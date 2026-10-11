@@ -37,3 +37,6 @@ __pycache__/
 Thumbs.db
 .vscode/
 .idea/
+
+# Projeto Ghidra local e dados gerados
+/ghidra-project/

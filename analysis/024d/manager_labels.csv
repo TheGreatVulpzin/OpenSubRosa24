@@ -1,0 +1,26 @@
+rva,kind,label,record_size,count,source,note
+0x1610,func,ai_route_setup?,,,ANALISE-NPCS.md,Prepara rota de IA
+0x6380,func,createevent_updateitem?,,,native_sdk/black_market.c,"Marca item como alterado (""dirty"")"
+0x64a0,func,createevent_updateplayer?,,,ANALISE-NPCS.md,Emite informações de jogador
+0x16c40,func,createevent_bullethit?,,,native_sdk/black_market.c,"Evento com tipo, flag e duas posições"
+0x16db0,func,createevent_sound?,,,ANALISE-BLACK-MARKET.md,Evento de som/efeito
+0x1b070,func,createitem,,,native_sdk/black_market.c,"(type, pos, vel, rot)"
+0x1b3c0,func,deleteitem,,,native_sdk/black_market.c,
+0x28020,func,createplayer,,,ANALISE-NPCS.md,Reserva slot de jogador
+0x2f130,func,lineintersecthuman?,,,native_sdk/black_market.c,"(human, from, to, raio)"
+0x31800,func,createobject,,,ANALISE-NPCS.md,Cria veículo (registro 0x8230)
+0x33350,func,scenario_createcar?,,,ANALISE-NPCS.md,Cria veículo em rota de trânsito
+0x49940,func,chat_handler?,,,ANALISE-BLACK-MARKET.md,Rotina de chat
+0x4f720,func,ai_playercar?,,,ANALISE-NPCS.md,Atualiza entradas da IA
+0x50ae0,func,createhuman,,,ANALISE-NPCS.md,Cria corpo humano (registro 0x2B64)
+0x51060,func,humansimulation?,,,ANALISE-NPCS.md,Etapa de simulação de humanos
+0x585b0,func,scenario_createtraffic2?,,,ANALISE-NPCS.md,Cria NPCs motoristas
+0x5b9b0,func,logicsimulation?,,,ANALISE-BLACK-MARKET.md,Ponto de hook do mercado no loop
+0xededd00,global,players,0x2408,256,ANALISE-NPCS.md,
+0x15cbf80,global,humans,0x2b64,512,ANALISE-NPCS.md,
+0x5592600,global,objects,0x8230,1024,ANALISE-NPCS.md,Veículos
+0x91022c0,global,items,0x1ac,,native_sdk/black_market.c,
+0x15e39020,global,connections,0xf170,,ANALISE-NPCS.md,"IP +0, porta +4, player id +0x10"
+0x1c4afc0,global,numofconnections,,,ANALISE-NPCS.md,
+0x90dc560,global,gamestate?,,,native_sdk/black_market.c,Valor 2 = partida rodando
+0x90dc578,global,ticks?,,,native_sdk/black_market.c,Contador de ticks
