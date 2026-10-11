@@ -98,8 +98,11 @@ public class ExportFunctionFeatures extends GhidraScript {
         if (b == null || !b.isInitialized() || b.isExecute()) return null;
         String m = ins.getMnemonicString().toUpperCase();
         try {
-            boolean dbl = m.endsWith("SD") || ins.toString().contains("qword");
-            boolean flt = m.endsWith("SS") || (m.startsWith("F") && ins.toString().contains("dword"));
+            // x87 no Ghidra: "FLD float ptr [..]" / "FMUL double ptr [..]". SSE: MOVSS, MULSD...
+            String t = ins.toString();
+            boolean fpu = m.startsWith("F");
+            boolean dbl = m.endsWith("SD") || (fpu && (t.contains("double ptr") || t.contains("qword")));
+            boolean flt = m.endsWith("SS") || (fpu && (t.contains("float ptr") || t.contains("dword")));
             if (dbl) return Double.toString(Double.longBitsToDouble(currentProgram.getMemory().getLong(a)));
             if (flt) return Double.toString(Float.intBitsToFloat(currentProgram.getMemory().getInt(a)));
         } catch (Exception e) {

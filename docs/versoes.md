@@ -4,7 +4,7 @@
 
 | Binário | Data de build | Papel |
 | --- | --- | --- |
-| `client/subrosa.exe`, `subrosa.x64`, Mac | 2015-08-02 | Cliente usado pela galera. |
+| `client/subrosa.exe`, `subrosa.x64`, Mac | 2015-08-02 | Cliente ALPHA 24, usado pela galera. |
 | `client/subrosadedicated.exe` | 2015-08-02 | Dedicado do mesmo build do cliente. |
 | `blackhouser/subrosadedicated024d.exe` | 2015-09-05 | Dedicado "0.24d" do Black Houser. Alvo do server manager. |
 
@@ -32,7 +32,12 @@ Explicações prováveis, a confirmar no código:
 
 O código do 024d é menor: 356 KB em 340 funções, contra 470 KB em 468 funções no dedicado de 02/08. O 024d usa mais inlining.
 
+## Número de versão
+
+O cliente guarda a versão na variável global `currentversion` (ELF, endereço `0x79731c`). O valor é **24**. O menu principal mostra `ALPHA 24`. A lista de servidores mostra `Alpha N` para cada servidor.
+
+O servidor `024d` é a versão 24, revisão "d". Cliente e servidor são da mesma versão.
+
 ## Pendências
 
-- Achar o número de versão do protocolo. O cliente mostra a versão com o formato `ALPHA /i`.
 - Comparar a tabela de tipos de veículo (`setupobjecttypes_*`) entre o ELF e o 024d.
