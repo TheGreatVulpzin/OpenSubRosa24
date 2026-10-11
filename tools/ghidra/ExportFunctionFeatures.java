@@ -2,6 +2,9 @@
 // Os dados servem para casar funções entre binários de arquiteturas diferentes
 // (ELF x64 com símbolos -> PE x86 sem símbolos).
 //
+// Também grava <saida>.symbols.tsv com os símbolos de dados graváveis
+// (variáveis globais), para mapear globais entre binários.
+//
 // Uso (headless): -postScript ExportFunctionFeatures.java <saida.jsonl>
 //@category SubVulpes
 
@@ -36,6 +39,7 @@ public class ExportFunctionFeatures extends GhidraScript {
                 List<String> strings = new ArrayList<>();
                 List<String> floats = new ArrayList<>();
                 List<Long> ints = new ArrayList<>();
+                List<String> globals = new ArrayList<>();
                 int insns = 0;
 
                 for (Instruction ins : listing.getInstructions(f.getBody(), true)) {
@@ -58,7 +62,10 @@ public class ExportFunctionFeatures extends GhidraScript {
                             continue;
                         }
                         String fv = readFloat(ref.getToAddress(), ins);
-                        if (fv != null) floats.add(fv);
+                        if (fv != null) { floats.add(fv); continue; }
+                        MemoryBlock gb = currentProgram.getMemory().getBlock(ref.getToAddress());
+                        if (gb != null && gb.isWrite() && !gb.isExecute())
+                            globals.add(String.format("0x%x", ref.getToAddress().getOffset() - base));
                     }
                     for (int i = 0; i < ins.getNumOperands(); i++) {
                         for (Object o : ins.getOpObjects(i)) {
@@ -85,8 +92,21 @@ public class ExportFunctionFeatures extends GhidraScript {
                 sb.append(",\"strings\":").append(jsonList(strings));
                 sb.append(",\"floats\":").append(jsonList(floats));
                 sb.append(",\"ints\":").append(ints.toString());
+                sb.append(",\"globals\":").append(jsonList(globals));
                 sb.append('}');
                 w.println(sb);
+            }
+        }
+        // Símbolos de dados graváveis com nome (só existem no ELF/Mach-O).
+        try (PrintWriter w = new PrintWriter(out + ".symbols.tsv", "UTF-8")) {
+            SymbolIterator si = currentProgram.getSymbolTable().getAllSymbols(true);
+            while (si.hasNext()) {
+                Symbol sym = si.next();
+                if (sym.getSource() == SourceType.DEFAULT || sym.isExternal()) continue;
+                if (sym.getSymbolType() != SymbolType.LABEL) continue;
+                MemoryBlock b = currentProgram.getMemory().getBlock(sym.getAddress());
+                if (b == null || !b.isWrite() || b.isExecute()) continue;
+                w.printf("0x%x	%s%n", sym.getAddress().getOffset() - base, sym.getName());
             }
         }
         println("Exportado: " + out);

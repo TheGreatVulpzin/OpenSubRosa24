@@ -22,7 +22,9 @@ Teste de precisão (o alvo tem nomes, então dá para conferir):
       --ref build/features/linux_x64.jsonl --evaluate
 """
 import argparse
+import bisect
 import csv
+import os
 import json
 import math
 import re
@@ -36,8 +38,45 @@ LIB_NAME = re.compile(
 MATH_EXT = ('sqrt', 'sin', 'cos', 'atan2', 'pow', 'acos', 'floor', 'fabs', 'asin', 'tan', 'ceil', 'exp', 'log')
 
 
-def load(path):
-    """Carrega features. Aceita "features.jsonl:nomes.csv" para usar nomes de um CSV do casador."""
+class GlobalNames:
+    """Traduz endereços de dados em nomes de variáveis globais."""
+
+    def __init__(self, rows):  # rows: [(início, fim, nome)]
+        rows.sort()
+        self.starts = [r[0] for r in rows]
+        self.rows = rows
+
+    def name(self, addr):
+        i = bisect.bisect_right(self.starts, addr) - 1
+        if i >= 0 and addr < self.rows[i][1]:
+            return self.rows[i][2]
+        return None
+
+    @staticmethod
+    def from_symbols(path):
+        rows = []
+        with open(path, encoding='utf-8') as fh:
+            items = sorted((int(a, 16), n.lstrip('_')) for a, n in (l.split() for l in fh if l.strip()))
+        for (a, n), nxt in zip(items, items[1:] + [(items[-1][0] + 0x1000, '')]):
+            rows.append((a, nxt[0], n))
+        return GlobalNames(rows)
+
+    @staticmethod
+    def from_csv(path):
+        with open(path, encoding='utf-8') as fh:
+            rows = [(int(r['rva'], 16), int(r['rva'], 16) + int(r['ref_size'], 16), r['name'])
+                    for r in csv.DictReader(fh)]
+        return GlobalNames(rows)
+
+
+def attach_globals(funcs, gn):
+    for f in funcs.values():
+        f['gnames'] = sorted({n for a in f.get('globals', []) if (n := gn.name(int(a, 16)))})
+
+
+def load(path, globals_csv=None, use_symbols=False):
+    """Carrega features. Aceita "features.jsonl:nomes.csv" para usar nomes de um CSV do casador.
+    Nomes de globais: do arquivo .symbols.tsv ao lado (binários com símbolos) ou de globals_csv."""
     names = None
     if ':' in path[2:]:  # ignora a letra do drive no Windows
         path, csv_path = path.rsplit(':', 1)
@@ -53,6 +92,11 @@ def load(path):
             if names is not None:
                 f['name'] = names.get(f['rva'], f['name'])
             funcs[f['rva']] = f
+    sym_path = path + '.symbols.tsv'
+    if globals_csv:
+        attach_globals(funcs, GlobalNames.from_csv(globals_csv))
+    elif use_symbols and names is None and os.path.exists(sym_path) and os.path.getsize(sym_path) > 0:
+        attach_globals(funcs, GlobalNames.from_symbols(sym_path))
     return funcs
 
 
@@ -90,6 +134,8 @@ def fingerprint(f, strict=False):
     for v in f['ints']:
         if v >= 32:
             feats['i:%d' % v] += 1
+    for g in f.get('gnames', []):
+        feats['g:' + g] += 1
     return feats
 
 
@@ -99,8 +145,13 @@ class Scorer:
         n = len(target_fps)
         self.idf = {k: math.log(1 + n / c) for k, c in df.items()}
         self.default = math.log(1 + n)  # característica ausente no alvo
+        # Tipos de pista que o alvo tem (s:, f:, x:, i:, g:...). Um tipo que o alvo
+        # não tem (ex.: globais com nome num .exe sem mapa de globais) não conta.
+        self.kinds = {k[:2] for k in df}
 
     def weight(self, k, count):
+        if k[:2] not in self.kinds:
+            return 0.0
         w = self.idf.get(k, self.default)
         if k.startswith('s:'):
             w *= 3  # strings são a evidência mais forte
@@ -236,12 +287,13 @@ def main():
     ap.add_argument('--out')
     ap.add_argument('--evaluate', action='store_true')
     ap.add_argument('--strict', action='store_true', help='alvo e referências do mesmo compilador')
+    ap.add_argument('--target-globals', help='CSV de globais do alvo (tools/re/map_globals.py)')
     ap.add_argument('--seed', help='CSV rva,name: nomes manuais usados como sementes da propagação')
     ap.add_argument('--keep', help='CSV anterior do alvo: nomes dele têm prioridade')
     args = ap.parse_args()
 
-    target = load(args.target)
-    refs = [load(p) for p in args.ref]
+    target = load(args.target, args.target_globals)
+    refs = [load(p, use_symbols=True) for p in args.ref]
     seeds = None
     if args.seed:
         with open(args.seed, encoding='utf-8') as fh:

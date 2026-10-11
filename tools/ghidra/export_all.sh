@@ -19,3 +19,6 @@ export_one subrosadedicated.exe     ded0802
 export_one subrosa.x64              linux_x64
 export_one subrosa                  mac_i386
 export_one subrosa.exe              client_win
+export_one subrosadedicated024c     ded024c_linux
+export_one subrosadedicated024c.exe ded024c_win
+export_one subrosadedicated024b     ded024b_linux

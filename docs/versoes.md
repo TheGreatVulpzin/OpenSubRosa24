@@ -8,6 +8,19 @@
 | `client/subrosadedicated.exe` | 2015-08-02 | Dedicado do mesmo build do cliente. |
 | `blackhouser/subrosadedicated024d.exe` | 2015-09-05 | Dedicado "0.24d" do Black Houser. Alvo do server manager. |
 
+## Versões oficiais baixadas (`original/vanilla/`)
+
+| Arquivo | Formato | Símbolos | Uso |
+| --- | --- | --- | --- |
+| `0.24c_Dedicated_Linux/.../subrosadedicated024c` | ELF x64 | **Sim** (461 funções) | Fonte principal de nomes para o 024d. |
+| `0.24b_Dedicated_Linux/.../subrosadedicated024b` | ELF x64 | **Sim** (461 funções) | Segunda fonte de nomes. |
+| `0.24c_Dedicated_Windows/.../subrosadedicated024c.exe` | PE32, MSVC | Não | Revisão anterior ao 024d, mesmo compilador. Ponte para o 024d. |
+| `0.24b_Dedicated_Windows/.../subrosadedicated024b.exe` | PE32, MSVC | Não | |
+| `0.24d_Dedicated_Windows/.../subrosadedicated024d.exe` | PE32, MSVC | Não | **Idêntico ao 024d do Black Houser** (mesmo SHA-256). O Black Houser roda o 024d sem modificação. |
+| `0.24b/` | Cliente completo (Windows, Linux, Mac) | ELF e Mach-O com símbolos | Cliente 24b. |
+| `0.25b_Dedicated_Linux/subrosadedicated025b` | ELF x64 | Não (stripped) | Versão seguinte. |
+| `0.22/`, `0.22_Dedicated_Server/` | Cliente e servidor 0.22 | Mach-O com símbolos | Versão anterior. |
+
 ## Cliente da galera x servidor 024d
 
 Os jogadores entram no Black Houser (024d) com o cliente da galera. No servidor aparecem helicóptero, trem e AK-47. Fonte: relato do usuário em 2026-10-11.

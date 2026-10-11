@@ -405,3 +405,1175 @@ aece24e8006445ceda44d92bfbe4e070164c03b50a775b14c8e3ef5be779b84f  client/texture
 70f61dcf27c07489a1fa6f0234f98f03f3d46ba827d16f1e1cafd77649072171  client/texture/twitter01.png
 c1d059f843a9949b4bab0c281894ece5dbd088c39c9d6a4480782cde4284a42d  client/wrap_oal.dll
 99d3fadae0e3b24f0cb24c664fd5e84f5710bfa94a5e4d61a6d785fc483646dd  client/wsock32.dll
+26592df0db555d4404a6097c9570fc78b6cd52789c0f8323b8d45556665e0059  vanilla/0.22/data/building000.sbb
+52cf91a5402da61918e9796b485a6a522117cb2fba6ca3e5788c7a4b6ad09c96  vanilla/0.22/data/building001.sbb
+5e3d7c7dc2e84cc7e10e62f6f2c62044c7a41a47fb7efa9126fec64e5ebeafce  vanilla/0.22/data/building002.sbb
+186c4eff36afcd8f9ec4b04ca4f89f3c34b7635960ceae6a0199778794de0e3b  vanilla/0.22/data/building003.sbb
+25cf5387cf61de0934275ee51d7b2cd3825ddfff470964184b149a1902b09e32  vanilla/0.22/data/building004.sbb
+592b0236b68eef2753b339869d7d84a094688d03890a027f000a8c134019261a  vanilla/0.22/data/building005.sbb
+437caba3363e23c2eb3efbcef1c6acfb6cf2d2e6f8508f53a8c14889233c24bb  vanilla/0.22/data/building006.sbb
+143093718c116fdc40b2ccf57f2625ada19555b4e26d810a552ad674bc378851  vanilla/0.22/data/building007.sbb
+efe3fed2ad095cc3bb967f6b681182a33ed9f84fc5c3e55aa324fb2541e661ec  vanilla/0.22/data/building008.sbb
+37eb23970ff9801b9eea9e69ca5d50023c99db2ec2f4c1fb958e2905dcd36b5c  vanilla/0.22/data/building009.sbb
+de438f75c68fea1a6d6cb6b04cab533d054e27969aa53be1cb834033e9415443  vanilla/0.22/data/building010.sbb
+65b8539a7962212796764345449e6db16c5c19ff82ef41fb2cbffdf3ca0efd83  vanilla/0.22/data/building011.sbb
+b9a91f229ad8c2df58a152bf21599c11101517ee910796e0688ee6749187c938  vanilla/0.22/data/building012.sbb
+2ed90cfb68fa584188788067a3a042901576de6ca181a76bb48d11697899da0b  vanilla/0.22/data/building013.sbb
+61805e0bde7069877dab99563cd027ad48ce85c3887cf50f79aed927c7aa20e1  vanilla/0.22/data/building014.sbb
+9de5d4493d930e555fb2a7cf6fdcda1340ccf48806e36a737d78cc3b01abf5a0  vanilla/0.22/data/building015.sbb
+65999ee9f8a6c856d5bb0ff8f8dabf217b3a4d6eb34259a117f43685e631a9c7  vanilla/0.22/data/building016.sbb
+53a995f55495877912929f52006deb3048030691307951f911de79b593840675  vanilla/0.22/data/building017.sbb
+d91abe76064fca9c780e59bc940a325fd03e43b41da921b2a4131ab137f32743  vanilla/0.22/data/building018.sbb
+6badc2dad8920de75b887af566885d7b6c8cb4a570684a8956a1eec107e6bc99  vanilla/0.22/data/building019.sbb
+fe75184a5f1140318ce50972eaa07025f5358c14068add66fdbd760b472213c3  vanilla/0.22/data/building020.sbb
+97fc900a35a7708ecc4873305759d59bc52c5e9d7bca462b0429c07d3523cfba  vanilla/0.22/data/building021.sbb
+6c25d4a7efbf62185f5708903dacb5c22af8c01cf065d6a0bcf4014e6dbabbe4  vanilla/0.22/data/building022.sbb
+1866bca3a9b907a90c915612d88f290d90ac48e1513a0633d89eeb51ff4c209c  vanilla/0.22/data/building023.sbb
+ab7e304d7555029c5e92f3dd0ab2958f8932d718d5728f2fd8a3aa21591c3e8a  vanilla/0.22/data/building024.sbb
+c164c4c60349ba8d2a51bb3a2dab9b532b488c8e0a1774968c9a87945e88906b  vanilla/0.22/data/building025.sbb
+614a74d18fb5163ae18ea546795a88d38b2a26466e4c4acfbddf0e22a5380005  vanilla/0.22/data/city.sbc
+65a9bbd5b3b9161c0dd61a9e185e391cfa68f31171e1a5fcfad20bcc9eb09480  vanilla/0.22/libspeex.dll
+f15b0408096eafc700fe069b716ffa921854b4e95bed33ad08524a59cc8ad57b  vanilla/0.22/libspeexdsp.dll
+eb2d0aedb5d25e6ea5732623347d6406bc8789dc8ee15b89a07fd9406aa576df  vanilla/0.22/OpenAL32.dll
+83f99dcdf06435388927cffb5b317c275a8548da334fcd4e4a877eb04af52ea9  vanilla/0.22/READREADREADME.txt
+edb4ddac5c18222177c61f2cdbbfe9a7bf5d995da0f11c662650dc8648dc6cc1  vanilla/0.22/SDL2.dll
+96b763810395d167586f3151485206b44d8e262fd05933aae91e8947073b091d  vanilla/0.22/shader/atmosphere.glfs
+a7b057a663b2a857f62776332579159ba81bde5f68f569b36f2be810ffcb7c84  vanilla/0.22/shader/atmosphere.glvs
+408739b2d3ee156b64e901b11f19de69a926cebd35494d25788b4a3918295d9a  vanilla/0.22/shader/blur.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.22/shader/blur.glvs
+3ee8c40ca1f19e00468cab9322ebe1d1e9ed2884dbc2fb64ea423fea5513f9fe  vanilla/0.22/shader/depth.glfs
+1fa61d1e40d15094aa4a14a66a3d11a09d72c6a40fc508c533834d64619f163d  vanilla/0.22/shader/depth.glvs
+55dcfd9216567cfad4f8fb814bafb579ad6fd9e426dd947a9e297b6a7b8b3564  vanilla/0.22/shader/model.glfs
+312b3ba5e7d1d5331be30afe60aa375ad264fb265164822e46eff9a8a24c4b21  vanilla/0.22/shader/model.glvs
+c371d39d2b19a73fc724ce550f4c33fbd27f6ceb6396b95222af0844bd9d8e56  vanilla/0.22/shader/occlusion.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.22/shader/occlusion.glvs
+c8fb8e678c783aadd74e9d3d02e9ba7e280e80837f480245d0d53cd78f5e77df  vanilla/0.22/shader/reflect.glfs
+66257b24cca9065a5927ae6c1a9162a889103d25b18655f83f46558caa194679  vanilla/0.22/shader/reflect.glvs
+c411ae37fcbb55587c85b63d65f751933335e5eb36444956ff8b6f2742bceffc  vanilla/0.22/shader/sector.glfs
+051d6ea319ae6a58d1e254d5a7be12e97b918bc423ca06d9d7a0e644e28a568d  vanilla/0.22/shader/sector.glvs
+581926ad90cde9f17c10d569ad446c9f47be88c492111a2c9c1bdf98be623b10  vanilla/0.22/shader/shadow.glfs
+eb9b856976de1b984c1d6025bb36aec6a2fbe03b50cdd8682f40dadc1240765d  vanilla/0.22/shader/shadow.glvs
+69c1545fe465b5bd05ddec8c164839f82fd40dea932e54b7d238515536d7c2a0  vanilla/0.22/sound/44magnum.wav
+de85189307452c373d91c4da169b17e6dcbd60624da9b2ddf06c6a8c1e1d6151  vanilla/0.22/sound/4cylinder.wav
+bf3c1f1c216acca80afbee70e095ebbbe0a2b9d5ffc26bad9a1adf604267f38d  vanilla/0.22/sound/bullethitbody01.wav
+2691eaec97f81bf0717d71fe065358cd31b6175ebc5b16d880b838f5a481ce80  vanilla/0.22/sound/bullethitbody02.wav
+14216ee45990851fd2eb1984529ecbcf68d5b5c0ff4a5664baa39deab409aa8a  vanilla/0.22/sound/bullethitmetal01.wav
+d312c55cfe42ffd79486a2fcf71ecf794b6988deb364115d307e321fbee540a5  vanilla/0.22/sound/bullethitmetal02.wav
+046f0435ea81254cbf11f170fa7de3fad2ddf0e38071149bb5fa6005ac90154b  vanilla/0.22/sound/carcrash01.wav
+082c6fb8d80c53371ac54e14243592188b0f659c5ff6b63461f3b6e1d61a91dd  vanilla/0.22/sound/carcrash02.wav
+ca010df53da255a1024e9bdd7784058a699267492a5d0ca1611e02a2e101d0e5  vanilla/0.22/sound/gearshift01.wav
+2db5766a977c2114adf1623e95809f011a89f6cc9c8ee5a9766a460015faa3a6  vanilla/0.22/sound/glassbreak01.wav
+66359deadd728a3de29d768625c959c8d4c30e650d9874e3013d6f1aa526992b  vanilla/0.22/sound/phonering01.wav
+beef6b96d28e1a7398ef45be2d614bc9579ff9960f26aa3fe28d2ff6707b4af0  vanilla/0.22/sound/reload01.wav
+8b7b0db24cc12da685aed27536c1b3590064e8ce40ecbea82c1330a0c22fa4b6  vanilla/0.22/sound/ricochet01.wav
+c6ccaf689e9147d86cca78f5c4079de12dbbf45302be999632126e059deb2da0  vanilla/0.22/sound/ricochet02.wav
+b1ea698bd9db1a1e6e858d10a9c4e163ce40662dbcf48d656711bff7fd93be15  vanilla/0.22/sound/ricochet03.wav
+c7a5cfca0111c6cf95c24948d9217a264550e8aa9771f339acf6b41fdf3448dc  vanilla/0.22/sound/ricochet04.wav
+64f5e82e275d564e11cd6a42af9f16dd173cc68983ca75afadb09e9fc77abf01  vanilla/0.22/sound/ricochet05.wav
+25d6092d9152df9491f6aa9b3f0238496d9327590ef5e4f9ef48f1f830deed24  vanilla/0.22/sound/ricochet06.wav
+e7ed9aef775070c918bf308ffdf60d51dfa8ca4ef0ec4f8884c6d07c23135dcd  vanilla/0.22/sound/ricochet07.wav
+b04139b5ff70f1dce267f261b447d8ed0a884cf86f658bf56d139c4efad48388  vanilla/0.22/sound/ricochet08.wav
+8cabe53a7b589394743fb0053de883cf8cff2ef695fc7cbe52d39b6dd57e1ab4  vanilla/0.22/sound/rifle01.wav
+992b6545539a655121ffc6d9e8f0065b040ce6bbdc14b63a0008fff651b49df1  vanilla/0.22/sound/shell_hit_cement.wav
+977f103f9897d69c79f36acc1ec8c4e0fa26353f5c9ed0749d853d9393a13400  vanilla/0.22/sound/submachinegun01.wav
+a6ad6fe9692a487264ad0ca55a8e4d9d807c49fa8a30f7674893b5663f7cfe89  vanilla/0.22/sound/tiresqueal.wav
+a3b6fcecc4ffdfab620f13ab00476711a5173af898e40fbe03d2d7c96bd81f9e  vanilla/0.22/subrosa.app/Contents/._Info.plist
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/._SDL2.framework
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Headers
+17c9635f5b506a03b35cf8116bdbdb51ed15af3e5514cd958c985c4a4bfcecfe  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/OpenAL
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Resources
+fece4cb64642876542132e21be94e8a1a06c0b2d37b0ef65695873c42169e3c3  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/al.h
+c4cc831c57f64ac0aae9518cadbeb398c8c77b218e3c8b0131ec6ddc186859c0  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/alc.h
+caec4f6b4557c53a03fe0daa46db8ad928a488420bea786a24a4fffd24376632  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/MacOSX_OALExtensions.h
+514727c7cb26f0b938bb5b3bf57ec98938c65526bfb479e2b4829f67137e5495  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/OpenAL
+edc7b404fb07ce3d1f87b6e6a48a6881be29f3b095cb6dad29954e36e3958b31  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Resources/Info.plist
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.22/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/Current
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/._Versions
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Headers
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Resources
+3fe3143e0f73aec22346589038070b52d158f1d2d120a10653d1f81198f75f86  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/SDL2
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/._A
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/.__CodeSignature
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._Headers
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._Resources
+7221e56f0987db064ffe1bdfa3d13eda2641bf91ea28e0e9cb810c00fc6c79ae  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._SDL2
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/_CodeSignature/._CodeResources
+e1b3bbaa9e66e87991d639ac79f2f06c770af4b69055245ebeae54c5b91c669a  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/_CodeSignature/CodeResources
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._begin_code.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._close_code.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_assert.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_atomic.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_audio.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_bits.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_blendmode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_clipboard.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_config.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_config_macosx.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_copying.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_cpuinfo.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_endian.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_error.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_events.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_filesystem.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_gamecontroller.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_gesture.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_haptic.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_hints.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_joystick.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_keyboard.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_keycode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_loadso.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_log.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_main.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_messagebox.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_mouse.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_mutex.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_name.h
+ebbf72b74710f5b4e7289cdf9e0f43226d82973bab40c3122ab825bf28c1eeba  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengl.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengles.h
+23eebc09a3e48855be6f75b1b9c068a46c8a1a9c3dd5b6d9f5d25eee6b5c15ce  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengles2.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_pixels.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_platform.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_power.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_quit.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_rect.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_render.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_revision.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_rwops.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_scancode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_shape.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_stdinc.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_surface.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_system.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_syswm.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_thread.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_timer.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_touch.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_types.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_version.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_video.h
+979948d0e260743717078cba3544389493b160da36929af0a46d74827ceada82  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/begin_code.h
+dcac842952318586307bfc8a95686b907f478af66d666662668e7a1b708ee2b9  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/close_code.h
+7d472b0b062f4a57a901016dd0f62116221d6ad4eaaf8fabf34d86c238ed3f3d  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h
+4af5f46ebe34753ae9ffb0b932a1397ac0ec37cedc3845a03fa3a154dae52737  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_assert.h
+34b842c343abadb1e91da02a7fd30ef1da577c90bb370c54c385f4e44413804d  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_atomic.h
+e3eb3603cda57deebb57947b5cabf91c7e06d0bc051b0628d76c34521d971382  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_audio.h
+fe36055e391e68e80922ae40209cb86e8db57f01fac896933e791dae53436912  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_bits.h
+3eb806b1eb223d0fea8bd757501c2ee9217a6835fb1b911e78e307ac5e98dbe0  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_blendmode.h
+24d5841490e8de30dd132572ec4862bb8a459396ee3e0a70a17f02469808b073  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_clipboard.h
+2388c00fc8e85e76bc8d3e808ccb5936829421339876bfdd11e42948e498c4b1  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config.h
+243e95c60c32467f2e35c3132816a8528d80f64a1d6fca47d9a6c501eaac27cd  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config_macosx.h
+1774c2b2574ca5fb6a931aaa5f506981aa32742e94b6e3645cbc2f33c97bcc96  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_copying.h
+ca825459e9b362b3718f81e8a43f911b9c7595f4a5032c9e90fdc75569fcfc0d  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_cpuinfo.h
+a40ba1b6184619f1e7671c42fe47a3db125cbdf0959dfd2aa3a6eb138eef5c27  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_endian.h
+453a03f7d08632f599dd8e5615db895633e527c762db75a29580143b955d7ed6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_error.h
+115a6bdc78e80326d37e3a9809ab5b11dcaee19fbcd3e069a4695398addaf441  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_events.h
+cd623e145ef93e26aa53592e78f25ceb144c583ab332ee4a623670415ce93f91  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_filesystem.h
+17547ddd82539d05dd45700bc210482b149fb767a881431f04f7f4287497ea97  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gamecontroller.h
+b49861ea93c5e9c482fff9b9463885513712ed00fc7dfaeeae924d7aac4add41  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gesture.h
+1152810cfa04fb80c2b02b241c204ff1af0f6aea78ad1344c99aabc65fc1b06d  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_haptic.h
+fd36b30e7929c8fe9a6b1031aa8f84873371d740a9fc70a317134534d1b0fea2  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_hints.h
+bd749035091f2372f1437ed1051c67ab9e944f8f3aec83a48e0c09568d74482d  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_joystick.h
+ab2dac4b76d399c39c7086027041cadc7e12df2eac650d15e5a482388bf788af  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keyboard.h
+f3376d14a9eb3714374a401bb9559dfc68befc88555fd6a08cbc3171e48569c3  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keycode.h
+ad6f92cefc8a2713a335c68dc63fc005305a23071b8fe26520029305cce60390  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_loadso.h
+31cbeaafabe8b2240d6694faa4f944d1efef6c5b856ab0e3b4f05892aa5301fc  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_log.h
+12cc2629b186af17a7c7ecf0369bd035647c5094fc3ba6a49d2f4328d2bb2209  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_main.h
+808e2b3f3405b9ee4dccd034bd3ed6ae09504b2f3fb0554f7c25046e072227fe  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_messagebox.h
+c348d6274e36d76a413a6ec0abd7a3dd958c8adf62ef1ddb566beba38d088be2  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mouse.h
+232107cc47ec7cfc2db3b1f98c61601864ad620791a8e89aaebb7af172ffb05f  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mutex.h
+474c7f104d431d75cee9ebb0bfe02818b48b691e101c9582f57f2caa94764b9a  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_name.h
+7cbb8d845109dd50b9dfd079c209a6bbd88829a721fdf8d5f95d8f5d9568d9ee  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengl.h
+f118bb0c209f79a450e63385f0f0142e6fde7b68959aec95bdeb4136775cd10f  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengles.h
+a83f8bf6fadc552525a0f190d3f81791070f3e0121a8d58e34756abe565a372a  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengles2.h
+3669d5edb874fec7e2a1030304036ff2b12fbba3ae5336f58218a489e782beb3  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_pixels.h
+8273fb3aed44c0ad84c9f8e5822a079c3943b966c94b153439164cbaa75da0be  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_platform.h
+5c5a3c3844a470ee3bcce63270b72ab32257c333a99fd04c46b926acaf501757  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_power.h
+b04abaf6d4810cce2d722f3d933ba152764931dff68a20dcbbd53d508096497c  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_quit.h
+02168ba71c32afb33b3d2e793dff55dacaae5560e9bcb6a002f37cf21be9fe39  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rect.h
+826d2b6768ace24062f38d7d9cd093786a4d1bd5857835e955b7095d13458bef  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_render.h
+beabb3914a30b7cb52d7a8f7fd6ec4fcfa14bb83c1ef7f353c1d7f7f0b8975b5  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_revision.h
+4173f470b3c4e08e2ba3bf8ef91c6d565b6538a23332e8ef4cd3cbfd8c93be68  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rwops.h
+2532f2433ff5316c93a666941fc2771f7b4e170e018bfea9a96cc709ae578c93  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_scancode.h
+d1abf04e4497884b8f2e855b6b91eb657e0d977c720c056ca74571fdd6e15ec9  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_shape.h
+4a40de200511ceb396889b967269ac61ecb02d7d127b30845287935a149a9ae6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_stdinc.h
+1abecec806d3e7439def079f9318918fe008fed9a302869855d43052f31f14bd  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_surface.h
+8b78ab84bab354736330fb68a203dbd8064f833f989a584af064250f26c11056  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_system.h
+52c789f319fb7e4dd681bab7e778e0b4e761bd0a330cd002afc4037cda4498e3  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_syswm.h
+a244202c16a5a0135cf218e0ac5811468e90efede9c6627f32229a96af16b4f6  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_thread.h
+d60cc8e046cd33bc860e1d15ad3ef596b158c5826cc0dd54dfb706624463aca3  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_timer.h
+0a0e9e5c4a32dd31024d1b392f307b2d822c4fdbe7cb677d086b617217c5ad52  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_touch.h
+1a94dea7e15074bbd5b7f06dc4b84d26b328f7b12803e46a2721c2e7a6d5aaac  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_types.h
+f70560d1ae6a995000e4029945b497b962b34b10fa7734bf6abf21148f8c6180  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_version.h
+22857b140118ae99f01f118a5ebfeca453be11d1fe2ed5d5842737c9760de8d2  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_video.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources/._Info.plist
+20aefba9b9908fadc97435c58027c06d0496417e77791f478994dd2be7bbe222  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources/Info.plist
+67e47c870120581c646ebb1ca287e24e39dcee0e40328565ab6d3806244e700e  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/SDL2
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.22/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/Current
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Headers
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Resources
+9a8e9f26ab7050aa706f3c00a64e3ca58ac1b6ea6b02587181f4f0e259a3f3a0  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Speex
+4cef02e3dcd9558ed2623c5ddbfbc8710a8eb434dbfc0081b21daf818db3a010  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/._.DS_Store
+a2642b6b0c1a8b4548d9841c16c0424ff620abf6882aeaaa904af6de633bb805  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/.DS_Store
+1a9a59c5fb21f967289d0816b889cfbecab0ef5f53ebba2451fcb24a9d4486ec  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex.h
+88ffabfa59833e84fc35c5b131a0f42d1a6777f64c2345e2e9f84a95a957e84f  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_bits.h
+77ef0e501be01fb298e69d62cc819759094c684f98b437a868e9117054bdb631  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_buffer.h
+6fac74cd4fc9a057853c0050504faaf3591b0214ac333f653d50aef6cff04ed8  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_callbacks.h
+7ea5c623c2b6e283482cfc761f4860034f385e579ed85ee138c2f51a83e7f28e  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_echo.h
+edd6970a82a1db4f85085fcfc736487e7b60889a731a30c32d30ddb4c865673a  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_header.h
+2b336feec642d48221a5c09974c169aa79fb45f1d6c523ef1d1bddf3ba6b1c00  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_jitter.h
+b8caeac7b65143bb0cdcce3d7555f69939fbf6c50ce399ea9b0dfe43bfebd2d6  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_preprocess.h
+18961b1db04d77eebdecdfbd2e62f0682ef3010a233e6b25d7ee8d099d0f3eda  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_resampler.h
+2f52b8bfbc7913302b9f59ea726792938d96c0a092ba06f9240c9096ba316bd3  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_stereo.h
+4524e2c7db34d93b2312bd9af827b7c2a9b377120573540a4e674de4d2a8102e  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_types.h
+3a84eec0499533a16e9e4f26d4ffb977d7aced490fe4f2c9c2cbc4e893f3744d  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Resources/English.lproj/InfoPlist.strings
+494266fe946037e2c17ebaafb326a93cfb61c0781b87dc2fc6b76085843b448d  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Resources/Info.plist
+6a368f8199c4322225dd7cae720f6fa200e702f068a05a97c757471670f51b73  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Speex
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.22/subrosa.app/Contents/Frameworks/Speex.framework/Versions/Current
+30f28011d4976fcedf97896c3d4e1d9cd573efe626f2eac33d56a1e208a5fd34  vanilla/0.22/subrosa.app/Contents/Info.plist
+1e7bca6a1ee79cd33e618ad8660fae1c2baf0879d9d01ce101dc72d958e48531  vanilla/0.22/subrosa.app/Contents/MacOS/subrosa
+82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0  vanilla/0.22/subrosa.app/Contents/PkgInfo
+bd3630932da5b10726acf9ba321a3e60c4d766fe99f4758a7b28f49e8663f14b  vanilla/0.22/subrosa.app/Contents/Resources/config.txt
+26592df0db555d4404a6097c9570fc78b6cd52789c0f8323b8d45556665e0059  vanilla/0.22/subrosa.app/Contents/Resources/data/building000.sbb
+52cf91a5402da61918e9796b485a6a522117cb2fba6ca3e5788c7a4b6ad09c96  vanilla/0.22/subrosa.app/Contents/Resources/data/building001.sbb
+5e3d7c7dc2e84cc7e10e62f6f2c62044c7a41a47fb7efa9126fec64e5ebeafce  vanilla/0.22/subrosa.app/Contents/Resources/data/building002.sbb
+186c4eff36afcd8f9ec4b04ca4f89f3c34b7635960ceae6a0199778794de0e3b  vanilla/0.22/subrosa.app/Contents/Resources/data/building003.sbb
+25cf5387cf61de0934275ee51d7b2cd3825ddfff470964184b149a1902b09e32  vanilla/0.22/subrosa.app/Contents/Resources/data/building004.sbb
+592b0236b68eef2753b339869d7d84a094688d03890a027f000a8c134019261a  vanilla/0.22/subrosa.app/Contents/Resources/data/building005.sbb
+437caba3363e23c2eb3efbcef1c6acfb6cf2d2e6f8508f53a8c14889233c24bb  vanilla/0.22/subrosa.app/Contents/Resources/data/building006.sbb
+143093718c116fdc40b2ccf57f2625ada19555b4e26d810a552ad674bc378851  vanilla/0.22/subrosa.app/Contents/Resources/data/building007.sbb
+efe3fed2ad095cc3bb967f6b681182a33ed9f84fc5c3e55aa324fb2541e661ec  vanilla/0.22/subrosa.app/Contents/Resources/data/building008.sbb
+37eb23970ff9801b9eea9e69ca5d50023c99db2ec2f4c1fb958e2905dcd36b5c  vanilla/0.22/subrosa.app/Contents/Resources/data/building009.sbb
+de438f75c68fea1a6d6cb6b04cab533d054e27969aa53be1cb834033e9415443  vanilla/0.22/subrosa.app/Contents/Resources/data/building010.sbb
+65b8539a7962212796764345449e6db16c5c19ff82ef41fb2cbffdf3ca0efd83  vanilla/0.22/subrosa.app/Contents/Resources/data/building011.sbb
+b9a91f229ad8c2df58a152bf21599c11101517ee910796e0688ee6749187c938  vanilla/0.22/subrosa.app/Contents/Resources/data/building012.sbb
+2ed90cfb68fa584188788067a3a042901576de6ca181a76bb48d11697899da0b  vanilla/0.22/subrosa.app/Contents/Resources/data/building013.sbb
+61805e0bde7069877dab99563cd027ad48ce85c3887cf50f79aed927c7aa20e1  vanilla/0.22/subrosa.app/Contents/Resources/data/building014.sbb
+9de5d4493d930e555fb2a7cf6fdcda1340ccf48806e36a737d78cc3b01abf5a0  vanilla/0.22/subrosa.app/Contents/Resources/data/building015.sbb
+65999ee9f8a6c856d5bb0ff8f8dabf217b3a4d6eb34259a117f43685e631a9c7  vanilla/0.22/subrosa.app/Contents/Resources/data/building016.sbb
+53a995f55495877912929f52006deb3048030691307951f911de79b593840675  vanilla/0.22/subrosa.app/Contents/Resources/data/building017.sbb
+d91abe76064fca9c780e59bc940a325fd03e43b41da921b2a4131ab137f32743  vanilla/0.22/subrosa.app/Contents/Resources/data/building018.sbb
+6badc2dad8920de75b887af566885d7b6c8cb4a570684a8956a1eec107e6bc99  vanilla/0.22/subrosa.app/Contents/Resources/data/building019.sbb
+fe75184a5f1140318ce50972eaa07025f5358c14068add66fdbd760b472213c3  vanilla/0.22/subrosa.app/Contents/Resources/data/building020.sbb
+97fc900a35a7708ecc4873305759d59bc52c5e9d7bca462b0429c07d3523cfba  vanilla/0.22/subrosa.app/Contents/Resources/data/building021.sbb
+6c25d4a7efbf62185f5708903dacb5c22af8c01cf065d6a0bcf4014e6dbabbe4  vanilla/0.22/subrosa.app/Contents/Resources/data/building022.sbb
+1866bca3a9b907a90c915612d88f290d90ac48e1513a0633d89eeb51ff4c209c  vanilla/0.22/subrosa.app/Contents/Resources/data/building023.sbb
+ab7e304d7555029c5e92f3dd0ab2958f8932d718d5728f2fd8a3aa21591c3e8a  vanilla/0.22/subrosa.app/Contents/Resources/data/building024.sbb
+c164c4c60349ba8d2a51bb3a2dab9b532b488c8e0a1774968c9a87945e88906b  vanilla/0.22/subrosa.app/Contents/Resources/data/building025.sbb
+614a74d18fb5163ae18ea546795a88d38b2a26466e4c4acfbddf0e22a5380005  vanilla/0.22/subrosa.app/Contents/Resources/data/city.sbc
+f1dcff1f7ccd3fc1f1d311228cd568cab6b9cca62b12f8eb6d23566a4362481d  vanilla/0.22/subrosa.app/Contents/Resources/English.lproj/InfoPlist.strings
+96b763810395d167586f3151485206b44d8e262fd05933aae91e8947073b091d  vanilla/0.22/subrosa.app/Contents/Resources/shader/atmosphere.glfs
+a7b057a663b2a857f62776332579159ba81bde5f68f569b36f2be810ffcb7c84  vanilla/0.22/subrosa.app/Contents/Resources/shader/atmosphere.glvs
+408739b2d3ee156b64e901b11f19de69a926cebd35494d25788b4a3918295d9a  vanilla/0.22/subrosa.app/Contents/Resources/shader/blur.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.22/subrosa.app/Contents/Resources/shader/blur.glvs
+3ee8c40ca1f19e00468cab9322ebe1d1e9ed2884dbc2fb64ea423fea5513f9fe  vanilla/0.22/subrosa.app/Contents/Resources/shader/depth.glfs
+1fa61d1e40d15094aa4a14a66a3d11a09d72c6a40fc508c533834d64619f163d  vanilla/0.22/subrosa.app/Contents/Resources/shader/depth.glvs
+55dcfd9216567cfad4f8fb814bafb579ad6fd9e426dd947a9e297b6a7b8b3564  vanilla/0.22/subrosa.app/Contents/Resources/shader/model.glfs
+312b3ba5e7d1d5331be30afe60aa375ad264fb265164822e46eff9a8a24c4b21  vanilla/0.22/subrosa.app/Contents/Resources/shader/model.glvs
+c371d39d2b19a73fc724ce550f4c33fbd27f6ceb6396b95222af0844bd9d8e56  vanilla/0.22/subrosa.app/Contents/Resources/shader/occlusion.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.22/subrosa.app/Contents/Resources/shader/occlusion.glvs
+c8fb8e678c783aadd74e9d3d02e9ba7e280e80837f480245d0d53cd78f5e77df  vanilla/0.22/subrosa.app/Contents/Resources/shader/reflect.glfs
+66257b24cca9065a5927ae6c1a9162a889103d25b18655f83f46558caa194679  vanilla/0.22/subrosa.app/Contents/Resources/shader/reflect.glvs
+c411ae37fcbb55587c85b63d65f751933335e5eb36444956ff8b6f2742bceffc  vanilla/0.22/subrosa.app/Contents/Resources/shader/sector.glfs
+051d6ea319ae6a58d1e254d5a7be12e97b918bc423ca06d9d7a0e644e28a568d  vanilla/0.22/subrosa.app/Contents/Resources/shader/sector.glvs
+581926ad90cde9f17c10d569ad446c9f47be88c492111a2c9c1bdf98be623b10  vanilla/0.22/subrosa.app/Contents/Resources/shader/shadow.glfs
+eb9b856976de1b984c1d6025bb36aec6a2fbe03b50cdd8682f40dadc1240765d  vanilla/0.22/subrosa.app/Contents/Resources/shader/shadow.glvs
+f838bc8275d8a27003c4bed4e1d1ee7b05ea2b96dbb5d8aac8b966c745c590a3  vanilla/0.22/subrosa.app/Contents/Resources/shaderoutput.txt
+69c1545fe465b5bd05ddec8c164839f82fd40dea932e54b7d238515536d7c2a0  vanilla/0.22/subrosa.app/Contents/Resources/sound/44magnum.wav
+de85189307452c373d91c4da169b17e6dcbd60624da9b2ddf06c6a8c1e1d6151  vanilla/0.22/subrosa.app/Contents/Resources/sound/4cylinder.wav
+bf3c1f1c216acca80afbee70e095ebbbe0a2b9d5ffc26bad9a1adf604267f38d  vanilla/0.22/subrosa.app/Contents/Resources/sound/bullethitbody01.wav
+2691eaec97f81bf0717d71fe065358cd31b6175ebc5b16d880b838f5a481ce80  vanilla/0.22/subrosa.app/Contents/Resources/sound/bullethitbody02.wav
+14216ee45990851fd2eb1984529ecbcf68d5b5c0ff4a5664baa39deab409aa8a  vanilla/0.22/subrosa.app/Contents/Resources/sound/bullethitmetal01.wav
+d312c55cfe42ffd79486a2fcf71ecf794b6988deb364115d307e321fbee540a5  vanilla/0.22/subrosa.app/Contents/Resources/sound/bullethitmetal02.wav
+046f0435ea81254cbf11f170fa7de3fad2ddf0e38071149bb5fa6005ac90154b  vanilla/0.22/subrosa.app/Contents/Resources/sound/carcrash01.wav
+082c6fb8d80c53371ac54e14243592188b0f659c5ff6b63461f3b6e1d61a91dd  vanilla/0.22/subrosa.app/Contents/Resources/sound/carcrash02.wav
+ca010df53da255a1024e9bdd7784058a699267492a5d0ca1611e02a2e101d0e5  vanilla/0.22/subrosa.app/Contents/Resources/sound/gearshift01.wav
+2db5766a977c2114adf1623e95809f011a89f6cc9c8ee5a9766a460015faa3a6  vanilla/0.22/subrosa.app/Contents/Resources/sound/glassbreak01.wav
+66359deadd728a3de29d768625c959c8d4c30e650d9874e3013d6f1aa526992b  vanilla/0.22/subrosa.app/Contents/Resources/sound/phonering01.wav
+beef6b96d28e1a7398ef45be2d614bc9579ff9960f26aa3fe28d2ff6707b4af0  vanilla/0.22/subrosa.app/Contents/Resources/sound/reload01.wav
+8b7b0db24cc12da685aed27536c1b3590064e8ce40ecbea82c1330a0c22fa4b6  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet01.wav
+c6ccaf689e9147d86cca78f5c4079de12dbbf45302be999632126e059deb2da0  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet02.wav
+b1ea698bd9db1a1e6e858d10a9c4e163ce40662dbcf48d656711bff7fd93be15  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet03.wav
+c7a5cfca0111c6cf95c24948d9217a264550e8aa9771f339acf6b41fdf3448dc  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet04.wav
+64f5e82e275d564e11cd6a42af9f16dd173cc68983ca75afadb09e9fc77abf01  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet05.wav
+25d6092d9152df9491f6aa9b3f0238496d9327590ef5e4f9ef48f1f830deed24  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet06.wav
+e7ed9aef775070c918bf308ffdf60d51dfa8ca4ef0ec4f8884c6d07c23135dcd  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet07.wav
+b04139b5ff70f1dce267f261b447d8ed0a884cf86f658bf56d139c4efad48388  vanilla/0.22/subrosa.app/Contents/Resources/sound/ricochet08.wav
+8cabe53a7b589394743fb0053de883cf8cff2ef695fc7cbe52d39b6dd57e1ab4  vanilla/0.22/subrosa.app/Contents/Resources/sound/rifle01.wav
+992b6545539a655121ffc6d9e8f0065b040ce6bbdc14b63a0008fff651b49df1  vanilla/0.22/subrosa.app/Contents/Resources/sound/shell_hit_cement.wav
+977f103f9897d69c79f36acc1ec8c4e0fa26353f5c9ed0749d853d9393a13400  vanilla/0.22/subrosa.app/Contents/Resources/sound/submachinegun01.wav
+a6ad6fe9692a487264ad0ca55a8e4d9d807c49fa8a30f7674893b5663f7cfe89  vanilla/0.22/subrosa.app/Contents/Resources/sound/tiresqueal.wav
+129ac1851cba8cf0fffa176644bded9bcb6bc98afebd48467932bb3b68e01fee  vanilla/0.22/subrosa.app/Contents/Resources/subrosa.bmp
+a6fc3fb30e90154a70e399efe3b3681cefa13f497279a7a875fa9995e59acea2  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_dollar.png
+320ae6d2bf7fc4d16976a8ed5fc58192bd9149f120aa5b805aaab5d3339e3120  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_fifty.png
+83c2a688da82cb7303a81364830bb04faf84f969d701b673da5ee2790905fa05  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_five.png
+865aa2196c30eb90957be674e5fb9743255a492d26ff454c959e1f15cbdc666b  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_hundred.png
+b6f7972c859d5b522403578f7e7a71744e5f5c034391cd7116df5a383c8a6eeb  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_ten.png
+85e0737d39261f3e4f358d9618eec329ead8c6c5f194b104b4cf3c78acae1196  vanilla/0.22/subrosa.app/Contents/Resources/texture/cash_twenty.png
+c7330904cbaa17d503ad1f15af25820e2432a4fad2887bec90d0d212876c867d  vanilla/0.22/subrosa.app/Contents/Resources/texture/dotmatrixfont.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.22/subrosa.app/Contents/Resources/texture/font01.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.22/subrosa.app/Contents/Resources/texture/font02.png
+aece24e8006445ceda44d92bfbe4e070164c03b50a775b14c8e3ef5be779b84f  vanilla/0.22/subrosa.app/Contents/Resources/texture/mouse01.png
+63a4b0c37257bb462b682d9a2d26629664745ad54e3b82cd487bd44bab80a516  vanilla/0.22/subrosa.app/Contents/Resources/texture/times.png
+70f61dcf27c07489a1fa6f0234f98f03f3d46ba827d16f1e1cafd77649072171  vanilla/0.22/subrosa.app/Contents/Resources/texture/twitter01.png
+129ac1851cba8cf0fffa176644bded9bcb6bc98afebd48467932bb3b68e01fee  vanilla/0.22/subrosa.bmp
+50f67acabe8a6443760971bf3050617d255b6b2e6e8c93739db0bc0607efcf0b  vanilla/0.22/subrosa.exe
+a6fc3fb30e90154a70e399efe3b3681cefa13f497279a7a875fa9995e59acea2  vanilla/0.22/texture/cash_dollar.png
+320ae6d2bf7fc4d16976a8ed5fc58192bd9149f120aa5b805aaab5d3339e3120  vanilla/0.22/texture/cash_fifty.png
+83c2a688da82cb7303a81364830bb04faf84f969d701b673da5ee2790905fa05  vanilla/0.22/texture/cash_five.png
+865aa2196c30eb90957be674e5fb9743255a492d26ff454c959e1f15cbdc666b  vanilla/0.22/texture/cash_hundred.png
+b6f7972c859d5b522403578f7e7a71744e5f5c034391cd7116df5a383c8a6eeb  vanilla/0.22/texture/cash_ten.png
+85e0737d39261f3e4f358d9618eec329ead8c6c5f194b104b4cf3c78acae1196  vanilla/0.22/texture/cash_twenty.png
+c7330904cbaa17d503ad1f15af25820e2432a4fad2887bec90d0d212876c867d  vanilla/0.22/texture/dotmatrixfont.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.22/texture/font01.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.22/texture/font02.png
+aece24e8006445ceda44d92bfbe4e070164c03b50a775b14c8e3ef5be779b84f  vanilla/0.22/texture/mouse01.png
+63a4b0c37257bb462b682d9a2d26629664745ad54e3b82cd487bd44bab80a516  vanilla/0.22/texture/times.png
+70f61dcf27c07489a1fa6f0234f98f03f3d46ba827d16f1e1cafd77649072171  vanilla/0.22/texture/twitter01.png
+c1d059f843a9949b4bab0c281894ece5dbd088c39c9d6a4480782cde4284a42d  vanilla/0.22/wrap_oal.dll
+1565e852889ecf9416b6c2e274406774bb4a0b68409a7e4b3322653c49434954  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/config.txt
+26592df0db555d4404a6097c9570fc78b6cd52789c0f8323b8d45556665e0059  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building000.sbb
+52cf91a5402da61918e9796b485a6a522117cb2fba6ca3e5788c7a4b6ad09c96  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building001.sbb
+5e3d7c7dc2e84cc7e10e62f6f2c62044c7a41a47fb7efa9126fec64e5ebeafce  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building002.sbb
+186c4eff36afcd8f9ec4b04ca4f89f3c34b7635960ceae6a0199778794de0e3b  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building003.sbb
+25cf5387cf61de0934275ee51d7b2cd3825ddfff470964184b149a1902b09e32  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building004.sbb
+592b0236b68eef2753b339869d7d84a094688d03890a027f000a8c134019261a  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building005.sbb
+437caba3363e23c2eb3efbcef1c6acfb6cf2d2e6f8508f53a8c14889233c24bb  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building006.sbb
+143093718c116fdc40b2ccf57f2625ada19555b4e26d810a552ad674bc378851  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building007.sbb
+efe3fed2ad095cc3bb967f6b681182a33ed9f84fc5c3e55aa324fb2541e661ec  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building008.sbb
+37eb23970ff9801b9eea9e69ca5d50023c99db2ec2f4c1fb958e2905dcd36b5c  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building009.sbb
+de438f75c68fea1a6d6cb6b04cab533d054e27969aa53be1cb834033e9415443  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building010.sbb
+65b8539a7962212796764345449e6db16c5c19ff82ef41fb2cbffdf3ca0efd83  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building011.sbb
+b9a91f229ad8c2df58a152bf21599c11101517ee910796e0688ee6749187c938  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building012.sbb
+2ed90cfb68fa584188788067a3a042901576de6ca181a76bb48d11697899da0b  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building013.sbb
+61805e0bde7069877dab99563cd027ad48ce85c3887cf50f79aed927c7aa20e1  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building014.sbb
+9de5d4493d930e555fb2a7cf6fdcda1340ccf48806e36a737d78cc3b01abf5a0  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building015.sbb
+65999ee9f8a6c856d5bb0ff8f8dabf217b3a4d6eb34259a117f43685e631a9c7  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building016.sbb
+53a995f55495877912929f52006deb3048030691307951f911de79b593840675  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building017.sbb
+d91abe76064fca9c780e59bc940a325fd03e43b41da921b2a4131ab137f32743  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building018.sbb
+6badc2dad8920de75b887af566885d7b6c8cb4a570684a8956a1eec107e6bc99  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building019.sbb
+fe75184a5f1140318ce50972eaa07025f5358c14068add66fdbd760b472213c3  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building020.sbb
+97fc900a35a7708ecc4873305759d59bc52c5e9d7bca462b0429c07d3523cfba  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building021.sbb
+6c25d4a7efbf62185f5708903dacb5c22af8c01cf065d6a0bcf4014e6dbabbe4  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building022.sbb
+1866bca3a9b907a90c915612d88f290d90ac48e1513a0633d89eeb51ff4c209c  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building023.sbb
+ab7e304d7555029c5e92f3dd0ab2958f8932d718d5728f2fd8a3aa21591c3e8a  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building024.sbb
+c164c4c60349ba8d2a51bb3a2dab9b532b488c8e0a1774968c9a87945e88906b  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/building025.sbb
+614a74d18fb5163ae18ea546795a88d38b2a26466e4c4acfbddf0e22a5380005  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/data/city.sbc
+65a9bbd5b3b9161c0dd61a9e185e391cfa68f31171e1a5fcfad20bcc9eb09480  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/libspeex.dll
+f15b0408096eafc700fe069b716ffa921854b4e95bed33ad08524a59cc8ad57b  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/libspeexdsp.dll
+eb2d0aedb5d25e6ea5732623347d6406bc8789dc8ee15b89a07fd9406aa576df  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/OpenAL32.dll
+edb4ddac5c18222177c61f2cdbbfe9a7bf5d995da0f11c662650dc8648dc6cc1  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/SDL2.dll
+d9936eadda55d1bfb2de4b809d88c136ddbb8becae70b3d1aed4933d113be6ea  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/subrosadedicated022.exe
+c1d059f843a9949b4bab0c281894ece5dbd088c39c9d6a4480782cde4284a42d  vanilla/0.22_Dedicated_Server/Sub Rosa 0.22 Dedicated Server/wrap_oal.dll
+24dabc686911cdf570bec7e3004712a8703b5b544b876096acf2db1909002f3b  vanilla/0.24b/Sub Rosa 0.24b/config.txt
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24b/Sub Rosa 0.24b/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24b/Sub Rosa 0.24b/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24b/Sub Rosa 0.24b/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24b/Sub Rosa 0.24b/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24b/Sub Rosa 0.24b/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24b/Sub Rosa 0.24b/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24b/Sub Rosa 0.24b/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24b/Sub Rosa 0.24b/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24b/Sub Rosa 0.24b/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24b/Sub Rosa 0.24b/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24b/Sub Rosa 0.24b/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24b/Sub Rosa 0.24b/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24b/Sub Rosa 0.24b/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24b/Sub Rosa 0.24b/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24b/Sub Rosa 0.24b/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24b/Sub Rosa 0.24b/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24b/Sub Rosa 0.24b/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24b/Sub Rosa 0.24b/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24b/Sub Rosa 0.24b/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24b/Sub Rosa 0.24b/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24b/Sub Rosa 0.24b/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24b/Sub Rosa 0.24b/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24b/Sub Rosa 0.24b/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24b/Sub Rosa 0.24b/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24b/Sub Rosa 0.24b/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24b/Sub Rosa 0.24b/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24b/Sub Rosa 0.24b/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24b/Sub Rosa 0.24b/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24b/Sub Rosa 0.24b/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24b/Sub Rosa 0.24b/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24b/Sub Rosa 0.24b/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24b/Sub Rosa 0.24b/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24b/Sub Rosa 0.24b/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24b/Sub Rosa 0.24b/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24b/Sub Rosa 0.24b/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24b/Sub Rosa 0.24b/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24b/Sub Rosa 0.24b/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24b/Sub Rosa 0.24b/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24b/Sub Rosa 0.24b/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24b/Sub Rosa 0.24b/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24b/Sub Rosa 0.24b/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24b/Sub Rosa 0.24b/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24b/Sub Rosa 0.24b/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24b/Sub Rosa 0.24b/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24b/Sub Rosa 0.24b/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24b/Sub Rosa 0.24b/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24b/Sub Rosa 0.24b/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24b/Sub Rosa 0.24b/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24b/Sub Rosa 0.24b/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24b/Sub Rosa 0.24b/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24b/Sub Rosa 0.24b/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24b/Sub Rosa 0.24b/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24b/Sub Rosa 0.24b/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24b/Sub Rosa 0.24b/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24b/Sub Rosa 0.24b/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24b/Sub Rosa 0.24b/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24b/Sub Rosa 0.24b/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24b/Sub Rosa 0.24b/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24b/Sub Rosa 0.24b/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24b/Sub Rosa 0.24b/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24b/Sub Rosa 0.24b/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24b/Sub Rosa 0.24b/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24b/Sub Rosa 0.24b/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24b/Sub Rosa 0.24b/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24b/Sub Rosa 0.24b/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24b/Sub Rosa 0.24b/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24b/Sub Rosa 0.24b/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24b/Sub Rosa 0.24b/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24b/Sub Rosa 0.24b/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24b/Sub Rosa 0.24b/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24b/Sub Rosa 0.24b/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24b/Sub Rosa 0.24b/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24b/Sub Rosa 0.24b/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24b/Sub Rosa 0.24b/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24b/Sub Rosa 0.24b/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24b/Sub Rosa 0.24b/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24b/Sub Rosa 0.24b/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24b/Sub Rosa 0.24b/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24b/Sub Rosa 0.24b/data/weapon/ak47.csm
+993c70791fc839bcdf0705dea7c84d06695bd9e9b68c7bce16df9ffb37a7587c  vanilla/0.24b/Sub Rosa 0.24b/Icon.ico
+65a9bbd5b3b9161c0dd61a9e185e391cfa68f31171e1a5fcfad20bcc9eb09480  vanilla/0.24b/Sub Rosa 0.24b/libspeex.dll
+f15b0408096eafc700fe069b716ffa921854b4e95bed33ad08524a59cc8ad57b  vanilla/0.24b/Sub Rosa 0.24b/libspeexdsp.dll
+eb2d0aedb5d25e6ea5732623347d6406bc8789dc8ee15b89a07fd9406aa576df  vanilla/0.24b/Sub Rosa 0.24b/OpenAL32.dll
+111aeddc6a6dbf64b28cb565aa12af9ee3cc0a56ce31e4da0068cf6b474c3288  vanilla/0.24b/Sub Rosa 0.24b/Redist/dxwebsetup.exe
+b8f39714d41e009f75efb183c37100f2cbabb71784bbd243be881ac5b42d86fd  vanilla/0.24b/Sub Rosa 0.24b/Redist/oalinst.exe
+8162b2d665ca52884507ede19549e99939ce4ea4a638c537fa653539819138c8  vanilla/0.24b/Sub Rosa 0.24b/Redist/vcredist_x86.exe
+edb4ddac5c18222177c61f2cdbbfe9a7bf5d995da0f11c662650dc8648dc6cc1  vanilla/0.24b/Sub Rosa 0.24b/SDL2.dll
+e1aca879a41e6cd28a4aea9338b97a0962f9e3a0b0ae64a0ee868b6a08331cd2  vanilla/0.24b/Sub Rosa 0.24b/shader/atmosphere.glfs
+a7b057a663b2a857f62776332579159ba81bde5f68f569b36f2be810ffcb7c84  vanilla/0.24b/Sub Rosa 0.24b/shader/atmosphere.glvs
+408739b2d3ee156b64e901b11f19de69a926cebd35494d25788b4a3918295d9a  vanilla/0.24b/Sub Rosa 0.24b/shader/blur.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.24b/Sub Rosa 0.24b/shader/blur.glvs
+3ee8c40ca1f19e00468cab9322ebe1d1e9ed2884dbc2fb64ea423fea5513f9fe  vanilla/0.24b/Sub Rosa 0.24b/shader/depth.glfs
+1fa61d1e40d15094aa4a14a66a3d11a09d72c6a40fc508c533834d64619f163d  vanilla/0.24b/Sub Rosa 0.24b/shader/depth.glvs
+bda7080c7e5ee9df71b7dbb9f3203ab7f7db4a670e979d2e7f5eda10083bb7dd  vanilla/0.24b/Sub Rosa 0.24b/shader/landscape.glfs
+b0d2306432d5b9c768cb1f40f20c29419e013deab7b84111d9c47a4b456f26f8  vanilla/0.24b/Sub Rosa 0.24b/shader/landscape.glvs
+55dcfd9216567cfad4f8fb814bafb579ad6fd9e426dd947a9e297b6a7b8b3564  vanilla/0.24b/Sub Rosa 0.24b/shader/model.glfs
+312b3ba5e7d1d5331be30afe60aa375ad264fb265164822e46eff9a8a24c4b21  vanilla/0.24b/Sub Rosa 0.24b/shader/model.glvs
+71c0a069850e1980bf120c1cc0e1358dff79e4460ff1ef06d946075bc69cf197  vanilla/0.24b/Sub Rosa 0.24b/shader/occlusion.glfs
+8e7bfa62fdbee98f8ec74ec63a8a5dbf3d5472dbf58d072f2880350f3c80a0c9  vanilla/0.24b/Sub Rosa 0.24b/shader/occlusion.glvs
+073019d1bb8d08659f7b212426915ff094e8352383413602d21a357dec268e22  vanilla/0.24b/Sub Rosa 0.24b/shader/reflect.glfs
+66257b24cca9065a5927ae6c1a9162a889103d25b18655f83f46558caa194679  vanilla/0.24b/Sub Rosa 0.24b/shader/reflect.glvs
+1a38a1e0e667c88c6de309b5efc645a02dbb830f4828addb560f3ed445f92ca0  vanilla/0.24b/Sub Rosa 0.24b/shader/sector.glfs
+051d6ea319ae6a58d1e254d5a7be12e97b918bc423ca06d9d7a0e644e28a568d  vanilla/0.24b/Sub Rosa 0.24b/shader/sector.glvs
+3308d2807bfbe9cb519a9d140db2d923cfeeba229597bef61d77fe5d120dd6bd  vanilla/0.24b/Sub Rosa 0.24b/shader/sector_window.glfs
+051d6ea319ae6a58d1e254d5a7be12e97b918bc423ca06d9d7a0e644e28a568d  vanilla/0.24b/Sub Rosa 0.24b/shader/sector_window.glvs
+581926ad90cde9f17c10d569ad446c9f47be88c492111a2c9c1bdf98be623b10  vanilla/0.24b/Sub Rosa 0.24b/shader/shadow.glfs
+eb9b856976de1b984c1d6025bb36aec6a2fbe03b50cdd8682f40dadc1240765d  vanilla/0.24b/Sub Rosa 0.24b/shader/shadow.glvs
+4aa0377ae7eda15f9d71381a5bf5d02fc8247aee4ace05535f92ac7be8bc1935  vanilla/0.24b/Sub Rosa 0.24b/shaderoutput.txt
+69c1545fe465b5bd05ddec8c164839f82fd40dea932e54b7d238515536d7c2a0  vanilla/0.24b/Sub Rosa 0.24b/sound/44magnum.wav
+de85189307452c373d91c4da169b17e6dcbd60624da9b2ddf06c6a8c1e1d6151  vanilla/0.24b/Sub Rosa 0.24b/sound/4cylinder.wav
+bf3c1f1c216acca80afbee70e095ebbbe0a2b9d5ffc26bad9a1adf604267f38d  vanilla/0.24b/Sub Rosa 0.24b/sound/bullethitbody01.wav
+2691eaec97f81bf0717d71fe065358cd31b6175ebc5b16d880b838f5a481ce80  vanilla/0.24b/Sub Rosa 0.24b/sound/bullethitbody02.wav
+14216ee45990851fd2eb1984529ecbcf68d5b5c0ff4a5664baa39deab409aa8a  vanilla/0.24b/Sub Rosa 0.24b/sound/bullethitmetal01.wav
+d312c55cfe42ffd79486a2fcf71ecf794b6988deb364115d307e321fbee540a5  vanilla/0.24b/Sub Rosa 0.24b/sound/bullethitmetal02.wav
+046f0435ea81254cbf11f170fa7de3fad2ddf0e38071149bb5fa6005ac90154b  vanilla/0.24b/Sub Rosa 0.24b/sound/carcrash01.wav
+082c6fb8d80c53371ac54e14243592188b0f659c5ff6b63461f3b6e1d61a91dd  vanilla/0.24b/Sub Rosa 0.24b/sound/carcrash02.wav
+ca010df53da255a1024e9bdd7784058a699267492a5d0ca1611e02a2e101d0e5  vanilla/0.24b/Sub Rosa 0.24b/sound/gearshift01.wav
+2db5766a977c2114adf1623e95809f011a89f6cc9c8ee5a9766a460015faa3a6  vanilla/0.24b/Sub Rosa 0.24b/sound/glassbreak01.wav
+9434c3c49ff50555b517122394dfd7cdd44a8b7e94b7eb14d5db450eeeafb876  vanilla/0.24b/Sub Rosa 0.24b/sound/helicopter02.wav
+66359deadd728a3de29d768625c959c8d4c30e650d9874e3013d6f1aa526992b  vanilla/0.24b/Sub Rosa 0.24b/sound/phonering01.wav
+beef6b96d28e1a7398ef45be2d614bc9579ff9960f26aa3fe28d2ff6707b4af0  vanilla/0.24b/Sub Rosa 0.24b/sound/reload01.wav
+8b7b0db24cc12da685aed27536c1b3590064e8ce40ecbea82c1330a0c22fa4b6  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet01.wav
+c6ccaf689e9147d86cca78f5c4079de12dbbf45302be999632126e059deb2da0  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet02.wav
+b1ea698bd9db1a1e6e858d10a9c4e163ce40662dbcf48d656711bff7fd93be15  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet03.wav
+c7a5cfca0111c6cf95c24948d9217a264550e8aa9771f339acf6b41fdf3448dc  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet04.wav
+64f5e82e275d564e11cd6a42af9f16dd173cc68983ca75afadb09e9fc77abf01  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet05.wav
+25d6092d9152df9491f6aa9b3f0238496d9327590ef5e4f9ef48f1f830deed24  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet06.wav
+e7ed9aef775070c918bf308ffdf60d51dfa8ca4ef0ec4f8884c6d07c23135dcd  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet07.wav
+b04139b5ff70f1dce267f261b447d8ed0a884cf86f658bf56d139c4efad48388  vanilla/0.24b/Sub Rosa 0.24b/sound/ricochet08.wav
+8cabe53a7b589394743fb0053de883cf8cff2ef695fc7cbe52d39b6dd57e1ab4  vanilla/0.24b/Sub Rosa 0.24b/sound/rifle01.wav
+992b6545539a655121ffc6d9e8f0065b040ce6bbdc14b63a0008fff651b49df1  vanilla/0.24b/Sub Rosa 0.24b/sound/shell_hit_cement.wav
+977f103f9897d69c79f36acc1ec8c4e0fa26353f5c9ed0749d853d9393a13400  vanilla/0.24b/Sub Rosa 0.24b/sound/submachinegun01.wav
+a6ad6fe9692a487264ad0ca55a8e4d9d807c49fa8a30f7674893b5663f7cfe89  vanilla/0.24b/Sub Rosa 0.24b/sound/tiresqueal.wav
+f9e817437efe2bd32dd62d8b5995f4e5c2f338dff1fb26f1fbd82d050257158e  vanilla/0.24b/Sub Rosa 0.24b/sound/train01.wav
+e7f73119317e8d6ec6b54c19f1be58973fa64dc3fa78bb955bf534cfe52ddf0d  vanilla/0.24b/Sub Rosa 0.24b/Steam.dll
+3648e216ecf0c6a474b07e79d39394911bfb9b5c85a52c20886aec1e9709f82d  vanilla/0.24b/Sub Rosa 0.24b/steam_api.dll
+a3b6fcecc4ffdfab620f13ab00476711a5173af898e40fbe03d2d7c96bd81f9e  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/._Info.plist
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/._SDL2.framework
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Headers
+17c9635f5b506a03b35cf8116bdbdb51ed15af3e5514cd958c985c4a4bfcecfe  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/OpenAL
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Resources
+fece4cb64642876542132e21be94e8a1a06c0b2d37b0ef65695873c42169e3c3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/al.h
+c4cc831c57f64ac0aae9518cadbeb398c8c77b218e3c8b0131ec6ddc186859c0  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/alc.h
+caec4f6b4557c53a03fe0daa46db8ad928a488420bea786a24a4fffd24376632  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Headers/MacOSX_OALExtensions.h
+514727c7cb26f0b938bb5b3bf57ec98938c65526bfb479e2b4829f67137e5495  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/OpenAL
+edc7b404fb07ce3d1f87b6e6a48a6881be29f3b095cb6dad29954e36e3958b31  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/A/Resources/Info.plist
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/OpenAL.framework/Versions/Current
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/._Versions
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Headers
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Resources
+3fe3143e0f73aec22346589038070b52d158f1d2d120a10653d1f81198f75f86  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/SDL2
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/._A
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/.__CodeSignature
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._Headers
+a221569ff191db9b0e1a6174f26da4055d070129a2de5e96a8fc45e50eb5cdc6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._Resources
+7221e56f0987db064ffe1bdfa3d13eda2641bf91ea28e0e9cb810c00fc6c79ae  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/._SDL2
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/_CodeSignature/._CodeResources
+e1b3bbaa9e66e87991d639ac79f2f06c770af4b69055245ebeae54c5b91c669a  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/_CodeSignature/CodeResources
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._begin_code.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._close_code.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_assert.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_atomic.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_audio.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_bits.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_blendmode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_clipboard.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_config.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_config_macosx.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_copying.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_cpuinfo.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_endian.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_error.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_events.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_filesystem.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_gamecontroller.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_gesture.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_haptic.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_hints.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_joystick.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_keyboard.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_keycode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_loadso.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_log.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_main.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_messagebox.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_mouse.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_mutex.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_name.h
+ebbf72b74710f5b4e7289cdf9e0f43226d82973bab40c3122ab825bf28c1eeba  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengl.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengles.h
+23eebc09a3e48855be6f75b1b9c068a46c8a1a9c3dd5b6d9f5d25eee6b5c15ce  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_opengles2.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_pixels.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_platform.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_power.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_quit.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_rect.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_render.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_revision.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_rwops.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_scancode.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_shape.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_stdinc.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_surface.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_system.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_syswm.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_thread.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_timer.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_touch.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_types.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_version.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/._SDL_video.h
+979948d0e260743717078cba3544389493b160da36929af0a46d74827ceada82  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/begin_code.h
+dcac842952318586307bfc8a95686b907f478af66d666662668e7a1b708ee2b9  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/close_code.h
+7d472b0b062f4a57a901016dd0f62116221d6ad4eaaf8fabf34d86c238ed3f3d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h
+4af5f46ebe34753ae9ffb0b932a1397ac0ec37cedc3845a03fa3a154dae52737  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_assert.h
+34b842c343abadb1e91da02a7fd30ef1da577c90bb370c54c385f4e44413804d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_atomic.h
+e3eb3603cda57deebb57947b5cabf91c7e06d0bc051b0628d76c34521d971382  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_audio.h
+fe36055e391e68e80922ae40209cb86e8db57f01fac896933e791dae53436912  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_bits.h
+3eb806b1eb223d0fea8bd757501c2ee9217a6835fb1b911e78e307ac5e98dbe0  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_blendmode.h
+24d5841490e8de30dd132572ec4862bb8a459396ee3e0a70a17f02469808b073  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_clipboard.h
+2388c00fc8e85e76bc8d3e808ccb5936829421339876bfdd11e42948e498c4b1  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config.h
+243e95c60c32467f2e35c3132816a8528d80f64a1d6fca47d9a6c501eaac27cd  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_config_macosx.h
+1774c2b2574ca5fb6a931aaa5f506981aa32742e94b6e3645cbc2f33c97bcc96  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_copying.h
+ca825459e9b362b3718f81e8a43f911b9c7595f4a5032c9e90fdc75569fcfc0d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_cpuinfo.h
+a40ba1b6184619f1e7671c42fe47a3db125cbdf0959dfd2aa3a6eb138eef5c27  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_endian.h
+453a03f7d08632f599dd8e5615db895633e527c762db75a29580143b955d7ed6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_error.h
+115a6bdc78e80326d37e3a9809ab5b11dcaee19fbcd3e069a4695398addaf441  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_events.h
+cd623e145ef93e26aa53592e78f25ceb144c583ab332ee4a623670415ce93f91  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_filesystem.h
+17547ddd82539d05dd45700bc210482b149fb767a881431f04f7f4287497ea97  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gamecontroller.h
+b49861ea93c5e9c482fff9b9463885513712ed00fc7dfaeeae924d7aac4add41  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_gesture.h
+1152810cfa04fb80c2b02b241c204ff1af0f6aea78ad1344c99aabc65fc1b06d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_haptic.h
+fd36b30e7929c8fe9a6b1031aa8f84873371d740a9fc70a317134534d1b0fea2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_hints.h
+bd749035091f2372f1437ed1051c67ab9e944f8f3aec83a48e0c09568d74482d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_joystick.h
+ab2dac4b76d399c39c7086027041cadc7e12df2eac650d15e5a482388bf788af  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keyboard.h
+f3376d14a9eb3714374a401bb9559dfc68befc88555fd6a08cbc3171e48569c3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_keycode.h
+ad6f92cefc8a2713a335c68dc63fc005305a23071b8fe26520029305cce60390  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_loadso.h
+31cbeaafabe8b2240d6694faa4f944d1efef6c5b856ab0e3b4f05892aa5301fc  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_log.h
+12cc2629b186af17a7c7ecf0369bd035647c5094fc3ba6a49d2f4328d2bb2209  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_main.h
+808e2b3f3405b9ee4dccd034bd3ed6ae09504b2f3fb0554f7c25046e072227fe  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_messagebox.h
+c348d6274e36d76a413a6ec0abd7a3dd958c8adf62ef1ddb566beba38d088be2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mouse.h
+232107cc47ec7cfc2db3b1f98c61601864ad620791a8e89aaebb7af172ffb05f  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_mutex.h
+474c7f104d431d75cee9ebb0bfe02818b48b691e101c9582f57f2caa94764b9a  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_name.h
+7cbb8d845109dd50b9dfd079c209a6bbd88829a721fdf8d5f95d8f5d9568d9ee  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengl.h
+f118bb0c209f79a450e63385f0f0142e6fde7b68959aec95bdeb4136775cd10f  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengles.h
+a83f8bf6fadc552525a0f190d3f81791070f3e0121a8d58e34756abe565a372a  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_opengles2.h
+3669d5edb874fec7e2a1030304036ff2b12fbba3ae5336f58218a489e782beb3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_pixels.h
+8273fb3aed44c0ad84c9f8e5822a079c3943b966c94b153439164cbaa75da0be  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_platform.h
+5c5a3c3844a470ee3bcce63270b72ab32257c333a99fd04c46b926acaf501757  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_power.h
+b04abaf6d4810cce2d722f3d933ba152764931dff68a20dcbbd53d508096497c  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_quit.h
+02168ba71c32afb33b3d2e793dff55dacaae5560e9bcb6a002f37cf21be9fe39  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rect.h
+826d2b6768ace24062f38d7d9cd093786a4d1bd5857835e955b7095d13458bef  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_render.h
+beabb3914a30b7cb52d7a8f7fd6ec4fcfa14bb83c1ef7f353c1d7f7f0b8975b5  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_revision.h
+4173f470b3c4e08e2ba3bf8ef91c6d565b6538a23332e8ef4cd3cbfd8c93be68  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_rwops.h
+2532f2433ff5316c93a666941fc2771f7b4e170e018bfea9a96cc709ae578c93  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_scancode.h
+d1abf04e4497884b8f2e855b6b91eb657e0d977c720c056ca74571fdd6e15ec9  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_shape.h
+4a40de200511ceb396889b967269ac61ecb02d7d127b30845287935a149a9ae6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_stdinc.h
+1abecec806d3e7439def079f9318918fe008fed9a302869855d43052f31f14bd  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_surface.h
+8b78ab84bab354736330fb68a203dbd8064f833f989a584af064250f26c11056  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_system.h
+52c789f319fb7e4dd681bab7e778e0b4e761bd0a330cd002afc4037cda4498e3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_syswm.h
+a244202c16a5a0135cf218e0ac5811468e90efede9c6627f32229a96af16b4f6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_thread.h
+d60cc8e046cd33bc860e1d15ad3ef596b158c5826cc0dd54dfb706624463aca3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_timer.h
+0a0e9e5c4a32dd31024d1b392f307b2d822c4fdbe7cb677d086b617217c5ad52  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_touch.h
+1a94dea7e15074bbd5b7f06dc4b84d26b328f7b12803e46a2721c2e7a6d5aaac  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_types.h
+f70560d1ae6a995000e4029945b497b962b34b10fa7734bf6abf21148f8c6180  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_version.h
+22857b140118ae99f01f118a5ebfeca453be11d1fe2ed5d5842737c9760de8d2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Headers/SDL_video.h
+021e0a592043da8b1a820a0315d344458caa6dc695c5208c03ca2a7989421870  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources/._Info.plist
+20aefba9b9908fadc97435c58027c06d0496417e77791f478994dd2be7bbe222  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources/Info.plist
+67e47c870120581c646ebb1ca287e24e39dcee0e40328565ab6d3806244e700e  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/A/SDL2
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/SDL2.framework/Versions/Current
+09d67365479ae0ee103140d4f495362399f4483e3dd0603cb6f38d9f5465bef1  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Headers
+62a0245311a27a99f68355256ea4bae27bfbf4496536d10ae1b767aebcd499b2  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Resources
+9a8e9f26ab7050aa706f3c00a64e3ca58ac1b6ea6b02587181f4f0e259a3f3a0  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Speex
+4cef02e3dcd9558ed2623c5ddbfbc8710a8eb434dbfc0081b21daf818db3a010  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/._.DS_Store
+a2642b6b0c1a8b4548d9841c16c0424ff620abf6882aeaaa904af6de633bb805  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/.DS_Store
+1a9a59c5fb21f967289d0816b889cfbecab0ef5f53ebba2451fcb24a9d4486ec  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex.h
+88ffabfa59833e84fc35c5b131a0f42d1a6777f64c2345e2e9f84a95a957e84f  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_bits.h
+77ef0e501be01fb298e69d62cc819759094c684f98b437a868e9117054bdb631  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_buffer.h
+6fac74cd4fc9a057853c0050504faaf3591b0214ac333f653d50aef6cff04ed8  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_callbacks.h
+7ea5c623c2b6e283482cfc761f4860034f385e579ed85ee138c2f51a83e7f28e  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_echo.h
+edd6970a82a1db4f85085fcfc736487e7b60889a731a30c32d30ddb4c865673a  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_header.h
+2b336feec642d48221a5c09974c169aa79fb45f1d6c523ef1d1bddf3ba6b1c00  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_jitter.h
+b8caeac7b65143bb0cdcce3d7555f69939fbf6c50ce399ea9b0dfe43bfebd2d6  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_preprocess.h
+18961b1db04d77eebdecdfbd2e62f0682ef3010a233e6b25d7ee8d099d0f3eda  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_resampler.h
+2f52b8bfbc7913302b9f59ea726792938d96c0a092ba06f9240c9096ba316bd3  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_stereo.h
+4524e2c7db34d93b2312bd9af827b7c2a9b377120573540a4e674de4d2a8102e  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Headers/speex_types.h
+3a84eec0499533a16e9e4f26d4ffb977d7aced490fe4f2c9c2cbc4e893f3744d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Resources/English.lproj/InfoPlist.strings
+494266fe946037e2c17ebaafb326a93cfb61c0781b87dc2fc6b76085843b448d  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Resources/Info.plist
+6a368f8199c4322225dd7cae720f6fa200e702f068a05a97c757471670f51b73  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/A/Speex
+22b451f10b3aab8f5790f9e52958bc4fda2854a091ff8450dae4a3f2870f85df  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Frameworks/Speex.framework/Versions/Current
+f6a0107e8db38d719d8bb640b3d1637afd07c56a5fc74f52ec58a091f49b7b98  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/Info.plist
+6a3cad487e9d52aa7e481242a74a00d3aec7f0dfff5b64ba62307a0360a3efeb  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/MacOS/libsteam_api.dylib
+78119827992c9b07e50fae1c3369d21279c123ce2593ed5bb89cb637b935012b  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/MacOS/subrosa
+82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0  vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/PkgInfo
+129ac1851cba8cf0fffa176644bded9bcb6bc98afebd48467932bb3b68e01fee  vanilla/0.24b/Sub Rosa 0.24b/subrosa.bmp
+294db16c600b96cdef00c9c025538a37d6d81439077f3ff1348efbbf0d92ca84  vanilla/0.24b/Sub Rosa 0.24b/subrosa.exe
+9afeea228cf37c08e0365430d6c14548579adc61cc96624580808f9ce2891390  vanilla/0.24b/Sub Rosa 0.24b/subrosa.x64
+54f18a19a87fdf55ef5a401be5d42d1f96326a1af6c7f2b50e2ea6fba237a973  vanilla/0.24b/Sub Rosa 0.24b/subrosadedicated.exe
+a6fc3fb30e90154a70e399efe3b3681cefa13f497279a7a875fa9995e59acea2  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_dollar.png
+320ae6d2bf7fc4d16976a8ed5fc58192bd9149f120aa5b805aaab5d3339e3120  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_fifty.png
+83c2a688da82cb7303a81364830bb04faf84f969d701b673da5ee2790905fa05  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_five.png
+865aa2196c30eb90957be674e5fb9743255a492d26ff454c959e1f15cbdc666b  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_hundred.png
+b6f7972c859d5b522403578f7e7a71744e5f5c034391cd7116df5a383c8a6eeb  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_ten.png
+0ff0cc562424383c0e164d67ec38d4d418193ec154832789b3a8c3572fe3fb4a  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_thousand.png
+85e0737d39261f3e4f358d9618eec329ead8c6c5f194b104b4cf3c78acae1196  vanilla/0.24b/Sub Rosa 0.24b/texture/cash_twenty.png
+e9bf6d0578a468e6af1885d56a9ed41ea466f2db3e5b1e83801cd699da0b7ddb  vanilla/0.24b/Sub Rosa 0.24b/texture/desert01.png
+c7330904cbaa17d503ad1f15af25820e2432a4fad2887bec90d0d212876c867d  vanilla/0.24b/Sub Rosa 0.24b/texture/dotmatrixfont.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.24b/Sub Rosa 0.24b/texture/font01.png
+1a7165f5b95bd4e9cb4eba8c9cb32333308ca20511b8fb69cc51c681ee58ecdb  vanilla/0.24b/Sub Rosa 0.24b/texture/font02.png
+5f884126cd2d60af9cec7c6946b96d8992cc20ada35a51b0ae82dd843e0181ae  vanilla/0.24b/Sub Rosa 0.24b/texture/mic.png
+aece24e8006445ceda44d92bfbe4e070164c03b50a775b14c8e3ef5be779b84f  vanilla/0.24b/Sub Rosa 0.24b/texture/mouse01.png
+63a4b0c37257bb462b682d9a2d26629664745ad54e3b82cd487bd44bab80a516  vanilla/0.24b/Sub Rosa 0.24b/texture/times.png
+70f61dcf27c07489a1fa6f0234f98f03f3d46ba827d16f1e1cafd77649072171  vanilla/0.24b/Sub Rosa 0.24b/texture/twitter01.png
+c1d059f843a9949b4bab0c281894ece5dbd088c39c9d6a4480782cde4284a42d  vanilla/0.24b/Sub Rosa 0.24b/wrap_oal.dll
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/data/weapon/ak47.csm
+830042375ed6489537fbf0f3ead7b0a82758633430fd1e615f348c9dfecdeef5  vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/subrosadedicated024b
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/data/weapon/ak47.csm
+e44dda00c47f0acf50b9f4d33420d7b5aba53cc14baf1947744fcd0e7db4eac9  vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/subrosadedicated024b.exe
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/data/weapon/ak47.csm
+5f159b17a0bafc66e8a0924088e8fe9de05684875066ebd72997ca5baaad9b9c  vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/subrosadedicated024c
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/data/weapon/ak47.csm
+8f09ba86085e0fea83b4c72610aa95b4b9fe98d191af08ffd21e33f25b0da6e6  vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/subrosadedicated024c.exe
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/autosave.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/block/test2.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/aapartment1.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/aoffice1.sbb
+7fc87503295bb83300e359cff14363baf61e3082bd49d9a75073c7d649d9a7e9  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/apartment1.sbb
+03935334e7e051e6b60612303038c3344c86e53bc6c79b9633adddca1b33cedd  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/bar1.sbb
+4fd1cebeb797b873599823cb338322b7eba8dfeec46431e2b2148ba4618ac7dd  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/base1.sbb
+600f40e0d9c8460cea937fc523d9578af90aa2835f7cfb8130ba5b90497f163e  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/base2.sbb
+dadeee7048e09b68e8b3ae3ac12a562680d1d29aa404c2ea3006cbf2533809cf  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/base3.sbb
+767ec2ee350e1a727ea3a8dd78e6dd00d7ad2fe7f4459b92e8f4d8eec253c400  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/base4.sbb
+ca941fbee1e1d6acebee8a7c859ebf86afbcc0aa3dcefca4ad106a36f2365aa9  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/base5.sbb
+97bd7a367851a3d6f5c57be08e8ae4b85d464a23d37cfa53529e9aac3df9ed2e  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/gunshop.sbb
+20d2569b63914c12bdc4e9dbf95b939b6dc9baf3bbef925960411686e25ef9ee  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/hospital0.sbb
+e5cbd178379f7ce6840389e663ef9a3ca330414539903f5da37ed2ee61d08c94  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/newbuilding.sbb
+5b6c007558feee859ac379a446e557fa584c47b209243837268183fca79c00ff  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/office1.sbb
+2fca160d8b137e3e70413d1ec393141278dcd910802ecb7315ff1f119bf9b2d9  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/parkinggarage2.sbb
+746d56c2c37b70acb6778fe4c1fdf0414c3585d358c8fbfc74880fcd8e0754f3  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/skyscraper1.sbb
+f84fbbd271ae489ba8daf043813ddf24d9a31b30e6c5960dfee114f19ea420ff  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/skyscraper2.sbb
+ab87e9710c64f0c19bf7e5a0ebd5dadffa10139f5e74b24556dabac983e84969  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/test4.sbb
+fd173c777edf1f3a6bb07beb02d434d65cdc865e681c5ec397abed38735d1a89  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/building/test5.sbb
+b7818b9f31ad7d0310108c3558fd8ec17364b9beac86b24f518c0512f6de6d97  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/city.sbc
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/texture/woodpanels0.png
+c50632c18d5948d9c3fed78e8683bb583df117a3b83ae9e31669f3ad1f1d9ca2  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/data/weapon/ak47.csm
+11e006786d945d5731cb664fba718a094d8f02648b13fcc20c26c8614ea603fd  vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/subrosadedicated024d.exe
+b13cabef1397e7640c2fc7606c53fcb2cc038f4ee664261c7290883a27305916  vanilla/0.25b_Dedicated_Linux/data/block/astairwell.sbl
+c00f2d12b49e3fdaf662132384d92f59e4edfa0a278bf42e95f98628ba9c8b9f  vanilla/0.25b_Dedicated_Linux/data/block/astairwellceiling.sbl
+b2b0b5d7dbcb4563646ea62cad93e91b019ac4b530cb4d013d27acbcbe199f08  vanilla/0.25b_Dedicated_Linux/data/block/astairwellfloor.sbl
+77e9ef2d1b04d1e46879952fb9d717b69e30c5ec3a6b3f4f6bc2eb95577ea7ce  vanilla/0.25b_Dedicated_Linux/data/block/autosave.sbl
+65b62c04c3d291f60d342e5f7022cb9b6d3b53d1cde0667094adab34f9639213  vanilla/0.25b_Dedicated_Linux/data/block/billboard.sbl
+404984289814cb0fe3aafc73a6405c81a362af0f08a3ccd33854890d71cd8527  vanilla/0.25b_Dedicated_Linux/data/block/boxtest.sbl
+6675da56bd6c1ea23a036a06a04752f1ee1db296271943ee352561ef547c318e  vanilla/0.25b_Dedicated_Linux/data/block/column.sbl
+28d4179295352471e2ab24b778a33824d58ee6ce03c9525dbcc398c6ce413585  vanilla/0.25b_Dedicated_Linux/data/block/columnfloor.sbl
+66baea98e2cfd1df1746ee7c9b3e9a6e883fb3f4fb4028b3e3545ebaf77bb627  vanilla/0.25b_Dedicated_Linux/data/block/cubicle-edge1.sbl
+852885e17dc7cb515d5f22827911bb98cbb4a53a32e8eaac91cf7ac3429c5809  vanilla/0.25b_Dedicated_Linux/data/block/cubicle-wall1.sbl
+fe0840930a318c25b592e2880bb0577a8b31820a609112caaec00138d85456cd  vanilla/0.25b_Dedicated_Linux/data/block/dealershipdisplay.sbl
+b1b24a07fe2cdb22eeebe656f8815f7da1951d5aaddc870105e7e32bfff50b1c  vanilla/0.25b_Dedicated_Linux/data/block/dealershipsign.sbl
+42a97e410e96458c09527afde6668becf68f862434be750cd99e9bb278b18c26  vanilla/0.25b_Dedicated_Linux/data/block/dealershipsignbtm.sbl
+808ffe4fb4d4847fac19f36732d4ea920b9c05fe0607807ecb4350a24517ae08  vanilla/0.25b_Dedicated_Linux/data/block/dealershipsigntop.sbl
+45225f7824249a931b0dafb71aecc6db5c1299ea0dc5e22c5d7cf3a0975674d8  vanilla/0.25b_Dedicated_Linux/data/block/garagedoor.sbl
+2514bdc946a3b4e8e2055281fa8478e006fe5cbdb5b539981e1df7e82d333007  vanilla/0.25b_Dedicated_Linux/data/block/garagedoorleft.sbl
+46f93f311b3f106a601435f6c104042068e5256005fd75a62635769a11f2d971  vanilla/0.25b_Dedicated_Linux/data/block/gunshopdisplay0.sbl
+ad62a1651f42453b6634d7c82352dd105164ef43d08983ab2963a12214141b78  vanilla/0.25b_Dedicated_Linux/data/block/gunsign.sbl
+d20033d3fa652bc96346313e1f0d40dba9b4f4f167a86057724134ffb299a775  vanilla/0.25b_Dedicated_Linux/data/block/gunsigncorner.sbl
+7ba6998a42593cfe7fd8f069467bdbb5380be823e346cc77e97a4e6f0ab34768  vanilla/0.25b_Dedicated_Linux/data/block/hospitalcanopy.sbl
+f7141717d77e36d3953011219eb0fa9a2006986d3066a09da9549181e2f19c6a  vanilla/0.25b_Dedicated_Linux/data/block/m_stairs.sbl
+83783c1b61f89498b773e03d3ebe0c66593fb2731ce81151e49e1d42c765bd82  vanilla/0.25b_Dedicated_Linux/data/block/parkingramp.sbl
+bc56753d16bc8ed1fc2d37e8f393ec46cc033e8679ee6a8bda99864aed612ca7  vanilla/0.25b_Dedicated_Linux/data/block/reception-desk.sbl
+a32483765c49ecc6587dfb236c893642d526956eb80f5cc769d66f9bf5dac838  vanilla/0.25b_Dedicated_Linux/data/block/reception-desknoceil.sbl
+71bb3f046d7badd2c555fa94e0568d1347949821eba0411bdc75d9ff263db40f  vanilla/0.25b_Dedicated_Linux/data/block/rooftop.sbl
+677af82ebe641ea235fbba7a3c3d8fffb9d53bc8b32fbe12c22c23e5a854bf99  vanilla/0.25b_Dedicated_Linux/data/block/rooftopcorner.sbl
+1b964f33c3b73180dfc28603b6193c4653083015424eda56f9034afd49e19c88  vanilla/0.25b_Dedicated_Linux/data/block/rooftopedge.sbl
+8c6d19b2a1571fb3f7b77f2512520bb861a97578762d3e7e7db2c32dfbdeeb37  vanilla/0.25b_Dedicated_Linux/data/block/rooftopincorner.sbl
+7ee707bed4406b988ccc2c9b14433c6c29938eee0016832fc2a3ee494d98c413  vanilla/0.25b_Dedicated_Linux/data/block/smokestack.sbl
+bd7315e7b32b93035173b8d5f58ac687468a24bdc009064fb23d99af8aa8be89  vanilla/0.25b_Dedicated_Linux/data/block/test.sbl
+410336209f20d3e08f602b5a917bef4a8c728be939f637e62420edf612bdd372  vanilla/0.25b_Dedicated_Linux/data/block/test2.sbl
+28619e83d24b6d765ea3d4a9be5fefdb2e7512c2f881266b9996e0b7f680e242  vanilla/0.25b_Dedicated_Linux/data/block/thincolumn.sbl
+f90feadfd3b5fbdc03f95cface37b22907b27ae91376a3a638c6d074a9c7d36a  vanilla/0.25b_Dedicated_Linux/data/building/aapartment1.sbb
+9006fa3562696a9b6de5e018e266e47db27c0aaa2e1d9a60dfc1fd73c2135744  vanilla/0.25b_Dedicated_Linux/data/building/abank.sbb
+2ae345fac9b43de0ce5c172266ecfc90a4e51c0d6afab397865c22b50d3b12c0  vanilla/0.25b_Dedicated_Linux/data/building/aoffice1.sbb
+654efc10787c14a9ba7d6639484babb93933314002c8d8e5e141699fddd8d5f4  vanilla/0.25b_Dedicated_Linux/data/building/apartment1.sbb
+d06005d5564ea6cf3493c1411bde04d4a887deb8383853f48a22bf5cd37a5f79  vanilla/0.25b_Dedicated_Linux/data/building/bank1.sbb
+0d1fdba86961e829f530cdeafc25e6b2bd95e3fe6f5c76609723d58e824ade06  vanilla/0.25b_Dedicated_Linux/data/building/bar1.sbb
+4e8737a592c956b1734bdd7e1193dcb4f349ca42642604104e6959d9eed3e1e7  vanilla/0.25b_Dedicated_Linux/data/building/base1.sbb
+ed2caef109e42c112cbbc017afd957556039bb84c352123a60b9c840d402423f  vanilla/0.25b_Dedicated_Linux/data/building/base2.sbb
+ef279b34a335d17250b79b3805ffba59a81f5a44d888ac17f9b6c6e7c50846a2  vanilla/0.25b_Dedicated_Linux/data/building/base3.sbb
+0767c999bebdad10f8f34f4dfd97347e4e4aab116aa742aaaef0561b495a0ee5  vanilla/0.25b_Dedicated_Linux/data/building/base4.sbb
+88a332804dbefce680968ab3c7cd420724e9d4ba04b225672df5071a9fff8ac9  vanilla/0.25b_Dedicated_Linux/data/building/base5.sbb
+b0ebd95b765315b250087e0053002df47e7fd93f4fa5b797d7ab58d10361d28e  vanilla/0.25b_Dedicated_Linux/data/building/billboard.sbb
+dd6e4a9716a34dd1976434c92bb092804f00798b2d2ec7f61e2d9bb70b826da5  vanilla/0.25b_Dedicated_Linux/data/building/burgertown.sbb
+e80a83c17c081de3d2dbb41755016923c9d535598697d5a6e2f59d978254bfc7  vanilla/0.25b_Dedicated_Linux/data/building/conveniencestore1.sbb
+8bb9c7311ceca375988d3c948288e348054f89f5f7dee024271851d8a9891d70  vanilla/0.25b_Dedicated_Linux/data/building/dealership1.sbb
+75ce8a85c064e853d7d09f3b9b20fcc3d4c03dae402a5d008d36e1764dee680c  vanilla/0.25b_Dedicated_Linux/data/building/dealership2.sbb
+bcc6d014cc0af2001631bd8b8dc8e2143ed0f6bde97d8ba52c146f08ce6b10b3  vanilla/0.25b_Dedicated_Linux/data/building/factory.sbb
+4c406b53498f5b8047bb5cbe275f06d8c2f54da436ff04aad46cd2666b7d4fda  vanilla/0.25b_Dedicated_Linux/data/building/gunshop.sbb
+1a3972f672190d79f953e4fc60f02ab8a71ab3a06f3c5e379038e5141f6639ae  vanilla/0.25b_Dedicated_Linux/data/building/hospital0.sbb
+ae097c98104aa194a8266fd9d9f2e566a0f4f3508e8a7ea16888ae0a6ac106f5  vanilla/0.25b_Dedicated_Linux/data/building/newbuilding.sbb
+beef38751cc84866572ac86bc0f628b97a1ed6b671cc1888148212cd0628e363  vanilla/0.25b_Dedicated_Linux/data/building/office1.sbb
+1cc01c12cfe4a4663f44204324c344bab9738e1548cde7666d69d6de08e25cf5  vanilla/0.25b_Dedicated_Linux/data/building/office2.sbb
+55e101a8c99952946c2d73eee182c95f89c4d590d8c9d3beb75caa2f827898b1  vanilla/0.25b_Dedicated_Linux/data/building/parkinggarage.sbb
+a350107df3ef4af2753a83c6bacbac6a84e8a46a5025229ed9904838fecd87a1  vanilla/0.25b_Dedicated_Linux/data/building/parkinggarage2.sbb
+cbe8a0b83db89df16f6f38f88d788271f5954fe74e9f3e07bccfa5f02e763c90  vanilla/0.25b_Dedicated_Linux/data/building/skyscraper1.sbb
+fde3f8305c8c8b32ceb7f3c56b2d111f02cdfc8f1575ee28fefddb356d378d17  vanilla/0.25b_Dedicated_Linux/data/building/skyscraper2.sbb
+b63906f42c35dfc4de1a5aa5d478e01d591c4abacdb4d5ed3301e88a74603de0  vanilla/0.25b_Dedicated_Linux/data/building/skyscrapera1.sbb
+5762dafc484c9c596f36a0d7a44612d3b2a2216ae4bff5d409c3f73bee5a3ed9  vanilla/0.25b_Dedicated_Linux/data/building/test.sbb
+bfd6f7f84690c64c5d80fa1967679baaa8ef9837cd64160b9b85f1b1662b7718  vanilla/0.25b_Dedicated_Linux/data/building/test2.sbb
+5e64082ab8b6c65115ad9052b1a97df8e96ae96dc6dd4fcd3efc5ef85c5c0d6c  vanilla/0.25b_Dedicated_Linux/data/building/test3.sbb
+e5af8bf753aeedac79de8cea4a3a31d500d1075313dc0ecb8f908a2aa1d6b923  vanilla/0.25b_Dedicated_Linux/data/building/test4.sbb
+17deb915eeac21f7406e968a29907396c0989626dcee4ea7c0e444fcda98578d  vanilla/0.25b_Dedicated_Linux/data/building/test5.sbb
+742c15ebc9c6de9fc53686f36bd471c416983017f824c03a181b1a0f4fd85ddb  vanilla/0.25b_Dedicated_Linux/data/city.sbc
+1009822f7c13434b757ee27c1f1d082ad04977c86e4e47515ea00a59389c9471  vanilla/0.25b_Dedicated_Linux/data/model/desktest.cmo
+17cb719ef0dd5c2a9c21186db7554650ed84d762892bd9a38f6da69348342914  vanilla/0.25b_Dedicated_Linux/data/model/lamptest.cmo
+66eb0bcac0ee57d4eedd3eb9411bff1f251fece321fa0eb5af16de1958fd75b1  vanilla/0.25b_Dedicated_Linux/data/texture/billboard01.png
+cfa7b3cd947b719f25e6d022b09e600206a18800cd2306bb5e6e747975d0d788  vanilla/0.25b_Dedicated_Linux/data/texture/blackroof.png
+1a0e79c22733d2df245b7eb1bfc16d2ddc800b7113c495345265b2a3c72c72e4  vanilla/0.25b_Dedicated_Linux/data/texture/brickwork-texture.png
+e2da448dd430d863d067f58b9a0177cc9a7b4a3e8df00b06be09ff67b75e7c31  vanilla/0.25b_Dedicated_Linux/data/texture/ceilinglights0.png
+0c0179e3b1533d97764fed5af1c5a8f7448aa747adeb32769087a04f0949997a  vanilla/0.25b_Dedicated_Linux/data/texture/dealershipsign1.png
+c232687114b15d2c55874e493c60d050d7a7035f09687b3dc6a56cf97e777a8c  vanilla/0.25b_Dedicated_Linux/data/texture/greycarpet.png
+c5a0365e3ec619962271854edf2060b353f3f9f7facd7a09b1cbbe752431391e  vanilla/0.25b_Dedicated_Linux/data/texture/greyroof.png
+b8056cd80adf684a35ed846fa0df54d90c4b32a4038927b04f131a8c5e95dae2  vanilla/0.25b_Dedicated_Linux/data/texture/gunshopsign1.png
+2ad8b88c2c5fecd912c157736bb2a9891b206fa7f966c2a6c34b9a7ffe289635  vanilla/0.25b_Dedicated_Linux/data/texture/lightbrick.png
+e2a2563ca611c0e32249033fb3d37f1b1a3bdd52b04abb04c2f00e9e852a7be0  vanilla/0.25b_Dedicated_Linux/data/texture/lightplaster.png
+be18b2c4db4f6cd3edf7bcadc2569747be9ac277fd722cc3549552b02f81026a  vanilla/0.25b_Dedicated_Linux/data/texture/lightplaster2.png
+15e6f433c5c080c508fb0265fa709ec86e9b8d6224b85843cab1eb546f2a9b51  vanilla/0.25b_Dedicated_Linux/data/texture/red.png
+6e3d00bc887f2888eb6e7be423729f00c83f3306b488f50b9970f6c73803d2c6  vanilla/0.25b_Dedicated_Linux/data/texture/redbricks.png
+df50051f415c91746de640cae03c0c9911d325e306b53231068a62b65ecc7109  vanilla/0.25b_Dedicated_Linux/data/texture/shingleroof0.png
+314fde15439c11b4f93b05cfde4cc2d9e5e89d312363bf15f76e0a5cb5907592  vanilla/0.25b_Dedicated_Linux/data/texture/shitwood.png
+403bc40b40de7035b3b27370d3ff4f228d5210219f6a2d331bb829279b924cbc  vanilla/0.25b_Dedicated_Linux/data/texture/uglyfloor0.png
+6eb1003fd88023e06424bd475d6dc7ce7e97b0efeedb2d65dcc82ebfb5e461a8  vanilla/0.25b_Dedicated_Linux/data/texture/whiteconcrete.png
+41e39a313c9edda5c2000ef9274cfabe9ba442de692c069133373bcb998ad11c  vanilla/0.25b_Dedicated_Linux/data/texture/whiteconcretegrid.png
+d35017950eed2a67666d54ac5b8a033fa0c75f7bed6f8c32bdb35bd81a43d881  vanilla/0.25b_Dedicated_Linux/data/texture/woodpanels0.png
+04c521ab6198e449d56696f3b5f1de906478c39ee8bd6f9fb94bce11326eae2b  vanilla/0.25b_Dedicated_Linux/subrosadedicated025b
+5eb0cf4290c1239c6af2e8d39257d87f2fd38904856995c51488c9382f3228a3  vanilla/archives/Sub Rosa 0.22 Dedicated Server.zip
+ae58d1b7f24d36d5e716f3384eb9419a353a3bc9708f94e41ce4a1919580119b  vanilla/archives/Sub Rosa 0.22.zip
+dfc8d3dbc5d1f762af0919e60c17336c2b1d7dc2d9246922a5a8003ac6b86128  vanilla/archives/Sub Rosa 0.24b Dedicated Linux.zip
+5fdafe9fcfd11556da7a1d07699cc23988a8c75f6eb28c6824455120429208be  vanilla/archives/Sub Rosa 0.24b Dedicated Windows.zip
+df6764d7378d050ed540b193e2d7d7a78bdb82ff0ae800f14db916210d0d463e  vanilla/archives/Sub Rosa 0.24b.zip
+e1d2c251716c599427823703b4bbf7fd4ab711c3a45a42021c3913eb08c02d2a  vanilla/archives/Sub Rosa 0.24c Dedicated Linux.zip
+1dcacd7e640b00ee92c8f6840a0545986df004b843525cd813f0b1232ebf2760  vanilla/archives/Sub Rosa 0.24c Dedicated Windows.zip
+d54b8eb9a437f11916eabc79713e35fdd46d6b7ba8c4d484877d0d8513444a5d  vanilla/archives/Sub Rosa 0.24d Dedicated Windows.zip
+1e0779568bde05f0462829eb56e0f24f46b738a5d896b7571efacbce05e0bc9b  vanilla/archives/Sub Rosa 0.25b Dedicated Linux.tar
