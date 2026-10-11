@@ -1,0 +1,335 @@
+{
+  "format": 1,
+  "id": "truck_speed",
+  "name": "Caminhão mais rápido",
+  "description": "Aumenta a faixa de rotação útil e a força do motor apenas dos caminhões (modelo 9). Multiplicadores padrão 2x. Vale para caminhões existentes e novos. A velocidade real depende da física e da carga. Desativar restaura as duas instruções originais.",
+  "parameters": {
+    "speed": {
+      "label": "Multiplicador da faixa de velocidade",
+      "type": "float",
+      "default": 2.0,
+      "min": 1.0,
+      "max": 4.0,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 0
+        }
+      ]
+    },
+    "power": {
+      "label": "Multiplicador da força do motor",
+      "type": "float",
+      "default": 2.0,
+      "min": 1.0,
+      "max": 4.0,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 4
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "d981508459059c83b904265905097506d835000000009de9ac3f02008d7426009c83ba04265905097506d80d040000009dd88a54845905e9bd250300",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 9,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 18,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 35,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 44,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 51,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 24,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 56,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".inject_data",
+      "data": "0000004000000040",
+      "relocations": []
+    },
+    {
+      "name": ".patch_23faa",
+      "data": "e9fcffffff90",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 147370,
+      "expected": "d98150849905",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_325bb",
+      "data": "e91c00000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 206267,
+      "expected": "d88a54849905",
+      "expected_relocations": [
+        2
+      ]
+    }
+  ],
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "rpm_hook",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "rpm_done",
+      "value": 22,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "speed_multiplier",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "force_hook",
+      "value": 32,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "force_done",
+      "value": 48,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "force_multiplier",
+      "value": 4,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "imports": {
+    "WSAStartup": 385356,
+    "ntohs": 385360,
+    "getservbyname": 385364,
+    "connect": 385368,
+    "select": 385372,
+    "__WSAFDIsSet": 385376,
+    "getsockopt": 385380,
+    "send": 385384,
+    "recv": 385388,
+    "inet_addr": 385392,
+    "htonl": 385396,
+    "sendto": 385400,
+    "recvfrom": 385404,
+    "closesocket": 385408,
+    "socket": 385412,
+    "htons": 385416,
+    "bind": 385420,
+    "ioctlsocket": 385424,
+    "gethostname": 385428,
+    "gethostbyname": 385432,
+    "ntohl": 385436,
+    "_chdir": 385108,
+    "_time64": 385112,
+    "strncmp": 385116,
+    "fclose": 385120,
+    "fopen": 385124,
+    "sprintf": 385128,
+    "fprintf": 385132,
+    "rand": 385136,
+    "malloc": 385140,
+    "free": 385144,
+    "memcpy": 385148,
+    "memset": 385152,
+    "fseek": 385156,
+    "_CIcos": 385160,
+    "_CIsin": 385164,
+    "_CIsqrt": 385168,
+    "_CIatan2": 385172,
+    "_CIpow": 385176,
+    "__daylight": 385180,
+    "__timezone": 385184,
+    "_tzset": 385188,
+    "_sleep": 385192,
+    "fgetc": 385196,
+    "sscanf": 385200,
+    "qsort": 385204,
+    "_findclose": 385208,
+    "_findnext64i32": 385212,
+    "_findfirst64i32": 385216,
+    "fputc": 385220,
+    "_CIacos": 385224,
+    "floor": 385228,
+    "_getcwd": 385232,
+    "fwrite": 385236,
+    "fread": 385240,
+    "tolower": 385244,
+    "srand": 385248,
+    "printf": 385252,
+    "_amsg_exit": 385256,
+    "__getmainargs": 385260,
+    "_cexit": 385264,
+    "_exit": 385268,
+    "_XcptFilter": 385272,
+    "exit": 385276,
+    "__initenv": 385280,
+    "_initterm": 385284,
+    "_initterm_e": 385288,
+    "_configthreadlocale": 385292,
+    "__setusermatherr": 385296,
+    "_commode": 385300,
+    "_fmode": 385304,
+    "__set_app_type": 385308,
+    "_crt_debugger_hook": 385312,
+    "?terminate@@YAXXZ": 385316,
+    "_unlock": 385320,
+    "__dllonexit": 385324,
+    "_lock": 385328,
+    "_onexit": 385332,
+    "_except_handler4_common": 385336,
+    "_invoke_watson": 385340,
+    "_controlfp_s": 385344,
+    "_CItan": 385348,
+    "QueryPerformanceCounter": 385024,
+    "SetProcessAffinityMask": 385028,
+    "GetCurrentProcessId": 385032,
+    "GetCurrentThreadId": 385036,
+    "GetTickCount": 385040,
+    "DecodePointer": 385044,
+    "IsProcessorFeaturePresent": 385048,
+    "IsDebuggerPresent": 385052,
+    "SetUnhandledExceptionFilter": 385056,
+    "UnhandledExceptionFilter": 385060,
+    "TerminateProcess": 385064,
+    "EncodePointer": 385068,
+    "HeapSetInformation": 385072,
+    "InterlockedCompareExchange": 385076,
+    "Sleep": 385080,
+    "InterlockedExchange": 385084,
+    "QueryPerformanceFrequency": 385088,
+    "GetCurrentProcess": 385092,
+    "GetProcessAffinityMask": 385096,
+    "GetSystemTimeAsFileTime": 385100
+  }
+}

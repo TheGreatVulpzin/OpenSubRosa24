@@ -1,0 +1,210 @@
+{
+  "format": 1,
+  "id": "dealership_truck",
+  "name": "Caminhão na concessionária",
+  "description": "Mantém um caminhão no catálogo de cada concessionária durante a partida, usando o loop do servidor. Preço configurável (padrão $12000). Se o catálogo estiver cheio, substitui a última oferta. Não cria veículo físico até a compra. Desativar interrompe a reposição; ofertas e veículos já criados permanecem até a atualização normal do jogo.",
+  "parameters": {
+    "price": {
+      "label": "Preço do caminhão",
+      "type": "int",
+      "default": 12000,
+      "min": 0,
+      "max": 1000000,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 0
+        },
+        {
+          "section": ".patch_ac9b2d8",
+          "offset": 0
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "9c60fc833d60c50d090275718b0db88b2c0e83f9017c6681f9000400007f5ebefc8b2c0e833e02754c8baec808000083fd007c4183fd087f3c31db8dbecc08000039eb7d0b833f0974234383c70cebf183fd087c0583ef0ceb06ff86c8080000c70709000000c7470800000000a10000000089470481c6dc090000e2a7619de99ca20000",
+      "relocations": [
+        {
+          "offset": 5,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 14,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 32,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 110,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 128,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".inject_data",
+      "data": "e02e0000",
+      "relocations": []
+    },
+    {
+      "name": ".patch_5cbd2",
+      "data": "e8fcffffff",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 379858,
+      "expected": "e8c9d6faff",
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_ac9b2d8",
+      "data": "e02e0000",
+      "relocations": [],
+      "rva": 180990680,
+      "expected": null,
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_ac9b2dc",
+      "data": "00409c45",
+      "relocations": [],
+      "rva": 180990684,
+      "expected": null,
+      "expected_relocations": []
+    }
+  ],
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handler",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "done",
+      "value": 125,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "shop_loop",
+      "value": 36,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "next_shop",
+      "value": 117,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "find_truck",
+      "value": 65,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "add_truck",
+      "value": 80,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "existing_truck",
+      "value": 109,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "append_truck",
+      "value": 90,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "write_truck",
+      "value": 96,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "price",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "imports": {}
+}

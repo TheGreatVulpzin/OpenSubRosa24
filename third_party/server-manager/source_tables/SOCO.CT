@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>364</ID>
+      <Description>"punch"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>// Config
+define(enable_descombulator,1)
+
+define(head_damage_multiplier,5)
+
+define(punch_knockback,8.5)
+define(punch_cooldown,#70)
+define(punch_damage,100.0)
+define(punch_threshold,3.0)
+
+// Human Struct
+define(human0,subrosadedicated024d.exe+15CBF80)
+  define(human_playerid,8)
+  define(human_health,28)
+  define(human_spawnprotectiontime,34)
+  define(human_drunkness,44)
+  define(human_globalpos,48)
+  define(human_inputflags,BC)
+  define(human_punchdelay,C4)
+  define(bone0,C8)
+    define(bone_vel,18)
+    define(bonesize,E0)
+  define(humansize,2B64)
+
+// Player Struct
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_godmode,44)
+  define(playersize,2408)
+
+// LineIntersectResult Struct
+define(lineintersectresult,subrosadedicated024d.exe+103484A0)
+  define(lineintersectresult_pos,0)
+  define(lineintersectresult_normal,4)
+
+[ENABLE]
+alloc(newmem,$1000)
+
+newmem:
+
+handanims:
+  fld dword ptr [subrosadedicated024d.exe+5E848]
+  fstp dword ptr [esp+24]
+
+  cmp [esi+human0+human_punchdelay],0
+  jle handanims_skip1
+
+  dec [esi+human0+human_punchdelay]
+
+handanims_skip1:
+  test [esi+human0+human_inputflags],800
+  je handanims_return
+
+  cmp edi,3
+  jne handanims_otherhand
+
+  mov [esp+1C],(float)0.15
+  mov [esp+20],(float)0.1
+  mov [esp+24],(float)-0.3
+
+  jmp handanims_left_hand
+
+handanims_otherhand:
+  mov [esp+1C],(float)-0.15
+  mov [esp+20],(float)0.1
+  mov [esp+24],(float)-0.3
+
+handanims_left_hand:
+  test [esi+human0+human_inputflags],1
+  je handanims_right_hand
+
+  cmp edi,3
+  jne handanims_right_hand
+
+  mov [esp+1C],(float)0.2
+  mov [esp+20],(float)0.2
+  mov [esp+24],(float)-1
+
+handanims_right_hand:
+  test [esi+human0+human_inputflags],2
+  je handanims_return
+
+  cmp edi,6
+  jne handanims_return
+
+  mov [esp+1C],(float)-0.2
+  mov [esp+20],(float)0.2
+  mov [esp+24],(float)-1
+
+  jmp handanims_return
+
+"subrosadedicated024d.exe"+2FAC7:
+  jmp handanims
+  nop 5
+
+handanims_return:
+
+newmem+200:
+
+collision_func:
+  push ebp
+  mov ebp,esp
+
+  push esi
+  push ecx
+  push edi
+
+  mov eax,[ebp+8]
+  imul eax,humansize
+
+  mov esi,[ebp+C]
+  imul esi,bonesize
+
+  mov ecx,[ebp+10]
+  imul ecx,humansize
+
+  mov edi,[ebp+14]
+  imul edi,bonesize
+
+  test [ecx+human0+human_inputflags],800
+  je collision_func_return
+
+  cmp [ecx+human0+human_punchdelay],0
+  jg collision_func_return
+
+  mov [ecx+human0+human_spawnprotectiontime],0
+
+  cmp [eax+human0+human_spawnprotectiontime],0
+  jg collision_func_return
+
+  push eax
+
+  mov eax,[eax+human0+human_playerid]
+    cmp eax,-1
+    je skip_godcheck
+  imul eax,playersize
+
+  cmp [eax+player0+player_godmode],0
+  je skip_godcheck
+
+  pop eax
+  jmp collision_func_return
+
+skip_godcheck:
+   pop eax
+
+  // Get velocity length
+  fld [ecx+human0+edi+bone0+bone_vel+0]
+    fsub [eax+human0+esi+bone0+bone_vel+0]
+    fmul st(0)
+    fld [ecx+human0+edi+bone0+bone_vel+4]
+      fsub [eax+human0+esi+bone0+bone_vel+4]
+      fmul st(0)
+      fld [ecx+human0+edi+bone0+bone_vel+8]
+        fsub [eax+human0+esi+bone0+bone_vel+8]
+        fmul st(0)
+      faddp
+    faddp
+    fsqrt
+
+  // Make damage based on velocity
+  push (float)punch_damage
+  fmul [esp]
+  fchs // Make negative
+
+  add esp,4
+
+  // Check velocity
+  push (float)-punch_threshold
+  fld [esp]
+  add esp,4
+  fcomip st(1)
+  jb collision_func_cleanup
+
+  cmp [ebp+C],2
+  je collision_func_dmg_head
+
+  fiadd [eax+human0+human_health]
+  fistp [eax+human0+human_health]
+  jmp collision_func_effect
+
+collision_func_dmg_head:
+  fld st(0)
+    push (float)head_damage_multiplier
+    fmul [esp]
+    add esp,4
+  fiadd [eax+human0+human_health]
+  fistp [eax+human0+human_health]
+  fchs // Make positive
+    fadd st(0)
+  fiadd [eax+human0+human_drunkness]
+  fistp [eax+human0+human_drunkness]
+
+collision_func_effect:
+  mov [ecx+human0+human_punchdelay],punch_cooldown
+
+  // Knockback
+  push (float)-punch_knockback
+
+  fld [eax+human0+esi+bone0+bone_vel+0]
+    fmul [esp]
+    fsubr [ecx+human0+edi+bone0+bone_vel+0]
+  fstp [eax+human0+esi+bone0+bone_vel++0]
+
+  fld [eax+human0+esi+bone0+bone_vel+4]
+    fmul [esp]
+    fsubr [ecx+human0+edi+bone0+bone_vel+4]
+  fstp [eax+human0+esi+bone0+bone_vel++4]
+
+  fld [eax+human0+esi+bone0+bone_vel+8]
+    fmul [esp]
+    fsubr [ecx+human0+edi+bone0+bone_vel+8]
+  fstp [eax+human0+esi+bone0+bone_vel++8]
+
+  add esp,4
+
+  push 0
+  lea eax,[ecx+human0+edi+bone0]
+  push eax
+  push 1
+  push 0
+  call subrosadedicated024d.exe+16C40
+  add esp,10
+
+  jmp collision_func_return
+
+collision_func_cleanup:
+  fstp st(0)
+
+collision_func_return:
+  pop edi
+  pop ecx
+  pop esi
+
+  pop ebp
+  ret
+
+collision:
+  cmp ebx,5
+  je collision_hand
+  cmp ebx,8
+  jne collision2
+
+collision_hand:
+  push ebx
+  push [esp+34]
+  push edi
+  push [esp+20]
+  call collision_func
+  add esp,10
+
+  jmp collision_originalcode
+
+collision2:
+  cmp edi,5
+  je collision_hand2
+  cmp edi,8
+  jne collision_originalcode
+
+collision_hand2:
+  push edi
+  push [esp+18]
+  push ebx
+  push [esp+3C]
+  call collision_func
+  add esp,10
+
+  jmp collision_originalcode
+
+collision_originalcode:
+  // Moved this after checking all collision so people can punch the legs and still keep them without collision
+  cmp ebx,0B
+  je cleanup1
+  cmp ebx,0E
+  je cleanup1
+  cmp ebx,0A
+  je cleanup1
+  cmp ebx,0D
+  je cleanup1
+
+  cmp edi,0B
+  je cleanup2
+  cmp edi,0E
+  je cleanup2
+  cmp edi,0A
+  je cleanup2
+  cmp edi,0D
+  je cleanup2
+
+  fld st(0)
+  mov eax,[esp+14]
+  jmp collision_return
+
+cleanup1:
+  fstp st(0)
+  jmp subrosadedicated024d.exe+195D6
+
+cleanup2:
+  fstp st(0)
+  jmp subrosadedicated024d.exe+195BC
+
+subrosadedicated024d.exe+1950E:
+  jmp collision
+  nop
+
+collision_return:
+
+// Fix not able to hit legs
+subrosadedicated024d.exe+194B0:
+  nop 24
+
+subrosadedicated024d.exe+1946E:
+  nop 24
+
+[DISABLE]
+
+// Hand Anims
+"subrosadedicated024d.exe"+2FAC7:
+  fld dword ptr [subrosadedicated024d.exe+5E848]
+  fstp dword ptr [esp+24]
+
+// Collision
+subrosadedicated024d.exe+1950E:
+  fld st(0)
+  mov eax,[esp+14]
+
+// Revert "Fix not able to hit legs"
+subrosadedicated024d.exe+194B0:
+  cmp edi,0B
+  je subrosadedicated024d.exe+195BC
+  cmp edi,0E
+  je subrosadedicated024d.exe+195BC
+  cmp edi,0A
+  je subrosadedicated024d.exe+195BC
+  cmp edi,0D
+  je subrosadedicated024d.exe+195BC
+
+subrosadedicated024d.exe+1946E:
+  cmp ebx,0B
+  je subrosadedicated024d.exe+195D6
+  cmp ebx,0E
+  je subrosadedicated024d.exe+195D6
+  cmp ebx,0A
+  je subrosadedicated024d.exe+195D6
+  cmp ebx,0D
+  je subrosadedicated024d.exe+195D6
+
+dealloc(newmem)
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

@@ -1,0 +1,33 @@
+{
+  "format": 1,
+  "id": "max_players",
+  "name": "Máximo de jogadores",
+  "description": "Muda o limite ativo; não expulsa automaticamente jogadores que já estão conectados.",
+  "imports": {},
+  "symbols": [],
+  "parameters": {
+    "value": {
+      "label": "Máximo de jogadores",
+      "default": 32,
+      "type": "byte",
+      "min": 1,
+      "max": 32,
+      "sites": [
+        {
+          "section": ".patch_761eabc",
+          "offset": 0,
+          "width": 1
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "name": ".patch_761eabc",
+      "rva": 123857596,
+      "data": "20",
+      "expected": null,
+      "relocations": []
+    }
+  ]
+}

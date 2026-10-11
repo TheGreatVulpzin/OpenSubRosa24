@@ -1,0 +1,181 @@
+{
+  "format": 1,
+  "id": "spawn_protection_fix",
+  "name": "Corrigir exploit de spawn protection",
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "d9442404d84c2404d95c2404d9442408d84c2408d95c2408d944240cd84c240cd95c240cd9442404d8442408d844240cd95c24048b442404c389c18b44240c5153ffb068265905ffb06c265905ffb070265905e8a8ffffff83c40c5b593d0ad7a33c0f8c070000006a6951e81c6a010083c408e907000000",
+      "relocations": [
+        {
+          "offset": 67,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 73,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 79,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 108,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 100,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_52c01",
+            "index": 6
+          }
+        },
+        {
+          "offset": 116,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_52c01",
+            "index": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_52c01",
+      "data": "e935000000909090909090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 338945,
+      "expected": "6a6450e8173efcff83c408",
+      "expected_relocations": []
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {
+    "velocity_squared": {
+      "label": "Limiar da velocidade ao quadrado",
+      "default": 0.02,
+      "type": "float",
+      "min": 0,
+      "max": 100,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 94,
+          "scale": 1
+        }
+      ]
+    }
+  },
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "vehicle_velocity",
+      "value": 104,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "vehiclebytes",
+      "value": 33328,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "newmem",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "lenght",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "code",
+      "value": 57,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return",
+      "value": 11,
+      "section": ".patch_52c01",
+      "index": 6
+    },
+    {
+      "name": "originalcode",
+      "value": 104,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_52c01",
+      "index": 6
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

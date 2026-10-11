@@ -1,0 +1,570 @@
+{
+  "format": 1,
+  "id": "safe_spawn",
+  "name": "Area segura no spawn",
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "83b8b4bf5c01000f8f9100000083b964ddde0e060f84840000006081b8c8bf5c01000000457f3081b8c8bf5c010080b2447c2481b8d0bf5c01000044447f1881b8d0bf5c01000018447c0c5552e81c6a010083c408eb468b8278ddde0e69c0642b000081b8c8bf5c01000000457f2e81b8c8bf5c010080b2447c2281b8d0bf5c01000044447f1681b8d0bf5c01000018447c0a5552e81c6a010083c4086183b964ddde0e07e90300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000083b8b4bf5c01007f5783b964ddde0e06744e608b44240c8b80142659058b8078ddde0e69c0642b000081b8c8bf5c01000000457f2a81b8c8bf5c010080b2447c1e81b8d0bf5c01000044447f1281b8d0bf5c01000018447c0661e9ee2b05006183b864ddde0e07e903000000",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 15,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 29,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 41,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 53,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 65,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 78,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 89,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 101,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 113,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 125,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 137,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 150,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 160,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 514,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 523,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 537,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 543,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 555,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 567,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 579,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 591,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 610,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 166,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_49394",
+            "index": 6
+          }
+        },
+        {
+          "offset": 603,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 616,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_52be0",
+            "index": 8
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_49394",
+      "data": "e9fcffffff9090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 299924,
+      "expected": "83b964dd1e0f07",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_52be0",
+      "data": "e9fc0100009090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 338912,
+      "expected": "83b864dd1e0f07",
+      "expected_relocations": [
+        2
+      ]
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {
+    "max_z": {
+      "label": "max_z",
+      "default": 2048.0,
+      "type": "float",
+      "min": 0,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 33,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 105,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 559,
+          "scale": 1
+        }
+      ]
+    },
+    "min_z": {
+      "label": "min_z",
+      "default": 1428.0,
+      "type": "float",
+      "min": 0,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 45,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 117,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 571,
+          "scale": 1
+        }
+      ]
+    },
+    "max_x": {
+      "label": "max_x",
+      "default": 784.0,
+      "type": "float",
+      "min": 0,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 57,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 129,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 583,
+          "scale": 1
+        }
+      ]
+    },
+    "min_x": {
+      "label": "min_x",
+      "default": 608.0,
+      "type": "float",
+      "min": 0,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 69,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 141,
+          "scale": 1
+        },
+        {
+          "section": ".inject",
+          "offset": 595,
+          "scale": 1
+        }
+      ]
+    }
+  },
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "max_z",
+      "value": 8264,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "min_z",
+      "value": 5160,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "max_x",
+      "value": 1924,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "min_x",
+      "value": 1544,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "player_team",
+      "value": 100,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "player_body",
+      "value": 120,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "body_vehicle",
+      "value": 20,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "body_health",
+      "value": 40,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "body_position",
+      "value": 72,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "bodybytes",
+      "value": 11108,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "newmem",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "player_shotted",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "originalcode_shotted",
+      "value": 158,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "attacker_shotted",
+      "value": 87,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "cleanup_shotted",
+      "value": 157,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return_shotted",
+      "value": 7,
+      "section": ".patch_49394",
+      "index": 6
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_49394",
+      "index": 6
+    },
+    {
+      "name": "player_runover",
+      "value": 512,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "originalcode_runover",
+      "value": 608,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "cleanup_runover",
+      "value": 607,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return_runover",
+      "value": 7,
+      "section": ".patch_52be0",
+      "index": 8
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_52be0",
+      "index": 8
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

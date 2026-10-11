@@ -1,0 +1,421 @@
+{
+  "format": 1,
+  "kind": "dll",
+  "id": "death_messages",
+  "name": "Somente mensagens de morte",
+  "description": "Rotina corrigida: mensagens limitadas a 63 caracteres, índices validados e uma mensagem por morte. O modo instantâneo adianta o processamento nativo da morte. Penalidades e separação do corpo ficam com o jogo. Reinicie o servidor antes de atualizar.",
+  "parameters": {},
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "9c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b4504890424e8fcffffff83c4100fae0c2489ec619d83bea8bf5c01fbe93a3d050029aba8bf5c019c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b4510890424c744240401000000c7442408ffffffff8b450489442408e8fcffffff83c4100fae0c2489ec619de90b9404002988a8bf5c019c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b451c890424c744240402000000c7442408ffffffffe8fcffffff83c4100fae0c2489ec619de9716a01008386a8bf5c01889c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b4504890424c744240403000000c7442408ffffffff8b453089442408e8fcffffff83c4100fae0c2489ec619de9952b05008386a8bf5c01889c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b4504890424c744240404000000c7442408ffffffffe8fcffffff83c4100fae0c2489ec619de90a230500c786a8bf5c019cffffff9c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec108b4504890424c744240405000000c7442408ffffffffe8fcffffff83c4100fae0c2489ec619de9ec3b0500",
+      "relocations": [
+        {
+          "offset": 32,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_death",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 49,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 61,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 120,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_cause",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 142,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 194,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_cause",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 216,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 276,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_cause",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 298,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 351,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_cause",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 373,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 429,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_cause",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 55,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 136,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 210,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 292,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 367,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 445,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_53d37",
+      "data": "e9fcffffff9090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 343351,
+      "expected": "83bea8bf9c01fb",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_49409",
+      "data": "e93700000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 300041,
+      "expected": "29aba8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_16a6f",
+      "data": "e98800000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 92783,
+      "expected": "2988a8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_52b92",
+      "data": "e9d20000009090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 338834,
+      "expected": "8386a8bf9c0188",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_52307",
+      "data": "e9240100009090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 336647,
+      "expected": "8386a8bf9c0188",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_53be6",
+      "data": "e96f0100009090909090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 343014,
+      "expected": "c786a8bf9c019cffffff",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".inject_data",
+      "data": "180000000100000000000000000000000100000001000000",
+      "relocations": [
+        {
+          "offset": 8,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "index": 0
+          }
+        }
+      ]
+    }
+  ],
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_53d37",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_49409",
+      "value": 59,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_16a6f",
+      "value": 140,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_52b92",
+      "value": 214,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_52307",
+      "value": 296,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "hook_53be6",
+      "value": 371,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "__dll_death",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__dll_cause",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "imports": {},
+  "dll": {
+    "abi": 1,
+    "file": "native/sr_death_messages.dll",
+    "sha256": "63ac3d08a11f73e09d98d1b3158bfae603ba4c548e7583effdd61825861a4935",
+    "build_id": "9ebe80070a0d9ceec6285bd33e754d1c8fdd4cdf76e282373ee6c802ff5ec3f9",
+    "configure": "SR_Configure",
+    "prepare_stop": "SR_PrepareStop",
+    "stop": "SR_Stop",
+    "identity": "SR_BuildId",
+    "symbols": {
+      "__dll_death": "SR_Death",
+      "__dll_cause": "SR_Cause"
+    },
+    "context_section": ".inject_data"
+  }
+}

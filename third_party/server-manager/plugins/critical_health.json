@@ -1,0 +1,326 @@
+{
+  "format": 1,
+  "id": "critical_health",
+  "name": "Estado critico com pouca vida",
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "83bea8bf5c010a7d14c7869cea5c0101000000c78694bf5c01ffffffff83bea8bf5c0109e903000000",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 11,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 21,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 31,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 37,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_53bf0",
+            "index": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_53bf0",
+      "data": "e9fcffffff9090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 343024,
+      "expected": "83bea8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_4eed4",
+      "data": "83b8a8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 323284,
+      "expected": "83b8a8bf9c01fb",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_206ad",
+      "data": "83b8a8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 132781,
+      "expected": "83b8a8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_51321",
+      "data": "83bea8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 332577,
+      "expected": "83bea8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_514d7",
+      "data": "83bea8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 333015,
+      "expected": "83bea8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_1907e",
+      "data": "83bfa8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 102526,
+      "expected": "83bfa8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_4a4a6",
+      "data": "83bea8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 304294,
+      "expected": "83bea8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_53a23",
+      "data": "83bea8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 342563,
+      "expected": "83bea8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_42ae5",
+      "data": "83bea8bf5c0109",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 273125,
+      "expected": "83b8a8bf9c0100",
+      "expected_relocations": [
+        2
+      ]
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {},
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "body_vehicle",
+      "value": 20,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "body_health",
+      "value": 40,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "body_bleeding",
+      "value": 11036,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "newmem",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "code",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "originalcode",
+      "value": 29,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return",
+      "value": 7,
+      "section": ".patch_53bf0",
+      "index": 6
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_53bf0",
+      "index": 6
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

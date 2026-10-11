@@ -1,0 +1,7 @@
+{
+  "format": 1,
+  "id": "vehicle_eject",
+  "name": "Ejetar do carro",
+  "description": "Tabela original preservada em source_tables. Ainda não portada para ativação segura.",
+  "unavailable": "O script de ejeção usa flags e índices sem validação; precisa ser refeito."
+}

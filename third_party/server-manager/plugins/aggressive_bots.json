@@ -1,0 +1,205 @@
+{
+  "format": 1,
+  "id": "aggressive_bots",
+  "name": "Bots mais agressivos",
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "01be68fede0ec786acddde0e00000000e90200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ff8668fede0ec786acddde0e02000000e902000000",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 8,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 258,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 264,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 17,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_3d86a",
+            "index": 6
+          }
+        },
+        {
+          "offset": 273,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_3d70a",
+            "index": 8
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_3d86a",
+      "data": "e9fcffffff90",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 252010,
+      "expected": "01be68fe1e0f",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_3d70a",
+      "data": "e9fc00000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 251658,
+      "expected": "ff8668fe1e0f",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_4fd09",
+      "data": "00",
+      "relocations": [],
+      "rva": 326921,
+      "expected": "03",
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_3d5e4",
+      "data": "9090",
+      "relocations": [],
+      "rva": 251364,
+      "expected": "7c05",
+      "expected_relocations": []
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {},
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "player_zoom_mode",
+      "value": 172,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "newmem",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "player_lost",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return_player_lost",
+      "value": 6,
+      "section": ".patch_3d86a",
+      "index": 6
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_3d86a",
+      "index": 6
+    },
+    {
+      "name": "player_spotted",
+      "value": 256,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "return_player_spotted",
+      "value": 6,
+      "section": ".patch_3d70a",
+      "index": 8
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_3d70a",
+      "index": 8
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

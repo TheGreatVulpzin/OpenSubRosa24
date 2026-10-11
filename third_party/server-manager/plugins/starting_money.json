@@ -1,0 +1,63 @@
+{
+  "format": 1,
+  "id": "starting_money",
+  "name": "Dinheiro inicial",
+  "sections": [
+    {
+      "name": ".patch_e027",
+      "data": "c782947b430fc4090000",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ],
+      "rva": 57383,
+      "expected": "c782947b830fe8030000",
+      "expected_relocations": [
+        2
+      ]
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {
+    "money": {
+      "label": "Dinheiro inicial",
+      "default": 2500,
+      "type": "int",
+      "min": 0,
+      "max": 100000000,
+      "sites": [
+        {
+          "section": ".patch_e027",
+          "offset": 6,
+          "scale": 1
+        }
+      ]
+    }
+  },
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Altera o valor de inicialização usado pela tabela do dinheiro. Não substitui o saldo atual de todos os jogadores."
+}

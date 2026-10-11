@@ -1,0 +1,39 @@
+# Arquivos originais do jogo (proprietários, Cryptic Sea) — NÃO versionar.
+# A integridade é garantida por original/MANIFEST.sha256.
+/original/**
+!/original/README.md
+!/original/MANIFEST.sha256
+
+# Server manager: estado local
+/third_party/server-manager/logs/
+/third_party/server-manager/settings.json
+
+# Bancos/projetos de ferramentas de RE (grandes, binários, locais)
+*.gpr
+*.rep/
+*.lock
+*.lock~
+*.i64
+*.idb
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+*.bndb
+
+# Build
+/build/
+/out/
+cmake-build-*/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

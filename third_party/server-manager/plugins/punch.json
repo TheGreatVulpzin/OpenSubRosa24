@@ -1,0 +1,842 @@
+{
+  "format": 1,
+  "id": "punch",
+  "name": "Sistema de socos",
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "d90548e80500d95c242483be44c05c01007e06ff8e44c05c01f7863cc05c01000800000f840600000083ff03751ac744241c9a99193ec7442420cdcccc3dc74424249a9999beeb18c744241c9a9919bec7442420cdcccc3dc74424249a9999bef7863cc05c0101000000741d83ff037518c744241ccdcc4c3ec7442420cdcc4c3ec7442424000080bff7863cc05c01020000000f840600000083ff060f8506000000c744241ccdcc4cbec7442420cdcc4c3ec7442424000080bfe9060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005589e55651578b450869c0642b00008b750c69f6e00000008b4d1069c9642b00008b7d1469ffe0000000f7813cc05c01000800000f844d01000083b944c05c01000f8f40010000c781b4bf5c010000000083b8b4bf5c01000f8f29010000508b8088bf5c0183f8ff741569c00824000083b844ddde0e00740658e90801000058d9843960c05c01d8a43060c05c01d8c8d9843964c05c01d8a43064c05c01d8c8d9843968c05c01d8a43068c05c01d8c8dec1dec1d9fa680000c842d80c24d9e083c40468000040c0d9042483c404dff10f82af000000837d0c02740eda80a8bf5c01db98a8bf5c01eb29d9c0680000a040d80c2483c404da80a8bf5c01db98a8bf5c01d9e0d8c0da80c4bf5c01db98c4bf5c01c78144c05c014600000068000008c1d9843060c05c01d80c24d8ac3960c05c01d99c3060c05c01d9843064c05c01d80c24d8ac3964c05c01d99c3064c05c01d9843068c05c01d80c24d8ac3968c05c01d99c3068c05c0183c4046a008d843948c05c01506a016a00e83c6c010083c410eb02ddd85f595e5dc383fb05740583fb08751453ff74243457ff742420e85bfeffff83c410eb1e83ff05740583ff08751457ff74241853ff74243ce83dfeffff83c410eb0083fb0b742e83fb0e742983fb0a742483fb0d741f83ff0b742183ff0e741c83ff0a741783ff0d7412d9c08b442414e902000000ddd8e9d2950100ddd8e9b8950100",
+      "relocations": [
+        {
+          "offset": 2,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 12,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 21,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 27,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 98,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 139,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 556,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 572,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 585,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 595,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 609,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 626,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 643,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 650,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 659,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 666,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 675,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 682,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 734,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 740,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 761,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 767,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 777,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 783,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 789,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 805,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 815,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 822,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 829,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 839,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 846,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 853,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 863,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 870,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 882,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 892,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 37,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_2fac7",
+            "index": 6
+          }
+        },
+        {
+          "offset": 149,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_2fac7",
+            "index": 6
+          }
+        },
+        {
+          "offset": 158,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_2fac7",
+            "index": 6
+          }
+        },
+        {
+          "offset": 187,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_2fac7",
+            "index": 6
+          }
+        },
+        {
+          "offset": 1015,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".patch_1950e",
+            "index": 8
+          }
+        },
+        {
+          "offset": 1022,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 1029,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_2fac7",
+      "data": "e9fcffffff9090909090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 195271,
+      "expected": "d90548e84500d95c2424",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_1950e",
+      "data": "e98803000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 103694,
+      "expected": "d9c08b442414",
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_194b0",
+      "data": "909090909090909090909090909090909090909090909090909090909090909090909090",
+      "relocations": [],
+      "rva": 103600,
+      "expected": "83ff0b0f840301000083ff0e0f84fa00000083ff0a0f84f100000083ff0d0f84e8000000",
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_1946e",
+      "data": "909090909090909090909090909090909090909090909090909090909090909090909090",
+      "relocations": [],
+      "rva": 103534,
+      "expected": "83fb0b0f845f01000083fb0e0f845601000083fb0a0f844d01000083fb0d0f8444010000",
+      "expected_relocations": []
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {
+    "damage": {
+      "label": "Multiplicador do dano por velocidade",
+      "default": 100.0,
+      "type": "float",
+      "min": 0,
+      "max": 10000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 695,
+          "scale": 1
+        }
+      ]
+    },
+    "head_multiplier": {
+      "label": "Multiplicador na cabeça",
+      "default": 5.0,
+      "type": "float",
+      "min": 0,
+      "max": 100,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 749,
+          "scale": 1
+        }
+      ]
+    },
+    "knockback": {
+      "label": "Força do empurrão",
+      "default": 8.5,
+      "type": "float",
+      "min": 0,
+      "max": 50,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 798,
+          "scale": -1
+        }
+      ]
+    },
+    "threshold": {
+      "label": "Limiar usado pelo script",
+      "default": 3.0,
+      "type": "float",
+      "min": 0,
+      "max": 100,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 708,
+          "scale": -1
+        }
+      ]
+    },
+    "cooldown": {
+      "label": "Intervalo em unidades do script",
+      "default": 70,
+      "type": "int",
+      "min": 0,
+      "max": 10000,
+      "sites": [
+        {
+          "section": ".inject",
+          "offset": 793,
+          "scale": 1
+        }
+      ]
+    }
+  },
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "enable_descombulator",
+      "value": 1,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "head_damage_multiplier",
+      "value": 5,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "punch_cooldown",
+      "value": 70,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_playerid",
+      "value": 8,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_health",
+      "value": 40,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_spawnprotectiontime",
+      "value": 52,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_drunkness",
+      "value": 68,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_globalpos",
+      "value": 72,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_inputflags",
+      "value": 188,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "human_punchdelay",
+      "value": 196,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "bone0",
+      "value": 200,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "bone_vel",
+      "value": 24,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "bonesize",
+      "value": 224,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "humansize",
+      "value": 11108,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "player_godmode",
+      "value": 68,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "playersize",
+      "value": 9224,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "lineintersectresult_pos",
+      "value": 0,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "lineintersectresult_normal",
+      "value": 4,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "newmem",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handanims",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handanims_skip1",
+      "value": 25,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handanims_return",
+      "value": 10,
+      "section": ".patch_2fac7",
+      "index": 6
+    },
+    {
+      "name": "handanims_otherhand",
+      "value": 72,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handanims_left_hand",
+      "value": 96,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handanims_right_hand",
+      "value": 137,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_2fac7",
+      "index": 6
+    },
+    {
+      "name": "collision_func",
+      "value": 512,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_func_return",
+      "value": 903,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "skip_godcheck",
+      "value": 639,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_func_cleanup",
+      "value": 901,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_func_dmg_head",
+      "value": 746,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_func_effect",
+      "value": 787,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision",
+      "value": 908,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_hand",
+      "value": 918,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision2",
+      "value": 938,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_originalcode",
+      "value": 968,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_hand2",
+      "value": 948,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "cleanup1",
+      "value": 1019,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "cleanup2",
+      "value": 1026,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "collision_return",
+      "value": 6,
+      "section": ".patch_1950e",
+      "index": 8
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".patch_1950e",
+      "index": 8
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Mantém a fórmula do script: dano por velocidade relativa, bônus na cabeça e empurrão. O limiar é comparado após multiplicar pelo dano, como na tabela original. Desativar interrompe os próximos socos; não reverte dano já causado."
+}

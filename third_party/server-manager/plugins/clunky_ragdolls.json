@@ -1,0 +1,35 @@
+{
+  "format": 1,
+  "id": "clunky_ragdolls",
+  "name": "Clunky Ragdolls",
+  "sections": [
+    {
+      "name": ".patch_42b51",
+      "data": "eb3a",
+      "relocations": [],
+      "rva": 273233,
+      "expected": "7f3a",
+      "expected_relocations": []
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {},
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

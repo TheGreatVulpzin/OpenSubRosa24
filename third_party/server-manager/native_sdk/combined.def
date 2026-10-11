@@ -1,0 +1,11 @@
+LIBRARY sr_combined
+EXPORTS
+    SR_BuildId DATA
+    SR_Configure=SR_Configure@4
+    SR_PrepareStop=SR_PrepareStop@4
+    SR_Stop=SR_Stop@4
+    SR_Tick
+    SR_AttackTick
+    SR_ChatHook
+    SR_NpcTick
+    SR_LockHealth

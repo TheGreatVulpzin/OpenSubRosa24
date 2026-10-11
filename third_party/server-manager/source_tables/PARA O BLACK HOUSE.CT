@@ -1,0 +1,1600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>240</ID>
+      <Description>"-- Administração --"</Description>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>168</ID>
+          <Description>"Máximo de jogadores"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>subrosadedicated024d.exe+761EABC</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>147</ID>
+          <Description>"Reiniciar jogo"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated024d.exe+761EAE0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>159</ID>
+          <Description>"Quantidade de NPC"</Description>
+          <VariableType>Byte</VariableType>
+          <Address>subrosadedicated024d.exe+5BAEA</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>239</ID>
+      <Description>"-- Scripts --"</Description>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>262</ID>
+          <Description>"Area segura no spawn"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,$1000)
+
+// Cordenadas pra area segura
+  define(max_z,2048)
+  define(min_z,1428)
+  define(max_x,784)
+  define(min_x,608)
+
+// Player Struct
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_team,64)
+  define(player_body,78)
+
+// Body Struct
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_vehicle,14)
+  define(body_health,28)
+  define(body_position,48)
+  define(bodybytes,2B64)
+
+// Funcs
+define(spawnProtectionPenalty,subrosadedicated024d.exe+16A20)
+
+newmem:
+
+player_shotted:
+
+  cmp dword ptr [eax+subrosadedicated024d.exe+15CBFB4],0
+  jg originalcode_shotted
+
+  cmp dword ptr [ecx+player0+player_team],6
+  je  originalcode_shotted
+
+  pushad
+
+  cmp [eax+body0+body_position+0],(float)max_z
+  jg  attacker_shotted
+
+  cmp [eax+body0+body_position+0],(float)min_z
+  jl  attacker_shotted
+
+  cmp [eax+body0+body_position+8],(float)max_x
+  jg  attacker_shotted
+
+  cmp [eax+body0+body_position+8],(float)min_x
+  jl  attacker_shotted
+
+  push ebp
+  push edx
+  call spawnProtectionPenalty
+  add esp,8
+
+  jmp cleanup_shotted
+
+attacker_shotted:
+  mov eax,[edx+player0+player_body]
+  imul eax,bodybytes
+
+  cmp [eax+body0+body_position+0],(float)max_z
+  jg  cleanup_shotted
+
+  cmp [eax+body0+body_position+0],(float)min_z
+  jl  cleanup_shotted
+
+  cmp [eax+body0+body_position+8],(float)max_x
+  jg  cleanup_shotted
+
+  cmp [eax+body0+body_position+8],(float)min_x
+  jl  cleanup_shotted
+
+  push ebp
+  push edx
+  call spawnProtectionPenalty
+  add esp,8
+
+cleanup_shotted:
+  popad
+
+originalcode_shotted:
+  cmp dword ptr [ecx+subrosadedicated024d.exe+EDEDD64],07
+  jmp return_shotted
+
+"subrosadedicated024d.exe"+49394:
+  jmp player_shotted
+  nop 2
+
+return_shotted:
+
+newmem+200:
+
+player_runover:
+
+  cmp dword ptr [eax+subrosadedicated024d.exe+15CBFB4],0
+  jg originalcode_runover
+
+  cmp dword ptr [ecx+player0+player_team],6
+  je  originalcode_runover
+
+  pushad
+
+  mov eax,[esp+0C]
+  mov eax,[eax+subrosadedicated024d.exe+5592614]
+
+  mov eax,[eax+player0+player_body]
+  imul eax,bodybytes
+
+  cmp [eax+body0+body_position+0],(float)max_z
+  jg  cleanup_runover
+
+  cmp [eax+body0+body_position+0],(float)min_z
+  jl  cleanup_runover
+
+  cmp [eax+body0+body_position+8],(float)max_x
+  jg  cleanup_runover
+
+  cmp [eax+body0+body_position+8],(float)min_x
+  jl  cleanup_runover
+
+  popad
+
+  jmp subrosadedicated024d.exe+52BF2
+
+cleanup_runover:
+  popad
+
+originalcode_runover:
+  cmp dword ptr [eax+subrosadedicated024d.exe+EDEDD64],07
+  jmp return_runover
+
+"subrosadedicated024d.exe"+52BE0:
+  jmp player_runover
+  nop 2
+
+return_runover:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+49394:
+  cmp dword ptr [ecx+subrosadedicated024d.exe+EDEDD64],07
+
+"subrosadedicated024d.exe"+52BE0:
+  cmp dword ptr [eax+subrosadedicated024d.exe+EDEDD64],07
+
+dealloc(newmem)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>258</ID>
+          <Description>"Estado critico com pouca vida"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_vehicle,14)
+  define(body_health,28)
+  define(body_bleeding,2B1C)
+
+alloc(newmem,$1000)
+
+newmem:
+
+code:
+  cmp dword ptr [esi+body0+body_health],A
+  jnl originalcode
+
+  mov [esi+body0+body_bleeding],1
+  mov [esi+body0+body_vehicle],-1
+
+originalcode:
+  cmp dword ptr [esi+body0+body_health],9
+  jmp return
+
+"subrosadedicated024d.exe"+53BF0:
+  jmp code
+  nop 2
+
+return:
+
+"subrosadedicated024d.exe"+4EED4:
+cmp dword ptr [eax+body0+body_health],9
+
+"subrosadedicated024d.exe"+206AD:
+cmp dword ptr [eax+body0+body_health],9
+
+"subrosadedicated024d.exe"+51321:
+cmp dword ptr [esi+body0+body_health],9
+
+"subrosadedicated024d.exe"+514D7:
+cmp dword ptr [esi+body0+body_health],9
+
+"subrosadedicated024d.exe"+1907E:
+cmp dword ptr [edi+body0+body_health],9
+
+"subrosadedicated024d.exe"+4A4A6:
+cmp dword ptr [esi+body0+body_health],9
+
+"subrosadedicated024d.exe"+53A23:
+cmp dword ptr [esi+body0+body_health],9
+
+"subrosadedicated024d.exe"+42AE5:
+cmp dword ptr [esi+body0+body_health],9
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+4EED4:
+cmp dword ptr [eax+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+206AD:
+cmp dword ptr [eax+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+51321:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+514D7:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+1907E:
+cmp dword ptr [edi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+4A4A6:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+53A23:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+53BF0:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+
+"subrosadedicated024d.exe"+42AE5:
+cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],0
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>257</ID>
+          <Description>"Corrigir exploit de spawn protection"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,$1000)
+
+// Constants
+define(MAX_VELOCITY_TO_KILL,0.02)
+
+// Vehicle Struct
+define(vehicle0,subrosadedicated024d.exe+5592600)
+  define(vehicle_velocity,68)
+  define(vehiclebytes,8230)
+
+newmem:
+
+lenght:
+
+  fld  [esp+4]
+  fmul [esp+4]
+  fstp [esp+4]
+
+  fld  [esp+8]
+  fmul [esp+8]
+  fstp [esp+8]
+
+  fld  [esp+C]
+  fmul [esp+C]
+  fstp [esp+C]
+
+  fld  [esp+4]
+  fadd [esp+8]
+  fadd [esp+C]
+  fstp [esp+4]
+
+  mov eax,[esp+4]
+{
+  push eax
+  call msvcrt.sqrt
+  add esp,4
+
+  mov eax,[esp+4]
+
+  mov [subrosadedicated024d.exe+618C0],eax
+}
+  ret
+
+code:
+
+  mov ecx,eax
+
+  mov eax,[esp+C]
+
+  push ecx
+  push ebx
+
+  push [eax+vehicle0+vehicle_velocity+0]
+  push [eax+vehicle0+vehicle_velocity+4]
+  push [eax+vehicle0+vehicle_velocity+8]
+  call lenght
+  add esp,C
+
+  pop ebx
+  pop ecx
+
+  cmp eax,(float)MAX_VELOCITY_TO_KILL
+  jl  return
+
+originalcode:
+  push 69 //64
+  push ecx
+  call subrosadedicated024d.exe+16A20
+  add esp,08
+  jmp return
+
+"subrosadedicated024d.exe"+52C01:
+  jmp code
+  nop 6
+return:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+52C01:
+  push 64
+  push eax
+  call subrosadedicated024d.exe+16A20
+  add esp,08
+
+dealloc(newmem)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>256</ID>
+          <Description>"Clunky Ragdolls"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+"subrosadedicated024d.exe"+42B51:
+  jmp subrosadedicated024d.exe+42B8D
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+42B51:
+  jg subrosadedicated024d.exe+42B8D
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>208</ID>
+          <Description>"Bots mais agressivos"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_zoom_mode,AC)
+
+alloc(newmem,%1000)
+
+newmem:
+
+player_lost:
+  add [esi+subrosadedicated024d.exe+EDEFE68],edi
+  mov [esi+player0+player_zoom_mode],0
+  jmp return_player_lost
+
+"subrosadedicated024d.exe"+3D86A:
+  jmp player_lost
+  nop
+
+return_player_lost:
+
+newmem+100:
+
+player_spotted:
+  inc [esi+subrosadedicated024d.exe+EDEFE68]
+  mov [esi+player0+player_zoom_mode],2
+  jmp return_player_spotted
+
+"subrosadedicated024d.exe"+3D70A:
+  jmp player_spotted
+  nop
+
+return_player_spotted:
+
+"subrosadedicated024d.exe"+4FD09:
+  db 0
+
+"subrosadedicated024d.exe"+3D5E4:
+  nop 2
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+3D5E4:
+  jl subrosadedicated024d.exe+3D5EB
+
+"subrosadedicated024d.exe"+4FD09:
+  db 3
+
+"subrosadedicated024d.exe"+3D86A:
+  add [esi+subrosadedicated024d.exe+EDEFE68],edi
+
+"subrosadedicated024d.exe"+3D70A:
+  inc [esi+subrosadedicated024d.exe+EDEFE68]
+
+dealloc(newmem)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>236</ID>
+          <Description>"Ejetar do carro"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,$1000)
+
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_ai_walk_completed,1A44)
+  define(playerbytes,2408)
+
+define(vehicle0,subrosadedicated024d.exe+5592600)
+  define(vehicle_type,4)
+  define(vehiclebytes,8230)
+
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_playerid,8)
+  define(body_vehicle,14)
+  define(body_part,C8)
+    define(body_part_position,0)
+    define(body_part_velocity,18)
+    define(body_part_bytes,E0)
+  define(bodybytes,2B64)
+
+newmem:
+  pushad
+
+    mov ebx,[esp+20]
+    imul edx,ebx,vehiclebytes
+
+    mov [edx+vehicle0+vehicle_type],B
+    je cleanup
+
+    mov ecx,#128
+    xor edx,edx
+
+player_loop:
+    cmp [edx+body0+body_vehicle],ebx
+    jne player_next
+
+    mov [edx+body0+body_vehicle],-1
+
+    mov eax,[edx+body0+body_playerid]
+    imul eax,playerbytes
+
+    mov [eax+player0+player_ai_walk_completed],1
+
+    xor eax,eax
+
+reset_vol_loop:
+    mov [edx+eax+body0+body_part+body_part_velocity+0],0
+    mov [edx+eax+body0+body_part+body_part_velocity+4],0
+    mov [edx+eax+body0+body_part+body_part_velocity+8],0
+
+    add eax,body_part_bytes
+    cmp eax,C40
+    jl  reset_vol_loop
+
+player_next:
+    add edx,bodybytes
+    dec ecx
+    cmp ecx,0
+    jge player_loop
+
+cleanup:
+  popad
+
+  call subrosadedicated024d.exe+22E20
+
+  jmp return
+
+"subrosadedicated024d.exe"+57060:
+  jmp newmem
+
+return:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+57060:
+  call subrosadedicated024d.exe+22E20
+
+dealloc(newmem)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>237</ID>
+          <Description>"Spawnar na concessionaria"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+// Mude esses defines para alterar as cordenadas
+define(z,485)
+define(x,26)
+define(y,655)
+
+
+"subrosadedicated024d.exe"+2561D744:
+  dd (float)z
+
+"subrosadedicated024d.exe"+2561D748:
+  dd (float)x
+
+"subrosadedicated024d.exe"+2561D74C:
+  dd (float)y
+
+"subrosadedicated024d.exe"+33245:
+  nop 6
+
+"subrosadedicated024d.exe"+33269:
+  nop 6
+
+"subrosadedicated024d.exe"+33257:
+  nop 6
+
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+2561D744:
+  dd (float)1976.032593
+
+"subrosadedicated024d.exe"+2561D748:
+  dd (float)26
+
+"subrosadedicated024d.exe"+2561D74C:
+  dd (float)622.6420288
+
+"subrosadedicated024d.exe"+33269:
+  fstp dword ptr [subrosadedicated024d.exe+2561D74C]
+
+"subrosadedicated024d.exe"+33257:
+  fstp dword ptr [subrosadedicated024d.exe+2561D748]
+
+"subrosadedicated024d.exe"+33245:
+  fstp dword ptr [subrosadedicated024d.exe+2561D744]
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>238</ID>
+          <Description>"Caminhão na concessionaria"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+alloc(newmem,$1000)
+
+newmem:
+  cmp eax,09
+  jnl truck
+  xor edi,edi
+  jmp subrosadedicated024d.exe+57F1
+
+truck:
+  cmp eax,0A
+  jnl return
+  mov edi,9
+  jmp subrosadedicated024d.exe+57F1
+
+"subrosadedicated024d.exe"+57B1:
+  jmp newmem
+  nop 4
+
+return:
+
+newmem+100:
+
+update:
+  call subrosadedicated024d.exe+5700
+  ret
+
+"subrosadedicated024d.exe"+AC9B2D8:
+  dd #12000
+
+"subrosadedicated024d.exe"+AC9B2DC:
+  dd (float)5000.00
+
+createThread(update)
+[DISABLE]
+
+"subrosadedicated024d.exe"+57B1:
+  cmp eax,0A
+  jnl subrosadedicated024d.exe+57BA
+  xor edi,edi
+  jmp subrosadedicated024d.exe+57F1
+
+dealloc(newmem)
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>242</ID>
+          <Description>"Mensagens de Morte + Morte instantânea"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+// Constants
+define(MAX_VALID_DMG_TIMER,#1200)
+  { if the player get 0 health until he dies the kill still counts
+    but the player dying speed is still random }
+
+// Game
+define(curTime,subrosadedicated024d.exe+761EAD8)
+ { This value is the time since the server as open }
+
+// Player Struct
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_name,4)
+  define(player_money,40)
+  define(player_stocks,6C)
+  define(player_body,78)
+  define(player_ai,1A38)
+  define(player_lastdmgtimer,1A58)
+  define(player_lastshottedby,1A60)
+  define(player_name_killfeed,1A64)
+  define(player_dmgtype,1A5C)
+  { 0 = Shotted
+    1 = Spawn Protection penalty
+    2 = Car
+    3 = Fall Damage
+    4 = Fall of map }
+  define(playerbytes,2408)
+
+// Vehicle Struct
+define(vehicle0,subrosadedicated024d.exe+5592600)
+  define(vehicle_owner,14)
+
+// Corpse Struct
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_playerid,8)
+  define(body_health,28)
+  define(body_timer,24)
+  define(body_bleeding,2B1C)
+
+// Bullet Struct
+define(bullet0,subrosadedicated024d.exe+1409BA0)
+  define(bullet_owner,8)
+
+// Funcs
+define(printMessage,subrosadedicated024d.exe+6260)
+  { int type, string message, int entity, int mode }
+define(moneyPenalty,subrosadedicated024d.exe+16960)
+  { int player }
+define(stocksPenalty,subrosadedicated024d.exe+5BE0)
+  { int player, int stocks }
+
+alloc(newmem,$1000)
+
+newmem:
+
+s_death_unknown:
+  db '%s morreu por motivos desconhecidos' 00
+
+s_death_bleeding:
+  db '%s sangrou ate a morte' 00
+
+s_death_by:
+  db '%s matou %s' 00
+
+s_death_penalty:
+  db '%s foi punido' 00
+
+s_runover:
+  db '%s atropelou %s' 00
+
+s_vehicle:
+  db '%s morreu por um veiculo' 00
+
+s_falldamage:
+  db '%s caiu de um lugar alto' 00
+
+s_fallofmap:
+  db '%s caiu na backrooms' 00
+
+s_suicide:
+  db '%s se matou' 00
+
+s_npc:
+  db 'um NPC' 00
+
+player_death:
+  cmp dword ptr [esi+body0+body_health],-5
+  jg  originalcode_player_death
+
+  cmp dword ptr [esi+body0+body_timer],#3600
+  jl  originalcode_player_death
+
+  mov  edx,[esi+body0+body_playerid]
+  imul edx,playerbytes
+
+  push esi
+  push edx
+
+  cmp [edx+player0+player_ai],1
+  je  is_npc
+
+  lea eax,[edx+player0+player_name]
+  push eax
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+  jmp cleanup_get_name
+
+is_npc:
+  push s_npc
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+
+cleanup_get_name:
+  pop edx
+  pop esi
+
+  push esi
+  push edx
+
+  mov eax,[curTime]
+  cmp [edx+player0+player_lastdmgtimer],eax
+  jge death_reason
+
+  cmp [esi+body0+body_bleeding],1
+  je  death_by_bleeding
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_unknown
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_bleeding:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_bleeding
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_reason:
+
+  cmp [edx+player0+player_dmgtype],3
+  je  death_by_falldamage
+
+  cmp [edx+player0+player_dmgtype],4
+  je  death_by_fallofmap
+
+  cmp [edx+player0+player_dmgtype],1
+  je  death_by_penalty
+
+  mov eax,[esi+body0+body_playerid]
+  cmp [edx+player0+player_lastshottedby],eax
+  je  death_suicide
+
+  mov esi,[edx+player0+player_lastshottedby]
+  imul esi,playerbytes
+
+  push esi
+  push edx
+
+  cmp [esi+player0+player_ai],1
+  je  is_npc2
+
+  lea eax,[esi+player0+player_name]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+  jmp cleanup_get_name2
+
+is_npc2:
+  push s_npc
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+
+cleanup_get_name2:
+  pop edx
+  pop esi
+
+  cmp [edx+player0+player_dmgtype],2
+  je  death_by_runover
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  push s_death_by
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,10
+  jmp player_death_printmessage
+
+death_by_penalty:
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_penalty
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_runover:
+  mov esi,[edx+player0+player_lastshottedby]
+
+  cmp esi,-1
+  je  death_by_vehicle
+
+  imul esi,playerbytes
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  push s_runover
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,10
+  jmp player_death_printmessage
+
+death_by_vehicle:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_vehicle
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_falldamage:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_falldamage
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_fallofmap:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_fallofmap
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_suicide:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_suicide
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+
+player_death_printmessage:
+
+  push 0
+  push -1
+  push subrosadedicated024d.exe+618C0
+  push 0
+  call printMessage
+  add esp,10
+
+  pop edx
+  pop esi
+
+  push edx
+
+  mov eax,[edx+player0+player_stocks]
+  push eax
+  mov eax,[esi+body0+body_playerid]
+  push eax
+  call stocksPenalty
+  add esp,8
+
+  mov eax,[esi+body0+body_playerid]
+  push eax
+  call moneyPenalty
+  add esp,4
+
+  pop edx
+
+  mov [edx+player0+player_body],-1
+  mov [esi+body0+body_playerid],-1
+
+  // Descomente para fazer o corpo sumir junto
+  //mov [esi+body0+body_timer],0
+
+originalcode_player_death:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-5
+  jmp return_player_death
+
+"subrosadedicated024d.exe"+53D37:
+  jmp player_death
+  nop 2
+
+return_player_death:
+
+newmem+500:
+
+player_shotted:
+
+  mov eax,[ebx+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov [eax+player0+player_dmgtype],0
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+  add [eax+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  mov edi,[esi+bullet0+bullet_owner]
+  mov [eax+player0+player_lastshottedby],edi
+
+originalcode_player_shotted:
+  sub [ebx+body0+body_health],ebp
+  jmp return_player_shotted
+
+"subrosadedicated024d.exe"+49409:
+  jmp player_shotted
+  nop
+
+return_player_shotted:
+
+newmem+600:
+
+player_penalty:
+
+  mov [esi+player0+player_dmgtype],1
+
+  mov edi,[curTime]
+  mov [esi+player0+player_lastdmgtimer],edi
+  add [esi+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  sub [eax+body0+body_health],ecx
+  jmp return_player_penalty
+
+"subrosadedicated024d.exe"+16A6F:
+  jmp player_penalty
+  nop
+
+return_player_penalty:
+
+newmem+700:
+
+player_runover:
+
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov [eax+player0+player_dmgtype],2
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  // Vehicle is insta death anyway
+  //add [eax+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  mov edi,[esp+C]
+  mov edi,[edi+vehicle0+vehicle_owner]
+  mov [subrosadedicated024d.exe+619C0],edi
+  mov [eax+player0+player_lastshottedby],edi
+
+  add dword ptr [esi+body0+body_health],-78
+  jmp return_runover
+
+"subrosadedicated024d.exe"+52B92:
+  jmp player_runover
+  nop 2
+
+return_runover:
+
+newmem+800:
+
+player_falldamage:
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  cmp [esi+body0+body_health],0
+  jle player_falldamage_just_damage
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  mov [eax+player0+player_dmgtype],3
+
+player_falldamage_just_damage:
+  add dword ptr [esi+body0+body_health],-78
+  jmp return_falldamage
+
+"subrosadedicated024d.exe"+52307:
+  jmp player_falldamage
+  nop 2
+
+return_falldamage:
+
+newmem+900:
+
+player_fallofmap:
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  mov [eax+player0+player_dmgtype],4
+
+  mov [esi+body0+body_health],FFFFFF9C
+  jmp return_fallofmap
+
+"subrosadedicated024d.exe"+53BE6:
+  jmp player_fallofmap
+  nop 5
+
+return_fallofmap:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+53D37:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-05
+
+"subrosadedicated024d.exe"+49409:
+  sub [ebx+subrosadedicated024d.exe+15CBFA8],ebp
+
+"subrosadedicated024d.exe"+16A6F:
+  sub [eax+subrosadedicated024d.exe+15CBFA8],ecx
+
+"subrosadedicated024d.exe"+52B92:
+  add dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-78
+
+"subrosadedicated024d.exe"+52307:
+  add dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-78
+
+"subrosadedicated024d.exe"+53BE6:
+  mov [esi+subrosadedicated024d.exe+15CBFA8],FFFFFF9C
+
+dealloc(newmem)
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>243</ID>
+              <Description>"Somente morte instantânea"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+// Player Struct
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_money,40)
+  define(player_stocks,6C)
+  define(player_body,78)
+  define(playerbytes,2408)
+
+// Corpse Struct
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_playerid,8)
+  define(body_health,28)
+  define(body_timer,24)
+
+// Funcs
+define(moneyPenalty,subrosadedicated024d.exe+16960)
+  { int player }
+define(stocksPenalty,subrosadedicated024d.exe+5BE0)
+  { int player, int stocks }
+
+alloc(newmem,$1000)
+
+newmem:
+
+code:
+  cmp dword ptr [esi+body0+body_health],-5
+  jg  originalcode
+
+  cmp dword ptr [esi+body0+body_timer],#3600
+  jl  originalcode
+
+  mov  edx,[esi+body0+body_playerid]
+  imul edx,playerbytes
+
+  push edx
+
+  mov eax,[edx+player0+player_stocks]
+  push eax
+  mov eax,[esi+body0+body_playerid]
+  push eax
+  call stocksPenalty
+  add esp,8
+
+  mov eax,[esi+body0+body_playerid]
+  push eax
+  call moneyPenalty
+  add esp,4
+
+  pop edx
+
+  mov [edx+player0+player_body],-1
+  mov [esi+body0+body_playerid],-1
+
+  // Descomente para fazer o corpo sumir junto
+  // mov [esi+subrosadedicated024d.exe+15CBFA4],0
+
+originalcode:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-5
+  jmp return
+
+"subrosadedicated024d.exe"+53D37:
+  jmp code
+  nop 2
+
+return:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+53D37:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-5
+
+dealloc(newmem)
+</AssemblerScript>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>248</ID>
+              <Description>"Somente mensagens de morte"</Description>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>[ENABLE]
+
+// Constants
+define(MAX_VALID_DMG_TIMER,#1200)
+  { if the player get 0 health until he dies the kill still counts
+    but the player dying speed is still random }
+
+// Game
+define(curTime,subrosadedicated024d.exe+761EAD8)
+ { This value is the time since the server as open }
+
+// Player Struct
+define(player0,subrosadedicated024d.exe+EDEDD00)
+  define(player_name,4)
+  define(player_money,40)
+  define(player_stocks,6C)
+  define(player_body,78)
+  define(player_ai,1A38)
+  define(player_lastdmgtimer,1A58)
+  define(player_lastshottedby,1A60)
+  define(player_name_killfeed,1A64)
+  define(player_dmgtype,1A5C)
+  { 0 = Shotted
+    1 = Spawn Protection penalty
+    2 = Car
+    3 = Fall Damage
+    4 = Fall of map }
+  define(playerbytes,2408)
+
+// Vehicle Struct
+define(vehicle0,subrosadedicated024d.exe+5592600)
+  define(vehicle_owner,14)
+
+// Corpse Struct
+define(body0,subrosadedicated024d.exe+15CBF80)
+  define(body_playerid,8)
+  define(body_health,28)
+  define(body_timer,24)
+  define(body_bleeding,2B1C)
+
+// Bullet Struct
+define(bullet0,subrosadedicated024d.exe+1409BA0)
+  define(bullet_owner,8)
+
+// Funcs
+define(printMessage,subrosadedicated024d.exe+6260)
+  { int type, string message, int entity, int mode }
+define(moneyPenalty,subrosadedicated024d.exe+16960)
+  { int player }
+define(stocksPenalty,subrosadedicated024d.exe+5BE0)
+  { int player, int stocks }
+
+alloc(newmem,$1000)
+
+newmem:
+
+s_death_unknown:
+  db '%s morreu por motivos desconhecidos' 00
+
+s_death_bleeding:
+  db '%s sangrou ate a morte' 00
+
+s_death_by:
+  db '%s matou %s' 00
+
+s_death_penalty:
+  db '%s foi punido' 00
+
+s_runover:
+  db '%s atropelou %s' 00
+
+s_vehicle:
+  db '%s morreu por um veiculo' 00
+
+s_falldamage:
+  db '%s caiu de um lugar alto' 00
+
+s_fallofmap:
+  db '%s caiu na backrooms' 00
+
+s_suicide:
+  db '%s se matou' 00
+
+s_npc:
+  db 'um NPC' 00
+
+player_death:
+  cmp dword ptr [esi+body0+body_health],-5
+  jg  originalcode_player_death
+
+  cmp dword ptr [esi+body0+body_timer],#3600
+  jl  originalcode_player_death
+
+  mov  edx,[esi+body0+body_playerid]
+  imul edx,playerbytes
+
+  push esi
+  push edx
+
+  cmp [edx+player0+player_ai],1
+  je  is_npc
+
+  lea eax,[edx+player0+player_name]
+  push eax
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+  jmp cleanup_get_name
+
+is_npc:
+  push s_npc
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+
+cleanup_get_name:
+  pop edx
+  pop esi
+
+  push esi
+  push edx
+
+  mov eax,[curTime]
+  cmp [edx+player0+player_lastdmgtimer],eax
+  jge death_reason
+
+  cmp [esi+body0+body_bleeding],1
+  je  death_by_bleeding
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_unknown
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_bleeding:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_bleeding
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_reason:
+
+  cmp [edx+player0+player_dmgtype],3
+  je  death_by_falldamage
+
+  cmp [edx+player0+player_dmgtype],4
+  je  death_by_fallofmap
+
+  cmp [edx+player0+player_dmgtype],1
+  je  death_by_penalty
+
+  mov eax,[esi+body0+body_playerid]
+  cmp [edx+player0+player_lastshottedby],eax
+  je  death_suicide
+
+  mov esi,[edx+player0+player_lastshottedby]
+  imul esi,playerbytes
+
+  push esi
+  push edx
+
+  cmp [esi+player0+player_ai],1
+  je  is_npc2
+
+  lea eax,[esi+player0+player_name]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+  jmp cleanup_get_name2
+
+is_npc2:
+  push s_npc
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  call sprintf
+  add esp,8
+
+cleanup_get_name2:
+  pop edx
+  pop esi
+
+  cmp [edx+player0+player_dmgtype],2
+  je  death_by_runover
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  push s_death_by
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,10
+  jmp player_death_printmessage
+
+death_by_penalty:
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_death_penalty
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_runover:
+  mov esi,[edx+player0+player_lastshottedby]
+
+  cmp esi,-1
+  je  death_by_vehicle
+
+  imul esi,playerbytes
+
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  lea eax,[esi+player0+player_name_killfeed]
+  push eax
+  push s_runover
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,10
+  jmp player_death_printmessage
+
+death_by_vehicle:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_vehicle
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_falldamage:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_falldamage
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_by_fallofmap:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_fallofmap
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+  jmp player_death_printmessage
+
+death_suicide:
+  lea eax,[edx+player0+player_name_killfeed]
+  push eax
+  push s_suicide
+  push subrosadedicated024d.exe+618C0
+  call sprintf
+  add esp,C
+
+player_death_printmessage:
+
+  push 0
+  push -1
+  push subrosadedicated024d.exe+618C0
+  push 0
+  call printMessage
+  add esp,10
+
+  pop edx
+  pop esi
+
+originalcode_player_death:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-5
+  jmp return_player_death
+
+"subrosadedicated024d.exe"+53D37:
+  jmp player_death
+  nop 2
+
+return_player_death:
+
+newmem+500:
+
+player_shotted:
+
+  mov eax,[ebx+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov [eax+player0+player_dmgtype],0
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+  add [eax+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  mov edi,[esi+bullet0+bullet_owner]
+  mov [eax+player0+player_lastshottedby],edi
+
+originalcode_player_shotted:
+  sub [ebx+body0+body_health],ebp
+  jmp return_player_shotted
+
+"subrosadedicated024d.exe"+49409:
+  jmp player_shotted
+  nop
+
+return_player_shotted:
+
+newmem+600:
+
+player_penalty:
+
+  mov [esi+player0+player_dmgtype],1
+
+  mov edi,[curTime]
+  mov [esi+player0+player_lastdmgtimer],edi
+  add [esi+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  sub [eax+body0+body_health],ecx
+  jmp return_player_penalty
+
+"subrosadedicated024d.exe"+16A6F:
+  jmp player_penalty
+  nop
+
+return_player_penalty:
+
+newmem+700:
+
+player_runover:
+
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov [eax+player0+player_dmgtype],2
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  // Vehicle is insta death anyway
+  //add [eax+player0+player_lastdmgtimer],MAX_VALID_DMG_TIMER
+
+  mov edi,[esp+C]
+  mov edi,[edi+vehicle0+vehicle_owner]
+  mov [subrosadedicated024d.exe+619C0],edi
+  mov [eax+player0+player_lastshottedby],edi
+
+  add dword ptr [esi+body0+body_health],-78
+  jmp return_runover
+
+"subrosadedicated024d.exe"+52B92:
+  jmp player_runover
+  nop 2
+
+return_runover:
+
+newmem+800:
+
+player_falldamage:
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  cmp [esi+body0+body_health],0
+  jle player_falldamage_just_damage
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  mov [eax+player0+player_dmgtype],3
+
+player_falldamage_just_damage:
+  add dword ptr [esi+body0+body_health],-78
+  jmp return_falldamage
+
+"subrosadedicated024d.exe"+52307:
+  jmp player_falldamage
+  nop 2
+
+return_falldamage:
+
+newmem+900:
+
+player_fallofmap:
+  mov  eax,[esi+body0+body_playerid]
+  imul eax,playerbytes
+
+  mov edi,[curTime]
+  mov [eax+player0+player_lastdmgtimer],edi
+
+  mov [eax+player0+player_dmgtype],4
+
+  mov [esi+body0+body_health],FFFFFF9C
+  jmp return_fallofmap
+
+"subrosadedicated024d.exe"+53BE6:
+  jmp player_fallofmap
+  nop 5
+
+return_fallofmap:
+
+[DISABLE]
+
+"subrosadedicated024d.exe"+53D37:
+  cmp dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-05
+
+"subrosadedicated024d.exe"+49409:
+  sub [ebx+subrosadedicated024d.exe+15CBFA8],ebp
+
+"subrosadedicated024d.exe"+16A6F:
+  sub [eax+subrosadedicated024d.exe+15CBFA8],ecx
+
+"subrosadedicated024d.exe"+52B92:
+  add dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-78
+
+"subrosadedicated024d.exe"+52307:
+  add dword ptr [esi+subrosadedicated024d.exe+15CBFA8],-78
+
+"subrosadedicated024d.exe"+53BE6:
+  mov [esi+subrosadedicated024d.exe+15CBFA8],FFFFFF9C
+
+dealloc(newmem)
+</AssemblerScript>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

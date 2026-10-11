@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>264</ID>
+      <Description>"numero do começo da ligado?"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+subrosadedicated024d.exe+E027:
+mov [edx+subrosadedicated024d.exe+F437B94],000009C4
+
+
+
+
+
+[DISABLE]
+subrosadedicated024d.exe+E027:
+mov [edx+subrosadedicated024d.exe+F437B94],000009C4
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

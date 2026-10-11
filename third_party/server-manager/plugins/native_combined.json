@@ -1,0 +1,772 @@
+{
+  "format": 1,
+  "kind": "dll",
+  "id": "native_combined",
+  "name": "Black Market + Chat + Comandos (DLL)",
+  "description": "Uma ativacao injeta a DLL com mercado, faca, chat no console e comandos admin. Use /admin <senha> e /bmhelp. Nao combine com os modulos separados de mercado/chat.",
+  "dll": {
+    "abi": 1,
+    "file": "native/sr_combined.dll",
+    "sha256": "d5912c91bae5c7bbd7ede0dea15378835249f8c9aa8036cbb23c4b41b39be499",
+    "build_id": "678aac5aa564f7b3bf7f984ddc5c9515049e1bb65eb839411eb3cbde258a4ec6",
+    "configure": "SR_Configure",
+    "prepare_stop": "SR_PrepareStop",
+    "stop": "SR_Stop",
+    "identity": "SR_BuildId",
+    "symbols": {
+      "__dll_tick": "SR_Tick",
+      "__dll_attack": "SR_AttackTick",
+      "__dll_chat": "SR_ChatHook",
+      "__dll_npc": "SR_NpcTick",
+      "__dll_health": "SR_LockHealth"
+    },
+    "context_section": ".inject_data"
+  },
+  "parameters": {
+    "knife_price": {
+      "label": "Preço da faca",
+      "type": "int",
+      "default": 125,
+      "min": 0,
+      "max": 1000000,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 20
+        }
+      ]
+    },
+    "bandage_price": {
+      "label": "Preço da bandagem",
+      "type": "int",
+      "default": 70,
+      "min": 0,
+      "max": 1000000,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 24
+        }
+      ]
+    },
+    "knife_wait": {
+      "label": "Intervalo após comprar faca (ticks)",
+      "type": "int",
+      "default": 400,
+      "min": 0,
+      "max": 36000,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 28
+        }
+      ]
+    },
+    "bandage_wait": {
+      "label": "Intervalo após comprar bandagem (ticks)",
+      "type": "int",
+      "default": 200,
+      "min": 0,
+      "max": 36000,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 32
+        }
+      ]
+    },
+    "point1_x": {
+      "label": "Ponto 1: X",
+      "type": "float",
+      "default": 692,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 36
+        }
+      ]
+    },
+    "point1_y": {
+      "label": "Ponto 1: Y",
+      "type": "float",
+      "default": 25.725,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 40
+        }
+      ]
+    },
+    "point1_z": {
+      "label": "Ponto 1: Z",
+      "type": "float",
+      "default": 354,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 44
+        }
+      ]
+    },
+    "point2_x": {
+      "label": "Ponto 2: X",
+      "type": "float",
+      "default": 1220,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 48
+        }
+      ]
+    },
+    "point2_y": {
+      "label": "Ponto 2: Y",
+      "type": "float",
+      "default": 25.725,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 52
+        }
+      ]
+    },
+    "point2_z": {
+      "label": "Ponto 2: Z",
+      "type": "float",
+      "default": 680,
+      "min": -99999,
+      "max": 99999,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 56
+        }
+      ]
+    },
+    "knife_damage": {
+      "label": "Dano da faca (0 = desativar ataque)",
+      "type": "int",
+      "default": 25,
+      "min": 0,
+      "max": 100,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 60
+        }
+      ]
+    },
+    "knife_range": {
+      "label": "Alcance da faca",
+      "type": "float",
+      "default": 1.5,
+      "min": 0.1,
+      "max": 3,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 64
+        }
+      ]
+    },
+    "knife_debug": {
+      "label": "Diagnóstico da faca (0 = não; 1 = sim)",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 68
+        }
+      ]
+    },
+    "show_id": {
+      "label": "Chat: mostrar ID (0 = nao; 1 = sim)",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 72
+        }
+      ]
+    },
+    "commands_enabled": {
+      "label": "Comandos admin (0 = nao; 1 = sim)",
+      "type": "int",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 76
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "9c6089e581ec2002000083e4f00fae0424dbe3d92c24e8fcffffff0fae0c2489ec619de9bcc804009c6089e581ec2002000083e4f00fae0424dbe3d92c24e8fcffffff0fae0c2489ec619de95c1005008b44240483ec40e9439904009c6089e581ec2002000083e4f00fae0424dbe3d92c24e8fcffffff0fae0c2489ec619de94c3603009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10890424e8fcffffff83c4100fae0c2489ec619d8b88a8bf5c01e9389001009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10891c24e8fcffffff83c4100fae0c2489ec619d8b83a8bf5c01e96c9404009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10893424e8fcffffff83c4100fae0c2489ec619d8bbea8bf5c01e9f51105009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10893424e8fcffffff85c0740c83bea8bf5c01009c5889452083c4100fae0c2489ec619d0f8e0c3c05008b542434e9f93b05009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10893424e8fcffffff83c4100fae0c2489ec619d83be94bf5c01ffe9243d05009c6089e581ec2002000083e4f00fae0424dbe3d92c2483ec10893424e8fcffffff83c4100fae0c2489ec619d8b86a8bf5c01e99b2b0500",
+      "relocations": [
+        {
+          "offset": 23,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_tick",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 63,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_attack",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 36,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 76,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 88,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "index": 0,
+            "value": 0
+          }
+        },
+        {
+          "offset": 115,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_npc",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 128,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 161,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 178,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 216,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 233,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 271,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 288,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 326,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 336,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 401,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 418,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 457,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_health",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 474,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 183,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 238,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 293,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 359,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 368,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 424,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 479,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_market",
+      "data": "e8fcffffff",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 379916,
+      "expected": "e8affcfeff"
+    },
+    {
+      "name": ".patch_attack",
+      "data": "e824000000",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 379901,
+      "expected": "e85e44ffff"
+    },
+    {
+      "name": ".patch_npc",
+      "data": "e8fcffffff",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 92,
+            "section": ".inject",
+            "index": 10
+          }
+        }
+      ],
+      "rva": 379774,
+      "expected": "e8cd6afdff"
+    },
+    {
+      "name": ".inject_data",
+      "data": "50000000010000000000000000000000010000007d0000004600000090010000c800000000002d44cdcccd410000b14300809844cdcccd4100002a44190000000000c03f000000000000000001000000",
+      "relocations": [
+        {
+          "offset": 8,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "index": 0,
+            "value": 0
+          }
+        },
+        {
+          "offset": 12,
+          "type": 1,
+          "symbol": {
+            "name": "original_chat",
+            "index": 1,
+            "value": 80,
+            "section": ".inject"
+          }
+        }
+      ]
+    },
+    {
+      "name": ".patch_health_19036",
+      "data": "e9fcffffff90",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 102454,
+      "expected": "8b88a8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_health_4946a",
+      "data": "e93300000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 300138,
+      "expected": "8b83a8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_health_511f3",
+      "data": "e96a00000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 332275,
+      "expected": "8bbea8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_health_53bf7",
+      "data": "e9a100000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 343031,
+      "expected": "7e178b542434",
+      "expected_relocations": []
+    },
+    {
+      "name": ".patch_health_53d21",
+      "data": "e9ec0000009090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 343329,
+      "expected": "83be94bf9c01ff",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_health_52b99",
+      "data": "e92401000090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 132,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 338841,
+      "expected": "8b86a8bf9c01",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_chat",
+      "rva": 301376,
+      "expected": "8b44240483ec40",
+      "data": "e9fcffffff9090",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "__dll_chat",
+            "index": 0,
+            "value": 0
+          }
+        }
+      ]
+    }
+  ],
+  "imports": {},
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "market_hook",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "attack_hook",
+      "value": 40,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "",
+      "value": 92,
+      "section": ".inject",
+      "index": 10
+    },
+    {
+      "name": "npc_hook",
+      "value": 0,
+      "section": ".inject_npc",
+      "index": 10
+    },
+    {
+      "name": "__dll_tick",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__dll_attack",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "__dll_npc",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ]
+}

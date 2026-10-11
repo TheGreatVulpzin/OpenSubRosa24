@@ -1,0 +1,133 @@
+{
+  "format": 1,
+  "id": "dealership_spawn",
+  "name": "Spawnar na concessionaria",
+  "sections": [
+    {
+      "name": ".patch_2561d744",
+      "data": "0080f243",
+      "relocations": [],
+      "rva": 627169092,
+      "expected": null
+    },
+    {
+      "name": ".patch_2561d748",
+      "data": "0000d041",
+      "relocations": [],
+      "rva": 627169096,
+      "expected": null
+    },
+    {
+      "name": ".patch_2561d74c",
+      "data": "00c02344",
+      "relocations": [],
+      "rva": 627169100,
+      "expected": null
+    },
+    {
+      "name": ".patch_33245",
+      "data": "909090909090",
+      "relocations": [],
+      "rva": 209477,
+      "expected": "d91d44d7a125",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_33269",
+      "data": "909090909090",
+      "relocations": [],
+      "rva": 209513,
+      "expected": "d91d4cd7a125",
+      "expected_relocations": [
+        2
+      ]
+    },
+    {
+      "name": ".patch_33257",
+      "data": "909090909090",
+      "relocations": [],
+      "rva": 209495,
+      "expected": "d91d48d7a125",
+      "expected_relocations": [
+        2
+      ]
+    }
+  ],
+  "imports": {
+    "sprintf": 385128
+  },
+  "parameters": {
+    "z": {
+      "label": "Coordenada z",
+      "default": 485.0,
+      "type": "float",
+      "min": -100000,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".patch_2561d744",
+          "offset": 0,
+          "scale": 1
+        }
+      ]
+    },
+    "x": {
+      "label": "Coordenada x",
+      "default": 26.0,
+      "type": "float",
+      "min": -100000,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".patch_2561d748",
+          "offset": 0,
+          "scale": 1
+        }
+      ]
+    },
+    "y": {
+      "label": "Coordenada y",
+      "default": 655.0,
+      "type": "float",
+      "min": -100000,
+      "max": 100000,
+      "sites": [
+        {
+          "section": ".patch_2561d74c",
+          "offset": 0,
+          "scale": 1
+        }
+      ]
+    }
+  },
+  "thread": null,
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "z",
+      "value": 1157,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "x",
+      "value": 38,
+      "section": "ABS",
+      "index": 65521
+    },
+    {
+      "name": "y",
+      "value": 1621,
+      "section": "ABS",
+      "index": 65521
+    }
+  ],
+  "description": "Conversão do script enviado. Teste em uma partida privada antes de usar no servidor habitual."
+}

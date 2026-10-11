@@ -1,0 +1,1026 @@
+{
+  "format": 1,
+  "id": "npc_spawner",
+  "name": "Spawnar NPC",
+  "description": "Cria um NPC humano sem carro a 3 metros à frente do primeiro jogador identificado na lista de conexões. O alvo fica fixo até desativar o módulo. Ative e clique em Spawnar NPCs. O jogador precisa estar vivo e fora de um veículo. Use uma área aberta e plana.",
+  "parameters": {
+    "quantity": {
+      "label": "Quantidade por pedido",
+      "type": "int",
+      "default": 1,
+      "min": 1,
+      "max": 8,
+      "sites": [
+        {
+          "section": ".inject_data",
+          "offset": 4
+        }
+      ]
+    }
+  },
+  "command": {
+    "label": "Spawnar NPCs",
+    "quantity_parameter": "quantity"
+  },
+  "sections": [
+    {
+      "name": ".inject",
+      "data": "9c6089e081ec1002000083e4f0898424000200000fae0424fc833d2000000000753a833dc0afc401017c31a13090e3153dff0000007725a314000000a12090e315a3180000000fb7052490e315a31c000000c7052000000001000000833d00000000000f8450030000833d60c50d09020f85db020000833d04000000010f8c22030000833d04000000080f8f15030000833d20000000010f85c00200008b0dc0afc40183f9010f8cb102000083f9200f8fa8020000bf2090e315a118000000390775170fb747043b051c000000750b8b47103b0514000000740d81c770f10000e2d8e9760200003dff0000000f876b02000069f00824000081c600ddde0e833e010f855602000083be381a0000000f85490200008b567881faff0100000f874602000069fa642b000081c780bf5c01833f010f85310200003947080f8528020000837f28000f8e1e020000837f14ff0f85200200008d5748b9030000008b0225ffffff7f3d0000a0460f871202000083c204e2e98b868c000000a35400000025ffffff7f3d0000c8420f87f2010000dbe3d92c24d90554000000d9fbd91d68000000d91d64000000db050c000000d80d5c000000d80558000000d91d6c000000d90564000000d80d6c000000d84748d91d24000000d9474cd80560000000d91d28000000d90568000000d80d6c000000d9e0d84750d91d2c000000a168000000a330000000a350000000a164000000a3380000003500000080a348000000b880bf5c01b900020000833800740c05642b0000e2f4e960010000e81c8002003dff0000000f874401000089c569d80824000081c300ddde0ec743044e504300c7436406000000a15400000089838c0000005568300000006824000000e8dc0a050083c40c3dff0100000f87b100000089437869f8642b000081c780bf5c01833f010f8599000000396f080f8590000000837f14ff0f8586000000a1540000008987ac000000894760c787b000000000000000a124000000894748a12800000089474ca12c000000894750c783441a000000000000c783481a000000000000c783381a00000100000055e89c64000083c404ff050c000000ff0d08000000833d08000000000f8f90000000c7051000000002000000c7050000000000000000eb7ac70300000000c70510000000f9ffffffeb5ec70510000000ffffffffeb52c70510000000f8ffffffeb46c70510000000f7ffffffeb3ac70510000000f6ffffffeb2ec70510000000f5ffffffeb22c70510000000fdffffffeb16c70510000000fcffffffeb0ac70510000000faffffffc70500000000000000000fae0c248ba42400020000619de96c350300",
+      "relocations": [
+        {
+          "offset": 27,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 36,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 44,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 56,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 61,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 66,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 73,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 78,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 84,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 94,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 107,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 120,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 133,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 146,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 159,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 182,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 187,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 201,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 212,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 250,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 299,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 379,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 406,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 414,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 420,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 426,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 432,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 438,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 444,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 450,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 456,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 465,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 474,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 480,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 486,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 492,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 503,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 508,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 513,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 518,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 523,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 528,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 538,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 543,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 570,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 595,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 614,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 626,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 631,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 636,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 665,
+          "type": 1,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 698,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 722,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 730,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 738,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 777,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        },
+        {
+          "offset": 786,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 792,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 798,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 811,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 821,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 839,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 851,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 863,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 875,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 887,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 899,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 911,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 923,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 935,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 945,
+          "type": 1,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject_data",
+            "index": 6
+          }
+        },
+        {
+          "offset": 967,
+          "type": 2,
+          "symbol": {
+            "name": "__server",
+            "value": 0,
+            "section": "",
+            "index": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": ".inject_data",
+      "data": "0000000001000000000000000000000000000000ffffffff0000000000000000000000000000000000000000000000000000803f0000000000000000000000000000803f0000000000000000000000000000803f00000000000040400000c03f9a99193e000000000000803f00004040",
+      "relocations": []
+    },
+    {
+      "name": ".patch_5cb79",
+      "data": "e8fcffffff",
+      "relocations": [
+        {
+          "offset": 1,
+          "type": 2,
+          "symbol": {
+            "name": "",
+            "value": 0,
+            "section": ".inject",
+            "index": 4
+          }
+        }
+      ],
+      "rva": 379769,
+      "expected": "e8f269fdff",
+      "expected_relocations": []
+    }
+  ],
+  "symbols": [
+    {
+      "name": "",
+      "value": 0,
+      "section": "",
+      "index": 0
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "handler",
+      "value": 0,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "latched",
+      "value": 32,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "check_request",
+      "value": 92,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "reference_id",
+      "value": 20,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "reference_ip",
+      "value": 24,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "reference_port",
+      "value": 28,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "request",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "restore",
+      "value": 953,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "bad_state",
+      "value": 849,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "quantity",
+      "value": 4,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "bad_quantity",
+      "value": 933,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "no_reference",
+      "value": 861,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "find_connection",
+      "value": 186,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "next_connection",
+      "value": 218,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "reference_connected",
+      "value": 231,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "no_reference_body",
+      "value": 873,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "reference_in_car",
+      "value": 885,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "check_position",
+      "value": 349,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "bad_position",
+      "value": 897,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "yaw",
+      "value": 84,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "cosine",
+      "value": 104,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "sine",
+      "value": 100,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "created",
+      "value": 12,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "spacing",
+      "value": 92,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "distance",
+      "value": 88,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "offset_distance",
+      "value": 108,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "position",
+      "value": 36,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "height_offset",
+      "value": 96,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "matrix",
+      "value": 48,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "find_body",
+      "value": 552,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "body_available",
+      "value": 569,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "no_body",
+      "value": 921,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "no_player",
+      "value": 909,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "rollback_player",
+      "value": 831,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "remaining",
+      "value": 8,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "status",
+      "value": 16,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "cancel",
+      "value": 943,
+      "section": ".inject",
+      "index": 4
+    },
+    {
+      "name": "",
+      "value": 0,
+      "section": ".inject_data",
+      "index": 6
+    },
+    {
+      "name": "__server",
+      "value": 0,
+      "section": "",
+      "index": 0
+    }
+  ],
+  "imports": {}
+}

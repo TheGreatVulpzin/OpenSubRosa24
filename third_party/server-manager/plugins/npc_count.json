@@ -1,0 +1,33 @@
+{
+  "format": 1,
+  "id": "npc_count",
+  "name": "Quantidade de NPCs",
+  "description": "Altera a constante usada na criação de NPCs. Não cria/remove imediatamente os NPCs existentes.",
+  "imports": {},
+  "symbols": [],
+  "parameters": {
+    "value": {
+      "label": "Quantidade de NPCs",
+      "default": 32,
+      "type": "byte",
+      "min": 0,
+      "max": 128,
+      "sites": [
+        {
+          "section": ".patch_5baea",
+          "offset": 0,
+          "width": 1
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "name": ".patch_5baea",
+      "rva": 375530,
+      "data": "20",
+      "expected": "20",
+      "relocations": []
+    }
+  ]
+}

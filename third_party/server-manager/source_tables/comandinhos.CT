@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>645</ID>
+      <Description>"Comandos extras"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>define(account0,subrosadedicated024d.exe+F437B68)
+ define(account_eye,34)
+ define(account_skin,38)
+ define(account_hair,3C)
+ define(account_name,8)
+
+define(player0,subrosadedicated024d.exe+EDEDD00)
+ define(player_eyes,23B4)
+ define(player_skin,23B8)
+ define(player_hair,23BC)
+ define(player_name,4)
+ define(player_human,78)
+
+define(human0,subrosadedicated024d.exe+15CBF80)
+ define(human_player,8)
+
+[ENABLE]
+alloc(newmem,2048)
+
+
+newmem:
+
+buceta:
+db '' 00
+
+tpposition:
+dd (float)0
+dd (float)0
+dd (float)0
+
+comando:
+db '/turn' 00
+
+comando1:
+db '/nick' 00
+
+comando2:
+db '/herobrine' 00
+
+comando3:
+db '/tp' 00
+
+comando4:
+db '/gobase' 00
+
+comando5:
+db '/sound' 00
+
+
+originalcode:
+
+push comando
+push edi
+call msvcrt.strstr
+add esp,8
+test eax,eax
+je herobrine
+
+pushad
+
+
+ mov eax,edi
+    add eax,5
+    push eax
+    call msvcrt.atoi
+    add esp,4
+
+
+mov ecx,eax
+
+imul ecx,4C
+
+
+mov edx,[ecx+account0+account_eye]
+mov [esi+player0+player_eyes],edx
+mov edx,[ecx+account0+account_skin]
+mov [esi+player0+player_skin],edx
+mov edx,[ecx+account0+account_hair]
+mov [esi+player0+player_hair],edx
+
+
+mov edx,[ecx+account0+account_name]
+mov [esi+player0+player_name],edx
+mov edx,[ecx+account0+account_name+4]
+mov [esi+player0+player_name+4],edx
+mov edx,[ecx+account0+account_name+8]
+mov [esi+player0+player_name+8],edx
+mov edx,[ecx+account0+account_name+C]
+mov [esi+player0+player_name+C],edx
+mov edx,[ecx+account0+account_name+10]
+mov [esi+player0+player_name+10],edx
+mov edx,[ecx+account0+account_name+14]
+mov [esi+player0+player_name+14],edx
+mov edx,[ecx+account0+account_name+18]
+mov [esi+player0+player_name+18],edx
+mov edx,[ecx+account0+account_name+1C]
+mov [esi+player0+player_name+1C],edx
+mov edx,[ecx+account0+account_name+20]
+mov [esi+player0+player_name+20],edx
+
+
+
+
+mov eax,esi
+xor edx, edx
+mov ecx,2408
+div ecx
+
+push eax
+call subrosadedicated024d.exe+64A0
+add esp,4
+
+mov edx,[esi+player0+player_human]
+push edx
+call subrosadedicated024d.exe+6580
+add esp,4
+
+skip:
+popad
+
+jmp end
+
+
+herobrine:
+
+
+push comando2
+push edi
+call msvcrt.strstr
+add esp,8
+test eax,eax
+je teleport
+
+
+pushad
+mov [esi+player0+player_eyes],#3
+
+
+mov eax,esi
+xor edx, edx
+mov ecx,2408
+div ecx
+
+push eax
+call subrosadedicated024d.exe+64A0
+add esp,4
+
+mov edx,[esi+player0+player_human]
+push edx
+call subrosadedicated024d.exe+6580
+add esp,4
+
+
+
+popad
+
+jmp end
+
+
+
+teleport:
+push comando3
+push edi
+call msvcrt.strstr
+add esp,8
+test eax,eax
+je tpbase
+
+
+
+
+mov edx,[esi+player0+player_human]
+imul edx,2B64
+
+
+/////////////////////////////////////////////////
+/////////////////// level check
+pushad
+
+
+
+push (float)2000
+fld [edx+human0+C8+E0*2+30]
+fchs
+fmul [esp]
+fadd [edx+human0+C8+E0*2+8]
+fstp [tpposition+8]
+
+fld [edx+human0+64]
+fchs
+fsin
+fmul [esp]
+fadd [edx+human0+C8+E0*2+4]
+fstp [tpposition+4]
+
+fld [edx+human0+C8+E0*2+38]
+fmul [esp]
+fadd [edx+human0+C8+E0*2+0]
+fstp [tpposition+0]
+
+add esp,4
+
+
+push 00
+lea eax,[tpposition]
+push eax
+lea ecx,[edx+human0+C8+E0*2+0]
+push ecx
+call subrosadedicated024d.exe+31630
+add esp,C
+
+cmp eax,0
+je tpskip
+/////////////////// level check
+/////////////////////////////////////////////////
+
+popad
+
+pushad
+mov ecx,0
+mov eax,0
+
+boneloop:
+
+fld [subrosadedicated024d.exe+103484A8]
+fstp [edx+human0+C8+8+ecx]
+
+push (float)1
+fld [subrosadedicated024d.exe+103484A4]
+fadd [esp]
+fstp [edx+human0+C8+4+ecx]
+add esp,4
+
+fld [subrosadedicated024d.exe+103484A0]
+fstp [edx+human0+C8+0+ecx]
+
+//last pos
+fld [subrosadedicated024d.exe+103484A8]
+fstp [edx+human0+C8+8+C+ecx]
+push (float)1
+fld [subrosadedicated024d.exe+103484A4]
+fadd [esp]
+fstp [edx+human0+C8+4+C+ecx]
+add esp,4
+fld [subrosadedicated024d.exe+103484A0]
+fstp [edx+human0+C8+0+C+ecx]
+
+//vel
+mov [edx+human0+C8+18+4],(float)0
+
+
+
+//mov [edx+human0+C8+4+ecx],(float)25
+
+inc eax
+mov ecx,eax
+imul ecx,E0
+
+cmp eax,#15
+jl boneloop
+
+
+tpskip:
+popad
+
+jmp end
+
+
+
+tpbase:
+
+push comando4
+push edi
+call msvcrt.strstr
+add esp,8
+test eax,eax
+je makesound
+
+
+pushad
+
+
+ mov eax,edi
+    add eax,7
+    push eax
+    call msvcrt.atoi
+    add esp,4
+
+cmp eax,-1
+jle baseskip
+
+teamcheckgold:
+cmp eax,0
+jg teamcheckmons
+
+push (float)453
+push (float)25
+push (float)178
+jmp basesend
+
+teamcheckmons:
+cmp eax,1
+jg teamcheckoxs
+
+push (float)418
+push (float)25
+push (float)1084
+jmp basesend
+
+teamcheckoxs:
+cmp eax,2
+jg teamchecknex
+
+push (float)955
+push (float)25
+push (float)1117
+jmp basesend
+
+teamchecknex:
+cmp eax,3
+jg teamcheckpent
+
+push (float)955
+push (float)25
+push (float)349
+jmp basesend
+
+
+teamcheckpent:
+
+//cmp eax,4
+//jg teamcheckpent
+
+push (float)1347
+push (float)25
+push (float)674
+jmp basesend
+
+
+basesend:
+mov eax,0
+mov ecx,0
+
+
+
+mov edx,[esi+player0+78]
+imul edx,2B64
+
+
+baseboneloop:
+fld [esp+8]
+fstp [edx+human0+C8+0+ecx]
+fld [esp+4]
+fstp [edx+human0+C8+4+ecx]
+fld [esp+0]
+fstp [edx+human0+C8+8+ecx]
+
+fld [esp+8]
+fstp [edx+human0+C8+0+C+ecx]
+fld [esp+4]
+fstp [edx+human0+C8+4+C+ecx]
+fld [esp+0]
+fstp [edx+human0+C8+8+C+ecx]
+
+inc eax
+mov ecx,eax
+imul ecx,E0
+
+cmp eax,#15
+jl baseboneloop
+
+add esp,C
+
+
+baseskip:
+popad
+
+
+jmp end
+
+
+makesound:
+push comando5
+push edi
+call msvcrt.strstr
+add esp,8
+test eax,eax
+je end
+
+
+
+
+/////////////////////////////////////////////////
+/////////////////// level check
+pushad
+
+mov edx,[esi+player0+78]
+cmp edx,-1
+jle soundskip
+imul edx,2B64
+
+
+push (float)2000
+fld [edx+human0+C8+E0*2+30]
+fchs
+fmul [esp]
+fadd [edx+human0+C8+E0*2+8]
+fstp [tpposition+8]
+
+fld [edx+human0+64]
+fchs
+fsin
+fmul [esp]
+fadd [edx+human0+C8+E0*2+4]
+fstp [tpposition+4]
+
+fld [edx+human0+C8+E0*2+38]
+fmul [esp]
+fadd [edx+human0+C8+E0*2+0]
+fstp [tpposition+0]
+
+add esp,4
+
+
+push 00
+lea eax,[tpposition]
+push eax
+lea ecx,[edx+human0+C8+E0*2+0]
+push ecx
+call subrosadedicated024d.exe+31630
+add esp,C
+
+cmp eax,0
+je soundskip
+/////////////////// level check
+/////////////////////////////////////////////////
+
+popad
+
+pushad
+
+
+ mov eax,edi
+    add eax,6
+    push eax
+    call msvcrt.atoi
+    add esp,4
+
+
+
+  push (float)0.15   // Speed
+  push (float)1   // Volume
+ lea edi,[subrosadedicated024d.exe+103484A0]
+  push edi        // Position
+  push eax        // Sound
+  call subrosadedicated024d.exe+16DB0
+  add esp,10
+
+
+soundskip:
+popad
+
+end:
+push 0A
+push subrosadedicated024d.exe+5EF3C
+
+jmp returnhere
+
+"subrosadedicated024d.exe"+4A0E2:
+jmp originalcode
+nop 2
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+dealloc(newmem)
+"subrosadedicated024d.exe"+4A0E2:
+push 0A
+push subrosadedicated024d.exe+5EF3C
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
