@@ -1,0 +1,10 @@
+rva,name,evidence
+0x41de0,bondsimulation2,"Rótulo de debug 'bondsim'. Maior função do servidor (20 KB), como no ELF (30 KB)."
+0x56710,objectsimulation,"Rótulo de debug 'objectsim'. ELF usa o rótulo 'object'."
+0x33650,serverrecv,"Strings ' Joined' e ' Exited', iguais às do serverrecv do ELF. Usa htonl/ntohl."
+0x13d80,building_load,"String 'data/building/%s.sbb' + fopen + memset. No ELF só building_load chama memset."
+0x3740,building_save,"String 'data/building/%s.sbb' + fopen, sem memset. Par de building_load."
+0x1b070,createitem,"Manager (native_sdk/black_market.c) chama com (tipo, pos, vel, rot)."
+0x28020,createplayer,"Manager (ANALISE-NPCS.md) e casador concordam."
+0x31800,createobject,"Manager (ANALISE-NPCS.md): registro 0x8230."
+0x50ae0,createhuman,"Manager (ANALISE-NPCS.md): registro 0x2B64, vida inicial 100."

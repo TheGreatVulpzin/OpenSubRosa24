@@ -37,6 +37,12 @@ MATH_EXT = ('sqrt', 'sin', 'cos', 'atan2', 'pow', 'acos', 'floor', 'fabs', 'asin
 
 
 def load(path):
+    """Carrega features. Aceita "features.jsonl:nomes.csv" para usar nomes de um CSV do casador."""
+    names = None
+    if ':' in path[2:]:  # ignora a letra do drive no Windows
+        path, csv_path = path.rsplit(':', 1)
+        with open(csv_path, encoding='utf-8') as fh:
+            names = {r['rva']: r['name'] for r in csv.DictReader(fh) if r['name']}
     funcs = {}
     with open(path, encoding='utf-8') as fh:
         for line in fh:
@@ -44,6 +50,8 @@ def load(path):
             # Mach-O: símbolos C começam com "_".
             if f['name'].startswith('_') and not f['name'].startswith('__'):
                 f['name'] = f['name'][1:]
+            if names is not None:
+                f['name'] = names.get(f['rva'], f['name'])
             funcs[f['rva']] = f
     return funcs
 
@@ -60,8 +68,17 @@ def norm_ext(name):
     return n
 
 
-def fingerprint(f):
+def fingerprint(f, strict=False):
+    """strict=True: alvo e referência vêm do mesmo compilador (MSVC 2010).
+    Nesse caso offsets de pilha e o tamanho do código também são comparáveis."""
     feats = Counter()
+    if strict:
+        for v in f['ints']:
+            if v < 0:
+                feats['n:%d' % v] += 1
+        feats['z:%d' % (f['insns'] // 10)] += 1
+        feats['b:%d' % (f['blocks'] // 3)] += 1
+        feats['c:%d' % len(f['calls'])] += 1
     for s in f['strings']:
         feats['s:' + s] += 1
     for v in f['floats']:
@@ -111,8 +128,8 @@ def size_bucket(n):
     return b
 
 
-def run(target, refs, min_anchor=0.45, margin=1.3):
-    tfp = {r: fingerprint(f) for r, f in target.items()}
+def run(target, refs, min_anchor=0.45, margin=1.3, strict=False, seeds=None):
+    tfp = {r: fingerprint(f, strict) for r, f in target.items()}
     scorer = Scorer(tfp)
 
     by_name = defaultdict(list)  # nome -> [(ref, rva)]
@@ -131,7 +148,7 @@ def run(target, refs, min_anchor=0.45, margin=1.3):
     for name, entries in by_name.items():
         best = {}
         for ref, rva in entries:
-            rfp = fingerprint(ref[rva])
+            rfp = fingerprint(ref[rva], strict)
             if sum(scorer.weight(k, c) for k, c in rfp.items()) < 6:
                 continue  # pouca evidência
             pool = set().union(*(inv[k] for k in rfp if k in inv)) if rfp else set()
@@ -146,6 +163,10 @@ def run(target, refs, min_anchor=0.45, margin=1.3):
             cands.append((s1, name, t1))
 
     result, used = {}, set()
+    for t, name in (seeds or {}).items():  # nomes revisados à mão entram primeiro
+        if t in target:
+            result[t] = (name, 'manual', 1.0, 'seed')
+            used.add(name)
     for s, name, t in sorted(cands, reverse=True):
         if t in result or name in used:
             continue
@@ -214,11 +235,30 @@ def main():
     ap.add_argument('--ref', action='append', required=True)
     ap.add_argument('--out')
     ap.add_argument('--evaluate', action='store_true')
+    ap.add_argument('--strict', action='store_true', help='alvo e referências do mesmo compilador')
+    ap.add_argument('--seed', help='CSV rva,name: nomes manuais usados como sementes da propagação')
+    ap.add_argument('--keep', help='CSV anterior do alvo: nomes dele têm prioridade')
     args = ap.parse_args()
 
     target = load(args.target)
     refs = [load(p) for p in args.ref]
-    result = run(target, refs)
+    seeds = None
+    if args.seed:
+        with open(args.seed, encoding='utf-8') as fh:
+            seeds = {r['rva']: r['name'] for r in csv.DictReader(fh)}
+    result = run(target, refs, strict=args.strict, seeds=seeds)
+    if args.keep:
+        with open(args.keep, encoding='utf-8') as fh:
+            prev = {r['rva']: r for r in csv.DictReader(fh) if r['name']}
+        used = {v[0] for v in result.values()}
+        conflicts = 0
+        for rva, r in prev.items():
+            if rva in result and result[rva][0] != r['name']:
+                conflicts += 1
+            if rva not in result or result[rva][0] != r['name']:
+                if r['name'] not in used or result.get(rva, (None,))[0] == r['name']:
+                    result[rva] = (r['name'], r['source'], r['confidence'], r['evidence'])
+        print(f'mantidos {len(prev)} nomes do CSV anterior ({conflicts} conflitos resolvidos a favor dele)')
 
     if args.evaluate:
         evaluate(target, result)
