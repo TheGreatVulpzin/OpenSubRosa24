@@ -9,7 +9,8 @@
  * Each argument (one dword) has a kind:
  *   V:xxxxxxxx   a plain value
  *   M:xxxxxxxx   an address inside the 024d image, as an RVA (the harness relocates it)
- *   P:hex...     a pointer to the stack or the heap: the 256 bytes it points to
+ *   P:xxxxxxxx:hex...  a readable address: the value, then the 256 bytes it points to
+ *                (old recordings: P:hex..., without the value)
  *
  * sv_snapshot.bin: header (magic, image base, .data RVA, .data size, x87 control word),
  * then each .data page that is not all zero: page index (uint32) + 4096 bytes.
@@ -96,7 +97,8 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
             fprintf(g_args, " M:%x", v - (uint32_t)sr_base);
         } else if (v >= 0x10000 && readable((void *)v, BLOB)) {
             const unsigned char *p = (const unsigned char *)v;
-            fputs(" P:", g_args);
+            /* The value too: a float such as 1.0 (0x3f800000) can look like a readable address. */
+            fprintf(g_args, " P:%x:", v);
             for (k = 0; k < BLOB; k++)
                 fprintf(g_args, "%02x", p[k]);
         } else {

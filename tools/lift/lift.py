@@ -796,7 +796,9 @@ def gen_table(lifted, headers, names):
             nice = f'{nice}_{rva:05x}'
         out.append(f'void lf_{rva:05x}(void);')
         size = 1 if ret in BYTE_TYPES else 2 if ret in WORD_TYPES else 4
-        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *)lf_{rva:05x}, {dwords}, {kind}, {size} }},')
+        # One letter per argument dword: p = pointer, v = value.
+        kinds = ''.join(('vv' if t in WIDE_TYPES else 'p' if t.strip().endswith('*') else 'v') for t, _ in params)
+        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *)lf_{rva:05x}, {dwords}, {kind}, {size}, "{kinds}" }},')
     out += ['', 'const LfEntry lf_table[] = {'] + (rows or ['    { 0 },']) + ['};',
             f'const int lf_table_count = {len(lifted)};', '']
     return chr(10).join(out)

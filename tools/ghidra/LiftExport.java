@@ -208,6 +208,7 @@ public class LiftExport extends GhidraScript {
      * the decompiler used for it (an "overlap" global like _DAT_x is not in the symbol map). */
     private void globals(StringBuilder sb, DecompileResults r) {
         Map<String, String[]> found = new LinkedHashMap<>();
+        Map<String, Set<String>> valueTypes = new HashMap<>();
         Iterator<HighSymbol> it = r.getHighFunction().getGlobalSymbolMap().getSymbols();
         while (it.hasNext()) {
             HighSymbol s = it.next();
@@ -229,6 +230,12 @@ public class LiftExport extends GhidraScript {
             // the global as a float. In C, "undefined4 x = 1.0" stores the int 1, so the type that
             // the decompiler used wins when it has the same size.
             String[] known = found.get(text);
+            // Types of the uses as a value (not "&DAT_x", an address with byte arithmetic).
+            int prev = leaves.indexOf(n) - 1;
+            while (prev >= 0 && ((ClangToken) leaves.get(prev)).getText().isBlank()) prev--;
+            boolean addressOf = prev >= 0 && ((ClangToken) leaves.get(prev)).getText().equals("&");
+            if (!addressOf) valueTypes.computeIfAbsent(text, k -> new HashSet<>()).add(
+                    dt.getDisplayName() + "|" + dt.getLength());
             if (known != null) {
                 if (known[1].startsWith("undefined") && !dt.getDisplayName().startsWith("undefined")
                         && String.valueOf(dt.getLength()).equals(known[2])) {
@@ -248,6 +255,28 @@ public class LiftExport extends GhidraScript {
                 hexAddr = String.format("%08x", rep.getAddress().getOffset());
             }
             found.put(text, new String[] { "0x" + hexAddr, dt.getDisplayName(), String.valueOf(dt.getLength()) });
+        }
+        // A global with the listing type "undefined" (1 byte, no real type) that the function
+        // uses as a value of one other type: numofevents is "undefined" but read as a uint.
+        // With the 1-byte type, C reads and writes only its low byte.
+        // With several use types (numofevents: uint, and ushort for its low half), the largest
+        // one wins: the smaller ones are pieces of it.
+        for (Map.Entry<String, String[]> e : found.entrySet()) {
+            Set<String> uses = valueTypes.get(e.getKey());
+            if (!e.getValue()[1].equals("undefined") || uses == null) continue;
+            String best = null;
+            int bestLen = 1;
+            for (String u : uses) {
+                String[] tl = u.split("\\|");
+                int len = Integer.parseInt(tl[1]);
+                if (tl[0].startsWith("undefined") || tl[0].contains("*") || len <= bestLen) continue;
+                best = tl[0];
+                bestLen = len;
+            }
+            if (best != null) {
+                e.getValue()[1] = best;
+                e.getValue()[2] = String.valueOf(bestLen);
+            }
         }
         boolean first = true;
         for (Map.Entry<String, String[]> e : found.entrySet()) {

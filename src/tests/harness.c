@@ -44,6 +44,7 @@ typedef struct Call {
     char kind[MAX_ARGS];          /* 'V', 'M' or 'P' */
     uint32_t value[MAX_ARGS];
     uint8_t *blob[MAX_ARGS];      /* 'P': BLOB bytes */
+    char has_value[MAX_ARGS];     /* 'P': the value is known (recordings after the fix) */
 } Call;
 
 static HMODULE g_mod;
@@ -238,9 +239,15 @@ static int load_calls(const char *path)
             c->kind[c->n] = tok[0];
             if (tok[0] == 'P') {
                 int k;
+                const char *hex = tok + 2, *colon = strchr(tok + 2, ':');
+                c->has_value[c->n] = colon != NULL;  /* new format: P:value:blob */
+                if (colon) {
+                    c->value[c->n] = strtoul(tok + 2, NULL, 16);
+                    hex = colon + 1;
+                }
                 c->blob[c->n] = malloc(BLOB);
-                for (k = 0; k < BLOB && tok[2 + 2 * k] && tok[3 + 2 * k]; k++)
-                    c->blob[c->n][k] = (uint8_t)(hexval(tok[2 + 2 * k]) * 16 + hexval(tok[3 + 2 * k]));
+                for (k = 0; k < BLOB && hex[2 * k] && hex[2 * k + 1]; k++)
+                    c->blob[c->n][k] = (uint8_t)(hexval(hex[2 * k]) * 16 + hexval(hex[2 * k + 1]));
             } else {
                 c->value[c->n] = strtoul(tok + 2, NULL, 16);
             }
@@ -252,13 +259,26 @@ static int load_calls(const char *path)
     return 1;
 }
 
-/* Arguments of a call: values, relocated image addresses, and fresh copies of the blobs. */
-static void build_args(const Call *c, uint32_t *a)
+/* 0 when a value argument was recorded as a pointer without its value (old recordings). */
+static int args_usable(const Call *c, const char *kinds)
+{
+    int i;
+    for (i = 0; i < c->n; i++)
+        if (c->kind[i] == 'P' && kinds[i] != 'p' && !c->has_value[i])
+            return 0;
+    return 1;
+}
+
+/* Arguments of a call: values, relocated image addresses, and fresh copies of the blobs
+ * for pointer parameters. A value parameter that looked like an address gets its value. */
+static void build_args(const Call *c, const char *kinds, uint32_t *a)
 {
     int i;
     for (i = 0; i < c->n; i++) {
         if (c->kind[i] == 'M') {
             a[i] = (uint32_t)sr_base + c->value[i];
+        } else if (c->kind[i] == 'P' && kinds[i] != 'p') {
+            a[i] = c->value[i];
         } else if (c->kind[i] == 'P') {
             memset(g_buf[i], 0, BUF);
             memcpy(g_buf[i] + BUF / 2, c->blob[i], BLOB);
@@ -413,9 +433,13 @@ int main(int argc, char **argv)
             uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
+            if (!args_usable(c, e->args)) {
+                skip++;
+                continue;
+            }
             mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
             ncalls++;
-            build_args(c, a);
+            build_args(c, e->args, a);
             fails_before = v.fails;
             v.broken = 0;
             sv_track_begin_new(&v);
@@ -424,13 +448,13 @@ int main(int argc, char **argv)
             for (k = 0; k < c->n; k++)
                 if (c->kind[k] == 'P')
                     memcpy(g_after_new[k], g_buf[k], BUF);
-            build_args(c, a);
+            build_args(c, e->args, a);
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
             same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ((ne ^ no) & mask) == 0) ||
                    (e->ret == LF_RET_INT64 && ne == no && de == dorig) ||
                    (e->ret == LF_RET_FLOAT && sv_same_float(fe, fo));
             for (k = 0; k < c->n; k++)
-                if (c->kind[k] == 'P' && !same_memory(g_after_new[k], g_buf[k])) {
+                if (c->kind[k] == 'P' && e->args[k] == 'p' && !same_memory(g_after_new[k], g_buf[k])) {
                     int b = 0;
                     while (g_after_new[k][b] == g_buf[k][b])
                         b++;
