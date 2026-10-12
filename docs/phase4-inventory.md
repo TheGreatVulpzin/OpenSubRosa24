@@ -12,7 +12,7 @@ Target: `original/blackhouser/subrosadedicated024d.exe` (PE32, SHA-256 `11e00678
 | 2 | A small PE parser (not committed) | The import table: 102 imports, with the IAT slot of each one. |
 | 3 | `objdump -d -M intel -j .text` of the `.exe` | 106,142 decoded instructions. Every `call [IAT]`, and every `call`/`jmp` to one of the 101 `jmp [IAT]` thunks, was attributed to a function. |
 | 4 | Static reachability from the entry point `0x5d316` | Direct calls, address immediates, and the CRT initialiser tables. It tells live code from code that nothing references. |
-| 5 | Ghidra headless decompile (`tools/ghidra/DecompileFunctions.java`) | Used to confirm `getmasterserverip`, `server_writelogfile`, `loadsaveoptions`, `saveaccountsserver`, `loadaccountsserver`, `leveleditor_load`, `newspaper_load`, `servercycle`. |
+| 5 | Ghidra headless decompile (`tools/ghidra/DecompileFunctions.java`) | Used to confirm `getmasterserverip`, `server_writelogfile`, `loadsaveoptions`, `saveaccountsserver`, `loadaccountsserver`, `leveleditor_load`, `newspaper_load`, `servercycle`, `sendpacket`, `recvpacket`. |
 | 6 | Symbol sizes of the Linux 0.24c server and the i386 Mach-O (`analysis/structs`, `original/vanilla`) | Capacity and size of the global arrays, and which structs hold pointers. |
 
 Image layout (from the PE header):
@@ -41,7 +41,7 @@ Limits of the method: it is static. A call through a computed pointer cannot be 
 - **Dynamic memory is used at 2 places only** (`createarea`, `landscape_buildsectorlods`). Everything else is in the 606 MiB (`0x25e997e0` bytes) of static `.data`. Only about 111 MiB of it has a name in the CSVs (section 4).
 - **Files**: reads `config.txt`, `user/server.srk`, `data/city.sbc`, `data/building/*.sbb`, `data/block/*.sbl` and (optional) `readme.txt`. Writes `user/server.srk` and `stats.txt`. The `dedlog.txt` debug log can never start, because its flag is never set. Details in section 3.
 - **About 40 % of the decoded instructions are x87** (41,955 in 271 functions). The only SSE2 use is one `cvttsd2si` in `_ftol2` and 14 `movaps` in `bondsimulation2`. The CRT sets the x87 precision to 53 bits at start-up. This is the biggest risk for an exact port (section 7).
-- **The city is made with `srand(0)` and the MSVC `rand()`** (`createlevel`). A port must give the same number sequence (section 7).
+- **`rand()` is used by 21 functions (47 sites) and is seeded from the clock.** `createlevel` calls `srand(0)`, but no function below it calls `rand`, so the level does not depend on the generator. All uses are bit masks or `% n` with a small `n`, none scales by `RAND_MAX` (section 7, R2).
 - **`functions.csv` covers the live code except 7 functions** (6 in the CRT and the `qsort` comparator at `0xd320`). 32 of its 340 functions are not referenced by live code (client-only or editor code).
 - The function `getpaths` (`0x5cd10`) is the real `main`, and `disablesocket` (`0xd710`) really opens the server socket. See the naming notes in section 8.
 
@@ -51,7 +51,7 @@ The 024d calls most imports with `call [IAT]`. Some of them are reached only thr
 
 ### 2.1 Memory
 
-The game code allocates from the heap in two functions only. `createarea` (`0xf2b0`) frees and allocates one block per level area (4 areas, record size `0x100d6c`), and `landscape_buildsectorlods` (`0x1e50`) does the same for 4 buffers in each `area_block` record (record size `0x84`). In both cases the pointer is stored **inside a global struct** (see section 7, R3). `memcpy` and `memset` come from `MSVCR100` through thunks. `memset` clears each new record in the `create*` functions with the size of the struct.
+The game code allocates from the heap in two functions only. `createarea` (`0xf2b0`) frees and allocates one block per level area (4 areas, record size `0x100d6c`), and `landscape_buildsectorlods` (`0x1e50`) does the same for 4 buffers in each `area_block` record (record size `0x84`; the name says landscape, but the address is the `area_block` array of section 4). In both cases the pointer is stored **inside a global struct** (see section 7, R3). `memcpy` and `memset` come from `MSVCR100` through thunks. `memset` clears each new record in the `create*` functions with the size of the struct.
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
@@ -69,7 +69,7 @@ There is no `strcpy`, `strlen` or `strcmp` import: the compiler inlined them (fo
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
-| `sprintf` | MSVCR100 | 30 | 0x11d0 saveaccountsclient†; 0x12f0 loadaccountsclient†; 0x29a0 loadblock; 0x3740 building_save†; 0x8320 leveleditor_save†; 0x8590 leveleditor_load; 0x8880 sprintf_comma ×4; 0xded0 createaccount; 0x13d80 building_load; 0x185a0 newspaper_load; 0x1ac40 getmasterserverip; 0x1d2c0 logic_farbslist; 0x1d4d0 logic_setteammanager; 0x49940 server_playermessage ×4; 0x4e7a0 loadsaveoptions ×2; 0x58320 scenario_createguards; 0x585b0 scenario_createtraffic2; 0x587f0 scenario_createchase ×4; 0x5b9b0 logicsimulation_world; 0x5c8d0 dedicatedserverloop | Builds file names (`data/block/%s.sbl`, `data/building/%s.sbb`, `data/city.sbc`), chat/log lines (`%s is now manager of %s`, ` Joined`, ` Exited`), `Agent %d` default name, the newspaper top-10 line. |
+| `sprintf` | MSVCR100 | 30 | 0x11d0 saveaccountsclient†; 0x12f0 loadaccountsclient†; 0x29a0 loadblock; 0x3740 building_save†; 0x8320 leveleditor_save†; 0x8590 leveleditor_load; 0x8880 sprintf_comma ×4; 0xded0 createaccount; 0x13d80 building_load; 0x185a0 newspaper_load; 0x1ac40 getmasterserverip; 0x1d2c0 logic_farbslist; 0x1d4d0 logic_setteammanager; 0x49940 server_playermessage ×4; 0x4e7a0 loadsaveoptions ×2; 0x58320 scenario_createguards; 0x585b0 scenario_createtraffic2; 0x587f0 scenario_createchase ×4; 0x5b9b0 logicsimulation_world; 0x5c8d0 dedicatedserverloop | Builds file names (`data/block/%s.sbl`, `data/building/%s.sbb`, `data/city.sbc`), chat and mission text (`logic_setteammanager`: `%s is now manager of %s`; `server_playermessage`; `scenario_*`), the `Agent %d` default name, the `physics:%d` debug line, the newspaper top-10 line (`%d. %s   $`) and the thousands separators of `sprintf_comma`. |
 | `sscanf` | MSVCR100 | 4 | 0xd110 getfloat; 0xd1a0 sub_d1a0~†; 0x1ac40 getmasterserverip; 0x49940 server_playermessage | `getfloat`/`getint` number parsing of `config.txt`, the master-server reply (`%d`), and the chat command parser in `server_playermessage`. |
 | `strncmp` | MSVCR100 | 7 | 0x1010 account_nameexists; 0x49940 server_playermessage ×6 | Account name lookup (`account_nameexists`, 24 characters) and the admin command prefixes in `server_playermessage` (`/kick `, `/ban1 `, `/give `...). |
 | `tolower` | MSVCR100 | 1 | 0x49940 server_playermessage | Case-insensitive command matching in `server_playermessage`. |
@@ -90,8 +90,8 @@ There is no `strcpy`, `strlen` or `strcmp` import: the compiler inlined them (fo
 | `_CIatan2` | MSVCR100 | 22 | 0x9600 geteulerangles2 ×3; 0x19060 human_calculatelegangles; 0x240e0 object_rotorsimulation† ×3; 0x272b0 objectsimulation_car; 0x4a440 human_calculatearmangles ×5; 0x4f720 playerai ×5; 0x51060 humansimulation ×4 | Euler angles, AI aiming, arm angles, helicopter rotor. |
 | `_CIpow` | MSVCR100 | 5 | 0x9690 sub_9690~†; 0x1f4a0 packobjectpacket2† ×2; 0x20680 packobjectpacket ×2 | `packobjectpacket`/`packobjectpacket2` (non-linear quantisation of values for the network) and `geteulerangles2`. |
 | `floor` | MSVCR100 | 2 | 0x1c1d0 lineintersectlandscape; 0x2c0c0 lineintersectarea | Landscape and area ray casts (`lineintersectlandscape`, `lineintersectarea`). |
-| `rand` | MSVCR100 | 47 | 0x1610 ai_car_nextwaypoint ×3; 0x5700 economy_carmarket; 0xded0 createaccount; 0xe2e0 loadaccountsserver ×3; 0xe4d0 ai_playercar; 0x22e20 applydamageobject; 0x28020 createplayer; 0x28230 createmission_threeway ×6; 0x286b0 createmission_transaction ×2; 0x48ec0 bulletsimulation ×2; 0x4e7a0 loadsaveoptions ×2; 0x4f720 playerai ×6; 0x50ae0 createhuman ×2; 0x55700 logic_playeractions; 0x58320 scenario_createguards ×3; 0x585b0 scenario_createtraffic2 ×4; 0x587f0 scenario_createchase ×2; 0x58ef0 createmission_acquisition ×2; 0x590f0 resetgame ×2; 0x5aa60 createscenario_world; 0x5ae70 logicsimulation_round | MSVC linear congruential generator. Level generation, AI, economy, account look values, damage. |
-| `srand` | MSVCR100 | 3 | 0x4e7a0 loadsaveoptions; 0x54e40 createlevel; 0x590f0 resetgame | `createlevel` seeds with 0 (deterministic city), `resetgame` and `loadsaveoptions` seed with the time. |
+| `rand` | MSVCR100 | 47 | 0x1610 ai_car_nextwaypoint ×3; 0x5700 economy_carmarket; 0xded0 createaccount; 0xe2e0 loadaccountsserver ×3; 0xe4d0 ai_playercar; 0x22e20 applydamageobject; 0x28020 createplayer; 0x28230 createmission_threeway ×6; 0x286b0 createmission_transaction ×2; 0x48ec0 bulletsimulation ×2; 0x4e7a0 loadsaveoptions ×2; 0x4f720 playerai ×6; 0x50ae0 createhuman ×2; 0x55700 logic_playeractions; 0x58320 scenario_createguards ×3; 0x585b0 scenario_createtraffic2 ×4; 0x587f0 scenario_createchase ×2; 0x58ef0 createmission_acquisition ×2; 0x590f0 resetgame ×2; 0x5aa60 createscenario_world; 0x5ae70 logicsimulation_round | MSVC linear congruential generator (15 bits). AI, economy, scenarios, spawn choices, damage, account look values. All uses are `& mask` or `% n`. |
+| `srand` | MSVCR100 | 3 | 0x4e7a0 loadsaveoptions; 0x54e40 createlevel; 0x590f0 resetgame | `createlevel` seeds with 0 (nothing below it calls `rand`), `resetgame` and `loadsaveoptions` seed with the time. |
 
 ### 2.4 Files and console
 
@@ -99,7 +99,7 @@ The game reads and writes files through two function pointers, `freadptr` (RVA `
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
-| `fopen` | MSVCR100 | 14 | 0x1080 saveaccountsserver; 0x11d0 saveaccountsclient†; 0x12f0 loadaccountsclient†; 0x1420 server_writelogfile; 0x29a0 loadblock; 0x3740 building_save†; 0x5280 debug_resetlogfile; 0x52f0 sub_52f0~†; 0x8320 leveleditor_save†; 0x8590 leveleditor_load; 0xd020 loadtextfile; 0xe2e0 loadaccountsserver; 0x13d80 building_load; 0x5c8d0 dedicatedserverloop | Opens every game file (see section 2). |
+| `fopen` | MSVCR100 | 14 | 0x1080 saveaccountsserver; 0x11d0 saveaccountsclient†; 0x12f0 loadaccountsclient†; 0x1420 server_writelogfile; 0x29a0 loadblock; 0x3740 building_save†; 0x5280 debug_resetlogfile; 0x52f0 sub_52f0~†; 0x8320 leveleditor_save†; 0x8590 leveleditor_load; 0xd020 loadtextfile; 0xe2e0 loadaccountsserver; 0x13d80 building_load; 0x5c8d0 dedicatedserverloop | Opens every game file (see section 3). |
 | `fclose` | MSVCR100 | 17 | 0x1080 saveaccountsserver; 0x11d0 saveaccountsclient†; 0x12f0 loadaccountsclient†; 0x1420 server_writelogfile; 0x29a0 loadblock ×2; 0x3740 building_save†; 0x5280 debug_resetlogfile; 0x8320 leveleditor_save†; 0x8590 leveleditor_load ×2; 0xd020 loadtextfile; 0xe2e0 loadaccountsserver; 0x13d80 building_load ×3; 0x5c8d0 dedicatedserverloop | Closes them. |
 | `fread` | MSVCR100 | 2 | 0x296a0 sub_296a0~†; 0x5cd10 getpaths | Only its address is used: `getpaths` (main) stores it in the global `freadptr` and all game readers call it through the pointer. |
 | `fwrite` | MSVCR100 | 2 | 0x296a0 sub_296a0~†; 0x5cd10 getpaths | Same for `fwriteptr` (writers). |
@@ -166,9 +166,9 @@ Dead code that also uses WinSock: `0xd7b0` (client socket, no bind), `0xd840` (t
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
-| `__getmainargs` | MSVCR100 | 1 | 0x5d041 sub_5d041~ | `__tmainCRTStartup`: argc/argv/envp. |
+| `__getmainargs` | MSVCR100 | 1 | 0x5d041 sub_5d041~ | The `_initterm` initialiser `0x5d041`: argc/argv/envp. |
 | `_initterm_e` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | `__tmainCRTStartup`: runs the pre-C initialisers. |
-| `_initterm` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | Runs the C initialisers (none are registered by the game). |
+| `_initterm` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | Runs the C initialiser table (one entry, `0x5d041`). |
 | `__set_app_type` | MSVCR100 | 1 | 0x5d25c sub_5d25c~ | Console application. |
 | `_controlfp_s` | MSVCR100 | 1 | 0x5d7b5 sub_5d7b5~ | `_setdefaultprecision`: sets the x87 precision control to 53 bits (`_controlfp_s(0, 0x10000, 0x30000)`) at RVA 0x5d7b5. |
 | `__setusermatherr` | MSVCR100 | 1 | 0x5d25c sub_5d25c~ | Registers the default `_matherr` hook. |
@@ -180,13 +180,13 @@ Dead code that also uses WinSock: `0xd7b0` (client socket, no bind), `0xd840` (t
 | `_exit` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | Fast exit path. |
 | `_cexit` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | Cleanup exit path. |
 | `_amsg_exit` | MSVCR100 | 2 | 0x5d041 sub_5d041~; 0x5d08c __tmainCRTStartup | Fatal CRT error path. |
-| `_XcptFilter` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | Exception filter in `mainCRTStartup`. |
+| `_XcptFilter` | MSVCR100 | 1 | 0x5d08c __tmainCRTStartup | SEH exception filter of `__tmainCRTStartup`. |
 | `_crt_debugger_hook` | MSVCR100 | 2 | 0x5d320 __report_gsfailure ×2 | CRT debugger hook (thunk). |
-| `?terminate@@YAXXZ` | MSVCR100 | 1 | 0x5d436 __CxxUnhandledExceptionFilter | C++ `terminate` (thunk; `__CxxUnhandledExceptionFilter`, dead). |
+| `?terminate@@YAXXZ` | MSVCR100 | 1 | 0x5d436 __CxxUnhandledExceptionFilter | C++ `terminate`, called by `__CxxUnhandledExceptionFilter` (it runs only on an unhandled C++ exception, which the game cannot raise). |
 | `_lock` | MSVCR100 | 1 | 0x5d492 __onexit | CRT lock (thunk). |
 | `_unlock` | MSVCR100 | 1 | 0x5d52a _unlockexit | CRT unlock (thunk). |
-| `_onexit` | MSVCR100 | 1 | 0x5d492 __onexit | `atexit` table (dead). |
-| `__dllonexit` | MSVCR100 | 1 | 0x5d492 __onexit | `atexit` table (dead). |
+| `_onexit` | MSVCR100 | 1 | 0x5d492 __onexit | `atexit` table: registers the one exit function `0x5d570`. |
+| `__dllonexit` | MSVCR100 | 1 | 0x5d492 __onexit | `atexit` table. |
 | `_except_handler4_common` | MSVCR100 | 1 | 0x5d769 __except_handler4 | SEH4 handler backend (`__except_handler4`). |
 | `_invoke_watson` | MSVCR100 | 2 | 0x5d78e sub_5d78e~†; 0x5d7b5 sub_5d7b5~ | Fatal CRT error report. |
 | `SetProcessAffinityMask` | KERNEL32 | 1 | 0xb300 setcpuaffinity† | `setcpuaffinity` (dead). The config key `setcpuaffinity=` is read but nothing calls the function. |
@@ -194,9 +194,9 @@ Dead code that also uses WinSock: `0xd7b0` (client socket, no bind), `0xd840` (t
 | `GetCurrentProcess` | KERNEL32 | 2 | 0xb300 setcpuaffinity†; 0x5d320 __report_gsfailure | `__report_gsfailure`, `setcpuaffinity` (dead). |
 | `GetCurrentProcessId` | KERNEL32 | 1 | 0x5d7f0 __security_init_cookie | Cookie seed. |
 | `GetCurrentThreadId` | KERNEL32 | 1 | 0x5d7f0 __security_init_cookie | Cookie seed. The server has no threads. |
-| `IsProcessorFeaturePresent` | KERNEL32 | 1 | 0x5d426 sub_5d426~ | `__report_gsfailure`. |
+| `IsProcessorFeaturePresent` | KERNEL32 | 1 | 0x5d426 sub_5d426~ | `IsProcessorFeaturePresent(10)`: the SSE2 flag that `_ftol2` reads. |
 | `IsDebuggerPresent` | KERNEL32 | 1 | 0x5d320 __report_gsfailure | `__report_gsfailure`. |
-| `SetUnhandledExceptionFilter` | KERNEL32 | 2 | 0x5d320 __report_gsfailure; 0x5d478 sub_5d478~ | `__report_gsfailure`, `__CxxUnhandledExceptionFilter` (dead). |
+| `SetUnhandledExceptionFilter` | KERNEL32 | 2 | 0x5d320 __report_gsfailure; 0x5d478 sub_5d478~ | `__report_gsfailure` (removes the filter) and the initialiser `0x5d478` (installs `__CxxUnhandledExceptionFilter` at start-up). |
 | `UnhandledExceptionFilter` | KERNEL32 | 1 | 0x5d320 __report_gsfailure | `__report_gsfailure`. |
 | `TerminateProcess` | KERNEL32 | 1 | 0x5d320 __report_gsfailure | `__report_gsfailure`. |
 | `InterlockedCompareExchange` | KERNEL32 | 1 | 0x5d08c __tmainCRTStartup | `__tmainCRTStartup`: startup lock. |
@@ -212,7 +212,7 @@ Formats are in `docs/formatos.md`. Readers and writers are in `tools/formats/sub
 
 | File | Mode | Opened by (RVA, name) | When | Format |
 | --- | --- | --- | --- | --- |
-| `config.txt` | `rb` | `0xd020 loadtextfile`, called by `0x4e7a0 loadsaveoptions` | Start-up, once | Text. `loadtextfile` reads the whole file, byte by byte with `fgetc`, into the global `parser` (1 MiB, **no size check**). Then `0x29650` (named `optionreadwriteint`, it is a key search) finds `key=` and `0xd110` (`getfloat`) or `0xd240` (`getstring`) reads the value. Keys: `screenwidth`, `screenheight`, `colordepth`, `depthbits`, `stencilbits`, `fullscreen`, `joystick`, `sound`, `soundvolume`, `musicvolume`, `port`, `servermaxbytespersecond`, `name`, `servername`, `serverpassword`, `gametype`, `invertmouse`, `maxnumofplayers`, `roundtime`, `setcpuaffinity`, `voicechat`, `voiceholdtotalk`, `voicekey`, `voicemb`, `voicemin`, `voiceboost`, `help`, `occlusion`. The server uses `port`, `servermaxbytespersecond`, `servername`, `serverpassword`, `gametype`, `maxnumofplayers`, `roundtime`. The others go to the shared `option` struct (RVA `0x90dc340`) and are not read again. A missing file is not an error: the defaults set by `loadsaveoptions` stay. |
+| `config.txt` | `rb` | `0xd020 loadtextfile`, called by `0x4e7a0 loadsaveoptions` | Start-up, once | Text. `loadtextfile` reads the whole file, byte by byte with `fgetc`, into the global `parser` (1 MiB, **no size check**). Then `0x29650` (named `optionreadwriteint`, it is a key search) finds `key=` and `0xd110` (`getfloat`) or `0xd240` (`getstring`) reads the value. Keys: `screenwidth`, `screenheight`, `colordepth`, `depthbits`, `stencilbits`, `fullscreen`, `joystick`, `sound`, `soundvolume`, `musicvolume`, `port`, `servermaxbytespersecond`, `name`, `servername`, `serverpassword`, `gametype`, `invertmouse`, `maxnumofplayers`, `roundtime`, `setcpuaffinity`, `voicechat`, `voiceholdtotalk`, `voicekey`, `voicemb`, `voicemin`, `voiceboost`, `help`, `occlusion`. The server uses `port`, `servermaxbytespersecond`, `servername`, `serverpassword`, `gametype`, `maxnumofplayers`, `roundtime`. The other keys are stored in `option` (RVA `0x90dc340`) or in the video settings next to `numofbullets` (RVA `0x17529a60`), and nothing in the server reads them again. A missing file is not an error: the defaults set by `loadsaveoptions` stay. |
 | `readme.txt` | `rb` | `0xd020 loadtextfile`, called by `0x185a0 newspaper_load` (from `resetgame`) | At each round start | Optional text, one newspaper line per line. Up to 1022 lines of 124 characters. `newspaper_load` adds a `Top 10 list` and 10 lines `%d. %s   $<money>` for the richest accounts. Not present in the Black Houser folder. |
 | `user/server.srk` | `rb` | `0xe2e0 loadaccountsserver` | Start-up, once | Binary accounts. Version 1 to 3. The record count is read from the file and **not checked** against the 65536 limit. See `docs/formatos.md`. |
 | `user/server.srk` | `wb` | `0x1080 saveaccountsserver`, called by `0x5b9b0 logicsimulation_world` and `0x590f0 resetgame` | Round start (`resetgame`); when the world clock reaches `0x3b5380` (after `player_calcassets` for every player); and in the periodic block of `logicsimulation_world`: every 18,000 units of the world clock (RVA `0x2561d740`, unnamed, it advances by 10 per tick), so about every 1,800 ticks, together with the economy update | Same format, always version 3. `tools/formats` writes identical files. |
@@ -277,7 +277,7 @@ Sources: `analysis/024d/globals.csv`, `analysis/024d/manual_globals.csv`, `src/i
 | `0xe219200` | `filelist` | 0.5 MiB (`0x80020`) | one block | Name lists made by `listfiles` | keep |
 | `0x91022c0` | `item` | 0.42 MiB (`0x6b000`) | 1024 × `0x1ac` | Items on the ground and in inventories | pool |
 | `0x1579ba0` | `debug` | 0.32 MiB (`0x523e0`) | one block | Debug log buffers: path of `dedlog.txt` at `+0x52384`, its `FILE *` at `+0x523c4`. Off in the 024d (section 3.3) | keep or drop |
-| `0x90dc540` | `game` | 0.15 MiB (`0x25d64`) | one struct | Round and world state: state `+0x20`, round length `+0x28` / `+0x2c`, tick `+0x38` (`ticks`, RVA `0x90dc578`) | keep |
+| `0x90dc540` | `game` | 0.15 MiB (`0x25d64`) | one struct | Round and world state: state `+0x20`, timing values set at start-up (`+0x28` = 3600, `+0x2c` = `roundtime` × 3600), tick `+0x38` (`ticks`, RVA `0x90dc578`) | keep |
 | `0x1952d680` | `bsdsocket` | 0.13 MiB (`0x20080`) | one struct | Socket handles, `sockaddr_in`, 64 KiB send and receive buffers (section 2.6) | keep |
 | `0x10357400` | `itemtype` | 26 KiB (`0x6600`) | 64 × `0x198` | Item type table | pool |
 | `0x14043a0` | `timer` | 22 KiB (`0x5800`) | 256 × `0x58` | Inline profiler timers (`RDTSC`). `manual_globals.csv` has `0x14043e0`, which is `+0x40` inside the first record | keep or drop |
@@ -331,7 +331,7 @@ Gaps between two named globals (RVA of the end of the first and the start of the
 
 The objects of the Linux 0.24c server (symbol sizes, x64) that are 1 MiB or more and that have no address in the 024d yet add up to 508 MiB. They are the content of the gaps above, in some order: `area_sector` 193.1, `building` 54.1, `render_sector` 48.0, `area_interior` 42.3, `area_sectormodel` 38.0, `trackmodel` 32.0, `floorplan2` 18.0, `buildingtype` 16.1, `sprite_render` 10.7, `track` 5.5, `radix` 4.0, `model` 3.5, `render_array` 3.0, `tempmesh` 2.8, `modeltemp` 2.4, `sprite` 2.3, `cityobjecttype` 2.3, `level_editor` 1.8, `sprite_model` 1.6, `voice` 1.3, and six objects of about 1 MiB. Several of them (`render_*`, `sprite*`, `model*`, `skymesh`, `tiremark`) are render data that the server may never touch. The order in the gaps is not known: different subsets of these sizes fit the same gap, so **no guess is made here**.
 
-To close this: extend `tools/re/map_globals.py` with the names of all live functions (it now has only the 226 reviewed names), then check each candidate with the access stride in the code (as done above for `area`).
+To close this: extend the matching of `tools/re/map_globals.py` (its votes come only from functions whose name also exists in the reference binaries), then check each candidate with the access stride in the code (as done above for `area`).
 
 ## 5. Start-up order: from the entry point to the main loop
 
@@ -366,7 +366,7 @@ Verified with the disassembly (`0x5cd10`, `0x5c8d0`, `0x5d08c`) and the decompil
 
 | # | Call | What it does |
 | --- | --- | --- |
-| 1 | `getmasterserverip` (`0x1ac40`) | TCP/HTTP to `www.crypticsea.com`. **Blocks** up to three 30 s waits (connect, send, receive; 100 ms sleeps). Stores the master IP and port and 8 server names. Fallback `216.55.186.104:27590`. Prints `connection successful` or `connection failed`. |
+| 1 | `getmasterserverip` (`0x1ac40`) | TCP/HTTP to `www.crypticsea.com`. **Blocks** for up to about 63 s: a 3 s `select` for the connect, then two loops of 300 × `_sleep(100)` (send, then receive). Stores the master IP and port and 8 server names. Fallback `216.55.186.104:27590`. Prints `connection successful` or `connection failed`. |
 | 2 | inline | Clamps `roundtime` to 1…30 and `maxnumofplayers` to 2…128. Copies the server name to `server+0x14` (no length limit). Sets `server+0x5c` (max players), `game+0x28` = 3600, `game+0x2c` = `roundtime` × 3600, `game+0x34` = `0x4ec`, `server+0`/`+8` = 1. |
 | 3 | `disablesocket` (`0xd710`, really *open server socket*) | `socket(AF_INET, SOCK_DGRAM, 17)`, `bind(port)`, `ioctlsocket(FIONBIO)`. Then `printf("port:%d")`, `printf("socketenabled:%d")`. |
 | 4 | `init_genrand(_time64(0))` (`0xad30`) | Seeds the Mersenne Twister. |
@@ -400,7 +400,7 @@ The loop has **no exit**. `disablesocket` (the real one, `0xd840`) and `WSAClean
 
 ## 6. The MSVC runtime code inside the `.exe`
 
-The 024d links part of the MSVC 2010 C runtime statically (the `libcmt` start-up and security code) and imports the rest from `MSVCR100.dll`. The code that is inside the `.exe` is from RVA `0x5ce18` to the end of `.text` (`0x5d940`). Everything in this table is **not game logic**; a standalone server must supply an equal behaviour only where the last column says so.
+The 024d links the start-up and security parts of the MSVC 2010 C runtime statically and imports the rest from `MSVCR100.dll`. The code that is inside the `.exe` is from RVA `0x5ce18` to the end of `.text` (`0x5d940`). Everything in this table is **not game logic**; a standalone server must supply an equal behaviour only where the last column says so.
 
 | RVA | Name (`functions.csv`) | Size | What it does | Used by | In a standalone server |
 | --- | --- | ---: | --- | --- | --- |
@@ -435,7 +435,7 @@ A standalone server should use the C cast `(int)(double)x`. It differs from a pl
 | --- | --- | --- |
 | A `main` | `getpaths` (`0x5cd10`) | Same steps (section 5.2), without the CRT tables. |
 | Heap, `memcpy`, `memset` | `MSVCR100` | libc. |
-| `rand` / `srand` | MSVC LCG | **Own copy of the MSVC generator** (R2). |
+| `rand` / `srand` | MSVC LCG, 15 bits | Any generator that returns 0…32767 (R2). The MSVC one is optional, for replayable tests. |
 | `_CI*`, `floor` | `MSVCR100` x87 | `libm`, or inline x87 on x86 (R1). |
 | `_ftol2` | Static CRT | C casts (above). |
 | Clock | `QueryPerformanceCounter`, `_sleep(1)`, `_time64`, `RDTSC` | `clock_gettime(CLOCK_MONOTONIC)`, `nanosleep`, `time`. Drop the profiler or use the monotonic clock. |
@@ -444,3 +444,81 @@ A standalone server should use the C cast `(int)(double)x`. It differs from a pl
 | Working directory | `_chdir`, `_getcwd` | `chdir`, `getcwd`. |
 | Files | `fopen` (text and binary modes) | `fopen`. Text mode for `stats.txt` writes CR CR LF on Windows. |
 
+## 7. Risks for Phase 4
+
+| ID | Risk | Evidence | First step |
+| --- | --- | --- | --- |
+| **R1** | **x87 precision and rounding.** About 40 % of the instructions are x87 and the program runs with 53-bit precision. A build with SSE2 (every x64 build, and `/arch:SSE2`) computes `float` expressions in 24 bits and rounds at other places, so results differ in the last bits. | `_controlfp_s(0, 0x10000, 0x30000)` at `0x5d7b5`. 41,955 x87 instructions in 271 functions. Known: `createlandscape` differs in 263 bytes (over 4 ulps) of the 2049 × 2049 height map and `buildsomeshit` in about 6000 bytes (`docs/lift.md`). 160 `fldcw`/`fnstcw` in the packers (`packobjectpacket`: 63, `serversend`: 6, ...) set round-toward-zero around `fistp`, so the **bits sent to the clients** depend on this rounding. `_CIpow` is used by the packers. `_CIsin`, `_CIcos`, `_CIatan2`, `_CIacos`, `_CItan` use x87 instructions in `MSVCR100`; `libm` can differ by one ulp. | Decide the goal: bit-exact (keep x87 on 32-bit Windows, `/arch:IA32`, and use inline `fsin`/`fpatan` for the rest) or "same within N ulps" with a test for each packer. Evaluate float expressions in `double` and round to `float` only where the original stores (`FLT_EVAL_METHOD` 1 style). |
+| **R2** | **Random numbers (low).** `rand()` is the MSVC generator (15 bits). It is used for AI, the economy, scenarios, damage, spawn choices and the look of new accounts, and it is seeded from the clock (`srand(_time64(0))` in `loadsaveoptions` and `resetgame`), so production runs are not repeatable anyway. | 21 functions, 47 sites. Every use is `& mask` or `% n` (`idiv`) with a small `n`; none divides by `RAND_MAX`. `createlevel` calls `srand(0)` (`0x54e55`) but none of the 54 functions below it calls `rand`: the level does not depend on it. The Mersenne Twister (`init_genrand`, `genrand_int32`) is used only for the account key (`loadaccountsserver`, `createaccount`); in the x64 ELF its state is an `unsigned long` array, so use `uint32_t`. | Provide `sr_rand()` with the 0…32767 range. Copy the MSVC linear congruential generator only if replayable tests are wanted. |
+| **R3** | **Pointers inside structs, and 64 bits.** The structs that go on the wire or into files have the same size on x64, but level and runtime structs hold pointers as 32-bit ints. | `area_block` record: `0x84` bytes in the 024d, `0xb0` in the x64 ELF, with 4 `malloc` pointers at `+0x44`…`+0x50`. `area` record: pointer at `+0x48`. Other symbols that grow in x64: `render_sector` (+16 MiB), `area_block` (+2.75 MiB), `model`, `timer` (22,528 against 21,504 bytes), `mt` (4,992 against 2,496), `building_editor`, `area_interior` (ELF symbol size against the gap between Mach-O symbols, so the i386 values are approximate). `freadptr`, `fwriteptr` and the `FILE *` at `0x13e22e68` are pointers in globals. Sockets are stored as 32-bit ints at `bsdsocket+0x24`. Same size on both: `player`, `human`, `object`, `item`, `connection`, `account` (`docs/structs.md`). | Give every pointer field its own type (`void *`) in `sr_types.h` and add `static_assert`s for both widths. Keep the on-wire and on-disk layouts by `#pragma pack`/fixed-width types. |
+| **R4** | **Pool limits are inside the code.** Loops end at absolute addresses (`cmp eax, 0xf42e500` is `&player[256]`), masks are literal (`& 0x3fff`), and some limits are part of the protocol or the file format. | 21,925 absolute addresses in `.text`. `event` is 65536 because the client acknowledges with 16 bits. `account` is 65536 because the file count is `0xffff` at most. `player` is 256 but `maxnumofplayers` is clamped to 2…128. | Make each limit a named constant first (`SR_MAX_*` exist), keep the protocol-bound ones fixed, and only then switch the others to heap arrays. Check `docs/protocol.md` for the bit width of each index before raising a limit. |
+| **R5** | **Readers trust sizes from the file.** | `loadtextfile` copies the whole file into the 1 MiB `parser` buffer and the next global is the `FILE *`. `loadaccountsserver` reads the count and does not compare it with 65536. `leveleditor_load`, `building_load` and `loadblock` read counts the same way. `dedicatedserverloop` copies the server name with no limit. | Keep the behaviour for valid files first. Add the checks in Phase 5 (with the input checks of `docs/plano.md`, item 5.6) and fuzz the readers with `tools/formats`. |
+| **R6** | **Blocking network call at start-up.** `getmasterserverip` waits up to about 63 s (a 3 s `select` for the connect, then 30 s to send and 30 s to receive, in steps of 100 ms) and uses `gethostbyname`. The master server (`www.crypticsea.com`) may not answer any more. | `0x1ac40`: `select` timeout 3 s, then `_sleep(100)` loops of 300 passes. Fallback `216.55.186.104:27590`. | Run it with a time limit or in a thread, and make the master list optional (`docs/plano.md`, item 5.4). |
+| **R7** | **Loss of the test oracle.** The Phase 3 verifier runs the original function next to the rewrite inside the `.exe`. A standalone server has no original. The lifted C code is also tied to the image: it uses `SR_VA()` addresses, `sr_import` and naked thunks that save the x87 state. | `docs/lift.md`. `src/lifted/lifted_024d.c`, `hook/hooks_lifted.c`, `hook/imports.c`. | Before the `.exe` goes away, record golden traces: the harness inputs (`sv_args.txt`, `sv_snapshot.bin`) and a packet capture of a played session. Replace `SR_VA(...)` by real variables function by function. |
+| **R8** | **Coverage of `functions.csv` and wrong names.** 7 live functions are not in the CSV (6 CRT and the `qsort` comparator `0xd320`). 129 unlisted code blocks (found by the padding rule) and 32 listed functions have no reference. Three names mislead: `getpaths` is `main`, `disablesocket` (`0xd710`) opens the socket, `optionreadwriteint` (`0x29650`) is a key search. | Section 8. | Fix the CSV (`manual_names.csv`) before the Phase 4 port starts, and decide which dead functions to port. The client-only ones (`clientrecv`, `unpack*`, `saveaccountsclient`) are needed again in Phase 6. |
+| **R9** | **Time and profiler.** The tick is 16 ms with up to 5 catch-up ticks. `_sleep(1)` has a coarse step on Windows. The profiler uses `RDTSC` 24 times. | `0x5c8d0`, `0xb4a0`. | Use a monotonic clock and a precise sleep. Drop the profiler or move it to `clock_gettime`. No game rule depends on the TSC. |
+
+The facts that make Phase 4 easier: the server has **one thread**, uses only **UDP plus one TCP request**, opens **a small set of files**, allocates the **heap in two places**, and every platform call is in the tables of section 2.
+
+## 8. Notes found while making this inventory
+
+### 8.1 Names that do not match the code
+
+These are for the next review of `analysis/024d/manual_names.csv`. This document did not change any CSV.
+
+| RVA | Name in `functions.csv` | What the code does | Evidence |
+| --- | --- | --- | --- |
+| `0x5cd10` | `getpaths` | It is the C `main`. `__tmainCRTStartup` calls it with `argc`, `argv`, `envp`. It saves the directory, loads the options, calls `WSAStartup` and jumps into `dedicatedserverloop`. | Section 5.2. |
+| `0xd710` | `disablesocket` | Opens the server UDP socket: `socket`, `bind(port)`, `ioctlsocket(FIONBIO)`. The ELF calls this `enablesocketserver` (213 bytes). `0xd7b0` (unlisted) is `enablesocketclient` and `0xd840` (unlisted) is the real `disablesocket`. | Disassembly; `analysis/symbols/subrosa_x64.functions.txt`. |
+| `0x29650` | `optionreadwriteint` | A key search: advances the `parser` cursor to the text of `key=`. `loadsaveoptions` calls it before every value. | Decompiled `loadsaveoptions`. |
+| `0x296a0` (unlisted) | none | Stores the addresses of `fread` and `fwrite` in `freadptr` and `fwriteptr`. `main` has the same code inline. No caller. | Disassembly. |
+| `0x1000` (unlisted) | none | `time()` wrapper (`push eax; call _time64`). No caller. | Disassembly. |
+
+`docs/protocol.md` §2.3 gives `0x12c90` as the 024d RVA of `servercycle`. `0x12c90` is `bondtimetolive`; `servercycle` is `0x33570` (the heartbeat code is there).
+
+### 8.2 Live functions that are not in `functions.csv`
+
+| RVA | What it is |
+| --- | --- |
+| `0xd320` | The string compare used as the `qsort` comparator in `listfiles` (compares two bytes per loop). |
+| `0x5d041` | `_initterm` initialiser: `_atexit(0x5d570)`, `__getmainargs`. |
+| `0x5d25c` | `_initterm_e` initialiser: app type, `_fmode`, `_commode`, `_setdefaultprecision`, `_configthreadlocale`. |
+| `0x5d426` | `_initterm_e` initialiser: SSE2 flag. |
+| `0x5d478` | `_initterm_e` initialiser: `SetUnhandledExceptionFilter`. |
+| `0x5d570` | Exit-time table runner. |
+| `0x5d7b5` | `_setdefaultprecision`: `_controlfp_s(0, 0x10000, 0x30000)`. |
+
+### 8.3 Listed functions with no reference in the program (32)
+
+They stay in the CSV. The standalone server does not need them; the client-side ones may be needed again in Phase 6.
+
+- Client and editor: `clientrecv`, `saveaccountsclient`, `loadaccountsclient`, `building_save`, `leveleditor_save`, `cs_pread`, `pbitreadnego`, `unpackevent`, `unpackobjectpacket`, `unpackorientation`, `unpackangle`, `unpackpositiondelta`.
+- Packers that the server loop does not use: `packobjectpacket2` (a second variant of `packobjectpacket`), `packpositiondelta`, `packscalar`, `packunitvector`.
+- Maths and simulation: `lerpnoise2d`, `cerpnoise2d`, `rotatevector2d`, `lineintersectline2d`, `sphereintersectline2d`, `lineintersectcircle2d`, `sphereintersectpoint`, `logicsimulation_driving`, `object_rotorsimulation`, `economysimulation`.
+- Time, CPU and random: `systemtimer`, `testtimer`, `gettimeofday`, `setcpuaffinity`, `init_by_array`, `__aulldiv`.
+
+In addition, 129 code blocks that the padding rule marks as separate functions and that `functions.csv` does not list have no reference. Examples: `0x6a50` (local IP list), `0xd7b0`, `0xd840`, `0xd4e0`/`0xd5a0` (text helpers with `fgetc`/`fputc`), `0xde90` (`_getcwd`), `0x15ca0`, `0xbf30`, `0xcf90` (maths).
+
+### 8.4 Next steps suggested for the Phase 4 start
+
+1. Finish the map of `.data` (section 4.2): extend the matching of `map_globals.py` and check each array with its access stride.
+2. Fix the names of section 8.1 and add the functions of section 8.2.
+3. Choose the numeric goal for R1 and write one test for each packer.
+4. Record the golden traces for R7 while the original `.exe` still runs.
+5. Write the platform layer from sections 2 and 6 (`src/platform/`: sockets, timer, files, directory scan) and run the first standalone start-up up to the end of `setupgame`.
+
+### 8.5 How to repeat the main numbers
+
+```bash
+bash tools/cloud/setup.sh && bash tools/ghidra/analyze_all.sh
+sha256sum original/blackhouser/subrosadedicated024d.exe  # must be 11e00678…, as in original/MANIFEST.sha256
+objdump -d -M intel -j .text original/blackhouser/subrosadedicated024d.exe > text.dis
+# imports: parse the PE import directory (RVA 0x5e000 area); IAT slots are 0x5e000-0x5e19c
+# calls to an import: "call DWORD PTR ds:0x45e0xx" and "call 0x45cxxx" / "call 0x45d8xx" (thunks)
+python -I tools/re/map_globals.py --target build/features/ded024d.jsonl --names analysis/024d/functions.csv \
+    --ref build/features/mac_i386.jsonl --ref build/features/linux_x64.jsonl --ref build/features/ded024c_linux.jsonl \
+    --min-votes 2 --out /tmp/globals_try.csv           # adds option, area_block, blocklist
+tools/ghidra/decompile.sh subrosadedicated024d.exe /tmp/dec.c 0x1ac40 0x4e7a0   # as in lift.md, program name in the project
+```
+
+`python -I tools/re/manifest.py check` prints 385 `MISMATCH` lines in a cloud session. The manifest lists the whole `original/` folder of the PC (archives, configs, saves, old packages), and `check` counts a file that is missing here as a mismatch. The five binaries used in this document were compared with `original/MANIFEST.sha256` one by one and are equal: `blackhouser/subrosadedicated024d.exe`, `client/subrosa.x64`, `client/subrosa.exe`, `client/subrosadedicated.exe` and `client/subrosa.app/Contents/MacOS/subrosa`.
