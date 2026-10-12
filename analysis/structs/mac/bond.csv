@@ -1,0 +1,30 @@
+offset,types,reads,writes,n_funcs,funcs
+0x8,int:4,3,1,1,_bondtimetolive
+0xc,undefined4:6 uint:2 int:1,3,6,2,_bondsimulation2 _humansimulation
+0x10,int:3,3,0,2,_deletebond _deleteparticle
+0x14,uint:5 int:1,6,0,2,_bondsimulation2 _renderframe
+0x18,uint:5,5,0,1,_bondsimulation2
+0x1c,int:2,2,0,1,_bondsimulation2
+0x20,int:2,2,0,1,_bondsimulation2
+0x28,?:2,2,0,1,_bondsimulation2
+0x34,undefined4:2 ?:2 float:1,4,1,2,_bondsimulation2 _human_calculatearmangles
+0x38,undefined4:2 float:1,2,1,2,_bondsimulation2 _human_calculatearmangles
+0x3c,undefined4:2 float:1,2,1,2,_bondsimulation2 _human_calculatearmangles
+0x40,undefined4:2,2,0,1,_bondsimulation2
+0x44,undefined4:2,2,0,1,_bondsimulation2
+0x48,undefined4:2,2,0,1,_bondsimulation2
+0x4c,float:8,7,1,1,_bondsimulation2
+0x50,float:8,7,1,1,_bondsimulation2
+0x54,float:6,6,0,1,_bondsimulation2
+0x60,float:16,11,5,5,_bondsimulation2 _createbond _objectsimulation _objectwheelcollision _objectwheelcollision2
+0x6c,float:15 undefined4:3,14,4,2,_bondsimulation2 _humansimulation
+0x70,uint:10 float:9 undefined4:8,25,2,2,_bondsimulation2 _humansimulation
+0x74,?:18,18,0,1,_bondsimulation2
+0x80,undefined4:9,9,0,1,_bondsimulation2
+0x8c,int:2,2,0,1,_deletebond
+0x90,int:14 uint:10 undefined4:1,25,0,3,_bondsimulation2 _deletebond _renderframe
+0x94,int:12 uint:10 undefined4:1,23,0,2,_bondsimulation2 _renderframe
+0x98,int:9 uint:2 undefined4:1,12,0,3,_bondsimulation2 _deletebond _renderframe
+0x9c,uint:2,2,0,1,_bondsimulation2
+0xb0,?:1,1,0,1,_bondsimulation2
+0xbc,?:1,1,0,1,_bondsimulation2

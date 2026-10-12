@@ -1,0 +1,96 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,int:36 undefined4:2,36,2,15,_applydamageobject _buildframelist _createevent_createobject _createobject _createwindowsprites _eventsimulation _getenginetorque2 _humansimulationclient _objectenginesimulation2 _objectsimulation _objectsimulation_car _packobjectpacket
+0x8,int:13 undefined4:1,13,1,6,_buildframelist _createobject _humansimulation _objectsimulation _packobjectpacket _packobjectpacket2
+0xc,int:9 undefined4:3,8,4,7,_applydamageobject _buildframelist _createobject _eventsimulation _objectsimulation_car _objectsimulation_heli _playerai
+0x14,undefined4:2 int:1,1,2,2,_createobject _humansimulation
+0x18,undefined4:3 int:1,2,2,4,_buildframelist _createevent_createobject _createobject _eventsimulation
+0x1c,int:4 undefined4:3,3,4,4,_createobject _deleteitem _objectsimulation _objecttimetolive
+0x20,undefined4:2 int:2,2,2,3,_itemlogic _objectsimulation_car _objectsimulation_heli
+0x24,?:65,65,0,20,_ai_playercar _applydamageobject _buildframelist _client_simulation _createobject _createvehicle _createwindowsprites _deleteobject _humansimulation _humansimulationclient _objectsimulation _objectsimulation_car
+0x28,float:1,1,0,1,_objectsimulation
+0x30,?:3,3,0,2,_createobject _objectsimulation
+0x3c,?:46,46,0,20,_ai_playercar _buildframelist _createobject _createvehicle _createwindowsprites _gameloop _getobjectrotation _getobjectrotation3 _humansimulation _humansimulationclient _object_rotorsimulation _objectenginesimulation2
+0x48,?:47,47,0,19,_ai_playercar _applydamageobject _buildframelist _createobject _createvehicle _gameloop _getobjectrotation _getobjectrotation3 _humansimulation _humansimulationclient _objectsimulation _objectsimulation_heli
+0x54,?:48 uint:1,49,0,19,_ai_playercar _buildframelist _createobject _createvehicle _gameloop _getobjectrotation _getobjectrotation3 _humansimulation _humansimulationclient _object_rotorsimulation _objectsimulation _objectsimulation_heli
+0x5c,float:1,1,0,1,_humansimulation
+0x60,?:27,27,0,9,_ai_playercar _applydamageobject _createwindowsprites _drawhud _objectsimulation _packobjectpacket _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x64,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x68,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x6c,?:1,1,0,1,_objectsimulation
+0x78,float:2 undefined4:1,1,2,1,_getobjectrotation
+0x7c,float:2 undefined4:1,1,2,1,_getobjectrotation
+0x80,float:2 undefined4:1,1,2,1,_getobjectrotation
+0x84,float:7,7,0,5,_humansimulation _lineintersectobject _objectsimulation _objecttrainsimulation _sphereintersectobject
+0x88,float:6,6,0,4,_humansimulation _lineintersectobject _objectsimulation _sphereintersectobject
+0x8c,float:7,7,0,5,_humansimulation _lineintersectobject _objectsimulation _objecttrainsimulation _sphereintersectobject
+0x90,float:7,7,0,5,_humansimulation _lineintersectobject _objectsimulation _objecttrainsimulation _sphereintersectobject
+0x94,float:6,6,0,4,_humansimulation _lineintersectobject _objectsimulation _sphereintersectobject
+0x98,float:7,7,0,5,_humansimulation _lineintersectobject _objectsimulation _objecttrainsimulation _sphereintersectobject
+0xa8,int:21,20,1,8,_addobjectrotation _createobject _deleteobject _deleteparticle _getobjectrotation _getobjectrotation2 _objectsimulation _objectsimulation_heli
+0xc4,int:2,2,0,1,_applydamageobject
+0xc8,int:2,2,0,1,_applydamageobject
+0xfc,int:3,3,0,2,_object_rotorsimulation _objectsimulation_heli
+0x100,int:1,1,0,1,_object_rotorsimulation
+0x1ac,int:3 undefined4:1,3,1,2,_createobject _objectsimulation
+0x3b0,int:9,7,2,2,_createbond _deletebond
+0x7b4,int:2 undefined4:1,2,1,3,_createobject _lineintersectobject _sphereintersectobject
+0x5bbc,float:7 undefined4:1,7,1,4,_humansimulation _object_rotorsimulation _objectsimulation_car _objectsimulation_heli
+0x5bc0,float:2 undefined4:1,2,1,3,_humansimulation _objectsimulation_car _objectsimulation_heli
+0x5bc4,float:5 undefined4:1,5,1,4,_humansimulation _object_rotorsimulation _objectsimulation_car _objectsimulation_heli
+0x5bc8,float:6 uint:2 undefined4:1,7,2,4,_humansimulation _object_rotorsimulation _objectsimulation_car _objectsimulation_heli
+0x5bdc,undefined4:4 uint:2 int:1,3,4,2,_humansimulation _objectsimulation_car
+0x5be4,int:6,4,2,3,_createvehicle _objectsimulation _objecttrainsimulation
+0x5e4c,float:12 undefined4:1,6,7,2,_objectenginesimulation2 _objectwheelsimulation2
+0x5e50,float:21,15,6,4,_ai_playercar _getenginetorque2 _objectenginesimulation2 _objectsimulation_car
+0x5e54,float:8 uint:1,6,3,2,_objectenginesimulation2 _objectsimulation_car
+0x5e58,float:3,2,1,2,_createobject _objectenginesimulation2
+0x5e5c,float:6,4,2,1,_objectenginesimulation2
+0x5e60,float:4 undefined4:1,4,1,2,_createobject _objectenginesimulation2
+0x5e64,undefined4:1 float:1,1,1,1,_createobject
+0x5e68,float:5,4,1,2,_createobject _objectenginesimulation2
+0x5e6c,int:28 undefined4:11,25,14,2,_ai_playercar _objectsimulation_car
+0x5e70,int:1 undefined4:1,1,1,1,_objectsimulation_car
+0x5e78,float:12 undefined4:5 uint:2,13,6,2,_objectenginesimulation2 _objectsimulation_car
+0x5e7c,float:4 uint:2,4,2,2,_objectenginesimulation2 _objectsimulation_car
+0x5e80,float:5,2,3,2,_objectenginesimulation2 _objectsimulation_car
+0x5e84,float:9 uint:1,6,4,2,_objectenginesimulation2 _objectsimulation_car
+0x5e90,int:2 undefined4:1,2,1,2,_createobject _objectenginesimulation2
+0x5e94,int:3 undefined4:1,3,1,2,_createobject _objectenginesimulation2
+0x5e98,int:3 undefined4:1,3,1,2,_createobject _objectenginesimulation2
+0x5ee0,int:18 undefined4:6 ?:2,16,10,6,_objectsimulation _objectsimulation_car _objectsimulation_heli _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x5ee4,undefined4:2 int:2,2,2,1,_objectsimulation_car
+0x5ee8,int:9 undefined4:3,9,3,7,_createobject _lineintersectobject _objectenginesimulation2 _objectsimulation _objectwheelsimulation2 _renderframe _tiremark_simulation
+0x5f1c,float:9 ?:3 undefined4:1,10,3,5,_buildframelist _objectsimulation_heli _packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5f20,?:3 uint:3 float:2 undefined4:1,7,2,5,_objectsimulation_car _objectwheelsimulation2 _packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5f48,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5f5c,?:3 float:2,5,0,4,_packobjectpacket _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x5fb4,?:3 float:1,3,1,4,_objectsimulation_heli _packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5fb8,float:4 ?:3 undefined4:1 uint:1,7,2,5,_objectsimulation_car _objectwheelsimulation2 _packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5fe0,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x5ff4,?:3 float:2,5,0,4,_packobjectpacket _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x604c,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x6078,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x608c,?:3 float:2,5,0,4,_packobjectpacket _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x60e4,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x6110,?:3,3,0,3,_packobjectpacket _packobjectpacket2 _unpackobjectpacket
+0x6124,?:3 float:2,5,0,4,_packobjectpacket _packobjectpacket2 _soundsimulation _unpackobjectpacket
+0x71ec,int:6 undefined4:1,6,1,6,_bondsimulation2 _createobject _objectenginesimulation2 _objectsimulation _objectwheelsimulation2 _renderframe
+0x8074,?:2,2,0,2,_createobject _object_rotorsimulation
+0x8098,?:1,1,0,1,_createobject
+0x80bc,?:1,1,0,1,_createobject
+0x80e0,?:1,1,0,1,_createobject
+0x8104,?:5,5,0,2,_createobject _object_rotorsimulation
+0x8110,?:2,2,0,1,_object_rotorsimulation
+0x811c,?:1,1,0,1,_object_rotorsimulation
+0x8128,?:3,3,0,2,_createobject _object_rotorsimulation
+0x8194,undefined4:5 int:4,4,5,3,_createvehicle _objectsimulation _resetgame
+0x8198,int:3 undefined4:2,2,3,1,_objectsimulation
+0x819c,int:3,2,1,2,_objectsimulation _objecttrainsimulation
+0x81a0,undefined4:1 float:1,1,1,2,_createobject _objectsimulation_car
+0x81a4,float:2 undefined4:1,2,1,2,_createobject _objectsimulation_car
+0x81a8,int:1 undefined4:1,1,1,2,_createobject _humansimulation
+0x820c,float:9,6,3,1,_objectsimulation
+0x8210,int:3 undefined4:2,4,1,2,_client_simulation _unpackobjectpacket
+0x8214,?:4,4,0,2,_client_simulation _unpackobjectpacket
+0x8220,undefined4:1 int:1,1,1,2,_client_simulation _unpackobjectpacket
+0x8224,?:2,2,0,2,_client_simulation _unpackobjectpacket

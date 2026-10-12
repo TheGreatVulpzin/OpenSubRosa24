@@ -39,6 +39,12 @@ ELEM_SIZE = {'char': 1, 'undefined1': 1, 'byte': 1, 'short': 2, 'undefined2': 2,
              'int': 4, 'uint': 4, 'float': 4, 'undefined4': 4, 'long': 8, 'double': 8, 'undefined8': 8}
 
 
+def gname(g):
+    """PTR__player_0019cc10 (Mach-O, acesso por ponteiro) -> player."""
+    g = re.sub(r'^PTR__+', '', g)
+    return re.sub(r'_[0-9a-f]{8}$', '', g)
+
+
 def num(s):
     return int(s, 16) if s.startswith('0x') else int(s)
 
@@ -66,11 +72,11 @@ def scan(text, structs):
 
     for fname, body in functions(text):
         for m in P_BYTES.finditer(body):
-            g = m.group('g')
+            g = gname(m.group('g'))
             if g in structs and num(m.group('stride')) == structs[g]:
                 add(g, num(m.group('off')), m.group('type'), fname, body, m.end())
         for m in P_ELEMS.finditer(body):
-            g = m.group('g')
+            g = gname(m.group('g'))
             if g in structs:
                 k, mm = num(m.group('k')), num(m.group('m'))
                 if structs[g] % k == 0:
@@ -78,7 +84,7 @@ def scan(text, structs):
                     add(g, mm * es, {1: 'char', 2: 'short', 4: 'int', 8: 'long'}.get(es, '?'), fname, body, m.end())
         vars_ = {m.group('var'): num(m.group('stride')) for m in P_VAR.finditer(body)}
         for m in P_VARUSE.finditer(body):
-            g, v = m.group('g'), m.group('var')
+            g, v = gname(m.group('g')), m.group('var')
             if g in structs and vars_.get(v) == structs[g]:
                 add(g, num(m.group('off')), m.group('type'), fname, body, m.end())
     return out
@@ -88,9 +94,9 @@ def discover(text):
     """Lista (global, stride) mais frequentes."""
     c = Counter()
     for m in P_BYTES.finditer(text):
-        c[(m.group('g'), num(m.group('stride')))] += 1
+        c[(gname(m.group('g')), num(m.group('stride')))] += 1
     for m in P_ELEMS.finditer(text):
-        c[(m.group('g'), f"{m.group('k')} elems")] += 1
+        c[(gname(m.group('g')), f"{m.group('k')} elems")] += 1
     return c
 
 

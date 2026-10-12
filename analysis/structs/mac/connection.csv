@@ -1,0 +1,13 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,__uint16_t:4 undefined2:3,6,1,2,_serverrecv _serversend
+0x8,int:2 ?:1,3,0,2,_serverrecv _serversend
+0xc,int:2 undefined4:1,2,1,2,_packevent _server_playermessage
+0x10,int:32 undefined4:3,34,1,5,_getinputs _packevent _server_playermessage _serverrecv _serversend
+0x14,int:11,6,5,2,_servercycle _serversend
+0x18,int:4,3,1,1,_servercycle
+0x1c,undefined4:8 int:3,2,9,3,_getinputs _server_playermessage _serverrecv
+0x44,int:9 ?:2 undefined4:1 uint:1,12,1,5,_packobjectpacket _packobjectpacket2 _resetgame _serverrecv _serversend
+0x4c,uint:4 int:4,6,2,2,_packobjectpacket _packobjectpacket2
+0x154,int:2 ?:1,3,0,2,_calculateplayervoice _serverrecv
+0xf158,?:4,4,0,4,_packobjectpacket _packobjectpacket2 _serverrecv _serversend
+0xf164,?:3,3,0,2,_packevent _serversend

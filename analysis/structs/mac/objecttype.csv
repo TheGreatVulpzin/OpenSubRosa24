@@ -1,0 +1,22 @@
+offset,types,reads,writes,n_funcs,funcs
+0xc,?:1,1,0,1,_playermenu_building_buy
+0x2c,undefined4:14,1,13,4,_economy_carmarket _setupobjecttypes_cars _setupobjecttypes_helicopters _setupobjectypes_train
+0x30,undefined4:13 float:1,1,13,4,_createobject _setupobjecttypes_cars _setupobjecttypes_helicopters _setupobjectypes_train
+0x34,float:7,4,3,1,_setupobjecttypeweight
+0x38,int:18 undefined4:2,19,1,6,_createobject _createtypemodel _objecttype_addparticle _setupobjecttypes_helicopters _setupobjecttypeweight _setupobjectypes_train
+0xb8,?:1,1,0,1,_setupobjectypes_train
+0xe0,?:1,1,0,1,_setupobjectypes_train
+0x11c,?:1,1,0,1,_setupobjectypes_train
+0x53c,undefined4:16 int:3,6,13,5,_createobject _setupobjecttypes_cars _setupobjecttypes_helicopters _setupobjecttypeweight _setupobjectypes_train
+0x540,?:1,1,0,1,_setupobjecttypeweight
+0x640,?:1,1,0,1,_setupobjecttypeweight
+0x740,int:7,6,1,2,_createobject _objecttype_addbond
+0x1344,int:282 undefined4:1,282,1,6,_createobject _createtypemodel _objecttype_addface _setupobjecttypes_cars _setupobjecttypes_helicopters _setupobjectypes_train
+0x5348,int:122 undefined4:13,122,13,3,_createtypemodel _objectsimulation _setupobjectypes_train
+0x734c,int:1,1,0,1,_createtypemodel
+0x7758,float:12,1,11,3,_createobject _setupobjecttypes_cars _setupobjecttypes_helicopters
+0x775c,int:21 undefined4:1,21,1,4,_buildframelist _createobject _objecttype_addwheel _setupobjecttypeweight
+0x7fe0,float:11 undefined4:1,1,11,2,_createobject _setupobjecttypes_cars
+0x7fe4,float:11 undefined4:1,1,11,2,_createobject _setupobjecttypes_cars
+0x807c,int:201 undefined4:14,162,53,4,_createobject _setupobjecttypes_cars _setupobjecttypes_helicopters _setupobjectypes_train
+0x8288,int:1,0,1,1,_setupobjectypes_train

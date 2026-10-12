@@ -1,0 +1,115 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,int:4 undefined4:2,4,2,2,_bondsimulation2 _humansimulation
+0x8,int:40 undefined4:9 uint:1,45,5,16,_ai_assessthreats _buildframelist _bulletsimulation _createevent_updatehuman _createhuman _deletehuman _eventsimulation _human_itemsimulation _humansimulation _humansimulationclient _itemweaponsimulation _logicsimulation_world
+0xc,undefined4:2 int:2,2,2,3,_createhuman _humansimulation _serverrecv
+0x10,int:2,1,1,1,_deleteparticle
+0x14,int:27 undefined4:6 ?:2,30,5,21,_bondsimulation2 _client_simulation _createhuman _deleteobject _drawhud _gameloop _getinputs_car _human_calcarmtorque _human_calculatearmangles _human_collisionhuman _human_itemsimulation _humansimulation
+0x18,int:13 ?:2,14,1,8,_drawhud _humansimulation _humansimulationclient _objectsimulation_car _objectsimulation_heli _packobjectpacket _packobjectpacket2 _playerai
+0x1c,int:3 undefined4:2,2,3,2,_humansimulation _setuphumanangles
+0x20,int:4 undefined4:1,3,2,1,_humansimulation
+0x24,int:7 undefined4:5,5,7,3,_createhuman _humansimulation _logicsimulation_world
+0x28,int:55 undefined4:5,49,11,13,_ai_assessthreats _bondsimulation2 _buildframelist _bulletsimulation _createhuman _human_applydamage _human_calculatearmangles _human_calculatelegangles _humansimulation _itemlogic _packobjectpacket _packobjectpacket2
+0x30,int:13 undefined4:4,11,6,2,_humansimulation _humansimulationclient
+0x34,int:7 uint:1 undefined4:1,5,4,4,_bulletsimulation _createhuman _human_itemsimulation _humansimulation
+0x38,undefined4:2 int:1,1,2,2,_bondsimulation2 _humansimulation
+0x3c,int:10 undefined4:1,10,1,4,_human_calcarmtorque _human_calculatearmangles _humansimulation _playersimulation
+0x44,int:8,5,3,2,_bulletsimulation _humansimulation
+0x48,?:35 float:2,37,0,14,_ai_assessthreats _drawmap _human_itemsimulation _humansimulation _humansimulationclient _itemlogic _logic_gunstore_buy _logic_player _logic_playeractions _logicsimulation_world _packobjectpacket _packobjectpacket2
+0x50,float:2,2,0,1,_drawmap
+0x54,?:1,1,0,1,_humansimulation
+0x60,undefined4:10 float:1,9,2,6,_bondsimulation2 _drawmap _getinputs_human _humansimulation _playerai _playersimulation
+0x64,float:6 undefined4:5,9,2,5,_getinputs_human _human_calcarmtorque _human_calculatearmangles _humansimulation _playersimulation
+0x80,float:2 undefined4:1,1,2,1,_humansimulation
+0x84,float:1 undefined4:1,0,2,1,_humansimulation
+0x8c,float:18,14,4,4,_bondsimulation2 _createhuman _human_calculatelegangles _humansimulation
+0x98,float:1 undefined4:1,0,2,1,_createhuman
+0x9c,undefined4:4,4,0,2,_human_itemsimulation _humansimulation
+0xa0,undefined4:1,1,0,1,_humansimulation
+0xa4,undefined4:1,1,0,1,_humansimulation
+0xa8,uint:1 undefined4:1,2,0,1,_humansimulation
+0xac,undefined4:5 float:4,6,3,4,_human_calcarmtorque _human_calculatearmangles _humansimulation _playersimulation
+0xb0,undefined4:5 float:4,6,3,4,_human_calcarmtorque _human_calculatearmangles _humansimulation _playersimulation
+0xb4,float:2,2,0,1,_human_calculatearmangles
+0xb8,float:2,2,0,1,_human_calculatearmangles
+0xbc,uint:21 undefined4:2,23,0,4,_bondsimulation2 _human_calculatearmangles _human_itemsimulation _humansimulation
+0xc0,uint:10 undefined4:2,10,2,3,_createhuman _human_itemsimulation _humansimulation
+0xc8,?:31 float:6,37,0,10,_client_simulation _getinputs_door _human_collisionhuman _humansimulation _humansimulationclient _logic_playeractions _packobjectpacket _packobjectpacket2 _player_loadinventory _scenario_armhuman
+0xcc,float:7,7,0,2,_human_collisionhuman _humansimulation
+0xd0,float:6,6,0,2,_human_collisionhuman _humansimulation
+0xd4,?:1,1,0,1,_humansimulation
+0xe0,?:3,3,0,3,_ai_assessthreats _humansimulation _setitempositionhuman
+0xe4,float:1,0,1,1,_humansimulation
+0xf8,?:5,5,0,3,_humansimulationclient _logic_playeractions _scenario_armhuman
+0x104,?:11,11,0,6,_bondsimulation2 _humansimulation _humansimulationclient _logic_playeractions _packobjectpacket _packobjectpacket2
+0x108,float:3,3,0,3,_bondsimulation2 _humansimulation _playerai
+0x110,?:3,3,0,2,_humansimulationclient _logic_playeractions
+0x1a8,?:4,4,0,3,_human_calcarmtorque _itemsimulationclient _setitempositionhuman
+0x1c0,?:1,1,0,1,_human_calcarmtorque
+0x1c4,float:3,1,2,2,_bulletsimulation _humansimulation
+0x1d8,?:8,8,0,4,_human_calcarmtorque _humansimulation _itemsimulationclient _setitempositionhuman
+0x1e4,?:6,6,0,4,_human_calcarmtorque _humansimulation _itemsimulationclient _setitempositionhuman
+0x1f0,?:5,5,0,3,_human_calcarmtorque _itemsimulationclient _setitempositionhuman
+0x208,?:1,1,0,1,_human_calcarmtorque
+0x250,?:2,2,0,1,_human_calculatearmangles
+0x288,?:19,19,0,6,_ai_assessthreats _buildframelist _calculateplayervoice _hudsimulation _human_itemsimulation _playerai
+0x28c,float:1,1,0,1,_human_itemsimulation
+0x2b8,?:5,5,0,3,_buildframelist _getinputs_door _humansimulation
+0x2c4,?:3,3,0,2,_buildframelist _humansimulation
+0x2d0,?:5,5,0,4,_ai_assessthreats _getinputs_door _hudsimulation _human_itemsimulation
+0x330,?:1,1,0,1,_human_calculatearmangles
+0x608,?:2,2,0,1,_playerai
+0x7c8,?:1,1,0,1,_playerai
+0x804,?:1,1,0,1,_playerai
+0x950,?:3,3,0,1,_human_calculatelegangles
+0xa30,?:3,3,0,1,_human_calculatelegangles
+0xa68,?:1,1,0,1,_buildframelist
+0xa98,?:1,1,0,1,_buildframelist
+0xb10,?:3,3,0,1,_human_calculatelegangles
+0xbf0,?:3,3,0,1,_human_calculatelegangles
+0xcd0,?:3,3,0,1,_human_calculatelegangles
+0xd08,?:1,1,0,1,_buildframelist
+0xd38,?:1,1,0,1,_buildframelist
+0xdb0,?:3,3,0,1,_human_calculatelegangles
+0xec8,int:9,8,1,4,_deletebond _deletehuman _human_createmuscleball _humansimulation
+0x26cc,int:8,7,1,4,_createjointbond _deletebond _deletehuman _humansimulation
+0x2870,?:1,1,0,1,_createhuman
+0x28bc,?:1,1,0,1,_createhuman
+0x2910,float:2,1,1,1,_itemweaponsimulation
+0x2914,float:2,1,1,1,_itemweaponsimulation
+0x2918,float:9,7,2,2,_human_calculatelegangles _humansimulation
+0x291c,int:25 undefined4:1,25,1,10,_clientrecv _drawhelp _drawhud _getinputs_door _human_calcarmtorque _human_calculatearmangles _human_itemsimulation _humansimulation _logic_playeractions _playerai
+0x2920,int:37,37,0,8,_drawhelp _drawhud _getinputs_door _human_calcarmtorque _human_calculatearmangles _human_itemsimulation _logic_playeractions _playerai
+0x2940,int:16 undefined4:1,16,1,8,_clientrecv _drawhelp _human_calcarmtorque _human_calculatearmangles _human_itemsimulation _humansimulation _logic_playeractions _playerai
+0x2944,int:7 undefined4:1,8,0,6,_drawhelp _human_calcarmtorque _human_calculatearmangles _human_itemsimulation _logic_playeractions _playerai
+0x2964,undefined4:1,0,1,1,_clientrecv
+0x2988,undefined4:1,0,1,1,_clientrecv
+0x29ac,undefined4:1,0,1,1,_clientrecv
+0x29d0,undefined4:1,0,1,1,_clientrecv
+0x29f4,undefined4:1,0,1,1,_clientrecv
+0x2a3c,?:1,1,0,1,_getinputs_door
+0x2a5c,?:2 float:1 undefined4:1,2,2,3,_createhuman _eventsimulation _mainmenu
+0x2a60,undefined4:2,0,2,2,_createhuman _mainmenu
+0x2a64,undefined4:2,0,2,2,_createhuman _mainmenu
+0x2a68,?:2 float:1 undefined4:1,2,2,3,_createhuman _eventsimulation _mainmenu
+0x2a6c,float:1 undefined4:1,0,2,2,_createhuman _mainmenu
+0x2a70,float:1 undefined4:1,0,2,2,_createhuman _mainmenu
+0x2a74,?:2 float:1 undefined4:1,2,2,3,_createhuman _eventsimulation _mainmenu
+0x2a78,undefined4:2,0,2,2,_createhuman _mainmenu
+0x2a7c,undefined4:2,0,2,2,_createhuman _mainmenu
+0x2a80,?:2 float:1 undefined4:1,2,2,3,_createhuman _eventsimulation _mainmenu
+0x2a84,float:1 undefined4:1,0,2,2,_createhuman _mainmenu
+0x2a88,float:1 undefined4:1,0,2,2,_createhuman _mainmenu
+0x2b1c,undefined4:3 int:3 ?:1,4,3,5,_bulletsimulation _drawhud _humansimulation _itemlogic _packobjectpacket2
+0x2b20,float:6,4,2,2,_bondsimulation2 _humansimulation
+0x2b24,int:3 undefined4:2,2,3,1,_human_itemsimulation
+0x2b28,undefined4:1,0,1,1,_frame_drawmessages
+0x2b2c,int:23 undefined4:6,22,7,6,_createhuman _eventsimulation _generatehumantexture _getinputs _logicsimulation_world _serverrecv
+0x2b30,int:9 undefined4:4,10,3,3,_createhuman _eventsimulation _generatehumantexture
+0x2b34,int:5 undefined4:4,6,3,3,_createhuman _eventsimulation _generatehumantexture
+0x2b38,undefined4:4 int:4,5,3,3,_createhuman _eventsimulation _generatehumantexture
+0x2b3c,undefined4:2 int:2,3,1,2,_eventsimulation _generatehumantexture
+0x2b40,undefined4:1 int:1,1,1,2,_buildframelist _eventsimulation
+0x2b44,int:3,3,0,1,_client_simulation
+0x2b48,?:2,2,0,1,_client_simulation
+0x2b54,int:1,1,0,1,_client_simulation
+0x2b58,?:1,1,0,1,_client_simulation

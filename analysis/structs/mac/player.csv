@@ -1,0 +1,91 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,?:24,24,0,14,_createaccount _createevent_updateplayer _displaydebuginfo _drawdisplay _drawplayerinfo _eventsimulation _fixplayername _gameloop _logic_setteammanager _scenario_createchase _scenario_createguards _scenario_createtraffic2
+0x24,undefined4:2 int:1 ?:1,3,1,3,_createaccount _gameloop _serverrecv
+0x28,undefined4:2 int:1 ?:1,3,1,3,_createaccount _gameloop _serverrecv
+0x2c,undefined4:1 int:1,1,1,1,_server_playermessage
+0x30,int:3,2,1,1,_server_playermessage
+0x34,int:22 undefined4:5,24,3,7,_createplayer _deleteplayer _gameloop _logic_playeractions _logicsimulation_world _playersimulation _serverrecv
+0x38,int:4,3,1,2,_logicsimulation _server_playermessage
+0x3c,int:4 ?:2 undefined4:2,6,2,7,_clientrecv _drawplayerinfo _economysimulation _logic_playeractions _logicsimulation_round _resetgame _serversend
+0x40,int:68 undefined4:14 ?:3,55,30,27,_clientrecv _createevent_updateplayer _createevent_updateplayer_finance _createplayer _deleteplayer _drawplayerinfo _economysimulation _eventsimulation _gameloop _logic_addteamcash _logic_cardealer_buy _logic_gunstore_buy
+0x44,uint:2 int:1,2,1,1,_server_playermessage
+0x48,undefined4:1 int:1 float:1,1,2,1,_drawplayerinfo
+0x4c,int:9 undefined4:3,6,6,5,_logic_gunstore_buy _logic_playeractions _logicsimulation_round _logicsimulation_world _resetgame
+0x50,int:9,6,3,3,_logic_cardealer_buy _logicsimulation_round _logicsimulation_world
+0x54,int:10 undefined4:2,6,6,3,_logic_playeractions _logicsimulation_round _logicsimulation_world
+0x58,int:3 undefined4:1,2,2,2,_logicsimulation_driving _resetgame
+0x5c,uint:3 undefined4:1,2,2,2,_logicsimulation_driving _resetgame
+0x60,undefined4:1 int:1,1,1,2,_rendercheckpoints _resetgame
+0x64,int:67 undefined4:32 ?:1,77,23,32,_ai_assessthreats _createevent_updateplayer _createhuman _createplayer _drawmap _drawplayerinfo _economysimulation _eventsimulation _gameloop _human_itemsimulation _itemweaponsimulation _logic_addteamcash
+0x68,int:3,2,1,1,_logicsimulation_round
+0x6c,int:26 undefined4:7,24,9,16,_createevent_updateplayer_finance _deleteplayer _drawplayerinfo _economysimulation _eventsimulation _logic_addteamcash _logic_playeractions _logic_teammissioncomplete _player_calcassets _playerbuystock _playerdeathtax _playerdebt
+0x70,undefined4:3 int:2,2,3,3,_economysimulation _itemweaponsimulation _logic_playeractions
+0x74,undefined4:1,0,1,1,_resetgame
+0x78,int:104 undefined4:38 ?:2,128,16,37,_calculateplayervoice _clientrecv _createevent_updateplayer _createplayer _deleteplayer _drawhelp _drawhud _economysimulation _eventsimulation _getinputs _getinputs_car _getinputs_door
+0x7c,float:21 undefined4:5 ?:1,10,17,9,_ai_playercar _drawhud _getinputs _getinputs_car _getinputs_door _getinputs_heli _getinputs_human _playerai _serverrecv
+0x80,float:30 undefined4:3 ?:1,16,18,7,_ai_playercar _getinputs _getinputs_car _getinputs_heli _getinputs_human _playerai _serverrecv
+0x84,float:21 undefined4:2 ?:1,9,15,8,_ai_playercar _drawhud _getinputs _getinputs_car _getinputs_heli _getinputs_human _playerai _serverrecv
+0x88,float:28 undefined4:3 ?:1,14,18,8,_ai_playercar _drawhud _getinputs _getinputs_car _getinputs_heli _getinputs_human _playerai _serverrecv
+0x8c,float:28 undefined4:6 ?:4,21,17,6,_getinputs_car _getinputs_heli _getinputs_human _playerai _scenario_createguards _serverrecv
+0x90,float:27 undefined4:7 ?:4,20,18,5,_getinputs_car _getinputs_heli _getinputs_human _playerai _serverrecv
+0x94,float:7 undefined4:2 ?:1,6,4,2,_getinputs_human _serverrecv
+0x98,float:9 undefined4:2 ?:1,7,5,2,_getinputs_human _serverrecv
+0x9c,uint:129 undefined4:7 ?:1,69,68,10,_drawhud _getinputs _getinputs_car _getinputs_heli _getinputs_human _hudsimulation _logicsimulation_world _playerai _playersimulation _serverrecv
+0xa0,undefined4:1,0,1,1,_playersimulation
+0xa4,?:2 undefined4:2,3,1,2,_clientrecv _serversend
+0xa8,?:2 undefined4:2,3,1,2,_clientrecv _serversend
+0xac,int:12 undefined4:6 ?:1,12,7,7,_drawhud _getinputs_car _getinputs_heli _getinputs_human _playersimulation _resetgame _serverrecv
+0xb0,float:24 undefined4:3,13,14,4,_getinputs _getinputs_car _getinputs_heli _getinputs_human
+0xb4,float:12 undefined4:1,9,4,4,_getinputs _getinputs_car _getinputs_heli _getinputs_human
+0xb8,undefined4:2,1,1,2,_createhuman _createplayer
+0xbc,int:3 undefined4:1,2,2,1,_logicsimulation_world
+0xc4,int:2 uint:2 undefined4:1,3,2,2,_drawhud _getinputs_human
+0xc8,int:9 undefined4:8 ?:1,11,7,6,_drawhud _getinputs _playerai _playersimulation _resetgame _serverrecv
+0xcc,int:3 undefined4:2,3,2,5,_getinputs _getinputs_car _getinputs_heli _getinputs_human _resetgame
+0xd0,int:2,1,1,1,_getinputs_human
+0xd4,undefined4:30 int:26 ?:2,30,28,16,_clientrecv _createplayer _drawdisplay _drawhud _drawplayermenu _getinputs _logic_player _logic_playeractions _logicsimulation _logicsimulation_round _logicsimulation_world _playermenu
+0xd8,int:38 ?:2,38,2,8,_clientrecv _logic_cardealer_buy _logic_gunstore_buy _logic_player _logic_playeractions _logic_suits_buy _playermenu_building_buy _serversend
+0xdc,int:2 undefined4:1,2,1,1,_getinputs
+0xe0,?:45 undefined4:2 int:1,47,1,12,_getinputs _playermenu_banking _playermenu_building_buy _playermenu_building_main _playermenu_buy _playermenu_buy_ammo _playermenu_buy_equipment _playermenu_buy_stocks _playermenu_buy_vehicles _playermenu_buy_weapons _playermenu_spawn _playermenu_team
+0xe4,int:33 uint:8 undefined4:2 ?:2,35,10,8,_gameloop _logic_playeractions _player_addaction_chat _player_addaction_item _player_addaction_menu _resetgame _serverrecv _serversend
+0xe8,int:4 undefined4:2 uint:2 ?:1,5,4,4,_clientrecv _gameloop _logic_playeractions _resetgame
+0x15ec,int:3 ?:2 undefined4:2,5,2,4,_clientrecv _drawhud _playersimulation _serversend
+0x15f0,?:2,2,0,2,_clientrecv _serversend
+0x15f4,?:2,2,0,2,_clientrecv _serversend
+0x15f8,int:1,1,0,1,_drawhud
+0x15fc,int:3 uint:1,4,0,2,_drawhelp _drawhud
+0x1620,int:2,2,0,1,_drawhelp
+0x1a38,int:13 undefined4:7 uint:1,13,8,13,_checksimulation _createevent_updateplayer _dedicatedserverloop _displaydebuginfo _drawplayerinfo _eventsimulation _logicsimulation_round _logicsimulation_world _resetgame _scenario_createchase _scenario_createguards _scenario_createtraffic2
+0x1a3c,int:6 undefined4:1,6,1,2,_ai_playercar _scenario_createchase
+0x1a40,int:4 undefined4:1,3,2,1,_ai_playercar
+0x1a44,int:47 undefined4:4,46,5,6,_ai_car_nextwaypoint _ai_playercar _playerai _resetgame _scenario_createchase _scenario_createtraffic2
+0x1a48,int:24 undefined4:4,19,9,5,_addplayerwaypoint _playerai _resetgame _scenario_createchase _scenario_createtraffic2
+0x214c,int:3 undefined4:2,2,3,3,_ai_car_nextwaypoint _scenario_createchase _scenario_createtraffic2
+0x2150,int:4 undefined4:2,3,3,3,_ai_car_nextwaypoint _scenario_createchase _scenario_createtraffic2
+0x2154,int:6 undefined4:3,6,3,3,_ai_playercar _createplayer _resetgame
+0x2158,int:1,1,0,1,_ai_playercar
+0x215c,int:3,2,1,1,_playerai
+0x2160,int:7 undefined4:2,5,4,1,_ai_playercar
+0x2164,int:3 undefined4:1,2,2,1,_playerai
+0x2168,int:17,15,2,2,_ai_assessthreats _playerai
+0x216c,int:7 undefined4:1,6,2,2,_ai_assessthreats _playerai
+0x2170,int:1,1,0,1,_ai_assessthreats
+0x22f0,undefined4:5 int:2,2,5,3,_logicsimulation_world _scenario_createchase _scenario_createguards
+0x22f4,undefined4:2 ?:2,2,2,3,_createhuman _createplayer _eventsimulation
+0x22f8,undefined4:2,0,2,2,_createplayer _eventsimulation
+0x22fc,undefined4:2,0,2,2,_createplayer _eventsimulation
+0x2300,?:2 float:1 undefined4:1,2,2,3,_createhuman _createplayer _eventsimulation
+0x2304,float:1 undefined4:1,0,2,2,_createplayer _eventsimulation
+0x2308,float:1 undefined4:1,0,2,2,_createplayer _eventsimulation
+0x230c,undefined4:2 ?:2,2,2,3,_createhuman _createplayer _eventsimulation
+0x2310,undefined4:2,0,2,2,_createplayer _eventsimulation
+0x2314,undefined4:2,0,2,2,_createplayer _eventsimulation
+0x2318,?:2 float:1 undefined4:1,2,2,3,_createhuman _createplayer _eventsimulation
+0x231c,float:1 undefined4:1,0,2,2,_createplayer _eventsimulation
+0x2320,float:1 undefined4:1,0,2,2,_createplayer _eventsimulation
+0x23b4,undefined4:3 int:2 uint:1,3,3,5,_createevent_updateplayer _createhuman _createplayer _eventsimulation _serverrecv
+0x23b8,undefined4:3 uint:2 int:1,3,3,5,_createevent_updateplayer _createhuman _createplayer _eventsimulation _serverrecv
+0x23bc,undefined4:3 uint:2 int:1,3,3,5,_createevent_updateplayer _createhuman _createplayer _eventsimulation _serverrecv
+0x23c0,undefined4:3 int:3 uint:1,5,2,4,_createevent_updateplayer _eventsimulation _logic_suits_buy _playermenu_building_buy
+0x23c4,undefined4:3 int:3 uint:1,5,2,4,_createevent_updateplayer _eventsimulation _logic_suits_buy _playermenu_building_buy
+0x23c8,?:1,1,0,1,_server_playermessage

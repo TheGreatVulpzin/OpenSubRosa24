@@ -1,0 +1,42 @@
+struct,offset,name,type,count,evidence
+player,0x0,active,int,,createplayer grava 1
+player,0x4,name,char,32,createaccount copia 32 bytes para a conta
+player,0x24,account_id,uint32_t,2,createaccount compara com conta+0x00 e +0x04
+player,0x40,money,int,,createplayer grava 50000; manager (black_market.c) usa como saldo; logic_gunstore_buy
+player,0x64,team,int,,createplayer grava 7; createhuman copia para human.team; logic_addteamcash
+player,0x78,human_id,int,,createplayer grava -1; manager: corpo do jogador
+player,0x8c,yaw,float,,manager (ANALISE-NPCS.md): yaw do jogador
+player,0x22f4,colors,vec3,4,createplayer inicia 4 vetores; createhuman copia para human+0x2a5c (provável: cores da roupa)
+player,0x23b4,look_a,int,,createplayer: rand() % 3; igual a conta.look_a
+player,0x23b8,look_b,int,,createplayer: rand() & 7
+player,0x23bc,look_c,int,,createplayer: rand() & 3
+human,0x0,active,int,,createhuman grava 1
+human,0x8,player_id,int,,createhuman: parâmetro 3 (dono)
+human,0xc,vehicle_id,int,,createhuman grava -1 (provável: veículo)
+human,0x24,despawn_timer,int,,createhuman grava 0xe10 (3600) (provável)
+human,0x28,health,int,,createhuman grava 100; manager: vida
+human,0xc8,bones,Bone,15,createhuman: loop de 15 com stride 0xe0
+human,0x291c,inventory,InventorySlot,8,createhuman: loop de 8 com stride 0x24; manager: contagem +0 e item +4
+human,0x2a5c,colors,vec3,4,createhuman copia de player.colors
+human,0x2b1c,bleeding,int,,manager: faca grava 1 (provável: sangramento)
+human,0x2b2c,team,int,,createhuman copia de player.team
+human,0x2b30,look_b,int,,createhuman copia de player.look_b
+human,0x2b34,look_c,int,,createhuman copia de player.look_c
+human,0x2b38,look_a,int,,createhuman copia de player.look_a
+item,0x0,active,int,,createitem grava 1
+item,0xc,type,int,,createitem: parâmetro 1 (tipo do item)
+item,0x10,type_flags,int,,createitem: itemtype+4
+item,0x14,unk_14,int,,createitem grava 0xffff
+item,0x18,parent_human,int,,createitem grava -1 (provável)
+item,0x1c,parent_item,int,,createitem grava -1 (provável)
+item,0x38,state,int,,manager: estado 3 = telefone especial
+item,0x48,pos,vec3,,createitem: parâmetro 2 (posição)
+item,0x54,pos_prev,vec3,,createitem: cópia da posição
+item,0x6c,vel,vec3,,createitem: parâmetro 3 (velocidade)
+item,0x84,rot,vec3,3,createitem: parâmetro 4 (matriz 3x3)
+item,0x108,phone_number,int,,manager: número discado
+item,0x110,call_state,int,,manager: estado da ligação
+object,0x0,active,int,,manager: slot livre com flag 0
+connection,0x0,ip,uint32_t,,manager (ANALISE-NPCS.md)
+connection,0x4,port,int,,manager (ANALISE-NPCS.md)
+connection,0x10,player_id,int,,manager (ANALISE-NPCS.md)
