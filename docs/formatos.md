@@ -1,135 +1,135 @@
-# Formatos de arquivo (Sub Rosa 0.24)
+# File formats (Sub Rosa 0.24)
 
-Leitores em [`tools/formats/subrosa_formats.py`](../tools/formats/subrosa_formats.py).
+Readers in [`tools/formats/subrosa_formats.py`](../tools/formats/subrosa_formats.py).
 
-Fonte: decompilação do cliente Linux 0.24b (`subrosa.x64`, com símbolos). Funções: `saveaccountsserver`, `loadaccountsserver`, `saveaccountsclient`, `loadblock`, `building_save`, `building_load`, `leveleditor_save`, `leveleditor_load`, `savemodelcsm`, `loadmodelcsm`, `createaccount`.
+Source: decompilation of the Linux client 0.24b (`subrosa.x64`, with symbols). Functions: `saveaccountsserver`, `loadaccountsserver`, `saveaccountsclient`, `loadblock`, `building_save`, `building_load`, `leveleditor_save`, `leveleditor_load`, `savemodelcsm`, `loadmodelcsm`, `createaccount`.
 
-Regras gerais:
+General rules:
 
-- Little-endian. Inteiros de 32 bits, salvo indicação.
-- O jogo lê pelo ponteiro `freadptr`. No Mac PowerPC ele aponta para `freadswap` (troca a ordem dos bytes). No x86 é `fread` direto.
-- O primeiro inteiro de cada arquivo é a versão. O jogo recusa versões fora da faixa.
+- Little-endian. 32-bit integers unless noted.
+- The game reads through the pointer `freadptr`. On Mac PowerPC it points to `freadswap` (swaps the byte order). On x86 it is a plain `fread`.
+- The first integer of each file is the version. The game rejects versions outside the range.
 
-Teste: todos os arquivos do 0.24b passam e são lidos até o último byte (29 `.sbb`, 30 `.sbl`, `city.sbc`, `ak47.csm`, 2 `server.srk`). O gravador de `server.srk` gera arquivos idênticos aos originais.
+Test: all 0.24b files pass and are read to the last byte (29 `.sbb`, 30 `.sbl`, `city.sbc`, `ak47.csm`, 2 `server.srk`). The `server.srk` writer produces files identical to the originals.
 
 ```bash
 python -I tools/formats/subrosa_formats.py original/client/data/city.sbc
 ```
 
-## `user/server.srk`: contas do servidor
+## `user/server.srk`: server accounts
 
-| Campo | Tipo | Descrição |
+| Field | Type | Description |
 | --- | --- | --- |
-| versão | int | 1 a 3. O jogo grava 3. |
-| key | uint | Global `account`. Número aleatório (`genrand_int32`) gerado quando não existe arquivo. |
-| n | int | Número de contas (máximo `0xffff`). |
-| contas | n × 60 bytes | Ver abaixo. |
+| version | int | 1 to 3. The game writes 3. |
+| key | uint | Global `account`. Random number (`genrand_int32`) generated when the file does not exist. |
+| n | int | Number of accounts (maximum `0xffff`). |
+| accounts | n × 60 bytes | See below. |
 
-Conta no arquivo (60 bytes). Em memória o registro tem `0x4c` bytes. Os campos `+0x28` e `+0x40..+0x4b` não vão para o arquivo.
+Account in the file (60 bytes). In memory the record is `0x4c` bytes. The fields `+0x28` and `+0x40..+0x4b` do not go to the file.
 
-| Offset na memória | Tipo | Campo | Descrição |
+| Memory offset | Type | Field | Description |
 | --- | --- | --- | --- |
-| `+0x00` | uint | id[0] | Copiado de `player+0x24`. Identifica o jogador. |
-| `+0x04` | uint | id[1] | Copiado de `player+0x28`. |
-| `+0x08` | char[32] | nome | O jogo grava os 32 bytes, com lixo depois do `\0`. Nome repetido ganha `(n)`, com corte em 24 caracteres. |
-| `+0x2c` | int | dinheiro | Conta nova: 1000. Pode ficar negativo (dívida). |
-| `+0x30` | int | desconhecido | Não lido na versão 1. |
-| `+0x34` | int | aparência A | Criação: `rand() % 3`. |
-| `+0x38` | int | aparência B | Criação: `rand() & 7`. |
-| `+0x3c` | int | aparência C | Criação: `rand() & 3`. |
+| `+0x00` | uint | id[0] | Copied from `player+0x24`. Identifies the player. |
+| `+0x04` | uint | id[1] | Copied from `player+0x28`. |
+| `+0x08` | char[32] | name | The game writes all 32 bytes, with garbage after the `\0`. A repeated name gets `(n)`, cut at 24 characters. |
+| `+0x2c` | int | money | New account: 1000. Can go negative (debt). |
+| `+0x30` | int | unknown | Not read in version 1. |
+| `+0x34` | int | look A | Creation: `rand() % 3`. |
+| `+0x38` | int | look B | Creation: `rand() & 7`. |
+| `+0x3c` | int | look C | Creation: `rand() & 3`. |
 
-Versão 1 não tem os 4 últimos campos. Na versão 2, se A, B e C são 0, o jogo sorteia de novo.
+Version 1 does not have the last 4 fields. In version 2, if A, B and C are 0, the game rolls again.
 
-## `client.srk`: contas no cliente
+## `client.srk`: accounts on the client
 
-| Campo | Tipo |
+| Field | Type |
 | --- | --- |
-| versão | int (1) |
+| version | int (1) |
 | n | int |
-| registros | n × 4 int |
+| records | n × 4 int |
 
-Provável: cada registro guarda a chave de um servidor e o `id` do jogador nele. Falta confirmar.
+Likely: each record holds a server key and the player `id` on that server. Needs confirmation.
 
-## `data/block/*.sbl`: bloco (peça de prédio)
+## `data/block/*.sbl`: block (building piece)
 
-| Campo | Tipo | Descrição |
+| Field | Type | Description |
 | --- | --- | --- |
-| versão | int | 1 ou 2. |
-| cabeçalho | 10 int | `blocktemp+0x40..+0x64`. O 10º é o número de superfícies. |
-| superfícies | ver abaixo | |
-| n_caixas | int | Só versão 2. |
-| caixas | n × (8 vec3 + 6 int + 1 int) | Só versão 2. Registro de `0x7c` bytes. 8 cantos, 6 valores por face, 1 flag. Provável: colisão. |
+| version | int | 1 or 2. |
+| header | 10 int | `blocktemp+0x40..+0x64`. The 10th is the number of surfaces. |
+| surfaces | see below | |
+| n_boxes | int | Version 2 only. |
+| boxes | n × (8 vec3 + 6 int + 1 int) | Version 2 only. Record of `0x7c` bytes. 8 corners, 6 values per face, 1 flag. Likely: collision. |
 
-Superfície (registro de `0x15c` bytes em memória):
+Surface (record of `0x15c` bytes in memory):
 
-1. 6 int, lidos na ordem `+8, +0, +0xc, +4, +0x150, +0x154`.
-2. 16 pontos (grade 4×4). Cada ponto: posição (3 float) + UV (2 float). É um patch Bézier bicúbico (`addbeziersurface`).
+1. 6 int, read in the order `+8, +0, +0xc, +4, +0x150, +0x154`.
+2. 16 points (4×4 grid). Each point: position (3 float) + UV (2 float). It is a bicubic Bézier patch (`addbeziersurface`).
 
-## `data/building/*.sbb`: prédio
+## `data/building/*.sbb`: building
 
-| Campo | Tipo | Descrição |
+| Field | Type | Description |
 | --- | --- | --- |
-| versão | int | 6 a 10. O jogo grava 10. |
-| nome | char[64] | |
-| size_x | int | Colunas. Padrão 24. |
-| size_z | int | Linhas. Padrão 24. |
-| andares | int | Padrão 4. |
-| n_texturas | int | |
-| texturas | n × char[64] | Ex.: `concrete`, `greycarpet`, `ceiling0`. |
-| n_blocos | int | |
-| blocos | n × char[64] | Nomes de `.sbl`. Ex.: `astairwell`, `rooftop`. |
-| células | ver abaixo | Grade com borda: andar `0..andares-1`, linha `0..size_z`, coluna `0..size_x`. |
-| extras | 16 × 6 int | Só versão ≥ 9. |
+| version | int | 6 to 10. The game writes 10. |
+| name | char[64] | |
+| size_x | int | Columns. Default 24. |
+| size_z | int | Rows. Default 24. |
+| floors | int | Default 4. |
+| n_textures | int | |
+| textures | n × char[64] | E.g. `concrete`, `greycarpet`, `ceiling0`. |
+| n_blocks | int | |
+| blocks | n × char[64] | Names of `.sbl` files. E.g. `astairwell`, `rooftop`. |
+| cells | see below | Grid with border: floor `0..floors-1`, row `0..size_z`, column `0..size_x`. |
+| extras | 16 × 6 int | Version ≥ 9 only. |
 
-Em memória a grade é `[64 andares][64 linhas][64 colunas]` de `0x48` bytes, em `building+0x4c`.
+In memory the grid is `[64 floors][64 rows][64 columns]` of `0x48` bytes, at `building+0x4c`.
 
-Célula no arquivo (ordem de leitura):
+Cell in the file (read order):
 
-| Offset | Tipo | Observação |
+| Offset | Type | Note |
 | --- | --- | --- |
-| `+0x00`, `+0x04` | int, int | Célula ocupada quando um deles não é 0. Usam bits altos como flags. |
-| `+0x10` | int | Só versão ≥ 7. |
-| `+0x08`, `+0x0c`, `+0x14` | int ×3 | Provável: índices de textura (piso, teto). |
-| `+0x18..+0x36` | 16 × int16 | Provável: peças/texturas por lado. |
-| `+0x38`, `+0x3c` | int ×2 | `+0x3c` zerado em versão < 8. |
-| `+0x40`, `+0x44` | int ×2 | Só versão ≥ 10. |
+| `+0x00`, `+0x04` | int, int | Cell is occupied when one of them is not 0. They use high bits as flags. |
+| `+0x10` | int | Version ≥ 7 only. |
+| `+0x08`, `+0x0c`, `+0x14` | int ×3 | Likely: texture indices (floor, ceiling). |
+| `+0x18..+0x36` | 16 × int16 | Likely: pieces/textures per side. |
+| `+0x38`, `+0x3c` | int ×2 | `+0x3c` is zeroed in version < 8. |
+| `+0x40`, `+0x44` | int ×2 | Version ≥ 10 only. |
 
-## `data/city.sbc`: cidade
+## `data/city.sbc`: city
 
-Arquivo único, ~1 MB. O jogo só aceita a versão 6. Dados vão para a global `level_editor`.
+Single file, ~1 MB. The game only accepts version 6. Data goes to the global `level_editor`.
 
-| Campo | Tipo | Descrição |
+| Field | Type | Description |
 | --- | --- | --- |
-| versão | int | 6. |
-| n_cruzamentos | int | |
-| cruzamentos | n × 3 int | `(x, y, z)` em unidades de tile. Ex.: `(160, 0, 288)`. |
-| n_ruas | int | |
-| ruas | n × (5 int + char[32]) | Os 2 primeiros int são os cruzamentos das pontas. Nome: `Main`, `6th Street`... |
-| tiles | 1024 × 1024 bytes | Mapa de tiles. Valores vistos: 0, 16, 17, 18 e múltiplos de 16 até 176. |
-| n_prédios | int | |
-| prédios | n × (char[64] + 4 int) | Nome do `.sbb` + `(x, y, z, rotação 0-3)`. Ex.: `gunshop` em `(147, 6, 261, 2)`. |
+| version | int | 6. |
+| n_intersections | int | |
+| intersections | n × 3 int | `(x, y, z)` in tile units. E.g. `(160, 0, 288)`. |
+| n_streets | int | |
+| streets | n × (5 int + char[32]) | The first 2 int are the intersections at the ends. Name: `Main`, `6th Street`... |
+| tiles | 1024 × 1024 bytes | Tile map. Values seen: 0, 16, 17, 18 and multiples of 16 up to 176. |
+| n_buildings | int | |
+| buildings | n × (char[64] + 4 int) | Name of the `.sbb` + `(x, y, z, rotation 0-3)`. E.g. `gunshop` at `(147, 6, 261, 2)`. |
 
-O `city.sbc` do 0.24b tem 54 cruzamentos, 84 ruas e 39 prédios.
+The `city.sbc` of 0.24b has 54 intersections, 84 streets and 39 buildings.
 
-## `*.csm`: modelo 3D
+## `*.csm`: 3D model
 
-| Campo | Tipo | Descrição |
+| Field | Type | Description |
 | --- | --- | --- |
-| assinatura | 4 bytes | `CSMo` |
-| versão | int | 1 |
-| n_vértices | int | |
-| desconhecido | int | `model+4`. Valor 8 no `ak47.csm`. |
-| n_triângulos | int | |
-| posições | n_vértices × vec3 | |
-| vetor B | n_vértices × vec3 | No `ak47` começa com (1, 0, 0). Provável: tangente. |
-| vetor C | n_vértices × vec3 | No `ak47` começa com (0, 1, 0). Provável: bitangente. |
-| índices | n_triângulos × 3 int | Vértices de cada triângulo. |
-| normais | n_triângulos × vec3 | Normal da face (vetores unitários). |
-| índices C | n_triângulos × 3 int | Provável: índices de UV. |
+| signature | 4 bytes | `CSMo` |
+| version | int | 1 |
+| n_vertices | int | |
+| unknown | int | `model+4`. Value 8 in `ak47.csm`. |
+| n_triangles | int | |
+| positions | n_vertices × vec3 | |
+| vector B | n_vertices × vec3 | In `ak47` it starts with (1, 0, 0). Likely: tangent. |
+| vector C | n_vertices × vec3 | In `ak47` it starts with (0, 1, 0). Likely: bitangent. |
+| indices | n_triangles × 3 int | Vertices of each triangle. |
+| normals | n_triangles × vec3 | Face normal (unit vectors). |
+| C indices | n_triangles × 3 int | Likely: UV indices. |
 
-## Pendências
+## Open items
 
-- Nomear os campos de célula do `.sbb` com o código de `building_setupbuild`.
-- Nomear os 10 inteiros do cabeçalho do `.sbl` e os 5 inteiros de rua do `.sbc`.
-- Confirmar `client.srk` com o código de `loadaccountsclient`.
-- Descobrir o campo `+0x30` da conta.
+- Name the `.sbb` cell fields with the code of `building_setupbuild`.
+- Name the 10 header integers of `.sbl` and the 5 street integers of `.sbc`.
+- Confirm `client.srk` with the code of `loadaccountsclient`.
+- Find out the account field `+0x30`.

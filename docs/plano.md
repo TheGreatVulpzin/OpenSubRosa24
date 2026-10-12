@@ -1,127 +1,127 @@
-# Plano SubVulpes — decomp do Sub Rosa
+# SubVulpes plan — Sub Rosa decomp
 
-## Contexto
+## Context
 
-O repositório já está inicializado (commit `b8ca658`): `original/` fora do git com manifesto SHA-256, server manager do amigo em `third_party/server-manager`, ferramentas em `tools/re/`, inventário em `docs/inventario.md`.
+The repository is already initialized (commit `b8ca658`): `original/` outside git with a SHA-256 manifest, the friend's server manager in `third_party/server-manager`, tools in `tools/re/`, inventory in `docs/inventario.md`.
 
-Objetivo: decompilar o Sub Rosa para melhorar servidores, adicionar features, otimizar e portar (Linux, macOS, navegador).
+Goal: decompile Sub Rosa to improve servers, add features, optimize and port (Linux, macOS, browser).
 
-Decisões tomadas com você:
+Decisions made with you:
 
-- **Estratégia:** decomp funcional + hooks (estilo re3/OpenRCT2). Cada função é reescrita em C e substitui a original dentro do executável real.
-- **Começo:** servidor dedicado.
-- **Protocolo:** compatível com os clientes originais 0.24.
-- **Repo:** privado por enquanto.
+- **Strategy:** functional decomp + hooks (re3/OpenRCT2 style). Each function is rewritten in C and replaces the original inside the real executable.
+- **Start:** dedicated server.
+- **Protocol:** compatible with the original 0.24 clients.
+- **Repo:** private for now.
 
-Fatos técnicos que guiam o plano:
+Technical facts that guide the plan:
 
-| Fato | Consequência |
+| Fact | Consequence |
 | --- | --- |
-| `subrosa.x64` (Linux) e o Mach-O i386 **têm símbolos**. Build de 2015-08-02, mesma data do `subrosa.exe` e do `subrosadedicated.exe` do cliente. | Nomes de ~817 funções de graça. Mach-O dá o layout de structs em 32 bits. |
-| Todos os PE usam **MSVC 2010** (linker 10.0, `MSVCR100.dll`). | Hooks precisam respeitar as convenções do MSVC. Matching futuro é possível com VS2010. |
-| O `subrosadedicated024d.exe` (2015-09-05) **importa `WSOCK32.dll`**. | Um `wsock32.dll` proxy na pasta do servidor carrega nosso código sem injetor. O cliente da galera já usa esse truque. |
-| `.data` do dedicado tem ~636 MB (pools estáticos). | Precisa virar alocação dinâmica no servidor próprio e, sobretudo, no WASM. |
-| O manager já mapeou RVAs, pools e offsets do 024d (`ANALISE-NPCS.md`, `ANALISE-BLACK-MARKET.md`, `native_sdk/*.h`). | Importar como rótulos iniciais. |
-| Máquina: Python 3.14, Java 21, CMake, git. **Sem compilador C.** | Instalar VS 2022 Build Tools (x86) e Ghidra. |
+| `subrosa.x64` (Linux) and the i386 Mach-O **have symbols**. Build of 2015-08-02, same date as the client's `subrosa.exe` and `subrosadedicated.exe`. | Names of ~817 functions for free. The Mach-O gives the 32-bit struct layout. |
+| All PE files use **MSVC 2010** (linker 10.0, `MSVCR100.dll`). | Hooks must respect the MSVC conventions. Future matching is possible with VS2010. |
+| `subrosadedicated024d.exe` (2015-09-05) **imports `WSOCK32.dll`**. | A proxy `wsock32.dll` in the server folder loads our code without an injector. The group's client already uses this trick. |
+| `.data` of the dedicated server is ~636 MB (static pools). | Must become dynamic allocation in our own server and, above all, in WASM. |
+| The manager already mapped RVAs, pools and offsets of the 024d (`ANALISE-NPCS.md`, `ANALISE-BLACK-MARKET.md`, `native_sdk/*.h`). | Import them as initial labels. |
+| Machine: Python 3.14, Java 21, CMake, git. **No C compiler.** | Install VS 2022 Build Tools (x86) and Ghidra. |
 
 ---
 
-## Fase 0 — Fundação de RE (primeira coisa a executar)
+## Phase 0 — RE foundation (first thing to run)
 
-1. Instalar ferramentas: Ghidra 11.x (usa o Java 21 existente), VS 2022 Build Tools com MSVC x86. Documentar em `docs/setup.md`.
-2. Criar projeto Ghidra local (gitignored) com: `subrosa.x64`, Mach-O i386, `subrosadedicated.exe` (ago), `subrosadedicated024d.exe` (set).
-3. Script headless `tools/ghidra/import_symbols.py`: aplica os nomes do ELF/Mach-O e propaga para os PE via Version Tracking (ago → set são quase iguais).
-4. **Confirmar a versão de protocolo:** comparar `serverrecv`/`clientrecv` e a constante de versão entre o cliente (ago) e o 024d. Responde se o cliente da galera fala com o 024d. Registrar em `docs/versoes.md`.
-5. Analisar o `wsock32.dll` do cliente (mod de 2024): o que ele faz e se é seguro. Registrar em `docs/mods-terceiros.md`.
-6. Documentar formatos de arquivo: `.sbc`, `.sbb`, `.sbl`, `.csm`, `.srk`, `config.txt`. Arquivo `docs/formatos.md` + parsers em `tools/formats/`.
+1. Install tools: Ghidra 11.x (uses the existing Java 21), VS 2022 Build Tools with MSVC x86. Document in `docs/setup.md`.
+2. Create a local Ghidra project (gitignored) with: `subrosa.x64`, i386 Mach-O, `subrosadedicated.exe` (Aug), `subrosadedicated024d.exe` (Sep).
+3. Headless script `tools/ghidra/import_symbols.py`: applies the ELF/Mach-O names and propagates them to the PE files via Version Tracking (Aug → Sep are almost equal).
+4. **Confirm the protocol version:** compare `serverrecv`/`clientrecv` and the version constant between the client (Aug) and the 024d. This tells whether the group's client talks to the 024d. Record it in `docs/versoes.md`.
+5. Analyze the client's `wsock32.dll` (2024 mod): what it does and whether it is safe. Record it in `docs/mods-terceiros.md`.
+6. Document file formats: `.sbc`, `.sbb`, `.sbl`, `.csm`, `.srk`, `config.txt`. File `docs/formatos.md` + parsers in `tools/formats/`.
 
-**Saída:** `analysis/024d/functions.csv` (RVA, tamanho, nome, origem do nome, confiança) e `analysis/024d/globals.csv`. Esses CSVs são a fonte de verdade versionada. O projeto Ghidra não entra no git.
+**Output:** `analysis/024d/functions.csv` (RVA, size, name, name source, confidence) and `analysis/024d/globals.csv`. These CSVs are the versioned source of truth. The Ghidra project does not go into git.
 
-## Fase 1 — Structs e globais
+## Phase 1 — Structs and globals
 
-1. Montar `src/include/sr_types.h` com as structs: `Player` (0x2408), `Human` (0x2B64), `Vehicle/Object` (0x8230), `Item`, `Connection` (0xF170), `Account`, `Event`. Usar o Mach-O i386 como referência de layout.
-2. `static_assert` de tamanho e offset para cada campo conhecido.
-3. Script que exporta as structs para o Ghidra (`tools/ghidra/apply_types.py`), para o decompilador mostrar campos com nome.
+1. Build `src/include/sr_types.h` with the structs: `Player` (0x2408), `Human` (0x2B64), `Vehicle/Object` (0x8230), `Item`, `Connection` (0xF170), `Account`, `Event`. Use the i386 Mach-O as the layout reference.
+2. `static_assert` for size and offset of each known field.
+3. Script that exports the structs to Ghidra (`tools/ghidra/apply_types.py`), so the decompiler shows named fields.
 
-## Fase 2 — Infraestrutura de hooks
+## Phase 2 — Hook infrastructure
 
-Layout novo em `src/`:
+New layout in `src/`:
 
 ```
 src/
-  include/      sr_types.h, globals.h (macros GLOBAL(tipo, nome, rva))
-  common/       matemática, vetores, parser, MT19937, bitstream (pbitwrite/pbitread)
-  game/         humanos, itens, objetos, veículos, lógica, economia, cenários
-  net/          pacotes, eventos, servercycle/serverrecv/serversend
-  server/       dedicatedserverloop, contas, config
-  platform/     sockets, timer, arquivos (abstração p/ Win/Linux/WASM)
+  include/      sr_types.h, globals.h (macros GLOBAL(type, name, rva))
+  common/       math, vectors, parser, MT19937, bitstream (pbitwrite/pbitread)
+  game/         humans, items, objects, vehicles, logic, economy, scenarios
+  net/          packets, events, servercycle/serverrecv/serversend
+  server/       dedicatedserverloop, accounts, config
+  platform/     sockets, timer, files (abstraction for Win/Linux/WASM)
 hook/
-  wsock32_proxy/  DLL proxy: repassa as 21 importações para o wsock32 do sistema
-  hooks.c         tabela HOOK(rva, função), instalação com JMP de 5 bytes
+  wsock32_proxy/  proxy DLL: forwards the 21 imports to the system wsock32
+  hooks.c         HOOK(rva, function) table, install with a 5-byte JMP
 ```
 
-Regras:
+Rules:
 
-- `HOOK(0x50AE0, createhuman)` registra a substituição. Um `hooks.cfg` liga/desliga cada hook, para bisseção de bugs.
-- Globais acessam a memória original via `GLOBAL(Player, players[256], 0xEDEDD00)` até o servidor ficar standalone.
-- Spike obrigatório: verificar convenções de chamada do MSVC 2010 (`__cdecl`, `__fastcall`, registradores customizados de LTCG). Criar wrappers `naked` onde precisar.
-- Primeiros hooks: funções folha (vetores, `pbitwrite*`) para validar o pipeline ponta a ponta.
+- `HOOK(0x50AE0, createhuman)` registers the replacement. A `hooks.cfg` turns each hook on/off, to bisect bugs.
+- Globals access the original memory via `GLOBAL(Player, players[256], 0xEDEDD00)` until the server is standalone.
+- Mandatory spike: check the MSVC 2010 calling conventions (`__cdecl`, `__fastcall`, custom LTCG registers). Create `naked` wrappers where needed.
+- First hooks: leaf functions (vectors, `pbitwrite*`) to validate the pipeline end to end.
 
-## Fase 3 — Decomp do servidor, de baixo para cima
+## Phase 3 — Server decomp, bottom up
 
-Ordem: utilitários → bitstream/pacotes → eventos (`createevent_*`) → jogadores/contas → itens/objetos/veículos → humanos (`humansimulation`, `bondsimulation2`) → lógica/economia/cenários → `servercycle` → `dedicatedserverloop`.
+Order: utilities → bitstream/packets → events (`createevent_*`) → players/accounts → items/objects/vehicles → humans (`humansimulation`, `bondsimulation2`) → logic/economy/scenarios → `servercycle` → `dedicatedserverloop`.
 
-- `tools/progress.py` calcula % de funções e bytes substituídos a partir do CSV. Publicar em `docs/progresso.md`.
-- Cada função nova só conta como feita depois de passar no teste diferencial (ver Verificação).
+- `tools/progress.py` computes the % of functions and bytes replaced from the CSV. Publish it in `docs/progresso.md`.
+- Each new function counts as done only after it passes the differential test (see Verification).
 
-## Fase 4 — Servidor standalone (`subvulpes-server`)
+## Phase 4 — Standalone server (`subvulpes-server`)
 
-1. Quando todo o código alcançável pelo dedicado estiver em C, compilar sem o `.exe` original.
-2. Trocar os pools estáticos por alocação dinâmica e limites configuráveis.
-3. Builds Windows x86/x64 e Linux x64. Atenção a structs com ponteiros ao passar para 64 bits.
-4. Continuar 100% compatível com o cliente 0.24.
+1. When all the code reachable from the dedicated server is in C, build without the original `.exe`.
+2. Replace the static pools with dynamic allocation and configurable limits.
+3. Windows x86/x64 and Linux x64 builds. Watch structs with pointers when moving to 64 bits.
+4. Stay 100% compatible with the 0.24 client.
 
-## Fase 5 — Servidor melhor
+## Phase 5 — Better server
 
-1. API de plugins nativa (C, carregada por DLL/.so) no lugar dos patches de memória.
-2. Portar os módulos do manager como plugins: black market, comandos admin (`/heal`, `/tp`, `/npc`, `/imortal`...), mensagens de morte, caminhão mais rápido, dinheiro inicial, socos, bots.
-3. Console de admin / RCON, logs estruturados, validações anti-cheat no servidor.
-4. Lista de servidores própria se o master da Cryptic Sea (`crypticsea.com/anewzero/serverinfo.php`) não responder mais.
-5. Perfilar `servercycle` e otimizar (tick rate, envio de pacotes, colisões).
+1. Native plugin API (C, loaded by DLL/.so) in place of memory patches.
+2. Port the manager modules as plugins: black market, admin commands (`/heal`, `/tp`, `/npc`, `/imortal`...), death messages, faster truck, starting money, punches, bots.
+3. Admin console / RCON, structured logs, server-side anti-cheat checks.
+4. Own server list if the Cryptic Sea master (`crypticsea.com/anewzero/serverinfo.php`) no longer answers.
+5. Profile `servercycle` and optimize (tick rate, packet sending, collisions).
 
-## Fase 6 — Cliente
+## Phase 6 — Client
 
-1. Mesmo método de hooks no `subrosa.exe` (que também importa `WSOCK32.dll`).
-2. Reaproveitar `common/`, `game/`, `net/` do servidor. Faltam render, input, áudio, voz, menus, editores.
-3. Cliente standalone com SDL2 + OpenAL. Trocar o OpenGL de pipeline fixo por GL 3.3 / GLES 3 (pré-requisito do WebGL2).
+1. Same hook method in `subrosa.exe` (which also imports `WSOCK32.dll`).
+2. Reuse `common/`, `game/`, `net/` from the server. Missing: render, input, audio, voice, menus, editors.
+3. Standalone client with SDL2 + OpenAL. Replace the fixed-pipeline OpenGL with GL 3.3 / GLES 3 (prerequisite for WebGL2).
 
-## Fase 7 — Portes
+## Phase 7 — Ports
 
-1. Linux, macOS (arm64), Windows x64 com o cliente standalone.
-2. **Navegador (Emscripten/WASM):**
-   - Render em WebGL2 (vem da Fase 6.3).
-   - Rede: navegador não faz UDP. O servidor ganha transporte WebSocket (ou WebRTC DataChannel) ao lado do UDP.
-   - Memória: pools dinâmicos da Fase 4.
-   - Assets: o jogador carrega a própria cópia do jogo (seletor de arquivo + IndexedDB). Nada de assets hospedados.
+1. Linux, macOS (arm64), Windows x64 with the standalone client.
+2. **Browser (Emscripten/WASM):**
+   - Render in WebGL2 (comes from Phase 6.3).
+   - Network: the browser cannot do UDP. The server gets a WebSocket (or WebRTC DataChannel) transport next to UDP.
+   - Memory: dynamic pools from Phase 4.
+   - Assets: the player loads their own copy of the game (file picker + IndexedDB). No hosted assets.
 
 ---
 
-## Arquivos críticos
+## Critical files
 
-- `original/blackhouser/subrosadedicated024d.exe` — alvo dos hooks do servidor.
-- `original/client/subrosa.x64`, `.../MacOS/subrosa` — fontes de nomes e layouts.
-- `analysis/symbols/subrosa_x64.functions.txt` — já gerado por `tools/re/elf_symbols.py`.
-- `third_party/server-manager/ANALISE-*.md`, `native_sdk/*.h`, `core.py` — RVAs e offsets já mapeados. O `core.py` também mostra como validar o hash do 024d.
-- `third_party/server-manager/tools/verify_*.py` — usam Unicorn para emular x86. Reaproveitar a ideia para testes diferenciais.
+- `original/blackhouser/subrosadedicated024d.exe` — target of the server hooks.
+- `original/client/subrosa.x64`, `.../MacOS/subrosa` — sources of names and layouts.
+- `analysis/symbols/subrosa_x64.functions.txt` — already generated by `tools/re/elf_symbols.py`.
+- `third_party/server-manager/ANALISE-*.md`, `native_sdk/*.h`, `core.py` — RVAs and offsets already mapped. `core.py` also shows how to validate the 024d hash.
+- `third_party/server-manager/tools/verify_*.py` — use Unicorn to emulate x86. Reuse the idea for differential tests.
 
-## Verificação
+## Verification
 
-- **Integridade:** `python -I tools/re/manifest.py check` antes de cada sessão de RE.
-- **Teste diferencial por função:** rodar a original (via Unicorn, como o manager faz, ou chamando a original dentro do processo) e a reescrita com as mesmas entradas e memória. Comparar retorno e memória escrita.
-- **Teste em jogo:** servidor 024d + `wsock32.dll` proxy + cliente original. Checklist: conectar, andar, dirigir, atirar, comprar no telefone, morrer, round reiniciar. Rodar com todos os hooks ligados e depois só com os novos.
-- **Rede:** gravar tráfego (Wireshark) do servidor original e do servidor com hooks no mesmo cenário. Comparar formato dos pacotes.
-- **Progresso:** `tools/progress.py` em cada commit.
+- **Integrity:** `python -I tools/re/manifest.py check` before each RE session.
+- **Differential test per function:** run the original (via Unicorn, as the manager does, or by calling the original inside the process) and the rewrite with the same inputs and memory. Compare the return value and the memory written.
+- **In-game test:** 024d server + proxy `wsock32.dll` + original client. Checklist: connect, walk, drive, shoot, buy at the phone, die, round restarts. Run with all hooks on and then with only the new ones.
+- **Network:** record traffic (Wireshark) from the original server and from the hooked server in the same scenario. Compare the packet format.
+- **Progress:** `tools/progress.py` on each commit.
 
-## Primeira entrega após aprovar
+## First delivery after approval
 
-Fase 0 inteira: Ghidra + símbolos propagados para o 024d, `functions.csv`, confirmação de versão de protocolo, análise do `wsock32.dll` do cliente, e `docs/setup.md` com o que instalar.
+All of Phase 0: Ghidra + symbols propagated to the 024d, `functions.csv`, protocol version confirmation, analysis of the client's `wsock32.dll`, and `docs/setup.md` with what to install.

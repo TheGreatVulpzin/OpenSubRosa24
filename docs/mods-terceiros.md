@@ -1,80 +1,80 @@
-# Mods de terceiros no cliente
+# Third-party mods in the client
 
-O cliente da galera tem otimizações fanmade. Elas estão em DLLs que não são da Cryptic Sea.
+The group's client has fan-made optimizations. They live in DLLs that are not from Cryptic Sea.
 
 ## `client/wsock32.dll`
 
-| Campo | Valor |
+| Field | Value |
 | --- | --- |
 | SHA-256 | `99d3fadae0e3b24f0cb24c664fd5e84f5710bfa94a5e4d61a6d785fc483646dd` |
 | Build | 2023-03-14, MSVC 2022 (linker 14.34), C++ |
-| Tipo | DLL proxy. Exporta as 75 funções do `wsock32.dll` do Windows. |
-| Decompilação | `build/decomp/wsock32_fan.c` (gerado, fora do git) |
+| Type | Proxy DLL. Exports the 75 functions of the Windows `wsock32.dll`. |
+| Decompilation | `build/decomp/wsock32_fan.c` (generated, outside git) |
 
-### Como carrega
+### How it loads
 
-1. O `subrosa.exe` importa `WSOCK32.dll`. O Windows carrega primeiro a cópia da pasta do jogo.
-2. No `DllMain`, a DLL carrega o `wsock32.dll` real de `GetSystemDirectoryW` e guarda os 75 endereços para repassar as chamadas.
-3. A DLL instala um hook em `subrosa.exe+0x1ab0c` (início do jogo). Quando o jogo passa por ali, a DLL aplica todos os patches.
-4. A DLL também cria um gerador MT19937 com semente de `std::random_device`.
+1. `subrosa.exe` imports `WSOCK32.dll`. Windows loads the copy in the game folder first.
+2. In `DllMain`, the DLL loads the real `wsock32.dll` from `GetSystemDirectoryW` and stores the 75 addresses to forward the calls.
+3. The DLL installs a hook at `subrosa.exe+0x1ab0c` (game start). When the game passes there, the DLL applies all patches.
+4. The DLL also creates an MT19937 generator seeded from `std::random_device`.
 
-### Patches no `subrosa.exe`
+### Patches in `subrosa.exe`
 
-Os nomes vêm de `analysis/client_win/functions.csv` (casador automático). "?" indica função sem nome.
+The names come from `analysis/client_win/functions.csv` (automatic matcher). "?" marks an unnamed function.
 
-| RVA | Função | Patch | Efeito provável |
+| RVA | Function | Patch | Likely effect |
 | --- | --- | --- | --- |
-| `0x9c3d2` | `createlevel` | JMP para a DLL (9 bytes) | Muda a criação do mapa. |
-| `0xda051` | `?` (`0xd9fa0`) | JMP para a DLL | Função grande do mapa/render (usa `2052` e `24680`). |
-| `0xe3c94` | `rendersprites` | JMP para a DLL | Muda o desenho de sprites. |
-| `0x106324` | `setupperspectiveviewport` | JMP para a DLL | Muda a câmera (FOV ou proporção da tela). |
-| `0x7cdaf` | `gameloop` | 6 bytes de NOP | Remove uma instrução do loop principal. |
-| `0x7a859` | `resetgame` | 1 byte = 0 | Muda uma constante ao reiniciar a partida. |
-| `0xfafe0` | `resettimer` | RET | Desliga a função. |
-| `0xfb020` | `starttimer` | RET | Desliga a função. |
-| `0xfb040` | `?` (provável `stoptimer`) | RET | Desliga a função. |
-| `0xd9fc9`, `0xd9fd0` | `?` (`0xd9fa0`) | Troca 7 bytes cada | Muda instruções da mesma função do mapa/render. |
-| `0xda334`, `0xda3fb` | `?` (`0xd9fa0`) | `cmp [ebp-0x80], 0x20` e `0x10` | Muda dois limites de loop. |
-| `0xe8456` a `0xe8482`, `0xe8760` a `0xe8774` | `generatetexture` | 9 trocas de 7 bytes | Muda a geração de texturas procedurais. |
+| `0x9c3d2` | `createlevel` | JMP to the DLL (9 bytes) | Changes the map creation. |
+| `0xda051` | `?` (`0xd9fa0`) | JMP to the DLL | Large map/render function (uses `2052` and `24680`). |
+| `0xe3c94` | `rendersprites` | JMP to the DLL | Changes sprite drawing. |
+| `0x106324` | `setupperspectiveviewport` | JMP to the DLL | Changes the camera (FOV or screen aspect). |
+| `0x7cdaf` | `gameloop` | 6 bytes of NOP | Removes one instruction from the main loop. |
+| `0x7a859` | `resetgame` | 1 byte = 0 | Changes a constant when the match restarts. |
+| `0xfafe0` | `resettimer` | RET | Turns the function off. |
+| `0xfb020` | `starttimer` | RET | Turns the function off. |
+| `0xfb040` | `?` (likely `stoptimer`) | RET | Turns the function off. |
+| `0xd9fc9`, `0xd9fd0` | `?` (`0xd9fa0`) | Replaces 7 bytes each | Changes instructions in the same map/render function. |
+| `0xda334`, `0xda3fb` | `?` (`0xd9fa0`) | `cmp [ebp-0x80], 0x20` and `0x10` | Changes two loop limits. |
+| `0xe8456` to `0xe8482`, `0xe8760` to `0xe8774` | `generatetexture` | 9 replacements of 7 bytes | Changes the generation of procedural textures. |
 
-Os três `RET` desligam os timers de medição de tempo (profiling). Isso provavelmente é parte da "otimização".
+The three `RET` patches turn off the timers that measure time (profiling). This is probably part of the "optimization".
 
-### Funções interceptadas (hook completo)
+### Intercepted functions (full hook)
 
-| RVA | Função | Handler na DLL | O que faz |
+| RVA | Function | Handler in the DLL | What it does |
 | --- | --- | --- | --- |
-| `0x79ad0` | `resetgame` | `FUN_10002db0` | Se o modo de jogo é 0, usa um modo próprio (5). Remove jogadores e corpos, edita blocos do mapa, cria 10 veículos. Parece um cenário customizado. |
-| `0xac190` | `setupmodel` | `FUN_10004760` | Adiciona modelos (provável: `conveniencestore1`). |
-| `0x10ac40` | `setuptexture` | `FUN_10003370` | Adiciona texturas (`texture/cash_thousand.png`). |
+| `0x79ad0` | `resetgame` | `FUN_10002db0` | If the game mode is 0, it uses its own mode (5). Removes players and bodies, edits map blocks, creates 10 vehicles. Looks like a custom scenario. |
+| `0xac190` | `setupmodel` | `FUN_10004760` | Adds models (likely `conveniencestore1`). |
+| `0x10ac40` | `setuptexture` | `FUN_10003370` | Adds textures (`texture/cash_thousand.png`). |
 
-### Funções do jogo que a DLL chama
+### Game functions the DLL calls
 
 `createplayer` (`0xd4750`), `deleteplayer` (`0xd4a20`), `createhuman` (`0x850b0`), `createitem` (`0x96cf0`), `createobject` (`0xc5780`), `linkitem` (`0x99d50`), `scenario_armhuman` (`0xddaf0`), `area_marksector` (`0x39230`), `loadtexturesetalpha` (`0x10a2f0`), `generatetexture` (`0xe7ff0`).
 
-Funções sem nome que a DLL chama, com a identificação provável:
+Unnamed functions the DLL calls, with the likely identification:
 
-| RVA | Evidência | Provável |
+| RVA | Evidence | Likely |
 | --- | --- | --- |
-| `0xc6ff0` | Usa `0x2B64` (corpo) e `0x8230` (objeto). A DLL chama para os 512 slots. | `deletehuman` |
-| `0x43c60` | Recebe coordenadas de bloco. Usa `2052` e `24680`. | `area_setblock` |
+| `0xc6ff0` | Uses `0x2B64` (body) and `0x8230` (object). The DLL calls it for all 512 slots. | `deletehuman` |
+| `0x43c60` | Takes block coordinates. Uses `2052` and `24680`. | `area_setblock` |
 
-### Riscos para o SubVulpes
+### Risks for SubVulpes
 
-| Risco | Avaliação |
+| Risk | Assessment |
 | --- | --- |
-| Servidor | Nenhum. A DLL só existe no cliente. |
-| Protocolo de rede | Nenhum patch toca nas funções de rede. O cliente com mod já joga no 024d original. |
-| Conflito com nossos hooks (Fase 6) | Real. Não colocar hooks nossos nos endereços acima enquanto a DLL estiver ativa. |
-| Nome do arquivo (Fase 6) | Nosso DLL também se chama `wsock32.dll`. Renomear o mod para `wsock32_fan.dll` e carregar ele a partir do nosso. |
+| Server | None. The DLL exists only on the client. |
+| Network protocol | No patch touches the network functions. The modded client already plays on the original 024d. |
+| Conflict with our hooks (Phase 6) | Real. Do not put our hooks at the addresses above while the DLL is active. |
+| File name (Phase 6) | Our DLL is also named `wsock32.dll`. Rename the mod to `wsock32_fan.dll` and load it from ours. |
 
-Indícios de segurança: a DLL só importa funções de memória, carga de DLL e CRT. Não importa funções de internet, processos, registro ou escrita de arquivos. Conclusão: baixo risco.
+Security signs: the DLL imports only memory, DLL loading and CRT functions. It does not import internet, process, registry or file-writing functions. Conclusion: low risk.
 
 ## `client/SDL2.dll`
 
-Arquivo de 2024-02-21. O jogo original é de 2015. Alguém trocou o SDL2 por uma versão mais nova.
+File dated 2024-02-21. The original game is from 2015. Someone replaced SDL2 with a newer version.
 
-## Pendências
+## Open items
 
-- Ler os handlers `FUN_10004760` e `FUN_10003370` e os desvios para `0x10002c3b`, `0x10002c8b`, `0x10002cab` e `0x10002d0b`.
-- Descobrir quando o modo de jogo é 0 no cliente (menu, offline ou partida).
-- Descobrir a versão do `SDL2.dll`.
+- Read the handlers `FUN_10004760` and `FUN_10003370` and the jumps to `0x10002c3b`, `0x10002c8b`, `0x10002cab` and `0x10002d0b`.
+- Find out when the game mode is 0 on the client (menu, offline or match).
+- Find out the version of `SDL2.dll`.

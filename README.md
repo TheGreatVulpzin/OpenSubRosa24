@@ -1,27 +1,27 @@
 # SubVulpes
 
-Projeto de análise e decompilação do **Sub Rosa** (Cryptic Sea, build de 2015, servidor 0.24d).
+Analysis and decompilation project for **Sub Rosa** (Cryptic Sea, 2015 build, server 0.24d).
 
-Objetivos:
+Goals:
 
-1. Entender o código do jogo (cliente e servidor dedicado).
-2. Recriar o código em C, compilável e equivalente ao original.
-3. Melhorar os servidores: desempenho, estabilidade, ferramentas de admin, mods.
-4. Adicionar features novas.
-5. Portar para outras plataformas (Linux, macOS moderno, ARM) e para o navegador (WebAssembly).
+1. Understand the game code (client and dedicated server).
+2. Recreate the code in C, compilable and equivalent to the original.
+3. Improve the servers: performance, stability, admin tools, mods.
+4. Add new features.
+5. Port to other platforms (Linux, modern macOS, ARM) and to the browser (WebAssembly).
 
-## Estrutura
+## Structure
 
-| Pasta | Conteúdo |
+| Folder | Content |
 | --- | --- |
-| `original/` | Arquivos originais do jogo. **Fora do git.** Veja [original/README.md](original/README.md). |
-| `analysis/` | Dados extraídos dos binários (símbolos, tabelas, notas de RE). |
-| `docs/` | Documentação. Comece por [docs/inventario.md](docs/inventario.md). |
-| `tools/re/` | Scripts de RE sem dependências (strings, símbolos ELF, manifesto). |
-| `src/` | Código decompilado / reimplementado (ainda vazio). |
-| `third_party/server-manager/` | Server Manager 0.7.1 (patches de memória para o dedicado 024d). |
+| `original/` | Original game files. **Not in git.** See [original/README.md](original/README.md). |
+| `analysis/` | Data extracted from the binaries (symbols, tables, RE notes). |
+| `docs/` | Documentation. Start with [docs/inventario.md](docs/inventario.md). |
+| `tools/re/` | RE scripts with no dependencies (strings, ELF symbols, manifest). |
+| `src/` | Decompiled / reimplemented code (still empty). |
+| `third_party/server-manager/` | Server Manager 0.7.1 (memory patches for the 024d dedicated server). |
 
-## Primeiros passos
+## Getting started
 
 ```bash
 python -I tools/re/manifest.py check
@@ -31,7 +31,7 @@ python -I tools/re/manifest.py check
 python -I tools/re/elf_symbols.py original/client/subrosa.x64
 ```
 
-## Aviso legal
+## Legal notice
 
-Sub Rosa é propriedade da Cryptic Sea. Este repositório não distribui binários nem assets originais.
-É preciso ter uma cópia do jogo para usar qualquer coisa daqui.
+Sub Rosa is owned by Cryptic Sea. This repository does not distribute original binaries or assets.
+You need your own copy of the game to use anything here.

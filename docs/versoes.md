@@ -1,59 +1,59 @@
-# Versões dos binários
+# Binary versions
 
-## Resumo
+## Summary
 
-| Binário | Data de build | Papel |
+| Binary | Build date | Role |
 | --- | --- | --- |
-| `client/subrosa.exe`, `subrosa.x64`, Mac | 2015-08-02 | Cliente ALPHA 24, usado pela galera. |
-| `client/subrosadedicated.exe` | 2015-08-02 | Dedicado do mesmo build do cliente. |
-| `blackhouser/subrosadedicated024d.exe` | 2015-09-05 | Dedicado "0.24d" do Black Houser. Alvo do server manager. |
+| `client/subrosa.exe`, `subrosa.x64`, Mac | 2015-08-02 | ALPHA 24 client, used by the group. |
+| `client/subrosadedicated.exe` | 2015-08-02 | Dedicated server from the same build as the client. |
+| `blackhouser/subrosadedicated024d.exe` | 2015-09-05 | "0.24d" dedicated server of Black Houser. Target of the server manager. |
 
-## Versões oficiais baixadas (`original/vanilla/`)
+## Official versions downloaded (`original/vanilla/`)
 
-| Arquivo | Formato | Símbolos | Uso |
+| File | Format | Symbols | Use |
 | --- | --- | --- | --- |
-| `0.24c_Dedicated_Linux/.../subrosadedicated024c` | ELF x64 | **Sim** (461 funções) | Fonte principal de nomes para o 024d. |
-| `0.24b_Dedicated_Linux/.../subrosadedicated024b` | ELF x64 | **Sim** (461 funções) | Segunda fonte de nomes. |
-| `0.24c_Dedicated_Windows/.../subrosadedicated024c.exe` | PE32, MSVC | Não | Revisão anterior ao 024d, mesmo compilador. Ponte para o 024d. |
-| `0.24b_Dedicated_Windows/.../subrosadedicated024b.exe` | PE32, MSVC | Não | |
-| `0.24d_Dedicated_Windows/.../subrosadedicated024d.exe` | PE32, MSVC | Não | **Idêntico ao 024d do Black Houser** (mesmo SHA-256). O Black Houser roda o 024d sem modificação. |
-| `0.24b/` | Cliente completo (Windows, Linux, Mac) | ELF e Mach-O com símbolos | Cliente 24b. |
-| `0.25b_Dedicated_Linux/subrosadedicated025b` | ELF x64 | Não (stripped) | Versão seguinte. |
-| `0.25b/` | Cliente completo 0.25b (Windows, Linux, Mac) | Só o Mach-O i386 (4573 símbolos) | Cliente de out/2015. O Mac é referência extra de nomes para o 024d. |
-| `0.22/`, `0.22_Dedicated_Server/` | Cliente e servidor 0.22 | Mach-O com símbolos | Versão anterior. |
+| `0.24c_Dedicated_Linux/.../subrosadedicated024c` | ELF x64 | **Yes** (461 functions) | Main source of names for the 024d. |
+| `0.24b_Dedicated_Linux/.../subrosadedicated024b` | ELF x64 | **Yes** (461 functions) | Second source of names. |
+| `0.24c_Dedicated_Windows/.../subrosadedicated024c.exe` | PE32, MSVC | No | Revision before the 024d, same compiler. Bridge to the 024d. |
+| `0.24b_Dedicated_Windows/.../subrosadedicated024b.exe` | PE32, MSVC | No | |
+| `0.24d_Dedicated_Windows/.../subrosadedicated024d.exe` | PE32, MSVC | No | **Identical to the Black Houser 024d** (same SHA-256). Black Houser runs the 024d unmodified. |
+| `0.24b/` | Full client (Windows, Linux, Mac) | ELF and Mach-O with symbols | 24b client. |
+| `0.25b_Dedicated_Linux/subrosadedicated025b` | ELF x64 | No (stripped) | Next version. |
+| `0.25b/` | Full 0.25b client (Windows, Linux, Mac) | Only the i386 Mach-O (4573 symbols) | Client of Oct 2015. The Mac build is an extra name reference for the 024d. |
+| `0.22/`, `0.22_Dedicated_Server/` | 0.22 client and server | Mach-O with symbols | Previous version. |
 
-Todas as versões do pacote SUB ROSA ALL (0.01 a 0.38f): ver `docs/versoes-todas.md`. Não há 0.24d para Linux ou Mac.
+All versions of the SUB ROSA ALL package (0.01 to 0.38f): see `docs/versoes-todas.md`. There is no 0.24d for Linux or Mac.
 
-## Cliente da galera x servidor 024d
+## The group's client vs. the 024d server
 
-Os jogadores entram no Black Houser (024d) com o cliente da galera. No servidor aparecem helicóptero, trem e AK-47. Fonte: relato do usuário em 2026-10-11.
+Players join Black Houser (024d) with the group's client. A helicopter, a train and an AK-47 show up on the server. Source: the user's report on 2026-10-11.
 
-Conclusão: o cliente de 02/08 e o 024d usam o mesmo protocolo. **A compatibilidade de rede deve seguir o par cliente 02/08 + servidor 024d.**
+Conclusion: the 08/02 client and the 024d use the same protocol. **Network compatibility must follow the pair 08/02 client + 024d server.**
 
-## Diferenças de strings entre os dois dedicados
+## String differences between the two dedicated servers
 
-O 024d não tem várias strings que o dedicado de 02/08 tem. Isso **não** indica que as features faltam.
+The 024d lacks several strings that the 08/02 dedicated server has. This does **not** mean the features are missing.
 
-| Só no dedicado 02/08 | Só no 024d |
+| Only in the 08/02 dedicated server | Only in the 024d |
 | --- | --- |
-| Nomes de veículos `Turbo`, `Turbo S`, `Truck` | `/phone`, `/give`, `/list3` |
-| Nomes de itens `AK-47`, magazines | `gametype=` |
-| Rótulos de debug `rotorrpm`, `rotormass` | Rótulos de debug `bondsim`, `objectsim`, `packetbuild` |
+| Vehicle names `Turbo`, `Turbo S`, `Truck` | `/phone`, `/give`, `/list3` |
+| Item names `AK-47`, magazines | `gametype=` |
+| Debug labels `rotorrpm`, `rotormass` | Debug labels `bondsim`, `objectsim`, `packetbuild` |
 | `data/city.sbc`, `data/block/%s.sbl` | `Goldmen Inc` + `%s open` |
 
-Explicações prováveis, a confirmar no código:
+Likely explanations, to confirm in the code:
 
-- O servidor não precisa de nomes de exibição. Só o cliente mostra os nomes.
-- Os rótulos de debug (medição de tempo por etapa) mudaram entre os builds.
+- The server does not need display names. Only the client shows names.
+- The debug labels (timing per stage) changed between builds.
 
-O código do 024d é menor: 356 KB em 340 funções, contra 470 KB em 468 funções no dedicado de 02/08. O 024d usa mais inlining.
+The 024d code is smaller: 356 KB in 340 functions, against 470 KB in 468 functions in the 08/02 dedicated server. The 024d uses more inlining.
 
-## Número de versão
+## Version number
 
-O cliente guarda a versão na variável global `currentversion` (ELF, endereço `0x79731c`). O valor é **24**. O menu principal mostra `ALPHA 24`. A lista de servidores mostra `Alpha N` para cada servidor.
+The client stores the version in the global variable `currentversion` (ELF, address `0x79731c`). The value is **24**. The main menu shows `ALPHA 24`. The server list shows `Alpha N` for each server.
 
-O servidor `024d` é a versão 24, revisão "d". Cliente e servidor são da mesma versão.
+The `024d` server is version 24, revision "d". Client and server have the same version.
 
-## Pendências
+## Open items
 
-- Comparar a tabela de tipos de veículo (`setupobjecttypes_*`) entre o ELF e o 024d.
+- Compare the vehicle type table (`setupobjecttypes_*`) between the ELF and the 024d.
