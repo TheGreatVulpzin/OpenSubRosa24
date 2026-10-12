@@ -202,3 +202,45 @@ Dead code that also uses WinSock: `0xd7b0` (client socket, no bind), `0xd840` (t
 | `InterlockedCompareExchange` | KERNEL32 | 1 | 0x5d08c __tmainCRTStartup | `__tmainCRTStartup`: startup lock. |
 | `InterlockedExchange` | KERNEL32 | 1 | 0x5d08c __tmainCRTStartup | `__tmainCRTStartup`: startup unlock. |
 
+## 3. Files
+
+The server uses **relative paths** and changes directory with `_chdir`. It must start in a folder that has `config.txt`, `data/` and `user/`. `getpaths` (main) saves the start directory twice with `_getcwd`; `loadsaveoptions` and the directory scans return to it.
+
+Formats are in `docs/formatos.md`. Readers and writers are in `tools/formats/subrosa_formats.py`. The `config.txt` of a real server has passwords: this document lists the **keys** only.
+
+### 3.1 Files that the live code opens
+
+| File | Mode | Opened by (RVA, name) | When | Format |
+| --- | --- | --- | --- | --- |
+| `config.txt` | `rb` | `0xd020 loadtextfile`, called by `0x4e7a0 loadsaveoptions` | Start-up, once | Text. `loadtextfile` reads the whole file, byte by byte with `fgetc`, into the global `parser` (1 MiB, **no size check**). Then `0x29650` (named `optionreadwriteint`, it is a key search) finds `key=` and `0xd110` (`getfloat`) or `0xd240` (`getstring`) reads the value. Keys: `screenwidth`, `screenheight`, `colordepth`, `depthbits`, `stencilbits`, `fullscreen`, `joystick`, `sound`, `soundvolume`, `musicvolume`, `port`, `servermaxbytespersecond`, `name`, `servername`, `serverpassword`, `gametype`, `invertmouse`, `maxnumofplayers`, `roundtime`, `setcpuaffinity`, `voicechat`, `voiceholdtotalk`, `voicekey`, `voicemb`, `voicemin`, `voiceboost`, `help`, `occlusion`. The server uses `port`, `servermaxbytespersecond`, `servername`, `serverpassword`, `gametype`, `maxnumofplayers`, `roundtime`. The others go to the shared `option` struct (RVA `0x90dc340`) and are not read again. A missing file is not an error: the defaults set by `loadsaveoptions` stay. |
+| `readme.txt` | `rb` | `0xd020 loadtextfile`, called by `0x185a0 newspaper_load` (from `resetgame`) | At each round start | Optional text, one newspaper line per line. Up to 1022 lines of 124 characters. `newspaper_load` adds a `Top 10 list` and 10 lines `%d. %s   $<money>` for the richest accounts. Not present in the Black Houser folder. |
+| `user/server.srk` | `rb` | `0xe2e0 loadaccountsserver` | Start-up, once | Binary accounts. Version 1 to 3. The record count is read from the file and **not checked** against the 65536 limit. See `docs/formatos.md`. |
+| `user/server.srk` | `wb` | `0x1080 saveaccountsserver`, called by `0x5b9b0 logicsimulation_world` and `0x590f0 resetgame` | Round start (`resetgame`); when the world clock reaches `0x3b5380` (after `player_calcassets` for every player); and in the periodic block of `logicsimulation_world`: every 18,000 units of the world clock (RVA `0x2561d740`, unnamed, it advances by 10 per tick), so about every 1,800 ticks, together with the economy update | Same format, always version 3. `tools/formats` writes identical files. |
+| `data/city.sbc` | `rb` | `0x8590 leveleditor_load` | Start-up, once | Binary city (version 6 only): intersections (12 bytes), streets (52 bytes), a 1024 × 1024 tile map, buildings (80 bytes read, 84 bytes in memory). Counts are not checked against the array sizes. It goes to the global `city`. |
+| `data/building/<name>.sbb` | `rb` | `0x13d80 building_load`, called by `0x54e40 createlevel` | Each `resetgame` | Binary building (version 6 to 10). The names come from `city.sbc`. `createlevel` also holds the names `aoffice1`, `hospital0`, `gunshop`, `dealership2`, `base1` to `base5`. `setupbuildingtypes` holds `glassonly`, `test2`. |
+| `data/block/<name>.sbl` | `rb` | `0x29a0 loadblock`, called by `0x2a510 area_createinteriorblocks` | Each `resetgame` | Binary block (version 1 or 2). `area_createinteriorblocks` loads every file that `listfiles` finds in `data/block`. It also looks up the names `stairs`, `stairsceiling`, `stairsfloor`, `stairsbalcony`, `railing`, `railingrightwall`, `ceilingedge`, `railingleftwall`, `ceilingedgerightwall`, `garagedoor` in that list. |
+| `stats.txt` | `w` (text) | `0x1420 server_writelogfile`, called by `0x5b9b0 logicsimulation_world` | In the same periodic block | Text, lines end with `\r\n`: `numofmissions=`, `numofbullets=`, `users=`, `totaltime=`, `averagetime=`, an empty line, then one line `index:name:value` for each account. `value` and `totaltime` come from the account field `+0x30` divided by 10 (the field that `docs/formatos.md` lists as unknown; it looks like a play-time counter). The file is opened in text mode with explicit `\r\n`, so on Windows each line ends with CR CR LF. |
+
+### 3.2 Directory scans (names only)
+
+| Directory | Pattern | Function | Use |
+| --- | --- | --- | --- |
+| `data/block` | `*.sbl` | `0xd3a0 listfiles` (from `area_createinteriorblocks`, `area_createsblocks`) | The list of block names. `_findfirst64i32` / `_findnext64i32` / `_findclose`, then `qsort` with the comparator at `0xd320`. |
+| `data/texture` | `*.png` | `0xd3a0 listfiles` (from `setupgame`) | Texture names, with `removeflieextentions`. The PNG files are **never opened**: the server only needs the names to number the textures. |
+
+### 3.3 Files that exist in the code but are never used by the server
+
+| File | Function | Why it is dead |
+| --- | --- | --- |
+| `client.srk` | `0x11d0 saveaccountsclient`, `0x12f0 loadaccountsclient` | No caller. Client account list. |
+| `data/building/<name>.sbb` (write) | `0x3740 building_save` | No caller. Editor. |
+| `data/city.sbc` (write) | `0x8320 leveleditor_save` | No caller. Editor. |
+| `dedlog.txt` | `0x5280 debug_resetlogfile`, the `0x52f0` helper (unlisted), and the main loop (`0x5c8d0`, every 64 ticks) | All three test the global at RVA `0x204020`. The program **never writes** that global (7 reads, 0 writes), so the log is off unless someone patches memory. If it were on, the loop would append `physics:%d` (a profiler value) with mode `rb+`. |
+| `.csm` models, `data/weapon/` | none | The string `CSMo` is in `.rdata` but no code uses it. The 024d has no model loader. |
+
+### 3.4 What Phase 4 must keep
+
+- The same folder contract (`config.txt`, `data/block`, `data/building`, `data/city.sbc`, `data/texture` for the names, `user/server.srk`).
+- The binary readers must give the same in-memory result as `fread` through `freadptr`. All integers are little-endian 32-bit. The structs read from files are fixed-size (the account record is 60 bytes in the file and `0x4c` in memory).
+- Hardening (Phase 5): the three binary readers and the text reader trust sizes and counts from the file.
+
