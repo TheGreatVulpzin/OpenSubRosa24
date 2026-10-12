@@ -22,11 +22,11 @@ python -I tools/re/merge_names.py --out analysis/ded0802/functions.csv \
 
 # 3. Dedicado 024d. Ciclo: casar funções -> mapear globais -> casar de novo.
 #    Referências: servidores Linux 0.24c/0.24b (mesma versão, com nomes), clientes
-#    com nomes e os .exe MSVC já nomeados.
+#    com nomes (0.24b e Mac 0.25, o mais perto do 024d depois dele) e os .exe MSVC já nomeados.
 cp analysis/024d/functions.csv build/match/ded024d_prev.csv 2>/dev/null || true
 for i in 1 2 3; do
     python -I tools/re/map_globals.py --target $F/ded024d.jsonl --names build/match/ded024d_prev.csv        --ref $F/ded024c_linux.jsonl --ref $F/ded024b_linux.jsonl --ref $F/mac_i386.jsonl        --out analysis/024d/globals.csv
-    $M --target $F/ded024d.jsonl --target-globals analysis/024d/globals.csv        --ref $F/ded024c_linux.jsonl --ref $F/ded024b_linux.jsonl        --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl        --ref "$F/ded0802.jsonl:analysis/ded0802/functions.csv"        --ref "$F/client_win.jsonl:analysis/client_win/functions.csv"        --seed analysis/024d/manual_names.csv        --out build/match/ded024d_iter$i.csv
+    $M --target $F/ded024d.jsonl --target-globals analysis/024d/globals.csv        --ref $F/ded024c_linux.jsonl --ref $F/ded024b_linux.jsonl        --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl --ref $F/mac025_i386.jsonl        --ref "$F/ded0802.jsonl:analysis/ded0802/functions.csv"        --ref "$F/client_win.jsonl:analysis/client_win/functions.csv"        --seed analysis/024d/manual_names.csv        --out build/match/ded024d_iter$i.csv
     python -I tools/re/merge_names.py --out build/match/ded024d_prev.csv --manual analysis/024d/manual_names.csv        build/match/ded024d_iter$i.csv build/match/ded024d_prev.csv
 done
 cp build/match/ded024d_prev.csv analysis/024d/functions.csv

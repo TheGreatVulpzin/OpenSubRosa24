@@ -2392,9 +2392,9 @@ rva,size,name,source,confidence,evidence
 0x947f0,261,sphereintersectline,callgraph,1.0,votes=12
 0x94900,142,,,,
 0x94990,395,lineintersectsphere,callgraph,0.5,votes=3
-0x94b20,223,getlanipaddress,anchor,0.565,features
+0x94b20,223,getlanipaddress,callgraph,0.667,votes=4
 0x94c00,69,getonlineserverlist,callgraph,1.0,votes=6
-0x94c50,1379,getmasterserverip,anchor,0.503,features
+0x94c50,1379,getmasterserverip,callgraph,0.667,votes=4
 0x951c0,6957,setupitemtypes,anchor,0.538,features
 0x96cf0,1019,createitem,callgraph,1.0,votes=81
 0x970f0,61,getnextitem,callgraph,0.667,votes=4
@@ -2467,7 +2467,7 @@ rva,size,name,source,confidence,evidence
 0xa8c60,251,multiply3x3matrices,callgraph,1.0,votes=32
 0xa8d60,164,transposematrix,callgraph,0.333,votes=2
 0xa8e10,1266,hostmenu,anchor,0.964,features
-0xa9310,4751,joinmenu,anchor,0.921,features
+0xa9310,4751,joinmenu,anchor,0.859,features
 0xaa5a0,881,connectmenu,anchor,0.98,features
 0xaa920,4826,mainmenu,anchor,0.854,features
 0xabc00,1171,notsupportedmenu,anchor,0.975,features
@@ -2752,12 +2752,12 @@ rva,size,name,source,confidence,evidence
 0xfdfb0,285,freadswap,anchor,0.79,features
 0xfe0d0,302,,,,
 0xfe200,164,removeflieextentions,callgraph,1.0,votes=12
-0xfe2b0,172,enablesocketserver,anchor,0.604,features
+0xfe2b0,172,disablesocket,callgraph,0.667,votes=4
 0xfe360,138,enablesocketclient,callgraph,0.333,votes=2
 0xfe3f0,35,,,,
-0xfe420,203,recvpacket,anchor,1.0,features
+0xfe420,203,recvpacket,callgraph,1.0,votes=8
 0xfe4f0,42,resetsendpacket,callgraph,1.0,votes=8
-0xfe520,130,sendpacket,anchor,1.0,features
+0xfe520,130,sendpacket,callgraph,1.0,votes=8
 0xfe5b0,113,cs_pwrite,callgraph,1.0,votes=81
 0xfe630,140,,,,
 0xfe6c0,308,pbitwrite,callgraph,1.0,votes=160
@@ -2898,7 +2898,7 @@ rva,size,name,source,confidence,evidence
 0x10d160,68,,,,
 0x10d1b0,166,,,,
 0x10d2da,155,,,,
-0x10d420,44,,,,
+0x10d420,38,,,,
 0x10d450,186,,,,
 0x10d510,367,,,,
 0x10d680,127,,,,

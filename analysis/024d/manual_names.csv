@@ -8,3 +8,4 @@ rva,name,evidence
 0x28020,createplayer,"Manager (ANALISE-NPCS.md) e casador concordam."
 0x31800,createobject,"Manager (ANALISE-NPCS.md): registro 0x8230."
 0x50ae0,createhuman,"Manager (ANALISE-NPCS.md): registro 0x2B64, vida inicial 100."
+0x4f720,playerai,"Chama ai_assessthreats, ai_playercar, rand e atan2, como o playerai do ELF 0.24c. Chamada pelo dedicatedserverloop. O Mac 0.25 sugeria playersimulation (errado: playersimulation não chama nada)."
