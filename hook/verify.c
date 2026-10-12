@@ -346,7 +346,7 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
 
     {
         int rand_ok = !g_holdrand || g_holdrand_new == *g_holdrand;
-        int ok = diffs == 0 && same_return && rand_ok && !g_overflow;
+        int ok = diffs == 0 && same_return && rand_ok && !g_overflow && !v->crashed;
         LARGE_INTEGER t1;
         double ms;
         QueryPerformanceCounter(&t1);
@@ -358,16 +358,40 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
         if (!ok) {
             v->fails++;
             if (v->fails <= 20)
-                sv_log("VERIFICA %s: DIFERENTE (chamada %ld): %ld bytes, retorno %s, rand %s%s", v->name,
+                sv_log("VERIFICA %s: DIFERENTE (chamada %ld): %ld bytes, retorno %s, rand %s%s%s", v->name,
                        v->calls, diffs, same_return ? "igual" : "DIFERENTE", rand_ok ? "igual" : "DIFERENTE",
-                       g_overflow ? ", páginas demais (aumente MAX_PAGES)" : "");
+                       g_overflow ? ", páginas demais (aumente MAX_PAGES)" : "", v->crashed ? ", TRAVOU" : "");
         }
+        v->crashed = 0;
         if (v->checks == 1 || v->checks % 1000 == 0)
             sv_log("VERIFICA %s: %ld verificadas, %ld diferenças", v->name, v->checks, v->fails);
     }
 }
 
+int sv_crash_filter(SvVerify *v, EXCEPTION_POINTERS *ep)
+{
+    EXCEPTION_RECORD *er = ep->ExceptionRecord;
+    uintptr_t at = (uintptr_t)er->ExceptionAddress;
+    HMODULE mod = NULL;
+    char modname[MAX_PATH] = "?";
+
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                       (LPCSTR)at, &mod);
+    if (mod)
+        GetModuleFileNameA(mod, modname, MAX_PATH);
+    sv_log("CRASH %s: exceção 0x%08lx em %s+0x%x (chamada %ld). O hook passa a usar só a original.",
+           v->name, er->ExceptionCode, strrchr(modname, 0x5c) ? strrchr(modname, 0x5c) + 1 : modname,
+           (unsigned)(at - (uintptr_t)mod), v->calls);
+    if (er->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && er->NumberParameters >= 2)
+        sv_log("  acesso %s em 0x%08x", er->ExceptionInformation[0] ? "de escrita" : "de leitura",
+               (unsigned)er->ExceptionInformation[1]);
+    v->broken = 1;
+    v->crashed = 1;
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 void sv_verify_summary(const SvVerify *v)
 {
-    sv_log("RESUMO %s: %ld chamadas, %ld verificadas, %ld diferenças", v->name, v->calls, v->checks, v->fails);
+    sv_log("RESUMO %s: %ld chamadas, %ld verificadas, %ld diferenças%s", v->name, v->calls, v->checks, v->fails,
+           v->broken ? ", QUEBRADO (travou)" : "");
 }

@@ -2,7 +2,7 @@
  *
  * Para acrescentar uma função:
  *   1. Escreva sr_<nome> em src/server/ e declare em sr_server.h.
- *   2. Crie o wrapper hk_<nome> com SV_HOOK_VOID ou SV_HOOK_RET.
+ *   2. Crie o wrapper hk_<nome> com SV_HOOK_VOID ou SV_HOOK_RET (hook_wrap.h).
  *   3. Acrescente uma linha em g_hooks com o RVA, o tamanho do prólogo e os bytes esperados.
  */
 #define WIN32_LEAN_AND_MEAN
@@ -13,35 +13,8 @@
 #include "hook.h"
 #include "sr_runtime.h"
 #include "sr_server.h"
+#include "hook_wrap.h"
 #include "verify.h"
-
-/* Wrapper de função void. NEW e ORIG são as chamadas completas, com argumentos. */
-#define SV_HOOK_VOID(STAT, NEW, ORIG, DETAIL) \
-    do {                                      \
-        if (!sv_verify_should(&STAT)) {       \
-            NEW;                              \
-            return;                           \
-        }                                     \
-        sv_track_begin_new(&STAT);               \
-        NEW;                                  \
-        sv_track_switch_to_original();        \
-        ORIG;                                 \
-        sv_verify_end(&STAT, 1, DETAIL);      \
-    } while (0)
-
-/* Wrapper de função com retorno. Compara os retornos e devolve o da original. */
-#define SV_HOOK_RET(TYPE, STAT, NEW, ORIG, DETAIL)            \
-    do {                                                      \
-        TYPE r_new_, r_orig_;                                 \
-        if (!sv_verify_should(&STAT))                         \
-            return NEW;                                       \
-        sv_track_begin_new(&STAT);                               \
-        r_new_ = NEW;                                         \
-        sv_track_switch_to_original();                        \
-        r_orig_ = ORIG;                                       \
-        sv_verify_end(&STAT, r_new_ == r_orig_, DETAIL);      \
-        return r_orig_;                                       \
-    } while (0)
 
 /* ------------------------------------------------------------ createevent_message (0x6260) */
 

@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "sr_runtime.h"
+#include "hook_wrap.h"
 #include "verify.h"
 
 #pragma section(".gdata", read, write)
@@ -42,6 +43,13 @@ static void write_a_copy(void) { g_vals[10] = 7; g_vals[2000] = 9; }
 static void write_b(void) { g_vals[10] = 8; g_vals[2000] = 9; }
 static void write_c_only(void) { g_vals[3000] = 5; }
 static void nothing(void) { }
+static void crash(void) { g_vals[20] = 3; *(volatile int *)0 = 1; }
+static void write_d(void) { g_vals[20] = 4; }
+
+static void hook_crash_test(SvVerify *v)
+{
+    SV_HOOK_VOID(*v, crash(), write_d(), "crash");
+}
 
 int main(void)
 {
@@ -79,6 +87,16 @@ int main(void)
         CHECK(v5.nranges > 0, "escopo aprendido depois das rodadas completas");
         run(&v5, write_b, write_a);
         CHECK(v5.fails == 1, "diferença detectada numa rodada com escopo");
+    }
+
+    {
+        SvVerify v6 = { "crash", 1 };
+        hook_crash_test(&v6);
+        CHECK(v6.broken == 1 && v6.fails == 1, "crash na versão nova: hook marcado como quebrado");
+        CHECK(g_vals[20] == 4, "crash na versão nova: escrita dela desfeita, estado da original");
+        g_vals[20] = 0;
+        hook_crash_test(&v6);
+        CHECK(g_vals[20] == 4 && v6.checks == 1, "hook quebrado: só a original roda");
     }
 
     g_vals[1] = 1;  /* a seção voltou a aceitar escrita */

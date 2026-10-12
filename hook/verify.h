@@ -27,6 +27,8 @@ typedef struct SvVerify {
     long calls;      /* chamadas totais */
     long checks;     /* chamadas verificadas */
     long fails;      /* verificações com diferença */
+    int broken;      /* 1 = a versão nova travou; o hook passa a usar só a original */
+    int crashed;     /* 1 = a versão nova travou nesta chamada */
     /* Escopo aprendido: faixas de páginas de .data que a função costuma escrever.
      * Fora das rodadas completas, só essas faixas ficam protegidas. */
     unsigned nranges;
@@ -55,6 +57,10 @@ void sv_track_switch_to_original(void);
  * same_return: 1 se os valores de retorno são iguais (ou se a função é void).
  * detail: texto curto para o log (pode ser NULL). */
 void sv_verify_end(SvVerify *v, int same_return, const char *detail);
+
+/* Filtro SEH para a versão nova: registra o crash, marca o hook como quebrado
+ * e pede ao Windows para executar o bloco __except. */
+int sv_crash_filter(SvVerify *v, struct _EXCEPTION_POINTERS *ep);
 
 /* Resumo de um hook no log. */
 void sv_verify_summary(const SvVerify *v);
