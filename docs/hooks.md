@@ -52,7 +52,7 @@ Uma escrita fora do escopo aprendido só aparece na próxima rodada completa.
 
 Limites: escritas fora da `.data` (pilha, heap, outros DLLs) não entram na comparação. O servidor precisa rodar em uma thread só.
 
-Teste do verificador sem o jogo: `build\hook\test_verify.exe` (9 casos).
+Teste do verificador sem o jogo: `build\hook\test_verify.exe` (11 casos).
 
 O jogo continua com o resultado da **original**. Então um erro na versão em C não afeta a partida durante o teste.
 
