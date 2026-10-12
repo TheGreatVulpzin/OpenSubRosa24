@@ -38,15 +38,15 @@ rva,size,name,source,confidence,evidence
 0x5b40,150,playerbuystock,anchor,0.781,features
 0x5be0,691,,,,
 0x5f20,178,,,,
-0x5fe0,434,createevent_updateiteminfo,callgraph,0.333,votes=2
+0x5fe0,434,,manual,,removido: createevent_updateiteminfo. Zera campos do jogador e percorre o inventário. Não é createevent_updateiteminfo.
 0x61a0,177,,,,
 0x6260,167,createevent_message,anchor,0.538,features
 0x6380,151,,,,
 0x6420,121,,,,
 0x64a0,217,,,,
 0x65f0,101,,,,
-0x6660,78,createevent_updatedoor,callgraph,1.0,votes=20
-0x6760,216,createevent_updatemission,callgraph,0.667,votes=4
+0x6660,78,createevent_updatedoor,manual,1.0,"Evento tipo 10 com 2 parâmetros, igual ao 0.24c. Reescrita em src/server/events.c."
+0x6760,216,createevent_updatemission,manual,1.0,"Evento tipo 12 com dados de missão (game+0xd0, passo 0x117c por time e 0x40 por missão), mesma fórmula do 0.24c."
 0x6840,144,playerdebt,callgraph,1.0,votes=8
 0x68d0,126,resetorientation,callgraph,1.0,votes=8
 0x6b30,4150,setupitemtypes,anchor,0.637,features
@@ -74,7 +74,7 @@ rva,size,name,source,confidence,evidence
 0x9be0,451,,,,
 0xa1b0,231,,,,
 0xa2a0,726,playersimulation,callgraph,0.333,votes=2
-0xa580,197,createevent_updatehuman,callgraph,1.0,votes=6
+0xa580,197,fixplayername,manual,1.0,"Troca '/' por espaço, tira espaços e usa ""Noname"", igual ao 0.24c. O casador dizia createevent_updatehuman. (casador dizia createevent_updatehuman)"
 0xa7a0,143,orientationtoquaternion,anchor,1.0,features
 0xa930,172,projectorientation,callgraph,1.0,votes=6
 0xaa80,103,scenario_getnumofmissions,callgraph,1.0,votes=12
@@ -152,7 +152,7 @@ rva,size,name,source,confidence,evidence
 0x121d0,640,area_interior_getblock,callgraph,0.333,votes=2
 0x12450,595,,,,
 0x126b0,756,,,,
-0x129b0,715,createbond,manual,1.0,Checa numofbonds < 0x3fff e grava particle_a/particle_b em bond+0x14/+0x18 (casador dizia createparticle). (casador dizia createparticle)
+0x129b0,715,createbond,manual,1.0,Checa numofbonds < 0x3fff e grava particle_a/particle_b em bond+0x14/+0x18 (casador dizia createparticle).
 0x12c90,744,servercycle,callgraph,0.333,votes=2
 0x12f80,322,,,,
 0x130d0,881,,,,
@@ -194,7 +194,7 @@ rva,size,name,source,confidence,evidence
 0x1aa60,473,calculatebarycentric,callgraph,1.0,votes=12
 0x1ac40,1061,getmasterserverip,anchor,0.9,features
 0x1b070,835,createitem,manual,1.0,"Manager (native_sdk/black_market.c) chama com (tipo, pos, vel, rot)."
-0x1b6e0,388,createevent_sound,callgraph,0.333,votes=2
+0x1b6e0,388,,manual,,"removido: createevent_sound. Liga um item a um osso (item+0x84.., human+0x1d8..). Não é createevent_sound."
 0x1b870,435,linkitem,callgraph,1.0,votes=102
 0x1ba30,529,,,,
 0x1bc50,1397,createlandscape,anchor,0.703,features
@@ -204,7 +204,7 @@ rva,size,name,source,confidence,evidence
 0x1d2c0,230,,,,
 0x1d3b0,278,,,,
 0x1d4d0,711,logic_setteammanager,anchor,0.534,features
-0x1d7a0,249,createevent_updateplayer_finance,callgraph,1.0,votes=8
+0x1d7a0,249,logic_gunstore_buy,manual,1.0,Checa num_purchases < 10 e usa menu_building * 0x9dc. O casador dizia createevent_updateplayer_finance. (casador dizia createevent_updateplayer_finance)
 0x1d8a0,307,,,,
 0x1d9e0,287,,,,
 0x1dba0,4599,,,,
@@ -244,7 +244,7 @@ rva,size,name,source,confidence,evidence
 0x29970,625,area_deleteblock,callgraph,1.0,votes=14
 0x29bf0,2321,area_block_createbuildinginterior,anchor,0.7,features
 0x2a510,6905,area_createinteriorblocks,anchor,0.757,features
-0x2c020,156,createevent_bullethit,callgraph,1.0,votes=6
+0x2c020,156,,manual,,removido: createevent_bullethit. Confere índices de area_block (0x84) e chama 2 funções. Não é createevent_bullethit.
 0x2c0c0,3279,lineintersectcityobject,callgraph,1.0,votes=14
 0x2cda0,1322,,,,
 0x2d2d0,1304,,,,

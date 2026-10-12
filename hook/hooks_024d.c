@@ -60,6 +60,48 @@ static void __cdecl hk_createevent_message(int kind, const char *text, int targe
 /* cmp dword ptr [server], 0  ->  83 3D <endereço de server> 00 */
 static uint8_t expect_createevent_message[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
 
+/* ------------------------------------------------------------ createevent_updatedoor (0x6660) */
+
+typedef void(__cdecl *createevent_updatedoor_fn)(int, int);
+static createevent_updatedoor_fn orig_createevent_updatedoor;
+static SvVerify v_createevent_updatedoor = { "createevent_updatedoor", -1, 0, 0, 0 };
+
+static void __cdecl hk_createevent_updatedoor(int a, int b)
+{
+    SV_HOOK_VOID(v_createevent_updatedoor, sr_createevent_updatedoor(a, b),
+                 orig_createevent_updatedoor(a, b), NULL);
+}
+
+static uint8_t expect_createevent_updatedoor[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
+
+/* ------------------------------------------------------------ createevent_updatemission (0x6760) */
+
+typedef void(__cdecl *createevent_updatemission_fn)(int, int);
+static createevent_updatemission_fn orig_createevent_updatemission;
+static SvVerify v_createevent_updatemission = { "createevent_updatemission", -1, 0, 0, 0 };
+
+static void __cdecl hk_createevent_updatemission(int team, int mission)
+{
+    SV_HOOK_VOID(v_createevent_updatemission, sr_createevent_updatemission(team, mission),
+                 orig_createevent_updatemission(team, mission), NULL);
+}
+
+static uint8_t expect_createevent_updatemission[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
+
+/* ------------------------------------------------------------ fixplayername (0xa580) */
+
+typedef void(__cdecl *fixplayername_fn)(int);
+static fixplayername_fn orig_fixplayername;
+static SvVerify v_fixplayername = { "fixplayername", -1, 0, 0, 0 };
+
+static void __cdecl hk_fixplayername(int id)
+{
+    SV_HOOK_VOID(v_fixplayername, sr_fixplayername(id), orig_fixplayername(id), sr_players[id].name);
+}
+
+/* push esi; mov esi, [esp+8] */
+static const uint8_t expect_fixplayername[5] = { 0x56, 0x8B, 0x74, 0x24, 0x08 };
+
 /* ------------------------------------------------------------ tabela */
 
 static const uint8_t mask_all[32] = {
@@ -70,10 +112,19 @@ static const uint8_t mask_all[32] = {
 static SvHook g_hooks[] = {
     { "createevent_message", 0x6260, (void *)hk_createevent_message, 7,
       expect_createevent_message, mask_all, (void **)&orig_createevent_message, 0, 0 },
+    { "createevent_updatedoor", 0x6660, (void *)hk_createevent_updatedoor, 7,
+      expect_createevent_updatedoor, mask_all, (void **)&orig_createevent_updatedoor, 0, 0 },
+    { "createevent_updatemission", 0x6760, (void *)hk_createevent_updatemission, 7,
+      expect_createevent_updatemission, mask_all, (void **)&orig_createevent_updatemission, 0, 0 },
+    { "fixplayername", 0xa580, (void *)hk_fixplayername, 5,
+      expect_fixplayername, mask_all, (void **)&orig_fixplayername, 0, 0 },
 };
 
 static SvVerify *g_stats[] = {
     &v_createevent_message,
+    &v_createevent_updatedoor,
+    &v_createevent_updatemission,
+    &v_fixplayername,
 };
 
 /* Escreve um endereço absoluto (relocado pelo ASLR) dentro dos bytes esperados. */
@@ -86,6 +137,8 @@ static void expect_va(uint8_t *expect, int offset, uint32_t rva)
 int sv_hooks_024d_install(void)
 {
     expect_va(expect_createevent_message, 2, SR_RVA_SERVER);
+    expect_va(expect_createevent_updatedoor, 2, SR_RVA_SERVER);
+    expect_va(expect_createevent_updatemission, 2, SR_RVA_SERVER);
 
     sv_verify_init();
     return sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));

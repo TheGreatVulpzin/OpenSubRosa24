@@ -24,6 +24,7 @@ extern uintptr_t sr_base;
 #define sr_game         (*SR_AT(Game, SR_RVA_GAME))
 #define sr_events       SR_AT(Event, SR_RVA_EVENT)
 #define sr_numofevents  (*SR_AT(uint32_t, SR_RVA_NUMOFEVENTS))
+#define sr_players      SR_AT(Player, SR_RVA_PLAYER)
 
 #ifdef __cplusplus
 }

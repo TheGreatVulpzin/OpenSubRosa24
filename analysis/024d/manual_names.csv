@@ -10,3 +10,10 @@ rva,name,evidence
 0x50ae0,createhuman,"Manager (ANALISE-NPCS.md): registro 0x2B64, vida inicial 100."
 0x129b0,createbond,Checa numofbonds < 0x3fff e grava particle_a/particle_b em bond+0x14/+0x18 (casador dizia createparticle).
 0x4f720,playerai,"Chama ai_assessthreats, ai_playercar, rand e atan2, como o playerai do ELF 0.24c. Chamada pelo dedicatedserverloop. O Mac 0.25 sugeria playersimulation (errado: playersimulation não chama nada)."
+0x6660,createevent_updatedoor,"Evento tipo 10 com 2 parâmetros, igual ao 0.24c. Reescrita em src/server/events.c."
+0x6760,createevent_updatemission,"Evento tipo 12 com dados de missão (game+0xd0, passo 0x117c por time e 0x40 por missão), mesma fórmula do 0.24c."
+0xa580,fixplayername,"Troca '/' por espaço, tira espaços e usa ""Noname"", igual ao 0.24c. O casador dizia createevent_updatehuman."
+0x1d7a0,logic_gunstore_buy,"Checa num_purchases < 10 e usa menu_building * 0x9dc. O casador dizia createevent_updateplayer_finance."
+0x5fe0,-,"Zera campos do jogador e percorre o inventário. Não é createevent_updateiteminfo."
+0x1b6e0,-,"Liga um item a um osso (item+0x84.., human+0x1d8..). Não é createevent_sound."
+0x2c020,-,"Confere índices de area_block (0x84) e chama 2 funções. Não é createevent_bullethit."

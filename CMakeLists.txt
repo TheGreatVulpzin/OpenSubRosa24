@@ -16,6 +16,7 @@ add_library(sv_wsock32 SHARED
     hook/verify.c
     hook/wsock32.def
     src/server/events.c
+    src/server/players.c
 )
 set_target_properties(sv_wsock32 PROPERTIES OUTPUT_NAME wsock32)
 target_include_directories(sv_wsock32 PRIVATE src/include hook)

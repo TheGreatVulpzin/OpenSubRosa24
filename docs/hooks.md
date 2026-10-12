@@ -20,15 +20,31 @@ Código: [`hook/`](../hook/) (proxy, hooks, tabela) e [`src/server/`](../src/ser
 | Função | RVA no 024d | Arquivo | Estado |
 | --- | --- | --- | --- |
 | `createevent_message` | `0x6260` | `src/server/events.c` | **Verificada** (2026-10-11): 28 chamadas com cliente conectado (boas-vindas, Top 10, corporações, entrada, chat), 0 diferenças. |
+| `createevent_updatedoor` | `0x6660` | `src/server/events.c` | Lote 1. Compila. Falta testar no jogo. |
+| `createevent_updatemission` | `0x6760` | `src/server/events.c` | Lote 1. Compila. Falta testar no jogo. |
+| `fixplayername` | `0xa580` | `src/server/players.c` | Lote 1. Compila. Falta testar no jogo. |
+
+Progresso: `python -I tools/progress.py`.
+
+## Antes de reescrever uma função
+
+1. **Confira o nome no código.** Os nomes do casador que vieram do grafo de chamadas erram com frequência. No lote 1, 4 de 7 nomes `createevent_*` estavam errados. Compare o pseudo-C do 024d com o do 0.24c (`build/decomp/`).
+2. **Veja o prólogo:** `tools/ghidra/PrintPrologue.java` mostra as primeiras instruções. O prólogo do hook precisa ter instruções inteiras, pelo menos 5 bytes e nenhum salto relativo.
+3. **Evite contas de float por enquanto.** O 024d usa x87. O nosso compilador usa SSE, e o último bit pode mudar.
 
 ## Modo de verificação
 
-Com `verify=1` (padrão nesta fase), cada chamada roda as duas versões:
+Com `verify=1` (padrão nesta fase), cada chamada roda as duas versões ([`hook/verify.c`](../hook/verify.c)):
 
-1. Roda a versão em C e guarda o que ela gravou.
-2. Desfaz a gravação.
-3. Roda a original pelo trampolim.
-4. Compara byte a byte. Diferença vai para o `subvulpes.log`.
+1. A seção `.data` do jogo (todas as globais) fica somente leitura.
+2. Roda a versão em C. Cada escrita gera uma exceção: o verificador guarda a página de 4 KB e libera a escrita.
+3. Guarda o resultado e desfaz as escritas. Também restaura o estado do `rand()` do `MSVCR100.dll`.
+4. Roda a original pelo trampolim, do mesmo jeito.
+5. Compara só as páginas que alguma das versões alterou. Diferença vai para o `subvulpes.log`, com nome (exemplo: `event[1234]+0x40`).
+
+Limites: escritas fora da `.data` (pilha, heap, outros DLLs) não entram na comparação. O servidor precisa rodar em uma thread só.
+
+Teste do verificador sem o jogo: `build\hook	est_verify.exe` (9 casos).
 
 O jogo continua com o resultado da **original**. Então um erro na versão em C não afeta a partida durante o teste.
 
@@ -60,8 +76,9 @@ Para conectar de outro PC, o amigo precisa alcançar a porta UDP do servidor (`p
 [hooks]
 enabled=1                ; 0 = só repassa a rede, sem hooks
 verify=1                 ; 1 = compara com a original a cada chamada
-createevent_message=1    ; 0 = desliga só este hook
-log_calls=1              ; 1 = registra cada chamada verificada (com o texto da mensagem)
+createevent_message=1    ; 0 = desliga só este hook (vale para qualquer nome de hook)
+verify_every.createevent_message=1   ; verifica 1 a cada N chamadas deste hook
+log_calls=1              ; 1 = registra cada chamada verificada
 ```
 
 Ao fechar o servidor, o log recebe uma linha `RESUMO` por função, com o total de chamadas e de diferenças.

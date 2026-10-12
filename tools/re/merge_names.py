@@ -2,6 +2,7 @@
 nomes diferentes para a mesma função, a evidência registra a divergência.
 
 Uso: python -I tools/re/merge_names.py --out final.csv [--manual manual.csv] principal.csv secundario.csv [...]
+No CSV manual, o nome "-" remove o nome do casador.
 """
 import argparse
 import csv
@@ -34,6 +35,10 @@ for table in tables[1:]:
 if args.manual:
     with open(args.manual, encoding='utf-8') as fh:
         for m in csv.DictReader(fh):
+            if m['name'] == '-':  # nome errado do casador: remove
+                cur = final[m['rva']]
+                cur.update(name='', source='manual', confidence='', evidence=f"removido: {cur['name']}. {m['evidence']}")
+                continue
             for r in final.values():  # o nome passa a pertencer só a esta função
                 if r['name'] == m['name'] and r['rva'] != m['rva']:
                     r['name'], r['source'] = '', ''
