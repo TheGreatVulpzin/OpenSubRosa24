@@ -12,7 +12,7 @@ Só este README e o `MANIFEST.sha256` entram no git.
 
 Fontes do `vanilla/`: `https://crypticsea.gart.sh/Sub Rosa/` e `https://archive.org/details/sub-rosa-0.22`.
 
-O pacote com todas as versões (`SUB ROSA ALL.rar`, 2,1 GB, de `https://archive.org/download/sub-rosa-all`) fica em `E:\SubVulpes-vanilla\`, por falta de espaço no C:.
+O pacote com todas as versões (`SUB ROSA ALL.rar`, 2,1 GB, de `https://archive.org/download/sub-rosa-all`) é processado na nuvem. Ver `docs/versoes-todas.md`.
 
 Para verificar se os arquivos batem com o manifesto:
 
