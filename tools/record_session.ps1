@@ -8,6 +8,7 @@
 # 3. Starts the server in a visible window. Play, then close the server window.
 #
 # Output in build\auto-server: sv_args.txt, sv_snapshot.bin, sv_packets.bin, subvulpes.log.
+# The files of the previous recording move to build\recordings\<date-time> (nothing is deleted).
 # These files have player names and chat: they stay on this PC (build\ is not in git).
 param([int]$SnapshotAfter = 600)
 
@@ -29,11 +30,16 @@ snapshot_after=$SnapshotAfter
 capture_packets=1
 "@ | Set-Content (Join-Path $dir "subvulpes.ini") -Encoding ascii
 
-foreach ($f in "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin") {
+# Keep the files of the previous recording: move them to build\recordings\<date-time>.
+$old = Join-Path $root ("build\recordings\" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+foreach ($f in "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin", "subvulpes.log") {
     $p = Join-Path $dir $f
-    if (Test-Path $p) { Remove-Item $p }
+    if (Test-Path $p) {
+        New-Item -ItemType Directory -Force $old | Out-Null
+        Move-Item $p $old
+    }
 }
-Set-Content (Join-Path $dir "subvulpes.log") ""
+if (Test-Path $old) { Write-Host "Previous recording moved to $old" }
 
 Write-Host "Server starts now (port in config.txt). The map takes about 3 minutes to load."
 Write-Host "The memory snapshot is taken $SnapshotAfter seconds after the start: play at least that long."
