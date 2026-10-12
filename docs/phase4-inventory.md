@@ -218,7 +218,7 @@ Formats are in `docs/formatos.md`. Readers and writers are in `tools/formats/sub
 | `user/server.srk` | `wb` | `0x1080 saveaccountsserver`, called by `0x5b9b0 logicsimulation_world` and `0x590f0 resetgame` | Round start (`resetgame`); when the world clock reaches `0x3b5380` (after `player_calcassets` for every player); and in the periodic block of `logicsimulation_world`: every 18,000 units of the world clock (RVA `0x2561d740`, unnamed, it advances by 10 per tick), so about every 1,800 ticks, together with the economy update | Same format, always version 3. `tools/formats` writes identical files. |
 | `data/city.sbc` | `rb` | `0x8590 leveleditor_load` | Start-up, once | Binary city (version 6 only): intersections (12 bytes), streets (52 bytes), a 1024 × 1024 tile map, buildings (80 bytes read, 84 bytes in memory). Counts are not checked against the array sizes. It goes to the global `city`. |
 | `data/building/<name>.sbb` | `rb` | `0x13d80 building_load`, called by `0x54e40 createlevel` | Each `resetgame` | Binary building (version 6 to 10). The names come from `city.sbc`. `createlevel` also holds the names `aoffice1`, `hospital0`, `gunshop`, `dealership2`, `base1` to `base5`. `setupbuildingtypes` holds `glassonly`, `test2`. |
-| `data/block/<name>.sbl` | `rb` | `0x29a0 loadblock`, called by `0x2a510 area_createinteriorblocks` | Each `resetgame` | Binary block (version 1 or 2). `area_createinteriorblocks` loads every file that `listfiles` finds in `data/block`. It also looks up the names `stairs`, `stairsceiling`, `stairsfloor`, `stairsbalcony`, `railing`, `railingrightwall`, `ceilingedge`, `railingleftwall`, `ceilingedgerightwall`, `garagedoor` in that list. |
+| `data/block/<name>.sbl` | `rb` | `0x29a0 loadblock`, called by `0x2a510 area_createinteriorblocks` (from `area_createsblocks`, from `setupgame`) | Start-up, once | Binary block (version 1 or 2). `area_createinteriorblocks` loads every file that `listfiles` finds in `data/block`. It also looks up the names `stairs`, `stairsceiling`, `stairsfloor`, `stairsbalcony`, `railing`, `railingrightwall`, `ceilingedge`, `railingleftwall`, `ceilingedgerightwall`, `garagedoor` in that list. |
 | `stats.txt` | `w` (text) | `0x1420 server_writelogfile`, called by `0x5b9b0 logicsimulation_world` | In the same periodic block | Text, lines end with `\r\n`: `numofmissions=`, `numofbullets=`, `users=`, `totaltime=`, `averagetime=`, an empty line, then one line `index:name:value` for each account. `value` and `totaltime` come from the account field `+0x30` divided by 10 (the field that `docs/formatos.md` lists as unknown; it looks like a play-time counter). The file is opened in text mode with explicit `\r\n`, so on Windows each line ends with CR CR LF. |
 
 ### 3.2 Directory scans (names only)
@@ -332,4 +332,115 @@ Gaps between two named globals (RVA of the end of the first and the start of the
 The objects of the Linux 0.24c server (symbol sizes, x64) that are 1 MiB or more and that have no address in the 024d yet add up to 508 MiB. They are the content of the gaps above, in some order: `area_sector` 193.1, `building` 54.1, `render_sector` 48.0, `area_interior` 42.3, `area_sectormodel` 38.0, `trackmodel` 32.0, `floorplan2` 18.0, `buildingtype` 16.1, `sprite_render` 10.7, `track` 5.5, `radix` 4.0, `model` 3.5, `render_array` 3.0, `tempmesh` 2.8, `modeltemp` 2.4, `sprite` 2.3, `cityobjecttype` 2.3, `level_editor` 1.8, `sprite_model` 1.6, `voice` 1.3, and six objects of about 1 MiB. Several of them (`render_*`, `sprite*`, `model*`, `skymesh`, `tiremark`) are render data that the server may never touch. The order in the gaps is not known: different subsets of these sizes fit the same gap, so **no guess is made here**.
 
 To close this: extend `tools/re/map_globals.py` with the names of all live functions (it now has only the 226 reviewed names), then check each candidate with the access stride in the code (as done above for `area`).
+
+## 5. Start-up order: from the entry point to the main loop
+
+Verified with the disassembly (`0x5cd10`, `0x5c8d0`, `0x5d08c`) and the decompiled `loadsaveoptions`. For the packet part see `docs/protocol.md` §2.
+
+### 5.1 Loader and C runtime (entry `0x5d316`)
+
+1. The Windows loader maps the image, applies the 21,953 relocations if the base is not `0x400000`, zero-fills `.data` (`0x25e997e0` bytes) and binds the imports (`WSOCK32.dll` is the proxy DLL when the hooks are used).
+2. `mainCRTStartup` (`0x5d316`) calls `__security_init_cookie` (`0x5d7f0`) and jumps to `__tmainCRTStartup`.
+3. `__tmainCRTStartup` (`0x5d08c`): `__SEH_prolog4`; `HeapSetInformation`; takes the start-up lock (`InterlockedCompareExchange`, `Sleep(1000)` while another thread holds it; never happens here).
+4. `_initterm_e` over `0x5e1b0`–`0x5e1c0` runs three initialisers:
+   - `0x5d25c`: checks the PE header, `__set_app_type(1)` (console), sets `_fmode` and `_commode`, calls `_setdefaultprecision` (`0x5d7b5`, which is `_controlfp_s(0, _PC_53, _MCW_PC)`), `__setusermatherr`, `_configthreadlocale(-1)`.
+   - `0x5d426`: `IsProcessorFeaturePresent(10)` into the SSE2 flag (RVA `0x25ef97d4`).
+   - `0x5d478`: `SetUnhandledExceptionFilter(0x5d436)`.
+5. `_initterm` over `0x5e1a4`–`0x5e1ac` runs one initialiser: `0x5d041` (`_atexit(0x5d570)`, then `__getmainargs`).
+6. `__tmainCRTStartup` calls `main(argc, argv, envp)`. **`main` is `getpaths` (`0x5cd10`).** Its return value goes to `exit`.
+
+### 5.2 `main` (`getpaths`, `0x5cd10`)
+
+| # | Call | What it does |
+| --- | --- | --- |
+| 1 | `debug_resetlogfile` (`0x5280`) | Does nothing: the debug flag is never set. |
+| 2 | `getcpufrequency` (`0xb4a0`) | `QueryPerformanceFrequency`; makes the counter-to-millisecond factor. |
+| 3 | `setuptimers` (`0xb540`) | Names the profiler timers. |
+| 4 | inline | Stores `fread` and `fwrite` in `freadptr` and `fwriteptr`. |
+| 5 | `_getcwd` × 2 | Two path buffers of 512 bytes (RVA `0x916d2e0`, `0x916d4e0`). |
+| 6 | `loadsaveoptions(0)` (`0x4e7a0`) | `_chdir` to the saved directory. Sets the defaults (port 27584, `servermaxbytespersecond` 100000, `maxnumofplayers` 16, `roundtime` 7, `gametype` 3, name `Agent <n>`, a random password, `Sub Rosa Server`). `srand(time)`. Reads `config.txt`. `_chdir` back. |
+| 7 | `WSAStartup(0x101, &wsadata)` | WinSock 1.1. |
+| 8 | `jmp dedicatedserverloop` | A tail jump. The loop never returns. |
+
+### 5.3 `dedicatedserverloop` (`0x5c8d0`), before the loop
+
+| # | Call | What it does |
+| --- | --- | --- |
+| 1 | `getmasterserverip` (`0x1ac40`) | TCP/HTTP to `www.crypticsea.com`. **Blocks** up to three 30 s waits (connect, send, receive; 100 ms sleeps). Stores the master IP and port and 8 server names. Fallback `216.55.186.104:27590`. Prints `connection successful` or `connection failed`. |
+| 2 | inline | Clamps `roundtime` to 1…30 and `maxnumofplayers` to 2…128. Copies the server name to `server+0x14` (no length limit). Sets `server+0x5c` (max players), `game+0x28` = 3600, `game+0x2c` = `roundtime` × 3600, `game+0x34` = `0x4ec`, `server+0`/`+8` = 1. |
+| 3 | `disablesocket` (`0xd710`, really *open server socket*) | `socket(AF_INET, SOCK_DGRAM, 17)`, `bind(port)`, `ioctlsocket(FIONBIO)`. Then `printf("port:%d")`, `printf("socketenabled:%d")`. |
+| 4 | `init_genrand(_time64(0))` (`0xad30`) | Seeds the Mersenne Twister. |
+| 5 | `loadaccountsserver` (`0xe2e0`) | `user/server.srk`. Makes a random account key if the file is missing. |
+| 6 | `leveleditor_load` (`0x8590`) | `data/city.sbc`. |
+| 7 | `setupgame` (`0x502a0`) | Lists `data/texture/*.png`; then `setupbuildingtypes`; `area_createsblocks` (lists `data/block/*.sbl`, `area_createinteriorblocks` → `loadblock` for each file, Bézier tessellation, LODs); `setupbody`; `setupbullettypes`; `setupitemtypes`; `setupobjecttypes_cars`, `_helicopters`, `setupobjectypes_train`; `setupcityobjecttypes`. |
+| 8 | inline | Sets four floats of an unnamed table (RVA `0x17179604`, stride `0x14`) to 100.0, clears `player[i].active` for the 256 slots, forces `gametype` to 3 unless it is 3 or 4 (`game+8`). |
+| 9 | `resetgame` (`0x590f0`) | `saveaccountsserver`; `newspaper_load` (`readme.txt`); `createlevel` (`srand(0)`, `createlandscape`, `buildsomeshit`, `createarea`, streets, `building_load` for each building, `building_buildfloorplan`); then `srand(_time64(0))`; creates the first humans, items, vehicles and the scenario (`createhuman`, `createitem`, `createvehicle`, `createobject`, `scenario_createguards`, `scenario_createcar`, `economy_carmarket`, `economy_gunmarket`) and the first events. |
+| 10 | `QueryPerformanceCounter` | Time base of the loop. |
+
+`resetgame` runs again at each new round: it is also called from `logicsimulation`, `logicsimulation_round` and `logicsimulation_world`.
+
+### 5.4 The main loop (about 62.5 ticks per second)
+
+Each pass: `_sleep(1)`, read the counter, and continue only when 16 ms have passed since the last tick. If the server is late it runs up to 5 ticks in a row. The time base moves forward by 16 ms for each tick; from the 4th tick in a row it is set to the current time, so a long backlog is dropped. One tick does, in this order:
+
+1. If `game+0x20` is 2: `playerai(i)` for every active player slot whose field `+0x1a38` is set (the AI players).
+2. `servercycle` (`0x33570`): sends the master heartbeat (type `0x20`) every 1024 ticks and updates the byte budget of each connection (`servermaxbytespersecond` ÷ number of connections).
+3. `serverrecv` (`0x33650`): reads and handles all datagrams.
+4. `playersimulation` (`0xa2a0`).
+5. If `game+0x20` is 0, 1 or 2: `particlesimulation`, `objectsimulation`, `humansimulation`, `itemsimulation`, `bondsimulation2`, `itemlogic`, `itemtimetolive`, `objecttimetolive`, `particletimetolive`, `bondtimetolive`.
+6. `logicsimulation` (`0x5c580`): rounds, economy, scenario, periodic saves (calls `logicsimulation_world`, `logicsimulation_round`, `resetgame`).
+7. `stoptimer`. Every 64 ticks, if the debug flag were set, one line is appended to `dedlog.txt`.
+8. `serversend` (`0x4ed30`): builds and sends the packet to each client.
+9. `ticks` (`0x90dc578`) is incremented by 1.
+10. If `game+0x20` is 0, 1 or 2: `bulletsimulation`.
+11. `eventsimulation` (`0x4061a0`).
+12. If `game+0x20` is 0, 1 or 2: `bullettimetolive`.
+
+The loop has **no exit**. `disablesocket` (the real one, `0xd840`) and `WSACleanup` are never called, and the server stops only when the process is killed. `saveaccountsserver` runs only at the places in section 3.1, so a kill can lose the changes since the last save.
+
+## 6. The MSVC runtime code inside the `.exe`
+
+The 024d links part of the MSVC 2010 C runtime statically (the `libcmt` start-up and security code) and imports the rest from `MSVCR100.dll`. The code that is inside the `.exe` is from RVA `0x5ce18` to the end of `.text` (`0x5d940`). Everything in this table is **not game logic**; a standalone server must supply an equal behaviour only where the last column says so.
+
+| RVA | Name (`functions.csv`) | Size | What it does | Used by | In a standalone server |
+| --- | --- | ---: | --- | --- | --- |
+| `0x5ce18` | `__security_check_cookie` | 15 | `/GS` check: compares `ECX` with `__security_cookie` (RVA `0x60d18`). If different, jumps to `__report_gsfailure`. | 53 functions (47 live) | Nothing. The compiler's own stack protector (or none). `lift.py` already skips it (`SKIPPED_CALLS`, `docs/lift.md`). |
+| `0x5ce50` | `__alloca_probe` | 43 | Stack probe for frames larger than one page (`___chkstk`). | `building_setupbuild` only | Nothing. The compiler adds probes. Or move the large local arrays to the heap. |
+| `0x5ce90` | `_ftol2` | 145 | Converts the x87 value in ST0 to an integer by truncation. | 33 functions (25 live), see below | **Yes, as a C cast.** See below. |
+| `0x5cf70` | `__aulldiv` | 104 | Unsigned 64-bit division. | `gettimeofday` (dead) | Nothing. |
+| `0x5cd7c`–`0x5ce17`, `0x5d88c`–`0x5d93a` | 101 thunks (unlisted) | 6 each | `jmp [IAT]` for each import. | Calls to imports | Nothing. Direct calls to the new libraries. |
+| `0x5d316` | `mainCRTStartup` | 10 | Calls `__security_init_cookie`, then `__tmainCRTStartup`. | Entry point | The C runtime of the new platform. |
+| `0x5d08c` | `__tmainCRTStartup` | 345 | Heap option, start-up lock, runs the initialisers, calls `main`, then `exit`. | `mainCRTStartup` | The C runtime of the new platform. |
+| `0x5d041`, `0x5d25c`, `0x5d426`, `0x5d478`, `0x5d570`, `0x5d7b5` | unlisted | small | Initialisers (`__getmainargs`, app type, `_fmode`, `_commode`, SSE2 flag, unhandled-exception filter, `_setdefaultprecision`) and the exit-time table runner. | `_initterm`, `_initterm_e`, `_atexit` | The C runtime, **plus the 53-bit x87 precision** if the port keeps x87 (section 7, R1). |
+| `0x5d320` | `__report_gsfailure` | 262 | Crash report after a failed cookie check: `IsDebuggerPresent`, `SetUnhandledExceptionFilter`, `UnhandledExceptionFilter`, `TerminateProcess(GetCurrentProcess(), 0xC0000409)`. | `__security_check_cookie` | `abort()`. |
+| `0x5d7f0` | `__security_init_cookie` | 155 | Seeds the cookie with time, process id, thread id, tick count and `QueryPerformanceCounter`. | `mainCRTStartup` | Nothing. |
+| `0x5d436`, `0x5d492`, `0x5d52a`, `0x5d533` | `__CxxUnhandledExceptionFilter`, `__onexit`, `_unlockexit`, `_atexit` | 9 to 152 | The `atexit` table and the C++ exception filter. The game registers one exit function (`0x5d570`), which runs an empty table. | CRT only | Nothing. |
+| `0x5d5b0`, `0x5d5f0`, `0x5d640` | `__ValidateImageBase`, `__FindPESection`, `__IsNonwritableInCurrentImage` | 53 to 166 | Walk the PE header to check that an exception handler is inside the image. | `__tmainCRTStartup`, SEH | Nothing. PE specific. |
+| `0x5d710`, `0x5d755`, `0x5d769` | `__SEH_prolog4`, `__SEH_epilog4`, `__except_handler4` | 20 to 69 | Structured exception handling frames with a cookie. | `__tmainCRTStartup`, `__onexit` only. **No game function uses SEH.** | Nothing. |
+
+Data that belongs to the runtime: `__security_cookie` (`0x60d18`), the SSE2 flag (`0x25ef97d4`), the start-up state and lock (`0x25ef97c4`, `0x25ef97c8`), the encoded pointers (`0x25ef97cc`, `0x25ef97d0`) and `argc`/`argv`/`envp` (`0x204024`–`0x20402c`).
+
+### `_ftol2` in detail
+
+`_ftol2` is the only runtime function that game code depends on for its *numbers*. Its two paths:
+
+- **SSE2 path** (taken on any CPU with SSE2 when the x87 control word has all exception masks set, which is the case here): `fstp qword [esp]` then `cvttsd2si eax, [esp]`. The value is **first rounded to a `double`** (53 bits), then truncated to a 32-bit integer. Only `EAX` is valid.
+- **x87 path** (old CPUs): a 64-bit `fistp` with a fix-up that gives truncation toward zero, result in `EDX:EAX`.
+
+A standalone server should use the C cast `(int)(double)x`. It differs from a plain truncation of the 64-bit mantissa only for values that are within 2^-53 (relative) of an integer. `lift.py` writes the 64-bit form `(longlong)` (`INLINE_CALLS`), because the Ghidra prototype of `_ftol2` returns `EDX:EAX`. On the SSE2 path `EDX` is not set, so a caller that read it would already be wrong on a current CPU. The live callers include money code (`playerbuystock`, `playersellstock`, `createevent_updatestocks`, `logic_addteamcash`, `playerdeathtax`, `playerteamkilltax`, `logicsimulation_world`), the ray and sphere tests on the landscape and areas, `createtrack`, `playersimulation`, `bulletsimulation`, `humansimulation`, `objectsimulation`, `objectsimulation_car`, and `packobjectpacket`.
+
+### What the standalone server needs instead (checklist)
+
+| Need | In the 024d | Replacement |
+| --- | --- | --- |
+| A `main` | `getpaths` (`0x5cd10`) | Same steps (section 5.2), without the CRT tables. |
+| Heap, `memcpy`, `memset` | `MSVCR100` | libc. |
+| `rand` / `srand` | MSVC LCG | **Own copy of the MSVC generator** (R2). |
+| `_CI*`, `floor` | `MSVCR100` x87 | `libm`, or inline x87 on x86 (R1). |
+| `_ftol2` | Static CRT | C casts (above). |
+| Clock | `QueryPerformanceCounter`, `_sleep(1)`, `_time64`, `RDTSC` | `clock_gettime(CLOCK_MONOTONIC)`, `nanosleep`, `time`. Drop the profiler or use the monotonic clock. |
+| Sockets | `WSOCK32` ordinals | BSD sockets. `WSAStartup` has no equivalent. `ioctlsocket(FIONBIO)` becomes `fcntl(O_NONBLOCK)`. |
+| Directory scan | `_findfirst64i32` | `opendir`/`readdir` with the glob match; the result is sorted by `qsort`, so the order does not depend on the file system. |
+| Working directory | `_chdir`, `_getcwd` | `chdir`, `getcwd`. |
+| Files | `fopen` (text and binary modes) | `fopen`. Text mode for `stats.txt` writes CR CR LF on Windows. |
 
