@@ -180,15 +180,16 @@ int sv_verify_init(void)
     if (g_full_every < 1)
         g_full_every = 1;
     sv_log("verification mode: %s", g_enabled ? "on" : "off");
-    if (!g_enabled)
-        return 1;
 
+    /* Find .data also when the verification is off: the memory snapshot (record.c) needs it. */
     for (i = 0; i < nt->FileHeader.NumberOfSections; i++, sec++) {
         if (strncmp((const char *)sec->Name, g_section, IMAGE_SIZEOF_SHORT_NAME) == 0) {
             g_data = (uint8_t *)(sr_base + sec->VirtualAddress);
             g_data_size = (sec->Misc.VirtualSize + PAGE - 1) & ~(size_t)(PAGE - 1);
         }
     }
+    if (!g_enabled)
+        return 1;
     if (!g_data) {
         sv_log("ERROR verifier: section %s not found", g_section);
         g_enabled = 0;
@@ -279,6 +280,14 @@ void sv_install_crash_report(void)
 int sv_verify_busy(void)
 {
     return g_active != NULL;
+}
+
+int sv_original_only(void)
+{
+    static int mode = -1;
+    if (mode < 0)
+        mode = sv_config_int("original_only", 0);
+    return mode;
 }
 
 int sv_verify_should(SvVerify *v)

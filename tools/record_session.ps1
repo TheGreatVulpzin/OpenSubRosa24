@@ -3,7 +3,8 @@
 # Usage: powershell -ExecutionPolicy Bypass -File tools\record_session.ps1 [-SnapshotAfter 600]
 #
 # 1. Copies the current hook DLL to build\auto-server.
-# 2. Writes subvulpes.ini: verifier on, argument recording, packet capture, and a
+# 2. Writes subvulpes.ini: only the original code runs (original_only=1, no C version,
+#    no verification), with argument recording, packet capture, and a
 #    snapshot of the memory SnapshotAfter seconds after the start.
 # 3. Starts the server in a visible window. Play, then close the server window.
 #
@@ -22,9 +23,8 @@ Copy-Item $dll (Join-Path $dir "wsock32.dll") -Force
 @"
 [hooks]
 enabled=1
-verify=1
-verify_relax=20
-verify_full_every=200
+verify=0
+original_only=1
 log_calls=0
 lifted=1
 record_args=1
@@ -43,6 +43,6 @@ foreach ($f in "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin", "subvulpes.lo
 }
 if (Test-Path $old) { Write-Host "Previous recording moved to $old" }
 
-Write-Host "Server starts now (port in config.txt). The verifier makes the map load slower than usual."
+Write-Host "Server starts now (port in config.txt). Only the original code runs: it loads like the normal server."
 Write-Host "The memory snapshot is taken $SnapshotAfter seconds after the start: play at least that long."
 Start-Process -FilePath (Join-Path $dir "subrosadedicated024d.exe") -WorkingDirectory $dir

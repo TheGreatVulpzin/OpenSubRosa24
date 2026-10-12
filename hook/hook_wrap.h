@@ -16,7 +16,7 @@
 #define SV_HOOK_VOID(STAT, NEW, ORIG, DETAIL)                                          \
     do {                                                                               \
         sv_note_call((STAT).name);                                                     \
-        if ((STAT).broken || sv_verify_busy()) {                                       \
+        if ((STAT).broken || sv_verify_busy() || sv_original_only()) {                                       \
             ORIG;                                                                      \
             return;                                                                    \
         }                                                                              \
@@ -43,7 +43,7 @@
     do {                                                                               \
         TYPE r_new_ = 0, r_orig_;                                                      \
         sv_note_call((STAT).name);                                                     \
-        if ((STAT).broken || sv_verify_busy())                                         \
+        if ((STAT).broken || sv_verify_busy() || sv_original_only())                                         \
             return ORIG;                                                               \
         if (!sv_verify_should(&(STAT))) {                                              \
             __try {                                                                    \

@@ -58,6 +58,11 @@ int sv_verify_data(const uint8_t **data, size_t *size);
 /* 1 = a verification is running now (a hook called from inside it must run the original). */
 int sv_verify_busy(void);
 
+/* subvulpes.ini original_only=1: every hook runs only the original function (no C version,
+ * no verification). The thunks still record arguments: a recording session for the
+ * offline test runs exactly like the original server. */
+int sv_original_only(void);
+
 /* 1 = verify this call. Obeys verify=0 and sampling. */
 int sv_verify_should(SvVerify *v);
 
