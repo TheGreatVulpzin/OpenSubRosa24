@@ -44,7 +44,7 @@ Com `verify=1` (padrão nesta fase), cada chamada roda as duas versões ([`hook/
 
 Limites: escritas fora da `.data` (pilha, heap, outros DLLs) não entram na comparação. O servidor precisa rodar em uma thread só.
 
-Teste do verificador sem o jogo: `build\hook	est_verify.exe` (9 casos).
+Teste do verificador sem o jogo: `build\hook\test_verify.exe` (9 casos).
 
 O jogo continua com o resultado da **original**. Então um erro na versão em C não afeta a partida durante o teste.
 
