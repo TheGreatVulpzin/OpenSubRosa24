@@ -85,9 +85,19 @@ static __inline void *lf_f2p(float f) { union { void *p; float f; } u; u.f = f; 
 static __inline float lf_u2f(unsigned int x) { union { unsigned int u; float f; } u; u.u = x; return u.f; }
 static __inline unsigned int lf_f2u(float f) { union { unsigned int u; float f; } u; u.f = f; return u.u; }
 
+/* Bit copies between a double and an 8-byte int. */
+static __inline double lf_u2d(unsigned long long x) { union { unsigned long long u; double d; } u; u.u = x; return u.d; }
+static __inline unsigned long long lf_d2u(double d) { union { unsigned long long u; double d; } u; u.d = d; return u.u; }
+
 /* Bit casts that tools/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
 #define LF_BITS_F(x) lf_u2f((unsigned int)(x))
 #define LF_BITS_U(x) lf_f2u((float)(x))
+#define LF_BITS_D(x) lf_u2d((unsigned long long)(x))
+#define LF_BITS_U64(x) lf_d2u((double)(x))
+
+/* The 4 bytes of a CONCAT piece: the bits of a float, the value of an int. */
+#define LF_U32(x) _Generic((x), float: lf_f2u((float)(x)), double: lf_f2u((float)(x)), \
+                           long double: lf_f2u((float)(x)), default: (uint)(x))
 
 /* Ghidra NAN(x): x is not a number (x87 compare with the parity flag). */
 #define NAN(x) ((x) != (x))
@@ -101,7 +111,7 @@ static __inline unsigned int lf_f2u(float f) { union { unsigned int u; float f; 
 #define CONCAT22(a, b) ((uint)(((uint)(ushort)(a) << 16) | (ushort)(b)))
 #define CONCAT31(a, b) ((uint)(((uint)(a) << 8) | (uchar)(b)))
 #define CONCAT14(a, b) ((ulonglong)(((ulonglong)(uchar)(a) << 32) | (uint)(b)))
-#define CONCAT44(a, b) ((ulonglong)(((ulonglong)(uint)(a) << 32) | (uint)(b)))
+#define CONCAT44(a, b) ((ulonglong)(((ulonglong)LF_U32(a) << 32) | LF_U32(b)))
 
 #define SUB41(x, n) ((uchar)((uint)(x) >> ((n) * 8)))
 #define SUB42(x, n) ((ushort)((uint)(x) >> ((n) * 8)))

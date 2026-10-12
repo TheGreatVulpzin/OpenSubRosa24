@@ -330,11 +330,21 @@ def call_arg_bits(body, callee_params, ptrs, types):
 
 
 def undefined_names(body, params, globals_):
-    """Variables whose Ghidra type is raw bytes (undefined4...)."""
-    names = {g['name'] for g in globals_ if g['type'].strip() in ('undefined4', 'undefined8')}
-    names |= {n for t, n in params if t in ('undefined4', 'undefined8')}
-    names |= set(re.findall(r'^\s*undefined[48]\s+([A-Za-z_]\w*);', body, flags=re.M))
+    """Variables whose Ghidra type is raw bytes: name -> size (undefined4: 4, undefined8: 8)."""
+    size = {'undefined4': 4, 'undefined8': 8}
+    names = {g['name']: size[g['type'].strip()] for g in globals_ if g['type'].strip() in size}
+    names.update({n: size[t] for t, n in params if t in size})
+    for m in re.finditer(r'^\s*(undefined[48])\s+([A-Za-z_]\w*);', body, flags=re.M):
+        names[m.group(2)] = size[m.group(1)]
     return names
+
+
+def lvalue_size(s, j, undef):
+    """Size (4 or 8) of the raw-byte lvalue at s[j]."""
+    m = re.match(r'\(?&?([A-Za-z_]\w*)', s[j:])
+    if m and m.group(1) in undef:
+        return undef[m.group(1)]
+    return 4
 
 
 def lvalue_end(s, j, undef):
@@ -364,7 +374,8 @@ def raw_float_uses(body, undef, floats=frozenset()):
     stored into raw bytes. In C both convert the number. Rewrite:
       (float)X        -> (*(float *)&(X))
       X = <float>;    -> *(float *)&(X) = <float>;
-    for X of raw-byte type (variable, (&DAT_x)[i] or *(undefined4 *)p)."""
+    for X of raw-byte type (variable, (&DAT_x)[i] or *(undefined4 *)p). For 8 raw bytes
+    (undefined8) the value is a double."""
     out, i = [], 0
     for m in re.finditer(r'\(float\)\s*', body):
         if m.start() < i:
@@ -373,7 +384,11 @@ def raw_float_uses(body, undef, floats=frozenset()):
         if end < 0:
             continue
         out.append(body[i:m.start()])
-        out.append(f'(*(float *)&({body[m.end():end]}))')
+        if lvalue_size(body, m.end(), undef) == 8:
+            # 8 raw bytes read as float: Ghidra means the double in them, converted.
+            out.append(f'((float)*(double *)&({body[m.end():end]}))')
+        else:
+            out.append(f'(*(float *)&({body[m.end():end]}))')
         i = end
     out.append(body[i:])
     body = ''.join(out)
@@ -385,6 +400,8 @@ def raw_float_uses(body, undef, floats=frozenset()):
                     or any(re.search(r'\b' + re.escape(n) + r'\b', rhs) for n in floats))
         if end != len(lv) or not floatish or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
             return m.group(0)
+        if lvalue_size(lv, 0, undef) == 8:
+            return f'{m.group(1)}*(double *)&({lv}) = {rhs};'
         return f'{m.group(1)}*(float *)&({lv}) = {rhs};'
     return re.sub(r'^(\s*)([^=;\n]+?)\s*=\s*([^=;][^;]*);', store, body, flags=re.M)
 
@@ -798,7 +815,7 @@ def compile_errors(path):
     bat = ROOT / 'build/lift/compile.bat'
     crlf = chr(13) + chr(10)
     bat.write_text(f'@call "{VCVARS}" >nul 2>nul{crlf}'
-                   f'cl /nologo /c /TC /W0 /we4013 /arch:IA32 /utf-8 /errorReport:none /I "{ROOT / "src/lifted"}" '
+                   f'cl /nologo /c /TC /std:c11 /W0 /we4013 /arch:IA32 /utf-8 /errorReport:none /I "{ROOT / "src/lifted"}" '
                    f'/Fo"{ROOT / "build/lift/lifted.obj"}" "{path}"{crlf}', encoding='mbcs')
     r = subprocess.run(['cmd', '/c', str(bat)], capture_output=True, text=True, encoding='mbcs', errors='replace')
     errs = {}

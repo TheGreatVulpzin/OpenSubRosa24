@@ -87,7 +87,8 @@ public class LiftExport extends GhidraScript {
      * Ghidra prints "(float)x" for two different p-code ops: INT2FLOAT (convert the number)
      * and CAST (keep the bits, one stack slot used as int and as float). C has only the
      * first meaning. A CAST between a 4-byte float and a 4-byte int or pointer becomes
-     * LF_BITS_F(x) (bits to float) or (T)LF_BITS_U(x) (float bits to T). Only a cast of a
+     * LF_BITS_F(x) (bits to float) or (T)LF_BITS_U(x) (float bits to T). The same for
+     * 8 bytes and double: LF_BITS_D(x) and (T)LF_BITS_U64(x). Only a cast of a
      * variable or of a parenthesized group is marked. */
     private String cText(DecompileResults r) {
         List<ClangNode> leaves = new ArrayList<>();
@@ -107,8 +108,10 @@ public class LiftExport extends GhidraScript {
             if (cast != null) {
                 // cast = {index of ')' of the cast, operand end index, 0 = to float / 1 = from float}
                 String type = castType(t, i, cast[0]);
-                sb.append(cast[2] == 0 ? "LF_BITS_F(" : "((" + type + ")LF_BITS_U(");
-                closeAfter.merge(cast[1], cast[2] == 0 ? 1 : 2, Integer::sum);
+                // 0: 4 bytes to float, 1: float to 4 bytes, 2: 8 bytes to double, 3: double to 8 bytes
+                String[] open = { "LF_BITS_F(", "((" + type + ")LF_BITS_U(", "LF_BITS_D(", "((" + type + ")LF_BITS_U64(" };
+                sb.append(open[cast[2]]);
+                closeAfter.merge(cast[1], cast[2] % 2 == 0 ? 1 : 2, Integer::sum);
                 i = cast[0];
                 continue;
             }
@@ -148,10 +151,22 @@ public class LiftExport extends GhidraScript {
         if (op0 instanceof ClangVariableToken) {
             castOp = op0.getPcodeOp();
             end = k;
-        } else if (op0.getText().equals("(")) {
+        } else if (op0.getText().equals("(") || (op0.getPcodeOp() != null && next(t, k) >= 0
+                && t.get(next(t, k)).getText().equals("("))) {
+            // A parenthesized group, or a call-like operand such as CONCAT44(a, b): the
+            // CAST consumes the output of an op inside it.
             int depth = 0;
             end = -1;
-            for (int j = k; j < t.size(); j++) {
+            int from = op0.getText().equals("(") ? k : next(t, k);
+            if (op0.getPcodeOp() != null && !op0.getText().equals("(")
+                    && op0.getPcodeOp().getOutput() != null) {
+                Iterator<ghidra.program.model.pcode.PcodeOp> d0 = op0.getPcodeOp().getOutput().getDescendants();
+                while (d0.hasNext()) {
+                    ghidra.program.model.pcode.PcodeOp q = d0.next();
+                    if (q.getOpcode() == ghidra.program.model.pcode.PcodeOp.CAST) castOp = q;
+                }
+            }
+            for (int j = from; j < t.size(); j++) {
                 String s = t.get(j).getText();
                 if (s.equals("(")) depth++;
                 else if (s.equals(")") && --depth == 0) {
@@ -161,7 +176,7 @@ public class LiftExport extends GhidraScript {
             }
             if (end < 0) return null;
             outer:
-            for (int j = k + 1; j < end; j++) {
+            for (int j = castOp == null ? k + 1 : end; j < end; j++) {
                 ghidra.program.model.pcode.PcodeOp p = t.get(j).getPcodeOp();
                 if (p == null || p.getOutput() == null) continue;
                 Iterator<ghidra.program.model.pcode.PcodeOp> d = p.getOutput().getDescendants();
@@ -181,11 +196,12 @@ public class LiftExport extends GhidraScript {
             return null;
         DataType dst = castOp.getOutput().getHigh().getDataType();
         DataType src = castOp.getInput(0).getHigh().getDataType();
-        if (dst.getLength() != 4 || src.getLength() != 4) return null;
-        boolean dstF = dst.getName().equals("float");
-        boolean srcF = src.getName().equals("float");
+        int len = dst.getLength();
+        if (len != src.getLength() || (len != 4 && len != 8)) return null;
+        boolean dstF = dst.getName().equals(len == 4 ? "float" : "double");
+        boolean srcF = src.getName().equals(len == 4 ? "float" : "double");
         if (dstF == srcF) return null;
-        return new int[] { close, end, dstF ? 0 : 1 };
+        return new int[] { close, end, (len == 4 ? 0 : 2) + (dstF ? 0 : 1) };
     }
 
     /* Globals: the symbol map, plus every DAT_/_DAT_ token of the C output with the data type
