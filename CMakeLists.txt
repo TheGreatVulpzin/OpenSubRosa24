@@ -15,6 +15,7 @@ add_library(sv_wsock32 SHARED
     hook/hooks_024d.c
     hook/verify.c
     hook/record.c
+    hook/capture.c
     hook/imports.c
     hook/hooks_lifted.c
     src/lifted/lifted_024d.c

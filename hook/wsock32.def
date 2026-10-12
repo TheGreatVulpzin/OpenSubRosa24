@@ -16,10 +16,10 @@ EXPORTS
     ntohl                      = sv_ntohl                      @14
     ntohs                      = sv_ntohs                      @15
     recv                       = sv_recv                       @16
-    recvfrom                   = sv_recvfrom                   @17
+    recvfrom                   = sv_recvfrom_capture                   @17
     select                     = sv_select                     @18
     send                       = sv_send                       @19
-    sendto                     = sv_sendto                     @20
+    sendto                     = sv_sendto_capture                     @20
     setsockopt                 = sv_setsockopt                 @21
     shutdown                   = sv_shutdown                   @22
     socket                     = sv_socket                     @23

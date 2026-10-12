@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 
+#include "capture.h"
 #include "hook.h"
 #include "sr_runtime.h"
 #include "verify.h"
@@ -47,6 +48,27 @@ SV_FORWARDS(SV_DECLARE)
 #define SV_STUB(ord, name) \
     __declspec(naked) void sv_##name(void) { __asm { jmp p_##name } }
 SV_FORWARDS(SV_STUB)
+
+/* recvfrom and sendto go through C: they record the datagrams (capture.c), then
+ * return what the real function returned. The .def file exports these two. */
+typedef int(WINAPI *recvfrom_fn)(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen);
+typedef int(WINAPI *sendto_fn)(uintptr_t s, const char *buf, int len, int flags, const void *to, int tolen);
+
+int WINAPI sv_recvfrom_capture(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen)
+{
+    int n = ((recvfrom_fn)p_recvfrom)(s, buf, len, flags, from, fromlen);
+    if (n > 0)
+        sv_capture(0, buf, n, from);
+    return n;
+}
+
+int WINAPI sv_sendto_capture(uintptr_t s, const char *buf, int len, int flags, const void *to, int tolen)
+{
+    int n = ((sendto_fn)p_sendto)(s, buf, len, flags, to, tolen);
+    if (n > 0)
+        sv_capture(1, buf, n, to);
+    return n;
+}
 
 static HMODULE g_real;
 
