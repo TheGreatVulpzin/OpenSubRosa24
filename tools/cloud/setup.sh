@@ -21,8 +21,10 @@ GART="https://crypticsea.gart.sh/Sub%20Rosa"
 # ---------------------------------------------------------------- Java
 if ! java -version 2>&1 | grep -qE 'version "(2[1-9]|[3-9][0-9])'; then
     echo "== Instalando Java 21"
+    SUDO=""
+    if [ "$(id -u)" != 0 ] && command -v sudo >/dev/null; then SUDO=sudo; fi
     if command -v apt-get >/dev/null; then
-        sudo apt-get update -qq && sudo apt-get install -y -qq openjdk-21-jdk-headless unzip
+        $SUDO apt-get update -qq && $SUDO apt-get install -y -qq openjdk-21-jdk-headless unzip
     else
         echo "ERRO: sem apt-get. Instale um JDK 21 manualmente." >&2
         exit 1
