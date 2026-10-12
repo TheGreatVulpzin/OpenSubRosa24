@@ -1,12 +1,12 @@
-/* Jogadores. */
+/* Players. */
 #include <string.h>
 
 #include "sr_runtime.h"
 #include "sr_server.h"
 
-/* Original: 024d RVA 0xa580 (fixplayername no ELF 0.24c).
- * Limpa o nome do jogador: troca '/' por espaço, tira espaços das pontas
- * e usa "Noname" se o nome ficar vazio. O nome tem 32 bytes (31 + '\0'). */
+/* Original: 024d RVA 0xa580 (fixplayername in the 0.24c ELF).
+ * Clean the player name: replace '/' with a space, remove spaces at both ends,
+ * and use "Noname" if the name is empty. The name has 32 bytes (31 + '\0'). */
 void __cdecl sr_fixplayername(int id)
 {
     char *name = sr_players[id].name;

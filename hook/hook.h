@@ -1,7 +1,7 @@
-/* Sistema de hooks do SubVulpes.
+/* SubVulpes hook system.
  *
- * Cada hook troca o início de uma função do 024d por um JMP para a versão em C.
- * O trampolim permite chamar a função original (para o modo de verificação).
+ * Each hook replaces the start of a 024d function with a JMP to the C version.
+ * The trampoline lets us call the original function (for the verification mode).
  */
 #ifndef SV_HOOK_H
 #define SV_HOOK_H
@@ -13,24 +13,24 @@ extern "C" {
 #endif
 
 typedef struct SvHook {
-    const char *name;           /* nome da função (igual ao ELF 0.24c) */
-    uint32_t rva;               /* início da função no 024d */
-    void *replacement;          /* função nova */
-    uint8_t prologue_len;       /* bytes copiados para o trampolim (>= 5, instruções inteiras) */
-    const uint8_t *expect;      /* bytes originais esperados no início da função */
-    const uint8_t *mask;        /* 0xff = conferir o byte; 0x00 = ignorar (endereço relocado) */
-    void **original;            /* saída: ponteiro para chamar a original via trampolim */
-    int enabled;                /* lido do subvulpes.ini */
+    const char *name;           /* function name (same as the 0.24c ELF) */
+    uint32_t rva;               /* function start in the 024d */
+    void *replacement;          /* new function */
+    uint8_t prologue_len;       /* bytes copied to the trampoline (>= 5, whole instructions) */
+    const uint8_t *expect;      /* expected original bytes at the function start */
+    const uint8_t *mask;        /* 0xff = check the byte; 0x00 = ignore (relocated address) */
+    void **original;            /* output: pointer to call the original through the trampoline */
+    int enabled;                /* read from subvulpes.ini */
     int installed;
 } SvHook;
 
-/* Log em subvulpes.log, na pasta do executável. */
+/* Log to subvulpes.log, in the folder of the executable. */
 void sv_log(const char *fmt, ...);
 
-/* Lê subvulpes.ini. Devolve o valor da chave, ou def se a chave não existe. */
+/* Read subvulpes.ini. Returns the value of the key, or def if the key does not exist. */
 int sv_config_int(const char *key, int def);
 
-/* Instala todos os hooks da tabela. Devolve o número de hooks instalados. */
+/* Install all hooks of the table. Returns the number of installed hooks. */
 int sv_install_hooks(SvHook *hooks, int count);
 
 #ifdef __cplusplus

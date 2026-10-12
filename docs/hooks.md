@@ -1,101 +1,102 @@
-# DLL de hooks (Fase 2)
+# Hook DLL (Phase 2)
 
-**A Fase 2 está concluída.** O método funciona de ponta a ponta no servidor real: DLL carregado, ASLR tratado, hook instalado, original chamada pelo trampolim e resultado idêntico.
+**Phase 2 is complete.** The method works end to end on the real server: DLL loaded, ASLR handled, hook installed, original called through the trampoline, identical result.
 
-O SubVulpes troca funções do `subrosadedicated024d.exe` por versões em C, uma de cada vez.
-O mecanismo é um `wsock32.dll` proxy na pasta do servidor.
+SubVulpes replaces functions of `subrosadedicated024d.exe` with C versions, one at a time.
+The mechanism is a proxy `wsock32.dll` in the server folder.
 
-## Como funciona
+## How it works
 
-1. O 024d importa `WSOCK32.dll`. O Windows carrega primeiro a cópia na pasta do executável.
-2. O nosso `wsock32.dll` carrega o `wsock32.dll` do sistema e repassa as 47 funções de rede.
-3. Ele confere se o executável é o 024d (data de build e tamanho do PE). Se não for, só repassa a rede.
-4. Ele instala os hooks: um `JMP` de 5 bytes no início de cada função original, para a versão em C.
-5. Um trampolim guarda o início da função original. Assim dá para chamar a original.
+1. The 024d imports `WSOCK32.dll`. Windows loads the copy in the folder of the executable first.
+2. Our `wsock32.dll` loads the system `wsock32.dll` and forwards the 47 network functions.
+3. It checks that the executable is the 024d (build date and PE size). If not, it only forwards the network.
+4. It installs the hooks: a 5-byte `JMP` at the start of each original function, to the C version.
+5. A trampoline keeps the start of the original function. This lets us call the original.
 
-Código: [`hook/`](../hook/) (proxy, hooks, tabela) e [`src/server/`](../src/server/) (funções reescritas).
+Code: [`hook/`](../hook/) (proxy, hooks, table) and [`src/server/`](../src/server/) (rewritten functions).
 
-## Funções trocadas
+## Replaced functions
 
-| Função | RVA no 024d | Arquivo | Estado |
+| Function | RVA in 024d | File | State |
 | --- | --- | --- | --- |
-| `createevent_message` | `0x6260` | `src/server/events.c` | **Verificada** (2026-10-11): 28 chamadas com cliente conectado (boas-vindas, Top 10, corporações, entrada, chat), 0 diferenças. |
-| `createevent_updatedoor` | `0x6660` | `src/server/events.c` | Lote 1. Não foi acionada no teste de 2026-10-11. Fica para a próxima rodada. |
-| `createevent_updatemission` | `0x6760` | `src/server/events.c` | **Verificada** (2026-10-11): 1 chamada, 0 diferenças. |
-| `fixplayername` | `0xa580` | `src/server/players.c` | **Verificada** (2026-10-11): 1 chamada, 0 diferenças. |
+| `createevent_message` | `0x6260` | `src/server/events.c` | **Verified** (2026-10-11): 42 calls with a client connected (welcome, Top 10, corporations, join, chat, admin), 0 differences. |
+| `createevent_updatedoor` | `0x6660` | `src/server/events.c` | Batch 1. Not triggered in the 2026-10-11 test. Moved to the next round. |
+| `createevent_updatemission` | `0x6760` | `src/server/events.c` | **Verified** (2026-10-11): 1 call, 0 differences. |
+| `fixplayername` | `0xa580` | `src/server/players.c` | **Verified** (2026-10-11): 1 call, 0 differences. |
 
-Progresso: `python -I tools/progress.py`.
+Progress: `python -I tools/progress.py`.
 
-## Antes de reescrever uma função
+## Before you rewrite a function
 
-1. **Confira o nome no código.** Os nomes do casador que vieram do grafo de chamadas erram com frequência. No lote 1, 4 de 7 nomes `createevent_*` estavam errados. Compare o pseudo-C do 024d com o do 0.24c (`build/decomp/`).
-2. **Veja o prólogo:** `tools/ghidra/PrintPrologue.java` mostra as primeiras instruções. O prólogo do hook precisa ter instruções inteiras, pelo menos 5 bytes e nenhum salto relativo.
-3. **Evite contas de float por enquanto.** O 024d usa x87. O nosso compilador usa SSE, e o último bit pode mudar.
+1. **Check the name in the code.** Names from the matcher that came from the call graph are often wrong. In batch 1, 4 of 7 `createevent_*` names were wrong. Compare the 024d pseudo-C with the 0.24c one (`build/decomp/`).
+2. **Look at the prologue:** `tools/ghidra/PrintPrologue.java` shows the first instructions. The hook prologue must have whole instructions, at least 5 bytes and no relative jump.
+3. **Avoid float math for now.** The 024d uses x87. Our compiler uses SSE, and the last bit can change.
 
-## Modo de verificação
+## Verification mode
 
-Com `verify=1` (padrão nesta fase), cada chamada roda as duas versões ([`hook/verify.c`](../hook/verify.c)):
+With `verify=1` (default in this phase), each call runs both versions ([`hook/verify.c`](../hook/verify.c)):
 
-1. A seção `.data` do jogo (todas as globais) fica somente leitura.
-2. Roda a versão em C. Cada escrita gera uma exceção: o verificador guarda a página de 4 KB e libera a escrita.
-3. Guarda o resultado e desfaz as escritas. Também restaura o estado do `rand()` do `MSVCR100.dll`.
-4. Roda a original pelo trampolim, do mesmo jeito.
-5. Compara só as páginas que alguma das versões alterou. Diferença vai para o `subvulpes.log`, com nome (exemplo: `event[1234]+0x40`).
+1. The game `.data` section (all globals) becomes read-only.
+2. The C version runs. Each write raises an exception: the verifier keeps the 4 KB page and allows the write.
+3. The verifier keeps the result and undoes the writes. It also restores the `rand()` state of `MSVCR100.dll`.
+4. The original runs through the trampoline, the same way.
+5. The verifier compares only the pages that one of the versions changed. A difference goes to `subvulpes.log`, with a name (example: `event[1234]+0x40`).
 
-**Escopo aprendido.** Proteger os 621 MB da `.data` custa de 150 a 200 ms por chamada. Por isso o verificador aprende quais globais cada função escreve:
+**Learned scope.** To protect the 621 MB of `.data` costs 150 to 200 ms per call. For this reason the verifier learns which globals each function writes:
 
-- Nas 3 primeiras verificações de um hook, e a cada `verify_full_every` (padrão 50), ele protege a `.data` inteira e anota as globais escritas.
-- Nas outras, ele protege só essas globais (o array inteiro de cada uma).
-- O log mostra o tempo e o tipo de cada verificação: `(1.2 ms, escopo)` ou `(180.0 ms, completa)`.
+- In the first 3 verifications of a hook, and every `verify_full_every` (default 50), it protects the whole `.data` and records the written globals.
+- In the others, it protects only those globals (the whole array of each one).
+- The log shows the time and the type of each verification: `(1.2 ms, scope)` or `(180.0 ms, full)`.
 
-Uma escrita fora do escopo aprendido só aparece na próxima rodada completa.
+A write outside the learned scope shows up only in the next full round.
 
-Limites: escritas fora da `.data` (pilha, heap, outros DLLs) não entram na comparação. O servidor precisa rodar em uma thread só.
+**Crash protection.** The new version runs inside `__try` ([`hook/hook_wrap.h`](../hook/hook_wrap.h)). If it crashes, the DLL logs the exception and the address, undoes its writes and runs the original. The hook is marked as broken and uses only the original from then on.
 
-Teste do verificador sem o jogo: `build\hook\test_verify.exe` (11 casos).
+Limits: writes outside `.data` (stack, heap, other DLLs) are not compared. The server must run on one thread.
 
-O jogo continua com o resultado da **original**. Então um erro na versão em C não afeta a partida durante o teste.
+Verifier test without the game: `build\hook\test_verify.exe` (14 cases).
 
-## Compilar
+The game keeps the result of the **original**. So an error in the C version does not affect the match during the test.
+
+## Build
 
 ```bat
 tools\build_hook.bat
 ```
 
-Saída: `build\hook\wsock32.dll`.
+Output: `build\hook\wsock32.dll`.
 
-## Testar
+## Test
 
-1. Faça uma **cópia** da pasta do servidor (por exemplo, a pasta do Black Houser). Não teste na pasta que vocês usam todo dia.
-2. Copie `build\hook\wsock32.dll` para a cópia, ao lado do `subrosadedicated024d.exe`.
-3. Inicie o servidor como sempre.
-4. Abra o `subvulpes.log` na mesma pasta. Ele deve ter estas linhas:
-   - `SubVulpes carregado.`
-   - `hook createevent_message instalado em +0x06260`
-   - `1 hook(s) instalado(s)`
-5. Conecte um cliente (você ou um amigo). Entre, saia e use o chat.
-6. Confira no log as linhas `VERIFICA createevent_message: N chamadas, 0 diferenças`.
+1. Make a **copy** of the server folder (for example, the Black Houser folder). Do not test in the folder that you use every day.
+2. Copy `build\hook\wsock32.dll` to the copy, next to `subrosadedicated024d.exe`.
+3. Start the server as usual.
+4. Open `subvulpes.log` in the same folder. It must have these lines:
+   - `SubVulpes loaded.`
+   - `hook createevent_message installed at +0x06260`
+   - `N hook(s) installed`
+5. Connect a client (you or a friend). Join, leave and use the chat.
+6. Close the server with the window button (X), not with the Task Manager. Otherwise the `SUMMARY` lines do not appear.
+7. Check the `SUMMARY <hook>: N calls, N verified, 0 differences` lines in the log.
 
-Para conectar de outro PC, o amigo precisa alcançar a porta UDP do servidor (`port=` no `config.txt`, padrão 27584). Tailscale ou ZeroTier servem.
+To connect from another PC, the friend must reach the server UDP port (`port=` in `config.txt`, default 27584). Tailscale or ZeroTier work.
 
-## `subvulpes.ini` (opcional, na pasta do servidor)
+## `subvulpes.ini` (optional, in the server folder)
 
 ```ini
 [hooks]
-enabled=1                ; 0 = só repassa a rede, sem hooks
-verify=1                 ; 1 = compara com a original a cada chamada
-createevent_message=1    ; 0 = desliga só este hook (vale para qualquer nome de hook)
-verify_every.createevent_message=1   ; verifica 1 a cada N chamadas deste hook
-verify_full_every=50     ; a cada N verificações de um hook, faz uma rodada completa
-log_calls=1              ; 1 = registra cada chamada verificada
+enabled=1                ; 0 = only forward the network, no hooks
+verify=1                 ; 1 = compare with the original on each call
+createevent_message=1    ; 0 = disable only this hook (works for any hook name)
+verify_every.createevent_message=1   ; verify 1 of every N calls of this hook
+verify_full_every=50     ; every N verifications of a hook, do a full round
+log_calls=1              ; 1 = log each verified call
 ```
 
-Ao fechar o servidor, o log recebe uma linha `RESUMO` por função, com o total de chamadas e de diferenças.
+## Remove
 
-## Remover
+Delete `wsock32.dll` from the server folder. The 024d goes back to the Windows `wsock32.dll`.
 
-Apague o `wsock32.dll` da pasta do servidor. O 024d volta a usar o `wsock32.dll` do Windows.
+## Compatibility with the manager
 
-## Compatibilidade com o manager
-
-O hook troca só os 5 primeiros bytes do `createevent_message`. O manager chama `0x626d`, no meio da função, e continua funcionando. Se outro programa já tiver alterado o início de uma função, o hook não é instalado e o log mostra `ERRO ... bytes originais diferentes`.
+The hook replaces only the first 5 bytes of `createevent_message`. The manager calls `0x626d`, in the middle of the function, and still works. If another program changed the start of a function before, the hook is not installed and the log shows `ERROR ... original bytes differ`.

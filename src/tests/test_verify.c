@@ -1,5 +1,5 @@
-/* Teste do verificador genérico (hook/verify.c) sem o jogo.
- * As "globais do jogo" ficam na seção .gdata deste executável. */
+/* Test of the generic verifier (hook/verify.c) without the game.
+ * The "game globals" live in the .gdata section of this executable. */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -18,7 +18,7 @@ static int failures;
 #define CHECK(cond, msg)                                   \
     do {                                                   \
         if (!(cond)) {                                     \
-            printf("FALHOU: %s (linha %d)\n", msg, __LINE__); \
+            printf("FAILED: %s (line %d)\n", msg, __LINE__); \
             failures++;                                    \
         } else {                                           \
             printf("ok: %s\n", msg);                       \
@@ -64,44 +64,44 @@ int main(void)
     CHECK(sv_verify_init(), "init");
 
     run(&v1, write_a, write_a_copy);
-    CHECK(v1.checks == 1 && v1.fails == 0, "versões iguais: 0 diferenças");
-    CHECK(g_vals[10] == 7 && g_vals[2000] == 9, "versões iguais: estado final correto");
+    CHECK(v1.checks == 1 && v1.fails == 0, "same versions: 0 differences");
+    CHECK(g_vals[10] == 7 && g_vals[2000] == 9, "same versions: final state is correct");
 
     g_vals[10] = 0;
     run(&v2, write_b, write_a);
-    CHECK(v2.fails == 1, "valor diferente: detectado");
-    CHECK(g_vals[10] == 7, "valor diferente: estado final é o da original");
+    CHECK(v2.fails == 1, "different value: detected");
+    CHECK(g_vals[10] == 7, "different value: final state is the original one");
 
     run(&v3, nothing, write_c_only);
-    CHECK(v3.fails == 1, "escrita só da original: detectada");
-    CHECK(g_vals[3000] == 5, "escrita só da original: estado final é o da original");
+    CHECK(v3.fails == 1, "write only by the original: detected");
+    CHECK(g_vals[3000] == 5, "write only by the original: final state is the original one");
 
     for (i = 0; i < 7; i++)
         run(&v4, write_a, write_a_copy);
-    CHECK(v4.calls == 7 && v4.checks == 3, "amostragem 1 a cada 3: 3 de 7 verificadas");
+    CHECK(v4.calls == 7 && v4.checks == 3, "sampling 1 of 3: 3 of 7 verified");
 
     {
         SvVerify v5 = { "escopo", 1 };
         for (i = 0; i < 5; i++)
             run(&v5, write_a, write_a_copy);
-        CHECK(v5.nranges > 0, "escopo aprendido depois das rodadas completas");
+        CHECK(v5.nranges > 0, "scope learned after the full rounds");
         run(&v5, write_b, write_a);
-        CHECK(v5.fails == 1, "diferença detectada numa rodada com escopo");
+        CHECK(v5.fails == 1, "difference detected in a scope round");
     }
 
     {
         SvVerify v6 = { "crash", 1 };
         hook_crash_test(&v6);
-        CHECK(v6.broken == 1 && v6.fails == 1, "crash na versão nova: hook marcado como quebrado");
-        CHECK(g_vals[20] == 4, "crash na versão nova: escrita dela desfeita, estado da original");
+        CHECK(v6.broken == 1 && v6.fails == 1, "crash in the new version: hook marked as broken");
+        CHECK(g_vals[20] == 4, "crash in the new version: its write undone, state of the original");
         g_vals[20] = 0;
         hook_crash_test(&v6);
-        CHECK(g_vals[20] == 4 && v6.checks == 1, "hook quebrado: só a original roda");
+        CHECK(g_vals[20] == 4 && v6.checks == 1, "broken hook: only the original runs");
     }
 
-    g_vals[1] = 1;  /* a seção voltou a aceitar escrita */
-    CHECK(g_vals[1] == 1, "seção liberada depois da verificação");
+    g_vals[1] = 1;  /* the section accepts writes again */
+    CHECK(g_vals[1] == 1, "section unlocked after the verification");
 
-    printf(failures ? "\n%d FALHA(S)\n" : "\nTODOS OS TESTES PASSARAM\n", failures);
+    printf(failures ? "\n%d FAILURE(S)\n" : "\nALL TESTS PASSED\n", failures);
     return failures != 0;
 }

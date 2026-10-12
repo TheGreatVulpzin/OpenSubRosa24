@@ -1,8 +1,8 @@
-/* Proxy do wsock32.dll.
+/* wsock32.dll proxy.
  *
- * O subrosadedicated024d.exe importa WSOCK32.dll. O Windows carrega primeiro
- * a cópia na pasta do executável: este DLL. Ele carrega o wsock32.dll do sistema,
- * repassa as 47 funções da WinSock 1.1 e instala os hooks do SubVulpes.
+ * subrosadedicated024d.exe imports WSOCK32.dll. Windows loads the copy in the
+ * folder of the executable first: this DLL. It loads the system wsock32.dll,
+ * forwards the 47 WinSock 1.1 functions and installs the SubVulpes hooks.
  */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -15,15 +15,15 @@
 int sv_hooks_024d_install(void);
 void sv_hooks_024d_summary(void);
 
-/* Identidade do 024d (cabeçalho PE). SHA-256 do arquivo:
+/* Identity of the 024d (PE header). SHA-256 of the file:
  * 11e006786d945d5731cb664fba718a094d8f02648b13fcc20c26c8614ea603fd */
 #define SR_024D_TIMESTAMP 0x55ea3325u
 #define SR_024D_SIZEOFIMAGE 0x25f3b000u
 
-/* ------------------------------------------------------------ repasse */
+/* ------------------------------------------------------------ forwarding */
 
-/* Cada função exportada é um JMP para a função real. A pilha fica intacta,
- * então a convenção de chamada (stdcall) da original continua valendo. */
+/* Each exported function is a JMP to the real function. The stack stays intact,
+ * so the calling convention (stdcall) of the original still applies. */
 #define SV_FORWARDS(X)                                                              \
     X(1, accept) X(2, bind) X(3, closesocket) X(4, connect) X(5, getpeername)      \
     X(6, getsockname) X(7, getsockopt) X(8, htonl) X(9, htons) X(10, inet_addr)    \
@@ -62,12 +62,12 @@ static int load_real_wsock32(void)
 #define SV_RESOLVE(ord, name)                                   \
     p_##name = GetProcAddress(g_real, MAKEINTRESOURCEA(ord));   \
     if (!p_##name)                                              \
-        sv_log("aviso: wsock32 do sistema não tem o ordinal %d (%s)", ord, #name);
+        sv_log("warning: the system wsock32 has no ordinal %d (%s)", ord, #name);
     SV_FORWARDS(SV_RESOLVE)
     return 1;
 }
 
-/* ------------------------------------------------------------ início */
+/* ------------------------------------------------------------ startup */
 
 static int is_024d(void)
 {
@@ -83,22 +83,22 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(inst);
         sr_base = (uintptr_t)GetModuleHandleA(NULL);
-        sv_log("SubVulpes carregado. Base do executável: 0x%08x", (unsigned)sr_base);
+        sv_log("SubVulpes loaded. Base of the executable: 0x%08x", (unsigned)sr_base);
         if (!load_real_wsock32()) {
-            sv_log("ERRO: não consegui carregar o wsock32.dll do sistema");
+            sv_log("ERROR: could not load the system wsock32.dll");
             return FALSE;
         }
         if (!sv_config_int("enabled", 1)) {
-            sv_log("hooks desligados (enabled=0). Só repassando a rede.");
+            sv_log("hooks disabled (enabled=0). Only forwarding the network.");
         } else if (!is_024d()) {
-            sv_log("executável não é o 024d esperado. Só repassando a rede.");
+            sv_log("executable is not the expected 024d. Only forwarding the network.");
         } else {
             int n = sv_hooks_024d_install();
-            sv_log("%d hook(s) instalado(s)", n);
+            sv_log("%d hook(s) installed", n);
         }
     } else if (reason == DLL_PROCESS_DETACH) {
         sv_hooks_024d_summary();
-        sv_log("SubVulpes descarregado.");
+        sv_log("SubVulpes unloaded.");
         if (g_real && reserved == NULL)
             FreeLibrary(g_real);
     }

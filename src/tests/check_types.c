@@ -1,4 +1,4 @@
-/* Compila os headers gerados. Os static_assert conferem tamanhos e offsets. */
+/* Compile the generated headers. The static_asserts check sizes and offsets. */
 #include "sr_types.h"
 #include "sr_globals_024d.h"
 

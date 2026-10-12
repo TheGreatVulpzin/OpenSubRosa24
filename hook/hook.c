@@ -1,4 +1,4 @@
-/* Instalação de hooks, log e configuração. */
+/* Hook installation, log and configuration. */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -11,7 +11,7 @@
 
 uintptr_t sr_base;
 
-static char g_dir[MAX_PATH];  /* pasta do executável, com barra no fim */
+static char g_dir[MAX_PATH];  /* folder of the executable, with a trailing backslash */
 
 static const char *exe_dir(void)
 {
@@ -52,7 +52,7 @@ int sv_config_int(const char *key, int def)
     return (int)GetPrivateProfileIntA("hooks", key, def, path);
 }
 
-/* Confere os bytes originais. Devolve 1 se batem. */
+/* Check the original bytes. Returns 1 if they match. */
 static int check_bytes(const SvHook *h, const uint8_t *site)
 {
     int i;
@@ -76,14 +76,14 @@ static int install(SvHook *h)
     DWORD old;
 
     if (!check_bytes(h, site)) {
-        sv_log("ERRO %s: bytes originais diferentes em +0x%x (outro patch no mesmo lugar?)", h->name, h->rva);
+        sv_log("ERROR %s: original bytes differ at +0x%x (another patch at the same place?)", h->name, h->rva);
         return 0;
     }
 
-    /* Trampolim: prólogo original + JMP de volta para o resto da função. */
+    /* Trampoline: original prologue + JMP back to the rest of the function. */
     tramp = (uint8_t *)VirtualAlloc(NULL, 32, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (!tramp) {
-        sv_log("ERRO %s: VirtualAlloc falhou (%lu)", h->name, GetLastError());
+        sv_log("ERROR %s: VirtualAlloc failed (%lu)", h->name, GetLastError());
         return 0;
     }
     memcpy(tramp, site, h->prologue_len);
@@ -93,9 +93,9 @@ static int install(SvHook *h)
     if (h->original)
         *h->original = tramp;
 
-    /* Site: JMP para a função nova. Bytes que sobram viram INT3. */
+    /* Site: JMP to the new function. Remaining bytes become INT3. */
     if (!VirtualProtect(site, h->prologue_len, PAGE_EXECUTE_READWRITE, &old)) {
-        sv_log("ERRO %s: VirtualProtect falhou (%lu)", h->name, GetLastError());
+        sv_log("ERROR %s: VirtualProtect failed (%lu)", h->name, GetLastError());
         return 0;
     }
     write_jmp(site, h->replacement);
@@ -114,11 +114,11 @@ int sv_install_hooks(SvHook *hooks, int count)
         SvHook *h = &hooks[i];
         h->enabled = sv_config_int(h->name, 1);
         if (!h->enabled) {
-            sv_log("hook %-28s desligado em subvulpes.ini", h->name);
+            sv_log("hook %-28s disabled in subvulpes.ini", h->name);
             continue;
         }
         if (install(h)) {
-            sv_log("hook %-28s instalado em +0x%05x", h->name, h->rva);
+            sv_log("hook %-28s installed at +0x%05x", h->name, h->rva);
             n++;
         }
     }

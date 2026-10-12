@@ -1,10 +1,10 @@
-/* Wrappers dos hooks: verificação, amostragem e proteção contra crash.
+/* Hook wrappers: verification, sampling and crash protection.
  *
- * NEW e ORIG são as chamadas completas, com argumentos.
- * - Hook quebrado (a versão nova já travou): só a original roda.
- * - Sem verificação nesta chamada: roda a nova. Se ela travar, roda a original.
- * - Com verificação: roda as duas e compara. O jogo fica com o resultado da original.
- *   Se a nova travar, o verificador desfaz as escritas dela antes de rodar a original.
+ * NEW and ORIG are the full calls, with arguments.
+ * - Broken hook (the new version crashed before): only the original runs.
+ * - No verification in this call: the new version runs. If it crashes, the original runs.
+ * - With verification: both run and are compared. The game keeps the result of the original.
+ *   If the new version crashes, the verifier undoes its writes before the original runs.
  */
 #ifndef SV_HOOK_WRAP_H
 #define SV_HOOK_WRAP_H
@@ -35,7 +35,7 @@
         sv_verify_end(&(STAT), 1, DETAIL);                                             \
     } while (0)
 
-/* Com retorno: compara os retornos e devolve o da original. */
+/* With a return value: compare the returns and return the one of the original. */
 #define SV_HOOK_RET(TYPE, STAT, NEW, ORIG, DETAIL)                                     \
     do {                                                                               \
         TYPE r_new_ = 0, r_orig_;                                                      \

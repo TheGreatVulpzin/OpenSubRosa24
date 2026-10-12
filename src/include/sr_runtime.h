@@ -1,7 +1,7 @@
-/* Acesso às globais do jogo enquanto o código roda dentro do subrosadedicated024d.exe.
+/* Access to the game globals while the code runs inside subrosadedicated024d.exe.
  *
- * O 024d usa ASLR: o endereço real de cada global é sr_base + RVA.
- * Na Fase 4 (servidor próprio), estas macros passam a apontar para arrays nossos.
+ * The 024d uses ASLR: the real address of each global is sr_base + RVA.
+ * In Phase 4 (own server), these macros will point to our own arrays.
  */
 #ifndef SR_RUNTIME_H
 #define SR_RUNTIME_H
@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-/* Base do módulo do jogo. O DLL de hooks preenche no início. */
+/* Base of the game module. The hook DLL sets it at startup. */
 extern uintptr_t sr_base;
 
 #define SR_AT(type, rva) ((type *)(sr_base + (rva)))

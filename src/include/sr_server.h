@@ -1,5 +1,5 @@
-/* Funções do servidor reescritas em C.
- * Cada função tem a mesma assinatura e convenção de chamada da original no 024d.
+/* Server functions rewritten in C.
+ * Each function has the same signature and calling convention as the original in the 024d.
  */
 #ifndef SR_SERVER_H
 #define SR_SERVER_H

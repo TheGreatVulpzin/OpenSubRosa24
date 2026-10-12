@@ -1,17 +1,17 @@
-/* Verificação genérica: roda a função nova e a original e compara a memória.
+/* Generic verification: run the new function and the original, then compare memory.
  *
- * Durante cada execução, a seção .data do jogo fica somente leitura. Cada escrita
- * gera uma exceção: o verificador guarda a página antes da escrita e libera a página.
- * No fim ele sabe quais páginas cada versão alterou e compara só essas.
+ * During each run, the game .data section is read-only. Each write raises an
+ * exception: the verifier keeps a copy of the page before the write and unlocks the page.
+ * At the end it knows which pages each version changed and compares only those.
  *
- * Fluxo de um hook (ver SV_VERIFY_CALL em hooks_024d.c):
- *   sv_verify_should(v)    decide se esta chamada é verificada (amostragem)
- *   sv_track_begin_new(v)            nova roda
- *   sv_track_switch_to_original()    roda original
- *   sv_verify_end(v, ...)  compara, registra no log e mantém o resultado da original
+ * Flow of a hook (see SV_HOOK_VOID in hook_wrap.h):
+ *   sv_verify_should(v)              decide if this call is verified (sampling)
+ *   sv_track_begin_new(v)            new version runs
+ *   sv_track_switch_to_original()    original runs
+ *   sv_verify_end(v, ...)            compare, write to the log, keep the result of the original
  *
- * Limites: só cobre a seção .data do executável (todas as globais do jogo).
- * Escritas na pilha, no heap ou em DLLs não entram. O servidor precisa ter uma só thread.
+ * Limits: covers only the .data section of the executable (all game globals).
+ * Writes to the stack, the heap or DLLs are not covered. The server must run on one thread.
  */
 #ifndef SV_VERIFY_H
 #define SV_VERIFY_H
@@ -22,47 +22,47 @@ extern "C" {
 
 typedef struct SvVerify {
     const char *name;
-    long every;      /* verifica 1 a cada N chamadas. Valor negativo = padrão do hook;
-                        subvulpes.ini verify_every.<nome> tem prioridade. */
-    long calls;      /* chamadas totais */
-    long checks;     /* chamadas verificadas */
-    long fails;      /* verificações com diferença */
-    int broken;      /* 1 = a versão nova travou; o hook passa a usar só a original */
-    int crashed;     /* 1 = a versão nova travou nesta chamada */
-    /* Escopo aprendido: faixas de páginas de .data que a função costuma escrever.
-     * Fora das rodadas completas, só essas faixas ficam protegidas. */
+    long every;      /* verify 1 of every N calls. Negative value = hook default;
+                        subvulpes.ini verify_every.<name> has priority. */
+    long calls;      /* total calls */
+    long checks;     /* verified calls */
+    long fails;      /* verifications with a difference */
+    int broken;      /* 1 = the new version crashed; the hook uses only the original from now on */
+    int crashed;     /* 1 = the new version crashed in this call */
+    /* Learned scope: page ranges of .data that the function usually writes.
+     * Outside full rounds, only these ranges are protected. */
     unsigned nranges;
-    unsigned range[32][2];   /* [primeira página, última + 1) dentro de .data */
+    unsigned range[32][2];   /* [first page, last page + 1) inside .data */
 } SvVerify;
 
-/* Só para testes: usa outra seção do executável no lugar de .data. Chame antes de sv_verify_init. */
+/* Tests only: use another section of the executable instead of .data. Call before sv_verify_init. */
 void sv_verify_set_section(const char *name);
 
-/* Localiza a seção .data e o rand() do MSVCR100. Devolve 0 se falhar. */
+/* Find the .data section and the MSVCR100 rand() state. Returns 0 on failure. */
 int sv_verify_init(void);
 
-/* 1 = verificar esta chamada. Respeita verify=0 e a amostragem. */
+/* 1 = verify this call. Obeys verify=0 and sampling. */
 int sv_verify_should(SvVerify *v);
 
-/* Começa a registrar escritas. Chame antes da versão nova.
- * Nas primeiras verificações e a cada verify_full_every (padrão 50), protege a .data
- * inteira e aprende as globais escritas. Nas outras, protege só o escopo aprendido. */
+/* Start to record writes. Call before the new version.
+ * In the first verifications and every verify_full_every (default 50), protect the whole
+ * .data and learn the written globals. In the others, protect only the learned scope. */
 void sv_track_begin_new(SvVerify *v);
 
-/* Guarda o resultado da versão nova, desfaz as escritas e começa a registrar
- * de novo. Chame entre a versão nova e a original. */
+/* Keep the result of the new version, undo its writes and start to record again.
+ * Call between the new version and the original. */
 void sv_track_switch_to_original(void);
 
-/* Para de registrar, compara e mantém o resultado da original.
- * same_return: 1 se os valores de retorno são iguais (ou se a função é void).
- * detail: texto curto para o log (pode ser NULL). */
+/* Stop recording, compare, and keep the result of the original.
+ * same_return: 1 if the return values are equal (or if the function returns void).
+ * detail: short text for the log (can be NULL). */
 void sv_verify_end(SvVerify *v, int same_return, const char *detail);
 
-/* Filtro SEH para a versão nova: registra o crash, marca o hook como quebrado
- * e pede ao Windows para executar o bloco __except. */
+/* SEH filter for the new version: log the crash, mark the hook as broken
+ * and tell Windows to run the __except block. */
 int sv_crash_filter(SvVerify *v, struct _EXCEPTION_POINTERS *ep);
 
-/* Resumo de um hook no log. */
+/* Summary of one hook in the log. */
 void sv_verify_summary(const SvVerify *v);
 
 #ifdef __cplusplus

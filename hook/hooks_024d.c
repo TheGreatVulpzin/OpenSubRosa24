@@ -1,9 +1,9 @@
-/* Tabela de hooks do subrosadedicated024d.exe.
+/* Hook table of subrosadedicated024d.exe.
  *
- * Para acrescentar uma função:
- *   1. Escreva sr_<nome> em src/server/ e declare em sr_server.h.
- *   2. Crie o wrapper hk_<nome> com SV_HOOK_VOID ou SV_HOOK_RET (hook_wrap.h).
- *   3. Acrescente uma linha em g_hooks com o RVA, o tamanho do prólogo e os bytes esperados.
+ * To add a function:
+ *   1. Write sr_<name> in src/server/ and declare it in sr_server.h.
+ *   2. Write the wrapper hk_<name> with SV_HOOK_VOID or SV_HOOK_RET (hook_wrap.h).
+ *   3. Add a line to g_hooks with the RVA, the prologue size and the expected bytes.
  */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -30,7 +30,7 @@ static void __cdecl hk_createevent_message(int kind, const char *text, int targe
                  text);
 }
 
-/* cmp dword ptr [server], 0  ->  83 3D <endereço de server> 00 */
+/* cmp dword ptr [server], 0  ->  83 3D <address of server> 00 */
 static uint8_t expect_createevent_message[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
 
 /* ------------------------------------------------------------ createevent_updatedoor (0x6660) */
@@ -75,7 +75,7 @@ static void __cdecl hk_fixplayername(int id)
 /* push esi; mov esi, [esp+8] */
 static const uint8_t expect_fixplayername[5] = { 0x56, 0x8B, 0x74, 0x24, 0x08 };
 
-/* ------------------------------------------------------------ tabela */
+/* ------------------------------------------------------------ table */
 
 static const uint8_t mask_all[32] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -100,7 +100,7 @@ static SvVerify *g_stats[] = {
     &v_fixplayername,
 };
 
-/* Escreve um endereço absoluto (relocado pelo ASLR) dentro dos bytes esperados. */
+/* Write an absolute address (relocated by ASLR) into the expected bytes. */
 static void expect_va(uint8_t *expect, int offset, uint32_t rva)
 {
     uint32_t va = (uint32_t)(sr_base + rva);
@@ -117,7 +117,7 @@ int sv_hooks_024d_install(void)
     return sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
 }
 
-/* Chamado quando o processo fecha. */
+/* Called when the process exits. */
 void sv_hooks_024d_summary(void)
 {
     size_t i;

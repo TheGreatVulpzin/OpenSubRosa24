@@ -1,10 +1,10 @@
-"""Progresso da Fase 3: quanto do 024d já roda em C.
+"""Phase 3 progress: how much of the 024d already runs in C.
 
-Lê a tabela g_hooks em hook/hooks_024d.c e os tamanhos em analysis/024d/functions.csv.
-Uma função conta como "verificada" quando docs/hooks.md marca **Verificada** na linha dela.
+Read the g_hooks table in hook/hooks_024d.c and the sizes in analysis/024d/functions.csv.
+A function counts as "verified" when docs/hooks.md marks **Verified** on its line.
 
-Uso: python -I tools/progress.py [--md]
-  --md  imprime a tabela em Markdown (para docs/progresso.md)
+Usage: python -I tools/progress.py [--md]
+  --md  print the table in Markdown
 """
 import csv
 import re
@@ -19,7 +19,7 @@ def main():
     hooks_src = (ROOT / 'hook/hooks_024d.c').read_text(encoding='utf-8')
     hooked = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),', hooks_src))
     doc = (ROOT / 'docs/hooks.md').read_text(encoding='utf-8')
-    verified = set(re.findall(r'^\| `(\w+)` \|[^\n]*\*\*Verificada\*\*', doc, re.M))
+    verified = set(re.findall(r'^\| `(\w+)` \|[^\n]*\*\*Verified\*\*', doc, re.M))
 
     with open(ROOT / 'analysis/024d/functions.csv', encoding='utf-8') as fh:
         rows = list(csv.DictReader(fh))
@@ -30,17 +30,17 @@ def main():
     verified_bytes = sum(size.get(int(hooked[n], 16), 0) for n in verified if n in hooked)
 
     lines = [
-        ('Funções em C (hook instalado)', len(hooked), total_funcs, hooked_bytes, total_bytes),
-        ('Funções verificadas no jogo', len(verified & set(hooked)), total_funcs, verified_bytes, total_bytes),
+        ('Functions in C (hook installed)', len(hooked), total_funcs, hooked_bytes, total_bytes),
+        ('Functions verified in the game', len(verified & set(hooked)), total_funcs, verified_bytes, total_bytes),
     ]
     if md:
-        print('| Medida | Funções | Bytes de código |')
+        print('| Measure | Functions | Code bytes |')
         print('| --- | --- | --- |')
         for label, n, tn, b, tb in lines:
-            print(f'| {label} | {n} de {tn} ({100 * n / tn:.1f}%) | {b} de {tb} ({100 * b / tb:.2f}%) |')
+            print(f'| {label} | {n} of {tn} ({100 * n / tn:.1f}%) | {b} of {tb} ({100 * b / tb:.2f}%) |')
     else:
         for label, n, tn, b, tb in lines:
-            print(f'{label:32} {n:4}/{tn} funções ({100 * n / tn:5.1f}%)   {b:7}/{tb} bytes ({100 * b / tb:5.2f}%)')
+            print(f'{label:32} {n:4}/{tn} functions ({100 * n / tn:5.1f}%)   {b:7}/{tb} bytes ({100 * b / tb:5.2f}%)')
 
 
 if __name__ == '__main__':
