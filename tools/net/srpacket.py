@@ -488,7 +488,9 @@ class VoiceFrame:
         index = r.read_bits(index_bits)
         n = r.read_bits(8)
         mode = r.read_bits(2)
-        return cls(index, mode, r.read_bytes(n) if n else b"")
+        # cs_pread aligns to the next byte even for 0 bytes (checked with a real capture:
+        # an empty frame takes 3 aligned bytes).
+        return cls(index, mode, r.read_bytes(n))
 
 
 @dataclass

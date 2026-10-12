@@ -267,7 +267,7 @@ Each action:
 
 Chat text starting with `/` is a server command (`server_playermessage`: `/admin`, `/kick`, `/ban...`, `/give`, `/cash`, `/resetgame`, `/heli`, `/list1..3`, ...); it is not broadcast.
 
-**Voice.** The client sends the 6 most recent voice frames each packet. The server reads exactly 6; for each frame `index` is read as 8 bits, `length` as 8 bits (0..255), `mode` 2 bits, then `length` raw bytes (a new byte alignment starts the data):
+**Voice.** The client sends the 6 most recent voice frames each packet. The server reads exactly 6; for each frame `index` is read as 8 bits, `length` as 8 bits (0..255), `mode` 2 bits, then `length` raw bytes (a new byte alignment starts the data, also when `length` is 0: an empty frame takes 3 aligned bytes, checked with a real capture):
 
 | Field | Size |
 | --- | --- |
@@ -526,7 +526,7 @@ Quantized floats are lossy. A parsed value can move by one step if you build the
 
 Wire format that is certain but whose meaning is not, and parts not checked:
 
-1. **No capture.** Nothing was compared with a real packet. A Wireshark capture of an original server and an original client is the next test (it would also check the 024d against the 0.24b client directly).
+1. **Capture (checked).** A 35-minute play session on the 024d with 0.24b clients was captured by the hook DLL (`capture_packets=1`, `tools/net/capture.py`). `srpacket.py` reads all of it with no error: 48229 state packets (type 5, 53 MB), the input packets (type 4), voice (type 8), query, join, new game, disconnect and heartbeat. The capture found one error in this document, now fixed: an empty voice frame still aligns to the next byte.
 2. **`game+0xc`** (u4 in types 6): meaning unknown. It appears inside the `updatescenario` event too, so it may be a scenario or mode.
 3. **`game+0x4c`, `game+0x50`** (the two angles of type 6): probably the sun or light direction. Not verified.
 4. **`phase_timer` is 16 bits** but the round time is up to `30 * 3600` ticks (`roundtime=` is clamped to 30 minutes), above 65535. It probably wraps for rounds over 18 minutes. The wrap was not tested.
