@@ -33,6 +33,8 @@ typedef struct SvVerify {
      * Outside full rounds, only these ranges are protected. */
     unsigned nranges;
     unsigned range[32][2];   /* [first page, last page + 1) inside .data */
+    int recheck;             /* 1 = the next verification is a full round */
+    long unconfirmed;        /* differences in scope rounds (not counted in fails) */
 } SvVerify;
 
 /* Tests only: use another section of the executable instead of .data. Call before sv_verify_init. */

@@ -17,3 +17,6 @@ rva,name,evidence
 0x5fe0,-,"Zeroes player fields and walks the inventory. It is not createevent_updateiteminfo."
 0x1b6e0,-,"Links an item to a bone (item+0x84.., human+0x1d8..). It is not createevent_sound."
 0x2c020,-,"Checks area_block indices (0x84) and calls 2 functions. It is not createevent_bullethit."
+0x5ce18,__security_check_cookie,"MSVC /GS check. Ghidra FID match in the 024d (Visual Studio 2010). The matcher name setmenuitem was wrong."
+0x5d320,__report_gsfailure,"Ghidra FID match (Visual Studio 2010). Failure path of __security_check_cookie."
+0x5ce90,_ftol2,"MSVC CRT float to int64. Argument in ST0, result in EDX:EAX. The matcher name cerpnoise2d was wrong."

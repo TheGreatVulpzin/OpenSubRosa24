@@ -35,7 +35,7 @@ BLOCKERS = {
     'halt_baddata': 'bad data', 'ExceptionList': 'SEH frame', 'stack0x': 'stack address',
     'switchD': 'computed jump', '(code *)': 'function pointer call', 'in_ST0': 'x87 input',
     'POPCOUNT': 'popcount', 'LOCK()': 'lock prefix',
-    '__security': 'security cookie', 'segment(': 'segment', 'CONCAT3': 'odd concat',
+    'segment(': 'segment', 'CONCAT3': 'odd concat',
     'rdtsc': 'time stamp counter',
 }
 
@@ -59,9 +59,19 @@ INLINE_IMPORTS = {
     'ntohl': '#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))',
 }
 
+# Game functions that lifted code does not call. __security_check_cookie (MSVC /GS) only
+# stops the process when the stack is corrupt. The lifted copy keeps its own stack frame,
+# so the check has no meaning there. Removing it also removes a false side effect
+# (the failure path calls GetCurrentProcess).
+SKIPPED_CALLS = {0x5ce18: '__security_check_cookie'}
+
+# Game functions that lifted code replaces with plain C. _ftol2 (MSVC CRT) converts the
+# x87 value in ST0 to a 64-bit int with truncation, the same as a C cast.
+INLINE_CALLS = {0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'}
+
 SIZE_TYPE = {1: 'uchar', 2: 'ushort', 4: 'uint', 8: 'ulonglong'}
 
-HEADER_RE = re.compile(r'^(?P<ret>.+?)\s*\b(?:(?P<cc>__cdecl|__stdcall|__fastcall|__thiscall)\s+)?'
+HEADER_RE = re.compile(r'^(?P<ret>.+?)\s*\b(?:(?P<cc>__cdecl(?:_keep[CDF]+)?|__stdcall|__fastcall|__thiscall)\s+)?'
                        r'(?P<name>[A-Za-z_]\w*)\s*\((?P<params>.*)\)\s*$', re.S)
 
 
@@ -87,7 +97,10 @@ def parse_header(c):
             if not pm:
                 return None
             params.append((pm.group(1).strip(), pm.group(2)))
-    return m.group('ret').strip(), m.group('cc') or '__cdecl', m.group('name'), params
+    # __cdecl_keepC/D/F (tools/ghidra/FixRegisterPreservation.java) only tell the decompiler
+    # which registers a callee keeps. For C they are __cdecl.
+    cc = re.sub(r'^__cdecl_keep[CDF]+$', '__cdecl', m.group('cc') or '__cdecl')
+    return m.group('ret').strip(), cc, m.group('name'), params
 
 
 def proto_cast(ret, cc, params):
@@ -140,7 +153,7 @@ def side_effects(funcs):
             if c['external']:
                 if c['target'] not in PURE_IMPORTS and rva not in direct:
                     direct[rva] = c['target']
-            elif 'rva' in c:
+            elif 'rva' in c and int(c['rva'], 16) not in SKIPPED_CALLS.keys() | INLINE_CALLS.keys():
                 graph[rva].add(int(c['rva'], 16))
     side = dict(direct)
     changed = True
@@ -206,6 +219,14 @@ def lift_function(f, rva, headers, imports_used):
             post.append(f'#undef {cname}')
         else:
             callee = int(call['rva'], 16)
+            if callee in INLINE_CALLS:
+                pre.append(INLINE_CALLS[callee].format(name=cname))
+                post.append(f'#undef {cname}')
+                continue
+            if callee in SKIPPED_CALLS:
+                pre.append(f'#define {cname}(x) ((void)0)')
+                post.append(f'#undef {cname}')
+                continue
             ch = headers.get(callee)
             if not ch:
                 return None, f'callee header unknown: {cname}'
@@ -214,6 +235,7 @@ def lift_function(f, rva, headers, imports_used):
             post.append(f'#undef {cname}')
 
     body = partial_access(strip_comments(c)).strip()
+    body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
     # Absolute addresses that the loader relocates (ASLR) but the pseudo-C shows as numbers.
     for v in f.get('relocvals', []):
         body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)

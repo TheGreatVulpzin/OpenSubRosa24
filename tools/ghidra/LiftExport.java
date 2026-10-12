@@ -97,10 +97,21 @@ public class LiftExport extends GhidraScript {
         for (ClangNode n : leaves) {
             if (!(n instanceof ClangVariableToken)) continue;
             String text = ((ClangToken) n).getText();
-            if (found.containsKey(text) || !text.matches("_*DAT_[0-9a-f]{8}")) continue;
             HighVariable hv = ((ClangVariableToken) n).getHighVariable();
             if (hv == null) continue;
             DataType dt = hv.getDataType();
+            // The symbol map keeps the listing type (often "undefined4"). The decompiler can use
+            // the global as a float. In C, "undefined4 x = 1.0" stores the int 1, so the type that
+            // the decompiler used wins when it has the same size.
+            String[] known = found.get(text);
+            if (known != null) {
+                if (known[1].startsWith("undefined") && !dt.getDisplayName().startsWith("undefined")
+                        && String.valueOf(dt.getLength()).equals(known[2])) {
+                    known[1] = dt.getDisplayName();
+                }
+                continue;
+            }
+            if (!text.matches("_*DAT_[0-9a-f]{8}")) continue;
             String hexAddr = text.substring(text.indexOf("DAT_") + 4);
             found.put(text, new String[] { "0x" + hexAddr, dt.getDisplayName(), String.valueOf(dt.getLength()) });
         }

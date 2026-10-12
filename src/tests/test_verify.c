@@ -86,7 +86,10 @@ int main(void)
             run(&v5, write_a, write_a_copy);
         CHECK(v5.nranges > 0, "scope learned after the full rounds");
         run(&v5, write_b, write_a);
-        CHECK(v5.fails == 1, "difference detected in a scope round");
+        CHECK(v5.fails == 0 && v5.unconfirmed == 1 && v5.recheck == 1,
+              "difference in a scope round: not counted, next round is full");
+        run(&v5, write_b, write_a);
+        CHECK(v5.fails == 1 && v5.recheck == 0, "difference confirmed in the full round");
     }
 
     {

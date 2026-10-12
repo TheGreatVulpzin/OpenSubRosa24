@@ -321,13 +321,13 @@ rva,size,name,source,confidence,evidence
 0x5c580,831,logicsimulation,anchor,0.583,features
 0x5c8d0,1063,dedicatedserverloop,anchor,0.846,features
 0x5cd10,107,getpaths,anchor,0.71,features
-0x5ce18,15,setmenuitem,callgraph,1.0,votes=86
+0x5ce18,15,__security_check_cookie,manual,1.0,
 0x5ce50,43,,,,
-0x5ce90,145,cerpnoise2d,callgraph,1.0,votes=34
+0x5ce90,145,_ftol2,manual,1.0,
 0x5cf70,104,,,,
 0x5d08c,345,,,,
 0x5d316,10,,,,
-0x5d320,262,,,,
+0x5d320,262,__report_gsfailure,manual,1.0,
 0x5d436,66,,,,
 0x5d492,152,,,,
 0x5d52a,9,,,,

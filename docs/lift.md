@@ -4,6 +4,13 @@
 
 ## Pipeline
 
+0. Once per Ghidra project, fix the signatures (run without `-readOnly`, so the changes are saved):
+
+   ```bash
+   "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis \
+       -scriptPath "$ROOT/tools/ghidra" -postScript FixX87Intrinsics.java -postScript FixRegisterPreservation.java
+   ```
+
 1. Export from Ghidra (5 minutes):
 
    ```bash
@@ -60,7 +67,7 @@ Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_
 | Reason | Meaning |
 | --- | --- |
 | `side_effect` | The function reaches the network, files, time, the heap or another impure import (directly or through callees). Verification runs a function twice, so these cannot be verified this way. |
-| `register input/output` | The decompiler shows values passed in registers (non-standard convention). |
+| `register input/output` | The decompiler shows values passed in registers (non-standard convention). Most cases are gone after `FixRegisterPreservation.java`. The rest are CRT helpers and callees that return a second value in EDX. |
 | `int typed as float (denormal literal)` | Ghidra typed an int parameter as float (`param_1 == 1.4013e-45`). |
 | `compile_error` | The pseudo-C does not compile. |
 
@@ -70,7 +77,29 @@ First complete run (2026-10-12): 141 of 340 functions lifted and compiled. Autom
 
 With the x87 intrinsics (2026-10-12): 192 of 340 functions lifted. 196 hooks installed in total (4 hand-written). Idle server, 180 s: no crash, 11 lifted functions verified, 0 differences.
 
+With the stack cookie, register preservation and `_ftol2` fixes (2026-10-12): 216 of 340 functions lifted. 220 hooks installed in total. Idle server, 300 s: no crash, 11 lifted functions verified, 0 differences.
+
 An idle server calls only a few functions. More coverage needs players: see the record and replay plan in `docs/plano.md`.
+
+## Stack cookies
+
+`0x5ce18` is `__security_check_cookie` (MSVC `/GS`). It stops the process only when the stack is corrupt. Its failure path calls `GetCurrentProcess`, so the side effect analysis blocked every function with a cookie. The lifter removes the call (`SKIPPED_CALLS` in `lift.py`): the lifted copy has its own stack frame, so the check has no meaning there.
+
+## Registers that a callee keeps
+
+The normal `__cdecl` model says that a call destroys ECX, EDX, ST0 and ST1. The 024d callers know better (see above). The decompiler then shows the kept values as `extraout_EDX` or `extraout_ST1`, and the pseudo-C cannot compile.
+
+`tools/ghidra/FixRegisterPreservation.java` finds the registers that each function writes, with its callees. It adds variants of `__cdecl` to the Ghidra program: `__cdecl_keepC`, `__cdecl_keepD`, `__cdecl_keepF` and their combinations (C = ECX, D = EDX, F = the x87 stack). Each function gets the variant that matches. For C, the variants are `__cdecl`: the lifted hooks keep ECX, EDX and the x87 state.
+
+The same script gives `_ftol2` (`0x5ce90`) a call fixup with its exact effect: it pops ST0 and returns the truncated value in EDX:EAX. The lifter writes it as a C cast to `longlong` (`INLINE_CALLS`).
+
+## Global types
+
+The Ghidra symbol map often keeps the listing type of a global (`undefined4`). The decompiler can use the same global as a `float`. In C, an `undefined4` global that receives `1.0` stores the int 1. `LiftExport.java` therefore uses the type that the decompiler used when it has the same size. This bug made `area_block_addbasicsurface` write `0x00000001` where the original writes `1.0`.
+
+## Verifier: scope rounds
+
+A scope round protects only the pages that the function wrote before, plus a margin of 16 pages on each side. A write outside the scope is not undone before the original runs, so a scope round can show a false difference. The verifier does not count a difference in a scope round. It makes the next verification of the hook a full round, and only a difference in a full round counts.
 
 ## x87 intrinsics
 
