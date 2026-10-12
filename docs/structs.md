@@ -34,16 +34,23 @@ As funções `createplayer` (`0x28020`), `createhuman` (`0x50ae0`) e `createitem
 | Campo | 0.24b (Mac) | 024d |
 | --- | --- | --- |
 | `human+0x34` na criação | `((rand() & 3) + 2) * 3600` | `((rand() & 3) + 3) * 3600` |
+| `Game` | tick em `+0x34` | tick em `+0x38`: o 0.24c inseriu um campo de 4 bytes no início |
+
+## Game
+
+A global `game` é uma struct única de `0x25d64` bytes. O layout vem do servidor 0.24c (ELF), e o 024d usa os mesmos offsets nas mesmas funções. O Mac 0.24b não serve de referência para a `Game` (ver tabela acima). No 024d, a global `item` começa logo depois, em `game + 0x25d80`.
 
 ## Estado (critérios da Fase 1)
 
 | Critério | Estado |
 | --- | --- |
-| 1. Structs do servidor no header, com tamanho certo | `Player`, `Human`, `Item`, `Object`, `Connection`, `ItemType`, `ObjectType`, `Bond`, `Event`, `Bullet`, `Body`, `Account`. Falta `Game` (struct única, tamanho de 32 bits ainda não confirmado). |
+| 1. Structs do servidor no header, com tamanho certo | `Player`, `Human`, `Item`, `Object`, `Connection`, `ItemType`, `ObjectType`, `Bond`, `Event`, `Bullet`, `Body`, `Account`, `Game`. |
 | 2. Sub-structs | `Bone` (posição, rotação, massa), `InventorySlot`, `vec3`. |
 | 3. Cobertura de nomes ≥ 80% | **80,0%** dos acessos do servidor (`tools/re/struct_coverage.py`). |
 | 4. Globais do 024d | Todos os arrays acima, mais `numofbonds`, `numofbullets`, `numofevents`, `ticks`. Confirmados em `analysis/024d/manual_globals.csv`. |
-| 5. Validação | Compila no MSVC x86 com `/W4 /WX`. 148 `static_assert` de offset. Offsets conferidos no 024d. |
+| 5. Validação | Compila no MSVC x86 com `/W4 /WX`. 170 `static_assert`. Offsets conferidos no 024d. |
+
+**A Fase 1 está concluída.**
 
 Capacidades (tamanho da global no ELF 0.24c ÷ tamanho do registro): player 256, human 512, item 1024, object 1024, connection 256, bond 16384, bullet 16384, event 65536 (buffer circular), particle 4096, objecttype 128, itemtype 64, body 32, account 65536.
 
@@ -57,4 +64,3 @@ Capacidades (tamanho da global no ELF 0.24c ÷ tamanho do registro): player 256,
 
 - Nomear os campos de `Bone` (15 por corpo) com `human_buildmuscles` e `bondsimulation2`.
 - Nomear `Object` (veículos) com `createobject` e `objectsimulation_car`.
-- Achar o RVA de `connection` no 024d. O manager diz `0x15e39020`, mas o mapa de globais ainda não confirmou.

@@ -52,6 +52,31 @@ typedef struct Account {
     uint8_t unk_40[0xc];
 } Account;
 
+/* Estado da partida: global "game" (uma só, não é array). 0x25d64 bytes.
+ * Layout do servidor 0.24c (ELF) e do 024d. O 0.24b (Mac) tem um campo de 4 bytes
+ * a menos no início: lá o tick fica em +0x34. Fonte: dedicatedserverloop,
+ * logicsimulation_round e resetgame do 0.24c, conferidos no 024d. */
+typedef struct Game {
+    uint8_t unk_00[0x8];
+    int gametype;       /* +0x08 config.txt "gametype=" (0 a 4) */
+    uint8_t unk_0c[0x10];
+    int round_number;   /* +0x1c resetgame soma 1 (provável) */
+    int state;          /* +0x20 1 e 2; manager: 2 = partida rodando */
+    int timer;          /* +0x24 diminui 1 por tick; 0 muda o estado */
+    int wait_time;      /* +0x28 dedicatedserverloop grava 0xe10 (3600 ticks) */
+    int round_time;     /* +0x2c config.txt "roundtime=" * 3600 */
+    uint8_t unk_30[0x4];
+    int unk_34;         /* +0x34 dedicatedserverloop grava 0x4ec */
+    int ticks;          /* +0x38 soma 1 por tick; usado em Event.tick */
+    uint8_t unk_3c[0x25d64 - 0x3c];
+} Game;
+
+SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
+SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
+SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
+SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
 SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
 SR_STATIC_ASSERT(offsetof(Bone, rot) == 0x30, "Bone.rot");
