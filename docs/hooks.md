@@ -1,5 +1,7 @@
 # DLL de hooks (Fase 2)
 
+**A Fase 2 está concluída.** O método funciona de ponta a ponta no servidor real: DLL carregado, ASLR tratado, hook instalado, original chamada pelo trampolim e resultado idêntico.
+
 O SubVulpes troca funções do `subrosadedicated024d.exe` por versões em C, uma de cada vez.
 O mecanismo é um `wsock32.dll` proxy na pasta do servidor.
 
@@ -17,7 +19,7 @@ Código: [`hook/`](../hook/) (proxy, hooks, tabela) e [`src/server/`](../src/ser
 
 | Função | RVA no 024d | Arquivo | Estado |
 | --- | --- | --- | --- |
-| `createevent_message` | `0x6260` | `src/server/events.c` | Testado no servidor (2026-10-11): hook instalado com ASLR (base `0x01000000`), 1 chamada, 0 diferenças. Falta teste com cliente conectado. |
+| `createevent_message` | `0x6260` | `src/server/events.c` | **Verificada** (2026-10-11): 28 chamadas com cliente conectado (boas-vindas, Top 10, corporações, entrada, chat), 0 diferenças. |
 
 ## Modo de verificação
 
