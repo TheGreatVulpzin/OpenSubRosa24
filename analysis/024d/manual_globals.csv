@@ -12,3 +12,4 @@ rva,name,count,evidence
 0xf270280,body,32,human_calculatearmangles: índice * 0x10 inteiros (0x40 bytes)
 0xf437b60,account,65536,createaccount: registros em +8 (chave e contador antes)
 0x90dc578,ticks,,createevent_message grava em event.tick; manager: contador de ticks
+0x103484a0,intersect,,mapa de votos (31,5) e manager (black_market.c usa intersect+0 e +0xc como posições de evento)

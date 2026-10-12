@@ -29,6 +29,7 @@
 #define SR_RVA_BODY                 0xf270280u  /* Body[] */
 #define SR_RVA_NUMOFEVENTS          0xf437318u
 #define SR_RVA_ACCOUNT              0xf437b60u
+#define SR_RVA_INTERSECT            0x103484a0u
 #define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
 #define SR_RVA_TIMERLIST            0x12a81c60u
 #define SR_RVA_SPEEX                0x12a81d00u
