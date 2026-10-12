@@ -410,7 +410,7 @@ typedef struct Object {
     vec3 pos;                            /* +0x0024 createobject: parâmetro 2 */
     vec3 pos_prev;                       /* +0x0030 createobject: cópia de pos */
     vec3 rot[3];                         /* +0x003c createobject: matriz do parâmetro 4; objectsimulation normaliza e faz crossproduct */
-    vec3 vel;                            /* +0x0060 objectsimulation zera */
+    vec3 vel;                            /* +0x0060 objectsimulation zera, soma e escala */
     vec3 vel_prev;                       /* +0x006c objectsimulation copia de vel */
     float unk_0078;                      /* +0x0078 1 funções */
     float unk_007c;                      /* +0x007c 1 funções */
@@ -445,7 +445,7 @@ typedef struct Object {
     uint8_t pad_5be0[0x4];
     int unk_5be4;                        /* +0x5be4 3 funções */
     uint8_t pad_5be8[0x264];
-    float engine_accel;                  /* +0x5e4c objectenginesimulation2: calculado */
+    float engine_accel;                  /* +0x5e4c objectenginesimulation2: calculado, somado em engine_rpm e zerado */
     float engine_rpm;                    /* +0x5e50 getenginetorque2/objectenginesimulation2 (provável) */
     float throttle;                      /* +0x5e54 objectenginesimulation2: entra como (1 - x) na aceleração (provável) */
     float engine_power;                  /* +0x5e58 createobject: objecttype+0x7758 * constante; manager (truck_speed) altera a força do motor */
@@ -561,7 +561,7 @@ typedef struct Connection {
     int timeout;                         /* +0x0018 servercycle: dividido por 0x3c (60) (provável) */
     int packets_received;                /* +0x001c serverrecv incrementa (provável) */
     uint8_t pad_0020[0x24];
-    int event_ack;                       /* +0x0044 serverrecv lê 16 bits do cliente; serversend envia eventos de event_ack até numofevents (máx. 31 por pacote */
+    int event_ack;                       /* +0x0044 serverrecv lê 16 bits do cliente; serversend envia eventos de event_ack até numofevents (máx. 31 por pacote, buffer circular de 0x10000) */
     uint8_t pad_0048[0x4];
     uint32_t sequence;                   /* +0x004c packobjectpacket2: compara bits &3 e &0x1f (provável) */
     uint8_t pad_0050[0x104];
@@ -665,7 +665,7 @@ typedef struct Bond {
     int state;                           /* +0x0000 createbond grava 0 */
     int type;                            /* +0x0004 createbond: parâmetro 1 */
     int unk_0008;                        /* +0x0008 1 funções */
-    int mode;                            /* +0x000c createbond: 3 */
+    int mode;                            /* +0x000c createbond: 3, ou 0 se tipo 1; humansimulation alterna 0/3 */
     int unk_10;                          /* +0x0010 createbond grava 2 */
     int particle_a;                      /* +0x0014 createbond: parâmetro 2 (índice em particle[]) */
     int particle_b;                      /* +0x0018 createbond: parâmetro 3 */
@@ -722,9 +722,9 @@ typedef struct Event {
     vec3 pos;                            /* +0x0008 packevent: cs_pwrite 3 floats; createevent_sound: posição */
     vec3 vec;                            /* +0x0014 packevent: cs_pwrite 3 floats */
     int param;                           /* +0x0020 createevent_sound: id do som; packevent: 4 bits em alguns tipos */
-    int attach_type;                     /* +0x0024 packevent: 1 = human (usa human+0x288) */
+    int attach_type;                     /* +0x0024 packevent: 1 = human (usa human+0x288), 2 = item (usa item.pos) */
     int attach_id;                       /* +0x0028 packevent: índice do human/item; 10 bits com sinal */
-    int range_mode;                      /* +0x002c packevent: 0 reduz */
+    int range_mode;                      /* +0x002c packevent: 0 reduz, 2 dobra o alcance pela distância */
     float sound_a;                       /* +0x0030 createevent_sound: parâmetro 3 */
     float sound_b;                       /* +0x0034 createevent_sound: parâmetro 4 */
     uint8_t pad_0038[0x8];

@@ -65,7 +65,7 @@ object,0x14,driver,int,,createobject grava -1 (provável)
 object,0x24,pos,vec3,,createobject: parâmetro 2
 object,0x30,pos_prev,vec3,,createobject: cópia de pos
 object,0x3c,rot,vec3,3,createobject: matriz do parâmetro 4; objectsimulation normaliza e faz crossproduct
-object,0x60,vel,vec3,,objectsimulation zera, soma e escala
+object,0x60,vel,vec3,,"objectsimulation zera, soma e escala"
 object,0x6c,vel_prev,vec3,,objectsimulation copia de vel
 objecttype,0x38,num_particles,int,,objecttype_addparticle incrementa (passo 0x14)
 objecttype,0x740,num_bonds,int,,objecttype_addbond incrementa (passo 0xc)
@@ -76,9 +76,9 @@ event,0x4,tick,int,,packevent: 28 bits; comparado com game+0x34 (idade < 600)
 event,0x8,pos,vec3,,packevent: cs_pwrite 3 floats; createevent_sound: posição
 event,0x14,vec,vec3,,packevent: cs_pwrite 3 floats
 event,0x20,param,int,,createevent_sound: id do som; packevent: 4 bits em alguns tipos
-event,0x24,attach_type,int,,packevent: 1 = human (usa human+0x288), 2 = item (usa item.pos)
+event,0x24,attach_type,int,,"packevent: 1 = human (usa human+0x288), 2 = item (usa item.pos)"
 event,0x28,attach_id,int,,packevent: índice do human/item; 10 bits com sinal
-event,0x2c,range_mode,int,,packevent: 0 reduz, 2 dobra o alcance pela distância
+event,0x2c,range_mode,int,,"packevent: 0 reduz, 2 dobra o alcance pela distância"
 event,0x30,sound_a,float,,createevent_sound: parâmetro 3
 event,0x34,sound_b,float,,createevent_sound: parâmetro 4
 bullet,0x0,type,int,,createbullet: parâmetro 1
@@ -89,7 +89,7 @@ bullet,0x20,pos_prev,vec3,,createbullet: cópia da posição
 bullet,0x2c,vel,vec3,,createbullet: parâmetro 3
 bond,0x0,state,int,,createbond grava 0
 bond,0x4,type,int,,createbond: parâmetro 1
-bond,0xc,mode,int,,createbond: 3, ou 0 se tipo 1; humansimulation alterna 0/3
+bond,0xc,mode,int,,"createbond: 3, ou 0 se tipo 1; humansimulation alterna 0/3"
 bond,0x10,unk_10,int,,createbond grava 2
 bond,0x14,particle_a,int,,createbond: parâmetro 2 (índice em particle[])
 bond,0x18,particle_b,int,,createbond: parâmetro 3
@@ -129,7 +129,7 @@ bond,0x70,unk_70,float,,bondsimulation2 copia para bondopt+0x3c e usa negado
 bond,0x90,human_id,int,,bondsimulation2 tipos 8 e 10: índice em human[]
 bond,0x94,bone_a,int,,bondsimulation2: índice do osso (passo 0xe0)
 bond,0x98,target,int,,bondsimulation2: tipo 10 = índice do item; tipo 8 = segundo osso
-human,0x60,axis,float,,getinputs_human: rótulo de debug "humanaxis"
+human,0x60,axis,float,,"getinputs_human: rótulo de debug ""humanaxis"""
 human,0x64,pitch,float,,human_calculatearmangles multiplica por constante (provável: ângulo vertical)
 item,0xa8,angvel,vec3,,item_physicssimulation amortece com scalevector; itemsimulation usa em dotproduct
 item,0xe0,cooldown,int,,createitem: itemtype+0x1c; itemlogic diminui 1; itemweaponsimulation testa == 0
@@ -143,12 +143,12 @@ object,0x5ee8,num_wheels,int,,createobject grava; objectsimulation usa como limi
 object,0x5f1c,rotor_angle,float,,objectsimulation_heli atualiza; unpackobjectpacket lê com unpackangle
 player,0x4c,num_purchases,int,,logic_gunstore_buy e logic_playeractions: limite < 10
 player,0xac,hud_mode,int,,getinputs_human soma 1; drawhud compara com 0 e 1
-object,0x5e4c,engine_accel,float,,objectenginesimulation2: calculado, somado em engine_rpm e zerado
+object,0x5e4c,engine_accel,float,,"objectenginesimulation2: calculado, somado em engine_rpm e zerado"
 object,0x5e54,throttle,float,,objectenginesimulation2: entra como (1 - x) na aceleração (provável)
 object,0x5e58,engine_power,float,,createobject: objecttype+0x7758 * constante; manager (truck_speed) altera a força do motor
 object,0x5e78,gear_ratio,float,,objectenginesimulation2: se != 0 acopla motor e rodas; objectsimulation_car grava por marcha (provável)
 objecttype,0x7758,engine_power,float,,createobject copia (× constante) para object.engine_power
 player,0x94,input_extra,float,2,serverrecv lê da rede junto com os eixos (2 floats depois de input_pitch)
 player,0xc8,input_mode,int,,serverrecv: 8 bits; getinputs grava 0/1; playersimulation compara 1 e 2 (provável)
-connection,0x44,event_ack,int,,serverrecv lê 16 bits do cliente; serversend envia eventos de event_ack até numofevents (máx. 31 por pacote, buffer circular de 0x10000)
+connection,0x44,event_ack,int,,"serverrecv lê 16 bits do cliente; serversend envia eventos de event_ack até numofevents (máx. 31 por pacote, buffer circular de 0x10000)"
 event,0x40,message,char,64,createevent_message: memcpy do texto (máx. 63 caracteres)
