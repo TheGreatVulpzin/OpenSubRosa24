@@ -63,6 +63,12 @@ typedef void code;
 #define ABS(x) fabs(x)
 #define ROUND(x) rint(x)
 
+/* RDTSC: CPU cycle counter. The game uses it only for its profiler (the timer table,
+ * see sv_verify_ignore in hook/hooks_024d.c). */
+unsigned __int64 __rdtsc(void);
+#pragma intrinsic(__rdtsc)
+#define rdtsc() __rdtsc()
+
 /* Ghidra NAN(x): x is not a number (x87 compare with the parity flag). */
 #define NAN(x) ((x) != (x))
 

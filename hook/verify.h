@@ -16,6 +16,8 @@
 #ifndef SV_VERIFY_H
 #define SV_VERIFY_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -42,6 +44,11 @@ void sv_verify_set_section(const char *name);
 
 /* Find the .data section and the MSVCR100 rand() state. Returns 0 on failure. */
 int sv_verify_init(void);
+
+/* Do not compare this range of .data (rva, size in bytes). For memory that holds values
+ * that change on each run, such as the profiler timers (CPU cycle counter). The original
+ * result stays in memory as usual. */
+void sv_verify_ignore(uint32_t rva, uint32_t size);
 
 /* 1 = a verification is running now (a hook called from inside it must run the original). */
 int sv_verify_busy(void);

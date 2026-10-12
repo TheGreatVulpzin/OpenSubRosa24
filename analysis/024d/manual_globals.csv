@@ -13,3 +13,4 @@ rva,name,count,evidence
 0xf437b60,account,65536,createaccount: records at +8 (key and counter before them)
 0x90dc578,ticks,,createevent_message writes it to event.tick; manager: tick counter
 0x103484a0,intersect,,vote map (31.5) and manager (black_market.c uses intersect+0 and +0xc as event positions)
+0x14043e0,timer,256,Linux ELF symbol timer (0x5800 bytes, 0x58 each). Profiler: starttimer/stoptimer with RDTSC (0xb3f0 = stoptimer)

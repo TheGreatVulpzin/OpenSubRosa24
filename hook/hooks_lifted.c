@@ -332,6 +332,49 @@ __declspec(naked) static void th_02560(void)
 }
 static uint8_t expect_02560[8] = { 0xd9, 0x44, 0x24, 0x08, 0x8b, 0x44, 0x24, 0x04 };
 
+float10 __cdecl lf_02620(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6);
+static float10 (__cdecl *orig_02620)(float, float, float, float, float, float);
+static SvVerify v_02620 = { "tesselatebezierderivative", -1 };
+static float10 __cdecl hk_02620(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6)
+{
+    SV_HOOK_RET_FLOAT(float10, v_02620, lf_02620(param_1, param_2, param_3, param_4, param_5, param_6), orig_02620(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+}
+__declspec(naked) static void th_02620(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_02620
+        add esp, 24
+        sub esp, 16
+        fstp qword ptr [esp]
+        fxrstor [esp + 16]
+        mov eax, [esp + 480]
+        mov ecx, [esp + 484]
+        mov edx, [esp + 488]
+        fld qword ptr [esp]
+        add esp, 16
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_02620[7] = { 0x8b, 0x44, 0x24, 0x04, 0x83, 0xf8, 0x01 };
+
 void __cdecl lf_026d0(int param_1, undefined4 * param_2);
 static void (__cdecl *orig_026d0)(int, undefined4 *);
 static SvVerify v_026d0 = { "area_copyrotateblock", -1 };
@@ -2381,6 +2424,40 @@ __declspec(naked) static void th_0b150(void)
 }
 static uint8_t expect_0b150[8] = { 0x8b, 0x44, 0x24, 0x04, 0xd9, 0x44, 0x24, 0x1c };
 
+void __cdecl lf_0b3f0(int param_1);
+static void (__cdecl *orig_0b3f0)(int);
+static SvVerify v_0b3f0 = { "copyvector", -1 };
+static void __cdecl hk_0b3f0(int param_1)
+{
+    SV_HOOK_VOID(v_0b3f0, lf_0b3f0(param_1), orig_0b3f0(param_1), NULL);
+}
+__declspec(naked) static void th_0b3f0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 8]
+        call hk_0b3f0
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_0b3f0[7] = { 0x83, 0xec, 0x0c, 0x8d, 0x44, 0x24, 0x04 };
+
 void __cdecl lf_0b540(void);
 static void (__cdecl *orig_0b540)(void);
 static SvVerify v_0b540 = { "setuptimers", -1 };
@@ -4083,6 +4160,42 @@ __declspec(naked) static void th_11d70(void)
 }
 static uint8_t expect_11d70[5] = { 0xd9, 0x44, 0x24, 0x1c, 0x53 };
 
+void __cdecl lf_11f70(int param_1, undefined4 param_2, float param_3);
+static void (__cdecl *orig_11f70)(int, undefined4, float);
+static SvVerify v_11f70 = { "area_block_addoutdoor", -1 };
+static void __cdecl hk_11f70(int param_1, undefined4 param_2, float param_3)
+{
+    SV_HOOK_VOID(v_11f70, lf_11f70(param_1, param_2, param_3), orig_11f70(param_1, param_2, param_3), NULL);
+}
+__declspec(naked) static void th_11f70(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_11f70
+        add esp, 12
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_11f70[8] = { 0x83, 0xec, 0x20, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
+
 void __cdecl lf_120c0(int param_1, undefined4 param_2, undefined4 param_3);
 static void (__cdecl *orig_120c0)(int, undefined4, undefined4);
 static SvVerify v_120c0 = { "area_block_addcorner", -1 };
@@ -4976,6 +5089,41 @@ __declspec(naked) static void th_16e30(void)
 }
 static uint8_t expect_16e30[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
+void __cdecl lf_16f10(float param_1, int param_2);
+static void (__cdecl *orig_16f10)(float, int);
+static SvVerify v_16f10 = { "packevent", -1 };
+static void __cdecl hk_16f10(float param_1, int param_2)
+{
+    SV_HOOK_VOID(v_16f10, lf_16f10(param_1, param_2), orig_16f10(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_16f10(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_16f10
+        add esp, 8
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_16f10[5] = { 0xa1, 0x78, 0xc5, 0x4d, 0x09 };
+
 void __cdecl lf_17b60(int param_1);
 static void (__cdecl *orig_17b60)(int);
 static SvVerify v_17b60 = { "lf_17b60", -1 };
@@ -5543,6 +5691,38 @@ __declspec(naked) static void th_1d8a0(void)
     }
 }
 static uint8_t expect_1d8a0[7] = { 0x83, 0xec, 0x24, 0x8b, 0x44, 0x24, 0x2c };
+
+void __cdecl lf_1dba0(void);
+static void (__cdecl *orig_1dba0)(void);
+static SvVerify v_1dba0 = { "lf_1dba0", -1 };
+static void __cdecl hk_1dba0(void)
+{
+    SV_HOOK_VOID(v_1dba0, lf_1dba0(), orig_1dba0(), NULL);
+}
+__declspec(naked) static void th_1dba0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_1dba0
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_1dba0[5] = { 0x83, 0xec, 0x64, 0x53, 0x55 };
 
 void __cdecl lf_21a30(float * param_1, float param_2, float param_3);
 static void (__cdecl *orig_21a30)(float *, float, float);
@@ -6922,6 +7102,43 @@ __declspec(naked) static void th_30f00(void)
 }
 static uint8_t expect_30f00[9] = { 0x83, 0xec, 0x50, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
+int __cdecl lf_31800(int param_1, float * param_2, undefined4 param_3, float * param_4, undefined4 param_5);
+static int (__cdecl *orig_31800)(int, float *, undefined4, float *, undefined4);
+static SvVerify v_31800 = { "createobject", -1 };
+static int __cdecl hk_31800(int param_1, float * param_2, undefined4 param_3, float * param_4, undefined4 param_5)
+{
+    SV_HOOK_RET(int, v_31800, lf_31800(param_1, param_2, param_3, param_4, param_5), orig_31800(param_1, param_2, param_3, param_4, param_5), NULL);
+}
+__declspec(naked) static void th_31800(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_31800
+        add esp, 20
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_31800[6] = { 0x83, 0xec, 0x38, 0x56, 0x33, 0xf6 };
+
 void __cdecl lf_32340(void);
 static void (__cdecl *orig_32340)(void);
 static SvVerify v_32340 = { "lf_32340", -1 };
@@ -7699,6 +7916,7 @@ static SvHook g_lifted[] = {
     { "area_marksector", 0x1cf0, (void *)th_01cf0, 5, expect_01cf0, mask_all, (void **)&orig_01cf0, 0, 0 },
     { "area_getnextchunk", 0x1e20, (void *)th_01e20, 10, expect_01e20, mask_all, (void **)&orig_01e20, 0, 0 },
     { "tesselatebezier", 0x2560, (void *)th_02560, 8, expect_02560, mask_all, (void **)&orig_02560, 0, 0 },
+    { "tesselatebezierderivative", 0x2620, (void *)th_02620, 7, expect_02620, mask_all, (void **)&orig_02620, 0, 0 },
     { "area_copyrotateblock", 0x26d0, (void *)th_026d0, 7, expect_026d0, mask_all, (void **)&orig_026d0, 0, 0 },
     { "area_block_rotatesurface", 0x2cf0, (void *)th_02cf0, 6, expect_02cf0, mask_all, (void **)&orig_02cf0, 0, 0 },
     { "lf_02dc0", 0x2dc0, (void *)th_02dc0, 7, expect_02dc0, mask_all, (void **)&orig_02dc0, 0, 0 },
@@ -7758,6 +7976,7 @@ static SvHook g_lifted[] = {
     { "lf_0b040", 0xb040, (void *)th_0b040, 8, expect_0b040, mask_all, (void **)&orig_0b040, 0, 0 },
     { "lf_0b0b0", 0xb0b0, (void *)th_0b0b0, 10, expect_0b0b0, mask_all, (void **)&orig_0b0b0, 0, 0 },
     { "lf_0b150", 0xb150, (void *)th_0b150, 8, expect_0b150, mask_all, (void **)&orig_0b150, 0, 0 },
+    { "copyvector", 0xb3f0, (void *)th_0b3f0, 7, expect_0b3f0, mask_all, (void **)&orig_0b3f0, 0, 0 },
     { "setuptimers", 0xb540, (void *)th_0b540, 10, expect_0b540, mask_all, (void **)&orig_0b540, 0, 0 },
     { "addvoice", 0xb6d0, (void *)th_0b6d0, 5, expect_0b6d0, mask_all, (void **)&orig_0b6d0, 0, 0 },
     { "lf_0b850", 0xb850, (void *)th_0b850, 8, expect_0b850, mask_all, (void **)&orig_0b850, 0, 0 },
@@ -7805,6 +8024,7 @@ static SvHook g_lifted[] = {
     { "area_block_addwindow", 0x118f0, (void *)th_118f0, 5, expect_118f0, mask_all, (void **)&orig_118f0, 0, 0 },
     { "area_block_adddoor", 0x11a40, (void *)th_11a40, 7, expect_11a40, mask_all, (void **)&orig_11a40, 0, 0 },
     { "area_block_addbeam", 0x11d70, (void *)th_11d70, 5, expect_11d70, mask_all, (void **)&orig_11d70, 0, 0 },
+    { "area_block_addoutdoor", 0x11f70, (void *)th_11f70, 8, expect_11f70, mask_all, (void **)&orig_11f70, 0, 0 },
     { "area_block_addcorner", 0x120c0, (void *)th_120c0, 7, expect_120c0, mask_all, (void **)&orig_120c0, 0, 0 },
     { "area_interior_getblock", 0x121d0, (void *)th_121d0, 7, expect_121d0, mask_all, (void **)&orig_121d0, 0, 0 },
     { "lf_12450", 0x12450, (void *)th_12450, 7, expect_12450, mask_all, (void **)&orig_12450, 0, 0 },
@@ -7830,6 +8050,7 @@ static SvHook g_lifted[] = {
     { "lf_16ce0", 0x16ce0, (void *)th_16ce0, 7, expect_16ce0, mask_all, (void **)&orig_16ce0, 0, 0 },
     { "scaleaddvectors", 0x16db0, (void *)th_16db0, 7, expect_16db0, mask_all, (void **)&orig_16db0, 0, 0 },
     { "lf_16e30", 0x16e30, (void *)th_16e30, 7, expect_16e30, mask_all, (void **)&orig_16e30, 0, 0 },
+    { "packevent", 0x16f10, (void *)th_16f10, 5, expect_16f10, mask_all, (void **)&orig_16f10, 0, 0 },
     { "lf_17b60", 0x17b60, (void *)th_17b60, 7, expect_17b60, mask_all, (void **)&orig_17b60, 0, 0 },
     { "deletehuman", 0x18720, (void *)th_18720, 5, expect_18720, mask_all, (void **)&orig_18720, 0, 0 },
     { "human_calculatelegangles", 0x19060, (void *)th_19060, 5, expect_19060, mask_all, (void **)&orig_19060, 0, 0 },
@@ -7846,6 +8067,7 @@ static SvHook g_lifted[] = {
     { "lf_1d3b0", 0x1d3b0, (void *)th_1d3b0, 5, expect_1d3b0, mask_all, (void **)&orig_1d3b0, 0, 0 },
     { "logic_gunstore_buy", 0x1d7a0, (void *)th_1d7a0, 8, expect_1d7a0, mask_all, (void **)&orig_1d7a0, 0, 0 },
     { "lf_1d8a0", 0x1d8a0, (void *)th_1d8a0, 7, expect_1d8a0, mask_all, (void **)&orig_1d8a0, 0, 0 },
+    { "lf_1dba0", 0x1dba0, (void *)th_1dba0, 5, expect_1dba0, mask_all, (void **)&orig_1dba0, 0, 0 },
     { "lf_21a30", 0x21a30, (void *)th_21a30, 7, expect_21a30, mask_all, (void **)&orig_21a30, 0, 0 },
     { "lf_21b40", 0x21b40, (void *)th_21b40, 7, expect_21b40, mask_all, (void **)&orig_21b40, 0, 0 },
     { "lf_21e00", 0x21e00, (void *)th_21e00, 8, expect_21e00, mask_all, (void **)&orig_21e00, 0, 0 },
@@ -7884,6 +8106,7 @@ static SvHook g_lifted[] = {
     { "deleteitem", 0x30ab0, (void *)th_30ab0, 6, expect_30ab0, mask_all, (void **)&orig_30ab0, 0, 0 },
     { "itemweaponsimulation", 0x30ba0, (void *)th_30ba0, 5, expect_30ba0, mask_all, (void **)&orig_30ba0, 0, 0 },
     { "lf_30f00", 0x30f00, (void *)th_30f00, 9, expect_30f00, mask_all, (void **)&orig_30f00, 0, 0 },
+    { "createobject", 0x31800, (void *)th_31800, 6, expect_31800, mask_all, (void **)&orig_31800, 0, 0 },
     { "lf_32340", 0x32340, (void *)th_32340, 5, expect_32340, mask_all, (void **)&orig_32340, 0, 0 },
     { "getobjectrotation2", 0x32bb0, (void *)th_32bb0, 8, expect_32bb0, mask_all, (void **)&orig_32bb0, 0, 0 },
     { "buildsomeshit", 0x32fe0, (void *)th_32fe0, 6, expect_32fe0, mask_all, (void **)&orig_32fe0, 0, 0 },
@@ -7918,6 +8141,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_01cf0,
     &v_01e20,
     &v_02560,
+    &v_02620,
     &v_026d0,
     &v_02cf0,
     &v_02dc0,
@@ -7977,6 +8201,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_0b040,
     &v_0b0b0,
     &v_0b150,
+    &v_0b3f0,
     &v_0b540,
     &v_0b6d0,
     &v_0b850,
@@ -8024,6 +8249,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_118f0,
     &v_11a40,
     &v_11d70,
+    &v_11f70,
     &v_120c0,
     &v_121d0,
     &v_12450,
@@ -8049,6 +8275,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_16ce0,
     &v_16db0,
     &v_16e30,
+    &v_16f10,
     &v_17b60,
     &v_18720,
     &v_19060,
@@ -8065,6 +8292,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_1d3b0,
     &v_1d7a0,
     &v_1d8a0,
+    &v_1dba0,
     &v_21a30,
     &v_21b40,
     &v_21e00,
@@ -8103,6 +8331,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_30ab0,
     &v_30ba0,
     &v_30f00,
+    &v_31800,
     &v_32340,
     &v_32bb0,
     &v_32fe0,
@@ -8141,7 +8370,7 @@ int sv_hooks_lifted_install(void)
     lf_x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
-    int to = sv_config_int("lifted_to", 216);
+    int to = sv_config_int("lifted_to", 222);
     relocate(expect_01cd0, 3);
     relocate(expect_04a10, 2);
     relocate(expect_04bb0, 2);
@@ -8166,6 +8395,7 @@ int sv_hooks_lifted_install(void)
     relocate(expect_0da60, 3);
     relocate(expect_0db20, 4);
     relocate(expect_0ded0, 4);
+    relocate(expect_11f70, 4);
     relocate(expect_129b0, 5);
     relocate(expect_12c90, 6);
     relocate(expect_143b0, 3);
@@ -8179,6 +8409,7 @@ int sv_hooks_lifted_install(void)
     relocate(expect_16ce0, 2);
     relocate(expect_16db0, 2);
     relocate(expect_16e30, 2);
+    relocate(expect_16f10, 1);
     relocate(expect_19610, 2);
     relocate(expect_1b070, 5);
     relocate(expect_21a30, 3);
@@ -8197,20 +8428,20 @@ int sv_hooks_lifted_install(void)
     relocate(expect_4da10, 4);
     relocate(expect_4e0d0, 4);
     relocate(expect_5aa60, 4);
-    if (to > 216)
-        to = 216;
+    if (to > 222)
+        to = 222;
     if (from < 0)
         from = 0;
     if (from >= to)
         return 0;
-    sv_log("lifted hooks %d..%d of 216", from, to);
+    sv_log("lifted hooks %d..%d of 222", from, to);
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
 void sv_hooks_lifted_summary(void)
 {
     int i;
-    for (i = 0; i < 216; i++)
+    for (i = 0; i < 222; i++)
         if (g_lifted_stats[i]->calls)
             sv_verify_summary(g_lifted_stats[i]);
 }

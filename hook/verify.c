@@ -334,6 +334,27 @@ void sv_track_switch_to_original(void)
     protect_scope(PAGE_READONLY);
 }
 
+static uint32_t g_ignore[16][2];  /* [rva, rva + size) */
+static int g_nignore;
+
+void sv_verify_ignore(uint32_t rva, uint32_t size)
+{
+    if (g_nignore < 16) {
+        g_ignore[g_nignore][0] = rva;
+        g_ignore[g_nignore][1] = rva + size;
+        g_nignore++;
+    }
+}
+
+static int ignored(uint32_t rva)
+{
+    int k;
+    for (k = 0; k < g_nignore; k++)
+        if (rva >= g_ignore[k][0] && rva < g_ignore[k][1])
+            return 1;
+    return 0;
+}
+
 /* Describe a .data address as "global[i]+0xNN". */
 static void describe(uint32_t rva, char *out, size_t n)
 {
@@ -381,7 +402,7 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
         if (!mine)
             continue;
         for (b = 0; b < PAGE; b++) {
-            if (mine[b] != now[b]) {
+            if (mine[b] != now[b] && !ignored(data_rva + g_new.index[i] * PAGE + b)) {
                 if (++diffs <= 8) {
                     describe(data_rva + g_new.index[i] * PAGE + b, where, sizeof where);
                     sv_log("  %s: new=%02x original=%02x", where, mine[b], now[b]);
@@ -398,7 +419,7 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
         now = g_data + (size_t)g_orig.index[i] * PAGE;
         before = g_orig.before[i];
         for (b = 0; b < PAGE; b++) {
-            if (before[b] != now[b]) {
+            if (before[b] != now[b] && !ignored(data_rva + g_orig.index[i] * PAGE + b)) {
                 if (++diffs <= 8) {
                     describe(data_rva + g_orig.index[i] * PAGE + b, where, sizeof where);
                     sv_log("  %s: new did not write, original=%02x", where, now[b]);

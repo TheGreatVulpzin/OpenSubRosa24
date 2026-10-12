@@ -118,6 +118,9 @@ int sv_hooks_024d_install(void)
     expect_va(expect_createevent_updatemission, 2, SR_RVA_SERVER);
 
     sv_verify_init();
+    /* timer[256] (0x58 bytes each, size from the Linux ELF symbol): profiler start and
+     * total times read from the CPU cycle counter (RDTSC). Each run writes other values. */
+    sv_verify_ignore(0x14043e0, 0x5800);
     n = sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
     /* Functions lifted automatically from Ghidra (tools/lift/lift.py). subvulpes.ini: lifted=0 disables all. */
     if (sv_config_int("lifted", 1))

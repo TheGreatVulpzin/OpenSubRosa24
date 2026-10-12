@@ -36,7 +36,6 @@ BLOCKERS = {
     'switchD': 'computed jump', '(code *)': 'function pointer call', 'in_ST0': 'x87 input',
     'POPCOUNT': 'popcount', 'LOCK()': 'lock prefix',
     'segment(': 'segment', 'CONCAT3': 'odd concat',
-    'rdtsc': 'time stamp counter',
 }
 
 # Imports with no effect outside memory (safe to run twice in a verification).
@@ -170,15 +169,39 @@ def side_effects(funcs):
     return side
 
 
+DENORMAL_RE = re.compile(r'(?<![0-9.\w])(\d\.\d+e-(?:3[89]|4[0-5]))(?![0-9.\w])')
+FLOAT_TINY = 2.0 ** -149  # smallest float denormal = int 1 read as float
+
+
+def exact_denormals(c):
+    """Ghidra typed an int as float: 'x == 1.4013e-45' means 'the int bits of x == 1'.
+
+    Ghidra prints 6 significant digits. In C the literal is a double, so the compare runs in
+    double and fails (1.4013e-45 is not 2^-149). Each literal becomes the exact float value
+    (9 digits, 'f' suffix), so the compare and the store use the same bits as the original.
+    A literal that does not map to exactly one int stays blocked."""
+    def rep(m):
+        text = m.group(1)
+        n = round(float(text) / FLOAT_TINY)
+        same = [k for k in (n - 1, n, n + 1) if k > 0 and float('%.6g' % (k * FLOAT_TINY)) == float(text)]
+        if same != [n]:
+            raise ValueError(text)
+        return '%.9ef' % (n * FLOAT_TINY)
+    try:
+        return DENORMAL_RE.sub(rep, c), None
+    except ValueError as e:
+        return None, f'int typed as float (ambiguous literal {e})'
+
+
 def lift_function(f, rva, headers, imports_used):
     """Return (C text, error). error is None on success."""
     c = f['c']
     for tok, why in BLOCKERS.items():
         if tok in c:
             return None, why
-    # A tiny float literal (1.4013e-45 = int 1 read as float) means Ghidra typed an int as float.
-    if re.search(r'(?<![0-9.])\d\.\d+e-(3[89]|4[0-5])(?![0-9])', c):
-        return None, 'int typed as float (denormal literal)'
+    c, err = exact_denormals(c)
+    if err:
+        return None, err
     hdr = headers.get(rva)
     if not hdr:
         return None, 'header not parsed'
