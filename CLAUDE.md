@@ -30,10 +30,11 @@ Se o download falhar, a sessão precisa de acesso de rede a `crypticsea.gart.sh`
 
 - `tools/re/strings.py <arquivo> [min]` — strings ASCII.
 - `tools/re/elf_symbols.py <elf> [--sections]` — funções do ELF.
+- `tools/re/survey_bins.py <pasta> [--manifest …] [--tsv]` — formato, símbolos e SHA-256 de todos os executáveis de uma pasta.
 - `tools/re/manifest.py write|check` — hashes de `original/`.
 - `tools/ghidra/analyze_all.sh [nome]` — importa e analisa binários. Caminhos em `tools/ghidra/env.sh`.
 - `tools/ghidra/export_all.sh` — reexporta features sem reanalisar.
-- `tools/ghidra/decompile.sh <programa> <saida.c> [rva ...]` — pseudo-C.
+- `tools/ghidra/decompile.sh <programa> <saida.c> [rva ...]` — pseudo-C. Programa em pasta do projeto: `mac025/subrosa`.
 - `tools/re/name_all.sh` — gera os CSVs de nomes de função.
 - `tools/re/map_globals.py` — mapeia variáveis globais por votos.
 - `tools/re/struct_fields.py` — levanta campos de structs do pseudo-C.

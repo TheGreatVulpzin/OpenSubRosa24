@@ -9,3 +9,4 @@ rva,name,evidence
 0x31800,createobject,"Manager (ANALISE-NPCS.md): registro 0x8230."
 0x50ae0,createhuman,"Manager (ANALISE-NPCS.md): registro 0x2B64, vida inicial 100."
 0x129b0,createbond,Checa numofbonds < 0x3fff e grava particle_a/particle_b em bond+0x14/+0x18 (casador dizia createparticle).
+0x4f720,playerai,"Chama ai_assessthreats, ai_playercar, rand e atan2, como o playerai do ELF 0.24c. Chamada pelo dedicatedserverloop. O Mac 0.25 sugeria playersimulation (errado: playersimulation não chama nada)."

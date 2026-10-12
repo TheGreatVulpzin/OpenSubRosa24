@@ -1,0 +1,304 @@
+serie	pacote	arquivo	formato	arq	simbolos	build_pe	bytes	sha256	no_manifesto
+0.01	Sub Rosa 0.01.zip	Sub Rosa 0.01/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-06-17	516096	542a97f97edd69b81447fde17c7b636286db86dd5a20b0e8e442912984c7ccf4	-
+0.02	Sub Rosa 0.02.zip	subrosa02/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-06-20	532480	7ffd49bd8321200ac7b375a5ccf94d68ecff25932d09ba7dedf3051fcb7ab573	-
+0.03	Sub Rosa 0.03.zip	subrosa03/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-06-20	532480	0f4b97b2798acb8ec8f8be5d932175699379e88b38cc1583b73f01b522d4010c	-
+0.05	Sub Rosa 0.05 Dedicated.zip	subrosa05dedicated/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-06-30	573440	694dc311fbb993205d51803269aa62eb79a66ad1673aaf13d10ce51e31f28cd5	-
+0.05	Sub Rosa 0.05.zip	Sub Rosa 0.05/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-06-30	573440	694dc311fbb993205d51803269aa62eb79a66ad1673aaf13d10ce51e31f28cd5	-
+0.06	Sub Rosa 0.06 Linux.tar.gz	subrosa06/subrosa	ELF64	x86-64	2433 funções	-	1207193	592d6420e77a4bd080c5da10f16487c2f0aef3c6997a60b6e7333a9a6669fe54	-
+0.06	Sub Rosa 0.06 Linux.zip	Sub Rosa 0.06 Linux/subrosa	ELF64	x86-64	2433 funções	-	1207193	592d6420e77a4bd080c5da10f16487c2f0aef3c6997a60b6e7333a9a6669fe54	-
+0.06	Sub Rosa 0.06.tar.gz	subrosadedicated32	ELF32	i386	296 funções	-	266493	c8808e4de2f5fa1e90023d25fcaddeb3f503c8c4779b4f942a6f33d6bd344ab9	-
+0.06	Sub Rosa 0.06.tar.gz	subrosadedicated64	ELF64	x86-64	296 funções	-	320883	b17c701d1412ea8a730979c80b6afefdc455a787505cfc1bbdaad91d96fa4264	-
+0.06	Sub Rosa 0.06.zip	Sub Rosa 0.06/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-08-22	655360	82abd1dbaf35938f4b7423cab0d70672df83f6648b4477ef3e261ae20f7a0f84	-
+0.06	Sub Rosa 0.06b.zip	subrosa06b/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-08-25	659456	96f5b10f86496f17bc4d99da3c7f467218163e48fdd461879c3aa356ab430153	-
+0.07	Sub Rosa 0.07 Dedicated Linux.tgz	subrosadedicated32	ELF32	i386	321 funções	-	320911	c7bbc240dd58e94fc9365a73f0b871b90e54aa688a8d99df98aaede638573be2	-
+0.07	Sub Rosa 0.07 Dedicated Linux.tgz	subrosadedicated64	ELF64	x86-64	321 funções	-	375568	0ece385cc63b93887eb29b0852574d3b109d103d4a41aa71f1fd8fe6d87c631f	-
+0.07	Sub Rosa 0.07 Mac.dmg	subrosa/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4350 símbolos, _gameloop	-	1213144	6b5a85878e4ebedcf48acc7e18f2a9ee594abff277270c658acc9c959b66faac	-
+0.07	Sub Rosa 0.07b Dedicated Linux.zip	Sub Rosa 0.07b Dedicated Windows/subrosadedicated32	ELF32	i386	321 funções	-	320911	c7bbc240dd58e94fc9365a73f0b871b90e54aa688a8d99df98aaede638573be2	-
+0.07	Sub Rosa 0.07b Dedicated Linux.zip	Sub Rosa 0.07b Dedicated Windows/subrosadedicated64	ELF64	x86-64	321 funções	-	375568	0ece385cc63b93887eb29b0852574d3b109d103d4a41aa71f1fd8fe6d87c631f	-
+0.07	Sub Rosa 0.07b Mac.dmg	subrosa/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4350 símbolos, _gameloop	-	1213144	6b5a85878e4ebedcf48acc7e18f2a9ee594abff277270c658acc9c959b66faac	-
+0.07	Sub Rosa 0.07b.zip	subrosa07b/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-10-04	724992	71ca04af816fbed1348815dd7e75fa74fc3779bbd70ace5ac43f1d4e404ebe9a	-
+0.07	subrosa07test.zip	subrosa07test/subrosa.exe	PE32 (linker 6.0)	i386	não	2012-09-29	720896	0675f4a56266839a46587104c15974c04a9e0669a6e0f53de6def95f64069eea	-
+0.15	subrosa15testreal Dedicated Windows Unofficial by marek9911.rar	subrosa15testreal Dedicated Windows Unofficial/subrosa15dedicated.exe	PE32 (linker 10.0)	i386	não	2014-02-26	1529856	dc7275298d564bfde3f4b9c848a8d15d64e1000ec2a8df3a7ab157418593be2a	-
+0.15	subrosa15testreal.rar	subrosa15testreal/subrosa.exe	PE32 (linker 10.0)	i386	não	2014-02-26	1529856	845cb859092b98ad3b7c2aac974f5f19e9510fc93acabb6d095340c8f3ab9cc4	-
+0.21	Sub Rosa 0.21 Dedicated Server Unofficial by marek9911.rar	Sub Rosa 0.21 Dedicated Server Unofficial/subrosa21_dedicated.exe	PE32 (linker 10.0)	i386	não	2014-08-14	1670656	265efa84629fd47c0bfed4dc7d8771ea40b5008b53aa530e491b53683a449098	-
+0.21	Sub Rosa 0.21.zip	Sub Rosa 0.21/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4502 símbolos, _gameloop	-	1808508	0c0dd2d3e78b53c9afb3c84b4f07507303a266946179d9a382f53a6c9af729b7	-
+0.21	Sub Rosa 0.21.zip	Sub Rosa 0.21/subrosa.exe	PE32 (linker 10.0)	i386	não	2014-08-14	1670656	d33d08d85adc4af74941d45544c698be63ccc735c0b5c4fa6095c330c5719bbb	-
+0.22	Sub Rosa 0.22 Dedicated Server Unofficial by mordekai.zip	subrosadedicated022.exe	PE32 (linker 10.0)	i386	não	2014-10-31	1683968	ab0ac66c7be052693de7c97f34feb70ccc35dea44d7abd736c9123a9a99cdbc2	-
+0.22	Sub Rosa 0.22.rar	subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4503 símbolos, _gameloop	-	1820832	1e7bca6a1ee79cd33e618ad8660fae1c2baf0879d9d01ce101dc72d958e48531	vanilla/0.22/subrosa.app/Contents/MacOS/subrosa
+0.22	Sub Rosa 0.22.rar	subrosa.exe	PE32 (linker 10.0)	i386	não	2014-10-31	1683968	50f67acabe8a6443760971bf3050617d255b6b2e6e8c93739db0bc0607efcf0b	vanilla/0.22/subrosa.exe
+0.23	Sub Rosa 0.23 Dedicated Server Unofficial by marek9911.rar	Sub Rosa 0.23 Dedicated Server Unofficial/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-01-01	1747456	583574f6439655c7a64510d167a7ee7ebb762338b1c6562c024d2f80c55996e5	-
+0.23	Sub Rosa 0.23.zip	Sub Rosa 0.23/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4539 símbolos, _gameloop	-	1875960	13a04d6fe097796cff5f5e14520993ac58e23db2ee6c0c17a302579e6a095c02	-
+0.23	Sub Rosa 0.23.zip	Sub Rosa 0.23/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-01-01	1747456	71e704dc16d4a407326174bd7fdca7cf6a18019abdfb1e4d8d3f578771819afa	-
+0.23	Sub Rosa 0.23.zip	Sub Rosa 0.23/subrosa64	ELF64	x86-64	2681 funções	-	1828288	1162971fc0a92eb2dc4af92e6bb6a4921a59d6806d0421ad792c5c0a75a56fe2	-
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b Dedicated Linux.zip	Sub Rosa 0.24b Dedicated Linux/subrosadedicated024b	ELF64	x86-64	461 funções	-	736525	830042375ed6489537fbf0f3ead7b0a82758633430fd1e615f348c9dfecdeef5	vanilla/0.24b_Dedicated_Linux/Sub Rosa 0.24b Dedicated Linux/subrosadedicated024b
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b Dedicated Windows.zip	Sub Rosa 0.24b Dedicated Windows/subrosadedicated024b.exe	PE32 (linker 10.0)	i386	não	2015-08-04	743936	e44dda00c47f0acf50b9f4d33420d7b5aba53cc14baf1947744fcd0e7db4eac9	vanilla/0.24b_Dedicated_Windows/Sub Rosa 0.24b Dedicated Windows/subrosadedicated024b.exe
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b.zip	Sub Rosa 0.24b/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4662 símbolos, _gameloop	-	2011560	78119827992c9b07e50fae1c3369d21279c123ce2593ed5bb89cb637b935012b	client/subrosa.app/Contents/MacOS/subrosa, vanilla/0.24b/Sub Rosa 0.24b/subrosa.app/Contents/MacOS/subrosa
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b.zip	Sub Rosa 0.24b/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-08-02	1872896	294db16c600b96cdef00c9c025538a37d6d81439077f3ff1348efbbf0d92ca84	client/subrosa.exe, vanilla/0.24b/Sub Rosa 0.24b/subrosa.exe
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b.zip	Sub Rosa 0.24b/subrosa.x64	ELF64	x86-64	2757 funções	-	1944242	9afeea228cf37c08e0365430d6c14548579adc61cc96624580808f9ce2891390	client/subrosa.x64, vanilla/0.24b/Sub Rosa 0.24b/subrosa.x64
+0.24	Sub Rosa 0.24b/Sub Rosa 0.24b.zip	Sub Rosa 0.24b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2015-08-02	742400	54f18a19a87fdf55ef5a401be5d42d1f96326a1af6c7f2b50e2ea6fba237a973	client/subrosadedicated.exe, vanilla/0.24b/Sub Rosa 0.24b/subrosadedicated.exe
+0.24	Sub Rosa 0.24c/Sub Rosa 0.24c Dedicated Linux.zip	Sub Rosa 0.24c Dedicated Linux/subrosadedicated024c	ELF64	x86-64	461 funções	-	736525	5f159b17a0bafc66e8a0924088e8fe9de05684875066ebd72997ca5baaad9b9c	vanilla/0.24c_Dedicated_Linux/Sub Rosa 0.24c Dedicated Linux/subrosadedicated024c
+0.24	Sub Rosa 0.24c/Sub Rosa 0.24c Dedicated Windows.zip	Sub Rosa 0.24c Dedicated Windows/subrosadedicated024c.exe	PE32 (linker 10.0)	i386	não	2015-08-04	744960	8f09ba86085e0fea83b4c72610aa95b4b9fe98d191af08ffd21e33f25b0da6e6	vanilla/0.24c_Dedicated_Windows/Sub Rosa 0.24c Dedicated Windows/subrosadedicated024c.exe
+0.24	Sub Rosa 0.24d Dedicated Windows.zip	Sub Rosa 0.24d Dedicated Windows/subrosadedicated024d.exe	PE32 (linker 10.0)	i386	não	2015-09-05	654848	11e006786d945d5731cb664fba718a094d8f02648b13fcc20c26c8614ea603fd	blackhouser/subrosadedicated024d.exe, vanilla/0.24d_Dedicated_Windows/Sub Rosa 0.24d Dedicated Windows/subrosadedicated024d.exe
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_b.exe	PE32 (linker 10.0)	i386	não	2015-10-16	1962496	3babbb5a2de4fe7fffae0eef928b4781c6e228e2aa5234b24707fbbedbfdb232	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_c.exe	PE32 (linker 10.0)	i386	não	2015-10-16	1955840	2aa88d5cf8aab1030fa944566d8ca12c93bfe2508e4a7798cde8abd127593298	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_d.exe	PE32 (linker 10.0)	i386	não	2015-10-17	1963008	ebd49674c68dbb4d54b30509b17020b39d06042b799d7c146f5b99c9d8212e61	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_e.exe	PE32 (linker 10.0)	i386	não	2015-10-17	1964032	e6ec203d5505c3e14e68cf00f567bcacd5208f15e4ee24860e8365e5d48d800d	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_f.exe	PE32 (linker 10.0)	i386	não	2015-10-17	1964032	8f2e367a5f3c1ab6caffcf6826f4e46a5a497e6dcbc185f232365e62a74b98ca	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25 Patches Windows.zip	Sub Rosa 0.25 Patches Windows/subrosatest_g.exe	PE32 (linker 10.0)	i386	não	2015-10-18	1965568	959b5ed7c077d68ce2ba9b7ea8a165797c8e186d62b398b0d1e9e2f79af75cc8	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25-1.7z	Sub Rosa 0.25-1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 4570 símbolos, _gameloop	-	1791672	8c70243814db92c5d133828c2e35ecacce93b528e239baf1bbf35f9f165fb40d	-
+0.25	Sub Rosa 0.25/Sub Rosa 0.25-1.7z	Sub Rosa 0.25-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-10-06	2036224	7cd633567c0bee5515015987e314221a5bb3069f618685c00f5ec2d39c679fef	vanilla/0.25b/Sub Rosa 0.25b/subrosa.exe
+0.25	Sub Rosa 0.25/Sub Rosa 0.25-1.7z	Sub Rosa 0.25-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.25	Sub Rosa 0.25/Sub Rosa 0.25.7z	Sub Rosa 0.25/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4573 símbolos, _gameloop	-	1509592	771dc2ab4fcf2e9f2eed48f00604149dc0c7fe6249f674435e7976fb9830c099	vanilla/0.25b/Sub Rosa 0.25b/subrosa.app/Contents/MacOS/subrosa
+0.25	Sub Rosa 0.25/Sub Rosa 0.25.7z	Sub Rosa 0.25/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-10-06	2036224	7cd633567c0bee5515015987e314221a5bb3069f618685c00f5ec2d39c679fef	vanilla/0.25b/Sub Rosa 0.25b/subrosa.exe
+0.25	Sub Rosa 0.25/Sub Rosa 0.25.7z	Sub Rosa 0.25/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.25	Sub Rosa 0.25b/Sub Rosa 0.25b Dedicated Linux.tar	subrosadedicated025b	ELF64	x86-64	não (stripped)	-	788608	04c521ab6198e449d56696f3b5f1de906478c39ee8bd6f9fb94bce11326eae2b	vanilla/0.25b_Dedicated_Linux/subrosadedicated025b
+0.25	Sub Rosa 0.25b/Sub Rosa 0.25b Dedicated Windows.zip	subrosa025/subrosadedicated025b.exe	PE32 (linker 10.0)	i386	não	2015-10-06	677376	c5665c920965327a06ac7c1e7880fc79d6e2c40111fef8b3bb73bdda65b50796	-
+0.25	Sub Rosa 0.25b/Sub Rosa 0.25b.zip	Sub Rosa 0.25b/subrosa.app/Contents/MacOS/subrosa	Mach-O	i386	i386: 4573 símbolos, _gameloop	-	1509592	771dc2ab4fcf2e9f2eed48f00604149dc0c7fe6249f674435e7976fb9830c099	vanilla/0.25b/Sub Rosa 0.25b/subrosa.app/Contents/MacOS/subrosa
+0.25	Sub Rosa 0.25b/Sub Rosa 0.25b.zip	Sub Rosa 0.25b/subrosa.exe	PE32 (linker 10.0)	i386	não	2015-10-06	2036224	7cd633567c0bee5515015987e314221a5bb3069f618685c00f5ec2d39c679fef	vanilla/0.25b/Sub Rosa 0.25b/subrosa.exe
+0.25	Sub Rosa 0.25b/Sub Rosa 0.25b.zip	Sub Rosa 0.25b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c Intel Patchtest.zip	Sub Rosa 0.25c Intel Patchtest/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 4570 símbolos, _gameloop	-	1791672	8c70243814db92c5d133828c2e35ecacce93b528e239baf1bbf35f9f165fb40d	-
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c Intel Patchtest.zip	Sub Rosa 0.25c Intel Patchtest/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-05-04	1963008	69abb08ec62945256a82d3ec3ce6be8abb72f2e59c06db7a7c0a13cb6d287350	-
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c Intel Patchtest.zip	Sub Rosa 0.25c Intel Patchtest/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c.7z	Sub Rosa 0.25c/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 4570 símbolos, _gameloop	-	1791672	8c70243814db92c5d133828c2e35ecacce93b528e239baf1bbf35f9f165fb40d	-
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c.7z	Sub Rosa 0.25c/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-03-27	1963008	fe6235fc15ff8dacb7795bb9cec7dd47fca145174252548ff1018ae6b6180e29	-
+0.25	Sub Rosa 0.25c/Sub Rosa 0.25c.7z	Sub Rosa 0.25c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.25	Sub Rosa 0.25d.7z	Sub Rosa 0.25d/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 4570 símbolos, _gameloop	-	1791672	8c70243814db92c5d133828c2e35ecacce93b528e239baf1bbf35f9f165fb40d	-
+0.25	Sub Rosa 0.25d.7z	Sub Rosa 0.25d/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-05-04	1963008	69abb08ec62945256a82d3ec3ce6be8abb72f2e59c06db7a7c0a13cb6d287350	-
+0.25	Sub Rosa 0.25d.7z	Sub Rosa 0.25d/subrosa.x64	ELF64	x86-64	não (stripped)	-	1248032	67e69434972a9789c8b11cc399ef0e799db1415c867ac6dc8f410916f32bd4e2	vanilla/0.25b/Sub Rosa 0.25b/subrosa.x64
+0.26	Sub Rosa 0.26a Traffic Test.zip	Sub Rosa 0.26a Traffic Test/subrosa.exe	PE32 (linker 10.0)	i386	não	2016-08-31	1706496	1253c6b729c7829374132aca94eadc025c3de36ca7f7563a6fe0434af81cfd09	-
+0.27	Sub Rosa 0.27a Rev1.zip	Sub Rosa 0.27a Rev1/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-08-02	1859072	a4cbe76714d281f6acea0f0da8eb7ea2da7e248cf7f4f6bf162118ff797dff71	-
+0.27	Sub Rosa 0.27a Rev2.zip	Sub Rosa 0.27a Rev2/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-08-02	1859072	a4cbe76714d281f6acea0f0da8eb7ea2da7e248cf7f4f6bf162118ff797dff71	-
+0.27	Sub Rosa 0.27a.7z	Sub Rosa 0.27a/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-08-02	1859072	a4cbe76714d281f6acea0f0da8eb7ea2da7e248cf7f4f6bf162118ff797dff71	-
+0.28	Sub Rosa 0.28a.7z	Sub Rosa 0.28a/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-09-22	1674240	041d7dfe2d2a6bb6f47efcc69a9b3127d818fd3e79d7b338c810a17bd074d5a0	-
+0.28	Sub Rosa 0.28b.7z	Sub Rosa 0.28b/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-09-29	1676288	0270bb6e1ecce2424dedb6d6325d38e5487c00d5aa1c66664ffbf9c82868a9f1	-
+0.29	Sub Rosa 0.29a-1.7z	Sub Rosa 0.29a-1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1903 símbolos, _gameloop	-	1546144	f099d150cce868e7fd7cf40a42bf6ed5dfafb20eed546a9a4d84c17da544a5b0	-
+0.29	Sub Rosa 0.29a-1.7z	Sub Rosa 0.29a-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-12-18	1602560	4f68c0d81ff3beee55e036c7b30023ca223cfb97179192e67f635969d99562f9	-
+0.29	Sub Rosa 0.29a-1.7z	Sub Rosa 0.29a-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1079936	10ed7122e0e19c75483f8e26293ff78046b84ef4d9cd7d1c5f2f6652fb07f924	-
+0.29	Sub Rosa 0.29a-1.7z	Sub Rosa 0.29a-1/subrosadedicated028.x64	ELF64	x86-64	não (stripped)	-	923840	49ae39caedd9e66a72184a8a289c13834a8893b7257e6c1a9dc459301fc3ce2c	-
+0.29	Sub Rosa 0.29a-2.7z	Sub Rosa 0.29a-2/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1903 símbolos, _gameloop	-	1546144	f099d150cce868e7fd7cf40a42bf6ed5dfafb20eed546a9a4d84c17da544a5b0	-
+0.29	Sub Rosa 0.29a-2.7z	Sub Rosa 0.29a-2/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-01-11	1601024	6d35547f1593d980a28fff5273d3f3f6f67d5db8b8b35dc9deb6b4ca74d740d6	-
+0.29	Sub Rosa 0.29a-2.7z	Sub Rosa 0.29a-2/subrosa.x64	ELF64	x86-64	não (stripped)	-	1079936	10ed7122e0e19c75483f8e26293ff78046b84ef4d9cd7d1c5f2f6652fb07f924	-
+0.29	Sub Rosa 0.29a-2.7z	Sub Rosa 0.29a-2/subrosadedicated028.x64	ELF64	x86-64	não (stripped)	-	923840	49ae39caedd9e66a72184a8a289c13834a8893b7257e6c1a9dc459301fc3ce2c	-
+0.29	Sub Rosa 0.29a.7z	Sub Rosa 0.29a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1903 símbolos, _gameloop	-	1546144	f099d150cce868e7fd7cf40a42bf6ed5dfafb20eed546a9a4d84c17da544a5b0	-
+0.29	Sub Rosa 0.29a.7z	Sub Rosa 0.29a/subrosa.exe	PE32 (linker 10.0)	i386	não	2017-12-18	1602560	4f68c0d81ff3beee55e036c7b30023ca223cfb97179192e67f635969d99562f9	-
+0.29	Sub Rosa 0.29a.7z	Sub Rosa 0.29a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1079936	10ed7122e0e19c75483f8e26293ff78046b84ef4d9cd7d1c5f2f6652fb07f924	-
+0.29	Sub Rosa 0.29a.7z	Sub Rosa 0.29a/subrosadedicated028.x64	ELF64	x86-64	não (stripped)	-	923840	49ae39caedd9e66a72184a8a289c13834a8893b7257e6c1a9dc459301fc3ce2c	-
+0.30	Sub Rosa 0.30a Test 9.7z	Sub Rosa 0.30a Test 9/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-08-08	1896448	c282c75a931e183ddca25e493b87349c0041a9cd4d58a5cd8129bc8d1b104be3	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a-1.7z	Sub Rosa 0.31a-1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1943 símbolos, _gameloop	-	1634636	9ebbeb012daa99940b5e0abee104ee6fb6abb7aca9c895737e536dd775b29423	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a-1.7z	Sub Rosa 0.31a-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-09-14	1923584	2fc7553e360b647cbcbb8df867eb73e6b3f1c1802590ef5cfb73f36901be8e62	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a-1.7z	Sub Rosa 0.31a-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1152224	d16ddc532b1e243821aef942c3f9f7084a7a5914aad2822403aa3408a4e1d582	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a-1.7z	Sub Rosa 0.31a-1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-09-14	881664	2f6b9ec4449cc93bb36851c136caa438fd2e2e30756c88e8ad2cf4e7975f8ca0	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a-1.7z	Sub Rosa 0.31a-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	1005776	52d82013ab46cc5bcd399676e3c1f8fc0acf9830e2eba49cd5ffe73333a155b0	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a.7z	Sub Rosa 0.31a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1942 símbolos, _gameloop	-	1634588	d7ee0bfd29c14bb05ab01866bcbc4ddc2bbc99813f115301372f0a4d7439c590	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a.7z	Sub Rosa 0.31a/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-09-14	1923584	6a587d269fed60bd667c9b1db688ff2b9bd2bc3ccf03462ff25bc2726bd27807	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a.7z	Sub Rosa 0.31a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1152224	a5cd24bdc6f4cd59f229d4dc7a903a04ec07f8fb28367b2017cec01976d5f9e7	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a.7z	Sub Rosa 0.31a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-09-14	881664	b5ebc9c589161d8cb7e5907e195f63c9c631abced99695f67b8a7fcc3df6e978	-
+0.31	Sub Rosa 0.31a/Sub Rosa 0.31a.7z	Sub Rosa 0.31a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	1009872	2ce21b45fa44ae74f2918438559ff9ba6f53a77f0d3f349a1d6f8043d7752c37	-
+0.31	Sub Rosa 0.31b.7z	Sub Rosa 0.31b/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1943 símbolos, _gameloop	-	1634636	fac29535744a615cc7c84a5de0fe160313b9576c68da16e8019b0431a3ed2b59	-
+0.31	Sub Rosa 0.31b.7z	Sub Rosa 0.31b/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-09-18	1923584	a4745f1688d02747c2828e8d7e8df07ac3a3256cca26e389f5234ba53260d360	-
+0.31	Sub Rosa 0.31b.7z	Sub Rosa 0.31b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1152224	d16ddc532b1e243821aef942c3f9f7084a7a5914aad2822403aa3408a4e1d582	-
+0.31	Sub Rosa 0.31b.7z	Sub Rosa 0.31b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-09-18	881664	0e7a1481fad34e38367fa77ac8665fc746f8170e68934a9d097c5c4a592a4593	-
+0.31	Sub Rosa 0.31b.7z	Sub Rosa 0.31b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	1005776	52d82013ab46cc5bcd399676e3c1f8fc0acf9830e2eba49cd5ffe73333a155b0	-
+0.32	Sub Rosa 0.32a.7z	Sub Rosa 0.32a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1944 símbolos, _gameloop	-	1626528	e5a793652d511a1551cd371ef5e9b3ab6445cc69b03f4b635c15016950cd0897	-
+0.32	Sub Rosa 0.32a.7z	Sub Rosa 0.32a/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-10-31	1935360	c534fbf1ec3b2359bddc3d0d74a98a074ed1c8b3e1d7042e82d6a0eec705b26f	-
+0.32	Sub Rosa 0.32a.7z	Sub Rosa 0.32a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1208264	be359cc3dee87883a517891da2baccc69aca9617cb00aafd06a642adf5227245	-
+0.32	Sub Rosa 0.32a.7z	Sub Rosa 0.32a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-10-31	887296	d21ae3e85b670e8d034aa9436823859bb9a97a5693f4f9a25de03215f26e8db8	-
+0.32	Sub Rosa 0.32a.7z	Sub Rosa 0.32a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	697920	1e9f8462d7ace297f7431c4eafc4256eed6e6ec2320d4c10c79472b56dfd7073	-
+0.33	Sub Rosa 0.33a.7z	Sub Rosa 0.33a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1960 símbolos, _gameloop	-	1663748	88493ca832df945144537f0794134b13a48fa4f56f65704be16d4d8502c25f95	-
+0.33	Sub Rosa 0.33a.7z	Sub Rosa 0.33a/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-12-05	1977344	15e0488c1020a92f5943a4544cca2fbbd22bd0341c17e29f5150ee977be41fcf	-
+0.33	Sub Rosa 0.33a.7z	Sub Rosa 0.33a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1240904	d82e6a3ba0d3fe1f95c07b3c94f438b6f5c68cfcb3c753bb0cf7ae711c836db2	-
+0.33	Sub Rosa 0.33a.7z	Sub Rosa 0.33a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-12-05	899072	aeb13ce7b9c68582d35fbc7f1cb192ba783b9a29e765f7d61e81448225afeecb	-
+0.33	Sub Rosa 0.33a.7z	Sub Rosa 0.33a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	706112	e27148f171036e3a35b64d95b9f31994a2b6e7e919b4cf98c956aa87bbd9c6ec	-
+0.33	Sub Rosa 0.33b.7z	Sub Rosa 0.33b/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1962 símbolos, _gameloop	-	1659772	1e99824642589020db0ca20329496c73a9e67bd9016197206ed1031b840db808	-
+0.33	Sub Rosa 0.33b.7z	Sub Rosa 0.33b/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-12-13	1972736	95fca7ac97e3126b072caef1ca853eb14c2b20fa40da98e3f85cc295934040fa	-
+0.33	Sub Rosa 0.33b.7z	Sub Rosa 0.33b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1240936	8b13f5a3c884f724d0540a0943e81ea91ce7b27423f39a353231653142ffd8ff	-
+0.33	Sub Rosa 0.33b.7z	Sub Rosa 0.33b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-12-13	898048	1f820828ebdc6490b0ca5905440bd3938819fb4f45f83ba3816c7d2e4b65546e	-
+0.33	Sub Rosa 0.33b.7z	Sub Rosa 0.33b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710208	f97e473979095c7d589c770d212086fe2197575a3e5cfba2df11328824a27f27	-
+0.33	Sub Rosa 0.33c.7z	Sub Rosa 0.33c/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1962 símbolos, _gameloop	-	1659772	7dbd8b769372cf529b0e4250de1b7cd56a12f37a04d371ec2e4140d7be04ab33	-
+0.33	Sub Rosa 0.33c.7z	Sub Rosa 0.33c/subrosa.exe	PE32 (linker 10.0)	i386	não	2018-12-13	1972736	94d627dc735896389a5b14748b8811f65d8317547db7d230cab91206f0d6ea45	-
+0.33	Sub Rosa 0.33c.7z	Sub Rosa 0.33c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1240936	9312ab40bf49d917426d8a9ba9a4ee05f85e984f90c61a5366299745a1abe013	-
+0.33	Sub Rosa 0.33c.7z	Sub Rosa 0.33c/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2018-12-13	898048	1f820828ebdc6490b0ca5905440bd3938819fb4f45f83ba3816c7d2e4b65546e	-
+0.33	Sub Rosa 0.33c.7z	Sub Rosa 0.33c/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710208	f97e473979095c7d589c770d212086fe2197575a3e5cfba2df11328824a27f27	-
+0.34	Sub Rosa 0.34a.7z	Sub Rosa 0.34a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1962 símbolos, _gameloop	-	1659772	7dbd8b769372cf529b0e4250de1b7cd56a12f37a04d371ec2e4140d7be04ab33	-
+0.34	Sub Rosa 0.34a.7z	Sub Rosa 0.34a/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-02-17	2027520	ceec19a0cfc5ef8c6c303d4d94c68930f2c8027e21e988dca2d886b20c2baa1d	-
+0.34	Sub Rosa 0.34a.7z	Sub Rosa 0.34a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1240936	9312ab40bf49d917426d8a9ba9a4ee05f85e984f90c61a5366299745a1abe013	-
+0.34	Sub Rosa 0.34a.7z	Sub Rosa 0.34a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-02-17	925696	55cf16dd663442f8737191a38c4e0cc901bfbba7c168642a5fd5727753998fa9	-
+0.34	Sub Rosa 0.34a.7z	Sub Rosa 0.34a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710208	f97e473979095c7d589c770d212086fe2197575a3e5cfba2df11328824a27f27	-
+0.34	Sub Rosa 0.34b.7z	Sub Rosa 0.34b/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1997 símbolos, _gameloop	-	1706808	13fcb381d8334e72b98a83274012dafdaf7a44c56dfbc3e358d24680f5e27ca9	-
+0.34	Sub Rosa 0.34b.7z	Sub Rosa 0.34b/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-02-19	2026496	487c8ea6b50aa807b772e21deb0ead6e5da0d97aac149aa46d24e481ba5a4193	-
+0.34	Sub Rosa 0.34b.7z	Sub Rosa 0.34b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1271272	04ea596a3e1bfd5bf2071f47016d890b365a34373d5f15cb6d40ec69a71d640d	-
+0.34	Sub Rosa 0.34b.7z	Sub Rosa 0.34b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-02-19	925696	066dea429908a9b35955dada68feb44714bcff5216c36f7f0b5956b35b958625	-
+0.34	Sub Rosa 0.34b.7z	Sub Rosa 0.34b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	722528	342b57576b3ff619338ea4a10cdc879b57e7ab83c7885a7a5eac224c99c2e402	-
+0.34	Sub Rosa 0.34c.7z	Sub Rosa 0.34c/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1997 símbolos, _gameloop	-	1706808	13fcb381d8334e72b98a83274012dafdaf7a44c56dfbc3e358d24680f5e27ca9	-
+0.34	Sub Rosa 0.34c.7z	Sub Rosa 0.34c/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-02-20	2027520	7b79cafb6c4ea641c679c33b03cb6148f1f6b4538a79d825499b12ef3939fb49	-
+0.34	Sub Rosa 0.34c.7z	Sub Rosa 0.34c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1271272	04ea596a3e1bfd5bf2071f47016d890b365a34373d5f15cb6d40ec69a71d640d	-
+0.34	Sub Rosa 0.34c.7z	Sub Rosa 0.34c/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-02-20	926720	4754c14eea7b580f2d543688133ac1257cc086ecc2fe01e7933c3450105299a0	-
+0.34	Sub Rosa 0.34c.7z	Sub Rosa 0.34c/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	722528	342b57576b3ff619338ea4a10cdc879b57e7ab83c7885a7a5eac224c99c2e402	-
+0.35	Sub Rosa 0.35a.7z	Sub Rosa 0.35a/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2037 símbolos, _gameloop	-	1709236	184398764d6796a46aa3d8ad2535c8af4f8693177035e8979c2ee0f204d606cd	-
+0.35	Sub Rosa 0.35a.7z	Sub Rosa 0.35a/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-05-17	2015744	ff8cd8d312063699f44e499104f73aefa6dc1739dacc6ad94450fd77a5c05321	-
+0.35	Sub Rosa 0.35a.7z	Sub Rosa 0.35a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1267816	4c9b7be26e0ebcb66e388b6e4c7aba27f2e7ece441e34180343b07129ae4b19e	-
+0.35	Sub Rosa 0.35a.7z	Sub Rosa 0.35a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-05-17	900096	912e5a07c0d85df63f74fef3be9f4b15d2bb228cc4b776fe587e6aaba464a2c7	-
+0.35	Sub Rosa 0.35a.7z	Sub Rosa 0.35a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	702048	d1b6d67895e1fd9a83189855aea3be8595dcd825e941fbd67c418507c0fc7319	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b Beta 1.7z	Sub Rosa 0.35b Beta 1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2037 símbolos, _gameloop	-	1709236	184398764d6796a46aa3d8ad2535c8af4f8693177035e8979c2ee0f204d606cd	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b Beta 1.7z	Sub Rosa 0.35b Beta 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-06-01	2014720	dd2a9707ffae4ceef9e26ab5a1f2fcb36ae7292a77b0410d0b1cb11d6cd2de10	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b Beta 1.7z	Sub Rosa 0.35b Beta 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1267816	4c9b7be26e0ebcb66e388b6e4c7aba27f2e7ece441e34180343b07129ae4b19e	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b Beta 1.7z	Sub Rosa 0.35b Beta 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-06-01	898560	d3193f2b5488e7cb02db8d805d8be1fd4af1cff2d8e5eae99ac5ce2cc1610cde	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b Beta 1.7z	Sub Rosa 0.35b Beta 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	702048	d1b6d67895e1fd9a83189855aea3be8595dcd825e941fbd67c418507c0fc7319	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b-1 Beta 1.7z	Sub Rosa 0.35b-1 Beta 1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2037 símbolos, _gameloop	-	1709236	184398764d6796a46aa3d8ad2535c8af4f8693177035e8979c2ee0f204d606cd	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b-1 Beta 1.7z	Sub Rosa 0.35b-1 Beta 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-06-03	2015744	8ea8244ff72944cb32da4f8078fe6853bd763d5f4ac359deb8e396d249ba9afe	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b-1 Beta 1.7z	Sub Rosa 0.35b-1 Beta 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1267816	4c9b7be26e0ebcb66e388b6e4c7aba27f2e7ece441e34180343b07129ae4b19e	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b-1 Beta 1.7z	Sub Rosa 0.35b-1 Beta 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-06-03	899584	f8137cf613f39578ad0013c2fc0273b0a9b3bd363a54f2465ae91440f5cdbfa1	-
+0.35	Sub Rosa 0.35b/Sub Rosa 0.35b-1 Beta 1.7z	Sub Rosa 0.35b-1 Beta 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	702048	d1b6d67895e1fd9a83189855aea3be8595dcd825e941fbd67c418507c0fc7319	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c-1.7z	Sub Rosa 0.35c-1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2039 símbolos, _gameloop	-	1705240	85f3f29ffc11c683c4235c14322f0bbf192787fa16809c863d914bcfe5f7ecba	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c-1.7z	Sub Rosa 0.35c-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-06-04	2016256	42aaa27e5772f81467c9c9c803b480eca8c9bb77cac8ff879452d24fec54f5c7	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c-1.7z	Sub Rosa 0.35c-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1267816	8c802969bc840698571d39effcd922332d53c4359d593b919fe6449ca5d30b54	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c-1.7z	Sub Rosa 0.35c-1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-06-04	899584	b6c3cc9b08d1830432299f6f76886b047488fe2f46806e711e24d1fb7f7a3cb2	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c-1.7z	Sub Rosa 0.35c-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	702048	0caccc3d33038220b18ab43f7fc4da7631418c0e4c19400fb6b885b255a964b5	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c.7z	Sub Rosa 0.35c/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2039 símbolos, _gameloop	-	1705240	85f3f29ffc11c683c4235c14322f0bbf192787fa16809c863d914bcfe5f7ecba	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c.7z	Sub Rosa 0.35c/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-06-04	2016256	7d0aa07925523de52f1fb8f821c0537ce52761bba9b08c0f0a8d57f08f0fbcb6	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c.7z	Sub Rosa 0.35c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1267816	8c802969bc840698571d39effcd922332d53c4359d593b919fe6449ca5d30b54	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c.7z	Sub Rosa 0.35c/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-06-04	899584	ccf62eb28564de82003994c81b43f1541880c4aa2ac1baa7b84e462a02d8cc1b	-
+0.35	Sub Rosa 0.35c/Sub Rosa 0.35c.7z	Sub Rosa 0.35c/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	702048	0caccc3d33038220b18ab43f7fc4da7631418c0e4c19400fb6b885b255a964b5	-
+0.35	Sub Rosa 0.35d.7z	Sub Rosa 0.35d/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2044 símbolos, _gameloop	-	1717824	6c8de776c15b08959045df3e449cfe0bbdc96506ac676e3b68de749769593760	-
+0.35	Sub Rosa 0.35d.7z	Sub Rosa 0.35d/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-06-07	2032128	280a29c919db0ec64375b27e9fe23541496074f807c4636a65932605dee0994a	-
+0.35	Sub Rosa 0.35d.7z	Sub Rosa 0.35d/subrosa.x64	ELF64	x86-64	não (stripped)	-	1276072	c35e4205687ca3a0b2dc6e9da0a85a3b660f088b0e15beaab3c708eb3f95bf2c	-
+0.35	Sub Rosa 0.35d.7z	Sub Rosa 0.35d/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-06-07	912384	3cb4510f453abcbd5969d408f3d2c520a765e9509ed9c637fff32c88c3767b91	-
+0.35	Sub Rosa 0.35d.7z	Sub Rosa 0.35d/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710304	3fc4ce63b969bf7cc6a6a3a711f5f6254c9a1238c437aa247c9d16c18ed685c1	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z Beta 1.7z	Sub Rosa 0.35z Beta 1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1997 símbolos, _gameloop	-	1706808	13fcb381d8334e72b98a83274012dafdaf7a44c56dfbc3e358d24680f5e27ca9	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z Beta 1.7z	Sub Rosa 0.35z Beta 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-05-13	2010112	1bd598e39247e321e68f40da9a6dee55d21cd241194afab23f4c5e266fe22e71	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z Beta 1.7z	Sub Rosa 0.35z Beta 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1271272	04ea596a3e1bfd5bf2071f47016d890b365a34373d5f15cb6d40ec69a71d640d	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z Beta 1.7z	Sub Rosa 0.35z Beta 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-05-13	895488	26a2d1c68a31a8c714fe7f44f9293c0b9de29acb0e9d6a54e8c2dea8c6e58c9c	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z Beta 1.7z	Sub Rosa 0.35z Beta 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	722528	342b57576b3ff619338ea4a10cdc879b57e7ab83c7885a7a5eac224c99c2e402	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z-1 Beta 1.7z	Sub Rosa 0.35z-1 Beta 1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 1997 símbolos, _gameloop	-	1706808	13fcb381d8334e72b98a83274012dafdaf7a44c56dfbc3e358d24680f5e27ca9	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z-1 Beta 1.7z	Sub Rosa 0.35z-1 Beta 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-05-14	1793024	3d25a524d29fe66539d972f0745bcf6eda3279e6891f05ab0db330b5a4fe032e	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z-1 Beta 1.7z	Sub Rosa 0.35z-1 Beta 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1271272	04ea596a3e1bfd5bf2071f47016d890b365a34373d5f15cb6d40ec69a71d640d	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z-1 Beta 1.7z	Sub Rosa 0.35z-1 Beta 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-05-13	895488	26a2d1c68a31a8c714fe7f44f9293c0b9de29acb0e9d6a54e8c2dea8c6e58c9c	-
+0.35	Sub Rosa 0.35z/Sub Rosa 0.35z-1 Beta 1.7z	Sub Rosa 0.35z-1 Beta 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	722528	342b57576b3ff619338ea4a10cdc879b57e7ab83c7885a7a5eac224c99c2e402	-
+0.36	Sub Rosa 0.36a.7z	Sub Rosa 0.36a/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-10-21	2112000	8fa2651188b5352a63ec7c470ed4dfd637de15a8981cf0aa9a6da5ab9405bf82	-
+0.36	Sub Rosa 0.36a.7z	Sub Rosa 0.36a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1362568	ca68e91ea7bae629c7042c1b1077f0cf00e435d14aa445cffc689775fd692918	-
+0.36	Sub Rosa 0.36a.7z	Sub Rosa 0.36a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-21	984576	7daa02b69ef30bf697380826d2e380e7fb7401ca6d708b65dcdaf2dce3f6376e	-
+0.36	Sub Rosa 0.36a.7z	Sub Rosa 0.36a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	784320	087a6a9a5d04316fca85fc20683b1091d2a0d7cef596b4d327b93eeb25426264	-
+0.36	Sub Rosa 0.36b.7z	Sub Rosa 0.36b/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-10-22	2112512	21a0d3ba2e2b491ea8e2fa59d4ec966e37e65c1a4a650553c20385bbc8128a71	-
+0.36	Sub Rosa 0.36b.7z	Sub Rosa 0.36b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1362568	1f6f292587a3e31a2f5fcec1bc538d4eaf405efe0ec5a3b5fd9d8272a39b898a	-
+0.36	Sub Rosa 0.36b.7z	Sub Rosa 0.36b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-22	985600	507d61fe1578270623f9ef20f5c8b47ee6c7a5a0c99f985319c4f7086d378f51	-
+0.36	Sub Rosa 0.36b.7z	Sub Rosa 0.36b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	784320	b692891324d4549e14c976d30ce066e5f9172bc97d12b00bdd6b6a62dd826808	-
+0.36	Sub Rosa 0.36v Beta 5.7z	Sub Rosa 0.36v Beta 5/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2044 símbolos, _gameloop	-	1717824	6c8de776c15b08959045df3e449cfe0bbdc96506ac676e3b68de749769593760	-
+0.36	Sub Rosa 0.36v Beta 5.7z	Sub Rosa 0.36v Beta 5/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-10-17	2115072	f1f4eb4a230a81fc0152ed29d0c17ca9fbb2e78475924941cde9eea3d3106cea	-
+0.36	Sub Rosa 0.36v Beta 5.7z	Sub Rosa 0.36v Beta 5/subrosa.x64	ELF64	x86-64	não (stripped)	-	1276072	c35e4205687ca3a0b2dc6e9da0a85a3b660f088b0e15beaab3c708eb3f95bf2c	-
+0.36	Sub Rosa 0.36v Beta 5.7z	Sub Rosa 0.36v Beta 5/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-17	982528	6dcda5daaf01bd689b6ae4f333fc05a4bbcd59e5807175a27f8bb21bb769111e	-
+0.36	Sub Rosa 0.36v Beta 5.7z	Sub Rosa 0.36v Beta 5/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710304	3fc4ce63b969bf7cc6a6a3a711f5f6254c9a1238c437aa247c9d16c18ed685c1	-
+0.36	Sub Rosa 0.36x Beta 3.7z	Sub Rosa 0.36x Beta 3/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2044 símbolos, _gameloop	-	1717824	6c8de776c15b08959045df3e449cfe0bbdc96506ac676e3b68de749769593760	-
+0.36	Sub Rosa 0.36x Beta 3.7z	Sub Rosa 0.36x Beta 3/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-10-02	2101248	d0b58162bc89aa7350252f0b4cd7c45b03d786ee6c0e77cc89a416e418446bbc	-
+0.36	Sub Rosa 0.36x Beta 3.7z	Sub Rosa 0.36x Beta 3/subrosa.x64	ELF64	x86-64	não (stripped)	-	1276072	c35e4205687ca3a0b2dc6e9da0a85a3b660f088b0e15beaab3c708eb3f95bf2c	-
+0.36	Sub Rosa 0.36x Beta 3.7z	Sub Rosa 0.36x Beta 3/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-02	972800	84b997360bb21b50cfaefbe70c955937d9fa4fd5275f9f7316241e5254e743b5	-
+0.36	Sub Rosa 0.36x Beta 3.7z	Sub Rosa 0.36x Beta 3/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710304	3fc4ce63b969bf7cc6a6a3a711f5f6254c9a1238c437aa247c9d16c18ed685c1	-
+0.36	Sub Rosa 0.36y Beta 2.7z	Sub Rosa 0.36y Beta 2/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2044 símbolos, _gameloop	-	1717824	6c8de776c15b08959045df3e449cfe0bbdc96506ac676e3b68de749769593760	-
+0.36	Sub Rosa 0.36y Beta 2.7z	Sub Rosa 0.36y Beta 2/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-10-01	2101760	28cb0b394a63b9e4b11ef73cab555e5b4e7f7b6a4d9ad522a4985eca47b43304	-
+0.36	Sub Rosa 0.36y Beta 2.7z	Sub Rosa 0.36y Beta 2/subrosa.x64	ELF64	x86-64	não (stripped)	-	1276072	c35e4205687ca3a0b2dc6e9da0a85a3b660f088b0e15beaab3c708eb3f95bf2c	-
+0.36	Sub Rosa 0.36y Beta 2.7z	Sub Rosa 0.36y Beta 2/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-01	973824	3cbd97e05ddfcd07022c0c6974484524bb4e2d5a6cd32122ee38117b14905a01	-
+0.36	Sub Rosa 0.36y Beta 2.7z	Sub Rosa 0.36y Beta 2/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710304	3fc4ce63b969bf7cc6a6a3a711f5f6254c9a1238c437aa247c9d16c18ed685c1	-
+0.36	Sub Rosa 0.36z Beta 1.7z	Sub Rosa 0.36z Beta 1/subrosa.app/Contents/MacOS/subrosa	Mach-O	x86-64	x86-64: 2044 símbolos, _gameloop	-	1717824	6c8de776c15b08959045df3e449cfe0bbdc96506ac676e3b68de749769593760	-
+0.36	Sub Rosa 0.36z Beta 1.7z	Sub Rosa 0.36z Beta 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2019-09-30	2100224	53f8069af86ab7344da6fd5d33c909b42834152d04ad923b76e50d1643c3a9d3	-
+0.36	Sub Rosa 0.36z Beta 1.7z	Sub Rosa 0.36z Beta 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1276072	c35e4205687ca3a0b2dc6e9da0a85a3b660f088b0e15beaab3c708eb3f95bf2c	-
+0.36	Sub Rosa 0.36z Beta 1.7z	Sub Rosa 0.36z Beta 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-09-30	972800	f082b8f0facf3ea09490fa2340d7b5c0b50793587336245ac3c727cd15a35ce3	-
+0.36	Sub Rosa 0.36z Beta 1.7z	Sub Rosa 0.36z Beta 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	710304	3fc4ce63b969bf7cc6a6a3a711f5f6254c9a1238c437aa247c9d16c18ed685c1	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a-1.7z	Sub Rosa 0.37a-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-02	2501120	0c4e1f781f10a05c1efb840fa3655ce8bd4e08c8905369fac495502bae87d7dc	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a-1.7z	Sub Rosa 0.37a-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1463920	4cb570241b7931b30591c7f68875f23b48396a11371217c78c404e10f249b4d9	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a-1.7z	Sub Rosa 0.37a-1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-02	1233920	996168f75d623c311c7dbc8c9fb139d383c0b59fb91430f47bc43d677cd4db17	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a-1.7z	Sub Rosa 0.37a-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	502f33ebc0683459921d80ce7ae965b56e9bb1f20c0b4f2a4149699209681cbc	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a.7z	Sub Rosa 0.37a/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-02	2501120	e2130a29bee9c2def8bfc98d1486aec82f53e064f7756bd8440c8297d0a13e65	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a.7z	Sub Rosa 0.37a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1463920	e8630290bbc92a6e8e3f7e183c33d160e687b0b302c4c4775873c129d002c28c	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a.7z	Sub Rosa 0.37a/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-02	1233920	281f0ef48f082f3b12a996e3fb7a5430d13fa757bfdeba71f3fc04b319ad9737	-
+0.37	Sub Rosa 0.37a/Sub Rosa 0.37a.7z	Sub Rosa 0.37a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	3dd1ef537e5145a4020a10ccb9906a12202037dafd54742a10aa6027b1b3496d	-
+0.37	Sub Rosa 0.37b.7z	Sub Rosa 0.37b/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-02	2501120	e4978f8756058475580ac42f9781aa473352a83625cae9f110b3dc5c1983985c	-
+0.37	Sub Rosa 0.37b.7z	Sub Rosa 0.37b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1468016	6610b97fb57a810897a10023e9ddb9dc9be68d680676e3ced725667c446e3ff5	-
+0.37	Sub Rosa 0.37b.7z	Sub Rosa 0.37b/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-02	1233920	49887c13a517fe404dbea7d639b369ae451710c0af0bb37447ab25db15fbb7fd	-
+0.37	Sub Rosa 0.37b.7z	Sub Rosa 0.37b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	f8ec46cf876ff57b03b897b260374fc6465685c262781664e24385bb47921945	-
+0.37	Sub Rosa 0.37c.7z	Sub Rosa 0.37c/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-04	2501120	9e3f8b185f5b2bc88504a9a3b4ee571d12283d077acf67e7ecaf23d29a469ebc	-
+0.37	Sub Rosa 0.37c.7z	Sub Rosa 0.37c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1468016	268d3e779303c04b5c7fc50b0cd9fa7d0978752f62b7a4470812b21244cf3856	-
+0.37	Sub Rosa 0.37c.7z	Sub Rosa 0.37c/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-04	1234432	30ad0364f3e1edeff1c9e747cb3fee9c6d02565f83bd9935841240f216273b15	-
+0.37	Sub Rosa 0.37c.7z	Sub Rosa 0.37c/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	e37734a0da9408357895587b1e093728f873af631b792d4e28f834942beefd36	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d-1.7z	Sub Rosa 0.37d-1/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-06	2244608	028fa1194ad3d1e911862cc06c25e589d3bad5f31db119b5c2b55665e8f998c6	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d-1.7z	Sub Rosa 0.37d-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1468016	5e28cc3cfde512117f495322de4b8362f8d9c19179d3a240ae0cc618663bedf9	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d-1.7z	Sub Rosa 0.37d-1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-04	1234432	30ad0364f3e1edeff1c9e747cb3fee9c6d02565f83bd9935841240f216273b15	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d-1.7z	Sub Rosa 0.37d-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	e37734a0da9408357895587b1e093728f873af631b792d4e28f834942beefd36	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d.7z	Sub Rosa 0.37d/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-07-06	2244608	ec4c0fe27c1a19e3bc9fb5a04d6ffcd15ade5d086197cef87d0e51bc985e8a85	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d.7z	Sub Rosa 0.37d/subrosa.x64	ELF64	x86-64	não (stripped)	-	1468016	268d3e779303c04b5c7fc50b0cd9fa7d0978752f62b7a4470812b21244cf3856	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d.7z	Sub Rosa 0.37d/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-04	1234432	30ad0364f3e1edeff1c9e747cb3fee9c6d02565f83bd9935841240f216273b15	-
+0.37	Sub Rosa 0.37d/Sub Rosa 0.37d.7z	Sub Rosa 0.37d/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	e37734a0da9408357895587b1e093728f873af631b792d4e28f834942beefd36	-
+0.37	Sub Rosa 0.37e.7z	Sub Rosa 0.37e/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-08-11	2242560	343b01c5626d3f3a2739ed4a0067da23002530bef6dc794e6fd3591455e7c665	-
+0.37	Sub Rosa 0.37e.7z	Sub Rosa 0.37e/subrosa.x64	ELF64	x86-64	não (stripped)	-	1468016	5e28cc3cfde512117f495322de4b8362f8d9c19179d3a240ae0cc618663bedf9	-
+0.37	Sub Rosa 0.37e.7z	Sub Rosa 0.37e/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-07-04	1234432	30ad0364f3e1edeff1c9e747cb3fee9c6d02565f83bd9935841240f216273b15	-
+0.37	Sub Rosa 0.37e.7z	Sub Rosa 0.37e/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	879472	e37734a0da9408357895587b1e093728f873af631b792d4e28f834942beefd36	-
+0.37	Sub Rosa 0.37y Test 2.7z	Sub Rosa 0.37y Test 2/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-06-19	2499072	3dbf8c2e3102e3a93914e117216641cf982dc4e7a5888191dd0aad1b2cc9cffd	-
+0.37	Sub Rosa 0.37y Test 2.7z	Sub Rosa 0.37y Test 2/subrosa.x64	ELF64	x86-64	não (stripped)	-	1362568	1f6f292587a3e31a2f5fcec1bc538d4eaf405efe0ec5a3b5fd9d8272a39b898a	-
+0.37	Sub Rosa 0.37y Test 2.7z	Sub Rosa 0.37y Test 2/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2020-06-19	1232896	f236bda4992d095274efd7e6cbd7138e645e81e9f6c9b8503e0bca4c4f5a4137	-
+0.37	Sub Rosa 0.37y Test 2.7z	Sub Rosa 0.37y Test 2/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	784320	b692891324d4549e14c976d30ce066e5f9172bc97d12b00bdd6b6a62dd826808	-
+0.37	Sub Rosa 0.37z Test 1.7z	Sub Rosa 0.37z Test 1/subrosa.exe	PE32 (linker 10.0)	i386	não	2020-06-10	2419200	392fca79240c6d9099ed7787356c07976ca1cb4df93f47c9fa2a4098bc77267c	-
+0.37	Sub Rosa 0.37z Test 1.7z	Sub Rosa 0.37z Test 1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1362568	1f6f292587a3e31a2f5fcec1bc538d4eaf405efe0ec5a3b5fd9d8272a39b898a	-
+0.37	Sub Rosa 0.37z Test 1.7z	Sub Rosa 0.37z Test 1/subrosadedicated.exe	PE32 (linker 10.0)	i386	não	2019-10-22	985600	507d61fe1578270623f9ef20f5c8b47ee6c7a5a0c99f985319c4f7086d378f51	-
+0.37	Sub Rosa 0.37z Test 1.7z	Sub Rosa 0.37z Test 1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	784320	b692891324d4549e14c976d30ce066e5f9172bc97d12b00bdd6b6a62dd826808	-
+0.38	Sub Rosa 0.38a.7z	Sub Rosa 0.38a/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-03-25	3075072	1583bf9fdd7de15429be60b4bf1c9cffe7ad27086fb35b8936fa06090d9f7b3a	-
+0.38	Sub Rosa 0.38a.7z	Sub Rosa 0.38a/subrosa.x64	ELF64	x86-64	não (stripped)	-	1587600	ecaf6b7a0e70f15d1ed93497c8ef41d385ce8df25e7bd0dd171327eb44989dee	-
+0.38	Sub Rosa 0.38a.7z	Sub Rosa 0.38a/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-03-25	1150976	8e5dc585cba95c88109a2c1771a1c223aeb7b38f457ccd2da7d44ee0260813c4	-
+0.38	Sub Rosa 0.38a.7z	Sub Rosa 0.38a/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	945232	66a7666cfc3a686e9183b0d2af961998b4a3e490b9c9b1a0dfb918e04dcce79c	-
+0.38	Sub Rosa 0.38b.7z	Sub Rosa 0.38b/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-03-27	3081216	daa7c69ac43840d973079a9e2aec01393d8f4ea2122d19ebb994445e3b2ad578	-
+0.38	Sub Rosa 0.38b.7z	Sub Rosa 0.38b/subrosa.x64	ELF64	x86-64	não (stripped)	-	1595792	96434afd389079cb5e1adb368c4fb126bb5d7d77a3145ec421d3b608fc00efe4	-
+0.38	Sub Rosa 0.38b.7z	Sub Rosa 0.38b/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-03-27	1150976	456ca8dee8032c12022925b5cd9a964d4fc86af0e6b5b388127defee1891a031	-
+0.38	Sub Rosa 0.38b.7z	Sub Rosa 0.38b/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	941136	c64553577e8eba0d0538d0234231d69dd3ef3a5f213763e773e3b25b425f233c	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c-1.7z	Sub Rosa 0.38c-1/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-01	3087360	7a3ee313d55cb6b9e5158948c359fbfa7654785ea70b94475e02672e0484bf68	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c-1.7z	Sub Rosa 0.38c-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	e6b6dbda25a2739006018e81bd5caea7723c7455baca8aa553fb904a4bd5ef1f	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c-1.7z	Sub Rosa 0.38c-1/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-01	1155072	cedda97fede0ed776643b5258a522abc3a17b7160094bad1779f3eb33af304ae	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c-1.7z	Sub Rosa 0.38c-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	c423e619ed73e65a50def47df11891f8cdaf3e07996ebe5083d0679b73ad5b19	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c.7z	Sub Rosa 0.38c/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-01	3087872	f646da3866ec7cd84a9e67dd1ff38a4ff497c2081f618d9e7c017af1fd74b7d8	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c.7z	Sub Rosa 0.38c/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	630dee1ea78722a5418938e1d8d0a67d7aa2419dcdf830f96753d2119ba5c483	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c.7z	Sub Rosa 0.38c/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-01	1155072	cedda97fede0ed776643b5258a522abc3a17b7160094bad1779f3eb33af304ae	-
+0.38	Sub Rosa 0.38c/Sub Rosa 0.38c.7z	Sub Rosa 0.38c/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	c423e619ed73e65a50def47df11891f8cdaf3e07996ebe5083d0679b73ad5b19	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d.7z	Sub Rosa 0.38d/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	3087360	8cf90938f6984d94abeb7aae193b87b1f0f320770dfd845f72e2b3b57efb8f52	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d.7z	Sub Rosa 0.38d/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d.7z	Sub Rosa 0.38d/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d.7z	Sub Rosa 0.38d/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-1.7z	Sub Rosa 0.38d2-1/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-06-25	3090432	9d22a764f5f85d52e4de7017877e12838b92bc7e4ddce5f066352777de3ce0d8	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-1.7z	Sub Rosa 0.38d2-1/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-1.7z	Sub Rosa 0.38d2-1/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-1.7z	Sub Rosa 0.38d2-1/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-2.7z	Sub Rosa 0.38d2-2/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-06	3090944	c4c802d5289230e5423b28ee32722c072c3b1d4e1e2cec896b223ce38f7653e3	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-2.7z	Sub Rosa 0.38d2-2/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-2.7z	Sub Rosa 0.38d2-2/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-2.7z	Sub Rosa 0.38d2-2/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-3.7z	Sub Rosa 0.38d2-3/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-09	3092480	05790af2e04a1b72170bc6a758457421a70a4d64e811d57f90b7afd408e60b2e	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-3.7z	Sub Rosa 0.38d2-3/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-3.7z	Sub Rosa 0.38d2-3/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-3.7z	Sub Rosa 0.38d2-3/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-4.7z	Sub Rosa 0.38d2-4/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-09	3092480	addda542ee3a98483bbf2884d89c6bc176553e7df6feab24c9ad302f39cdb934	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-4.7z	Sub Rosa 0.38d2-4/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-4.7z	Sub Rosa 0.38d2-4/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-4.7z	Sub Rosa 0.38d2-4/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-5.7z	Sub Rosa 0.38d2-5/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-10	3092480	6e3222f8f826307f3a6e1c18079a2fdf43690d6d7d091b1b208893b0ef6649e3	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-5.7z	Sub Rosa 0.38d2-5/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-5.7z	Sub Rosa 0.38d2-5/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-5.7z	Sub Rosa 0.38d2-5/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-6.7z	Sub Rosa 0.38d2-6/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-13	3092992	8755401dd914319dd982a41e69f728106d418a77e71a4747d929c72b7d7185f4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-6.7z	Sub Rosa 0.38d2-6/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-6.7z	Sub Rosa 0.38d2-6/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-6.7z	Sub Rosa 0.38d2-6/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-7.7z	Sub Rosa 0.38d2-7/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-13	3091456	8e72cb809194db42b7c17075df36abbcddb5c81913965601288931edee286aef	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-7.7z	Sub Rosa 0.38d2-7/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-7.7z	Sub Rosa 0.38d2-7/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-7.7z	Sub Rosa 0.38d2-7/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-8.7z	Sub Rosa 0.38d2-8/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-07-14	3091968	4455014cb09b99c64d6ae053f4b330738b002ae60849896146217122619bf293	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-8.7z	Sub Rosa 0.38d2-8/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-8.7z	Sub Rosa 0.38d2-8/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2-8.7z	Sub Rosa 0.38d2-8/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2.7z	Sub Rosa 0.38d2/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-06-17	3090944	20fb6443c6031b3ed7905a8ae3c7349e416935bcf726fb8ec7da91d481524f7d	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2.7z	Sub Rosa 0.38d2/subrosa.x64	ELF64	x86-64	não (stripped)	-	1600144	d4922d1d7ebdb2222bf45bd4234aca216ac8664dfa7ec1391b775aba9c519234	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2.7z	Sub Rosa 0.38d2/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-04-10	1155072	cb1af52bb38e3c524f6eadea9c135ba467582efec4da74376622ef71589246a4	-
+0.38	Sub Rosa 0.38d/Sub Rosa 0.38d2.7z	Sub Rosa 0.38d2/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	949328	08447ac10b71e641ae9a3f2b5fbad46243a8be349052f4d400ed073f6039a8f6	-
+0.38	Sub Rosa 0.38e.7z	Sub Rosa 0.38e/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-09-03	3371008	d29ed9be88f5de507373686d289e68716738f08826e0e96f36022a800e8684f0	-
+0.38	Sub Rosa 0.38e.7z	Sub Rosa 0.38e/subrosa.x64	ELF64	x86-64	não (stripped)	-	1889232	57ff1f3eebf439fe6e6550bb4a2a9fa8d7c8ad9483dcc9ac64d00dbdcd71c771	-
+0.38	Sub Rosa 0.38e.7z	Sub Rosa 0.38e/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-09-03	1438720	955a6078a8fdea82dd66f59c45233a31d73f64d6eeace92b423b7f52600831f5	-
+0.38	Sub Rosa 0.38e.7z	Sub Rosa 0.38e/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	1234320	955c03c0dc1b8e19487e65ea057a7e204488c716cf1c5aaa0b29a93da5142f33	-
+0.38	Sub Rosa 0.38f.7z	Sub Rosa 0.38f/subrosa.exe	PE32+ (linker 14.26)	x86-64	não	2021-09-24	3372544	cc667f7d3c765a36940a8fcc583c7ee189fd1bdbf167e56e59ac3a9f6873ad12	-
+0.38	Sub Rosa 0.38f.7z	Sub Rosa 0.38f/subrosa.x64	ELF64	x86-64	não (stripped)	-	1889232	cf513979b23546188019883f92c136f0945b766c120db6188ada7fe020119b12	-
+0.38	Sub Rosa 0.38f.7z	Sub Rosa 0.38f/subrosadedicated.exe	PE32+ (linker 14.26)	x86-64	não	2021-09-03	1438720	955a6078a8fdea82dd66f59c45233a31d73f64d6eeace92b423b7f52600831f5	-
+0.38	Sub Rosa 0.38f.7z	Sub Rosa 0.38f/subrosadedicated.x64	ELF64	x86-64	não (stripped)	-	1234320	955c03c0dc1b8e19487e65ea057a7e204488c716cf1c5aaa0b29a93da5142f33	-

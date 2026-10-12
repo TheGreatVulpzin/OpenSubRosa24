@@ -19,7 +19,10 @@
 | `0.24d_Dedicated_Windows/.../subrosadedicated024d.exe` | PE32, MSVC | Não | **Idêntico ao 024d do Black Houser** (mesmo SHA-256). O Black Houser roda o 024d sem modificação. |
 | `0.24b/` | Cliente completo (Windows, Linux, Mac) | ELF e Mach-O com símbolos | Cliente 24b. |
 | `0.25b_Dedicated_Linux/subrosadedicated025b` | ELF x64 | Não (stripped) | Versão seguinte. |
+| `0.25b/` | Cliente completo 0.25b (Windows, Linux, Mac) | Só o Mach-O i386 (4573 símbolos) | Cliente de out/2015. O Mac é referência extra de nomes para o 024d. |
 | `0.22/`, `0.22_Dedicated_Server/` | Cliente e servidor 0.22 | Mach-O com símbolos | Versão anterior. |
+
+Todas as versões do pacote SUB ROSA ALL (0.01 a 0.38f): ver `docs/versoes-todas.md`. Não há 0.24d para Linux ou Mac.
 
 ## Cliente da galera x servidor 024d
 

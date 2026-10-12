@@ -102,7 +102,7 @@ rva,size,name,source,confidence,evidence
 0x23ee0,522,city_createelevator,anchor,1.0,features
 0x240f0,3197,setupcityobjecttypes,anchor,1.0,features
 0x24d70,568,cityobject_addbox,anchor,1.0,features
-0x24fb0,2389,clientrecv,anchor,0.862,features
+0x24fb0,2389,clientrecv,anchor,0.863,features
 0x25910,1391,clientsend,anchor,1.0,features
 0x25e80,409,,,,
 0x26020,226,,,,
@@ -346,7 +346,7 @@ rva,size,name,source,confidence,evidence
 0x60a50,420,,,,
 0x60c00,133,init_genrand,anchor,1.0,features
 0x60c90,378,init_by_array,anchor,1.0,features
-0x60e10,411,genrand_int32,anchor,0.668,features
+0x60e10,411,genrand_int32,anchor,0.667,features
 0x60fb0,12,,,,
 0x60fc0,34,genrand_real1,anchor,1.0,features
 0x60ff0,34,,,,
@@ -406,7 +406,7 @@ rva,size,name,source,confidence,evidence
 0x72d80,285,freadswap,anchor,1.0,features
 0x72ea0,302,fwriteswap,anchor,0.867,features
 0x72fd0,164,removeflieextentions,anchor,1.0,features
-0x73080,172,enablesocketserver,anchor,1.0,features
+0x73080,172,disablesocket,anchor,1.0,features
 0x73130,138,enablesocketclient,anchor,1.0,features
 0x731c0,35,,,,
 0x731f0,203,recvpacket,anchor,1.0,features
@@ -453,7 +453,7 @@ rva,size,name,source,confidence,evidence
 0x74330,117,,,,
 0x743b0,104,,,,
 0x74420,31,,,,
-0x744c2,365,,,,
+0x744c2,345,,,,
 0x7474c,10,,,,
 0x74756,262,,,,
 0x7486c,66,,,,

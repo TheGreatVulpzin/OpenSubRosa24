@@ -51,12 +51,18 @@ echo "GHIDRA=$TOOLS/ghidra_${GHIDRA_VER}_PUBLIC"
 fetch() {  # $1 = caminho relativo no gart.sh (com %20), $2 = pasta de destino em original/vanilla
     local dest="$ROOT/original/vanilla/$2" arch="$ROOT/original/vanilla/archives/$(basename "${1//%20/ }")"
     [ -d "$dest" ] && return 0
-    mkdir -p "$ROOT/original/vanilla/archives" "$dest"
-    [ -f "$arch" ] || curl -sfL -o "$arch" "$GART/$1"
+    mkdir -p "$ROOT/original/vanilla/archives"
+    # Baixa para .part e só cria a pasta depois: falha de rede não deixa pasta vazia
+    # (que faria a próxima execução pular o download).
+    if [ ! -f "$arch" ]; then
+        curl -sfL -o "$arch.part" "$GART/$1" || { rm -f "$arch.part"; echo "ERRO: falha ao baixar $1" >&2; return 1; }
+        mv "$arch.part" "$arch"
+    fi
+    mkdir -p "$dest"
     case "$arch" in
         *.zip) unzip -q -o "$arch" -d "$dest" ;;
         *.tar) tar -xf "$arch" -C "$dest" ;;
-    esac
+    esac || { rm -rf "$dest"; return 1; }
     echo "ok $2"
 }
 echo "== Baixando binários oficiais"
@@ -67,6 +73,7 @@ fetch "0.24/c/Sub%20Rosa%200.24c%20Dedicated%20Linux.zip"      0.24c_Dedicated_L
 fetch "0.24/c/Sub%20Rosa%200.24c%20Dedicated%20Windows.zip"    0.24c_Dedicated_Windows
 fetch "0.24/Sub%20Rosa%200.24d%20Dedicated%20Windows.zip"      0.24d_Dedicated_Windows
 fetch "0.25/b/Sub%20Rosa%200.25b%20Dedicated%20Linux.tar"      0.25b_Dedicated_Linux
+fetch "0.25/b/Sub%20Rosa%200.25b.zip"                          0.25b   # cliente Mac i386 com símbolos
 
 # Monta original/client (cliente 0.24b) e original/blackhouser (024d) como no PC.
 V="$ROOT/original/vanilla"

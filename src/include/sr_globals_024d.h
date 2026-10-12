@@ -6,14 +6,14 @@
 #ifndef SR_GLOBALS_024D_H
 #define SR_GLOBALS_024D_H
 
-#define SR_RVA_CUBEQUAD             0x60180u
+#define SR_RVA_CUBEQUAD             0x60170u
+#define SR_RVA_CUBEVERTEX           0x60174u
 #define SR_RVA_BULLET               0x1409ba0u  /* Bullet[] */
 #define SR_RVA_DEBUG                0x1579ba0u
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
 #define SR_RVA_SERVER               0x761ea60u
-#define SR_RVA_OPTION               0x90dc340u
 #define SR_RVA_NUMOFTRACKS          0x90dc520u
 #define SR_RVA_GAME                 0x90dc540u
 #define SR_RVA_TICKS                0x90dc578u
@@ -29,10 +29,10 @@
 #define SR_RVA_BODY                 0xf270280u  /* Body[] */
 #define SR_RVA_NUMOFEVENTS          0xf437318u
 #define SR_RVA_ACCOUNT              0xf437b60u
-#define SR_RVA_INTERSECT            0x103484a0u
 #define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
+#define SR_RVA_TIMERLIST            0x12a81c60u
 #define SR_RVA_SPEEX                0x12a81d00u
-#define SR_RVA_PARSER               0x13d22d64u
+#define SR_RVA_PARSER               0x13d22d60u
 #define SR_RVA_CONNECTION           0x15e39020u  /* Connection[] */
 #define SR_RVA_NUMOFBONDS           0x17179a28u
 #define SR_RVA_BOND                 0x17179a40u  /* Bond[] */
