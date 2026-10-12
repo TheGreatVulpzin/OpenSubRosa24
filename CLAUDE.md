@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-Projeto de RE/decompilação do Sub Rosa (2015). Idioma do projeto: português (BR).
+Projeto de RE/decompilação do Sub Rosa (2015).
+
+**Language:** everything in the repository is in English (code, comments, docs, commit messages). Chat with the user is in Portuguese (BR). Old commits stay in Portuguese.
 
 ## Regras
 
