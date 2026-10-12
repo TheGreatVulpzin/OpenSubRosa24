@@ -16,6 +16,7 @@
 #ifndef SV_VERIFY_H
 #define SV_VERIFY_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -49,6 +50,9 @@ int sv_verify_init(void);
  * that change on each run, such as the profiler timers (CPU cycle counter). The original
  * result stays in memory as usual. */
 void sv_verify_ignore(uint32_t rva, uint32_t size);
+
+/* The .data section that the verifier watches. Returns 0 before sv_verify_init. */
+int sv_verify_data(const uint8_t **data, size_t *size);
 
 /* 1 = a verification is running now (a hook called from inside it must run the original). */
 int sv_verify_busy(void);

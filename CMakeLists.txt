@@ -14,6 +14,7 @@ add_library(sv_wsock32 SHARED
     hook/hook.c
     hook/hooks_024d.c
     hook/verify.c
+    hook/record.c
     hook/imports.c
     hook/hooks_lifted.c
     src/lifted/lifted_024d.c
@@ -26,7 +27,7 @@ set_target_properties(sv_wsock32 PROPERTIES OUTPUT_NAME wsock32)
 target_include_directories(sv_wsock32 PRIVATE src/include src/lifted hook)
 # Lifted Ghidra code: x87 math like the original (/arch:IA32), no warnings (decompiler style).
 set_source_files_properties(src/lifted/lifted_024d.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
-set_source_files_properties(hook/hooks_lifted.c src/lifted/x87_intrinsics.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+set_source_files_properties(hook/hooks_lifted.c src/lifted/x87_intrinsics.c src/lifted/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 target_compile_options(sv_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(sv_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
 # Static CRT: the DLL does not depend on a redistributable.
@@ -36,7 +37,19 @@ add_executable(check_types src/tests/check_types.c)
 target_include_directories(check_types PRIVATE src/include)
 target_compile_options(check_types PRIVATE /W4 /WX /utf-8)
 
-add_executable(test_verify src/tests/test_verify.c hook/verify.c hook/hook.c)
+add_executable(test_verify src/tests/test_verify.c hook/verify.c hook/hook.c hook/record.c)
 target_include_directories(test_verify PRIVATE src/include hook)
 target_compile_options(test_verify PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(test_verify PRIVATE _CRT_SECURE_NO_WARNINGS)
+
+# Offline differential test: loads the 024d as a library, fills .data from a snapshot and
+# compares each lifted function with the original on recorded calls (src/tests/harness.c).
+add_executable(harness src/tests/harness.c hook/verify.c hook/hook.c hook/record.c hook/imports.c
+    src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c)
+target_include_directories(harness PRIVATE src/include src/lifted hook)
+target_compile_options(harness PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(harness PRIVATE _CRT_SECURE_NO_WARNINGS)
+target_link_options(harness PRIVATE /LARGEADDRESSAWARE)
+set_property(TARGET harness PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+# The harness stays out of the way of the 024d test copy (0x20000000..0x45f3b000, tools/re/fixed_base.py).
+target_link_options(harness PRIVATE /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)

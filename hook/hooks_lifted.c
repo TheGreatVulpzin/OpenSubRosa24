@@ -7,6 +7,7 @@
 #include "hook.h"
 #include "hook_wrap.h"
 #include "lift_support.h"
+#include "record.h"
 #include "verify.h"
 
 undefined4 __cdecl lf_01010(char * param_1);
@@ -29,6 +30,13 @@ __declspec(naked) static void th_01010(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 0
+        push 0x1010
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_01010
         add esp, 4
@@ -62,6 +70,13 @@ __declspec(naked) static void th_01540(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 1
+        push 0x1540
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_01540
@@ -101,6 +116,13 @@ __declspec(naked) static void th_01610(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 2
+        push 0x1610
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_01610
         add esp, 4
@@ -135,6 +157,13 @@ __declspec(naked) static void th_01850(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 3
+        push 0x1850
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -171,6 +200,13 @@ __declspec(naked) static void th_01bc0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 4
+        push 0x1bc0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -208,6 +244,13 @@ __declspec(naked) static void th_01cd0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 5
+        push 0x1cd0
+        call sv_record_args
+        add esp, 16
         call hk_01cd0
         fxrstor [esp]
         mov ecx, [esp + 468]
@@ -239,6 +282,13 @@ __declspec(naked) static void th_01cf0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 6
+        push 0x1cf0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -276,6 +326,13 @@ __declspec(naked) static void th_01e20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 7
+        push 0x1e20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_01e20
         add esp, 4
@@ -309,6 +366,13 @@ __declspec(naked) static void th_02560(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 8
+        push 0x2560
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -352,6 +416,13 @@ __declspec(naked) static void th_02620(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 9
+        push 0x2620
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -395,6 +466,13 @@ __declspec(naked) static void th_026d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 10
+        push 0x26d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_026d0
@@ -430,6 +508,13 @@ __declspec(naked) static void th_02cf0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 11
+        push 0x2cf0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_02cf0
@@ -464,6 +549,13 @@ __declspec(naked) static void th_02dc0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 12
+        push 0x2dc0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -502,6 +594,13 @@ __declspec(naked) static void th_02f00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 13
+        push 0x2f00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -540,6 +639,13 @@ __declspec(naked) static void th_03030(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 14
+        push 0x3030
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -576,6 +682,13 @@ __declspec(naked) static void th_03130(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 15
+        push 0x3130
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -612,6 +725,13 @@ __declspec(naked) static void th_03290(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 16
+        push 0x3290
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -649,6 +769,13 @@ __declspec(naked) static void th_033a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 17
+        push 0x33a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_033a0
         add esp, 4
@@ -683,6 +810,13 @@ __declspec(naked) static void th_03d70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 18
+        push 0x3d70
+        call sv_record_args
+        add esp, 16
         call hk_03d70
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -715,6 +849,13 @@ __declspec(naked) static void th_041c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 19
+        push 0x41c0
+        call sv_record_args
+        add esp, 16
         call hk_041c0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -747,6 +888,13 @@ __declspec(naked) static void th_04450(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 20
+        push 0x4450
+        call sv_record_args
+        add esp, 16
         call hk_04450
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -779,6 +927,13 @@ __declspec(naked) static void th_04a10(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 21
+        push 0x4a10
+        call sv_record_args
+        add esp, 16
         call hk_04a10
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -811,6 +966,13 @@ __declspec(naked) static void th_04bb0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 22
+        push 0x4bb0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -851,6 +1013,13 @@ __declspec(naked) static void th_05160(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 23
+        push 0x5160
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -887,6 +1056,13 @@ __declspec(naked) static void th_053a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 24
+        push 0x53a0
+        call sv_record_args
+        add esp, 16
         call hk_053a0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -919,6 +1095,13 @@ __declspec(naked) static void th_05700(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 25
+        push 0x5700
+        call sv_record_args
+        add esp, 16
         call hk_05700
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -951,6 +1134,13 @@ __declspec(naked) static void th_05870(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 26
+        push 0x5870
+        call sv_record_args
+        add esp, 16
         call hk_05870
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -983,6 +1173,13 @@ __declspec(naked) static void th_05b40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 27
+        push 0x5b40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_05b40
@@ -1018,6 +1215,13 @@ __declspec(naked) static void th_05be0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 28
+        push 0x5be0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_05be0
@@ -1053,6 +1257,13 @@ __declspec(naked) static void th_05f20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 29
+        push 0x5f20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_05f20
         add esp, 4
@@ -1087,6 +1298,13 @@ __declspec(naked) static void th_05fe0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 30
+        push 0x5fe0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_05fe0
         add esp, 4
@@ -1121,6 +1339,13 @@ __declspec(naked) static void th_061a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 31
+        push 0x61a0
+        call sv_record_args
+        add esp, 16
         call hk_061a0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -1153,6 +1378,13 @@ __declspec(naked) static void th_06380(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 32
+        push 0x6380
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_06380
         add esp, 4
@@ -1187,6 +1419,13 @@ __declspec(naked) static void th_06420(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 33
+        push 0x6420
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_06420
         add esp, 4
@@ -1221,6 +1460,13 @@ __declspec(naked) static void th_064a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 34
+        push 0x64a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_064a0
         add esp, 4
@@ -1255,6 +1501,13 @@ __declspec(naked) static void th_065f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 35
+        push 0x65f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_065f0
         add esp, 4
@@ -1289,6 +1542,13 @@ __declspec(naked) static void th_06840(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 36
+        push 0x6840
+        call sv_record_args
+        add esp, 16
         call hk_06840
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -1321,6 +1581,13 @@ __declspec(naked) static void th_068d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 37
+        push 0x68d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_068d0
         add esp, 4
@@ -1355,6 +1622,13 @@ __declspec(naked) static void th_06b30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 38
+        push 0x6b30
+        call sv_record_args
+        add esp, 16
         call hk_06b30
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -1387,6 +1661,13 @@ __declspec(naked) static void th_07b90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 39
+        push 0x7b90
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_07b90
         add esp, 4
@@ -1420,6 +1701,13 @@ __declspec(naked) static void th_07c40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 40
+        push 0x7c40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1455,6 +1743,13 @@ __declspec(naked) static void th_07ce0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 41
+        push 0x7ce0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_07ce0
@@ -1490,6 +1785,13 @@ __declspec(naked) static void th_07d60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 42
+        push 0x7d60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_07d60
@@ -1524,6 +1826,13 @@ __declspec(naked) static void th_07e00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 43
+        push 0x7e00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1559,6 +1868,13 @@ __declspec(naked) static void th_07e50(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 44
+        push 0x7e50
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1595,6 +1911,13 @@ __declspec(naked) static void th_07f80(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 45
+        push 0x7f80
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_07f80
@@ -1630,6 +1953,13 @@ __declspec(naked) static void th_080b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 46
+        push 0x80b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1666,6 +1996,13 @@ __declspec(naked) static void th_08880(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 47
+        push 0x8880
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_08880
@@ -1701,6 +2038,13 @@ __declspec(naked) static void th_089c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 48
+        push 0x89c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1736,6 +2080,13 @@ __declspec(naked) static void th_08a60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 49
+        push 0x8a60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1771,6 +2122,13 @@ __declspec(naked) static void th_08b00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 50
+        push 0x8b00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1806,6 +2164,13 @@ __declspec(naked) static void th_08fe0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 51
+        push 0x8fe0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_08fe0
@@ -1841,6 +2206,13 @@ __declspec(naked) static void th_093e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 52
+        push 0x93e0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_093e0
@@ -1876,6 +2248,13 @@ __declspec(naked) static void th_094a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 53
+        push 0x94a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_094a0
         add esp, 4
@@ -1910,6 +2289,13 @@ __declspec(naked) static void th_09600(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 54
+        push 0x9600
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_09600
@@ -1945,6 +2331,13 @@ __declspec(naked) static void th_09870(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 55
+        push 0x9870
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -1985,6 +2378,13 @@ __declspec(naked) static void th_09a00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 56
+        push 0x9a00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2025,6 +2425,13 @@ __declspec(naked) static void th_09be0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 57
+        push 0x9be0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2065,6 +2472,13 @@ __declspec(naked) static void th_0a1b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 58
+        push 0xa1b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0a1b0
         add esp, 4
@@ -2099,6 +2513,13 @@ __declspec(naked) static void th_0a2a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 59
+        push 0xa2a0
+        call sv_record_args
+        add esp, 16
         call hk_0a2a0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -2131,6 +2552,13 @@ __declspec(naked) static void th_0a7a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 60
+        push 0xa7a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0a7a0
@@ -2166,6 +2594,13 @@ __declspec(naked) static void th_0a930(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 61
+        push 0xa930
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2202,6 +2637,13 @@ __declspec(naked) static void th_0aa80(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 62
+        push 0xaa80
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0aa80
         add esp, 4
@@ -2235,6 +2677,13 @@ __declspec(naked) static void th_0ab20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 63
+        push 0xab20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0ab20
         add esp, 4
@@ -2269,6 +2718,13 @@ __declspec(naked) static void th_0ac00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 64
+        push 0xac00
+        call sv_record_args
+        add esp, 16
         call hk_0ac00
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -2301,6 +2757,13 @@ __declspec(naked) static void th_0ad30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 65
+        push 0xad30
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0ad30
         add esp, 4
@@ -2335,6 +2798,13 @@ __declspec(naked) static void th_0ad70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 66
+        push 0xad70
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0ad70
@@ -2370,6 +2840,13 @@ __declspec(naked) static void th_0ae50(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 67
+        push 0xae50
+        call sv_record_args
+        add esp, 16
         call hk_0ae50
         fxrstor [esp]
         mov ecx, [esp + 468]
@@ -2401,6 +2878,13 @@ __declspec(naked) static void th_0b040(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 68
+        push 0xb040
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -2439,6 +2923,13 @@ __declspec(naked) static void th_0b0b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 69
+        push 0xb0b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -2476,6 +2967,13 @@ __declspec(naked) static void th_0b150(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 70
+        push 0xb150
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -2517,6 +3015,13 @@ __declspec(naked) static void th_0b3f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 71
+        push 0xb3f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0b3f0
         add esp, 4
@@ -2551,6 +3056,13 @@ __declspec(naked) static void th_0b540(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 72
+        push 0xb540
+        call sv_record_args
+        add esp, 16
         call hk_0b540
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -2583,6 +3095,13 @@ __declspec(naked) static void th_0b6d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 73
+        push 0xb6d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0b6d0
@@ -2617,6 +3136,13 @@ __declspec(naked) static void th_0b850(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 74
+        push 0xb850
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0b850
@@ -2656,6 +3182,13 @@ __declspec(naked) static void th_0b880(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 75
+        push 0xb880
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2692,6 +3225,13 @@ __declspec(naked) static void th_0b8c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 76
+        push 0xb8c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0b8c0
         add esp, 4
@@ -2730,6 +3270,13 @@ __declspec(naked) static void th_0b900(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 77
+        push 0xb900
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0b900
@@ -2765,6 +3312,13 @@ __declspec(naked) static void th_0b9d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 78
+        push 0xb9d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2801,6 +3355,13 @@ __declspec(naked) static void th_0ba00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 79
+        push 0xba00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2837,6 +3398,13 @@ __declspec(naked) static void th_0ba30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 80
+        push 0xba30
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2873,6 +3441,13 @@ __declspec(naked) static void th_0ba60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 81
+        push 0xba60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -2910,6 +3485,13 @@ __declspec(naked) static void th_0baa0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 82
+        push 0xbaa0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0baa0
@@ -2949,6 +3531,13 @@ __declspec(naked) static void th_0bb00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 83
+        push 0xbb00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -2985,6 +3574,13 @@ __declspec(naked) static void th_0bb80(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 84
+        push 0xbb80
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -3022,6 +3618,13 @@ __declspec(naked) static void th_0bc20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 85
+        push 0xbc20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0bc20
         add esp, 4
@@ -3056,6 +3659,13 @@ __declspec(naked) static void th_0bc50(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 86
+        push 0xbc50
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -3092,6 +3702,13 @@ __declspec(naked) static void th_0bdb0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 87
+        push 0xbdb0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -3128,6 +3745,13 @@ __declspec(naked) static void th_0bf60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 88
+        push 0xbf60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0bf60
@@ -3163,6 +3787,13 @@ __declspec(naked) static void th_0c0a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 89
+        push 0xc0a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0c0a0
@@ -3198,6 +3829,13 @@ __declspec(naked) static void th_0c120(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 90
+        push 0xc120
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -3236,6 +3874,13 @@ __declspec(naked) static void th_0c290(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 91
+        push 0xc290
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -3274,6 +3919,13 @@ __declspec(naked) static void th_0c420(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 92
+        push 0xc420
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -3314,6 +3966,13 @@ __declspec(naked) static void th_0c8f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 93
+        push 0xc8f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -3354,6 +4013,13 @@ __declspec(naked) static void th_0cab0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 94
+        push 0xcab0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -3393,6 +4059,13 @@ __declspec(naked) static void th_0cca0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 95
+        push 0xcca0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -3432,6 +4105,13 @@ __declspec(naked) static void th_0cdf0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 96
+        push 0xcdf0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -3471,6 +4151,13 @@ __declspec(naked) static void th_0d0c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 97
+        push 0xd0c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0d0c0
         add esp, 4
@@ -3504,6 +4191,13 @@ __declspec(naked) static void th_0d240(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 98
+        push 0xd240
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0d240
@@ -3539,6 +4233,13 @@ __declspec(naked) static void th_0d2a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 99
+        push 0xd2a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0d2a0
@@ -3574,6 +4275,13 @@ __declspec(naked) static void th_0d680(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 100
+        push 0xd680
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0d680
         add esp, 4
@@ -3608,6 +4316,13 @@ __declspec(naked) static void th_0d990(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 101
+        push 0xd990
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -3643,6 +4358,13 @@ __declspec(naked) static void th_0d9f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 102
+        push 0xd9f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -3678,6 +4400,13 @@ __declspec(naked) static void th_0da60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 103
+        push 0xda60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0da60
@@ -3712,6 +4441,13 @@ __declspec(naked) static void th_0db20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 104
+        push 0xdb20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0db20
@@ -3746,6 +4482,13 @@ __declspec(naked) static void th_0ddb0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 105
+        push 0xddb0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0ddb0
@@ -3780,6 +4523,13 @@ __declspec(naked) static void th_0ddd0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 106
+        push 0xddd0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0ddd0
@@ -3814,6 +4564,13 @@ __declspec(naked) static void th_0ded0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 107
+        push 0xded0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_0ded0
         add esp, 4
@@ -3847,6 +4604,13 @@ __declspec(naked) static void th_0e4d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 108
+        push 0xe4d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_0e4d0
@@ -3882,6 +4646,13 @@ __declspec(naked) static void th_0f4a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 109
+        push 0xf4a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -3919,6 +4690,13 @@ __declspec(naked) static void th_0f620(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 110
+        push 0xf620
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -3955,6 +4733,13 @@ __declspec(naked) static void th_0f6f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 111
+        push 0xf6f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -3995,6 +4780,13 @@ __declspec(naked) static void th_0fc40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 112
+        push 0xfc40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -4035,6 +4827,13 @@ __declspec(naked) static void th_10140(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 113
+        push 0x10140
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -4073,6 +4872,13 @@ __declspec(naked) static void th_105c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 114
+        push 0x105c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -4109,6 +4915,13 @@ __declspec(naked) static void th_10950(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 115
+        push 0x10950
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -4149,6 +4962,13 @@ __declspec(naked) static void th_10da0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 116
+        push 0x10da0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_10da0
@@ -4184,6 +5004,13 @@ __declspec(naked) static void th_118f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 117
+        push 0x118f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -4223,6 +5050,13 @@ __declspec(naked) static void th_11a40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 118
+        push 0x11a40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -4259,6 +5093,13 @@ __declspec(naked) static void th_11d70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 9
+        push eax
+        push 119
+        push 0x11d70
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 40]
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
@@ -4301,6 +5142,13 @@ __declspec(naked) static void th_11f70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 120
+        push 0x11f70
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -4337,6 +5185,13 @@ __declspec(naked) static void th_120c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 121
+        push 0x120c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -4373,6 +5228,13 @@ __declspec(naked) static void th_121d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 122
+        push 0x121d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -4412,6 +5274,13 @@ __declspec(naked) static void th_12450(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 123
+        push 0x12450
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -4452,6 +5321,13 @@ __declspec(naked) static void th_126b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 124
+        push 0x126b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -4492,6 +5368,13 @@ __declspec(naked) static void th_129b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 125
+        push 0x129b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -4528,6 +5411,13 @@ __declspec(naked) static void th_12c90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 126
+        push 0x12c90
+        call sv_record_args
+        add esp, 16
         call hk_12c90
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -4560,6 +5450,13 @@ __declspec(naked) static void th_12f80(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 127
+        push 0x12f80
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_12f80
         add esp, 4
@@ -4594,6 +5491,13 @@ __declspec(naked) static void th_130d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 128
+        push 0x130d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_130d0
         add esp, 4
@@ -4628,6 +5532,13 @@ __declspec(naked) static void th_13450(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 129
+        push 0x13450
+        call sv_record_args
+        add esp, 16
         call hk_13450
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -4660,6 +5571,13 @@ __declspec(naked) static void th_143b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 130
+        push 0x143b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -4696,6 +5614,13 @@ __declspec(naked) static void th_14590(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 131
+        push 0x14590
+        call sv_record_args
+        add esp, 16
         call hk_14590
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -4728,6 +5653,13 @@ __declspec(naked) static void th_14600(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 132
+        push 0x14600
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -4763,6 +5695,13 @@ __declspec(naked) static void th_146a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 133
+        push 0x146a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -4801,6 +5740,13 @@ __declspec(naked) static void th_14dd0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 134
+        push 0x14dd0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -4841,6 +5787,13 @@ __declspec(naked) static void th_154b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 135
+        push 0x154b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_154b0
         add esp, 4
@@ -4874,6 +5827,13 @@ __declspec(naked) static void th_155e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 136
+        push 0x155e0
+        call sv_record_args
+        add esp, 16
         call hk_155e0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -4906,6 +5866,13 @@ __declspec(naked) static void th_15df0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 137
+        push 0x15df0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_15df0
@@ -4941,6 +5908,13 @@ __declspec(naked) static void th_16680(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 138
+        push 0x16680
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_16680
@@ -4976,6 +5950,13 @@ __declspec(naked) static void th_16710(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 139
+        push 0x16710
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_16710
@@ -5011,6 +5992,13 @@ __declspec(naked) static void th_16790(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 140
+        push 0x16790
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_16790
         add esp, 4
@@ -5045,6 +6033,13 @@ __declspec(naked) static void th_16860(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 141
+        push 0x16860
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -5081,6 +6076,13 @@ __declspec(naked) static void th_16960(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 142
+        push 0x16960
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_16960
         add esp, 4
@@ -5115,6 +6117,13 @@ __declspec(naked) static void th_16a20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 143
+        push 0x16a20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_16a20
@@ -5150,6 +6159,13 @@ __declspec(naked) static void th_16bb0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 144
+        push 0x16bb0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5187,6 +6203,13 @@ __declspec(naked) static void th_16c40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 145
+        push 0x16c40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5224,6 +6247,13 @@ __declspec(naked) static void th_16ce0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 146
+        push 0x16ce0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -5262,6 +6292,13 @@ __declspec(naked) static void th_16db0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 147
+        push 0x16db0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5299,6 +6336,13 @@ __declspec(naked) static void th_16e30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 148
+        push 0x16e30
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -5340,6 +6384,13 @@ __declspec(naked) static void th_16f10(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 149
+        push 0x16f10
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_16f10
@@ -5375,6 +6426,13 @@ __declspec(naked) static void th_17b60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 150
+        push 0x17b60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_17b60
         add esp, 4
@@ -5409,6 +6467,13 @@ __declspec(naked) static void th_18720(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 151
+        push 0x18720
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_18720
         add esp, 4
@@ -5443,6 +6508,13 @@ __declspec(naked) static void th_19060(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 152
+        push 0x19060
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_19060
         add esp, 4
@@ -5477,6 +6549,13 @@ __declspec(naked) static void th_19380(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 153
+        push 0x19380
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_19380
         add esp, 4
@@ -5511,6 +6590,13 @@ __declspec(naked) static void th_19610(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 154
+        push 0x19610
+        call sv_record_args
+        add esp, 16
         call hk_19610
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -5543,6 +6629,13 @@ __declspec(naked) static void th_19ee0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 155
+        push 0x19ee0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5579,6 +6672,13 @@ __declspec(naked) static void th_1a000(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 9
+        push eax
+        push 156
+        push 0x1a000
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 40]
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
@@ -5620,6 +6720,13 @@ __declspec(naked) static void th_1a700(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 157
+        push 0x1a700
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -5660,6 +6767,13 @@ __declspec(naked) static void th_1a7f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 158
+        push 0x1a7f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -5699,6 +6813,13 @@ __declspec(naked) static void th_1a990(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 159
+        push 0x1a990
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -5737,6 +6858,13 @@ __declspec(naked) static void th_1aa60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 7
+        push eax
+        push 160
+        push 0x1aa60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
@@ -5776,6 +6904,13 @@ __declspec(naked) static void th_1b070(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 161
+        push 0x1b070
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5812,6 +6947,13 @@ __declspec(naked) static void th_1b6e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 162
+        push 0x1b6e0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_1b6e0
@@ -5847,6 +6989,13 @@ __declspec(naked) static void th_1b870(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 163
+        push 0x1b870
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -5883,6 +7032,13 @@ __declspec(naked) static void th_1ba30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 164
+        push 0x1ba30
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -5921,6 +7077,13 @@ __declspec(naked) static void th_1bc50(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 165
+        push 0x1bc50
+        call sv_record_args
+        add esp, 16
         call hk_1bc50
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -5953,6 +7116,13 @@ __declspec(naked) static void th_1c1d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 166
+        push 0x1c1d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_1c1d0
@@ -5987,6 +7157,13 @@ __declspec(naked) static void th_1c8f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 167
+        push 0x1c8f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6022,6 +7199,13 @@ __declspec(naked) static void th_1cdf0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 168
+        push 0x1cdf0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_1cdf0
@@ -6056,6 +7240,13 @@ __declspec(naked) static void th_1d2c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 169
+        push 0x1d2c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_1d2c0
         add esp, 4
@@ -6090,6 +7281,13 @@ __declspec(naked) static void th_1d3b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 170
+        push 0x1d3b0
+        call sv_record_args
+        add esp, 16
         call hk_1d3b0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -6122,6 +7320,13 @@ __declspec(naked) static void th_1d4d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 171
+        push 0x1d4d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_1d4d0
@@ -6157,6 +7362,13 @@ __declspec(naked) static void th_1d7a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 172
+        push 0x1d7a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_1d7a0
@@ -6192,6 +7404,13 @@ __declspec(naked) static void th_1d8a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 173
+        push 0x1d8a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6228,6 +7447,13 @@ __declspec(naked) static void th_1dba0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 174
+        push 0x1dba0
+        call sv_record_args
+        add esp, 16
         call hk_1dba0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -6260,6 +7486,13 @@ __declspec(naked) static void th_21a30(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 175
+        push 0x21a30
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6296,6 +7529,13 @@ __declspec(naked) static void th_21b40(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 176
+        push 0x21b40
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6332,6 +7572,13 @@ __declspec(naked) static void th_21e00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 177
+        push 0x21e00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -6369,6 +7616,13 @@ __declspec(naked) static void th_223d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 178
+        push 0x223d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6405,6 +7659,13 @@ __declspec(naked) static void th_225e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 179
+        push 0x225e0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_225e0
@@ -6440,6 +7701,13 @@ __declspec(naked) static void th_22af0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 180
+        push 0x22af0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -6478,6 +7746,13 @@ __declspec(naked) static void th_22e20(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 181
+        push 0x22e20
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_22e20
@@ -6513,6 +7788,13 @@ __declspec(naked) static void th_22f90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 182
+        push 0x22f90
+        call sv_record_args
+        add esp, 16
         call hk_22f90
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -6545,6 +7827,13 @@ __declspec(naked) static void th_23fa0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 183
+        push 0x23fa0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_23fa0
         add esp, 4
@@ -6583,6 +7872,13 @@ __declspec(naked) static void th_240e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 184
+        push 0x240e0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_240e0
         add esp, 4
@@ -6617,6 +7913,13 @@ __declspec(naked) static void th_24f60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 185
+        push 0x24f60
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_24f60
         add esp, 4
@@ -6651,6 +7954,13 @@ __declspec(naked) static void th_257a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 186
+        push 0x257a0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -6687,6 +7997,13 @@ __declspec(naked) static void th_25e70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 187
+        push 0x25e70
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -6724,6 +8041,13 @@ __declspec(naked) static void th_26bc0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 188
+        push 0x26bc0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6759,6 +8083,13 @@ __declspec(naked) static void th_26db0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 189
+        push 0x26db0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -6794,6 +8125,13 @@ __declspec(naked) static void th_26f90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 190
+        push 0x26f90
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_26f90
         add esp, 4
@@ -6828,6 +8166,13 @@ __declspec(naked) static void th_272b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 191
+        push 0x272b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_272b0
         add esp, 4
@@ -6862,6 +8207,13 @@ __declspec(naked) static void th_278c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 192
+        push 0x278c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -6899,6 +8251,13 @@ __declspec(naked) static void th_279b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 193
+        push 0x279b0
+        call sv_record_args
+        add esp, 16
         call hk_279b0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -6931,6 +8290,13 @@ __declspec(naked) static void th_27ba0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 194
+        push 0x27ba0
+        call sv_record_args
+        add esp, 16
         call hk_27ba0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -6963,6 +8329,13 @@ __declspec(naked) static void th_27e80(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 195
+        push 0x27e80
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -7003,6 +8376,13 @@ __declspec(naked) static void th_28020(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 196
+        push 0x28020
+        call sv_record_args
+        add esp, 16
         call hk_28020
         fxrstor [esp]
         mov ecx, [esp + 468]
@@ -7034,6 +8414,13 @@ __declspec(naked) static void th_28190(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 197
+        push 0x28190
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -7070,6 +8457,13 @@ __declspec(naked) static void th_286b0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 198
+        push 0x286b0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -7106,6 +8500,13 @@ __declspec(naked) static void th_28a90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 12
+        push eax
+        push 199
+        push 0x28a90
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 52]
         push dword ptr [ebp + 48]
         push dword ptr [ebp + 44]
@@ -7151,6 +8552,13 @@ __declspec(naked) static void th_28c90(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 200
+        push 0x28c90
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7188,6 +8596,13 @@ __declspec(naked) static void th_29300(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 201
+        push 0x29300
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -7224,6 +8639,13 @@ __declspec(naked) static void th_29650(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 202
+        push 0x29650
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_29650
         add esp, 4
@@ -7257,6 +8679,13 @@ __declspec(naked) static void th_296f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 203
+        push 0x296f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -7295,6 +8724,13 @@ __declspec(naked) static void th_29830(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 204
+        push 0x29830
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -7333,6 +8769,13 @@ __declspec(naked) static void th_29970(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 205
+        push 0x29970
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7370,6 +8813,13 @@ __declspec(naked) static void th_2c020(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 206
+        push 0x2c020
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -7410,6 +8860,13 @@ __declspec(naked) static void th_2cda0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 207
+        push 0x2cda0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -7450,6 +8907,13 @@ __declspec(naked) static void th_2d2d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 208
+        push 0x2d2d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -7490,6 +8954,13 @@ __declspec(naked) static void th_2d7f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 9
+        push eax
+        push 209
+        push 0x2d7f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 40]
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
@@ -7531,6 +9002,13 @@ __declspec(naked) static void th_2daf0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 9
+        push eax
+        push 210
+        push 0x2daf0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 40]
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
@@ -7572,6 +9050,13 @@ __declspec(naked) static void th_2dfc0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 211
+        push 0x2dfc0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -7612,6 +9097,13 @@ __declspec(naked) static void th_2efd0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 212
+        push 0x2efd0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7649,6 +9141,13 @@ __declspec(naked) static void th_2f090(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 213
+        push 0x2f090
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7686,6 +9185,13 @@ __declspec(naked) static void th_2f130(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 214
+        push 0x2f130
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7722,6 +9228,13 @@ __declspec(naked) static void th_2f420(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 215
+        push 0x2f420
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_2f420
         add esp, 4
@@ -7756,6 +9269,13 @@ __declspec(naked) static void th_306d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 216
+        push 0x306d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
@@ -7793,6 +9313,13 @@ __declspec(naked) static void th_307f0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 8
+        push eax
+        push 217
+        push 0x307f0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 36]
         push dword ptr [ebp + 32]
         push dword ptr [ebp + 28]
@@ -7833,6 +9360,13 @@ __declspec(naked) static void th_30ab0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 218
+        push 0x30ab0
+        call sv_record_args
+        add esp, 16
         call hk_30ab0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -7865,6 +9399,13 @@ __declspec(naked) static void th_30ba0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 219
+        push 0x30ba0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_30ba0
         add esp, 4
@@ -7899,6 +9440,13 @@ __declspec(naked) static void th_30f00(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 220
+        push 0x30f00
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -7934,6 +9482,13 @@ __declspec(naked) static void th_31480(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 221
+        push 0x31480
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_31480
@@ -7968,6 +9523,13 @@ __declspec(naked) static void th_31630(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 222
+        push 0x31630
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8003,6 +9565,13 @@ __declspec(naked) static void th_31800(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 5
+        push eax
+        push 223
+        push 0x31800
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
@@ -8040,6 +9609,13 @@ __declspec(naked) static void th_32340(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 224
+        push 0x32340
+        call sv_record_args
+        add esp, 16
         call hk_32340
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8072,6 +9648,13 @@ __declspec(naked) static void th_324c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 225
+        push 0x324c0
+        call sv_record_args
+        add esp, 16
         call hk_324c0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8104,6 +9687,13 @@ __declspec(naked) static void th_32bb0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 226
+        push 0x32bb0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8139,6 +9729,13 @@ __declspec(naked) static void th_32fe0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 227
+        push 0x32fe0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_32fe0
         add esp, 4
@@ -8173,6 +9770,13 @@ __declspec(naked) static void th_33350(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 228
+        push 0x33350
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -8212,6 +9816,13 @@ __declspec(naked) static void th_34870(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 229
+        push 0x34870
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_34870
         add esp, 4
@@ -8246,6 +9857,13 @@ __declspec(naked) static void th_34c10(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 230
+        push 0x34c10
+        call sv_record_args
+        add esp, 16
         call hk_34c10
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8278,6 +9896,13 @@ __declspec(naked) static void th_3b0c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 231
+        push 0x3b0c0
+        call sv_record_args
+        add esp, 16
         call hk_3b0c0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8310,6 +9935,13 @@ __declspec(naked) static void th_3ccc0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 232
+        push 0x3ccc0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8345,6 +9977,13 @@ __declspec(naked) static void th_3cfe0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 233
+        push 0x3cfe0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_3cfe0
@@ -8380,6 +10019,13 @@ __declspec(naked) static void th_3d500(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 234
+        push 0x3d500
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_3d500
@@ -8415,6 +10061,13 @@ __declspec(naked) static void th_3da50(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 235
+        push 0x3da50
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 28]
         push dword ptr [ebp + 24]
         push dword ptr [ebp + 20]
@@ -8454,6 +10107,13 @@ __declspec(naked) static void th_48ec0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 236
+        push 0x48ec0
+        call sv_record_args
+        add esp, 16
         call hk_48ec0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8486,6 +10146,13 @@ __declspec(naked) static void th_4c720(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 237
+        push 0x4c720
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_4c720
         add esp, 4
@@ -8520,6 +10187,13 @@ __declspec(naked) static void th_4c8c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 238
+        push 0x4c8c0
+        call sv_record_args
+        add esp, 16
         call hk_4c8c0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8552,6 +10226,13 @@ __declspec(naked) static void th_4cee0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 239
+        push 0x4cee0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_4cee0
         add esp, 4
@@ -8586,6 +10267,13 @@ __declspec(naked) static void th_4d630(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 240
+        push 0x4d630
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8621,6 +10309,13 @@ __declspec(naked) static void th_4d750(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 241
+        push 0x4d750
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_4d750
@@ -8655,6 +10350,13 @@ __declspec(naked) static void th_4d850(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 242
+        push 0x4d850
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_4d850
         add esp, 4
@@ -8689,6 +10391,13 @@ __declspec(naked) static void th_4da10(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 243
+        push 0x4da10
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_4da10
         add esp, 4
@@ -8723,6 +10432,13 @@ __declspec(naked) static void th_4e060(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 244
+        push 0x4e060
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8758,6 +10474,13 @@ __declspec(naked) static void th_4e0d0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 245
+        push 0x4e0d0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_4e0d0
@@ -8793,6 +10516,13 @@ __declspec(naked) static void th_4e2c0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 246
+        push 0x4e2c0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_4e2c0
@@ -8828,6 +10558,13 @@ __declspec(naked) static void th_4e500(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 247
+        push 0x4e500
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
         call hk_4e500
@@ -8863,6 +10600,13 @@ __declspec(naked) static void th_4f720(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 248
+        push 0x4f720
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_4f720
         add esp, 4
@@ -8897,6 +10641,13 @@ __declspec(naked) static void th_500e0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 249
+        push 0x500e0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_500e0
         add esp, 4
@@ -8931,6 +10682,13 @@ __declspec(naked) static void th_50ae0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 3
+        push eax
+        push 250
+        push 0x50ae0
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]
         push dword ptr [ebp + 8]
@@ -8966,6 +10724,13 @@ __declspec(naked) static void th_542a0(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 251
+        push 0x542a0
+        call sv_record_args
+        add esp, 16
         call hk_542a0
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -8998,6 +10763,13 @@ __declspec(naked) static void th_55700(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 252
+        push 0x55700
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 8]
         call hk_55700
         add esp, 4
@@ -9032,6 +10804,13 @@ __declspec(naked) static void th_5aa60(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 253
+        push 0x5aa60
+        call sv_record_args
+        add esp, 16
         call hk_5aa60
         fxrstor [esp]
         mov eax, [esp + 464]
@@ -9064,6 +10843,13 @@ __declspec(naked) static void th_5cf70(void)
         mov [esp + 472], edx
         fninit
         fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 4
+        push eax
+        push 254
+        push 0x5cf70
+        call sv_record_args
+        add esp, 16
         push dword ptr [ebp + 20]
         push dword ptr [ebp + 16]
         push dword ptr [ebp + 12]

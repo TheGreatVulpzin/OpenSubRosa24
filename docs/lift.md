@@ -111,3 +111,26 @@ A scope round protects only the pages that the function wrote before, plus a mar
 ## Floats
 
 Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns are compared after rounding to `float` (`SV_HOOK_RET_FLOAT`): the original often rounds before it returns, and Ghidra loses that rounding. Callers store the result as `float`.
+
+## Offline differential test (harness)
+
+`src/tests/harness.c` tests the lifted functions without a server and without players.
+
+1. Make a copy of the 024d at a fixed base, for the test server and for the harness:
+
+   ```bash
+   python -I tools/re/fixed_base.py original/blackhouser/subrosadedicated024d.exe build/auto-server/subrosadedicated024d.exe
+   python -I tools/re/fixed_base.py original/blackhouser/subrosadedicated024d.exe build/hook/024d_fixed.exe
+   ```
+
+   Both copies load at 0x20000000 with ASLR off. A snapshot of `.data` from the server then fits the harness with no pointer fixes.
+
+2. Record real inputs. In `build/auto-server/subvulpes.ini`, set `record_args=1` and `snapshot_after=150`, then run the server (`tools\autotest.ps1 -Seconds 200`). The thunks of the lifted hooks write `sv_args.txt` (up to 24 different calls per function, `hook/record.c`). After 150 seconds the DLL writes `sv_snapshot.bin` (the non-zero pages of `.data`).
+
+3. Run the harness:
+
+   ```bat
+   build\hook\harness.exe build\hook\024d_fixed.exe build\auto-server\sv_snapshot.bin build\auto-server\sv_args.txt [name filter]
+   ```
+
+   It loads the 024d as a library, resolves its imports, fills `.data` from the snapshot and runs each recorded call twice: the lifted version, then the original (the verifier undoes the writes of the first run). It compares the `.data` writes, the return value and the memory behind pointer arguments. A full run takes a few minutes. The details of each difference go to `build/hook/subvulpes.log`.

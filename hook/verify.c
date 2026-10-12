@@ -9,6 +9,7 @@
 #include "sr_global_table.h"
 #include "sr_runtime.h"
 #include "verify.h"
+#include "record.h"
 
 #define PAGE 4096u
 #define MAX_PAGES 4096   /* pages changed per run and per version (16 MB) */
@@ -223,6 +224,16 @@ static unsigned g_recent_pos;
 void sv_note_call(const char *name)
 {
     g_recent[g_recent_pos++ & 15] = name;
+    sv_snapshot_check();
+}
+
+int sv_verify_data(const uint8_t **data, size_t *size)
+{
+    if (!g_data)
+        return 0;
+    *data = g_data;
+    *size = g_data_size;
+    return 1;
 }
 
 static LONG WINAPI on_unhandled(EXCEPTION_POINTERS *ep)
