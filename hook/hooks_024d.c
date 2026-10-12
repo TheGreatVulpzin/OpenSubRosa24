@@ -22,7 +22,7 @@
             NEW;                              \
             return;                           \
         }                                     \
-        sv_track_begin_new();                 \
+        sv_track_begin_new(&STAT);               \
         NEW;                                  \
         sv_track_switch_to_original();        \
         ORIG;                                 \
@@ -35,7 +35,7 @@
         TYPE r_new_, r_orig_;                                 \
         if (!sv_verify_should(&STAT))                         \
             return NEW;                                       \
-        sv_track_begin_new();                                 \
+        sv_track_begin_new(&STAT);                               \
         r_new_ = NEW;                                         \
         sv_track_switch_to_original();                        \
         r_orig_ = ORIG;                                       \
@@ -47,7 +47,7 @@
 
 typedef void(__cdecl *createevent_message_fn)(int, const char *, int, int);
 static createevent_message_fn orig_createevent_message;
-static SvVerify v_createevent_message = { "createevent_message", -1, 0, 0, 0 };
+static SvVerify v_createevent_message = { "createevent_message", -1 };
 
 static void __cdecl hk_createevent_message(int kind, const char *text, int target, int extra)
 {
@@ -64,7 +64,7 @@ static uint8_t expect_createevent_message[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
 
 typedef void(__cdecl *createevent_updatedoor_fn)(int, int);
 static createevent_updatedoor_fn orig_createevent_updatedoor;
-static SvVerify v_createevent_updatedoor = { "createevent_updatedoor", -1, 0, 0, 0 };
+static SvVerify v_createevent_updatedoor = { "createevent_updatedoor", -1 };
 
 static void __cdecl hk_createevent_updatedoor(int a, int b)
 {
@@ -78,7 +78,7 @@ static uint8_t expect_createevent_updatedoor[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00
 
 typedef void(__cdecl *createevent_updatemission_fn)(int, int);
 static createevent_updatemission_fn orig_createevent_updatemission;
-static SvVerify v_createevent_updatemission = { "createevent_updatemission", -1, 0, 0, 0 };
+static SvVerify v_createevent_updatemission = { "createevent_updatemission", -1 };
 
 static void __cdecl hk_createevent_updatemission(int team, int mission)
 {
@@ -92,7 +92,7 @@ static uint8_t expect_createevent_updatemission[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0
 
 typedef void(__cdecl *fixplayername_fn)(int);
 static fixplayername_fn orig_fixplayername;
-static SvVerify v_fixplayername = { "fixplayername", -1, 0, 0, 0 };
+static SvVerify v_fixplayername = { "fixplayername", -1 };
 
 static void __cdecl hk_fixplayername(int id)
 {

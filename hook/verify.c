@@ -17,6 +17,10 @@ static uint8_t *g_data;        /* início da seção .data do jogo */
 static size_t g_data_size;
 static int g_enabled;          /* subvulpes.ini: verify */
 static int g_log_calls;        /* subvulpes.ini: log_calls */
+static int g_full_every;       /* subvulpes.ini: verify_full_every */
+static SvVerify *g_scope;      /* hook da verificação atual */
+static int g_full;             /* 1 = esta verificação protege a .data inteira */
+static LARGE_INTEGER g_t0, g_freq;
 static PVOID g_veh;
 static const char *g_section = ".data";  /* os testes trocam por uma seção própria */
 
@@ -35,6 +39,7 @@ typedef struct PageSet {
 } PageSet;
 
 static PageSet g_new, g_orig;
+static int find_page(const PageSet *s, uint32_t page);
 static PageSet *g_active;           /* conjunto que recebe as falhas agora */
 static uint8_t *g_new_result[MAX_PAGES];  /* páginas da versão nova, depois de rodar */
 static int g_overflow;
@@ -58,6 +63,62 @@ static void protect_all(DWORD prot)
     if (!VirtualProtect(g_data, g_data_size, prot, &old) && !warned) {
         warned = 1;
         sv_log("ERRO verificador: VirtualProtect da .data falhou (%lu)", GetLastError());
+    }
+}
+
+/* Protege só o necessário: a .data inteira (rodada completa) ou o escopo aprendido. */
+static void protect_scope(DWORD prot)
+{
+    unsigned i;
+    DWORD old;
+    if (g_full || !g_scope) {
+        protect_all(prot);
+        return;
+    }
+    for (i = 0; i < g_scope->nranges; i++) {
+        VirtualProtect(g_data + (size_t)g_scope->range[i][0] * PAGE,
+                       (size_t)(g_scope->range[i][1] - g_scope->range[i][0]) * PAGE, prot, &old);
+    }
+}
+
+/* Faixa de páginas da global que contém a página (o array inteiro), ou só a página. */
+static void global_pages(uint32_t page, unsigned *first, unsigned *last)
+{
+    uint32_t data_rva = (uint32_t)((uintptr_t)g_data - sr_base);
+    uint32_t rva = data_rva + page * PAGE;
+    size_t k;
+    *first = page;
+    *last = page + 1;
+    for (k = 0; k < sizeof sr_global_table / sizeof sr_global_table[0]; k++) {
+        const SrGlobalInfo *g = &sr_global_table[k];
+        uint32_t end = g->rva + g->elem_size * g->count;
+        if (g->elem_size && g->count && g->rva <= rva + PAGE - 1 && rva < end && g->rva >= data_rva) {
+            *first = (g->rva - data_rva) / PAGE;
+            *last = (end - data_rva + PAGE - 1) / PAGE;
+            return;
+        }
+    }
+}
+
+static void learn_page(SvVerify *v, uint32_t page)
+{
+    unsigned first, last, i;
+    global_pages(page, &first, &last);
+    for (i = 0; i < v->nranges; i++) {
+        if (first < v->range[i][1] && v->range[i][0] < last) {  /* sobrepõe: junta */
+            if (first < v->range[i][0])
+                v->range[i][0] = first;
+            if (last > v->range[i][1])
+                v->range[i][1] = last;
+            return;
+        }
+    }
+    if (v->nranges < 32) {
+        v->range[v->nranges][0] = first;
+        v->range[v->nranges][1] = last;
+        v->nranges++;
+    } else {
+        v->nranges = 0;  /* escopo grande demais: volta a rodadas completas */
     }
 }
 
@@ -103,6 +164,9 @@ int sv_verify_init(void)
 
     g_enabled = sv_config_int("verify", 1);
     g_log_calls = sv_config_int("log_calls", 1);
+    g_full_every = sv_config_int("verify_full_every", 50);
+    if (g_full_every < 1)
+        g_full_every = 1;
     sv_log("modo de verificação: %s", g_enabled ? "ligado" : "desligado");
     if (!g_enabled)
         return 1;
@@ -156,8 +220,13 @@ int sv_verify_should(SvVerify *v)
     return (v->calls - 1) % v->every == 0;
 }
 
-void sv_track_begin_new(void)
+void sv_track_begin_new(SvVerify *v)
 {
+    if (!g_freq.QuadPart)
+        QueryPerformanceFrequency(&g_freq);
+    QueryPerformanceCounter(&g_t0);
+    g_scope = v;
+    g_full = v->nranges == 0 || v->checks < 3 || v->checks % g_full_every == 0;
     g_pool_used = 0;
     g_overflow = 0;
     g_new.count = 0;
@@ -165,7 +234,7 @@ void sv_track_begin_new(void)
     if (g_holdrand)
         g_holdrand_before = *g_holdrand;
     g_active = &g_new;
-    protect_all(PAGE_READONLY);
+    protect_scope(PAGE_READONLY);
 }
 
 static int find_page(const PageSet *s, uint32_t page)
@@ -181,7 +250,7 @@ void sv_track_switch_to_original(void)
 {
     uint32_t i;
     g_active = NULL;
-    protect_all(PAGE_READWRITE);
+    protect_scope(PAGE_READWRITE);
 
     /* Guarda o resultado da versão nova e devolve as páginas ao estado anterior. */
     for (i = 0; i < g_new.count; i++) {
@@ -199,7 +268,7 @@ void sv_track_switch_to_original(void)
     }
 
     g_active = &g_orig;
-    protect_all(PAGE_READONLY);
+    protect_scope(PAGE_READONLY);
 }
 
 /* Descreve um endereço de .data como "global[i]+0xNN". */
@@ -233,7 +302,13 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
     uint32_t data_rva = (uint32_t)((uintptr_t)g_data - sr_base);
 
     g_active = NULL;
-    protect_all(PAGE_READWRITE);
+    protect_scope(PAGE_READWRITE);
+
+    /* Aprende as globais escritas (para as próximas verificações deste hook). */
+    for (i = 0; i < g_new.count; i++)
+        learn_page(v, g_new.index[i]);
+    for (i = 0; i < g_orig.count; i++)
+        learn_page(v, g_orig.index[i]);
 
     /* Páginas que a nova alterou: compara o resultado dela com o estado atual (da original). */
     for (i = 0; i < g_new.count; i++) {
@@ -272,10 +347,14 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
     {
         int rand_ok = !g_holdrand || g_holdrand_new == *g_holdrand;
         int ok = diffs == 0 && same_return && rand_ok && !g_overflow;
+        LARGE_INTEGER t1;
+        double ms;
+        QueryPerformanceCounter(&t1);
+        ms = 1000.0 * (double)(t1.QuadPart - g_t0.QuadPart) / (double)g_freq.QuadPart;
         v->checks++;
         if (g_log_calls)
-            sv_log("chamada %s #%ld: %s \"%s\"", v->name, v->calls, ok ? "igual" : "DIFERENTE",
-                   detail ? detail : "");
+            sv_log("chamada %s #%ld: %s \"%s\" (%.1f ms, %s)", v->name, v->calls, ok ? "igual" : "DIFERENTE",
+                   detail ? detail : "", ms, g_full ? "completa" : "escopo");
         if (!ok) {
             v->fails++;
             if (v->fails <= 20)

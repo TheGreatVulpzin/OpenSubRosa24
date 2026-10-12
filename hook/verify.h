@@ -6,8 +6,8 @@
  *
  * Fluxo de um hook (ver SV_VERIFY_CALL em hooks_024d.c):
  *   sv_verify_should(v)    decide se esta chamada é verificada (amostragem)
- *   sv_track_begin()       nova roda
- *   sv_track_begin()       roda original
+ *   sv_track_begin_new(v)            nova roda
+ *   sv_track_switch_to_original()    roda original
  *   sv_verify_end(v, ...)  compara, registra no log e mantém o resultado da original
  *
  * Limites: só cobre a seção .data do executável (todas as globais do jogo).
@@ -27,6 +27,10 @@ typedef struct SvVerify {
     long calls;      /* chamadas totais */
     long checks;     /* chamadas verificadas */
     long fails;      /* verificações com diferença */
+    /* Escopo aprendido: faixas de páginas de .data que a função costuma escrever.
+     * Fora das rodadas completas, só essas faixas ficam protegidas. */
+    unsigned nranges;
+    unsigned range[32][2];   /* [primeira página, última + 1) dentro de .data */
 } SvVerify;
 
 /* Só para testes: usa outra seção do executável no lugar de .data. Chame antes de sv_verify_init. */
@@ -38,8 +42,10 @@ int sv_verify_init(void);
 /* 1 = verificar esta chamada. Respeita verify=0 e a amostragem. */
 int sv_verify_should(SvVerify *v);
 
-/* Começa a registrar escritas. Chame antes da versão nova. */
-void sv_track_begin_new(void);
+/* Começa a registrar escritas. Chame antes da versão nova.
+ * Nas primeiras verificações e a cada verify_full_every (padrão 50), protege a .data
+ * inteira e aprende as globais escritas. Nas outras, protege só o escopo aprendido. */
+void sv_track_begin_new(SvVerify *v);
 
 /* Guarda o resultado da versão nova, desfaz as escritas e começa a registrar
  * de novo. Chame entre a versão nova e a original. */

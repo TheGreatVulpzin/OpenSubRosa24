@@ -30,7 +30,7 @@ static void run(SvVerify *v, void (*new_fn)(void), void (*orig_fn)(void))
         new_fn();
         return;
     }
-    sv_track_begin_new();
+    sv_track_begin_new(v);
     new_fn();
     sv_track_switch_to_original();
     orig_fn();
@@ -45,10 +45,10 @@ static void nothing(void) { }
 
 int main(void)
 {
-    SvVerify v1 = { "iguais", 1, 0, 0, 0 };
-    SvVerify v2 = { "valor_diferente", 1, 0, 0, 0 };
-    SvVerify v3 = { "so_original_escreve", 1, 0, 0, 0 };
-    SvVerify v4 = { "amostragem", 3, 0, 0, 0 };
+    SvVerify v1 = { "iguais", 1 };
+    SvVerify v2 = { "valor_diferente", 1 };
+    SvVerify v3 = { "so_original_escreve", 1 };
+    SvVerify v4 = { "amostragem", 3 };
     int i;
 
     sr_base = (uintptr_t)GetModuleHandleA(NULL);
@@ -71,6 +71,15 @@ int main(void)
     for (i = 0; i < 7; i++)
         run(&v4, write_a, write_a_copy);
     CHECK(v4.calls == 7 && v4.checks == 3, "amostragem 1 a cada 3: 3 de 7 verificadas");
+
+    {
+        SvVerify v5 = { "escopo", 1 };
+        for (i = 0; i < 5; i++)
+            run(&v5, write_a, write_a_copy);
+        CHECK(v5.nranges > 0, "escopo aprendido depois das rodadas completas");
+        run(&v5, write_b, write_a);
+        CHECK(v5.fails == 1, "diferença detectada numa rodada com escopo");
+    }
 
     g_vals[1] = 1;  /* a seção voltou a aceitar escrita */
     CHECK(g_vals[1] == 1, "seção liberada depois da verificação");

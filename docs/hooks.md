@@ -20,9 +20,9 @@ Código: [`hook/`](../hook/) (proxy, hooks, tabela) e [`src/server/`](../src/ser
 | Função | RVA no 024d | Arquivo | Estado |
 | --- | --- | --- | --- |
 | `createevent_message` | `0x6260` | `src/server/events.c` | **Verificada** (2026-10-11): 28 chamadas com cliente conectado (boas-vindas, Top 10, corporações, entrada, chat), 0 diferenças. |
-| `createevent_updatedoor` | `0x6660` | `src/server/events.c` | Lote 1. Compila. Falta testar no jogo. |
-| `createevent_updatemission` | `0x6760` | `src/server/events.c` | Lote 1. Compila. Falta testar no jogo. |
-| `fixplayername` | `0xa580` | `src/server/players.c` | Lote 1. Compila. Falta testar no jogo. |
+| `createevent_updatedoor` | `0x6660` | `src/server/events.c` | Lote 1. Não foi acionada no teste de 2026-10-11. Fica para a próxima rodada. |
+| `createevent_updatemission` | `0x6760` | `src/server/events.c` | **Verificada** (2026-10-11): 1 chamada, 0 diferenças. |
+| `fixplayername` | `0xa580` | `src/server/players.c` | **Verificada** (2026-10-11): 1 chamada, 0 diferenças. |
 
 Progresso: `python -I tools/progress.py`.
 
@@ -41,6 +41,14 @@ Com `verify=1` (padrão nesta fase), cada chamada roda as duas versões ([`hook/
 3. Guarda o resultado e desfaz as escritas. Também restaura o estado do `rand()` do `MSVCR100.dll`.
 4. Roda a original pelo trampolim, do mesmo jeito.
 5. Compara só as páginas que alguma das versões alterou. Diferença vai para o `subvulpes.log`, com nome (exemplo: `event[1234]+0x40`).
+
+**Escopo aprendido.** Proteger os 621 MB da `.data` custa de 150 a 200 ms por chamada. Por isso o verificador aprende quais globais cada função escreve:
+
+- Nas 3 primeiras verificações de um hook, e a cada `verify_full_every` (padrão 50), ele protege a `.data` inteira e anota as globais escritas.
+- Nas outras, ele protege só essas globais (o array inteiro de cada uma).
+- O log mostra o tempo e o tipo de cada verificação: `(1.2 ms, escopo)` ou `(180.0 ms, completa)`.
+
+Uma escrita fora do escopo aprendido só aparece na próxima rodada completa.
 
 Limites: escritas fora da `.data` (pilha, heap, outros DLLs) não entram na comparação. O servidor precisa rodar em uma thread só.
 
@@ -78,6 +86,7 @@ enabled=1                ; 0 = só repassa a rede, sem hooks
 verify=1                 ; 1 = compara com a original a cada chamada
 createevent_message=1    ; 0 = desliga só este hook (vale para qualquer nome de hook)
 verify_every.createevent_message=1   ; verifica 1 a cada N chamadas deste hook
+verify_full_every=50     ; a cada N verificações de um hook, faz uma rodada completa
 log_calls=1              ; 1 = registra cada chamada verificada
 ```
 
