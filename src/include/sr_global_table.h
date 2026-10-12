@@ -1,0 +1,43 @@
+/* Gerado por tools/re/gen_types.py. Globais do 024d para mensagens de diagnóstico. */
+#ifndef SR_GLOBAL_TABLE_H
+#define SR_GLOBAL_TABLE_H
+
+typedef struct SrGlobalInfo { unsigned rva; const char *name; unsigned elem_size; unsigned count; } SrGlobalInfo;
+
+static const SrGlobalInfo sr_global_table[] = {
+    { 0x60170u, "cubequad", 0x0u, 0u },
+    { 0x60174u, "cubevertex", 0x0u, 0u },
+    { 0x1409ba0u, "bullet", 0x5cu, 16384u },
+    { 0x1579ba0u, "debug", 0x0u, 0u },
+    { 0x15cbf80u, "human", 0x2b64u, 512u },
+    { 0x1b49788u, "stats", 0x0u, 0u },
+    { 0x5592600u, "object", 0x8230u, 1024u },
+    { 0x761ea60u, "server", 0x0u, 0u },
+    { 0x90dc520u, "numoftracks", 0x0u, 0u },
+    { 0x90dc540u, "game", 0x0u, 0u },
+    { 0x90dc578u, "ticks", 0x0u, 0u },
+    { 0x91022c0u, "item", 0x1acu, 1024u },
+    { 0x916d700u, "soundlist", 0x0u, 0u },
+    { 0x93dd880u, "event", 0x80u, 65536u },
+    { 0xac51bc0u, "objecttype", 0x828cu, 128u },
+    { 0xb3e7200u, "particle", 0x0u, 4096u },
+    { 0xe219200u, "filelist", 0x0u, 0u },
+    { 0xe299220u, "city", 0x0u, 0u },
+    { 0xededd00u, "player", 0x2408u, 256u },
+    { 0xf26fd00u, "materiallist", 0x0u, 0u },
+    { 0xf270280u, "body", 0x40u, 32u },
+    { 0xf437318u, "numofevents", 0x0u, 0u },
+    { 0xf437b68u, "account", 0x4cu, 65536u },
+    { 0x103484a0u, "intersect", 0x0u, 0u },
+    { 0x10357400u, "itemtype", 0x198u, 64u },
+    { 0x12a81c60u, "timerlist", 0x0u, 0u },
+    { 0x12a81d00u, "speex", 0x0u, 0u },
+    { 0x13d22d60u, "parser", 0x0u, 0u },
+    { 0x15e39020u, "connection", 0xf170u, 256u },
+    { 0x17179a28u, "numofbonds", 0x0u, 0u },
+    { 0x17179a40u, "bond", 0xecu, 16384u },
+    { 0x17529a40u, "numofbullets", 0x0u, 0u },
+    { 0x1952d680u, "bsdsocket", 0x0u, 0u },
+};
+
+#endif

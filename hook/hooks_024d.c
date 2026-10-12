@@ -1,8 +1,9 @@
 /* Tabela de hooks do subrosadedicated024d.exe.
  *
- * Modo de verificação (subvulpes.ini: verify=1, o padrão nesta fase):
- * a cada chamada, roda a função nova, guarda o resultado, desfaz,
- * roda a original pelo trampolim e compara a memória. Diferença vai para o log.
+ * Para acrescentar uma função:
+ *   1. Escreva sr_<nome> em src/server/ e declare em sr_server.h.
+ *   2. Crie o wrapper hk_<nome> com SV_HOOK_VOID ou SV_HOOK_RET.
+ *   3. Acrescente uma linha em g_hooks com o RVA, o tamanho do prólogo e os bytes esperados.
  */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -12,68 +13,57 @@
 #include "hook.h"
 #include "sr_runtime.h"
 #include "sr_server.h"
+#include "verify.h"
 
-static int g_verify;
-static int g_log_calls;   /* subvulpes.ini: log_calls=1 registra cada chamada verificada */
+/* Wrapper de função void. NEW e ORIG são as chamadas completas, com argumentos. */
+#define SV_HOOK_VOID(STAT, NEW, ORIG, DETAIL) \
+    do {                                      \
+        if (!sv_verify_should(&STAT)) {       \
+            NEW;                              \
+            return;                           \
+        }                                     \
+        sv_track_begin_new();                 \
+        NEW;                                  \
+        sv_track_switch_to_original();        \
+        ORIG;                                 \
+        sv_verify_end(&STAT, 1, DETAIL);      \
+    } while (0)
 
-typedef struct VerifyStats {
-    const char *name;
-    long checks;
-    long fails;
-} VerifyStats;
+/* Wrapper de função com retorno. Compara os retornos e devolve o da original. */
+#define SV_HOOK_RET(TYPE, STAT, NEW, ORIG, DETAIL)            \
+    do {                                                      \
+        TYPE r_new_, r_orig_;                                 \
+        if (!sv_verify_should(&STAT))                         \
+            return NEW;                                       \
+        sv_track_begin_new();                                 \
+        r_new_ = NEW;                                         \
+        sv_track_switch_to_original();                        \
+        r_orig_ = ORIG;                                       \
+        sv_verify_end(&STAT, r_new_ == r_orig_, DETAIL);      \
+        return r_orig_;                                       \
+    } while (0)
 
-static void verify_result(VerifyStats *s, int ok, const char *detail)
-{
-    s->checks++;
-    if (g_log_calls)
-        sv_log("chamada %s #%ld: %s \"%s\"", s->name, s->checks, ok ? "igual" : "DIFERENTE", detail);
-    if (!ok) {
-        s->fails++;
-        if (s->fails <= 20)
-            sv_log("VERIFICA %s: DIFERENTE (chamada %ld) %s", s->name, s->checks, detail);
-    }
-    if (s->checks == 1 || s->checks % 1000 == 0)
-        sv_log("VERIFICA %s: %ld chamadas, %ld diferenças", s->name, s->checks, s->fails);
-}
-
-/* ------------------------------------------------------------ createevent_message */
+/* ------------------------------------------------------------ createevent_message (0x6260) */
 
 typedef void(__cdecl *createevent_message_fn)(int, const char *, int, int);
 static createevent_message_fn orig_createevent_message;
-static VerifyStats st_createevent_message = { "createevent_message", 0, 0 };
+static SvVerify v_createevent_message = { "createevent_message", -1, 0, 0, 0 };
 
 static void __cdecl hk_createevent_message(int kind, const char *text, int target, int extra)
 {
-    uint32_t idx, n_before, n_mine;
-    Event before, mine;
-
-    if (!g_verify) {
-        sr_createevent_message(kind, text, target, extra);
-        return;
-    }
-
-    idx = sr_numofevents & 0xffff;
-    n_before = sr_numofevents;
-    before = sr_events[idx];
-
-    sr_createevent_message(kind, text, target, extra);
-    mine = sr_events[idx];
-    n_mine = sr_numofevents;
-
-    sr_events[idx] = before;
-    sr_numofevents = n_before;
-    orig_createevent_message(kind, text, target, extra);
-
-    verify_result(&st_createevent_message,
-                  memcmp(&mine, &sr_events[idx], sizeof(Event)) == 0 && n_mine == sr_numofevents,
-                  text);
+    SV_HOOK_VOID(v_createevent_message,
+                 sr_createevent_message(kind, text, target, extra),
+                 orig_createevent_message(kind, text, target, extra),
+                 text);
 }
-
-/* ------------------------------------------------------------ tabela */
 
 /* cmp dword ptr [server], 0  ->  83 3D <endereço de server> 00 */
 static uint8_t expect_createevent_message[7] = { 0x83, 0x3D, 0, 0, 0, 0, 0x00 };
-static const uint8_t mask_all[16] = {
+
+/* ------------------------------------------------------------ tabela */
+
+static const uint8_t mask_all[32] = {
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 };
 
@@ -82,22 +72,30 @@ static SvHook g_hooks[] = {
       expect_createevent_message, mask_all, (void **)&orig_createevent_message, 0, 0 },
 };
 
+static SvVerify *g_stats[] = {
+    &v_createevent_message,
+};
+
+/* Escreve um endereço absoluto (relocado pelo ASLR) dentro dos bytes esperados. */
+static void expect_va(uint8_t *expect, int offset, uint32_t rva)
+{
+    uint32_t va = (uint32_t)(sr_base + rva);
+    memcpy(expect + offset, &va, 4);
+}
+
 int sv_hooks_024d_install(void)
 {
-    /* O endereço absoluto de "server" dentro da instrução muda com o ASLR. */
-    uint32_t server_va = (uint32_t)(sr_base + SR_RVA_SERVER);
-    memcpy(&expect_createevent_message[2], &server_va, 4);
+    expect_va(expect_createevent_message, 2, SR_RVA_SERVER);
 
-    g_verify = sv_config_int("verify", 1);
-    g_log_calls = sv_config_int("log_calls", 1);
-    sv_log("modo de verificação: %s", g_verify ? "ligado" : "desligado");
+    sv_verify_init();
     return sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
 }
 
-/* Chamado quando o processo fecha: resumo final da verificação. */
+/* Chamado quando o processo fecha. */
 void sv_hooks_024d_summary(void)
 {
-    if (g_verify)
-        sv_log("RESUMO %s: %ld chamadas, %ld diferenças", st_createevent_message.name,
-               st_createevent_message.checks, st_createevent_message.fails);
+    size_t i;
+    for (i = 0; i < sizeof g_stats / sizeof g_stats[0]; i++)
+        if (g_stats[i]->calls)
+            sv_verify_summary(g_stats[i]);
 }

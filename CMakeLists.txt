@@ -13,6 +13,7 @@ add_library(sv_wsock32 SHARED
     hook/proxy.c
     hook/hook.c
     hook/hooks_024d.c
+    hook/verify.c
     hook/wsock32.def
     src/server/events.c
 )
@@ -26,3 +27,8 @@ set_property(TARGET sv_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<C
 add_executable(check_types src/tests/check_types.c)
 target_include_directories(check_types PRIVATE src/include)
 target_compile_options(check_types PRIVATE /W4 /WX /utf-8)
+
+add_executable(test_verify src/tests/test_verify.c hook/verify.c hook/hook.c)
+target_include_directories(test_verify PRIVATE src/include hook)
+target_compile_options(test_verify PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(test_verify PRIVATE _CRT_SECURE_NO_WARNINGS)

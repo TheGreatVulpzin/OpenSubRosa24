@@ -219,6 +219,29 @@ def gen_globals():
     return '\n'.join(lines)
 
 
+def gen_global_table():
+    """Tabela {rva, nome, tamanho do registro, quantidade} para o log do verificador."""
+    rows = {}
+    for path in ('analysis/024d/globals.csv', 'analysis/024d/manual_globals.csv'):
+        with open(ROOT / path, encoding='utf-8') as fh:
+            for r in csv.DictReader(fh):
+                rows[r['name']] = int(r['rva'], 16)
+    sizes = {g: s for (g, s) in STRUCTS.values()}
+    sizes['account'] = 0x4c
+    lines = ['/* Gerado por tools/re/gen_types.py. Globais do 024d para mensagens de diagnóstico. */',
+             '#ifndef SR_GLOBAL_TABLE_H', '#define SR_GLOBAL_TABLE_H', '',
+             'typedef struct SrGlobalInfo { unsigned rva; const char *name; unsigned elem_size; unsigned count; } SrGlobalInfo;',
+             '', 'static const SrGlobalInfo sr_global_table[] = {']
+    for name, rva in sorted(rows.items(), key=lambda x: x[1]):
+        size = sizes.get(name, 0)
+        count = COUNTS.get(name, 0)
+        if name == 'account':
+            rva += 8  # registros depois da chave e do contador
+        lines.append(f'    {{ 0x{rva:x}u, "{name}", 0x{size:x}u, {count}u }},')
+    lines += ['};', '', '#endif', '']
+    return chr(10).join(lines)
+
+
 def main():
     names = load_names()
     parts = [HEADER]
@@ -229,6 +252,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     (out / 'sr_types.h').write_text('\n\n'.join(parts), encoding='utf-8', newline='\n')
     (out / 'sr_globals_024d.h').write_text(gen_globals(), encoding='utf-8', newline='\n')
+    (out / 'sr_global_table.h').write_text(gen_global_table(), encoding='utf-8', newline='\n')
     print('gerado: src/include/sr_types.h, src/include/sr_globals_024d.h')
 
 
