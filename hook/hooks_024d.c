@@ -14,6 +14,7 @@
 #include "sr_server.h"
 
 static int g_verify;
+static int g_log_calls;   /* subvulpes.ini: log_calls=1 registra cada chamada verificada */
 
 typedef struct VerifyStats {
     const char *name;
@@ -24,6 +25,8 @@ typedef struct VerifyStats {
 static void verify_result(VerifyStats *s, int ok, const char *detail)
 {
     s->checks++;
+    if (g_log_calls)
+        sv_log("chamada %s #%ld: %s \"%s\"", s->name, s->checks, ok ? "igual" : "DIFERENTE", detail);
     if (!ok) {
         s->fails++;
         if (s->fails <= 20)
@@ -86,6 +89,15 @@ int sv_hooks_024d_install(void)
     memcpy(&expect_createevent_message[2], &server_va, 4);
 
     g_verify = sv_config_int("verify", 1);
+    g_log_calls = sv_config_int("log_calls", 1);
     sv_log("modo de verificação: %s", g_verify ? "ligado" : "desligado");
     return sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
+}
+
+/* Chamado quando o processo fecha: resumo final da verificação. */
+void sv_hooks_024d_summary(void)
+{
+    if (g_verify)
+        sv_log("RESUMO %s: %ld chamadas, %ld diferenças", st_createevent_message.name,
+               st_createevent_message.checks, st_createevent_message.fails);
 }

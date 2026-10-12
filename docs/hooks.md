@@ -17,7 +17,7 @@ Código: [`hook/`](../hook/) (proxy, hooks, tabela) e [`src/server/`](../src/ser
 
 | Função | RVA no 024d | Arquivo | Estado |
 | --- | --- | --- | --- |
-| `createevent_message` | `0x6260` | `src/server/events.c` | Compila. Falta testar no jogo. |
+| `createevent_message` | `0x6260` | `src/server/events.c` | Testado no servidor (2026-10-11): hook instalado com ASLR (base `0x01000000`), 1 chamada, 0 diferenças. Falta teste com cliente conectado. |
 
 ## Modo de verificação
 
@@ -59,7 +59,10 @@ Para conectar de outro PC, o amigo precisa alcançar a porta UDP do servidor (`p
 enabled=1                ; 0 = só repassa a rede, sem hooks
 verify=1                 ; 1 = compara com a original a cada chamada
 createevent_message=1    ; 0 = desliga só este hook
+log_calls=1              ; 1 = registra cada chamada verificada (com o texto da mensagem)
 ```
+
+Ao fechar o servidor, o log recebe uma linha `RESUMO` por função, com o total de chamadas e de diferenças.
 
 ## Remover
 

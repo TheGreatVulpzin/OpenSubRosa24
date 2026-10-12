@@ -13,6 +13,7 @@
 #include "sr_runtime.h"
 
 int sv_hooks_024d_install(void);
+void sv_hooks_024d_summary(void);
 
 /* Identidade do 024d (cabeçalho PE). SHA-256 do arquivo:
  * 11e006786d945d5731cb664fba718a094d8f02648b13fcc20c26c8614ea603fd */
@@ -95,8 +96,11 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
             int n = sv_hooks_024d_install();
             sv_log("%d hook(s) instalado(s)", n);
         }
-    } else if (reason == DLL_PROCESS_DETACH && g_real && reserved == NULL) {
-        FreeLibrary(g_real);
+    } else if (reason == DLL_PROCESS_DETACH) {
+        sv_hooks_024d_summary();
+        sv_log("SubVulpes descarregado.");
+        if (g_real && reserved == NULL)
+            FreeLibrary(g_real);
     }
     return TRUE;
 }
