@@ -1,23 +1,23 @@
-"""Casa funções de um binário sem símbolos com binários de referência com símbolos.
+"""Match functions of a binary without symbols against reference binaries with symbols.
 
-Entrada: arquivos .jsonl de tools/ghidra/ExportFunctionFeatures.java.
-Saída: CSV com rva, nome, fonte, confiança e evidência.
+Input: .jsonl files from tools/ghidra/ExportFunctionFeatures.java.
+Output: CSV with rva, name, source, confidence and evidence.
 
-Método:
-  1. Âncoras: compara strings, floats, importações e inteiros positivos
-     (offsets de struct, tamanhos de registro). Cada característica pesa
-     pelo inverso da frequência (IDF). O MSVC faz muito inlining, então a
-     função do alvo pode conter várias funções da referência. Por isso a
-     pontuação mede quanto da referência aparece no alvo.
-  2. Propagação: para cada par casado, alinha as chamadas internas e vota
-     nos pares chamador -> chamado. Repete até não mudar nada.
+Method:
+  1. Anchors: compare strings, floats, imports and positive integers
+     (struct offsets, record sizes). Each feature is weighted by the
+     inverse of its frequency (IDF). MSVC inlines a lot, so a target
+     function can contain several reference functions. For this reason
+     the score measures how much of the reference appears in the target.
+  2. Propagation: for each matched pair, align the internal calls and vote
+     on caller -> callee pairs. Repeat until nothing changes.
 
-Uso:
+Usage:
   python -I tools/re/match_functions.py --target build/features/ded024d.jsonl \
       --ref build/features/linux_x64.jsonl --ref build/features/mac_i386.jsonl \
       --out analysis/024d/functions.csv
 
-Teste de precisão (o alvo tem nomes, então dá para conferir):
+Accuracy test (the target has names, so we can check):
   python -I tools/re/match_functions.py --target build/features/mac_i386.jsonl \
       --ref build/features/linux_x64.jsonl --evaluate
 """
@@ -31,7 +31,7 @@ import re
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 
-# Nomes que não são do jogo (bibliotecas embutidas, CRT, runtime).
+# Names that are not from the game (embedded libraries, CRT, runtime).
 LIB_NAME = re.compile(
     r'^(GLee|SDL|gl[A-Z]|stbi|__|_start|frame_dummy|call_gmon|register_tm|deregister_tm|_init$|_fini$'
     r'|speex|spx|png|jpeg|hdr_|bmp_|tga_|psd_|FUN_|thunk_|entry$|dyld|stub)')
@@ -39,9 +39,9 @@ MATH_EXT = ('sqrt', 'sin', 'cos', 'atan2', 'pow', 'acos', 'floor', 'fabs', 'asin
 
 
 class GlobalNames:
-    """Traduz endereços de dados em nomes de variáveis globais."""
+    """Translate data addresses into global variable names."""
 
-    def __init__(self, rows):  # rows: [(início, fim, nome)]
+    def __init__(self, rows):  # rows: [(start, end, name)]
         rows.sort()
         self.starts = [r[0] for r in rows]
         self.rows = rows
@@ -75,10 +75,10 @@ def attach_globals(funcs, gn):
 
 
 def load(path, globals_csv=None, use_symbols=False):
-    """Carrega features. Aceita "features.jsonl:nomes.csv" para usar nomes de um CSV do casador.
-    Nomes de globais: do arquivo .symbols.tsv ao lado (binários com símbolos) ou de globals_csv."""
+    """Load features. Accepts "features.jsonl:names.csv" to use names from a matcher CSV.
+    Global names: from the .symbols.tsv file next to it (binaries with symbols) or from globals_csv."""
     names = None
-    if ':' in path[2:]:  # ignora a letra do drive no Windows
+    if ':' in path[2:]:  # ignore the drive letter on Windows
         path, csv_path = path.rsplit(':', 1)
         with open(csv_path, encoding='utf-8') as fh:
             names = {r['rva']: r['name'] for r in csv.DictReader(fh) if r['name']}
@@ -86,7 +86,7 @@ def load(path, globals_csv=None, use_symbols=False):
     with open(path, encoding='utf-8') as fh:
         for line in fh:
             f = json.loads(line)
-            # Mach-O: símbolos C começam com "_".
+            # Mach-O: C symbols start with "_".
             if f['name'].startswith('_') and not f['name'].startswith('__'):
                 f['name'] = f['name'][1:]
             if names is not None:
@@ -101,7 +101,7 @@ def load(path, globals_csv=None, use_symbols=False):
 
 
 def norm_ext(name):
-    """Normaliza importações entre CRTs: _CIsqrt / sqrtf / ___memset_chk -> sqrt / memset."""
+    """Normalize imports across CRTs: _CIsqrt / sqrtf / ___memset_chk -> sqrt / memset."""
     n = name.lstrip('_')
     if n.startswith('CI'):
         n = n[2:]
@@ -113,8 +113,8 @@ def norm_ext(name):
 
 
 def fingerprint(f, strict=False):
-    """strict=True: alvo e referência vêm do mesmo compilador (MSVC 2010).
-    Nesse caso offsets de pilha e o tamanho do código também são comparáveis."""
+    """strict=True: target and reference come from the same compiler (MSVC 2010).
+    In this case stack offsets and the code size are also comparable."""
     feats = Counter()
     if strict:
         for v in f['ints']:
@@ -144,9 +144,9 @@ class Scorer:
         df = Counter(k for fp in target_fps.values() for k in fp)
         n = len(target_fps)
         self.idf = {k: math.log(1 + n / c) for k, c in df.items()}
-        self.default = math.log(1 + n)  # característica ausente no alvo
-        # Tipos de pista que o alvo tem (s:, f:, x:, i:, g:...). Um tipo que o alvo
-        # não tem (ex.: globais com nome num .exe sem mapa de globais) não conta.
+        self.default = math.log(1 + n)  # feature missing from the target
+        # Kinds of clue the target has (s:, f:, x:, i:, g:...). A kind the target
+        # does not have (e.g. named globals in an .exe without a globals map) does not count.
         self.kinds = {k[:2] for k in df}
 
     def weight(self, k, count):
@@ -154,11 +154,11 @@ class Scorer:
             return 0.0
         w = self.idf.get(k, self.default)
         if k.startswith('s:'):
-            w *= 3  # strings são a evidência mais forte
+            w *= 3  # strings are the strongest evidence
         return w * min(count, 3)
 
     def score(self, ref_fp, tgt_fp):
-        """Fração (ponderada) da referência que aparece no alvo, com pena pelo excesso do alvo."""
+        """Weighted fraction of the reference that appears in the target, with a penalty for the target's excess."""
         total = sum(self.weight(k, c) for k, c in ref_fp.items())
         if total == 0:
             return 0.0
@@ -183,13 +183,13 @@ def run(target, refs, min_anchor=0.45, margin=1.3, strict=False, seeds=None):
     tfp = {r: fingerprint(f, strict) for r, f in target.items()}
     scorer = Scorer(tfp)
 
-    by_name = defaultdict(list)  # nome -> [(ref, rva)]
+    by_name = defaultdict(list)  # name -> [(ref, rva)]
     for ref in refs:
         for rva, f in ref.items():
             if not LIB_NAME.match(f['name']):
                 by_name[f['name']].append((ref, rva))
 
-    # Índice invertido: característica -> funções do alvo (acelera a busca).
+    # Inverted index: feature -> target functions (speeds up the search).
     inv = defaultdict(set)
     for r, fp in tfp.items():
         for k in fp:
@@ -201,7 +201,7 @@ def run(target, refs, min_anchor=0.45, margin=1.3, strict=False, seeds=None):
         for ref, rva in entries:
             rfp = fingerprint(ref[rva], strict)
             if sum(scorer.weight(k, c) for k, c in rfp.items()) < 6:
-                continue  # pouca evidência
+                continue  # little evidence
             pool = set().union(*(inv[k] for k in rfp if k in inv)) if rfp else set()
             for t in pool:
                 s = scorer.score(rfp, tfp[t])
@@ -214,7 +214,7 @@ def run(target, refs, min_anchor=0.45, margin=1.3, strict=False, seeds=None):
             cands.append((s1, name, t1))
 
     result, used = {}, set()
-    for t, name in (seeds or {}).items():  # nomes revisados à mão entram primeiro
+    for t, name in (seeds or {}).items():  # hand-reviewed names go first
         if t in target:
             result[t] = (name, 'manual', 1.0, 'seed')
             used.add(name)
@@ -224,7 +224,7 @@ def run(target, refs, min_anchor=0.45, margin=1.3, strict=False, seeds=None):
         result[t] = (name, 'anchor', round(s, 3), 'features')
         used.add(name)
 
-    # Propagação pelo grafo de chamadas.
+    # Propagation through the call graph.
     for _ in range(50):
         votes = defaultdict(Counter)
         for trva, (name, *_r) in list(result.items()):
@@ -270,14 +270,14 @@ def evaluate(target, result):
     ok = sum(1 for r, v in result.items() if target[r]['name'] == v[0])
     bad = [(r, target[r]['name'], v) for r, v in result.items() if target[r]['name'] != v[0]]
     game = sum(1 for f in target.values() if not LIB_NAME.match(f['name']))
-    print(f'casadas {len(result)} de {game} funções do jogo | certas {ok} | erradas {len(bad)} '
-          f'| precisão {ok / max(1, len(result)):.1%}')
+    print(f'matched {len(result)} of {game} game functions | right {ok} | wrong {len(bad)} '
+          f'| accuracy {ok / max(1, len(result)):.1%}')
     for src in ('anchor', 'callgraph'):
         sub = [r for r, v in result.items() if v[1] == src]
         good = sum(1 for r in sub if target[r]['name'] == result[r][0])
-        print(f'  {src:9}: {len(sub)} casadas, {good / max(1, len(sub)):.1%} certas')
+        print(f'  {src:9}: {len(sub)} matched, {good / max(1, len(sub)):.1%} right')
     for r, real, v in bad[:15]:
-        print(f'  ERRO {r}: real={real} casado={v[0]} ({v[1]} {v[2]})')
+        print(f'  ERROR {r}: real={real} matched={v[0]} ({v[1]} {v[2]})')
 
 
 def main():
@@ -286,10 +286,10 @@ def main():
     ap.add_argument('--ref', action='append', required=True)
     ap.add_argument('--out')
     ap.add_argument('--evaluate', action='store_true')
-    ap.add_argument('--strict', action='store_true', help='alvo e referências do mesmo compilador')
-    ap.add_argument('--target-globals', help='CSV de globais do alvo (tools/re/map_globals.py)')
-    ap.add_argument('--seed', help='CSV rva,name: nomes manuais usados como sementes da propagação')
-    ap.add_argument('--keep', help='CSV anterior do alvo: nomes dele têm prioridade')
+    ap.add_argument('--strict', action='store_true', help='target and references from the same compiler')
+    ap.add_argument('--target-globals', help='CSV of target globals (tools/re/map_globals.py)')
+    ap.add_argument('--seed', help='CSV rva,name: manual names used as propagation seeds')
+    ap.add_argument('--keep', help='previous CSV of the target: its names have priority')
     args = ap.parse_args()
 
     target = load(args.target, args.target_globals)
@@ -310,7 +310,7 @@ def main():
             if rva not in result or result[rva][0] != r['name']:
                 if r['name'] not in used or result.get(rva, (None,))[0] == r['name']:
                     result[rva] = (r['name'], r['source'], r['confidence'], r['evidence'])
-        print(f'mantidos {len(prev)} nomes do CSV anterior ({conflicts} conflitos resolvidos a favor dele)')
+        print(f'kept {len(prev)} names from the previous CSV ({conflicts} conflicts resolved in its favor)')
 
     if args.evaluate:
         evaluate(target, result)
@@ -321,8 +321,8 @@ def main():
             for rva in sorted(target, key=lambda r: int(r, 16)):
                 name, src, conf, ev = result.get(rva, ('', '', '', ''))
                 w.writerow([rva, target[rva]['size'], name, src, conf, ev])
-        print(f'{len(result)}/{len(target)} funções nomeadas '
-              f'({sum(1 for v in result.values() if v[1] == "anchor")} âncoras)')
+        print(f'{len(result)}/{len(target)} functions named '
+              f'({sum(1 for v in result.values() if v[1] == "anchor")} anchors)')
 
 
 if __name__ == '__main__':

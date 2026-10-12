@@ -1,10 +1,10 @@
-"""Mede quanto dos acessos a structs no código do servidor cai em campos com nome.
+"""Measure how many struct accesses in the server code fall in named fields.
 
-Servidor = funções que existem no servidor Linux 0.24c (com símbolos).
-Acessos = contagem de leituras + escritas em analysis/structs/mac/<struct>.csv,
-só das funções do servidor.
+Server = functions that exist in the Linux 0.24c server (with symbols).
+Accesses = count of reads + writes in analysis/structs/mac/<struct>.csv,
+only from the server functions.
 
-Uso: python -I tools/re/struct_coverage.py [--top 15]
+Usage: python -I tools/re/struct_coverage.py [--top 15]
 """
 import argparse
 import csv
@@ -25,7 +25,7 @@ def server_functions():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--top', type=int, default=10, help='mostra os N offsets sem nome mais usados')
+    ap.add_argument('--top', type=int, default=10, help='show the N most used unnamed offsets')
     args = ap.parse_args()
     server = server_functions()
 
@@ -58,7 +58,7 @@ def main():
         named_all += nm
         pct = 100 * nm / tot if tot else 100
         top = ', '.join(f'+0x{o:x}({n})' for o, n in missing.most_common(args.top))
-        print(f'{s:11} {nm:5}/{tot:5} = {pct:5.1f}%   sem nome: {top}')
+        print(f'{s:11} {nm:5}/{tot:5} = {pct:5.1f}%   unnamed: {top}')
     print(f'{"TOTAL":11} {named_all:5}/{total_all:5} = {100 * named_all / total_all:5.1f}%')
 
 

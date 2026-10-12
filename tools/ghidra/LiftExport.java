@@ -1,10 +1,10 @@
-// Exporta tudo que o conversor automático (tools/lift/lift.py) precisa, em JSON Lines.
+// Export everything the automatic converter (tools/lift/lift.py) needs, in JSON Lines.
 //
-// Por função: RVA, nome, convenção de chamada, retorno, parâmetros (com o lugar de cada um),
-// pseudo-C, globais com tipo, funções chamadas com assinatura, e o prólogo para o hook
-// (bytes, instruções inteiras >= 5 bytes, posições relocadas pelo ASLR).
+// Per function: RVA, name, calling convention, return type, parameters (with the storage of each),
+// pseudo-C, typed globals, called functions with signature, and the prologue for the hook
+// (bytes, whole instructions >= 5 bytes, positions relocated by ASLR).
 //
-// Uso (headless, -process <programa> -noanalysis): -postScript LiftExport.java <saida.jsonl>
+// Usage (headless, -process <program> -noanalysis): -postScript LiftExport.java <output.jsonl>
 //@category SubVulpes
 
 import ghidra.app.decompiler.DecompInterface;
@@ -70,7 +70,7 @@ public class LiftExport extends GhidraScript {
             }
         }
         di.dispose();
-        println("Exportado: " + out);
+        println("Exported: " + out);
     }
 
     private void globals(StringBuilder sb, HighFunction hf) {
@@ -114,7 +114,7 @@ public class LiftExport extends GhidraScript {
         }
     }
 
-    /* Prólogo: instruções inteiras até >= 5 bytes. Marca salto relativo e posições relocadas. */
+    /* Prologue: whole instructions up to >= 5 bytes. Flags a relative jump and relocated positions. */
     private void prologue(StringBuilder sb, Function f) throws Exception {
         Instruction ins = getInstructionAt(f.getEntryPoint());
         int len = 0;

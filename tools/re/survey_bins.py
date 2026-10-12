@@ -1,12 +1,12 @@
-"""Levanta os executáveis de uma pasta: formato, arquitetura, símbolos, data de build e SHA-256.
+"""Survey the executables in a folder: format, architecture, symbols, build date and SHA-256.
 
-Uso: python -I tools/re/survey_bins.py <pasta> [--manifest original/MANIFEST.sha256] [--tsv]
-Saída: uma linha por executável (PE, ELF ou Mach-O). Sem dependências externas.
+Usage: python -I tools/re/survey_bins.py <folder> [--manifest original/MANIFEST.sha256] [--tsv]
+Output: one line per executable (PE, ELF or Mach-O). No external dependencies.
 
-Símbolos:
-  ELF    -> número de funções em .symtab (como tools/re/elf_symbols.py).
-  Mach-O -> número de entradas em LC_SYMTAB e se existe _gameloop.
-  PE     -> tabela de símbolos COFF ou caminho de PDB no diretório de debug.
+Symbols:
+  ELF    -> number of functions in .symtab (like tools/re/elf_symbols.py).
+  Mach-O -> number of entries in LC_SYMTAB and whether _gameloop exists.
+  PE     -> COFF symbol table or PDB path in the debug directory.
 """
 import datetime
 import hashlib
@@ -39,7 +39,7 @@ def elf_info(d):
                 _, _, _, info, _, shndx = struct.unpack_from('<IIIBBH', d, s[4] + j * symsize)
             if info & 0xF == 2 and shndx != 0:
                 nfunc += 1
-    return 'ELF64' if is64 else 'ELF32', arch, f'{nfunc} funções' if nfunc else 'não (stripped)'
+    return 'ELF64' if is64 else 'ELF32', arch, f'{nfunc} functions' if nfunc else 'no (stripped)'
 
 
 MACHO_CPU = {7: 'i386', 0x1000007: 'x86-64', 18: 'ppc', 0x1000012: 'ppc64'}
@@ -72,7 +72,7 @@ def macho_info(d):
     for o in offs:
         arch, nsyms, gl = macho_one(d, o)
         archs.append(arch)
-        syms.append(f'{arch}: {nsyms} símbolos' + (', _gameloop' if gl else '') if nsyms else f'{arch}: não')
+        syms.append(f'{arch}: {nsyms} symbols' + (', _gameloop' if gl else '') if nsyms else f'{arch}: no')
     return 'Mach-O' + (' fat' if len(offs) > 1 else ''), '+'.join(archs), '; '.join(syms)
 
 
@@ -102,11 +102,11 @@ def pe_info(d):
                 pdb = d[raw + 24:d.index(b'\0', raw + 24)].decode(errors='replace')
     date = datetime.datetime.fromtimestamp(stamp, datetime.timezone.utc).strftime('%Y-%m-%d')
     if symptr and nsym:
-        sym = f'COFF ({nsym} símbolos)'
+        sym = f'COFF ({nsym} symbols)'
     elif pdb:
-        sym = f'não (PDB {pdb})'
+        sym = f'no (PDB {pdb})'
     else:
-        sym = 'não'
+        sym = 'no'
     return f'PE32{"+" if is64 else ""} (linker {linker})', arch, sym, date
 
 
@@ -144,19 +144,19 @@ def main():
                 else:
                     fmt, arch, sym = macho_info(d)
             except (struct.error, ValueError, IndexError) as ex:
-                fmt, arch, sym = '?', '?', f'erro: {ex}'
+                fmt, arch, sym = '?', '?', f'error: {ex}'
             h = hashlib.sha256(d).hexdigest()
             known = ', '.join(manifest.get(h, [])) or '-'
             rows.append((os.path.relpath(path, root), fmt, arch, sym, date, len(d), h, known))
     rows.sort()
     if tsv:
-        print('arquivo\tformato\tarq\tsímbolos\tbuild\tbytes\tsha256\tno_manifesto')
+        print('file\tformat\tarch\tsymbols\tbuild\tbytes\tsha256\tin_manifest')
         for r in rows:
             print('\t'.join(map(str, r)))
     else:
         for r in rows:
-            print(f'{r[0]}\n    {r[1]} {r[2]} | símbolos: {r[3]} | build {r[4]} | {r[5]} B\n'
-                  f'    sha256 {r[6]} | manifesto: {r[7]}')
+            print(f'{r[0]}\n    {r[1]} {r[2]} | symbols: {r[3]} | build {r[4]} | {r[5]} B\n'
+                  f'    sha256 {r[6]} | manifest: {r[7]}')
 
 
 if __name__ == '__main__':

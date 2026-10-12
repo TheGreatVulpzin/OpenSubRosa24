@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Reexporta as features dos programas já analisados no projeto (sem reanalisar).
-# Uso: tools/ghidra/export_all.sh
+# Re-export the features of the programs already analyzed in the project (without re-analyzing).
+# Usage: tools/ghidra/export_all.sh
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 
-export_one() {  # $1 = nome do programa no projeto, $2 = nome curto, $3 = pasta no projeto (opcional)
+export_one() {  # $1 = program name in the project, $2 = short name, $3 = folder in the project (optional)
     "$HEADLESS" "$ROOT/ghidra-project" "subvulpes${3:+/$3}" \
         -process "$1" -noanalysis -readOnly \
         -scriptPath "$ROOT/tools/ghidra" \
         -postScript ExportFunctionFeatures.java "$ROOT/build/features/$2.jsonl" 2>&1 \
-        | grep -E "Exportado|ERROR" || true
+        | grep -E "Exported|ERROR" || true
 }
 
 export_one subrosadedicated024d.exe ded024d

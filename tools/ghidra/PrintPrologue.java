@@ -1,9 +1,9 @@
-// Mostra as primeiras instruções de funções, com bytes e endereços absolutos.
-// Serve para escolher o tamanho do prólogo de um hook (instruções inteiras, >= 5 bytes,
-// sem salto relativo) e os bytes esperados.
+// Show the first instructions of functions, with bytes and absolute addresses.
+// Use it to choose the prologue size of a hook (whole instructions, >= 5 bytes,
+// no relative jump) and the expected bytes.
 //
-// Uso (headless, -process <programa> -noanalysis):
-//   -postScript PrintPrologue.java <saida.txt> <rva> [rva ...]
+// Usage (headless, -process <program> -noanalysis):
+//   -postScript PrintPrologue.java <output.txt> <rva> [rva ...]
 //@category SubVulpes
 
 import ghidra.app.script.GhidraScript;
@@ -35,7 +35,7 @@ public class PrintPrologue extends GhidraScript {
                     }
                     total += ins.getLength();
                     w.printf("  +%2d  %-24s %-40s %s%s%n", total - ins.getLength(), hex, ins,
-                            rel ? "RELATIVO" : "", refs);
+                            rel ? "RELATIVE" : "", refs);
                     ins = ins.getNext();
                 }
             }

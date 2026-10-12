@@ -1,5 +1,5 @@
-# Variáveis comuns dos scripts do Ghidra (Windows/Git Bash e Linux).
-# Uso: source "$(dirname "$0")/env.sh"
+# Variables shared by the Ghidra scripts (Windows/Git Bash and Linux).
+# Usage: source "$(dirname "$0")/env.sh"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 case "$(uname -s)" in
     MINGW*|MSYS*|CYGWIN*)

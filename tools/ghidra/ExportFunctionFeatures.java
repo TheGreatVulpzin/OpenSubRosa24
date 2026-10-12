@@ -1,11 +1,11 @@
-// Exporta características de cada função para um arquivo JSON Lines.
-// Os dados servem para casar funções entre binários de arquiteturas diferentes
-// (ELF x64 com símbolos -> PE x86 sem símbolos).
+// Export the features of each function to a JSON Lines file.
+// The data is used to match functions between binaries of different architectures
+// (ELF x64 with symbols -> PE x86 without symbols).
 //
-// Também grava <saida>.symbols.tsv com os símbolos de dados graváveis
-// (variáveis globais), para mapear globais entre binários.
+// It also writes <output>.symbols.tsv with the writable data symbols
+// (global variables), to map globals between binaries.
 //
-// Uso (headless): -postScript ExportFunctionFeatures.java <saida.jsonl>
+// Usage (headless): -postScript ExportFunctionFeatures.java <output.jsonl>
 //@category SubVulpes
 
 import ghidra.app.script.GhidraScript;
@@ -25,7 +25,7 @@ public class ExportFunctionFeatures extends GhidraScript {
 
     @Override
     protected void run() throws Exception {
-        String out = getScriptArgs().length > 0 ? getScriptArgs()[0] : askString("Saída", "Arquivo .jsonl");
+        String out = getScriptArgs().length > 0 ? getScriptArgs()[0] : askString("Output", ".jsonl file");
         Listing listing = currentProgram.getListing();
         long base = currentProgram.getImageBase().getOffset();
         BasicBlockModel bbm = new BasicBlockModel(currentProgram);
@@ -71,7 +71,7 @@ public class ExportFunctionFeatures extends GhidraScript {
                         for (Object o : ins.getOpObjects(i)) {
                             if (o instanceof Scalar) {
                                 long v = ((Scalar) o).getSignedValue();
-                                // Ignora valores pequenos (offsets de pilha, índices) e endereços.
+                                // Ignore small values (stack offsets, indices) and addresses.
                                 if (Math.abs(v) >= 16 && Math.abs(v) < 0x400000) ints.add(v);
                             }
                         }
@@ -97,7 +97,7 @@ public class ExportFunctionFeatures extends GhidraScript {
                 w.println(sb);
             }
         }
-        // Símbolos de dados graváveis com nome (só existem no ELF/Mach-O).
+        // Named writable data symbols (they only exist in ELF/Mach-O).
         try (PrintWriter w = new PrintWriter(out + ".symbols.tsv", "UTF-8")) {
             SymbolIterator si = currentProgram.getSymbolTable().getAllSymbols(true);
             while (si.hasNext()) {
@@ -109,16 +109,16 @@ public class ExportFunctionFeatures extends GhidraScript {
                 w.printf("0x%x	%s%n", sym.getAddress().getOffset() - base, sym.getName());
             }
         }
-        println("Exportado: " + out);
+        println("Exported: " + out);
     }
 
-    /** Lê float/double referenciado por instruções x87/SSE em seção somente leitura. */
+    /** Read a float/double referenced by x87/SSE instructions in a read-only section. */
     private String readFloat(Address a, Instruction ins) {
         MemoryBlock b = currentProgram.getMemory().getBlock(a);
         if (b == null || !b.isInitialized() || b.isExecute()) return null;
         String m = ins.getMnemonicString().toUpperCase();
         try {
-            // x87 no Ghidra: "FLD float ptr [..]" / "FMUL double ptr [..]". SSE: MOVSS, MULSD...
+            // x87 in Ghidra: "FLD float ptr [..]" / "FMUL double ptr [..]". SSE: MOVSS, MULSD...
             String t = ins.toString();
             boolean fpu = m.startsWith("F");
             boolean dbl = m.endsWith("SD") || (fpu && (t.contains("double ptr") || t.contains("qword")));

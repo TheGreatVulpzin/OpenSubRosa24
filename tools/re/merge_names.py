@@ -1,15 +1,15 @@
-"""Junta CSVs do casador. O primeiro CSV tem prioridade. Quando dois CSVs dão
-nomes diferentes para a mesma função, a evidência registra a divergência.
+"""Merge matcher CSVs. The first CSV has priority. When two CSVs give
+different names to the same function, the evidence records the divergence.
 
-Uso: python -I tools/re/merge_names.py --out final.csv [--manual manual.csv] principal.csv secundario.csv [...]
-No CSV manual, o nome "-" remove o nome do casador.
+Usage: python -I tools/re/merge_names.py --out final.csv [--manual manual.csv] primary.csv secondary.csv [...]
+In the manual CSV, the name "-" removes the matcher name.
 """
 import argparse
 import csv
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--out', required=True)
-ap.add_argument('--manual', help='CSV rva,name,evidence com nomes revisados à mão (prioridade máxima)')
+ap.add_argument('--manual', help='CSV rva,name,evidence with hand-reviewed names (highest priority)')
 ap.add_argument('inputs', nargs='+')
 args = ap.parse_args()
 
@@ -35,18 +35,18 @@ for table in tables[1:]:
 if args.manual:
     with open(args.manual, encoding='utf-8') as fh:
         for m in csv.DictReader(fh):
-            if m['name'] == '-':  # nome errado do casador: remove
+            if m['name'] == '-':  # wrong matcher name: remove
                 cur = final[m['rva']]
-                cur.update(name='', source='manual', confidence='', evidence=f"removido: {cur['name']}. {m['evidence']}")
+                cur.update(name='', source='manual', confidence='', evidence=f"removed: {cur['name']}. {m['evidence']}")
                 continue
-            for r in final.values():  # o nome passa a pertencer só a esta função
+            for r in final.values():  # the name now belongs only to this function
                 if r['name'] == m['name'] and r['rva'] != m['rva']:
                     r['name'], r['source'] = '', ''
             cur = final[m['rva']]
             old = cur['name']
             cur.update(name=m['name'], source='manual', confidence='1.0', evidence=m['evidence'])
             if old and old != m['name']:
-                cur['evidence'] += f' (casador dizia {old})'
+                cur['evidence'] += f' (matcher said {old})'
 
 with open(args.out, 'w', newline='', encoding='utf-8') as fh:
     w = csv.DictWriter(fh, fieldnames=list(tables[0][0].keys()), lineterminator='\n')
@@ -56,4 +56,4 @@ with open(args.out, 'w', newline='', encoding='utf-8') as fh:
 
 named = sum(1 for r in final.values() if r['name'])
 div = sum(1 for r in final.values() if 'diverge' in r['evidence'])
-print(f'{named}/{len(final)} nomeadas, {div} com divergência')
+print(f'{named}/{len(final)} named, {div} with divergence')

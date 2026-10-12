@@ -1,8 +1,8 @@
-// Decompila funções para um arquivo .c (pseudo-C do Ghidra).
+// Decompile functions to a .c file (Ghidra pseudo-C).
 //
-// Uso (headless, com -process <programa> -noanalysis):
-//   -postScript DecompileFunctions.java <saida.c> [rva ...]
-// Sem RVAs, decompila todas as funções do programa.
+// Usage (headless, with -process <program> -noanalysis):
+//   -postScript DecompileFunctions.java <output.c> [rva ...]
+// Without RVAs, it decompiles all functions of the program.
 //@category SubVulpes
 
 import ghidra.app.decompiler.DecompInterface;
@@ -29,7 +29,7 @@ public class DecompileFunctions extends GhidraScript {
                 Function f = getFunctionAt(toAddr(base + rva));
                 if (f == null) f = getFunctionContaining(toAddr(base + rva));
                 if (f != null) funcs.add(f);
-                else println("Sem função em " + args[i]);
+                else println("No function at " + args[i]);
             }
         } else {
             currentProgram.getListing().getFunctions(true).forEach(funcs::add);
@@ -43,11 +43,11 @@ public class DecompileFunctions extends GhidraScript {
                 if (f.isThunk() || f.isExternal()) continue;
                 DecompileResults r = di.decompileFunction(f, 120, monitor);
                 w.printf("// rva 0x%x  %s%n", f.getEntryPoint().getOffset() - base, f.getName());
-                w.println(r.decompileCompleted() ? r.getDecompiledFunction().getC() : "// falhou: " + r.getErrorMessage());
+                w.println(r.decompileCompleted() ? r.getDecompiledFunction().getC() : "// failed: " + r.getErrorMessage());
                 w.println();
             }
         }
         di.dispose();
-        println("Decompilado: " + out);
+        println("Decompiled: " + out);
     }
 }
