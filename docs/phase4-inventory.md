@@ -244,3 +244,92 @@ Formats are in `docs/formatos.md`. Readers and writers are in `tools/formats/sub
 - The binary readers must give the same in-memory result as `fread` through `freadptr`. All integers are little-endian 32-bit. The structs read from files are fixed-size (the account record is 60 bytes in the file and `0x4c` in memory).
 - Hardening (Phase 5): the three binary readers and the text reader trust sizes and counts from the file.
 
+## 4. Global state (`.data`)
+
+`.data` is `0x25e997e0` bytes (606.6 MiB, about 636 MB) from RVA `0x60000` to `0x25ef97e0`. Only the first `0xe00` bytes have a value in the file (the strings `Sub Rosa`, the packet magic `7DFP` at `0x60d08`, the stack cookie at `0x60d18`, and a few constants). The rest is zero memory.
+
+Sources: `analysis/024d/globals.csv`, `analysis/024d/manual_globals.csv`, `src/include/sr_global_table.h` (element sizes), `docs/structs.md` (capacities), and the 0.24c Linux server symbol sizes (`original/vanilla/0.24c_Dedicated_Linux`). Size = element size × capacity. MiB = 2^20 bytes.
+
+**Phase 4 column.** `docs/plano.md` says the static pools must become dynamic allocation with configurable limits (Phase 4, item 2). Marks:
+
+- **pool**: array of game entities with a capacity constant (`SR_MAX_*` in `src/include/sr_globals_024d.h`). To become dynamic, with a configurable limit.
+- **world**: level data with a size fixed by the format or the level. To move to the heap, with a fixed size.
+- **keep**: small, can stay static.
+
+### 4.1 Named globals, largest first
+
+| RVA | Name | Size | Layout | What it holds | Phase 4 |
+| --- | --- | ---: | --- | --- | --- |
+| `0x5592600` | `object` | 32.5 MiB (`0x208c000`) | 1024 × `0x8230` | Vehicles and other physical objects (cars, helicopters, train) with their bodies | pool |
+| `0x15e39020` | `connection` | 15.1 MiB (`0xf17000`) | 256 × `0xf170` | State of each connected client: event acknowledgement, send budget, packet state | pool |
+| `0xe299220` | `city` | 10.0 MiB (`0xa0b9a0`) | one block, size from the ELF symbol | City from `city.sbc`: intersections, streets, 1 MiB tile map, building list, floor plans | world |
+| `0x12a81d00` | `speex` | 9.2 MiB (`0x931000`) | one block | Voice codec state (the name is the ELF symbol; the votes in `globals.csv` put it here). The server relays voice frames without decoding them, so most of it is probably unused (not checked). The voice ring that `serverrecv` writes is inside each `player` record, not here | world, likely droppable |
+| `0x93dd880` | `event` | 8.0 MiB (`0x800000`) | 65536 × `0x80` | Ring buffer of network events. `numofevents` (RVA `0xf437318`) is the index. Clients acknowledge with 16 bits, so the size is part of the protocol | pool, but keep 65536 (R4) |
+| `0x133b2d00` | `area_block` | 8.25 MiB (`0x840000`) | 65536 × `0x84` | Geometry of one `.sbl` block per record. Each record holds 4 heap pointers (section 2.1). Found with `map_globals.py --min-votes 2`; not yet in `globals.csv` | world, **has pointers** |
+| `0x15cbf80` | `human` | 5.4 MiB (`0x56c800`) | 512 × `0x2b64` | People: 15 bones, inventory, health | pool |
+| `0xf437b60` | `account` | 4.75 MiB (`0x4c0008`) | 8 bytes (key, count) + 65536 × `0x4c` | Account list loaded from `server.srk`. The limit comes from the file format (count ≤ `0xffff`) | pool |
+| `0xac51bc0` | `objecttype` | 4.1 MiB (`0x414600`) | 128 × `0x828c` | Vehicle type tables, filled by `setupobjecttypes_*` at start-up | pool |
+| `0x17179a40` | `bond` | 3.7 MiB (`0x3b0000`) | 16384 × `0xec` | Physics joints between particles. Counter `numofbonds` (RVA `0x17179a28`) | pool |
+| `0xb3e7200` | `particle` | 3.75 MiB (`0x3c0000`) | 4096 × `0x3c0` (size from the ELF) | Physics points | pool |
+| `0xededd00` | `player` | 2.25 MiB (`0x240800`) | 256 × `0x2408` | Player slots. `config.txt` `maxnumofplayers` is clamped to 2…128, so half of the pool is never used | pool |
+| `0x1409ba0` | `bullet` | 1.4 MiB (`0x170000`) | 16384 × `0x5c` | Bullets. Counter `numofbullets` (RVA `0x17529a40`) | pool |
+| `0x13d22d60` | `parser` | 1.0 MiB (`0x100108`) | cursor (`+0`), length (`+4`), bytes (`+8`), `FILE *` (`+0x100108`) | Text file buffer for `loadtextfile` (no size check) | keep (fix the check) |
+| `0xe219200` | `filelist` | 0.5 MiB (`0x80020`) | one block | Name lists made by `listfiles` | keep |
+| `0x91022c0` | `item` | 0.42 MiB (`0x6b000`) | 1024 × `0x1ac` | Items on the ground and in inventories | pool |
+| `0x1579ba0` | `debug` | 0.32 MiB (`0x523e0`) | one block | Debug log buffers: path of `dedlog.txt` at `+0x52384`, its `FILE *` at `+0x523c4`. Off in the 024d (section 3.3) | keep or drop |
+| `0x90dc540` | `game` | 0.15 MiB (`0x25d64`) | one struct | Round and world state: state `+0x20`, round length `+0x28` / `+0x2c`, tick `+0x38` (`ticks`, RVA `0x90dc578`) | keep |
+| `0x1952d680` | `bsdsocket` | 0.13 MiB (`0x20080`) | one struct | Socket handles, `sockaddr_in`, 64 KiB send and receive buffers (section 2.6) | keep |
+| `0x10357400` | `itemtype` | 26 KiB (`0x6600`) | 64 × `0x198` | Item type table | pool |
+| `0x14043a0` | `timer` | 22 KiB (`0x5800`) | 256 × `0x58` | Inline profiler timers (`RDTSC`). `manual_globals.csv` has `0x14043e0`, which is `+0x40` inside the first record | keep or drop |
+| `0xf270280` | `body` | 2 KiB (`0x800`) | 32 × `0x40` | Table of 32 body parts of 16 ints each (read by `human_calculatearmangles`) | pool |
+| `0x90dc340` | `option` | 352 B (`0x160`) | one struct | Settings from `config.txt` (port `+0`, max bytes per second `+4`, name `+8`, ...). New: found with `--min-votes 2` | keep |
+| `0x916d700` | `soundlist` | 320 B | one block | Sound names | keep |
+| `0xf26fd00` | `materiallist` | 1.4 KiB | one block | Material table | keep |
+| `0x761ea60` | `server` | 160 B | one struct | Server state: running flag `+0`, name, max players `+0x5c` | keep |
+| `0x12a81c60` | `timerlist` | 96 B | one block | Profiler timer indices | keep |
+| `0x1b49788` | `stats` | 32 B | one block | Counters written to `stats.txt` (`numofbullets`, `numofmissions`) | keep |
+| `0x90dc520` | `numoftracks` | 20 B | one block | Track counters (ELF symbol `numoftracks`) | keep |
+| `0x103484a0` | `intersect` | small | one block | Intersection test result record (`black_market.c` of the server manager reads `+0` and `+0xc` as positions) | keep |
+| `0x60170`, `0x60174` | `cubequad`, `cubevertex` | `0x60` each | constants | Unit cube tables (initialised data) | keep |
+
+Not named in the CSVs, but of fixed meaning (for Phase 4 they matter as much as the named ones):
+
+| RVA | Name | Size | What it holds | Evidence |
+| --- | --- | ---: | --- | --- |
+| `0x916d2e0`, `0x916d4e0` | start directory, `config` directory | 2 × 512 B | The two `_getcwd` results | `getpaths` |
+| `0x91022a4`, `0x13bf2d00` | `freadptr`, `fwriteptr` | 4 B each | Pointers to `fread`, `fwrite` | `getpaths`, 79 reads of `fwriteptr` |
+| `0x13e22e68` | `FILE *` of the text/binary file in use | 4 B | Shared by all readers | `loadtextfile` |
+| `0xb7a8ca0` | `blocklist` | 257 KiB (`0x40360`) | List of block records (ELF symbol `blocklist`, 262,996 bytes) | New, `--min-votes 2` |
+| `0x204020` | debug flag | 4 B | Never written | section 3.3 |
+| `0x60d08` | packet magic `7DFP` | 4 B | First 4 bytes of every datagram | `docs/protocol.md` §3.1 |
+| `0x60d18` | `__security_cookie` | 4 B | Stack cookie, used by 53 functions | section 6 |
+| `0x25ef97d4` | SSE2 flag | 4 B | Set by `0x5d426`, read by `_ftol2` | section 6 |
+| `0x2561d740` | world clock | 4 B | Advances by 10 per tick; drives the periodic save | section 3.1 |
+| `0x16d66040` | `area` | 4.0 MiB (4 × `0x100d6c`) | Level areas. `createarea` allocates one volume block for each. Holds a heap pointer at `+0x48` of each record (`0x17166088`) | New. Record size matches the ELF symbol `area` (4,208,064 bytes) |
+| about `0x9c1d8c0` | `landscape` height map | 16.0 MiB (2049 × 2049 floats + header) | Terrain heights written by `createlandscape` | New. Size matches the ELF symbol `landscape` (16,793,616 bytes) |
+| `0x1954d700` | `area_sector` (start) | unknown | Sector records used by `area_createsector`, `area_createblock`. It starts right after `bsdsocket` | New. Size not checked (193 MiB in the ELF) |
+
+Totals: the named globals of the first table (with `blocklist` below) add up to **111 MiB** of the 606.6 MiB. `area` and `landscape` add 20 MiB. About **475 MiB** have no name and no size yet; they are in the regions of section 4.2.
+
+### 4.2 Regions without a name in the CSVs
+
+Gaps between two named globals (RVA of the end of the first and the start of the next), largest first:
+
+| Between | Gap | Remark |
+| --- | ---: | --- |
+| `bsdsocket` end `0x1954d700` → image end `0x25ef97e0` | 201.7 MiB | Starts with `area_sector`. The world clock (`0x2561d740`) and the CRT globals are also here. |
+| `stats` `0x1b497a8` → `object` `0x5592600` | 58.3 MiB | Many references near `0x1c497c0`, `0x1d65a40`, `0x2f65bd0`, `0x536a06c`. |
+| `blocklist` end `0xb7e9000` → `filelist` `0xe219200` | 42.2 MiB | |
+| `itemtype` end `0x1035da00` → `timerlist` `0x12a81c60` | 39.1 MiB | |
+| `parser` end `0x13e22e68` → `connection` `0x15e39020` | 32.1 MiB | |
+| `numofbullets` `0x17529a40` → `bsdsocket` `0x1952d680` | 32.0 MiB | |
+| `server` end `0x761eb00` → `option` `0x90dc340` | 26.7 MiB | |
+| `cubevertex` end `0x601d4` → `timer` `0x14043a0` | 19.6 MiB | The initialised data and the CRT cookie are at the start. |
+| `event` end `0x9bdd880` → `objecttype` `0xac51bc0` | 16.4 MiB | Contains the `landscape` height map (16.0 MiB). |
+| `account` end `0xf8f7b68` → `intersect` `0x103484a0` | 10.3 MiB | |
+| `objecttype` end `0xb0661c0` → `particle` `0xb3e7200` | 3.5 MiB | |
+
+The objects of the Linux 0.24c server (symbol sizes, x64) that are 1 MiB or more and that have no address in the 024d yet add up to 508 MiB. They are the content of the gaps above, in some order: `area_sector` 193.1, `building` 54.1, `render_sector` 48.0, `area_interior` 42.3, `area_sectormodel` 38.0, `trackmodel` 32.0, `floorplan2` 18.0, `buildingtype` 16.1, `sprite_render` 10.7, `track` 5.5, `radix` 4.0, `model` 3.5, `render_array` 3.0, `tempmesh` 2.8, `modeltemp` 2.4, `sprite` 2.3, `cityobjecttype` 2.3, `level_editor` 1.8, `sprite_model` 1.6, `voice` 1.3, and six objects of about 1 MiB. Several of them (`render_*`, `sprite*`, `model*`, `skymesh`, `tiremark`) are render data that the server may never touch. The order in the gaps is not known: different subsets of these sizes fit the same gap, so **no guess is made here**.
+
+To close this: extend `tools/re/map_globals.py` with the names of all live functions (it now has only the 226 reviewed names), then check each candidate with the access stride in the code (as done above for `area`).
+
