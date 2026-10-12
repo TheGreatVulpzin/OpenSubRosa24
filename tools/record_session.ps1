@@ -23,6 +23,8 @@ Copy-Item $dll (Join-Path $dir "wsock32.dll") -Force
 [hooks]
 enabled=1
 verify=1
+verify_relax=20
+verify_full_every=200
 log_calls=0
 lifted=1
 record_args=1
@@ -41,6 +43,6 @@ foreach ($f in "sv_args.txt", "sv_snapshot.bin", "sv_packets.bin", "subvulpes.lo
 }
 if (Test-Path $old) { Write-Host "Previous recording moved to $old" }
 
-Write-Host "Server starts now (port in config.txt). The map takes about 3 minutes to load."
+Write-Host "Server starts now (port in config.txt). The verifier makes the map load slower than usual."
 Write-Host "The memory snapshot is taken $SnapshotAfter seconds after the start: play at least that long."
 Start-Process -FilePath (Join-Path $dir "subrosadedicated024d.exe") -WorkingDirectory $dir
