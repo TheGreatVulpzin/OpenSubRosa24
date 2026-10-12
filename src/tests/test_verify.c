@@ -43,6 +43,9 @@ static void write_a_copy(void) { g_vals[10] = 7; g_vals[2000] = 9; }
 static void write_b(void) { g_vals[10] = 8; g_vals[2000] = 9; }
 static void write_c_only(void) { g_vals[3000] = 5; }
 static void nothing(void) { }
+static void float_one(void) { g_vals[40] = 0x3f800000; }       /* 1.0f */
+static void float_one_ulp(void) { g_vals[40] = 0x3f800001; }   /* 1.0f + 1 ulp */
+static void float_two(void) { g_vals[40] = 0x40000000; }       /* 2.0f */
 static void crash(void) { g_vals[20] = 3; *(volatile int *)0 = 1; }
 static void write_d(void) { g_vals[20] = 4; }
 
@@ -91,6 +94,15 @@ int main(void)
               "difference in a scope round: not counted, next round is full");
         run(&v5, write_b, write_a);
         CHECK(v5.fails == 1 && v5.recheck == 0, "difference confirmed in the full round");
+    }
+
+    {
+        SvVerify v7 = { "float_ulp", 1 };
+        SvVerify v8 = { "float_far", 1 };
+        run(&v7, float_one, float_one_ulp);
+        CHECK(v7.fails == 0 && v7.near_floats == 1, "float 1 ulp apart: not a difference, counted apart");
+        run(&v8, float_one, float_two);
+        CHECK(v8.fails == 1, "float far apart: a difference");
     }
 
     {

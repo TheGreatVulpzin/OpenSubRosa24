@@ -134,3 +134,18 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
    ```
 
    It loads the 024d as a library, resolves its imports, fills `.data` from the snapshot and runs each recorded call twice: the lifted version, then the original (the verifier undoes the writes of the first run). It compares the `.data` writes, the return value and the memory behind pointer arguments. A full run takes a few minutes. The details of each difference go to `build/hook/subvulpes.log`.
+
+## Float precision
+
+The 024d runs the x87 with 53-bit precision (control word `0x27F`). The original keeps intermediate values in x87 registers, and the lifted C code rounds them to `float` at other places. Some float results therefore differ in the last bits.
+
+The verifier accepts two normal floats with the same sign that are at most `verify_float_ulps` steps apart (default 4, 0 = exact). It counts these words apart, and the log says "floats differ in the last bits only".
+
+Known functions with larger precision differences (the verifier disables their hooks, so the original runs):
+
+| Function | Difference |
+| --- | --- |
+| `createlandscape` | 263 bytes over 4 ulps in the 2049 x 2049 height map |
+| `buildsomeshit` | about 6000 bytes, the error grows through the computation |
+
+Both run once, when the server starts. A bit-exact version needs the rounding points of the original, by hand. `/fp:fast` makes the differences larger.

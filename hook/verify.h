@@ -38,6 +38,7 @@ typedef struct SvVerify {
     unsigned range[32][2];   /* [first page, last page + 1) inside .data */
     int recheck;             /* 1 = the next verification is a full round */
     long unconfirmed;        /* differences in scope rounds (not counted in fails) */
+    long near_floats;        /* float words that differ only in the last bits (not counted) */
 } SvVerify;
 
 /* Tests only: use another section of the executable instead of .data. Call before sv_verify_init. */

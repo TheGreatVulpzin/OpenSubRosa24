@@ -12,7 +12,7 @@
 #include "record.h"
 
 #define PAGE 4096u
-#define MAX_PAGES 4096   /* pages changed per run and per version (16 MB) */
+#define MAX_PAGES 8192   /* pages changed per run and per version (32 MB): createlandscape writes 17 MB */
 
 static uint8_t *g_data;        /* start of the game .data section */
 static size_t g_data_size;
@@ -372,6 +372,22 @@ static int ignored(uint32_t rva)
     return 0;
 }
 
+/* Two normal floats with the same sign, at most g_ulps steps apart. The original keeps
+ * x87 intermediate values with 64-bit precision in registers, the C version rounds them
+ * at other places: the last bits can differ. subvulpes.ini verify_float_ulps (default 4,
+ * 0 = exact). The verifier counts these words apart ("near floats"). */
+static int g_ulps = -1;
+
+static int near_float(uint32_t a, uint32_t b)
+{
+    uint32_t ea = (a >> 23) & 0xff, eb = (b >> 23) & 0xff;
+    if (g_ulps < 0)
+        g_ulps = sv_config_int("verify_float_ulps", 4);
+    if (!g_ulps || ea == 0 || ea == 0xff || eb == 0 || eb == 0xff || (a ^ b) >> 31)
+        return 0;
+    return (a > b ? a - b : b - a) <= (uint32_t)g_ulps;
+}
+
 /* Describe a .data address as "global[i]+0xNN". */
 static void describe(uint32_t rva, char *out, size_t n)
 {
@@ -398,7 +414,7 @@ static void describe(uint32_t rva, char *out, size_t n)
 void sv_verify_end(SvVerify *v, int same_return, const char *detail)
 {
     uint32_t i;
-    long diffs = 0;
+    long diffs = 0, nfloat = 0;
     char where[96];
     uint32_t data_rva = (uint32_t)((uintptr_t)g_data - sr_base);
 
@@ -419,6 +435,16 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
         if (!mine)
             continue;
         for (b = 0; b < PAGE; b++) {
+            if ((b & 3) == 0 && memcmp(mine + b, now + b, 4) != 0) {
+                uint32_t x, y;
+                memcpy(&x, mine + b, 4);
+                memcpy(&y, now + b, 4);
+                if (near_float(x, y)) {
+                    nfloat++;
+                    b += 3;
+                    continue;
+                }
+            }
             if (mine[b] != now[b] && !ignored(data_rva + g_new.index[i] * PAGE + b)) {
                 if (++diffs <= 8) {
                     describe(data_rva + g_new.index[i] * PAGE + b, where, sizeof where);
@@ -468,6 +494,9 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
         if (g_log_calls)
             sv_log("call %s #%ld: %s \"%s\" (%.1f ms, %s)", v->name, v->calls, ok ? "same" : "DIFFERENT",
                    detail ? detail : "", ms, g_full ? "full" : "scope");
+        if (nfloat && !v->near_floats)
+            sv_log("VERIFY %s: %ld floats differ in the last bits only (within verify_float_ulps)", v->name, nfloat);
+        v->near_floats += nfloat;
         if (!ok) {
             v->fails++;
             /* A confirmed difference: the new version is wrong. From now on only the
