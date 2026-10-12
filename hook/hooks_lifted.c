@@ -4160,6 +4160,7 @@ __declspec(naked) static void th_0d0c0(void)
         add esp, 16
         push dword ptr [ebp + 8]
         call hk_0d0c0
+        movzx eax, al
         add esp, 4
         fxrstor [esp]
         mov ecx, [esp + 468]
@@ -8648,6 +8649,7 @@ __declspec(naked) static void th_29650(void)
         add esp, 16
         push dword ptr [ebp + 8]
         call hk_29650
+        movzx eax, al
         add esp, 4
         fxrstor [esp]
         mov ecx, [esp + 468]

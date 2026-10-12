@@ -13,6 +13,7 @@ typedef struct LfEntry {
     void *lifted;     /* lf_<rva> in lifted_024d.c */
     int dwords;       /* size of the arguments on the stack, in dwords */
     int ret;          /* LF_RET_* */
+    int ret_size;     /* LF_RET_INT: 1, 2 or 4 bytes of EAX */
 } LfEntry;
 
 extern const LfEntry lf_table[];

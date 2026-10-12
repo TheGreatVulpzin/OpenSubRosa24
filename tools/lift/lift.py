@@ -615,6 +615,8 @@ def lift_function(f, rva, headers, imports_used):
 WIDE_TYPES = {'float10', 'double', 'longlong', 'ulonglong', 'undefined8', 'qword', 'undefined5', 'undefined6',
               'undefined7'}
 FLOAT_RETURNS = {'float10', 'double', 'float'}
+BYTE_TYPES = {'bool', 'char', 'uchar', 'byte', 'undefined1', 'sbyte'}
+WORD_TYPES = {'short', 'ushort', 'word', 'undefined2', 'wchar16'}
 
 
 def fpu_thunk(rva, ret, params, index=-1):
@@ -648,6 +650,13 @@ def fpu_thunk(rva, ret, params, index=-1):
     for i in reversed(range(dwords)):
         lines.append(f'        push dword ptr [ebp + {8 + 4 * i}]')
     lines.append(f'        call hk_{rva:05x}')
+    # A 1- or 2-byte return: C leaves the upper bits of EAX undefined. The original code
+    # usually returns a clean EAX (xor eax, eax / setcc al), and an optimized caller can
+    # read all of EAX. Zero-extend it.
+    if ret in BYTE_TYPES:
+        lines.append('        movzx eax, al')
+    elif ret in WORD_TYPES:
+        lines.append('        movzx eax, ax')
     if dwords:
         lines.append(f'        add esp, {4 * dwords}')
     if ret in FLOAT_RETURNS:
@@ -754,7 +763,8 @@ def gen_table(lifted, headers, names):
         if used[nice] > 1:
             nice = f'{nice}_{rva:05x}'
         out.append(f'void lf_{rva:05x}(void);')
-        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *)lf_{rva:05x}, {dwords}, {kind} }},')
+        size = 1 if ret in BYTE_TYPES else 2 if ret in WORD_TYPES else 4
+        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *)lf_{rva:05x}, {dwords}, {kind}, {size} }},')
     out += ['', 'const LfEntry lf_table[] = {'] + (rows or ['    { 0 },']) + ['};',
             f'const int lf_table_count = {len(lifted)};', '']
     return chr(10).join(out)

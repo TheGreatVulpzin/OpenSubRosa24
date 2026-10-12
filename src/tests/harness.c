@@ -69,7 +69,7 @@ static int load_snapshot(const char *path)
     }
     g_snap.index = malloc(cap * 4);
     g_snap.pages = malloc((size_t)cap * 4096);
-    while (fread(&idx, 4, 1, f) == 1) {
+    while (fread(&idx, 4, 1, f) == 1 && idx != 0xffffffffu) {
         if (g_snap.npages == cap) {
             cap *= 2;
             g_snap.index = realloc(g_snap.index, cap * 4);
@@ -84,6 +84,63 @@ static int load_snapshot(const char *path)
     }
     fclose(f);
     return 1;
+}
+
+/* Heap regions of the server (after the .data pages in the snapshot). They must go to the
+ * same addresses, before the harness itself uses the memory: map_regions runs first. */
+typedef struct Region {
+    uint32_t base, size;
+    long offset;  /* content in the snapshot file */
+    int mapped;
+} Region;
+
+static Region *g_regions;
+static int g_nregions, g_mapped;
+static char g_snap_path[MAX_PATH];
+
+static void map_regions(const char *path)
+{
+    FILE *f = fopen(path, "rb");
+    uint32_t idx, hdr[2];
+    int cap = 256;
+    if (!f)
+        return;
+    strncpy(g_snap_path, path, MAX_PATH - 1);
+    fseek(f, 18, SEEK_SET);
+    while (fread(&idx, 4, 1, f) == 1 && idx != 0xffffffffu)
+        fseek(f, 4096, SEEK_CUR);
+    g_regions = malloc(cap * sizeof(Region));
+    while (fread(hdr, 4, 2, f) == 2) {
+        Region *r;
+        if (g_nregions == cap) {
+            cap *= 2;
+            g_regions = realloc(g_regions, cap * sizeof(Region));
+        }
+        r = &g_regions[g_nregions++];
+        r->base = hdr[0];
+        r->size = hdr[1];
+        r->offset = ftell(f);
+        r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE) != NULL;
+        g_mapped += r->mapped;
+        fseek(f, (long)r->size, SEEK_CUR);
+    }
+    fclose(f);
+}
+
+static void apply_regions(void)
+{
+    FILE *f = fopen(g_snap_path, "rb");
+    int i;
+    if (!f)
+        return;
+    for (i = 0; i < g_nregions; i++) {
+        if (!g_regions[i].mapped)
+            continue;
+        fseek(f, g_regions[i].offset, SEEK_SET);
+        if (fread((void *)(uintptr_t)g_regions[i].base, g_regions[i].size, 1, f) != 1)
+            g_regions[i].mapped = 0;
+    }
+    fclose(f);
 }
 
 /* Put the snapshot into .data. Pointers into the image move with the load address: each
@@ -106,6 +163,7 @@ static void apply_snapshot(void)
                 if (w[k] >= g_snap.base && w[k] < g_snap.base + g_image_size)
                     w[k] += delta;
     }
+    apply_regions();
 }
 
 /* The loader does not resolve the imports of an .exe that LoadLibrary loads. Fill the
@@ -290,6 +348,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: harness <024d.exe> <sv_snapshot.bin> <sv_args.txt> [name filter]\n");
         return 2;
     }
+    map_regions(argv[2]);
     g_mod = LoadLibraryExA(argv[1], NULL, 0);
     if (!g_mod) {
         fprintf(stderr, "cannot load %s (error %lu)\n", argv[1], GetLastError());
@@ -314,6 +373,7 @@ int main(int argc, char **argv)
     sv_verify_ignore(0x14043e0, 0x5800);  /* profiler timers (RDTSC), see hooks_024d.c */
     printf("024d at %p, snapshot base %08x, %u pages, %d recorded calls\n", (void *)g_mod, g_snap.base,
            g_snap.npages, g_ncalls);
+    printf("heap regions: %d of %d mapped at their server address\n", g_mapped, g_nregions);
     if ((uint32_t)sr_base != g_snap.base)
         printf("WARNING: the 024d did not load at the snapshot base. Pointers in the snapshot are guessed.\n"
                "Use the same copy from tools/re/fixed_base.py for the server and the harness.\n");
@@ -333,8 +393,10 @@ int main(int argc, char **argv)
             uint32_t a[MAX_ARGS], ne = 0, de = 0, no = 0, dorig = 0;
             double fe = 0, fo = 0;
             int k, new_ok, orig_ok, same, fails_before;
+            uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
+            mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
             ncalls++;
             build_args(c, a);
             fails_before = v.fails;
@@ -347,7 +409,7 @@ int main(int argc, char **argv)
                     memcpy(g_after_new[k], g_buf[k], BUF);
             build_args(c, a);
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
-            same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ne == no) ||
+            same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ((ne ^ no) & mask) == 0) ||
                    (e->ret == LF_RET_INT64 && ne == no && de == dorig) ||
                    (e->ret == LF_RET_FLOAT && (float)fe == (float)fo);
             for (k = 0; k < c->n; k++)

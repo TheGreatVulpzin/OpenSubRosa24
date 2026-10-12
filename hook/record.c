@@ -156,6 +156,26 @@ void sv_snapshot_check(void)
             fwrite(w, 4096, 1, f);
         }
     }
+    {
+        /* The game also keeps pointers to heap memory in .data. Write every committed
+         * private read/write region (heaps, malloc blocks), with its address: the harness
+         * maps them at the same addresses. End of .data pages: index 0xffffffff. */
+        uint32_t end = 0xffffffffu, total = 0;
+        uintptr_t a = 0x10000;
+        MEMORY_BASIC_INFORMATION mi;
+        fwrite(&end, 4, 1, f);
+        while (a < 0x7fff0000 && VirtualQuery((void *)a, &mi, sizeof mi)) {
+            if (mi.State == MEM_COMMIT && mi.Type == MEM_PRIVATE && mi.Protect == PAGE_READWRITE) {
+                uint32_t rbase = (uint32_t)(uintptr_t)mi.BaseAddress, rsize = (uint32_t)mi.RegionSize;
+                fwrite(&rbase, 4, 1, f);
+                fwrite(&rsize, 4, 1, f);
+                fwrite(mi.BaseAddress, rsize, 1, f);
+                total += rsize;
+            }
+            a = (uintptr_t)mi.BaseAddress + mi.RegionSize;
+        }
+        sv_log("snapshot: %u KB of heap regions", total / 1024);
+    }
     fclose(f);
     sv_log("snapshot of .data written to sv_snapshot.bin");
 }
