@@ -258,16 +258,46 @@ def local_types(body, params):
     return types
 
 
+def expr_type(e, types):
+    """Small type inference for one argument. Returns a type name, 'literal' for an int
+    literal, '*'-ended for a pointer, or '' when unknown."""
+    e = e.strip()
+    if re.fullmatch(r'-?(0x[0-9a-fA-F]+|\d+)', e):
+        return 'literal'
+    if re.fullmatch(r'-?\d+\.\d*(e-?\d+)?f?', e):
+        return 'float'
+    if re.fullmatch(r'&\s*\(?[A-Za-z_]\w*\)?(\s*\[[^\]]*\])?', e):
+        return 'void *'
+    m = re.fullmatch(r'\(([A-Za-z_][\w ]*\**)\)\s*([A-Za-z_]\w*|\(.*\))', e, flags=re.S)
+    if m:
+        return m.group(1).strip()
+    m = re.fullmatch(r'([A-Za-z_]\w*)', e)
+    if m:
+        if re.fullmatch(r'fVar\d+', e):
+            return 'float'
+        return types.get(e, '')
+    m = re.fullmatch(r'\*\s*([A-Za-z_]\w*)', e)
+    if m:
+        t = types.get(m.group(1), '')
+        return t[:-1].strip() if t.endswith('*') else ''
+    m = re.fullmatch(r'\(&([A-Za-z_]\w*)\)\s*\[[^\[\]]*\]', e)
+    if m:
+        return types.get(m.group(1), '')  # (&DAT_x)[i]: element of the type of DAT_x
+    m = re.fullmatch(r'([A-Za-z_]\w*)\s*\[[^\[\]]*\]', e)
+    if m:
+        t = types.get(m.group(1), '')
+        if t.endswith('*'):
+            return t[:-1].strip()
+        return t  # array declared "int local_54 [8]": the element type
+    return ''
+
+
 def call_arg_bits(body, callee_params, ptrs, types):
     """Ghidra prints an argument with the type that the caller uses. The callee prototype
     can use another type for the same 4 bytes: the original pushes the bits unchanged.
       float parameter, pointer argument     -> lf_p2f(arg)
       float parameter, int argument          -> lf_u2f(arg)   (0x3f8c0000 is 1.09375)
       int parameter, float variable          -> lf_f2u(arg)"""
-    def base(arg):
-        m = re.fullmatch(r'([A-Za-z_]\w*)(\s*\[[^\]]*\])?', arg)
-        return (m.group(1), bool(m.group(2))) if m else (None, False)
-
     for cname, cparams in callee_params.items():
         spans = list(call_spans(body, cname))
         for a, e in reversed(spans):
@@ -277,15 +307,12 @@ def call_arg_bits(body, callee_params, ptrs, types):
                 if i >= len(args):
                     break
                 arg = args[i]
-                name, indexed = base(arg)
-                atype = types.get(name, '') if name else ''
-                if indexed:
-                    atype = atype.rstrip(' *') if atype.endswith('*') else atype
+                atype = expr_type(arg, types)
                 new = None
                 if ptype == 'float':
-                    if re.fullmatch(r'&\s*[A-Za-z_]\w*', arg) or (arg in ptrs and not indexed):
+                    if atype.endswith('*'):
                         new = f'lf_p2f({arg})'
-                    elif re.fullmatch(r'-?(0x[0-9a-fA-F]+|\d+)', arg) and arg not in ('0', '-0'):
+                    elif atype == 'literal' and arg not in ('0', '-0'):
                         new = f'lf_u2f({arg})'
                     elif atype in INT_TYPES:
                         new = f'lf_u2f((uint)({arg}))'
@@ -555,7 +582,7 @@ def lift_function(f, rva, headers, imports_used):
     body = raw_float_uses(body, undefined_names(body, params, f['globals']))
     body = pointer_float_casts(body, params, f['globals'])
     body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),
-                         local_types(body, params))
+                         dict({g["name"]: g["type"].strip() for g in f["globals"]}, **local_types(body, params)))
     # Short strings stored as an immediate ("Uzi" = 0x00697a55): Ghidra shows them as an
     # address (&DAT_00697a55). The loader does not relocate them, so neither do we.
     relocs = set(f.get('relocvals', []))

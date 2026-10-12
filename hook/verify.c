@@ -18,6 +18,7 @@ static size_t g_data_size;
 static int g_enabled;          /* subvulpes.ini: verify */
 static int g_log_calls;        /* subvulpes.ini: log_calls */
 static int g_full_every;       /* subvulpes.ini: verify_full_every */
+static int g_relax;            /* subvulpes.ini: verify_relax */
 static SvVerify *g_scope;      /* hook of the current verification */
 static int g_full;             /* 1 = this verification protects the whole .data */
 static LARGE_INTEGER g_t0, g_freq;
@@ -174,6 +175,7 @@ int sv_verify_init(void)
     g_enabled = sv_config_int("verify", 1);
     g_log_calls = sv_config_int("log_calls", 1);
     g_full_every = sv_config_int("verify_full_every", 50);
+    g_relax = sv_config_int("verify_relax", 200);
     if (g_full_every < 1)
         g_full_every = 1;
     sv_log("verification mode: %s", g_enabled ? "on" : "off");
@@ -280,6 +282,10 @@ int sv_verify_should(SvVerify *v)
         if (v->every < 1)
             v->every = 1;
     }
+    /* A hook with many clean verifications needs fewer: after verify_relax (default 200)
+     * checks with no difference, verify 1 call of every 64 (or every N, if N is larger). */
+    if (v->checks >= g_relax && v->fails == 0 && v->every < 64)
+        return (v->calls - 1) % 64 == 0;
     return (v->calls - 1) % v->every == 0;
 }
 

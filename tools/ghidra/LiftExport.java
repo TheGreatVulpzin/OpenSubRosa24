@@ -7,8 +7,11 @@
 // Usage (headless, -process <program> -noanalysis): -postScript LiftExport.java <output.jsonl>
 //@category SubVulpes
 
+import ghidra.app.decompiler.ClangBreak;
 import ghidra.app.decompiler.ClangNode;
+import ghidra.app.decompiler.ClangSyntaxToken;
 import ghidra.app.decompiler.ClangToken;
+import ghidra.app.decompiler.ClangTypeToken;
 import ghidra.app.decompiler.ClangVariableToken;
 import ghidra.app.decompiler.DecompInterface;
 import ghidra.app.decompiler.DecompileOptions;
@@ -62,7 +65,7 @@ public class LiftExport extends GhidraScript {
                 }
                 sb.append("],");
                 field(sb, "ok", String.valueOf(r.decompileCompleted())).append(',');
-                field(sb, "c", r.decompileCompleted() ? r.getDecompiledFunction().getC() : "").append(',');
+                field(sb, "c", r.decompileCompleted() ? cText(r) : "").append(',');
                 sb.append("\"globals\":[");
                 if (r.decompileCompleted()) globals(sb, r);
                 sb.append("],\"calls\":[");
@@ -77,6 +80,112 @@ public class LiftExport extends GhidraScript {
         }
         di.dispose();
         println("Exported: " + out);
+    }
+
+    /* The pseudo-C, built from the token tree, with the bit casts marked.
+     *
+     * Ghidra prints "(float)x" for two different p-code ops: INT2FLOAT (convert the number)
+     * and CAST (keep the bits, one stack slot used as int and as float). C has only the
+     * first meaning. A CAST between a 4-byte float and a 4-byte int or pointer becomes
+     * LF_BITS_F(x) (bits to float) or (T)LF_BITS_U(x) (float bits to T). Only a cast of a
+     * variable or of a parenthesized group is marked. */
+    private String cText(DecompileResults r) {
+        List<ClangNode> leaves = new ArrayList<>();
+        r.getCCodeMarkup().flatten(leaves);
+        List<ClangToken> t = new ArrayList<>();
+        for (ClangNode n : leaves) t.add((ClangToken) n);
+        StringBuilder sb = new StringBuilder();
+        Map<Integer, Integer> closeAfter = new HashMap<>();
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (tok instanceof ClangBreak) {
+                sb.append('\n');
+                for (int k = 0; k < ((ClangBreak) tok).getIndent(); k++) sb.append(' ');
+                continue;
+            }
+            int[] cast = bitCast(t, i);
+            if (cast != null) {
+                // cast = {index of ')' of the cast, operand end index, 0 = to float / 1 = from float}
+                String type = castType(t, i, cast[0]);
+                sb.append(cast[2] == 0 ? "LF_BITS_F(" : "((" + type + ")LF_BITS_U(");
+                closeAfter.merge(cast[1], cast[2] == 0 ? 1 : 2, Integer::sum);
+                i = cast[0];
+                continue;
+            }
+            sb.append(tok.getText());
+            Integer close = closeAfter.remove(i);
+            if (close != null) for (int k = 0; k < close; k++) sb.append(')');
+        }
+        return sb.toString();
+    }
+
+    private static int next(List<ClangToken> t, int i) {
+        for (int j = i + 1; j < t.size(); j++) {
+            if (t.get(j) instanceof ClangBreak) return -1;
+            if (!t.get(j).getText().isBlank()) return j;
+        }
+        return -1;
+    }
+
+    private static String castType(List<ClangToken> t, int open, int close) {
+        StringBuilder s = new StringBuilder();
+        for (int j = open + 1; j < close; j++) s.append(t.get(j).getText());
+        return s.toString().trim();
+    }
+
+    private int[] bitCast(List<ClangToken> t, int i) {
+        if (!(t.get(i) instanceof ClangSyntaxToken) || !t.get(i).getText().equals("(")) return null;
+        int ty = next(t, i);
+        if (ty < 0 || !(t.get(ty) instanceof ClangTypeToken)) return null;
+        int close = next(t, ty);
+        while (close >= 0 && t.get(close).getText().equals("*")) close = next(t, close);
+        if (close < 0 || !t.get(close).getText().equals(")")) return null;
+        int k = next(t, close);
+        if (k < 0) return null;
+        ghidra.program.model.pcode.PcodeOp castOp = null;
+        int end;
+        ClangToken op0 = t.get(k);
+        if (op0 instanceof ClangVariableToken) {
+            castOp = op0.getPcodeOp();
+            end = k;
+        } else if (op0.getText().equals("(")) {
+            int depth = 0;
+            end = -1;
+            for (int j = k; j < t.size(); j++) {
+                String s = t.get(j).getText();
+                if (s.equals("(")) depth++;
+                else if (s.equals(")") && --depth == 0) {
+                    end = j;
+                    break;
+                }
+            }
+            if (end < 0) return null;
+            outer:
+            for (int j = k + 1; j < end; j++) {
+                ghidra.program.model.pcode.PcodeOp p = t.get(j).getPcodeOp();
+                if (p == null || p.getOutput() == null) continue;
+                Iterator<ghidra.program.model.pcode.PcodeOp> d = p.getOutput().getDescendants();
+                while (d.hasNext()) {
+                    ghidra.program.model.pcode.PcodeOp q = d.next();
+                    if (q.getOpcode() == ghidra.program.model.pcode.PcodeOp.CAST) {
+                        castOp = q;
+                        break outer;
+                    }
+                }
+            }
+        } else {
+            return null;
+        }
+        if (castOp == null || castOp.getOpcode() != ghidra.program.model.pcode.PcodeOp.CAST) return null;
+        if (castOp.getOutput() == null || castOp.getOutput().getHigh() == null || castOp.getInput(0).getHigh() == null)
+            return null;
+        DataType dst = castOp.getOutput().getHigh().getDataType();
+        DataType src = castOp.getInput(0).getHigh().getDataType();
+        if (dst.getLength() != 4 || src.getLength() != 4) return null;
+        boolean dstF = dst.getName().equals("float");
+        boolean srcF = src.getName().equals("float");
+        if (dstF == srcF) return null;
+        return new int[] { close, end, dstF ? 0 : 1 };
     }
 
     /* Globals: the symbol map, plus every DAT_/_DAT_ token of the C output with the data type

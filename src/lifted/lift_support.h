@@ -85,6 +85,10 @@ static __inline void *lf_f2p(float f) { union { void *p; float f; } u; u.f = f; 
 static __inline float lf_u2f(unsigned int x) { union { unsigned int u; float f; } u; u.u = x; return u.f; }
 static __inline unsigned int lf_f2u(float f) { union { unsigned int u; float f; } u; u.f = f; return u.u; }
 
+/* Bit casts that tools/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
+#define LF_BITS_F(x) lf_u2f((unsigned int)(x))
+#define LF_BITS_U(x) lf_f2u((float)(x))
+
 /* Ghidra NAN(x): x is not a number (x87 compare with the parity flag). */
 #define NAN(x) ((x) != (x))
 

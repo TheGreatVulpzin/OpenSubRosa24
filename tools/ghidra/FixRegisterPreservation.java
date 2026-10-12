@@ -40,7 +40,8 @@ public class FixRegisterPreservation extends GhidraScript {
     private static final int C = 1, D = 2, F = 4, ALL = 7;
     private static final long FTOL2_VA = 0x45ce90L;
     private static final String FTOL2_FIXUP = "<callfixup name=\"ftol2\"><target name=\"_ftol2\"/><pcode><body><![CDATA["
-            + "ftol2tmp:8 = trunc(ST0); EAX = ftol2tmp:4; EDX = ftol2tmp(4);"
+            // The CALL already pushed the return address: the RET of _ftol2 pops it (ESP + 4).
+            + "ftol2tmp:8 = trunc(ST0); EAX = ftol2tmp:4; EDX = ftol2tmp(4); ESP = ESP + 4;"
             + "ST0 = ST1; ST1 = ST2; ST2 = ST3; ST3 = ST4; ST4 = ST5; ST5 = ST6; ST6 = ST7;"
             + "]]></body></pcode></callfixup>";
 
