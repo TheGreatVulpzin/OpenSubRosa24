@@ -60,7 +60,6 @@ Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_
 | Reason | Meaning |
 | --- | --- |
 | `side_effect` | The function reaches the network, files, time, the heap or another impure import (directly or through callees). Verification runs a function twice, so these cannot be verified this way. |
-| `x87 intrinsic without arguments` | `_CIsqrt`, `_CIsin`... take the argument in ST0. Ghidra prints the call without the argument. |
 | `register input/output` | The decompiler shows values passed in registers (non-standard convention). |
 | `int typed as float (denormal literal)` | Ghidra typed an int parameter as float (`param_1 == 1.4013e-45`). |
 | `compile_error` | The pseudo-C does not compile. |
@@ -69,7 +68,16 @@ Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_
 
 First complete run (2026-10-12): 141 of 340 functions lifted and compiled. Automatic test on an idle server (180 s): no crash, 10 lifted functions called and verified, 0 differences.
 
+With the x87 intrinsics (2026-10-12): 192 of 340 functions lifted. 196 hooks installed in total (4 hand-written). Idle server, 180 s: no crash, 11 lifted functions verified, 0 differences.
+
 An idle server calls only a few functions. More coverage needs players: see the record and replay plan in `docs/plano.md`.
+
+## x87 intrinsics
+
+`_CIsqrt`, `_CIsin`, `_CIcos`, `_CItan`, `_CIacos`, `_CIatan2` and `_CIpow` take their arguments on the x87 stack (ST0, or ST1 and ST0) and return in ST0. Two steps make them work:
+
+1. `tools/ghidra/FixX87Intrinsics.java` gives them their real signatures in the Ghidra project (run it once, without `-readOnly`). The pseudo-C then shows the arguments: `_CIsqrt((double)(x * x + y * y))`.
+2. `src/lifted/x87_intrinsics.c` has a naked thunk for each one. The thunk loads the arguments on the x87 stack and jumps to the routine of the game CRT. The result is bit-for-bit the same as in the original.
 
 ## Floats
 

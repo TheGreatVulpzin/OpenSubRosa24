@@ -19,6 +19,16 @@ extern uintptr_t sr_base;
 /* Address of an import of the game (the value stored in its IAT slot). */
 void *sr_import(const char *dll, const char *name);
 
+/* x87 intrinsics of the game CRT, called with normal cdecl arguments (x87_intrinsics.c). */
+void lf_x87_init(void);
+double __cdecl lf_CIsqrt(double x);
+double __cdecl lf_CIsin(double x);
+double __cdecl lf_CIcos(double x);
+double __cdecl lf_CItan(double x);
+double __cdecl lf_CIacos(double x);
+double __cdecl lf_CIatan2(double a, double b);
+double __cdecl lf_CIpow(double a, double b);
+
 /* ---------------------------------------------------------------- Ghidra types */
 
 typedef unsigned char undefined;

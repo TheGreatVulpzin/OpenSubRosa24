@@ -17,6 +17,7 @@ add_library(sv_wsock32 SHARED
     hook/imports.c
     hook/hooks_lifted.c
     src/lifted/lifted_024d.c
+    src/lifted/x87_intrinsics.c
     hook/wsock32.def
     src/server/events.c
     src/server/players.c
@@ -25,7 +26,7 @@ set_target_properties(sv_wsock32 PROPERTIES OUTPUT_NAME wsock32)
 target_include_directories(sv_wsock32 PRIVATE src/include src/lifted hook)
 # Lifted Ghidra code: x87 math like the original (/arch:IA32), no warnings (decompiler style).
 set_source_files_properties(src/lifted/lifted_024d.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
-set_source_files_properties(hook/hooks_lifted.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+set_source_files_properties(hook/hooks_lifted.c src/lifted/x87_intrinsics.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 target_compile_options(sv_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(sv_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
 # Static CRT: the DLL does not depend on a redistributable.

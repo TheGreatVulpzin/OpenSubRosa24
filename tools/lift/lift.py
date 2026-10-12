@@ -34,7 +34,7 @@ BLOCKERS = {
     'in_': 'register input', 'unaff_': 'register input', 'extraout_': 'register output',
     'halt_baddata': 'bad data', 'ExceptionList': 'SEH frame', 'stack0x': 'stack address',
     'switchD': 'computed jump', '(code *)': 'function pointer call', 'in_ST0': 'x87 input',
-    '_CI': 'x87 intrinsic without arguments', 'POPCOUNT': 'popcount', 'LOCK()': 'lock prefix',
+    'POPCOUNT': 'popcount', 'LOCK()': 'lock prefix',
     '__security': 'security cookie', 'segment(': 'segment', 'CONCAT3': 'odd concat',
     'rdtsc': 'time stamp counter',
 }
@@ -45,7 +45,11 @@ PURE_IMPORTS = {
     'strcat', 'strchr', 'strstr', 'sprintf', 'sscanf', 'rand', 'srand', 'floor', 'ceil', 'fabs',
     'abs', 'atoi', 'atof', 'toupper', 'tolower', 'qsort', '_stricmp', '_strnicmp',
     'htons', 'htonl', 'ntohs', 'ntohl',
+    '_CIsqrt', '_CIsin', '_CIcos', '_CItan', '_CIacos', '_CIatan2', '_CIpow',
 }
+
+# x87 intrinsics: arguments on the x87 stack. Lifted code calls the thunks in x87_intrinsics.c.
+X87_INTRINSICS = {'_CIsqrt', '_CIsin', '_CIcos', '_CItan', '_CIacos', '_CIatan2', '_CIpow'}
 
 # Byte swaps: inline (WinSock imports of the 024d are by ordinal).
 INLINE_IMPORTS = {
@@ -185,6 +189,12 @@ def lift_function(f, rva, headers, imports_used):
                 pre.append(INLINE_IMPORTS[tgt])
                 post.append(f'#undef {cname}')
                 continue
+            if tgt in X87_INTRINSICS:
+                pre.append(f'#define {cname} lf{tgt}')
+                post.append(f'#undef {cname}')
+                continue
+            if tgt.startswith('_CI'):
+                return None, f'x87 intrinsic {tgt} not supported'
             ph = parse_header(call['proto'] + '{')
             if not ph:
                 return None, f'import prototype: {call["proto"]}'
@@ -318,6 +328,7 @@ def gen_hooks(lifted, headers, funcs, names):
             '}', '',
             'int sv_hooks_lifted_install(void)',
             '{',
+            '    lf_x87_init();',
             '    /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */',
             '    int from = sv_config_int("lifted_from", 0);',
             f'    int to = sv_config_int("lifted_to", {len(lifted)});'] + inits + [
