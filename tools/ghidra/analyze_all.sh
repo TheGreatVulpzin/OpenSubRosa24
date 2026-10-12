@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 # Importa os binários no projeto Ghidra local (ghidra-project/) e exporta as features.
-# Uso: GHIDRA=/e/tools/ghidra_12.1.4_PUBLIC tools/ghidra/analyze_all.sh
+# Uso: tools/ghidra/analyze_all.sh [nome_curto ...]   (caminhos em tools/ghidra/env.sh)
 set -euo pipefail
+source "$(dirname "$0")/env.sh"
 # Com argumentos, roda só os nomes curtos pedidos. Ex.: analyze_all.sh ded024c_linux ded024c_win
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-GHIDRA="${GHIDRA:-/e/tools/ghidra_12.1.4_PUBLIC}"
-HEADLESS="$GHIDRA/support/analyzeHeadless.bat"
 mkdir -p "$ROOT/ghidra-project" "$ROOT/build/features"
 
 ONLY=" $* "

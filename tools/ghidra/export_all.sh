@@ -2,12 +2,10 @@
 # Reexporta as features dos programas já analisados no projeto (sem reanalisar).
 # Uso: tools/ghidra/export_all.sh
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-GHIDRA="${GHIDRA:-/e/tools/ghidra_12.1.4_PUBLIC}"
-export JAVA_HOME="${JAVA_HOME:-/c/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot}"
+source "$(dirname "$0")/env.sh"
 
 export_one() {  # $1 = nome do programa no projeto, $2 = nome curto
-    "$GHIDRA/support/analyzeHeadless.bat" "$ROOT/ghidra-project" subvulpes \
+    "$HEADLESS" "$ROOT/ghidra-project" subvulpes \
         -process "$1" -noanalysis -readOnly \
         -scriptPath "$ROOT/tools/ghidra" \
         -postScript ExportFunctionFeatures.java "$ROOT/build/features/$2.jsonl" 2>&1 \

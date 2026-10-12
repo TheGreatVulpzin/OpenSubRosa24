@@ -16,11 +16,28 @@ Projeto de RE/decompilação do Sub Rosa (2015). Idioma do projeto: português (
 - `original/blackhouser/subrosadedicated024d.exe` — PE32 sem símbolos. Alvo do server manager (SHA-256 `11e00678…`).
 - Endereços do 024d são sempre **RVAs** (relativos à base do módulo), como no server manager.
 
+## Sessão na nuvem (Linux)
+
+A nuvem faz o trabalho pesado do Ghidra. Compilar com MSVC e testar com o jogo fica no PC Windows.
+
+1. Rode `bash tools/cloud/setup.sh`. Ele instala Java 21 e Ghidra 12.1.4 e baixa os binários oficiais do gart.sh. Leva de 5 a 10 minutos.
+2. Rode `bash tools/ghidra/analyze_all.sh` para criar o projeto Ghidra. Leva de 10 a 30 minutos.
+3. Faça commit só dos resultados versionáveis (`analysis/`, `docs/`, `src/`, `tools/`). Nunca de `original/`, `build/` ou `ghidra-project/`.
+
+Se o download falhar, a sessão precisa de acesso de rede a `crypticsea.gart.sh` e `github.com`.
+
 ## Ferramentas
 
 - `tools/re/strings.py <arquivo> [min]` — strings ASCII.
 - `tools/re/elf_symbols.py <elf> [--sections]` — funções do ELF.
 - `tools/re/manifest.py write|check` — hashes de `original/`.
+- `tools/ghidra/analyze_all.sh [nome]` — importa e analisa binários. Caminhos em `tools/ghidra/env.sh`.
+- `tools/ghidra/export_all.sh` — reexporta features sem reanalisar.
+- `tools/ghidra/decompile.sh <programa> <saida.c> [rva ...]` — pseudo-C.
+- `tools/re/name_all.sh` — gera os CSVs de nomes de função.
+- `tools/re/map_globals.py` — mapeia variáveis globais por votos.
+- `tools/re/struct_fields.py` — levanta campos de structs do pseudo-C.
+- `tools/formats/subrosa_formats.py` — leitores de `.srk`, `.sbl`, `.sbb`, `.sbc`, `.csm`.
 
 ## Plano
 
