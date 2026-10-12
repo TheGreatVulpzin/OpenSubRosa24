@@ -1,142 +1,142 @@
 rva,size,name,source,confidence,evidence
-0x1010,98,account_nameexists,anchor,0.536,features
-0x1080,331,,,,
-0x11d0,284,,,,
-0x12f0,289,,,,
+0x1010,98,account_nameexists,review,0.98,Same strncmp over the 0x4c-byte account records with the 0x18-byte name cap as the 0.24c ELF account_nameexists.
+0x1080,331,saveaccountsserver,review,0.97,"Writes user/server.srk with version 3 and the same per-account field sequence (0x4c stride, 0x20-byte name) as the ELF saveaccountsserver."
+0x11d0,284,saveaccountsclient,review,0.97,"Writes client.srk with version 1 and 0x10-byte records after _chdir, same as the ELF saveaccountsclient."
+0x12f0,289,loadaccountsclient,review,0.97,"Reads client.srk, checks version 1 and reads 0x10-byte records, mirror of saveaccountsclient and the ELF loadaccountsclient."
 0x1420,280,server_writelogfile,anchor,0.983,features
-0x1540,104,,,,
-0x1610,568,,,,
-0x1850,254,,,,
-0x1bc0,263,,,,
+0x1540,104,angulardistance,review,0.95,"Wraps the difference of two angles by 2*pi (constants 3.14159265359 and 6.28318530718), same logic as the ELF angulardistance; called by playerai."
+0x1610,568,ai_car_nextwaypoint,review,0.97,"Same logic as the ELF ai_car_nextwaypoint: reads the player waypoint ring (stride 0x1c) and picks the next city intersection with rand, retrying up to 0x200 times."
+0x1850,254,area_getblock,review,0.93,Reads the exterior block value at sector+4 using the same chunk/sector index math as the ELF area_getblock; returns 0 when out of range or unallocated.
+0x1bc0,263,area_getblocktexture,review,0.9,"Five-parameter getter returning a ushort from the sector table at +0x804 with the extra face index, same as the ELF area_getblocktexture."
 0x1cd0,31,area_getnextsector,callgraph,1.0,votes=7
-0x1cf0,217,area_marksector,callgraph,0.5,votes=3
-0x1e20,41,area_getnextchunk,callgraph,0.333,votes=2
+0x1cf0,217,area_marksector,review,0.97,"Resolves the sector of a block coordinate and stores 1 in the sector dirty flag, same logic as the ELF area_marksector; called after every block write."
+0x1e20,41,area_getnextchunk,review,0.97,"Scans the 0x200 chunk records (0x804-byte stride) of an area for an unused one and returns -1 when full, same as the ELF area_getnextchunk."
 0x1e50,1795,landscape_buildsectorlods,anchor,0.908,features
 0x2560,187,tesselatebezier,callgraph,1.0,votes=88
 0x2620,174,tesselatebezierderivative,callgraph,1.0,votes=40
 0x26d0,610,area_copyrotateblock,callgraph,1.0,votes=128
 0x29a0,830,loadblock,callgraph,1.0,votes=12
 0x2cf0,193,area_block_rotatesurface,callgraph,1.0,votes=308
-0x2dc0,311,,,,
-0x2f00,304,,,,
-0x3030,254,,,,
-0x3130,337,clamp,anchor,0.86,features
-0x3290,262,,,,
-0x33a0,686,,,,
+0x2dc0,311,area_interior_setblock,review,0.95,"Writes the interior block array (sector+0xc00 ints), frees the cached interior slot (+0x1400 ints) and calls area_marksector, same as the ELF area_interior_setblock."
+0x2f00,304,area_interior_setobject,review,0.93,"Writes the interior object array (sector+0x1200 ints) and frees the cached interior slot (+0x1400 ints), same as the ELF area_interior_setobject."
+0x3030,254,area_interior_getblock,review,0.93,"Four-parameter getter of the interior block array (sector+0xc00 ints), same shape as the ELF area_interior_getblock."
+0x3130,337,area_interior_getblocklink,review,0.93,"Reads the interior block (sector+0xc00 ints) and follows 0xc0000000 link entries by recursing into area_interior_getblock, same as the ELF area_interior_getblocklink; currently named clamp."
+0x3290,262,area_interior_getblocktexture,review,0.93,"Five-parameter getter returning a byte at sector+0x3804 with the face index, same as the ELF area_interior_getblocktexture."
+0x33a0,686,deletebond,review,0.88,"Takes a bond index below numofbonds and removes it from the particle and object bond lists (stride 0xec bond record); called for each bond of a deleted particle, matching the ELF deletebond."
 0x3740,1575,building_save,manual,1.0,"String 'data/building/%s.sbb' + fopen, sem memset. Par de building_load."
-0x3d70,1094,area_getblock,callgraph,1.0,votes=8
-0x41c0,643,area_setblock,callgraph,1.0,votes=8
-0x4450,1440,building_setupbuild,anchor,0.49,features
+0x3d70,1094,building_setupbuild,review,0.88,Called by createlevel right after area_createblock and after building_load where the ELF calls building_setupbuild; also uses __alloca_probe for large local arrays. Currently named area_getblock (the real area_getblock is 0x1850).
+0x41c0,643,building_setupfloorplannewer,review,0.88,Called by createlevel just before building_buildfloorplan where the ELF calls building_setupfloorplannewer; copies 0x1200-byte floorplan records field by field. Currently named area_setblock (the real area_setblock is 0x296f0).
+0x4450,1440,building_rotatefloorplan,review,0.85,"In createlevel it is the call between building_setupbuild (0x3d70) and building_setupfloorplannewer (0x41c0) after building_load, where the ELF calls building_rotatefloorplan; large unrolled copy loops with memset."
 0x4a10,259,setupbullettypes,anchor,0.725,features
 0x4bb0,1448,cityobject_addbox,callgraph,1.0,votes=108
-0x5160,201,,,,
-0x5280,112,debug_resetlogfile,anchor,0.548,features
-0x5350,70,,,,
-0x53a0,854,economysimulation,anchor,0.587,features
-0x5700,364,,,,
-0x5870,703,economy_carmarket,callgraph,1.0,votes=14
+0x5160,201,packunitvector,review,0.98,"Picks the largest-magnitude axis, stores its index and sign, then packs the other two ratios scaled by (1<<bits)-1 with a sign bit; identical logic to the ELF packunitvector."
+0x5280,112,debug_resetlogfile,review,0.97,"Writes 'loggy log log' to dedlog.txt when debugging is on, same as the ELF debug_resetlogfile."
+0x5350,70,systemtimer,review,0.93,"Calls QueryPerformanceCounter and scales the 64-bit count by a stored double to a 32-bit tick value, the Windows version of the ELF systemtimer (clock_gettime)."
+0x53a0,854,economysimulation,review,0.93,"Per-team loop that pays player salaries (+0x96 plus a share of team income), updates the stock price table (stride 5 floats), multiplies holdings by 5 at the price cap and picks the top-valued player per team, same structure as the ELF economysimulation."
+0x5700,364,economy_carmarket,review,0.95,"Walks the buildings of type 2 (stride 0x9dc), randomly drops 1 in 8 stock entries with rand and refills up to 8 car entries (type, price, rand%6), same as the ELF economy_carmarket (5 rand calls)."
+0x5870,703,economy_gunmarket,review,0.93,"Initialises the fixed 7-entry inventory of buildings of type 7 (stride 0x9dc), same as the ELF economy_gunmarket; currently named economy_carmarket (the car market is 0x5700)."
 0x5b40,150,playerbuystock,anchor,0.781,features
-0x5be0,691,,,,
-0x5f20,178,,,,
-0x5fe0,434,,manual,,removido: createevent_updateiteminfo. Zera campos do jogador e percorre o inventário. Não é createevent_updateiteminfo.
-0x61a0,177,,,,
-0x6260,167,createevent_message,anchor,0.538,features
-0x6380,151,,,,
-0x6420,121,,,,
-0x64a0,217,,,,
-0x65f0,101,,,,
+0x5be0,691,playersellstock,review,0.95,Sells param_2 shares (player+0x6c) of the player's team stock and decreases the market share count (stride 5 ints); the 0.95/0.98 price factor and _ftol2 match the ELF playersellstock.
+0x5f20,178,player_calcassets,review,0.95,"Sells all of the player's stock via playersellstock then walks the 7 inventory slots and adds the objecttype price of every owned type-0x18 vehicle item to player money, same as the ELF player_calcassets."
+0x5fe0,434,player_saveinventory,review,0.95,"Zeroes the 7 per-slot inventory counters at player+0x1718 (stride 100) and walks the human's 7 inventory slots copying item type, linked-item flag and ammo into 0xc-byte entries, same as the ELF player_saveinventory."
+0x61a0,177,eventsimulation,review,0.95,"Walks the event ring from the last handled index up to numofevents and handles type 10 (door update) by writing the garage-door interior objects, same as the ELF eventsimulation; called by dedicatedserverloop after bulletsimulation."
+0x6260,167,createevent_message,review,0.97,"Event type 2: copies up to 0x3f chars of a string into the event and stores its length and 3 parameters, same as the ELF createevent_message."
+0x6380,151,createevent_updateitem,review,0.97,"Event type 5 with item index and the item+0x18/+0x1c/+0x20 fields (record stride 0x1ac), same as the ELF createevent_updateitem."
+0x6420,121,createevent_updateiteminfo,review,0.95,"Event type 6 copying item+0x104, +0x10c and +0x110 (record stride 0x1ac), same fields as the ELF createevent_updateiteminfo."
+0x64a0,217,createevent_updateplayer,review,0.95,"Event type 7 for a player index: packs flags and player fields (stride 0x2408) and copies the 0x1f-byte name block at player+4, same as the ELF createevent_updateplayer."
+0x65f0,101,createevent_updateplayer_finance,review,0.97,"Event type 8 with the player index and two player fields, same as the ELF createevent_updateplayer_finance."
 0x6660,78,createevent_updatedoor,manual,1.0,"Evento tipo 10 com 2 parâmetros, igual ao 0.24c. Reescrita em src/server/events.c."
 0x6760,216,createevent_updatemission,manual,1.0,"Evento tipo 12 com dados de missão (game+0xd0, passo 0x117c por time e 0x40 por missão), mesma fórmula do 0.24c."
-0x6840,144,playerdebt,callgraph,1.0,votes=8
-0x68d0,126,resetorientation,callgraph,1.0,votes=8
-0x6b30,4150,setupitemtypes,anchor,0.637,features
-0x7b90,161,,,,
-0x7c40,155,item_removebill,callgraph,0.333,votes=2
-0x7ce0,115,,,,
-0x7d60,149,item_removeitemlink,callgraph,1.0,votes=12
-0x7e00,71,,,,
+0x6840,144,createevent_updatestocks,review,0.93,"Loops five stock entries then emits event type 0xd with packed stock values, same as the ELF createevent_updatestocks; currently named playerdebt."
+0x68d0,126,createevent_updatecarmarket,review,0.93,"Event type 0xe with market+0x140 + index*0x10 and three market fields at stride 0xc, same as the ELF createevent_updatecarmarket; currently named resetorientation."
+0x6b30,4150,setupitemtypes,review,0.95,"Called by setupgame between setupbullettypes and the setupobjecttypes functions like the ELF; fills the item type table with the item names ('Magnum', 'Bandage', 'Briefcase', 'Cell Phone', 'Newspaper' ...)."
+0x7b90,161,item_billvalue,review,0.95,"Sums the value-table entry (DAT_00460458) for each 3-bit packed bill of an item (count at +0x138, bits at +0x13c; unrolled by 2), same as the ELF item_billvalue."
+0x7c40,155,item_addbill,review,0.95,"Increments the bill count (max 9), shifts the 3-bit packed bill values up from the insert index and stores the new value, identical logic to the ELF item_addbill."
+0x7ce0,115,item_removebill,review,0.93,"Decrements the bill count and shifts the 3-bit packed bills down over the removed index, mirror of item_addbill and same as the ELF item_removebill."
+0x7d60,149,linkitemtoitem,review,0.9,"Checks a type compatibility table (DAT_10757498) and the slot limits, then appends the item to the parent's list and sets the child's parent/slot fields, same as the ELF linkitemtoitem; currently named item_removeitemlink."
+0x7e00,71,item_addhumanlink,review,0.93,"Appends an item index to the human's slot list (stride 9 ints, max 8 entries, counter before the list) and returns 1/0, same as the ELF item_addhumanlink."
 0x7e50,296,item_removehumanlink,callgraph,1.0,votes=16
-0x7f80,290,,,,
-0x80b0,315,city_addintersection,callgraph,0.333,votes=2
-0x8320,610,,,,
+0x7f80,290,item_removeitemlink,review,0.95,"Finds the item in the parent's linked-item list (count at +0x24, list at +0x28), removes it by swapping the last entry, clears the link at +0x1c and emits updateitem events, same as the ELF item_removeitemlink."
+0x80b0,315,city_addintersection,review,0.9,"Appends an intersection (city counter, stride 0x68) and is called by createlevel right after createarea, where the ELF calls city_addintersection."
+0x8320,610,leveleditor_save,review,0.97,Writes data/city.sbc with version 6 and the same intersection/street/0x100000-byte grid/building record sequence as the ELF leveleditor_save; counterpart of leveleditor_load (0x8590).
 0x8590,641,leveleditor_load,callgraph,1.0,votes=8
 0x8880,278,sprintf_comma,anchor,0.889,features
 0x89c0,151,pointinsidebase,callgraph,1.0,votes=26
-0x8a60,151,,,,
+0x8a60,151,pointinsidebuilding,review,0.97,"Axis-aligned box test of a point against a building record (stride 0x9dc, bounds at +0x78..+0x8c) widened by a margin parameter, same expression as the ELF pointinsidebuilding; called twice by logic_player."
 0x8b00,151,pointinsidebasesafe,callgraph,1.0,votes=24
-0x8cf0,752,item_addbill,callgraph,0.333,votes=2
-0x8fe0,1020,,,,
-0x93e0,182,,,,
-0x94a0,349,logic_player,anchor,0.686,features
+0x8cf0,752,logic_addteamcash,review,0.9,"Calls createevent_updateplayer_finance and createevent_updatestocks (0x6840), the same callee set as the ELF logic_addteamcash (finance x2, updatestocks); called by logic_playeractions."
+0x8fe0,1020,logic_teammissioncomplete,review,0.93,"Calls createevent_updateplayer_finance, createevent_updatemission and createevent_updatestocks, the same callee set as the ELF logic_teammissioncomplete; called by logic_playeractions."
+0x93e0,182,logic_suits_buy,review,0.9,"Calls createevent_updateplayer and createevent_updateplayer_finance after a player/human/city check, the same callee set as the ELF logic_suits_buy; called by logic_playeractions."
+0x94a0,349,logic_player,review,0.93,"Calls the point-inside-building helper (0x8a60) twice and pointinsidebase, same callee sequence as the ELF logic_player; called by logicsimulation."
 0x9600,141,geteulerangles2,anchor,0.955,features
-0x9870,390,,,,
+0x9870,390,lerpnoise2d,review,0.9,"Linear interpolation of noise2d samples (noise constants 15731/789221 and 9.31e-10 scale, _ftol2 x2), first of the three *noise2d interpolators in the same order as the ELF (lerp, serp, cerp)."
 0x9a00,472,serpnoise2d,callgraph,0.833,votes=5
-0x9be0,451,,,,
-0xa1b0,231,,,,
-0xa2a0,726,playersimulation,callgraph,0.333,votes=2
+0x9be0,451,cerpnoise2d,review,0.93,"Cosine interpolation of noise2d samples (_CIcos x2, 3.14159265359 and 0.5), same as the ELF cerpnoise2d; follows serpnoise2d (0x9a00)."
+0xa1b0,231,deleteplayer,review,0.97,"Sells the player's stock (the playerdebt call inlined), stores the money back into the account for modes 3/4, clears the five team-manager slots that reference the player, unlinks the human and zeroes the record, then calls createevent_updateplayer (0x64a0), same as the ELF deleteplayer."
+0xa2a0,726,playersimulation,review,0.95,"Copies per-player state to the human (menu/equipment slots, health at +0x28, the 7 inventory slots with item types and weapon flags 0x100/0x300), same logic as the ELF playersimulation; called by dedicatedserverloop right before the physics block."
 0xa580,197,fixplayername,manual,1.0,"Troca '/' por espaço, tira espaços e usa ""Noname"", igual ao 0.24c. O casador dizia createevent_updatehuman. (casador dizia createevent_updatehuman)"
 0xa7a0,143,orientationtoquaternion,anchor,1.0,features
 0xa930,172,projectorientation,callgraph,1.0,votes=6
 0xaa80,103,scenario_getnumofmissions,callgraph,1.0,votes=12
-0xab20,174,logic_farbslist,callgraph,1.0,votes=6
-0xac00,301,,,,
+0xab20,174,scenario_setmissioninactive,review,0.97,"Loops 5 teams x 0x10 missions, clears the mission item time-to-live, returns its stock share to the market, zeroes the mission and calls createevent_updatemission, line-for-line the ELF scenario_setmissioninactive; currently named logic_farbslist (the real logic_farbslist is 0x1d2c0)."
+0xac00,301,csradixsort,review,0.93,"Radix-sort helper (memset of 1024-int bucket tables) called twice by packobjectpacket and once by packobjectpacket2 in the same places where the ELF calls csradixsort, plus by newspaper_load and the top-10 list code."
 0xad30,59,init_genrand,callgraph,1.0,votes=38
 0xad70,213,init_by_array,anchor,1.0,features
 0xae50,269,genrand_int32,anchor,1.0,features
-0xb040,103,,,,
-0xb0b0,148,,,,
-0xb150,224,,,,
-0xb230,170,,,,
-0xb300,122,,,,
-0xb3f0,168,copyvector,callgraph,1.0,votes=54
+0xb040,103,objecttype_addparticle,review,0.95,"Appends a 4-parameter particle entry (stride 0x14, counter at objecttype+0x38) to an object type, same as the ELF objecttype_addparticle."
+0xb0b0,148,objecttype_addbond,review,0.95,"Appends a bond (stride 0xc) unless the same particle pair already exists in either order, same as the ELF objecttype_addbond; called 4 times by the helicopter setup like the ELF."
+0xb150,224,objecttype_addface,review,0.95,"Appends a face record (stride 0x40) with four -1 links and the two extra parameters, same as the ELF objecttype_addface; called 13 times by the helicopter setup like the ELF."
+0xb230,170,gettimeofday,review,0.88,Windows emulation of gettimeofday: converts GetSystemTimeAsFileTime to Unix seconds and microseconds with __aulldiv and fills the timezone from _tzset/__timezone/__daylight; its only caller is testtimer (0x18570).
+0xb300,122,setcpuaffinity,review,0.9,"GetProcessAffinityMask then SetProcessAffinityMask(1) with a stored result, same role as the ELF setcpuaffinity (called at startup)."
+0xb3f0,168,stoptimer,review,0.85,"Reads rdtsc, adds the elapsed ticks to the 64-bit accumulator of timer entry (stride 0x58) and stores the scaled result, the stop half of the resettimer/starttimer/stoptimer trio used around the physics block; currently named copyvector."
 0xb4a0,145,getcpufrequency,anchor,0.892,features
 0xb540,381,setuptimers,anchor,0.718,features
 0xb6d0,377,addvoice,callgraph,1.0,votes=24
-0xb850,37,,,,
-0xb880,59,,,,
-0xb8c0,50,,,,
+0xb850,37,dotproduct,review,0.95,"Returns a.x*b.x + a.y*b.y + a.z*b.z as float10, same as the ELF dotproduct; called from ai code and the area ray routines."
+0xb880,59,crossproduct,review,0.97,"Writes the cross product of two vectors into the first argument, same formula as the ELF crossproduct."
+0xb8c0,50,vectorlength,review,0.85,"Square root of the already-accumulated dot product (_CIsqrt, 3 floats on the FPU stack), the inlined form of the ELF vectorlength (sqrt(dotproduct(v,v)))."
 0xb900,123,normalizevector,callgraph,1.0,votes=72
-0xb9d0,37,vectorlength,callgraph,0.333,votes=2
-0xba00,37,debug_addsphere,callgraph,1.0,votes=8
-0xba30,37,,,,
-0xba60,51,dotproduct,callgraph,1.0,votes=12
-0xbaa0,90,,,,
-0xbb00,123,,,,
-0xbb80,153,,,,
-0xbc20,35,,,,
-0xbc50,341,,,,
+0xb9d0,37,addvectors,review,0.97,"Component-wise sum of two 3-float vectors into the first argument, same as the ELF addvectors."
+0xba00,37,subtractvectors,review,0.97,"Component-wise difference of two vectors, same as the ELF subtractvectors; currently named debug_addsphere."
+0xba30,37,scalevector,review,0.97,"Multiplies the 3 components of a vector by a scalar into the first argument, same as the ELF scalevector; called by ai_assessthreats."
+0xba60,51,scaleaddvectors,review,0.97,"Computes a + s*b component-wise, same as the ELF scaleaddvectors; currently named dotproduct."
+0xbaa0,90,vectordistance,review,0.93,"Square root of the squared component differences of two vectors, same as the ELF vectordistance (69 bytes in the ELF)."
+0xbb00,123,projectvector,review,0.95,"Multiplies a vector by a 3x3 orientation matrix (columns at +0/+3/+6), same expression as the ELF projectvector."
+0xbb80,153,generatetrinormal,review,0.93,"Cross product of (p1-p0) and (p2-p0) followed by normalizevector, same as the ELF generatetrinormal."
+0xbc20,35,resetorientation,review,0.97,"Writes the 3x3 identity matrix (1.0 at indexes 0, 4 and 8, zero elsewhere), same as the ELF resetorientation."
+0xbc50,341,rotatevector,review,0.97,"Rodrigues rotation of a vector around an axis using cos and sin of the angle in ST0 (cross products, dot product, scaled sum), same math as the ELF rotatevector."
 0xbdb0,352,rotateorientation,callgraph,1.0,votes=336
-0xbf60,101,,,,
-0xc0a0,114,,,,
+0xbf60,101,normalizevector2d,review,0.93,"Square root of the 2-component dot product, scales both components by 1/length or zeroes them, same as the ELF normalizevector2d."
+0xc0a0,114,rotatevector2d,review,0.95,"Rotates a 2D vector by cos and sin of the angle in ST0, same math as the ELF rotatevector2d."
 0xc120,357,lineintersectplane,callgraph,1.0,votes=14
-0xc290,387,,,,
-0xc420,600,lineintersecttriangle,callgraph,0.667,votes=4
-0xc680,624,,,,
-0xc8f0,445,,,,
-0xcab0,492,,,,
-0xcca0,333,,,,
-0xcdf0,405,,,,
+0xc290,387,lineintersectplanetwosided,review,0.95,"Plane intersection that rejects the segment when both end distances have the same sign and otherwise returns the hit point and parameter, same as the ELF lineintersectplanetwosided; called by lineintersecttriangletwosided."
+0xc420,600,lineintersecttriangle,review,0.95,"Calls lineintersectplane (0xc120) and then tests the hit against the triangle edges with cross/dot products, same as the ELF lineintersecttriangle; called by sphereintersecttriangle and the area ray code."
+0xc680,624,lineintersecttriangletwosided,review,0.93,"Calls lineintersectplane and lineintersectplanetwosided (0xc290) before the triangle edge tests, same as the ELF lineintersecttriangletwosided; called by lineintersectobject."
+0xc8f0,445,pointdistanceline,review,0.95,"Distance from a point to a segment: end-point distance through vectordistance when the projection falls outside, otherwise the distance to the projected point after normalizevector; called twice by human_itemsimulation where the ELF calls pointdistanceline."
+0xcab0,492,lineintersectline2d,review,0.85,Seven pointer parameters and normalizevector2d (0xbf60) like the ELF lineintersectline2d; the larger of the two 2D segment routines that use normalizevector2d.
+0xcca0,333,sphereintersectline2d,review,0.95,"Projects a 2D point onto a segment (both end-point dot-product checks, normal from the segment, normalizevector2d) and returns the signed distance if within the radius, same logic as the ELF sphereintersectline2d."
+0xcdf0,405,lineintersectcircle2d,review,0.85,"Three square roots, six pointers plus a float radius, same shape and size as the ELF lineintersectcircle2d (399 bytes in the ELF)."
 0xd020,128,loadtextfile,anchor,0.975,features
 0xd0c0,69,findstring,callgraph,1.0,votes=12
 0xd110,140,getfloat,anchor,0.773,features
-0xd240,91,,,,
-0xd2a0,123,,,,
-0xd3a0,302,,,,
-0xd680,142,removeflieextentions,anchor,0.635,features
+0xd240,91,getstring,review,0.95,"Copies the parser buffer up to CR/LF or the size limit without skipping the line break, same as the ELF getstring."
+0xd2a0,123,cs_getline,review,0.97,"Copies a line from the parser buffer and then skips the trailing CR/LF characters, same as the ELF cs_getline."
+0xd3a0,302,listfiles,review,0.95,"_findfirst64i32/_findnext64i32 loop collecting files or directories (skipping '.') into 0x40-byte entries with a 0x3ff cap, then qsort, same as the ELF listfiles."
+0xd680,142,removeflieextentions,review,0.95,"Truncates each 0x40-byte filelist entry at the first '.' (unrolled by 4), same as the ELF removeflieextentions."
 0xd710,154,disablesocket,anchor,0.982,features
 0xd860,173,recvpacket,anchor,0.958,features
 0xd910,116,sendpacket,anchor,0.974,features
 0xd990,84,cs_pwrite,callgraph,1.0,votes=48
-0xd9f0,99,,,,
+0xd9f0,99,cs_pread,review,0.95,"Copies param_2*param_3 bytes out of the packet buffer at the byte cursor (0xffff cap, aligns past a partial bit), same as the ELF cs_pread."
 0xda60,191,pbitwrite,callgraph,1.0,votes=430
-0xdb20,218,,,,
+0xdb20,218,pbitread,review,0.95,"Reads param_2 bits from the packet buffer at the byte/bit cursor and advances it, the bit-reader counterpart of pbitwrite (0xda60) and the ELF pbitread."
 0xddb0,24,pbitwritenego,callgraph,1.0,votes=12
-0xddd0,66,,,,
-0xded0,576,createaccount,anchor,0.512,features
+0xddd0,66,pbitreadnego,review,0.93,"Reads n bits through pbitread and returns -1 when all n bits are set, mirror of pbitwritenego (0xddb0) and the ELF pbitreadnego."
+0xded0,576,createaccount,review,0.9,"Looks up the player's account ids in the 0x4c-byte account table, otherwise memsets a new record, copies the 0x18-char name and generates ids with rand, same flow as the ELF createaccount; called by serverrecv."
 0xe2e0,484,loadaccountsserver,anchor,0.836,features
 0xe4d0,3541,ai_playercar,anchor,0.736,features
-0xf2b0,475,area_setblockcolor,anchor,0.57,features
-0xf4a0,376,area_createsector,anchor,0.627,features
+0xf2b0,475,createarea,review,0.95,"Fills the area record (position, orientation, 3 dimensions, scale and 1/scale), frees and mallocs the 4-byte-per-cell chunk grid and resets it to -1, same as the ELF createarea; called by createlevel."
+0xf4a0,376,area_createsector,review,0.93,"Calls area_getnextsector and three memsets to initialise a new sector for an 8x8x8 cell, same as the ELF area_createsector."
 0xf620,194,area_createchunk,callgraph,1.0,votes=6
 0xf6f0,1331,addbeziersurface,callgraph,1.0,votes=152
 0xfc40,1239,addbeziersurfacetexture,callgraph,1.0,votes=18
@@ -149,193 +149,193 @@ rva,size,name,source,confidence,evidence
 0x11d70,486,area_block_addbeam,callgraph,1.0,votes=76
 0x11f70,334,area_block_addoutdoor,callgraph,1.0,votes=6
 0x120c0,266,area_block_addcorner,callgraph,1.0,votes=10
-0x121d0,640,area_interior_getblock,callgraph,0.333,votes=2
-0x12450,595,,,,
-0x126b0,756,,,,
+0x121d0,640,area_interior_createblock,review,0.97,"Writes the interior block with the 0x80000000 flag, copies the 8 texture bytes, fills the multi-cell extents with 0xc0000000 link entries through area_interior_setblock and marks the sector, same as the ELF area_interior_createblock."
+0x12450,595,lineintersectnormalblock,review,0.93,"Calls lineintersecttriangle twice on the cube quad/vertex tables, same callee set as the ELF lineintersectnormalblock; lineintersectarea (0x2c0c0) calls it twice like the ELF."
+0x126b0,756,lineintersectspecblock,review,0.93,"Calls generatetrinormal once and lineintersecttriangle twice, same callee set as the ELF lineintersectspecblock; lineintersectarea (0x2c0c0) calls it four times like the ELF."
 0x129b0,715,createbond,manual,1.0,Checa numofbonds < 0x3fff e grava particle_a/particle_b em bond+0x14/+0x18 (casador dizia createparticle).
-0x12c90,744,servercycle,callgraph,0.333,votes=2
-0x12f80,322,,,,
-0x130d0,881,,,,
-0x13450,2335,setupbuildingtypes,anchor,0.456,features
+0x12c90,744,bondtimetolive,review,0.93,"Decrements the bond time-to-live (stride 0xec, field +8, skipped when >= 0x10000) and deletes expired bonds with deletebond inlined, same as the ELF bondtimetolive; last call of the physics block in dedicatedserverloop."
+0x12f80,322,bond_partpart,review,0.93,"Reads the two particle indices of bond record param_1, computes the spring force along the particle pair and adds equal and opposite accelerations (0x20-byte particle stride), the same computation as the Mac 0.25 bond_partpart that was split out of bondsimulation2; called by bondsimulation2."
+0x130d0,881,bond_bodybody,review,0.85,"Three-index body constraint of the same bond table called by bondsimulation2 right after bond_partpart, matching the Mac 0.25 bond_bodybody (773 bytes) in role and neighbourhood."
+0x13450,2335,setupbuildingtypes,review,0.93,"First of the setup calls in setupgame after the file listing, like the ELF setupbuildingtypes; contains the 'glassonly' string."
 0x13d80,1566,building_load,manual,1.0,String 'data/building/%s.sbb' + fopen + memset. No ELF só building_load chama memset.
 0x143b0,474,createbullet,anchor,0.733,features
-0x14590,99,systemtimer,anchor,1.0,features
+0x14590,99,bullettimetolive,review,0.9,"Called last in the dedicatedserverloop physics block where the ELF calls bullettimetolive, and decrements a time-to-live field in a record array; currently named systemtimer (the real systemtimer is 0x5350)."
 0x14600,155,createcityobject,callgraph,1.0,votes=9
-0x146a0,1833,lineintersectarea,callgraph,0.333,votes=2
-0x14dd0,1757,addvectors,callgraph,0.333,votes=2
-0x154b0,300,city_createelevator,anchor,0.695,features
-0x155e0,1726,setupcityobjecttypes,anchor,0.609,features
+0x146a0,1833,lineintersectcityobject,review,0.85,"Four projectvector, one generatetrinormal, two lineintersecttriangle, four normalizevector and vectorlength calls, the ELF lineintersectcityobject profile; called by lineintersectall and lineintersectlevel together with lineintersectarea (0x2c0c0)."
+0x14dd0,1757,lineintersectcityobjecttype,review,0.88,"Same callee profile as the ELF lineintersectcityobjecttype (projectvector x4, generatetrinormal, lineintersecttriangle x2, normalizevector x4) and called by lineintersectarea (0x2c0c0) exactly like the ELF."
+0x154b0,300,city_createelevator,review,0.93,Called by human_itemsimulation after area_interior_getblocklink where the ELF calls city_createelevator; calls createcityobject and uses the city and debug globals.
+0x155e0,1726,setupcityobjecttypes,review,0.93,"Last call of setupgame like the ELF setupcityobjecttypes, and calls cityobject_addbox many times with the same box tables."
 0x15df0,1327,packorientation,callgraph,1.0,votes=59
-0x16320,857,,,,
-0x16680,130,,,,
-0x16710,114,,,,
+0x16320,857,unpackorientation,review,0.95,"Reads one value with pbitread and normalizes four basis vectors, same as the ELF unpackorientation; called by unpackobjectpacket."
+0x16680,130,packangle,review,0.95,"Converts an angle to a signed fixed-point value scaled by half the bit range over 2*pi (constant 6.28318530718) and calls pbitwrite, same as the ELF packangle; called by serversend."
+0x16710,114,unpackangle,review,0.95,"Reads bits with pbitread and rescales to a signed angle (2*pi constant), inverse of packangle and same as the ELF unpackangle."
 0x16790,158,packposition,callgraph,1.0,votes=38
-0x16860,136,,,,
-0x16960,182,,,,
-0x16a20,386,,,,
-0x16bb0,143,getrandomvector2d,callgraph,1.0,votes=10
-0x16c40,160,,,,
-0x16ce0,194,,,,
-0x16db0,119,scaleaddvectors,callgraph,1.0,votes=36
-0x16e30,219,,,,
+0x16860,136,packscalar,review,0.95,"Packs |x| scaled by (half-range / param) clamped to half-range-1 with a sign bit through pbitwrite, same as the ELF packscalar."
+0x16960,182,playerdeathtax,review,0.97,"Takes a share of cash above 10000 and a tenth of the player stock holdings (also removed from the market) and emits the finance event (0x65f0), the same steps as the ELF playerdeathtax."
+0x16a20,386,playerteamkilltax,review,0.97,"Charges the team-kill penalty (-(damage*100+1) cash, a share of cash and of stock capped at 1.0, health loss in mode 4) and emits createevent_updateplayer (0x64a0) and createevent_updateplayer_finance (0x65f0), the same steps as the ELF playerteamkilltax."
+0x16bb0,143,createevent_bullet,review,0.95,"Event type 0 with two vectors and two ints, called by itemweaponsimulation right after createbullet where the ELF calls createevent_bullet; currently named getrandomvector2d."
+0x16c40,160,createevent_bullethit,review,0.95,"Event type 1 with one vector, an optional second vector (zeroed when NULL) and two ints, same layout as the ELF createevent_bullethit."
+0x16ce0,194,createevent_updateobject,review,0.9,"Event type 4 with three ints and two optional vectors (zeroed when NULL), same layout as the ELF createevent_updateobject."
+0x16db0,119,createevent_sound,review,0.95,"Event type 9 with an id, a vector and two parameters, same as the ELF createevent_sound; currently named scaleaddvectors."
+0x16e30,219,createevent_updateblock_quad,review,0.97,"Event type 0x10 with four packed 16-bit pairs/ints plus two optional vectors, same fields as the ELF createevent_updateblock_quad (8 parameters)."
 0x16f10,3134,packevent,anchor,0.712,features
-0x17b60,2569,,,,
-0x18570,44,testtimer,anchor,0.633,features
+0x17b60,2569,unpackevent,review,0.93,"Decodes each event type with pbitread, cs_pread and one pbitreadnego (0xddd0), same profile as the ELF unpackevent; called only by clientrecv."
+0x18570,44,testtimer,review,0.9,"Calls the gettimeofday emulation (0xb230) and converts the result to a millisecond double (0.001/1000.0 constants), same as the ELF testtimer."
 0x185a0,363,newspaper_load,anchor,0.782,features
-0x18720,335,deletehuman,anchor,0.491,features
+0x18720,335,deletehuman,review,0.93,"Calls item_removehumanlink (0x7e50) and inlines createevent_updatehuman (event type 0x11), the same two callees as the ELF deletehuman; called last by humansimulation."
 0x19060,787,human_calculatelegangles,anchor,0.795,features
 0x19380,649,human_collisionhuman,anchor,0.912,features
-0x19610,2244,negvector,anchor,0.592,features
-0x19ee0,277,,,,
-0x1a000,1790,,,,
-0x1a700,231,,,,
-0x1a7f0,402,,,,
-0x1a990,194,,,,
-0x1aa60,473,calculatebarycentric,callgraph,1.0,votes=12
+0x19610,2244,setupbody,review,0.9,Called by setupgame right after area_createsblocks where the ELF calls setupbody; large table of 0.0625-step float constants (human body model) and no calls.
+0x19ee0,277,createjointbond,review,0.9,"Leaf routine with memset and the 0.0625/0.125 constants, called once by human_createmuscleball like the ELF createjointbond."
+0x1a000,1790,circleintersecttriangle,review,0.9,"Four normalizevector, a crossproduct and three lineintersectplanetwosided calls, called by the circle block/landscape routines where the ELF calls circleintersecttriangle."
+0x1a700,231,sphereintersecttriangle,review,0.93,"Calls lineintersecttriangle and vectordistance, same callee set as the ELF sphereintersecttriangle; called by the sphere-vs-block routines."
+0x1a7f0,402,sphereintersectline,review,0.93,"Two normalizevector calls plus sqrt distances to a segment, same callee profile as the ELF sphereintersectline; called three times by sphereintersecttrianglefull (0x307f0)."
+0x1a990,194,sphereintersectpoint,review,0.97,"If the point is closer than the radius it writes the contact point, the normalized offset and the penetration depth (radius - sqrt distance), same logic as the ELF sphereintersectpoint with vectorlength inlined."
+0x1aa60,473,lineintersectsphere,review,0.95,"Distance-along-ray and perpendicular-distance test of a segment against a sphere (normalizevector, dot products, radius squared check) as in the ELF lineintersectsphere; called once by lineintersectobject like the ELF; currently named calculatebarycentric."
 0x1ac40,1061,getmasterserverip,anchor,0.9,features
 0x1b070,835,createitem,manual,1.0,"Manager (native_sdk/black_market.c) chama com (tipo, pos, vel, rot)."
-0x1b6e0,388,,manual,,"removido: createevent_sound. Liga um item a um osso (item+0x84.., human+0x1d8..). Não é createevent_sound."
+0x1b6e0,388,setitempositionhuman,review,0.9,"Last callee of human_itemsimulation, where the ELF calls setitempositionhuman, and links an item to a human bone (item+0x84.. and human+0x1d8..) as the manual note records."
 0x1b870,435,linkitem,callgraph,1.0,votes=102
-0x1ba30,529,,,,
+0x1ba30,529,addcitystreet,review,0.97,"Compares the intersection deltas to choose a street direction and links the new street index into both intersections (stride 0x68) while raising their width fields, line-for-line the same as the ELF addcitystreet."
 0x1bc50,1397,createlandscape,anchor,0.703,features
-0x1c1d0,1806,,,,
-0x1c8f0,1273,,,,
-0x1cdf0,1226,,,,
-0x1d2c0,230,,,,
-0x1d3b0,278,,,,
-0x1d4d0,711,logic_setteammanager,anchor,0.534,features
+0x1c1d0,1806,lineintersectlandscape,review,0.9,"Uses floor and _ftol2 to walk landscape cells with generatetrinormal x2 and lineintersecttriangle x2, the ELF lineintersectlandscape profile; called by lineintersectlevel."
+0x1c8f0,1273,circleintersectlandscape,review,0.9,"Landscape cell walk (_ftol2 x4, generatetrinormal x2) calling circleintersecttriangle (0x1a000) twice; called by circleintersectlevel (0x4d630) like the ELF circleintersectlandscape."
+0x1cdf0,1226,sphereintersectlandscape,review,0.9,"Landscape cell walk (_ftol2 x4, generatetrinormal x2) calling sphereintersecttriangle twice; called by the level sphere test (0x4d750) like the ELF sphereintersectlandscape."
+0x1d2c0,230,logic_farbslist,review,0.95,"Formats the 'Top 10 list' lines with '%d. %s   $', csradixsort, sprintf_comma and two createevent_message calls, same call profile as the ELF logic_farbslist."
+0x1d3b0,278,logicsimulation_driving,review,0.93,"Checkpoint logic: for each player with a human it tests the remaining checkpoints against a distance threshold (sqrt, inlined vectordistance), sets the checkpoint bitmask and count and bumps a game counter when all are reached, same logic as the ELF logicsimulation_driving."
+0x1d4d0,711,logic_setteammanager,review,0.95,"String '%s is now manager of %s' plus updateiteminfo x4, createitem x2, rotateorientation and createevent_message, same call profile as the ELF logic_setteammanager."
 0x1d7a0,249,logic_gunstore_buy,manual,1.0,Checa num_purchases < 10 e usa menu_building * 0x9dc. O casador dizia createevent_updateplayer_finance. (casador dizia createevent_updateplayer_finance)
-0x1d8a0,307,,,,
-0x1d9e0,287,,,,
-0x1dba0,4599,,,,
-0x1f4a0,4550,net_calcdistancefactor,anchor,0.524,features
+0x1d8a0,307,multiplyquaternion,review,0.9,"307-byte leaf with 9 pointer-indexed floats and no calls, called three times by human_calcarmtorque, which calls multiplyquaternion seven times in the ELF (the rest inlined); the Mac version is 246 bytes."
+0x1d9e0,287,multiply3x3matrices,review,0.93,"Called in bondsimulation2 between resetorientation and geteulerangles2 where the ELF calls multiply3x3matrices; 287 bytes with a /GS cookie, matching the 286-byte Mac multiply3x3matrices; also used by human_calculatearmangles."
+0x1dba0,4599,unpackobjectpacket,review,0.93,"Reads object state with ~42 pbitread calls, rebuilds orientations through the unpackorientation helper (0x16320) and rotateorientation, same profile as the ELF unpackobjectpacket; called only by clientrecv."
+0x1f4a0,4550,packobjectpacket2,review,0.93,"Packs object state with pbitwrite/packposition/packorientation, one csradixsort call and a pow-based distance factor (net_calcdistancefactor inlined), same call profile as the ELF packobjectpacket2."
 0x20680,5028,packobjectpacket,callgraph,1.0,votes=8
-0x21a30,271,,,,
-0x21b40,343,,,,
-0x21e00,960,,,,
-0x223d0,522,,,,
-0x225e0,1292,,,,
-0x22af0,804,lineintersecttriangletwosided,callgraph,1.0,votes=6
+0x21a30,271,getrandomvector2d,review,0.95,"Noise-based random 2D vector ending in normalizevector2d (0xbf60), called last by itemweaponsimulation where the ELF calls getrandomvector2d."
+0x21b40,343,getrandomvector3d,review,0.95,"Noise-based random unit vector ending in normalizevector, called by itemweaponsimulation (first call) and ai_assessthreats exactly where the ELF calls getrandomvector3d."
+0x21e00,960,addobjectrotation,review,0.93,"Loop (unrolled by 4) adding (particle-pos) x axis * scale to each particle's velocity-like vector for all particles of an object, same as the ELF addobjectrotation; called by objectsimulation_heli like the ELF."
+0x223d0,522,getobjectrotation2,review,0.9,"Writes a 3-vector accumulated over the object's particles from cross products with the three axis constants and particle vectors, same signature (out, object, point) and role as the ELF getobjectrotation2; called by humansimulation."
+0x225e0,1292,getobjectrotation3,review,0.85,"(float*, object) routine with a sqrt and /GS cookie called by objectwheelsimulation2 (0x22f90) where the ELF calls getobjectrotation3."
+0x22af0,804,calculatebarycentric,review,0.97,"Calls generatetrinormal and normalizevector and divides three dot products per vertex to return barycentric weights, line-for-line the ELF calculatebarycentric; called twice by lineintersectobject and sphereintersectobject like the ELF; currently named lineintersecttriangletwosided."
 0x22e20,361,applydamageobject,anchor,0.837,features
-0x22f90,4104,,,,
-0x23fa0,319,getenginetorque2,anchor,0.559,features
-0x240e0,3656,object_rotorsimulation,anchor,0.552,features
-0x24f60,2103,objectsimulation_heli,anchor,0.517,features
+0x22f90,4104,objectwheelsimulation2,review,0.85,Called by bondsimulation2 right after rotatevector where the ELF calls objectwheelsimulation2; large function using rotatevector (0xbc50) and a sqrt helper (0x225e0).
+0x23fa0,319,getenginetorque2,review,0.92,"Engine torque curve with the 60.0, 2*pi, 7000.0 and 0.75/2.25/0.625 constants, called by objectenginesimulation2 (0x324c0), same role as the ELF getenginetorque2."
+0x240e0,3656,object_rotorsimulation,review,0.85,"3.6 KB function using atan2, sin, cos and sqrt with no callers, the same dead-code situation as the ELF object_rotorsimulation."
+0x24f60,2103,objectsimulation_heli,review,0.93,"Called by objectsimulation and itself calls normalizevector and addobjectrotation (0x21e00), matching the ELF objectsimulation_heli."
 0x257a0,1737,lineintersectobject,callgraph,1.0,votes=20
-0x25e70,3402,createtrack,anchor,0.569,features
-0x26bc0,489,,,,
-0x26db0,477,,,,
-0x26f90,785,,,,
+0x25e70,3402,createtrack,review,0.93,"Large track builder using _ftol2, normalizevector and sqrt, called only by buildsomeshit and using the numoftracks global like the ELF createtrack."
+0x26bc0,489,lineintersecttrack,review,0.93,"Rejects points farther than a threshold from the track center (stride 0x578), then tests each track triangle with generatetrinormal and lineintersecttriangle and keeps the closest hit, identical to the ELF lineintersecttrack; called by objecttrainsimulation."
+0x26db0,477,lineintersecttrackrail,review,0.88,"Sibling of lineintersecttrack called second by objecttrainsimulation (0x26f90) with the same signature, same pairing and order as the ELF lineintersecttrackrail."
+0x26f90,785,objecttrainsimulation,review,0.9,"Uses the numoftracks global and two segment helpers (0x26bc0, 0x26db0) and is called by objectsimulation after the wheel routines, where the ELF calls objecttrainsimulation."
 0x272b0,1537,objectsimulation_car,anchor,0.77,features
-0x278c0,240,projectvector,callgraph,1.0,votes=12
-0x279b0,477,,,,
-0x27ba0,731,,,,
+0x278c0,240,createparticle,review,0.95,"Returns -1 above 0x3fff particles, memsets a 0xf0-byte particle record, sets time-to-live 0x10000 and copies position/velocity, same as the ELF createparticle; currently named projectvector (the real projectvector is 0xbb00)."
+0x279b0,477,particletimetolive,review,0.93,"Decrements the particle time-to-live (stride 0xf0, field +4) and deletes expired particles, calling deletebond for each attached bond, same as the ELF particletimetolive."
+0x27ba0,731,particlesimulation,review,0.95,"Loop (unrolled by 4) over the particle table (count DAT_1994d730, stride 0xf0) that copies position to the previous-position slot and integrates, same as the ELF particlesimulation; first call of the physics block."
 0x27e80,413,calculatefriction,anchor,0.836,features
 0x28020,365,createplayer,manual,1.0,Manager (ANALISE-NPCS.md) e casador concordam.
 0x28190,151,scenario_armhuman,callgraph,1.0,votes=34
-0x28230,1144,,,,
+0x28230,1144,createmission_threeway,review,0.85,"Mission builder called by createscenario_world that uses rand x7, createitem and createevent_updatemission; the other two mission builders are already identified as createmission_transaction (0x286b0) and createmission_acquisition (0x58ef0)."
 0x286b0,992,createmission_transaction,callgraph,1.0,votes=8
-0x28a90,497,objecttype_addparticle,callgraph,1.0,votes=96
-0x28c90,1637,,,,
-0x29300,741,,,,
+0x28a90,497,objecttype_addwheel,review,0.93,"Appends a wheel record (stride 0x44, counter at objecttype+0x775c) from 12 parameters and computes the wheel position by interpolating between two particles, same as the ELF objecttype_addwheel; currently named objecttype_addparticle (the real one is 0xb040)."
+0x28c90,1637,calculatepointscale,review,0.95,"Four nested loops over the object-type points (param_2 count) that test every 4-point combination with subtract/cross/normalize/dot products, identical structure to the ELF calculatepointscale; called twice by setupobjecttypeweight."
+0x29300,741,objecttype_calcquadweights,review,0.9,"Called 12 times by the train setup (setupobjectypes_train) like the ELF objecttype_calcquadweights, and builds quad weights with generatetrinormal and a square root; size 741 bytes vs 731 in the ELF."
 0x29650,80,optionreadwriteint,callgraph,1.0,votes=168
-0x296f0,320,,,,
-0x29830,320,,,,
+0x296f0,320,area_setblock,review,0.95,"Creates the chunk and sector on demand (area_createchunk, area_createsector), writes the exterior block array and calls area_marksector, same as the ELF area_setblock."
+0x29830,320,area_setblockcolor,review,0.95,"Same as area_setblock but writes the color array (sector+0xa00 ints), same as the ELF area_setblockcolor."
 0x29970,625,area_deleteblock,callgraph,1.0,votes=14
 0x29bf0,2321,area_block_createbuildinginterior,anchor,0.7,features
 0x2a510,6905,area_createinteriorblocks,anchor,0.757,features
-0x2c020,156,,manual,,removido: createevent_bullethit. Confere índices de area_block (0x84) e chama 2 funções. Não é createevent_bullethit.
-0x2c0c0,3279,lineintersectcityobject,callgraph,1.0,votes=14
-0x2cda0,1322,,,,
-0x2d2d0,1304,,,,
-0x2d7f0,756,,,,
-0x2daf0,1221,,,,
-0x2dfc0,845,,,,
-0x2e310,2215,,,,
-0x2efd0,184,,,,
-0x2f090,148,,,,
+0x2c020,156,area_breakblock,review,0.98,"Rejects bad area/index and non-0x80000000 blocks, checks the face index against the block record, emits createevent_updateblock_quad (0x16e30) and calls area_interior_setblock (0x2dc0) with (3<<face)<<16|block, identical to the ELF area_breakblock."
+0x2c0c0,3279,lineintersectarea,review,0.93,"Calls the area getters (0x1850, 0x3030), lineintersectnormalblock (0x12450) x2, lineintersectspecblock (0x126b0) x4 and lineintersectcityobjecttype (0x14dd0), exactly the ELF lineintersectarea call counts; currently named lineintersectcityobject."
+0x2cda0,1322,sphereintersectnormalblock,review,0.92,"Two sphereintersecttriangle and four sphereintersectline calls without generatetrinormal, same callee set as the ELF sphereintersectnormalblock; called twice by sphereintersectarea (0x40aa0)."
+0x2d2d0,1304,sphereintersectspecblock,review,0.92,"Two sphereintersecttriangle, four sphereintersectline and one generatetrinormal, same callee set as the ELF sphereintersectspecblock; called four times by sphereintersectarea (0x40aa0)."
+0x2d7f0,756,circleintersectnormalblock,review,0.92,"Calls circleintersecttriangle (0x1a000) twice on the cube tables, same callee set as the ELF circleintersectnormalblock; called once by circleintersectarea."
+0x2daf0,1221,circleintersectspecblock,review,0.92,"Calls generatetrinormal three times and circleintersecttriangle three times, same callee set as the ELF circleintersectspecblock; called four times by circleintersectarea."
+0x2dfc0,845,sphereintersectcityobjecttype,review,0.92,"Four projectvector, one generatetrinormal and two sphereintersecttriangle calls, same callee set as the ELF sphereintersectcityobjecttype; called once by sphereintersectarea (0x40aa0)."
+0x2e310,2215,clientrecv,review,0.95,"Packet receive loop calling recvpacket twice, pbitread/unpackangle (4 calls) and dispatching to the object-packet (0x1dba0) and event (0x17b60) decoders, same call profile as the ELF clientrecv."
+0x2efd0,184,packpositiondelta,review,0.95,"Loops 3 components writing (a[i]-b[i]) through the packscalar logic with pbitwrite, same as the ELF packpositiondelta."
+0x2f090,148,unpackpositiondelta,review,0.95,"Loops 3 components reading a scalar with pbitread and adding the reference vector, same as the ELF unpackpositiondelta."
 0x2f130,741,lineintersecthuman,anchor,0.733,features
-0x2f420,4778,human_calcarmtorque,anchor,0.692,features
-0x306d0,278,,,,
+0x2f420,4778,human_calcarmtorque,review,0.95,"Calls orientationtoquaternion x6, normalizevector x7, rotatevector x2, projectorientation and multiplyquaternion (0x1d8a0), the same counts as the ELF human_calcarmtorque; called by human_calculatearmangles."
+0x306d0,278,human_createmuscleball,review,0.93,"Calls the joint-bond creator (0x19ee0) once and memsets the muscle record, same shape as the ELF human_createmuscleball; called 8 times by human_buildmuscles."
 0x307f0,695,sphereintersecttrianglefull,anchor,0.792,features
-0x30ab0,237,deleteitem,anchor,0.854,features
+0x30ab0,237,itemtimetolive,review,0.93,"Loops the 0x400 items, decrements the time-to-live field and deletes expired items with deleteitem inlined, called in the physics block slot of the ELF itemtimetolive; currently named deleteitem."
 0x30ba0,850,itemweaponsimulation,callgraph,1.0,votes=6
-0x30f00,1405,,,,
+0x30f00,1405,item_sphereintersect,review,0.88,"Called by item_physicssimulation and itself calls generatetrinormal (0xbb80) and sphereintersecttrianglefull twice over the cube quad/vertex tables, matching the ELF item_sphereintersect."
 0x31480,417,lineintersectall,callgraph,1.0,votes=10
-0x31630,449,,,,
+0x31630,449,lineintersectlevel,review,0.9,"Called repeatedly by humansimulation, bulletsimulation and objectsimulation where the ELF calls lineintersectlevel, and dispatches to the area ray caster (0x1c1d0), lineintersectcityobject and lineintersectarea."
 0x31800,2866,createobject,manual,1.0,Manager (ANALISE-NPCS.md): registro 0x8230.
-0x32340,371,,,,
-0x324c0,1768,,,,
-0x32bb0,1069,getobjectrotation2,callgraph,1.0,votes=8
-0x32fe0,696,buildsomeshit,anchor,0.56,features
-0x33350,542,scenario_createcar,anchor,0.69,features
-0x33570,223,,,,
+0x32340,371,objecttimetolive,review,0.93,"Loops the 0x400 object records (stride 0x8230), decrements the time-to-live at +0x1c unless it is 0xffff or more and deletes expired objects with deleteobject inlined, same as the ELF objecttimetolive."
+0x324c0,1768,objectenginesimulation2,review,0.88,"Last call of bondsimulation2 where the ELF calls objectenginesimulation2, and it calls getenginetorque2 (0x23fa0) twice."
+0x32bb0,1069,sphereintersectobject,review,0.93,"Bounding-box test of point+radius against the object bounds, then per-face generatetrinormal, sphereintersecttrianglefull (0x307f0) and calculatebarycentric (0x22af0) calls, the ELF sphereintersectobject profile; currently named getobjectrotation2 (the real one is 0x223d0)."
+0x32fe0,696,buildsomeshit,review,0.93,"Builds track geometry with sin/cos (0.39269908169875 = pi/8, 32.0) and calls createtrack, called by createlevel right after createlandscape like the ELF buildsomeshit."
+0x33350,542,scenario_createcar,review,0.93,"Calls rotateorientation twice and createobject, called by resetgame twice and scenario_createtraffic2 like the ELF scenario_createcar."
+0x33570,223,servercycle,review,0.97,"Sends the 0x20 master-server heartbeat every 0x400 frames (cs_pwrite + sendpacket) and rebalances per-connection bandwidth (/0x3c), same as the ELF servercycle; called right before serverrecv in dedicatedserverloop."
 0x33650,4615,serverrecv,manual,1.0,"Strings ' Joined' e ' Exited', iguais às do serverrecv do ELF. Usa htonl/ntohl."
-0x34870,918,objecttype_addface,anchor,0.553,features
+0x34870,918,setupobjecttypeweight,review,0.88,"Called once by the helicopter setup and by every car/train setup, and calls the point-scale helper (0x28c90) twice, matching the ELF setupobjecttypeweight call pattern."
 0x34c10,23015,setupobjecttypes_cars,anchor,0.841,features
-0x3a610,2702,setupobjecttypes_helicopters,anchor,0.545,features
-0x3b0c0,7161,setupobjectypes_train,anchor,0.537,features
+0x3a610,2702,setupobjecttypes_helicopters,review,0.95,"Second of the three object-type setup calls in setupgame after the car setup, calls objecttype_addbond (0xb0b0) 4 times and objecttype_addface 13 times like the ELF setupobjecttypes_helicopters."
+0x3b0c0,7161,setupobjectypes_train,review,0.95,Third of the object-type setup calls in setupgame; calls objecttype_calcquadweights (0x29300) 12 times like the ELF setupobjectypes_train.
 0x3ccc0,780,createvehicle,anchor,0.727,features
 0x3cfe0,1298,calculateplayervoice,anchor,0.8,features
-0x3d500,1339,ai_assessthreats,anchor,0.646,features
-0x3da50,1532,area_createblock,anchor,0.456,features
+0x3d500,1339,ai_assessthreats,review,0.93,"Uses vectordistance, lineintersectlevel, scalevector and getrandomvector3d (0x21b40) with dotproduct, the ELF ai_assessthreats callee sequence; called by playerai."
+0x3da50,1532,area_createblock,review,0.97,"Creates the chunk and sector on demand, then six area_getblock/area_setblock pairs and three area_marksector calls, the same call sequence as the ELF area_createblock."
 0x3e070,10783,area_createsblocks,anchor,0.774,features
-0x40aa0,2710,,,,
-0x41550,2187,,,,
+0x40aa0,2710,sphereintersectarea,review,0.93,"Calls the area getters (0x1850, 0x3030), sphereintersectnormalblock x2, sphereintersectspecblock x4 and sphereintersectcityobjecttype x1, exactly the ELF sphereintersectarea call counts."
+0x41550,2187,circleintersectarea,review,0.93,"Uses area_getblock, area_interior_getblock and both texture getters (0x1bc0, 0x3290), circleintersectnormalblock x1 and circleintersectspecblock x4, the ELF circleintersectarea call counts; called by circleintersectlevel."
 0x41de0,19991,bondsimulation2,manual,1.0,"Rótulo de debug 'bondsim'. Maior função do servidor (20 KB), como no ELF (30 KB)."
-0x46c30,8825,building_buildfloorplan,anchor,0.553,features
-0x48ec0,2666,bulletsimulation,anchor,0.616,features
+0x46c30,8825,building_buildfloorplan,review,0.95,"Calls area_deleteblock, area_createblock x2, area_setblockcolor, area_block_createbuildinginterior, area_interior_getblock/createblock/setobject and rotateorientation in the ELF building_buildfloorplan order."
+0x48ec0,2666,bulletsimulation,review,0.95,"Calls lineintersecthuman, lineintersectobject, lineintersectlevel, area_breakblock, createevent_bullethit x3, createevent_updateobject x2, playerteamkilltax x2 and applydamageobject in the ELF bulletsimulation order; called by dedicatedserverloop."
 0x49940,2804,server_playermessage,anchor,0.853,features
 0x4a440,6413,human_calculatearmangles,anchor,0.772,features
-0x4bd60,2482,human_itemsimulation,anchor,0.589,features
-0x4c720,402,,,,
-0x4c8c0,1527,itemlogic,anchor,0.695,features
+0x4bd60,2482,human_itemsimulation,review,0.95,"Calls lineintersectall, area_interior_getblocklink, city_createelevator, pointinsidebase, createevent_updatedoor x2, linkitem, createevent_sound, pointdistanceline x2 and setitempositionhuman in the same order as the ELF human_itemsimulation."
+0x4c720,402,human_buildmuscles,review,0.93,"Calls the muscle-ball builder (0x306d0) eight times, the same shape as the ELF human_buildmuscles (8 x human_createmuscleball); called by createhuman."
+0x4c8c0,1527,itemlogic,review,0.95,"Calls itemweaponsimulation, createevent_updateiteminfo x10, createevent_sound x2, createevent_updateitem and vectordistance, the same callee profile as the ELF itemlogic; called by dedicatedserverloop."
 0x4cee0,1855,item_physicssimulation,callgraph,1.0,votes=14
-0x4d630,277,,,,
-0x4d750,247,crossproduct,callgraph,1.0,votes=8
-0x4d850,433,buildcityinterection,callgraph,0.667,votes=4
-0x4da10,1606,,,,
-0x4e060,106,,,,
-0x4e0d0,490,logic_cardealer_buy,anchor,0.639,features
-0x4e2c0,571,,,,
-0x4e500,661,lineintersectlevel,callgraph,0.333,votes=2
+0x4d630,277,circleintersectlevel,review,0.88,"Called by both wheel collision routines (objectwheelcollision and objectwheelcollision2) where the ELF calls circleintersectlevel, and itself dispatches to the two area circle-intersect routines (0x1c8f0 and 0x41550)."
+0x4d750,247,sphereintersectlevel,review,0.9,"Calls the landscape sphere test (0x1cdf0) and sphereintersectarea (0x40aa0) per area, matching the ELF sphereintersectlevel; currently named crossproduct."
+0x4d850,433,buildcityinterection,review,0.93,Called by createlevel right after buildcitystreet like the ELF; calls area_createblock and the interior setblock helper (0x2f00) four times.
+0x4da10,1606,buildcitystreet,review,0.9,Called by createlevel between building_buildfloorplan and buildcityinterection where the ELF calls buildcitystreet; creates six area blocks via area_createblock and uses city and materiallist.
+0x4e060,106,logic_createcar,review,0.93,"Small wrapper whose only call is createobject, same as the ELF logic_createcar; called by logic_playeractions and the player inventory loader."
+0x4e0d0,490,logic_cardealer_buy,review,0.93,"Calls rotateorientation, createobject, createitem, linkitem, createevent_updateplayer and createevent_updateplayer_finance, same call sequence as the ELF logic_cardealer_buy."
+0x4e2c0,571,objectwheelcollision2,review,0.9,"Calls circleintersectlevel (0x4d630) and normalizevector, same shape as the ELF objectwheelcollision2; called by objectsimulation just before objectwheelcollision."
+0x4e500,661,objectwheelcollision,review,0.9,"Calls circleintersectlevel (0x4d630), a vector rotate (0xbc50) and normalizevector, the same call sequence as the ELF objectwheelcollision; called by objectsimulation."
 0x4e7a0,1413,loadsaveoptions,anchor,0.936,features
 0x4ed30,2482,serversend,callgraph,1.0,votes=10
 0x4f720,2495,playerai,manual,1.0,"Chama ai_assessthreats, ai_playercar, rand e atan2, como o playerai do ELF 0.24c. Chamada pelo dedicatedserverloop. O Mac 0.25 sugeria playersimulation (errado: playersimulation não chama nada)."
-0x500e0,437,,,,
+0x500e0,437,player_loadinventory,review,0.93,"Calls createitem three times, linkitem four times and logic_createcar (0x4e060), same call pattern as the ELF player_loadinventory; called by logicsimulation_round."
 0x502a0,2096,setupgame,anchor,0.797,features
 0x50ae0,1385,createhuman,manual,1.0,"Manager (ANALISE-NPCS.md): registro 0x2B64, vida inicial 100."
 0x51060,12838,humansimulation,anchor,0.703,features
-0x542a0,2971,itemsimulation,anchor,0.605,features
-0x54e40,2217,createlevel,anchor,0.498,features
+0x542a0,2971,itemsimulation,review,0.95,"Calls item_physicssimulation, rotateorientation, lineintersectlevel x2 and calculatefriction, the same callee profile as the ELF itemsimulation; called by dedicatedserverloop."
+0x54e40,2217,createlevel,review,0.95,"Calls createlandscape, buildsomeshit, createarea, city_addintersection, addcitystreet, area_createblock, building_load, building_setupbuild and building_buildfloorplan in the same order as the ELF createlevel; called by resetgame."
 0x55700,4096,logic_playeractions,anchor,0.736,features
 0x56710,7097,objectsimulation,manual,1.0,Rótulo de debug 'objectsim'. ELF usa o rótulo 'object'.
-0x58320,640,scenario_createguards,anchor,0.692,features
-0x585b0,562,,,,
+0x58320,640,scenario_createguards,review,0.93,"Calls createplayer, createhuman, scenario_armhuman and createitem with rand and sprintf, same callee profile as the ELF scenario_createguards; called by createmission_acquisition and resetgame."
+0x585b0,562,scenario_createtraffic2,review,0.9,"Calls createplayer, createevent_updateplayer, scenario_createcar, createhuman and ai_car_nextwaypoint with rand, the same callees as the ELF scenario_createtraffic2."
 0x587f0,1780,scenario_createchase,anchor,0.787,features
 0x58ef0,493,createmission_acquisition,anchor,0.811,features
-0x590f0,6488,resetgame,anchor,0.553,features
+0x590f0,6488,resetgame,review,0.95,"Calls saveaccountsserver, newspaper_load, createlevel, createhuman, createitem/linkitem, createvehicle, createobject, scenario_createguards, scenario_createcar, economy_carmarket/gunmarket and createevent_updateplayer in the ELF resetgame order."
 0x5aa60,1033,createscenario_world,anchor,0.757,features
-0x5ae70,2876,logicsimulation_round,anchor,0.594,features
-0x5b9b0,2996,logicsimulation_world,anchor,0.624,features
-0x5c580,831,logicsimulation,anchor,0.583,features
+0x5ae70,2876,logicsimulation_round,review,0.95,"Calls createhuman, player_loadinventory, createscenario_world, scenario_createtraffic2, createobject x3, createitem x2, player_saveinventory and resetgame in the ELF logicsimulation_round order."
+0x5b9b0,2996,logicsimulation_world,review,0.95,"Calls scenario_createtraffic2, createitem x9, createobject, player_calcassets, saveaccountsserver, resetgame, economy_carmarket/gunmarket, logic_farbslist, createscenario_world, pointinsidebase/pointinsidebasesafe and logic_setteammanager in the ELF logicsimulation_world order; strings 'Goldmen Inc', 'Pentacom', '%s manager: %s'."
+0x5c580,831,logicsimulation,review,0.95,"Calls logic_player, logic_playeractions, resetgame, logicsimulation_round and logicsimulation_world, the same five callees in the same order as the ELF logicsimulation."
 0x5c8d0,1063,dedicatedserverloop,anchor,0.846,features
 0x5cd10,107,getpaths,anchor,0.71,features
 0x5ce18,15,__security_check_cookie,manual,1.0,
-0x5ce50,43,,,,
+0x5ce50,43,__alloca_probe,review,0.98,"MSVC CRT stack probe (touches the stack in 4096-byte steps); Ghidra function-ID match for Visual Studio, and the decompiler shows it inlined into large-frame functions such as 0x3d70."
 0x5ce90,145,_ftol2,manual,1.0,
-0x5cf70,104,,,,
-0x5d08c,345,,,,
-0x5d316,10,,,,
+0x5cf70,104,__aulldiv,review,0.98,"MSVC CRT unsigned 64-bit divide helper (library function matched by Ghidra FID, 4 uint arguments, quotient in EDX:EAX); used by 0xb230 to convert FILETIME to seconds."
+0x5d08c,345,__tmainCRTStartup,review,0.97,"MSVC CRT startup: HeapSetInformation, _amsg_exit, initterm_e/initterm, then calls the game's getpaths and exit; Ghidra FID name ___tmainCRTStartup."
+0x5d316,10,mainCRTStartup,review,0.97,PE entry point: calls __security_init_cookie and then __tmainCRTStartup (Ghidra names it entry).
 0x5d320,262,__report_gsfailure,manual,1.0,
-0x5d436,66,,,,
-0x5d492,152,,,,
-0x5d52a,9,,,,
-0x5d533,23,,,,
-0x5d5b0,53,,,,
-0x5d5f0,68,,,,
-0x5d640,166,,,,
-0x5d710,69,,,,
-0x5d755,20,,,,
-0x5d769,37,,,,
-0x5d7f0,155,,,,
+0x5d436,66,__CxxUnhandledExceptionFilter,review,0.97,"MSVC CRT unhandled C++ exception filter: checks exception code 0xe06d7363 with 3 parameters and the 0x19930520-0x19930522 magic numbers, then calls terminate; Ghidra FID match."
+0x5d492,152,__onexit,review,0.97,"MSVC CRT __onexit: decodes the atexit table with DecodePointer, takes lock 8 and calls __dllonexit, then re-encodes the table; Ghidra FID match for Visual Studio 2010."
+0x5d52a,9,_unlockexit,review,0.8,"Nine-byte funclet that only calls _unlock(8), used as the finally block of __onexit to release the exit lock (CRT _unlockexit)."
+0x5d533,23,_atexit,review,0.97,MSVC CRT atexit wrapper that returns -1 when __onexit returns NULL; Ghidra FID match for Visual Studio 2010.
+0x5d5b0,53,__ValidateImageBase,review,0.97,Checks the MZ (0x5a4d) and PE (0x4550) signatures and the 0x10b optional-header magic; Ghidra FID match for Visual Studio 2008/2010.
+0x5d5f0,68,__FindPESection,review,0.97,Walks the PE section headers looking for the section that contains an RVA; Ghidra FID match for Visual Studio 2010.
+0x5d640,166,__IsNonwritableInCurrentImage,review,0.97,"Validates the image base at 0x400000, finds the section of the target address and returns whether it lacks the writable flag; Ghidra FID match for Visual Studio 2010."
+0x5d710,69,__SEH_prolog4,review,0.97,"MSVC SEH4 prolog: saves EBX/ESI/EDI, XORs the security cookie into the frame and links ExceptionList; Ghidra FID match."
+0x5d755,20,__SEH_epilog4,review,0.97,MSVC SEH4 epilog: restores ExceptionList from the frame; Ghidra FID match.
+0x5d769,37,__except_handler4,review,0.93,"Stub that tail-calls __except_handler4_common with the security cookie address and __security_check_cookie, installed as the SEH4 handler of __IsNonwritableInCurrentImage."
+0x5d7f0,155,__security_init_cookie,review,0.97,"Builds the /GS cookie from GetSystemTimeAsFileTime, GetCurrentProcessId, GetCurrentThreadId, GetTickCount and QueryPerformanceCounter; Ghidra FID name ___security_init_cookie."
