@@ -70,6 +70,7 @@ int main(void)
     g_vals[10] = 0;
     run(&v2, write_b, write_a);
     CHECK(v2.fails == 1, "different value: detected");
+    CHECK(v2.broken == 1, "different value: hook disabled, only the original runs from now on");
     CHECK(g_vals[10] == 7, "different value: final state is the original one");
 
     run(&v3, nothing, write_c_only);

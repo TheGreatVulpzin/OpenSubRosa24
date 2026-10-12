@@ -453,6 +453,13 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
                    detail ? detail : "", ms, g_full ? "full" : "scope");
         if (!ok) {
             v->fails++;
+            /* A confirmed difference: the new version is wrong. From now on only the
+             * original runs (as after a crash). verify_keep=1 in subvulpes.ini keeps the
+             * new version, to collect more differences. */
+            if (!sv_config_int("verify_keep", 0) && !v->broken) {
+                v->broken = 1;
+                sv_log("VERIFY %s: hook disabled after a difference, the original runs from now on", v->name);
+            }
             if (v->fails <= 20)
                 sv_log("VERIFY %s: DIFFERENT (call %ld): %ld bytes, return %s, rand %s%s%s%s%s", v->name,
                        v->calls, diffs, same_return ? "same" : "DIFFERENT", rand_ok ? "same" : "DIFFERENT",

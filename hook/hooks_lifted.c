@@ -1335,6 +1335,38 @@ __declspec(naked) static void th_068d0(void)
 }
 static uint8_t expect_068d0[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
+void __cdecl lf_06b30(void);
+static void (__cdecl *orig_06b30)(void);
+static SvVerify v_06b30 = { "setupitemtypes", -1 };
+static void __cdecl hk_06b30(void)
+{
+    SV_HOOK_VOID(v_06b30, lf_06b30(), orig_06b30(), NULL);
+}
+__declspec(naked) static void th_06b30(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_06b30
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_06b30[5] = { 0x83, 0xec, 0x0c, 0x53, 0x55 };
+
 int __cdecl lf_07b90(int param_1);
 static int (__cdecl *orig_07b90)(int);
 static SvVerify v_07b90 = { "lf_07b90", -1 };
@@ -2072,6 +2104,41 @@ __declspec(naked) static void th_0a2a0(void)
     }
 }
 static uint8_t expect_0a2a0[9] = { 0x83, 0xec, 0x14, 0xdd, 0x05, 0x68, 0xe6, 0x45, 0x00 };
+
+void __cdecl lf_0a7a0(float * param_1, float * param_2);
+static void (__cdecl *orig_0a7a0)(float *, float *);
+static SvVerify v_0a7a0 = { "orientationtoquaternion", -1 };
+static void __cdecl hk_0a7a0(float * param_1, float * param_2)
+{
+    SV_HOOK_VOID(v_0a7a0, lf_0a7a0(param_1, param_2), orig_0a7a0(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_0a7a0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_0a7a0
+        add esp, 8
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_0a7a0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
 void __cdecl lf_0a930(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0a930)(float *, float *, float *);
@@ -3411,37 +3478,6 @@ __declspec(naked) static void th_0d0c0(void)
 }
 static uint8_t expect_0d0c0[7] = { 0x53, 0x8b, 0x1d, 0x64, 0x2d, 0x12, 0x14 };
 
-undefined4 __cdecl lf_0d110(void);
-static undefined4 (__cdecl *orig_0d110)(void);
-static SvVerify v_0d110 = { "getfloat", -1 };
-static undefined4 __cdecl hk_0d110(void)
-{
-    SV_HOOK_RET(undefined4, v_0d110, lf_0d110(), orig_0d110(), NULL);
-}
-__declspec(naked) static void th_0d110(void)
-{
-    __asm {
-        push ebp
-        mov ebp, esp
-        and esp, -16
-        sub esp, 512
-        fxsave [esp]
-        mov [esp + 464], eax
-        mov [esp + 468], ecx
-        mov [esp + 472], edx
-        fninit
-        fldcw word ptr [esp]
-        call hk_0d110
-        fxrstor [esp]
-        mov ecx, [esp + 468]
-        mov edx, [esp + 472]
-        mov esp, ebp
-        pop ebp
-        ret
-    }
-}
-static uint8_t expect_0d110[6] = { 0x51, 0xa1, 0x60, 0x2d, 0x12, 0x14 };
-
 void __cdecl lf_0d240(undefined1 * param_1, int param_2);
 static void (__cdecl *orig_0d240)(undefined1 *, int);
 static SvVerify v_0d240 = { "lf_0d240", -1 };
@@ -3752,12 +3788,12 @@ __declspec(naked) static void th_0ddd0(void)
 }
 static uint8_t expect_0ddd0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-void __cdecl lf_0ded0(int param_1);
-static void (__cdecl *orig_0ded0)(int);
+int __cdecl lf_0ded0(int param_1);
+static int (__cdecl *orig_0ded0)(int);
 static SvVerify v_0ded0 = { "createaccount", -1 };
-static void __cdecl hk_0ded0(int param_1)
+static int __cdecl hk_0ded0(int param_1)
 {
-    SV_HOOK_VOID(v_0ded0, lf_0ded0(param_1), orig_0ded0(param_1), NULL);
+    SV_HOOK_RET(int, v_0ded0, lf_0ded0(param_1), orig_0ded0(param_1), NULL);
 }
 __declspec(naked) static void th_0ded0(void)
 {
@@ -3776,7 +3812,6 @@ __declspec(naked) static void th_0ded0(void)
         call hk_0ded0
         add esp, 4
         fxrstor [esp]
-        mov eax, [esp + 464]
         mov ecx, [esp + 468]
         mov edx, [esp + 472]
         mov esp, ebp
@@ -3893,6 +3928,86 @@ __declspec(naked) static void th_0f620(void)
     }
 }
 static uint8_t expect_0f620[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
+
+void __cdecl lf_0f6f0(int param_1, int param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7);
+static void (__cdecl *orig_0f6f0)(int, int, int, undefined4, int, undefined4, undefined4);
+static SvVerify v_0f6f0 = { "addbeziersurface", -1 };
+static void __cdecl hk_0f6f0(int param_1, int param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7)
+{
+    SV_HOOK_VOID(v_0f6f0, lf_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+}
+__declspec(naked) static void th_0f6f0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_0f6f0
+        add esp, 28
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_0f6f0[8] = { 0x83, 0xec, 0x40, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
+
+void __cdecl lf_0fc40(int param_1, undefined4 param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7);
+static void (__cdecl *orig_0fc40)(int, undefined4, int, undefined4, int, undefined4, undefined4);
+static SvVerify v_0fc40 = { "addbeziersurfacetexture", -1 };
+static void __cdecl hk_0fc40(int param_1, undefined4 param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7)
+{
+    SV_HOOK_VOID(v_0fc40, lf_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+}
+__declspec(naked) static void th_0fc40(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_0fc40
+        add esp, 28
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_0fc40[8] = { 0x83, 0xec, 0x3c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
 void __cdecl lf_10140(int param_1, int param_2, int param_3, int param_4, int param_5);
 static void (__cdecl *orig_10140)(int, int, int, int, int);
@@ -4487,6 +4602,38 @@ __declspec(naked) static void th_130d0(void)
 }
 static uint8_t expect_130d0[7] = { 0x83, 0xec, 0x3c, 0x8b, 0x54, 0x24, 0x40 };
 
+void __cdecl lf_13450(void);
+static void (__cdecl *orig_13450)(void);
+static SvVerify v_13450 = { "setupbuildingtypes", -1 };
+static void __cdecl hk_13450(void)
+{
+    SV_HOOK_VOID(v_13450, lf_13450(), orig_13450(), NULL);
+}
+__declspec(naked) static void th_13450(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_13450
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_13450[7] = { 0xd9, 0xe8, 0xb8, 0x28, 0x03, 0x4d, 0x09 };
+
 int __cdecl lf_143b0(int param_1, undefined4 * param_2, float * param_3, undefined4 param_4);
 static int (__cdecl *orig_143b0)(int, undefined4 *, float *, undefined4);
 static SvVerify v_143b0 = { "createbullet", -1 };
@@ -4589,6 +4736,84 @@ __declspec(naked) static void th_14600(void)
     }
 }
 static uint8_t expect_14600[8] = { 0x56, 0x33, 0xf6, 0xb8, 0x20, 0x40, 0x22, 0x16 };
+
+undefined4 __cdecl lf_146a0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float * param_6);
+static undefined4 (__cdecl *orig_146a0)(float *, undefined4 *, float *, int, float *, float *);
+static SvVerify v_146a0 = { "lineintersectarea", -1 };
+static undefined4 __cdecl hk_146a0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float * param_6)
+{
+    SV_HOOK_RET(undefined4, v_146a0, lf_146a0(param_1, param_2, param_3, param_4, param_5, param_6), orig_146a0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+}
+__declspec(naked) static void th_146a0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_146a0
+        add esp, 24
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_146a0[6] = { 0x81, 0xec, 0x84, 0x00, 0x00, 0x00 };
+
+undefined4 __cdecl lf_14dd0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, undefined4 param_6, float * param_7, float * param_8);
+static undefined4 (__cdecl *orig_14dd0)(float *, undefined4 *, float *, int, float *, undefined4, float *, float *);
+static SvVerify v_14dd0 = { "addvectors", -1 };
+static undefined4 __cdecl hk_14dd0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, undefined4 param_6, float * param_7, float * param_8)
+{
+    SV_HOOK_RET(undefined4, v_14dd0, lf_14dd0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_14dd0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+}
+__declspec(naked) static void th_14dd0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_14dd0
+        add esp, 32
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_14dd0[6] = { 0x81, 0xec, 0x84, 0x00, 0x00, 0x00 };
 
 int __cdecl lf_154b0(float * param_1);
 static int (__cdecl *orig_154b0)(float *);
@@ -5226,6 +5451,40 @@ __declspec(naked) static void th_19060(void)
 }
 static uint8_t expect_19060[5] = { 0x83, 0xec, 0x38, 0x56, 0x57 };
 
+void __cdecl lf_19380(float param_1);
+static void (__cdecl *orig_19380)(float);
+static SvVerify v_19380 = { "human_collisionhuman", -1 };
+static void __cdecl hk_19380(float param_1)
+{
+    SV_HOOK_VOID(v_19380, lf_19380(param_1), orig_19380(param_1), NULL);
+}
+__declspec(naked) static void th_19380(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 8]
+        call hk_19380
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_19380[8] = { 0x83, 0xec, 0x1c, 0x55, 0x8b, 0x6c, 0x24, 0x24 };
+
 void __cdecl lf_19610(void);
 static void (__cdecl *orig_19610)(void);
 static SvVerify v_19610 = { "negvector", -1 };
@@ -5293,6 +5552,87 @@ __declspec(naked) static void th_19ee0(void)
     }
 }
 static uint8_t expect_19ee0[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0x64, 0x2b, 0x00, 0x00 };
+
+undefined4 __cdecl lf_1a000(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, float * param_7, float * param_8, float * param_9);
+static undefined4 (__cdecl *orig_1a000)(float *, float *, float *, float *, float *, float, float *, float *, float *);
+static SvVerify v_1a000 = { "lf_1a000", -1 };
+static undefined4 __cdecl hk_1a000(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, float * param_7, float * param_8, float * param_9)
+{
+    SV_HOOK_RET(undefined4, v_1a000, lf_1a000(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_1a000(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
+}
+__declspec(naked) static void th_1a000(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 40]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_1a000
+        add esp, 36
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_1a000[7] = { 0x83, 0xec, 0x38, 0x8b, 0x44, 0x24, 0x44 };
+
+undefined4 __cdecl lf_1a700(undefined4 param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8);
+static undefined4 (__cdecl *orig_1a700)(undefined4, float *, float *, float *, float, float *, undefined4, undefined4);
+static SvVerify v_1a700 = { "lf_1a700", -1 };
+static undefined4 __cdecl hk_1a700(undefined4 param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8)
+{
+    SV_HOOK_RET(undefined4, v_1a700, lf_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+}
+__declspec(naked) static void th_1a700(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_1a700
+        add esp, 32
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_1a700[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x54, 0x24, 0x24 };
 
 undefined4 __cdecl lf_1a7f0(float * param_1, undefined4 param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7);
 static undefined4 (__cdecl *orig_1a7f0)(float *, undefined4, float *, float *, float, float *, float *);
@@ -5555,6 +5895,38 @@ __declspec(naked) static void th_1ba30(void)
 }
 static uint8_t expect_1ba30[5] = { 0x53, 0x8b, 0x5c, 0x24, 0x08 };
 
+void __cdecl lf_1bc50(void);
+static void (__cdecl *orig_1bc50)(void);
+static SvVerify v_1bc50 = { "createlandscape", -1 };
+static void __cdecl hk_1bc50(void)
+{
+    SV_HOOK_VOID(v_1bc50, lf_1bc50(), orig_1bc50(), NULL);
+}
+__declspec(naked) static void th_1bc50(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_1bc50
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_1bc50[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
+
 void __cdecl lf_1d2c0(int param_1);
 static void (__cdecl *orig_1d2c0)(int);
 static SvVerify v_1d2c0 = { "lf_1d2c0", -1 };
@@ -5620,6 +5992,41 @@ __declspec(naked) static void th_1d3b0(void)
     }
 }
 static uint8_t expect_1d3b0[5] = { 0x83, 0xec, 0x18, 0x53, 0x55 };
+
+void __cdecl lf_1d4d0(float param_1, int param_2);
+static void (__cdecl *orig_1d4d0)(float, int);
+static SvVerify v_1d4d0 = { "logic_setteammanager", -1 };
+static void __cdecl hk_1d4d0(float param_1, int param_2)
+{
+    SV_HOOK_VOID(v_1d4d0, lf_1d4d0(param_1, param_2), orig_1d4d0(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_1d4d0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_1d4d0
+        add esp, 8
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_1d4d0[8] = { 0x83, 0xec, 0x3c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
 void __cdecl lf_1d7a0(int param_1, int param_2);
 static void (__cdecl *orig_1d7a0)(int, int);
@@ -6150,6 +6557,113 @@ __declspec(naked) static void th_257a0(void)
     }
 }
 static uint8_t expect_257a0[7] = { 0x83, 0xec, 0x50, 0x8b, 0x4c, 0x24, 0x54 };
+
+void __cdecl lf_25e70(int param_1, float * param_2, float param_3, float param_4);
+static void (__cdecl *orig_25e70)(int, float *, float, float);
+static SvVerify v_25e70 = { "createtrack", -1 };
+static void __cdecl hk_25e70(int param_1, float * param_2, float param_3, float param_4)
+{
+    SV_HOOK_VOID(v_25e70, lf_25e70(param_1, param_2, param_3, param_4), orig_25e70(param_1, param_2, param_3, param_4), NULL);
+}
+__declspec(naked) static void th_25e70(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_25e70
+        add esp, 16
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_25e70[7] = { 0x8b, 0x44, 0x24, 0x04, 0x83, 0xec, 0x58 };
+
+undefined4 __cdecl lf_26bc0(float * param_1, undefined4 param_2, int param_3);
+static undefined4 (__cdecl *orig_26bc0)(float *, undefined4, int);
+static SvVerify v_26bc0 = { "lf_26bc0", -1 };
+static undefined4 __cdecl hk_26bc0(float * param_1, undefined4 param_2, int param_3)
+{
+    SV_HOOK_RET(undefined4, v_26bc0, lf_26bc0(param_1, param_2, param_3), orig_26bc0(param_1, param_2, param_3), NULL);
+}
+__declspec(naked) static void th_26bc0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_26bc0
+        add esp, 12
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_26bc0[8] = { 0x83, 0xec, 0x3c, 0x53, 0x8b, 0x5c, 0x24, 0x44 };
+
+undefined4 __cdecl lf_26db0(float * param_1, undefined4 param_2, int param_3);
+static undefined4 (__cdecl *orig_26db0)(float *, undefined4, int);
+static SvVerify v_26db0 = { "lf_26db0", -1 };
+static undefined4 __cdecl hk_26db0(float * param_1, undefined4 param_2, int param_3)
+{
+    SV_HOOK_RET(undefined4, v_26db0, lf_26db0(param_1, param_2, param_3), orig_26db0(param_1, param_2, param_3), NULL);
+}
+__declspec(naked) static void th_26db0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_26db0
+        add esp, 12
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_26db0[8] = { 0x83, 0xec, 0x3c, 0x53, 0x8b, 0x5c, 0x24, 0x44 };
 
 void __cdecl lf_26f90(int param_1);
 static void (__cdecl *orig_26f90)(int);
@@ -6733,6 +7247,46 @@ __declspec(naked) static void th_2c020(void)
 }
 static uint8_t expect_2c020[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
+undefined4 __cdecl lf_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, uint param_7, float param_8);
+static undefined4 (__cdecl *orig_2cda0)(float *, float *, float *, float *, undefined4, int *, uint, float);
+static SvVerify v_2cda0 = { "lf_2cda0", -1 };
+static undefined4 __cdecl hk_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, uint param_7, float param_8)
+{
+    SV_HOOK_RET(undefined4, v_2cda0, lf_2cda0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2cda0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+}
+__declspec(naked) static void th_2cda0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_2cda0
+        add esp, 32
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_2cda0[7] = { 0x83, 0xec, 0x60, 0x8b, 0x44, 0x24, 0x6c };
+
 undefined4 __cdecl lf_2d2d0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, float param_7, float param_8);
 static undefined4 (__cdecl *orig_2d2d0)(float *, float *, float *, float *, undefined4, int *, float, float);
 static SvVerify v_2d2d0 = { "lf_2d2d0", -1 };
@@ -6772,6 +7326,47 @@ __declspec(naked) static void th_2d2d0(void)
     }
 }
 static uint8_t expect_2d2d0[9] = { 0x83, 0xec, 0x60, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
+
+undefined4 __cdecl lf_2d7f0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, uint param_8, float param_9);
+static undefined4 (__cdecl *orig_2d7f0)(undefined4 *, undefined4 *, float *, undefined4, undefined4, undefined4, int *, uint, float);
+static SvVerify v_2d7f0 = { "lf_2d7f0", -1 };
+static undefined4 __cdecl hk_2d7f0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, uint param_8, float param_9)
+{
+    SV_HOOK_RET(undefined4, v_2d7f0, lf_2d7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_2d7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
+}
+__declspec(naked) static void th_2d7f0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 40]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_2d7f0
+        add esp, 36
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_2d7f0[7] = { 0x83, 0xec, 0x58, 0x8b, 0x44, 0x24, 0x64 };
 
 undefined4 __cdecl lf_2daf0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, float param_8, float param_9);
 static undefined4 (__cdecl *orig_2daf0)(undefined4 *, undefined4 *, float *, undefined4, undefined4, undefined4, int *, float, float);
@@ -6964,6 +7559,40 @@ __declspec(naked) static void th_2f130(void)
 }
 static uint8_t expect_2f130[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
+void __cdecl lf_2f420(int param_1);
+static void (__cdecl *orig_2f420)(int);
+static SvVerify v_2f420 = { "human_calcarmtorque", -1 };
+static void __cdecl hk_2f420(int param_1)
+{
+    SV_HOOK_VOID(v_2f420, lf_2f420(param_1), orig_2f420(param_1), NULL);
+}
+__declspec(naked) static void th_2f420(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 8]
+        call hk_2f420
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_2f420[6] = { 0x81, 0xec, 0x20, 0x01, 0x00, 0x00 };
+
 void __cdecl lf_306d0(int param_1, undefined4 param_2, int param_3, undefined4 * param_4);
 static void (__cdecl *orig_306d0)(int, undefined4, int, undefined4 *);
 static SvVerify v_306d0 = { "lf_306d0", -1 };
@@ -7000,6 +7629,46 @@ __declspec(naked) static void th_306d0(void)
     }
 }
 static uint8_t expect_306d0[5] = { 0x8b, 0x44, 0x24, 0x08, 0x53 };
+
+undefined4 __cdecl lf_307f0(undefined4 * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8);
+static undefined4 (__cdecl *orig_307f0)(undefined4 *, float *, float *, float *, float, float *, undefined4, undefined4);
+static SvVerify v_307f0 = { "sphereintersecttrianglefull", -1 };
+static undefined4 __cdecl hk_307f0(undefined4 * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8)
+{
+    SV_HOOK_RET(undefined4, v_307f0, lf_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+}
+__declspec(naked) static void th_307f0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_307f0
+        add esp, 32
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_307f0[7] = { 0x83, 0xec, 0x24, 0x8b, 0x44, 0x24, 0x30 };
 
 void __cdecl lf_30ab0(void);
 static void (__cdecl *orig_30ab0)(void);
@@ -7102,6 +7771,75 @@ __declspec(naked) static void th_30f00(void)
 }
 static uint8_t expect_30f00[9] = { 0x83, 0xec, 0x50, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
+undefined4 __cdecl lf_31480(undefined4 param_1, undefined4 param_2);
+static undefined4 (__cdecl *orig_31480)(undefined4, undefined4);
+static SvVerify v_31480 = { "lineintersectall", -1 };
+static undefined4 __cdecl hk_31480(undefined4 param_1, undefined4 param_2)
+{
+    SV_HOOK_RET(undefined4, v_31480, lf_31480(param_1, param_2), orig_31480(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_31480(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_31480
+        add esp, 8
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_31480[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
+
+undefined4 __cdecl lf_31630(undefined4 param_1, undefined4 param_2, int param_3);
+static undefined4 (__cdecl *orig_31630)(undefined4, undefined4, int);
+static SvVerify v_31630 = { "lf_31630", -1 };
+static undefined4 __cdecl hk_31630(undefined4 param_1, undefined4 param_2, int param_3)
+{
+    SV_HOOK_RET(undefined4, v_31630, lf_31630(param_1, param_2, param_3), orig_31630(param_1, param_2, param_3), NULL);
+}
+__declspec(naked) static void th_31630(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_31630
+        add esp, 12
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_31630[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
+
 int __cdecl lf_31800(int param_1, float * param_2, undefined4 param_3, float * param_4, undefined4 param_5);
 static int (__cdecl *orig_31800)(int, float *, undefined4, float *, undefined4);
 static SvVerify v_31800 = { "createobject", -1 };
@@ -7170,6 +7908,38 @@ __declspec(naked) static void th_32340(void)
     }
 }
 static uint8_t expect_32340[5] = { 0xd9, 0xee, 0x53, 0x55, 0x56 };
+
+void __cdecl lf_324c0(void);
+static void (__cdecl *orig_324c0)(void);
+static SvVerify v_324c0 = { "lf_324c0", -1 };
+static void __cdecl hk_324c0(void)
+{
+    SV_HOOK_VOID(v_324c0, lf_324c0(), orig_324c0(), NULL);
+}
+__declspec(naked) static void th_324c0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_324c0
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_324c0[6] = { 0xdd, 0x05, 0xf8, 0xe6, 0x45, 0x00 };
 
 undefined4 __cdecl lf_32bb0(int param_1, float * param_2, float param_3);
 static undefined4 (__cdecl *orig_32bb0)(int, float *, float);
@@ -7312,6 +8082,70 @@ __declspec(naked) static void th_34870(void)
     }
 }
 static uint8_t expect_34870[5] = { 0x83, 0xec, 0x3c, 0xd9, 0xee };
+
+void __cdecl lf_34c10(void);
+static void (__cdecl *orig_34c10)(void);
+static SvVerify v_34c10 = { "setupobjecttypes_cars", -1 };
+static void __cdecl hk_34c10(void)
+{
+    SV_HOOK_VOID(v_34c10, lf_34c10(), orig_34c10(), NULL);
+}
+__declspec(naked) static void th_34c10(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_34c10
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_34c10[6] = { 0x81, 0xec, 0x88, 0x00, 0x00, 0x00 };
+
+void __cdecl lf_3b0c0(void);
+static void (__cdecl *orig_3b0c0)(void);
+static SvVerify v_3b0c0 = { "setupobjectypes_train", -1 };
+static void __cdecl hk_3b0c0(void)
+{
+    SV_HOOK_VOID(v_3b0c0, lf_3b0c0(), orig_3b0c0(), NULL);
+}
+__declspec(naked) static void th_3b0c0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_3b0c0
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_3b0c0[6] = { 0x81, 0xec, 0xf4, 0x00, 0x00, 0x00 };
 
 int __cdecl lf_3ccc0(int param_1, float * param_2, undefined4 * param_3);
 static int (__cdecl *orig_3ccc0)(int, float *, undefined4 *);
@@ -7557,6 +8391,75 @@ __declspec(naked) static void th_4cee0(void)
 }
 static uint8_t expect_4cee0[5] = { 0x83, 0xec, 0x2c, 0x53, 0x55 };
 
+undefined4 __cdecl lf_4d630(undefined4 param_1, undefined4 param_2, undefined4 param_3);
+static undefined4 (__cdecl *orig_4d630)(undefined4, undefined4, undefined4);
+static SvVerify v_4d630 = { "lf_4d630", -1 };
+static undefined4 __cdecl hk_4d630(undefined4 param_1, undefined4 param_2, undefined4 param_3)
+{
+    SV_HOOK_RET(undefined4, v_4d630, lf_4d630(param_1, param_2, param_3), orig_4d630(param_1, param_2, param_3), NULL);
+}
+__declspec(naked) static void th_4d630(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_4d630
+        add esp, 12
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_4d630[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
+
+undefined4 __cdecl lf_4d750(undefined4 param_1, undefined4 param_2);
+static undefined4 (__cdecl *orig_4d750)(undefined4, undefined4);
+static SvVerify v_4d750 = { "crossproduct", -1 };
+static undefined4 __cdecl hk_4d750(undefined4 param_1, undefined4 param_2)
+{
+    SV_HOOK_RET(undefined4, v_4d750, lf_4d750(param_1, param_2), orig_4d750(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_4d750(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_4d750
+        add esp, 8
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_4d750[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
+
 void __cdecl lf_4d850(int param_1);
 static void (__cdecl *orig_4d850)(int);
 static SvVerify v_4d850 = { "buildcityinterection", -1 };
@@ -7765,6 +8668,40 @@ __declspec(naked) static void th_4e500(void)
 }
 static uint8_t expect_4e500[5] = { 0x83, 0xec, 0x1c, 0x53, 0x55 };
 
+void __cdecl lf_4f720(undefined4 * param_1);
+static void (__cdecl *orig_4f720)(undefined4 *);
+static SvVerify v_4f720 = { "playerai", -1 };
+static void __cdecl hk_4f720(undefined4 * param_1)
+{
+    SV_HOOK_VOID(v_4f720, lf_4f720(param_1), orig_4f720(param_1), NULL);
+}
+__declspec(naked) static void th_4f720(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 8]
+        call hk_4f720
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_4f720[8] = { 0x83, 0xec, 0x5c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
+
 void __cdecl lf_500e0(int param_1);
 static void (__cdecl *orig_500e0)(int);
 static SvVerify v_500e0 = { "lf_500e0", -1 };
@@ -7833,6 +8770,72 @@ __declspec(naked) static void th_50ae0(void)
     }
 }
 static uint8_t expect_50ae0[5] = { 0x83, 0xec, 0x1c, 0x53, 0x55 };
+
+void __cdecl lf_542a0(void);
+static void (__cdecl *orig_542a0)(void);
+static SvVerify v_542a0 = { "itemsimulation", -1 };
+static void __cdecl hk_542a0(void)
+{
+    SV_HOOK_VOID(v_542a0, lf_542a0(), orig_542a0(), NULL);
+}
+__declspec(naked) static void th_542a0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        call hk_542a0
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_542a0[8] = { 0x83, 0xec, 0x5c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
+
+void __cdecl lf_55700(int param_1);
+static void (__cdecl *orig_55700)(int);
+static SvVerify v_55700 = { "logic_playeractions", -1 };
+static void __cdecl hk_55700(int param_1)
+{
+    SV_HOOK_VOID(v_55700, lf_55700(param_1), orig_55700(param_1), NULL);
+}
+__declspec(naked) static void th_55700(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        push dword ptr [ebp + 8]
+        call hk_55700
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_55700[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
 void __cdecl lf_5aa60(void);
 static void (__cdecl *orig_5aa60)(void);
@@ -7945,6 +8948,7 @@ static SvHook g_lifted[] = {
     { "lf_065f0", 0x65f0, (void *)th_065f0, 7, expect_065f0, mask_all, (void **)&orig_065f0, 0, 0 },
     { "playerdebt", 0x6840, (void *)th_06840, 7, expect_06840, mask_all, (void **)&orig_06840, 0, 0 },
     { "resetorientation", 0x68d0, (void *)th_068d0, 7, expect_068d0, mask_all, (void **)&orig_068d0, 0, 0 },
+    { "setupitemtypes", 0x6b30, (void *)th_06b30, 5, expect_06b30, mask_all, (void **)&orig_06b30, 0, 0 },
     { "lf_07b90", 0x7b90, (void *)th_07b90, 7, expect_07b90, mask_all, (void **)&orig_07b90, 0, 0 },
     { "item_removebill", 0x7c40, (void *)th_07c40, 10, expect_07c40, mask_all, (void **)&orig_07c40, 0, 0 },
     { "lf_07ce0", 0x7ce0, (void *)th_07ce0, 5, expect_07ce0, mask_all, (void **)&orig_07ce0, 0, 0 },
@@ -7966,6 +8970,7 @@ static SvHook g_lifted[] = {
     { "lf_09be0", 0x9be0, (void *)th_09be0, 7, expect_09be0, mask_all, (void **)&orig_09be0, 0, 0 },
     { "lf_0a1b0", 0xa1b0, (void *)th_0a1b0, 6, expect_0a1b0, mask_all, (void **)&orig_0a1b0, 0, 0 },
     { "playersimulation", 0xa2a0, (void *)th_0a2a0, 9, expect_0a2a0, mask_all, (void **)&orig_0a2a0, 0, 0 },
+    { "orientationtoquaternion", 0xa7a0, (void *)th_0a7a0, 5, expect_0a7a0, mask_all, (void **)&orig_0a7a0, 0, 0 },
     { "projectorientation", 0xa930, (void *)th_0a930, 7, expect_0a930, mask_all, (void **)&orig_0a930, 0, 0 },
     { "scenario_getnumofmissions", 0xaa80, (void *)th_0aa80, 10, expect_0aa80, mask_all, (void **)&orig_0aa80, 0, 0 },
     { "logic_farbslist", 0xab20, (void *)th_0ab20, 5, expect_0ab20, mask_all, (void **)&orig_0ab20, 0, 0 },
@@ -8003,7 +9008,6 @@ static SvHook g_lifted[] = {
     { "lf_0cca0", 0xcca0, (void *)th_0cca0, 7, expect_0cca0, mask_all, (void **)&orig_0cca0, 0, 0 },
     { "lf_0cdf0", 0xcdf0, (void *)th_0cdf0, 7, expect_0cdf0, mask_all, (void **)&orig_0cdf0, 0, 0 },
     { "findstring", 0xd0c0, (void *)th_0d0c0, 7, expect_0d0c0, mask_all, (void **)&orig_0d0c0, 0, 0 },
-    { "getfloat", 0xd110, (void *)th_0d110, 6, expect_0d110, mask_all, (void **)&orig_0d110, 0, 0 },
     { "lf_0d240", 0xd240, (void *)th_0d240, 6, expect_0d240, mask_all, (void **)&orig_0d240, 0, 0 },
     { "lf_0d2a0", 0xd2a0, (void *)th_0d2a0, 5, expect_0d2a0, mask_all, (void **)&orig_0d2a0, 0, 0 },
     { "removeflieextentions", 0xd680, (void *)th_0d680, 6, expect_0d680, mask_all, (void **)&orig_0d680, 0, 0 },
@@ -8017,6 +9021,8 @@ static SvHook g_lifted[] = {
     { "ai_playercar", 0xe4d0, (void *)th_0e4d0, 7, expect_0e4d0, mask_all, (void **)&orig_0e4d0, 0, 0 },
     { "area_createsector", 0xf4a0, (void *)th_0f4a0, 5, expect_0f4a0, mask_all, (void **)&orig_0f4a0, 0, 0 },
     { "area_createchunk", 0xf620, (void *)th_0f620, 7, expect_0f620, mask_all, (void **)&orig_0f620, 0, 0 },
+    { "addbeziersurface", 0xf6f0, (void *)th_0f6f0, 8, expect_0f6f0, mask_all, (void **)&orig_0f6f0, 0, 0 },
+    { "addbeziersurfacetexture", 0xfc40, (void *)th_0fc40, 8, expect_0fc40, mask_all, (void **)&orig_0fc40, 0, 0 },
     { "area_block_addwindowhorizontal", 0x10140, (void *)th_10140, 8, expect_10140, mask_all, (void **)&orig_10140, 0, 0 },
     { "area_block_addwindowvertical", 0x105c0, (void *)th_105c0, 8, expect_105c0, mask_all, (void **)&orig_105c0, 0, 0 },
     { "area_block_addbox", 0x10950, (void *)th_10950, 7, expect_10950, mask_all, (void **)&orig_10950, 0, 0 },
@@ -8033,9 +9039,12 @@ static SvHook g_lifted[] = {
     { "servercycle", 0x12c90, (void *)th_12c90, 10, expect_12c90, mask_all, (void **)&orig_12c90, 0, 0 },
     { "lf_12f80", 0x12f80, (void *)th_12f80, 7, expect_12f80, mask_all, (void **)&orig_12f80, 0, 0 },
     { "lf_130d0", 0x130d0, (void *)th_130d0, 7, expect_130d0, mask_all, (void **)&orig_130d0, 0, 0 },
+    { "setupbuildingtypes", 0x13450, (void *)th_13450, 7, expect_13450, mask_all, (void **)&orig_13450, 0, 0 },
     { "createbullet", 0x143b0, (void *)th_143b0, 7, expect_143b0, mask_all, (void **)&orig_143b0, 0, 0 },
     { "systemtimer", 0x14590, (void *)th_14590, 7, expect_14590, mask_all, (void **)&orig_14590, 0, 0 },
     { "createcityobject", 0x14600, (void *)th_14600, 8, expect_14600, mask_all, (void **)&orig_14600, 0, 0 },
+    { "lineintersectarea", 0x146a0, (void *)th_146a0, 6, expect_146a0, mask_all, (void **)&orig_146a0, 0, 0 },
+    { "addvectors", 0x14dd0, (void *)th_14dd0, 6, expect_14dd0, mask_all, (void **)&orig_14dd0, 0, 0 },
     { "city_createelevator", 0x154b0, (void *)th_154b0, 10, expect_154b0, mask_all, (void **)&orig_154b0, 0, 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)th_155e0, 6, expect_155e0, mask_all, (void **)&orig_155e0, 0, 0 },
     { "packorientation", 0x15df0, (void *)th_15df0, 5, expect_15df0, mask_all, (void **)&orig_15df0, 0, 0 },
@@ -8054,8 +9063,11 @@ static SvHook g_lifted[] = {
     { "lf_17b60", 0x17b60, (void *)th_17b60, 7, expect_17b60, mask_all, (void **)&orig_17b60, 0, 0 },
     { "deletehuman", 0x18720, (void *)th_18720, 5, expect_18720, mask_all, (void **)&orig_18720, 0, 0 },
     { "human_calculatelegangles", 0x19060, (void *)th_19060, 5, expect_19060, mask_all, (void **)&orig_19060, 0, 0 },
+    { "human_collisionhuman", 0x19380, (void *)th_19380, 8, expect_19380, mask_all, (void **)&orig_19380, 0, 0 },
     { "negvector", 0x19610, (void *)th_19610, 6, expect_19610, mask_all, (void **)&orig_19610, 0, 0 },
     { "lf_19ee0", 0x19ee0, (void *)th_19ee0, 10, expect_19ee0, mask_all, (void **)&orig_19ee0, 0, 0 },
+    { "lf_1a000", 0x1a000, (void *)th_1a000, 7, expect_1a000, mask_all, (void **)&orig_1a000, 0, 0 },
+    { "lf_1a700", 0x1a700, (void *)th_1a700, 7, expect_1a700, mask_all, (void **)&orig_1a700, 0, 0 },
     { "lf_1a7f0", 0x1a7f0, (void *)th_1a7f0, 7, expect_1a7f0, mask_all, (void **)&orig_1a7f0, 0, 0 },
     { "lf_1a990", 0x1a990, (void *)th_1a990, 7, expect_1a990, mask_all, (void **)&orig_1a990, 0, 0 },
     { "calculatebarycentric", 0x1aa60, (void *)th_1aa60, 5, expect_1aa60, mask_all, (void **)&orig_1aa60, 0, 0 },
@@ -8063,8 +9075,10 @@ static SvHook g_lifted[] = {
     { "lf_1b6e0", 0x1b6e0, (void *)th_1b6e0, 10, expect_1b6e0, mask_all, (void **)&orig_1b6e0, 0, 0 },
     { "linkitem", 0x1b870, (void *)th_1b870, 5, expect_1b870, mask_all, (void **)&orig_1b870, 0, 0 },
     { "lf_1ba30", 0x1ba30, (void *)th_1ba30, 5, expect_1ba30, mask_all, (void **)&orig_1ba30, 0, 0 },
+    { "createlandscape", 0x1bc50, (void *)th_1bc50, 6, expect_1bc50, mask_all, (void **)&orig_1bc50, 0, 0 },
     { "lf_1d2c0", 0x1d2c0, (void *)th_1d2c0, 5, expect_1d2c0, mask_all, (void **)&orig_1d2c0, 0, 0 },
     { "lf_1d3b0", 0x1d3b0, (void *)th_1d3b0, 5, expect_1d3b0, mask_all, (void **)&orig_1d3b0, 0, 0 },
+    { "logic_setteammanager", 0x1d4d0, (void *)th_1d4d0, 8, expect_1d4d0, mask_all, (void **)&orig_1d4d0, 0, 0 },
     { "logic_gunstore_buy", 0x1d7a0, (void *)th_1d7a0, 8, expect_1d7a0, mask_all, (void **)&orig_1d7a0, 0, 0 },
     { "lf_1d8a0", 0x1d8a0, (void *)th_1d8a0, 7, expect_1d8a0, mask_all, (void **)&orig_1d8a0, 0, 0 },
     { "lf_1dba0", 0x1dba0, (void *)th_1dba0, 5, expect_1dba0, mask_all, (void **)&orig_1dba0, 0, 0 },
@@ -8080,6 +9094,9 @@ static SvHook g_lifted[] = {
     { "object_rotorsimulation", 0x240e0, (void *)th_240e0, 6, expect_240e0, mask_all, (void **)&orig_240e0, 0, 0 },
     { "objectsimulation_heli", 0x24f60, (void *)th_24f60, 5, expect_24f60, mask_all, (void **)&orig_24f60, 0, 0 },
     { "lineintersectobject", 0x257a0, (void *)th_257a0, 7, expect_257a0, mask_all, (void **)&orig_257a0, 0, 0 },
+    { "createtrack", 0x25e70, (void *)th_25e70, 7, expect_25e70, mask_all, (void **)&orig_25e70, 0, 0 },
+    { "lf_26bc0", 0x26bc0, (void *)th_26bc0, 8, expect_26bc0, mask_all, (void **)&orig_26bc0, 0, 0 },
+    { "lf_26db0", 0x26db0, (void *)th_26db0, 8, expect_26db0, mask_all, (void **)&orig_26db0, 0, 0 },
     { "lf_26f90", 0x26f90, (void *)th_26f90, 6, expect_26f90, mask_all, (void **)&orig_26f90, 0, 0 },
     { "projectvector", 0x278c0, (void *)th_278c0, 7, expect_278c0, mask_all, (void **)&orig_278c0, 0, 0 },
     { "lf_279b0", 0x279b0, (void *)th_279b0, 6, expect_279b0, mask_all, (void **)&orig_279b0, 0, 0 },
@@ -8096,22 +9113,31 @@ static SvHook g_lifted[] = {
     { "lf_29830", 0x29830, (void *)th_29830, 5, expect_29830, mask_all, (void **)&orig_29830, 0, 0 },
     { "area_deleteblock", 0x29970, (void *)th_29970, 8, expect_29970, mask_all, (void **)&orig_29970, 0, 0 },
     { "lf_2c020", 0x2c020, (void *)th_2c020, 7, expect_2c020, mask_all, (void **)&orig_2c020, 0, 0 },
+    { "lf_2cda0", 0x2cda0, (void *)th_2cda0, 7, expect_2cda0, mask_all, (void **)&orig_2cda0, 0, 0 },
     { "lf_2d2d0", 0x2d2d0, (void *)th_2d2d0, 9, expect_2d2d0, mask_all, (void **)&orig_2d2d0, 0, 0 },
+    { "lf_2d7f0", 0x2d7f0, (void *)th_2d7f0, 7, expect_2d7f0, mask_all, (void **)&orig_2d7f0, 0, 0 },
     { "lf_2daf0", 0x2daf0, (void *)th_2daf0, 9, expect_2daf0, mask_all, (void **)&orig_2daf0, 0, 0 },
     { "lf_2dfc0", 0x2dfc0, (void *)th_2dfc0, 7, expect_2dfc0, mask_all, (void **)&orig_2dfc0, 0, 0 },
     { "lf_2efd0", 0x2efd0, (void *)th_2efd0, 7, expect_2efd0, mask_all, (void **)&orig_2efd0, 0, 0 },
     { "lf_2f090", 0x2f090, (void *)th_2f090, 7, expect_2f090, mask_all, (void **)&orig_2f090, 0, 0 },
     { "lineintersecthuman", 0x2f130, (void *)th_2f130, 6, expect_2f130, mask_all, (void **)&orig_2f130, 0, 0 },
+    { "human_calcarmtorque", 0x2f420, (void *)th_2f420, 6, expect_2f420, mask_all, (void **)&orig_2f420, 0, 0 },
     { "lf_306d0", 0x306d0, (void *)th_306d0, 5, expect_306d0, mask_all, (void **)&orig_306d0, 0, 0 },
+    { "sphereintersecttrianglefull", 0x307f0, (void *)th_307f0, 7, expect_307f0, mask_all, (void **)&orig_307f0, 0, 0 },
     { "deleteitem", 0x30ab0, (void *)th_30ab0, 6, expect_30ab0, mask_all, (void **)&orig_30ab0, 0, 0 },
     { "itemweaponsimulation", 0x30ba0, (void *)th_30ba0, 5, expect_30ba0, mask_all, (void **)&orig_30ba0, 0, 0 },
     { "lf_30f00", 0x30f00, (void *)th_30f00, 9, expect_30f00, mask_all, (void **)&orig_30f00, 0, 0 },
+    { "lineintersectall", 0x31480, (void *)th_31480, 5, expect_31480, mask_all, (void **)&orig_31480, 0, 0 },
+    { "lf_31630", 0x31630, (void *)th_31630, 5, expect_31630, mask_all, (void **)&orig_31630, 0, 0 },
     { "createobject", 0x31800, (void *)th_31800, 6, expect_31800, mask_all, (void **)&orig_31800, 0, 0 },
     { "lf_32340", 0x32340, (void *)th_32340, 5, expect_32340, mask_all, (void **)&orig_32340, 0, 0 },
+    { "lf_324c0", 0x324c0, (void *)th_324c0, 6, expect_324c0, mask_all, (void **)&orig_324c0, 0, 0 },
     { "getobjectrotation2", 0x32bb0, (void *)th_32bb0, 8, expect_32bb0, mask_all, (void **)&orig_32bb0, 0, 0 },
     { "buildsomeshit", 0x32fe0, (void *)th_32fe0, 6, expect_32fe0, mask_all, (void **)&orig_32fe0, 0, 0 },
     { "scenario_createcar", 0x33350, (void *)th_33350, 8, expect_33350, mask_all, (void **)&orig_33350, 0, 0 },
     { "objecttype_addface", 0x34870, (void *)th_34870, 5, expect_34870, mask_all, (void **)&orig_34870, 0, 0 },
+    { "setupobjecttypes_cars", 0x34c10, (void *)th_34c10, 6, expect_34c10, mask_all, (void **)&orig_34c10, 0, 0 },
+    { "setupobjectypes_train", 0x3b0c0, (void *)th_3b0c0, 6, expect_3b0c0, mask_all, (void **)&orig_3b0c0, 0, 0 },
     { "createvehicle", 0x3ccc0, (void *)th_3ccc0, 8, expect_3ccc0, mask_all, (void **)&orig_3ccc0, 0, 0 },
     { "calculateplayervoice", 0x3cfe0, (void *)th_3cfe0, 6, expect_3cfe0, mask_all, (void **)&orig_3cfe0, 0, 0 },
     { "ai_assessthreats", 0x3d500, (void *)th_3d500, 6, expect_3d500, mask_all, (void **)&orig_3d500, 0, 0 },
@@ -8119,14 +9145,19 @@ static SvHook g_lifted[] = {
     { "lf_4c720", 0x4c720, (void *)th_4c720, 9, expect_4c720, mask_all, (void **)&orig_4c720, 0, 0 },
     { "itemlogic", 0x4c8c0, (void *)th_4c8c0, 5, expect_4c8c0, mask_all, (void **)&orig_4c8c0, 0, 0 },
     { "item_physicssimulation", 0x4cee0, (void *)th_4cee0, 5, expect_4cee0, mask_all, (void **)&orig_4cee0, 0, 0 },
+    { "lf_4d630", 0x4d630, (void *)th_4d630, 5, expect_4d630, mask_all, (void **)&orig_4d630, 0, 0 },
+    { "crossproduct", 0x4d750, (void *)th_4d750, 5, expect_4d750, mask_all, (void **)&orig_4d750, 0, 0 },
     { "buildcityinterection", 0x4d850, (void *)th_4d850, 8, expect_4d850, mask_all, (void **)&orig_4d850, 0, 0 },
     { "lf_4da10", 0x4da10, (void *)th_4da10, 8, expect_4da10, mask_all, (void **)&orig_4da10, 0, 0 },
     { "lf_4e060", 0x4e060, (void *)th_4e060, 7, expect_4e060, mask_all, (void **)&orig_4e060, 0, 0 },
     { "logic_cardealer_buy", 0x4e0d0, (void *)th_4e0d0, 8, expect_4e0d0, mask_all, (void **)&orig_4e0d0, 0, 0 },
     { "lf_4e2c0", 0x4e2c0, (void *)th_4e2c0, 7, expect_4e2c0, mask_all, (void **)&orig_4e2c0, 0, 0 },
     { "lineintersectlevel", 0x4e500, (void *)th_4e500, 5, expect_4e500, mask_all, (void **)&orig_4e500, 0, 0 },
+    { "playerai", 0x4f720, (void *)th_4f720, 8, expect_4f720, mask_all, (void **)&orig_4f720, 0, 0 },
     { "lf_500e0", 0x500e0, (void *)th_500e0, 7, expect_500e0, mask_all, (void **)&orig_500e0, 0, 0 },
     { "createhuman", 0x50ae0, (void *)th_50ae0, 5, expect_50ae0, mask_all, (void **)&orig_50ae0, 0, 0 },
+    { "itemsimulation", 0x542a0, (void *)th_542a0, 8, expect_542a0, mask_all, (void **)&orig_542a0, 0, 0 },
+    { "logic_playeractions", 0x55700, (void *)th_55700, 8, expect_55700, mask_all, (void **)&orig_55700, 0, 0 },
     { "createscenario_world", 0x5aa60, (void *)th_5aa60, 8, expect_5aa60, mask_all, (void **)&orig_5aa60, 0, 0 },
     { "lf_5cf70", 0x5cf70, (void *)th_5cf70, 6, expect_5cf70, mask_all, (void **)&orig_5cf70, 0, 0 },
 };
@@ -8170,6 +9201,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_065f0,
     &v_06840,
     &v_068d0,
+    &v_06b30,
     &v_07b90,
     &v_07c40,
     &v_07ce0,
@@ -8191,6 +9223,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_09be0,
     &v_0a1b0,
     &v_0a2a0,
+    &v_0a7a0,
     &v_0a930,
     &v_0aa80,
     &v_0ab20,
@@ -8228,7 +9261,6 @@ static SvVerify *g_lifted_stats[] = {
     &v_0cca0,
     &v_0cdf0,
     &v_0d0c0,
-    &v_0d110,
     &v_0d240,
     &v_0d2a0,
     &v_0d680,
@@ -8242,6 +9274,8 @@ static SvVerify *g_lifted_stats[] = {
     &v_0e4d0,
     &v_0f4a0,
     &v_0f620,
+    &v_0f6f0,
+    &v_0fc40,
     &v_10140,
     &v_105c0,
     &v_10950,
@@ -8258,9 +9292,12 @@ static SvVerify *g_lifted_stats[] = {
     &v_12c90,
     &v_12f80,
     &v_130d0,
+    &v_13450,
     &v_143b0,
     &v_14590,
     &v_14600,
+    &v_146a0,
+    &v_14dd0,
     &v_154b0,
     &v_155e0,
     &v_15df0,
@@ -8279,8 +9316,11 @@ static SvVerify *g_lifted_stats[] = {
     &v_17b60,
     &v_18720,
     &v_19060,
+    &v_19380,
     &v_19610,
     &v_19ee0,
+    &v_1a000,
+    &v_1a700,
     &v_1a7f0,
     &v_1a990,
     &v_1aa60,
@@ -8288,8 +9328,10 @@ static SvVerify *g_lifted_stats[] = {
     &v_1b6e0,
     &v_1b870,
     &v_1ba30,
+    &v_1bc50,
     &v_1d2c0,
     &v_1d3b0,
+    &v_1d4d0,
     &v_1d7a0,
     &v_1d8a0,
     &v_1dba0,
@@ -8305,6 +9347,9 @@ static SvVerify *g_lifted_stats[] = {
     &v_240e0,
     &v_24f60,
     &v_257a0,
+    &v_25e70,
+    &v_26bc0,
+    &v_26db0,
     &v_26f90,
     &v_278c0,
     &v_279b0,
@@ -8321,22 +9366,31 @@ static SvVerify *g_lifted_stats[] = {
     &v_29830,
     &v_29970,
     &v_2c020,
+    &v_2cda0,
     &v_2d2d0,
+    &v_2d7f0,
     &v_2daf0,
     &v_2dfc0,
     &v_2efd0,
     &v_2f090,
     &v_2f130,
+    &v_2f420,
     &v_306d0,
+    &v_307f0,
     &v_30ab0,
     &v_30ba0,
     &v_30f00,
+    &v_31480,
+    &v_31630,
     &v_31800,
     &v_32340,
+    &v_324c0,
     &v_32bb0,
     &v_32fe0,
     &v_33350,
     &v_34870,
+    &v_34c10,
+    &v_3b0c0,
     &v_3ccc0,
     &v_3cfe0,
     &v_3d500,
@@ -8344,14 +9398,19 @@ static SvVerify *g_lifted_stats[] = {
     &v_4c720,
     &v_4c8c0,
     &v_4cee0,
+    &v_4d630,
+    &v_4d750,
     &v_4d850,
     &v_4da10,
     &v_4e060,
     &v_4e0d0,
     &v_4e2c0,
     &v_4e500,
+    &v_4f720,
     &v_500e0,
     &v_50ae0,
+    &v_542a0,
+    &v_55700,
     &v_5aa60,
     &v_5cf70,
 };
@@ -8370,7 +9429,7 @@ int sv_hooks_lifted_install(void)
     lf_x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
-    int to = sv_config_int("lifted_to", 222);
+    int to = sv_config_int("lifted_to", 250);
     relocate(expect_01cd0, 3);
     relocate(expect_04a10, 2);
     relocate(expect_04bb0, 2);
@@ -8387,7 +9446,6 @@ int sv_hooks_lifted_install(void)
     relocate(expect_0ae50, 1);
     relocate(expect_0b540, 2);
     relocate(expect_0d0c0, 3);
-    relocate(expect_0d110, 2);
     relocate(expect_0d240, 2);
     relocate(expect_0d2a0, 1);
     relocate(expect_0d990, 1);
@@ -8395,9 +9453,12 @@ int sv_hooks_lifted_install(void)
     relocate(expect_0da60, 3);
     relocate(expect_0db20, 4);
     relocate(expect_0ded0, 4);
+    relocate(expect_0f6f0, 4);
+    relocate(expect_0fc40, 4);
     relocate(expect_11f70, 4);
     relocate(expect_129b0, 5);
     relocate(expect_12c90, 6);
+    relocate(expect_13450, 3);
     relocate(expect_143b0, 3);
     relocate(expect_14590, 3);
     relocate(expect_14600, 4);
@@ -8412,6 +9473,7 @@ int sv_hooks_lifted_install(void)
     relocate(expect_16f10, 1);
     relocate(expect_19610, 2);
     relocate(expect_1b070, 5);
+    relocate(expect_1d4d0, 4);
     relocate(expect_21a30, 3);
     relocate(expect_21b40, 3);
     relocate(expect_22f90, 4);
@@ -8422,26 +9484,30 @@ int sv_hooks_lifted_install(void)
     relocate(expect_2d2d0, 5);
     relocate(expect_2daf0, 5);
     relocate(expect_30f00, 5);
+    relocate(expect_324c0, 2);
     relocate(expect_33350, 4);
     relocate(expect_4c720, 5);
     relocate(expect_4d850, 4);
     relocate(expect_4da10, 4);
     relocate(expect_4e0d0, 4);
+    relocate(expect_4f720, 4);
+    relocate(expect_542a0, 4);
+    relocate(expect_55700, 4);
     relocate(expect_5aa60, 4);
-    if (to > 222)
-        to = 222;
+    if (to > 250)
+        to = 250;
     if (from < 0)
         from = 0;
     if (from >= to)
         return 0;
-    sv_log("lifted hooks %d..%d of 222", from, to);
+    sv_log("lifted hooks %d..%d of 250", from, to);
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
 void sv_hooks_lifted_summary(void)
 {
     int i;
-    for (i = 0; i < 222; i++)
+    for (i = 0; i < 250; i++)
         if (g_lifted_stats[i]->calls)
             sv_verify_summary(g_lifted_stats[i]);
 }

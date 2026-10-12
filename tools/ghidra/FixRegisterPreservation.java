@@ -179,7 +179,10 @@ public class FixRegisterPreservation extends GhidraScript {
                 + "<output>"
                 + "<pentry minsize=\"4\" maxsize=\"10\" metatype=\"float\" extension=\"float\"><register name=\"ST0\"/></pentry>"
                 + "<pentry minsize=\"1\" maxsize=\"4\"><register name=\"EAX\"/></pentry>"
-                + "<pentry minsize=\"5\" maxsize=\"8\"><addr space=\"join\" piece1=\"EDX\" piece2=\"EAX\"/></pentry>"
+                // A function that keeps EDX cannot return 64 bits in EDX:EAX. Without this rule
+                // the decompiler still shows the kept EDX as "extraout_EDX".
+                + ((keep & D) != 0 ? ""
+                        : "<pentry minsize=\"5\" maxsize=\"8\"><addr space=\"join\" piece1=\"EDX\" piece2=\"EAX\"/></pentry>")
                 + "</output>"
                 + "<unaffected><varnode space=\"ram\" offset=\"0\" size=\"4\"/>"
                 + "<register name=\"ESP\"/><register name=\"EBP\"/><register name=\"ESI\"/><register name=\"EDI\"/>"

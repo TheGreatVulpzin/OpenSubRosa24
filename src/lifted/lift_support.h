@@ -55,6 +55,8 @@ typedef unsigned char bool;
 typedef unsigned short wchar16;
 typedef double float10;   /* x87 80-bit in the original; MSVC has no 80-bit type */
 typedef void code;
+typedef void *pointer;    /* Ghidra generic pointer type */
+typedef void *pointer32;
 
 #define true 1
 #define false 0
@@ -68,6 +70,20 @@ typedef void code;
 unsigned __int64 __rdtsc(void);
 #pragma intrinsic(__rdtsc)
 #define rdtsc() __rdtsc()
+
+/* Ghidra prints a NaN constant as "NAN" (the lifter writes LF_NAN). */
+static const union { unsigned int u; float f; } lf_nan_bits = { 0x7fc00000u };
+#define LF_NAN (lf_nan_bits.f)
+
+/* Bit copy between a float and a 4-byte pointer. Ghidra merges a stack slot that holds
+ * a pointer at one time and a float at another time into one variable. */
+static __inline float lf_p2f(const void *p) { union { const void *p; float f; } u; u.p = p; return u.f; }
+static __inline void *lf_f2p(float f) { union { void *p; float f; } u; u.f = f; return u.p; }
+
+/* Bit copy between a float and a 4-byte int (an argument that the caller and the callee
+ * type differently: the original pushes the same 4 bytes). */
+static __inline float lf_u2f(unsigned int x) { union { unsigned int u; float f; } u; u.u = x; return u.f; }
+static __inline unsigned int lf_f2u(float f) { union { unsigned int u; float f; } u; u.f = f; return u.u; }
 
 /* Ghidra NAN(x): x is not a number (x87 compare with the parity flag). */
 #define NAN(x) ((x) != (x))

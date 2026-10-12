@@ -111,8 +111,17 @@ public class LiftExport extends GhidraScript {
                 }
                 continue;
             }
-            if (!text.matches("_*DAT_[0-9a-f]{8}")) continue;
-            String hexAddr = text.substring(text.indexOf("DAT_") + 4);
+            // DAT_107575c0, _DAT_107575c0, DAT_107575c0_1 (a second symbol at the same address)
+            // and PTR_s_Goldmen_Inc_00460438 (a pointer global named after its target).
+            java.util.regex.Matcher gm = java.util.regex.Pattern
+                    .compile("_*(?:DAT|PTR)_(?:\\w*_)?([0-9a-f]{8})(?:_\\d+)?").matcher(text);
+            if (!gm.matches()) continue;
+            // The real address: "DAT_107575c0_1" can be a piece at 0x107575c1.
+            String hexAddr = gm.group(1);
+            ghidra.program.model.pcode.Varnode rep = hv.getRepresentative();
+            if (rep != null && rep.getAddress().isMemoryAddress()) {
+                hexAddr = String.format("%08x", rep.getAddress().getOffset());
+            }
             found.put(text, new String[] { "0x" + hexAddr, dt.getDisplayName(), String.valueOf(dt.getLength()) });
         }
         boolean first = true;

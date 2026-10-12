@@ -193,6 +193,288 @@ def exact_denormals(c):
         return None, f'int typed as float (ambiguous literal {e})'
 
 
+def pointer_names(body, params, globals_):
+    """Names of the variables with a pointer type: parameters, locals and globals."""
+    names = {n for t, n in params if t.endswith('*')}
+    names |= set(re.findall(r'^\s*[A-Za-z_][\w ]*\*+\s*([A-Za-z_]\w*);', body, flags=re.M))
+    names |= {g['name'] for g in globals_ if g['type'].strip().endswith('*')}
+    return names
+
+
+def pointer_float_casts(body, params, globals_):
+    """'(float)p' with a pointer p is a bit copy in Ghidra (one stack slot holds a pointer
+    at one time and a float at another time). In C it does not compile: use lf_p2f()."""
+    ptrs = pointer_names(body, params, globals_)
+    if not ptrs:
+        return body
+
+    def rep(m):
+        return f'lf_p2f({m.group(1)})' if m.group(1) in ptrs else m.group(0)
+    return re.sub(r'\(float\)\s*([A-Za-z_]\w*)(?![\w\[.(]|\s*->)', rep, body)
+
+
+FLOATISH_RE = re.compile(r'\bfVar\d+|\bdVar\d+|\(float\)|\(double\)|\(float10\)|\d\.\d')
+
+
+def split_args(s):
+    """Top-level comma split of a call argument list (without the outer parentheses)."""
+    out, depth, cur = [], 0, ''
+    for ch in s:
+        if ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        if ch == ',' and depth == 0:
+            out.append(cur.strip())
+            cur = ''
+        else:
+            cur += ch
+    if cur.strip():
+        out.append(cur.strip())
+    return out
+
+
+def call_spans(s, name):
+    """(start of the argument list, end after ')') of each call 'name(...)' in s."""
+    for m in re.finditer(r'\b' + re.escape(name) + r'\s*\(', s):
+        end = balanced_end(s, m.end() - 1)
+        if end > 0:
+            yield m.end(), end
+
+
+def call_args(s, name):
+    return [split_args(s[a:e - 1]) for a, e in call_spans(s, name)]
+
+
+INT_TYPES = {'int', 'uint', 'undefined4', 'dword', 'undefined', 'char', 'uchar', 'short', 'ushort', 'bool',
+             'byte', 'undefined1', 'undefined2', 'long', 'ulong'}
+
+
+def local_types(body, params):
+    """name -> base type of the parameters and local declarations."""
+    types = {n: t for t, n in params}
+    for m in re.finditer(r'^\s*([A-Za-z_][\w ]*?)\s*(\**)\s*([A-Za-z_]\w*)\s*(\[\d+\])?\s*;', body, flags=re.M):
+        types.setdefault(m.group(3), m.group(1).strip() + (' ' + m.group(2) if m.group(2) else ''))
+    return types
+
+
+def call_arg_bits(body, callee_params, ptrs, types):
+    """Ghidra prints an argument with the type that the caller uses. The callee prototype
+    can use another type for the same 4 bytes: the original pushes the bits unchanged.
+      float parameter, pointer argument     -> lf_p2f(arg)
+      float parameter, int argument          -> lf_u2f(arg)   (0x3f8c0000 is 1.09375)
+      int parameter, float variable          -> lf_f2u(arg)"""
+    def base(arg):
+        m = re.fullmatch(r'([A-Za-z_]\w*)(\s*\[[^\]]*\])?', arg)
+        return (m.group(1), bool(m.group(2))) if m else (None, False)
+
+    for cname, cparams in callee_params.items():
+        spans = list(call_spans(body, cname))
+        for a, e in reversed(spans):
+            args = split_args(body[a:e - 1])
+            changed = False
+            for i, (ptype, _) in enumerate(cparams):
+                if i >= len(args):
+                    break
+                arg = args[i]
+                name, indexed = base(arg)
+                atype = types.get(name, '') if name else ''
+                if indexed:
+                    atype = atype.rstrip(' *') if atype.endswith('*') else atype
+                new = None
+                if ptype == 'float':
+                    if re.fullmatch(r'&\s*[A-Za-z_]\w*', arg) or (arg in ptrs and not indexed):
+                        new = f'lf_p2f({arg})'
+                    elif re.fullmatch(r'-?(0x[0-9a-fA-F]+|\d+)', arg) and arg not in ('0', '-0'):
+                        new = f'lf_u2f({arg})'
+                    elif atype in INT_TYPES:
+                        new = f'lf_u2f((uint)({arg}))'
+                elif ptype in INT_TYPES and atype in ('float', 'float10', 'double'):
+                    new = f'lf_f2u({arg})'
+                if new:
+                    args[i] = new
+                    changed = True
+            if changed:
+                body = body[:a] + ','.join(args) + body[e - 1:]
+    return body
+
+
+def undefined_names(body, params, globals_):
+    """Variables whose Ghidra type is raw bytes (undefined4...)."""
+    names = {g['name'] for g in globals_ if g['type'].strip() in ('undefined4', 'undefined8')}
+    names |= {n for t, n in params if t in ('undefined4', 'undefined8')}
+    names |= set(re.findall(r'^\s*undefined[48]\s+([A-Za-z_]\w*);', body, flags=re.M))
+    return names
+
+
+def lvalue_end(s, j, undef):
+    """End of an lvalue of raw-byte type at s[j], or -1: NAME, (&NAME)[...] or
+    *(undefined4 *)(...)."""
+    m = re.match(r'([A-Za-z_]\w*)(?![\w(\[.]|\s*->)', s[j:])
+    if m and m.group(1) in undef:
+        return j + m.end()
+    m = re.match(r'\(&([A-Za-z_]\w*)\)\[', s[j:])
+    if m and m.group(1) in undef:
+        k = j + m.end() - 1
+        depth = 0
+        for t in range(k, len(s)):
+            depth += s[t] == '['
+            depth -= s[t] == ']'
+            if depth == 0:
+                return t + 1
+        return -1
+    m = re.match(r'\*\(undefined4 \*\)', s[j:])
+    if m:
+        return operand_end(s, j + m.end())
+    return -1
+
+
+def raw_float_uses(body, undef):
+    """Ghidra: a cast from raw bytes (undefined4) to float is a bit copy, and so is a float
+    stored into raw bytes. In C both convert the number. Rewrite:
+      (float)X        -> (*(float *)&(X))
+      X = <float>;    -> *(float *)&(X) = <float>;
+    for X of raw-byte type (variable, (&DAT_x)[i] or *(undefined4 *)p)."""
+    out, i = [], 0
+    for m in re.finditer(r'\(float\)\s*', body):
+        if m.start() < i:
+            continue
+        end = lvalue_end(body, m.end(), undef)
+        if end < 0:
+            continue
+        out.append(body[i:m.start()])
+        out.append(f'(*(float *)&({body[m.end():end]}))')
+        i = end
+    out.append(body[i:])
+    body = ''.join(out)
+
+    def store(m):
+        lv, rhs = m.group(2), m.group(3)
+        end = lvalue_end(lv, 0, undef)
+        if end != len(lv) or not FLOATISH_RE.search(rhs) or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
+            return m.group(0)
+        return f'{m.group(1)}*(float *)&({lv}) = {rhs};'
+    return re.sub(r'^(\s*)([^=;\n]+?)\s*=\s*([^=;][^;]*);', store, body, flags=re.M)
+
+
+STACK_VAR_RE = re.compile(r'^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local|[a-z]+Stack)_([0-9a-f]+))\s*(\[\d+\])?\s*;[ \t]*$',
+                          flags=re.M)
+
+
+def stack_frame(body):
+    """Put the stack variables at their original offsets in one frame.
+
+    Ghidra names a stack variable after its offset (local_74 is 0x74 bytes under the return
+    address). The original code can take the address of one variable and reach its
+    neighbors (&local_74 passed as a vector, the callee reads local_70 too). C gives no
+    order for separate locals, so they all go into lf_frame, at the original offsets.
+    Returns (body, macro lines, undef lines)."""
+    found = list(STACK_VAR_RE.finditer(body))
+    if not found:
+        return body, [], []
+    size = max(int(m.group(5), 16) for m in found) + 16
+    size = (size + 15) & ~15
+    pre, post = [], []
+    for m in found:
+        typ = (m.group(2).strip() + ' ' + m.group(3)).strip()
+        name, off, arr = m.group(4), int(m.group(5), 16), m.group(6)
+        if arr:
+            pre.append(f'#define {name} (*({typ} (*){arr})(lf_frame + 0x{size - off:x}))')
+        else:
+            pre.append(f'#define {name} (*({typ} *)(lf_frame + 0x{size - off:x}))')
+        post.append(f'#undef {name}')
+    body = STACK_VAR_RE.sub('', body)
+    brace = body.index('{')
+    body = body[:brace + 1] + f'\n  __declspec(align(16)) uchar lf_frame[0x{size:x}];' + body[brace + 1:]
+    return body, pre, post
+
+
+def balanced_end(s, i):
+    """Index after the parenthesized group that starts at s[i] == '('."""
+    depth = 0
+    for j in range(i, len(s)):
+        if s[j] == '(':
+            depth += 1
+        elif s[j] == ')':
+            depth -= 1
+            if depth == 0:
+                return j + 1
+    return -1
+
+
+def fix_float_to_pointer(line, ptype):
+    """Compiler error "cannot convert from 'float' to 'T *'": the last '(T *)' cast on the
+    line is a bit copy of a float. Rewrite '(T *)X' as '((T *)lf_f2p(X))'."""
+    ms = list(re.finditer(r'\(\s*' + re.escape(ptype.replace(' ', '')).replace(r'\*', r'\s*\*') + r'\s*\)\s*', line))
+    if not ms:
+        return None
+    m = ms[-1]
+    k = m.end()
+    end = operand_end(line, k)
+    if end < 0:
+        return None
+    return line[:m.start()] + f'(({ptype})lf_f2p({line[k:end]}))' + line[end:]
+
+
+CAST_TYPES = {'float', 'double', 'float10', 'int', 'uint', 'char', 'uchar', 'short', 'ushort', 'byte', 'bool',
+              'longlong', 'ulonglong', 'undefined', 'undefined1', 'undefined2', 'undefined4', 'undefined8',
+              'dword', 'word', 'sbyte', 'unsigned int', 'long', 'ulong'}
+
+
+def operand_end(s, k):
+    """End index of the cast operand that starts at s[k]: skips more casts ('(float)x'),
+    then takes a parenthesized group or a name with [..], ., -> after it."""
+    j = k
+    while True:
+        while j < len(s) and s[j] in ' \n':
+            j += 1
+        if j < len(s) and s[j] == '(':
+            end = balanced_end(s, j)
+            if end < 0:
+                return -1
+            inner = s[j + 1:end - 1].strip()
+            if inner in CAST_TYPES or re.fullmatch(r'[A-Za-z_][\w ]*\*+', inner):
+                j = end
+                continue
+            return end
+        em = re.match(r'[A-Za-z_]\w*', s[j:])
+        if not em:
+            return -1
+        j += em.end()
+        while j < len(s):
+            if s[j] == '[':
+                depth = 0
+                for t in range(j, len(s)):
+                    depth += s[t] == '['
+                    depth -= s[t] == ']'
+                    if depth == 0:
+                        break
+                j = t + 1
+            elif s.startswith('->', j) or s[j] == '.':
+                pm = re.match(r'(->|\.)\s*[A-Za-z_]\w*', s[j:])
+                if not pm:
+                    break
+                j += pm.end()
+            else:
+                break
+        return j
+
+
+def fix_text_line(text, rel, ptype):
+    """Apply fix_float_to_pointer to line rel of a function text (or to the statement that
+    ends there: MSVC reports the last line of a statement on several lines)."""
+    nl = chr(10)
+    lines = text.split(nl)
+    if not 0 <= rel < len(lines):
+        return None
+    for first in (rel, max(0, rel - 1), max(0, rel - 3), max(0, rel - 6)):
+        window = nl.join(lines[first:rel + 1])
+        new = fix_float_to_pointer(window, ptype)
+        if new is not None:
+            return nl.join(lines[:first] + new.split(nl) + lines[rel + 1:])
+    return None
+
+
 def lift_function(f, rva, headers, imports_used):
     """Return (C text, error). error is None on success."""
     c = f['c']
@@ -214,6 +496,7 @@ def lift_function(f, rva, headers, imports_used):
         return None, 'variadic'
 
     pre, post = [], []
+    callee_params = {}
     for g in f['globals']:
         pre.append(global_macro(g))
         post.append(f'#undef {g["name"]}')
@@ -254,14 +537,42 @@ def lift_function(f, rva, headers, imports_used):
             if not ch:
                 return None, f'callee header unknown: {cname}'
             cret, ccc, _cn, cparams = ch
+            # A call can push more arguments than the callee prototype shows (Ghidra kept
+            # only the ones that the callee reads). Push them all, as the original does.
+            most = max((len(a) for a in call_args(c, cname)), default=0)
+            if most > len(cparams) and ccc == '__cdecl':
+                extra = call_args(c, cname)
+                extra = next(a for a in extra if len(a) == most)[len(cparams):]
+                cparams = list(cparams) + [('float' if FLOATISH_RE.search(a) else 'undefined4', f'extra_{i}')
+                                           for i, a in enumerate(extra)]
+            callee_params[cname] = cparams
             pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_VA(0x{callee + BASE:x}))')
             post.append(f'#undef {cname}')
 
     body = partial_access(strip_comments(c)).strip()
     body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
+    body = re.sub(r'\bNAN\b(?!\s*\()', 'LF_NAN', body)
+    body = raw_float_uses(body, undefined_names(body, params, f['globals']))
+    body = pointer_float_casts(body, params, f['globals'])
+    body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),
+                         local_types(body, params))
+    # Short strings stored as an immediate ("Uzi" = 0x00697a55): Ghidra shows them as an
+    # address (&DAT_00697a55). The loader does not relocate them, so neither do we.
+    relocs = set(f.get('relocvals', []))
+
+    def immediate(m):
+        v = int(m.group(2), 16)
+        text = v.to_bytes(4, 'little')
+        if v in relocs or not all(b == 0 or 32 <= b < 127 for b in text):
+            return m.group(0)
+        return f'((undefined *)0x{v:x})'
+    body = re.sub(r'&(_*DAT_([0-9a-f]{8}))(?![\w\[])', immediate, body)
     # Absolute addresses that the loader relocates (ASLR) but the pseudo-C shows as numbers.
     for v in f.get('relocvals', []):
         body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)
+    body, fpre, fpost = stack_frame(body)
+    pre += fpre
+    post += fpost
     # Rename the definition: FUN_x(...) -> lf_<rva>(...), with an explicit convention.
     head_end = body.index('{')
     head = body[:head_end]
@@ -427,6 +738,54 @@ def compile_errors(path):
     return errs
 
 
+def compile_loop(texts, imports_used, status, out_c, compile_=True, verbose=True, failed=None):
+    """Write out_c, compile it, fix what the lifter can fix and remove the functions that
+    still fail (status[rva] = compile_error). Returns the remaining texts."""
+    for attempt in range(60):
+        code, lines = gen_lifted(texts, imports_used)
+        out_c.write_text(code, encoding='utf-8', newline='\n')
+        if not compile_:
+            break
+        errs = compile_errors(out_c)
+        if not errs:
+            break
+        # Errors that the lifter can fix in place: float stored in a pointer variable.
+        tmap = dict(texts)
+        fixed = set()
+        # The fixes keep the line count, so several fixes per function work in one round.
+        for line, msg in sorted(errs.items(), reverse=True):
+            q = re.findall(r"'([^']*)'", msg)
+            if not (msg.startswith('C2440') and len(q) >= 2 and q[-2] in ('float', 'double', 'float10')
+                    and q[-1].rstrip().endswith('*')):
+                continue
+            for rva, (a, b) in lines.items():
+                if a <= line <= b:
+                    new = fix_text_line(tmap[rva], line - (a + 1), q[-1].strip())
+                    if new is not None and new != tmap[rva]:
+                        tmap[rva] = new
+                        fixed.add(rva)
+        if fixed:
+            texts = [(r, tmap[r]) for r, _ in texts]
+            verbose and print(f'attempt {attempt + 1}: fixed float/pointer casts in {len(fixed)} function(s)')
+            continue
+        bad = {}
+        for line, msg in errs.items():
+            for rva, (a, b) in lines.items():
+                if a <= line <= b:
+                    bad.setdefault(rva, msg)
+        if not bad:
+            verbose and print('compile errors outside functions:', list(errs.items())[:5])
+            break
+        for rva, msg in bad.items():
+            status[rva] = ('compile_error', msg)
+        if failed is not None:
+            failed.update({r: t for r, t in texts if r in bad})
+        texts = [(r, t) for r, t in texts if r not in bad]
+        verbose and print(f'attempt {attempt + 1}: removed {len(bad)} function(s) with compile errors')
+
+    return texts
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--compile', action='store_true')
@@ -465,27 +824,7 @@ def main():
         if args.max and len(texts) >= args.max:
             break
 
-    out_c = ROOT / 'src/lifted/lifted_024d.c'
-    for attempt in range(12):
-        code, lines = gen_lifted(texts, imports_used)
-        out_c.write_text(code, encoding='utf-8', newline='\n')
-        if not args.compile:
-            break
-        errs = compile_errors(out_c)
-        if not errs:
-            break
-        bad = {}
-        for line, msg in errs.items():
-            for rva, (a, b) in lines.items():
-                if a <= line <= b:
-                    bad.setdefault(rva, msg)
-        if not bad:
-            print('compile errors outside functions:', list(errs.items())[:5])
-            break
-        for rva, msg in bad.items():
-            status[rva] = ('compile_error', msg)
-        texts = [(r, t) for r, t in texts if r not in bad]
-        print(f'attempt {attempt + 1}: removed {len(bad)} function(s) with compile errors')
+    texts = compile_loop(texts, imports_used, status, ROOT / 'src/lifted/lifted_024d.c', args.compile)
 
     lifted = [r for r, _ in texts]
     for r in lifted:
