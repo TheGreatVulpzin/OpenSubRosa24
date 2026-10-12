@@ -63,6 +63,9 @@ int sv_verify_busy(void);
  * offline test runs exactly like the original server. */
 int sv_original_only(void);
 
+/* Two float results are the same: equal, both NaN, or at most verify_float_ulps apart. */
+int sv_same_float(double a, double b);
+
 /* 1 = verify this call. Obeys verify=0 and sampling. */
 int sv_verify_should(SvVerify *v);
 

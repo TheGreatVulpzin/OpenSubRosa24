@@ -33,10 +33,8 @@ void lf_05be0(void);
 void lf_05f20(void);
 void lf_05fe0(void);
 void lf_061a0(void);
-void lf_06380(void);
 void lf_06420(void);
 void lf_064a0(void);
-void lf_065f0(void);
 void lf_06840(void);
 void lf_068d0(void);
 void lf_06b30(void);
@@ -52,6 +50,7 @@ void lf_08880(void);
 void lf_089c0(void);
 void lf_08a60(void);
 void lf_08b00(void);
+void lf_08cf0(void);
 void lf_08fe0(void);
 void lf_093e0(void);
 void lf_094a0(void);
@@ -70,7 +69,6 @@ void lf_0ad30(void);
 void lf_0ad70(void);
 void lf_0ae50(void);
 void lf_0b040(void);
-void lf_0b0b0(void);
 void lf_0b150(void);
 void lf_0b3f0(void);
 void lf_0b540(void);
@@ -199,6 +197,7 @@ void lf_27ba0(void);
 void lf_27e80(void);
 void lf_28020(void);
 void lf_28190(void);
+void lf_28230(void);
 void lf_286b0(void);
 void lf_28a90(void);
 void lf_28c90(void);
@@ -229,9 +228,9 @@ void lf_32340(void);
 void lf_324c0(void);
 void lf_32bb0(void);
 void lf_32fe0(void);
-void lf_33350(void);
 void lf_34870(void);
 void lf_34c10(void);
+void lf_3a610(void);
 void lf_3b0c0(void);
 void lf_3ccc0(void);
 void lf_3cfe0(void);
@@ -254,6 +253,8 @@ void lf_500e0(void);
 void lf_50ae0(void);
 void lf_542a0(void);
 void lf_55700(void);
+void lf_585b0(void);
+void lf_58ef0(void);
 void lf_5aa60(void);
 void lf_5cf70(void);
 
@@ -290,10 +291,8 @@ const LfEntry lf_table[] = {
     { "player_calcassets", 0x5f20, (void *)lf_05f20, 1, LF_RET_VOID, 4 },
     { "player_saveinventory", 0x5fe0, (void *)lf_05fe0, 1, LF_RET_VOID, 4 },
     { "eventsimulation", 0x61a0, (void *)lf_061a0, 0, LF_RET_VOID, 4 },
-    { "createevent_updateitem", 0x6380, (void *)lf_06380, 1, LF_RET_VOID, 4 },
     { "createevent_updateiteminfo", 0x6420, (void *)lf_06420, 1, LF_RET_VOID, 4 },
     { "createevent_updateplayer", 0x64a0, (void *)lf_064a0, 1, LF_RET_VOID, 4 },
-    { "createevent_updateplayer_finance", 0x65f0, (void *)lf_065f0, 1, LF_RET_VOID, 4 },
     { "createevent_updatestocks", 0x6840, (void *)lf_06840, 0, LF_RET_VOID, 4 },
     { "createevent_updatecarmarket", 0x68d0, (void *)lf_068d0, 1, LF_RET_VOID, 4 },
     { "setupitemtypes", 0x6b30, (void *)lf_06b30, 0, LF_RET_VOID, 4 },
@@ -309,6 +308,7 @@ const LfEntry lf_table[] = {
     { "pointinsidebase", 0x89c0, (void *)lf_089c0, 3, LF_RET_INT, 4 },
     { "pointinsidebuilding", 0x8a60, (void *)lf_08a60, 3, LF_RET_INT, 4 },
     { "pointinsidebasesafe", 0x8b00, (void *)lf_08b00, 3, LF_RET_INT, 4 },
+    { "logic_addteamcash", 0x8cf0, (void *)lf_08cf0, 2, LF_RET_VOID, 4 },
     { "logic_teammissioncomplete", 0x8fe0, (void *)lf_08fe0, 2, LF_RET_VOID, 4 },
     { "logic_suits_buy", 0x93e0, (void *)lf_093e0, 2, LF_RET_VOID, 4 },
     { "logic_player", 0x94a0, (void *)lf_094a0, 1, LF_RET_VOID, 4 },
@@ -327,7 +327,6 @@ const LfEntry lf_table[] = {
     { "init_by_array", 0xad70, (void *)lf_0ad70, 2, LF_RET_VOID, 4 },
     { "genrand_int32", 0xae50, (void *)lf_0ae50, 0, LF_RET_INT, 4 },
     { "objecttype_addparticle", 0xb040, (void *)lf_0b040, 5, LF_RET_VOID, 4 },
-    { "objecttype_addbond", 0xb0b0, (void *)lf_0b0b0, 4, LF_RET_VOID, 4 },
     { "objecttype_addface", 0xb150, (void *)lf_0b150, 8, LF_RET_VOID, 4 },
     { "stoptimer", 0xb3f0, (void *)lf_0b3f0, 1, LF_RET_VOID, 4 },
     { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4 },
@@ -456,6 +455,7 @@ const LfEntry lf_table[] = {
     { "calculatefriction", 0x27e80, (void *)lf_27e80, 3, LF_RET_FLOAT, 4 },
     { "createplayer", 0x28020, (void *)lf_28020, 0, LF_RET_INT, 4 },
     { "scenario_armhuman", 0x28190, (void *)lf_28190, 3, LF_RET_VOID, 4 },
+    { "createmission_threeway", 0x28230, (void *)lf_28230, 3, LF_RET_VOID, 4 },
     { "createmission_transaction", 0x286b0, (void *)lf_286b0, 3, LF_RET_VOID, 4 },
     { "objecttype_addwheel", 0x28a90, (void *)lf_28a90, 12, LF_RET_VOID, 4 },
     { "calculatepointscale", 0x28c90, (void *)lf_28c90, 4, LF_RET_VOID, 4 },
@@ -486,9 +486,9 @@ const LfEntry lf_table[] = {
     { "objectenginesimulation2", 0x324c0, (void *)lf_324c0, 0, LF_RET_VOID, 4 },
     { "sphereintersectobject", 0x32bb0, (void *)lf_32bb0, 3, LF_RET_INT, 4 },
     { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4 },
-    { "scenario_createcar", 0x33350, (void *)lf_33350, 6, LF_RET_VOID, 4 },
     { "setupobjecttypeweight", 0x34870, (void *)lf_34870, 1, LF_RET_VOID, 4 },
     { "setupobjecttypes_cars", 0x34c10, (void *)lf_34c10, 0, LF_RET_VOID, 4 },
+    { "setupobjecttypes_helicopters", 0x3a610, (void *)lf_3a610, 0, LF_RET_VOID, 4 },
     { "setupobjectypes_train", 0x3b0c0, (void *)lf_3b0c0, 0, LF_RET_VOID, 4 },
     { "createvehicle", 0x3ccc0, (void *)lf_3ccc0, 3, LF_RET_INT, 4 },
     { "calculateplayervoice", 0x3cfe0, (void *)lf_3cfe0, 2, LF_RET_VOID, 4 },
@@ -511,7 +511,9 @@ const LfEntry lf_table[] = {
     { "createhuman", 0x50ae0, (void *)lf_50ae0, 3, LF_RET_INT, 4 },
     { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4 },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4 },
+    { "scenario_createtraffic2", 0x585b0, (void *)lf_585b0, 1, LF_RET_VOID, 4 },
+    { "createmission_acquisition", 0x58ef0, (void *)lf_58ef0, 3, LF_RET_INT, 4 },
     { "createscenario_world", 0x5aa60, (void *)lf_5aa60, 0, LF_RET_VOID, 4 },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4 },
 };
-const int lf_table_count = 255;
+const int lf_table_count = 256;

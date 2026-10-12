@@ -397,6 +397,19 @@ static int near_float(uint32_t a, uint32_t b)
     return (a > b ? a - b : b - a) <= (uint32_t)g_ulps;
 }
 
+int sv_same_float(double a, double b)
+{
+    float fa = (float)a, fb = (float)b;
+    uint32_t x, y;
+    if (fa == fb)
+        return 1;
+    memcpy(&x, &fa, 4);
+    memcpy(&y, &fb, 4);
+    if (fa != fa && fb != fb)
+        return 1;  /* both NaN */
+    return near_float(x, y);
+}
+
 /* Describe a .data address as "global[i]+0xNN". */
 static void describe(uint32_t rva, char *out, size_t n)
 {

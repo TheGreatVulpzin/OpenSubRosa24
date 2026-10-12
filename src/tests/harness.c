@@ -336,6 +336,23 @@ static int safe_invoke(void *fn, const uint32_t *args, int n, int kind, uint32_t
     return 1;
 }
 
+/* Memory behind a pointer argument: the same, word by word, with the float tolerance of the
+ * verifier (a float output can differ in the last bits, see docs/lift.md "Float precision"). */
+static int same_memory(const uint8_t *a, const uint8_t *b)
+{
+    int i;
+    for (i = 0; i < BUF; i += 4) {
+        float x, y;
+        if (memcmp(a + i, b + i, 4) == 0)
+            continue;
+        memcpy(&x, a + i, 4);
+        memcpy(&y, b + i, 4);
+        if (!sv_same_float(x, y))
+            return 0;
+    }
+    return 1;
+}
+
 /* ------------------------------------------------------------------ main */
 
 int main(int argc, char **argv)
@@ -411,10 +428,17 @@ int main(int argc, char **argv)
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
             same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ((ne ^ no) & mask) == 0) ||
                    (e->ret == LF_RET_INT64 && ne == no && de == dorig) ||
-                   (e->ret == LF_RET_FLOAT && (float)fe == (float)fo);
+                   (e->ret == LF_RET_FLOAT && sv_same_float(fe, fo));
             for (k = 0; k < c->n; k++)
-                if (c->kind[k] == 'P' && memcmp(g_after_new[k], g_buf[k], BUF) != 0)
+                if (c->kind[k] == 'P' && !same_memory(g_after_new[k], g_buf[k])) {
+                    int b = 0;
+                    while (g_after_new[k][b] == g_buf[k][b])
+                        b++;
                     same = 0;
+                    if (getenv("HARNESS_DEBUG"))
+                        printf("  call %d arg %d: memory differs at %+d: new %02x original %02x\n", j, k,
+                               b - BUF / 2, g_after_new[k][b], g_buf[k][b]);
+                }
             sv_verify_end(&v, same && new_ok, NULL);
             if (!orig_ok) {
                 skip++;

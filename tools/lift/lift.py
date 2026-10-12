@@ -618,8 +618,17 @@ def lift_function(f, rva, headers, imports_used):
         return f'((undefined *)0x{v:x})'
     body = re.sub(r'&(_*DAT_([0-9a-f]{8}))(?![\w\[])', immediate, body)
     # Absolute addresses that the loader relocates (ASLR) but the pseudo-C shows as numbers.
-    for v in f.get('relocvals', []):
+    # A compare can show the relocated value plus or minus 1: the code has "cmp esi, END" and
+    # "jae", Ghidra prints "END - 1 < p". createitem searched past the item array.
+    big = [v for v in f.get('relocvals', []) if v >= 0x10000]
+    for v in big:
         body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)
+    for v in big:
+        for d, sign in ((-1, '-'), (1, '+')):
+            if v + d in relocs:
+                continue
+            body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % (v + d),
+                          f'((int)SR_VA(0x{v:x}) {sign} 1)', body)
     body, fpre, fpost = stack_frame(body)
     pre += fpre
     post += fpost
@@ -885,6 +894,16 @@ def main():
             f = json.loads(line)
             funcs[int(f['rva'], 16)] = f
     headers = {rva: h for rva, f in funcs.items() if (h := parse_header(f['c']))}
+    # The stored return type is a value (tools/ghidra/FixReturnTypes.java: callers read EAX),
+    # but the decompiled body returns nothing: the original leaves an intermediate value in
+    # EAX and optimized callers use it. Callers see an int return. The function itself
+    # stays original until its C version computes the same EAX.
+    eax_only = set()
+    for rva, f in funcs.items():
+        h = headers.get(rva)
+        if h and h[0] == 'void' and f.get('ret', 'void') not in ('void', 'undefined'):
+            headers[rva] = ('undefined4',) + tuple(h[1:])
+            eax_only.add(rva)
     names = load_names()
     hand = handwritten_rvas()
     side = side_effects(funcs)
@@ -901,6 +920,9 @@ def main():
             continue
         if rva in side:
             status[rva] = ('side_effect', side[rva])
+            continue
+        if rva in eax_only:
+            status[rva] = ('blocked', 'callers read EAX, the C body returns nothing')
             continue
         text, err = lift_function(funcs[rva], rva, headers, imports_used)
         if err:
