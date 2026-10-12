@@ -31,6 +31,11 @@ if ! java -version 2>&1 | grep -qE 'version "(2[1-9]|[3-9][0-9])'; then
     fi
 fi
 
+if ! command -v unzip >/dev/null; then
+    echo "== Instalando unzip"
+    $( [ "$(id -u)" != 0 ] && command -v sudo ) apt-get install -y -qq unzip
+fi
+
 # ---------------------------------------------------------------- Ghidra
 mkdir -p "$TOOLS"
 if [ ! -x "$TOOLS/ghidra_${GHIDRA_VER}_PUBLIC/support/analyzeHeadless" ]; then
