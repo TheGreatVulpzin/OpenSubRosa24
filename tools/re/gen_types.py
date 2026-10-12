@@ -24,7 +24,17 @@ STRUCTS = {
     'Item': ('item', 0x1ac),
     'Object': ('object', 0x8230),
     'Connection': ('connection', 0xf170),
+    'ItemType': ('itemtype', 0x198),
+    'ObjectType': ('objecttype', 0x828c),
+    'Bond': ('bond', 0xec),
+    'Event': ('event', 0x80),
+    'Bullet': ('bullet', 0x5c),
+    'Body': ('body', 0x40),
 }
+# Capacidade de cada array (tamanho da global no ELF 0.24c / tamanho do registro).
+COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
+          'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 4096,
+          'objecttype': 128, 'itemtype': 64, 'body': 32, 'account': 65536}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12,
              'Bone': 0xe0, 'InventorySlot': 0x24}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
@@ -52,8 +62,17 @@ HEADER = '''/* Gerado por tools/re/gen_types.py. Não edite à mão:
 
 typedef struct vec3 { float x, y, z; } vec3;
 
-/* Osso do corpo (ragdoll). 15 por Human. Campos ainda não mapeados. */
-typedef struct Bone { uint8_t raw[0xe0]; } Bone;
+/* Osso do corpo (ragdoll). 15 por Human, a partir de Human+0xc8.
+ * Fonte: createhuman e bondsimulation2 (Mach-O). */
+typedef struct Bone {
+    vec3 pos;           /* +0x00 createhuman: posição */
+    vec3 pos_prev;      /* +0x0c createhuman: cópia da posição */
+    uint8_t unk_18[0x18];
+    vec3 rot[3];        /* +0x30 createhuman: matriz do parâmetro 2; bondsimulation2 usa as 3 linhas */
+    uint8_t unk_54[0x38];
+    float mass;         /* +0x8c bondsimulation2: proporção de massa com Item.mass */
+    uint8_t unk_90[0x50];
+} Bone;
 
 /* Posição do inventário. 8 por Human. */
 typedef struct InventorySlot {
@@ -77,6 +96,8 @@ typedef struct Account {
 
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
 SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
+SR_STATIC_ASSERT(offsetof(Bone, rot) == 0x30, "Bone.rot");
+SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
 SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
@@ -123,27 +144,37 @@ def gen_struct(cname, glob, size, named, accessed):
 
     lines = [f'/* {glob}[]: registro de 0x{size:x} bytes. */', f'typedef struct {cname} {{']
     pos = 0
-    for off, sz, decl, comment, _ in fields:
+    emitted = set()
+    for off, sz, decl, comment, name in fields:
         if off < pos:
-            continue  # sobreposição: mantém o primeiro (os nomeados vêm antes no mesmo offset)
+            if name:
+                raise SystemExit(f'ERRO: {cname}.{name} (+0x{off:x}) sobrepõe o campo anterior. Corrija names.csv.')
+            continue  # unk_ sobreposto a um campo com nome: descarta
         if off > pos:
             lines.append(f'    uint8_t pad_{pos:04x}[0x{off - pos:x}];')
         lines.append(f'    {decl};'.ljust(40) + f' /* +0x{off:04x} {comment} */')
+        emitted.add(name)
         pos = off + sz
     if pos < size:
         lines.append(f'    uint8_t pad_{pos:04x}[0x{size - pos:x}];')
     lines.append(f'}} {cname};')
     lines.append(f'SR_STATIC_ASSERT(sizeof({cname}) == 0x{size:x}, "{cname}");')
     for off, _sz, _decl, _c, name in fields:
-        if name:
+        if name and name in emitted:
             lines.append(f'SR_STATIC_ASSERT(offsetof({cname}, {name}) == 0x{off:x}, "{cname}.{name}");')
     return '\n'.join(lines)
 
 
 def gen_globals():
-    rows = []
+    # Globais confirmadas à mão têm prioridade sobre o mapa automático.
+    rows = {}
     with open(ROOT / 'analysis/024d/globals.csv', encoding='utf-8') as fh:
-        rows = list(csv.DictReader(fh))
+        for r in csv.DictReader(fh):
+            rows[r['name']] = r
+    with open(ROOT / 'analysis/024d/manual_globals.csv', encoding='utf-8') as fh:
+        for r in csv.DictReader(fh):
+            rows[r['name']] = r
+    rows = list(rows.values())
     types = {g: c for c, (g, _s) in STRUCTS.items()}
     lines = ['/* Gerado por tools/re/gen_types.py a partir de analysis/024d/globals.csv.',
              ' * RVAs das variáveis globais no subrosadedicated024d.exe',
@@ -155,6 +186,10 @@ def gen_globals():
         t = types.get(r['name'])
         note = f'  /* {t}[] */' if t else ''
         lines.append(f'#define SR_RVA_{r["name"].upper():<20} {r["rva"]}u{note}')
+    lines.append('')
+    lines.append('/* Capacidade de cada array (tamanho da global no ELF 0.24c / tamanho do registro). */')
+    for g, n in COUNTS.items():
+        lines.append(f'#define SR_MAX_{g.upper():<20} {n}')
     lines += ['', '#endif', '']
     return '\n'.join(lines)
 

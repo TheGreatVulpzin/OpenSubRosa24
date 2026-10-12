@@ -1,0 +1,14 @@
+rva,name,count,evidence
+0x15e39020,connection,256,manager (ANALISE-NPCS.md) e mapa de votos (16 funções)
+0x1409ba0,bullet,16384,createbullet (0x143b0): memset da base e limite 0x3fff
+0x17529a40,numofbullets,,createbullet: contador com limite 0x3fff
+0x17179a40,bond,16384,createbond (0x129b0): particle_a em +0x14
+0x17179a28,numofbonds,,createbond: contador com limite 0x3fff
+0xb3e7200,particle,4096,createbond: particle+0x50 (número de bonds, limite 31)
+0x93dd880,event,65536,createevent_message (0x6260): grava tipo 2 em +0x0
+0xf437318,numofevents,,createevent_message: índice do evento
+0x10357400,itemtype,64,createitem: itemtype+4 copiado para item.mass
+0xac51bc0,objecttype,128,createobject: lê objecttype+0
+0xf270280,body,32,human_calculatearmangles: índice * 0x10 inteiros (0x40 bytes)
+0xf437b60,account,65536,createaccount: registros em +8 (chave e contador antes)
+0x90dc578,ticks,,createevent_message grava em event.tick; manager: contador de ticks

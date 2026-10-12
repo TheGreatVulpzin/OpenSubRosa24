@@ -1,0 +1,15 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,?:10 undefined4:3,13,0,8,_client_simulation _createhuman _createjointbond _human_calculatearmangles _humansimulation _humansimulationclient _mainmenu _unpackobjectpacket
+0x8,undefined4:2,2,0,2,_humansimulationclient _mainmenu
+0xc,undefined4:2,2,0,2,_humansimulationclient _mainmenu
+0x10,?:7 undefined4:2,9,0,3,_client_simulation _human_calculatearmangles _unpackobjectpacket
+0x14,undefined4:11,11,0,4,_client_simulation _human_calcarmtorque _human_calculatearmangles _unpackobjectpacket
+0x18,undefined4:11,11,0,4,_client_simulation _human_calcarmtorque _human_calculatearmangles _unpackobjectpacket
+0x1c,float:3 undefined4:1,4,0,2,_createhuman _setupbody
+0x20,undefined4:2 float:2,4,0,3,_createhuman _renderframe _setupbody
+0x24,undefined4:2 float:2,4,0,3,_createhuman _renderframe _setupbody
+0x28,undefined4:2 float:2,4,0,3,_createhuman _renderframe _setupbody
+0x2c,undefined4:1,1,0,1,_createhuman
+0x30,?:1 float:1,1,1,2,_createhuman _setupbody
+0x34,float:1,0,1,1,_setupbody
+0x38,float:1,0,1,1,_setupbody

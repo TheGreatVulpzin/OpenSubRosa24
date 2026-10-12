@@ -35,16 +35,23 @@ As funções `createplayer` (`0x28020`), `createhuman` (`0x50ae0`) e `createitem
 | --- | --- | --- |
 | `human+0x34` na criação | `((rand() & 3) + 2) * 3600` | `((rand() & 3) + 3) * 3600` |
 
-## Estado
+## Estado (critérios da Fase 1)
 
-| Struct | Tamanho | Campos com nome | Offsets acessados (`unk_`) |
-| --- | --- | --- | --- |
-| Player | `0x2408` | 11 | ver header |
-| Human | `0x2b64` | 13 | ver header |
-| Item | `0x1ac` | 15 | ver header |
-| Object | `0x8230` | 1 | ver header |
-| Connection | `0xf170` | 3 | ver header |
-| Account | `0x4c` | 8 | completo para o arquivo |
+| Critério | Estado |
+| --- | --- |
+| 1. Structs do servidor no header, com tamanho certo | `Player`, `Human`, `Item`, `Object`, `Connection`, `ItemType`, `ObjectType`, `Bond`, `Event`, `Bullet`, `Body`, `Account`. Falta `Game` (struct única, tamanho de 32 bits ainda não confirmado). |
+| 2. Sub-structs | `Bone` (posição, rotação, massa), `InventorySlot`, `vec3`. |
+| 3. Cobertura de nomes ≥ 80% | **80,0%** dos acessos do servidor (`tools/re/struct_coverage.py`). |
+| 4. Globais do 024d | Todos os arrays acima, mais `numofbonds`, `numofbullets`, `numofevents`, `ticks`. Confirmados em `analysis/024d/manual_globals.csv`. |
+| 5. Validação | Compila no MSVC x86 com `/W4 /WX`. 148 `static_assert` de offset. Offsets conferidos no 024d. |
+
+Capacidades (tamanho da global no ELF 0.24c ÷ tamanho do registro): player 256, human 512, item 1024, object 1024, connection 256, bond 16384, bullet 16384, event 65536 (buffer circular), particle 4096, objecttype 128, itemtype 64, body 32, account 65536.
+
+## Achados de protocolo
+
+- Pacote de entrada do jogador (`serverrecv`): nome (32 bytes) e `account_id` ao entrar. Depois, a cada quadro: 8 floats (`+0x7c..+0x98`), botões (`+0x9c`), `input_mode` (8 bits), `hud_mode` (4 bits), `num_actions` (8 bits).
+- Eventos: o cliente confirma o último evento recebido (`connection.event_ack`, 16 bits). O servidor reenvia do `event_ack` até `numofevents`, no máximo 31 por pacote.
+- Telefones dos times: número = `1111 × time` (`item.phone_id`).
 
 ## Próximos passos
 

@@ -7,6 +7,7 @@
 #define SR_GLOBALS_024D_H
 
 #define SR_RVA_CUBEQUAD             0x60180u
+#define SR_RVA_BULLET               0x1409ba0u  /* Bullet[] */
 #define SR_RVA_DEBUG                0x1579ba0u
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u
@@ -15,15 +16,42 @@
 #define SR_RVA_OPTION               0x90dc340u
 #define SR_RVA_NUMOFTRACKS          0x90dc520u
 #define SR_RVA_GAME                 0x90dc540u
+#define SR_RVA_TICKS                0x90dc578u
 #define SR_RVA_ITEM                 0x91022c0u  /* Item[] */
 #define SR_RVA_SOUNDLIST            0x916d700u
+#define SR_RVA_EVENT                0x93dd880u  /* Event[] */
+#define SR_RVA_OBJECTTYPE           0xac51bc0u  /* ObjectType[] */
+#define SR_RVA_PARTICLE             0xb3e7200u
 #define SR_RVA_FILELIST             0xe219200u
 #define SR_RVA_CITY                 0xe299220u
 #define SR_RVA_PLAYER               0xededd00u  /* Player[] */
 #define SR_RVA_MATERIALLIST         0xf26fd00u
+#define SR_RVA_BODY                 0xf270280u  /* Body[] */
+#define SR_RVA_NUMOFEVENTS          0xf437318u
+#define SR_RVA_ACCOUNT              0xf437b60u
 #define SR_RVA_INTERSECT            0x103484a0u
+#define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
 #define SR_RVA_SPEEX                0x12a81d00u
 #define SR_RVA_PARSER               0x13d22d64u
+#define SR_RVA_CONNECTION           0x15e39020u  /* Connection[] */
+#define SR_RVA_NUMOFBONDS           0x17179a28u
+#define SR_RVA_BOND                 0x17179a40u  /* Bond[] */
+#define SR_RVA_NUMOFBULLETS         0x17529a40u
 #define SR_RVA_BSDSOCKET            0x1952d680u
+
+/* Capacidade de cada array (tamanho da global no ELF 0.24c / tamanho do registro). */
+#define SR_MAX_PLAYER               256
+#define SR_MAX_HUMAN                512
+#define SR_MAX_ITEM                 1024
+#define SR_MAX_OBJECT               1024
+#define SR_MAX_CONNECTION           256
+#define SR_MAX_BOND                 16384
+#define SR_MAX_BULLET               16384
+#define SR_MAX_EVENT                65536
+#define SR_MAX_PARTICLE             4096
+#define SR_MAX_OBJECTTYPE           128
+#define SR_MAX_ITEMTYPE             64
+#define SR_MAX_BODY                 32
+#define SR_MAX_ACCOUNT              65536
 
 #endif

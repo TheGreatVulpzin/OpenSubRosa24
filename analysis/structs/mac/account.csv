@@ -1,0 +1,11 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,int:3,2,1,1,_logicsimulation_world
+0x8,?:2 int:1,3,0,3,_createaccount _loadaccountsserver _saveaccountsserver
+0xc,?:2 int:1,3,0,3,_createaccount _loadaccountsserver _saveaccountsserver
+0x10,?:6,6,0,5,_account_nameexists _createaccount _loadaccountsserver _saveaccountsserver _server_writelogfile
+0x30,int:4 undefined4:1,3,2,2,_createaccount _logicsimulation_world
+0x34,int:6 ?:2,7,1,5,_accountdeathtax _loadaccountsserver _logic_farbslist _newspaper_load _saveaccountsserver
+0x38,?:2 uint:2,4,0,3,_loadaccountsserver _saveaccountsserver _server_writelogfile
+0x3c,int:4 ?:2,3,3,3,_createaccount _loadaccountsserver _saveaccountsserver
+0x40,uint:3 ?:2 int:1,3,3,3,_createaccount _loadaccountsserver _saveaccountsserver
+0x44,uint:3 ?:2 int:1,3,3,3,_createaccount _loadaccountsserver _saveaccountsserver

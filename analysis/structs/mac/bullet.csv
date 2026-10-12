@@ -1,0 +1,10 @@
+offset,types,reads,writes,n_funcs,funcs
+0x4,int:4 undefined4:3,3,4,2,_bulletsimulation _bullettimetolive
+0x8,int:6 undefined4:2,8,0,1,_bulletsimulation
+0xc,float:8,8,0,1,_bulletsimulation
+0x10,float:1,1,0,1,_bulletsimulation
+0x14,?:8,8,0,2,_buildframelist _bulletsimulation
+0x20,?:5,5,0,2,_bulletsimulation _renderframe
+0x2c,?:14,14,0,1,_bulletsimulation
+0x30,float:2,1,1,1,_bulletsimulation
+0x38,?:1,1,0,1,_buildframelist
