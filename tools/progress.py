@@ -18,6 +18,8 @@ def main():
     md = '--md' in sys.argv
     hooks_src = (ROOT / 'hook/hooks_024d.c').read_text(encoding='utf-8')
     hooked = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),', hooks_src))
+    lifted_path = ROOT / 'hook/hooks_lifted.c'
+    lifted = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),', lifted_path.read_text(encoding='utf-8')))         if lifted_path.exists() else {}
     doc = (ROOT / 'docs/hooks.md').read_text(encoding='utf-8')
     verified = set(re.findall(r'^\| `(\w+)` \|[^\n]*\*\*Verified\*\*', doc, re.M))
 
@@ -29,8 +31,11 @@ def main():
     hooked_bytes = sum(size.get(int(rva, 16), 0) for rva in hooked.values())
     verified_bytes = sum(size.get(int(hooked[n], 16), 0) for n in verified if n in hooked)
 
+    lifted_bytes = sum(size.get(int(rva, 16), 0) for rva in lifted.values())
     lines = [
-        ('Functions in C (hook installed)', len(hooked), total_funcs, hooked_bytes, total_bytes),
+        ('Functions in C (hand-written)', len(hooked), total_funcs, hooked_bytes, total_bytes),
+        ('Functions in C (lifted)', len(lifted), total_funcs, lifted_bytes, total_bytes),
+        ('Functions in C (total)', len(hooked) + len(lifted), total_funcs, hooked_bytes + lifted_bytes, total_bytes),
         ('Functions verified in the game', len(verified & set(hooked)), total_funcs, verified_bytes, total_bytes),
     ]
     if md:
