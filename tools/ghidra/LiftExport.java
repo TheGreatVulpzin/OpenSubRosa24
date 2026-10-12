@@ -7,6 +7,9 @@
 // Usage (headless, -process <program> -noanalysis): -postScript LiftExport.java <output.jsonl>
 //@category SubVulpes
 
+import ghidra.app.decompiler.ClangNode;
+import ghidra.app.decompiler.ClangToken;
+import ghidra.app.decompiler.ClangVariableToken;
 import ghidra.app.decompiler.DecompInterface;
 import ghidra.app.decompiler.DecompileOptions;
 import ghidra.app.decompiler.DecompileResults;
@@ -16,6 +19,7 @@ import ghidra.program.model.data.DataType;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.pcode.HighFunction;
 import ghidra.program.model.pcode.HighSymbol;
+import ghidra.program.model.pcode.HighVariable;
 import ghidra.program.model.reloc.Relocation;
 
 import java.io.PrintWriter;
@@ -60,11 +64,13 @@ public class LiftExport extends GhidraScript {
                 field(sb, "ok", String.valueOf(r.decompileCompleted())).append(',');
                 field(sb, "c", r.decompileCompleted() ? r.getDecompiledFunction().getC() : "").append(',');
                 sb.append("\"globals\":[");
-                if (r.decompileCompleted()) globals(sb, r.getHighFunction());
+                if (r.decompileCompleted()) globals(sb, r);
                 sb.append("],\"calls\":[");
                 calls(sb, f);
                 sb.append("],");
                 prologue(sb, f);
+                sb.append(',');
+                relocValues(sb, f);
                 sb.append('}');
                 w.println(sb);
             }
@@ -73,21 +79,40 @@ public class LiftExport extends GhidraScript {
         println("Exported: " + out);
     }
 
-    private void globals(StringBuilder sb, HighFunction hf) {
-        boolean first = true;
-        Iterator<HighSymbol> it = hf.getGlobalSymbolMap().getSymbols();
+    /* Globals: the symbol map, plus every DAT_/_DAT_ token of the C output with the data type
+     * the decompiler used for it (an "overlap" global like _DAT_x is not in the symbol map). */
+    private void globals(StringBuilder sb, DecompileResults r) {
+        Map<String, String[]> found = new LinkedHashMap<>();
+        Iterator<HighSymbol> it = r.getHighFunction().getGlobalSymbolMap().getSymbols();
         while (it.hasNext()) {
             HighSymbol s = it.next();
             Address a = s.getStorage().isMemoryStorage() ? s.getStorage().getMinAddress() : null;
             if (a == null) continue;
             DataType dt = s.getDataType();
+            found.put(s.getName(), new String[] { String.format("0x%x", a.getOffset()), dt.getDisplayName(),
+                    String.valueOf(dt.getLength()) });
+        }
+        List<ClangNode> leaves = new ArrayList<>();
+        r.getCCodeMarkup().flatten(leaves);
+        for (ClangNode n : leaves) {
+            if (!(n instanceof ClangVariableToken)) continue;
+            String text = ((ClangToken) n).getText();
+            if (found.containsKey(text) || !text.matches("_*DAT_[0-9a-f]{8}")) continue;
+            HighVariable hv = ((ClangVariableToken) n).getHighVariable();
+            if (hv == null) continue;
+            DataType dt = hv.getDataType();
+            String hexAddr = text.substring(text.indexOf("DAT_") + 4);
+            found.put(text, new String[] { "0x" + hexAddr, dt.getDisplayName(), String.valueOf(dt.getLength()) });
+        }
+        boolean first = true;
+        for (Map.Entry<String, String[]> e : found.entrySet()) {
             if (!first) sb.append(',');
             first = false;
             sb.append('{');
-            field(sb, "name", s.getName()).append(',');
-            field(sb, "va", String.format("0x%x", a.getOffset())).append(',');
-            field(sb, "type", dt.getDisplayName()).append(',');
-            sb.append("\"size\":").append(dt.getLength());
+            field(sb, "name", e.getKey()).append(',');
+            field(sb, "va", e.getValue()[0]).append(',');
+            field(sb, "type", e.getValue()[1]).append(',');
+            sb.append("\"size\":").append(e.getValue()[2]);
             sb.append('}');
         }
     }
@@ -140,6 +165,25 @@ public class LiftExport extends GhidraScript {
             sb.append(rel.getAddress().subtract(f.getEntryPoint()));
         }
         sb.append("]}");
+    }
+
+    /* Values at relocation sites inside the function: absolute addresses that the loader
+     * moves with ASLR. The pseudo-C shows some of them as plain numbers. */
+    private void relocValues(StringBuilder sb, Function f) throws Exception {
+        TreeSet<Long> vals = new TreeSet<>();
+        Iterator<Relocation> it = currentProgram.getRelocationTable().getRelocations(f.getBody());
+        while (it.hasNext()) {
+            Relocation rel = it.next();
+            vals.add(currentProgram.getMemory().getInt(rel.getAddress()) & 0xffffffffL);
+        }
+        sb.append("\"relocvals\":[");
+        boolean first = true;
+        for (long v : vals) {
+            if (!first) sb.append(',');
+            first = false;
+            sb.append(v);
+        }
+        sb.append(']');
     }
 
     private String hex(Address a) {

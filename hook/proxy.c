@@ -11,6 +11,7 @@
 
 #include "hook.h"
 #include "sr_runtime.h"
+#include "verify.h"
 
 int sv_hooks_024d_install(void);
 void sv_hooks_024d_summary(void);
@@ -94,6 +95,7 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
             sv_log("executable is not the expected 024d. Only forwarding the network.");
         } else {
             int n = sv_hooks_024d_install();
+            sv_install_crash_report();
             sv_log("%d hook(s) installed", n);
         }
     } else if (reason == DLL_PROCESS_DETACH) {

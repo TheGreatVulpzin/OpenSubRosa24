@@ -41,6 +41,9 @@ void sv_verify_set_section(const char *name);
 /* Find the .data section and the MSVCR100 rand() state. Returns 0 on failure. */
 int sv_verify_init(void);
 
+/* 1 = a verification is running now (a hook called from inside it must run the original). */
+int sv_verify_busy(void);
+
 /* 1 = verify this call. Obeys verify=0 and sampling. */
 int sv_verify_should(SvVerify *v);
 
@@ -61,6 +64,12 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail);
 /* SEH filter for the new version: log the crash, mark the hook as broken
  * and tell Windows to run the __except block. */
 int sv_crash_filter(SvVerify *v, struct _EXCEPTION_POINTERS *ep);
+
+/* Remember a hook call (ring of 16) for the crash report. */
+void sv_note_call(const char *name);
+
+/* Log the address and the last hooks when the process dies of an exception. */
+void sv_install_crash_report(void);
 
 /* Summary of one hook in the log. */
 void sv_verify_summary(const SvVerify *v);

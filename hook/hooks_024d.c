@@ -107,14 +107,24 @@ static void expect_va(uint8_t *expect, int offset, uint32_t rva)
     memcpy(expect + offset, &va, 4);
 }
 
+int sv_hooks_lifted_install(void);
+void sv_hooks_lifted_summary(void);
+
 int sv_hooks_024d_install(void)
 {
+    int n;
     expect_va(expect_createevent_message, 2, SR_RVA_SERVER);
     expect_va(expect_createevent_updatedoor, 2, SR_RVA_SERVER);
     expect_va(expect_createevent_updatemission, 2, SR_RVA_SERVER);
 
     sv_verify_init();
-    return sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
+    n = sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
+    /* Functions lifted automatically from Ghidra (tools/lift/lift.py). subvulpes.ini: lifted=0 disables all. */
+    if (sv_config_int("lifted", 1))
+        n += sv_hooks_lifted_install();
+    else
+        sv_log("lifted hooks disabled (lifted=0)");
+    return n;
 }
 
 /* Called when the process exits. */
@@ -124,4 +134,5 @@ void sv_hooks_024d_summary(void)
     for (i = 0; i < sizeof g_stats / sizeof g_stats[0]; i++)
         if (g_stats[i]->calls)
             sv_verify_summary(g_stats[i]);
+    sv_hooks_lifted_summary();
 }

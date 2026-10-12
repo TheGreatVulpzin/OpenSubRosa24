@@ -4,6 +4,7 @@
 //
 // Usage (headless, -process <program> -noanalysis):
 //   -postScript PrintPrologue.java <output.txt> <rva> [rva ...]
+//   An argument "n40" sets how many instructions to print for the next addresses (default 8).
 //@category SubVulpes
 
 import ghidra.app.script.GhidraScript;
@@ -19,12 +20,17 @@ public class PrintPrologue extends GhidraScript {
         String[] args = getScriptArgs();
         long base = currentProgram.getImageBase().getOffset();
         try (PrintWriter w = new PrintWriter(args[0], "UTF-8")) {
+            int count = 8;
             for (int i = 1; i < args.length; i++) {
+                if (args[i].startsWith("n")) {
+                    count = Integer.parseInt(args[i].substring(1));
+                    continue;
+                }
                 long rva = Long.decode(args[i]);
                 w.printf("== rva 0x%x%n", rva);
-                Instruction ins = getInstructionAt(toAddr(base + rva));
+                Instruction ins = getInstructionContaining(toAddr(base + rva));
                 int total = 0;
-                for (int n = 0; ins != null && n < 8; n++) {
+                for (int n = 0; ins != null && n < count; n++) {
                     StringBuilder hex = new StringBuilder();
                     for (byte b : ins.getBytes()) hex.append(String.format("%02x ", b));
                     boolean rel = ins.getFlowType().isJump() || ins.getFlowType().isCall();

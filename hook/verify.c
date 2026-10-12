@@ -205,6 +205,60 @@ int sv_verify_init(void)
     return 1;
 }
 
+/* Ring of the last hooks called, for the crash report. */
+static const char *g_recent[16];
+static unsigned g_recent_pos;
+
+void sv_note_call(const char *name)
+{
+    g_recent[g_recent_pos++ & 15] = name;
+}
+
+static LONG WINAPI on_unhandled(EXCEPTION_POINTERS *ep)
+{
+    static int reported;
+    EXCEPTION_RECORD *er = ep->ExceptionRecord;
+    uintptr_t at = (uintptr_t)er->ExceptionAddress;
+    HMODULE mod = NULL;
+    char modname[MAX_PATH] = "?";
+    unsigned i;
+
+    /* Vectored handler: it sees every exception first. Report only access violations
+     * and similar errors, once, and let the normal handling continue. */
+    if (reported || (er->ExceptionCode != EXCEPTION_ACCESS_VIOLATION &&
+                     er->ExceptionCode != EXCEPTION_ILLEGAL_INSTRUCTION &&
+                     er->ExceptionCode != EXCEPTION_STACK_OVERFLOW &&
+                     er->ExceptionCode != EXCEPTION_INT_DIVIDE_BY_ZERO))
+        return EXCEPTION_CONTINUE_SEARCH;
+    reported = 1;
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                       (LPCSTR)at, &mod);
+    if (mod)
+        GetModuleFileNameA(mod, modname, MAX_PATH);
+    sv_log("FATAL (first report): exception 0x%08lx at %s+0x%x.", er->ExceptionCode,
+           strrchr(modname, 0x5c) ? strrchr(modname, 0x5c) + 1 : modname, (unsigned)(at - (uintptr_t)mod));
+    if (er->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && er->NumberParameters >= 2)
+        sv_log("  %s access at 0x%08x", er->ExceptionInformation[0] ? "write" : "read",
+               (unsigned)er->ExceptionInformation[1]);
+    for (i = 0; i < 16; i++) {
+        const char *n = g_recent[(g_recent_pos + i) & 15];
+        if (n)
+            sv_log("  recent hook: %s", n);
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+void sv_install_crash_report(void)
+{
+    /* Priority 0: after the page-guard handler, so the verifier faults never get here. */
+    AddVectoredExceptionHandler(0, on_unhandled);
+}
+
+int sv_verify_busy(void)
+{
+    return g_active != NULL;
+}
+
 int sv_verify_should(SvVerify *v)
 {
     v->calls++;
