@@ -280,6 +280,9 @@ def expr_type(e, types):
     if m:
         t = types.get(m.group(1), '')
         return t[:-1].strip() if t.endswith('*') else ''
+    m = re.fullmatch(r'\*\s*\(([A-Za-z_][\w ]*?)\s*\*\)\s*(\(.*\)|[A-Za-z_]\w*)', e, flags=re.S)
+    if m:
+        return m.group(1).strip()  # *(T *)(p): a T
     m = re.fullmatch(r'\(&([A-Za-z_]\w*)\)\s*\[[^\[\]]*\]', e)
     if m:
         return types.get(m.group(1), '')  # (&DAT_x)[i]: element of the type of DAT_x
@@ -356,7 +359,7 @@ def lvalue_end(s, j, undef):
     return -1
 
 
-def raw_float_uses(body, undef):
+def raw_float_uses(body, undef, floats=frozenset()):
     """Ghidra: a cast from raw bytes (undefined4) to float is a bit copy, and so is a float
     stored into raw bytes. In C both convert the number. Rewrite:
       (float)X        -> (*(float *)&(X))
@@ -378,7 +381,9 @@ def raw_float_uses(body, undef):
     def store(m):
         lv, rhs = m.group(2), m.group(3)
         end = lvalue_end(lv, 0, undef)
-        if end != len(lv) or not FLOATISH_RE.search(rhs) or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
+        floatish = (FLOATISH_RE.search(rhs) or re.search(r'\*\s*\(float \*\)', rhs)
+                    or any(re.search(r'\b' + re.escape(n) + r'\b', rhs) for n in floats))
+        if end != len(lv) or not floatish or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
             return m.group(0)
         return f'{m.group(1)}*(float *)&({lv}) = {rhs};'
     return re.sub(r'^(\s*)([^=;\n]+?)\s*=\s*([^=;][^;]*);', store, body, flags=re.M)
@@ -579,7 +584,8 @@ def lift_function(f, rva, headers, imports_used):
     body = partial_access(strip_comments(c)).strip()
     body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
     body = re.sub(r'\bNAN\b(?!\s*\()', 'LF_NAN', body)
-    body = raw_float_uses(body, undefined_names(body, params, f['globals']))
+    floats = {n for n, t in local_types(body, params).items() if t in ('float', 'float10', 'double')}
+    body = raw_float_uses(body, undefined_names(body, params, f['globals']), floats)
     body = pointer_float_casts(body, params, f['globals'])
     body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),
                          dict({g["name"]: g["type"].strip() for g in f["globals"]}, **local_types(body, params)))

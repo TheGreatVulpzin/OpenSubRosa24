@@ -88,6 +88,9 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 3. Admin console / RCON, structured logs, server-side anti-cheat checks.
 4. Own server list if the Cryptic Sea master (`crypticsea.com/anewzero/serverinfo.php`) no longer answers.
 5. Profile `servercycle` and optimize (tick rate, packet sending, collisions).
+6. Fix the input checks of the original server (`docs/protocol.md`, section 12, item 15):
+   - **Voice index (security):** `serverrecv` (0x33650) reads the voice frame index of a type 4 packet with 8 bits and uses it before the `& 0x3f` mask. An index from 64 to 255 makes `memcpy` write up to 255 client bytes up to 48 KB after the 64-entry voice ring. Mask or reject the index before the copy.
+   - Item count of the object part (8 bits, no cap), the server name copy (`strcpy`, longer than the 32 bytes sent) and the human health (`health + 10` in 7 bits, wraps above 117).
 
 ## Phase 6 — Client
 
