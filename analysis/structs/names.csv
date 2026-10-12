@@ -1,154 +1,154 @@
 struct,offset,name,type,count,evidence
-player,0x0,active,int,,createplayer grava 1
-player,0x4,name,char,32,createaccount copia 32 bytes para a conta
-player,0x24,account_id,uint32_t,2,createaccount compara com conta+0x00 e +0x04
-player,0x40,money,int,,createplayer grava 50000; manager (black_market.c) usa como saldo; logic_gunstore_buy
-player,0x64,team,int,,createplayer grava 7; createhuman copia para human.team; logic_addteamcash
-player,0x78,human_id,int,,createplayer grava -1; manager: corpo do jogador
-player,0x8c,yaw,float,,manager (ANALISE-NPCS.md): yaw do jogador
-player,0x22f4,colors,vec3,4,createplayer inicia 4 vetores; createhuman copia para human+0x2a5c (provável: cores da roupa)
-player,0x23b4,look_a,int,,createplayer: rand() % 3; igual a conta.look_a
+player,0x0,active,int,,createplayer writes 1
+player,0x4,name,char,32,createaccount copies 32 bytes to the account
+player,0x24,account_id,uint32_t,2,createaccount compares with account+0x00 and +0x04
+player,0x40,money,int,,createplayer writes 50000; manager (black_market.c) uses it as the balance; logic_gunstore_buy
+player,0x64,team,int,,createplayer writes 7; createhuman copies it to human.team; logic_addteamcash
+player,0x78,human_id,int,,createplayer writes -1; manager: the player's body
+player,0x8c,yaw,float,,manager (ANALISE-NPCS.md): player yaw
+player,0x22f4,colors,vec3,4,createplayer initializes 4 vectors; createhuman copies them to human+0x2a5c (likely: clothes colors)
+player,0x23b4,look_a,int,,createplayer: rand() % 3; equal to account.look_a
 player,0x23b8,look_b,int,,createplayer: rand() & 7
 player,0x23bc,look_c,int,,createplayer: rand() & 3
-human,0x0,active,int,,createhuman grava 1
-human,0x8,player_id,int,,createhuman: parâmetro 3 (dono)
-human,0x24,despawn_timer,int,,createhuman grava 0xe10 (3600) (provável)
-human,0x28,health,int,,createhuman grava 100; manager: vida
-human,0xc8,bones,Bone,15,createhuman: loop de 15 com stride 0xe0
-human,0x291c,inventory,InventorySlot,8,createhuman: loop de 8 com stride 0x24; manager: contagem +0 e item +4
-human,0x2a5c,colors,vec3,4,createhuman copia de player.colors
-human,0x2b1c,bleeding,int,,manager: faca grava 1 (provável: sangramento)
-human,0x2b2c,team,int,,createhuman copia de player.team
-human,0x2b30,look_b,int,,createhuman copia de player.look_b
-human,0x2b34,look_c,int,,createhuman copia de player.look_c
-human,0x2b38,look_a,int,,createhuman copia de player.look_a
-item,0x0,active,int,,createitem grava 1
-item,0xc,type,int,,createitem: parâmetro 1 (tipo do item)
-item,0x10,mass,float,,createitem: itemtype+4; bondsimulation2 usa em proporção de massa com Bone.mass
-item,0x14,unk_14,int,,createitem grava 0xffff
-item,0x18,parent_human,int,,createitem grava -1 (provável)
-item,0x1c,parent_item,int,,createitem grava -1 (provável)
-item,0x38,state,int,,manager: estado 3 = telefone especial
-item,0x48,pos,vec3,,createitem: parâmetro 2 (posição)
-item,0x54,pos_prev,vec3,,createitem: cópia da posição
-item,0x6c,vel,vec3,,createitem: parâmetro 3 (velocidade)
-item,0x84,rot,vec3,3,createitem: parâmetro 4 (matriz 3x3)
-item,0x108,phone_number,int,,manager: número discado
-item,0x110,call_state,int,,manager: estado da ligação
-object,0x0,active,int,,manager: slot livre com flag 0
+human,0x0,active,int,,createhuman writes 1
+human,0x8,player_id,int,,createhuman: parameter 3 (owner)
+human,0x24,despawn_timer,int,,createhuman writes 0xe10 (3600) (likely)
+human,0x28,health,int,,createhuman writes 100; manager: health
+human,0xc8,bones,Bone,15,createhuman: loop of 15 with stride 0xe0
+human,0x291c,inventory,InventorySlot,8,createhuman: loop of 8 with stride 0x24; manager: count +0 and item +4
+human,0x2a5c,colors,vec3,4,createhuman copies from player.colors
+human,0x2b1c,bleeding,int,,manager: knife writes 1 (likely: bleeding)
+human,0x2b2c,team,int,,createhuman copies from player.team
+human,0x2b30,look_b,int,,createhuman copies from player.look_b
+human,0x2b34,look_c,int,,createhuman copies from player.look_c
+human,0x2b38,look_a,int,,createhuman copies from player.look_a
+item,0x0,active,int,,createitem writes 1
+item,0xc,type,int,,createitem: parameter 1 (item type)
+item,0x10,mass,float,,createitem: itemtype+4; bondsimulation2 uses it in the mass ratio with Bone.mass
+item,0x14,unk_14,int,,createitem writes 0xffff
+item,0x18,parent_human,int,,createitem writes -1 (likely)
+item,0x1c,parent_item,int,,createitem writes -1 (likely)
+item,0x38,state,int,,manager: state 3 = special phone
+item,0x48,pos,vec3,,createitem: parameter 2 (position)
+item,0x54,pos_prev,vec3,,createitem: copy of the position
+item,0x6c,vel,vec3,,createitem: parameter 3 (velocity)
+item,0x84,rot,vec3,3,createitem: parameter 4 (3x3 matrix)
+item,0x108,phone_number,int,,manager: dialed number
+item,0x110,call_state,int,,manager: call state
+object,0x0,active,int,,manager: free slot with flag 0
 connection,0x0,ip,uint32_t,,manager (ANALISE-NPCS.md)
 connection,0x4,port,int,,manager (ANALISE-NPCS.md)
 connection,0x10,player_id,int,,manager (ANALISE-NPCS.md)
 player,0x6c,stocks,int,,playerbuystock/playersellstock; economysimulation
-player,0x7c,input_axes,float,4,getinputs_human/car/heli gravam floats
-player,0x90,input_pitch,float,,getinputs_* gravam; vizinho de yaw (provável)
-player,0x9c,input_buttons,uint32_t,,getinputs_* gravam bits
-player,0xd4,menu,int,,playermenu compara com 1 e 2; logic_player grava 9
-player,0xd8,menu_building,int,,logic_cardealer_buy usa como índice (passo 0x9dc); serversend envia 16 bits
-player,0xe4,num_actions,int,,player_addaction_chat/menu: índice de ações (passo 0x54)
-player,0x1a44,ai_waypoint,int,,ai_playercar/ai_car_nextwaypoint: índice no caminho (passo 0x1c em +0x1a58)
-human,0x14,vehicle_id,int,,createhuman grava -1; packobjectpacket envia se != -1
-human,0x18,vehicle_seat,int,,playerai compara com 0 (motorista) e 1
-human,0x48,pos,vec3,,manager: posição global; logic_playeractions usa em pointinsidebase
-human,0xbc,input_buttons,uint32_t,,humansimulation testa bits &1 &8 &0x10
-human,0xc0,input_buttons_prev,uint32_t,,createhuman grava 0x3c0; testes de bits como +0xbc (provável: botões do quadro anterior)
-item,0x20,parent_slot,int,,clientrecv: índice * 0x24 + 0x291c (InventorySlot do corpo)
-item,0x24,num_children,int,,linkitemtoitem: < 8; deleteitem: laço
-item,0xb4,torque,vec3,,itemsimulation zera e acumula por quadro; bondsimulation2 soma crossproduct (provável)
-item,0xf8,linked_item,int,,itemlogic grava índice de item; logic_setteammanager zera call_state do item ligado
-item,0x114,vehicle_id,int,,player_calcassets: < 0x400; economysimulation: índice * 0x8230 (provável: chave)
-item,0x138,cash,int,,item_removebill/logic_playeractions comparam valor
-item,0x13c,bills_mask,uint32_t,,item_addbill/resetgame alteram bits
-object,0x4,type,int,,createobject: parâmetro 1; índice em objecttype
-object,0xc,health,int,,createobject grava 100 (provável)
-object,0x14,driver,int,,createobject grava -1 (provável)
-object,0x24,pos,vec3,,createobject: parâmetro 2
-object,0x30,pos_prev,vec3,,createobject: cópia de pos
-object,0x3c,rot,vec3,3,createobject: matriz do parâmetro 4; objectsimulation normaliza e faz crossproduct
-object,0x60,vel,vec3,,"objectsimulation zera, soma e escala"
-object,0x6c,vel_prev,vec3,,objectsimulation copia de vel
-objecttype,0x38,num_particles,int,,objecttype_addparticle incrementa (passo 0x14)
-objecttype,0x740,num_bonds,int,,objecttype_addbond incrementa (passo 0xc)
-objecttype,0x1344,num_faces,int,,objecttype_addface incrementa (passo 0x40)
-objecttype,0x775c,num_wheels,int,,objecttype_addwheel incrementa (passo 0x44)
-event,0x0,type,int,,packevent: pbitwrite 6 bits; createevent_sound grava 9
-event,0x4,tick,int,,packevent: 28 bits; comparado com game+0x34 (idade < 600)
-event,0x8,pos,vec3,,packevent: cs_pwrite 3 floats; createevent_sound: posição
+player,0x7c,input_axes,float,4,getinputs_human/car/heli write floats
+player,0x90,input_pitch,float,,getinputs_* write it; neighbor of yaw (likely)
+player,0x9c,input_buttons,uint32_t,,getinputs_* write bits
+player,0xd4,menu,int,,playermenu compares with 1 and 2; logic_player writes 9
+player,0xd8,menu_building,int,,logic_cardealer_buy uses it as an index (stride 0x9dc); serversend sends 16 bits
+player,0xe4,num_actions,int,,player_addaction_chat/menu: action index (stride 0x54)
+player,0x1a44,ai_waypoint,int,,ai_playercar/ai_car_nextwaypoint: index into the path (stride 0x1c at +0x1a58)
+human,0x14,vehicle_id,int,,createhuman writes -1; packobjectpacket sends it if != -1
+human,0x18,vehicle_seat,int,,playerai compares with 0 (driver) and 1
+human,0x48,pos,vec3,,manager: global position; logic_playeractions uses it in pointinsidebase
+human,0xbc,input_buttons,uint32_t,,humansimulation tests bits &1 &8 &0x10
+human,0xc0,input_buttons_prev,uint32_t,,createhuman writes 0x3c0; bit tests like +0xbc (likely: buttons of the previous frame)
+item,0x20,parent_slot,int,,clientrecv: index * 0x24 + 0x291c (InventorySlot of the body)
+item,0x24,num_children,int,,linkitemtoitem: < 8; deleteitem: loop
+item,0xb4,torque,vec3,,itemsimulation zeroes it and accumulates per frame; bondsimulation2 adds crossproduct (likely)
+item,0xf8,linked_item,int,,itemlogic writes an item index; logic_setteammanager zeroes call_state of the linked item
+item,0x114,vehicle_id,int,,player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key)
+item,0x138,cash,int,,item_removebill/logic_playeractions compare the value
+item,0x13c,bills_mask,uint32_t,,item_addbill/resetgame change bits
+object,0x4,type,int,,createobject: parameter 1; index into objecttype
+object,0xc,health,int,,createobject writes 100 (likely)
+object,0x14,driver,int,,createobject writes -1 (likely)
+object,0x24,pos,vec3,,createobject: parameter 2
+object,0x30,pos_prev,vec3,,createobject: copy of pos
+object,0x3c,rot,vec3,3,createobject: matrix from parameter 4; objectsimulation normalizes it and does crossproduct
+object,0x60,vel,vec3,,"objectsimulation zeroes, adds and scales"
+object,0x6c,vel_prev,vec3,,objectsimulation copies from vel
+objecttype,0x38,num_particles,int,,objecttype_addparticle increments (stride 0x14)
+objecttype,0x740,num_bonds,int,,objecttype_addbond increments (stride 0xc)
+objecttype,0x1344,num_faces,int,,objecttype_addface increments (stride 0x40)
+objecttype,0x775c,num_wheels,int,,objecttype_addwheel increments (stride 0x44)
+event,0x0,type,int,,packevent: pbitwrite 6 bits; createevent_sound writes 9
+event,0x4,tick,int,,packevent: 28 bits; compared with game+0x34 (age < 600)
+event,0x8,pos,vec3,,packevent: cs_pwrite 3 floats; createevent_sound: position
 event,0x14,vec,vec3,,packevent: cs_pwrite 3 floats
-event,0x20,param,int,,createevent_sound: id do som; packevent: 4 bits em alguns tipos
-event,0x24,attach_type,int,,"packevent: 1 = human (usa human+0x288), 2 = item (usa item.pos)"
-event,0x28,attach_id,int,,packevent: índice do human/item; 10 bits com sinal
-event,0x2c,range_mode,int,,"packevent: 0 reduz, 2 dobra o alcance pela distância"
-event,0x30,sound_a,float,,createevent_sound: parâmetro 3
-event,0x34,sound_b,float,,createevent_sound: parâmetro 4
-bullet,0x0,type,int,,createbullet: parâmetro 1
-bullet,0x4,ttl,int,,createbullet grava 600
-bullet,0x8,owner,int,,createbullet: parâmetro 4
-bullet,0x14,pos,vec3,,createbullet: parâmetro 2
-bullet,0x20,pos_prev,vec3,,createbullet: cópia da posição
-bullet,0x2c,vel,vec3,,createbullet: parâmetro 3
-bond,0x0,state,int,,createbond grava 0
-bond,0x4,type,int,,createbond: parâmetro 1
-bond,0xc,mode,int,,"createbond: 3, ou 0 se tipo 1; humansimulation alterna 0/3"
-bond,0x10,unk_10,int,,createbond grava 2
-bond,0x14,particle_a,int,,createbond: parâmetro 2 (índice em particle[])
-bond,0x18,particle_b,int,,createbond: parâmetro 3
-bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (provável)
-bond,0x74,friction_dir,vec3,,bondsimulation2: scalevector e calculatefriction (provável)
-body,0x4,pos,vec3,,human_calculatearmangles: subtractvectors com a posição do osso
-itemtype,0x80,size,vec3,,setupitemtypes: produtos de 0x80/0x84/0x88 (provável: dimensões para massa)
-connection,0xc,unk_0c,int,,packevent: == 0 libera eventos de tipo 2
-connection,0x14,send_timer,int,,serversend: < 1 envia e recarrega (provável)
-connection,0x18,timeout,int,,servercycle: dividido por 0x3c (60) (provável)
-connection,0x1c,packets_received,int,,serverrecv incrementa (provável)
-connection,0x4c,sequence,uint32_t,,packobjectpacket2: compara bits &3 e &0x1f (provável)
-connection,0xf158,camera_pos,vec3,,packobjectpacket: copyvector para distância
-connection,0xf164,listener_pos,vec3,,packevent: vectordistance para alcance de som
-account,0x8,id,uint32_t,2,global account: chave(+0) e n(+4) antes dos registros; offsets aqui = campo + 8
+event,0x20,param,int,,createevent_sound: sound id; packevent: 4 bits in some types
+event,0x24,attach_type,int,,"packevent: 1 = human (uses human+0x288), 2 = item (uses item.pos)"
+event,0x28,attach_id,int,,"packevent: human/item index; 10 bits, signed"
+event,0x2c,range_mode,int,,"packevent: 0 reduces, 2 doubles the range by distance"
+event,0x30,sound_a,float,,createevent_sound: parameter 3
+event,0x34,sound_b,float,,createevent_sound: parameter 4
+bullet,0x0,type,int,,createbullet: parameter 1
+bullet,0x4,ttl,int,,createbullet writes 600
+bullet,0x8,owner,int,,createbullet: parameter 4
+bullet,0x14,pos,vec3,,createbullet: parameter 2
+bullet,0x20,pos_prev,vec3,,createbullet: copy of the position
+bullet,0x2c,vel,vec3,,createbullet: parameter 3
+bond,0x0,state,int,,createbond writes 0
+bond,0x4,type,int,,createbond: parameter 1
+bond,0xc,mode,int,,"createbond: 3, or 0 if type 1; humansimulation toggles 0/3"
+bond,0x10,unk_10,int,,createbond writes 2
+bond,0x14,particle_a,int,,createbond: parameter 2 (index into particle[])
+bond,0x18,particle_b,int,,createbond: parameter 3
+bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (likely)
+bond,0x74,friction_dir,vec3,,bondsimulation2: scalevector and calculatefriction (likely)
+body,0x4,pos,vec3,,human_calculatearmangles: subtractvectors with the bone position
+itemtype,0x80,size,vec3,,setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass)
+connection,0xc,unk_0c,int,,packevent: == 0 releases type 2 events
+connection,0x14,send_timer,int,,serversend: < 1 sends and reloads (likely)
+connection,0x18,timeout,int,,servercycle: divided by 0x3c (60) (likely)
+connection,0x1c,packets_received,int,,serverrecv increments (likely)
+connection,0x4c,sequence,uint32_t,,packobjectpacket2: compares bits &3 and &0x1f (likely)
+connection,0xf158,camera_pos,vec3,,packobjectpacket: copyvector for distance
+connection,0xf164,listener_pos,vec3,,packevent: vectordistance for sound range
+account,0x8,id,uint32_t,2,global account: key(+0) and n(+4) before the records; offsets here = field + 8
 account,0x10,name,char,32,saveaccountsserver: 32 bytes
-account,0x30,name_locked,int,,createaccount grava 5
-account,0x34,money,int,,createaccount grava 1000
+account,0x30,name_locked,int,,createaccount writes 5
+account,0x34,money,int,,createaccount writes 1000
 account,0x38,unk_30,int,,saveaccountsserver
 account,0x3c,look_a,int,,createaccount: rand() % 3
 account,0x40,look_b,int,,createaccount: rand() & 7
 account,0x44,look_c,int,,createaccount: rand() & 3
-player,0x1a38,is_bot,int,,scenario_createchase grava 1; logicsimulation_round filtra == 0; manager: bots não compram
-player,0x1a48,num_path,int,,resetgame/scenario_createtraffic2: contador da lista em +0x1a4c (passo 0x1c)
-player,0x2168,num_threats,int,,ai_assessthreats: laço e limite < 0x10
-object,0xa8,particle_start,int,,createobject/deleteparticle/objectsimulation: início das partículas do objeto
-object,0x5e50,engine_rpm,float,,getenginetorque2/objectenginesimulation2 (provável)
-object,0x5e6c,gear,int,,objectsimulation_car grava 1 e 3; ai_playercar compara > 1 (provável)
-object,0x81a8,num_seats,int,,createobject copia de objecttype.num_seats; humansimulation lê
-objecttype,0x807c,num_seats,int,,setupobjecttypes_*: lista de vec3 em +0x8080; createobject copia para object+0x81ac (provável: assentos)
-objecttype,0x5348,num_quads,int,,setupobjectypes_train: 4 índices de partícula por registro (passo 0x20); objectsimulation (provável)
-bond,0x34,local_a,vec3,,bondsimulation2: ponto no osso (pesos das 3 linhas da rotação do Bone)
-bond,0x40,local_b,vec3,,bondsimulation2 tipo 10: ponto no item (pesos das linhas de item.rot)
-bond,0x4c,mass_ratio,float,2,bondsimulation2 tipo 10: massa_item/(soma) e massa_osso/(soma)
-bond,0x6c,stiffness,float,,bondsimulation2: força = (distância - rest_length) * stiffness
-bond,0x70,unk_70,float,,bondsimulation2 copia para bondopt+0x3c e usa negado
-bond,0x90,human_id,int,,bondsimulation2 tipos 8 e 10: índice em human[]
-bond,0x94,bone_a,int,,bondsimulation2: índice do osso (passo 0xe0)
-bond,0x98,target,int,,bondsimulation2: tipo 10 = índice do item; tipo 8 = segundo osso
-human,0x60,axis,float,,"getinputs_human: rótulo de debug ""humanaxis"""
-human,0x64,pitch,float,,human_calculatearmangles multiplica por constante (provável: ângulo vertical)
-item,0xa8,angvel,vec3,,item_physicssimulation amortece com scalevector; itemsimulation usa em dotproduct
-item,0xe0,cooldown,int,,createitem: itemtype+0x1c; itemlogic diminui 1; itemweaponsimulation testa == 0
+player,0x1a38,is_bot,int,,scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy
+player,0x1a48,num_path,int,,resetgame/scenario_createtraffic2: counter of the list at +0x1a4c (stride 0x1c)
+player,0x2168,num_threats,int,,ai_assessthreats: loop and limit < 0x10
+object,0xa8,particle_start,int,,createobject/deleteparticle/objectsimulation: start of the object's particles
+object,0x5e50,engine_rpm,float,,getenginetorque2/objectenginesimulation2 (likely)
+object,0x5e6c,gear,int,,objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely)
+object,0x81a8,num_seats,int,,createobject copies from objecttype.num_seats; humansimulation reads it
+objecttype,0x807c,num_seats,int,,setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats)
+objecttype,0x5348,num_quads,int,,setupobjectypes_train: 4 particle indices per record (stride 0x20); objectsimulation (likely)
+bond,0x34,local_a,vec3,,bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation)
+bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of the rows of item.rot)
+bond,0x4c,mass_ratio,float,2,bondsimulation2 type 10: item_mass/(sum) and bone_mass/(sum)
+bond,0x6c,stiffness,float,,bondsimulation2: force = (distance - rest_length) * stiffness
+bond,0x70,unk_70,float,,bondsimulation2 copies it to bondopt+0x3c and uses it negated
+bond,0x90,human_id,int,,bondsimulation2 types 8 and 10: index into human[]
+bond,0x94,bone_a,int,,bondsimulation2: bone index (stride 0xe0)
+bond,0x98,target,int,,bondsimulation2: type 10 = item index; type 8 = second bone
+human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
+human,0x64,pitch,float,,human_calculatearmangles multiplies it by a constant (likely: vertical angle)
+item,0xa8,angvel,vec3,,item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct
+item,0xe0,cooldown,int,,createitem: itemtype+0x1c; itemlogic decreases by 1; itemweaponsimulation tests == 0
 item,0xe4,unk_e4,int,,createitem: itemtype+0x18
-item,0xec,flags,uint32_t,,itemlogic testa bit 1; human_itemsimulation liga bit 1
-item,0xfc,phone_id,int,,logic_setteammanager compara com time * 1111 (0x457)
-item,0x104,info,int,,createevent_updateiteminfo envia; itemlogic e eventsimulation gravam
-item,0x134,num_bills,int,,item_addbill e logic_playeractions somam 1
-object,0x8,state,int,,objectsimulation compara com 1 e 2; packobjectpacket ignora 3 (provável: estado do objeto)
-object,0x5ee8,num_wheels,int,,createobject grava; objectsimulation usa como limite de laço (provável: cópia de objecttype.num_wheels)
-object,0x5f1c,rotor_angle,float,,objectsimulation_heli atualiza; unpackobjectpacket lê com unpackangle
-player,0x4c,num_purchases,int,,logic_gunstore_buy e logic_playeractions: limite < 10
-player,0xac,hud_mode,int,,getinputs_human soma 1; drawhud compara com 0 e 1
-object,0x5e4c,engine_accel,float,,"objectenginesimulation2: calculado, somado em engine_rpm e zerado"
-object,0x5e54,throttle,float,,objectenginesimulation2: entra como (1 - x) na aceleração (provável)
-object,0x5e58,engine_power,float,,createobject: objecttype+0x7758 * constante; manager (truck_speed) altera a força do motor
-object,0x5e78,gear_ratio,float,,objectenginesimulation2: se != 0 acopla motor e rodas; objectsimulation_car grava por marcha (provável)
-objecttype,0x7758,engine_power,float,,createobject copia (× constante) para object.engine_power
-player,0x94,input_extra,float,2,serverrecv lê da rede junto com os eixos (2 floats depois de input_pitch)
-player,0xc8,input_mode,int,,serverrecv: 8 bits; getinputs grava 0/1; playersimulation compara 1 e 2 (provável)
-connection,0x44,event_ack,int,,"serverrecv lê 16 bits do cliente; serversend envia eventos de event_ack até numofevents (máx. 31 por pacote, buffer circular de 0x10000)"
-event,0x40,message,char,64,createevent_message: memcpy do texto (máx. 63 caracteres)
+item,0xec,flags,uint32_t,,itemlogic tests bit 1; human_itemsimulation sets bit 1
+item,0xfc,phone_id,int,,logic_setteammanager compares with team * 1111 (0x457)
+item,0x104,info,int,,createevent_updateiteminfo sends it; itemlogic and eventsimulation write it
+item,0x134,num_bills,int,,item_addbill and logic_playeractions add 1
+object,0x8,state,int,,objectsimulation compares with 1 and 2; packobjectpacket ignores 3 (likely: object state)
+object,0x5ee8,num_wheels,int,,createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels)
+object,0x5f1c,rotor_angle,float,,objectsimulation_heli updates it; unpackobjectpacket reads it with unpackangle
+player,0x4c,num_purchases,int,,logic_gunstore_buy and logic_playeractions: limit < 10
+player,0xac,hud_mode,int,,getinputs_human adds 1; drawhud compares with 0 and 1
+object,0x5e4c,engine_accel,float,,"objectenginesimulation2: computed, added to engine_rpm and zeroed"
+object,0x5e54,throttle,float,,objectenginesimulation2: enters as (1 - x) in the acceleration (likely)
+object,0x5e58,engine_power,float,,createobject: objecttype+0x7758 * constant; manager (truck_speed) changes the engine force
+object,0x5e78,gear_ratio,float,,objectenginesimulation2: if != 0 it couples engine and wheels; objectsimulation_car writes it per gear (likely)
+objecttype,0x7758,engine_power,float,,createobject copies it (× constant) to object.engine_power
+player,0x94,input_extra,float,2,serverrecv reads it from the network together with the axes (2 floats after input_pitch)
+player,0xc8,input_mode,int,,serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely)
+connection,0x44,event_ack,int,,"serverrecv reads 16 bits from the client; serversend sends events from event_ack to numofevents (max. 31 per packet, circular buffer of 0x10000)"
+event,0x40,message,char,64,createevent_message: memcpy of the text (max. 63 characters)
