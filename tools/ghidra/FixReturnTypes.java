@@ -4,12 +4,12 @@
 // thinks that the call destroys EAX, so it decides that the function returns nothing.
 // The original callers read EAX after the call, so the function returns a value there.
 //
-// The type is undefined4. The __cdecl_keepF prototype lists ST0 before EAX as an output,
-// and an undefined4 return can match ST0. For objecttype_addbond (0xb0b0) this is wrong:
-// setupobjecttypes_helicopters loads 1.0 (fld1) before calls to it, and the pseudo-C
-// showed "fVar8 = (float10)FUN_0040b0b0(...)" instead of 1.0. That function gets int,
-// which fits EAX only. An int for all 14 functions made the harness worse (crashes in
-// lineintersectlevel), so the others keep undefined4.
+// The script stores the parameters that the decompiler finds, then locks an int return.
+// Two mistakes to avoid:
+// - An undefined4 return can match ST0: the __cdecl_keepF prototype lists ST0 before EAX
+//   as an output. setupobjecttypes_helicopters loads 1.0 (fld1) before calls to
+//   objecttype_addbond, and the pseudo-C showed "fVar8 = (float10)FUN_0040b0b0(...)".
+// - A locked signature with no stored parameters makes every caller drop its arguments.
 //
 // The script also applies the "security_check_cookie" call fixup of x86win.cspec to
 // __security_check_cookie (0x45ce18): the decompiler then ignores the call.
@@ -26,7 +26,6 @@ import ghidra.app.decompiler.DecompileOptions;
 import ghidra.app.decompiler.DecompileResults;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.data.IntegerDataType;
-import ghidra.program.model.data.Undefined4DataType;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.pcode.HighFunctionDBUtil;
 import ghidra.program.model.symbol.SourceType;
@@ -37,7 +36,6 @@ public class FixReturnTypes extends GhidraScript {
             0x65f0, 0x6760, 0xb0b0, 0xded0, 0x1ac40, 0x29bf0, 0x2c0c0, 0x33350, 0x40aa0, 0x41550, 0x58320,
             0x587f0, 0x5cd10, 0x6380 };
     private static final long COOKIE_RVA = 0x5ce18;
-    private static final long ADDBOND_RVA = 0xb0b0;  // objecttype_addbond
 
     @Override
     protected void run() throws Exception {
@@ -54,28 +52,19 @@ public class FixReturnTypes extends GhidraScript {
                 println(String.format("no function at 0x%x", rva));
                 continue;
             }
-            boolean eaxOnly = rva == ADDBOND_RVA;
-            println(String.format("0x%x %s: return %s -> %s", rva, f.getName(), f.getReturnType().getName(),
-                    eaxOnly ? "int" : "undefined4"));
-            // The parameters are not stored: the decompiler finds them. A locked signature
-            // with no stored parameters makes every caller drop its arguments, so keep the
-            // signature unlocked.
-            f.setReturnType(Undefined4DataType.dataType, SourceType.USER_DEFINED);
+            println(String.format("0x%x %s: return %s -> int", rva, f.getName(), f.getReturnType().getName()));
             f.setSignatureSource(SourceType.DEFAULT);
-            if (eaxOnly) {
-                // Store the parameters that the decompiler finds, then lock an int return.
-                DecompInterface di = new DecompInterface();
-                di.setOptions(new DecompileOptions());
-                di.openProgram(currentProgram);
-                DecompileResults r = di.decompileFunction(f, 120, monitor);
-                if (r.decompileCompleted()) {
-                    HighFunctionDBUtil.commitParamsToDatabase(r.getHighFunction(), true,
-                            HighFunctionDBUtil.ReturnCommitOption.NO_COMMIT, SourceType.USER_DEFINED);
-                    f.setReturnType(IntegerDataType.dataType, SourceType.USER_DEFINED);
-                    println("  parameters stored: " + f.getParameterCount() + ", return int");
-                }
-                di.dispose();
+            DecompInterface di = new DecompInterface();
+            di.setOptions(new DecompileOptions());
+            di.openProgram(currentProgram);
+            DecompileResults r = di.decompileFunction(f, 120, monitor);
+            if (r.decompileCompleted()) {
+                HighFunctionDBUtil.commitParamsToDatabase(r.getHighFunction(), true,
+                        HighFunctionDBUtil.ReturnCommitOption.NO_COMMIT, SourceType.USER_DEFINED);
+                f.setReturnType(IntegerDataType.dataType, SourceType.USER_DEFINED);
+                println("  parameters stored: " + f.getParameterCount());
             }
+            di.dispose();
             n++;
         }
         println("int returns fixed: " + n);

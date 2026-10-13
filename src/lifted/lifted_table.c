@@ -98,6 +98,7 @@ void lf_0cab0(void);
 void lf_0cca0(void);
 void lf_0cdf0(void);
 void lf_0d0c0(void);
+void lf_0d110(void);
 void lf_0d240(void);
 void lf_0d2a0(void);
 void lf_0d680(void);
@@ -229,6 +230,7 @@ void lf_32340(void);
 void lf_324c0(void);
 void lf_32bb0(void);
 void lf_32fe0(void);
+void lf_33350(void);
 void lf_34870(void);
 void lf_34c10(void);
 void lf_3a610(void);
@@ -358,6 +360,7 @@ const LfEntry lf_table[] = {
     { "sphereintersectline2d", 0xcca0, (void *)lf_0cca0, 7, LF_RET_INT, 4, "ppppppv" },
     { "lineintersectcircle2d", 0xcdf0, (void *)lf_0cdf0, 7, LF_RET_INT, 4, "ppppppv" },
     { "findstring", 0xd0c0, (void *)lf_0d0c0, 1, LF_RET_INT, 1, "p" },
+    { "getfloat", 0xd110, (void *)lf_0d110, 0, LF_RET_INT, 4, "" },
     { "getstring", 0xd240, (void *)lf_0d240, 2, LF_RET_VOID, 4, "pv" },
     { "cs_getline", 0xd2a0, (void *)lf_0d2a0, 2, LF_RET_VOID, 4, "vv" },
     { "removeflieextentions", 0xd680, (void *)lf_0d680, 1, LF_RET_VOID, 4, "v" },
@@ -482,13 +485,14 @@ const LfEntry lf_table[] = {
     { "itemtimetolive", 0x30ab0, (void *)lf_30ab0, 0, LF_RET_VOID, 4, "" },
     { "itemweaponsimulation", 0x30ba0, (void *)lf_30ba0, 1, LF_RET_VOID, 4, "v" },
     { "item_sphereintersect", 0x30f00, (void *)lf_30f00, 3, LF_RET_INT, 4, "vvv" },
-    { "lineintersectall", 0x31480, (void *)lf_31480, 2, LF_RET_INT, 4, "vv" },
-    { "lineintersectlevel", 0x31630, (void *)lf_31630, 3, LF_RET_INT, 4, "vvv" },
+    { "lineintersectall", 0x31480, (void *)lf_31480, 2, LF_RET_INT, 4, "pp" },
+    { "lineintersectlevel", 0x31630, (void *)lf_31630, 3, LF_RET_INT, 4, "ppv" },
     { "createobject", 0x31800, (void *)lf_31800, 5, LF_RET_INT, 4, "vpvpv" },
     { "objecttimetolive", 0x32340, (void *)lf_32340, 0, LF_RET_VOID, 4, "" },
     { "objectenginesimulation2", 0x324c0, (void *)lf_324c0, 0, LF_RET_VOID, 4, "" },
     { "sphereintersectobject", 0x32bb0, (void *)lf_32bb0, 3, LF_RET_INT, 4, "vpv" },
     { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4, "p" },
+    { "scenario_createcar", 0x33350, (void *)lf_33350, 6, LF_RET_INT, 4, "vvvvvv" },
     { "setupobjecttypeweight", 0x34870, (void *)lf_34870, 1, LF_RET_VOID, 4, "v" },
     { "setupobjecttypes_cars", 0x34c10, (void *)lf_34c10, 0, LF_RET_VOID, 4, "" },
     { "setupobjecttypes_helicopters", 0x3a610, (void *)lf_3a610, 0, LF_RET_VOID, 4, "" },
@@ -501,8 +505,8 @@ const LfEntry lf_table[] = {
     { "human_buildmuscles", 0x4c720, (void *)lf_4c720, 1, LF_RET_VOID, 4, "v" },
     { "itemlogic", 0x4c8c0, (void *)lf_4c8c0, 0, LF_RET_VOID, 4, "" },
     { "item_physicssimulation", 0x4cee0, (void *)lf_4cee0, 1, LF_RET_VOID, 4, "v" },
-    { "circleintersectlevel", 0x4d630, (void *)lf_4d630, 3, LF_RET_INT, 4, "vvv" },
-    { "sphereintersectlevel", 0x4d750, (void *)lf_4d750, 2, LF_RET_INT, 4, "vv" },
+    { "circleintersectlevel", 0x4d630, (void *)lf_4d630, 3, LF_RET_INT, 4, "ppv" },
+    { "sphereintersectlevel", 0x4d750, (void *)lf_4d750, 2, LF_RET_INT, 4, "pv" },
     { "buildcityinterection", 0x4d850, (void *)lf_4d850, 1, LF_RET_VOID, 4, "v" },
     { "buildcitystreet", 0x4da10, (void *)lf_4da10, 1, LF_RET_VOID, 4, "v" },
     { "logic_createcar", 0x4e060, (void *)lf_4e060, 3, LF_RET_INT, 4, "vvv" },
@@ -520,4 +524,4 @@ const LfEntry lf_table[] = {
     { "createscenario_world", 0x5aa60, (void *)lf_5aa60, 0, LF_RET_VOID, 4, "" },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv" },
 };
-const int lf_table_count = 258;
+const int lf_table_count = 260;
