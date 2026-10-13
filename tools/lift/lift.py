@@ -84,6 +84,14 @@ INLINE_CALLS = {0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'}
 
 SIZE_TYPE = {1: 'uchar', 2: 'ushort', 4: 'uint', 8: 'ulonglong'}
 
+# Size of the element that a pointer of this base type points to.
+ELEMENT_SIZE = {
+    'char': 1, 'uchar': 1, 'byte': 1, 'undefined': 1, 'undefined1': 1, 'bool': 1,
+    'short': 2, 'ushort': 2, 'word': 2, 'undefined2': 2,
+    'int': 4, 'uint': 4, 'dword': 4, 'float': 4, 'undefined4': 4,
+    'double': 8, 'longlong': 8, 'ulonglong': 8, 'undefined8': 8,
+}
+
 HEADER_RE = re.compile(r'^(?P<ret>.+?)\s*\b(?:(?P<cc>__cdecl(?:_keep[CDF]+)?|__stdcall|__fastcall|__thiscall)\s+)?'
                        r'(?P<name>[A-Za-z_]\w*)\s*\((?P<params>.*)\)\s*$', re.S)
 
@@ -526,9 +534,22 @@ def register_artifacts(c):
     return c
 
 
+# Fixes for single decompiler bugs: (old text, new text) per function. Each old text must
+# exist, or the lift fails. The harness checks the result against the original.
+LIFT_PATCHES = {
+    # servercycle: Ghidra drops "mov byte ptr [esp+0Fh],20h", a store into local_1 after
+    # its address goes to the call. The master server packet then has 0x00, not 0x20.
+    0x33570: [('FUN_0040d990(&local_1,1,1);', 'local_1 = 0x20;\n      FUN_0040d990(&local_1,1,1);')],
+}
+
+
 def lift_function(f, rva, headers, imports_used):
     """Return (C text, error). error is None on success."""
     c = register_artifacts(f['c'])
+    for old, new in LIFT_PATCHES.get(rva, []):
+        if old not in c:
+            return None, f'lift patch text not found: {old}'
+        c = c.replace(old, new, 1)
     for tok, why in BLOCKERS.items():
         # At the start of a word: "builtin_strncpy" is not a register input "in_".
         if re.search(r'(?<![A-Za-z0-9_])' + re.escape(tok), c):
@@ -648,6 +669,21 @@ def lift_function(f, rva, headers, imports_used):
     # A compare can show the relocated value plus or minus 1: the code has "cmp esi, END" and
     # "jae", Ghidra prints "END - 1 < p". createitem searched past the item array.
     big = [v for v in f.get('relocvals', []) if v >= 0x10000]
+    # A pointer that counts from 0: Ghidra puts the array address into the index.
+    # "local_cc[0x1664980]" (a float *) is the float at 0x5992600 in humansimulation. The
+    # index moves by the relocation delta divided by the element size.
+    ptypes = local_types(body, params)
+
+    def index_reloc(m):
+        t = ptypes.get(m.group(1), '')
+        s = ELEMENT_SIZE.get(t[:-1].strip()) if t.endswith('*') and t.count('*') == 1 else None
+        if not s:
+            return m.group(0)
+        inner = re.sub(r'(?<![\w])0x([0-9a-f]+)\b',
+                       lambda k: (f'(0x{k.group(1)} + LF_RELOC / {s})' if int(k.group(1), 16) * s in relocs
+                                  and int(k.group(1), 16) * s >= 0x10000 else k.group(0)), m.group(2))
+        return f'{m.group(1)}[{inner}]'
+    body = re.sub(r'\b([A-Za-z_]\w*)\[([^\[\]]*)\]', index_reloc, body)
     for v in big:
         body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)
     # An inlined strncpy stores 4 bytes at a time: Ghidra adds the offset to the address

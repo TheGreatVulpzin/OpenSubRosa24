@@ -37283,6 +37283,7 @@ void __cdecl lf_33570(void)
       DAT_1992d6e0 = 0;
       _DAT_1992d6e4 = DAT_00460d08;
       DAT_1992d6dc = 4;
+      local_1 = 0x20;
       FUN_0040d990(&local_1,1,1);
       FUN_0040d910(DAT_17579820,DAT_17579824);
     }
@@ -48090,11 +48091,11 @@ LAB_00442c75:
             local_9c = (float *)((int)local_84 * 0x20);
             fVar7 = -pfVar33[-2];
             fVar4 = pfVar33[-2];
-            local_7c = (float)(fVar4 * local_9c[0x160f74] +
+            local_7c = (float)(fVar4 * local_9c[(0x160f74 + LF_RELOC / 4)] +
                        ((float)(fVar7 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar5)) * 8]) + (float)(fVar6 * pfVar33[-1]))));
-            local_78 = (float)(local_9c[0x160f75] * fVar4 +
+            local_78 = (float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar4 +
                        ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar5)) * 8]) * fVar7 + (float)(fVar6 * *pfVar33))));
-            local_74 = (float)(fVar4 * local_9c[0x160f76] +
+            local_74 = (float)(fVar4 * local_9c[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar7 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar5)) * 8]) + (float)(fVar6 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
             local_bc = fVar5;
@@ -48128,9 +48129,9 @@ LAB_00442c75:
               *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]) =
                    (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]) + local_74 * fVar4);
               local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_80))));
-              local_9c[0x160f78] = (float)(local_9c[0x160f78] + LF_BITS_F(local_50) * local_7c);
-              local_9c[0x160f79] = (float)(local_9c[0x160f79] + LF_BITS_F(local_50) * local_78);
-              local_9c[0x160f7a] = (float)(LF_BITS_F(local_50) * local_74 + local_9c[0x160f7a]);
+              local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_7c);
+              local_9c[(0x160f79 + LF_RELOC / 4)] = (float)(local_9c[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_78);
+              local_9c[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_50) * local_74 + local_9c[(0x160f7a + LF_RELOC / 4)]);
             }
           }
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x3U) {
@@ -48146,16 +48147,16 @@ LAB_00442c75:
             fVar8 = (float)(pfVar33[-10] * pfVar33[-2]);
             fVar9 = (float)(pfVar33[-9] * pfVar33[-2]);
             local_50 = (float *)((int)local_a0 * 0x20);
-            local_5c = (float)((float)(fVar8 * local_88[0x160f74] +
+            local_5c = (float)((float)(fVar8 * local_88[(0x160f74 + LF_RELOC / 4)] +
                        ((float)((float)((float)(fVar5 * pfVar33[-1]) + fVar6 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar4)) * 8])) +
-                       fVar7 * local_9c[0x160f74]))) + fVar9 * local_50[0x160f74]);
-            local_58 = (float)(local_50[0x160f75] * fVar9 +
-                       ((float)(local_88[0x160f75] * fVar8 +
-                       ((float)(local_9c[0x160f75] * fVar7 +
+                       fVar7 * local_9c[(0x160f74 + LF_RELOC / 4)]))) + fVar9 * local_50[(0x160f74 + LF_RELOC / 4)]);
+            local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar9 +
+                       ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar8 +
+                       ((float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar7 +
                        ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar4)) * 8]) * fVar6 + (float)(fVar5 * *pfVar33))))))));
-            local_54 = (float)(fVar9 * local_50[0x160f76] +
-                       ((float)(fVar8 * local_88[0x160f76] +
-                       ((float)(fVar7 * local_9c[0x160f76] +
+            local_54 = (float)(fVar9 * local_50[(0x160f76 + LF_RELOC / 4)] +
+                       ((float)(fVar8 * local_88[(0x160f76 + LF_RELOC / 4)] +
+                       ((float)(fVar7 * local_9c[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar6 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar4)) * 8]) + (float)(fVar5 * pfVar33[1]))))))));
             local_98 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
             local_bc = fVar4;
@@ -48182,17 +48183,17 @@ LAB_00442c75:
                    (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar4)) * 8]) + local_54 * fVar5);
               fVar4 = -local_70 * local_98;
               local_80 = ((float *)LF_BITS_U(((float)(pfVar33[-0xb] * fVar4))));
-              local_9c[0x160f78] = (float)(local_9c[0x160f78] + LF_BITS_F(local_80) * local_5c);
-              local_9c[0x160f79] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[0x160f79]);
-              local_9c[0x160f7a] = (float)(LF_BITS_F(local_80) * local_54 + local_9c[0x160f7a]);
+              local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
+              local_9c[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[(0x160f79 + LF_RELOC / 4)]);
+              local_9c[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_80) * local_54 + local_9c[(0x160f7a + LF_RELOC / 4)]);
               local_9c = ((float *)LF_BITS_U(((float)(pfVar33[-10] * fVar4))));
-              local_88[0x160f78] = (float)(local_88[0x160f78] + LF_BITS_F(local_9c) * local_5c);
-              local_88[0x160f79] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[0x160f79]);
-              local_88[0x160f7a] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[0x160f7a]);
+              local_88[(0x160f78 + LF_RELOC / 4)] = (float)(local_88[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_9c) * local_5c);
+              local_88[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[(0x160f79 + LF_RELOC / 4)]);
+              local_88[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[(0x160f7a + LF_RELOC / 4)]);
               local_88 = ((float *)LF_BITS_U(((float)(fVar4 * pfVar33[-9]))));
-              local_50[0x160f78] = (float)(local_50[0x160f78] + LF_BITS_F(local_88) * local_5c);
-              local_50[0x160f79] = (float)(local_50[0x160f79] + LF_BITS_F(local_88) * local_58);
-              local_50[0x160f7a] = (float)(LF_BITS_F(local_88) * local_54 + local_50[0x160f7a]);
+              local_50[(0x160f78 + LF_RELOC / 4)] = (float)(local_50[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_5c);
+              local_50[(0x160f79 + LF_RELOC / 4)] = (float)(local_50[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_58);
+              local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
             }
           }
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x4U) {
@@ -48210,16 +48211,16 @@ LAB_00442c75:
             local_50 = (float *)((int)local_a0 * 0x20);
             fVar9 = (float)(pfVar33[-9] * pfVar33[-2]);
             local_5c = (float)((float)((float)(fVar7 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar4)) * 8]) +
-                       ((float)(fVar5 * pfVar33[-1] + fVar6 * local_9c[0x118778]))) + fVar8 * local_88[0x160f74])
-                       + fVar9 * local_50[0x160f74]);
-            local_58 = (float)(local_50[0x160f75] * fVar9 +
-                       ((float)(local_88[0x160f75] * fVar8 +
+                       ((float)(fVar5 * pfVar33[-1] + fVar6 * local_9c[(0x118778 + LF_RELOC / 4)]))) + fVar8 * local_88[(0x160f74 + LF_RELOC / 4)])
+                       + fVar9 * local_50[(0x160f74 + LF_RELOC / 4)]);
+            local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar9 +
+                       ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar8 +
                        ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar4)) * 8]) * fVar7 +
-                       ((float)(local_9c[0x118779] * fVar6 + (float)(*pfVar33 * fVar5))))))));
-            local_54 = (float)(fVar9 * local_50[0x160f76] +
-                       ((float)(fVar8 * local_88[0x160f76] +
+                       ((float)(local_9c[(0x118779 + LF_RELOC / 4)] * fVar6 + (float)(*pfVar33 * fVar5))))))));
+            local_54 = (float)(fVar9 * local_50[(0x160f76 + LF_RELOC / 4)] +
+                       ((float)(fVar8 * local_88[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar7 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar4)) * 8]) +
-                       ((float)(fVar6 * local_9c[0x11877a] + (float)(fVar5 * pfVar33[1]))))))));
+                       ((float)(fVar6 * local_9c[(0x11877a + LF_RELOC / 4)] + (float)(fVar5 * pfVar33[1]))))))));
             local_70 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
             local_84 = ((int *)LF_BITS_U(fVar4));
             dVar39 = _CIsqrt((double)local_70);
@@ -48245,9 +48246,9 @@ LAB_00442c75:
             if (0.0 < LF_BITS_F(local_80)) {
               FUN_00427e80(&local_5c,pfVar33 + -1,pfVar33[2]);
               local_80 = ((float *)LF_BITS_U((local_70 * LF_BITS_F(local_84))));
-              local_9c[0x11877c] = (float)(local_9c[0x11877c] + LF_BITS_F(local_80) * local_5c);
-              local_9c[0x11877d] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[0x11877d]);
-              local_9c[0x11877e] = (float)(local_9c[0x11877e] + local_54 * LF_BITS_F(local_80));
+              local_9c[(0x11877c + LF_RELOC / 4)] = (float)(local_9c[(0x11877c + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
+              local_9c[(0x11877d + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[(0x11877d + LF_RELOC / 4)]);
+              local_9c[(0x11877e + LF_RELOC / 4)] = (float)(local_9c[(0x11877e + LF_RELOC / 4)] + local_54 * LF_BITS_F(local_80));
               fVar5 = -local_70 * local_98;
               fVar6 = (float)(pfVar33[-0xb] * fVar5);
               *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar4)) * 8]) =
@@ -48257,13 +48258,13 @@ LAB_00442c75:
               *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar4)) * 8]) =
                    (float)(fVar6 * local_54 + LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar4)) * 8]));
               local_9c = ((float *)LF_BITS_U(((float)(pfVar33[-10] * fVar5))));
-              local_88[0x160f78] = (float)(local_88[0x160f78] + LF_BITS_F(local_9c) * local_5c);
-              local_88[0x160f79] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[0x160f79]);
-              local_88[0x160f7a] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[0x160f7a]);
+              local_88[(0x160f78 + LF_RELOC / 4)] = (float)(local_88[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_9c) * local_5c);
+              local_88[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[(0x160f79 + LF_RELOC / 4)]);
+              local_88[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[(0x160f7a + LF_RELOC / 4)]);
               local_88 = ((float *)LF_BITS_U(((float)(fVar5 * pfVar33[-9]))));
-              local_50[0x160f78] = (float)(local_50[0x160f78] + LF_BITS_F(local_88) * local_5c);
-              local_50[0x160f79] = (float)(local_50[0x160f79] + LF_BITS_F(local_88) * local_58);
-              local_50[0x160f7a] = (float)(LF_BITS_F(local_88) * local_54 + local_50[0x160f7a]);
+              local_50[(0x160f78 + LF_RELOC / 4)] = (float)(local_50[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_5c);
+              local_50[(0x160f79 + LF_RELOC / 4)] = (float)(local_50[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_58);
+              local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
             }
           }
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x5U) {
@@ -48525,13 +48526,13 @@ LAB_00442c75:
             fVar8 = -pfVar33[-2];
             local_80 = (float *)((int)local_88 * 0x810 + (int)local_84 * 0x80);
             fVar4 = pfVar33[-2];
-            local_7c = (float)(fVar4 * local_80[0x118778] +
+            local_7c = (float)(fVar4 * local_80[(0x118778 + LF_RELOC / 4)] +
                        ((float)(fVar8 * LF_BITS_F((&DAT_00461de0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) +
                        fVar7 * pfVar33[-1])));
-            local_78 = (float)(local_80[0x118779] * fVar4 +
+            local_78 = (float)(local_80[(0x118779 + LF_RELOC / 4)] * fVar4 +
                        ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) * fVar8 +
                        (float)(fVar7 * *pfVar33))));
-            local_74 = (float)(fVar4 * local_80[0x11877a] +
+            local_74 = (float)(fVar4 * local_80[(0x11877a + LF_RELOC / 4)] +
                        ((float)(fVar8 * LF_BITS_F((&DAT_00461de8)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) +
                        (float)(fVar7 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
@@ -48570,9 +48571,9 @@ LAB_00442c75:
                    (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) +
                    local_74 * LF_BITS_F(local_88));
               local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_50))));
-              local_80[0x11877c] = (float)(local_80[0x11877c] + LF_BITS_F(local_50) * local_7c);
-              local_80[0x11877d] = (float)(local_80[0x11877d] + LF_BITS_F(local_50) * local_78);
-              local_80[0x11877e] = (float)(LF_BITS_F(local_50) * local_74 + local_80[0x11877e]);
+              local_80[(0x11877c + LF_RELOC / 4)] = (float)(local_80[(0x11877c + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_7c);
+              local_80[(0x11877d + LF_RELOC / 4)] = (float)(local_80[(0x11877d + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_78);
+              local_80[(0x11877e + LF_RELOC / 4)] = (float)(LF_BITS_F(local_50) * local_74 + local_80[(0x11877e + LF_RELOC / 4)]);
             }
           }
           if (LF_BITS_U(pfVar33[-0x1e]) == 0xeU) {
@@ -48599,16 +48600,16 @@ LAB_00442c75:
                        LF_BITS_F((&DAT_09502374)[((int)LF_BITS_U(fVar5)) * 0x6b]) * local_c8)));
             fVar4 = pfVar33[-2];
             local_7c = (float)(fVar4 * local_6c +
-                       ((float)(fVar7 * ((float)(local_9c[0x118778] +
-                               ((float)(local_90 * local_9c[0x118786] - local_8c * local_9c[0x118785])))) +
+                       ((float)(fVar7 * ((float)(local_9c[(0x118778 + LF_RELOC / 4)] +
+                               ((float)(local_90 * local_9c[(0x118786 + LF_RELOC / 4)] - local_8c * local_9c[(0x118785 + LF_RELOC / 4)])))) +
                        fVar6 * pfVar33[-1])));
             local_78 = (float)(fVar4 * local_68 +
-                       ((float)(fVar7 * ((float)(local_9c[0x118779] +
-                               ((float)(local_9c[0x118784] * local_8c - local_94 * local_9c[0x118786])))) +
+                       ((float)(fVar7 * ((float)(local_9c[(0x118779 + LF_RELOC / 4)] +
+                               ((float)(local_9c[(0x118784 + LF_RELOC / 4)] * local_8c - local_94 * local_9c[(0x118786 + LF_RELOC / 4)])))) +
                        (float)(fVar6 * *pfVar33))));
             local_74 = (float)(fVar4 * local_64 +
-                       ((float)(fVar7 * ((float)(local_9c[0x11877a] +
-                               ((float)(local_9c[0x118785] * local_94 - local_90 * local_9c[0x118784])))) +
+                       ((float)(fVar7 * ((float)(local_9c[(0x11877a + LF_RELOC / 4)] +
+                               ((float)(local_9c[(0x118785 + LF_RELOC / 4)] * local_94 - local_90 * local_9c[(0x118784 + LF_RELOC / 4)])))) +
                        (float)(fVar6 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
             dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
@@ -48636,12 +48637,12 @@ LAB_00442c75:
               fVar4 = LF_BITS_F(local_88) * local_7c;
               fVar7 = (float)(LF_BITS_F(local_88) * local_78);
               fVar6 = (float)(LF_BITS_F(local_88) * local_74);
-              local_9c[0x11877c] = (float)(fVar4 + local_9c[0x11877c]);
-              local_9c[0x11877d] = (float)(fVar7 + local_9c[0x11877d]);
-              local_9c[0x11877e] = (float)(fVar6 + local_9c[0x11877e]);
-              local_9c[0x118788] = (float)(((float)(local_8c * fVar7 - local_90 * fVar6)) + local_9c[0x118788]);
-              local_9c[0x118789] = (float)(local_9c[0x118789] + ((float)(local_94 * fVar6 - fVar4 * local_8c)));
-              local_9c[0x11878a] = (float)(local_9c[0x11878a] + ((float)(local_90 * fVar4 - local_94 * fVar7)));
+              local_9c[(0x11877c + LF_RELOC / 4)] = (float)(fVar4 + local_9c[(0x11877c + LF_RELOC / 4)]);
+              local_9c[(0x11877d + LF_RELOC / 4)] = (float)(fVar7 + local_9c[(0x11877d + LF_RELOC / 4)]);
+              local_9c[(0x11877e + LF_RELOC / 4)] = (float)(fVar6 + local_9c[(0x11877e + LF_RELOC / 4)]);
+              local_9c[(0x118788 + LF_RELOC / 4)] = (float)(((float)(local_8c * fVar7 - local_90 * fVar6)) + local_9c[(0x118788 + LF_RELOC / 4)]);
+              local_9c[(0x118789 + LF_RELOC / 4)] = (float)(local_9c[(0x118789 + LF_RELOC / 4)] + ((float)(local_94 * fVar6 - fVar4 * local_8c)));
+              local_9c[(0x11878a + LF_RELOC / 4)] = (float)(local_9c[(0x11878a + LF_RELOC / 4)] + ((float)(local_90 * fVar4 - local_94 * fVar7)));
               local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_50))));
               local_5c = LF_BITS_F(local_50) * local_7c;
               local_58 = (float)(LF_BITS_F(local_50) * local_78);
@@ -50107,7 +50108,7 @@ LAB_004471be:
       *(float *)&((&DAT_0e6c8c24)[DAT_0e6c8bb8 * 0x277]) = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
       *(float *)&((&DAT_0e6c8c28)[DAT_0e6c8bb8 * 0x277]) = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
       puVar7 = (undefined4 *)(DAT_0e6c8bb8 * 0x9dc);
-      *(float *)&(puVar7[0x39b230b]) = (float)((float)(param_4 + param_6) * 4.0);
+      *(float *)&(puVar7[(0x39b230b + LF_RELOC / 4)]) = (float)((float)(param_4 + param_6) * 4.0);
       (&DAT_0e6c94c4)[DAT_0e6c8bb8 * 0x277] = 0;
       if (DAT_07a1ea60 != 0) {
         (&DAT_0e6c94c4)[DAT_0e6c8bb8 * 0x277] = 0;
@@ -50155,7 +50156,7 @@ LAB_004471be:
   }
   *(float *)&((&DAT_0e6c8c2c)[DAT_0e6c8bb8 * 0x277]) = (float)((float)(param_4 + param_6) * 4.0);
   puVar7 = (undefined4 *)(DAT_0e6c8bb8 * 0x9dc);
-  puVar7[0x39b2531] = 0;
+  puVar7[(0x39b2531 + LF_RELOC / 4)] = 0;
 LAB_00448999:
   DAT_0e6c8bb8 = DAT_0e6c8bb8 + 1;
   return puVar7;
@@ -58358,16 +58359,16 @@ LAB_0045230e:
         local_98 = LF_BITS_D((((ulonglong)LF_BITS_U64(local_98)) & 0xffffffff00000000));
         local_cc = (float *)0x0;
         do {
-          if (((((LF_BITS_U(local_cc[0x1664980]) != 0x0U) && (LF_BITS_U(local_cc[0x1664982]) != 0x3U)) &&
-               ((local_cc[0x16649a1] - 2.0 <= LF_BITS_F((&DAT_019cc048)[(int)puVar13 * 0xad9] &&
-                ((LF_BITS_F((&DAT_019cc048)[(int)puVar13 * 0xad9]) <= local_cc[0x16649a4] + 2.0 &&
-                 (local_cc[0x16649a3] - 2.0 < LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9]) !=
-                  (local_cc[0x16649a3] - 2.0 == LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9])))))))))
-              && (LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9]) <= local_cc[0x16649a6] + 2.0)) &&
-             ((local_cc[0x16649a2] - 2.0 < LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) !=
-               (local_cc[0x16649a2] - 2.0 == LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9])) &&
-              (LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) < local_cc[0x16649a5] + 2.0 !=
-               (LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) == local_cc[0x16649a5] + 2.0))))) {
+          if (((((LF_BITS_U(local_cc[(0x1664980 + LF_RELOC / 4)]) != 0x0U) && (LF_BITS_U(local_cc[(0x1664982 + LF_RELOC / 4)]) != 0x3U)) &&
+               ((local_cc[(0x16649a1 + LF_RELOC / 4)] - 2.0 <= LF_BITS_F((&DAT_019cc048)[(int)puVar13 * 0xad9] &&
+                ((LF_BITS_F((&DAT_019cc048)[(int)puVar13 * 0xad9]) <= local_cc[(0x16649a4 + LF_RELOC / 4)] + 2.0 &&
+                 (local_cc[(0x16649a3 + LF_RELOC / 4)] - 2.0 < LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9]) !=
+                  (local_cc[(0x16649a3 + LF_RELOC / 4)] - 2.0 == LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9])))))))))
+              && (LF_BITS_F((&DAT_019cc050)[(int)puVar13 * 0xad9]) <= local_cc[(0x16649a6 + LF_RELOC / 4)] + 2.0)) &&
+             ((local_cc[(0x16649a2 + LF_RELOC / 4)] - 2.0 < LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) !=
+               (local_cc[(0x16649a2 + LF_RELOC / 4)] - 2.0 == LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9])) &&
+              (LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) < local_cc[(0x16649a5 + LF_RELOC / 4)] + 2.0 !=
+               (LF_BITS_F((&DAT_019cc04c)[(int)puVar13 * 0xad9]) == local_cc[(0x16649a5 + LF_RELOC / 4)] + 2.0))))) {
             local_c4 = (float *)(&DAT_019cc060 + (int)puVar13 * 0xad9);
             local_c0 = 0.0;
             do {
@@ -58433,9 +58434,9 @@ LAB_0045230e:
                                    0x3f000000);
                       if (((((&DAT_019cbf88)[(int)puVar13 * 0xad9] != -1) &&
                            ((&DAT_0f1edd64)[(&DAT_019cbf88)[(int)puVar13 * 0xad9] * 0x902] == 7)) &&
-                          (0 < *(int *)(&DAT_019cbfb4 + iVar21))) && (LF_BITS_U(local_cc[0x1664985]) != 0xffffffffU))
+                          (0 < *(int *)(&DAT_019cbfb4 + iVar21))) && (LF_BITS_U(local_cc[(0x1664985 + LF_RELOC / 4)]) != 0xffffffffU))
                       {
-                        FUN_00416a20(local_cc[0x1664985],100);
+                        FUN_00416a20(local_cc[(0x1664985 + LF_RELOC / 4)],100);
                       }
                     }
                   }

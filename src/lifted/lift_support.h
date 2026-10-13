@@ -16,6 +16,9 @@ extern uintptr_t sr_base;
 /* Image address (base 0x400000) -> real address in this process. */
 #define SR_VA(va) ((void *)(sr_base + (uintptr_t)(va) - 0x400000u))
 
+/* The relocation delta: how far the 024d moved from its file base. */
+#define LF_RELOC ((int)(sr_base - 0x400000u))
+
 /* Address of an import of the game (the value stored in its IAT slot). */
 void *sr_import(const char *dll, const char *name);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);

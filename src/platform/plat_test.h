@@ -17,6 +17,19 @@ int plat_test_init(const char *game_dir, const char *sandbox_dir);
  * import addresses into two globals). Call after each snapshot load. */
 void plat_test_patch_globals(void);
 
+/* A packet that recv or recvfrom gives to the game (from the E lines of a recording). */
+typedef struct PlatPacket {
+    int ret;                  /* the return value: the byte count, or -1 */
+    int len;                  /* bytes in data */
+    unsigned char *data;
+    int fromlen;              /* bytes in from (recvfrom) */
+    unsigned char from[16];
+} PlatPacket;
+
+/* The packets of the next test call, in order. Each run gets the same packets. After the
+ * last one, recv and recvfrom return -1 (no data). */
+void plat_test_set_packets(const PlatPacket *packets, int count);
+
 void plat_test_begin(int run);
 void plat_test_end(int run);
 

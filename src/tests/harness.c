@@ -20,6 +20,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,6 +54,8 @@ typedef struct Call {
     uint32_t value[MAX_ARGS];
     uint8_t *blob[MAX_ARGS];      /* 'P': BLOB bytes */
     char has_value[MAX_ARGS];     /* 'P': the value is known (recordings after the fix) */
+    int npackets;                 /* packets that the call received (E recvfrom lines) */
+    PlatPacket *packets;
 } Call;
 
 static HMODULE g_mod;
@@ -227,19 +230,65 @@ static int hexval(char c)
     return c <= '9' ? c - '0' : (c | 32) - 'a' + 10;
 }
 
+/* Hex bytes up to the next space. Returns the count. */
+static int hex_bytes(const char *hex, unsigned char *out, int max)
+{
+    int k;
+    for (k = 0; k < max && isxdigit((unsigned char)hex[2 * k]) && isxdigit((unsigned char)hex[2 * k + 1]); k++)
+        out[k] = (unsigned char)(hexval(hex[2 * k]) * 16 + hexval(hex[2 * k + 1]));
+    return k;
+}
+
+/* "E recvfrom V:s V:len V:flags V:fromlen o:<data> o:<from> r:<ret>" (hook/record_imports.c),
+ * or "E recv V:s V:len V:flags o:<data> r:<ret>": add the packet to the call. */
+static void add_packet(Call *c, char *line)
+{
+    PlatPacket *p;
+    char *tok, *data = NULL, *from = NULL;
+    int outs = 0;
+    c->packets = realloc(c->packets, (c->npackets + 1) * sizeof(PlatPacket));
+    p = &c->packets[c->npackets];
+    memset(p, 0, sizeof *p);
+    p->ret = -1;
+    for (tok = strtok(line, " \r\n"); tok; tok = strtok(NULL, " \r\n")) {
+        if (!strncmp(tok, "o:", 2) && outs++ == 0)
+            data = tok + 2;
+        else if (!strncmp(tok, "o:", 2))
+            from = tok + 2;
+        else if (!strncmp(tok, "r:", 2))
+            p->ret = (int)strtoul(tok + 2, NULL, 16);
+    }
+    if (data && p->ret > 0) {
+        p->data = malloc((size_t)p->ret);
+        p->len = hex_bytes(data, p->data, p->ret);
+    }
+    if (from)
+        p->fromlen = hex_bytes(from, p->from, (int)sizeof p->from);
+    c->npackets++;
+}
+
 static int load_calls(const char *path)
 {
     FILE *f = fopen(path, "r");
-    static char line[MAX_ARGS * (BLOB * 2 + 4) + 64];
+    /* An E line holds up to 64 KB of bytes as hex (hook/record.c). */
+    static char line[(64u << 10) * 2 + 4096];
     int cap = 1024;
+    int last = -1;            /* the call that the E lines belong to */
     if (!f)
         return 0;
     g_calls = calloc(cap, sizeof(Call));
     while (fgets(line, sizeof line, f)) {
         Call *c;
         char *p = line, *tok;
+        if (last >= 0 && (!strncmp(line, "E recvfrom ", 11) || !strncmp(line, "E recv ", 7))) {
+            add_packet(&g_calls[last], line);
+            continue;
+        }
+        if (line[0] == 'Z')
+            last = -1;
         if (line[0] != 'R')
             continue;
+        last = -1;
         if (g_ncalls == cap) {
             cap *= 2;
             g_calls = realloc(g_calls, cap * sizeof(Call));
@@ -269,7 +318,7 @@ static int load_calls(const char *path)
             }
             c->n++;
         }
-        g_ncalls++;
+        last = g_ncalls++;
     }
     fclose(f);
     return 1;
@@ -283,6 +332,21 @@ static int args_usable(const Call *c, const char *kinds)
         if (c->kind[i] == 'P' && kinds[i] != 'p' && !c->has_value[i])
             return 0;
     return 1;
+}
+
+/* 1 when a value argument is an address inside the stack of this thread. A pointer to a
+ * local of the server that Ghidra typed as an int (rotateorientation gets "(int)&local_38")
+ * has no content here, and both versions would write over the stack of the harness. */
+static int points_into_stack(const Call *c, const char *kinds)
+{
+    ULONG_PTR low, high;
+    int i;
+    GetCurrentThreadStackLimits(&low, &high);
+    for (i = 0; i < c->n; i++)
+        if ((c->kind[i] == 'V' || (c->kind[i] == 'P' && kinds[i] != 'p')) && c->value[i] >= low &&
+            c->value[i] < high)
+            return 1;
+    return 0;
 }
 
 /* Arguments of a call: values, relocated image addresses, and fresh copies of the blobs
@@ -539,6 +603,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "usage: harness <024d.exe> <sv_snapshot.bin> <sv_args.txt> [name filter]\n");
         return 2;
     }
+    setvbuf(stdout, NULL, _IONBF, 0);  /* a crash keeps all output before it */
     map_regions(argv[2]);
     g_mod = LoadLibraryExA(argv[1], NULL, 0);
     if (!g_mod) {
@@ -606,7 +671,7 @@ int main(int argc, char **argv)
             uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
-            if (!args_usable(c, e->args)) {
+            if (!args_usable(c, e->args) || points_into_stack(c, e->args)) {
                 skip++;
                 continue;
             }
@@ -618,6 +683,7 @@ int main(int argc, char **argv)
             sv_track_begin_new(&v);
             if (g_nprobe)
                 printf(" call %d: lifted\n", j);
+            plat_test_set_packets(c->packets, c->npackets);
             plat_test_begin(0);
             new_ok = safe_invoke(e->lifted, a, c->n, e->ret, &ne, &de, &fe);
             plat_test_end(0);

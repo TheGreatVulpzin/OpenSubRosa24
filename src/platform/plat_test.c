@@ -10,8 +10,9 @@
  *   zeroed pool, so both runs get the same addresses. free does nothing.
  * - Files: reads come from the game folder. Each write goes to a copy in the sandbox folder
  *   of the run. fclose of a written file logs its size and hash.
- * - Network: no socket is real. send and sendto log the bytes, recv and recvfrom get no data,
- *   connect fails and name lookups find nothing.
+ * - Network: no socket is real. send and sendto log the bytes. recv and recvfrom get the
+ *   recorded packets of the call (plat_test_set_packets), then no data. connect fails and
+ *   name lookups find nothing.
  *
  * fread copies through a buffer of its own: the verifier protects the .data pages, and a
  * large fread goes straight to ReadFile, which fails on a protected page with no exception.
@@ -477,20 +478,46 @@ static int WINAPI st_sendto(SOCK s, const char *buf, int len, int flags, const v
     return len;
 }
 
+static const PlatPacket *g_packets;
+static int g_npackets, g_next_packet;
+
+void plat_test_set_packets(const PlatPacket *packets, int count)
+{
+    g_packets = packets;
+    g_npackets = count;
+}
+
+/* The next recorded packet: copy its bytes and its address, return its return value. */
+static int next_packet(const char *what, SOCK s, char *buf, int len, int flags, void *from, int *fromlen)
+{
+    const PlatPacket *p;
+    int n;
+    if (g_next_packet >= g_npackets) {
+        ev("%s %x size %d flags %x -> no data", what, (unsigned)s, len, flags);
+        return -1;
+    }
+    p = &g_packets[g_next_packet++];
+    n = p->len < len ? p->len : len;
+    if (n > 0)
+        memcpy(buf, p->data, (size_t)n);
+    if (from && fromlen) {
+        int m = p->fromlen < *fromlen ? p->fromlen : *fromlen;
+        if (m > 0)
+            memcpy(from, p->from, (size_t)m);
+        *fromlen = p->fromlen;
+    }
+    ev("%s %x size %d flags %x -> %d (packet %d)", what, (unsigned)s, len, flags, p->ret, g_next_packet - 1);
+    return p->ret;
+}
+
 static int WINAPI st_recv(SOCK s, char *buf, int len, int flags)
 {
-    (void)buf;
-    ev("recv %x size %d flags %x -> no data", (unsigned)s, len, flags);
-    return -1;
+    return next_packet("recv", s, buf, len, flags, NULL, NULL);
 }
 
 static int WINAPI st_recvfrom(SOCK s, char *buf, int len, int flags, void *from, int *fromlen)
 {
-    (void)buf;
-    (void)from;
-    (void)fromlen;
-    ev("recvfrom %x size %d flags %x -> no data", (unsigned)s, len, flags);
-    return -1;
+    return next_packet("recvfrom", s, buf, len, flags, from, fromlen);
 }
 
 /* ------------------------------------------------------------------ lookup */
@@ -629,6 +656,7 @@ void plat_test_begin(int run)
     g_qpc = QPC_START;
     g_nsock = 0;
     g_read_bytes = 0;
+    g_next_packet = 0;
     GetCurrentDirectoryA(MAX_PATH, g_saved_cwd);
     SetCurrentDirectoryA(g_root);
     g_run = run;
