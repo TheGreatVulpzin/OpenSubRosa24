@@ -69,6 +69,7 @@ void lf_0ad30(void);
 void lf_0ad70(void);
 void lf_0ae50(void);
 void lf_0b040(void);
+void lf_0b0b0(void);
 void lf_0b150(void);
 void lf_0b3f0(void);
 void lf_0b540(void);
@@ -328,6 +329,7 @@ const LfEntry lf_table[] = {
     { "init_by_array", 0xad70, (void *)lf_0ad70, 2, LF_RET_VOID, 4, "vv" },
     { "genrand_int32", 0xae50, (void *)lf_0ae50, 0, LF_RET_INT, 4, "" },
     { "objecttype_addparticle", 0xb040, (void *)lf_0b040, 5, LF_RET_VOID, 4, "vvvvv" },
+    { "objecttype_addbond", 0xb0b0, (void *)lf_0b0b0, 4, LF_RET_INT, 4, "vvvv" },
     { "objecttype_addface", 0xb150, (void *)lf_0b150, 8, LF_RET_VOID, 4, "vvvvvvvv" },
     { "stoptimer", 0xb3f0, (void *)lf_0b3f0, 1, LF_RET_VOID, 4, "v" },
     { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4, "" },
@@ -518,4 +520,4 @@ const LfEntry lf_table[] = {
     { "createscenario_world", 0x5aa60, (void *)lf_5aa60, 0, LF_RET_VOID, 4, "" },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv" },
 };
-const int lf_table_count = 257;
+const int lf_table_count = 258;
