@@ -33,7 +33,12 @@ def warnings(path):
                    encoding='mbcs')
     r = subprocess.run(['cmd', '/c', str(bat)], capture_output=True, text=True, encoding='mbcs', errors='replace')
     out = []
-    for m in re.finditer(r'\((\d+)\)\s*:\s*warning (C4244|C4242):\s*(.*)', r.stdout + r.stderr):
+    for m in re.finditer(r'\((\d+)\)\s*:\s*warning (C4244|C4242|C4700):\s*(.*)', r.stdout + r.stderr):
+        if m.group(2) == 'C4700':
+            # A local read before any write: lf_frame holds the stack variables, so a slot
+            # that the original fills in a way the lifted code does not (a callee, a push).
+            out.append((int(m.group(1)), 'uninitialized', re.findall(r"'([^']*)'", m.group(3))[-1]))
+            continue
         types = re.findall(r"'([^']*)'", m.group(3))
         # Only conversions between a float type and an integer type.
         if len(types) >= 2 and (types[-2] in FLOATS) != (types[-1] in FLOATS):

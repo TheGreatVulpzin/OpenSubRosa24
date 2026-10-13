@@ -120,6 +120,15 @@ The rules run in this order: `floatStores`, `storeRounding`, `floatGrouping`, `c
 
 `FixReturnTypes.java` gives `objecttype_addbond` (0xb0b0) an `int` return and stores its parameters. The `__cdecl_keepF` prototype lists ST0 before EAX as an output, and an `undefined4` return matched ST0. A caller kept 1.0 on the x87 stack across the call, and the pseudo-C read it as the return value. Do not lock a signature that has no stored parameters: every caller then drops its arguments.
 
+## Lint
+
+`python -I tools/lift/lint.py` compiles the lifted C with `/W4` and lists two kinds of warnings by function:
+
+- **An implicit conversion between a float and an int (C4244).** The machine code converts only with explicit instructions (`fild`, `fistp`), and Ghidra prints them as explicit casts. So an implicit conversion is a candidate lifting bug. Check each one in the p-code before you change it.
+- **A local read before any write (C4700).** Check the original. `createvehicle` (0x3ccc0) is a bug of the game itself: for `param_1 != 0` it returns `[esp+4]`, a stack slot that it never writes. The lifted code returns another unwritten value. Callers must ignore this return.
+
+The game has bugs of its own (for example the voice index overflow). The lifted code keeps them, because it must do the same as the original.
+
 ## Call arguments with the bits of another type
 
 Ghidra prints a call argument with the type that the caller uses. The callee can use another type for the same 4 bytes, and the original pushes the bits unchanged. In C the call converts the number. `LiftExport.java` (`callArgBits`) wraps the argument:
