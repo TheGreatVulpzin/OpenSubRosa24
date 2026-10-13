@@ -46,6 +46,10 @@ static void nothing(void) { }
 static void float_one(void) { g_vals[40] = 0x3f800000; }       /* 1.0f */
 static void float_one_ulp(void) { g_vals[40] = 0x3f800001; }   /* 1.0f + 1 ulp */
 static void float_two(void) { g_vals[40] = 0x40000000; }       /* 2.0f */
+static void ptr_a(void) { g_vals[41] = 0x20001234; }            /* a pointer, 1e-19 as a float */
+static void ptr_b(void) { g_vals[41] = 0x20005678; }
+static void tiny_a(void) { float f = -7.4607641e-07f; memcpy((void *)&g_vals[42], &f, 4); }
+static void tiny_b(void) { float f = -7.44941644e-07f; memcpy((void *)&g_vals[42], &f, 4); }
 static void crash(void) { g_vals[20] = 3; *(volatile int *)0 = 1; }
 static void write_d(void) { g_vals[20] = 4; }
 
@@ -103,6 +107,14 @@ int main(void)
         CHECK(v7.fails == 0 && v7.near_floats == 1, "float 1 ulp apart: not a difference, counted apart");
         run(&v8, float_one, float_two);
         CHECK(v8.fails == 1, "float far apart: a difference");
+    }
+    {
+        SvVerify v9 = { "pointer_like", 1 };
+        SvVerify v10 = { "cancellation", 1 };
+        run(&v9, ptr_a, ptr_b);
+        CHECK(v9.fails == 1, "two pointers: a difference (no value tolerance far from 1)");
+        run(&v10, tiny_a, tiny_b);
+        CHECK(v10.fails == 0, "tiny result of a cancellation, 1e-9 apart: not a difference");
     }
 
     {

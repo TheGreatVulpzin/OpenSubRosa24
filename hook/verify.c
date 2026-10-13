@@ -2,6 +2,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -390,11 +391,24 @@ static int g_ulps = -1;
 static int near_float(uint32_t a, uint32_t b)
 {
     uint32_t ea = (a >> 23) & 0xff, eb = (b >> 23) & 0xff;
+    float x, y;
+    double d, m;
     if (g_ulps < 0)
         g_ulps = sv_config_int("verify_float_ulps", 4);
     if (!g_ulps || ea == 0 || ea == 0xff || eb == 0 || eb == 0xff || (a ^ b) >> 31)
         return 0;
-    return (a > b ? a - b : b - a) <= (uint32_t)g_ulps;
+    if ((a > b ? a - b : b - a) <= (uint32_t)g_ulps)
+        return 1;
+    /* Value tolerance: an error that grows through a sum, or a tiny result of a subtraction of
+     * near values (1e-9 off around 3e-7). Only for floats between 1e-12 and 1e12 in size:
+     * pointers and large ints look like floats far outside this range (0x20001234 is 1e-19). */
+    memcpy(&x, &a, 4);
+    memcpy(&y, &b, 4);
+    m = fabs(x) > fabs(y) ? fabs(x) : fabs(y);
+    if (m < 1e-12 || m > 1e12 || fabs(x) < 1e-12 || fabs(y) < 1e-12)
+        return 0;
+    d = fabs((double)x - (double)y);
+    return d <= 1e-6 || d <= 1e-5 * m;
 }
 
 int sv_same_float(double a, double b)

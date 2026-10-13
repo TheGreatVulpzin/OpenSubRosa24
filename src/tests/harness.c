@@ -459,9 +459,13 @@ int main(int argc, char **argv)
                     while (g_after_new[k][b] == g_buf[k][b])
                         b++;
                     same = 0;
-                    if (getenv("HARNESS_DEBUG"))
-                        printf("  call %d arg %d: memory differs at %+d: new %02x original %02x\n", j, k,
-                               b - BUF / 2, g_after_new[k][b], g_buf[k][b]);
+                    if (getenv("HARNESS_DEBUG")) {
+                        float fn, fo2;
+                        memcpy(&fn, g_after_new[k] + (b & ~3), 4);
+                        memcpy(&fo2, g_buf[k] + (b & ~3), 4);
+                        printf("  call %d arg %d: memory differs at %+d: new %02x original %02x (as float %.9g / %.9g)\n",
+                               j, k, b - BUF / 2, g_after_new[k][b], g_buf[k][b], fn, fo2);
+                    }
                 }
             sv_verify_end(&v, same && new_ok, NULL);
             if (!orig_ok) {
