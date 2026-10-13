@@ -20,6 +20,7 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | The terrain is a height map of 2049 x 2049 points. | code | `createlandscape` |
 | Building floor plans come from block files (`data/block/*.sbl`) that the server reads 4 bytes at a time. Loading a level makes about 3.2 million reads of 4 bytes. | code | `loadblock` (0x29a0) |
 | What the track is for (a train?). | check | |
+| The server has elevator code. When a player uses a block of one special type inside a building, the server creates an elevator for that building and sends it to the floor of the player (height minus the building base, divided by 4). Normal city buildings seem to have no such block, so the code never runs in practice. | code, check | `city_createelevator` (0x154b0), called by `human_itemsimulation` (0x4bd60) |
 
 ### 2. The server
 
@@ -43,6 +44,7 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | --- | --- | --- |
 | The game has a stock market: functions to buy and sell stock, and a tax when a player dies. | code (names) | `playerbuystock`, `playersellstock`, `playerdeathtax` |
 | How the prices move. | check | |
+| `economysimulation` is dead code in the 024d server: no function calls it and no pointer to it exists in the binary. Maybe stock prices never change on a dedicated server. | code, check | `economysimulation` (0x53a0) |
 
 ### 5. Physics
 
