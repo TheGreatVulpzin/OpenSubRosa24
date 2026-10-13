@@ -246,8 +246,6 @@ void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
     }
     if (g_rec_trace)
         sv_log("rec begin %x depth %d", rva, t_depth);
-    if (sv_config_int("record_trace", 0))
-        sv_log("rec begin %x depth %d", rva, t_depth);
     if (d < RET_MAX)
         t_rets[d] = 0;
     t_depth++;
@@ -292,14 +290,10 @@ void sv_rec_push_ret(uint32_t ret)
 uint32_t sv_rec_end(uint32_t eax)
 {
     int d = --t_depth;
+    uint32_t ret;
     if (g_rec_trace)
         sv_log("rec end depth %d", d);
-    static int trace = -1;
-    if (trace < 0)
-        trace = sv_config_int("record_trace", 0);
-    if (trace)
-        sv_log("rec end depth %d", d);
-    uint32_t ret = d < RET_MAX ? t_rets[d] : 0;
+    ret = d < RET_MAX ? t_rets[d] : 0;
     if (d < SCOPE_MAX) {
         Scope *s = &t_scope[d];
         if (s->rec && !s->dropped) {

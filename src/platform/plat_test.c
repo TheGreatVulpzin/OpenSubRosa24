@@ -391,6 +391,22 @@ static int __cdecl st_printf(const char *fmt, ...)
 
 /* ------------------------------------------------------------------ network */
 
+/* A sockaddr_in for the log: "200.xx.xx.156:27584 #hash". The middle of the IP address is
+ * hidden (the addresses of players), the hash of the whole address keeps the compare exact. */
+static const char *addr_text(const void *addr, int len)
+{
+    static char buf[2][64];
+    static int k;
+    const uint8_t *a = addr;
+    char *o = buf[k ^= 1];
+    if (!a || len < 8) {
+        snprintf(o, 64, "%s", a ? "short" : "null");
+        return o;
+    }
+    snprintf(o, 64, "%u.xx.xx.%u:%u #%08x", a[4], a[7], (unsigned)(a[2] << 8 | a[3]), fnv(a, (size_t)len));
+    return o;
+}
+
 typedef UINT_PTR SOCK;
 
 static SOCK WINAPI st_socket(int af, int type, int protocol)
@@ -402,7 +418,7 @@ static SOCK WINAPI st_socket(int af, int type, int protocol)
 
 static int WINAPI st_bind(SOCK s, const void *addr, int len)
 {
-    ev("bind %x %s", (unsigned)s, hex(addr, (size_t)len));
+    ev("bind %x %s", (unsigned)s, addr_text(addr, len));
     return 0;
 }
 
@@ -420,7 +436,7 @@ static int WINAPI st_closesocket(SOCK s)
 
 static int WINAPI st_connect(SOCK s, const void *addr, int len)
 {
-    ev("connect %x %s", (unsigned)s, hex(addr, (size_t)len));
+    ev("connect %x %s", (unsigned)s, addr_text(addr, len));
     return -1;
 }
 
@@ -464,8 +480,46 @@ static int WINAPI st_WSAFDIsSet(SOCK s, void *set)
     return 0;
 }
 
+/* The bytes of each sent packet, per run: plat_test_same finds the first different byte. */
+typedef struct Sent {
+    uint8_t *bytes;   /* all packets, one after the other */
+    size_t len, cap;
+    size_t *start;    /* offset of each packet in bytes */
+    int count, max;
+} Sent;
+
+static Sent g_sent[2];
+
+static void keep_sent(const char *buf, int len)
+{
+    Sent *t;
+    if (g_run < 0 || len < 0)
+        return;
+    t = &g_sent[g_run];
+    if (t->len + (size_t)len > t->cap) {
+        size_t cap = t->cap ? t->cap * 2 : 65536;
+        while (cap < t->len + (size_t)len)
+            cap *= 2;
+        t->bytes = realloc(t->bytes, cap);
+        t->cap = cap;
+    }
+    if (t->count == t->max) {
+        t->max = t->max ? t->max * 2 : 64;
+        t->start = realloc(t->start, (size_t)t->max * sizeof(size_t));
+    }
+    t->start[t->count++] = t->len;
+    memcpy(t->bytes + t->len, buf, (size_t)len);
+    t->len += (size_t)len;
+}
+
+static size_t sent_len(const Sent *t, int i)
+{
+    return (i + 1 < t->count ? t->start[i + 1] : t->len) - t->start[i];
+}
+
 static int WINAPI st_send(SOCK s, const char *buf, int len, int flags)
 {
+    keep_sent(buf, len);
     ev("send %x %d bytes flags %x hash %08x data %s", (unsigned)s, len, flags, fnv(buf, (size_t)len),
        hex(buf, (size_t)len));
     return len;
@@ -473,7 +527,8 @@ static int WINAPI st_send(SOCK s, const char *buf, int len, int flags)
 
 static int WINAPI st_sendto(SOCK s, const char *buf, int len, int flags, const void *to, int tolen)
 {
-    ev("sendto %x %d bytes flags %x to %s hash %08x data %s", (unsigned)s, len, flags, hex(to, (size_t)tolen),
+    keep_sent(buf, len);
+    ev("sendto %x %d bytes flags %x to %s hash %08x data %s", (unsigned)s, len, flags, addr_text(to, tolen),
        fnv(buf, (size_t)len), hex(buf, (size_t)len));
     return len;
 }
@@ -650,6 +705,8 @@ void plat_test_begin(int run)
     l->len = 0;
     l->events = 0;
     l->full = 0;
+    g_sent[run].len = 0;
+    g_sent[run].count = 0;
     remove_tree(g_box[run]);
     memset(g_pool, 0, g_pool_dirty);
     g_pool_used = g_pool_dirty = 0;
@@ -715,6 +772,21 @@ int plat_test_same(char *why, size_t n)
         if (a->text[i] == '\n')
             start = i + 1;
     if (i < a->len || i < b->len || a->events != b->events) {
+        const Sent *sa = &g_sent[0], *sb = &g_sent[1];
+        int p;
+        /* A different packet: the first different byte is more useful than the log line. */
+        for (p = 0; p < sa->count && p < sb->count; p++) {
+            size_t la_n = sent_len(sa, p), lb_n = sent_len(sb, p), m;
+            const uint8_t *x = sa->bytes + sa->start[p], *y = sb->bytes + sb->start[p];
+            for (m = 0; m < la_n && m < lb_n && x[m] == y[m]; m++)
+                ;
+            if (m < la_n || m < lb_n) {
+                snprintf(why, n, "packet %d (%u/%u bytes) differs at byte %u: lifted %s, original %s", p,
+                         (unsigned)la_n, (unsigned)lb_n, (unsigned)m, hex(x + m, m < la_n ? (la_n - m < 8 ? la_n - m : 8) : 0),
+                         hex(y + m, m < lb_n ? (lb_n - m < 8 ? lb_n - m : 8) : 0));
+                return 0;
+            }
+        }
         line_at(a, start, la, sizeof la);
         line_at(b, start, lb, sizeof lb);
         snprintf(why, n, "environment: lifted \"%s\", original \"%s\"", la[0] ? la : "(end)", lb[0] ? lb : "(end)");
