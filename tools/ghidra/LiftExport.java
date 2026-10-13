@@ -106,10 +106,12 @@ public class LiftExport extends GhidraScript {
         StringBuilder sb = new StringBuilder();
         Map<Integer, Integer> closeAfter = new HashMap<>();
         Map<Integer, String> openBefore = new HashMap<>();
+        // A rule that runs later puts its "(" outside the ones before it at the same token:
+        // rounding and grouping go inside, the bit copies of callArgBits outside.
         floatStores(t, openBefore, closeAfter);
-        callArgBits(t, openBefore, closeAfter);
         storeRounding(t, openBefore, closeAfter);
         floatGrouping(t, openBefore, closeAfter);
+        callArgBits(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -319,7 +321,7 @@ public class LiftExport extends GhidraScript {
                 if (wrap == null) continue;
                 // "0" is 0.0 as a float too.
                 if (v.isConstant() && v.getOffset() == 0) continue;
-                openBefore.merge(first, wrap, (x, y) -> x + y);
+                openBefore.merge(first, wrap, (x, y) -> y + x);
                 closeAfter.merge(last, close, Integer::sum);
             }
         }
