@@ -243,7 +243,11 @@ void lf_3cfe0(void);
 void lf_3d500(void);
 void lf_3da50(void);
 void lf_40aa0(void);
+void lf_41550(void);
+void lf_41de0(void);
 void lf_48ec0(void);
+void lf_4a440(void);
+void lf_4bd60(void);
 void lf_4c720(void);
 void lf_4c8c0(void);
 void lf_4cee0(void);
@@ -258,9 +262,11 @@ void lf_4e500(void);
 void lf_4f720(void);
 void lf_500e0(void);
 void lf_50ae0(void);
+void lf_51060(void);
 void lf_542a0(void);
 void lf_55700(void);
 void lf_56710(void);
+void lf_58320(void);
 void lf_585b0(void);
 void lf_58ef0(void);
 void lf_5aa60(void);
@@ -509,7 +515,11 @@ const LfEntry lf_table[] = {
     { "ai_assessthreats", 0x3d500, (void *)lf_3d500, 2, LF_RET_VOID, 4, "vv" },
     { "area_createblock", 0x3da50, (void *)lf_3da50, 6, LF_RET_VOID, 4, "vvvvvp" },
     { "sphereintersectarea", 0x40aa0, (void *)lf_40aa0, 6, LF_RET_INT, 4, "pppvpv" },
+    { "circleintersectarea", 0x41550, (void *)lf_41550, 7, LF_RET_INT, 4, "pppvppv" },
+    { "bondsimulation2", 0x41de0, (void *)lf_41de0, 0, LF_RET_VOID, 4, "" },
     { "bulletsimulation", 0x48ec0, (void *)lf_48ec0, 0, LF_RET_VOID, 4, "" },
+    { "human_calculatearmangles", 0x4a440, (void *)lf_4a440, 1, LF_RET_VOID, 4, "v" },
+    { "human_itemsimulation", 0x4bd60, (void *)lf_4bd60, 1, LF_RET_VOID, 4, "v" },
     { "human_buildmuscles", 0x4c720, (void *)lf_4c720, 1, LF_RET_VOID, 4, "v" },
     { "itemlogic", 0x4c8c0, (void *)lf_4c8c0, 0, LF_RET_VOID, 4, "" },
     { "item_physicssimulation", 0x4cee0, (void *)lf_4cee0, 1, LF_RET_VOID, 4, "v" },
@@ -524,12 +534,14 @@ const LfEntry lf_table[] = {
     { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p" },
     { "player_loadinventory", 0x500e0, (void *)lf_500e0, 1, LF_RET_VOID, 4, "v" },
     { "createhuman", 0x50ae0, (void *)lf_50ae0, 3, LF_RET_INT, 4, "ppv" },
+    { "humansimulation", 0x51060, (void *)lf_51060, 0, LF_RET_VOID, 4, "" },
     { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4, "" },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v" },
     { "objectsimulation", 0x56710, (void *)lf_56710, 0, LF_RET_VOID, 4, "" },
+    { "scenario_createguards", 0x58320, (void *)lf_58320, 3, LF_RET_INT, 4, "vvv" },
     { "scenario_createtraffic2", 0x585b0, (void *)lf_585b0, 1, LF_RET_VOID, 4, "v" },
     { "createmission_acquisition", 0x58ef0, (void *)lf_58ef0, 3, LF_RET_INT, 4, "vvv" },
     { "createscenario_world", 0x5aa60, (void *)lf_5aa60, 0, LF_RET_VOID, 4, "" },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv" },
 };
-const int lf_table_count = 264;
+const int lf_table_count = 270;

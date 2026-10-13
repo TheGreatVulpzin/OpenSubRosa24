@@ -503,6 +503,14 @@ def lift_function(f, rva, headers, imports_used):
     for g in f['globals']:
         pre.append(global_macro(g))
         post.append(f'#undef {g["name"]}')
+    # "pcVar9 = rand_exref;": the original loads the import address from the IAT once and
+    # calls it through a register. The import macro gives the same address.
+    external = {c['name'] for c in f['calls'] if c['external']}
+    for x in sorted(set(re.findall(r'\b([A-Za-z_]\w*)_exref\b', c))):
+        if x not in external:
+            return None, f'import reference without a call: {x}_exref'
+        pre.append(f'#define {x}_exref ((code *){x})')
+        post.append(f'#undef {x}_exref')
     for call in f['calls']:
         cname = call['name']
         if call['external']:
@@ -552,6 +560,10 @@ def lift_function(f, rva, headers, imports_used):
             post.append(f'#undef {cname}')
 
     body = partial_access(strip_comments(c)).strip()
+    # SSE values (bondsimulation2): C cannot assign an array, so use the lf_m128 struct.
+    body = re.sub(r'\bundefined1\s+(auVar\d+)\s*\[16\];', r'lf_m128 \1;', body)
+    body = body.replace('*(undefined1 (*) [16])', '*(lf_m128 *)')
+    body = re.sub(r'\bdpps\(', 'lf_dpps(', body)
     body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
     body = re.sub(r'\bNAN\b(?!\s*\()', 'LF_NAN', body)
     body = raw_float_uses(body, undefined_names(body, params, f['globals']),

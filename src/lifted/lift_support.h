@@ -54,7 +54,7 @@ typedef unsigned long long qword;
 typedef unsigned char bool;
 typedef unsigned short wchar16;
 typedef double float10;   /* x87 80-bit in the original; MSVC has no 80-bit type */
-typedef void code;
+typedef int code();  /* Ghidra "code *": a pointer to a function, called as (*p)() */
 typedef void *pointer;    /* Ghidra generic pointer type */
 typedef void *pointer32;
 
@@ -88,6 +88,24 @@ static __inline unsigned int lf_f2u(float f) { union { unsigned int u; float f; 
 /* Bit copies between a double and an 8-byte int. */
 static __inline double lf_u2d(unsigned long long x) { union { unsigned long long u; double d; } u; u.u = x; return u.d; }
 static __inline unsigned long long lf_d2u(double d) { union { unsigned long long u; double d; } u; u.d = d; return u.u; }
+
+/* 16-byte SSE values. Ghidra declares them "undefined1 auVar1 [16]", and C cannot assign
+ * an array: tools/lift/lift.py uses this struct. lf_dpps runs the same DPPS instruction as
+ * the original (bondsimulation2), so the result is the same to the bit. */
+#include <smmintrin.h>
+typedef struct { __declspec(align(16)) unsigned char b[16]; } lf_m128;
+static __inline lf_m128 lf_dpps(lf_m128 a, lf_m128 b, int imm)
+{
+    lf_m128 r;
+    __m128 x = _mm_loadu_ps((const float *)a.b), y = _mm_loadu_ps((const float *)b.b);
+    switch (imm) {  /* the immediate must be a constant */
+    case 0x7f: _mm_storeu_ps((float *)r.b, _mm_dp_ps(x, y, 0x7f)); break;
+    case 0xff: _mm_storeu_ps((float *)r.b, _mm_dp_ps(x, y, 0xff)); break;
+    case 0x71: _mm_storeu_ps((float *)r.b, _mm_dp_ps(x, y, 0x71)); break;
+    default: __debugbreak();
+    }
+    return r;
+}
 
 /* Bit casts that tools/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
 #define LF_BITS_F(x) lf_u2f((unsigned int)(x))

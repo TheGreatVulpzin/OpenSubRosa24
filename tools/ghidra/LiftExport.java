@@ -412,6 +412,10 @@ public class LiftExport extends GhidraScript {
         Instruction in = listing.getInstructionAt(a);
         if (in == null) return false;
         String m = in.getMnemonicString().toUpperCase();
+        // SSE (mulps, addps, dpps...) rounds every float op to 24 bits. bondsimulation2 has
+        // a block of SSE4.1 code.
+        for (int o = 0; o < in.getNumOperands(); o++)
+            if (in.getDefaultOperandRepresentation(o).toUpperCase().contains("XMM")) return true;
         if (!m.startsWith("F")) return false;
         // Where the result is: ST0, or ST(i) for "fop st(i),st" (minus one for a pop).
         int r = 0;
@@ -774,10 +778,11 @@ public class LiftExport extends GhidraScript {
         int close = next(t, ty);
         while (close >= 0 && t.get(close).getText().equals("*")) close = next(t, close);
         if (close < 0 || !t.get(close).getText().equals(")")) return null;
-        int k = next(t, close);
-        if (k < 0 || t.get(k).getText().equals("(")) return null;
+        int k = nextAcross(t, close);
+        if (k < 0) return null;
+        String printed = castType(t, i, close).replace(" ", "");
         int u = k;
-        while (u >= 0 && t.get(u).getPcodeOp() == null) u = next(t, u);
+        while (u >= 0 && t.get(u).getPcodeOp() == null) u = nextAcross(t, u);
         if (u < 0) return null;
         // The CAST: the op of the first token, or an op that uses its result (a few levels).
         PcodeOp castOp = null;
@@ -790,8 +795,12 @@ public class LiftExport extends GhidraScript {
                 break;
             }
             int c = p.getOpcode();
-            if (c == PcodeOp.FLOAT_FLOAT2FLOAT || c == PcodeOp.FLOAT_INT2FLOAT || c == PcodeOp.FLOAT_TRUNC
-                    || c == PcodeOp.INT_ZEXT || c == PcodeOp.INT_SEXT) break;  // this is the printed cast
+            // A conversion op with the printed type is the printed cast: "(float)dVar10". One
+            // with another type is inside the operand: "(float *)(float)dVar39".
+            if ((c == PcodeOp.FLOAT_FLOAT2FLOAT || c == PcodeOp.FLOAT_INT2FLOAT || c == PcodeOp.FLOAT_TRUNC
+                    || c == PcodeOp.INT_ZEXT || c == PcodeOp.INT_SEXT) && p.getOutput() != null
+                    && p.getOutput().getHigh() != null
+                    && printed.equals(p.getOutput().getHigh().getDataType().getName().replace(" ", ""))) break;
             if (p.getOutput() == null) continue;
             Iterator<PcodeOp> d = p.getOutput().getDescendants();
             while (d.hasNext()) todo.add(d.next());
@@ -799,7 +808,6 @@ public class LiftExport extends GhidraScript {
         if (castKind(castOp) < 0) return null;
         // It must be the printed cast: "(float)dVar10" is a FLOAT2FLOAT, and a bit CAST of
         // its result further on is another op.
-        String printed = castType(t, i, close).replace(" ", "");
         if (!printed.equals(castOp.getOutput().getHigh().getDataType().getName().replace(" ", ""))) return null;
         Set<PcodeOp> allowed = subtree(castOp.getInput(0));
         allowed.add(castOp);
@@ -807,7 +815,7 @@ public class LiftExport extends GhidraScript {
         int depth = 0, end = -1;
         for (int j = k; j >= 0 && j < t.size(); j++) {
             ClangToken x = t.get(j);
-            if (x instanceof ClangBreak) return null;
+            if (x instanceof ClangBreak) continue;  // an operand on several lines
             String s = x.getText();
             if (s.isBlank()) continue;
             if (s.equals("(") || s.equals("[")) {
