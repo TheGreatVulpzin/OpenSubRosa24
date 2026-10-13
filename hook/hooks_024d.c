@@ -130,6 +130,8 @@ int sv_hooks_024d_install(void)
         sv_log("lifted hooks disabled (lifted=0)");
     /* Record-only hooks of the side-effect functions (record_imports=1, docs/side-effects.md). */
     n += sv_hooks_record_install();
+    /* Hand-written main function and main loop (own_main=1, src/server/main_loop.c). */
+    n += sv_main_loop_install();
     return n;
 }
 

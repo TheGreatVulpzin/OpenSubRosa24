@@ -16,6 +16,11 @@ void __cdecl sr_createevent_updatemission(int team, int mission);
 /* players.c */
 void __cdecl sr_fixplayername(int id);
 
+/* main_loop.c (subvulpes.ini own_main=1) */
+void __cdecl sr_getpaths(void);
+void __cdecl sr_dedicatedserverloop(void);
+int sv_main_loop_install(void);
+
 #ifdef __cplusplus
 }
 #endif
