@@ -369,7 +369,7 @@ def lvalue_end(s, j, undef):
     return -1
 
 
-def raw_float_uses(body, undef, floats=frozenset()):
+def raw_float_uses(body, undef, floats=frozenset(), types=None):
     """Ghidra: a cast from raw bytes (undefined4) to float is a bit copy, and so is a float
     stored into raw bytes. In C both convert the number. Rewrite:
       (float)X        -> (*(float *)&(X))
@@ -396,7 +396,7 @@ def raw_float_uses(body, undef, floats=frozenset()):
     def store(m):
         lv, rhs = m.group(2), m.group(3)
         end = lvalue_end(lv, 0, undef)
-        floatish = (FLOATISH_RE.search(rhs) or re.search(r'\*\s*\(float \*\)', rhs)
+        floatish = (FLOATISH_RE.search(rhs) or expr_type(rhs, types or {}) in ('float', 'float10', 'double') or re.search(r'\*\s*\(float \*\)', rhs)
                     or any(re.search(r'\b' + re.escape(n) + r'\b', rhs) for n in floats))
         if end != len(lv) or not floatish or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
             return m.group(0)
@@ -602,7 +602,8 @@ def lift_function(f, rva, headers, imports_used):
     body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
     body = re.sub(r'\bNAN\b(?!\s*\()', 'LF_NAN', body)
     floats = {n for n, t in local_types(body, params).items() if t in ('float', 'float10', 'double')}
-    body = raw_float_uses(body, undefined_names(body, params, f['globals']), floats)
+    body = raw_float_uses(body, undefined_names(body, params, f['globals']), floats,
+                          dict({g['name']: g['type'].strip() for g in f['globals']}, **local_types(body, params)))
     body = pointer_float_casts(body, params, f['globals'])
     body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),
                          dict({g["name"]: g["type"].strip() for g in f["globals"]}, **local_types(body, params)))
