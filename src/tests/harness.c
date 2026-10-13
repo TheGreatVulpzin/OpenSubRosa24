@@ -15,6 +15,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -345,6 +346,81 @@ static int crash_filter(EXCEPTION_POINTERS *ep)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+/* Probes: HARNESS_PROBE=rva[:espoff],... puts an INT3 on each instruction of the original
+ * and prints ST0, ST1 and the float at [esp+espoff] when it runs. Compare the intermediate
+ * values of the original with printf()s put in the lifted C. */
+#define MAX_PROBES 16
+static struct {
+    uint32_t rva, espoff;
+    int has_off;
+    uint8_t byte;
+} g_probe[MAX_PROBES];
+static int g_nprobe, g_rearm = -1;
+
+static double x87_to_double(const BYTE *r)
+{
+    uint64_t m;
+    int e = (r[8] | (r[9] << 8)) & 0x7fff;
+    memcpy(&m, r, 8);
+    if (e == 0 && m == 0)
+        return (r[9] & 0x80) ? -0.0 : 0.0;
+    return ((r[9] & 0x80) ? -1 : 1) * ldexp((double)m, e - 16383 - 63);
+}
+
+static LONG CALLBACK probe_handler(EXCEPTION_POINTERS *ep)
+{
+    CONTEXT *c = ep->ContextRecord;
+    DWORD code = ep->ExceptionRecord->ExceptionCode;
+    int k;
+    if (code == EXCEPTION_SINGLE_STEP && g_rearm >= 0) {
+        *(uint8_t *)(sr_base + g_probe[g_rearm].rva) = 0xcc;
+        g_rearm = -1;
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    if (code != EXCEPTION_BREAKPOINT)
+        return EXCEPTION_CONTINUE_SEARCH;
+    for (k = 0; k < g_nprobe; k++) {
+        if ((uintptr_t)ep->ExceptionRecord->ExceptionAddress != sr_base + g_probe[k].rva)
+            continue;
+        printf("  probe %05x: st0 %.17g st1 %.17g", g_probe[k].rva, x87_to_double(c->FloatSave.RegisterArea),
+               x87_to_double(c->FloatSave.RegisterArea + 10));
+        if (g_probe[k].has_off) {
+            float f;
+            memcpy(&f, (void *)(uintptr_t)(c->Esp + g_probe[k].espoff), 4);
+            printf(" [esp+%x] %.9g (%08x)", g_probe[k].espoff, f, *(uint32_t *)&f);
+        }
+        printf(" ebx %x esi %x edi %x ebp %x\n", c->Ebx, c->Esi, c->Edi, c->Ebp);
+        *(uint8_t *)(sr_base + g_probe[k].rva) = g_probe[k].byte;
+        c->Eip = (DWORD)(sr_base + g_probe[k].rva);
+        c->EFlags |= 0x100;  /* single step, then put the INT3 back */
+        g_rearm = k;
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+static void set_probes(const char *spec)
+{
+    while (spec && *spec && g_nprobe < MAX_PROBES) {
+        char *end;
+        DWORD old;
+        uint8_t *p;
+        g_probe[g_nprobe].rva = strtoul(spec, &end, 16);
+        if (*end == ':') {
+            g_probe[g_nprobe].espoff = strtoul(end + 1, &end, 16);
+            g_probe[g_nprobe].has_off = 1;
+        }
+        p = (uint8_t *)(sr_base + g_probe[g_nprobe].rva);
+        VirtualProtect(p, 1, PAGE_EXECUTE_READWRITE, &old);
+        g_probe[g_nprobe].byte = *p;
+        *p = 0xcc;
+        g_nprobe++;
+        spec = *end == ',' ? end + 1 : NULL;
+    }
+    if (g_nprobe)
+        AddVectoredExceptionHandler(1, probe_handler);
+}
+
 static int safe_invoke(void *fn, const uint32_t *args, int n, int kind, uint32_t *r_eax, uint32_t *r_edx,
                        double *r_f)
 {
@@ -403,6 +479,7 @@ int main(int argc, char **argv)
     apply_snapshot();
     printf("imports resolved: %d\n", resolve_imports());
     lf_x87_init();
+    set_probes(getenv("HARNESS_PROBE"));
     if (!sv_verify_init()) {
         fprintf(stderr, "verifier: no .data section\n");
         return 1;
@@ -443,12 +520,16 @@ int main(int argc, char **argv)
             fails_before = v.fails;
             v.broken = 0;
             sv_track_begin_new(&v);
+            if (g_nprobe)
+                printf(" call %d: lifted\n", j);
             new_ok = safe_invoke(e->lifted, a, c->n, e->ret, &ne, &de, &fe);
             sv_track_switch_to_original();
             for (k = 0; k < c->n; k++)
                 if (c->kind[k] == 'P')
                     memcpy(g_after_new[k], g_buf[k], BUF);
             build_args(c, e->args, a);
+            if (g_nprobe)
+                printf(" call %d: original\n", j);
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
             same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ((ne ^ no) & mask) == 0) ||
                    (e->ret == LF_RET_INT64 && ne == no && de == dorig) ||

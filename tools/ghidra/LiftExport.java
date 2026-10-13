@@ -108,6 +108,8 @@ public class LiftExport extends GhidraScript {
         Map<Integer, String> openBefore = new HashMap<>();
         floatStores(t, openBefore, closeAfter);
         callArgBits(t, openBefore, closeAfter);
+        storeRounding(t, openBefore, closeAfter);
+        floatGrouping(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -276,6 +278,235 @@ public class LiftExport extends GhidraScript {
                 closeAfter.merge(last, close, Integer::sum);
             }
         }
+    }
+
+    /* The original keeps x87 values in registers with 53 bits, but it rounds a value to 24 bits
+     * when it stores it as a float (fstp dword ptr [esp+10h]) and reads it back. The p-code
+     * of the decompiler has only 4-byte float ops, so it cannot show which results the
+     * original rounded. Look at the machine code: if the result of a float op goes to a
+     * dword store before any other x87 op uses it, print "(float)(...)" around the op.
+     * human_calcarmtorque summed four terms with a store after each add. */
+    private void storeRounding(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        Set<PcodeOp> done = new HashSet<>();
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!(tok instanceof ClangOpToken)) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null || done.contains(op) || op.getOutput() == null || op.getOutput().getSize() != 4) continue;
+            int code = op.getOpcode();
+            if (code != PcodeOp.FLOAT_ADD && code != PcodeOp.FLOAT_SUB && code != PcodeOp.FLOAT_MULT
+                    && code != PcodeOp.FLOAT_DIV) continue;
+            String text = tok.getText();
+            if (!(text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/"))) continue;
+            done.add(op);
+            if (!storedAsFloat(op.getSeqnum().getTarget())) continue;
+            Set<PcodeOp> self = subtree(op.getOutput());
+            int start = i, depth = 0;
+            for (int j = i - 1; j >= 0; j--) {
+                ClangToken u = t.get(j);
+                if (u instanceof ClangBreak || u.getText().isBlank()) continue;
+                String x = u.getText();
+                if (x.equals(")")) {
+                    depth++;
+                } else if (x.equals("(")) {
+                    if (depth == 0) break;
+                    depth--;
+                } else if (depth == 0 && (x.equals("=") || x.equals(",") || x.equals(";") || x.equals("{")
+                        || x.equals("}") || x.equals("return"))) {
+                    break;
+                } else if (depth == 0 && u.getPcodeOp() != null && !self.contains(u.getPcodeOp())) {
+                    break;
+                }
+                start = j;
+            }
+            if (depth != 0) continue;
+            int end = -1;
+            for (int j = nextAcross(t, i); j >= 0 && j < t.size(); j++) {
+                ClangToken u = t.get(j);
+                if (u instanceof ClangBreak || u.getText().isBlank()) continue;
+                String x = u.getText();
+                if (x.equals("(")) {
+                    depth++;
+                } else if (x.equals(")")) {
+                    if (depth == 0) break;
+                    depth--;
+                } else if (depth == 0 && (x.equals(";") || x.equals(","))) {
+                    break;
+                } else if (depth == 0 && u.getPcodeOp() != null && !self.contains(u.getPcodeOp())) {
+                    break;
+                }
+                end = j;
+            }
+            if (end < 0 || depth != 0 || start == i) continue;
+            openBefore.merge(start, "(float)(", (a, b) -> b + a);
+            closeAfter.merge(end, 1, Integer::sum);
+        }
+    }
+
+    /* Follow the x87 stack from the instruction at a: true when its result is stored as a
+     * dword (rounded to float) before another x87 instruction reads it. */
+    private boolean storedAsFloat(Address a) {
+        Listing listing = currentProgram.getListing();
+        Instruction in = listing.getInstructionAt(a);
+        if (in == null) return false;
+        String m = in.getMnemonicString().toUpperCase();
+        if (!m.startsWith("F")) return false;
+        // Where the result is: ST0, or ST(i) for "fop st(i),st" (minus one for a pop).
+        int r = 0;
+        if (in.getNumOperands() == 2) {
+            int d = stIndex(in.getDefaultOperandRepresentation(0));
+            if (d > 0) r = m.endsWith("P") ? d - 1 : d;
+        }
+        for (int n = 0; n < 16; n++) {
+            in = in.getNext();
+            if (in == null) return false;
+            m = in.getMnemonicString().toUpperCase();
+            if (in.getFlowType().isCall() || in.getFlowType().isJump() || in.getFlowType().isTerminal()) return false;
+            if (!m.startsWith("F")) continue;
+            String o0 = in.getNumOperands() > 0 ? in.getDefaultOperandRepresentation(0) : "";
+            String o1 = in.getNumOperands() > 1 ? in.getDefaultOperandRepresentation(1) : "";
+            if (m.equals("FST") || m.equals("FSTP")) {
+                if (r == 0) return o0.toLowerCase().startsWith("float ptr") || o0.toLowerCase().startsWith("dword ptr");
+                if (m.equals("FSTP")) r--;
+                continue;
+            }
+            if (m.startsWith("FLD") || m.equals("FILD")) {
+                r++;
+                continue;
+            }
+            if (m.equals("FXCH")) {
+                int x = o0.isEmpty() ? 1 : stIndex(o0);
+                if (r == 0) r = x;
+                else if (r == x) r = 0;
+                continue;
+            }
+            // Any other x87 instruction that touches the value uses it unrounded.
+            int s0 = stIndex(o0), s1 = stIndex(o1);
+            if (in.getNumOperands() == 0 && m.endsWith("P")) {
+                s0 = 1;  // "faddp" alone is "faddp st(1),st"
+                s1 = 0;
+            }
+            if (r == 0 || s0 == r || s1 == r) return false;
+            if (m.endsWith("P")) r--;
+            if (r < 0) return false;
+        }
+        return false;
+    }
+
+    /* 2 for "ST(2)" or "ST2", 0 for "ST" or "ST0", -1 when it is not an x87 register. */
+    private static int stIndex(String o) {
+        String x = o.toUpperCase().replace(" ", "");
+        if (x.equals("ST") || x.equals("ST0") || x.equals("ST(0)")) return 0;
+        java.util.regex.Matcher mm = java.util.regex.Pattern.compile("^ST\\(?(\\d)\\)?$").matcher(x);
+        return mm.find() ? Integer.parseInt(mm.group(1)) : -1;
+    }
+
+    /* Float math is not associative: (a + b) + c and a + (b + c) round differently. Ghidra
+     * prints the p-code tree FLOAT_ADD(x, FLOAT_ADD(y, z)) as "x + y + z", which C reads as
+     * (x + y) + z. The same for * and /. Put the parentheses back around a right operand
+     * that is itself a + or - (for + and -) or a * or / (for * and /).
+     * human_calcarmtorque summed three squares in another order. The 1-ulp difference went
+     * through acos() near 1 and became 1.6e-5. */
+    private void floatGrouping(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!(tok instanceof ClangOpToken)) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null || op.getNumInputs() != 2) continue;
+            int code = op.getOpcode();
+            Set<Integer> group;
+            if (code == PcodeOp.FLOAT_ADD || code == PcodeOp.FLOAT_SUB)
+                group = Set.of(PcodeOp.FLOAT_ADD, PcodeOp.FLOAT_SUB);
+            else if (code == PcodeOp.FLOAT_MULT || code == PcodeOp.FLOAT_DIV)
+                group = Set.of(PcodeOp.FLOAT_MULT, PcodeOp.FLOAT_DIV);
+            else
+                continue;
+            String text = tok.getText();
+            if (!(text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/"))) continue;
+            int start = nextAcross(t, i);
+            if (start < 0) continue;
+            // Which input is printed on the right: the first token with an op tells.
+            Set<PcodeOp> s0 = subtree(op.getInput(0)), s1 = subtree(op.getInput(1));
+            int probe = start;
+            while (probe >= 0 && t.get(probe).getPcodeOp() == null) probe = nextAcross(t, probe);
+            if (probe < 0) continue;
+            PcodeOp first = t.get(probe).getPcodeOp();
+            Set<PcodeOp> right;
+            Varnode rv;
+            if (s1.contains(first)) {
+                right = s1;
+                rv = op.getInput(1);
+            } else if (s0.contains(first)) {
+                right = s0;
+                rv = op.getInput(0);
+            } else {
+                continue;  // a leaf: a variable or a constant
+            }
+            PcodeOp def = rv.getDef();
+            if (def == null || !group.contains(def.getOpcode())) continue;
+            // The end of the right operand: the last token before a token of another op at
+            // depth 0, or before ";", "," or an unmatched ")".
+            int depth = 0, end = -1;
+            for (int j = start; j < t.size(); j++) {
+                ClangToken u = t.get(j);
+                if (u instanceof ClangBreak || u.getText().isBlank()) continue;
+                String x = u.getText();
+                if (x.equals("(")) {
+                    depth++;
+                } else if (x.equals(")")) {
+                    if (depth == 0) break;
+                    depth--;
+                } else if (depth == 0 && (x.equals(";") || x.equals(","))) {
+                    break;
+                } else if (depth == 0 && u.getPcodeOp() != null && !right.contains(u.getPcodeOp())) {
+                    break;
+                }
+                end = j;
+            }
+            if (end < 0 || depth != 0) continue;
+            if (t.get(start).getText().equals("(") && matching(t, start) == end) continue;
+            openBefore.merge(start, "(", (a, b) -> b + a);
+            closeAfter.merge(end, 1, Integer::sum);
+        }
+    }
+
+    /* The ops of the expression that computes v, down to named variables. */
+    private static Set<PcodeOp> subtree(Varnode v) {
+        Set<PcodeOp> out = new HashSet<>();
+        Deque<Varnode> todo = new ArrayDeque<>();
+        todo.push(v);
+        while (!todo.isEmpty() && out.size() < 512) {
+            Varnode x = todo.pop();
+            PcodeOp d = x.getDef();
+            if (d == null || out.contains(d)) continue;
+            int c = d.getOpcode();
+            if (c == PcodeOp.MULTIEQUAL || c == PcodeOp.INDIRECT) continue;
+            if (x != v && x.getHigh() != null && x.getHigh().getSymbol() != null) continue;
+            out.add(d);
+            for (int k = 0; k < d.getNumInputs(); k++) todo.push(d.getInput(k));
+        }
+        return out;
+    }
+
+    /* The next token that is not blank, on this line or a later one. */
+    private static int nextAcross(List<ClangToken> t, int i) {
+        for (int j = i + 1; j < t.size(); j++) {
+            if (t.get(j) instanceof ClangBreak) continue;
+            if (!t.get(j).getText().isBlank()) return j;
+        }
+        return -1;
+    }
+
+    private static int matching(List<ClangToken> t, int open) {
+        int depth = 0;
+        for (int j = open; j < t.size(); j++) {
+            String x = t.get(j).getText();
+            if (x.equals("(")) depth++;
+            else if (x.equals(")") && --depth == 0) return j;
+        }
+        return -1;
     }
 
     private final Map<Address, DataType[]> protos = new HashMap<>();

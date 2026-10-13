@@ -167,11 +167,26 @@ The 024d runs the x87 with 53-bit precision (control word `0x27F`). The original
 
 The verifier accepts two normal floats with the same sign that are at most `verify_float_ulps` steps apart (default 4, 0 = exact). It counts these words apart, and the log says "floats differ in the last bits only".
 
-Known functions with larger precision differences (the verifier disables their hooks, so the original runs):
+Two rules in `LiftExport.java` put the rounding points of the original back into the C:
+
+- `storeRounding`: the original rounds a value to `float` only when it stores it (`fstp dword ptr [esp+10h]`). The decompiler p-code has only 4-byte float ops, so it does not show these stores. The rule follows the x87 stack in the machine code after each float op. When the result goes to a `float` store before another x87 instruction uses it, the rule prints `(float)(...)` around the op. A Ghidra listing shows `faddp st(1),st` as `FADDP` without operands.
+- `floatGrouping`: Ghidra prints `FLOAT_ADD(x, FLOAT_ADD(y, z))` as `x + y + z`, which C reads as `(x + y) + z`. Float math is not associative, so the rule puts the parentheses back. The same applies to `*` and `/`.
+
+These two rules made `createlandscape` (a 2049 x 2049 height map) bit-exact. Known functions that still have precision differences (the verifier disables their hooks, so the original runs):
 
 | Function | Difference |
 | --- | --- |
-| `createlandscape` | 263 bytes over 4 ulps in the 2049 x 2049 height map |
 | `buildsomeshit` | about 6000 bytes, the error grows through the computation |
+| `human_calcarmtorque` | `acos()` of a value near 1 makes a small difference large |
 
-Both run once, when the server starts. A bit-exact version needs the rounding points of the original, by hand. `/fp:fast` makes the differences larger.
+`/fp:fast` makes the differences larger.
+
+### Probes
+
+To find where a lifted function starts to differ, compare its intermediate values with the original:
+
+```bash
+HARNESS_PROBE=2fe39,2fd14:3c build/hook/harness.exe <exe> <snapshot> <args> human_calcarmtorque
+```
+
+Each probe puts an `INT3` on an instruction of the original (RVA) and prints ST0, ST1, EBX, ESI, EDI, EBP and, with `:off`, the float at `[esp+off]`. Put `printf()` calls at the same places in the lifted C (in `src/lifted/lifted_024d.c`, then lift again to remove them). `tools/ghidra/DumpTokens.java <out> <rva>` prints the decompiler tokens with the p-code op, its address and its input types. `insn:<rva>` prints the instructions as the Ghidra listing shows them.

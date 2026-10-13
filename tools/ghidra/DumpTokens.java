@@ -29,6 +29,18 @@ public class DumpTokens extends GhidraScript {
         di.openProgram(currentProgram);
         try (PrintWriter w = new PrintWriter(args[0], "UTF-8")) {
             for (int a = 1; a < args.length; a++) {
+                if (args[a].startsWith("insn:")) {
+                    // insn:<rva>: the instruction there and the next ones, with their operands.
+                    ghidra.program.model.listing.Instruction in = currentProgram.getListing()
+                            .getInstructionAt(currentProgram.getImageBase().add(Long.decode(args[a].substring(5))));
+                    for (int k = 0; in != null && k < 8; k++, in = in.getNext()) {
+                        StringBuilder s = new StringBuilder(in.getAddress() + " " + in.getMnemonicString());
+                        for (int o = 0; o < in.getNumOperands(); o++)
+                            s.append(" [").append(in.getDefaultOperandRepresentation(o)).append(']');
+                        w.println(s);
+                    }
+                    continue;
+                }
                 long rva = Long.decode(args[a]);
                 Function f = getFunctionAt(currentProgram.getImageBase().add(rva));
                 if (f == null) {
@@ -46,7 +58,7 @@ public class DumpTokens extends GhidraScript {
                     s.append(String.format("%-24s %-20s", t.getText(), t.getClass().getSimpleName()));
                     PcodeOp op = t.getPcodeOp();
                     if (op != null) {
-                        s.append(" op=").append(op.getMnemonic());
+                        s.append(" op=").append(op.getMnemonic()).append('@').append(op.getSeqnum().getTarget());
                         Varnode o = op.getOutput();
                         if (o != null && o.getHigh() != null)
                             s.append(" out=").append(o.getHigh().getDataType().getName()).append('/').append(o.getSize());
@@ -55,6 +67,7 @@ public class DumpTokens extends GhidraScript {
                             s.append(" in").append(i).append('=')
                                     .append(v.getHigh() == null ? "?" : v.getHigh().getDataType().getName())
                                     .append('/').append(v.getSize());
+                            if (v.getDef() != null) s.append('<').append(v.getDef().getMnemonic());
                         }
                     }
                     if (t.getHighVariable() != null)
