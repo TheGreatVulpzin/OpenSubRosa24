@@ -253,6 +253,7 @@ void lf_500e0(void);
 void lf_50ae0(void);
 void lf_542a0(void);
 void lf_55700(void);
+void lf_56710(void);
 void lf_585b0(void);
 void lf_58ef0(void);
 void lf_5aa60(void);
@@ -511,9 +512,10 @@ const LfEntry lf_table[] = {
     { "createhuman", 0x50ae0, (void *)lf_50ae0, 3, LF_RET_INT, 4, "ppv" },
     { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4, "" },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v" },
+    { "objectsimulation", 0x56710, (void *)lf_56710, 0, LF_RET_VOID, 4, "" },
     { "scenario_createtraffic2", 0x585b0, (void *)lf_585b0, 1, LF_RET_VOID, 4, "v" },
     { "createmission_acquisition", 0x58ef0, (void *)lf_58ef0, 3, LF_RET_INT, 4, "vvv" },
     { "createscenario_world", 0x5aa60, (void *)lf_5aa60, 0, LF_RET_VOID, 4, "" },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv" },
 };
-const int lf_table_count = 256;
+const int lf_table_count = 257;

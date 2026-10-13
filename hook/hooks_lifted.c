@@ -10738,6 +10738,45 @@ __declspec(naked) static void th_55700(void)
 }
 static uint8_t expect_55700[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
+void __cdecl lf_56710(void);
+static void (__cdecl *orig_56710)(void);
+static SvVerify v_56710 = { "objectsimulation", -1 };
+static void __cdecl hk_56710(void)
+{
+    SV_HOOK_VOID(v_56710, lf_56710(), orig_56710(), NULL);
+}
+__declspec(naked) static void th_56710(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 0
+        push eax
+        push 252
+        push 0x56710
+        call sv_record_args
+        add esp, 16
+        call hk_56710
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_56710[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
+
 void __cdecl lf_585b0(int param_1);
 static void (__cdecl *orig_585b0)(int);
 static SvVerify v_585b0 = { "scenario_createtraffic2", -1 };
@@ -10761,7 +10800,7 @@ __declspec(naked) static void th_585b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 252
+        push 253
         push 0x585b0
         call sv_record_args
         add esp, 16
@@ -10802,7 +10841,7 @@ __declspec(naked) static void th_58ef0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 253
+        push 254
         push 0x58ef0
         call sv_record_args
         add esp, 16
@@ -10844,7 +10883,7 @@ __declspec(naked) static void th_5aa60(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 254
+        push 255
         push 0x5aa60
         call sv_record_args
         add esp, 16
@@ -10883,7 +10922,7 @@ __declspec(naked) static void th_5cf70(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 255
+        push 256
         push 0x5cf70
         call sv_record_args
         add esp, 16
@@ -11160,6 +11199,7 @@ static SvHook g_lifted[] = {
     { "createhuman", 0x50ae0, (void *)th_50ae0, 5, expect_50ae0, mask_all, (void **)&orig_50ae0, 0, 0 },
     { "itemsimulation", 0x542a0, (void *)th_542a0, 8, expect_542a0, mask_all, (void **)&orig_542a0, 0, 0 },
     { "logic_playeractions", 0x55700, (void *)th_55700, 8, expect_55700, mask_all, (void **)&orig_55700, 0, 0 },
+    { "objectsimulation", 0x56710, (void *)th_56710, 8, expect_56710, mask_all, (void **)&orig_56710, 0, 0 },
     { "scenario_createtraffic2", 0x585b0, (void *)th_585b0, 10, expect_585b0, mask_all, (void **)&orig_585b0, 0, 0 },
     { "createmission_acquisition", 0x58ef0, (void *)th_58ef0, 9, expect_58ef0, mask_all, (void **)&orig_58ef0, 0, 0 },
     { "createscenario_world", 0x5aa60, (void *)th_5aa60, 8, expect_5aa60, mask_all, (void **)&orig_5aa60, 0, 0 },
@@ -11419,6 +11459,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_50ae0,
     &v_542a0,
     &v_55700,
+    &v_56710,
     &v_585b0,
     &v_58ef0,
     &v_5aa60,
@@ -11439,7 +11480,7 @@ int sv_hooks_lifted_install(void)
     lf_x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
-    int to = sv_config_int("lifted_to", 256);
+    int to = sv_config_int("lifted_to", 257);
     relocate(expect_01cd0, 3);
     relocate(expect_04a10, 2);
     relocate(expect_04bb0, 2);
@@ -11502,23 +11543,24 @@ int sv_hooks_lifted_install(void)
     relocate(expect_4f720, 4);
     relocate(expect_542a0, 4);
     relocate(expect_55700, 4);
+    relocate(expect_56710, 4);
     relocate(expect_585b0, 5);
     relocate(expect_58ef0, 5);
     relocate(expect_5aa60, 4);
-    if (to > 256)
-        to = 256;
+    if (to > 257)
+        to = 257;
     if (from < 0)
         from = 0;
     if (from >= to)
         return 0;
-    sv_log("lifted hooks %d..%d of 256", from, to);
+    sv_log("lifted hooks %d..%d of 257", from, to);
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
 void sv_hooks_lifted_summary(void)
 {
     int i;
-    for (i = 0; i < 256; i++)
+    for (i = 0; i < 257; i++)
         if (g_lifted_stats[i]->calls)
             sv_verify_summary(g_lifted_stats[i]);
 }

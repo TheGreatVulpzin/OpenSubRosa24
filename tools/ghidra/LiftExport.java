@@ -595,7 +595,7 @@ public class LiftExport extends GhidraScript {
         return s.toString().trim();
     }
 
-    private int[] bitCast(List<ClangToken> t, int i) {
+    private int[] bitCastSimple(List<ClangToken> t, int i) {
         if (!(t.get(i) instanceof ClangSyntaxToken) || !t.get(i).getText().equals("(")) return null;
         int ty = next(t, i);
         if (ty < 0 || !(t.get(ty) instanceof ClangTypeToken)) return null;
@@ -650,17 +650,89 @@ public class LiftExport extends GhidraScript {
         } else {
             return null;
         }
-        if (castOp == null || castOp.getOpcode() != ghidra.program.model.pcode.PcodeOp.CAST) return null;
+        int kind = castKind(castOp);
+        return kind < 0 ? null : new int[] { close, end, kind };
+    }
+
+    /* 0: 4 bytes to float, 1: float to 4 bytes, 2: 8 bytes to double, 3: double to 8 bytes,
+     * -1: not a bit cast between a float and an int of the same size. */
+    private static int castKind(PcodeOp castOp) {
+        if (castOp == null || castOp.getOpcode() != PcodeOp.CAST) return -1;
         if (castOp.getOutput() == null || castOp.getOutput().getHigh() == null || castOp.getInput(0).getHigh() == null)
-            return null;
+            return -1;
         DataType dst = castOp.getOutput().getHigh().getDataType();
         DataType src = castOp.getInput(0).getHigh().getDataType();
         int len = dst.getLength();
-        if (len != src.getLength() || (len != 4 && len != 8)) return null;
+        if (len != src.getLength() || (len != 4 && len != 8)) return -1;
         boolean dstF = dst.getName().equals(len == 4 ? "float" : "double");
         boolean srcF = src.getName().equals(len == 4 ? "float" : "double");
-        if (dstF == srcF) return null;
-        return new int[] { close, end, (len == 4 ? 0 : 2) + (dstF ? 0 : 1) };
+        if (dstF == srcF) return -1;
+        return (len == 4 ? 0 : 2) + (dstF ? 0 : 1);
+    }
+
+    /* A bit cast at t[i]: the simple forms "(T)var", "(T)(...)", "(T)F(...)", then any operand
+     * such as "(int)*p" or "(int)p[2]". createobject read a body index with (int)*pfVar14 and
+     * converted the float to an int. The end of the operand comes from the p-code: the tokens
+     * of the expression that the CAST reads. */
+    private int[] bitCast(List<ClangToken> t, int i) {
+        int[] r = bitCastSimple(t, i);
+        if (r != null) return r;
+        if (!(t.get(i) instanceof ClangSyntaxToken) || !t.get(i).getText().equals("(")) return null;
+        int ty = next(t, i);
+        if (ty < 0 || !(t.get(ty) instanceof ClangTypeToken)) return null;
+        int close = next(t, ty);
+        while (close >= 0 && t.get(close).getText().equals("*")) close = next(t, close);
+        if (close < 0 || !t.get(close).getText().equals(")")) return null;
+        int k = next(t, close);
+        if (k < 0 || t.get(k).getText().equals("(")) return null;
+        int u = k;
+        while (u >= 0 && t.get(u).getPcodeOp() == null) u = next(t, u);
+        if (u < 0) return null;
+        // The CAST: the op of the first token, or an op that uses its result (a few levels).
+        PcodeOp castOp = null;
+        Deque<PcodeOp> todo = new ArrayDeque<>();
+        todo.add(t.get(u).getPcodeOp());
+        for (int n = 0; n < 16 && !todo.isEmpty() && castOp == null; n++) {
+            PcodeOp p = todo.poll();
+            if (p.getOpcode() == PcodeOp.CAST) {
+                castOp = p;
+                break;
+            }
+            int c = p.getOpcode();
+            if (c == PcodeOp.FLOAT_FLOAT2FLOAT || c == PcodeOp.FLOAT_INT2FLOAT || c == PcodeOp.FLOAT_TRUNC
+                    || c == PcodeOp.INT_ZEXT || c == PcodeOp.INT_SEXT) break;  // this is the printed cast
+            if (p.getOutput() == null) continue;
+            Iterator<PcodeOp> d = p.getOutput().getDescendants();
+            while (d.hasNext()) todo.add(d.next());
+        }
+        if (castKind(castOp) < 0) return null;
+        // It must be the printed cast: "(float)dVar10" is a FLOAT2FLOAT, and a bit CAST of
+        // its result further on is another op.
+        String printed = castType(t, i, close).replace(" ", "");
+        if (!printed.equals(castOp.getOutput().getHigh().getDataType().getName().replace(" ", ""))) return null;
+        Set<PcodeOp> allowed = subtree(castOp.getInput(0));
+        allowed.add(castOp);
+        if (!allowed.contains(t.get(u).getPcodeOp())) return null;
+        int depth = 0, end = -1;
+        for (int j = k; j >= 0 && j < t.size(); j++) {
+            ClangToken x = t.get(j);
+            if (x instanceof ClangBreak) return null;
+            String s = x.getText();
+            if (s.isBlank()) continue;
+            if (s.equals("(") || s.equals("[")) {
+                depth++;
+            } else if (s.equals(")") || s.equals("]")) {
+                if (depth == 0) break;
+                depth--;
+            } else if (depth == 0 && (s.equals(";") || s.equals(","))) {
+                break;
+            } else if (depth == 0 && x.getPcodeOp() != null && !allowed.contains(x.getPcodeOp())) {
+                break;
+            }
+            end = j;
+        }
+        if (end < k || depth != 0) return null;
+        return new int[] { close, end, castKind(castOp) };
     }
 
     /* Globals: the symbol map, plus every DAT_/_DAT_ token of the C output with the data type
