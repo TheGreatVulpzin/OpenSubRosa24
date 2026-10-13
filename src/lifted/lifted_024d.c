@@ -8958,7 +8958,7 @@ LAB_0040f22c:
   }
   if (-1.0 <= local_54) {
     if (local_54 <= 1.0) {
-      (&DAT_0f1edd88)[iVar9 * 0x902] = local_54;
+      *(float *)&((&DAT_0f1edd88)[iVar9 * 0x902]) = local_54;
       return;
     }
     (&DAT_0f1edd88)[iVar9 * 0x902] = 0x3f800000;
@@ -20083,7 +20083,7 @@ LAB_0041e31d:
         local_44 = (float)(local_38 & 0x1f) * 0.03125;
         *(float *)&((&DAT_05998548)[iVar11 * 0x208c]) = local_44;
         if ((local_38 & 0x20) != 0) {
-          (&DAT_05998548)[iVar11 * 0x208c] = -local_44;
+          *(float *)&((&DAT_05998548)[iVar11 * 0x208c]) = -local_44;
         }
         fVar15 = (float10)FUN_0040db20(&local_34,6);
         local_44 = (float)((float10)(local_34 & 0x1f) * fVar15);
@@ -20107,13 +20107,13 @@ LAB_0041e31d:
         local_44 = (float)((float10)(local_28 & 0x1f) * fVar15);
         *(float *)&((&DAT_0599855c)[iVar11 * 0x208c]) = local_44;
         if ((local_28 & 0x20) != 0) {
-          (&DAT_0599855c)[iVar11 * 0x208c] = -local_44;
+          *(float *)&((&DAT_0599855c)[iVar11 * 0x208c]) = -local_44;
         }
         fVar15 = (float10)FUN_0040db20(&local_24,6);
         local_44 = (float)((float10)(local_24 & 0x1f) * fVar15);
         *(float *)&((&DAT_059985f4)[iVar11 * 0x208c]) = local_44;
         if ((local_24 & 0x20) != 0) {
-          (&DAT_059985f4)[iVar11 * 0x208c] = -local_44;
+          *(float *)&((&DAT_059985f4)[iVar11 * 0x208c]) = -local_44;
         }
         fVar15 = (float10)FUN_0040db20(&local_20,6);
         local_44 = (float)((float10)(local_20 & 0x1f) * fVar15);
@@ -20318,7 +20318,7 @@ LAB_0041e31d:
       local_10 = (float)(((uint)LF_BITS_U(local_14)) & 0x1f) * 0.03125;
       *(float *)&((&DAT_16224070)[iVar8 * 0x15]) = local_10;
       if ((((uint)LF_BITS_U(local_14)) & 0x20) != 0) {
-        (&DAT_16224070)[iVar8 * 0x15] = -local_10;
+        *(float *)&((&DAT_16224070)[iVar8 * 0x15]) = -local_10;
       }
       local_60 = LF_BITS_F((((int)LF_BITS_U(local_60)) + 1));
     } while (((int)LF_BITS_U(local_60)) < DAT_1074b1ec);
@@ -23961,7 +23961,7 @@ void __cdecl lf_272b0(int param_1)
     local_18 = (float)((float10)1.570796326795 - (float10)dVar9);
   }
   if (fVar1 * 0.75 <= 0.0) {
-    (&DAT_05998520)[param_1 * 0x208c] = -local_18;
+    *(float *)&((&DAT_05998520)[param_1 * 0x208c]) = -local_18;
     local_18 = -fVar4;
   }
   else {

@@ -409,7 +409,9 @@ def raw_float_uses(body, undef, floats=frozenset(), types=None):
         if lvalue_size(lv, 0, undef) == 8:
             return f'{m.group(1)}*(double *)&({lv}) = {rhs};'
         return f'{m.group(1)}*(float *)&({lv}) = {rhs};'
-    return re.sub(r'^(\s*)([^=;\n]+?)\s*=\s*([^=;][^;]*);', store, body, flags=re.M)
+    # The "=" of "<=", ">=", "!=" or "+=" is not an assignment: "if (x <= 1.0) {" must not
+    # take the next line as its right side.
+    return re.sub(r'^(\s*)([^=;\n]+?)\s*(?<![<>!+\-*/%&|^])=\s*([^=;][^;]*);', store, body, flags=re.M)
 
 
 STACK_VAR_RE = re.compile(r'^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local|[a-z]+Stack)_([0-9a-f]+))\s*(\[\d+\])?\s*;[ \t]*$',
