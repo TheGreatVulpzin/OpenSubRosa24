@@ -206,6 +206,14 @@ public class LiftExport extends GhidraScript {
         if (piece == null && op != null && op.getOutput() != null && op.getOutput().getSize() == len
                 && op.getOutput().getHigh() != null && isFloat(op.getOutput().getHigh().getDataType(), len))
             type = len == 4 ? "float" : "double";
+        // A read by a float operation: "(double)local_60._0_4_" is FLOAT2FLOAT of the piece, and
+        // "fVar6 < local_40._0_4_" is FLOAT_LESS (building_buildfloorplan). The piece has no
+        // SUBPIECE: the stack piece is its own varnode.
+        if (piece == null && op != null && (len == 4 || len == 8) && isFloatOp(op.getOpcode())) {
+            for (int k = 0; k < op.getNumInputs(); k++)
+                if (op.getInput(k).getSize() == len)
+                    type = len == 4 ? "float" : "double";
+        }
         pieceEnd = field;
         return "(*(" + type + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
     }
@@ -219,7 +227,11 @@ public class LiftExport extends GhidraScript {
         HighVariable h = t.get(i).getHighVariable();
         if (h == null || h.getSymbol() == null || h.getSymbol().getDataType() == null) return null;
         int whole = h.getSymbol().getDataType().getLength(), size = h.getDataType().getLength();
-        if (size <= 0 || size >= whole || !t.get(i).getText().equals(h.getSymbol().getName())) return null;
+        // The same size is a piece too when the high variable is a float: "undefined4 local_14"
+        // holds a float, and a read of local_14 in C converts the int (building_buildfloorplan).
+        boolean sameFloat = size == whole && isFloat(h.getDataType(), size);
+        if (size <= 0 || (size >= whole && !sameFloat) || !t.get(i).getText().equals(h.getSymbol().getName()))
+            return null;
         // Only raw bytes (undefined8): an array such as float local_34[3] is not a piece.
         if (!(h.getSymbol().getDataType() instanceof Undefined)) return null;
         // Not in a declaration or in the function header.
@@ -282,6 +294,13 @@ public class LiftExport extends GhidraScript {
             PcodeOp.FLOAT_ADD, PcodeOp.FLOAT_SUB, PcodeOp.FLOAT_MULT, PcodeOp.FLOAT_DIV,
             PcodeOp.FLOAT_NEG, PcodeOp.FLOAT_ABS, PcodeOp.FLOAT_SQRT, PcodeOp.FLOAT_INT2FLOAT,
             PcodeOp.FLOAT_FLOAT2FLOAT, PcodeOp.FLOAT_CEIL, PcodeOp.FLOAT_FLOOR, PcodeOp.FLOAT_ROUND);
+
+    /* A p-code operation whose inputs are all floats (INT2FLOAT is not: its input is an int). */
+    private static boolean isFloatOp(int code) {
+        return code != PcodeOp.FLOAT_INT2FLOAT && (FLOAT_OPS.contains(code) || code == PcodeOp.FLOAT_LESS
+                || code == PcodeOp.FLOAT_LESSEQUAL || code == PcodeOp.FLOAT_EQUAL || code == PcodeOp.FLOAT_NOTEQUAL
+                || code == PcodeOp.FLOAT_TRUNC || code == PcodeOp.FLOAT_NAN);
+    }
 
     private static boolean isFloat(DataType d, int len) {
         return d != null && d.getLength() == len && d.getName().equals(len == 4 ? "float" : "double");

@@ -66,7 +66,8 @@ Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_
 
 | Reason | Meaning |
 | --- | --- |
-| `side_effect` | The function reaches the network, files, time, the heap or another impure import (directly or through callees). Verification runs a function twice, so these cannot be verified this way. |
+| `harness_only` | Lifted, but the function reaches the network, files, time, the heap or another impure import. The live verifier runs a function twice, so the live server keeps the original. The offline harness tests it in a test environment. |
+| `side_effect` | Not lifted: the CRT startup code, `dedicatedserverloop` and `getpaths` (written by hand in `src/server/main_loop.c`). |
 | `register input/output` | The decompiler shows values passed in registers (non-standard convention). Most cases are gone after `FixRegisterPreservation.java`. The rest are CRT helpers and callees that return a second value in EDX. |
 | `int typed as float (denormal literal)` | Ghidra typed an int parameter as float (`param_1 == 1.4013e-45`). |
 | `compile_error` | The pseudo-C does not compile. |
@@ -114,7 +115,8 @@ The first version of this rule was a regex in `lift.py`. It read the `=` of `<=`
 | --- | --- | --- | --- |
 | `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. |
 | `floatBitCompares` | `fVar5 != -NAN` (an `INT_NOTEQUAL`) | Every compare with a NaN is unordered, so `!=` is always true. | `LF_BITS_U(fVar5) != 0xffffffffU` |
-| `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))` |
+| `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))`. The piece is a float when its p-code piece has a float type, or when a float operation reads it (`(double)local_60._0_4_`, `f < local_40._0_4_`). |
+| `pieceVariable` | `local_14` (declared `undefined4`, used as a float) | A read converts the int. | `(*(float *)((uchar *)&local_14 + 0))`. Also for a smaller high variable in an `undefined8` symbol. |
 
 The rules run in this order: `floatStores`, `storeRounding`, `floatGrouping`, `callArgBits`, `floatBitCompares`. A later rule puts its parenthesis outside the earlier ones at the same token. So `lf_f2u((float)(x))` keeps the rounding inside the bit copy.
 
@@ -210,3 +212,25 @@ HARNESS_PROBE=2fe39,2fd14:3c build/hook/harness.exe <exe> <snapshot> <args> huma
 ```
 
 Each probe puts an `INT3` on an instruction of the original (RVA). It prints ST0, ST1, EAX, EBX, ESI, EDI and EBP. With `:off`, it also prints the float at `[esp+off]`. With `:off*`, `[esp+off]` is a pointer, and the probe prints the 3 floats there (a vector argument of a call). Put `printf()` calls at the same places in the lifted C (in `src/lifted/lifted_024d.c`, then lift again to remove them). `tools/ghidra/DumpTokens.java <out> <rva>` prints the decompiler tokens with the p-code op, its address and its input types. `insn:<rva>` prints the instructions as the Ghidra listing shows them.
+
+### Watchpoint
+
+To find which instruction writes a different value, use the RVA from the difference in `build/hook/subvulpes.log`:
+
+```bash
+HARNESS_WATCH=e2c8db0 build/hook/harness.exe <exe> <snapshot> <args> building_buildfloorplan
+```
+
+The harness puts a hardware data breakpoint (DR0, 4 bytes) on the address. It prints each write with the new value and the place after the instruction: an RVA in the 024d (the original) or an address in the harness (the lifted code). The verifier also writes the address when it undoes the first run.
+
+## Side-effect functions
+
+The harness tests them in a test environment (`src/platform/plat_test.c`). See `docs/side-effects.md`.
+
+The lifter also needs these rules for them:
+
+- `lift_os.h`: the CRT, KERNEL32 and WinSock types (`FILE`, `LARGE_INTEGER`, `sockaddr`, `fd_set`...) with the MSVC 2010 layout. Only `lifted_024d.c` includes it.
+- WinSock imports by ordinal (`WSOCK_ORDINALS`, `LF_IMPORT_ORD`).
+- A global that holds a function address (`(*DAT_095022a4)(...)`, the `fread` pointer) gets the type `code *`.
+- An inlined `strncpy` stores 4 bytes at a time, and Ghidra adds the offset to the address (`iVar2 + 0x9fdd8a8`). An address up to 16 bytes after a relocated value becomes `SR_VA(base) + offset`.
+- `ram0x1992d6ed`: a 4-byte store into the middle of another global.

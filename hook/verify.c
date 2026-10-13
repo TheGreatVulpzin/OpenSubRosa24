@@ -13,7 +13,12 @@
 #include "record.h"
 
 #define PAGE 4096u
-#define MAX_PAGES 8192   /* pages changed per run and per version (32 MB): createlandscape writes 17 MB */
+/* Pages changed per run and per version (32 MB): createlandscape writes 17 MB. The offline
+ * harness sets more: createarea touches about 8200 pages. */
+#ifndef SV_MAX_PAGES
+#define SV_MAX_PAGES 8192
+#endif
+#define MAX_PAGES SV_MAX_PAGES
 
 static uint8_t *g_data;        /* start of the game .data section */
 static size_t g_data_size;

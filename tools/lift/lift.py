@@ -65,6 +65,13 @@ INLINE_IMPORTS = {
     'ntohl': '#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))',
 }
 
+# The 024d imports WinSock by ordinal: the lifted code finds the import by its ordinal.
+WSOCK_ORDINALS = {
+    'bind': 2, 'closesocket': 3, 'connect': 4, 'getsockopt': 7, 'inet_addr': 10, 'ioctlsocket': 12,
+    'recv': 16, 'recvfrom': 17, 'select': 18, 'send': 19, 'sendto': 20, 'socket': 23,
+    'gethostbyname': 52, 'getservbyname': 55, 'WSAStartup': 115, '__WSAFDIsSet': 151,
+}
+
 # Game functions that lifted code does not call. __security_check_cookie (MSVC /GS) only
 # stops the process when the stack is corrupt. The lifted copy keeps its own stack frame,
 # so the check has no meaning there. Removing it also removes a false side effect
@@ -129,11 +136,12 @@ def global_macro(g):
 
 
 def partial_access(c):
-    """Ghidra 'x._4_2_' (2 bytes at offset 4 of x) -> C pointer access."""
+    """Ghidra 'x._4_2_' (2 bytes at offset 4 of x) -> C pointer access. x can be a member
+    path ('local_148.sa_data._2_4_')."""
     def rep(m):
         t = SIZE_TYPE.get(int(m.group(3)), 'uchar')
         return f'(*({t} *)((uchar *)&{m.group(1)} + {m.group(2)}))'
-    return re.sub(r'\b([A-Za-z_]\w*)\._(\d+)_(\d+)_', rep, c)
+    return re.sub(r'(?<![\w.>])([A-Za-z_]\w*(?:(?:\.|->)(?!_\d+_\d+_)[A-Za-z_]\w*)*)\._(\d+)_(\d+)_', rep, c)
 
 
 def load_names():
@@ -539,8 +547,17 @@ def lift_function(f, rva, headers, imports_used):
     if any(t == '...' for t, _ in params):
         return None, 'variadic'
 
+    # Ghidra "ram0x1992d6ed": a 4-byte store into the middle of another global (serversend).
+    c = re.sub(r'\bram0x([0-9a-f]+)\b', lambda m: f'(*(undefined4 *)SR_VA(0x{m.group(1)}))', c)
+    # A LARGE_INTEGER read as one 64-bit value: "(longlong)local_8".
+    for v in re.findall(r'\bLARGE_INTEGER\s+(\w+);', c):
+        c = re.sub(r'\(longlong\)' + v + r'\b(?![.\[])', v + '.QuadPart', c)
+
     pre, post = [], []
     for g in f['globals']:
+        # A global that holds a function address: the fread and fwrite pointers of getpaths.
+        if g['type'].strip().endswith('*') and re.search(r'\(\*' + re.escape(g['name']) + r'\)\(', c):
+            g = dict(g, type='code *')
         pre.append(global_macro(g))
         post.append(f'#undef {g["name"]}')
     # "pcVar9 = rand_exref;": the original loads the import address from the IAT once and
@@ -572,7 +589,11 @@ def lift_function(f, rva, headers, imports_used):
             icc = call['cc'] if call['cc'] in ('__cdecl', '__stdcall', '__fastcall') else '__cdecl'
             key = (call.get('library', ''), tgt)
             idx = imports_used.setdefault(key, len(imports_used))
-            pre.append(f'#define {cname} (({proto_cast(iret, icc, iparams)})LF_IMPORT({idx}, "{key[0]}", "{tgt}"))')
+            if key[0].upper() == 'WSOCK32.DLL' and tgt in WSOCK_ORDINALS:
+                ref = f'LF_IMPORT_ORD({idx}, "{key[0]}", {WSOCK_ORDINALS[tgt]})'
+            else:
+                ref = f'LF_IMPORT({idx}, "{key[0]}", "{tgt}")'
+            pre.append(f'#define {cname} (({proto_cast(iret, icc, iparams)}){ref})')
             post.append(f'#undef {cname}')
         else:
             callee = int(call['rva'], 16)
@@ -629,12 +650,14 @@ def lift_function(f, rva, headers, imports_used):
     big = [v for v in f.get('relocvals', []) if v >= 0x10000]
     for v in big:
         body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)
+    # An inlined strncpy stores 4 bytes at a time: Ghidra adds the offset to the address
+    # ("iVar2 + 0x9fdd8a8" for &DAT_09fdd8a4 + 4 in newspaper_load). Offsets up to 16.
     for v in big:
-        for d, sign in ((-1, '-'), (1, '+')):
-            if v + d in relocs:
+        for d in [-1] + list(range(1, 17)):
+            if v + d in relocs or any(0 < v + d - w < d for w in big):
                 continue
             body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % (v + d),
-                          f'((int)SR_VA(0x{v:x}) {sign} 1)', body)
+                          f'((int)SR_VA(0x{v:x}) {"-" if d < 0 else "+"} {abs(d)})', body)
     body, fpre, fpost = stack_frame(body)
     pre += fpre
     post += fpost
@@ -790,6 +813,13 @@ def gen_hooks(lifted, headers, funcs, names):
 RECORD_SKIP = {0x5c8d0, 0x5cd10}
 
 
+def harness_only(rva, side):
+    """A side-effect function of the game that the lifter lifts anyway. The live server keeps
+    the original (a second run would send a second packet). The offline harness tests it in
+    the environment of src/platform/plat_test.c."""
+    return rva in side and rva not in RECORD_SKIP and rva < 0x5ce18
+
+
 def gen_record_hooks(side, headers, funcs, names):
     """hook/hooks_record.c: a record-only hook for each side-effect function of the game
     (docs/side-effects.md). The thunk keeps every register, the flags and the x87 state. It
@@ -879,9 +909,10 @@ def gen_table(lifted, headers, names):
 def gen_lifted(texts, imports_used):
     out = ['/* Generated by tools/lift/lift.py from Ghidra pseudo-C of subrosadedicated024d.exe.',
            ' * Do not edit: improve the lifter or move the function to src/server/ by hand. */',
-           '#include "lift_support.h"', '',
+           '#include "lift_support.h"', '#include "lift_os.h"', '',
            f'static void *lf_imports[{max(1, len(imports_used))}];',
            '#define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))',
+           '#define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))',
            '']
     lines = {}
     for rva, text in texts:
@@ -992,7 +1023,7 @@ def main():
         if rva in hand:
             status[rva] = ('handwritten', '')
             continue
-        if rva in side:
+        if rva in side and not harness_only(rva, side):
             status[rva] = ('side_effect', side[rva])
             continue
         if rva in eax_only:
@@ -1010,8 +1041,9 @@ def main():
 
     lifted = [r for r, _ in texts]
     for r in lifted:
-        status[r] = ('lifted', '')
-    (ROOT / 'hook/hooks_lifted.c').write_text(gen_hooks(lifted, headers, funcs, names), encoding='utf-8', newline='\n')
+        status[r] = ('harness_only', side[r]) if r in side else ('lifted', '')
+    live = [r for r in lifted if r not in side]
+    (ROOT / 'hook/hooks_lifted.c').write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
     (ROOT / 'hook/hooks_record.c').write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
                                              newline='\n')
     (ROOT / 'src/lifted/lifted_table.c').write_text(gen_table(lifted, headers, names), encoding='utf-8', newline='\n')
@@ -1024,7 +1056,7 @@ def main():
                         len(funcs[rva]['c']), *status[rva]])
     count = Counter(s for s, _ in status.values())
     print('result:', dict(count))
-    reasons = Counter(r.split(' (')[0] for s, r in status.values() if s in ('blocked', 'side_effect'))
+    reasons = Counter(r.split(' (')[0] for s, r in status.values() if s in ('blocked', 'side_effect', 'compile_error'))
     print('top reasons:', reasons.most_common(12))
 
 

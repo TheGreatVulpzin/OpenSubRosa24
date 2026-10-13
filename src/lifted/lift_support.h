@@ -18,6 +18,7 @@ extern uintptr_t sr_base;
 
 /* Address of an import of the game (the value stored in its IAT slot). */
 void *sr_import(const char *dll, const char *name);
+void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
 /* x87 intrinsics of the game CRT, called with normal cdecl arguments (x87_intrinsics.c). */
 void lf_x87_init(void);

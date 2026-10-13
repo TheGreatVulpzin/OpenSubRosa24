@@ -121,7 +121,7 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 
 - **Integrity:** `python -I tools/re/manifest.py check` before each RE session.
 - **Differential test per function:** run the original (via Unicorn, as the manager does, or by calling the original inside the process) and the rewrite with the same inputs and memory. Compare the return value and the memory written.
-- **In-game test:** 024d server + proxy `wsock32.dll` + original client. Checklist: connect, walk, drive, shoot, buy at the phone, die, round restarts. Run with all hooks on and then with only the new ones.
+- **In-game test:** 024d server + proxy `wsock32.dll` + original client. Checklist: connect, walk, drive, shoot, call another player on the phone, die, round restarts. Run with all hooks on and then with only the new ones.
 - **Network:** record traffic (Wireshark) from the original server and from the hooked server in the same scenario. Compare the packet format.
 - **Progress:** `tools/progress.py` on each commit.
 

@@ -1,6 +1,30 @@
 # Verification of side-effect functions
 
-Status: the record part works (subvulpes.ini `record_imports=1`). The replay part in the harness is not written yet.
+Status: the side-effect functions of the game are tested in the offline harness with a test environment (`src/platform/plat_test.c`). The replay design below is not used.
+
+## Test environment (current method)
+
+Both versions of a function (lifted and original) run in the same fake environment. The harness compares what each version does with it. No import result comes from the recording, so the recording needs only the `R` lines (the arguments) of each call.
+
+- `tools/lift/lift.py` lifts the side-effect functions of the game anyway, with the status `harness_only`. The live server keeps the original of these functions: a second run would send a second packet. 39 of the 42 game functions are lifted. `loadaccountsserver` has a relative call in its prologue, and `dedicatedserverloop` and `getpaths` run the whole server.
+- `src/platform/platform.h` is the platform layer: the operating system services that the game imports. `plat_test.c` is the implementation for the harness. Phase 4 adds the implementations for Windows, Linux and the browser.
+- Clock: `QueryPerformanceCounter` starts at the same value in each run and advances by 0.1 ms per call. `_time64`, `GetSystemTimeAsFileTime` and `_sleep` follow it.
+- Heap: `malloc` gives blocks from a pool at a fixed address. Each run starts with an empty pool, so both runs get the same addresses. The harness compares the pool after the two runs.
+- Files: reads come from the game folder. The game folder is the folder of the recorded server (getpaths stores it at RVA 0x916d4e0) when it exists on this PC, else `original/blackhouser`, or `HARNESS_GAME_DIR`. Each write goes to `build/harness_env/<run>/`. The log has the size and the hash of each written file.
+- Network: no socket is real. `send` and `sendto` log the bytes, `recv` and `recvfrom` get no data, `connect` fails and name lookups find nothing.
+- `fread` copies through a buffer of its own: the verifier protects the .data pages, and a large `fread` goes straight to `ReadFile`, which fails on a protected page with no exception. The harness also puts the stub into the `fread` pointer that `getpaths` stores at RVA 0x91022a4.
+- Each run writes a log of its events. A different log is a difference. `HARNESS_DEBUG=2` prints both logs.
+- `HARNESS_WATCH=rva` puts a hardware breakpoint on one .data address and prints each instruction that writes it, in both versions.
+
+Result on the recording `20261013-1016-smoke` (a server start without players): `loadblock`, `building_load`, `createarea`, `listfiles`, `loadtextfile`, `loadsaveoptions`, `setupgame`, `getmasterserverip`, `disablesocket` and other functions are the same as the original. The network functions that need packets (`serverrecv`, `recvpacket`) have no recorded call with data yet.
+
+Limits:
+
+- A function that receives a file opened before the call (a `FILE *` from the server process) cannot run in the harness.
+- `recvfrom` gives no packet. A test of the receive path needs the packets of the call (the `E` lines of `record_imports`, or `sv_packets.bin`).
+- `getfloat` is a known difference: when `sscanf` finds no number, the original returns an uninitialized local.
+
+## Import recorder
 
 The record part:
 
