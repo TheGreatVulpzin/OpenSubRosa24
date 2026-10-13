@@ -246,10 +246,6 @@ def call_args(s, name):
     return [split_args(s[a:e - 1]) for a, e in call_spans(s, name)]
 
 
-INT_TYPES = {'int', 'uint', 'undefined4', 'dword', 'undefined', 'char', 'uchar', 'short', 'ushort', 'bool',
-             'byte', 'undefined1', 'undefined2', 'long', 'ulong'}
-
-
 def local_types(body, params):
     """name -> base type of the parameters and local declarations."""
     types = {n: t for t, n in params}
@@ -293,40 +289,6 @@ def expr_type(e, types):
             return t[:-1].strip()
         return t  # array declared "int local_54 [8]": the element type
     return ''
-
-
-def call_arg_bits(body, callee_params, ptrs, types):
-    """Ghidra prints an argument with the type that the caller uses. The callee prototype
-    can use another type for the same 4 bytes: the original pushes the bits unchanged.
-      float parameter, pointer argument     -> lf_p2f(arg)
-      float parameter, int argument          -> lf_u2f(arg)   (0x3f8c0000 is 1.09375)
-      int parameter, float variable          -> lf_f2u(arg)"""
-    for cname, cparams in callee_params.items():
-        spans = list(call_spans(body, cname))
-        for a, e in reversed(spans):
-            args = split_args(body[a:e - 1])
-            changed = False
-            for i, (ptype, _) in enumerate(cparams):
-                if i >= len(args):
-                    break
-                arg = args[i]
-                atype = expr_type(arg, types)
-                new = None
-                if ptype == 'float':
-                    if atype.endswith('*'):
-                        new = f'lf_p2f({arg})'
-                    elif atype == 'literal' and arg not in ('0', '-0'):
-                        new = f'lf_u2f({arg})'
-                    elif atype in INT_TYPES:
-                        new = f'lf_u2f((uint)({arg}))'
-                elif ptype in INT_TYPES and atype in ('float', 'float10', 'double'):
-                    new = f'lf_f2u({arg})'
-                if new:
-                    args[i] = new
-                    changed = True
-            if changed:
-                body = body[:a] + ','.join(args) + body[e - 1:]
-    return body
 
 
 def undefined_names(body, params, globals_):
@@ -537,7 +499,6 @@ def lift_function(f, rva, headers, imports_used):
         return None, 'variadic'
 
     pre, post = [], []
-    callee_params = {}
     for g in f['globals']:
         pre.append(global_macro(g))
         post.append(f'#undef {g["name"]}')
@@ -586,7 +547,6 @@ def lift_function(f, rva, headers, imports_used):
                 extra = next(a for a in extra if len(a) == most)[len(cparams):]
                 cparams = list(cparams) + [('float' if FLOATISH_RE.search(a) else 'undefined4', f'extra_{i}')
                                            for i, a in enumerate(extra)]
-            callee_params[cname] = cparams
             pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_VA(0x{callee + BASE:x}))')
             post.append(f'#undef {cname}')
 
@@ -596,8 +556,7 @@ def lift_function(f, rva, headers, imports_used):
     body = raw_float_uses(body, undefined_names(body, params, f['globals']),
                           dict({g['name']: g['type'].strip() for g in f['globals']}, **local_types(body, params)))
     body = pointer_float_casts(body, params, f['globals'])
-    body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),
-                         dict({g["name"]: g["type"].strip() for g in f["globals"]}, **local_types(body, params)))
+    # Call arguments with the bits of another type: LiftExport.java (callArgBits).
     # Short strings stored as an immediate ("Uzi" = 0x00697a55): Ghidra shows them as an
     # address (&DAT_00697a55). The loader does not relocate them, so neither do we.
     relocs = set(f.get('relocvals', []))

@@ -108,6 +108,19 @@ The rule uses the p-code, not the text:
 
 The first version of this rule was a regex in `lift.py`. It read the `=` of `<=` as an assignment and it marked integer results such as `(int)(longlong)(x)` as floats. The p-code rule fixed `playerbuystock`, `playersellstock`, `playerdeathtax` and the crashes of `createobject`.
 
+## Call arguments with the bits of another type
+
+Ghidra prints a call argument with the type that the caller uses. The callee can use another type for the same 4 bytes, and the original pushes the bits unchanged. In C the call converts the number. `LiftExport.java` (`callArgBits`) wraps the argument:
+
+| Parameter | Argument | Output |
+| --- | --- | --- |
+| `float` | pointer | `lf_p2f(arg)` |
+| `float` | constant | `lf_u2f(arg)` (`0x3f8c0000` is 1.09375) |
+| `float` | other 4 bytes | `lf_u2f((uint)(arg))` |
+| not `float`, not a pointer | `float` | `lf_f2u(arg)` |
+
+The argument type comes from the p-code input of the `CALL`. The parameter type comes from the decompiler prototype of the callee, the same one that `lift.py` reads from the callee header. The stored signature can have no parameters. The regex version did not know the type of an expression such as `pfVar11[1] * fVar1`.
+
 `tools/ghidra/DumpTokens.java` prints the tokens of some functions with their p-code op and types. Use it to check a rule.
 
 ## Verifier: scope rounds

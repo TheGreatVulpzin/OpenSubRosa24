@@ -8,6 +8,7 @@
 //@category SubVulpes
 
 import ghidra.app.decompiler.ClangBreak;
+import ghidra.app.decompiler.ClangFuncNameToken;
 import ghidra.app.decompiler.ClangNode;
 import ghidra.app.decompiler.ClangOpToken;
 import ghidra.app.decompiler.ClangStatement;
@@ -28,6 +29,7 @@ import ghidra.program.model.pcode.HighFunction;
 import ghidra.program.model.pcode.HighSymbol;
 import ghidra.program.model.pcode.HighVariable;
 import ghidra.program.model.pcode.PcodeOp;
+import ghidra.program.model.pcode.Varnode;
 import ghidra.program.model.reloc.Relocation;
 
 import java.io.PrintWriter;
@@ -84,6 +86,7 @@ public class LiftExport extends GhidraScript {
             }
         }
         di.dispose();
+        if (protoDi != null) protoDi.dispose();
         println("Exported: " + out);
     }
 
@@ -104,6 +107,7 @@ public class LiftExport extends GhidraScript {
         Map<Integer, Integer> closeAfter = new HashMap<>();
         Map<Integer, String> openBefore = new HashMap<>();
         floatStores(t, openBefore, closeAfter);
+        callArgBits(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -206,6 +210,97 @@ public class LiftExport extends GhidraScript {
             openBefore.merge(first, len == 4 ? "*(float *)&(" : "*(double *)&(", (a, b) -> b + a);
             closeAfter.merge(last, 1, Integer::sum);
         }
+    }
+
+    /* A call argument printed with the caller type. The original pushes the bits of the
+     * argument unchanged, but in C the call converts the number to the callee parameter type:
+     *   float parameter, pointer argument      -> lf_p2f(arg)
+     *   float parameter, other 4-byte argument -> lf_u2f(arg)   (0x3f8c0000 is 1.09375)
+     *   int parameter, float argument          -> lf_f2u(arg)
+     * The argument type comes from the p-code input of the CALL, the parameter type from the
+     * callee signature. Only calls to functions of the program (not imports). */
+    private void callArgBits(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        for (int i = 0; i < t.size(); i++) {
+            if (!(t.get(i) instanceof ClangFuncNameToken)) continue;
+            PcodeOp op = t.get(i).getPcodeOp();
+            if (op == null || op.getOpcode() != PcodeOp.CALL) continue;
+            Function callee = getFunctionAt(op.getInput(0).getAddress());
+            if (callee == null || callee.isExternal() || callee.isThunk()) continue;
+            DataType[] ps = paramTypes(callee);
+            int open = next(t, i);
+            if (open < 0 || !t.get(open).getText().equals("(")) continue;
+            // Split the arguments at the commas of depth 1.
+            List<int[]> args = new ArrayList<>();
+            int depth = 0, start = -1, j;
+            for (j = open; j < t.size(); j++) {
+                String s = t.get(j).getText();
+                if (s.equals("(")) {
+                    if (depth++ == 0) start = j + 1;
+                } else if (s.equals(")")) {
+                    if (--depth == 0) break;
+                } else if (s.equals(",") && depth == 1) {
+                    args.add(new int[] { start, j - 1 });
+                    start = j + 1;
+                }
+            }
+            if (j >= t.size()) continue;
+            if (start <= j - 1) args.add(new int[] { start, j - 1 });
+            if (args.size() != op.getNumInputs() - 1) continue;
+            for (int k = 0; k < args.size() && k < ps.length; k++) {
+                Varnode v = op.getInput(k + 1);
+                if (v.getSize() != 4 || v.getHigh() == null) continue;
+                DataType a = v.getHigh().getDataType();
+                DataType p = ps[k];
+                if (p == null || p.getLength() != 4) continue;
+                int first = args.get(k)[0], last = args.get(k)[1];
+                while (first <= last && t.get(first).getText().isBlank()) first++;
+                while (last >= first && t.get(last).getText().isBlank()) last--;
+                if (first > last) continue;
+                String wrap = null;
+                int close = 1;
+                if (isFloat(p, 4) && !isFloat(a, 4)) {
+                    if (a instanceof Pointer) wrap = "lf_p2f(";
+                    else if (v.isConstant()) wrap = "lf_u2f(";
+                    else {
+                        wrap = "lf_u2f((uint)(";
+                        close = 2;
+                    }
+                } else if (!isFloat(p, 4) && !(p instanceof Pointer) && isFloat(a, 4)) {
+                    wrap = "lf_f2u(";
+                }
+                if (wrap == null) continue;
+                // "0" is 0.0 as a float too.
+                if (v.isConstant() && v.getOffset() == 0) continue;
+                openBefore.merge(first, wrap, (x, y) -> x + y);
+                closeAfter.merge(last, close, Integer::sum);
+            }
+        }
+    }
+
+    private final Map<Address, DataType[]> protos = new HashMap<>();
+    private DecompInterface protoDi;
+
+    /* The parameter types of a function as the decompiler shows them (the pseudo-C header that
+     * lift.py reads). The stored signature can have no parameters at all. */
+    private DataType[] paramTypes(Function f) {
+        DataType[] r = protos.get(f.getEntryPoint());
+        if (r != null) return r;
+        r = new DataType[0];
+        if (protoDi == null) {
+            protoDi = new DecompInterface();
+            protoDi.setOptions(new DecompileOptions());
+            protoDi.openProgram(currentProgram);
+        }
+        DecompileResults d = protoDi.decompileFunction(f, 120, monitor);
+        HighFunction h = d.decompileCompleted() ? d.getHighFunction() : null;
+        if (h != null) {
+            ghidra.program.model.pcode.FunctionPrototype fp = h.getFunctionPrototype();
+            r = new DataType[fp.getNumParams()];
+            for (int i = 0; i < r.length; i++) r[i] = fp.getParam(i).getDataType();
+        }
+        protos.put(f.getEntryPoint(), r);
+        return r;
     }
 
     private static int next(List<ClangToken> t, int i) {
