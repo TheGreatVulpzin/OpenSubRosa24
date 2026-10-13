@@ -28,6 +28,7 @@ original_only=1
 log_calls=0
 lifted=1
 record_args=1
+record_imports=1
 snapshot_after=$SnapshotAfter
 capture_packets=1
 "@ | Set-Content (Join-Path $dir "subvulpes.ini") -Encoding ascii

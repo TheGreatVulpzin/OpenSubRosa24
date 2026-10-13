@@ -109,6 +109,7 @@ static void expect_va(uint8_t *expect, int offset, uint32_t rva)
 
 int sv_hooks_lifted_install(void);
 void sv_hooks_lifted_summary(void);
+int sv_hooks_record_install(void);
 
 int sv_hooks_024d_install(void)
 {
@@ -127,6 +128,8 @@ int sv_hooks_024d_install(void)
         n += sv_hooks_lifted_install();
     else
         sv_log("lifted hooks disabled (lifted=0)");
+    /* Record-only hooks of the side-effect functions (record_imports=1, docs/side-effects.md). */
+    n += sv_hooks_record_install();
     return n;
 }
 

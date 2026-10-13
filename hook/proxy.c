@@ -49,6 +49,16 @@ SV_FORWARDS(SV_DECLARE)
     __declspec(naked) void sv_##name(void) { __asm { jmp p_##name } }
 SV_FORWARDS(SV_STUB)
 
+/* The pointer that the stub of a WinSock function jumps through. hook/record_imports.c
+ * puts a recording wrapper there, which calls the real function. */
+FARPROC *sv_wsock_slot(const char *name)
+{
+#define SV_SLOT(ord, nm) if (lstrcmpA(name, #nm) == 0) return &p_##nm;
+    SV_FORWARDS(SV_SLOT)
+#undef SV_SLOT
+    return NULL;
+}
+
 /* recvfrom and sendto go through C: they record the datagrams (capture.c), then
  * return what the real function returned. The .def file exports these two. */
 typedef int(WINAPI *recvfrom_fn)(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen);
