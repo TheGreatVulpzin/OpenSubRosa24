@@ -1237,10 +1237,10 @@ __declspec(naked) static void th_05be0(void)
 }
 static uint8_t expect_05be0[8] = { 0x83, 0xec, 0x08, 0x53, 0x8b, 0x5c, 0x24, 0x10 };
 
-void __cdecl lf_05f20(int param_1);
-static void (__cdecl *orig_05f20)(int);
+void __cdecl lf_05f20(float param_1);
+static void (__cdecl *orig_05f20)(float);
 static SvVerify v_05f20 = { "player_calcassets", -1 };
-static void __cdecl hk_05f20(int param_1)
+static void __cdecl hk_05f20(float param_1)
 {
     SV_HOOK_VOID(v_05f20, lf_05f20(param_1), orig_05f20(param_1), NULL);
 }
@@ -2412,10 +2412,10 @@ __declspec(naked) static void th_09be0(void)
 }
 static uint8_t expect_09be0[7] = { 0x83, 0xec, 0x18, 0xd9, 0x44, 0x24, 0x1c };
 
-void __cdecl lf_0a1b0(uint param_1);
-static void (__cdecl *orig_0a1b0)(uint);
+void __cdecl lf_0a1b0(float param_1);
+static void (__cdecl *orig_0a1b0)(float);
 static SvVerify v_0a1b0 = { "deleteplayer", -1 };
-static void __cdecl hk_0a1b0(uint param_1)
+static void __cdecl hk_0a1b0(float param_1)
 {
     SV_HOOK_VOID(v_0a1b0, lf_0a1b0(param_1), orig_0a1b0(param_1), NULL);
 }
@@ -3858,10 +3858,10 @@ __declspec(naked) static void th_0c290(void)
 }
 static uint8_t expect_0c290[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x44, 0x24, 0x24 };
 
-undefined4 __cdecl lf_0c420(float * param_1, float * param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, float * param_6, float * param_7, float * param_8);
-static undefined4 (__cdecl *orig_0c420)(float *, float *, undefined4, undefined4, undefined4, float *, float *, float *);
+undefined4 __cdecl lf_0c420(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8);
+static undefined4 (__cdecl *orig_0c420)(float *, float *, float *, float *, float *, float *, float *, float *);
 static SvVerify v_0c420 = { "lineintersecttriangle", -1 };
-static undefined4 __cdecl hk_0c420(float * param_1, float * param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, float * param_6, float * param_7, float * param_8)
+static undefined4 __cdecl hk_0c420(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8)
 {
     SV_HOOK_RET(undefined4, v_0c420, lf_0c420(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_0c420(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -3905,6 +3905,54 @@ __declspec(naked) static void th_0c420(void)
 }
 static uint8_t expect_0c420[8] = { 0x8b, 0x44, 0x24, 0x14, 0x8b, 0x4c, 0x24, 0x10 };
 
+undefined4 __cdecl lf_0c680(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8, int param_9);
+static undefined4 (__cdecl *orig_0c680)(float *, float *, float *, float *, float *, float *, float *, float *, int);
+static SvVerify v_0c680 = { "lineintersecttriangletwosided", -1 };
+static undefined4 __cdecl hk_0c680(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8, int param_9)
+{
+    SV_HOOK_RET(undefined4, v_0c680, lf_0c680(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_0c680(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
+}
+__declspec(naked) static void th_0c680(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 9
+        push eax
+        push 92
+        push 0xc680
+        call sv_record_args
+        add esp, 16
+        push dword ptr [ebp + 40]
+        push dword ptr [ebp + 36]
+        push dword ptr [ebp + 32]
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_0c680
+        add esp, 36
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_0c680[8] = { 0x8b, 0x44, 0x24, 0x14, 0x8b, 0x4c, 0x24, 0x10 };
+
 float10 __cdecl lf_0c8f0(float * param_1, float * param_2, float * param_3);
 static float10 (__cdecl *orig_0c8f0)(float *, float *, float *);
 static SvVerify v_0c8f0 = { "pointdistanceline", -1 };
@@ -3928,7 +3976,7 @@ __declspec(naked) static void th_0c8f0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 92
+        push 93
         push 0xc8f0
         call sv_record_args
         add esp, 16
@@ -3975,7 +4023,7 @@ __declspec(naked) static void th_0cab0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 93
+        push 94
         push 0xcab0
         call sv_record_args
         add esp, 16
@@ -4021,7 +4069,7 @@ __declspec(naked) static void th_0cca0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 94
+        push 95
         push 0xcca0
         call sv_record_args
         add esp, 16
@@ -4067,7 +4115,7 @@ __declspec(naked) static void th_0cdf0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 95
+        push 96
         push 0xcdf0
         call sv_record_args
         add esp, 16
@@ -4113,7 +4161,7 @@ __declspec(naked) static void th_0d0c0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 96
+        push 97
         push 0xd0c0
         call sv_record_args
         add esp, 16
@@ -4154,7 +4202,7 @@ __declspec(naked) static void th_0d110(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 97
+        push 98
         push 0xd110
         call sv_record_args
         add esp, 16
@@ -4192,7 +4240,7 @@ __declspec(naked) static void th_0d240(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 98
+        push 99
         push 0xd240
         call sv_record_args
         add esp, 16
@@ -4234,7 +4282,7 @@ __declspec(naked) static void th_0d2a0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 99
+        push 100
         push 0xd2a0
         call sv_record_args
         add esp, 16
@@ -4276,7 +4324,7 @@ __declspec(naked) static void th_0d680(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 100
+        push 101
         push 0xd680
         call sv_record_args
         add esp, 16
@@ -4317,7 +4365,7 @@ __declspec(naked) static void th_0d990(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 101
+        push 102
         push 0xd990
         call sv_record_args
         add esp, 16
@@ -4359,7 +4407,7 @@ __declspec(naked) static void th_0d9f0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 102
+        push 103
         push 0xd9f0
         call sv_record_args
         add esp, 16
@@ -4401,7 +4449,7 @@ __declspec(naked) static void th_0da60(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 103
+        push 104
         push 0xda60
         call sv_record_args
         add esp, 16
@@ -4442,7 +4490,7 @@ __declspec(naked) static void th_0db20(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 104
+        push 105
         push 0xdb20
         call sv_record_args
         add esp, 16
@@ -4460,10 +4508,10 @@ __declspec(naked) static void th_0db20(void)
 }
 static uint8_t expect_0db20[8] = { 0x51, 0x57, 0x8b, 0x3d, 0xe8, 0xd6, 0x93, 0x19 };
 
-undefined4 __cdecl lf_0ddb0(undefined4 param_1, undefined4 param_2);
-static undefined4 (__cdecl *orig_0ddb0)(undefined4, undefined4);
+undefined4 __cdecl lf_0ddb0(uint * param_1, uint param_2);
+static undefined4 (__cdecl *orig_0ddb0)(uint *, uint);
 static SvVerify v_0ddb0 = { "pbitwritenego", -1 };
-static undefined4 __cdecl hk_0ddb0(undefined4 param_1, undefined4 param_2)
+static undefined4 __cdecl hk_0ddb0(uint * param_1, uint param_2)
 {
     SV_HOOK_RET(undefined4, v_0ddb0, lf_0ddb0(param_1, param_2), orig_0ddb0(param_1, param_2), NULL);
 }
@@ -4483,7 +4531,7 @@ __declspec(naked) static void th_0ddb0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 105
+        push 106
         push 0xddb0
         call sv_record_args
         add esp, 16
@@ -4501,10 +4549,10 @@ __declspec(naked) static void th_0ddb0(void)
 }
 static uint8_t expect_0ddb0[8] = { 0x8b, 0x44, 0x24, 0x08, 0x8b, 0x4c, 0x24, 0x04 };
 
-undefined4 __cdecl lf_0ddd0(int * param_1, int param_2);
-static undefined4 (__cdecl *orig_0ddd0)(int *, int);
+undefined4 __cdecl lf_0ddd0(uint * param_1, uint param_2);
+static undefined4 (__cdecl *orig_0ddd0)(uint *, uint);
 static SvVerify v_0ddd0 = { "pbitreadnego", -1 };
-static undefined4 __cdecl hk_0ddd0(int * param_1, int param_2)
+static undefined4 __cdecl hk_0ddd0(uint * param_1, uint param_2)
 {
     SV_HOOK_RET(undefined4, v_0ddd0, lf_0ddd0(param_1, param_2), orig_0ddd0(param_1, param_2), NULL);
 }
@@ -4524,7 +4572,7 @@ __declspec(naked) static void th_0ddd0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 106
+        push 107
         push 0xddd0
         call sv_record_args
         add esp, 16
@@ -4565,7 +4613,7 @@ __declspec(naked) static void th_0ded0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 107
+        push 108
         push 0xded0
         call sv_record_args
         add esp, 16
@@ -4605,7 +4653,7 @@ __declspec(naked) static void th_0e4d0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 108
+        push 109
         push 0xe4d0
         call sv_record_args
         add esp, 16
@@ -4647,7 +4695,7 @@ __declspec(naked) static void th_0f4a0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 109
+        push 110
         push 0xf4a0
         call sv_record_args
         add esp, 16
@@ -4691,7 +4739,7 @@ __declspec(naked) static void th_0f620(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 110
+        push 111
         push 0xf620
         call sv_record_args
         add esp, 16
@@ -4711,10 +4759,10 @@ __declspec(naked) static void th_0f620(void)
 }
 static uint8_t expect_0f620[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-void __cdecl lf_0f6f0(int param_1, int param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7);
-static void (__cdecl *orig_0f6f0)(int, int, int, undefined4, int, undefined4, undefined4);
+void __cdecl lf_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7);
+static void (__cdecl *orig_0f6f0)(int, int, int, float, int, float, undefined4);
 static SvVerify v_0f6f0 = { "addbeziersurface", -1 };
-static void __cdecl hk_0f6f0(int param_1, int param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7)
+static void __cdecl hk_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7)
 {
     SV_HOOK_VOID(v_0f6f0, lf_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
@@ -4734,7 +4782,7 @@ __declspec(naked) static void th_0f6f0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 111
+        push 112
         push 0xf6f0
         call sv_record_args
         add esp, 16
@@ -4758,10 +4806,10 @@ __declspec(naked) static void th_0f6f0(void)
 }
 static uint8_t expect_0f6f0[8] = { 0x83, 0xec, 0x40, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_0fc40(int param_1, undefined4 param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7);
-static void (__cdecl *orig_0fc40)(int, undefined4, int, undefined4, int, undefined4, undefined4);
+void __cdecl lf_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7);
+static void (__cdecl *orig_0fc40)(int, undefined4, int, float, int, float, undefined4);
 static SvVerify v_0fc40 = { "addbeziersurfacetexture", -1 };
-static void __cdecl hk_0fc40(int param_1, undefined4 param_2, int param_3, undefined4 param_4, int param_5, undefined4 param_6, undefined4 param_7)
+static void __cdecl hk_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7)
 {
     SV_HOOK_VOID(v_0fc40, lf_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
@@ -4781,7 +4829,7 @@ __declspec(naked) static void th_0fc40(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 112
+        push 113
         push 0xfc40
         call sv_record_args
         add esp, 16
@@ -4828,7 +4876,7 @@ __declspec(naked) static void th_10140(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 113
+        push 114
         push 0x10140
         call sv_record_args
         add esp, 16
@@ -4873,7 +4921,7 @@ __declspec(naked) static void th_105c0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 114
+        push 115
         push 0x105c0
         call sv_record_args
         add esp, 16
@@ -4916,7 +4964,7 @@ __declspec(naked) static void th_10950(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 115
+        push 116
         push 0x10950
         call sv_record_args
         add esp, 16
@@ -4963,7 +5011,7 @@ __declspec(naked) static void th_10da0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 116
+        push 117
         push 0x10da0
         call sv_record_args
         add esp, 16
@@ -4982,10 +5030,10 @@ __declspec(naked) static void th_10da0(void)
 }
 static uint8_t expect_10da0[7] = { 0xd9, 0xee, 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-undefined * __cdecl lf_118f0(undefined4 param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7);
-static undefined * (__cdecl *orig_118f0)(undefined4, float, float, float, float, int, uint);
+undefined * __cdecl lf_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7);
+static undefined * (__cdecl *orig_118f0)(int, float, float, float, float, int, uint);
 static SvVerify v_118f0 = { "area_block_addwindow", -1 };
-static undefined * __cdecl hk_118f0(undefined4 param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7)
+static undefined * __cdecl hk_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7)
 {
     SV_HOOK_RET(undefined *, v_118f0, lf_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
@@ -5005,7 +5053,7 @@ __declspec(naked) static void th_118f0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 117
+        push 118
         push 0x118f0
         call sv_record_args
         add esp, 16
@@ -5051,7 +5099,7 @@ __declspec(naked) static void th_11a40(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 118
+        push 119
         push 0x11a40
         call sv_record_args
         add esp, 16
@@ -5071,10 +5119,10 @@ __declspec(naked) static void th_11a40(void)
 }
 static uint8_t expect_11a40[7] = { 0xd9, 0xee, 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-void __cdecl lf_11d70(undefined4 param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9);
-static void (__cdecl *orig_11d70)(undefined4, float, float, float, float, float, float, uint, uint *);
+void __cdecl lf_11d70(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9);
+static void (__cdecl *orig_11d70)(int, float, float, float, float, float, float, uint, uint *);
 static SvVerify v_11d70 = { "area_block_addbeam", -1 };
-static void __cdecl hk_11d70(undefined4 param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9)
+static void __cdecl hk_11d70(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9)
 {
     SV_HOOK_VOID(v_11d70, lf_11d70(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_11d70(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
 }
@@ -5094,7 +5142,7 @@ __declspec(naked) static void th_11d70(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 119
+        push 120
         push 0x11d70
         call sv_record_args
         add esp, 16
@@ -5143,7 +5191,7 @@ __declspec(naked) static void th_11f70(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 120
+        push 121
         push 0x11f70
         call sv_record_args
         add esp, 16
@@ -5186,7 +5234,7 @@ __declspec(naked) static void th_120c0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 121
+        push 122
         push 0x120c0
         call sv_record_args
         add esp, 16
@@ -5229,7 +5277,7 @@ __declspec(naked) static void th_121d0(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 122
+        push 123
         push 0x121d0
         call sv_record_args
         add esp, 16
@@ -5252,10 +5300,10 @@ __declspec(naked) static void th_121d0(void)
 }
 static uint8_t expect_121d0[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xec, 0x14 };
 
-undefined4 __cdecl lf_12450(undefined4 param_1, undefined4 * param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, int * param_6, uint param_7, float param_8);
-static undefined4 (__cdecl *orig_12450)(undefined4, undefined4 *, undefined4, undefined4, undefined4, int *, uint, float);
+undefined4 __cdecl lf_12450(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, int * param_6, uint param_7, float param_8);
+static undefined4 (__cdecl *orig_12450)(float *, float *, float *, float *, float *, int *, uint, float);
 static SvVerify v_12450 = { "lineintersectnormalblock", -1 };
-static undefined4 __cdecl hk_12450(undefined4 param_1, undefined4 * param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, int * param_6, uint param_7, float param_8)
+static undefined4 __cdecl hk_12450(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, int * param_6, uint param_7, float param_8)
 {
     SV_HOOK_RET(undefined4, v_12450, lf_12450(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_12450(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -5275,7 +5323,7 @@ __declspec(naked) static void th_12450(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 123
+        push 124
         push 0x12450
         call sv_record_args
         add esp, 16
@@ -5299,10 +5347,10 @@ __declspec(naked) static void th_12450(void)
 }
 static uint8_t expect_12450[7] = { 0x83, 0xec, 0x30, 0x8b, 0x44, 0x24, 0x48 };
 
-undefined4 __cdecl lf_126b0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, int * param_6, float param_7, float param_8);
-static undefined4 (__cdecl *orig_126b0)(undefined4 *, undefined4 *, float *, undefined4, undefined4, int *, float, float);
+undefined4 __cdecl lf_126b0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, int * param_6, float param_7, float param_8);
+static undefined4 (__cdecl *orig_126b0)(float *, float *, float *, float *, float *, int *, float, float);
 static SvVerify v_126b0 = { "lineintersectspecblock", -1 };
-static undefined4 __cdecl hk_126b0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, int * param_6, float param_7, float param_8)
+static undefined4 __cdecl hk_126b0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, int * param_6, float param_7, float param_8)
 {
     SV_HOOK_RET(undefined4, v_126b0, lf_126b0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_126b0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -5322,7 +5370,7 @@ __declspec(naked) static void th_126b0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 124
+        push 125
         push 0x126b0
         call sv_record_args
         add esp, 16
@@ -5369,7 +5417,7 @@ __declspec(naked) static void th_129b0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 125
+        push 126
         push 0x129b0
         call sv_record_args
         add esp, 16
@@ -5412,7 +5460,7 @@ __declspec(naked) static void th_12c90(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 126
+        push 127
         push 0x12c90
         call sv_record_args
         add esp, 16
@@ -5451,7 +5499,7 @@ __declspec(naked) static void th_12f80(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 127
+        push 128
         push 0x12f80
         call sv_record_args
         add esp, 16
@@ -5492,7 +5540,7 @@ __declspec(naked) static void th_130d0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 128
+        push 129
         push 0x130d0
         call sv_record_args
         add esp, 16
@@ -5533,7 +5581,7 @@ __declspec(naked) static void th_13450(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 129
+        push 130
         push 0x13450
         call sv_record_args
         add esp, 16
@@ -5572,7 +5620,7 @@ __declspec(naked) static void th_143b0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 130
+        push 131
         push 0x143b0
         call sv_record_args
         add esp, 16
@@ -5615,7 +5663,7 @@ __declspec(naked) static void th_14590(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 131
+        push 132
         push 0x14590
         call sv_record_args
         add esp, 16
@@ -5631,10 +5679,10 @@ __declspec(naked) static void th_14590(void)
 }
 static uint8_t expect_14590[7] = { 0x53, 0x8b, 0x1d, 0x40, 0x9a, 0x92, 0x17 };
 
-int __cdecl lf_14600(undefined4 param_1, undefined4 * param_2, undefined4 param_3);
-static int (__cdecl *orig_14600)(undefined4, undefined4 *, undefined4);
+int __cdecl lf_14600(undefined4 param_1, undefined4 * param_2, float param_3);
+static int (__cdecl *orig_14600)(undefined4, undefined4 *, float);
 static SvVerify v_14600 = { "createcityobject", -1 };
-static int __cdecl hk_14600(undefined4 param_1, undefined4 * param_2, undefined4 param_3)
+static int __cdecl hk_14600(undefined4 param_1, undefined4 * param_2, float param_3)
 {
     SV_HOOK_RET(int, v_14600, lf_14600(param_1, param_2, param_3), orig_14600(param_1, param_2, param_3), NULL);
 }
@@ -5654,7 +5702,7 @@ __declspec(naked) static void th_14600(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 132
+        push 133
         push 0x14600
         call sv_record_args
         add esp, 16
@@ -5673,10 +5721,10 @@ __declspec(naked) static void th_14600(void)
 }
 static uint8_t expect_14600[8] = { 0x56, 0x33, 0xf6, 0xb8, 0x20, 0x40, 0x22, 0x16 };
 
-undefined4 __cdecl lf_146a0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float * param_6);
-static undefined4 (__cdecl *orig_146a0)(float *, undefined4 *, float *, int, float *, float *);
+undefined4 __cdecl lf_146a0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6);
+static undefined4 (__cdecl *orig_146a0)(float *, float *, float *, int, float *, float *);
 static SvVerify v_146a0 = { "lineintersectcityobject", -1 };
-static undefined4 __cdecl hk_146a0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float * param_6)
+static undefined4 __cdecl hk_146a0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6)
 {
     SV_HOOK_RET(undefined4, v_146a0, lf_146a0(param_1, param_2, param_3, param_4, param_5, param_6), orig_146a0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
@@ -5696,7 +5744,7 @@ __declspec(naked) static void th_146a0(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 133
+        push 134
         push 0x146a0
         call sv_record_args
         add esp, 16
@@ -5718,10 +5766,10 @@ __declspec(naked) static void th_146a0(void)
 }
 static uint8_t expect_146a0[6] = { 0x81, 0xec, 0x84, 0x00, 0x00, 0x00 };
 
-undefined4 __cdecl lf_14dd0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, undefined4 param_6, float * param_7, float * param_8);
-static undefined4 (__cdecl *orig_14dd0)(float *, undefined4 *, float *, int, float *, undefined4, float *, float *);
+undefined4 __cdecl lf_14dd0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6, float * param_7, float * param_8);
+static undefined4 (__cdecl *orig_14dd0)(float *, float *, float *, int, float *, float *, float *, float *);
 static SvVerify v_14dd0 = { "lineintersectcityobjecttype", -1 };
-static undefined4 __cdecl hk_14dd0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, undefined4 param_6, float * param_7, float * param_8)
+static undefined4 __cdecl hk_14dd0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6, float * param_7, float * param_8)
 {
     SV_HOOK_RET(undefined4, v_14dd0, lf_14dd0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_14dd0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -5741,7 +5789,7 @@ __declspec(naked) static void th_14dd0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 134
+        push 135
         push 0x14dd0
         call sv_record_args
         add esp, 16
@@ -5788,7 +5836,7 @@ __declspec(naked) static void th_154b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 135
+        push 136
         push 0x154b0
         call sv_record_args
         add esp, 16
@@ -5828,7 +5876,7 @@ __declspec(naked) static void th_155e0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 136
+        push 137
         push 0x155e0
         call sv_record_args
         add esp, 16
@@ -5844,10 +5892,10 @@ __declspec(naked) static void th_155e0(void)
 }
 static uint8_t expect_155e0[6] = { 0xd9, 0x05, 0x98, 0xe5, 0x45, 0x00 };
 
-void __cdecl lf_15df0(float * param_1, int param_2);
-static void (__cdecl *orig_15df0)(float *, int);
+void __cdecl lf_15df0(float * param_1, uint param_2);
+static void (__cdecl *orig_15df0)(float *, uint);
 static SvVerify v_15df0 = { "packorientation", -1 };
-static void __cdecl hk_15df0(float * param_1, int param_2)
+static void __cdecl hk_15df0(float * param_1, uint param_2)
 {
     SV_HOOK_VOID(v_15df0, lf_15df0(param_1, param_2), orig_15df0(param_1, param_2), NULL);
 }
@@ -5867,7 +5915,7 @@ __declspec(naked) static void th_15df0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 137
+        push 138
         push 0x15df0
         call sv_record_args
         add esp, 16
@@ -5885,6 +5933,48 @@ __declspec(naked) static void th_15df0(void)
     }
 }
 static uint8_t expect_15df0[5] = { 0x83, 0xec, 0x28, 0xd9, 0xee };
+
+void __cdecl lf_16320(float * param_1, float * param_2);
+static void (__cdecl *orig_16320)(float *, float *);
+static SvVerify v_16320 = { "unpackorientation", -1 };
+static void __cdecl hk_16320(float * param_1, float * param_2)
+{
+    SV_HOOK_VOID(v_16320, lf_16320(param_1, param_2), orig_16320(param_1, param_2), NULL);
+}
+__declspec(naked) static void th_16320(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 2
+        push eax
+        push 139
+        push 0x16320
+        call sv_record_args
+        add esp, 16
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_16320
+        add esp, 8
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_16320[7] = { 0x53, 0x56, 0x57, 0x8b, 0x7c, 0x24, 0x14 };
 
 void __cdecl lf_16680(float * param_1, uint param_2);
 static void (__cdecl *orig_16680)(float *, uint);
@@ -5909,7 +5999,7 @@ __declspec(naked) static void th_16680(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 138
+        push 140
         push 0x16680
         call sv_record_args
         add esp, 16
@@ -5951,7 +6041,7 @@ __declspec(naked) static void th_16710(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 139
+        push 141
         push 0x16710
         call sv_record_args
         add esp, 16
@@ -5993,7 +6083,7 @@ __declspec(naked) static void th_16790(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 140
+        push 142
         push 0x16790
         call sv_record_args
         add esp, 16
@@ -6034,7 +6124,7 @@ __declspec(naked) static void th_16860(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 141
+        push 143
         push 0x16860
         call sv_record_args
         add esp, 16
@@ -6077,7 +6167,7 @@ __declspec(naked) static void th_16960(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 142
+        push 144
         push 0x16960
         call sv_record_args
         add esp, 16
@@ -6118,7 +6208,7 @@ __declspec(naked) static void th_16a20(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 143
+        push 145
         push 0x16a20
         call sv_record_args
         add esp, 16
@@ -6160,7 +6250,7 @@ __declspec(naked) static void th_16bb0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 144
+        push 146
         push 0x16bb0
         call sv_record_args
         add esp, 16
@@ -6204,7 +6294,7 @@ __declspec(naked) static void th_16c40(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 145
+        push 147
         push 0x16c40
         call sv_record_args
         add esp, 16
@@ -6248,7 +6338,7 @@ __declspec(naked) static void th_16ce0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 146
+        push 148
         push 0x16ce0
         call sv_record_args
         add esp, 16
@@ -6293,7 +6383,7 @@ __declspec(naked) static void th_16db0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 147
+        push 149
         push 0x16db0
         call sv_record_args
         add esp, 16
@@ -6337,7 +6427,7 @@ __declspec(naked) static void th_16e30(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 148
+        push 150
         push 0x16e30
         call sv_record_args
         add esp, 16
@@ -6385,7 +6475,7 @@ __declspec(naked) static void th_16f10(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 149
+        push 151
         push 0x16f10
         call sv_record_args
         add esp, 16
@@ -6404,10 +6494,10 @@ __declspec(naked) static void th_16f10(void)
 }
 static uint8_t expect_16f10[5] = { 0xa1, 0x78, 0xc5, 0x4d, 0x09 };
 
-void __cdecl lf_17b60(int param_1);
-static void (__cdecl *orig_17b60)(int);
+void __cdecl lf_17b60(uint param_1);
+static void (__cdecl *orig_17b60)(uint);
 static SvVerify v_17b60 = { "unpackevent", -1 };
-static void __cdecl hk_17b60(int param_1)
+static void __cdecl hk_17b60(uint param_1)
 {
     SV_HOOK_VOID(v_17b60, lf_17b60(param_1), orig_17b60(param_1), NULL);
 }
@@ -6427,7 +6517,7 @@ __declspec(naked) static void th_17b60(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 150
+        push 152
         push 0x17b60
         call sv_record_args
         add esp, 16
@@ -6445,10 +6535,10 @@ __declspec(naked) static void th_17b60(void)
 }
 static uint8_t expect_17b60[7] = { 0x51, 0x53, 0x56, 0x8b, 0x74, 0x24, 0x10 };
 
-void __cdecl lf_18720(uint param_1);
-static void (__cdecl *orig_18720)(uint);
+void __cdecl lf_18720(uint * param_1);
+static void (__cdecl *orig_18720)(uint *);
 static SvVerify v_18720 = { "deletehuman", -1 };
-static void __cdecl hk_18720(uint param_1)
+static void __cdecl hk_18720(uint * param_1)
 {
     SV_HOOK_VOID(v_18720, lf_18720(param_1), orig_18720(param_1), NULL);
 }
@@ -6468,7 +6558,7 @@ __declspec(naked) static void th_18720(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 151
+        push 153
         push 0x18720
         call sv_record_args
         add esp, 16
@@ -6509,7 +6599,7 @@ __declspec(naked) static void th_19060(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 152
+        push 154
         push 0x19060
         call sv_record_args
         add esp, 16
@@ -6550,7 +6640,7 @@ __declspec(naked) static void th_19380(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 153
+        push 155
         push 0x19380
         call sv_record_args
         add esp, 16
@@ -6591,7 +6681,7 @@ __declspec(naked) static void th_19610(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 154
+        push 156
         push 0x19610
         call sv_record_args
         add esp, 16
@@ -6630,7 +6720,7 @@ __declspec(naked) static void th_19ee0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 155
+        push 157
         push 0x19ee0
         call sv_record_args
         add esp, 16
@@ -6673,7 +6763,7 @@ __declspec(naked) static void th_1a000(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 156
+        push 158
         push 0x1a000
         call sv_record_args
         add esp, 16
@@ -6698,10 +6788,10 @@ __declspec(naked) static void th_1a000(void)
 }
 static uint8_t expect_1a000[7] = { 0x83, 0xec, 0x38, 0x8b, 0x44, 0x24, 0x44 };
 
-undefined4 __cdecl lf_1a700(undefined4 param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8);
-static undefined4 (__cdecl *orig_1a700)(undefined4, float *, float *, float *, float, float *, undefined4, undefined4);
+undefined4 __cdecl lf_1a700(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
+static undefined4 (__cdecl *orig_1a700)(float *, float *, float *, float *, float, float *, float *, float *);
 static SvVerify v_1a700 = { "sphereintersecttriangle", -1 };
-static undefined4 __cdecl hk_1a700(undefined4 param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8)
+static undefined4 __cdecl hk_1a700(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8)
 {
     SV_HOOK_RET(undefined4, v_1a700, lf_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -6721,7 +6811,7 @@ __declspec(naked) static void th_1a700(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 157
+        push 159
         push 0x1a700
         call sv_record_args
         add esp, 16
@@ -6745,10 +6835,10 @@ __declspec(naked) static void th_1a700(void)
 }
 static uint8_t expect_1a700[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x54, 0x24, 0x24 };
 
-undefined4 __cdecl lf_1a7f0(float * param_1, undefined4 param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7);
-static undefined4 (__cdecl *orig_1a7f0)(float *, undefined4, float *, float *, float, float *, float *);
+undefined4 __cdecl lf_1a7f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7);
+static undefined4 (__cdecl *orig_1a7f0)(float *, float *, float *, float *, float, float *, float *);
 static SvVerify v_1a7f0 = { "sphereintersectline", -1 };
-static undefined4 __cdecl hk_1a7f0(float * param_1, undefined4 param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7)
+static undefined4 __cdecl hk_1a7f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7)
 {
     SV_HOOK_RET(undefined4, v_1a7f0, lf_1a7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_1a7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
@@ -6768,7 +6858,7 @@ __declspec(naked) static void th_1a7f0(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 158
+        push 160
         push 0x1a7f0
         call sv_record_args
         add esp, 16
@@ -6814,7 +6904,7 @@ __declspec(naked) static void th_1a990(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 159
+        push 161
         push 0x1a990
         call sv_record_args
         add esp, 16
@@ -6859,7 +6949,7 @@ __declspec(naked) static void th_1aa60(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 160
+        push 162
         push 0x1aa60
         call sv_record_args
         add esp, 16
@@ -6905,7 +6995,7 @@ __declspec(naked) static void th_1b070(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 161
+        push 163
         push 0x1b070
         call sv_record_args
         add esp, 16
@@ -6948,7 +7038,7 @@ __declspec(naked) static void th_1b6e0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 162
+        push 164
         push 0x1b6e0
         call sv_record_args
         add esp, 16
@@ -6990,7 +7080,7 @@ __declspec(naked) static void th_1b870(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 163
+        push 165
         push 0x1b870
         call sv_record_args
         add esp, 16
@@ -7033,7 +7123,7 @@ __declspec(naked) static void th_1ba30(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 164
+        push 166
         push 0x1ba30
         call sv_record_args
         add esp, 16
@@ -7078,7 +7168,7 @@ __declspec(naked) static void th_1bc50(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 165
+        push 167
         push 0x1bc50
         call sv_record_args
         add esp, 16
@@ -7094,10 +7184,10 @@ __declspec(naked) static void th_1bc50(void)
 }
 static uint8_t expect_1bc50[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-undefined4 __cdecl lf_1c1d0(int param_1, int param_2);
-static undefined4 (__cdecl *orig_1c1d0)(int, int);
+undefined4 __cdecl lf_1c1d0(float * param_1, float * param_2);
+static undefined4 (__cdecl *orig_1c1d0)(float *, float *);
 static SvVerify v_1c1d0 = { "lineintersectlandscape", -1 };
-static undefined4 __cdecl hk_1c1d0(int param_1, int param_2)
+static undefined4 __cdecl hk_1c1d0(float * param_1, float * param_2)
 {
     SV_HOOK_RET(undefined4, v_1c1d0, lf_1c1d0(param_1, param_2), orig_1c1d0(param_1, param_2), NULL);
 }
@@ -7117,7 +7207,7 @@ __declspec(naked) static void th_1c1d0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 166
+        push 168
         push 0x1c1d0
         call sv_record_args
         add esp, 16
@@ -7135,10 +7225,10 @@ __declspec(naked) static void th_1c1d0(void)
 }
 static uint8_t expect_1c1d0[6] = { 0x81, 0xec, 0xac, 0x00, 0x00, 0x00 };
 
-undefined4 __cdecl lf_1c8f0(float * param_1, undefined4 param_2, float param_3);
-static undefined4 (__cdecl *orig_1c8f0)(float *, undefined4, float);
+undefined4 __cdecl lf_1c8f0(float * param_1, float * param_2, float param_3);
+static undefined4 (__cdecl *orig_1c8f0)(float *, float *, float);
 static SvVerify v_1c8f0 = { "circleintersectlandscape", -1 };
-static undefined4 __cdecl hk_1c8f0(float * param_1, undefined4 param_2, float param_3)
+static undefined4 __cdecl hk_1c8f0(float * param_1, float * param_2, float param_3)
 {
     SV_HOOK_RET(undefined4, v_1c8f0, lf_1c8f0(param_1, param_2, param_3), orig_1c8f0(param_1, param_2, param_3), NULL);
 }
@@ -7158,7 +7248,7 @@ __declspec(naked) static void th_1c8f0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 167
+        push 169
         push 0x1c8f0
         call sv_record_args
         add esp, 16
@@ -7200,7 +7290,7 @@ __declspec(naked) static void th_1cdf0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 168
+        push 170
         push 0x1cdf0
         call sv_record_args
         add esp, 16
@@ -7241,7 +7331,7 @@ __declspec(naked) static void th_1d2c0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 169
+        push 171
         push 0x1d2c0
         call sv_record_args
         add esp, 16
@@ -7282,7 +7372,7 @@ __declspec(naked) static void th_1d3b0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 170
+        push 172
         push 0x1d3b0
         call sv_record_args
         add esp, 16
@@ -7321,7 +7411,7 @@ __declspec(naked) static void th_1d4d0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 171
+        push 173
         push 0x1d4d0
         call sv_record_args
         add esp, 16
@@ -7363,7 +7453,7 @@ __declspec(naked) static void th_1d7a0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 172
+        push 174
         push 0x1d7a0
         call sv_record_args
         add esp, 16
@@ -7405,7 +7495,7 @@ __declspec(naked) static void th_1d8a0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 173
+        push 175
         push 0x1d8a0
         call sv_record_args
         add esp, 16
@@ -7448,7 +7538,7 @@ __declspec(naked) static void th_1dba0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 174
+        push 176
         push 0x1dba0
         call sv_record_args
         add esp, 16
@@ -7487,7 +7577,7 @@ __declspec(naked) static void th_21a30(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 175
+        push 177
         push 0x21a30
         call sv_record_args
         add esp, 16
@@ -7530,7 +7620,7 @@ __declspec(naked) static void th_21b40(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 176
+        push 178
         push 0x21b40
         call sv_record_args
         add esp, 16
@@ -7573,7 +7663,7 @@ __declspec(naked) static void th_21e00(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 177
+        push 179
         push 0x21e00
         call sv_record_args
         add esp, 16
@@ -7617,7 +7707,7 @@ __declspec(naked) static void th_223d0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 178
+        push 180
         push 0x223d0
         call sv_record_args
         add esp, 16
@@ -7660,7 +7750,7 @@ __declspec(naked) static void th_225e0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 179
+        push 181
         push 0x225e0
         call sv_record_args
         add esp, 16
@@ -7702,7 +7792,7 @@ __declspec(naked) static void th_22af0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 180
+        push 182
         push 0x22af0
         call sv_record_args
         add esp, 16
@@ -7747,7 +7837,7 @@ __declspec(naked) static void th_22e20(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 181
+        push 183
         push 0x22e20
         call sv_record_args
         add esp, 16
@@ -7789,7 +7879,7 @@ __declspec(naked) static void th_22f90(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 182
+        push 184
         push 0x22f90
         call sv_record_args
         add esp, 16
@@ -7828,7 +7918,7 @@ __declspec(naked) static void th_23fa0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 183
+        push 185
         push 0x23fa0
         call sv_record_args
         add esp, 16
@@ -7873,7 +7963,7 @@ __declspec(naked) static void th_240e0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 184
+        push 186
         push 0x240e0
         call sv_record_args
         add esp, 16
@@ -7914,7 +8004,7 @@ __declspec(naked) static void th_24f60(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 185
+        push 187
         push 0x24f60
         call sv_record_args
         add esp, 16
@@ -7955,7 +8045,7 @@ __declspec(naked) static void th_257a0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 186
+        push 188
         push 0x257a0
         call sv_record_args
         add esp, 16
@@ -7998,7 +8088,7 @@ __declspec(naked) static void th_25e70(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 187
+        push 189
         push 0x25e70
         call sv_record_args
         add esp, 16
@@ -8019,10 +8109,10 @@ __declspec(naked) static void th_25e70(void)
 }
 static uint8_t expect_25e70[7] = { 0x8b, 0x44, 0x24, 0x04, 0x83, 0xec, 0x58 };
 
-undefined4 __cdecl lf_26bc0(float * param_1, undefined4 param_2, int param_3);
-static undefined4 (__cdecl *orig_26bc0)(float *, undefined4, int);
+undefined4 __cdecl lf_26bc0(float * param_1, float * param_2, int param_3);
+static undefined4 (__cdecl *orig_26bc0)(float *, float *, int);
 static SvVerify v_26bc0 = { "lineintersecttrack", -1 };
-static undefined4 __cdecl hk_26bc0(float * param_1, undefined4 param_2, int param_3)
+static undefined4 __cdecl hk_26bc0(float * param_1, float * param_2, int param_3)
 {
     SV_HOOK_RET(undefined4, v_26bc0, lf_26bc0(param_1, param_2, param_3), orig_26bc0(param_1, param_2, param_3), NULL);
 }
@@ -8042,7 +8132,7 @@ __declspec(naked) static void th_26bc0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 188
+        push 190
         push 0x26bc0
         call sv_record_args
         add esp, 16
@@ -8061,10 +8151,10 @@ __declspec(naked) static void th_26bc0(void)
 }
 static uint8_t expect_26bc0[8] = { 0x83, 0xec, 0x3c, 0x53, 0x8b, 0x5c, 0x24, 0x44 };
 
-undefined4 __cdecl lf_26db0(float * param_1, undefined4 param_2, int param_3);
-static undefined4 (__cdecl *orig_26db0)(float *, undefined4, int);
+undefined4 __cdecl lf_26db0(float * param_1, float * param_2, int param_3);
+static undefined4 (__cdecl *orig_26db0)(float *, float *, int);
 static SvVerify v_26db0 = { "lineintersecttrackrail", -1 };
-static undefined4 __cdecl hk_26db0(float * param_1, undefined4 param_2, int param_3)
+static undefined4 __cdecl hk_26db0(float * param_1, float * param_2, int param_3)
 {
     SV_HOOK_RET(undefined4, v_26db0, lf_26db0(param_1, param_2, param_3), orig_26db0(param_1, param_2, param_3), NULL);
 }
@@ -8084,7 +8174,7 @@ __declspec(naked) static void th_26db0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 189
+        push 191
         push 0x26db0
         call sv_record_args
         add esp, 16
@@ -8126,7 +8216,7 @@ __declspec(naked) static void th_26f90(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 190
+        push 192
         push 0x26f90
         call sv_record_args
         add esp, 16
@@ -8167,7 +8257,7 @@ __declspec(naked) static void th_272b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 191
+        push 193
         push 0x272b0
         call sv_record_args
         add esp, 16
@@ -8208,7 +8298,7 @@ __declspec(naked) static void th_278c0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 192
+        push 194
         push 0x278c0
         call sv_record_args
         add esp, 16
@@ -8252,7 +8342,7 @@ __declspec(naked) static void th_279b0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 193
+        push 195
         push 0x279b0
         call sv_record_args
         add esp, 16
@@ -8291,7 +8381,7 @@ __declspec(naked) static void th_27ba0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 194
+        push 196
         push 0x27ba0
         call sv_record_args
         add esp, 16
@@ -8330,7 +8420,7 @@ __declspec(naked) static void th_27e80(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 195
+        push 197
         push 0x27e80
         call sv_record_args
         add esp, 16
@@ -8377,7 +8467,7 @@ __declspec(naked) static void th_28020(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 196
+        push 198
         push 0x28020
         call sv_record_args
         add esp, 16
@@ -8415,7 +8505,7 @@ __declspec(naked) static void th_28190(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 197
+        push 199
         push 0x28190
         call sv_record_args
         add esp, 16
@@ -8458,7 +8548,7 @@ __declspec(naked) static void th_28230(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 198
+        push 200
         push 0x28230
         call sv_record_args
         add esp, 16
@@ -8501,7 +8591,7 @@ __declspec(naked) static void th_286b0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 199
+        push 201
         push 0x286b0
         call sv_record_args
         add esp, 16
@@ -8544,7 +8634,7 @@ __declspec(naked) static void th_28a90(void)
         lea eax, [ebp + 8]
         push 12
         push eax
-        push 200
+        push 202
         push 0x28a90
         call sv_record_args
         add esp, 16
@@ -8596,7 +8686,7 @@ __declspec(naked) static void th_28c90(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 201
+        push 203
         push 0x28c90
         call sv_record_args
         add esp, 16
@@ -8617,10 +8707,10 @@ __declspec(naked) static void th_28c90(void)
 }
 static uint8_t expect_28c90[5] = { 0x83, 0xec, 0x60, 0xd9, 0xee };
 
-void __cdecl lf_29300(float * param_1, float * param_2, int param_3);
-static void (__cdecl *orig_29300)(float *, float *, int);
+void __cdecl lf_29300(float * param_1, float * param_2, float * param_3);
+static void (__cdecl *orig_29300)(float *, float *, float *);
 static SvVerify v_29300 = { "objecttype_calcquadweights", -1 };
-static void __cdecl hk_29300(float * param_1, float * param_2, int param_3)
+static void __cdecl hk_29300(float * param_1, float * param_2, float * param_3)
 {
     SV_HOOK_VOID(v_29300, lf_29300(param_1, param_2, param_3), orig_29300(param_1, param_2, param_3), NULL);
 }
@@ -8640,7 +8730,7 @@ __declspec(naked) static void th_29300(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 202
+        push 204
         push 0x29300
         call sv_record_args
         add esp, 16
@@ -8683,7 +8773,7 @@ __declspec(naked) static void th_29650(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 203
+        push 205
         push 0x29650
         call sv_record_args
         add esp, 16
@@ -8724,7 +8814,7 @@ __declspec(naked) static void th_296f0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 204
+        push 206
         push 0x296f0
         call sv_record_args
         add esp, 16
@@ -8769,7 +8859,7 @@ __declspec(naked) static void th_29830(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 205
+        push 207
         push 0x29830
         call sv_record_args
         add esp, 16
@@ -8814,7 +8904,7 @@ __declspec(naked) static void th_29970(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 206
+        push 208
         push 0x29970
         call sv_record_args
         add esp, 16
@@ -8835,10 +8925,10 @@ __declspec(naked) static void th_29970(void)
 }
 static uint8_t expect_29970[8] = { 0x83, 0xec, 0x08, 0x56, 0x8b, 0x74, 0x24, 0x10 };
 
-undefined4 __cdecl lf_2c020(uint param_1, int param_2, undefined4 param_3, undefined4 param_4, uint param_5, int param_6, undefined4 param_7, undefined4 param_8);
-static undefined4 (__cdecl *orig_2c020)(uint, int, undefined4, undefined4, uint, int, undefined4, undefined4);
+undefined4 __cdecl lf_2c020(uint param_1, uint param_2, uint param_3, uint param_4, uint param_5, int param_6, undefined4 * param_7, undefined4 * param_8);
+static undefined4 (__cdecl *orig_2c020)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *);
 static SvVerify v_2c020 = { "area_breakblock", -1 };
-static undefined4 __cdecl hk_2c020(uint param_1, int param_2, undefined4 param_3, undefined4 param_4, uint param_5, int param_6, undefined4 param_7, undefined4 param_8)
+static undefined4 __cdecl hk_2c020(uint param_1, uint param_2, uint param_3, uint param_4, uint param_5, int param_6, undefined4 * param_7, undefined4 * param_8)
 {
     SV_HOOK_RET(undefined4, v_2c020, lf_2c020(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2c020(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -8858,7 +8948,7 @@ __declspec(naked) static void th_2c020(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 207
+        push 209
         push 0x2c020
         call sv_record_args
         add esp, 16
@@ -8882,10 +8972,55 @@ __declspec(naked) static void th_2c020(void)
 }
 static uint8_t expect_2c020[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-undefined4 __cdecl lf_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, uint param_7, float param_8);
-static undefined4 (__cdecl *orig_2cda0)(float *, float *, float *, float *, undefined4, int *, uint, float);
+int __cdecl lf_2c0c0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6);
+static int (__cdecl *orig_2c0c0)(float *, float *, float *, int, float *, float *);
+static SvVerify v_2c0c0 = { "lineintersectarea", -1 };
+static int __cdecl hk_2c0c0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6)
+{
+    SV_HOOK_RET(int, v_2c0c0, lf_2c0c0(param_1, param_2, param_3, param_4, param_5, param_6), orig_2c0c0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+}
+__declspec(naked) static void th_2c0c0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 210
+        push 0x2c0c0
+        call sv_record_args
+        add esp, 16
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_2c0c0
+        add esp, 24
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_2c0c0[6] = { 0x81, 0xec, 0xc4, 0x00, 0x00, 0x00 };
+
+undefined4 __cdecl lf_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, int * param_6, uint param_7, float param_8);
+static undefined4 (__cdecl *orig_2cda0)(float *, float *, float *, float *, float, int *, uint, float);
 static SvVerify v_2cda0 = { "sphereintersectnormalblock", -1 };
-static undefined4 __cdecl hk_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, uint param_7, float param_8)
+static undefined4 __cdecl hk_2cda0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, int * param_6, uint param_7, float param_8)
 {
     SV_HOOK_RET(undefined4, v_2cda0, lf_2cda0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2cda0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -8905,7 +9040,7 @@ __declspec(naked) static void th_2cda0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 208
+        push 211
         push 0x2cda0
         call sv_record_args
         add esp, 16
@@ -8929,10 +9064,10 @@ __declspec(naked) static void th_2cda0(void)
 }
 static uint8_t expect_2cda0[7] = { 0x83, 0xec, 0x60, 0x8b, 0x44, 0x24, 0x6c };
 
-undefined4 __cdecl lf_2d2d0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, float param_7, float param_8);
-static undefined4 (__cdecl *orig_2d2d0)(float *, float *, float *, float *, undefined4, int *, float, float);
+undefined4 __cdecl lf_2d2d0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, int * param_6, float param_7, float param_8);
+static undefined4 (__cdecl *orig_2d2d0)(float *, float *, float *, float *, float, int *, float, float);
 static SvVerify v_2d2d0 = { "sphereintersectspecblock", -1 };
-static undefined4 __cdecl hk_2d2d0(float * param_1, float * param_2, float * param_3, float * param_4, undefined4 param_5, int * param_6, float param_7, float param_8)
+static undefined4 __cdecl hk_2d2d0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, int * param_6, float param_7, float param_8)
 {
     SV_HOOK_RET(undefined4, v_2d2d0, lf_2d2d0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2d2d0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -8952,7 +9087,7 @@ __declspec(naked) static void th_2d2d0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 209
+        push 212
         push 0x2d2d0
         call sv_record_args
         add esp, 16
@@ -8976,10 +9111,10 @@ __declspec(naked) static void th_2d2d0(void)
 }
 static uint8_t expect_2d2d0[9] = { 0x83, 0xec, 0x60, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
-undefined4 __cdecl lf_2d7f0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, uint param_8, float param_9);
-static undefined4 (__cdecl *orig_2d7f0)(undefined4 *, undefined4 *, float *, undefined4, undefined4, undefined4, int *, uint, float);
+undefined4 __cdecl lf_2d7f0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, int * param_7, uint param_8, float param_9);
+static undefined4 (__cdecl *orig_2d7f0)(float *, float *, float *, float *, float *, float, int *, uint, float);
 static SvVerify v_2d7f0 = { "circleintersectnormalblock", -1 };
-static undefined4 __cdecl hk_2d7f0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, uint param_8, float param_9)
+static undefined4 __cdecl hk_2d7f0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, int * param_7, uint param_8, float param_9)
 {
     SV_HOOK_RET(undefined4, v_2d7f0, lf_2d7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_2d7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
 }
@@ -8999,7 +9134,7 @@ __declspec(naked) static void th_2d7f0(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 210
+        push 213
         push 0x2d7f0
         call sv_record_args
         add esp, 16
@@ -9024,10 +9159,10 @@ __declspec(naked) static void th_2d7f0(void)
 }
 static uint8_t expect_2d7f0[7] = { 0x83, 0xec, 0x58, 0x8b, 0x44, 0x24, 0x64 };
 
-undefined4 __cdecl lf_2daf0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, float param_8, float param_9);
-static undefined4 (__cdecl *orig_2daf0)(undefined4 *, undefined4 *, float *, undefined4, undefined4, undefined4, int *, float, float);
+undefined4 __cdecl lf_2daf0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, int * param_7, float param_8, float param_9);
+static undefined4 (__cdecl *orig_2daf0)(float *, float *, float *, float *, float *, float, int *, float, float);
 static SvVerify v_2daf0 = { "circleintersectspecblock", -1 };
-static undefined4 __cdecl hk_2daf0(undefined4 * param_1, undefined4 * param_2, float * param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, int * param_7, float param_8, float param_9)
+static undefined4 __cdecl hk_2daf0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, int * param_7, float param_8, float param_9)
 {
     SV_HOOK_RET(undefined4, v_2daf0, lf_2daf0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_2daf0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
 }
@@ -9047,7 +9182,7 @@ __declspec(naked) static void th_2daf0(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 211
+        push 214
         push 0x2daf0
         call sv_record_args
         add esp, 16
@@ -9072,10 +9207,10 @@ __declspec(naked) static void th_2daf0(void)
 }
 static uint8_t expect_2daf0[9] = { 0x83, 0xec, 0x58, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
-undefined4 __cdecl lf_2dfc0(undefined4 * param_1, undefined4 * param_2, float * param_3, float param_4, float * param_5, undefined4 param_6, float * param_7, float param_8);
-static undefined4 (__cdecl *orig_2dfc0)(undefined4 *, undefined4 *, float *, float, float *, undefined4, float *, float);
+undefined4 __cdecl lf_2dfc0(float * param_1, float * param_2, float * param_3, float param_4, float * param_5, float * param_6, float * param_7, float param_8);
+static undefined4 (__cdecl *orig_2dfc0)(float *, float *, float *, float, float *, float *, float *, float);
 static SvVerify v_2dfc0 = { "sphereintersectcityobjecttype", -1 };
-static undefined4 __cdecl hk_2dfc0(undefined4 * param_1, undefined4 * param_2, float * param_3, float param_4, float * param_5, undefined4 param_6, float * param_7, float param_8)
+static undefined4 __cdecl hk_2dfc0(float * param_1, float * param_2, float * param_3, float param_4, float * param_5, float * param_6, float * param_7, float param_8)
 {
     SV_HOOK_RET(undefined4, v_2dfc0, lf_2dfc0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2dfc0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -9095,7 +9230,7 @@ __declspec(naked) static void th_2dfc0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 212
+        push 215
         push 0x2dfc0
         call sv_record_args
         add esp, 16
@@ -9119,10 +9254,10 @@ __declspec(naked) static void th_2dfc0(void)
 }
 static uint8_t expect_2dfc0[7] = { 0x83, 0xec, 0x4c, 0x8b, 0x4c, 0x24, 0x68 };
 
-void __cdecl lf_2efd0(int param_1, float * param_2, float param_3, undefined4 param_4);
-static void (__cdecl *orig_2efd0)(int, float *, float, undefined4);
+void __cdecl lf_2efd0(int param_1, float * param_2, float param_3, uint param_4);
+static void (__cdecl *orig_2efd0)(int, float *, float, uint);
 static SvVerify v_2efd0 = { "packpositiondelta", -1 };
-static void __cdecl hk_2efd0(int param_1, float * param_2, float param_3, undefined4 param_4)
+static void __cdecl hk_2efd0(int param_1, float * param_2, float param_3, uint param_4)
 {
     SV_HOOK_VOID(v_2efd0, lf_2efd0(param_1, param_2, param_3, param_4), orig_2efd0(param_1, param_2, param_3, param_4), NULL);
 }
@@ -9142,7 +9277,7 @@ __declspec(naked) static void th_2efd0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 213
+        push 216
         push 0x2efd0
         call sv_record_args
         add esp, 16
@@ -9163,10 +9298,10 @@ __declspec(naked) static void th_2efd0(void)
 }
 static uint8_t expect_2efd0[7] = { 0x83, 0xec, 0x10, 0x8b, 0x4c, 0x24, 0x20 };
 
-void __cdecl lf_2f090(float * param_1, int param_2, undefined4 param_3, undefined4 param_4);
-static void (__cdecl *orig_2f090)(float *, int, undefined4, undefined4);
+void __cdecl lf_2f090(float * param_1, int param_2, undefined4 param_3, uint param_4);
+static void (__cdecl *orig_2f090)(float *, int, undefined4, uint);
 static SvVerify v_2f090 = { "unpackpositiondelta", -1 };
-static void __cdecl hk_2f090(float * param_1, int param_2, undefined4 param_3, undefined4 param_4)
+static void __cdecl hk_2f090(float * param_1, int param_2, undefined4 param_3, uint param_4)
 {
     SV_HOOK_VOID(v_2f090, lf_2f090(param_1, param_2, param_3, param_4), orig_2f090(param_1, param_2, param_3, param_4), NULL);
 }
@@ -9186,7 +9321,7 @@ __declspec(naked) static void th_2f090(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 214
+        push 217
         push 0x2f090
         call sv_record_args
         add esp, 16
@@ -9230,7 +9365,7 @@ __declspec(naked) static void th_2f130(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 215
+        push 218
         push 0x2f130
         call sv_record_args
         add esp, 16
@@ -9273,7 +9408,7 @@ __declspec(naked) static void th_2f420(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 216
+        push 219
         push 0x2f420
         call sv_record_args
         add esp, 16
@@ -9291,10 +9426,10 @@ __declspec(naked) static void th_2f420(void)
 }
 static uint8_t expect_2f420[6] = { 0x81, 0xec, 0x20, 0x01, 0x00, 0x00 };
 
-void __cdecl lf_306d0(int param_1, undefined4 param_2, int param_3, undefined4 * param_4);
-static void (__cdecl *orig_306d0)(int, undefined4, int, undefined4 *);
+void __cdecl lf_306d0(int param_1, undefined4 param_2, int param_3, float * param_4);
+static void (__cdecl *orig_306d0)(int, undefined4, int, float *);
 static SvVerify v_306d0 = { "human_createmuscleball", -1 };
-static void __cdecl hk_306d0(int param_1, undefined4 param_2, int param_3, undefined4 * param_4)
+static void __cdecl hk_306d0(int param_1, undefined4 param_2, int param_3, float * param_4)
 {
     SV_HOOK_VOID(v_306d0, lf_306d0(param_1, param_2, param_3, param_4), orig_306d0(param_1, param_2, param_3, param_4), NULL);
 }
@@ -9314,7 +9449,7 @@ __declspec(naked) static void th_306d0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 217
+        push 220
         push 0x306d0
         call sv_record_args
         add esp, 16
@@ -9335,10 +9470,10 @@ __declspec(naked) static void th_306d0(void)
 }
 static uint8_t expect_306d0[5] = { 0x8b, 0x44, 0x24, 0x08, 0x53 };
 
-undefined4 __cdecl lf_307f0(undefined4 * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8);
-static undefined4 (__cdecl *orig_307f0)(undefined4 *, float *, float *, float *, float, float *, undefined4, undefined4);
+undefined4 __cdecl lf_307f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
+static undefined4 (__cdecl *orig_307f0)(float *, float *, float *, float *, float, float *, float *, float *);
 static SvVerify v_307f0 = { "sphereintersecttrianglefull", -1 };
-static undefined4 __cdecl hk_307f0(undefined4 * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, undefined4 param_7, undefined4 param_8)
+static undefined4 __cdecl hk_307f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8)
 {
     SV_HOOK_RET(undefined4, v_307f0, lf_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
@@ -9358,7 +9493,7 @@ __declspec(naked) static void th_307f0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 218
+        push 221
         push 0x307f0
         call sv_record_args
         add esp, 16
@@ -9405,7 +9540,7 @@ __declspec(naked) static void th_30ab0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 219
+        push 222
         push 0x30ab0
         call sv_record_args
         add esp, 16
@@ -9444,7 +9579,7 @@ __declspec(naked) static void th_30ba0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 220
+        push 223
         push 0x30ba0
         call sv_record_args
         add esp, 16
@@ -9462,10 +9597,10 @@ __declspec(naked) static void th_30ba0(void)
 }
 static uint8_t expect_30ba0[5] = { 0x83, 0xec, 0x24, 0x53, 0x55 };
 
-undefined4 __cdecl lf_30f00(int param_1, undefined4 param_2, undefined4 param_3);
-static undefined4 (__cdecl *orig_30f00)(int, undefined4, undefined4);
+undefined4 __cdecl lf_30f00(int param_1, float * param_2, float param_3);
+static undefined4 (__cdecl *orig_30f00)(int, float *, float);
 static SvVerify v_30f00 = { "item_sphereintersect", -1 };
-static undefined4 __cdecl hk_30f00(int param_1, undefined4 param_2, undefined4 param_3)
+static undefined4 __cdecl hk_30f00(int param_1, float * param_2, float param_3)
 {
     SV_HOOK_RET(undefined4, v_30f00, lf_30f00(param_1, param_2, param_3), orig_30f00(param_1, param_2, param_3), NULL);
 }
@@ -9485,7 +9620,7 @@ __declspec(naked) static void th_30f00(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 221
+        push 224
         push 0x30f00
         call sv_record_args
         add esp, 16
@@ -9527,7 +9662,7 @@ __declspec(naked) static void th_31480(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 222
+        push 225
         push 0x31480
         call sv_record_args
         add esp, 16
@@ -9568,7 +9703,7 @@ __declspec(naked) static void th_31630(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 223
+        push 226
         push 0x31630
         call sv_record_args
         add esp, 16
@@ -9587,10 +9722,10 @@ __declspec(naked) static void th_31630(void)
 }
 static uint8_t expect_31630[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
 
-int __cdecl lf_31800(int param_1, float * param_2, undefined4 param_3, float * param_4, undefined4 param_5);
-static int (__cdecl *orig_31800)(int, float *, undefined4, float *, undefined4);
+int __cdecl lf_31800(int param_1, float * param_2, undefined4 * param_3, float * param_4, undefined4 param_5);
+static int (__cdecl *orig_31800)(int, float *, undefined4 *, float *, undefined4);
 static SvVerify v_31800 = { "createobject", -1 };
-static int __cdecl hk_31800(int param_1, float * param_2, undefined4 param_3, float * param_4, undefined4 param_5)
+static int __cdecl hk_31800(int param_1, float * param_2, undefined4 * param_3, float * param_4, undefined4 param_5)
 {
     SV_HOOK_RET(int, v_31800, lf_31800(param_1, param_2, param_3, param_4, param_5), orig_31800(param_1, param_2, param_3, param_4, param_5), NULL);
 }
@@ -9610,7 +9745,7 @@ __declspec(naked) static void th_31800(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 224
+        push 227
         push 0x31800
         call sv_record_args
         add esp, 16
@@ -9654,7 +9789,7 @@ __declspec(naked) static void th_32340(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 225
+        push 228
         push 0x32340
         call sv_record_args
         add esp, 16
@@ -9693,7 +9828,7 @@ __declspec(naked) static void th_324c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 226
+        push 229
         push 0x324c0
         call sv_record_args
         add esp, 16
@@ -9732,7 +9867,7 @@ __declspec(naked) static void th_32bb0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 227
+        push 230
         push 0x32bb0
         call sv_record_args
         add esp, 16
@@ -9774,7 +9909,7 @@ __declspec(naked) static void th_32fe0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 228
+        push 231
         push 0x32fe0
         call sv_record_args
         add esp, 16
@@ -9792,10 +9927,10 @@ __declspec(naked) static void th_32fe0(void)
 }
 static uint8_t expect_32fe0[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-int __cdecl lf_33350(undefined4 param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6);
-static int (__cdecl *orig_33350)(undefined4, undefined4, int, int, int, float);
+int __cdecl lf_33350(int param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6);
+static int (__cdecl *orig_33350)(int, undefined4, int, int, int, float);
 static SvVerify v_33350 = { "scenario_createcar", -1 };
-static int __cdecl hk_33350(undefined4 param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6)
+static int __cdecl hk_33350(int param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6)
 {
     SV_HOOK_RET(int, v_33350, lf_33350(param_1, param_2, param_3, param_4, param_5, param_6), orig_33350(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
@@ -9815,7 +9950,7 @@ __declspec(naked) static void th_33350(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 229
+        push 232
         push 0x33350
         call sv_record_args
         add esp, 16
@@ -9860,7 +9995,7 @@ __declspec(naked) static void th_34870(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 230
+        push 233
         push 0x34870
         call sv_record_args
         add esp, 16
@@ -9901,7 +10036,7 @@ __declspec(naked) static void th_34c10(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 231
+        push 234
         push 0x34c10
         call sv_record_args
         add esp, 16
@@ -9940,7 +10075,7 @@ __declspec(naked) static void th_3a610(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 232
+        push 235
         push 0x3a610
         call sv_record_args
         add esp, 16
@@ -9979,7 +10114,7 @@ __declspec(naked) static void th_3b0c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 233
+        push 236
         push 0x3b0c0
         call sv_record_args
         add esp, 16
@@ -9995,10 +10130,10 @@ __declspec(naked) static void th_3b0c0(void)
 }
 static uint8_t expect_3b0c0[6] = { 0x81, 0xec, 0xf4, 0x00, 0x00, 0x00 };
 
-int __cdecl lf_3ccc0(int param_1, float * param_2, undefined4 * param_3);
-static int (__cdecl *orig_3ccc0)(int, float *, undefined4 *);
+int __cdecl lf_3ccc0(int param_1, float * param_2, float * param_3);
+static int (__cdecl *orig_3ccc0)(int, float *, float *);
 static SvVerify v_3ccc0 = { "createvehicle", -1 };
-static int __cdecl hk_3ccc0(int param_1, float * param_2, undefined4 * param_3)
+static int __cdecl hk_3ccc0(int param_1, float * param_2, float * param_3)
 {
     SV_HOOK_RET(int, v_3ccc0, lf_3ccc0(param_1, param_2, param_3), orig_3ccc0(param_1, param_2, param_3), NULL);
 }
@@ -10018,7 +10153,7 @@ __declspec(naked) static void th_3ccc0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 234
+        push 237
         push 0x3ccc0
         call sv_record_args
         add esp, 16
@@ -10060,7 +10195,7 @@ __declspec(naked) static void th_3cfe0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 235
+        push 238
         push 0x3cfe0
         call sv_record_args
         add esp, 16
@@ -10102,7 +10237,7 @@ __declspec(naked) static void th_3d500(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 236
+        push 239
         push 0x3d500
         call sv_record_args
         add esp, 16
@@ -10144,7 +10279,7 @@ __declspec(naked) static void th_3da50(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 237
+        push 240
         push 0x3da50
         call sv_record_args
         add esp, 16
@@ -10166,6 +10301,51 @@ __declspec(naked) static void th_3da50(void)
     }
 }
 static uint8_t expect_3da50[8] = { 0x83, 0xec, 0x0c, 0x55, 0x8b, 0x6c, 0x24, 0x14 };
+
+int __cdecl lf_40aa0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float param_6);
+static int (__cdecl *orig_40aa0)(float *, undefined4 *, float *, int, float *, float);
+static SvVerify v_40aa0 = { "sphereintersectarea", -1 };
+static int __cdecl hk_40aa0(float * param_1, undefined4 * param_2, float * param_3, int param_4, float * param_5, float param_6)
+{
+    SV_HOOK_RET(int, v_40aa0, lf_40aa0(param_1, param_2, param_3, param_4, param_5, param_6), orig_40aa0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+}
+__declspec(naked) static void th_40aa0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 6
+        push eax
+        push 241
+        push 0x40aa0
+        call sv_record_args
+        add esp, 16
+        push dword ptr [ebp + 28]
+        push dword ptr [ebp + 24]
+        push dword ptr [ebp + 20]
+        push dword ptr [ebp + 16]
+        push dword ptr [ebp + 12]
+        push dword ptr [ebp + 8]
+        call hk_40aa0
+        add esp, 24
+        fxrstor [esp]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_40aa0[6] = { 0x81, 0xec, 0xa4, 0x00, 0x00, 0x00 };
 
 void __cdecl lf_48ec0(void);
 static void (__cdecl *orig_48ec0)(void);
@@ -10190,7 +10370,7 @@ __declspec(naked) static void th_48ec0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 238
+        push 242
         push 0x48ec0
         call sv_record_args
         add esp, 16
@@ -10206,10 +10386,10 @@ __declspec(naked) static void th_48ec0(void)
 }
 static uint8_t expect_48ec0[6] = { 0x83, 0xec, 0x60, 0x56, 0x33, 0xf6 };
 
-void __cdecl lf_4c720(undefined4 param_1);
-static void (__cdecl *orig_4c720)(undefined4);
+void __cdecl lf_4c720(int param_1);
+static void (__cdecl *orig_4c720)(int);
 static SvVerify v_4c720 = { "human_buildmuscles", -1 };
-static void __cdecl hk_4c720(undefined4 param_1)
+static void __cdecl hk_4c720(int param_1)
 {
     SV_HOOK_VOID(v_4c720, lf_4c720(param_1), orig_4c720(param_1), NULL);
 }
@@ -10229,7 +10409,7 @@ __declspec(naked) static void th_4c720(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 239
+        push 243
         push 0x4c720
         call sv_record_args
         add esp, 16
@@ -10270,7 +10450,7 @@ __declspec(naked) static void th_4c8c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 240
+        push 244
         push 0x4c8c0
         call sv_record_args
         add esp, 16
@@ -10309,7 +10489,7 @@ __declspec(naked) static void th_4cee0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 241
+        push 245
         push 0x4cee0
         call sv_record_args
         add esp, 16
@@ -10327,10 +10507,10 @@ __declspec(naked) static void th_4cee0(void)
 }
 static uint8_t expect_4cee0[5] = { 0x83, 0xec, 0x2c, 0x53, 0x55 };
 
-undefined4 __cdecl lf_4d630(float * param_1, undefined4 * param_2, float param_3);
-static undefined4 (__cdecl *orig_4d630)(float *, undefined4 *, float);
+undefined4 __cdecl lf_4d630(float * param_1, float * param_2, float param_3);
+static undefined4 (__cdecl *orig_4d630)(float *, float *, float);
 static SvVerify v_4d630 = { "circleintersectlevel", -1 };
-static undefined4 __cdecl hk_4d630(float * param_1, undefined4 * param_2, float param_3)
+static undefined4 __cdecl hk_4d630(float * param_1, float * param_2, float param_3)
 {
     SV_HOOK_RET(undefined4, v_4d630, lf_4d630(param_1, param_2, param_3), orig_4d630(param_1, param_2, param_3), NULL);
 }
@@ -10350,7 +10530,7 @@ __declspec(naked) static void th_4d630(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 242
+        push 246
         push 0x4d630
         call sv_record_args
         add esp, 16
@@ -10392,7 +10572,7 @@ __declspec(naked) static void th_4d750(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 243
+        push 247
         push 0x4d750
         call sv_record_args
         add esp, 16
@@ -10433,7 +10613,7 @@ __declspec(naked) static void th_4d850(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 244
+        push 248
         push 0x4d850
         call sv_record_args
         add esp, 16
@@ -10474,7 +10654,7 @@ __declspec(naked) static void th_4da10(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 245
+        push 249
         push 0x4da10
         call sv_record_args
         add esp, 16
@@ -10492,10 +10672,10 @@ __declspec(naked) static void th_4da10(void)
 }
 static uint8_t expect_4da10[8] = { 0x83, 0xec, 0x34, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-undefined4 __cdecl lf_4e060(undefined4 param_1, int param_2, undefined4 param_3);
-static undefined4 (__cdecl *orig_4e060)(undefined4, int, undefined4);
+undefined4 __cdecl lf_4e060(int param_1, int param_2, undefined4 param_3);
+static undefined4 (__cdecl *orig_4e060)(int, int, undefined4);
 static SvVerify v_4e060 = { "logic_createcar", -1 };
-static undefined4 __cdecl hk_4e060(undefined4 param_1, int param_2, undefined4 param_3)
+static undefined4 __cdecl hk_4e060(int param_1, int param_2, undefined4 param_3)
 {
     SV_HOOK_RET(undefined4, v_4e060, lf_4e060(param_1, param_2, param_3), orig_4e060(param_1, param_2, param_3), NULL);
 }
@@ -10515,7 +10695,7 @@ __declspec(naked) static void th_4e060(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 246
+        push 250
         push 0x4e060
         call sv_record_args
         add esp, 16
@@ -10557,7 +10737,7 @@ __declspec(naked) static void th_4e0d0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 247
+        push 251
         push 0x4e0d0
         call sv_record_args
         add esp, 16
@@ -10599,7 +10779,7 @@ __declspec(naked) static void th_4e2c0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 248
+        push 252
         push 0x4e2c0
         call sv_record_args
         add esp, 16
@@ -10641,7 +10821,7 @@ __declspec(naked) static void th_4e500(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 249
+        push 253
         push 0x4e500
         call sv_record_args
         add esp, 16
@@ -10660,10 +10840,10 @@ __declspec(naked) static void th_4e500(void)
 }
 static uint8_t expect_4e500[5] = { 0x83, 0xec, 0x1c, 0x53, 0x55 };
 
-void __cdecl lf_4f720(undefined4 * param_1);
-static void (__cdecl *orig_4f720)(undefined4 *);
+void __cdecl lf_4f720(float * param_1);
+static void (__cdecl *orig_4f720)(float *);
 static SvVerify v_4f720 = { "playerai", -1 };
-static void __cdecl hk_4f720(undefined4 * param_1)
+static void __cdecl hk_4f720(float * param_1)
 {
     SV_HOOK_VOID(v_4f720, lf_4f720(param_1), orig_4f720(param_1), NULL);
 }
@@ -10683,7 +10863,7 @@ __declspec(naked) static void th_4f720(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 250
+        push 254
         push 0x4f720
         call sv_record_args
         add esp, 16
@@ -10724,7 +10904,7 @@ __declspec(naked) static void th_500e0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 251
+        push 255
         push 0x500e0
         call sv_record_args
         add esp, 16
@@ -10765,7 +10945,7 @@ __declspec(naked) static void th_50ae0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 252
+        push 256
         push 0x50ae0
         call sv_record_args
         add esp, 16
@@ -10807,7 +10987,7 @@ __declspec(naked) static void th_542a0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 253
+        push 257
         push 0x542a0
         call sv_record_args
         add esp, 16
@@ -10823,10 +11003,10 @@ __declspec(naked) static void th_542a0(void)
 }
 static uint8_t expect_542a0[8] = { 0x83, 0xec, 0x5c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_55700(int param_1);
-static void (__cdecl *orig_55700)(int);
+void __cdecl lf_55700(float param_1);
+static void (__cdecl *orig_55700)(float);
 static SvVerify v_55700 = { "logic_playeractions", -1 };
-static void __cdecl hk_55700(int param_1)
+static void __cdecl hk_55700(float param_1)
 {
     SV_HOOK_VOID(v_55700, lf_55700(param_1), orig_55700(param_1), NULL);
 }
@@ -10846,7 +11026,7 @@ __declspec(naked) static void th_55700(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 254
+        push 258
         push 0x55700
         call sv_record_args
         add esp, 16
@@ -10887,7 +11067,7 @@ __declspec(naked) static void th_56710(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 255
+        push 259
         push 0x56710
         call sv_record_args
         add esp, 16
@@ -10926,7 +11106,7 @@ __declspec(naked) static void th_585b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 256
+        push 260
         push 0x585b0
         call sv_record_args
         add esp, 16
@@ -10967,7 +11147,7 @@ __declspec(naked) static void th_58ef0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 257
+        push 261
         push 0x58ef0
         call sv_record_args
         add esp, 16
@@ -11009,7 +11189,7 @@ __declspec(naked) static void th_5aa60(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 258
+        push 262
         push 0x5aa60
         call sv_record_args
         add esp, 16
@@ -11048,7 +11228,7 @@ __declspec(naked) static void th_5cf70(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 259
+        push 263
         push 0x5cf70
         call sv_record_args
         add esp, 16
@@ -11165,6 +11345,7 @@ static SvHook g_lifted[] = {
     { "lineintersectplane", 0xc120, (void *)th_0c120, 7, expect_0c120, mask_all, (void **)&orig_0c120, 0, 0 },
     { "lineintersectplanetwosided", 0xc290, (void *)th_0c290, 7, expect_0c290, mask_all, (void **)&orig_0c290, 0, 0 },
     { "lineintersecttriangle", 0xc420, (void *)th_0c420, 8, expect_0c420, mask_all, (void **)&orig_0c420, 0, 0 },
+    { "lineintersecttriangletwosided", 0xc680, (void *)th_0c680, 8, expect_0c680, mask_all, (void **)&orig_0c680, 0, 0 },
     { "pointdistanceline", 0xc8f0, (void *)th_0c8f0, 7, expect_0c8f0, mask_all, (void **)&orig_0c8f0, 0, 0 },
     { "lineintersectline2d", 0xcab0, (void *)th_0cab0, 8, expect_0cab0, mask_all, (void **)&orig_0cab0, 0, 0 },
     { "sphereintersectline2d", 0xcca0, (void *)th_0cca0, 7, expect_0cca0, mask_all, (void **)&orig_0cca0, 0, 0 },
@@ -11211,6 +11392,7 @@ static SvHook g_lifted[] = {
     { "city_createelevator", 0x154b0, (void *)th_154b0, 10, expect_154b0, mask_all, (void **)&orig_154b0, 0, 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)th_155e0, 6, expect_155e0, mask_all, (void **)&orig_155e0, 0, 0 },
     { "packorientation", 0x15df0, (void *)th_15df0, 5, expect_15df0, mask_all, (void **)&orig_15df0, 0, 0 },
+    { "unpackorientation", 0x16320, (void *)th_16320, 7, expect_16320, mask_all, (void **)&orig_16320, 0, 0 },
     { "packangle", 0x16680, (void *)th_16680, 7, expect_16680, mask_all, (void **)&orig_16680, 0, 0 },
     { "unpackangle", 0x16710, (void *)th_16710, 5, expect_16710, mask_all, (void **)&orig_16710, 0, 0 },
     { "packposition", 0x16790, (void *)th_16790, 5, expect_16790, mask_all, (void **)&orig_16790, 0, 0 },
@@ -11281,6 +11463,7 @@ static SvHook g_lifted[] = {
     { "area_setblockcolor", 0x29830, (void *)th_29830, 5, expect_29830, mask_all, (void **)&orig_29830, 0, 0 },
     { "area_deleteblock", 0x29970, (void *)th_29970, 8, expect_29970, mask_all, (void **)&orig_29970, 0, 0 },
     { "area_breakblock", 0x2c020, (void *)th_2c020, 7, expect_2c020, mask_all, (void **)&orig_2c020, 0, 0 },
+    { "lineintersectarea", 0x2c0c0, (void *)th_2c0c0, 6, expect_2c0c0, mask_all, (void **)&orig_2c0c0, 0, 0 },
     { "sphereintersectnormalblock", 0x2cda0, (void *)th_2cda0, 7, expect_2cda0, mask_all, (void **)&orig_2cda0, 0, 0 },
     { "sphereintersectspecblock", 0x2d2d0, (void *)th_2d2d0, 9, expect_2d2d0, mask_all, (void **)&orig_2d2d0, 0, 0 },
     { "circleintersectnormalblock", 0x2d7f0, (void *)th_2d7f0, 7, expect_2d7f0, mask_all, (void **)&orig_2d7f0, 0, 0 },
@@ -11311,6 +11494,7 @@ static SvHook g_lifted[] = {
     { "calculateplayervoice", 0x3cfe0, (void *)th_3cfe0, 6, expect_3cfe0, mask_all, (void **)&orig_3cfe0, 0, 0 },
     { "ai_assessthreats", 0x3d500, (void *)th_3d500, 6, expect_3d500, mask_all, (void **)&orig_3d500, 0, 0 },
     { "area_createblock", 0x3da50, (void *)th_3da50, 8, expect_3da50, mask_all, (void **)&orig_3da50, 0, 0 },
+    { "sphereintersectarea", 0x40aa0, (void *)th_40aa0, 6, expect_40aa0, mask_all, (void **)&orig_40aa0, 0, 0 },
     { "bulletsimulation", 0x48ec0, (void *)th_48ec0, 6, expect_48ec0, mask_all, (void **)&orig_48ec0, 0, 0 },
     { "human_buildmuscles", 0x4c720, (void *)th_4c720, 9, expect_4c720, mask_all, (void **)&orig_4c720, 0, 0 },
     { "itemlogic", 0x4c8c0, (void *)th_4c8c0, 5, expect_4c8c0, mask_all, (void **)&orig_4c8c0, 0, 0 },
@@ -11428,6 +11612,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_0c120,
     &v_0c290,
     &v_0c420,
+    &v_0c680,
     &v_0c8f0,
     &v_0cab0,
     &v_0cca0,
@@ -11474,6 +11659,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_154b0,
     &v_155e0,
     &v_15df0,
+    &v_16320,
     &v_16680,
     &v_16710,
     &v_16790,
@@ -11544,6 +11730,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_29830,
     &v_29970,
     &v_2c020,
+    &v_2c0c0,
     &v_2cda0,
     &v_2d2d0,
     &v_2d7f0,
@@ -11574,6 +11761,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_3cfe0,
     &v_3d500,
     &v_3da50,
+    &v_40aa0,
     &v_48ec0,
     &v_4c720,
     &v_4c8c0,
@@ -11612,7 +11800,7 @@ int sv_hooks_lifted_install(void)
     lf_x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
-    int to = sv_config_int("lifted_to", 260);
+    int to = sv_config_int("lifted_to", 264);
     relocate(expect_01cd0, 3);
     relocate(expect_04a10, 2);
     relocate(expect_04bb0, 2);
@@ -11681,20 +11869,20 @@ int sv_hooks_lifted_install(void)
     relocate(expect_585b0, 5);
     relocate(expect_58ef0, 5);
     relocate(expect_5aa60, 4);
-    if (to > 260)
-        to = 260;
+    if (to > 264)
+        to = 264;
     if (from < 0)
         from = 0;
     if (from >= to)
         return 0;
-    sv_log("lifted hooks %d..%d of 260", from, to);
+    sv_log("lifted hooks %d..%d of 264", from, to);
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
 void sv_hooks_lifted_summary(void)
 {
     int i;
-    for (i = 0; i < 260; i++)
+    for (i = 0; i < 264; i++)
         if (g_lifted_stats[i]->calls)
             sv_verify_summary(g_lifted_stats[i]);
 }

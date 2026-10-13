@@ -360,7 +360,8 @@ def raw_float_uses(body, undef, types=None):
     return ''.join(out)
 
 
-STACK_VAR_RE = re.compile(r'^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local|[a-z]+Stack)_([0-9a-f]+))\s*(\[\d+\])?\s*;[ \t]*$',
+# A declaration, not a statement: "return local_4;" is not a variable of type "return".
+STACK_VAR_RE = re.compile(r'^(\s*)(?!(?:return|goto|else|case|do)\b)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local|[a-z]+Stack)_([0-9a-f]+))\s*(\[\d+\])?\s*;[ \t]*$',
                           flags=re.M)
 
 
