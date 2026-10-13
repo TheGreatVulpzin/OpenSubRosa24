@@ -369,13 +369,11 @@ def lvalue_end(s, j, undef):
     return -1
 
 
-def raw_float_uses(body, undef, floats=frozenset(), types=None):
-    """Ghidra: a cast from raw bytes (undefined4) to float is a bit copy, and so is a float
-    stored into raw bytes. In C both convert the number. Rewrite:
-      (float)X        -> (*(float *)&(X))
-      X = <float>;    -> *(float *)&(X) = <float>;
-    for X of raw-byte type (variable, (&DAT_x)[i] or *(undefined4 *)p). For 8 raw bytes
-    (undefined8) the value is a double."""
+def raw_float_uses(body, undef, types=None):
+    """Ghidra: a cast from raw bytes (undefined4) to float is a bit copy. In C it converts
+    the number. Rewrite (float)X -> (*(float *)&(X)) for X of raw-byte type (variable,
+    (&DAT_x)[i] or *(undefined4 *)p). For 8 raw bytes (undefined8) the value is a double.
+    A float stored into raw bytes is marked in LiftExport.java (floatStores), from the p-code."""
     out, i = [], 0
     for m in re.finditer(r'\(float\)\s*', body):
         if m.start() < i:
@@ -397,21 +395,7 @@ def raw_float_uses(body, undef, floats=frozenset(), types=None):
             out.append(f'(*(float *)&({body[m.end():end]}))')
         i = end
     out.append(body[i:])
-    body = ''.join(out)
-
-    def store(m):
-        lv, rhs = m.group(2), m.group(3)
-        end = lvalue_end(lv, 0, undef)
-        floatish = (FLOATISH_RE.search(rhs) or expr_type(rhs, types or {}) in ('float', 'float10', 'double') or re.search(r'\*\s*\(float \*\)', rhs)
-                    or any(re.search(r'\b' + re.escape(n) + r'\b', rhs) for n in floats))
-        if end != len(lv) or not floatish or re.fullmatch(r'0x[0-9a-fA-F]+', rhs.strip()):
-            return m.group(0)
-        if lvalue_size(lv, 0, undef) == 8:
-            return f'{m.group(1)}*(double *)&({lv}) = {rhs};'
-        return f'{m.group(1)}*(float *)&({lv}) = {rhs};'
-    # The "=" of "<=", ">=", "!=" or "+=" is not an assignment: "if (x <= 1.0) {" must not
-    # take the next line as its right side.
-    return re.sub(r'^(\s*)([^=;\n]+?)\s*(?<![<>!+\-*/%&|^])=\s*([^=;][^;]*);', store, body, flags=re.M)
+    return ''.join(out)
 
 
 STACK_VAR_RE = re.compile(r'^(\s*)([A-Za-z_][\w ]*?)\s*(\**)\s*((?:local|[a-z]+Stack)_([0-9a-f]+))\s*(\[\d+\])?\s*;[ \t]*$',
@@ -609,8 +593,7 @@ def lift_function(f, rva, headers, imports_used):
     body = partial_access(strip_comments(c)).strip()
     body = re.sub(r'\b__cdecl_keep[CDF]+\b', '__cdecl', body)
     body = re.sub(r'\bNAN\b(?!\s*\()', 'LF_NAN', body)
-    floats = {n for n, t in local_types(body, params).items() if t in ('float', 'float10', 'double')}
-    body = raw_float_uses(body, undefined_names(body, params, f['globals']), floats,
+    body = raw_float_uses(body, undefined_names(body, params, f['globals']),
                           dict({g['name']: g['type'].strip() for g in f['globals']}, **local_types(body, params)))
     body = pointer_float_casts(body, params, f['globals'])
     body = call_arg_bits(body, callee_params, pointer_names(body, params, f['globals']),

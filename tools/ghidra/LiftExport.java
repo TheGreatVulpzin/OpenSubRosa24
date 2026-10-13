@@ -9,6 +9,8 @@
 
 import ghidra.app.decompiler.ClangBreak;
 import ghidra.app.decompiler.ClangNode;
+import ghidra.app.decompiler.ClangOpToken;
+import ghidra.app.decompiler.ClangStatement;
 import ghidra.app.decompiler.ClangSyntaxToken;
 import ghidra.app.decompiler.ClangToken;
 import ghidra.app.decompiler.ClangTypeToken;
@@ -19,10 +21,13 @@ import ghidra.app.decompiler.DecompileResults;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.data.DataType;
+import ghidra.program.model.data.Pointer;
+import ghidra.program.model.data.Undefined;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.pcode.HighFunction;
 import ghidra.program.model.pcode.HighSymbol;
 import ghidra.program.model.pcode.HighVariable;
+import ghidra.program.model.pcode.PcodeOp;
 import ghidra.program.model.reloc.Relocation;
 
 import java.io.PrintWriter;
@@ -97,6 +102,8 @@ public class LiftExport extends GhidraScript {
         for (ClangNode n : leaves) t.add((ClangToken) n);
         StringBuilder sb = new StringBuilder();
         Map<Integer, Integer> closeAfter = new HashMap<>();
+        Map<Integer, String> openBefore = new HashMap<>();
+        floatStores(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -104,6 +111,8 @@ public class LiftExport extends GhidraScript {
                 for (int k = 0; k < ((ClangBreak) tok).getIndent(); k++) sb.append(' ');
                 continue;
             }
+            String lhsOpen = openBefore.get(i);
+            if (lhsOpen != null) sb.append(lhsOpen);
             int[] cast = bitCast(t, i);
             if (cast != null) {
                 // cast = {index of ')' of the cast, operand end index, 0 = to float / 1 = from float}
@@ -120,6 +129,83 @@ public class LiftExport extends GhidraScript {
             if (close != null) for (int k = 0; k < close; k++) sb.append(')');
         }
         return sb.toString();
+    }
+
+    private static final Set<Integer> FLOAT_OPS = Set.of(
+            PcodeOp.FLOAT_ADD, PcodeOp.FLOAT_SUB, PcodeOp.FLOAT_MULT, PcodeOp.FLOAT_DIV,
+            PcodeOp.FLOAT_NEG, PcodeOp.FLOAT_ABS, PcodeOp.FLOAT_SQRT, PcodeOp.FLOAT_INT2FLOAT,
+            PcodeOp.FLOAT_FLOAT2FLOAT, PcodeOp.FLOAT_CEIL, PcodeOp.FLOAT_FLOOR, PcodeOp.FLOAT_ROUND);
+
+    private static boolean isFloat(DataType d, int len) {
+        return d != null && d.getLength() == len && d.getName().equals(len == 4 ? "float" : "double");
+    }
+
+    /* A float stored into raw bytes (undefined4 or undefined8). Ghidra prints "X = f;" and
+     * means the bits of f. In C the assignment converts the number (0.42 becomes 0). Mark
+     * the left side: "*(float *)&(X) = f;" (double for 8 bytes). The p-code gives the types,
+     * so "<=" in a condition or a statement on many lines does not matter. */
+    private void floatStores(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        Map<ClangToken, Integer> index = new IdentityHashMap<>();
+        for (int i = 0; i < t.size(); i++) index.put(t.get(i), i);
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!(tok instanceof ClangOpToken) || !tok.getText().equals("=")) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null) continue;
+            DataType dst, val;
+            boolean floatValue;
+            if (op.getOpcode() == PcodeOp.STORE) {
+                if (op.getNumInputs() < 3 || op.getInput(1).getHigh() == null || op.getInput(2).getHigh() == null)
+                    continue;
+                DataType p = op.getInput(1).getHigh().getDataType();
+                if (!(p instanceof Pointer)) continue;
+                dst = ((Pointer) p).getDataType();
+                val = op.getInput(2).getHigh().getDataType();
+                floatValue = dst != null && isFloat(val, dst.getLength());
+            } else {
+                // A variable: the C declaration has the symbol type (undefined8 local_30), but
+                // the decompiler can use the variable as another type (double).
+                HighVariable h = op.getOutput() == null ? null : op.getOutput().getHigh();
+                if (h == null) continue;
+                HighSymbol sym = h.getSymbol();
+                dst = sym != null && sym.getDataType() != null ? sym.getDataType() : h.getDataType();
+                int n = dst.getLength();
+                floatValue = isFloat(h.getDataType(), n)
+                        || FLOAT_OPS.contains(op.getOpcode()) && op.getOutput().getSize() == n
+                        || op.getOpcode() == PcodeOp.COPY && op.getInput(0).getHigh() != null
+                                && isFloat(op.getInput(0).getHigh().getDataType(), n);
+            }
+            if (dst == null || !(dst instanceof Undefined) || !floatValue) continue;
+            int len = dst.getLength();
+            if (len != 4 && len != 8) continue;
+            // "X = 0x3f800000;" already gives the bits.
+            int rhs = next(t, i);
+            if (rhs >= 0 && t.get(rhs).getText().matches("-?0x[0-9a-fA-F]+")) {
+                int after = next(t, rhs);
+                if (after >= 0 && t.get(after).getText().equals(";")) continue;
+            }
+            // The left side: from the first token of the statement to the token before "=".
+            ClangNode s = tok.Parent();
+            while (s != null && !(s instanceof ClangStatement)) s = s.Parent();
+            if (s == null) continue;
+            List<ClangNode> leaves = new ArrayList<>();
+            s.flatten(leaves);
+            Integer first = null;
+            for (ClangNode n : leaves) {
+                if (!((ClangToken) n).getText().isBlank()) {
+                    first = index.get((ClangToken) n);
+                    break;
+                }
+            }
+            int last = i - 1;
+            while (last >= 0 && t.get(last).getText().isBlank()) last--;
+            if (first == null || first > last) continue;
+            String head = t.get(first).getText();
+            if (head.equals("for") || head.equals("if") || head.equals("while") || head.equals("return")) continue;
+            openBefore.merge(first, len == 4 ? "*(float *)&(" : "*(double *)&(", (a, b) -> b + a);
+            closeAfter.merge(last, 1, Integer::sum);
+        }
     }
 
     private static int next(List<ClangToken> t, int i) {

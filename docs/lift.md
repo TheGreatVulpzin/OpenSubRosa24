@@ -97,6 +97,19 @@ The same script gives `_ftol2` (`0x5ce90`) a call fixup with its exact effect: i
 
 The Ghidra symbol map often keeps the listing type of a global (`undefined4`). The decompiler can use the same global as a `float`. In C, an `undefined4` global that receives `1.0` stores the int 1. `LiftExport.java` therefore uses the type that the decompiler used when it has the same size. This bug made `area_block_addbasicsurface` write `0x00000001` where the original writes `1.0`.
 
+## Float stores into raw bytes
+
+Ghidra prints `X = f;` when a float goes into raw bytes (`undefined4` or `undefined8`). The original copies the bits. In C the assignment converts the number, so 0.42 becomes 0. `LiftExport.java` (`floatStores`) marks the left side: `*(float *)&(X) = f;`, or `double` for 8 bytes.
+
+The rule uses the p-code, not the text:
+
+- A `STORE` through a pointer: the pointed type is raw bytes, and the stored value has a float type.
+- An assignment to a variable: the declared type (the symbol type) is raw bytes, and the decompiler uses the variable as a float. Ghidra can declare `undefined8 local_30` and use `local_30` as a `double`.
+
+The first version of this rule was a regex in `lift.py`. It read the `=` of `<=` as an assignment and it marked integer results such as `(int)(longlong)(x)` as floats. The p-code rule fixed `playerbuystock`, `playersellstock`, `playerdeathtax` and the crashes of `createobject`.
+
+`tools/ghidra/DumpTokens.java` prints the tokens of some functions with their p-code op and types. Use it to check a rule.
+
 ## Verifier: scope rounds
 
 A scope round protects only the pages that the function wrote before, plus a margin of 16 pages on each side. A write outside the scope is not undone before the original runs, so a scope round can show a false difference. The verifier does not count a difference in a scope round. It makes the next verification of the hook a full round, and only a difference in a full round counts.
