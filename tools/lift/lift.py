@@ -381,6 +381,12 @@ def raw_float_uses(body, undef, floats=frozenset(), types=None):
         if m.start() < i:
             continue
         end = lvalue_end(body, m.end(), undef)
+        if end < 0 and types:
+            # An element of a raw-byte pointer: (float)p[1] or (float)*p with p undefined4 *.
+            em = re.match(r'\*?\s*[A-Za-z_]\w*(\s*\[[^\[\]]*\])?', body[m.end():])
+            if em and (em.group(1) or em.group(0).startswith('*')) and \
+                    expr_type(em.group(0), types) == 'undefined4':
+                end = m.end() + em.end()
         if end < 0:
             continue
         out.append(body[i:m.start()])

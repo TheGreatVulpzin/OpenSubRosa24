@@ -3145,7 +3145,7 @@ void __cdecl lf_06840(void)
   if (DAT_07a1ea60 != 0) {
     puVar4 = &DAT_1757960c;
     do {
-      *puVar4 = (int)(longlong)(float)puVar4[-2];
+      *puVar4 = (int)(longlong)(*(float *)&(puVar4[-2]));
       uVar3 = DAT_0f837318;
       uVar2 = DAT_094dc578;
       puVar4 = puVar4 + 5;
@@ -25249,7 +25249,7 @@ void __cdecl lf_28a90(int param_1,undefined4 param_2,int param_3,int param_4,und
   fVar4 = *(float *)(&DAT_0b051c04 + param_3 * 0x14);
   fVar5 = *(float *)(&DAT_0b051c08 + iVar1);
   fVar6 = *(float *)(&DAT_0b051c08 + param_3 * 0x14);
-  fVar7 = (float)param_5[1];
+  fVar7 = (*(float *)&(param_5[1]));
   pfVar2 = (float *)(&DAT_0b059340 + *(int *)(&DAT_0b05931c + iVar8) * 0x44 + iVar8);
   *pfVar2 = *(float *)(&DAT_0b051c00 + param_3 * 0x14) +
             fVar7 * (*(float *)(&DAT_0b051c00 + param_4 * 0x14) -
@@ -29154,11 +29154,11 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 param_3,float *param_
               fVar1 = (*(float *)&((&DAT_05998504)[iVar20 * 0x208c + iVar18 * 0x26]));
               puVar12[0x29] = fVar1 * 0.0;
               fVar1 = fVar1 * 0.0 +
-                      (float)puVar12[0x26] + (float)puVar12[0x27] + (float)puVar12[0x28];
-              puVar12[0x26] = (float)puVar12[0x26] / fVar1;
-              puVar12[0x27] = (float)puVar12[0x27] / fVar1;
-              puVar12[0x28] = (float)puVar12[0x28] / fVar1;
-              puVar12[0x29] = (float)puVar12[0x29] / fVar1;
+                      (*(float *)&(puVar12[0x26])) + (*(float *)&(puVar12[0x27])) + (*(float *)&(puVar12[0x28]));
+              puVar12[0x26] = (*(float *)&(puVar12[0x26])) / fVar1;
+              puVar12[0x27] = (*(float *)&(puVar12[0x27])) / fVar1;
+              puVar12[0x28] = (*(float *)&(puVar12[0x28])) / fVar1;
+              puVar12[0x29] = (*(float *)&(puVar12[0x29])) / fVar1;
               if (uVar17 == 0) {
                 puVar12[0x2a] = 0xbe000000;
               }
@@ -29169,24 +29169,24 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 param_3,float *param_
               puVar12[0x2e] = puVar13[-0xc];
               puVar12[0x2f] = (&DAT_059984f8)[iVar20 * 0x208c + iVar18 * 0x26];
               puVar12[0x30] = (&DAT_059984fc)[iVar20 * 0x208c + iVar18 * 0x26];
-              puVar12[0x31] = (float)puVar13[-0xb] * 0.875;
-              puVar12[0x32] = (float)puVar13[-10] * 0.875;
+              puVar12[0x31] = (*(float *)&(puVar13[-0xb])) * 0.875;
+              puVar12[0x32] = (*(float *)&(puVar13[-10])) * 0.875;
               puVar12[0x33] = (*(float *)&((&DAT_05998500)[iVar20 * 0x208c + iVar18 * 0x26])) * 0.125;
               fVar1 = (*(float *)&((&DAT_05998504)[iVar20 * 0x208c + iVar18 * 0x26]));
               puVar12[0x34] = fVar1 * 0.125;
               fVar1 = fVar1 * 0.125 +
-                      (float)puVar12[0x31] + (float)puVar12[0x32] + (float)puVar12[0x33];
-              puVar12[0x31] = (float)puVar12[0x31] / fVar1;
-              puVar12[0x32] = (float)puVar12[0x32] / fVar1;
-              puVar12[0x33] = (float)puVar12[0x33] / fVar1;
-              puVar12[0x34] = (float)puVar12[0x34] / fVar1;
+                      (*(float *)&(puVar12[0x31])) + (*(float *)&(puVar12[0x32])) + (*(float *)&(puVar12[0x33]));
+              puVar12[0x31] = (*(float *)&(puVar12[0x31])) / fVar1;
+              puVar12[0x32] = (*(float *)&(puVar12[0x32])) / fVar1;
+              puVar12[0x33] = (*(float *)&(puVar12[0x33])) / fVar1;
+              puVar12[0x34] = (*(float *)&(puVar12[0x34])) / fVar1;
               if (uVar17 == 0) {
                 puVar12[0x35] = 0x3e000000;
               }
               else {
                 puVar12[0x35] = 0xbe000000;
               }
-              fVar1 = (float)puVar13[-8];
+              fVar1 = (*(float *)&(puVar13[-8]));
               local_38 = local_38 + 1;
               puVar13 = puVar13 + 0x26;
               puVar12[0x20] = fVar1;
@@ -34939,9 +34939,9 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,undefined4 *param_3)
   param_3[6] = (&DAT_05992654)[iVar4 * 0x208c];
   param_3[7] = (&DAT_05992658)[iVar4 * 0x208c];
   param_3[8] = (&DAT_0599265c)[iVar4 * 0x208c];
-  local_c = (fVar1 - (float)param_3[6] * 5.5) + (float)param_3[3] * 0.5;
-  local_8 = (float)param_3[4] * 0.5 + (fVar2 - (float)param_3[7] * 5.5);
-  local_4 = (float)param_3[5] * 0.5 + (fVar3 - (float)param_3[8] * 5.5);
+  local_c = (fVar1 - (*(float *)&(param_3[6])) * 5.5) + (*(float *)&(param_3[3])) * 0.5;
+  local_8 = (*(float *)&(param_3[4])) * 0.5 + (fVar2 - (*(float *)&(param_3[7])) * 5.5);
+  local_4 = (*(float *)&(param_3[5])) * 0.5 + (fVar3 - (*(float *)&(param_3[8])) * 5.5);
   iVar5 = FUN_00431800(0xd,&local_c,0,param_3,0);
   (&DAT_059981e4)[iVar5 * 0x208c] = iVar4;
   param_1 = 0;
@@ -34969,9 +34969,9 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,undefined4 *param_3)
   param_3[6] = (&DAT_05992654)[iVar4 * 0x208c];
   param_3[7] = (&DAT_05992658)[iVar4 * 0x208c];
   param_3[8] = (&DAT_0599265c)[iVar4 * 0x208c];
-  local_c = fVar1 + (float)param_3[6] * 5.5 + (float)param_3[3] * 0.5;
-  local_8 = (float)param_3[4] * 0.5 + (float)param_3[7] * 5.5 + fVar2;
-  local_4 = (float)param_3[5] * 0.5 + (float)param_3[8] * 5.5 + fVar3;
+  local_c = fVar1 + (*(float *)&(param_3[6])) * 5.5 + (*(float *)&(param_3[3])) * 0.5;
+  local_8 = (*(float *)&(param_3[4])) * 0.5 + (*(float *)&(param_3[7])) * 5.5 + fVar2;
+  local_4 = (*(float *)&(param_3[5])) * 0.5 + (*(float *)&(param_3[8])) * 5.5 + fVar3;
   iVar5 = FUN_00431800(0xd,&local_c,0,param_3,0);
   (&DAT_059981e4)[iVar5 * 0x208c] = iVar4;
   param_1 = 2;
