@@ -27,22 +27,25 @@ static const char *exe_dir(void)
 
 void sv_log(const char *fmt, ...)
 {
-    char path[MAX_PATH];
-    FILE *f;
+    /* The file stays open. Each line is flushed, so a crash report is complete. */
+    static FILE *f;
     SYSTEMTIME t;
     va_list ap;
 
-    snprintf(path, sizeof path, "%ssubvulpes.log", exe_dir());
-    f = fopen(path, "a");
-    if (!f)
-        return;
+    if (!f) {
+        char path[MAX_PATH];
+        snprintf(path, sizeof path, "%ssubvulpes.log", exe_dir());
+        f = fopen(path, "a");
+        if (!f)
+            return;
+    }
     GetLocalTime(&t);
     fprintf(f, "%02d:%02d:%02d.%03d ", t.wHour, t.wMinute, t.wSecond, t.wMilliseconds);
     va_start(ap, fmt);
     vfprintf(f, fmt, ap);
     va_end(ap);
     fputc('\n', f);
-    fclose(f);
+    fflush(f);
 }
 
 int sv_config_int(const char *key, int def)

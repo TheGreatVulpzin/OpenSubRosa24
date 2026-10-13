@@ -26,6 +26,7 @@ void sv_ev_begin(const char *name);
 void sv_ev_v(uint32_t v);
 void sv_ev_s(const char *s);
 void sv_ev_bytes(char tag, const void *p, size_t n);
+void sv_ev_hash(char tag, const void *p, size_t n);  /* " o#len:hash", not the bytes */
 void sv_ev_r(uint32_t r);
 void sv_ev_end(void);
 

@@ -99,10 +99,47 @@ static void __cdecl w_free(void *p)
     r_free(p);
 }
 
+/* Files opened for reading only. A replay reads them again from the server folder (the map
+ * and the buildings are the same files). So fread and fgetc on such a file write no event:
+ * createlevel alone makes 3.2 million 4-byte reads. The fclose event has the number of read
+ * calls, the number of bytes and a hash of all of them, to check that the file is the same. */
+#define RO_MAX 64
+typedef struct { SvFile *f; uint32_t calls, bytes, hash; } RoFile;
+static RoFile g_ro[RO_MAX];
+
+static RoFile *read_only(SvFile *f)
+{
+    int i;
+    for (i = 0; i < RO_MAX; i++)
+        if (f && g_ro[i].f == f)
+            return &g_ro[i];
+    return NULL;
+}
+
+static void ro_add(RoFile *ro, const void *p, size_t n)
+{
+    const unsigned char *b = (const unsigned char *)p;
+    size_t i;
+    ro->calls++;
+    ro->bytes += (uint32_t)n;
+    for (i = 0; i < n; i++)
+        ro->hash = (ro->hash ^ b[i]) * 16777619u;
+}
+
 static SvFile *(__cdecl *r_fopen)(const char *, const char *);
 static SvFile *__cdecl w_fopen(const char *path, const char *mode)
 {
     SvFile *f = r_fopen(path, mode);
+    if (f && mode && strchr(mode, 'r') && !strchr(mode, '+') && !strchr(mode, 'w') && !strchr(mode, 'a')) {
+        int i;
+        for (i = 0; i < RO_MAX && g_ro[i].f; i++)
+            ;
+        if (i < RO_MAX) {
+            g_ro[i].f = f;
+            g_ro[i].calls = g_ro[i].bytes = 0;
+            g_ro[i].hash = 2166136261u;
+        }
+    }
     if (ON) {
         sv_ev_begin("fopen"); sv_ev_s(path); sv_ev_s(mode); sv_ev_r((uint32_t)(uintptr_t)f); sv_ev_end();
     }
@@ -112,9 +149,20 @@ static SvFile *__cdecl w_fopen(const char *path, const char *mode)
 static int(__cdecl *r_fclose)(SvFile *);
 static int __cdecl w_fclose(SvFile *f)
 {
-    int r = r_fclose(f);
+    RoFile *ro = read_only(f), copy = { 0 };
+    int r;
+    if (ro) {
+        copy = *ro;
+        ro->f = NULL;
+    }
+    r = r_fclose(f);
     if (ON) {
-        sv_ev_begin("fclose"); sv_ev_v((uint32_t)(uintptr_t)f); sv_ev_r((uint32_t)r); sv_ev_end();
+        sv_ev_begin("fclose"); sv_ev_v((uint32_t)(uintptr_t)f);
+        if (copy.f) {
+            /* read-only file: reads, bytes and hash of everything read */
+            sv_ev_v(copy.calls); sv_ev_v(copy.bytes); sv_ev_v(copy.hash);
+        }
+        sv_ev_r((uint32_t)r); sv_ev_end();
     }
     return r;
 }
@@ -123,7 +171,11 @@ static int(__cdecl *r_fgetc)(SvFile *);
 static int __cdecl w_fgetc(SvFile *f)
 {
     int r = r_fgetc(f);
-    if (ON) {
+    RoFile *ro = read_only(f);
+    if (ro) {
+        unsigned char c = (unsigned char)r;
+        ro_add(ro, &c, r == -1 ? 0 : 1);
+    } else if (ON) {
         sv_ev_begin("fgetc"); sv_ev_v((uint32_t)(uintptr_t)f); sv_ev_r((uint32_t)r); sv_ev_end();
     }
     return r;
@@ -144,7 +196,10 @@ static size_t(__cdecl *r_fread)(void *, size_t, size_t, SvFile *);
 static size_t __cdecl w_fread(void *buf, size_t size, size_t count, SvFile *f)
 {
     size_t r = r_fread(buf, size, count, f);
-    if (ON) {
+    RoFile *ro = read_only(f);
+    if (ro) {
+        ro_add(ro, buf, r * size);
+    } else if (ON) {
         sv_ev_begin("fread"); sv_ev_v((uint32_t)size); sv_ev_v((uint32_t)count); sv_ev_v((uint32_t)(uintptr_t)f);
         sv_ev_bytes('o', buf, r * size); sv_ev_r((uint32_t)r); sv_ev_end();
     }

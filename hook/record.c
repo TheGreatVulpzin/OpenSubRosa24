@@ -53,6 +53,18 @@ static uint32_t hash_args(const uint32_t *a, int n)
 static int readable(const void *p, size_t n)
 {
     MEMORY_BASIC_INFORMATION mi;
+    /* The image of the 024d is always mapped. VirtualQuery on its 636 MB .data takes about
+     * 1 ms (Windows measures the whole region), and building_load reads thousands of 4-byte
+     * values: recording took 15 seconds per building. */
+    if (g_image_size && n <= g_image_size && (uintptr_t)p >= sr_base &&
+        (uintptr_t)p - sr_base <= g_image_size - n)  /* no overflow for p near 0xffffffff */
+        return 1;
+    /* The image of the 024d is always mapped. VirtualQuery on its 636 MB .data takes about
+     * 1 ms (Windows measures the whole region), and building_load reads thousands of 4-byte
+     * values: recording took 15 seconds per building. */
+    if (g_image_size && n <= g_image_size && (uintptr_t)p >= sr_base &&
+        (uintptr_t)p - sr_base <= g_image_size - n)  /* no overflow for p near 0xffffffff */
+        return 1;
     if (!VirtualQuery(p, &mi, sizeof mi) || mi.State != MEM_COMMIT)
         return 0;
     if (mi.Protect & (PAGE_NOACCESS | PAGE_GUARD))
@@ -116,24 +128,28 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
 
 #define SCOPE_MAX 8     /* recorded nesting depth */
 #define RET_MAX 256     /* nesting depth of the thunks (return addresses) */
-#define SCOPE_CAP (8u << 20)
+static size_t g_scope_cap = 8u << 20;  /* subvulpes.ini record_cap_mb */
 
 typedef struct {
     int rec;            /* this call is recorded */
     int idx;            /* function slot, for the limit of RECORD_MAX calls */
     char *buf;
     size_t len, cap;
-    int dropped;        /* the call grew over SCOPE_CAP: not written */
+    int dropped;        /* the call grew over the cap: not written */
 } Scope;
 
 static __declspec(thread) uint32_t t_rets[RET_MAX];
 static __declspec(thread) int t_depth;
 static __declspec(thread) Scope t_scope[SCOPE_MAX];
 static int g_rec_imports = -1;
+static int g_rec_trace;  /* subvulpes.ini record_trace=1: log each begin and end */
 static uint32_t g_rec_rva[RECORD_FUNCS];
 static int g_rec_nfuncs;
 static uint32_t g_rec_seen[RECORD_FUNCS][RECORD_MAX];
 static unsigned char g_rec_count[RECORD_FUNCS];
+static uint32_t g_rec_calls[RECORD_FUNCS];
+#define REC_FIRST 4
+static int g_rec_every = 50;  /* subvulpes.ini record_every */
 static char g_line[(64u << 10) * 2 + 4096];
 static size_t g_line_len;
 
@@ -154,8 +170,9 @@ static void scope_add(Scope *s, const char *p, size_t n)
 {
     if (s->dropped)
         return;
-    if (s->len + n > SCOPE_CAP) {
+    if (s->len + n > g_scope_cap) {
         s->dropped = 1;
+        sv_log("record: a call is over %u MB and is not written", (unsigned)(g_scope_cap >> 20));
         return;
     }
     if (s->len + n + 1 > s->cap) {
@@ -219,8 +236,18 @@ static int func_slot(uint32_t rva)
 void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
 {
     int d = t_depth, i;
-    if (g_rec_imports < 0)
+    if (g_rec_imports < 0) {
         g_rec_imports = sv_config_int("record_imports", 0) && open_args();
+        g_rec_trace = sv_config_int("record_trace", 0);
+        g_rec_every = sv_config_int("record_every", 50);
+        g_scope_cap = (size_t)sv_config_int("record_cap_mb", 8) << 20;
+        if (g_rec_every < 1)
+            g_rec_every = 1;
+    }
+    if (g_rec_trace)
+        sv_log("rec begin %x depth %d", rva, t_depth);
+    if (sv_config_int("record_trace", 0))
+        sv_log("rec begin %x depth %d", rva, t_depth);
     if (d < RET_MAX)
         t_rets[d] = 0;
     t_depth++;
@@ -231,6 +258,12 @@ void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
         return;
     t_scope[d].idx = func_slot(rva);
     if (t_scope[d].idx < 0 || g_rec_count[t_scope[d].idx] >= RECORD_MAX)
+        return;
+    /* The first REC_FIRST calls of a function are always recorded (the startup functions run
+     * once). After that, one call in record_every, so the records of the tick functions
+     * spread over the whole session instead of the first ticks. */
+    g_rec_calls[t_scope[d].idx]++;
+    if (g_rec_count[t_scope[d].idx] >= REC_FIRST && g_rec_calls[t_scope[d].idx] % g_rec_every != 0)
         return;
     t_scope[d].rec = 1;
     scope_printf(&t_scope[d], "R %x", rva);
@@ -259,6 +292,13 @@ void sv_rec_push_ret(uint32_t ret)
 uint32_t sv_rec_end(uint32_t eax)
 {
     int d = --t_depth;
+    if (g_rec_trace)
+        sv_log("rec end depth %d", d);
+    static int trace = -1;
+    if (trace < 0)
+        trace = sv_config_int("record_trace", 0);
+    if (trace)
+        sv_log("rec end depth %d", d);
     uint32_t ret = d < RET_MAX ? t_rets[d] : 0;
     if (d < SCOPE_MAX) {
         Scope *s = &t_scope[d];
@@ -341,6 +381,21 @@ void sv_ev_bytes(char tag, const void *p, size_t n)
         g_line[g_line_len++] = digits[b[i] >> 4];
         g_line[g_line_len++] = digits[b[i] & 15];
     }
+}
+
+void sv_ev_hash(char tag, const void *p, size_t n)
+{
+    const unsigned char *b = (const unsigned char *)p;
+    uint32_t h = 2166136261u;
+    char tmp[32];
+    size_t i;
+    if (!p || !readable(p, n ? n : 1)) {
+        line_add(tmp, (size_t)snprintf(tmp, sizeof tmp, " %c:-", tag));
+        return;
+    }
+    for (i = 0; i < n; i++)
+        h = (h ^ b[i]) * 16777619u;
+    line_add(tmp, (size_t)snprintf(tmp, sizeof tmp, " %c#%x:%x", tag, (unsigned)n, h));
 }
 
 void sv_ev_s(const char *s)
