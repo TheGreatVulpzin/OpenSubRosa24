@@ -1,0 +1,53 @@
+rva,name,impure_import,call_path,all_impure_imports,depth
+0x1080,saveaccountsserver,fclose,saveaccountsserver@0x1080,fclose fopen,0
+0x11d0,saveaccountsclient,_chdir,saveaccountsclient@0x11d0,_chdir fclose fopen,0
+0x12f0,loadaccountsclient,_chdir,loadaccountsclient@0x12f0,_chdir fclose fopen,0
+0x1420,server_writelogfile,fprintf,server_writelogfile@0x1420,fclose fopen fprintf,0
+0x1e50,landscape_buildsectorlods,free,landscape_buildsectorlods@0x1e50,free malloc,0
+0x29a0,loadblock,fclose,loadblock@0x29a0,fclose fopen,0
+0x3740,building_save,fclose,building_save@0x3740,fclose fopen,0
+0x5280,debug_resetlogfile,fopen,debug_resetlogfile@0x5280,fclose fopen fprintf,0
+0x5350,systemtimer,QueryPerformanceCounter,systemtimer@0x5350,QueryPerformanceCounter,0
+0x8320,leveleditor_save,fopen,leveleditor_save@0x8320,fclose fopen,0
+0x8590,leveleditor_load,fclose,leveleditor_load@0x8590,fclose fopen,0
+0xb230,gettimeofday,GetSystemTimeAsFileTime,gettimeofday@0xb230,GetSystemTimeAsFileTime __daylight __timezone _tzset,0
+0xb300,setcpuaffinity,SetProcessAffinityMask,setcpuaffinity@0xb300,GetCurrentProcess GetProcessAffinityMask SetProcessAffinityMask,0
+0xb4a0,getcpufrequency,QueryPerformanceFrequency,getcpufrequency@0xb4a0,QueryPerformanceFrequency,0
+0xd020,loadtextfile,fclose,loadtextfile@0xd020,fclose fgetc fopen,0
+0xd3a0,listfiles,_findclose,listfiles@0xd3a0,_findclose _findfirst64i32 _findnext64i32,0
+0xd710,disablesocket,bind,disablesocket@0xd710,bind ioctlsocket socket,0
+0xd860,recvpacket,recvfrom,recvpacket@0xd860,recvfrom,0
+0xd910,sendpacket,sendto,sendpacket@0xd910,sendto,0
+0xe2e0,loadaccountsserver,fclose,loadaccountsserver@0xe2e0,fclose fopen,0
+0xf2b0,createarea,malloc,createarea@0xf2b0,free malloc,0
+0x13d80,building_load,fclose,building_load@0x13d80,fclose fopen,0
+0x18570,testtimer,GetSystemTimeAsFileTime,testtimer@0x18570 -> gettimeofday@0xb230,GetSystemTimeAsFileTime __daylight __timezone _tzset,1
+0x185a0,newspaper_load,fclose,newspaper_load@0x185a0 -> loadtextfile@0xd020,fclose fgetc fopen,1
+0x1ac40,getmasterserverip,_sleep,getmasterserverip@0x1ac40,__WSAFDIsSet _sleep closesocket connect gethostbyname getservbyname getsockopt inet_addr ioctlsocket recv select send socket,0
+0x29bf0,area_block_createbuildinginterior,free,area_block_createbuildinginterior@0x29bf0 -> landscape_buildsectorlods@0x1e50,free malloc,1
+0x2a510,area_createinteriorblocks,_chdir,area_createinteriorblocks@0x2a510,_chdir _findclose _findfirst64i32 _findnext64i32 fclose fopen free malloc,0
+0x2e310,clientrecv,recvfrom,clientrecv@0x2e310 -> recvpacket@0xd860,recvfrom,1
+0x33570,servercycle,sendto,servercycle@0x33570 -> sendpacket@0xd910,sendto,1
+0x33650,serverrecv,recvfrom,serverrecv@0x33650 -> recvpacket@0xd860,recvfrom sendto,1
+0x3e070,area_createsblocks,_chdir,area_createsblocks@0x3e070,_chdir _findclose _findfirst64i32 _findnext64i32 fclose fopen free malloc,0
+0x46c30,building_buildfloorplan,free,building_buildfloorplan@0x46c30 -> area_block_createbuildinginterior@0x29bf0 -> landscape_buildsectorlods@0x1e50,free malloc,2
+0x4e7a0,loadsaveoptions,_time64,loadsaveoptions@0x4e7a0,_chdir _time64 fclose fgetc fopen,0
+0x4ed30,serversend,sendto,serversend@0x4ed30,sendto,0
+0x502a0,setupgame,_chdir,setupgame@0x502a0,_chdir _findclose _findfirst64i32 _findnext64i32 fclose fopen free malloc,0
+0x54e40,createlevel,fclose,createlevel@0x54e40 -> building_load@0x13d80,fclose fopen free malloc,1
+0x590f0,resetgame,_time64,resetgame@0x590f0,_time64 fclose fgetc fopen free malloc,0
+0x5ae70,logicsimulation_round,_time64,logicsimulation_round@0x5ae70 -> resetgame@0x590f0,_time64 fclose fgetc fopen free malloc,1
+0x5b9b0,logicsimulation_world,fclose,logicsimulation_world@0x5b9b0 -> saveaccountsserver@0x1080,_time64 fclose fgetc fopen fprintf free malloc,1
+0x5c580,logicsimulation,_time64,logicsimulation@0x5c580 -> resetgame@0x590f0,_time64 fclose fgetc fopen fprintf free malloc,1
+0x5c8d0,dedicatedserverloop,fopen,dedicatedserverloop@0x5c8d0,QueryPerformanceCounter __WSAFDIsSet _chdir _findclose _findfirst64i32 _findnext64i32 _sleep _time64 bind closesocket connect fclose fgetc fopen fprintf free fseek gethostbyname getservbyname getsockopt inet_addr ioctlsocket malloc printf recv recvfrom select send sendto socket,0
+0x5cd10,getpaths,WSAStartup,getpaths@0x5cd10,QueryPerformanceCounter QueryPerformanceFrequency WSAStartup __WSAFDIsSet _chdir _findclose _findfirst64i32 _findnext64i32 _getcwd _sleep _time64 bind closesocket connect fclose fgetc fopen fprintf free fseek gethostbyname getservbyname getsockopt inet_addr ioctlsocket malloc printf recv recvfrom select send sendto socket,0
+0x5ce18,__security_check_cookie,UnhandledExceptionFilter,__security_check_cookie@0x5ce18 -> __report_gsfailure@0x5d320,GetCurrentProcess IsDebuggerPresent SetUnhandledExceptionFilter TerminateProcess UnhandledExceptionFilter _crt_debugger_hook,1
+0x5d08c,__tmainCRTStartup,Sleep,__tmainCRTStartup@0x5d08c,HeapSetInformation InterlockedCompareExchange InterlockedExchange QueryPerformanceCounter QueryPerformanceFrequency Sleep WSAStartup __WSAFDIsSet _amsg_exit _cexit _chdir _findclose _findfirst64i32 _findnext64i32 _getcwd _sleep _time64 bind closesocket connect exit fclose fgetc fopen fprintf free fseek gethostbyname getservbyname getsockopt inet_addr initterm initterm_e ioctlsocket malloc printf recv recvfrom select send sendto socket,0
+0x5d316,mainCRTStartup,QueryPerformanceCounter,mainCRTStartup@0x5d316 -> __security_init_cookie@0x5d7f0,GetCurrentProcessId GetCurrentThreadId GetSystemTimeAsFileTime GetTickCount HeapSetInformation InterlockedCompareExchange InterlockedExchange QueryPerformanceCounter QueryPerformanceFrequency Sleep WSAStartup __WSAFDIsSet _amsg_exit _cexit _chdir _findclose _findfirst64i32 _findnext64i32 _getcwd _sleep _time64 bind closesocket connect exit fclose fgetc fopen fprintf free fseek gethostbyname getservbyname getsockopt inet_addr initterm initterm_e ioctlsocket malloc printf recv recvfrom select send sendto socket,1
+0x5d320,__report_gsfailure,UnhandledExceptionFilter,__report_gsfailure@0x5d320,GetCurrentProcess IsDebuggerPresent SetUnhandledExceptionFilter TerminateProcess UnhandledExceptionFilter _crt_debugger_hook,0
+0x5d436,__CxxUnhandledExceptionFilter,terminate,__CxxUnhandledExceptionFilter@0x5d436,terminate,0
+0x5d492,__onexit,EncodePointer,__onexit@0x5d492,DecodePointer EncodePointer __dllonexit _lock _onexit _unlock,0
+0x5d52a,_unlockexit,_unlock,_unlockexit@0x5d52a,_unlock,0
+0x5d533,_atexit,EncodePointer,_atexit@0x5d533 -> __onexit@0x5d492,DecodePointer EncodePointer __dllonexit _lock _onexit _unlock,1
+0x5d769,__except_handler4,except_handler4_common,__except_handler4@0x5d769,except_handler4_common,0
+0x5d7f0,__security_init_cookie,QueryPerformanceCounter,__security_init_cookie@0x5d7f0,GetCurrentProcessId GetCurrentThreadId GetSystemTimeAsFileTime GetTickCount QueryPerformanceCounter,0
