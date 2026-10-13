@@ -1,0 +1,47 @@
+# Checks that do not need the game files: the repository rules, the Python tests, the
+# build of the hook DLL and the harness, the tests without the game, and the lint of the
+# lifted C. The harness itself needs the 024d executable and a recording, which stay
+# out of the repository, so it runs only on a local PC.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Repository rules (no game files, no passwords, no build output)
+        run: python -I tools/ci/check_repo.py
+      - name: Protocol tests
+        run: python tools/net/test_srpacket.py
+      - name: Python syntax of the tools
+        run: python -m compileall -q tools
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+      - name: Build the hook DLL, the harness and the tests (MSVC x86)
+        shell: cmd
+        run: tools\build_hook.bat
+      - name: Struct sizes and offsets
+        shell: cmd
+        run: build\hook\check_types.exe
+      - name: Verifier tests
+        shell: cmd
+        run: build\hook\test_verify.exe
+      - name: Lint of the lifted C
+        run: python -I tools/lift/lint.py

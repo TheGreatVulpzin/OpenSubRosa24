@@ -20,14 +20,21 @@ Usage:
 import argparse
 import csv
 import json
+import os
 import re
+import shutil
 import subprocess
 from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = 0x400000
-VCVARS = r'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Auxiliary\Build\vcvars32.bat'
+VCVARS = os.environ.get('VCVARS', r'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\VC\Auxiliary\Build\vcvars32.bat')
+
+
+def vcvars_line():
+    """The .bat line that sets up MSVC x86, or nothing when cl is already in PATH (CI)."""
+    return '' if shutil.which('cl') else f'@call "{VCVARS}" >nul 2>nul' + chr(13) + chr(10)
 
 # Decompiler artifacts that the lifter does not handle (yet).
 BLOCKERS = {
@@ -791,7 +798,7 @@ def compile_errors(path):
     """Compile one file with MSVC x86 (/arch:IA32). Returns {line: message}."""
     bat = ROOT / 'build/lift/compile.bat'
     crlf = chr(13) + chr(10)
-    bat.write_text(f'@call "{VCVARS}" >nul 2>nul{crlf}'
+    bat.write_text(vcvars_line() +
                    f'cl /nologo /c /TC /std:c11 /W0 /we4013 /arch:IA32 /utf-8 /errorReport:none /I "{ROOT / "src/lifted"}" '
                    f'/Fo"{ROOT / "build/lift/lifted.obj"}" "{path}"{crlf}', encoding='mbcs')
     r = subprocess.run(['cmd', '/c', str(bat)], capture_output=True, text=True, encoding='mbcs', errors='replace')

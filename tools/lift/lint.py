@@ -19,15 +19,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/lift'))
-from lift import VCVARS, load_names  # noqa: E402
+from lift import load_names, vcvars_line  # noqa: E402
 
 FLOATS = ('float', 'double', 'float10', 'long double')
+
+# Findings checked by hand: bugs of the game itself (docs/lift.md, "Lint").
+KNOWN = {('lf_3ccc0', 'uninitialized')}
 
 
 def warnings(path):
     bat = ROOT / 'build/lift/lint.bat'
+    bat.parent.mkdir(parents=True, exist_ok=True)
     crlf = chr(13) + chr(10)
-    bat.write_text(f'@call "{VCVARS}" >nul 2>nul{crlf}'
+    bat.write_text(vcvars_line() +
                    f'cl /nologo /c /TC /std:c11 /W4 /arch:IA32 /utf-8 /errorReport:none '
                    f'/I "{ROOT / "src/lifted"}" /Fo"{ROOT / "build/lift/lint.obj"}" "{path}"{crlf}',
                    encoding='mbcs')
@@ -62,6 +66,10 @@ def main():
         for line, a, b, text in found[fn]:
             print(f'  {line}: {a} -> {b}: {text[:150]}')
     print(f'total: {sum(len(v) for v in found.values())} warnings in {len(found)} functions')
+    new = [(fn, w[1]) for fn, ws in found.items() for w in ws if (fn, w[1]) not in KNOWN]
+    if new:
+        print(f'{len(new)} new finding(s), not in KNOWN')
+        sys.exit(1)
 
 
 if __name__ == '__main__':
