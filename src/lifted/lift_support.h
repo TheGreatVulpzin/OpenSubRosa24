@@ -107,6 +107,25 @@ static __inline lf_m128 lf_dpps(lf_m128 a, lf_m128 b, int imm)
     return r;
 }
 
+/* The x87 control word (fnstcw). Ghidra shows it as in_FPUControlWord (packobjectpacket). */
+static __inline unsigned short lf_fpucw(void)
+{
+    unsigned short cw;
+    __asm fnstcw cw
+    return cw;
+}
+
+/* Ghidra "builtin_strncpy(dst, "text", n)": the original stores the n bytes of the
+ * constant (with its NUL) as immediate moves. */
+static __inline void lf_strncpy(void *d, const void *s, unsigned int n)
+{
+    unsigned char *a = (unsigned char *)d;
+    const unsigned char *b = (const unsigned char *)s;
+    while (n--)
+        *a++ = *b++;
+}
+#define builtin_strncpy(d, s, n) lf_strncpy((d), (s), (n))
+
 /* Bit casts that tools/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
 #define LF_BITS_F(x) lf_u2f((unsigned int)(x))
 #define LF_BITS_U(x) lf_f2u((float)(x))

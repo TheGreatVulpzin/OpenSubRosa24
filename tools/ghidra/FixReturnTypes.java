@@ -34,7 +34,8 @@ public class FixReturnTypes extends GhidraScript {
 
     private static final long[] INT_RETURNS = {
             0x65f0, 0x6760, 0xb0b0, 0xded0, 0x1ac40, 0x29bf0, 0x2c0c0, 0x33350, 0x40aa0, 0x41550, 0x58320,
-            0x587f0, 0x5cd10, 0x6380 };
+            0x587f0, 0x5cd10, 0x6380,
+            0x28190 };  // scenario_armhuman: scenario_createchase reads its EAX
     private static final long COOKIE_RVA = 0x5ce18;
 
     @Override

@@ -486,11 +486,44 @@ def fix_text_line(text, rel, ptype):
     return None
 
 
+def register_artifacts(c):
+    """Decompiler artifacts that have a plain C meaning:
+    - in_FPUControlWord: the x87 control word (fnstcw), lf_fpucw() (packobjectpacket).
+    - in_EAX (ECX, EDX, EBX) declared as a local and written before any read: Ghidra keeps the
+      register name, but the value comes from the function itself (createevent_updateitem).
+    - &stack0xffffffcc: a stack slot under the return address that has no local name, the
+      start of a temporary array (multiply3x3matrices). It becomes &local_34, so stack_frame
+      puts it at the same offset as the original."""
+    if 'in_FPUControlWord' in c:
+        c = re.sub(r'^\s*\w+\s+in_FPUControlWord;\s*\n', '', c, flags=re.M)
+        c = re.sub(r'\bin_FPUControlWord\b', 'lf_fpucw()', c)
+    for reg in ('EAX', 'ECX', 'EDX', 'EBX'):
+        name = f'in_{reg}'
+        decl = re.search(rf'^\s*\w+\s+{name};\s*$', c, flags=re.M)
+        if not decl:
+            continue
+        first = re.search(rf'\b{name}\b(\s*=(?!=))?', c[decl.end():])
+        if first and first.group(1):
+            c = re.sub(rf'\b{name}\b', f'lf_{reg.lower()}', c)
+    offs = sorted(set(int(x, 16) for x in re.findall(r'&stack0x(ffff[0-9a-f]{4})\b', c)))
+    if offs and not re.search(r'(?<!&)stack0x', c):
+        brace = c.index('{')
+        decls = ''
+        for v in offs:
+            n = 0x100000000 - v
+            if not re.search(rf'\blocal_{n:x}\b', c):
+                decls += f'\n  undefined4 local_{n:x};'
+            c = c.replace(f'&stack0x{v:08x}', f'((undefined *)&local_{n:x})')
+        c = c[:brace + 1] + decls + c[brace + 1:]
+    return c
+
+
 def lift_function(f, rva, headers, imports_used):
     """Return (C text, error). error is None on success."""
-    c = f['c']
+    c = register_artifacts(f['c'])
     for tok, why in BLOCKERS.items():
-        if tok in c:
+        # At the start of a word: "builtin_strncpy" is not a register input "in_".
+        if re.search(r'(?<![A-Za-z0-9_])' + re.escape(tok), c):
             return None, why
     c, err = exact_denormals(c)
     if err:

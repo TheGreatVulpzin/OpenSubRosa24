@@ -112,6 +112,7 @@ public class LiftExport extends GhidraScript {
         storeRounding(t, openBefore, closeAfter);
         floatGrouping(t, openBefore, closeAfter);
         callArgBits(t, openBefore, closeAfter);
+        pieceArgBits(t, openBefore, closeAfter);
         replaceSpans.clear();
         floatBitCompares(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
@@ -143,6 +144,13 @@ public class LiftExport extends GhidraScript {
                     if (close != null) for (int c = 0; c < close; c++) sb.append(')');
                 }
                 i = pieceEnd;
+                continue;
+            }
+            String smaller = pieceVariable(t, i);
+            if (smaller != null) {
+                sb.append(smaller);
+                Integer close = closeAfter.remove(i);
+                if (close != null) for (int c = 0; c < close; c++) sb.append(')');
                 continue;
             }
             int[] cast = bitCast(t, i);
@@ -194,8 +202,80 @@ public class LiftExport extends GhidraScript {
         if (piece != null && piece.getSize() == len && piece.getHigh() != null
                 && isFloat(piece.getHigh().getDataType(), len))
             type = len == 4 ? "float" : "double";
+        // A write: "local_48._0_4_ = fVar5;" is a COPY whose output is the float piece.
+        if (piece == null && op != null && op.getOutput() != null && op.getOutput().getSize() == len
+                && op.getOutput().getHigh() != null && isFloat(op.getOutput().getHigh().getDataType(), len))
+            type = len == 4 ? "float" : "double";
         pieceEnd = field;
         return "(*(" + type + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
+    }
+
+    /* A variable token whose high variable is smaller than its declared symbol: Ghidra gives
+     * the name of an 8-byte stack variable (undefined8 local_48) to a float that lives in its
+     * low 4 bytes. In C the name means the 8 bytes. Print the piece: the type of the high
+     * variable at its offset in the symbol (packobjectpacket). */
+    private String pieceVariable(List<ClangToken> t, int i) {
+        if (!(t.get(i) instanceof ClangVariableToken)) return null;
+        HighVariable h = t.get(i).getHighVariable();
+        if (h == null || h.getSymbol() == null || h.getSymbol().getDataType() == null) return null;
+        int whole = h.getSymbol().getDataType().getLength(), size = h.getDataType().getLength();
+        if (size <= 0 || size >= whole || !t.get(i).getText().equals(h.getSymbol().getName())) return null;
+        // Only raw bytes (undefined8): an array such as float local_34[3] is not a piece.
+        if (!(h.getSymbol().getDataType() instanceof Undefined)) return null;
+        // Not in a declaration or in the function header.
+        for (ClangNode p = t.get(i).Parent(); p != null; p = p.Parent())
+            if (p instanceof ghidra.app.decompiler.ClangVariableDecl || p instanceof ghidra.app.decompiler.ClangFuncProto)
+                return null;
+        Varnode rep = h.getRepresentative();
+        ghidra.program.model.listing.VariableStorage st = h.getSymbol().getStorage();
+        if (rep == null || st == null || st.getMinAddress() == null || !rep.getAddress().isStackAddress()
+                || !st.getMinAddress().isStackAddress()) return null;
+        long off = rep.getOffset() - st.getMinAddress().getOffset();
+        if (off < 0 || off + size > whole) return null;
+        String type = isFloat(h.getDataType(), size) ? (size == 4 ? "float" : "double")
+                : size == 1 ? "uchar" : size == 2 ? "ushort" : size == 4 ? "uint" : null;
+        if (type == null) return null;
+        return "(*(" + type + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
+    }
+
+    /* CONCAT44(hi, lo) is a PIECE of two 4-byte values. A float argument gives its bits, but
+     * the C macro converts the number. Wrap it: LF_BITS_U(arg) (packobjectpacket). */
+    private void pieceArgBits(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!tok.getText().startsWith("CONCAT")) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null || op.getOpcode() != PcodeOp.PIECE || op.getNumInputs() != 2) continue;
+            int open = next(t, i);
+            if (open < 0 || !t.get(open).getText().equals("(")) continue;
+            List<int[]> args = new ArrayList<>();
+            int depth = 0, start = -1, j;
+            for (j = open; j < t.size(); j++) {
+                String s = t.get(j).getText();
+                if (s.equals("(")) {
+                    if (depth++ == 0) start = j + 1;
+                } else if (s.equals(")")) {
+                    if (--depth == 0) break;
+                } else if (s.equals(",") && depth == 1) {
+                    args.add(new int[] { start, j - 1 });
+                    start = j + 1;
+                }
+            }
+            if (j >= t.size()) continue;
+            args.add(new int[] { start, j - 1 });
+            if (args.size() != 2) continue;
+            for (int k = 0; k < 2; k++) {
+                Varnode v = op.getInput(k);
+                if (v.getHigh() == null || !isFloat(v.getHigh().getDataType(), v.getSize())) continue;
+                int first = args.get(k)[0], last = args.get(k)[1];
+                while (first <= last && t.get(first).getText().isBlank()) first++;
+                while (last >= first && t.get(last).getText().isBlank()) last--;
+                if (first > last) continue;
+                openBefore.merge(first, v.getSize() == 4 ? "LF_BITS_U(" : "LF_BITS_U64(", (x, y) -> y + x);
+                closeAfter.merge(last, 1, Integer::sum);
+            }
+        }
     }
 
     private static final Set<Integer> FLOAT_OPS = Set.of(
@@ -746,7 +826,12 @@ public class LiftExport extends GhidraScript {
             return null;
         }
         int kind = castKind(castOp);
-        return kind < 0 ? null : new int[] { close, end, kind };
+        if (kind < 0) return null;
+        // The CAST must be the printed cast: in "(uint)(float)local_48" the CAST is the
+        // "(uint)", and "(float)" is the SUBPIECE of an 8-byte variable.
+        if (!castType(t, i, close).replace(" ", "")
+                .equals(castOp.getOutput().getHigh().getDataType().getName().replace(" ", ""))) return null;
+        return new int[] { close, end, kind };
     }
 
     /* 0: 4 bytes to float, 1: float to 4 bytes, 2: 8 bytes to double, 3: double to 8 bytes,
