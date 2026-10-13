@@ -567,7 +567,9 @@ def lift_function(f, rva, headers, imports_used):
         if v in relocs or not all(b == 0 or 32 <= b < 127 for b in text):
             return m.group(0)
         return f'((undefined *)0x{v:x})'
-    body = re.sub(r'&(_*DAT_([0-9a-f]{8}))(?![\w\[])', immediate, body)
+    # "&DAT_00460020 + i" is an address in pointer arithmetic, not a string, even when its
+    # bytes are printable: the code used [eax*4+460018h] and Ghidra added the +8.
+    body = re.sub(r'&(_*DAT_([0-9a-f]{8}))(?![\w\[])(?!\s*[+\-])', immediate, body)
     # Absolute addresses that the loader relocates (ASLR) but the pseudo-C shows as numbers.
     # A compare can show the relocated value plus or minus 1: the code has "cmp esi, END" and
     # "jae", Ghidra prints "END - 1 < p". createitem searched past the item array.

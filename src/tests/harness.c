@@ -347,7 +347,8 @@ static int crash_filter(EXCEPTION_POINTERS *ep)
 }
 
 /* Probes: HARNESS_PROBE=rva[:espoff],... puts an INT3 on each instruction of the original
- * and prints ST0, ST1 and the float at [esp+espoff] when it runs. Compare the intermediate
+ * and prints ST0, ST1 and the float at [esp+espoff] when it runs ("rva:espoff*": the 3
+ * floats that [esp+espoff] points to). Compare the intermediate
  * values of the original with printf()s put in the lifted C. */
 #define MAX_PROBES 16
 static struct {
@@ -384,12 +385,15 @@ static LONG CALLBACK probe_handler(EXCEPTION_POINTERS *ep)
             continue;
         printf("  probe %05x: st0 %.17g st1 %.17g", g_probe[k].rva, x87_to_double(c->FloatSave.RegisterArea),
                x87_to_double(c->FloatSave.RegisterArea + 10));
-        if (g_probe[k].has_off) {
+        if (g_probe[k].has_off == 2) {
+            const float *v = *(const float **)(uintptr_t)(c->Esp + g_probe[k].espoff);
+            printf(" *[esp+%x] %.9g %.9g %.9g", g_probe[k].espoff, v[0], v[1], v[2]);
+        } else if (g_probe[k].has_off) {
             float f;
             memcpy(&f, (void *)(uintptr_t)(c->Esp + g_probe[k].espoff), 4);
             printf(" [esp+%x] %.9g (%08x)", g_probe[k].espoff, f, *(uint32_t *)&f);
         }
-        printf(" ebx %x esi %x edi %x ebp %x\n", c->Ebx, c->Esi, c->Edi, c->Ebp);
+        printf(" eax %x ebx %x esi %x edi %x ebp %x\n", c->Eax, c->Ebx, c->Esi, c->Edi, c->Ebp);
         *(uint8_t *)(sr_base + g_probe[k].rva) = g_probe[k].byte;
         c->Eip = (DWORD)(sr_base + g_probe[k].rva);
         c->EFlags |= 0x100;  /* single step, then put the INT3 back */
@@ -409,6 +413,10 @@ static void set_probes(const char *spec)
         if (*end == ':') {
             g_probe[g_nprobe].espoff = strtoul(end + 1, &end, 16);
             g_probe[g_nprobe].has_off = 1;
+            if (*end == '*') {  /* rva:off*: [esp+off] is a pointer to 3 floats */
+                g_probe[g_nprobe].has_off = 2;
+                end++;
+            }
         }
         p = (uint8_t *)(sr_base + g_probe[g_nprobe].rva);
         VirtualProtect(p, 1, PAGE_EXECUTE_READWRITE, &old);
