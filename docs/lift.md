@@ -41,7 +41,7 @@
 | --- | --- |
 | Ghidra types (`undefined4`, `float10`...) and helper ops (`CONCAT31`, `SUB41`, `ROUND`...) | `src/lifted/lift_support.h` |
 | Globals (`DAT_0f837318`) | One `#define` per global with the decompiler type, relocated with `SR_VA()` |
-| Partial access (`x._4_2_`) | Pointer access with the right size |
+| Partial access (`x._4_2_`) | Pointer access with the right size, and `float` when the p-code piece is a float (`LiftExport.java`, `partialAccess`). As `uint`, `local_64 = local_5c._0_4_` converted the bits of a cosine to a number. |
 | Calls to other game functions | Through the game address (so hooks and originals both work) |
 | CRT and Windows imports | Through the game IAT (`sr_import`), so `rand()`, `FILE*` and the heap are the game ones |
 | Absolute addresses shown as numbers (`ptr < 0x46177c`) | The values at relocation sites become `SR_VA(...)` |
@@ -177,7 +177,6 @@ These two rules made `createlandscape` (a 2049 x 2049 height map) bit-exact. Kno
 | Function | Difference |
 | --- | --- |
 | `buildsomeshit` | about 6000 bytes, the error grows through the computation |
-| `human_calcarmtorque` | `acos()` of a value near 1 makes a small difference large |
 
 `/fp:fast` makes the differences larger.
 

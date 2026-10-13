@@ -119,6 +119,16 @@ public class LiftExport extends GhidraScript {
             }
             String lhsOpen = openBefore.get(i);
             if (lhsOpen != null) sb.append(lhsOpen);
+            String piece = partialAccess(t, i);
+            if (piece != null) {
+                sb.append(piece);
+                for (int k = i; k <= pieceEnd; k++) {
+                    Integer close = closeAfter.remove(k);
+                    if (close != null) for (int c = 0; c < close; c++) sb.append(')');
+                }
+                i = pieceEnd;
+                continue;
+            }
             int[] cast = bitCast(t, i);
             if (cast != null) {
                 // cast = {index of ')' of the cast, operand end index, 0 = to float / 1 = from float}
@@ -135,6 +145,41 @@ public class LiftExport extends GhidraScript {
             if (close != null) for (int k = 0; k < close; k++) sb.append(')');
         }
         return sb.toString();
+    }
+
+    private static final java.util.regex.Pattern FIELD = java.util.regex.Pattern.compile("^_(\\d+)_(\\d+)_$");
+
+    /* Ghidra "x._4_2_" is 2 bytes at offset 4 of x. Print it as a pointer access, with the
+     * type that the decompiler gives to the piece: float when the piece is a float, so that
+     * "local_64 = local_5c._0_4_;" copies the bits of a float and does not convert an int.
+     * Returns null when the tokens at i are not "variable . _N_M_". */
+    private int pieceEnd;
+
+    private String partialAccess(List<ClangToken> t, int i) {
+        if (!(t.get(i) instanceof ClangVariableToken)) return null;
+        int dot = next(t, i), field = dot < 0 ? -1 : next(t, dot);
+        if (field < 0 || !t.get(dot).getText().equals(".")) return null;
+        java.util.regex.Matcher m = FIELD.matcher(t.get(field).getText());
+        if (!m.find()) return null;
+        int off = Integer.parseInt(m.group(1)), len = Integer.parseInt(m.group(2));
+        String type = len == 1 ? "uchar" : len == 2 ? "ushort" : len == 4 ? "uint" : len == 8 ? "ulonglong" : "uchar";
+        PcodeOp op = t.get(dot).getPcodeOp();
+        Varnode piece = null;
+        if (op != null) {
+            if (op.getOpcode() == PcodeOp.SUBPIECE) {
+                piece = op.getOutput();
+            } else {
+                for (int k = 0; k < op.getNumInputs(); k++) {
+                    PcodeOp d = op.getInput(k).getDef();
+                    if (d != null && d.getOpcode() == PcodeOp.SUBPIECE) piece = op.getInput(k);
+                }
+            }
+        }
+        if (piece != null && piece.getSize() == len && piece.getHigh() != null
+                && isFloat(piece.getHigh().getDataType(), len))
+            type = len == 4 ? "float" : "double";
+        pieceEnd = field;
+        return "(*(" + type + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
     }
 
     private static final Set<Integer> FLOAT_OPS = Set.of(
