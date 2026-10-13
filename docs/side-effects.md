@@ -13,6 +13,7 @@ Both versions of a function (lifted and original) run in the same fake environme
 - Files: reads come from the game folder. The game folder is the folder of the recorded server (getpaths stores it at RVA 0x916d4e0) when it exists on this PC, else `original/blackhouser`, or `HARNESS_GAME_DIR`. Each write goes to `build/harness_env/<run>/`. The log has the size and the hash of each written file.
 - Network: no socket is real. `send` and `sendto` log the bytes, `recv` and `recvfrom` get the recorded packets of the call (the `E recvfrom` lines of `record_imports`) and then no data, `connect` fails and name lookups find nothing.
 - `fread` copies through a buffer of its own: the verifier protects the .data pages, and a large `fread` goes straight to `ReadFile`, which fails on a protected page with no exception. The harness also puts the stub into the `fread` pointer that `getpaths` stores at RVA 0x91022a4.
+- Heap regions of the snapshot: write watch finds the pages that each run writes. After the lifted run, the pages go back to their content before the call, so the original starts from the same heap. The harness compares the pages of both runs.
 - Each run writes a log of its events. A different log is a difference. `HARNESS_DEBUG=2` prints both logs.
 - `HARNESS_WATCH=rva` puts a hardware breakpoint on one .data address and prints each instruction that writes it, in both versions.
 

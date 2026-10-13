@@ -104,6 +104,7 @@ typedef struct Region {
     uint32_t base, size;
     long offset;  /* content in the snapshot file */
     int mapped;
+    uint8_t *shadow;  /* the content before the current call (both runs start from it) */
 } Region;
 
 static Region *g_regions;
@@ -132,7 +133,8 @@ static void map_regions(const char *path)
         r->base = hdr[0];
         r->size = hdr[1];
         r->offset = ftell(f);
-        r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE) != NULL;
+        r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH,
+                                 PAGE_READWRITE) != NULL;
         g_mapped += r->mapped;
         fseek(f, (long)r->size, SEEK_CUR);
     }
@@ -149,10 +151,141 @@ static void apply_regions(void)
         if (!g_regions[i].mapped)
             continue;
         fseek(f, g_regions[i].offset, SEEK_SET);
-        if (fread((void *)(uintptr_t)g_regions[i].base, g_regions[i].size, 1, f) != 1)
+        if (fread((void *)(uintptr_t)g_regions[i].base, g_regions[i].size, 1, f) != 1) {
+            g_regions[i].mapped = 0;
+            continue;
+        }
+        if (!g_regions[i].shadow)
+            g_regions[i].shadow = malloc(g_regions[i].size);
+        if (g_regions[i].shadow)
+            memcpy(g_regions[i].shadow, (void *)(uintptr_t)g_regions[i].base, g_regions[i].size);
+        else
             g_regions[i].mapped = 0;
     }
     fclose(f);
+}
+
+/* Heap writes. The verifier undoes the .data writes of the lifted run, but the heap regions
+ * of the snapshot are outside .data. Write watch finds the pages that each run writes:
+ * after the lifted run they go back to the shadow copy, so the original starts from the
+ * same heap, and the harness compares the pages of both runs. */
+typedef struct HeapPage {
+    uint8_t *addr;
+    uint8_t data[4096];  /* the page after the lifted run */
+} HeapPage;
+
+static HeapPage *g_heap_pages;
+static int g_nheap, g_heap_cap;
+static void **g_watch_buf;
+static ULONG_PTR g_watch_cap;
+
+static void heap_reset_watch(void)
+{
+    int i;
+    for (i = 0; i < g_nregions; i++)
+        if (g_regions[i].mapped)
+            ResetWriteWatch((void *)(uintptr_t)g_regions[i].base, g_regions[i].size);
+}
+
+/* Pages written in region i since the last reset. Returns the count (g_watch_buf). */
+static ULONG_PTR heap_written(int i)
+{
+    ULONG_PTR count, pages = g_regions[i].size / 4096 + 1;
+    ULONG gran;
+    if (pages > g_watch_cap) {
+        g_watch_buf = realloc(g_watch_buf, pages * sizeof(void *));
+        g_watch_cap = pages;
+    }
+    count = g_watch_cap;
+    if (GetWriteWatch(0, (void *)(uintptr_t)g_regions[i].base, g_regions[i].size, g_watch_buf, &count, &gran) != 0)
+        return 0;
+    return count;
+}
+
+/* After the lifted run: keep its pages and put the shadow content back. */
+static void heap_after_lifted(void)
+{
+    int i;
+    g_nheap = 0;
+    for (i = 0; i < g_nregions; i++) {
+        ULONG_PTR k, n;
+        if (!g_regions[i].mapped)
+            continue;
+        n = heap_written(i);
+        for (k = 0; k < n; k++) {
+            uint8_t *page = g_watch_buf[k];
+            if (g_nheap == g_heap_cap) {
+                g_heap_cap = g_heap_cap ? g_heap_cap * 2 : 256;
+                g_heap_pages = realloc(g_heap_pages, g_heap_cap * sizeof(HeapPage));
+            }
+            g_heap_pages[g_nheap].addr = page;
+            memcpy(g_heap_pages[g_nheap].data, page, 4096);
+            memcpy(page, g_regions[i].shadow + (page - (uint8_t *)(uintptr_t)g_regions[i].base), 4096);
+            g_nheap++;
+        }
+    }
+    heap_reset_watch();
+}
+
+static int same_page(const uint8_t *a, const uint8_t *b, int *at)
+{
+    int i;
+    for (i = 0; i < 4096; i += 4) {
+        float x, y;
+        if (memcmp(a + i, b + i, 4) == 0)
+            continue;
+        memcpy(&x, a + i, 4);
+        memcpy(&y, b + i, 4);
+        if (!sv_same_float(x, y)) {
+            *at = i;
+            return 0;
+        }
+    }
+    return 1;
+}
+
+/* After the original run: compare the pages that either run wrote, then make the state
+ * after the original the new shadow. Returns 1 when the heap writes are the same. */
+static int heap_after_original(char *why, size_t n)
+{
+    int i, k, same = 1, at;
+    for (k = 0; k < g_nheap && same; k++)
+        if (!same_page(g_heap_pages[k].data, g_heap_pages[k].addr, &at)) {
+            snprintf(why, n, "heap: memory at %08x differs", (unsigned)(uintptr_t)(g_heap_pages[k].addr + at));
+            same = 0;
+        }
+    for (i = 0; i < g_nregions; i++) {
+        ULONG_PTR j, cnt;
+        uint8_t *base = (uint8_t *)(uintptr_t)g_regions[i].base;
+        if (!g_regions[i].mapped)
+            continue;
+        cnt = heap_written(i);
+        for (j = 0; j < cnt; j++) {
+            uint8_t *page = g_watch_buf[j];
+            uint8_t *old = g_regions[i].shadow + (page - base);
+            /* A page that only the original wrote: the lifted run left the shadow content. */
+            if (same) {
+                int lifted_wrote = 0;
+                for (k = 0; k < g_nheap; k++)
+                    if (g_heap_pages[k].addr == page)
+                        lifted_wrote = 1;
+                if (!lifted_wrote && !same_page(old, page, &at)) {
+                    snprintf(why, n, "heap: lifted did not write %08x", (unsigned)(uintptr_t)(page + at));
+                    same = 0;
+                }
+            }
+            memcpy(old, page, 4096);
+        }
+    }
+    for (k = 0; k < g_nheap; k++) {
+        for (i = 0; i < g_nregions; i++) {
+            uint8_t *base = (uint8_t *)(uintptr_t)g_regions[i].base;
+            if (g_regions[i].mapped && g_heap_pages[k].addr >= base && g_heap_pages[k].addr < base + g_regions[i].size)
+                memcpy(g_regions[i].shadow + (g_heap_pages[k].addr - base), g_heap_pages[k].addr, 4096);
+        }
+    }
+    heap_reset_watch();
+    return same;
 }
 
 /* Put the snapshot into .data. Pointers into the image move with the load address: each
@@ -664,7 +797,7 @@ int main(int argc, char **argv)
         for (j = 0; j < g_ncalls; j++) {
             const Call *c = &g_calls[j];
             uint32_t a[MAX_ARGS], ne = 0, de = 0, no = 0, dorig = 0;
-            char env_why[256] = "";
+            char env_why[256] = "", heap_why[256] = "";
             int env_same;
             double fe = 0, fo = 0;
             int k, new_ok, orig_ok, same, fails_before;
@@ -685,8 +818,10 @@ int main(int argc, char **argv)
                 printf(" call %d: lifted\n", j);
             plat_test_set_packets(c->packets, c->npackets);
             plat_test_begin(0);
+            heap_reset_watch();
             new_ok = safe_invoke(e->lifted, a, c->n, e->ret, &ne, &de, &fe);
             plat_test_end(0);
+            heap_after_lifted();
             sv_track_switch_to_original();
             for (k = 0; k < c->n; k++)
                 if (c->kind[k] == 'P')
@@ -698,6 +833,10 @@ int main(int argc, char **argv)
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
             plat_test_end(1);
             env_same = plat_test_same(env_why, sizeof env_why);
+            if (!heap_after_original(heap_why, sizeof heap_why) && env_same) {
+                env_same = 0;
+                memcpy(env_why, heap_why, sizeof env_why);
+            }
             same = e->ret == LF_RET_VOID || (e->ret == LF_RET_INT && ((ne ^ no) & mask) == 0) ||
                    (e->ret == LF_RET_INT64 && ne == no && de == dorig) ||
                    (e->ret == LF_RET_FLOAT && sv_same_float(fe, fo));
