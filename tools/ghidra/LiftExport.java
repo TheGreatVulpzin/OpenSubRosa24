@@ -112,6 +112,8 @@ public class LiftExport extends GhidraScript {
         storeRounding(t, openBefore, closeAfter);
         floatGrouping(t, openBefore, closeAfter);
         callArgBits(t, openBefore, closeAfter);
+        replaceSpans.clear();
+        floatBitCompares(t, openBefore, closeAfter);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -121,6 +123,18 @@ public class LiftExport extends GhidraScript {
             }
             String lhsOpen = openBefore.get(i);
             if (lhsOpen != null) sb.append(lhsOpen);
+            Object[] rep = replaceSpans.get(i);
+            if (rep != null) {
+                // A constant printed as a float literal, replaced by its bits.
+                int repEnd = (Integer) rep[0];
+                sb.append((String) rep[1]);
+                for (int k = i; k <= repEnd; k++) {
+                    Integer close = closeAfter.remove(k);
+                    if (close != null) for (int c = 0; c < close; c++) sb.append(')');
+                }
+                i = repEnd;
+                continue;
+            }
             String piece = partialAccess(t, i);
             if (piece != null) {
                 sb.append(piece);
@@ -554,6 +568,83 @@ public class LiftExport extends GhidraScript {
             else if (x.equals(")") && --depth == 0) return j;
         }
         return -1;
+    }
+
+    private final Map<Integer, Object[]> replaceSpans = new HashMap<>();
+
+    /* An integer compare (INT_EQUAL, INT_NOTEQUAL) of a float-typed value compares bits. Ghidra
+     * prints it as a float compare: "fVar5 != -NAN" for "parent index != -1". In C every
+     * compare with a NaN is unordered, so "!=" is always true. Print the float side as
+     * LF_BITS_U(x) and a float constant as its bits. itemsimulation copied item[-1]. */
+    private void floatBitCompares(List<ClangToken> t, Map<Integer, String> openBefore,
+            Map<Integer, Integer> closeAfter) {
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!(tok instanceof ClangOpToken)) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null || op.getNumInputs() != 2) continue;
+            if (op.getOpcode() != PcodeOp.INT_EQUAL && op.getOpcode() != PcodeOp.INT_NOTEQUAL) continue;
+            if (!tok.getText().equals("==") && !tok.getText().equals("!=")) continue;
+            Varnode a = op.getInput(0), b = op.getInput(1);
+            int len = a.getSize();
+            if (len != b.getSize() || (len != 4 && len != 8)) continue;
+            boolean af = a.getHigh() != null && isFloat(a.getHigh().getDataType(), len);
+            boolean bf = b.getHigh() != null && isFloat(b.getHigh().getDataType(), len);
+            if (!af && !bf) continue;
+            // The two sides of the operator, from the p-code of each input.
+            int[] left = side(t, i, op, -1), right = side(t, i, op, 1);
+            if (left == null || right == null) continue;
+            for (int[] sd : new int[][] { left, right }) {
+                Varnode v = sd[2] == 0 ? a : b;
+                if (v.isConstant()) {
+                    if (!(sd[2] == 0 ? af : bf) && !(sd[2] == 0 ? bf : af)) continue;
+                    String bits = len == 4 ? String.format("0x%xU", v.getOffset() & 0xffffffffL)
+                            : String.format("0x%xULL", v.getOffset());
+                    replaceSpans.put(sd[0], new Object[] { sd[1], bits });
+                } else if (sd[2] == 0 ? af : bf) {
+                    openBefore.merge(sd[0], len == 4 ? "LF_BITS_U(" : "LF_BITS_U64(", (x, y) -> y + x);
+                    closeAfter.merge(sd[1], 1, Integer::sum);
+                }
+            }
+        }
+    }
+
+    /* The token span {start, end, input index} of one side of the binary op at t[i]
+     * (dir -1: left, 1: right), or null. */
+    private int[] side(List<ClangToken> t, int i, PcodeOp op, int dir) {
+        Set<PcodeOp> s0 = subtree(op.getInput(0)), s1 = subtree(op.getInput(1));
+        int depth = 0, first = -1, last = -1, which = -1;
+        for (int j = i + dir; j >= 0 && j < t.size(); j += dir) {
+            ClangToken u = t.get(j);
+            if (u instanceof ClangBreak || u.getText().isBlank()) continue;
+            String x = u.getText();
+            String open = dir > 0 ? "(" : ")", close = dir > 0 ? ")" : "(";
+            if (x.equals(open) || (dir > 0 ? x.equals("[") : x.equals("]"))) {
+                depth++;
+            } else if (x.equals(close) || (dir > 0 ? x.equals("]") : x.equals("["))) {
+                if (depth == 0) break;
+                depth--;
+            } else if (depth == 0 && (x.equals(";") || x.equals(",") || x.equals("=") || x.equals("&&")
+                    || x.equals("||") || x.equals("return"))) {
+                break;
+            } else if (depth == 0 && u.getPcodeOp() != null && u.getPcodeOp() != op
+                    && !s0.contains(u.getPcodeOp()) && !s1.contains(u.getPcodeOp())) {
+                break;
+            }
+            PcodeOp p = u.getPcodeOp();
+            if (which < 0 && p != null) {
+                if (s0.contains(p)) which = 0;
+                else if (s1.contains(p)) which = 1;
+                else if (p == op && u.getHighVariable() != null) {
+                    if (u.getHighVariable() == op.getInput(0).getHigh()) which = 0;
+                    else if (u.getHighVariable() == op.getInput(1).getHigh()) which = 1;
+                }
+            }
+            if (first < 0) first = j;
+            last = j;
+        }
+        if (first < 0 || depth != 0 || which < 0) return null;
+        return dir > 0 ? new int[] { first, last, which } : new int[] { last, first, which };
     }
 
     private final Map<Address, DataType[]> protos = new HashMap<>();

@@ -108,6 +108,18 @@ The rule uses the p-code, not the text:
 
 The first version of this rule was a regex in `lift.py`. It read the `=` of `<=` as an assignment and it marked integer results such as `(int)(longlong)(x)` as floats. The p-code rule fixed `playerbuystock`, `playersellstock`, `playerdeathtax` and the crashes of `createobject`.
 
+## Other bit rules in LiftExport.java
+
+| Rule | Ghidra prints | Problem in C | Output |
+| --- | --- | --- | --- |
+| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. |
+| `floatBitCompares` | `fVar5 != -NAN` (an `INT_NOTEQUAL`) | Every compare with a NaN is unordered, so `!=` is always true. | `LF_BITS_U(fVar5) != 0xffffffffU` |
+| `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))` |
+
+The rules run in this order: `floatStores`, `storeRounding`, `floatGrouping`, `callArgBits`, `floatBitCompares`. A later rule puts its parenthesis outside the earlier ones at the same token. So `lf_f2u((float)(x))` keeps the rounding inside the bit copy.
+
+`FixReturnTypes.java` gives `objecttype_addbond` (0xb0b0) an `int` return and stores its parameters. The `__cdecl_keepF` prototype lists ST0 before EAX as an output, and an `undefined4` return matched ST0. A caller kept 1.0 on the x87 stack across the call, and the pseudo-C read it as the return value. Do not lock a signature that has no stored parameters: every caller then drops its arguments.
+
 ## Call arguments with the bits of another type
 
 Ghidra prints a call argument with the type that the caller uses. The callee can use another type for the same 4 bytes, and the original pushes the bits unchanged. In C the call converts the number. `LiftExport.java` (`callArgBits`) wraps the argument:
