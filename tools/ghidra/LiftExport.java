@@ -108,6 +108,7 @@ public class LiftExport extends GhidraScript {
         Map<Integer, String> openBefore = new HashMap<>();
         // A rule that runs later puts its "(" outside the ones before it at the same token:
         // rounding and grouping go inside, the bit copies of callArgBits outside.
+        collectRdataFloats(r.getFunction());
         floatStores(t, openBefore, closeAfter);
         storeRounding(t, openBefore, closeAfter);
         floatGrouping(t, openBefore, closeAfter);
@@ -172,14 +173,117 @@ public class LiftExport extends GhidraScript {
             }
             // An unknown area of a struct (ApplyTypes.java leaves it without a field): Ghidra
             // prints "&x->field_0x90". In C each struct is a union with lf_raw, its raw bytes.
+            if (tok.getText().equals("ROUND") && choppedRound(tok)) {
+                sb.append("LF_CHOP");
+                Integer close = closeAfter.remove(i);
+                if (close != null) for (int k = 0; k < close; k++) sb.append(')');
+                continue;
+            }
+            String exact = exactFloat(tok);
             if (tok instanceof ghidra.app.decompiler.ClangFieldToken && RAW_FIELD.matcher(tok.getText()).matches())
                 sb.append("lf_raw[").append(tok.getText().substring(6)).append(']');
+            else if (exact != null)
+                sb.append(exact);
             else
                 sb.append(tok.getText());
             Integer close = closeAfter.remove(i);
             if (close != null) for (int k = 0; k < close; k++) sb.append(')');
         }
         return sb.toString();
+    }
+
+    /* A FISTP in truncation mode. MSVC converts a float to an int with FNSTCW, OR 0xc00 (the
+     * rounding control "chop"), FLDCW, FISTP, then FLDCW of the old word. Ghidra prints the
+     * FISTP as ROUND(x), and the FLDCW is lost: in C, ROUND is rint() and rounds to nearest.
+     * serversend packed the view angle one unit too high. Returns true when the ROUND token
+     * comes from a FIST/FISTP that a FLDCW of a word with "OR 0xc00" comes before, in the
+     * same run of instructions. */
+    private boolean choppedRound(ClangToken tok) {
+        PcodeOp op = tok.getPcodeOp();
+        if (op == null || op.getOpcode() != PcodeOp.FLOAT_ROUND) return false;
+        Instruction ins = currentProgram.getListing().getInstructionAt(op.getSeqnum().getTarget());
+        if (ins == null || !ins.getMnemonicString().startsWith("FIST")) return false;
+        boolean fldcw = false;
+        for (int n = 0; n < 16 && ins != null; n++) {
+            ins = currentProgram.getListing().getInstructionBefore(ins.getAddress());
+            if (ins == null || ins.getFlowType().isJump() || ins.getFlowType().isCall()) return false;
+            String m = ins.getMnemonicString();
+            if (m.equals("FLDCW")) {
+                if (fldcw) return false;  // the restore of an earlier conversion
+                fldcw = true;
+            } else if (fldcw && m.equals("OR") && ins.getNumOperands() == 2
+                    && ins.getScalar(1) != null && (ins.getScalar(1).getUnsignedValue() & 0xc00) == 0xc00) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* A float constant printed with all its digits. Ghidra prints a short form: serversend
+     * multiplies by the double 5215.189175234883 (32768 / 2 pi), and Ghidra prints 5215.189.
+     * In C the short form is another number, and the packed angle was off by a few units. The
+     * value is the exact float or double of the constant, printed as a double literal (as
+     * Ghidra does), so the type of the expression does not change. Returns null when the
+     * token is not a float constant. */
+    private static final java.util.regex.Pattern DECIMAL = java.util.regex.Pattern.compile("^-?\\d+\\.\\d*([eE][-+]?\\d+)?$|^-?\\d+[eE][-+]?\\d+$");
+
+    /* The float constants that the function reads from .rdata: the 4-byte floats, and the
+     * 8-byte doubles. Ghidra can make a 4-byte constant from a double: packangle divides by
+     * the double 6.28318530718 (FDIV double ptr), and the p-code constant is the float
+     * 6.2831855. Filled by cText for each function. */
+    private final Set<Float> rdataFloats = new HashSet<>();
+    private final Map<Float, Set<Double>> rdataDoubles = new HashMap<>();
+
+    private void collectRdataFloats(Function f) {
+        rdataFloats.clear();
+        rdataDoubles.clear();
+        ghidra.program.model.mem.MemoryBlock rdata = currentProgram.getMemory().getBlock(".rdata");
+        if (f == null || rdata == null) return;
+        for (Instruction ins : currentProgram.getListing().getInstructions(f.getBody(), true)) {
+            if (!ins.getMnemonicString().startsWith("F")) continue;
+            for (ghidra.program.model.symbol.Reference ref : ins.getReferencesFrom()) {
+                Address a = ref.getToAddress();
+                if (!rdata.contains(a)) continue;
+                try {
+                    // The operand size: "float ptr" or "double ptr".
+                    String text = ins.toString();
+                    if (text.contains("double ptr")) {
+                        double d = Double.longBitsToDouble(currentProgram.getMemory().getLong(a));
+                        rdataDoubles.computeIfAbsent((float) d, k -> new HashSet<>()).add(d);
+                    } else if (text.contains("float ptr")) {
+                        rdataFloats.add(Float.intBitsToFloat(currentProgram.getMemory().getInt(a)));
+                    }
+                } catch (ghidra.program.model.mem.MemoryAccessException e) {
+                    // not initialized: no constant
+                }
+            }
+        }
+    }
+
+    private String exactFloat(ClangToken tok) {
+        if (!(tok instanceof ClangVariableToken) || !DECIMAL.matcher(tok.getText()).matches()) return null;
+        Varnode vn = ((ClangVariableToken) tok).getVarnode();
+        if (vn == null || !vn.isConstant() || vn.getHigh() == null) return null;
+        int len = vn.getSize();
+        if (!isFloat(vn.getHigh().getDataType(), len)) return null;
+        double d;
+        if (len == 4) {
+            float c = Float.intBitsToFloat((int) vn.getOffset());
+            d = c;
+            // A float that the function never reads as a float, but reads as one double.
+            Set<Double> wide = rdataDoubles.get(Math.abs(c));
+            if (!rdataFloats.contains(Math.abs(c)) && wide != null && wide.size() == 1)
+                d = Math.copySign(wide.iterator().next(), c);
+        } else if (len == 8) {
+            d = Double.longBitsToDouble(vn.getOffset());
+        } else {
+            return null;
+        }
+        if (Double.isNaN(d) || Double.isInfinite(d)) return null;
+        String s = Double.toString(d);
+        // Keep the printed sign: "-x" can be a unary minus token before a positive constant.
+        if (tok.getText().startsWith("-") != (d < 0)) return null;
+        return s;
     }
 
     private static final java.util.regex.Pattern FIELD = java.util.regex.Pattern.compile("^_(\\d+)_(\\d+)_$");

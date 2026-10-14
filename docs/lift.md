@@ -131,6 +131,11 @@ The Ghidra project is not versioned. Make a backup before `ApplyTypes.java` or `
 
 The type of a piece (`pieceType`) is `float` only when the piece is a float. The piece of a CAST is not: in `local_b4[1] = (float)g_objecttype[12]._188_4_;` the CAST output is the float, and the piece keeps the bits of an int. As a `float` piece, `LF_BITS_F` converted the value to `uint` and `setupobjectypes_train` stored `0xffffffff` instead of 0.528.
 
+## Float constants and conversions
+
+- `exactFloat`: Ghidra prints a float constant in a short form (`0.2`, `3.1415927`). In C the short form is a double with another value. `LiftExport.java` prints the exact value of the 4-byte or 8-byte constant as a double literal (`0.20000000298023224`), so the type of the expression does not change. Ghidra can also make a 4-byte constant from a double in `.rdata`: `packangle` divides by the double `6.28318530718` (`FDIV double ptr`), and the p-code constant is the float `6.2831855`. When the function reads no float with that value but reads one double that rounds to it, the double is the value (`collectRdataFloats`).
+- `choppedRound`: MSVC converts a float to an int with `FNSTCW`, `OR 0xc00` (rounding control "chop"), `FLDCW`, `FISTP`, and `FLDCW` of the old word. Ghidra prints the `FISTP` as `ROUND(x)` and drops the `FLDCW`. `ROUND` is `rint()`, which rounds to nearest. A `ROUND` from a `FIST`/`FISTP` with a chop `FLDCW` before it becomes `LF_CHOP(x)` (`trunc()`). All 50 `ROUND` of the 024d are of this kind. `serversend` packed the view angle one unit too high (byte 23 of packet 4).
+
 ## Float stores into raw bytes
 
 Ghidra prints `X = f;` when a float goes into raw bytes (`undefined4` or `undefined8`). The original copies the bits. In C the assignment converts the number, so 0.42 becomes 0. `LiftExport.java` (`floatStores`) marks the left side: `*(float *)&(X) = f;`, or `double` for 8 bytes.

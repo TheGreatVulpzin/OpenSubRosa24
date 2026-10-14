@@ -62,7 +62,7 @@ If the download fails, the session needs network access to `crypticsea.gart.sh` 
 
 ### Ghidra extensions (installed in `E:\tools\ghidra_12.1.4_PUBLIC\Ghidra\Extensions`)
 
-- **GhidraMCP** (LaurieWired, 2.0) — an MCP server that lets Claude decompile, rename and retype in Ghidra directly. `.mcp.json` (not versioned, template in `tools/ghidra/mcp.json.example`) starts it in headless mode on a copy of the project. Run `bash tools/ghidra/mcp_refresh.sh` after each change to the real project. The copy opens with `--discard`: changes there are lost, so put permanent changes into a script.
+- **GhidraMCP** (LaurieWired, 2.0) — an MCP server that lets Claude decompile, rename and retype in Ghidra directly. It runs as its own process with the HTTP transport: `powershell -File tools\ghidra\mcp_server.ps1 start|stop|restart|refresh|status` (port 8081, log in `build/ghidra-mcp.log`). `.mcp.json` (not versioned, template in `tools/ghidra/mcp.json.example`) points to `http://127.0.0.1:8081/mcp`. The server opens a copy of the project. Run `bash tools/ghidra/mcp_refresh.sh` after each change to the real project (not after a change to `LiftExport.java` or `lift.py`). The copy opens with `--discard`: changes there are lost, so put permanent changes into a script.
 - **ghidra-delinker-extension** (boricj, 0.9.2) — exports parts of the 024d as COFF object files with relocations (Phase 4). Run the "Relocation table synthesizer" analyzer first. Headless script: `DelinkProgram.java`.
 
 ## Plan

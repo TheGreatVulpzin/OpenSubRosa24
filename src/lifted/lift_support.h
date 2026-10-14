@@ -72,6 +72,8 @@ typedef void *pointer32;
 /* Ghidra x87 operations. ROUND = FRNDINT (current rounding mode, default to nearest). */
 #define ABS(x) fabs(x)
 #define ROUND(x) rint(x)
+/* A FISTP after FLDCW with the rounding control "chop" (LiftExport.java, choppedRound). */
+#define LF_CHOP(x) trunc(x)
 
 /* RDTSC: CPU cycle counter. The game uses it only for its profiler (the timer table,
  * see sv_verify_ignore in hook/hooks_024d.c). */
