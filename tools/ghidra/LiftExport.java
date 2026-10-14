@@ -1273,6 +1273,11 @@ public class LiftExport extends GhidraScript {
                 depth--;
             } else if (depth == 0 && (s.equals(";") || s.equals(","))) {
                 break;
+            } else if (depth == 0 && (s.equals("&&") || s.equals("||") || s.equals("?") || s.equals(":"))) {
+                // An "&&" that joins the conditions of nested ifs has no p-code op. The operand
+                // of a cast never holds one at depth 0. objectsimulation wrapped the next
+                // condition in LF_BITS_F and never called lineintersectobject.
+                break;
             } else if (depth == 0 && x.getPcodeOp() != null && !allowed.contains(x.getPcodeOp())) {
                 break;
             }

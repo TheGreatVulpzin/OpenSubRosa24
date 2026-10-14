@@ -81,7 +81,7 @@ With the x87 intrinsics (2026-10-12): 192 of 340 functions lifted. 196 hooks ins
 
 With the stack cookie, register preservation and `_ftol2` fixes (2026-10-12): 216 of 340 functions lifted. 220 hooks installed in total. Idle server, 300 s: no crash, 11 lifted functions verified, 0 differences.
 
-With the Ghidra types (2026-10-14): 276 lifted + 39 harness_only. Harness, calls same: `play-20261012` 2917, `20261013-1016-smoke` 1679, `20261013-query` 2213, `20261013-195210` 3652 (no count dropped).
+With the Ghidra types (2026-10-14): 276 lifted + 39 harness_only. Harness, calls same: `play-20261012` 2917, `20261013-1016-smoke` 1679, `20261013-query` 2216, `20261013-195210` 3680 (no count dropped).
 
 An idle server calls only a few functions. More coverage needs players: see the record and replay plan in `docs/plano.md`.
 
