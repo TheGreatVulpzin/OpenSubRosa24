@@ -12,6 +12,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "hook.h"
@@ -54,6 +55,9 @@ void sv_console_event(int error, const char *fmt, ...)
 static int console_width(void)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
+    const char *env = getenv("SV_UI_WIDTH");
+    if (env && atoi(env) > 0)
+        return atoi(env);
     if (GetConsoleScreenBufferInfo(g_out, &info))
         return info.srWindow.Right - info.srWindow.Left + 1;
     return 80;
@@ -78,13 +82,30 @@ static void banner(void)
     static const char *const wide_side[] = {"", "SubVulpes", "Sub Rosa 024d server", "", "", "", "", "", ""};
     static const char *const narrow[] = {" ^...^", "<_* *_>", "  \\_/"};
     static const char *const narrow_side[] = {"", "SubVulpes", ""};
-    const char *const *art = console_width() >= 52 ? wide : narrow;
-    const char *const *side = console_width() >= 52 ? wide_side : narrow_side;
-    int i, rows = console_width() >= 52 ? 9 : 3, pad = console_width() >= 52 ? 28 : 10;
+    /* "SubVulpes" in the figlet font "small" (39 columns), drawn beside rows 2 to 6 of the fox. */
+    static const char *const big[] = {
+        " ___      _  __   __    _",
+        "/ __|_  _| |_\\ \\ / /  _| |_ __  ___ ___",
+        "\\__ \\ || | '_ \\ V / || | | '_ \\/ -_|_-<",
+        "|___/\\_,_|_.__/\\_/ \\_,_|_| .__/\\___/__/",
+        "                         |_|",
+    };
+    int width = console_width();
+    const char *const *art = width >= 52 ? wide : narrow;
+    int i, rows = width >= 52 ? 9 : 3, pad = width >= 52 ? 28 : 10;
     char line[160];
     write_text("\n");
     for (i = 0; i < rows; i++) {
-        snprintf(line, sizeof line, "%s%-*s%s%s\n", g_color ? ORANGE : "", pad, art[i], g_color ? RESET : "", side[i]);
+        const char *text;
+        if (width >= 72 && i >= 1 && i <= 5)
+            text = big[i - 1];
+        else if (width >= 72 && i == 7)
+            text = "     Sub Rosa 024d server";
+        else if (width >= 52)
+            text = (i == 1 || i == 2) ? wide_side[i] : "";
+        else
+            text = narrow_side[i];
+        snprintf(line, sizeof line, "%s%-*s%s%s\n", g_color ? ORANGE : "", pad, art[i], g_color ? RESET : "", text);
         write_text(line);
     }
     write_text("\n");

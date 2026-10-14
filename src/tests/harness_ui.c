@@ -4,6 +4,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
@@ -57,10 +58,13 @@ void ui_init(void)
     c_reset = "\x1b[0m";
 }
 
-/* Columns of the console window; 80 when stdout is redirected. */
+/* Columns of the console window; 80 when stdout is redirected. SV_UI_WIDTH overrides it (tools\test_ui.bat). */
 static int console_width(void)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
+    const char *env = getenv("SV_UI_WIDTH");
+    if (env && atoi(env) > 0)
+        return atoi(env);
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info))
         return info.srWindow.Right - info.srWindow.Left + 1;
     return 80;
@@ -113,6 +117,14 @@ void ui_banner(void)
         "    (__/ (__/",
     };
     static const char *const wide_side[] = {"", "SubVulpes", "differential harness", "Sub Rosa 024d", "", "", "", "", ""};
+    /* "SubVulpes" in the figlet font "small" (39 columns), drawn beside rows 2 to 6 of the fox. */
+    static const char *const big[] = {
+        " ___      _  __   __    _",
+        "/ __|_  _| |_\\ \\ / /  _| |_ __  ___ ___",
+        "\\__ \\ || | '_ \\ V / || | | '_ \\/ -_|_-<",
+        "|___/\\_,_|_.__/\\_/ \\_,_|_| .__/\\___/__/",
+        "                         |_|",
+    };
     static const char *const narrow[] = {" ^...^", "<_* *_>", "  \\_/"};
     static const char *const narrow_side[] = {"", "SubVulpes harness", ""};
     LARGE_INTEGER t;
@@ -120,7 +132,16 @@ void ui_banner(void)
     size_t n = sizeof g_quotes / sizeof g_quotes[0];
     QueryPerformanceCounter(&t);
     printf("\n");
-    if (width >= 52) {
+    if (width >= 72) {
+        for (i = 0; i < 9; i++) {
+            printf("%s%s%-28s%s", c_orange, c_bold, wide[i], c_reset);
+            if (i >= 1 && i <= 5)
+                printf("%s%s%s", c_bold, big[i - 1], c_reset);
+            else if (i == 7)
+                printf("%s     differential harness%s", c_gray, c_reset);
+            printf("\n");
+        }
+    } else if (width >= 52) {
         for (i = 0; i < 9; i++)
             printf("%s%s%-28s%s%s%s%s\n", c_orange, c_bold, wide[i], c_reset, c_bold, wide_side[i], c_reset);
     } else {
