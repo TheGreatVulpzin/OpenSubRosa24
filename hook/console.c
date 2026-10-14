@@ -59,22 +59,32 @@ static int console_width(void)
     return 80;
 }
 
-/* Fox beside the name when the window is wide enough, one short line when it is narrow.
- * ASCII only, so the columns line up in any console font. The fox is drawn for this project. */
+/* ASCII art from asciiart.eu, ASCII only so the columns line up in any console font.
+ * Wide window: running fox by H P Barmario (Morfina), signed "mrf" in the art.
+ * Narrow window: small fox by "cp97". */
 static void banner(void)
 {
-    static const char *const fox[] = {"  /\\___/\\", " /  o o  \\", "(_   ^   _)", "  \\_____/"};
-    static const char *const side[] = {"", "  SubVulpes", "  Sub Rosa 024d server", ""};
-    char line[128];
-    size_t i;
+    static const char *const wide[] = {
+        "   /|_/|",
+        "  / ^ ^(_o",
+        " /    __.'",
+        " /     \\",
+        "(_) (_) '._",
+        "  '.__     '. .-''-'.",
+        "     ( '.   ('.____.''",
+        "     _) )'_, )mrf",
+        "    (__/ (__/",
+    };
+    static const char *const wide_side[] = {"", "SubVulpes", "Sub Rosa 024d server", "", "", "", "", "", ""};
+    static const char *const narrow[] = {" ^...^", "<_* *_>", "  \\_/"};
+    static const char *const narrow_side[] = {"", "SubVulpes", ""};
+    const char *const *art = console_width() >= 52 ? wide : narrow;
+    const char *const *side = console_width() >= 52 ? wide_side : narrow_side;
+    int i, rows = console_width() >= 52 ? 9 : 3, pad = console_width() >= 52 ? 28 : 10;
+    char line[160];
     write_text("\n");
-    if (console_width() >= 40) {
-        for (i = 0; i < 4; i++) {
-            snprintf(line, sizeof line, "%s%-11s%s%s\n", g_color ? ORANGE : "", fox[i], g_color ? RESET : "", side[i]);
-            write_text(line);
-        }
-    } else {
-        snprintf(line, sizeof line, "%s/\\_/\\%s SubVulpes\n", g_color ? ORANGE : "", g_color ? RESET : "");
+    for (i = 0; i < rows; i++) {
+        snprintf(line, sizeof line, "%s%-*s%s%s\n", g_color ? ORANGE : "", pad, art[i], g_color ? RESET : "", side[i]);
         write_text(line);
     }
     write_text("\n");

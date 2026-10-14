@@ -98,19 +98,34 @@ static void print_wrapped(const char *text, int width)
 
 void ui_banner(void)
 {
-    /* The fox is drawn for this project. ASCII only, so the columns line up in any font. */
-    static const char *const fox[] = {"  /\\___/\\", " /  o o  \\", "(_   ^   _)", "  \\_____/"};
-    static const char *const side[] = {"", "  SubVulpes", "  differential harness", "  Sub Rosa 024d"};
+    /* ASCII art from asciiart.eu, ASCII only so the columns line up in any font.
+     * Wide: running fox by H P Barmario (Morfina), signed "mrf" in the art.
+     * Narrow: small fox by "cp97". */
+    static const char *const wide[] = {
+        "   /|_/|",
+        "  / ^ ^(_o",
+        " /    __.'",
+        " /     \\",
+        "(_) (_) '._",
+        "  '.__     '. .-''-'.",
+        "     ( '.   ('.____.''",
+        "     _) )'_, )mrf",
+        "    (__/ (__/",
+    };
+    static const char *const wide_side[] = {"", "SubVulpes", "differential harness", "Sub Rosa 024d", "", "", "", "", ""};
+    static const char *const narrow[] = {" ^...^", "<_* *_>", "  \\_/"};
+    static const char *const narrow_side[] = {"", "SubVulpes harness", ""};
     LARGE_INTEGER t;
     int i, width = console_width();
     size_t n = sizeof g_quotes / sizeof g_quotes[0];
     QueryPerformanceCounter(&t);
     printf("\n");
-    if (width >= 44) {
-        for (i = 0; i < 4; i++)
-            printf("%s%s%-11s%s%s%s%s\n", c_orange, c_bold, fox[i], c_reset, c_bold, side[i], c_reset);
+    if (width >= 52) {
+        for (i = 0; i < 9; i++)
+            printf("%s%s%-28s%s%s%s%s\n", c_orange, c_bold, wide[i], c_reset, c_bold, wide_side[i], c_reset);
     } else {
-        printf("%s%s/\\_/\\%s %sSubVulpes%s %sharness%s\n", c_orange, c_bold, c_reset, c_bold, c_reset, c_gray, c_reset);
+        for (i = 0; i < 3; i++)
+            printf("%s%s%-10s%s%s%s%s\n", c_orange, c_bold, narrow[i], c_reset, c_bold, narrow_side[i], c_reset);
     }
     printf("\n");
     print_wrapped(g_quotes[(size_t)(t.QuadPart ^ time(NULL)) % n], width);
