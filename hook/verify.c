@@ -14,7 +14,7 @@
 
 #define PAGE 4096u
 /* Pages changed per run and per version (32 MB): createlandscape writes 17 MB. The offline
- * harness sets more: createarea touches about 8200 pages. */
+ * harness sets more: createarea touches about 8200 pages, createlevel more than 16384. */
 #ifndef SV_MAX_PAGES
 #define SV_MAX_PAGES 8192
 #endif
