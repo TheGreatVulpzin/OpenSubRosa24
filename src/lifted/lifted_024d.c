@@ -53,8 +53,8 @@ undefined4 __cdecl lf_01010(char *param_1)
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x1c))
 void __cdecl lf_01080(void)
 
@@ -95,8 +95,8 @@ void __cdecl lf_01080(void)
 #undef DAT_0f837b64
 #undef g_account
 #undef g_p_fwrite
-#undef fopen
 #undef fclose
+#undef fopen
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x11d0 */
@@ -107,11 +107,11 @@ void __cdecl lf_01080(void)
 #define DAT_0956d2e0 (*(undefined *)SR_VA(0x956d2e0))
 #define DAT_0956d4e0 (*(undefined *)SR_VA(0x956d4e0))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_48 (*(undefined4 *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -157,11 +157,11 @@ void __cdecl lf_011d0(void)
 #undef DAT_0956d2e0
 #undef DAT_0956d4e0
 #undef g_p_fwrite
-#undef _chdir
-#undef __security_check_cookie
 #undef sprintf
-#undef fopen
+#undef _chdir
 #undef fclose
+#undef fopen
+#undef __security_check_cookie
 #undef local_48
 #undef local_44
 #undef local_4
@@ -174,11 +174,11 @@ void __cdecl lf_011d0(void)
 #define DAT_0956d2e0 (*(undefined *)SR_VA(0x956d2e0))
 #define DAT_0956d4e0 (*(undefined *)SR_VA(0x956d4e0))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -224,11 +224,11 @@ void __cdecl lf_012f0(void)
 #undef DAT_0956d2e0
 #undef DAT_0956d4e0
 #undef g_p_fread
-#undef _chdir
-#undef __security_check_cookie
 #undef sprintf
-#undef fopen
+#undef _chdir
 #undef fclose
+#undef fopen
+#undef __security_check_cookie
 #undef local_48
 #undef local_44
 #undef local_4
@@ -240,8 +240,8 @@ void __cdecl lf_012f0(void)
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define DAT_01f4978c (*(undefined4 *)SR_VA(0x1f4978c))
 #define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "fprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 void __cdecl lf_01420(void)
 
 {
@@ -292,8 +292,8 @@ void __cdecl lf_01420(void)
 #undef g_account
 #undef DAT_01f4978c
 #undef fprintf
-#undef fopen
 #undef fclose
+#undef fopen
 
 /* ---------------------------------------------------------------- 0x1540 */
 
@@ -618,8 +618,8 @@ int __cdecl lf_01e20(int param_1)
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
 #define DAT_25c4d76c (*(undefined *)SR_VA(0x25c4d76c))
 #define DAT_25c7d76c (*(undefined *)SR_VA(0x25c7d76c))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(7, "MSVCR100.DLL", "free"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(8, "MSVCR100.DLL", "free"))
 #define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(9, "MSVCR100.DLL", "malloc"))
 void __cdecl lf_01e50(int param_1)
 
@@ -815,8 +815,8 @@ LAB_004022d2:
 #undef DAT_25bfd768
 #undef DAT_25c4d76c
 #undef DAT_25c7d76c
-#undef free
 #undef memcpy
+#undef free
 #undef malloc
 
 /* ---------------------------------------------------------------- 0x2560 */
@@ -1007,9 +1007,9 @@ void __cdecl lf_026d0(int param_1,undefined4 *param_2)
 #define DAT_0577c54c (*(undefined4 *)SR_VA(0x577c54c))
 #define DAT_057d35ac (*(undefined4 *)SR_VA(0x57d35ac))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
 #define iStack_50 (*(int *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
@@ -1130,8 +1130,8 @@ void __cdecl lf_029a0(undefined4 param_1)
 #undef DAT_057d35ac
 #undef g_p_fread
 #undef sprintf
-#undef fopen
 #undef fclose
+#undef fopen
 #undef __security_check_cookie
 #undef iStack_50
 #undef local_4c
@@ -1196,7 +1196,7 @@ int __cdecl lf_02cf0(int param_1,int param_2)
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
 #define DAT_19952744 (*(undefined *)SR_VA(0x19952744))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_02dc0(uint param_1,uint param_2,uint param_3,uint param_4,undefined4 param_5)
 
 {
@@ -1228,7 +1228,7 @@ void __cdecl lf_02dc0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
           ;
           *(undefined4 *)(&DAT_19952744 + iVar1 * 4) = 0xffffffff;
         }
-        FUN_00401cf0(param_1,param_2,param_3,param_4);
+        area_marksector(param_1,param_2,param_3,param_4);
       }
     }
   }
@@ -1242,7 +1242,7 @@ void __cdecl lf_02dc0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #undef DAT_171665ac
 #undef DAT_19950744
 #undef DAT_19952744
-#undef FUN_00401cf0
+#undef area_marksector
 
 /* ---------------------------------------------------------------- 0x2f00 */
 #define DAT_0bbe91e4 (*(undefined *)SR_VA(0xbbe91e4))
@@ -1354,7 +1354,7 @@ int __cdecl lf_03030(uint param_1,uint param_2,uint param_3,uint param_4)
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
-#define FUN_00403030 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
 int __cdecl lf_03130(uint param_1,uint param_2,uint param_3,uint param_4)
 
 {
@@ -1384,8 +1384,9 @@ int __cdecl lf_03130(uint param_1,uint param_2,uint param_3,uint param_4)
                                      param_1 * 0x4035b + iVar2 * 0x201) * 4) * 0x181a +
                             ((param_4 & 7) + (param_3 & 7) * 8) * 8 + (param_2 & 7)) * 4);
           if ((uVar1 & 0xe0000000) == 0xc0000000) {
-            uVar1 = FUN_00403030(param_1,param_2 - (uVar1 & 0xff),param_3 - (uVar1 >> 0x10 & 0xff),
-                                 param_4 - (uVar1 >> 8 & 0xff));
+            uVar1 = area_interior_getblock
+                              (param_1,param_2 - (uVar1 & 0xff),param_3 - (uVar1 >> 0x10 & 0xff),
+                               param_4 - (uVar1 >> 8 & 0xff));
           }
           return uVar1;
         }
@@ -1401,7 +1402,7 @@ int __cdecl lf_03130(uint param_1,uint param_2,uint param_3,uint param_4)
 #undef DAT_17166088
 #undef DAT_171665ac
 #undef DAT_19950744
-#undef FUN_00403030
+#undef area_interior_getblock
 
 /* ---------------------------------------------------------------- 0x3290 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -1635,9 +1636,9 @@ void __cdecl lf_033a0(int param_1)
 #define DAT_05766068 (*(undefined1 *)SR_VA(0x5766068))
 #define DAT_0576a06c (*(undefined1 *)SR_VA(0x576a06c))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define local_50 (*(undefined4 *)(lf_frame + 0x20))
@@ -1864,8 +1865,8 @@ void __cdecl lf_03740(undefined4 param_1)
 #undef DAT_0576a06c
 #undef g_p_fwrite
 #undef sprintf
-#undef fopen
 #undef fclose
+#undef fopen
 #undef __security_check_cookie
 #undef local_54
 #undef local_50
@@ -2813,7 +2814,7 @@ void __cdecl lf_04a10(void)
 #define _DAT_00460064 (*(float *)SR_VA(0x460064))
 #define _DAT_00460068 (*(float *)SR_VA(0x460068))
 void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
-            float param_7)
+                 float param_7)
 
 {
   int iVar1;
@@ -3005,9 +3006,9 @@ void __cdecl lf_05160(uint *param_1,float *param_2,byte param_3)
 #define DAT_019cbf24_1 (*(char *)SR_VA(0x19cbf25))
 #define DAT_019cbf28_1 (*(char *)SR_VA(0x19cbf29))
 #define DAT_019cbf2c_1 (*(char *)SR_VA(0x19cbf2d))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "fprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 void __cdecl lf_05280(void)
 
 {
@@ -3043,8 +3044,8 @@ void __cdecl lf_05280(void)
 #undef DAT_019cbf24_1
 #undef DAT_019cbf28_1
 #undef DAT_019cbf2c_1
-#undef fclose
 #undef fprintf
+#undef fclose
 #undef fopen
 
 /* ---------------------------------------------------------------- 0x5350 */
@@ -3610,7 +3611,7 @@ void __cdecl lf_05be0(float param_1,int param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00405be0 ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
 void __cdecl lf_05f20(float param_1)
 
 {
@@ -3622,7 +3623,7 @@ void __cdecl lf_05f20(float param_1)
   
   iVar3 = g_player[((int)LF_BITS_U(param_1))].human_id;
   if (iVar3 != -1) {
-    FUN_00405be0(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
+    playersellstock(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
     iVar4 = 7;
     piVar5 = &g_human[iVar3].inventory[0].item_id;
     do {
@@ -3651,7 +3652,7 @@ void __cdecl lf_05f20(float param_1)
 #undef g_item
 #undef g_objecttype
 #undef g_player
-#undef FUN_00405be0
+#undef playersellstock
 
 /* ---------------------------------------------------------------- 0x5fe0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -3744,8 +3745,8 @@ LAB_00406158:
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define FUN_00402f00 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_interior_setobject ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_061a0(void)
 
@@ -3776,8 +3777,8 @@ void __cdecl lf_061a0(void)
           else {
             uVar6 = 0;
           }
-          FUN_00402f00(0,uVar2,uVar3,uVar4,uVar6);
-          FUN_00401cf0(0,uVar2,uVar3,uVar4);
+          area_interior_setobject(0,uVar2,uVar3,uVar4,uVar6);
+          area_marksector(0,uVar2,uVar3,uVar4);
           puVar7 = puVar7 + 4;
           local_8 = local_8 + -1;
         } while (local_8 != 0);
@@ -3792,8 +3793,8 @@ void __cdecl lf_061a0(void)
 #undef g_numofevents
 #undef g_game
 #undef g_event
-#undef FUN_00402f00
-#undef FUN_00401cf0
+#undef area_interior_setobject
+#undef area_marksector
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x6380 */
@@ -4830,7 +4831,7 @@ void __cdecl lf_07e50(uint param_1,uint *param_2,int param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int * *)(lf_frame + 0x18))
 void __cdecl lf_07f80(uint param_1,uint param_2)
@@ -4874,7 +4875,7 @@ void __cdecl lf_07f80(uint param_1,uint param_2)
           g_numofevents = (uint)(ushort)g_numofevents;
           piVar6 = local_8;
         }
-        FUN_00406380(param_2);
+        createevent_updateitem(param_2);
       }
       else {
         local_c = local_c + 1;
@@ -4890,7 +4891,7 @@ void __cdecl lf_07f80(uint param_1,uint param_2)
 #undef g_game
 #undef g_item
 #undef g_event
-#undef FUN_00406380
+#undef createevent_updateitem
 #undef local_c
 #undef local_8
 
@@ -4963,10 +4964,10 @@ void __cdecl lf_080b0(int param_1,int param_2,int param_3)
 #define DAT_0f67c2c4 (*(undefined *)SR_VA(0xf67c2c4))
 #define DAT_0f77c30c (*(undefined4 *)SR_VA(0xf77c30c))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define local_48 (*(undefined4 *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -5043,10 +5044,10 @@ void __cdecl lf_08320(void)
 #undef DAT_0f67c2c4
 #undef DAT_0f77c30c
 #undef g_p_fwrite
-#undef __security_check_cookie
+#undef sprintf
 #undef fclose
 #undef fopen
-#undef sprintf
+#undef __security_check_cookie
 #undef local_48
 #undef local_44
 #undef local_4
@@ -5062,10 +5063,10 @@ void __cdecl lf_08320(void)
 #define DAT_0f67c2c4 (*(undefined *)SR_VA(0xf67c2c4))
 #define DAT_0f77c30c (*(undefined4 *)SR_VA(0xf77c30c))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -5145,16 +5146,16 @@ void __cdecl lf_08590(void)
 #undef DAT_0f67c2c4
 #undef DAT_0f77c30c
 #undef g_p_fread
-#undef __security_check_cookie
+#undef sprintf
 #undef fclose
 #undef fopen
-#undef sprintf
+#undef __security_check_cookie
 #undef local_48
 #undef local_44
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x8880 */
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 void __cdecl lf_08880(char *param_1,int param_2)
 
 {
@@ -5259,9 +5260,9 @@ undefined4 __cdecl lf_08b00(float *param_1,int param_2,float param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00406840 ((void (__cdecl *)(void))SR_VA(0x406840))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define local_4 (*(float *)(lf_frame + 0x1c))
 void __cdecl lf_08cf0(int param_1,float param_2)
 
@@ -5298,7 +5299,7 @@ void __cdecl lf_08cf0(int param_1,float param_2)
         param_2 = 0.0;
       }
       piVar3[-9] = piVar3[-9] + ((int)LF_BITS_U((longlong)((float)((int)LF_BITS_U(local_4)) * param_2)));
-      FUN_004065f0(iVar5);
+      createevent_updateplayer_finance(iVar5);
     }
     iVar2 = g_game.ticks;
     piVar3 = piVar3 + 0x902;
@@ -5368,7 +5369,7 @@ void __cdecl lf_08cf0(int param_1,float param_2)
       iVar4 = iVar4 + 4;
     } while (iVar5 < 0x100);
   }
-  FUN_00406840();
+  createevent_updatestocks();
   return;
 }
 #undef g_numofevents
@@ -5378,9 +5379,9 @@ void __cdecl lf_08cf0(int param_1,float param_2)
 #undef g_game
 #undef g_event
 #undef g_player
-#undef FUN_00406840
-#undef FUN_004065f0
 #undef _ftol2
+#undef createevent_updatestocks
+#undef createevent_updateplayer_finance
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x8fe0 */
@@ -5391,9 +5392,9 @@ void __cdecl lf_08cf0(int param_1,float param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00406840 ((void (__cdecl *)(void))SR_VA(0x406840))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
-#define FUN_00406760 ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define local_18 (*(int *)(lf_frame + 0x18))
 #define local_14 (*(int * *)(lf_frame + 0x1c))
 #define local_10 (*(int *)(lf_frame + 0x20))
@@ -5433,7 +5434,7 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
           do {
             if (((((Player *)(piVar2 + -0x10))->active != 0) && (piVar2[9] == param_2)) &&
                (*piVar2 = *piVar2 + *(int *)(&g_game.lf_raw[0xf4] + iVar6), g_game.gametype == 3)) {
-              FUN_004065f0(iVar5);
+              createevent_updateplayer_finance(iVar5);
             }
             piVar2 = piVar2 + 0x902;
             iVar5 = iVar5 + 1;
@@ -5460,7 +5461,7 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
           *(undefined4 *)(&g_game.lf_raw[0x100] + iVar6) = 0;
         }
         *(undefined4 *)(&g_game.lf_raw[0xd0] + iVar6) = 0;
-        FUN_00406760(param_2,local_18);
+        createevent_updatemission(param_2,local_18);
       }
       iVar5 = g_game.ticks;
       local_14 = local_14 + 0x10;
@@ -5544,7 +5545,7 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
     param_2 = param_2 + 1;
     param_1 = param_1 + 5;
   } while ((int)param_1 < ((int)SR_VA(0x17579668)));
-  FUN_00406840();
+  createevent_updatestocks();
   return;
 }
 #undef g_numofevents
@@ -5554,9 +5555,9 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
 #undef g_item
 #undef g_event
 #undef g_player
-#undef FUN_00406840
-#undef FUN_004065f0
-#undef FUN_00406760
+#undef createevent_updatestocks
+#undef createevent_updatemission
+#undef createevent_updateplayer_finance
 #undef local_18
 #undef local_14
 #undef local_10
@@ -5566,8 +5567,8 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
 #define DAT_0e6c94c0 (*(undefined *)SR_VA(0xe6c94c0))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 void __cdecl lf_093e0(int param_1,int param_2)
 
 {
@@ -5595,9 +5596,9 @@ void __cdecl lf_093e0(int param_1,int param_2)
       }
     }
     g_player[param_1].money = iVar1 - iVar2;
-    FUN_004064a0(param_1);
+    createevent_updateplayer(param_1);
     if (g_game.gametype == 3) {
-      FUN_004065f0(param_1);
+      createevent_updateplayer_finance(param_1);
     }
   }
   return;
@@ -5606,16 +5607,16 @@ void __cdecl lf_093e0(int param_1,int param_2)
 #undef DAT_0e6c94c0
 #undef g_game
 #undef g_player
-#undef FUN_004065f0
-#undef FUN_004064a0
+#undef createevent_updateplayer
+#undef createevent_updateplayer_finance
 
 /* ---------------------------------------------------------------- 0x94a0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
 #define DAT_0e6c8bfc (*(undefined4 *)SR_VA(0xe6c8bfc))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00408a60 ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
-#define FUN_004089c0 ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
+#define pointinsidebuilding ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
 void __cdecl lf_094a0(int param_1)
 
 {
@@ -5634,7 +5635,7 @@ void __cdecl lf_094a0(int param_1)
       do {
         iVar2 = *piVar5;
         if ((((iVar2 == 2) || (iVar2 == 4)) || (iVar2 == 7)) &&
-           (iVar2 = FUN_00408a60(iVar4,&g_human[uVar1].pos.x,0.0), iVar2 != 0)) {
+           (iVar2 = pointinsidebuilding(iVar4,&g_human[uVar1].pos.x,0.0), iVar2 != 0)) {
           if (g_player[param_1].menu != 0) {
             return;
           }
@@ -5650,7 +5651,8 @@ void __cdecl lf_094a0(int param_1)
     if (0 < iVar3) {
       piVar5 = &DAT_0e6c8bfc;
       do {
-        if ((*piVar5 == 5) && (iVar2 = FUN_00408a60(iVar4,&g_human[uVar1].pos.x,0.0), iVar2 != 0)) {
+        if ((*piVar5 == 5) &&
+           (iVar2 = pointinsidebuilding(iVar4,&g_human[uVar1].pos.x,0.0), iVar2 != 0)) {
           if (g_player[param_1].menu != 0) {
             return;
           }
@@ -5663,7 +5665,7 @@ void __cdecl lf_094a0(int param_1)
       } while (iVar4 < iVar3);
     }
     if ((g_player[param_1].team < 5) &&
-       (iVar3 = FUN_004089c0(&g_human[uVar1].pos.x,g_player[param_1].team,0.0), iVar3 != 0)) {
+       (iVar3 = pointinsidebase(&g_human[uVar1].pos.x,g_player[param_1].team,0.0), iVar3 != 0)) {
       if (g_player[param_1].menu == 0) {
         g_player[param_1].menu = 3;
         return;
@@ -5679,14 +5681,14 @@ void __cdecl lf_094a0(int param_1)
 #undef DAT_0e6c8bb8
 #undef DAT_0e6c8bfc
 #undef g_player
-#undef FUN_00408a60
-#undef FUN_004089c0
+#undef pointinsidebuilding
+#undef pointinsidebase
 
 /* ---------------------------------------------------------------- 0x9600 */
-#define _CIsqrt lf_CIsqrt
 #define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
 #define _CIatan2 lf_CIatan2
+#define _CIsqrt lf_CIsqrt
 void __cdecl lf_09600(float *param_1,float *param_2)
 
 {
@@ -5705,10 +5707,10 @@ void __cdecl lf_09600(float *param_1,float *param_2)
   param_1[2] = (float)dVar1;
   return;
 }
-#undef _CIsqrt
 #undef _CIcos
 #undef _CIsin
 #undef _CIatan2
+#undef _CIsqrt
 
 /* ---------------------------------------------------------------- 0x9870 */
 #define _ftol2(x) ((ulonglong)(longlong)(x))
@@ -5799,8 +5801,8 @@ float10 __cdecl lf_09a00(float param_1,float param_2,uint param_3)
 #undef _ftol2
 
 /* ---------------------------------------------------------------- 0x9be0 */
-#define _CIcos lf_CIcos
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define _CIcos lf_CIcos
 float10 __cdecl lf_09be0(float param_1,float param_2,uint param_3)
 
 {
@@ -5845,24 +5847,24 @@ float10 __cdecl lf_09be0(float param_1,float param_2,uint param_3)
                   fVar3 * ((float)(1.0 - (float)(iVar8 * iVar8 + 0xd208dd0dU & 0x7fffffff) * 9.313226e-10))))
                   * (1.0 - fVar4)));
 }
-#undef _CIcos
 #undef _ftol2
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xa1b0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00405be0 ((void (__cdecl *)(float, int))SR_VA(0x405be0))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 void __cdecl lf_0a1b0(float param_1)
 
 {
   int iVar1;
   
-  FUN_00405be0(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
+  playersellstock(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
   if (((uint)LF_BITS_U(param_1)) < 0x100) {
-    FUN_00405be0(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
+    playersellstock(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
   }
   if (((g_game.gametype == 3) || (g_game.gametype == 4)) && (g_player[((int)LF_BITS_U(param_1))].unk_0034 != -1))
   {
@@ -5889,15 +5891,15 @@ void __cdecl lf_0a1b0(float param_1)
     g_human[iVar1].player_id = -1;
   }
   g_player[((int)LF_BITS_U(param_1))].active = 0;
-  FUN_004064a0(((int)LF_BITS_U(param_1)));
+  createevent_updateplayer(((int)LF_BITS_U(param_1)));
   return;
 }
 #undef g_human
 #undef g_account
 #undef g_game
 #undef g_player
-#undef FUN_00405be0
-#undef FUN_004064a0
+#undef playersellstock
+#undef createevent_updateplayer
 
 /* ---------------------------------------------------------------- 0xa2a0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -6185,7 +6187,7 @@ int __cdecl lf_0aa80(int param_1)
 #define DAT_17579600 (*(undefined4 *)SR_VA(0x17579600))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define FUN_00406760 ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int * *)(lf_frame + 0x18))
 void __cdecl lf_0ab20(int param_1)
@@ -6222,7 +6224,7 @@ void __cdecl lf_0ab20(int param_1)
           *piVar4 = 0;
         }
         piVar4[-0xc] = 0;
-        FUN_00406760(local_c,iVar3);
+        createevent_updatemission(local_c,iVar3);
       }
       iVar3 = iVar3 + 1;
       piVar4 = piVar4 + 0x10;
@@ -6236,7 +6238,7 @@ void __cdecl lf_0ab20(int param_1)
 #undef DAT_17579600
 #undef g_game
 #undef g_item
-#undef FUN_00406760
+#undef createevent_updatemission
 #undef local_c
 #undef local_8
 
@@ -6341,7 +6343,7 @@ void __cdecl lf_0ad30(undefined4 param_1)
 #define DAT_0046177c (*(undefined4 *)SR_VA(0x46177c))
 #define DAT_00460dc0 (*(undefined4 *)SR_VA(0x460dc0))
 #define DAT_012bd6aa (*(undefined *)SR_VA(0x12bd6aa))
-#define FUN_0040ad30 ((void (__cdecl *)(undefined4))SR_VA(0x40ad30))
+#define init_genrand ((void (__cdecl *)(undefined4))SR_VA(0x40ad30))
 void __cdecl lf_0ad70(int param_1,int param_2)
 
 {
@@ -6351,7 +6353,7 @@ void __cdecl lf_0ad70(int param_1,int param_2)
   int iVar4;
   int iVar5;
   
-  FUN_0040ad30(&DAT_012bd6aa);
+  init_genrand(&DAT_012bd6aa);
   iVar4 = 0;
   iVar3 = 1;
   if (param_2 < 0x270) {
@@ -6394,7 +6396,7 @@ LAB_0040adf9:
 #undef DAT_0046177c
 #undef DAT_00460dc0
 #undef DAT_012bd6aa
-#undef FUN_0040ad30
+#undef init_genrand
 
 /* ---------------------------------------------------------------- 0xae50 */
 #define DAT_00460cd0 (*(int *)SR_VA(0x460cd0))
@@ -6404,7 +6406,7 @@ LAB_0040adf9:
 #define DAT_00460d10 (*(undefined *)SR_VA(0x460d10))
 #define DAT_00460dc4 (*(undefined4 *)SR_VA(0x460dc4))
 #define _DAT_004613f0 (*(uint *)SR_VA(0x4613f0))
-#define FUN_0040ad30 ((void (__cdecl *)(undefined4))SR_VA(0x40ad30))
+#define init_genrand ((void (__cdecl *)(undefined4))SR_VA(0x40ad30))
 int __cdecl lf_0ae50(void)
 
 {
@@ -6415,7 +6417,7 @@ int __cdecl lf_0ae50(void)
   
   if (0x26f < DAT_00460cd0) {
     if (DAT_00460cd0 == 0x271) {
-      FUN_0040ad30(0x1571);
+      init_genrand(0x1571);
     }
     iVar2 = 0;
     do {
@@ -6453,12 +6455,11 @@ int __cdecl lf_0ae50(void)
 #undef DAT_00460d10
 #undef DAT_00460dc4
 #undef _DAT_004613f0
-#undef FUN_0040ad30
+#undef init_genrand
 
 /* ---------------------------------------------------------------- 0xb040 */
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-void __cdecl lf_0b040(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,undefined4 param_5
-            )
+void __cdecl lf_0b040(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,undefined4 param_5)
 
 {
   int *piVar1;
@@ -6510,8 +6511,8 @@ int __cdecl lf_0b0b0(int param_1,undefined4 param_2,int param_3,int param_4)
 
 /* ---------------------------------------------------------------- 0xb150 */
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-void __cdecl lf_0b150(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,undefined4 param_5
-            ,undefined4 param_6,undefined4 param_7,undefined4 param_8)
+void __cdecl lf_0b150(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,
+                  undefined4 param_5,undefined4 param_6,undefined4 param_7,undefined4 param_8)
 
 {
   int iVar1;
@@ -6535,11 +6536,11 @@ void __cdecl lf_0b150(int param_1,undefined4 param_2,undefined4 param_3,undefine
 
 /* ---------------------------------------------------------------- 0xb230 */
 #define DAT_00461840 (*(int *)SR_VA(0x461840))
-#define GetSystemTimeAsFileTime ((void (__stdcall *)(LPFILETIME))LF_IMPORT(12, "KERNEL32.DLL", "GetSystemTimeAsFileTime"))
-#define __daylight ((int * (__cdecl *)(void))LF_IMPORT(13, "MSVCR100.DLL", "__daylight"))
-#define _tzset ((void (__cdecl *)(void))LF_IMPORT(14, "MSVCR100.DLL", "_tzset"))
 #define __aulldiv ((undefined8 (__cdecl *)(uint, uint, uint, uint))SR_VA(0x45cf70))
-#define __timezone ((long * (__cdecl *)(void))LF_IMPORT(15, "MSVCR100.DLL", "__timezone"))
+#define __timezone ((long * (__cdecl *)(void))LF_IMPORT(12, "MSVCR100.DLL", "__timezone"))
+#define GetSystemTimeAsFileTime ((void (__stdcall *)(LPFILETIME))LF_IMPORT(13, "KERNEL32.DLL", "GetSystemTimeAsFileTime"))
+#define __daylight ((int * (__cdecl *)(void))LF_IMPORT(14, "MSVCR100.DLL", "__daylight"))
+#define _tzset ((void (__cdecl *)(void))LF_IMPORT(15, "MSVCR100.DLL", "_tzset"))
 #define local_10 (*(_FILETIME *)(lf_frame + 0x10))
 #define local_4 (*(undefined4 *)(lf_frame + 0x1c))
 undefined4 __cdecl lf_0b230(int *param_1,int *param_2)
@@ -6576,11 +6577,11 @@ undefined4 __cdecl lf_0b230(int *param_1,int *param_2)
   return 0;
 }
 #undef DAT_00461840
+#undef __aulldiv
+#undef __timezone
 #undef GetSystemTimeAsFileTime
 #undef __daylight
 #undef _tzset
-#undef __aulldiv
-#undef __timezone
 #undef local_10
 #undef local_4
 
@@ -7101,7 +7102,7 @@ void __cdecl lf_0bb00(float *param_1,float *param_2,float *param_3)
 
 
 /* ---------------------------------------------------------------- 0xbb80 */
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 void __cdecl lf_0bb80(float *param_1,float *param_2,float *param_3,float *param_4)
 
 {
@@ -7133,10 +7134,10 @@ void __cdecl lf_0bb80(float *param_1,float *param_2,float *param_3,float *param_
   *param_1 = (float)(((float)(fVar5 - fVar6)) * ((float)(fVar9 - fVar10)) - ((float)(fVar3 - fVar4)) * ((float)(fVar11 - fVar12)));
   param_1[1] = (float)(((float)(fVar1 - fVar2)) * (fVar11 - fVar12) - ((float)(fVar7 - fVar8)) * (fVar5 - fVar6));
   param_1[2] = (float)((fVar7 - fVar8) * (fVar3 - fVar4) - (fVar1 - fVar2) * (fVar9 - fVar10));
-  FUN_0040b900(param_1,param_1);
+  normalizevector(param_1,param_1);
   return;
 }
-#undef FUN_0040b900
+#undef normalizevector
 
 /* ---------------------------------------------------------------- 0xbc20 */
 
@@ -7157,8 +7158,8 @@ void __cdecl lf_0bc20(undefined4 *param_1)
 
 
 /* ---------------------------------------------------------------- 0xbc50 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
 void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
 
 {
@@ -7189,13 +7190,13 @@ void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
   param_1[2] = (float)(fVar9 * fVar5 + ((float)(fVar3 * fVar7 + ((float)(fVar8 * fVar1 - fVar6 * fVar2)) * fVar4)));
   return;
 }
-#undef _CIcos
 #undef _CIsin
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xbdb0 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIcos lf_CIcos
 void __cdecl lf_0bdb0(int param_1,float *param_2,float param_3)
 
 {
@@ -7237,15 +7238,15 @@ void __cdecl lf_0bdb0(int param_1,float *param_2,float param_3)
     *pfVar1 = (float)(*pfVar1 + fVar6 * fVar9);
     pfVar11[-1] = (float)(pfVar11[-1] + fVar6 * fVar10);
     *pfVar11 = (float)(fVar6 * fVar8 + *pfVar11);
-    FUN_0040b900(pfVar1,pfVar1);
+    normalizevector(pfVar1,pfVar1);
     pfVar11 = pfVar11 + 3;
     iVar12 = iVar12 + -1;
   } while (iVar12 != 0);
   return;
 }
-#undef _CIcos
 #undef _CIsin
-#undef FUN_0040b900
+#undef normalizevector
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xbf60 */
 #define _CIsqrt lf_CIsqrt
@@ -7269,8 +7270,8 @@ void __cdecl lf_0bf60(float *param_1,float *param_2)
 #undef _CIsqrt
 
 /* ---------------------------------------------------------------- 0xc0a0 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
 void __cdecl lf_0c0a0(float *param_1,float param_2)
 
 {
@@ -7287,13 +7288,13 @@ void __cdecl lf_0c0a0(float *param_1,float param_2)
   param_1[1] = (float)(fVar2 * (float)dVar4 + param_1[1] * (float)dVar3);
   return;
 }
-#undef _CIcos
 #undef _CIsin
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xc120 */
 
 undefined4 __cdecl lf_0c120(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6)
+                  float *param_6)
 
 {
   float fVar1;
@@ -7335,8 +7336,8 @@ undefined4 __cdecl lf_0c120(float *param_1,float *param_2,float *param_3,float *
 
 /* ---------------------------------------------------------------- 0xc290 */
 
-undefined4 __cdecl lf_0c290(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6)
+undefined4 __cdecl lf_0c290(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
+          )
 
 {
   float fVar1;
@@ -7378,14 +7379,14 @@ undefined4 __cdecl lf_0c290(float *param_1,float *param_2,float *param_3,float *
 
 
 /* ---------------------------------------------------------------- 0xc420 */
-#define FUN_0040c120 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c120))
-undefined4 __cdecl lf_0c420(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float *param_7,float *param_8)
+#define lineintersectplane ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c120))
+undefined4 __cdecl lf_0c420(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
+          ,float *param_7,float *param_8)
 
 {
   int iVar1;
   
-  iVar1 = FUN_0040c120(param_1,param_2,param_3,param_4,param_5,param_6);
+  iVar1 = lineintersectplane(param_1,param_2,param_3,param_4,param_5,param_6);
   if ((((iVar1 != 0) &&
        (0.0 <= (float)(((float)(((float)(*param_1 - *param_6)) * ((float)(param_7[1] - param_6[1])) -
                ((float)(*param_7 - *param_6)) * ((float)(param_1[1] - param_6[1])))) * param_2[2] +
@@ -7409,22 +7410,22 @@ undefined4 __cdecl lf_0c420(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef FUN_0040c120
+#undef lineintersectplane
 
 /* ---------------------------------------------------------------- 0xc680 */
-#define FUN_0040c120 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c120))
-#define FUN_0040c290 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c290))
-undefined4 __cdecl lf_0c680(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float *param_7,float *param_8,int param_9)
+#define lineintersectplane ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c120))
+#define lineintersectplanetwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c290))
+undefined4 __cdecl lf_0c680(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
+          ,float *param_7,float *param_8,int param_9)
 
 {
   int iVar1;
   
   if (param_9 == 0) {
-    iVar1 = FUN_0040c120(param_1,param_2,param_3,param_4,param_5,param_6);
+    iVar1 = lineintersectplane(param_1,param_2,param_3,param_4,param_5,param_6);
   }
   else {
-    iVar1 = FUN_0040c290(param_1,param_2,param_3,param_4,param_5,param_6);
+    iVar1 = lineintersectplanetwosided(param_1,param_2,param_3,param_4,param_5,param_6);
   }
   if (iVar1 != 0) {
     if (((float)(param_2[2] *
@@ -7461,13 +7462,13 @@ undefined4 __cdecl lf_0c680(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef FUN_0040c120
-#undef FUN_0040c290
+#undef lineintersectplane
+#undef lineintersectplanetwosided
 
 /* ---------------------------------------------------------------- 0xc8f0 */
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -7506,20 +7507,20 @@ float10 __cdecl lf_0c8f0(float *param_1,float *param_2,float *param_3)
   local_14 = (float)(param_3[1] - param_1[1]);
   local_10 = (float)(param_3[2] - param_1[2]);
   if ((float)(local_4 * local_10 + (local_14 * local_8 + local_18 * local_c)) <= 0.0) {
-    fVar2 = (float10)FUN_0040baa0(param_3,param_1);
+    fVar2 = (float10)vectordistance(param_3,param_1);
     return fVar2;
   }
-  FUN_0040b900(&local_c,&local_c);
+  normalizevector(&local_c,&local_c);
   fVar1 = -((float)(local_8 * local_14 + local_c * local_18 + local_4 * local_10));
   local_18 = (float)(*param_3 + fVar1 * local_c);
   local_14 = (float)(param_3[1] + fVar1 * local_8);
   local_10 = (float)(local_4 * fVar1 + param_3[2]);
-  fVar2 = (float10)FUN_0040baa0(&local_18,param_1);
+  fVar2 = (float10)vectordistance(&local_18,param_1);
   return fVar2;
 }
+#undef normalizevector
+#undef vectordistance
 #undef _CIsqrt
-#undef FUN_0040baa0
-#undef FUN_0040b900
 #undef local_18
 #undef local_14
 #undef local_10
@@ -7528,9 +7529,9 @@ float10 __cdecl lf_0c8f0(float *param_1,float *param_2,float *param_3)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0xcab0 */
-#define FUN_0040bf60 ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
+#define normalizevector2d ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
 undefined4 __cdecl lf_0cab0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float *param_7)
+                   float *param_6,float *param_7)
 
 {
   float fVar1;
@@ -7544,7 +7545,7 @@ undefined4 __cdecl lf_0cab0(float *param_1,float *param_2,float *param_3,float *
   param_2[1] = fVar1;
   if ((0.0 <= (float)(fVar1 * ((float)(param_4[1] - param_6[1])) + *param_2 * ((float)(*param_4 - *param_6)))) &&
      ((float)(*param_2 * ((float)(*param_5 - *param_6)) + ((float)(param_5[1] - param_6[1])) * fVar1) <= 0.0)) {
-    FUN_0040bf60(param_2,param_2);
+    normalizevector2d(param_2,param_2);
     *param_3 = (float)(param_2[1] * ((float)(param_6[1] - param_4[1])) + *param_2 * ((float)(*param_6 - *param_4)));
     fVar1 = *param_5;
     fVar2 = *param_4;
@@ -7564,12 +7565,12 @@ undefined4 __cdecl lf_0cab0(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef FUN_0040bf60
+#undef normalizevector2d
 
 /* ---------------------------------------------------------------- 0xcca0 */
-#define FUN_0040bf60 ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
-undefined4 __cdecl lf_0cca0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float param_7)
+#define normalizevector2d ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
+undefined4 __cdecl lf_0cca0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
+          ,float param_7)
 
 {
   float fVar1;
@@ -7580,7 +7581,7 @@ undefined4 __cdecl lf_0cca0(float *param_1,float *param_2,float *param_3,float *
              ((float)(*param_5 - *param_6)) * ((float)(*param_4 - *param_6))))) {
     *param_2 = (float)(param_5[1] - param_6[1]);
     param_2[1] = (float)(*param_6 - *param_5);
-    FUN_0040bf60(param_2,param_2);
+    normalizevector2d(param_2,param_2);
     fVar1 = (float)(((float)(param_4[1] - param_5[1])) * param_2[1] + *param_2 * ((float)(*param_4 - *param_5)));
     if (ABS(fVar1) <= param_7) {
       *param_1 = (float)(*param_4 + -fVar1 * *param_2);
@@ -7592,12 +7593,12 @@ undefined4 __cdecl lf_0cca0(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef FUN_0040bf60
+#undef normalizevector2d
 
 /* ---------------------------------------------------------------- 0xcdf0 */
 #define _CIsqrt lf_CIsqrt
-undefined4 __cdecl lf_0cdf0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float param_7)
+undefined4 __cdecl lf_0cdf0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
+          ,float param_7)
 
 {
   float fVar1;
@@ -7645,9 +7646,9 @@ undefined4 __cdecl lf_0cdf0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_14222e68 (*(int *)SR_VA(0x14222e68))
 #define DAT_14122d68 (*(undefined1 *)SR_VA(0x14122d68))
 #define g_parser (*(undefined4 *)SR_VA(0x14122d60))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define fgetc ((int (__cdecl *)(FILE *))LF_IMPORT(20, "MSVCR100.DLL", "fgetc"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
 void __cdecl lf_0d020(char *param_1)
 
 {
@@ -7676,8 +7677,8 @@ void __cdecl lf_0d020(char *param_1)
 #undef DAT_14122d68
 #undef g_parser
 #undef fopen
-#undef fclose
 #undef fgetc
+#undef fclose
 
 /* ---------------------------------------------------------------- 0xd0c0 */
 #define DAT_14122d64 (*(int *)SR_VA(0x14122d64))
@@ -7810,11 +7811,11 @@ void __cdecl lf_0d2a0(int param_1,int param_2)
 #define LAB_0040d320 (*(undefined *)SR_VA(0x40d320))
 #define DAT_0e619204 (*(undefined1 *)SR_VA(0xe619204))
 #define g_filelist (*(undefined4 *)SR_VA(0xe619200))
-#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(22, "MSVCR100.DLL", "_findclose"))
-#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(23, "MSVCR100.DLL", "_findfirst64i32"))
-#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(24, "MSVCR100.DLL", "qsort"))
 #define __security_check_cookie(x) ((void)0)
-#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(25, "MSVCR100.DLL", "_findnext64i32"))
+#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(22, "MSVCR100.DLL", "_findclose"))
+#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(23, "MSVCR100.DLL", "qsort"))
+#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(24, "MSVCR100.DLL", "_findnext64i32"))
+#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(25, "MSVCR100.DLL", "_findfirst64i32"))
 #define local_12c (*(_finddata64i32_t *)(lf_frame + 0x14))
 #define local_4 (*(uint *)(lf_frame + 0x13c))
 void __cdecl lf_0d3a0(char *param_1,int param_2,int param_3)
@@ -7876,11 +7877,11 @@ LAB_0040d46c:
 #undef LAB_0040d320
 #undef DAT_0e619204
 #undef g_filelist
-#undef _findclose
-#undef _findfirst64i32
-#undef qsort
 #undef __security_check_cookie
+#undef _findclose
+#undef qsort
 #undef _findnext64i32
+#undef _findfirst64i32
 #undef local_12c
 #undef local_4
 
@@ -7944,10 +7945,10 @@ void __cdecl lf_0d680(int param_1)
 #define DAT_1992d684 (*(undefined4 *)SR_VA(0x1992d684))
 #define DAT_1992d6a4 (*(undefined *)SR_VA(0x1992d6a4))
 #define _DAT_1992d6c4 (*(undefined2 *)SR_VA(0x1992d6c4))
-#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(26, "WSOCK32.DLL", 23))
-#define bind ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 2))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define bind ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(26, "WSOCK32.DLL", 2))
+#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 23))
 #define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(28, "WSOCK32.DLL", 12))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 void __cdecl lf_0d710(u_long param_1)
 
 {
@@ -7980,10 +7981,10 @@ void __cdecl lf_0d710(u_long param_1)
 #undef DAT_1992d684
 #undef DAT_1992d6a4
 #undef _DAT_1992d6c4
-#undef socket
 #undef bind
-#undef htons
+#undef socket
 #undef ioctlsocket
+#undef htons
 
 /* ---------------------------------------------------------------- 0xd860 */
 #define DAT_1992d6c8 (*(undefined4 *)SR_VA(0x1992d6c8))
@@ -8050,8 +8051,8 @@ int __cdecl lf_0d860(void)
 #define DAT_1992d6c4 (*(undefined *)SR_VA(0x1992d6c4))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
 void __cdecl lf_0d910(u_long param_1,u_short param_2)
 
@@ -8078,15 +8079,15 @@ void __cdecl lf_0d910(u_long param_1,u_short param_2)
 #undef DAT_1992d6c4
 #undef DAT_1992d6e4
 #undef g_bsdsocket
-#undef htons
 #undef htonl
+#undef htons
 #undef sendto
 
 /* ---------------------------------------------------------------- 0xd990 */
 #define DAT_1992d6dc (*(int *)SR_VA(0x1992d6dc))
 #define DAT_1992d6e0 (*(int *)SR_VA(0x1992d6e0))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
 undefined4 __cdecl lf_0d990(void *param_1,int param_2,int param_3)
 
 {
@@ -8111,7 +8112,7 @@ undefined4 __cdecl lf_0d990(void *param_1,int param_2,int param_3)
 #define DAT_1993d6e4 (*(int *)SR_VA(0x1993d6e4))
 #define DAT_1993d6ec (*(int *)SR_VA(0x1993d6ec))
 #define DAT_1993d6f0 (*(undefined1 *)SR_VA(0x1993d6f0))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
 undefined4 __cdecl lf_0d9f0(void *param_1,int param_2,int param_3)
 
 {
@@ -8237,24 +8238,24 @@ int __cdecl lf_0db20(uint *param_1,uint param_2)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0xddb0 */
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 int __cdecl lf_0ddb0(uint *param_1,uint param_2)
 
 {
-  FUN_0040da60(param_1,param_2);
+  pbitwrite(param_1,param_2);
   return 1;
 }
-#undef FUN_0040da60
+#undef pbitwrite
 
 /* ---------------------------------------------------------------- 0xddd0 */
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
 int __cdecl lf_0ddd0(uint *param_1,uint param_2)
 
 {
   uint uVar1;
   
   uVar1 = param_2;
-  FUN_0040db20(&param_2,param_2);
+  pbitread(&param_2,param_2);
   if (param_2 == (1 << ((byte)uVar1 & 0x1f)) - 1U) {
     *param_1 = 0xffffffff;
     return 1;
@@ -8262,17 +8263,17 @@ int __cdecl lf_0ddd0(uint *param_1,uint param_2)
   *param_1 = param_2;
   return 1;
 }
-#undef FUN_0040db20
+#undef pbitread
 
 /* ---------------------------------------------------------------- 0xded0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00401010 ((undefined4 (__cdecl *)(char *))SR_VA(0x401010))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define account_nameexists ((undefined4 (__cdecl *)(char *))SR_VA(0x401010))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define local_2c (*(char * *)(lf_frame + 0x14))
 #define local_28 (*(int *)(lf_frame + 0x18))
@@ -8348,7 +8349,7 @@ int __cdecl lf_0ded0(int param_1)
   iVar2 = 1;
   do {
     pcVar3 = local_2c;
-    iVar4 = FUN_00401010(local_2c);
+    iVar4 = account_nameexists(local_2c);
     if (iVar4 == 0) break;
     *(undefined1 *)(local_28 + ((int)SR_VA(0xf1edd04)) + param_1 * 0x2408) = 0;
     sprintf(local_24,"(%d)",iVar2);
@@ -8399,10 +8400,10 @@ int __cdecl lf_0ded0(int param_1)
 #undef DAT_0f837b64
 #undef g_account
 #undef g_player
+#undef __security_check_cookie
 #undef memset
 #undef sprintf
-#undef __security_check_cookie
-#undef FUN_00401010
+#undef account_nameexists
 #undef rand
 #undef local_2c
 #undef local_28
@@ -8434,13 +8435,13 @@ int __cdecl lf_0ded0(int param_1)
 #define DAT_0e699234 (*(undefined *)SR_VA(0xe699234))
 #define DAT_0e699238 (*(undefined *)SR_VA(0xe699238))
 #define DAT_0e69923c (*(undefined *)SR_VA(0xe69923c))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_00401610 ((void (__cdecl *)(uint))SR_VA(0x401610))
-#define FUN_0040b850 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
 #define local_4c (*(uint *)(lf_frame + 0x24))
@@ -8623,7 +8624,7 @@ void __cdecl lf_0e4d0(float param_1,int param_2)
   local_3c = (float)(local_24 - g_object[param_2].pos.x);
   local_38 = (float)(local_20 - g_object[param_2].pos.y);
   local_34 = (float)(local_1c - g_object[param_2].pos.z);
-  FUN_0040b900(&local_3c,&local_3c);
+  normalizevector(&local_3c,&local_3c);
   local_14 = (float)(local_3c * g_object[param_2].rot[2].z - local_34 * g_object[param_2].rot[2].x);
   local_54 = (float)(g_object[param_2].rot[1].z *
              ((float)(local_38 * g_object[param_2].rot[2].x - g_object[param_2].rot[2].y * local_3c)) +
@@ -8675,12 +8676,12 @@ LAB_0040eaa5:
     iVar5 = g_player[((int)LF_BITS_U(param_1))].ai_waypoint * 0x1c;
     *(undefined4 *)(&g_player[((int)LF_BITS_U(param_1))].lf_raw[0x1a60] + iVar5) =
          *(undefined4 *)(&g_player[((int)LF_BITS_U(param_1))].lf_raw[0x1a7c] + iVar5);
-    FUN_00401610(((uint)LF_BITS_U(param_1)));
+    ai_car_nextwaypoint(((uint)LF_BITS_U(param_1)));
   }
   iVar5 = g_player[((int)LF_BITS_U(param_1))].unk_2154;
   if (((iVar5 != -1) && (g_player[((int)LF_BITS_U(param_1))].unk_2158 == (&DAT_0e699260)[iVar5 * 0x1a])) &&
-     (fVar20 = (float10)FUN_0040baa0(&g_object[param_2].pos.x,
-                                     (float *)(&DAT_0e699234 + iVar5 * 0x68)),
+     (fVar20 = (float10)vectordistance(&g_object[param_2].pos.x,
+                                       (float *)(&DAT_0e699234 + iVar5 * 0x68)),
      (float10)32.0 < fVar20)) {
     (&DAT_0e699260)[iVar5 * 0x1a] = (&DAT_0e699260)[iVar5 * 0x1a] + 1;
     (&DAT_0e699268)[iVar5 * 0x1a] = 0;
@@ -8689,7 +8690,7 @@ LAB_0040eaa5:
   local_3c = (float)(local_24 - g_object[param_2].pos.x);
   local_38 = (float)(local_20 - g_object[param_2].pos.y);
   local_34 = (float)(local_1c - g_object[param_2].pos.z);
-  FUN_0040b900(&local_3c,&local_3c);
+  normalizevector(&local_3c,&local_3c);
   pPVar11 = g_player + ((int)LF_BITS_U(param_1));
   fVar1 = local_3c * g_object[param_2].rot[2].x;
   fVar1 = (float)(ABS((float)(local_34 * g_object[param_2].rot[2].z + (g_object[param_2].rot[2].y * local_38 + fVar1)))
@@ -8763,9 +8764,9 @@ LAB_0040ef80:
           g_player[((int)LF_BITS_U(fVar12))].unk_1a40 = 0x3c;
         }
         if ((2.0 < (float)(local_34 * local_4 + (local_38 * local_8 + local_c * local_3c))) && (fVar2 < 2.0)) {
-          fVar20 = (float10)FUN_0040b850(&g_object[param_2].rot[2].x,pfVar19 + 10);
+          fVar20 = (float10)dotproduct(&g_object[param_2].rot[2].x,pfVar19 + 10);
           if ((float10)0.0 < fVar20) {
-            fVar20 = (float10)FUN_0040baa0(&g_object[param_2].pos.x,(float *)(pfVar19 + -2));
+            fVar20 = (float10)vectordistance(&g_object[param_2].pos.x,(float *)(pfVar19 + -2));
             local_50 = (float)(fVar20 - (float10)8.0);
             if (local_50 < 0.0) {
               local_50 = 0.0;
@@ -8773,7 +8774,7 @@ LAB_0040ef80:
             if ((g_player[((int)LF_BITS_U(fVar12))].unk_1a3c != 0) && (local_50 < 16.0)) {
               local_50 = 16.0;
             }
-            fVar20 = (float10)FUN_0040b8c0(pfVar19 + 0xd);
+            fVar20 = (float10)vectorlength(pfVar19 + 0xd);
             fVar1 = (float)(fVar20 + (float10)((float)((local_50 * 0.5) / 60.0)));
             if (fVar1 < param_1) goto LAB_0040f118;
           }
@@ -8852,13 +8853,13 @@ LAB_0040f22c:
 #undef DAT_0e699234
 #undef DAT_0e699238
 #undef DAT_0e69923c
-#undef FUN_0040b900
-#undef FUN_00401610
-#undef FUN_0040b850
 #undef _CIsqrt
-#undef FUN_0040b8c0
-#undef FUN_0040baa0
 #undef rand
+#undef normalizevector
+#undef vectorlength
+#undef ai_car_nextwaypoint
+#undef vectordistance
+#undef dotproduct
 #undef local_54
 #undef local_50
 #undef local_4c
@@ -8907,7 +8908,7 @@ LAB_0040f22c:
 #define DAT_171665a8 (*(undefined *)SR_VA(0x171665a8))
 #define DAT_1994d740 (*(undefined4 *)SR_VA(0x1994d740))
 #define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(9, "MSVCR100.DLL", "malloc"))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(7, "MSVCR100.DLL", "free"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(8, "MSVCR100.DLL", "free"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int *)(lf_frame + 0x1c))
 void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int param_5,float param_6)
@@ -9048,8 +9049,8 @@ void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int pa
 #define DAT_19952760 (*(undefined *)SR_VA(0x19952760))
 #define DAT_19952788 (*(undefined *)SR_VA(0x19952788))
 #define DAT_19952f8c (*(undefined *)SR_VA(0x19952f8c))
+#define area_getnextsector ((int (__cdecl *)(void))SR_VA(0x401cd0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_00401cd0 ((int (__cdecl *)(void))SR_VA(0x401cd0))
 int __cdecl lf_0f4a0(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5)
 
 {
@@ -9065,7 +9066,7 @@ int __cdecl lf_0f4a0(uint param_1,uint param_2,uint param_3,uint param_4,uint pa
      (((iVar3 = param_1 * 0x100d6c, (int)param_3 >> 3 < *(int *)(&DAT_17166074 + iVar3) &&
        ((int)param_4 >> 3 < *(int *)(&DAT_17166078 + iVar3))) &&
       ((int)param_5 >> 3 < *(int *)(&DAT_1716607c + iVar3))))) {
-    iVar1 = FUN_00401cd0();
+    iVar1 = area_getnextsector();
     if (iVar1 == -1) {
       return -1;
     }
@@ -9112,8 +9113,8 @@ int __cdecl lf_0f4a0(uint param_1,uint param_2,uint param_3,uint param_4,uint pa
 #undef DAT_19952760
 #undef DAT_19952788
 #undef DAT_19952f8c
+#undef area_getnextsector
 #undef memset
-#undef FUN_00401cd0
 
 /* ---------------------------------------------------------------- 0xf620 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -9122,7 +9123,7 @@ int __cdecl lf_0f4a0(uint param_1,uint param_2,uint param_3,uint param_4,uint pa
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665a8 (*(undefined *)SR_VA(0x171665a8))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
-#define FUN_00401e20 ((int (__cdecl *)(int))SR_VA(0x401e20))
+#define area_getnextchunk ((int (__cdecl *)(int))SR_VA(0x401e20))
 int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 
 {
@@ -9140,7 +9141,7 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
     iVar3 = *(int *)(&DAT_17166074 + iVar4);
     if (((param_2 < iVar3) && (param_3 < *(int *)(&DAT_17166078 + iVar4))) &&
        (iVar1 = *(int *)(&DAT_1716607c + iVar4), param_4 < iVar1)) {
-      iVar2 = FUN_00401e20(param_1);
+      iVar2 = area_getnextchunk(param_1);
       if (iVar2 == -1) {
         return -1;
       }
@@ -9165,7 +9166,7 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #undef DAT_17166088
 #undef DAT_171665a8
 #undef DAT_171665ac
-#undef FUN_00401e20
+#undef area_getnextchunk
 
 /* ---------------------------------------------------------------- 0xf6f0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -9197,9 +9198,9 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #define DAT_25bbd774 (*(undefined4 *)SR_VA(0x25bbd774))
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00402620 ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
+#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
+#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00402560 ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -9212,7 +9213,7 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #define local_1c (*(float (*)[6])(lf_frame + 0x34))
 #define local_4 (*(uint *)(lf_frame + 0x4c))
 void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int param_5,float param_6,
-            undefined4 param_7)
+                undefined4 param_7)
 
 {
   __declspec(align(16)) uchar lf_frame[0x50];
@@ -9259,8 +9260,8 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
         pfVar8 = pfVar3;
         do {
           iVar5 = iVar7;
-          fVar10 = (float10)FUN_00402560(((int)LF_BITS_U(param_6)),local_38,pfVar8[-0x18],pfVar8[-0xc],*pfVar8,
-                                         pfVar8[0xc]);
+          fVar10 = (float10)tesselatebezier(((int)LF_BITS_U(param_6)),local_38,pfVar8[-0x18],pfVar8[-0xc],*pfVar8
+                                            ,pfVar8[0xc]);
           *pfVar6 = (float)fVar10;
           pfVar8 = pfVar8 + 1;
           pfVar6 = pfVar6 + 1;
@@ -9268,8 +9269,8 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
         } while (iVar7 != 0);
         iVar5 = iVar5 + 1;
         do {
-          fVar10 = (float10)FUN_00402560(((int)LF_BITS_U(param_6)),local_38,pfVar4[-0x10],pfVar4[-8],*pfVar4,
-                                         pfVar4[8]);
+          fVar10 = (float10)tesselatebezier(((int)LF_BITS_U(param_6)),local_38,pfVar4[-0x10],pfVar4[-8],*pfVar4,
+                                            pfVar4[8]);
           *pfVar9 = (float)fVar10;
           pfVar4 = pfVar4 + 1;
           pfVar9 = pfVar9 + 1;
@@ -9278,8 +9279,9 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
         pfVar6 = (float *)((int)&DAT_0b4661c0 + ((int)LF_BITS_U(local_3c)));
         iVar7 = 3;
         do {
-          fVar10 = (float10)FUN_00402620(param_6,local_38,pfVar3[-0x18],pfVar3[-0xc],*pfVar3,
-                                         pfVar3[0xc]);
+          fVar10 = (float10)tesselatebezierderivative
+                                      (param_6,local_38,pfVar3[-0x18],pfVar3[-0xc],*pfVar3,
+                                       pfVar3[0xc]);
           *pfVar6 = (float)fVar10;
           pfVar3 = pfVar3 + 1;
           pfVar6 = pfVar6 + 1;
@@ -9294,40 +9296,41 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
         do {
           iVar5 = 0;
           do {
-            fVar10 = (float10)FUN_00402560(((int)LF_BITS_U(param_4)),local_3c,LF_BITS_F((&DAT_07a1ea20)[iVar5]),
-                                           LF_BITS_F((&DAT_07a1ea2c)[iVar5]),
-                                           LF_BITS_F((&DAT_07a1ea38)[iVar5]),
-                                           LF_BITS_F((&DAT_07a1ea44)[iVar5]));
+            fVar10 = (float10)tesselatebezier(((int)LF_BITS_U(param_4)),local_3c,LF_BITS_F((&DAT_07a1ea20)[iVar5]),
+                                              LF_BITS_F((&DAT_07a1ea2c)[iVar5]),
+                                              LF_BITS_F((&DAT_07a1ea38)[iVar5]),
+                                              LF_BITS_F((&DAT_07a1ea44)[iVar5]));
             iVar1 = iVar5 + DAT_25aad760 * 3;
             iVar5 = iVar5 + 1;
             *(float *)&((&DAT_25aad764)[iVar1]) = (float)fVar10;
           } while (iVar5 < 3);
           iVar5 = 0;
           do {
-            fVar10 = (float10)FUN_00402560(((int)LF_BITS_U(param_4)),local_3c,LF_BITS_F((&DAT_14022d40)[iVar5]),
-                                           LF_BITS_F((&DAT_14022d48)[iVar5]),
-                                           LF_BITS_F((&DAT_14022d50)[iVar5]),
-                                           LF_BITS_F((&DAT_14022d58)[iVar5]));
+            fVar10 = (float10)tesselatebezier(((int)LF_BITS_U(param_4)),local_3c,LF_BITS_F((&DAT_14022d40)[iVar5]),
+                                              LF_BITS_F((&DAT_14022d48)[iVar5]),
+                                              LF_BITS_F((&DAT_14022d50)[iVar5]),
+                                              LF_BITS_F((&DAT_14022d58)[iVar5]));
             iVar1 = iVar5 + DAT_25aad760 * 3;
             iVar5 = iVar5 + 1;
             *(float *)&((&DAT_25b3d764)[iVar1]) = (float)fVar10;
           } while (iVar5 < 2);
           iVar5 = 0;
           do {
-            fVar10 = (float10)FUN_00402620(param_4,local_3c,*(float *)((int)&DAT_07a1ea20 + iVar5),
-                                           *(float *)((int)&DAT_07a1ea2c + iVar5),
-                                           *(float *)((int)&DAT_07a1ea38 + iVar5),
-                                           *(float *)((int)&DAT_07a1ea44 + iVar5));
+            fVar10 = (float10)tesselatebezierderivative
+                                        (param_4,local_3c,*(float *)((int)&DAT_07a1ea20 + iVar5),
+                                         *(float *)((int)&DAT_07a1ea2c + iVar5),
+                                         *(float *)((int)&DAT_07a1ea38 + iVar5),
+                                         *(float *)((int)&DAT_07a1ea44 + iVar5));
             *(float *)((int)local_1c + iVar5) = (float)fVar10;
             iVar5 = iVar5 + 4;
           } while (iVar5 < 0xc);
           iVar5 = 0;
           do {
-            fVar10 = (float10)FUN_00402560(((int)LF_BITS_U(param_4)),local_3c,
-                                           *(float *)((int)&DAT_0b4661c0 + iVar5),
-                                           *(float *)((int)&DAT_0b4661cc + iVar5),
-                                           *(float *)((int)&DAT_0b4661d8 + iVar5),
-                                           *(float *)((int)&DAT_0b4661e4 + iVar5));
+            fVar10 = (float10)tesselatebezier(((int)LF_BITS_U(param_4)),local_3c,
+                                              *(float *)((int)&DAT_0b4661c0 + iVar5),
+                                              *(float *)((int)&DAT_0b4661cc + iVar5),
+                                              *(float *)((int)&DAT_0b4661d8 + iVar5),
+                                              *(float *)((int)&DAT_0b4661e4 + iVar5));
             iVar1 = DAT_25aad760;
             *(float *)((int)local_1c + iVar5 + 0xc) = (float)fVar10;
             iVar5 = iVar5 + 4;
@@ -9433,9 +9436,9 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #undef DAT_25bbd774
 #undef DAT_25bfd768
 #undef _CIsqrt
-#undef FUN_00402620
+#undef tesselatebezier
+#undef tesselatebezierderivative
 #undef __security_check_cookie
-#undef FUN_00402560
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -9476,9 +9479,9 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #define DAT_25bbd774 (*(undefined4 *)SR_VA(0x25bbd774))
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00402620 ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
+#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
+#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00402560 ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
@@ -9490,7 +9493,7 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #define local_1c (*(float (*)[6])(lf_frame + 0x34))
 #define local_4 (*(uint *)(lf_frame + 0x4c))
 void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,int param_5,float param_6,
-            undefined4 param_7)
+          undefined4 param_7)
 
 {
   __declspec(align(16)) uchar lf_frame[0x50];
@@ -9531,8 +9534,8 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
         iVar7 = 3;
         pfVar4 = pfVar2;
         do {
-          fVar8 = (float10)FUN_00402560(((int)LF_BITS_U(param_6)),local_34,pfVar4[-0x18],pfVar4[-0xc],*pfVar4,
-                                        pfVar4[0xc]);
+          fVar8 = (float10)tesselatebezier(((int)LF_BITS_U(param_6)),local_34,pfVar4[-0x18],pfVar4[-0xc],*pfVar4,
+                                           pfVar4[0xc]);
           *pfVar6 = (float)fVar8;
           pfVar4 = pfVar4 + 1;
           pfVar6 = pfVar6 + 1;
@@ -9541,8 +9544,9 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
         pfVar6 = (float *)((int)&DAT_0b4661c0 + iVar5);
         iVar7 = 3;
         do {
-          fVar8 = (float10)FUN_00402620(param_6,local_34,pfVar2[-0x18],pfVar2[-0xc],*pfVar2,
-                                        pfVar2[0xc]);
+          fVar8 = (float10)tesselatebezierderivative
+                                     (param_6,local_34,pfVar2[-0x18],pfVar2[-0xc],*pfVar2,
+                                      pfVar2[0xc]);
           *pfVar6 = (float)fVar8;
           pfVar2 = pfVar2 + 1;
           pfVar6 = pfVar6 + 1;
@@ -9557,10 +9561,10 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
         do {
           iVar7 = 0;
           do {
-            fVar8 = (float10)FUN_00402560(((int)LF_BITS_U(param_4)),local_38,LF_BITS_F((&DAT_07a1ea20)[iVar7]),
-                                          LF_BITS_F((&DAT_07a1ea2c)[iVar7]),
-                                          LF_BITS_F((&DAT_07a1ea38)[iVar7]),
-                                          LF_BITS_F((&DAT_07a1ea44)[iVar7]));
+            fVar8 = (float10)tesselatebezier(((int)LF_BITS_U(param_4)),local_38,LF_BITS_F((&DAT_07a1ea20)[iVar7]),
+                                             LF_BITS_F((&DAT_07a1ea2c)[iVar7]),
+                                             LF_BITS_F((&DAT_07a1ea38)[iVar7]),
+                                             LF_BITS_F((&DAT_07a1ea44)[iVar7]));
             iVar3 = iVar7 + iVar3 * 3;
             iVar7 = iVar7 + 1;
             *(float *)&((&DAT_25aad764)[iVar3]) = (float)fVar8;
@@ -9572,20 +9576,21 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
           (&DAT_25b3d768)[DAT_25aad760 * 3] = (&DAT_25aad76c)[DAT_25aad760 * 3];
           iVar3 = 0;
           do {
-            fVar8 = (float10)FUN_00402620(param_4,local_38,*(float *)((int)&DAT_07a1ea20 + iVar3),
-                                          *(float *)((int)&DAT_07a1ea2c + iVar3),
-                                          *(float *)((int)&DAT_07a1ea38 + iVar3),
-                                          *(float *)((int)&DAT_07a1ea44 + iVar3));
+            fVar8 = (float10)tesselatebezierderivative
+                                       (param_4,local_38,*(float *)((int)&DAT_07a1ea20 + iVar3),
+                                        *(float *)((int)&DAT_07a1ea2c + iVar3),
+                                        *(float *)((int)&DAT_07a1ea38 + iVar3),
+                                        *(float *)((int)&DAT_07a1ea44 + iVar3));
             *(float *)((int)local_1c + iVar3) = (float)fVar8;
             iVar3 = iVar3 + 4;
           } while (iVar3 < 0xc);
           iVar3 = 0;
           do {
-            fVar8 = (float10)FUN_00402560(((int)LF_BITS_U(param_4)),local_38,
-                                          *(float *)((int)&DAT_0b4661c0 + iVar3),
-                                          *(float *)((int)&DAT_0b4661cc + iVar3),
-                                          *(float *)((int)&DAT_0b4661d8 + iVar3),
-                                          *(float *)((int)&DAT_0b4661e4 + iVar3));
+            fVar8 = (float10)tesselatebezier(((int)LF_BITS_U(param_4)),local_38,
+                                             *(float *)((int)&DAT_0b4661c0 + iVar3),
+                                             *(float *)((int)&DAT_0b4661cc + iVar3),
+                                             *(float *)((int)&DAT_0b4661d8 + iVar3),
+                                             *(float *)((int)&DAT_0b4661e4 + iVar3));
             iVar7 = DAT_25aad760;
             *(float *)((int)local_1c + iVar3 + 0xc) = (float)fVar8;
             iVar3 = iVar3 + 4;
@@ -9690,9 +9695,9 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
 #undef DAT_25bbd774
 #undef DAT_25bfd768
 #undef _CIsqrt
-#undef FUN_00402620
+#undef tesselatebezier
+#undef tesselatebezierderivative
 #undef __security_check_cookie
-#undef FUN_00402560
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -9726,8 +9731,8 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_5)
 
 {
@@ -9754,7 +9759,7 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     _DAT_0bbe915c = 0;
     _DAT_0bbe9134 = 0.0;
     _DAT_0bbe9138 = 0;
-    uVar3 = FUN_00402cf0(param_1,0x50000);
+    uVar3 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9 | uVar3;
   }
   else {
@@ -9770,9 +9775,9 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     _DAT_0bbe9138 = 0;
     DAT_0bbe90a4 = fVar1;
     DAT_0bbe90c8 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x50000);
+    uVar3 = area_block_rotatesurface(param_1,0x50000);
     uVar5 = (param_1 - 2U & 3) + 9;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0;
     DAT_0bbe90c4 = 0x3f800000;
@@ -9785,8 +9790,8 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     DAT_0bbe90c8 = fVar1;
     _DAT_0bbe9134 = fVar1;
     _DAT_0bbe9158 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x40000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
+    uVar3 = area_block_rotatesurface(param_1,0x40000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c4 = 0x3f800000;
@@ -9799,10 +9804,10 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     _DAT_0bbe9134 = 0.0;
     DAT_0bbe90a4 = fVar1;
     DAT_0bbe90c8 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x60000);
+    uVar3 = area_block_rotatesurface(param_1,0x60000);
     uVar3 = param_1 + 1U | uVar3;
   }
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3);
 LAB_0041039f:
   if (((byte)uVar4 & 8) == 8) {
     DAT_0bbe90a0 = 0x3f800000;
@@ -9818,9 +9823,9 @@ LAB_0041039f:
     _DAT_0bbe9130 = 0x3f800000;
     _DAT_0bbe9134 = fVar2;
     _DAT_0bbe9158 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x50000);
+    uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c4 = 0x3f800000;
@@ -9833,8 +9838,8 @@ LAB_0041039f:
     DAT_0bbe90c8 = fVar2;
     _DAT_0bbe9134 = fVar2;
     _DAT_0bbe9158 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x30000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
+    uVar4 = area_block_rotatesurface(param_1,0x30000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a4 = 1.0;
     DAT_0bbe90a8 = 0x3d800000;
@@ -9847,7 +9852,7 @@ LAB_0041039f:
     _DAT_0bbe9130 = 0;
     _DAT_0bbe9134 = fVar2;
     _DAT_0bbe9158 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x60000);
+    uVar4 = area_block_rotatesurface(param_1,0x60000);
     uVar3 = param_1 + 1;
   }
   else {
@@ -9866,10 +9871,10 @@ LAB_0041039f:
     _DAT_0bbe915c = 0;
     _DAT_0bbe9138 = 0;
     _DAT_0bbe9130 = 0x3f800000;
-    uVar4 = FUN_00402cf0(param_1,0x50000);
+    uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
   }
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
   return;
 }
 #undef DAT_0bbe90a0
@@ -9893,8 +9898,8 @@ LAB_0041039f:
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9138
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef addbeziersurface
+#undef area_block_rotatesurface
 
 /* ---------------------------------------------------------------- 0x105c0 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
@@ -9918,8 +9923,8 @@ LAB_0041039f:
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 
 {
@@ -9945,9 +9950,9 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9138 = 0;
     DAT_0bbe90a0 = fVar1;
     _DAT_0bbe9130 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x50000);
+    uVar3 = area_block_rotatesurface(param_1,0x50000);
     uVar5 = (param_1 - 2U & 3) + 9;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c8 = 0x3f800000;
@@ -9960,8 +9965,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     DAT_0bbe90c4 = fVar1;
     _DAT_0bbe9130 = fVar1;
     _DAT_0bbe9154 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x20000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
+    uVar3 = area_block_rotatesurface(param_1,0x20000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar5 | uVar3);
     DAT_0bbe90a0 = 0.0;
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
@@ -9974,8 +9979,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9134 = 0;
     DAT_0bbe90c4 = fVar1;
     _DAT_0bbe9154 = fVar1;
-    uVar3 = FUN_00402cf0(param_1,0x60000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar3);
+    uVar3 = area_block_rotatesurface(param_1,0x60000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar3);
   }
   if (((byte)uVar4 & 2) == 2) {
     DAT_0bbe90a0 = 1.0;
@@ -9991,9 +9996,9 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9138 = 0;
     DAT_0bbe90c4 = fVar2;
     _DAT_0bbe9154 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x50000);
+    uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0;
     DAT_0bbe90c8 = 0x3f800000;
@@ -10006,8 +10011,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     DAT_0bbe90c4 = fVar2;
     _DAT_0bbe9130 = fVar2;
     _DAT_0bbe9154 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x10000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
+    uVar4 = area_block_rotatesurface(param_1,0x10000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | uVar4);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90cc = 0x3d800000;
@@ -10020,8 +10025,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9138 = 0x3d800000;
     DAT_0bbe90a0 = fVar2;
     _DAT_0bbe9130 = fVar2;
-    uVar4 = FUN_00402cf0(param_1,0x60000);
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar4);
+    uVar4 = area_block_rotatesurface(param_1,0x60000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar4);
     return;
   }
   return;
@@ -10047,8 +10052,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9138
 #undef _DAT_0bbe9130
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef addbeziersurface
+#undef area_block_rotatesurface
 
 /* ---------------------------------------------------------------- 0x10950 */
 #define DAT_25aad760 (*(int *)SR_VA(0x25aad760))
@@ -10080,8 +10085,8 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
 #define g_cubequad (*(undefined4 *)SR_VA(0x460170))
 #define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
-void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
-            uint param_7)
+void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,float param_5,
+                 float param_6,uint param_7)
 
 {
   float fVar1;
@@ -10237,8 +10242,8 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
 #define _DAT_0bbe9158 (*(float *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
 void __cdecl lf_10da0(uint param_1,float *param_2)
 
 {
@@ -10285,7 +10290,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
     _DAT_0bbe9158 = 0.0;
     _DAT_0bbe9130 = 0.0;
     _DAT_0bbe9134 = 0.0;
-    uVar1 = FUN_00402cf0(param_1 - 1,0x60000);
+    uVar1 = area_block_rotatesurface(param_1 - 1,0x60000);
   }
   DAT_0bbe90a0 = (float)(*param_2 + DAT_0bbe90a0);
   DAT_0bbe90a4 = (float)(param_2[1] + DAT_0bbe90a4);
@@ -10299,7 +10304,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
   _DAT_0bbe9130 = (float)(*param_2 + _DAT_0bbe9130);
   _DAT_0bbe9134 = (float)(param_2[1] + _DAT_0bbe9134);
   _DAT_0bbe9138 = (float)(_DAT_0bbe9138 + param_2[2]);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | param_1);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | param_1);
   return;
 }
 #undef DAT_0bbe90a0
@@ -10320,8 +10325,8 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9130
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef area_block_rotatesurface
+#undef addbeziersurface
 
 /* ---------------------------------------------------------------- 0x118f0 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
@@ -10343,10 +10348,10 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
 #define _DAT_0bbe9158 (*(float *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
 undefined * __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float param_5,int param_6,
-            uint param_7)
+          uint param_7)
 
 {
   float fVar1;
@@ -10367,8 +10372,8 @@ undefined * __cdecl lf_118f0(int param_1,float param_2,float param_3,float param
   DAT_0bbe90a4 = fVar2;
   DAT_0bbe90c8 = fVar2;
   _DAT_0bbe9130 = fVar1;
-  uVar3 = FUN_00402cf0(param_1,0x50000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | param_7);
+  uVar3 = area_block_rotatesurface(param_1,0x50000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | param_7);
   DAT_0bbe90a0 = param_2;
   DAT_0bbe90a8 = 0x3d000000;
   DAT_0bbe90cc = 0x3d000000;
@@ -10381,8 +10386,8 @@ undefined * __cdecl lf_118f0(int param_1,float param_2,float param_3,float param
   DAT_0bbe90c4 = fVar1;
   DAT_0bbe90c8 = fVar2;
   _DAT_0bbe9154 = fVar1;
-  uVar3 = FUN_00402cf0(param_1,0x60000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | param_7);
+  uVar3 = area_block_rotatesurface(param_1,0x60000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar3 | param_7);
   *(int *)(&DAT_137b2d78 + param_6 * 0x84) = *(int *)(&DAT_137b2d78 + param_6 * 0x84) + 2;
   return &DAT_137b2d78 + param_6 * 0x84;
 }
@@ -10405,8 +10410,8 @@ undefined * __cdecl lf_118f0(int param_1,float param_2,float param_3,float param
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9130
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef area_block_rotatesurface
+#undef addbeziersurface
 
 /* ---------------------------------------------------------------- 0x11a40 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
@@ -10427,8 +10432,8 @@ undefined * __cdecl lf_118f0(int param_1,float param_2,float param_3,float param
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
 void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 
 {
@@ -10448,9 +10453,9 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9158 = 0;
   _DAT_0bbe9130 = 0.0;
   _DAT_0bbe9134 = 0;
-  uVar3 = FUN_00402cf0(param_1,0x60000);
+  uVar3 = area_block_rotatesurface(param_1,0x60000);
   uVar1 = param_1 + 1;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
   DAT_0bbe90a0 = param_2;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
@@ -10463,8 +10468,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9154 = param_2;
   _DAT_0bbe9130 = param_2;
   _DAT_0bbe9138 = 0x3d800000;
-  uVar3 = FUN_00402cf0(param_1,0x20000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(param_1 - 1U & 3) + 1 | uVar3);
+  uVar3 = area_block_rotatesurface(param_1,0x20000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(param_1 - 1U & 3) + 1 | uVar3);
   fVar2 = (float)(1.0 - param_2);
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
@@ -10478,8 +10483,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9138 = 0x3d800000;
   DAT_0bbe90a0 = fVar2;
   _DAT_0bbe9130 = fVar2;
-  uVar3 = FUN_00402cf0(param_1,0x60000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
+  uVar3 = area_block_rotatesurface(param_1,0x60000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0;
   DAT_0bbe90c8 = 0x3f800000;
@@ -10492,8 +10497,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   DAT_0bbe90c4 = fVar2;
   _DAT_0bbe9130 = fVar2;
   _DAT_0bbe9154 = fVar2;
-  uVar3 = FUN_00402cf0(param_1,0x10000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(uVar1 & 3) + 1 | uVar3);
+  uVar3 = area_block_rotatesurface(param_1,0x10000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(uVar1 & 3) + 1 | uVar3);
   DAT_0bbe90a0 = 0.0;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
@@ -10506,8 +10511,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe915c = 0x3d800000;
   _DAT_0bbe9138 = 0x3d800000;
   _DAT_0bbe9130 = 0.0;
-  uVar3 = FUN_00402cf0(param_1,0x60000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
+  uVar3 = area_block_rotatesurface(param_1,0x60000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
   DAT_0bbe90a0 = 0.0;
   DAT_0bbe90a4 = param_3;
   DAT_0bbe90a8 = 0x3d800000;
@@ -10520,8 +10525,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0.0;
   _DAT_0bbe9138 = 0;
-  uVar3 = FUN_00402cf0(param_1,0x30000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
+  uVar3 = area_block_rotatesurface(param_1,0x30000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar1 | uVar3);
   return;
 }
 #undef DAT_0bbe90a0
@@ -10542,8 +10547,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9130
 #undef _DAT_0bbe9134
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef area_block_rotatesurface
+#undef addbeziersurface
 
 /* ---------------------------------------------------------------- 0x11d70 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
@@ -10571,10 +10576,10 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9138 (*(float *)SR_VA(0xbbe9138))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
-            float param_7,uint param_8,uint *param_9)
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6
+                  ,float param_7,uint param_8,uint *param_9)
 
 {
   int iVar1;
@@ -10619,7 +10624,7 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
       else {
         iVar2 = (-(uint)(iVar5 != 4) & 0x20000) + 0x20000;
       }
-      uVar3 = FUN_00402cf0(param_1,iVar2);
+      uVar3 = area_block_rotatesurface(param_1,iVar2);
       if (iVar5 == 0) {
         uVar4 = param_9[5];
       }
@@ -10629,7 +10634,7 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
       else {
         uVar4 = param_9[iVar5];
       }
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar4 | uVar3);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar4 | uVar3);
     }
     iVar5 = iVar5 + 1;
     uVar6 = uVar6 << 1 | (uint)((int)uVar6 < 0);
@@ -10661,13 +10666,13 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
 #undef _DAT_0bbe9130
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9138
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef area_block_rotatesurface
+#undef addbeziersurface
 
 /* ---------------------------------------------------------------- 0x11f70 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
+#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00411d70 ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
 #define local_20 (*(float *)(lf_frame + 0x10))
 #define local_1c (*(uint (*)[4])(lf_frame + 0x14))
 #define local_c (*(undefined4 *)(lf_frame + 0x24))
@@ -10690,16 +10695,16 @@ void __cdecl lf_11f70(int param_1,undefined4 param_2,float param_3)
   local_1c[2] = 2;
   local_c = 4;
   local_8 = 5;
-  FUN_00411d70(param_1,0.0,0.0,0.0,0.3125,1.0,0.0625,0x1a,local_1c);
-  FUN_00411d70(param_1,0.6875,0.0,0.0,0.3125,1.0,0.0625,0xe,local_1c);
+  area_block_addbeam(param_1,0.0,0.0,0.0,0.3125,1.0,0.0625,0x1a,local_1c);
+  area_block_addbeam(param_1,0.6875,0.0,0.0,0.3125,1.0,0.0625,0xe,local_1c);
   local_20 = (float)(1.0 - param_3);
-  FUN_00411d70(param_1,0.0,param_3,0.0,1.0,local_20,0.0625,0xb,local_1c);
-  FUN_00411d70(param_1,0.0,0.0,0.0,1.0,0.0625,0.0625,8,local_1c);
+  area_block_addbeam(param_1,0.0,param_3,0.0,1.0,local_20,0.0625,0xb,local_1c);
+  area_block_addbeam(param_1,0.0,0.0,0.0,1.0,0.0625,0.0625,8,local_1c);
   return;
 }
 #undef DAT_00460d18
+#undef area_block_addbeam
 #undef __security_check_cookie
-#undef FUN_00411d70
 #undef local_20
 #undef local_1c
 #undef local_c
@@ -10725,8 +10730,8 @@ void __cdecl lf_11f70(int param_1,undefined4 param_2,float param_3)
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
 void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 
 {
@@ -10744,8 +10749,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
   _DAT_0bbe9158 = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9134 = 0;
-  uVar1 = FUN_00402cf0(param_1,0x60000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar1);
+  uVar1 = area_block_rotatesurface(param_1,0x60000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,param_1 + 1U | uVar1);
   DAT_0bbe90a0 = param_2;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = param_3;
@@ -10758,8 +10763,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
   _DAT_0bbe9154 = param_2;
   _DAT_0bbe9130 = param_2;
   _DAT_0bbe9138 = param_3;
-  uVar1 = FUN_00402cf0(param_1,0x20000);
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(param_1 - 1U & 3) + 1 | uVar1);
+  uVar1 = area_block_rotatesurface(param_1,0x20000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,(param_1 - 1U & 3) + 1 | uVar1);
   return;
 }
 #undef DAT_0bbe90a0
@@ -10780,8 +10785,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9130
 #undef _DAT_0bbe9134
-#undef FUN_00402cf0
-#undef FUN_0040f6f0
+#undef area_block_rotatesurface
+#undef addbeziersurface
 
 /* ---------------------------------------------------------------- 0x121d0 */
 #define DAT_0bbe91e4 (*(undefined *)SR_VA(0xbbe91e4))
@@ -10803,8 +10808,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 #define DAT_19950f4a (*(undefined *)SR_VA(0x19950f4a))
 #define DAT_19950f4b (*(undefined *)SR_VA(0x19950f4b))
 #define DAT_19952744 (*(undefined *)SR_VA(0x19952744))
-#define FUN_00402dc0 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402dc0))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_interior_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402dc0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5,undefined1 *param_6)
 
 {
@@ -10857,8 +10862,9 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
                   if (0 < iVar2) {
                     do {
                       if (((uVar6 != 0) || (uVar8 != 0)) || (uVar7 != 0)) {
-                        FUN_00402dc0(param_1,uVar7 + param_2,uVar6 + param_3,uVar8 + param_4,
-                                     ((uVar6 | 0xffffc000) << 8 | uVar8) << 8 | uVar7);
+                        area_interior_setblock
+                                  (param_1,uVar7 + param_2,uVar6 + param_3,uVar8 + param_4,
+                                   ((uVar6 | 0xffffc000) << 8 | uVar8) << 8 | uVar7);
                       }
                       uVar7 = uVar7 + 1;
                     } while ((int)uVar7 < iVar2);
@@ -10876,7 +10882,7 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
           ;
           *(undefined4 *)(&DAT_19952744 + iVar4 * 4) = 0xffffffff;
         }
-        FUN_00401cf0(param_1,param_2,param_3,param_4);
+        area_marksector(param_1,param_2,param_3,param_4);
       }
     }
   }
@@ -10901,8 +10907,8 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #undef DAT_19950f4a
 #undef DAT_19950f4b
 #undef DAT_19952744
-#undef FUN_00402dc0
-#undef FUN_00401cf0
+#undef area_interior_setblock
+#undef area_marksector
 
 /* ---------------------------------------------------------------- 0x12450 */
 #define DAT_1074850c (*(int * *)SR_VA(0x1074850c))
@@ -10911,7 +10917,7 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define DAT_00460020 (*(undefined *)SR_VA(0x460020))
 #define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
 #define DAT_00460178 (*(undefined4 *)SR_VA(0x460178))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_20 (*(float *)(lf_frame + 0x20))
 #define local_1c (*(float *)(lf_frame + 0x24))
@@ -10921,8 +10927,8 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define local_c (*(float *)(lf_frame + 0x34))
 #define local_8 (*(float *)(lf_frame + 0x38))
 #define local_4 (*(float *)(lf_frame + 0x3c))
-undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,int *param_6
-            ,uint param_7,float param_8)
+undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,int *param_6,
+          uint param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x40];
@@ -10971,7 +10977,8 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
       *param_2 = pfVar8[-2];
       param_2[1] = pfVar8[-1];
       param_2[2] = *pfVar8;
-      iVar7 = FUN_0040c420(param_1,param_2,param_3,param_4,param_5,&local_c,&local_18,&local_24);
+      iVar7 = lineintersecttriangle
+                        (param_1,param_2,param_3,param_4,param_5,&local_c,&local_18,&local_24);
       if (iVar7 != 0) {
         DAT_1074850c = param_6;
         return 1;
@@ -10984,7 +10991,8 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
       local_24 = (float)(*(float *)(&DAT_00460018 + iVar2) * param_8 + fVar5);
       local_20 = (float)(*(float *)(&DAT_0046001c + iVar2) * param_8 + fVar3);
       local_1c = (float)(fVar4 + *(float *)(&DAT_00460020 + iVar2) * param_8);
-      iVar7 = FUN_0040c420(param_1,param_2,param_3,param_4,param_5,&local_c,&local_18,&local_24);
+      iVar7 = lineintersecttriangle
+                        (param_1,param_2,param_3,param_4,param_5,&local_c,&local_18,&local_24);
       if (iVar7 != 0) {
         DAT_1074850c = param_6;
         return 1;
@@ -11004,7 +11012,7 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_00460020
 #undef DAT_00460080
 #undef DAT_00460178
-#undef FUN_0040c420
+#undef lineintersecttriangle
 #undef local_24
 #undef local_20
 #undef local_1c
@@ -11023,8 +11031,8 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
 #define DAT_137b2d58 (*(undefined *)SR_VA(0x137b2d58))
 #define DAT_137b2d5c (*(undefined *)SR_VA(0x137b2d5c))
 #define DAT_137b2d78 (*(undefined *)SR_VA(0x137b2d78))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -11043,8 +11051,8 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
 #define local_c (*(float *)(lf_frame + 0x54))
 #define local_8 (*(float *)(lf_frame + 0x58))
 #define local_4 (*(float *)(lf_frame + 0x5c))
-undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,int *param_6
-            ,float param_7,float param_8)
+undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,int *param_6,
+          float param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x60];
@@ -11110,9 +11118,10 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
         local_c = (float)(*pfVar1 * fVar6 + fVar7);
         local_8 = (float)(pfVar1[1] * fVar6 + fVar4);
         local_4 = (float)(fVar5 + pfVar1[2] * fVar6);
-        FUN_0040bb80(&local_48,&local_24,&local_18,&local_30);
-        iVar10 = FUN_0040c420(&local_3c,&local_48,&param_7,param_4,param_5,&local_24,&local_18,
-                              &local_30);
+        generatetrinormal(&local_48,&local_24,&local_18,&local_30);
+        iVar10 = lineintersecttriangle
+                           (&local_3c,&local_48,&param_7,param_4,param_5,&local_24,&local_18,
+                            &local_30);
         if ((iVar10 != 0) && (param_7 < *param_3)) {
           *param_1 = local_3c;
           param_1[1] = local_38;
@@ -11124,8 +11133,9 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
           DAT_1074850c = *(undefined4 *)(*(int *)(&DAT_137b2d5c + iVar11) + iVar12 * 4);
           DAT_10748514 = iVar12;
         }
-        iVar10 = FUN_0040c420(&local_3c,&local_48,&param_7,param_4,param_5,&local_24,&local_30,
-                              &local_c);
+        iVar10 = lineintersecttriangle
+                           (&local_3c,&local_48,&param_7,param_4,param_5,&local_24,&local_30,
+                            &local_c);
         fVar6 = param_8;
         if ((iVar10 != 0) && (param_7 < *param_3)) {
           *param_1 = local_3c;
@@ -11155,8 +11165,8 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_137b2d58
 #undef DAT_137b2d5c
 #undef DAT_137b2d78
-#undef FUN_0040bb80
-#undef FUN_0040c420
+#undef lineintersecttriangle
+#undef generatetrinormal
 #undef local_48
 #undef local_44
 #undef local_40
@@ -11186,8 +11196,8 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_0b7e7254 (*(undefined4 *)SR_VA(0xb7e7254))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
 #define local_10 (*(int * *)(lf_frame + 0x10))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
@@ -11265,7 +11275,7 @@ int __cdecl lf_129b0(int param_1,int param_2,int param_3,int param_4)
     local_c = (float)(LF_BITS_F((&DAT_0b7e7214)[param_3 * 0x3c]) - LF_BITS_F((&DAT_0b7e7214)[param_2 * 0x3c]));
     local_8 = (float)(LF_BITS_F((&DAT_0b7e7218)[param_3 * 0x3c]) - LF_BITS_F((&DAT_0b7e7218)[param_2 * 0x3c]));
     local_4 = (float)(LF_BITS_F((&DAT_0b7e721c)[param_3 * 0x3c]) - LF_BITS_F((&DAT_0b7e721c)[param_2 * 0x3c]));
-    fVar5 = (float10)FUN_0040b8c0(&local_c);
+    fVar5 = (float10)vectorlength(&local_c);
     iVar3 = (&DAT_0b7e7250)[param_2 * 0x3c];
     g_bond[iVar2].rest_length = (float)fVar5;
     g_bond[iVar2].stiffness = 0.25;
@@ -11295,8 +11305,8 @@ int __cdecl lf_129b0(int param_1,int param_2,int param_3,int param_4)
 #undef DAT_0b7e7254
 #undef g_numofbonds
 #undef g_bond
+#undef vectorlength
 #undef memset
-#undef FUN_0040b8c0
 #undef local_10
 #undef local_c
 #undef local_8
@@ -12550,12 +12560,12 @@ void __cdecl lf_13450(void)
 #define DAT_05766068 (*(undefined1 *)SR_VA(0x5766068))
 #define DAT_0576a06c (*(undefined1 *)SR_VA(0x576a06c))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_004041c0 ((void (__cdecl *)(void))SR_VA(0x4041c0))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define building_setupfloorplannewer ((void (__cdecl *)(void))SR_VA(0x4041c0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define iStack_50 (*(int *)(lf_frame + 0x20))
 #define iStack_4c (*(int *)(lf_frame + 0x24))
@@ -12696,7 +12706,7 @@ void __cdecl lf_13d80(undefined4 param_1,int param_2)
     }
     fclose((FILE *)DAT_14222e68);
   }
-  FUN_004041c0();
+  building_setupfloorplannewer();
   iVar6 = 0;
   if (0 < DAT_02165bc8) {
     iVar5 = 0;
@@ -12750,12 +12760,12 @@ void __cdecl lf_13d80(undefined4 param_1,int param_2)
 #undef DAT_05766068
 #undef DAT_0576a06c
 #undef g_p_fread
-#undef sprintf
-#undef FUN_004041c0
-#undef __security_check_cookie
-#undef memset
-#undef fclose
 #undef fopen
+#undef __security_check_cookie
+#undef fclose
+#undef building_setupfloorplannewer
+#undef memset
+#undef sprintf
 #undef local_54
 #undef iStack_50
 #undef iStack_4c
@@ -12781,7 +12791,7 @@ void __cdecl lf_13d80(undefined4 param_1,int param_2)
 #define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
 #define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
 
 {
@@ -12815,7 +12825,7 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
   *(float *)puVar1 = -*param_3;
   *(float *)&g_bullet[iVar8].lf_raw[0x54] = -param_3[1];
   *(float *)&g_bullet[iVar8].lf_raw[0x58] = -param_3[2];
-  FUN_0040b900((float *)puVar1,(float *)puVar1);
+  normalizevector((float *)puVar1,(float *)puVar1);
   fVar7 = _DAT_00460ce8;
   fVar5 = _DAT_00460ce4;
   fVar6 = _DAT_00460cdc;
@@ -12838,7 +12848,7 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
     fVar4 = fVar4 * *(float *)&g_bullet[iVar8].lf_raw[0x54] - *(float *)puVar1 * fVar5;
   }
   *(float *)&g_bullet[iVar8].lf_raw[0x40] = fVar4;
-  FUN_0040b900((float *)piVar2,(float *)piVar2);
+  normalizevector((float *)piVar2,(float *)piVar2);
   puVar3 = &g_bullet[iVar8].lf_raw[0x44];
   *(float *)puVar3 =
        (float)(*(float *)&g_bullet[iVar8].lf_raw[0x40] * *(float *)&g_bullet[iVar8].lf_raw[0x54] -
@@ -12849,7 +12859,7 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
   *(float *)&g_bullet[iVar8].lf_raw[0x4c] =
        (float)(*(float *)puVar1 * *(float *)&g_bullet[iVar8].lf_raw[0x3c] -
        *(float *)&g_bullet[iVar8].lf_raw[0x54] * LF_BITS_F(*piVar2));
-  FUN_0040b900((float *)puVar3,(float *)puVar3);
+  normalizevector((float *)puVar3,(float *)puVar3);
   g_bullet[iVar8].vel.x = *param_3;
   iVar9 = g_numofbullets;
   g_bullet[iVar8].vel.y = param_3[1];
@@ -12877,7 +12887,7 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
 #undef _DAT_00460cd4
 #undef _DAT_00460ce0
 #undef memset
-#undef FUN_0040b900
+#undef normalizevector
 
 /* ---------------------------------------------------------------- 0x14590 */
 #define g_numofbullets (*(int *)SR_VA(0x17929a40))
@@ -12946,7 +12956,7 @@ void __cdecl lf_14590(void)
 #define DAT_16224058 (*(undefined *)SR_VA(0x16224058))
 #define DAT_1622405c (*(undefined *)SR_VA(0x1622405c))
 #define DAT_16224060 (*(undefined *)SR_VA(0x16224060))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 
 {
@@ -12976,7 +12986,7 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
       *(undefined4 *)(&DAT_1622405c + iVar2) = 0;
       *(undefined4 *)(&DAT_16224050 + iVar2) = 0x3f800000;
       *(undefined4 *)(&DAT_16224060 + iVar2) = 0x3f800000;
-      FUN_0040bdb0((int)(&DAT_16224040 + iVar2),(float *)&DAT_00460ce0,param_3);
+      rotateorientation((int)(&DAT_16224040 + iVar2),(float *)&DAT_00460ce0,param_3);
       return iVar3;
     }
     piVar1 = piVar1 + 0x15;
@@ -12999,7 +13009,7 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 #undef DAT_16224058
 #undef DAT_1622405c
 #undef DAT_16224060
-#undef FUN_0040bdb0
+#undef rotateorientation
 
 /* ---------------------------------------------------------------- 0x146a0 */
 #define DAT_1074851c (*(undefined4 *)SR_VA(0x1074851c))
@@ -13023,13 +13033,13 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
-#define _CIsqrt lf_CIsqrt
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define _CIsqrt lf_CIsqrt
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -13138,10 +13148,10 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
       piVar5 = (int *)(&DAT_0f42f114 + local_4);
       do {
         pfVar1 = (float *)(&DAT_16224040 + iVar4);
-        FUN_0040bb00(&local_68,(float *)(&DAT_0f42e508 + (piVar5[-1] + iVar3) * 0xc),pfVar1);
-        FUN_0040bb00(&local_5c,(float *)(&DAT_0f42e508 + (*piVar5 + iVar3) * 0xc),pfVar1);
-        FUN_0040bb00(&local_2c,(float *)(&DAT_0f42e508 + (piVar5[1] + iVar3) * 0xc),pfVar1);
-        FUN_0040bb80(&local_1c,&local_68,&local_5c,&local_2c);
+        projectvector(&local_68,(float *)(&DAT_0f42e508 + (piVar5[-1] + iVar3) * 0xc),pfVar1);
+        projectvector(&local_5c,(float *)(&DAT_0f42e508 + (*piVar5 + iVar3) * 0xc),pfVar1);
+        projectvector(&local_2c,(float *)(&DAT_0f42e508 + (piVar5[1] + iVar3) * 0xc),pfVar1);
+        generatetrinormal(&local_1c,&local_68,&local_5c,&local_2c);
         local_68 = (float)(*(float *)(&DAT_16224028 + iVar4) + local_68);
         local_64 = (float)(*(float *)(&DAT_1622402c + iVar4) + local_64);
         local_60 = (float)(*(float *)(&DAT_16224030 + iVar4) + local_60);
@@ -13152,14 +13162,15 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
         local_28 = (float)(*(float *)(&DAT_1622402c + iVar4) + local_28);
         local_24 = (float)(*(float *)(&DAT_16224030 + iVar4) + local_24);
         if (piVar5[-2] == 4) {
-          FUN_0040bb00(&local_50,(float *)(&DAT_0f42e508 + (piVar5[2] + iVar3) * 0xc),
-                       (float *)(&DAT_16224040 + iVar4));
+          projectvector(&local_50,(float *)(&DAT_0f42e508 + (piVar5[2] + iVar3) * 0xc),
+                        (float *)(&DAT_16224040 + iVar4));
           local_50 = (float)(*(float *)(&DAT_16224028 + iVar4) + local_50);
           local_4c = (float)(*(float *)(&DAT_1622402c + iVar4) + local_4c);
           local_48 = (float)(*(float *)(&DAT_16224030 + iVar4) + local_48);
         }
-        iVar2 = FUN_0040c420(&local_10,&local_1c,&local_44,param_5,param_6,&local_68,&local_5c,
-                             &local_2c);
+        iVar2 = lineintersecttriangle
+                          (&local_10,&local_1c,&local_44,param_5,param_6,&local_68,&local_5c,
+                           &local_2c);
         if ((iVar2 != 0) && (local_44 < *param_3)) {
           *param_1 = local_10;
           param_1[1] = local_c;
@@ -13184,11 +13195,11 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
             dVar7 = _CIsqrt((double)((float)(local_6c * local_6c + (local_74 * local_74 + local_70 * local_70))
                                     ));
             local_40 = (float)dVar7;
-            FUN_0040b900(&local_74,&local_74);
+            normalizevector(&local_74,&local_74);
             dVar7 = _CIsqrt((double)((float)(local_78 * local_78 + (local_80 * local_80 + local_7c * local_7c))
                                     ));
             local_3c = (float)dVar7;
-            FUN_0040b900(&local_80,&local_80);
+            normalizevector(&local_80,&local_80);
             DAT_1074851c = (undefined4)
                            (longlong)
                            ((((float)(local_30 * local_6c + (local_38 * local_74 + local_34 * local_70))) * 8.0
@@ -13201,8 +13212,9 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
           }
         }
         if (((piVar5[-2] == 4) &&
-            (iVar2 = FUN_0040c420(&local_10,&local_1c,&local_44,param_5,param_6,&local_68,&local_2c,
-                                  &local_50), iVar2 != 0)) && (local_44 < *param_3)) {
+            (iVar2 = lineintersecttriangle
+                               (&local_10,&local_1c,&local_44,param_5,param_6,&local_68,&local_2c,
+                                &local_50), iVar2 != 0)) && (local_44 < *param_3)) {
           *param_1 = local_10;
           param_1[1] = local_c;
           param_1[2] = local_8;
@@ -13223,12 +13235,12 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
             local_38 = (float)(*param_1 - local_68);
             local_34 = (float)(param_1[1] - local_64);
             local_30 = (float)(param_1[2] - local_60);
-            fVar6 = (float10)FUN_0040b8c0(&local_74);
+            fVar6 = (float10)vectorlength(&local_74);
             local_40 = (float)fVar6;
-            FUN_0040b900(&local_74,&local_74);
-            fVar6 = (float10)FUN_0040b8c0(&local_80);
+            normalizevector(&local_74,&local_74);
+            fVar6 = (float10)vectorlength(&local_80);
             local_3c = (float)fVar6;
-            FUN_0040b900(&local_80,&local_80);
+            normalizevector(&local_80,&local_80);
             DAT_1074851c = (undefined4)
                            (longlong)
                            ((((float)(local_30 * local_6c + (local_38 * local_74 + local_34 * local_70))) * 8.0
@@ -13274,13 +13286,13 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0040b8c0
-#undef FUN_0040bb00
-#undef FUN_0040bb80
-#undef FUN_0040b900
-#undef FUN_0040c420
-#undef _CIsqrt
 #undef _ftol2
+#undef vectorlength
+#undef projectvector
+#undef lineintersecttriangle
+#undef _CIsqrt
+#undef normalizevector
+#undef generatetrinormal
 #undef local_80
 #undef local_7c
 #undef local_78
@@ -13328,13 +13340,13 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define _CIsqrt lf_CIsqrt
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -13368,7 +13380,7 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #define local_8 (*(float *)(lf_frame + 0x88))
 #define local_4 (*(int *)(lf_frame + 0x8c))
 undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int param_4,float *param_5,float *param_6,
-            float *param_7,float *param_8)
+          float *param_7,float *param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x90];
@@ -13439,10 +13451,10 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
       iVar2 = param_4 * 0x302;
       piVar3 = (int *)(&DAT_0f42f114 + local_4);
       do {
-        FUN_0040bb00(&local_68,(float *)(&DAT_0f42e508 + (piVar3[-1] + iVar2) * 0xc),param_6);
-        FUN_0040bb00(&local_5c,(float *)(&DAT_0f42e508 + (*piVar3 + iVar2) * 0xc),param_6);
-        FUN_0040bb00(&local_2c,(float *)(&DAT_0f42e508 + (piVar3[1] + iVar2) * 0xc),param_6);
-        FUN_0040bb80(&local_1c,&local_68,&local_5c,&local_2c);
+        projectvector(&local_68,(float *)(&DAT_0f42e508 + (piVar3[-1] + iVar2) * 0xc),param_6);
+        projectvector(&local_5c,(float *)(&DAT_0f42e508 + (*piVar3 + iVar2) * 0xc),param_6);
+        projectvector(&local_2c,(float *)(&DAT_0f42e508 + (piVar3[1] + iVar2) * 0xc),param_6);
+        generatetrinormal(&local_1c,&local_68,&local_5c,&local_2c);
         local_68 = (float)(*param_5 + local_68);
         local_64 = (float)(param_5[1] + local_64);
         local_60 = (float)(local_60 + param_5[2]);
@@ -13453,13 +13465,14 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
         local_28 = (float)(local_28 + param_5[1]);
         local_24 = (float)(local_24 + param_5[2]);
         if (piVar3[-2] == 4) {
-          FUN_0040bb00(&local_50,(float *)(&DAT_0f42e508 + (piVar3[2] + iVar2) * 0xc),param_6);
+          projectvector(&local_50,(float *)(&DAT_0f42e508 + (piVar3[2] + iVar2) * 0xc),param_6);
           local_50 = (float)(*param_5 + local_50);
           local_4c = (float)(local_4c + param_5[1]);
           local_48 = (float)(local_48 + param_5[2]);
         }
-        iVar1 = FUN_0040c420(&local_10,&local_1c,&local_44,param_7,param_8,&local_68,&local_5c,
-                             &local_2c);
+        iVar1 = lineintersecttriangle
+                          (&local_10,&local_1c,&local_44,param_7,param_8,&local_68,&local_5c,
+                           &local_2c);
         if ((iVar1 != 0) && (local_44 < *param_3)) {
           *param_1 = local_10;
           param_1[1] = local_c;
@@ -13484,11 +13497,11 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
             dVar5 = _CIsqrt((double)((float)(local_6c * local_6c + (local_74 * local_74 + local_70 * local_70))
                                     ));
             local_40 = (float)dVar5;
-            FUN_0040b900(&local_74,&local_74);
+            normalizevector(&local_74,&local_74);
             dVar5 = _CIsqrt((double)((float)(local_78 * local_78 + (local_80 * local_80 + local_7c * local_7c))
                                     ));
             local_3c = (float)dVar5;
-            FUN_0040b900(&local_80,&local_80);
+            normalizevector(&local_80,&local_80);
             DAT_1074851c = (undefined4)
                            (longlong)
                            ((((float)(local_30 * local_6c + (local_38 * local_74 + local_34 * local_70))) * 8.0
@@ -13501,8 +13514,9 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
           }
         }
         if (((piVar3[-2] == 4) &&
-            (iVar1 = FUN_0040c420(&local_10,&local_1c,&local_44,param_7,param_8,&local_68,&local_2c,
-                                  &local_50), iVar1 != 0)) && (local_44 < *param_3)) {
+            (iVar1 = lineintersecttriangle
+                               (&local_10,&local_1c,&local_44,param_7,param_8,&local_68,&local_2c,
+                                &local_50), iVar1 != 0)) && (local_44 < *param_3)) {
           *param_1 = local_10;
           param_1[1] = local_c;
           param_1[2] = local_8;
@@ -13523,12 +13537,12 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
             local_38 = (float)(*param_1 - local_68);
             local_34 = (float)(param_1[1] - local_64);
             local_30 = (float)(param_1[2] - local_60);
-            fVar4 = (float10)FUN_0040b8c0(&local_74);
+            fVar4 = (float10)vectorlength(&local_74);
             local_40 = (float)fVar4;
-            FUN_0040b900(&local_74,&local_74);
-            fVar4 = (float10)FUN_0040b8c0(&local_80);
+            normalizevector(&local_74,&local_74);
+            fVar4 = (float10)vectorlength(&local_80);
             local_3c = (float)fVar4;
-            FUN_0040b900(&local_80,&local_80);
+            normalizevector(&local_80,&local_80);
             DAT_1074851c = (undefined4)
                            (longlong)
                            ((((float)(local_30 * local_6c + (local_38 * local_74 + local_34 * local_70))) * 8.0
@@ -13566,13 +13580,13 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0040b8c0
-#undef FUN_0040bb00
-#undef FUN_0040bb80
-#undef FUN_0040b900
-#undef FUN_0040c420
+#undef vectorlength
+#undef projectvector
+#undef lineintersecttriangle
 #undef _CIsqrt
+#undef generatetrinormal
 #undef _ftol2
+#undef normalizevector
 #undef local_80
 #undef local_7c
 #undef local_78
@@ -13620,7 +13634,7 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
 #define DAT_1622406c (*(undefined *)SR_VA(0x1622406c))
 #define _DAT_019c9dec (*(undefined4 *)SR_VA(0x19c9dec))
 #define _DAT_019c9df0 (*(undefined4 *)SR_VA(0x19c9df0))
-#define FUN_00414600 ((int (__cdecl *)(undefined4, undefined4 *, float))SR_VA(0x414600))
+#define createcityobject ((int (__cdecl *)(undefined4, undefined4 *, float))SR_VA(0x414600))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
@@ -13657,7 +13671,7 @@ int __cdecl lf_154b0(float *param_1)
         local_c = (float)((float)(int)(&DAT_0e6c8c34)[iVar4 * 0x277] * 4.0 + 2.0);
         local_8 = (float)((float)(int)(&DAT_0e6c8c38)[iVar4 * 0x277] * 4.0 + 2.0);
         local_4 = (float)((float)(int)(&DAT_0e6c8c3c)[iVar4 * 0x277] * 4.0 + 2.0);
-        iVar3 = FUN_00414600(2,&local_c,0.0);
+        iVar3 = createcityobject(2,&local_c,0.0);
         if (iVar3 == -1) {
           return -1;
         }
@@ -13685,7 +13699,7 @@ int __cdecl lf_154b0(float *param_1)
 #undef DAT_1622406c
 #undef _DAT_019c9dec
 #undef _DAT_019c9df0
-#undef FUN_00414600
+#undef createcityobject
 #undef local_c
 #undef local_8
 #undef local_4
@@ -13762,11 +13776,11 @@ int __cdecl lf_154b0(float *param_1)
 #define _DAT_0f43bd88 (*(undefined4 *)SR_VA(0xf43bd88))
 #define _DAT_0f43bd8c (*(undefined4 *)SR_VA(0xf43bd8c))
 #define _DAT_0f439978 (*(undefined4 *)SR_VA(0xf439978))
-#define FUN_00404bb0 ((void (__cdecl *)(int, float, float, float, float, float, float))SR_VA(0x404bb0))
+#define cityobject_addbox ((void (__cdecl *)(int, float, float, float, float, float, float))SR_VA(0x404bb0))
 void __cdecl lf_155e0(void)
 
 {
-  FUN_00404bb0(9,0.0,2.0,-1.625,4.0,4.0,0.25);
+  cityobject_addbox(9,0.0,2.0,-1.625,4.0,4.0,0.25);
   _DAT_0f4429d8 = 0x40600000;
   *(undefined4 *)(&DAT_0f432d38 + DAT_0f432d34 * 0xc) = 0xc0000000;
   *(undefined4 *)(&DAT_0f432d3c + DAT_0f432d34 * 0xc) = 0xbff00000;
@@ -13814,21 +13828,21 @@ void __cdecl lf_155e0(void)
   *(undefined4 *)(&DAT_0f433950 + DAT_0f433938 * 0x18) = 1;
   _DAT_0f432d30 = 0x40a00000;
   DAT_0f433938 = DAT_0f433938 + 1;
-  FUN_00404bb0(1,0.0,1.0,0.0,1.875,0.25,1.0);
-  FUN_00404bb0(1,0.6875,0.46875,0.0,0.25,1.0,1.0);
-  FUN_00404bb0(1,-0.6875,0.46875,0.0,0.25,1.0,1.0);
-  FUN_00404bb0(1,0.0,0.46875,0.3125,1.640625,1.0,0.125);
+  cityobject_addbox(1,0.0,1.0,0.0,1.875,0.25,1.0);
+  cityobject_addbox(1,0.6875,0.46875,0.0,0.25,1.0,1.0);
+  cityobject_addbox(1,-0.6875,0.46875,0.0,0.25,1.0,1.0);
+  cityobject_addbox(1,0.0,0.46875,0.3125,1.640625,1.0,0.125);
   _DAT_0f432d24 = 0;
   _DAT_0f432d28 = 0x3e400000;
   _DAT_0f432d2c = 0;
   _DAT_0f430918 = 0x40400000;
-  FUN_00404bb0(4,0.0,0.625,0.125,0.3125,0.25,0.3125);
-  FUN_00404bb0(4,0.0,0.0,0.0,0.75,1.0,0.625);
+  cityobject_addbox(4,0.0,0.625,0.125,0.3125,0.25,0.3125);
+  cityobject_addbox(4,0.0,0.0,0.0,0.75,1.0,0.625);
   _DAT_0f43996c = 0;
   _DAT_0f439970 = 0x3f400000;
   _DAT_0f439974 = 0xbf800000;
   _DAT_0f437560 = 0x40400000;
-  FUN_00404bb0(8,0.0,0.0,0.0,1.0,1.25,1.0);
+  cityobject_addbox(8,0.0,0.0,0.0,1.0,1.25,1.0);
   _DAT_0f4405c8 = _DAT_0f4405c8 * 0.75;
   _DAT_0f4405cc = (float)(_DAT_0f4405cc * 0.75);
   _DAT_0f4405d0 = (float)(_DAT_0f4405d0 * 0.75);
@@ -13845,10 +13859,10 @@ void __cdecl lf_155e0(void)
   _DAT_0f4429d0 = 0x3f200000;
   _DAT_0f4429d4 = 0xbf800000;
   _DAT_0f4405c0 = 0x40400000;
-  FUN_00404bb0(5,0.0,0.0,0.0,0.375,6.0,0.375);
-  FUN_00404bb0(5,0.0,3.0,-5.0,0.25,0.25,10.0);
-  FUN_00404bb0(5,0.0,3.0,-6.0,0.3125,1.0,0.5);
-  FUN_00404bb0(5,0.0,3.0,-10.0,0.3125,1.0,0.5);
+  cityobject_addbox(5,0.0,0.0,0.0,0.375,6.0,0.375);
+  cityobject_addbox(5,0.0,3.0,-5.0,0.25,0.25,10.0);
+  cityobject_addbox(5,0.0,3.0,-6.0,0.3125,1.0,0.5);
+  cityobject_addbox(5,0.0,3.0,-10.0,0.3125,1.0,0.5);
   _DAT_0f43bd84 = 0;
   _DAT_0f43bd88 = 0x40500000;
   _DAT_0f43bd8c = 0xbf800000;
@@ -13926,7 +13940,7 @@ void __cdecl lf_155e0(void)
 #undef _DAT_0f43bd88
 #undef _DAT_0f43bd8c
 #undef _DAT_0f439978
-#undef FUN_00404bb0
+#undef cityobject_addbox
 
 /* ---------------------------------------------------------------- 0x15df0 */
 #define DAT_0f837b00 (*(undefined *)SR_VA(0xf837b00))
@@ -13971,8 +13985,8 @@ void __cdecl lf_155e0(void)
 #define _DAT_0f837b3c (*(float *)SR_VA(0xf837b3c))
 #define _DAT_0f837b40 (*(float *)SR_VA(0xf837b40))
 #define _DAT_0f837b44 (*(float *)SR_VA(0xf837b44))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_28 (*(uint *)(lf_frame + 0x18))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_20 (*(float *)(lf_frame + 0x20))
@@ -14039,9 +14053,9 @@ void __cdecl lf_15df0(float *param_1,uint param_2)
       _DAT_0f837b3c = (float)(_DAT_0f837b18 + _DAT_0f837b00);
       _DAT_0f837b40 = (float)(_DAT_0f837b04 + _DAT_0f837b1c);
       _DAT_0f837b44 = (float)(_DAT_0f837b20 + _DAT_0f837b08);
-      FUN_0040b900((float *)&DAT_0f837b24,(float *)&DAT_0f837b24);
-      FUN_0040b900((float *)&DAT_0f837b30,(float *)&DAT_0f837b30);
-      FUN_0040b900((float *)&DAT_0f837b3c,(float *)&DAT_0f837b3c);
+      normalizevector((float *)&DAT_0f837b24,(float *)&DAT_0f837b24);
+      normalizevector((float *)&DAT_0f837b30,(float *)&DAT_0f837b30);
+      normalizevector((float *)&DAT_0f837b3c,(float *)&DAT_0f837b3c);
       local_18 = (float)(*param_1 - _DAT_0f837b3c);
       local_14 = (float)(param_1[1] - _DAT_0f837b40);
       local_10 = (float)(param_1[2] - _DAT_0f837b44);
@@ -14117,7 +14131,7 @@ LAB_004162d1:
     } while (iVar5 < (int)param_2);
   }
   local_28 = uVar1;
-  FUN_0040da60(&local_28,param_2);
+  pbitwrite(&local_28,param_2);
   return;
 }
 #undef DAT_0f837b00
@@ -14162,8 +14176,8 @@ LAB_004162d1:
 #undef _DAT_0f837b3c
 #undef _DAT_0f837b40
 #undef _DAT_0f837b44
-#undef FUN_0040b900
-#undef FUN_0040da60
+#undef pbitwrite
+#undef normalizevector
 #undef local_28
 #undef local_24
 #undef local_20
@@ -14218,8 +14232,8 @@ LAB_004162d1:
 #define _DAT_0f837b3c (*(float *)SR_VA(0xf837b3c))
 #define _DAT_0f837b40 (*(float *)SR_VA(0xf837b40))
 #define _DAT_0f837b44 (*(float *)SR_VA(0xf837b44))
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 void __cdecl lf_16320(float *param_1,float *param_2)
 
 {
@@ -14231,7 +14245,7 @@ void __cdecl lf_16320(float *param_1,float *param_2)
   int iVar6;
   
   pfVar3 = param_2;
-  FUN_0040db20((uint *)&param_2,(uint)param_2);
+  pbitread((uint *)&param_2,(uint)param_2);
   pfVar4 = param_2;
   iVar2 = ((uint)param_2 & 7) * 0xc;
   _DAT_0f837b00 =
@@ -14259,9 +14273,9 @@ void __cdecl lf_16320(float *param_1,float *param_2)
       _DAT_0f837b3c = (float)(_DAT_0f837b18 + _DAT_0f837b00);
       _DAT_0f837b40 = (float)(_DAT_0f837b04 + _DAT_0f837b1c);
       _DAT_0f837b44 = (float)(_DAT_0f837b20 + _DAT_0f837b08);
-      FUN_0040b900((float *)&DAT_0f837b24,(float *)&DAT_0f837b24);
-      FUN_0040b900((float *)&DAT_0f837b30,(float *)&DAT_0f837b30);
-      FUN_0040b900((float *)&DAT_0f837b3c,(float *)&DAT_0f837b3c);
+      normalizevector((float *)&DAT_0f837b24,(float *)&DAT_0f837b24);
+      normalizevector((float *)&DAT_0f837b30,(float *)&DAT_0f837b30);
+      normalizevector((float *)&DAT_0f837b3c,(float *)&DAT_0f837b3c);
       uVar5 = (uint)pfVar4 >> ((byte)iVar6 & 0x1f) & 3;
       if (uVar5 == 0) {
         _DAT_0f837b0c = _DAT_0f837b24;
@@ -14308,7 +14322,7 @@ void __cdecl lf_16320(float *param_1,float *param_2)
   param_1[1] = (float)(param_1[1] + _DAT_0f837b1c);
   param_1[2] = (float)(param_1[2] + _DAT_0f837b20);
   param_2 = param_1;
-  FUN_0040b900(param_1,param_1);
+  normalizevector(param_1,param_1);
   return;
 }
 #undef DAT_0f837b00
@@ -14353,11 +14367,11 @@ void __cdecl lf_16320(float *param_1,float *param_2)
 #undef _DAT_0f837b3c
 #undef _DAT_0f837b40
 #undef _DAT_0f837b44
-#undef FUN_0040db20
-#undef FUN_0040b900
+#undef pbitread
+#undef normalizevector
 
 /* ---------------------------------------------------------------- 0x16680 */
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_16680(float *param_1,uint param_2)
 
@@ -14374,14 +14388,14 @@ void __cdecl lf_16680(float *param_1,uint param_2)
   if (*param_1 < 0.0) {
     param_2 = param_2 | uVar2;
   }
-  FUN_0040da60(&param_2,uVar1);
+  pbitwrite(&param_2,uVar1);
   return;
 }
-#undef FUN_0040da60
+#undef pbitwrite
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x16710 */
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
 void __cdecl lf_16710(float *param_1,uint param_2)
 
 {
@@ -14390,7 +14404,7 @@ void __cdecl lf_16710(float *param_1,uint param_2)
   uint uVar3;
   
   uVar2 = param_2;
-  FUN_0040db20(&param_2,param_2);
+  pbitread(&param_2,param_2);
   uVar2 = (uint)(1 << ((byte)uVar2 & 0x1f)) >> 1;
   uVar3 = uVar2 - 1 & param_2;
   fVar1 = (float)(int)uVar3;
@@ -14405,7 +14419,7 @@ void __cdecl lf_16710(float *param_1,uint param_2)
   *param_1 = -fVar1;
   return;
 }
-#undef FUN_0040db20
+#undef pbitread
 
 /* ---------------------------------------------------------------- 0x16790 */
 #define DAT_1992d6dc (*(int *)SR_VA(0x1992d6dc))
@@ -14452,7 +14466,7 @@ void __cdecl lf_16790(undefined4 *param_1)
 #undef DAT_1992d6e4
 
 /* ---------------------------------------------------------------- 0x16860 */
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_16860(float *param_1,float param_2,uint param_3)
 
@@ -14472,10 +14486,10 @@ void __cdecl lf_16860(float *param_1,float param_2,uint param_3)
   if (*param_1 < 0.0) {
     param_3 = param_3 | uVar2;
   }
-  FUN_0040da60(&param_3,uVar1);
+  pbitwrite(&param_3,uVar1);
   return;
 }
-#undef FUN_0040da60
+#undef pbitwrite
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x16960 */
@@ -14483,7 +14497,7 @@ void __cdecl lf_16860(float *param_1,float param_2,uint param_3)
 #define DAT_17579604 (*(undefined4 *)SR_VA(0x17579604))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 void __cdecl lf_16960(uint param_1)
 
 {
@@ -14509,7 +14523,7 @@ void __cdecl lf_16960(uint param_1)
         g_player[param_1].stocks = iVar2 - iVar3;
       }
     }
-    FUN_004065f0(param_1);
+    createevent_updateplayer_finance(param_1);
   }
   return;
 }
@@ -14517,16 +14531,16 @@ void __cdecl lf_16960(uint param_1)
 #undef DAT_17579604
 #undef g_player
 #undef _ftol2
-#undef FUN_004065f0
+#undef createevent_updateplayer_finance
 
 /* ---------------------------------------------------------------- 0x16a20 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_17579600 (*(undefined4 *)SR_VA(0x17579600))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 void __cdecl lf_16a20(float param_1,int param_2)
 
 {
@@ -14581,8 +14595,8 @@ void __cdecl lf_16a20(float param_1,int param_2)
       (&DAT_17579600)[iVar1 * 5] = (&DAT_17579600)[iVar1 * 5] - iVar6;
       g_player[((int)LF_BITS_U(fVar4))].stocks = iVar5 - iVar6;
     }
-    FUN_004064a0(((int)LF_BITS_U(fVar4)));
-    FUN_004065f0(((int)LF_BITS_U(fVar4)));
+    createevent_updateplayer(((int)LF_BITS_U(fVar4)));
+    createevent_updateplayer_finance(((int)LF_BITS_U(fVar4)));
   }
   return;
 }
@@ -14590,9 +14604,9 @@ void __cdecl lf_16a20(float param_1,int param_2)
 #undef DAT_17579600
 #undef g_game
 #undef g_player
-#undef FUN_004064a0
 #undef _ftol2
-#undef FUN_004065f0
+#undef createevent_updateplayer
+#undef createevent_updateplayer_finance
 
 /* ---------------------------------------------------------------- 0x16bb0 */
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
@@ -14762,7 +14776,7 @@ void __cdecl lf_16db0(int param_1,undefined4 *param_2,float param_3,float param_
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 void __cdecl lf_16e30(int param_1,int param_2,int param_3,int param_4,int param_5,int param_6,
-            undefined4 *param_7,undefined4 *param_8)
+          undefined4 *param_7,undefined4 *param_8)
 
 {
   float fVar1;
@@ -14821,10 +14835,10 @@ void __cdecl lf_16e30(int param_1,int param_2,int param_3,int param_4,int param_
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0040ddb0 ((int (__cdecl *)(uint *, uint))SR_VA(0x40ddb0))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_0040d990 ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
+#define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwritenego ((int (__cdecl *)(uint *, uint))SR_VA(0x40ddb0))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
@@ -14855,14 +14869,14 @@ void __cdecl lf_16f10(float param_1,int param_2)
      (((g_event[((int)LF_BITS_U(param_1))].type == 2 && (g_event[((int)LF_BITS_U(param_1))].attach_type != 3)) ||
       (g_event[((int)LF_BITS_U(param_1))].type == 9)))) {
     param_1 = 2.522337236e-44f;
-    FUN_0040da60((uint *)&param_1,6);
+    pbitwrite((uint *)&param_1,6);
     return;
   }
   iVar12 = g_event[((int)LF_BITS_U(param_1))].type;
   if (((iVar12 == 2) && (g_event[((int)LF_BITS_U(param_1))].attach_type == 4)) &&
      (g_connection[param_2].unk_0c == 0)) {
     param_1 = 2.522337236e-44f;
-    FUN_0040da60((uint *)&param_1,6);
+    pbitwrite((uint *)&param_1,6);
     return;
   }
   if (((g_connection[param_2].unk_0c == 0) && (iVar12 == 2)) &&
@@ -14875,8 +14889,8 @@ void __cdecl lf_16f10(float param_1,int param_2)
         if (iVar2 != -1) {
           piVar10 = &g_player[iVar2].unk_23c8;
           if (((char)g_player[iVar2].unk_23c8 != '\0') && (g_player[iVar2].human_id == iVar1)) {
-            FUN_0040da60((uint *)(g_event + ((int)LF_BITS_U(param_1))),6);
-            FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].tick,0x1c);
+            pbitwrite((uint *)(g_event + ((int)LF_BITS_U(param_1))),6);
+            pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].tick,0x1c);
             piVar6 = piVar10;
             do {
               iVar9 = *piVar6;
@@ -14884,17 +14898,17 @@ void __cdecl lf_16f10(float param_1,int param_2)
             } while ((char)iVar9 != '\0');
             fVar7 = LF_BITS_F(((int)piVar6 - (iVar2 * 0x2408 + ((int)SR_VA(0xf1f00c8) + 1))));
             param_1 = fVar7;
-            FUN_0040da60((uint *)&param_1,6);
-            FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
-            FUN_0040ddb0((uint *)&pEVar5->attach_id,10);
-            FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
+            pbitwrite((uint *)&param_1,6);
+            pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
+            pbitwritenego((uint *)&pEVar5->attach_id,10);
+            pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
             uVar11 = ((uint)LF_BITS_U(fVar7)) & 0x3f;
             if (uVar11 == 0) {
               return;
             }
             do {
               param_1 = LF_BITS_F(((int)(char)*piVar10 & 0x7f));
-              FUN_0040da60((uint *)&param_1,7);
+              pbitwrite((uint *)&param_1,7);
               piVar10 = (int *)((int)piVar10 + 1);
               uVar11 = uVar11 - 1;
             } while (uVar11 != 0);
@@ -14911,7 +14925,7 @@ void __cdecl lf_16f10(float param_1,int param_2)
         local_8 = g_item[iVar1].pos.y;
         local_4 = g_item[iVar1].pos.z;
       }
-      fVar13 = (float10)FUN_0040baa0(&local_c,&g_connection[param_2].listener_pos.x);
+      fVar13 = (float10)vectordistance(&local_c,&g_connection[param_2].listener_pos.x);
       param_1 = (float)((float10)32.0 / (fVar13 * (float10)0.125));
       if (g_event[((int)LF_BITS_U(fVar4))].range_mode == 0) {
         param_1 = (float)(param_1 * 0.25);
@@ -14924,51 +14938,51 @@ void __cdecl lf_16f10(float param_1,int param_2)
       }
       if (param_1 < 4.0) {
         param_1 = 2.522337236e-44f;
-        FUN_0040da60((uint *)&param_1,6);
+        pbitwrite((uint *)&param_1,6);
         return;
       }
     }
   }
-  FUN_0040da60((uint *)(g_event + ((int)LF_BITS_U(fVar4))),6);
-  FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].tick,0x1c);
+  pbitwrite((uint *)(g_event + ((int)LF_BITS_U(fVar4))),6);
+  pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].tick,0x1c);
   if (iVar12 == 0) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,4);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
-    FUN_0040d990(&g_event[((int)LF_BITS_U(fVar4))].pos,4,3);
-    FUN_0040d990(&g_event[((int)LF_BITS_U(fVar4))].vec,4,3);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
+    cs_pwrite(&g_event[((int)LF_BITS_U(fVar4))].pos,4,3);
+    cs_pwrite(&g_event[((int)LF_BITS_U(fVar4))].vec,4,3);
   }
   if (iVar12 == 1) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,4);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,6);
-    FUN_0040d990(&g_event[((int)LF_BITS_U(fVar4))].pos,4,3);
-    FUN_0040d990(&g_event[((int)LF_BITS_U(fVar4))].vec,4,3);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,6);
+    cs_pwrite(&g_event[((int)LF_BITS_U(fVar4))].pos,4,3);
+    cs_pwrite(&g_event[((int)LF_BITS_U(fVar4))].vec,4,3);
   }
   if (iVar12 == 2) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,6);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,6);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
     iVar12 = 0;
     uVar11 = g_event[((int)LF_BITS_U(fVar4))].param & 0x3f;
     if (uVar11 != 0) {
       do {
         param_1 = LF_BITS_F((*(byte *)(iVar9 + ((int)SR_VA(0x97dd8c0)) + iVar12) & 0x7f));
-        FUN_0040da60((uint *)&param_1,7);
+        pbitwrite((uint *)&param_1,7);
         iVar12 = iVar12 + 1;
       } while (iVar12 < (int)uVar11);
     }
   }
   iVar12 = g_event[((int)LF_BITS_U(fVar4))].type;
   if (iVar12 == 3) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,8);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,4);
   }
   iVar8 = DAT_1992d6dc;
   if (iVar12 == 4) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
     iVar8 = DAT_1992d6dc;
     if (DAT_1992d6dc < 0x10000) {
       if (0 < DAT_1992d6e0) {
@@ -14999,20 +15013,20 @@ void __cdecl lf_16f10(float param_1,int param_2)
   }
   DAT_1992d6dc = iVar8;
   if (iVar12 == 5) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,0x14);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,0x14);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,4);
   }
   if (iVar12 == 6) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,3);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,0x10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,2);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,3);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,0x10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,2);
   }
   if (iVar12 == 7) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,0x10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,0x10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,10);
     if (DAT_1992d6dc < 0x10000) {
       if (0 < DAT_1992d6e0) {
         DAT_1992d6dc = DAT_1992d6dc + 1;
@@ -15021,23 +15035,23 @@ void __cdecl lf_16f10(float param_1,int param_2)
       *(int *)(&DAT_1992d6e4 + DAT_1992d6dc) = g_event[((int)LF_BITS_U(fVar4))].attach_id;
       DAT_1992d6dc = DAT_1992d6dc + 4;
     }
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,0x10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,0x10);
     iVar8 = 0;
     do {
       param_1 = LF_BITS_F((*(byte *)(iVar9 + ((int)SR_VA(0x97dd8c0)) + iVar8) & 0x7f));
-      FUN_0040da60((uint *)&param_1,7);
+      pbitwrite((uint *)&param_1,7);
       iVar8 = iVar8 + 1;
     } while (iVar8 < 0x1f);
   }
   if (iVar12 == 0x11) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,1);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,1);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,8);
   }
   iVar9 = DAT_1992d6dc;
   if ((iVar12 == 8) &&
-     (FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8), iVar9 = DAT_1992d6dc,
-     DAT_1992d6dc < 0x10000)) {
+     (pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8), iVar9 = DAT_1992d6dc, DAT_1992d6dc < 0x10000)
+     ) {
     if (0 < DAT_1992d6e0) {
       DAT_1992d6dc = DAT_1992d6dc + 1;
       DAT_1992d6e0 = 0;
@@ -15057,8 +15071,8 @@ void __cdecl lf_16f10(float param_1,int param_2)
   DAT_1992d6dc = iVar9;
   iVar9 = DAT_1992d6dc;
   if ((iVar12 == 9) &&
-     (FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8), iVar9 = DAT_1992d6dc,
-     DAT_1992d6dc < 0x10000)) {
+     (pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8), iVar9 = DAT_1992d6dc, DAT_1992d6dc < 0x10000)
+     ) {
     if (0 < DAT_1992d6e0) {
       DAT_1992d6dc = DAT_1992d6dc + 1;
       DAT_1992d6e0 = 0;
@@ -15091,8 +15105,8 @@ void __cdecl lf_16f10(float param_1,int param_2)
   }
   DAT_1992d6dc = iVar9;
   if (iVar12 == 10) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,1);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,1);
   }
   iVar9 = DAT_1992d6dc;
   if ((iVar12 == 0xb) && (DAT_1992d6dc < 0x10000)) {
@@ -15197,10 +15211,10 @@ void __cdecl lf_16f10(float param_1,int param_2)
   }
   DAT_1992d6dc = iVar9;
   if (iVar12 == 0xe) {
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,8);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,8);
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,0x14);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].param,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_type,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].attach_id,8);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,0x14);
   }
   iVar9 = DAT_1992d6dc;
   if ((iVar12 == 0xf) && (DAT_1992d6dc < 0x10000)) {
@@ -15260,7 +15274,7 @@ void __cdecl lf_16f10(float param_1,int param_2)
       }
     }
     DAT_1992d6dc = iVar9;
-    FUN_0040da60((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,10);
+    pbitwrite((uint *)&g_event[((int)LF_BITS_U(fVar4))].range_mode,10);
     iVar9 = DAT_1992d6dc;
     if (DAT_1992d6dc < 0x10000) {
       if (0 < DAT_1992d6e0) {
@@ -15304,10 +15318,10 @@ void __cdecl lf_16f10(float param_1,int param_2)
 #undef g_event
 #undef g_connection
 #undef g_player
-#undef FUN_0040ddb0
-#undef FUN_0040da60
-#undef FUN_0040baa0
-#undef FUN_0040d990
+#undef cs_pwrite
+#undef pbitwrite
+#undef pbitwritenego
+#undef vectordistance
 #undef local_c
 #undef local_8
 #undef local_4
@@ -15320,9 +15334,9 @@ void __cdecl lf_16f10(float param_1,int param_2)
 #define DAT_1993d6f4 (*(undefined1 *)SR_VA(0x1993d6f4))
 #define DAT_1993d6f8 (*(undefined *)SR_VA(0x1993d6f8))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define FUN_0040ddd0 ((int (__cdecl *)(uint *, uint))SR_VA(0x40ddd0))
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
-#define FUN_0040d9f0 ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d9f0))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define cs_pread ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d9f0))
+#define pbitreadnego ((int (__cdecl *)(uint *, uint))SR_VA(0x40ddd0))
 #define local_4 (*(uint *)(lf_frame + 0x1c))
 void __cdecl lf_17b60(uint param_1)
 
@@ -15341,31 +15355,31 @@ void __cdecl lf_17b60(uint param_1)
   uVar6 = param_1;
   iVar8 = param_1 * 0x80;
   pEVar1 = g_event + param_1;
-  FUN_0040db20((uint *)pEVar1,6);
+  pbitread((uint *)pEVar1,6);
   if (pEVar1->type != 0x12) {
-    FUN_0040db20((uint *)&g_event[uVar6].tick,0x1c);
+    pbitread((uint *)&g_event[uVar6].tick,0x1c);
     if (pEVar1->type == 0) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,4);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,10);
-      FUN_0040d9f0(&g_event[uVar6].pos,4,3);
-      FUN_0040d9f0(&g_event[uVar6].vec,4,3);
+      pbitread((uint *)&g_event[uVar6].param,4);
+      pbitread((uint *)&g_event[uVar6].attach_type,10);
+      cs_pread(&g_event[uVar6].pos,4,3);
+      cs_pread(&g_event[uVar6].vec,4,3);
     }
     if (pEVar1->type == 1) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,4);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,6);
-      FUN_0040d9f0(&g_event[uVar6].pos,4,3);
-      FUN_0040d9f0(&g_event[uVar6].vec,4,3);
+      pbitread((uint *)&g_event[uVar6].param,4);
+      pbitread((uint *)&g_event[uVar6].attach_type,6);
+      cs_pread(&g_event[uVar6].pos,4,3);
+      cs_pread(&g_event[uVar6].vec,4,3);
     }
     if (pEVar1->type == 2) {
       piVar2 = &g_event[uVar6].param;
-      FUN_0040db20((uint *)piVar2,6);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,4);
-      FUN_0040ddd0((uint *)&g_event[uVar6].attach_id,10);
-      FUN_0040db20((uint *)&g_event[uVar6].range_mode,4);
+      pbitread((uint *)piVar2,6);
+      pbitread((uint *)&g_event[uVar6].attach_type,4);
+      pbitreadnego((uint *)&g_event[uVar6].attach_id,10);
+      pbitread((uint *)&g_event[uVar6].range_mode,4);
       iVar7 = 0;
       if (0 < *piVar2) {
         do {
-          FUN_0040db20(&param_1,7);
+          pbitread(&param_1,7);
           *(undefined1 *)(iVar8 + ((int)SR_VA(0x97dd8c0)) + iVar7) = (undefined1)param_1;
           iVar7 = iVar7 + 1;
         } while (iVar7 < *piVar2);
@@ -15373,9 +15387,9 @@ void __cdecl lf_17b60(uint param_1)
       *(undefined1 *)(iVar8 + ((int)SR_VA(0x97dd8c0)) + *piVar2) = 0;
     }
     if (pEVar1->type == 3) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,10);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,8);
-      FUN_0040db20(&local_4,4);
+      pbitread((uint *)&g_event[uVar6].param,10);
+      pbitread((uint *)&g_event[uVar6].attach_type,8);
+      pbitread(&local_4,4);
       if (local_4 == 0xf) {
         g_event[uVar6].attach_id = -1;
       }
@@ -15384,59 +15398,59 @@ void __cdecl lf_17b60(uint param_1)
       }
     }
     if (pEVar1->type == 4) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,10);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,4);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_id,10);
-      FUN_0040d9f0(&g_event[uVar6].pos,4,3);
-      FUN_0040d9f0(&g_event[uVar6].vec,4,3);
+      pbitread((uint *)&g_event[uVar6].param,10);
+      pbitread((uint *)&g_event[uVar6].attach_type,4);
+      pbitread((uint *)&g_event[uVar6].attach_id,10);
+      cs_pread(&g_event[uVar6].pos,4,3);
+      cs_pread(&g_event[uVar6].vec,4,3);
     }
     if (pEVar1->type == 5) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,0x14);
-      FUN_0040db20(&local_4,10);
+      pbitread((uint *)&g_event[uVar6].param,0x14);
+      pbitread(&local_4,10);
       if (local_4 == 0x3ff) {
         g_event[uVar6].attach_type = -1;
       }
       else {
         g_event[uVar6].attach_type = local_4;
       }
-      FUN_0040db20(&local_4,10);
+      pbitread(&local_4,10);
       if (local_4 == 0x3ff) {
         g_event[uVar6].attach_id = -1;
       }
       else {
         g_event[uVar6].attach_id = local_4;
       }
-      FUN_0040db20((uint *)&g_event[uVar6].range_mode,4);
+      pbitread((uint *)&g_event[uVar6].range_mode,4);
     }
     if (pEVar1->type == 6) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,10);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,3);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_id,0x10);
-      FUN_0040db20((uint *)&g_event[uVar6].range_mode,2);
+      pbitread((uint *)&g_event[uVar6].param,10);
+      pbitread((uint *)&g_event[uVar6].attach_type,3);
+      pbitread((uint *)&g_event[uVar6].attach_id,0x10);
+      pbitread((uint *)&g_event[uVar6].range_mode,2);
     }
     if (pEVar1->type == 7) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,0x10);
-      FUN_0040db20(&local_4,10);
+      pbitread((uint *)&g_event[uVar6].param,0x10);
+      pbitread(&local_4,10);
       if (local_4 == 0x3ff) {
         g_event[uVar6].attach_type = -1;
       }
       else {
         g_event[uVar6].attach_type = local_4;
       }
-      FUN_0040d9f0(&g_event[uVar6].attach_id,4,1);
-      FUN_0040db20((uint *)&g_event[uVar6].range_mode,0x10);
+      cs_pread(&g_event[uVar6].attach_id,4,1);
+      pbitread((uint *)&g_event[uVar6].range_mode,0x10);
       iVar7 = 0;
       do {
-        FUN_0040db20(&param_1,7);
+        pbitread(&param_1,7);
         *(undefined1 *)(iVar8 + ((int)SR_VA(0x97dd8c0)) + iVar7) = (undefined1)param_1;
         iVar7 = iVar7 + 1;
       } while (iVar7 < 0x1f);
       g_event[uVar6].message[0x1f] = '\0';
     }
     if (pEVar1->type == 0x11) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,10);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,1);
-      FUN_0040db20(&param_1,8);
+      pbitread((uint *)&g_event[uVar6].param,10);
+      pbitread((uint *)&g_event[uVar6].attach_type,1);
+      pbitread(&param_1,8);
       if (param_1 == 0xff) {
         g_event[uVar6].attach_id = -1;
       }
@@ -15447,7 +15461,7 @@ void __cdecl lf_17b60(uint param_1)
     iVar7 = DAT_1993d6ec;
     iVar8 = DAT_1993d6e4;
     if ((pEVar1->type == 8) &&
-       (FUN_0040db20((uint *)&g_event[uVar6].param,8), iVar8 = DAT_1993d6e4, iVar7 = DAT_1993d6ec,
+       (pbitread((uint *)&g_event[uVar6].param,8), iVar8 = DAT_1993d6e4, iVar7 = DAT_1993d6ec,
        DAT_1993d6e8 < 0x10000)) {
       if (DAT_1993d6e8 + 4 <= DAT_1993d6e4) {
         if (0 < DAT_1993d6ec) {
@@ -15471,7 +15485,7 @@ void __cdecl lf_17b60(uint param_1)
       }
     }
     if ((pEVar1->type == 9) &&
-       (FUN_0040db20((uint *)&g_event[uVar6].param,8), iVar8 = DAT_1993d6e4, iVar7 = DAT_1993d6ec,
+       (pbitread((uint *)&g_event[uVar6].param,8), iVar8 = DAT_1993d6e4, iVar7 = DAT_1993d6ec,
        DAT_1993d6e8 < 0x10000)) {
       if (DAT_1993d6e8 + 0xc <= DAT_1993d6e4) {
         if (0 < DAT_1993d6ec) {
@@ -15509,8 +15523,8 @@ void __cdecl lf_17b60(uint param_1)
       }
     }
     if (pEVar1->type == 10) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,8);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,1);
+      pbitread((uint *)&g_event[uVar6].param,8);
+      pbitread((uint *)&g_event[uVar6].attach_type,1);
       iVar7 = DAT_1993d6ec;
       iVar8 = DAT_1993d6e4;
     }
@@ -15641,10 +15655,10 @@ void __cdecl lf_17b60(uint param_1)
       }
     }
     if (pEVar1->type == 0xe) {
-      FUN_0040db20((uint *)&g_event[uVar6].param,8);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_type,8);
-      FUN_0040db20((uint *)&g_event[uVar6].attach_id,8);
-      FUN_0040db20((uint *)&g_event[uVar6].range_mode,0x14);
+      pbitread((uint *)&g_event[uVar6].param,8);
+      pbitread((uint *)&g_event[uVar6].attach_type,8);
+      pbitread((uint *)&g_event[uVar6].attach_id,8);
+      pbitread((uint *)&g_event[uVar6].range_mode,0x14);
       iVar7 = DAT_1993d6ec;
       iVar8 = DAT_1993d6e4;
     }
@@ -15716,7 +15730,7 @@ void __cdecl lf_17b60(uint param_1)
           }
         }
       }
-      FUN_0040db20(&param_1,10);
+      pbitread(&param_1,10);
       if (param_1 == 0x3ff) {
         g_event[uVar6].range_mode = -1;
       }
@@ -15760,14 +15774,14 @@ void __cdecl lf_17b60(uint param_1)
 #undef DAT_1993d6f4
 #undef DAT_1993d6f8
 #undef g_event
-#undef FUN_0040ddd0
-#undef FUN_0040db20
-#undef FUN_0040d9f0
+#undef pbitread
+#undef cs_pread
+#undef pbitreadnego
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x18570 */
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0040b230 ((undefined4 (__cdecl *)(int *, int *))SR_VA(0x40b230))
+#define gettimeofday ((undefined4 (__cdecl *)(int *, int *))SR_VA(0x40b230))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int *)(lf_frame + 0x1c))
 longlong __cdecl lf_18570(void)
@@ -15777,11 +15791,11 @@ longlong __cdecl lf_18570(void)
 
 
   
-  FUN_0040b230(&local_8,(int *)0x0);
+  gettimeofday(&local_8,(int *)0x0);
   return (longlong)((double)local_8 * 1000.0 + (double)local_4 * 0.001);
 }
 #undef _ftol2
-#undef FUN_0040b230
+#undef gettimeofday
 #undef local_8
 #undef local_4
 
@@ -15796,11 +15810,11 @@ longlong __cdecl lf_18570(void)
 #define DAT_00603f20 (*(undefined4 *)SR_VA(0x603f20))
 #define DAT_09fdd8a4 (*(undefined *)SR_VA(0x9fdd8a4))
 #define DAT_10347c84 (*(undefined4 *)SR_VA(0x10347c84))
-#define FUN_00408880 ((void (__cdecl *)(char *, int))SR_VA(0x408880))
-#define FUN_0040d020 ((void (__cdecl *)(char *))SR_VA(0x40d020))
-#define FUN_0040d2a0 ((void (__cdecl *)(int, int))SR_VA(0x40d2a0))
-#define FUN_0040ac00 ((void (__cdecl *)(void))SR_VA(0x40ac00))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
+#define cs_getline ((void (__cdecl *)(int, int))SR_VA(0x40d2a0))
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
 void __cdecl lf_185a0(void)
 
 {
@@ -15814,11 +15828,11 @@ void __cdecl lf_185a0(void)
   undefined4 *puVar8;
   undefined4 *puVar9;
   
-  FUN_0040d020("readme.txt");
+  loadtextfile("readme.txt");
   DAT_09fdd8a0 = 0;
   do {
     if (DAT_14122d64 <= g_parser) break;
-    FUN_0040d2a0((int)(&DAT_09fdd8a4 + DAT_09fdd8a0 * 0x100),0x7c);
+    cs_getline((int)(&DAT_09fdd8a4 + DAT_09fdd8a0 * 0x100),0x7c);
     DAT_09fdd8a0 = DAT_09fdd8a0 + 1;
   } while (DAT_09fdd8a0 < 0x3fe);
   iVar2 = DAT_09fdd8a0 * 0x100;
@@ -15837,12 +15851,12 @@ void __cdecl lf_185a0(void)
       piVar5 = piVar5 + 0x13;
     } while (iVar2 < iVar3);
   }
-  FUN_0040ac00();
+  csradixsort();
   iVar2 = 0;
   do {
     if (iVar2 < iVar3) {
       sprintf(&DAT_00460d40,"%d. %s   $",iVar2 + 1,(&DAT_10347c84)[iVar2] * 0x4c + ((int)SR_VA(0xf837b70)));
-      FUN_00408880((char *)&DAT_00603f20,g_account[(&DAT_10347c84)[iVar2]].money);
+      sprintf_comma((char *)&DAT_00603f20,g_account[(&DAT_10347c84)[iVar2]].money);
       pcVar4 = (char *)&DAT_00603f20;
       do {
         pcVar7 = pcVar4;
@@ -15890,11 +15904,11 @@ void __cdecl lf_185a0(void)
 #undef DAT_00603f20
 #undef DAT_09fdd8a4
 #undef DAT_10347c84
-#undef FUN_00408880
-#undef FUN_0040d020
-#undef FUN_0040d2a0
-#undef FUN_0040ac00
+#undef sprintf_comma
 #undef sprintf
+#undef loadtextfile
+#undef cs_getline
+#undef csradixsort
 
 /* ---------------------------------------------------------------- 0x18720 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -15904,7 +15918,7 @@ void __cdecl lf_185a0(void)
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 void __cdecl lf_18720(uint *param_1)
 
 {
@@ -15925,8 +15939,9 @@ void __cdecl lf_18720(uint *param_1)
     do {
       iVar1 = pIVar3->count;
       while (0 < iVar1) {
-        FUN_00407e50((&g_human[(int)param_1].inventory[0].count)[pIVar3->count + iVar5],param_1,
-                     iVar2);
+        item_removehumanlink
+                  ((&g_human[(int)param_1].inventory[0].count)[pIVar3->count + iVar5],param_1,iVar2)
+        ;
         iVar1 = pIVar3->count;
       }
       iVar5 = iVar5 + 9;
@@ -15976,15 +15991,15 @@ void __cdecl lf_18720(uint *param_1)
 #undef g_event
 #undef g_bond
 #undef g_player
-#undef FUN_00407e50
+#undef item_removehumanlink
 
 /* ---------------------------------------------------------------- 0x19060 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
+#define _CIsin lf_CIsin
 #define _CIatan2 lf_CIatan2
 #define _CIacos lf_CIacos
-#define _CIsin lf_CIsin
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_30 (*(float *)(lf_frame + 0x10))
 void __cdecl lf_19060(int param_1)
 
@@ -16038,7 +16053,7 @@ void __cdecl lf_19060(int param_1)
       pfVar8[0x1b] = 0.0;
       pfVar8[0x1c] = 0.0;
       pfVar8[0x1d] = 0.0;
-      FUN_0040bdb0((int)pfVar1,pfVar1,local_30);
+      rotateorientation((int)pfVar1,pfVar1,local_30);
       pBVar6 = pBVar6 + 1;
       iVar7 = iVar7 + 1;
       pfVar8 = pfVar8 + 0x38;
@@ -16056,8 +16071,9 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[9].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[9].lf_raw[0xc8] = 0x3f800000;
   dVar10 = _CIsin((double)g_human[param_1].unk_2918);
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,
-               (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 - (float10)fVar4));
+  rotateorientation((int)puVar2,(float *)puVar2,
+                    (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 -
+                           (float10)fVar4));
   puVar2 = &g_human[param_1].bones[10].lf_raw[0xa8];
   *(undefined4 *)puVar2 = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[10].lf_raw[0xac] = 0;
@@ -16068,7 +16084,7 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[10].lf_raw[0xc4] = 0;
   *(undefined4 *)&g_human[param_1].bones[10].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[10].lf_raw[0xc8] = 0x3f800000;
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,(float)(fVar4 + fVar4));
+  rotateorientation((int)puVar2,(float *)puVar2,(float)(fVar4 + fVar4));
   puVar2 = &g_human[param_1].bones[0xb].lf_raw[0xa8];
   *(undefined4 *)puVar2 = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xb].lf_raw[0xac] = 0;
@@ -16080,9 +16096,9 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[0xb].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xb].lf_raw[0xc8] = 0x3f800000;
   dVar10 = _CIsin((double)g_human[param_1].unk_2918);
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,
-               (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 - (float10)fVar4))
-  ;
+  rotateorientation((int)puVar2,(float *)puVar2,
+                    (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 -
+                           (float10)fVar4));
   puVar2 = &g_human[param_1].bones[0xc].lf_raw[0xa8];
   *(undefined4 *)puVar2 = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xc].lf_raw[0xac] = 0;
@@ -16094,9 +16110,9 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[0xc].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xc].lf_raw[0xc8] = 0x3f800000;
   dVar10 = _CIsin((double)g_human[param_1].unk_2918);
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,
-               (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 - (float10)fVar4))
-  ;
+  rotateorientation((int)puVar2,(float *)puVar2,
+                    (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 -
+                           (float10)fVar4));
   puVar2 = &g_human[param_1].bones[0xd].lf_raw[0xa8];
   *(undefined4 *)puVar2 = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xd].lf_raw[0xac] = 0;
@@ -16107,7 +16123,7 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[0xd].lf_raw[0xc4] = 0;
   *(undefined4 *)&g_human[param_1].bones[0xd].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xd].lf_raw[0xc8] = 0x3f800000;
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,fVar4 + fVar4);
+  rotateorientation((int)puVar2,(float *)puVar2,fVar4 + fVar4);
   puVar2 = &g_human[param_1].bones[0xe].lf_raw[0xa8];
   *(undefined4 *)puVar2 = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xe].lf_raw[0xac] = 0;
@@ -16119,24 +16135,25 @@ void __cdecl lf_19060(int param_1)
   *(undefined4 *)&g_human[param_1].bones[0xe].lf_raw[0xb8] = 0x3f800000;
   *(undefined4 *)&g_human[param_1].bones[0xe].lf_raw[0xc8] = 0x3f800000;
   dVar10 = _CIsin((double)g_human[param_1].unk_2918);
-  FUN_0040bdb0((int)puVar2,(float *)puVar2,
-               (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 - (float10)fVar4));
+  rotateorientation((int)puVar2,(float *)puVar2,
+                    (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 -
+                           (float10)fVar4));
   return;
 }
 #undef g_human
 #undef g_body
+#undef _CIsin
 #undef _CIatan2
 #undef _CIacos
-#undef _CIsin
-#undef FUN_0040bdb0
+#undef rotateorientation
 #undef local_30
 
 /* ---------------------------------------------------------------- 0x19380 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define FUN_0040ba00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
 #define local_1c (*(Bone * *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_c (*(float *)(lf_frame + 0x24))
@@ -16182,8 +16199,8 @@ void __cdecl lf_19380(float param_1)
               do {
                 if ((((LF_BITS_U(fVar7) != 0xbU) && (LF_BITS_U(fVar7) != 0xeU)) && (LF_BITS_U(fVar7) != 0xaU)) &&
                    (LF_BITS_U(fVar7) != 0xdU)) {
-                  FUN_0040ba00(&local_c,&pvVar5->x,(float *)local_1c);
-                  fVar8 = (float10)FUN_0040b8c0(&local_c);
+                  subtractvectors(&local_c,&pvVar5->x,(float *)local_1c);
+                  fVar8 = (float10)vectorlength(&local_c);
                   fVar1 = (float)fVar8;
                   if (fVar1 < 0.375) {
                     fVar2 = (float)(1.0 / fVar1);
@@ -16225,8 +16242,8 @@ void __cdecl lf_19380(float param_1)
 #undef g_human
 #undef g_numofbonds
 #undef g_bond
-#undef FUN_0040b8c0
-#undef FUN_0040ba00
+#undef subtractvectors
+#undef vectorlength
 #undef local_1c
 #undef local_18
 #undef local_c
@@ -16543,10 +16560,10 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
 #undef memset
 
 /* ---------------------------------------------------------------- 0x1a000 */
+#define crossproduct ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b880))
+#define lineintersectplanetwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c290))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b880 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b880))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040c290 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c290))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -16559,8 +16576,8 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
 #define local_c (*(float *)(lf_frame + 0x34))
 #define local_8 (*(float *)(lf_frame + 0x38))
 #define local_4 (*(float *)(lf_frame + 0x3c))
-undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float param_6,float *param_7,float *param_8,float *param_9)
+undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float param_6,
+          float *param_7,float *param_8,float *param_9)
 
 {
   __declspec(align(16)) uchar lf_frame[0x40];
@@ -16614,7 +16631,7 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
     local_30 = (float)(*param_4 - local_24);
     local_2c = (float)(param_4[1] - local_20);
     local_28 = (float)(param_4[2] - local_1c);
-    FUN_0040b900(&local_c,&local_c);
+    normalizevector(&local_c,&local_c);
     fVar3 = (float)(local_4 * local_28 + (local_8 * local_2c + local_c * local_30));
     param_5 = ((float *)LF_BITS_U(((float)(local_24 + fVar3 * local_c))));
     *param_1 = LF_BITS_F(param_5);
@@ -16658,7 +16675,7 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
           local_18 = (float)(*param_1 - *param_9);
           local_14 = (float)(param_1[1] - param_9[1]);
           local_10 = (float)(param_1[2] - param_9[2]);
-          FUN_0040b880(&local_24,&local_30,&local_18);
+          crossproduct(&local_24,&local_30,&local_18);
           param_5 = ((float *)LF_BITS_U(((float)(pfVar7[2] * local_1c + (*pfVar7 * local_24 + pfVar7[1] * local_20)))));
           pfVar4 = param_2;
           if (0.0 <= LF_BITS_F(param_5)) {
@@ -16669,7 +16686,7 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
     }
   }
   param_2 = pfVar4;
-  iVar10 = FUN_0040c290(&local_30,pfVar9,(float *)&param_2,param_7,param_8,pfVar8);
+  iVar10 = lineintersectplanetwosided(&local_30,pfVar9,(float *)&param_2,param_7,param_8,pfVar8);
   if (iVar10 != 0) {
     local_c = (float)(*pfVar8 - local_30);
     local_8 = (float)(pfVar8[1] - local_2c);
@@ -16684,11 +16701,11 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
       *pfVar7 = (float)(*pfVar8 - local_30);
       pfVar7[1] = (float)(pfVar8[1] - local_2c);
       pfVar7[2] = (float)(pfVar8[2] - local_28);
-      FUN_0040b900(pfVar7,pfVar7);
+      normalizevector(pfVar7,pfVar7);
       *param_3 = LF_BITS_F(param_2);
     }
   }
-  iVar10 = FUN_0040c290(&local_30,pfVar9,(float *)&param_2,param_8,param_9,pfVar8);
+  iVar10 = lineintersectplanetwosided(&local_30,pfVar9,(float *)&param_2,param_8,param_9,pfVar8);
   if (iVar10 != 0) {
     local_c = (float)(*pfVar8 - local_30);
     local_8 = (float)(pfVar8[1] - local_2c);
@@ -16703,11 +16720,11 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
       *pfVar7 = (float)(*pfVar8 - local_30);
       pfVar7[1] = (float)(pfVar8[1] - local_2c);
       pfVar7[2] = (float)(pfVar8[2] - local_28);
-      FUN_0040b900(pfVar7,pfVar7);
+      normalizevector(pfVar7,pfVar7);
       *param_3 = LF_BITS_F(param_2);
     }
   }
-  iVar10 = FUN_0040c290(&local_30,pfVar9,(float *)&param_2,param_9,param_7,pfVar8);
+  iVar10 = lineintersectplanetwosided(&local_30,pfVar9,(float *)&param_2,param_9,param_7,pfVar8);
   if (iVar10 != 0) {
     local_c = (float)(*pfVar8 - local_30);
     local_8 = (float)(pfVar8[1] - local_2c);
@@ -16724,7 +16741,7 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
       *pfVar7 = (float)(*pfVar8 - local_30);
       pfVar7[1] = (float)(pfVar8[1] - local_2c);
       pfVar7[2] = (float)(pfVar8[2] - local_28);
-      FUN_0040b900(pfVar7,pfVar7);
+      normalizevector(pfVar7,pfVar7);
       *pfVar4 = LF_BITS_F(param_2);
       param_3 = pfVar4;
     }
@@ -16734,10 +16751,10 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
   }
   return 1;
 }
+#undef crossproduct
+#undef lineintersectplanetwosided
 #undef _CIsqrt
-#undef FUN_0040b880
-#undef FUN_0040b900
-#undef FUN_0040c290
+#undef normalizevector
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -16752,13 +16769,13 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x1a700 */
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
-undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,
-            float *param_6,float *param_7,float *param_8)
+undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,float *param_6,
+          float *param_7,float *param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x20];
@@ -16780,25 +16797,26 @@ undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *
     local_8 = (float)(LF_BITS_F(pfVar2) * param_2[1] + param_4[1]);
     local_4 = (float)(LF_BITS_F(pfVar2) * param_2[2] + param_4[2]);
     param_4 = pfVar2;
-    iVar4 = FUN_0040c420(param_1,param_2,(float *)&param_4,pfVar3,&local_c,param_6,param_7,param_8);
+    iVar4 = lineintersecttriangle
+                      (param_1,param_2,(float *)&param_4,pfVar3,&local_c,param_6,param_7,param_8);
     if (iVar4 == 0) {
       return 0;
     }
-    fVar5 = (float10)FUN_0040baa0(pfVar3,param_1);
+    fVar5 = (float10)vectordistance(pfVar3,param_1);
     *param_3 = (float)fVar5;
     return 1;
   }
   return 0;
 }
-#undef FUN_0040baa0
-#undef FUN_0040c420
+#undef vectordistance
+#undef lineintersecttriangle
 #undef local_c
 #undef local_8
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x1a7f0 */
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -16806,7 +16824,7 @@ undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *
 #define local_8 (*(float *)(lf_frame + 0x28))
 #define local_4 (*(float *)(lf_frame + 0x2c))
 undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,
-            float *param_6,float *param_7)
+                   float *param_6,float *param_7)
 
 {
   __declspec(align(16)) uchar lf_frame[0x30];
@@ -16831,7 +16849,7 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
   local_c = (float)(*param_4 - *param_6);
   local_8 = (float)(param_4[1] - param_6[1]);
   local_4 = (float)(param_4[2] - param_6[2]);
-  FUN_0040b900(&local_18,&local_18);
+  normalizevector(&local_18,&local_18);
   fVar4 = (float)(local_4 * local_10 + (local_8 * local_14 + local_c * local_18));
   if ((0.0 < fVar4) && (dVar5 = _CIsqrt((double)((float)(fVar2 + (fVar3 + fVar1)))), fVar4 < (float)dVar5)) {
     *param_1 = (float)(*param_6 + fVar4 * local_18);
@@ -16843,7 +16861,7 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
     local_4 = (float)(param_4[2] - local_4);
     dVar5 = _CIsqrt((double)((float)(local_8 * local_8 + local_c * local_c + local_4 * local_4)));
     if ((float)dVar5 < param_5) {
-      FUN_0040b900(param_2,&local_c);
+      normalizevector(param_2,&local_c);
       *param_3 = (float)dVar5;
       return 1;
     }
@@ -16851,7 +16869,7 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
   return 0;
 }
 #undef _CIsqrt
-#undef FUN_0040b900
+#undef normalizevector
 #undef local_18
 #undef local_14
 #undef local_10
@@ -16861,8 +16879,7 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
 
 /* ---------------------------------------------------------------- 0x1a990 */
 #define _CIsqrt lf_CIsqrt
-undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,
-            float *param_6)
+undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,float *param_6)
 
 {
   float fVar1;
@@ -16894,13 +16911,13 @@ undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *
 
 /* ---------------------------------------------------------------- 0x1aa60 */
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
 undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float *param_6,float param_7)
+                   float *param_6,float param_7)
 
 {
   __declspec(align(16)) uchar lf_frame[0x20];
@@ -16926,7 +16943,7 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
   fVar4 = (float)(*param_6 - *param_4);
   fVar5 = (float)(param_6[1] - param_4[1]);
   fVar6 = (float)(param_6[2] - param_4[2]);
-  FUN_0040b900(&local_c,&local_c);
+  normalizevector(&local_c,&local_c);
   fVar7 = (float)(fVar6 * local_4 + (fVar5 * local_8 + fVar4 * local_c));
   *param_3 = fVar7;
   if (0.0 <= fVar7) {
@@ -16944,19 +16961,19 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
       local_c = (float)(*param_5 - *param_4);
       local_8 = (float)(param_5[1] - param_4[1]);
       local_4 = (float)(param_5[2] - param_4[2]);
-      FUN_0040ba60(param_1,param_4,&local_c,*param_3);
+      scaleaddvectors(param_1,param_4,&local_c,*param_3);
       *param_2 = (float)(*param_1 - *param_6);
       param_2[1] = (float)(param_1[1] - param_6[1]);
       param_2[2] = (float)(param_1[2] - param_6[2]);
-      FUN_0040b900(param_2,param_2);
+      normalizevector(param_2,param_2);
       return 1;
     }
   }
   return 0;
 }
 #undef _CIsqrt
-#undef FUN_0040b900
-#undef FUN_0040ba60
+#undef normalizevector
+#undef scaleaddvectors
 #undef local_c
 #undef local_8
 #undef local_4
@@ -16974,24 +16991,24 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
 #define DAT_17579827 (*(undefined1 *)SR_VA(0x17579827))
 #define DAT_17579828 (*(undefined1 *)SR_VA(0x17579828))
 #define DAT_17579829 (*(undefined1 *)SR_VA(0x17579829))
+#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(31, "WSOCK32.DLL", 18))
+#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(32, "WSOCK32.DLL", 151))
+#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(33, "WSOCK32.DLL", 16))
 #define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(28, "WSOCK32.DLL", 12))
-#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(26, "WSOCK32.DLL", 23))
-#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(31, "WSOCK32.DLL", 7))
-#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(32, "WSOCK32.DLL", 55))
-#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(33, "WSOCK32.DLL", 4))
-#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(34, "WSOCK32.DLL", 52))
-#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(35, "WSOCK32.DLL", 10))
-#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(36, "WSOCK32.DLL", 151))
-#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(37, "WSOCK32.DLL", 3))
-#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(38, "WSOCK32.DLL", 19))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 18))
-#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(40, "WSOCK32.DLL", 16))
-#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(41, "MSVCR100.DLL", "_sleep"))
+#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(34, "WSOCK32.DLL", 19))
 #define __security_check_cookie(x) ((void)0)
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(35, "WSOCK32.DLL", 55))
+#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(36, "MSVCR100.DLL", "_sleep"))
+#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(37, "WSOCK32.DLL", 7))
+#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(38, "WSOCK32.DLL", 52))
+#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 10))
+#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(40, "WSOCK32.DLL", 4))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(41, "WSOCK32.DLL", 3))
+#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 23))
+#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
+#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define auStack_26c (*(undefined1 (*)[4])(lf_frame + 0x14))
 #define local_268 (*(int (*)[4])(lf_frame + 0x18))
 #define local_258 (*(timeval *)(lf_frame + 0x28))
@@ -17196,24 +17213,24 @@ LAB_0041ae5d:
 #undef DAT_17579827
 #undef DAT_17579828
 #undef DAT_17579829
+#undef select
+#undef __WSAFDIsSet
+#undef recv
 #undef ioctlsocket
+#undef send
+#undef __security_check_cookie
+#undef sprintf
+#undef getservbyname
+#undef _sleep
+#undef getsockopt
+#undef gethostbyname
+#undef inet_addr
+#undef connect
+#undef htons
+#undef closesocket
 #undef socket
 #undef sscanf
-#undef sprintf
-#undef getsockopt
-#undef getservbyname
-#undef connect
-#undef gethostbyname
 #undef ntohl
-#undef inet_addr
-#undef __WSAFDIsSet
-#undef closesocket
-#undef send
-#undef htons
-#undef select
-#undef recv
-#undef _sleep
-#undef __security_check_cookie
 #undef auStack_26c
 #undef local_268
 #undef local_258
@@ -17239,7 +17256,7 @@ LAB_0041ae5d:
 #define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
 #define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 *param_4)
 
 {
@@ -17340,10 +17357,10 @@ uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 
     *(float *)&g_item[uVar9].lf_raw[0x1a4] =
          (float)(_DAT_00460ce4 * fVar1 + *(float *)&g_item[uVar9].lf_raw[0x1a4]);
     *(float *)&g_item[uVar9].lf_raw[0x1a8] = (float)(fVar1 * fVar7 + *(float *)&g_item[uVar9].lf_raw[0x1a8]);
-    FUN_00406380(uVar9);
+    createevent_updateitem(uVar9);
     return uVar9;
   }
-  FUN_00406380(uVar9);
+  createevent_updateitem(uVar9);
   return uVar9;
 }
 #undef DAT_00460cd4
@@ -17361,7 +17378,7 @@ uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 
 #undef _DAT_00460ce4
 #undef _DAT_00460ce8
 #undef memset
-#undef FUN_00406380
+#undef createevent_updateitem
 
 /* ---------------------------------------------------------------- 0x1b6e0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -17403,11 +17420,11 @@ void __cdecl lf_1b6e0(int param_1,int param_2)
 /* ---------------------------------------------------------------- 0x1b870 */
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00407d60 ((int (__cdecl *)(int, int))SR_VA(0x407d60))
-#define FUN_00407e00 ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define linkitemtoitem ((int (__cdecl *)(int, int))SR_VA(0x407d60))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 int __cdecl lf_1b870(uint param_1,uint param_2,int param_3,int param_4)
 
 {
@@ -17420,13 +17437,14 @@ int __cdecl lf_1b870(uint param_1,uint param_2,int param_3,int param_4)
   if (param_2 == 0xffffffff) {
     if (param_3 == -1) {
       if (g_item[param_1].parent_item != 0xffffffff) {
-        FUN_00407f80(param_1,g_item[param_1].parent_item);
-        FUN_00406380(param_1);
+        item_removeitemlink(param_1,g_item[param_1].parent_item);
+        createevent_updateitem(param_1);
         return 1;
       }
       if ((uint *)g_item[param_1].parent_human != (uint *)0xffffffff) {
-        FUN_00407e50(param_1,(uint *)g_item[param_1].parent_human,g_item[param_1].parent_slot);
-        FUN_00406380(param_1);
+        item_removehumanlink
+                  (param_1,(uint *)g_item[param_1].parent_human,g_item[param_1].parent_slot);
+        createevent_updateitem(param_1);
         return 1;
       }
     }
@@ -17437,19 +17455,19 @@ int __cdecl lf_1b870(uint param_1,uint param_2,int param_3,int param_4)
           if (g_itemtype[g_item[param_1].type].unk_0008 != 0) {
 LAB_0041b9ae:
             if (g_item[param_1].parent_item != 0xffffffff) {
-              FUN_00407f80(param_1,g_item[param_1].parent_item);
+              item_removeitemlink(param_1,g_item[param_1].parent_item);
               g_item[param_1].parent_item = -1;
             }
             if ((uint *)g_item[param_1].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(param_1,(uint *)g_item[param_1].parent_human,g_item[param_1].parent_slot)
-              ;
+              item_removehumanlink
+                        (param_1,(uint *)g_item[param_1].parent_human,g_item[param_1].parent_slot);
             }
-            iVar2 = FUN_00407e00(param_1,param_3,param_4);
+            iVar2 = item_addhumanlink(param_1,param_3,param_4);
             if (iVar2 != 0) {
               g_item[param_1].parent_human = param_3;
               g_item[param_1].parent_slot = param_4;
             }
-            FUN_00406380(param_1);
+            createevent_updateitem(param_1);
             return 1;
           }
         }
@@ -17460,13 +17478,13 @@ LAB_0041b9ae:
   }
   else {
     iVar2 = g_item[param_2].parent_slot;
-    iVar1 = FUN_00407d60(param_1,param_2);
+    iVar1 = linkitemtoitem(param_1,param_2);
     if (iVar1 != 0) {
       if ((uint *)g_item[param_2].parent_human != (uint *)0xffffffff) {
-        FUN_00407e50(param_2,(uint *)g_item[param_2].parent_human,iVar2);
+        item_removehumanlink(param_2,(uint *)g_item[param_2].parent_human,iVar2);
       }
-      FUN_00406380(param_1);
-      FUN_00406380(param_2);
+      createevent_updateitem(param_1);
+      createevent_updateitem(param_2);
       return 1;
     }
   }
@@ -17474,11 +17492,11 @@ LAB_0041b9ae:
 }
 #undef g_itemtype
 #undef g_item
-#undef FUN_00407e50
-#undef FUN_00407d60
-#undef FUN_00407e00
-#undef FUN_00406380
-#undef FUN_00407f80
+#undef linkitemtoitem
+#undef item_removeitemlink
+#undef createevent_updateitem
+#undef item_addhumanlink
+#undef item_removehumanlink
 
 /* ---------------------------------------------------------------- 0x1ba30 */
 #define DAT_0e6b3228 (*(int *)SR_VA(0xe6b3228))
@@ -17504,7 +17522,7 @@ LAB_0041b9ae:
 #define DAT_0e6b3250 (*(undefined *)SR_VA(0xe6b3250))
 #define DAT_0e6b3254 (*(undefined *)SR_VA(0xe6b3254))
 #define DAT_0e6b3258 (*(undefined *)SR_VA(0xe6b3258))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 void __cdecl lf_1ba30(int param_1,int param_2,int param_3,int param_4,char *param_5)
 
 {
@@ -17555,8 +17573,8 @@ void __cdecl lf_1ba30(int param_1,int param_2,int param_3,int param_4,char *para
   *(undefined4 *)(&DAT_0e6b3244 + DAT_0e6b3228 * 0x4c) = 0;
   *(float *)(&DAT_0e6b3248 + DAT_0e6b3228 * 0x4c) =
        (float)(int)((&DAT_0e699230)[param_2 * 0x1a] - (&DAT_0e699230)[param_1 * 0x1a]);
-  FUN_0040b900((float *)(&DAT_0e6b3240 + DAT_0e6b3228 * 0x4c),
-               (float *)(&DAT_0e6b3240 + DAT_0e6b3228 * 0x4c));
+  normalizevector((float *)(&DAT_0e6b3240 + DAT_0e6b3228 * 0x4c),
+                  (float *)(&DAT_0e6b3240 + DAT_0e6b3228 * 0x4c));
   *(float *)(&DAT_0e6b324c + DAT_0e6b3228 * 0x4c) = -*(float *)(&DAT_0e6b3248 + DAT_0e6b3228 * 0x4c)
   ;
   *(undefined4 *)(&DAT_0e6b3250 + DAT_0e6b3228 * 0x4c) = 0;
@@ -17599,7 +17617,7 @@ void __cdecl lf_1ba30(int param_1,int param_2,int param_3,int param_4,char *para
 #undef DAT_0e6b3250
 #undef DAT_0e6b3254
 #undef DAT_0e6b3258
-#undef FUN_0040b900
+#undef normalizevector
 
 /* ---------------------------------------------------------------- 0x1bc50 */
 #define DAT_0a01d8c0 (*(undefined4 *)SR_VA(0xa01d8c0))
@@ -17610,8 +17628,8 @@ void __cdecl lf_1ba30(int param_1,int param_2,int param_3,int param_4,char *para
 #define DAT_0a4200d0 (*(undefined4 *)SR_VA(0xa4200d0))
 #define DAT_0a61c4c8 (*(undefined4 *)SR_VA(0xa61c4c8))
 #define _DAT_0a01d8c8 (*(undefined4 *)SR_VA(0xa01d8c8))
+#define serpnoise2d ((float10 (__cdecl *)(float, float, uint))SR_VA(0x409a00))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00409a00 ((float10 (__cdecl *)(float, float, uint))SR_VA(0x409a00))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
 void __cdecl lf_1bc50(void)
@@ -17659,11 +17677,11 @@ void __cdecl lf_1bc50(void)
         local_54 = 0.0;
       }
       fVar3 = (float)iVar7 * 0.125;
-      fVar8 = (float10)FUN_00409a00((float)(fVar3 * 0.5),(float)(fVar4 * 0.5),0xffffffff);
-      fVar9 = (float10)FUN_00409a00(fVar3,fVar4,0xffffffff);
-      fVar10 = (float10)FUN_00409a00((float)(fVar3 * 0.25),fVar4 * 0.25,0xffffffff);
-      fVar11 = (float10)FUN_00409a00(fVar3 * 0.125,fVar4 * 0.125,0xffffffff);
-      fVar12 = (float10)FUN_00409a00((float)(fVar3 * 0.125 * 0.5),(float)(fVar4 * 0.125 * 0.5),0xffffffff);
+      fVar8 = (float10)serpnoise2d((float)(fVar3 * 0.5),(float)(fVar4 * 0.5),0xffffffff);
+      fVar9 = (float10)serpnoise2d(fVar3,fVar4,0xffffffff);
+      fVar10 = (float10)serpnoise2d((float)(fVar3 * 0.25),fVar4 * 0.25,0xffffffff);
+      fVar11 = (float10)serpnoise2d(fVar3 * 0.125,fVar4 * 0.125,0xffffffff);
+      fVar12 = (float10)serpnoise2d((float)(fVar3 * 0.125 * 0.5),(float)(fVar4 * 0.125 * 0.5),0xffffffff);
       fVar13 = (float10)((float)(local_54 * local_54));
       *(float *)&((&DAT_0a01d8cc)[iVar2]) =
            (float)((fVar12 + fVar13 * (float10)0.25) * (float10)32.0 * fVar13 +
@@ -17763,8 +17781,8 @@ void __cdecl lf_1bc50(void)
 #undef DAT_0a4200d0
 #undef DAT_0a61c4c8
 #undef _DAT_0a01d8c8
+#undef serpnoise2d
 #undef _CIsqrt
-#undef FUN_00409a00
 #undef local_54
 #undef local_50
 
@@ -17799,11 +17817,11 @@ void __cdecl lf_1bc50(void)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define __security_check_cookie(x) ((void)0)
+#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_ac (*(float *)(lf_frame + 0x14))
 #define local_a8 (*(float *)(lf_frame + 0x18))
 #define local_a4 (*(float *)(lf_frame + 0x1c))
@@ -17958,9 +17976,10 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
         local_a8 = (float)(local_6c + DAT_0a01d8c0);
         local_a4 = (float)(LF_BITS_F((&DAT_0a01f8d4)[iVar9]) + DAT_0a01d8c4);
         local_a0 = (float)(_DAT_0a01d8c8 + local_84);
-        FUN_0040bb80(&local_78,&local_90,&local_9c,&local_a8);
-        iVar8 = FUN_0040c420(&local_58,&local_78,&local_ac,local_64,local_68,&local_90,&local_9c,
-                             &local_a8);
+        generatetrinormal(&local_78,&local_90,&local_9c,&local_a8);
+        iVar8 = lineintersecttriangle
+                          (&local_58,&local_78,&local_ac,local_64,local_68,&local_90,&local_9c,
+                           &local_a8);
         if ((iVar8 != 0) && (local_ac < _DAT_107484b8)) {
           _g_intersect = local_58;
           _DAT_107484a4 = local_54;
@@ -17982,9 +18001,10 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
         local_a8 = (float)(local_60 + DAT_0a01d8c0);
         local_a4 = (float)(DAT_0a01d8c4 + LF_BITS_F((&DAT_0a01f8d0)[iVar9]));
         local_a0 = (float)(_DAT_0a01d8c8 + local_84);
-        FUN_0040bb80(&local_78,&local_90,&local_9c,&local_a8);
-        iVar8 = FUN_0040c420(&local_58,&local_78,&local_ac,local_64,local_68,&local_90,&local_9c,
-                             &local_a8);
+        generatetrinormal(&local_78,&local_90,&local_9c,&local_a8);
+        iVar8 = lineintersecttriangle
+                          (&local_58,&local_78,&local_ac,local_64,local_68,&local_90,&local_9c,
+                           &local_a8);
         fVar1 = local_34[1];
         if ((iVar8 != 0) && (local_ac < _DAT_107484b8)) {
           _g_intersect = local_58;
@@ -18067,11 +18087,11 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef floor
-#undef FUN_0040bb80
 #undef _ftol2
-#undef FUN_0040c420
+#undef lineintersecttriangle
 #undef __security_check_cookie
+#undef floor
+#undef generatetrinormal
 #undef local_ac
 #undef local_a8
 #undef local_a4
@@ -18132,9 +18152,9 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0041a000 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_64 (*(int *)(lf_frame + 0x1c))
 #define local_60 (*(uint *)(lf_frame + 0x20))
 #define local_5c (*(int *)(lf_frame + 0x24))
@@ -18257,9 +18277,10 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
           local_3c = (float)(local_48 + local_3c);
           local_38 = (float)(local_38 + LF_BITS_F((&DAT_0a01f8d4)[iVar7]));
           local_34 = (float)(local_34 + local_44);
-          FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-          iVar6 = FUN_0041a000(&local_c,&local_18,&local_54,param_1,param_2,param_3,&local_24,
-                               &local_30,&local_3c);
+          generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+          iVar6 = circleintersecttriangle
+                            (&local_c,&local_18,&local_54,param_1,param_2,param_3,&local_24,
+                             &local_30,&local_3c);
           if ((iVar6 != 0) && (local_54 < local_58)) {
             _g_intersect = local_c;
             _DAT_107484a4 = local_8;
@@ -18283,9 +18304,10 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
           local_3c = (float)(local_50 + DAT_0a01d8c0);
           local_38 = (float)(DAT_0a01d8c4 + LF_BITS_F((&DAT_0a01f8d0)[iVar7]));
           local_34 = (float)(_DAT_0a01d8c8 + local_44);
-          FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-          iVar6 = FUN_0041a000(&local_c,&local_18,&local_54,param_1,param_2,param_3,&local_24,
-                               &local_30,&local_3c);
+          generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+          iVar6 = circleintersecttriangle
+                            (&local_c,&local_18,&local_54,param_1,param_2,param_3,&local_24,
+                             &local_30,&local_3c);
           fVar3 = _DAT_0a01d8c8;
           fVar4 = DAT_0a01d8c0;
           fVar5 = DAT_0a01d8c4;
@@ -18348,9 +18370,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0040bb80
+#undef circleintersecttriangle
 #undef _ftol2
-#undef FUN_0041a000
+#undef generatetrinormal
 #undef local_64
 #undef local_60
 #undef local_5c
@@ -18408,9 +18430,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0041a700 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define local_5c (*(uint *)(lf_frame + 0x14))
 #define local_58 (*(int *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -18529,9 +18551,10 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
           local_3c = (float)(local_48 + local_3c);
           local_38 = (float)(local_38 + LF_BITS_F((&DAT_0a01f8d4)[iVar8]));
           local_34 = (float)(local_34 + local_44);
-          FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-          iVar6 = FUN_0041a700(&local_c,&local_18,&local_54,param_1,param_2,&local_24,&local_30,
-                               &local_3c);
+          generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+          iVar6 = sphereintersecttriangle
+                            (&local_c,&local_18,&local_54,param_1,param_2,&local_24,&local_30,
+                             &local_3c);
           if ((iVar6 != 0) && (local_54 < _DAT_107484bc)) {
             _g_intersect = local_c;
             _DAT_107484a4 = local_8;
@@ -18554,9 +18577,10 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
           local_3c = (float)(local_50 + DAT_0a01d8c0);
           local_38 = (float)(DAT_0a01d8c4 + LF_BITS_F((&DAT_0a01f8d0)[iVar8]));
           local_34 = (float)(_DAT_0a01d8c8 + local_44);
-          FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-          iVar6 = FUN_0041a700(&local_c,&local_18,&local_54,param_1,param_2,&local_24,&local_30,
-                               &local_3c);
+          generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+          iVar6 = sphereintersecttriangle
+                            (&local_c,&local_18,&local_54,param_1,param_2,&local_24,&local_30,
+                             &local_3c);
           fVar3 = _DAT_0a01d8c8;
           fVar4 = DAT_0a01d8c0;
           fVar5 = DAT_0a01d8c4;
@@ -18618,9 +18642,9 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0040bb80
+#undef generatetrinormal
+#undef sphereintersecttriangle
 #undef _ftol2
-#undef FUN_0041a700
 #undef local_5c
 #undef local_58
 #undef local_54
@@ -18652,10 +18676,10 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
 #define DAT_00461d48 (*(undefined4 *)SR_VA(0x461d48))
 #define DAT_00603fa0 (*(undefined1 *)SR_VA(0x603fa0))
 #define DAT_10347c84 (*(undefined4 *)SR_VA(0x10347c84))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_0040ac00 ((void (__cdecl *)(void))SR_VA(0x40ac00))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define FUN_00408880 ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
 void __cdecl lf_1d2c0(int param_1)
 
 {
@@ -18670,7 +18694,7 @@ void __cdecl lf_1d2c0(int param_1)
   
   iVar2 = DAT_0f837b64;
   if (param_1 < 0) {
-    FUN_00406260(0,"Top 10 list",0xffffffff,0);
+    createevent_message(0,"Top 10 list",0xffffffff,0);
   }
   else if (param_1 < DAT_0f837b64) {
     iVar3 = 0;
@@ -18683,9 +18707,9 @@ void __cdecl lf_1d2c0(int param_1)
         piVar5 = piVar5 + 0x13;
       } while (iVar3 < iVar2);
     }
-    FUN_0040ac00();
+    csradixsort();
     sprintf(&DAT_00603fa0,"%d. %s   $",param_1 + 1,(&DAT_10347c84)[param_1] * 0x4c + ((int)SR_VA(0xf837b70)));
-    FUN_00408880((char *)&DAT_00461d48,g_account[(&DAT_10347c84)[param_1]].money);
+    sprintf_comma((char *)&DAT_00461d48,g_account[(&DAT_10347c84)[param_1]].money);
     pcVar1 = (char *)&DAT_00461d48;
     do {
       pcVar4 = pcVar1;
@@ -18707,7 +18731,7 @@ void __cdecl lf_1d2c0(int param_1)
       puVar7 = (undefined4 *)((int)puVar7 + 1);
       puVar8 = (undefined4 *)((int)puVar8 + 1);
     }
-    FUN_00406260(0,&DAT_00603fa0,0xffffffff,0);
+    createevent_message(0,&DAT_00603fa0,0xffffffff,0);
     return;
   }
   return;
@@ -18719,9 +18743,9 @@ void __cdecl lf_1d2c0(int param_1)
 #undef DAT_00603fa0
 #undef DAT_10347c84
 #undef sprintf
-#undef FUN_0040ac00
-#undef FUN_00406260
-#undef FUN_00408880
+#undef createevent_message
+#undef sprintf_comma
+#undef csradixsort
 
 /* ---------------------------------------------------------------- 0x1d3b0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -18793,12 +18817,12 @@ void __cdecl lf_1d3b0(void)
 #define DAT_00461780 (*(undefined *)SR_VA(0x461780))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_00406420 ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
@@ -18844,7 +18868,7 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
             g_item[*piVar5].call_state = 0;
             g_item[*piVar5].linked_item = -1;
             g_item[*piVar5].info = 0;
-            FUN_00406420(*piVar5);
+            createevent_updateiteminfo(*piVar5);
           }
           piVar5[-0x39] = 0;
         }
@@ -18853,7 +18877,7 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
             g_item[*piVar5].call_state = 0;
             g_item[*piVar5].linked_item = -1;
             g_item[*piVar5].info = 0;
-            FUN_00406420(*piVar5);
+            createevent_updateiteminfo(*piVar5);
           }
           piVar5[-0x39] = 0;
         }
@@ -18875,28 +18899,28 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
     local_1c[4] = 0.0;
     local_1c[1] = 1.0;
     local_1c[5] = 1.0;
-    uVar3 = FUN_0041b070(0x17,&local_38,(undefined4 *)0x0,&local_28);
+    uVar3 = createitem(0x17,&local_38,(undefined4 *)0x0,&local_28);
     fVar2 = local_3c;
     if (uVar3 != 0xffffffff) {
       g_item[uVar3].unk_010c = 0;
       g_item[uVar3].phone_id = (((int)LF_BITS_U(local_3c)) + 1) * 0x457;
-      FUN_00406420(uVar3);
+      createevent_updateiteminfo(uVar3);
     }
     local_3c = (float)(LF_BITS_F((*(uint *)((uchar *)&g_event[0x2bba].message + 8))) - 1.5707964);
-    FUN_0040bdb0((int)&local_28,local_1c,local_3c);
+    rotateorientation((int)&local_28,local_1c,local_3c);
     local_38 = (float)(local_38 + local_28 * 0.5);
     local_34 = (float)(local_24 * 0.5 + local_34);
     local_30 = (float)(local_20 * 0.5 + local_30);
-    uVar3 = FUN_0041b070(0x17,&local_38,(undefined4 *)0x0,&local_28);
+    uVar3 = createitem(0x17,&local_38,(undefined4 *)0x0,&local_28);
     if (uVar3 != 0xffffffff) {
       g_item[uVar3].unk_010c = 1;
       g_item[uVar3].phone_id = ((int)LF_BITS_U(fVar2)) * 0x457 + 0x458;
-      FUN_00406420(uVar3);
+      createevent_updateiteminfo(uVar3);
     }
     puVar1 = (&PTR_s_Goldmen_Inc_00460438)[((int)LF_BITS_U(fVar2))];
     *(int *)(&g_game.lf_raw[0x9c] + iVar4) = local_2c;
     sprintf(&DAT_00461780,"%s is now manager of %s",local_2c * 0x2408 + ((int)SR_VA(0xf1edd04)),puVar1);
-    FUN_00406260(0,&DAT_00461780,0xffffffff,0);
+    createevent_message(0,&DAT_00461780,0xffffffff,0);
   }
   return;
 }
@@ -18907,11 +18931,11 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
 #undef g_item
 #undef g_event
 #undef sprintf
-#undef FUN_0041b070
-#undef FUN_00406420
+#undef createevent_updateiteminfo
 #undef __security_check_cookie
-#undef FUN_00406260
-#undef FUN_0040bdb0
+#undef createevent_message
+#undef rotateorientation
+#undef createitem
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -18928,9 +18952,9 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
 #define DAT_0e6c94bc (*(undefined *)SR_VA(0xe6c94bc))
 #define DAT_0e6c94c0 (*(undefined *)SR_VA(0xe6c94c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -18982,16 +19006,16 @@ void __cdecl lf_1d7a0(int param_1,int param_2)
       local_8 = 0;
       local_14 = 0x3f800000;
       local_4 = 0x3f800000;
-      uVar3 = FUN_0041b070(*(int *)(&DAT_0e6c94bc + iVar5),&local_30,(undefined4 *)0x0,&local_24);
+      uVar3 = createitem(*(int *)(&DAT_0e6c94bc + iVar5),&local_30,(undefined4 *)0x0,&local_24);
       iVar5 = 2;
       do {
-        iVar4 = FUN_0041b870(uVar3,0xffffffff,iVar2,iVar5);
+        iVar4 = linkitem(uVar3,0xffffffff,iVar2,iVar5);
         if (iVar4 != 0) break;
         iVar5 = iVar5 + 1;
       } while (iVar5 < 7);
       g_player[param_1].money = g_player[param_1].money - iVar1;
       g_player[param_1].num_purchases = g_player[param_1].num_purchases + 1;
-      FUN_004064a0(param_1);
+      createevent_updateplayer(param_1);
     }
   }
   return;
@@ -19000,9 +19024,9 @@ void __cdecl lf_1d7a0(int param_1,int param_2)
 #undef DAT_0e6c94bc
 #undef DAT_0e6c94c0
 #undef g_player
-#undef FUN_0041b070
-#undef FUN_004064a0
-#undef FUN_0041b870
+#undef linkitem
+#undef createevent_updateplayer
+#undef createitem
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -19237,10 +19261,10 @@ void __cdecl lf_1d9e0(float *param_1,int param_2,float *param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00416320 ((void (__cdecl *)(float *, float *))SR_VA(0x416320))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define unpackorientation ((void (__cdecl *)(float *, float *))SR_VA(0x416320))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define _CIsqrt lf_CIsqrt
 #define local_64 (*(uint *)(lf_frame + 0x1c))
 #define local_60 (*(float *)(lf_frame + 0x20))
@@ -19316,27 +19340,27 @@ void __cdecl lf_1dba0(void)
 
 
   
-  FUN_0040db20((uint *)&DAT_1074a5e0,8);
+  pbitread((uint *)&DAT_1074a5e0,8);
   local_60 = 0.0;
   if (0 < DAT_1074a5e0) {
     do {
-      FUN_0040db20(&local_58,10);
-      FUN_0040db20((uint *)&local_5c,1);
+      pbitread(&local_58,10);
+      pbitread((uint *)&local_5c,1);
       uVar13 = local_58;
       if (LF_BITS_U(local_5c) == 0x0U) {
         iVar17 = local_58 * 0x2b64;
-        FUN_0040db20(&local_54,8);
+        pbitread(&local_54,8);
         if (local_54 == 0xff) {
           g_human[uVar13].vehicle_id = -1;
         }
         else {
           g_human[uVar13].vehicle_id = local_54;
         }
-        FUN_0040db20((uint *)&g_human[uVar13].vehicle_seat,4);
+        pbitread((uint *)&g_human[uVar13].vehicle_seat,4);
         piVar1 = &g_human[uVar13].health;
-        FUN_0040db20((uint *)piVar1,7);
+        pbitread((uint *)piVar1,7);
         *piVar1 = *piVar1 + -10;
-        FUN_0040db20((uint *)&g_human[uVar13].bleeding,1);
+        pbitread((uint *)&g_human[uVar13].bleeding,1);
         iVar14 = g_game.ticks;
         g_human[uVar13].unk_2b54 = g_human[uVar13].unk_2b44;
         g_human[uVar13].unk_2b58 = g_human[uVar13].unk_2b48;
@@ -19387,9 +19411,9 @@ void __cdecl lf_1dba0(void)
               g_human[uVar13].unk_2b48 = ((int)LF_BITS_U(g_human[uVar13].bones[0].pos.x));
               *(float *)&g_human[uVar13].lf_raw[0x2b4c] = g_human[uVar13].bones[0].pos.y;
               *(float *)&g_human[uVar13].lf_raw[0x2b50] = g_human[uVar13].bones[0].pos.z;
-              FUN_00416320(&pvVar3->x,(float *)0x1f);
+              unpackorientation(&pvVar3->x,(float *)0x1f);
               pvVar4 = g_human[uVar13].bones[0].rot + 2;
-              FUN_00416320(&pvVar4->x,(float *)0x1f);
+              unpackorientation(&pvVar4->x,(float *)0x1f);
               pvVar2 = g_human[uVar13].bones[0].rot;
               pvVar2->x = (float)(g_human[uVar13].bones[0].rot[2].z * g_human[uVar13].bones[0].rot[1].y -
                           g_human[uVar13].bones[0].rot[2].y * g_human[uVar13].bones[0].rot[1].z);
@@ -19399,25 +19423,25 @@ void __cdecl lf_1dba0(void)
               g_human[uVar13].bones[0].rot[0].z =
                    (float)(g_human[uVar13].bones[0].rot[2].y * pvVar3->x -
                    pvVar4->x * g_human[uVar13].bones[0].rot[1].y);
-              FUN_0040b900(&pvVar2->x,&pvVar2->x);
+              normalizevector(&pvVar2->x,&pvVar2->x);
               local_64 = uVar11;
             }
             else {
-              FUN_0040db20(&local_50,0x10);
+              pbitread(&local_50,0x10);
               local_10 = LF_BITS_F((local_50 & 0x7fff));
               local_4c = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189);
               *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd0] = local_4c;
               if ((local_50 & 0x8000) != 0) {
                 *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd0] = -local_4c;
               }
-              FUN_0040db20(&local_48,0x10);
+              pbitread(&local_48,0x10);
               local_10 = LF_BITS_F((local_48 & 0x7fff));
               local_4c = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189);
               *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd4] = local_4c;
               if ((local_48 & 0x8000) != 0) {
                 *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd4] = -local_4c;
               }
-              FUN_0040db20((uint *)&local_44,0x10);
+              pbitread((uint *)&local_44,0x10);
               uVar12 = local_64;
               local_10 = LF_BITS_F((((uint)LF_BITS_U(local_44)) & 0x7fff));
               *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd8] = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189);
@@ -19466,12 +19490,12 @@ void __cdecl lf_1dba0(void)
               g_human[uVar13].bones[uVar11].rot[2].x = g_human[uVar13].bones[iVar14].rot[2].x;
               g_human[uVar13].bones[uVar11].rot[2].y = g_human[uVar13].bones[iVar14].rot[2].y;
               g_human[uVar13].bones[uVar11].rot[2].z = g_human[uVar13].bones[iVar14].rot[2].z;
-              FUN_0040bdb0((int)pvVar3,&pvVar3->x,
-                           *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd0]);
-              FUN_0040bdb0((int)pvVar3,&g_human[uVar13].bones[uVar11].rot[1].x,
-                           *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd4]);
-              FUN_0040bdb0((int)pvVar3,&g_human[uVar13].bones[uVar11].rot[2].x,
-                           *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd8]);
+              rotateorientation((int)pvVar3,&pvVar3->x,
+                                *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd0]);
+              rotateorientation((int)pvVar3,&g_human[uVar13].bones[uVar11].rot[1].x,
+                                *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd4]);
+              rotateorientation((int)pvVar3,&g_human[uVar13].bones[uVar11].rot[2].x,
+                                *(float *)&g_human[uVar13].bones[uVar11].lf_raw[0xd8]);
               local_c = (float)(g_body[uVar12].pos.x - LF_BITS_F(g_body[uVar12].unk_0010));
               local_8 = (float)(g_body[uVar12].pos.y - LF_BITS_F(g_body[uVar12].unk_0014));
               local_4 = (float)(g_body[uVar12].pos.z - LF_BITS_F(g_body[uVar12].unk_0018));
@@ -19509,12 +19533,12 @@ void __cdecl lf_1dba0(void)
       local_60 = LF_BITS_F((((int)LF_BITS_U(local_60)) + 1));
     } while (((int)LF_BITS_U(local_60)) < DAT_1074a5e0);
   }
-  FUN_0040db20((uint *)&DAT_1074a9e4,8);
+  pbitread((uint *)&DAT_1074a9e4,8);
   iVar17 = 0;
   if (0 < DAT_1074a9e4) {
     do {
-      FUN_0040db20(&local_58,10);
-      FUN_0040db20((uint *)&local_5c,2);
+      pbitread(&local_58,10);
+      pbitread((uint *)&local_5c,2);
       uVar13 = local_58;
       iVar15 = DAT_1993d6e8;
       iVar14 = g_game.ticks;
@@ -19565,11 +19589,11 @@ void __cdecl lf_1dba0(void)
       *(float *)&g_object[local_58].lf_raw[0x8218] = g_object[local_58].pos.y;
       *(float *)&g_object[local_58].lf_raw[0x821c] = g_object[local_58].pos.z;
       if (LF_BITS_U(local_5c) == 0x0U) {
-        FUN_00416320(&g_object[local_58].rot[1].x,(float *)0x1f);
+        unpackorientation(&g_object[local_58].rot[1].x,(float *)0x1f);
         pfVar19 = (float *)0x1f;
 LAB_0041e31d:
         pvVar3 = g_object[uVar13].rot + 2;
-        FUN_00416320(&pvVar3->x,pfVar19);
+        unpackorientation(&pvVar3->x,pfVar19);
         g_object[uVar13].rot[0].x =
              (float)(g_object[uVar13].rot[2].z * g_object[uVar13].rot[1].y -
              g_object[uVar13].rot[2].y * g_object[uVar13].rot[1].z);
@@ -19597,123 +19621,123 @@ LAB_0041e31d:
           fVar7 = local_60 * g_object[uVar13].rot[0].z;
         }
         g_object[uVar13].rot[0].z = fVar7;
-        FUN_0040db20(&local_48,8);
+        pbitread(&local_48,8);
         local_44 = (float)((float)(local_48 & 0x7f) / 20.371832);
         g_object[uVar13].rotor_angle = local_44;
         if ((char)local_48 < '\0') {
           g_object[uVar13].rotor_angle = -local_44;
         }
-        FUN_0040db20((uint *)&local_4c,8);
+        pbitread((uint *)&local_4c,8);
         local_44 = (float)((float)(((uint)LF_BITS_U(local_4c)) & 0x7f) / 20.371832);
         g_object[uVar13].unk_5fb4 = local_44;
         if (SUB41(local_4c,0) < '\0') {
           g_object[uVar13].unk_5fb4 = -local_44;
         }
-        FUN_0040db20(&local_50,8);
+        pbitread(&local_50,8);
         local_44 = (float)((float)(local_50 & 0x7f) / 20.371832);
         g_object[uVar13].unk_604c = ((int)LF_BITS_U(local_44));
         if ((char)local_50 < '\0') {
           g_object[uVar13].unk_604c = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_54,8);
+        pbitread(&local_54,8);
         local_44 = (float)((float)(local_54 & 0x7f) / 20.371832);
         g_object[uVar13].unk_60e4 = ((int)LF_BITS_U(local_44));
         if ((char)local_54 < '\0') {
           g_object[uVar13].unk_60e4 = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_40,8);
+        pbitread(&local_40,8);
         local_44 = (float)((float)(local_40 & 0x7f) / 20.371832);
         g_object[uVar13].unk_5f20 = local_44;
         if ((char)local_40 < '\0') {
           g_object[uVar13].unk_5f20 = -local_44;
         }
-        FUN_0040db20(&local_3c,8);
+        pbitread(&local_3c,8);
         local_44 = (float)((float)(local_3c & 0x7f) / 20.371832);
         g_object[uVar13].unk_5fb8 = local_44;
         if ((char)local_3c < '\0') {
           g_object[uVar13].unk_5fb8 = -local_44;
         }
-        FUN_0040db20(&local_38,6);
+        pbitread(&local_38,6);
         local_44 = (float)(local_38 & 0x1f) * 0.03125;
         g_object[uVar13].unk_5f48 = ((int)LF_BITS_U(local_44));
         if ((local_38 & 0x20) != 0) {
           g_object[uVar13].unk_5f48 = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_34,6);
+        pbitread(&local_34,6);
         local_44 = (float)((float)(local_34 & 0x1f) * 0.03125);
         g_object[uVar13].unk_5fe0 = ((int)LF_BITS_U(local_44));
         if ((local_34 & 0x20) != 0) {
           g_object[uVar13].unk_5fe0 = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_30,6);
+        pbitread(&local_30,6);
         local_44 = (float)((float)(local_30 & 0x1f) * 0.03125);
         g_object[uVar13].unk_6078 = ((int)LF_BITS_U(local_44));
         if ((local_30 & 0x20) != 0) {
           g_object[uVar13].unk_6078 = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_2c,6);
+        pbitread(&local_2c,6);
         local_44 = (float)((float)(local_2c & 0x1f) * 0.03125);
         g_object[uVar13].unk_6110 = ((int)LF_BITS_U(local_44));
         if ((local_2c & 0x20) != 0) {
           g_object[uVar13].unk_6110 = ((int)LF_BITS_U(-local_44));
         }
-        FUN_0040db20(&local_28,6);
+        pbitread(&local_28,6);
         local_44 = (float)((float)(local_28 & 0x1f) * 0.03125);
         g_object[uVar13].unk_5f5c = local_44;
         if ((local_28 & 0x20) != 0) {
           g_object[uVar13].unk_5f5c = -local_44;
         }
-        FUN_0040db20(&local_24,6);
+        pbitread(&local_24,6);
         local_44 = (float)((float)(local_24 & 0x1f) * 0.03125);
         g_object[uVar13].unk_5ff4 = local_44;
         if ((local_24 & 0x20) != 0) {
           g_object[uVar13].unk_5ff4 = -local_44;
         }
-        FUN_0040db20(&local_20,6);
+        pbitread(&local_20,6);
         local_44 = (float)((float)(local_20 & 0x1f) * 0.03125);
         g_object[uVar13].unk_608c = local_44;
         if ((local_20 & 0x20) != 0) {
           g_object[uVar13].unk_608c = -local_44;
         }
-        FUN_0040db20(&local_1c,6);
+        pbitread(&local_1c,6);
         local_44 = (float)((float)(local_1c & 0x1f) * 0.03125);
         g_object[uVar13].unk_6124 = local_44;
         if ((local_1c & 0x20) != 0) {
           g_object[uVar13].unk_6124 = -local_44;
         }
-        FUN_0040db20(&local_18,8);
+        pbitread(&local_18,8);
         local_44 = (float)(local_18 & 0x7f) * 0.0078125;
         g_object[uVar13].vel.x = local_44;
         if ((char)local_18 < '\0') {
           g_object[uVar13].vel.x = -local_44;
         }
-        FUN_0040db20((uint *)&local_14,8);
+        pbitread((uint *)&local_14,8);
         local_44 = (float)((float)(((uint)LF_BITS_U(local_14)) & 0x7f) * 0.0078125);
         g_object[uVar13].vel.y = local_44;
         if (SUB41(local_14,0) < '\0') {
           g_object[uVar13].vel.y = -local_44;
         }
-        FUN_0040db20((uint *)&local_10,8);
+        pbitread((uint *)&local_10,8);
         local_44 = (float)((float)(((uint)LF_BITS_U(local_10)) & 0x7f) * 0.0078125);
         g_object[uVar13].vel.z = local_44;
         if (SUB41(local_10,0) < '\0') {
           g_object[uVar13].vel.z = -local_44;
         }
-        FUN_0040db20((uint *)&g_object[uVar13].unk_5ee0,0xd);
+        pbitread((uint *)&g_object[uVar13].unk_5ee0,0xd);
       }
       else if (LF_BITS_U(local_5c) == 0x1U) {
-        FUN_00416320(&g_object[local_58].rot[1].x,(float *)0x15);
+        unpackorientation(&g_object[local_58].rot[1].x,(float *)0x15);
         pfVar19 = (float *)0x15;
         goto LAB_0041e31d;
       }
       iVar17 = iVar17 + 1;
     } while (iVar17 < DAT_1074a9e4);
   }
-  FUN_0040db20((uint *)&DAT_1074ade8,8);
+  pbitread((uint *)&DAT_1074ade8,8);
   iVar17 = 0;
   if (0 < DAT_1074ade8) {
     do {
-      FUN_0040db20((uint *)&local_10,10);
+      pbitread((uint *)&local_10,10);
       fVar7 = local_10;
       iVar14 = DAT_1993d6e4;
       if (DAT_1993d6e8 < 0x10000) {
@@ -19751,9 +19775,9 @@ LAB_0041e31d:
         }
       }
       pvVar3 = g_item[((int)LF_BITS_U(local_10))].rot + 1;
-      FUN_00416320(&pvVar3->x,(float *)0x1f);
+      unpackorientation(&pvVar3->x,(float *)0x1f);
       pvVar4 = g_item[((int)LF_BITS_U(fVar7))].rot + 2;
-      FUN_00416320(&pvVar4->x,(float *)0x1f);
+      unpackorientation(&pvVar4->x,(float *)0x1f);
       g_item[((int)LF_BITS_U(fVar7))].rot[0].x =
            (float)(g_item[((int)LF_BITS_U(fVar7))].rot[2].z * g_item[((int)LF_BITS_U(fVar7))].rot[1].y -
            g_item[((int)LF_BITS_U(fVar7))].rot[2].y * g_item[((int)LF_BITS_U(fVar7))].rot[1].z);
@@ -19779,20 +19803,20 @@ LAB_0041e31d:
         fVar8 = local_5c * g_item[((int)LF_BITS_U(fVar7))].rot[0].z;
       }
       g_item[((int)LF_BITS_U(fVar7))].rot[0].z = fVar8;
-      FUN_0040db20(&local_64,1);
+      pbitread(&local_64,1);
       if (local_64 != 0) {
-        FUN_0040db20((uint *)&g_item[((int)LF_BITS_U(fVar7))].cash,4);
-        FUN_0040db20((uint *)&g_item[((int)LF_BITS_U(fVar7))].num_bills,4);
-        FUN_0040db20(&g_item[((int)LF_BITS_U(fVar7))].bills_mask,0x1e);
+        pbitread((uint *)&g_item[((int)LF_BITS_U(fVar7))].cash,4);
+        pbitread((uint *)&g_item[((int)LF_BITS_U(fVar7))].num_bills,4);
+        pbitread(&g_item[((int)LF_BITS_U(fVar7))].bills_mask,0x1e);
       }
       iVar17 = iVar17 + 1;
     } while (iVar17 < DAT_1074ade8);
   }
-  FUN_0040db20((uint *)&DAT_1074b1ec,8);
+  pbitread((uint *)&DAT_1074b1ec,8);
   local_60 = 0.0;
   if (0 < DAT_1074b1ec) {
     do {
-      FUN_0040db20(&local_58,10);
+      pbitread(&local_58,10);
       uVar13 = local_58;
       iVar14 = DAT_1993d6e8;
       iVar15 = local_58 * 0x54;
@@ -19835,9 +19859,9 @@ LAB_0041e31d:
         }
       }
       pfVar19 = (float *)(&DAT_1622404c + iVar15);
-      FUN_00416320(pfVar19,(float *)0x1f);
+      unpackorientation(pfVar19,(float *)0x1f);
       pfVar6 = (float *)(&DAT_16224058 + iVar15);
-      FUN_00416320(pfVar6,(float *)0x1f);
+      unpackorientation(pfVar6,(float *)0x1f);
       *(float *)(&DAT_16224040 + iVar15) =
            (float)(*(float *)(&DAT_16224060 + iVar15) * *(float *)(&DAT_16224050 + iVar15) -
            *(float *)(&DAT_1622405c + iVar15) * *(float *)(&DAT_16224054 + iVar15));
@@ -19864,9 +19888,9 @@ LAB_0041e31d:
         fVar7 = local_5c * *(float *)(&DAT_16224048 + iVar15);
       }
       *(float *)(&DAT_16224048 + iVar15) = fVar7;
-      FUN_0040db20((uint *)(&DAT_1622406c + iVar15),7);
-      FUN_0040db20((uint *)(&DAT_16224068 + iVar15),7);
-      FUN_0040db20((uint *)&local_14,6);
+      pbitread((uint *)(&DAT_1622406c + iVar15),7);
+      pbitread((uint *)(&DAT_16224068 + iVar15),7);
+      pbitread((uint *)&local_14,6);
       local_10 = (float)((float)(((uint)LF_BITS_U(local_14)) & 0x1f) * 0.03125);
       *(float *)&((&DAT_16224070)[uVar13 * 0x15]) = local_10;
       if ((((uint)LF_BITS_U(local_14)) & 0x20) != 0) {
@@ -19907,10 +19931,10 @@ LAB_0041e31d:
 #undef g_game
 #undef g_item
 #undef g_body
-#undef FUN_0040b900
-#undef FUN_0040db20
-#undef FUN_0040bdb0
-#undef FUN_00416320
+#undef pbitread
+#undef unpackorientation
+#undef rotateorientation
+#undef normalizevector
 #undef _CIsqrt
 #undef local_64
 #undef local_60
@@ -19970,13 +19994,13 @@ LAB_0041e31d:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
-#define FUN_0040ac00 ((void (__cdecl *)(void))SR_VA(0x40ac00))
-#define FUN_00415df0 ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define FUN_00416790 ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
-#define _CIpow lf_CIpow
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define _CIsqrt lf_CIsqrt
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define _CIpow lf_CIpow
+#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
 #define local_40 (*(uint *)(lf_frame + 0x10))
 #define local_3c (*(uint *)(lf_frame + 0x14))
 #define local_38 (*(undefined8 *)(lf_frame + 0x18))
@@ -20115,7 +20139,7 @@ void __cdecl lf_1f4a0(int param_1,int param_2)
       puVar8 = puVar8 + 3;
     } while (iVar6 < iVar10);
   }
-  FUN_0040ac00();
+  csradixsort();
   uVar9 = 0;
   local_3c = DAT_10347c80 - 1;
   DAT_1074a5e0 = 0;
@@ -20207,7 +20231,7 @@ LAB_0041fa77:
     DAT_1074a9e4 = 0;
     DAT_1074a5e0 = 0;
   }
-  FUN_0040da60((uint *)&DAT_1074a5e0,8);
+  pbitwrite((uint *)&DAT_1074a5e0,8);
   local_3c = 0;
   if (0 < DAT_1074a5e0) {
     do {
@@ -20215,25 +20239,25 @@ LAB_0041fa77:
       uVar9 = (&DAT_1074a5e8)[local_3c * 2];
       local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar10);
       local_40 = uVar9;
-      FUN_0040da60((uint *)&local_38,10);
-      FUN_0040da60(&local_40,1);
+      pbitwrite((uint *)&local_38,10);
+      pbitwrite(&local_40,1);
       if (uVar9 == 0) {
-        FUN_0040da60((uint *)&g_human[iVar10].vehicle_id,8);
-        FUN_0040da60((uint *)&g_human[iVar10].vehicle_seat,4);
+        pbitwrite((uint *)&g_human[iVar10].vehicle_id,8);
+        pbitwrite((uint *)&g_human[iVar10].vehicle_seat,4);
         iVar6 = g_human[iVar10].health + 10;
         if (iVar6 < 0) {
           iVar6 = 0;
         }
         local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar6);
-        FUN_0040da60((uint *)&local_38,7);
-        FUN_0040da60((uint *)&g_human[iVar10].bleeding,1);
+        pbitwrite((uint *)&local_38,7);
+        pbitwrite((uint *)&g_human[iVar10].bleeding,1);
         iVar6 = 0;
         do {
           if ((g_human[iVar10].vehicle_id == -1) || (iVar6 < 9)) {
             if (iVar6 == 0) {
-              FUN_00416790((undefined4 *)g_human[iVar10].bones);
-              FUN_00415df0(&g_human[iVar10].bones[0].rot[1].x,0x1f);
-              FUN_00415df0(&g_human[iVar10].bones[0].rot[2].x,0x1f);
+              packposition((undefined4 *)g_human[iVar10].bones);
+              packorientation(&g_human[iVar10].bones[0].rot[1].x,0x1f);
+              packorientation(&g_human[iVar10].bones[0].rot[2].x,0x1f);
             }
             else {
               uVar1 = (ulonglong)
@@ -20244,7 +20268,7 @@ LAB_0041fa77:
               if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd0] < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
               }
-              FUN_0040da60((uint *)&local_38,0x10);
+              pbitwrite((uint *)&local_38,0x10);
               uVar1 = (ulonglong)
                       ROUND(ABS(*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd4]) * 5215.189);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
@@ -20253,7 +20277,7 @@ LAB_0041fa77:
               if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd4] < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
               }
-              FUN_0040da60((uint *)&local_38,0x10);
+              pbitwrite((uint *)&local_38,0x10);
               local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
               uVar1 = (ulonglong)
                       ROUND(ABS(*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd8]) * 5215.189);
@@ -20263,7 +20287,7 @@ LAB_0041fa77:
               if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd8] < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
               }
-              FUN_0040da60((uint *)&local_38,0x10);
+              pbitwrite((uint *)&local_38,0x10);
             }
           }
           iVar6 = iVar6 + 1;
@@ -20272,7 +20296,7 @@ LAB_0041fa77:
       local_3c = local_3c + 1;
     } while ((int)local_3c < DAT_1074a5e0);
   }
-  FUN_0040da60((uint *)&DAT_1074a9e4,8);
+  pbitwrite((uint *)&DAT_1074a9e4,8);
   iVar10 = 0;
   if (0 < DAT_1074a9e4) {
     do {
@@ -20280,14 +20304,14 @@ LAB_0041fa77:
       uVar14 = (&DAT_1074a9ec)[iVar10 * 2];
       local_40 = uVar14;
       local_3c = uVar9;
-      FUN_0040da60(&local_3c,10);
-      FUN_0040da60(&local_40,2);
-      FUN_00416790(&g_object[uVar9].pos.x);
+      pbitwrite(&local_3c,10);
+      pbitwrite(&local_40,2);
+      packposition(&g_object[uVar9].pos.x);
       if (uVar14 == 0) {
-        FUN_00415df0(&g_object[uVar9].rot[1].x,0x1f);
+        packorientation(&g_object[uVar9].rot[1].x,0x1f);
         uVar14 = 0x1f;
 LAB_0041fded:
-        FUN_00415df0(&g_object[uVar9].rot[2].x,uVar14);
+        packorientation(&g_object[uVar9].rot[2].x,uVar14);
         uVar1 = (ulonglong)ROUND(ABS(g_object[uVar9].rotor_angle) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20295,7 +20319,7 @@ LAB_0041fded:
         if (g_object[uVar9].rotor_angle < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         uVar1 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_5fb4) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20303,7 +20327,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_5fb4 < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         uVar1 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_604c)) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20311,7 +20335,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_604c) < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         uVar1 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_60e4)) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20319,7 +20343,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_60e4) < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         uVar1 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_5f20) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20327,7 +20351,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_5f20 < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         uVar1 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_5fb8) * 20.371832);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20335,7 +20359,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_5fb8 < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
         }
-        FUN_0040da60((uint *)&local_38,8);
+        pbitwrite((uint *)&local_38,8);
         local_38 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_5f48)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20344,7 +20368,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_5f48) < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_5fe0)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20353,7 +20377,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_5fe0) < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_6078)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20362,7 +20386,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_6078) < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(LF_BITS_F(g_object[uVar9].unk_6110)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20371,7 +20395,7 @@ LAB_0041fded:
         if (LF_BITS_F(g_object[uVar9].unk_6110) < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_5f5c) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20380,7 +20404,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_5f5c < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_5ff4) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20389,7 +20413,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_5ff4 < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_608c) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20398,7 +20422,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_608c < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].unk_6124) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20407,7 +20431,7 @@ LAB_0041fded:
         if (g_object[uVar9].unk_6124 < 0.0) {
           local_3c = local_3c | 0x20;
         }
-        FUN_0040da60(&local_3c,6);
+        pbitwrite(&local_3c,6);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].vel.x) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x7f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20416,7 +20440,7 @@ LAB_0041fded:
         if (g_object[uVar9].vel.x < 0.0) {
           local_3c = local_3c | 0x80;
         }
-        FUN_0040da60(&local_3c,8);
+        pbitwrite(&local_3c,8);
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].vel.y) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x7f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
@@ -20425,7 +20449,7 @@ LAB_0041fded:
         if (g_object[uVar9].vel.y < 0.0) {
           local_3c = local_3c | 0x80;
         }
-        FUN_0040da60(&local_3c,8);
+        pbitwrite(&local_3c,8);
         local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
         local_38 = (ulonglong)ROUND(ABS(g_object[uVar9].vel.z) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20435,51 +20459,51 @@ LAB_0041fded:
         if (g_object[uVar9].vel.z < 0.0) {
           local_3c = local_3c | 0x80;
         }
-        FUN_0040da60(&local_3c,8);
-        FUN_0040da60((uint *)&g_object[uVar9].unk_5ee0,0xd);
+        pbitwrite(&local_3c,8);
+        pbitwrite((uint *)&g_object[uVar9].unk_5ee0,0xd);
       }
       else if (uVar14 == 1) {
-        FUN_00415df0(&g_object[uVar9].rot[1].x,0x15);
+        packorientation(&g_object[uVar9].rot[1].x,0x15);
         uVar14 = 0x15;
         goto LAB_0041fded;
       }
       iVar10 = iVar10 + 1;
     } while (iVar10 < DAT_1074a9e4);
   }
-  FUN_0040da60((uint *)&DAT_1074ade8,8);
+  pbitwrite((uint *)&DAT_1074ade8,8);
   iVar10 = 0;
   if (0 < DAT_1074ade8) {
     do {
       uVar9 = (&DAT_1074adec)[iVar10];
       (*(uint *)((uchar *)&local_38 + 0)) = uVar9;
-      FUN_0040da60((uint *)&local_38,10);
-      FUN_00416790(&g_item[uVar9].pos.x);
-      FUN_00415df0(&g_item[uVar9].rot[1].x,0x1f);
-      FUN_00415df0(&g_item[uVar9].rot[2].x,0x1f);
+      pbitwrite((uint *)&local_38,10);
+      packposition(&g_item[uVar9].pos.x);
+      packorientation(&g_item[uVar9].rot[1].x,0x1f);
+      packorientation(&g_item[uVar9].rot[2].x,0x1f);
       bVar12 = g_item[uVar9].type == 0x10;
       local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),(uint)bVar12);
-      FUN_0040da60((uint *)&local_38,1);
+      pbitwrite((uint *)&local_38,1);
       if (bVar12) {
-        FUN_0040da60((uint *)&g_item[uVar9].cash,4);
-        FUN_0040da60((uint *)&g_item[uVar9].num_bills,4);
-        FUN_0040da60(&g_item[uVar9].bills_mask,0x1e);
+        pbitwrite((uint *)&g_item[uVar9].cash,4);
+        pbitwrite((uint *)&g_item[uVar9].num_bills,4);
+        pbitwrite(&g_item[uVar9].bills_mask,0x1e);
       }
       iVar10 = iVar10 + 1;
     } while (iVar10 < DAT_1074ade8);
   }
-  FUN_0040da60((uint *)&DAT_1074b1ec,8);
+  pbitwrite((uint *)&DAT_1074b1ec,8);
   iVar10 = 0;
   if (0 < DAT_1074b1ec) {
     do {
       uVar9 = (&DAT_1074b1f0)[iVar10];
       local_3c = uVar9;
-      FUN_0040da60(&local_3c,10);
+      pbitwrite(&local_3c,10);
       iVar6 = uVar9 * 0x54;
-      FUN_00416790((undefined4 *)(&DAT_16224028 + iVar6));
-      FUN_00415df0((float *)(&DAT_1622404c + iVar6),0x1f);
-      FUN_00415df0((float *)(&DAT_16224058 + iVar6),0x1f);
-      FUN_0040da60((uint *)(&DAT_1622406c + iVar6),7);
-      FUN_0040da60((uint *)(&DAT_16224068 + iVar6),7);
+      packposition((undefined4 *)(&DAT_16224028 + iVar6));
+      packorientation((float *)(&DAT_1622404c + iVar6),0x1f);
+      packorientation((float *)(&DAT_16224058 + iVar6),0x1f);
+      pbitwrite((uint *)(&DAT_1622406c + iVar6),7);
+      pbitwrite((uint *)(&DAT_16224068 + iVar6),7);
       local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
       local_38 = (ulonglong)ROUND(ABS(LF_BITS_F((&DAT_16224070)[uVar9 * 0x15])) * 32.0);
       local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
@@ -20489,7 +20513,7 @@ LAB_0041fded:
       if (LF_BITS_F((&DAT_16224070)[uVar9 * 0x15]) < 0.0) {
         local_3c = local_3c | 0x20;
       }
-      FUN_0040da60(&local_3c,6);
+      pbitwrite(&local_3c,6);
       iVar10 = iVar10 + 1;
     } while (iVar10 < DAT_1074b1ec);
   }
@@ -20528,13 +20552,13 @@ LAB_0041fded:
 #undef g_player
 #undef g_numofevents
 #undef g_connection
-#undef FUN_0040ac00
-#undef FUN_00415df0
-#undef FUN_0040da60
-#undef FUN_00416790
-#undef _CIpow
+#undef pbitwrite
 #undef _CIsqrt
+#undef csradixsort
+#undef _CIpow
+#undef packposition
 #undef _ftol2
+#undef packorientation
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -20575,13 +20599,13 @@ LAB_0041fded:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
-#define FUN_0040ac00 ((void (__cdecl *)(void))SR_VA(0x40ac00))
-#define FUN_00415df0 ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define FUN_00416790 ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
-#define _CIpow lf_CIpow
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define _CIsqrt lf_CIsqrt
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define _CIpow lf_CIpow
+#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -20696,7 +20720,7 @@ void __cdecl lf_20680(int param_1,int param_2)
     iVar9 = iVar9 + 1;
     iVar4 = iVar4 + 0x1c;
   } while ((int)pHVar5 < ((int)SR_VA(0x1b27180)));
-  FUN_0040ac00();
+  csradixsort();
   iVar9 = DAT_10347c80 + -1;
   DAT_1074a5e0 = 0;
   if (-1 < iVar9) {
@@ -20787,7 +20811,7 @@ void __cdecl lf_20680(int param_1,int param_2)
     iVar4 = iVar4 + 0x70;
     iVar9 = iVar9 + 4;
   } while (iVar1 < 0x80);
-  FUN_0040ac00();
+  csradixsort();
   iVar4 = DAT_10347c80;
   DAT_1074a9e4 = 0;
   iVar9 = DAT_10347c80;
@@ -20878,7 +20902,7 @@ LAB_00420e39:
     DAT_1074a9e4 = 0;
     DAT_1074a5e0 = 0;
   }
-  FUN_0040da60((uint *)&DAT_1074a5e0,8);
+  pbitwrite((uint *)&DAT_1074a5e0,8);
   local_50 = 0.0;
   if (0 < DAT_1074a5e0) {
     do {
@@ -20887,24 +20911,24 @@ LAB_00420e39:
       fVar3 = LF_BITS_F((&DAT_1074a5e8)[((int)LF_BITS_U(local_50)) * 2]);
       local_58 = fVar7;
       local_4c = fVar3;
-      FUN_0040da60((uint *)&local_58,10);
-      FUN_0040da60((uint *)&local_4c,1);
+      pbitwrite((uint *)&local_58,10);
+      pbitwrite((uint *)&local_4c,1);
       if (LF_BITS_U(fVar3) == 0x0U) {
-        FUN_0040da60((uint *)&g_human[((int)LF_BITS_U(fVar7))].vehicle_id,8);
-        FUN_0040da60((uint *)&g_human[((int)LF_BITS_U(fVar7))].vehicle_seat,4);
+        pbitwrite((uint *)&g_human[((int)LF_BITS_U(fVar7))].vehicle_id,8);
+        pbitwrite((uint *)&g_human[((int)LF_BITS_U(fVar7))].vehicle_seat,4);
         local_4c = LF_BITS_F((g_human[((int)LF_BITS_U(fVar7))].health + 10));
         if (((int)LF_BITS_U(local_4c)) < 0) {
           local_4c = fVar3;
         }
-        FUN_0040da60((uint *)&local_4c,7);
-        FUN_0040da60((uint *)&g_human[((int)LF_BITS_U(fVar7))].bleeding,1);
+        pbitwrite((uint *)&local_4c,7);
+        pbitwrite((uint *)&g_human[((int)LF_BITS_U(fVar7))].bleeding,1);
         iVar9 = 0;
         do {
           if ((g_human[((int)LF_BITS_U(fVar7))].vehicle_id == -1) || (iVar9 < 9)) {
             if (iVar9 == 0) {
-              FUN_00416790((undefined4 *)g_human[((int)LF_BITS_U(fVar7))].bones);
-              FUN_00415df0(&g_human[((int)LF_BITS_U(fVar7))].bones[0].rot[1].x,0x1f);
-              FUN_00415df0(&g_human[((int)LF_BITS_U(fVar7))].bones[0].rot[2].x,0x1f);
+              packposition((undefined4 *)g_human[((int)LF_BITS_U(fVar7))].bones);
+              packorientation(&g_human[((int)LF_BITS_U(fVar7))].bones[0].rot[1].x,0x1f);
+              packorientation(&g_human[((int)LF_BITS_U(fVar7))].bones[0].rot[2].x,0x1f);
             }
             else {
               local_48 = (longlong)
@@ -20914,7 +20938,7 @@ LAB_00420e39:
               if (*(float *)&g_human[((int)LF_BITS_U(fVar7))].bones[iVar9].lf_raw[0xd0] < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
-              FUN_0040da60((uint *)&local_4c,0x10);
+              pbitwrite((uint *)&local_4c,0x10);
               local_48 = (longlong)
                          ROUND(ABS(*(float *)&g_human[((int)LF_BITS_U(fVar7))].bones[iVar9].lf_raw[0xd4]) *
                                5215.189);
@@ -20922,7 +20946,7 @@ LAB_00420e39:
               if (*(float *)&g_human[((int)LF_BITS_U(fVar7))].bones[iVar9].lf_raw[0xd4] < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
-              FUN_0040da60((uint *)&local_4c,0x10);
+              pbitwrite((uint *)&local_4c,0x10);
               local_58 = LF_BITS_F(CONCAT22((*(ushort *)((uchar *)&local_58 + 2)),lf_fpucw()));
               local_48 = (longlong)
                          ROUND(ABS(*(float *)&g_human[((int)LF_BITS_U(fVar7))].bones[iVar9].lf_raw[0xd8]) *
@@ -20931,7 +20955,7 @@ LAB_00420e39:
               if (*(float *)&g_human[((int)LF_BITS_U(fVar7))].bones[iVar9].lf_raw[0xd8] < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
-              FUN_0040da60((uint *)&local_4c,0x10);
+              pbitwrite((uint *)&local_4c,0x10);
               fVar10 = local_50;
             }
           }
@@ -20941,7 +20965,7 @@ LAB_00420e39:
       local_50 = LF_BITS_F((((int)LF_BITS_U(fVar10)) + 1));
     } while (((int)LF_BITS_U(local_50)) < DAT_1074a5e0);
   }
-  FUN_0040da60((uint *)&DAT_1074a9e4,8);
+  pbitwrite((uint *)&DAT_1074a9e4,8);
   iVar9 = 0;
   if (0 < DAT_1074a9e4) {
     do {
@@ -20949,50 +20973,50 @@ LAB_00420e39:
       fVar3 = LF_BITS_F((&DAT_1074a9ec)[iVar9 * 2]);
       local_50 = fVar7;
       local_4c = fVar3;
-      FUN_0040da60((uint *)&local_50,10);
-      FUN_0040da60((uint *)&local_4c,2);
-      FUN_00416790(&g_object[((int)LF_BITS_U(fVar7))].pos.x);
+      pbitwrite((uint *)&local_50,10);
+      pbitwrite((uint *)&local_4c,2);
+      packposition(&g_object[((int)LF_BITS_U(fVar7))].pos.x);
       if (LF_BITS_U(fVar3) == 0x0U) {
-        FUN_00415df0(&g_object[((int)LF_BITS_U(fVar7))].rot[1].x,0x1f);
+        packorientation(&g_object[((int)LF_BITS_U(fVar7))].rot[1].x,0x1f);
         uVar8 = 0x1f;
 LAB_0042119f:
-        FUN_00415df0(&g_object[((int)LF_BITS_U(fVar7))].rot[2].x,uVar8);
+        packorientation(&g_object[((int)LF_BITS_U(fVar7))].rot[2].x,uVar8);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].rotor_angle) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (g_object[((int)LF_BITS_U(fVar7))].rotor_angle < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_5fb4) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (g_object[((int)LF_BITS_U(fVar7))].unk_5fb4 < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_604c)) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_604c) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_60e4)) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_60e4) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_5f20) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (g_object[((int)LF_BITS_U(fVar7))].unk_5f20 < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_5fb8) * 20.371832);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
         if (g_object[((int)LF_BITS_U(fVar7))].unk_5fb8 < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_5f48)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21001,7 +21025,7 @@ LAB_0042119f:
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_5f48) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_5fe0)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21010,7 +21034,7 @@ LAB_0042119f:
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_5fe0) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_6078)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21019,7 +21043,7 @@ LAB_0042119f:
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_6078) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_6110)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21028,7 +21052,7 @@ LAB_0042119f:
         if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar7))].unk_6110) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_5f5c) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21037,7 +21061,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].unk_5f5c < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_5ff4) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21046,7 +21070,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].unk_5ff4 < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_608c) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21055,7 +21079,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].unk_608c < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].unk_6124) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21064,7 +21088,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].unk_6124 < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
-        FUN_0040da60((uint *)&local_4c,6);
+        pbitwrite((uint *)&local_4c,6);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].vel.x) * 128.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x7f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21073,7 +21097,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].vel.x < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].vel.y) * 128.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x7f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
@@ -21082,7 +21106,7 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].vel.y < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
+        pbitwrite((uint *)&local_4c,8);
         local_58 = LF_BITS_F(CONCAT22((*(ushort *)((uchar *)&local_58 + 2)),lf_fpucw()));
         local_48 = (longlong)ROUND(ABS(g_object[((int)LF_BITS_U(fVar7))].vel.z) * 128.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
@@ -21092,51 +21116,51 @@ LAB_0042119f:
         if (g_object[((int)LF_BITS_U(fVar7))].vel.z < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
-        FUN_0040da60((uint *)&local_4c,8);
-        FUN_0040da60((uint *)&g_object[((int)LF_BITS_U(fVar7))].unk_5ee0,0xd);
+        pbitwrite((uint *)&local_4c,8);
+        pbitwrite((uint *)&g_object[((int)LF_BITS_U(fVar7))].unk_5ee0,0xd);
       }
       else if (LF_BITS_U(fVar3) == 0x1U) {
-        FUN_00415df0(&g_object[((int)LF_BITS_U(fVar7))].rot[1].x,0x15);
+        packorientation(&g_object[((int)LF_BITS_U(fVar7))].rot[1].x,0x15);
         uVar8 = 0x15;
         goto LAB_0042119f;
       }
       iVar9 = iVar9 + 1;
     } while (iVar9 < DAT_1074a9e4);
   }
-  FUN_0040da60((uint *)&DAT_1074ade8,8);
+  pbitwrite((uint *)&DAT_1074ade8,8);
   iVar9 = 0;
   if (0 < DAT_1074ade8) {
     do {
       iVar4 = (&DAT_1074adec)[iVar9];
       local_48 = CONCAT44((*(uint *)((uchar *)&local_48 + 4)),iVar4);
-      FUN_0040da60((uint *)&local_48,10);
-      FUN_00416790(&g_item[iVar4].pos.x);
-      FUN_00415df0(&g_item[iVar4].rot[1].x,0x1f);
-      FUN_00415df0(&g_item[iVar4].rot[2].x,0x1f);
+      pbitwrite((uint *)&local_48,10);
+      packposition(&g_item[iVar4].pos.x);
+      packorientation(&g_item[iVar4].rot[1].x,0x1f);
+      packorientation(&g_item[iVar4].rot[2].x,0x1f);
       bVar12 = g_item[iVar4].type == 0x10;
       local_4c = LF_BITS_F((uint)bVar12);
-      FUN_0040da60((uint *)&local_4c,1);
+      pbitwrite((uint *)&local_4c,1);
       if (bVar12) {
-        FUN_0040da60((uint *)&g_item[iVar4].cash,4);
-        FUN_0040da60((uint *)&g_item[iVar4].num_bills,4);
-        FUN_0040da60(&g_item[iVar4].bills_mask,0x1e);
+        pbitwrite((uint *)&g_item[iVar4].cash,4);
+        pbitwrite((uint *)&g_item[iVar4].num_bills,4);
+        pbitwrite(&g_item[iVar4].bills_mask,0x1e);
       }
       iVar9 = iVar9 + 1;
     } while (iVar9 < DAT_1074ade8);
   }
-  FUN_0040da60((uint *)&DAT_1074b1ec,8);
+  pbitwrite((uint *)&DAT_1074b1ec,8);
   iVar9 = 0;
   if (0 < DAT_1074b1ec) {
     do {
       fVar7 = LF_BITS_F((&DAT_1074b1f0)[iVar9]);
       local_50 = fVar7;
-      FUN_0040da60((uint *)&local_50,10);
+      pbitwrite((uint *)&local_50,10);
       iVar4 = ((int)LF_BITS_U(fVar7)) * 0x54;
-      FUN_00416790((undefined4 *)(&DAT_16224028 + iVar4));
-      FUN_00415df0((float *)(&DAT_1622404c + iVar4),0x1f);
-      FUN_00415df0((float *)(&DAT_16224058 + iVar4),0x1f);
-      FUN_0040da60((uint *)(&DAT_1622406c + iVar4),7);
-      FUN_0040da60((uint *)(&DAT_16224068 + iVar4),7);
+      packposition((undefined4 *)(&DAT_16224028 + iVar4));
+      packorientation((float *)(&DAT_1622404c + iVar4),0x1f);
+      packorientation((float *)(&DAT_16224058 + iVar4),0x1f);
+      pbitwrite((uint *)(&DAT_1622406c + iVar4),7);
+      pbitwrite((uint *)(&DAT_16224068 + iVar4),7);
       local_58 = LF_BITS_F(CONCAT22((*(ushort *)((uchar *)&local_58 + 2)),lf_fpucw()));
       local_48 = (longlong)ROUND(ABS(LF_BITS_F((&DAT_16224070)[((int)LF_BITS_U(fVar7)) * 0x15])) * 32.0);
       local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
@@ -21146,7 +21170,7 @@ LAB_0042119f:
       if (LF_BITS_F((&DAT_16224070)[((int)LF_BITS_U(fVar7)) * 0x15]) < 0.0) {
         local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
       }
-      FUN_0040da60((uint *)&local_4c,6);
+      pbitwrite((uint *)&local_4c,6);
       iVar9 = iVar9 + 1;
     } while (iVar9 < DAT_1074b1ec);
   }
@@ -21189,13 +21213,13 @@ LAB_00420c80:
 #undef g_player
 #undef g_numofevents
 #undef g_connection
-#undef FUN_0040ac00
-#undef FUN_00415df0
-#undef FUN_0040da60
-#undef FUN_00416790
-#undef _CIpow
+#undef pbitwrite
 #undef _CIsqrt
+#undef csradixsort
+#undef _CIpow
+#undef packposition
 #undef _ftol2
+#undef packorientation
 #undef local_58
 #undef local_54
 #undef local_50
@@ -21217,7 +21241,7 @@ LAB_00420c80:
 
 /* ---------------------------------------------------------------- 0x21a30 */
 #define DAT_0956d2c0 (*(uint *)SR_VA(0x956d2c0))
-#define FUN_0040bf60 ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
+#define normalizevector2d ((void (__cdecl *)(float *, float *))SR_VA(0x40bf60))
 void __cdecl lf_21a30(float *param_1,float param_2,float param_3)
 
 {
@@ -21233,7 +21257,7 @@ void __cdecl lf_21a30(float *param_1,float param_2,float param_3)
   iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
   DAT_0956d2c0 = DAT_0956d2c0 + 1;
   param_1[1] = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313226e-10);
-  FUN_0040bf60(param_1,param_1);
+  normalizevector2d(param_1,param_1);
   uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
   iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
   DAT_0956d2c0 = DAT_0956d2c0 + 1;
@@ -21244,11 +21268,11 @@ void __cdecl lf_21a30(float *param_1,float param_2,float param_3)
   return;
 }
 #undef DAT_0956d2c0
-#undef FUN_0040bf60
+#undef normalizevector2d
 
 /* ---------------------------------------------------------------- 0x21b40 */
 #define DAT_0956d2c0 (*(uint *)SR_VA(0x956d2c0))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 void __cdecl lf_21b40(float *param_1,float param_2,float param_3)
 
 {
@@ -21268,7 +21292,7 @@ void __cdecl lf_21b40(float *param_1,float param_2,float param_3)
   iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
   DAT_0956d2c0 = DAT_0956d2c0 + 1;
   param_1[2] = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313226e-10);
-  FUN_0040b900(param_1,param_1);
+  normalizevector(param_1,param_1);
   uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
   iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
   DAT_0956d2c0 = DAT_0956d2c0 + 1;
@@ -21280,7 +21304,7 @@ void __cdecl lf_21b40(float *param_1,float param_2,float param_3)
   return;
 }
 #undef DAT_0956d2c0
-#undef FUN_0040b900
+#undef normalizevector
 
 /* ---------------------------------------------------------------- 0x21e00 */
 #define DAT_0b7e7214 (*(undefined4 *)SR_VA(0xb7e7214))
@@ -21739,8 +21763,8 @@ void __cdecl lf_225e0(float *param_1,int param_2)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x22af0 */
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -21758,11 +21782,11 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
 
 
   
-  FUN_0040bb80(&local_c,param_3,param_4,param_5);
+  generatetrinormal(&local_c,param_3,param_4,param_5);
   local_18 = (float)(((float)(param_5[1] - param_4[1])) * local_4 - ((float)(param_5[2] - param_4[2])) * local_8);
   local_14 = (float)(local_c * (param_5[2] - param_4[2]) - ((float)(*param_5 - *param_4)) * local_4);
   local_10 = (float)(local_8 * (*param_5 - *param_4) - (param_5[1] - param_4[1]) * local_c);
-  FUN_0040b900(&local_18,&local_18);
+  normalizevector(&local_18,&local_18);
   *param_1 = (float)(((float)(local_10 * ((float)(param_2[2] - param_4[2])) +
              (local_14 * ((float)(param_2[1] - param_4[1])) + local_18 * ((float)(*param_2 - *param_4))))) /
              ((float)(((float)(*param_3 - *param_4)) * local_18 + ((float)(param_3[1] - param_4[1])) * local_14 +
@@ -21770,7 +21794,7 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
   local_18 = (float)(((float)(param_3[1] - param_5[1])) * local_4 - ((float)(param_3[2] - param_5[2])) * local_8);
   local_14 = (float)(local_c * (param_3[2] - param_5[2]) - ((float)(*param_3 - *param_5)) * local_4);
   local_10 = (float)(local_8 * (*param_3 - *param_5) - (param_3[1] - param_5[1]) * local_c);
-  FUN_0040b900(&local_18,&local_18);
+  normalizevector(&local_18,&local_18);
   param_1[1] = (float)(((float)(local_10 * ((float)(param_2[2] - param_5[2])) +
                (local_14 * ((float)(param_2[1] - param_5[1])) + local_18 * ((float)(*param_2 - *param_5))))) /
                ((float)(((float)(*param_4 - *param_5)) * local_18 + ((float)(param_4[1] - param_5[1])) * local_14 +
@@ -21778,15 +21802,15 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
   local_18 = (float)(((float)(param_4[1] - param_3[1])) * local_4 - ((float)(param_4[2] - param_3[2])) * local_8);
   local_14 = (float)(local_c * (param_4[2] - param_3[2]) - ((float)(*param_4 - *param_3)) * local_4);
   local_10 = (float)(local_8 * (*param_4 - *param_3) - (param_4[1] - param_3[1]) * local_c);
-  FUN_0040b900(&local_18,&local_18);
+  normalizevector(&local_18,&local_18);
   param_1[2] = (float)(((float)(local_10 * ((float)(param_2[2] - param_3[2])) +
                (local_14 * ((float)(param_2[1] - param_3[1])) + local_18 * ((float)(*param_2 - *param_3))))) /
                ((float)(((float)(*param_5 - *param_3)) * local_18 + ((float)(param_5[1] - param_3[1])) * local_14 +
                ((float)(param_5[2] - param_3[2])) * local_10)));
   return;
 }
-#undef FUN_0040bb80
-#undef FUN_0040b900
+#undef generatetrinormal
+#undef normalizevector
 #undef local_18
 #undef local_14
 #undef local_10
@@ -21799,8 +21823,8 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
 #define DAT_0b7e722c (*(undefined4 *)SR_VA(0xb7e722c))
 #define DAT_0b7e7230 (*(undefined4 *)SR_VA(0xb7e7230))
 #define DAT_0b7e7234 (*(undefined4 *)SR_VA(0xb7e7234))
-#define FUN_00416ce0 ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
 void __cdecl lf_22e20(int param_1,int param_2)
 
 {
@@ -21830,7 +21854,7 @@ void __cdecl lf_22e20(int param_1,int param_2)
          (float)(LF_BITS_F((&DAT_0b7e722c)[iVar4 * 0x3c]) + (float)(fVar3 * g_object[param_1].rot[1].x));
     *(float *)&((&DAT_0b7e7230)[iVar4 * 0x3c]) = (float)(LF_BITS_F((&DAT_0b7e7230)[iVar4 * 0x3c]) + (float)(fVar1 * fVar3));
     *(float *)&((&DAT_0b7e7234)[iVar4 * 0x3c]) = (float)(LF_BITS_F((&DAT_0b7e7234)[iVar4 * 0x3c]) + (float)(fVar3 * fVar2));
-    FUN_00416ce0(param_1,2,0,&g_object[param_1].pos.x,&g_object[param_1].vel.x);
+    createevent_updateobject(param_1,2,0,&g_object[param_1].pos.x,&g_object[param_1].vel.x);
   }
   return;
 }
@@ -21838,8 +21862,8 @@ void __cdecl lf_22e20(int param_1,int param_2)
 #undef DAT_0b7e722c
 #undef DAT_0b7e7230
 #undef DAT_0b7e7234
-#undef FUN_00416ce0
 #undef rand
+#undef createevent_updateobject
 
 /* ---------------------------------------------------------------- 0x22f90 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -21855,9 +21879,9 @@ void __cdecl lf_22e20(int param_1,int param_2)
 #define DAT_0b7e7214 (*(undefined4 *)SR_VA(0xb7e7214))
 #define DAT_0b7e7218 (*(undefined4 *)SR_VA(0xb7e7218))
 #define DAT_0b7e721c (*(undefined4 *)SR_VA(0xb7e721c))
-#define FUN_004225e0 ((void (__cdecl *)(float *, int))SR_VA(0x4225e0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define getobjectrotation3 ((void (__cdecl *)(float *, int))SR_VA(0x4225e0))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
 #define local_78 (*(float *)(lf_frame + 0x18))
 #define local_74 (*(float *)(lf_frame + 0x1c))
 #define local_70 (*(float *)(lf_frame + 0x20))
@@ -22060,7 +22084,7 @@ void __cdecl lf_22f90(void)
           if (local_50 == 0) {
             fVar17 = *(float *)((int)&g_object[0].unk_5f20 + iVar16);
 LAB_0042360a:
-            FUN_0040bc50(&local_34,(float *)((int)&g_object[0].rot[1].x + iVar16),fVar17);
+            rotatevector(&local_34,(float *)((int)&g_object[0].rot[1].x + iVar16),fVar17);
           }
           else if (local_50 == 1) {
             fVar17 = *(float *)((int)&g_object[0].unk_5fb8 + iVar16);
@@ -22082,7 +22106,7 @@ LAB_0042360a:
           local_60 = (float)(((float)(*(float *)(&g_object[0].lf_raw[0x7218] + iVar15) * local_34 -
                      *(float *)(&g_object[0].lf_raw[0x7214] + iVar15) * local_30)) * 0.25 -
                      local_6c * 0.5);
-          FUN_004225e0(&local_10,local_44);
+          getobjectrotation3(&local_10,local_44);
           fVar1 = -((float)(local_2c * local_8 + (local_c * local_30 + local_34 * local_10)));
           fVar17 = *(float *)(&g_object[0].lf_raw[0x725c] + iVar15);
           *(float *)(&g_object[0].lf_raw[0x7250] + iVar15) =
@@ -22236,9 +22260,9 @@ LAB_0042360a:
 #undef DAT_0b7e7214
 #undef DAT_0b7e7218
 #undef DAT_0b7e721c
-#undef FUN_004225e0
 #undef __security_check_cookie
-#undef FUN_0040bc50
+#undef getobjectrotation3
+#undef rotatevector
 #undef local_78
 #undef local_74
 #undef local_70
@@ -22305,9 +22329,9 @@ float10 __cdecl lf_23fa0(int param_1)
 #define DAT_0b7e7238 (*(undefined4 *)SR_VA(0xb7e7238))
 #define DAT_0b7e723c (*(undefined4 *)SR_VA(0xb7e723c))
 #define DAT_0b7e7240 (*(undefined4 *)SR_VA(0xb7e7240))
-#define FUN_00421e00 ((void (__cdecl *)(int, float *, float *, float))SR_VA(0x421e00))
 #define _CIsin lf_CIsin
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define addobjectrotation ((void (__cdecl *)(int, float *, float *, float))SR_VA(0x421e00))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define _CIsqrt lf_CIsqrt
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(int * *)(lf_frame + 0x18))
@@ -22402,7 +22426,7 @@ LAB_004250f8:
                                LF_BITS_F((&DAT_0b7e723c)[iVar9 * 0x3c]) *
                                LF_BITS_F((&DAT_0b7e723c)[iVar9 * 0x3c])))));
       fVar5 = (float)((float)dVar10 * (float)dVar10);
-      FUN_0040b900(&local_c,pfVar2);
+      normalizevector(&local_c,pfVar2);
       fVar4 = (float)(((fVar5 * 4.0 * 0.5) / -1000.0) *
               ((float)(local_4 * g_object[param_1].rot[0].z +
               (local_c * g_object[param_1].rot[0].x + local_8 * g_object[param_1].rot[0].y))));
@@ -22525,8 +22549,8 @@ LAB_004250f8:
              (float)(fVar4 * g_object[param_1].rot[2].z + LF_BITS_F((&DAT_0b7e7234)[iVar3 * 0x3c]));
       } while (iVar9 < g_object[param_1].particle_start);
     }
-    FUN_00421e00(param_1,&g_object[param_1].pos.x,&pvVar1->x,
-                 (float)(g_object[param_1].unk_5bc0 * 0.00027777778));
+    addobjectrotation(param_1,&g_object[param_1].pos.x,&pvVar1->x,
+                      (float)(g_object[param_1].unk_5bc0 * 0.00027777778));
   }
   return;
 }
@@ -22538,9 +22562,9 @@ LAB_004250f8:
 #undef DAT_0b7e7238
 #undef DAT_0b7e723c
 #undef DAT_0b7e7240
-#undef FUN_00421e00
 #undef _CIsin
-#undef FUN_0040b900
+#undef addobjectrotation
+#undef normalizevector
 #undef _CIsqrt
 #undef local_1c
 #undef local_18
@@ -22584,11 +22608,11 @@ LAB_004250f8:
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
 #define _DAT_107484c4 (*(float *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(float *)SR_VA(0x107484c8))
-#define FUN_0040c680 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_VA(0x40c680))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_00422af0 ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define FUN_0041aa60 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float))SR_VA(0x41aa60))
+#define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define lineintersectsphere ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float))SR_VA(0x41aa60))
+#define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_VA(0x40c680))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define local_48 (*(int *)(lf_frame + 0x18))
@@ -22670,9 +22694,10 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
           local_3c = *(float *)(&g_object[param_1].lf_raw[0x4bbc] + iVar5);
           local_38 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc0] + iVar5);
           local_34 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc4] + iVar5);
-          FUN_0040bb80(&local_30,&local_c,&local_24,&local_3c);
-          iVar2 = FUN_0040c680(&local_18,&local_30,&local_50,param_2,param_3,&local_c,&local_24,
-                               &local_3c,1);
+          generatetrinormal(&local_30,&local_c,&local_24,&local_3c);
+          iVar2 = lineintersecttriangletwosided
+                            (&local_18,&local_30,&local_50,param_2,param_3,&local_c,&local_24,
+                             &local_3c,1);
           if ((iVar2 != 0) && (local_50 < _DAT_107484b8)) {
             _g_intersect = local_18;
             _DAT_107484a4 = local_14;
@@ -22688,7 +22713,8 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
                                    (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar4) + 1) * 4);
             DAT_107484dc = *(int *)((int)(g_object[param_1].rot + 9) +
                                    (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
-            FUN_00422af0((float *)&DAT_107484e4,(float *)&g_intersect,&local_c,&local_24,&local_3c);
+            calculatebarycentric
+                      ((float *)&DAT_107484e4,(float *)&g_intersect,&local_c,&local_24,&local_3c);
             _DAT_107484c0 =
                  (float)((float)(_DAT_107484e8 * LF_BITS_F((&DAT_0b7e722c)[DAT_107484d8 * 0x3c]) +
                  _DAT_107484e4 * LF_BITS_F((&DAT_0b7e722c)[DAT_107484d4 * 0x3c])) +
@@ -22711,9 +22737,10 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
             local_3c = *(float *)(&g_object[param_1].lf_raw[0x4bbc] + iVar2);
             local_38 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc0] + iVar2);
             local_34 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc4] + iVar2);
-            FUN_0040bb80(&local_30,&local_c,&local_24,&local_3c);
-            iVar3 = FUN_0040c680(&local_18,&local_30,&local_50,param_2,param_3,&local_c,&local_24,
-                                 &local_3c,1);
+            generatetrinormal(&local_30,&local_c,&local_24,&local_3c);
+            iVar3 = lineintersecttriangletwosided
+                              (&local_18,&local_30,&local_50,param_2,param_3,&local_c,&local_24,
+                               &local_3c,1);
             iVar4 = local_4c;
             if ((iVar3 != 0) && (local_50 < _DAT_107484b8)) {
               _g_intersect = local_18;
@@ -22730,15 +22757,15 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
                                      (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
               DAT_107484dc = *(int *)((int)(g_object[param_1].rot + 9) +
                                      (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
-              FUN_00422af0((float *)&DAT_107484e4,(float *)&g_intersect,&local_c,&local_24,&local_3c
-                          );
+              calculatebarycentric
+                        ((float *)&DAT_107484e4,(float *)&g_intersect,&local_c,&local_24,&local_3c);
               _DAT_107484c0 = _DAT_107484e4 * LF_BITS_F((&DAT_0b7e722c)[DAT_107484d4 * 0x3c]);
               _DAT_107484c4 = (float)(LF_BITS_F((&DAT_0b7e7230)[DAT_107484d4 * 0x3c]) * _DAT_107484e4);
               _DAT_107484c8 = (float)(_DAT_107484e4 * LF_BITS_F((&DAT_0b7e7234)[DAT_107484d4 * 0x3c]));
-              FUN_0040ba60((float *)&DAT_107484c0,(float *)&DAT_107484c0,
-                           (float *)(&DAT_0b7e722c + DAT_107484d8 * 0x3c),_DAT_107484e8);
-              FUN_0040ba60((float *)&DAT_107484c0,(float *)&DAT_107484c0,
-                           (float *)(&DAT_0b7e722c + DAT_107484dc * 0x3c),_DAT_107484ec);
+              scaleaddvectors((float *)&DAT_107484c0,(float *)&DAT_107484c0,
+                              (float *)(&DAT_0b7e722c + DAT_107484d8 * 0x3c),_DAT_107484e8);
+              scaleaddvectors((float *)&DAT_107484c0,(float *)&DAT_107484c0,
+                              (float *)(&DAT_0b7e722c + DAT_107484dc * 0x3c),_DAT_107484ec);
               iVar4 = local_4c;
             }
           }
@@ -22753,7 +22780,8 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
       if (0 < iVar1) {
         pfVar6 = (float *)(&g_object[0].lf_raw[0x5f24] + iVar4);
         do {
-          iVar4 = FUN_0041aa60(&local_18,&local_30,&local_50,param_2,param_3,pfVar6,pfVar6[-6]);
+          iVar4 = lineintersectsphere(&local_18,&local_30,&local_50,param_2,param_3,pfVar6,
+                                      pfVar6[-6]);
           if ((iVar4 != 0) && (local_50 < _DAT_107484b8)) {
             DAT_107484d0 = -1;
             _g_intersect = local_18;
@@ -22810,11 +22838,11 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
 #undef _DAT_107484ec
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0040c680
-#undef FUN_0040bb80
-#undef FUN_00422af0
-#undef FUN_0040ba60
-#undef FUN_0041aa60
+#undef calculatebarycentric
+#undef scaleaddvectors
+#undef generatetrinormal
+#undef lineintersectsphere
+#undef lineintersecttriangletwosided
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -22861,9 +22889,9 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
 #define DAT_25d7f52c (*(undefined4 *)SR_VA(0x25d7f52c))
 #define DAT_25d7f530 (*(undefined *)SR_VA(0x25d7f530))
 #define _DAT_0a01d8c8 (*(float *)SR_VA(0xa01d8c8))
-#define _CIsqrt lf_CIsqrt
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsqrt lf_CIsqrt
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -22960,7 +22988,7 @@ void __cdecl lf_25e70(int param_1,float *param_2,float param_3,float param_4)
   local_3c = (float)(pfVar10[2] - pfVar10[5]);
   local_38 = 0.0;
   local_34 = -((float)(*pfVar10 - pfVar10[3]));
-  FUN_0040b900(&local_3c,&local_3c);
+  normalizevector(&local_3c,&local_3c);
   dVar13 = _CIsqrt((double)((float)(((float)(pfVar10[0xb] - pfVar10[2])) * (pfVar10[0xb] - pfVar10[2]) +
                            (((float)(pfVar10[9] - *pfVar10)) * (pfVar10[9] - *pfVar10) + 0.0))));
   fVar2 = (float)((float)dVar13 / 3.0);
@@ -22976,7 +23004,7 @@ void __cdecl lf_25e70(int param_1,float *param_2,float param_3,float param_4)
   local_3c = (float)(pfVar10[8] - pfVar10[0xb]);
   local_38 = 0.0;
   local_34 = -((float)(pfVar10[6] - pfVar10[9]));
-  FUN_0040b900(&local_3c,&local_3c);
+  normalizevector(&local_3c,&local_3c);
   dVar13 = _CIsqrt((double)((float)(((float)(pfVar10[3] - pfVar10[6])) * (pfVar10[3] - pfVar10[6]) + 0.0 +
                            ((float)(pfVar10[5] - pfVar10[8])) * (pfVar10[5] - pfVar10[8]))));
   fVar2 = (float)((float)dVar13 / 3.0);
@@ -23267,9 +23295,9 @@ void __cdecl lf_25e70(int param_1,float *param_2,float param_3,float param_4)
 #undef DAT_25d7f52c
 #undef DAT_25d7f530
 #undef _DAT_0a01d8c8
-#undef _CIsqrt
-#undef FUN_0040b900
 #undef _ftol2
+#undef normalizevector
+#undef _CIsqrt
 #undef local_48
 #undef local_44
 #undef local_40
@@ -23311,8 +23339,8 @@ void __cdecl lf_25e70(int param_1,float *param_2,float param_3,float param_4)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(undefined4 *)(lf_frame + 0x18))
 #define local_34 (*(undefined4 *)(lf_frame + 0x1c))
@@ -23379,9 +23407,10 @@ undefined4 __cdecl lf_26bc0(float *param_1,float *param_2,int param_3)
         iVar3 = piVar5[1] * 0xc + iVar4;
         local_38 = *(undefined4 *)(&DAT_25d7efd4 + iVar3 + 4);
         local_34 = *(undefined4 *)(&DAT_25d7efd4 + iVar3 + 8);
-        FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-        iVar3 = FUN_0040c420(&local_c,&local_18,(float *)&param_1,pfVar1,pfVar2,&local_24,&local_30,
-                             &local_3c);
+        generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+        iVar3 = lineintersecttriangle
+                          (&local_c,&local_18,(float *)&param_1,pfVar1,pfVar2,&local_24,&local_30,
+                           &local_3c);
         if ((iVar3 != 0) && (LF_BITS_F(param_1) < LF_BITS_F(_DAT_107484b8))) {
           _g_intersect = local_c;
           _DAT_107484a4 = local_8;
@@ -23422,8 +23451,8 @@ undefined4 __cdecl lf_26bc0(float *param_1,float *param_2,int param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_0040bb80
-#undef FUN_0040c420
+#undef lineintersecttriangle
+#undef generatetrinormal
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -23461,8 +23490,8 @@ undefined4 __cdecl lf_26bc0(float *param_1,float *param_2,int param_3)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(undefined4 *)(lf_frame + 0x18))
 #define local_34 (*(undefined4 *)(lf_frame + 0x1c))
@@ -23526,9 +23555,10 @@ undefined4 __cdecl lf_26db0(float *param_1,float *param_2,int param_3)
         iVar3 = piVar5[1] * 0xc + iVar4;
         local_38 = *(undefined4 *)(&DAT_25d7efd4 + iVar3 + 4);
         local_34 = *(undefined4 *)(&DAT_25d7efd4 + iVar3 + 8);
-        FUN_0040bb80(&local_18,&local_24,&local_30,&local_3c);
-        iVar3 = FUN_0040c420(&local_c,&local_18,(float *)&param_1,pfVar1,pfVar2,&local_24,&local_30,
-                             &local_3c);
+        generatetrinormal(&local_18,&local_24,&local_30,&local_3c);
+        iVar3 = lineintersecttriangle
+                          (&local_c,&local_18,(float *)&param_1,pfVar1,pfVar2,&local_24,&local_30,
+                           &local_3c);
         if ((iVar3 != 0) && (LF_BITS_F(param_1) < LF_BITS_F(_DAT_107484b8))) {
           _g_intersect = local_c;
           _DAT_107484a4 = local_8;
@@ -23568,8 +23598,8 @@ undefined4 __cdecl lf_26db0(float *param_1,float *param_2,int param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_0040bb80
-#undef FUN_0040c420
+#undef lineintersecttriangle
+#undef generatetrinormal
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -23607,8 +23637,8 @@ undefined4 __cdecl lf_26db0(float *param_1,float *param_2,int param_3)
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
-#define FUN_00426bc0 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x426bc0))
-#define FUN_00426db0 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x426db0))
+#define lineintersecttrack ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x426bc0))
+#define lineintersecttrackrail ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x426db0))
 #define local_1c (*(int * *)(lf_frame + 0x14))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_10 (*(float * *)(lf_frame + 0x20))
@@ -23642,8 +23672,8 @@ void __cdecl lf_26f90(int param_1)
         local_14 = 4;
         do {
           iVar2 = *local_1c;
-          iVar10 = FUN_00426bc0(&g_object[param_1].pos.x,(float *)(&DAT_0b7e7214 + iVar2 * 0x3c),
-                                iVar11);
+          iVar10 = lineintersecttrack(&g_object[param_1].pos.x,
+                                      (float *)(&DAT_0b7e7214 + iVar2 * 0x3c),iVar11);
           iVar9 = g_numofbonds;
           fVar5 = _DAT_107484a8;
           if (iVar10 != 0) {
@@ -23678,8 +23708,9 @@ void __cdecl lf_26f90(int param_1)
             }
           }
           iVar2 = *local_1c;
-          iVar10 = FUN_00426db0(&g_object[param_1].pos.x,(float *)(&DAT_0b7e7214 + iVar2 * 0x3c),
-                                iVar11);
+          iVar10 = lineintersecttrackrail
+                             (&g_object[param_1].pos.x,(float *)(&DAT_0b7e7214 + iVar2 * 0x3c),
+                              iVar11);
           iVar9 = g_numofbonds;
           if (iVar10 != 0) {
             fVar5 = (float)(_g_intersect - (*(float *)&((&DAT_0b7e7214)[iVar2 * 0x3c])));
@@ -23738,8 +23769,8 @@ void __cdecl lf_26f90(int param_1)
 #undef _DAT_107484b4
 #undef _DAT_107484b0
 #undef _DAT_107484ac
-#undef FUN_00426bc0
-#undef FUN_00426db0
+#undef lineintersecttrack
+#undef lineintersecttrackrail
 #undef local_1c
 #undef local_14
 #undef local_10
@@ -23748,12 +23779,12 @@ void __cdecl lf_26f90(int param_1)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define DAT_0956d830 (*(undefined4 *)SR_VA(0x956d830))
-#define FUN_00416db0 ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define _CIatan2 lf_CIatan2
-#define _CIsin lf_CIsin
-#define _CItan lf_CItan
-#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define _CIcos lf_CIcos
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define _CIsin lf_CIsin
+#define _CIatan2 lf_CIatan2
+#define _CItan lf_CItan
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
 #define local_18 (*(float *)(lf_frame + 0x18))
 void __cdecl lf_272b0(int param_1)
 
@@ -23841,10 +23872,10 @@ void __cdecl lf_272b0(int param_1)
   }
   if ((iVar3 == 0) && (g_object[param_1].gear != g_object[param_1].unk_5e70)) {
     if (g_object[param_1].gear == 0) {
-      FUN_00416db0(DAT_0956d830,&g_object[param_1].pos.x,lf_u2f(0x3f400000),lf_u2f(0x3f800000));
+      createevent_sound(DAT_0956d830,&g_object[param_1].pos.x,lf_u2f(0x3f400000),lf_u2f(0x3f800000));
     }
     else {
-      FUN_00416db0(DAT_0956d830,&g_object[param_1].pos.x,lf_u2f(0x3f800000),lf_u2f(0x3f400000));
+      createevent_sound(DAT_0956d830,&g_object[param_1].pos.x,lf_u2f(0x3f800000),lf_u2f(0x3f400000));
     }
   }
   iVar3 = g_object[param_1].gear;
@@ -23960,12 +23991,12 @@ LAB_0042788c:
 #undef g_human
 #undef g_object
 #undef DAT_0956d830
-#undef FUN_00416db0
-#undef _CIatan2
-#undef _CIsin
-#undef _CItan
-#undef _ftol2
 #undef _CIcos
+#undef _ftol2
+#undef _CIsin
+#undef _CIatan2
+#undef _CItan
+#undef createevent_sound
 #undef local_18
 
 /* ---------------------------------------------------------------- 0x278c0 */
@@ -23988,7 +24019,7 @@ LAB_0042788c:
 #define DAT_0b7e72d8 (*(undefined4 *)SR_VA(0xb7e72d8))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 int __cdecl lf_278c0(undefined4 param_1,undefined4 *param_2,undefined4 *param_3,undefined4 param_4,
-            int param_5)
+              int param_5)
 
 {
   int iVar1;
@@ -24052,7 +24083,7 @@ int __cdecl lf_278c0(undefined4 param_1,undefined4 *param_2,undefined4 *param_3,
 #define DAT_0b7e7254 (*(undefined4 *)SR_VA(0xb7e7254))
 #define g_particle (*(undefined4 *)SR_VA(0xb7e7200))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define FUN_004033a0 ((void (__cdecl *)(int))SR_VA(0x4033a0))
+#define deletebond ((void (__cdecl *)(int))SR_VA(0x4033a0))
 #define local_c (*(int * *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int * *)(lf_frame + 0x1c))
@@ -24092,7 +24123,7 @@ void __cdecl lf_279b0(void)
           if (-1 < iVar8) {
             piVar2 = &DAT_0b7e7254 + local_8 + iVar8;
             do {
-              FUN_004033a0(*piVar2);
+              deletebond(*piVar2);
               piVar2 = piVar2 + -1;
               iVar8 = iVar8 + -1;
               iVar4 = DAT_1994d730;
@@ -24191,7 +24222,7 @@ void __cdecl lf_279b0(void)
 #undef DAT_0b7e7254
 #undef g_particle
 #undef g_bond
-#undef FUN_004033a0
+#undef deletebond
 #undef local_c
 #undef local_8
 #undef local_4
@@ -24332,8 +24363,8 @@ float10 __cdecl lf_27e80(float *param_1,float *param_2,float param_3)
 /* ---------------------------------------------------------------- 0x28020 */
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 int __cdecl lf_28020(void)
 
 {
@@ -24399,13 +24430,13 @@ int __cdecl lf_28020(void)
 }
 #undef g_game
 #undef g_player
-#undef memset
 #undef rand
+#undef memset
 
 /* ---------------------------------------------------------------- 0x28190 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
 int __cdecl lf_28190(int param_1,int param_2,int param_3)
 
 {
@@ -24418,15 +24449,15 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
   if (param_1 != -1) {
     pvVar1 = g_human[param_1].bones[0].rot;
     pBVar2 = g_human[param_1].bones;
-    uVar3 = FUN_0041b070(param_2,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
-    FUN_0041b870(uVar3,0xffffffff,param_1,0);
-    uVar3 = FUN_0041b070(param_2 + 1,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
-    lf_eax = FUN_0041b870(uVar3,0xffffffff,param_1,1);
+    uVar3 = createitem(param_2,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
+    linkitem(uVar3,0xffffffff,param_1,0);
+    uVar3 = createitem(param_2 + 1,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
+    lf_eax = linkitem(uVar3,0xffffffff,param_1,1);
     iVar4 = 1;
     if (1 < param_3) {
       do {
-        uVar3 = FUN_0041b070(param_2 + 1,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
-        lf_eax = FUN_0041b870(uVar3,0xffffffff,param_1,(iVar4 + -1 >> 1) + 3);
+        uVar3 = createitem(param_2 + 1,(float *)pBVar2,(undefined4 *)0x0,&pvVar1->x);
+        lf_eax = linkitem(uVar3,0xffffffff,param_1,(iVar4 + -1 >> 1) + 3);
         iVar4 = iVar4 + 1;
       } while (iVar4 < param_3);
     }
@@ -24434,8 +24465,8 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
   return lf_eax;
 }
 #undef g_human
-#undef FUN_0041b870
-#undef FUN_0041b070
+#undef createitem
+#undef linkitem
 
 /* ---------------------------------------------------------------- 0x28230 */
 #define DAT_17579610 (*(undefined4 *)SR_VA(0x17579610))
@@ -24448,11 +24479,11 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
 #define DAT_0b051b8c (*(int *)SR_VA(0xb051b8c))
 #define DAT_17579600 (*(undefined4 *)SR_VA(0x17579600))
 #define DAT_17579604 (*(undefined4 *)SR_VA(0x17579604))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_00406760 ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define __security_check_cookie(x) ((void)0)
 #define local_70 (*(int *)(lf_frame + 0x10))
 #define local_6c (*(int *)(lf_frame + 0x14))
 #define local_68 (*(float *)(lf_frame + 0x18))
@@ -24583,7 +24614,7 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
       local_60 = (float)((float)(((float)(*(float *)(&g_game.lf_raw[0x78] + iVar3) + *(float *)(&g_game.lf_raw[0x84] + iVar3))) *
                  0.5) - 1.0);
       if (iVar2 == 0) {
-        DAT_0b051b8c = FUN_0041b070(iVar7,&local_68,(undefined4 *)0x0,&local_48);
+        DAT_0b051b8c = createitem(iVar7,&local_68,(undefined4 *)0x0,&local_48);
         local_60 = (float)(local_60 + 2.0);
       }
       iVar2 = iVar2 + 1;
@@ -24670,7 +24701,7 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
           (&DAT_17579610)[local_54 * 5] = (&DAT_17579610)[local_54 * 5] + uVar1;
           *(uint *)(&g_game.lf_raw[0x100] + iVar2) = uVar1;
         }
-        FUN_00406760(local_54,local_6c);
+        createevent_updatemission(local_54,local_6c);
         iVar7 = iVar7 + 1;
       } while (iVar7 < param_2);
     }
@@ -24688,11 +24719,11 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #undef DAT_0b051b8c
 #undef DAT_17579600
 #undef DAT_17579604
-#undef __security_check_cookie
-#undef FUN_00406760
 #undef _ftol2
 #undef rand
-#undef FUN_0041b070
+#undef createevent_updatemission
+#undef createitem
+#undef __security_check_cookie
 #undef local_70
 #undef local_6c
 #undef local_68
@@ -24724,10 +24755,10 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0b051b94 (*(int *)SR_VA(0xb051b94))
 #define DAT_0b051b8c (*(undefined4 *)SR_VA(0xb051b8c))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_00406760 ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define __security_check_cookie(x) ((void)0)
 #define local_68 (*(float *)(lf_frame + 0x18))
 #define local_64 (*(int *)(lf_frame + 0x1c))
 #define local_60 (*(int *)(lf_frame + 0x20))
@@ -24832,7 +24863,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
                  0.5);
       local_54 = (float)(((float)(*(float *)(&g_game.lf_raw[0x78] + iVar2) + *(float *)(&g_game.lf_raw[0x84] + iVar2))) *
                  0.5);
-      uVar4 = FUN_0041b070(*piVar6,&local_5c,(undefined4 *)0x0,&local_4c);
+      uVar4 = createitem(*piVar6,&local_5c,(undefined4 *)0x0,&local_4c);
       *(undefined4 *)((int)&DAT_0b051b8c + iVar8) = uVar4;
       *(int *)((int)aiStack_28 + iVar8 + 0x18) = DAT_0b051a80;
       DAT_0b051a80 = DAT_0b051a80 + 1;
@@ -24882,7 +24913,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
         *(float *)(&g_game.lf_raw[0x10c] + iVar5) = (float)(-local_68 * 1.25e-05);
         *(undefined4 *)(&g_game.lf_raw[0xe0] + iVar5) = *(undefined4 *)(local_64 + uVar9 * 4);
         *(undefined4 *)(&g_game.lf_raw[0x100] + iVar5) = 0;
-        FUN_00406760(iVar8,iVar7);
+        createevent_updatemission(iVar8,iVar7);
         if ((uVar3 == 0) && (uVar3 = rand(), (uVar3 & 7) == 0)) {
           iVar7 = 0;
           piVar6 = (int *)(&g_game.lf_raw[0x110] + iVar2);
@@ -24918,7 +24949,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
           *(undefined4 *)(&g_game.lf_raw[0xd8] + iVar2) = 6;
           *(undefined4 *)(&g_game.lf_raw[0xe0] + iVar2) = *(undefined4 *)(local_64 + 8);
           *(undefined4 *)(&g_game.lf_raw[0x100] + iVar2) = 0;
-          FUN_00406760(iVar8,iVar7);
+          createevent_updatemission(iVar8,iVar7);
         }
         param_3 = local_64;
         uVar3 = local_50;
@@ -24935,10 +24966,10 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
 #undef g_item
 #undef DAT_0b051b94
 #undef DAT_0b051b8c
-#undef __security_check_cookie
-#undef FUN_00406760
 #undef rand
-#undef FUN_0041b070
+#undef createevent_updatemission
+#undef createitem
+#undef __security_check_cookie
 #undef local_68
 #undef local_64
 #undef local_60
@@ -24960,8 +24991,8 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
 /* ---------------------------------------------------------------- 0x28a90 */
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
 void __cdecl lf_28a90(int param_1,undefined4 param_2,int param_3,int param_4,undefined4 *param_5,
-            undefined4 param_6,undefined4 param_7,undefined4 param_8,float param_9,
-            undefined4 param_10,undefined4 param_11,undefined4 param_12)
+                   undefined4 param_6,undefined4 param_7,undefined4 param_8,float param_9,
+                   undefined4 param_10,undefined4 param_11,undefined4 param_12)
 
 {
   float *pfVar1;
@@ -25244,8 +25275,8 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
 #undef local_1c
 
 /* ---------------------------------------------------------------- 0x29300 */
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define _CIsqrt lf_CIsqrt
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_38 (*(float * *)(lf_frame + 0x18))
 #define local_30 (*(int *)(lf_frame + 0x20))
 #define local_24 (*(float *)(lf_frame + 0x2c))
@@ -25279,7 +25310,7 @@ void __cdecl lf_29300(float *param_1,float *param_2,float *param_3)
   param_1[1] = 0.0;
   param_1[2] = 0.0;
   param_1[3] = 0.0;
-  FUN_0040bb80(&local_c,param_3,param_3 + 3,param_3 + 6);
+  generatetrinormal(&local_c,param_3,param_3 + 3,param_3 + 6);
   iVar5 = 0;
   local_38 = param_3 + 2;
   fVar1 = local_4;
@@ -25340,8 +25371,8 @@ void __cdecl lf_29300(float *param_1,float *param_2,float *param_3)
   param_1[3] = (float)(param_1[3] * 0.25);
   return;
 }
-#undef FUN_0040bb80
 #undef _CIsqrt
+#undef generatetrinormal
 #undef local_38
 #undef local_30
 #undef local_24
@@ -25354,7 +25385,7 @@ void __cdecl lf_29300(float *param_1,float *param_2,float *param_3)
 /* ---------------------------------------------------------------- 0x29650 */
 #define DAT_14122d64 (*(int *)SR_VA(0x14122d64))
 #define g_parser (*(char * *)SR_VA(0x14122d60))
-#define FUN_0040d0c0 ((bool (__cdecl *)(char *))SR_VA(0x40d0c0))
+#define findstring ((bool (__cdecl *)(char *))SR_VA(0x40d0c0))
 bool __cdecl lf_29650(char *param_1)
 
 {
@@ -25366,7 +25397,7 @@ bool __cdecl lf_29650(char *param_1)
   
   iVar3 = DAT_14122d64;
   iVar5 = (int)g_parser;
-  while ((iVar5 < iVar3 && (g_parser = (char *)iVar5, iVar4 = FUN_0040d0c0(param_1), iVar4 == 0))) {
+  while ((iVar5 < iVar3 && (g_parser = (char *)iVar5, iVar4 = findstring(param_1), iVar4 == 0))) {
     iVar5 = iVar5 + 1;
   }
   pcVar1 = param_1 + 1;
@@ -25379,7 +25410,7 @@ bool __cdecl lf_29650(char *param_1)
 }
 #undef DAT_14122d64
 #undef g_parser
-#undef FUN_0040d0c0
+#undef findstring
 
 /* ---------------------------------------------------------------- 0x296f0 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -25388,9 +25419,9 @@ bool __cdecl lf_29650(char *param_1)
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
-#define FUN_0040f4a0 ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
-#define FUN_0040f620 ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
+#define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
 void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefined4 param_5)
 
 {
@@ -25410,19 +25441,19 @@ void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
          ((uVar1 = *(uint *)(*(int *)(&DAT_17166088 + iVar2) +
                             ((*(int *)(&DAT_1716607c + iVar2) * iVar4 + iVar3) *
                              *(int *)(&DAT_17166074 + iVar2) + iVar5) * 4), uVar1 != 0xffffffff ||
-          (uVar1 = FUN_0040f620(param_1,iVar5,iVar4,iVar3), uVar1 != 0xffffffff)))) {
+          (uVar1 = area_createchunk(param_1,iVar5,iVar4,iVar3), uVar1 != 0xffffffff)))) {
         iVar2 = *(int *)(&DAT_171665ac +
                         (((int)param_2 >> 3 & 7U) +
                          (((int)param_4 >> 3 & 7U) + ((int)param_3 >> 3 & 7U) * 8) * 8 +
                          param_1 * 0x4035b + uVar1 * 0x201) * 4);
         if ((iVar2 != -1) ||
-           (iVar2 = FUN_0040f4a0(param_1,uVar1,(int)param_2 >> 3,(int)param_3 >> 3,(int)param_4 >> 3
-                                ), iVar2 != -1)) {
+           (iVar2 = area_createsector(param_1,uVar1,(int)param_2 >> 3,(int)param_3 >> 3,
+                                      (int)param_4 >> 3), iVar2 != -1)) {
           *(undefined4 *)
            (&DAT_1994d744 +
            (iVar2 * 0x181a + ((param_4 & 7) + (param_3 & 7) * 8) * 8 + (param_2 & 7)) * 4) = param_5
           ;
-          FUN_00401cf0(param_1,param_2,param_3,param_4);
+          area_marksector(param_1,param_2,param_3,param_4);
         }
       }
     }
@@ -25435,9 +25466,9 @@ void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #undef DAT_17166088
 #undef DAT_171665ac
 #undef DAT_1994d744
-#undef FUN_0040f4a0
-#undef FUN_00401cf0
-#undef FUN_0040f620
+#undef area_createsector
+#undef area_marksector
+#undef area_createchunk
 
 /* ---------------------------------------------------------------- 0x29830 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -25446,9 +25477,9 @@ void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994ff44 (*(undefined *)SR_VA(0x1994ff44))
-#define FUN_0040f4a0 ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
-#define FUN_0040f620 ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
+#define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
 void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefined4 param_5)
 
 {
@@ -25468,19 +25499,19 @@ void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefi
          ((uVar1 = *(uint *)(*(int *)(&DAT_17166088 + iVar2) +
                             ((*(int *)(&DAT_1716607c + iVar2) * iVar4 + iVar3) *
                              *(int *)(&DAT_17166074 + iVar2) + iVar5) * 4), uVar1 != 0xffffffff ||
-          (uVar1 = FUN_0040f620(param_1,iVar5,iVar4,iVar3), uVar1 != 0xffffffff)))) {
+          (uVar1 = area_createchunk(param_1,iVar5,iVar4,iVar3), uVar1 != 0xffffffff)))) {
         iVar2 = *(int *)(&DAT_171665ac +
                         (((int)param_2 >> 3 & 7U) +
                          (((int)param_4 >> 3 & 7U) + ((int)param_3 >> 3 & 7U) * 8) * 8 +
                          param_1 * 0x4035b + uVar1 * 0x201) * 4);
         if ((iVar2 != -1) ||
-           (iVar2 = FUN_0040f4a0(param_1,uVar1,(int)param_2 >> 3,(int)param_3 >> 3,(int)param_4 >> 3
-                                ), iVar2 != -1)) {
+           (iVar2 = area_createsector(param_1,uVar1,(int)param_2 >> 3,(int)param_3 >> 3,
+                                      (int)param_4 >> 3), iVar2 != -1)) {
           *(undefined4 *)
            (&DAT_1994ff44 +
            (iVar2 * 0x181a + ((param_4 & 7) + (param_3 & 7) * 8) * 8 + (param_2 & 7)) * 4) = param_5
           ;
-          FUN_00401cf0(param_1,param_2,param_3,param_4);
+          area_marksector(param_1,param_2,param_3,param_4);
         }
       }
     }
@@ -25493,9 +25524,9 @@ void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #undef DAT_17166088
 #undef DAT_171665ac
 #undef DAT_1994ff44
-#undef FUN_0040f4a0
-#undef FUN_00401cf0
-#undef FUN_0040f620
+#undef area_createsector
+#undef area_marksector
+#undef area_createchunk
 
 /* ---------------------------------------------------------------- 0x29970 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -25505,9 +25536,9 @@ void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
-#define FUN_004296f0 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
 void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 
 {
@@ -25535,34 +25566,34 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
                 ((param_4 & 7) + (param_3 & 7) * 8) * 8 + (param_2 & 7);
         iVar3 = iVar1 * 4;
         if ((*(uint *)(&DAT_1994d744 + iVar1 * 4) & 0xe0000000) == 0x40000000) {
-          uVar2 = FUN_00401850(param_1,param_2,param_3 - 1,param_4);
+          uVar2 = area_getblock(param_1,param_2,param_3 - 1,param_4);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2,param_3 - 1,param_4,uVar2 | 0x20);
+            area_setblock(param_1,param_2,param_3 - 1,param_4,uVar2 | 0x20);
           }
-          uVar2 = FUN_00401850(param_1,param_2,param_3 + 1,param_4);
+          uVar2 = area_getblock(param_1,param_2,param_3 + 1,param_4);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2,param_3 + 1,param_4,uVar2 | 1);
+            area_setblock(param_1,param_2,param_3 + 1,param_4,uVar2 | 1);
           }
-          uVar2 = FUN_00401850(param_1,param_2,param_3,param_4 + 1);
+          uVar2 = area_getblock(param_1,param_2,param_3,param_4 + 1);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2,param_3,param_4 + 1,uVar2 | 8);
+            area_setblock(param_1,param_2,param_3,param_4 + 1,uVar2 | 8);
           }
-          uVar2 = FUN_00401850(param_1,param_2,param_3,param_4 - 1);
+          uVar2 = area_getblock(param_1,param_2,param_3,param_4 - 1);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2,param_3,param_4 - 1,uVar2 | 2);
+            area_setblock(param_1,param_2,param_3,param_4 - 1,uVar2 | 2);
           }
-          uVar2 = FUN_00401850(param_1,param_2 - 1,param_3,param_4);
+          uVar2 = area_getblock(param_1,param_2 - 1,param_3,param_4);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2 - 1,param_3,param_4,uVar2 | 0x10);
+            area_setblock(param_1,param_2 - 1,param_3,param_4,uVar2 | 0x10);
           }
-          uVar2 = FUN_00401850(param_1,param_2 + 1,param_3,param_4);
+          uVar2 = area_getblock(param_1,param_2 + 1,param_3,param_4);
           if ((uVar2 & 0xe0000000) == 0x40000000) {
-            FUN_004296f0(param_1,param_2 + 1,param_3,param_4,uVar2 | 4);
+            area_setblock(param_1,param_2 + 1,param_3,param_4,uVar2 | 4);
           }
         }
         *(undefined4 *)(&DAT_1994d744 + iVar3) = 0;
         *(undefined4 *)(&DAT_19950744 + iVar3) = 0;
-        FUN_00401cf0(param_1,param_2,param_3,param_4);
+        area_marksector(param_1,param_2,param_3,param_4);
       }
     }
   }
@@ -25575,9 +25606,9 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #undef DAT_171665ac
 #undef DAT_1994d744
 #undef DAT_19950744
-#undef FUN_00401850
-#undef FUN_00401cf0
-#undef FUN_004296f0
+#undef area_getblock
+#undef area_marksector
+#undef area_setblock
 
 /* ---------------------------------------------------------------- 0x29bf0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -25621,16 +25652,16 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #define _DAT_0bbe9154 (*(undefined4 *)SR_VA(0xbbe9154))
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
+#define area_block_adddoor ((void (__cdecl *)(int, float, undefined4))SR_VA(0x411a40))
+#define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
+#define area_block_addwindowhorizontal ((void (__cdecl *)(int, int, int, int, int))SR_VA(0x410140))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00410140 ((void (__cdecl *)(int, int, int, int, int))SR_VA(0x410140))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_004105c0 ((void (__cdecl *)(int, int, int))SR_VA(0x4105c0))
-#define FUN_004120c0 ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
-#define FUN_00401e50 ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define FUN_004118f0 ((undefined * (__cdecl *)(int, float, float, float, float, int, uint))SR_VA(0x4118f0))
-#define FUN_00411f70 ((void (__cdecl *)(int, undefined4, float))SR_VA(0x411f70))
-#define FUN_00411a40 ((void (__cdecl *)(int, float, undefined4))SR_VA(0x411a40))
+#define area_block_addoutdoor ((void (__cdecl *)(int, undefined4, float))SR_VA(0x411f70))
+#define area_block_addwindow ((undefined * (__cdecl *)(int, float, float, float, float, int, uint))SR_VA(0x4118f0))
+#define area_block_addwindowvertical ((void (__cdecl *)(int, int, int))SR_VA(0x4105c0))
 #define local_28 (*(int *)(lf_frame + 0x18))
 #define local_24 (*(uint *)(lf_frame + 0x1c))
 #define local_20 (*(uint *)(lf_frame + 0x20))
@@ -25692,10 +25723,11 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
     uVar4 = local_14[iVar7];
     if (((0 < (int)uVar4) && ((int)uVar4 < 9)) &&
        (iVar2 = uVar4 - 1, (&DAT_0bba7240)[iVar2 * 7 + uVar5 * 0x6a] == 0)) {
-      FUN_004118f0(iVar7,LF_BITS_F((&DAT_0bba7244)[iVar2 * 7 + uVar5 * 0x6a]),
-                   LF_BITS_F((&DAT_0bba7248)[iVar2 * 7 + uVar5 * 0x6a]),
-                   LF_BITS_F((&DAT_0bba724c)[iVar2 * 7 + uVar5 * 0x6a]),
-                   LF_BITS_F((&DAT_0bba7250)[iVar2 * 7 + uVar5 * 0x6a]),local_28,6);
+      area_block_addwindow
+                (iVar7,LF_BITS_F((&DAT_0bba7244)[iVar2 * 7 + uVar5 * 0x6a]),
+                 LF_BITS_F((&DAT_0bba7248)[iVar2 * 7 + uVar5 * 0x6a]),
+                 LF_BITS_F((&DAT_0bba724c)[iVar2 * 7 + uVar5 * 0x6a]),
+                 LF_BITS_F((&DAT_0bba7250)[iVar2 * 7 + uVar5 * 0x6a]),local_28,6);
     }
     iVar7 = iVar7 + 1;
   } while (iVar7 < 4);
@@ -25713,7 +25745,7 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
     _DAT_0bbe9154 = 0x3f800000;
     _DAT_0bbe915c = 0x3f800000;
     _DAT_0bbe9138 = 0x3f800000;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
     *(uint *)(&DAT_137b2d7c + iVar6) = *(uint *)(&DAT_137b2d7c + iVar6) | 1;
   }
   if (local_1c != 0) {
@@ -25729,7 +25761,7 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
     _DAT_0bbe915c = 0;
     _DAT_0bbe9130 = 0;
     _DAT_0bbe9138 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
     *(uint *)(&DAT_137b2d7c + iVar6) = *(uint *)(&DAT_137b2d7c + iVar6) | 0x20;
   }
   iVar7 = 0;
@@ -25737,8 +25769,8 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
   do {
     uVar4 = local_14[iVar7];
     if ((0 < (int)uVar4) && ((int)uVar4 < 9)) {
-      FUN_004105c0(iVar7,local_18,uVar4 - 1);
-      FUN_00410140(iVar7,local_18,uVar4 - 1,local_24,local_1c);
+      area_block_addwindowvertical(iVar7,local_18,uVar4 - 1);
+      area_block_addwindowhorizontal(iVar7,local_18,uVar4 - 1,local_24,local_1c);
     }
     iVar2 = 0;
     if (uVar4 == 9) {
@@ -25754,19 +25786,19 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
       DAT_0bbe90cc = 0x3d800000;
       _DAT_0bbe915c = 0x3d800000;
       _DAT_0bbe9138 = 0x3d800000;
-      uVar5 = FUN_00402cf0(iVar7,0x60000);
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,iVar7 + 1U | uVar5);
+      uVar5 = area_block_rotatesurface(iVar7,0x60000);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,iVar7 + 1U | uVar5);
       *(uint *)(&DAT_137b2d7c + iVar6) =
            *(uint *)(&DAT_137b2d7c + iVar6) | local_20 << 1 | (uint)((int)local_20 < 0);
     }
     if (uVar4 == 10) {
-      FUN_00411a40(iVar7,0.3125,0x3f200000);
+      area_block_adddoor(iVar7,0.3125,0x3f200000);
     }
     if (uVar4 == 0xb) {
-      FUN_004120c0(iVar7,0x3d800000,0x3d800000);
+      area_block_addcorner(iVar7,0x3d800000,0x3d800000);
     }
     if (uVar4 == 0xc) {
-      FUN_00411f70(iVar7,0x3e800000,0.625);
+      area_block_addoutdoor(iVar7,0x3e800000,0.625);
     }
     iVar7 = iVar7 + 1;
     local_20 = local_20 << 1 | (uint)((int)local_20 < 0);
@@ -25775,7 +25807,7 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
   *(undefined4 *)(&DAT_137b2d70 + iVar6) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar6) = 1;
   if (param_1 == 0) {
-    FUN_00401e50(local_28);
+    landscape_buildsectorlods(local_28);
     return local_28;
   }
   if (0 < DAT_25bbd764) {
@@ -25907,16 +25939,16 @@ LAB_0042a4ca:
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
+#undef area_block_adddoor
+#undef area_block_addcorner
+#undef addbeziersurface
+#undef landscape_buildsectorlods
+#undef area_block_addwindowhorizontal
+#undef area_block_rotatesurface
 #undef __security_check_cookie
-#undef FUN_00410140
-#undef FUN_00402cf0
-#undef FUN_004105c0
-#undef FUN_004120c0
-#undef FUN_00401e50
-#undef FUN_0040f6f0
-#undef FUN_004118f0
-#undef FUN_00411f70
-#undef FUN_00411a40
+#undef area_block_addoutdoor
+#undef area_block_addwindow
+#undef area_block_addwindowvertical
 #undef local_28
 #undef local_24
 #undef local_20
@@ -26007,19 +26039,19 @@ LAB_0042a4ca:
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
-#define FUN_00411d70 ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
+#define area_block_addbox ((void (__cdecl *)(float, float, float, float, float, float, uint))SR_VA(0x410950))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_00410da0 ((void (__cdecl *)(uint, float *))SR_VA(0x410da0))
-#define FUN_00401e50 ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define FUN_00402cf0 ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define FUN_004026d0 ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
-#define FUN_00410950 ((void (__cdecl *)(float, float, float, float, float, float, uint))SR_VA(0x410950))
-#define FUN_0040d3a0 ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
-#define FUN_0040d680 ((void (__cdecl *)(int))SR_VA(0x40d680))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define FUN_004029a0 ((void (__cdecl *)(undefined4))SR_VA(0x4029a0))
+#define area_block_addbasicsurface ((void (__cdecl *)(uint, float *))SR_VA(0x410da0))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
+#define loadblock ((void (__cdecl *)(undefined4))SR_VA(0x4029a0))
+#define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_98 (*(float *)(lf_frame + 0x18))
 #define local_94 (*(float *)(lf_frame + 0x1c))
 #define local_90 (*(float *)(lf_frame + 0x20))
@@ -26083,8 +26115,8 @@ void __cdecl lf_2a510(void)
   local_4 = DAT_00460d18 ^ (uint)&local_98;
   _chdir("data");
   iVar6 = _chdir("block");
-  FUN_0040d3a0("*.sbl",0,0);
-  FUN_0040d680(0);
+  listfiles("*.sbl",0,0);
+  removeflieextentions(0);
   if (iVar6 == 0) {
     _chdir("..");
     _chdir("..");
@@ -26133,7 +26165,7 @@ LAB_0042a5e6:
         pbVar8 = pbVar8 + 1;
       } while (bVar5 != 0);
       local_80 = fVar17;
-      FUN_004029a0(local_44);
+      loadblock(local_44);
       if (0 < DAT_057d3548) {
         local_84 = DAT_057d3548;
         do {
@@ -26144,7 +26176,7 @@ LAB_0042a5e6:
               pfVar1 = (float *)(&DAT_057d354c + local_8c[1] * 0xc + iVar6);
               pfVar2 = (float *)(&DAT_057d354c + *local_8c * 0xc + iVar6);
               pfVar3 = (float *)(&DAT_057d354c + local_8c[-1] * 0xc + iVar6);
-              FUN_0040bb80(&local_70,pfVar3,pfVar2,pfVar1);
+              generatetrinormal(&local_70,pfVar3,pfVar2,pfVar1);
               iVar12 = DAT_25aad760;
               *(float *)&((&DAT_25aad764)[DAT_25aad760 * 3]) = *pfVar3;
               *(float *)&((&DAT_25aad768)[iVar12 * 3]) = pfVar3[1];
@@ -26263,8 +26295,8 @@ LAB_0042a5e6:
           } while ((int)puVar11 < ((int)SR_VA(0xbbe9168)));
           uVar14 = puVar19[0x4e];
           if (puVar19[0x4f] != 0) {
-            FUN_0040bb80(&local_70,(float *)&DAT_0bbe90a0,(float *)&DAT_0bbe90c4,
-                         (float *)&DAT_0bbe9154);
+            generatetrinormal(&local_70,(float *)&DAT_0bbe90a0,(float *)&DAT_0bbe90c4,
+                              (float *)&DAT_0bbe9154);
             if (local_6c <= 0.707) {
               if (-0.707 <= local_6c) {
                 if (local_70 <= 0.707) {
@@ -26292,8 +26324,8 @@ LAB_0042a5e6:
               uVar14 = uVar14 | 0x40000;
             }
           }
-          FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),puVar19[-6],LF_BITS_F(puVar19[-4]),puVar19[-5],
-                       LF_BITS_F(puVar19[-3]),uVar14);
+          addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),puVar19[-6],LF_BITS_F(puVar19[-4]),puVar19[-5],
+                           LF_BITS_F(puVar19[-3]),uVar14);
           iVar6 = iVar6 + 1;
           puVar19 = puVar19 + 0x57;
         } while (iVar6 < DAT_0577c544);
@@ -26310,7 +26342,7 @@ LAB_0042a5e6:
             do {
               iVar6 = local_84;
               local_98 = (float)local_84;
-              FUN_00410da0(0,&local_98);
+              area_block_addbasicsurface(0,&local_98);
               local_84 = iVar6 + 1;
               iVar6 = DAT_0577c520;
               iVar9 = DAT_0577c528;
@@ -26332,7 +26364,7 @@ LAB_0042a5e6:
               do {
                 iVar6 = local_84;
                 local_98 = (float)local_84;
-                FUN_00410da0(5,&local_98);
+                area_block_addbasicsurface(5,&local_98);
                 local_84 = iVar6 + 1;
                 iVar6 = DAT_0577c520;
                 iVar9 = DAT_0577c528;
@@ -26356,7 +26388,7 @@ LAB_0042a5e6:
               do {
                 iVar6 = local_84;
                 local_98 = (float)local_84;
-                FUN_00410da0(3,&local_98);
+                area_block_addbasicsurface(3,&local_98);
                 local_84 = iVar6 + 1;
                 iVar6 = DAT_0577c520;
                 iVar12 = DAT_0577c524;
@@ -26377,7 +26409,7 @@ LAB_0042a5e6:
             do {
               uVar14 = local_88;
               local_90 = (float)(int)local_88;
-              FUN_00410da0(4,&local_98);
+              area_block_addbasicsurface(4,&local_98);
               local_88 = uVar14 + 1;
               iVar9 = DAT_0577c528;
               iVar12 = DAT_0577c524;
@@ -26397,7 +26429,7 @@ LAB_0042a5e6:
               iVar6 = local_84;
               local_98 = (float)local_84;
               local_90 = 0.0;
-              FUN_00410da0(1,&local_98);
+              area_block_addbasicsurface(1,&local_98);
               local_84 = iVar6 + 1;
               iVar6 = DAT_0577c520;
               iVar12 = DAT_0577c524;
@@ -26420,7 +26452,7 @@ LAB_0042a5e6:
               do {
                 uVar14 = local_88;
                 local_90 = (float)(int)local_88;
-                FUN_00410da0(2,&local_98);
+                area_block_addbasicsurface(2,&local_98);
                 local_88 = uVar14 + 1;
                 iVar9 = DAT_0577c528;
                 iVar12 = DAT_0577c524;
@@ -26443,19 +26475,19 @@ LAB_0042a5e6:
         DAT_0bba8e64 = local_78;
       }
       *(uint *)(&DAT_137b2d80 + ((int)LF_BITS_U(fVar17))) = local_74;
-      FUN_00401e50(local_78);
+      landscape_buildsectorlods(local_78);
       iVar6 = iVar13 + 1;
-      FUN_004026d0(iVar6,(undefined4 *)(&DAT_137b2d6c + ((int)LF_BITS_U(fVar17))));
+      area_copyrotateblock(iVar6,(undefined4 *)(&DAT_137b2d6c + ((int)LF_BITS_U(fVar17))));
       *(uint *)(&DAT_137b2d80 + iVar6 * 0x84) = uVar14;
-      FUN_00401e50(iVar6);
+      landscape_buildsectorlods(iVar6);
       iVar9 = iVar13 + 2;
-      FUN_004026d0(iVar9,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
+      area_copyrotateblock(iVar9,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
       *(uint *)(&DAT_137b2d80 + iVar9 * 0x84) = uVar14;
-      FUN_00401e50(iVar9);
+      landscape_buildsectorlods(iVar9);
       iVar13 = iVar13 + 3;
-      FUN_004026d0(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar9 * 0x84));
+      area_copyrotateblock(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar9 * 0x84));
       *(uint *)(&DAT_137b2d80 + iVar13 * 0x84) = uVar14;
-      FUN_00401e50(iVar13);
+      landscape_buildsectorlods(iVar13);
       local_7c = local_7c + 1;
     } while (local_7c < g_filelist);
   }
@@ -26488,7 +26520,7 @@ LAB_0042a5e6:
     DAT_25aad760 = 0;
     DAT_25bbd764 = 0;
     DAT_25c4d768 = 0;
-    FUN_00411d70(0,0.0,0.875,0.9375,1.0,0.125,0.0625,0x3f,local_64);
+    area_block_addbeam(0,0.0,0.875,0.9375,1.0,0.125,0.0625,0x3f,local_64);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a4 = 0x3d800000;
     DAT_0bbe90a8 = 0;
@@ -26501,7 +26533,7 @@ LAB_0042a5e6:
     _DAT_0bbe9134 = 0x3d800000;
     DAT_0bbe90cc = 0;
     _DAT_0bbe9130 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
     if (iVar6 == 1) {
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3f800000;
@@ -26515,22 +26547,22 @@ LAB_0042a5e6:
       _DAT_0bbe9158 = 0;
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
-      uVar14 = FUN_00402cf0(1,0x60000);
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar14 | 2);
+      uVar14 = area_block_rotatesurface(1,0x60000);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar14 | 2);
     }
     iVar12 = iVar9 * 0x84;
     *(undefined4 *)(&DAT_137b2d6c + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d70 + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d74 + iVar12) = 1;
-    FUN_00401e50(iVar9);
+    landscape_buildsectorlods(iVar9);
     iVar13 = iVar9 + 1;
-    FUN_004026d0(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
-    FUN_00401e50(iVar13);
+    area_copyrotateblock(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
+    landscape_buildsectorlods(iVar13);
     iVar12 = iVar9 + 2;
-    FUN_004026d0(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
-    FUN_00401e50(iVar12);
-    FUN_004026d0(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
-    FUN_00401e50(iVar9 + 3);
+    area_copyrotateblock(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
+    landscape_buildsectorlods(iVar12);
+    area_copyrotateblock(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
+    landscape_buildsectorlods(iVar9 + 3);
     iVar6 = iVar6 + 1;
   } while (iVar6 < 2);
   iVar6 = 0;
@@ -26569,7 +26601,7 @@ LAB_0042a5e6:
     DAT_25aad760 = 0;
     DAT_25bbd764 = 0;
     DAT_25c4d768 = 0;
-    FUN_00411d70(0,0.0,0.0,0.9375,1.0,0.25,0.0625,0x3f,local_64);
+    area_block_addbeam(0,0.0,0.0,0.9375,1.0,0.25,0.0625,0x3f,local_64);
     if (iVar6 == 1) {
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3f800000;
@@ -26583,10 +26615,10 @@ LAB_0042a5e6:
       _DAT_0bbe9158 = 0;
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
-      uVar14 = FUN_00402cf0(3,0x60000);
+      uVar14 = area_block_rotatesurface(3,0x60000);
       uVar14 = uVar14 | 4;
 LAB_0042b290:
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar14);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar14);
     }
     else if (iVar6 == 2) {
       DAT_0bbe90a0 = 0;
@@ -26601,7 +26633,7 @@ LAB_0042b290:
       _DAT_0bbe9158 = 0;
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
-      uVar14 = FUN_00402cf0(1,0x60000);
+      uVar14 = area_block_rotatesurface(1,0x60000);
       uVar14 = uVar14 | 2;
       goto LAB_0042b290;
     }
@@ -26617,20 +26649,20 @@ LAB_0042b290:
     _DAT_0bbe915c = 0;
     _DAT_0bbe9130 = 0;
     _DAT_0bbe9138 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
     iVar12 = iVar9 * 0x84;
     *(undefined4 *)(&DAT_137b2d6c + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d70 + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d74 + iVar12) = 1;
-    FUN_00401e50(iVar9);
+    landscape_buildsectorlods(iVar9);
     iVar13 = iVar9 + 1;
-    FUN_004026d0(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
-    FUN_00401e50(iVar13);
+    area_copyrotateblock(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
+    landscape_buildsectorlods(iVar13);
     iVar12 = iVar9 + 2;
-    FUN_004026d0(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
-    FUN_00401e50(iVar12);
-    FUN_004026d0(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
-    FUN_00401e50(iVar9 + 3);
+    area_copyrotateblock(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
+    landscape_buildsectorlods(iVar12);
+    area_copyrotateblock(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
+    landscape_buildsectorlods(iVar9 + 3);
     iVar9 = DAT_0bba8ee4;
     iVar6 = iVar6 + 1;
   } while (iVar6 < 3);
@@ -26658,17 +26690,17 @@ LAB_0042b290:
     else {
       fVar17 = 0.125;
     }
-    FUN_00411d70(0,0.0,local_94,local_90,0.5,0.0625,fVar17,0x3f,local_64);
+    area_block_addbeam(0,0.0,local_94,local_90,0.5,0.0625,fVar17,0x3f,local_64);
     iVar12 = iVar12 + 1;
     local_94 = (float)(local_94 + 0.0625);
     local_90 = (float)(local_90 + 0.125);
   } while (iVar12 < 8);
   local_80 = (float)(local_94 - 0.0625);
-  FUN_00411d70(0,0.5,local_80,local_90,0.5,0.0625,0.625,0x3f,local_64);
+  area_block_addbeam(0,0.5,local_80,local_90,0.5,0.0625,0.625,0x3f,local_64);
   uVar14 = 8;
   do {
     local_90 = (float)(local_90 - 0.125);
-    FUN_00411d70(0,0.5,local_94,local_90,0.5,0.0625,0.125,0x3f,local_64);
+    area_block_addbeam(0,0.5,local_94,local_90,0.5,0.0625,0.125,0x3f,local_64);
     local_94 = (float)(local_94 + 0.0625);
     uVar14 = uVar14 - 1;
   } while (uVar14 != 0);
@@ -26684,7 +26716,7 @@ LAB_0042b290:
   DAT_0bbe90c8 = 0x40000000;
   DAT_0bbe90cc = 0x40000000;
   _DAT_0bbe915c = 0x40000000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0x3d800000;
   DAT_0bbe90a8 = 0;
@@ -26697,7 +26729,7 @@ LAB_0042b290:
   _DAT_0bbe9138 = 0x40000000;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9134 = 0x3d800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0x3ff00000;
   DAT_0bbe90a8 = 0x40000000;
@@ -26710,33 +26742,33 @@ LAB_0042b290:
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30005);
   local_64[1] = 1;
   local_64[2] = 2;
   local_64[3] = 3;
   local_64[4] = 4;
   local_64[5] = 5;
   local_64[0] = uVar14;
-  FUN_00411d70(0,0.0,0.875,0.0,1.0,0.125,0.0625,0x3f,local_64);
+  area_block_addbeam(0,0.0,0.875,0.0,1.0,0.125,0.0625,0x3f,local_64);
   local_64[0] = 1;
   local_64[1] = 1;
   local_64[2] = 2;
   local_64[3] = 3;
   local_64[4] = 4;
   local_64[5] = 5;
-  FUN_00411d70(0,0.0,1.0,0.0,0.5,0.25,0.0625,0x3f,local_64);
+  area_block_addbeam(0,0.0,1.0,0.0,0.5,0.25,0.0625,0x3f,local_64);
   *(undefined4 *)(&DAT_137b2d6c + iVar6) = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar6) = 2;
   *(undefined4 *)(&DAT_137b2d74 + iVar6) = 2;
-  FUN_00401e50(iVar9);
+  landscape_buildsectorlods(iVar9);
   iVar12 = iVar9 + 1;
-  FUN_004026d0(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar6));
-  FUN_00401e50(iVar12);
+  area_copyrotateblock(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar6));
+  landscape_buildsectorlods(iVar12);
   iVar6 = iVar9 + 2;
-  FUN_004026d0(iVar6,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
-  FUN_00401e50(iVar6);
-  FUN_004026d0(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
-  FUN_00401e50(iVar9 + 3);
+  area_copyrotateblock(iVar6,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
+  landscape_buildsectorlods(iVar6);
+  area_copyrotateblock(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
+  landscape_buildsectorlods(iVar9 + 3);
   iVar6 = DAT_0bba8cfc;
   DAT_25aad760 = 0;
   DAT_25bbd764 = 0;
@@ -26753,7 +26785,7 @@ LAB_0042b290:
   DAT_0bbe90c8 = 0x3f800000;
   DAT_0bbe90cc = 0x3f800000;
   _DAT_0bbe915c = 0x3f800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3f700000;
@@ -26766,7 +26798,7 @@ LAB_0042b290:
   DAT_0bbe90cc = 0x3f700000;
   _DAT_0bbe915c = 0x3f700000;
   _DAT_0bbe9138 = 0x3f700000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50002);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50002);
   DAT_0bbe90a0 = 0x3d800000;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3f800000;
@@ -26779,17 +26811,17 @@ LAB_0042b290:
   _DAT_0bbe9154 = 0x3d800000;
   _DAT_0bbe9130 = 0x3d800000;
   _DAT_0bbe9138 = 0x3f800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x20002);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x20002);
   iVar9 = iVar6 * 0x84;
   *(undefined4 *)(&DAT_137b2d6c + iVar9) = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar9) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar9) = 1;
-  FUN_00401e50(iVar6);
+  landscape_buildsectorlods(iVar6);
   piVar20 = &DAT_0bba8d00;
   do {
     iVar9 = *piVar20;
-    FUN_004026d0(iVar9,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
-    FUN_00401e50(iVar9);
+    area_copyrotateblock(iVar9,(undefined4 *)(&DAT_137b2d6c + iVar6 * 0x84));
+    landscape_buildsectorlods(iVar9);
     piVar20 = piVar20 + 1;
     iVar6 = iVar9;
   } while ((int)piVar20 < ((int)SR_VA(0xbba8d0c)));
@@ -26826,8 +26858,8 @@ LAB_0042b290:
     DAT_25c4d768 = 0;
     local_90 = 0.0;
     if (iVar6 == 2) {
-      FUN_00410950(0.5,0.0,0.0,0.5,0.0625,0.125,0);
-      FUN_00410950(0.0,0.0,0.0,0.5,1.0,0.0625,2);
+      area_block_addbox(0.5,0.0,0.0,0.5,0.0625,0.125,0);
+      area_block_addbox(0.0,0.0,0.0,0.5,1.0,0.0625,2);
     }
     else {
       do {
@@ -26837,13 +26869,13 @@ LAB_0042b290:
         else {
           fVar17 = 0.125;
         }
-        FUN_00410950(0.0,local_94,local_90,0.5,0.0625,fVar17,0);
+        area_block_addbox(0.0,local_94,local_90,0.5,0.0625,fVar17,0);
         iVar21 = iVar21 + 1;
         local_94 = (float)(local_94 + 0.0625);
         local_90 = (float)(local_90 + 0.125);
       } while (iVar21 < 8);
       local_80 = (float)(local_94 - 0.0625);
-      FUN_00410950(0.5,local_80,local_90,0.5,0.0625,1.0,0);
+      area_block_addbox(0.5,local_80,local_90,0.5,0.0625,1.0,0);
       iVar12 = 0;
       do {
         local_90 = (float)(local_90 - 0.125);
@@ -26852,7 +26884,7 @@ LAB_0042b290:
           fVar17 = (float)(local_94 - 1.0);
           local_80 = fVar17;
         }
-        FUN_00410950(0.5,fVar17,local_90,0.5,0.0625,0.125,0);
+        area_block_addbox(0.5,fVar17,local_90,0.5,0.0625,0.125,0);
         iVar12 = iVar12 + 1;
         local_94 = (float)(local_94 + 0.0625);
       } while (iVar12 < 8);
@@ -26869,7 +26901,7 @@ LAB_0042b290:
     _DAT_0bbe9154 = 0x3d800000;
     _DAT_0bbe9130 = 0x3d800000;
     _DAT_0bbe9138 = 0x40000000;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x20004);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x20004);
     DAT_0bbe90a0 = 0x3f700000;
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0;
@@ -26882,7 +26914,7 @@ LAB_0042b290:
     _DAT_0bbe9158 = 0;
     _DAT_0bbe9134 = 0;
     _DAT_0bbe9138 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x10002);
     if (iVar6 == 0) {
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3d800000;
@@ -26896,7 +26928,7 @@ LAB_0042b290:
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
       _DAT_0bbe9138 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50003);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50003);
 LAB_0042bdb3:
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3f800000;
@@ -26910,7 +26942,7 @@ LAB_0042bdb3:
       _DAT_0bbe915c = 0;
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9138 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50003);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x50003);
       if (iVar6 == 1) {
         uVar23 = 0x40000;
         DAT_0bbe90a4 = 0x3d800000;
@@ -26940,7 +26972,7 @@ LAB_0042be90:
       _DAT_0bbe9130 = 0;
       DAT_0bbe90c4 = 0x3f800000;
       DAT_0bbe90a0 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar23);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,uVar23);
     }
     DAT_0bbe90a0 = 0x3f800000;
     DAT_0bbe90a4 = 0x3f800000;
@@ -26954,20 +26986,20 @@ LAB_0042be90:
     DAT_0bbe90cc = 0x3fc00000;
     _DAT_0bbe915c = 0x3fc00000;
     _DAT_0bbe9138 = 0x3fc00000;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x60001);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x60001);
     iVar12 = iVar9 * 0x84;
     *(undefined4 *)(&DAT_137b2d6c + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d70 + iVar12) = 1;
     *(undefined4 *)(&DAT_137b2d74 + iVar12) = 2;
-    FUN_00401e50(iVar9);
+    landscape_buildsectorlods(iVar9);
     iVar13 = iVar9 + 1;
-    FUN_004026d0(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
-    FUN_00401e50(iVar13);
+    area_copyrotateblock(iVar13,(undefined4 *)(&DAT_137b2d6c + iVar12));
+    landscape_buildsectorlods(iVar13);
     iVar12 = iVar9 + 2;
-    FUN_004026d0(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
-    FUN_00401e50(iVar12);
-    FUN_004026d0(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
-    FUN_00401e50(iVar9 + 3);
+    area_copyrotateblock(iVar12,(undefined4 *)(&DAT_137b2d6c + iVar13 * 0x84));
+    landscape_buildsectorlods(iVar12);
+    area_copyrotateblock(iVar9 + 3,(undefined4 *)(&DAT_137b2d6c + iVar12 * 0x84));
+    landscape_buildsectorlods(iVar9 + 3);
     iVar6 = iVar6 + 1;
     if (2 < iVar6) {
       return;
@@ -27055,19 +27087,19 @@ LAB_0042be90:
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9130
-#undef FUN_00411d70
+#undef listfiles
+#undef area_block_addbeam
+#undef area_block_addbox
 #undef _chdir
 #undef __security_check_cookie
-#undef FUN_0040bb80
-#undef FUN_00410da0
-#undef FUN_00401e50
-#undef FUN_00402cf0
-#undef FUN_004026d0
-#undef FUN_00410950
-#undef FUN_0040d3a0
-#undef FUN_0040d680
-#undef FUN_0040f6f0
-#undef FUN_004029a0
+#undef area_block_addbasicsurface
+#undef area_block_rotatesurface
+#undef addbeziersurface
+#undef area_copyrotateblock
+#undef landscape_buildsectorlods
+#undef loadblock
+#undef removeflieextentions
+#undef generatetrinormal
 #undef local_98
 #undef local_94
 #undef local_90
@@ -27087,10 +27119,10 @@ LAB_0042be90:
 
 /* ---------------------------------------------------------------- 0x2c020 */
 #define DAT_137b2d78 (*(undefined *)SR_VA(0x137b2d78))
-#define FUN_00416e30 ((void (__cdecl *)(int, int, int, int, int, int, undefined4 *, undefined4 *))SR_VA(0x416e30))
-#define FUN_00402dc0 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402dc0))
+#define createevent_updateblock_quad ((void (__cdecl *)(int, int, int, int, int, int, undefined4 *, undefined4 *))SR_VA(0x416e30))
+#define area_interior_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402dc0))
 undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5,int param_6,
-            undefined4 *param_7,undefined4 *param_8)
+               undefined4 *param_7,undefined4 *param_8)
 
 {
   if ((3 < param_1) || ((int)param_2 < 0)) {
@@ -27102,13 +27134,14 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
   if (*(int *)(&DAT_137b2d78 + (param_5 & 0xffff) * 0x84) <= param_6) {
     return 0;
   }
-  FUN_00416e30(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
-  FUN_00402dc0(param_1,param_2,param_3,param_4,(3 << ((byte)param_6 & 0x1e)) << 0x10 | param_5);
+  createevent_updateblock_quad(param_1,param_2,param_3,param_4,param_5,param_6,param_7,param_8);
+  area_interior_setblock
+            (param_1,param_2,param_3,param_4,(3 << ((byte)param_6 & 0x1e)) << 0x10 | param_5);
   return 1;
 }
 #undef DAT_137b2d78
-#undef FUN_00416e30
-#undef FUN_00402dc0
+#undef createevent_updateblock_quad
+#undef area_interior_setblock
 
 /* ---------------------------------------------------------------- 0x2c0c0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -27150,18 +27183,18 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
 #define DAT_19951f44 (*(undefined *)SR_VA(0x19951f44))
+#define addvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_00412450 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, uint, float))SR_VA(0x412450))
-#define FUN_0040bc20 ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define FUN_00403030 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define lineintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, uint, float))SR_VA(0x412450))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00414dd0 ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *, float *, float *))SR_VA(0x414dd0))
-#define FUN_0040b9d0 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
-#define FUN_004126b0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, float, float))SR_VA(0x4126b0))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define lineintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *, float *, float *))SR_VA(0x414dd0))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define lineintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, float, float))SR_VA(0x4126b0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
 #define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
 #define local_c4 (*(float *)(lf_frame + 0x1c))
 #define local_c0 (*(uint *)(lf_frame + 0x20))
@@ -27182,8 +27215,8 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define local_40 (*(uint (*)[6])(lf_frame + 0xa0))
 #define local_28 (*(float (*)[9])(lf_frame + 0xb8))
 #define local_4 (*(uint *)(lf_frame + 0xdc))
-int __cdecl lf_2c0c0(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,float *param_6
-            )
+int __cdecl lf_2c0c0(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,
+                 float *param_6)
 
 {
   __declspec(align(16)) uchar lf_frame[0xe0];
@@ -27362,7 +27395,7 @@ int __cdecl lf_2c0c0(float *param_1,float *param_2,float *param_3,uint param_4,f
           if (uVar7 == 1) {
             fVar6 = 1.5707964;
 LAB_0042c6a4:
-            FUN_0040bc50(&local_b8,(float *)&DAT_00460ce0,fVar6);
+            rotatevector(&local_b8,(float *)&DAT_00460ce0,fVar6);
           }
           else {
             if (uVar7 == 2) {
@@ -27379,11 +27412,11 @@ LAB_0042c6a4:
           local_b4 = (float)((float)(int)local_88[1] * *(float *)(&DAT_17166080 + iVar10) + local_b4);
           local_b0 = (float)((float)(int)local_88[2] * *(float *)(&DAT_17166080 + iVar10) +
                      *(float *)(&DAT_17166080 + iVar10) * 0.5 + local_b0);
-          FUN_0040bc20(local_28);
+          resetorientation(local_28);
           if (uVar7 == 1) {
             fVar6 = 1.5707964;
 LAB_0042c75a:
-            FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,fVar6);
+            rotateorientation((int)local_28,(float *)&DAT_00460ce0,fVar6);
           }
           else {
             if (uVar7 == 2) {
@@ -27396,13 +27429,14 @@ LAB_0042c75a:
             }
           }
           pfVar11 = local_bc;
-          iVar5 = FUN_00414dd0(param_1,local_bc,local_a4,uVar13,&local_b8,local_28,local_7c + 6,
-                               local_7c + 9);
+          iVar5 = lineintersectcityobjecttype
+                            (param_1,local_bc,local_a4,uVar13,&local_b8,local_28,local_7c + 6,
+                             local_7c + 9);
           pfVar4 = local_ac;
           if (iVar5 != 0) {
-            FUN_0040bb00(param_1,param_1,local_ac);
-            FUN_0040b9d0(param_1,param_1,local_a8);
-            FUN_0040bb00(pfVar11,pfVar11,pfVar4);
+            projectvector(param_1,param_1,local_ac);
+            addvectors(param_1,param_1,local_a8);
+            projectvector(pfVar11,pfVar11,pfVar4);
             DAT_107484f4 = local_c0;
             DAT_107484f8 = local_88[0];
             DAT_107484fc = local_88[1];
@@ -27417,13 +27451,14 @@ LAB_0042c75a:
         if (LF_BITS_U(fVar6) != 0x0U) {
           uVar7 = ((uint)LF_BITS_U(fVar6)) & 0xe0000000;
           if (uVar7 == 0x40000000) {
-            iVar5 = FUN_00412450(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88
-                                 ,((uint)LF_BITS_U(fVar6)),*(float *)(&DAT_17166080 + iVar10));
+            iVar5 = lineintersectnormalblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88,
+                               ((uint)LF_BITS_U(fVar6)),*(float *)(&DAT_17166080 + iVar10));
             pfVar4 = local_ac;
             if (iVar5 != 0) {
-              FUN_0040bb00(param_1,param_1,local_ac);
-              FUN_0040b9d0(param_1,param_1,local_a8);
-              FUN_0040bb00(pfVar11,pfVar11,pfVar4);
+              projectvector(param_1,param_1,local_ac);
+              addvectors(param_1,param_1,local_a8);
+              projectvector(pfVar11,pfVar11,pfVar4);
               DAT_107484f4 = local_c0;
               DAT_107484f8 = local_88[0];
               DAT_107484fc = local_88[1];
@@ -27433,8 +27468,9 @@ LAB_0042c75a:
             }
           }
           else if (uVar7 == 0x80000000) {
-            iVar5 = FUN_004126b0(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88
-                                 ,fVar6,*(float *)(&DAT_17166080 + iVar10));
+            iVar5 = lineintersectspecblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88,
+                               fVar6,*(float *)(&DAT_17166080 + iVar10));
             if (iVar5 != 0) goto LAB_0042c893;
           }
           else if (uVar7 == 0xc0000000) {
@@ -27442,14 +27478,15 @@ LAB_0042c75a:
             local_98 = local_88[2] - (((uint)LF_BITS_U(fVar6)) >> 8 & 0xff);
             uVar7 = local_88[0] - (((uint)LF_BITS_U(fVar6)) & 0xff);
             local_a0 = uVar7;
-            fVar6 = LF_BITS_F(FUN_00401850(local_c0,uVar7,local_9c,local_98));
-            iVar5 = FUN_004126b0(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,
-                                 (int *)&local_a0,fVar6,*(float *)(&DAT_17166080 + iVar10));
+            fVar6 = LF_BITS_F(area_getblock(local_c0,uVar7,local_9c,local_98));
+            iVar5 = lineintersectspecblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)&local_a0,
+                               fVar6,*(float *)(&DAT_17166080 + iVar10));
             pfVar11 = local_ac;
             if (iVar5 != 0) {
-              FUN_0040bb00(param_1,param_1,local_ac);
-              FUN_0040b9d0(param_1,param_1,local_a8);
-              FUN_0040bb00(local_bc,local_bc,pfVar11);
+              projectvector(param_1,param_1,local_ac);
+              addvectors(param_1,param_1,local_a8);
+              projectvector(local_bc,local_bc,pfVar11);
               DAT_107484f4 = local_c0;
               DAT_107484f8 = uVar7;
               DAT_107484fc = local_9c;
@@ -27464,14 +27501,15 @@ LAB_0042c75a:
         if (LF_BITS_U(fVar6) != 0x0U) {
           uVar7 = ((uint)LF_BITS_U(fVar6)) & 0xe0000000;
           if (uVar7 == 0x40000000) {
-            iVar5 = FUN_00412450(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88
-                                 ,((uint)LF_BITS_U(fVar6)),*(float *)(&DAT_17166080 + iVar10));
+            iVar5 = lineintersectnormalblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88,
+                               ((uint)LF_BITS_U(fVar6)),*(float *)(&DAT_17166080 + iVar10));
             if (iVar5 != 0) {
 LAB_0042c893:
               pfVar4 = local_ac;
-              FUN_0040bb00(param_1,param_1,local_ac);
-              FUN_0040b9d0(param_1,param_1,local_a8);
-              FUN_0040bb00(pfVar11,pfVar11,pfVar4);
+              projectvector(param_1,param_1,local_ac);
+              addvectors(param_1,param_1,local_a8);
+              projectvector(pfVar11,pfVar11,pfVar4);
               DAT_107484f4 = local_c0;
               DAT_107484f8 = local_88[0];
               DAT_107484fc = local_88[1];
@@ -27481,13 +27519,14 @@ LAB_0042c893:
             }
           }
           else if (uVar7 == 0x80000000) {
-            iVar5 = FUN_004126b0(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88
-                                 ,fVar6,*(float *)(&DAT_17166080 + iVar10));
+            iVar5 = lineintersectspecblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)local_88,
+                               fVar6,*(float *)(&DAT_17166080 + iVar10));
             pfVar4 = local_ac;
             if (iVar5 != 0) {
-              FUN_0040bb00(param_1,param_1,local_ac);
-              FUN_0040b9d0(param_1,param_1,local_a8);
-              FUN_0040bb00(pfVar11,pfVar11,pfVar4);
+              projectvector(param_1,param_1,local_ac);
+              addvectors(param_1,param_1,local_a8);
+              projectvector(pfVar11,pfVar11,pfVar4);
               DAT_107484f4 = local_c0;
               DAT_107484f8 = local_88[0];
               DAT_107484fc = local_88[1];
@@ -27501,14 +27540,15 @@ LAB_0042c893:
             local_98 = local_88[2] - (((uint)LF_BITS_U(fVar6)) >> 8 & 0xff);
             uVar7 = local_88[0] - (((uint)LF_BITS_U(fVar6)) & 0xff);
             local_a0 = uVar7;
-            fVar6 = LF_BITS_F(FUN_00403030(local_c0,uVar7,local_9c,local_98));
-            iVar5 = FUN_004126b0(param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,
-                                 (int *)&local_a0,fVar6,*(float *)(&DAT_17166080 + iVar10));
+            fVar6 = LF_BITS_F(area_interior_getblock(local_c0,uVar7,local_9c,local_98));
+            iVar5 = lineintersectspecblock
+                              (param_1,local_bc,local_a4,local_7c + 6,local_7c + 9,(int *)&local_a0,
+                               fVar6,*(float *)(&DAT_17166080 + iVar10));
             pfVar11 = local_ac;
             if (iVar5 != 0) {
-              FUN_0040bb00(param_1,param_1,local_ac);
-              FUN_0040b9d0(param_1,param_1,local_a8);
-              FUN_0040bb00(local_bc,local_bc,pfVar11);
+              projectvector(param_1,param_1,local_ac);
+              addvectors(param_1,param_1,local_a8);
+              projectvector(local_bc,local_bc,pfVar11);
               DAT_107484f4 = local_c0;
               DAT_107484f8 = uVar7;
               DAT_107484fc = local_9c;
@@ -27596,18 +27636,18 @@ LAB_0042c893:
 #undef DAT_1994d744
 #undef DAT_19950744
 #undef DAT_19951f44
+#undef addvectors
+#undef projectvector
 #undef __security_check_cookie
-#undef FUN_0040bb00
-#undef FUN_00412450
-#undef FUN_0040bc20
-#undef FUN_00403030
-#undef FUN_00401850
+#undef lineintersectnormalblock
+#undef area_interior_getblock
 #undef _ftol2
-#undef FUN_0040bc50
-#undef FUN_0040bdb0
-#undef FUN_00414dd0
-#undef FUN_0040b9d0
-#undef FUN_004126b0
+#undef rotatevector
+#undef lineintersectcityobjecttype
+#undef area_getblock
+#undef lineintersectspecblock
+#undef rotateorientation
+#undef resetorientation
 #undef floor
 #undef local_c4
 #undef local_c0
@@ -27635,8 +27675,8 @@ LAB_0042c893:
 #define DAT_00460020 (*(undefined *)SR_VA(0x460020))
 #define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
 #define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
-#define FUN_0041a700 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
-#define FUN_0041a7f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define local_60 (*(uint *)(lf_frame + 0x10))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -27660,7 +27700,7 @@ LAB_0042c893:
 #define local_8 (*(float *)(lf_frame + 0x68))
 #define local_4 (*(float *)(lf_frame + 0x6c))
 undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,int *param_6,
-            uint param_7,float param_8)
+          uint param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x70];
@@ -27733,8 +27773,9 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
       local_50 = (float)(param_4[1] - local_2c);
       local_4c = (float)(param_4[2] - local_28);
       if (0.0 < (float)(local_4c * local_40 + (local_54 * local_48 + local_50 * local_44))) {
-        iVar6 = FUN_0041a700(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,
-                             &local_18,&local_24);
+        iVar6 = sphereintersecttriangle
+                          (&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,&local_18
+                           ,&local_24);
         if ((iVar6 != 0) && (LF_BITS_F(param_6) < *param_3)) {
           *param_1 = local_54;
           param_1[1] = local_50;
@@ -27744,8 +27785,9 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
           param_2[2] = local_40;
           *param_3 = LF_BITS_F(param_6);
         }
-        iVar6 = FUN_0041a700(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,
-                             &local_24,&local_c);
+        iVar6 = sphereintersecttriangle
+                          (&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,&local_24
+                           ,&local_c);
         if ((iVar6 != 0) && (LF_BITS_F(param_6) < *param_3)) {
           *param_1 = local_54;
           param_1[1] = local_50;
@@ -27755,8 +27797,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
           param_2[2] = local_40;
           *param_3 = LF_BITS_F(param_6);
         }
-        iVar6 = FUN_0041a7f0(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,
-                             &local_18);
+        iVar6 = sphereintersectline(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_30,
+                                    &local_18);
         if ((iVar6 != 0) && (LF_BITS_F(param_6) < *param_3)) {
           *param_1 = local_54;
           param_1[1] = local_50;
@@ -27766,8 +27808,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
           param_2[2] = local_40;
           *param_3 = LF_BITS_F(param_6);
         }
-        iVar6 = FUN_0041a7f0(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_18,
-                             &local_24);
+        iVar6 = sphereintersectline(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_18,
+                                    &local_24);
         if ((iVar6 != 0) && (LF_BITS_F(param_6) < *param_3)) {
           *param_1 = local_54;
           param_1[1] = local_50;
@@ -27777,8 +27819,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
           param_2[2] = local_40;
           *param_3 = LF_BITS_F(param_6);
         }
-        iVar6 = FUN_0041a7f0(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_24,
-                             &local_c);
+        iVar6 = sphereintersectline(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_24,
+                                    &local_c);
         if ((iVar6 != 0) && (LF_BITS_F(param_6) < *param_3)) {
           *param_1 = local_54;
           param_1[1] = local_50;
@@ -27788,8 +27830,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
           param_2[2] = local_40;
           *param_3 = LF_BITS_F(param_6);
         }
-        iVar6 = FUN_0041a7f0(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_c,
-                             &local_30);
+        iVar6 = sphereintersectline(&local_54,&local_48,(float *)&param_6,param_4,param_5,&local_c,
+                                    &local_30);
         fVar3 = local_34;
         fVar2 = local_38;
         fVar5 = local_3c;
@@ -27820,8 +27862,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_00460020
 #undef DAT_00460080
 #undef g_cubevertex
-#undef FUN_0041a700
-#undef FUN_0041a7f0
+#undef sphereintersectline
+#undef sphereintersecttriangle
 #undef local_60
 #undef local_54
 #undef local_50
@@ -27850,9 +27892,9 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_137b2d54 (*(undefined *)SR_VA(0x137b2d54))
 #define DAT_137b2d58 (*(undefined *)SR_VA(0x137b2d58))
 #define DAT_137b2d78 (*(undefined *)SR_VA(0x137b2d78))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0041a700 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
-#define FUN_0041a7f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_60 (*(int *)(lf_frame + 0x10))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -27876,7 +27918,7 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
 #define local_8 (*(float *)(lf_frame + 0x68))
 #define local_4 (*(float *)(lf_frame + 0x6c))
 undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,int *param_6,
-            float param_7,float param_8)
+          float param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x70];
@@ -27949,7 +27991,7 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
         local_c = (float)(*pfVar1 * fVar6 + fVar7);
         local_8 = (float)(pfVar1[1] * fVar6 + fVar4);
         local_4 = (float)(fVar5 + pfVar1[2] * fVar6);
-        FUN_0040bb80(&local_48,&local_30,&local_18,&local_24);
+        generatetrinormal(&local_48,&local_30,&local_18,&local_24);
         local_54 = (float)(*param_4 - local_30);
         local_50 = (float)(param_4[1] - local_2c);
         local_4c = (float)(param_4[2] - local_28);
@@ -27958,8 +28000,9 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
         fVar7 = local_3c;
         fVar6 = param_8;
         if (0.0 < (float)(local_40 * local_4c + (local_48 * local_54 + local_44 * local_50))) {
-          iVar10 = FUN_0041a700(&local_54,&local_48,&param_7,param_4,param_5,&local_30,&local_18,
-                                &local_24);
+          iVar10 = sphereintersecttriangle
+                             (&local_54,&local_48,&param_7,param_4,param_5,&local_30,&local_18,
+                              &local_24);
           if ((iVar10 != 0) && (param_7 < *param_3)) {
             *param_1 = local_54;
             param_1[1] = local_50;
@@ -27969,8 +28012,9 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
             param_2[2] = local_40;
             *param_3 = param_7;
           }
-          iVar10 = FUN_0041a700(&local_54,&local_48,&param_7,param_4,param_5,&local_30,&local_24,
-                                &local_c);
+          iVar10 = sphereintersecttriangle
+                             (&local_54,&local_48,&param_7,param_4,param_5,&local_30,&local_24,
+                              &local_c);
           if ((iVar10 != 0) && (param_7 < *param_3)) {
             *param_1 = local_54;
             param_1[1] = local_50;
@@ -27980,7 +28024,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
             param_2[2] = local_40;
             *param_3 = param_7;
           }
-          iVar10 = FUN_0041a7f0(&local_54,&local_48,&param_7,param_4,param_5,&local_30,&local_18);
+          iVar10 = sphereintersectline(&local_54,&local_48,&param_7,param_4,param_5,&local_30,
+                                       &local_18);
           if ((iVar10 != 0) && (param_7 < *param_3)) {
             *param_1 = local_54;
             param_1[1] = local_50;
@@ -27990,7 +28035,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
             param_2[2] = local_40;
             *param_3 = param_7;
           }
-          iVar10 = FUN_0041a7f0(&local_54,&local_48,&param_7,param_4,param_5,&local_18,&local_24);
+          iVar10 = sphereintersectline(&local_54,&local_48,&param_7,param_4,param_5,&local_18,
+                                       &local_24);
           if ((iVar10 != 0) && (param_7 < *param_3)) {
             *param_1 = local_54;
             param_1[1] = local_50;
@@ -28000,7 +28046,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
             param_2[2] = local_40;
             *param_3 = param_7;
           }
-          iVar10 = FUN_0041a7f0(&local_54,&local_48,&param_7,param_4,param_5,&local_24,&local_c);
+          iVar10 = sphereintersectline(&local_54,&local_48,&param_7,param_4,param_5,&local_24,
+                                       &local_c);
           if ((iVar10 != 0) && (param_7 < *param_3)) {
             *param_1 = local_54;
             param_1[1] = local_50;
@@ -28010,7 +28057,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
             param_2[2] = local_40;
             *param_3 = param_7;
           }
-          iVar10 = FUN_0041a7f0(&local_54,&local_48,&param_7,param_4,param_5,&local_c,&local_30);
+          iVar10 = sphereintersectline(&local_54,&local_48,&param_7,param_4,param_5,&local_c,
+                                       &local_30);
           fVar5 = local_34;
           fVar4 = local_38;
           fVar7 = local_3c;
@@ -28039,9 +28087,9 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_137b2d54
 #undef DAT_137b2d58
 #undef DAT_137b2d78
-#undef FUN_0040bb80
-#undef FUN_0041a700
-#undef FUN_0041a7f0
+#undef sphereintersectline
+#undef sphereintersecttriangle
+#undef generatetrinormal
 #undef local_60
 #undef local_54
 #undef local_50
@@ -28072,7 +28120,7 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_00460020 (*(undefined *)SR_VA(0x460020))
 #define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
 #define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
-#define FUN_0041a000 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
+#define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
 #define local_58 (*(uint *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -28095,8 +28143,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
 #define local_c (*(float *)(lf_frame + 0x64))
 #define local_8 (*(float *)(lf_frame + 0x68))
 #define local_4 (*(float *)(lf_frame + 0x6c))
-undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float param_6,int *param_7,uint param_8,float param_9)
+undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float param_6,
+          int *param_7,uint param_8,float param_9)
 
 {
   __declspec(align(16)) uchar lf_frame[0x70];
@@ -28162,8 +28210,9 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
       local_54 = pfVar5[-2];
       local_50 = pfVar5[-1];
       local_4c = *pfVar5;
-      iVar3 = FUN_0041a000(&local_3c,&local_54,(float *)&param_7,param_4,param_5,param_6,&local_24,
-                           &local_18,&local_30);
+      iVar3 = circleintersecttriangle
+                        (&local_3c,&local_54,(float *)&param_7,param_4,param_5,param_6,&local_24,
+                         &local_18,&local_30);
       if ((iVar3 != 0) && (LF_BITS_F(param_7) < *param_3)) {
         *param_1 = local_3c;
         param_1[1] = local_38;
@@ -28177,8 +28226,9 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
       local_54 = pfVar5[-2];
       local_50 = pfVar5[-1];
       local_4c = *pfVar5;
-      iVar3 = FUN_0041a000(&local_3c,&local_54,(float *)&param_7,param_4,param_5,param_6,&local_24,
-                           &local_30,&local_c);
+      iVar3 = circleintersecttriangle
+                        (&local_3c,&local_54,(float *)&param_7,param_4,param_5,param_6,&local_24,
+                         &local_30,&local_c);
       local_4 = local_40;
       local_8 = local_44;
       local_c = local_48;
@@ -28210,7 +28260,7 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_00460020
 #undef DAT_00460080
 #undef g_cubevertex
-#undef FUN_0041a000
+#undef circleintersecttriangle
 #undef local_58
 #undef local_54
 #undef local_50
@@ -28244,8 +28294,8 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_137b2d64 (*(undefined *)SR_VA(0x137b2d64))
 #define DAT_137b2d68 (*(undefined *)SR_VA(0x137b2d68))
 #define DAT_137b2d78 (*(undefined *)SR_VA(0x137b2d78))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0041a000 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
+#define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -28264,8 +28314,8 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
 #define local_c (*(float *)(lf_frame + 0x54))
 #define local_8 (*(float *)(lf_frame + 0x58))
 #define local_4 (*(float *)(lf_frame + 0x5c))
-undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,
-            float param_6,int *param_7,float param_8,float param_9)
+undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float param_6,
+          int *param_7,float param_8,float param_9)
 
 {
   __declspec(align(16)) uchar lf_frame[0x60];
@@ -28326,9 +28376,10 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
       local_3c = (float)(*pfVar2 * param_9 + fVar8);
       local_38 = (float)(pfVar2[1] * param_9 + fVar5);
       local_34 = (float)(fVar6 + pfVar2[2] * param_9);
-      FUN_0040bb80(&local_48,&local_30,&local_18,&local_3c);
-      iVar10 = FUN_0041a000(&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,&local_18
-                            ,&local_3c);
+      generatetrinormal(&local_48,&local_30,&local_18,&local_3c);
+      iVar10 = circleintersecttriangle
+                         (&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,&local_18,
+                          &local_3c);
       if ((iVar10 != 0) && (param_8 < *param_3)) {
         *param_1 = local_24;
         param_1[1] = local_20;
@@ -28368,9 +28419,10 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
         local_c = (float)(*pfVar1 * fVar7 + fVar8);
         local_8 = (float)(pfVar1[1] * fVar7 + fVar5);
         local_4 = (float)(fVar6 + pfVar1[2] * fVar7);
-        FUN_0040bb80(&local_48,&local_30,&local_18,&local_3c);
-        iVar10 = FUN_0041a000(&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,
-                              &local_18,&local_3c);
+        generatetrinormal(&local_48,&local_30,&local_18,&local_3c);
+        iVar10 = circleintersecttriangle
+                           (&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,&local_18
+                            ,&local_3c);
         if ((iVar10 != 0) && (param_8 < *param_3)) {
           *param_1 = local_24;
           param_1[1] = local_20;
@@ -28381,9 +28433,10 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
           *param_3 = param_8;
           DAT_1074850c = *(undefined4 *)(*(int *)(&DAT_137b2d5c + iVar13) + iVar12 * 4);
         }
-        FUN_0040bb80(&local_48,&local_30,&local_3c,&local_c);
-        iVar10 = FUN_0041a000(&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,
-                              &local_3c,&local_c);
+        generatetrinormal(&local_48,&local_30,&local_3c,&local_c);
+        iVar10 = circleintersecttriangle
+                           (&local_24,&local_48,&param_8,param_4,param_5,param_6,&local_30,&local_3c
+                            ,&local_c);
         fVar7 = param_9;
         if ((iVar10 != 0) && (param_8 < *param_3)) {
           *param_1 = local_24;
@@ -28414,8 +28467,8 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_137b2d64
 #undef DAT_137b2d68
 #undef DAT_137b2d78
-#undef FUN_0040bb80
-#undef FUN_0041a000
+#undef circleintersecttriangle
+#undef generatetrinormal
 #undef local_48
 #undef local_44
 #undef local_40
@@ -28440,9 +28493,9 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_0f42e508 (*(undefined *)SR_VA(0xf42e508))
 #define DAT_0f42f108 (*(undefined *)SR_VA(0xf42f108))
 #define DAT_0f42f114 (*(undefined *)SR_VA(0xf42f114))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_0041a700 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
+#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -28461,8 +28514,8 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
 #define local_c (*(float *)(lf_frame + 0x54))
 #define local_8 (*(float *)(lf_frame + 0x58))
 #define local_4 (*(float *)(lf_frame + 0x5c))
-undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float param_4,float *param_5,
-            float *param_6,float *param_7,float param_8)
+undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float param_4,float *param_5,float *param_6,
+          float *param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x60];
@@ -28506,10 +28559,10 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
       iVar4 = ((int)LF_BITS_U(param_4)) * 0x302;
       piVar6 = (int *)(&DAT_0f42f114 + iVar5);
       do {
-        FUN_0040bb00(&local_3c,(float *)(&DAT_0f42e508 + (piVar6[-1] + iVar4) * 0xc),pfVar2);
-        FUN_0040bb00(&local_30,(float *)(&DAT_0f42e508 + (*piVar6 + iVar4) * 0xc),pfVar2);
-        FUN_0040bb00(&local_48,(float *)(&DAT_0f42e508 + (piVar6[1] + iVar4) * 0xc),pfVar2);
-        FUN_0040bb80(&local_24,&local_3c,&local_30,&local_48);
+        projectvector(&local_3c,(float *)(&DAT_0f42e508 + (piVar6[-1] + iVar4) * 0xc),pfVar2);
+        projectvector(&local_30,(float *)(&DAT_0f42e508 + (*piVar6 + iVar4) * 0xc),pfVar2);
+        projectvector(&local_48,(float *)(&DAT_0f42e508 + (piVar6[1] + iVar4) * 0xc),pfVar2);
+        generatetrinormal(&local_24,&local_3c,&local_30,&local_48);
         local_3c = (float)(*pfVar1 + local_3c);
         local_38 = (float)(local_38 + pfVar1[1]);
         local_34 = (float)(pfVar1[2] + local_34);
@@ -28520,13 +28573,14 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
         local_44 = (float)(local_44 + pfVar1[1]);
         local_40 = (float)(pfVar1[2] + local_40);
         if (piVar6[-2] == 4) {
-          FUN_0040bb00(&local_18,(float *)(&DAT_0f42e508 + (piVar6[2] + iVar4) * 0xc),pfVar2);
+          projectvector(&local_18,(float *)(&DAT_0f42e508 + (piVar6[2] + iVar4) * 0xc),pfVar2);
           local_18 = (float)(*pfVar1 + local_18);
           local_14 = (float)(local_14 + pfVar1[1]);
           local_10 = (float)(pfVar1[2] + local_10);
         }
-        iVar3 = FUN_0041a700(&local_c,&local_24,&param_4,param_7,param_8,&local_3c,&local_30,
-                             &local_48);
+        iVar3 = sphereintersecttriangle
+                          (&local_c,&local_24,&param_4,param_7,param_8,&local_3c,&local_30,&local_48
+                          );
         if ((iVar3 != 0) && (param_4 < *param_3)) {
           *param_1 = local_c;
           param_1[1] = local_8;
@@ -28537,8 +28591,9 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
           *param_3 = param_4;
         }
         if (((piVar6[-2] == 4) &&
-            (iVar3 = FUN_0041a700(&local_c,&local_24,&param_4,param_7,param_8,&local_3c,&local_48,
-                                  &local_18), iVar3 != 0)) && (param_4 < *param_3)) {
+            (iVar3 = sphereintersecttriangle
+                               (&local_c,&local_24,&param_4,param_7,param_8,&local_3c,&local_48,
+                                &local_18), iVar3 != 0)) && (param_4 < *param_3)) {
           *param_1 = local_c;
           param_1[1] = local_8;
           param_1[2] = local_4;
@@ -28561,9 +28616,9 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
 #undef DAT_0f42e508
 #undef DAT_0f42f108
 #undef DAT_0f42f114
-#undef FUN_0040bb00
-#undef FUN_0040bb80
-#undef FUN_0041a700
+#undef sphereintersecttriangle
+#undef generatetrinormal
+#undef projectvector
 #undef local_48
 #undef local_44
 #undef local_40
@@ -28615,13 +28670,13 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
 #define _DAT_019c9ee4 (*(undefined4 *)SR_VA(0x19c9ee4))
 #define _DAT_1994d724 (*(undefined4 *)SR_VA(0x1994d724))
 #define _DAT_07a1ea6c (*(int *)SR_VA(0x7a1ea6c))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
-#define FUN_0041dba0 ((void (__cdecl *)(void))SR_VA(0x41dba0))
-#define FUN_00417b60 ((void (__cdecl *)(uint))SR_VA(0x417b60))
-#define FUN_0040d860 ((int (__cdecl *)(void))SR_VA(0x40d860))
-#define FUN_00416710 ((void (__cdecl *)(float *, uint))SR_VA(0x416710))
+#define unpackangle ((void (__cdecl *)(float *, uint))SR_VA(0x416710))
 #define __security_check_cookie(x) ((void)0)
+#define unpackobjectpacket ((void (__cdecl *)(void))SR_VA(0x41dba0))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define recvpacket ((int (__cdecl *)(void))SR_VA(0x40d860))
+#define unpackevent ((void (__cdecl *)(uint))SR_VA(0x417b60))
 #define local_38 (*(int *)(lf_frame + 0x18))
 #define local_31 (*(char *)(lf_frame + 0x1f))
 #define local_30 (*(int *)(lf_frame + 0x20))
@@ -28672,7 +28727,7 @@ void __cdecl lf_2e310(void)
   if (0x4af < DAT_1994d728) {
     (*(uint *)((uchar *)&g_game + 4)) = 3;
   }
-  local_38 = FUN_0040d860();
+  local_38 = recvpacket();
   while (0 < local_38) {
     if ((DAT_1993d6e8 < 0x10000) && (DAT_1993d6e8 + 1 <= DAT_1993d6e4)) {
       if (0 < DAT_1993d6ec) {
@@ -28692,10 +28747,10 @@ void __cdecl lf_2e310(void)
         DAT_1994d704 = *(undefined4 *)(&DAT_1993d6f0 + DAT_1993d6e8);
         DAT_1993d6e8 = DAT_1993d6e8 + 4;
       }
-      FUN_0040db20((uint *)&g_game.gametype,4);
-      FUN_0040db20((uint *)&g_game.lf_raw[0xc],4);
-      FUN_00416710((float *)&g_game.lf_raw[0x4c],0x10);
-      FUN_00416710((float *)&g_game.lf_raw[0x50],0x10);
+      pbitread((uint *)&g_game.gametype,4);
+      pbitread((uint *)&g_game.lf_raw[0xc],4);
+      unpackangle((float *)&g_game.lf_raw[0x4c],0x10);
+      unpackangle((float *)&g_game.lf_raw[0x50],0x10);
     }
     else if (local_31 == '\x05') {
       DAT_1994d728 = 0;
@@ -28718,30 +28773,30 @@ void __cdecl lf_2e310(void)
         }
         if ((g_game.ticks <= local_30) || (99 < g_game.ticks - local_30)) {
           g_game.ticks = local_30;
-          FUN_0040db20((uint *)&g_game.state,4);
+          pbitread((uint *)&g_game.state,4);
           if (g_game.state == 1) {
             piVar6 = &g_player[0].unk_003c;
             do {
-              FUN_0040db20((uint *)piVar6,1);
+              pbitread((uint *)piVar6,1);
               piVar6 = piVar6 + 0x902;
             } while ((int)piVar6 < ((int)SR_VA(0xf235e3c)));
           }
-          FUN_0040db20((uint *)&g_game.timer,0x10);
-          FUN_0040db20(&DAT_25a1d740,0x1e);
-          FUN_0040db20((uint *)&g_game.lf_raw[0x90],6);
-          FUN_0040db20((uint *)&g_game.lf_raw[0x120c],6);
-          FUN_0040db20((uint *)&g_game.lf_raw[0x2388],6);
-          FUN_0040db20((uint *)&DAT_10347be0,8);
+          pbitread((uint *)&g_game.timer,0x10);
+          pbitread(&DAT_25a1d740,0x1e);
+          pbitread((uint *)&g_game.lf_raw[0x90],6);
+          pbitread((uint *)&g_game.lf_raw[0x120c],6);
+          pbitread((uint *)&g_game.lf_raw[0x2388],6);
+          pbitread((uint *)&DAT_10347be0,8);
           iVar8 = DAT_10347be0;
-          FUN_0040db20(&local_24,10);
+          pbitread(&local_24,10);
           if (local_24 == 0x3ff) {
             g_player[iVar8].human_id = -1;
           }
           else {
             g_player[iVar8].human_id = local_24;
           }
-          FUN_00416710((float *)&g_player[iVar8].unk_00a4,0x10);
-          FUN_00416710((float *)&g_player[iVar8].unk_00a8,0x10);
+          unpackangle((float *)&g_player[iVar8].unk_00a4,0x10);
+          unpackangle((float *)&g_player[iVar8].unk_00a8,0x10);
           if (DAT_1993d6e8 < 0x10000) {
             if (DAT_1993d6e8 + 4 <= DAT_1993d6e4) {
               if (0 < DAT_1993d6ec) {
@@ -28778,19 +28833,19 @@ void __cdecl lf_2e310(void)
             *(undefined4 *)&g_human[iVar3].bones[2].lf_raw[0x1c] = local_c;
             *(undefined4 *)&g_human[iVar3].bones[2].lf_raw[0x20] = local_8;
           }
-          FUN_0040db20((uint *)&g_player[iVar8].menu,8);
-          FUN_0040db20((uint *)&g_player[iVar8].menu_building,0x10);
+          pbitread((uint *)&g_player[iVar8].menu,8);
+          pbitread((uint *)&g_player[iVar8].menu_building,0x10);
           if (g_player[iVar8].menu == 10) {
             iVar3 = g_player[iVar8].menu_building;
             puVar1 = &DAT_0e6c94c4 + iVar3 * 0x277;
-            FUN_0040db20(puVar1,8);
+            pbitread(puVar1,8);
             iVar7 = 0;
             if (0 < (int)*puVar1) {
               puVar10 = &DAT_0e6c94cc + iVar3 * 0x277;
               do {
-                FUN_0040db20(puVar10 + -1,8);
-                FUN_0040db20(puVar10,0x18);
-                FUN_0040db20(puVar10 + 1,4);
+                pbitread(puVar10 + -1,8);
+                pbitread(puVar10,0x18);
+                pbitread(puVar10 + 1,4);
                 iVar7 = iVar7 + 1;
                 puVar10 = puVar10 + 3;
               } while (iVar7 < (int)*puVar1);
@@ -28805,19 +28860,19 @@ void __cdecl lf_2e310(void)
             DAT_1993d6e8 = DAT_1993d6e8 + 4;
             g_player[iVar8].money = *piVar6;
           }
-          FUN_0040db20((uint *)&g_player[iVar8].unk_00e8,8);
-          FUN_0040db20((uint *)&g_player[iVar8].unk_15ec,8);
-          FUN_0040db20((uint *)&g_player[iVar8].unk_15f0,6);
-          FUN_0040db20((uint *)&g_player[iVar8].unk_15f4,8);
+          pbitread((uint *)&g_player[iVar8].unk_00e8,8);
+          pbitread((uint *)&g_player[iVar8].unk_15ec,8);
+          pbitread((uint *)&g_player[iVar8].unk_15f0,6);
+          pbitread((uint *)&g_player[iVar8].unk_15f4,8);
           piVar6 = &g_player[iVar8].unk_15f8;
           iVar8 = 7;
           do {
-            FUN_0040db20((uint *)piVar6,4);
+            pbitread((uint *)piVar6,4);
             local_30 = 0;
             piVar2 = piVar6;
             if (0 < *piVar6) {
               do {
-                FUN_0040db20((uint *)(piVar2 + 1),0x10);
+                pbitread((uint *)(piVar2 + 1),0x10);
                 local_30 = local_30 + 1;
                 piVar2 = piVar2 + 1;
               } while (local_30 < *piVar6);
@@ -28825,16 +28880,16 @@ void __cdecl lf_2e310(void)
             piVar6 = piVar6 + 9;
             iVar8 = iVar8 + -1;
           } while (iVar8 != 0);
-          FUN_0041dba0();
+          unpackobjectpacket();
           _DAT_019c9ee4 = 0;
-          FUN_0040db20((uint *)&DAT_1994d72c,0x10);
-          FUN_0040db20(&local_1c,6);
-          FUN_0040db20(&local_2c,0x10);
+          pbitread((uint *)&DAT_1994d72c,0x10);
+          pbitread(&local_1c,6);
+          pbitread(&local_2c,0x10);
           uVar9 = local_2c;
           uVar11 = local_1c;
           if (0 < (int)local_1c) {
             do {
-              FUN_00417b60(uVar9);
+              unpackevent(uVar9);
               if (g_numofevents == uVar9) {
                 sVar4 = (short)g_numofevents;
                 g_numofevents = (uint)(ushort)(sVar4 + 1);
@@ -28923,16 +28978,16 @@ void __cdecl lf_2e310(void)
       iVar8 = 0;
       local_38 = 0;
       do {
-        FUN_0040db20((uint *)((int)&DAT_0f0a4bc0 + iVar8),1);
+        pbitread((uint *)((int)&DAT_0f0a4bc0 + iVar8),1);
         if (*(uint *)((int)&DAT_0f0a4bc0 + iVar8) != 0) {
-          FUN_0040db20(&local_14,8);
+          pbitread(&local_14,8);
           if (local_14 == 0xff) {
             *(undefined4 *)((int)&DAT_0f0a4bc8 + iVar8) = 0xffffffff;
           }
           else {
             *(uint *)((int)&DAT_0f0a4bc8 + iVar8) = local_14;
           }
-          FUN_0040db20(&local_20,8);
+          pbitread(&local_20,8);
           if (local_20 == 0xff) {
             *(undefined4 *)((int)&DAT_0f0a4bcc + iVar8) = 0xffffffff;
           }
@@ -28942,11 +28997,11 @@ void __cdecl lf_2e310(void)
           local_28 = 4;
           local_30 = 4;
           do {
-            FUN_0040db20(&local_18,6);
+            pbitread(&local_18,6);
             uVar9 = local_18;
             iVar3 = (local_38 + local_18) * 4;
-            FUN_0040db20((uint *)(&DAT_0f0a9be8 + iVar3),8);
-            FUN_0040db20((uint *)(&DAT_0f0a9ce8 + iVar3),2);
+            pbitread((uint *)(&DAT_0f0a9be8 + iVar3),8);
+            pbitread((uint *)(&DAT_0f0a9ce8 + iVar3),2);
             _Size = *(size_t *)(&DAT_0f0a9be8 + iVar3);
             if ((DAT_1993d6e8 < 0x10000) && ((int)(DAT_1993d6e8 + _Size) <= DAT_1993d6e4)) {
               if (0 < DAT_1993d6ec) {
@@ -28966,7 +29021,7 @@ void __cdecl lf_2e310(void)
         iVar8 = iVar8 + 0x29228;
       } while (local_38 < 0x52450);
     }
-    local_38 = FUN_0040d860();
+    local_38 = recvpacket();
   }
   return;
 }
@@ -29001,13 +29056,13 @@ void __cdecl lf_2e310(void)
 #undef _DAT_019c9ee4
 #undef _DAT_1994d724
 #undef _DAT_07a1ea6c
-#undef memcpy
-#undef FUN_0040db20
-#undef FUN_0041dba0
-#undef FUN_00417b60
-#undef FUN_0040d860
-#undef FUN_00416710
+#undef unpackangle
 #undef __security_check_cookie
+#undef unpackobjectpacket
+#undef memcpy
+#undef pbitread
+#undef recvpacket
+#undef unpackevent
 #undef local_38
 #undef local_31
 #undef local_30
@@ -29024,7 +29079,7 @@ void __cdecl lf_2e310(void)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x2efd0 */
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define local_10 (*(uint *)(lf_frame + 0x10))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(longlong *)(lf_frame + 0x18))
@@ -29052,19 +29107,19 @@ void __cdecl lf_2efd0(int param_1,float *param_2,float param_3,uint param_4)
     if (fVar1 < 0.0) {
       local_10 = local_10 | uVar3;
     }
-    FUN_0040da60(&local_10,param_4);
+    pbitwrite(&local_10,param_4);
     param_2 = param_2 + 1;
     local_c = local_c + -1;
   } while (local_c != 0);
   return;
 }
-#undef FUN_0040da60
+#undef pbitwrite
 #undef local_10
 #undef local_c
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x2f090 */
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(uint *)(lf_frame + 0x1c))
 void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
@@ -29083,7 +29138,7 @@ void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
   pfVar4 = param_1;
   local_4 = uVar3;
   do {
-    FUN_0040db20(&local_4,param_4);
+    pbitread(&local_4,param_4);
     uVar1 = uVar3 - 1 & local_4;
     local_8 = (float)(int)uVar1;
     if ((int)uVar1 < 0) {
@@ -29099,7 +29154,7 @@ void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
   } while (iVar2 != 0);
   return;
 }
-#undef FUN_0040db20
+#undef pbitread
 #undef local_8
 #undef local_4
 
@@ -29119,8 +29174,8 @@ void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_38 (*(float *)(lf_frame + 0x38))
 #define local_34 (*(float *)(lf_frame + 0x3c))
@@ -29189,7 +29244,7 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
     local_10 = (float)(pfVar1[1] - param_2[1]);
     local_c = (float)(pfVar1[2] - param_2[2]);
     local_38 = fVar2;
-    FUN_0040b900(&local_38,&local_38);
+    normalizevector(&local_38,&local_38);
     fVar6 = (float)(local_c * local_30 + (local_10 * local_34 + local_14 * local_38));
     if (0.0 <= fVar6) {
       fVar5 = (float)(local_10 * local_10 + local_14 * local_14 + local_c * local_c);
@@ -29209,7 +29264,7 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
           local_1c = (float)(local_28 - pfVar1[1]);
           local_18 = (float)(local_24 - pfVar1[2]);
           local_38 = fVar2;
-          FUN_0040b900(&local_20,&local_20);
+          normalizevector(&local_20,&local_20);
           if (fVar3 < _DAT_107484b8) {
             _g_intersect = local_2c;
             _DAT_107484a4 = local_28;
@@ -29245,8 +29300,8 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
+#undef normalizevector
 #undef _CIsqrt
-#undef FUN_0040b900
 #undef local_58
 #undef local_38
 #undef local_34
@@ -29283,16 +29338,16 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
 #define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
 #define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define FUN_0041d8a0 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x41d8a0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define _CIsqrt lf_CIsqrt
-#define FUN_0040a7a0 ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define _CIacos lf_CIacos
-#define _CIcos lf_CIcos
+#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40a930))
 #define _CIsin lf_CIsin
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_0040a930 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40a930))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define _CIcos lf_CIcos
+#define _CIsqrt lf_CIsqrt
+#define _CIacos lf_CIacos
+#define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define multiplyquaternion ((void (__cdecl *)(float *, float *, float *))SR_VA(0x41d8a0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define __security_check_cookie(x) ((void)0)
 #define local_120 (*(float *)(lf_frame + 0x10))
 #define local_11c (*(float *)(lf_frame + 0x14))
@@ -29588,9 +29643,9 @@ LAB_0042f545:
     }
     if (g_human[param_1].vehicle_id == -1) {
       local_f0 = (float)(g_human[param_1].pitch * 0.5);
-      FUN_0040bc50(&local_114,(float *)&DAT_00460cd4,local_f0);
+      rotatevector(&local_114,(float *)&DAT_00460cd4,local_f0);
     }
-    FUN_0040bc50(&local_114,(float *)&DAT_00460ce0,local_e8);
+    rotatevector(&local_114,(float *)&DAT_00460ce0,local_e8);
     if (iVar7 == 0) {
       local_114 = (float)(local_114 + _DAT_00460cd4 * 0.5);
       local_110 = (float)(_DAT_00460cd8 * 0.5 + local_110);
@@ -29637,7 +29692,7 @@ LAB_0042f545:
       local_f0 = local_f4;
     }
     if (local_f0 < local_108) {
-      FUN_0040b900(&local_120,&local_120);
+      normalizevector(&local_120,&local_120);
       local_114 = (float)(local_c4 + local_f0 * local_120);
       local_10c = (float)(local_f0 * local_118 + local_bc);
     }
@@ -29659,7 +29714,7 @@ LAB_0042f545:
     dVar10 = _CIsqrt((double)local_f4);
     local_f4 = (float)dVar10;
     if (0.03125 < local_f4) {
-      FUN_0040b900(&local_120,&local_120);
+      normalizevector(&local_120,&local_120);
       local_d0 = (float)(local_a8 + local_120 * 0.03125);
       local_c8 = (float)(local_118 * 0.03125 + local_a0);
     }
@@ -29682,8 +29737,8 @@ LAB_0042f545:
     local_f0 = (float)((float10)dVar10 + (float10)dVar10);
     local_b8 = *(float *)(iVar7 * 0x2a0 + ((int)SR_VA(0x19cc124) + 672) + iVar9);
     pvVar2 = g_human[param_1].bones[iVar7 * 3 + 3].rot;
-    FUN_0041d8a0(&local_28,&pvVar2->x,&pvVar1->x);
-    FUN_0040a7a0(&local_e0,&local_28);
+    multiplyquaternion(&local_28,&pvVar2->x,&pvVar1->x);
+    orientationtoquaternion(&local_e0,&local_28);
     local_28 = 1.0;
     local_24 = 0.0;
     local_20 = 0.0;
@@ -29696,11 +29751,11 @@ LAB_0042f545:
     if (local_118 < 0.0625) {
       local_118 = 0.0625;
     }
-    FUN_0040b900(&local_1c,&local_120);
+    normalizevector(&local_1c,&local_120);
     local_10 = (float)(local_14 * _DAT_00460cd8 - local_18 * _DAT_00460cdc);
     local_c = (float)(local_1c * _DAT_00460cdc - _DAT_00460cd4 * local_14);
     local_8 = (float)(_DAT_00460cd4 * local_18 - local_1c * _DAT_00460cd8);
-    FUN_0040b900(&local_10,&local_10);
+    normalizevector(&local_10,&local_10);
     fVar3 = local_14;
     local_28 = (float)(local_18 * local_8 - local_14 * local_c);
     local_48 = (float)(local_10 * local_14 - local_1c * local_8);
@@ -29713,8 +29768,8 @@ LAB_0042f545:
     local_f4 = (float)(-local_f0 * 0.5);
     local_1c = local_48;
     local_10 = local_44;
-    FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,local_f4);
-    FUN_0040a7a0(&local_104,&local_28);
+    rotateorientation((int)&local_28,(float *)&DAT_00460cd4,local_f4);
+    orientationtoquaternion(&local_104,&local_28);
     local_8c = local_104;
     local_88 = local_100;
     local_84 = local_fc;
@@ -29722,8 +29777,8 @@ LAB_0042f545:
     local_e0 = -local_e0;
     local_dc = -local_dc;
     local_d8 = -local_d8;
-    FUN_0040a930(&local_104,&local_e0,&local_104);
-    FUN_0040b900(&local_104,&local_104);
+    projectorientation(&local_104,&local_e0,&local_104);
+    normalizevector(&local_104,&local_104);
     if (-1.0 <= local_f8) {
       if (1.0 < local_f8) {
         local_f8 = 1.0;
@@ -29750,8 +29805,9 @@ LAB_0042f545:
          g_human[param_1].bones[iVar7 * 3 + 3].rot[2].z * local_118);
     iVar6 = *(int *)(iVar7 * 0x2a0 + ((int)SR_VA(0x19cc124) + 896) + iVar9);
     pvVar1 = g_human[param_1].bones[iVar7 * 3 + 4].rot;
-    FUN_0041d8a0(&local_28,&pvVar1->x,(float *)((int)&g_human[0].bones[3].rot[0].x + local_ec));
-    FUN_0040a7a0(&local_e0,&local_28);
+    multiplyquaternion(&local_28,&pvVar1->x,(float *)((int)&g_human[0].bones[3].rot[0].x + local_ec)
+                      );
+    orientationtoquaternion(&local_e0,&local_28);
     local_28 = 1.0;
     local_24 = 0.0;
     local_20 = 0.0;
@@ -29761,8 +29817,8 @@ LAB_0042f545:
     local_c = 0.0;
     local_18 = 1.0;
     local_8 = 1.0;
-    FUN_0040bdb0((int)&local_28,&local_28,local_f0);
-    FUN_0040a7a0(&local_104,&local_28);
+    rotateorientation((int)&local_28,&local_28,local_f0);
+    orientationtoquaternion(&local_104,&local_28);
     local_9c = local_104;
     local_98 = local_100;
     local_94 = local_fc;
@@ -29770,8 +29826,8 @@ LAB_0042f545:
     local_e0 = -local_e0;
     local_dc = -local_dc;
     local_d8 = -local_d8;
-    FUN_0040a930(&local_104,&local_e0,&local_104);
-    FUN_0040b900(&local_104,&local_104);
+    projectorientation(&local_104,&local_e0,&local_104);
+    normalizevector(&local_104,&local_104);
     if (-1.0 <= local_f8) {
       if (1.0 < local_f8) {
         local_f8 = 1.0;
@@ -29798,8 +29854,9 @@ LAB_0042f545:
          g_human[param_1].bones[iVar7 * 3 + 4].rot[1].z * local_11c +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[2].z * local_118);
     iVar6 = *(int *)&g_human[param_1].bones[iVar7 * 3 + 5].lf_raw[0xdc];
-    FUN_0041d8a0(&local_28,&pvVar1->x,(float *)((int)&g_human[0].bones[4].rot[0].x + local_ec));
-    FUN_0040a7a0(&local_e0,&local_28);
+    multiplyquaternion(&local_28,&pvVar1->x,(float *)((int)&g_human[0].bones[4].rot[0].x + local_ec)
+                      );
+    orientationtoquaternion(&local_e0,&local_28);
     local_28 = 1.0;
     local_24 = 0.0;
     local_20 = 0.0;
@@ -29810,33 +29867,33 @@ LAB_0042f545:
     local_18 = 1.0;
     local_8 = 1.0;
     local_b8 = (float)(-g_human[param_1].pitch * 0.5);
-    FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,local_b8);
-    FUN_0040a7a0(&local_104,&local_28);
+    rotateorientation((int)&local_28,(float *)&DAT_00460cd4,local_b8);
+    orientationtoquaternion(&local_104,&local_28);
     local_9c = -local_9c;
     local_98 = -local_98;
     local_94 = -local_94;
-    FUN_0040a930(&local_104,&local_104,&local_9c);
+    projectorientation(&local_104,&local_104,&local_9c);
     local_8c = -local_8c;
     local_88 = -local_88;
     local_84 = -local_84;
-    FUN_0040a930(&local_104,&local_104,&local_8c);
+    projectorientation(&local_104,&local_104,&local_8c);
     local_70 = 0.0;
     local_6c = local_60;
     local_64 = (*(float *)((uchar *)&local_5c + 0));
-    FUN_0040a930(&local_104,&local_104,&local_70);
+    projectorientation(&local_104,&local_104,&local_70);
     if ((iVar7 == 1) || ((local_e4 != 0xd && (local_e4 != 0xe)))) {
       dVar10 = _CIsin(-0.7853981633975);
       local_70 = -(float)dVar10;
       local_6c = 0.0;
       dVar10 = _CIcos(-0.7853981633975);
       local_64 = (float)dVar10;
-      FUN_0040a930(&local_104,&local_104,&local_70);
+      projectorientation(&local_104,&local_104,&local_70);
     }
     local_e0 = -local_e0;
     local_dc = -local_dc;
     local_d8 = -local_d8;
-    FUN_0040a930(&local_104,&local_e0,&local_104);
-    FUN_0040b900(&local_104,&local_104);
+    projectorientation(&local_104,&local_e0,&local_104);
+    normalizevector(&local_104,&local_104);
     if (-1.0 <= local_f8) {
       if (1.0 < local_f8) {
         local_f8 = 1.0;
@@ -29895,16 +29952,16 @@ LAB_0042f545:
 #undef _DAT_00460cd4
 #undef _DAT_00460cd8
 #undef _DAT_00460cdc
-#undef FUN_0041d8a0
-#undef FUN_0040bdb0
-#undef _CIsqrt
-#undef FUN_0040a7a0
-#undef FUN_0040b900
-#undef _CIacos
-#undef _CIcos
+#undef projectorientation
 #undef _CIsin
-#undef FUN_0040bc50
-#undef FUN_0040a930
+#undef rotatevector
+#undef _CIcos
+#undef _CIsqrt
+#undef _CIacos
+#undef orientationtoquaternion
+#undef normalizevector
+#undef multiplyquaternion
+#undef rotateorientation
 #undef __security_check_cookie
 #undef local_120
 #undef local_11c
@@ -29974,8 +30031,8 @@ LAB_0042f545:
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define FUN_00419ee0 ((int (__cdecl *)(int, int, int, float *))SR_VA(0x419ee0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
+#define createjointbond ((int (__cdecl *)(int, int, int, float *))SR_VA(0x419ee0))
 void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
 
 {
@@ -29983,7 +30040,7 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
   int iVar2;
   int iVar3;
   
-  FUN_00419ee0(param_1,param_2,param_3,param_4);
+  createjointbond(param_1,param_2,param_3,param_4);
   iVar2 = g_numofbonds;
   iVar3 = param_1 * 0x2b64;
   *(int *)(iVar3 + ((int)SR_VA(0x19cce4c)) + g_human[param_1].unk_0ec8 * 0x30) = g_numofbonds;
@@ -30010,13 +30067,13 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
 #undef g_human
 #undef g_numofbonds
 #undef g_bond
-#undef FUN_00419ee0
 #undef memset
+#undef createjointbond
 
 /* ---------------------------------------------------------------- 0x307f0 */
-#define FUN_0040c420 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_0041a7f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_20 (*(float *)(lf_frame + 0x20))
 #define local_1c (*(float *)(lf_frame + 0x24))
@@ -30026,8 +30083,8 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
 #define local_c (*(float *)(lf_frame + 0x34))
 #define local_8 (*(float *)(lf_frame + 0x38))
 #define local_4 (*(float *)(lf_frame + 0x3c))
-undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,
-            float *param_6,float *param_7,float *param_8)
+undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,float *param_6,
+          float *param_7,float *param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x40];
@@ -30066,8 +30123,8 @@ undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *
   local_20 = param_2[1];
   local_1c = param_2[2];
   param_4 = pfVar2;
-  iVar5 = FUN_0040c420(&local_18,&local_24,(float *)&param_4,pfVar3,&local_c,param_6,param_7,param_8
-                      );
+  iVar5 = lineintersecttriangle
+                    (&local_18,&local_24,(float *)&param_4,pfVar3,&local_c,param_6,param_7,param_8);
   if (iVar5 != 0) {
     *param_1 = local_18;
     param_1[1] = local_14;
@@ -30075,12 +30132,12 @@ undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *
     *param_2 = local_24;
     param_2[1] = local_20;
     param_2[2] = local_1c;
-    fVar6 = (float10)FUN_0040baa0(pfVar3,&local_18);
+    fVar6 = (float10)vectordistance(pfVar3,&local_18);
     param_4 = ((float *)LF_BITS_U((float)fVar6));
     *param_3 = LF_BITS_F(param_4);
     if (LF_BITS_F(param_4) != 65536.0) goto LAB_00430a83;
   }
-  iVar5 = FUN_0041a7f0(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,pfVar4,param_7);
+  iVar5 = sphereintersectline(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,pfVar4,param_7);
   if ((iVar5 != 0) && (LF_BITS_F(param_4) < *param_3)) {
     *param_1 = local_18;
     param_1[1] = local_14;
@@ -30090,7 +30147,7 @@ undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *
     param_2[2] = local_1c;
     *param_3 = LF_BITS_F(param_4);
   }
-  iVar5 = FUN_0041a7f0(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,param_7,param_8);
+  iVar5 = sphereintersectline(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,param_7,param_8);
   if ((iVar5 != 0) && (LF_BITS_F(param_4) < *param_3)) {
     *param_1 = local_18;
     param_1[1] = local_14;
@@ -30100,7 +30157,7 @@ undefined4 __cdecl lf_307f0(float *param_1,float *param_2,float *param_3,float *
     param_2[2] = local_1c;
     *param_3 = LF_BITS_F(param_4);
   }
-  iVar5 = FUN_0041a7f0(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,param_8,pfVar4);
+  iVar5 = sphereintersectline(&local_18,&local_24,(float *)&param_4,pfVar3,param_5,param_8,pfVar4);
   if ((iVar5 != 0) && (LF_BITS_F(param_4) < *param_3)) {
     *param_1 = local_18;
     param_1[1] = local_14;
@@ -30116,9 +30173,9 @@ LAB_00430a83:
   }
   return 1;
 }
-#undef FUN_0040c420
-#undef FUN_0040baa0
-#undef FUN_0041a7f0
+#undef sphereintersectline
+#undef vectordistance
+#undef lineintersecttriangle
 #undef local_24
 #undef local_20
 #undef local_1c
@@ -30133,9 +30190,9 @@ LAB_00430a83:
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 void __cdecl lf_30ab0(void)
 
 {
@@ -30158,24 +30215,24 @@ void __cdecl lf_30ab0(void)
           (*(uint *)((uchar *)&g_game + 154976)) = (*(uint *)((uchar *)&g_game + 154976)) + -1;
         }
         if ((uint *)piVar4[1] != (uint *)0xffffffff) {
-          FUN_00407e50(uVar3,(uint *)piVar4[1],piVar4[3]);
+          item_removehumanlink(uVar3,(uint *)piVar4[1],piVar4[3]);
         }
         iVar1 = piVar4[4];
         while (0 < iVar1) {
           piVar4[4] = piVar4[4] + -1;
           uVar2 = *(uint *)((int)g_item[0].rot + (piVar4[4] + iVar5) * 4 + -0x5c);
           g_item[uVar2].parent_item = -1;
-          FUN_00406380(uVar2);
+          createevent_updateitem(uVar2);
           iVar1 = piVar4[4];
         }
         if (piVar4[2] != 0xffffffff) {
-          FUN_00407f80(uVar3,piVar4[2]);
+          item_removeitemlink(uVar3,piVar4[2]);
         }
         if ((piVar4[-2] == 0x18) && ((uint)piVar4[0x40] < 0x400)) {
           g_object[piVar4[0x40]].unk_001c = 0;
         }
         ((Item *)(piVar4 + -5))->active = 0;
-        FUN_00406380(uVar3);
+        createevent_updateitem(uVar3);
       }
     }
     piVar4 = piVar4 + 0x6b;
@@ -30187,9 +30244,9 @@ void __cdecl lf_30ab0(void)
 #undef g_object
 #undef g_game
 #undef g_item
-#undef FUN_00407f80
-#undef FUN_00407e50
-#undef FUN_00406380
+#undef item_removeitemlink
+#undef item_removehumanlink
+#undef createevent_updateitem
 
 /* ---------------------------------------------------------------- 0x30ba0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -30198,10 +30255,10 @@ void __cdecl lf_30ab0(void)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00421b40 ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
-#define FUN_00421a30 ((void (__cdecl *)(float *, float, float))SR_VA(0x421a30))
-#define FUN_00416bb0 ((void (__cdecl *)(int, undefined4 *, undefined4 *, int))SR_VA(0x416bb0))
-#define FUN_004143b0 ((int (__cdecl *)(int, undefined4 *, float *, int))SR_VA(0x4143b0))
+#define createevent_bullet ((void (__cdecl *)(int, undefined4 *, undefined4 *, int))SR_VA(0x416bb0))
+#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
+#define createbullet ((int (__cdecl *)(int, undefined4 *, float *, int))SR_VA(0x4143b0))
+#define getrandomvector2d ((void (__cdecl *)(float *, float, float))SR_VA(0x421a30))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_18 (*(float *)(lf_frame + 0x28))
 #define local_14 (*(float *)(lf_frame + 0x2c))
@@ -30265,7 +30322,7 @@ void __cdecl lf_30ba0(int param_1)
         local_c = (float)(fVar5 * g_item[param_1].rot[2].x + g_item[param_1].vel.x);
         local_8 = (float)(g_item[param_1].rot[2].y * fVar5 + g_item[param_1].vel.y);
         local_4 = (float)(fVar5 * g_item[param_1].rot[2].z + g_item[param_1].vel.z);
-        FUN_00421b40(&local_18,LF_BITS_F(g_itemtype[iVar2].unk_0024),0.0);
+        getrandomvector3d(&local_18,LF_BITS_F(g_itemtype[iVar2].unk_0024),0.0);
         local_c = (float)(local_c + local_18);
         local_8 = (float)(local_8 + local_14);
         local_4 = (float)(local_10 + local_4);
@@ -30280,9 +30337,9 @@ void __cdecl lf_30ba0(int param_1)
           local_18 = (float)(g_item[param_1].pos.x + g_item[param_1].rot[2].x * 0.0);
           local_14 = (float)(g_item[param_1].rot[2].y * 0.0 + g_item[param_1].pos.y);
           local_10 = (float)(g_item[param_1].rot[2].z * 0.0 + g_item[param_1].pos.z);
-          FUN_004143b0(iVar7,&local_18,&local_c,iVar4);
-          FUN_00416bb0(g_itemtype[iVar2].unk_0014,&g_item[param_1].pos.x,&local_c,param_1);
-          FUN_00421a30(&local_18,g_itemtype[iVar2].unk_006c,0.0);
+          createbullet(iVar7,&local_18,&local_c,iVar4);
+          createevent_bullet(g_itemtype[iVar2].unk_0014,&g_item[param_1].pos.x,&local_c,param_1);
+          getrandomvector2d(&local_18,g_itemtype[iVar2].unk_006c,0.0);
           local_18 = (float)(g_itemtype[iVar2].unk_006c + local_18);
           g_human[iVar3].unk_2910 = (float)(g_human[iVar3].unk_2910 + local_18 * 0.25);
           g_human[iVar3].unk_2914 = (float)(local_14 * 0.25 + g_human[iVar3].unk_2914);
@@ -30308,10 +30365,10 @@ void __cdecl lf_30ba0(int param_1)
 #undef g_game
 #undef g_item
 #undef g_player
-#undef FUN_00421b40
-#undef FUN_00421a30
-#undef FUN_00416bb0
-#undef FUN_004143b0
+#undef createevent_bullet
+#undef getrandomvector3d
+#undef createbullet
+#undef getrandomvector2d
 #undef local_24
 #undef local_18
 #undef local_14
@@ -30342,8 +30399,8 @@ void __cdecl lf_30ba0(int param_1)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_004307f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define sphereintersecttrianglefull ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
 #define local_48 (*(float *)(lf_frame + 0x18))
@@ -30453,9 +30510,9 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
     local_1c = (float)(local_4c * g_item[iVar6].rot[2].z +
                ((float)(fVar2 * g_item[iVar6].rot[1].z + ((float)(fVar3 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
     ;
-    FUN_0040bb80(&local_18,&local_3c,&local_30,&local_48);
-    iVar7 = FUN_004307f0(&local_c,&local_18,&local_50,param_2,param_3,&local_3c,&local_30,&local_48)
-    ;
+    generatetrinormal(&local_18,&local_3c,&local_30,&local_48);
+    iVar7 = sphereintersecttrianglefull
+                      (&local_c,&local_18,&local_50,param_2,param_3,&local_3c,&local_30,&local_48);
     if ((iVar7 != 0) && (local_50 < _DAT_107484bc)) {
       _g_intersect = local_c;
       DAT_107484d0 = param_1;
@@ -30466,8 +30523,8 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
       _DAT_107484b4 = local_10;
       _DAT_107484bc = local_50;
     }
-    iVar7 = FUN_004307f0(&local_c,&local_18,&local_50,param_2,param_3,&local_3c,&local_48,&local_24)
-    ;
+    iVar7 = sphereintersecttrianglefull
+                      (&local_c,&local_18,&local_50,param_2,param_3,&local_3c,&local_48,&local_24);
     if ((iVar7 != 0) && (local_50 < _DAT_107484bc)) {
       _g_intersect = local_c;
       DAT_107484d0 = param_1;
@@ -30507,8 +30564,8 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_0040bb80
-#undef FUN_004307f0
+#undef generatetrinormal
+#undef sphereintersecttrianglefull
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -30555,8 +30612,8 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0042c0c0 ((int (__cdecl *)(float *, float *, float *, uint, float *, float *))SR_VA(0x42c0c0))
-#define FUN_004146a0 ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *))SR_VA(0x4146a0))
+#define lineintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float *))SR_VA(0x42c0c0))
+#define lineintersectcityobject ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *))SR_VA(0x4146a0))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -30587,8 +30644,8 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
   piVar3 = &DAT_17166040;
   do {
     if (((*piVar3 != 0) &&
-        (iVar1 = FUN_0042c0c0(&local_18,&local_c,&local_1c,uVar5,param_1,param_2), iVar1 != 0)) &&
-       (local_1c < _DAT_107484b8)) {
+        (iVar1 = lineintersectarea(&local_18,&local_c,&local_1c,uVar5,param_1,param_2), iVar1 != 0))
+       && (local_1c < _DAT_107484b8)) {
       _g_intersect = local_18;
       _DAT_107484a4 = local_14;
       _DAT_107484a8 = local_10;
@@ -30604,8 +30661,8 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
   iVar1 = 0;
   do {
     if (((puVar4[-7] != 0) &&
-        (iVar2 = FUN_004146a0(&local_18,&local_c,&local_1c,iVar1,param_1,param_2), iVar2 != 0)) &&
-       (local_1c < _DAT_107484b8)) {
+        (iVar2 = lineintersectcityobject(&local_18,&local_c,&local_1c,iVar1,param_1,param_2),
+        iVar2 != 0)) && (local_1c < _DAT_107484b8)) {
       DAT_107484f4 = 0xffffffff;
       _g_intersect = local_18;
       _DAT_107484a4 = local_14;
@@ -30651,8 +30708,8 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0042c0c0
-#undef FUN_004146a0
+#undef lineintersectarea
+#undef lineintersectcityobject
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -30685,9 +30742,9 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define FUN_0042c0c0 ((int (__cdecl *)(float *, float *, float *, uint, float *, float *))SR_VA(0x42c0c0))
-#define FUN_0041c1d0 ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x41c1d0))
-#define FUN_004146a0 ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *))SR_VA(0x4146a0))
+#define lineintersectlandscape ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x41c1d0))
+#define lineintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float *))SR_VA(0x42c0c0))
+#define lineintersectcityobject ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *))SR_VA(0x4146a0))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -30713,13 +30770,13 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 
   
   _DAT_107484b8 = 1.0;
-  FUN_0041c1d0(param_1,param_2);
+  lineintersectlandscape(param_1,param_2);
   uVar5 = 0;
   piVar3 = &DAT_17166040;
   do {
     if (((*piVar3 != 0) &&
-        (iVar1 = FUN_0042c0c0(&local_18,&local_c,&local_1c,uVar5,param_1,param_2), iVar1 != 0)) &&
-       (local_1c < _DAT_107484b8)) {
+        (iVar1 = lineintersectarea(&local_18,&local_c,&local_1c,uVar5,param_1,param_2), iVar1 != 0))
+       && (local_1c < _DAT_107484b8)) {
       _g_intersect = local_18;
       _DAT_107484a4 = local_14;
       _DAT_107484a8 = local_10;
@@ -30739,8 +30796,8 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
     puVar4 = &DAT_1622403c;
     do {
       if (((puVar4[-7] != 0) &&
-          (iVar2 = FUN_004146a0(&local_18,&local_c,&local_1c,iVar1,param_1,param_2), iVar2 != 0)) &&
-         (local_1c < _DAT_107484b8)) {
+          (iVar2 = lineintersectcityobject(&local_18,&local_c,&local_1c,iVar1,param_1,param_2),
+          iVar2 != 0)) && (local_1c < _DAT_107484b8)) {
         DAT_107484f4 = 0xffffffff;
         _g_intersect = local_18;
         _DAT_107484a4 = local_14;
@@ -30785,9 +30842,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef FUN_0042c0c0
-#undef FUN_0041c1d0
-#undef FUN_004146a0
+#undef lineintersectlandscape
+#undef lineintersectarea
+#undef lineintersectcityobject
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -30806,9 +30863,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 #define DAT_0b7e7214 (*(undefined4 *)SR_VA(0xb7e7214))
 #define DAT_0b7e7218 (*(undefined4 *)SR_VA(0xb7e7218))
 #define DAT_0b7e721c (*(undefined4 *)SR_VA(0xb7e721c))
-#define FUN_004129b0 ((int (__cdecl *)(int, int, int, int))SR_VA(0x4129b0))
+#define createparticle ((int (__cdecl *)(undefined4, undefined4 *, undefined4 *, undefined4, int))SR_VA(0x4278c0))
+#define createbond ((int (__cdecl *)(int, int, int, int))SR_VA(0x4129b0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_004278c0 ((int (__cdecl *)(undefined4, undefined4 *, undefined4 *, undefined4, int))SR_VA(0x4278c0))
 #define local_38 (*(uint *)(lf_frame + 0x18))
 #define local_30 (*(undefined4 * *)(lf_frame + 0x20))
 #define local_2c (*(int *)(lf_frame + 0x24))
@@ -30894,7 +30951,7 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
             local_c = (float)(*param_2 + ((float)(fVar4 * param_4[6] + (fVar3 * param_4[3] + fVar2 * *param_4))));
             local_8 = (float)((float)(fVar4 * param_4[7] + (fVar2 * param_4[1] + fVar3 * param_4[4])) + param_2[1]);
             local_4 = (float)((float)(param_4[5] * fVar3 + param_4[2] * fVar2 + param_4[8] * fVar4) + param_2[2]);
-            iVar10 = FUN_004278c0(0,&local_c,param_3,lf_f2u((float)(pfVar13[1] * fVar1)),iVar20);
+            iVar10 = createparticle(0,&local_c,param_3,lf_f2u((float)(pfVar13[1] * fVar1)),iVar20);
             pfVar13 = pfVar13 + 5;
             *(int *)((int)(g_object[iVar20].rot + 9) + (g_object[iVar20].particle_start + 1) * 4) =
                  iVar10;
@@ -30906,8 +30963,8 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         if (0 < (int)local_38) {
           piVar11 = (int *)&g_objecttype[param_1].lf_raw[0x748];
           do {
-            FUN_004129b0(piVar11[-1],*(int *)((int)(g_object[iVar20].rot + 9) + (*piVar11 + 1) * 4),
-                         *(int *)((int)(g_object[iVar20].rot + 9) + (piVar11[1] + 1) * 4),-1);
+            createbond(piVar11[-1],*(int *)((int)(g_object[iVar20].rot + 9) + (*piVar11 + 1) * 4),
+                       *(int *)((int)(g_object[iVar20].rot + 9) + (piVar11[1] + 1) * 4),-1);
             piVar11 = piVar11 + 3;
             local_38 = local_38 + -1;
           } while (local_38 != 0);
@@ -31192,9 +31249,9 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
 #undef DAT_0b7e7214
 #undef DAT_0b7e7218
 #undef DAT_0b7e721c
-#undef FUN_004129b0
+#undef createparticle
+#undef createbond
 #undef memset
-#undef FUN_004278c0
 #undef local_38
 #undef local_30
 #undef local_2c
@@ -31296,7 +31353,7 @@ void __cdecl lf_32340(void)
 
 /* ---------------------------------------------------------------- 0x324c0 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define FUN_00423fa0 ((float10 (__cdecl *)(int))SR_VA(0x423fa0))
+#define getenginetorque2 ((float10 (__cdecl *)(int))SR_VA(0x423fa0))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
 void __cdecl lf_324c0(void)
@@ -31354,7 +31411,7 @@ void __cdecl lf_324c0(void)
             pfVar5 = pfVar5 + 0x3a;
           } while (iVar8 < *(int *)((int)&g_object[0].unk_71ec + iVar9));
         }
-        fVar13 = (float10)FUN_00423fa0(iVar10);
+        fVar13 = (float10)getenginetorque2(iVar10);
         *(float *)((int)&g_object[0].engine_accel + iVar9) =
              (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar9) /
                        (float10)3600.0) *
@@ -31448,7 +31505,7 @@ void __cdecl lf_324c0(void)
             pfVar5 = pfVar5 + 0x26;
           } while (iVar8 < *(int *)((int)&g_object[0].num_wheels + iVar9));
         }
-        fVar13 = (float10)FUN_00423fa0(iVar10);
+        fVar13 = (float10)getenginetorque2(iVar10);
         pfVar5 = (float *)(*(int *)((int)&g_object[0].unk_5e94 + iVar9) * 0x98 + ((int)SR_VA(0x5998518)) + iVar9);
         *(float *)((int)&g_object[0].engine_accel + iVar9) =
              (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar9) /
@@ -31516,7 +31573,7 @@ void __cdecl lf_324c0(void)
   return;
 }
 #undef g_object
-#undef FUN_00423fa0
+#undef getenginetorque2
 #undef local_14
 #undef local_10
 
@@ -31541,9 +31598,9 @@ void __cdecl lf_324c0(void)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_004307f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
-#define FUN_0040bb80 ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define FUN_00422af0 ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
+#define sphereintersecttrianglefull ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
+#define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_58 (*(int *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(int *)(lf_frame + 0x20))
@@ -31629,9 +31686,10 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
           local_c = *(float *)(&g_object[param_1].lf_raw[0x4bbc] + iVar3);
           local_8 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc0] + iVar3);
           local_4 = *(undefined4 *)(&g_object[param_1].lf_raw[0x4bc4] + iVar3);
-          FUN_0040bb80(&local_48,&local_30,&local_18,&local_3c);
-          iVar4 = FUN_004307f0(&local_24,&local_48,&local_54,param_2,param_3,&local_30,&local_18,
-                               &local_3c);
+          generatetrinormal(&local_48,&local_30,&local_18,&local_3c);
+          iVar4 = sphereintersecttrianglefull
+                            (&local_24,&local_48,&local_54,param_2,param_3,&local_30,&local_18,
+                             &local_3c);
           if ((iVar4 != 0) && (local_54 < _DAT_107484bc)) {
             _g_intersect = local_24;
             DAT_107484d0 = local_58;
@@ -31647,13 +31705,14 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
                                    (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
             DAT_107484dc = *(int *)((int)(g_object[param_1].rot + 9) +
                                    (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
-            FUN_00422af0((float *)&DAT_107484e4,(float *)&g_intersect,&local_30,&local_18,&local_3c)
-            ;
+            calculatebarycentric
+                      ((float *)&DAT_107484e4,(float *)&g_intersect,&local_30,&local_18,&local_3c);
           }
           if (piVar6[-2] == 4) {
-            FUN_0040bb80(&local_48,&local_30,&local_3c,&local_c);
-            iVar5 = FUN_004307f0(&local_24,&local_48,&local_54,param_2,param_3,&local_30,&local_3c,
-                                 &local_c);
+            generatetrinormal(&local_48,&local_30,&local_3c,&local_c);
+            iVar5 = sphereintersecttrianglefull
+                              (&local_24,&local_48,&local_54,param_2,param_3,&local_30,&local_3c,
+                               &local_c);
             if ((iVar5 != 0) && (local_54 < _DAT_107484bc)) {
               _g_intersect = local_24;
               DAT_107484d0 = local_58;
@@ -31669,8 +31728,8 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
                                      (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
               DAT_107484dc = *(int *)((int)(g_object[param_1].rot + 9) +
                                      (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar3) + 1) * 4);
-              FUN_00422af0((float *)&DAT_107484e4,(float *)&g_intersect,&local_30,&local_3c,&local_c
-                          );
+              calculatebarycentric
+                        ((float *)&DAT_107484e4,(float *)&g_intersect,&local_30,&local_3c,&local_c);
             }
           }
         }
@@ -31704,9 +31763,9 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_004307f0
-#undef FUN_0040bb80
-#undef FUN_00422af0
+#undef sphereintersecttrianglefull
+#undef calculatebarycentric
+#undef generatetrinormal
 #undef local_58
 #undef local_54
 #undef local_50
@@ -31750,9 +31809,9 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 #define _DAT_25a1d750 (*(undefined4 *)SR_VA(0x25a1d750))
 #define _DAT_25a1d754 (*(undefined4 *)SR_VA(0x25a1d754))
 #define _DAT_25a1d758 (*(undefined4 *)SR_VA(0x25a1d758))
-#define _CIsin lf_CIsin
+#define createtrack ((void (__cdecl *)(int, float *, float, float))SR_VA(0x425e70))
 #define _CIcos lf_CIcos
-#define FUN_00425e70 ((void (__cdecl *)(int, float *, float, float))SR_VA(0x425e70))
+#define _CIsin lf_CIsin
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_50 (*(float *)(lf_frame + 0x40))
@@ -31842,7 +31901,7 @@ void __cdecl lf_32fe0(float *param_1)
     local_14 = (float)(fVar1 - (float)dVar6 * 1.0);
     local_10 = (float)(fVar3 + -0.0);
     local_c = (float)(fVar2 - -(float)dVar7 * 1.0);
-    FUN_00425e70(0,&local_38,0.0,0.0);
+    createtrack(0,&local_38,0.0,0.0);
     uVar4 = uVar4 + 1;
     iVar5 = iVar5 + -1;
     local_7c = local_80;
@@ -31877,9 +31936,9 @@ void __cdecl lf_32fe0(float *param_1)
 #undef _DAT_25a1d750
 #undef _DAT_25a1d754
 #undef _DAT_25a1d758
-#undef _CIsin
+#undef createtrack
 #undef _CIcos
-#undef FUN_00425e70
+#undef _CIsin
 #undef local_80
 #undef local_7c
 #undef local_50
@@ -31913,8 +31972,8 @@ void __cdecl lf_32fe0(float *param_1)
 #define DAT_0e6b3250 (*(undefined *)SR_VA(0xe6b3250))
 #define DAT_0e6b3254 (*(undefined *)SR_VA(0xe6b3254))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
 #define local_48 (*(float *)(lf_frame + 0x18))
@@ -31978,15 +32037,15 @@ int __cdecl lf_33350(int param_1,undefined4 param_2,int param_3,int param_4,int 
   local_28[4] = 1.0;
   local_28[8] = 1.0;
   if (*(int *)(&DAT_0e6b3234 + iVar1) == 0) {
-    FUN_0040bdb0((int)local_28,local_28 + 3,-1.5707964);
+    rotateorientation((int)local_28,local_28 + 3,-1.5707964);
   }
   if (param_4 == 0) {
-    FUN_0040bdb0((int)local_28,local_28 + 3,3.1415927);
+    rotateorientation((int)local_28,local_28 + 3,3.1415927);
   }
   local_34 = (float)(local_50 + param_6 * local_40);
   local_2c = (float)(param_6 * local_38 + local_48);
   local_30 = (float)((float)(local_3c * param_6 + local_4c) + 1.5);
-  iVar1 = FUN_00431800(param_1,&local_34,(undefined4 *)0x0,local_28,param_2);
+  iVar1 = createobject(param_1,&local_34,(undefined4 *)0x0,local_28,param_2);
   return iVar1;
 }
 #undef DAT_00460d18
@@ -32003,8 +32062,8 @@ int __cdecl lf_33350(int param_1,undefined4 param_2,int param_3,int param_4,int 
 #undef DAT_0e6b3250
 #undef DAT_0e6b3254
 #undef __security_check_cookie
-#undef FUN_0040bdb0
-#undef FUN_00431800
+#undef createobject
+#undef rotateorientation
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -32032,8 +32091,8 @@ int __cdecl lf_33350(int param_1,undefined4 param_2,int param_3,int param_4,int 
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define DAT_094dc344 (*(int *)SR_VA(0x94dc344))
 #define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
-#define FUN_0040d990 ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
-#define FUN_0040d910 ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
+#define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
+#define sendpacket ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
 #define local_1 (*(undefined1 *)(lf_frame + 0x1f))
 void __cdecl lf_33570(void)
 
@@ -32051,8 +32110,8 @@ void __cdecl lf_33570(void)
       _DAT_1992d6e4 = DAT_00460d08;
       DAT_1992d6dc = 4;
       local_1 = 0x20;
-      FUN_0040d990(&local_1,1,1);
-      FUN_0040d910(DAT_17579820,DAT_17579824);
+      cs_pwrite(&local_1,1,1);
+      sendpacket(DAT_17579820,DAT_17579824);
     }
     iVar4 = DAT_0204afc0;
     if (0 < DAT_0204afc0) {
@@ -32096,8 +32155,8 @@ void __cdecl lf_33570(void)
 #undef g_connection
 #undef DAT_094dc344
 #undef _DAT_1992d6e4
-#undef FUN_0040d990
-#undef FUN_0040d910
+#undef cs_pwrite
+#undef sendpacket
 #undef local_1
 
 /* ---------------------------------------------------------------- 0x33650 */
@@ -32147,23 +32206,23 @@ void __cdecl lf_33570(void)
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
 #define _DAT_07a1ead8 (*(int *)SR_VA(0x7a1ead8))
 #define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_0040a1b0 ((void (__cdecl *)(float))SR_VA(0x40a1b0))
-#define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define FUN_00428020 ((int (__cdecl *)(void))SR_VA(0x428020))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define FUN_0040d860 ((int (__cdecl *)(void))SR_VA(0x40d860))
-#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define deleteplayer ((void (__cdecl *)(float))SR_VA(0x40a1b0))
+#define createaccount ((int (__cdecl *)(int))SR_VA(0x40ded0))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define FUN_0040db20 ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
+#define recvpacket ((int (__cdecl *)(void))SR_VA(0x40d860))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040a580 ((void (__cdecl *)(int))SR_VA(0x40a580))
-#define FUN_0040ded0 ((int (__cdecl *)(int))SR_VA(0x40ded0))
+#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define fixplayername ((void (__cdecl *)(int))SR_VA(0x40a580))
 #define local_68 (*(int *)(lf_frame + 0x18))
 #define local_61 (*(char *)(lf_frame + 0x1f))
 #define local_60 (*(uint *)(lf_frame + 0x20))
@@ -32264,7 +32323,7 @@ void __cdecl lf_33650(void)
           if (g_player[((int)LF_BITS_U(fVar11))].unk_0034 != -1) {
             g_account[g_player[((int)LF_BITS_U(fVar11))].unk_0034].name_locked = 2;
           }
-          FUN_0040a1b0(fVar11);
+          deleteplayer(fVar11);
           pcVar9 = g_player[((int)LF_BITS_U(fVar11))].name;
           iVar14 = -(int)pcVar9;
           do {
@@ -32278,7 +32337,7 @@ void __cdecl lf_33650(void)
             pcVar9 = pcVar13 + 1;
           } while (pcVar13[1] != '\0');
           builtin_strncpy(pcVar13 + 1," Exited",8);
-          FUN_00406260(0,local_44,0xffffffff,0);
+          createevent_message(0,local_44,0xffffffff,0);
         }
         _Src = _Src + -1;
         iVar17 = iVar17 + -1;
@@ -32288,7 +32347,7 @@ void __cdecl lf_33650(void)
     } while (local_68 < iVar17);
   }
   DAT_0204afc0 = iVar14;
-  iVar17 = FUN_0040d860();
+  iVar17 = recvpacket();
   do {
     if (iVar17 < 1) {
       return;
@@ -32311,7 +32370,7 @@ void __cdecl lf_33650(void)
       DAT_1993d6e8 = DAT_1993d6e8 + 1;
     }
     if (local_61 == '\0') {
-      FUN_0040db20(&local_5c,8);
+      pbitread(&local_5c,8);
       if ((DAT_1993d6e8 < 0x10000) && (DAT_1993d6e8 + 4 <= DAT_1993d6e4)) {
         if (0 < DAT_1993d6ec) {
           DAT_1993d6e8 = DAT_1993d6e8 + 1;
@@ -32325,7 +32384,7 @@ void __cdecl lf_33650(void)
       local_61 = '\x01';
       DAT_1992d6e8 = 1;
       DAT_1992d6dc = 5;
-      FUN_0040da60(&DAT_004603c8,8);
+      pbitwrite(&DAT_004603c8,8);
       if (DAT_1992d6dc < 0x10000) {
         if (0 < DAT_1992d6e0) {
           DAT_1992d6dc = DAT_1992d6dc + 1;
@@ -32334,9 +32393,9 @@ void __cdecl lf_33650(void)
         *(undefined4 *)(&DAT_1992d6e4 + DAT_1992d6dc) = local_50;
         DAT_1992d6dc = DAT_1992d6dc + 4;
       }
-      FUN_0040da60((uint *)&g_game.gametype,4);
-      FUN_0040da60((uint *)&DAT_07a1eac4,8);
-      FUN_0040da60((uint *)&DAT_07a1eabc,8);
+      pbitwrite((uint *)&g_game.gametype,4);
+      pbitwrite((uint *)&DAT_07a1eac4,8);
+      pbitwrite((uint *)&DAT_07a1eabc,8);
       if (DAT_1992d6dc < 0x10000) {
         if (0 < DAT_1992d6e0) {
           DAT_1992d6dc = DAT_1992d6dc + 1;
@@ -32367,7 +32426,7 @@ void __cdecl lf_33650(void)
       }
     }
     else if (local_61 == '\x02') {
-      iVar17 = FUN_0040db20(&local_5c,8);
+      iVar17 = pbitread(&local_5c,8);
       if ((iVar17 != 0) && (local_5c == DAT_004603c8)) {
         iVar17 = 0;
         if (0 < DAT_0204afc0) {
@@ -32385,7 +32444,7 @@ void __cdecl lf_33650(void)
         }
         if (DAT_07a1eac4 < DAT_07a1eabc) {
           memset(g_connection + DAT_0204afc0,0,0xf170);
-          fVar11 = LF_BITS_F(FUN_00428020());
+          fVar11 = LF_BITS_F(createplayer());
           iVar17 = DAT_1993d6e4;
           if (LF_BITS_U(fVar11) != 0xffffffffU) {
             if (DAT_1993d6e8 < 0x10000) {
@@ -32422,8 +32481,8 @@ void __cdecl lf_33650(void)
                 }
               }
             }
-            FUN_0040a580(((int)LF_BITS_U(fVar11)));
-            iVar12 = FUN_0040ded0(((int)LF_BITS_U(fVar11)));
+            fixplayername(((int)LF_BITS_U(fVar11)));
+            iVar12 = createaccount(((int)LF_BITS_U(fVar11)));
             iVar17 = DAT_0204afc0;
             iVar18 = 0;
             g_player[((int)LF_BITS_U(fVar11))].unk_0034 = iVar12;
@@ -32432,7 +32491,7 @@ void __cdecl lf_33650(void)
               piVar8 = &g_connection[0].player_id;
               do {
                 if ((*piVar8 != -1) && (g_player[*piVar8].unk_0034 == iVar12)) {
-                  FUN_0040a1b0(fVar11);
+                  deleteplayer(fVar11);
                   fVar11 = LF_BITS_F(g_connection[iVar18].player_id);
                   g_connection[iVar18].player_id = -1;
                   goto LAB_004340dc;
@@ -32451,7 +32510,7 @@ void __cdecl lf_33650(void)
               g_player[((int)LF_BITS_U(fVar11))].look_b = iVar15;
               g_player[((int)LF_BITS_U(fVar11))].look_c = iVar12;
               if (0 < iVar17) {
-                FUN_0040a1b0(fVar11);
+                deleteplayer(fVar11);
                 goto LAB_00434849;
               }
               local_68 = 2;
@@ -32567,7 +32626,7 @@ void __cdecl lf_33650(void)
               g_player[((int)LF_BITS_U(fVar11))].money = 0;
             }
             DAT_07a1eac4 = DAT_07a1eac4 + 1;
-            FUN_004064a0(((int)LF_BITS_U(fVar11)));
+            createevent_updateplayer(((int)LF_BITS_U(fVar11)));
             if (g_server != 0) {
               iVar17 = g_player[((int)LF_BITS_U(fVar11))].money;
               g_event[g_numofevents].type = 8;
@@ -32590,7 +32649,7 @@ void __cdecl lf_33650(void)
               pcVar9 = pcVar13 + 1;
             } while (pcVar13[1] != '\0');
             builtin_strncpy(pcVar13 + 1," Joined",8);
-            FUN_00406260(0,local_44,0xffffffff,0);
+            createevent_message(0,local_44,0xffffffff,0);
 LAB_004340dc:
             uVar10 = ntohl(DAT_1992d6c8);
             iVar17 = DAT_0204afc0;
@@ -32755,9 +32814,9 @@ LAB_004340dc:
               }
             }
             iVar12 = iVar14 * 0x2408;
-            FUN_0040db20((uint *)&g_player[iVar14].input_mode,8);
-            FUN_0040db20((uint *)&g_player[iVar14].hud_mode,4);
-            FUN_0040db20((uint *)&g_connection[iVar17].event_ack,0x10);
+            pbitread((uint *)&g_player[iVar14].input_mode,8);
+            pbitread((uint *)&g_player[iVar14].hud_mode,4);
+            pbitread((uint *)&g_connection[iVar17].event_ack,0x10);
             if ((DAT_1993d6e8 < 0x10000) && (DAT_1993d6e8 + 0xc <= DAT_1993d6e4)) {
               if (0 < DAT_1993d6ec) {
                 DAT_1993d6e8 = DAT_1993d6e8 + 1;
@@ -32770,16 +32829,16 @@ LAB_004340dc:
               g_connection[iVar17].camera_pos.y = fVar11;
               g_connection[iVar17].camera_pos.z = fVar5;
             }
-            FUN_0040db20(&local_48,4);
+            pbitread(&local_48,4);
             piVar8 = &g_player[iVar14].num_actions;
-            FUN_0040db20((uint *)piVar8,8);
+            pbitread((uint *)piVar8,8);
             iVar17 = iVar14;
             if (0 < (int)local_48) {
               local_60 = local_48;
               do {
-                FUN_0040db20((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddec)) + iVar12),4);
+                pbitread((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddec)) + iVar12),4);
                 if (LF_BITS_U(g_player[iVar14].input_extra[*piVar8 * 0x15 + 0x16]) == 0x0U) {
-                  FUN_0040db20((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),8);
+                  pbitread((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),8);
                   if ((DAT_1993d6e8 < 0x10000) && (DAT_1993d6e8 + 4 <= DAT_1993d6e4)) {
                     if (0 < DAT_1993d6ec) {
                       DAT_1993d6e8 = DAT_1993d6e8 + 1;
@@ -32791,7 +32850,7 @@ LAB_004340dc:
                   }
                 }
                 if (LF_BITS_U(g_player[iVar14].input_extra[*piVar8 * 0x15 + 0x16]) == 0x1U) {
-                  FUN_0040db20((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),6);
+                  pbitread((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),6);
                   uVar16 = 0;
                   local_58 = 0;
                   iVar18 = DAT_1993d6e8;
@@ -32815,11 +32874,11 @@ LAB_004340dc:
                   *(undefined1 *)
                    (*(int *)(iVar12 + ((int)SR_VA(0xf1eddf0)) + *piVar8 * 0x54) + iVar12 + ((int)SR_VA(0xf1ede00)) +
                    *piVar8 * 0x54) = 0;
-                  FUN_0040db20((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddf4)) + iVar12),4);
+                  pbitread((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddf4)) + iVar12),4);
                 }
                 if (LF_BITS_U(g_player[iVar14].input_extra[*piVar8 * 0x15 + 0x16]) == 0x2U) {
-                  FUN_0040db20((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),0x10);
-                  FUN_0040db20((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddf4)) + iVar12),0x10);
+                  pbitread((uint *)(g_player[iVar14].input_extra + *piVar8 * 0x15 + 0x17),0x10);
+                  pbitread((uint *)(*piVar8 * 0x54 + ((int)SR_VA(0xf1eddf4)) + iVar12),0x10);
                 }
                 local_60 = local_60 - 1;
                 *piVar8 = *piVar8 + 1U & 0x3f;
@@ -32828,11 +32887,11 @@ LAB_004340dc:
             local_68 = iVar17 * 0x2484;
             local_60 = 6;
             do {
-              FUN_0040db20(&local_58,8);
+              pbitread(&local_58,8);
               uVar16 = local_58;
               iVar14 = (local_68 + local_58) * 4;
-              FUN_0040db20((uint *)(&DAT_12e96d08 + iVar14),8);
-              FUN_0040db20((uint *)(&DAT_12e96e08 + iVar14),2);
+              pbitread((uint *)(&DAT_12e96d08 + iVar14),8);
+              pbitread((uint *)(&DAT_12e96e08 + iVar14),2);
               _Size = *(size_t *)(&DAT_12e96d08 + iVar14);
               if ((DAT_1993d6e8 < 0x10000) && ((int)(DAT_1993d6e8 + _Size) <= DAT_1993d6e4)) {
                 if (0 < DAT_1993d6ec) {
@@ -32847,8 +32906,8 @@ LAB_004340dc:
               local_60 = local_60 + -1;
             } while (local_60 != 0);
             *(uint *)(&DAT_12e96d00 + iVar17 * 0x9210) = uVar16 + 1 & 0x3f;
-            FUN_0040db20(&DAT_12e9af0c + iVar17 * 0x2484,1);
-            FUN_0040db20(&local_4c,8);
+            pbitread(&DAT_12e9af0c + iVar17 * 0x2484,1);
+            pbitread(&local_4c,8);
             if (local_4c == 0xff) {
               *(undefined4 *)((int)&g_connection[0].unk_0154 + local_54) = 0xffffffff;
             }
@@ -32879,7 +32938,7 @@ LAB_004340dc:
       }
     }
 LAB_00434849:
-    iVar17 = FUN_0040d860();
+    iVar17 = recvpacket();
   } while( true );
 }
 #undef DAT_00460d18
@@ -32928,23 +32987,23 @@ LAB_00434849:
 #undef g_bsdsocket
 #undef _DAT_07a1ead8
 #undef _DAT_1992d6e4
-#undef FUN_004064a0
-#undef FUN_0040a1b0
-#undef ntohs
-#undef FUN_00428020
-#undef FUN_0040da60
-#undef memset
-#undef FUN_0040d860
-#undef ntohl
+#undef deleteplayer
+#undef createaccount
 #undef htons
-#undef htonl
-#undef FUN_0040db20
 #undef memcpy
-#undef FUN_00406260
-#undef sendto
+#undef pbitread
+#undef memset
+#undef recvpacket
+#undef createevent_message
+#undef createplayer
+#undef ntohs
+#undef ntohl
+#undef pbitwrite
+#undef createevent_updateplayer
 #undef __security_check_cookie
-#undef FUN_0040a580
-#undef FUN_0040ded0
+#undef sendto
+#undef htonl
+#undef fixplayername
 #undef local_68
 #undef local_61
 #undef local_60
@@ -32972,8 +33031,8 @@ LAB_00434849:
 #define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
 #define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
 #define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
+#define calculatepointscale ((void (__cdecl *)(float *, int, int, float *))SR_VA(0x428c90))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00428c90 ((void (__cdecl *)(float *, int, int, float *))SR_VA(0x428c90))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_30 (*(undefined8 *)(lf_frame + 0x20))
 #define local_28 (*(float *)(lf_frame + 0x28))
@@ -33120,12 +33179,12 @@ void __cdecl lf_34870(int param_1)
   fVar1 = (float)(fVar1 * 0.25);
   *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(_DAT_00460cf0 * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * _DAT_00460cec))));
   local_28 = (float)(fVar1 * _DAT_00460cf4 + local_1c);
-  FUN_00428c90((float *)&g_objecttype[param_1].unk_0640,iVar7,((int)SR_VA(0x20497c0)),(float *)&local_30);
+  calculatepointscale((float *)&g_objecttype[param_1].unk_0640,iVar7,((int)SR_VA(0x20497c0)),(float *)&local_30);
   fVar1 = (float)(g_objecttype[param_1].unk_0034 * 0.25);
   *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(_DAT_00460cd8 * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * _DAT_00460cd4))));
   local_28 = (float)(fVar1 * _DAT_00460cdc + local_1c);
-  FUN_00428c90((float *)&g_objecttype[param_1].unk_0540,g_objecttype[param_1].unk_053c,((int)SR_VA(0x20497c0)),
-               (float *)&local_30);
+  calculatepointscale((float *)&g_objecttype[param_1].unk_0540,g_objecttype[param_1].unk_053c,
+                      ((int)SR_VA(0x20497c0)),(float *)&local_30);
   return;
 }
 #undef DAT_00460cec
@@ -33142,8 +33201,8 @@ void __cdecl lf_34870(int param_1)
 #undef _DAT_00460cd8
 #undef _DAT_00460cd4
 #undef _DAT_00460cdc
+#undef calculatepointscale
 #undef _CIsqrt
-#undef FUN_00428c90
 #undef local_3c
 #undef local_30
 #undef local_28
@@ -33161,12 +33220,12 @@ void __cdecl lf_34870(int param_1)
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_006e6156 (*(undefined *)SR_VA(0x6e6156))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
+#define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040b040 ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b040))
-#define FUN_00434870 ((void (__cdecl *)(int))SR_VA(0x434870))
-#define FUN_0040b150 ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
-#define FUN_00428a90 ((void (__cdecl *)(int, undefined4, int, int, undefined4 *, undefined4, undefined4, undefined4, float, undefined4, undefined4, undefined4))SR_VA(0x428a90))
-#define FUN_0040b0b0 ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define objecttype_addparticle ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b040))
+#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
+#define objecttype_addwheel ((void (__cdecl *)(int, undefined4, int, int, undefined4 *, undefined4, undefined4, undefined4, float, undefined4, undefined4, undefined4))SR_VA(0x428a90))
 #define local_88 (*(int * *)(lf_frame + 0x18))
 #define local_84 (*(int *)(lf_frame + 0x1c))
 #define local_80 (*(float *)(lf_frame + 0x20))
@@ -33243,7 +33302,7 @@ void __cdecl lf_34c10(void)
     if ((int)uVar2 < 4) {
       uVar1 = 0x40000000;
     }
-    FUN_0040b040(0,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(0,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -33260,7 +33319,7 @@ void __cdecl lf_34c10(void)
     else {
       local_78 = 1.3125;
     }
-    FUN_0040b040(0,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(0,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[0].unk_053c = 0x10;
@@ -33282,7 +33341,7 @@ void __cdecl lf_34c10(void)
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(0,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(0,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -33293,18 +33352,18 @@ void __cdecl lf_34c10(void)
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(0,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(0,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(0,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(0,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(0,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(0,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(0,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(0,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(0,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(0,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00434eeb:
-      FUN_0040b150(0,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(0,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00434eeb;
     iVar5 = iVar5 + 1;
@@ -33325,7 +33384,7 @@ LAB_00434eeb:
       iVar3 = *local_88;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(0,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(0,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -33333,51 +33392,51 @@ LAB_00434eeb:
     iVar5 = iVar5 + 1;
     local_84 = local_84 + -1;
   } while (local_84 != 0);
-  FUN_0040b150(0,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(0,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1320] + g_objecttype[0].num_faces * 0x40) = 0x10;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1330] + g_objecttype[0].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1324] + g_objecttype[0].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1334] + g_objecttype[0].num_faces * 0x40) = 0x3ee00000;
-  FUN_0040b150(0,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(0,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x131c] + g_objecttype[0].num_faces * 0x40) = 0x12;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x132c] + g_objecttype[0].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1328] + g_objecttype[0].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1338] + g_objecttype[0].num_faces * 0x40) = 0x3f100000;
-  FUN_0040b150(0,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+  objecttype_addface(0,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
-  FUN_0040b150(0,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(0,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x131c] + g_objecttype[0].num_faces * 0x40) = 0x11;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x132c] + g_objecttype[0].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1328] + g_objecttype[0].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1338] + g_objecttype[0].num_faces * 0x40) = 0x3ee00000;
-  FUN_0040b150(0,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(0,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1320] + g_objecttype[0].num_faces * 0x40) = 0x13;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1330] + g_objecttype[0].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1324] + g_objecttype[0].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[0].lf_raw[0x1334] + g_objecttype[0].num_faces * 0x40) = 0x3f100000;
-  FUN_0040b150(0,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(0,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[0].num_faces)[g_objecttype[0].num_faces * 0x10] = 1;
-  FUN_0040b150(0,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+  objecttype_addface(0,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(0,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(0,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(0,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(0,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(0,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(0,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(0,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(0,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   g_objecttype[0].unk_7fe4 = 3.1171875;
   g_objecttype[0].num_seats = 4;
   g_objecttype[0].unk_7fe0 = 1.0;
@@ -33393,7 +33452,7 @@ LAB_00434eeb:
   (*(uint *)((uchar *)&g_objecttype[0] + 32916)) = 0xbe800000;
   (*(uint *)((uchar *)&g_objecttype[0] + 32928)) = 0x3f800000;
   (*(uint *)((uchar *)&g_objecttype[0] + 32940)) = 0x3f800000;
-  FUN_00434870(0);
+  setupobjecttypeweight(0);
   g_objecttype[1].unk_0030 = 1000.0;
   g_objecttype[1].engine_power = 1.0;
   (*(uchar *)((uchar *)&g_objecttype[1].unk_000c + 0)) = 'T';
@@ -33431,7 +33490,7 @@ LAB_00434eeb:
     if ((int)uVar2 < 4) {
       uVar1 = 0x40000000;
     }
-    FUN_0040b040(1,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(1,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -33448,11 +33507,11 @@ LAB_00434eeb:
     else {
       local_78 = 1.3125;
     }
-    FUN_0040b040(1,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(1,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[1].unk_053c = 0x10;
-  FUN_0040b040(1,0,0,0xc00c0000,0x40800000);
+  objecttype_addparticle(1,0,0,0xc00c0000,0x40800000);
   iVar5 = 0;
   do {
     local_54[0] = iVar5 * 2;
@@ -33471,7 +33530,7 @@ LAB_00434eeb:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(1,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(1,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -33483,25 +33542,25 @@ LAB_00434eeb:
     if (iVar5 == 0) {
       iVar3 = 0;
       do {
-        FUN_0040b0b0(1,0,local_54[iVar3],0x14);
+        objecttype_addbond(1,0,local_54[iVar3],0x14);
         iVar3 = iVar3 + 1;
       } while (iVar3 < 8);
     }
     iVar7 = local_54[2];
     iVar6 = local_54[1];
     iVar3 = local_54[0];
-    FUN_0040b150(1,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(1,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
+    objecttype_addface(1,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(1,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
     iVar8 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(1,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
+      objecttype_addface(1,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
     }
     iVar3 = local_54[6];
-    FUN_0040b150(1,4,local_54[6],iVar8,iVar6,iVar7,0x3f800000,0x3f800000);
+    objecttype_addface(1,4,local_54[6],iVar8,iVar6,iVar7,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(1,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(1,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
 LAB_0043574c:
-      FUN_0040b150(1,4,local_54[4],iVar8,iVar3,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(1,4,local_54[4],iVar8,iVar3,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_0043574c;
     iVar5 = iVar5 + 1;
@@ -33522,7 +33581,7 @@ LAB_0043574c:
       iVar3 = *local_88;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(1,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(1,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -33530,51 +33589,51 @@ LAB_0043574c:
     iVar5 = iVar5 + 1;
     local_84 = local_84 + -1;
   } while (local_84 != 0);
-  FUN_0040b150(1,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(1,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1320] + g_objecttype[1].num_faces * 0x40) = 0x10;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1330] + g_objecttype[1].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1324] + g_objecttype[1].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1334] + g_objecttype[1].num_faces * 0x40) = 0x3ee00000;
-  FUN_0040b150(1,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(1,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x131c] + g_objecttype[1].num_faces * 0x40) = 0x12;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x132c] + g_objecttype[1].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1328] + g_objecttype[1].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1338] + g_objecttype[1].num_faces * 0x40) = 0x3f100000;
-  FUN_0040b150(1,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+  objecttype_addface(1,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
-  FUN_0040b150(1,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(1,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x131c] + g_objecttype[1].num_faces * 0x40) = 0x11;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x132c] + g_objecttype[1].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1328] + g_objecttype[1].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1338] + g_objecttype[1].num_faces * 0x40) = 0x3ee00000;
-  FUN_0040b150(1,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(1,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1320] + g_objecttype[1].num_faces * 0x40) = 0x13;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1330] + g_objecttype[1].num_faces * 0x40) = 0x3f000000;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1324] + g_objecttype[1].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[1].lf_raw[0x1334] + g_objecttype[1].num_faces * 0x40) = 0x3f100000;
-  FUN_0040b150(1,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(1,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[1].num_faces)[g_objecttype[1].num_faces * 0x10] = 1;
-  FUN_0040b150(1,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+  objecttype_addface(1,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(1,0,0,2,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(1,0,0,2,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(1,0,1,3,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(1,0,1,3,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(1,0,2,4,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(1,0,2,4,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(1,0,3,5,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(1,0,3,5,&local_74,0x3ec00000,0x41c00000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   g_objecttype[1].unk_7fe4 = 3.1171875;
   g_objecttype[1].num_seats = 4;
   g_objecttype[1].unk_7fe0 = 1.0;
@@ -33590,7 +33649,7 @@ LAB_0043574c:
   (*(uint *)((uchar *)&g_objecttype[1] + 32916)) = 0xbe800000;
   (*(uint *)((uchar *)&g_objecttype[1] + 32928)) = 0x3f800000;
   (*(uint *)((uchar *)&g_objecttype[1] + 32940)) = 0x3f800000;
-  FUN_00434870(1);
+  setupobjecttypeweight(1);
   g_objecttype[2].unk_0030 = 600.0;
   g_objecttype[2].engine_power = 0.4375;
   (*(uchar *)((uchar *)&g_objecttype[2].unk_000c + 0)) = 'M';
@@ -33625,7 +33684,7 @@ LAB_0043574c:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(2,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(2,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -33642,7 +33701,7 @@ LAB_0043574c:
     else {
       local_78 = 0.875;
     }
-    FUN_0040b040(2,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(2,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[2].unk_053c = 0x10;
@@ -33665,7 +33724,7 @@ LAB_0043574c:
         iVar7 = *local_88;
         iVar8 = iVar6;
         do {
-          FUN_0040b0b0(2,0,iVar7,local_54[iVar8]);
+          objecttype_addbond(2,0,iVar7,local_54[iVar8]);
           iVar8 = iVar8 + 1;
           iVar3 = local_54[0];
         } while (iVar8 < 8);
@@ -33676,18 +33735,18 @@ LAB_0043574c:
       iVar6 = iVar6 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(2,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(2,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
+    objecttype_addface(2,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(2,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
     iVar6 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(2,4,local_54[5],local_54[4],iVar3,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(2,4,local_54[5],local_54[4],iVar3,iVar7,0x3f800000,0x3f800000);
     }
     iVar3 = local_54[6];
-    FUN_0040b150(2,4,local_54[6],iVar6,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(2,4,local_54[6],iVar6,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(2,4,local_54[7],iVar3,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(2,4,local_54[7],iVar3,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00435f37:
-      FUN_0040b150(2,4,local_54[4],iVar6,iVar3,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(2,4,local_54[4],iVar6,iVar3,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00435f37;
     iVar5 = iVar5 + 1;
@@ -33708,7 +33767,7 @@ LAB_00435f37:
       iVar3 = *piVar4;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(2,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(2,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -33716,31 +33775,31 @@ LAB_00435f37:
     piVar4 = piVar4 + 1;
     local_84 = local_84 + -1;
   } while (local_84 != 0);
-  FUN_0040b150(2,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(2,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[2].num_faces)[g_objecttype[2].num_faces * 0x10] = 1;
-  FUN_0040b150(2,4,0x11,0x10,10,0xb,0x3f800000,0x40800000);
+  objecttype_addface(2,4,0x11,0x10,10,0xb,0x3f800000,0x40800000);
   (&g_objecttype[2].num_faces)[g_objecttype[2].num_faces * 0x10] = 1;
-  FUN_0040b150(2,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(2,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[2].num_faces)[g_objecttype[2].num_faces * 0x10] = 1;
-  FUN_0040b150(2,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(2,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[2].num_faces)[g_objecttype[2].num_faces * 0x10] = 1;
-  FUN_0040b150(2,4,0x10,0x11,0x13,0x12,0x3f800000,0);
+  objecttype_addface(2,4,0x10,0x11,0x13,0x12,0x3f800000,0);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(2,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(2,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(2,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(2,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(2,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(2,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(2,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(2,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   g_objecttype[2].unk_7fe4 = 2.5703125;
   g_objecttype[2].num_seats = 2;
   g_objecttype[2].unk_7fe0 = 1.0;
@@ -33750,7 +33809,7 @@ LAB_00435f37:
   (*(uint *)((uchar *)&g_objecttype[2] + 32908)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[2] + 32912)) = 0xbec00000;
   (*(uint *)((uchar *)&g_objecttype[2] + 32916)) = 0;
-  FUN_00434870(2);
+  setupobjecttypeweight(2);
   g_objecttype[3].unk_0030 = 1500.0;
   g_objecttype[3].engine_power = 1.0;
   g_objecttype[3].unk_000c = 0x6f6d694c;
@@ -33780,7 +33839,7 @@ LAB_00435f37:
     if ((int)uVar2 < 4) {
       uVar1 = 0x40000000;
     }
-    FUN_0040b040(3,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(3,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -33797,7 +33856,7 @@ LAB_00435f37:
     else {
       local_78 = 2.1875;
     }
-    FUN_0040b040(3,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(3,lf_f2u(local_80),0x3f8c0000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[3].unk_053c = 0x10;
@@ -33820,7 +33879,7 @@ LAB_00435f37:
         iVar7 = *local_88;
         iVar8 = iVar6;
         do {
-          FUN_0040b0b0(3,0,iVar7,local_54[iVar8]);
+          objecttype_addbond(3,0,iVar7,local_54[iVar8]);
           iVar8 = iVar8 + 1;
           iVar3 = local_54[0];
         } while (iVar8 < 8);
@@ -33831,18 +33890,18 @@ LAB_00435f37:
       iVar6 = iVar6 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(3,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(3,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
+    objecttype_addface(3,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(3,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
     iVar6 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(3,4,local_54[5],local_54[4],iVar3,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(3,4,local_54[5],local_54[4],iVar3,iVar7,0x3f800000,0x3f800000);
     }
     iVar3 = local_54[6];
-    FUN_0040b150(3,4,local_54[6],iVar6,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(3,4,local_54[6],iVar6,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(3,4,local_54[7],iVar3,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(3,4,local_54[7],iVar3,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00436569:
-      FUN_0040b150(3,4,local_54[4],iVar6,iVar3,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(3,4,local_54[4],iVar6,iVar3,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00436569;
     iVar5 = iVar5 + 1;
@@ -33863,7 +33922,7 @@ LAB_00436569:
       iVar3 = *piVar4;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(3,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(3,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -33873,13 +33932,13 @@ LAB_00436569:
   } while (local_84 != 0);
   local_6c = 0x3e800000;
   local_68 = 0x3e800000;
-  FUN_0040b150(3,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(3,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1320] + g_objecttype[3].num_faces * 0x40) = 0x10;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1330] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1324] + g_objecttype[3].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1334] + g_objecttype[3].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(3,4,0x10,0x12,0xc,10,0x3f800000,0x40c00000);
+  objecttype_addface(3,4,0x10,0x12,0xc,10,0x3f800000,0x40c00000);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x131c] + g_objecttype[3].num_faces * 0x40) = 0x12;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x132c] + g_objecttype[3].num_faces * 0x40) = 0x3e800000;
@@ -33889,21 +33948,21 @@ LAB_00436569:
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1334] + g_objecttype[3].num_faces * 0x40) = 0x3e800000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1328] + g_objecttype[3].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1338] + g_objecttype[3].num_faces * 0x40) = 0x3ec00000;
-  FUN_0040b150(3,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(3,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x131c] + g_objecttype[3].num_faces * 0x40) = 0x12;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x132c] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1328] + g_objecttype[3].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1338] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
-  FUN_0040b150(3,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+  objecttype_addface(3,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
-  FUN_0040b150(3,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(3,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x131c] + g_objecttype[3].num_faces * 0x40) = 0x11;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x132c] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1328] + g_objecttype[3].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1338] + g_objecttype[3].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(3,4,0x13,0x11,0xb,0xd,0x3f800000,0x40c00000);
+  objecttype_addface(3,4,0x13,0x11,0xb,0xd,0x3f800000,0x40c00000);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x131c] + g_objecttype[3].num_faces * 0x40) = 0x11;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x132c] + g_objecttype[3].num_faces * 0x40) = 0x3e800000;
@@ -33913,31 +33972,31 @@ LAB_00436569:
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1334] + g_objecttype[3].num_faces * 0x40) = 0x3ec00000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1328] + g_objecttype[3].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1338] + g_objecttype[3].num_faces * 0x40) = 0x3e800000;
-  FUN_0040b150(3,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(3,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1320] + g_objecttype[3].num_faces * 0x40) = 0x13;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1330] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1324] + g_objecttype[3].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[3].lf_raw[0x1334] + g_objecttype[3].num_faces * 0x40) = 0x3f400000;
-  FUN_0040b150(3,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(3,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[3].num_faces)[g_objecttype[3].num_faces * 0x10] = 1;
-  FUN_0040b150(3,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+  objecttype_addface(3,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(3,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(3,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(3,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(3,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(3,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(3,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   local_74 = 0x3e000000;
   local_70 = 0x3f600000;
-  FUN_00428a90(3,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(3,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   g_objecttype[3].unk_7fe4 = 4.6484375;
   g_objecttype[3].num_seats = 4;
   g_objecttype[3].unk_7fe0 = 1.0;
@@ -33953,7 +34012,7 @@ LAB_00436569:
   (*(uint *)((uchar *)&g_objecttype[3] + 32940)) = 0x40000000;
   (*(uint *)((uchar *)&g_objecttype[3] + 32932)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[3] + 32936)) = 0xbec00000;
-  FUN_00434870(3);
+  setupobjecttypeweight(3);
   g_objecttype[4].unk_0030 = 800.0;
   g_objecttype[4].engine_power = 1.25;
   g_objecttype[4].unk_000c = 0x62727554;
@@ -33992,7 +34051,7 @@ LAB_00436569:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(4,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(4,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -34009,7 +34068,7 @@ LAB_00436569:
     else {
       local_78 = 0.875;
     }
-    FUN_0040b040(4,lf_f2u(local_80),0x3f750000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(4,lf_f2u(local_80),0x3f750000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[4].unk_053c = 0x10;
@@ -34031,7 +34090,7 @@ LAB_00436569:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(4,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(4,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -34042,18 +34101,18 @@ LAB_00436569:
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(4,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(4,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(4,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(4,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(4,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(4,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(4,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(4,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(4,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(4,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00436f09:
-      FUN_0040b150(4,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(4,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00436f09;
     iVar5 = iVar5 + 1;
@@ -34074,7 +34133,7 @@ LAB_00436f09:
       iVar3 = *piVar4;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(4,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(4,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -34082,27 +34141,27 @@ LAB_00436f09:
     piVar4 = piVar4 + 1;
     local_84 = local_84 + -1;
   } while (local_84 != 0);
-  FUN_0040b150(4,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(4,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[4].num_faces)[g_objecttype[4].num_faces * 0x10] = 1;
-  FUN_0040b150(4,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+  objecttype_addface(4,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
   (&g_objecttype[4].num_faces)[g_objecttype[4].num_faces * 0x10] = 1;
-  FUN_0040b150(4,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(4,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[4].num_faces)[g_objecttype[4].num_faces * 0x10] = 1;
-  FUN_0040b150(4,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(4,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[4].num_faces)[g_objecttype[4].num_faces * 0x10] = 1;
-  FUN_0040b150(4,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+  objecttype_addface(4,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(4,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(4,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(4,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
+  objecttype_addwheel(4,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(4,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(4,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(4,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
+  objecttype_addwheel(4,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
   g_objecttype[4].unk_7fe4 = 2.3515625;
   g_objecttype[4].num_seats = 2;
   g_objecttype[4].unk_7fe0 = 1.0;
@@ -34112,7 +34171,7 @@ LAB_00436f09:
   (*(uint *)((uchar *)&g_objecttype[4] + 32908)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[4] + 32912)) = 0xbf000000;
   (*(uint *)((uchar *)&g_objecttype[4] + 32916)) = 0x3e000000;
-  FUN_00434870(4);
+  setupobjecttypeweight(4);
   g_objecttype[5].unk_0030 = 750.0;
   g_objecttype[5].engine_power = 1.75;
   (*(uchar *)((uchar *)&g_objecttype[5].unk_000c + 0)) = 'T';
@@ -34157,7 +34216,7 @@ LAB_00436f09:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(5,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(5,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -34174,7 +34233,7 @@ LAB_00436f09:
     else {
       local_78 = 0.875;
     }
-    FUN_0040b040(5,lf_f2u(local_80),0x3f750000,lf_f2u(local_78),0x3ec00000);
+    objecttype_addparticle(5,lf_f2u(local_80),0x3f750000,lf_f2u(local_78),0x3ec00000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[5].unk_053c = 0x10;
@@ -34196,7 +34255,7 @@ LAB_00436f09:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(5,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(5,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -34207,18 +34266,18 @@ LAB_00436f09:
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(5,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(5,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(5,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(5,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(5,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(5,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(5,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(5,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(5,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(5,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00437548:
-      FUN_0040b150(5,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(5,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00437548;
     iVar5 = iVar5 + 1;
@@ -34239,7 +34298,7 @@ LAB_00437548:
       iVar3 = *local_88;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(5,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(5,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -34247,27 +34306,27 @@ LAB_00437548:
     iVar5 = iVar5 + 1;
     local_84 = local_84 + -1;
   } while (local_84 != 0);
-  FUN_0040b150(5,4,0x10,0x12,0xc,10,0x3f800000,0);
+  objecttype_addface(5,4,0x10,0x12,0xc,10,0x3f800000,0);
   (&g_objecttype[5].num_faces)[g_objecttype[5].num_faces * 0x10] = 1;
-  FUN_0040b150(5,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+  objecttype_addface(5,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
   (&g_objecttype[5].num_faces)[g_objecttype[5].num_faces * 0x10] = 1;
-  FUN_0040b150(5,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+  objecttype_addface(5,4,0x13,0x11,0xb,0xd,0x3f800000,0);
   (&g_objecttype[5].num_faces)[g_objecttype[5].num_faces * 0x10] = 1;
-  FUN_0040b150(5,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+  objecttype_addface(5,4,0x12,0x13,0xd,0xc,0x3f800000,0);
   (&g_objecttype[5].num_faces)[g_objecttype[5].num_faces * 0x10] = 1;
-  FUN_0040b150(5,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+  objecttype_addface(5,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(5,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(5,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(5,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
+  objecttype_addwheel(5,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(5,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(5,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(5,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
+  objecttype_addwheel(5,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,0.0,0x3e800000,0x3f000000,
+                      0x3f000000);
   g_objecttype[5].unk_7fe4 = 2.3515625;
   g_objecttype[5].num_seats = 2;
   g_objecttype[5].unk_7fe0 = 1.0;
@@ -34277,7 +34336,7 @@ LAB_00437548:
   (*(uint *)((uchar *)&g_objecttype[5] + 32908)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[5] + 32912)) = 0xbec00000;
   (*(uint *)((uchar *)&g_objecttype[5] + 32916)) = 0x3e000000;
-  FUN_00434870(5);
+  setupobjecttypeweight(5);
   g_objecttype[7].unk_0030 = 2100.0;
   g_objecttype[7].unk_000c = (int)((undefined *)0x6e6156);
   g_objecttype[7].unk_002c = 3000;
@@ -34310,7 +34369,7 @@ LAB_00437548:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(7,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(7,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0xc);
   uVar2 = 0;
@@ -34327,7 +34386,7 @@ LAB_00437548:
     else {
       local_78 = 2.375;
     }
-    FUN_0040b040(7,lf_f2u(local_80),0x3fb00000,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(7,lf_f2u(local_80),0x3fb00000,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[7].unk_053c = 0xc;
@@ -34349,7 +34408,7 @@ LAB_00437548:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(7,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(7,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -34360,20 +34419,20 @@ LAB_00437548:
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(7,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(7,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(7,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(7,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(7,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(7,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(7,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(7,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     iVar7 = local_54[7];
     iVar9 = iVar6;
     iVar10 = local_54[3];
     if ((iVar5 == 1) ||
        (iVar7 = local_54[4], iVar9 = iVar3, iVar8 = iVar6, iVar10 = local_54[7], iVar5 == 0)) {
-      FUN_0040b150(7,4,iVar7,iVar9,iVar8,iVar10,0x3f800000,0x3f800000);
+      objecttype_addface(7,4,iVar7,iVar9,iVar8,iVar10,0x3f800000,0x3f800000);
     }
     iVar5 = iVar5 + 1;
   } while (iVar5 < 2);
@@ -34393,7 +34452,7 @@ LAB_00437548:
       iVar3 = *local_88;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(7,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(7,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -34403,13 +34462,13 @@ LAB_00437548:
   } while (local_84 != 0);
   local_6c = 0x3e800000;
   local_68 = 0x3e666666;
-  FUN_0040b150(7,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(7,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1320] + g_objecttype[7].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1330] + g_objecttype[7].num_faces * 0x40) = 0x3f333333;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1324] + g_objecttype[7].num_faces * 0x40) = 8;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1334] + g_objecttype[7].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(7,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(7,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x131c] + g_objecttype[7].num_faces * 0x40) = 0xe;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x132c] + g_objecttype[7].num_faces * 0x40) = 0x3e99999a;
@@ -34419,21 +34478,21 @@ LAB_00437548:
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1334] + g_objecttype[7].num_faces * 0x40) = 0x3e666666;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1328] + g_objecttype[7].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1338] + g_objecttype[7].num_faces * 0x40) = 0x3ec00000;
-  FUN_0040b150(7,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(7,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x131c] + g_objecttype[7].num_faces * 0x40) = 0xe;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x132c] + g_objecttype[7].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1328] + g_objecttype[7].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1338] + g_objecttype[7].num_faces * 0x40) = 0x3f466666;
-  FUN_0040b150(7,4,0xd,0xc,8,9,0x3f800000,0x40c00000);
+  objecttype_addface(7,4,0xd,0xc,8,9,0x3f800000,0x40c00000);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
-  FUN_0040b150(7,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(7,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x131c] + g_objecttype[7].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x132c] + g_objecttype[7].num_faces * 0x40) = 0x3f333333;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1328] + g_objecttype[7].num_faces * 0x40) = 9;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1338] + g_objecttype[7].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(7,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(7,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x131c] + g_objecttype[7].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x132c] + g_objecttype[7].num_faces * 0x40) = 0x3e800000;
@@ -34443,27 +34502,27 @@ LAB_00437548:
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1334] + g_objecttype[7].num_faces * 0x40) = 0x3ec00000;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1328] + g_objecttype[7].num_faces * 0x40) = 9;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1338] + g_objecttype[7].num_faces * 0x40) = 0x3e666666;
-  FUN_0040b150(7,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(7,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1320] + g_objecttype[7].num_faces * 0x40) = 0xf;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1330] + g_objecttype[7].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1324] + g_objecttype[7].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[7].lf_raw[0x1334] + g_objecttype[7].num_faces * 0x40) = 0x3f466666;
-  FUN_0040b150(7,4,0xe,0xf,0xb,10,0x3f800000,0);
+  objecttype_addface(7,4,0xe,0xf,0xb,10,0x3f800000,0);
   (&g_objecttype[7].num_faces)[g_objecttype[7].num_faces * 0x10] = 1;
-  FUN_0040b150(7,4,0xc,0xd,0xf,0xe,0x3f800000,0x3f800000);
+  objecttype_addface(7,4,0xc,0xd,0xf,0xe,0x3f800000,0x3f800000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(7,0,0,2,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(7,0,1,3,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(7,0,0,2,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3f000000);
+  objecttype_addwheel(7,0,1,3,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3f000000);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(7,0,2,4,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3f000000);
-  FUN_00428a90(7,0,3,5,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3f000000);
+  objecttype_addwheel(7,0,2,4,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3f000000);
+  objecttype_addwheel(7,0,3,5,&local_74,0x3ec00000,0x41a00000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3f000000);
   g_objecttype[7].unk_7fe4 = 3.4375;
   g_objecttype[7].num_seats = 6;
   g_objecttype[7].unk_7fe0 = 1.125;
@@ -34485,7 +34544,7 @@ LAB_00437548:
   (*(uint *)((uchar *)&g_objecttype[7] + 32964)) = 0x40100000;
   (*(uint *)((uchar *)&g_objecttype[7] + 32956)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[7] + 32960)) = 0xbe800000;
-  FUN_00434870(7);
+  setupobjecttypeweight(7);
   g_objecttype[8].unk_0030 = 1200.0;
   g_objecttype[8].engine_power = 0.5;
   (*(uchar *)((uchar *)&g_objecttype[8].unk_000c + 0)) = 'M';
@@ -34525,7 +34584,7 @@ LAB_00437548:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(8,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(8,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0xc);
   uVar2 = 0;
@@ -34542,7 +34601,7 @@ LAB_00437548:
     else {
       local_78 = 2.125;
     }
-    FUN_0040b040(8,lf_f2u(local_80),0x3f933333,lf_f2u(local_78),0x3f000000);
+    objecttype_addparticle(8,lf_f2u(local_80),0x3f933333,lf_f2u(local_78),0x3f000000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[8].unk_053c = 0xc;
@@ -34564,7 +34623,7 @@ LAB_00437548:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(8,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(8,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -34575,20 +34634,20 @@ LAB_00437548:
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(8,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(8,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(8,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(8,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(8,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(8,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(8,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(8,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     iVar7 = local_54[7];
     iVar9 = iVar6;
     iVar10 = local_54[3];
     if ((iVar5 == 1) ||
        (iVar7 = local_54[4], iVar9 = iVar3, iVar8 = iVar6, iVar10 = local_54[7], iVar5 == 0)) {
-      FUN_0040b150(8,4,iVar7,iVar9,iVar8,iVar10,0x3f800000,0x3f800000);
+      objecttype_addface(8,4,iVar7,iVar9,iVar8,iVar10,0x3f800000,0x3f800000);
     }
     iVar5 = iVar5 + 1;
   } while (iVar5 < 2);
@@ -34608,7 +34667,7 @@ LAB_00437548:
       iVar3 = *local_88;
       iVar6 = iVar5;
       do {
-        FUN_0040b0b0(8,0,iVar3,local_54[iVar6]);
+        objecttype_addbond(8,0,iVar3,local_54[iVar6]);
         iVar6 = iVar6 + 1;
       } while (iVar6 < 8);
     }
@@ -34618,13 +34677,13 @@ LAB_00437548:
   } while (local_84 != 0);
   local_6c = 0x3e800000;
   local_68 = 0x3e666666;
-  FUN_0040b150(8,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(8,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1320] + g_objecttype[8].num_faces * 0x40) = 0xc;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1330] + g_objecttype[8].num_faces * 0x40) = 0x3f333333;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1324] + g_objecttype[8].num_faces * 0x40) = 8;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1334] + g_objecttype[8].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(8,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(8,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x131c] + g_objecttype[8].num_faces * 0x40) = 0xe;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x132c] + g_objecttype[8].num_faces * 0x40) = 0x3e99999a;
@@ -34634,21 +34693,21 @@ LAB_00437548:
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1334] + g_objecttype[8].num_faces * 0x40) = 0x3e666666;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1328] + g_objecttype[8].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1338] + g_objecttype[8].num_faces * 0x40) = 0x3ec00000;
-  FUN_0040b150(8,4,0xc,0xe,10,8,0x3f800000,0);
+  objecttype_addface(8,4,0xc,0xe,10,8,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x131c] + g_objecttype[8].num_faces * 0x40) = 0xe;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x132c] + g_objecttype[8].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1328] + g_objecttype[8].num_faces * 0x40) = 10;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1338] + g_objecttype[8].num_faces * 0x40) = 0x3f466666;
-  FUN_0040b150(8,4,0xd,0xc,8,9,0x3f800000,0x40c00000);
+  objecttype_addface(8,4,0xd,0xc,8,9,0x3f800000,0x40c00000);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
-  FUN_0040b150(8,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(8,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x131c] + g_objecttype[8].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x132c] + g_objecttype[8].num_faces * 0x40) = 0x3f333333;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1328] + g_objecttype[8].num_faces * 0x40) = 9;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1338] + g_objecttype[8].num_faces * 0x40) = 0x3f200000;
-  FUN_0040b150(8,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(8,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x131c] + g_objecttype[8].num_faces * 0x40) = 0xd;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x132c] + g_objecttype[8].num_faces * 0x40) = 0x3e800000;
@@ -34658,28 +34717,28 @@ LAB_00437548:
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1334] + g_objecttype[8].num_faces * 0x40) = 0x3ec00000;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1328] + g_objecttype[8].num_faces * 0x40) = 9;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1338] + g_objecttype[8].num_faces * 0x40) = 0x3e666666;
-  FUN_0040b150(8,4,0xf,0xd,9,0xb,0x3f800000,0);
+  objecttype_addface(8,4,0xf,0xd,9,0xb,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1320] + g_objecttype[8].num_faces * 0x40) = 0xf;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1330] + g_objecttype[8].num_faces * 0x40) = 0x3f400000;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1324] + g_objecttype[8].num_faces * 0x40) = 0xb;
   *(undefined4 *)(&g_objecttype[8].lf_raw[0x1334] + g_objecttype[8].num_faces * 0x40) = 0x3f466666;
-  FUN_0040b150(8,4,0xe,0xf,0xb,10,0x3f800000,0);
+  objecttype_addface(8,4,0xe,0xf,0xb,10,0x3f800000,0);
   (&g_objecttype[8].num_faces)[g_objecttype[8].num_faces * 0x10] = 1;
-  FUN_0040b150(8,4,0xc,0xd,0xf,0xe,0x3f800000,0x3f800000);
+  objecttype_addface(8,4,0xc,0xd,0xf,0xe,0x3f800000,0x3f800000);
   local_74 = 0;
   local_70 = 0x3f800000;
-  FUN_00428a90(8,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3ec00000);
-  FUN_00428a90(8,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3ec00000);
+  objecttype_addwheel(8,0,0,2,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3ec00000);
+  objecttype_addwheel(8,0,1,3,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3ec00000);
   local_80 = (float)((float10)-1.875 - (float10)0.625 * (float10)0.0);
   local_74 = 0x3e800000;
   local_70 = 0x3f400000;
-  FUN_00428a90(8,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
-  FUN_00428a90(8,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-               0x3e800000);
+  objecttype_addwheel(8,0,2,4,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
+  objecttype_addwheel(8,0,3,5,&local_74,0x3ec00000,0x41400000,0x41360b61,-0.125,0x3e800000,
+                      0x3f000000,0x3e800000);
   g_objecttype[8].unk_7fe4 = (float)(1.21875 - local_80);
   g_objecttype[8].num_seats = 6;
   g_objecttype[8].unk_7fe0 = 1.0;
@@ -34701,7 +34760,7 @@ LAB_00437548:
   (*(uint *)((uchar *)&g_objecttype[8] + 32964)) = 0x3ffc0000;
   (*(uint *)((uchar *)&g_objecttype[8] + 32956)) = 0x3ec00000;
   (*(uint *)((uchar *)&g_objecttype[8] + 32960)) = 0xbec00000;
-  FUN_00434870(8);
+  setupobjecttypeweight(8);
   g_objecttype[6].unk_0030 = 900.0;
   g_objecttype[6].engine_power = 1.25;
   (*(uchar *)((uchar *)&g_objecttype[6].unk_000c + 0)) = 'B';
@@ -34740,7 +34799,7 @@ LAB_00437548:
     else {
       uVar1 = 0x3f800000;
     }
-    FUN_0040b040(6,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+    objecttype_addparticle(6,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 0x10);
   uVar2 = 0;
@@ -34757,7 +34816,7 @@ LAB_00437548:
     else {
       local_78 = 0.75;
     }
-    FUN_0040b040(6,lf_f2u(local_80),0x3f7bffff,lf_f2u(local_78),0x3ec00000);
+    objecttype_addparticle(6,lf_f2u(local_80),0x3f7bffff,lf_f2u(local_78),0x3ec00000);
     uVar2 = uVar2 + 1;
   } while ((int)uVar2 < 4);
   g_objecttype[6].unk_053c = 0x10;
@@ -34779,7 +34838,7 @@ LAB_00437548:
         iVar6 = *local_88;
         iVar7 = iVar3;
         do {
-          FUN_0040b0b0(6,0,iVar6,local_54[iVar7]);
+          objecttype_addbond(6,0,iVar6,local_54[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -34790,18 +34849,18 @@ LAB_00437548:
       iVar3 = iVar3 + 1;
       local_84 = local_84 + -1;
     } while (local_84 != 0);
-    FUN_0040b150(6,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-    FUN_0040b150(6,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(6,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+    objecttype_addface(6,4,local_54[4],local_54[7],local_54[3],iVar6,0x3f800000,0x3f800000);
     iVar3 = local_54[5];
     if (iVar5 == 0) {
-      FUN_0040b150(6,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
+      objecttype_addface(6,4,local_54[5],local_54[4],iVar6,iVar7,0x3f800000,0x3f800000);
     }
     iVar6 = local_54[6];
-    FUN_0040b150(6,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
+    objecttype_addface(6,4,local_54[6],iVar3,iVar7,iVar8,0x3f800000,0x3f800000);
     if (iVar5 == 2) {
-      FUN_0040b150(6,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
+      objecttype_addface(6,4,local_54[7],iVar6,iVar8,local_54[3],0x3f800000,0x3f800000);
 LAB_00438ecc:
-      FUN_0040b150(6,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
+      objecttype_addface(6,4,local_54[4],iVar3,iVar6,local_54[7],0x3f800000,0x3f800000);
     }
     else if (iVar5 != 1) goto LAB_00438ecc;
     iVar5 = iVar5 + 1;
@@ -34822,7 +34881,7 @@ LAB_00438ecc:
           iVar3 = *local_88;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(6,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(6,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
@@ -34830,7 +34889,7 @@ LAB_00438ecc:
         iVar5 = iVar5 + 1;
         local_84 = local_84 + -1;
       } while (local_84 != 0);
-      FUN_0040b150(6,4,0x10,0x12,0xc,10,0x3f800000,0);
+      objecttype_addface(6,4,0x10,0x12,0xc,10,0x3f800000,0);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1320] + g_objecttype[6].num_faces * 0x40) = 0x10;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1330] + g_objecttype[6].num_faces * 0x40) = 0x3f000000
@@ -34838,7 +34897,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1324] + g_objecttype[6].num_faces * 0x40) = 10;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1334] + g_objecttype[6].num_faces * 0x40) = 0x3ee00000
       ;
-      FUN_0040b150(6,4,0x10,0x12,0xc,10,0x3f800000,0);
+      objecttype_addface(6,4,0x10,0x12,0xc,10,0x3f800000,0);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x131c] + g_objecttype[6].num_faces * 0x40) = 0x12;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x132c] + g_objecttype[6].num_faces * 0x40) = 0x3f000000
@@ -34846,9 +34905,9 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1328] + g_objecttype[6].num_faces * 0x40) = 0xc;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1338] + g_objecttype[6].num_faces * 0x40) = 0x3f100000
       ;
-      FUN_0040b150(6,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+      objecttype_addface(6,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
-      FUN_0040b150(6,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+      objecttype_addface(6,4,0x13,0x11,0xb,0xd,0x3f800000,0);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x131c] + g_objecttype[6].num_faces * 0x40) = 0x11;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x132c] + g_objecttype[6].num_faces * 0x40) = 0x3f000000
@@ -34856,7 +34915,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1328] + g_objecttype[6].num_faces * 0x40) = 0xb;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1338] + g_objecttype[6].num_faces * 0x40) = 0x3ee00000
       ;
-      FUN_0040b150(6,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+      objecttype_addface(6,4,0x13,0x11,0xb,0xd,0x3f800000,0);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1320] + g_objecttype[6].num_faces * 0x40) = 0x13;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1330] + g_objecttype[6].num_faces * 0x40) = 0x3f000000
@@ -34864,25 +34923,25 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1324] + g_objecttype[6].num_faces * 0x40) = 0xd;
       *(undefined4 *)(&g_objecttype[6].lf_raw[0x1334] + g_objecttype[6].num_faces * 0x40) = 0x3f100000
       ;
-      FUN_0040b150(6,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+      objecttype_addface(6,4,0x12,0x13,0xd,0xc,0x3f800000,0);
       (&g_objecttype[6].num_faces)[g_objecttype[6].num_faces * 0x10] = 1;
-      FUN_0040b150(6,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+      objecttype_addface(6,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
       local_74 = 0x3ec00000;
       local_70 = 0x3f200000;
-      FUN_00428a90(6,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-                   0x3e800000);
+      objecttype_addwheel(6,0,0,2,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                          0x3f000000,0x3e800000);
       local_74 = 0x3ec00000;
       local_70 = 0x3f200000;
-      FUN_00428a90(6,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-                   0x3e800000);
+      objecttype_addwheel(6,0,1,3,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                          0x3f000000,0x3e800000);
       local_74 = 0x3e000000;
       local_70 = 0x3f600000;
-      FUN_00428a90(6,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-                   0x3e800000);
+      objecttype_addwheel(6,0,2,4,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                          0x3f000000,0x3e800000);
       local_74 = 0x3e000000;
       local_70 = 0x3f600000;
-      FUN_00428a90(6,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,0x3f000000,
-                   0x3e800000);
+      objecttype_addwheel(6,0,3,5,&local_74,0x3ec00000,0x41400000,0x41638e39,-0.125,0x3e800000,
+                          0x3f000000,0x3e800000);
       g_objecttype[6].unk_7fe4 = 2.578125;
       g_objecttype[6].num_seats = 4;
       g_objecttype[6].unk_7fe0 = 1.0;
@@ -34898,7 +34957,7 @@ LAB_00438ecc:
       (*(uint *)((uchar *)&g_objecttype[6] + 32940)) = 0x3f200000;
       (*(uint *)((uchar *)&g_objecttype[6] + 32932)) = 0x3ec00000;
       (*(uint *)((uchar *)&g_objecttype[6] + 32936)) = 0xbf000000;
-      FUN_00434870(6);
+      setupobjecttypeweight(6);
       g_objecttype[9].unk_0030 = 9000.0;
       g_objecttype[9].engine_power = 1.0;
       (*(uchar *)((uchar *)&g_objecttype[9].unk_000c + 0)) = 'T';
@@ -34935,7 +34994,7 @@ LAB_00438ecc:
         else {
           uVar1 = 0x3f800000;
         }
-        FUN_0040b040(9,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+        objecttype_addparticle(9,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
         uVar2 = uVar2 + 1;
       } while ((int)uVar2 < 0xc);
       uVar2 = 0;
@@ -34958,10 +35017,10 @@ LAB_00438ecc:
         else {
           local_78 = 0.0;
         }
-        FUN_0040b040(9,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),0x3f000000);
+        objecttype_addparticle(9,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),0x3f000000);
         uVar2 = uVar2 + 1;
       } while ((int)uVar2 < 8);
-      FUN_0040b040(9,0,0x3e000000,0x3fc00000,0x40000000);
+      objecttype_addparticle(9,0,0x3e000000,0x3fc00000,0x40000000);
       g_objecttype[9].unk_053c = 0x14;
       iVar5 = 0;
       do {
@@ -34981,7 +35040,7 @@ LAB_00438ecc:
             iVar6 = *local_88;
             iVar7 = iVar3;
             do {
-              FUN_0040b0b0(9,0,iVar6,local_54[iVar7]);
+              objecttype_addbond(9,0,iVar6,local_54[iVar7]);
               iVar7 = iVar7 + 1;
             } while (iVar7 < 8);
           }
@@ -34993,24 +35052,25 @@ LAB_00438ecc:
         if (iVar5 == 1) {
           iVar3 = 0;
           do {
-            FUN_0040b0b0(9,0,local_54[iVar3],0x14);
+            objecttype_addbond(9,0,local_54[iVar3],0x14);
             iVar3 = iVar3 + 1;
           } while (iVar3 < 8);
         }
         iVar7 = local_54[2];
         iVar6 = local_54[1];
         iVar3 = local_54[0];
-        FUN_0040b150(9,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-        FUN_0040b150(9,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
+        objecttype_addface(9,4,local_54[0],local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000
+                          );
+        objecttype_addface(9,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
         if (iVar5 == 0) {
-          FUN_0040b150(9,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
+          objecttype_addface(9,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
         }
         iVar3 = local_54[6];
-        FUN_0040b150(9,4,local_54[6],local_54[5],iVar6,iVar7,0x3f800000,0x3f800000);
+        objecttype_addface(9,4,local_54[6],local_54[5],iVar6,iVar7,0x3f800000,0x3f800000);
         iVar6 = local_54[7];
         if (iVar5 == 1) {
-          FUN_0040b150(9,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
-          FUN_0040b150(9,4,local_54[4],local_54[5],iVar3,iVar6,0x3f800000,0x3f800000);
+          objecttype_addface(9,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
+          objecttype_addface(9,4,local_54[4],local_54[5],iVar3,iVar6,0x3f800000,0x3f800000);
         }
         iVar5 = iVar5 + 1;
       } while (iVar5 < 2);
@@ -35030,7 +35090,7 @@ LAB_00438ecc:
           iVar3 = *local_88;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(9,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(9,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
@@ -35038,10 +35098,10 @@ LAB_00438ecc:
         iVar5 = iVar5 + 1;
         local_84 = local_84 + -1;
       } while (local_84 != 0);
-      FUN_0040b150(9,4,0xc,0xe,8,6,0x3f800000,0x3f800000);
-      FUN_0040b150(9,4,0xd,0xc,6,7,0x3f800000,0x3f800000);
-      FUN_0040b150(9,4,0xf,0xd,7,9,0x3f800000,0x3f800000);
-      FUN_0040b150(9,4,0xe,0xf,9,8,0x3f800000,0x3f800000);
+      objecttype_addface(9,4,0xc,0xe,8,6,0x3f800000,0x3f800000);
+      objecttype_addface(9,4,0xd,0xc,6,7,0x3f800000,0x3f800000);
+      objecttype_addface(9,4,0xf,0xd,7,9,0x3f800000,0x3f800000);
+      objecttype_addface(9,4,0xe,0xf,9,8,0x3f800000,0x3f800000);
       local_88 = local_54;
       local_54[0] = 4;
       local_54[1] = 5;
@@ -35054,7 +35114,7 @@ LAB_00438ecc:
           iVar3 = *local_88;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(9,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(9,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 4);
         }
@@ -35078,7 +35138,7 @@ LAB_00438ecc:
           iVar3 = *local_88;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(9,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(9,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
@@ -35088,7 +35148,7 @@ LAB_00438ecc:
       } while (local_84 != 0);
       local_6c = 0x3e800000;
       local_68 = 0x3e666666;
-      FUN_0040b150(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
+      objecttype_addface(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1320] + g_objecttype[9].num_faces * 0x40) = 0x10;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1330] + g_objecttype[9].num_faces * 0x40) = 0x3f333333
@@ -35096,7 +35156,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1324] + g_objecttype[9].num_faces * 0x40) = 0xc;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1334] + g_objecttype[9].num_faces * 0x40) = 0x3f200000
       ;
-      FUN_0040b150(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
+      objecttype_addface(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x131c] + g_objecttype[9].num_faces * 0x40) = 0x12;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x132c] + g_objecttype[9].num_faces * 0x40) = 0x3e99999a
@@ -35110,7 +35170,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1328] + g_objecttype[9].num_faces * 0x40) = 0xe;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1338] + g_objecttype[9].num_faces * 0x40) = 0x3ec00000
       ;
-      FUN_0040b150(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
+      objecttype_addface(9,4,0x10,0x12,0xe,0xc,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x131c] + g_objecttype[9].num_faces * 0x40) = 0x12;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x132c] + g_objecttype[9].num_faces * 0x40) = 0x3f400000
@@ -35118,9 +35178,9 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1328] + g_objecttype[9].num_faces * 0x40) = 0xe;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1338] + g_objecttype[9].num_faces * 0x40) = 0x3f466666
       ;
-      FUN_0040b150(9,4,0x11,0x10,0xc,0xd,0x3f800000,0x40c00000);
+      objecttype_addface(9,4,0x11,0x10,0xc,0xd,0x3f800000,0x40c00000);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
-      FUN_0040b150(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
+      objecttype_addface(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x131c] + g_objecttype[9].num_faces * 0x40) = 0x11;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x132c] + g_objecttype[9].num_faces * 0x40) = 0x3f333333
@@ -35128,7 +35188,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1328] + g_objecttype[9].num_faces * 0x40) = 0xd;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1338] + g_objecttype[9].num_faces * 0x40) = 0x3f200000
       ;
-      FUN_0040b150(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
+      objecttype_addface(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x131c] + g_objecttype[9].num_faces * 0x40) = 0x11;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x132c] + g_objecttype[9].num_faces * 0x40) = 0x3e800000
@@ -35142,7 +35202,7 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1328] + g_objecttype[9].num_faces * 0x40) = 0xd;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1338] + g_objecttype[9].num_faces * 0x40) = 0x3e666666
       ;
-      FUN_0040b150(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
+      objecttype_addface(9,4,0x13,0x11,0xd,0xf,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1320] + g_objecttype[9].num_faces * 0x40) = 0x13;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1330] + g_objecttype[9].num_faces * 0x40) = 0x3f400000
@@ -35150,32 +35210,32 @@ LAB_00438ecc:
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1324] + g_objecttype[9].num_faces * 0x40) = 0xf;
       *(undefined4 *)(&g_objecttype[9].lf_raw[0x1334] + g_objecttype[9].num_faces * 0x40) = 0x3f466666
       ;
-      FUN_0040b150(9,4,0x12,0x13,0xf,0xe,0x3f800000,0);
+      objecttype_addface(9,4,0x12,0x13,0xf,0xe,0x3f800000,0);
       (&g_objecttype[9].num_faces)[g_objecttype[9].num_faces * 0x10] = 1;
-      FUN_0040b150(9,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+      objecttype_addface(9,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
       local_74 = 0x3f400000;
       local_70 = 0x3e800000;
       uVar2 = 0;
-      FUN_00428a90(9,0,0,2,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
-      FUN_00428a90(9,0,1,3,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
+      objecttype_addwheel(9,0,0,2,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
+      objecttype_addwheel(9,0,1,3,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
       local_80 = -1.5;
       local_74 = 0x3e800000;
       local_70 = 0x3f400000;
-      FUN_00428a90(9,0,2,4,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
-      FUN_00428a90(9,0,3,5,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
+      objecttype_addwheel(9,0,2,4,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
+      objecttype_addwheel(9,0,3,5,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
       local_7c = 1.875;
       g_objecttype[9].unk_7fe4 = (float)(1.875 - local_80);
       g_objecttype[9].unk_7fe0 = 1.125;
       local_74 = 0x3f000000;
       local_70 = 0x3f000000;
-      FUN_00428a90(9,0,2,4,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
-      FUN_00428a90(9,0,3,5,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,0x3f000000,
-                   0x3f000000);
+      objecttype_addwheel(9,0,2,4,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
+      objecttype_addwheel(9,0,3,5,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
       (*(uint *)((uchar *)&g_objecttype[9] + 32896)) = 0xbec00000;
       g_objecttype[9].num_seats = 2;
       (*(uint *)((uchar *)&g_objecttype[9] + 32900)) = 0x3e000000;
@@ -35183,7 +35243,7 @@ LAB_00438ecc:
       (*(uint *)((uchar *)&g_objecttype[9] + 32908)) = 0x3ec00000;
       (*(uint *)((uchar *)&g_objecttype[9] + 32912)) = 0x3e000000;
       (*(uint *)((uchar *)&g_objecttype[9] + 32916)) = 0xbf600000;
-      FUN_00434870(9);
+      setupobjecttypeweight(9);
       g_objecttype[10].unk_0030 = 9000.0;
       local_14[0] = -7.25;
       (*(uchar *)((uchar *)&g_objecttype[10].unk_000c + 0)) = 'T';
@@ -35221,7 +35281,7 @@ LAB_00438ecc:
         else {
           uVar1 = 0x3f800000;
         }
-        FUN_0040b040(10,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
+        objecttype_addparticle(10,lf_f2u(local_80),lf_f2u(local_7c),lf_f2u(local_78),uVar1);
         uVar2 = uVar2 + 1;
       } while ((int)uVar2 < 0xc);
       uVar2 = 0;
@@ -35238,10 +35298,10 @@ LAB_00438ecc:
         else {
           local_78 = 8.0;
         }
-        FUN_0040b040(10,lf_f2u(local_80),0xbf000000,lf_f2u(local_78),0x3f800000);
+        objecttype_addparticle(10,lf_f2u(local_80),0xbf000000,lf_f2u(local_78),0x3f800000);
         uVar2 = uVar2 + 1;
       } while ((int)uVar2 < 4);
-      FUN_0040b040(10,0,0x3e000000,0xc0e00000,0x40000000);
+      objecttype_addparticle(10,0,0x3e000000,0xc0e00000,0x40000000);
       g_objecttype[10].unk_053c = 0x10;
       iVar5 = 0;
       do {
@@ -35262,7 +35322,7 @@ LAB_00438ecc:
             iVar7 = *local_88;
             iVar8 = iVar6;
             do {
-              FUN_0040b0b0(10,0,iVar7,local_54[iVar8]);
+              objecttype_addbond(10,0,iVar7,local_54[iVar8]);
               iVar8 = iVar8 + 1;
               iVar3 = local_54[0];
             } while (iVar8 < 8);
@@ -35275,24 +35335,24 @@ LAB_00438ecc:
         if (iVar5 == 0) {
           iVar6 = 0;
           do {
-            FUN_0040b0b0(10,0,local_54[iVar6],0x10);
+            objecttype_addbond(10,0,local_54[iVar6],0x10);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
         iVar7 = local_54[2];
         iVar6 = local_54[1];
-        FUN_0040b150(10,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
-        FUN_0040b150(10,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
+        objecttype_addface(10,4,iVar3,local_54[3],local_54[2],local_54[1],0x3f800000,0x3f800000);
+        objecttype_addface(10,4,local_54[4],local_54[7],local_54[3],iVar3,0x3f800000,0x3f800000);
         iVar8 = local_54[5];
         if (iVar5 == 0) {
-          FUN_0040b150(10,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
+          objecttype_addface(10,4,local_54[5],local_54[4],iVar3,iVar6,0x3f800000,0x3f800000);
         }
         iVar3 = local_54[6];
-        FUN_0040b150(10,4,local_54[6],iVar8,iVar6,iVar7,0x3f800000,0x3f800000);
+        objecttype_addface(10,4,local_54[6],iVar8,iVar6,iVar7,0x3f800000,0x3f800000);
         if (iVar5 == 1) {
-          FUN_0040b150(10,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
+          objecttype_addface(10,4,local_54[7],iVar3,iVar7,local_54[3],0x3f800000,0x3f800000);
         }
-        FUN_0040b150(10,4,local_54[4],iVar8,iVar3,local_54[7],0x3f800000,0x3f800000);
+        objecttype_addface(10,4,local_54[4],iVar8,iVar3,local_54[7],0x3f800000,0x3f800000);
         iVar5 = iVar5 + 1;
       } while (iVar5 < 2);
       local_54[0] = 0xc;
@@ -35311,7 +35371,7 @@ LAB_00438ecc:
           iVar3 = *piVar4;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(10,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(10,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
@@ -35335,7 +35395,7 @@ LAB_00438ecc:
           iVar3 = *piVar4;
           iVar6 = iVar5;
           do {
-            FUN_0040b0b0(10,0,iVar3,local_54[iVar6]);
+            objecttype_addbond(10,0,iVar3,local_54[iVar6]);
             iVar6 = iVar6 + 1;
           } while (iVar6 < 8);
         }
@@ -35345,22 +35405,22 @@ LAB_00438ecc:
       } while (local_84 != 0);
       local_74 = 0x3f400000;
       local_70 = 0x3e800000;
-      FUN_00428a90(10,0,0xc,0xe,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
-                   0x3f000000,0x3f000000);
-      FUN_00428a90(10,0,0xd,0xf,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
-                   0x3f000000,0x3f000000);
+      objecttype_addwheel(10,0,0xc,0xe,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
+      objecttype_addwheel(10,0,0xd,0xf,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
       local_80 = -5.4375;
       local_74 = 0x3e800000;
       local_70 = 0x3f400000;
-      FUN_00428a90(10,0,0xc,0xe,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
-                   0x3f000000,0x3f000000);
-      FUN_00428a90(10,0,0xd,0xf,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
-                   0x3f000000,0x3f000000);
+      objecttype_addwheel(10,0,0xc,0xe,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
+      objecttype_addwheel(10,0,0xd,0xf,&local_74,0x3ec00000,0x42a00000,0x41360b61,-0.125,0x3e800000,
+                          0x3f000000,0x3f000000);
       g_objecttype[10].num_seats = 0;
       local_7c = 6.0;
       g_objecttype[10].unk_7fe4 = (float)(6.0 - local_80);
       g_objecttype[10].unk_7fe0 = 1.125;
-      FUN_00434870(10);
+      setupobjecttypeweight(10);
       return;
     }
   } while( true );
@@ -35368,12 +35428,12 @@ LAB_00438ecc:
 #undef DAT_00460d18
 #undef DAT_006e6156
 #undef g_objecttype
+#undef objecttype_addface
 #undef __security_check_cookie
-#undef FUN_0040b040
-#undef FUN_00434870
-#undef FUN_0040b150
-#undef FUN_00428a90
-#undef FUN_0040b0b0
+#undef objecttype_addparticle
+#undef objecttype_addbond
+#undef setupobjecttypeweight
+#undef objecttype_addwheel
 #undef local_88
 #undef local_84
 #undef local_80
@@ -35390,10 +35450,10 @@ LAB_00438ecc:
 /* ---------------------------------------------------------------- 0x3a610 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
+#define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00434870 ((void (__cdecl *)(int))SR_VA(0x434870))
-#define FUN_0040b150 ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
-#define FUN_0040b0b0 ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
+#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(int * *)(lf_frame + 0x1c))
 #define local_30 (*(float *)(lf_frame + 0x20))
@@ -35580,7 +35640,7 @@ void __cdecl lf_3a610(void)
     if (iVar6 < 5) {
       iVar5 = iVar6 + 0x14;
       do {
-        FUN_0040b0b0(0xb,0,iVar6 + 0x13,iVar5);
+        objecttype_addbond(0xb,0,iVar6 + 0x13,iVar5);
         iVar5 = iVar5 + 1;
       } while (iVar5 < 0x19);
     }
@@ -35600,7 +35660,7 @@ void __cdecl lf_3a610(void)
     iVar6 = local_24[iVar4];
     iVar5 = 0;
     do {
-      FUN_0040b0b0(0xb,1,iVar6,iVar5 + 0x14);
+      objecttype_addbond(0xb,1,iVar6,iVar5 + 0x14);
       iVar5 = iVar5 + 1;
     } while (iVar5 < 5);
     iVar4 = iVar4 + 1;
@@ -35623,7 +35683,7 @@ void __cdecl lf_3a610(void)
         iVar5 = *local_34;
         iVar7 = iVar6;
         do {
-          FUN_0040b0b0(0xb,1,iVar5,local_24[iVar7]);
+          objecttype_addbond(0xb,1,iVar5,local_24[iVar7]);
           iVar7 = iVar7 + 1;
         } while (iVar7 < 8);
       }
@@ -35631,20 +35691,20 @@ void __cdecl lf_3a610(void)
       iVar6 = iVar6 + 1;
       local_38 = LF_BITS_F((((int)LF_BITS_U(local_38)) + -1));
     } while (LF_BITS_U(local_38) != 0x0U);
-    FUN_0040b150(0xb,4,local_24[0],local_24[3],local_24[2],local_24[1],0x3f800000,0x3f800000);
+    objecttype_addface(0xb,4,local_24[0],local_24[3],local_24[2],local_24[1],0x3f800000,0x3f800000);
     iVar5 = local_24[4];
     iVar6 = local_24[0];
-    FUN_0040b150(0xb,4,local_24[4],local_24[7],local_24[3],local_24[0],0x3f800000,0x3f800000);
+    objecttype_addface(0xb,4,local_24[4],local_24[7],local_24[3],local_24[0],0x3f800000,0x3f800000);
     iVar7 = local_24[5];
     if (iVar4 == 0) {
-      FUN_0040b150(0xb,4,local_24[5],iVar5,iVar6,local_24[1],0x3f800000,0x3f800000);
+      objecttype_addface(0xb,4,local_24[5],iVar5,iVar6,local_24[1],0x3f800000,0x3f800000);
     }
     iVar6 = local_24[6];
-    FUN_0040b150(0xb,4,local_24[6],iVar7,local_24[1],local_24[2],0x3f800000,0x3f800000);
+    objecttype_addface(0xb,4,local_24[6],iVar7,local_24[1],local_24[2],0x3f800000,0x3f800000);
     if (iVar4 == 2) {
-      FUN_0040b150(0xb,4,local_24[7],iVar6,local_24[2],local_24[3],0x3f800000,0x3f800000);
+      objecttype_addface(0xb,4,local_24[7],iVar6,local_24[2],local_24[3],0x3f800000,0x3f800000);
 LAB_0043acef:
-      FUN_0040b150(0xb,4,iVar5,iVar7,iVar6,local_24[7],0x3f800000,0x3f800000);
+      objecttype_addface(0xb,4,iVar5,iVar7,iVar6,local_24[7],0x3f800000,0x3f800000);
     }
     else if (iVar4 != 1) goto LAB_0043acef;
     iVar4 = iVar4 + 1;
@@ -35665,7 +35725,7 @@ LAB_0043acef:
           iVar6 = *local_34;
           iVar5 = iVar4;
           do {
-            FUN_0040b0b0(0xb,1,iVar6,local_24[iVar5]);
+            objecttype_addbond(0xb,1,iVar6,local_24[iVar5]);
             iVar5 = iVar5 + 1;
           } while (iVar5 < 8);
         }
@@ -35673,7 +35733,7 @@ LAB_0043acef:
         iVar4 = iVar4 + 1;
         local_38 = LF_BITS_F((((int)LF_BITS_U(local_38)) + -1));
       } while (LF_BITS_U(local_38) != 0x0U);
-      FUN_0040b150(0xb,4,0x10,0x12,0xc,10,0x3f800000,0);
+      objecttype_addface(0xb,4,0x10,0x12,0xc,10,0x3f800000,0);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1320] + g_objecttype[0xb].num_faces * 0x40) = 0x10;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1330] + g_objecttype[0xb].num_faces * 0x40) =
@@ -35681,7 +35741,7 @@ LAB_0043acef:
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1324] + g_objecttype[0xb].num_faces * 0x40) = 10;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1334] + g_objecttype[0xb].num_faces * 0x40) =
            0x3ee00000;
-      FUN_0040b150(0xb,4,0x10,0x12,0xc,10,0x3f800000,0);
+      objecttype_addface(0xb,4,0x10,0x12,0xc,10,0x3f800000,0);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x131c] + g_objecttype[0xb].num_faces * 0x40) = 0x12;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x132c] + g_objecttype[0xb].num_faces * 0x40) =
@@ -35689,9 +35749,9 @@ LAB_0043acef:
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1328] + g_objecttype[0xb].num_faces * 0x40) = 0xc;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1338] + g_objecttype[0xb].num_faces * 0x40) =
            0x3f100000;
-      FUN_0040b150(0xb,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
+      objecttype_addface(0xb,4,0x11,0x10,10,0xb,0x3f800000,0x40c00000);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
-      FUN_0040b150(0xb,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+      objecttype_addface(0xb,4,0x13,0x11,0xb,0xd,0x3f800000,0);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x131c] + g_objecttype[0xb].num_faces * 0x40) = 0x11;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x132c] + g_objecttype[0xb].num_faces * 0x40) =
@@ -35699,7 +35759,7 @@ LAB_0043acef:
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1328] + g_objecttype[0xb].num_faces * 0x40) = 0xb;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1338] + g_objecttype[0xb].num_faces * 0x40) =
            0x3ee00000;
-      FUN_0040b150(0xb,4,0x13,0x11,0xb,0xd,0x3f800000,0);
+      objecttype_addface(0xb,4,0x13,0x11,0xb,0xd,0x3f800000,0);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1320] + g_objecttype[0xb].num_faces * 0x40) = 0x13;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1330] + g_objecttype[0xb].num_faces * 0x40) =
@@ -35707,9 +35767,9 @@ LAB_0043acef:
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1324] + g_objecttype[0xb].num_faces * 0x40) = 0xd;
       *(undefined4 *)(&g_objecttype[0xb].lf_raw[0x1334] + g_objecttype[0xb].num_faces * 0x40) =
            0x3f100000;
-      FUN_0040b150(0xb,4,0x12,0x13,0xd,0xc,0x3f800000,0);
+      objecttype_addface(0xb,4,0x12,0x13,0xd,0xc,0x3f800000,0);
       (&g_objecttype[0xb].num_faces)[g_objecttype[0xb].num_faces * 0x10] = 1;
-      FUN_0040b150(0xb,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
+      objecttype_addface(0xb,4,0x10,0x11,0x13,0x12,0x3f800000,0x3f800000);
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32896)) = 0xbec00000;
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32900)) = 0xbf200000;
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32904)) = 0xbf800000;
@@ -35723,17 +35783,17 @@ LAB_0043acef:
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32940)) = 0x3f000000;
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32932)) = 0x3ec00000;
       (*(uint *)((uchar *)&g_objecttype[0xb] + 32936)) = 0xbf200000;
-      FUN_00434870(0xb);
+      setupobjecttypeweight(0xb);
       return;
     }
   } while( true );
 }
 #undef DAT_00460d18
 #undef g_objecttype
+#undef objecttype_addface
 #undef __security_check_cookie
-#undef FUN_00434870
-#undef FUN_0040b150
-#undef FUN_0040b0b0
+#undef setupobjecttypeweight
+#undef objecttype_addbond
 #undef local_38
 #undef local_34
 #undef local_30
@@ -35744,11 +35804,11 @@ LAB_0043acef:
 /* ---------------------------------------------------------------- 0x3b0c0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define FUN_00429300 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x429300))
+#define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00434870 ((void (__cdecl *)(int))SR_VA(0x434870))
-#define FUN_0040b150 ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
-#define FUN_0040b0b0 ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
+#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define objecttype_calcquadweights ((void (__cdecl *)(float *, float *, float *))SR_VA(0x429300))
 #define local_f4 (*(float *)(lf_frame + 0x1c))
 #define local_f0 (*(float *)(lf_frame + 0x20))
 #define local_ec (*(float *)(lf_frame + 0x24))
@@ -36060,7 +36120,7 @@ void __cdecl lf_3b0c0(void)
   local_f0 = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 68))) + 2.5);
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 72))) + 2.0);
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_particles;
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar1 * 0x20) = 6;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 2;
@@ -36075,7 +36135,7 @@ void __cdecl lf_3b0c0(void)
   local_f4 = LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 64)));
   local_f0 = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 68))) + 2.5);
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 72))) + 3.5);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 6;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 2;
@@ -36090,7 +36150,7 @@ void __cdecl lf_3b0c0(void)
   local_60 = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 72))) + 3.5);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 6;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 2;
@@ -36105,7 +36165,7 @@ void __cdecl lf_3b0c0(void)
   local_5c = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 72))) + 2.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 6;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 2;
@@ -36132,7 +36192,7 @@ void __cdecl lf_3b0c0(void)
   local_f4 = LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 164)));
   local_f0 = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 168))) + 2.5);
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 172))) - 1.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 0xb;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 9;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 3;
@@ -36147,7 +36207,7 @@ void __cdecl lf_3b0c0(void)
   local_54 = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 172))) - 7.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 0xb;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 9;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 3;
@@ -36162,7 +36222,7 @@ void __cdecl lf_3b0c0(void)
   local_50 = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 172))) - 7.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 0xb;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 9;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 3;
@@ -36177,7 +36237,7 @@ void __cdecl lf_3b0c0(void)
   local_4c = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 172))) - 1.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 0xb;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 9;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 3;
@@ -36204,7 +36264,7 @@ void __cdecl lf_3b0c0(void)
   local_f4 = LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 104)));
   local_f0 = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 108))) + 2.5);
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 112))) + 1.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 10;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 4;
@@ -36219,7 +36279,7 @@ void __cdecl lf_3b0c0(void)
   local_44 = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 112))) + 7.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 10;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 4;
@@ -36234,7 +36294,7 @@ void __cdecl lf_3b0c0(void)
   local_40 = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 112))) + 7.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 10;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 4;
@@ -36249,7 +36309,7 @@ void __cdecl lf_3b0c0(void)
   local_3c = g_objecttype[0xc].num_quads;
   g_objecttype[0xc].num_quads = g_objecttype[0xc].num_quads + 1;
   local_ec = (float)(LF_BITS_F((*(uint *)((uchar *)&g_objecttype[0xc] + 112))) + 1.0);
-  FUN_00429300(local_d4,&local_f4,local_b4);
+  objecttype_calcquadweights(local_d4,&local_f4,local_b4);
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x536c] + iVar5 * 0x20) = 8;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5350] + g_objecttype[0xc].num_quads * 0x20) = 10;
   *(undefined4 *)(&g_objecttype[0xc].lf_raw[0x5354] + g_objecttype[0xc].num_quads * 0x20) = 4;
@@ -36281,7 +36341,7 @@ void __cdecl lf_3b0c0(void)
       if (local_e0 < 8) {
         local_d8 = *local_e8;
         do {
-          FUN_0040b0b0(0xc,0,local_d8,local_84[local_e4]);
+          objecttype_addbond(0xc,0,local_d8,local_84[local_e4]);
           local_e4 = local_e4 + 1;
         } while (local_e4 < 8);
       }
@@ -36289,65 +36349,65 @@ void __cdecl lf_3b0c0(void)
       local_e0 = local_e0 + 1;
       local_dc = local_dc + -1;
     } while (local_dc != 0);
-    FUN_0040b150(0xc,4,iVar3,iVar6,local_84[2],local_84[1],0x3f800000,0x3f800000);
-    FUN_0040b150(0xc,4,iVar3,local_84[1],local_84[2],iVar6,0x3f800000,0x3f800000);
+    objecttype_addface(0xc,4,iVar3,iVar6,local_84[2],local_84[1],0x3f800000,0x3f800000);
+    objecttype_addface(0xc,4,iVar3,local_84[1],local_84[2],iVar6,0x3f800000,0x3f800000);
     if (iVar5 == 0) {
-      FUN_0040b150(0xc,4,6,local_68,local_60,local_64,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,6,local_64,local_60,local_68,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_60,local_68,2,local_5c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_60,local_5c,2,local_68,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,6,local_64,local_58,0,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,6,0,local_58,local_64,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_58,local_5c,2,0,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,6,local_68,local_60,local_64,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,6,local_64,local_60,local_68,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_60,local_68,2,local_5c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_60,local_5c,2,local_68,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,6,local_64,local_58,0,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,6,0,local_58,local_64,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_58,local_5c,2,0,0x3f800000,0x3f800000);
       iVar6 = local_58;
-      FUN_0040b150(0xc,4,local_58,0,2,local_5c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_64,iVar6,local_5c,local_60,0x3f800000,0x43800000);
+      objecttype_addface(0xc,4,local_58,0,2,local_5c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_64,iVar6,local_5c,local_60,0x3f800000,0x43800000);
       iVar6 = local_84[1];
       g_objecttype[0xc].unk_8288 = g_objecttype[0xc].num_faces + -1;
       (&g_objecttype[0xc].num_faces)[g_objecttype[0xc].num_faces * 0x10] = 1;
-      FUN_0040b150(0xc,4,local_70,6,0,local_84[1],0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_70,iVar6,0,6,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_70,6,0,local_84[1],0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_70,iVar6,0,6,0x3f800000,0x3f800000);
       iVar3 = local_84[2];
       iVar6 = local_84[1];
-      FUN_0040b150(0xc,4,local_6c,local_70,local_84[1],local_84[2],0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_6c,iVar3,iVar6,local_70,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_6c,local_70,local_84[1],local_84[2],0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_6c,iVar3,iVar6,local_70,0x3f800000,0x3f800000);
       iVar6 = local_6c;
     }
     else {
-      FUN_0040b150(0xc,4,iVar1,local_68,local_40,local_44,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar1,local_44,local_40,local_68,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_40,local_68,iVar6,local_3c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_40,local_3c,iVar6,local_68,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar1,local_44,local_38,iVar3,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar1,iVar3,local_38,local_44,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_38,local_3c,iVar6,iVar3,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar1,local_68,local_40,local_44,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar1,local_44,local_40,local_68,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_40,local_68,iVar6,local_3c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_40,local_3c,iVar6,local_68,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar1,local_44,local_38,iVar3,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar1,iVar3,local_38,local_44,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_38,local_3c,iVar6,iVar3,0x3f800000,0x3f800000);
       iVar4 = local_38;
-      FUN_0040b150(0xc,4,local_38,iVar3,iVar6,local_3c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_44,iVar4,local_3c,local_40,0x3f800000,0x43800000);
+      objecttype_addface(0xc,4,local_38,iVar3,iVar6,local_3c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_44,iVar4,local_3c,local_40,0x3f800000,0x43800000);
       iVar6 = local_6c;
       (&g_objecttype[0xc].num_faces)[g_objecttype[0xc].num_faces * 0x10] = 1;
-      FUN_0040b150(0xc,4,local_6c,local_70,local_50,local_54,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar6,local_54,local_50,local_70,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_50,local_70,local_84[1],local_4c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_50,local_4c,local_84[1],local_70,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar6,local_54,local_48,local_84[2],0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,iVar6,local_84[2],local_48,local_54,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_48,local_4c,local_84[1],local_84[2],0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_48,local_84[2],local_84[1],local_4c,0x3f800000,0x3f800000);
-      FUN_0040b150(0xc,4,local_54,local_48,local_4c,local_50,0x3f800000,0x43800000);
+      objecttype_addface(0xc,4,local_6c,local_70,local_50,local_54,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar6,local_54,local_50,local_70,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_50,local_70,local_84[1],local_4c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_50,local_4c,local_84[1],local_70,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar6,local_54,local_48,local_84[2],0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,iVar6,local_84[2],local_48,local_54,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_48,local_4c,local_84[1],local_84[2],0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_48,local_84[2],local_84[1],local_4c,0x3f800000,0x3f800000);
+      objecttype_addface(0xc,4,local_54,local_48,local_4c,local_50,0x3f800000,0x43800000);
       (&g_objecttype[0xc].num_faces)[g_objecttype[0xc].num_faces * 0x10] = 1;
       if (iVar5 == 1) {
-        FUN_0040b150(0xc,4,local_68,iVar6,local_84[2],4,0x3f800000,0x3f800000);
-        FUN_0040b150(0xc,4,local_68,4,local_84[2],iVar6,0x3f800000,0x3f800000);
+        objecttype_addface(0xc,4,local_68,iVar6,local_84[2],4,0x3f800000,0x3f800000);
+        objecttype_addface(0xc,4,local_68,4,local_84[2],iVar6,0x3f800000,0x3f800000);
       }
     }
     iVar3 = local_70;
-    FUN_0040b150(0xc,4,iVar1,local_70,iVar6,local_68,0x3f800000,0x3f800000);
-    FUN_0040b150(0xc,4,iVar1,local_68,iVar6,iVar3,0x3f800000,0x3f800000);
+    objecttype_addface(0xc,4,iVar1,local_70,iVar6,local_68,0x3f800000,0x3f800000);
+    objecttype_addface(0xc,4,iVar1,local_68,iVar6,iVar3,0x3f800000,0x3f800000);
     iVar5 = iVar5 + 1;
   } while (iVar5 < 2);
   g_objecttype[0xc].num_seats = 0;
-  FUN_00434870(0xc);
+  setupobjecttypeweight(0xc);
   g_objecttype[0xd].unk_0030 = 8000.0;
   (*(uint *)((uchar *)&g_objecttype[0xd] + 0)) = 3;
   *(undefined4 *)(&g_objecttype[0xd].lf_raw[0x40] + g_objecttype[0xd].num_particles * 0x14) =
@@ -36405,7 +36465,7 @@ void __cdecl lf_3b0c0(void)
   iVar6 = iVar5;
   do {
     for (; iVar5 < 6; iVar5 = iVar5 + 1) {
-      FUN_0040b0b0(0xd,0,iVar6,iVar5);
+      objecttype_addbond(0xd,0,iVar6,iVar5);
     }
     iVar5 = iVar6 + 1;
     iVar6 = iVar5;
@@ -36414,11 +36474,11 @@ void __cdecl lf_3b0c0(void)
 }
 #undef DAT_00460d18
 #undef g_objecttype
-#undef FUN_00429300
+#undef objecttype_addface
 #undef __security_check_cookie
-#undef FUN_00434870
-#undef FUN_0040b150
-#undef FUN_0040b0b0
+#undef setupobjecttypeweight
+#undef objecttype_addbond
+#undef objecttype_calcquadweights
 #undef local_f4
 #undef local_f0
 #undef local_ec
@@ -36459,8 +36519,8 @@ void __cdecl lf_3b0c0(void)
 
 /* ---------------------------------------------------------------- 0x3ccc0 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define FUN_004129b0 ((int (__cdecl *)(int, int, int, int))SR_VA(0x4129b0))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createbond ((int (__cdecl *)(int, int, int, int))SR_VA(0x4129b0))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_c (*(float *)(lf_frame + 0x24))
 #define local_8 (*(float *)(lf_frame + 0x28))
@@ -36487,7 +36547,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   local_c = *param_2;
   local_8 = param_2[1];
   local_4 = param_2[2];
-  iVar4 = FUN_00431800(0xc,&local_c,(undefined4 *)0x0,param_3,0);
+  iVar4 = createobject(0xc,&local_c,(undefined4 *)0x0,param_3,0);
   g_object[iVar4].unk_8194 = 0x4a;
   fVar1 = g_object[iVar4].pos.x;
   fVar2 = g_object[iVar4].pos.y;
@@ -36504,7 +36564,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   local_c = (float)(((float)(fVar1 - param_3[6] * 5.5)) + param_3[3] * 0.5);
   local_8 = (float)(param_3[4] * 0.5 + ((float)(fVar2 - param_3[7] * 5.5)));
   local_4 = (float)(param_3[5] * 0.5 + ((float)(fVar3 - param_3[8] * 5.5)));
-  iVar5 = FUN_00431800(0xd,&local_c,(undefined4 *)0x0,param_3,0);
+  iVar5 = createobject(0xd,&local_c,(undefined4 *)0x0,param_3,0);
   g_object[iVar5].unk_5be4 = iVar4;
   param_1 = 0;
   do {
@@ -36512,7 +36572,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
       piVar6 = (int *)&g_object[iVar5].lf_raw[0xbc];
       iVar7 = 2;
       do {
-        FUN_004129b0(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
+        createbond(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
         piVar6 = piVar6 + 1;
         iVar7 = iVar7 + -1;
       } while (iVar7 != 0);
@@ -36534,7 +36594,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   local_c = (float)((float)(fVar1 + param_3[6] * 5.5) + param_3[3] * 0.5);
   local_8 = (float)(param_3[4] * 0.5 + ((float)(param_3[7] * 5.5 + fVar2)));
   local_4 = (float)(param_3[5] * 0.5 + ((float)(param_3[8] * 5.5 + fVar3)));
-  iVar5 = FUN_00431800(0xd,&local_c,(undefined4 *)0x0,param_3,0);
+  iVar5 = createobject(0xd,&local_c,(undefined4 *)0x0,param_3,0);
   g_object[iVar5].unk_5be4 = iVar4;
   param_1 = 2;
   do {
@@ -36542,7 +36602,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
       piVar6 = (int *)&g_object[iVar5].lf_raw[0xbc];
       iVar7 = 2;
       do {
-        FUN_004129b0(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
+        createbond(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
         piVar6 = piVar6 + 1;
         iVar7 = iVar7 + -1;
       } while (iVar7 != 0);
@@ -36552,8 +36612,8 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   return iVar4;
 }
 #undef g_object
-#undef FUN_00431800
-#undef FUN_004129b0
+#undef createobject
+#undef createbond
 #undef local_14
 #undef local_c
 #undef local_8
@@ -36566,9 +36626,9 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040b6d0 ((int (__cdecl *)(int, float))SR_VA(0x40b6d0))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define addvoice ((int (__cdecl *)(int, float))SR_VA(0x40b6d0))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_1c (*(int *)(lf_frame + 0x24))
 #define local_18 (*(float *)(lf_frame + 0x28))
@@ -36649,7 +36709,7 @@ LAB_0043d0fc:
             goto LAB_0043d0fc;
           }
 LAB_0043d100:
-          fVar9 = (float10)FUN_0040baa0(&local_18,(float *)(g_human[iVar3].bones + 2));
+          fVar9 = (float10)vectordistance(&local_18,(float *)(g_human[iVar3].bones + 2));
           piVar7[7] = ((int)LF_BITS_U((float)fVar9));
         }
         fVar1 = LF_BITS_F(piVar7[7]);
@@ -36714,7 +36774,7 @@ LAB_0043d17f:
           local_24 = (float)dVar10;
           if (256.0 <= local_24) goto LAB_0043d33b;
         }
-        iVar3 = FUN_0040b6d0(param_1,local_24);
+        iVar3 = addvoice(param_1,local_24);
         if (iVar3 != -1) {
           iVar3 = iVar3 * 0x20;
           *(float *)(&g_connection[param_1].lf_raw[0x70] + iVar3) = local_24;
@@ -36750,7 +36810,7 @@ LAB_0043d33b:
             local_4 = (float)(g_item[iVar8].pos.z - local_10);
             dVar10 = _CIsqrt((double)((float)(local_4 * local_4 + (local_c * local_c + local_8 * local_8))));
             fVar1 = (float)((float)dVar10 * 4.0);
-            if ((fVar1 < 256.0) && (iVar6 = FUN_0040b6d0(param_1,fVar1), iVar6 != -1)) {
+            if ((fVar1 < 256.0) && (iVar6 = addvoice(param_1,fVar1), iVar6 != -1)) {
               iVar6 = iVar6 * 0x20;
               *(float *)(&g_connection[param_1].lf_raw[0x70] + iVar6) = fVar1;
               iVar2 = g_human[iVar2].player_id;
@@ -36777,9 +36837,9 @@ LAB_0043d4d4:
 #undef g_item
 #undef g_connection
 #undef g_player
+#undef vectordistance
 #undef _CIsqrt
-#undef FUN_0040b6d0
-#undef FUN_0040baa0
+#undef addvoice
 #undef local_24
 #undef local_1c
 #undef local_18
@@ -36793,12 +36853,12 @@ LAB_0043d4d4:
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00421b40 ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define FUN_00431630 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define scalevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40ba30))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040ba30 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40ba30))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
 #define local_30 (*(int *)(lf_frame + 0x10))
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -36842,8 +36902,8 @@ void __cdecl lf_3d500(int param_1,int param_2)
           (iVar8 = *(int *)((int)&g_human[0].player_id + local_30), iVar8 != -1)) &&
          (iVar9 = param_1 * 0x2408, g_player[iVar8].team != g_player[param_1].team)) {
         pBVar1 = g_human[param_2].bones + 2;
-        fVar10 = (float10)FUN_0040baa0((float *)((int)&(((Bone *)(g_human[0].bones[2].rot + -4))->
-                                                       pos).x + local_30),(float *)pBVar1);
+        fVar10 = (float10)vectordistance((float *)((int)&(((Bone *)(g_human[0].bones[2].rot + -4))->
+                                                         pos).x + local_30),(float *)pBVar1);
         if (fVar10 < (float10)128.0) {
           iVar4 = 0;
           iVar8 = -1;
@@ -36870,7 +36930,7 @@ void __cdecl lf_3d500(int param_1,int param_2)
           if (((float)(g_human[param_2].bones[2].rot[2].z * local_10 +
                (g_human[param_2].bones[2].rot[2].x * local_18 +
                g_human[param_2].bones[2].rot[2].y * local_14)) < 0.0) &&
-             (iVar4 = FUN_00431630((float *)pBVar1,pfVar7,1), iVar4 == 0)) {
+             (iVar4 = lineintersectlevel((float *)pBVar1,pfVar7,1), iVar4 == 0)) {
             if (iVar8 == -1) {
               if (g_player[param_1].num_threats < 0x10) {
                 *(int *)(iVar9 + ((int)SR_VA(0xf1efe70)) + g_player[param_1].num_threats * 0x18) = local_2c;
@@ -36895,17 +36955,17 @@ LAB_0043d719:
                 *(undefined4 *)(&g_player[param_1].lf_raw[0x2180] + iVar8) = 0x41800000;
               }
               pfVar2 = (float *)(&g_player[param_1].lf_raw[0x2174] + iVar8);
-              FUN_0040ba30(pfVar2,pfVar2,0.875);
-              FUN_00421b40(&local_18,
-                           (float)((float)dVar11 * 0.25 * 0.125 +
-                           (16.0 - *(float *)(&g_player[param_1].lf_raw[0x2180] + iVar8)) * 0.125 *
-                           0.25),0.0);
+              scalevector(pfVar2,pfVar2,0.875);
+              getrandomvector3d(&local_18,
+                                (float)((float)dVar11 * 0.25 * 0.125 +
+                                (16.0 - *(float *)(&g_player[param_1].lf_raw[0x2180] + iVar8)) * 0.125
+                                * 0.25),0.0);
               local_18 = (float)(local_18 + *pfVar7);
               local_14 = (float)(local_14 + pfVar7[1]);
               local_10 = (float)(local_10 + pfVar7[2]);
-              FUN_0040ba60(&local_18,&local_18,
-                           (float *)((int)(g_human[0].bones[0].rot + -2) + local_30),4.0);
-              FUN_0040ba60(pfVar2,pfVar2,&local_18,0.125);
+              scaleaddvectors(&local_18,&local_18,
+                              (float *)((int)(g_human[0].bones[0].rot + -2) + local_30),4.0);
+              scaleaddvectors(pfVar2,pfVar2,&local_18,0.125);
             }
           }
         }
@@ -36976,12 +37036,12 @@ LAB_0043d719:
 #undef g_human
 #undef g_game
 #undef g_player
-#undef FUN_00421b40
-#undef FUN_0040ba60
-#undef FUN_00431630
+#undef scaleaddvectors
+#undef vectordistance
+#undef scalevector
 #undef _CIsqrt
-#undef FUN_0040ba30
-#undef FUN_0040baa0
+#undef lineintersectlevel
+#undef getrandomvector3d
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -37011,11 +37071,11 @@ LAB_0043d719:
 #define DAT_1994df50 (*(undefined *)SR_VA(0x1994df50))
 #define DAT_1994df52 (*(undefined *)SR_VA(0x1994df52))
 #define DAT_1994ff44 (*(undefined *)SR_VA(0x1994ff44))
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define FUN_004296f0 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
-#define FUN_0040f620 ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
-#define FUN_00401cf0 ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
-#define FUN_0040f4a0 ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
+#define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
 #define local_c (*(uint *)(lf_frame + 0x14))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5,ushort *param_6)
@@ -37040,14 +37100,14 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
          ((uVar2 = *(uint *)(*(int *)(&DAT_17166088 + iVar3) +
                             ((*(int *)(&DAT_1716607c + iVar3) * iVar5 + iVar4) *
                              *(int *)(&DAT_17166074 + iVar3) + iVar1) * 4), uVar2 != 0xffffffff ||
-          (uVar2 = FUN_0040f620(param_1,iVar1,iVar5,iVar4), uVar2 != 0xffffffff)))) {
+          (uVar2 = area_createchunk(param_1,iVar1,iVar5,iVar4), uVar2 != 0xffffffff)))) {
         iVar1 = *(int *)(&DAT_171665ac +
                         (((int)param_2 >> 3 & 7U) +
                          (((int)param_4 >> 3 & 7U) + ((int)param_3 >> 3 & 7U) * 8) * 8 +
                          param_1 * 0x4035b + uVar2 * 0x201) * 4);
         if ((iVar1 != -1) ||
-           (iVar1 = FUN_0040f4a0(param_1,uVar2,(int)param_2 >> 3,(int)param_3 >> 3,(int)param_4 >> 3
-                                ), iVar1 != -1)) {
+           (iVar1 = area_createsector(param_1,uVar2,(int)param_2 >> 3,(int)param_3 >> 3,
+                                      (int)param_4 >> 3), iVar1 != -1)) {
           if ((param_5 & 0xe0000000) == 0x40000000) {
             iVar3 = (param_2 & 7) + ((param_4 & 7) + (param_3 & 7) * 8) * 8;
             iVar5 = iVar1 * 0x6068 + iVar3 * 0x10;
@@ -37086,37 +37146,37 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) | 0x2000;
             }
             *(undefined4 *)(&DAT_1994ff44 + iVar1) = 0;
-            uVar2 = FUN_00401850(param_1,param_2,param_3 - 1,param_4);
+            uVar2 = area_getblock(param_1,param_2,param_3 - 1,param_4);
             if (((uVar2 & 0xe0000000) == 0x40000000) || (param_3 == 0)) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xfffffffe;
-              FUN_004296f0(param_1,param_2,param_3 - 1,param_4,uVar2 & 0xffffffdf);
+              area_setblock(param_1,param_2,param_3 - 1,param_4,uVar2 & 0xffffffdf);
             }
-            uVar2 = FUN_00401850(param_1,param_2,param_3 + 1,param_4);
+            uVar2 = area_getblock(param_1,param_2,param_3 + 1,param_4);
             if ((uVar2 & 0xe0000000) == 0x40000000) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xffffffdf;
-              FUN_004296f0(param_1,param_2,param_3 + 1,param_4,uVar2 & 0xfffffffe);
+              area_setblock(param_1,param_2,param_3 + 1,param_4,uVar2 & 0xfffffffe);
             }
-            uVar2 = FUN_00401850(param_1,param_2,param_3,param_4 + 1);
+            uVar2 = area_getblock(param_1,param_2,param_3,param_4 + 1);
             if ((uVar2 & 0xe0000000) == 0x40000000) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xfffffffd;
-              FUN_004296f0(param_1,param_2,param_3,param_4 + 1,uVar2 & 0xfffffff7);
+              area_setblock(param_1,param_2,param_3,param_4 + 1,uVar2 & 0xfffffff7);
             }
-            uVar2 = FUN_00401850(param_1,param_2,param_3,param_4 - 1);
+            uVar2 = area_getblock(param_1,param_2,param_3,param_4 - 1);
             if ((uVar2 & 0xe0000000) == 0x40000000) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xfffffff7;
-              FUN_004296f0(param_1,param_2,param_3,param_4 - 1,uVar2 & 0xfffffffd);
+              area_setblock(param_1,param_2,param_3,param_4 - 1,uVar2 & 0xfffffffd);
             }
-            uVar2 = FUN_00401850(param_1,param_2 - 1,param_3,param_4);
+            uVar2 = area_getblock(param_1,param_2 - 1,param_3,param_4);
             if ((uVar2 & 0xe0000000) == 0x40000000) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xfffffffb;
-              FUN_004296f0(param_1,param_2 - 1,param_3,param_4,uVar2 & 0xffffffef);
+              area_setblock(param_1,param_2 - 1,param_3,param_4,uVar2 & 0xffffffef);
             }
-            uVar2 = FUN_00401850(param_1,param_2 + 1,param_3,param_4);
+            uVar2 = area_getblock(param_1,param_2 + 1,param_3,param_4);
             if ((uVar2 & 0xe0000000) == 0x40000000) {
               *(uint *)(&DAT_1994d744 + iVar1) = *(uint *)(&DAT_1994d744 + iVar1) & 0xffffffef;
-              FUN_004296f0(param_1,param_2 + 1,param_3,param_4,uVar2 & 0xfffffffb);
+              area_setblock(param_1,param_2 + 1,param_3,param_4,uVar2 & 0xfffffffb);
             }
-            FUN_00401cf0(param_1,param_2,param_3,param_4);
+            area_marksector(param_1,param_2,param_3,param_4);
             return;
           }
           if ((param_5 & 0xe0000000) == 0x80000000) {
@@ -37144,9 +37204,10 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
                     if (0 < *(int *)(&DAT_137b2d6c + iVar1)) {
                       do {
                         if (((local_8 != 0) || (local_c != 0)) || (uVar2 != 0)) {
-                          FUN_004296f0(param_1,param_2 + uVar2,param_3 + local_8,local_c + param_4,
-                                       ((local_8 | 0xffffc000) << 8 | local_c) << 8 | uVar2);
-                          FUN_00401cf0(param_1,param_2 + uVar2,param_3 + local_8,local_c + param_4);
+                          area_setblock(param_1,param_2 + uVar2,param_3 + local_8,local_c + param_4,
+                                        ((local_8 | 0xffffc000) << 8 | local_c) << 8 | uVar2);
+                          area_marksector(param_1,param_2 + uVar2,param_3 + local_8,
+                                          local_c + param_4);
                         }
                         uVar2 = uVar2 + 1;
                       } while ((int)uVar2 < *(int *)(&DAT_137b2d6c + iVar1));
@@ -37157,7 +37218,7 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
                 local_8 = local_8 + 1;
               } while ((int)local_8 < *(int *)(&DAT_137b2d70 + iVar1));
             }
-            FUN_00401cf0(param_1,param_2,param_3,param_4);
+            area_marksector(param_1,param_2,param_3,param_4);
           }
         }
       }
@@ -37183,11 +37244,11 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #undef DAT_1994df50
 #undef DAT_1994df52
 #undef DAT_1994ff44
-#undef FUN_00401850
-#undef FUN_004296f0
-#undef FUN_0040f620
-#undef FUN_00401cf0
-#undef FUN_0040f4a0
+#undef area_createchunk
+#undef area_getblock
+#undef area_marksector
+#undef area_createsector
+#undef area_setblock
 #undef local_c
 #undef local_8
 
@@ -37528,16 +37589,16 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define _DAT_02165ad8 (*(undefined4 *)SR_VA(0x2165ad8))
 #define _DAT_02165ad4 (*(float *)SR_VA(0x2165ad4))
 #define _DAT_02165af8 (*(float *)SR_VA(0x2165af8))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
+#define addbeziersurfacetexture ((void (__cdecl *)(int, undefined4, int, float, int, float, undefined4))SR_VA(0x40fc40))
+#define area_createinteriorblocks ((void (__cdecl *)(void))SR_VA(0x42a510))
+#define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
+#define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0042a510 ((void (__cdecl *)(void))SR_VA(0x42a510))
-#define FUN_0040fc40 ((void (__cdecl *)(int, undefined4, int, float, int, float, undefined4))SR_VA(0x40fc40))
-#define FUN_00411d70 ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
-#define FUN_0040d3a0 ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
-#define FUN_00401e50 ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define FUN_0040f6f0 ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define FUN_004026d0 ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
-#define FUN_004120c0 ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
 #define auStack_44 (*(undefined1 (*)[4])(lf_frame + 0x1c))
 #define local_40 (*(uint * *)(lf_frame + 0x20))
 #define local_3c (*(int * *)(lf_frame + 0x24))
@@ -37743,7 +37804,7 @@ void __cdecl lf_3e070(void)
   DAT_0bba8e74 = DAT_0bba8ca4;
   _chdir("data");
   iVar1 = _chdir("block");
-  FUN_0040d3a0("*.sbl",0,0);
+  listfiles("*.sbl",0,0);
   if (iVar1 == 0) {
     _chdir("..");
     _chdir("..");
@@ -37776,7 +37837,7 @@ void __cdecl lf_3e070(void)
     puVar4 = puVar4 + 1;
     iVar1 = DAT_0bba8ca0;
   }
-  FUN_0042a510();
+  area_createinteriorblocks();
   iVar1 = 0;
   do {
     local_3c = &DAT_0bba8e04 + iVar1 * 6;
@@ -37822,7 +37883,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
       if ((iVar1 == 0) || (iVar1 == 2)) {
         DAT_0bbe90a0 = 0x3f800000;
         if (iVar1 == 2) {
@@ -37864,7 +37925,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
         DAT_0bbe90a0 = 0;
         if (iVar1 == 0) {
           DAT_0bbe90a4 = (float)local_30;
@@ -37905,7 +37966,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
       }
       if ((iVar1 == 1) || (iVar1 == 3)) {
         DAT_0bbe90a0 = 0;
@@ -37949,7 +38010,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
         DAT_0bbe90a0 = 0x3f800000;
         if (iVar1 == 3) {
           DAT_0bbe90a4 = (float)local_30;
@@ -37991,7 +38052,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
       }
       iVar3 = (int)local_40 * 0x84;
       *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
@@ -38000,7 +38061,7 @@ void __cdecl lf_3e070(void)
         *(undefined4 *)(&DAT_137b2d70 + iVar3) = 2;
       }
       *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-      FUN_00401e50((int)local_40);
+      landscape_buildsectorlods((int)local_40);
       local_3c = local_3c + 1;
       local_34 = (float)(local_34 + 0.16666667);
       local_38 = local_38 + -1;
@@ -38058,12 +38119,12 @@ void __cdecl lf_3e070(void)
       DAT_0bbe9164 = 0;
       DAT_0bbe917c = 0;
       _DAT_0bbe91c0 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
       iVar3 = iVar1 * 0x84;
       *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
       *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
       *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-      FUN_00401e50(iVar1);
+      landscape_buildsectorlods(iVar1);
       local_3c = local_3c + 1;
       local_38 = local_38 + -1;
       local_34 = (float)(local_34 + 0.16666667);
@@ -38122,12 +38183,12 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
       iVar3 = iVar1 * 0x84;
       *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
       *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
       *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-      FUN_00401e50(iVar1);
+      landscape_buildsectorlods(iVar1);
       iVar1 = DAT_0bba8cec;
       local_3c = local_3c + 1;
       local_38 = local_38 + -1;
@@ -38171,20 +38232,20 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9128 = 0.0625;
   _DAT_0bbe9158 = 0.0625;
   _DAT_0bbe912c = 0x3f400000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
   iVar3 = iVar1 * 0x84;
   local_40 = (uint *)(&DAT_137b2d6c + iVar3);
   *local_40 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-  FUN_00401e50(iVar1);
+  landscape_buildsectorlods(iVar1);
   local_3c = (int *)local_40;
   local_38 = 3;
   do {
     iVar1 = iVar1 + 1;
-    FUN_004026d0(iVar1,local_3c);
+    area_copyrotateblock(iVar1,local_3c);
     local_3c = local_3c + 0x21;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     local_38 = local_38 + -1;
   } while (local_38 != 0);
   local_40 = (uint *)0x0;
@@ -38214,7 +38275,7 @@ void __cdecl lf_3e070(void)
     _DAT_0bbe91dc = 0;
     _DAT_0bbe91c0 = 0;
     _DAT_0bbe91c4 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     if (((uint)local_40 & 1) != 0) {
       DAT_0bbe90a0 = 0x3f800000;
       DAT_0bbe90a4 = 0.0625;
@@ -38236,7 +38297,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe9130 = 0x3f800000;
       DAT_0bbe9178 = 0x3f800000;
       _DAT_0bbe91d8 = 0x3f800000;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     }
     if (((uint)local_40 & 8) != 0) {
       DAT_0bbe90a0 = 0;
@@ -38259,7 +38320,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91c4 = 0;
       DAT_0bbe9164 = 0x3d800000;
       DAT_0bbe917c = 0x3d800000;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     }
     if (((uint)local_40 & 4) != 0) {
       DAT_0bbe90a0 = 0;
@@ -38282,7 +38343,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     }
     if (((uint)local_40 & 2) != 0) {
       DAT_0bbe90a0 = 0x3f800000;
@@ -38305,13 +38366,13 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91d8 = 0x3f800000;
       DAT_0bbe9164 = 0x3d800000;
       DAT_0bbe917c = 0x3d800000;
-      FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     }
     iVar3 = iVar1 * 0x84;
     *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
     *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
     *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     uVar5 = DAT_0bba8e74;
     local_40 = (uint *)((int)local_40 + 1);
   } while ((int)local_40 < 0x10);
@@ -38330,7 +38391,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9134 = 0.0625;
   DAT_0bbe90cc = 0;
   _DAT_0bbe9130 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0.875;
   DAT_0bbe90a8 = 0x3f800000;
@@ -38343,7 +38404,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30001);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30001);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -38356,7 +38417,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9138 = 0;
   _DAT_0bbe9130 = 0x3f800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -38369,18 +38430,18 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9134 = 0.0;
   _DAT_0bbe9138 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
-  FUN_004120c0(1,0x3d800000,0x3d800000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
+  area_block_addcorner(1,0x3d800000,0x3d800000);
   iVar1 = uVar5 * 0x84;
   *(undefined4 *)(&DAT_137b2d6c + iVar1) = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar1) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar1) = 1;
-  FUN_00401e50(uVar5);
+  landscape_buildsectorlods(uVar5);
   local_40 = (uint *)&DAT_0bba8e78;
   do {
-    FUN_004026d0(*local_40,(undefined4 *)(&DAT_137b2d6c + uVar5 * 0x84));
+    area_copyrotateblock(*local_40,(undefined4 *)(&DAT_137b2d6c + uVar5 * 0x84));
     uVar5 = *local_40;
-    FUN_00401e50(uVar5);
+    landscape_buildsectorlods(uVar5);
     iVar1 = DAT_0bba8e84;
     local_40 = local_40 + 1;
   } while ((int)local_40 < ((int)SR_VA(0xbba8e84)));
@@ -38399,7 +38460,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9134 = 0.0625;
   DAT_0bbe90cc = 0;
   _DAT_0bbe9130 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0.875;
   DAT_0bbe90a8 = 0x3f800000;
@@ -38412,7 +38473,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30001);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x30001);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -38425,7 +38486,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9138 = 0;
   _DAT_0bbe9130 = 0x3f800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
   DAT_0bbe90a0 = 0x3d800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -38438,18 +38499,18 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9138 = 0;
   DAT_0bbe90c8 = 1.0;
   _DAT_0bbe9130 = 0x3d800000;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
-  FUN_004120c0(0,0x3d800000,0x3d800000);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0x6000b);
+  area_block_addcorner(0,0x3d800000,0x3d800000);
   iVar3 = iVar1 * 0x84;
   *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-  FUN_00401e50(iVar1);
+  landscape_buildsectorlods(iVar1);
   local_40 = (uint *)&DAT_0bba8e88;
   do {
-    FUN_004026d0(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar1 * 0x84));
+    area_copyrotateblock(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar1 * 0x84));
     iVar1 = *local_40;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     local_40 = local_40 + 1;
   } while ((int)local_40 < ((int)SR_VA(0xbba8e94)));
   iVar1 = 0;
@@ -38498,12 +38559,12 @@ void __cdecl lf_3e070(void)
     _DAT_0bbe91dc = 0;
     _DAT_0bbe91c0 = 0;
     _DAT_0bbe91c4 = 0;
-    FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
     iVar3 = (int)local_40 * 0x84;
     *(undefined4 *)(&DAT_137b2d6c + iVar3) = 1;
     *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
     *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-    FUN_00401e50((int)local_40);
+    landscape_buildsectorlods((int)local_40);
     iVar3 = DAT_0bba8f74;
     iVar1 = iVar1 + 1;
   } while (iVar1 < 4);
@@ -38534,7 +38595,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe912c = 0x40000000;
   _DAT_0bbe9128 = 0.3125;
   _DAT_0bbe9158 = 0.5625;
-  FUN_0040fc40(((int)SR_VA(0xbbe90a0)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
+  addbeziersurfacetexture(((int)SR_VA(0xbbe90a0)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
   _DAT_02165a64 = DAT_0bbe90a0;
   _DAT_02165a6c = DAT_0bbe90a8;
   _DAT_02165a40 = DAT_0bbe90c4;
@@ -38559,7 +38620,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad8 = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9158 + 0.6875);
   _DAT_02165af8 = (float)(_DAT_0bbe9134 + 0.6875);
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x40000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x40000);
   _DAT_02165a64 = DAT_0bbe90c4;
   _DAT_02165a6c = DAT_0bbe90cc;
   _DAT_02165a68 = 2.0;
@@ -38584,7 +38645,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165af8 = 2.0;
   _DAT_02165ad0 = _DAT_0bbe9154;
   _DAT_02165ad4 = 0.0;
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a44 = 2.0;
@@ -38609,17 +38670,17 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad4 = 2.0;
   _DAT_02165af4 = _DAT_0bbe9130;
   _DAT_02165af8 = 0.0;
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
   iVar1 = iVar3 * 0x84;
   *(undefined4 *)(&DAT_137b2d6c + iVar1) = 4;
   *(undefined4 *)(&DAT_137b2d70 + iVar1) = 2;
   *(undefined4 *)(&DAT_137b2d74 + iVar1) = 4;
-  FUN_00401e50(iVar3);
+  landscape_buildsectorlods(iVar3);
   local_40 = (uint *)&DAT_0bba8f78;
   do {
-    FUN_004026d0(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar3 * 0x84));
+    area_copyrotateblock(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar3 * 0x84));
     iVar3 = *local_40;
-    FUN_00401e50(iVar3);
+    landscape_buildsectorlods(iVar3);
     iVar1 = DAT_0bba8f84;
     local_40 = local_40 + 1;
   } while ((int)local_40 < ((int)SR_VA(0xbba8f84)));
@@ -38650,7 +38711,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0x407c0000;
   _DAT_0bbe9154 = 0;
   _DAT_0bbe9158 = 1.0625;
-  FUN_0040fc40(((int)SR_VA(0xbbe90a0)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
+  addbeziersurfacetexture(((int)SR_VA(0xbbe90a0)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a64 = DAT_0bbe90c4;
@@ -38675,7 +38736,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165afc = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9134 - 1.0);
   _DAT_02165af8 = (float)(_DAT_0bbe9158 - 1.0);
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x30000);
   _DAT_02165a64 = DAT_0bbe90a0;
   _DAT_02165a6c = DAT_0bbe90a8;
   _DAT_02165a40 = DAT_0bbe90c4;
@@ -38700,7 +38761,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad8 = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9158 + 0.6875);
   _DAT_02165af8 = (float)(_DAT_0bbe9134 + 0.6875);
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x40000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x40000);
   _DAT_02165a64 = DAT_0bbe90c4;
   _DAT_02165a6c = DAT_0bbe90cc;
   _DAT_02165a68 = 2.0;
@@ -38725,7 +38786,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165af8 = 2.0;
   _DAT_02165ad0 = _DAT_0bbe9154;
   _DAT_02165ad4 = 0.0;
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a44 = 2.0;
@@ -38750,17 +38811,17 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad4 = 2.0;
   _DAT_02165af4 = _DAT_0bbe9130;
   _DAT_02165af8 = 0.0;
-  FUN_0040fc40(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
+  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464e-45f,8,4.203895393e-45f,0x50000);
   iVar3 = iVar1 * 0x84;
   *(undefined4 *)(&DAT_137b2d6c + iVar3) = 4;
   *(undefined4 *)(&DAT_137b2d70 + iVar3) = 2;
   *(undefined4 *)(&DAT_137b2d74 + iVar3) = 4;
-  FUN_00401e50(iVar1);
+  landscape_buildsectorlods(iVar1);
   local_40 = (uint *)&DAT_0bba8f88;
   do {
-    FUN_004026d0(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar1 * 0x84));
+    area_copyrotateblock(*local_40,(undefined4 *)(&DAT_137b2d6c + iVar1 * 0x84));
     iVar1 = *local_40;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     iVar3 = DAT_0bba8fa4;
     local_40 = local_40 + 1;
   } while ((int)local_40 < ((int)SR_VA(0xbba8f94)));
@@ -38787,20 +38848,20 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
   iVar1 = iVar3 * 0x84;
   local_40 = (uint *)(&DAT_137b2d6c + iVar1);
   *local_40 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar1) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar1) = 1;
-  FUN_00401e50(iVar3);
+  landscape_buildsectorlods(iVar3);
   local_3c = (int *)local_40;
   local_38 = 3;
   do {
     iVar3 = iVar3 + 1;
-    FUN_004026d0(iVar3,local_3c);
+    area_copyrotateblock(iVar3,local_3c);
     local_3c = local_3c + 0x21;
-    FUN_00401e50(iVar3);
+    landscape_buildsectorlods(iVar3);
     iVar1 = DAT_0bba8fb4;
     local_38 = local_38 + -1;
   } while (local_38 != 0);
@@ -38827,27 +38888,27 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
   local_24[0] = 1;
   local_24[1] = 1;
   local_24[2] = 1;
   local_24[3] = 1;
   local_24[4] = 1;
   local_24[5] = 1;
-  FUN_00411d70(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
   iVar3 = iVar1 * 0x84;
   local_40 = (uint *)(&DAT_137b2d6c + iVar3);
   *local_40 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-  FUN_00401e50(iVar1);
+  landscape_buildsectorlods(iVar1);
   local_3c = (int *)local_40;
   local_38 = 3;
   do {
     iVar1 = iVar1 + 1;
-    FUN_004026d0(iVar1,local_3c);
+    area_copyrotateblock(iVar1,local_3c);
     local_3c = local_3c + 0x21;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     iVar3 = DAT_0bba8fc4;
     local_38 = local_38 + -1;
   } while (local_38 != 0);
@@ -38874,27 +38935,27 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  FUN_0040f6f0(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
+  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464e-45f,1,1.401298464e-45f,0);
   local_24[0] = 1;
   local_24[1] = 1;
   local_24[2] = 1;
   local_24[3] = 1;
   local_24[4] = 1;
   local_24[5] = 1;
-  FUN_00411d70(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
   iVar1 = iVar3 * 0x84;
   local_40 = (uint *)(&DAT_137b2d6c + iVar1);
   *local_40 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar1) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar1) = 1;
-  FUN_00401e50(iVar3);
+  landscape_buildsectorlods(iVar3);
   local_3c = (int *)local_40;
   local_38 = 3;
   do {
     iVar3 = iVar3 + 1;
-    FUN_004026d0(iVar3,local_3c);
+    area_copyrotateblock(iVar3,local_3c);
     local_3c = local_3c + 0x21;
-    FUN_00401e50(iVar3);
+    landscape_buildsectorlods(iVar3);
     iVar1 = DAT_0bba8fd4;
     local_38 = local_38 + -1;
   } while (local_38 != 0);
@@ -38907,21 +38968,21 @@ void __cdecl lf_3e070(void)
   local_24[3] = 1;
   local_24[4] = 1;
   local_24[5] = 1;
-  FUN_00411d70(0,0.0,0.0,0.0,1.0,0.0625,1.0,0x22,local_24);
-  FUN_00411d70(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,1.0,0.0625,1.0,0x22,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,1.0,0.3125,0.0625,0x2a,local_24);
   iVar3 = iVar1 * 0x84;
   local_40 = (uint *)(&DAT_137b2d6c + iVar3);
   *local_40 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar3) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar3) = 1;
-  FUN_00401e50(iVar1);
+  landscape_buildsectorlods(iVar1);
   local_3c = (int *)local_40;
   local_38 = 3;
   do {
     iVar1 = iVar1 + 1;
-    FUN_004026d0(iVar1,local_3c);
+    area_copyrotateblock(iVar1,local_3c);
     local_3c = local_3c + 0x21;
-    FUN_00401e50(iVar1);
+    landscape_buildsectorlods(iVar1);
     iVar3 = DAT_0bba8fe4;
     local_38 = local_38 + -1;
   } while (local_38 != 0);
@@ -38934,20 +38995,20 @@ void __cdecl lf_3e070(void)
   local_24[3] = 1;
   local_24[4] = 1;
   local_24[5] = 1;
-  FUN_00411d70(0,0.0,0.0,0.0,1.0,0.0625,1.0,0x32,local_24);
-  FUN_00411d70(0,0.0,0.0,0.0,0.0625,0.3125,0.0625,0x32,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,1.0,0.0625,1.0,0x32,local_24);
+  area_block_addbeam(0,0.0,0.0,0.0,0.0625,0.3125,0.0625,0x32,local_24);
   iVar1 = iVar3 * 0x84;
   puVar4 = (undefined4 *)(&DAT_137b2d6c + iVar1);
   *puVar4 = 1;
   *(undefined4 *)(&DAT_137b2d70 + iVar1) = 1;
   *(undefined4 *)(&DAT_137b2d74 + iVar1) = 1;
-  FUN_00401e50(iVar3);
+  landscape_buildsectorlods(iVar3);
   local_38 = 3;
   do {
     iVar3 = iVar3 + 1;
-    FUN_004026d0(iVar3,puVar4);
+    area_copyrotateblock(iVar3,puVar4);
     puVar4 = puVar4 + 0x21;
-    FUN_00401e50(iVar3);
+    landscape_buildsectorlods(iVar3);
     local_38 = local_38 + -1;
   } while (local_38 != 0);
   return;
@@ -39288,16 +39349,16 @@ void __cdecl lf_3e070(void)
 #undef _DAT_02165ad8
 #undef _DAT_02165ad4
 #undef _DAT_02165af8
-#undef __security_check_cookie
-#undef FUN_0042a510
-#undef FUN_0040fc40
-#undef FUN_00411d70
-#undef FUN_0040d3a0
-#undef FUN_00401e50
-#undef FUN_0040f6f0
-#undef FUN_004026d0
 #undef _chdir
-#undef FUN_004120c0
+#undef addbeziersurface
+#undef listfiles
+#undef area_block_addbeam
+#undef addbeziersurfacetexture
+#undef area_createinteriorblocks
+#undef area_block_addcorner
+#undef area_copyrotateblock
+#undef __security_check_cookie
+#undef landscape_buildsectorlods
 #undef auStack_44
 #undef local_40
 #undef local_3c
@@ -39333,20 +39394,20 @@ void __cdecl lf_3e070(void)
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
 #define DAT_19951f44 (*(undefined *)SR_VA(0x19951f44))
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define FUN_0040b850 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
-#define FUN_0042dfc0 ((undefined4 (__cdecl *)(float *, float *, float *, float, float *, float *, float *, float))SR_VA(0x42dfc0))
-#define FUN_0040ba00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0040bc20 ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define FUN_0040b9d0 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define sphereintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, float, float *, float *, float *, float))SR_VA(0x42dfc0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_0042cda0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42cda0))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_0042d2d0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42d2d0))
-#define FUN_00403030 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define addvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
+#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define sphereintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42cda0))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define sphereintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42d2d0))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
 #define local_a4 (*(float *)(lf_frame + 0x1c))
 #define local_a0 (*(float *)(lf_frame + 0x20))
 #define local_9c (*(float *)(lf_frame + 0x24))
@@ -39373,7 +39434,8 @@ void __cdecl lf_3e070(void)
 #define local_40 (*(int (*)[6])(lf_frame + 0x80))
 #define local_28 (*(float (*)[9])(lf_frame + 0x98))
 #define local_4 (*(uint *)(lf_frame + 0xbc))
-int __cdecl lf_40aa0(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,float param_6)
+int __cdecl lf_40aa0(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,
+                   float param_6)
 
 {
   __declspec(align(16)) uchar lf_frame[0xc0];
@@ -39429,13 +39491,13 @@ int __cdecl lf_40aa0(float *param_1,float *param_2,float *param_3,uint param_4,f
   pfVar5 = (float *)(&DAT_17166044 + iVar6);
   local_88 = iVar6;
   local_70 = pfVar5;
-  FUN_0040ba00(&local_68,param_5,pfVar5);
+  subtractvectors(&local_68,param_5,pfVar5);
   local_74 = (float *)(&DAT_17166050 + iVar6);
-  fVar8 = (float10)FUN_0040b850(&local_68,local_74);
+  fVar8 = (float10)dotproduct(&local_68,local_74);
   local_4c[0] = (float)fVar8;
-  fVar8 = (float10)FUN_0040b850(&local_68,(float *)(&DAT_1716605c + iVar6));
+  fVar8 = (float10)dotproduct(&local_68,(float *)(&DAT_1716605c + iVar6));
   local_4c[1] = (float)fVar8;
-  fVar8 = (float10)FUN_0040b850(&local_68,(float *)(&DAT_17166068 + iVar6));
+  fVar8 = (float10)dotproduct(&local_68,(float *)(&DAT_17166068 + iVar6));
   local_4c[2] = (float)fVar8;
   iVar6 = 0;
   do {
@@ -39487,7 +39549,7 @@ int __cdecl lf_40aa0(float *param_1,float *param_2,float *param_3,uint param_4,f
                   if (uVar3 == 1) {
                     fVar9 = 1.5707964;
 LAB_00440e27:
-                    FUN_0040bc50(&local_68,(float *)&DAT_00460ce0,fVar9);
+                    rotatevector(&local_68,(float *)&DAT_00460ce0,fVar9);
                   }
                   else {
                     if (uVar3 == 2) {
@@ -39504,11 +39566,11 @@ LAB_00440e27:
                   local_64 = (float)((float)(int)local_80 * *(float *)(&DAT_17166080 + local_88) + local_64);
                   local_60 = (float)((float)(int)local_7c * *(float *)(&DAT_17166080 + local_88) +
                              *(float *)(&DAT_17166080 + local_88) * 0.5 + local_60);
-                  FUN_0040bc20(local_28);
+                  resetorientation(local_28);
                   if (uVar3 == 1) {
                     fVar9 = 1.5707964;
 LAB_00440edc:
-                    FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,fVar9);
+                    rotateorientation((int)local_28,(float *)&DAT_00460ce0,fVar9);
                   }
                   else {
                     if (uVar3 == 2) {
@@ -39520,14 +39582,15 @@ LAB_00440edc:
                       goto LAB_00440edc;
                     }
                   }
-                  iVar6 = FUN_0042dfc0(&local_a4,&local_94,&local_98,LF_BITS_F((uVar4 & 0x3ff)),
-                                       &local_68,local_28,local_4c,param_6);
+                  iVar6 = sphereintersectcityobjecttype
+                                    (&local_a4,&local_94,&local_98,LF_BITS_F((uVar4 & 0x3ff)),&local_68,
+                                     local_28,local_4c,param_6);
                   pfVar7 = local_74;
                   pfVar5 = local_70;
                   if (iVar6 != 0) {
-                    FUN_0040bb00(param_1,param_1,local_74);
-                    FUN_0040b9d0(param_1,param_1,local_70);
-                    FUN_0040bb00(param_2,param_2,pfVar7);
+                    projectvector(param_1,param_1,local_74);
+                    addvectors(param_1,param_1,local_70);
+                    projectvector(param_2,param_2,pfVar7);
                     *param_1 = local_a4;
                     param_1[1] = local_a0;
                     param_1[2] = local_9c;
@@ -39542,17 +39605,17 @@ LAB_00440edc:
                 fVar9 = *(float *)(&DAT_1994d744 + local_6c);
                 uVar4 = ((uint)LF_BITS_U(fVar9)) & 0xe0000000;
                 if (uVar4 == 0x40000000) {
-                  iVar6 = FUN_0042cda0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                       (int *)&local_84,((uint)LF_BITS_U(fVar9)),
-                                       *(float *)(&DAT_17166080 + local_88));
+                  iVar6 = sphereintersectnormalblock
+                                    (&local_a4,&local_94,&local_98,local_4c,param_6,(int *)&local_84
+                                     ,((uint)LF_BITS_U(fVar9)),*(float *)(&DAT_17166080 + local_88));
                   pfVar7 = local_74;
                   pfVar1 = local_78;
                   if ((iVar6 != 0) && (local_98 < *local_78)) {
-                    FUN_0040bb00(&local_a4,&local_a4,local_74);
+                    projectvector(&local_a4,&local_a4,local_74);
                     local_a4 = (float)(*pfVar5 + local_a4);
                     local_a0 = (float)(pfVar5[1] + local_a0);
                     local_9c = (float)(pfVar5[2] + local_9c);
-                    FUN_0040bb00(&local_94,&local_94,pfVar7);
+                    projectvector(&local_94,&local_94,pfVar7);
                     *param_1 = local_a4;
                     param_1[1] = local_a0;
                     param_1[2] = local_9c;
@@ -39563,16 +39626,17 @@ LAB_00440edc:
                   }
                 }
                 else if (uVar4 == 0x80000000) {
-                  iVar6 = FUN_0042d2d0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                       (int *)&local_84,fVar9,*(float *)(&DAT_17166080 + local_88));
+                  iVar6 = sphereintersectspecblock
+                                    (&local_a4,&local_94,&local_98,local_4c,param_6,(int *)&local_84
+                                     ,fVar9,*(float *)(&DAT_17166080 + local_88));
                   pfVar7 = local_74;
                   pfVar1 = local_78;
                   if ((iVar6 != 0) && (local_98 < *local_78)) {
-                    FUN_0040bb00(&local_a4,&local_a4,local_74);
+                    projectvector(&local_a4,&local_a4,local_74);
                     local_a4 = (float)(*pfVar5 + local_a4);
                     local_a0 = (float)(pfVar5[1] + local_a0);
                     local_9c = (float)(pfVar5[2] + local_9c);
-                    FUN_0040bb00(&local_94,&local_94,pfVar7);
+                    projectvector(&local_94,&local_94,pfVar7);
                     *param_1 = local_a4;
                     param_1[1] = local_a0;
                     param_1[2] = local_9c;
@@ -39590,17 +39654,18 @@ LAB_00440edc:
                     local_54 = local_80 - (((uint)LF_BITS_U(fVar9)) >> 0x10 & 0xff);
                     local_50 = local_7c - (((uint)LF_BITS_U(fVar9)) >> 8 & 0xff);
                     fVar9 = *(float *)(&DAT_17166080 + local_88);
-                    fVar2 = LF_BITS_F(FUN_00401850(local_5c,local_58,local_54,local_50));
-                    iVar6 = FUN_0042d2d0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                         (int *)&local_58,fVar2,fVar9);
+                    fVar2 = LF_BITS_F(area_getblock(local_5c,local_58,local_54,local_50));
+                    iVar6 = sphereintersectspecblock
+                                      (&local_a4,&local_94,&local_98,local_4c,param_6,
+                                       (int *)&local_58,fVar2,fVar9);
                     pfVar7 = local_74;
                     pfVar5 = local_70;
                     if ((iVar6 != 0) && (local_98 < *local_78)) {
-                      FUN_0040bb00(&local_a4,&local_a4,local_74);
+                      projectvector(&local_a4,&local_a4,local_74);
                       local_a4 = (float)(*local_70 + local_a4);
                       local_a0 = (float)(local_70[1] + local_a0);
                       local_9c = (float)(local_70[2] + local_9c);
-                      FUN_0040bb00(&local_94,&local_94,pfVar7);
+                      projectvector(&local_94,&local_94,pfVar7);
                       *param_1 = local_a4;
                       param_1[1] = local_a0;
                       param_1[2] = local_9c;
@@ -39616,9 +39681,9 @@ LAB_00440edc:
                 fVar9 = *(float *)(&DAT_19950744 + local_6c);
                 uVar4 = ((uint)LF_BITS_U(fVar9)) & 0xe0000000;
                 if (uVar4 == 0x40000000) {
-                  iVar6 = FUN_0042cda0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                       (int *)&local_84,((uint)LF_BITS_U(fVar9)),
-                                       *(float *)(&DAT_17166080 + local_88));
+                  iVar6 = sphereintersectnormalblock
+                                    (&local_a4,&local_94,&local_98,local_4c,param_6,(int *)&local_84
+                                     ,((uint)LF_BITS_U(fVar9)),*(float *)(&DAT_17166080 + local_88));
                 }
                 else {
                   if (uVar4 != 0x80000000) {
@@ -39627,17 +39692,18 @@ LAB_00440edc:
                       local_54 = local_80 - (((uint)LF_BITS_U(fVar9)) >> 0x10 & 0xff);
                       local_50 = local_7c - (((uint)LF_BITS_U(fVar9)) >> 8 & 0xff);
                       fVar9 = *(float *)(&DAT_17166080 + local_88);
-                      fVar2 = LF_BITS_F(FUN_00403030(local_5c,local_58,local_54,local_50));
-                      iVar6 = FUN_0042d2d0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                           (int *)&local_58,fVar2,fVar9);
+                      fVar2 = LF_BITS_F(area_interior_getblock(local_5c,local_58,local_54,local_50));
+                      iVar6 = sphereintersectspecblock
+                                        (&local_a4,&local_94,&local_98,local_4c,param_6,
+                                         (int *)&local_58,fVar2,fVar9);
                       pfVar7 = local_74;
                       pfVar5 = local_70;
                       if ((iVar6 != 0) && (local_98 < *local_78)) {
-                        FUN_0040bb00(&local_a4,&local_a4,local_74);
+                        projectvector(&local_a4,&local_a4,local_74);
                         local_a4 = (float)(*local_70 + local_a4);
                         local_a0 = (float)(local_70[1] + local_a0);
                         local_9c = (float)(local_70[2] + local_9c);
-                        FUN_0040bb00(&local_94,&local_94,pfVar7);
+                        projectvector(&local_94,&local_94,pfVar7);
                         *param_1 = local_a4;
                         param_1[1] = local_a0;
                         param_1[2] = local_9c;
@@ -39650,16 +39716,17 @@ LAB_00440edc:
                     }
                     goto LAB_0044147f;
                   }
-                  iVar6 = FUN_0042d2d0(&local_a4,&local_94,&local_98,local_4c,param_6,
-                                       (int *)&local_84,fVar9,*(float *)(&DAT_17166080 + local_88));
+                  iVar6 = sphereintersectspecblock
+                                    (&local_a4,&local_94,&local_98,local_4c,param_6,(int *)&local_84
+                                     ,fVar9,*(float *)(&DAT_17166080 + local_88));
                 }
                 pfVar1 = local_78;
                 if ((iVar6 != 0) && (local_98 < *local_78)) {
-                  FUN_0040bb00(&local_a4,&local_a4,pfVar7);
+                  projectvector(&local_a4,&local_a4,pfVar7);
                   local_a4 = (float)(*pfVar5 + local_a4);
                   local_a0 = (float)(pfVar5[1] + local_a0);
                   local_9c = (float)(pfVar5[2] + local_9c);
-                  FUN_0040bb00(&local_94,&local_94,pfVar7);
+                  projectvector(&local_94,&local_94,pfVar7);
                   *param_1 = local_a4;
                   param_1[1] = local_a0;
                   param_1[2] = local_9c;
@@ -39710,20 +39777,20 @@ LAB_0044147f:
 #undef DAT_1994d744
 #undef DAT_19950744
 #undef DAT_19951f44
-#undef FUN_00401850
-#undef FUN_0040b850
-#undef FUN_0042dfc0
-#undef FUN_0040ba00
-#undef _ftol2
-#undef FUN_0040bc20
-#undef FUN_0040b9d0
+#undef dotproduct
+#undef rotatevector
+#undef area_getblock
+#undef sphereintersectcityobjecttype
+#undef projectvector
 #undef __security_check_cookie
-#undef FUN_0040bdb0
-#undef FUN_0040bc50
-#undef FUN_0042cda0
-#undef FUN_0040bb00
-#undef FUN_0042d2d0
-#undef FUN_00403030
+#undef _ftol2
+#undef rotateorientation
+#undef addvectors
+#undef subtractvectors
+#undef sphereintersectnormalblock
+#undef area_interior_getblock
+#undef sphereintersectspecblock
+#undef resetorientation
 #undef local_a4
 #undef local_a0
 #undef local_9c
@@ -39776,17 +39843,17 @@ LAB_0044147f:
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define FUN_0040b850 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
-#define FUN_0042d7f0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42d7f0))
-#define FUN_0040ba00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0042daf0 ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42daf0))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_00401bc0 ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x401bc0))
-#define FUN_00403290 ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x403290))
-#define FUN_00403030 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define circleintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42d7f0))
+#define area_getblocktexture ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x401bc0))
+#define circleintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42daf0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define __security_check_cookie(x) ((void)0)
+#define area_interior_getblocktexture ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x403290))
 #define local_78 (*(float *)(lf_frame + 0x18))
 #define local_74 (*(float *)(lf_frame + 0x1c))
 #define local_70 (*(float *)(lf_frame + 0x20))
@@ -39812,8 +39879,8 @@ LAB_0044147f:
 #define local_20 (*(int *)(lf_frame + 0x70))
 #define local_1c (*(float (*)[3])(lf_frame + 0x74))
 #define local_10 (*(uint (*)[4])(lf_frame + 0x80))
-int __cdecl lf_41550(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,float *param_6
-            ,float param_7)
+int __cdecl lf_41550(float *param_1,float *param_2,float *param_3,uint param_4,float *param_5,
+                   float *param_6,float param_7)
 
 {
   __declspec(align(16)) uchar lf_frame[0x90];
@@ -39869,12 +39936,12 @@ int __cdecl lf_41550(float *param_1,float *param_2,float *param_3,uint param_4,f
   }
   pfVar1 = (float *)(&DAT_17166044 + iVar6);
   local_68 = iVar6;
-  FUN_0040ba00(&local_28,param_5,pfVar1);
-  fVar8 = (float10)FUN_0040b850(&local_28,(float *)(&DAT_17166050 + iVar6));
+  subtractvectors(&local_28,param_5,pfVar1);
+  fVar8 = (float10)dotproduct(&local_28,(float *)(&DAT_17166050 + iVar6));
   local_1c[0] = (float)fVar8;
-  fVar8 = (float10)FUN_0040b850(&local_28,(float *)(&DAT_1716605c + iVar6));
+  fVar8 = (float10)dotproduct(&local_28,(float *)(&DAT_1716605c + iVar6));
   local_1c[1] = (float)fVar8;
-  fVar8 = (float10)FUN_0040b850(&local_28,(float *)(&DAT_17166068 + iVar6));
+  fVar8 = (float10)dotproduct(&local_28,(float *)(&DAT_17166068 + iVar6));
   local_1c[2] = (float)fVar8;
   local_34 = *local_44;
   local_6c = 0.0;
@@ -39923,17 +39990,18 @@ int __cdecl lf_41550(float *param_1,float *param_2,float *param_3,uint param_4,f
                 uVar5 = ((uint)LF_BITS_U(fVar3)) & 0xe0000000;
                 local_60 = uVar7;
                 if (uVar5 == 0x40000000) {
-                  iVar4 = FUN_0042d7f0(&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
-                                       (int *)&local_60,((uint)LF_BITS_U(fVar3)),
-                                       *(float *)(&DAT_17166080 + local_68));
+                  iVar4 = circleintersectnormalblock
+                                    (&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
+                                     (int *)&local_60,((uint)LF_BITS_U(fVar3)),
+                                     *(float *)(&DAT_17166080 + local_68));
 LAB_004418e4:
                   if ((iVar4 != 0) && (local_6c < *local_64)) {
                     pfVar2 = (float *)(&DAT_17166050 + local_68);
-                    FUN_0040bb00(&local_78,&local_78,pfVar2);
+                    projectvector(&local_78,&local_78,pfVar2);
                     local_78 = (float)(*pfVar1 + local_78);
                     local_74 = (float)(*(float *)(&DAT_17166048 + iVar6) + local_74);
                     local_70 = (float)(*(float *)(&DAT_1716604c + iVar6) + local_70);
-                    FUN_0040bb00(&local_54,&local_54,pfVar2);
+                    projectvector(&local_54,&local_54,pfVar2);
                     *param_1 = local_78;
                     param_1[1] = local_74;
                     param_1[2] = local_70;
@@ -39945,31 +40013,31 @@ LAB_004418e4:
                     uVar9 = local_5c;
                     uVar10 = local_58;
 LAB_00441990:
-                    DAT_10748508 = FUN_00401bc0(local_48,uVar5,uVar9,uVar10,DAT_1074850c);
+                    DAT_10748508 = area_getblocktexture(local_48,uVar5,uVar9,uVar10,DAT_1074850c);
                   }
                 }
                 else {
                   if (uVar5 == 0x80000000) {
-                    iVar4 = FUN_0042daf0(&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
-                                         (int *)&local_60,fVar3,*(float *)(&DAT_17166080 + local_68)
-                                        );
+                    iVar4 = circleintersectspecblock
+                                      (&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
+                                       (int *)&local_60,fVar3,*(float *)(&DAT_17166080 + local_68));
                     goto LAB_004418e4;
                   }
                   if (uVar5 == 0xc0000000) {
                     local_40 = uVar7 - (((uint)LF_BITS_U(fVar3)) & 0xff);
                     local_3c = local_5c - (((uint)LF_BITS_U(fVar3)) >> 0x10 & 0xff);
                     local_38 = local_58 - (((uint)LF_BITS_U(fVar3)) >> 8 & 0xff);
-                    fVar3 = LF_BITS_F(FUN_00401850(local_48,local_40,local_3c,local_38));
-                    iVar4 = FUN_0042daf0(&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
-                                         (int *)&local_40,fVar3,*(float *)(&DAT_17166080 + local_68)
-                                        );
+                    fVar3 = LF_BITS_F(area_getblock(local_48,local_40,local_3c,local_38));
+                    iVar4 = circleintersectspecblock
+                                      (&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
+                                       (int *)&local_40,fVar3,*(float *)(&DAT_17166080 + local_68));
                     if ((iVar4 == 0) || (*local_64 <= local_6c)) goto LAB_00441af1;
                     pfVar2 = (float *)(&DAT_17166050 + local_68);
-                    FUN_0040bb00(&local_78,&local_78,pfVar2);
+                    projectvector(&local_78,&local_78,pfVar2);
                     local_78 = (float)(*pfVar1 + local_78);
                     local_74 = (float)(*(float *)(&DAT_17166048 + iVar6) + local_74);
                     local_70 = (float)(*(float *)(&DAT_1716604c + iVar6) + local_70);
-                    FUN_0040bb00(&local_54,&local_54,pfVar2);
+                    projectvector(&local_54,&local_54,pfVar2);
                     *param_1 = local_78;
                     param_1[1] = local_74;
                     param_1[2] = local_70;
@@ -39986,15 +40054,16 @@ LAB_00441990:
 LAB_00441af1:
                 fVar3 = *(float *)(&DAT_19950744 + (int)local_44);
                 if ((((uint)LF_BITS_U(fVar3)) & 0xe0000000) == 0x80000000) {
-                  iVar4 = FUN_0042daf0(&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
-                                       (int *)&local_60,fVar3,*(float *)(&DAT_17166080 + local_68));
+                  iVar4 = circleintersectspecblock
+                                    (&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
+                                     (int *)&local_60,fVar3,*(float *)(&DAT_17166080 + local_68));
                   if ((iVar4 != 0) && (local_6c < *local_64)) {
                     pfVar2 = (float *)(&DAT_17166050 + local_68);
-                    FUN_0040bb00(&local_78,&local_78,pfVar2);
+                    projectvector(&local_78,&local_78,pfVar2);
                     local_78 = (float)(*pfVar1 + local_78);
                     local_74 = (float)(*(float *)(&DAT_17166048 + iVar6) + local_74);
                     local_70 = (float)(*(float *)(&DAT_1716604c + iVar6) + local_70);
-                    FUN_0040bb00(&local_54,&local_54,pfVar2);
+                    projectvector(&local_54,&local_54,pfVar2);
                     *param_1 = local_78;
                     param_1[1] = local_74;
                     param_1[2] = local_70;
@@ -40006,23 +40075,25 @@ LAB_00441af1:
                     uVar9 = local_5c;
                     uVar10 = local_58;
 LAB_00441bf7:
-                    DAT_10748508 = FUN_00403290(local_48,uVar5,uVar9,uVar10,DAT_1074850c);
+                    DAT_10748508 = area_interior_getblocktexture
+                                             (local_48,uVar5,uVar9,uVar10,DAT_1074850c);
                   }
                 }
                 else if ((((uint)LF_BITS_U(fVar3)) & 0xe0000000) == 0xc0000000) {
                   local_40 = uVar7 - (((uint)LF_BITS_U(fVar3)) & 0xff);
                   local_3c = local_5c - (((uint)LF_BITS_U(fVar3)) >> 0x10 & 0xff);
                   local_38 = local_58 - (((uint)LF_BITS_U(fVar3)) >> 8 & 0xff);
-                  fVar3 = LF_BITS_F(FUN_00403030(local_48,local_40,local_3c,local_38));
-                  iVar4 = FUN_0042daf0(&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
-                                       (int *)&local_40,fVar3,*(float *)(&DAT_17166080 + local_68));
+                  fVar3 = LF_BITS_F(area_interior_getblock(local_48,local_40,local_3c,local_38));
+                  iVar4 = circleintersectspecblock
+                                    (&local_78,&local_54,&local_6c,local_1c,&local_34,param_7,
+                                     (int *)&local_40,fVar3,*(float *)(&DAT_17166080 + local_68));
                   if ((iVar4 != 0) && (local_6c < *local_64)) {
                     pfVar2 = (float *)(&DAT_17166050 + local_68);
-                    FUN_0040bb00(&local_78,&local_78,pfVar2);
+                    projectvector(&local_78,&local_78,pfVar2);
                     local_78 = (float)(*pfVar1 + local_78);
                     local_74 = (float)(*(float *)(&DAT_17166048 + iVar6) + local_74);
                     local_70 = (float)(*(float *)(&DAT_1716604c + iVar6) + local_70);
-                    FUN_0040bb00(&local_54,&local_54,pfVar2);
+                    projectvector(&local_54,&local_54,pfVar2);
                     *param_1 = local_78;
                     param_1[1] = local_74;
                     param_1[2] = local_70;
@@ -40075,17 +40146,17 @@ LAB_00441bf7:
 #undef DAT_171665ac
 #undef DAT_1994d744
 #undef DAT_19950744
-#undef __security_check_cookie
-#undef FUN_00401850
-#undef FUN_0040b850
-#undef FUN_0042d7f0
-#undef FUN_0040ba00
+#undef dotproduct
 #undef _ftol2
-#undef FUN_0042daf0
-#undef FUN_0040bb00
-#undef FUN_00401bc0
-#undef FUN_00403290
-#undef FUN_00403030
+#undef area_getblock
+#undef subtractvectors
+#undef area_interior_getblock
+#undef circleintersectnormalblock
+#undef area_getblocktexture
+#undef circleintersectspecblock
+#undef projectvector
+#undef __security_check_cookie
+#undef area_interior_getblocktexture
 #undef local_78
 #undef local_74
 #undef local_70
@@ -40184,18 +40255,18 @@ LAB_00441bf7:
 #define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
 #define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
 #define _DAT_020a5a30 (*(int *)SR_VA(0x20a5a30))
-#define FUN_0041d9e0 ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
-#define FUN_004130d0 ((void (__cdecl *)(int))SR_VA(0x4130d0))
+#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00422f90 ((void (__cdecl *)(void))SR_VA(0x422f90))
-#define FUN_0040b3f0 ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_VA(0x409600))
 #define _CIsqrt lf_CIsqrt
-#define FUN_004324c0 ((void (__cdecl *)(void))SR_VA(0x4324c0))
-#define FUN_00412f80 ((void (__cdecl *)(int))SR_VA(0x412f80))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_00427e80 ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
-#define FUN_00409600 ((void (__cdecl *)(float *, float *))SR_VA(0x409600))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define bond_bodybody ((void (__cdecl *)(int))SR_VA(0x4130d0))
+#define objectenginesimulation2 ((void (__cdecl *)(void))SR_VA(0x4324c0))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define bond_partpart ((void (__cdecl *)(int))SR_VA(0x412f80))
+#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
+#define objectwheelsimulation2 ((void (__cdecl *)(void))SR_VA(0x422f90))
 #define auStack_e4 (*(undefined1 (*)[16])(lf_frame + 0x1c))
 #define local_d4 (*(float *)(lf_frame + 0x2c))
 #define local_d0 (*(float *)(lf_frame + 0x30))
@@ -40729,13 +40800,14 @@ void __cdecl lf_41de0(void)
             *(undefined4 *)&g_human[iVar30].bones[iVar28].lf_raw[0xc4] = 0;
           }
           local_84 = (int *)iVar28;
-          FUN_0041d9e0(&local_28,(int)&local_28,(float *)&g_human[iVar30].bones[iVar28].lf_raw[0xa8]);
+          multiply3x3matrices(&local_28,(int)&local_28,
+                              (float *)&g_human[iVar30].bones[iVar28].lf_raw[0xa8]);
           fVar5 = LF_BITS_F(local_a0[0x17]);
           pfVar32[0xc] = fVar5;
           local_50 = ((float *)LF_BITS_U(fVar5));
           if ((((int)local_84 < 3) || (8 < (int)local_84)) ||
              (*(int *)((int)&g_human[0].health + (int)local_60) < 1)) {
-            FUN_00409600(&local_94,&local_28);
+            geteulerangles2(&local_94,&local_28);
             fVar5 = local_94;
             local_cc = local_94;
             local_c8 = local_90;
@@ -40827,11 +40899,11 @@ LAB_00442c75:
             pfVar32[-1] = (float)(local_34 * local_94);
             *pfVar32 = (float)(local_30 * local_94);
             pfVar32[1] = (float)(local_94 * local_2c);
-            FUN_0040bdb0((int)&local_4c,&local_34,fVar5);
+            rotateorientation((int)&local_4c,&local_34,fVar5);
             pfVar32[-1] = (float)(pfVar32[-1] + local_90 * local_4c);
             *pfVar32 = (float)(local_90 * local_48 + *pfVar32);
             pfVar32[1] = (float)(local_90 * local_44 + pfVar32[1]);
-            FUN_0040bdb0((int)&local_4c,&local_4c,local_c8);
+            rotateorientation((int)&local_4c,&local_4c,local_c8);
             pfVar32[-1] = (float)(local_8c * local_40 + pfVar32[-1]);
             *pfVar32 = (float)(local_8c * local_3c + *pfVar32);
             pfVar32[1] = (float)(local_8c * local_38 + pfVar32[1]);
@@ -40857,7 +40929,7 @@ LAB_00442c75:
           iVar30 = DAT_12e81cc0;
           pfVar32[10] = pfVar32[3] * fVar5;
           pfVar32[0xb] = (float)(fVar6 * pfVar32[3]);
-          FUN_0040b3f0(iVar30);
+          stoptimer(iVar30);
           piVar18 = local_a0;
         }
       }
@@ -40866,7 +40938,7 @@ LAB_00442c75:
       pfVar32 = pfVar32 + 0x10;
     } while (local_c0 < g_numofbonds);
   }
-  FUN_0040b3f0(DAT_12e81cb8);
+  stoptimer(DAT_12e81cb8);
   iVar30 = DAT_12e81cbc * 0x58;
   local_60 = (undefined4 *)(&g_timer + iVar30);
   uVar13 = rdtsc();
@@ -40967,7 +41039,7 @@ LAB_00442c75:
       iVar30 = iVar30 + -1;
     } while (iVar30 != 0);
   }
-  FUN_0040b3f0(DAT_12e81cbc);
+  stoptimer(DAT_12e81cbc);
   local_60 = (undefined4 *)0x0;
   do {
     puVar21 = local_60;
@@ -41131,7 +41203,7 @@ LAB_00442c75:
       }
       puVar31 = puVar31 + 0x204;
     } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    FUN_0040b3f0(DAT_12e81cc4);
+    stoptimer(DAT_12e81cc4);
     iVar30 = DAT_12e81cc8 * 0x58;
     local_50 = (float *)(&g_timer + iVar30);
     uVar13 = rdtsc();
@@ -41173,7 +41245,7 @@ LAB_00442c75:
         local_94 = _DAT_00460cec;
         local_90 = _DAT_00460cf0;
         local_8c = _DAT_00460cf4;
-        FUN_0040bc50(&local_94,(float *)&DAT_00460ce0,pfVar32[-0x2a]);
+        rotatevector(&local_94,(float *)&DAT_00460ce0,pfVar32[-0x2a]);
         local_6c = 0.0;
         local_68 = (float)(((float)(pfVar32[2] * local_8c - pfVar32[4] * local_94)) * 0.125);
         local_64 = 0.0;
@@ -41250,14 +41322,14 @@ LAB_00442c75:
       pfVar32 = pfVar32 + 0xad9;
       pfVar34 = pfVar34 + 0x204;
     } while ((int)pfVar32 < ((int)SR_VA(0x1f38888)));
-    FUN_0040b3f0(DAT_12e81cc8);
+    stoptimer(DAT_12e81cc8);
     iVar30 = DAT_12e81ccc * 0x58;
     local_50 = (float *)(&g_timer + iVar30);
     uVar13 = rdtsc();
     *local_50 = ((float)*(double *)&(uVar13));
     *(int *)(&DAT_018043e4 + iVar30) = (int)((ulonglong)uVar13 >> 0x20);
-    FUN_00422f90();
-    FUN_0040b3f0(DAT_12e81ccc);
+    objectwheelsimulation2();
+    stoptimer(DAT_12e81ccc);
     local_c0 = 0;
     if (0 < g_numofbonds) {
       pfVar34 = &g_bond[0].friction_dir.y;
@@ -41271,8 +41343,8 @@ LAB_00442c75:
             uVar13 = rdtsc();
             *local_50 = ((float)*(double *)&(uVar13));
             *(int *)(&DAT_018043e4 + iVar30) = (int)((ulonglong)uVar13 >> 0x20);
-            FUN_00412f80(local_c0);
-            FUN_0040b3f0(DAT_12e81cd0);
+            bond_partpart(local_c0);
+            stoptimer(DAT_12e81cd0);
           }
           if (LF_BITS_U(pfVar34[-0x1e]) == 0x1U) {
             fVar6 = pfVar34[-0x19];
@@ -41289,7 +41361,7 @@ LAB_00442c75:
             local_50 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 + (pvVar1->x * local_5c + local_58 * *pfVar34)))))
             ;
             if (0.0 < LF_BITS_F(local_50)) {
-              FUN_00427e80(&local_5c,(float *)pvVar1,pfVar34[2]);
+              calculatefriction(&local_5c,(float *)pvVar1,pfVar34[2]);
               *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) + local_5c);
               *(float *)&((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) + local_58);
               *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) + local_54);
@@ -41332,7 +41404,7 @@ LAB_00442c75:
             local_50 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_74 +
                                 (local_7c * ((vec3 *)(pfVar34 + -1))->x + local_78 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_50)) {
-              FUN_00427e80(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
+              calculatefriction(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
               fVar5 = (float)(local_70 * *local_88);
               *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) =
                    (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) + fVar5 * local_7c);
@@ -41386,7 +41458,7 @@ LAB_00442c75:
             local_80 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 +
                                 (((vec3 *)(pfVar34 + -1))->x * local_5c + local_58 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_80)) {
-              FUN_00427e80(&local_5c,(float *)(pfVar34 + -1),pfVar34[2]);
+              calculatefriction(&local_5c,(float *)(pfVar34 + -1),pfVar34[2]);
               fVar6 = local_70 * LF_BITS_F(local_84);
               *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) =
                    (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) + fVar6 * local_5c);
@@ -41457,7 +41529,7 @@ LAB_00442c75:
             local_80 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 +
                                 (((vec3 *)(pfVar34 + -1))->x * local_5c + local_58 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_80)) {
-              FUN_00427e80(&local_5c,(float *)(pfVar34 + -1),pfVar34[2]);
+              calculatefriction(&local_5c,(float *)(pfVar34 + -1),pfVar34[2]);
               local_80 = ((float *)LF_BITS_U((local_70 * LF_BITS_F(local_84))));
               local_9c[(0x11877c + LF_RELOC / 4)] = (float)(local_9c[(0x11877c + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
               local_9c[(0x11877d + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[(0x11877d + LF_RELOC / 4)]);
@@ -41504,7 +41576,7 @@ LAB_00442c75:
             local_50 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 +
                                 (((vec3 *)(pfVar34 + -1))->x * local_5c + local_58 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_50)) {
-              fVar36 = (float10)FUN_00427e80(&local_5c,pfVar34 + -1,pfVar34[2]);
+              fVar36 = (float10)calculatefriction(&local_5c,pfVar34 + -1,pfVar34[2]);
               (&g_object[((int)LF_BITS_U(fVar5))].unk_5f5c)[((int)LF_BITS_U(fVar6)) * 0x26] =
                    (float)(fVar36 + (float10)(&g_object[((int)LF_BITS_U(fVar5))].unk_5f5c)[((int)LF_BITS_U(fVar6)) * 0x26]);
               *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f3c] + iVar30) =
@@ -41519,7 +41591,7 @@ LAB_00442c75:
               *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) =
                    (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) - LF_BITS_F(local_50));
             }
-            FUN_0040b3f0(DAT_12e81cdc);
+            stoptimer(DAT_12e81cdc);
           }
           if (LF_BITS_U(pfVar34[-0x1e]) == 0x7U) {
             iVar30 = DAT_12e81ce4 * 0x58;
@@ -41551,7 +41623,7 @@ LAB_00442c75:
             local_50 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 +
                                 (((vec3 *)(pfVar34 + -1))->x * local_5c + local_58 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_50)) {
-              FUN_00427e80(&local_5c,pfVar34 + -1,pfVar34[2]);
+              calculatefriction(&local_5c,pfVar34 + -1,pfVar34[2]);
               *(float *)&((&DAT_00461df0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
                    (float)(local_5c + LF_BITS_F((&DAT_00461df0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
               *(float *)&((&DAT_00461df4)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
@@ -41568,7 +41640,7 @@ LAB_00442c75:
               *(float *)&((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
                    (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) + local_64);
             }
-            FUN_0040b3f0(DAT_12e81ce4);
+            stoptimer(DAT_12e81ce4);
           }
           if (LF_BITS_U(pfVar34[-0x1e]) == 0x8U) {
             iVar30 = DAT_12e81cd4 * 0x58;
@@ -41576,8 +41648,8 @@ LAB_00442c75:
             uVar13 = rdtsc();
             *local_50 = ((float)*(double *)&(uVar13));
             *(int *)(&DAT_018043e4 + iVar30) = (int)((ulonglong)uVar13 >> 0x20);
-            FUN_004130d0(local_c0);
-            FUN_0040b3f0(DAT_12e81cd4);
+            bond_bodybody(local_c0);
+            stoptimer(DAT_12e81cd4);
           }
           if (LF_BITS_U(pfVar34[-0x1e]) == 0x9U) {
             iVar30 = DAT_12e81cd8 * 0x58;
@@ -41612,7 +41684,7 @@ LAB_00442c75:
             *(float *)&((&DAT_00461e28)[uVar29 * 0x20 + uVar25 * 0x204]) =
                  (float)(local_54 * LF_BITS_F(local_50) + LF_BITS_F((&DAT_00461e28)[uVar29 * 0x20 + uVar25 * 0x204]))
             ;
-            FUN_0040b3f0(DAT_12e81cd8);
+            stoptimer(DAT_12e81cd8);
           }
           if (LF_BITS_U(pfVar34[-0x1e]) == 0xaU) {
             iVar30 = DAT_12e81ce0 * 0x58;
@@ -41693,7 +41765,7 @@ LAB_00442c75:
             *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4] =
                  (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4]);
             local_50 = local_88;
-            FUN_0040b3f0(DAT_12e81ce0);
+            stoptimer(DAT_12e81ce0);
           }
           fVar5 = pfVar34[-0x1e];
           if (LF_BITS_U(fVar5) == 0xbU) {
@@ -41771,7 +41843,7 @@ LAB_00442c75:
             local_88 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_74 +
                                 (local_7c * ((vec3 *)(pfVar34 + -1))->x + local_78 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_88)) {
-              FUN_00427e80(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
+              calculatefriction(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
               local_88 = ((float *)LF_BITS_U(((float)(local_70 * *local_9c))));
               *(float *)&((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
                    (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
@@ -41844,7 +41916,7 @@ LAB_00442c75:
             local_88 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_74 +
                                 (local_7c * ((vec3 *)(pfVar34 + -1))->x + local_78 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_88)) {
-              FUN_00427e80(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
+              calculatefriction(&local_7c,(float *)(pfVar34 + -1),pfVar34[2]);
               local_88 = ((float *)LF_BITS_U(((float)(g_item[((int)LF_BITS_U(fVar6))].mass * local_70))));
               fVar5 = LF_BITS_F(local_88) * local_7c;
               fVar8 = (float)(LF_BITS_F(local_88) * local_78);
@@ -41894,7 +41966,7 @@ LAB_00442c75:
             local_50 = ((float *)LF_BITS_U(((float)(pfVar34[1] * local_54 +
                                 (((vec3 *)(pfVar34 + -1))->x * local_5c + local_58 * *pfVar34)))));
             if (0.0 < LF_BITS_F(local_50)) {
-              FUN_00427e80(&local_5c,pfVar34 + -1,pfVar34[2]);
+              calculatefriction(&local_5c,pfVar34 + -1,pfVar34[2]);
               *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7208] + iVar30) =
                    (float)(local_5c + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7208] + iVar30));
               *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x720c] + iVar30) =
@@ -41924,8 +41996,8 @@ LAB_00442c75:
     uVar13 = rdtsc();
     *local_60 = (int)uVar13;
     *(int *)(&DAT_018043e4 + iVar30) = (int)((ulonglong)uVar13 >> 0x20);
-    FUN_004324c0();
-    FUN_0040b3f0(DAT_12e81ccc);
+    objectenginesimulation2();
+    stoptimer(DAT_12e81ccc);
     iVar30 = DAT_12e81cc4 * 0x58;
     uVar13 = rdtsc();
     *(int *)(&g_timer + iVar30) = (int)uVar13;
@@ -42055,7 +42127,7 @@ LAB_00442c75:
         puVar31 = puVar31 + 0x204;
       } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
     }
-    FUN_0040b3f0(DAT_12e81cf4);
+    stoptimer(DAT_12e81cf4);
     pfVar32 = &g_item[0].vel.y;
     do {
       if ((LF_BITS_U(pfVar32[-0x1c]) != 0x0U) && (LF_BITS_U(pfVar32[-0x1b]) != 0x0U)) {
@@ -42123,7 +42195,7 @@ LAB_00442c75:
       }
       piVar18 = piVar18 + 0x208c;
     } while ((int)piVar18 < ((int)SR_VA(0x7a257ec)));
-    FUN_0040b3f0(DAT_12e81cc4);
+    stoptimer(DAT_12e81cc4);
     local_60 = (undefined4 *)((int)puVar21 + 1);
   } while ((int)local_60 < 0x20);
   iVar30 = DAT_12e81cbc * 0x58;
@@ -42230,8 +42302,8 @@ LAB_00442c75:
     piVar18 = piVar18 + 0xad9;
     piVar35 = piVar35 + 0x204;
   } while ((int)piVar18 < ((int)SR_VA(0x1f38784)));
-  FUN_0040b3f0(DAT_12e81cbc);
-  FUN_0040b3f0(DAT_12e81cb4);
+  stoptimer(DAT_12e81cbc);
+  stoptimer(DAT_12e81cb4);
   _DAT_020a5a30 = g_numofbonds;
   g_numofbonds = DAT_14022d24;
   return;
@@ -42307,18 +42379,18 @@ LAB_00442c75:
 #undef _DAT_00460cf0
 #undef _DAT_00460cf4
 #undef _DAT_020a5a30
-#undef FUN_0041d9e0
-#undef FUN_004130d0
+#undef calculatefriction
 #undef __security_check_cookie
-#undef FUN_00422f90
-#undef FUN_0040b3f0
+#undef geteulerangles2
 #undef _CIsqrt
-#undef FUN_004324c0
-#undef FUN_00412f80
-#undef FUN_0040bdb0
-#undef FUN_0040bc50
-#undef FUN_00427e80
-#undef FUN_00409600
+#undef rotateorientation
+#undef stoptimer
+#undef bond_bodybody
+#undef objectenginesimulation2
+#undef rotatevector
+#undef bond_partpart
+#undef multiply3x3matrices
+#undef objectwheelsimulation2
 #undef auStack_e4
 #undef local_d4
 #undef local_d0
@@ -42424,16 +42496,16 @@ LAB_00442c75:
 #define g_server (*(int *)SR_VA(0x7a1ea60))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_city (*(int *)SR_VA(0xe699220))
-#define FUN_00429bf0 ((int (__cdecl *)(int, uint))SR_VA(0x429bf0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0043da50 ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
-#define FUN_00429830 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x429830))
-#define FUN_004121d0 ((void (__cdecl *)(uint, uint, uint, uint, uint, undefined1 *))SR_VA(0x4121d0))
+#define area_interior_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, undefined1 *))SR_VA(0x4121d0))
+#define area_setblockcolor ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x429830))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00402f00 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
-#define FUN_00403030 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00429970 ((void (__cdecl *)(uint, uint, uint, uint))SR_VA(0x429970))
+#define area_interior_setobject ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
+#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
+#define area_block_createbuildinginterior ((int (__cdecl *)(int, uint))SR_VA(0x429bf0))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define area_deleteblock ((void (__cdecl *)(uint, uint, uint, uint))SR_VA(0x429970))
 #define local_64 (*(float *)(lf_frame + 0x1c))
 #define local_60 (*(double *)(lf_frame + 0x20))
 #define local_58 (*(float *)(lf_frame + 0x28))
@@ -42456,8 +42528,8 @@ LAB_00442c75:
 #define local_c (*(float *)(lf_frame + 0x74))
 #define local_8 (*(int *)(lf_frame + 0x78))
 #define local_4 (*(uint *)(lf_frame + 0x7c))
-undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_4,float param_5,int param_6,
-            int param_7,undefined4 *param_8)
+undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_4,float param_5,int param_6,int param_7
+          ,undefined4 *param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x80];
@@ -42530,7 +42602,7 @@ undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_
             piVar12 = &DAT_006043a0 + ((*(uint *)((uchar *)&local_4c + 0)) + iVar9) * 0x480;
             do {
               if (*piVar12 != 0) {
-                FUN_00429970(param_1,iVar13 + param_2,((int)LF_BITS_U(param_3)) + iVar11,iVar9 + param_4);
+                area_deleteblock(param_1,iVar13 + param_2,((int)LF_BITS_U(param_3)) + iVar11,iVar9 + param_4);
               }
               iVar13 = iVar13 + 1;
               piVar12 = piVar12 + 0x12;
@@ -42554,8 +42626,8 @@ undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_
         local_c = 2.755106924e-40f;
         local_8 = 0x30003;
         do {
-          FUN_0043da50(param_1,iVar11 + param_2,((int)LF_BITS_U(param_3)) - 1,uVar15,0x40000000,
-                       (ushort *)&local_14);
+          area_createblock(param_1,iVar11 + param_2,((int)LF_BITS_U(param_3)) - 1,uVar15,0x40000000,
+                           (ushort *)&local_14);
           iVar11 = iVar11 + 1;
         } while (iVar11 < ((int)LF_BITS_U(param_5)));
       }
@@ -42580,10 +42652,10 @@ undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_
                 local_10 = *(float *)(puVar16 + 1);
                 local_c = *(float *)(puVar16 + 3);
                 local_8 = *(int *)(puVar16 + 5);
-                FUN_0043da50(param_1,uVar15,((uint)LF_BITS_U(local_64)),param_4 + iVar11,
-                             *(uint *)(puVar16 + -0xf),(ushort *)&local_14);
-                FUN_00429830(param_1,uVar15,((uint)LF_BITS_U(local_64)),param_4 + iVar11,
-                             *(undefined4 *)(puVar16 + 0xf));
+                area_createblock(param_1,uVar15,((uint)LF_BITS_U(local_64)),param_4 + iVar11,
+                                 *(uint *)(puVar16 + -0xf),(ushort *)&local_14);
+                area_setblockcolor(param_1,uVar15,((uint)LF_BITS_U(local_64)),param_4 + iVar11,
+                                   *(undefined4 *)(puVar16 + 0xf));
               }
               puVar16 = puVar16 + 0x24;
               uVar15 = uVar15 + 1;
@@ -42665,18 +42737,19 @@ undefined4 * __cdecl lf_46c30(uint param_1,uint param_2,float param_3,int param_
                         }
                       }
                     }
-                    uVar15 = FUN_00429bf0(0,uVar5);
+                    uVar15 = area_block_createbuildinginterior(0,uVar5);
                     uVar5 = ((int)LF_BITS_U(local_54)) + param_4;
                     uVar10 = ((int)LF_BITS_U(local_58)) + -1 + param_2;
-                    iVar11 = FUN_00403030(param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5);
+                    iVar11 = area_interior_getblock(param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5);
                     if (iVar11 == 0) goto LAB_004471be;
                   }
                   else {
                     uVar5 = ((int)LF_BITS_U(local_54)) + param_4;
                     uVar10 = ((int)LF_BITS_U(local_58)) + -1 + param_2;
 LAB_004471be:
-                    FUN_004121d0(param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5,uVar15 | 0x80000000,
-                                 (undefined1 *)&local_14);
+                    area_interior_createblock
+                              (param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5,uVar15 | 0x80000000,
+                               (undefined1 *)&local_14);
                   }
                   if (((local_44 != (undefined4 *)0xffffffff) &&
                       (uVar15 = piVar12[-0x13] & 0xffff, DAT_0bba8e64 <= uVar15)) &&
@@ -42707,7 +42780,7 @@ LAB_004471be:
                     }
                   }
                   if (piVar12[-3] != 0) {
-                    FUN_00402f00(param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5,0x401);
+                    area_interior_setobject(param_1,uVar10,((uint)LF_BITS_U(local_64)),uVar5,0x401);
                   }
                 }
                 fVar6 = LF_BITS_F((((int)LF_BITS_U(local_58)) + 1));
@@ -42944,11 +43017,11 @@ LAB_004471be:
     local_18 = 1.0;
     fVar6 = (float)(*(float *)(&g_game.lf_raw[0x88] + iVar14) - 1.5707964);
     local_60 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_60 + 4)),LF_BITS_U(fVar6)));
-    FUN_0040bdb0((int)&local_38,&local_2c,fVar6);
+    rotateorientation((int)&local_38,&local_2c,fVar6);
     *(float *)&((*(float *)((uchar *)&local_14 + 0))) = (float)((*(float *)((uchar *)&local_14 + 0)) - local_20 * 44.0);
     local_10 = (float)(local_10 - local_1c * 44.0);
     local_c = (float)(local_c - local_18 * 44.0);
-    FUN_0040bdb0((int)&local_38,&local_2c,3.1415927);
+    rotateorientation((int)&local_38,&local_2c,3.1415927);
     *(float *)&((*(float *)((uchar *)&local_14 + 0))) = (float)((*(float *)((uchar *)&local_14 + 0)) - local_38 * 16.0);
     *(undefined4 *)(*(int *)(&g_game.lf_raw[0x4d0] + iVar14) * 0x34 + ((int)SR_VA(0x94dca14)) + iVar14) = 0;
     local_10 = (float)(local_10 - local_34 * 16.0);
@@ -43306,16 +43379,16 @@ LAB_00448999:
 #undef g_server
 #undef g_game
 #undef g_city
-#undef FUN_00429bf0
 #undef __security_check_cookie
-#undef FUN_0043da50
-#undef FUN_00429830
-#undef FUN_004121d0
+#undef area_interior_createblock
+#undef area_setblockcolor
+#undef rotateorientation
 #undef _CIsqrt
-#undef FUN_00402f00
-#undef FUN_00403030
-#undef FUN_0040bdb0
-#undef FUN_00429970
+#undef area_interior_setobject
+#undef area_createblock
+#undef area_block_createbuildinginterior
+#undef area_interior_getblock
+#undef area_deleteblock
 #undef local_64
 #undef local_60
 #undef local_58
@@ -43382,18 +43455,18 @@ LAB_00448999:
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define FUN_00416a20 ((void (__cdecl *)(float, int))SR_VA(0x416a20))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_004257a0 ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define FUN_0042c020 ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
-#define FUN_00422e20 ((void (__cdecl *)(int, int))SR_VA(0x422e20))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0042f130 ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
-#define FUN_00416c40 ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
-#define FUN_00416ce0 ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
-#define FUN_00431630 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define area_breakblock ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
+#define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
+#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_60 (*(float *)(lf_frame + 0x10))
 #define local_5c (*(int *)(lf_frame + 0x14))
 #define local_58 (*(int *)(lf_frame + 0x18))
@@ -43479,7 +43552,7 @@ void __cdecl lf_48ec0(void)
       fVar4 = *(float *)((int)&g_bullet[0].vel.z + iVar11);
       dVar14 = _CIsqrt((double)((float)(fVar4 * fVar4 + (*pfVar2 * *pfVar2 + fVar3 * fVar3))));
       fVar3 = (float)(-(float)dVar14 * (float)dVar14 * *(float *)(&DAT_0f837324 + iVar9 * 0x18));
-      FUN_0040b900(&local_40,pfVar2);
+      normalizevector(&local_40,pfVar2);
       bVar13 = g_server != 0;
       local_58 = -1;
       local_5c = -1;
@@ -43501,10 +43574,10 @@ void __cdecl lf_48ec0(void)
         piVar12 = &g_human[0].player_id;
         do {
           if (((((((Human *)(piVar12 + -2))->active != 0) &&
-                (iVar7 = FUN_0042f130(iVar9,(float *)((int)&g_bullet[0].pos_prev.x + iVar11),pfVar1,
-                                      0.0), iVar7 != 0)) && (_DAT_107484b8 < local_60)) &&
-              ((iVar7 = *piVar12, iVar7 != *(int *)((int)&g_bullet[0].owner + iVar11) ||
-               ((DAT_107484d4 != 5 && (DAT_107484d4 != 8)))))) &&
+                (iVar7 = lineintersecthuman(iVar9,(float *)((int)&g_bullet[0].pos_prev.x + iVar11),
+                                            pfVar1,0.0), iVar7 != 0)) && (_DAT_107484b8 < local_60))
+              && ((iVar7 = *piVar12, iVar7 != *(int *)((int)&g_bullet[0].owner + iVar11) ||
+                  ((DAT_107484d4 != 5 && (DAT_107484d4 != 8)))))) &&
              ((iVar7 == -1 || (g_player[iVar7].unk_0044 == 0)))) {
             local_4c = _g_intersect;
             local_10 = DAT_107484d4;
@@ -43523,8 +43596,8 @@ void __cdecl lf_48ec0(void)
         pOVar10 = g_object;
         do {
           if (((pOVar10->active != 0) &&
-              (iVar7 = FUN_004257a0(iVar9,(float *)((int)&g_bullet[0].pos_prev.x + iVar11),pfVar1,1)
-              , iVar7 != 0)) && (_DAT_107484b8 < local_60)) {
+              (iVar7 = lineintersectobject(iVar9,(float *)((int)&g_bullet[0].pos_prev.x + iVar11),
+                                           pfVar1,1), iVar7 != 0)) && (_DAT_107484b8 < local_60)) {
             local_4c = _g_intersect;
             local_48 = _DAT_107484a4;
             local_54 = DAT_107484d0;
@@ -43546,7 +43619,7 @@ void __cdecl lf_48ec0(void)
           iVar9 = iVar9 + 1;
         } while ((int)pOVar10 < ((int)SR_VA(0x7a1e600)));
       }
-      iVar9 = FUN_00431630((float *)((int)&g_bullet[0].pos_prev.x + iVar11),pfVar1,1);
+      iVar9 = lineintersectlevel((float *)((int)&g_bullet[0].pos_prev.x + iVar11),pfVar1,1);
       if ((iVar9 != 0) && (_DAT_107484b8 < local_60)) {
         local_58 = -1;
         local_4c = _g_intersect;
@@ -43557,10 +43630,11 @@ void __cdecl lf_48ec0(void)
         local_30 = _DAT_107484b0;
         local_2c = _DAT_107484b4;
         if ((g_server != 0) &&
-           (iVar9 = FUN_0042c020(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500,DAT_10748510,
-                                 DAT_10748514,&local_4c,
-                                 (undefined4 *)((int)&g_bullet[0].vel.x + iVar11)), iVar9 == 0)) {
-          FUN_00416c40(0,0,&local_4c,&local_34);
+           (iVar9 = area_breakblock(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500,DAT_10748510
+                                    ,DAT_10748514,&local_4c,
+                                    (undefined4 *)((int)&g_bullet[0].vel.x + iVar11)), iVar9 == 0))
+        {
+          createevent_bullethit(0,0,&local_4c,&local_34);
         }
         *pfVar1 = local_4c;
         *(float *)((int)&g_bullet[0].pos.y + iVar11) = local_48;
@@ -43580,7 +43654,7 @@ void __cdecl lf_48ec0(void)
             iVar9 = 0;
           }
           else {
-            FUN_00416c40(0,1,&local_4c,&local_34);
+            createevent_bullethit(0,1,&local_4c,&local_34);
           }
           if (local_10 == 2) {
             if (iVar9 < 0x19) {
@@ -43601,7 +43675,7 @@ LAB_0044935f:
               fVar4 = LF_BITS_F(g_human[local_58].player_id);
               if ((((LF_BITS_U(fVar4) != 0xffffffffU) && (LF_BITS_U(fVar3) != LF_BITS_U(fVar4))) && (g_player[((int)LF_BITS_U(fVar4))].team == 7)) &&
                  (0 < g_human[local_58].unk_0034)) {
-                FUN_00416a20(fVar3,iVar9);
+                playerteamkilltax(fVar3,iVar9);
                 goto LAB_004493b0;
               }
             }
@@ -43612,7 +43686,7 @@ LAB_004493b0:
                 (fVar3 = *(float *)((int)&g_bullet[0].owner + iVar11), LF_BITS_U(fVar3) != 0xffffffffU)) &&
                ((fVar4 = LF_BITS_F(g_human[local_58].player_id), LF_BITS_U(fVar4) != 0xffffffffU &&
                 ((LF_BITS_U(fVar3) != LF_BITS_U(fVar4) && (g_player[((int)LF_BITS_U(fVar3))].team == g_player[((int)LF_BITS_U(fVar4))].team)))))) {
-              FUN_00416a20(fVar3,iVar9);
+              playerteamkilltax(fVar3,iVar9);
             }
           }
           g_human[local_58].health = g_human[local_58].health - iVar9;
@@ -43684,7 +43758,7 @@ LAB_004493b0:
                 *(undefined4 *)(&g_object[local_5c].lf_raw[0x5f0c] + iVar9) = 0x3e800000;
                 *(undefined4 *)(&g_object[local_5c].lf_raw[0x5eec] + iVar9) = 1;
                 *(undefined4 *)(&g_object[local_5c].lf_raw[0x5ef0] + iVar9) = 1;
-                FUN_00416ce0(local_5c,1,local_10,&local_4c,pfVar1);
+                createevent_updateobject(local_5c,1,local_10,&local_4c,pfVar1);
               }
             }
           }
@@ -43708,13 +43782,13 @@ LAB_004493b0:
                           (8.0 - *(float *)(&g_object[local_5c].lf_raw[0x7ec] + iVar7)));
               }
               if (*(int *)(&g_object[local_5c].lf_raw[0x7f4] + iVar7) < 1) {
-                FUN_00416ce0(local_5c,0,local_54,&local_4c,pfVar1);
+                createevent_updateobject(local_5c,0,local_54,&local_4c,pfVar1);
                 *(undefined4 *)(&g_object[local_5c].lf_raw[0x7f4] + iVar7) = 0;
               }
             }
             else {
-              FUN_00416c40(0,2,&local_4c,&local_34);
-              FUN_00422e20(local_5c,iVar9);
+              createevent_bullethit(0,2,&local_4c,&local_34);
+              applydamageobject(local_5c,iVar9);
             }
             fVar3 = *(float *)((int)&g_bullet[0].unk_000c + iVar11);
             local_38 = (float)(local_2c * *(float *)((int)&g_bullet[0].vel.z + iVar11) +
@@ -43795,18 +43869,18 @@ LAB_004493b0:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef FUN_00416a20
-#undef _ftol2
-#undef FUN_004257a0
-#undef FUN_0042c020
-#undef FUN_00422e20
+#undef normalizevector
+#undef lineintersectlevel
+#undef playerteamkilltax
+#undef createevent_updateobject
+#undef lineintersectobject
 #undef _CIsqrt
-#undef FUN_0042f130
-#undef FUN_00416c40
-#undef FUN_00416ce0
-#undef FUN_00431630
+#undef area_breakblock
+#undef applydamageobject
+#undef createevent_bullethit
+#undef _ftol2
+#undef lineintersecthuman
 #undef rand
-#undef FUN_0040b900
 #undef local_60
 #undef local_5c
 #undef local_58
@@ -43853,17 +43927,17 @@ LAB_004493b0:
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define strncmp_exref (*(undefined * *)SR_VA(0x45e05c))
 #define strncmp_exref ((code *)strncmp)
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 #define tolower ((int (__cdecl *)(int))LF_IMPORT(43, "MSVCR100.DLL", "tolower"))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
 #define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(0, "MSVCR100.DLL", "strncmp"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
 #define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define FUN_00428190 ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
 #define local_40 (*(int *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int *)(lf_frame + 0x18))
@@ -43997,7 +44071,7 @@ LAB_00449acc:
         g_connection[iVar7].unk_0c = 1;
       }
       sprintf(&DAT_00461848,"%s admin",local_3c + ((int)SR_VA(0xf1edd04)));
-      FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+      createevent_message(4,&DAT_00461848,0xffffffff,0);
       pcVar15 = strncmp_exref;
     }
   }
@@ -44015,7 +44089,7 @@ LAB_00449acc:
           else {
             sprintf(&DAT_00461848,"%d:%d %s",local_40,iVar8,iVar8 * 0x2408 + ((int)SR_VA(0xf1edd04)));
           }
-          FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+          createevent_message(4,&DAT_00461848,0xffffffff,0);
         }
         local_40 = local_40 + 1;
       } while (local_40 < 10);
@@ -44025,7 +44099,7 @@ LAB_00449acc:
       do {
         if ((local_40 < 10) && (iVar8 = g_connection[local_40].player_id, iVar8 != -1)) {
           sprintf(&DAT_00461848,"%s  %d",iVar8 * 0x2408 + ((int)SR_VA(0xf1edd04)),g_player[iVar8].unk_0034);
-          FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+          createevent_message(4,&DAT_00461848,0xffffffff,0);
         }
         local_40 = local_40 + 1;
       } while (local_40 < DAT_0204afc0);
@@ -44035,7 +44109,7 @@ LAB_00449acc:
       do {
         if ((local_40 < 0x14) && (iVar8 = g_connection[local_40].player_id, iVar8 != -1)) {
           sprintf(&DAT_00461848,"%s  %d",iVar8 * 0x2408 + ((int)SR_VA(0xf1edd04)),g_player[iVar8].unk_0034);
-          FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+          createevent_message(4,&DAT_00461848,0xffffffff,0);
         }
         local_40 = local_40 + 1;
       } while (local_40 < DAT_0204afc0);
@@ -44046,7 +44120,7 @@ LAB_00449acc:
         iVar8 = g_connection[local_40].player_id;
         if (iVar8 != -1) {
           sprintf(&DAT_00461848,"%s  %d",iVar8 * 0x2408 + ((int)SR_VA(0xf1edd04)),g_player[iVar8].unk_0034);
-          FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+          createevent_message(4,&DAT_00461848,0xffffffff,0);
         }
         local_40 = local_40 + 1;
       } while (local_40 < DAT_0204afc0);
@@ -44061,7 +44135,7 @@ LAB_00449acc:
       else {
         pcVar6 = "godmode on";
       }
-      FUN_00406260(4,pcVar6,0xffffffff,0);
+      createevent_message(4,pcVar6,0xffffffff,0);
     }
     iVar8 = (*pcVar15)(param_2,"/heli",5);
     if ((iVar8 == 0) && (iVar7 = *(int *)((int)g_player[0].input_axes + iVar7 + -4), iVar7 != -1)) {
@@ -44077,7 +44151,7 @@ LAB_00449acc:
       local_24[7] = 0.0;
       local_24[4] = 1.0;
       local_24[8] = 1.0;
-      FUN_00431800(0xb,&local_30,(undefined4 *)0x0,local_24,1);
+      createobject(0xb,&local_30,(undefined4 *)0x0,local_24,1);
     }
     iVar10 = (*pcVar15)(param_2,"/phone",6);
     iVar13 = local_3c;
@@ -44110,21 +44184,22 @@ LAB_00449acc:
         piVar12 = piVar12 + 0x6b;
       } while ((int)piVar12 < ((int)SR_VA(0x956d3b8)));
       iVar7 = *(int *)((int)g_player[0].input_axes + local_3c + -4);
-      uVar11 = FUN_0041b070(0x17,(float *)g_human[iVar7].bones,(undefined4 *)0x0,
-                            &g_human[iVar7].bones[0].rot[0].x);
+      uVar11 = createitem(0x17,(float *)g_human[iVar7].bones,(undefined4 *)0x0,
+                          &g_human[iVar7].bones[0].rot[0].x);
       iVar7 = *(int *)((int)g_player[0].input_axes + iVar13 + -4);
       g_item[uVar11].phone_id = 0x1a0a;
       if (uVar11 < 0x400) {
         if (iVar7 == -1) {
           if (g_item[uVar11].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar11].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar11,(uint *)g_item[uVar11].parent_human,g_item[uVar11].parent_slot);
-              FUN_00406380(uVar11);
+              item_removehumanlink
+                        (uVar11,(uint *)g_item[uVar11].parent_human,g_item[uVar11].parent_slot);
+              createevent_updateitem(uVar11);
             }
           }
           else {
-            FUN_00407f80(uVar11,g_item[uVar11].parent_item);
-            FUN_00406380(uVar11);
+            item_removeitemlink(uVar11,g_item[uVar11].parent_item);
+            createevent_updateitem(uVar11);
           }
         }
         else {
@@ -44132,11 +44207,12 @@ LAB_00449acc:
           if ((g_human[iVar7].inventory[6].count < 2) &&
              (g_itemtype[g_item[uVar11].type].unk_0008 == 0)) {
             if (g_item[uVar11].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar11,g_item[uVar11].parent_item);
+              item_removeitemlink(uVar11,g_item[uVar11].parent_item);
               g_item[uVar11].parent_item = -1;
             }
             if ((uint *)g_item[uVar11].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar11,(uint *)g_item[uVar11].parent_human,g_item[uVar11].parent_slot);
+              item_removehumanlink
+                        (uVar11,(uint *)g_item[uVar11].parent_human,g_item[uVar11].parent_slot);
             }
             if (pIVar3->count < 8) {
               (&g_human[iVar7].inventory[6].item_id)[pIVar3->count] = uVar11;
@@ -44144,7 +44220,7 @@ LAB_00449acc:
               g_item[uVar11].parent_human = iVar7;
               g_item[uVar11].parent_slot = 6;
             }
-            FUN_00406380(uVar11);
+            createevent_updateitem(uVar11);
           }
         }
       }
@@ -44153,7 +44229,7 @@ LAB_00449acc:
     iVar7 = local_3c;
     if ((iVar8 == 0) && (iVar8 = *(int *)((int)g_player[0].input_axes + local_3c + -4), iVar8 != -1)
        ) {
-      FUN_00428190(iVar8,2,4);
+      scenario_armhuman(iVar8,2,4);
     }
     iVar8 = strncmp(param_2,"/cash",5);
     if (iVar8 == 0) {
@@ -44177,7 +44253,7 @@ LAB_00449acc:
           && (-1 < local_38)) && (local_38 < DAT_0f837b64)) {
         DAT_07a1eadc = local_38;
         sprintf(&DAT_00461848,"%s %d ban?",local_38 * 0x4c + ((int)SR_VA(0xf837b70)),local_38);
-        FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+        createevent_message(4,&DAT_00461848,0xffffffff,0);
       }
     }
     iVar7 = strncmp(param_2,"/give ",6);
@@ -44202,7 +44278,7 @@ LAB_00449acc:
           piVar12 = piVar12 + 0x902;
         } while ((int)piVar12 < ((int)SR_VA(0xf42e540)));
         sprintf(&DAT_00461848,"%s(%d) %d cash",local_38 * 0x4c + ((int)SR_VA(0xf837b70)),local_38,local_34);
-        FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+        createevent_message(4,&DAT_00461848,0xffffffff,0);
       }
     }
     iVar7 = strncmp(param_2,"/bany ",6);
@@ -44220,7 +44296,7 @@ LAB_00449acc:
         iVar8 = DAT_07a1eadc * 0x4c;
         *(int *)&g_account[DAT_07a1eadc].lf_raw[0x48] = local_40;
         sprintf(&DAT_00461848,"%s %d banned %d",iVar8 + ((int)SR_VA(0xf837b70)),iVar7,local_40);
-        FUN_00406260(4,&DAT_00461848,0xffffffff,0);
+        createevent_message(4,&DAT_00461848,0xffffffff,0);
         DAT_07a1eadc = -1;
       }
     }
@@ -44280,7 +44356,7 @@ LAB_0044a385:
         pcVar6 = pcVar6 + 4;
         pcVar16 = pcVar16 + 4;
       }
-      FUN_00406260(0,&DAT_00461848,0xffffffff,0);
+      createevent_message(0,&DAT_00461848,0xffffffff,0);
     }
     iVar7 = strncmp(param_2,"/clearkick",10);
     if (iVar7 == 0) {
@@ -44310,17 +44386,17 @@ LAB_0044a385:
 #undef g_connection
 #undef strncmp_exref
 #undef strncmp_exref
-#undef FUN_00407f80
-#undef sprintf
-#undef FUN_00406260
+#undef item_removeitemlink
+#undef item_removehumanlink
 #undef tolower
-#undef FUN_00407e50
-#undef FUN_0041b070
-#undef FUN_00406380
-#undef FUN_00431800
 #undef strncmp
+#undef sprintf
+#undef scenario_armhuman
+#undef createitem
+#undef createevent_updateitem
+#undef createevent_message
 #undef sscanf
-#undef FUN_00428190
+#undef createobject
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -44347,20 +44423,20 @@ LAB_0044a385:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define _CIcos lf_CIcos
-#define FUN_0042f420 ((void (__cdecl *)(int))SR_VA(0x42f420))
-#define _CIsqrt lf_CIsqrt
-#define FUN_0041d9e0 ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
-#define _CIsin lf_CIsin
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define _CIacos lf_CIacos
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define __security_check_cookie(x) ((void)0)
 #define _CIatan2 lf_CIatan2
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_0040bb00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define FUN_0040a7a0 ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIacos lf_CIacos
+#define _CIsqrt lf_CIsqrt
+#define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define human_calcarmtorque ((void (__cdecl *)(int))SR_VA(0x42f420))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
 #define local_a0 (*(float *)(lf_frame + 0x10))
 #define local_9c (*(float *)(lf_frame + 0x14))
 #define local_98 (*(float *)(lf_frame + 0x18))
@@ -44518,13 +44594,13 @@ void __cdecl lf_4a440(int param_1)
       *(undefined4 *)&g_human[param_1].bones[iVar9].lf_raw[0xbc] = 0;
       *(undefined4 *)&g_human[param_1].bones[iVar9].lf_raw[0xc0] = 0;
       *(undefined4 *)&g_human[param_1].bones[iVar9].lf_raw[0xc4] = 0;
-      FUN_0040bdb0((int)puVar1,(float *)puVar1,local_a0);
+      rotateorientation((int)puVar1,(float *)puVar1,local_a0);
       if (iVar9 == 3) {
         if (local_98 < 0.0) {
           local_98 = 0.0;
         }
 LAB_0044a71d:
-        FUN_0040bdb0((int)puVar1,(float *)&g_human[param_1].bones[iVar9].lf_raw[0xc0],local_98);
+        rotateorientation((int)puVar1,(float *)&g_human[param_1].bones[iVar9].lf_raw[0xc0],local_98);
       }
       else if (iVar9 == 6) {
         if (0.0 < local_98) {
@@ -44572,10 +44648,10 @@ LAB_0044a71d:
   if (iVar9 == -1) {
     puVar2 = &g_human[param_1].bones[1].lf_raw[0xb4];
     local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].unk_00b4 * 0.5 + local_58))));
-    FUN_0040bdb0((int)puVar1,(float *)puVar2,LF_BITS_F(local_94));
+    rotateorientation((int)puVar1,(float *)puVar2,LF_BITS_F(local_94));
     local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].unk_00b8 * 0.75 + g_human[param_1].pitch * 0.5))));
-    FUN_0040bdb0((int)puVar1,(float *)puVar1,LF_BITS_F(local_94));
-    FUN_0040bdb0((int)puVar1,(float *)puVar2,local_74);
+    rotateorientation((int)puVar1,(float *)puVar1,LF_BITS_F(local_94));
+    rotateorientation((int)puVar1,(float *)puVar2,local_74);
     pfVar12 = (float *)&g_human[param_1].bones[2].lf_raw[0xa8];
     *pfVar12 = 1.0;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xac] = 0;
@@ -44587,17 +44663,17 @@ LAB_0044a71d:
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xb8] = 0x3f800000;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xc8] = 0x3f800000;
     local_94 = ((float *)LF_BITS_U(((float)((g_human[param_1].unk_00b4 * 0.5 - local_74) + 0.049087387))));
-    FUN_0040bdb0((int)pfVar12,(float *)&DAT_00460ce0,LF_BITS_F(local_94));
+    rotateorientation((int)pfVar12,(float *)&DAT_00460ce0,LF_BITS_F(local_94));
     if ((g_human[param_1].unk_003c == 2) && (LF_BITS_U(local_90) != 0x0U)) {
-      FUN_0040bdb0((int)pfVar12,(float *)&g_human[param_1].bones[2].lf_raw[0xc0],0.19634955);
+      rotateorientation((int)pfVar12,(float *)&g_human[param_1].bones[2].lf_raw[0xc0],0.19634955);
     }
     fVar13 = (float)(g_human[param_1].unk_00b8 * 0.25 + g_human[param_1].pitch * 0.5);
     local_94 = ((float *)LF_BITS_U(fVar13));
   }
   else {
     local_94 = ((float *)LF_BITS_U(((float)(local_58 + local_74))));
-    FUN_0040bdb0((int)puVar1,(float *)&g_human[param_1].bones[1].lf_raw[0xb4],LF_BITS_F(local_94));
-    FUN_0040bdb0((int)puVar1,(float *)puVar1,local_54);
+    rotateorientation((int)puVar1,(float *)&g_human[param_1].bones[1].lf_raw[0xb4],LF_BITS_F(local_94));
+    rotateorientation((int)puVar1,(float *)puVar1,local_54);
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xa8] = 0x3f800000;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xac] = 0;
     pfVar12 = (float *)&g_human[param_1].bones[2].lf_raw[0xb4];
@@ -44610,7 +44686,7 @@ LAB_0044a71d:
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xc8] = 0x3f800000;
     fVar13 = -local_74;
   }
-  FUN_0040bdb0(iVar10 + ((int)SR_VA(0x19cc2b0)),pfVar12,fVar13);
+  rotateorientation(iVar10 + ((int)SR_VA(0x19cc2b0)),pfVar12,fVar13);
   iVar9 = param_1;
   if (g_human[param_1].inventory[0].count < 1) {
 LAB_0044b6cf:
@@ -44631,7 +44707,7 @@ LAB_0044b6cf:
                LF_BITS_F(g_body[1].unk_0018) * 0.0);
     local_9c = (float)((float)(LF_BITS_F(local_94) + LF_BITS_F(g_body[1].unk_0014)) + LF_BITS_F(g_body[1].unk_0018) * 0.0);
     local_98 = (float)(LF_BITS_F(g_body[1].unk_0018) + ((float)(LF_BITS_F(g_body[1].unk_0014) * 0.0 + LF_BITS_F(local_94))));
-    FUN_0041d9e0(&local_4c,(int)puVar1,&local_4c);
+    multiply3x3matrices(&local_4c,(int)puVar1,&local_4c);
     local_8c = (float)(g_body[1].pos.x - LF_BITS_F(g_body[1].unk_0010));
     local_88 = (float)(g_body[1].pos.y - LF_BITS_F(g_body[1].unk_0014));
     local_84 = (float)(g_body[1].pos.z - LF_BITS_F(g_body[1].unk_0018));
@@ -44645,7 +44721,7 @@ LAB_0044b6cf:
                ((float)(LF_BITS_F(g_body[6].unk_0014) * local_38 +
                ((float)((float)((float)((float)(local_98 + local_44 * local_8c) + local_38 * local_88) + local_2c * local_84) +
                LF_BITS_F(g_body[6].unk_0010) * local_44)))));
-    FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc630)),&local_4c);
+    multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc630)),&local_4c);
     local_8c = (float)(g_body[6].pos.x - LF_BITS_F(g_body[6].unk_0010));
     local_88 = (float)(g_body[6].pos.y - LF_BITS_F(g_body[6].unk_0014));
     local_84 = (float)(g_body[6].pos.z - LF_BITS_F(g_body[6].unk_0018));
@@ -44659,7 +44735,7 @@ LAB_0044b6cf:
                ((float)(LF_BITS_F(g_body[7].unk_0014) * local_38 +
                ((float)((float)((float)((float)(local_98 + local_44 * local_8c) + local_38 * local_88) + local_2c * local_84) +
                LF_BITS_F(g_body[7].unk_0010) * local_44)))));
-    FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc710)),&local_4c);
+    multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc710)),&local_4c);
     local_8c = (float)(g_body[7].pos.x - LF_BITS_F(g_body[7].unk_0010));
     local_88 = (float)(g_body[7].pos.y - LF_BITS_F(g_body[7].unk_0014));
     local_84 = (float)(g_body[7].pos.z - LF_BITS_F(g_body[7].unk_0018));
@@ -44673,7 +44749,7 @@ LAB_0044b6cf:
                ((float)(LF_BITS_F(g_body[8].unk_0014) * local_38 +
                ((float)((float)((float)((float)(local_98 + local_44 * local_8c) + local_38 * local_88) + local_2c * local_84) +
                LF_BITS_F(g_body[8].unk_0010) * local_44)))));
-    FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc7f0)),&local_4c);
+    multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc7f0)),&local_4c);
     iVar9 = g_human[param_1].inventory[0].item_id;
     local_8c = (float)(g_body[8].pos.x - LF_BITS_F(g_body[8].unk_0010));
     local_88 = (float)(g_body[8].pos.y - LF_BITS_F(g_body[8].unk_0014));
@@ -44694,12 +44770,12 @@ LAB_0044b6cf:
       local_78 = 0.0;
     }
     if (iVar7 == 0x10) {
-      FUN_0040bdb0((int)&local_4c,&local_4c,0.9817477);
+      rotateorientation((int)&local_4c,&local_4c,0.9817477);
       local_7c = 0.0;
       local_78 = 0.125;
     }
     if (g_item[iVar9].type == 0x1a) {
-      FUN_0040bdb0((int)&local_4c,&local_4c,1.3744467);
+      rotateorientation((int)&local_4c,&local_4c,1.3744467);
       local_80 = 0.1625;
       local_7c = 0.0;
       local_78 = 0.1875;
@@ -44707,9 +44783,9 @@ LAB_0044b6cf:
     local_70 = 0.0;
     local_6c = 0.0;
     local_68 = 0.0;
-    FUN_0040bc50(&local_70,(float *)&DAT_00460ce0,local_58);
+    rotatevector(&local_70,(float *)&DAT_00460ce0,local_58);
     local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].pitch - 0.07363108))));
-    FUN_0040bc50(&local_70,(float *)&DAT_00460cd4,LF_BITS_F(local_94));
+    rotatevector(&local_70,(float *)&DAT_00460cd4,LF_BITS_F(local_94));
     iVar8 = g_numofbonds;
     g_bond[g_numofbonds].state = 10;
     g_bond[g_numofbonds].human_id = param_1;
@@ -44778,12 +44854,12 @@ LAB_0044b6cf:
     local_8 = (float)(g_human[param_1].bones[8].rot[2].z * g_item[iVar9].rot[2].z +
               (g_item[iVar9].rot[2].x * g_human[param_1].bones[8].rot[2].x +
               g_human[param_1].bones[8].rot[2].y * g_item[iVar9].rot[2].y));
-    FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,1.5707964);
+    rotateorientation((int)&local_28,(float *)&DAT_00460cd4,1.5707964);
     if (g_item[iVar9].type == 0x10) {
-      FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,-1.1780972);
+      rotateorientation((int)&local_28,(float *)&DAT_00460cd4,-1.1780972);
     }
     if (g_item[iVar9].type == 0x1a) {
-      FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,-1.3744467);
+      rotateorientation((int)&local_28,(float *)&DAT_00460cd4,-1.3744467);
     }
     local_90 = -0.09817477;
     if (g_item[iVar9].type == 10) {
@@ -44792,12 +44868,12 @@ LAB_0044b6cf:
     if (g_item[iVar9].type == 8) {
       local_90 = -0.12271846;
     }
-    FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,local_90);
-    FUN_0040a7a0(&local_70,&local_28);
+    rotateorientation((int)&local_28,(float *)&DAT_00460cd4,local_90);
+    orientationtoquaternion(&local_70,&local_28);
     local_70 = -local_70;
     local_6c = -local_6c;
     local_68 = -local_68;
-    FUN_0040b900(&local_70,&local_70);
+    normalizevector(&local_70,&local_70);
     if (-1.0 <= local_64) {
       if (1.0 < local_64) {
         local_64 = 1.0;
@@ -44816,7 +44892,7 @@ LAB_0044b6cf:
     local_8c = *pfVar12;
     local_88 = LF_BITS_F((&DAT_0fcf7b8c)[iVar7 * 0x10]);
     local_84 = LF_BITS_F((&DAT_0fcf7b90)[iVar7 * 0x10]);
-    FUN_0040bb00(pfVar12,&local_8c,&pvVar3->x);
+    projectvector(pfVar12,&local_8c,&pvVar3->x);
     local_94 = ((float *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
     *pfVar12 = LF_BITS_F(local_94) * *pfVar12;
     *(float *)&((&DAT_0fcf7b8c)[iVar7 * 0x10]) = (float)(LF_BITS_F((&DAT_0fcf7b8c)[iVar7 * 0x10]) * LF_BITS_F(local_94));
@@ -44845,10 +44921,10 @@ LAB_0044b6cf:
   local_30 = 0.0;
   local_3c = 1.0;
   local_2c = 1.0;
-  FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc1d0)),&local_4c);
-  FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc390)),&local_4c);
-  FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc470)),&local_4c);
-  FUN_0041d9e0(&local_4c,iVar10 + ((int)SR_VA(0x19cc550)),&local_4c);
+  multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc1d0)),&local_4c);
+  multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc390)),&local_4c);
+  multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc470)),&local_4c);
+  multiply3x3matrices(&local_4c,iVar10 + ((int)SR_VA(0x19cc550)),&local_4c);
   iVar7 = g_numofbonds;
   iVar10 = g_human[param_1].inventory[1].count;
   local_7c = -0.0625;
@@ -44930,12 +45006,12 @@ LAB_0044b6cf:
       local_8 = (float)(g_human[param_1].bones[5].rot[2].z * g_item[iVar8].rot[2].z +
                 (pvVar4->x * g_item[iVar8].rot[2].x +
                 g_human[param_1].bones[5].rot[2].y * g_item[iVar8].rot[2].y));
-      FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,1.5707964);
+      rotateorientation((int)&local_28,(float *)&DAT_00460cd4,1.5707964);
       if (g_item[iVar8].type == 0xd) {
-        FUN_0040bdb0((int)&local_28,(float *)&DAT_00460ce0,1.5707964);
+        rotateorientation((int)&local_28,(float *)&DAT_00460ce0,1.5707964);
       }
       if (g_item[iVar8].type == 0x10) {
-        FUN_0040bdb0((int)&local_28,(float *)&DAT_00460cd4,-1.1780972);
+        rotateorientation((int)&local_28,(float *)&DAT_00460cd4,-1.1780972);
       }
       dVar11 = _CIatan2((double)local_14,(double)local_8);
       local_a0 = (float)dVar11;
@@ -44962,9 +45038,9 @@ LAB_0044b6cf:
       *local_94 = local_8c * g_human[param_1].bones[5].rot[0].x;
       *(float *)&((&DAT_0fcf7b8c)[iVar9 * 0x10]) = (float)(g_human[param_1].bones[5].rot[0].y * local_8c);
       *(float *)&((&DAT_0fcf7b90)[iVar9 * 0x10]) = (float)(local_8c * g_human[param_1].bones[5].rot[0].z);
-      FUN_0040ba60(local_94,local_94,&pvVar3->x,local_88);
+      scaleaddvectors(local_94,local_94,&pvVar3->x,local_88);
       pfVar12 = local_94;
-      FUN_0040ba60(local_94,local_94,&pvVar4->x,local_84);
+      scaleaddvectors(local_94,local_94,&pvVar4->x,local_84);
       local_94 = ((float *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
       *pfVar12 = LF_BITS_F(local_94) * *pfVar12;
       pfVar12[1] = (float)(pfVar12[1] * LF_BITS_F(local_94));
@@ -44981,12 +45057,12 @@ LAB_0044b6cf:
         *(float *)((int)&DAT_0fcf7b98 + ((int)LF_BITS_U(local_74))) = g_item[iVar8].unk_0120;
       }
       g_numofbonds = g_numofbonds + 1;
-      FUN_0042f420(local_50);
+      human_calcarmtorque(local_50);
       return;
     }
   }
 LAB_0044bd2b:
-  FUN_0042f420(iVar9);
+  human_calcarmtorque(iVar9);
   return;
 }
 #undef g_human
@@ -45005,20 +45081,20 @@ LAB_0044bd2b:
 #undef g_itemtype
 #undef g_numofbonds
 #undef g_bond
-#undef FUN_0040ba60
-#undef _CIcos
-#undef FUN_0042f420
-#undef _CIsqrt
-#undef FUN_0041d9e0
-#undef _CIsin
-#undef FUN_0040bdb0
-#undef _CIacos
+#undef normalizevector
 #undef __security_check_cookie
 #undef _CIatan2
-#undef FUN_0040bc50
-#undef FUN_0040bb00
-#undef FUN_0040a7a0
-#undef FUN_0040b900
+#undef _CIacos
+#undef _CIsqrt
+#undef orientationtoquaternion
+#undef scaleaddvectors
+#undef multiply3x3matrices
+#undef projectvector
+#undef human_calcarmtorque
+#undef rotateorientation
+#undef _CIsin
+#undef _CIcos
+#undef rotatevector
 #undef local_a0
 #undef local_9c
 #undef local_98
@@ -45085,21 +45161,21 @@ LAB_0044bd2b:
 #define DAT_16224068 (*(undefined *)SR_VA(0x16224068))
 #define DAT_1622406c (*(undefined *)SR_VA(0x1622406c))
 #define _DAT_10748520 (*(int *)SR_VA(0x10748520))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00431480 ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x431480))
-#define FUN_0041b6e0 ((void (__cdecl *)(int, int))SR_VA(0x41b6e0))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00416db0 ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define FUN_004154b0 ((int (__cdecl *)(float *))SR_VA(0x4154b0))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define FUN_00406660 ((void (__cdecl *)(int, int))SR_VA(0x406660))
-#define FUN_004089c0 ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define FUN_00403130 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403130))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define FUN_0040c8f0 ((float10 (__cdecl *)(float *, float *, float *))SR_VA(0x40c8f0))
+#define lineintersectall ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x431480))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define pointdistanceline ((float10 (__cdecl *)(float *, float *, float *))SR_VA(0x40c8f0))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
+#define createevent_updatedoor ((void (__cdecl *)(int, int))SR_VA(0x406660))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define setitempositionhuman ((void (__cdecl *)(int, int))SR_VA(0x41b6e0))
+#define city_createelevator ((int (__cdecl *)(float *))SR_VA(0x4154b0))
+#define area_interior_getblocklink ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403130))
 #define local_48 (*(uint *)(lf_frame + 0x18))
 #define local_44 (*(int *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -45174,7 +45250,7 @@ void __cdecl lf_4bd60(int param_1)
     local_2c = (float)(g_human[param_1].bones[2].pos.z - g_human[param_1].bones[2].rot[2].z * 2.0);
     if ((((g_human[param_1].input_buttons & 1) != 0) &&
         ((g_human[param_1].input_buttons_prev & 1) == 0)) &&
-       (iVar5 = FUN_00431480((float *)pBVar1,&local_34), iVar5 != 0)) {
+       (iVar5 = lineintersectall((float *)pBVar1,&local_34), iVar5 != 0)) {
       if (DAT_107484f4 == 0xffffffff) {
         if ((DAT_10748518 != -1) && (DAT_1074851c != -1)) {
           iVar5 = DAT_1074851c + (3 - _DAT_10748520) * 8;
@@ -45184,21 +45260,22 @@ void __cdecl lf_4bd60(int param_1)
         }
       }
       else {
-        uVar6 = FUN_00403130(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500);
+        uVar6 = area_interior_getblocklink(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500);
         if ((uVar6 == (DAT_0bba8d14 | 0x80000000)) &&
-           (iVar5 = FUN_004154b0((float *)pBVar1), iVar5 != -1)) {
+           (iVar5 = city_createelevator((float *)pBVar1), iVar5 != -1)) {
           *(int *)(&DAT_16224068 + iVar5 * 0x54) =
                (int)(longlong)
                     ((g_human[param_1].bones[2].pos.y -
                      *(float *)(&DAT_0e6c8c10 + DAT_16224064 * 0x9dc)) * 0.25);
         }
         if ((((g_game.state == 2) && (iVar5 = g_player[((int)LF_BITS_U(local_40))].team, -1 < iVar5)) &&
-            (iVar5 < 5)) && (iVar7 = FUN_004089c0(&g_human[param_1].pos.x,iVar5,4.0), iVar7 != 0)) {
+            (iVar5 < 5)) && (iVar7 = pointinsidebase(&g_human[param_1].pos.x,iVar5,4.0), iVar7 != 0)
+           ) {
           if (((DAT_0bba8e64 | 0x80000000) <= uVar6) && (uVar6 <= (DAT_0bba8e70 | 0x80000000))) {
-            FUN_00406660(iVar5,0);
+            createevent_updatedoor(iVar5,0);
           }
           if ((DAT_10748510 == 0) && (DAT_10748518 == 9)) {
-            FUN_00406660(iVar5,1);
+            createevent_updatedoor(iVar5,1);
           }
         }
       }
@@ -45213,14 +45290,13 @@ void __cdecl lf_4bd60(int param_1)
       if (((0 < g_item[iVar5].num_children) &&
           (*(int *)(&g_itemtype[g_item[g_item[iVar5].unk_0028].type].lf_raw[0x98] +
                    g_item[iVar5].type * 4) != 0)) &&
-         ((iVar5 = FUN_0041b870(*(int *)((int)(g_item[iVar5].rot + -8) +
-                                        g_item[iVar5].num_children * 4),0xffffffff,local_44,uVar9),
-          iVar5 != 0 &&
+         ((iVar5 = linkitem(*(int *)((int)(g_item[iVar5].rot + -8) + g_item[iVar5].num_children * 4)
+                            ,0xffffffff,local_44,uVar9), iVar5 != 0 &&
           (g_human[param_1].unk_2b24 = 0x3c,
           g_itemtype[g_item[g_human[param_1].inventory[uVar6].item_id].type].unk_0008 != 0)))) {
-        FUN_00416db0(DAT_0956d80c,
-                     &g_item[*(int *)((int)&g_human[0].inventory[0].item_id + local_48)].pos.x,
-                     lf_u2f(0x3f800000),lf_u2f(0x3f600000));
+        createevent_sound(DAT_0956d80c,
+                          &g_item[*(int *)((int)&g_human[0].inventory[0].item_id + local_48)].pos.x,
+                          lf_u2f(0x3f800000),lf_u2f(0x3f600000));
       }
     }
     piVar10 = &g_human[param_1].inventory[2].item_id;
@@ -45231,7 +45307,7 @@ void __cdecl lf_4bd60(int param_1)
           (0 < ((InventorySlot *)(piVar10 + -1))->count)) &&
          ((uVar6 = uVar9 << 6 | uVar9 >> 0x1a, (uVar6 & g_human[param_1].input_buttons) == uVar6 &&
           ((g_human[param_1].input_buttons_prev & uVar6) != uVar6)))) {
-        FUN_0041b870(*piVar10,0xffffffff,local_44,local_38);
+        linkitem(*piVar10,0xffffffff,local_44,local_38);
       }
       piVar10 = piVar10 + 9;
       uVar9 = uVar9 << 1 | (uint)((int)uVar9 < 0);
@@ -45250,10 +45326,10 @@ void __cdecl lf_4bd60(int param_1)
       local_48 = 0;
       do {
         if (((((Item *)(piVar10 + -6))->active != 0) && (*piVar10 == -1)) && (piVar10[1] == -1)) {
-          fVar13 = (float10)FUN_0040c8f0((float *)pBVar1,&local_34,(float *)(piVar10 + 0xc));
+          fVar13 = (float10)pointdistanceline((float *)pBVar1,&local_34,(float *)(piVar10 + 0xc));
           if (fVar13 < (float10)local_40) {
             local_3c = local_48;
-            fVar13 = (float10)FUN_0040c8f0((float *)pBVar1,&local_34,(float *)(piVar10 + 0xc));
+            fVar13 = (float10)pointdistanceline((float *)pBVar1,&local_34,(float *)(piVar10 + 0xc));
             local_40 = (float)fVar13;
           }
         }
@@ -45263,7 +45339,7 @@ void __cdecl lf_4bd60(int param_1)
         piVar10 = piVar10 + 0x6b;
       } while ((int)piVar10 < ((int)SR_VA(0x956d2d8)));
       if ((local_3c != 0xffffffff) &&
-         (FUN_0041b870(local_3c,0xffffffff,local_44,local_38), g_item[uVar9].type == 0x19)) {
+         (linkitem(local_3c,0xffffffff,local_44,local_38), g_item[uVar9].type == 0x19)) {
         iVar5 = uVar6 * 0x10;
         *(float *)((int)g_human[param_1].colors + iVar5 + -0x20) =
              (float)(g_item[uVar9].pos.x + g_item[uVar9].rot[0].x * 0.5);
@@ -45296,7 +45372,7 @@ void __cdecl lf_4bd60(int param_1)
       local_c = 0.0;
       local_18 = 1.0;
       local_8 = 1.0;
-      FUN_0040bdb0((int)&local_28,(float *)&DAT_00460ce0,LF_BITS_F(g_human[param_1].unk_009c));
+      rotateorientation((int)&local_28,(float *)&DAT_00460ce0,LF_BITS_F(g_human[param_1].unk_009c));
       iVar7 = uVar9 * 0x10;
       *(float *)(iVar7 + ((int)SR_VA(0x19ce9bc)) + param_1 * 0x2b64) = (float)(LF_BITS_F(g_item[iVar5].unk_0194) + local_28);
       *(float *)((int)g_human[param_1].colors + iVar7 + -0x1c) =
@@ -45328,13 +45404,13 @@ void __cdecl lf_4bd60(int param_1)
        (uVar6 = *(uint *)((int)&g_human[0].inventory[0].item_id + local_48), uVar6 < 0x400)) {
       if (g_item[uVar6].parent_item == 0xffffffff) {
         if ((uint *)g_item[uVar6].parent_human != (uint *)0xffffffff) {
-          FUN_00407e50(uVar6,(uint *)g_item[uVar6].parent_human,g_item[uVar6].parent_slot);
-          FUN_00406380(uVar6);
+          item_removehumanlink(uVar6,(uint *)g_item[uVar6].parent_human,g_item[uVar6].parent_slot);
+          createevent_updateitem(uVar6);
         }
       }
       else {
-        FUN_00407f80(uVar6,g_item[uVar6].parent_item);
-        FUN_00406380(uVar6);
+        item_removeitemlink(uVar6,g_item[uVar6].parent_item);
+        createevent_updateitem(uVar6);
       }
     }
     if (((((g_human[param_1].input_buttons & 0x1000) != 0) &&
@@ -45344,12 +45420,12 @@ void __cdecl lf_4bd60(int param_1)
       uVar6 = *(uint *)((int)&g_human[0].inventory[0].item_id + local_48);
       uVar2 = g_human[param_1].inventory[uVar9].item_id;
       if (((*(int *)(&g_itemtype[g_item[uVar6].type].lf_raw[0x98] + g_item[uVar2].type * 4) != 0) &&
-          (iVar5 = FUN_0041b870(uVar2,uVar6,-1,0), iVar5 != 0)) &&
+          (iVar5 = linkitem(uVar2,uVar6,-1,0), iVar5 != 0)) &&
          (g_human[param_1].unk_2b24 = 0x3c,
          g_itemtype[g_item[g_human[param_1].inventory[uVar9].item_id].type].unk_0008 != 0)) {
-        FUN_00416db0(DAT_0956d80c,
-                     &g_item[*(int *)((int)&g_human[0].inventory[0].item_id + local_48)].pos.x,
-                     lf_u2f(0x3f800000),lf_u2f(0x3f800000));
+        createevent_sound(DAT_0956d80c,
+                          &g_item[*(int *)((int)&g_human[0].inventory[0].item_id + local_48)].pos.x,
+                          lf_u2f(0x3f800000),lf_u2f(0x3f800000));
       }
     }
     uVar6 = local_48;
@@ -45361,7 +45437,7 @@ void __cdecl lf_4bd60(int param_1)
         if (((g_item[uVar2].type != 0xd) && (g_item[uVar2].type != 0xe)) &&
            ((uVar8 = uVar9 << 6 | uVar9 >> 0x1a, (uVar8 & g_human[param_1].input_buttons) == uVar8
             && ((g_human[param_1].input_buttons_prev & uVar8) != uVar8)))) {
-          FUN_0041b870(uVar2,0xffffffff,local_44,iVar5 + 2);
+          linkitem(uVar2,0xffffffff,local_44,iVar5 + 2);
         }
       }
       iVar5 = iVar5 + 1;
@@ -45374,31 +45450,32 @@ void __cdecl lf_4bd60(int param_1)
     iVar7 = g_human[param_1].inventory[0].count;
     if (iVar7 < 1) {
       if ((0 < g_human[param_1].inventory[1].count) && (iVar7 == 0)) {
-        FUN_0041b870(g_human[param_1].inventory[1].item_id,0xffffffff,local_44,0);
+        linkitem(g_human[param_1].inventory[1].item_id,0xffffffff,local_44,0);
       }
     }
     else {
       uVar9 = g_human[param_1].inventory[0].item_id;
       if (g_human[param_1].inventory[1].count == 0) {
-        FUN_0041b870(uVar9,0xffffffff,local_44,1);
+        linkitem(uVar9,0xffffffff,local_44,1);
       }
       else {
         uVar6 = g_human[param_1].inventory[1].item_id;
         if (uVar9 < 0x400) {
           if (g_item[uVar9].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar9].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar9,(uint *)g_item[uVar9].parent_human,g_item[uVar9].parent_slot);
-              FUN_00406380(uVar9);
+              item_removehumanlink
+                        (uVar9,(uint *)g_item[uVar9].parent_human,g_item[uVar9].parent_slot);
+              createevent_updateitem(uVar9);
             }
           }
           else {
-            FUN_00407f80(uVar9,g_item[uVar9].parent_item);
-            FUN_00406380(uVar9);
+            item_removeitemlink(uVar9,g_item[uVar9].parent_item);
+            createevent_updateitem(uVar9);
           }
         }
         iVar5 = local_44;
-        FUN_0041b870(uVar6,0xffffffff,local_44,0);
-        FUN_0041b870(uVar9,0xffffffff,iVar5,1);
+        linkitem(uVar6,0xffffffff,local_44,0);
+        linkitem(uVar9,0xffffffff,iVar5,1);
       }
     }
   }
@@ -45414,7 +45491,7 @@ void __cdecl lf_4bd60(int param_1)
         if (g_itemtype[g_item[iVar3].type].unk_0008 != 0) {
           g_human[param_1].unk_0034 = 0;
         }
-        FUN_0041b6e0(iVar3,iVar5);
+        setitempositionhuman(iVar3,iVar5);
         iVar7 = iVar7 + 1;
         pIVar4 = (InventorySlot *)&pIVar4->item_id;
       } while (iVar7 < pIVar11->count);
@@ -45448,21 +45525,21 @@ void __cdecl lf_4bd60(int param_1)
 #undef DAT_16224068
 #undef DAT_1622406c
 #undef _DAT_10748520
-#undef FUN_00407f80
-#undef _ftol2
-#undef FUN_0040bdb0
-#undef FUN_00431480
-#undef FUN_0041b6e0
+#undef item_removeitemlink
 #undef __security_check_cookie
-#undef FUN_00407e50
-#undef FUN_00416db0
-#undef FUN_004154b0
-#undef FUN_00406380
-#undef FUN_00406660
-#undef FUN_004089c0
-#undef FUN_00403130
-#undef FUN_0041b870
-#undef FUN_0040c8f0
+#undef lineintersectall
+#undef linkitem
+#undef pointdistanceline
+#undef _ftol2
+#undef createevent_updateitem
+#undef pointinsidebase
+#undef createevent_updatedoor
+#undef createevent_sound
+#undef item_removehumanlink
+#undef rotateorientation
+#undef setitempositionhuman
+#undef city_createelevator
+#undef area_interior_getblocklink
 #undef local_48
 #undef local_44
 #undef local_40
@@ -45484,7 +45561,7 @@ void __cdecl lf_4bd60(int param_1)
 
 /* ---------------------------------------------------------------- 0x4c720 */
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define FUN_004306d0 ((void (__cdecl *)(int, int, int, float *))SR_VA(0x4306d0))
+#define human_createmuscleball ((void (__cdecl *)(int, int, int, float *))SR_VA(0x4306d0))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int *)(lf_frame + 0x1c))
@@ -45501,26 +45578,26 @@ void __cdecl lf_4c720(int param_1)
   local_c = LF_BITS_F(g_body[1].unk_0010);
   local_8 = g_body[1].unk_0014;
   local_4 = g_body[1].unk_0018;
-  FUN_004306d0(param_1,0,1,&local_c);
+  human_createmuscleball(param_1,0,1,&local_c);
   local_c = LF_BITS_F(g_body[2].unk_0010);
   local_8 = g_body[2].unk_0014;
   local_4 = g_body[2].unk_0018;
-  FUN_004306d0(param_1,1,2,&local_c);
+  human_createmuscleball(param_1,1,2,&local_c);
   iVar1 = 9;
   piVar2 = &g_body[9].unk_0018;
   do {
     local_c = LF_BITS_F(piVar2[-2]);
     local_8 = piVar2[-1];
     local_4 = *piVar2;
-    FUN_004306d0(param_1,0,iVar1,&local_c);
+    human_createmuscleball(param_1,0,iVar1,&local_c);
     local_c = LF_BITS_F(piVar2[0xe]);
     local_8 = piVar2[0xf];
     local_4 = piVar2[0x10];
-    FUN_004306d0(param_1,iVar1,iVar1 + 1,&local_c);
+    human_createmuscleball(param_1,iVar1,iVar1 + 1,&local_c);
     local_c = LF_BITS_F(piVar2[0x1e]);
     local_8 = piVar2[0x1f];
     local_4 = piVar2[0x20];
-    FUN_004306d0(param_1,iVar1 + 1,iVar1 + 2,&local_c);
+    human_createmuscleball(param_1,iVar1 + 1,iVar1 + 2,&local_c);
     piVar2 = piVar2 + 0x30;
     iVar1 = iVar1 + 3;
   } while ((int)piVar2 < ((int)SR_VA(0xf670658)));
@@ -45530,22 +45607,22 @@ void __cdecl lf_4c720(int param_1)
     local_c = LF_BITS_F(piVar2[-2]);
     local_8 = piVar2[-1];
     local_4 = *piVar2;
-    FUN_004306d0(param_1,1,iVar1,&local_c);
+    human_createmuscleball(param_1,1,iVar1,&local_c);
     local_c = LF_BITS_F(piVar2[0xe]);
     local_8 = piVar2[0xf];
     local_4 = piVar2[0x10];
-    FUN_004306d0(param_1,iVar1,iVar1 + 1,&local_c);
+    human_createmuscleball(param_1,iVar1,iVar1 + 1,&local_c);
     local_c = LF_BITS_F(piVar2[0x1e]);
     local_8 = piVar2[0x1f];
     local_4 = piVar2[0x20];
-    FUN_004306d0(param_1,iVar1 + 1,iVar1 + 2,&local_c);
+    human_createmuscleball(param_1,iVar1 + 1,iVar1 + 2,&local_c);
     piVar2 = piVar2 + 0x30;
     iVar1 = iVar1 + 3;
   } while ((int)piVar2 < ((int)SR_VA(0xf6704d8)));
   return;
 }
 #undef g_body
-#undef FUN_004306d0
+#undef human_createmuscleball
 #undef local_c
 #undef local_8
 #undef local_4
@@ -45557,11 +45634,11 @@ void __cdecl lf_4c720(int param_1)
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_00406420 ((void (__cdecl *)(uint))SR_VA(0x406420))
-#define FUN_00416db0 ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define FUN_00430ba0 ((void (__cdecl *)(int))SR_VA(0x430ba0))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define itemweaponsimulation ((void (__cdecl *)(int))SR_VA(0x430ba0))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_4c8c0(void)
@@ -45602,7 +45679,7 @@ LAB_0044c991:
       }
       else if (0 < g_item[local_8].unk_14) goto LAB_0044c991;
       if (g_itemtype[g_item[local_8].type].unk_0008 != 0) {
-        FUN_00430ba0(local_8);
+        itemweaponsimulation(local_8);
       }
       iVar3 = g_item[local_8].type;
       if ((iVar3 == 0x18) && (uVar5 = g_item[local_8].vehicle_id, uVar5 < 0x400)) {
@@ -45624,7 +45701,7 @@ LAB_0044c991:
             g_item[local_8].call_state = 1;
             g_item[local_8].phone_number = 0;
             g_item[local_8].info = 0;
-            FUN_00406420(local_8);
+            createevent_updateiteminfo(local_8);
           }
         }
         else if (iVar3 == 1) {
@@ -45633,7 +45710,7 @@ LAB_0044c991:
             g_item[local_8].call_state = 0;
             g_item[local_8].phone_number = 0;
             g_item[local_8].info = 0;
-            FUN_00406420(local_8);
+            createevent_updateiteminfo(local_8);
           }
           iVar3 = g_item[local_8].phone_number;
           if (999 < iVar3) {
@@ -45653,7 +45730,7 @@ LAB_0044c991:
                   g_item[local_8].linked_item = uVar5;
                   g_item[local_8].info = 0;
                   g_item[uVar5].info = iVar3;
-                  FUN_00406420(local_8);
+                  createevent_updateiteminfo(local_8);
                   goto LAB_0044cd59;
                 }
                 piVar2 = piVar2 + 0x6b;
@@ -45669,7 +45746,7 @@ LAB_0044c991:
             g_item[local_8].call_state = 0;
             g_item[local_8].linked_item = -1;
             g_item[local_8].info = 0;
-            FUN_00406420(local_8);
+            createevent_updateiteminfo(local_8);
           }
           if (g_item[local_8].call_state == 2) {
             iVar3 = g_item[local_8].linked_item;
@@ -45678,8 +45755,8 @@ LAB_0044c991:
             }
             else {
               if (((byte)g_game.ticks & 0x7f) == 0) {
-                FUN_00416db0(DAT_0956d7c8,&g_item[iVar3].pos.x,lf_u2f(0x3f800000),lf_u2f(0x3f800000));
-                FUN_00416db0(DAT_0956d7c8,&g_item[local_8].pos.x,lf_u2f(0x3f000000),lf_u2f(0x3f800000));
+                createevent_sound(DAT_0956d7c8,&g_item[iVar3].pos.x,lf_u2f(0x3f800000),lf_u2f(0x3f800000));
+                createevent_sound(DAT_0956d7c8,&g_item[local_8].pos.x,lf_u2f(0x3f000000),lf_u2f(0x3f800000));
               }
               g_item[local_8].unk_0100 = g_item[local_8].unk_0100 + 1;
               if (0x2ff < g_item[local_8].unk_0100) {
@@ -45687,10 +45764,10 @@ LAB_0044c991:
                 g_item[local_8].call_state = 0;
                 g_item[iVar3].call_state = 0;
                 g_item[g_item[local_8].linked_item].info = 0;
-                FUN_00406420(g_item[local_8].linked_item);
+                createevent_updateiteminfo(g_item[local_8].linked_item);
                 g_item[local_8].linked_item = -1;
                 g_item[local_8].info = 0;
-                FUN_00406420(local_8);
+                createevent_updateiteminfo(local_8);
               }
             }
           }
@@ -45706,9 +45783,9 @@ LAB_0044c991:
                   piVar2[0x41] = 3;
                   g_item[local_8].linked_item = uVar5;
                   g_item[local_8].info = piVar2[0x3c];
-                  FUN_00406420(local_8);
+                  createevent_updateiteminfo(local_8);
                   piVar2[0x3e] = g_item[local_8].phone_id;
-                  FUN_00406420(uVar5);
+                  createevent_updateiteminfo(uVar5);
                 }
                 piVar2 = piVar2 + 0x6b;
                 uVar5 = uVar5 + 1;
@@ -45719,12 +45796,12 @@ LAB_0044c991:
               g_item[iVar3].call_state = 0;
               g_item[g_item[local_8].linked_item].linked_item = -1;
               g_item[g_item[local_8].linked_item].info = 0;
-              FUN_00406420(g_item[local_8].linked_item);
+              createevent_updateiteminfo(g_item[local_8].linked_item);
               g_item[local_8].linked_item = -1;
               g_item[local_8].info = 0;
               uVar5 = local_8;
 LAB_0044cd59:
-              FUN_00406420(uVar5);
+              createevent_updateiteminfo(uVar5);
             }
           }
         }
@@ -45738,7 +45815,7 @@ LAB_0044cd59:
           if (g_item[local_8].type != 0xe) goto LAB_0044cda4;
           g_item[local_8].type = 0xd;
         }
-        FUN_00406380(local_8);
+        createevent_updateitem(local_8);
       }
 LAB_0044cda4:
       if (((uVar5 != 1) && ((g_item[local_8].unk_00f0 & 1) != 0)) && (g_item[local_8].type == 0xc))
@@ -45750,7 +45827,7 @@ LAB_0044cda4:
         do {
           if (((((Human *)(piVar2 + -10))->active != 0) && (-5 < *piVar2)) &&
              ((piVar2[0xabd] != 0 || (*piVar2 < 10)))) {
-            fVar6 = (float10)FUN_0040baa0(&g_item[local_8].pos.x,(float *)(piVar2 + 8));
+            fVar6 = (float10)vectordistance(&g_item[local_8].pos.x,(float *)(piVar2 + 8));
             if ((float)fVar6 < local_c) {
               iVar3 = iVar4;
               local_c = (float)fVar6;
@@ -45785,11 +45862,11 @@ LAB_0044cda4:
 #undef g_itemtype
 #undef g_game
 #undef g_item
-#undef FUN_0040baa0
-#undef FUN_00406420
-#undef FUN_00416db0
-#undef FUN_00430ba0
-#undef FUN_00406380
+#undef createevent_sound
+#undef vectordistance
+#undef createevent_updateiteminfo
+#undef createevent_updateitem
+#undef itemweaponsimulation
 #undef local_c
 #undef local_8
 
@@ -45812,9 +45889,9 @@ LAB_0044cda4:
 #define _g_intersect (*(float *)SR_VA(0x107484a0))
 #define _DAT_107484a4 (*(float *)SR_VA(0x107484a4))
 #define _DAT_107484a8 (*(float *)SR_VA(0x107484a8))
-#define FUN_00430f00 ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x430f00))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define item_sphereintersect ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x430f00))
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_28 (*(Bone * *)(lf_frame + 0x18))
 #define local_24 (*(float *)(lf_frame + 0x1c))
@@ -45896,7 +45973,7 @@ void __cdecl lf_4cee0(int param_1)
     local_24 = (float)(local_1c * g_item[param_1].torque.x);
     local_20 = (float)(g_item[param_1].torque.y * local_1c);
     local_1c = (float)(local_1c * g_item[param_1].torque.z);
-    FUN_0040bdb0((int)pvVar3,&local_24,fVar4);
+    rotateorientation((int)pvVar3,&local_24,fVar4);
   }
   pfVar7 = (float *)&g_item[param_1].lf_raw[0x19c];
   iVar9 = 2;
@@ -45958,7 +46035,7 @@ void __cdecl lf_4cee0(int param_1)
       do {
         iVar11 = iVar9;
         if (((iVar10 != 5) && (iVar10 != 8)) &&
-           (iVar8 = FUN_00430f00(param_1,(float *)pBVar12,0.125), iVar8 != 0)) {
+           (iVar8 = item_sphereintersect(param_1,(float *)pBVar12,0.125), iVar8 != 0)) {
           fVar4 = (float)(0.125 - _DAT_107484bc);
           g_bond[iVar9].state = 0xe;
           g_bond[iVar9].human_id = local_2c;
@@ -46012,9 +46089,9 @@ void __cdecl lf_4cee0(int param_1)
 #undef _g_intersect
 #undef _DAT_107484a4
 #undef _DAT_107484a8
-#undef FUN_00430f00
 #undef _CIsqrt
-#undef FUN_0040bdb0
+#undef rotateorientation
+#undef item_sphereintersect
 #undef local_2c
 #undef local_28
 #undef local_24
@@ -46047,8 +46124,8 @@ void __cdecl lf_4cee0(int param_1)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_0041c8f0 ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x41c8f0))
-#define FUN_00441550 ((int (__cdecl *)(float *, float *, float *, uint, float *, float *, float))SR_VA(0x441550))
+#define circleintersectlandscape ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x41c8f0))
+#define circleintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float *, float))SR_VA(0x441550))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -46073,12 +46150,12 @@ undefined4 __cdecl lf_4d630(float *param_1,float *param_2,float param_3)
   
   _DAT_107484b8 = 0x3f800000;
   _DAT_107484bc = 65536.0;
-  FUN_0041c8f0(param_1,param_2,param_3);
+  circleintersectlandscape(param_1,param_2,param_3);
   uVar3 = 0;
   piVar2 = &DAT_17166040;
   do {
     if (((*piVar2 != 0) &&
-        (iVar1 = FUN_00441550(&local_18,&local_c,&local_1c,uVar3,param_1,param_2,param_3),
+        (iVar1 = circleintersectarea(&local_18,&local_c,&local_1c,uVar3,param_1,param_2,param_3),
         iVar1 != 0)) && (local_1c < _DAT_107484bc)) {
       _g_intersect = local_18;
       DAT_10748504 = DAT_10748508;
@@ -46117,8 +46194,8 @@ undefined4 __cdecl lf_4d630(float *param_1,float *param_2,float param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_0041c8f0
-#undef FUN_00441550
+#undef circleintersectlandscape
+#undef circleintersectarea
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -46145,8 +46222,8 @@ undefined4 __cdecl lf_4d630(float *param_1,float *param_2,float param_3)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define FUN_0041cdf0 ((undefined4 (__cdecl *)(float *, float))SR_VA(0x41cdf0))
-#define FUN_00440aa0 ((int (__cdecl *)(float *, float *, float *, uint, float *, float))SR_VA(0x440aa0))
+#define sphereintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float))SR_VA(0x440aa0))
+#define sphereintersectlandscape ((undefined4 (__cdecl *)(float *, float))SR_VA(0x41cdf0))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -46171,13 +46248,13 @@ undefined4 __cdecl lf_4d750(float *param_1,float param_2)
   
   _DAT_107484b8 = 0x3f800000;
   _DAT_107484bc = 65536.0;
-  FUN_0041cdf0(param_1,param_2);
+  sphereintersectlandscape(param_1,param_2);
   uVar3 = 0;
   piVar2 = &DAT_17166040;
   do {
     if (((*piVar2 != 0) &&
-        (iVar1 = FUN_00440aa0(&local_18,&local_c,&local_1c,uVar3,param_1,param_2), iVar1 != 0)) &&
-       (local_1c < _DAT_107484bc)) {
+        (iVar1 = sphereintersectarea(&local_18,&local_c,&local_1c,uVar3,param_1,param_2), iVar1 != 0
+        )) && (local_1c < _DAT_107484bc)) {
       _g_intersect = local_18;
       _DAT_107484a4 = local_14;
       _DAT_107484a8 = local_10;
@@ -46211,8 +46288,8 @@ undefined4 __cdecl lf_4d750(float *param_1,float param_2)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef FUN_0041cdf0
-#undef FUN_00440aa0
+#undef sphereintersectarea
+#undef sphereintersectlandscape
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -46234,9 +46311,9 @@ undefined4 __cdecl lf_4d750(float *param_1,float param_2)
 #define DAT_0e699254 (*(undefined *)SR_VA(0xe699254))
 #define DAT_0e699258 (*(undefined *)SR_VA(0xe699258))
 #define DAT_0e69925c (*(undefined *)SR_VA(0xe69925c))
-#define FUN_00402f00 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
-#define FUN_0043da50 ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
 #define __security_check_cookie(x) ((void)0)
+#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
+#define area_interior_setobject ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
 #define local_14 (*(ushort (*)[8])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x2c))
 void __cdecl lf_4d850(int param_1)
@@ -46269,7 +46346,7 @@ void __cdecl lf_4d850(int param_1)
       uVar5 = iVar1 - *(int *)(&DAT_0e699258 + iVar4);
       if ((int)uVar5 < iVar2) {
         do {
-          FUN_0043da50(0,uVar5,*(uint *)(&DAT_0e69922c + iVar4),uVar3,0x40000000,local_14);
+          area_createblock(0,uVar5,*(uint *)(&DAT_0e69922c + iVar4),uVar3,0x40000000,local_14);
           iVar1 = (&DAT_0e699228)[param_1 * 0x1a];
           uVar5 = uVar5 + 1;
           iVar2 = *(int *)(&DAT_0e699250 + iVar4) + iVar1;
@@ -46281,20 +46358,24 @@ void __cdecl lf_4d850(int param_1)
   iVar1 = (&DAT_0e699228)[param_1 * 0x1a];
   iVar2 = (&DAT_0e699230)[param_1 * 0x1a];
   if (*(int *)(&DAT_0e699248 + iVar4) != -1) {
-    FUN_00402f00(0,*(int *)(&DAT_0e699250 + iVar4) + iVar1,*(int *)(&DAT_0e69922c + iVar4) + 1,
-                 *(int *)(&DAT_0e699254 + iVar4) + iVar2,param_1 << 0xc | 5);
+    area_interior_setobject
+              (0,*(int *)(&DAT_0e699250 + iVar4) + iVar1,*(int *)(&DAT_0e69922c + iVar4) + 1,
+               *(int *)(&DAT_0e699254 + iVar4) + iVar2,param_1 << 0xc | 5);
   }
   if ((&DAT_0e699240)[param_1 * 0x1a] != -1) {
-    FUN_00402f00(0,(iVar1 - *(int *)(&DAT_0e699250 + iVar4)) - 1,*(int *)(&DAT_0e69922c + iVar4) + 1
-                 ,(iVar2 - *(int *)(&DAT_0e699254 + iVar4)) - 1,param_1 << 0xc | 0x805);
+    area_interior_setobject
+              (0,(iVar1 - *(int *)(&DAT_0e699250 + iVar4)) - 1,*(int *)(&DAT_0e69922c + iVar4) + 1,
+               (iVar2 - *(int *)(&DAT_0e699254 + iVar4)) - 1,param_1 << 0xc | 0x805);
   }
   if (*(int *)(&DAT_0e69924c + iVar4) != -1) {
-    FUN_00402f00(0,(iVar1 - *(int *)(&DAT_0e699250 + iVar4)) - 1,*(int *)(&DAT_0e69922c + iVar4) + 1
-                 ,*(int *)(&DAT_0e699254 + iVar4) + iVar2,param_1 << 0xc | 0x1000405);
+    area_interior_setobject
+              (0,(iVar1 - *(int *)(&DAT_0e699250 + iVar4)) - 1,*(int *)(&DAT_0e69922c + iVar4) + 1,
+               *(int *)(&DAT_0e699254 + iVar4) + iVar2,param_1 << 0xc | 0x1000405);
   }
   if ((&DAT_0e699244)[param_1 * 0x1a] != -1) {
-    FUN_00402f00(0,*(int *)(&DAT_0e699250 + iVar4) + iVar1,*(int *)(&DAT_0e69922c + iVar4) + 1,
-                 (iVar2 - *(int *)(&DAT_0e699254 + iVar4)) - 1,param_1 << 0xc | 0x1000c05);
+    area_interior_setobject
+              (0,*(int *)(&DAT_0e699250 + iVar4) + iVar1,*(int *)(&DAT_0e69922c + iVar4) + 1,
+               (iVar2 - *(int *)(&DAT_0e699254 + iVar4)) - 1,param_1 << 0xc | 0x1000c05);
   }
   return;
 }
@@ -46310,9 +46391,9 @@ void __cdecl lf_4d850(int param_1)
 #undef DAT_0e699254
 #undef DAT_0e699258
 #undef DAT_0e69925c
-#undef FUN_00402f00
-#undef FUN_0043da50
 #undef __security_check_cookie
+#undef area_createblock
+#undef area_interior_setobject
 #undef local_14
 #undef local_4
 
@@ -46338,8 +46419,8 @@ void __cdecl lf_4d850(int param_1)
 #define DAT_0e6b3234 (*(undefined *)SR_VA(0xe6b3234))
 #define DAT_0e6b3238 (*(undefined *)SR_VA(0xe6b3238))
 #define DAT_0e6b323c (*(undefined *)SR_VA(0xe6b323c))
-#define FUN_0043da50 ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
 #define __security_check_cookie(x) ((void)0)
+#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
 #define local_34 (*(uint *)(lf_frame + 0x1c))
 #define local_30 (*(int *)(lf_frame + 0x20))
 #define local_2c (*(uint *)(lf_frame + 0x24))
@@ -46432,7 +46513,7 @@ void __cdecl lf_4da10(int param_1)
                 uVar3 = (&DAT_0bba8da4)[iVar1] | 0x80000000;
               }
             }
-            FUN_0043da50(0,uVar6,local_34,iVar5 + local_20,uVar3,local_14);
+            area_createblock(0,uVar6,local_34,iVar5 + local_20,uVar3,local_14);
             iVar4 = *(int *)(&DAT_0e6b323c + iVar7);
             iVar5 = iVar5 + 1;
             iVar2 = local_18;
@@ -46453,13 +46534,13 @@ void __cdecl lf_4da10(int param_1)
     if ((int)uVar6 < *(int *)(&DAT_0e6b323c + iVar7) + (&DAT_0e699230)[iVar1 * 0x1a]) {
       do {
         local_14[5] = 9;
-        FUN_0043da50(0,*(int *)(&DAT_0e699250 + iVar1 * 0x68) + (&DAT_0e699228)[iVar1 * 0x1a],
-                     *(uint *)(&DAT_0e69922c + iVar1 * 0x68),uVar6,0x40000000,local_14);
+        area_createblock(0,*(int *)(&DAT_0e699250 + iVar1 * 0x68) + (&DAT_0e699228)[iVar1 * 0x1a],
+                         *(uint *)(&DAT_0e69922c + iVar1 * 0x68),uVar6,0x40000000,local_14);
         local_14[5] = 9;
         iVar1 = *(int *)(&DAT_0e6b3230 + iVar7) * 0x68;
-        FUN_0043da50(0,((&DAT_0e699228)[*(int *)(&DAT_0e6b3230 + iVar7) * 0x1a] -
-                       *(int *)(&DAT_0e699258 + iVar1)) - 1,*(uint *)(&DAT_0e69922c + iVar1),uVar6,
-                     0x40000000,local_14);
+        area_createblock(0,((&DAT_0e699228)[*(int *)(&DAT_0e6b3230 + iVar7) * 0x1a] -
+                           *(int *)(&DAT_0e699258 + iVar1)) - 1,*(uint *)(&DAT_0e69922c + iVar1),
+                         uVar6,0x40000000,local_14);
         iVar1 = (&DAT_0e6b322c)[param_1 * 0x13];
         uVar6 = uVar6 + 1;
       } while ((int)uVar6 < (&DAT_0e699230)[iVar1 * 0x1a] + *(int *)(&DAT_0e6b323c + iVar7));
@@ -46523,7 +46604,7 @@ void __cdecl lf_4da10(int param_1)
                 uVar3 = (&DAT_0bba8dbc)[iVar1] | 0x80000000;
               }
             }
-            FUN_0043da50(0,iVar5 + local_1c,local_34,uVar6,uVar3,local_14);
+            area_createblock(0,iVar5 + local_1c,local_34,uVar6,uVar3,local_14);
             iVar4 = *(int *)(&DAT_0e6b323c + iVar7);
             iVar5 = iVar5 + 1;
             iVar2 = local_18;
@@ -46544,14 +46625,14 @@ void __cdecl lf_4da10(int param_1)
     if ((int)uVar6 < *(int *)(&DAT_0e6b323c + iVar7) + (&DAT_0e699228)[iVar1 * 0x1a]) {
       do {
         local_14[5] = 6;
-        FUN_0043da50(0,uVar6,*(uint *)(&DAT_0e69922c + iVar1 * 0x68),
-                     *(int *)(&DAT_0e699254 + iVar1 * 0x68) + (&DAT_0e699230)[iVar1 * 0x1a],
-                     0x40000000,local_14);
+        area_createblock(0,uVar6,*(uint *)(&DAT_0e69922c + iVar1 * 0x68),
+                         *(int *)(&DAT_0e699254 + iVar1 * 0x68) + (&DAT_0e699230)[iVar1 * 0x1a],
+                         0x40000000,local_14);
         local_14[5] = 6;
         iVar1 = *(int *)(&DAT_0e6b3230 + iVar7) * 0x68;
-        FUN_0043da50(0,uVar6,*(uint *)(&DAT_0e69922c + iVar1),
-                     ((&DAT_0e699230)[*(int *)(&DAT_0e6b3230 + iVar7) * 0x1a] -
-                     *(int *)(&DAT_0e69925c + iVar1)) - 1,0x40000000,local_14);
+        area_createblock(0,uVar6,*(uint *)(&DAT_0e69922c + iVar1),
+                         ((&DAT_0e699230)[*(int *)(&DAT_0e6b3230 + iVar7) * 0x1a] -
+                         *(int *)(&DAT_0e69925c + iVar1)) - 1,0x40000000,local_14);
         iVar1 = (&DAT_0e6b322c)[param_1 * 0x13];
         uVar6 = uVar6 + 1;
       } while ((int)uVar6 < (&DAT_0e699228)[iVar1 * 0x1a] + *(int *)(&DAT_0e6b323c + iVar7));
@@ -46580,8 +46661,8 @@ void __cdecl lf_4da10(int param_1)
 #undef DAT_0e6b3234
 #undef DAT_0e6b3238
 #undef DAT_0e6b323c
-#undef FUN_0043da50
 #undef __security_check_cookie
+#undef area_createblock
 #undef local_34
 #undef local_30
 #undef local_2c
@@ -46595,7 +46676,7 @@ void __cdecl lf_4da10(int param_1)
 
 /* ---------------------------------------------------------------- 0x4e060 */
 #define g_game (*(Game *)SR_VA(0x94dc540))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
 undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
 
 {
@@ -46620,7 +46701,7 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
     if (iVar2 < iVar1) {
       iVar4 = iVar2 * 0x34 + iVar4;
       *(undefined4 *)(&g_game.lf_raw[0x4d4] + iVar4) = 1;
-      uVar3 = FUN_00431800(param_1,(float *)(&g_game.lf_raw[0x4d8] + iVar4),(undefined4 *)0x0,
+      uVar3 = createobject(param_1,(float *)(&g_game.lf_raw[0x4d8] + iVar4),(undefined4 *)0x0,
                            (float *)(&g_game.lf_raw[0x4e4] + iVar4),param_3);
       return uVar3;
     }
@@ -46628,7 +46709,7 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
   return 0xffffffff;
 }
 #undef g_game
-#undef FUN_00431800
+#undef createobject
 
 /* ---------------------------------------------------------------- 0x4e0d0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -46644,13 +46725,13 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
 #define DAT_0e6c9590 (*(undefined *)SR_VA(0xe6c9590))
 #define DAT_0e6c9594 (*(undefined *)SR_VA(0xe6c9594))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_40 (*(int *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int *)(lf_frame + 0x18))
@@ -46699,26 +46780,26 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
       local_28[7] = 0.0;
       local_28[4] = 1.0;
       local_28[8] = 1.0;
-      FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,1.5707964);
-      iVar3 = FUN_00431800(*(int *)(&DAT_0e6c94bc + g_player[param_1].menu_building * 0x9dc + iVar2)
+      rotateorientation((int)local_28,(float *)&DAT_00460ce0,1.5707964);
+      iVar3 = createobject(*(int *)(&DAT_0e6c94bc + g_player[param_1].menu_building * 0x9dc + iVar2)
                            ,&local_34,(undefined4 *)0x0,local_28,
                            (&DAT_0e6c94c4)[g_player[param_1].menu_building * 0x277 + param_2 * 3]);
       g_player[param_1].money =
            g_player[param_1].money -
            *(int *)(&DAT_0e6c94c0 + iVar2 + g_player[param_1].menu_building * 0x9dc);
-      uVar4 = FUN_0041b070(0x18,&local_34,(undefined4 *)0x0,local_28);
+      uVar4 = createitem(0x18,&local_34,(undefined4 *)0x0,local_28);
       g_item[uVar4].vehicle_id = iVar3;
       iVar3 = 2;
       do {
-        iVar5 = FUN_0041b870(uVar4,0xffffffff,local_38,iVar3);
+        iVar5 = linkitem(uVar4,0xffffffff,local_38,iVar3);
         iVar6 = local_40;
         if (iVar5 != 0) break;
         iVar3 = iVar3 + 1;
       } while (iVar3 < 7);
       g_player[param_1].unk_0050 = g_player[param_1].unk_0050 + 1;
-      FUN_004064a0(local_40);
+      createevent_updateplayer(local_40);
       if (g_game.gametype == 3) {
-        FUN_004065f0(iVar6);
+        createevent_updateplayer_finance(iVar6);
       }
       iVar3 = g_player[param_1].menu_building;
       if (0 < (int)(&DAT_0e6c94c4)[iVar3 * 0x277]) {
@@ -46746,13 +46827,13 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
 #undef DAT_0e6c9590
 #undef DAT_0e6c9594
 #undef g_player
-#undef FUN_0041b070
-#undef FUN_004064a0
 #undef __security_check_cookie
-#undef FUN_00431800
-#undef FUN_004065f0
-#undef FUN_0040bdb0
-#undef FUN_0041b870
+#undef linkitem
+#undef rotateorientation
+#undef createevent_updateplayer_finance
+#undef createevent_updateplayer
+#undef createobject
+#undef createitem
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -46780,8 +46861,8 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
-#define FUN_0044d630 ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
 #define local_20 (*(int *)(lf_frame + 0x10))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
@@ -46823,8 +46904,9 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
                *(float *)(&g_object[param_1].lf_raw[0x71f4] + iVar9));
     local_10 = (float)(fVar1 * *(float *)(&g_object[param_1].lf_raw[0x721c] + iVar9) +
                *(float *)(&g_object[param_1].lf_raw[0x71f8] + iVar9));
-    iVar8 = FUN_0044d630(&local_18,(float *)(&g_object[param_1].lf_raw[0x7214] + iVar9),
-                         *(float *)(&g_object[param_1].lf_raw[0x7278] + iVar9));
+    iVar8 = circleintersectlevel
+                      (&local_18,(float *)(&g_object[param_1].lf_raw[0x7214] + iVar9),
+                       *(float *)(&g_object[param_1].lf_raw[0x7278] + iVar9));
     iVar7 = g_numofbonds;
     if (iVar8 != 0) {
       local_c = (float)(_g_intersect - local_18);
@@ -46833,7 +46915,7 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
       g_bond[g_numofbonds].state = 0xf;
       g_bond[iVar7].human_id = param_1;
       g_bond[iVar7].bone_a = param_2;
-      FUN_0040b900(&local_c,&local_c);
+      normalizevector(&local_c,&local_c);
       iVar8 = DAT_10748504;
       fVar6 = _DAT_107484b0;
       fVar5 = _DAT_107484ac;
@@ -46879,8 +46961,8 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
 #undef _DAT_107484b0
 #undef _DAT_107484ac
 #undef _DAT_107484b4
-#undef FUN_0044d630
-#undef FUN_0040b900
+#undef normalizevector
+#undef circleintersectlevel
 #undef local_20
 #undef local_18
 #undef local_14
@@ -46907,9 +46989,9 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
-#define FUN_0044d630 ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
-#define FUN_0040bc50 ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -46945,7 +47027,8 @@ void __cdecl lf_4e500(int param_1,int param_2)
   ;
   iVar4 = *(int *)((int)(g_object[param_1].rot + 9) +
                   (*(int *)(&g_object[param_1].lf_raw[0x5efc] + iVar9) + 1) * 4);
-  iVar7 = FUN_0044d630(&local_18,&g_object[param_1].rot[0].x,*(float *)(iVar9 + ((int)SR_VA(0x599850c)) + iVar8));
+  iVar7 = circleintersectlevel
+                    (&local_18,&g_object[param_1].rot[0].x,*(float *)(iVar9 + ((int)SR_VA(0x599850c)) + iVar8));
   iVar8 = g_numofbonds;
   if (iVar7 != 0) {
     local_c = (float)(local_18 - _g_intersect);
@@ -46982,7 +47065,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
     g_bond[iVar8].human_id = param_1;
     local_10 = g_object[param_1].rot[2].z;
     g_bond[iVar8].bone_a = param_2;
-    FUN_0040bc50(&local_18,&g_object[param_1].rot[1].x,(&g_object[param_1].unk_5f20)[param_2 * 0x26]
+    rotatevector(&local_18,&g_object[param_1].rot[1].x,(&g_object[param_1].unk_5f20)[param_2 * 0x26]
                 );
     fVar6 = _DAT_107484b4;
     fVar5 = _DAT_107484b0;
@@ -46994,7 +47077,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
     *piVar1 = ((int)LF_BITS_U(((float)(local_4 * _DAT_107484b0 - local_8 * _DAT_107484b4))));
     *(float *)&g_bond[iVar8].lf_raw[0xb4] = (float)(local_c * fVar6 - fVar2 * local_4);
     *(float *)&g_bond[iVar8].lf_raw[0xb8] = (float)(local_8 * fVar2 - local_c * fVar5);
-    FUN_0040b900((float *)piVar1,(float *)piVar1);
+    normalizevector((float *)piVar1,(float *)piVar1);
     g_numofbonds = g_numofbonds + 1;
   }
   return;
@@ -47016,9 +47099,9 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #undef _DAT_107484b4
 #undef _DAT_107484b0
 #undef _DAT_107484ac
-#undef FUN_0044d630
-#undef FUN_0040bc50
-#undef FUN_0040b900
+#undef normalizevector
+#undef rotatevector
+#undef circleintersectlevel
 #undef local_18
 #undef local_14
 #undef local_10
@@ -47097,15 +47180,15 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #define _DAT_094dc474 (*(undefined4 *)SR_VA(0x94dc474))
 #define _DAT_094dc478 (*(undefined4 *)SR_VA(0x94dc478))
 #define _DAT_094dc488 (*(float *)SR_VA(0x94dc488))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
-#define FUN_00429650 ((bool (__cdecl *)(char *))SR_VA(0x429650))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0040d020 ((void (__cdecl *)(char *))SR_VA(0x40d020))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_0040d240 ((void (__cdecl *)(undefined1 *, int))SR_VA(0x40d240))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
 #define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
-#define FUN_0040d110 ((undefined4 (__cdecl *)(void))SR_VA(0x40d110))
+#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
+#define optionreadwriteint ((bool (__cdecl *)(char *))SR_VA(0x429650))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define getfloat ((undefined4 (__cdecl *)(void))SR_VA(0x40d110))
+#define getstring ((void (__cdecl *)(undefined1 *, int))SR_VA(0x40d240))
 void __cdecl lf_4e7a0(int param_1)
 
 {
@@ -47167,145 +47250,145 @@ void __cdecl lf_4e7a0(int param_1)
   _DAT_094dc484 = 100;
   _DAT_094dc47c = 1;
   _DAT_094dc464 = 1;
-  FUN_0040d020("config.txt");
-  iVar3 = FUN_00429650("screenwidth=");
+  loadtextfile("config.txt");
+  iVar3 = optionreadwriteint("screenwidth=");
   if (iVar3 != 0) {
-    _DAT_17929a60 = FUN_0040d110();
+    _DAT_17929a60 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("screenheight=");
+  iVar3 = optionreadwriteint("screenheight=");
   if (iVar3 != 0) {
-    _DAT_17929a64 = FUN_0040d110();
+    _DAT_17929a64 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("colordepth=");
+  iVar3 = optionreadwriteint("colordepth=");
   if (iVar3 != 0) {
-    _DAT_17929a68 = FUN_0040d110();
+    _DAT_17929a68 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("depthbits=");
+  iVar3 = optionreadwriteint("depthbits=");
   if (iVar3 != 0) {
-    _DAT_17929a6c = FUN_0040d110();
+    _DAT_17929a6c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("stencilbits=");
+  iVar3 = optionreadwriteint("stencilbits=");
   if (iVar3 != 0) {
-    _DAT_17929a70 = FUN_0040d110();
+    _DAT_17929a70 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("fullscreen=");
+  iVar3 = optionreadwriteint("fullscreen=");
   if (iVar3 != 0) {
-    _DAT_17929a74 = FUN_0040d110();
+    _DAT_17929a74 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("joystick=");
+  iVar3 = optionreadwriteint("joystick=");
   if (iVar3 != 0) {
-    _DAT_17929a80 = FUN_0040d110();
+    _DAT_17929a80 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("sound=");
+  iVar3 = optionreadwriteint("sound=");
   if (iVar3 != 0) {
-    _DAT_17929a78 = FUN_0040d110();
+    _DAT_17929a78 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("soundvolume=");
+  iVar3 = optionreadwriteint("soundvolume=");
   if (iVar3 != 0) {
-    _DAT_094dc418 = FUN_0040d110();
+    _DAT_094dc418 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("musicvolume=");
+  iVar3 = optionreadwriteint("musicvolume=");
   if (iVar3 != 0) {
-    _DAT_094dc41c = FUN_0040d110();
+    _DAT_094dc41c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("port=");
+  iVar3 = optionreadwriteint("port=");
   if (iVar3 != 0) {
-    _DAT_094dc340 = FUN_0040d110();
+    _DAT_094dc340 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("servermaxbytespersecond=");
+  iVar3 = optionreadwriteint("servermaxbytespersecond=");
   if (iVar3 != 0) {
-    DAT_094dc344 = FUN_0040d110();
+    DAT_094dc344 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("name=");
+  iVar3 = optionreadwriteint("name=");
   if (iVar3 != 0) {
-    FUN_0040d240(&DAT_094dc348,0x1e);
+    getstring(&DAT_094dc348,0x1e);
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("servername=");
+  iVar3 = optionreadwriteint("servername=");
   if (iVar3 != 0) {
-    FUN_0040d240(&DAT_094dc388,0x32);
+    getstring(&DAT_094dc388,0x32);
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("serverpassword=");
+  iVar3 = optionreadwriteint("serverpassword=");
   if (iVar3 != 0) {
-    FUN_0040d240(&DAT_094dc3c8,0x32);
+    getstring(&DAT_094dc3c8,0x32);
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("gametype=");
+  iVar3 = optionreadwriteint("gametype=");
   if (iVar3 != 0) {
-    DAT_094dc458 = FUN_0040d110();
+    DAT_094dc458 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("invertmouse=");
+  iVar3 = optionreadwriteint("invertmouse=");
   if (iVar3 != 0) {
-    _DAT_094dc44c = FUN_0040d110();
+    _DAT_094dc44c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("maxnumofplayers=");
+  iVar3 = optionreadwriteint("maxnumofplayers=");
   if (iVar3 != 0) {
-    DAT_094dc454 = FUN_0040d110();
+    DAT_094dc454 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("roundtime=");
+  iVar3 = optionreadwriteint("roundtime=");
   if (iVar3 != 0) {
-    DAT_094dc45c = FUN_0040d110();
+    DAT_094dc45c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("setcpuaffinity=");
+  iVar3 = optionreadwriteint("setcpuaffinity=");
   if (iVar3 != 0) {
-    _DAT_094dc460 = FUN_0040d110();
+    _DAT_094dc460 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voicechat=");
+  iVar3 = optionreadwriteint("voicechat=");
   if (iVar3 != 0) {
-    DAT_094dc46c = FUN_0040d110();
+    DAT_094dc46c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voiceholdtotalk=");
+  iVar3 = optionreadwriteint("voiceholdtotalk=");
   if (iVar3 != 0) {
-    _DAT_094dc470 = FUN_0040d110();
+    _DAT_094dc470 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voicekey=");
+  iVar3 = optionreadwriteint("voicekey=");
   if (iVar3 != 0) {
-    _DAT_094dc474 = FUN_0040d110();
+    _DAT_094dc474 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voicemb=");
+  iVar3 = optionreadwriteint("voicemb=");
   if (iVar3 != 0) {
-    _DAT_094dc478 = FUN_0040d110();
+    _DAT_094dc478 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voicemin=");
+  iVar3 = optionreadwriteint("voicemin=");
   if (iVar3 != 0) {
-    _DAT_094dc468 = FUN_0040d110();
+    _DAT_094dc468 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("voiceboost=");
+  iVar3 = optionreadwriteint("voiceboost=");
   if (iVar3 != 0) {
-    _DAT_094dc484 = FUN_0040d110();
+    _DAT_094dc484 = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("help=");
+  iVar3 = optionreadwriteint("help=");
   if (iVar3 != 0) {
-    _DAT_094dc47c = FUN_0040d110();
+    _DAT_094dc47c = getfloat();
   }
   g_parser = 0;
-  iVar3 = FUN_00429650("occlusion=");
+  iVar3 = optionreadwriteint("occlusion=");
   if (iVar3 != 0) {
-    _DAT_094dc464 = FUN_0040d110();
+    _DAT_094dc464 = getfloat();
   }
   g_parser = 0;
   _DAT_094dc488 = (float)((float)_DAT_094dc484 / 100.0);
@@ -47388,15 +47471,15 @@ void __cdecl lf_4e7a0(int param_1)
 #undef _DAT_094dc474
 #undef _DAT_094dc478
 #undef _DAT_094dc488
-#undef _chdir
-#undef FUN_00429650
-#undef rand
-#undef FUN_0040d020
 #undef sprintf
-#undef FUN_0040d240
 #undef _time64
+#undef _chdir
 #undef srand
-#undef FUN_0040d110
+#undef loadtextfile
+#undef optionreadwriteint
+#undef rand
+#undef getfloat
+#undef getstring
 
 /* ---------------------------------------------------------------- 0x4ed30 */
 #define DAT_12e81cf0 (*(int *)SR_VA(0x12e81cf0))
@@ -47437,17 +47520,17 @@ void __cdecl lf_4e7a0(int param_1)
 #define _DAT_1992d6e9 (*(int *)SR_VA(0x1992d6e9))
 #define ram0x1992d6ed (*(int *)SR_VA(0x1992d6ed))
 #define _DAT_07a1ea6c (*(int *)SR_VA(0x7a1ea6c))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
-#define FUN_0040d910 ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
-#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define FUN_00416680 ((void (__cdecl *)(float *, uint))SR_VA(0x416680))
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
-#define FUN_0040da60 ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define FUN_0043cfe0 ((void (__cdecl *)(int, int))SR_VA(0x43cfe0))
-#define FUN_00416f10 ((void (__cdecl *)(float, int))SR_VA(0x416f10))
+#define packangle ((void (__cdecl *)(float *, uint))SR_VA(0x416680))
+#define packobjectpacket ((void (__cdecl *)(int, int))SR_VA(0x420680))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define FUN_00420680 ((void (__cdecl *)(int, int))SR_VA(0x420680))
-#define FUN_0040b3f0 ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define sendpacket ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
+#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
+#define calculateplayervoice ((void (__cdecl *)(int, int))SR_VA(0x43cfe0))
+#define packevent ((void (__cdecl *)(float, int))SR_VA(0x416f10))
 #define local_34 (*(uint * *)(lf_frame + 0x1c))
 #define local_30 (*(int *)(lf_frame + 0x20))
 #define local_2c (*(int *)(lf_frame + 0x24))
@@ -47534,22 +47617,22 @@ void __cdecl lf_4ed30(void)
           (*(undefined4 *)SR_VA(0x1992d6ed)) = g_game.ticks;
           DAT_1992d6dc = 0xd;
           local_28 = puVar13;
-          FUN_0040da60((uint *)&g_game.state,4);
+          pbitwrite((uint *)&g_game.state,4);
           if (g_game.state == 1) {
             piVar11 = &g_player[0].unk_003c;
             do {
-              FUN_0040da60((uint *)piVar11,1);
+              pbitwrite((uint *)piVar11,1);
               piVar11 = piVar11 + 0x902;
             } while ((int)piVar11 < ((int)SR_VA(0xf235e3c)));
           }
-          FUN_0040da60((uint *)&g_game.timer,0x10);
-          FUN_0040da60(&DAT_25a1d740,0x1e);
-          FUN_0040da60((uint *)&g_game.lf_raw[0x90],6);
-          FUN_0040da60((uint *)&g_game.lf_raw[0x120c],6);
-          FUN_0040da60((uint *)&g_game.lf_raw[0x2388],6);
-          FUN_0040da60((uint *)&local_28,8);
+          pbitwrite((uint *)&g_game.timer,0x10);
+          pbitwrite(&DAT_25a1d740,0x1e);
+          pbitwrite((uint *)&g_game.lf_raw[0x90],6);
+          pbitwrite((uint *)&g_game.lf_raw[0x120c],6);
+          pbitwrite((uint *)&g_game.lf_raw[0x2388],6);
+          pbitwrite((uint *)&local_28,8);
           piVar11 = &g_player[(int)puVar13].human_id;
-          FUN_0040da60((uint *)piVar11,10);
+          pbitwrite((uint *)piVar11,10);
           local_14 = 0;
           local_10 = 0;
           local_c = 0;
@@ -47567,14 +47650,14 @@ void __cdecl lf_4ed30(void)
           if (LF_BITS_F(g_player[(int)puVar13].unk_00a4) < 0.0) {
             local_34 = (uint *)((uint)local_34 | 0x8000);
           }
-          FUN_0040da60((uint *)&local_34,0x10);
+          pbitwrite((uint *)&local_34,0x10);
           local_24 = (undefined4 *)(lf_fpucw() | 0xc00);
           local_20 = (longlong)ROUND(ABS(LF_BITS_F(g_player[(int)puVar13].unk_00a8)) * 5215.189);
           local_34 = (uint *)((uint)local_20 & 0x7fff);
           if (LF_BITS_F(g_player[(int)puVar13].unk_00a8) < 0.0) {
             local_34 = (uint *)((uint)local_34 | 0x8000);
           }
-          FUN_0040da60((uint *)&local_34,0x10);
+          pbitwrite((uint *)&local_34,0x10);
           iVar8 = DAT_1992d6dc;
           if (DAT_1992d6dc < 0x10000) {
             if (0 < DAT_1992d6e0) {
@@ -47604,18 +47687,18 @@ void __cdecl lf_4ed30(void)
             }
           }
           DAT_1992d6dc = iVar8;
-          FUN_0040da60((uint *)&g_player[(int)puVar13].menu,8);
-          FUN_0040da60((uint *)&g_player[(int)puVar13].menu_building,0x10);
+          pbitwrite((uint *)&g_player[(int)puVar13].menu,8);
+          pbitwrite((uint *)&g_player[(int)puVar13].menu_building,0x10);
           if (g_player[(int)puVar13].menu == 10) {
             iVar8 = g_player[(int)puVar13].menu_building;
-            FUN_0040da60(&DAT_0e6c94c4 + iVar8 * 0x277,8);
+            pbitwrite(&DAT_0e6c94c4 + iVar8 * 0x277,8);
             uVar10 = (&DAT_0e6c94c4)[iVar8 * 0x277];
             if (0 < (int)uVar10) {
               puVar14 = &DAT_0e6c94cc + iVar8 * 0x277;
               do {
-                FUN_0040da60(puVar14 + -1,8);
-                FUN_0040da60(puVar14,0x18);
-                FUN_0040da60(puVar14 + 1,4);
+                pbitwrite(puVar14 + -1,8);
+                pbitwrite(puVar14,0x18);
+                pbitwrite(puVar14 + 1,4);
                 puVar14 = puVar14 + 3;
                 uVar10 = uVar10 - 1;
               } while (uVar10 != 0);
@@ -47629,19 +47712,19 @@ void __cdecl lf_4ed30(void)
             *(int *)(&DAT_1992d6e4 + DAT_1992d6dc) = g_player[(int)puVar13].money;
             DAT_1992d6dc = DAT_1992d6dc + 4;
           }
-          FUN_0040da60((uint *)&g_player[(int)puVar13].num_actions,8);
-          FUN_0040da60((uint *)&g_player[(int)puVar13].unk_15ec,8);
-          FUN_0040da60((uint *)&g_player[(int)puVar13].unk_15f0,6);
-          FUN_0040da60((uint *)&g_player[(int)puVar13].unk_15f4,8);
+          pbitwrite((uint *)&g_player[(int)puVar13].num_actions,8);
+          pbitwrite((uint *)&g_player[(int)puVar13].unk_15ec,8);
+          pbitwrite((uint *)&g_player[(int)puVar13].unk_15f0,6);
+          pbitwrite((uint *)&g_player[(int)puVar13].unk_15f4,8);
           piVar11 = &g_player[(int)puVar13].unk_15f8;
           iVar8 = 7;
           do {
-            FUN_0040da60((uint *)piVar11,4);
+            pbitwrite((uint *)piVar11,4);
             iVar9 = *piVar11;
             piVar5 = piVar11;
             if (0 < iVar9) {
               do {
-                FUN_0040da60((uint *)(piVar5 + 1),0x10);
+                pbitwrite((uint *)(piVar5 + 1),0x10);
                 iVar9 = iVar9 + -1;
                 piVar5 = piVar5 + 1;
               } while (iVar9 != 0);
@@ -47649,8 +47732,8 @@ void __cdecl lf_4ed30(void)
             piVar11 = piVar11 + 9;
             iVar8 = iVar8 + -1;
           } while (iVar8 != 0);
-          FUN_00420680(local_2c,(int)local_28);
-          FUN_0040da60((uint *)&g_numofevents,0x10);
+          packobjectpacket(local_2c,(int)local_28);
+          pbitwrite((uint *)&g_numofevents,0x10);
           iVar8 = DAT_1992d6dc;
           fVar12 = *(float *)((int)&g_connection[0].event_ack + local_30);
           puVar13 = (uint *)((int)&g_connection[0].event_ack + local_30);
@@ -47668,15 +47751,15 @@ void __cdecl lf_4ed30(void)
           }
           puVar14 = local_34;
           local_24 = (undefined4 *)DAT_1992d6e0;
-          FUN_0040da60((uint *)&local_34,6);
-          FUN_0040da60(puVar13,0x10);
+          pbitwrite((uint *)&local_34,6);
+          pbitwrite(puVar13,0x10);
           iVar9 = local_2c;
           local_28 = (uint *)0x0;
           puVar13 = puVar14;
           if (0 < (int)puVar14) {
             do {
               local_28 = puVar13;
-              FUN_00416f10(fVar12,iVar9);
+              packevent(fVar12,iVar9);
               fVar12 = LF_BITS_F((((int)LF_BITS_U(fVar12)) + 1U & 0xffff));
               puVar14 = (uint *)((int)puVar14 - 1);
               puVar13 = local_28;
@@ -47686,7 +47769,7 @@ void __cdecl lf_4ed30(void)
           iVar9 = DAT_1992d6dc;
           DAT_1992d6e0 = (int)local_24;
           DAT_1992d6dc = iVar8;
-          FUN_0040da60((uint *)&local_28,6);
+          pbitwrite((uint *)&local_28,6);
           piVar11 = (int *)((int)&g_connection[0].send_timer + local_30);
           *piVar11 = *piVar11 + iVar9;
           uVar2 = *(u_short *)((int)&g_connection[0].port + local_30);
@@ -47708,16 +47791,16 @@ void __cdecl lf_4ed30(void)
           DAT_1992d6e0 = 0;
           DAT_1992d6e8 = 8;
           DAT_1992d6dc = 5;
-          FUN_0043cfe0(local_2c,*(int *)((int)&g_connection[0].player_id + local_30));
+          calculateplayervoice(local_2c,*(int *)((int)&g_connection[0].player_id + local_30));
           puVar13 = (uint *)(&g_connection[0].lf_raw[0x54] + iVar8);
           local_24 = (undefined4 *)0x8;
           do {
             local_34 = puVar13;
-            FUN_0040da60(puVar13,1);
+            pbitwrite(puVar13,1);
             if (*puVar13 != 0) {
               uVar10 = puVar13[1];
-              FUN_0040da60(puVar13 + 2,8);
-              FUN_0040da60(puVar13 + 3,8);
+              pbitwrite(puVar13 + 2,8);
+              pbitwrite(puVar13 + 3,8);
               iVar8 = uVar10 * 0x9210;
               puVar14 = (uint *)((uint)(*(uint **)(&DAT_12e96d00 + iVar8) + -1) & 0x3f);
               local_28 = puVar14;
@@ -47725,10 +47808,10 @@ void __cdecl lf_4ed30(void)
                 local_20 = CONCAT44((*(uint *)((uchar *)&local_20 + 4)),uVar10 * 0x2484);
                 do {
                   local_28 = puVar14;
-                  FUN_0040da60((uint *)&local_28,6);
+                  pbitwrite((uint *)&local_28,6);
                   iVar9 = ((uint)local_20 + (int)puVar14) * 4;
-                  FUN_0040da60((uint *)(&DAT_12e96d08 + iVar9),8);
-                  FUN_0040da60((uint *)(&DAT_12e96e08 + iVar9),2);
+                  pbitwrite((uint *)(&DAT_12e96d08 + iVar9),8);
+                  pbitwrite((uint *)(&DAT_12e96e08 + iVar9),2);
                   _Size = *(size_t *)(&DAT_12e96d08 + iVar9);
                   if (DAT_1992d6dc < 0x10000) {
                     if (0 < DAT_1992d6e0) {
@@ -47771,21 +47854,21 @@ void __cdecl lf_4ed30(void)
           DAT_1992d6e0 = 0;
           _DAT_1992d6e9 = g_game.round_number;
           DAT_1992d6dc = 9;
-          FUN_0040da60((uint *)&g_game.gametype,4);
-          FUN_0040da60((uint *)&g_game.lf_raw[0xc],4);
-          FUN_00416680((float *)&g_game.lf_raw[0x4c],0x10);
-          FUN_00416680((float *)&g_game.lf_raw[0x50],0x10);
+          pbitwrite((uint *)&g_game.gametype,4);
+          pbitwrite((uint *)&g_game.lf_raw[0xc],4);
+          packangle((float *)&g_game.lf_raw[0x4c],0x10);
+          packangle((float *)&g_game.lf_raw[0x50],0x10);
           iVar9 = g_connection[iVar6].port;
           _DAT_07a1ea6c = DAT_1992d6dc;
           uVar3 = g_connection[iVar6].ip;
           g_connection[iVar6].send_timer = iVar8 + DAT_1992d6dc;
-          FUN_0040d910(uVar3,(u_short)iVar9);
+          sendpacket(uVar3,(u_short)iVar9);
         }
       }
       local_2c = local_2c + 1;
     } while (local_2c < local_18);
   }
-  FUN_0040b3f0(DAT_12e81cf0);
+  stoptimer(DAT_12e81cf0);
   return;
 }
 #undef DAT_12e81cf0
@@ -47826,17 +47909,17 @@ void __cdecl lf_4ed30(void)
 #undef _DAT_1992d6e9
 #undef ram0x1992d6ed
 #undef _DAT_07a1ea6c
-#undef memcpy
-#undef FUN_0040d910
-#undef htonl
-#undef FUN_00416680
-#undef sendto
-#undef FUN_0040da60
-#undef FUN_0043cfe0
-#undef FUN_00416f10
+#undef packangle
+#undef packobjectpacket
 #undef htons
-#undef FUN_00420680
-#undef FUN_0040b3f0
+#undef pbitwrite
+#undef sendto
+#undef sendpacket
+#undef htonl
+#undef stoptimer
+#undef memcpy
+#undef calculateplayervoice
+#undef packevent
 #undef local_34
 #undef local_30
 #undef local_2c
@@ -47857,22 +47940,22 @@ void __cdecl lf_4ed30(void)
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define FUN_0040b8c0 ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define _CIsqrt lf_CIsqrt
-#define FUN_0042f130 ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0040ba00 ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
-#define FUN_00401540 ((float10 (__cdecl *)(float, float))SR_VA(0x401540))
-#define FUN_004257a0 ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define FUN_0040baa0 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define FUN_0040b850 ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_0043d500 ((void (__cdecl *)(int, int))SR_VA(0x43d500))
 #define _CIatan2 lf_CIatan2
-#define FUN_0040e4d0 ((void (__cdecl *)(float, int))SR_VA(0x40e4d0))
-#define FUN_0040b900 ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsqrt lf_CIsqrt
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define ai_assessthreats ((void (__cdecl *)(int, int))SR_VA(0x43d500))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define angulardistance ((float10 (__cdecl *)(float, float))SR_VA(0x401540))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define ai_playercar ((void (__cdecl *)(float, int))SR_VA(0x40e4d0))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
 #define local_5c (*(vec3 * *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -47998,7 +48081,7 @@ LAB_0044f971:
   iVar3 = g_human[iVar4].vehicle_id;
   local_38 = iVar3;
   if (iVar3 == -1) {
-    FUN_0043d500((int)param_1,iVar4);
+    ai_assessthreats((int)param_1,iVar4);
     local_28 = 0x3f800000;
     local_24 = 0;
     local_20 = 0;
@@ -48009,7 +48092,7 @@ LAB_0044f971:
     local_c = 0;
     local_18 = 0x3f800000;
     local_8 = 0x3f800000;
-    FUN_0040bdb0((int)&local_28,(float *)&DAT_00460ce0,g_human[iVar4].axis);
+    rotateorientation((int)&local_28,(float *)&DAT_00460ce0,g_human[iVar4].axis);
     local_4c = g_player[(int)param_1].yaw;
     if (g_human[iVar4].bones[0].rot[1].y < 0.9) {
       g_player[(int)param_1].input_buttons = g_player[(int)param_1].input_buttons | 8;
@@ -48022,9 +48105,9 @@ LAB_0044f971:
       local_50 = (float)(*(float *)(&g_player[(int)param_1].lf_raw[0x1a54] + iVar3 * 0x1c) -
                  g_human[iVar4].pos.z);
       local_54 = 0.0;
-      fVar7 = (float10)FUN_0040b8c0(&local_58);
+      fVar7 = (float10)vectorlength(&local_58);
       local_5c = ((vec3 *)LF_BITS_U((float)fVar7));
-      FUN_0040b900(&local_58,&local_58);
+      normalizevector(&local_58,&local_58);
       dVar8 = _CIatan2((double)local_58,(double)-local_50);
       local_4c = (float)dVar8;
       if (LF_BITS_F(local_5c) < 4.0) {
@@ -48048,10 +48131,10 @@ LAB_0044f971:
       if ((0 < g_player[(int)param_1].num_threats) &&
          (iVar6 = g_player[(int)param_1].unk_216c * 0x18,
          12.0 < *(float *)(&g_player[(int)param_1].lf_raw[0x2180] + iVar6))) {
-        FUN_0040ba00(&local_58,(float *)(&g_player[(int)param_1].lf_raw[0x2174] + iVar6),
-                     (float *)(g_human[iVar4].bones + 6));
+        subtractvectors(&local_58,(float *)(&g_player[(int)param_1].lf_raw[0x2174] + iVar6),
+                        (float *)(g_human[iVar4].bones + 6));
         local_54 = (float)(local_54 - 0.5);
-        fVar7 = (float10)FUN_0040b8c0(&local_58);
+        fVar7 = (float10)vectorlength(&local_58);
         local_5c = ((vec3 *)LF_BITS_U((float)fVar7));
         dVar8 = _CIatan2((double)local_58,(double)-local_50);
         local_4c = (float)dVar8;
@@ -48063,23 +48146,23 @@ LAB_0044f971:
           g_player[(int)param_1].input_axes[3] = 0.0;
         }
         if (((LF_BITS_F(local_5c) < 64.0) &&
-            (fVar7 = (float10)FUN_00401540(local_4c,g_player[(int)param_1].yaw),
+            (fVar7 = (float10)angulardistance(local_4c,g_player[(int)param_1].yaw),
             ABS(fVar7) < (float10)0.125)) &&
-           (fVar7 = (float10)FUN_00401540(local_48,g_player[(int)param_1].input_pitch),
+           (fVar7 = (float10)angulardistance(local_48,g_player[(int)param_1].input_pitch),
            ABS(fVar7) < (float10)0.125)) {
-          FUN_0040ba60(&local_58,(float *)(g_human[iVar4].bones + 8),
-                       &g_human[iVar4].bones[8].rot[1].x,-64.0);
+          scaleaddvectors(&local_58,(float *)(g_human[iVar4].bones + 8),
+                          &g_human[iVar4].bones[8].rot[1].x,-64.0);
           iVar6 = 0;
           piVar5 = &g_human[0].player_id;
           do {
             if ((((((Human *)(piVar5 + -2))->active != 0) && (iVar6 != local_40)) &&
                 ((*piVar5 != -1 &&
                  ((g_player[*piVar5].team == g_player[(int)param_1].team &&
-                  (fVar7 = (float10)FUN_0040baa0((float *)(piVar5 + 0xa0),
-                                                 (float *)(g_human[iVar4].bones + 2)),
+                  (fVar7 = (float10)vectordistance((float *)(piVar5 + 0xa0),
+                                                   (float *)(g_human[iVar4].bones + 2)),
                   fVar7 < (float10)128.0)))))) &&
-               (iVar3 = FUN_0042f130(iVar6,(float *)(g_human[iVar4].bones + 8),&local_58,0.25),
-               iVar3 != 0)) goto LAB_0044fd13;
+               (iVar3 = lineintersecthuman(iVar6,(float *)(g_human[iVar4].bones + 8),&local_58,0.25)
+               , iVar3 != 0)) goto LAB_0044fd13;
             piVar5 = piVar5 + 0xad9;
             iVar6 = iVar6 + 1;
           } while ((int)piVar5 < ((int)SR_VA(0x1f38788)));
@@ -48091,10 +48174,10 @@ LAB_0044f971:
       }
     }
 LAB_0044fd13:
-    fVar7 = (float10)FUN_00401540(local_4c,g_player[(int)param_1].yaw);
+    fVar7 = (float10)angulardistance(local_4c,g_player[(int)param_1].yaw);
     g_player[(int)param_1].yaw =
          (float)(fVar7 * (float10)0.125 * (float10)0.5 + (float10)g_player[(int)param_1].yaw);
-    fVar7 = (float10)FUN_00401540(local_48,g_player[(int)param_1].input_pitch);
+    fVar7 = (float10)angulardistance(local_48,g_player[(int)param_1].input_pitch);
     fVar7 = fVar7 * (float10)0.125 * (float10)0.5;
   }
   else {
@@ -48111,10 +48194,10 @@ LAB_0044fd13:
       g_player[(int)param_1].input_buttons = g_player[(int)param_1].input_buttons | 0x800;
     }
     if (g_human[iVar4].vehicle_seat == 0) {
-      FUN_0040e4d0(LF_BITS_F(local_5c),iVar3);
+      ai_playercar(LF_BITS_F(local_5c),iVar3);
       return;
     }
-    FUN_0043d500((int)local_5c,local_40);
+    ai_assessthreats((int)local_5c,local_40);
     iVar1 = g_human[iVar4].vehicle_seat;
     if (iVar1 == 1) {
       local_4c = 0.7853982;
@@ -48129,17 +48212,17 @@ LAB_0044fd13:
     if ((0 < g_player[(int)param_1].num_threats) &&
        (iVar1 = g_player[(int)param_1].unk_216c * 0x18,
        8.0 < *(float *)(&g_player[(int)param_1].lf_raw[0x2180] + iVar1))) {
-      FUN_0040ba00(&local_58,(float *)(&g_player[(int)param_1].lf_raw[0x2174] + iVar1),
-                   (float *)(g_human[iVar4].bones + 6));
+      subtractvectors(&local_58,(float *)(&g_player[(int)param_1].lf_raw[0x2174] + iVar1),
+                      (float *)(g_human[iVar4].bones + 6));
       local_54 = (float)(local_54 - 0.25);
-      fVar7 = (float10)FUN_0040b8c0(&local_58);
+      fVar7 = (float10)vectorlength(&local_58);
       local_5c = ((vec3 *)LF_BITS_U((float)fVar7));
-      FUN_0040b900(local_34,&local_58);
-      fVar7 = (float10)FUN_0040b850(local_34,&g_object[iVar3].rot[0].x);
+      normalizevector(local_34,&local_58);
+      fVar7 = (float10)dotproduct(local_34,&g_object[iVar3].rot[0].x);
       local_58 = (float)fVar7;
-      fVar7 = (float10)FUN_0040b850(local_34,&g_object[iVar3].rot[1].x);
+      fVar7 = (float10)dotproduct(local_34,&g_object[iVar3].rot[1].x);
       local_54 = (float)fVar7;
-      fVar7 = (float10)FUN_0040b850(local_34,&g_object[iVar3].rot[2].x);
+      fVar7 = (float10)dotproduct(local_34,&g_object[iVar3].rot[2].x);
       local_50 = (float)fVar7;
       dVar8 = _CIatan2((double)local_58,(double)-local_50);
       local_4c = (float)dVar8;
@@ -48149,25 +48232,25 @@ LAB_0044fd13:
       local_48 = (float)dVar8;
       iVar3 = g_item[g_human[iVar4].inventory[0].item_id].unk_0028;
       if ((LF_BITS_F(local_5c) < 64.0) &&
-         ((fVar7 = (float10)FUN_00401540(local_4c,g_player[(int)param_1].yaw),
+         ((fVar7 = (float10)angulardistance(local_4c,g_player[(int)param_1].yaw),
           ABS(fVar7) < (float10)0.125 &&
-          (fVar7 = (float10)FUN_00401540(local_48,g_player[(int)param_1].input_pitch),
+          (fVar7 = (float10)angulardistance(local_48,g_player[(int)param_1].input_pitch),
           ABS(fVar7) < (float10)0.125)))) {
         local_5c = &g_item[iVar3].pos;
-        FUN_0040ba60(&local_58,&local_5c->x,&g_item[iVar3].rot[2].x,-64.0);
+        scaleaddvectors(&local_58,&local_5c->x,&g_item[iVar3].rot[2].x,-64.0);
         piVar5 = &g_human[0].player_id;
         do {
           if (((((((Human *)(piVar5 + -2))->active != 0) && (iVar6 != local_40)) && (*piVar5 != -1))
               && ((g_player[*piVar5].team == g_player[(int)param_1].team &&
-                  (fVar7 = (float10)FUN_0040baa0((float *)(piVar5 + 0xa0),
-                                                 (float *)(g_human[iVar4].bones + 2)),
+                  (fVar7 = (float10)vectordistance((float *)(piVar5 + 0xa0),
+                                                   (float *)(g_human[iVar4].bones + 2)),
                   fVar7 < (float10)64.0)))) &&
-             (iVar3 = FUN_0042f130(iVar6,&local_5c->x,&local_58,0.25), iVar3 != 0))
+             (iVar3 = lineintersecthuman(iVar6,&local_5c->x,&local_58,0.25), iVar3 != 0))
           goto LAB_00450088;
           piVar5 = piVar5 + 0xad9;
           iVar6 = iVar6 + 1;
         } while ((int)piVar5 < ((int)SR_VA(0x1f38788)));
-        iVar4 = FUN_004257a0(local_38,&local_5c->x,&local_58,0);
+        iVar4 = lineintersectobject(local_38,&local_5c->x,&local_58,0);
         if ((iVar4 == 0) || (*(int *)(DAT_107484d0 * 0x40 + ((int)SR_VA(0x5992df0)) + local_3c) == 1)) {
           g_player[(int)param_1].input_buttons = g_player[(int)param_1].input_buttons | 1;
         }
@@ -48192,22 +48275,22 @@ LAB_00450088:
 #undef g_itemtype
 #undef g_item
 #undef g_player
-#undef FUN_0040ba60
-#undef FUN_0040b8c0
-#undef _CIsqrt
-#undef FUN_0042f130
-#undef FUN_0040bdb0
-#undef rand
-#undef FUN_0040ba00
-#undef FUN_00401540
-#undef FUN_004257a0
-#undef FUN_0040baa0
-#undef FUN_0040b850
 #undef __security_check_cookie
-#undef FUN_0043d500
 #undef _CIatan2
-#undef FUN_0040e4d0
-#undef FUN_0040b900
+#undef _CIsqrt
+#undef vectorlength
+#undef subtractvectors
+#undef ai_assessthreats
+#undef dotproduct
+#undef vectordistance
+#undef angulardistance
+#undef normalizevector
+#undef ai_playercar
+#undef scaleaddvectors
+#undef rotateorientation
+#undef lineintersectobject
+#undef rand
+#undef lineintersecthuman
 #undef local_5c
 #undef local_58
 #undef local_54
@@ -48235,9 +48318,9 @@ LAB_00450088:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_0044e060 ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -48299,24 +48382,24 @@ void __cdecl lf_500e0(int param_1)
         do {
           iVar5 = *piVar8;
           if (iVar5 < 0xd) {
-            uVar3 = FUN_0041b070(iVar5,&local_30,(undefined4 *)0x0,&local_24);
+            uVar3 = createitem(iVar5,&local_30,(undefined4 *)0x0,&local_24);
             if (g_itemtype[*piVar8].unk_0008 == 0) {
               g_item[uVar3].cooldown = piVar8[2];
             }
             else if (0 < piVar8[1]) {
-              uVar4 = FUN_0041b070(*piVar8 + 1,&local_30,(undefined4 *)0x0,&local_24);
+              uVar4 = createitem(*piVar8 + 1,&local_30,(undefined4 *)0x0,&local_24);
               g_item[uVar4].cooldown = piVar8[2];
-              FUN_0041b870(uVar3,uVar4,-1,0);
-              FUN_0041b870(uVar3,0xffffffff,iVar2,iVar7);
+              linkitem(uVar3,uVar4,-1,0);
+              linkitem(uVar3,0xffffffff,iVar2,iVar7);
               goto LAB_00450260;
             }
-            FUN_0041b870(uVar3,0xffffffff,iVar2,iVar7);
+            linkitem(uVar3,0xffffffff,iVar2,iVar7);
           }
           else if (((iVar5 == 0x18) && (uVar1 < 3)) &&
-                  (iVar5 = FUN_0044e060(piVar8[1],uVar1,piVar8[2]), iVar5 != -1)) {
-            uVar3 = FUN_0041b070(0x18,&local_30,(undefined4 *)0x0,&local_24);
+                  (iVar5 = logic_createcar(piVar8[1],uVar1,piVar8[2]), iVar5 != -1)) {
+            uVar3 = createitem(0x18,&local_30,(undefined4 *)0x0,&local_24);
             g_item[uVar3].vehicle_id = iVar5;
-            FUN_0041b870(uVar3,0xffffffff,iVar2,iVar7);
+            linkitem(uVar3,0xffffffff,iVar2,iVar7);
           }
 LAB_00450260:
           param_1 = param_1 + 1;
@@ -48333,9 +48416,9 @@ LAB_00450260:
 #undef g_itemtype
 #undef g_item
 #undef g_player
-#undef FUN_0041b070
-#undef FUN_0044e060
-#undef FUN_0041b870
+#undef linkitem
+#undef createitem
+#undef logic_createcar
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -48618,18 +48701,18 @@ LAB_00450260:
 #define _DAT_1715008c (*(undefined4 *)SR_VA(0x1715008c))
 #define _DAT_17150714 (*(undefined4 *)SR_VA(0x17150714))
 #define _DAT_1715060c (*(undefined4 *)SR_VA(0x1715060c))
-#define FUN_00406b30 ((void (__cdecl *)(void))SR_VA(0x406b30))
-#define FUN_0040d3a0 ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
-#define FUN_00404a10 ((void (__cdecl *)(void))SR_VA(0x404a10))
-#define FUN_004155e0 ((void (__cdecl *)(void))SR_VA(0x4155e0))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
-#define FUN_0043e070 ((void (__cdecl *)(void))SR_VA(0x43e070))
-#define FUN_00419610 ((void (__cdecl *)(void))SR_VA(0x419610))
-#define FUN_0043a610 ((void (__cdecl *)(void))SR_VA(0x43a610))
-#define FUN_0043b0c0 ((void (__cdecl *)(void))SR_VA(0x43b0c0))
-#define FUN_00434c10 ((void (__cdecl *)(void))SR_VA(0x434c10))
-#define FUN_0040d680 ((void (__cdecl *)(int))SR_VA(0x40d680))
-#define FUN_00413450 ((void (__cdecl *)(void))SR_VA(0x413450))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define setupbullettypes ((void (__cdecl *)(void))SR_VA(0x404a10))
+#define setupobjectypes_train ((void (__cdecl *)(void))SR_VA(0x43b0c0))
+#define area_createsblocks ((void (__cdecl *)(void))SR_VA(0x43e070))
+#define setupitemtypes ((void (__cdecl *)(void))SR_VA(0x406b30))
+#define setupobjecttypes_cars ((void (__cdecl *)(void))SR_VA(0x434c10))
+#define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
+#define setupbuildingtypes ((void (__cdecl *)(void))SR_VA(0x413450))
+#define setupobjecttypes_helicopters ((void (__cdecl *)(void))SR_VA(0x43a610))
+#define setupcityobjecttypes ((void (__cdecl *)(void))SR_VA(0x4155e0))
+#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define setupbody ((void (__cdecl *)(void))SR_VA(0x419610))
 void __cdecl lf_502a0(void)
 
 {
@@ -48839,8 +48922,8 @@ void __cdecl lf_502a0(void)
   (&DAT_1715003c)[_DAT_0f66fff0 * 0x58] = 0;
   _chdir("data");
   iVar9 = _chdir("texture");
-  FUN_0040d3a0("*.png",0,0);
-  FUN_0040d680(0);
+  listfiles("*.png",0,0);
+  removeflieextentions(0);
   if (iVar9 == 0) {
     _chdir("..");
     _chdir("..");
@@ -48912,15 +48995,15 @@ void __cdecl lf_502a0(void)
   _DAT_0956d7b0 = 0x2d;
   _DAT_0956d7b4 = 0x2e;
   _g_soundlist = 0x2f;
-  FUN_00413450();
-  FUN_0043e070();
-  FUN_00419610();
-  FUN_00404a10();
-  FUN_00406b30();
-  FUN_00434c10();
-  FUN_0043a610();
-  FUN_0043b0c0();
-  FUN_004155e0();
+  setupbuildingtypes();
+  area_createsblocks();
+  setupbody();
+  setupbullettypes();
+  setupitemtypes();
+  setupobjecttypes_cars();
+  setupobjecttypes_helicopters();
+  setupobjectypes_train();
+  setupcityobjecttypes();
   puVar4 = &DAT_17150028;
   do {
     puVar4[-1] = 0x3e800000;
@@ -49214,18 +49297,18 @@ void __cdecl lf_502a0(void)
 #undef _DAT_1715008c
 #undef _DAT_17150714
 #undef _DAT_1715060c
-#undef FUN_00406b30
-#undef FUN_0040d3a0
-#undef FUN_00404a10
-#undef FUN_004155e0
 #undef _chdir
-#undef FUN_0043e070
-#undef FUN_00419610
-#undef FUN_0043a610
-#undef FUN_0043b0c0
-#undef FUN_00434c10
-#undef FUN_0040d680
-#undef FUN_00413450
+#undef setupbullettypes
+#undef setupobjectypes_train
+#undef area_createsblocks
+#undef setupitemtypes
+#undef setupobjecttypes_cars
+#undef removeflieextentions
+#undef setupbuildingtypes
+#undef setupobjecttypes_helicopters
+#undef setupcityobjecttypes
+#undef listfiles
+#undef setupbody
 
 /* ---------------------------------------------------------------- 0x50ae0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -49236,7 +49319,7 @@ void __cdecl lf_502a0(void)
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0044c720 ((void (__cdecl *)(int))SR_VA(0x44c720))
+#define human_buildmuscles ((void (__cdecl *)(int))SR_VA(0x44c720))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 
@@ -49345,7 +49428,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
       pfVar10 = pfVar10 + 0x38;
       pfVar11 = pfVar12;
     } while ((int)pfVar12 < ((int)SR_VA(0xf67064c)));
-    FUN_0044c720(iVar13);
+    human_buildmuscles(iVar13);
     g_human[iVar13].unk_2870 = ((int)LF_BITS_U(*param_1));
     *(float *)&g_human[iVar13].lf_raw[0x2874] = param_1[1];
     *(float *)&g_human[iVar13].lf_raw[0x2878] = param_1[2];
@@ -49417,7 +49500,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #undef g_event
 #undef g_player
 #undef rand
-#undef FUN_0044c720
+#undef human_buildmuscles
 #undef memset
 
 /* ---------------------------------------------------------------- 0x51060 */
@@ -49491,35 +49574,35 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define FUN_0044bd60 ((void (__cdecl *)(int))SR_VA(0x44bd60))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define FUN_004257a0 ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define sphereintersectlevel ((undefined4 (__cdecl *)(float *, float))SR_VA(0x44d750))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define playerdeathtax ((void (__cdecl *)(uint))SR_VA(0x416960))
+#define deletehuman ((void (__cdecl *)(uint *))SR_VA(0x418720))
 #define _CIatan2 lf_CIatan2
-#define FUN_0044a440 ((void (__cdecl *)(int))SR_VA(0x44a440))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00419060 ((void (__cdecl *)(int))SR_VA(0x419060))
-#define FUN_00416960 ((void (__cdecl *)(uint))SR_VA(0x416960))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_00416a20 ((void (__cdecl *)(float, int))SR_VA(0x416a20))
-#define FUN_0040b3f0 ((void (__cdecl *)(int))SR_VA(0x40b3f0))
-#define FUN_00416c40 ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
-#define FUN_00419380 ((void (__cdecl *)(float))SR_VA(0x419380))
-#define FUN_00418720 ((void (__cdecl *)(uint *))SR_VA(0x418720))
-#define _CIcos lf_CIcos
-#define FUN_0044d750 ((undefined4 (__cdecl *)(float *, float))SR_VA(0x44d750))
-#define FUN_004223d0 ((void (__cdecl *)(float *, int, float *))SR_VA(0x4223d0))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define __security_check_cookie(x) ((void)0)
+#define pointinsidebuilding ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define getobjectrotation2 ((void (__cdecl *)(float *, int, float *))SR_VA(0x4223d0))
+#define human_collisionhuman ((void (__cdecl *)(float))SR_VA(0x419380))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00408a60 ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
 #define _CIsin lf_CIsin
-#define FUN_00432bb0 ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x432bb0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00405be0 ((void (__cdecl *)(float, int))SR_VA(0x405be0))
-#define FUN_00431630 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
-#define FUN_00416db0 ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define __security_check_cookie(x) ((void)0)
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define human_itemsimulation ((void (__cdecl *)(int))SR_VA(0x44bd60))
+#define human_calculatelegangles ((void (__cdecl *)(int))SR_VA(0x419060))
+#define sphereintersectobject ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x432bb0))
+#define _CIcos lf_CIcos
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define human_calculatearmangles ((void (__cdecl *)(int))SR_VA(0x44a440))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
 #define local_cc (*(float * *)(lf_frame + 0x14))
 #define local_c8 (*(float *)(lf_frame + 0x18))
 #define local_c4 (*(Bone * *)(lf_frame + 0x1c))
@@ -49770,11 +49853,11 @@ void __cdecl lf_51060(void)
           local_48 = (float)(LF_BITS_F(local_cc) * *(float *)&g_human[(int)puVar9].bones[iVar19].lf_raw[0x60]);
           local_44 = (float)(LF_BITS_F(local_cc) * *(float *)&g_human[(int)puVar9].bones[iVar19].lf_raw[0x64]);
           local_40 = (float)(LF_BITS_F(local_cc) * *(float *)&g_human[(int)puVar9].bones[iVar19].lf_raw[0x68]);
-          FUN_0040bdb0(iVar19 * 0xe0 + iVar18 + ((int)SR_VA(0x19cc078)),&local_48,local_c8);
+          rotateorientation(iVar19 * 0xe0 + iVar18 + ((int)SR_VA(0x19cc078)),&local_48,local_c8);
         }
         if (iVar19 == 0) {
-          iVar12 = FUN_00431630(&g_human[(int)puVar9].bones[0].pos_prev.x,
-                                (float *)g_human[(int)puVar9].bones,1);
+          iVar12 = lineintersectlevel(&g_human[(int)puVar9].bones[0].pos_prev.x,
+                                      (float *)g_human[(int)puVar9].bones,1);
           if (iVar12 != 0) {
             g_human[(int)puVar9].bones[0].pos.x = (float)(_g_intersect + _DAT_107484ac * 0.0625);
             g_human[(int)puVar9].bones[0].pos.y = (float)(_DAT_107484b0 * 0.0625 + _DAT_107484a4);
@@ -49807,7 +49890,7 @@ void __cdecl lf_51060(void)
             local_3c = (float)(g_human[(int)puVar9].bones[0].pos.x + fVar3 * 0.125);
             local_38 = (float)(g_human[(int)puVar9].bones[0].pos.y + fVar2 * 0.125);
             local_34 = (float)(fVar22 * 0.125 + g_human[(int)puVar9].bones[0].pos.z);
-            iVar12 = FUN_004257a0(iVar19,&local_3c,&local_48,0);
+            iVar12 = lineintersectobject(iVar19,&local_3c,&local_48,0);
             fVar3 = _DAT_00460ce0;
             fVar2 = _DAT_00460ce4;
             fVar22 = _DAT_00460ce8;
@@ -49835,7 +49918,7 @@ void __cdecl lf_51060(void)
         local_3c = g_human[(int)puVar9].bones[0].pos.x;
         local_38 = g_human[(int)puVar9].bones[0].pos.y;
         local_34 = g_human[(int)puVar9].bones[0].pos.z;
-        iVar19 = FUN_00431630(&local_3c,&local_48,1);
+        iVar19 = lineintersectlevel(&local_3c,&local_48,1);
         if ((iVar19 == 0) || (_DAT_107484b0 <= 0.7)) {
           local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar9].unk_008c * 1.125))));
           local_48 = (float)(((float)(g_human[(int)puVar9].bones[0].pos.x +
@@ -49851,7 +49934,7 @@ void __cdecl lf_51060(void)
                      _DAT_00460ce4 * 0.375);
           local_34 = (float)(((float)(g_human[(int)puVar9].bones[0].pos.z - _DAT_00460cdc * 0.1875)) -
                      _DAT_00460ce8 * 0.375);
-          iVar19 = FUN_00431630(&local_3c,&local_48,1);
+          iVar19 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar19 != 0) && (0.7 < _DAT_107484b0)) {
             local_c0 = 1.401298464e-45f;
             local_b0 = (float)(_g_intersect + 0.0);
@@ -49876,7 +49959,7 @@ void __cdecl lf_51060(void)
                      _DAT_00460ce4 * 0.375);
           local_34 = (float)(((float)(_DAT_00460cdc * 0.1875 + g_human[(int)puVar9].bones[0].pos.z)) -
                      _DAT_00460ce8 * 0.375);
-          iVar19 = FUN_00431630(&local_3c,&local_48,1);
+          iVar19 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar19 != 0) && (0.7 < _DAT_107484b0)) {
             fVar22 = LF_BITS_F((((int)LF_BITS_U(fVar22)) + 1));
             local_b0 = (float)(_g_intersect + local_b0);
@@ -49901,7 +49984,7 @@ void __cdecl lf_51060(void)
                      _DAT_00460ce4 * 0.375);
           local_34 = (float)(((float)(g_human[(int)puVar9].bones[0].pos.z - _DAT_00460cf4 * 0.1875)) -
                      _DAT_00460ce8 * 0.375);
-          iVar19 = FUN_00431630(&local_3c,&local_48,1);
+          iVar19 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar19 != 0) && (0.7 < _DAT_107484b0)) {
             fVar22 = LF_BITS_F((((int)LF_BITS_U(fVar22)) + 1));
             local_b0 = (float)(_g_intersect + local_b0);
@@ -49926,7 +50009,7 @@ void __cdecl lf_51060(void)
                      _DAT_00460ce4 * 0.375);
           local_34 = (float)(((float)(_DAT_00460cf4 * 0.1875 + g_human[(int)puVar9].bones[0].pos.z)) -
                      _DAT_00460ce8 * 0.375);
-          iVar19 = FUN_00431630(&local_3c,&local_48,1);
+          iVar19 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar19 != 0) && (0.7 < _DAT_107484b0)) {
             fVar22 = LF_BITS_F((((int)LF_BITS_U(fVar22)) + 1));
             local_b0 = (float)(_g_intersect + local_b0);
@@ -49944,7 +50027,7 @@ void __cdecl lf_51060(void)
             local_3c = g_human[(int)puVar9].bones[0].pos.x;
             local_38 = g_human[(int)puVar9].bones[0].pos.y;
             local_34 = g_human[(int)puVar9].bones[0].pos.z;
-            iVar19 = FUN_00431630(&local_3c,&local_48,1);
+            iVar19 = lineintersectlevel(&local_3c,&local_48,1);
             if ((iVar19 != 0) && (0.7 < _DAT_107484b0)) {
               local_c0 = 1.401298464e-45f;
               local_b0 = (float)(_g_intersect + local_b0);
@@ -50040,7 +50123,7 @@ LAB_00452144:
               local_c8 = 0.25;
             }
             pfVar16 = (float *)(iVar19 * 0xe0 + ((int)SR_VA(0x19cc048)) + iVar18);
-            iVar13 = FUN_0044d750(pfVar16,local_c8);
+            iVar13 = sphereintersectlevel(pfVar16,local_c8);
             iVar12 = g_numofbonds;
             if (iVar13 != 0) {
               fVar22 = (float)(local_c8 - _DAT_107484bc);
@@ -50084,7 +50167,7 @@ LAB_0045230e:
           local_14 = 0.0;
           local_20 = 0x3f800000;
           local_10 = 1.0;
-          FUN_0040bdb0((int)&local_30,(float *)&DAT_00460ce0,g_human[(int)puVar9].axis);
+          rotateorientation((int)&local_30,(float *)&DAT_00460ce0,g_human[(int)puVar9].axis);
           fVar2 = -LF_BITS_F(g_human[(int)puVar9].unk_00a8);
           fVar22 = LF_BITS_F(g_human[(int)puVar9].unk_00a0);
           local_48 = (float)(fVar22 * local_30 + ((float)(fVar2 * local_18 + 0.0)));
@@ -50194,7 +50277,8 @@ LAB_0045230e:
                 if ((LF_BITS_U(local_c0) == 0x5U) || (LF_BITS_U(local_c0) == 0x8U)) {
                   local_c8 = 0.0625;
                 }
-                iVar14 = FUN_00432bb0((*(uint *)((uchar *)&local_98 + 0)),(float *)&local_c4[-1].lf_raw[0xc8],local_c8);
+                iVar14 = sphereintersectobject
+                                   ((*(uint *)((uchar *)&local_98 + 0)),(float *)&local_c4[-1].lf_raw[0xc8],local_c8);
                 iVar13 = g_numofbonds;
                 fVar2 = _DAT_107484e4;
                 iVar12 = DAT_107484dc;
@@ -50234,21 +50318,22 @@ LAB_0045230e:
                     local_48 = (float)(LF_BITS_F((&DAT_0b7e722c)[iVar8 * 0x3c]) * fVar2);
                     local_44 = (float)(LF_BITS_F((&DAT_0b7e7230)[iVar8 * 0x3c]) * fVar2);
                     local_40 = (float)(LF_BITS_F((&DAT_0b7e7234)[iVar8 * 0x3c]) * fVar2);
-                    FUN_0040ba60(&local_48,&local_48,(float *)(&DAT_0b7e722c + iVar19 * 0x3c),fVar3)
-                    ;
-                    FUN_0040ba60(&local_48,&local_48,(float *)(&DAT_0b7e722c + iVar12 * 0x3c),
-                                 _DAT_107484ec);
-                    FUN_0040ba60(&local_3c,&local_48,(float *)local_c4,-1.0);
+                    scaleaddvectors(&local_48,&local_48,(float *)(&DAT_0b7e722c + iVar19 * 0x3c),
+                                    fVar3);
+                    scaleaddvectors(&local_48,&local_48,(float *)(&DAT_0b7e722c + iVar12 * 0x3c),
+                                    _DAT_107484ec);
+                    scaleaddvectors(&local_3c,&local_48,(float *)local_c4,-1.0);
                     local_c0 = (float)(_DAT_107484b4 * local_34 +
                                (local_38 * _DAT_107484b0 + _DAT_107484ac * local_3c));
                     if ((0.16666667 < local_c0) &&
                        (g_human[(int)puVar9].health = g_human[(int)puVar9].health + -0x78,
                        g_human[(int)puVar9].health + 0x77U < 0x78)) {
-                      FUN_00416db0(DAT_0956d78c,&g_human[(int)puVar9].pos.x,lf_u2f(0x3f800000),lf_u2f(0x3f000000));
+                      createevent_sound(DAT_0956d78c,&g_human[(int)puVar9].pos.x,lf_u2f(0x3f800000),
+                                        lf_u2f(0x3f000000));
                       if ((((g_human[(int)puVar9].player_id != -1) &&
                            (g_player[g_human[(int)puVar9].player_id].team == 7)) &&
                           (0 < g_human[(int)puVar9].unk_0034)) && (LF_BITS_U(local_cc[(0x1664985 + LF_RELOC / 4)]) != 0xffffffffU)) {
-                        FUN_00416a20(local_cc[(0x1664985 + LF_RELOC / 4)],100);
+                        playerteamkilltax(local_cc[(0x1664985 + LF_RELOC / 4)],100);
                       }
                     }
                   }
@@ -50454,7 +50539,7 @@ LAB_00452eb1:
           }
           g_human[(int)puVar9].bones[0].rot[0].z = fVar2;
         }
-        FUN_004223d0(&local_48,local_9c,&g_object[iVar12].pos.x);
+        getobjectrotation2(&local_48,local_9c,&g_object[iVar12].pos.x);
         fVar2 = (float)(((float)(local_44 * g_human[(int)puVar9].bones[0].rot[0].y +
                  local_48 * g_human[(int)puVar9].bones[0].rot[0].x +
                 local_40 * g_human[(int)puVar9].bones[0].rot[0].z)) *
@@ -50529,22 +50614,22 @@ LAB_00452eb1:
             if ((g_human[(int)puVar9].unk_0030 == 0) &&
                ((LF_BITS_U(local_c0) == 0x9U || (LF_BITS_U(local_c0) == 0xcU)))) {
               iVar12 = iVar13 + iVar18 + ((int)SR_VA(0x19cc078));
-              FUN_0040bdb0(iVar12,(float *)iVar12,-1.5707964);
+              rotateorientation(iVar12,(float *)iVar12,-1.5707964);
             }
             if (LF_BITS_U(local_c0) == 0x1U) {
               local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar9].unk_00ac * 0.5))));
-              FUN_0040bdb0(iVar18 + ((int)SR_VA(0x19cc158)),&g_human[(int)puVar9].bones[1].rot[1].x,
-                           LF_BITS_F(local_c4));
+              rotateorientation(iVar18 + ((int)SR_VA(0x19cc158)),&g_human[(int)puVar9].bones[1].rot[1].x,
+                                LF_BITS_F(local_c4));
               fVar22 = g_human[(int)puVar9].unk_00b0;
               iVar12 = iVar18 + ((int)SR_VA(0x19cc158));
 LAB_00453705:
               local_c4 = ((Bone *)LF_BITS_U(((float)(fVar22 * 0.5))));
-              FUN_0040bdb0(iVar12,(float *)iVar12,LF_BITS_F(local_c4));
+              rotateorientation(iVar12,(float *)iVar12,LF_BITS_F(local_c4));
             }
             else if (LF_BITS_U(local_c0) == 0x2U) {
               local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar9].unk_00ac * 0.5))));
-              FUN_0040bdb0(iVar18 + ((int)SR_VA(0x19cc238)),&g_human[(int)puVar9].bones[2].rot[1].x,
-                           LF_BITS_F(local_c4));
+              rotateorientation(iVar18 + ((int)SR_VA(0x19cc238)),&g_human[(int)puVar9].bones[2].rot[1].x,
+                                LF_BITS_F(local_c4));
               fVar22 = g_human[(int)puVar9].unk_00b0;
               iVar12 = iVar18 + ((int)SR_VA(0x19cc238));
               goto LAB_00453705;
@@ -50617,8 +50702,8 @@ LAB_00453705:
             g_human[(int)puVar9].unk_0030 = 0;
             do {
               if (((iVar19 != 0xb) && (iVar19 != 0xe)) &&
-                 (iVar12 = FUN_00431630((float *)((int)&g_object[0].rot[-2].x + ((int)LF_BITS_U(fVar22))),
-                                        (float *)local_c4,0), iVar12 != 0)) {
+                 (iVar12 = lineintersectlevel((float *)((int)&g_object[0].rot[-2].x + ((int)LF_BITS_U(fVar22))),
+                                              (float *)local_c4,0), iVar12 != 0)) {
                 (local_c4->pos).x = (float)(_g_intersect + _DAT_107484ac * 0.0625);
                 (local_c4->pos).y = (float)(_DAT_107484b0 * 0.0625 + _DAT_107484a4);
                 (local_c4->pos).z = (float)(_DAT_107484b4 * 0.0625 + _DAT_107484a8);
@@ -50641,8 +50726,8 @@ LAB_00453705:
         }
       }
       puVar10 = local_a4;
-      FUN_00419060((int)local_a4);
-      FUN_0044a440((int)puVar10);
+      human_calculatelegangles((int)local_a4);
+      human_calculatearmangles((int)puVar10);
       g_human[(int)puVar9].pos.x = g_human[(int)puVar9].bones[0].pos.x;
       g_human[(int)puVar9].pos.y = g_human[(int)puVar9].bones[0].pos.y;
       g_human[(int)puVar9].pos.z = g_human[(int)puVar9].bones[0].pos.z;
@@ -50718,13 +50803,14 @@ LAB_00453705:
           {
             if (g_item[uVar15].parent_item == 0xffffffff) {
               if ((uint *)g_item[uVar15].parent_human != (uint *)0xffffffff) {
-                FUN_00407e50(uVar15,(uint *)g_item[uVar15].parent_human,g_item[uVar15].parent_slot);
-                FUN_00406380(uVar15);
+                item_removehumanlink
+                          (uVar15,(uint *)g_item[uVar15].parent_human,g_item[uVar15].parent_slot);
+                createevent_updateitem(uVar15);
               }
             }
             else {
-              FUN_00407f80(uVar15,g_item[uVar15].parent_item);
-              FUN_00406380(uVar15);
+              item_removeitemlink(uVar15,g_item[uVar15].parent_item);
+              createevent_updateitem(uVar15);
             }
           }
           piVar20 = piVar20 + 9;
@@ -50732,7 +50818,7 @@ LAB_00453705:
         } while (local_cc != (float *)0x0);
       }
       else {
-        FUN_0044bd60((int)local_a4);
+        human_itemsimulation((int)local_a4);
       }
       iVar19 = g_human[(int)puVar9].health;
       if ((-5 < iVar19) &&
@@ -50749,11 +50835,11 @@ LAB_00453705:
           local_48 = (float)(_DAT_00460ce0 * 0.5 + g_human[(int)puVar9].pos.x);
           local_44 = (float)(_DAT_00460ce4 * 0.5 + g_human[(int)puVar9].pos.y);
           local_40 = (float)(_DAT_00460ce8 * 0.5 + g_human[(int)puVar9].pos.z);
-          FUN_00416c40(0,3,&local_48,&local_48);
+          createevent_bullethit(0,3,&local_48,&local_48);
         }
       }
       if (g_human[(int)puVar9].vehicle_id == -1) {
-        FUN_00419380(LF_BITS_F(local_a4));
+        human_collisionhuman(LF_BITS_F(local_a4));
       }
       iVar19 = g_game.gametype;
       if (g_human[(int)puVar9].health < -4) {
@@ -50775,9 +50861,9 @@ LAB_00453705:
           }
           else {
             if ((g_game.gametype == 4) && (((uint)LF_BITS_U(fVar22)) < 0x100)) {
-              FUN_00405be0(fVar22,g_player[((int)LF_BITS_U(fVar22))].stocks);
+              playersellstock(fVar22,g_player[((int)LF_BITS_U(fVar22))].stocks);
             }
-            FUN_00416960(((uint)LF_BITS_U(fVar22)));
+            playerdeathtax(((uint)LF_BITS_U(fVar22)));
             if (iVar19 == 4) {
               iVar19 = g_human[(int)puVar9].player_id;
               if ((*(uint *)((uchar *)&g_game + 156)) == iVar19) {
@@ -50798,7 +50884,7 @@ LAB_00453705:
               g_player[((int)LF_BITS_U(fVar22))].team = 7;
             }
             g_player[((int)LF_BITS_U(fVar22))].human_id = -1;
-            FUN_004064a0(((int)LF_BITS_U(fVar22)));
+            createevent_updateplayer(((int)LF_BITS_U(fVar22)));
             g_human[(int)puVar9].player_id = -1;
           }
         }
@@ -50820,7 +50906,7 @@ LAB_00453705:
         piVar20 = &DAT_0e6c8bfc;
         do {
           if ((*piVar20 == 6) &&
-             (iVar12 = FUN_00408a60(iVar19,&g_human[(int)puVar9].pos.x,0.0), iVar12 != 0)) {
+             (iVar12 = pointinsidebuilding(iVar19,&g_human[(int)puVar9].pos.x,0.0), iVar12 != 0)) {
             if (g_human[(int)puVar9].player_id == -1) {
               if (g_game.gametype == 4) {
                 g_human[(int)puVar9].despawn_timer = 0;
@@ -50837,7 +50923,7 @@ LAB_00453705:
         } while (iVar19 < DAT_0e6c8bb8);
       }
       if (g_human[(int)puVar9].despawn_timer < 1) {
-        FUN_00418720(local_a4);
+        deletehuman(local_a4);
       }
       g_human[(int)puVar9].input_buttons_prev = g_human[(int)puVar9].input_buttons;
       iVar19 = 3;
@@ -50915,7 +51001,7 @@ LAB_00453705:
     }
     local_a4 = (uint *)((int)local_a4 + 1);
     if (0x1ff < (int)local_a4) {
-      FUN_0040b3f0(DAT_12e81ce8);
+      stoptimer(DAT_12e81ce8);
       return;
     }
   } while( true );
@@ -50990,35 +51076,35 @@ LAB_00453705:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef FUN_0044bd60
-#undef FUN_00406380
-#undef FUN_004257a0
-#undef FUN_0040ba60
+#undef item_removehumanlink
+#undef sphereintersectlevel
+#undef createevent_updateitem
+#undef lineintersectlevel
+#undef lineintersectobject
+#undef createevent_updateplayer
+#undef playerdeathtax
+#undef deletehuman
 #undef _CIatan2
-#undef FUN_0044a440
-#undef FUN_00407e50
-#undef FUN_00419060
-#undef FUN_00416960
-#undef FUN_004064a0
-#undef _ftol2
-#undef FUN_00416a20
-#undef FUN_0040b3f0
-#undef FUN_00416c40
-#undef FUN_00419380
-#undef FUN_00418720
-#undef _CIcos
-#undef FUN_0044d750
-#undef FUN_004223d0
-#undef FUN_00407f80
-#undef __security_check_cookie
+#undef pointinsidebuilding
+#undef playersellstock
+#undef getobjectrotation2
+#undef human_collisionhuman
 #undef _CIsqrt
-#undef FUN_00408a60
+#undef _ftol2
+#undef createevent_bullethit
 #undef _CIsin
-#undef FUN_00432bb0
-#undef FUN_0040bdb0
-#undef FUN_00405be0
-#undef FUN_00431630
-#undef FUN_00416db0
+#undef __security_check_cookie
+#undef scaleaddvectors
+#undef playerteamkilltax
+#undef human_itemsimulation
+#undef human_calculatelegangles
+#undef sphereintersectobject
+#undef _CIcos
+#undef rotateorientation
+#undef human_calculatearmangles
+#undef stoptimer
+#undef createevent_sound
+#undef item_removeitemlink
 #undef local_cc
 #undef local_c8
 #undef local_c4
@@ -51086,12 +51172,12 @@ LAB_00453705:
 #define _DAT_107484a4 (*(float *)SR_VA(0x107484a4))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484a8 (*(float *)SR_VA(0x107484a8))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00431630 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
-#define FUN_00427e80 ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
-#define __security_check_cookie(x) ((void)0)
+#define item_physicssimulation ((void (__cdecl *)(int))SR_VA(0x44cee0))
 #define _CIsqrt lf_CIsqrt
-#define FUN_0044cee0 ((void (__cdecl *)(int))SR_VA(0x44cee0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define __security_check_cookie(x) ((void)0)
+#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
 #define local_5c (*(float *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -51169,7 +51255,7 @@ void __cdecl lf_542a0(void)
       pfVar7[-0x30] = 0.0;
       if (LF_BITS_U(fVar5) == 0x19U) {
         pfVar7[-0x30] = 1.401298464e-45f;
-        FUN_0044cee0(local_40);
+        item_physicssimulation(local_40);
       }
       else if ((LF_BITS_U(pfVar7[-0x2a]) == 0xffffffffU) && ((LF_BITS_U(pfVar7[-0x2b]) == 0xffffffffU || (((int)LF_BITS_U(pfVar7[-0x29])) < 2)))) {
         if (LF_BITS_U(pfVar7[-0x2f]) == 0x0U) {
@@ -51205,7 +51291,7 @@ void __cdecl lf_542a0(void)
             local_10 = (float)(local_58 * pfVar7[-4]);
             local_c = (float)(local_58 * pfVar7[-3]);
             local_8 = (float)(local_58 * pfVar7[-2]);
-            FUN_0040bdb0((int)pfVar2,&local_10,local_48);
+            rotateorientation((int)pfVar2,&local_10,local_48);
           }
           local_3c = 0;
           local_58 = 0.0;
@@ -51215,7 +51301,7 @@ void __cdecl lf_542a0(void)
           local_20 = pfVar7[-0x14];
           local_44 = 1.0;
           do {
-            iVar8 = FUN_00431630(pfVar7 + -0x1c,pfVar1,1);
+            iVar8 = lineintersectlevel(pfVar7 + -0x1c,pfVar1,1);
             fVar3 = _DAT_107484ac;
             if (iVar8 == 0) break;
             local_44 = (float)((1.0 - _DAT_107484b8) * local_44);
@@ -51284,7 +51370,7 @@ void __cdecl lf_542a0(void)
                       ((float)(pfVar7[-0xc] * fVar4 + ((float)(fVar3 * pfVar7[-0xf] + pfVar7[-0x1e])))));
             local_8 = (float)(local_5c * pfVar7[-8] +
                       ((float)(fVar4 * pfVar7[-0xb] + ((float)(fVar3 * pfVar7[-0xe] + pfVar7[-0x1d])))));
-            iVar8 = FUN_00431630(pfVar1,&local_10,1);
+            iVar8 = lineintersectlevel(pfVar1,&local_10,1);
             if (iVar8 != 0) {
               local_34 = (float)(_g_intersect - *pfVar1);
               local_30 = (float)(_DAT_107484a4 - pfVar7[-0x1e]);
@@ -51305,7 +51391,7 @@ void __cdecl lf_542a0(void)
               local_5c = (float)(_DAT_107484b4 * local_4c +
                          (local_50 * _DAT_107484b0 + local_54 * _DAT_107484ac));
               if (0.0 < local_5c) {
-                FUN_00427e80(&local_54,(float *)&DAT_107484ac,0.4);
+                calculatefriction(&local_54,(float *)&DAT_107484ac,0.4);
                 local_54 = local_54 * 0.25;
                 pfVar7[-0x16] = (float)(pfVar7[-0x16] + local_54);
                 local_50 = local_50 * 0.25;
@@ -51448,12 +51534,12 @@ LAB_00454e02:
 #undef _DAT_107484a4
 #undef _DAT_107484b4
 #undef _DAT_107484a8
-#undef FUN_0040bdb0
-#undef FUN_00431630
-#undef FUN_00427e80
-#undef __security_check_cookie
+#undef item_physicssimulation
 #undef _CIsqrt
-#undef FUN_0044cee0
+#undef rotateorientation
+#undef lineintersectlevel
+#undef __security_check_cookie
+#undef calculatefriction
 #undef local_5c
 #undef local_58
 #undef local_54
@@ -51520,24 +51606,24 @@ LAB_00454e02:
 #define _DAT_0e6c2a30 (*(undefined4 *)SR_VA(0xe6c2a30))
 #define _DAT_0e6c8a34 (*(undefined4 *)SR_VA(0xe6c8a34))
 #define _DAT_0e699224 (*(undefined4 *)SR_VA(0xe699224))
-#define FUN_0041ba30 ((void (__cdecl *)(int, int, int, int, char *))SR_VA(0x41ba30))
-#define FUN_004296f0 ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
-#define FUN_00413d80 ((void (__cdecl *)(undefined4, int))SR_VA(0x413d80))
-#define FUN_004041c0 ((void (__cdecl *)(void))SR_VA(0x4041c0))
-#define __security_check_cookie(x) ((void)0)
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
-#define FUN_0044d850 ((void (__cdecl *)(int))SR_VA(0x44d850))
-#define FUN_00432fe0 ((void (__cdecl *)(float *))SR_VA(0x432fe0))
-#define FUN_00403d70 ((void (__cdecl *)(void))SR_VA(0x403d70))
-#define FUN_0044da10 ((void (__cdecl *)(int))SR_VA(0x44da10))
-#define FUN_00404450 ((void (__cdecl *)(void))SR_VA(0x404450))
-#define FUN_0043da50 ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
-#define FUN_00446c30 ((undefined4 * (__cdecl *)(uint, uint, float, int, float, int, int, undefined4 *))SR_VA(0x446c30))
-#define FUN_004080b0 ((void (__cdecl *)(int, int, int))SR_VA(0x4080b0))
-#define FUN_0040f2b0 ((void (__cdecl *)(uint, float *, int, int, int, float))SR_VA(0x40f2b0))
-#define FUN_00401850 ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define FUN_0041bc50 ((void (__cdecl *)(void))SR_VA(0x41bc50))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define building_setupbuild ((void (__cdecl *)(void))SR_VA(0x403d70))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
+#define addcitystreet ((void (__cdecl *)(int, int, int, int, char *))SR_VA(0x41ba30))
+#define city_addintersection ((void (__cdecl *)(int, int, int))SR_VA(0x4080b0))
+#define building_load ((void (__cdecl *)(undefined4, int))SR_VA(0x413d80))
+#define createarea ((void (__cdecl *)(uint, float *, int, int, int, float))SR_VA(0x40f2b0))
+#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
+#define __security_check_cookie(x) ((void)0)
+#define createlandscape ((void (__cdecl *)(void))SR_VA(0x41bc50))
+#define buildcityinterection ((void (__cdecl *)(int))SR_VA(0x44d850))
+#define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
+#define buildsomeshit ((void (__cdecl *)(float *))SR_VA(0x432fe0))
+#define building_setupfloorplannewer ((void (__cdecl *)(void))SR_VA(0x4041c0))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
+#define building_buildfloorplan ((undefined4 * (__cdecl *)(uint, uint, float, int, float, int, int, undefined4 *))SR_VA(0x446c30))
+#define buildcitystreet ((void (__cdecl *)(int))SR_VA(0x44da10))
+#define building_rotatefloorplan ((void (__cdecl *)(void))SR_VA(0x404450))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(undefined4 *)(lf_frame + 0x20))
@@ -51574,15 +51660,15 @@ void __cdecl lf_54e40(void)
   local_4 = DAT_00460d18 ^ (uint)&local_18;
   srand(0);
   memset(&DAT_12e80c44,0,0x1000);
-  FUN_0041bc50();
+  createlandscape();
   local_14 = 448.0;
   local_c = 0x4419c000;
   local_10 = 0x41c00000;
-  FUN_00432fe0(&local_14);
+  buildsomeshit(&local_14);
   local_14 = 0.0;
   local_10 = 0;
   local_c = 0;
-  FUN_0040f2b0(0,&local_14,0x40,8,0x40,4.0);
+  createarea(0,&local_14,0x40,8,0x40,4.0);
   g_city = 0;
   DAT_0e6b3228 = 0;
   DAT_0e6bca2c = 0;
@@ -51602,7 +51688,7 @@ void __cdecl lf_54e40(void)
       piVar9 = &DAT_0f670abc;
       iVar13 = DAT_0f670ab8;
       do {
-        FUN_004080b0(*piVar9,5,piVar9[2]);
+        city_addintersection(*piVar9,5,piVar9[2]);
         piVar9 = piVar9 + 3;
         iVar13 = iVar13 + -1;
       } while (iVar13 != 0);
@@ -51611,7 +51697,7 @@ void __cdecl lf_54e40(void)
     if (0 < DAT_0f673abc) {
       piVar9 = &DAT_0f673ad0;
       do {
-        FUN_0041ba30(piVar9[-4],piVar9[-3],piVar9[-1],*piVar9,(char *)(piVar9 + 1));
+        addcitystreet(piVar9[-4],piVar9[-3],piVar9[-1],*piVar9,(char *)(piVar9 + 1));
         iVar13 = iVar13 + 1;
         piVar9 = piVar9 + 0xd;
       } while (iVar13 < DAT_0f673abc);
@@ -51637,7 +51723,7 @@ void __cdecl lf_54e40(void)
       uVar14 = 0;
       do {
         if (((int)uVar10 < 0x88) || (0x97 < (int)uVar10)) {
-          FUN_0043da50(0,uVar14,uVar7,uVar10,0x40000000,(ushort *)&local_14);
+          area_createblock(0,uVar14,uVar7,uVar10,0x40000000,(ushort *)&local_14);
         }
         uVar14 = uVar14 + 1;
       } while ((int)uVar14 < 0x200);
@@ -51646,9 +51732,10 @@ void __cdecl lf_54e40(void)
     uVar7 = uVar7 + 1;
   } while ((int)uVar7 < 6);
   if (g_game.gametype == 1) {
-    FUN_00403d70();
-    FUN_004041c0();
-    FUN_00446c30(0,0x24,8.407790786e-45f,0x24,DAT_03365d4c,DAT_03365d50,DAT_03365d54,(undefined4 *)0x0);
+    building_setupbuild();
+    building_setupfloorplannewer();
+    building_buildfloorplan
+              (0,0x24,8.407790786e-45f,0x24,DAT_03365d4c,DAT_03365d50,DAT_03365d54,(undefined4 *)0x0);
     if (g_game.gametype == 1) {
       return;
     }
@@ -51656,14 +51743,14 @@ void __cdecl lf_54e40(void)
   iVar13 = 0;
   if (0 < DAT_0e6b3228) {
     do {
-      FUN_0044da10(iVar13);
+      buildcitystreet(iVar13);
       iVar13 = iVar13 + 1;
     } while (iVar13 < DAT_0e6b3228);
   }
   iVar13 = 0;
   if (0 < g_city) {
     do {
-      FUN_0044d850(iVar13);
+      buildcityinterection(iVar13);
       iVar13 = iVar13 + 1;
     } while (iVar13 < g_city);
   }
@@ -51687,10 +51774,10 @@ void __cdecl lf_54e40(void)
         uVar10 = uVar10 | 8;
       }
       uVar14 = iVar8 + 0x1ea;
-      FUN_0043da50(0,uVar14,6,uVar7,(&DAT_0bba8cac)[uVar10] | 0x80000000,(ushort *)&local_14);
-      uVar10 = FUN_00401850(0,uVar14,5,uVar7);
+      area_createblock(0,uVar14,6,uVar7,(&DAT_0bba8cac)[uVar10] | 0x80000000,(ushort *)&local_14);
+      uVar10 = area_getblock(0,uVar14,5,uVar7);
       if ((uVar10 & 0xe0000000) == 0x40000000) {
-        FUN_004296f0(0,uVar14,5,uVar7,uVar10 & 0xffffffdf);
+        area_setblock(0,uVar14,5,uVar7,uVar10 & 0xffffffdf);
       }
       iVar8 = iVar8 + 1;
     } while (iVar8 < 8);
@@ -51706,7 +51793,7 @@ void __cdecl lf_54e40(void)
         local_10 = 0x30003;
         local_c = 0x30003;
         local_8 = 0x30003;
-        FUN_0043da50(0,uVar10,5,uVar7,0x40000000,(ushort *)&local_14);
+        area_createblock(0,uVar10,5,uVar7,0x40000000,(ushort *)&local_14);
         bVar1 = (&DAT_0f67c2c4)[uVar10 + iVar13];
         if ((bVar1 & 0xf) == 0) {
           local_14 = 0.0;
@@ -51741,8 +51828,8 @@ void __cdecl lf_54e40(void)
           }
           uVar14 = (&DAT_0bba8cac)[uVar14] | 0x80000000;
 LAB_00455309:
-          FUN_0043da50(0,uVar10,6,uVar7,uVar14,(ushort *)&local_14);
-          uVar14 = FUN_00401850(0,uVar10,5,uVar7);
+          area_createblock(0,uVar10,6,uVar7,uVar14,(ushort *)&local_14);
+          uVar14 = area_getblock(0,uVar10,5,uVar7);
         }
         else if ((bVar3 < 2) || (5 < bVar3)) {
           if (bVar3 == 6) {
@@ -51754,21 +51841,21 @@ LAB_00455309:
           if (iVar8 < 4) {
             uVar14 = (&DAT_0bba8fd4)[iVar8];
 LAB_004553d3:
-            FUN_0043da50(0,uVar10,6,uVar7,uVar14 | 0x80000000,(ushort *)&local_14);
+            area_createblock(0,uVar10,6,uVar7,uVar14 | 0x80000000,(ushort *)&local_14);
           }
           else if (iVar8 < 8) {
             uVar14 = (&DAT_0bba8fd4)[iVar8];
             goto LAB_004553d3;
           }
-          uVar14 = FUN_00401850(0,uVar10,5,uVar7);
+          uVar14 = area_getblock(0,uVar10,5,uVar7);
         }
         else {
-          FUN_0043da50(0,uVar10,6,uVar7,(&DAT_0bba8ce4)[bVar1 >> 4] | 0x80000000,(ushort *)&local_14
-                      );
-          uVar14 = FUN_00401850(0,uVar10,5,uVar7);
+          area_createblock(0,uVar10,6,uVar7,(&DAT_0bba8ce4)[bVar1 >> 4] | 0x80000000,
+                           (ushort *)&local_14);
+          uVar14 = area_getblock(0,uVar10,5,uVar7);
         }
         if ((uVar14 & 0xe0000000) == 0x40000000) {
-          FUN_004296f0(0,uVar10,5,uVar7,uVar14 & 0xffffffdf);
+          area_setblock(0,uVar10,5,uVar7,uVar14 & 0xffffffdf);
         }
       }
 LAB_00455411:
@@ -51781,17 +51868,17 @@ LAB_00455411:
   if (0 < DAT_0f77c2c4) {
     pbVar15 = &DAT_0f77c2cc;
     do {
-      FUN_00413d80(pbVar15,0);
-      FUN_00403d70();
+      building_load(pbVar15,0);
+      building_setupbuild();
       fVar11 = *(float *)(pbVar15 + 0x4c);
       local_18 = fVar11;
       if (0 < ((int)LF_BITS_U(fVar11))) {
         do {
-          FUN_00404450();
+          building_rotatefloorplan();
           fVar11 = LF_BITS_F((((int)LF_BITS_U(fVar11)) + -1));
         } while (LF_BITS_U(fVar11) != 0x0U);
       }
-      FUN_004041c0();
+      building_setupfloorplannewer();
       puVar12 = (undefined4 *)0x9;
       pbVar5 = &DAT_0045f330;
       pbVar2 = pbVar15;
@@ -52017,8 +52104,9 @@ LAB_004556a8:
       if (iVar8 == 0) {
         puVar12 = (undefined4 *)0xd;
       }
-      FUN_00446c30(0,*(uint *)(pbVar15 + 0x40),8.407790786e-45f,*(int *)(pbVar15 + 0x48),DAT_03365d4c,
-                   DAT_03365d50,DAT_03365d54,puVar12);
+      building_buildfloorplan
+                (0,*(uint *)(pbVar15 + 0x40),8.407790786e-45f,*(int *)(pbVar15 + 0x48),DAT_03365d4c,
+                 DAT_03365d50,DAT_03365d54,puVar12);
       iVar13 = iVar13 + 1;
       pbVar15 = pbVar15 + 0x54;
     } while (iVar13 < DAT_0f77c2c4);
@@ -52066,24 +52154,24 @@ LAB_004556a8:
 #undef _DAT_0e6c2a30
 #undef _DAT_0e6c8a34
 #undef _DAT_0e699224
-#undef FUN_0041ba30
-#undef FUN_004296f0
-#undef FUN_00413d80
-#undef FUN_004041c0
-#undef __security_check_cookie
-#undef srand
-#undef FUN_0044d850
-#undef FUN_00432fe0
-#undef FUN_00403d70
-#undef FUN_0044da10
-#undef FUN_00404450
-#undef FUN_0043da50
-#undef FUN_00446c30
-#undef FUN_004080b0
-#undef FUN_0040f2b0
-#undef FUN_00401850
-#undef FUN_0041bc50
+#undef area_getblock
+#undef building_setupbuild
 #undef memset
+#undef addcitystreet
+#undef city_addintersection
+#undef building_load
+#undef createarea
+#undef area_createblock
+#undef __security_check_cookie
+#undef createlandscape
+#undef buildcityinterection
+#undef area_setblock
+#undef buildsomeshit
+#undef building_setupfloorplannewer
+#undef srand
+#undef building_buildfloorplan
+#undef buildcitystreet
+#undef building_rotatefloorplan
 #undef local_18
 #undef local_14
 #undef local_10
@@ -52117,33 +52205,33 @@ LAB_004556a8:
 #define _DAT_25a1d74c (*(float *)SR_VA(0x25a1d74c))
 #define _DAT_25a1d750 (*(float *)SR_VA(0x25a1d750))
 #define _DAT_25a1d758 (*(float *)SR_VA(0x25a1d758))
-#define FUN_00407c40 ((int (__cdecl *)(int, int, int))SR_VA(0x407c40))
-#define FUN_0040ba60 ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define FUN_00407b90 ((int (__cdecl *)(int))SR_VA(0x407b90))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define FUN_0044e060 ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_00408fe0 ((void (__cdecl *)(float *, int))SR_VA(0x408fe0))
-#define FUN_004093e0 ((void (__cdecl *)(int, int))SR_VA(0x4093e0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_004068d0 ((void (__cdecl *)(int))SR_VA(0x4068d0))
-#define FUN_00449940 ((undefined4 (__cdecl *)(int, char *))SR_VA(0x449940))
-#define FUN_004065f0 ((int (__cdecl *)(int))SR_VA(0x4065f0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00416db0 ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define FUN_00407ce0 ((void (__cdecl *)(int, int))SR_VA(0x407ce0))
-#define FUN_0041d7a0 ((void (__cdecl *)(int, int))SR_VA(0x41d7a0))
-#define FUN_00406420 ((void (__cdecl *)(uint))SR_VA(0x406420))
-#define FUN_0040bc20 ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_00405be0 ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define logic_gunstore_buy ((void (__cdecl *)(int, int))SR_VA(0x41d7a0))
+#define item_addbill ((int (__cdecl *)(int, int, int))SR_VA(0x407c40))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00408cf0 ((void (__cdecl *)(int, float))SR_VA(0x408cf0))
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define FUN_004089c0 ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define FUN_0044e0d0 ((void (__cdecl *)(int, int))SR_VA(0x44e0d0))
-#define FUN_00405b40 ((void (__cdecl *)(int, int))SR_VA(0x405b40))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define playerbuystock ((void (__cdecl *)(int, int))SR_VA(0x405b40))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define logic_addteamcash ((void (__cdecl *)(int, float))SR_VA(0x408cf0))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define logic_cardealer_buy ((void (__cdecl *)(int, int))SR_VA(0x44e0d0))
+#define createevent_updatecarmarket ((void (__cdecl *)(int))SR_VA(0x4068d0))
+#define item_billvalue ((int (__cdecl *)(int))SR_VA(0x407b90))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
+#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
+#define item_removebill ((void (__cdecl *)(int, int))SR_VA(0x407ce0))
+#define logic_teammissioncomplete ((void (__cdecl *)(float *, int))SR_VA(0x408fe0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define server_playermessage ((undefined4 (__cdecl *)(int, char *))SR_VA(0x449940))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define logic_suits_buy ((void (__cdecl *)(int, int))SR_VA(0x4093e0))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
 #define local_50 (*(int *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define local_48 (*(float *)(lf_frame + 0x18))
@@ -52241,23 +52329,23 @@ void __cdecl lf_55700(float param_1)
           else if (iVar17 + -2 <= g_item[uVar16].cash) {
             uVar18 = uVar18 ^ 1;
             if (g_human[iVar12].inventory[uVar18].count == 0) {
-              uVar13 = FUN_0041b070(0x10,&g_item[uVar16].pos.x,&g_item[uVar16].vel.x,
-                                    &g_item[uVar16].rot[0].x);
+              uVar13 = createitem(0x10,&g_item[uVar16].pos.x,&g_item[uVar16].vel.x,
+                                  &g_item[uVar16].rot[0].x);
               g_item[uVar13].bills_mask =
                    g_item[uVar16].bills_mask >> ((char)g_item[uVar16].num_bills * '\x03' & 0x1fU) &
                    7;
               g_item[uVar13].cash = 0;
-              FUN_0041b870(uVar13,0xffffffff,iVar12,uVar18);
+              linkitem(uVar13,0xffffffff,iVar12,uVar18);
               uVar13 = local_34;
-              FUN_00407ce0(local_34,g_item[uVar16].num_bills);
+              item_removebill(local_34,g_item[uVar16].num_bills);
             }
             else {
               iVar12 = g_human[iVar12].inventory[uVar18].item_id;
               if ((g_item[iVar12].type == 0x10) &&
-                 (iVar12 = FUN_00407c40(iVar12,0,g_item[uVar16].bills_mask >>
+                 (iVar12 = item_addbill(iVar12,0,g_item[uVar16].bills_mask >>
                                                  ((char)g_item[uVar16].num_bills * '\x03' & 0x1fU) &
                                                  7), iVar12 != 0)) {
-                FUN_00407ce0(uVar16,g_item[uVar16].num_bills);
+                item_removebill(uVar16,g_item[uVar16].num_bills);
               }
             }
           }
@@ -52273,10 +52361,10 @@ void __cdecl lf_55700(float param_1)
            ((iVar12 = *(int *)((int)g_player[0].input_extra + local_4c + 0x60), -1 < iVar12 &&
             (iVar12 < 10)))) {
           g_item[uVar16].phone_number = iVar12 + g_item[uVar16].phone_number * 10;
-          FUN_00416db0(*(undefined4 *)(&DAT_0956d7cc + iVar12 * 4),&g_item[uVar16].pos.x,lf_u2f(0x3f800000),
-                       lf_u2f(0x3f800000));
+          createevent_sound(*(undefined4 *)(&DAT_0956d7cc + iVar12 * 4),&g_item[uVar16].pos.x,
+                            lf_u2f(0x3f800000),lf_u2f(0x3f800000));
           g_item[uVar16].info = g_item[uVar16].phone_number;
-          FUN_00406420(uVar13);
+          createevent_updateiteminfo(uVar13);
         }
       }
 LAB_00455968:
@@ -52284,25 +52372,25 @@ LAB_00455968:
       iVar12 = local_50;
       if (*(int *)((int)g_player[0].input_extra + local_4c + 0x58) == 1) {
         pcVar1 = (char *)((int)g_player[0].input_extra + local_4c + 0x6c);
-        iVar10 = FUN_00449940(((int)LF_BITS_U(local_48)),pcVar1);
+        iVar10 = server_playermessage(((int)LF_BITS_U(local_48)),pcVar1);
         iVar12 = local_50;
         if (iVar10 == 0) {
           if (((g_game.state == 3) ||
               (iVar10 = *(int *)((int)g_player[0].input_axes + local_50 + -4), iVar10 == -1)) ||
              (g_human[iVar10].health < 1)) {
-            FUN_00406260(0,pcVar1,lf_f2u(local_48),
-                         *(undefined4 *)((int)g_player[0].input_extra + iVar17 + 0x60));
+            createevent_message(0,pcVar1,lf_f2u(local_48),
+                                *(undefined4 *)((int)g_player[0].input_extra + iVar17 + 0x60));
           }
           else {
             uVar5 = *(undefined4 *)((int)g_player[0].input_extra + iVar17 + 0x60);
-            FUN_00406260(1,pcVar1,iVar10,uVar5);
+            createevent_message(1,pcVar1,iVar10,uVar5);
             iVar12 = local_50;
             if (0 < g_human[iVar10].inventory[0].count) {
               iVar10 = g_human[iVar10].inventory[0].item_id;
               if (((g_item[iVar10].type == 0x17) &&
                   (iVar11 = g_item[iVar10].linked_item, iVar11 != -1)) &&
                  (g_item[iVar11].linked_item == iVar10)) {
-                FUN_00406260(2,pcVar1,iVar11,uVar5);
+                createevent_message(2,pcVar1,iVar11,uVar5);
                 iVar12 = local_50;
               }
             }
@@ -52320,28 +52408,28 @@ LAB_00455968:
             if (g_game.state == 1) {
               if (uVar18 == 1) {
                 *(undefined4 *)((int)g_player[0].input_axes + iVar12 + -0x18) = 0;
-                FUN_004064a0(((int)LF_BITS_U(local_48)));
+                createevent_updateplayer(((int)LF_BITS_U(local_48)));
               }
               else if (uVar18 == 2) {
                 *(undefined4 *)((int)g_player[0].input_axes + iVar12 + -0x18) = 1;
-                FUN_004064a0(((int)LF_BITS_U(local_48)));
+                createevent_updateplayer(((int)LF_BITS_U(local_48)));
               }
               else if (uVar18 == 3) {
                 *(undefined4 *)((int)g_player[0].input_axes + iVar12 + -0x18) = 2;
-                FUN_004064a0(((int)LF_BITS_U(local_48)));
+                createevent_updateplayer(((int)LF_BITS_U(local_48)));
               }
               else if (uVar18 == 4) {
-                FUN_00405be0(local_48,*(int *)((int)g_player[0].input_axes + iVar12 + -0x10));
+                playersellstock(local_48,*(int *)((int)g_player[0].input_axes + iVar12 + -0x10));
                 *(undefined4 *)((int)g_player[0].input_axes + iVar12 + -0x18) = 7;
                 *(undefined4 *)((int)g_player[0].input_axes + iVar12 + -0xc) = 0;
-                FUN_004065f0(((int)LF_BITS_U(fVar9)));
-                FUN_004064a0(((int)LF_BITS_U(fVar9)));
+                createevent_updateplayer_finance(((int)LF_BITS_U(fVar9)));
+                createevent_updateplayer(((int)LF_BITS_U(fVar9)));
               }
               else {
                 if (uVar18 == 5) {
                   *(undefined4 *)((int)g_player[0].account_id + iVar12 + 0x18) = 1;
                 }
-                FUN_004064a0(((int)LF_BITS_U(local_48)));
+                createevent_updateplayer(((int)LF_BITS_U(local_48)));
               }
             }
           }
@@ -52366,16 +52454,16 @@ LAB_00455968:
             local_c = 0.0;
             local_18 = 1.0;
             local_8 = 1.0;
-            FUN_0040bdb0((int)&local_28,&local_1c,-1.5707964);
+            rotateorientation((int)&local_28,&local_1c,-1.5707964);
             fVar14 = local_48;
-            iVar17 = FUN_00450ae0(&local_40,&local_28,((int)LF_BITS_U(local_48)));
+            iVar17 = createhuman(&local_40,&local_28,((int)LF_BITS_U(local_48)));
             *(int *)((int)g_player[0].input_axes + iVar12 + -4) = iVar17;
             uVar16 = local_34;
             if (iVar17 != -1) {
               g_human[iVar17].unk_000c = *(int *)((int)g_player[0].account_id + iVar12 + 0x10);
               g_human[iVar17].axis = -1.5707964;
-              FUN_004064a0(((int)LF_BITS_U(fVar14)));
-              FUN_004065f0(((int)LF_BITS_U(fVar14)));
+              createevent_updateplayer(((int)LF_BITS_U(fVar14)));
+              createevent_updateplayer_finance(((int)LF_BITS_U(fVar14)));
               *(undefined4 *)((int)g_player[0].input_extra + iVar12 + 0x40) = 0;
               uVar16 = local_34;
             }
@@ -52394,17 +52482,17 @@ LAB_00455cd2:
                (iVar17 = *(int *)((int)g_player[0].input_extra + iVar12 + 0x44),
                (int)uVar18 < (&DAT_0e6c94c4)[iVar17 * 0x277] + 1)) {
               if ((&DAT_0e6c8bfc)[iVar17 * 0x277] == 4) {
-                FUN_004093e0(((int)LF_BITS_U(local_48)),uVar18);
+                logic_suits_buy(((int)LF_BITS_U(local_48)),uVar18);
                 local_30 = 1;
               }
               if ((&DAT_0e6c8bfc)[*(int *)((int)g_player[0].input_extra + iVar12 + 0x44) * 0x277] ==
                   2) {
-                FUN_0044e0d0(((int)LF_BITS_U(local_48)),uVar18);
+                logic_cardealer_buy(((int)LF_BITS_U(local_48)),uVar18);
                 local_30 = 1;
               }
               if ((&DAT_0e6c8bfc)[*(int *)((int)g_player[0].input_extra + iVar12 + 0x44) * 0x277] ==
                   7) {
-                FUN_0041d7a0(((int)LF_BITS_U(local_48)),uVar18);
+                logic_gunstore_buy(((int)LF_BITS_U(local_48)),uVar18);
                 local_30 = 0;
                 goto LAB_00455da0;
               }
@@ -52456,10 +52544,10 @@ LAB_00455e9e:
                     local_c = 0.0;
                     local_18 = 1.0;
                     local_8 = 1.0;
-                    uVar16 = FUN_0041b070(iVar17,&local_40,(undefined4 *)0x0,&local_28);
+                    uVar16 = createitem(iVar17,&local_40,(undefined4 *)0x0,&local_28);
                     iVar10 = 2;
                     do {
-                      iVar11 = FUN_0041b870(uVar16,0xffffffff,local_4c,iVar10);
+                      iVar11 = linkitem(uVar16,0xffffffff,local_4c,iVar10);
                       iVar12 = local_50;
                       if (iVar11 != 0) break;
                       iVar10 = iVar10 + 1;
@@ -52467,7 +52555,7 @@ LAB_00455e9e:
                     piVar2 = (int *)((int)g_player[0].account_id + local_50 + 0x1c);
                     *piVar2 = *piVar2 - *(int *)(g_itemtype + iVar17);
                     if (g_game.gametype == 3) {
-                      FUN_004065f0(((int)LF_BITS_U(local_48)));
+                      createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                     }
                     piVar2 = (int *)((int)g_player[0].account_id + iVar12 + 0x28);
                     *piVar2 = *piVar2 + 1;
@@ -52523,20 +52611,20 @@ LAB_00455f8b:
                 }
               }
               pHVar8 = g_human + local_4c;
-              iVar12 = FUN_004089c0(&(pHVar8->pos).x,(int)local_44,0.0);
+              iVar12 = pointinsidebase(&(pHVar8->pos).x,(int)local_44,0.0);
               if (((iVar12 != 0) && (iVar11 != -1)) &&
-                 (iVar12 = FUN_0044e060(iVar11,(int)local_44,local_2c), iVar12 != -1)) {
+                 (iVar12 = logic_createcar(iVar11,(int)local_44,local_2c), iVar12 != -1)) {
                 local_40 = (pHVar8->pos).x;
                 local_3c = g_human[iVar17].pos.y;
                 *(undefined4 *)((int)g_player[0].input_extra + local_50 + 0x40) = 3;
                 local_38 = g_human[iVar17].pos.z;
-                FUN_0040bc20(&local_28);
-                uVar16 = FUN_0041b070(0x18,&local_40,(undefined4 *)0x0,&local_28);
+                resetorientation(&local_28);
+                uVar16 = createitem(0x18,&local_40,(undefined4 *)0x0,&local_28);
                 iVar17 = local_4c;
                 g_item[uVar16].vehicle_id = iVar12;
                 iVar12 = 2;
                 do {
-                  iVar10 = FUN_0041b870(uVar16,0xffffffff,iVar17,iVar12);
+                  iVar10 = linkitem(uVar16,0xffffffff,iVar17,iVar12);
                   if (iVar10 != 0) break;
                   iVar12 = iVar12 + 1;
                 } while (iVar12 < 6);
@@ -52544,10 +52632,10 @@ LAB_00455f8b:
                 piVar2 = (int *)((int)g_player[0].account_id + local_50 + 0x1c);
                 *piVar2 = *piVar2 - *(int *)(&DAT_1757974c + iVar12 * 0xc);
                 if (g_game.gametype == 3) {
-                  FUN_004065f0(((int)LF_BITS_U(local_48)));
+                  createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                 }
                 *(undefined4 *)(&DAT_1757974c + iVar12 * 0xc) = 0;
-                FUN_004068d0(iVar12);
+                createevent_updatecarmarket(iVar12);
               }
 LAB_004560df:
               if (uVar18 == 0x10) {
@@ -52564,15 +52652,15 @@ LAB_004560df:
                   local_34 = 0xd;
                 }
                 uVar16 = local_34;
-                iVar10 = FUN_004089c0(&g_human[local_4c].pos.x,(int)local_44,0.0);
+                iVar10 = pointinsidebase(&g_human[local_4c].pos.x,(int)local_44,0.0);
                 if ((((iVar10 != 0) && (uVar16 != 0xffffffff)) &&
                     (*(int *)((int)g_player[0].account_id + iVar12 + 0x28) < 10)) &&
                    ((iVar10 = *(int *)((int)g_player[0].account_id + iVar12 + 0x1c), -1 < iVar10 &&
                     (local_44 = g_itemtype + uVar16, *(int *)local_44 <= iVar10)))) {
                   pvVar3 = g_human[iVar17].bones[0].rot + 2;
-                  FUN_0040ba60(&local_40,(float *)g_human[iVar17].bones,&pvVar3->x,-0.75);
+                  scaleaddvectors(&local_40,(float *)g_human[iVar17].bones,&pvVar3->x,-0.75);
                   pvVar4 = g_human[iVar17].bones[0].rot + 1;
-                  FUN_0040ba60(&local_40,&local_40,&pvVar4->x,0.75);
+                  scaleaddvectors(&local_40,&local_40,&pvVar4->x,0.75);
                   uVar16 = local_34;
                   local_28 = g_human[iVar17].bones[0].rot[0].x;
                   local_24 = g_human[iVar17].bones[0].rot[0].y;
@@ -52583,12 +52671,12 @@ LAB_004560df:
                   local_10 = pvVar3->x;
                   local_c = g_human[iVar17].bones[0].rot[2].y;
                   local_8 = g_human[iVar17].bones[0].rot[2].z;
-                  uVar13 = FUN_0041b070(local_34,&local_40,(undefined4 *)0x0,&local_28);
+                  uVar13 = createitem(local_34,&local_40,(undefined4 *)0x0,&local_28);
                   iVar12 = local_4c;
                   if (uVar16 == 0xc) {
                     iVar10 = 2;
                     do {
-                      iVar11 = FUN_0041b870(uVar13,0xffffffff,iVar12,iVar10);
+                      iVar11 = linkitem(uVar13,0xffffffff,iVar12,iVar10);
                       iVar17 = local_50;
                       if (iVar11 != 0) break;
                       iVar10 = iVar10 + 1;
@@ -52596,13 +52684,13 @@ LAB_004560df:
                     piVar2 = (int *)((int)g_player[0].account_id + local_50 + 0x1c);
                     *piVar2 = *piVar2 - (*(uint *)((uchar *)&g_itemtype[0xc] + 0));
                     if (g_game.gametype == 3) {
-                      FUN_004065f0(((int)LF_BITS_U(local_48)));
+                      createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                     }
                   }
                   else {
                     iVar17 = 0;
                     do {
-                      iVar10 = FUN_0041b870(uVar13,0xffffffff,iVar12,iVar17);
+                      iVar10 = linkitem(uVar13,0xffffffff,iVar12,iVar17);
                       if (iVar10 != 0) break;
                       iVar17 = iVar17 + 1;
                     } while (iVar17 < 2);
@@ -52617,19 +52705,19 @@ LAB_004560df:
               }
               else if (uVar16 == 8) {
                 if (uVar18 == 1) {
-                  FUN_00405b40(((int)LF_BITS_U(local_48)),1);
-                  FUN_004065f0(((int)LF_BITS_U(local_48)));
+                  playerbuystock(((int)LF_BITS_U(local_48)),1);
+                  createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                 }
                 else {
                   if (uVar18 == 2) {
                     iVar17 = 1;
 LAB_004563c7:
-                    FUN_00405be0(local_48,iVar17);
+                    playersellstock(local_48,iVar17);
                   }
                   else {
                     if (uVar18 == 3) {
-                      FUN_00405b40(((int)LF_BITS_U(local_48)),10);
-                      FUN_004065f0(((int)LF_BITS_U(local_48)));
+                      playerbuystock(((int)LF_BITS_U(local_48)),10);
+                      createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                       goto LAB_004562db;
                     }
                     if (uVar18 == 4) {
@@ -52637,8 +52725,8 @@ LAB_004563c7:
                       goto LAB_004563c7;
                     }
                     if (uVar18 == 5) {
-                      FUN_00405b40(((int)LF_BITS_U(local_48)),100);
-                      FUN_004065f0(((int)LF_BITS_U(local_48)));
+                      playerbuystock(((int)LF_BITS_U(local_48)),100);
+                      createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                       goto LAB_004562db;
                     }
                     if (uVar18 == 6) {
@@ -52646,8 +52734,8 @@ LAB_004563c7:
                       goto LAB_004563c7;
                     }
                     if (uVar18 == 7) {
-                      FUN_00405b40(((int)LF_BITS_U(local_48)),5000);
-                      FUN_004065f0(((int)LF_BITS_U(local_48)));
+                      playerbuystock(((int)LF_BITS_U(local_48)),5000);
+                      createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                       goto LAB_004562db;
                     }
                     if (uVar18 == 8) {
@@ -52655,7 +52743,7 @@ LAB_004563c7:
                       goto LAB_004563c7;
                     }
                   }
-                  FUN_004065f0(((int)LF_BITS_U(local_48)));
+                  createevent_updateplayer_finance(((int)LF_BITS_U(local_48)));
                 }
               }
               else {
@@ -52673,11 +52761,11 @@ LAB_004563c7:
                         local_40 = g_human[local_4c].pos.x;
                         local_3c = g_human[local_4c].pos.y;
                         local_38 = g_human[local_4c].pos.z;
-                        FUN_0040bc20(&local_28);
-                        uVar16 = FUN_0041b070(0x10,&local_40,(undefined4 *)0x0,&local_28);
+                        resetorientation(&local_28);
+                        uVar16 = createitem(0x10,&local_40,(undefined4 *)0x0,&local_28);
                         g_item[uVar16].cash = 0;
                         g_item[uVar16].bills_mask = uVar18;
-                        FUN_0041b870(uVar16,0xffffffff,local_4c,0);
+                        linkitem(uVar16,0xffffffff,local_4c,0);
                         (&DAT_17579610)[(int)pIVar6 * 5] =
                              (&DAT_17579610)[(int)pIVar6 * 5] - *(int *)(&DAT_00460458 + uVar18 * 4)
                         ;
@@ -52685,7 +52773,7 @@ LAB_004563c7:
                       else {
                         iVar10 = g_human[local_4c].inventory[0].item_id;
                         if ((g_item[iVar10].type != 0x10) ||
-                           (iVar10 = FUN_00407c40(iVar10,0,uVar18), iVar10 == 0)) goto LAB_00456669;
+                           (iVar10 = item_addbill(iVar10,0,uVar18), iVar10 == 0)) goto LAB_00456669;
                         (&DAT_17579610)[(int)pIVar6 * 5] = iVar17 - iVar12;
                       }
                       if ((int)uVar18 < 3) {
@@ -52700,8 +52788,8 @@ LAB_00456669:
                     if (0 < g_human[local_4c].inventory[0].count) {
                       iVar17 = g_human[local_4c].inventory[0].item_id;
                       if (g_item[iVar17].type == 0x10) {
-                        fVar14 = LF_BITS_F(FUN_00407b90(iVar17));
-                        FUN_00408cf0((int)local_44,fVar14);
+                        fVar14 = LF_BITS_F(item_billvalue(iVar17));
+                        logic_addteamcash((int)local_44,fVar14);
                         g_item[iVar17].unk_14 = 0;
                       }
                       else {
@@ -52712,7 +52800,7 @@ LAB_00456669:
                           iVar15 = (int)pfVar7 * 0x117c + iVar10;
                           if ((*(int *)(&g_game.lf_raw[0xd0] + iVar15) != 0) &&
                              (iVar17 == *(int *)(&g_game.lf_raw[0xdc] + iVar15))) {
-                            FUN_00408fe0(pfVar7,iVar11);
+                            logic_teammissioncomplete(pfVar7,iVar11);
                           }
                           iVar10 = iVar10 + 0x40;
                           iVar11 = iVar11 + 1;
@@ -52733,18 +52821,18 @@ LAB_00456669:
                       local_40 = g_human[local_4c].pos.x;
                       local_3c = g_human[local_4c].pos.y;
                       local_38 = g_human[local_4c].pos.z;
-                      FUN_0040bc20(&local_28);
-                      uVar16 = FUN_0041b070(0x10,&local_40,(undefined4 *)0x0,&local_28);
+                      resetorientation(&local_28);
+                      uVar16 = createitem(0x10,&local_40,(undefined4 *)0x0,&local_28);
                       g_item[uVar16].cash = 0;
                       g_item[uVar16].bills_mask = uVar18;
-                      FUN_0041b870(uVar16,0xffffffff,local_4c,0);
+                      linkitem(uVar16,0xffffffff,local_4c,0);
                       piVar2 = (int *)((int)g_player[0].account_id + iVar12 + 0x1c);
                       *piVar2 = *piVar2 - *(int *)(&DAT_00460458 + uVar18 * 4);
                     }
                     else {
                       iVar11 = g_human[local_4c].inventory[0].item_id;
                       if ((g_item[iVar11].type != 0x10) ||
-                         (iVar11 = FUN_00407c40(iVar11,0,uVar18), iVar11 == 0)) goto LAB_004564e4;
+                         (iVar11 = item_addbill(iVar11,0,uVar18), iVar11 == 0)) goto LAB_004564e4;
                       *(int *)((int)g_player[0].account_id + iVar12 + 0x1c) = iVar17 - iVar10;
                     }
                     if ((int)uVar18 < 3) {
@@ -52758,7 +52846,7 @@ LAB_004564e4:
                   if (0 < g_human[local_4c].inventory[0].count) {
                     iVar17 = g_human[local_4c].inventory[0].item_id;
                     if (g_item[iVar17].type == 0x10) {
-                      iVar10 = FUN_00407b90(iVar17);
+                      iVar10 = item_billvalue(iVar17);
                       piVar2 = (int *)((int)g_player[0].account_id + iVar12 + 0x1c);
                       *piVar2 = *piVar2 + iVar10;
                       g_item[iVar17].unk_14 = 0;
@@ -52807,33 +52895,33 @@ LAB_004560f2:
 #undef _DAT_25a1d74c
 #undef _DAT_25a1d750
 #undef _DAT_25a1d758
-#undef FUN_00407c40
-#undef FUN_0040ba60
-#undef FUN_00407b90
-#undef FUN_0041b870
-#undef FUN_0044e060
-#undef FUN_004064a0
-#undef FUN_00408fe0
-#undef FUN_004093e0
-#undef rand
-#undef FUN_004068d0
-#undef FUN_00449940
-#undef FUN_004065f0
-#undef FUN_0040bdb0
-#undef FUN_00416db0
-#undef FUN_00407ce0
-#undef FUN_0041d7a0
-#undef FUN_00406420
-#undef FUN_0040bc20
-#undef FUN_0041b070
-#undef FUN_00405be0
+#undef scaleaddvectors
+#undef logic_gunstore_buy
+#undef item_addbill
 #undef __security_check_cookie
-#undef FUN_00408cf0
-#undef FUN_00450ae0
-#undef FUN_004089c0
-#undef FUN_0044e0d0
-#undef FUN_00405b40
-#undef FUN_00406260
+#undef createevent_updateplayer_finance
+#undef rand
+#undef playerbuystock
+#undef createevent_sound
+#undef logic_addteamcash
+#undef createevent_message
+#undef logic_cardealer_buy
+#undef createevent_updatecarmarket
+#undef item_billvalue
+#undef playersellstock
+#undef createitem
+#undef createevent_updateiteminfo
+#undef linkitem
+#undef resetorientation
+#undef logic_createcar
+#undef item_removebill
+#undef logic_teammissioncomplete
+#undef rotateorientation
+#undef createhuman
+#undef server_playermessage
+#undef createevent_updateplayer
+#undef logic_suits_buy
+#undef pointinsidebase
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -52922,21 +53010,21 @@ LAB_004560f2:
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define FUN_004272b0 ((void (__cdecl *)(int))SR_VA(0x4272b0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_0044e500 ((void (__cdecl *)(int, int))SR_VA(0x44e500))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_00424f60 ((void (__cdecl *)(int))SR_VA(0x424f60))
-#define FUN_00422e20 ((void (__cdecl *)(int, int))SR_VA(0x422e20))
-#define FUN_0044e2c0 ((void (__cdecl *)(int, int))SR_VA(0x44e2c0))
-#define FUN_004257a0 ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define FUN_00431630 ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
-#define FUN_00426f90 ((void (__cdecl *)(int))SR_VA(0x426f90))
-#define FUN_0042c020 ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
+#define objectsimulation_heli ((void (__cdecl *)(int))SR_VA(0x424f60))
 #define _CIsqrt lf_CIsqrt
-#define FUN_00416ce0 ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
-#define FUN_0040b3f0 ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
+#define objectsimulation_car ((void (__cdecl *)(int))SR_VA(0x4272b0))
+#define objectwheelcollision ((void (__cdecl *)(int, int))SR_VA(0x44e500))
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define __security_check_cookie(x) ((void)0)
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
+#define objectwheelcollision2 ((void (__cdecl *)(int, int))SR_VA(0x44e2c0))
+#define objecttrainsimulation ((void (__cdecl *)(int))SR_VA(0x426f90))
+#define area_breakblock ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
 #define local_48 (*(int * *)(lf_frame + 0x18))
@@ -53299,7 +53387,7 @@ void __cdecl lf_56710(void)
       }
       if (LF_BITS_U(pfVar20[-0x18]) != 0xdU) {
         if (0.083333336 < LF_BITS_F(local_48)) {
-          FUN_00422e20(((int)LF_BITS_U(local_44)),(int)(longlong)(LF_BITS_F(local_48) * 60.0 + 10.0));
+          applydamageobject(((int)LF_BITS_U(local_44)),(int)(longlong)(LF_BITS_F(local_48) * 60.0 + 10.0));
         }
         uVar11 = g_numofevents;
         iVar7 = g_game.ticks;
@@ -53408,10 +53496,10 @@ void __cdecl lf_56710(void)
   do {
     if (*(int *)((int)&((Object *)(g_object[0].rot + -5))->active + iVar7) != 0) {
       if (*(int *)((int)g_object[0].rot + iVar7 + -0x34) == 1) {
-        FUN_004272b0(((int)LF_BITS_U(local_44)));
+        objectsimulation_car(((int)LF_BITS_U(local_44)));
       }
       if (*(int *)((int)g_object[0].rot + iVar7 + -0x34) == 2) {
-        FUN_00424f60(((int)LF_BITS_U(local_44)));
+        objectsimulation_heli(((int)LF_BITS_U(local_44)));
       }
       if (*(int *)((int)g_object[0].rot + iVar7 + -0x38) == 0xc) {
         pfVar20 = (float *)((int)&g_object[0].rot[-2].x + iVar7);
@@ -53454,7 +53542,7 @@ void __cdecl lf_56710(void)
           iVar18 = g_objecttype[*(int *)((int)g_object[0].rot + iVar7 + -0x38)].unk_8288;
           uVar22 = 4;
 LAB_00457632:
-          FUN_00416ce0(lf_f2u(local_44),uVar22,iVar18,pfVar20,pfVar19);
+          createevent_updateobject(lf_f2u(local_44),uVar22,iVar18,pfVar20,pfVar19);
         }
         iVar18 = *(int *)((int)&g_object[0].unk_8194 + iVar7);
         iVar10 = iVar18 * 0x578;
@@ -53544,9 +53632,9 @@ LAB_0045770a:
             local_10 = (float)(local_50 * pfVar20[0x14]);
             local_c = (float)(local_50 * pfVar20[0x15]);
             local_8 = (float)(local_50 * pfVar20[0x16]);
-            FUN_0040bdb0((int)pfVar19,&local_10,local_4c);
+            rotateorientation((int)pfVar19,&local_10,local_4c);
           }
-          FUN_0044e2c0(((int)LF_BITS_U(local_44)),iVar18);
+          objectwheelcollision2(((int)LF_BITS_U(local_44)),iVar18);
           iVar18 = iVar18 + 1;
           pfVar20 = pfVar20 + 0x3a;
         } while (iVar18 < *(int *)((int)&g_object[0].unk_71ec + iVar7));
@@ -53585,13 +53673,13 @@ LAB_0045770a:
                        (local_10 * *(float *)((int)&g_object[0].rot[1].x + iVar7) +
                        *(float *)((int)&g_object[0].rot[1].y + iVar7) * local_c));
           pfVar19[-3] = (float)(pfVar19[-4] + pfVar19[-3]);
-          FUN_0044e500(((int)LF_BITS_U(local_44)),iVar18);
+          objectwheelcollision(((int)LF_BITS_U(local_44)),iVar18);
           iVar18 = iVar18 + 1;
           pfVar19 = pfVar19 + 0x26;
         } while (iVar18 < *(int *)((int)&g_object[0].num_wheels + iVar7));
       }
       if (*(int *)((int)g_object[0].rot + iVar7 + -0x34) == 3) {
-        FUN_00426f90(((int)LF_BITS_U(local_44)));
+        objecttrainsimulation(((int)LF_BITS_U(local_44)));
       }
       local_48 = (int *)0x0;
       if ((*(int *)((int)g_object[0].rot + iVar7 + -0x34) != 3) &&
@@ -53609,10 +53697,11 @@ LAB_0045770a:
           dVar21 = _CIsqrt((double)local_50);
           local_50 = (float)dVar21;
           if ((64.0 <= local_50) ||
-             (iVar18 = FUN_00431630((float *)((int)&g_object[0].rot[-2].x + iVar7),
-                                    (float *)(&DAT_0b7e7214 + iVar18 * 0x3c),0), iVar18 == 0)) {
-            iVar10 = FUN_00431630((float *)((int)&g_object[0].rot[-1].x + iVar7),
-                                  (float *)(&DAT_0b7e7214 + *piVar15 * 0x3c),0);
+             (iVar18 = lineintersectlevel((float *)((int)&g_object[0].rot[-2].x + iVar7),
+                                          (float *)(&DAT_0b7e7214 + iVar18 * 0x3c),0), iVar18 == 0))
+          {
+            iVar10 = lineintersectlevel((float *)((int)&g_object[0].rot[-1].x + iVar7),
+                                        (float *)(&DAT_0b7e7214 + *piVar15 * 0x3c),0);
             iVar18 = g_numofbonds;
             fVar2 = _DAT_107484a8;
             if (iVar10 != 0) {
@@ -53648,9 +53737,9 @@ LAB_0045770a:
           else {
             iVar18 = 0;
             if (DAT_107484f8 != 0xffffffff) {
-              iVar18 = FUN_0042c020(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500,DAT_10748510
-                                    ,DAT_10748514,&DAT_0b7e7214 + *piVar15 * 0x3c,
-                                    &DAT_0b7e722c + *piVar15 * 0x3c);
+              iVar18 = area_breakblock(DAT_107484f4,DAT_107484f8,DAT_107484fc,DAT_10748500,
+                                       DAT_10748510,DAT_10748514,&DAT_0b7e7214 + *piVar15 * 0x3c,
+                                       &DAT_0b7e722c + *piVar15 * 0x3c);
             }
             iVar10 = *piVar15;
             local_2c = (float)(_DAT_107484b0 * ((float)(_DAT_107484a4 - LF_BITS_F((&DAT_0b7e7218)[iVar10 * 0x3c]))) +
@@ -53662,7 +53751,7 @@ LAB_0045770a:
             local_10 = (float)((*(float *)&((&DAT_0b7e7214)[iVar10 * 0x3c])) + _DAT_00460ce0 * 0.5);
             local_c = (float)(_DAT_00460ce4 * 0.5 + LF_BITS_F((&DAT_0b7e7218)[iVar10 * 0x3c]));
             local_8 = (float)(_DAT_00460ce8 * 0.5 + LF_BITS_F((&DAT_0b7e721c)[iVar10 * 0x3c]));
-            iVar12 = FUN_00431630(&local_10,(float *)(&DAT_0b7e7214 + iVar10 * 0x3c),0);
+            iVar12 = lineintersectlevel(&local_10,(float *)(&DAT_0b7e7214 + iVar10 * 0x3c),0);
             iVar10 = g_numofbonds;
             if (iVar12 != 0) {
               iVar12 = *piVar15;
@@ -53702,7 +53791,7 @@ LAB_0045770a:
             *(undefined4 *)&g_bond[iVar10].lf_raw[0xc4] = 0;
             g_bond[iVar10].unk_0080 = 0x3f19999a;
             if ((iVar18 == 2) && (0x14 < ((int)LF_BITS_U(local_4c)))) {
-              FUN_00422e20(((int)LF_BITS_U(local_44)),100);
+              applydamageobject(((int)LF_BITS_U(local_44)),100);
             }
           }
           local_4c = LF_BITS_F((((int)LF_BITS_U(local_4c)) + 1));
@@ -53746,8 +53835,9 @@ LAB_00457ea9:
               piVar15 = (int *)((int)(g_object[0].rot + 9) + iVar7 + 4);
               do {
                 iVar18 = *piVar15;
-                iVar13 = FUN_004257a0(((int)LF_BITS_U(local_4c)),(float *)((int)&g_object[0].rot[-2].x + iVar7),
-                                      (float *)(&DAT_0b7e7214 + iVar18 * 0x3c),0);
+                iVar13 = lineintersectobject(((int)LF_BITS_U(local_4c)),
+                                             (float *)((int)&g_object[0].rot[-2].x + iVar7),
+                                             (float *)(&DAT_0b7e7214 + iVar18 * 0x3c),0);
                 iVar12 = g_numofbonds;
                 iVar10 = DAT_107484d4;
                 if (iVar13 != 0) {
@@ -53789,7 +53879,7 @@ LAB_00457ea9:
         local_44 = LF_BITS_F((((int)LF_BITS_U(local_44)) + 1));
         iVar7 = iVar7 + 0x8230;
       } while (iVar7 < 0x208c000);
-      FUN_0040b3f0(DAT_12e81cec);
+      stoptimer(DAT_12e81cec);
       return;
     }
   } while( true );
@@ -53860,21 +53950,21 @@ LAB_00457ea9:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef FUN_004272b0
-#undef FUN_0040bdb0
-#undef __security_check_cookie
-#undef FUN_0044e500
-#undef _ftol2
-#undef FUN_00424f60
-#undef FUN_00422e20
-#undef FUN_0044e2c0
-#undef FUN_004257a0
-#undef FUN_00431630
-#undef FUN_00426f90
-#undef FUN_0042c020
+#undef objectsimulation_heli
 #undef _CIsqrt
-#undef FUN_00416ce0
-#undef FUN_0040b3f0
+#undef applydamageobject
+#undef objectsimulation_car
+#undef objectwheelcollision
+#undef lineintersectlevel
+#undef __security_check_cookie
+#undef _ftol2
+#undef stoptimer
+#undef rotateorientation
+#undef createevent_updateobject
+#undef objectwheelcollision2
+#undef objecttrainsimulation
+#undef area_breakblock
+#undef lineintersectobject
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -53914,15 +54004,15 @@ LAB_00457ea9:
 #define DAT_0e6c91cc (*(undefined *)SR_VA(0xe6c91cc))
 #define rand_exref (*(undefined * *)SR_VA(0x45e070))
 #define rand_exref ((code *)rand)
-#define FUN_00428190 ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00428020 ((int (__cdecl *)(void))SR_VA(0x428020))
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define __security_check_cookie(x) ((void)0)
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define __security_check_cookie(x) ((void)0)
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -53984,7 +54074,7 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
           } while (iVar6 < 0x200);
         }
         (&DAT_00603de0)[iVar4] = 1;
-        iVar6 = FUN_00428020();
+        iVar6 = createplayer();
         (*pcVar8)();
         iVar4 = iVar5 + iVar4 * 0x10;
         local_38 = *(float *)(&DAT_0e6c8dc4 + iVar4);
@@ -53994,7 +54084,7 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
         sprintf(g_player[iVar6].name,"");
         g_player[iVar6].is_bot = 1;
         g_player[iVar6].unk_22f0 = param_3;
-        FUN_004064a0(iVar6);
+        createevent_updateplayer(iVar6);
         iVar4 = *(int *)(&DAT_0e6c8dd0 + iVar4);
         local_40 = 0.0;
         if (iVar4 == 1) {
@@ -54015,8 +54105,8 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
         local_28[5] = 0.0;
         local_28[6] = 0.0;
         local_28[7] = 0.0;
-        FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,local_40);
-        iVar4 = FUN_00450ae0(&local_38,local_28,iVar6);
+        rotateorientation((int)local_28,(float *)&DAT_00460ce0,local_40);
+        iVar4 = createhuman(&local_38,local_28,iVar6);
         g_player[iVar6].yaw = local_40;
         g_player[iVar6].human_id = iVar4;
         uVar1 = rand();
@@ -54028,7 +54118,7 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
           iVar4 = g_player[iVar6].human_id;
           iVar6 = 10;
         }
-        FUN_00428190(iVar4,iVar6,3);
+        scenario_armhuman(iVar4,iVar6,3);
         pcVar8 = rand_exref;
         iVar4 = local_3c + -1;
       } while (local_3c + -1 != 0);
@@ -54047,7 +54137,7 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
     local_28[5] = 0.0;
     local_28[6] = 0.0;
     local_28[7] = 0.0;
-    local_4 = FUN_0041b070(param_2,&local_38,(undefined4 *)0x0,local_28);
+    local_4 = createitem(param_2,&local_38,(undefined4 *)0x0,local_28);
     DAT_0b051b8c = local_4;
     DAT_0b051bac = param_1;
   }
@@ -54070,15 +54160,15 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #undef DAT_0e6c91cc
 #undef rand_exref
 #undef rand_exref
-#undef FUN_00428190
-#undef sprintf
-#undef FUN_0041b070
-#undef FUN_004064a0
-#undef FUN_0040bdb0
-#undef FUN_00428020
-#undef FUN_00450ae0
-#undef __security_check_cookie
 #undef rand
+#undef createplayer
+#undef sprintf
+#undef rotateorientation
+#undef createhuman
+#undef __security_check_cookie
+#undef scenario_armhuman
+#undef createevent_updateplayer
+#undef createitem
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -54096,13 +54186,13 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #define DAT_0e699230 (*(undefined4 *)SR_VA(0xe699230))
 #define g_city (*(int *)SR_VA(0xe699220))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_00428020 ((int (__cdecl *)(void))SR_VA(0x428020))
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_00433350 ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
-#define FUN_00401610 ((void (__cdecl *)(uint))SR_VA(0x401610))
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
 #define local_1c (*(int *)(lf_frame + 0x14))
 #define local_18 (*(uint *)(lf_frame + 0x18))
 #define local_c (*(float *)(lf_frame + 0x24))
@@ -54131,12 +54221,12 @@ void __cdecl lf_585b0(int param_1)
   
   if ((DAT_0e6b3228 != 0) && (local_18 = 0, 0 < param_1)) {
     do {
-      uVar2 = FUN_00428020();
+      uVar2 = createplayer();
       iVar9 = uVar2 * 0x2408;
       g_player[uVar2].team = 6;
       sprintf(g_player[uVar2].name,"");
       g_player[uVar2].is_bot = 1;
-      FUN_004064a0(uVar2);
+      createevent_updateplayer(uVar2);
       uVar3 = rand();
       iVar4 = rand();
       iVar4 = iVar4 % DAT_0e6b3228;
@@ -54163,11 +54253,11 @@ void __cdecl lf_585b0(int param_1)
       uVar6 = uVar3 & 1;
       uVar10 = uVar5 & 1;
       iVar7 = rand();
-      iVar8 = FUN_00433350(local_1c,iVar7 % 6,iVar8,uVar6,uVar10,fVar11);
+      iVar8 = scenario_createcar(local_1c,iVar7 % 6,iVar8,uVar6,uVar10,fVar11);
       local_c = g_object[iVar8].pos.x;
       local_8 = g_object[iVar8].pos.y;
       local_4 = g_object[iVar8].pos.z;
-      iVar7 = FUN_00450ae0(&local_c,&g_object[iVar8].rot[0].x,uVar2);
+      iVar7 = createhuman(&local_c,&g_object[iVar8].rot[0].x,uVar2);
       g_player[uVar2].human_id = iVar7;
       g_human[iVar7].vehicle_id = iVar8;
       g_human[iVar7].vehicle_seat = 0;
@@ -54188,7 +54278,7 @@ void __cdecl lf_585b0(int param_1)
       *(uint *)(iVar9 + ((int)SR_VA(0xf1ef75c)) + g_player[uVar2].num_path * 0x1c) = uVar3 & 1;
       *(uint *)(iVar9 + ((int)SR_VA(0xf1ef760)) + g_player[uVar2].num_path * 0x1c) = uVar5 & 1;
       g_player[uVar2].num_path = g_player[uVar2].num_path + 1;
-      FUN_00401610(uVar2);
+      ai_car_nextwaypoint(uVar2);
       local_18 = local_18 + 1;
     } while ((int)local_18 < param_1);
   }
@@ -54201,13 +54291,13 @@ void __cdecl lf_585b0(int param_1)
 #undef DAT_0e699230
 #undef g_city
 #undef g_player
-#undef sprintf
-#undef FUN_004064a0
-#undef FUN_00428020
-#undef FUN_00450ae0
+#undef createplayer
 #undef rand
-#undef FUN_00433350
-#undef FUN_00401610
+#undef scenario_createcar
+#undef sprintf
+#undef createhuman
+#undef createevent_updateplayer
+#undef ai_car_nextwaypoint
 #undef local_1c
 #undef local_18
 #undef local_c
@@ -54223,20 +54313,20 @@ void __cdecl lf_585b0(int param_1)
 #define DAT_0b051b8c (*(uint *)SR_VA(0xb051b8c))
 #define DAT_0b051bac (*(undefined4 *)SR_VA(0xb051bac))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_0041b870 ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define FUN_00428190 ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00407e00 ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
+#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_00428020 ((int (__cdecl *)(void))SR_VA(0x428020))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define FUN_00433350 ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
-#define FUN_00401610 ((void (__cdecl *)(uint))SR_VA(0x401610))
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -54277,21 +54367,21 @@ int __cdecl lf_587f0(int param_1,int param_2)
 
   
   if (DAT_0e6b3228 != 0) {
-    uVar2 = FUN_00428020();
+    uVar2 = createplayer();
     iVar9 = uVar2 * 0x2408;
     g_player[uVar2].team = 6;
     sprintf(g_player[uVar2].name,"");
     g_player[uVar2].is_bot = 1;
     g_player[uVar2].unk_22f0 = param_2;
-    FUN_004064a0(uVar2);
+    createevent_updateplayer(uVar2);
     uVar3 = rand();
     iVar4 = rand();
     iVar4 = iVar4 % DAT_0e6b3228;
-    iVar5 = FUN_00433350(3,0,iVar4,uVar3 & 1,1,32.0);
+    iVar5 = scenario_createcar(3,0,iVar4,uVar3 & 1,1,32.0);
     local_30 = g_object[iVar5].pos.x;
     local_2c = g_object[iVar5].pos.y;
     local_28 = g_object[iVar5].pos.z;
-    iVar6 = FUN_00450ae0(&local_30,&g_object[iVar5].rot[0].x,uVar2);
+    iVar6 = createhuman(&local_30,&g_object[iVar5].rot[0].x,uVar2);
     g_player[uVar2].human_id = iVar6;
     local_30 = 62.0;
     local_2c = 10.0;
@@ -54307,73 +54397,75 @@ int __cdecl lf_587f0(int param_1,int param_2)
     local_8 = 0;
     local_14 = 0x3f800000;
     local_4 = 0x3f800000;
-    uVar7 = FUN_0041b070(0x18,&local_30,(undefined4 *)0x0,&local_24);
+    uVar7 = createitem(0x18,&local_30,(undefined4 *)0x0,&local_24);
     iVar6 = g_player[uVar2].human_id;
     g_item[uVar7].vehicle_id = iVar5;
     if (uVar7 < 0x400) {
       if (iVar6 == -1) {
         if (g_item[uVar7].parent_item == 0xffffffff) {
           if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-            FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-            FUN_00406380(uVar7);
+            item_removehumanlink(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+            ;
+            createevent_updateitem(uVar7);
           }
         }
         else {
-          FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-          FUN_00406380(uVar7);
+          item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+          createevent_updateitem(uVar7);
         }
       }
       else if ((g_human[iVar6].inventory[4].count < 2) &&
               (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
         if (g_item[uVar7].parent_item != 0xffffffff) {
-          FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+          item_removeitemlink(uVar7,g_item[uVar7].parent_item);
           g_item[uVar7].parent_item = -1;
         }
         if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-          FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+          item_removehumanlink(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
         }
-        iVar6 = FUN_00407e00(uVar7,g_player[uVar2].human_id,4);
+        iVar6 = item_addhumanlink(uVar7,g_player[uVar2].human_id,4);
         if (iVar6 != 0) {
           g_item[uVar7].parent_human = g_player[uVar2].human_id;
           g_item[uVar7].parent_slot = 4;
         }
-        FUN_00406380(uVar7);
+        createevent_updateitem(uVar7);
       }
     }
-    uVar7 = FUN_0041b070(0xd,&local_30,(undefined4 *)0x0,&local_24);
+    uVar7 = createitem(0xd,&local_30,(undefined4 *)0x0,&local_24);
     g_item[uVar7].type = 0xe;
-    DAT_0b051b8c = FUN_0041b070(param_1,&local_30,(undefined4 *)0x0,&local_24);
+    DAT_0b051b8c = createitem(param_1,&local_30,(undefined4 *)0x0,&local_24);
     DAT_0b051bac = 0xff;
-    FUN_0041b870(uVar7,DAT_0b051b8c,-1,0);
+    linkitem(uVar7,DAT_0b051b8c,-1,0);
     iVar6 = g_player[uVar2].human_id;
     g_item[uVar7].type = 0xd;
     if (uVar7 < 0x400) {
       if (iVar6 == -1) {
         if (g_item[uVar7].parent_item == 0xffffffff) {
           if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-            FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-            FUN_00406380(uVar7);
+            item_removehumanlink(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+            ;
+            createevent_updateitem(uVar7);
           }
         }
         else {
-          FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-          FUN_00406380(uVar7);
+          item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+          createevent_updateitem(uVar7);
         }
       }
       else if ((g_human[iVar6].inventory[3].count < 2) && (g_itemtype[0xd].unk_0008 == 0)) {
         if (g_item[uVar7].parent_item != 0xffffffff) {
-          FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+          item_removeitemlink(uVar7,g_item[uVar7].parent_item);
           g_item[uVar7].parent_item = -1;
         }
         if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-          FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+          item_removehumanlink(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
         }
-        iVar6 = FUN_00407e00(uVar7,g_player[uVar2].human_id,3);
+        iVar6 = item_addhumanlink(uVar7,g_player[uVar2].human_id,3);
         if (iVar6 != 0) {
           g_item[uVar7].parent_human = g_player[uVar2].human_id;
           g_item[uVar7].parent_slot = 3;
         }
-        FUN_00406380(uVar7);
+        createevent_updateitem(uVar7);
       }
     }
     g_player[uVar2].team = 6;
@@ -54389,19 +54481,19 @@ int __cdecl lf_587f0(int param_1,int param_2)
     *(uint *)(iVar9 + ((int)SR_VA(0xf1ef75c)) + g_player[uVar2].num_path * 0x1c) = uVar3 & 1;
     *(undefined4 *)(iVar9 + ((int)SR_VA(0xf1ef760)) + g_player[uVar2].num_path * 0x1c) = 1;
     g_player[uVar2].num_path = g_player[uVar2].num_path + 1;
-    FUN_00401610(uVar2);
-    FUN_00401610(uVar2);
-    iVar6 = FUN_00428020();
+    ai_car_nextwaypoint(uVar2);
+    ai_car_nextwaypoint(uVar2);
+    iVar6 = createplayer();
     g_player[iVar6].team = 6;
     sprintf(g_player[iVar6].name,"");
     g_player[iVar6].is_bot = 1;
     g_player[iVar6].unk_22f0 = param_2;
-    FUN_004064a0(iVar6);
+    createevent_updateplayer(iVar6);
     local_30 = g_object[iVar5].pos.x;
     pvVar1 = g_object[iVar5].rot;
     local_2c = g_object[iVar5].pos.y;
     local_28 = g_object[iVar5].pos.z;
-    iVar4 = FUN_00450ae0(&local_30,&pvVar1->x,iVar6);
+    iVar4 = createhuman(&local_30,&pvVar1->x,iVar6);
     g_player[iVar6].human_id = iVar4;
     g_human[iVar4].vehicle_id = iVar5;
     g_human[iVar4].vehicle_seat = 1;
@@ -54414,19 +54506,19 @@ int __cdecl lf_587f0(int param_1,int param_2)
       iVar6 = g_player[iVar6].human_id;
       iVar4 = 10;
     }
-    FUN_00428190(iVar6,iVar4,4);
+    scenario_armhuman(iVar6,iVar4,4);
     uVar2 = rand();
     if ((uVar2 & 1) == 0) {
-      iVar6 = FUN_00428020();
+      iVar6 = createplayer();
       g_player[iVar6].team = 6;
       sprintf(g_player[iVar6].name,"");
       g_player[iVar6].is_bot = 1;
       g_player[iVar6].unk_22f0 = param_2;
-      FUN_004064a0(iVar6);
+      createevent_updateplayer(iVar6);
       local_30 = g_object[iVar5].pos.x;
       local_2c = g_object[iVar5].pos.y;
       local_28 = g_object[iVar5].pos.z;
-      iVar4 = FUN_00450ae0(&local_30,&pvVar1->x,iVar6);
+      iVar4 = createhuman(&local_30,&pvVar1->x,iVar6);
       g_player[iVar6].human_id = iVar4;
       g_human[iVar4].vehicle_id = iVar5;
       g_human[iVar4].vehicle_seat = 2;
@@ -54439,29 +54531,29 @@ int __cdecl lf_587f0(int param_1,int param_2)
         iVar6 = g_player[iVar6].human_id;
         iVar4 = 10;
       }
-      FUN_00428190(iVar6,iVar4,4);
+      scenario_armhuman(iVar6,iVar4,4);
     }
     lf_eax = rand();
     if ((lf_eax & 1) == 0) {
-      iVar6 = FUN_00428020();
+      iVar6 = createplayer();
       g_player[iVar6].team = 6;
       sprintf(g_player[iVar6].name,"");
       g_player[iVar6].is_bot = 1;
       g_player[iVar6].unk_22f0 = param_2;
-      FUN_004064a0(iVar6);
+      createevent_updateplayer(iVar6);
       local_30 = g_object[iVar5].pos.x;
       local_2c = g_object[iVar5].pos.y;
       local_28 = g_object[iVar5].pos.z;
-      iVar4 = FUN_00450ae0(&local_30,&pvVar1->x,iVar6);
+      iVar4 = createhuman(&local_30,&pvVar1->x,iVar6);
       g_player[iVar6].human_id = iVar4;
       g_human[iVar4].vehicle_id = iVar5;
       g_human[iVar4].vehicle_seat = 3;
       uVar2 = rand();
       if ((uVar2 & 1) == 0) {
-        iVar6 = FUN_00428190(g_player[iVar6].human_id,6,4);
+        iVar6 = scenario_armhuman(g_player[iVar6].human_id,6,4);
         return iVar6;
       }
-      lf_eax = FUN_00428190(g_player[iVar6].human_id,10,4);
+      lf_eax = scenario_armhuman(g_player[iVar6].human_id,10,4);
     }
   }
   return lf_eax;
@@ -54474,20 +54566,20 @@ int __cdecl lf_587f0(int param_1,int param_2)
 #undef DAT_0b051b8c
 #undef DAT_0b051bac
 #undef g_player
-#undef FUN_0041b870
-#undef FUN_00428190
-#undef sprintf
-#undef FUN_00450ae0
-#undef FUN_00407f80
-#undef FUN_00407e50
-#undef FUN_00407e00
+#undef createplayer
+#undef linkitem
+#undef scenario_armhuman
+#undef item_removeitemlink
+#undef createevent_updateitem
+#undef item_addhumanlink
+#undef ai_car_nextwaypoint
 #undef rand
-#undef FUN_0041b070
-#undef FUN_004064a0
-#undef FUN_00428020
-#undef FUN_00406380
-#undef FUN_00433350
-#undef FUN_00401610
+#undef scenario_createcar
+#undef sprintf
+#undef createhuman
+#undef item_removehumanlink
+#undef createevent_updateplayer
+#undef createitem
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -54511,9 +54603,9 @@ int __cdecl lf_587f0(int param_1,int param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
 #define DAT_0e6c8bfc (*(undefined4 *)SR_VA(0xe6c8bfc))
-#define FUN_00406760 ((int (__cdecl *)(int, int))SR_VA(0x406760))
-#define FUN_004587f0 ((int (__cdecl *)(int, int))SR_VA(0x4587f0))
-#define FUN_00458320 ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define scenario_createchase ((int (__cdecl *)(int, int))SR_VA(0x4587f0))
+#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
@@ -54542,7 +54634,7 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
     DAT_0b051a84 = 0;
   }
   if (param_1 == 1) {
-    iVar3 = FUN_004587f0(iVar1,local_8);
+    iVar3 = scenario_createchase(iVar1,local_8);
   }
   else {
     iVar3 = param_1;
@@ -54564,7 +54656,7 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
       if ((&DAT_0e6c8bfc)[iVar3 * 0x277] != 3) {
         return iVar7;
       }
-      iVar3 = FUN_00458320(iVar3,iVar1,local_8);
+      iVar3 = scenario_createguards(iVar3,iVar1,local_8);
     }
   }
   iVar8 = 0;
@@ -54612,7 +54704,7 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
            (float)((float)*(int *)(&g_game.lf_raw[0xf4] + iVar7) * 2.5e-05);
       *(undefined4 *)(&g_game.lf_raw[0x100] + iVar7) = 0;
       *(undefined4 *)(&g_game.lf_raw[0x10c] + iVar7) = 0;
-      iVar3 = FUN_00406760(iVar3,iVar9);
+      iVar3 = createevent_updatemission(iVar3,iVar9);
       iVar8 = iVar8 + 1;
     } while (iVar8 < param_2);
   }
@@ -54628,9 +54720,9 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
 #undef g_item
 #undef DAT_0e6c8bb8
 #undef DAT_0e6c8bfc
-#undef FUN_00406760
-#undef FUN_004587f0
-#undef FUN_00458320
+#undef createevent_updatemission
+#undef scenario_createchase
+#undef scenario_createguards
 #undef rand
 #undef local_8
 
@@ -54738,28 +54830,28 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
 #define _DAT_25d7fab4 (*(float *)SR_VA(0x25d7fab4))
 #define _DAT_25d7fab8 (*(float *)SR_VA(0x25d7fab8))
 #define _DAT_25d7fabc (*(float *)SR_VA(0x25d7fabc))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_00458320 ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
-#define FUN_00405700 ((void (__cdecl *)(void))SR_VA(0x405700))
-#define FUN_00407e50 ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define FUN_00433350 ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define saveaccountsserver ((void (__cdecl *)(void))SR_VA(0x401080))
+#define economy_gunmarket ((void (__cdecl *)(void))SR_VA(0x405870))
+#define newspaper_load ((void (__cdecl *)(void))SR_VA(0x4185a0))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_0043ccc0 ((int (__cdecl *)(int, float *, float *))SR_VA(0x43ccc0))
-#define FUN_004185a0 ((void (__cdecl *)(void))SR_VA(0x4185a0))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
-#define FUN_00405870 ((void (__cdecl *)(void))SR_VA(0x405870))
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define FUN_00406380 ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define __security_check_cookie(x) ((void)0)
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
 #define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define FUN_00401080 ((void (__cdecl *)(void))SR_VA(0x401080))
-#define FUN_00406840 ((void (__cdecl *)(void))SR_VA(0x406840))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define FUN_00454e40 ((void (__cdecl *)(void))SR_VA(0x454e40))
+#define createvehicle ((int (__cdecl *)(int, float *, float *))SR_VA(0x43ccc0))
+#define createlevel ((void (__cdecl *)(void))SR_VA(0x454e40))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define economy_carmarket ((void (__cdecl *)(void))SR_VA(0x405700))
+#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
 #define local_30 (*(float *)(lf_frame + 0x20))
@@ -54796,7 +54888,7 @@ void __cdecl lf_590f0(void)
   local_4 = DAT_00460d18 ^ (uint)&local_38;
   DAT_07a1eadc = 0xffffffff;
   if ((g_game.gametype == 3) && (g_server != 0)) {
-    FUN_00401080();
+    saveaccountsserver();
   }
   g_game.state = 1;
   g_game.timer = 0;
@@ -54864,7 +54956,7 @@ void __cdecl lf_590f0(void)
     DAT_09fdd8a0 = 0;
   }
   else {
-    FUN_004185a0();
+    newspaper_load();
     iVar14 = g_game.gametype;
     if (g_server != 0) {
       local_2c = rand();
@@ -55031,7 +55123,7 @@ void __cdecl lf_590f0(void)
   _DAT_0f172688 = 0;
   _DAT_0f19b8b0 = 0;
   _DAT_0f1c4ad8 = 0;
-  FUN_00454e40();
+  createlevel();
   _Var13 = _time64((__time64_t *)0x0);
   srand((uint)_Var13);
   iVar10 = DAT_0e6b322c * 0x68;
@@ -55059,8 +55151,8 @@ void __cdecl lf_590f0(void)
       local_28[5] = 0.0;
       local_28[6] = 0.0;
       local_28[7] = 0.0;
-      FUN_0040bdb0((int)local_28,local_28 + 3,3.1415927);
-      g_player[0].human_id = FUN_00450ae0(&local_38,local_28,0);
+      rotateorientation((int)local_28,local_28 + 3,3.1415927);
+      g_player[0].human_id = createhuman(&local_38,local_28,0);
       g_human[g_player[0].human_id].axis = 3.1415927;
       local_28[0] = 1.0;
       local_28[1] = 0.0;
@@ -55073,18 +55165,19 @@ void __cdecl lf_590f0(void)
       local_28[7] = 0.0;
       local_28[4] = 1.0;
       local_28[8] = 1.0;
-      uVar7 = FUN_0041b070(2,&local_38,(undefined4 *)0x0,local_28);
+      uVar7 = createitem(2,&local_38,(undefined4 *)0x0,local_28);
       if (uVar7 < 0x400) {
         if (g_player[0].human_id == -1) {
           if (g_item[uVar7].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-              FUN_00406380(uVar7);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              createevent_updateitem(uVar7);
             }
           }
           else {
-            FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-            FUN_00406380(uVar7);
+            item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+            createevent_updateitem(uVar7);
           }
         }
         else {
@@ -55092,11 +55185,12 @@ void __cdecl lf_590f0(void)
           pIVar1 = g_human[g_player[0].human_id].inventory;
           if ((iVar10 < 2) && (iVar10 < 1)) {
             if (g_item[uVar7].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+              item_removeitemlink(uVar7,g_item[uVar7].parent_item);
               g_item[uVar7].parent_item = -1;
             }
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
             }
             iVar10 = g_player[0].human_id;
             if (pIVar1->count < 8) {
@@ -55105,33 +55199,35 @@ void __cdecl lf_590f0(void)
               g_item[uVar7].parent_human = iVar10;
               g_item[uVar7].parent_slot = 0;
             }
-            FUN_00406380(uVar7);
+            createevent_updateitem(uVar7);
           }
         }
       }
-      uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+      uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
       if (uVar7 < 0x400) {
         if (g_player[0].human_id == -1) {
           if (g_item[uVar7].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-              FUN_00406380(uVar7);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              createevent_updateitem(uVar7);
             }
           }
           else {
-            FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-            FUN_00406380(uVar7);
+            item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+            createevent_updateitem(uVar7);
           }
         }
         else {
           pIVar1 = g_human[g_player[0].human_id].inventory + 1;
           if ((pIVar1->count < 2) && (pIVar1->count < 1)) {
             if (g_item[uVar7].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+              item_removeitemlink(uVar7,g_item[uVar7].parent_item);
               g_item[uVar7].parent_item = -1;
             }
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
             }
             iVar10 = g_player[0].human_id;
             if (pIVar1->count < 8) {
@@ -55140,22 +55236,23 @@ void __cdecl lf_590f0(void)
               g_item[uVar7].parent_human = iVar10;
               g_item[uVar7].parent_slot = 1;
             }
-            FUN_00406380(uVar7);
+            createevent_updateitem(uVar7);
           }
         }
       }
-      uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+      uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
       if (uVar7 < 0x400) {
         if (g_player[0].human_id == -1) {
           if (g_item[uVar7].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-              FUN_00406380(uVar7);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              createevent_updateitem(uVar7);
             }
           }
           else {
-            FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-            FUN_00406380(uVar7);
+            item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+            createevent_updateitem(uVar7);
           }
         }
         else {
@@ -55163,11 +55260,12 @@ void __cdecl lf_590f0(void)
           if ((g_human[g_player[0].human_id].inventory[3].count < 2) &&
              (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
             if (g_item[uVar7].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+              item_removeitemlink(uVar7,g_item[uVar7].parent_item);
               g_item[uVar7].parent_item = -1;
             }
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
             }
             iVar10 = g_player[0].human_id;
             if (pIVar1->count < 8) {
@@ -55176,22 +55274,23 @@ void __cdecl lf_590f0(void)
               g_item[uVar7].parent_human = iVar10;
               g_item[uVar7].parent_slot = 3;
             }
-            FUN_00406380(uVar7);
+            createevent_updateitem(uVar7);
           }
         }
       }
-      uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+      uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
       if (uVar7 < 0x400) {
         if (g_player[0].human_id == -1) {
           if (g_item[uVar7].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-              FUN_00406380(uVar7);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              createevent_updateitem(uVar7);
             }
           }
           else {
-            FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-            FUN_00406380(uVar7);
+            item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+            createevent_updateitem(uVar7);
           }
         }
         else {
@@ -55199,11 +55298,12 @@ void __cdecl lf_590f0(void)
           if ((g_human[g_player[0].human_id].inventory[3].count < 2) &&
              (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
             if (g_item[uVar7].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+              item_removeitemlink(uVar7,g_item[uVar7].parent_item);
               g_item[uVar7].parent_item = -1;
             }
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
             }
             iVar10 = g_player[0].human_id;
             if (pIVar1->count < 8) {
@@ -55212,22 +55312,23 @@ void __cdecl lf_590f0(void)
               g_item[uVar7].parent_human = iVar10;
               g_item[uVar7].parent_slot = 3;
             }
-            FUN_00406380(uVar7);
+            createevent_updateitem(uVar7);
           }
         }
       }
-      uVar7 = FUN_0041b070(4,&local_38,(undefined4 *)0x0,local_28);
+      uVar7 = createitem(4,&local_38,(undefined4 *)0x0,local_28);
       if (uVar7 < 0x400) {
         if (g_player[0].human_id == -1) {
           if (g_item[uVar7].parent_item == 0xffffffff) {
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
-              FUN_00406380(uVar7);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              createevent_updateitem(uVar7);
             }
           }
           else {
-            FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-            FUN_00406380(uVar7);
+            item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+            createevent_updateitem(uVar7);
           }
         }
         else {
@@ -55235,11 +55336,12 @@ void __cdecl lf_590f0(void)
           if ((g_human[g_player[0].human_id].inventory[2].count < 2) &&
              (g_itemtype[g_item[uVar7].type].unk_0008 != 0)) {
             if (g_item[uVar7].parent_item != 0xffffffff) {
-              FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+              item_removeitemlink(uVar7,g_item[uVar7].parent_item);
               g_item[uVar7].parent_item = -1;
             }
             if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-              FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
+              item_removehumanlink
+                        (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot);
             }
             iVar10 = g_player[0].human_id;
             if (pIVar1->count < 8) {
@@ -55248,7 +55350,7 @@ void __cdecl lf_590f0(void)
               g_item[uVar7].parent_human = iVar10;
               g_item[uVar7].parent_slot = 2;
             }
-            FUN_00406380(uVar7);
+            createevent_updateitem(uVar7);
           }
         }
       }
@@ -55263,17 +55365,17 @@ void __cdecl lf_590f0(void)
       local_28[5] = 0.0;
       local_28[6] = 0.0;
       local_28[7] = 0.0;
-      FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,-1.5707964);
+      rotateorientation((int)local_28,(float *)&DAT_00460ce0,-1.5707964);
       local_38 = _DAT_25d98474;
       local_30 = LF_BITS_F(_DAT_25d9847c);
       local_34 = (float)(_DAT_25d98478 + 1.625);
-      FUN_0043ccc0(0,&local_38,local_28);
+      createvehicle(0,&local_38,local_28);
       local_38 = _DAT_25d7fab4;
       local_34 = _DAT_25d7fab8;
       local_30 = _DAT_25d7fabc;
-      FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,3.1415927);
+      rotateorientation((int)local_28,(float *)&DAT_00460ce0,3.1415927);
       local_34 = (float)(local_34 + 1.625);
-      iVar10 = FUN_0043ccc0(0,&local_38,local_28);
+      iVar10 = createvehicle(0,&local_38,local_28);
       g_object[iVar10].unk_8194 = 0x4a;
       if (g_server != 0) {
         if ((g_game.gametype == 0) || (g_game.gametype == 2)) {
@@ -55317,7 +55419,7 @@ void __cdecl lf_590f0(void)
             local_28[7] = 0.0;
             local_28[4] = 1.0;
             local_28[8] = 1.0;
-            iVar8 = FUN_00450ae0(&local_38,local_28,local_2c);
+            iVar8 = createhuman(&local_38,local_28,local_2c);
             g_player[uVar7].human_id = iVar8;
             if (uVar7 == 0) {
               local_28[0] = 1.0;
@@ -55329,32 +55431,34 @@ void __cdecl lf_590f0(void)
               local_28[7] = 0.0;
               local_28[4] = 1.0;
               local_28[8] = 1.0;
-              uVar7 = FUN_0041b070(2,&local_38,(undefined4 *)0x0,local_28);
+              uVar7 = createitem(2,&local_38,(undefined4 *)0x0,local_28);
               iVar10 = g_player[0].human_id;
               if (uVar7 < 0x400) {
                 if (g_player[0].human_id == -1) {
                   if (g_item[uVar7].parent_item == 0xffffffff) {
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
-                      FUN_00406380(uVar7);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
+                      createevent_updateitem(uVar7);
                     }
                   }
                   else {
-                    FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-                    FUN_00406380(uVar7);
+                    item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+                    createevent_updateitem(uVar7);
                   }
                 }
                 else {
                   pIVar1 = g_human[g_player[0].human_id].inventory;
                   if ((pIVar1->count < 2) && (pIVar1->count < 1)) {
                     if (g_item[uVar7].parent_item != 0xffffffff) {
-                      FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+                      item_removeitemlink(uVar7,g_item[uVar7].parent_item);
                       g_item[uVar7].parent_item = -1;
                     }
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
                     }
                     if (pIVar1->count < 8) {
                       (&g_human[iVar10].inventory[0].item_id)[pIVar1->count] = uVar7;
@@ -55362,36 +55466,38 @@ void __cdecl lf_590f0(void)
                       g_item[uVar7].parent_human = iVar10;
                       g_item[uVar7].parent_slot = 0;
                     }
-                    FUN_00406380(uVar7);
+                    createevent_updateitem(uVar7);
                   }
                 }
               }
-              uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+              uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
               iVar10 = g_player[0].human_id;
               if (uVar7 < 0x400) {
                 if (g_player[0].human_id == -1) {
                   if (g_item[uVar7].parent_item == 0xffffffff) {
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
-                      FUN_00406380(uVar7);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
+                      createevent_updateitem(uVar7);
                     }
                   }
                   else {
-                    FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-                    FUN_00406380(uVar7);
+                    item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+                    createevent_updateitem(uVar7);
                   }
                 }
                 else {
                   pIVar1 = g_human[g_player[0].human_id].inventory + 1;
                   if ((pIVar1->count < 2) && (pIVar1->count < 1)) {
                     if (g_item[uVar7].parent_item != 0xffffffff) {
-                      FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+                      item_removeitemlink(uVar7,g_item[uVar7].parent_item);
                       g_item[uVar7].parent_item = -1;
                     }
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
                     }
                     if (pIVar1->count < 8) {
                       (&g_human[iVar10].inventory[1].item_id)[pIVar1->count] = uVar7;
@@ -55399,24 +55505,25 @@ void __cdecl lf_590f0(void)
                       g_item[uVar7].parent_human = iVar10;
                       g_item[uVar7].parent_slot = 1;
                     }
-                    FUN_00406380(uVar7);
+                    createevent_updateitem(uVar7);
                   }
                 }
               }
-              uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+              uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
               iVar10 = g_player[0].human_id;
               if (uVar7 < 0x400) {
                 if (g_player[0].human_id == -1) {
                   if (g_item[uVar7].parent_item == 0xffffffff) {
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
-                      FUN_00406380(uVar7);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
+                      createevent_updateitem(uVar7);
                     }
                   }
                   else {
-                    FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-                    FUN_00406380(uVar7);
+                    item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+                    createevent_updateitem(uVar7);
                   }
                 }
                 else {
@@ -55424,12 +55531,13 @@ void __cdecl lf_590f0(void)
                   if ((g_human[g_player[0].human_id].inventory[3].count < 2) &&
                      (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
                     if (g_item[uVar7].parent_item != 0xffffffff) {
-                      FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+                      item_removeitemlink(uVar7,g_item[uVar7].parent_item);
                       g_item[uVar7].parent_item = -1;
                     }
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
                     }
                     if (pIVar1->count < 8) {
                       (&g_human[iVar10].inventory[3].item_id)[pIVar1->count] = uVar7;
@@ -55437,24 +55545,25 @@ void __cdecl lf_590f0(void)
                       g_item[uVar7].parent_human = iVar10;
                       g_item[uVar7].parent_slot = 3;
                     }
-                    FUN_00406380(uVar7);
+                    createevent_updateitem(uVar7);
                   }
                 }
               }
-              uVar7 = FUN_0041b070(3,&local_38,(undefined4 *)0x0,local_28);
+              uVar7 = createitem(3,&local_38,(undefined4 *)0x0,local_28);
               iVar10 = g_player[0].human_id;
               if (uVar7 < 0x400) {
                 if (g_player[0].human_id == -1) {
                   if (g_item[uVar7].parent_item == 0xffffffff) {
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
-                      FUN_00406380(uVar7);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
+                      createevent_updateitem(uVar7);
                     }
                   }
                   else {
-                    FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-                    FUN_00406380(uVar7);
+                    item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+                    createevent_updateitem(uVar7);
                   }
                 }
                 else {
@@ -55462,12 +55571,13 @@ void __cdecl lf_590f0(void)
                   if ((g_human[g_player[0].human_id].inventory[3].count < 2) &&
                      (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
                     if (g_item[uVar7].parent_item != 0xffffffff) {
-                      FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+                      item_removeitemlink(uVar7,g_item[uVar7].parent_item);
                       g_item[uVar7].parent_item = -1;
                     }
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
                     }
                     if (pIVar1->count < 8) {
                       (&g_human[iVar10].inventory[3].item_id)[pIVar1->count] = uVar7;
@@ -55475,64 +55585,65 @@ void __cdecl lf_590f0(void)
                       g_item[uVar7].parent_human = iVar10;
                       g_item[uVar7].parent_slot = 3;
                     }
-                    FUN_00406380(uVar7);
+                    createevent_updateitem(uVar7);
                   }
                 }
               }
               local_38 = (float)(local_38 + 2.0);
-              FUN_00431800(6,&local_38,(undefined4 *)0x0,local_28,1);
-              iVar10 = FUN_0041b070(0x17,&local_38,(undefined4 *)0x0,local_28);
+              createobject(6,&local_38,(undefined4 *)0x0,local_28,1);
+              iVar10 = createitem(0x17,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
               g_item[iVar10].phone_id = 0x457;
-              iVar10 = FUN_0041b070(0x17,&local_38,(undefined4 *)0x0,local_28);
+              iVar10 = createitem(0x17,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
               g_item[iVar10].phone_id = 0x8ae;
-              FUN_0041b070(0xd,&local_38,(undefined4 *)0x0,local_28);
+              createitem(0xd,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(0xc,&local_38,(undefined4 *)0x0,local_28);
+              createitem(0xc,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              iVar10 = FUN_0041b070(0x10,&local_38,(undefined4 *)0x0,local_28);
+              iVar10 = createitem(0x10,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
               g_item[iVar10].bills_mask = 0x6006001;
               g_item[iVar10].cash = 9;
-              iVar10 = FUN_0041b070(0x10,&local_38,(undefined4 *)0x0,local_28);
+              iVar10 = createitem(0x10,&local_38,(undefined4 *)0x0,local_28);
               g_item[iVar10].bills_mask = (uint)&DAT_0402b001;
               g_item[iVar10].cash = 9;
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(0x14,&local_38,(undefined4 *)0x0,local_28);
+              createitem(0x14,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(0x13,&local_38,(undefined4 *)0x0,local_28);
+              createitem(0x13,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(0,&local_38,(undefined4 *)0x0,local_28);
+              createitem(0,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(1,&local_38,(undefined4 *)0x0,local_28);
+              createitem(1,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(1,&local_38,(undefined4 *)0x0,local_28);
+              createitem(1,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
-              FUN_0041b070(1,&local_38,(undefined4 *)0x0,local_28);
+              createitem(1,&local_38,(undefined4 *)0x0,local_28);
               local_30 = (float)(local_30 + 1.0);
               local_38 = (float)(local_38 + 1.5);
               local_34 = (float)(((float)(local_34 + 0.125)) - 1.0);
               if (DAT_00604020 != 0) {
-                FUN_0041b070(0x19,&local_38,(undefined4 *)0x0,local_28);
+                createitem(0x19,&local_38,(undefined4 *)0x0,local_28);
               }
               local_38 = (float)(local_38 + 1.0);
             }
             else if (uVar7 == 2) {
-              uVar7 = FUN_0041b070(0x16,&local_38,(undefined4 *)0x0,local_28);
+              uVar7 = createitem(0x16,&local_38,(undefined4 *)0x0,local_28);
               iVar10 = g_player[2].human_id;
               if (uVar7 < 0x400) {
                 if (g_player[2].human_id == -1) {
                   if (g_item[uVar7].parent_item == 0xffffffff) {
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
-                      FUN_00406380(uVar7);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
+                      createevent_updateitem(uVar7);
                     }
                   }
                   else {
-                    FUN_00407f80(uVar7,g_item[uVar7].parent_item);
-                    FUN_00406380(uVar7);
+                    item_removeitemlink(uVar7,g_item[uVar7].parent_item);
+                    createevent_updateitem(uVar7);
                   }
                 }
                 else {
@@ -55540,12 +55651,13 @@ void __cdecl lf_590f0(void)
                   if ((g_human[g_player[2].human_id].inventory[4].count < 2) &&
                      (g_itemtype[g_item[uVar7].type].unk_0008 == 0)) {
                     if (g_item[uVar7].parent_item != 0xffffffff) {
-                      FUN_00407f80(uVar7,g_item[uVar7].parent_item);
+                      item_removeitemlink(uVar7,g_item[uVar7].parent_item);
                       g_item[uVar7].parent_item = -1;
                     }
                     if ((uint *)g_item[uVar7].parent_human != (uint *)0xffffffff) {
-                      FUN_00407e50(uVar7,(uint *)g_item[uVar7].parent_human,
-                                   g_item[uVar7].parent_slot);
+                      item_removehumanlink
+                                (uVar7,(uint *)g_item[uVar7].parent_human,g_item[uVar7].parent_slot)
+                      ;
                     }
                     if (pIVar1->count < 8) {
                       (&g_human[iVar10].inventory[4].item_id)[pIVar1->count] = uVar7;
@@ -55553,7 +55665,7 @@ void __cdecl lf_590f0(void)
                       g_item[uVar7].parent_human = iVar10;
                       g_item[uVar7].parent_slot = 4;
                     }
-                    FUN_00406380(uVar7);
+                    createevent_updateitem(uVar7);
                   }
                 }
               }
@@ -55586,7 +55698,7 @@ void __cdecl lf_590f0(void)
               } while (iVar10 < DAT_0e6c8bb8);
             }
             if (g_game.gametype == 2) {
-              FUN_00458320(iVar10,0x16,&DAT_00989680);
+              scenario_createguards(iVar10,0x16,&DAT_00989680);
             }
           }
           local_28[0] = 1.0;
@@ -55608,27 +55720,27 @@ void __cdecl lf_590f0(void)
             local_28[5] = 0.0;
             local_28[6] = 0.0;
             local_28[7] = 0.0;
-            FUN_0040bdb0((int)local_28,(float *)&DAT_00460ce0,-1.5707964);
-            FUN_00433350(1,1,0,0,1,64.0);
+            rotateorientation((int)local_28,(float *)&DAT_00460ce0,-1.5707964);
+            scenario_createcar(1,1,0,0,1,64.0);
           }
           fVar16 = 80.0;
           iVar15 = 1;
           iVar14 = 1;
           iVar8 = 0;
           iVar10 = rand();
-          FUN_00433350(0xb,iVar10 % 6,iVar8,iVar14,iVar15,fVar16);
+          scenario_createcar(0xb,iVar10 % 6,iVar8,iVar14,iVar15,fVar16);
         }
         if (g_server != 0) {
-          FUN_00405700();
-          FUN_00405870();
-          FUN_00406840();
+          economy_carmarket();
+          economy_gunmarket();
+          createevent_updatestocks();
           iVar10 = DAT_09fdd8a0;
           iVar8 = 0;
           if (0 < DAT_09fdd8a0) {
             pcVar12 = &DAT_09fdd8e3;
             do {
-              FUN_00406260(3,pcVar12 + -0x3f,iVar8,0);
-              FUN_00406260(3,pcVar12,iVar8,1);
+              createevent_message(3,pcVar12 + -0x3f,iVar8,0);
+              createevent_message(3,pcVar12,iVar8,1);
               iVar8 = iVar8 + 1;
               pcVar12 = pcVar12 + 0x100;
             } while (iVar8 < iVar10);
@@ -55637,8 +55749,8 @@ void __cdecl lf_590f0(void)
           iVar8 = 0;
           piVar2 = &g_player[0].money;
           do {
-            if ((((Player *)(piVar2 + -0x10))->active != 0) && (FUN_004064a0(iVar8), g_server != 0))
-            {
+            if ((((Player *)(piVar2 + -0x10))->active != 0) &&
+               (createevent_updateplayer(iVar8), g_server != 0)) {
               iVar14 = *piVar2;
               g_event[g_numofevents].type = 8;
               g_event[g_numofevents].tick = iVar10;
@@ -55760,28 +55872,28 @@ void __cdecl lf_590f0(void)
 #undef _DAT_25d7fab4
 #undef _DAT_25d7fab8
 #undef _DAT_25d7fabc
-#undef __security_check_cookie
-#undef FUN_0040bdb0
-#undef FUN_00458320
-#undef FUN_00405700
-#undef FUN_00407e50
-#undef FUN_00433350
-#undef FUN_0041b070
+#undef saveaccountsserver
+#undef economy_gunmarket
+#undef newspaper_load
+#undef item_removeitemlink
+#undef createevent_message
+#undef scenario_createguards
 #undef rand
-#undef FUN_004064a0
-#undef FUN_0043ccc0
-#undef FUN_004185a0
-#undef _time64
-#undef FUN_00405870
-#undef FUN_00450ae0
-#undef FUN_00406380
+#undef __security_check_cookie
+#undef scenario_createcar
 #undef srand
-#undef FUN_00406260
-#undef FUN_00407f80
-#undef FUN_00401080
-#undef FUN_00406840
-#undef FUN_00431800
-#undef FUN_00454e40
+#undef createvehicle
+#undef createlevel
+#undef rotateorientation
+#undef createhuman
+#undef createevent_updateitem
+#undef item_removehumanlink
+#undef createobject
+#undef economy_carmarket
+#undef createevent_updatestocks
+#undef createevent_updateplayer
+#undef _time64
+#undef createitem
 #undef local_38
 #undef local_34
 #undef local_30
@@ -55800,12 +55912,12 @@ void __cdecl lf_590f0(void)
 #define DAT_01f4978c (*(int *)SR_VA(0x1f4978c))
 #define DAT_0b051a8c (*(undefined4 *)SR_VA(0xb051a8c))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define __security_check_cookie(x) ((void)0)
-#define FUN_00428230 ((void (__cdecl *)(undefined4, int, undefined4 *))SR_VA(0x428230))
-#define FUN_004286b0 ((void (__cdecl *)(undefined4, int, int))SR_VA(0x4286b0))
-#define FUN_00458ef0 ((int (__cdecl *)(int, int, int))SR_VA(0x458ef0))
-#define FUN_0040aa80 ((int (__cdecl *)(int))SR_VA(0x40aa80))
+#define createmission_acquisition ((int (__cdecl *)(int, int, int))SR_VA(0x458ef0))
+#define createmission_transaction ((void (__cdecl *)(undefined4, int, int))SR_VA(0x4286b0))
+#define scenario_getnumofmissions ((int (__cdecl *)(int))SR_VA(0x40aa80))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define __security_check_cookie(x) ((void)0)
+#define createmission_threeway ((void (__cdecl *)(undefined4, int, undefined4 *))SR_VA(0x428230))
 #define local_24 (*(undefined4 (*)[8])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x3c))
 void __cdecl lf_5aa60(void)
@@ -55834,7 +55946,7 @@ void __cdecl lf_5aa60(void)
   do {
     iVar5 = *piVar10;
     if ((0 < iVar5) &&
-       ((iVar4 = FUN_0040aa80(iVar9), iVar4 < 1 ||
+       ((iVar4 = scenario_getnumofmissions(iVar9), iVar4 < 1 ||
         ((DAT_25a1d740 == (DAT_25a1d740 / 0x34bc0) * 0x34bc0 && (iVar4 < 2)))))) {
       (&DAT_0b051a8c)[DAT_0b051a88] = iVar9;
       DAT_0b051a88 = DAT_0b051a88 + 1;
@@ -55947,10 +56059,10 @@ void __cdecl lf_5aa60(void)
             iVar9 = 3;
           }
 LAB_0045adfc:
-          FUN_004286b0(2,iVar9,(int)local_24);
+          createmission_transaction(2,iVar9,(int)local_24);
         }
         else if (iVar5 == 0) {
-          FUN_00428230(0,iVar9,local_24);
+          createmission_threeway(0,iVar9,local_24);
         }
         else if (iVar5 == 2) goto LAB_0045adfc;
       }
@@ -55969,7 +56081,7 @@ LAB_0045ad91:
           iVar9 = 1;
         }
         iVar5 = rand();
-        FUN_00458ef0((uint)(2 < ((byte)iVar5 & 7)),iVar9,(int)local_24);
+        createmission_acquisition((uint)(2 < ((byte)iVar5 & 7)),iVar9,(int)local_24);
       }
       DAT_01f4978c = DAT_01f4978c + 1;
       iVar5 = 0;
@@ -55996,12 +56108,12 @@ LAB_0045ad91:
 #undef DAT_01f4978c
 #undef DAT_0b051a8c
 #undef g_event
-#undef __security_check_cookie
-#undef FUN_00428230
-#undef FUN_004286b0
-#undef FUN_00458ef0
-#undef FUN_0040aa80
+#undef createmission_acquisition
+#undef createmission_transaction
+#undef scenario_getnumofmissions
 #undef rand
+#undef __security_check_cookie
+#undef createmission_threeway
 #undef local_24
 #undef local_4
 
@@ -56014,17 +56126,17 @@ LAB_0045ad91:
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define FUN_00405fe0 ((void (__cdecl *)(int))SR_VA(0x405fe0))
+#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define player_saveinventory ((void (__cdecl *)(int))SR_VA(0x405fe0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define FUN_0045aa60 ((void (__cdecl *)(void))SR_VA(0x45aa60))
-#define FUN_0040bdb0 ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define FUN_004585b0 ((void (__cdecl *)(int))SR_VA(0x4585b0))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define player_loadinventory ((void (__cdecl *)(int))SR_VA(0x4500e0))
+#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
 #define __security_check_cookie(x) ((void)0)
-#define FUN_00450ae0 ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define FUN_004500e0 ((void (__cdecl *)(int))SR_VA(0x4500e0))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define FUN_004590f0 ((void (__cdecl *)(void))SR_VA(0x4590f0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -56118,12 +56230,12 @@ void __cdecl lf_5ae70(void)
           local_1c[1] = 1.0;
           local_1c[5] = 1.0;
           local_34 = (float)(*(float *)(&g_game.lf_raw[0x88] + *piVar7 * 0x117c) - 1.5707964);
-          FUN_0040bdb0((int)&local_28,local_1c,local_34);
-          iVar5 = FUN_00450ae0(&local_40,&local_28,iVar10);
+          rotateorientation((int)&local_28,local_1c,local_34);
+          iVar5 = createhuman(&local_40,&local_28,iVar10);
           piVar7[5] = iVar5;
           g_human[iVar5].axis = local_34;
           piVar7[0x1c] = 0;
-          FUN_004500e0(iVar10);
+          player_loadinventory(iVar10);
           iVar5 = g_game.timer;
         }
       }
@@ -56163,8 +56275,9 @@ void __cdecl lf_5ae70(void)
       g_game.timer = 0x744;
       return;
     }
-    if ((g_game.timer == 0x708) && (FUN_0045aa60(), iVar3 = g_game.ticks, g_game.timer == 0x708)) {
-      FUN_004585b0(0x18);
+    if ((g_game.timer == 0x708) &&
+       (createscenario_world(), iVar3 = g_game.ticks, g_game.timer == 0x708)) {
+      scenario_createtraffic2(0x18);
       iVar9 = 0;
       local_30 = 0x458;
       local_34 = 0.0;
@@ -56185,7 +56298,7 @@ void __cdecl lf_5ae70(void)
           if (iVar3 < iVar10) {
             iVar10 = iVar3 * 0x34 + iVar9;
             *(undefined4 *)(&g_game.lf_raw[0x4d4] + iVar10) = 1;
-            FUN_00431800(0,(float *)(&g_game.lf_raw[0x4d8] + iVar10),(undefined4 *)0x0,
+            createobject(0,(float *)(&g_game.lf_raw[0x4d8] + iVar10),(undefined4 *)0x0,
                          (float *)(&g_game.lf_raw[0x4e4] + iVar10),0);
           }
         }
@@ -56203,7 +56316,7 @@ void __cdecl lf_5ae70(void)
           if (iVar3 < iVar10) {
             iVar10 = iVar3 * 0x34 + iVar9;
             *(undefined4 *)(&g_game.lf_raw[0x4d4] + iVar10) = 1;
-            FUN_00431800(8,(float *)(&g_game.lf_raw[0x4d8] + iVar10),(undefined4 *)0x0,
+            createobject(8,(float *)(&g_game.lf_raw[0x4d8] + iVar10),(undefined4 *)0x0,
                          (float *)(&g_game.lf_raw[0x4e4] + iVar10),0);
           }
         }
@@ -56217,7 +56330,7 @@ void __cdecl lf_5ae70(void)
                        *(float *)(&g_game.lf_raw[0x500] + iVar9) * 8.0);
             local_38 = (float)(*(float *)(&g_game.lf_raw[0x4e0] + iVar9) -
                        *(float *)(&g_game.lf_raw[0x504] + iVar9) * 8.0);
-            FUN_00431800(0xb,&local_40,(undefined4 *)0x0,(float *)(&g_game.lf_raw[0x4e4] + iVar9),0);
+            createobject(0xb,&local_40,(undefined4 *)0x0,(float *)(&g_game.lf_raw[0x4e4] + iVar9),0);
             break;
           }
           iVar10 = iVar10 + 1;
@@ -56239,8 +56352,8 @@ void __cdecl lf_5ae70(void)
         local_1c[1] = 1.0;
         local_1c[5] = 1.0;
         local_2c = (float)(*(float *)(&g_game.lf_raw[0x88] + iVar9) - 1.5707964);
-        FUN_0040bdb0((int)&local_28,local_1c,local_2c);
-        uVar4 = FUN_0041b070(0x17,&local_40,(undefined4 *)0x0,&local_28);
+        rotateorientation((int)&local_28,local_1c,local_2c);
+        uVar4 = createitem(0x17,&local_40,(undefined4 *)0x0,&local_28);
         if (uVar4 != 0xffffffff) {
           bVar11 = g_server != 0;
           g_item[uVar4].unk_010c = 0;
@@ -56263,7 +56376,7 @@ void __cdecl lf_5ae70(void)
         local_40 = (float)(local_40 + local_28 * 0.5);
         local_3c = (float)(local_24 * 0.5 + local_3c);
         local_38 = (float)(local_20 * 0.5 + local_38);
-        uVar4 = FUN_0041b070(0x17,&local_40,(undefined4 *)0x0,&local_28);
+        uVar4 = createitem(0x17,&local_40,(undefined4 *)0x0,&local_28);
         iVar3 = g_game.ticks;
         if (uVar4 != 0xffffffff) {
           bVar11 = g_server != 0;
@@ -56438,12 +56551,12 @@ void __cdecl lf_5ae70(void)
     iVar9 = 0;
     do {
       if ((((Player *)(piVar7 + -0x68e))->active != 0) && (*piVar7 == 0)) {
-        FUN_00405fe0(iVar9);
+        player_saveinventory(iVar9);
       }
       piVar7 = piVar7 + 0x902;
       iVar9 = iVar9 + 1;
     } while ((int)piVar7 < ((int)SR_VA(0xf42ff38)));
-    FUN_004590f0();
+    resetgame();
   }
   return;
 }
@@ -56455,17 +56568,17 @@ void __cdecl lf_5ae70(void)
 #undef g_item
 #undef g_event
 #undef g_player
-#undef FUN_00405fe0
+#undef scenario_createtraffic2
+#undef createobject
+#undef player_saveinventory
+#undef rotateorientation
 #undef rand
-#undef FUN_0045aa60
-#undef FUN_0040bdb0
-#undef FUN_004585b0
-#undef FUN_0041b070
+#undef player_loadinventory
+#undef resetgame
+#undef createhuman
+#undef createscenario_world
 #undef __security_check_cookie
-#undef FUN_00450ae0
-#undef FUN_004500e0
-#undef FUN_00431800
-#undef FUN_004590f0
+#undef createitem
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -56504,29 +56617,29 @@ void __cdecl lf_5ae70(void)
 #define _DAT_25a1d744 (*(float *)SR_VA(0x25a1d744))
 #define _DAT_25a1d748 (*(undefined4 *)SR_VA(0x25a1d748))
 #define _DAT_25a1d74c (*(float *)SR_VA(0x25a1d74c))
-#define FUN_0040ab20 ((void (__cdecl *)(int))SR_VA(0x40ab20))
-#define FUN_00405870 ((void (__cdecl *)(void))SR_VA(0x405870))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
-#define FUN_00401080 ((void (__cdecl *)(void))SR_VA(0x401080))
-#define FUN_00405be0 ((void (__cdecl *)(float, int))SR_VA(0x405be0))
-#define FUN_0041d2c0 ((void (__cdecl *)(int))SR_VA(0x41d2c0))
-#define FUN_00408b00 ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x408b00))
-#define FUN_004585b0 ((void (__cdecl *)(int))SR_VA(0x4585b0))
-#define FUN_0041b070 ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define FUN_00406260 ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define FUN_004590f0 ((void (__cdecl *)(void))SR_VA(0x4590f0))
-#define FUN_0041d4d0 ((void (__cdecl *)(float, int))SR_VA(0x41d4d0))
-#define FUN_00405700 ((void (__cdecl *)(void))SR_VA(0x405700))
-#define FUN_00406840 ((void (__cdecl *)(void))SR_VA(0x406840))
-#define FUN_00408880 ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define economy_carmarket ((void (__cdecl *)(void))SR_VA(0x405700))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define logic_farbslist ((void (__cdecl *)(int))SR_VA(0x41d2c0))
+#define server_writelogfile ((void (__cdecl *)(void))SR_VA(0x401420))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define economy_gunmarket ((void (__cdecl *)(void))SR_VA(0x405870))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define pointinsidebasesafe ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x408b00))
+#define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
+#define logic_setteammanager ((void (__cdecl *)(float, int))SR_VA(0x41d4d0))
+#define player_calcassets ((void (__cdecl *)(float))SR_VA(0x405f20))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define FUN_004064a0 ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define FUN_00407f80 ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define FUN_0045aa60 ((void (__cdecl *)(void))SR_VA(0x45aa60))
-#define FUN_00405f20 ((void (__cdecl *)(float))SR_VA(0x405f20))
-#define FUN_004089c0 ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define FUN_00431800 ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define FUN_00401420 ((void (__cdecl *)(void))SR_VA(0x401420))
+#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define saveaccountsserver ((void (__cdecl *)(void))SR_VA(0x401080))
+#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define scenario_setmissioninactive ((void (__cdecl *)(int))SR_VA(0x40ab20))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int * *)(lf_frame + 0x18))
@@ -56600,7 +56713,7 @@ void __cdecl lf_5b9b0(void)
                 uVar9 = *(uint *)pIVar13;
                 if (0 < g_item[uVar9].num_children) {
                   g_item[g_item[uVar9].unk_0028].unk_14 = 0;
-                  FUN_00407f80(g_item[uVar9].unk_0028,uVar9);
+                  item_removeitemlink(g_item[uVar9].unk_0028,uVar9);
                 }
                 iVar10 = iVar10 + -1;
                 g_item[uVar9].unk_14 = 0;
@@ -56621,7 +56734,7 @@ void __cdecl lf_5b9b0(void)
     g_game.state = 2;
     g_game.timer = g_game.round_time;
     DAT_25a1d740 = 0x1a5e00;
-    FUN_004585b0(0x20);
+    scenario_createtraffic2(0x20);
     local_24 = 1.0;
     local_20 = 0;
     local_1c = 0;
@@ -56637,30 +56750,30 @@ void __cdecl lf_5b9b0(void)
     if (DAT_00604020 != 0) {
       local_30 = (float)(_DAT_25a1d744 + 4.0);
       local_28 = (float)(_DAT_25a1d74c + 16.0);
-      iVar4 = FUN_0041b070(0x17,&local_30,(undefined4 *)0x0,&local_24);
+      iVar4 = createitem(0x17,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
       g_item[iVar4].phone_id = 0x457;
-      iVar4 = FUN_0041b070(0x17,&local_30,(undefined4 *)0x0,&local_24);
+      iVar4 = createitem(0x17,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
       g_item[iVar4].phone_id = 0x8ae;
-      iVar4 = FUN_0041b070(0x17,&local_30,(undefined4 *)0x0,&local_24);
+      iVar4 = createitem(0x17,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
       g_item[iVar4].phone_id = 0xd05;
-      FUN_0041b070(2,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(2,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
-      FUN_0041b070(3,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(3,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
-      FUN_0041b070(3,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(3,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
-      iVar4 = FUN_0041b070(0x10,&local_30,(undefined4 *)0x0,&local_24);
+      iVar4 = createitem(0x10,&local_30,(undefined4 *)0x0,&local_24);
       g_item[iVar4].bills_mask = (uint)&DAT_01001001;
       local_28 = (float)(local_28 + 1.0);
       g_item[iVar4].cash = 9;
-      FUN_0041b070(0x1a,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(0x1a,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
-      FUN_0041b070(0xc,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(0xc,&local_30,(undefined4 *)0x0,&local_24);
       local_28 = (float)(local_28 + 1.0);
-      FUN_00431800(0xb,&local_30,(undefined4 *)0x0,&local_24,0);
+      createobject(0xb,&local_30,(undefined4 *)0x0,&local_24,0);
     }
   }
   if (g_game.state == 2) {
@@ -56670,13 +56783,13 @@ void __cdecl lf_5b9b0(void)
       pPVar11 = g_player;
       do {
         if (pPVar11->active != 0) {
-          FUN_00405f20(fVar14);
+          player_calcassets(fVar14);
         }
         pPVar11 = pPVar11 + 1;
         fVar14 = LF_BITS_F((((int)LF_BITS_U(fVar14)) + 1));
       } while ((int)pPVar11 < ((int)SR_VA(0xf42e500)));
-      FUN_00401080();
-      FUN_004590f0();
+      saveaccountsserver();
+      resetgame();
       return;
     }
     local_40 = 2.242077543e-44f;
@@ -56688,7 +56801,7 @@ void __cdecl lf_5b9b0(void)
       piVar7 = piVar6;
       do {
         if ((piVar7[-10] != 0) && (*piVar7 < DAT_25a1d740)) {
-          FUN_0040ab20(piVar7[-9]);
+          scenario_setmissioninactive(piVar7[-9]);
         }
         piVar7 = piVar7 + 0x10;
         iVar4 = iVar4 + -1;
@@ -56707,9 +56820,9 @@ void __cdecl lf_5b9b0(void)
       } while (iVar4 < DAT_0f837b64);
     }
     if (DAT_25a1d740 == (DAT_25a1d740 / 18000) * 18000) {
-      FUN_00405700();
-      FUN_00405870();
-      FUN_00401080();
+      economy_carmarket();
+      economy_gunmarket();
+      saveaccountsserver();
       piVar6 = &g_player[0].unk_0034;
       do {
         if ((((Player *)(piVar6 + -0xd))->active != 0) && (*piVar6 != -1)) {
@@ -56737,12 +56850,12 @@ void __cdecl lf_5b9b0(void)
           piVar6 = piVar6 + 0x13;
         } while (iVar4 < DAT_0f837b64);
       }
-      FUN_00401420();
-      FUN_00406840();
+      server_writelogfile();
+      createevent_updatestocks();
     }
     uVar9 = DAT_25a1d740 % 0x1a5e0 - 54000;
     if ((uVar9 < 0x4b1) && (uVar9 == ((int)uVar9 / 0x78) * 0x78)) {
-      FUN_0041d2c0((int)uVar9 / 0x78 + -1);
+      logic_farbslist((int)uVar9 / 0x78 + -1);
     }
     uVar9 = DAT_25a1d740 % 0x1a5e0;
     if ((uVar9 < 600) && (iVar4 = (int)uVar9 / 0x78, uVar9 == iVar4 * 0x78)) {
@@ -56756,13 +56869,13 @@ void __cdecl lf_5b9b0(void)
         sprintf(&DAT_004617c0,"%s manager: %s",(&PTR_s_Goldmen_Inc_00460438)[iVar4],
                 *(int *)(&g_game.lf_raw[0x9c] + iVar4 * 0x117c) * 0x2408 + ((int)SR_VA(0xf1edd04)));
       }
-      FUN_00406260(0,&DAT_004617c0,0xffffffff,0);
+      createevent_message(0,&DAT_004617c0,0xffffffff,0);
       if (0 < (int)(&DAT_17579600)[iVar4 * 5]) {
         sprintf(&DAT_004617c0,"%s market cap: $",(&PTR_s_Goldmen_Inc_00460438)[iVar4]);
         local_40 = LF_BITS_F((longlong)
                           (LF_BITS_F((&DAT_17579604)[iVar4 * 5]) *
                           (float)(int)(&DAT_17579600)[iVar4 * 5]));
-        FUN_00408880((char *)&DAT_00603ee0,((int)LF_BITS_U(local_40)));
+        sprintf_comma((char *)&DAT_00603ee0,((int)LF_BITS_U(local_40)));
         pcVar1 = (char *)&DAT_00603ee0;
         do {
           pcVar5 = pcVar1;
@@ -56784,7 +56897,7 @@ void __cdecl lf_5b9b0(void)
           puVar12 = (undefined4 *)((int)puVar12 + 1);
           puVar15 = (undefined4 *)((int)puVar15 + 1);
         }
-        FUN_00406260(0,&DAT_004617c0,0xffffffff,0);
+        createevent_message(0,&DAT_004617c0,0xffffffff,0);
       }
     }
     if (DAT_25a1d740 % 54000 == 0) {
@@ -56812,7 +56925,7 @@ void __cdecl lf_5b9b0(void)
         piVar6[0x1b07] = 0;
         piVar6 = piVar6 + 0x2408;
       } while ((int)piVar6 < ((int)SR_VA(0xf42e550)));
-      FUN_0045aa60();
+      createscenario_world();
     }
     for (; (int)(*(uint *)((uchar *)&g_game + 154976)) < 8; (*(uint *)((uchar *)&g_game + 154976)) = (*(uint *)((uchar *)&g_game + 154976)) + 1) {
       local_30 = (float)(_DAT_25a1d744 - 4.0);
@@ -56827,7 +56940,7 @@ void __cdecl lf_5b9b0(void)
       local_14 = 0x3f800000;
       local_4 = 0x3f800000;
       local_2c = _DAT_25a1d748;
-      FUN_0041b070(0x1a,&local_30,(undefined4 *)0x0,&local_24);
+      createitem(0x1a,&local_30,(undefined4 *)0x0,&local_24);
     }
     piVar6 = &g_player[0].is_bot;
     do {
@@ -56857,17 +56970,17 @@ void __cdecl lf_5b9b0(void)
             piVar6[0x16] = 0;
           }
           else {
-            iVar4 = FUN_004089c0(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(fVar3)),0.0);
+            iVar4 = pointinsidebase(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(fVar3)),0.0);
             if ((iVar4 == 0) && (piVar6[0x16] = piVar6[0x16] + 1, 0xb3 < piVar6[0x16])) {
               if (((uint)LF_BITS_U(fVar14)) < 0x100) {
-                FUN_00405be0(fVar14,piVar6[2]);
+                playersellstock(fVar14,piVar6[2]);
               }
               if (LF_BITS_U(*(float *)(&g_game.lf_raw[0x9c] + *piVar6 * 0x117c)) == LF_BITS_U(fVar14)) {
                 *(undefined4 *)(&g_game.lf_raw[0x9c] + *piVar6 * 0x117c) = 0xffffffff;
               }
               *piVar6 = 7;
               g_human[((int)LF_BITS_U(fVar2))].team = ((int)LF_BITS_U(local_40));
-              FUN_004064a0(((int)LF_BITS_U(fVar14)));
+              createevent_updateplayer(((int)LF_BITS_U(fVar14)));
               iVar4 = g_game.ticks;
               if (g_server != 0) {
                 g_event[g_numofevents].type = 8;
@@ -56882,25 +56995,25 @@ void __cdecl lf_5b9b0(void)
           }
           fVar3 = LF_BITS_F(*piVar6);
           if ((*(int *)(&g_game.lf_raw[0x9c] + ((int)LF_BITS_U(fVar3)) * 0x117c) == -1) &&
-             (iVar4 = FUN_00408b00(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(fVar3)),0.0), iVar4 != 0)) {
-            FUN_0041d4d0(fVar3,((int)LF_BITS_U(fVar14)));
+             (iVar4 = pointinsidebasesafe(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(fVar3)),0.0), iVar4 != 0)) {
+            logic_setteammanager(fVar3,((int)LF_BITS_U(fVar14)));
           }
         }
         if (LF_BITS_U(LF_BITS_F(*piVar6)) == 0x7U) {
           local_40 = 0.0;
           piVar7 = (int *)&g_game.lf_raw[0x9c];
           do {
-            iVar4 = FUN_00408b00(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(local_40)),0.0);
+            iVar4 = pointinsidebasesafe(&g_human[((int)LF_BITS_U(fVar2))].pos.x,((int)LF_BITS_U(local_40)),0.0);
             if (iVar4 != 0) {
               iVar4 = *piVar7;
               g_human[((int)LF_BITS_U(fVar2))].unk_0034 = 0;
               if ((iVar4 == -1) ||
                  ((g_player[iVar4].human_id != -1 &&
-                  (iVar4 = FUN_00408b00(&g_human[g_player[iVar4].human_id].pos.x,((int)LF_BITS_U(local_40)),0.0),
-                  iVar4 != 0)))) {
+                  (iVar4 = pointinsidebasesafe(&g_human[g_player[iVar4].human_id].pos.x,
+                                               ((int)LF_BITS_U(local_40)),0.0), iVar4 != 0)))) {
                 g_human[((int)LF_BITS_U(fVar2))].team = ((int)LF_BITS_U(local_40));
                 *piVar6 = ((int)LF_BITS_U(local_40));
-                FUN_004064a0(((int)LF_BITS_U(fVar14)));
+                createevent_updateplayer(((int)LF_BITS_U(fVar14)));
               }
             }
             local_40 = LF_BITS_F((((int)LF_BITS_U(local_40)) + 1));
@@ -56961,29 +57074,29 @@ void __cdecl lf_5b9b0(void)
 #undef _DAT_25a1d744
 #undef _DAT_25a1d748
 #undef _DAT_25a1d74c
-#undef FUN_0040ab20
-#undef FUN_00405870
+#undef createobject
+#undef economy_carmarket
+#undef item_removeitemlink
+#undef logic_farbslist
+#undef server_writelogfile
+#undef createevent_message
+#undef economy_gunmarket
 #undef sprintf
-#undef FUN_00401080
-#undef FUN_00405be0
-#undef FUN_0041d2c0
-#undef FUN_00408b00
-#undef FUN_004585b0
-#undef FUN_0041b070
-#undef FUN_00406260
-#undef FUN_004590f0
-#undef FUN_0041d4d0
-#undef FUN_00405700
-#undef FUN_00406840
-#undef FUN_00408880
+#undef resetgame
+#undef createitem
+#undef pointinsidebasesafe
+#undef sprintf_comma
+#undef scenario_createtraffic2
+#undef pointinsidebase
+#undef logic_setteammanager
+#undef player_calcassets
 #undef _ftol2
-#undef FUN_004064a0
-#undef FUN_00407f80
-#undef FUN_0045aa60
-#undef FUN_00405f20
-#undef FUN_004089c0
-#undef FUN_00431800
-#undef FUN_00401420
+#undef createevent_updatestocks
+#undef saveaccountsserver
+#undef createscenario_world
+#undef playersellstock
+#undef scenario_setmissioninactive
+#undef createevent_updateplayer
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -57019,11 +57132,11 @@ void __cdecl lf_5b9b0(void)
 #define _DAT_0e699414 (*(undefined4 *)SR_VA(0xe699414))
 #define _DAT_0e699418 (*(undefined4 *)SR_VA(0xe699418))
 #define _DAT_0e69941c (*(undefined4 *)SR_VA(0xe69941c))
-#define FUN_0045ae70 ((void (__cdecl *)(void))SR_VA(0x45ae70))
-#define FUN_004094a0 ((void (__cdecl *)(int))SR_VA(0x4094a0))
-#define FUN_0045b9b0 ((void (__cdecl *)(void))SR_VA(0x45b9b0))
-#define FUN_00455700 ((void (__cdecl *)(float))SR_VA(0x455700))
-#define FUN_004590f0 ((void (__cdecl *)(void))SR_VA(0x4590f0))
+#define logic_playeractions ((void (__cdecl *)(float))SR_VA(0x455700))
+#define logicsimulation_round ((void (__cdecl *)(void))SR_VA(0x45ae70))
+#define logic_player ((void (__cdecl *)(int))SR_VA(0x4094a0))
+#define logicsimulation_world ((void (__cdecl *)(void))SR_VA(0x45b9b0))
+#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
 void __cdecl lf_5c580(void)
 
 {
@@ -57106,7 +57219,7 @@ void __cdecl lf_5c580(void)
         }
       }
       else {
-        FUN_004094a0(iVar6);
+        logic_player(iVar6);
       }
     }
     piVar1 = piVar1 + 0x902;
@@ -57168,22 +57281,22 @@ void __cdecl lf_5c580(void)
   pPVar5 = g_player;
   do {
     if (pPVar5->active != 0) {
-      FUN_00455700(fVar7);
+      logic_playeractions(fVar7);
     }
     pPVar5 = pPVar5 + 1;
     fVar7 = LF_BITS_F((((int)LF_BITS_U(fVar7)) + 1));
   } while ((int)pPVar5 < ((int)SR_VA(0xf42e500)));
   if (DAT_07a1eae0 != 0) {
-    FUN_004590f0();
+    resetgame();
     DAT_07a1eae0 = 0;
   }
   if (g_game.gametype == 3) {
-    FUN_0045ae70();
+    logicsimulation_round();
   }
   if (g_game.gametype != 4) {
     return;
   }
-  FUN_0045b9b0();
+  logicsimulation_world();
   return;
 }
 #undef DAT_1992d668
@@ -57204,11 +57317,11 @@ void __cdecl lf_5c580(void)
 #undef _DAT_0e699414
 #undef _DAT_0e699418
 #undef _DAT_0e69941c
-#undef FUN_0045ae70
-#undef FUN_004094a0
-#undef FUN_0045b9b0
-#undef FUN_00455700
-#undef FUN_004590f0
+#undef logic_playeractions
+#undef logicsimulation_round
+#undef logic_player
+#undef logicsimulation_world
+#undef resetgame
 
 /* ---------------------------------------------------------------- 0x5cf70 */
 

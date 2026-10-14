@@ -531,7 +531,7 @@ def register_artifacts(c):
 LIFT_PATCHES = {
     # servercycle: Ghidra drops "mov byte ptr [esp+0Fh],20h", a store into local_1 after
     # its address goes to the call. The master server packet then has 0x00, not 0x20.
-    0x33570: [('FUN_0040d990(&local_1,1,1);', 'local_1 = 0x20;\n      FUN_0040d990(&local_1,1,1);')],
+    0x33570: [('cs_pwrite(&local_1,1,1);', 'local_1 = 0x20;\n      cs_pwrite(&local_1,1,1);')],
 }
 
 

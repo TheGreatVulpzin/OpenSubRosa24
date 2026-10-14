@@ -109,7 +109,9 @@ The lifter reads the types that the Ghidra project has. Better types give better
 2. `tools/ghidra/types_json.py` reads the header and writes a JSON file. `tools/ghidra/ApplyTypes.java` puts the structs and the global arrays (`g_human`, `g_object`, `g_objecttype`... with the `g_` prefix) into the project. Run both after each change to the structs or the globals.
 3. In `sr_types.h` each struct is a union with `lf_raw[size]`. A byte array that has no field in Ghidra prints as `field_0x5350`. `LiftExport.java` prints it as `lf_raw[0x5350]`, so the C compiles with the same layout.
 
-The Ghidra project is not versioned. Make a backup before `ApplyTypes.java`. The knowledge that must stay is in the CSV, the header and the scripts.
+4. `tools/ghidra/ApplyNames.java` gives the functions their names from `analysis/024d/functions.csv`. It changes only the default names (`FUN_...`) and skips the CRT names (a leading `_`). The names are cosmetic for the lifter, because `lift.py` calls each callee through its address. First run (2026-10-14): 322 functions renamed, and the lifted C has no `FUN_` name left. A `LIFT_PATCHES` text uses the callee name, so update it when a name changes.
+
+The Ghidra project is not versioned. Make a backup before `ApplyTypes.java` or `ApplyNames.java`. The knowledge that must stay is in the CSV, the header and the scripts.
 
 ## Relocated constants
 
