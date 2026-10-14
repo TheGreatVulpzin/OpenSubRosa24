@@ -8147,6 +8147,47 @@ __declspec(naked) static void th_23fa0(void)
 }
 static uint8_t expect_23fa0[10] = { 0x8b, 0x4c, 0x24, 0x04, 0x69, 0xc9, 0x30, 0x82, 0x00, 0x00 };
 
+void __cdecl lf_240e0(int param_1);
+static void (__cdecl *orig_240e0)(int);
+static SvVerify v_240e0 = { "object_rotorsimulation", -1 };
+static void __cdecl hk_240e0(int param_1)
+{
+    SV_HOOK_VOID(v_240e0, lf_240e0(param_1), orig_240e0(param_1), NULL);
+}
+__declspec(naked) static void th_240e0(void)
+{
+    __asm {
+        push ebp
+        mov ebp, esp
+        and esp, -16
+        sub esp, 512
+        fxsave [esp]
+        mov [esp + 464], eax
+        mov [esp + 468], ecx
+        mov [esp + 472], edx
+        fninit
+        fldcw word ptr [esp]
+        lea eax, [ebp + 8]
+        push 1
+        push eax
+        push 191
+        push 0x240e0
+        call sv_record_args
+        add esp, 16
+        push dword ptr [ebp + 8]
+        call hk_240e0
+        add esp, 4
+        fxrstor [esp]
+        mov eax, [esp + 464]
+        mov ecx, [esp + 468]
+        mov edx, [esp + 472]
+        mov esp, ebp
+        pop ebp
+        ret
+    }
+}
+static uint8_t expect_240e0[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
+
 void __cdecl lf_24f60(int param_1);
 static void (__cdecl *orig_24f60)(int);
 static SvVerify v_24f60 = { "objectsimulation_heli", -1 };
@@ -8170,7 +8211,7 @@ __declspec(naked) static void th_24f60(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 191
+        push 192
         push 0x24f60
         call sv_record_args
         add esp, 16
@@ -8211,7 +8252,7 @@ __declspec(naked) static void th_257a0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 192
+        push 193
         push 0x257a0
         call sv_record_args
         add esp, 16
@@ -8254,7 +8295,7 @@ __declspec(naked) static void th_25e70(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 193
+        push 194
         push 0x25e70
         call sv_record_args
         add esp, 16
@@ -8298,7 +8339,7 @@ __declspec(naked) static void th_26bc0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 194
+        push 195
         push 0x26bc0
         call sv_record_args
         add esp, 16
@@ -8340,7 +8381,7 @@ __declspec(naked) static void th_26db0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 195
+        push 196
         push 0x26db0
         call sv_record_args
         add esp, 16
@@ -8382,7 +8423,7 @@ __declspec(naked) static void th_26f90(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 196
+        push 197
         push 0x26f90
         call sv_record_args
         add esp, 16
@@ -8423,7 +8464,7 @@ __declspec(naked) static void th_272b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 197
+        push 198
         push 0x272b0
         call sv_record_args
         add esp, 16
@@ -8464,7 +8505,7 @@ __declspec(naked) static void th_278c0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 198
+        push 199
         push 0x278c0
         call sv_record_args
         add esp, 16
@@ -8508,7 +8549,7 @@ __declspec(naked) static void th_279b0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 199
+        push 200
         push 0x279b0
         call sv_record_args
         add esp, 16
@@ -8547,7 +8588,7 @@ __declspec(naked) static void th_27ba0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 200
+        push 201
         push 0x27ba0
         call sv_record_args
         add esp, 16
@@ -8586,7 +8627,7 @@ __declspec(naked) static void th_27e80(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 201
+        push 202
         push 0x27e80
         call sv_record_args
         add esp, 16
@@ -8633,7 +8674,7 @@ __declspec(naked) static void th_28020(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 202
+        push 203
         push 0x28020
         call sv_record_args
         add esp, 16
@@ -8671,7 +8712,7 @@ __declspec(naked) static void th_28190(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 203
+        push 204
         push 0x28190
         call sv_record_args
         add esp, 16
@@ -8713,7 +8754,7 @@ __declspec(naked) static void th_28230(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 204
+        push 205
         push 0x28230
         call sv_record_args
         add esp, 16
@@ -8756,7 +8797,7 @@ __declspec(naked) static void th_286b0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 205
+        push 206
         push 0x286b0
         call sv_record_args
         add esp, 16
@@ -8799,7 +8840,7 @@ __declspec(naked) static void th_28a90(void)
         lea eax, [ebp + 8]
         push 12
         push eax
-        push 206
+        push 207
         push 0x28a90
         call sv_record_args
         add esp, 16
@@ -8851,7 +8892,7 @@ __declspec(naked) static void th_28c90(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 207
+        push 208
         push 0x28c90
         call sv_record_args
         add esp, 16
@@ -8895,7 +8936,7 @@ __declspec(naked) static void th_29300(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 208
+        push 209
         push 0x29300
         call sv_record_args
         add esp, 16
@@ -8938,7 +8979,7 @@ __declspec(naked) static void th_29650(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 209
+        push 210
         push 0x29650
         call sv_record_args
         add esp, 16
@@ -8979,7 +9020,7 @@ __declspec(naked) static void th_296f0(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 210
+        push 211
         push 0x296f0
         call sv_record_args
         add esp, 16
@@ -9024,7 +9065,7 @@ __declspec(naked) static void th_29830(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 211
+        push 212
         push 0x29830
         call sv_record_args
         add esp, 16
@@ -9069,7 +9110,7 @@ __declspec(naked) static void th_29970(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 212
+        push 213
         push 0x29970
         call sv_record_args
         add esp, 16
@@ -9113,7 +9154,7 @@ __declspec(naked) static void th_2c020(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 213
+        push 214
         push 0x2c020
         call sv_record_args
         add esp, 16
@@ -9160,7 +9201,7 @@ __declspec(naked) static void th_2c0c0(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 214
+        push 215
         push 0x2c0c0
         call sv_record_args
         add esp, 16
@@ -9205,7 +9246,7 @@ __declspec(naked) static void th_2cda0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 215
+        push 216
         push 0x2cda0
         call sv_record_args
         add esp, 16
@@ -9252,7 +9293,7 @@ __declspec(naked) static void th_2d2d0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 216
+        push 217
         push 0x2d2d0
         call sv_record_args
         add esp, 16
@@ -9299,7 +9340,7 @@ __declspec(naked) static void th_2d7f0(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 217
+        push 218
         push 0x2d7f0
         call sv_record_args
         add esp, 16
@@ -9347,7 +9388,7 @@ __declspec(naked) static void th_2daf0(void)
         lea eax, [ebp + 8]
         push 9
         push eax
-        push 218
+        push 219
         push 0x2daf0
         call sv_record_args
         add esp, 16
@@ -9395,7 +9436,7 @@ __declspec(naked) static void th_2dfc0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 219
+        push 220
         push 0x2dfc0
         call sv_record_args
         add esp, 16
@@ -9442,7 +9483,7 @@ __declspec(naked) static void th_2efd0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 220
+        push 221
         push 0x2efd0
         call sv_record_args
         add esp, 16
@@ -9486,7 +9527,7 @@ __declspec(naked) static void th_2f090(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 221
+        push 222
         push 0x2f090
         call sv_record_args
         add esp, 16
@@ -9530,7 +9571,7 @@ __declspec(naked) static void th_2f130(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 222
+        push 223
         push 0x2f130
         call sv_record_args
         add esp, 16
@@ -9573,7 +9614,7 @@ __declspec(naked) static void th_2f420(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 223
+        push 224
         push 0x2f420
         call sv_record_args
         add esp, 16
@@ -9614,7 +9655,7 @@ __declspec(naked) static void th_306d0(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 224
+        push 225
         push 0x306d0
         call sv_record_args
         add esp, 16
@@ -9658,7 +9699,7 @@ __declspec(naked) static void th_307f0(void)
         lea eax, [ebp + 8]
         push 8
         push eax
-        push 225
+        push 226
         push 0x307f0
         call sv_record_args
         add esp, 16
@@ -9705,7 +9746,7 @@ __declspec(naked) static void th_30ab0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 226
+        push 227
         push 0x30ab0
         call sv_record_args
         add esp, 16
@@ -9744,7 +9785,7 @@ __declspec(naked) static void th_30ba0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 227
+        push 228
         push 0x30ba0
         call sv_record_args
         add esp, 16
@@ -9785,7 +9826,7 @@ __declspec(naked) static void th_30f00(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 228
+        push 229
         push 0x30f00
         call sv_record_args
         add esp, 16
@@ -9827,7 +9868,7 @@ __declspec(naked) static void th_31480(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 229
+        push 230
         push 0x31480
         call sv_record_args
         add esp, 16
@@ -9868,7 +9909,7 @@ __declspec(naked) static void th_31630(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 230
+        push 231
         push 0x31630
         call sv_record_args
         add esp, 16
@@ -9910,7 +9951,7 @@ __declspec(naked) static void th_31800(void)
         lea eax, [ebp + 8]
         push 5
         push eax
-        push 231
+        push 232
         push 0x31800
         call sv_record_args
         add esp, 16
@@ -9954,7 +9995,7 @@ __declspec(naked) static void th_32340(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 232
+        push 233
         push 0x32340
         call sv_record_args
         add esp, 16
@@ -9993,7 +10034,7 @@ __declspec(naked) static void th_324c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 233
+        push 234
         push 0x324c0
         call sv_record_args
         add esp, 16
@@ -10032,7 +10073,7 @@ __declspec(naked) static void th_32bb0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 234
+        push 235
         push 0x32bb0
         call sv_record_args
         add esp, 16
@@ -10074,7 +10115,7 @@ __declspec(naked) static void th_32fe0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 235
+        push 236
         push 0x32fe0
         call sv_record_args
         add esp, 16
@@ -10115,7 +10156,7 @@ __declspec(naked) static void th_33350(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 236
+        push 237
         push 0x33350
         call sv_record_args
         add esp, 16
@@ -10160,7 +10201,7 @@ __declspec(naked) static void th_34870(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 237
+        push 238
         push 0x34870
         call sv_record_args
         add esp, 16
@@ -10201,7 +10242,7 @@ __declspec(naked) static void th_34c10(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 238
+        push 239
         push 0x34c10
         call sv_record_args
         add esp, 16
@@ -10240,7 +10281,7 @@ __declspec(naked) static void th_3a610(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 239
+        push 240
         push 0x3a610
         call sv_record_args
         add esp, 16
@@ -10279,7 +10320,7 @@ __declspec(naked) static void th_3b0c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 240
+        push 241
         push 0x3b0c0
         call sv_record_args
         add esp, 16
@@ -10318,7 +10359,7 @@ __declspec(naked) static void th_3ccc0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 241
+        push 242
         push 0x3ccc0
         call sv_record_args
         add esp, 16
@@ -10360,7 +10401,7 @@ __declspec(naked) static void th_3cfe0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 242
+        push 243
         push 0x3cfe0
         call sv_record_args
         add esp, 16
@@ -10402,7 +10443,7 @@ __declspec(naked) static void th_3d500(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 243
+        push 244
         push 0x3d500
         call sv_record_args
         add esp, 16
@@ -10444,7 +10485,7 @@ __declspec(naked) static void th_3da50(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 244
+        push 245
         push 0x3da50
         call sv_record_args
         add esp, 16
@@ -10490,7 +10531,7 @@ __declspec(naked) static void th_40aa0(void)
         lea eax, [ebp + 8]
         push 6
         push eax
-        push 245
+        push 246
         push 0x40aa0
         call sv_record_args
         add esp, 16
@@ -10535,7 +10576,7 @@ __declspec(naked) static void th_41550(void)
         lea eax, [ebp + 8]
         push 7
         push eax
-        push 246
+        push 247
         push 0x41550
         call sv_record_args
         add esp, 16
@@ -10581,7 +10622,7 @@ __declspec(naked) static void th_41de0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 247
+        push 248
         push 0x41de0
         call sv_record_args
         add esp, 16
@@ -10620,7 +10661,7 @@ __declspec(naked) static void th_48ec0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 248
+        push 249
         push 0x48ec0
         call sv_record_args
         add esp, 16
@@ -10659,7 +10700,7 @@ __declspec(naked) static void th_49940(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 249
+        push 250
         push 0x49940
         call sv_record_args
         add esp, 16
@@ -10700,7 +10741,7 @@ __declspec(naked) static void th_4a440(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 250
+        push 251
         push 0x4a440
         call sv_record_args
         add esp, 16
@@ -10741,7 +10782,7 @@ __declspec(naked) static void th_4bd60(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 251
+        push 252
         push 0x4bd60
         call sv_record_args
         add esp, 16
@@ -10782,7 +10823,7 @@ __declspec(naked) static void th_4c720(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 252
+        push 253
         push 0x4c720
         call sv_record_args
         add esp, 16
@@ -10823,7 +10864,7 @@ __declspec(naked) static void th_4c8c0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 253
+        push 254
         push 0x4c8c0
         call sv_record_args
         add esp, 16
@@ -10862,7 +10903,7 @@ __declspec(naked) static void th_4cee0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 254
+        push 255
         push 0x4cee0
         call sv_record_args
         add esp, 16
@@ -10903,7 +10944,7 @@ __declspec(naked) static void th_4d630(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 255
+        push 256
         push 0x4d630
         call sv_record_args
         add esp, 16
@@ -10945,7 +10986,7 @@ __declspec(naked) static void th_4d750(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 256
+        push 257
         push 0x4d750
         call sv_record_args
         add esp, 16
@@ -10986,7 +11027,7 @@ __declspec(naked) static void th_4d850(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 257
+        push 258
         push 0x4d850
         call sv_record_args
         add esp, 16
@@ -11027,7 +11068,7 @@ __declspec(naked) static void th_4da10(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 258
+        push 259
         push 0x4da10
         call sv_record_args
         add esp, 16
@@ -11068,7 +11109,7 @@ __declspec(naked) static void th_4e060(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 259
+        push 260
         push 0x4e060
         call sv_record_args
         add esp, 16
@@ -11110,7 +11151,7 @@ __declspec(naked) static void th_4e0d0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 260
+        push 261
         push 0x4e0d0
         call sv_record_args
         add esp, 16
@@ -11152,7 +11193,7 @@ __declspec(naked) static void th_4e2c0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 261
+        push 262
         push 0x4e2c0
         call sv_record_args
         add esp, 16
@@ -11194,7 +11235,7 @@ __declspec(naked) static void th_4e500(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 262
+        push 263
         push 0x4e500
         call sv_record_args
         add esp, 16
@@ -11236,7 +11277,7 @@ __declspec(naked) static void th_4f720(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 263
+        push 264
         push 0x4f720
         call sv_record_args
         add esp, 16
@@ -11277,7 +11318,7 @@ __declspec(naked) static void th_500e0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 264
+        push 265
         push 0x500e0
         call sv_record_args
         add esp, 16
@@ -11318,7 +11359,7 @@ __declspec(naked) static void th_50ae0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 265
+        push 266
         push 0x50ae0
         call sv_record_args
         add esp, 16
@@ -11360,7 +11401,7 @@ __declspec(naked) static void th_51060(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 266
+        push 267
         push 0x51060
         call sv_record_args
         add esp, 16
@@ -11399,7 +11440,7 @@ __declspec(naked) static void th_542a0(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 267
+        push 268
         push 0x542a0
         call sv_record_args
         add esp, 16
@@ -11438,7 +11479,7 @@ __declspec(naked) static void th_55700(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 268
+        push 269
         push 0x55700
         call sv_record_args
         add esp, 16
@@ -11479,7 +11520,7 @@ __declspec(naked) static void th_56710(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 269
+        push 270
         push 0x56710
         call sv_record_args
         add esp, 16
@@ -11518,7 +11559,7 @@ __declspec(naked) static void th_58320(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 270
+        push 271
         push 0x58320
         call sv_record_args
         add esp, 16
@@ -11560,7 +11601,7 @@ __declspec(naked) static void th_585b0(void)
         lea eax, [ebp + 8]
         push 1
         push eax
-        push 271
+        push 272
         push 0x585b0
         call sv_record_args
         add esp, 16
@@ -11601,7 +11642,7 @@ __declspec(naked) static void th_587f0(void)
         lea eax, [ebp + 8]
         push 2
         push eax
-        push 272
+        push 273
         push 0x587f0
         call sv_record_args
         add esp, 16
@@ -11642,7 +11683,7 @@ __declspec(naked) static void th_58ef0(void)
         lea eax, [ebp + 8]
         push 3
         push eax
-        push 273
+        push 274
         push 0x58ef0
         call sv_record_args
         add esp, 16
@@ -11684,7 +11725,7 @@ __declspec(naked) static void th_5aa60(void)
         lea eax, [ebp + 8]
         push 0
         push eax
-        push 274
+        push 275
         push 0x5aa60
         call sv_record_args
         add esp, 16
@@ -11723,7 +11764,7 @@ __declspec(naked) static void th_5cf70(void)
         lea eax, [ebp + 8]
         push 4
         push eax
-        push 275
+        push 276
         push 0x5cf70
         call sv_record_args
         add esp, 16
@@ -11939,6 +11980,7 @@ static SvHook g_lifted[] = {
     { "applydamageobject", 0x22e20, (void *)th_22e20, 8, expect_22e20, mask_all, (void **)&orig_22e20, 0, 0 },
     { "objectwheelsimulation2", 0x22f90, (void *)th_22f90, 8, expect_22f90, mask_all, (void **)&orig_22f90, 0, 0 },
     { "getenginetorque2", 0x23fa0, (void *)th_23fa0, 10, expect_23fa0, mask_all, (void **)&orig_23fa0, 0, 0 },
+    { "object_rotorsimulation", 0x240e0, (void *)th_240e0, 6, expect_240e0, mask_all, (void **)&orig_240e0, 0, 0 },
     { "objectsimulation_heli", 0x24f60, (void *)th_24f60, 5, expect_24f60, mask_all, (void **)&orig_24f60, 0, 0 },
     { "lineintersectobject", 0x257a0, (void *)th_257a0, 7, expect_257a0, mask_all, (void **)&orig_257a0, 0, 0 },
     { "createtrack", 0x25e70, (void *)th_25e70, 7, expect_25e70, mask_all, (void **)&orig_25e70, 0, 0 },
@@ -12218,6 +12260,7 @@ static SvVerify *g_lifted_stats[] = {
     &v_22e20,
     &v_22f90,
     &v_23fa0,
+    &v_240e0,
     &v_24f60,
     &v_257a0,
     &v_25e70,
@@ -12319,7 +12362,7 @@ int sv_hooks_lifted_install(void)
     lf_x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
-    int to = sv_config_int("lifted_to", 276);
+    int to = sv_config_int("lifted_to", 277);
     relocate(expect_01cd0, 3);
     relocate(expect_04a10, 2);
     relocate(expect_04bb0, 2);
@@ -12395,20 +12438,20 @@ int sv_hooks_lifted_install(void)
     relocate(expect_587f0, 5);
     relocate(expect_58ef0, 5);
     relocate(expect_5aa60, 4);
-    if (to > 276)
-        to = 276;
+    if (to > 277)
+        to = 277;
     if (from < 0)
         from = 0;
     if (from >= to)
         return 0;
-    sv_log("lifted hooks %d..%d of 276", from, to);
+    sv_log("lifted hooks %d..%d of 277", from, to);
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
 void sv_hooks_lifted_summary(void)
 {
     int i;
-    for (i = 0; i < 276; i++)
+    for (i = 0; i < 277; i++)
         if (g_lifted_stats[i]->calls)
             sv_verify_summary(g_lifted_stats[i]);
 }

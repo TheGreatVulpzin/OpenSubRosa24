@@ -83,6 +83,8 @@ With the stack cookie, register preservation and `_ftol2` fixes (2026-10-12): 21
 
 With the Ghidra types (2026-10-14): 276 lifted + 39 harness_only. Harness, calls same: `play-20261012` 2917, `20261013-1016-smoke` 1679, `20261013-query` 2216, `20261013-195210` 3680 (no count dropped).
 
+With `castAt` (2026-10-14): 277 lifted + 39 harness_only. `object_rotorsimulation` (0x240e0) compiles now. It has no callers in the 024d (dead code, also in the ELF), so no recording tests it. Its hook is installed, but the server never calls it. Harness, calls same: `play-20261012` 2917, `20261013-1016-smoke` 1679, `20261013-query` 2216, `20261013-195210` 3680 (no count dropped).
+
 An idle server calls only a few functions. More coverage needs players: see the record and replay plan in `docs/plano.md`.
 
 ## Stack cookies
@@ -151,7 +153,7 @@ The first version of this rule was a regex in `lift.py`. It read the `=` of `<=`
 
 | Rule | Ghidra prints | Problem in C | Output |
 | --- | --- | --- | --- |
-| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. A cast from a float whose operand starts with an integer cast (`(int)(longlong)(x * f)`) is not marked: in C the operand is already an integer (`integerCastAt`, `logic_addteamcash`). |
+| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. A cast from a float whose operand starts with an integer cast (`(int)(longlong)(x * f)`) is not marked: in C the operand is already an integer (`integerCastAt`, `logic_addteamcash`). In `(float)*(undefined4 *)&x`, the group after `*` is a cast, not the arguments of a call-like operand. The operand goes on after the cast (`castAt`, `object_rotorsimulation`). |
 | `floatBitCompares` | `fVar5 != -NAN` (an `INT_NOTEQUAL`) | Every compare with a NaN is unordered, so `!=` is always true. | `LF_BITS_U(fVar5) != 0xffffffffU` |
 | `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))`. The piece is a float when its p-code piece has a float type, or when a float operation reads it (`(double)local_60._0_4_`, `f < local_40._0_4_`). |
 | `pieceVariable` | `local_14` (declared `undefined4`, used as a float) | A read converts the int. | `(*(float *)((uchar *)&local_14 + 0))`. Also for a smaller high variable in an `undefined8` symbol. |
@@ -237,9 +239,31 @@ These two rules made `createlandscape` (a 2049 x 2049 height map) bit-exact. Kno
 
 | Function | Difference |
 | --- | --- |
-| `buildsomeshit` | about 6000 bytes, the error grows through the computation |
+| `buildsomeshit` | 5873 floats in the last bits, 4 floats about 230 to 720 steps apart |
 
 `/fp:fast` makes the differences larger.
+
+### Accepted difference: buildsomeshit
+
+`buildsomeshit` (0x32fe0) builds the track geometry with `sin`, `cos` and `createtrack`. `createlevel` calls it once per level, after `createlandscape`. The difference is accepted: no C version of the function can give the same bits.
+
+Result of one harness call (`build/hook/subvulpes.log`, 2026-10-14):
+
+- 5873 floats are at most `verify_float_ulps` (4) steps apart.
+- 4 floats in `g_object` are 228 to 720 steps apart. That is a relative error of about 1e-4 (2^-23 for each step).
+- The return value and the `rand()` state are the same.
+
+Why the bits differ:
+
+1. The 024d keeps the intermediate values in x87 registers at 53-bit precision (control word `0x27F`). It rounds them to `float` only when it stores them.
+2. The sine and cosine results go through many operations before a store. The lifted C rounds at other points. The decompiler p-code does not show where the original keeps a value in a register.
+3. Each step adds a small error, and the error grows through the chain of calculations. `storeRounding` and `floatGrouping` do not remove it.
+
+What the tools do:
+
+- The harness counts these calls as "known" (`known_difference()` in `src/tests/harness.c`, "x87 precision"). They do not count as a failure, and they are not in the "calls same" count.
+- With `verify=1`, the live verifier logs the difference and disables the hook. The original runs from then on.
+- With `verify=0`, the lifted version runs. The track geometry then has the relative error above. The in-game test checklist must include the objects that `createtrack` builds.
 
 ### Probes
 

@@ -1133,7 +1133,7 @@ public class LiftExport extends GhidraScript {
                 }
             }
         } else if (op0.getText().equals("(") || (op0.getPcodeOp() != null && next(t, k) >= 0
-                && t.get(next(t, k)).getText().equals("("))) {
+                && t.get(next(t, k)).getText().equals("(") && !castAt(t, next(t, k)))) {
             // A parenthesized group, or a call-like operand such as CONCAT44(a, b): the
             // CAST consumes the output of an op inside it.
             int depth = 0;
@@ -1195,6 +1195,18 @@ public class LiftExport extends GhidraScript {
         if (close < 0 || !t.get(close).getText().equals(")")) return false;
         String name = t.get(ty).getText();
         return !name.equals("float") && !name.equals("double") && !name.equals("float10");
+    }
+
+    /* A cast "(T)" or "(T *)" at t[j]. "(float)*(undefined4 *)&x" is not a call-like operand
+     * "F(...)": the group after "*" is a cast, and the operand goes on after it.
+     * object_rotorsimulation did not compile with LF_BITS_F(*(undefined4 *))&x. */
+    private static boolean castAt(List<ClangToken> t, int j) {
+        if (!t.get(j).getText().equals("(")) return false;
+        int ty = next(t, j);
+        if (ty < 0 || !(t.get(ty) instanceof ClangTypeToken)) return false;
+        int close = next(t, ty);
+        while (close >= 0 && t.get(close).getText().equals("*")) close = next(t, close);
+        return close >= 0 && t.get(close).getText().equals(")");
     }
 
     /* 0: 4 bytes to float, 1: float to 4 bytes, 2: 8 bytes to double, 3: double to 8 bytes,
