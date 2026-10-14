@@ -8,6 +8,7 @@
 
 #define SR_RVA_CUBEQUAD             0x60170u
 #define SR_RVA_CUBEVERTEX           0x60174u
+#define SR_RVA_TIMER                0x14043e0u
 #define SR_RVA_BULLET               0x1409ba0u  /* Bullet[] */
 #define SR_RVA_DEBUG                0x1579ba0u
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */

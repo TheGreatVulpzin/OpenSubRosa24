@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "ghidra": {
+      "command": "E:/tools/ghidramcp-venv/Scripts/ghidra-mcp.exe",
+      "args": [
+        "--headless",
+        "--binary",
+        "original/blackhouser/subrosadedicated024d.exe",
+        "--project",
+        "E:/subvulpes/ghidra-mcp-project",
+        "--project-name",
+        "subvulpes",
+        "--no-analyze",
+        "--discard"
+      ],
+      "env": {
+        "JAVA_HOME": "C:/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot",
+        "GHIDRA_INSTALL_DIR": "E:/tools/ghidra_12.1.4_PUBLIC"
+      }
+    }
+  }
+}

@@ -216,7 +216,6 @@ void lf_22af0(void);
 void lf_22e20(void);
 void lf_22f90(void);
 void lf_23fa0(void);
-void lf_240e0(void);
 void lf_24f60(void);
 void lf_257a0(void);
 void lf_25e70(void);
@@ -534,7 +533,6 @@ const LfEntry lf_table[] = {
     { "applydamageobject", 0x22e20, (void *)lf_22e20, 2, LF_RET_VOID, 4, "vv" },
     { "objectwheelsimulation2", 0x22f90, (void *)lf_22f90, 0, LF_RET_VOID, 4, "" },
     { "getenginetorque2", 0x23fa0, (void *)lf_23fa0, 1, LF_RET_FLOAT, 4, "v" },
-    { "object_rotorsimulation", 0x240e0, (void *)lf_240e0, 1, LF_RET_VOID, 4, "v" },
     { "objectsimulation_heli", 0x24f60, (void *)lf_24f60, 1, LF_RET_VOID, 4, "v" },
     { "lineintersectobject", 0x257a0, (void *)lf_257a0, 4, LF_RET_INT, 4, "vppv" },
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv" },
@@ -636,4 +634,4 @@ const LfEntry lf_table[] = {
     { "logicsimulation", 0x5c580, (void *)lf_5c580, 0, LF_RET_VOID, 4, "" },
     { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv" },
 };
-const int lf_table_count = 316;
+const int lf_table_count = 315;

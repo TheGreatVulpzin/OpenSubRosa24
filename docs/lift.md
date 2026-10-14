@@ -44,7 +44,8 @@
 | Partial access (`x._4_2_`) | Pointer access with the right size, and `float` when the p-code piece is a float (`LiftExport.java`, `partialAccess`). As `uint`, `local_64 = local_5c._0_4_` converted the bits of a cosine to a number. |
 | Calls to other game functions | Through the game address (so hooks and originals both work) |
 | CRT and Windows imports | Through the game IAT (`sr_import`), so `rand()`, `FILE*` and the heap are the game ones |
-| Absolute addresses shown as numbers (`ptr < 0x46177c`) | The values at relocation sites become `SR_VA(...)` |
+| Absolute addresses shown as numbers (`ptr < 0x46177c`) | The values at relocation sites become `SR_VA(...)` (`relocatedConstants` in `LiftExport.java`, see "Relocated constants") |
+| Structs and global arrays (`g_human[i].money`) | The Ghidra project has them (`ApplyTypes.java`, see "Types in the Ghidra project") |
 
 ## What the 024d does that breaks the normal ABI
 
@@ -80,6 +81,8 @@ With the x87 intrinsics (2026-10-12): 192 of 340 functions lifted. 196 hooks ins
 
 With the stack cookie, register preservation and `_ftol2` fixes (2026-10-12): 216 of 340 functions lifted. 220 hooks installed in total. Idle server, 300 s: no crash, 11 lifted functions verified, 0 differences.
 
+With the Ghidra types (2026-10-14): 276 lifted + 39 harness_only. Harness, calls same: `play-20261012` 2917, `20261013-1016-smoke` 1679, `20261013-query` 2213, `20261013-195210` 3652 (no count dropped).
+
 An idle server calls only a few functions. More coverage needs players: see the record and replay plan in `docs/plano.md`.
 
 ## Stack cookies
@@ -97,6 +100,34 @@ The same script gives `_ftol2` (`0x5ce90`) a call fixup with its exact effect: i
 ## Global types
 
 The Ghidra symbol map often keeps the listing type of a global (`undefined4`). The decompiler can use the same global as a `float`. In C, an `undefined4` global that receives `1.0` stores the int 1. `LiftExport.java` therefore uses the type that the decompiler used when it has the same size. This bug made `area_block_addbasicsurface` write `0x00000001` where the original writes `1.0`.
+
+## Types in the Ghidra project
+
+The lifter reads the types that the Ghidra project has. Better types give better pseudo-C for all functions, so the project holds them and `lift.py` has no text rule for them.
+
+1. `tools/re/gen_types.py` makes `src/include/sr_types.h` from `analysis/structs/names.csv`. Add a known field to the CSV, never to the header.
+2. `tools/ghidra/types_json.py` reads the header and writes a JSON file. `tools/ghidra/ApplyTypes.java` puts the structs and the global arrays (`g_human`, `g_object`, `g_objecttype`... with the `g_` prefix) into the project. Run both after each change to the structs or the globals.
+3. In `sr_types.h` each struct is a union with `lf_raw[size]`. A byte array that has no field in Ghidra prints as `field_0x5350`. `LiftExport.java` prints it as `lf_raw[0x5350]`, so the C compiles with the same layout.
+
+The Ghidra project is not versioned. Make a backup before `ApplyTypes.java`. The knowledge that must stay is in the CSV, the header and the scripts.
+
+## Relocated constants
+
+`relocatedConstants` (in `LiftExport.java`) replaces all the old text rules for addresses. The lifted code runs the 024d at another base, so each absolute address must be `SR_VA(addr)`. The rule reads the relocation table of the function:
+
+- A constant is relocated when the instruction of its p-code op has a relocation with the same value, or with the value minus a small field offset (`iVar2 + 0x9fdd8a8` is `&DAT_09fdd8a4 + 4`).
+- Ghidra can fold the offset into a constant and move it to another instruction (the second store of an inlined `strncpy`, `newspaper_load`). When the instruction has no relocation, the nearest relocated value of the function up to 0x40 bytes below the constant is the base.
+- The index of a `PTRADD` is relocated when `index * element size` is a relocated value (`LF_RELOC`).
+- A RAM address without a symbol (`ram0x1992d6ed`) becomes a pointer access to `SR_VA()`.
+- Each token changes once, so no address gets two relocations. The old regex rules did this twice for the `serversend` tick.
+
+## Pieces of expressions
+
+`expressionPieces` handles Ghidra pieces of a struct area without a field (`g_itemtype[8]._40_4_`, `x.f._0_4_`, `p->f._0_4_`). It finds the start of the postfix chain (names, `[..]`, `.field`, `->field`) and prints `(*(T *)((uchar *)&chain + off))`. `HighGlobal` names (`g_parser`) come from the decompiler symbol, not from a text search.
+
+`bitCast` also reads a whole postfix chain: `(float)g_body[1].unk_0010` is a bit cast of the field load. The CAST op must be the printed cast, and the operand ends where the tokens leave the p-code subtree.
+
+The type of a piece (`pieceType`) is `float` only when the piece is a float. The piece of a CAST is not: in `local_b4[1] = (float)g_objecttype[12]._188_4_;` the CAST output is the float, and the piece keeps the bits of an int. As a `float` piece, `LF_BITS_F` converted the value to `uint` and `setupobjectypes_train` stored `0xffffffff` instead of 0.528.
 
 ## Float stores into raw bytes
 
@@ -232,5 +263,5 @@ The lifter also needs these rules for them:
 - `lift_os.h`: the CRT, KERNEL32 and WinSock types (`FILE`, `LARGE_INTEGER`, `sockaddr`, `fd_set`...) with the MSVC 2010 layout. Only `lifted_024d.c` includes it.
 - WinSock imports by ordinal (`WSOCK_ORDINALS`, `LF_IMPORT_ORD`).
 - A global that holds a function address (`(*DAT_095022a4)(...)`, the `fread` pointer) gets the type `code *`.
-- An inlined `strncpy` stores 4 bytes at a time, and Ghidra adds the offset to the address (`iVar2 + 0x9fdd8a8`). An address up to 16 bytes after a relocated value becomes `SR_VA(base) + offset`.
+- An inlined `strncpy` stores 4 bytes at a time, and Ghidra adds the offset to the address (`iVar2 + 0x9fdd8a8`). `relocatedConstants` handles it (see "Relocated constants").
 - `ram0x1992d6ed`: a 4-byte store into the middle of another global.

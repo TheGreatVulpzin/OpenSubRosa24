@@ -33,7 +33,7 @@ def warnings(path):
     crlf = chr(13) + chr(10)
     bat.write_text(vcvars_line() +
                    f'cl /nologo /c /TC /std:c11 /W4 /arch:IA32 /utf-8 /errorReport:none '
-                   f'/I "{ROOT / "src/lifted"}" /Fo"{ROOT / "build/lift/lint.obj"}" "{path}"{crlf}',
+                   f'/I "{ROOT / "src/lifted"}" /I "{ROOT / "src/include"}" /Fo"{ROOT / "build/lift/lint.obj"}" "{path}"{crlf}',
                    encoding='mbcs')
     r = subprocess.run(['cmd', '/c', str(bat)], capture_output=True, text=True, encoding='mbcs', errors='replace')
     out = []

@@ -115,6 +115,12 @@ public class LiftExport extends GhidraScript {
         pieceArgBits(t, openBefore, closeAfter);
         replaceSpans.clear();
         floatBitCompares(t, openBefore, closeAfter);
+        try {
+            relocatedConstants(t, r.getFunction());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        expressionPieces(t, openBefore);
         for (int i = 0; i < t.size(); i++) {
             ClangToken tok = t.get(i);
             if (tok instanceof ClangBreak) {
@@ -164,7 +170,12 @@ public class LiftExport extends GhidraScript {
                 i = cast[0];
                 continue;
             }
-            sb.append(tok.getText());
+            // An unknown area of a struct (ApplyTypes.java leaves it without a field): Ghidra
+            // prints "&x->field_0x90". In C each struct is a union with lf_raw, its raw bytes.
+            if (tok instanceof ghidra.app.decompiler.ClangFieldToken && RAW_FIELD.matcher(tok.getText()).matches())
+                sb.append("lf_raw[").append(tok.getText().substring(6)).append(']');
+            else
+                sb.append(tok.getText());
             Integer close = closeAfter.remove(i);
             if (close != null) for (int k = 0; k < close; k++) sb.append(')');
         }
@@ -172,6 +183,7 @@ public class LiftExport extends GhidraScript {
     }
 
     private static final java.util.regex.Pattern FIELD = java.util.regex.Pattern.compile("^_(\\d+)_(\\d+)_$");
+    private static final java.util.regex.Pattern RAW_FIELD = java.util.regex.Pattern.compile("^field_0x[0-9a-f]+$");
 
     /* Ghidra "x._4_2_" is 2 bytes at offset 4 of x. Print it as a pointer access, with the
      * type that the decompiler gives to the piece: float when the piece is a float, so that
@@ -186,6 +198,104 @@ public class LiftExport extends GhidraScript {
         java.util.regex.Matcher m = FIELD.matcher(t.get(field).getText());
         if (!m.find()) return null;
         int off = Integer.parseInt(m.group(1)), len = Integer.parseInt(m.group(2));
+        pieceEnd = field;
+        return "(*(" + pieceType(t, dot, len) + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
+    }
+
+    /* The same for a piece of an expression: "g_itemtype[8]._40_4_" (an unknown area of a
+     * struct, ApplyTypes.java leaves it without a field), "x.f._0_4_" or "p->f._0_4_". The
+     * expression starts where its postfix chain (names, [..], .field, ->field) starts. */
+    private void expressionPieces(List<ClangToken> t, Map<Integer, String> openBefore) {
+        for (int dot = 1; dot + 1 < t.size(); dot++) {
+            if (!t.get(dot).getText().equals(".") || replaceSpans.containsKey(dot)) continue;
+            int field = next(t, dot);
+            if (field < 0) continue;
+            java.util.regex.Matcher m = FIELD.matcher(t.get(field).getText());
+            if (!m.find()) continue;
+            int prev = prevTok(t, dot);
+            if (prev < 0 || t.get(prev) instanceof ClangVariableToken && prevTok(t, prev) >= 0
+                    && !isChain(t.get(prevTok(t, prev)).getText()))
+                continue;  // "var._N_M_": partialAccess
+            int start = postfixStart(t, prev);
+            if (start < 0) continue;
+            int off = Integer.parseInt(m.group(1)), len = Integer.parseInt(m.group(2));
+            openBefore.merge(start, "(*(" + pieceType(t, dot, len) + " *)((uchar *)&", (x, y) -> y + x);
+            replaceSpans.put(dot, new Object[] { field, " + " + off + "))" });
+        }
+    }
+
+    private static boolean isChain(String s) {
+        return s.equals(".") || s.equals("->") || s.equals("]");
+    }
+
+    private static int prevTok(List<ClangToken> t, int i) {
+        for (int j = i - 1; j >= 0; j--)
+            if (!t.get(j).getText().isBlank() && !(t.get(j) instanceof ClangBreak)) return j;
+        return -1;
+    }
+
+    /* The last token of the postfix chain that starts at the name t[start]: "a[i].f->g". */
+    private static int postfixEnd(List<ClangToken> t, int start) {
+        int end = start;
+        while (true) {
+            int n = next(t, end);
+            if (n < 0) return end;
+            String s = t.get(n).getText();
+            if (s.equals("[")) {
+                int depth = 0, j;
+                for (j = n; j < t.size(); j++) {
+                    String u = t.get(j).getText();
+                    if (u.equals("[")) depth++;
+                    else if (u.equals("]") && --depth == 0) break;
+                }
+                if (j >= t.size()) return end;
+                end = j;
+            } else if ((s.equals(".") || s.equals("->")) && next(t, n) >= 0
+                    && t.get(next(t, n)) instanceof ghidra.app.decompiler.ClangFieldToken) {
+                end = next(t, n);
+            } else {
+                return end;
+            }
+        }
+    }
+
+    /* The first token of the postfix expression that ends at t[end], or -1. */
+    private static int postfixStart(List<ClangToken> t, int end) {
+        int j = end;
+        while (j >= 0) {
+            String s = t.get(j).getText();
+            if (s.equals("]") || s.equals(")")) {
+                String open = s.equals("]") ? "[" : "(";
+                int depth = 0;
+                for (; j >= 0; j--) {
+                    String u = t.get(j).getText();
+                    if (u.equals(s)) depth++;
+                    else if (u.equals(open) && --depth == 0) break;
+                }
+                if (j < 0) return -1;
+                if (open.equals("(")) {
+                    // A parenthesized primary ends the chain, unless a name before it calls it.
+                    int p = prevTok(t, j);
+                    if (p < 0 || !(t.get(p) instanceof ClangFuncNameToken)) return j;
+                    return p;
+                }
+                j = prevTok(t, j);
+                continue;
+            }
+            // A name: the chain goes on when "." or "->" is before it.
+            int p = prevTok(t, j);
+            if (p >= 0 && (t.get(p).getText().equals(".") || t.get(p).getText().equals("->"))) {
+                j = prevTok(t, p);
+                continue;
+            }
+            return j;
+        }
+        return -1;
+    }
+
+    /* The C type of the piece "_N_len_" whose "." is t[dot]: float or double when the p-code
+     * piece is a float, else an unsigned int of len bytes. */
+    private String pieceType(List<ClangToken> t, int dot, int len) {
         String type = len == 1 ? "uchar" : len == 2 ? "ushort" : len == 4 ? "uint" : len == 8 ? "ulonglong" : "uchar";
         PcodeOp op = t.get(dot).getPcodeOp();
         Varnode piece = null;
@@ -202,8 +312,11 @@ public class LiftExport extends GhidraScript {
         if (piece != null && piece.getSize() == len && piece.getHigh() != null
                 && isFloat(piece.getHigh().getDataType(), len))
             type = len == 4 ? "float" : "double";
-        // A write: "local_48._0_4_ = fVar5;" is a COPY whose output is the float piece.
-        if (piece == null && op != null && op.getOutput() != null && op.getOutput().getSize() == len
+        // A write: "local_48._0_4_ = fVar5;" is a COPY whose output is the float piece. Not a
+        // CAST: in "(float)x._188_4_" the CAST output is the float and the piece keeps the bits
+        // of an int (setupobjectypes_train read it as a float and converted it to uint).
+        if (piece == null && op != null && op.getOpcode() != PcodeOp.CAST
+                && op.getOutput() != null && op.getOutput().getSize() == len
                 && op.getOutput().getHigh() != null && isFloat(op.getOutput().getHigh().getDataType(), len))
             type = len == 4 ? "float" : "double";
         // A read by a float operation: "(double)local_60._0_4_" is FLOAT2FLOAT of the piece, and
@@ -214,8 +327,7 @@ public class LiftExport extends GhidraScript {
                 if (op.getInput(k).getSize() == len)
                     type = len == 4 ? "float" : "double";
         }
-        pieceEnd = field;
-        return "(*(" + type + " *)((uchar *)&" + t.get(i).getText() + " + " + off + "))";
+        return type;
     }
 
     /* A variable token whose high variable is smaller than its declared symbol: Ghidra gives
@@ -679,6 +791,100 @@ public class LiftExport extends GhidraScript {
      * prints it as a float compare: "fVar5 != -NAN" for "parent index != -1". In C every
      * compare with a NaN is unordered, so "!=" is always true. Print the float side as
      * LF_BITS_U(x) and a float constant as its bits. itemsimulation copied item[-1]. */
+    private static final java.util.regex.Pattern NUMBER = java.util.regex.Pattern.compile("^(-?)(0x[0-9a-fA-F]+|\\d+)$");
+
+    /* Absolute addresses that the loader relocates, printed as numbers. The lifted code runs
+     * the 024d at another base, so each one becomes SR_VA() of the original address.
+     *
+     * A constant token is relocated when the instruction of its p-code op has a relocation
+     * whose value is the constant, or the constant minus a small offset (Ghidra adds the
+     * offset of a field: "iVar2 + 0x9fdd8a8" for &DAT_09fdd8a4 + 4). The index of a PTRADD
+     * is relocated when index * element size is such a value (a pointer that counts from 0,
+     * "local_cc[0x1664980]" in humansimulation). Without a relocation in the instruction,
+     * an exact relocated value of the function counts (Ghidra can move a constant away from
+     * its instruction). A RAM address without a symbol ("ram0x1992d6ed") becomes a pointer
+     * access to SR_VA(). Each token is changed once, so no address gets two relocations. */
+    private void relocatedConstants(List<ClangToken> t, Function f) throws Exception {
+        Map<Address, Set<Long>> byIns = new HashMap<>();
+        Set<Long> all = new HashSet<>();
+        Iterator<Relocation> it = currentProgram.getRelocationTable().getRelocations(f.getBody());
+        while (it.hasNext()) {
+            Relocation rel = it.next();
+            long v = currentProgram.getMemory().getInt(rel.getAddress()) & 0xffffffffL;
+            Instruction ins = currentProgram.getListing().getInstructionContaining(rel.getAddress());
+            if (ins != null) byIns.computeIfAbsent(ins.getAddress(), k -> new HashSet<>()).add(v);
+            all.add(v);
+        }
+        if (all.isEmpty()) return;
+        for (int i = 0; i < t.size(); i++) {
+            if (replaceSpans.containsKey(i) || !(t.get(i) instanceof ClangVariableToken)) continue;
+            ClangToken tok = t.get(i);
+            String text = tok.getText();
+            Varnode vn = ((ClangVariableToken) tok).getVarnode();
+            if (text.startsWith("ram0x") && vn != null && vn.isAddress()) {
+                long a = vn.getAddress().getOffset();
+                String ty = vn.getSize() == 1 ? "uchar" : vn.getSize() == 2 ? "ushort" : vn.getSize() == 8 ? "undefined8" : "undefined4";
+                replaceSpans.put(i, new Object[] { i, String.format("(*(%s *)SR_VA(0x%x))", ty, a) });
+                continue;
+            }
+            java.util.regex.Matcher m = NUMBER.matcher(text);
+            if (!m.find()) continue;
+            boolean neg = !m.group(1).isEmpty();
+            String digits = m.group(2);
+            // A 64-bit constant (a longlong mask) is never a 32-bit address.
+            if (digits.length() > 10) continue;
+            long val = digits.startsWith("0x") ? Long.parseLong(digits.substring(2), 16) : Long.parseLong(digits);
+            if (val > 0xffffffffL) continue;
+            PcodeOp op = tok.getPcodeOp();
+            Set<Long> local = Collections.emptySet();
+            if (op != null) {
+                Instruction ins = currentProgram.getListing().getInstructionContaining(op.getSeqnum().getTarget());
+                if (ins != null) local = byIns.getOrDefault(ins.getAddress(), Collections.emptySet());
+            }
+            // The index of a PTRADD: index * element size is the address.
+            if (op != null && op.getOpcode() == PcodeOp.PTRADD && !neg && op.getNumInputs() == 3
+                    && op.getInput(1).isConstant() && op.getInput(1).getOffset() == val && op.getInput(2).isConstant()) {
+                long size = op.getInput(2).getOffset();
+                long addr = val * size;
+                if (size > 0 && (local.contains(addr) || all.contains(addr))) {
+                    replaceSpans.put(i, new Object[] { i, String.format("(0x%x + LF_RELOC / %d)", val, size) });
+                    continue;
+                }
+            }
+            if (val < 0x10000) continue;
+            String rel = relocText(val, local, all);
+            if (rel != null)
+                replaceSpans.put(i, new Object[] { i, neg ? "(-" + rel + ")" : rel });
+        }
+    }
+
+    /* "((int)SR_VA(0xV))" or "((int)SR_VA(0xV) + d)" for a value V that the loader relocates. */
+    private static String relocText(long val, Set<Long> local, Set<Long> all) {
+        if (local.contains(val) || all.contains(val))
+            return String.format("((int)SR_VA(0x%x))", val);
+        // A field offset inside the same instruction, or "END - 1" in a compare.
+        for (long r : local) {
+            long d = val - r;
+            if (d >= -0x10000 && d <= 0x10000 && d != 0)
+                return String.format("((int)SR_VA(0x%x) %s %d)", r, d < 0 ? "-" : "+", Math.abs(d));
+        }
+        // Ghidra folded the field offset into a constant and moved it to another instruction:
+        // "iVar2 + 0x9fdd8a8" for the relocated 0x9fdd8a4 plus 4 (newspaper_load). Only when no
+        // relocation of this instruction explains the value.
+        if (local.isEmpty()) {
+            long best = -1;
+            for (long r : all)
+                if (val > r && val - r <= 0x40 && (best < 0 || val - r < val - best)) best = r;
+            if (best >= 0)
+                return String.format("((int)SR_VA(0x%x) + %d)", best, val - best);
+        }
+        if (all.contains(val + 1))
+            return String.format("((int)SR_VA(0x%x) - 1)", val + 1);
+        if (all.contains(val - 1))
+            return String.format("((int)SR_VA(0x%x) + 1)", val - 1);
+        return null;
+    }
+
     private void floatBitCompares(List<ClangToken> t, Map<Integer, String> openBefore,
             Map<Integer, Integer> closeAfter) {
         for (int i = 0; i < t.size(); i++) {
@@ -803,7 +1009,25 @@ public class LiftExport extends GhidraScript {
         ClangToken op0 = t.get(k);
         if (op0 instanceof ClangVariableToken) {
             castOp = op0.getPcodeOp();
-            end = k;
+            end = postfixEnd(t, k);
+            // "(float)g_body[1].unk_0010": the cast reads the whole postfix chain. The CAST
+            // consumes the output of an op in the chain (the field load).
+            if (end != k) {
+                castOp = null;
+                chain:
+                for (int j = k; j <= end; j++) {
+                    PcodeOp p = t.get(j).getPcodeOp();
+                    if (p == null || p.getOutput() == null) continue;
+                    Iterator<PcodeOp> d = p.getOutput().getDescendants();
+                    while (d.hasNext()) {
+                        PcodeOp q = d.next();
+                        if (q.getOpcode() == PcodeOp.CAST) {
+                            castOp = q;
+                            break chain;
+                        }
+                    }
+                }
+            }
         } else if (op0.getText().equals("(") || (op0.getPcodeOp() != null && next(t, k) >= 0
                 && t.get(next(t, k)).getText().equals("("))) {
             // A parenthesized group, or a call-like operand such as CONCAT44(a, b): the
@@ -981,13 +1205,17 @@ public class LiftExport extends GhidraScript {
             // and PTR_s_Goldmen_Inc_00460438 (a pointer global named after its target).
             java.util.regex.Matcher gm = java.util.regex.Pattern
                     .compile("_*(?:DAT|PTR)_(?:\\w*_)?([0-9a-f]{8})(?:_\\d+)?").matcher(text);
-            if (!gm.matches()) continue;
+            // A named global (ApplyTypes.java) prints "_g_intersect" for a piece of g_intersect:
+            // the decompiler marks it as a global variable.
+            boolean global = hv instanceof ghidra.program.model.pcode.HighGlobal;
+            if (!gm.matches() && !global) continue;
             // The real address: "DAT_107575c0_1" can be a piece at 0x107575c1.
-            String hexAddr = gm.group(1);
+            String hexAddr = gm.matches() ? gm.group(1) : null;
             ghidra.program.model.pcode.Varnode rep = hv.getRepresentative();
             if (rep != null && rep.getAddress().isMemoryAddress()) {
                 hexAddr = String.format("%08x", rep.getAddress().getOffset());
             }
+            if (hexAddr == null) continue;
             found.put(text, new String[] { "0x" + hexAddr, dt.getDisplayName(), String.valueOf(dt.getLength()) });
         }
         // A global with the listing type "undefined" (1 byte, no real type) that the function

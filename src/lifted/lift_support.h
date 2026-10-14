@@ -11,6 +11,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Structs of the game (Human, Object, Player...): ApplyTypes.java puts the same types into
+ * Ghidra, so the pseudo-C uses them. */
+#include "sr_types.h"
+
 extern uintptr_t sr_base;
 
 /* Image address (base 0x400000) -> real address in this process. */

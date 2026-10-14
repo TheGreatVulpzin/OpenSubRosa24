@@ -3,6 +3,10 @@
  *
  * 32-bit layout of Sub Rosa 0.24 (equal in the i386 Mach-O and in the 024d PE).
  * unk_XXXX fields: the game accesses the offset, but the meaning is not known yet.
+ *
+ * Each record is a union of its fields and lf_raw, the raw bytes. Ghidra keeps the unknown
+ * bytes (pad_ and byte arrays) without a field and prints "&x->field_0x28" for them. The
+ * lifter prints lf_raw[0x28] (tools/ghidra/ApplyTypes.java, LiftExport.java).
  */
 #ifndef SR_TYPES_H
 #define SR_TYPES_H
@@ -22,7 +26,7 @@ typedef struct vec3 { float x, y, z; } vec3;
 
 /* Body bone (ragdoll). 15 per Human, starting at Human+0xc8.
  * Source: createhuman and bondsimulation2 (Mach-O). */
-typedef struct Bone {
+typedef union Bone { struct {
     vec3 pos;           /* +0x00 createhuman: position */
     vec3 pos_prev;      /* +0x0c createhuman: copy of the position */
     uint8_t unk_18[0x18];
@@ -30,17 +34,17 @@ typedef struct Bone {
     uint8_t unk_54[0x38];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
     uint8_t unk_90[0x50];
-} Bone;
+}; uint8_t lf_raw[0xe0]; } Bone;
 
 /* Inventory slot. 8 per Human. */
-typedef struct InventorySlot {
+typedef union InventorySlot { struct {
     int count;      /* +0x00 manager: quantity */
     int item_id;    /* +0x04 manager: index into items[] */
     uint8_t unk_08[0x1c];
-} InventorySlot;
+}; uint8_t lf_raw[0x24]; } InventorySlot;
 
 /* Account saved in user/server.srk (docs/formatos.md). */
-typedef struct Account {
+typedef union Account { struct {
     uint32_t id[2];     /* +0x00 equal to Player.account_id */
     char name[32];      /* +0x08 */
     int name_locked;    /* +0x28 not saved to the file; createaccount writes 5 */
@@ -50,13 +54,13 @@ typedef struct Account {
     int look_b;         /* +0x38 rand() & 7 */
     int look_c;         /* +0x3c rand() & 3 */
     uint8_t unk_40[0xc];
-} Account;
+}; uint8_t lf_raw[0x4c]; } Account;
 
 /* Match state: global "game" (a single one, not an array). 0x25d64 bytes.
  * Layout of the 0.24c server (ELF) and of the 024d. The 0.24b (Mac) has one
  * 4-byte field less at the start: there the tick is at +0x34. Source: dedicatedserverloop,
  * logicsimulation_round and resetgame of the 0.24c, checked in the 024d. */
-typedef struct Game {
+typedef union Game { struct {
     uint8_t unk_00[0x8];
     int gametype;       /* +0x08 config.txt "gametype=" (0 to 4) */
     uint8_t unk_0c[0x10];
@@ -69,7 +73,7 @@ typedef struct Game {
     int unk_34;         /* +0x34 dedicatedserverloop writes 0x4ec */
     int ticks;          /* +0x38 adds 1 per tick; used in Event.tick */
     uint8_t unk_3c[0x25d64 - 0x3c];
-} Game;
+}; uint8_t lf_raw[0x25d64]; } Game;
 
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
 SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
@@ -87,7 +91,7 @@ SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 
 
 /* player[]: record of 0x2408 bytes. */
-typedef struct Player {
+typedef union Player { struct {
     int active;                          /* +0x0000 createplayer writes 1 */
     char name[32];                       /* +0x0004 createaccount copies 32 bytes to the account */
     uint32_t account_id[2];              /* +0x0024 createaccount compares with account+0x00 and +0x04 */
@@ -171,7 +175,7 @@ typedef struct Player {
     int unk_23c4;                        /* +0x23c4 4 functions */
     int unk_23c8;                        /* +0x23c8 1 functions */
     uint8_t pad_23cc[0x3c];
-} Player;
+}; uint8_t lf_raw[0x2408]; } Player;
 SR_STATIC_ASSERT(sizeof(Player) == 0x2408, "Player");
 SR_STATIC_ASSERT(offsetof(Player, active) == 0x0, "Player.active");
 SR_STATIC_ASSERT(offsetof(Player, name) == 0x4, "Player.name");
@@ -201,7 +205,7 @@ SR_STATIC_ASSERT(offsetof(Player, look_b) == 0x23b8, "Player.look_b");
 SR_STATIC_ASSERT(offsetof(Player, look_c) == 0x23bc, "Player.look_c");
 
 /* human[]: record of 0x2b64 bytes. */
-typedef struct Human {
+typedef union Human { struct {
     int active;                          /* +0x0000 createhuman writes 1 */
     int unk_0004;                        /* +0x0004 2 functions */
     int player_id;                       /* +0x0008 createhuman: parameter 3 (owner) */
@@ -277,7 +281,7 @@ typedef struct Human {
     int unk_2b54;                        /* +0x2b54 1 functions */
     int unk_2b58;                        /* +0x2b58 1 functions */
     uint8_t pad_2b5c[0x8];
-} Human;
+}; uint8_t lf_raw[0x2b64]; } Human;
 SR_STATIC_ASSERT(sizeof(Human) == 0x2b64, "Human");
 SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
 SR_STATIC_ASSERT(offsetof(Human, player_id) == 0x8, "Human.player_id");
@@ -300,7 +304,7 @@ SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
 SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
 
 /* item[]: record of 0x1ac bytes. */
-typedef struct Item {
+typedef union Item { struct {
     int active;                          /* +0x0000 createitem writes 1 */
     int unk_0004;                        /* +0x0004 3 functions */
     int unk_0008;                        /* +0x0008 2 functions */
@@ -366,7 +370,7 @@ typedef struct Item {
     uint8_t pad_0198[0x8];
     int unk_01a0;                        /* +0x01a0 1 functions */
     uint8_t pad_01a4[0x8];
-} Item;
+}; uint8_t lf_raw[0x1ac]; } Item;
 SR_STATIC_ASSERT(sizeof(Item) == 0x1ac, "Item");
 SR_STATIC_ASSERT(offsetof(Item, active) == 0x0, "Item.active");
 SR_STATIC_ASSERT(offsetof(Item, type) == 0xc, "Item.type");
@@ -397,7 +401,7 @@ SR_STATIC_ASSERT(offsetof(Item, cash) == 0x138, "Item.cash");
 SR_STATIC_ASSERT(offsetof(Item, bills_mask) == 0x13c, "Item.bills_mask");
 
 /* object[]: record of 0x8230 bytes. */
-typedef struct Object {
+typedef union Object { struct {
     int active;                          /* +0x0000 manager: free slot with flag 0 */
     int type;                            /* +0x0004 createobject: parameter 1; index into objecttype */
     int state;                           /* +0x0008 objectsimulation compares with 1 and 2; packobjectpacket ignores 3 (likely: object state) */
@@ -527,7 +531,7 @@ typedef struct Object {
     int unk_8220;                        /* +0x8220 2 functions */
     int unk_8224;                        /* +0x8224 2 functions */
     uint8_t pad_8228[0x8];
-} Object;
+}; uint8_t lf_raw[0x8230]; } Object;
 SR_STATIC_ASSERT(sizeof(Object) == 0x8230, "Object");
 SR_STATIC_ASSERT(offsetof(Object, active) == 0x0, "Object.active");
 SR_STATIC_ASSERT(offsetof(Object, type) == 0x4, "Object.type");
@@ -551,7 +555,7 @@ SR_STATIC_ASSERT(offsetof(Object, rotor_angle) == 0x5f1c, "Object.rotor_angle");
 SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
 
 /* connection[]: record of 0xf170 bytes. */
-typedef struct Connection {
+typedef union Connection { struct {
     uint32_t ip;                         /* +0x0000 manager (ANALISE-NPCS.md) */
     int port;                            /* +0x0004 manager (ANALISE-NPCS.md) */
     int unk_0008;                        /* +0x0008 2 functions */
@@ -569,7 +573,7 @@ typedef struct Connection {
     uint8_t pad_0158[0xf000];
     vec3 camera_pos;                     /* +0xf158 packobjectpacket: copyvector for distance */
     vec3 listener_pos;                   /* +0xf164 packevent: vectordistance for sound range */
-} Connection;
+}; uint8_t lf_raw[0xf170]; } Connection;
 SR_STATIC_ASSERT(sizeof(Connection) == 0xf170, "Connection");
 SR_STATIC_ASSERT(offsetof(Connection, ip) == 0x0, "Connection.ip");
 SR_STATIC_ASSERT(offsetof(Connection, port) == 0x4, "Connection.port");
@@ -584,7 +588,7 @@ SR_STATIC_ASSERT(offsetof(Connection, camera_pos) == 0xf158, "Connection.camera_
 SR_STATIC_ASSERT(offsetof(Connection, listener_pos) == 0xf164, "Connection.listener_pos");
 
 /* itemtype[]: record of 0x198 bytes. */
-typedef struct ItemType {
+typedef union ItemType { struct {
     uint8_t pad_0000[0x4];
     int unk_0004;                        /* +0x0004 1 functions */
     int unk_0008;                        /* +0x0008 1 functions */
@@ -608,12 +612,12 @@ typedef struct ItemType {
     float unk_0090;                      /* +0x0090 2 functions */
     float unk_0094;                      /* +0x0094 2 functions */
     uint8_t pad_0098[0x100];
-} ItemType;
+}; uint8_t lf_raw[0x198]; } ItemType;
 SR_STATIC_ASSERT(sizeof(ItemType) == 0x198, "ItemType");
 SR_STATIC_ASSERT(offsetof(ItemType, size) == 0x80, "ItemType.size");
 
 /* objecttype[]: record of 0x828c bytes. */
-typedef struct ObjectType {
+typedef union ObjectType { struct {
     uint8_t pad_0000[0xc];
     int unk_000c;                        /* +0x000c 1 functions */
     uint8_t pad_0010[0x1c];
@@ -650,7 +654,7 @@ typedef struct ObjectType {
     int num_seats;                       /* +0x807c setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats) */
     uint8_t pad_8080[0x208];
     int unk_8288;                        /* +0x8288 1 functions */
-} ObjectType;
+}; uint8_t lf_raw[0x828c]; } ObjectType;
 SR_STATIC_ASSERT(sizeof(ObjectType) == 0x828c, "ObjectType");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_particles) == 0x38, "ObjectType.num_particles");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_bonds) == 0x740, "ObjectType.num_bonds");
@@ -661,7 +665,7 @@ SR_STATIC_ASSERT(offsetof(ObjectType, num_wheels) == 0x775c, "ObjectType.num_whe
 SR_STATIC_ASSERT(offsetof(ObjectType, num_seats) == 0x807c, "ObjectType.num_seats");
 
 /* bond[]: record of 0xec bytes. */
-typedef struct Bond {
+typedef union Bond { struct {
     int state;                           /* +0x0000 createbond writes 0 */
     int type;                            /* +0x0004 createbond: parameter 1 */
     int unk_0008;                        /* +0x0008 1 functions */
@@ -696,7 +700,7 @@ typedef struct Bond {
     uint8_t pad_00b4[0x8];
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x2c];
-} Bond;
+}; uint8_t lf_raw[0xec]; } Bond;
 SR_STATIC_ASSERT(sizeof(Bond) == 0xec, "Bond");
 SR_STATIC_ASSERT(offsetof(Bond, state) == 0x0, "Bond.state");
 SR_STATIC_ASSERT(offsetof(Bond, type) == 0x4, "Bond.type");
@@ -716,7 +720,7 @@ SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
 SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
 
 /* event[]: record of 0x80 bytes. */
-typedef struct Event {
+typedef union Event { struct {
     int type;                            /* +0x0000 packevent: pbitwrite 6 bits; createevent_sound writes 9 */
     int tick;                            /* +0x0004 packevent: 28 bits; compared with game+0x34 (age < 600) */
     vec3 pos;                            /* +0x0008 packevent: cs_pwrite 3 floats; createevent_sound: position */
@@ -729,7 +733,7 @@ typedef struct Event {
     float sound_b;                       /* +0x0034 createevent_sound: parameter 4 */
     uint8_t pad_0038[0x8];
     char message[64];                    /* +0x0040 createevent_message: memcpy of the text (max. 63 characters) */
-} Event;
+}; uint8_t lf_raw[0x80]; } Event;
 SR_STATIC_ASSERT(sizeof(Event) == 0x80, "Event");
 SR_STATIC_ASSERT(offsetof(Event, type) == 0x0, "Event.type");
 SR_STATIC_ASSERT(offsetof(Event, tick) == 0x4, "Event.tick");
@@ -744,7 +748,7 @@ SR_STATIC_ASSERT(offsetof(Event, sound_b) == 0x34, "Event.sound_b");
 SR_STATIC_ASSERT(offsetof(Event, message) == 0x40, "Event.message");
 
 /* bullet[]: record of 0x5c bytes. */
-typedef struct Bullet {
+typedef union Bullet { struct {
     int type;                            /* +0x0000 createbullet: parameter 1 */
     int ttl;                             /* +0x0004 createbullet writes 600 */
     int owner;                           /* +0x0008 createbullet: parameter 4 */
@@ -755,7 +759,7 @@ typedef struct Bullet {
     vec3 vel;                            /* +0x002c createbullet: parameter 3 */
     int unk_0038;                        /* +0x0038 1 functions */
     uint8_t pad_003c[0x20];
-} Bullet;
+}; uint8_t lf_raw[0x5c]; } Bullet;
 SR_STATIC_ASSERT(sizeof(Bullet) == 0x5c, "Bullet");
 SR_STATIC_ASSERT(offsetof(Bullet, type) == 0x0, "Bullet.type");
 SR_STATIC_ASSERT(offsetof(Bullet, ttl) == 0x4, "Bullet.ttl");
@@ -765,7 +769,7 @@ SR_STATIC_ASSERT(offsetof(Bullet, pos_prev) == 0x20, "Bullet.pos_prev");
 SR_STATIC_ASSERT(offsetof(Bullet, vel) == 0x2c, "Bullet.vel");
 
 /* body[]: record of 0x40 bytes. */
-typedef struct Body {
+typedef union Body { struct {
     uint8_t pad_0000[0x4];
     vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
     int unk_0010;                        /* +0x0010 3 functions */
@@ -780,7 +784,7 @@ typedef struct Body {
     float unk_0034;                      /* +0x0034 1 functions */
     float unk_0038;                      /* +0x0038 1 functions */
     uint8_t pad_003c[0x4];
-} Body;
+}; uint8_t lf_raw[0x40]; } Body;
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
 

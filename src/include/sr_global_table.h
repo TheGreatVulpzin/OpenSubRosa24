@@ -7,6 +7,7 @@ typedef struct SrGlobalInfo { unsigned rva; const char *name; unsigned elem_size
 static const SrGlobalInfo sr_global_table[] = {
     { 0x60170u, "cubequad", 0x0u, 0u },
     { 0x60174u, "cubevertex", 0x0u, 0u },
+    { 0x14043e0u, "timer", 0x0u, 0u },
     { 0x1409ba0u, "bullet", 0x5cu, 16384u },
     { 0x1579ba0u, "debug", 0x0u, 0u },
     { 0x15cbf80u, "human", 0x2b64u, 512u },

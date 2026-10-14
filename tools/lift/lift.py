@@ -84,14 +84,6 @@ INLINE_CALLS = {0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'}
 
 SIZE_TYPE = {1: 'uchar', 2: 'ushort', 4: 'uint', 8: 'ulonglong'}
 
-# Size of the element that a pointer of this base type points to.
-ELEMENT_SIZE = {
-    'char': 1, 'uchar': 1, 'byte': 1, 'undefined': 1, 'undefined1': 1, 'bool': 1,
-    'short': 2, 'ushort': 2, 'word': 2, 'undefined2': 2,
-    'int': 4, 'uint': 4, 'dword': 4, 'float': 4, 'undefined4': 4,
-    'double': 8, 'longlong': 8, 'ulonglong': 8, 'undefined8': 8,
-}
-
 HEADER_RE = re.compile(r'^(?P<ret>.+?)\s*\b(?:(?P<cc>__cdecl(?:_keep[CDF]+)?|__stdcall|__fastcall|__thiscall)\s+)?'
                        r'(?P<name>[A-Za-z_]\w*)\s*\((?P<params>.*)\)\s*$', re.S)
 
@@ -568,8 +560,6 @@ def lift_function(f, rva, headers, imports_used):
     if any(t == '...' for t, _ in params):
         return None, 'variadic'
 
-    # Ghidra "ram0x1992d6ed": a 4-byte store into the middle of another global (serversend).
-    c = re.sub(r'\bram0x([0-9a-f]+)\b', lambda m: f'(*(undefined4 *)SR_VA(0x{m.group(1)}))', c)
     # A LARGE_INTEGER read as one 64-bit value: "(longlong)local_8".
     for v in re.findall(r'\bLARGE_INTEGER\s+(\w+);', c):
         c = re.sub(r'\(longlong\)' + v + r'\b(?![.\[])', v + '.QuadPart', c)
@@ -665,35 +655,7 @@ def lift_function(f, rva, headers, imports_used):
     # "&DAT_00460020 + i" is an address in pointer arithmetic, not a string, even when its
     # bytes are printable: the code used [eax*4+460018h] and Ghidra added the +8.
     body = re.sub(r'&(_*DAT_([0-9a-f]{8}))(?![\w\[])(?!\s*[+\-])', immediate, body)
-    # Absolute addresses that the loader relocates (ASLR) but the pseudo-C shows as numbers.
-    # A compare can show the relocated value plus or minus 1: the code has "cmp esi, END" and
-    # "jae", Ghidra prints "END - 1 < p". createitem searched past the item array.
-    big = [v for v in f.get('relocvals', []) if v >= 0x10000]
-    # A pointer that counts from 0: Ghidra puts the array address into the index.
-    # "local_cc[0x1664980]" (a float *) is the float at 0x5992600 in humansimulation. The
-    # index moves by the relocation delta divided by the element size.
-    ptypes = local_types(body, params)
-
-    def index_reloc(m):
-        t = ptypes.get(m.group(1), '')
-        s = ELEMENT_SIZE.get(t[:-1].strip()) if t.endswith('*') and t.count('*') == 1 else None
-        if not s:
-            return m.group(0)
-        inner = re.sub(r'(?<![\w])0x([0-9a-f]+)\b',
-                       lambda k: (f'(0x{k.group(1)} + LF_RELOC / {s})' if int(k.group(1), 16) * s in relocs
-                                  and int(k.group(1), 16) * s >= 0x10000 else k.group(0)), m.group(2))
-        return f'{m.group(1)}[{inner}]'
-    body = re.sub(r'\b([A-Za-z_]\w*)\[([^\[\]]*)\]', index_reloc, body)
-    for v in big:
-        body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % v, f'((int)SR_VA(0x{v:x}))', body)
-    # An inlined strncpy stores 4 bytes at a time: Ghidra adds the offset to the address
-    # ("iVar2 + 0x9fdd8a8" for &DAT_09fdd8a4 + 4 in newspaper_load). Offsets up to 16.
-    for v in big:
-        for d in [-1] + list(range(1, 17)):
-            if v + d in relocs or any(0 < v + d - w < d for w in big):
-                continue
-            body = re.sub(r'(?<![\w])0x0*%x(?![0-9a-fA-FxX])' % (v + d),
-                          f'((int)SR_VA(0x{v:x}) {"-" if d < 0 else "+"} {abs(d)})', body)
+    # Relocated addresses (SR_VA, LF_RELOC) come from LiftExport.java (relocatedConstants).
     body, fpre, fpost = stack_frame(body)
     pre += fpre
     post += fpost
@@ -965,7 +927,7 @@ def compile_errors(path):
     bat = ROOT / 'build/lift/compile.bat'
     crlf = chr(13) + chr(10)
     bat.write_text(vcvars_line() +
-                   f'cl /nologo /c /TC /std:c11 /W0 /we4013 /arch:IA32 /utf-8 /errorReport:none /I "{ROOT / "src/lifted"}" '
+                   f'cl /nologo /c /TC /std:c11 /W0 /we4013 /arch:IA32 /utf-8 /errorReport:none /I "{ROOT / "src/lifted"}" /I "{ROOT / "src/include"}" '
                    f'/Fo"{ROOT / "build/lift/lifted.obj"}" "{path}"{crlf}', encoding='mbcs')
     r = subprocess.run(['cmd', '/c', str(bat)], capture_output=True, text=True, encoding='mbcs', errors='replace')
     errs = {}
