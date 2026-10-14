@@ -265,3 +265,9 @@ The lifter also needs these rules for them:
 - A global that holds a function address (`(*DAT_095022a4)(...)`, the `fread` pointer) gets the type `code *`.
 - An inlined `strncpy` stores 4 bytes at a time, and Ghidra adds the offset to the address (`iVar2 + 0x9fdd8a8`). `relocatedConstants` handles it (see "Relocated constants").
 - `ram0x1992d6ed`: a 4-byte store into the middle of another global.
+
+## Delinker test (Phase 4)
+
+`tools/ghidra/delink.sh <first VA> <last VA> <output.obj>` exports a range of the 024d as a COFF object file with `ghidra-delinker-extension` (`DelinkProgram.java` runs the "Relocation table synthesizer" analyzer on the range). The exporter name is `COFF relocatable object`.
+
+Test on `init_genrand` (0x40ad30 to 0x40ad6a, 59 bytes): `dumpbin /symbols /relocations /disasm` shows one `.text` section of 0x3B bytes, four `DIR32` relocations and three undefined externals (`DAT_00460cd0`, `DAT_00460dc0`, `DAT_0046177c`). The symbols carry the Ghidra names (`FUN_0040ad30`, `DAT_...`), not the names of the CSV files. Rename them in the project before a real export.
