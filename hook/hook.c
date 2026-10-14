@@ -46,6 +46,14 @@ void sv_log(const char *fmt, ...)
     va_end(ap);
     fputc('\n', f);
     fflush(f);
+    /* Errors also go to the server console (only after sv_console_init). */
+    if (strncmp(fmt, "ERROR", 5) == 0) {
+        char text[512];
+        va_start(ap, fmt);
+        vsnprintf(text, sizeof text, fmt, ap);
+        va_end(ap);
+        sv_console_event(1, "%s", text);
+    }
 }
 
 int sv_config_int(const char *key, int def)

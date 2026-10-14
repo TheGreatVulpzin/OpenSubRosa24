@@ -27,6 +27,13 @@ typedef struct SvHook {
 /* Log to subvulpes.log, in the folder of the executable. */
 void sv_log(const char *fmt, ...);
 
+/* Server console (console.c): banner, window title and [SubVulpes] event lines. */
+void sv_console_init(const char *mode, int hooks);
+void sv_console_event(int error, const char *fmt, ...);
+
+/* Recording size so far (record.c): calls written to sv_args.txt and its size in bytes. */
+void sv_record_stats(int *calls, long long *bytes);
+
 /* Read subvulpes.ini. Returns the value of the key, or def if the key does not exist. */
 int sv_config_int(const char *key, int def);
 

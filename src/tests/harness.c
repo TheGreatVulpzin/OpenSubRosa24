@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "harness_ui.h"
 #include "hook.h"
 #include "lifted_table.h"
 #include "plat_test.h"
@@ -244,11 +245,20 @@ static int same_page(const uint8_t *a, const uint8_t *b, int *at)
     return 1;
 }
 
+static int cmp_heap_page(const void *a, const void *b)
+{
+    uintptr_t x = (uintptr_t)((const HeapPage *)a)->addr, y = (uintptr_t)((const HeapPage *)b)->addr;
+    return x < y ? -1 : x > y;
+}
+
 /* After the original run: compare the pages that either run wrote, then make the state
  * after the original the new shadow. Returns 1 when the heap writes are the same. */
 static int heap_after_original(char *why, size_t n)
 {
     int i, k, same = 1, at;
+    /* Sorted by address: the lookup of each page that the original wrote is a binary search
+     * (a linear search made the area functions take minutes). */
+    qsort(g_heap_pages, (size_t)g_nheap, sizeof(HeapPage), cmp_heap_page);
     for (k = 0; k < g_nheap && same; k++)
         if (!same_page(g_heap_pages[k].data, g_heap_pages[k].addr, &at)) {
             snprintf(why, n, "heap: memory at %08x differs", (unsigned)(uintptr_t)(g_heap_pages[k].addr + at));
@@ -265,10 +275,7 @@ static int heap_after_original(char *why, size_t n)
             uint8_t *old = g_regions[i].shadow + (page - base);
             /* A page that only the original wrote: the lifted run left the shadow content. */
             if (same) {
-                int lifted_wrote = 0;
-                for (k = 0; k < g_nheap; k++)
-                    if (g_heap_pages[k].addr == page)
-                        lifted_wrote = 1;
+                int lifted_wrote = bsearch(&page, g_heap_pages, (size_t)g_nheap, sizeof(HeapPage), cmp_heap_page) != NULL;
                 if (!lifted_wrote && !same_page(old, page, &at)) {
                     snprintf(why, n, "heap: lifted did not write %08x", (unsigned)(uintptr_t)(page + at));
                     same = 0;
@@ -730,6 +737,8 @@ int main(int argc, char **argv)
     int i, j, total_ok = 0, total_diff = 0, total_known = 0, total_skip = 0, total_crash = 0, tested = 0;
     const char *filter = argc > 4 ? argv[4] : NULL;
     const char *game_dir;
+    int imports, index = 0, total_funcs = 0;
+    LARGE_INTEGER t_start, t_end, freq;
     IMAGE_NT_HEADERS32 *nt;
 
     if (argc < 4) {
@@ -737,6 +746,9 @@ int main(int argc, char **argv)
         return 2;
     }
     setvbuf(stdout, NULL, _IONBF, 0);  /* a crash keeps all output before it */
+    ui_init();
+    ui_banner();
+    QueryPerformanceCounter(&t_start);
     map_regions(argv[2]);
     g_mod = LoadLibraryExA(argv[1], NULL, 0);
     if (!g_mod) {
@@ -766,9 +778,8 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot set up the test environment (game folder %s, MSVCR100.dll)\n", game_dir);
         return 1;
     }
-    printf("game folder: %s\n", game_dir);
     plat_test_patch_globals();
-    printf("imports resolved: %d\n", resolve_imports());
+    imports = resolve_imports();
     lf_x87_init();
     set_probes(getenv("HARNESS_PROBE"));
     set_watch(getenv("HARNESS_WATCH"));
@@ -777,12 +788,18 @@ int main(int argc, char **argv)
         return 1;
     }
     sv_verify_ignore(0x14043e0, 0x5800);  /* profiler timers (RDTSC), see hooks_024d.c */
-    printf("024d at %p, snapshot base %08x, %u pages, %d recorded calls\n", (void *)g_mod, g_snap.base,
-           g_snap.npages, g_ncalls);
-    printf("heap regions: %d of %d mapped at their server address\n", g_mapped, g_nregions);
+    ui_info("recording", "%s (%d calls)", argv[3], g_ncalls);
+    ui_info("snapshot", "%s (%u pages, %d of %d heap regions)", argv[2], g_snap.npages, g_mapped, g_nregions);
+    ui_info("024d", "%p (snapshot base %08x), %d imports", (void *)g_mod, g_snap.base, imports);
+    ui_info("game folder", "%s", game_dir);
+    ui_info("filter", "%s", filter ? filter : "(all functions)");
+    printf("\n");
     if ((uint32_t)sr_base != g_snap.base)
-        printf("WARNING: the 024d did not load at the snapshot base. Pointers in the snapshot are guessed.\n"
-               "Use the same copy from tools/re/fixed_base.py for the server and the harness.\n");
+        ui_warning("the 024d did not load at the snapshot base. Pointers in the snapshot are guessed. "
+                   "Use the same copy from tools/re/fixed_base.py for the server and the harness.");
+    for (i = 0; i < lf_table_count; i++)
+        if (!filter || strstr(lf_table[i].name, filter))
+            total_funcs++;
 
     for (i = 0; i < lf_table_count; i++) {
         const LfEntry *e = &lf_table[i];
@@ -791,6 +808,7 @@ int main(int argc, char **argv)
         char first[320] = "";
         if (filter && !strstr(e->name, filter))
             continue;
+        index++;
         memset(&v, 0, sizeof v);
         v.name = e->name;
         v.every = 1;
@@ -892,11 +910,11 @@ int main(int argc, char **argv)
         }
         total_skip += skip;
         total_crash += crash;
-        printf("%-34s %3d same %3d different %3d crashed %3d skipped  %s\n", e->name, ok, diff, crash, skip,
-               first);
+        ui_function(index, total_funcs, e->name, ok, diff, crash, skip, diff && known_difference(e->name), first);
     }
-    printf("\n%d functions tested: %d calls same, %d different, %d known differences, %d lifted crashed, "
-           "%d skipped\n",
-           tested, total_ok, total_diff, total_known, total_crash, total_skip);
+    QueryPerformanceCounter(&t_end);
+    QueryPerformanceFrequency(&freq);
+    ui_summary(tested, total_ok, total_diff, total_known, total_crash, total_skip,
+               (double)(t_end.QuadPart - t_start.QuadPart) / (double)freq.QuadPart);
     return total_diff || total_crash ? 3 : 0;
 }

@@ -35,6 +35,7 @@
 
 static int g_record = -1;
 static FILE *g_args;
+static volatile long g_written_calls;  /* calls in sv_args.txt (console title) */
 static uint32_t g_seen[RECORD_FUNCS][RECORD_MAX];
 static unsigned char g_count[RECORD_FUNCS];
 static uint32_t g_image_size;
@@ -113,6 +114,7 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
     }
     fputc('\n', g_args);
     fflush(g_args);
+    g_written_calls++;
 }
 
 /* ------------------------------------------------------------ record and replay
@@ -310,6 +312,7 @@ uint32_t sv_rec_end(uint32_t eax)
                 g_rec_seen[s->idx][g_rec_count[s->idx]++] = h;
                 fwrite(s->buf, 1, s->len, g_args);
                 fflush(g_args);
+                g_written_calls++;
             }
         }
         free(s->buf);
@@ -477,4 +480,11 @@ void sv_snapshot_check(void)
     }
     fclose(f);
     sv_log("snapshot of .data written to sv_snapshot.bin");
+    sv_console_event(0, "snapshot saved: sv_snapshot.bin");
+}
+
+void sv_record_stats(int *calls, long long *bytes)
+{
+    *calls = (int)g_written_calls;
+    *bytes = g_args ? _ftelli64(g_args) : 0;
 }

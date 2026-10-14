@@ -127,8 +127,15 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
             sv_log("executable is not the expected 024d. Only forwarding the network.");
         } else {
             int n = sv_hooks_024d_install();
+            char mode[64];
             sv_install_crash_report();
             sv_log("%d hook(s) installed", n);
+            /* The mode for the console: what this server does besides the game. */
+            snprintf(mode, sizeof mode, "%s%s%s",
+                     sv_config_int("record_args", 0) || sv_config_int("record_imports", 0) ? "recording" : "playing",
+                     sv_original_only() ? ", original code" : ", lifted code",
+                     sv_config_int("verify", 1) && !sv_original_only() ? ", verify on" : "");
+            sv_console_init(mode, n);
         }
     } else if (reason == DLL_PROCESS_DETACH) {
         sv_hooks_024d_summary();
