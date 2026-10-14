@@ -1173,12 +1173,28 @@ public class LiftExport extends GhidraScript {
             return null;
         }
         int kind = castKind(castOp);
-        if (kind < 0) return null;
+        if (kind < 0 || (kind % 2 == 1 && integerCastAt(t, k))) return null;
         // The CAST must be the printed cast: in "(uint)(float)local_48" the CAST is the
         // "(uint)", and "(float)" is the SUBPIECE of an 8-byte variable.
         if (!castType(t, i, close).replace(" ", "")
                 .equals(castOp.getOutput().getHigh().getDataType().getName().replace(" ", ""))) return null;
         return new int[] { close, end, kind };
+    }
+
+    /* A cast from a float whose operand starts with a cast to an integer type:
+     * "(int)(longlong)(x * f)". In C the
+     * operand is then an integer, and "(int)" keeps its low bits like the p-code SUBPIECE.
+     * Ghidra types the 4-byte piece of the stack slot as a float (the slot also holds a
+     * float), so the CAST looks like a bit cast. LF_BITS_U would convert the longlong to a
+     * float (logic_addteamcash added the bits of 49.1 to the player money). */
+    private static boolean integerCastAt(List<ClangToken> t, int k) {
+        if (!t.get(k).getText().equals("(")) return false;
+        int ty = next(t, k);
+        if (ty < 0 || !(t.get(ty) instanceof ClangTypeToken)) return false;
+        int close = next(t, ty);
+        if (close < 0 || !t.get(close).getText().equals(")")) return false;
+        String name = t.get(ty).getText();
+        return !name.equals("float") && !name.equals("double") && !name.equals("float10");
     }
 
     /* 0: 4 bytes to float, 1: float to 4 bytes, 2: 8 bytes to double, 3: double to 8 bytes,
@@ -1237,7 +1253,7 @@ public class LiftExport extends GhidraScript {
             Iterator<PcodeOp> d = p.getOutput().getDescendants();
             while (d.hasNext()) todo.add(d.next());
         }
-        if (castKind(castOp) < 0) return null;
+        if (castKind(castOp) < 0 || (castKind(castOp) % 2 == 1 && integerCastAt(t, k))) return null;
         // It must be the printed cast: "(float)dVar10" is a FLOAT2FLOAT, and a bit CAST of
         // its result further on is another op.
         if (!printed.equals(castOp.getOutput().getHigh().getDataType().getName().replace(" ", ""))) return null;

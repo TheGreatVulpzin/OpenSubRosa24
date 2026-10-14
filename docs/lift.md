@@ -151,7 +151,7 @@ The first version of this rule was a regex in `lift.py`. It read the `=` of `<=`
 
 | Rule | Ghidra prints | Problem in C | Output |
 | --- | --- | --- | --- |
-| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. |
+| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. A cast from a float whose operand starts with an integer cast (`(int)(longlong)(x * f)`) is not marked: in C the operand is already an integer (`integerCastAt`, `logic_addteamcash`). |
 | `floatBitCompares` | `fVar5 != -NAN` (an `INT_NOTEQUAL`) | Every compare with a NaN is unordered, so `!=` is always true. | `LF_BITS_U(fVar5) != 0xffffffffU` |
 | `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))`. The piece is a float when its p-code piece has a float type, or when a float operation reads it (`(double)local_60._0_4_`, `f < local_40._0_4_`). |
 | `pieceVariable` | `local_14` (declared `undefined4`, used as a float) | A read converts the int. | `(*(float *)((uchar *)&local_14 + 0))`. Also for a smaller high variable in an `undefined8` symbol. |

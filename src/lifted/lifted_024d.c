@@ -53,8 +53,8 @@ undefined4 __cdecl lf_01010(char *param_1)
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x1c))
 void __cdecl lf_01080(void)
 
@@ -95,8 +95,8 @@ void __cdecl lf_01080(void)
 #undef DAT_0f837b64
 #undef g_account
 #undef g_p_fwrite
-#undef fclose
 #undef fopen
+#undef fclose
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x11d0 */
@@ -107,11 +107,11 @@ void __cdecl lf_01080(void)
 #define DAT_0956d2e0 (*(undefined *)SR_VA(0x956d2e0))
 #define DAT_0956d4e0 (*(undefined *)SR_VA(0x956d4e0))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define local_48 (*(undefined4 *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -157,11 +157,11 @@ void __cdecl lf_011d0(void)
 #undef DAT_0956d2e0
 #undef DAT_0956d4e0
 #undef g_p_fwrite
+#undef fopen
+#undef _chdir
 #undef fclose
 #undef __security_check_cookie
 #undef sprintf
-#undef _chdir
-#undef fopen
 #undef local_48
 #undef local_44
 #undef local_4
@@ -174,11 +174,11 @@ void __cdecl lf_011d0(void)
 #define DAT_0956d2e0 (*(undefined *)SR_VA(0x956d2e0))
 #define DAT_0956d4e0 (*(undefined *)SR_VA(0x956d4e0))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x5c))
@@ -224,11 +224,11 @@ void __cdecl lf_012f0(void)
 #undef DAT_0956d2e0
 #undef DAT_0956d4e0
 #undef g_p_fread
+#undef fopen
+#undef _chdir
 #undef fclose
 #undef __security_check_cookie
 #undef sprintf
-#undef _chdir
-#undef fopen
 #undef local_48
 #undef local_44
 #undef local_4
@@ -239,9 +239,9 @@ void __cdecl lf_012f0(void)
 #define DAT_10748524 (*(int *)SR_VA(0x10748524))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define DAT_01f4978c (*(undefined4 *)SR_VA(0x1f4978c))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "fprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
 void __cdecl lf_01420(void)
 
 {
@@ -291,9 +291,9 @@ void __cdecl lf_01420(void)
 #undef DAT_10748524
 #undef g_account
 #undef DAT_01f4978c
+#undef fopen
 #undef fclose
 #undef fprintf
-#undef fopen
 
 /* ---------------------------------------------------------------- 0x1540 */
 
@@ -618,9 +618,9 @@ int __cdecl lf_01e20(int param_1)
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
 #define DAT_25c4d76c (*(undefined *)SR_VA(0x25c4d76c))
 #define DAT_25c7d76c (*(undefined *)SR_VA(0x25c7d76c))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(7, "MSVCR100.DLL", "free"))
-#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(8, "MSVCR100.DLL", "malloc"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
+#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(7, "MSVCR100.DLL", "malloc"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(9, "MSVCR100.DLL", "free"))
 void __cdecl lf_01e50(int param_1)
 
 {
@@ -815,9 +815,9 @@ LAB_004022d2:
 #undef DAT_25bfd768
 #undef DAT_25c4d76c
 #undef DAT_25c7d76c
-#undef free
 #undef malloc
 #undef memcpy
+#undef free
 
 /* ---------------------------------------------------------------- 0x2560 */
 
@@ -1007,10 +1007,10 @@ void __cdecl lf_026d0(int param_1,undefined4 *param_2)
 #define DAT_0577c54c (*(undefined4 *)SR_VA(0x577c54c))
 #define DAT_057d35ac (*(undefined4 *)SR_VA(0x57d35ac))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define iStack_50 (*(int *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define iStack_48 (*(int *)(lf_frame + 0x18))
@@ -1129,8 +1129,8 @@ void __cdecl lf_029a0(undefined4 param_1)
 #undef DAT_0577c54c
 #undef DAT_057d35ac
 #undef g_p_fread
-#undef __security_check_cookie
 #undef fopen
+#undef __security_check_cookie
 #undef sprintf
 #undef fclose
 #undef iStack_50
@@ -1636,10 +1636,10 @@ void __cdecl lf_033a0(int param_1)
 #define DAT_05766068 (*(undefined1 *)SR_VA(0x5766068))
 #define DAT_0576a06c (*(undefined1 *)SR_VA(0x576a06c))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define local_50 (*(undefined4 *)(lf_frame + 0x20))
 #define local_4c (*(int *)(lf_frame + 0x24))
@@ -1864,9 +1864,9 @@ void __cdecl lf_03740(undefined4 param_1)
 #undef DAT_05766068
 #undef DAT_0576a06c
 #undef g_p_fwrite
+#undef sprintf
 #undef __security_check_cookie
 #undef fopen
-#undef sprintf
 #undef fclose
 #undef local_54
 #undef local_50
@@ -1894,8 +1894,8 @@ void __cdecl lf_03740(undefined4 param_1)
 #define DAT_137b2d00 (*(undefined1 *)SR_VA(0x137b2d00))
 #define g_materiallist (*(int *)SR_VA(0xf66fd00))
 #define DAT_17150038 (*(undefined1 *)SR_VA(0x17150038))
-#define __security_check_cookie(x) ((void)0)
 #define __alloca_probe ((void (__cdecl *)(void))SR_VA(0x45ce50))
+#define __security_check_cookie(x) ((void)0)
 #define local_1424 (*(byte * *)(lf_frame + 0x1c))
 #define local_1420 (*(byte * *)(lf_frame + 0x20))
 #define local_141c (*(int *)(lf_frame + 0x24))
@@ -2129,8 +2129,8 @@ LAB_00403e67:
 #undef DAT_137b2d00
 #undef g_materiallist
 #undef DAT_17150038
-#undef __security_check_cookie
 #undef __alloca_probe
+#undef __security_check_cookie
 #undef local_1424
 #undef local_1420
 #undef local_141c
@@ -3006,9 +3006,9 @@ void __cdecl lf_05160(uint *param_1,float *param_2,byte param_3)
 #define DAT_019cbf24_1 (*(char *)SR_VA(0x19cbf25))
 #define DAT_019cbf28_1 (*(char *)SR_VA(0x19cbf29))
 #define DAT_019cbf2c_1 (*(char *)SR_VA(0x19cbf2d))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "fprintf"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
 void __cdecl lf_05280(void)
 
 {
@@ -3045,8 +3045,8 @@ void __cdecl lf_05280(void)
 #undef DAT_019cbf28_1
 #undef DAT_019cbf2c_1
 #undef fopen
-#undef fprintf
 #undef fclose
+#undef fprintf
 
 /* ---------------------------------------------------------------- 0x5350 */
 #define DAT_0956d6f0 (*(undefined *)SR_VA(0x956d6f0))
@@ -4964,9 +4964,9 @@ void __cdecl lf_080b0(int param_1,int param_2,int param_3)
 #define DAT_0f67c2c4 (*(undefined *)SR_VA(0xf67c2c4))
 #define DAT_0f77c30c (*(undefined4 *)SR_VA(0xf77c30c))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
 #define local_48 (*(undefined4 *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
@@ -5044,9 +5044,9 @@ void __cdecl lf_08320(void)
 #undef DAT_0f67c2c4
 #undef DAT_0f77c30c
 #undef g_p_fwrite
+#undef fclose
 #undef sprintf
 #undef fopen
-#undef fclose
 #undef __security_check_cookie
 #undef local_48
 #undef local_44
@@ -5063,9 +5063,9 @@ void __cdecl lf_08320(void)
 #define DAT_0f67c2c4 (*(undefined *)SR_VA(0xf67c2c4))
 #define DAT_0f77c30c (*(undefined4 *)SR_VA(0xf77c30c))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define __security_check_cookie(x) ((void)0)
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
@@ -5146,16 +5146,16 @@ void __cdecl lf_08590(void)
 #undef DAT_0f67c2c4
 #undef DAT_0f77c30c
 #undef g_p_fread
+#undef fclose
 #undef sprintf
 #undef fopen
-#undef fclose
 #undef __security_check_cookie
 #undef local_48
 #undef local_44
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x8880 */
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 void __cdecl lf_08880(char *param_1,int param_2)
 
 {
@@ -5260,8 +5260,8 @@ undefined4 __cdecl lf_08b00(float *param_1,int param_2,float param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
 #define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define local_4 (*(float *)(lf_frame + 0x1c))
 void __cdecl lf_08cf0(int param_1,float param_2)
@@ -5298,7 +5298,7 @@ void __cdecl lf_08cf0(int param_1,float param_2)
       else {
         param_2 = 0.0;
       }
-      piVar3[-9] = piVar3[-9] + ((int)LF_BITS_U((longlong)((float)((int)LF_BITS_U(local_4)) * param_2)));
+      piVar3[-9] = piVar3[-9] + (int)(longlong)((float)((int)LF_BITS_U(local_4)) * param_2);
       createevent_updateplayer_finance(iVar5);
     }
     iVar2 = g_game.ticks;
@@ -5379,8 +5379,8 @@ void __cdecl lf_08cf0(int param_1,float param_2)
 #undef g_game
 #undef g_event
 #undef g_player
-#undef createevent_updatestocks
 #undef _ftol2
+#undef createevent_updatestocks
 #undef createevent_updateplayer_finance
 #undef local_4
 
@@ -5392,8 +5392,8 @@ void __cdecl lf_08cf0(int param_1,float param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define local_18 (*(int *)(lf_frame + 0x18))
 #define local_14 (*(int * *)(lf_frame + 0x1c))
@@ -5555,8 +5555,8 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
 #undef g_item
 #undef g_event
 #undef g_player
-#undef createevent_updatemission
 #undef createevent_updatestocks
+#undef createevent_updatemission
 #undef createevent_updateplayer_finance
 #undef local_18
 #undef local_14
@@ -5685,9 +5685,9 @@ void __cdecl lf_094a0(int param_1)
 #undef pointinsidebase
 
 /* ---------------------------------------------------------------- 0x9600 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
 #define _CIsqrt lf_CIsqrt
+#define _CIcos lf_CIcos
 #define _CIatan2 lf_CIatan2
 void __cdecl lf_09600(float *param_1,float *param_2)
 
@@ -5707,9 +5707,9 @@ void __cdecl lf_09600(float *param_1,float *param_2)
   param_1[2] = (float)dVar1;
   return;
 }
-#undef _CIcos
 #undef _CIsin
 #undef _CIsqrt
+#undef _CIcos
 #undef _CIatan2
 
 /* ---------------------------------------------------------------- 0x9870 */
@@ -6537,9 +6537,9 @@ void __cdecl lf_0b150(int param_1,undefined4 param_2,undefined4 param_3,undefine
 /* ---------------------------------------------------------------- 0xb230 */
 #define DAT_00461840 (*(int *)SR_VA(0x461840))
 #define __timezone ((long * (__cdecl *)(void))LF_IMPORT(12, "MSVCR100.DLL", "__timezone"))
-#define __daylight ((int * (__cdecl *)(void))LF_IMPORT(13, "MSVCR100.DLL", "__daylight"))
-#define GetSystemTimeAsFileTime ((void (__stdcall *)(LPFILETIME))LF_IMPORT(14, "KERNEL32.DLL", "GetSystemTimeAsFileTime"))
-#define _tzset ((void (__cdecl *)(void))LF_IMPORT(15, "MSVCR100.DLL", "_tzset"))
+#define _tzset ((void (__cdecl *)(void))LF_IMPORT(13, "MSVCR100.DLL", "_tzset"))
+#define __daylight ((int * (__cdecl *)(void))LF_IMPORT(14, "MSVCR100.DLL", "__daylight"))
+#define GetSystemTimeAsFileTime ((void (__stdcall *)(LPFILETIME))LF_IMPORT(15, "KERNEL32.DLL", "GetSystemTimeAsFileTime"))
 #define __aulldiv ((undefined8 (__cdecl *)(uint, uint, uint, uint))SR_VA(0x45cf70))
 #define local_10 (*(_FILETIME *)(lf_frame + 0x10))
 #define local_4 (*(undefined4 *)(lf_frame + 0x1c))
@@ -6578,9 +6578,9 @@ undefined4 __cdecl lf_0b230(int *param_1,int *param_2)
 }
 #undef DAT_00461840
 #undef __timezone
+#undef _tzset
 #undef __daylight
 #undef GetSystemTimeAsFileTime
-#undef _tzset
 #undef __aulldiv
 #undef local_10
 #undef local_4
@@ -6592,8 +6592,8 @@ undefined4 __cdecl lf_0b230(int *param_1,int *param_2)
 #define _DAT_019c9dec (*(int *)SR_VA(0x19c9dec))
 #define _DAT_019c9de8 (*(undefined4 *)SR_VA(0x19c9de8))
 #define _DAT_019c9df0 (*(int *)SR_VA(0x19c9df0))
-#define GetCurrentProcess ((HANDLE (__stdcall *)(void))LF_IMPORT(16, "KERNEL32.DLL", "GetCurrentProcess"))
-#define GetProcessAffinityMask ((BOOL (__stdcall *)(HANDLE, PDWORD_PTR, PDWORD_PTR))LF_IMPORT(17, "KERNEL32.DLL", "GetProcessAffinityMask"))
+#define GetProcessAffinityMask ((BOOL (__stdcall *)(HANDLE, PDWORD_PTR, PDWORD_PTR))LF_IMPORT(16, "KERNEL32.DLL", "GetProcessAffinityMask"))
+#define GetCurrentProcess ((HANDLE (__stdcall *)(void))LF_IMPORT(17, "KERNEL32.DLL", "GetCurrentProcess"))
 #define SetProcessAffinityMask ((BOOL (__stdcall *)(HANDLE, DWORD_PTR))LF_IMPORT(18, "KERNEL32.DLL", "SetProcessAffinityMask"))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 #define local_4 (*(ULONG_PTR *)(lf_frame + 0x1c))
@@ -6636,8 +6636,8 @@ void __cdecl lf_0b300(void)
 #undef _DAT_019c9dec
 #undef _DAT_019c9de8
 #undef _DAT_019c9df0
-#undef GetCurrentProcess
 #undef GetProcessAffinityMask
+#undef GetCurrentProcess
 #undef SetProcessAffinityMask
 #undef local_8
 #undef local_4
@@ -7158,8 +7158,8 @@ void __cdecl lf_0bc20(undefined4 *param_1)
 
 
 /* ---------------------------------------------------------------- 0xbc50 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
 void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
 
 {
@@ -7190,13 +7190,13 @@ void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
   param_1[2] = (float)(fVar9 * fVar5 + ((float)(fVar3 * fVar7 + ((float)(fVar8 * fVar1 - fVar6 * fVar2)) * fVar4)));
   return;
 }
-#undef _CIcos
 #undef _CIsin
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xbdb0 */
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
 void __cdecl lf_0bdb0(int param_1,float *param_2,float param_3)
 
 {
@@ -7244,9 +7244,9 @@ void __cdecl lf_0bdb0(int param_1,float *param_2,float param_3)
   } while (iVar12 != 0);
   return;
 }
-#undef _CIcos
-#undef _CIsin
 #undef normalizevector
+#undef _CIsin
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xbf60 */
 #define _CIsqrt lf_CIsqrt
@@ -7270,8 +7270,8 @@ void __cdecl lf_0bf60(float *param_1,float *param_2)
 #undef _CIsqrt
 
 /* ---------------------------------------------------------------- 0xc0a0 */
-#define _CIcos lf_CIcos
 #define _CIsin lf_CIsin
+#define _CIcos lf_CIcos
 void __cdecl lf_0c0a0(float *param_1,float param_2)
 
 {
@@ -7288,8 +7288,8 @@ void __cdecl lf_0c0a0(float *param_1,float param_2)
   param_1[1] = (float)(fVar2 * (float)dVar4 + param_1[1] * (float)dVar3);
   return;
 }
-#undef _CIcos
 #undef _CIsin
+#undef _CIcos
 
 /* ---------------------------------------------------------------- 0xc120 */
 
@@ -7466,8 +7466,8 @@ undefined4 __cdecl lf_0c680(float *param_1,float *param_2,float *param_3,float *
 #undef lineintersectplanetwosided
 
 /* ---------------------------------------------------------------- 0xc8f0 */
-#define _CIsqrt lf_CIsqrt
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
@@ -7518,8 +7518,8 @@ float10 __cdecl lf_0c8f0(float *param_1,float *param_2,float *param_3)
   fVar2 = (float10)vectordistance(&local_18,param_1);
   return fVar2;
 }
-#undef _CIsqrt
 #undef vectordistance
+#undef _CIsqrt
 #undef normalizevector
 #undef local_18
 #undef local_14
@@ -7646,9 +7646,9 @@ undefined4 __cdecl lf_0cdf0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_14222e68 (*(int *)SR_VA(0x14222e68))
 #define DAT_14122d68 (*(undefined1 *)SR_VA(0x14122d68))
 #define g_parser (*(undefined4 *)SR_VA(0x14122d60))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fgetc ((int (__cdecl *)(FILE *))LF_IMPORT(20, "MSVCR100.DLL", "fgetc"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 void __cdecl lf_0d020(char *param_1)
 
 {
@@ -7676,9 +7676,9 @@ void __cdecl lf_0d020(char *param_1)
 #undef DAT_14222e68
 #undef DAT_14122d68
 #undef g_parser
-#undef fclose
 #undef fopen
 #undef fgetc
+#undef fclose
 
 /* ---------------------------------------------------------------- 0xd0c0 */
 #define DAT_14122d64 (*(int *)SR_VA(0x14122d64))
@@ -7811,11 +7811,11 @@ void __cdecl lf_0d2a0(int param_1,int param_2)
 #define LAB_0040d320 (*(undefined *)SR_VA(0x40d320))
 #define DAT_0e619204 (*(undefined1 *)SR_VA(0xe619204))
 #define g_filelist (*(undefined4 *)SR_VA(0xe619200))
-#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(22, "MSVCR100.DLL", "_findnext64i32"))
-#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(23, "MSVCR100.DLL", "qsort"))
-#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(24, "MSVCR100.DLL", "_findfirst64i32"))
-#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(25, "MSVCR100.DLL", "_findclose"))
+#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(22, "MSVCR100.DLL", "_findfirst64i32"))
+#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(23, "MSVCR100.DLL", "_findnext64i32"))
+#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(24, "MSVCR100.DLL", "_findclose"))
 #define __security_check_cookie(x) ((void)0)
+#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(25, "MSVCR100.DLL", "qsort"))
 #define local_12c (*(_finddata64i32_t *)(lf_frame + 0x14))
 #define local_4 (*(uint *)(lf_frame + 0x13c))
 void __cdecl lf_0d3a0(char *param_1,int param_2,int param_3)
@@ -7877,11 +7877,11 @@ LAB_0040d46c:
 #undef LAB_0040d320
 #undef DAT_0e619204
 #undef g_filelist
-#undef _findnext64i32
-#undef qsort
 #undef _findfirst64i32
+#undef _findnext64i32
 #undef _findclose
 #undef __security_check_cookie
+#undef qsort
 #undef local_12c
 #undef local_4
 
@@ -7945,10 +7945,10 @@ void __cdecl lf_0d680(int param_1)
 #define DAT_1992d684 (*(undefined4 *)SR_VA(0x1992d684))
 #define DAT_1992d6a4 (*(undefined *)SR_VA(0x1992d6a4))
 #define _DAT_1992d6c4 (*(undefined2 *)SR_VA(0x1992d6c4))
-#define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(26, "WSOCK32.DLL", 12))
+#define bind ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(26, "WSOCK32.DLL", 2))
+#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 23))
+#define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(28, "WSOCK32.DLL", 12))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define bind ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 2))
-#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(28, "WSOCK32.DLL", 23))
 void __cdecl lf_0d710(u_long param_1)
 
 {
@@ -7981,10 +7981,10 @@ void __cdecl lf_0d710(u_long param_1)
 #undef DAT_1992d684
 #undef DAT_1992d6a4
 #undef _DAT_1992d6c4
-#undef ioctlsocket
-#undef htons
 #undef bind
 #undef socket
+#undef ioctlsocket
+#undef htons
 
 /* ---------------------------------------------------------------- 0xd860 */
 #define DAT_1992d6c8 (*(undefined4 *)SR_VA(0x1992d6c8))
@@ -8051,9 +8051,9 @@ int __cdecl lf_0d860(void)
 #define DAT_1992d6c4 (*(undefined *)SR_VA(0x1992d6c4))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 void __cdecl lf_0d910(u_long param_1,u_short param_2)
 
 {
@@ -8079,15 +8079,15 @@ void __cdecl lf_0d910(u_long param_1,u_short param_2)
 #undef DAT_1992d6c4
 #undef DAT_1992d6e4
 #undef g_bsdsocket
-#undef htons
 #undef htonl
 #undef sendto
+#undef htons
 
 /* ---------------------------------------------------------------- 0xd990 */
 #define DAT_1992d6dc (*(int *)SR_VA(0x1992d6dc))
 #define DAT_1992d6e0 (*(int *)SR_VA(0x1992d6e0))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
 undefined4 __cdecl lf_0d990(void *param_1,int param_2,int param_3)
 
 {
@@ -8112,7 +8112,7 @@ undefined4 __cdecl lf_0d990(void *param_1,int param_2,int param_3)
 #define DAT_1993d6e4 (*(int *)SR_VA(0x1993d6e4))
 #define DAT_1993d6ec (*(int *)SR_VA(0x1993d6ec))
 #define DAT_1993d6f0 (*(undefined1 *)SR_VA(0x1993d6f0))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
 undefined4 __cdecl lf_0d9f0(void *param_1,int param_2,int param_3)
 
 {
@@ -8270,11 +8270,11 @@ int __cdecl lf_0ddd0(uint *param_1,uint param_2)
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define account_nameexists ((undefined4 (__cdecl *)(char *))SR_VA(0x401010))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define __security_check_cookie(x) ((void)0)
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define local_2c (*(char * *)(lf_frame + 0x14))
 #define local_28 (*(int *)(lf_frame + 0x18))
 #define local_24 (*(char (*)[32])(lf_frame + 0x1c))
@@ -8400,11 +8400,11 @@ int __cdecl lf_0ded0(int param_1)
 #undef DAT_0f837b64
 #undef g_account
 #undef g_player
-#undef sprintf
 #undef account_nameexists
-#undef memset
 #undef rand
 #undef __security_check_cookie
+#undef memset
+#undef sprintf
 #undef local_2c
 #undef local_28
 #undef local_24
@@ -8435,13 +8435,13 @@ int __cdecl lf_0ded0(int param_1)
 #define DAT_0e699234 (*(undefined *)SR_VA(0xe699234))
 #define DAT_0e699238 (*(undefined *)SR_VA(0xe699238))
 #define DAT_0e69923c (*(undefined *)SR_VA(0xe69923c))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define _CIsqrt lf_CIsqrt
 #define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
-#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
 #define local_4c (*(uint *)(lf_frame + 0x24))
@@ -8853,13 +8853,13 @@ LAB_0040f22c:
 #undef DAT_0e699234
 #undef DAT_0e699238
 #undef DAT_0e69923c
+#undef dotproduct
+#undef vectordistance
+#undef rand
 #undef _CIsqrt
 #undef ai_car_nextwaypoint
-#undef vectordistance
-#undef normalizevector
-#undef rand
-#undef dotproduct
 #undef vectorlength
+#undef normalizevector
 #undef local_54
 #undef local_50
 #undef local_4c
@@ -8907,8 +8907,8 @@ LAB_0040f22c:
 #define DAT_171660a4 (*(undefined *)SR_VA(0x171660a4))
 #define DAT_171665a8 (*(undefined *)SR_VA(0x171665a8))
 #define DAT_1994d740 (*(undefined4 *)SR_VA(0x1994d740))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(7, "MSVCR100.DLL", "free"))
-#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(8, "MSVCR100.DLL", "malloc"))
+#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(7, "MSVCR100.DLL", "malloc"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(9, "MSVCR100.DLL", "free"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int *)(lf_frame + 0x1c))
 void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int param_5,float param_6)
@@ -9024,8 +9024,8 @@ void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int pa
 #undef DAT_171660a4
 #undef DAT_171665a8
 #undef DAT_1994d740
-#undef free
 #undef malloc
+#undef free
 #undef local_8
 #undef local_4
 
@@ -9197,10 +9197,10 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #define DAT_25bbd770 (*(undefined4 *)SR_VA(0x25bbd770))
 #define DAT_25bbd774 (*(undefined4 *)SR_VA(0x25bbd774))
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
-#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
-#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
-#define __security_check_cookie(x) ((void)0)
 #define _CIsqrt lf_CIsqrt
+#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
+#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
+#define __security_check_cookie(x) ((void)0)
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -9435,10 +9435,10 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #undef DAT_25bbd770
 #undef DAT_25bbd774
 #undef DAT_25bfd768
-#undef tesselatebezierderivative
-#undef tesselatebezier
-#undef __security_check_cookie
 #undef _CIsqrt
+#undef tesselatebezier
+#undef tesselatebezierderivative
+#undef __security_check_cookie
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -9478,10 +9478,10 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #define DAT_25bbd770 (*(undefined4 *)SR_VA(0x25bbd770))
 #define DAT_25bbd774 (*(undefined4 *)SR_VA(0x25bbd774))
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
-#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
-#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
-#define __security_check_cookie(x) ((void)0)
 #define _CIsqrt lf_CIsqrt
+#define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_VA(0x402560))
+#define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_VA(0x402620))
+#define __security_check_cookie(x) ((void)0)
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
@@ -9694,10 +9694,10 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
 #undef DAT_25bbd770
 #undef DAT_25bbd774
 #undef DAT_25bfd768
-#undef tesselatebezierderivative
-#undef tesselatebezier
-#undef __security_check_cookie
 #undef _CIsqrt
+#undef tesselatebezier
+#undef tesselatebezierderivative
+#undef __security_check_cookie
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -10671,8 +10671,8 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
 
 /* ---------------------------------------------------------------- 0x11f70 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define __security_check_cookie(x) ((void)0)
 #define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
+#define __security_check_cookie(x) ((void)0)
 #define local_20 (*(float *)(lf_frame + 0x10))
 #define local_1c (*(uint (*)[4])(lf_frame + 0x14))
 #define local_c (*(undefined4 *)(lf_frame + 0x24))
@@ -10703,8 +10703,8 @@ void __cdecl lf_11f70(int param_1,undefined4 param_2,float param_3)
   return;
 }
 #undef DAT_00460d18
-#undef __security_check_cookie
 #undef area_block_addbeam
+#undef __security_check_cookie
 #undef local_20
 #undef local_1c
 #undef local_c
@@ -10808,8 +10808,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 #define DAT_19950f4a (*(undefined *)SR_VA(0x19950f4a))
 #define DAT_19950f4b (*(undefined *)SR_VA(0x19950f4b))
 #define DAT_19952744 (*(undefined *)SR_VA(0x19952744))
-#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 #define area_interior_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402dc0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5,undefined1 *param_6)
 
 {
@@ -10907,8 +10907,8 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #undef DAT_19950f4a
 #undef DAT_19950f4b
 #undef DAT_19952744
-#undef area_marksector
 #undef area_interior_setblock
+#undef area_marksector
 
 /* ---------------------------------------------------------------- 0x12450 */
 #define DAT_1074850c (*(int * *)SR_VA(0x1074850c))
@@ -11196,8 +11196,8 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_0b7e7254 (*(undefined4 *)SR_VA(0xb7e7254))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define local_10 (*(int * *)(lf_frame + 0x10))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
@@ -11305,8 +11305,8 @@ int __cdecl lf_129b0(int param_1,int param_2,int param_3,int param_4)
 #undef DAT_0b7e7254
 #undef g_numofbonds
 #undef g_bond
-#undef memset
 #undef vectorlength
+#undef memset
 #undef local_10
 #undef local_c
 #undef local_8
@@ -12560,12 +12560,12 @@ void __cdecl lf_13450(void)
 #define DAT_05766068 (*(undefined1 *)SR_VA(0x5766068))
 #define DAT_0576a06c (*(undefined1 *)SR_VA(0x576a06c))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_VA(0x4041c0))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define iStack_50 (*(int *)(lf_frame + 0x20))
 #define iStack_4c (*(int *)(lf_frame + 0x24))
@@ -12760,12 +12760,12 @@ void __cdecl lf_13d80(undefined4 param_1,int param_2)
 #undef DAT_05766068
 #undef DAT_0576a06c
 #undef g_p_fread
-#undef fopen
-#undef fclose
-#undef sprintf
 #undef __security_check_cookie
+#undef sprintf
+#undef fopen
 #undef memset
 #undef building_setupfloorplannewer
+#undef fclose
 #undef local_54
 #undef iStack_50
 #undef iStack_4c
@@ -13033,13 +13033,13 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
-#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define _CIsqrt lf_CIsqrt
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -13286,13 +13286,13 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef _ftol2
-#undef _CIsqrt
 #undef normalizevector
-#undef lineintersecttriangle
-#undef projectvector
-#undef generatetrinormal
+#undef _ftol2
 #undef vectorlength
+#undef projectvector
+#undef lineintersecttriangle
+#undef _CIsqrt
+#undef generatetrinormal
 #undef local_80
 #undef local_7c
 #undef local_78
@@ -13340,13 +13340,13 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
-#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define _CIsqrt lf_CIsqrt
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -13580,13 +13580,13 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef _ftol2
-#undef _CIsqrt
 #undef normalizevector
-#undef lineintersecttriangle
-#undef projectvector
-#undef generatetrinormal
+#undef _ftol2
 #undef vectorlength
+#undef projectvector
+#undef lineintersecttriangle
+#undef _CIsqrt
+#undef generatetrinormal
 #undef local_80
 #undef local_7c
 #undef local_78
@@ -14232,8 +14232,8 @@ LAB_004162d1:
 #define _DAT_0f837b3c (*(float *)SR_VA(0xf837b3c))
 #define _DAT_0f837b40 (*(float *)SR_VA(0xf837b40))
 #define _DAT_0f837b44 (*(float *)SR_VA(0xf837b44))
-#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
 void __cdecl lf_16320(float *param_1,float *param_2)
 
 {
@@ -14367,8 +14367,8 @@ void __cdecl lf_16320(float *param_1,float *param_2)
 #undef _DAT_0f837b3c
 #undef _DAT_0f837b40
 #undef _DAT_0f837b44
-#undef pbitread
 #undef normalizevector
+#undef pbitread
 
 /* ---------------------------------------------------------------- 0x16680 */
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
@@ -14539,8 +14539,8 @@ void __cdecl lf_16960(uint param_1)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 void __cdecl lf_16a20(float param_1,int param_2)
 
 {
@@ -14605,8 +14605,8 @@ void __cdecl lf_16a20(float param_1,int param_2)
 #undef g_game
 #undef g_player
 #undef _ftol2
-#undef createevent_updateplayer_finance
 #undef createevent_updateplayer
+#undef createevent_updateplayer_finance
 
 /* ---------------------------------------------------------------- 0x16bb0 */
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
@@ -14836,9 +14836,9 @@ void __cdecl lf_16e30(int param_1,int param_2,int param_3,int param_4,int param_
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
-#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define pbitwritenego ((int (__cdecl *)(uint *, uint))SR_VA(0x40ddb0))
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
@@ -15319,9 +15319,9 @@ void __cdecl lf_16f10(float param_1,int param_2)
 #undef g_connection
 #undef g_player
 #undef cs_pwrite
-#undef vectordistance
 #undef pbitwritenego
 #undef pbitwrite
+#undef vectordistance
 #undef local_c
 #undef local_8
 #undef local_4
@@ -15810,11 +15810,11 @@ longlong __cdecl lf_18570(void)
 #define DAT_00603f20 (*(undefined4 *)SR_VA(0x603f20))
 #define DAT_09fdd8a4 (*(undefined *)SR_VA(0x9fdd8a4))
 #define DAT_10347c84 (*(undefined4 *)SR_VA(0x10347c84))
-#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
 #define cs_getline ((void (__cdecl *)(int, int))SR_VA(0x40d2a0))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
 #define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 void __cdecl lf_185a0(void)
 
 {
@@ -15904,11 +15904,11 @@ void __cdecl lf_185a0(void)
 #undef DAT_00603f20
 #undef DAT_09fdd8a4
 #undef DAT_10347c84
-#undef loadtextfile
 #undef cs_getline
-#undef sprintf
-#undef csradixsort
 #undef sprintf_comma
+#undef loadtextfile
+#undef csradixsort
+#undef sprintf
 
 /* ---------------------------------------------------------------- 0x18720 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -15996,10 +15996,10 @@ void __cdecl lf_18720(uint *param_1)
 /* ---------------------------------------------------------------- 0x19060 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define _CIsin lf_CIsin
 #define _CIatan2 lf_CIatan2
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define _CIacos lf_CIacos
+#define _CIsin lf_CIsin
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_30 (*(float *)(lf_frame + 0x10))
 void __cdecl lf_19060(int param_1)
 
@@ -16142,10 +16142,10 @@ void __cdecl lf_19060(int param_1)
 }
 #undef g_human
 #undef g_body
-#undef _CIsin
 #undef _CIatan2
-#undef rotateorientation
 #undef _CIacos
+#undef _CIsin
+#undef rotateorientation
 #undef local_30
 
 /* ---------------------------------------------------------------- 0x19380 */
@@ -16560,10 +16560,10 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
 #undef memset
 
 /* ---------------------------------------------------------------- 0x1a000 */
-#define crossproduct ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b880))
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define lineintersectplanetwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_VA(0x40c290))
+#define _CIsqrt lf_CIsqrt
+#define crossproduct ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b880))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -16751,10 +16751,10 @@ undefined4 __cdecl lf_1a000(float *param_1,float *param_2,float *param_3,float *
   }
   return 1;
 }
-#undef crossproduct
-#undef _CIsqrt
 #undef normalizevector
 #undef lineintersectplanetwosided
+#undef _CIsqrt
+#undef crossproduct
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -16815,8 +16815,8 @@ undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x1a7f0 */
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsqrt lf_CIsqrt
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -16868,8 +16868,8 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef _CIsqrt
 #undef normalizevector
+#undef _CIsqrt
 #undef local_18
 #undef local_14
 #undef local_10
@@ -16910,9 +16910,9 @@ undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *
 #undef _CIsqrt
 
 /* ---------------------------------------------------------------- 0x1aa60 */
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define _CIsqrt lf_CIsqrt
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
@@ -16971,9 +16971,9 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
   }
   return 0;
 }
-#undef _CIsqrt
 #undef normalizevector
 #undef scaleaddvectors
+#undef _CIsqrt
 #undef local_c
 #undef local_8
 #undef local_4
@@ -16991,24 +16991,24 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
 #define DAT_17579827 (*(undefined1 *)SR_VA(0x17579827))
 #define DAT_17579828 (*(undefined1 *)SR_VA(0x17579828))
 #define DAT_17579829 (*(undefined1 *)SR_VA(0x17579829))
-#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(31, "WSOCK32.DLL", 18))
-#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(32, "WSOCK32.DLL", 151))
-#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(33, "WSOCK32.DLL", 16))
-#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(34, "WSOCK32.DLL", 52))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define __security_check_cookie(x) ((void)0)
-#define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(26, "WSOCK32.DLL", 12))
-#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(35, "WSOCK32.DLL", 55))
-#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(36, "MSVCR100.DLL", "_sleep"))
-#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(37, "WSOCK32.DLL", 7))
-#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(38, "WSOCK32.DLL", 19))
-#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 10))
-#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(40, "WSOCK32.DLL", 4))
-#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(41, "WSOCK32.DLL", 3))
-#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(28, "WSOCK32.DLL", 23))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(31, "WSOCK32.DLL", 4))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(32, "MSVCR100.DLL", "_sleep"))
+#define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(27, "WSOCK32.DLL", 23))
+#define __security_check_cookie(x) ((void)0)
+#define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(28, "WSOCK32.DLL", 12))
+#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(33, "WSOCK32.DLL", 55))
+#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(34, "WSOCK32.DLL", 19))
+#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(35, "WSOCK32.DLL", 7))
+#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(36, "WSOCK32.DLL", 18))
+#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
+#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(37, "WSOCK32.DLL", 3))
+#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(38, "WSOCK32.DLL", 10))
+#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 151))
+#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(40, "WSOCK32.DLL", 16))
+#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(41, "WSOCK32.DLL", 52))
 #define auStack_26c (*(undefined1 (*)[4])(lf_frame + 0x14))
 #define local_268 (*(int (*)[4])(lf_frame + 0x18))
 #define local_258 (*(timeval *)(lf_frame + 0x28))
@@ -17213,24 +17213,24 @@ LAB_0041ae5d:
 #undef DAT_17579827
 #undef DAT_17579828
 #undef DAT_17579829
-#undef select
-#undef __WSAFDIsSet
-#undef recv
-#undef gethostbyname
 #undef sprintf
-#undef sscanf
+#undef connect
+#undef htons
+#undef _sleep
+#undef socket
 #undef __security_check_cookie
 #undef ioctlsocket
 #undef getservbyname
-#undef _sleep
-#undef getsockopt
 #undef send
-#undef inet_addr
-#undef ntohl
-#undef connect
+#undef getsockopt
+#undef select
+#undef sscanf
 #undef closesocket
-#undef socket
-#undef htons
+#undef ntohl
+#undef inet_addr
+#undef __WSAFDIsSet
+#undef recv
+#undef gethostbyname
 #undef auStack_26c
 #undef local_268
 #undef local_258
@@ -17420,11 +17420,11 @@ void __cdecl lf_1b6e0(int param_1,int param_2)
 /* ---------------------------------------------------------------- 0x1b870 */
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
+#define linkitemtoitem ((int (__cdecl *)(int, int))SR_VA(0x407d60))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
 #define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define linkitemtoitem ((int (__cdecl *)(int, int))SR_VA(0x407d60))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
 int __cdecl lf_1b870(uint param_1,uint param_2,int param_3,int param_4)
 
 {
@@ -17492,11 +17492,11 @@ LAB_0041b9ae:
 }
 #undef g_itemtype
 #undef g_item
+#undef linkitemtoitem
+#undef item_removeitemlink
 #undef createevent_updateitem
 #undef item_addhumanlink
 #undef item_removehumanlink
-#undef linkitemtoitem
-#undef item_removeitemlink
 
 /* ---------------------------------------------------------------- 0x1ba30 */
 #define DAT_0e6b3228 (*(int *)SR_VA(0xe6b3228))
@@ -17817,11 +17817,11 @@ void __cdecl lf_1bc50(void)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
-#define __security_check_cookie(x) ((void)0)
-#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
+#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define __security_check_cookie(x) ((void)0)
 #define local_ac (*(float *)(lf_frame + 0x14))
 #define local_a8 (*(float *)(lf_frame + 0x18))
 #define local_a4 (*(float *)(lf_frame + 0x1c))
@@ -18087,11 +18087,11 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef generatetrinormal
-#undef lineintersecttriangle
-#undef __security_check_cookie
-#undef floor
 #undef _ftol2
+#undef lineintersecttriangle
+#undef floor
+#undef generatetrinormal
+#undef __security_check_cookie
 #undef local_ac
 #undef local_a8
 #undef local_a4
@@ -18152,9 +18152,9 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
+#define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_64 (*(int *)(lf_frame + 0x1c))
 #define local_60 (*(uint *)(lf_frame + 0x20))
 #define local_5c (*(int *)(lf_frame + 0x24))
@@ -18370,9 +18370,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef generatetrinormal
-#undef circleintersecttriangle
 #undef _ftol2
+#undef circleintersecttriangle
+#undef generatetrinormal
 #undef local_64
 #undef local_60
 #undef local_5c
@@ -18430,9 +18430,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
-#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define local_5c (*(uint *)(lf_frame + 0x14))
 #define local_58 (*(int *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -18642,9 +18642,9 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef sphereintersecttriangle
 #undef _ftol2
 #undef generatetrinormal
+#undef sphereintersecttriangle
 #undef local_5c
 #undef local_58
 #undef local_54
@@ -18677,8 +18677,8 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
 #define DAT_00603fa0 (*(undefined1 *)SR_VA(0x603fa0))
 #define DAT_10347c84 (*(undefined4 *)SR_VA(0x10347c84))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
 void __cdecl lf_1d2c0(int param_1)
 
@@ -18743,8 +18743,8 @@ void __cdecl lf_1d2c0(int param_1)
 #undef DAT_00603fa0
 #undef DAT_10347c84
 #undef createevent_message
-#undef sprintf
 #undef csradixsort
+#undef sprintf
 #undef sprintf_comma
 
 /* ---------------------------------------------------------------- 0x1d3b0 */
@@ -18817,12 +18817,12 @@ void __cdecl lf_1d3b0(void)
 #define DAT_00461780 (*(undefined *)SR_VA(0x461780))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define __security_check_cookie(x) ((void)0)
-#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define __security_check_cookie(x) ((void)0)
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
@@ -18930,12 +18930,12 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
 #undef DAT_00461780
 #undef g_item
 #undef g_event
-#undef createevent_message
-#undef sprintf
 #undef rotateorientation
-#undef __security_check_cookie
-#undef createevent_updateiteminfo
+#undef createevent_message
 #undef createitem
+#undef sprintf
+#undef createevent_updateiteminfo
+#undef __security_check_cookie
 #undef local_3c
 #undef local_38
 #undef local_34
@@ -19261,11 +19261,11 @@ void __cdecl lf_1d9e0(float *param_1,int param_2,float *param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define _CIsqrt lf_CIsqrt
-#define unpackorientation ((void (__cdecl *)(float *, float *))SR_VA(0x416320))
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define unpackorientation ((void (__cdecl *)(float *, float *))SR_VA(0x416320))
+#define _CIsqrt lf_CIsqrt
 #define local_64 (*(uint *)(lf_frame + 0x1c))
 #define local_60 (*(float *)(lf_frame + 0x20))
 #define local_5c (*(float *)(lf_frame + 0x24))
@@ -19931,11 +19931,11 @@ LAB_0041e31d:
 #undef g_game
 #undef g_item
 #undef g_body
-#undef rotateorientation
-#undef _CIsqrt
-#undef unpackorientation
 #undef pbitread
+#undef rotateorientation
 #undef normalizevector
+#undef unpackorientation
+#undef _CIsqrt
 #undef local_64
 #undef local_60
 #undef local_5c
@@ -19994,13 +19994,13 @@ LAB_0041e31d:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
-#define _CIpow lf_CIpow
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
 #define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
 #define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define _CIsqrt lf_CIsqrt
+#define _CIpow lf_CIpow
 #define local_40 (*(uint *)(lf_frame + 0x10))
 #define local_3c (*(uint *)(lf_frame + 0x14))
 #define local_38 (*(undefined8 *)(lf_frame + 0x18))
@@ -20552,13 +20552,13 @@ LAB_0041fded:
 #undef g_player
 #undef g_numofevents
 #undef g_connection
-#undef _CIpow
-#undef _ftol2
-#undef _CIsqrt
-#undef pbitwrite
-#undef packposition
 #undef packorientation
+#undef _ftol2
+#undef packposition
 #undef csradixsort
+#undef pbitwrite
+#undef _CIsqrt
+#undef _CIpow
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -20599,13 +20599,13 @@ LAB_0041fded:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
-#define _CIpow lf_CIpow
-#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define _CIsqrt lf_CIsqrt
-#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
+#define packposition ((void (__cdecl *)(undefined4 *))SR_VA(0x416790))
+#define _CIsqrt lf_CIsqrt
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define _CIpow lf_CIpow
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -21213,13 +21213,13 @@ LAB_00420c80:
 #undef g_player
 #undef g_numofevents
 #undef g_connection
-#undef _CIpow
-#undef packposition
-#undef pbitwrite
-#undef _CIsqrt
-#undef csradixsort
-#undef _ftol2
 #undef packorientation
+#undef packposition
+#undef _CIsqrt
+#undef _ftol2
+#undef csradixsort
+#undef pbitwrite
+#undef _CIpow
 #undef local_58
 #undef local_54
 #undef local_50
@@ -21763,8 +21763,8 @@ void __cdecl lf_225e0(float *param_1,int param_2)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x22af0 */
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -21809,8 +21809,8 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
                ((float)(param_5[2] - param_3[2])) * local_10)));
   return;
 }
-#undef generatetrinormal
 #undef normalizevector
+#undef generatetrinormal
 #undef local_18
 #undef local_14
 #undef local_10
@@ -22330,9 +22330,9 @@ float10 __cdecl lf_23fa0(int param_1)
 #define DAT_0b7e723c (*(undefined4 *)SR_VA(0xb7e723c))
 #define DAT_0b7e7240 (*(undefined4 *)SR_VA(0xb7e7240))
 #define addobjectrotation ((void (__cdecl *)(int, float *, float *, float))SR_VA(0x421e00))
-#define _CIsin lf_CIsin
 #define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsin lf_CIsin
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(int * *)(lf_frame + 0x18))
 #define local_14 (*(int *)(lf_frame + 0x1c))
@@ -22563,9 +22563,9 @@ LAB_004250f8:
 #undef DAT_0b7e723c
 #undef DAT_0b7e7240
 #undef addobjectrotation
-#undef _CIsin
 #undef _CIsqrt
 #undef normalizevector
+#undef _CIsin
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -22608,11 +22608,11 @@ LAB_004250f8:
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
 #define _DAT_107484c4 (*(float *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(float *)SR_VA(0x107484c8))
-#define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_VA(0x40c680))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
 #define lineintersectsphere ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float))SR_VA(0x41aa60))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_VA(0x40c680))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define local_48 (*(int *)(lf_frame + 0x18))
@@ -22838,11 +22838,11 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
 #undef _DAT_107484ec
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef lineintersecttriangletwosided
-#undef scaleaddvectors
-#undef generatetrinormal
 #undef calculatebarycentric
 #undef lineintersectsphere
+#undef generatetrinormal
+#undef scaleaddvectors
+#undef lineintersecttriangletwosided
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -23779,11 +23779,11 @@ void __cdecl lf_26f90(int param_1)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define DAT_0956d830 (*(undefined4 *)SR_VA(0x956d830))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIatan2 lf_CIatan2
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define _CIsin lf_CIsin
 #define _CItan lf_CItan
+#define _CIatan2 lf_CIatan2
+#define _CIcos lf_CIcos
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define local_18 (*(float *)(lf_frame + 0x18))
 void __cdecl lf_272b0(int param_1)
@@ -23991,11 +23991,11 @@ LAB_0042788c:
 #undef g_human
 #undef g_object
 #undef DAT_0956d830
-#undef _CIcos
-#undef _CIsin
-#undef _CIatan2
 #undef createevent_sound
+#undef _CIsin
 #undef _CItan
+#undef _CIatan2
+#undef _CIcos
 #undef _ftol2
 #undef local_18
 
@@ -24435,8 +24435,8 @@ int __cdecl lf_28020(void)
 
 /* ---------------------------------------------------------------- 0x28190 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 int __cdecl lf_28190(int param_1,int param_2,int param_3)
 
 {
@@ -24465,8 +24465,8 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
   return lf_eax;
 }
 #undef g_human
-#undef createitem
 #undef linkitem
+#undef createitem
 
 /* ---------------------------------------------------------------- 0x28230 */
 #define DAT_17579610 (*(undefined4 *)SR_VA(0x17579610))
@@ -24479,10 +24479,10 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
 #define DAT_0b051b8c (*(int *)SR_VA(0xb051b8c))
 #define DAT_17579600 (*(undefined4 *)SR_VA(0x17579600))
 #define DAT_17579604 (*(undefined4 *)SR_VA(0x17579604))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define __security_check_cookie(x) ((void)0)
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define __security_check_cookie(x) ((void)0)
+#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define local_70 (*(int *)(lf_frame + 0x10))
 #define local_6c (*(int *)(lf_frame + 0x14))
@@ -24719,10 +24719,10 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #undef DAT_0b051b8c
 #undef DAT_17579600
 #undef DAT_17579604
-#undef _ftol2
-#undef __security_check_cookie
-#undef createitem
 #undef rand
+#undef createitem
+#undef __security_check_cookie
+#undef _ftol2
 #undef createevent_updatemission
 #undef local_70
 #undef local_6c
@@ -24755,9 +24755,9 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0b051b94 (*(int *)SR_VA(0xb051b94))
 #define DAT_0b051b8c (*(undefined4 *)SR_VA(0xb051b8c))
-#define __security_check_cookie(x) ((void)0)
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define __security_check_cookie(x) ((void)0)
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
 #define local_68 (*(float *)(lf_frame + 0x18))
 #define local_64 (*(int *)(lf_frame + 0x1c))
@@ -24966,9 +24966,9 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
 #undef g_item
 #undef DAT_0b051b94
 #undef DAT_0b051b8c
-#undef __security_check_cookie
-#undef createitem
 #undef rand
+#undef createitem
+#undef __security_check_cookie
 #undef createevent_updatemission
 #undef local_68
 #undef local_64
@@ -25419,9 +25419,9 @@ bool __cdecl lf_29650(char *param_1)
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
-#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 #define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
 #define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefined4 param_5)
 
 {
@@ -25466,9 +25466,9 @@ void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #undef DAT_17166088
 #undef DAT_171665ac
 #undef DAT_1994d744
-#undef area_marksector
 #undef area_createchunk
 #undef area_createsector
+#undef area_marksector
 
 /* ---------------------------------------------------------------- 0x29830 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -25477,9 +25477,9 @@ void __cdecl lf_296f0(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #define DAT_17166088 (*(undefined *)SR_VA(0x17166088))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994ff44 (*(undefined *)SR_VA(0x1994ff44))
-#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 #define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
 #define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefined4 param_5)
 
 {
@@ -25524,9 +25524,9 @@ void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #undef DAT_17166088
 #undef DAT_171665ac
 #undef DAT_1994ff44
-#undef area_marksector
 #undef area_createchunk
 #undef area_createsector
+#undef area_marksector
 
 /* ---------------------------------------------------------------- 0x29970 */
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -25536,8 +25536,8 @@ void __cdecl lf_29830(uint param_1,uint param_2,uint param_3,uint param_4,undefi
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
-#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
 #define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
 #define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 
@@ -25606,8 +25606,8 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #undef DAT_171665ac
 #undef DAT_1994d744
 #undef DAT_19950744
-#undef area_getblock
 #undef area_setblock
+#undef area_getblock
 #undef area_marksector
 
 /* ---------------------------------------------------------------- 0x29bf0 */
@@ -25653,15 +25653,15 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define area_block_addwindow ((undefined * (__cdecl *)(int, float, float, float, float, int, uint))SR_VA(0x4118f0))
-#define area_block_addwindowvertical ((void (__cdecl *)(int, int, int))SR_VA(0x4105c0))
-#define area_block_addwindowhorizontal ((void (__cdecl *)(int, int, int, int, int))SR_VA(0x410140))
-#define __security_check_cookie(x) ((void)0)
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define area_block_adddoor ((void (__cdecl *)(int, float, undefined4))SR_VA(0x411a40))
-#define area_block_addoutdoor ((void (__cdecl *)(int, undefined4, float))SR_VA(0x411f70))
-#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 #define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
+#define area_block_addoutdoor ((void (__cdecl *)(int, undefined4, float))SR_VA(0x411f70))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
+#define area_block_addwindowhorizontal ((void (__cdecl *)(int, int, int, int, int))SR_VA(0x410140))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
+#define area_block_addwindowvertical ((void (__cdecl *)(int, int, int))SR_VA(0x4105c0))
+#define area_block_adddoor ((void (__cdecl *)(int, float, undefined4))SR_VA(0x411a40))
+#define __security_check_cookie(x) ((void)0)
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 #define local_28 (*(int *)(lf_frame + 0x18))
 #define local_24 (*(uint *)(lf_frame + 0x1c))
 #define local_20 (*(uint *)(lf_frame + 0x20))
@@ -25940,15 +25940,15 @@ LAB_0042a4ca:
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
 #undef area_block_addwindow
-#undef area_block_addwindowvertical
-#undef area_block_addwindowhorizontal
-#undef __security_check_cookie
-#undef addbeziersurface
-#undef landscape_buildsectorlods
-#undef area_block_adddoor
-#undef area_block_addoutdoor
-#undef area_block_rotatesurface
 #undef area_block_addcorner
+#undef area_block_addoutdoor
+#undef landscape_buildsectorlods
+#undef area_block_addwindowhorizontal
+#undef addbeziersurface
+#undef area_block_addwindowvertical
+#undef area_block_adddoor
+#undef __security_check_cookie
+#undef area_block_rotatesurface
 #undef local_28
 #undef local_24
 #undef local_20
@@ -26039,19 +26039,19 @@ LAB_0042a4ca:
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
-#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
 #define loadblock ((void (__cdecl *)(undefined4))SR_VA(0x4029a0))
-#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
-#define area_block_addbox ((void (__cdecl *)(float, float, float, float, float, float, uint))SR_VA(0x410950))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
 #define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define __security_check_cookie(x) ((void)0)
 #define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
+#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
+#define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
 #define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
 #define area_block_addbasicsurface ((void (__cdecl *)(uint, float *))SR_VA(0x410da0))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
+#define __security_check_cookie(x) ((void)0)
+#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define area_block_addbox ((void (__cdecl *)(float, float, float, float, float, float, uint))SR_VA(0x410950))
 #define local_98 (*(float *)(lf_frame + 0x18))
 #define local_94 (*(float *)(lf_frame + 0x1c))
 #define local_90 (*(float *)(lf_frame + 0x20))
@@ -27087,19 +27087,19 @@ LAB_0042be90:
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe9134
 #undef _DAT_0bbe9130
-#undef landscape_buildsectorlods
-#undef area_block_rotatesurface
-#undef listfiles
+#undef generatetrinormal
+#undef _chdir
 #undef loadblock
-#undef area_block_addbeam
-#undef area_block_addbox
+#undef landscape_buildsectorlods
 #undef addbeziersurface
-#undef __security_check_cookie
 #undef area_copyrotateblock
+#undef area_block_addbeam
+#undef area_block_rotatesurface
 #undef removeflieextentions
 #undef area_block_addbasicsurface
-#undef _chdir
-#undef generatetrinormal
+#undef __security_check_cookie
+#undef listfiles
+#undef area_block_addbox
 #undef local_98
 #undef local_94
 #undef local_90
@@ -27183,19 +27183,19 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
 #define DAT_19951f44 (*(undefined *)SR_VA(0x19951f44))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define lineintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, float, float))SR_VA(0x4126b0))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define lineintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *, float *, float *))SR_VA(0x414dd0))
-#define lineintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, uint, float))SR_VA(0x412450))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
-#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define __security_check_cookie(x) ((void)0)
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define lineintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, float, float))SR_VA(0x4126b0))
 #define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define lineintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, int *, uint, float))SR_VA(0x412450))
 #define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
+#define __security_check_cookie(x) ((void)0)
+#define lineintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *, float *, float *))SR_VA(0x414dd0))
 #define local_c4 (*(float *)(lf_frame + 0x1c))
 #define local_c0 (*(uint *)(lf_frame + 0x20))
 #define local_bc (*(float * *)(lf_frame + 0x24))
@@ -27636,19 +27636,19 @@ LAB_0042c893:
 #undef DAT_1994d744
 #undef DAT_19950744
 #undef DAT_19951f44
-#undef _ftol2
-#undef projectvector
-#undef lineintersectspecblock
-#undef resetorientation
-#undef lineintersectcityobjecttype
-#undef lineintersectnormalblock
-#undef rotateorientation
 #undef addvectors
-#undef area_getblock
-#undef __security_check_cookie
 #undef rotatevector
+#undef lineintersectspecblock
 #undef floor
+#undef _ftol2
+#undef lineintersectnormalblock
 #undef area_interior_getblock
+#undef rotateorientation
+#undef area_getblock
+#undef projectvector
+#undef resetorientation
+#undef __security_check_cookie
+#undef lineintersectcityobjecttype
 #undef local_c4
 #undef local_c0
 #undef local_bc
@@ -27893,8 +27893,8 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_137b2d58 (*(undefined *)SR_VA(0x137b2d58))
 #define DAT_137b2d78 (*(undefined *)SR_VA(0x137b2d78))
 #define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_60 (*(int *)(lf_frame + 0x10))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -28088,8 +28088,8 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
 #undef DAT_137b2d58
 #undef DAT_137b2d78
 #undef sphereintersectline
-#undef generatetrinormal
 #undef sphereintersecttriangle
+#undef generatetrinormal
 #undef local_60
 #undef local_54
 #undef local_50
@@ -28494,8 +28494,8 @@ undefined4 __cdecl lf_2daf0(float *param_1,float *param_2,float *param_3,float *
 #define DAT_0f42f108 (*(undefined *)SR_VA(0xf42f108))
 #define DAT_0f42f114 (*(undefined *)SR_VA(0xf42f114))
 #define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -28617,8 +28617,8 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
 #undef DAT_0f42f108
 #undef DAT_0f42f114
 #undef projectvector
-#undef generatetrinormal
 #undef sphereintersecttriangle
+#undef generatetrinormal
 #undef local_48
 #undef local_44
 #undef local_40
@@ -28670,12 +28670,12 @@ undefined4 __cdecl lf_2dfc0(float *param_1,float *param_2,float *param_3,float p
 #define _DAT_019c9ee4 (*(undefined4 *)SR_VA(0x19c9ee4))
 #define _DAT_1994d724 (*(undefined4 *)SR_VA(0x1994d724))
 #define _DAT_07a1ea6c (*(int *)SR_VA(0x7a1ea6c))
+#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define unpackangle ((void (__cdecl *)(float *, uint))SR_VA(0x416710))
 #define unpackevent ((void (__cdecl *)(uint))SR_VA(0x417b60))
 #define unpackobjectpacket ((void (__cdecl *)(void))SR_VA(0x41dba0))
 #define recvpacket ((int (__cdecl *)(void))SR_VA(0x40d860))
-#define unpackangle ((void (__cdecl *)(float *, uint))SR_VA(0x416710))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
-#define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
 #define __security_check_cookie(x) ((void)0)
 #define local_38 (*(int *)(lf_frame + 0x18))
 #define local_31 (*(char *)(lf_frame + 0x1f))
@@ -29056,12 +29056,12 @@ void __cdecl lf_2e310(void)
 #undef _DAT_019c9ee4
 #undef _DAT_1994d724
 #undef _DAT_07a1ea6c
+#undef pbitread
+#undef unpackangle
 #undef unpackevent
 #undef unpackobjectpacket
 #undef recvpacket
-#undef unpackangle
 #undef memcpy
-#undef pbitread
 #undef __security_check_cookie
 #undef local_38
 #undef local_31
@@ -29174,8 +29174,8 @@ void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
-#define _CIsqrt lf_CIsqrt
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define _CIsqrt lf_CIsqrt
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_38 (*(float *)(lf_frame + 0x38))
 #define local_34 (*(float *)(lf_frame + 0x3c))
@@ -29300,8 +29300,8 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef _CIsqrt
 #undef normalizevector
+#undef _CIsqrt
 #undef local_58
 #undef local_38
 #undef local_34
@@ -29338,16 +29338,16 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
 #define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
 #define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40a930))
-#define _CIsqrt lf_CIsqrt
-#define multiplyquaternion ((void (__cdecl *)(float *, float *, float *))SR_VA(0x41d8a0))
-#define _CIsin lf_CIsin
-#define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
 #define _CIcos lf_CIcos
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define _CIacos lf_CIacos
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define _CIsqrt lf_CIsqrt
+#define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40a930))
+#define multiplyquaternion ((void (__cdecl *)(float *, float *, float *))SR_VA(0x41d8a0))
+#define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
+#define _CIacos lf_CIacos
+#define _CIsin lf_CIsin
 #define __security_check_cookie(x) ((void)0)
 #define local_120 (*(float *)(lf_frame + 0x10))
 #define local_11c (*(float *)(lf_frame + 0x14))
@@ -29952,16 +29952,16 @@ LAB_0042f545:
 #undef _DAT_00460cd4
 #undef _DAT_00460cd8
 #undef _DAT_00460cdc
-#undef rotatevector
-#undef projectorientation
-#undef _CIsqrt
-#undef multiplyquaternion
-#undef _CIsin
-#undef orientationtoquaternion
 #undef _CIcos
-#undef normalizevector
-#undef _CIacos
 #undef rotateorientation
+#undef rotatevector
+#undef _CIsqrt
+#undef normalizevector
+#undef projectorientation
+#undef multiplyquaternion
+#undef orientationtoquaternion
+#undef _CIacos
+#undef _CIsin
 #undef __security_check_cookie
 #undef local_120
 #undef local_11c
@@ -30072,8 +30072,8 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
 
 /* ---------------------------------------------------------------- 0x307f0 */
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_20 (*(float *)(lf_frame + 0x20))
 #define local_1c (*(float *)(lf_frame + 0x24))
@@ -30174,8 +30174,8 @@ LAB_00430a83:
   return 1;
 }
 #undef vectordistance
-#undef lineintersecttriangle
 #undef sphereintersectline
+#undef lineintersecttriangle
 #undef local_24
 #undef local_20
 #undef local_1c
@@ -30191,8 +30191,8 @@ LAB_00430a83:
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 #define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 void __cdecl lf_30ab0(void)
 
 {
@@ -30245,8 +30245,8 @@ void __cdecl lf_30ab0(void)
 #undef g_game
 #undef g_item
 #undef item_removeitemlink
-#undef item_removehumanlink
 #undef createevent_updateitem
+#undef item_removehumanlink
 
 /* ---------------------------------------------------------------- 0x30ba0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -30255,10 +30255,10 @@ void __cdecl lf_30ab0(void)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define getrandomvector2d ((void (__cdecl *)(float *, float, float))SR_VA(0x421a30))
-#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
-#define createevent_bullet ((void (__cdecl *)(int, undefined4 *, undefined4 *, int))SR_VA(0x416bb0))
 #define createbullet ((int (__cdecl *)(int, undefined4 *, float *, int))SR_VA(0x4143b0))
+#define getrandomvector2d ((void (__cdecl *)(float *, float, float))SR_VA(0x421a30))
+#define createevent_bullet ((void (__cdecl *)(int, undefined4 *, undefined4 *, int))SR_VA(0x416bb0))
+#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_18 (*(float *)(lf_frame + 0x28))
 #define local_14 (*(float *)(lf_frame + 0x2c))
@@ -30365,10 +30365,10 @@ void __cdecl lf_30ba0(int param_1)
 #undef g_game
 #undef g_item
 #undef g_player
-#undef getrandomvector2d
-#undef getrandomvector3d
-#undef createevent_bullet
 #undef createbullet
+#undef getrandomvector2d
+#undef createevent_bullet
+#undef getrandomvector3d
 #undef local_24
 #undef local_18
 #undef local_14
@@ -30399,8 +30399,8 @@ void __cdecl lf_30ba0(int param_1)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define sphereintersecttrianglefull ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
+#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
 #define local_48 (*(float *)(lf_frame + 0x18))
@@ -30564,8 +30564,8 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef generatetrinormal
 #undef sphereintersecttrianglefull
+#undef generatetrinormal
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -30742,9 +30742,9 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
 #define _DAT_107484c0 (*(undefined4 *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(undefined4 *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(undefined4 *)SR_VA(0x107484c8))
+#define lineintersectlandscape ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x41c1d0))
 #define lineintersectcityobject ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *))SR_VA(0x4146a0))
 #define lineintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float *))SR_VA(0x42c0c0))
-#define lineintersectlandscape ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x41c1d0))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -30842,9 +30842,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
+#undef lineintersectlandscape
 #undef lineintersectcityobject
 #undef lineintersectarea
-#undef lineintersectlandscape
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -30863,9 +30863,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 #define DAT_0b7e7214 (*(undefined4 *)SR_VA(0xb7e7214))
 #define DAT_0b7e7218 (*(undefined4 *)SR_VA(0xb7e7218))
 #define DAT_0b7e721c (*(undefined4 *)SR_VA(0xb7e721c))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define createparticle ((int (__cdecl *)(undefined4, undefined4 *, undefined4 *, undefined4, int))SR_VA(0x4278c0))
 #define createbond ((int (__cdecl *)(int, int, int, int))SR_VA(0x4129b0))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define local_38 (*(uint *)(lf_frame + 0x18))
 #define local_30 (*(undefined4 * *)(lf_frame + 0x20))
 #define local_2c (*(int *)(lf_frame + 0x24))
@@ -31249,9 +31249,9 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
 #undef DAT_0b7e7214
 #undef DAT_0b7e7218
 #undef DAT_0b7e721c
+#undef memset
 #undef createparticle
 #undef createbond
-#undef memset
 #undef local_38
 #undef local_30
 #undef local_2c
@@ -31599,8 +31599,8 @@ void __cdecl lf_324c0(void)
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
-#define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
 #define sphereintersecttrianglefull ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x4307f0))
+#define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_VA(0x422af0))
 #define local_58 (*(int *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(int *)(lf_frame + 0x20))
@@ -31764,8 +31764,8 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 #undef _DAT_107484b0
 #undef _DAT_107484b4
 #undef generatetrinormal
-#undef calculatebarycentric
 #undef sphereintersecttrianglefull
+#undef calculatebarycentric
 #undef local_58
 #undef local_54
 #undef local_50
@@ -31809,8 +31809,8 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 #define _DAT_25a1d750 (*(undefined4 *)SR_VA(0x25a1d750))
 #define _DAT_25a1d754 (*(undefined4 *)SR_VA(0x25a1d754))
 #define _DAT_25a1d758 (*(undefined4 *)SR_VA(0x25a1d758))
-#define createtrack ((void (__cdecl *)(int, float *, float, float))SR_VA(0x425e70))
 #define _CIsin lf_CIsin
+#define createtrack ((void (__cdecl *)(int, float *, float, float))SR_VA(0x425e70))
 #define _CIcos lf_CIcos
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
@@ -31936,8 +31936,8 @@ void __cdecl lf_32fe0(float *param_1)
 #undef _DAT_25a1d750
 #undef _DAT_25a1d754
 #undef _DAT_25a1d758
-#undef createtrack
 #undef _CIsin
+#undef createtrack
 #undef _CIcos
 #undef local_80
 #undef local_7c
@@ -31971,8 +31971,8 @@ void __cdecl lf_32fe0(float *param_1)
 #define DAT_0e6b324c (*(undefined *)SR_VA(0xe6b324c))
 #define DAT_0e6b3250 (*(undefined *)SR_VA(0xe6b3250))
 #define DAT_0e6b3254 (*(undefined *)SR_VA(0xe6b3254))
-#define __security_check_cookie(x) ((void)0)
 #define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define __security_check_cookie(x) ((void)0)
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
@@ -32061,8 +32061,8 @@ int __cdecl lf_33350(int param_1,undefined4 param_2,int param_3,int param_4,int 
 #undef DAT_0e6b324c
 #undef DAT_0e6b3250
 #undef DAT_0e6b3254
-#undef __security_check_cookie
 #undef createobject
+#undef __security_check_cookie
 #undef rotateorientation
 #undef local_50
 #undef local_4c
@@ -32206,23 +32206,23 @@ void __cdecl lf_33570(void)
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
 #define _DAT_07a1ead8 (*(int *)SR_VA(0x7a1ead8))
 #define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define __security_check_cookie(x) ((void)0)
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define fixplayername ((void (__cdecl *)(int))SR_VA(0x40a580))
-#define deleteplayer ((void (__cdecl *)(float))SR_VA(0x40a1b0))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
-#define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define recvpacket ((int (__cdecl *)(void))SR_VA(0x40d860))
+#define deleteplayer ((void (__cdecl *)(float))SR_VA(0x40a1b0))
 #define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
-#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define createaccount ((int (__cdecl *)(int))SR_VA(0x40ded0))
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define recvpacket ((int (__cdecl *)(void))SR_VA(0x40d860))
+#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
+#define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define __security_check_cookie(x) ((void)0)
+#define createaccount ((int (__cdecl *)(int))SR_VA(0x40ded0))
+#define fixplayername ((void (__cdecl *)(int))SR_VA(0x40a580))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define local_68 (*(int *)(lf_frame + 0x18))
 #define local_61 (*(char *)(lf_frame + 0x1f))
 #define local_60 (*(uint *)(lf_frame + 0x20))
@@ -32987,23 +32987,23 @@ LAB_00434849:
 #undef g_bsdsocket
 #undef _DAT_07a1ead8
 #undef _DAT_1992d6e4
-#undef htons
-#undef __security_check_cookie
-#undef sendto
-#undef pbitwrite
-#undef fixplayername
-#undef deleteplayer
 #undef memcpy
-#undef ntohs
 #undef memset
-#undef createevent_message
-#undef recvpacket
+#undef deleteplayer
 #undef createplayer
-#undef htonl
 #undef createevent_updateplayer
-#undef ntohl
-#undef createaccount
 #undef pbitread
+#undef createevent_message
+#undef ntohl
+#undef recvpacket
+#undef pbitwrite
+#undef ntohs
+#undef sendto
+#undef __security_check_cookie
+#undef createaccount
+#undef fixplayername
+#undef htons
+#undef htonl
 #undef local_68
 #undef local_61
 #undef local_60
@@ -33220,12 +33220,12 @@ void __cdecl lf_34870(int param_1)
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_006e6156 (*(undefined *)SR_VA(0x6e6156))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
-#define objecttype_addwheel ((void (__cdecl *)(int, undefined4, int, int, undefined4 *, undefined4, undefined4, undefined4, float, undefined4, undefined4, undefined4))SR_VA(0x428a90))
-#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
-#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
-#define objecttype_addparticle ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b040))
 #define __security_check_cookie(x) ((void)0)
+#define objecttype_addparticle ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b040))
+#define objecttype_addwheel ((void (__cdecl *)(int, undefined4, int, int, undefined4 *, undefined4, undefined4, undefined4, float, undefined4, undefined4, undefined4))SR_VA(0x428a90))
+#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
+#define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
+#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
 #define local_88 (*(int * *)(lf_frame + 0x18))
 #define local_84 (*(int *)(lf_frame + 0x1c))
 #define local_80 (*(float *)(lf_frame + 0x20))
@@ -35428,12 +35428,12 @@ LAB_00438ecc:
 #undef DAT_00460d18
 #undef DAT_006e6156
 #undef g_objecttype
-#undef objecttype_addface
-#undef objecttype_addwheel
-#undef setupobjecttypeweight
-#undef objecttype_addbond
-#undef objecttype_addparticle
 #undef __security_check_cookie
+#undef objecttype_addparticle
+#undef objecttype_addwheel
+#undef objecttype_addbond
+#undef objecttype_addface
+#undef setupobjecttypeweight
 #undef local_88
 #undef local_84
 #undef local_80
@@ -35450,10 +35450,10 @@ LAB_00438ecc:
 /* ---------------------------------------------------------------- 0x3a610 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
+#define __security_check_cookie(x) ((void)0)
+#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
 #define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
 #define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
-#define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
-#define __security_check_cookie(x) ((void)0)
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(int * *)(lf_frame + 0x1c))
 #define local_30 (*(float *)(lf_frame + 0x20))
@@ -35790,10 +35790,10 @@ LAB_0043acef:
 }
 #undef DAT_00460d18
 #undef g_objecttype
+#undef __security_check_cookie
+#undef objecttype_addbond
 #undef objecttype_addface
 #undef setupobjecttypeweight
-#undef objecttype_addbond
-#undef __security_check_cookie
 #undef local_38
 #undef local_34
 #undef local_30
@@ -35804,11 +35804,11 @@ LAB_0043acef:
 /* ---------------------------------------------------------------- 0x3b0c0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define __security_check_cookie(x) ((void)0)
 #define objecttype_calcquadweights ((void (__cdecl *)(float *, float *, float *))SR_VA(0x429300))
-#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
+#define __security_check_cookie(x) ((void)0)
 #define objecttype_addbond ((int (__cdecl *)(int, undefined4, int, int))SR_VA(0x40b0b0))
 #define objecttype_addface ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_VA(0x40b150))
+#define setupobjecttypeweight ((void (__cdecl *)(int))SR_VA(0x434870))
 #define local_f4 (*(float *)(lf_frame + 0x1c))
 #define local_f0 (*(float *)(lf_frame + 0x20))
 #define local_ec (*(float *)(lf_frame + 0x24))
@@ -36474,11 +36474,11 @@ void __cdecl lf_3b0c0(void)
 }
 #undef DAT_00460d18
 #undef g_objecttype
-#undef __security_check_cookie
 #undef objecttype_calcquadweights
-#undef setupobjecttypeweight
+#undef __security_check_cookie
 #undef objecttype_addbond
 #undef objecttype_addface
+#undef setupobjecttypeweight
 #undef local_f4
 #undef local_f0
 #undef local_ec
@@ -36626,9 +36626,9 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define _CIsqrt lf_CIsqrt
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define addvoice ((int (__cdecl *)(int, float))SR_VA(0x40b6d0))
+#define _CIsqrt lf_CIsqrt
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_1c (*(int *)(lf_frame + 0x24))
 #define local_18 (*(float *)(lf_frame + 0x28))
@@ -36837,9 +36837,9 @@ LAB_0043d4d4:
 #undef g_item
 #undef g_connection
 #undef g_player
-#undef _CIsqrt
 #undef vectordistance
 #undef addvoice
+#undef _CIsqrt
 #undef local_24
 #undef local_1c
 #undef local_18
@@ -36853,11 +36853,11 @@ LAB_0043d4d4:
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define _CIsqrt lf_CIsqrt
-#define scalevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40ba30))
-#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_VA(0x421b40))
+#define scalevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40ba30))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define _CIsqrt lf_CIsqrt
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
 #define local_30 (*(int *)(lf_frame + 0x10))
 #define local_2c (*(int *)(lf_frame + 0x14))
@@ -37036,11 +37036,11 @@ LAB_0043d719:
 #undef g_human
 #undef g_game
 #undef g_player
-#undef _CIsqrt
-#undef scalevector
-#undef getrandomvector3d
 #undef lineintersectlevel
+#undef getrandomvector3d
+#undef scalevector
 #undef vectordistance
+#undef _CIsqrt
 #undef scaleaddvectors
 #undef local_30
 #undef local_2c
@@ -37071,11 +37071,11 @@ LAB_0043d719:
 #define DAT_1994df50 (*(undefined *)SR_VA(0x1994df50))
 #define DAT_1994df52 (*(undefined *)SR_VA(0x1994df52))
 #define DAT_1994ff44 (*(undefined *)SR_VA(0x1994ff44))
-#define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
-#define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
-#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
 #define area_marksector ((void (__cdecl *)(uint, int, int, int))SR_VA(0x401cf0))
 #define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define area_createsector ((int (__cdecl *)(uint, uint, uint, uint, uint))SR_VA(0x40f4a0))
+#define area_createchunk ((int (__cdecl *)(uint, int, int, int))SR_VA(0x40f620))
 #define local_c (*(uint *)(lf_frame + 0x14))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5,ushort *param_6)
@@ -37244,11 +37244,11 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #undef DAT_1994df50
 #undef DAT_1994df52
 #undef DAT_1994ff44
-#undef area_createchunk
-#undef area_createsector
-#undef area_getblock
 #undef area_marksector
 #undef area_setblock
+#undef area_getblock
+#undef area_createsector
+#undef area_createchunk
 #undef local_c
 #undef local_8
 
@@ -37589,16 +37589,16 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define _DAT_02165ad8 (*(undefined4 *)SR_VA(0x2165ad8))
 #define _DAT_02165ad4 (*(float *)SR_VA(0x2165ad4))
 #define _DAT_02165af8 (*(float *)SR_VA(0x2165af8))
-#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
+#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
 #define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define addbeziersurfacetexture ((void (__cdecl *)(int, undefined4, int, float, int, float, undefined4))SR_VA(0x40fc40))
+#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
 #define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, undefined4))SR_VA(0x40f6f0))
-#define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
 #define area_createinteriorblocks ((void (__cdecl *)(void))SR_VA(0x42a510))
-#define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
-#define addbeziersurfacetexture ((void (__cdecl *)(int, undefined4, int, float, int, float, undefined4))SR_VA(0x40fc40))
+#define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
+#define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
 #define auStack_44 (*(undefined1 (*)[4])(lf_frame + 0x1c))
 #define local_40 (*(uint * *)(lf_frame + 0x20))
 #define local_3c (*(int * *)(lf_frame + 0x24))
@@ -39349,16 +39349,16 @@ void __cdecl lf_3e070(void)
 #undef _DAT_02165ad8
 #undef _DAT_02165ad4
 #undef _DAT_02165af8
-#undef area_block_addbeam
+#undef addbeziersurface
 #undef area_block_addcorner
+#undef _chdir
+#undef addbeziersurfacetexture
+#undef landscape_buildsectorlods
 #undef listfiles
 #undef __security_check_cookie
-#undef _chdir
-#undef addbeziersurface
-#undef area_copyrotateblock
 #undef area_createinteriorblocks
-#undef landscape_buildsectorlods
-#undef addbeziersurfacetexture
+#undef area_copyrotateblock
+#undef area_block_addbeam
 #undef auStack_44
 #undef local_40
 #undef local_3c
@@ -39394,20 +39394,20 @@ void __cdecl lf_3e070(void)
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
 #define DAT_19951f44 (*(undefined *)SR_VA(0x19951f44))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define addvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
-#define sphereintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42d2d0))
-#define sphereintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, float, float *, float *, float *, float))SR_VA(0x42dfc0))
 #define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define __security_check_cookie(x) ((void)0)
-#define sphereintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42cda0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
 #define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
+#define sphereintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42cda0))
+#define __security_check_cookie(x) ((void)0)
+#define sphereintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, float, float *, float *, float *, float))SR_VA(0x42dfc0))
+#define sphereintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42d2d0))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
+#define addvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40b9d0))
 #define local_a4 (*(float *)(lf_frame + 0x1c))
 #define local_a0 (*(float *)(lf_frame + 0x20))
 #define local_9c (*(float *)(lf_frame + 0x24))
@@ -39777,20 +39777,20 @@ LAB_0044147f:
 #undef DAT_1994d744
 #undef DAT_19950744
 #undef DAT_19951f44
-#undef resetorientation
-#undef addvectors
-#undef sphereintersectspecblock
-#undef sphereintersectcityobjecttype
 #undef projectvector
-#undef area_getblock
-#undef __security_check_cookie
-#undef sphereintersectnormalblock
+#undef rotateorientation
 #undef area_interior_getblock
 #undef subtractvectors
+#undef rotatevector
+#undef area_getblock
+#undef sphereintersectnormalblock
+#undef __security_check_cookie
+#undef sphereintersectcityobjecttype
+#undef sphereintersectspecblock
 #undef dotproduct
 #undef _ftol2
-#undef rotatevector
-#undef rotateorientation
+#undef resetorientation
+#undef addvectors
 #undef local_a4
 #undef local_a0
 #undef local_9c
@@ -39843,17 +39843,17 @@ LAB_0044147f:
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
 #define DAT_1994d744 (*(undefined *)SR_VA(0x1994d744))
 #define DAT_19950744 (*(undefined *)SR_VA(0x19950744))
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define area_interior_getblocktexture ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x403290))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
+#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
 #define area_getblocktexture ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x401bc0))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
-#define circleintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42daf0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define circleintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42d7f0))
-#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
 #define __security_check_cookie(x) ((void)0)
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
-#define area_interior_getblocktexture ((int (__cdecl *)(uint, uint, uint, uint, int))SR_VA(0x403290))
+#define circleintersectnormalblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, uint, float))SR_VA(0x42d7f0))
+#define circleintersectspecblock ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, int *, float, float))SR_VA(0x42daf0))
 #define local_78 (*(float *)(lf_frame + 0x18))
 #define local_74 (*(float *)(lf_frame + 0x1c))
 #define local_70 (*(float *)(lf_frame + 0x20))
@@ -40146,17 +40146,17 @@ LAB_00441bf7:
 #undef DAT_171665ac
 #undef DAT_1994d744
 #undef DAT_19950744
+#undef projectvector
+#undef area_interior_getblocktexture
+#undef area_interior_getblock
+#undef dotproduct
+#undef subtractvectors
 #undef area_getblock
 #undef area_getblocktexture
-#undef subtractvectors
-#undef circleintersectspecblock
 #undef _ftol2
-#undef circleintersectnormalblock
-#undef projectvector
-#undef area_interior_getblock
 #undef __security_check_cookie
-#undef dotproduct
-#undef area_interior_getblocktexture
+#undef circleintersectnormalblock
+#undef circleintersectspecblock
 #undef local_78
 #undef local_74
 #undef local_70
@@ -40255,18 +40255,18 @@ LAB_00441bf7:
 #define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
 #define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
 #define _DAT_020a5a30 (*(int *)SR_VA(0x20a5a30))
+#define _CIsqrt lf_CIsqrt
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define bond_bodybody ((void (__cdecl *)(int))SR_VA(0x4130d0))
+#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
 #define bond_partpart ((void (__cdecl *)(int))SR_VA(0x412f80))
 #define objectenginesimulation2 ((void (__cdecl *)(void))SR_VA(0x4324c0))
-#define objectwheelsimulation2 ((void (__cdecl *)(void))SR_VA(0x422f90))
-#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
-#define bond_bodybody ((void (__cdecl *)(int))SR_VA(0x4130d0))
 #define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_VA(0x409600))
-#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
-#define _CIsqrt lf_CIsqrt
-#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
 #define __security_check_cookie(x) ((void)0)
+#define objectwheelsimulation2 ((void (__cdecl *)(void))SR_VA(0x422f90))
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
 #define auStack_e4 (*(undefined1 (*)[16])(lf_frame + 0x1c))
 #define local_d4 (*(float *)(lf_frame + 0x2c))
 #define local_d0 (*(float *)(lf_frame + 0x30))
@@ -42379,18 +42379,18 @@ LAB_00442c75:
 #undef _DAT_00460cf0
 #undef _DAT_00460cf4
 #undef _DAT_020a5a30
+#undef _CIsqrt
 #undef rotatevector
+#undef bond_bodybody
+#undef multiply3x3matrices
 #undef bond_partpart
 #undef objectenginesimulation2
-#undef objectwheelsimulation2
-#undef stoptimer
-#undef bond_bodybody
 #undef geteulerangles2
-#undef multiply3x3matrices
-#undef _CIsqrt
-#undef calculatefriction
 #undef __security_check_cookie
+#undef objectwheelsimulation2
 #undef rotateorientation
+#undef stoptimer
+#undef calculatefriction
 #undef auStack_e4
 #undef local_d4
 #undef local_d0
@@ -42496,16 +42496,16 @@ LAB_00442c75:
 #define g_server (*(int *)SR_VA(0x7a1ea60))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_city (*(int *)SR_VA(0xe699220))
-#define area_block_createbuildinginterior ((int (__cdecl *)(int, uint))SR_VA(0x429bf0))
-#define _CIsqrt lf_CIsqrt
-#define area_deleteblock ((void (__cdecl *)(uint, uint, uint, uint))SR_VA(0x429970))
-#define area_interior_setobject ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
-#define area_setblockcolor ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x429830))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
 #define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
 #define area_interior_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, undefined1 *))SR_VA(0x4121d0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define area_deleteblock ((void (__cdecl *)(uint, uint, uint, uint))SR_VA(0x429970))
+#define area_block_createbuildinginterior ((int (__cdecl *)(int, uint))SR_VA(0x429bf0))
 #define __security_check_cookie(x) ((void)0)
+#define area_setblockcolor ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x429830))
+#define area_interior_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403030))
+#define _CIsqrt lf_CIsqrt
+#define area_interior_setobject ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x402f00))
 #define local_64 (*(float *)(lf_frame + 0x1c))
 #define local_60 (*(double *)(lf_frame + 0x20))
 #define local_58 (*(float *)(lf_frame + 0x28))
@@ -43379,16 +43379,16 @@ LAB_00448999:
 #undef g_server
 #undef g_game
 #undef g_city
-#undef area_block_createbuildinginterior
-#undef _CIsqrt
-#undef area_deleteblock
-#undef area_interior_setobject
-#undef area_setblockcolor
-#undef rotateorientation
-#undef area_interior_getblock
 #undef area_createblock
 #undef area_interior_createblock
+#undef rotateorientation
+#undef area_deleteblock
+#undef area_block_createbuildinginterior
 #undef __security_check_cookie
+#undef area_setblockcolor
+#undef area_interior_getblock
+#undef _CIsqrt
+#undef area_interior_setobject
 #undef local_64
 #undef local_60
 #undef local_58
@@ -43455,18 +43455,18 @@ LAB_00448999:
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define _CIsqrt lf_CIsqrt
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
-#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
-#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
-#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define _CIsqrt lf_CIsqrt
+#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
 #define area_breakblock ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
+#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
 #define local_60 (*(float *)(lf_frame + 0x10))
 #define local_5c (*(int *)(lf_frame + 0x14))
 #define local_58 (*(int *)(lf_frame + 0x18))
@@ -43869,18 +43869,18 @@ LAB_004493b0:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef createevent_bullethit
-#undef rand
-#undef _CIsqrt
+#undef lineintersectobject
 #undef lineintersectlevel
 #undef normalizevector
 #undef createevent_updateobject
-#undef lineintersecthuman
-#undef lineintersectobject
 #undef _ftol2
 #undef applydamageobject
-#undef playerteamkilltax
+#undef _CIsqrt
+#undef createevent_bullethit
+#undef rand
+#undef lineintersecthuman
 #undef area_breakblock
+#undef playerteamkilltax
 #undef local_60
 #undef local_5c
 #undef local_58
@@ -43927,17 +43927,17 @@ LAB_004493b0:
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define strncmp_exref (*(undefined * *)SR_VA(0x45e05c))
 #define strncmp_exref ((code *)strncmp)
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define tolower ((int (__cdecl *)(int))LF_IMPORT(43, "MSVCR100.DLL", "tolower"))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
 #define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(0, "MSVCR100.DLL", "strncmp"))
+#define tolower ((int (__cdecl *)(int))LF_IMPORT(43, "MSVCR100.DLL", "tolower"))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
 #define local_40 (*(int *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int *)(lf_frame + 0x18))
@@ -44386,17 +44386,17 @@ LAB_0044a385:
 #undef g_connection
 #undef strncmp_exref
 #undef strncmp_exref
-#undef createitem
-#undef createevent_updateitem
-#undef createevent_message
 #undef sprintf
-#undef createobject
 #undef item_removehumanlink
-#undef tolower
-#undef item_removeitemlink
-#undef sscanf
-#undef scenario_armhuman
 #undef strncmp
+#undef tolower
+#undef createobject
+#undef createevent_updateitem
+#undef createitem
+#undef sscanf
+#undef createevent_message
+#undef item_removeitemlink
+#undef scenario_armhuman
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -44423,20 +44423,20 @@ LAB_0044a385:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define __security_check_cookie(x) ((void)0)
-#define _CIacos lf_CIacos
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define human_calcarmtorque ((void (__cdecl *)(int))SR_VA(0x42f420))
-#define _CIsin lf_CIsin
-#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
-#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
-#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define _CIcos lf_CIcos
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
+#define multiply3x3matrices ((void (__cdecl *)(float *, int, float *))SR_VA(0x41d9e0))
+#define _CIsqrt lf_CIsqrt
+#define _CIcos lf_CIcos
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
+#define __security_check_cookie(x) ((void)0)
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define _CIatan2 lf_CIatan2
+#define _CIacos lf_CIacos
+#define projectvector ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40bb00))
+#define _CIsin lf_CIsin
+#define human_calcarmtorque ((void (__cdecl *)(int))SR_VA(0x42f420))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
 #define local_a0 (*(float *)(lf_frame + 0x10))
 #define local_9c (*(float *)(lf_frame + 0x14))
 #define local_98 (*(float *)(lf_frame + 0x18))
@@ -45081,20 +45081,20 @@ LAB_0044bd2b:
 #undef g_itemtype
 #undef g_numofbonds
 #undef g_bond
-#undef __security_check_cookie
-#undef _CIacos
-#undef _CIsqrt
-#undef _CIatan2
-#undef scaleaddvectors
-#undef human_calcarmtorque
-#undef _CIsin
-#undef projectvector
-#undef multiply3x3matrices
-#undef rotatevector
 #undef normalizevector
-#undef rotateorientation
-#undef _CIcos
 #undef orientationtoquaternion
+#undef multiply3x3matrices
+#undef _CIsqrt
+#undef _CIcos
+#undef rotatevector
+#undef __security_check_cookie
+#undef rotateorientation
+#undef _CIatan2
+#undef _CIacos
+#undef projectvector
+#undef _CIsin
+#undef human_calcarmtorque
+#undef scaleaddvectors
 #undef local_a0
 #undef local_9c
 #undef local_98
@@ -45161,21 +45161,21 @@ LAB_0044bd2b:
 #define DAT_16224068 (*(undefined *)SR_VA(0x16224068))
 #define DAT_1622406c (*(undefined *)SR_VA(0x1622406c))
 #define _DAT_10748520 (*(int *)SR_VA(0x10748520))
-#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define __security_check_cookie(x) ((void)0)
-#define city_createelevator ((int (__cdecl *)(float *))SR_VA(0x4154b0))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define lineintersectall ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x431480))
-#define pointdistanceline ((float10 (__cdecl *)(float *, float *, float *))SR_VA(0x40c8f0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define setitempositionhuman ((void (__cdecl *)(int, int))SR_VA(0x41b6e0))
 #define createevent_updatedoor ((void (__cdecl *)(int, int))SR_VA(0x406660))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define area_interior_getblocklink ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403130))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define pointdistanceline ((float10 (__cdecl *)(float *, float *, float *))SR_VA(0x40c8f0))
+#define lineintersectall ((undefined4 (__cdecl *)(float *, float *))SR_VA(0x431480))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define __security_check_cookie(x) ((void)0)
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define area_interior_getblocklink ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x403130))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define city_createelevator ((int (__cdecl *)(float *))SR_VA(0x4154b0))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
 #define local_48 (*(uint *)(lf_frame + 0x18))
 #define local_44 (*(int *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -45525,21 +45525,21 @@ void __cdecl lf_4bd60(int param_1)
 #undef DAT_16224068
 #undef DAT_1622406c
 #undef _DAT_10748520
-#undef pointinsidebase
-#undef linkitem
-#undef __security_check_cookie
-#undef city_createelevator
-#undef _ftol2
-#undef lineintersectall
-#undef pointdistanceline
-#undef createevent_updateitem
 #undef setitempositionhuman
 #undef createevent_updatedoor
-#undef rotateorientation
-#undef item_removeitemlink
-#undef createevent_sound
-#undef area_interior_getblocklink
 #undef item_removehumanlink
+#undef pointdistanceline
+#undef lineintersectall
+#undef _ftol2
+#undef __security_check_cookie
+#undef rotateorientation
+#undef area_interior_getblocklink
+#undef pointinsidebase
+#undef createevent_sound
+#undef createevent_updateitem
+#undef linkitem
+#undef city_createelevator
+#undef item_removeitemlink
 #undef local_48
 #undef local_44
 #undef local_40
@@ -45634,11 +45634,11 @@ void __cdecl lf_4c720(int param_1)
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
-#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define itemweaponsimulation ((void (__cdecl *)(int))SR_VA(0x430ba0))
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_4c8c0(void)
@@ -45862,11 +45862,11 @@ LAB_0044cda4:
 #undef g_itemtype
 #undef g_game
 #undef g_item
-#undef createevent_updateitem
-#undef createevent_updateiteminfo
-#undef vectordistance
 #undef createevent_sound
+#undef createevent_updateitem
 #undef itemweaponsimulation
+#undef vectordistance
+#undef createevent_updateiteminfo
 #undef local_c
 #undef local_8
 
@@ -45889,9 +45889,9 @@ LAB_0044cda4:
 #define _g_intersect (*(float *)SR_VA(0x107484a0))
 #define _DAT_107484a4 (*(float *)SR_VA(0x107484a4))
 #define _DAT_107484a8 (*(float *)SR_VA(0x107484a8))
-#define item_sphereintersect ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x430f00))
-#define _CIsqrt lf_CIsqrt
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define _CIsqrt lf_CIsqrt
+#define item_sphereintersect ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x430f00))
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_28 (*(Bone * *)(lf_frame + 0x18))
 #define local_24 (*(float *)(lf_frame + 0x1c))
@@ -46089,9 +46089,9 @@ void __cdecl lf_4cee0(int param_1)
 #undef _g_intersect
 #undef _DAT_107484a4
 #undef _DAT_107484a8
-#undef item_sphereintersect
-#undef _CIsqrt
 #undef rotateorientation
+#undef _CIsqrt
+#undef item_sphereintersect
 #undef local_2c
 #undef local_28
 #undef local_24
@@ -46222,8 +46222,8 @@ undefined4 __cdecl lf_4d630(float *param_1,float *param_2,float param_3)
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(undefined4 *)SR_VA(0x107484b0))
 #define _DAT_107484b4 (*(undefined4 *)SR_VA(0x107484b4))
-#define sphereintersectlandscape ((undefined4 (__cdecl *)(float *, float))SR_VA(0x41cdf0))
 #define sphereintersectarea ((int (__cdecl *)(float *, float *, float *, uint, float *, float))SR_VA(0x440aa0))
+#define sphereintersectlandscape ((undefined4 (__cdecl *)(float *, float))SR_VA(0x41cdf0))
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(undefined4 *)(lf_frame + 0x1c))
@@ -46288,8 +46288,8 @@ undefined4 __cdecl lf_4d750(float *param_1,float param_2)
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484b4
-#undef sphereintersectlandscape
 #undef sphereintersectarea
+#undef sphereintersectlandscape
 #undef local_1c
 #undef local_18
 #undef local_14
@@ -46725,13 +46725,13 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
 #define DAT_0e6c9590 (*(undefined *)SR_VA(0xe6c9590))
 #define DAT_0e6c9594 (*(undefined *)SR_VA(0xe6c9594))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
-#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define __security_check_cookie(x) ((void)0)
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define __security_check_cookie(x) ((void)0)
 #define local_40 (*(int *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int *)(lf_frame + 0x18))
@@ -46827,13 +46827,13 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
 #undef DAT_0e6c9590
 #undef DAT_0e6c9594
 #undef g_player
-#undef linkitem
-#undef createobject
-#undef __security_check_cookie
-#undef createitem
 #undef rotateorientation
-#undef createevent_updateplayer_finance
+#undef createobject
+#undef createitem
 #undef createevent_updateplayer
+#undef createevent_updateplayer_finance
+#undef linkitem
+#undef __security_check_cookie
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -46861,8 +46861,8 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
-#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
 #define local_20 (*(int *)(lf_frame + 0x10))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
@@ -46961,8 +46961,8 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
 #undef _DAT_107484b0
 #undef _DAT_107484ac
 #undef _DAT_107484b4
-#undef circleintersectlevel
 #undef normalizevector
+#undef circleintersectlevel
 #undef local_20
 #undef local_18
 #undef local_14
@@ -46989,9 +46989,9 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
-#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
-#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define circleintersectlevel ((undefined4 (__cdecl *)(float *, float *, float))SR_VA(0x44d630))
+#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bc50))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -47099,9 +47099,9 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #undef _DAT_107484b4
 #undef _DAT_107484b0
 #undef _DAT_107484ac
-#undef rotatevector
-#undef circleintersectlevel
 #undef normalizevector
+#undef circleintersectlevel
+#undef rotatevector
 #undef local_18
 #undef local_14
 #undef local_10
@@ -47180,15 +47180,15 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #define _DAT_094dc474 (*(undefined4 *)SR_VA(0x94dc474))
 #define _DAT_094dc478 (*(undefined4 *)SR_VA(0x94dc478))
 #define _DAT_094dc488 (*(float *)SR_VA(0x94dc488))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
-#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
 #define getstring ((void (__cdecl *)(undefined1 *, int))SR_VA(0x40d240))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(45, "MSVCR100.DLL", "_time64"))
+#define loadtextfile ((void (__cdecl *)(char *))SR_VA(0x40d020))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define optionreadwriteint ((bool (__cdecl *)(char *))SR_VA(0x429650))
 #define getfloat ((undefined4 (__cdecl *)(void))SR_VA(0x40d110))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
 void __cdecl lf_4e7a0(int param_1)
 
 {
@@ -47471,15 +47471,15 @@ void __cdecl lf_4e7a0(int param_1)
 #undef _DAT_094dc474
 #undef _DAT_094dc478
 #undef _DAT_094dc488
+#undef _chdir
+#undef getstring
+#undef srand
 #undef _time64
 #undef loadtextfile
-#undef _chdir
-#undef rand
-#undef getstring
 #undef sprintf
+#undef rand
 #undef optionreadwriteint
 #undef getfloat
-#undef srand
 
 /* ---------------------------------------------------------------- 0x4ed30 */
 #define DAT_12e81cf0 (*(int *)SR_VA(0x12e81cf0))
@@ -47520,17 +47520,17 @@ void __cdecl lf_4e7a0(int param_1)
 #define _DAT_1992d6e9 (*(int *)SR_VA(0x1992d6e9))
 #define ram0x1992d6ed (*(int *)SR_VA(0x1992d6ed))
 #define _DAT_07a1ea6c (*(int *)SR_VA(0x7a1ea6c))
-#define packevent ((void (__cdecl *)(float, int))SR_VA(0x416f10))
 #define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
+#define sendpacket ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
+#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memcpy"))
 #define calculateplayervoice ((void (__cdecl *)(int, int))SR_VA(0x43cfe0))
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
-#define packobjectpacket ((void (__cdecl *)(int, int))SR_VA(0x420680))
-#define sendpacket ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
-#define packangle ((void (__cdecl *)(float *, uint))SR_VA(0x416680))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
-#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
 #define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define packobjectpacket ((void (__cdecl *)(int, int))SR_VA(0x420680))
+#define packangle ((void (__cdecl *)(float *, uint))SR_VA(0x416680))
+#define packevent ((void (__cdecl *)(float, int))SR_VA(0x416f10))
 #define local_34 (*(uint * *)(lf_frame + 0x1c))
 #define local_30 (*(int *)(lf_frame + 0x20))
 #define local_2c (*(int *)(lf_frame + 0x24))
@@ -47909,17 +47909,17 @@ void __cdecl lf_4ed30(void)
 #undef _DAT_1992d6e9
 #undef ram0x1992d6ed
 #undef _DAT_07a1ea6c
-#undef packevent
 #undef htonl
+#undef sendpacket
+#undef htons
+#undef stoptimer
+#undef memcpy
 #undef calculateplayervoice
 #undef pbitwrite
-#undef packobjectpacket
-#undef sendpacket
-#undef packangle
-#undef htons
-#undef memcpy
-#undef stoptimer
 #undef sendto
+#undef packobjectpacket
+#undef packangle
+#undef packevent
 #undef local_34
 #undef local_30
 #undef local_2c
@@ -47940,21 +47940,21 @@ void __cdecl lf_4ed30(void)
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define _CIatan2 lf_CIatan2
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
-#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define ai_playercar ((void (__cdecl *)(float, int))SR_VA(0x40e4d0))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
 #define __security_check_cookie(x) ((void)0)
-#define angulardistance ((float10 (__cdecl *)(float, float))SR_VA(0x401540))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
-#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define ai_assessthreats ((void (__cdecl *)(int, int))SR_VA(0x43d500))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
+#define angulardistance ((float10 (__cdecl *)(float, float))SR_VA(0x401540))
+#define _CIatan2 lf_CIatan2
 #define _CIsqrt lf_CIsqrt
+#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_VA(0x40baa0))
+#define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_VA(0x42f130))
+#define ai_playercar ((void (__cdecl *)(float, int))SR_VA(0x40e4d0))
+#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_VA(0x40b850))
+#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
+#define vectorlength ((float10 (__cdecl *)(float *))SR_VA(0x40b8c0))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define ai_assessthreats ((void (__cdecl *)(int, int))SR_VA(0x43d500))
 #define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40ba00))
 #define local_5c (*(vec3 * *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
@@ -48275,21 +48275,21 @@ LAB_00450088:
 #undef g_itemtype
 #undef g_item
 #undef g_player
-#undef rand
-#undef _CIatan2
-#undef dotproduct
-#undef lineintersecthuman
 #undef scaleaddvectors
-#undef ai_playercar
-#undef rotateorientation
-#undef vectordistance
 #undef __security_check_cookie
-#undef angulardistance
-#undef vectorlength
-#undef lineintersectobject
-#undef ai_assessthreats
+#undef rotateorientation
 #undef normalizevector
+#undef angulardistance
+#undef _CIatan2
 #undef _CIsqrt
+#undef vectordistance
+#undef lineintersecthuman
+#undef ai_playercar
+#undef dotproduct
+#undef lineintersectobject
+#undef vectorlength
+#undef rand
+#undef ai_assessthreats
 #undef subtractvectors
 #undef local_5c
 #undef local_58
@@ -48318,9 +48318,9 @@ LAB_00450088:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
 #define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -48416,9 +48416,9 @@ LAB_00450260:
 #undef g_itemtype
 #undef g_item
 #undef g_player
-#undef logic_createcar
 #undef linkitem
 #undef createitem
+#undef logic_createcar
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -48701,18 +48701,18 @@ LAB_00450260:
 #define _DAT_1715008c (*(undefined4 *)SR_VA(0x1715008c))
 #define _DAT_17150714 (*(undefined4 *)SR_VA(0x17150714))
 #define _DAT_1715060c (*(undefined4 *)SR_VA(0x1715060c))
-#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define setupbody ((void (__cdecl *)(void))SR_VA(0x419610))
-#define area_createsblocks ((void (__cdecl *)(void))SR_VA(0x43e070))
-#define setupitemtypes ((void (__cdecl *)(void))SR_VA(0x406b30))
-#define setupobjecttypes_helicopters ((void (__cdecl *)(void))SR_VA(0x43a610))
-#define setupbullettypes ((void (__cdecl *)(void))SR_VA(0x404a10))
-#define setupobjectypes_train ((void (__cdecl *)(void))SR_VA(0x43b0c0))
-#define setupbuildingtypes ((void (__cdecl *)(void))SR_VA(0x413450))
-#define setupobjecttypes_cars ((void (__cdecl *)(void))SR_VA(0x434c10))
-#define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
 #define setupcityobjecttypes ((void (__cdecl *)(void))SR_VA(0x4155e0))
+#define area_createsblocks ((void (__cdecl *)(void))SR_VA(0x43e070))
+#define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
+#define setupbullettypes ((void (__cdecl *)(void))SR_VA(0x404a10))
+#define setupbuildingtypes ((void (__cdecl *)(void))SR_VA(0x413450))
+#define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
+#define setupobjecttypes_cars ((void (__cdecl *)(void))SR_VA(0x434c10))
+#define setupitemtypes ((void (__cdecl *)(void))SR_VA(0x406b30))
+#define setupobjectypes_train ((void (__cdecl *)(void))SR_VA(0x43b0c0))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(3, "MSVCR100.DLL", "_chdir"))
+#define setupobjecttypes_helicopters ((void (__cdecl *)(void))SR_VA(0x43a610))
+#define setupbody ((void (__cdecl *)(void))SR_VA(0x419610))
 void __cdecl lf_502a0(void)
 
 {
@@ -49297,18 +49297,18 @@ void __cdecl lf_502a0(void)
 #undef _DAT_1715008c
 #undef _DAT_17150714
 #undef _DAT_1715060c
-#undef listfiles
-#undef _chdir
-#undef setupbody
-#undef area_createsblocks
-#undef setupitemtypes
-#undef setupobjecttypes_helicopters
-#undef setupbullettypes
-#undef setupobjectypes_train
-#undef setupbuildingtypes
-#undef setupobjecttypes_cars
-#undef removeflieextentions
 #undef setupcityobjecttypes
+#undef area_createsblocks
+#undef removeflieextentions
+#undef setupbullettypes
+#undef setupbuildingtypes
+#undef listfiles
+#undef setupobjecttypes_cars
+#undef setupitemtypes
+#undef setupobjectypes_train
+#undef _chdir
+#undef setupobjecttypes_helicopters
+#undef setupbody
 
 /* ---------------------------------------------------------------- 0x50ae0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -49319,8 +49319,8 @@ void __cdecl lf_502a0(void)
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define human_buildmuscles ((void (__cdecl *)(int))SR_VA(0x44c720))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 
 {
@@ -49500,8 +49500,8 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #undef g_event
 #undef g_player
 #undef human_buildmuscles
-#undef memset
 #undef rand
+#undef memset
 
 /* ---------------------------------------------------------------- 0x51060 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -49574,35 +49574,35 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define human_calculatearmangles ((void (__cdecl *)(int))SR_VA(0x44a440))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define human_itemsimulation ((void (__cdecl *)(int))SR_VA(0x44bd60))
-#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
-#define playerdeathtax ((void (__cdecl *)(uint))SR_VA(0x416960))
-#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIcos lf_CIcos
-#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define _CIsin lf_CIsin
-#define getobjectrotation2 ((void (__cdecl *)(float *, int, float *))SR_VA(0x4223d0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
-#define pointinsidebuilding ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
-#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
-#define human_collisionhuman ((void (__cdecl *)(float))SR_VA(0x419380))
-#define sphereintersectlevel ((undefined4 (__cdecl *)(float *, float))SR_VA(0x44d750))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define deletehuman ((void (__cdecl *)(uint *))SR_VA(0x418720))
-#define __security_check_cookie(x) ((void)0)
-#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
-#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
-#define _CIsqrt lf_CIsqrt
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define sphereintersectobject ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x432bb0))
-#define human_calculatelegangles ((void (__cdecl *)(int))SR_VA(0x419060))
 #define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
+#define human_calculatearmangles ((void (__cdecl *)(int))SR_VA(0x44a440))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
+#define human_collisionhuman ((void (__cdecl *)(float))SR_VA(0x419380))
+#define __security_check_cookie(x) ((void)0)
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
 #define _CIatan2 lf_CIatan2
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define _CIcos lf_CIcos
+#define getobjectrotation2 ((void (__cdecl *)(float *, int, float *))SR_VA(0x4223d0))
+#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define deletehuman ((void (__cdecl *)(uint *))SR_VA(0x418720))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define sphereintersectlevel ((undefined4 (__cdecl *)(float *, float))SR_VA(0x44d750))
+#define human_itemsimulation ((void (__cdecl *)(int))SR_VA(0x44bd60))
+#define _CIsqrt lf_CIsqrt
+#define sphereintersectobject ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x432bb0))
+#define pointinsidebuilding ((undefined4 (__cdecl *)(int, float *, float))SR_VA(0x408a60))
+#define playerdeathtax ((void (__cdecl *)(uint))SR_VA(0x416960))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define human_calculatelegangles ((void (__cdecl *)(int))SR_VA(0x419060))
+#define _CIsin lf_CIsin
+#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
 #define local_cc (*(float * *)(lf_frame + 0x14))
 #define local_c8 (*(float *)(lf_frame + 0x18))
 #define local_c4 (*(Bone * *)(lf_frame + 0x1c))
@@ -51076,35 +51076,35 @@ LAB_00453705:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef lineintersectlevel
-#undef createevent_updateplayer
-#undef human_calculatearmangles
-#undef item_removeitemlink
-#undef human_itemsimulation
-#undef playersellstock
-#undef playerdeathtax
-#undef stoptimer
-#undef _ftol2
-#undef _CIcos
-#undef item_removehumanlink
-#undef _CIsin
-#undef getobjectrotation2
-#undef createevent_updateitem
-#undef pointinsidebuilding
-#undef createevent_sound
-#undef human_collisionhuman
-#undef sphereintersectlevel
-#undef rotateorientation
-#undef deletehuman
-#undef __security_check_cookie
-#undef playerteamkilltax
-#undef createevent_bullethit
-#undef _CIsqrt
-#undef scaleaddvectors
-#undef sphereintersectobject
-#undef human_calculatelegangles
 #undef lineintersectobject
+#undef human_calculatearmangles
+#undef scaleaddvectors
+#undef createevent_sound
+#undef stoptimer
+#undef human_collisionhuman
+#undef __security_check_cookie
+#undef createevent_updateplayer
+#undef item_removehumanlink
 #undef _CIatan2
+#undef rotateorientation
+#undef _CIcos
+#undef getobjectrotation2
+#undef playerteamkilltax
+#undef _ftol2
+#undef createevent_bullethit
+#undef playersellstock
+#undef deletehuman
+#undef createevent_updateitem
+#undef sphereintersectlevel
+#undef human_itemsimulation
+#undef _CIsqrt
+#undef sphereintersectobject
+#undef pointinsidebuilding
+#undef playerdeathtax
+#undef item_removeitemlink
+#undef human_calculatelegangles
+#undef _CIsin
+#undef lineintersectlevel
 #undef local_cc
 #undef local_c8
 #undef local_c4
@@ -51173,11 +51173,11 @@ LAB_00453705:
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484a8 (*(float *)SR_VA(0x107484a8))
 #define _CIsqrt lf_CIsqrt
-#define item_physicssimulation ((void (__cdecl *)(int))SR_VA(0x44cee0))
-#define __security_check_cookie(x) ((void)0)
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_VA(0x427e80))
+#define item_physicssimulation ((void (__cdecl *)(int))SR_VA(0x44cee0))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define __security_check_cookie(x) ((void)0)
 #define local_5c (*(float *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -51535,11 +51535,11 @@ LAB_00454e02:
 #undef _DAT_107484b4
 #undef _DAT_107484a8
 #undef _CIsqrt
-#undef item_physicssimulation
-#undef __security_check_cookie
 #undef rotateorientation
 #undef calculatefriction
+#undef item_physicssimulation
 #undef lineintersectlevel
+#undef __security_check_cookie
 #undef local_5c
 #undef local_58
 #undef local_54
@@ -51606,24 +51606,24 @@ LAB_00454e02:
 #define _DAT_0e6c2a30 (*(undefined4 *)SR_VA(0xe6c2a30))
 #define _DAT_0e6c8a34 (*(undefined4 *)SR_VA(0xe6c8a34))
 #define _DAT_0e699224 (*(undefined4 *)SR_VA(0xe699224))
-#define building_setupfloorplannewer ((void (__cdecl *)(void))SR_VA(0x4041c0))
-#define __security_check_cookie(x) ((void)0)
-#define building_setupbuild ((void (__cdecl *)(void))SR_VA(0x403d70))
-#define buildcitystreet ((void (__cdecl *)(int))SR_VA(0x44da10))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define city_addintersection ((void (__cdecl *)(int, int, int))SR_VA(0x4080b0))
-#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
-#define buildcityinterection ((void (__cdecl *)(int))SR_VA(0x44d850))
-#define addcitystreet ((void (__cdecl *)(int, int, int, int, char *))SR_VA(0x41ba30))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_VA(0x401850))
-#define building_buildfloorplan ((undefined4 * (__cdecl *)(uint, uint, float, int, float, int, int, undefined4 *))SR_VA(0x446c30))
-#define building_rotatefloorplan ((void (__cdecl *)(void))SR_VA(0x404450))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
-#define createlandscape ((void (__cdecl *)(void))SR_VA(0x41bc50))
-#define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
 #define createarea ((void (__cdecl *)(uint, float *, int, int, int, float))SR_VA(0x40f2b0))
+#define city_addintersection ((void (__cdecl *)(int, int, int))SR_VA(0x4080b0))
+#define building_setupbuild ((void (__cdecl *)(void))SR_VA(0x403d70))
+#define area_setblock ((void (__cdecl *)(uint, uint, uint, uint, undefined4))SR_VA(0x4296f0))
+#define createlandscape ((void (__cdecl *)(void))SR_VA(0x41bc50))
+#define buildcitystreet ((void (__cdecl *)(int))SR_VA(0x44da10))
+#define building_rotatefloorplan ((void (__cdecl *)(void))SR_VA(0x404450))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 #define building_load ((void (__cdecl *)(undefined4, int))SR_VA(0x413d80))
+#define __security_check_cookie(x) ((void)0)
+#define buildcityinterection ((void (__cdecl *)(int))SR_VA(0x44d850))
 #define buildsomeshit ((void (__cdecl *)(float *))SR_VA(0x432fe0))
+#define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_VA(0x43da50))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
+#define building_setupfloorplannewer ((void (__cdecl *)(void))SR_VA(0x4041c0))
+#define addcitystreet ((void (__cdecl *)(int, int, int, int, char *))SR_VA(0x41ba30))
+#define building_buildfloorplan ((undefined4 * (__cdecl *)(uint, uint, float, int, float, int, int, undefined4 *))SR_VA(0x446c30))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(undefined4 *)(lf_frame + 0x20))
@@ -52154,24 +52154,24 @@ LAB_004556a8:
 #undef _DAT_0e6c2a30
 #undef _DAT_0e6c8a34
 #undef _DAT_0e699224
-#undef building_setupfloorplannewer
-#undef __security_check_cookie
-#undef building_setupbuild
-#undef buildcitystreet
-#undef memset
-#undef city_addintersection
-#undef area_createblock
-#undef buildcityinterection
-#undef addcitystreet
 #undef area_getblock
-#undef building_buildfloorplan
-#undef building_rotatefloorplan
-#undef srand
-#undef createlandscape
-#undef area_setblock
 #undef createarea
+#undef city_addintersection
+#undef building_setupbuild
+#undef area_setblock
+#undef createlandscape
+#undef buildcitystreet
+#undef building_rotatefloorplan
+#undef memset
 #undef building_load
+#undef __security_check_cookie
+#undef buildcityinterection
 #undef buildsomeshit
+#undef area_createblock
+#undef srand
+#undef building_setupfloorplannewer
+#undef addcitystreet
+#undef building_buildfloorplan
 #undef local_18
 #undef local_14
 #undef local_10
@@ -52205,33 +52205,33 @@ LAB_004556a8:
 #define _DAT_25a1d74c (*(float *)SR_VA(0x25a1d74c))
 #define _DAT_25a1d750 (*(float *)SR_VA(0x25a1d750))
 #define _DAT_25a1d758 (*(float *)SR_VA(0x25a1d758))
-#define item_removebill ((void (__cdecl *)(int, int))SR_VA(0x407ce0))
-#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
 #define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define logic_suits_buy ((void (__cdecl *)(int, int))SR_VA(0x4093e0))
-#define logic_teammissioncomplete ((void (__cdecl *)(float *, int))SR_VA(0x408fe0))
-#define logic_gunstore_buy ((void (__cdecl *)(int, int))SR_VA(0x41d7a0))
-#define item_addbill ((int (__cdecl *)(int, int, int))SR_VA(0x407c40))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define item_billvalue ((int (__cdecl *)(int))SR_VA(0x407b90))
-#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define server_playermessage ((undefined4 (__cdecl *)(int, char *))SR_VA(0x449940))
-#define logic_cardealer_buy ((void (__cdecl *)(int, int))SR_VA(0x44e0d0))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define playerbuystock ((void (__cdecl *)(int, int))SR_VA(0x405b40))
-#define __security_check_cookie(x) ((void)0)
-#define createevent_updatecarmarket ((void (__cdecl *)(int))SR_VA(0x4068d0))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
-#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
+#define logic_cardealer_buy ((void (__cdecl *)(int, int))SR_VA(0x44e0d0))
 #define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define logic_addteamcash ((void (__cdecl *)(int, float))SR_VA(0x408cf0))
+#define resetorientation ((void (__cdecl *)(undefined4 *))SR_VA(0x40bc20))
+#define item_addbill ((int (__cdecl *)(int, int, int))SR_VA(0x407c40))
+#define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
+#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
+#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
+#define logic_suits_buy ((void (__cdecl *)(int, int))SR_VA(0x4093e0))
 #define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define server_playermessage ((undefined4 (__cdecl *)(int, char *))SR_VA(0x449940))
+#define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define logic_gunstore_buy ((void (__cdecl *)(int, int))SR_VA(0x41d7a0))
+#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_VA(0x44e060))
+#define __security_check_cookie(x) ((void)0)
+#define playerbuystock ((void (__cdecl *)(int, int))SR_VA(0x405b40))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define logic_teammissioncomplete ((void (__cdecl *)(float *, int))SR_VA(0x408fe0))
+#define item_removebill ((void (__cdecl *)(int, int))SR_VA(0x407ce0))
+#define createevent_updatecarmarket ((void (__cdecl *)(int))SR_VA(0x4068d0))
 #define local_50 (*(int *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define local_48 (*(float *)(lf_frame + 0x18))
@@ -52895,33 +52895,33 @@ LAB_004560f2:
 #undef _DAT_25a1d74c
 #undef _DAT_25a1d750
 #undef _DAT_25a1d758
-#undef item_removebill
-#undef logic_createcar
 #undef pointinsidebase
-#undef logic_suits_buy
-#undef logic_teammissioncomplete
-#undef logic_gunstore_buy
-#undef item_addbill
-#undef createevent_message
-#undef createitem
 #undef item_billvalue
-#undef playersellstock
 #undef createevent_updateplayer
-#undef createhuman
-#undef server_playermessage
-#undef logic_cardealer_buy
-#undef resetorientation
-#undef createevent_updateplayer_finance
 #undef rand
-#undef playerbuystock
-#undef __security_check_cookie
-#undef createevent_updatecarmarket
-#undef scaleaddvectors
-#undef createevent_updateiteminfo
+#undef logic_cardealer_buy
 #undef rotateorientation
+#undef createitem
 #undef logic_addteamcash
+#undef resetorientation
+#undef item_addbill
+#undef createevent_updateiteminfo
 #undef createevent_sound
+#undef createevent_updateplayer_finance
+#undef scaleaddvectors
+#undef logic_suits_buy
 #undef linkitem
+#undef server_playermessage
+#undef playersellstock
+#undef createhuman
+#undef logic_gunstore_buy
+#undef logic_createcar
+#undef __security_check_cookie
+#undef playerbuystock
+#undef createevent_message
+#undef logic_teammissioncomplete
+#undef item_removebill
+#undef createevent_updatecarmarket
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -53010,21 +53010,21 @@ LAB_004560f2:
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
-#define _CIsqrt lf_CIsqrt
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define objectsimulation_car ((void (__cdecl *)(int))SR_VA(0x4272b0))
 #define __security_check_cookie(x) ((void)0)
-#define objecttrainsimulation ((void (__cdecl *)(int))SR_VA(0x426f90))
-#define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
 #define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_VA(0x4257a0))
-#define objectwheelcollision ((void (__cdecl *)(int, int))SR_VA(0x44e500))
+#define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_VA(0x431630))
+#define objectwheelcollision2 ((void (__cdecl *)(int, int))SR_VA(0x44e2c0))
+#define objectwheelcollision ((void (__cdecl *)(int, int))SR_VA(0x44e500))
+#define objectsimulation_car ((void (__cdecl *)(int))SR_VA(0x4272b0))
 #define objectsimulation_heli ((void (__cdecl *)(int))SR_VA(0x424f60))
 #define area_breakblock ((undefined4 (__cdecl *)(uint, uint, uint, uint, uint, int, undefined4 *, undefined4 *))SR_VA(0x42c020))
-#define objectwheelcollision2 ((void (__cdecl *)(int, int))SR_VA(0x44e2c0))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
 #define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
-#define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
+#define _CIsqrt lf_CIsqrt
+#define objecttrainsimulation ((void (__cdecl *)(int))SR_VA(0x426f90))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(float *)(lf_frame + 0x14))
 #define local_48 (*(int * *)(lf_frame + 0x18))
@@ -53950,21 +53950,21 @@ LAB_00457ea9:
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
-#undef _CIsqrt
-#undef _ftol2
-#undef objectsimulation_car
 #undef __security_check_cookie
-#undef objecttrainsimulation
-#undef createevent_updateobject
 #undef lineintersectobject
-#undef objectwheelcollision
+#undef applydamageobject
 #undef lineintersectlevel
+#undef objectwheelcollision2
+#undef objectwheelcollision
+#undef objectsimulation_car
 #undef objectsimulation_heli
 #undef area_breakblock
-#undef objectwheelcollision2
-#undef rotateorientation
+#undef _ftol2
+#undef createevent_updateobject
 #undef stoptimer
-#undef applydamageobject
+#undef _CIsqrt
+#undef objecttrainsimulation
+#undef rotateorientation
 #undef local_50
 #undef local_4c
 #undef local_48
@@ -54004,15 +54004,15 @@ LAB_00457ea9:
 #define DAT_0e6c91cc (*(undefined *)SR_VA(0xe6c91cc))
 #define rand_exref (*(undefined * *)SR_VA(0x45e070))
 #define rand_exref ((code *)rand)
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
 #define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define __security_check_cookie(x) ((void)0)
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -54160,15 +54160,15 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #undef DAT_0e6c91cc
 #undef rand_exref
 #undef rand_exref
-#undef createevent_updateplayer
-#undef scenario_armhuman
 #undef createhuman
-#undef rand
-#undef createplayer
-#undef rotateorientation
-#undef sprintf
-#undef createitem
 #undef __security_check_cookie
+#undef createplayer
+#undef createitem
+#undef rand
+#undef sprintf
+#undef scenario_armhuman
+#undef createevent_updateplayer
+#undef rotateorientation
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -54186,13 +54186,13 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #define DAT_0e699230 (*(undefined4 *)SR_VA(0xe699230))
 #define g_city (*(int *)SR_VA(0xe699220))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
 #define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
 #define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define local_1c (*(int *)(lf_frame + 0x14))
 #define local_18 (*(uint *)(lf_frame + 0x18))
 #define local_c (*(float *)(lf_frame + 0x24))
@@ -54291,13 +54291,13 @@ void __cdecl lf_585b0(int param_1)
 #undef DAT_0e699230
 #undef g_city
 #undef g_player
-#undef createevent_updateplayer
-#undef scenario_createcar
 #undef createhuman
 #undef createplayer
+#undef scenario_createcar
 #undef rand
-#undef ai_car_nextwaypoint
 #undef sprintf
+#undef createevent_updateplayer
+#undef ai_car_nextwaypoint
 #undef local_1c
 #undef local_18
 #undef local_c
@@ -54313,20 +54313,20 @@ void __cdecl lf_585b0(int param_1)
 #define DAT_0b051b8c (*(uint *)SR_VA(0xb051b8c))
 #define DAT_0b051bac (*(undefined4 *)SR_VA(0xb051bac))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
-#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
 #define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_VA(0x407e00))
-#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
+#define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_VA(0x428190))
+#define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define createplayer ((int (__cdecl *)(void))SR_VA(0x428020))
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_VA(0x41b870))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
+#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_VA(0x401610))
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -54566,20 +54566,20 @@ int __cdecl lf_587f0(int param_1,int param_2)
 #undef DAT_0b051b8c
 #undef DAT_0b051bac
 #undef g_player
-#undef scenario_armhuman
 #undef rand
-#undef createitem
-#undef createevent_updateplayer
-#undef scenario_createcar
-#undef createhuman
-#undef item_removeitemlink
-#undef createplayer
 #undef item_addhumanlink
-#undef ai_car_nextwaypoint
 #undef sprintf
-#undef createevent_updateitem
 #undef item_removehumanlink
+#undef scenario_armhuman
+#undef createevent_updateitem
+#undef createhuman
+#undef createplayer
+#undef scenario_createcar
+#undef createitem
 #undef linkitem
+#undef createevent_updateplayer
+#undef item_removeitemlink
+#undef ai_car_nextwaypoint
 #undef local_30
 #undef local_2c
 #undef local_28
@@ -54603,10 +54603,10 @@ int __cdecl lf_587f0(int param_1,int param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
 #define DAT_0e6c8bfc (*(undefined4 *)SR_VA(0xe6c8bfc))
-#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
-#define scenario_createchase ((int (__cdecl *)(int, int))SR_VA(0x4587f0))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_VA(0x406760))
+#define scenario_createchase ((int (__cdecl *)(int, int))SR_VA(0x4587f0))
+#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
 #define local_8 (*(int *)(lf_frame + 0x18))
 int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
 
@@ -54720,10 +54720,10 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
 #undef g_item
 #undef DAT_0e6c8bb8
 #undef DAT_0e6c8bfc
-#undef scenario_createguards
-#undef scenario_createchase
 #undef rand
 #undef createevent_updatemission
+#undef scenario_createchase
+#undef scenario_createguards
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x590f0 */
@@ -54830,28 +54830,28 @@ int __cdecl lf_58ef0(int param_1,int param_2,int param_3)
 #define _DAT_25d7fab4 (*(float *)SR_VA(0x25d7fab4))
 #define _DAT_25d7fab8 (*(float *)SR_VA(0x25d7fab8))
 #define _DAT_25d7fabc (*(float *)SR_VA(0x25d7fabc))
-#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
+#define newspaper_load ((void (__cdecl *)(void))SR_VA(0x4185a0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define saveaccountsserver ((void (__cdecl *)(void))SR_VA(0x401080))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
-#define createlevel ((void (__cdecl *)(void))SR_VA(0x454e40))
+#define economy_gunmarket ((void (__cdecl *)(void))SR_VA(0x405870))
+#define __security_check_cookie(x) ((void)0)
+#define economy_carmarket ((void (__cdecl *)(void))SR_VA(0x405700))
+#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(45, "MSVCR100.DLL", "_time64"))
 #define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_VA(0x407e50))
-#define economy_gunmarket ((void (__cdecl *)(void))SR_VA(0x405870))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define __security_check_cookie(x) ((void)0)
-#define newspaper_load ((void (__cdecl *)(void))SR_VA(0x4185a0))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
-#define createvehicle ((int (__cdecl *)(int, float *, float *))SR_VA(0x43ccc0))
-#define saveaccountsserver ((void (__cdecl *)(void))SR_VA(0x401080))
+#define createlevel ((void (__cdecl *)(void))SR_VA(0x454e40))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
-#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define createvehicle ((int (__cdecl *)(int, float *, float *))SR_VA(0x43ccc0))
 #define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
-#define economy_carmarket ((void (__cdecl *)(void))SR_VA(0x405700))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define scenario_createguards ((int (__cdecl *)(int, int, int))SR_VA(0x458320))
+#define scenario_createcar ((int (__cdecl *)(int, undefined4, int, int, int, float))SR_VA(0x433350))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
 #define local_30 (*(float *)(lf_frame + 0x20))
@@ -55872,28 +55872,28 @@ void __cdecl lf_590f0(void)
 #undef _DAT_25d7fab4
 #undef _DAT_25d7fab8
 #undef _DAT_25d7fabc
-#undef scenario_createguards
+#undef newspaper_load
+#undef rotateorientation
+#undef saveaccountsserver
 #undef createevent_updatestocks
-#undef createlevel
+#undef economy_gunmarket
+#undef __security_check_cookie
+#undef economy_carmarket
+#undef createhuman
+#undef srand
+#undef createevent_message
+#undef _time64
 #undef createevent_updateitem
 #undef item_removehumanlink
-#undef economy_gunmarket
-#undef createevent_message
 #undef createitem
-#undef rand
-#undef __security_check_cookie
-#undef newspaper_load
-#undef createevent_updateplayer
-#undef createhuman
-#undef createvehicle
-#undef saveaccountsserver
+#undef createlevel
 #undef item_removeitemlink
-#undef _time64
-#undef scenario_createcar
-#undef rotateorientation
+#undef createvehicle
 #undef createobject
-#undef srand
-#undef economy_carmarket
+#undef rand
+#undef scenario_createguards
+#undef scenario_createcar
+#undef createevent_updateplayer
 #undef local_38
 #undef local_34
 #undef local_30
@@ -55913,10 +55913,10 @@ void __cdecl lf_590f0(void)
 #define DAT_0b051a8c (*(undefined4 *)SR_VA(0xb051a8c))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define createmission_threeway ((void (__cdecl *)(undefined4, int, undefined4 *))SR_VA(0x428230))
-#define scenario_getnumofmissions ((int (__cdecl *)(int))SR_VA(0x40aa80))
 #define createmission_acquisition ((int (__cdecl *)(int, int, int))SR_VA(0x458ef0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define scenario_getnumofmissions ((int (__cdecl *)(int))SR_VA(0x40aa80))
 #define __security_check_cookie(x) ((void)0)
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define createmission_transaction ((void (__cdecl *)(undefined4, int, int))SR_VA(0x4286b0))
 #define local_24 (*(undefined4 (*)[8])(lf_frame + 0x1c))
 #define local_4 (*(uint *)(lf_frame + 0x3c))
@@ -56109,10 +56109,10 @@ LAB_0045ad91:
 #undef DAT_0b051a8c
 #undef g_event
 #undef createmission_threeway
-#undef scenario_getnumofmissions
 #undef createmission_acquisition
-#undef rand
+#undef scenario_getnumofmissions
 #undef __security_check_cookie
+#undef rand
 #undef createmission_transaction
 #undef local_24
 #undef local_4
@@ -56126,17 +56126,17 @@ LAB_0045ad91:
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define player_loadinventory ((void (__cdecl *)(int))SR_VA(0x4500e0))
-#define __security_check_cookie(x) ((void)0)
-#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
-#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
-#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
-#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
-#define player_saveinventory ((void (__cdecl *)(int))SR_VA(0x405fe0))
 #define createhuman ((int (__cdecl *)(float *, float *, int))SR_VA(0x450ae0))
+#define rotateorientation ((void (__cdecl *)(int, float *, float))SR_VA(0x40bdb0))
+#define player_loadinventory ((void (__cdecl *)(int))SR_VA(0x4500e0))
+#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
+#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
+#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
+#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
+#define __security_check_cookie(x) ((void)0)
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
+#define player_saveinventory ((void (__cdecl *)(int))SR_VA(0x405fe0))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -56568,17 +56568,17 @@ void __cdecl lf_5ae70(void)
 #undef g_item
 #undef g_event
 #undef g_player
-#undef resetgame
-#undef rand
-#undef player_loadinventory
-#undef __security_check_cookie
-#undef createscenario_world
-#undef scenario_createtraffic2
-#undef createobject
-#undef createitem
-#undef rotateorientation
-#undef player_saveinventory
 #undef createhuman
+#undef rotateorientation
+#undef player_loadinventory
+#undef scenario_createtraffic2
+#undef createitem
+#undef createscenario_world
+#undef resetgame
+#undef __security_check_cookie
+#undef createobject
+#undef rand
+#undef player_saveinventory
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -56617,29 +56617,29 @@ void __cdecl lf_5ae70(void)
 #define _DAT_25a1d744 (*(float *)SR_VA(0x25a1d744))
 #define _DAT_25a1d748 (*(undefined4 *)SR_VA(0x25a1d748))
 #define _DAT_25a1d74c (*(float *)SR_VA(0x25a1d74c))
-#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
-#define logic_farbslist ((void (__cdecl *)(int))SR_VA(0x41d2c0))
-#define scenario_setmissioninactive ((void (__cdecl *)(int))SR_VA(0x40ab20))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
-#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
-#define logic_setteammanager ((void (__cdecl *)(float, int))SR_VA(0x41d4d0))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define economy_carmarket ((void (__cdecl *)(void))SR_VA(0x405700))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
+#define logic_setteammanager ((void (__cdecl *)(float, int))SR_VA(0x41d4d0))
+#define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_VA(0x406840))
+#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
+#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
+#define _ftol2(x) ((ulonglong)(longlong)(x))
 #define playersellstock ((void (__cdecl *)(float, int))SR_VA(0x405be0))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_VA(0x407f80))
-#define server_writelogfile ((void (__cdecl *)(void))SR_VA(0x401420))
-#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
-#define pointinsidebasesafe ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x408b00))
-#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
-#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
-#define createobject ((int (__cdecl *)(int, float *, undefined4 *, float *, int))SR_VA(0x431800))
 #define player_calcassets ((void (__cdecl *)(float))SR_VA(0x405f20))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_VA(0x401080))
+#define sprintf_comma ((void (__cdecl *)(char *, int))SR_VA(0x408880))
+#define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x4089c0))
+#define server_writelogfile ((void (__cdecl *)(void))SR_VA(0x401420))
+#define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
+#define pointinsidebasesafe ((undefined4 (__cdecl *)(float *, int, float))SR_VA(0x408b00))
+#define scenario_createtraffic2 ((void (__cdecl *)(int))SR_VA(0x4585b0))
+#define createscenario_world ((void (__cdecl *)(void))SR_VA(0x45aa60))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(4, "MSVCR100.DLL", "sprintf"))
+#define logic_farbslist ((void (__cdecl *)(int))SR_VA(0x41d2c0))
 #define economy_gunmarket ((void (__cdecl *)(void))SR_VA(0x405870))
+#define scenario_setmissioninactive ((void (__cdecl *)(int))SR_VA(0x40ab20))
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(int * *)(lf_frame + 0x18))
@@ -57074,29 +57074,29 @@ void __cdecl lf_5b9b0(void)
 #undef _DAT_25a1d744
 #undef _DAT_25a1d748
 #undef _DAT_25a1d74c
-#undef resetgame
-#undef logic_farbslist
-#undef scenario_setmissioninactive
-#undef sprintf
-#undef sprintf_comma
-#undef pointinsidebase
-#undef logic_setteammanager
 #undef createitem
 #undef economy_carmarket
-#undef _ftol2
+#undef logic_setteammanager
+#undef resetgame
 #undef createevent_updatestocks
+#undef createevent_updateplayer
+#undef createobject
+#undef _ftol2
 #undef playersellstock
 #undef item_removeitemlink
-#undef server_writelogfile
-#undef createscenario_world
-#undef createevent_updateplayer
-#undef pointinsidebasesafe
-#undef createevent_message
-#undef scenario_createtraffic2
-#undef createobject
 #undef player_calcassets
 #undef saveaccountsserver
+#undef sprintf_comma
+#undef pointinsidebase
+#undef server_writelogfile
+#undef createevent_message
+#undef pointinsidebasesafe
+#undef scenario_createtraffic2
+#undef createscenario_world
+#undef sprintf
+#undef logic_farbslist
 #undef economy_gunmarket
+#undef scenario_setmissioninactive
 #undef local_40
 #undef local_3c
 #undef local_38
@@ -57132,11 +57132,11 @@ void __cdecl lf_5b9b0(void)
 #define _DAT_0e699414 (*(undefined4 *)SR_VA(0xe699414))
 #define _DAT_0e699418 (*(undefined4 *)SR_VA(0xe699418))
 #define _DAT_0e69941c (*(undefined4 *)SR_VA(0xe69941c))
+#define logic_playeractions ((void (__cdecl *)(float))SR_VA(0x455700))
 #define resetgame ((void (__cdecl *)(void))SR_VA(0x4590f0))
 #define logicsimulation_world ((void (__cdecl *)(void))SR_VA(0x45b9b0))
 #define logic_player ((void (__cdecl *)(int))SR_VA(0x4094a0))
 #define logicsimulation_round ((void (__cdecl *)(void))SR_VA(0x45ae70))
-#define logic_playeractions ((void (__cdecl *)(float))SR_VA(0x455700))
 void __cdecl lf_5c580(void)
 
 {
@@ -57317,11 +57317,11 @@ void __cdecl lf_5c580(void)
 #undef _DAT_0e699414
 #undef _DAT_0e699418
 #undef _DAT_0e69941c
+#undef logic_playeractions
 #undef resetgame
 #undef logicsimulation_world
 #undef logic_player
 #undef logicsimulation_round
-#undef logic_playeractions
 
 /* ---------------------------------------------------------------- 0x5cf70 */
 
