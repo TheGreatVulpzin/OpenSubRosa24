@@ -50,25 +50,32 @@ void sv_console_event(int error, const char *fmt, ...)
     write_text(line);
 }
 
+/* Columns of the console window. */
+static int console_width(void)
+{
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    if (GetConsoleScreenBufferInfo(g_out, &info))
+        return info.srWindow.Right - info.srWindow.Left + 1;
+    return 80;
+}
+
+/* Fox beside the name when the window is wide enough, one short line when it is narrow.
+ * ASCII only, so the columns line up in any console font. The fox is drawn for this project. */
 static void banner(void)
 {
-    static const char *const art[] = {
-        "  /\\_/\\   ____        _ __     __     _",
-        " ( o.o ) / ___| _   _| |\\ \\   / /   _| |_ __   ___  ___",
-        "  > ^ <  \\___ \\| | | | '_ \\ \\ / / | | | | '_ \\ / _ \\/ __|",
-        "          ___) | |_| | |_) \\ V /| |_| | | |_) |  __/\\__ \\",
-        "         |____/ \\__,_|_.__/ \\_/  \\__,_|_| .__/ \\___||___/",
-        "                                        |_|   Sub Rosa 024d",
-    };
+    static const char *const fox[] = {"  /\\___/\\", " /  o o  \\", "(_   ^   _)", "  \\_____/"};
+    static const char *const side[] = {"", "  SubVulpes", "  Sub Rosa 024d server", ""};
+    char line[128];
     size_t i;
     write_text("\n");
-    for (i = 0; i < sizeof art / sizeof art[0]; i++) {
-        if (g_color)
-            write_text(ORANGE);
-        write_text(art[i]);
-        if (g_color)
-            write_text(RESET);
-        write_text("\n");
+    if (console_width() >= 40) {
+        for (i = 0; i < 4; i++) {
+            snprintf(line, sizeof line, "%s%-11s%s%s\n", g_color ? ORANGE : "", fox[i], g_color ? RESET : "", side[i]);
+            write_text(line);
+        }
+    } else {
+        snprintf(line, sizeof line, "%s/\\_/\\%s SubVulpes\n", g_color ? ORANGE : "", g_color ? RESET : "");
+        write_text(line);
     }
     write_text("\n");
 }
