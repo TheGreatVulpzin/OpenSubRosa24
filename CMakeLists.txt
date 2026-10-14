@@ -24,6 +24,7 @@ add_library(sv_wsock32 SHARED
     src/lifted/lifted_024d.c
     src/lifted/x87_intrinsics.c
     hook/wsock32.def
+    src/server/accounts.c
     src/server/events.c
     src/server/players.c
     src/server/main_loop.c
@@ -50,7 +51,7 @@ target_compile_definitions(test_verify PRIVATE _CRT_SECURE_NO_WARNINGS)
 # Offline differential test: loads the 024d as a library, fills .data from a snapshot and
 # compares each lifted function with the original on recorded calls (src/tests/harness.c).
 add_executable(harness src/tests/harness.c hook/verify.c hook/hook.c hook/console.c hook/record.c hook/imports.c
-    src/tests/harness_ui.c src/platform/plat_test.c src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c)
+    src/tests/harness_ui.c src/platform/plat_test.c src/server/accounts.c src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c)
 target_include_directories(harness PRIVATE src/include src/lifted src/platform hook)
 target_compile_options(harness PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(harness PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152)

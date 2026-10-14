@@ -75,6 +75,32 @@ static void __cdecl hk_fixplayername(int id)
 /* push esi; mov esi, [esp+8] */
 static const uint8_t expect_fixplayername[5] = { 0x56, 0x8B, 0x74, 0x24, 0x08 };
 
+/* ------------------------------------------------------------ loadaccountsserver (0xe2e0) */
+
+static SvVerify v_loadaccountsserver = { "loadaccountsserver", -1 };
+static void *genrand_int32_va, *loadaccountsserver_rest;
+
+/* The prologue calls genrand_int32 with a relative CALL, so a copy of it in a trampoline
+ * calls a wrong address. This thunk runs the same prologue with an absolute call, then
+ * jumps to the rest of the original. */
+__declspec(naked) static void orig_loadaccountsserver(void)
+{
+    __asm {
+        sub esp, 8
+        push esi
+        call dword ptr [genrand_int32_va]
+        jmp dword ptr [loadaccountsserver_rest]
+    }
+}
+
+static void __cdecl hk_loadaccountsserver(void)
+{
+    SV_HOOK_VOID(v_loadaccountsserver, sr_loadaccountsserver(), orig_loadaccountsserver(), NULL);
+}
+
+/* sub esp, 8; push esi; call genrand_int32 (rel32, the same with ASLR) */
+static const uint8_t expect_loadaccountsserver[9] = { 0x83, 0xEC, 0x08, 0x56, 0xE8, 0x67, 0xCB, 0xFF, 0xFF };
+
 /* ------------------------------------------------------------ table */
 
 static const uint8_t mask_all[32] = {
@@ -91,6 +117,9 @@ static SvHook g_hooks[] = {
       expect_createevent_updatemission, mask_all, (void **)&orig_createevent_updatemission, 0, 0 },
     { "fixplayername", 0xa580, (void *)hk_fixplayername, 5,
       expect_fixplayername, mask_all, (void **)&orig_fixplayername, 0, 0 },
+    /* No trampoline: orig_loadaccountsserver calls the original. */
+    { "loadaccountsserver", 0xe2e0, (void *)hk_loadaccountsserver, 9,
+      expect_loadaccountsserver, mask_all, NULL, 0, 0 },
 };
 
 static SvVerify *g_stats[] = {
@@ -98,6 +127,7 @@ static SvVerify *g_stats[] = {
     &v_createevent_updatedoor,
     &v_createevent_updatemission,
     &v_fixplayername,
+    &v_loadaccountsserver,
 };
 
 /* Write an absolute address (relocated by ASLR) into the expected bytes. */
@@ -117,6 +147,8 @@ int sv_hooks_024d_install(void)
     expect_va(expect_createevent_message, 2, SR_RVA_SERVER);
     expect_va(expect_createevent_updatedoor, 2, SR_RVA_SERVER);
     expect_va(expect_createevent_updatemission, 2, SR_RVA_SERVER);
+    genrand_int32_va = (void *)(sr_base + 0xae50);
+    loadaccountsserver_rest = (void *)(sr_base + 0xe2e9);
 
     sv_verify_init();
     /* timer[256] (0x58 bytes each, size from the Linux ELF symbol): profiler start and

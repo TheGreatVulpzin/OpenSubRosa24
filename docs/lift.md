@@ -224,6 +224,8 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
 
    It loads the 024d as a library, resolves its imports, fills `.data` from the snapshot and runs each recorded call twice: the lifted version, then the original (the verifier undoes the writes of the first run). It compares the `.data` writes, the return value and the memory behind pointer arguments. A full run takes a few minutes. The details of each difference go to `build/hook/subvulpes.log`.
 
+   The harness also tests the hand-written functions in its `hand_table` (`src/server/`). The recordings have no call of a function without a record hook. A hand-written function without arguments then runs once from the snapshot. Now: `loadaccountsserver`. `HARNESS_GAME_DIR` gives it another `user/server.srk`.
+
 ## Float precision
 
 The 024d runs the x87 with 53-bit precision (control word `0x27F`). The original keeps intermediate values in x87 registers, and the lifted C code rounds them to `float` at other places. Some float results therefore differ in the last bits.

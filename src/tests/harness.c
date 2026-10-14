@@ -32,6 +32,7 @@
 #include "plat_test.h"
 #include "platform.h"
 #include "sr_runtime.h"
+#include "sr_server.h"
 #include "verify.h"
 
 void lf_x87_init(void);
@@ -407,6 +408,34 @@ static void add_packet(Call *c, char *line)
     c->npackets++;
 }
 
+/* Hand-written functions (src/server/) that the lifter does not convert. The recordings have
+ * no call of a function without a record hook. A function without arguments then runs once
+ * from the snapshot. */
+static const LfEntry hand_table[] = {
+    { "loadaccountsserver", 0xe2e0, (void *)(uintptr_t)sr_loadaccountsserver, 0, LF_RET_VOID, 4, "" },
+};
+#define HAND_COUNT ((int)(sizeof hand_table / sizeof hand_table[0]))
+
+static const LfEntry *table_entry(int i)
+{
+    return i < lf_table_count ? &lf_table[i] : &hand_table[i - lf_table_count];
+}
+
+static void add_hand_calls(void)
+{
+    int i, j;
+    for (i = 0; i < HAND_COUNT; i++) {
+        const LfEntry *e = &hand_table[i];
+        for (j = 0; j < g_ncalls && g_calls[j].rva != e->rva; j++)
+            ;
+        if (j < g_ncalls || e->dwords != 0)
+            continue;
+        g_calls = realloc(g_calls, (g_ncalls + 1) * sizeof(Call));
+        memset(&g_calls[g_ncalls], 0, sizeof(Call));
+        g_calls[g_ncalls++].rva = e->rva;
+    }
+}
+
 static int load_calls(const char *path)
 {
     FILE *f = fopen(path, "r");
@@ -762,6 +791,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot read the snapshot or the recorded calls\n");
         return 1;
     }
+    add_hand_calls();
     for (i = 0; i < MAX_ARGS; i++)
         g_buf[i] = VirtualAlloc(NULL, BUF, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     apply_snapshot();
@@ -797,12 +827,12 @@ int main(int argc, char **argv)
     if ((uint32_t)sr_base != g_snap.base)
         ui_warning("the 024d did not load at the snapshot base. Pointers in the snapshot are guessed. "
                    "Use the same copy from tools/re/fixed_base.py for the server and the harness.");
-    for (i = 0; i < lf_table_count; i++)
-        if (!filter || strstr(lf_table[i].name, filter))
+    for (i = 0; i < lf_table_count + HAND_COUNT; i++)
+        if (!filter || strstr(table_entry(i)->name, filter))
             total_funcs++;
 
-    for (i = 0; i < lf_table_count; i++) {
-        const LfEntry *e = &lf_table[i];
+    for (i = 0; i < lf_table_count + HAND_COUNT; i++) {
+        const LfEntry *e = table_entry(i);
         SvVerify v;
         int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0;
         char first[320] = "";

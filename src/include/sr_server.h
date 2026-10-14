@@ -8,6 +8,9 @@
 extern "C" {
 #endif
 
+/* accounts.c */
+void __cdecl sr_loadaccountsserver(void);
+
 /* events.c */
 void __cdecl sr_createevent_message(int kind, const char *text, int target, int extra);
 void __cdecl sr_createevent_updatedoor(int a, int b);
