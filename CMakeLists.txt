@@ -11,6 +11,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_library(sv_wsock32 SHARED
     hook/proxy.c
+    hook/netguard.c
     hook/hook.c
     hook/console.c
     hook/hooks_024d.c
@@ -61,3 +62,8 @@ target_link_options(harness PRIVATE /LARGEADDRESSAWARE)
 set_property(TARGET harness PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # The harness stays out of the way of the 024d test copy (0x20000000..0x45f3b000, tools/re/fixed_base.py).
 target_link_options(harness PRIVATE /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
+
+# Input checks of the proxy (hook/netguard.c): packets made by tools/net/srpacket.py.
+add_executable(test_netguard src/tests/test_netguard.c hook/netguard.c)
+target_include_directories(test_netguard PRIVATE hook)
+target_compile_options(test_netguard PRIVATE /W4 /WX /utf-8)

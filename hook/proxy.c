@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include "capture.h"
+#include "netguard.h"
 #include "hook.h"
 #include "sr_runtime.h"
 #include "verify.h"
@@ -64,12 +65,34 @@ FARPROC *sv_wsock_slot(const char *name)
 typedef int(WINAPI *recvfrom_fn)(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen);
 typedef int(WINAPI *sendto_fn)(uintptr_t s, const char *buf, int len, int flags, const void *to, int tolen);
 
+/* subvulpes.ini net_guard=0 turns the input checks off (hook/netguard.c). */
+static int g_guard = -1;
+static unsigned g_guard_masked, g_guard_dropped;
+
 int WINAPI sv_recvfrom_capture(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen)
 {
-    int n = ((recvfrom_fn)p_recvfrom)(s, buf, len, flags, from, fromlen);
-    if (n > 0)
-        sv_capture(0, buf, n, from);
-    return n;
+    int n, masked, from_size = fromlen ? *fromlen : 0;
+    if (g_guard < 0)
+        g_guard = sv_config_int("net_guard", 1);
+    for (;;) {
+        if (fromlen)
+            *fromlen = from_size;
+        n = ((recvfrom_fn)p_recvfrom)(s, buf, len, flags, from, fromlen);
+        if (n > 0)
+            sv_capture(0, buf, n, from);
+        if (n <= 0 || !g_guard)
+            return n;
+        if (sv_netguard_input((uint8_t *)buf, n, &masked) == SV_GUARD_PASS) {
+            if (masked && ++g_guard_masked <= 20)
+                sv_log("net guard: %d voice index(es) above 63 masked (%u packets so far)", masked, g_guard_masked);
+            return n;
+        }
+        /* A short type 4 packet: drop it and give the game the next datagram. With no
+         * datagram left, recvfrom returns -1 (WSAEWOULDBLOCK) as the game expects. */
+        if (++g_guard_dropped <= 20)
+            sv_log("net guard: type 4 packet of %d bytes ends before its voice frames, dropped (%u so far)", n,
+                   g_guard_dropped);
+    }
 }
 
 int WINAPI sv_sendto_capture(uintptr_t s, const char *buf, int len, int flags, const void *to, int tolen)

@@ -541,7 +541,7 @@ Wire format that is certain but whose meaning is not, and parts not checked:
 13. **Types never produced**: `HumanBlock.kind == 1`, `ObjectBlock.mode == 3`, events 11 and 15 (not produced by the 024d), `packobjectpacket2` (dead code), `pbitwritescale`/`pbitwritesign` (unused). The parser handles them as the code does.
 14. **Voice codec**: the frames sit in an array called `speex`; the codec, frame duration and the meaning of `mode` (2 bits) were not checked.
 15. **Out-of-range inputs in the original**, relevant to anyone who writes a compatible server:
-    - the voice `index` of a type 4 packet is read as 8 bits and used to index a 64-entry ring before it is masked; a value >= 64 writes outside the ring in the original server;
+    - the voice `index` of a type 4 packet is read as 8 bits and used to index a 64-entry ring before it is masked; a value >= 64 writes outside the ring in the original server; the hook DLL masks it to 6 bits before the game reads the packet, and drops a type 4 packet that ends before its last voice frame (`hook/netguard.c`, `net_guard=1` by default);
     - the item count of the object part is 8 bits but the item loop has no explicit cap (up to 1024 items), so a count above 255 would wrap;
     - the server name is copied with `strcpy` into `server+0x14`, but only 32 bytes are sent, so a long `servername=` (up to 49 characters) is cut in the packet and the unsent part is still written into memory after the name;
     - the human health is sent as `health + 10` in 7 bits and wraps above 117.
