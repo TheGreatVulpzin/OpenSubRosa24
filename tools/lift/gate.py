@@ -32,6 +32,7 @@ the recordings). Never run a gate together with Ghidra or a server.
 import argparse
 import json
 import os
+import queue
 import re
 import subprocess
 import sys
@@ -175,26 +176,38 @@ def main():
         lst.write_text('\n'.join(only) + '\n')
         filter_arg = ['@' + str(lst)]
 
+    jobs = max(1, a.jobs)
+    # Free sandbox folders (env0, env1...). A run takes one and gives it back, so two runs
+    # at the same time never share a folder: the lifted run of one would see the files of the
+    # other (saveaccountsserver got "fopen user\server.srk -> null").
+    slots = queue.Queue()
+    for k in range(jobs):
+        slots.put(k)
+
     def run(job):
-        k, (name, d, args) = job
+        name, d, args = job
         if a.from_files:
             f = out / f'{name}.txt'
             return name, f.read_text(encoding='utf-8') if f.exists() else '', 0.0
+        k = slots.get()
         env = dict(os.environ, SV_UI_WIDTH='220', HARNESS_ENV_DIR=str(out / f'env{k}'),
                    SV_LOG_FILE=str(out / f'{name}.log'))
         (out / f'{name}.log').unlink(missing_ok=True)
         t0 = time.time()
-        p = subprocess.run([str(t['harness']), str(t['image']), str(d / 'sv_snapshot.bin'), str(args)] + filter_arg,
-                           capture_output=True, text=True, errors='replace', env=env, cwd=ROOT)
+        try:
+            p = subprocess.run([str(t['harness']), str(t['image']), str(d / 'sv_snapshot.bin'), str(args)] + filter_arg,
+                               capture_output=True, text=True, errors='replace', env=env, cwd=ROOT)
+        finally:
+            slots.put(k)
         text = p.stdout + p.stderr
+        if p.returncode not in (0, 3):  # 3: differences found (the summary says which)
+            text += f'\nharness exit code {p.returncode:#x}\n'
         (out / f'{name}.txt').write_text(text, encoding='utf-8')
         return name, text, time.time() - t0
 
     t0 = time.time()
-    jobs = max(1, a.jobs)
     with ThreadPoolExecutor(max_workers=jobs) as pool:
-        # Each worker slot gets its own sandbox folder (env0, env1...): job k uses k % jobs.
-        done = list(pool.map(run, [(i % jobs, r) for i, r in enumerate(runs)]))
+        done = list(pool.map(run, runs))
     tmp.cleanup()
 
     results, errors = {}, []

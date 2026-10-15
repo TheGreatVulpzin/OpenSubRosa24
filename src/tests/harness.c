@@ -139,6 +139,10 @@ static void map_regions(const char *path)
         r->base = hdr[0];
         r->size = hdr[1];
         r->offset = ftell(f);
+        /* malloc leaves the field with old heap bytes. apply_regions then skipped its malloc
+         * and copied the region to that address: a crash or a silent overwrite, depending on
+         * the heap content (gate.py --changed, 2026-10-15). */
+        r->shadow = NULL;
         r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH,
                                  PAGE_READWRITE) != NULL;
         g_mapped += r->mapped;
@@ -814,11 +818,55 @@ static const char *known_difference(const char *name)
 
 /* ------------------------------------------------------------------ main */
 
+/* A crash outside the guarded calls: print where, with the module and its offset, so the
+ * gate log shows more than an exit code 0xc0000005. */
+static LONG WINAPI unhandled(EXCEPTION_POINTERS *ep)
+{
+    HMODULE m = NULL;
+    char name[MAX_PATH] = "?";
+    uintptr_t at = (uintptr_t)ep->ExceptionRecord->ExceptionAddress;
+    if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           (const char *)at, &m))
+        GetModuleFileNameA(m, name, sizeof name);
+    fprintf(stderr, "harness crashed: exception %08lx at %s+0x%x (data address %08x)\n",
+            ep->ExceptionRecord->ExceptionCode, strrchr(name, '\\') ? strrchr(name, '\\') + 1 : name,
+            (unsigned)(at - (uintptr_t)m),
+            ep->ExceptionRecord->NumberParameters >= 2 ? (unsigned)ep->ExceptionRecord->ExceptionInformation[1] : 0);
+    fprintf(stderr, "  esi %08lx edi %08lx ecx %08lx, 024d at %08x, snapshot pages %p (%u)\n",
+            ep->ContextRecord->Esi, ep->ContextRecord->Edi, ep->ContextRecord->Ecx, (unsigned)sr_base,
+            (void *)g_snap.pages, g_snap.npages);
+    {
+        int r;
+        for (r = 0; r < g_nregions; r++)
+            fprintf(stderr, "  heap region %08x size %08x mapped %d shadow %p\n", g_regions[r].base, g_regions[r].size,
+                    g_regions[r].mapped, (void *)g_regions[r].shadow);
+    }
+    /* Stack words that point into the same module: likely return addresses (build/hook/*.map). */
+    if (m) {
+        const uint32_t *sp = (const uint32_t *)(uintptr_t)ep->ContextRecord->Esp;
+        uintptr_t lo = (uintptr_t)m, hi = lo + 0x400000;
+        int k, shown = 0;
+        fprintf(stderr, "  stack:");
+        for (k = 0; k < 256 && shown < 12; k++) {
+            if (IsBadReadPtr(sp + k, 4))
+                break;
+            if (sp[k] > lo && sp[k] < hi) {
+                fprintf(stderr, " +0x%x", (unsigned)(sp[k] - lo));
+                shown++;
+            }
+        }
+        fprintf(stderr, "\n");
+    }
+    fflush(stderr);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 int main(int argc, char **argv)
 {
     int i, j, total_ok = 0, total_diff = 0, total_known = 0, total_skip = 0, total_crash = 0, tested = 0;
     const char *filter = argc > 4 ? argv[4] : NULL;
     const char *game_dir;
+    SetUnhandledExceptionFilter(unhandled);
     int imports, index = 0, total_funcs = 0;
     LARGE_INTEGER t_start, t_end, freq;
     IMAGE_NT_HEADERS32 *nt;

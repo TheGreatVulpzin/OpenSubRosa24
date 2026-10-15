@@ -58,7 +58,7 @@ add_executable(harness src/tests/harness.c hook/verify.c hook/hook.c hook/consol
 target_include_directories(harness PRIVATE src/include src/lifted src/platform hook)
 target_compile_options(harness PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(harness PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152)
-target_link_options(harness PRIVATE /LARGEADDRESSAWARE)
+target_link_options(harness PRIVATE /LARGEADDRESSAWARE /MAP)
 set_property(TARGET harness PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # The harness stays out of the way of the 024d test copy (0x20000000..0x45f3b000, tools/re/fixed_base.py).
 target_link_options(harness PRIVATE /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
