@@ -10,8 +10,8 @@
  *   sv_track_switch_to_original()    original runs
  *   sv_verify_end(v, ...)            compare, write to the log, keep the result of the original
  *
- * Limits: covers only the .data section of the executable (all game globals).
- * Writes to the stack, the heap or DLLs are not covered. The server must run on one thread.
+ * Limits: covers the .data section of the executable (all game globals) and, with
+ * sv_verify_watch_heap, the MSVCR100 heap. Writes to the stack or DLLs are not covered. The server must run on one thread.
  */
 #ifndef SV_VERIFY_H
 #define SV_VERIFY_H
@@ -46,6 +46,10 @@ void sv_verify_set_section(const char *name);
 
 /* Find the .data section and the MSVCR100 rand() state. Returns 0 on failure. */
 int sv_verify_init(void);
+
+/* Also verify the writes to the MSVCR100 heap (malloc blocks of the game) by copy and compare.
+ * Call after sv_verify_init. subvulpes.ini verify_heap=0 turns it off. Returns 1 when active. */
+int sv_verify_watch_heap(void);
 
 /* Do not compare this range of .data (rva, size in bytes). For memory that holds values
  * that change on each run, such as the profiler timers (CPU cycle counter). The original

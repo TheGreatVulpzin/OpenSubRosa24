@@ -151,6 +151,7 @@ int sv_hooks_024d_install(void)
     loadaccountsserver_rest = (void *)(sr_base + 0xe2e9);
 
     sv_verify_init();
+    sv_verify_watch_heap();
     /* timer[256] (0x58 bytes each, size from the Linux ELF symbol): profiler start and
      * total times read from the CPU cycle counter (RDTSC). Each run writes other values. */
     sv_verify_ignore(0x14043e0, 0x5800);

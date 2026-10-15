@@ -52,7 +52,9 @@ A write outside the learned scope shows up only in the next full round.
 
 **Crash protection.** The new version runs inside `__try` ([`hook/hook_wrap.h`](../hook/hook_wrap.h)). If it crashes, the DLL logs the exception and the address, undoes its writes and runs the original. The hook is marked as broken and uses only the original from then on.
 
-Limits: writes outside `.data` (stack, heap, other DLLs) are not compared. The server must run on one thread.
+**Heap.** Page protection covers only `.data`. The verifier also copies the committed pages of the `MSVCR100.dll` heap (the `malloc` blocks of the game) before the C version runs. After the C version, it finds the changed pages by comparison and puts the copy back. After the original, it compares the content of the blocks in use. The allocator data (heap header, free lists) does not count: two runs can leave other free lists with the same effect. Without the heap copy, `area_createblock` wrote the new chunk into the chunk grid (a `malloc` block), the original found the chunk, did not create it, and the game kept a chunk count of 0. When the C version frees heap pages (a large block, a decommit), the copy cannot go back: the log shows `freed heap pages ... heap not undone`, and that call is not compared. The log shows the size of the copy (`heap copy of N KB`) each time it grows by a quarter.
+
+Limits: writes to the stack and to other DLLs are not compared. The server must run on one thread.
 
 Verifier test without the game: `build\hook\test_verify.exe` (14 cases).
 
@@ -91,6 +93,7 @@ createevent_message=1    ; 0 = disable only this hook (works for any hook name)
 verify_every.createevent_message=1   ; verify 1 of every N calls of this hook
 verify_full_every=50     ; every N verifications of a hook, do a full round
 log_calls=1              ; 1 = log each verified call
+verify_heap=1            ; 0 = do not copy and compare the MSVCR100 heap
 ```
 
 ## Remove

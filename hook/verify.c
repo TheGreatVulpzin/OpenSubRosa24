@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "hook.h"
@@ -62,6 +63,260 @@ static uint8_t *pool_page(void)
     if (g_pool_used == g_pool_cap)
         return NULL;
     return g_pool + (size_t)(g_pool_used++) * PAGE;
+}
+
+/* Heap of the game (MSVCR100 malloc). Page protection covers only .data, so the verifier
+ * copies the committed pages of this heap before the new version runs, finds the pages each
+ * version changed by comparison, and undoes the writes of the new version. Without it, a
+ * malloc block that the new version writes stays changed for the original:
+ * area_createblock stored the new chunk in the chunk grid (a malloc block), so the original
+ * found the chunk, did not create it, and the game kept a chunk count of 0.
+ *
+ * Only the content of the blocks in use counts as a difference. The allocator data (heap
+ * header, free lists, block headers) can differ between two runs with the same effect.
+ * When the new version frees pages of the heap (a large block or a decommit), the copy
+ * cannot go back: the heap stays as the new version left it, as without heap verification.
+ *
+ * subvulpes.ini verify_heap=0 turns it off. Only the live DLL calls sv_verify_watch_heap:
+ * the offline harness uses write watch on its heap regions. */
+typedef struct HeapRange {
+    uint8_t *base;
+    size_t size;
+    size_t shadow;  /* offset of the copy in g_hshadow */
+} HeapRange;
+
+typedef struct HeapSpan {
+    uintptr_t start, end;  /* user data of one block in use: [start, end) */
+} HeapSpan;
+
+static HANDLE g_heap;
+static int near_float(uint32_t a, uint32_t b);
+static uint8_t *g_halloc[128];  /* allocation bases of the heap (segments and large blocks) */
+static int g_nhalloc;
+static HeapSpan *g_hbusy;       /* blocks in use at the last scan, sorted by address */
+static size_t g_nhbusy, g_hbusy_cap;
+static HeapRange g_hr[512];     /* committed read/write ranges at the start of this verification */
+static int g_nhr;
+static uint8_t *g_hshadow, *g_hnew, *g_hchanged;  /* copy before, result of new, page changed by new */
+static size_t g_hcap, g_hlogged;
+static int g_hlost;             /* 1 = the new version freed heap pages: no undo, no compare */
+static long g_hlost_count;
+
+static void heap_add_alloc(uint8_t *base)
+{
+    int i;
+    for (i = 0; i < g_nhalloc; i++)
+        if (g_halloc[i] == base)
+            return;
+    if (g_nhalloc < (int)(sizeof g_halloc / sizeof g_halloc[0]))
+        g_halloc[g_nhalloc++] = base;
+}
+
+static int cmp_span(const void *a, const void *b)
+{
+    uintptr_t x = ((const HeapSpan *)a)->start, y = ((const HeapSpan *)b)->start;
+    return x < y ? -1 : x > y;
+}
+
+/* The allocations of the heap (its segments and its large blocks) and the blocks in use. */
+static void heap_scan(void)
+{
+    PROCESS_HEAP_ENTRY e;
+    MEMORY_BASIC_INFORMATION mbi;
+    g_nhalloc = 0;
+    g_nhbusy = 0;
+    if (!HeapLock(g_heap))
+        return;
+    e.lpData = NULL;
+    while (HeapWalk(g_heap, &e)) {
+        if (!(e.wFlags & (PROCESS_HEAP_REGION | PROCESS_HEAP_ENTRY_BUSY)))
+            continue;
+        if (VirtualQuery(e.lpData, &mbi, sizeof mbi) && mbi.State == MEM_COMMIT)
+            heap_add_alloc((uint8_t *)mbi.AllocationBase);
+        if (!(e.wFlags & PROCESS_HEAP_ENTRY_BUSY) || !e.cbData)
+            continue;
+        if (g_nhbusy == g_hbusy_cap) {
+            /* The hook DLL allocates from the process heap, not from the heap it scans. */
+            size_t cap = g_hbusy_cap ? g_hbusy_cap * 2 : 4096;
+            HeapSpan *n = (HeapSpan *)realloc(g_hbusy, cap * sizeof(HeapSpan));
+            if (!n)
+                break;
+            g_hbusy = n;
+            g_hbusy_cap = cap;
+        }
+        g_hbusy[g_nhbusy].start = (uintptr_t)e.lpData;
+        g_hbusy[g_nhbusy].end = (uintptr_t)e.lpData + e.cbData;
+        g_nhbusy++;
+    }
+    HeapUnlock(g_heap);
+    qsort(g_hbusy, g_nhbusy, sizeof(HeapSpan), cmp_span);
+}
+
+/* 1 = the address is in the user data of a block in use (at the last scan). */
+static int heap_in_block(uintptr_t a)
+{
+    size_t lo = 0, hi = g_nhbusy;
+    while (lo < hi) {
+        size_t mid = (lo + hi) / 2;
+        if (g_hbusy[mid].end <= a)
+            lo = mid + 1;
+        else if (g_hbusy[mid].start > a)
+            hi = mid;
+        else
+            return 1;
+    }
+    return 0;
+}
+
+/* Committed read/write ranges of the allocations, and a copy of their content. */
+static void heap_begin(void)
+{
+    int i;
+    size_t total = 0;
+    if (g_full || !g_nhalloc)
+        heap_scan();
+    g_nhr = 0;
+    g_hlost = 0;
+    for (i = 0; i < g_nhalloc; i++) {
+        uint8_t *p = g_halloc[i];
+        MEMORY_BASIC_INFORMATION mbi;
+        while (VirtualQuery(p, &mbi, sizeof mbi) && mbi.AllocationBase == g_halloc[i]) {
+            if (mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE &&
+                g_nhr < (int)(sizeof g_hr / sizeof g_hr[0])) {
+                g_hr[g_nhr].base = (uint8_t *)mbi.BaseAddress;
+                g_hr[g_nhr].size = mbi.RegionSize;
+                g_hr[g_nhr].shadow = total;
+                total += mbi.RegionSize;
+                g_nhr++;
+            }
+            p = (uint8_t *)mbi.BaseAddress + mbi.RegionSize;
+        }
+    }
+    if (total > g_hlogged + g_hlogged / 4) {
+        g_hlogged = total;
+        sv_log("verifier: heap copy of %u KB in %d ranges, %u blocks in use", (unsigned)(total / 1024), g_nhr,
+               (unsigned)g_nhbusy);
+    }
+    if (total > g_hcap) {
+        if (g_hshadow)
+            VirtualFree(g_hshadow, 0, MEM_RELEASE);
+        g_hcap = total + total / 2;
+        /* One block: the copy before, the result of the new version, one flag per page. */
+        g_hshadow = (uint8_t *)VirtualAlloc(NULL, g_hcap * 2 + g_hcap / PAGE, MEM_COMMIT | MEM_RESERVE,
+                                            PAGE_READWRITE);
+        if (!g_hshadow) {
+            sv_log("ERROR verifier: no memory for a heap copy of %u KB, heap not verified", (unsigned)(total / 1024));
+            g_hcap = 0;
+            g_nhr = 0;
+            g_heap = NULL;
+            return;
+        }
+        g_hnew = g_hshadow + g_hcap;
+        g_hchanged = g_hnew + g_hcap;
+    }
+    for (i = 0; i < g_nhr; i++)
+        memcpy(g_hshadow + g_hr[i].shadow, g_hr[i].base, g_hr[i].size);
+}
+
+/* 1 = the whole range is still committed read/write memory. */
+static int heap_range_ok(const HeapRange *r)
+{
+    MEMORY_BASIC_INFORMATION mbi;
+    return VirtualQuery(r->base, &mbi, sizeof mbi) && mbi.State == MEM_COMMIT && mbi.Protect == PAGE_READWRITE &&
+           mbi.RegionSize >= r->size;
+}
+
+/* After the new version: keep the pages it changed and put the copy back. */
+static void heap_after_new(const SvVerify *v)
+{
+    int i;
+    size_t off;
+    for (i = 0; i < g_nhr; i++) {
+        if (!heap_range_ok(&g_hr[i])) {
+            g_hlost = 1;
+            if (++g_hlost_count <= 20)
+                sv_log("VERIFY %s: the new version freed heap pages at 0x%08x, heap not undone (call %ld)",
+                       v->name, (unsigned)(uintptr_t)g_hr[i].base, v->calls);
+            return;
+        }
+    }
+    for (i = 0; i < g_nhr; i++) {
+        for (off = 0; off < g_hr[i].size; off += PAGE) {
+            uint8_t *page = g_hr[i].base + off;
+            size_t s = g_hr[i].shadow + off;
+            g_hchanged[s / PAGE] = 0;
+            if (memcmp(page, g_hshadow + s, PAGE) != 0) {
+                g_hchanged[s / PAGE] = 1;
+                memcpy(g_hnew + s, page, PAGE);
+                memcpy(page, g_hshadow + s, PAGE);
+            }
+        }
+    }
+}
+
+/* After the original: compare the blocks in use. Returns the count of different bytes
+ * (the log gets the first ones, up to 8 with the .data differences before them). */
+static long heap_compare(long logged, long *nfloat)
+{
+    int i;
+    size_t off;
+    long diffs = 0;
+    if (g_hlost)
+        return 0;
+    for (i = 0; i < g_nhr; i++) {
+        if (!heap_range_ok(&g_hr[i]))
+            continue;  /* the original freed it: nothing to compare */
+        for (off = 0; off < g_hr[i].size; off += PAGE) {
+            const uint8_t *now = g_hr[i].base + off;
+            size_t s = g_hr[i].shadow + off;
+            const uint8_t *ref = g_hchanged[s / PAGE] ? g_hnew + s : g_hshadow + s;
+            uint32_t b;
+            if (memcmp(ref, now, PAGE) == 0)
+                continue;
+            for (b = 0; b < PAGE; b++) {
+                if ((b & 3) == 0 && memcmp(ref + b, now + b, 4) != 0 && heap_in_block((uintptr_t)(now + b))) {
+                    uint32_t x, y;
+                    memcpy(&x, ref + b, 4);
+                    memcpy(&y, now + b, 4);
+                    if (near_float(x, y)) {
+                        (*nfloat)++;
+                        b += 3;
+                        continue;
+                    }
+                }
+                if (ref[b] == now[b] || !heap_in_block((uintptr_t)(now + b)))
+                    continue;
+                if (logged + ++diffs <= 8) {
+                    if (g_hchanged[s / PAGE])
+                        sv_log("  heap 0x%08x: new=%02x original=%02x", (unsigned)(uintptr_t)(now + b), ref[b], now[b]);
+                    else
+                        sv_log("  heap 0x%08x: new did not write, original=%02x", (unsigned)(uintptr_t)(now + b), now[b]);
+                }
+            }
+        }
+    }
+    return diffs;
+}
+
+int sv_verify_watch_heap(void)
+{
+    HMODULE crt = GetModuleHandleA("MSVCR100.dll");
+    intptr_t (__cdecl *get_heap)(void);
+    if (!g_enabled || !sv_config_int("verify_heap", 1))
+        return 0;
+    get_heap = crt ? (intptr_t (__cdecl *)(void))(void *)GetProcAddress(crt, "_get_heap_handle") : NULL;
+    if (!get_heap || !get_heap()) {
+        sv_log("warning verifier: MSVCR100 heap not found; writes to malloc blocks are not verified");
+        return 0;
+    }
+    /* The hook DLL (static CRT) uses the process heap: the log buffers must stay out of the copy. */
+    if ((HANDLE)get_heap() == GetProcessHeap()) {
+        sv_log("warning verifier: MSVCR100 uses the process heap; writes to malloc blocks are not verified");
+        return 0;
+    }
+    g_heap = (HANDLE)get_heap();
+    sv_log("verifier: MSVCR100 heap at 0x%08x is verified (copy and compare)", (unsigned)(uintptr_t)g_heap);
+    return 1;
 }
 
 static void protect_all(DWORD prot)
@@ -328,6 +583,8 @@ void sv_track_begin_new(SvVerify *v)
     g_orig.count = 0;
     if (g_holdrand)
         g_holdrand_before = *g_holdrand;
+    if (g_heap)
+        heap_begin();
     g_active = &g_new;
     protect_scope(PAGE_READONLY);
 }
@@ -361,6 +618,8 @@ void sv_track_switch_to_original(void)
         g_holdrand_new = *g_holdrand;
         *g_holdrand = g_holdrand_before;
     }
+    if (g_heap)
+        heap_after_new(g_scope);
 
     g_active = &g_orig;
     protect_scope(PAGE_READONLY);
@@ -511,6 +770,9 @@ void sv_verify_end(SvVerify *v, int same_return, const char *detail)
             }
         }
     }
+
+    if (g_heap)
+        diffs += heap_compare(diffs, &nfloat);
 
     {
         int rand_ok = !g_holdrand || g_holdrand_new == *g_holdrand;
