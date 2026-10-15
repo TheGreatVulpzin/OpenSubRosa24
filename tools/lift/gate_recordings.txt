@@ -1,0 +1,10 @@
+# Recordings for tools/lift/gate.py (folders in build/recordings, local and not versioned).
+# Format: name [synth]. "synth" also runs the recording with tools/recording/synth_calls.txt
+# appended. A missing folder is skipped with a note.
+play-20261012
+20261013-1016-smoke
+20261013-query
+20261013-195210
+20261015-friend
+murilo-20261015 synth
+round-20261015-0141 synth

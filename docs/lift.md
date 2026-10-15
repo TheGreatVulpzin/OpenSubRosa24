@@ -35,6 +35,8 @@
    powershell -File tools\autotest.ps1 -Seconds 180
    ```
 
+4. Or all of it in one command: `bash tools/lift/pipeline.sh` (add `--params` after a change to `analysis/024d/params.csv`). The last step is `tools/lift/gate.py`: the harness on every recording of `tools/lift/gate_recordings.txt`, compared function by function with `build/gate/baseline.json`. It fails when a "calls same" count drops or a new difference appears. After a good run, `python -I tools/lift/gate.py --from-files --update` saves the results as the new baseline.
+
 ## What the lifter does
 
 | Problem | Solution |

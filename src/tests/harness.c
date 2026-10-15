@@ -834,7 +834,7 @@ int main(int argc, char **argv)
     for (i = 0; i < lf_table_count + HAND_COUNT; i++) {
         const LfEntry *e = table_entry(i);
         SvVerify v;
-        int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0;
+        int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0, stack_skip = 0;
         char first[320] = "";
         if (filter && !strstr(e->name, filter))
             continue;
@@ -852,8 +852,13 @@ int main(int argc, char **argv)
             uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
-            if (!args_usable(c, e->args) || points_into_stack(c, e->args)) {
+            if (!args_usable(c, e->args)) {
                 skip++;
+                continue;
+            }
+            if (points_into_stack(c, e->args)) {
+                skip++;
+                stack_skip++;
                 continue;
             }
             mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
@@ -928,8 +933,19 @@ int main(int argc, char **argv)
                 ok++;
             }
         }
-        if (!ncalls)
+        /* A value argument that points into the stack is often a pointer that Ghidra typed
+         * as an int: analysis/024d/params.csv gives it a pointer type. Without this note, a
+         * function whose calls are all skipped left no line (loadblock, 2026-10-15). */
+        if (stack_skip && !first[0])
+            snprintf(first, sizeof first, "%d skipped: value points into the stack (check params.csv)", stack_skip);
+        if (!ncalls) {
+            if (skip) {
+                total_skip += skip;
+                ui_function(index, total_funcs, e->name, 0, 0, 0, skip, 0,
+                            first[0] ? first : "all calls skipped: old record without a value");
+            }
             continue;
+        }
         tested++;
         total_ok += ok;
         if (diff && known_difference(e->name)) {
