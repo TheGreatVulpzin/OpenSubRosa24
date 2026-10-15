@@ -7,6 +7,7 @@
  *   so that several harnesses can run at the same time.
  *   HARNESS_RESET=1: put the snapshot back before each function (results do not depend on
  *   the order of the functions).
+ *   HARNESS_RETRY=0: do not run a call again from the snapshot when its original crashed.
  *
  * 1. Load the 024d as a library (its code runs, its entry point does not).
  * 2. Fill its .data section from a snapshot of a running server (hook/record.c).
@@ -869,6 +870,7 @@ int main(int argc, char **argv)
     const char *filter = argc > 4 ? argv[4] : NULL;
     const char *game_dir;
     int reset_each = getenv("HARNESS_RESET") && atoi(getenv("HARNESS_RESET")) != 0;
+    int retry_crash = !getenv("HARNESS_RETRY") || atoi(getenv("HARNESS_RETRY")) != 0;
     SetUnhandledExceptionFilter(unhandled);
     int imports, index = 0, total_funcs = 0;
     LARGE_INTEGER t_start, t_end, freq;
@@ -940,7 +942,7 @@ int main(int argc, char **argv)
     for (i = 0; i < lf_table_count + HAND_COUNT; i++) {
         const LfEntry *e = table_entry(i);
         SvVerify v;
-        int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0, stack_skip = 0;
+        int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0, stack_skip = 0, retried_ok = 0;
         char first[320] = "";
         if (!filter_match(e->name))
             continue;
@@ -963,7 +965,7 @@ int main(int argc, char **argv)
             char env_why[256] = "", heap_why[256] = "";
             int env_same;
             double fe = 0, fo = 0;
-            int k, new_ok, orig_ok, same, fails_before;
+            int k, new_ok, orig_ok, same, fails_before, retried = 0;
             uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
@@ -978,6 +980,7 @@ int main(int argc, char **argv)
             }
             mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
             ncalls++;
+        again:
             build_args(c, e->args, a);
             fails_before = v.fails;
             v.broken = 0;
@@ -1027,6 +1030,18 @@ int main(int argc, char **argv)
             if (getenv("HARNESS_DEBUG") && atoi(getenv("HARNESS_DEBUG")) >= 2)
                 plat_test_dump();
             sv_verify_end(&v, same && env_same && new_ok, NULL);
+            /* The original crashed: often the heap that the earlier calls changed (the writes
+             * of the original runs stay), not the call itself. Put the snapshot back and run
+             * this call once more (HARNESS_RETRY=0 turns it off). The cost is only paid on a
+             * crash; gate.py --reset does the same for every function. */
+            if (!orig_ok && !retried && retry_crash) {
+                apply_snapshot();
+                resolve_imports();
+                retried = 1;
+                goto again;
+            }
+            if (orig_ok && retried)
+                retried_ok++;
             if (!orig_ok) {
                 skip++;
                 if (!first[0])
@@ -1051,6 +1066,9 @@ int main(int argc, char **argv)
         /* A value argument that points into the stack is often a pointer that Ghidra typed
          * as an int: analysis/024d/params.csv gives it a pointer type. Without this note, a
          * function whose calls are all skipped left no line (loadblock, 2026-10-15). */
+        if (retried_ok && !first[0])
+            snprintf(first, sizeof first, "%d call(s) run again from the snapshot after the original crashed",
+                     retried_ok);
         if (stack_skip && !first[0])
             snprintf(first, sizeof first, "%d skipped: value points into the stack (check params.csv)", stack_skip);
         if (!ncalls) {
