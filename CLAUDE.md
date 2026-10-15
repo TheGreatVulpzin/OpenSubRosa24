@@ -61,7 +61,7 @@ If the download fails, the session needs network access to `crypticsea.gart.sh` 
 - `build/hook/harness.exe <024d_fixed.exe> <sv_snapshot.bin> <sv_args.txt> [filter]` — runs each recorded call with the lifted and the original version and compares them. `HARNESS_DEBUG`, `HARNESS_PROBE` and `HARNESS_WATCH` help to find a difference (`docs/lift.md`). Side-effect functions run in the test environment of `src/platform/plat_test.c` (`docs/side-effects.md`).
 - `tools/lift/lint.py` — float/int conversions and uninitialized variables in the lifted C.
 - `bash tools/lift/pipeline.sh [--params] [--no-gate] [gate options]` — LiftExport, lift, build and gate in one command.
-- `python -I tools/lift/gate.py [--update] [--only NAME]` — harness on every recording of `tools/lift/gate_recordings.txt` (and `tools/recording/synth_calls.txt`), compared with `build/gate/baseline.json`. It fails when a "calls same" count drops.
+- `python -I tools/lift/gate.py [--changed] [--jobs N] [--update] [--target NAME]` — harness on every recording of a target (`tools/lift/targets/ded024d.json`), compared function by function with a local baseline. It fails when a "calls same" count drops. `--changed` runs only the functions whose lifted C changed (minutes instead of 40). Run a full gate before a push.
 - `python -I tools/lift/deps.py [--func NAME]` — Phase 4 progress: globals, calls and `SR_VA` that the lifted C still takes from the image.
 
 ### Ghidra extensions (installed in `E:\tools\ghidra_12.1.4_PUBLIC\Ghidra\Extensions`)

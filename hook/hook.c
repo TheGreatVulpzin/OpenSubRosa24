@@ -4,6 +4,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "hook.h"
@@ -36,7 +37,11 @@ void sv_log(const char *fmt, ...)
 
     if (!f) {
         char path[MAX_PATH];
-        snprintf(path, sizeof path, "%ssubvulpes.log", exe_dir());
+        /* SV_LOG_FILE: another log (parallel harness runs, tools/lift/gate.py --jobs). */
+        if (getenv("SV_LOG_FILE"))
+            snprintf(path, sizeof path, "%s", getenv("SV_LOG_FILE"));
+        else
+            snprintf(path, sizeof path, "%ssubvulpes.log", exe_dir());
         f = fopen(path, "a");
         if (!f)
             return;

@@ -54,14 +54,24 @@ static uint8_t *g_new_result[MAX_PAGES];  /* pages of the new version, after it 
 static int g_overflow;
 static int g_holdrand_before, g_holdrand_new;
 
-/* Simple pool of copy pages (reused between calls). */
+/* Simple pool of copy pages (reused between calls). The pool is only reserved: pages are
+ * committed in steps of POOL_STEP when a call needs them. A full commit of MAX_PAGES * 3
+ * pages (576 MB) counted against the Windows commit limit even when a call used a few pages,
+ * and a harness failed to start when the limit was nearly full. */
+#define POOL_STEP 256
 static uint8_t *g_pool;
-static uint32_t g_pool_used, g_pool_cap;
+static uint32_t g_pool_used, g_pool_cap, g_pool_committed;
 
 static uint8_t *pool_page(void)
 {
     if (g_pool_used == g_pool_cap)
         return NULL;
+    if (g_pool_used == g_pool_committed) {
+        uint32_t n = g_pool_cap - g_pool_committed < POOL_STEP ? g_pool_cap - g_pool_committed : POOL_STEP;
+        if (!VirtualAlloc(g_pool + (size_t)g_pool_committed * PAGE, (size_t)n * PAGE, MEM_COMMIT, PAGE_READWRITE))
+            return NULL;
+        g_pool_committed += n;
+    }
     return g_pool + (size_t)(g_pool_used++) * PAGE;
 }
 
@@ -467,7 +477,7 @@ int sv_verify_init(void)
         sv_log("warning verifier: rand() state not found; functions that call rand() will differ");
 
     g_pool_cap = MAX_PAGES * 3;  /* before (new), before (original), result of new */
-    g_pool = (uint8_t *)VirtualAlloc(NULL, (size_t)g_pool_cap * PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    g_pool = (uint8_t *)VirtualAlloc(NULL, (size_t)g_pool_cap * PAGE, MEM_RESERVE, PAGE_READWRITE);
     if (!g_pool) {
         sv_log("ERROR verifier: no memory for %u pages", g_pool_cap);
         g_enabled = 0;

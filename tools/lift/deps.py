@@ -1,6 +1,6 @@
 """Phase 4 progress: how much the lifted C still depends on the original .exe.
 
-Usage: python -I tools/lift/deps.py [--top N] [--md] [--func NAME]
+Usage: python -I tools/lift/deps.py [--top N] [--md] [--func NAME] [--target NAME]
 
 The lifted C (src/lifted/lifted_024d.c) still uses the image of the 024d in three ways:
 - globals: "#define g_human (*(Human (*)[..])SR_VA(0x..))", the memory of .data in the image.
@@ -15,15 +15,14 @@ layer of Phase 4 replaces them (docs/phase4-inventory.md, section 2).
 A standalone server (docs/plano.md, Phase 4) needs all of these at zero.
 """
 import argparse
+import json
 import re
 import sys
 from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-LIFTED = ROOT / 'src' / 'lifted' / 'lifted_024d.c'
-TABLE = ROOT / 'src' / 'lifted' / 'lifted_table.c'
-HAND = ROOT / 'hook' / 'hooks_024d.c'
+TARGETS = ROOT / 'tools' / 'lift' / 'targets'  # the same target files as gate.py
 
 BLOCK = re.compile(r'^/\* -+ 0x([0-9a-f]+) \*/$', re.M)
 FUNC_DEF = re.compile(r'^#define (\w+) \(\([^;\n]*\(__cdecl \*\)\([^\n]*\)\)SR_VA\(0x([0-9a-f]+)\)\)$', re.M)
@@ -46,10 +45,14 @@ def main():
     ap.add_argument('--top', type=int, default=15, help='functions with the most dependencies')
     ap.add_argument('--md', action='store_true', help='Markdown table')
     ap.add_argument('--func', help='list the dependencies of one function')
+    ap.add_argument('--target', default='ded024d', help='tools/lift/targets/<name>.json')
     a = ap.parse_args()
+    t = json.loads((TARGETS / f'{a.target}.json').read_text(encoding='utf-8'))
+    LIFTED, TABLE = ROOT / t['lifted_c'], ROOT / t['table']
+    HAND = ROOT / t['hand_hooks'] if t.get('hand_hooks') else None
 
     names = {int(r, 16): n for n, r in NAME.findall(TABLE.read_text(encoding='utf-8'))}
-    in_c = set(names) | {int(r, 16) for _, r in NAME.findall(HAND.read_text(encoding='utf-8'))}
+    in_c = set(names) | ({int(r, 16) for _, r in NAME.findall(HAND.read_text(encoding='utf-8'))} if HAND else set())
     rows, globals_used, callees_exe = [], Counter(), Counter()
     for rva, body in blocks(LIFTED.read_text(encoding='utf-8')):
         name = names.get(rva, f'0x{rva:x}')

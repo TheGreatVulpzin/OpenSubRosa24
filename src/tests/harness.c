@@ -1,6 +1,10 @@
 /* Offline differential test of the lifted functions.
  *
  * Usage: harness <subrosadedicated024d.exe> <sv_snapshot.bin> <sv_args.txt> [filter]
+ *   filter: a part of a function name, or exact names separated by commas ("a,b,c"),
+ *   or @file with one exact name per line (tools/lift/gate.py --changed).
+ *   HARNESS_ENV_DIR: the sandbox folder of the test environment (default build/harness_env),
+ *   so that several harnesses can run at the same time.
  *
  * 1. Load the 024d as a library (its code runs, its entry point does not).
  * 2. Fill its .data section from a snapshot of a running server (hook/record.c).
@@ -506,6 +510,55 @@ static int args_usable(const Call *c, const char *kinds)
 /* 1 when a value argument is an address inside the stack of this thread. A pointer to a
  * local of the server that Ghidra typed as an int (rotateorientation gets "(int)&local_38")
  * has no content here, and both versions would write over the stack of the harness. */
+/* The name filter: a part of a name, or a list of exact names (commas or @file). */
+static char *g_names;  /* ",a,b,c," for an exact list, NULL for a part of a name */
+static const char *g_part;
+
+static void set_filter(const char *filter)
+{
+    size_t n;
+    if (!filter)
+        return;
+    if (filter[0] == '@') {
+        FILE *f = fopen(filter + 1, "r");
+        char line[256];
+        g_names = calloc(1, 2);
+        g_names[0] = ',';
+        n = 1;
+        while (f && fgets(line, sizeof line, f)) {
+            size_t k = strcspn(line, " \r\n");
+            if (!k)
+                continue;
+            g_names = realloc(g_names, n + k + 2);
+            memcpy(g_names + n, line, k);
+            n += k;
+            g_names[n++] = ',';
+            g_names[n] = '\0';
+        }
+        if (f)
+            fclose(f);
+        return;
+    }
+    if (!strchr(filter, ',')) {
+        g_part = filter;
+        return;
+    }
+    n = strlen(filter);
+    g_names = malloc(n + 3);
+    snprintf(g_names, n + 3, ",%s,", filter);
+}
+
+static int filter_match(const char *name)
+{
+    char key[96];
+    if (g_part)
+        return strstr(name, g_part) != NULL;
+    if (!g_names)
+        return 1;
+    snprintf(key, sizeof key, ",%s,", name);
+    return strstr(g_names, key) != NULL;
+}
+
 static int points_into_stack(const Call *c, const char *kinds)
 {
     ULONG_PTR low, high;
@@ -804,7 +857,8 @@ int main(int argc, char **argv)
         game_dir = attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY) ? recorded
                                                                                        : "original/blackhouser";
     }
-    if (!plat_test_init(game_dir, "build/harness_env")) {
+    set_filter(filter);
+    if (!plat_test_init(game_dir, getenv("HARNESS_ENV_DIR") ? getenv("HARNESS_ENV_DIR") : "build/harness_env")) {
         fprintf(stderr, "cannot set up the test environment (game folder %s, MSVCR100.dll)\n", game_dir);
         return 1;
     }
@@ -828,7 +882,7 @@ int main(int argc, char **argv)
         ui_warning("the 024d did not load at the snapshot base. Pointers in the snapshot are guessed. "
                    "Use the same copy from tools/re/fixed_base.py for the server and the harness.");
     for (i = 0; i < lf_table_count + HAND_COUNT; i++)
-        if (!filter || strstr(table_entry(i)->name, filter))
+        if (filter_match(table_entry(i)->name))
             total_funcs++;
 
     for (i = 0; i < lf_table_count + HAND_COUNT; i++) {
@@ -836,7 +890,7 @@ int main(int argc, char **argv)
         SvVerify v;
         int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0, stack_skip = 0;
         char first[320] = "";
-        if (filter && !strstr(e->name, filter))
+        if (!filter_match(e->name))
             continue;
         index++;
         memset(&v, 0, sizeof v);

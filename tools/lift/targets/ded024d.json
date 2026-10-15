@@ -1,0 +1,34 @@
+{
+  "description": "Dedicated server 0.24d (subrosadedicated024d.exe), lifted by tools/lift/lift.py",
+  "harness": "build/hook/harness.exe",
+  "image": "build/hook/024d_fixed.exe",
+  "lifted_c": "src/lifted/lifted_024d.c",
+  "table": "src/lifted/lifted_table.c",
+  "hand_hooks": "hook/hooks_024d.c",
+  "full_run_paths": [
+    "src/lifted/lift_support.h",
+    "src/lifted/x87_intrinsics.c",
+    "src/lifted/lifted_table.c",
+    "src/tests",
+    "src/platform",
+    "src/server",
+    "src/include",
+    "hook/verify.c",
+    "hook/verify.h",
+    "hook/hook.c",
+    "hook/imports.c",
+    "CMakeLists.txt"
+  ],
+  "recordings_dir": "build/recordings",
+  "recordings": [
+    {"name": "play-20261012"},
+    {"name": "20261013-1016-smoke"},
+    {"name": "20261013-query"},
+    {"name": "20261013-195210"},
+    {"name": "20261015-friend"},
+    {"name": "murilo-20261015", "synth": true},
+    {"name": "round-20261015-0141", "synth": true}
+  ],
+  "synth": "tools/recording/synth_calls.txt",
+  "out_dir": "build/gate/ded024d"
+}

@@ -35,7 +35,11 @@
    powershell -File tools\autotest.ps1 -Seconds 180
    ```
 
-4. Or all of it in one command: `bash tools/lift/pipeline.sh` (add `--params` after a change to `analysis/024d/params.csv`). The last step is `tools/lift/gate.py`: the harness on every recording of `tools/lift/gate_recordings.txt`, compared function by function with `build/gate/baseline.json`. It fails when a "calls same" count drops or a new difference appears. After a good run, `python -I tools/lift/gate.py --from-files --update` saves the results as the new baseline.
+4. Or all of it in one command: `bash tools/lift/pipeline.sh` (add `--params` after a change to `analysis/024d/params.csv`). The last step is `tools/lift/gate.py`: the harness on every recording of the target `tools/lift/targets/ded024d.json`, compared function by function with `build/gate/ded024d/baseline.json`. It fails when a "calls same" count drops or a new difference appears. After a good run, `python -I tools/lift/gate.py --from-files --update` saves the results as the new baseline.
+
+   Faster gates: `--changed` runs only the functions whose lifted C differs from git `HEAD` (`--ref` for another version). The harness calls the other game functions through the image, so an unchanged function gives the same results; the script keeps their baseline values. A change in a file of the target's `full_run_paths` (the harness, the verifier, `lift_support.h`...) runs everything. `--jobs N` runs N harnesses at the same time (default 2; each one needs about 1 GB of commit). Run a full gate before a push.
+
+   Other binaries (the client, another server version) get their own target file: harness, image, lifted C and table, recordings, output folder. `gate.py --target <name>` uses it.
 
 ## What the lifter does
 
