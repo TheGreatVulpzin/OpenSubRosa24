@@ -27,6 +27,11 @@ typedef struct SvHook {
 /* Log to subvulpes.log, in the folder of the executable. */
 void sv_log(const char *fmt, ...);
 
+/* Remove one installed hook (hook.c). Game thread only. */
+int sv_unhook_rva(uint32_t rva);
+int sv_rehook_rva(uint32_t rva);
+int sv_unhooked_count(void);
+
 /* Server console (console.c): banner, window title and [SubVulpes] event lines. */
 void sv_console_init(const char *mode, int hooks);
 void sv_console_event(int error, const char *fmt, ...);

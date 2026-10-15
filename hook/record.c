@@ -29,15 +29,15 @@
 #include "sr_runtime.h"
 #include "verify.h"
 
-#define RECORD_MAX 24
+#define RECORD_MAX 24      /* calls of a tested function (and of a record-only hook) */
 #define RECORD_FUNCS 1024
 #define BLOB 256
 
 static int g_record = -1;
 static FILE *g_args;
 static volatile long g_written_calls;  /* calls in sv_args.txt (console title) */
-static uint32_t g_seen[RECORD_FUNCS][RECORD_MAX];
-static unsigned char g_count[RECORD_FUNCS];
+static uint32_t *g_seen[RECORD_FUNCS];  /* hashes of the recorded calls of each function */
+static int g_count[RECORD_FUNCS], g_cap[RECORD_FUNCS];
 static uint32_t g_image_size;
 
 static int open_args(void);
@@ -54,12 +54,6 @@ static uint32_t hash_args(const uint32_t *a, int n)
 static int readable(const void *p, size_t n)
 {
     MEMORY_BASIC_INFORMATION mi;
-    /* The image of the 024d is always mapped. VirtualQuery on its 636 MB .data takes about
-     * 1 ms (Windows measures the whole region), and building_load reads thousands of 4-byte
-     * values: recording took 15 seconds per building. */
-    if (g_image_size && n <= g_image_size && (uintptr_t)p >= sr_base &&
-        (uintptr_t)p - sr_base <= g_image_size - n)  /* no overflow for p near 0xffffffff */
-        return 1;
     /* The image of the 024d is always mapped. VirtualQuery on its 636 MB .data takes about
      * 1 ms (Windows measures the whole region), and building_load reads thousands of 4-byte
      * values: recording took 15 seconds per building. */
@@ -83,19 +77,198 @@ static void exe_path(char *out, size_t n, const char *file)
     strncat(out, file, n - strlen(out) - 1);
 }
 
+static int g_snap_done;  /* sv_snapshot_check finished (or snapshot_after=0) */
+
+/* ------------------------------------------------------------ what to record
+ *
+ * Each hook costs time on every call: the thunk (FXSAVE, the recorder) runs before the
+ * original. With 277 hooks the server fell from 60 to 15-25 ticks per second. With
+ * original_only=1 (a recording session) only some functions keep their hook:
+ *
+ *   untested   record_focus.txt, "untested": no recording has a call yet. Always hooked,
+ *              every call with new arguments is recorded, no limit.
+ *   diff       record_focus.txt, "diff": the harness finds a difference. Always hooked
+ *              until record_diff_max calls (default 32), then rotation.
+ *   tested     all other functions: they have calls in older recordings. No hook, except
+ *              in the rotation: every record_rotate_sec seconds (default 180), the next
+ *              record_rotate_count functions (default 15) get their hook for
+ *              record_rotate_window seconds (default 3) and can record record_rotate_extra
+ *              (default 8) new calls in the whole session.
+ *
+ * sv_args.txt stops growing at record_total_mb (default 200).
+ * Hooks are removed and put back only on the game thread (inside a hook): the rotation
+ * runs from sv_rec_begin, which the record-only hook of servercycle calls every tick.
+ */
+
+enum { CLS_TESTED, CLS_UNTESTED, CLS_DIFF };
+
+static int rotation_runs(void);  /* record_imports=1: sv_rec_begin runs every tick */
+
+typedef struct Focus {
+    uint32_t rva;
+    int cls;
+} Focus;
+
+static Focus *g_focus;
+static int g_nfocus, g_focus_loaded;
+static int g_diff_max = 32, g_rot_sec = 180, g_rot_count = 15, g_rot_window = 3, g_rot_extra = 8;
+static long long g_total_max = 200ll << 20;
+static int g_extra[RECORD_FUNCS];       /* rotation calls recorded per function */
+static uint32_t g_tested[RECORD_FUNCS];  /* tested functions seen (rotation list) */
+static int g_ntested, g_rot_next, g_rot_active[64], g_nrot_active;
+static DWORD g_rot_last, g_rot_end;
+
+static int cmp_focus(const void *a, const void *b)
+{
+    uint32_t x = ((const Focus *)a)->rva, y = ((const Focus *)b)->rva;
+    return x < y ? -1 : x > y;
+}
+
+/* record_focus.txt next to the server: one function per line, "0x1d4d0 untested name". */
+static void load_focus(void)
+{
+    char path[MAX_PATH], line[256];
+    FILE *f;
+    int cap = 0;
+    g_focus_loaded = 1;
+    g_diff_max = sv_config_int("record_diff_max", 32);
+    g_rot_sec = sv_config_int("record_rotate_sec", 180);
+    g_rot_count = sv_config_int("record_rotate_count", 15);
+    g_rot_window = sv_config_int("record_rotate_window", 3);
+    g_rot_extra = sv_config_int("record_rotate_extra", 8);
+    g_total_max = (long long)sv_config_int("record_total_mb", 200) << 20;
+    if (g_rot_count > 64)
+        g_rot_count = 64;
+    exe_path(path, sizeof path, "record_focus.txt");
+    f = fopen(path, "r");
+    if (!f) {
+        sv_log("record: no record_focus.txt, all functions are in the rotation");
+        return;
+    }
+    while (fgets(line, sizeof line, f)) {
+        char cls[32];
+        unsigned rva;
+        if (line[0] == '#' || sscanf(line, "%x %31s", &rva, cls) != 2)
+            continue;
+        if (g_nfocus == cap) {
+            cap = cap ? cap * 2 : 64;
+            g_focus = realloc(g_focus, cap * sizeof(Focus));
+        }
+        g_focus[g_nfocus].rva = rva;
+        g_focus[g_nfocus].cls = strcmp(cls, "diff") == 0 ? CLS_DIFF : CLS_UNTESTED;
+        g_nfocus++;
+    }
+    fclose(f);
+    qsort(g_focus, (size_t)g_nfocus, sizeof(Focus), cmp_focus);
+    sv_log("record: %d functions in record_focus.txt", g_nfocus);
+}
+
+static int focus_class(uint32_t rva)
+{
+    Focus key, *found;
+    key.rva = rva;
+    found = g_nfocus ? bsearch(&key, g_focus, (size_t)g_nfocus, sizeof(Focus), cmp_focus) : NULL;
+    return found ? found->cls : CLS_TESTED;
+}
+
+static int in_rotation(uint32_t rva)
+{
+    int i;
+    for (i = 0; i < g_nrot_active; i++)
+        if (g_tested[g_rot_active[i]] == rva)
+            return 1;
+    return 0;
+}
+
+static int args_full(void)
+{
+    return g_total_max > 0 && g_args && _ftelli64(g_args) >= g_total_max;
+}
+
+/* Remove a hook in a recording session. */
+static void drop_hook(uint32_t rva)
+{
+    if (sv_original_only() && sv_unhook_rva(rva) && sv_unhooked_count() % 50 == 1)
+        sv_log("record: %d hooks removed", sv_unhooked_count());
+}
+
+/* The rotation of the tested functions. Game thread (sv_rec_begin). */
+static void rotate(void)
+{
+    DWORD now = GetTickCount();
+    int i;
+    if (!sv_original_only() || !g_ntested)
+        return;
+    if (g_nrot_active && (int)(now - g_rot_end) >= 0) {
+        for (i = 0; i < g_nrot_active; i++)
+            sv_unhook_rva(g_tested[g_rot_active[i]]);
+        g_nrot_active = 0;
+    }
+    if (g_nrot_active || now - g_rot_last < (DWORD)g_rot_sec * 1000u)
+        return;
+    g_rot_last = now;
+    for (i = 0; i < g_ntested && g_nrot_active < g_rot_count; i++) {
+        int k = (g_rot_next + i) % g_ntested;
+        if (sv_rehook_rva(g_tested[k]))
+            g_rot_active[g_nrot_active++] = k;
+    }
+    g_rot_next = (g_rot_next + i) % g_ntested;
+    g_rot_end = now + (DWORD)g_rot_window * 1000u;
+}
+
 void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
 {
     uint32_t h;
-    int i, k;
+    int i, k, cls, limit;
     if (g_record < 0)
         g_record = sv_config_int("record_args", 0) && open_args();
-    if (!g_record || index < 0 || index >= RECORD_FUNCS || g_count[index] >= RECORD_MAX || sv_verify_busy())
+    if (!g_record || index < 0 || index >= RECORD_FUNCS || sv_verify_busy())
+        return;
+    if (!g_focus_loaded)
+        load_focus();
+    cls = focus_class(rva);
+    /* Verification sessions (original_only=0) keep the old rule: RECORD_MAX calls, no hook
+     * removal (the verifier needs the hooks). */
+    if (!sv_original_only())
+        limit = RECORD_MAX;
+    else if (cls == CLS_UNTESTED)
+        limit = 1 << 30;
+    else if (cls == CLS_DIFF && g_count[index] < g_diff_max)
+        limit = g_diff_max;
+    else if (in_rotation(rva) && g_extra[index] < g_rot_extra)
+        limit = g_count[index] + 1;
+    else
+        limit = 0;
+    if (sv_original_only() && cls != CLS_UNTESTED && limit == 0) {
+        /* A tested function (or a diff function with its calls): no hook outside the
+         * rotation. Remember it for the rotation. */
+        for (k = 0; k < g_ntested && g_tested[k] != rva; k++)
+            ;
+        if (k == g_ntested && g_ntested < RECORD_FUNCS)
+            g_tested[g_ntested++] = rva;
+        /* The hooks take the snapshot (sv_note_call) unless the rotation runs: without
+         * record_imports, keep them until the snapshot is written. */
+        if (g_snap_done || rotation_runs())
+            drop_hook(rva);
+        return;
+    }
+    if (g_count[index] >= limit || args_full())
         return;
     h = hash_args(args, ndw);
     for (k = 0; k < g_count[index]; k++)
         if (g_seen[index][k] == h)
             return;
+    if (g_count[index] == g_cap[index]) {
+        int cap = g_cap[index] ? g_cap[index] * 2 : 32;
+        uint32_t *seen = realloc(g_seen[index], (size_t)cap * sizeof(uint32_t));
+        if (!seen)
+            return;
+        g_seen[index] = seen;
+        g_cap[index] = cap;
+    }
     g_seen[index][g_count[index]++] = h;
+    if (cls != CLS_UNTESTED && in_rotation(rva))
+        g_extra[index]++;
 
     fprintf(g_args, "R %x", rva);
     for (i = 0; i < ndw; i++) {
@@ -235,6 +408,18 @@ static int func_slot(uint32_t rva)
     return g_rec_nfuncs++;
 }
 
+static int rotation_runs(void)
+{
+    return g_rec_imports > 0;
+}
+
+/* Calls of a record-only (side-effect) function: more for a diff or untested function. */
+static int rec_limit(uint32_t rva)
+{
+    int cls = focus_class(rva);
+    return cls == CLS_DIFF ? (g_diff_max < 250 ? g_diff_max : 250) : cls == CLS_UNTESTED ? 250 : RECORD_MAX;
+}
+
 void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
 {
     int d = t_depth, i;
@@ -256,8 +441,16 @@ void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
     memset(&t_scope[d], 0, sizeof t_scope[d]);
     if (!g_rec_imports)
         return;
+    if (d == 0) {
+        /* Once per outer call on the game thread: the rotation of the hooks and the
+         * snapshot (the lifted hooks are mostly removed, so sv_note_call is rare). */
+        if (!g_focus_loaded)
+            load_focus();
+        rotate();
+        sv_snapshot_check();
+    }
     t_scope[d].idx = func_slot(rva);
-    if (t_scope[d].idx < 0 || g_rec_count[t_scope[d].idx] >= RECORD_MAX)
+    if (t_scope[d].idx < 0 || g_rec_count[t_scope[d].idx] >= rec_limit(rva))
         return;
     /* The first REC_FIRST calls of a function are always recorded (the startup functions run
      * once). After that, one call in record_every, so the records of the tick functions
@@ -308,7 +501,7 @@ uint32_t sv_rec_end(uint32_t eax)
                 h = (h ^ (unsigned char)s->buf[i]) * 16777619u;
             for (k = 0; k < g_rec_count[s->idx]; k++)
                 dup |= g_rec_seen[s->idx][k] == h;
-            if (!dup && !s->dropped && g_rec_count[s->idx] < RECORD_MAX) {
+            if (!dup && !s->dropped && g_rec_count[s->idx] < rec_limit(g_rec_rva[s->idx]) && !args_full()) {
                 g_rec_seen[s->idx][g_rec_count[s->idx]++] = h;
                 fwrite(s->buf, 1, s->len, g_args);
                 fflush(g_args);
@@ -409,16 +602,66 @@ void sv_ev_end(void)
             scope_add(&t_scope[d], g_line, g_line_len);
 }
 
+/* The snapshot is a frozen moment of the game: the copy into memory runs on the game thread
+ * (about 0.1 s for 230 MB), the slow write to the disk runs on its own thread. Writing on
+ * the game thread froze the server for seconds, and then it ran extra ticks to catch up. */
+typedef struct SnapBuf {
+    uint8_t *data;
+    size_t len;
+} SnapBuf;
+
+static void snap_put(SnapBuf *b, const void *p, size_t n)
+{
+    memcpy(b->data + b->len, p, n);
+    b->len += n;
+}
+
+static DWORD WINAPI snapshot_writer(LPVOID arg)
+{
+    SnapBuf *b = arg;
+    char path[MAX_PATH];
+    HANDLE f;
+    size_t done = 0;
+    exe_path(path, sizeof path, "sv_snapshot.bin");
+    f = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    /* WriteFile in 16 MB parts: one call with the whole buffer can fail. */
+    while (f != INVALID_HANDLE_VALUE && done < b->len) {
+        DWORD part = (DWORD)(b->len - done < (16u << 20) ? b->len - done : (16u << 20)), wrote = 0;
+        if (!WriteFile(f, b->data + done, part, &wrote, NULL) || wrote == 0)
+            break;
+        done += wrote;
+    }
+    if (f != INVALID_HANDLE_VALUE)
+        CloseHandle(f);
+    if (done == b->len) {
+        sv_log("snapshot of .data written to sv_snapshot.bin (%u MB)", (unsigned)(b->len >> 20));
+        sv_console_event(0, "snapshot saved: sv_snapshot.bin");
+    } else {
+        sv_log("ERROR snapshot: wrote %u of %u MB of sv_snapshot.bin (error %lu)", (unsigned)(done >> 20),
+               (unsigned)(b->len >> 20), GetLastError());
+    }
+    VirtualFree(b->data, 0, MEM_RELEASE);
+    free(b);
+    return 0;
+}
+
 void sv_snapshot_check(void)
 {
     static int after = -1, done;
     static DWORD start;
-    char path[MAX_PATH];
     const uint8_t *data;
-    size_t size, page;
+    size_t size, page, npages, total;
     uint32_t data_rva, base, magic = 0x50414e53; /* "SNAP" */
+    uint32_t end = 0xffffffffu, heap = 0;
     unsigned short cw;
-    FILE *f;
+    uint8_t *used;
+    MEMORY_BASIC_INFORMATION *regions = NULL;
+    int nregions = 0, cap = 0, r;
+    uintptr_t a = 0x10000;
+    MEMORY_BASIC_INFORMATION mi;
+    SnapBuf *b;
+    HANDLE th;
+    DWORD t0;
 
     if (done)
         return;
@@ -426,61 +669,91 @@ void sv_snapshot_check(void)
         after = sv_config_int("snapshot_after", 0);
         start = GetTickCount();
         if (after <= 0) {
-            done = 1;
+            done = g_snap_done = 1;
             return;
         }
     }
     if (GetTickCount() - start < (DWORD)after * 1000u || sv_verify_busy())
         return;
-    done = 1;
+    done = g_snap_done = 1;
     if (!sv_verify_data(&data, &size))
         return;
-    exe_path(path, sizeof path, "sv_snapshot.bin");
-    f = fopen(path, "wb");
-    if (!f)
-        return;
+    t0 = GetTickCount();
     __asm fnstcw cw
     base = (uint32_t)sr_base;
     data_rva = (uint32_t)((uintptr_t)data - sr_base);
-    fwrite(&magic, 4, 1, f);
-    fwrite(&base, 4, 1, f);
-    fwrite(&data_rva, 4, 1, f);
-    fwrite(&size, 4, 1, f);
-    fwrite(&cw, 2, 1, f);
-    for (page = 0; page < size / 4096; page++) {
+
+    /* Pass 1: the .data pages that are not all zero, and the heap regions. The game also
+     * keeps pointers to heap memory in .data: every committed private read/write region
+     * goes into the file with its address (the harness maps it at the same address). */
+    npages = size / 4096;
+    used = calloc(npages, 1);
+    if (!used)
+        return;
+    total = 18;  /* header */
+    for (page = 0; page < npages; page++) {
         const uint32_t *w = (const uint32_t *)(data + page * 4096);
-        int k, nonzero = 0;
-        for (k = 0; k < 1024 && !nonzero; k++)
-            nonzero = w[k] != 0;
-        if (nonzero) {
-            uint32_t idx = (uint32_t)page;
-            fwrite(&idx, 4, 1, f);
-            fwrite(w, 4096, 1, f);
-        }
+        int k;
+        for (k = 0; k < 1024 && !used[page]; k++)
+            used[page] = w[k] != 0;
+        if (used[page])
+            total += 4 + 4096;
     }
-    {
-        /* The game also keeps pointers to heap memory in .data. Write every committed
-         * private read/write region (heaps, malloc blocks), with its address: the harness
-         * maps them at the same addresses. End of .data pages: index 0xffffffff. */
-        uint32_t end = 0xffffffffu, total = 0;
-        uintptr_t a = 0x10000;
-        MEMORY_BASIC_INFORMATION mi;
-        fwrite(&end, 4, 1, f);
-        while (a < 0x7fff0000 && VirtualQuery((void *)a, &mi, sizeof mi)) {
-            if (mi.State == MEM_COMMIT && mi.Type == MEM_PRIVATE && mi.Protect == PAGE_READWRITE) {
-                uint32_t rbase = (uint32_t)(uintptr_t)mi.BaseAddress, rsize = (uint32_t)mi.RegionSize;
-                fwrite(&rbase, 4, 1, f);
-                fwrite(&rsize, 4, 1, f);
-                fwrite(mi.BaseAddress, rsize, 1, f);
-                total += rsize;
+    total += 4;  /* end of the .data pages */
+    while (a < 0x7fff0000 && VirtualQuery((void *)a, &mi, sizeof mi)) {
+        if (mi.State == MEM_COMMIT && mi.Type == MEM_PRIVATE && mi.Protect == PAGE_READWRITE &&
+            (const uint8_t *)mi.BaseAddress != used) {
+            if (nregions == cap) {
+                cap = cap ? cap * 2 : 64;
+                regions = realloc(regions, (size_t)cap * sizeof mi);
             }
-            a = (uintptr_t)mi.BaseAddress + mi.RegionSize;
+            regions[nregions++] = mi;
+            total += 8 + mi.RegionSize;
         }
-        sv_log("snapshot: %u KB of heap regions", total / 1024);
+        a = (uintptr_t)mi.BaseAddress + mi.RegionSize;
     }
-    fclose(f);
-    sv_log("snapshot of .data written to sv_snapshot.bin");
-    sv_console_event(0, "snapshot saved: sv_snapshot.bin");
+
+    /* Pass 2: copy. The buffer is allocated after the region list, so it is not in it. */
+    b = malloc(sizeof *b);
+    if (b)
+        b->data = VirtualAlloc(NULL, total, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    if (!b || !b->data) {
+        sv_log("ERROR snapshot: no memory for a %u MB copy", (unsigned)(total >> 20));
+        free(b);
+        free(used);
+        free(regions);
+        return;
+    }
+    b->len = 0;
+    snap_put(b, &magic, 4);
+    snap_put(b, &base, 4);
+    snap_put(b, &data_rva, 4);
+    snap_put(b, &size, 4);
+    snap_put(b, &cw, 2);
+    for (page = 0; page < npages; page++) {
+        if (used[page]) {
+            uint32_t idx = (uint32_t)page;
+            snap_put(b, &idx, 4);
+            snap_put(b, data + page * 4096, 4096);
+        }
+    }
+    snap_put(b, &end, 4);
+    for (r = 0; r < nregions; r++) {
+        uint32_t rbase = (uint32_t)(uintptr_t)regions[r].BaseAddress, rsize = (uint32_t)regions[r].RegionSize;
+        snap_put(b, &rbase, 4);
+        snap_put(b, &rsize, 4);
+        snap_put(b, regions[r].BaseAddress, rsize);
+        heap += rsize;
+    }
+    free(used);
+    free(regions);
+    sv_log("snapshot: copied in %lu ms (%u KB of heap regions), writing on a thread", GetTickCount() - t0,
+           heap / 1024);
+    th = CreateThread(NULL, 0, snapshot_writer, b, 0, NULL);
+    if (th)
+        CloseHandle(th);
+    else
+        snapshot_writer(b);
 }
 
 void sv_record_stats(int *calls, long long *bytes)

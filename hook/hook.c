@@ -11,7 +11,9 @@
 
 uintptr_t sr_base;
 
-static char g_dir[MAX_PATH];  /* folder of the executable, with a trailing backslash */
+static char g_dir[MAX_PATH];
+static SvHook *g_installed[1024];  /* installed hooks, for sv_unhook_rva */
+static int g_ninstalled, g_unhooked;  /* folder of the executable, with a trailing backslash */
 
 static const char *exe_dir(void)
 {
@@ -115,7 +117,63 @@ static int install(SvHook *h)
     FlushInstructionCache(GetCurrentProcess(), site, h->prologue_len);
 
     h->installed = 1;
+    if (g_ninstalled < (int)(sizeof g_installed / sizeof g_installed[0]))
+        g_installed[g_ninstalled++] = h;
     return 1;
+}
+
+/* Put the original prologue back: the function runs with no hook from now on. The
+ * trampoline holds the original bytes (a relative prologue is never hooked). Call it only
+ * on the game thread, from inside a hook: no other thread runs game code. */
+int sv_unhook_rva(uint32_t rva)
+{
+    int i;
+    for (i = 0; i < g_ninstalled; i++) {
+        SvHook *h = g_installed[i];
+        uint8_t *site;
+        DWORD old;
+        if (!h->installed || h->rva != rva || !h->original || !*h->original)
+            continue;
+        site = (uint8_t *)(sr_base + h->rva);
+        if (!VirtualProtect(site, h->prologue_len, PAGE_EXECUTE_READWRITE, &old))
+            return 0;
+        memcpy(site, *h->original, h->prologue_len);
+        VirtualProtect(site, h->prologue_len, old, &old);
+        FlushInstructionCache(GetCurrentProcess(), site, h->prologue_len);
+        h->installed = 0;
+        g_unhooked++;
+        return 1;
+    }
+    return 0;
+}
+
+/* Put a removed hook back (the rotation of the recorder). Game thread only. */
+int sv_rehook_rva(uint32_t rva)
+{
+    int i;
+    for (i = 0; i < g_ninstalled; i++) {
+        SvHook *h = g_installed[i];
+        uint8_t *site;
+        DWORD old;
+        if (h->installed || h->rva != rva)
+            continue;
+        site = (uint8_t *)(sr_base + h->rva);
+        if (!VirtualProtect(site, h->prologue_len, PAGE_EXECUTE_READWRITE, &old))
+            return 0;
+        write_jmp(site, h->replacement);
+        memset(site + 5, 0xCC, h->prologue_len - 5);
+        VirtualProtect(site, h->prologue_len, old, &old);
+        FlushInstructionCache(GetCurrentProcess(), site, h->prologue_len);
+        h->installed = 1;
+        g_unhooked--;
+        return 1;
+    }
+    return 0;
+}
+
+int sv_unhooked_count(void)
+{
+    return g_unhooked;
 }
 
 int sv_install_hooks(SvHook *hooks, int count)

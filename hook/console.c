@@ -16,6 +16,10 @@
 #include <string.h>
 
 #include "hook.h"
+#include "sr_runtime.h"
+
+/* game.ticks (RVA 0x90dc578): the server adds 1 per game tick. */
+#define RVA_TICKS 0x90dc578u
 
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
@@ -119,22 +123,36 @@ static void format_mb(char *out, size_t n, long long bytes)
 /* Title every 2 seconds, summary every 5 minutes. */
 static DWORD WINAPI status_thread(LPVOID unused)
 {
-    DWORD last_summary = GetTickCount();
+    DWORD last_summary = GetTickCount(), last = GetTickCount();
+    int last_ticks = *(volatile int *)(sr_base + RVA_TICKS), min_tps = 1 << 30;
     (void)unused;
     for (;;) {
-        int calls;
+        int calls, ticks, tps;
         long long bytes;
         char title[256], mb[32];
+        DWORD now;
         Sleep(2000);
+        /* Game ticks per second: the game slows down when this falls. */
+        now = GetTickCount();
+        ticks = *(volatile int *)(sr_base + RVA_TICKS);
+        tps = now > last ? (int)((long long)(ticks - last_ticks) * 1000 / (long long)(now - last)) : 0;
+        last = now;
+        last_ticks = ticks;
+        if (tps < min_tps)
+            min_tps = tps;
         sv_record_stats(&calls, &bytes);
         format_mb(mb, sizeof mb, bytes);
-        snprintf(title, sizeof title, "Sub Rosa 024d + SubVulpes | %s | %d calls recorded, %s", g_mode, calls, mb);
+        snprintf(title, sizeof title, "Sub Rosa 024d + SubVulpes | %s | %d ticks/s | %d calls recorded, %s", g_mode,
+                 tps, calls, mb);
         SetConsoleTitleA(title);
         if (GetTickCount() - last_summary >= 5 * 60 * 1000) {
             DWORD up = (GetTickCount() - g_start) / 1000;
             last_summary = GetTickCount();
-            sv_console_event(0, "%s%02lu:%02lu:%02lu%s  %d calls recorded, %s", g_color ? GRAY : "", up / 3600,
-                             up / 60 % 60, up % 60, g_color ? RESET : "", calls, mb);
+            sv_console_event(0, "%s%02lu:%02lu:%02lu%s  %d ticks/s (lowest %d)  %d calls recorded, %s",
+                             g_color ? GRAY : "", up / 3600, up / 60 % 60, up % 60, g_color ? RESET : "", tps, min_tps,
+                             calls, mb);
+            sv_log("status: %d ticks/s (lowest %d in 5 min), %d calls recorded", tps, min_tps, calls);
+            min_tps = 1 << 30;
         }
     }
 }
