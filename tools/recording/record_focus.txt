@@ -3,16 +3,13 @@
 # All other lifted functions are hooked only in the rotation.
 # Format: rva class name
 0x29a0 untested loadblock
-0x5f20 untested player_calcassets
 0x5fe0 untested player_saveinventory
 0x68d0 untested createevent_updatecarmarket
-0xab20 untested scenario_setmissioninactive
 0xddb0 untested pbitwritenego
 0x14600 untested createcityobject
 0x146a0 untested lineintersectcityobject
 0x154b0 untested city_createelevator
 0x16a20 untested playerteamkilltax
-0x1d9e0 untested multiply3x3matrices
 0x225e0 untested getobjectrotation3
 0x286b0 untested createmission_transaction
 0x30f00 untested item_sphereintersect
@@ -24,3 +21,4 @@
 0x5ae70 untested logicsimulation_round
 0x4ed30 diff serversend
 0x8cf0 diff logic_addteamcash
+0x51060 diff humansimulation
