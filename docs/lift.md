@@ -124,6 +124,7 @@ The Ghidra project is not versioned. Make a backup before `ApplyTypes.java` or `
 - The index of a `PTRADD` is relocated when `index * element size` is a relocated value (`LF_RELOC`).
 - A RAM address without a symbol (`ram0x1992d6ed`) becomes a pointer access to `SR_VA()`.
 - Each token changes once, so no address gets two relocations. The old regex rules did this twice for the `serversend` tick.
+- A string literal can be the base of a folded difference (`stringsWithDelta`). The inline `strcpy` of MSVC loads the source S and the destination D and copies with `mov [esi + ecx], dl`, where `esi = D - S`. Ghidra folds `D - S` into one constant: `pcVar14[iVar7 + 0x13a503c] = cVar1` for `"objectsim"`. In C the literal is in the hook DLL, so the copy wrote far away from D. Live with `verify=0`, `objectsimulation`, `humansimulation` and `bondsimulation2` crashed on call 1 (write access inside the DLL). With `verify=1` the write fell on writable memory and nothing showed. The rule prints the string as `SR_VA(S)` when a constant c of the function gives `S + c` = a relocated value in another section. Ghidra can start the loop one byte before the string (`"?humansim"`): S is then the token plus a small k, and the text is `SR_VA(S) - k`. All 17 cases are the profiler names (`timer[i].name`).
 
 ## Pieces of expressions
 

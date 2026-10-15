@@ -38,6 +38,8 @@ target_compile_options(sv_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(sv_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
 # Static CRT: the DLL does not depend on a redistributable.
 set_property(TARGET sv_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+# Map file (build/hook/wsock32.map): turns a crash offset "WSOCK32.dll+0x..." into a function name.
+target_link_options(sv_wsock32 PRIVATE /MAP)
 
 add_executable(check_types src/tests/check_types.c)
 target_include_directories(check_types PRIVATE src/include)

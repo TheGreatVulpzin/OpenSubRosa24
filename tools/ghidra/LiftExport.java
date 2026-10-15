@@ -920,6 +920,7 @@ public class LiftExport extends GhidraScript {
             all.add(v);
         }
         if (all.isEmpty()) return;
+        stringsWithDelta(t, all);
         for (int i = 0; i < t.size(); i++) {
             if (replaceSpans.containsKey(i) || !(t.get(i) instanceof ClangVariableToken)) continue;
             ClangToken tok = t.get(i);
@@ -960,6 +961,54 @@ public class LiftExport extends GhidraScript {
             if (rel != null)
                 replaceSpans.put(i, new Object[] { i, neg ? "(-" + rel + ")" : rel });
         }
+    }
+
+    /* A string literal that the code uses as the base of a folded address difference. An
+     * inline strcpy of MSVC loads the source S and the destination D, then copies with
+     * "mov [esi + ecx], dl" where esi = D - S. Ghidra folds D - S into one constant:
+     * "pcVar14[iVar7 + 0x13a503c] = cVar1" for "objectsim" in objectsimulation. In C the
+     * literal is in the hook DLL, so the copy wrote to S' + D - S, far away from D. When a
+     * constant c of the function gives S + c = a relocated value, print the string as the
+     * relocated S: the exe keeps the same text, and S + c points to D again. Ghidra can
+     * rotate the loop and start one byte before the string ("?humansim" in humansimulation
+     * is S - 1, with "pcVar11 = pcVar11 + 1" first): S is then the token plus a small k. */
+    private void stringsWithDelta(List<ClangToken> t, Set<Long> all) {
+        Set<Long> consts = new HashSet<>();
+        for (ClangToken tok : t) {
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null) continue;
+            for (Varnode in : op.getInputs())
+                if (in != null && in.isConstant()) consts.add(in.getOffset() & 0xffffffffL);
+        }
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (replaceSpans.containsKey(i) || !(tok instanceof ClangVariableToken) || !tok.getText().startsWith("\""))
+                continue;
+            Varnode vn = ((ClangVariableToken) tok).getVarnode();
+            if (vn == null || !vn.isConstant()) continue;
+            String rep = null;
+            for (long k = 0; k <= 4 && rep == null; k++) {
+                long s = (vn.getOffset() + k) & 0xffffffffL;
+                ghidra.program.model.mem.MemoryBlock from = block(s);
+                if (!all.contains(s) || from == null) continue;
+                for (long c : consts) {
+                    long d = (s + c) & 0xffffffffL;
+                    // The destination is in another section (.data): a small constant that leads
+                    // to the next string in .rdata is an offset, not a folded difference.
+                    if (c != 0 && c != s && all.contains(d) && block(d) != null && block(d) != from) {
+                        rep = k == 0 ? String.format("((char *)SR_VA(0x%x))", s)
+                                : String.format("((char *)SR_VA(0x%x) - %d)", s, k);
+                        break;
+                    }
+                }
+            }
+            if (rep != null) replaceSpans.put(i, new Object[] { i, rep });
+        }
+    }
+
+    private ghidra.program.model.mem.MemoryBlock block(long va) {
+        return currentProgram.getMemory().getBlock(
+                currentProgram.getAddressFactory().getDefaultAddressSpace().getAddress(va));
     }
 
     /* "((int)SR_VA(0xV))" or "((int)SR_VA(0xV) + d)" for a value V that the loader relocates. */
@@ -1392,7 +1441,11 @@ public class LiftExport extends GhidraScript {
 
     private void calls(StringBuilder sb, Function f) {
         boolean first = true;
-        for (Function c : f.getCalledFunctions(monitor)) {
+        // Sorted by address: getCalledFunctions is a hash set, and each export had another
+        // order of the #define lines in lifted_024d.c.
+        List<Function> called = new ArrayList<>(f.getCalledFunctions(monitor));
+        called.sort(Comparator.comparing(Function::getEntryPoint));
+        for (Function c : called) {
             Function t = c.isThunk() ? c.getThunkedFunction(true) : c;
             if (!first) sb.append(',');
             first = false;
