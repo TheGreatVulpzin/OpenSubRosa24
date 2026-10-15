@@ -221,8 +221,8 @@ static void tick(void)
 /* Original: dedicatedserverloop (RVA 0x5c8d0). */
 void __cdecl sr_dedicatedserverloop(void)
 {
-    uint32_t next;
-    int i, hours, catchup;
+    uint32_t next, status_ms;
+    int i, hours, catchup, status_ticks;
 
     g_printf(getmasterserverip() ? "connection successful\n" : "connection failed\n");
 
@@ -264,8 +264,19 @@ void __cdecl sr_dedicatedserverloop(void)
     /* 16 ms ticks. Behind by 16 ms or more: run up to 5 ticks, then wait again. After the
      * fourth tick in a row, the schedule restarts from now instead of catching up. */
     next = now_ms();
+    status_ms = next;
+    status_ticks = sr_game.ticks;
+    sv_log("own main loop: running (game ticks %d)", sr_game.ticks);
     for (;;) {
         g_sleep(1);
+        /* A status line every minute, so a log shows that this loop runs and how fast. */
+        if (now_ms() - status_ms >= 60000) {
+            uint32_t ms = now_ms() - status_ms;
+            sv_log("own main loop: %d ticks in %u ms (%.1f ticks/s)", sr_game.ticks - status_ticks, ms,
+                   (sr_game.ticks - status_ticks) * 1000.0 / ms);
+            status_ms += ms;
+            status_ticks = sr_game.ticks;
+        }
         catchup = 0;
         for (;;) {
             if (now_ms() - next < 16 || catchup > 4)
@@ -283,6 +294,7 @@ void __cdecl sr_dedicatedserverloop(void)
 /* Original: getpaths (RVA 0x5cd10), the main function. */
 void __cdecl sr_getpaths(void)
 {
+    sv_log("own main: getpaths runs");
     load_imports();
     debug_resetlogfile();
     getcpufrequency();
