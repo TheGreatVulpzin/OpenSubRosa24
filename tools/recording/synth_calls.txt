@@ -1,0 +1,47 @@
+# Hand-written calls for the harness, in the sv_args.txt format (hook/record.c).
+# They test functions that no recording reaches: the map has no elevator, and the
+# other functions need game situations that a short test session does not make.
+# The arguments are not real game calls. The object and item indices come from the
+# murilo-20261015 recording (object 0xb is a car with 4 wheels, items 0xd, 0x9, 0x2a, 0x27).
+# Use: cat <recording>/sv_args.txt tools/recording/synth_calls.txt > <tmp>/args.txt,
+# then run build/hook/harness.exe with <tmp>/args.txt. Lines that do not start with R are skipped.
+#
+# getobjectrotation3(float *out, int object)
+R 225e0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:b
+R 225e0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:0
+# objectwheelcollision2(int object, int wheel)
+R 4e2c0 V:b V:0
+R 4e2c0 V:b V:1
+R 4e2c0 V:b V:2
+R 4e2c0 V:b V:3
+# item_physicssimulation(int item)
+R 4cee0 V:d
+R 4cee0 V:9
+R 4cee0 V:2a
+R 4cee0 V:27
+# item_sphereintersect(int item, float *pos, float radius): radius 1.0 and 4.0
+R 30f00 V:d P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:3f800000
+R 30f00 V:2a P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:40800000
+# city_createelevator(float *pos)
+R 154b0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+# createcityobject(int type, float *pos, float rotation)
+R 14600 V:0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:0
+R 14600 V:1 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:3fc90fdb
+# lineintersectcityobject(float *a, float *b, float *out, int cityobject, float *normal, float *t)
+R 146a0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 P:0:0000000000c8c2420000000000 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 V:0 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 P:0:000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+# pbitwritenego(uint *value, uint bits)
+R ddb0 P:0:05000000 V:a
+R ddb0 P:0:ffffffff V:a
+R ddb0 P:0:00020000 V:10
+# createmission_transaction(int kind, int count, int *teams)
+R 286b0 V:0 V:2 P:0:0000000001000000
+R 286b0 V:1 V:3 P:0:000000000100000002000000
+# playerteamkilltax(int player, int damage)
+R 16a20 V:0 V:64
+# logic_createcar(int type, int team, int color)
+R 4e060 V:0 V:0 V:0
+# createevent_updatecarmarket(int slot)
+R 68d0 V:0
+R 68d0 V:1
+# logic_addteamcash(int team, float amount): 100.0
+R 8cf0 V:0 V:42c80000
