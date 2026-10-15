@@ -1345,6 +1345,19 @@ public class LiftExport extends GhidraScript {
             end = j;
         }
         if (end < k || depth != 0) return null;
+        // The CAST must be the root of the operand, not a cast inside it. humansimulation
+        // printed "local_c8 = (float)((float10)(float)local_c4 * ...)": the outer (float) is a
+        // FLOAT2FLOAT, and the CAST found first was the inner one (local_c4 is a Bone *). The
+        // conversion became LF_BITS_F, and human.unk_2b20 got 0 instead of 14.49.
+        // The inner CAST can reach the operand through a conversion with no token of its own
+        // ("(float10)"), so the test looks at the whole subtree of each operand op.
+        Set<PcodeOp> seen = new HashSet<>();
+        for (int j = k; j <= end; j++) {
+            PcodeOp op = t.get(j).getPcodeOp();
+            if (op == null || op == castOp || !seen.add(op)) continue;
+            for (int n = 0; n < op.getNumInputs(); n++)
+                if (subtree(op.getInput(n)).contains(castOp)) return null;
+        }
         return new int[] { close, end, castKind(castOp) };
     }
 

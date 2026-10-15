@@ -549,7 +549,7 @@ const LfEntry lf_table[] = {
     { "createplayer", 0x28020, (void *)lf_28020, 0, LF_RET_INT, 4, "" },
     { "scenario_armhuman", 0x28190, (void *)lf_28190, 3, LF_RET_INT, 4, "vvv" },
     { "createmission_threeway", 0x28230, (void *)lf_28230, 3, LF_RET_VOID, 4, "vvp" },
-    { "createmission_transaction", 0x286b0, (void *)lf_286b0, 3, LF_RET_VOID, 4, "vvv" },
+    { "createmission_transaction", 0x286b0, (void *)lf_286b0, 3, LF_RET_VOID, 4, "vvp" },
     { "objecttype_addwheel", 0x28a90, (void *)lf_28a90, 12, LF_RET_VOID, 4, "vvvvpvvvvvvv" },
     { "calculatepointscale", 0x28c90, (void *)lf_28c90, 4, LF_RET_VOID, 4, "pvvp" },
     { "objecttype_calcquadweights", 0x29300, (void *)lf_29300, 3, LF_RET_VOID, 4, "ppp" },

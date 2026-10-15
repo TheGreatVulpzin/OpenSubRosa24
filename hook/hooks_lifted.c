@@ -6265,10 +6265,10 @@ __declspec(naked) static void th_16960(void)
 }
 static uint8_t expect_16960[5] = { 0x55, 0x8b, 0x6c, 0x24, 0x08 };
 
-void __cdecl lf_16a20(float param_1, int param_2);
-static void (__cdecl *orig_16a20)(float, int);
+void __cdecl lf_16a20(int param_1, int param_2);
+static void (__cdecl *orig_16a20)(int, int);
 static SvVerify v_16a20 = { "playerteamkilltax", -1 };
-static void __cdecl hk_16a20(float param_1, int param_2)
+static void __cdecl hk_16a20(int param_1, int param_2)
 {
     SV_HOOK_VOID(v_16a20, lf_16a20(param_1, param_2), orig_16a20(param_1, param_2), NULL);
 }
@@ -8774,10 +8774,10 @@ __declspec(naked) static void th_28230(void)
 }
 static uint8_t expect_28230[8] = { 0x83, 0xec, 0x70, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_286b0(undefined4 param_1, int param_2, int param_3);
-static void (__cdecl *orig_286b0)(undefined4, int, int);
+void __cdecl lf_286b0(undefined4 param_1, int param_2, int * param_3);
+static void (__cdecl *orig_286b0)(undefined4, int, int *);
 static SvVerify v_286b0 = { "createmission_transaction", -1 };
-static void __cdecl hk_286b0(undefined4 param_1, int param_2, int param_3)
+static void __cdecl hk_286b0(undefined4 param_1, int param_2, int * param_3)
 {
     SV_HOOK_VOID(v_286b0, lf_286b0(param_1, param_2, param_3), orig_286b0(param_1, param_2, param_3), NULL);
 }

@@ -14541,62 +14541,62 @@ void __cdecl lf_16960(uint param_1)
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-void __cdecl lf_16a20(float param_1,int param_2)
+void __cdecl lf_16a20(int param_1,int param_2)
 
 {
   int iVar1;
   float fVar2;
   Player *pPVar3;
-  float fVar4;
+  int iVar4;
   int iVar5;
   int iVar6;
   
-  fVar4 = param_1;
-  if ((((uint)LF_BITS_U(param_1)) < 0x100) && (0 < param_2)) {
+  iVar4 = param_1;
+  if (((uint)param_1 < 0x100) && (0 < param_2)) {
     (*(uint *)((uchar *)&g_game + 48)) = 0x3d4ccccd;
-    iVar5 = g_player[((int)LF_BITS_U(param_1))].human_id;
+    iVar5 = g_player[param_1].human_id;
     if ((g_game.gametype == 4) && (iVar5 != -1)) {
       g_human[iVar5].health = g_human[iVar5].health - param_2;
       g_human[iVar5].bleeding = 1;
     }
     fVar2 = (float)(((float)param_2 * 0.05000000074505806) / 100.0);
-    g_player[((int)LF_BITS_U(param_1))].money = g_player[((int)LF_BITS_U(param_1))].money + param_2 * -100 + -1;
-    pPVar3 = g_player + ((int)LF_BITS_U(param_1));
+    g_player[param_1].money = g_player[param_1].money + param_2 * -100 + -1;
+    pPVar3 = g_player + param_1;
     if (0.0 <= fVar2) {
-      param_1 = fVar2;
+      param_1 = ((int)LF_BITS_U(fVar2));
       if (1.0 < fVar2) {
-        param_1 = 1.0;
+        param_1 = 0x3f800000;
       }
     }
     else {
-      param_1 = 0.0;
+      param_1 = 0;
     }
-    iVar5 = (int)(longlong)((float)pPVar3->money * param_1);
+    iVar5 = (int)(longlong)((float)pPVar3->money * LF_BITS_F(param_1));
     if (iVar5 < 0) {
       iVar5 = 0;
     }
-    iVar1 = g_player[((int)LF_BITS_U(fVar4))].team;
-    g_player[((int)LF_BITS_U(fVar4))].money = pPVar3->money - iVar5;
+    iVar1 = g_player[iVar4].team;
+    g_player[iVar4].money = pPVar3->money - iVar5;
     if (iVar1 != -1) {
-      param_1 = (float)(((float)((float)param_2 / 100.0)) * 0.05000000074505806);
-      if (0.0 <= param_1) {
-        if (1.0 < param_1) {
-          param_1 = 1.0;
+      param_1 = ((int)LF_BITS_U(((float)(((float)((float)param_2 / 100.0)) * 0.05000000074505806))));
+      if (0.0 <= LF_BITS_F(param_1)) {
+        if (1.0 < LF_BITS_F(param_1)) {
+          param_1 = 0x3f800000;
         }
       }
       else {
-        param_1 = 0.0;
+        param_1 = 0;
       }
-      iVar5 = g_player[((int)LF_BITS_U(fVar4))].stocks;
-      iVar6 = (int)(longlong)((float)iVar5 * param_1);
+      iVar5 = g_player[iVar4].stocks;
+      iVar6 = (int)(longlong)((float)iVar5 * LF_BITS_F(param_1));
       if ((iVar6 == 0) && (0 < iVar5)) {
         iVar6 = 1;
       }
       (&DAT_17579600)[iVar1 * 5] = (&DAT_17579600)[iVar1 * 5] - iVar6;
-      g_player[((int)LF_BITS_U(fVar4))].stocks = iVar5 - iVar6;
+      g_player[iVar4].stocks = iVar5 - iVar6;
     }
-    createevent_updateplayer(((int)LF_BITS_U(fVar4)));
-    createevent_updateplayer_finance(((int)LF_BITS_U(fVar4)));
+    createevent_updateplayer(iVar4);
+    createevent_updateplayer_finance(iVar4);
   }
   return;
 }
@@ -25220,7 +25220,7 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_VA(0x41b070))
 #define __security_check_cookie(x) ((void)0)
 #define local_68 (*(float *)(lf_frame + 0x18))
-#define local_64 (*(int *)(lf_frame + 0x1c))
+#define local_64 (*(int * *)(lf_frame + 0x1c))
 #define local_60 (*(int *)(lf_frame + 0x20))
 #define local_5c (*(float *)(lf_frame + 0x24))
 #define local_58 (*(float *)(lf_frame + 0x28))
@@ -25236,7 +25236,7 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #define local_30 (*(undefined4 *)(lf_frame + 0x50))
 #define local_2c (*(undefined4 *)(lf_frame + 0x54))
 #define aiStack_28 (*(int (*)[10])(lf_frame + 0x58))
-void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
+void __cdecl lf_286b0(undefined4 param_1,int param_2,int *param_3)
 
 {
   __declspec(align(16)) uchar lf_frame[0x80];
@@ -25309,7 +25309,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
       piVar6 = (int *)((int)aiStack_28 + iVar8 + 0xc);
       local_4c = 0x3f800000;
       local_3c = 0x3f800000;
-      iVar2 = *(int *)((param_3 - (int)(aiStack_28 + 3)) + (int)piVar6) * 0x117c;
+      iVar2 = *(int *)(((int)param_3 - (int)(aiStack_28 + 3)) + (int)piVar6) * 0x117c;
       local_2c = 0x3f800000;
       local_48 = 0;
       local_44 = 0;
@@ -25332,7 +25332,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
     uVar3 = 0;
     if (0 < param_2) {
       do {
-        iVar8 = *(int *)(param_3 + uVar3 * 4);
+        iVar8 = param_3[uVar3];
         local_50 = uVar3 + 1;
         uVar9 = local_50;
         if (2 < (int)local_50) {
@@ -25371,7 +25371,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
         *(int *)(&g_game.lf_raw[0xf8] + iVar5) = local_60;
         *(float *)(&g_game.lf_raw[0x108] + iVar5) = (float)(local_68 * 2.499999936844688E-5);
         *(float *)(&g_game.lf_raw[0x10c] + iVar5) = (float)(-local_68 * 1.249999968422344E-5);
-        *(undefined4 *)(&g_game.lf_raw[0xe0] + iVar5) = *(undefined4 *)(local_64 + uVar9 * 4);
+        *(int *)(&g_game.lf_raw[0xe0] + iVar5) = local_64[uVar9];
         *(undefined4 *)(&g_game.lf_raw[0x100] + iVar5) = 0;
         createevent_updatemission(iVar8,iVar7);
         if ((uVar3 == 0) && (uVar3 = rand(), (uVar3 & 7) == 0)) {
@@ -25407,7 +25407,7 @@ void __cdecl lf_286b0(undefined4 param_1,int param_2,int param_3)
           *(int *)(&g_game.lf_raw[0xf8] + iVar2) = local_60;
           *(undefined4 *)(&g_game.lf_raw[0xd0] + iVar2) = 1;
           *(undefined4 *)(&g_game.lf_raw[0xd8] + iVar2) = 6;
-          *(undefined4 *)(&g_game.lf_raw[0xe0] + iVar2) = *(undefined4 *)(local_64 + 8);
+          *(int *)(&g_game.lf_raw[0xe0] + iVar2) = local_64[2];
           *(undefined4 *)(&g_game.lf_raw[0x100] + iVar2) = 0;
           createevent_updatemission(iVar8,iVar7);
         }
@@ -43917,7 +43917,7 @@ LAB_00448999:
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
-#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define playerteamkilltax ((void (__cdecl *)(int, int))SR_VA(0x416a20))
 #define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
 #define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_VA(0x416ce0))
 #define applydamageobject ((void (__cdecl *)(int, int))SR_VA(0x422e20))
@@ -44130,12 +44130,12 @@ void __cdecl lf_48ec0(void)
           }
 LAB_0044935f:
           if (g_game.gametype == 4) {
-            fVar3 = *(float *)((int)&g_bullet[0].owner + iVar11);
-            if (LF_BITS_U(fVar3) != 0xffffffffU) {
-              fVar4 = LF_BITS_F(g_human[local_58].player_id);
-              if ((((LF_BITS_U(fVar4) != 0xffffffffU) && (LF_BITS_U(fVar3) != LF_BITS_U(fVar4))) && (g_player[((int)LF_BITS_U(fVar4))].team == 7)) &&
+            iVar7 = *(int *)((int)&g_bullet[0].owner + iVar11);
+            if (iVar7 != -1) {
+              iVar6 = g_human[local_58].player_id;
+              if ((((iVar6 != -1) && (iVar7 != iVar6)) && (g_player[iVar6].team == 7)) &&
                  (0 < g_human[local_58].unk_0034)) {
-                playerteamkilltax(fVar3,iVar9);
+                playerteamkilltax(iVar7,iVar9);
                 goto LAB_004493b0;
               }
             }
@@ -44143,10 +44143,10 @@ LAB_0044935f:
           else {
 LAB_004493b0:
             if (((g_game.gametype == 3) &&
-                (fVar3 = *(float *)((int)&g_bullet[0].owner + iVar11), LF_BITS_U(fVar3) != 0xffffffffU)) &&
-               ((fVar4 = LF_BITS_F(g_human[local_58].player_id), LF_BITS_U(fVar4) != 0xffffffffU &&
-                ((LF_BITS_U(fVar3) != LF_BITS_U(fVar4) && (g_player[((int)LF_BITS_U(fVar3))].team == g_player[((int)LF_BITS_U(fVar4))].team)))))) {
-              playerteamkilltax(fVar3,iVar9);
+                (iVar7 = *(int *)((int)&g_bullet[0].owner + iVar11), iVar7 != -1)) &&
+               ((iVar6 = g_human[local_58].player_id, iVar6 != -1 &&
+                ((iVar7 != iVar6 && (g_player[iVar7].team == g_player[iVar6].team)))))) {
+              playerteamkilltax(iVar7,iVar9);
             }
           }
           g_human[local_58].health = g_human[local_58].health - iVar9;
@@ -50020,7 +50020,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_VA(0x40ba60))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bdb0))
 #define playerdeathtax ((void (__cdecl *)(uint))SR_VA(0x416960))
-#define playerteamkilltax ((void (__cdecl *)(float, int))SR_VA(0x416a20))
+#define playerteamkilltax ((void (__cdecl *)(int, int))SR_VA(0x416a20))
 #define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_VA(0x416c40))
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_VA(0x416db0))
 #define deletehuman ((void (__cdecl *)(uint *))SR_VA(0x418720))
@@ -50236,12 +50236,12 @@ void __cdecl lf_51060(void)
                    0.001953125) * 6.28318530718);
         dVar27 = _CIsin((double)local_a0);
         fVar26 = (float10)0.5;
-        local_c8 = LF_BITS_F(((float10)LF_BITS_F(local_c4) * fVar26 + (float10)0.375 +
-                          ((float10)1 - (float10)LF_BITS_F(local_c4)) * ((float10)dVar27 * (float10)0.25)))
+        local_c8 = (float)((float10)LF_BITS_F(local_c4) * fVar26 + (float10)0.375 +
+                          ((float10)1 - (float10)LF_BITS_F(local_c4)) * ((float10)dVar27 * (float10)0.25))
         ;
         if (iVar14 < 10) {
-          local_c8 = LF_BITS_F((((float10)((float)(LF_BITS_F(local_cc) / 10.0)) * fVar26 + fVar26) *
-                            (float10)local_c8));
+          local_c8 = (float)(((float10)((float)(LF_BITS_F(local_cc) / 10.0)) * fVar26 + fVar26) *
+                            (float10)local_c8);
         }
         g_human[(int)puVar11].unk_2b20 = local_c8;
       }
@@ -50772,7 +50772,7 @@ LAB_0045230e:
                       if ((((g_human[(int)puVar11].player_id != -1) &&
                            (g_player[g_human[(int)puVar11].player_id].team == 7)) &&
                           (0 < g_human[(int)puVar11].unk_0034)) && (LF_BITS_U(local_cc[(0x1664985 + LF_RELOC / 4)]) != 0xffffffffU)) {
-                        playerteamkilltax(local_cc[(0x1664985 + LF_RELOC / 4)],100);
+                        playerteamkilltax(((int)LF_BITS_U(local_cc[(0x1664985 + LF_RELOC / 4)])),100);
                       }
                     }
                   }
@@ -56358,7 +56358,7 @@ void __cdecl lf_590f0(void)
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define scenario_getnumofmissions ((int (__cdecl *)(int))SR_VA(0x40aa80))
 #define createmission_threeway ((void (__cdecl *)(undefined4, int, undefined4 *))SR_VA(0x428230))
-#define createmission_transaction ((void (__cdecl *)(undefined4, int, int))SR_VA(0x4286b0))
+#define createmission_transaction ((void (__cdecl *)(undefined4, int, int *))SR_VA(0x4286b0))
 #define createmission_acquisition ((int (__cdecl *)(int, int, int *))SR_VA(0x458ef0))
 #define __security_check_cookie(x) ((void)0)
 #define local_24 (*(int (*)[8])(lf_frame + 0x1c))
@@ -56502,7 +56502,7 @@ void __cdecl lf_5aa60(void)
             iVar9 = 3;
           }
 LAB_0045adfc:
-          createmission_transaction(2,iVar9,(int)local_24);
+          createmission_transaction(2,iVar9,local_24);
         }
         else if (iVar5 == 0) {
           createmission_threeway(0,iVar9,local_24);
@@ -57315,9 +57315,9 @@ void __cdecl lf_5b9b0(void)
       createevent_message(0,&DAT_004617c0,0xffffffff,0);
       if (0 < (int)(&DAT_17579600)[iVar4 * 5]) {
         sprintf(&DAT_004617c0,"%s market cap: $",(&PTR_s_Goldmen_Inc_00460438)[iVar4]);
-        local_40 = LF_BITS_F((longlong)
+        local_40 = (float)(longlong)
                           (LF_BITS_F((&DAT_17579604)[iVar4 * 5]) *
-                          (float)(int)(&DAT_17579600)[iVar4 * 5]));
+                          (float)(int)(&DAT_17579600)[iVar4 * 5]);
         sprintf_comma((char *)&DAT_00603ee0,((int)LF_BITS_U(local_40)));
         pcVar1 = (char *)&DAT_00603ee0;
         do {

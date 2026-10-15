@@ -156,7 +156,7 @@ The first version of this rule was a regex in `lift.py`. It read the `=` of `<=`
 
 | Rule | Ghidra prints | Problem in C | Output |
 | --- | --- | --- | --- |
-| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. A cast from a float whose operand starts with an integer cast (`(int)(longlong)(x * f)`) is not marked: in C the operand is already an integer (`integerCastAt`, `logic_addteamcash`). In `(float)*(undefined4 *)&x`, the group after `*` is a cast, not the arguments of a call-like operand. The operand goes on after the cast (`castAt`, `object_rotorsimulation`). |
+| `bitCast` | `(int)*pfVar14`, `(float)p[2]` | The cast converts the number. | `(int)LF_BITS_U(*pfVar14)`. The end of the operand comes from the p-code. A cast from a float whose operand starts with an integer cast (`(int)(longlong)(x * f)`) is not marked: in C the operand is already an integer (`integerCastAt`, `logic_addteamcash`). In `(float)*(undefined4 *)&x`, the group after `*` is a cast, not the arguments of a call-like operand. The operand goes on after the cast (`castAt`, `object_rotorsimulation`). The CAST must be the root of the operand: when an op of the operand has the CAST in its subtree, the CAST is an inner one and the printed cast is a conversion. `humansimulation` printed `local_c8 = (float)((float10)(float)local_c4 * ...)` with `local_c4` typed `Bone *`, and the outer conversion became `LF_BITS_F`: `human.unk_2b20` got 0 instead of 14.49. |
 | `floatBitCompares` | `fVar5 != -NAN` (an `INT_NOTEQUAL`) | Every compare with a NaN is unordered, so `!=` is always true. | `LF_BITS_U(fVar5) != 0xffffffffU` |
 | `partialAccess` | `local_5c._0_4_` | A `uint` access converts a float piece. | `(*(float *)((uchar *)&local_5c + 0))`. The piece is a float when its p-code piece has a float type, or when a float operation reads it (`(double)local_60._0_4_`, `f < local_40._0_4_`). |
 | `pieceVariable` | `local_14` (declared `undefined4`, used as a float) | A read converts the int. | `(*(float *)((uchar *)&local_14 + 0))`. Also for a smaller high variable in an `undefined8` symbol. |
@@ -228,6 +228,15 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
    It loads the 024d as a library, resolves its imports, fills `.data` from the snapshot and runs each recorded call twice: the lifted version, then the original (the verifier undoes the writes of the first run). It compares the `.data` writes, the return value and the memory behind pointer arguments. A full run takes a few minutes. The details of each difference go to `build/hook/subvulpes.log`.
 
    The harness also tests the hand-written functions in its `hand_table` (`src/server/`). The recordings have no call of a function without a record hook. A hand-written function without arguments then runs once from the snapshot. Now: `loadaccountsserver`. `HARNESS_GAME_DIR` gives it another `user/server.srk`.
+
+   **Hand-written calls.** `tools/recording/synth_calls.txt` holds calls in the `sv_args.txt` format for functions that no recording reaches (the map has no elevator) or that need two players (team kill). Append it to a real recording and run the harness on the result:
+
+   ```bash
+   cat build/recordings/<rec>/sv_args.txt tools/recording/synth_calls.txt > <tmp>/args.txt
+   build/hook/harness.exe build/hook/024d_fixed.exe build/recordings/<rec>/sv_snapshot.bin <tmp>/args.txt
+   ```
+
+   The arguments are not real game calls: the object and item indices come from a recording, and the positions are zero. They test that both versions do the same on the same state, but not on the paths that real play takes. First run (2026-10-15, snapshots of `round-20261015-0141` and `murilo-20261015`): 13 functions, 26 calls, all the same.
 
 ## Float precision
 
