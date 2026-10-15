@@ -3721,10 +3721,10 @@ __declspec(naked) static void th_0bc50(void)
 }
 static uint8_t expect_0bc50[7] = { 0x83, 0xec, 0x18, 0x8b, 0x44, 0x24, 0x20 };
 
-void __cdecl lf_0bdb0(int param_1, float * param_2, float param_3);
-static void (__cdecl *orig_0bdb0)(int, float *, float);
+void __cdecl lf_0bdb0(float * param_1, float * param_2, float param_3);
+static void (__cdecl *orig_0bdb0)(float *, float *, float);
 static SvVerify v_0bdb0 = { "rotateorientation", -1 };
-static void __cdecl hk_0bdb0(int param_1, float * param_2, float param_3)
+static void __cdecl hk_0bdb0(float * param_1, float * param_2, float param_3)
 {
     SV_HOOK_VOID(v_0bdb0, lf_0bdb0(param_1, param_2, param_3), orig_0bdb0(param_1, param_2, param_3), NULL);
 }
@@ -7595,10 +7595,10 @@ __declspec(naked) static void th_1d8a0(void)
 }
 static uint8_t expect_1d8a0[7] = { 0x83, 0xec, 0x24, 0x8b, 0x44, 0x24, 0x2c };
 
-void __cdecl lf_1d9e0(float * param_1, int param_2, float * param_3);
-static void (__cdecl *orig_1d9e0)(float *, int, float *);
+void __cdecl lf_1d9e0(float * param_1, float * param_2, float * param_3);
+static void (__cdecl *orig_1d9e0)(float *, float *, float *);
 static SvVerify v_1d9e0 = { "multiply3x3matrices", -1 };
-static void __cdecl hk_1d9e0(float * param_1, int param_2, float * param_3)
+static void __cdecl hk_1d9e0(float * param_1, float * param_2, float * param_3)
 {
     SV_HOOK_VOID(v_1d9e0, lf_1d9e0(param_1, param_2, param_3), orig_1d9e0(param_1, param_2, param_3), NULL);
 }
@@ -11660,10 +11660,10 @@ __declspec(naked) static void th_587f0(void)
 }
 static uint8_t expect_587f0[10] = { 0x83, 0xec, 0x40, 0x83, 0x3d, 0x28, 0x32, 0x6b, 0x0e, 0x00 };
 
-int __cdecl lf_58ef0(int param_1, int param_2, int param_3);
-static int (__cdecl *orig_58ef0)(int, int, int);
+int __cdecl lf_58ef0(int param_1, int param_2, int * param_3);
+static int (__cdecl *orig_58ef0)(int, int, int *);
 static SvVerify v_58ef0 = { "createmission_acquisition", -1 };
-static int __cdecl hk_58ef0(int param_1, int param_2, int param_3)
+static int __cdecl hk_58ef0(int param_1, int param_2, int * param_3)
 {
     SV_HOOK_RET(int, v_58ef0, lf_58ef0(param_1, param_2, param_3), orig_58ef0(param_1, param_2, param_3), NULL);
 }

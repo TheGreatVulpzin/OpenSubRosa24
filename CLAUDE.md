@@ -51,6 +51,7 @@ If the download fails, the session needs network access to `crypticsea.gart.sh` 
 - `tools/re/gen_types.py` — generates `src/include/sr_types.h` from `analysis/structs/names.csv`. Add a known field there, never in the header.
 - `tools/ghidra/types_json.py` then `ApplyTypes.java` — put the structs and the global arrays (`g_human`, `g_object`...) into the Ghidra project. Run both after each change to the structs or the globals.
 - `tools/ghidra/ApplyNames.java` — gives the functions their names from `analysis/024d/functions.csv` (only `FUN_` names). Run it after each change to the CSV.
+- `tools/ghidra/ApplyParams.java` — gives parameters their types from `analysis/024d/params.csv` (a pointer typed as `int` makes the harness skip the call). Run it after each change to the CSV.
 - `tools/ghidra/LiftExport.java` — export for the lifter. The p-code rules (float bits, rounding, relocated addresses, struct pieces) live here.
 
 ### Lift and test

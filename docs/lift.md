@@ -113,6 +113,8 @@ The lifter reads the types that the Ghidra project has. Better types give better
 
 4. `tools/ghidra/ApplyNames.java` gives the functions their names from `analysis/024d/functions.csv`. It changes only the default names (`FUN_...`) and skips the CRT names (a leading `_`). The names are cosmetic for the lifter, because `lift.py` calls each callee through its address. First run (2026-10-14): 322 functions renamed, and the lifted C has no `FUN_` name left. A `LIFT_PATCHES` text uses the callee name, so update it when a name changes.
 
+5. `tools/ghidra/ApplyParams.java` gives parameters their types from `analysis/024d/params.csv` (rva, name, index, type, evidence). Ghidra often types a pointer parameter as `int` or `undefined4`. The lifted table then marks the argument as a value, and the harness skips each recorded call where that value points into the caller stack. As a pointer, the harness copies the recorded memory and runs the call. First run (2026-10-15): `loadblock`, `createmission_acquisition`, `multiply3x3matrices` and `rotateorientation`. The harness found 189 more calls that are the same, on six recordings, and no count dropped. The script prints the old type of each parameter.
+
 The Ghidra project is not versioned. Make a backup before `ApplyTypes.java` or `ApplyNames.java`. The knowledge that must stay is in the CSV, the header and the scripts.
 
 ## Relocated constants
