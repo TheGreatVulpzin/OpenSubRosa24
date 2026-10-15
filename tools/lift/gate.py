@@ -9,6 +9,7 @@ Usage:
   python -I tools/lift/gate.py --funcs a,b          only these functions
   python -I tools/lift/gate.py --from-files         compare the saved outputs again, no harness run
   python -I tools/lift/gate.py --target client      another target (tools/lift/targets/<name>.json)
+  python -I tools/lift/gate.py --reset              each function starts from the snapshot
 
 The rule of docs/lift.md: no "calls same" count may drop on any recording. A drop is a
 function with fewer same calls than in the baseline, or a function that has calls in the
@@ -25,6 +26,12 @@ so a function whose lifted C did not change gives the same results. The script c
 lifted C with the version in git (--ref, default HEAD), runs only the changed functions and
 keeps the baseline values of the others. A change in a "full_run_paths" file runs everything.
 Run a full gate before a push and after a change of many functions.
+
+--reset (or "reset": true in the target): the harness puts the snapshot back before each
+function (HARNESS_RESET=1). Without it, the writes of the original runs stay, and a function
+can fail because of the heap that earlier functions changed. With it, the counts do not
+depend on the order, and --changed gives the same counts as a full run. The reset mode has
+its own outputs and baseline in <out_dir>/reset.
 
 Outputs: <out_dir>/<run>.txt and <run>.log. Baseline: <out_dir>/baseline.json (local, like
 the recordings). Never run a gate together with Ghidra or a server.
@@ -134,10 +141,12 @@ def main():
     ap.add_argument('--jobs', type=int, default=2, help='harness runs at the same time (default 2)')
     ap.add_argument('--from-files', action='store_true', help='read the saved outputs, do not run the harness')
     ap.add_argument('--no-synth', action='store_true', help='skip the runs with the hand-written calls')
+    ap.add_argument('--reset', action='store_true', help='each function starts from the snapshot (HARNESS_RESET=1)')
     a = ap.parse_args()
 
     t = load_target(a.target)
-    out = t['out_dir']
+    reset = a.reset or t.get('reset', False)
+    out = t['out_dir'] / 'reset' if reset else t['out_dir']
     out.mkdir(parents=True, exist_ok=True)
     baseline_file = out / 'baseline.json'
     baseline = json.loads(baseline_file.read_text()) if baseline_file.exists() else {}
@@ -191,7 +200,7 @@ def main():
             return name, f.read_text(encoding='utf-8') if f.exists() else '', 0.0
         k = slots.get()
         env = dict(os.environ, SV_UI_WIDTH='220', HARNESS_ENV_DIR=str(out / f'env{k}'),
-                   SV_LOG_FILE=str(out / f'{name}.log'))
+                   SV_LOG_FILE=str(out / f'{name}.log'), HARNESS_RESET='1' if reset else '0')
         (out / f'{name}.log').unlink(missing_ok=True)
         t0 = time.time()
         try:
@@ -228,7 +237,7 @@ def main():
         was = f' (baseline {old["total"]["same"]})' if old else ' (no baseline)'
         took = f', {secs:.0f} s' if secs else ''
         print(f'{name}: {total["functions"]} functions, {total["same"]} same{was}{took}')
-    print(f'{len(done)} run(s) in {time.time() - t0:.0f} s, {jobs} at a time')
+    print(f'{len(done)} run(s) in {time.time() - t0:.0f} s, {jobs} at a time' + (', reset mode' if reset else ''))
 
     for e in errors:
         print('DROP ' + e)

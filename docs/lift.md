@@ -39,6 +39,8 @@
 
    Faster gates: `--changed` runs only the functions whose lifted C differs from git `HEAD` (`--ref` for another version). The harness calls the other game functions through the image, so an unchanged function gives the same results; the script keeps their baseline values. A change in a file of the target's `full_run_paths` (the harness, the verifier, `lift_support.h`...) runs everything. `--jobs N` runs N harnesses at the same time (default 2; each one needs about 1 GB of commit). Run a full gate before a push.
 
+   `--reset` puts the snapshot back before each function (`HARNESS_RESET=1`). Without it, the writes of the original runs stay, and a later function can see a heap that earlier calls changed. First run (2026-10-15): the three "original crashed" calls of the normal mode pass (`setupgame` in smoke, `humansimulation` in 195210, `server_playermessage` in murilo), no count drops, and the full gate takes 29 minutes instead of 16. The reset mode keeps its own outputs and baseline in `build/gate/ded024d/reset`.
+
    Other binaries (the client, another server version) get their own target file: harness, image, lifted C and table, recordings, output folder. `gate.py --target <name>` uses it.
 
 ## What the lifter does

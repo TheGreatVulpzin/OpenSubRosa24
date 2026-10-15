@@ -5,6 +5,8 @@
  *   or @file with one exact name per line (tools/lift/gate.py --changed).
  *   HARNESS_ENV_DIR: the sandbox folder of the test environment (default build/harness_env),
  *   so that several harnesses can run at the same time.
+ *   HARNESS_RESET=1: put the snapshot back before each function (results do not depend on
+ *   the order of the functions).
  *
  * 1. Load the 024d as a library (its code runs, its entry point does not).
  * 2. Fill its .data section from a snapshot of a running server (hook/record.c).
@@ -866,6 +868,7 @@ int main(int argc, char **argv)
     int i, j, total_ok = 0, total_diff = 0, total_known = 0, total_skip = 0, total_crash = 0, tested = 0;
     const char *filter = argc > 4 ? argv[4] : NULL;
     const char *game_dir;
+    int reset_each = getenv("HARNESS_RESET") && atoi(getenv("HARNESS_RESET")) != 0;
     SetUnhandledExceptionFilter(unhandled);
     int imports, index = 0, total_funcs = 0;
     LARGE_INTEGER t_start, t_end, freq;
@@ -925,6 +928,7 @@ int main(int argc, char **argv)
     ui_info("024d", "%p (snapshot base %08x), %d imports", (void *)g_mod, g_snap.base, imports);
     ui_info("game folder", "%s", game_dir);
     ui_info("filter", "%s", filter ? filter : "(all functions)");
+    ui_info("reset", "%s", reset_each ? "snapshot before each function" : "off");
     printf("\n");
     if ((uint32_t)sr_base != g_snap.base)
         ui_warning("the 024d did not load at the snapshot base. Pointers in the snapshot are guessed. "
@@ -940,6 +944,15 @@ int main(int argc, char **argv)
         char first[320] = "";
         if (!filter_match(e->name))
             continue;
+        /* HARNESS_RESET=1: every function starts from the snapshot. Without it, the writes of
+         * the original runs stay, and a later function can see a heap that the earlier calls
+         * changed (humansimulation call 1223 of 20261013-195210 crashes in the original after
+         * 1222 other calls). With it, a result does not depend on the other functions, so
+         * gate.py --changed gives the same counts as a full gate. */
+        if (reset_each && index > 0) {
+            apply_snapshot();
+            resolve_imports();
+        }
         index++;
         memset(&v, 0, sizeof v);
         v.name = e->name;
