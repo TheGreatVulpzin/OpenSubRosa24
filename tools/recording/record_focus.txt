@@ -3,7 +3,6 @@
 # All other lifted functions are hooked only in the rotation.
 # Format: rva class name
 0x29a0 untested loadblock
-0x5fe0 untested player_saveinventory
 0x68d0 untested createevent_updatecarmarket
 0xddb0 untested pbitwritenego
 0x14600 untested createcityobject
@@ -16,9 +15,7 @@
 0x4cee0 untested item_physicssimulation
 0x4e060 untested logic_createcar
 0x4e2c0 untested objectwheelcollision2
-0x500e0 untested player_loadinventory
 0x58ef0 untested createmission_acquisition
-0x5ae70 untested logicsimulation_round
 0x4ed30 diff serversend
 0x8cf0 diff logic_addteamcash
 0x51060 diff humansimulation
