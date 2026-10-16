@@ -2777,10 +2777,10 @@ __declspec(naked) static void th_0ac00(void)
 }
 static uint8_t expect_0ac00[5] = { 0x53, 0x55, 0x33, 0xc0, 0x56 };
 
-void __cdecl lf_0ad30(undefined4 param_1);
-static void (__cdecl *orig_0ad30)(undefined4);
+void __cdecl lf_0ad30(uint param_1);
+static void (__cdecl *orig_0ad30)(uint);
 static SvVerify v_0ad30 = { "init_genrand", -1 };
-static void __cdecl hk_0ad30(undefined4 param_1)
+static void __cdecl hk_0ad30(uint param_1)
 {
     SV_HOOK_VOID(v_0ad30, lf_0ad30(param_1), orig_0ad30(param_1), NULL);
 }
@@ -5759,10 +5759,10 @@ __declspec(naked) static void th_14590(void)
 }
 static uint8_t expect_14590[7] = { 0x53, 0x8b, 0x1d, 0x40, 0x9a, 0x92, 0x17 };
 
-int __cdecl lf_14600(undefined4 param_1, undefined4 * param_2, float param_3);
-static int (__cdecl *orig_14600)(undefined4, undefined4 *, float);
+int __cdecl lf_14600(int param_1, undefined4 * param_2, float param_3);
+static int (__cdecl *orig_14600)(int, undefined4 *, float);
 static SvVerify v_14600 = { "createcityobject", -1 };
-static int __cdecl hk_14600(undefined4 param_1, undefined4 * param_2, float param_3)
+static int __cdecl hk_14600(int param_1, undefined4 * param_2, float param_3)
 {
     SV_HOOK_RET(int, v_14600, lf_14600(param_1, param_2, param_3), orig_14600(param_1, param_2, param_3), NULL);
 }

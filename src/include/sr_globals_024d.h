@@ -23,28 +23,36 @@
 #define SR_RVA_SYSINFO              0x916d2e0u  /* SysInfo[] */
 #define SR_RVA_SOUNDLIST            0x916d700u  /* SoundList[] */
 #define SR_RVA_EVENT                0x93dd880u  /* Event[] */
+#define SR_RVA_SCENARIO             0xac51a80u  /* Scenario[] */
 #define SR_RVA_OBJECTTYPE           0xac51bc0u  /* ObjectType[] */
 #define SR_RVA_PARTICLE             0xb3e7200u  /* Particle[] */
+#define SR_RVA_BUILDBLOCKTYPE       0xb7a7200u  /* BuildBlockType[] */
 #define SR_RVA_BLOCKLIST            0xb7a8ca0u  /* BlockList[] */
 #define SR_RVA_FILELIST             0xe219200u  /* FileList[] */
 #define SR_RVA_CITY                 0xe299220u  /* City[] */
 #define SR_RVA_PLAYER               0xededd00u  /* Player[] */
+#define SR_RVA_CITYOBJECTTYPE       0xf02e500u  /* CityObjectType[] */
 #define SR_RVA_MATERIALLIST         0xf26fd00u  /* MaterialList[] */
 #define SR_RVA_BODY                 0xf270280u  /* Body[] */
 #define SR_RVA_NUMOFEVENTS          0xf437318u
 #define SR_RVA_ACCOUNT              0xf437b60u
+#define SR_RVA_RADIX                0xff47c80u  /* Radix[] */
 #define SR_RVA_INTERSECT            0x103484a0u  /* Intersect[] */
 #define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
 #define SR_RVA_TIMERLIST            0x12a81c60u  /* TimerList[] */
 #define SR_RVA_SPEEX                0x12a81d00u  /* Speex[] */
 #define SR_RVA_AREA_BLOCK           0x133b2d00u  /* AreaBlock[] */
 #define SR_RVA_PARSER               0x13d22d60u  /* Parser[] */
+#define SR_RVA_CITYOBJECT           0x15e24020u  /* CityObject[] */
 #define SR_RVA_CONNECTION           0x15e39020u  /* Connection[] */
 #define SR_RVA_AREA                 0x16d66040u  /* Area[] */
+#define SR_RVA_MARKET               0x17179600u  /* Market[] */
+#define SR_RVA_MASTERSERVER         0x17179820u  /* MasterServer[] */
 #define SR_RVA_NUMOFBONDS           0x17179a28u
 #define SR_RVA_BOND                 0x17179a40u  /* Bond[] */
 #define SR_RVA_NUMOFBULLETS         0x17529a40u
 #define SR_RVA_BSDSOCKET            0x1952d680u  /* BsdSocket[] */
+#define SR_RVA_GAME_WORLD           0x2561d740u  /* GameWorld[] */
 
 /* Capacity of each array (size of the global in the 0.24c ELF / record size). */
 #define SR_MAX_PLAYER               256

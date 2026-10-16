@@ -1,0 +1,8 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,19,7,clientrecv createmission_acquisition createmission_threeway createmission_transaction createscenario_world logicsimulation_world serversend
+0x4,float,5,4,buildsomeshit logic_playeractions logicsimulation_world resetgame
+0x8,float,5,4,buildsomeshit logic_playeractions logicsimulation_world resetgame
+0xc,float,5,4,buildsomeshit logic_playeractions logicsimulation_world resetgame
+0x10,float,2,2,buildsomeshit logic_playeractions
+0x14,float,1,1,buildsomeshit
+0x18,float,3,2,buildsomeshit logic_playeractions

@@ -1,0 +1,39 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,33,5,csradixsort logic_farbslist newspaper_load packobjectpacket packobjectpacket2
+0x4,int,11,5,csradixsort logic_farbslist newspaper_load packobjectpacket packobjectpacket2
+0x8,int,6,4,csradixsort newspaper_load packobjectpacket packobjectpacket2
+0xc,int,1,1,packobjectpacket
+0x10,int,1,1,packobjectpacket
+0x100004,int,2,1,csradixsort
+0x100008,int,2,1,csradixsort
+0x200004,int,7,5,csradixsort logic_farbslist newspaper_load packobjectpacket packobjectpacket2
+0x200008,int,5,4,logic_farbslist newspaper_load packobjectpacket packobjectpacket2
+0x20000c,int,1,1,packobjectpacket
+0x200010,int,1,1,packobjectpacket
+0x200014,int,2,1,packobjectpacket
+0x300004,int,6,2,packobjectpacket packobjectpacket2
+0x300008,int,3,2,packobjectpacket packobjectpacket2
+0x30000c,int,1,1,packobjectpacket
+0x300010,int,1,1,packobjectpacket
+0x300014,int,2,1,packobjectpacket
+0x400004,int,3,1,csradixsort
+0x400008,int,1,1,csradixsort
+0x40000c,int,1,1,csradixsort
+0x400010,int,1,1,csradixsort
+0x400014,int,1,1,csradixsort
+0x400018,int,1,1,csradixsort
+0x40001c,int,1,1,csradixsort
+0x400020,int,1,1,csradixsort
+0x400024,int,1,1,csradixsort
+0x400028,int,1,1,csradixsort
+0x400404,int,4,1,csradixsort
+0x400408,int,1,1,csradixsort
+0x40040c,int,1,1,csradixsort
+0x400410,int,1,1,csradixsort
+0x400414,int,1,1,csradixsort
+0x400418,int,2,1,csradixsort
+0x40041c,int,1,1,csradixsort
+0x400420,int,1,1,csradixsort
+0x400424,int,1,1,csradixsort
+0x400428,int,1,1,csradixsort
+0x40042c,int,1,1,csradixsort

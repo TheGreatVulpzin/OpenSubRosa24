@@ -52,6 +52,16 @@ STRUCTS = {
     'Debug': ('debug', 0x523c8),
     'FileList': ('filelist', 0x80020),
     'Parser': ('parser', 0x10010c),
+    # Phase 4, batch 3: tools/re/map_regions.py candidates whose Linux 0.24c size fits the
+    # gap to the next known global (analysis/024d/manual_globals.csv has the evidence).
+    'CityObjectType': ('cityobjecttype', 0x241800),
+    'CityObject': ('cityobject', 0x15000),
+    'MasterServer': ('masterserver', 0x208),
+    'BuildBlockType': ('buildblocktype', 0x1a80),
+    'Market': ('market', 0x204),
+    'Scenario': ('scenario', 0x134),
+    'Radix': ('radix', 0x400804),
+    'GameWorld': ('game_world', 0x1c),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,

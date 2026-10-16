@@ -1,0 +1,20 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,23,10,createmission_threeway logic_addteamcash logic_teammissioncomplete logicsimulation_world playerbuystock playerdeathtax playersellstock playerteamkilltax resetgame scenario_setmissioninactive
+0x4,float,39,13,createevent_updatestocks createmission_threeway dedicatedserverloop economysimulation logic_addteamcash logic_teammissioncomplete logicsimulation_world playerbuystock playerdeathtax playersellstock playersimulation resetgame scenario_setmissioninactive
+0x8,float,1,1,resetgame
+0xc,int,5,3,createevent_updatestocks logicsimulation_world resetgame
+0x10,int,16,5,createmission_threeway logic_playeractions logic_teammissioncomplete playersellstock scenario_setmissioninactive
+0x14,int,4,2,logic_teammissioncomplete resetgame
+0x18,float,17,6,createevent_updatestocks dedicatedserverloop economysimulation logic_teammissioncomplete logicsimulation_world resetgame
+0x1c,float,1,1,resetgame
+0x20,int,3,2,createevent_updatestocks resetgame
+0x24,int,4,2,logic_teammissioncomplete scenario_setmissioninactive
+0x2c,float,2,2,dedicatedserverloop logic_teammissioncomplete
+0x34,int,1,1,createevent_updatestocks
+0x40,float,1,1,dedicatedserverloop
+0x48,int,1,1,createevent_updatestocks
+0x5c,int,1,1,createevent_updatestocks
+0x140,int,2,2,createevent_updatecarmarket logic_playeractions
+0x144,int,2,2,createevent_updatecarmarket logic_playeractions
+0x148,int,2,2,createevent_updatecarmarket logic_playeractions
+0x14c,int,4,2,createevent_updatecarmarket logic_playeractions

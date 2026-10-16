@@ -1,0 +1,58 @@
+offset,type,uses,n_funcs,funcs
+0x0,float,18,3,lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0x4,int,32,1,cityobject_addbox
+0x8,float,8,1,cityobject_addbox
+0xc,float,8,1,cityobject_addbox
+0x10,float,8,1,cityobject_addbox
+0xc08,int,24,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc0c,int,9,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc10,int,6,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc14,int,6,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc18,int,6,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc1c,int,6,4,cityobject_addbox lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0xc20,int,4,2,lineintersectcityobject lineintersectcityobjecttype
+0xc28,int,3,3,lineintersectcityobject lineintersectcityobjecttype sphereintersectcityobjecttype
+0x240c,float,2,2,lineintersectarea sphereintersectarea
+0x2410,float,2,2,lineintersectarea sphereintersectarea
+0x2414,float,2,2,lineintersectarea sphereintersectarea
+0x2418,float,1,1,setupcityobjecttypes
+0x4824,float,1,1,setupcityobjecttypes
+0x4828,float,1,1,setupcityobjecttypes
+0x482c,float,1,1,setupcityobjecttypes
+0x4830,float,1,1,setupcityobjecttypes
+0x4834,int,32,1,setupcityobjecttypes
+0x4838,float,8,1,setupcityobjecttypes
+0x483c,float,8,1,setupcityobjecttypes
+0x4840,float,8,1,setupcityobjecttypes
+0x5438,int,13,1,setupcityobjecttypes
+0x543c,int,2,1,setupcityobjecttypes
+0x5440,int,2,1,setupcityobjecttypes
+0x5444,int,2,1,setupcityobjecttypes
+0x5448,int,2,1,setupcityobjecttypes
+0x544c,int,2,1,setupcityobjecttypes
+0x5450,int,1,1,setupcityobjecttypes
+0x9060,float,1,1,setupcityobjecttypes
+0xb46c,float,1,1,setupcityobjecttypes
+0xb470,float,1,1,setupcityobjecttypes
+0xb474,float,1,1,setupcityobjecttypes
+0xb478,float,1,1,setupcityobjecttypes
+0xd884,float,1,1,setupcityobjecttypes
+0xd888,float,1,1,setupcityobjecttypes
+0xd88c,float,1,1,setupcityobjecttypes
+0x120c0,float,1,1,setupcityobjecttypes
+0x120c8,float,2,1,setupcityobjecttypes
+0x120cc,float,2,1,setupcityobjecttypes
+0x120d0,float,2,1,setupcityobjecttypes
+0x120d4,float,2,1,setupcityobjecttypes
+0x120d8,float,2,1,setupcityobjecttypes
+0x120dc,float,2,1,setupcityobjecttypes
+0x120e0,float,2,1,setupcityobjecttypes
+0x120e4,float,2,1,setupcityobjecttypes
+0x120e8,float,2,1,setupcityobjecttypes
+0x120ec,float,2,1,setupcityobjecttypes
+0x120f0,float,2,1,setupcityobjecttypes
+0x120f4,float,2,1,setupcityobjecttypes
+0x144cc,float,1,1,setupcityobjecttypes
+0x144d0,float,1,1,setupcityobjecttypes
+0x144d4,float,1,1,setupcityobjecttypes
+0x144d8,float,1,1,setupcityobjecttypes

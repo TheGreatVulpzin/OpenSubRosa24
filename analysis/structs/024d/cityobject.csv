@@ -1,0 +1,36 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,7,7,createcityobject lineintersectall lineintersectlevel packobjectpacket packobjectpacket2 resetgame unpackobjectpacket
+0x4,int,2,2,lineintersectcityobject unpackobjectpacket
+0x8,float,9,4,lineintersectcityobject packobjectpacket packobjectpacket2 unpackobjectpacket
+0xc,float,7,2,lineintersectcityobject unpackobjectpacket
+0x10,float,7,2,lineintersectcityobject unpackobjectpacket
+0x14,float,3,3,lineintersectall lineintersectcityobject lineintersectlevel
+0x18,float,3,3,lineintersectall lineintersectcityobject lineintersectlevel
+0x1c,float,3,3,lineintersectall lineintersectcityobject lineintersectlevel
+0x20,float,5,1,unpackobjectpacket
+0x24,float,5,1,unpackobjectpacket
+0x28,float,4,1,unpackobjectpacket
+0x2c,float,4,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x30,float,2,1,unpackobjectpacket
+0x34,float,2,1,unpackobjectpacket
+0x38,float,4,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x3c,float,2,1,unpackobjectpacket
+0x40,float,2,1,unpackobjectpacket
+0x44,int,2,2,city_createelevator human_itemsimulation
+0x48,int,4,3,human_itemsimulation packobjectpacket packobjectpacket2
+0x4c,int,4,4,city_createelevator human_itemsimulation packobjectpacket packobjectpacket2
+0x50,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x54,int,7,6,createcityobject lineintersectall lineintersectlevel packobjectpacket packobjectpacket2 resetgame
+0x58,int,1,1,createcityobject
+0x5c,float,1,1,createcityobject
+0x60,float,1,1,createcityobject
+0x64,float,1,1,createcityobject
+0x74,float,2,1,createcityobject
+0x78,float,1,1,createcityobject
+0x7c,float,1,1,createcityobject
+0x80,float,1,1,createcityobject
+0x84,float,1,1,createcityobject
+0x88,float,1,1,createcityobject
+0x8c,float,1,1,createcityobject
+0x90,float,1,1,createcityobject
+0x94,float,1,1,createcityobject
