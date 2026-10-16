@@ -57,6 +57,7 @@ public class ApplyTypes extends GhidraScript {
             case "char": return CharDataType.dataType;
             case "uint8_t": return ByteDataType.dataType;
             case "int16_t": return ShortDataType.dataType;
+            case "char*": return new PointerDataType(CharDataType.dataType, dtm);
             default:
                 DataType t = types.get(name);
                 if (t == null) throw new IllegalArgumentException("unknown type " + name);
@@ -118,6 +119,10 @@ public class ApplyTypes extends GhidraScript {
                 listing.createData(at, dt);
                 typed++;
             }
+            // A name that moved (a wrong address in an older CSV) must not stay at the old place.
+            for (Symbol s : currentProgram.getSymbolTable().getGlobalSymbols(name))
+                if (!s.getAddress().equals(at))
+                    s.delete();
             Symbol old = getSymbolAt(at);
             if (old == null || !old.getName().equals(name)) {
                 createLabel(at, name, true, SourceType.USER_DEFINED);

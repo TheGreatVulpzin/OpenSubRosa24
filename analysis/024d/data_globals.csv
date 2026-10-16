@@ -1,0 +1,32 @@
+rva,name,type,count,evidence
+0x60000,gamedir,char,9,"initialized .data: ""Sub Rosa"", Linux 0.24c symbol gamedir (9 bytes)"
+0x6000c,hack_modulusopt,int,3,"initialized .data: 1, 2, 0; same bytes as the Linux 0.24c symbol"
+0x60018,cubevertex,float,24,initialized .data: same 96 bytes as the Linux 0.24c symbol (globals.csv had 0x60174 = cubequad[1])
+0x60078,cubenormal,float,18,initialized .data: same 72 bytes as the Linux 0.24c symbol
+0x600c0,cubetangent,float,18,initialized .data: same 72 bytes as the Linux 0.24c symbol
+0x60108,cubebinormal,float,18,initialized .data: same 72 bytes as the Linux 0.24c symbol
+0x60150,cubetexcoord,float,8,initialized .data: same 32 bytes as the Linux 0.24c symbol
+0x60170,cubequad,int,24,"initialized .data: same 96 bytes as the Linux 0.24c symbol (vertex indices 3, 2, 1, 0...)"
+0x601d0,cubetri,int,36,initialized .data: same 144 bytes as the Linux 0.24c symbol
+0x60260,cubeline,int,24,initialized .data: same 96 bytes as the Linux 0.24c symbol
+0x602c0,octahedron,float,18,initialized .data: same 72 bytes as the Linux 0.24c symbol
+0x60308,octahedronindex,int,24,initialized .data: same 96 bytes as the Linux 0.24c symbol
+0x60368,debug_cubevertex,float,24,initialized .data: same 96 bytes as the Linux 0.24c symbol
+0x603c8,currentversion,int,,initialized .data: 24 (version 0.24)
+0x603cc,menucolor,float,3,initialized .data: same 12 bytes as the Linux 0.24c symbol
+0x603d8,teamcolor,float,24,initialized .data: same 96 bytes as the Linux 0.24c symbol (8 teams x RGB)
+0x60438,teamname,char*,8,"initialized .data: 8 relocated pointers to .rdata strings; Linux 0.24c teamname is 8 pointers"
+0x60458,dollarbillvalue,int,8,"initialized .data: 1, 5, 10, 20, 50, 100, 1000, 0"
+0x60478,cslogo,uint8_t,2048,initialized .data: same 2048 bytes as the Linux 0.24c symbol
+0x60c78,csmstr,char*,,"initialized .data: 1 relocated pointer to .rdata; Linux 0.24c csmstr is 1 pointer, between cslogo and tracktrailmodelquad"
+0x60c7c,tracktrailmodelquad,int,12,initialized .data: same 48 bytes as the Linux 0.24c symbol
+0x60cac,lightwavelength,float,3,"initialized .data: 0.5, 0.625, 1.0"
+0x60cb8,carcolorname,char*,6,"initialized .data: 6 relocated pointers to .rdata strings; Linux 0.24c carcolorname is 6 pointers"
+0x60cd0,mti,int,,initialized .data: 625 (Mersenne Twister index N + 1)
+0x60cd4,xaxis,float,3,"initialized .data: 1, 0, 0, after mti as in the Linux 0.24c layout"
+0x60ce0,yaxis,float,3,"initialized .data: 0, 1, 0"
+0x60cec,zaxis,float,3,"initialized .data: 0, 0, 1"
+0x60cf8,xaxis2d,float,2,"initialized .data: 1, 0"
+0x60d00,yaxis2d,float,2,"initialized .data: 0, 1"
+0x60d08,socketid,uint32_t,,"initialized .data: ""7DFP"", the packet magic (docs/protocol.md 3.1). Linux has char[5], but the 024d copies it as one 4-byte int: as char[5] the decompiler split the copy wrong (serversend sent F for P)"
+0x60d10,mag01,uint32_t,2,"initialized .data: 0, 0x9908b0df (Mersenne Twister, a static of genrand_int32)"

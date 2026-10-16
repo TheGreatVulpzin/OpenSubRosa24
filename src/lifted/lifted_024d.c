@@ -2766,34 +2766,10 @@ void __cdecl lf_04a10(void)
 #undef _DAT_0f83737c
 
 /* ---------------------------------------------------------------- 0x4bb0 */
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460024 (*(float *)SR_VA(0x460024))
-#define DAT_00460028 (*(float *)SR_VA(0x460028))
-#define DAT_0046002c (*(float *)SR_VA(0x46002c))
-#define DAT_00460030 (*(float *)SR_VA(0x460030))
-#define DAT_00460034 (*(float *)SR_VA(0x460034))
-#define DAT_00460038 (*(float *)SR_VA(0x460038))
-#define DAT_0046003c (*(float *)SR_VA(0x46003c))
-#define DAT_00460040 (*(float *)SR_VA(0x460040))
-#define DAT_00460044 (*(float *)SR_VA(0x460044))
-#define DAT_00460048 (*(undefined *)SR_VA(0x460048))
-#define DAT_0046004c (*(undefined *)SR_VA(0x46004c))
-#define DAT_00460050 (*(undefined *)SR_VA(0x460050))
-#define DAT_00460054 (*(undefined *)SR_VA(0x460054))
-#define DAT_00460058 (*(undefined *)SR_VA(0x460058))
-#define DAT_0046005c (*(undefined *)SR_VA(0x46005c))
-#define DAT_00460060 (*(undefined *)SR_VA(0x460060))
-#define DAT_00460064 (*(undefined *)SR_VA(0x460064))
-#define DAT_00460068 (*(undefined *)SR_VA(0x460068))
-#define DAT_0046006c (*(float *)SR_VA(0x46006c))
-#define DAT_00460070 (*(float *)SR_VA(0x460070))
-#define DAT_00460074 (*(float *)SR_VA(0x460074))
 #define DAT_0f42e504 (*(undefined *)SR_VA(0xf42e504))
 #define DAT_0f42e508 (*(undefined *)SR_VA(0xf42e508))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
 #define DAT_0f42e50c (*(undefined *)SR_VA(0xf42e50c))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
 #define DAT_0f42e510 (*(undefined *)SR_VA(0xf42e510))
 #define DAT_0f42f108 (*(undefined *)SR_VA(0xf42f108))
 #define DAT_0f42f10c (*(undefined *)SR_VA(0xf42f10c))
@@ -2801,18 +2777,7 @@ void __cdecl lf_04a10(void)
 #define DAT_0f42f114 (*(undefined *)SR_VA(0xf42f114))
 #define DAT_0f42f118 (*(undefined *)SR_VA(0xf42f118))
 #define DAT_0f42f11c (*(undefined *)SR_VA(0xf42f11c))
-#define _DAT_00460018 (*(float *)SR_VA(0x460018))
-#define _DAT_0046001c (*(float *)SR_VA(0x46001c))
-#define _DAT_00460020 (*(float *)SR_VA(0x460020))
-#define _DAT_00460048 (*(float *)SR_VA(0x460048))
-#define _DAT_0046004c (*(float *)SR_VA(0x46004c))
-#define _DAT_00460050 (*(float *)SR_VA(0x460050))
-#define _DAT_00460054 (*(float *)SR_VA(0x460054))
-#define _DAT_00460058 (*(float *)SR_VA(0x460058))
-#define _DAT_0046005c (*(float *)SR_VA(0x46005c))
-#define _DAT_00460060 (*(float *)SR_VA(0x460060))
-#define _DAT_00460064 (*(float *)SR_VA(0x460064))
-#define _DAT_00460068 (*(float *)SR_VA(0x460068))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
                  float param_7)
 
@@ -2826,61 +2791,61 @@ void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,floa
   iVar3 = param_1 * 0x2418;
   iVar1 = *(int *)(&DAT_0f42e504 + iVar3);
   iVar4 = param_1 * 0x302;
-  *(float *)(&DAT_0f42e508 + (iVar4 + iVar1) * 0xc) = (float)(param_2 + param_5 * (_DAT_00460018 - 0.5));
+  *(float *)(&DAT_0f42e508 + (iVar4 + iVar1) * 0xc) = (float)(param_2 + param_5 * (g_cubevertex[0] - 0.5));
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)(param_3 + param_6 * (_DAT_0046001c - 0.5));
+       (float)(param_3 + param_6 * (g_cubevertex[1] - 0.5));
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)(param_4 + param_7 * (_DAT_00460020 - 0.5));
+       (float)(param_4 + param_7 * (g_cubevertex[2] - 0.5));
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460024 - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[3] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460028 - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[4] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_0046002c - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[5] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460030 - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[6] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460034 - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[7] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460038 - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[8] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_0046003c - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[9] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460040 - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[10] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460044 - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[0xb] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460048 - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[0xc] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_0046004c - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[0xd] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460050 - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[0xe] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460054 - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[0xf] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460058 - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[0x10] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_0046005c - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[0x11] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460060 - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[0x12] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460064 - 0.5) * param_6 + param_3);
+       (float)((g_cubevertex[0x13] - 0.5) * param_6 + param_3);
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((_DAT_00460068 - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[0x14] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   *(float *)(&DAT_0f42e508 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_0046006c - 0.5) * param_5 + param_2);
+       (float)((g_cubevertex[0x15] - 0.5) * param_5 + param_2);
   *(float *)(&DAT_0f42e50c + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)(param_3 + (DAT_00460070 - 0.5) * param_6);
-  piVar5 = &g_cubevertex;
+       (float)(param_3 + (g_cubevertex[0x16] - 0.5) * param_6);
+  piVar5 = g_cubequad + 1;
   *(float *)(&DAT_0f42e510 + (*(int *)(&DAT_0f42e504 + iVar3) + iVar4) * 0xc) =
-       (float)((DAT_00460074 - 0.5) * param_7 + param_4);
+       (float)((g_cubevertex[0x17] - 0.5) * param_7 + param_4);
   *(int *)(&DAT_0f42e504 + iVar3) = *(int *)(&DAT_0f42e504 + iVar3) + 1;
   iVar4 = param_1 * 0x181;
   do {
@@ -2907,34 +2872,10 @@ void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,floa
   } while ((int)piVar5 < ((int)SR_VA(0x4601d4)));
   return;
 }
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460024
-#undef DAT_00460028
-#undef DAT_0046002c
-#undef DAT_00460030
-#undef DAT_00460034
-#undef DAT_00460038
-#undef DAT_0046003c
-#undef DAT_00460040
-#undef DAT_00460044
-#undef DAT_00460048
-#undef DAT_0046004c
-#undef DAT_00460050
-#undef DAT_00460054
-#undef DAT_00460058
-#undef DAT_0046005c
-#undef DAT_00460060
-#undef DAT_00460064
-#undef DAT_00460068
-#undef DAT_0046006c
-#undef DAT_00460070
-#undef DAT_00460074
 #undef DAT_0f42e504
 #undef DAT_0f42e508
-#undef DAT_0f42e50c
 #undef g_cubevertex
+#undef DAT_0f42e50c
 #undef DAT_0f42e510
 #undef DAT_0f42f108
 #undef DAT_0f42f10c
@@ -2942,18 +2883,7 @@ void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,floa
 #undef DAT_0f42f114
 #undef DAT_0f42f118
 #undef DAT_0f42f11c
-#undef _DAT_00460018
-#undef _DAT_0046001c
-#undef _DAT_00460020
-#undef _DAT_00460048
-#undef _DAT_0046004c
-#undef _DAT_00460050
-#undef _DAT_00460054
-#undef _DAT_00460058
-#undef _DAT_0046005c
-#undef _DAT_00460060
-#undef _DAT_00460064
-#undef _DAT_00460068
+#undef g_cubequad
 
 /* ---------------------------------------------------------------- 0x5160 */
 #define local_8 (*(int *)(lf_frame + 0x18))
@@ -4595,7 +4525,7 @@ void __cdecl lf_06b30(void)
 #undef _DAT_0f837368
 
 /* ---------------------------------------------------------------- 0x7b90 */
-#define DAT_00460458 (*(undefined *)SR_VA(0x460458))
+#define g_dollarbillvalue (*(int (*)[8])SR_VA(0x460458))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 int __cdecl lf_07b90(int param_1)
 
@@ -4624,22 +4554,20 @@ int __cdecl lf_07b90(int param_1)
         bVar3 = bVar6 & 0x1f;
         bVar1 = bVar6 + 3;
         bVar6 = bVar6 + 6;
-        iVar7 = iVar7 + *(int *)(&DAT_00460458 + (g_item[param_1].bills_mask >> bVar3 & 7) * 4);
-        iVar8 = iVar8 + *(int *)(&DAT_00460458 +
-                                (g_item[param_1].bills_mask >> (bVar1 & 0x1f) & 7) * 4);
+        iVar7 = iVar7 + g_dollarbillvalue[g_item[param_1].bills_mask >> bVar3 & 7];
+        iVar8 = iVar8 + g_dollarbillvalue[g_item[param_1].bills_mask >> (bVar1 & 0x1f) & 7];
         uVar9 = uVar9 - 1;
       } while (uVar9 != 0);
     }
     iVar4 = 0;
     if (iVar5 <= g_item[param_1].cash) {
-      iVar4 = *(int *)(&DAT_00460458 +
-                      (g_item[param_1].bills_mask >> ((char)iVar5 * '\x03' & 0x1fU) & 7) * 4);
+      iVar4 = g_dollarbillvalue[g_item[param_1].bills_mask >> ((char)iVar5 * '\x03' & 0x1fU) & 7];
     }
     iVar4 = iVar4 + iVar8 + iVar7;
   }
   return iVar4;
 }
-#undef DAT_00460458
+#undef g_dollarbillvalue
 #undef g_item
 
 /* ---------------------------------------------------------------- 0x7c40 */
@@ -6320,24 +6248,24 @@ void __cdecl lf_0ac00(void)
 
 /* ---------------------------------------------------------------- 0xad30 */
 #define DAT_00460dc0 (*(undefined4 *)SR_VA(0x460dc0))
-#define DAT_00460cd0 (*(int *)SR_VA(0x460cd0))
+#define g_mti (*(int *)SR_VA(0x460cd0))
 void __cdecl lf_0ad30(undefined4 param_1)
 
 {
   uint *puVar1;
   
   DAT_00460dc0 = param_1;
-  DAT_00460cd0 = 1;
+  g_mti = 1;
   puVar1 = &DAT_00460dc0;
   do {
-    puVar1[1] = (*puVar1 >> 0x1e ^ *puVar1) * 0x6c078965 + DAT_00460cd0;
+    puVar1[1] = (*puVar1 >> 0x1e ^ *puVar1) * 0x6c078965 + g_mti;
     puVar1 = puVar1 + 1;
-    DAT_00460cd0 = DAT_00460cd0 + 1;
+    g_mti = g_mti + 1;
   } while ((int)puVar1 < ((int)SR_VA(0x46177c)));
   return;
 }
 #undef DAT_00460dc0
-#undef DAT_00460cd0
+#undef g_mti
 
 /* ---------------------------------------------------------------- 0xad70 */
 #define DAT_0046177c (*(undefined4 *)SR_VA(0x46177c))
@@ -6399,12 +6327,12 @@ LAB_0040adf9:
 #undef init_genrand
 
 /* ---------------------------------------------------------------- 0xae50 */
-#define DAT_00460cd0 (*(int *)SR_VA(0x460cd0))
 #define DAT_0046177c (*(uint *)SR_VA(0x46177c))
 #define DAT_00460dc0 (*(uint *)SR_VA(0x460dc0))
 #define DAT_004613f0 (*(undefined *)SR_VA(0x4613f0))
-#define DAT_00460d10 (*(undefined *)SR_VA(0x460d10))
 #define DAT_00460dc4 (*(undefined4 *)SR_VA(0x460dc4))
+#define g_mti (*(int *)SR_VA(0x460cd0))
+#define g_mag01 (*(uint (*)[2])SR_VA(0x460d10))
 #define _DAT_004613f0 (*(uint *)SR_VA(0x4613f0))
 #define init_genrand ((void (__cdecl *)(undefined4))SR_VA(0x40ad30))
 int __cdecl lf_0ae50(void)
@@ -6415,8 +6343,8 @@ int __cdecl lf_0ae50(void)
   uint *puVar3;
   uint *puVar4;
   
-  if (0x26f < DAT_00460cd0) {
-    if (DAT_00460cd0 == 0x271) {
+  if (0x26f < g_mti) {
+    if (g_mti == 0x271) {
       init_genrand(0x1571);
     }
     iVar2 = 0;
@@ -6426,34 +6354,33 @@ int __cdecl lf_0ae50(void)
       iVar2 = iVar2 + 1;
       uVar1 = (*puVar3 ^ *puVar4) & 0x7fffffff ^ *(uint *)(iVar2 * 4 + ((int)SR_VA(0x460dbc)));
       *(uint *)(iVar2 * 4 + ((int)SR_VA(0x460dbc))) =
-           uVar1 >> 1 ^ *(uint *)(&DAT_00460d10 + (uVar1 & 1) * 4) ^
-           *(uint *)(&DAT_004613f0 + iVar2 * 4);
+           uVar1 >> 1 ^ g_mag01[uVar1 & 1] ^ *(uint *)(&DAT_004613f0 + iVar2 * 4);
     } while (iVar2 < 0xe3);
     if (iVar2 < 0x26f) {
       puVar3 = &DAT_00460dc0 + iVar2;
       do {
         puVar4 = puVar3 + 1;
         uVar1 = (*puVar3 ^ puVar3[1]) & 0x7fffffff ^ *puVar3;
-        *puVar3 = *(uint *)(&DAT_00460d10 + (uVar1 & 1) * 4) ^ puVar3[-0xe3] ^ uVar1 >> 1;
+        *puVar3 = g_mag01[uVar1 & 1] ^ puVar3[-0xe3] ^ uVar1 >> 1;
         puVar3 = puVar4;
       } while ((int)puVar4 < ((int)SR_VA(0x46177c)));
     }
     uVar1 = (DAT_00460dc0 ^ DAT_0046177c) & 0x7fffffff ^ DAT_0046177c;
-    DAT_0046177c = uVar1 >> 1 ^ *(uint *)(&DAT_00460d10 + (uVar1 & 1) * 4) ^ _DAT_004613f0;
-    DAT_00460cd0 = 0;
+    DAT_0046177c = uVar1 >> 1 ^ g_mag01[uVar1 & 1] ^ _DAT_004613f0;
+    g_mti = 0;
   }
-  uVar1 = (&DAT_00460dc0)[DAT_00460cd0] ^ (&DAT_00460dc0)[DAT_00460cd0] >> 0xb;
-  DAT_00460cd0 = DAT_00460cd0 + 1;
+  uVar1 = (&DAT_00460dc0)[g_mti] ^ (&DAT_00460dc0)[g_mti] >> 0xb;
+  g_mti = g_mti + 1;
   uVar1 = uVar1 ^ (uVar1 & 0xff3a58ad) << 7;
   uVar1 = uVar1 ^ (uVar1 & 0xffffdf8c) << 0xf;
   return uVar1 >> 0x12 ^ uVar1;
 }
-#undef DAT_00460cd0
 #undef DAT_0046177c
 #undef DAT_00460dc0
 #undef DAT_004613f0
-#undef DAT_00460d10
 #undef DAT_00460dc4
+#undef g_mti
+#undef g_mag01
 #undef _DAT_004613f0
 #undef init_genrand
 
@@ -7988,7 +7915,6 @@ void __cdecl lf_0d710(u_long param_1)
 
 /* ---------------------------------------------------------------- 0xd860 */
 #define DAT_1992d6c8 (*(undefined4 *)SR_VA(0x1992d6c8))
-#define DAT_00460d08 (*(char *)SR_VA(0x460d08))
 #define DAT_1993d6f0 (*(byte *)SR_VA(0x1993d6f0))
 #define DAT_1993d6f1 (*(byte *)SR_VA(0x1993d6f1))
 #define DAT_1993d6f2 (*(byte *)SR_VA(0x1993d6f2))
@@ -8000,6 +7926,7 @@ void __cdecl lf_0d710(u_long param_1)
 #define DAT_1992d6a4 (*(undefined *)SR_VA(0x1992d6a4))
 #define DAT_1992d6c4 (*(undefined *)SR_VA(0x1992d6c4))
 #define DAT_1992d6d4 (*(undefined4 *)SR_VA(0x1992d6d4))
+#define g_socketid (*(uint *)SR_VA(0x460d08))
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
 #define recvfrom ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int *))LF_IMPORT_ORD(29, "WSOCK32.DLL", 17))
 int __cdecl lf_0d860(void)
@@ -8012,10 +7939,10 @@ int __cdecl lf_0d860(void)
   DAT_1993d6e4 = recvfrom(*(SOCKET *)(&DAT_1992d6a4 + g_bsdsocket * 4),(char *)&DAT_1993d6f0,0x10000
                           ,0,(sockaddr *)&DAT_1992d6c4,&DAT_1992d6d4);
   if (0 < DAT_1993d6e4) {
-    if (((((uint)DAT_1993d6f0 == (int)(char)DAT_00460d08) &&
-         ((uint)DAT_1993d6f1 == (int)(*(uchar *)((uchar *)&DAT_00460d08 + 1)))) &&
-        ((uint)DAT_1993d6f2 == (int)(*(uchar *)((uchar *)&DAT_00460d08 + 2)))) &&
-       ((uint)DAT_1993d6f3 == (int)(*(uchar *)((uchar *)&DAT_00460d08 + 3)))) {
+    if (((((uint)DAT_1993d6f0 == (int)(char)g_socketid) &&
+         ((uint)DAT_1993d6f1 == (int)(*(uchar *)((uchar *)&g_socketid + 1)))) &&
+        ((uint)DAT_1993d6f2 == (int)(*(uchar *)((uchar *)&g_socketid + 2)))) &&
+       ((uint)DAT_1993d6f3 == (int)(*(uchar *)((uchar *)&g_socketid + 3)))) {
       DAT_1993d6e8 = 4;
       DAT_1993d6ec = 0;
       return DAT_1993d6e4;
@@ -8025,7 +7952,6 @@ int __cdecl lf_0d860(void)
   return DAT_1993d6e4;
 }
 #undef DAT_1992d6c8
-#undef DAT_00460d08
 #undef DAT_1993d6f0
 #undef DAT_1993d6f1
 #undef DAT_1993d6f2
@@ -8037,6 +7963,7 @@ int __cdecl lf_0d860(void)
 #undef DAT_1992d6a4
 #undef DAT_1992d6c4
 #undef DAT_1992d6d4
+#undef g_socketid
 #undef g_bsdsocket
 #undef recvfrom
 
@@ -10058,19 +9985,11 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 /* ---------------------------------------------------------------- 0x10950 */
 #define DAT_25aad760 (*(int *)SR_VA(0x25aad760))
 #define DAT_25bbd764 (*(int *)SR_VA(0x25bbd764))
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460078 (*(undefined4 *)SR_VA(0x460078))
-#define DAT_0046007c (*(undefined4 *)SR_VA(0x46007c))
-#define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
-#define DAT_004600c0 (*(undefined4 *)SR_VA(0x4600c0))
-#define DAT_004600c4 (*(undefined4 *)SR_VA(0x4600c4))
-#define DAT_004600c8 (*(undefined4 *)SR_VA(0x4600c8))
-#define DAT_00460178 (*(undefined4 *)SR_VA(0x460178))
-#define DAT_0046017c (*(undefined4 *)SR_VA(0x46017c))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
 #define DAT_25aad764 (*(undefined4 *)SR_VA(0x25aad764))
+#define g_cubenormal (*(float (*)[18])SR_VA(0x460078))
 #define DAT_25aad768 (*(undefined4 *)SR_VA(0x25aad768))
+#define g_cubetangent (*(float (*)[18])SR_VA(0x4600c0))
 #define DAT_25aad76c (*(undefined4 *)SR_VA(0x25aad76c))
 #define DAT_25add764 (*(undefined4 *)SR_VA(0x25add764))
 #define DAT_25add768 (*(undefined4 *)SR_VA(0x25add768))
@@ -10083,8 +10002,7 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 #define DAT_25bbd770 (*(undefined4 *)SR_VA(0x25bbd770))
 #define DAT_25bbd774 (*(undefined4 *)SR_VA(0x25bbd774))
 #define DAT_25bfd768 (*(undefined4 *)SR_VA(0x25bfd768))
-#define g_cubequad (*(undefined4 *)SR_VA(0x460170))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,float param_5,
                  float param_6,uint param_7)
 
@@ -10092,102 +10010,98 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
   float fVar1;
   float fVar2;
   int iVar3;
-  int iVar4;
-  uint uVar5;
+  uint uVar4;
+  int iVar5;
   int iVar6;
   int iVar7;
   int iVar8;
   
   iVar6 = 0;
   do {
-    iVar4 = DAT_25aad760;
-    iVar3 = (&g_cubequad)[iVar6 * 4] * 0xc;
-    fVar1 = *(float *)(&DAT_0046001c + iVar3);
-    fVar2 = *(float *)(&DAT_00460020 + iVar3);
-    *(float *)&((&DAT_25aad764)[DAT_25aad760 * 3]) =
-         (float)((float)(*(float *)(&DAT_00460018 + (&g_cubequad)[iVar6 * 4] * 0xc) * param_4) + param_1);
-    *(float *)&((&DAT_25aad768)[iVar4 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
-    *(float *)&((&DAT_25aad76c)[iVar4 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
     iVar3 = DAT_25aad760;
-    (&DAT_25add764)[DAT_25aad760 * 3] = (&DAT_00460078)[iVar6 * 3];
-    (&DAT_25add768)[iVar3 * 3] = (&DAT_0046007c)[iVar6 * 3];
-    (&DAT_25add76c)[iVar3 * 3] = (&DAT_00460080)[iVar6 * 3];
-    iVar3 = DAT_25aad760;
-    (&DAT_25b0d764)[DAT_25aad760 * 3] = (&DAT_004600c0)[iVar6 * 3];
-    (&DAT_25b0d768)[iVar3 * 3] = (&DAT_004600c4)[iVar6 * 3];
-    (&DAT_25b0d76c)[iVar3 * 3] = (&DAT_004600c8)[iVar6 * 3];
+    iVar5 = g_cubequad[iVar6 * 4];
+    fVar1 = g_cubevertex[iVar5 * 3 + 1];
+    fVar2 = g_cubevertex[iVar5 * 3 + 2];
+    *(float *)&((&DAT_25aad764)[DAT_25aad760 * 3]) = (float)((float)(g_cubevertex[iVar5 * 3] * param_4) + param_1);
+    *(float *)&((&DAT_25aad768)[iVar3 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
+    *(float *)&((&DAT_25aad76c)[iVar3 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25add764)[DAT_25aad760 * 3]) = g_cubenormal[iVar6 * 3];
+    *(float *)&((&DAT_25add768)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25add76c)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 2];
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25b0d764)[DAT_25aad760 * 3]) = g_cubetangent[iVar6 * 3];
+    *(float *)&((&DAT_25b0d768)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25b0d76c)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 2];
+    iVar5 = g_cubequad[iVar6 * 4 + 1];
     iVar7 = DAT_25aad760 + 1;
-    iVar3 = (&g_cubevertex)[iVar6 * 4] * 0xc;
-    fVar1 = *(float *)(&DAT_0046001c + iVar3);
-    fVar2 = *(float *)(&DAT_00460020 + iVar3);
+    fVar1 = g_cubevertex[iVar5 * 3 + 1];
+    fVar2 = g_cubevertex[iVar5 * 3 + 2];
     DAT_25aad760 = iVar7;
-    *(float *)&((&DAT_25aad764)[iVar7 * 3]) =
-         (float)((float)(*(float *)(&DAT_00460018 + (&g_cubevertex)[iVar6 * 4] * 0xc) * param_4) + param_1);
+    *(float *)&((&DAT_25aad764)[iVar7 * 3]) = (float)((float)(g_cubevertex[iVar5 * 3] * param_4) + param_1);
     *(float *)&((&DAT_25aad768)[iVar7 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
     *(float *)&((&DAT_25aad76c)[iVar7 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
-    iVar3 = DAT_25aad760;
-    (&DAT_25add764)[DAT_25aad760 * 3] = (&DAT_00460078)[iVar6 * 3];
-    (&DAT_25add768)[iVar3 * 3] = (&DAT_0046007c)[iVar6 * 3];
-    (&DAT_25add76c)[iVar3 * 3] = (&DAT_00460080)[iVar6 * 3];
-    iVar3 = DAT_25aad760;
-    (&DAT_25b0d764)[DAT_25aad760 * 3] = (&DAT_004600c0)[iVar6 * 3];
-    (&DAT_25b0d768)[iVar3 * 3] = (&DAT_004600c4)[iVar6 * 3];
-    (&DAT_25b0d76c)[iVar3 * 3] = (&DAT_004600c8)[iVar6 * 3];
-    iVar7 = (&DAT_00460178)[iVar6 * 4] * 0xc;
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25add764)[DAT_25aad760 * 3]) = g_cubenormal[iVar6 * 3];
+    *(float *)&((&DAT_25add768)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25add76c)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 2];
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25b0d764)[DAT_25aad760 * 3]) = g_cubetangent[iVar6 * 3];
+    *(float *)&((&DAT_25b0d768)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25b0d76c)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 2];
+    iVar5 = g_cubequad[iVar6 * 4 + 2];
     iVar8 = DAT_25aad760 + 1;
-    iVar3 = (&DAT_0046017c)[iVar6 * 4];
-    fVar1 = *(float *)(&DAT_0046001c + iVar7);
-    fVar2 = *(float *)(&DAT_00460020 + iVar7);
+    iVar7 = g_cubequad[iVar6 * 4 + 3];
+    fVar1 = g_cubevertex[iVar5 * 3 + 1];
+    fVar2 = g_cubevertex[iVar5 * 3 + 2];
     DAT_25aad760 = iVar8;
-    *(float *)&((&DAT_25aad764)[iVar8 * 3]) =
-         (float)((float)(*(float *)(&DAT_00460018 + (&DAT_00460178)[iVar6 * 4] * 0xc) * param_4) + param_1);
+    *(float *)&((&DAT_25aad764)[iVar8 * 3]) = (float)((float)(g_cubevertex[iVar5 * 3] * param_4) + param_1);
     *(float *)&((&DAT_25aad768)[iVar8 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
     *(float *)&((&DAT_25aad76c)[iVar8 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
-    iVar7 = DAT_25aad760;
-    (&DAT_25add764)[DAT_25aad760 * 3] = (&DAT_00460078)[iVar6 * 3];
-    (&DAT_25add768)[iVar7 * 3] = (&DAT_0046007c)[iVar6 * 3];
-    (&DAT_25add76c)[iVar7 * 3] = (&DAT_00460080)[iVar6 * 3];
-    iVar7 = DAT_25aad760;
-    (&DAT_25b0d764)[DAT_25aad760 * 3] = (&DAT_004600c0)[iVar6 * 3];
-    (&DAT_25b0d768)[iVar7 * 3] = (&DAT_004600c4)[iVar6 * 3];
-    (&DAT_25b0d76c)[iVar7 * 3] = (&DAT_004600c8)[iVar6 * 3];
-    iVar8 = DAT_25aad760 + 1;
-    iVar7 = iVar3 * 0xc;
-    fVar1 = *(float *)(&DAT_0046001c + iVar7);
-    fVar2 = *(float *)(&DAT_00460020 + iVar7);
-    DAT_25aad760 = iVar8;
-    *(float *)&((&DAT_25aad764)[iVar8 * 3]) = (float)((float)(*(float *)(&DAT_00460018 + iVar3 * 0xc) * param_4) + param_1);
-    *(float *)&((&DAT_25aad768)[iVar8 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
-    *(float *)&((&DAT_25aad76c)[iVar8 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
-    iVar3 = DAT_25aad760;
-    (&DAT_25add764)[DAT_25aad760 * 3] = (&DAT_00460078)[iVar6 * 3];
-    (&DAT_25add768)[iVar3 * 3] = (&DAT_0046007c)[iVar6 * 3];
-    (&DAT_25add76c)[iVar3 * 3] = (&DAT_00460080)[iVar6 * 3];
-    iVar3 = DAT_25aad760;
-    (&DAT_25b0d764)[DAT_25aad760 * 3] = (&DAT_004600c0)[iVar6 * 3];
-    (&DAT_25b0d768)[iVar3 * 3] = (&DAT_004600c4)[iVar6 * 3];
-    (&DAT_25b0d76c)[iVar3 * 3] = (&DAT_004600c8)[iVar6 * 3];
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25add764)[DAT_25aad760 * 3]) = g_cubenormal[iVar6 * 3];
+    *(float *)&((&DAT_25add768)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25add76c)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 2];
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25b0d764)[DAT_25aad760 * 3]) = g_cubetangent[iVar6 * 3];
+    *(float *)&((&DAT_25b0d768)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25b0d76c)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 2];
+    iVar5 = DAT_25aad760 + 1;
+    fVar1 = g_cubevertex[iVar7 * 3 + 1];
+    fVar2 = g_cubevertex[iVar7 * 3 + 2];
+    DAT_25aad760 = iVar5;
+    *(float *)&((&DAT_25aad764)[iVar5 * 3]) = (float)((float)(g_cubevertex[iVar7 * 3] * param_4) + param_1);
+    *(float *)&((&DAT_25aad768)[iVar5 * 3]) = (float)((float)(fVar1 * param_5) + param_2);
+    *(float *)&((&DAT_25aad76c)[iVar5 * 3]) = (float)((float)(fVar2 * param_6) + param_3);
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25add764)[DAT_25aad760 * 3]) = g_cubenormal[iVar6 * 3];
+    *(float *)&((&DAT_25add768)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25add76c)[iVar5 * 3]) = g_cubenormal[iVar6 * 3 + 2];
+    iVar5 = DAT_25aad760;
+    *(float *)&((&DAT_25b0d764)[DAT_25aad760 * 3]) = g_cubetangent[iVar6 * 3];
+    *(float *)&((&DAT_25b0d768)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 1];
+    *(float *)&((&DAT_25b0d76c)[iVar5 * 3]) = g_cubetangent[iVar6 * 3 + 2];
     DAT_25aad760 = DAT_25aad760 + 1;
     if (iVar6 == 0) {
-      uVar5 = 0x30000;
+      uVar4 = 0x30000;
     }
     else if (iVar6 == 1) {
-      uVar5 = 0x60000;
+      uVar4 = 0x60000;
     }
     else if (iVar6 == 2) {
-      uVar5 = 0x10000;
+      uVar4 = 0x10000;
     }
     else if (iVar6 == 3) {
-      uVar5 = 0x50000;
+      uVar4 = 0x50000;
     }
     else {
-      uVar5 = (-(uint)(iVar6 != 4) & 0x20000) + 0x20000;
+      uVar4 = (-(uint)(iVar6 != 4) & 0x20000) + 0x20000;
     }
-    (&DAT_25bbd768)[DAT_25bbd764 * 4] = iVar4;
-    (&DAT_25bbd76c)[DAT_25bbd764 * 4] = iVar4 + 1;
-    (&DAT_25bbd770)[DAT_25bbd764 * 4] = iVar4 + 2;
-    (&DAT_25bbd774)[DAT_25bbd764 * 4] = iVar4 + 3;
-    (&DAT_25bfd768)[DAT_25bbd764] = uVar5 | param_7;
+    (&DAT_25bbd768)[DAT_25bbd764 * 4] = iVar3;
+    (&DAT_25bbd76c)[DAT_25bbd764 * 4] = iVar3 + 1;
+    (&DAT_25bbd770)[DAT_25bbd764 * 4] = iVar3 + 2;
+    (&DAT_25bbd774)[DAT_25bbd764 * 4] = iVar3 + 3;
+    (&DAT_25bfd768)[DAT_25bbd764] = uVar4 | param_7;
     DAT_25bbd764 = DAT_25bbd764 + 1;
     iVar6 = iVar6 + 1;
   } while (iVar6 < 6);
@@ -10195,19 +10109,11 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
 }
 #undef DAT_25aad760
 #undef DAT_25bbd764
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460078
-#undef DAT_0046007c
-#undef DAT_00460080
-#undef DAT_004600c0
-#undef DAT_004600c4
-#undef DAT_004600c8
-#undef DAT_00460178
-#undef DAT_0046017c
+#undef g_cubevertex
 #undef DAT_25aad764
+#undef g_cubenormal
 #undef DAT_25aad768
+#undef g_cubetangent
 #undef DAT_25aad76c
 #undef DAT_25add764
 #undef DAT_25add768
@@ -10221,7 +10127,6 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
 #undef DAT_25bbd774
 #undef DAT_25bfd768
 #undef g_cubequad
-#undef g_cubevertex
 
 /* ---------------------------------------------------------------- 0x10da0 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
@@ -10553,6 +10458,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 /* ---------------------------------------------------------------- 0x11d70 */
 #define DAT_0bbe90a0 (*(float *)SR_VA(0xbbe90a0))
 #define DAT_0bbe90a4 (*(float *)SR_VA(0xbbe90a4))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
 #define DAT_0bbe90a8 (*(float *)SR_VA(0xbbe90a8))
 #define DAT_0bbe90c4 (*(float *)SR_VA(0xbbe90c4))
 #define DAT_0bbe90c8 (*(float *)SR_VA(0xbbe90c8))
@@ -10563,13 +10469,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define DAT_0bbe9138 (*(undefined *)SR_VA(0xbbe9138))
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460178 (*(undefined4 *)SR_VA(0x460178))
-#define DAT_0046017c (*(undefined4 *)SR_VA(0x46017c))
-#define g_cubequad (*(undefined4 *)SR_VA(0x460170))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
 #define _DAT_0bbe9158 (*(float *)SR_VA(0xbbe9158))
 #define _DAT_0bbe915c (*(float *)SR_VA(0xbbe915c))
@@ -10584,65 +10484,67 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
 {
   int iVar1;
   int iVar2;
-  uint uVar3;
+  int iVar3;
   uint uVar4;
-  int iVar5;
-  uint uVar6;
+  uint uVar5;
+  int iVar6;
+  uint uVar7;
   
-  iVar5 = 0;
-  uVar6 = 1;
+  iVar6 = 0;
+  uVar7 = 1;
   do {
-    if ((uVar6 & param_8) == uVar6) {
-      iVar2 = (&g_cubequad)[iVar5 * 4] * 0xc;
-      DAT_0bbe90a0 = (float)(*(float *)(&DAT_00460018 + (&g_cubequad)[iVar5 * 4] * 0xc) * param_5 + param_2);
-      DAT_0bbe90a4 = (float)(*(float *)(&DAT_0046001c + iVar2) * param_6 + param_3);
-      iVar1 = (&g_cubevertex)[iVar5 * 4] * 0xc;
-      DAT_0bbe90a8 = (float)(*(float *)(&DAT_00460020 + iVar2) * param_7 + param_4);
-      DAT_0bbe90c4 = (float)(*(float *)(&DAT_00460018 + iVar1) * param_5 + param_2);
-      DAT_0bbe90c8 = (float)(*(float *)(&DAT_0046001c + iVar1) * param_6 + param_3);
-      DAT_0bbe90cc = (float)(*(float *)(&DAT_00460020 + iVar1) * param_7 + param_4);
-      iVar2 = (&DAT_00460178)[iVar5 * 4] * 0xc;
-      iVar1 = (&DAT_0046017c)[iVar5 * 4] * 0xc;
-      _DAT_0bbe9154 = (float)(*(float *)(&DAT_00460018 + iVar2) * param_5 + param_2);
-      _DAT_0bbe9158 = (float)(*(float *)(&DAT_0046001c + iVar2) * param_6 + param_3);
-      _DAT_0bbe915c = (float)(*(float *)(&DAT_00460020 + iVar2) * param_7 + param_4);
-      _DAT_0bbe9130 = (float)(param_2 + *(float *)(&DAT_00460018 + iVar1) * param_5);
-      _DAT_0bbe9134 = (float)(*(float *)(&DAT_0046001c + iVar1) * param_6 + param_3);
-      _DAT_0bbe9138 = (float)(param_4 + *(float *)(&DAT_00460020 + iVar1) * param_7);
-      if (iVar5 == 0) {
-        iVar2 = 0x30000;
+    if ((uVar7 & param_8) == uVar7) {
+      iVar3 = g_cubequad[iVar6 * 4];
+      DAT_0bbe90a0 = (float)(g_cubevertex[iVar3 * 3] * param_5 + param_2);
+      DAT_0bbe90a4 = (float)(g_cubevertex[iVar3 * 3 + 1] * param_6 + param_3);
+      iVar1 = g_cubequad[iVar6 * 4 + 1];
+      DAT_0bbe90a8 = (float)(g_cubevertex[iVar3 * 3 + 2] * param_7 + param_4);
+      DAT_0bbe90c4 = (float)(g_cubevertex[iVar1 * 3] * param_5 + param_2);
+      DAT_0bbe90c8 = (float)(g_cubevertex[iVar1 * 3 + 1] * param_6 + param_3);
+      iVar3 = g_cubequad[iVar6 * 4 + 2];
+      iVar2 = g_cubequad[iVar6 * 4 + 3];
+      DAT_0bbe90cc = (float)(g_cubevertex[iVar1 * 3 + 2] * param_7 + param_4);
+      _DAT_0bbe9154 = (float)(g_cubevertex[iVar3 * 3] * param_5 + param_2);
+      _DAT_0bbe9158 = (float)(g_cubevertex[iVar3 * 3 + 1] * param_6 + param_3);
+      _DAT_0bbe915c = (float)(g_cubevertex[iVar3 * 3 + 2] * param_7 + param_4);
+      _DAT_0bbe9130 = (float)(param_2 + g_cubevertex[iVar2 * 3] * param_5);
+      _DAT_0bbe9134 = (float)(g_cubevertex[iVar2 * 3 + 1] * param_6 + param_3);
+      _DAT_0bbe9138 = (float)(param_4 + g_cubevertex[iVar2 * 3 + 2] * param_7);
+      if (iVar6 == 0) {
+        iVar3 = 0x30000;
       }
-      else if (iVar5 == 1) {
-        iVar2 = 0x60000;
+      else if (iVar6 == 1) {
+        iVar3 = 0x60000;
       }
-      else if (iVar5 == 2) {
-        iVar2 = 0x10000;
+      else if (iVar6 == 2) {
+        iVar3 = 0x10000;
       }
-      else if (iVar5 == 3) {
-        iVar2 = 0x50000;
-      }
-      else {
-        iVar2 = (-(uint)(iVar5 != 4) & 0x20000) + 0x20000;
-      }
-      uVar3 = area_block_rotatesurface(param_1,iVar2);
-      if (iVar5 == 0) {
-        uVar4 = param_9[5];
-      }
-      else if (iVar5 == 5) {
-        uVar4 = *param_9;
+      else if (iVar6 == 3) {
+        iVar3 = 0x50000;
       }
       else {
-        uVar4 = param_9[iVar5];
+        iVar3 = (-(uint)(iVar6 != 4) & 0x20000) + 0x20000;
       }
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar4 | uVar3);
+      uVar4 = area_block_rotatesurface(param_1,iVar3);
+      if (iVar6 == 0) {
+        uVar5 = param_9[5];
+      }
+      else if (iVar6 == 5) {
+        uVar5 = *param_9;
+      }
+      else {
+        uVar5 = param_9[iVar6];
+      }
+      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar4);
     }
-    iVar5 = iVar5 + 1;
-    uVar6 = uVar6 << 1 | (uint)((int)uVar6 < 0);
-  } while (iVar5 < 6);
+    iVar6 = iVar6 + 1;
+    uVar7 = uVar7 << 1 | (uint)((int)uVar7 < 0);
+  } while (iVar6 < 6);
   return;
 }
 #undef DAT_0bbe90a0
 #undef DAT_0bbe90a4
+#undef g_cubevertex
 #undef DAT_0bbe90a8
 #undef DAT_0bbe90c4
 #undef DAT_0bbe90c8
@@ -10653,13 +10555,7 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
 #undef DAT_0bbe9130
 #undef DAT_0bbe9134
 #undef DAT_0bbe9138
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460178
-#undef DAT_0046017c
 #undef g_cubequad
-#undef g_cubevertex
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe915c
@@ -10912,11 +10808,9 @@ void __cdecl lf_121d0(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 
 /* ---------------------------------------------------------------- 0x12450 */
 #define DAT_1074850c (*(int * *)SR_VA(0x1074850c))
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
-#define DAT_00460178 (*(undefined4 *)SR_VA(0x460178))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
+#define g_cubenormal (*(float (*)[18])SR_VA(0x460078))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_VA(0x40c420))
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_20 (*(float *)(lf_frame + 0x20))
@@ -10955,25 +10849,25 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
   fVar5 = param_8 * (float)*param_6;
   piVar1 = param_6 + 1;
   param_6 = (int *)0x0;
-  piVar9 = &DAT_00460178;
-  pfVar8 = (float *)&DAT_00460080;
+  piVar9 = g_cubequad + 2;
+  pfVar8 = g_cubenormal + 2;
   fVar3 = (float)((float)*piVar1 * param_8);
   fVar4 = (float)((float)piVar6[2] * param_8);
   do {
     if (((param_7 & 1 << ((byte)param_6 & 0x1f)) != 0) &&
        ((param_7 & 0x40 << ((byte)param_6 & 0x1f)) != 0)) {
-      iVar7 = piVar9[-2] * 0xc;
-      local_c = (float)(*(float *)(&DAT_00460018 + piVar9[-2] * 0xc) * param_8 + fVar5);
-      local_8 = (float)(*(float *)(&DAT_0046001c + iVar7) * param_8 + fVar3);
-      iVar2 = piVar9[-1] * 0xc;
-      local_4 = (float)(*(float *)(&DAT_00460020 + iVar7) * param_8 + fVar4);
-      local_18 = (float)(*(float *)(&DAT_00460018 + iVar2) * param_8 + fVar5);
-      local_14 = (float)(*(float *)(&DAT_0046001c + iVar2) * param_8 + fVar3);
-      iVar7 = *piVar9 * 0xc;
-      local_10 = (float)(*(float *)(&DAT_00460020 + iVar2) * param_8 + fVar4);
-      local_24 = (float)(*(float *)(&DAT_00460018 + iVar7) * param_8 + fVar5);
-      local_20 = (float)(*(float *)(&DAT_0046001c + iVar7) * param_8 + fVar3);
-      local_1c = (float)(fVar4 + *(float *)(&DAT_00460020 + iVar7) * param_8);
+      iVar7 = piVar9[-2];
+      local_c = (float)(g_cubevertex[iVar7 * 3] * param_8 + fVar5);
+      local_8 = (float)(g_cubevertex[iVar7 * 3 + 1] * param_8 + fVar3);
+      iVar2 = piVar9[-1];
+      local_4 = (float)(g_cubevertex[iVar7 * 3 + 2] * param_8 + fVar4);
+      local_18 = (float)(g_cubevertex[iVar2 * 3] * param_8 + fVar5);
+      local_14 = (float)(g_cubevertex[iVar2 * 3 + 1] * param_8 + fVar3);
+      iVar7 = *piVar9;
+      local_10 = (float)(g_cubevertex[iVar2 * 3 + 2] * param_8 + fVar4);
+      local_24 = (float)(g_cubevertex[iVar7 * 3] * param_8 + fVar5);
+      local_20 = (float)(g_cubevertex[iVar7 * 3 + 1] * param_8 + fVar3);
+      local_1c = (float)(fVar4 + g_cubevertex[iVar7 * 3 + 2] * param_8);
       *param_2 = pfVar8[-2];
       param_2[1] = pfVar8[-1];
       param_2[2] = *pfVar8;
@@ -10983,14 +10877,14 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
         DAT_1074850c = param_6;
         return 1;
       }
-      iVar7 = *piVar9 * 0xc;
-      local_18 = (float)(fVar5 + param_8 * *(float *)(&DAT_00460018 + *piVar9 * 0xc));
-      local_14 = (float)(fVar3 + *(float *)(&DAT_0046001c + iVar7) * param_8);
-      iVar2 = piVar9[1] * 0xc;
-      local_10 = (float)(fVar4 + *(float *)(&DAT_00460020 + iVar7) * param_8);
-      local_24 = (float)(*(float *)(&DAT_00460018 + iVar2) * param_8 + fVar5);
-      local_20 = (float)(*(float *)(&DAT_0046001c + iVar2) * param_8 + fVar3);
-      local_1c = (float)(fVar4 + *(float *)(&DAT_00460020 + iVar2) * param_8);
+      iVar7 = *piVar9;
+      local_18 = (float)(fVar5 + param_8 * g_cubevertex[iVar7 * 3]);
+      local_14 = (float)(fVar3 + g_cubevertex[iVar7 * 3 + 1] * param_8);
+      iVar2 = piVar9[1];
+      local_10 = (float)(fVar4 + g_cubevertex[iVar7 * 3 + 2] * param_8);
+      local_24 = (float)(g_cubevertex[iVar2 * 3] * param_8 + fVar5);
+      local_20 = (float)(g_cubevertex[iVar2 * 3 + 1] * param_8 + fVar3);
+      local_1c = (float)(fVar4 + g_cubevertex[iVar2 * 3 + 2] * param_8);
       iVar7 = lineintersecttriangle
                         (param_1,param_2,param_3,param_4,param_5,&local_c,&local_18,&local_24);
       if (iVar7 != 0) {
@@ -11007,11 +10901,9 @@ undefined4 __cdecl lf_12450(float *param_1,float *param_2,float *param_3,float *
   } while( true );
 }
 #undef DAT_1074850c
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460080
-#undef DAT_00460178
+#undef g_cubevertex
+#undef g_cubenormal
+#undef g_cubequad
 #undef lineintersecttriangle
 #undef local_24
 #undef local_20
@@ -11730,41 +11622,27 @@ void __cdecl lf_130d0(int param_1)
 #define DAT_094d0340 (*(undefined *)SR_VA(0x94d0340))
 #define DAT_0bba7240 (*(undefined4 *)SR_VA(0xbba7240))
 #define DAT_094d0344 (*(undefined *)SR_VA(0x94d0344))
+#define g_teamcolor (*(float (*)[24])SR_VA(0x4603d8))
 #define DAT_0bba7254 (*(undefined4 *)SR_VA(0xbba7254))
-#define DAT_004603d8 (*(undefined *)SR_VA(0x4603d8))
 #define DAT_0bba725c (*(undefined4 *)SR_VA(0xbba725c))
 #define DAT_094d0354 (*(undefined *)SR_VA(0x94d0354))
 #define DAT_0bba7270 (*(undefined4 *)SR_VA(0xbba7270))
-#define DAT_004603dc (*(undefined *)SR_VA(0x4603dc))
 #define DAT_0bba7278 (*(undefined4 *)SR_VA(0xbba7278))
 #define DAT_094d0358 (*(undefined *)SR_VA(0x94d0358))
 #define DAT_0bba728c (*(undefined4 *)SR_VA(0xbba728c))
-#define DAT_004603e0 (*(undefined *)SR_VA(0x4603e0))
 #define DAT_0bba7294 (*(undefined4 *)SR_VA(0xbba7294))
 #define DAT_094d035c (*(undefined *)SR_VA(0x94d035c))
-#define DAT_004603e4 (*(undefined *)SR_VA(0x4603e4))
 #define DAT_094d0360 (*(undefined *)SR_VA(0x94d0360))
-#define DAT_004603e8 (*(undefined *)SR_VA(0x4603e8))
 #define DAT_094d0364 (*(undefined *)SR_VA(0x94d0364))
-#define DAT_004603ec (*(undefined *)SR_VA(0x4603ec))
 #define DAT_094d0368 (*(undefined *)SR_VA(0x94d0368))
-#define DAT_004603f0 (*(undefined *)SR_VA(0x4603f0))
 #define DAT_094d036c (*(undefined *)SR_VA(0x94d036c))
-#define DAT_004603f4 (*(undefined *)SR_VA(0x4603f4))
 #define DAT_094d0370 (*(undefined *)SR_VA(0x94d0370))
-#define DAT_004603f8 (*(undefined *)SR_VA(0x4603f8))
 #define DAT_094d0374 (*(undefined *)SR_VA(0x94d0374))
-#define DAT_004603fc (*(undefined *)SR_VA(0x4603fc))
 #define DAT_094d0378 (*(undefined *)SR_VA(0x94d0378))
-#define DAT_00460400 (*(undefined *)SR_VA(0x460400))
 #define DAT_094d037c (*(undefined *)SR_VA(0x94d037c))
-#define DAT_00460404 (*(undefined *)SR_VA(0x460404))
 #define DAT_094d0380 (*(undefined *)SR_VA(0x94d0380))
-#define DAT_00460408 (*(undefined *)SR_VA(0x460408))
 #define DAT_094d0384 (*(undefined *)SR_VA(0x94d0384))
-#define DAT_0046040c (*(undefined *)SR_VA(0x46040c))
 #define DAT_094d0388 (*(undefined *)SR_VA(0x94d0388))
-#define DAT_00460410 (*(undefined *)SR_VA(0x460410))
 #define DAT_094d038c (*(undefined *)SR_VA(0x94d038c))
 #define DAT_0bba7244 (*(undefined4 *)SR_VA(0xbba7244))
 #define DAT_0bba7248 (*(undefined4 *)SR_VA(0xbba7248))
@@ -11894,36 +11772,21 @@ void __cdecl lf_130d0(int param_1)
 #define _DAT_094d033c (*(undefined4 *)SR_VA(0x94d033c))
 #define _DAT_094d0340 (*(undefined4 *)SR_VA(0x94d0340))
 #define _DAT_094d0344 (*(undefined4 *)SR_VA(0x94d0344))
-#define _DAT_094d0354 (*(undefined4 *)SR_VA(0x94d0354))
-#define _DAT_004603d8 (*(undefined4 *)SR_VA(0x4603d8))
-#define _DAT_094d0358 (*(undefined4 *)SR_VA(0x94d0358))
-#define _DAT_004603dc (*(undefined4 *)SR_VA(0x4603dc))
-#define _DAT_094d035c (*(undefined4 *)SR_VA(0x94d035c))
-#define _DAT_004603e0 (*(undefined4 *)SR_VA(0x4603e0))
-#define _DAT_094d0360 (*(undefined4 *)SR_VA(0x94d0360))
-#define _DAT_004603e4 (*(undefined4 *)SR_VA(0x4603e4))
-#define _DAT_094d0364 (*(undefined4 *)SR_VA(0x94d0364))
-#define _DAT_004603e8 (*(undefined4 *)SR_VA(0x4603e8))
-#define _DAT_094d0368 (*(undefined4 *)SR_VA(0x94d0368))
-#define _DAT_004603ec (*(undefined4 *)SR_VA(0x4603ec))
-#define _DAT_094d036c (*(undefined4 *)SR_VA(0x94d036c))
-#define _DAT_004603f0 (*(undefined4 *)SR_VA(0x4603f0))
-#define _DAT_094d0370 (*(undefined4 *)SR_VA(0x94d0370))
-#define _DAT_004603f4 (*(undefined4 *)SR_VA(0x4603f4))
-#define _DAT_094d0374 (*(undefined4 *)SR_VA(0x94d0374))
-#define _DAT_004603f8 (*(undefined4 *)SR_VA(0x4603f8))
-#define _DAT_094d0378 (*(undefined4 *)SR_VA(0x94d0378))
-#define _DAT_004603fc (*(undefined4 *)SR_VA(0x4603fc))
-#define _DAT_094d037c (*(undefined4 *)SR_VA(0x94d037c))
-#define _DAT_00460400 (*(undefined4 *)SR_VA(0x460400))
-#define _DAT_094d0380 (*(undefined4 *)SR_VA(0x94d0380))
-#define _DAT_00460404 (*(undefined4 *)SR_VA(0x460404))
-#define _DAT_094d0384 (*(undefined4 *)SR_VA(0x94d0384))
-#define _DAT_00460408 (*(undefined4 *)SR_VA(0x460408))
-#define _DAT_094d0388 (*(undefined4 *)SR_VA(0x94d0388))
-#define _DAT_0046040c (*(undefined4 *)SR_VA(0x46040c))
-#define _DAT_094d038c (*(undefined4 *)SR_VA(0x94d038c))
-#define _DAT_00460410 (*(undefined4 *)SR_VA(0x460410))
+#define _DAT_094d0354 (*(float *)SR_VA(0x94d0354))
+#define _DAT_094d0358 (*(float *)SR_VA(0x94d0358))
+#define _DAT_094d035c (*(float *)SR_VA(0x94d035c))
+#define _DAT_094d0360 (*(float *)SR_VA(0x94d0360))
+#define _DAT_094d0364 (*(float *)SR_VA(0x94d0364))
+#define _DAT_094d0368 (*(float *)SR_VA(0x94d0368))
+#define _DAT_094d036c (*(float *)SR_VA(0x94d036c))
+#define _DAT_094d0370 (*(float *)SR_VA(0x94d0370))
+#define _DAT_094d0374 (*(float *)SR_VA(0x94d0374))
+#define _DAT_094d0378 (*(float *)SR_VA(0x94d0378))
+#define _DAT_094d037c (*(float *)SR_VA(0x94d037c))
+#define _DAT_094d0380 (*(float *)SR_VA(0x94d0380))
+#define _DAT_094d0384 (*(float *)SR_VA(0x94d0384))
+#define _DAT_094d0388 (*(float *)SR_VA(0x94d0388))
+#define _DAT_094d038c (*(float *)SR_VA(0x94d038c))
 #define _DAT_0bba73a8 (*(undefined4 *)SR_VA(0xbba73a8))
 #define _DAT_0bba73fc (*(undefined4 *)SR_VA(0xbba73fc))
 #define _DAT_0bba73ac (*(undefined2 *)SR_VA(0xbba73ac))
@@ -12034,25 +11897,25 @@ void __cdecl lf_13450(void)
   _DAT_094d0344 = 0x3e000000;
   DAT_0bba7254 = 0xf;
   DAT_0bba725c = 0;
-  _DAT_094d0354 = _DAT_004603d8;
+  _DAT_094d0354 = g_teamcolor[0];
   DAT_0bba7270 = 7;
   DAT_0bba7278 = 0;
-  _DAT_094d0358 = _DAT_004603dc;
+  _DAT_094d0358 = g_teamcolor[1];
   DAT_0bba728c = 0xb;
   DAT_0bba7294 = 0;
-  _DAT_094d035c = _DAT_004603e0;
-  _DAT_094d0360 = _DAT_004603e4;
-  _DAT_094d0364 = _DAT_004603e8;
-  _DAT_094d0368 = _DAT_004603ec;
-  _DAT_094d036c = _DAT_004603f0;
-  _DAT_094d0370 = _DAT_004603f4;
-  _DAT_094d0374 = _DAT_004603f8;
-  _DAT_094d0378 = _DAT_004603fc;
-  _DAT_094d037c = _DAT_00460400;
-  _DAT_094d0380 = _DAT_00460404;
-  _DAT_094d0384 = _DAT_00460408;
-  _DAT_094d0388 = _DAT_0046040c;
-  _DAT_094d038c = _DAT_00460410;
+  _DAT_094d035c = g_teamcolor[2];
+  _DAT_094d0360 = g_teamcolor[3];
+  _DAT_094d0364 = g_teamcolor[4];
+  _DAT_094d0368 = g_teamcolor[5];
+  _DAT_094d036c = g_teamcolor[6];
+  _DAT_094d0370 = g_teamcolor[7];
+  _DAT_094d0374 = g_teamcolor[8];
+  _DAT_094d0378 = g_teamcolor[9];
+  _DAT_094d037c = g_teamcolor[10];
+  _DAT_094d0380 = g_teamcolor[0xb];
+  _DAT_094d0384 = g_teamcolor[0xc];
+  _DAT_094d0388 = g_teamcolor[0xd];
+  _DAT_094d038c = g_teamcolor[0xe];
   DAT_0bba7244 = 0x3e000000;
   DAT_0bba7248 = 0x3f400000;
   DAT_0bba724c = 0x3e000000;
@@ -12269,41 +12132,27 @@ void __cdecl lf_13450(void)
 #undef DAT_094d0340
 #undef DAT_0bba7240
 #undef DAT_094d0344
+#undef g_teamcolor
 #undef DAT_0bba7254
-#undef DAT_004603d8
 #undef DAT_0bba725c
 #undef DAT_094d0354
 #undef DAT_0bba7270
-#undef DAT_004603dc
 #undef DAT_0bba7278
 #undef DAT_094d0358
 #undef DAT_0bba728c
-#undef DAT_004603e0
 #undef DAT_0bba7294
 #undef DAT_094d035c
-#undef DAT_004603e4
 #undef DAT_094d0360
-#undef DAT_004603e8
 #undef DAT_094d0364
-#undef DAT_004603ec
 #undef DAT_094d0368
-#undef DAT_004603f0
 #undef DAT_094d036c
-#undef DAT_004603f4
 #undef DAT_094d0370
-#undef DAT_004603f8
 #undef DAT_094d0374
-#undef DAT_004603fc
 #undef DAT_094d0378
-#undef DAT_00460400
 #undef DAT_094d037c
-#undef DAT_00460404
 #undef DAT_094d0380
-#undef DAT_00460408
 #undef DAT_094d0384
-#undef DAT_0046040c
 #undef DAT_094d0388
-#undef DAT_00460410
 #undef DAT_094d038c
 #undef DAT_0bba7244
 #undef DAT_0bba7248
@@ -12434,35 +12283,20 @@ void __cdecl lf_13450(void)
 #undef _DAT_094d0340
 #undef _DAT_094d0344
 #undef _DAT_094d0354
-#undef _DAT_004603d8
 #undef _DAT_094d0358
-#undef _DAT_004603dc
 #undef _DAT_094d035c
-#undef _DAT_004603e0
 #undef _DAT_094d0360
-#undef _DAT_004603e4
 #undef _DAT_094d0364
-#undef _DAT_004603e8
 #undef _DAT_094d0368
-#undef _DAT_004603ec
 #undef _DAT_094d036c
-#undef _DAT_004603f0
 #undef _DAT_094d0370
-#undef _DAT_004603f4
 #undef _DAT_094d0374
-#undef _DAT_004603f8
 #undef _DAT_094d0378
-#undef _DAT_004603fc
 #undef _DAT_094d037c
-#undef _DAT_00460400
 #undef _DAT_094d0380
-#undef _DAT_00460404
 #undef _DAT_094d0384
-#undef _DAT_00460408
 #undef _DAT_094d0388
-#undef _DAT_0046040c
 #undef _DAT_094d038c
-#undef _DAT_00460410
 #undef _DAT_0bba73a8
 #undef _DAT_0bba73fc
 #undef _DAT_0bba73ac
@@ -12774,22 +12608,12 @@ void __cdecl lf_13d80(undefined4 param_1,int param_2)
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x143b0 */
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
 #define g_stats (*(int *)SR_VA(0x1f49788))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
 #define DAT_0f837320 (*(undefined *)SR_VA(0xf837320))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_numofbullets (*(int *)SR_VA(0x17929a40))
 #define g_bullet (*(Bullet (*)[16384])SR_VA(0x1809ba0))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
@@ -12826,25 +12650,25 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
   *(float *)&g_bullet[iVar8].lf_raw[0x54] = -param_3[1];
   *(float *)&g_bullet[iVar8].lf_raw[0x58] = -param_3[2];
   normalizevector((float *)puVar1,(float *)puVar1);
-  fVar7 = _DAT_00460ce8;
-  fVar5 = _DAT_00460ce4;
-  fVar6 = _DAT_00460cdc;
-  fVar4 = _DAT_00460cd8;
+  fVar7 = g_yaxis[2];
+  fVar5 = g_yaxis[1];
+  fVar6 = g_xaxis[2];
+  fVar4 = g_xaxis[1];
   piVar2 = &g_bullet[iVar8].unk_0038;
   if (0.7070000171661377 <= ABS(*(float *)&g_bullet[iVar8].lf_raw[0x54])) {
-    *piVar2 = ((int)LF_BITS_U(((float)(_DAT_00460cd8 * *(float *)&g_bullet[iVar8].lf_raw[0x58] -
-                   _DAT_00460cdc * *(float *)&g_bullet[iVar8].lf_raw[0x54]))));
-    fVar5 = _DAT_00460cd4;
+    *piVar2 = ((int)LF_BITS_U(((float)(g_xaxis[1] * *(float *)&g_bullet[iVar8].lf_raw[0x58] -
+                   g_xaxis[2] * *(float *)&g_bullet[iVar8].lf_raw[0x54]))));
+    fVar5 = g_xaxis[0];
     *(float *)&g_bullet[iVar8].lf_raw[0x3c] =
-         (float)(*(float *)puVar1 * fVar6 - _DAT_00460cd4 * *(float *)&g_bullet[iVar8].lf_raw[0x58]);
+         (float)(*(float *)puVar1 * fVar6 - g_xaxis[0] * *(float *)&g_bullet[iVar8].lf_raw[0x58]);
     fVar4 = (float)(*(float *)&g_bullet[iVar8].lf_raw[0x54] * fVar5 - fVar4 * *(float *)puVar1);
   }
   else {
-    *piVar2 = ((int)LF_BITS_U(((float)(_DAT_00460ce4 * *(float *)&g_bullet[iVar8].lf_raw[0x58] -
-                   _DAT_00460ce8 * *(float *)&g_bullet[iVar8].lf_raw[0x54]))));
-    fVar4 = _DAT_00460ce0;
+    *piVar2 = ((int)LF_BITS_U(((float)(g_yaxis[1] * *(float *)&g_bullet[iVar8].lf_raw[0x58] -
+                   g_yaxis[2] * *(float *)&g_bullet[iVar8].lf_raw[0x54]))));
+    fVar4 = g_yaxis[0];
     *(float *)&g_bullet[iVar8].lf_raw[0x3c] =
-         (float)(fVar7 * *(float *)puVar1 - _DAT_00460ce0 * *(float *)&g_bullet[iVar8].lf_raw[0x58]);
+         (float)(fVar7 * *(float *)puVar1 - g_yaxis[0] * *(float *)&g_bullet[iVar8].lf_raw[0x58]);
     fVar4 = fVar4 * *(float *)&g_bullet[iVar8].lf_raw[0x54] - *(float *)puVar1 * fVar5;
   }
   *(float *)&g_bullet[iVar8].lf_raw[0x40] = fVar4;
@@ -12870,22 +12694,12 @@ int __cdecl lf_143b0(int param_1,undefined4 *param_2,float *param_3,int param_4)
   g_numofbullets = g_numofbullets + 1;
   return iVar9;
 }
-#undef DAT_00460ce4
 #undef g_stats
-#undef DAT_00460ce8
-#undef DAT_00460ce0
-#undef DAT_00460cd8
-#undef DAT_00460cdc
-#undef DAT_00460cd4
 #undef DAT_0f837320
+#undef g_xaxis
+#undef g_yaxis
 #undef g_numofbullets
 #undef g_bullet
-#undef _DAT_00460ce8
-#undef _DAT_00460ce4
-#undef _DAT_00460cdc
-#undef _DAT_00460cd8
-#undef _DAT_00460cd4
-#undef _DAT_00460ce0
 #undef normalizevector
 #undef memset
 
@@ -12941,7 +12755,6 @@ void __cdecl lf_14590(void)
 #undef g_bullet
 
 /* ---------------------------------------------------------------- 0x14600 */
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_16224020 (*(undefined4 *)SR_VA(0x16224020))
 #define DAT_16224024 (*(undefined *)SR_VA(0x16224024))
 #define DAT_16224028 (*(undefined *)SR_VA(0x16224028))
@@ -12956,6 +12769,7 @@ void __cdecl lf_14590(void)
 #define DAT_16224058 (*(undefined *)SR_VA(0x16224058))
 #define DAT_1622405c (*(undefined *)SR_VA(0x1622405c))
 #define DAT_16224060 (*(undefined *)SR_VA(0x16224060))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bdb0))
 int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 
@@ -12986,7 +12800,7 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
       *(undefined4 *)(&DAT_1622405c + iVar2) = 0;
       *(undefined4 *)(&DAT_16224050 + iVar2) = 0x3f800000;
       *(undefined4 *)(&DAT_16224060 + iVar2) = 0x3f800000;
-      rotateorientation((float *)(&DAT_16224040 + iVar2),(float *)&DAT_00460ce0,param_3);
+      rotateorientation((float *)(&DAT_16224040 + iVar2),g_yaxis,param_3);
       return iVar3;
     }
     piVar1 = piVar1 + 0x15;
@@ -12994,7 +12808,6 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
   } while ((int)piVar1 < ((int)SR_VA(0x16239020)));
   return -1;
 }
-#undef DAT_00460ce0
 #undef DAT_16224020
 #undef DAT_16224024
 #undef DAT_16224028
@@ -13009,6 +12822,7 @@ int __cdecl lf_14600(undefined4 param_1,undefined4 *param_2,float param_3)
 #undef DAT_16224058
 #undef DAT_1622405c
 #undef DAT_16224060
+#undef g_yaxis
 #undef rotateorientation
 
 /* ---------------------------------------------------------------- 0x146a0 */
@@ -13952,7 +13766,9 @@ void __cdecl lf_155e0(void)
 #define DAT_0f837b18 (*(undefined *)SR_VA(0xf837b18))
 #define DAT_0f837b1c (*(undefined *)SR_VA(0xf837b1c))
 #define DAT_0f837b20 (*(undefined *)SR_VA(0xf837b20))
+#define g_octahedron (*(float (*)[18])SR_VA(0x4602c0))
 #define DAT_0f837b24 (*(undefined *)SR_VA(0xf837b24))
+#define g_octahedronindex (*(int (*)[24])SR_VA(0x460308))
 #define DAT_0f837b28 (*(undefined *)SR_VA(0xf837b28))
 #define DAT_0f837b2c (*(undefined *)SR_VA(0xf837b2c))
 #define DAT_0f837b30 (*(undefined *)SR_VA(0xf837b30))
@@ -13961,12 +13777,6 @@ void __cdecl lf_155e0(void)
 #define DAT_0f837b3c (*(undefined *)SR_VA(0xf837b3c))
 #define DAT_0f837b40 (*(undefined *)SR_VA(0xf837b40))
 #define DAT_0f837b44 (*(undefined *)SR_VA(0xf837b44))
-#define DAT_004602c0 (*(undefined *)SR_VA(0x4602c0))
-#define DAT_004602c4 (*(undefined *)SR_VA(0x4602c4))
-#define DAT_004602c8 (*(undefined *)SR_VA(0x4602c8))
-#define DAT_00460308 (*(undefined *)SR_VA(0x460308))
-#define DAT_0046030c (*(undefined *)SR_VA(0x46030c))
-#define DAT_00460310 (*(undefined *)SR_VA(0x460310))
 #define _DAT_0f837b00 (*(float *)SR_VA(0xf837b00))
 #define _DAT_0f837b04 (*(float *)SR_VA(0xf837b04))
 #define _DAT_0f837b08 (*(float *)SR_VA(0xf837b08))
@@ -14027,19 +13837,19 @@ void __cdecl lf_15df0(float *param_1,uint param_2)
     uVar3 = uVar3 | 4;
     local_28 = uVar3;
   }
-  _DAT_0f837b00 = *(float *)(&DAT_004602c0 + *(int *)(&DAT_00460308 + uVar3 * 0xc) * 0xc);
-  iVar5 = *(int *)(&DAT_00460308 + uVar3 * 0xc) * 0xc;
-  _DAT_0f837b04 = *(float *)(&DAT_004602c4 + iVar5);
+  iVar5 = g_octahedronindex[uVar3 * 3];
+  _DAT_0f837b00 = g_octahedron[iVar5 * 3];
+  _DAT_0f837b04 = g_octahedron[iVar5 * 3 + 1];
   uVar4 = 8;
-  _DAT_0f837b08 = *(float *)(&DAT_004602c8 + iVar5);
-  _DAT_0f837b0c = *(float *)(&DAT_004602c0 + *(int *)(&DAT_0046030c + uVar3 * 0xc) * 0xc);
-  iVar5 = *(int *)(&DAT_0046030c + uVar3 * 0xc) * 0xc;
-  _DAT_0f837b10 = *(float *)(&DAT_004602c4 + iVar5);
-  iVar2 = *(int *)(&DAT_00460310 + uVar3 * 0xc) * 0xc;
-  _DAT_0f837b14 = *(float *)(&DAT_004602c8 + iVar5);
-  _DAT_0f837b18 = *(float *)(&DAT_004602c0 + iVar2);
-  _DAT_0f837b1c = *(float *)(&DAT_004602c4 + iVar2);
-  _DAT_0f837b20 = *(float *)(&DAT_004602c8 + iVar2);
+  _DAT_0f837b08 = g_octahedron[iVar5 * 3 + 2];
+  iVar5 = g_octahedronindex[uVar3 * 3 + 1];
+  iVar2 = g_octahedronindex[uVar3 * 3 + 2];
+  _DAT_0f837b0c = g_octahedron[iVar5 * 3];
+  _DAT_0f837b10 = g_octahedron[iVar5 * 3 + 1];
+  _DAT_0f837b14 = g_octahedron[iVar5 * 3 + 2];
+  _DAT_0f837b18 = g_octahedron[iVar2 * 3];
+  _DAT_0f837b1c = g_octahedron[iVar2 * 3 + 1];
+  _DAT_0f837b20 = g_octahedron[iVar2 * 3 + 2];
   uVar1 = local_28;
   if (3 < (int)param_2) {
     iVar5 = 3;
@@ -14143,7 +13953,9 @@ LAB_004162d1:
 #undef DAT_0f837b18
 #undef DAT_0f837b1c
 #undef DAT_0f837b20
+#undef g_octahedron
 #undef DAT_0f837b24
+#undef g_octahedronindex
 #undef DAT_0f837b28
 #undef DAT_0f837b2c
 #undef DAT_0f837b30
@@ -14152,12 +13964,6 @@ LAB_004162d1:
 #undef DAT_0f837b3c
 #undef DAT_0f837b40
 #undef DAT_0f837b44
-#undef DAT_004602c0
-#undef DAT_004602c4
-#undef DAT_004602c8
-#undef DAT_00460308
-#undef DAT_0046030c
-#undef DAT_00460310
 #undef _DAT_0f837b00
 #undef _DAT_0f837b04
 #undef _DAT_0f837b08
@@ -14199,7 +14005,9 @@ LAB_004162d1:
 #define DAT_0f837b18 (*(undefined *)SR_VA(0xf837b18))
 #define DAT_0f837b1c (*(undefined *)SR_VA(0xf837b1c))
 #define DAT_0f837b20 (*(undefined *)SR_VA(0xf837b20))
+#define g_octahedron (*(float (*)[18])SR_VA(0x4602c0))
 #define DAT_0f837b24 (*(undefined *)SR_VA(0xf837b24))
+#define g_octahedronindex (*(int (*)[24])SR_VA(0x460308))
 #define DAT_0f837b28 (*(undefined *)SR_VA(0xf837b28))
 #define DAT_0f837b2c (*(undefined *)SR_VA(0xf837b2c))
 #define DAT_0f837b30 (*(undefined *)SR_VA(0xf837b30))
@@ -14208,12 +14016,6 @@ LAB_004162d1:
 #define DAT_0f837b3c (*(undefined *)SR_VA(0xf837b3c))
 #define DAT_0f837b40 (*(undefined *)SR_VA(0xf837b40))
 #define DAT_0f837b44 (*(undefined *)SR_VA(0xf837b44))
-#define DAT_004602c0 (*(undefined *)SR_VA(0x4602c0))
-#define DAT_004602c4 (*(undefined *)SR_VA(0x4602c4))
-#define DAT_004602c8 (*(undefined *)SR_VA(0x4602c8))
-#define DAT_00460308 (*(undefined *)SR_VA(0x460308))
-#define DAT_0046030c (*(undefined *)SR_VA(0x46030c))
-#define DAT_00460310 (*(undefined *)SR_VA(0x460310))
 #define _DAT_0f837b00 (*(float *)SR_VA(0xf837b00))
 #define _DAT_0f837b04 (*(float *)SR_VA(0xf837b04))
 #define _DAT_0f837b08 (*(float *)SR_VA(0xf837b08))
@@ -14247,21 +14049,20 @@ void __cdecl lf_16320(float *param_1,float *param_2)
   pfVar3 = param_2;
   pbitread((uint *)&param_2,(uint)param_2);
   pfVar4 = param_2;
-  iVar2 = ((uint)param_2 & 7) * 0xc;
-  _DAT_0f837b00 =
-       *(float *)(&DAT_004602c0 + *(int *)(&DAT_00460308 + ((uint)param_2 & 7) * 0xc) * 0xc);
-  iVar1 = *(int *)(&DAT_00460308 + ((uint)param_2 & 7) * 0xc) * 0xc;
+  uVar5 = (uint)param_2 & 7;
+  iVar1 = g_octahedronindex[uVar5 * 3];
+  _DAT_0f837b00 = g_octahedron[iVar1 * 3];
   iVar6 = 3;
-  _DAT_0f837b04 = *(float *)(&DAT_004602c4 + iVar1);
-  _DAT_0f837b08 = *(float *)(&DAT_004602c8 + iVar1);
-  _DAT_0f837b0c = *(float *)(&DAT_004602c0 + *(int *)(&DAT_0046030c + iVar2) * 0xc);
-  iVar1 = *(int *)(&DAT_0046030c + iVar2) * 0xc;
-  _DAT_0f837b10 = *(float *)(&DAT_004602c4 + iVar1);
-  iVar2 = *(int *)(&DAT_00460310 + iVar2) * 0xc;
-  _DAT_0f837b14 = *(float *)(&DAT_004602c8 + iVar1);
-  _DAT_0f837b18 = *(float *)(&DAT_004602c0 + iVar2);
-  _DAT_0f837b1c = *(float *)(&DAT_004602c4 + iVar2);
-  _DAT_0f837b20 = *(float *)(&DAT_004602c8 + iVar2);
+  _DAT_0f837b04 = g_octahedron[iVar1 * 3 + 1];
+  _DAT_0f837b08 = g_octahedron[iVar1 * 3 + 2];
+  iVar1 = g_octahedronindex[uVar5 * 3 + 1];
+  iVar2 = g_octahedronindex[uVar5 * 3 + 2];
+  _DAT_0f837b0c = g_octahedron[iVar1 * 3];
+  _DAT_0f837b10 = g_octahedron[iVar1 * 3 + 1];
+  _DAT_0f837b14 = g_octahedron[iVar1 * 3 + 2];
+  _DAT_0f837b18 = g_octahedron[iVar2 * 3];
+  _DAT_0f837b1c = g_octahedron[iVar2 * 3 + 1];
+  _DAT_0f837b20 = g_octahedron[iVar2 * 3 + 2];
   if (3 < (int)pfVar3) {
     do {
       _DAT_0f837b24 = (float)(_DAT_0f837b00 + _DAT_0f837b0c);
@@ -14334,7 +14135,9 @@ void __cdecl lf_16320(float *param_1,float *param_2)
 #undef DAT_0f837b18
 #undef DAT_0f837b1c
 #undef DAT_0f837b20
+#undef g_octahedron
 #undef DAT_0f837b24
+#undef g_octahedronindex
 #undef DAT_0f837b28
 #undef DAT_0f837b2c
 #undef DAT_0f837b30
@@ -14343,12 +14146,6 @@ void __cdecl lf_16320(float *param_1,float *param_2)
 #undef DAT_0f837b3c
 #undef DAT_0f837b40
 #undef DAT_0f837b44
-#undef DAT_004602c0
-#undef DAT_004602c4
-#undef DAT_004602c8
-#undef DAT_00460308
-#undef DAT_0046030c
-#undef DAT_00460310
 #undef _DAT_0f837b00
 #undef _DAT_0f837b04
 #undef _DAT_0f837b08
@@ -17241,20 +17038,10 @@ LAB_0041ae5d:
 #undef local_c
 
 /* ---------------------------------------------------------------- 0x1b070 */
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define createevent_updateitem ((int (__cdecl *)(uint))SR_VA(0x406380))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 *param_4)
@@ -17333,19 +17120,19 @@ uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 
     g_item[uVar9].unk_017c = -0x41000000;
     g_item[uVar9].unk_0180 = -0x40800000;
     g_item[uVar9].unk_0184 = 0;
-    fVar4 = _DAT_00460cd4 * -0.5;
+    fVar4 = g_xaxis[0] * -0.5;
     g_item[uVar9].unk_0194 = ((int)LF_BITS_U(((float)(*param_2 + fVar4))));
-    fVar5 = _DAT_00460cd8 * -0.5;
+    fVar5 = g_xaxis[1] * -0.5;
     *(float *)&g_item[uVar9].lf_raw[0x198] = (float)(param_2[1] + fVar5);
-    fVar6 = _DAT_00460cdc * -0.5;
+    fVar6 = g_xaxis[2] * -0.5;
     *(float *)&g_item[uVar9].lf_raw[0x19c] = (float)(param_2[2] + fVar6);
     fVar1 = LF_BITS_F(g_item[uVar9].unk_0180);
-    g_item[uVar9].unk_0194 = ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[uVar9].unk_0194) + fVar1 * _DAT_00460ce0))));
-    *(float *)&g_item[uVar9].lf_raw[0x198] =
-         (float)(_DAT_00460ce4 * fVar1 + *(float *)&g_item[uVar9].lf_raw[0x198]);
-    fVar7 = _DAT_00460ce8;
-    *(float *)&g_item[uVar9].lf_raw[0x19c] =
-         (float)(*(float *)&g_item[uVar9].lf_raw[0x19c] + _DAT_00460ce8 * fVar1);
+    g_item[uVar9].unk_0194 = ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[uVar9].unk_0194) + fVar1 * g_yaxis[0]))));
+    *(float *)&g_item[uVar9].lf_raw[0x198] = (float)(g_yaxis[1] * fVar1 + *(float *)&g_item[uVar9].lf_raw[0x198])
+    ;
+    fVar7 = g_yaxis[2];
+    *(float *)&g_item[uVar9].lf_raw[0x19c] = (float)(*(float *)&g_item[uVar9].lf_raw[0x19c] + g_yaxis[2] * fVar1)
+    ;
     g_item[uVar9].unk_0188 = -0x41000000;
     g_item[uVar9].unk_018c = 1.0;
     g_item[uVar9].unk_0190 = 0;
@@ -17353,9 +17140,9 @@ uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 
     *(float *)&g_item[uVar9].lf_raw[0x1a4] = (float)(param_2[1] + fVar5);
     *(float *)&g_item[uVar9].lf_raw[0x1a8] = (float)(fVar6 + param_2[2]);
     fVar1 = g_item[uVar9].unk_018c;
-    g_item[uVar9].unk_01a0 = ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[uVar9].unk_01a0) + fVar1 * _DAT_00460ce0))));
-    *(float *)&g_item[uVar9].lf_raw[0x1a4] =
-         (float)(_DAT_00460ce4 * fVar1 + *(float *)&g_item[uVar9].lf_raw[0x1a4]);
+    g_item[uVar9].unk_01a0 = ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[uVar9].unk_01a0) + fVar1 * g_yaxis[0]))));
+    *(float *)&g_item[uVar9].lf_raw[0x1a4] = (float)(g_yaxis[1] * fVar1 + *(float *)&g_item[uVar9].lf_raw[0x1a4])
+    ;
     *(float *)&g_item[uVar9].lf_raw[0x1a8] = (float)(fVar1 * fVar7 + *(float *)&g_item[uVar9].lf_raw[0x1a8]);
     createevent_updateitem(uVar9);
     return uVar9;
@@ -17363,20 +17150,10 @@ uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 
   createevent_updateitem(uVar9);
   return uVar9;
 }
-#undef DAT_00460cd4
-#undef DAT_00460cd8
 #undef g_itemtype
-#undef DAT_00460cdc
-#undef DAT_00460ce0
 #undef g_item
-#undef DAT_00460ce4
-#undef DAT_00460ce8
-#undef _DAT_00460cd4
-#undef _DAT_00460cd8
-#undef _DAT_00460cdc
-#undef _DAT_00460ce0
-#undef _DAT_00460ce4
-#undef _DAT_00460ce8
+#undef g_xaxis
+#undef g_yaxis
 #undef createevent_updateitem
 #undef memset
 
@@ -18812,11 +18589,11 @@ void __cdecl lf_1d3b0(void)
 
 /* ---------------------------------------------------------------- 0x1d4d0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define PTR_s_Goldmen_Inc_00460438 (*(pointer *)SR_VA(0x460438))
-#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_00461780 (*(undefined *)SR_VA(0x461780))
+#define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
+#define g_teamname (*(char * (*)[8])SR_VA(0x460438))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
 #define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_VA(0x406420))
@@ -18837,7 +18614,7 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
 
 {
   __declspec(align(16)) uchar lf_frame[0x50];
-  undefined *puVar1;
+  char *pcVar1;
   float fVar2;
   uint uVar3;
   int iVar4;
@@ -18917,19 +18694,19 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
       g_item[uVar3].phone_id = ((int)LF_BITS_U(fVar2)) * 0x457 + 0x458;
       createevent_updateiteminfo(uVar3);
     }
-    puVar1 = (&PTR_s_Goldmen_Inc_00460438)[((int)LF_BITS_U(fVar2))];
+    pcVar1 = g_teamname[((int)LF_BITS_U(fVar2))];
     *(int *)(&g_game.lf_raw[0x9c] + iVar4) = local_2c;
-    sprintf(&DAT_00461780,"%s is now manager of %s",local_2c * 0x2408 + ((int)SR_VA(0xf1edd04)),puVar1);
+    sprintf(&DAT_00461780,"%s is now manager of %s",local_2c * 0x2408 + ((int)SR_VA(0xf1edd04)),pcVar1);
     createevent_message(0,&DAT_00461780,0xffffffff,0);
   }
   return;
 }
 #undef DAT_00460d18
-#undef PTR_s_Goldmen_Inc_00460438
-#undef g_game
 #undef DAT_00461780
+#undef g_game
 #undef g_item
 #undef g_event
+#undef g_teamname
 #undef sprintf
 #undef createevent_message
 #undef createevent_updateiteminfo
@@ -21461,30 +21238,15 @@ void __cdecl lf_21e00(int param_1,float *param_2,float *param_3,float param_4)
 
 /* ---------------------------------------------------------------- 0x223d0 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
-#define DAT_00460cf4 (*(undefined *)SR_VA(0x460cf4))
-#define DAT_00460cf0 (*(undefined *)SR_VA(0x460cf0))
-#define DAT_00460cec (*(undefined *)SR_VA(0x460cec))
 #define DAT_0b7e7214 (*(undefined4 *)SR_VA(0xb7e7214))
 #define DAT_0b7e7218 (*(undefined4 *)SR_VA(0xb7e7218))
 #define DAT_0b7e721c (*(undefined4 *)SR_VA(0xb7e721c))
 #define DAT_0b7e722c (*(undefined4 *)SR_VA(0xb7e722c))
 #define DAT_0b7e7230 (*(undefined4 *)SR_VA(0xb7e7230))
 #define DAT_0b7e7234 (*(undefined4 *)SR_VA(0xb7e7234))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
-#define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
-#define _DAT_00460cec (*(float *)SR_VA(0x460cec))
-#define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
 
 {
@@ -21506,59 +21268,38 @@ void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
       fVar2 = (float)(LF_BITS_F((&DAT_0b7e7214)[iVar1 * 0x3c]) - *param_3);
       fVar3 = (float)(LF_BITS_F((&DAT_0b7e7218)[iVar1 * 0x3c]) - param_3[1]);
       fVar4 = (float)(LF_BITS_F((&DAT_0b7e721c)[iVar1 * 0x3c]) - param_3[2]);
-      *param_1 = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) *
-                  ((float)(_DAT_00460cd8 * fVar2 - _DAT_00460cd4 * fVar3)) +
-                 (LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) *
-                 ((float)(fVar3 * _DAT_00460cdc - fVar4 * _DAT_00460cd8)) +
-                 LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) *
-                 ((float)(_DAT_00460cd4 * fVar4 - fVar2 * _DAT_00460cdc))))) * 0.125 * 0.125 * 0.5 + *param_1);
+      *param_1 = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) * ((float)(g_xaxis[1] * fVar2 - g_xaxis[0] * fVar3)) +
+                 (LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) * ((float)(fVar3 * g_xaxis[2] - fVar4 * g_xaxis[1])) +
+                 LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) * ((float)(g_xaxis[0] * fVar4 - fVar2 * g_xaxis[2]))))) *
+                 0.125 * 0.125 * 0.5 + *param_1);
       iVar1 = *piVar5;
       iVar6 = iVar6 + 1;
-      param_1[1] = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) *
-                    ((float)(_DAT_00460ce4 * fVar2 - _DAT_00460ce0 * fVar3)) +
-                   (LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) *
-                   ((float)(_DAT_00460ce8 * fVar3 - _DAT_00460ce4 * fVar4)) +
-                   LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) *
-                   ((float)(_DAT_00460ce0 * fVar4 - _DAT_00460ce8 * fVar2))))) * 0.125 * 0.125 * 0.5 +
-                   param_1[1]);
+      param_1[1] = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) * ((float)(g_yaxis[1] * fVar2 - g_yaxis[0] * fVar3))
+                   + (LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) *
+                     ((float)(g_yaxis[2] * fVar3 - g_yaxis[1] * fVar4)) +
+                     LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) *
+                     ((float)(g_yaxis[0] * fVar4 - g_yaxis[2] * fVar2))))) * 0.125 * 0.125 * 0.5 + param_1[1]);
       iVar1 = *piVar5;
-      param_1[2] = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) *
-                    ((float)(_DAT_00460cf0 * fVar2 - fVar3 * _DAT_00460cec)) +
-                   (((float)(_DAT_00460cf4 * fVar3 - _DAT_00460cf0 * fVar4)) *
-                   LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) +
-                   LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) *
-                   ((float)(_DAT_00460cec * fVar4 - _DAT_00460cf4 * fVar2))))) * 0.125 * 0.125 * 0.5 +
-                   param_1[2]);
+      param_1[2] = (float)(((float)(LF_BITS_F((&DAT_0b7e7234)[iVar1 * 0x3c]) * ((float)(g_zaxis[1] * fVar2 - fVar3 * g_zaxis[0]))
+                   + (((float)(g_zaxis[2] * fVar3 - g_zaxis[1] * fVar4)) *
+                     LF_BITS_F((&DAT_0b7e722c)[iVar1 * 0x3c]) +
+                     LF_BITS_F((&DAT_0b7e7230)[iVar1 * 0x3c]) *
+                     ((float)(g_zaxis[0] * fVar4 - g_zaxis[2] * fVar2))))) * 0.125 * 0.125 * 0.5 + param_1[2]);
       piVar5 = piVar5 + 1;
     } while (iVar6 < g_object[param_2].particle_start);
   }
   return;
 }
 #undef g_object
-#undef DAT_00460cdc
-#undef DAT_00460cd8
-#undef DAT_00460cd4
-#undef DAT_00460ce8
-#undef DAT_00460ce4
-#undef DAT_00460ce0
-#undef DAT_00460cf4
-#undef DAT_00460cf0
-#undef DAT_00460cec
 #undef DAT_0b7e7214
 #undef DAT_0b7e7218
 #undef DAT_0b7e721c
 #undef DAT_0b7e722c
 #undef DAT_0b7e7230
 #undef DAT_0b7e7234
-#undef _DAT_00460cd8
-#undef _DAT_00460cd4
-#undef _DAT_00460cdc
-#undef _DAT_00460ce4
-#undef _DAT_00460ce0
-#undef _DAT_00460ce8
-#undef _DAT_00460cf0
-#undef _DAT_00460cec
-#undef _DAT_00460cf4
+#undef g_xaxis
+#undef g_yaxis
+#undef g_zaxis
 
 /* ---------------------------------------------------------------- 0x225e0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -26479,8 +26220,8 @@ LAB_0042a4ca:
 #define DAT_137b2d74 (*(undefined *)SR_VA(0x137b2d74))
 #define DAT_137b2d80 (*(undefined *)SR_VA(0x137b2d80))
 #define DAT_25aad764 (*(undefined4 *)SR_VA(0x25aad764))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define DAT_25aad768 (*(undefined4 *)SR_VA(0x25aad768))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
 #define DAT_25aad76c (*(undefined4 *)SR_VA(0x25aad76c))
 #define DAT_25add764 (*(undefined4 *)SR_VA(0x25add764))
 #define DAT_25add768 (*(undefined4 *)SR_VA(0x25add768))
@@ -26630,7 +26371,7 @@ LAB_0042a5e6:
         local_84 = DAT_057d3548;
         do {
           local_88 = 1;
-          local_8c = &g_cubevertex;
+          local_8c = g_cubequad + 1;
           do {
             if ((local_88 & *(uint *)((int)&DAT_057d35c4 + iVar6)) == local_88) {
               pfVar1 = (float *)(&DAT_057d354c + local_8c[1] * 0xc + iVar6);
@@ -27527,8 +27268,8 @@ LAB_0042be90:
 #undef DAT_137b2d74
 #undef DAT_137b2d80
 #undef DAT_25aad764
+#undef g_cubequad
 #undef DAT_25aad768
-#undef g_cubevertex
 #undef DAT_25aad76c
 #undef DAT_25add764
 #undef DAT_25add768
@@ -27611,7 +27352,6 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define DAT_107484f8 (*(uint *)SR_VA(0x107484f8))
 #define DAT_107484fc (*(uint *)SR_VA(0x107484fc))
 #define DAT_10748518 (*(uint *)SR_VA(0x10748518))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0f43090c (*(undefined *)SR_VA(0xf43090c))
 #define DAT_0f430910 (*(undefined *)SR_VA(0xf430910))
 #define DAT_0f430914 (*(undefined *)SR_VA(0xf430914))
@@ -27625,6 +27365,7 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define DAT_17166060 (*(undefined *)SR_VA(0x17166060))
 #define DAT_17166064 (*(undefined *)SR_VA(0x17166064))
 #define DAT_17166068 (*(undefined *)SR_VA(0x17166068))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_1716606c (*(undefined *)SR_VA(0x1716606c))
 #define DAT_17166070 (*(undefined *)SR_VA(0x17166070))
 #define DAT_17166074 (*(undefined *)SR_VA(0x17166074))
@@ -27855,7 +27596,7 @@ int __cdecl lf_2c0c0(float *param_1,float *param_2,float *param_3,uint param_4,f
           if (uVar7 == 1) {
             fVar6 = 1.5707963705062866;
 LAB_0042c6a4:
-            rotatevector(&local_b8,(float *)&DAT_00460ce0,fVar6);
+            rotatevector(&local_b8,g_yaxis,fVar6);
           }
           else {
             if (uVar7 == 2) {
@@ -27876,7 +27617,7 @@ LAB_0042c6a4:
           if (uVar7 == 1) {
             fVar6 = 1.5707963705062866;
 LAB_0042c75a:
-            rotateorientation(local_28,(float *)&DAT_00460ce0,fVar6);
+            rotateorientation(local_28,g_yaxis,fVar6);
           }
           else {
             if (uVar7 == 2) {
@@ -28064,7 +27805,6 @@ LAB_0042c893:
 #undef DAT_107484f8
 #undef DAT_107484fc
 #undef DAT_10748518
-#undef DAT_00460ce0
 #undef DAT_0f43090c
 #undef DAT_0f430910
 #undef DAT_0f430914
@@ -28078,6 +27818,7 @@ LAB_0042c893:
 #undef DAT_17166060
 #undef DAT_17166064
 #undef DAT_17166068
+#undef g_yaxis
 #undef DAT_1716606c
 #undef DAT_17166070
 #undef DAT_17166074
@@ -28130,11 +27871,9 @@ LAB_0042c893:
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x2cda0 */
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
+#define g_cubenormal (*(float (*)[18])SR_VA(0x460078))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define sphereintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a700))
 #define sphereintersectline ((undefined4 (__cdecl *)(float *, float *, float *, float *, float, float *, float *))SR_VA(0x41a7f0))
 #define local_60 (*(uint *)(lf_frame + 0x10))
@@ -28200,9 +27939,9 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
   fVar5 = param_8 * (float)*param_6;
   bVar7 = 0;
   local_60 = 1;
-  piVar9 = &g_cubevertex;
+  piVar9 = g_cubequad + 1;
   fVar2 = (float)((float)param_6[1] * param_8);
-  pfVar8 = (float *)&DAT_00460080;
+  pfVar8 = g_cubenormal + 2;
   fVar3 = (float)((float)param_6[2] * param_8);
   fVar4 = param_8;
   local_3c = fVar5;
@@ -28210,22 +27949,22 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
   local_34 = fVar3;
   do {
     if (((local_60 & param_7) != 0) && ((param_7 & 0x40 << (bVar7 & 0x1f)) != 0)) {
-      iVar6 = piVar9[-1] * 0xc;
-      local_30 = (float)(*(float *)(&DAT_00460018 + piVar9[-1] * 0xc) * fVar4 + fVar5);
-      local_2c = (float)(*(float *)(&DAT_0046001c + iVar6) * fVar4 + fVar2);
-      iVar1 = *piVar9 * 0xc;
-      local_28 = (float)(*(float *)(&DAT_00460020 + iVar6) * fVar4 + fVar3);
-      local_18 = (float)(*(float *)(&DAT_00460018 + iVar1) * fVar4 + fVar5);
-      local_14 = (float)(*(float *)(&DAT_0046001c + iVar1) * fVar4 + fVar2);
-      iVar6 = piVar9[1] * 0xc;
-      local_10 = (float)(*(float *)(&DAT_00460020 + iVar1) * fVar4 + fVar3);
-      local_24 = (float)(fVar4 * *(float *)(&DAT_00460018 + iVar6) + fVar5);
-      local_20 = (float)(*(float *)(&DAT_0046001c + iVar6) * fVar4 + fVar2);
-      iVar1 = piVar9[2] * 0xc;
-      local_1c = (float)(*(float *)(&DAT_00460020 + iVar6) * fVar4 + fVar3);
-      local_c = (float)(*(float *)(&DAT_00460018 + iVar1) * fVar4 + fVar5);
-      local_8 = (float)(*(float *)(&DAT_0046001c + iVar1) * fVar4 + fVar2);
-      local_4 = (float)(*(float *)(&DAT_00460020 + iVar1) * fVar4 + fVar3);
+      iVar6 = piVar9[-1];
+      local_30 = (float)(g_cubevertex[iVar6 * 3] * fVar4 + fVar5);
+      local_2c = (float)(g_cubevertex[iVar6 * 3 + 1] * fVar4 + fVar2);
+      iVar1 = *piVar9;
+      local_28 = (float)(g_cubevertex[iVar6 * 3 + 2] * fVar4 + fVar3);
+      local_18 = (float)(g_cubevertex[iVar1 * 3] * fVar4 + fVar5);
+      local_14 = (float)(g_cubevertex[iVar1 * 3 + 1] * fVar4 + fVar2);
+      iVar6 = piVar9[1];
+      local_10 = (float)(g_cubevertex[iVar1 * 3 + 2] * fVar4 + fVar3);
+      local_24 = (float)(fVar4 * g_cubevertex[iVar6 * 3] + fVar5);
+      local_20 = (float)(g_cubevertex[iVar6 * 3 + 1] * fVar4 + fVar2);
+      iVar1 = piVar9[2];
+      local_1c = (float)(g_cubevertex[iVar6 * 3 + 2] * fVar4 + fVar3);
+      local_c = (float)(g_cubevertex[iVar1 * 3] * fVar4 + fVar5);
+      local_8 = (float)(g_cubevertex[iVar1 * 3 + 1] * fVar4 + fVar2);
+      local_4 = (float)(g_cubevertex[iVar1 * 3 + 2] * fVar4 + fVar3);
       local_48 = pfVar8[-2];
       local_44 = pfVar8[-1];
       local_40 = *pfVar8;
@@ -28317,11 +28056,9 @@ undefined4 __cdecl lf_2cda0(float *param_1,float *param_2,float *param_3,float *
   }
   return 1;
 }
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460080
 #undef g_cubevertex
+#undef g_cubenormal
+#undef g_cubequad
 #undef sphereintersecttriangle
 #undef sphereintersectline
 #undef local_60
@@ -28575,11 +28312,9 @@ undefined4 __cdecl lf_2d2d0(float *param_1,float *param_2,float *param_3,float *
 
 /* ---------------------------------------------------------------- 0x2d7f0 */
 #define DAT_1074850c (*(int *)SR_VA(0x1074850c))
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define DAT_00460080 (*(undefined4 *)SR_VA(0x460080))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
+#define g_cubenormal (*(float (*)[18])SR_VA(0x460078))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define circleintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float, float *, float *, float *))SR_VA(0x41a000))
 #define local_58 (*(uint *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -28641,8 +28376,8 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
   local_c = param_9 * (float)*param_7;
   iVar4 = 0;
   local_58 = 1;
-  piVar6 = &g_cubevertex;
-  pfVar5 = (float *)&DAT_00460080;
+  piVar6 = g_cubequad + 1;
+  pfVar5 = g_cubenormal + 2;
   local_8 = (float)((float)param_7[1] * param_9);
   local_4 = (float)((float)param_7[2] * param_9);
   fVar2 = param_9;
@@ -28651,22 +28386,22 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
   local_40 = local_4;
   do {
     if (((local_58 & param_8) != 0) && ((param_8 & 0x40 << ((byte)iVar4 & 0x1f)) != 0)) {
-      iVar3 = piVar6[-1] * 0xc;
-      local_24 = (float)(*(float *)(&DAT_00460018 + piVar6[-1] * 0xc) * fVar2 + local_c);
-      local_20 = (float)(*(float *)(&DAT_0046001c + iVar3) * fVar2 + local_8);
-      iVar1 = *piVar6 * 0xc;
-      local_1c = (float)(*(float *)(&DAT_00460020 + iVar3) * fVar2 + local_4);
-      local_18 = (float)(fVar2 * *(float *)(&DAT_00460018 + iVar1) + local_c);
-      local_14 = (float)(*(float *)(&DAT_0046001c + iVar1) * fVar2 + local_8);
-      iVar3 = piVar6[1] * 0xc;
-      local_10 = (float)(*(float *)(&DAT_00460020 + iVar1) * fVar2 + local_4);
-      local_30 = (float)(*(float *)(&DAT_00460018 + iVar3) * fVar2 + local_c);
-      local_2c = (float)(*(float *)(&DAT_0046001c + iVar3) * fVar2 + local_8);
-      iVar1 = piVar6[2] * 0xc;
-      local_28 = (float)(*(float *)(&DAT_00460020 + iVar3) * fVar2 + local_4);
-      local_c = (float)(*(float *)(&DAT_00460018 + iVar1) * fVar2 + local_c);
-      local_8 = (float)(*(float *)(&DAT_0046001c + iVar1) * fVar2 + local_8);
-      local_4 = (float)(local_4 + *(float *)(&DAT_00460020 + iVar1) * fVar2);
+      iVar3 = piVar6[-1];
+      local_24 = (float)(g_cubevertex[iVar3 * 3] * fVar2 + local_c);
+      local_20 = (float)(g_cubevertex[iVar3 * 3 + 1] * fVar2 + local_8);
+      iVar1 = *piVar6;
+      local_1c = (float)(g_cubevertex[iVar3 * 3 + 2] * fVar2 + local_4);
+      local_18 = (float)(fVar2 * g_cubevertex[iVar1 * 3] + local_c);
+      local_14 = (float)(g_cubevertex[iVar1 * 3 + 1] * fVar2 + local_8);
+      iVar3 = piVar6[1];
+      local_10 = (float)(g_cubevertex[iVar1 * 3 + 2] * fVar2 + local_4);
+      local_30 = (float)(g_cubevertex[iVar3 * 3] * fVar2 + local_c);
+      local_2c = (float)(g_cubevertex[iVar3 * 3 + 1] * fVar2 + local_8);
+      iVar1 = piVar6[2];
+      local_28 = (float)(g_cubevertex[iVar3 * 3 + 2] * fVar2 + local_4);
+      local_c = (float)(g_cubevertex[iVar1 * 3] * fVar2 + local_c);
+      local_8 = (float)(g_cubevertex[iVar1 * 3 + 1] * fVar2 + local_8);
+      local_4 = (float)(local_4 + g_cubevertex[iVar1 * 3 + 2] * fVar2);
       local_54 = pfVar5[-2];
       local_50 = pfVar5[-1];
       local_4c = *pfVar5;
@@ -28715,11 +28450,9 @@ undefined4 __cdecl lf_2d7f0(float *param_1,float *param_2,float *param_3,float *
   return 1;
 }
 #undef DAT_1074850c
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef DAT_00460080
 #undef g_cubevertex
+#undef g_cubenormal
+#undef g_cubequad
 #undef circleintersecttriangle
 #undef local_58
 #undef local_54
@@ -29778,26 +29511,16 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 
 /* ---------------------------------------------------------------- 0x2f420 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
+#define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_00460cec (*(undefined *)SR_VA(0x460cec))
-#define DAT_00460cf0 (*(undefined *)SR_VA(0x460cf0))
-#define DAT_00460cf4 (*(undefined *)SR_VA(0x460cf4))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0fcf7b88 (*(undefined4 *)SR_VA(0xfcf7b88))
 #define DAT_0fcf7b8c (*(undefined4 *)SR_VA(0xfcf7b8c))
 #define DAT_0fcf7b90 (*(undefined4 *)SR_VA(0xfcf7b90))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define _DAT_00460cec (*(float *)SR_VA(0x460cec))
-#define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
-#define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
 #define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_VA(0x40a930))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
@@ -30096,20 +29819,20 @@ LAB_0042f545:
         }
       }
       else if (iVar7 == 0) {
-        local_114 = (float)(local_114 - _DAT_00460cec * 0.3125);
-        local_110 = (float)(local_110 - _DAT_00460cf0 * 0.3125);
-        local_10c = (float)(local_10c - _DAT_00460cf4 * 0.3125);
+        local_114 = (float)(local_114 - g_zaxis[0] * 0.3125);
+        local_110 = (float)(local_110 - g_zaxis[1] * 0.3125);
+        local_10c = (float)(local_10c - g_zaxis[2] * 0.3125);
       }
     }
     if (g_human[param_1].vehicle_id == -1) {
       local_f0 = (float)(g_human[param_1].pitch * 0.5);
-      rotatevector(&local_114,(float *)&DAT_00460cd4,local_f0);
+      rotatevector(&local_114,g_xaxis,local_f0);
     }
-    rotatevector(&local_114,(float *)&DAT_00460ce0,local_e8);
+    rotatevector(&local_114,g_yaxis,local_e8);
     if (iVar7 == 0) {
-      local_114 = (float)(local_114 + _DAT_00460cd4 * 0.5);
-      local_110 = (float)(_DAT_00460cd8 * 0.5 + local_110);
-      local_10c = (float)(_DAT_00460cdc * 0.5 + local_10c);
+      local_114 = (float)(local_114 + g_xaxis[0] * 0.5);
+      local_110 = (float)(g_xaxis[1] * 0.5 + local_110);
+      local_10c = (float)(g_xaxis[2] * 0.5 + local_10c);
     }
     iVar6 = g_human[param_1].inventory[0].count;
     if (iVar6 == 0) {
@@ -30212,9 +29935,9 @@ LAB_0042f545:
       local_118 = 0.0625;
     }
     normalizevector(&local_1c,&local_120);
-    local_10 = (float)(local_14 * _DAT_00460cd8 - local_18 * _DAT_00460cdc);
-    local_c = (float)(local_1c * _DAT_00460cdc - _DAT_00460cd4 * local_14);
-    local_8 = (float)(_DAT_00460cd4 * local_18 - local_1c * _DAT_00460cd8);
+    local_10 = (float)(local_14 * g_xaxis[1] - local_18 * g_xaxis[2]);
+    local_c = (float)(local_1c * g_xaxis[2] - g_xaxis[0] * local_14);
+    local_8 = (float)(g_xaxis[0] * local_18 - local_1c * g_xaxis[1]);
     normalizevector(&local_10,&local_10);
     fVar3 = local_14;
     local_28 = (float)(local_18 * local_8 - local_14 * local_c);
@@ -30228,7 +29951,7 @@ LAB_0042f545:
     local_f4 = (float)(-local_f0 * 0.5);
     local_1c = local_48;
     local_10 = local_44;
-    rotateorientation(&local_28,(float *)&DAT_00460cd4,local_f4);
+    rotateorientation(&local_28,g_xaxis,local_f4);
     orientationtoquaternion(&local_104,&local_28);
     local_8c = local_104;
     local_88 = local_100;
@@ -30327,7 +30050,7 @@ LAB_0042f545:
     local_18 = 1.0;
     local_8 = 1.0;
     local_b8 = (float)(-g_human[param_1].pitch * 0.5);
-    rotateorientation(&local_28,(float *)&DAT_00460cd4,local_b8);
+    rotateorientation(&local_28,g_xaxis,local_b8);
     orientationtoquaternion(&local_104,&local_28);
     local_9c = -local_9c;
     local_98 = -local_98;
@@ -30392,26 +30115,16 @@ LAB_0042f545:
   } while( true );
 }
 #undef g_human
+#undef g_body
 #undef DAT_00460d18
-#undef DAT_00460cec
-#undef DAT_00460cf0
-#undef DAT_00460cf4
-#undef g_item
-#undef DAT_00460ce0
 #undef DAT_0fcf7b88
 #undef DAT_0fcf7b8c
 #undef DAT_0fcf7b90
-#undef DAT_00460cd4
-#undef g_body
-#undef DAT_00460cd8
-#undef DAT_00460cdc
 #undef g_itemtype
-#undef _DAT_00460cec
-#undef _DAT_00460cf0
-#undef _DAT_00460cf4
-#undef _DAT_00460cd4
-#undef _DAT_00460cd8
-#undef _DAT_00460cdc
+#undef g_xaxis
+#undef g_item
+#undef g_yaxis
+#undef g_zaxis
 #undef orientationtoquaternion
 #undef projectorientation
 #undef normalizevector
@@ -30839,19 +30552,17 @@ void __cdecl lf_30ba0(int param_1)
 
 /* ---------------------------------------------------------------- 0x30f00 */
 #define DAT_107484bc (*(undefined *)SR_VA(0x107484bc))
+#define g_cubevertex (*(float (*)[24])SR_VA(0x460018))
+#define g_intersect (*(undefined *)SR_VA(0x107484a0))
 #define DAT_107484d0 (*(int *)SR_VA(0x107484d0))
+#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define DAT_107484a4 (*(undefined *)SR_VA(0x107484a4))
 #define DAT_107484a8 (*(undefined *)SR_VA(0x107484a8))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_107484ac (*(undefined *)SR_VA(0x107484ac))
 #define DAT_107484b0 (*(undefined *)SR_VA(0x107484b0))
 #define DAT_107484b4 (*(undefined *)SR_VA(0x107484b4))
-#define DAT_00460018 (*(undefined *)SR_VA(0x460018))
-#define DAT_0046001c (*(undefined *)SR_VA(0x46001c))
-#define DAT_00460020 (*(undefined *)SR_VA(0x460020))
-#define g_intersect (*(undefined *)SR_VA(0x107484a0))
-#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define g_cubevertex (*(undefined4 *)SR_VA(0x460174))
+#define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define _DAT_107484bc (*(float *)SR_VA(0x107484bc))
 #define _g_intersect (*(float *)SR_VA(0x107484a0))
 #define _DAT_107484a4 (*(undefined4 *)SR_VA(0x107484a4))
@@ -30886,10 +30597,10 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
 {
   __declspec(align(16)) uchar lf_frame[0x60];
   int iVar1;
-  float fVar2;
+  int iVar2;
   float fVar3;
   float fVar4;
-  int iVar5;
+  float fVar5;
   int iVar6;
   int iVar7;
   int *piVar8;
@@ -30918,57 +30629,57 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
   _DAT_107484bc = 65536.0;
   iVar1 = g_item[param_1].type;
   param_1 = 0;
-  piVar8 = &g_cubevertex;
+  piVar8 = g_cubequad + 1;
   do {
-    iVar7 = piVar8[-1] * 0xc;
-    fVar2 = (float)((*(float *)(&DAT_00460018 + piVar8[-1] * 0xc) - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
-    fVar4 = (float)((*(float *)(&DAT_0046001c + iVar7) - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
-    iVar5 = *piVar8 * 0xc;
-    fVar3 = (float)((*(float *)(&DAT_00460020 + iVar7) - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
-    local_3c = (float)((float)((float)(fVar2 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar4 * g_item[iVar6].rot[1].x)
+    iVar7 = piVar8[-1];
+    fVar3 = (float)((g_cubevertex[iVar7 * 3] - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
+    fVar5 = (float)((g_cubevertex[iVar7 * 3 + 1] - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
+    iVar2 = *piVar8;
+    fVar4 = (float)((g_cubevertex[iVar7 * 3 + 2] - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
+    local_3c = (float)((float)((float)(fVar3 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar5 * g_item[iVar6].rot[1].x)
+               + fVar4 * g_item[iVar6].rot[2].x);
+    local_38 = (float)(fVar4 * g_item[iVar6].rot[2].y +
+               ((float)(g_item[iVar6].rot[1].y * fVar5 + ((float)(g_item[iVar6].rot[0].y * fVar3 + g_item[iVar6].pos.y)))))
+    ;
+    local_34 = (float)(fVar4 * g_item[iVar6].rot[2].z +
+               ((float)(fVar5 * g_item[iVar6].rot[1].z + ((float)(fVar3 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
+    ;
+    fVar5 = (float)((g_cubevertex[iVar2 * 3] - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
+    fVar4 = (float)((g_cubevertex[iVar2 * 3 + 1] - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
+    iVar7 = piVar8[1];
+    fVar3 = (float)((g_cubevertex[iVar2 * 3 + 2] - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
+    local_30 = (float)((float)((float)(fVar5 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar4 * g_item[iVar6].rot[1].x)
                + fVar3 * g_item[iVar6].rot[2].x);
-    local_38 = (float)(fVar3 * g_item[iVar6].rot[2].y +
-               ((float)(g_item[iVar6].rot[1].y * fVar4 + ((float)(g_item[iVar6].rot[0].y * fVar2 + g_item[iVar6].pos.y)))))
+    local_2c = (float)(fVar3 * g_item[iVar6].rot[2].y +
+               ((float)(g_item[iVar6].rot[1].y * fVar4 + ((float)(g_item[iVar6].rot[0].y * fVar5 + g_item[iVar6].pos.y)))))
     ;
-    local_34 = (float)(fVar3 * g_item[iVar6].rot[2].z +
-               ((float)(fVar4 * g_item[iVar6].rot[1].z + ((float)(fVar2 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
+    local_28 = (float)(fVar3 * g_item[iVar6].rot[2].z +
+               ((float)(fVar4 * g_item[iVar6].rot[1].z + ((float)(fVar5 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
     ;
-    fVar4 = (float)((*(float *)(&DAT_00460018 + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
-    fVar3 = (float)((*(float *)(&DAT_0046001c + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
-    iVar7 = piVar8[1] * 0xc;
-    fVar2 = (float)((*(float *)(&DAT_00460020 + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
-    local_30 = (float)((float)((float)(fVar4 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar3 * g_item[iVar6].rot[1].x)
-               + fVar2 * g_item[iVar6].rot[2].x);
-    local_2c = (float)(fVar2 * g_item[iVar6].rot[2].y +
-               ((float)(g_item[iVar6].rot[1].y * fVar3 + ((float)(g_item[iVar6].rot[0].y * fVar4 + g_item[iVar6].pos.y)))))
+    fVar5 = (float)((g_cubevertex[iVar7 * 3] - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
+    fVar4 = (float)((g_cubevertex[iVar7 * 3 + 1] - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
+    iVar2 = piVar8[2];
+    fVar3 = (float)((g_cubevertex[iVar7 * 3 + 2] - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
+    local_48 = (float)(fVar3 * g_item[iVar6].rot[2].x +
+               ((float)((float)(fVar5 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar4 * g_item[iVar6].rot[1].x)))
     ;
-    local_28 = (float)(fVar2 * g_item[iVar6].rot[2].z +
-               ((float)(fVar3 * g_item[iVar6].rot[1].z + ((float)(fVar4 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
+    local_44 = (float)(fVar3 * g_item[iVar6].rot[2].y +
+               ((float)(g_item[iVar6].rot[1].y * fVar4 + ((float)(g_item[iVar6].rot[0].y * fVar5 + g_item[iVar6].pos.y)))))
     ;
-    fVar4 = (float)((*(float *)(&DAT_00460018 + iVar7) - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
-    fVar3 = (float)((*(float *)(&DAT_0046001c + iVar7) - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
-    iVar5 = piVar8[2] * 0xc;
-    fVar2 = (float)((*(float *)(&DAT_00460020 + iVar7) - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
-    local_48 = (float)(fVar2 * g_item[iVar6].rot[2].x +
+    local_40 = (float)(fVar3 * g_item[iVar6].rot[2].z +
+               ((float)(fVar4 * g_item[iVar6].rot[1].z + ((float)(fVar5 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
+    ;
+    fVar4 = (float)((g_cubevertex[iVar2 * 3] - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
+    fVar3 = (float)((g_cubevertex[iVar2 * 3 + 1] - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
+    local_4c = (float)((g_cubevertex[iVar2 * 3 + 2] - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
+    local_24 = (float)(local_4c * g_item[iVar6].rot[2].x +
                ((float)((float)(fVar4 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar3 * g_item[iVar6].rot[1].x)))
     ;
-    local_44 = (float)(fVar2 * g_item[iVar6].rot[2].y +
+    local_20 = (float)(local_4c * g_item[iVar6].rot[2].y +
                ((float)(g_item[iVar6].rot[1].y * fVar3 + ((float)(g_item[iVar6].rot[0].y * fVar4 + g_item[iVar6].pos.y)))))
     ;
-    local_40 = (float)(fVar2 * g_item[iVar6].rot[2].z +
-               ((float)(fVar3 * g_item[iVar6].rot[1].z + ((float)(fVar4 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
-    ;
-    fVar3 = (float)((*(float *)(&DAT_00460018 + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.x);
-    fVar2 = (float)((*(float *)(&DAT_0046001c + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.y);
-    local_4c = (float)((*(float *)(&DAT_00460020 + iVar5) - 0.5) * 2.0 * g_itemtype[iVar1].size.z);
-    local_24 = (float)(local_4c * g_item[iVar6].rot[2].x +
-               ((float)((float)(fVar3 * g_item[iVar6].rot[0].x + g_item[iVar6].pos.x) + fVar2 * g_item[iVar6].rot[1].x)))
-    ;
-    local_20 = (float)(local_4c * g_item[iVar6].rot[2].y +
-               ((float)(g_item[iVar6].rot[1].y * fVar2 + ((float)(g_item[iVar6].rot[0].y * fVar3 + g_item[iVar6].pos.y)))))
-    ;
     local_1c = (float)(local_4c * g_item[iVar6].rot[2].z +
-               ((float)(fVar2 * g_item[iVar6].rot[1].z + ((float)(fVar3 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
+               ((float)(fVar3 * g_item[iVar6].rot[1].z + ((float)(fVar4 * g_item[iVar6].rot[0].z + g_item[iVar6].pos.z)))))
     ;
     generatetrinormal(&local_18,&local_3c,&local_30,&local_48);
     iVar7 = sphereintersecttrianglefull
@@ -31004,19 +30715,17 @@ undefined4 __cdecl lf_30f00(int param_1,float *param_2,float param_3)
   return 1;
 }
 #undef DAT_107484bc
+#undef g_cubevertex
+#undef g_intersect
 #undef DAT_107484d0
+#undef g_itemtype
 #undef DAT_107484a4
 #undef DAT_107484a8
 #undef g_item
 #undef DAT_107484ac
 #undef DAT_107484b0
 #undef DAT_107484b4
-#undef DAT_00460018
-#undef DAT_0046001c
-#undef DAT_00460020
-#undef g_intersect
-#undef g_itemtype
-#undef g_cubevertex
+#undef g_cubequad
 #undef _DAT_107484bc
 #undef _g_intersect
 #undef _DAT_107484a4
@@ -32540,17 +32249,17 @@ int __cdecl lf_33350(int param_1,undefined4 param_2,int param_3,int param_4,int 
 /* ---------------------------------------------------------------- 0x33570 */
 #define DAT_094dc408 (*(int *)SR_VA(0x94dc408))
 #define DAT_094dc40c (*(int *)SR_VA(0x94dc40c))
-#define DAT_00460d08 (*(undefined4 *)SR_VA(0x460d08))
 #define DAT_1992d6e0 (*(undefined4 *)SR_VA(0x1992d6e0))
 #define DAT_1992d6e4 (*(undefined *)SR_VA(0x1992d6e4))
-#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_1992d6dc (*(undefined4 *)SR_VA(0x1992d6dc))
+#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_17579824 (*(u_short *)SR_VA(0x17579824))
 #define DAT_17579820 (*(u_long *)SR_VA(0x17579820))
 #define DAT_0204afc0 (*(int *)SR_VA(0x204afc0))
-#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define DAT_094dc344 (*(int *)SR_VA(0x94dc344))
-#define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
+#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
+#define g_socketid (*(uint *)SR_VA(0x460d08))
+#define _DAT_1992d6e4 (*(uint *)SR_VA(0x1992d6e4))
 #define sendpacket ((void (__cdecl *)(u_long, u_short))SR_VA(0x40d910))
 #define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_VA(0x40d990))
 #define local_1 (*(undefined1 *)(lf_frame + 0x1f))
@@ -32567,7 +32276,7 @@ void __cdecl lf_33570(void)
   if (DAT_094dc408 != 0) {
     if ((DAT_094dc40c != 0) && ((g_game.ticks & 0x3ffU) == 0)) {
       DAT_1992d6e0 = 0;
-      _DAT_1992d6e4 = DAT_00460d08;
+      _DAT_1992d6e4 = g_socketid;
       DAT_1992d6dc = 4;
       local_1 = 0x20;
       cs_pwrite(&local_1,1,1);
@@ -32604,16 +32313,16 @@ void __cdecl lf_33570(void)
 }
 #undef DAT_094dc408
 #undef DAT_094dc40c
-#undef DAT_00460d08
 #undef DAT_1992d6e0
 #undef DAT_1992d6e4
-#undef g_game
 #undef DAT_1992d6dc
+#undef g_game
 #undef DAT_17579824
 #undef DAT_17579820
 #undef DAT_0204afc0
-#undef g_connection
 #undef DAT_094dc344
+#undef g_connection
+#undef g_socketid
 #undef _DAT_1992d6e4
 #undef sendpacket
 #undef cs_pwrite
@@ -32630,13 +32339,12 @@ void __cdecl lf_33570(void)
 #define DAT_1993d6e8 (*(int *)SR_VA(0x1993d6e8))
 #define DAT_1993d6e4 (*(int *)SR_VA(0x1993d6e4))
 #define DAT_1993d6ec (*(int *)SR_VA(0x1993d6ec))
-#define DAT_00460d08 (*(undefined4 *)SR_VA(0x460d08))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
+#define g_currentversion (*(int *)SR_VA(0x4603c8))
 #define DAT_1992d6e0 (*(int *)SR_VA(0x1992d6e0))
 #define DAT_1992d6dc (*(int *)SR_VA(0x1992d6dc))
 #define DAT_1992d6c6 (*(u_short *)SR_VA(0x1992d6c6))
 #define DAT_1992d6d4 (*(int *)SR_VA(0x1992d6d4))
-#define DAT_004603c8 (*(uint *)SR_VA(0x4603c8))
 #define DAT_07a1eabc (*(int *)SR_VA(0x7a1eabc))
 #define DAT_00604020 (*(int *)SR_VA(0x604020))
 #define DAT_1992d6e8 (*(undefined1 *)SR_VA(0x1992d6e8))
@@ -32649,10 +32357,11 @@ void __cdecl lf_33570(void)
 #define DAT_12e96f08 (*(undefined *)SR_VA(0x12e96f08))
 #define DAT_12e9af0c (*(undefined4 *)SR_VA(0x12e9af0c))
 #define DAT_1992d684 (*(undefined4 *)SR_VA(0x1992d684))
+#define g_socketid (*(uint *)SR_VA(0x460d08))
 #define DAT_1992d6a4 (*(undefined *)SR_VA(0x1992d6a4))
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_1992d6c4 (*(undefined *)SR_VA(0x1992d6c4))
 #define DAT_1993d6f0 (*(undefined1 *)SR_VA(0x1993d6f0))
+#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_1993d6f4 (*(undefined1 *)SR_VA(0x1993d6f4))
 #define DAT_1993d6f8 (*(undefined *)SR_VA(0x1993d6f8))
 #define g_server (*(int *)SR_VA(0x7a1ea60))
@@ -32665,7 +32374,7 @@ void __cdecl lf_33570(void)
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
 #define _DAT_07a1ead8 (*(int *)SR_VA(0x7a1ead8))
-#define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
+#define _DAT_1992d6e4 (*(uint *)SR_VA(0x1992d6e4))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_VA(0x406260))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define deleteplayer ((void (__cdecl *)(float))SR_VA(0x40a1b0))
@@ -32839,12 +32548,12 @@ void __cdecl lf_33650(void)
         local_50 = *(undefined4 *)(&DAT_1993d6f0 + DAT_1993d6e8);
         DAT_1993d6e8 = DAT_1993d6e8 + 4;
       }
-      _DAT_1992d6e4 = DAT_00460d08;
+      _DAT_1992d6e4 = g_socketid;
       DAT_1992d6e0 = 0;
       local_61 = '\x01';
       DAT_1992d6e8 = 1;
       DAT_1992d6dc = 5;
-      pbitwrite(&DAT_004603c8,8);
+      pbitwrite((uint *)&g_currentversion,8);
       if (DAT_1992d6dc < 0x10000) {
         if (0 < DAT_1992d6e0) {
           DAT_1992d6dc = DAT_1992d6dc + 1;
@@ -32887,7 +32596,7 @@ void __cdecl lf_33650(void)
     }
     else if (local_61 == '\x02') {
       iVar17 = pbitread(&local_5c,8);
-      if ((iVar17 != 0) && (local_5c == DAT_004603c8)) {
+      if ((iVar17 != 0) && (local_5c == g_currentversion)) {
         iVar17 = 0;
         if (0 < DAT_0204afc0) {
           piVar8 = &g_connection[0].port;
@@ -33411,13 +33120,12 @@ LAB_00434849:
 #undef DAT_1993d6e8
 #undef DAT_1993d6e4
 #undef DAT_1993d6ec
-#undef DAT_00460d08
 #undef DAT_1992d6e4
+#undef g_currentversion
 #undef DAT_1992d6e0
 #undef DAT_1992d6dc
 #undef DAT_1992d6c6
 #undef DAT_1992d6d4
-#undef DAT_004603c8
 #undef DAT_07a1eabc
 #undef DAT_00604020
 #undef DAT_1992d6e8
@@ -33430,10 +33138,11 @@ LAB_00434849:
 #undef DAT_12e96f08
 #undef DAT_12e9af0c
 #undef DAT_1992d684
+#undef g_socketid
 #undef DAT_1992d6a4
-#undef g_human
 #undef DAT_1992d6c4
 #undef DAT_1993d6f0
+#undef g_human
 #undef DAT_1993d6f4
 #undef DAT_1993d6f8
 #undef g_server
@@ -33477,20 +33186,10 @@ LAB_00434849:
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x34870 */
-#define DAT_00460cec (*(undefined *)SR_VA(0x460cec))
-#define DAT_00460cf0 (*(undefined *)SR_VA(0x460cf0))
-#define DAT_00460cf4 (*(undefined *)SR_VA(0x460cf4))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
 #define DAT_020497c8 (*(undefined4 *)SR_VA(0x20497c8))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
-#define _DAT_00460cec (*(float *)SR_VA(0x460cec))
-#define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
 #define calculatepointscale ((void (__cdecl *)(float *, int, int, float *))SR_VA(0x428c90))
 #define _CIsqrt lf_CIsqrt
 #define local_3c (*(float *)(lf_frame + 0x14))
@@ -33637,30 +33336,20 @@ void __cdecl lf_34870(int param_1)
     } while (iVar6 != 0);
   }
   fVar1 = (float)(fVar1 * 0.25);
-  *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(_DAT_00460cf0 * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * _DAT_00460cec))));
-  local_28 = (float)(fVar1 * _DAT_00460cf4 + local_1c);
+  *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(g_zaxis[1] * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * g_zaxis[0]))));
+  local_28 = (float)(fVar1 * g_zaxis[2] + local_1c);
   calculatepointscale((float *)&g_objecttype[param_1].unk_0640,iVar7,((int)SR_VA(0x20497c0)),(float *)&local_30);
   fVar1 = (float)(g_objecttype[param_1].unk_0034 * 0.25);
-  *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(_DAT_00460cd8 * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * _DAT_00460cd4))));
-  local_28 = (float)(fVar1 * _DAT_00460cdc + local_1c);
+  *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(g_xaxis[1] * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * g_xaxis[0]))));
+  local_28 = (float)(fVar1 * g_xaxis[2] + local_1c);
   calculatepointscale((float *)&g_objecttype[param_1].unk_0540,g_objecttype[param_1].unk_053c,
                       ((int)SR_VA(0x20497c0)),(float *)&local_30);
   return;
 }
-#undef DAT_00460cec
-#undef DAT_00460cf0
-#undef DAT_00460cf4
-#undef DAT_00460cd4
-#undef DAT_00460cd8
-#undef DAT_00460cdc
 #undef DAT_020497c8
+#undef g_xaxis
+#undef g_zaxis
 #undef g_objecttype
-#undef _DAT_00460cf0
-#undef _DAT_00460cec
-#undef _DAT_00460cf4
-#undef _DAT_00460cd8
-#undef _DAT_00460cd4
-#undef _DAT_00460cdc
 #undef calculatepointscale
 #undef _CIsqrt
 #undef local_3c
@@ -39830,7 +39519,6 @@ void __cdecl lf_3e070(void)
 /* ---------------------------------------------------------------- 0x40aa0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_107484f8 (*(undefined4 *)SR_VA(0x107484f8))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0f43090c (*(undefined *)SR_VA(0xf43090c))
 #define DAT_0f430910 (*(undefined *)SR_VA(0xf430910))
 #define DAT_0f430914 (*(undefined *)SR_VA(0xf430914))
@@ -39848,6 +39536,7 @@ void __cdecl lf_3e070(void)
 #define DAT_17166090 (*(undefined *)SR_VA(0x17166090))
 #define DAT_17166094 (*(undefined *)SR_VA(0x17166094))
 #define DAT_17166098 (*(undefined *)SR_VA(0x17166098))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_1716609c (*(undefined *)SR_VA(0x1716609c))
 #define DAT_171660a0 (*(undefined *)SR_VA(0x171660a0))
 #define DAT_171665ac (*(undefined *)SR_VA(0x171665ac))
@@ -40009,7 +39698,7 @@ int __cdecl lf_40aa0(float *param_1,float *param_2,float *param_3,uint param_4,f
                   if (uVar3 == 1) {
                     fVar9 = 1.5707963705062866;
 LAB_00440e27:
-                    rotatevector(&local_68,(float *)&DAT_00460ce0,fVar9);
+                    rotatevector(&local_68,g_yaxis,fVar9);
                   }
                   else {
                     if (uVar3 == 2) {
@@ -40030,7 +39719,7 @@ LAB_00440e27:
                   if (uVar3 == 1) {
                     fVar9 = 1.5707963705062866;
 LAB_00440edc:
-                    rotateorientation(local_28,(float *)&DAT_00460ce0,fVar9);
+                    rotateorientation(local_28,g_yaxis,fVar9);
                   }
                   else {
                     if (uVar3 == 2) {
@@ -40213,7 +39902,6 @@ LAB_0044147f:
 }
 #undef DAT_00460d18
 #undef DAT_107484f8
-#undef DAT_00460ce0
 #undef DAT_0f43090c
 #undef DAT_0f430910
 #undef DAT_0f430914
@@ -40231,6 +39919,7 @@ LAB_0044147f:
 #undef DAT_17166090
 #undef DAT_17166094
 #undef DAT_17166098
+#undef g_yaxis
 #undef DAT_1716609c
 #undef DAT_171660a0
 #undef DAT_171665ac
@@ -40659,14 +40348,10 @@ LAB_00441bf7:
 #define DAT_12e81cdc (*(int *)SR_VA(0x12e81cdc))
 #define DAT_12e81ce0 (*(int *)SR_VA(0x12e81ce0))
 #define DAT_12e81ce4 (*(int *)SR_VA(0x12e81ce4))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define DAT_1994d730 (*(int *)SR_VA(0x1994d730))
 #define DAT_00603dd0 (*(undefined4 * *)SR_VA(0x603dd0))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
-#define DAT_00460cec (*(undefined *)SR_VA(0x460cec))
-#define DAT_00460cf0 (*(undefined *)SR_VA(0x460cf0))
-#define DAT_00460cf4 (*(undefined *)SR_VA(0x460cf4))
 #define DAT_019cbf68 (*(int *)SR_VA(0x19cbf68))
 #define DAT_14022d24 (*(undefined4 *)SR_VA(0x14022d24))
 #define DAT_020a5a30 (*(undefined *)SR_VA(0x20a5a30))
@@ -40708,12 +40393,6 @@ LAB_00441bf7:
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460cec (*(float *)SR_VA(0x460cec))
-#define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
-#define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
 #define _DAT_020a5a30 (*(int *)SR_VA(0x20a5a30))
 #define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_VA(0x409600))
 #define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
@@ -41671,9 +41350,9 @@ LAB_00442c75:
     *(int *)(&DAT_018043e4 + iVar30) = (int)((ulonglong)uVar13 >> 0x20);
     pfVar34 = (float *)&DAT_00461e04;
     pfVar32 = &g_human[0].bones[0].rot[1].y;
-    fVar5 = _DAT_00460ce8;
-    fVar6 = _DAT_00460ce0;
-    fVar7 = _DAT_00460ce4;
+    fVar5 = g_yaxis[2];
+    fVar6 = g_yaxis[0];
+    fVar7 = g_yaxis[1];
     do {
       if ((((LF_BITS_U(pfVar32[-0x42]) != 0x0U) && (LF_BITS_U(pfVar32[-0x34]) != 0x0U)) &&
           (((((uint)LF_BITS_U(pfVar32[-0x13])) & 8) != 0 || (0.8999999761581421 < *pfVar32)))) &&
@@ -41702,10 +41381,10 @@ LAB_00442c75:
           local_58 = (float)(LF_BITS_F(local_84) * local_58);
           local_54 = (float)(LF_BITS_F(local_84) * fVar5);
         }
-        local_94 = _DAT_00460cec;
-        local_90 = _DAT_00460cf0;
-        local_8c = _DAT_00460cf4;
-        rotatevector(&local_94,(float *)&DAT_00460ce0,pfVar32[-0x2a]);
+        local_94 = g_zaxis[0];
+        local_90 = g_zaxis[1];
+        local_8c = g_zaxis[2];
+        rotatevector(&local_94,g_yaxis,pfVar32[-0x2a]);
         local_6c = 0.0;
         local_68 = (float)(((float)(pfVar32[2] * local_8c - pfVar32[4] * local_94)) * 0.125);
         local_64 = 0.0;
@@ -41775,9 +41454,9 @@ LAB_00442c75:
         pfVar34[-1] = (float)(pfVar34[-1] + local_5c);
         *pfVar34 = (float)(local_58 + *pfVar34);
         pfVar34[1] = (float)(local_54 + pfVar34[1]);
-        fVar7 = _DAT_00460ce4;
-        fVar6 = _DAT_00460ce0;
-        fVar5 = _DAT_00460ce8;
+        fVar7 = g_yaxis[1];
+        fVar6 = g_yaxis[0];
+        fVar5 = g_yaxis[2];
       }
       pfVar32 = pfVar32 + 0xad9;
       pfVar34 = pfVar34 + 0x204;
@@ -42783,14 +42462,10 @@ LAB_00442c75:
 #undef DAT_12e81cdc
 #undef DAT_12e81ce0
 #undef DAT_12e81ce4
+#undef g_yaxis
+#undef g_zaxis
 #undef DAT_1994d730
 #undef DAT_00603dd0
-#undef DAT_00460ce8
-#undef DAT_00460ce4
-#undef DAT_00460ce0
-#undef DAT_00460cec
-#undef DAT_00460cf0
-#undef DAT_00460cf4
 #undef DAT_019cbf68
 #undef DAT_14022d24
 #undef DAT_020a5a30
@@ -42832,12 +42507,6 @@ LAB_00442c75:
 #undef g_item
 #undef g_numofbonds
 #undef g_bond
-#undef _DAT_00460ce8
-#undef _DAT_00460ce0
-#undef _DAT_00460ce4
-#undef _DAT_00460cec
-#undef _DAT_00460cf0
-#undef _DAT_00460cf4
 #undef _DAT_020a5a30
 #undef geteulerangles2
 #undef stoptimer
@@ -44869,18 +44538,18 @@ LAB_0044a385:
 /* ---------------------------------------------------------------- 0x4a440 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0fcf7b88 (*(undefined4 *)SR_VA(0xfcf7b88))
 #define DAT_0fcf7b8c (*(undefined4 *)SR_VA(0xfcf7b8c))
 #define DAT_0fcf7b90 (*(undefined4 *)SR_VA(0xfcf7b90))
 #define DAT_0fcf7b98 (*(undefined4 *)SR_VA(0xfcf7b98))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0fcf7bb4 (*(undefined4 *)SR_VA(0xfcf7bb4))
 #define DAT_0fcf7bb8 (*(undefined4 *)SR_VA(0xfcf7bb8))
+#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0fcf7bbc (*(undefined4 *)SR_VA(0xfcf7bbc))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_VA(0x40a7a0))
@@ -45122,7 +44791,7 @@ LAB_0044a71d:
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xb8] = 0x3f800000;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xc8] = 0x3f800000;
     local_94 = ((float *)LF_BITS_U(((float)((g_human[param_1].unk_00b4 * 0.5 - local_74) + 0.04908738521234375))));
-    rotateorientation(pfVar11,(float *)&DAT_00460ce0,LF_BITS_F(local_94));
+    rotateorientation(pfVar11,g_yaxis,LF_BITS_F(local_94));
     if ((g_human[param_1].unk_003c == 2) && (LF_BITS_U(local_90) != 0x0U)) {
       rotateorientation(pfVar11,(float *)&g_human[param_1].bones[2].lf_raw[0xc0],0.19634954631328583);
     }
@@ -45243,9 +44912,9 @@ LAB_0044b6cf:
     local_70 = 0.0;
     local_6c = 0.0;
     local_68 = 0.0;
-    rotatevector(&local_70,(float *)&DAT_00460ce0,local_58);
+    rotatevector(&local_70,g_yaxis,local_58);
     local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].pitch - 0.07363107800483704))));
-    rotatevector(&local_70,(float *)&DAT_00460cd4,LF_BITS_F(local_94));
+    rotatevector(&local_70,g_xaxis,LF_BITS_F(local_94));
     iVar8 = g_numofbonds;
     g_bond[g_numofbonds].state = 10;
     g_bond[g_numofbonds].human_id = param_1;
@@ -45314,12 +44983,12 @@ LAB_0044b6cf:
     local_8 = (float)(g_human[param_1].bones[8].rot[2].z * g_item[iVar9].rot[2].z +
               (g_item[iVar9].rot[2].x * g_human[param_1].bones[8].rot[2].x +
               g_human[param_1].bones[8].rot[2].y * g_item[iVar9].rot[2].y));
-    rotateorientation(&local_28,(float *)&DAT_00460cd4,1.5707963705062866);
+    rotateorientation(&local_28,g_xaxis,1.5707963705062866);
     if (g_item[iVar9].type == 0x10) {
-      rotateorientation(&local_28,(float *)&DAT_00460cd4,-1.1780972480773926);
+      rotateorientation(&local_28,g_xaxis,-1.1780972480773926);
     }
     if (g_item[iVar9].type == 0x1a) {
-      rotateorientation(&local_28,(float *)&DAT_00460cd4,-1.3744467496871948);
+      rotateorientation(&local_28,g_xaxis,-1.3744467496871948);
     }
     local_90 = -0.09817477315664291;
     if (g_item[iVar9].type == 10) {
@@ -45328,7 +44997,7 @@ LAB_0044b6cf:
     if (g_item[iVar9].type == 8) {
       local_90 = -0.1227184608578682;
     }
-    rotateorientation(&local_28,(float *)&DAT_00460cd4,local_90);
+    rotateorientation(&local_28,g_xaxis,local_90);
     orientationtoquaternion(&local_70,&local_28);
     local_70 = -local_70;
     local_6c = -local_6c;
@@ -45466,12 +45135,12 @@ LAB_0044b6cf:
       local_8 = (float)(g_human[param_1].bones[5].rot[2].z * g_item[iVar7].rot[2].z +
                 (pvVar4->x * g_item[iVar7].rot[2].x +
                 g_human[param_1].bones[5].rot[2].y * g_item[iVar7].rot[2].y));
-      rotateorientation(&local_28,(float *)&DAT_00460cd4,1.5707963705062866);
+      rotateorientation(&local_28,g_xaxis,1.5707963705062866);
       if (g_item[iVar7].type == 0xd) {
-        rotateorientation(&local_28,(float *)&DAT_00460ce0,1.5707963705062866);
+        rotateorientation(&local_28,g_yaxis,1.5707963705062866);
       }
       if (g_item[iVar7].type == 0x10) {
-        rotateorientation(&local_28,(float *)&DAT_00460cd4,-1.1780972480773926);
+        rotateorientation(&local_28,g_xaxis,-1.1780972480773926);
       }
       dVar10 = _CIatan2((double)local_14,(double)local_8);
       local_a0 = (float)dVar10;
@@ -45527,18 +45196,18 @@ LAB_0044bd2b:
 }
 #undef g_human
 #undef DAT_00460d18
-#undef DAT_00460cd4
-#undef DAT_00460ce0
 #undef DAT_0fcf7b88
 #undef DAT_0fcf7b8c
 #undef DAT_0fcf7b90
 #undef DAT_0fcf7b98
-#undef g_item
 #undef DAT_0fcf7bb4
 #undef DAT_0fcf7bb8
+#undef g_item
 #undef DAT_0fcf7bbc
 #undef g_body
 #undef g_itemtype
+#undef g_xaxis
+#undef g_yaxis
 #undef g_numofbonds
 #undef g_bond
 #undef orientationtoquaternion
@@ -45616,8 +45285,8 @@ LAB_0044bd2b:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define DAT_1074851c (*(int *)SR_VA(0x1074851c))
 #define DAT_10748520 (*(undefined *)SR_VA(0x10748520))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0e6c8c10 (*(undefined *)SR_VA(0xe6c8c10))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_16224068 (*(undefined *)SR_VA(0x16224068))
 #define DAT_1622406c (*(undefined *)SR_VA(0x1622406c))
 #define _DAT_10748520 (*(int *)SR_VA(0x10748520))
@@ -45832,7 +45501,7 @@ void __cdecl lf_4bd60(int param_1)
       local_c = 0.0;
       local_18 = 1.0;
       local_8 = 1.0;
-      rotateorientation(&local_28,(float *)&DAT_00460ce0,LF_BITS_F(g_human[param_1].unk_009c));
+      rotateorientation(&local_28,g_yaxis,LF_BITS_F(g_human[param_1].unk_009c));
       iVar7 = uVar9 * 0x10;
       *(float *)(iVar7 + ((int)SR_VA(0x19ce9bc)) + param_1 * 0x2b64) = (float)(LF_BITS_F(g_item[iVar5].unk_0194) + local_28);
       *(float *)((int)g_human[param_1].colors + iVar7 + -0x1c) =
@@ -45980,8 +45649,8 @@ void __cdecl lf_4bd60(int param_1)
 #undef g_itemtype
 #undef DAT_1074851c
 #undef DAT_10748520
-#undef DAT_00460ce0
 #undef DAT_0e6c8c10
+#undef g_yaxis
 #undef DAT_16224068
 #undef DAT_1622406c
 #undef _DAT_10748520
@@ -47173,18 +46842,18 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
 
 /* ---------------------------------------------------------------- 0x4e0d0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0e6c94bc (*(undefined *)SR_VA(0xe6c94bc))
 #define DAT_0e6c94c0 (*(undefined *)SR_VA(0xe6c94c0))
-#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_0e6c94c4 (*(undefined4 *)SR_VA(0xe6c94c4))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
+#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_0e6c94c8 (*(undefined4 *)SR_VA(0xe6c94c8))
+#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0e6c9588 (*(undefined *)SR_VA(0xe6c9588))
 #define DAT_0e6c958c (*(undefined *)SR_VA(0xe6c958c))
 #define DAT_0e6c9590 (*(undefined *)SR_VA(0xe6c9590))
 #define DAT_0e6c9594 (*(undefined *)SR_VA(0xe6c9594))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_VA(0x4064a0))
 #define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_VA(0x4065f0))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bdb0))
@@ -47240,7 +46909,7 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
       local_28[7] = 0.0;
       local_28[4] = 1.0;
       local_28[8] = 1.0;
-      rotateorientation(local_28,(float *)&DAT_00460ce0,1.5707963705062866);
+      rotateorientation(local_28,g_yaxis,1.5707963705062866);
       iVar3 = createobject(*(int *)(&DAT_0e6c94bc + g_player[param_1].menu_building * 0x9dc + iVar2)
                            ,&local_34,(undefined4 *)0x0,local_28,
                            (&DAT_0e6c94c4)[g_player[param_1].menu_building * 0x277 + param_2 * 3]);
@@ -47275,18 +46944,18 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
   return;
 }
 #undef DAT_00460d18
-#undef DAT_00460ce0
 #undef DAT_0e6c94bc
 #undef DAT_0e6c94c0
-#undef g_game
 #undef DAT_0e6c94c4
-#undef g_item
+#undef g_game
 #undef DAT_0e6c94c8
+#undef g_item
 #undef DAT_0e6c9588
 #undef DAT_0e6c958c
 #undef DAT_0e6c9590
 #undef DAT_0e6c9594
 #undef g_player
+#undef g_yaxis
 #undef createevent_updateplayer
 #undef createevent_updateplayer_finance
 #undef rotateorientation
@@ -47944,7 +47613,6 @@ void __cdecl lf_4e7a0(int param_1)
 /* ---------------------------------------------------------------- 0x4ed30 */
 #define DAT_12e81cf0 (*(int *)SR_VA(0x12e81cf0))
 #define DAT_0204afc0 (*(int *)SR_VA(0x204afc0))
-#define DAT_00460d08 (*(undefined4 *)SR_VA(0x460d08))
 #define DAT_1992d6e4 (*(undefined1 *)SR_VA(0x1992d6e4))
 #define DAT_1992d6e0 (*(int *)SR_VA(0x1992d6e0))
 #define DAT_1992d6dc (*(int *)SR_VA(0x1992d6dc))
@@ -47969,6 +47637,7 @@ void __cdecl lf_4e7a0(int param_1)
 #define DAT_1992d6a4 (*(undefined *)SR_VA(0x1992d6a4))
 #define DAT_1992d6c4 (*(undefined *)SR_VA(0x1992d6c4))
 #define DAT_25a1d740 (*(undefined4 *)SR_VA(0x25a1d740))
+#define g_socketid (*(uint *)SR_VA(0x460d08))
 #define g_timer (*(undefined *)SR_VA(0x18043e0))
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_game (*(Game *)SR_VA(0x94dc540))
@@ -47976,7 +47645,7 @@ void __cdecl lf_4e7a0(int param_1)
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_bsdsocket (*(int *)SR_VA(0x1992d680))
-#define _DAT_1992d6e4 (*(undefined4 *)SR_VA(0x1992d6e4))
+#define _DAT_1992d6e4 (*(uint *)SR_VA(0x1992d6e4))
 #define _DAT_1992d6e9 (*(int *)SR_VA(0x1992d6e9))
 #define ram0x1992d6ed (*(int *)SR_VA(0x1992d6ed))
 #define _DAT_07a1ea6c (*(int *)SR_VA(0x7a1ea6c))
@@ -48069,7 +47738,7 @@ void __cdecl lf_4ed30(void)
             g_connection[local_2c].listener_pos.y = g_human[iVar8].pos.y;
             fVar12 = g_human[iVar8].pos.z;
           }
-          _DAT_1992d6e4 = DAT_00460d08;
+          _DAT_1992d6e4 = g_socketid;
           g_connection[local_2c].listener_pos.z = fVar12;
           DAT_1992d6e8 = 5;
           _DAT_1992d6e9 = iVar9;
@@ -48247,7 +47916,7 @@ void __cdecl lf_4ed30(void)
                    (sockaddr *)&DAT_1992d6c4,DAT_1992d6d4);
           }
           iVar8 = local_30;
-          _DAT_1992d6e4 = DAT_00460d08;
+          _DAT_1992d6e4 = g_socketid;
           DAT_1992d6e0 = 0;
           DAT_1992d6e8 = 8;
           DAT_1992d6dc = 5;
@@ -48309,7 +47978,7 @@ void __cdecl lf_4ed30(void)
           }
         }
         else {
-          _DAT_1992d6e4 = DAT_00460d08;
+          _DAT_1992d6e4 = g_socketid;
           DAT_1992d6e8 = 6;
           DAT_1992d6e0 = 0;
           _DAT_1992d6e9 = g_game.round_number;
@@ -48333,7 +48002,6 @@ void __cdecl lf_4ed30(void)
 }
 #undef DAT_12e81cf0
 #undef DAT_0204afc0
-#undef DAT_00460d08
 #undef DAT_1992d6e4
 #undef DAT_1992d6e0
 #undef DAT_1992d6dc
@@ -48358,6 +48026,7 @@ void __cdecl lf_4ed30(void)
 #undef DAT_1992d6a4
 #undef DAT_1992d6c4
 #undef DAT_25a1d740
+#undef g_socketid
 #undef g_timer
 #undef g_human
 #undef g_game
@@ -48396,9 +48065,9 @@ void __cdecl lf_4ed30(void)
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_107484d0 (*(int *)SR_VA(0x107484d0))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define angulardistance ((float10 (__cdecl *)(float, float))SR_VA(0x401540))
@@ -48536,7 +48205,7 @@ LAB_0044f971:
     local_28[7] = 0.0;
     local_28[4] = 1.0;
     local_28[8] = 1.0;
-    rotateorientation(local_28,(float *)&DAT_00460ce0,g_human[iVar4].axis);
+    rotateorientation(local_28,g_yaxis,g_human[iVar4].axis);
     local_4c = g_player[(int)param_1].yaw;
     if (g_human[iVar4].bones[0].rot[1].y < 0.8999999761581421) {
       g_player[(int)param_1].input_buttons = g_player[(int)param_1].input_buttons | 8;
@@ -48715,9 +48384,9 @@ LAB_00450088:
 #undef DAT_00460d18
 #undef DAT_107484d0
 #undef g_object
-#undef DAT_00460ce0
 #undef g_itemtype
 #undef g_item
+#undef g_yaxis
 #undef g_player
 #undef rand
 #undef angulardistance
@@ -49941,71 +49610,56 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 
 /* ---------------------------------------------------------------- 0x51060 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
-#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define DAT_12e81ce8 (*(int *)SR_VA(0x12e81ce8))
-#define DAT_00460cd4 (*(undefined *)SR_VA(0x460cd4))
-#define DAT_00460cd8 (*(undefined *)SR_VA(0x460cd8))
-#define DAT_00460cdc (*(undefined *)SR_VA(0x460cdc))
-#define DAT_00460cec (*(undefined *)SR_VA(0x460cec))
-#define DAT_00460cf0 (*(undefined *)SR_VA(0x460cf0))
-#define DAT_00460cf4 (*(undefined *)SR_VA(0x460cf4))
-#define DAT_107484ac (*(undefined *)SR_VA(0x107484ac))
 #define DAT_018043e4 (*(undefined *)SR_VA(0x18043e4))
 #define DAT_018043e8 (*(undefined *)SR_VA(0x18043e8))
-#define DAT_107484b0 (*(undefined *)SR_VA(0x107484b0))
 #define DAT_018043ec (*(undefined *)SR_VA(0x18043ec))
-#define DAT_107484a4 (*(undefined *)SR_VA(0x107484a4))
 #define DAT_018043f0 (*(undefined *)SR_VA(0x18043f0))
-#define DAT_107484b4 (*(undefined *)SR_VA(0x107484b4))
 #define DAT_0b7e722c (*(undefined4 *)SR_VA(0xb7e722c))
-#define DAT_107484a8 (*(undefined *)SR_VA(0x107484a8))
 #define DAT_0b7e7230 (*(undefined4 *)SR_VA(0xb7e7230))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
 #define DAT_0b7e7234 (*(undefined4 *)SR_VA(0xb7e7234))
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_0e6c8bfc (*(undefined4 *)SR_VA(0xe6c8bfc))
+#define DAT_107484ac (*(undefined *)SR_VA(0x107484ac))
+#define DAT_107484b0 (*(undefined *)SR_VA(0x107484b0))
+#define DAT_107484a4 (*(undefined *)SR_VA(0x107484a4))
+#define DAT_107484b4 (*(undefined *)SR_VA(0x107484b4))
+#define DAT_107484a8 (*(undefined *)SR_VA(0x107484a8))
+#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define DAT_107484c0 (*(undefined *)SR_VA(0x107484c0))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_107484c4 (*(undefined *)SR_VA(0x107484c4))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define DAT_107484c8 (*(undefined *)SR_VA(0x107484c8))
 #define g_timer (*(undefined *)SR_VA(0x18043e0))
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_game (*(Game *)SR_VA(0x94dc540))
 #define DAT_107484bc (*(undefined *)SR_VA(0x107484bc))
+#define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define DAT_107484e4 (*(undefined *)SR_VA(0x107484e4))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
+#define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define DAT_107484d8 (*(int *)SR_VA(0x107484d8))
-#define g_intersect (*(undefined *)SR_VA(0x107484a0))
 #define DAT_107484dc (*(int *)SR_VA(0x107484dc))
 #define DAT_107484d4 (*(int *)SR_VA(0x107484d4))
+#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define DAT_107484e8 (*(undefined *)SR_VA(0x107484e8))
+#define g_intersect (*(undefined *)SR_VA(0x107484a0))
 #define DAT_107484ec (*(undefined *)SR_VA(0x107484ec))
+#define DAT_0956d78c (*(undefined4 *)SR_VA(0x956d78c))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define DAT_0956d78c (*(undefined4 *)SR_VA(0x956d78c))
+#define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
+#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define _g_intersect (*(float *)SR_VA(0x107484a0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484a4 (*(float *)SR_VA(0x107484a4))
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484a8 (*(float *)SR_VA(0x107484a8))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
 #define _DAT_107484c0 (*(float *)SR_VA(0x107484c0))
 #define _DAT_107484c4 (*(float *)SR_VA(0x107484c4))
 #define _DAT_107484c8 (*(float *)SR_VA(0x107484c8))
-#define _DAT_00460cd4 (*(float *)SR_VA(0x460cd4))
-#define _DAT_00460cd8 (*(float *)SR_VA(0x460cd8))
-#define _DAT_00460cdc (*(float *)SR_VA(0x460cdc))
-#define _DAT_00460cec (*(float *)SR_VA(0x460cec))
-#define _DAT_00460cf0 (*(float *)SR_VA(0x460cf0))
-#define _DAT_00460cf4 (*(float *)SR_VA(0x460cf4))
 #define _DAT_107484bc (*(float *)SR_VA(0x107484bc))
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
@@ -50316,9 +49970,9 @@ void __cdecl lf_51060(void)
         local_bc = 0.0;
         local_b8 = 0.0;
         local_b4 = 0.0;
-        fVar24 = _DAT_00460ce8;
-        fVar3 = _DAT_00460ce4;
-        fVar4 = _DAT_00460ce0;
+        fVar24 = g_yaxis[2];
+        fVar3 = g_yaxis[1];
+        fVar4 = g_yaxis[0];
         do {
           if ((((Object *)(piVar22 + -2))->active != 0) && (*piVar22 != 3)) {
             local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
@@ -50329,9 +49983,9 @@ void __cdecl lf_51060(void)
             local_38 = (float)(g_human[(int)puVar11].bones[0].pos.y + fVar3 * 0.125);
             local_34 = (float)(fVar24 * 0.125 + g_human[(int)puVar11].bones[0].pos.z);
             iVar14 = lineintersectobject(iVar21,&local_3c,&local_48,0);
-            fVar4 = _DAT_00460ce0;
-            fVar3 = _DAT_00460ce4;
-            fVar24 = _DAT_00460ce8;
+            fVar4 = g_yaxis[0];
+            fVar3 = g_yaxis[1];
+            fVar24 = g_yaxis[2];
             if (iVar14 != 0) {
               local_c0 = 1.401298464324817E-45;
               local_b0 = (float)(_g_intersect + 0.0);
@@ -50361,17 +50015,17 @@ void __cdecl lf_51060(void)
           local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
           local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
-                     _DAT_00460cd4 * 0.1875);
+                     g_xaxis[0] * 0.1875);
           local_44 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y)) - _DAT_00460cd8 * 0.1875);
+                     g_human[(int)puVar11].bones[0].pos.y)) - g_xaxis[1] * 0.1875);
           local_40 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z)) - _DAT_00460cdc * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - _DAT_00460cd4 * 0.1875)) -
-                     _DAT_00460ce0 * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - _DAT_00460cd8 * 0.1875)) -
-                     _DAT_00460ce4 * 0.375);
-          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - _DAT_00460cdc * 0.1875)) -
-                     _DAT_00460ce8 * 0.375);
+                     g_human[(int)puVar11].bones[0].pos.z)) - g_xaxis[2] * 0.1875);
+          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - g_xaxis[0] * 0.1875)) -
+                     g_yaxis[0] * 0.375);
+          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - g_xaxis[1] * 0.1875)) -
+                     g_yaxis[1] * 0.375);
+          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - g_xaxis[2] * 0.1875)) -
+                     g_yaxis[2] * 0.375);
           iVar21 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar21 != 0) && (0.699999988079071 < _DAT_107484b0)) {
             local_c0 = 1.401298464324817E-45;
@@ -50385,18 +50039,18 @@ void __cdecl lf_51060(void)
           fVar24 = local_c0;
           local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
           local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) +
-                     _DAT_00460cd4 * 0.1875);
+                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_xaxis[0] * 0.1875)
+          ;
           local_44 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y) + _DAT_00460cd8 * 0.1875);
+                     g_human[(int)puVar11].bones[0].pos.y) + g_xaxis[1] * 0.1875);
           local_40 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z) + _DAT_00460cdc * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + _DAT_00460cd4 * 0.1875)) -
-                     _DAT_00460ce0 * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + _DAT_00460cd8 * 0.1875)) -
-                     _DAT_00460ce4 * 0.375);
-          local_34 = (float)(((float)(_DAT_00460cdc * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
-                     _DAT_00460ce8 * 0.375);
+                     g_human[(int)puVar11].bones[0].pos.z) + g_xaxis[2] * 0.1875);
+          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + g_xaxis[0] * 0.1875)) -
+                     g_yaxis[0] * 0.375);
+          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + g_xaxis[1] * 0.1875)) -
+                     g_yaxis[1] * 0.375);
+          local_34 = (float)(((float)(g_xaxis[2] * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
+                     g_yaxis[2] * 0.375);
           iVar21 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar21 != 0) && (0.699999988079071 < _DAT_107484b0)) {
             fVar24 = LF_BITS_F((((int)LF_BITS_U(fVar24)) + 1));
@@ -50411,17 +50065,17 @@ void __cdecl lf_51060(void)
           local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
           local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
-                     _DAT_00460cec * 0.1875);
+                     g_zaxis[0] * 0.1875);
           local_44 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y)) - _DAT_00460cf0 * 0.1875);
+                     g_human[(int)puVar11].bones[0].pos.y)) - g_zaxis[1] * 0.1875);
           local_40 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z)) - _DAT_00460cf4 * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - _DAT_00460cec * 0.1875)) -
-                     _DAT_00460ce0 * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - _DAT_00460cf0 * 0.1875)) -
-                     _DAT_00460ce4 * 0.375);
-          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - _DAT_00460cf4 * 0.1875)) -
-                     _DAT_00460ce8 * 0.375);
+                     g_human[(int)puVar11].bones[0].pos.z)) - g_zaxis[2] * 0.1875);
+          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - g_zaxis[0] * 0.1875)) -
+                     g_yaxis[0] * 0.375);
+          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - g_zaxis[1] * 0.1875)) -
+                     g_yaxis[1] * 0.375);
+          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - g_zaxis[2] * 0.1875)) -
+                     g_yaxis[2] * 0.375);
           iVar21 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar21 != 0) && (0.699999988079071 < _DAT_107484b0)) {
             fVar24 = LF_BITS_F((((int)LF_BITS_U(fVar24)) + 1));
@@ -50435,18 +50089,18 @@ void __cdecl lf_51060(void)
           }
           local_cc = ((float *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
           local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) +
-                     _DAT_00460cec * 0.1875);
+                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_zaxis[0] * 0.1875)
+          ;
           local_44 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y) + _DAT_00460cf0 * 0.1875);
+                     g_human[(int)puVar11].bones[0].pos.y) + g_zaxis[1] * 0.1875);
           local_40 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z) + _DAT_00460cf4 * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + _DAT_00460cec * 0.1875)) -
-                     _DAT_00460ce0 * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + _DAT_00460cf0 * 0.1875)) -
-                     _DAT_00460ce4 * 0.375);
-          local_34 = (float)(((float)(_DAT_00460cf4 * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
-                     _DAT_00460ce8 * 0.375);
+                     g_human[(int)puVar11].bones[0].pos.z) + g_zaxis[2] * 0.1875);
+          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + g_zaxis[0] * 0.1875)) -
+                     g_yaxis[0] * 0.375);
+          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + g_zaxis[1] * 0.1875)) -
+                     g_yaxis[1] * 0.375);
+          local_34 = (float)(((float)(g_zaxis[2] * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
+                     g_yaxis[2] * 0.375);
           iVar21 = lineintersectlevel(&local_3c,&local_48,1);
           if ((iVar21 != 0) && (0.699999988079071 < _DAT_107484b0)) {
             fVar24 = LF_BITS_F((((int)LF_BITS_U(fVar24)) + 1));
@@ -50459,9 +50113,9 @@ void __cdecl lf_51060(void)
             local_c0 = fVar24;
           }
           if (LF_BITS_U(fVar24) == 0x0U) {
-            local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x - _DAT_00460ce0 * 0.5);
-            local_44 = (float)(g_human[(int)puVar11].bones[0].pos.y - _DAT_00460ce4 * 0.5);
-            local_40 = (float)(g_human[(int)puVar11].bones[0].pos.z - _DAT_00460ce8 * 0.5);
+            local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x - g_yaxis[0] * 0.5);
+            local_44 = (float)(g_human[(int)puVar11].bones[0].pos.y - g_yaxis[1] * 0.5);
+            local_40 = (float)(g_human[(int)puVar11].bones[0].pos.z - g_yaxis[2] * 0.5);
             local_3c = g_human[(int)puVar11].bones[0].pos.x;
             local_38 = g_human[(int)puVar11].bones[0].pos.y;
             local_34 = g_human[(int)puVar11].bones[0].pos.z;
@@ -50605,7 +50259,7 @@ LAB_0045230e:
           local_14 = 0.0;
           local_20 = 0x3f800000;
           local_10 = 1.0;
-          rotateorientation(&local_30,(float *)&DAT_00460ce0,g_human[(int)puVar11].axis);
+          rotateorientation(&local_30,g_yaxis,g_human[(int)puVar11].axis);
           fVar3 = -LF_BITS_F(g_human[(int)puVar11].unk_00a8);
           fVar24 = LF_BITS_F(g_human[(int)puVar11].unk_00a0);
           local_48 = (float)(fVar24 * local_30 + ((float)(fVar3 * local_18 + 0.0)));
@@ -51275,9 +50929,9 @@ LAB_00453705:
         }
         g_human[(int)puVar11].health = iVar21;
         if (0 < iVar21) {
-          local_48 = (float)(_DAT_00460ce0 * 0.5 + g_human[(int)puVar11].pos.x);
-          local_44 = (float)(_DAT_00460ce4 * 0.5 + g_human[(int)puVar11].pos.y);
-          local_40 = (float)(_DAT_00460ce8 * 0.5 + g_human[(int)puVar11].pos.z);
+          local_48 = (float)(g_yaxis[0] * 0.5 + g_human[(int)puVar11].pos.x);
+          local_44 = (float)(g_yaxis[1] * 0.5 + g_human[(int)puVar11].pos.y);
+          local_40 = (float)(g_yaxis[2] * 0.5 + g_human[(int)puVar11].pos.z);
           createevent_bullethit(0,3,&local_48,&local_48);
         }
       }
@@ -51450,71 +51104,56 @@ LAB_00453705:
   } while( true );
 }
 #undef DAT_00460d18
-#undef DAT_0e6c8bb8
-#undef DAT_0f837b64
 #undef DAT_12e81ce8
-#undef DAT_00460cd4
-#undef DAT_00460cd8
-#undef DAT_00460cdc
-#undef DAT_00460cec
-#undef DAT_00460cf0
-#undef DAT_00460cf4
-#undef DAT_107484ac
 #undef DAT_018043e4
 #undef DAT_018043e8
-#undef DAT_107484b0
 #undef DAT_018043ec
-#undef DAT_107484a4
 #undef DAT_018043f0
-#undef DAT_107484b4
 #undef DAT_0b7e722c
-#undef DAT_107484a8
 #undef DAT_0b7e7230
-#undef DAT_00460ce8
 #undef DAT_0b7e7234
-#undef DAT_00460ce4
-#undef DAT_00460ce0
 #undef DAT_0e6c8bfc
+#undef DAT_107484ac
+#undef DAT_107484b0
+#undef DAT_107484a4
+#undef DAT_107484b4
+#undef DAT_107484a8
+#undef g_xaxis
 #undef DAT_107484c0
+#undef g_yaxis
 #undef DAT_107484c4
+#undef g_zaxis
 #undef DAT_107484c8
 #undef g_timer
 #undef g_human
 #undef g_object
-#undef g_game
 #undef DAT_107484bc
+#undef g_game
 #undef g_item
 #undef g_player
-#undef g_body
 #undef DAT_107484e4
-#undef g_account
+#undef g_body
 #undef DAT_107484d8
-#undef g_intersect
 #undef DAT_107484dc
 #undef DAT_107484d4
+#undef g_account
 #undef DAT_107484e8
+#undef g_intersect
 #undef DAT_107484ec
+#undef DAT_0956d78c
 #undef g_numofbonds
 #undef g_bond
-#undef DAT_0956d78c
+#undef DAT_0e6c8bb8
+#undef DAT_0f837b64
 #undef _g_intersect
 #undef _DAT_107484ac
 #undef _DAT_107484b0
 #undef _DAT_107484a4
 #undef _DAT_107484b4
 #undef _DAT_107484a8
-#undef _DAT_00460ce8
-#undef _DAT_00460ce4
-#undef _DAT_00460ce0
 #undef _DAT_107484c0
 #undef _DAT_107484c4
 #undef _DAT_107484c8
-#undef _DAT_00460cd4
-#undef _DAT_00460cd8
-#undef _DAT_00460cdc
-#undef _DAT_00460cec
-#undef _DAT_00460cf0
-#undef _DAT_00460cf4
 #undef _DAT_107484bc
 #undef _DAT_107484e4
 #undef _DAT_107484e8
@@ -52634,14 +52273,14 @@ LAB_004556a8:
 #define DAT_25a1d750 (*(undefined *)SR_VA(0x25a1d750))
 #define DAT_25a1d758 (*(undefined *)SR_VA(0x25a1d758))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define DAT_00460458 (*(undefined *)SR_VA(0x460458))
 #define DAT_0956d7cc (*(undefined *)SR_VA(0x956d7cc))
+#define g_dollarbillvalue (*(int (*)[8])SR_VA(0x460458))
 #define DAT_0e6c8bfc (*(undefined4 *)SR_VA(0xe6c8bfc))
 #define DAT_0e6c94c4 (*(undefined4 *)SR_VA(0xe6c94c4))
 #define DAT_17579610 (*(undefined4 *)SR_VA(0x17579610))
 #define DAT_17579744 (*(undefined *)SR_VA(0x17579744))
-#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define DAT_17579748 (*(undefined *)SR_VA(0x17579748))
+#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define DAT_1757974c (*(undefined *)SR_VA(0x1757974c))
 #define _DAT_25a1d744 (*(float *)SR_VA(0x25a1d744))
 #define _DAT_25a1d748 (*(float *)SR_VA(0x25a1d748))
@@ -53195,7 +52834,7 @@ LAB_004563c7:
                       (pIVar6 = *(ItemType **)((int)g_player[0].input_axes + iVar12 + -0x18),
                       local_44 = pIVar6, (int)pIVar6 < 0)) || (4 < (int)pIVar6)) goto LAB_004560f2;
                   if (uVar18 - 1 < 6) {
-                    iVar12 = *(int *)(&DAT_00460458 + uVar18 * 4);
+                    iVar12 = g_dollarbillvalue[uVar18];
                     iVar17 = (&DAT_17579610)[(int)pIVar6 * 5];
                     if ((iVar12 <= iVar17) &&
                        ((2 < (int)uVar18 ||
@@ -53210,8 +52849,7 @@ LAB_004563c7:
                         g_item[uVar16].bills_mask = uVar18;
                         linkitem(uVar16,0xffffffff,local_4c,0);
                         (&DAT_17579610)[(int)pIVar6 * 5] =
-                             (&DAT_17579610)[(int)pIVar6 * 5] - *(int *)(&DAT_00460458 + uVar18 * 4)
-                        ;
+                             (&DAT_17579610)[(int)pIVar6 * 5] - g_dollarbillvalue[uVar18];
                       }
                       else {
                         iVar10 = g_human[local_4c].inventory[0].item_id;
@@ -53256,7 +52894,7 @@ LAB_00456669:
                 }
                 if (uVar18 - 1 < 6) {
                   iVar17 = *(int *)((int)g_player[0].account_id + iVar12 + 0x1c);
-                  iVar10 = *(int *)(&DAT_00460458 + uVar18 * 4);
+                  iVar10 = g_dollarbillvalue[uVar18];
                   if ((iVar10 <= iVar17) &&
                      ((2 < (int)uVar18 ||
                       (*(int *)((int)g_player[0].input_axes + iVar12 + -0x28) < 0x28)))) {
@@ -53270,7 +52908,7 @@ LAB_00456669:
                       g_item[uVar16].bills_mask = uVar18;
                       linkitem(uVar16,0xffffffff,local_4c,0);
                       piVar2 = (int *)((int)g_player[0].account_id + iVar12 + 0x1c);
-                      *piVar2 = *piVar2 - *(int *)(&DAT_00460458 + uVar18 * 4);
+                      *piVar2 = *piVar2 - g_dollarbillvalue[uVar18];
                     }
                     else {
                       iVar11 = g_human[local_4c].inventory[0].item_id;
@@ -53324,14 +52962,14 @@ LAB_004560f2:
 #undef DAT_25a1d750
 #undef DAT_25a1d758
 #undef g_player
-#undef DAT_00460458
 #undef DAT_0956d7cc
+#undef g_dollarbillvalue
 #undef DAT_0e6c8bfc
 #undef DAT_0e6c94c4
 #undef DAT_17579610
 #undef DAT_17579744
-#undef g_itemtype
 #undef DAT_17579748
+#undef g_itemtype
 #undef DAT_1757974c
 #undef _DAT_25a1d744
 #undef _DAT_25a1d748
@@ -53393,6 +53031,7 @@ LAB_004560f2:
 #define DAT_0956d77c (*(int *)SR_VA(0x956d77c))
 #define DAT_0e6993d4 (*(undefined *)SR_VA(0xe6993d4))
 #define DAT_0e6993dc (*(undefined *)SR_VA(0xe6993dc))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_107484f8 (*(uint *)SR_VA(0x107484f8))
 #define DAT_10748514 (*(int *)SR_VA(0x10748514))
 #define DAT_10748510 (*(uint *)SR_VA(0x10748510))
@@ -53404,9 +53043,6 @@ LAB_004560f2:
 #define DAT_107484ac (*(undefined *)SR_VA(0x107484ac))
 #define DAT_107484b0 (*(undefined *)SR_VA(0x107484b0))
 #define DAT_107484b4 (*(undefined *)SR_VA(0x107484b4))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
-#define DAT_00460ce4 (*(undefined *)SR_VA(0x460ce4))
-#define DAT_00460ce8 (*(undefined *)SR_VA(0x460ce8))
 #define DAT_107484d4 (*(int *)SR_VA(0x107484d4))
 #define DAT_107484d8 (*(int *)SR_VA(0x107484d8))
 #define DAT_107484e4 (*(undefined *)SR_VA(0x107484e4))
@@ -53447,9 +53083,6 @@ LAB_004560f2:
 #define _DAT_107484b4 (*(float *)SR_VA(0x107484b4))
 #define _DAT_107484b0 (*(float *)SR_VA(0x107484b0))
 #define _DAT_107484ac (*(float *)SR_VA(0x107484ac))
-#define _DAT_00460ce0 (*(float *)SR_VA(0x460ce0))
-#define _DAT_00460ce4 (*(float *)SR_VA(0x460ce4))
-#define _DAT_00460ce8 (*(float *)SR_VA(0x460ce8))
 #define _DAT_107484e4 (*(float *)SR_VA(0x107484e4))
 #define _DAT_107484e8 (*(float *)SR_VA(0x107484e8))
 #define _DAT_107484ec (*(float *)SR_VA(0x107484ec))
@@ -54191,9 +53824,9 @@ LAB_0045770a:
             local_3c = _DAT_107484ac;
             local_38 = _DAT_107484b0;
             local_34 = _DAT_107484b4;
-            local_10 = (float)((*(float *)&((&DAT_0b7e7214)[iVar10 * 0x3c])) + _DAT_00460ce0 * 0.5);
-            local_c = (float)(_DAT_00460ce4 * 0.5 + LF_BITS_F((&DAT_0b7e7218)[iVar10 * 0x3c]));
-            local_8 = (float)(_DAT_00460ce8 * 0.5 + LF_BITS_F((&DAT_0b7e721c)[iVar10 * 0x3c]));
+            local_10 = (float)((*(float *)&((&DAT_0b7e7214)[iVar10 * 0x3c])) + g_yaxis[0] * 0.5);
+            local_c = (float)(g_yaxis[1] * 0.5 + LF_BITS_F((&DAT_0b7e7218)[iVar10 * 0x3c]));
+            local_8 = (float)(g_yaxis[2] * 0.5 + LF_BITS_F((&DAT_0b7e721c)[iVar10 * 0x3c]));
             iVar12 = lineintersectlevel(&local_10,(float *)(&DAT_0b7e7214 + iVar10 * 0x3c),0);
             iVar10 = g_numofbonds;
             if (iVar12 != 0) {
@@ -54333,6 +53966,7 @@ LAB_00457ea9:
 #undef DAT_0956d77c
 #undef DAT_0e6993d4
 #undef DAT_0e6993dc
+#undef g_yaxis
 #undef DAT_107484f8
 #undef DAT_10748514
 #undef DAT_10748510
@@ -54344,9 +53978,6 @@ LAB_00457ea9:
 #undef DAT_107484ac
 #undef DAT_107484b0
 #undef DAT_107484b4
-#undef DAT_00460ce0
-#undef DAT_00460ce4
-#undef DAT_00460ce8
 #undef DAT_107484d4
 #undef DAT_107484d8
 #undef DAT_107484e4
@@ -54387,9 +54018,6 @@ LAB_00457ea9:
 #undef _DAT_107484b4
 #undef _DAT_107484b0
 #undef _DAT_107484ac
-#undef _DAT_00460ce0
-#undef _DAT_00460ce4
-#undef _DAT_00460ce8
 #undef _DAT_107484e4
 #undef _DAT_107484e8
 #undef _DAT_107484ec
@@ -54434,17 +54062,17 @@ LAB_00457ea9:
 #define PTR_rand_0045e070 (*(undefined * *)SR_VA(0x45e070))
 #define DAT_0b051b8c (*(uint *)SR_VA(0xb051b8c))
 #define DAT_0b051bac (*(int *)SR_VA(0xb051bac))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_00603de0 (*(undefined4 *)SR_VA(0x603de0))
 #define DAT_0e6c8dc0 (*(undefined *)SR_VA(0xe6c8dc0))
 #define DAT_0e6c8dc4 (*(undefined *)SR_VA(0xe6c8dc4))
 #define DAT_0e6c8dc8 (*(undefined *)SR_VA(0xe6c8dc8))
 #define DAT_0e6c8dcc (*(undefined *)SR_VA(0xe6c8dcc))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define DAT_0e6c8dd0 (*(undefined *)SR_VA(0xe6c8dd0))
+#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define DAT_0e6c91c4 (*(undefined *)SR_VA(0xe6c91c4))
 #define DAT_0e6c91c8 (*(undefined *)SR_VA(0xe6c91c8))
 #define DAT_0e6c91cc (*(undefined *)SR_VA(0xe6c91cc))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define rand_exref (*(undefined * *)SR_VA(0x45e070))
 #define rand_exref ((code *)rand)
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
@@ -54548,7 +54176,7 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
         local_28[5] = 0.0;
         local_28[6] = 0.0;
         local_28[7] = 0.0;
-        rotateorientation(local_28,(float *)&DAT_00460ce0,local_40);
+        rotateorientation(local_28,g_yaxis,local_40);
         iVar4 = createhuman(&local_38,local_28,iVar6);
         g_player[iVar6].yaw = local_40;
         g_player[iVar6].human_id = iVar4;
@@ -54590,17 +54218,17 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #undef PTR_rand_0045e070
 #undef DAT_0b051b8c
 #undef DAT_0b051bac
-#undef DAT_00460ce0
 #undef DAT_00603de0
 #undef DAT_0e6c8dc0
 #undef DAT_0e6c8dc4
 #undef DAT_0e6c8dc8
 #undef DAT_0e6c8dcc
-#undef g_player
 #undef DAT_0e6c8dd0
+#undef g_player
 #undef DAT_0e6c91c4
 #undef DAT_0e6c91c8
 #undef DAT_0e6c91cc
+#undef g_yaxis
 #undef rand_exref
 #undef rand_exref
 #undef sprintf
@@ -55190,6 +54818,7 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define DAT_0bba8c80 (*(undefined *)SR_VA(0xbba8c80))
 #define DAT_057f254c (*(undefined4 *)SR_VA(0x57f254c))
 #define DAT_0f0a4bc0 (*(undefined4 *)SR_VA(0xf0a4bc0))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_0f0cdde8 (*(undefined *)SR_VA(0xf0cdde8))
 #define DAT_0f0f7010 (*(undefined *)SR_VA(0xf0f7010))
 #define DAT_0f120238 (*(undefined *)SR_VA(0xf120238))
@@ -55215,7 +54844,6 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define DAT_00604020 (*(int *)SR_VA(0x604020))
 #define DAT_0e6c8bb8 (*(int *)SR_VA(0xe6c8bb8))
 #define DAT_1994d704 (*(int *)SR_VA(0x1994d704))
-#define DAT_00460ce0 (*(undefined *)SR_VA(0x460ce0))
 #define DAT_00989680 (*(undefined *)SR_VA(0x989680))
 #define DAT_0402b001 (*(undefined *)SR_VA(0x402b001))
 #define DAT_09fdd8e3 (*(undefined *)SR_VA(0x9fdd8e3))
@@ -55808,7 +55436,7 @@ void __cdecl lf_590f0(void)
       local_28[5] = 0.0;
       local_28[6] = 0.0;
       local_28[7] = 0.0;
-      rotateorientation(local_28,(float *)&DAT_00460ce0,-1.5707963705062866);
+      rotateorientation(local_28,g_yaxis,-1.5707963705062866);
       local_38 = _DAT_25d98474;
       local_30 = LF_BITS_F(_DAT_25d9847c);
       local_34 = (float)(_DAT_25d98478 + 1.625);
@@ -55816,7 +55444,7 @@ void __cdecl lf_590f0(void)
       local_38 = _DAT_25d7fab4;
       local_34 = _DAT_25d7fab8;
       local_30 = _DAT_25d7fabc;
-      rotateorientation(local_28,(float *)&DAT_00460ce0,3.1415927410125732);
+      rotateorientation(local_28,g_yaxis,3.1415927410125732);
       local_34 = (float)(local_34 + 1.625);
       iVar10 = createvehicle(0,&local_38,local_28);
       g_object[iVar10].unk_8194 = 0x4a;
@@ -56163,7 +55791,7 @@ void __cdecl lf_590f0(void)
             local_28[5] = 0.0;
             local_28[6] = 0.0;
             local_28[7] = 0.0;
-            rotateorientation(local_28,(float *)&DAT_00460ce0,-1.5707963705062866);
+            rotateorientation(local_28,g_yaxis,-1.5707963705062866);
             scenario_createcar(1,1,0,0,1,64.0);
           }
           fVar16 = 80.0;
@@ -56232,6 +55860,7 @@ void __cdecl lf_590f0(void)
 #undef DAT_0bba8c80
 #undef DAT_057f254c
 #undef DAT_0f0a4bc0
+#undef g_yaxis
 #undef DAT_0f0cdde8
 #undef DAT_0f0f7010
 #undef DAT_0f120238
@@ -56257,7 +55886,6 @@ void __cdecl lf_590f0(void)
 #undef DAT_00604020
 #undef DAT_0e6c8bb8
 #undef DAT_1994d704
-#undef DAT_00460ce0
 #undef DAT_00989680
 #undef DAT_0402b001
 #undef DAT_09fdd8e3
@@ -57047,16 +56675,16 @@ void __cdecl lf_5ae70(void)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define PTR_s_Goldmen_Inc_00460438 (*(pointer *)SR_VA(0x460438))
 #define DAT_004617c0 (*(undefined1 *)SR_VA(0x4617c0))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define DAT_00603ee0 (*(undefined4 *)SR_VA(0x603ee0))
+#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
+#define g_teamname (*(char * (*)[8])SR_VA(0x460438))
 #define DAT_01001001 (*(undefined *)SR_VA(0x1001001))
 #define DAT_17579600 (*(undefined4 *)SR_VA(0x17579600))
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
 #define DAT_17579604 (*(undefined4 *)SR_VA(0x17579604))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
+#define g_numofevents (*(uint *)SR_VA(0xf837318))
 #define DAT_1757960c (*(undefined4 *)SR_VA(0x1757960c))
+#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define _DAT_25a1d744 (*(float *)SR_VA(0x25a1d744))
 #define _DAT_25a1d748 (*(undefined4 *)SR_VA(0x25a1d748))
 #define _DAT_25a1d74c (*(float *)SR_VA(0x25a1d74c))
@@ -57306,15 +56934,15 @@ void __cdecl lf_5b9b0(void)
         iVar4 = 4;
       }
       if (*(int *)(&g_game.lf_raw[0x9c] + iVar4 * 0x117c) == -1) {
-        sprintf(&DAT_004617c0,"%s open",(&PTR_s_Goldmen_Inc_00460438)[iVar4]);
+        sprintf(&DAT_004617c0,"%s open",g_teamname[iVar4]);
       }
       else {
-        sprintf(&DAT_004617c0,"%s manager: %s",(&PTR_s_Goldmen_Inc_00460438)[iVar4],
+        sprintf(&DAT_004617c0,"%s manager: %s",g_teamname[iVar4],
                 *(int *)(&g_game.lf_raw[0x9c] + iVar4 * 0x117c) * 0x2408 + ((int)SR_VA(0xf1edd04)));
       }
       createevent_message(0,&DAT_004617c0,0xffffffff,0);
       if (0 < (int)(&DAT_17579600)[iVar4 * 5]) {
-        sprintf(&DAT_004617c0,"%s market cap: $",(&PTR_s_Goldmen_Inc_00460438)[iVar4]);
+        sprintf(&DAT_004617c0,"%s market cap: $",g_teamname[iVar4]);
         local_40 = (float)(longlong)
                           (LF_BITS_F((&DAT_17579604)[iVar4 * 5]) *
                           (float)(int)(&DAT_17579600)[iVar4 * 5]);
@@ -57504,16 +57132,16 @@ void __cdecl lf_5b9b0(void)
 #undef g_item
 #undef DAT_0f837b64
 #undef g_event
-#undef PTR_s_Goldmen_Inc_00460438
 #undef DAT_004617c0
-#undef g_player
 #undef DAT_00603ee0
+#undef g_player
+#undef g_teamname
 #undef DAT_01001001
 #undef DAT_17579600
-#undef g_numofevents
 #undef DAT_17579604
-#undef g_account
+#undef g_numofevents
 #undef DAT_1757960c
+#undef g_account
 #undef _DAT_25a1d744
 #undef _DAT_25a1d748
 #undef _DAT_25a1d74c
