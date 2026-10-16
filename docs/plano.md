@@ -76,13 +76,25 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 
 ## Phase 4 — Standalone server (`subvulpes-server`)
 
-Phase 3 is closed (2026-10-16, `docs/progresso.md`): 321 of 340 functions are in C (99.2 % of the code bytes), and the lifted C makes no call to the `.exe`. It still takes 1473 globals, 657 inline `SR_VA` and 123 import references from the image (`tools/lift/deps.py`).
+Phase 3 is closed (2026-10-16, `docs/progresso.md`): 321 of 340 functions are in C (99.2 % of the code bytes). The lifted C reaches the image only through `SR_VA(va)` = `sr_base + va - 0x400000` (`src/lifted/lift_support.h`) and `sr_import`. Counts in `src/lifted/lifted_024d.c` on 2026-10-16:
 
-1. **4.1: mirrored `.data`** (1 to 2 days). A new `subvulpes-server.exe` reserves a region with the layout of the 024d `.data` and sets `sr_base` (`src/lifted/lift_support.h`) to it. The lifted C does not change. A table maps the globals and `SR_VA` values that hold addresses of `.text` functions (`qsort` comparator, `freadptr`/`fwriteptr`) to the C functions.
-2. **4.2: `.rdata` and initial `.data` in C** (about 1 day). A script generates C tables from the 024d: the `.rdata` strings and constants (7 KB) and the initial `.data` bytes (3.5 KB). The generated files are versioned in `src/`. The import names are not copied: the linker makes the import table.
-3. **4.3: platform layer** (1 to 2 days). Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits and the `rand()` of MSVCR100.
-4. **In-game test** of `subvulpes-server.exe` with players. The 39 harness-only functions (`serverrecv`, `serversend`...) run live in C here for the first time. Look at them first when a network bug shows.
-5. **4.5:** named globals in place of the mirrored `.data`, dynamic pools with configurable limits, Linux x64. Watch structs with pointers on 64 bits. SSE in place of x87 changes the float bits of more functions than `buildsomeshit`: decide the accepted precision when this step starts.
+| Use of the image | Count | Target |
+| --- | ---: | --- |
+| `SR_VA` into `.data` (globals, `#define` and inline) | 4968 | 639 of them inline, without a name |
+| `SR_VA` into `.text` | 626 | 625 calls to other functions in C, through the hook `JMP` in the `.exe`. 1 is `LAB_0040d320`, the `qsort` comparator, which is not in C. |
+| `SR_VA` into `.rdata` | 27 | 18 inline. Strings are already C literals, and float constants are already exact C values (`exactFloat`). |
+| `sr_import` | 123 references | Reads the import table of the PE image at `sr_base`. |
+
+Relocations outside `.text`: 15 in the initial `.data` (all point to `.rdata` strings) and 13 in `.rdata` (CRT tables). The initial `.data` has no pointer to `.text`.
+
+1. **4.1: image region and direct calls** (2 to 3 days).
+   - `subvulpes-server.exe` reserves a region of `SizeOfImage` (`0x25f3b000`, about 607 MB, the same as the original) and sets `sr_base` to it.
+   - A script generates C arrays of `.rdata` and the initial `.data` (versioned in `src/`). At start-up the server copies them to their RVAs in the region and applies the 28 relocations.
+   - `lift.py` generates direct calls to the `lf_` functions for the standalone build. The hooked build keeps the calls through the `.exe`, so that the live hooks and the verifier still see every call.
+   - Write the `qsort` comparator (`0xd320`) in C.
+2. **4.2: platform layer** (1 to 2 days). Replace `sr_import` with direct links to the CRT and WinSock. Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits.
+3. **In-game test** of `subvulpes-server.exe` with players. The 39 harness-only functions (`serverrecv`, `serversend`, `servercycle`...) run live in C here for the first time. Look at them first when a network bug shows.
+4. **4.3:** named globals in place of the image region, dynamic pools with configurable limits, Linux x64. Watch structs with pointers on 64 bits. SSE in place of x87 changes the float bits of more functions than `buildsomeshit`: decide the accepted precision when this step starts.
 
 Verification: the harness keeps testing the lifted functions against the 024d. No packet replay test for now. Add it if a bug is too hard to find in game.
 
