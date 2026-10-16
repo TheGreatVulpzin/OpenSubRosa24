@@ -98,7 +98,12 @@ public class LiftExport extends GhidraScript {
      * LF_BITS_F(x) (bits to float) or (T)LF_BITS_U(x) (float bits to T). The same for
      * 8 bytes and double: LF_BITS_D(x) and (T)LF_BITS_U64(x). Only a cast of a
      * variable or of a parenthesized group is marked. */
+    /* Globals that a rule prints by name (namedAddress). globals() adds them to the list, so
+     * that lift.py writes their #define. */
+    private final Map<String, String[]> extraGlobals = new LinkedHashMap<>();
+
     private String cText(DecompileResults r) {
+        extraGlobals.clear();
         List<ClangNode> leaves = new ArrayList<>();
         r.getCCodeMarkup().flatten(leaves);
         List<ClangToken> t = new ArrayList<>();
@@ -958,8 +963,11 @@ public class LiftExport extends GhidraScript {
             }
             if (val < 0x10000) continue;
             String rel = relocText(val, local, all);
-            if (rel != null)
+            if (rel != null) {
+                String named = namedAddress(val);
+                if (named != null) rel = named;
                 replaceSpans.put(i, new Object[] { i, neg ? "(-" + rel + ")" : rel });
+            }
         }
     }
 
@@ -1009,6 +1017,55 @@ public class LiftExport extends GhidraScript {
     private ghidra.program.model.mem.MemoryBlock block(long va) {
         return currentProgram.getMemory().getBlock(
                 currentProgram.getAddressFactory().getDefaultAddressSpace().getAddress(va));
+    }
+
+    /* An address inside a typed global (ApplyTypes.java) as a C expression with the same value:
+     * "((int)&g_player[3].ai_waypoint)", "((int)&g_human[512])" for the end of the array (a
+     * loop bound), or lf_raw[k] for bytes without a field. Returns null for other addresses.
+     * The value is the same as SR_VA(va), so the code does the same. */
+    private String namedAddress(long va) {
+        Address a = toAddr(va);
+        ghidra.program.model.listing.Listing listing = currentProgram.getListing();
+        ghidra.program.model.listing.Data d = listing.getDataContaining(a);
+        boolean end = false;
+        if (d == null || !isNamedGlobal(d)) {
+            // One past the end: the loop bound of an array.
+            d = listing.getDataContaining(toAddr(va - 1));
+            if (d == null || !isNamedGlobal(d) || d.getMaxAddress().getOffset() + 1 != va) return null;
+            end = true;
+        }
+        String name = d.getPrimarySymbol().getName();
+        DataType dt = d.getDataType();
+        long off = va - d.getMinAddress().getOffset();
+        StringBuilder e = new StringBuilder(name);
+        DataType elem = dt;
+        if (dt instanceof ghidra.program.model.data.Array) {
+            ghidra.program.model.data.Array arr = (ghidra.program.model.data.Array) dt;
+            elem = arr.getDataType();
+            long len = arr.getElementLength();
+            long idx = end ? arr.getNumElements() : off / len;
+            e.append('[').append(idx).append(']');
+            off = end ? 0 : off % len;
+        } else if (end) {
+            return null;  // the end of a single struct is not a loop bound
+        }
+        if (off != 0) {
+            if (!(elem instanceof ghidra.program.model.data.Structure)) return null;
+            ghidra.program.model.data.DataTypeComponent c =
+                    ((ghidra.program.model.data.Structure) elem).getComponentContaining((int) off);
+            if (c != null && c.getOffset() == off && c.getFieldName() != null)
+                e.append('.').append(c.getFieldName());
+            else
+                e.append(".lf_raw[0x").append(Long.toHexString(off)).append(']');
+        }
+        extraGlobals.putIfAbsent(name, new String[] { String.format("0x%x", d.getMinAddress().getOffset()),
+                dt.getDisplayName(), String.valueOf(dt.getLength()) });
+        return "((int)&" + e + ")";
+    }
+
+    private boolean isNamedGlobal(ghidra.program.model.listing.Data d) {
+        ghidra.program.model.symbol.Symbol s = d.getPrimarySymbol();
+        return s != null && s.getName().startsWith("g_") && d.getDataType().getLength() > 1;
     }
 
     /* "((int)SR_VA(0xV))" or "((int)SR_VA(0xV) + d)" for a value V that the loader relocates. */
@@ -1364,7 +1421,7 @@ public class LiftExport extends GhidraScript {
     /* Globals: the symbol map, plus every DAT_/_DAT_ token of the C output with the data type
      * the decompiler used for it (an "overlap" global like _DAT_x is not in the symbol map). */
     private void globals(StringBuilder sb, DecompileResults r) {
-        Map<String, String[]> found = new LinkedHashMap<>();
+        Map<String, String[]> found = new LinkedHashMap<>(extraGlobals);
         Map<String, Set<String>> valueTypes = new HashMap<>();
         Iterator<HighSymbol> it = r.getHighFunction().getGlobalSymbolMap().getSymbols();
         while (it.hasNext()) {
