@@ -76,10 +76,17 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 
 ## Phase 4 — Standalone server (`subvulpes-server`)
 
-1. When all the code reachable from the dedicated server is in C, build without the original `.exe`.
-2. Replace the static pools with dynamic allocation and configurable limits.
-3. Windows x86/x64 and Linux x64 builds. Watch structs with pointers when moving to 64 bits.
-4. Stay 100% compatible with the 0.24 client.
+Phase 3 is closed (2026-10-16, `docs/progresso.md`): 321 of 340 functions are in C (99.2 % of the code bytes), and the lifted C makes no call to the `.exe`. It still takes 1473 globals, 657 inline `SR_VA` and 123 import references from the image (`tools/lift/deps.py`).
+
+1. **4.1: mirrored `.data`** (1 to 2 days). A new `subvulpes-server.exe` reserves a region with the layout of the 024d `.data` and sets `sr_base` (`src/lifted/lift_support.h`) to it. The lifted C does not change. A table maps the globals and `SR_VA` values that hold addresses of `.text` functions (`qsort` comparator, `freadptr`/`fwriteptr`) to the C functions.
+2. **4.2: `.rdata` and initial `.data` in C** (about 1 day). A script generates C tables from the 024d: the `.rdata` strings and constants (7 KB) and the initial `.data` bytes (3.5 KB). The generated files are versioned in `src/`. The import names are not copied: the linker makes the import table.
+3. **4.3: platform layer** (1 to 2 days). Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits and the `rand()` of MSVCR100.
+4. **In-game test** of `subvulpes-server.exe` with players. The 39 harness-only functions (`serverrecv`, `serversend`...) run live in C here for the first time. Look at them first when a network bug shows.
+5. **4.5:** named globals in place of the mirrored `.data`, dynamic pools with configurable limits, Linux x64. Watch structs with pointers on 64 bits. SSE in place of x87 changes the float bits of more functions than `buildsomeshit`: decide the accepted precision when this step starts.
+
+Verification: the harness keeps testing the lifted functions against the 024d. No packet replay test for now. Add it if a bug is too hard to find in game.
+
+Stay 100% compatible with the 0.24 client.
 
 ## Phase 5 — Better server
 
