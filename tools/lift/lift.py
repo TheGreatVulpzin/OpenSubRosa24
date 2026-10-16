@@ -125,14 +125,20 @@ def proto_cast(ret, cc, params):
     return f'{ret} ({cc} *)({plist})'
 
 
+# The .text of the 024d (image addresses). An address there is code: SR_FN, not SR_VA.
+TEXT_START, TEXT_END = 0x401000, 0x45e000
+
+
 def global_macro(g):
     name, va, typ = g['name'], int(g['va'], 16), g['type'].strip()
     if typ in ('undefined', ''):
         typ = 'undefined'
     m = re.match(r'(.+?)\s*\[(\d+)\]$', typ)
+    # A label in the code (the qsort comparator LAB_0040d320): its address is a function.
+    sr = 'SR_FN' if TEXT_START <= va < TEXT_END else 'SR_VA'
     if m:
-        return f'#define {name} (*({m.group(1)} (*)[{m.group(2)}])SR_VA(0x{va:x}))'
-    return f'#define {name} (*({typ} *)SR_VA(0x{va:x}))'
+        return f'#define {name} (*({m.group(1)} (*)[{m.group(2)}]){sr}(0x{va:x}))'
+    return f'#define {name} (*({typ} *){sr}(0x{va:x}))'
 
 
 def partial_access(c):
@@ -628,7 +634,7 @@ def lift_function(f, rva, headers, imports_used):
                 extra = next(a for a in extra if len(a) == most)[len(cparams):]
                 cparams = list(cparams) + [('float' if FLOATISH_RE.search(a) else 'undefined4', f'extra_{i}')
                                            for i, a in enumerate(extra)]
-            pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_VA(0x{callee + BASE:x}))')
+            pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_FN(0x{callee + BASE:x}))')
             post.append(f'#undef {cname}')
 
     body = partial_access(strip_comments(c)).strip()

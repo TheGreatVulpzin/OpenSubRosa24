@@ -20,6 +20,16 @@ extern uintptr_t sr_base;
 /* Image address (base 0x400000) -> real address in this process. */
 #define SR_VA(va) ((void *)(sr_base + (uintptr_t)(va) - 0x400000u))
 
+/* Image address of a function -> the function to call. With the hooks, the code of the 024d
+ * (its hook jumps to the C version). In the standalone server there is no 024d code:
+ * sr_fn() finds the C version (src/standalone/fn_table.c). */
+#ifdef SR_STANDALONE
+void *sr_fn(uintptr_t va);
+#define SR_FN(va) sr_fn((uintptr_t)(va))
+#else
+#define SR_FN(va) SR_VA(va)
+#endif
+
 /* The relocation delta: how far the 024d moved from its file base. */
 #define LF_RELOC ((int)(sr_base - 0x400000u))
 

@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TARGETS = ROOT / 'tools' / 'lift' / 'targets'  # the same target files as gate.py
 
 BLOCK = re.compile(r'^/\* -+ 0x([0-9a-f]+) \*/$', re.M)
-FUNC_DEF = re.compile(r'^#define (\w+) \(\([^;\n]*\(__cdecl \*\)\([^\n]*\)\)SR_VA\(0x([0-9a-f]+)\)\)$', re.M)
+FUNC_DEF = re.compile(r'^#define (\w+) \(\([^;\n]*\(__cdecl \*\)\([^\n]*\)\)SR_(?:VA|FN)\(0x([0-9a-f]+)\)\)$', re.M)
 DATA_DEF = re.compile(r'^#define (\w+) \(\*\([^\n]*\)SR_VA\(0x([0-9a-f]+)\)\)$', re.M)
 IMPORT_DEF = re.compile(r'^#define (\w+) [^\n]*LF_IMPORT\(\d+, "([^"]+)", "([^"]+)"\)\)$', re.M)
 INLINE = re.compile(r'SR_VA\(')

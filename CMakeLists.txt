@@ -67,3 +67,14 @@ target_link_options(harness PRIVATE /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
 add_executable(test_netguard src/tests/test_netguard.c hook/netguard.c)
 target_include_directories(test_netguard PRIVATE hook)
 target_compile_options(test_netguard PRIVATE /W4 /WX /utf-8)
+
+# Phase 5: the dedicated server without the 024d (src/standalone/main.c). The same lifted and
+# hand-written C as the hook DLL, with SR_STANDALONE: game calls go to the C functions.
+add_executable(subvulpes-server src/standalone/main.c src/standalone/fn_table.c src/standalone/image_024d.c
+    src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c
+    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c)
+target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/standalone hook)
+target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
+target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP)
+set_property(TARGET subvulpes-server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

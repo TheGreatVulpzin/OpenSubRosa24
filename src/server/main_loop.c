@@ -24,7 +24,14 @@ void sv_hooks_lifted_profile(void);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
 #define G(type, rva) (*(type *)(sr_base + (rva)))
-#define CALL(rva) ((void(__cdecl *)(void))(sr_base + (rva)))
+/* A game function: the 024d code with the hooks, the C version in the standalone server. */
+#ifdef SR_STANDALONE
+void *sr_fn(uintptr_t va);
+#define CODE(rva) sr_fn(0x400000u + (rva))
+#else
+#define CODE(rva) ((void *)(sr_base + (rva)))
+#endif
+#define CALL(rva) ((void(__cdecl *)(void))CODE(rva))
 
 /* ------------------------------------------------------------ globals (RVA) */
 
@@ -68,14 +75,14 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
 /* ------------------------------------------------------------ game functions (RVA) */
 
-#define getmasterserverip   ((int(__cdecl *)(void))(sr_base + 0x1ac40))
-#define disablesocket       ((void(__cdecl *)(int))(sr_base + 0xd710))
-#define init_genrand        ((void(__cdecl *)(int))(sr_base + 0xad30))
+#define getmasterserverip   ((int(__cdecl *)(void))CODE(0x1ac40))
+#define disablesocket       ((void(__cdecl *)(int))CODE(0xd710))
+#define init_genrand        ((void(__cdecl *)(int))CODE(0xad30))
 #define loadaccountsserver  CALL(0xe2e0)
 #define leveleditor_load    CALL(0x8590)
 #define setupgame           CALL(0x502a0)
 #define resetgame           CALL(0x590f0)
-#define playerai            ((void(__cdecl *)(int))(sr_base + 0x4f720))
+#define playerai            ((void(__cdecl *)(int))CODE(0x4f720))
 #define servercycle         CALL(0x33570)
 #define serverrecv          CALL(0x33650)
 #define playersimulation    CALL(0xa2a0)
@@ -90,7 +97,7 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal);
 #define particletimetolive  CALL(0x279b0)
 #define bondtimetolive      CALL(0x12c90)
 #define logicsimulation     CALL(0x5c580)
-#define stoptimer           ((void(__cdecl *)(int))(sr_base + 0xb3f0))
+#define stoptimer           ((void(__cdecl *)(int))CODE(0xb3f0))
 #define serversend          CALL(0x4ed30)
 #define bulletsimulation    CALL(0x48ec0)
 #define eventsimulation     CALL(0x61a0)
@@ -98,7 +105,7 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal);
 #define debug_resetlogfile  CALL(0x5280)
 #define getcpufrequency     CALL(0xb4a0)
 #define setuptimers         CALL(0xb540)
-#define loadsaveoptions     ((void(__cdecl *)(int))(sr_base + 0x4e7a0))
+#define loadsaveoptions     ((void(__cdecl *)(int))CODE(0x4e7a0))
 
 /* ------------------------------------------------------------ CRT and WinSock of the game */
 
@@ -312,6 +319,7 @@ void __cdecl sr_getpaths(void)
     sr_dedicatedserverloop();
 }
 
+#ifndef SR_STANDALONE
 /* ------------------------------------------------------------ hooks */
 
 static uint8_t expect_loop[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
@@ -332,3 +340,4 @@ int sv_main_loop_install(void)
     load_imports();
     return sv_install_hooks(g_main_hooks, 2);
 }
+#endif /* SR_STANDALONE */
