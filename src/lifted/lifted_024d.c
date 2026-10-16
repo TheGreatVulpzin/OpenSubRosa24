@@ -6120,44 +6120,27 @@ void __cdecl lf_0b4a0(void)
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xb540 */
-#define DAT_12e81cf0 (*(undefined4 *)SR_VA(0x12e81cf0))
-#define DAT_12e81ce8 (*(undefined4 *)SR_VA(0x12e81ce8))
-#define DAT_12e81cec (*(undefined4 *)SR_VA(0x12e81cec))
-#define DAT_12e81cf4 (*(undefined4 *)SR_VA(0x12e81cf4))
-#define DAT_12e81cb4 (*(undefined4 *)SR_VA(0x12e81cb4))
-#define DAT_12e81cb8 (*(undefined4 *)SR_VA(0x12e81cb8))
-#define DAT_12e81cbc (*(undefined4 *)SR_VA(0x12e81cbc))
-#define DAT_12e81cc0 (*(undefined4 *)SR_VA(0x12e81cc0))
-#define DAT_12e81cc4 (*(undefined4 *)SR_VA(0x12e81cc4))
-#define DAT_12e81cc8 (*(undefined4 *)SR_VA(0x12e81cc8))
-#define DAT_12e81ccc (*(undefined4 *)SR_VA(0x12e81ccc))
-#define DAT_12e81cd0 (*(undefined4 *)SR_VA(0x12e81cd0))
-#define DAT_12e81cd4 (*(undefined4 *)SR_VA(0x12e81cd4))
-#define DAT_12e81cd8 (*(undefined4 *)SR_VA(0x12e81cd8))
-#define DAT_12e81cdc (*(undefined4 *)SR_VA(0x12e81cdc))
-#define DAT_12e81ce0 (*(undefined4 *)SR_VA(0x12e81ce0))
-#define DAT_12e81ce4 (*(undefined4 *)SR_VA(0x12e81ce4))
 #define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
 void __cdecl lf_0b540(void)
 
 {
-  DAT_12e81cf0 = 0x40;
-  DAT_12e81ce8 = 0x41;
-  DAT_12e81cec = 0x42;
-  DAT_12e81cf4 = 0x43;
-  DAT_12e81cb4 = 0x44;
-  DAT_12e81cb8 = 0x45;
-  DAT_12e81cbc = 0x46;
-  DAT_12e81cc0 = 0x47;
-  DAT_12e81cc4 = 0x48;
-  DAT_12e81cc8 = 0x49;
-  DAT_12e81ccc = 0x4a;
-  DAT_12e81cd0 = 0x4b;
-  DAT_12e81cd4 = 0x4c;
-  DAT_12e81cd8 = 0x4d;
-  DAT_12e81cdc = 0x4e;
-  DAT_12e81ce0 = 0x4f;
-  DAT_12e81ce4 = 0x50;
+  g_timerlist.unk_0090 = 0x40;
+  g_timerlist.unk_0088 = 0x41;
+  g_timerlist.unk_008c = 0x42;
+  g_timerlist.unk_0094 = 0x43;
+  g_timerlist.unk_0054 = 0x44;
+  g_timerlist.unk_0058 = 0x45;
+  g_timerlist.unk_005c = 0x46;
+  g_timerlist.unk_0060 = 0x47;
+  g_timerlist.unk_0064 = 0x48;
+  g_timerlist.unk_0068 = 0x49;
+  g_timerlist.unk_006c = 0x4a;
+  g_timerlist.unk_0070 = 0x4b;
+  g_timerlist.unk_0074 = 0x4c;
+  g_timerlist.unk_0078 = 0x4d;
+  g_timerlist.unk_007c = 0x4e;
+  g_timerlist.unk_0080 = 0x4f;
+  g_timerlist.unk_0084 = 0x50;
   g_timerlist.unk_0004 = 0x51;
   g_timerlist.unk_0008 = 0x52;
   g_timerlist.unk_000c = 0x53;
@@ -6181,23 +6164,6 @@ void __cdecl lf_0b540(void)
   g_timerlist.unk_0000 = 0x65;
   return;
 }
-#undef DAT_12e81cf0
-#undef DAT_12e81ce8
-#undef DAT_12e81cec
-#undef DAT_12e81cf4
-#undef DAT_12e81cb4
-#undef DAT_12e81cb8
-#undef DAT_12e81cbc
-#undef DAT_12e81cc0
-#undef DAT_12e81cc4
-#undef DAT_12e81cc8
-#undef DAT_12e81ccc
-#undef DAT_12e81cd0
-#undef DAT_12e81cd4
-#undef DAT_12e81cd8
-#undef DAT_12e81cdc
-#undef DAT_12e81ce0
-#undef DAT_12e81ce4
 #undef g_timerlist
 
 /* ---------------------------------------------------------------- 0xb6d0 */
@@ -17077,15 +17043,12 @@ void __cdecl lf_1d9e0(float *param_1,float *param_2,float *param_3)
 /* ---------------------------------------------------------------- 0x1dba0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define DAT_1074a5e0 (*(int *)SR_VA(0x1074a5e0))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_1074a9e4 (*(int *)SR_VA(0x1074a9e4))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_1074ade8 (*(int *)SR_VA(0x1074ade8))
-#define DAT_1074b1ec (*(int *)SR_VA(0x1074b1ec))
 #define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
 #define g_cityobject (*(CityObject *)SR_VA(0x16224020))
+#define g_objectpacket (*(ObjectPacket *)SR_VA(0x1074a5e0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_VA(0x40b900))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_VA(0x40bdb0))
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_VA(0x40db20))
@@ -17164,9 +17127,9 @@ void __cdecl lf_1dba0(void)
 
 
   
-  pbitread((uint *)&DAT_1074a5e0,8);
+  pbitread((uint *)&g_objectpacket,8);
   local_60 = 0.0;
-  if (0 < DAT_1074a5e0) {
+  if (0 < g_objectpacket.unk_0000) {
     do {
       pbitread(&local_58,10);
       pbitread((uint *)&local_5c,1);
@@ -17355,11 +17318,11 @@ void __cdecl lf_1dba0(void)
         } while ((int)local_64 < 0xf);
       }
       local_60 = LF_BITS_F((((int)LF_BITS_U(local_60)) + 1));
-    } while (((int)LF_BITS_U(local_60)) < DAT_1074a5e0);
+    } while (((int)LF_BITS_U(local_60)) < g_objectpacket.unk_0000);
   }
-  pbitread((uint *)&DAT_1074a9e4,8);
+  pbitread((uint *)&g_objectpacket.unk_0404,8);
   iVar16 = 0;
-  if (0 < DAT_1074a9e4) {
+  if (0 < g_objectpacket.unk_0404) {
     do {
       pbitread(&local_58,10);
       pbitread((uint *)&local_5c,2);
@@ -17555,11 +17518,11 @@ LAB_0041e31d:
         goto LAB_0041e31d;
       }
       iVar16 = iVar16 + 1;
-    } while (iVar16 < DAT_1074a9e4);
+    } while (iVar16 < g_objectpacket.unk_0404);
   }
-  pbitread((uint *)&DAT_1074ade8,8);
+  pbitread((uint *)&g_objectpacket.unk_0808,8);
   iVar16 = 0;
-  if (0 < DAT_1074ade8) {
+  if (0 < g_objectpacket.unk_0808) {
     do {
       pbitread((uint *)&local_10,10);
       fVar6 = local_10;
@@ -17634,11 +17597,11 @@ LAB_0041e31d:
         pbitread(&g_item[((int)LF_BITS_U(fVar6))].bills_mask,0x1e);
       }
       iVar16 = iVar16 + 1;
-    } while (iVar16 < DAT_1074ade8);
+    } while (iVar16 < g_objectpacket.unk_0808);
   }
-  pbitread((uint *)&DAT_1074b1ec,8);
+  pbitread((uint *)&g_objectpacket.unk_0c0c,8);
   local_60 = 0.0;
-  if (0 < DAT_1074b1ec) {
+  if (0 < g_objectpacket.unk_0c0c) {
     do {
       pbitread(&local_58,10);
       uVar12 = local_58;
@@ -17723,21 +17686,18 @@ LAB_0041e31d:
         (&g_cityobject.unk_0050)[uVar12 * 0x15] = -local_10;
       }
       local_60 = LF_BITS_F((((int)LF_BITS_U(local_60)) + 1));
-    } while (((int)LF_BITS_U(local_60)) < DAT_1074b1ec);
+    } while (((int)LF_BITS_U(local_60)) < g_objectpacket.unk_0c0c);
   }
   return;
 }
 #undef g_human
 #undef g_body
-#undef DAT_1074a5e0
 #undef g_object
-#undef DAT_1074a9e4
 #undef g_game
 #undef g_item
-#undef DAT_1074ade8
-#undef DAT_1074b1ec
 #undef g_bsdsocket
 #undef g_cityobject
+#undef g_objectpacket
 #undef normalizevector
 #undef rotateorientation
 #undef pbitread
@@ -17771,27 +17731,14 @@ LAB_0041e31d:
 
 /* ---------------------------------------------------------------- 0x1f4a0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define DAT_1074b3f0 (*(int *)SR_VA(0x1074b3f0))
+#define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_1074a5e0 (*(int *)SR_VA(0x1074a5e0))
-#define DAT_1074a9e4 (*(int *)SR_VA(0x1074a9e4))
-#define DAT_1074ade8 (*(int *)SR_VA(0x1074ade8))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_1074b1ec (*(int *)SR_VA(0x1074b1ec))
+#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_radix (*(Radix *)SR_VA(0x10347c80))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_cityobject (*(CityObject *)SR_VA(0x16224020))
-#define DAT_1074a5e4 (*(undefined4 *)SR_VA(0x1074a5e4))
-#define DAT_1074a5e8 (*(undefined4 *)SR_VA(0x1074a5e8))
-#define DAT_1074a9e8 (*(undefined4 *)SR_VA(0x1074a9e8))
-#define g_numofevents (*(int *)SR_VA(0xf837318))
-#define DAT_1074a9ec (*(undefined4 *)SR_VA(0x1074a9ec))
-#define DAT_1074adec (*(undefined4 *)SR_VA(0x1074adec))
-#define DAT_1074b1f0 (*(undefined4 *)SR_VA(0x1074b1f0))
-#define DAT_1074b3f4 (*(undefined4 *)SR_VA(0x1074b3f4))
-#define DAT_1074b3f8 (*(undefined4 *)SR_VA(0x1074b3f8))
-#define DAT_1074b3fc (*(undefined4 *)SR_VA(0x1074b3fc))
-#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
+#define g_objectpacket (*(ObjectPacket *)SR_VA(0x1074a5e0))
 #define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
@@ -17815,19 +17762,18 @@ void __cdecl lf_1f4a0(int param_1,int param_2)
 {
   __declspec(align(16)) uchar lf_frame[0x50];
   ulonglong uVar1;
-  undefined4 uVar2;
-  int iVar3;
+  int iVar2;
+  float fVar3;
   float fVar4;
-  float fVar5;
-  int iVar6;
-  CityObject *pCVar7;
-  int *piVar8;
-  uint uVar9;
-  int iVar10;
-  float *pfVar11;
-  bool bVar12;
-  double dVar13;
-  uint uVar14;
+  int iVar5;
+  CityObject *pCVar6;
+  int *piVar7;
+  uint uVar8;
+  int iVar9;
+  float *pfVar10;
+  bool bVar11;
+  double dVar12;
+  uint uVar13;
 
 
 
@@ -17840,506 +17786,493 @@ void __cdecl lf_1f4a0(int param_1,int param_2)
 
 
   
-  uVar9 = 0;
-  if (((param_2 == -1) || (iVar10 = g_player[param_2].human_id, iVar10 == -1)) ||
-     (g_human[iVar10].health < 1)) {
+  uVar8 = 0;
+  if (((param_2 == -1) || (iVar9 = g_player[param_2].human_id, iVar9 == -1)) ||
+     (g_human[iVar9].health < 1)) {
     local_20 = g_connection[param_1].camera_pos.x;
     local_1c = g_connection[param_1].camera_pos.y;
     local_18 = g_connection[param_1].camera_pos.z;
   }
   else {
-    local_20 = g_human[iVar10].pos.x;
-    local_1c = g_human[iVar10].pos.y;
-    local_18 = g_human[iVar10].pos.z;
+    local_20 = g_human[iVar9].pos.x;
+    local_1c = g_human[iVar9].pos.y;
+    local_18 = g_human[iVar9].pos.z;
   }
   local_40 = 0xffffffff;
   local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),0xffffffff);
-  if (((param_2 != -1) && (uVar14 = g_player[param_2].human_id, uVar14 != 0xffffffff)) &&
-     (local_40 = uVar14, g_human[uVar14].vehicle_id != -1)) {
-    local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),g_human[uVar14].vehicle_id);
+  if (((param_2 != -1) && (uVar13 = g_player[param_2].human_id, uVar13 != 0xffffffff)) &&
+     (local_40 = uVar13, g_human[uVar13].vehicle_id != -1)) {
+    local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),g_human[uVar13].vehicle_id);
   }
-  iVar10 = 0;
-  DAT_1074b3f0 = 0;
+  iVar9 = 0;
+  g_objectpacket.unk_0e10 = 0;
   local_3c = 0;
-  pfVar11 = &g_human[0].pos.z;
+  pfVar10 = &g_human[0].pos.z;
   do {
-    if (LF_BITS_U(pfVar11[-0x14]) != 0x0U) {
-      local_14 = (float)(local_20 - ((vec3 *)(pfVar11 + -2))->x);
-      local_10 = (float)(local_1c - pfVar11[-1]);
-      local_c = (float)(local_18 - *pfVar11);
+    if (LF_BITS_U(pfVar10[-0x14]) != 0x0U) {
+      local_14 = (float)(local_20 - ((vec3 *)(pfVar10 + -2))->x);
+      local_10 = (float)(local_1c - pfVar10[-1]);
+      local_c = (float)(local_18 - *pfVar10);
       local_24 = (float)(local_c * local_c + (local_14 * local_14 + local_10 * local_10));
-      dVar13 = _CIsqrt((double)local_24);
-      local_24 = (float)dVar13;
-      dVar13 = _CIpow((double)local_24,1.75);
-      local_24 = (float)((float)dVar13 * 0.00390625);
-      iVar6 = (int)(longlong)((1.0 - local_24) * 256.0);
-      if (iVar6 < 1) {
-        iVar6 = 1;
+      dVar12 = _CIsqrt((double)local_24);
+      local_24 = (float)dVar12;
+      dVar12 = _CIpow((double)local_24,1.75);
+      local_24 = (float)((float)dVar12 * 0.00390625);
+      iVar5 = (int)(longlong)((1.0 - local_24) * 256.0);
+      if (iVar5 < 1) {
+        iVar5 = 1;
       }
-      if (uVar9 == local_40) {
-        iVar6 = 0x400;
+      if (uVar8 == local_40) {
+        iVar5 = 0x400;
       }
-      piVar8 = (int *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + local_3c);
-      *piVar8 = *piVar8 + iVar6;
-      uVar2 = *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + local_3c);
-      (&DAT_1074b3f4)[iVar10 * 3] = 0;
-      (&DAT_1074b3f8)[DAT_1074b3f0 * 3] = uVar9;
-      (&DAT_1074b3fc)[DAT_1074b3f0 * 3] = uVar2;
-      iVar10 = DAT_1074b3f0 + 1;
-      DAT_1074b3f0 = iVar10;
+      piVar7 = (int *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + local_3c);
+      *piVar7 = *piVar7 + iVar5;
+      iVar5 = *(int *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + local_3c);
+      (&g_objectpacket.unk_0e14)[iVar9 * 3] = 0;
+      (&g_objectpacket.unk_0e18)[g_objectpacket.unk_0e10 * 3] = uVar8;
+      (&g_objectpacket.unk_0e1c)[g_objectpacket.unk_0e10 * 3] = iVar5;
+      iVar9 = g_objectpacket.unk_0e10 + 1;
+      g_objectpacket.unk_0e10 = iVar9;
     }
     local_3c = local_3c + 0x1c;
-    pfVar11 = pfVar11 + 0xad9;
-    uVar9 = uVar9 + 1;
-  } while ((int)pfVar11 < ((int)SR_VA(0x1b271d0)));
-  uVar9 = 0;
+    pfVar10 = pfVar10 + 0xad9;
+    uVar8 = uVar8 + 1;
+  } while ((int)pfVar10 < ((int)SR_VA(0x1b271d0)));
+  uVar8 = 0;
   local_3c = 0;
-  pfVar11 = &g_object[0].pos.z;
+  pfVar10 = &g_object[0].pos.z;
   do {
-    if ((LF_BITS_U(pfVar11[-0xb]) != 0x0U) && (LF_BITS_U(pfVar11[-9]) != 0x3U)) {
-      local_14 = (float)(local_20 - ((vec3 *)(pfVar11 + -2))->x);
-      local_10 = (float)(local_1c - pfVar11[-1]);
-      local_c = (float)(local_18 - *pfVar11);
+    if ((LF_BITS_U(pfVar10[-0xb]) != 0x0U) && (LF_BITS_U(pfVar10[-9]) != 0x3U)) {
+      local_14 = (float)(local_20 - ((vec3 *)(pfVar10 + -2))->x);
+      local_10 = (float)(local_1c - pfVar10[-1]);
+      local_c = (float)(local_18 - *pfVar10);
       local_24 = (float)(local_c * local_c + (local_14 * local_14 + local_10 * local_10));
-      dVar13 = _CIsqrt((double)local_24);
-      local_24 = (float)((float)dVar13 * 0.00390625);
-      dVar13 = _CIpow((double)local_24,1.75);
-      local_24 = (float)((float)dVar13 * 0.00390625);
-      iVar6 = (int)(longlong)((1.0 - local_24) * 256.0);
-      if (iVar6 < 1) {
-        iVar6 = 1;
+      dVar12 = _CIsqrt((double)local_24);
+      local_24 = (float)((float)dVar12 * 0.00390625);
+      dVar12 = _CIpow((double)local_24,1.75);
+      local_24 = (float)((float)dVar12 * 0.00390625);
+      iVar5 = (int)(longlong)((1.0 - local_24) * 256.0);
+      if (iVar5 < 1) {
+        iVar5 = 1;
       }
-      if (uVar9 == (uint)(*(uint *)((uchar *)&local_38 + 0))) {
-        iVar6 = 0x400;
+      if (uVar8 == (uint)(*(uint *)((uchar *)&local_38 + 0))) {
+        iVar5 = 0x400;
       }
-      piVar8 = (int *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + local_3c);
-      *piVar8 = *piVar8 + iVar6;
-      uVar2 = *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + local_3c);
-      (&DAT_1074b3f4)[iVar10 * 3] = 1;
-      (&DAT_1074b3f8)[DAT_1074b3f0 * 3] = uVar9;
-      (&DAT_1074b3fc)[DAT_1074b3f0 * 3] = uVar2;
-      iVar10 = DAT_1074b3f0 + 1;
-      DAT_1074b3f0 = iVar10;
+      piVar7 = (int *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + local_3c);
+      *piVar7 = *piVar7 + iVar5;
+      iVar5 = *(int *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + local_3c);
+      (&g_objectpacket.unk_0e14)[iVar9 * 3] = 1;
+      (&g_objectpacket.unk_0e18)[g_objectpacket.unk_0e10 * 3] = uVar8;
+      (&g_objectpacket.unk_0e1c)[g_objectpacket.unk_0e10 * 3] = iVar5;
+      iVar9 = g_objectpacket.unk_0e10 + 1;
+      g_objectpacket.unk_0e10 = iVar9;
     }
     local_3c = local_3c + 0x1c;
-    pfVar11 = pfVar11 + 0x208c;
-    uVar9 = uVar9 + 1;
-  } while ((int)pfVar11 < ((int)SR_VA(0x5da3e2c)));
-  iVar6 = 0;
+    pfVar10 = pfVar10 + 0x208c;
+    uVar8 = uVar8 + 1;
+  } while ((int)pfVar10 < ((int)SR_VA(0x5da3e2c)));
+  iVar5 = 0;
   g_radix.unk_0000 = 0;
-  if (0 < iVar10) {
-    piVar8 = &DAT_1074b3fc;
+  if (0 < iVar9) {
+    piVar7 = &g_objectpacket.unk_0e1c;
     do {
-      (&g_radix.unk_200004)[g_radix.unk_0000] = *piVar8;
-      (&g_radix.unk_300004)[g_radix.unk_0000] = iVar6;
+      (&g_radix.unk_200004)[g_radix.unk_0000] = *piVar7;
+      (&g_radix.unk_300004)[g_radix.unk_0000] = iVar5;
       g_radix.unk_0000 = g_radix.unk_0000 + 1;
-      iVar6 = iVar6 + 1;
-      piVar8 = piVar8 + 3;
-    } while (iVar6 < iVar10);
+      iVar5 = iVar5 + 1;
+      piVar7 = piVar7 + 3;
+    } while (iVar5 < iVar9);
   }
   csradixsort();
-  uVar9 = 0;
+  uVar8 = 0;
   local_3c = g_radix.unk_0000 - 1;
-  DAT_1074a5e0 = 0;
-  DAT_1074a9e4 = 0;
+  g_objectpacket.unk_0000 = 0;
+  g_objectpacket.unk_0404 = 0;
   if (-1 < (int)local_3c) {
-    iVar10 = g_radix.unk_0000 + -8;
+    iVar9 = g_radix.unk_0000 + -8;
     do {
-      iVar6 = (&g_radix.unk_300004)[(&g_radix.unk_0004)[local_3c]];
-      if (iVar10 <= (int)local_3c) {
-        if ((&DAT_1074b3f4)[iVar6 * 3] == 0) {
-          iVar3 = (&DAT_1074b3f8)[iVar6 * 3];
-          *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + iVar3 * 0x1c) = 0;
-          (&DAT_1074a5e4)[DAT_1074a5e0 * 2] = iVar3;
-          (&DAT_1074a5e8)[DAT_1074a5e0 * 2] = 0;
-          DAT_1074a5e0 = DAT_1074a5e0 + 1;
+      iVar5 = (&g_radix.unk_300004)[(&g_radix.unk_0004)[local_3c]];
+      if (iVar9 <= (int)local_3c) {
+        if ((&g_objectpacket.unk_0e14)[iVar5 * 3] == 0) {
+          iVar2 = (&g_objectpacket.unk_0e18)[iVar5 * 3];
+          *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + iVar2 * 0x1c) = 0;
+          (&g_objectpacket.unk_0004)[g_objectpacket.unk_0000 * 2] = iVar2;
+          (&g_objectpacket.unk_0008)[g_objectpacket.unk_0000 * 2] = 0;
+          g_objectpacket.unk_0000 = g_objectpacket.unk_0000 + 1;
         }
-        if ((&DAT_1074b3f4)[iVar6 * 3] == 1) {
-          iVar6 = (&DAT_1074b3f8)[iVar6 * 3];
-          *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + iVar6 * 0x1c) = 0;
-          (&DAT_1074a9e8)[DAT_1074a9e4 * 2] = iVar6;
-          (&DAT_1074a9ec)[DAT_1074a9e4 * 2] = 0;
-          DAT_1074a9e4 = DAT_1074a9e4 + 1;
+        if ((&g_objectpacket.unk_0e14)[iVar5 * 3] == 1) {
+          iVar5 = (&g_objectpacket.unk_0e18)[iVar5 * 3];
+          *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + iVar5 * 0x1c) = 0;
+          (&g_objectpacket.unk_0408)[g_objectpacket.unk_0404 * 2] = iVar5;
+          (&g_objectpacket.unk_040c)[g_objectpacket.unk_0404 * 2] = 0;
+          g_objectpacket.unk_0404 = g_objectpacket.unk_0404 + 1;
         }
       }
       local_3c = local_3c - 1;
     } while (-1 < (int)local_3c);
   }
-  DAT_1074ade8 = 0;
-  pfVar11 = &g_item[0].pos.z;
+  g_objectpacket.unk_0808 = 0;
+  pfVar10 = &g_item[0].pos.z;
   do {
-    if (((LF_BITS_U(pfVar11[-0x14]) != 0x0U) && (LF_BITS_U(pfVar11[-0xd]) == 0xffffffffU)) &&
-       ((LF_BITS_U(pfVar11[-0xe]) == 0xffffffffU || (((int)LF_BITS_U(pfVar11[-0xc])) < 2)))) {
-      uVar14 = g_connection[param_1].sequence;
-      (&DAT_1074adec)[DAT_1074ade8] = uVar9;
-      if (((uVar14 ^ uVar9) & 3) != 0) {
-        local_14 = (float)(local_20 - ((vec3 *)(pfVar11 + -2))->x);
-        local_10 = (float)(local_1c - pfVar11[-1]);
-        local_c = (float)(local_18 - *pfVar11);
+    if (((LF_BITS_U(pfVar10[-0x14]) != 0x0U) && (LF_BITS_U(pfVar10[-0xd]) == 0xffffffffU)) &&
+       ((LF_BITS_U(pfVar10[-0xe]) == 0xffffffffU || (((int)LF_BITS_U(pfVar10[-0xc])) < 2)))) {
+      uVar13 = g_connection[param_1].sequence;
+      (&g_objectpacket.unk_080c)[g_objectpacket.unk_0808] = uVar8;
+      if (((uVar13 ^ uVar8) & 3) != 0) {
+        local_14 = (float)(local_20 - ((vec3 *)(pfVar10 + -2))->x);
+        local_10 = (float)(local_1c - pfVar10[-1]);
+        local_c = (float)(local_18 - *pfVar10);
         local_24 = (float)(local_c * local_c + (local_14 * local_14 + local_10 * local_10));
-        dVar13 = _CIsqrt((double)local_24);
-        if (32.0 <= (float)dVar13) goto LAB_0041fa77;
+        dVar12 = _CIsqrt((double)local_24);
+        if (32.0 <= (float)dVar12) goto LAB_0041fa77;
       }
-      if (((uVar14 ^ uVar9) & 0x1f) != 0) {
-        fVar4 = (float)(local_20 - ((vec3 *)(pfVar11 + -2))->x);
-        fVar5 = (float)(local_1c - pfVar11[-1]);
-        local_38 = CONCAT44(LF_BITS_U(fVar5),LF_BITS_U(fVar4));
-        local_30 = (float)(local_18 - *pfVar11);
-        local_24 = (float)(local_30 * local_30 + (fVar4 * fVar4 + fVar5 * fVar5));
-        dVar13 = _CIsqrt((double)local_24);
-        if (256.0 <= (float)dVar13) goto LAB_0041fa77;
-        if (LF_BITS_U(pfVar11[-0xe]) == 0xffffffffU) {
-          local_24 = (float)(pfVar11[9] * pfVar11[9] + (pfVar11[7] * pfVar11[7] + pfVar11[8] * pfVar11[8]));
-          dVar13 = _CIsqrt((double)local_24);
-          if ((float)dVar13 <= 0.008333333767950535) {
-            local_24 = (float)(pfVar11[0x1b] * pfVar11[0x1b] +
-                       (pfVar11[0x19] * pfVar11[0x19] + pfVar11[0x1a] * pfVar11[0x1a]));
-            dVar13 = _CIsqrt((double)local_24);
-            if ((float)dVar13 <= 0.008333333767950535) goto LAB_0041fa77;
+      if (((uVar13 ^ uVar8) & 0x1f) != 0) {
+        fVar3 = (float)(local_20 - ((vec3 *)(pfVar10 + -2))->x);
+        fVar4 = (float)(local_1c - pfVar10[-1]);
+        local_38 = CONCAT44(LF_BITS_U(fVar4),LF_BITS_U(fVar3));
+        local_30 = (float)(local_18 - *pfVar10);
+        local_24 = (float)(local_30 * local_30 + (fVar3 * fVar3 + fVar4 * fVar4));
+        dVar12 = _CIsqrt((double)local_24);
+        if (256.0 <= (float)dVar12) goto LAB_0041fa77;
+        if (LF_BITS_U(pfVar10[-0xe]) == 0xffffffffU) {
+          local_24 = (float)(pfVar10[9] * pfVar10[9] + (pfVar10[7] * pfVar10[7] + pfVar10[8] * pfVar10[8]));
+          dVar12 = _CIsqrt((double)local_24);
+          if ((float)dVar12 <= 0.008333333767950535) {
+            local_24 = (float)(pfVar10[0x1b] * pfVar10[0x1b] +
+                       (pfVar10[0x19] * pfVar10[0x19] + pfVar10[0x1a] * pfVar10[0x1a]));
+            dVar12 = _CIsqrt((double)local_24);
+            if ((float)dVar12 <= 0.008333333767950535) goto LAB_0041fa77;
           }
         }
       }
-      DAT_1074ade8 = DAT_1074ade8 + 1;
+      g_objectpacket.unk_0808 = g_objectpacket.unk_0808 + 1;
     }
 LAB_0041fa77:
-    pfVar11 = pfVar11 + 0x6b;
-    uVar9 = uVar9 + 1;
-  } while ((int)pfVar11 < ((int)SR_VA(0x956d310)));
-  DAT_1074b1ec = 0;
-  iVar10 = 0;
-  pCVar7 = &g_cityobject;
+    pfVar10 = pfVar10 + 0x6b;
+    uVar8 = uVar8 + 1;
+  } while ((int)pfVar10 < ((int)SR_VA(0x956d310)));
+  g_objectpacket.unk_0c0c = 0;
+  iVar9 = 0;
+  pCVar6 = &g_cityobject;
   do {
-    if (pCVar7->unk_0000 != 0) {
-      (&DAT_1074b1f0)[DAT_1074b1ec] = iVar10;
-      DAT_1074b1ec = DAT_1074b1ec + 1;
+    if (pCVar6->unk_0000 != 0) {
+      (&g_objectpacket.unk_0c10)[g_objectpacket.unk_0c0c] = iVar9;
+      g_objectpacket.unk_0c0c = g_objectpacket.unk_0c0c + 1;
     }
-    pCVar7 = (CityObject *)&pCVar7->unk_0054;
-    iVar10 = iVar10 + 1;
-  } while ((int)pCVar7 < ((int)SR_VA(0x16226a20)));
+    pCVar6 = (CityObject *)&pCVar6->unk_0054;
+    iVar9 = iVar9 + 1;
+  } while ((int)pCVar6 < ((int)SR_VA(0x16226a20)));
   local_24 = LF_BITS_F((param_1 * 0xf170));
-  iVar10 = g_connection[param_1].event_ack;
-  if (g_numofevents < iVar10) {
-    iVar10 = (g_numofevents - iVar10) + 0x10000;
+  iVar9 = g_connection[param_1].event_ack;
+  if (g_numofevents < iVar9) {
+    iVar9 = (g_numofevents - iVar9) + 0x10000;
   }
   else {
-    iVar10 = g_numofevents - iVar10;
+    iVar9 = g_numofevents - iVar9;
   }
-  if (0x1f < iVar10) {
-    DAT_1074ade8 = 0;
-    DAT_1074a9e4 = 0;
-    DAT_1074a5e0 = 0;
+  if (0x1f < iVar9) {
+    g_objectpacket.unk_0808 = 0;
+    g_objectpacket.unk_0404 = 0;
+    g_objectpacket.unk_0000 = 0;
   }
-  pbitwrite((uint *)&DAT_1074a5e0,8);
+  pbitwrite((uint *)&g_objectpacket,8);
   local_3c = 0;
-  if (0 < DAT_1074a5e0) {
+  if (0 < g_objectpacket.unk_0000) {
     do {
-      iVar10 = (&DAT_1074a5e4)[local_3c * 2];
-      uVar9 = (&DAT_1074a5e8)[local_3c * 2];
-      local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar10);
-      local_40 = uVar9;
+      iVar9 = (&g_objectpacket.unk_0004)[local_3c * 2];
+      uVar8 = (&g_objectpacket.unk_0008)[local_3c * 2];
+      local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar9);
+      local_40 = uVar8;
       pbitwrite((uint *)&local_38,10);
       pbitwrite(&local_40,1);
-      if (uVar9 == 0) {
-        pbitwrite((uint *)&g_human[iVar10].vehicle_id,8);
-        pbitwrite((uint *)&g_human[iVar10].vehicle_seat,4);
-        iVar6 = g_human[iVar10].health + 10;
-        if (iVar6 < 0) {
-          iVar6 = 0;
+      if (uVar8 == 0) {
+        pbitwrite((uint *)&g_human[iVar9].vehicle_id,8);
+        pbitwrite((uint *)&g_human[iVar9].vehicle_seat,4);
+        iVar5 = g_human[iVar9].health + 10;
+        if (iVar5 < 0) {
+          iVar5 = 0;
         }
-        local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar6);
+        local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),iVar5);
         pbitwrite((uint *)&local_38,7);
-        pbitwrite((uint *)&g_human[iVar10].bleeding,1);
-        iVar6 = 0;
+        pbitwrite((uint *)&g_human[iVar9].bleeding,1);
+        iVar5 = 0;
         do {
-          if ((g_human[iVar10].vehicle_id == -1) || (iVar6 < 9)) {
-            if (iVar6 == 0) {
-              packposition((undefined4 *)g_human[iVar10].bones);
-              packorientation(&g_human[iVar10].bones[0].rot[1].x,0x1f);
-              packorientation(&g_human[iVar10].bones[0].rot[2].x,0x1f);
+          if ((g_human[iVar9].vehicle_id == -1) || (iVar5 < 9)) {
+            if (iVar5 == 0) {
+              packposition((undefined4 *)g_human[iVar9].bones);
+              packorientation(&g_human[iVar9].bones[0].rot[1].x,0x1f);
+              packorientation(&g_human[iVar9].bones[0].rot[2].x,0x1f);
             }
             else {
               uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd0]) * 5215.189175234883);
+                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd0]) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-              uVar9 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+              uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd0] < 0.0) {
-                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
+              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd0] < 0.0) {
+                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
               uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd4]) * 5215.189175234883);
+                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd4]) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-              uVar9 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+              uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd4] < 0.0) {
-                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
+              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd4] < 0.0) {
+                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
               local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
               uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd8]) * 5215.189175234883);
+                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd8]) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-              uVar9 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+              uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar10].bones[iVar6].lf_raw[0xd8] < 0.0) {
-                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar9) & 0xffffffff00007fff | 0x8000;
+              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd8] < 0.0) {
+                local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
             }
           }
-          iVar6 = iVar6 + 1;
-        } while (iVar6 < 0xf);
+          iVar5 = iVar5 + 1;
+        } while (iVar5 < 0xf);
       }
       local_3c = local_3c + 1;
-    } while ((int)local_3c < DAT_1074a5e0);
+    } while ((int)local_3c < g_objectpacket.unk_0000);
   }
-  pbitwrite((uint *)&DAT_1074a9e4,8);
-  iVar10 = 0;
-  if (0 < DAT_1074a9e4) {
+  pbitwrite((uint *)&g_objectpacket.unk_0404,8);
+  iVar9 = 0;
+  if (0 < g_objectpacket.unk_0404) {
     do {
-      uVar9 = (&DAT_1074a9e8)[iVar10 * 2];
-      uVar14 = (&DAT_1074a9ec)[iVar10 * 2];
-      local_40 = uVar14;
-      local_3c = uVar9;
+      uVar8 = (&g_objectpacket.unk_0408)[iVar9 * 2];
+      uVar13 = (&g_objectpacket.unk_040c)[iVar9 * 2];
+      local_40 = uVar13;
+      local_3c = uVar8;
       pbitwrite(&local_3c,10);
       pbitwrite(&local_40,2);
-      packposition(&g_object[uVar9].pos.x);
-      if (uVar14 == 0) {
-        packorientation(&g_object[uVar9].rot[1].x,0x1f);
-        uVar14 = 0x1f;
+      packposition(&g_object[uVar8].pos.x);
+      if (uVar13 == 0) {
+        packorientation(&g_object[uVar8].rot[1].x,0x1f);
+        uVar13 = 0x1f;
 LAB_0041fded:
-        packorientation(&g_object[uVar9].rot[2].x,uVar14);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].rotor_angle) * 20.37183271576126);
+        packorientation(&g_object[uVar8].rot[2].x,uVar13);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].rotor_angle) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar9].rotor_angle < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (g_object[uVar8].rotor_angle < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_5fb4) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5fb4) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar9].unk_5fb4 < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (g_object[uVar8].unk_5fb4 < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_604c)) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_604c)) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (LF_BITS_F(g_object[uVar9].unk_604c) < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (LF_BITS_F(g_object[uVar8].unk_604c) < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_60e4)) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_60e4)) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (LF_BITS_F(g_object[uVar9].unk_60e4) < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (LF_BITS_F(g_object[uVar8].unk_60e4) < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_5f20) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5f20) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar9].unk_5f20 < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (g_object[uVar8].unk_5f20 < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_5fb8) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5fb8) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
-        uVar14 = (uint)(*(uint *)((uchar *)&local_38 + 0));
+        uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar9].unk_5fb8 < 0.0) {
-          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar14) & 0xffffffff0000007f | 0x80;
+        if (g_object[uVar8].unk_5fb8 < 0.0) {
+          local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_5f48)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_5f48)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar9].unk_5f48) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].unk_5f48) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_5fe0)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_5fe0)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar9].unk_5fe0) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].unk_5fe0) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_6078)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_6078)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar9].unk_6078) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].unk_6078) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar9].unk_6110)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_6110)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar9].unk_6110) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].unk_6110) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_5f5c) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5f5c) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar9].unk_5f5c < 0.0) {
+        if (g_object[uVar8].unk_5f5c < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_5ff4) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5ff4) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar9].unk_5ff4 < 0.0) {
+        if (g_object[uVar8].unk_5ff4 < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_608c) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_608c) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar9].unk_608c < 0.0) {
+        if (g_object[uVar8].unk_608c < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].unk_6124) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_6124) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar9].unk_6124 < 0.0) {
+        if (g_object[uVar8].unk_6124 < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].vel.x) * 128.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].vel.x) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x7f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x7f;
         }
-        if (g_object[uVar9].vel.x < 0.0) {
+        if (g_object[uVar8].vel.x < 0.0) {
           local_3c = local_3c | 0x80;
         }
         pbitwrite(&local_3c,8);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].vel.y) * 128.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].vel.y) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x7f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x7f;
         }
-        if (g_object[uVar9].vel.y < 0.0) {
+        if (g_object[uVar8].vel.y < 0.0) {
           local_3c = local_3c | 0x80;
         }
         pbitwrite(&local_3c,8);
         local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar9].vel.z) * 128.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].vel.z) * 128.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x7f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x7f;
         }
-        if (g_object[uVar9].vel.z < 0.0) {
+        if (g_object[uVar8].vel.z < 0.0) {
           local_3c = local_3c | 0x80;
         }
         pbitwrite(&local_3c,8);
-        pbitwrite((uint *)&g_object[uVar9].unk_5ee0,0xd);
+        pbitwrite((uint *)&g_object[uVar8].unk_5ee0,0xd);
       }
-      else if (uVar14 == 1) {
-        packorientation(&g_object[uVar9].rot[1].x,0x15);
-        uVar14 = 0x15;
+      else if (uVar13 == 1) {
+        packorientation(&g_object[uVar8].rot[1].x,0x15);
+        uVar13 = 0x15;
         goto LAB_0041fded;
       }
-      iVar10 = iVar10 + 1;
-    } while (iVar10 < DAT_1074a9e4);
+      iVar9 = iVar9 + 1;
+    } while (iVar9 < g_objectpacket.unk_0404);
   }
-  pbitwrite((uint *)&DAT_1074ade8,8);
-  iVar10 = 0;
-  if (0 < DAT_1074ade8) {
+  pbitwrite((uint *)&g_objectpacket.unk_0808,8);
+  iVar9 = 0;
+  if (0 < g_objectpacket.unk_0808) {
     do {
-      uVar9 = (&DAT_1074adec)[iVar10];
-      (*(uint *)((uchar *)&local_38 + 0)) = uVar9;
+      uVar8 = (&g_objectpacket.unk_080c)[iVar9];
+      (*(uint *)((uchar *)&local_38 + 0)) = uVar8;
       pbitwrite((uint *)&local_38,10);
-      packposition(&g_item[uVar9].pos.x);
-      packorientation(&g_item[uVar9].rot[1].x,0x1f);
-      packorientation(&g_item[uVar9].rot[2].x,0x1f);
-      bVar12 = g_item[uVar9].type == 0x10;
-      local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),(uint)bVar12);
+      packposition(&g_item[uVar8].pos.x);
+      packorientation(&g_item[uVar8].rot[1].x,0x1f);
+      packorientation(&g_item[uVar8].rot[2].x,0x1f);
+      bVar11 = g_item[uVar8].type == 0x10;
+      local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),(uint)bVar11);
       pbitwrite((uint *)&local_38,1);
-      if (bVar12) {
-        pbitwrite((uint *)&g_item[uVar9].cash,4);
-        pbitwrite((uint *)&g_item[uVar9].num_bills,4);
-        pbitwrite(&g_item[uVar9].bills_mask,0x1e);
+      if (bVar11) {
+        pbitwrite((uint *)&g_item[uVar8].cash,4);
+        pbitwrite((uint *)&g_item[uVar8].num_bills,4);
+        pbitwrite(&g_item[uVar8].bills_mask,0x1e);
       }
-      iVar10 = iVar10 + 1;
-    } while (iVar10 < DAT_1074ade8);
+      iVar9 = iVar9 + 1;
+    } while (iVar9 < g_objectpacket.unk_0808);
   }
-  pbitwrite((uint *)&DAT_1074b1ec,8);
-  iVar10 = 0;
-  if (0 < DAT_1074b1ec) {
+  pbitwrite((uint *)&g_objectpacket.unk_0c0c,8);
+  iVar9 = 0;
+  if (0 < g_objectpacket.unk_0c0c) {
     do {
-      uVar9 = (&DAT_1074b1f0)[iVar10];
-      local_3c = uVar9;
+      uVar8 = (&g_objectpacket.unk_0c10)[iVar9];
+      local_3c = uVar8;
       pbitwrite(&local_3c,10);
-      packposition(&g_cityobject.unk_0008 + uVar9 * 0x15);
-      packorientation(&g_cityobject.unk_002c + uVar9 * 0x15,0x1f);
-      packorientation(&g_cityobject.unk_0038 + uVar9 * 0x15,0x1f);
-      pbitwrite((uint *)(&g_cityobject.unk_004c + uVar9 * 0x15),7);
-      pbitwrite((uint *)(&g_cityobject.unk_0048 + uVar9 * 0x15),7);
+      packposition(&g_cityobject.unk_0008 + uVar8 * 0x15);
+      packorientation(&g_cityobject.unk_002c + uVar8 * 0x15,0x1f);
+      packorientation(&g_cityobject.unk_0038 + uVar8 * 0x15,0x1f);
+      pbitwrite((uint *)(&g_cityobject.unk_004c + uVar8 * 0x15),7);
+      pbitwrite((uint *)(&g_cityobject.unk_0048 + uVar8 * 0x15),7);
       local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
-      local_38 = (ulonglong)LF_CHOP(ABS((&g_cityobject.unk_0050)[uVar9 * 0x15]) * 32.0);
+      local_38 = (ulonglong)LF_CHOP(ABS((&g_cityobject.unk_0050)[uVar8 * 0x15]) * 32.0);
       local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
       if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
         local_3c = 0x1f;
       }
-      if ((&g_cityobject.unk_0050)[uVar9 * 0x15] < 0.0) {
+      if ((&g_cityobject.unk_0050)[uVar8 * 0x15] < 0.0) {
         local_3c = local_3c | 0x20;
       }
       pbitwrite(&local_3c,6);
-      iVar10 = iVar10 + 1;
-    } while (iVar10 < DAT_1074b1ec);
+      iVar9 = iVar9 + 1;
+    } while (iVar9 < g_objectpacket.unk_0c0c);
   }
-  piVar8 = (int *)((int)&g_connection[0].sequence + ((int)LF_BITS_U(local_24)));
-  *piVar8 = *piVar8 + 1;
+  piVar7 = (int *)((int)&g_connection[0].sequence + ((int)LF_BITS_U(local_24)));
+  *piVar7 = *piVar7 + 1;
   return;
 }
 #undef g_human
-#undef DAT_1074b3f0
+#undef g_numofevents
 #undef g_object
-#undef DAT_1074a5e0
-#undef DAT_1074a9e4
-#undef DAT_1074ade8
 #undef g_item
-#undef DAT_1074b1ec
+#undef g_connection
 #undef g_radix
 #undef g_player
 #undef g_cityobject
-#undef DAT_1074a5e4
-#undef DAT_1074a5e8
-#undef DAT_1074a9e8
-#undef g_numofevents
-#undef DAT_1074a9ec
-#undef DAT_1074adec
-#undef DAT_1074b1f0
-#undef DAT_1074b3f4
-#undef DAT_1074b3f8
-#undef DAT_1074b3fc
-#undef g_connection
+#undef g_objectpacket
 #undef csradixsort
 #undef pbitwrite
 #undef packorientation
@@ -18361,23 +18294,14 @@ LAB_0041fded:
 
 /* ---------------------------------------------------------------- 0x20680 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
+#define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_1074a5e0 (*(int *)SR_VA(0x1074a5e0))
-#define DAT_1074a9e4 (*(int *)SR_VA(0x1074a9e4))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_1074ade8 (*(int *)SR_VA(0x1074ade8))
-#define DAT_1074b1ec (*(int *)SR_VA(0x1074b1ec))
+#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_radix (*(Radix *)SR_VA(0x10347c80))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_cityobject (*(CityObject *)SR_VA(0x16224020))
-#define DAT_1074a5e4 (*(undefined4 *)SR_VA(0x1074a5e4))
-#define DAT_1074a5e8 (*(undefined4 *)SR_VA(0x1074a5e8))
-#define g_numofevents (*(int *)SR_VA(0xf837318))
-#define DAT_1074a9e8 (*(undefined4 *)SR_VA(0x1074a9e8))
-#define DAT_1074a9ec (*(undefined4 *)SR_VA(0x1074a9ec))
-#define DAT_1074adec (*(undefined4 *)SR_VA(0x1074adec))
-#define DAT_1074b1f0 (*(undefined4 *)SR_VA(0x1074b1f0))
-#define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
+#define g_objectpacket (*(ObjectPacket *)SR_VA(0x1074a5e0))
 #define csradixsort ((void (__cdecl *)(void))SR_VA(0x40ac00))
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_VA(0x40da60))
 #define packorientation ((void (__cdecl *)(float *, uint))SR_VA(0x415df0))
@@ -18503,16 +18427,16 @@ void __cdecl lf_20680(int param_1,int param_2)
   } while ((int)pHVar6 < ((int)SR_VA(0x1b27180)));
   csradixsort();
   iVar11 = g_radix.unk_0000 + -1;
-  DAT_1074a5e0 = 0;
+  g_objectpacket.unk_0000 = 0;
   if (-1 < iVar11) {
     iVar5 = g_radix.unk_0000 + -8;
     do {
       iVar1 = (&g_radix.unk_300004)[(&g_radix.unk_0004)[iVar11]];
       if (iVar5 <= iVar11) {
         *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16240178)) + iVar1 * 0x1c) = 0;
-        (&DAT_1074a5e4)[DAT_1074a5e0 * 2] = iVar1;
-        (&DAT_1074a5e8)[DAT_1074a5e0 * 2] = 0;
-        DAT_1074a5e0 = DAT_1074a5e0 + 1;
+        (&g_objectpacket.unk_0004)[g_objectpacket.unk_0000 * 2] = iVar1;
+        (&g_objectpacket.unk_0008)[g_objectpacket.unk_0000 * 2] = 0;
+        g_objectpacket.unk_0000 = g_objectpacket.unk_0000 + 1;
       }
       iVar11 = iVar11 + -1;
     } while (-1 < iVar11);
@@ -18594,7 +18518,7 @@ void __cdecl lf_20680(int param_1,int param_2)
   } while (iVar1 < 0x80);
   csradixsort();
   iVar5 = g_radix.unk_0000;
-  DAT_1074a9e4 = 0;
+  g_objectpacket.unk_0404 = 0;
   iVar11 = g_radix.unk_0000;
 joined_r0x00420bbc:
   while (iVar1 = iVar11 + -1, -1 < iVar1) {
@@ -18602,24 +18526,24 @@ joined_r0x00420bbc:
     iVar11 = iVar1;
     if (iVar5 + -2 <= iVar1) {
       *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + iVar2 * 0x1c) = 0;
-      (&DAT_1074a9e8)[DAT_1074a9e4 * 2] = iVar2;
-      (&DAT_1074a9ec)[DAT_1074a9e4 * 2] = 0;
+      (&g_objectpacket.unk_0408)[g_objectpacket.unk_0404 * 2] = iVar2;
+      (&g_objectpacket.unk_040c)[g_objectpacket.unk_0404 * 2] = 0;
       goto LAB_00420c80;
     }
     if (iVar1 < iVar5 + -8) goto LAB_00420c5c;
     *(undefined4 *)(param_1 * 0xf170 + ((int)SR_VA(0x16239178)) + iVar2 * 0x1c) = 0;
-    (&DAT_1074a9e8)[DAT_1074a9e4 * 2] = iVar2;
-    (&DAT_1074a9ec)[DAT_1074a9e4 * 2] = 1;
-    DAT_1074a9e4 = DAT_1074a9e4 + 1;
+    (&g_objectpacket.unk_0408)[g_objectpacket.unk_0404 * 2] = iVar2;
+    (&g_objectpacket.unk_040c)[g_objectpacket.unk_0404 * 2] = 1;
+    g_objectpacket.unk_0404 = g_objectpacket.unk_0404 + 1;
   }
   uVar10 = 0;
-  DAT_1074ade8 = 0;
+  g_objectpacket.unk_0808 = 0;
   pfVar13 = &g_item[0].pos.z;
   do {
     if (((LF_BITS_U(pfVar13[-0x14]) != 0x0U) && (LF_BITS_U(pfVar13[-0xd]) == 0xffffffffU)) &&
        ((LF_BITS_U(pfVar13[-0xe]) == 0xffffffffU || (((int)LF_BITS_U(pfVar13[-0xc])) < 2)))) {
       uVar3 = g_connection[param_1].sequence;
-      (&DAT_1074adec)[DAT_1074ade8] = uVar10;
+      (&g_objectpacket.unk_080c)[g_objectpacket.unk_0808] = uVar10;
       if (((uVar3 ^ uVar10) & 3) != 0) {
         local_14 = (float)(local_38 - ((vec3 *)(pfVar13 + -2))->x);
         local_10 = (float)(local_34 - pfVar13[-1]);
@@ -18654,19 +18578,19 @@ joined_r0x00420bbc:
           }
         }
       }
-      DAT_1074ade8 = DAT_1074ade8 + 1;
+      g_objectpacket.unk_0808 = g_objectpacket.unk_0808 + 1;
     }
 LAB_00420e39:
     pfVar13 = pfVar13 + 0x6b;
     uVar10 = uVar10 + 1;
   } while ((int)pfVar13 < ((int)SR_VA(0x956d310)));
-  DAT_1074b1ec = 0;
+  g_objectpacket.unk_0c0c = 0;
   iVar11 = 0;
   pCVar7 = &g_cityobject;
   do {
     if (pCVar7->unk_0000 != 0) {
-      (&DAT_1074b1f0)[DAT_1074b1ec] = iVar11;
-      DAT_1074b1ec = DAT_1074b1ec + 1;
+      (&g_objectpacket.unk_0c10)[g_objectpacket.unk_0c0c] = iVar11;
+      g_objectpacket.unk_0c0c = g_objectpacket.unk_0c0c + 1;
     }
     pCVar7 = (CityObject *)&pCVar7->unk_0054;
     iVar11 = iVar11 + 1;
@@ -18680,17 +18604,17 @@ LAB_00420e39:
     iVar11 = g_numofevents - iVar11;
   }
   if (0x17 < iVar11) {
-    DAT_1074ade8 = 0;
-    DAT_1074a9e4 = 0;
-    DAT_1074a5e0 = 0;
+    g_objectpacket.unk_0808 = 0;
+    g_objectpacket.unk_0404 = 0;
+    g_objectpacket.unk_0000 = 0;
   }
-  pbitwrite((uint *)&DAT_1074a5e0,8);
+  pbitwrite((uint *)&g_objectpacket,8);
   local_50 = 0.0;
-  if (0 < DAT_1074a5e0) {
+  if (0 < g_objectpacket.unk_0000) {
     do {
       fVar12 = local_50;
-      fVar9 = LF_BITS_F((&DAT_1074a5e4)[((int)LF_BITS_U(local_50)) * 2]);
-      fVar4 = LF_BITS_F((&DAT_1074a5e8)[((int)LF_BITS_U(local_50)) * 2]);
+      fVar9 = LF_BITS_F((&g_objectpacket.unk_0004)[((int)LF_BITS_U(local_50)) * 2]);
+      fVar4 = LF_BITS_F((&g_objectpacket.unk_0008)[((int)LF_BITS_U(local_50)) * 2]);
       local_58 = fVar9;
       local_4c = fVar4;
       pbitwrite((uint *)&local_58,10);
@@ -18745,14 +18669,14 @@ LAB_00420e39:
         } while (iVar11 < 0xf);
       }
       local_50 = LF_BITS_F((((int)LF_BITS_U(fVar12)) + 1));
-    } while (((int)LF_BITS_U(local_50)) < DAT_1074a5e0);
+    } while (((int)LF_BITS_U(local_50)) < g_objectpacket.unk_0000);
   }
-  pbitwrite((uint *)&DAT_1074a9e4,8);
+  pbitwrite((uint *)&g_objectpacket.unk_0404,8);
   iVar11 = 0;
-  if (0 < DAT_1074a9e4) {
+  if (0 < g_objectpacket.unk_0404) {
     do {
-      fVar9 = LF_BITS_F((&DAT_1074a9e8)[iVar11 * 2]);
-      fVar4 = LF_BITS_F((&DAT_1074a9ec)[iVar11 * 2]);
+      fVar9 = LF_BITS_F((&g_objectpacket.unk_0408)[iVar11 * 2]);
+      fVar4 = LF_BITS_F((&g_objectpacket.unk_040c)[iVar11 * 2]);
       local_50 = fVar9;
       local_4c = fVar4;
       pbitwrite((uint *)&local_50,10);
@@ -18907,13 +18831,13 @@ LAB_0042119f:
         goto LAB_0042119f;
       }
       iVar11 = iVar11 + 1;
-    } while (iVar11 < DAT_1074a9e4);
+    } while (iVar11 < g_objectpacket.unk_0404);
   }
-  pbitwrite((uint *)&DAT_1074ade8,8);
+  pbitwrite((uint *)&g_objectpacket.unk_0808,8);
   iVar11 = 0;
-  if (0 < DAT_1074ade8) {
+  if (0 < g_objectpacket.unk_0808) {
     do {
-      iVar5 = (&DAT_1074adec)[iVar11];
+      iVar5 = (&g_objectpacket.unk_080c)[iVar11];
       local_48 = CONCAT44((*(uint *)((uchar *)&local_48 + 4)),iVar5);
       pbitwrite((uint *)&local_48,10);
       packposition(&g_item[iVar5].pos.x);
@@ -18928,13 +18852,13 @@ LAB_0042119f:
         pbitwrite(&g_item[iVar5].bills_mask,0x1e);
       }
       iVar11 = iVar11 + 1;
-    } while (iVar11 < DAT_1074ade8);
+    } while (iVar11 < g_objectpacket.unk_0808);
   }
-  pbitwrite((uint *)&DAT_1074b1ec,8);
+  pbitwrite((uint *)&g_objectpacket.unk_0c0c,8);
   iVar11 = 0;
-  if (0 < DAT_1074b1ec) {
+  if (0 < g_objectpacket.unk_0c0c) {
     do {
-      fVar9 = LF_BITS_F((&DAT_1074b1f0)[iVar11]);
+      fVar9 = LF_BITS_F((&g_objectpacket.unk_0c10)[iVar11]);
       local_50 = fVar9;
       pbitwrite((uint *)&local_50,10);
       packposition(&g_cityobject.unk_0008 + ((int)LF_BITS_U(fVar9)) * 0x15);
@@ -18953,38 +18877,29 @@ LAB_0042119f:
       }
       pbitwrite((uint *)&local_4c,6);
       iVar11 = iVar11 + 1;
-    } while (iVar11 < DAT_1074b1ec);
+    } while (iVar11 < g_objectpacket.unk_0c0c);
   }
   piVar8 = (int *)((int)&g_connection[0].sequence + ((int)LF_BITS_U(local_54)));
   *piVar8 = *piVar8 + 1;
   return;
 LAB_00420c5c:
   if (iVar5 + -0x10 <= iVar1) {
-    (&DAT_1074a9e8)[DAT_1074a9e4 * 2] = iVar2;
-    (&DAT_1074a9ec)[DAT_1074a9e4 * 2] = 2;
+    (&g_objectpacket.unk_0408)[g_objectpacket.unk_0404 * 2] = iVar2;
+    (&g_objectpacket.unk_040c)[g_objectpacket.unk_0404 * 2] = 2;
 LAB_00420c80:
-    DAT_1074a9e4 = DAT_1074a9e4 + 1;
+    g_objectpacket.unk_0404 = g_objectpacket.unk_0404 + 1;
   }
   goto joined_r0x00420bbc;
 }
 #undef g_human
+#undef g_numofevents
 #undef g_object
-#undef DAT_1074a5e0
-#undef DAT_1074a9e4
 #undef g_item
-#undef DAT_1074ade8
-#undef DAT_1074b1ec
+#undef g_connection
 #undef g_radix
 #undef g_player
 #undef g_cityobject
-#undef DAT_1074a5e4
-#undef DAT_1074a5e8
-#undef g_numofevents
-#undef DAT_1074a9e8
-#undef DAT_1074a9ec
-#undef DAT_1074adec
-#undef DAT_1074b1f0
-#undef g_connection
+#undef g_objectpacket
 #undef csradixsort
 #undef pbitwrite
 #undef packorientation
@@ -36901,40 +36816,28 @@ LAB_00441bf7:
 
 /* ---------------------------------------------------------------- 0x41de0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_12e81cb4 (*(int *)SR_VA(0x12e81cb4))
-#define DAT_12e81cf4 (*(int *)SR_VA(0x12e81cf4))
-#define DAT_12e81cb8 (*(int *)SR_VA(0x12e81cb8))
-#define DAT_12e81cbc (*(int *)SR_VA(0x12e81cbc))
-#define DAT_12e81cc0 (*(int *)SR_VA(0x12e81cc0))
-#define DAT_12e81cc4 (*(int *)SR_VA(0x12e81cc4))
-#define DAT_12e81cc8 (*(int *)SR_VA(0x12e81cc8))
-#define DAT_12e81ccc (*(int *)SR_VA(0x12e81ccc))
-#define DAT_12e81cd0 (*(int *)SR_VA(0x12e81cd0))
-#define DAT_12e81cd4 (*(int *)SR_VA(0x12e81cd4))
-#define DAT_12e81cd8 (*(int *)SR_VA(0x12e81cd8))
-#define DAT_12e81cdc (*(int *)SR_VA(0x12e81cdc))
-#define DAT_12e81ce0 (*(int *)SR_VA(0x12e81ce0))
-#define DAT_12e81ce4 (*(int *)SR_VA(0x12e81ce4))
-#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define DAT_00603dd0 (*(int * *)SR_VA(0x603dd0))
-#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
-#define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
 #define DAT_019cbf68 (*(int *)SR_VA(0x19cbf68))
 #define DAT_14022d24 (*(undefined4 *)SR_VA(0x14022d24))
 #define DAT_020a5a30 (*(undefined *)SR_VA(0x20a5a30))
+#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
+#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
+#define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
+#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
+#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define DAT_00461dd4 (*(undefined4 *)SR_VA(0x461dd4))
 #define DAT_00461de0 (*(undefined4 *)SR_VA(0x461de0))
 #define DAT_00461de4 (*(undefined4 *)SR_VA(0x461de4))
 #define DAT_00461de8 (*(undefined4 *)SR_VA(0x461de8))
+#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define DAT_00461df0 (*(undefined4 *)SR_VA(0x461df0))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
 #define DAT_00461df4 (*(undefined4 *)SR_VA(0x461df4))
 #define DAT_00461df8 (*(undefined4 *)SR_VA(0x461df8))
 #define DAT_00461e04 (*(undefined4 *)SR_VA(0x461e04))
+#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
 #define DAT_00461e10 (*(undefined4 *)SR_VA(0x461e10))
 #define DAT_00461e14 (*(undefined4 *)SR_VA(0x461e14))
 #define DAT_00461e18 (*(undefined4 *)SR_VA(0x461e18))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
 #define DAT_00461e20 (*(undefined4 *)SR_VA(0x461e20))
 #define DAT_00461e24 (*(undefined4 *)SR_VA(0x461e24))
 #define DAT_00461e28 (*(undefined4 *)SR_VA(0x461e28))
@@ -36943,13 +36846,12 @@ LAB_00441bf7:
 #define DAT_00583dd8 (*(undefined4 *)SR_VA(0x583dd8))
 #define DAT_00583de0 (*(undefined4 *)SR_VA(0x583de0))
 #define DAT_00583de4 (*(undefined4 *)SR_VA(0x583de4))
+#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
+#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
 #define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
+#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
 #define _DAT_020a5a30 (*(int *)SR_VA(0x20a5a30))
 #define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_VA(0x409600))
 #define stoptimer ((void (__cdecl *)(int))SR_VA(0x40b3f0))
@@ -37115,17 +37017,17 @@ void __cdecl lf_41de0(void)
 
 
   
-  iVar30 = DAT_12e81cb4;
+  iVar30 = g_timerlist.unk_0054;
   local_4 = DAT_00460d18 ^ (uint)auStack_e4;
-  iVar29 = DAT_12e81cb4 * 0x58;
+  iVar29 = g_timerlist.unk_0054 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45eea8));
   do {
     cVar12 = *pcVar15;
     pcVar15[iVar29 + 0x13a54f8] = cVar12;
-    iVar16 = DAT_12e81cf4;
+    iVar16 = g_timerlist.unk_0094;
     pcVar15 = pcVar15 + 1;
   } while (cVar12 != '\0');
-  iVar29 = DAT_12e81cf4 * 0x58;
+  iVar29 = g_timerlist.unk_0094 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee9c));
   g_timer[iVar30].unk_0048 = 0;
   g_timer[iVar30].unk_004c = 0;
@@ -37138,8 +37040,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar16].unk_0048 = 0;
   g_timer[iVar16].unk_004c = 0;
   g_timer[iVar16].unk_0050 = 0;
-  iVar29 = DAT_12e81cb8;
-  iVar16 = DAT_12e81cb8 * 0x58;
+  iVar29 = g_timerlist.unk_0058;
+  iVar16 = g_timerlist.unk_0058 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee90));
   do {
     cVar12 = *pcVar15;
@@ -37149,8 +37051,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cbc;
-  iVar16 = DAT_12e81cbc * 0x58;
+  iVar29 = g_timerlist.unk_005c;
+  iVar16 = g_timerlist.unk_005c * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee80));
   do {
     cVar12 = *pcVar15;
@@ -37160,8 +37062,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cc0;
-  iVar16 = DAT_12e81cc0 * 0x58;
+  iVar29 = g_timerlist.unk_0060;
+  iVar16 = g_timerlist.unk_0060 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee70));
   do {
     cVar12 = *pcVar15;
@@ -37171,8 +37073,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cc4;
-  iVar16 = DAT_12e81cc4 * 0x58;
+  iVar29 = g_timerlist.unk_0064;
+  iVar16 = g_timerlist.unk_0064 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee60));
   do {
     cVar12 = *pcVar15;
@@ -37182,8 +37084,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cc8;
-  iVar16 = DAT_12e81cc8 * 0x58;
+  iVar29 = g_timerlist.unk_0068;
+  iVar16 = g_timerlist.unk_0068 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee54));
   do {
     cVar12 = *pcVar15;
@@ -37193,8 +37095,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81ccc;
-  iVar16 = DAT_12e81ccc * 0x58;
+  iVar29 = g_timerlist.unk_006c;
+  iVar16 = g_timerlist.unk_006c * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee44));
   do {
     cVar12 = *pcVar15;
@@ -37204,8 +37106,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cd0;
-  iVar16 = DAT_12e81cd0 * 0x58;
+  iVar29 = g_timerlist.unk_0070;
+  iVar16 = g_timerlist.unk_0070 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee34));
   do {
     cVar12 = *pcVar15;
@@ -37215,8 +37117,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cd4;
-  iVar16 = DAT_12e81cd4 * 0x58;
+  iVar29 = g_timerlist.unk_0074;
+  iVar16 = g_timerlist.unk_0074 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee24));
   do {
     cVar12 = *pcVar15;
@@ -37226,8 +37128,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cd8;
-  iVar16 = DAT_12e81cd8 * 0x58;
+  iVar29 = g_timerlist.unk_0078;
+  iVar16 = g_timerlist.unk_0078 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee14));
   do {
     cVar12 = *pcVar15;
@@ -37237,8 +37139,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81cdc;
-  iVar16 = DAT_12e81cdc * 0x58;
+  iVar29 = g_timerlist.unk_007c;
+  iVar16 = g_timerlist.unk_007c * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ee00));
   do {
     cVar12 = *pcVar15;
@@ -37248,8 +37150,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81ce0;
-  iVar16 = DAT_12e81ce0 * 0x58;
+  iVar29 = g_timerlist.unk_0080;
+  iVar16 = g_timerlist.unk_0080 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45edf0));
   do {
     cVar12 = *pcVar15;
@@ -37259,8 +37161,8 @@ void __cdecl lf_41de0(void)
   g_timer[iVar29].unk_0048 = 0;
   g_timer[iVar29].unk_004c = 0;
   g_timer[iVar29].unk_0050 = 0;
-  iVar29 = DAT_12e81ce4;
-  iVar16 = DAT_12e81ce4 * 0x58;
+  iVar29 = g_timerlist.unk_0084;
+  iVar16 = g_timerlist.unk_0084 * 0x58;
   pcVar15 = ((char *)SR_VA(0x45ede0));
   do {
     cVar12 = *pcVar15;
@@ -37273,8 +37175,8 @@ void __cdecl lf_41de0(void)
   uVar13 = rdtsc();
   g_timer[iVar30].unk_0040 = (int)uVar13;
   g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-  iVar30 = DAT_12e81cb8;
-  local_60 = &g_timer[DAT_12e81cb8].unk_0040;
+  iVar30 = g_timerlist.unk_0058;
+  local_60 = &g_timer[g_timerlist.unk_0058].unk_0040;
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
   g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -37441,10 +37343,10 @@ void __cdecl lf_41de0(void)
           pfVar21[10] = local_70 * local_d0;
           pfVar21[0xb] = (float)(local_d4 * local_70);
         }
-        iVar30 = DAT_12e81cc0;
+        iVar30 = g_timerlist.unk_0060;
         if (((Bond *)(piVar18 + -5))->state == 9) {
           uVar13 = rdtsc();
-          g_timer[DAT_12e81cc0].unk_0040 = (int)uVar13;
+          g_timer[g_timerlist.unk_0060].unk_0040 = (int)uVar13;
           g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
           iVar30 = local_a0[0x1f];
           iVar29 = local_a0[0x20];
@@ -37636,7 +37538,7 @@ LAB_00442c75:
           if (pfVar21[3] < *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98]) {
             pfVar21[3] = *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98];
           }
-          iVar30 = DAT_12e81cc0;
+          iVar30 = g_timerlist.unk_0060;
           pfVar21[10] = pfVar21[3] * fVar5;
           pfVar21[0xb] = (float)(fVar6 * pfVar21[3]);
           stoptimer(iVar30);
@@ -37648,9 +37550,9 @@ LAB_00442c75:
       pfVar21 = pfVar21 + 0x10;
     } while (local_c0 < g_numofbonds);
   }
-  stoptimer(DAT_12e81cb8);
-  iVar30 = DAT_12e81cbc;
-  local_60 = &g_timer[DAT_12e81cbc].unk_0040;
+  stoptimer(g_timerlist.unk_0058);
+  iVar30 = g_timerlist.unk_005c;
+  local_60 = &g_timer[g_timerlist.unk_005c].unk_0040;
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
   g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -37749,12 +37651,12 @@ LAB_00442c75:
       iVar30 = iVar30 + -1;
     } while (iVar30 != 0);
   }
-  stoptimer(DAT_12e81cbc);
+  stoptimer(g_timerlist.unk_005c);
   local_60 = (int *)0x0;
   do {
     piVar18 = local_60;
-    iVar30 = DAT_12e81cc4;
-    local_50 = (float *)&g_timer[DAT_12e81cc4].unk_0040;
+    iVar30 = g_timerlist.unk_0064;
+    local_50 = (float *)&g_timer[g_timerlist.unk_0064].unk_0040;
     uVar13 = rdtsc();
     DAT_00603dd0 = local_60;
     *local_50 = LF_BITS_F((int)uVar13);
@@ -37913,9 +37815,9 @@ LAB_00442c75:
       }
       puVar31 = puVar31 + 0x204;
     } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    stoptimer(DAT_12e81cc4);
-    iVar30 = DAT_12e81cc8;
-    local_50 = (float *)&g_timer[DAT_12e81cc8].unk_0040;
+    stoptimer(g_timerlist.unk_0064);
+    iVar30 = g_timerlist.unk_0068;
+    local_50 = (float *)&g_timer[g_timerlist.unk_0068].unk_0040;
     uVar13 = rdtsc();
     *local_50 = LF_BITS_F((int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -38032,29 +37934,29 @@ LAB_00442c75:
       pfVar21 = pfVar21 + 0xad9;
       pfVar33 = pfVar33 + 0x204;
     } while ((int)pfVar21 < ((int)SR_VA(0x1f38888)));
-    stoptimer(DAT_12e81cc8);
-    iVar30 = DAT_12e81ccc;
-    local_50 = (float *)&g_timer[DAT_12e81ccc].unk_0040;
+    stoptimer(g_timerlist.unk_0068);
+    iVar30 = g_timerlist.unk_006c;
+    local_50 = (float *)&g_timer[g_timerlist.unk_006c].unk_0040;
     uVar13 = rdtsc();
     *local_50 = LF_BITS_F((int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     objectwheelsimulation2();
-    stoptimer(DAT_12e81ccc);
+    stoptimer(g_timerlist.unk_006c);
     local_c0 = 0;
     if (0 < g_numofbonds) {
       pfVar33 = &g_bond[0].friction_dir.y;
       pfVar21 = &g_bondopt.unk_0020;
       do {
-        iVar30 = DAT_12e81cd0;
+        iVar30 = g_timerlist.unk_0070;
         if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
             (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) {
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x0U) {
-            local_50 = (float *)&g_timer[DAT_12e81cd0].unk_0040;
+            local_50 = (float *)&g_timer[g_timerlist.unk_0070].unk_0040;
             uVar13 = rdtsc();
             *local_50 = LF_BITS_F((int)uVar13);
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             bond_partpart(local_c0);
-            stoptimer(DAT_12e81cd0);
+            stoptimer(g_timerlist.unk_0070);
           }
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x1U) {
             fVar6 = pfVar33[-0x19];
@@ -38262,10 +38164,10 @@ LAB_00442c75:
               local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
             }
           }
-          iVar30 = DAT_12e81cdc;
+          iVar30 = g_timerlist.unk_007c;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x5U) {
             uVar13 = rdtsc();
-            g_timer[DAT_12e81cdc].unk_0040 = (int)uVar13;
+            g_timer[g_timerlist.unk_007c].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             fVar5 = pfVar33[6];
             fVar6 = pfVar33[7];
@@ -38301,12 +38203,12 @@ LAB_00442c75:
               *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) =
                    (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) - LF_BITS_F(local_50));
             }
-            stoptimer(DAT_12e81cdc);
+            stoptimer(g_timerlist.unk_007c);
           }
-          iVar30 = DAT_12e81ce4;
+          iVar30 = g_timerlist.unk_0084;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x7U) {
             uVar13 = rdtsc();
-            g_timer[DAT_12e81ce4].unk_0040 = (int)uVar13;
+            g_timer[g_timerlist.unk_0084].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             fVar5 = pfVar33[6];
             fVar6 = pfVar33[7];
@@ -38350,21 +38252,21 @@ LAB_00442c75:
               *(float *)&((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
                    (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) + local_64);
             }
-            stoptimer(DAT_12e81ce4);
+            stoptimer(g_timerlist.unk_0084);
           }
-          iVar30 = DAT_12e81cd4;
+          iVar30 = g_timerlist.unk_0074;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x8U) {
-            local_50 = (float *)&g_timer[DAT_12e81cd4].unk_0040;
+            local_50 = (float *)&g_timer[g_timerlist.unk_0074].unk_0040;
             uVar13 = rdtsc();
             *local_50 = LF_BITS_F((int)uVar13);
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             bond_bodybody(local_c0);
-            stoptimer(DAT_12e81cd4);
+            stoptimer(g_timerlist.unk_0074);
           }
-          iVar30 = DAT_12e81cd8;
+          iVar30 = g_timerlist.unk_0078;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x9U) {
             uVar13 = rdtsc();
-            g_timer[DAT_12e81cd8].unk_0040 = (int)uVar13;
+            g_timer[g_timerlist.unk_0078].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             uVar25 = (uint)(ushort)((BondOpt *)(pfVar21 + -8))->unk_0000;
             fVar6 = -pfVar21[7];
@@ -38394,12 +38296,12 @@ LAB_00442c75:
             *(float *)&((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]) =
                  (float)(local_54 * LF_BITS_F(local_50) + LF_BITS_F((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]))
             ;
-            stoptimer(DAT_12e81cd8);
+            stoptimer(g_timerlist.unk_0078);
           }
-          iVar30 = DAT_12e81ce0;
+          iVar30 = g_timerlist.unk_0080;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0xaU) {
             uVar13 = rdtsc();
-            g_timer[DAT_12e81ce0].unk_0040 = (int)uVar13;
+            g_timer[g_timerlist.unk_0080].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             fVar6 = pfVar33[6];
             local_94 = pfVar21[-2];
@@ -38475,7 +38377,7 @@ LAB_00442c75:
             *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4] =
                  (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4]);
             local_50 = local_88;
-            stoptimer(DAT_12e81ce0);
+            stoptimer(g_timerlist.unk_0080);
           }
           fVar5 = pfVar33[-0x1e];
           if (LF_BITS_U(fVar5) == 0xbU) {
@@ -38701,16 +38603,16 @@ LAB_00442c75:
         piVar18 = local_60;
       } while (local_c0 < g_numofbonds);
     }
-    iVar30 = DAT_12e81ccc;
-    local_60 = &g_timer[DAT_12e81ccc].unk_0040;
+    iVar30 = g_timerlist.unk_006c;
+    local_60 = &g_timer[g_timerlist.unk_006c].unk_0040;
     uVar13 = rdtsc();
     *local_60 = (int)uVar13;
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     objectenginesimulation2();
-    stoptimer(DAT_12e81ccc);
-    iVar30 = DAT_12e81cc4;
+    stoptimer(g_timerlist.unk_006c);
+    iVar30 = g_timerlist.unk_0064;
     uVar13 = rdtsc();
-    g_timer[DAT_12e81cc4].unk_0040 = (int)uVar13;
+    g_timer[g_timerlist.unk_0064].unk_0040 = (int)uVar13;
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     iVar29 = g_area_sector.unk_0030;
     iVar30 = 0;
@@ -38746,8 +38648,8 @@ LAB_00442c75:
         pfVar21 = pfVar21 + 8;
       } while (iVar29 != 0);
     }
-    iVar30 = DAT_12e81cf4;
-    local_60 = &g_timer[DAT_12e81cf4].unk_0040;
+    iVar30 = g_timerlist.unk_0094;
+    local_60 = &g_timer[g_timerlist.unk_0094].unk_0040;
     uVar13 = rdtsc();
     *local_60 = (int)uVar13;
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -38837,7 +38739,7 @@ LAB_00442c75:
         puVar31 = puVar31 + 0x204;
       } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
     }
-    stoptimer(DAT_12e81cf4);
+    stoptimer(g_timerlist.unk_0094);
     pfVar21 = &g_item[0].vel.y;
     do {
       if ((LF_BITS_U(pfVar21[-0x1c]) != 0x0U) && (LF_BITS_U(pfVar21[-0x1b]) != 0x0U)) {
@@ -38905,11 +38807,11 @@ LAB_00442c75:
       }
       piVar34 = piVar34 + 0x208c;
     } while ((int)piVar34 < ((int)SR_VA(0x7a257ec)));
-    stoptimer(DAT_12e81cc4);
-    iVar30 = DAT_12e81cbc;
+    stoptimer(g_timerlist.unk_0064);
+    iVar30 = g_timerlist.unk_005c;
     local_60 = (int *)((int)piVar18 + 1);
   } while ((int)local_60 < 0x20);
-  local_60 = &g_timer[DAT_12e81cbc].unk_0040;
+  local_60 = &g_timer[g_timerlist.unk_005c].unk_0040;
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
   g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -39012,47 +38914,35 @@ LAB_00442c75:
     piVar18 = piVar18 + 0xad9;
     piVar34 = piVar34 + 0x204;
   } while ((int)piVar18 < ((int)SR_VA(0x1f38784)));
-  stoptimer(DAT_12e81cbc);
-  stoptimer(DAT_12e81cb4);
+  stoptimer(g_timerlist.unk_005c);
+  stoptimer(g_timerlist.unk_0054);
   _DAT_020a5a30 = g_numofbonds;
   g_numofbonds = DAT_14022d24;
   return;
 }
 #undef DAT_00460d18
-#undef DAT_12e81cb4
-#undef DAT_12e81cf4
-#undef DAT_12e81cb8
-#undef DAT_12e81cbc
-#undef DAT_12e81cc0
-#undef DAT_12e81cc4
-#undef DAT_12e81cc8
-#undef DAT_12e81ccc
-#undef DAT_12e81cd0
-#undef DAT_12e81cd4
-#undef DAT_12e81cd8
-#undef DAT_12e81cdc
-#undef DAT_12e81ce0
-#undef DAT_12e81ce4
-#undef g_yaxis
 #undef DAT_00603dd0
-#undef g_zaxis
-#undef g_timer
 #undef DAT_019cbf68
 #undef DAT_14022d24
 #undef DAT_020a5a30
+#undef g_yaxis
+#undef g_zaxis
+#undef g_timer
+#undef g_human
+#undef g_object
 #undef DAT_00461dd4
 #undef DAT_00461de0
 #undef DAT_00461de4
 #undef DAT_00461de8
+#undef g_item
 #undef DAT_00461df0
-#undef g_bondopt
 #undef DAT_00461df4
 #undef DAT_00461df8
 #undef DAT_00461e04
+#undef g_particle
 #undef DAT_00461e10
 #undef DAT_00461e14
 #undef DAT_00461e18
-#undef g_area_sector
 #undef DAT_00461e20
 #undef DAT_00461e24
 #undef DAT_00461e28
@@ -39061,13 +38951,12 @@ LAB_00442c75:
 #undef DAT_00583dd8
 #undef DAT_00583de0
 #undef DAT_00583de4
+#undef g_bondopt
+#undef g_timerlist
 #undef DAT_00583de8
-#undef g_human
-#undef g_object
-#undef g_item
-#undef g_particle
 #undef g_numofbonds
 #undef g_bond
+#undef g_area_sector
 #undef _DAT_020a5a30
 #undef geteulerangles2
 #undef stoptimer
@@ -43694,7 +43583,6 @@ void __cdecl lf_4e7a0(int param_1)
 
 /* ---------------------------------------------------------------- 0x4ed30 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define DAT_12e81cf0 (*(int *)SR_VA(0x12e81cf0))
 #define DAT_0204afc0 (*(int *)SR_VA(0x204afc0))
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define g_game (*(Game *)SR_VA(0x94dc540))
@@ -43702,6 +43590,7 @@ void __cdecl lf_4e7a0(int param_1)
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_numofevents (*(int *)SR_VA(0xf837318))
 #define g_game_world (*(GameWorld *)SR_VA(0x25a1d740))
+#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
 #define g_speex (*(Speex *)SR_VA(0x12e81d00))
 #define g_connection (*(Connection (*)[256])SR_VA(0x16239020))
 #define g_socketid (*(uint *)SR_VA(0x460d08))
@@ -43758,9 +43647,9 @@ void __cdecl lf_4ed30(void)
 
 
   
-  iVar10 = DAT_12e81cf0;
+  iVar10 = g_timerlist.unk_0090;
   iVar7 = DAT_0204afc0;
-  iVar8 = DAT_12e81cf0 * 0x58;
+  iVar8 = g_timerlist.unk_0090 * 0x58;
   pcVar6 = ((char *)SR_VA(0x45f1d8));
   local_18 = DAT_0204afc0;
   do {
@@ -44058,11 +43947,10 @@ void __cdecl lf_4ed30(void)
       local_2c = local_2c + 1;
     } while (local_2c < local_18);
   }
-  stoptimer(DAT_12e81cf0);
+  stoptimer(g_timerlist.unk_0090);
   return;
 }
 #undef g_human
-#undef DAT_12e81cf0
 #undef DAT_0204afc0
 #undef g_server
 #undef g_game
@@ -44070,6 +43958,7 @@ void __cdecl lf_4ed30(void)
 #undef g_player
 #undef g_numofevents
 #undef g_game_world
+#undef g_timerlist
 #undef g_speex
 #undef g_connection
 #undef g_socketid
@@ -45406,18 +45295,18 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 /* ---------------------------------------------------------------- 0x51060 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_12e81ce8 (*(int *)SR_VA(0x12e81ce8))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_soundlist (*(SoundList *)SR_VA(0x956d700))
 #define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_city (*(City *)SR_VA(0xe699220))
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
+#define g_city (*(City *)SR_VA(0xe699220))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
+#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
@@ -45581,9 +45470,9 @@ void __cdecl lf_51060(void)
 
 
   
-  iVar23 = DAT_12e81ce8;
+  iVar23 = g_timerlist.unk_0088;
   local_c = DAT_00460d18 ^ (uint)&local_cc;
-  iVar21 = DAT_12e81ce8 * 0x58;
+  iVar21 = g_timerlist.unk_0088 * 0x58;
   pcVar13 = ((char *)SR_VA(0x45f2b0) - 1);
   do {
     pcVar13 = pcVar13 + 1;
@@ -46865,25 +46754,25 @@ LAB_00453705:
     }
     local_a4 = (uint *)((int)local_a4 + 1);
     if (0x1ff < (int)local_a4) {
-      stoptimer(DAT_12e81ce8);
+      stoptimer(g_timerlist.unk_0088);
       return;
     }
   } while( true );
 }
 #undef g_human
 #undef DAT_00460d18
-#undef DAT_12e81ce8
 #undef g_object
 #undef g_game
 #undef g_item
 #undef g_soundlist
 #undef g_particle
-#undef g_city
 #undef DAT_0f837b64
+#undef g_city
 #undef g_player
 #undef g_body
 #undef g_account
 #undef g_intersect
+#undef g_timerlist
 #undef g_xaxis
 #undef g_yaxis
 #undef g_zaxis
@@ -48651,9 +48540,8 @@ LAB_004560f2:
 
 /* ---------------------------------------------------------------- 0x56710 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_12e81cec (*(int *)SR_VA(0x12e81cec))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define DAT_1992d668 (*(undefined4 *)SR_VA(0x1992d668))
+#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_soundlist (*(SoundList *)SR_VA(0x956d700))
@@ -48663,6 +48551,7 @@ LAB_004560f2:
 #define g_city (*(City *)SR_VA(0xe699220))
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
+#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
 #define g_track (*(Track *)SR_VA(0x25d7efc0))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
@@ -48750,9 +48639,9 @@ void __cdecl lf_56710(void)
 
 
   
-  iVar15 = DAT_12e81cec;
+  iVar15 = g_timerlist.unk_008c;
   local_4 = DAT_00460d18 ^ (uint)&local_50;
-  iVar7 = DAT_12e81cec * 0x58;
+  iVar7 = g_timerlist.unk_008c * 0x58;
   pcVar14 = ((char *)SR_VA(0x45f364));
   do {
     cVar1 = *pcVar14;
@@ -49549,15 +49438,14 @@ LAB_00457ea9:
         local_44 = LF_BITS_F((((int)LF_BITS_U(local_44)) + 1));
         iVar15 = iVar15 + 0x8230;
       } while (iVar15 < 0x208c000);
-      stoptimer(DAT_12e81cec);
+      stoptimer(g_timerlist.unk_008c);
       return;
     }
   } while( true );
 }
 #undef DAT_00460d18
-#undef DAT_12e81cec
-#undef g_object
 #undef DAT_1992d668
+#undef g_object
 #undef g_server
 #undef g_game
 #undef g_soundlist
@@ -49567,6 +49455,7 @@ LAB_00457ea9:
 #undef g_city
 #undef g_numofevents
 #undef g_intersect
+#undef g_timerlist
 #undef g_track
 #undef g_yaxis
 #undef g_numofbonds

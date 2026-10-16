@@ -1812,7 +1812,7 @@ SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
 SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
 
-/* timerlist[]: record of 0x54 bytes. */
+/* timerlist[]: record of 0xa0 bytes. */
 typedef union TimerList { struct {
     int unk_0000;                        /* +0x0000 1 functions */
     int unk_0004;                        /* +0x0004 1 functions */
@@ -1835,8 +1835,26 @@ typedef union TimerList { struct {
     int unk_0048;                        /* +0x0048 1 functions */
     int unk_004c;                        /* +0x004c 1 functions */
     int unk_0050;                        /* +0x0050 1 functions */
-}; uint8_t lf_raw[0x54]; } TimerList;
-SR_STATIC_ASSERT(sizeof(TimerList) == 0x54, "TimerList");
+    int unk_0054;                        /* +0x0054 2 functions */
+    int unk_0058;                        /* +0x0058 2 functions */
+    int unk_005c;                        /* +0x005c 2 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int unk_0064;                        /* +0x0064 2 functions */
+    int unk_0068;                        /* +0x0068 2 functions */
+    int unk_006c;                        /* +0x006c 2 functions */
+    int unk_0070;                        /* +0x0070 2 functions */
+    int unk_0074;                        /* +0x0074 2 functions */
+    int unk_0078;                        /* +0x0078 2 functions */
+    int unk_007c;                        /* +0x007c 2 functions */
+    int unk_0080;                        /* +0x0080 2 functions */
+    int unk_0084;                        /* +0x0084 2 functions */
+    int unk_0088;                        /* +0x0088 2 functions */
+    int unk_008c;                        /* +0x008c 2 functions */
+    int unk_0090;                        /* +0x0090 2 functions */
+    int unk_0094;                        /* +0x0094 2 functions */
+    uint8_t pad_0098[0x8];
+}; uint8_t lf_raw[0xa0]; } TimerList;
+SR_STATIC_ASSERT(sizeof(TimerList) == 0xa0, "TimerList");
 
 /* speex[]: record of 0x931000 bytes. */
 typedef union Speex { struct {
@@ -3008,6 +3026,39 @@ typedef union AreaSector { struct {
     uint8_t pad_6db9858[0x53167a8];
 }; uint8_t lf_raw[0xc0d0000]; } AreaSector;
 SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
+
+/* objectpacket[]: record of 0xce14 bytes. */
+typedef union ObjectPacket { struct {
+    int unk_0000;                        /* +0x0000 3 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x3f0];
+    int unk_0404;                        /* +0x0404 3 functions */
+    int unk_0408;                        /* +0x0408 2 functions */
+    int unk_040c;                        /* +0x040c 2 functions */
+    int unk_0410;                        /* +0x0410 2 functions */
+    int unk_0414;                        /* +0x0414 2 functions */
+    uint8_t pad_0418[0x3f0];
+    int unk_0808;                        /* +0x0808 3 functions */
+    int unk_080c;                        /* +0x080c 2 functions */
+    int unk_0810;                        /* +0x0810 2 functions */
+    uint8_t pad_0814[0x3f8];
+    int unk_0c0c;                        /* +0x0c0c 3 functions */
+    int unk_0c10;                        /* +0x0c10 2 functions */
+    int unk_0c14;                        /* +0x0c14 2 functions */
+    uint8_t pad_0c18[0x1f8];
+    int unk_0e10;                        /* +0x0e10 1 functions */
+    int unk_0e14;                        /* +0x0e14 1 functions */
+    int unk_0e18;                        /* +0x0e18 1 functions */
+    int unk_0e1c;                        /* +0x0e1c 1 functions */
+    int unk_0e20;                        /* +0x0e20 1 functions */
+    int unk_0e24;                        /* +0x0e24 1 functions */
+    int unk_0e28;                        /* +0x0e28 1 functions */
+    uint8_t pad_0e2c[0xbfe8];
+}; uint8_t lf_raw[0xce14]; } ObjectPacket;
+SR_STATIC_ASSERT(sizeof(ObjectPacket) == 0xce14, "ObjectPacket");
 
 #pragma pack(pop)
 

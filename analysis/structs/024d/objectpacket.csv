@@ -1,0 +1,24 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,19,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x4,int,4,2,packobjectpacket packobjectpacket2
+0x8,int,4,2,packobjectpacket packobjectpacket2
+0xc,int,2,2,packobjectpacket packobjectpacket2
+0x10,int,1,1,packobjectpacket
+0x404,int,24,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x408,int,4,2,packobjectpacket packobjectpacket2
+0x40c,int,4,2,packobjectpacket packobjectpacket2
+0x410,int,6,2,packobjectpacket packobjectpacket2
+0x414,int,5,2,packobjectpacket packobjectpacket2
+0x808,int,17,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x80c,int,4,2,packobjectpacket packobjectpacket2
+0x810,int,4,2,packobjectpacket packobjectpacket2
+0xc0c,int,15,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0xc10,int,4,2,packobjectpacket packobjectpacket2
+0xc14,int,4,2,packobjectpacket packobjectpacket2
+0xe10,int,9,1,packobjectpacket2
+0xe14,int,3,1,packobjectpacket2
+0xe18,int,3,1,packobjectpacket2
+0xe1c,int,2,1,packobjectpacket2
+0xe20,int,1,1,packobjectpacket2
+0xe24,int,1,1,packobjectpacket2
+0xe28,int,2,1,packobjectpacket2

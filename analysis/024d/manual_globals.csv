@@ -34,3 +34,4 @@ rva,name,count,evidence
 0x2597efc0,track,,"map_regions.py (score 0.57, 7 reference functions); 0x10 after the end of tempmesh; the Linux 0.24c size 0x578000 ends before the end of .data"
 0x1d65b80,building,,"first address of building_load and building_save; all accesses of the building_* functions lie inside the Linux 0.24c size 0x36168f8 (no pointers: i386 size 0x3616900); it ends 0xa0 before blocktemp"
 0x1954d700,area_sector,,"docs/phase4-inventory.md 4.1: starts after bsdsocket; the i386 Mach-O size 0xc0d0000 ends 0x40 before game_world (0x2561d740)"
+0x1034a5e0,objectpacket,,"map_regions.py block score 1.0 (packobjectpacket, packobjectpacket2, unpackobjectpacket); the Linux 0.24c size 0xce14 ends 0xc before itemtype"

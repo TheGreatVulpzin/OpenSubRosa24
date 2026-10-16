@@ -20,3 +20,20 @@ offset,type,uses,n_funcs,funcs
 0x48,int,1,1,setuptimers
 0x4c,int,1,1,setuptimers
 0x50,int,1,1,setuptimers
+0x54,int,3,2,bondsimulation2 setuptimers
+0x58,int,4,2,bondsimulation2 setuptimers
+0x5c,int,6,2,bondsimulation2 setuptimers
+0x60,int,4,2,bondsimulation2 setuptimers
+0x64,int,6,2,bondsimulation2 setuptimers
+0x68,int,4,2,bondsimulation2 setuptimers
+0x6c,int,6,2,bondsimulation2 setuptimers
+0x70,int,4,2,bondsimulation2 setuptimers
+0x74,int,4,2,bondsimulation2 setuptimers
+0x78,int,4,2,bondsimulation2 setuptimers
+0x7c,int,4,2,bondsimulation2 setuptimers
+0x80,int,4,2,bondsimulation2 setuptimers
+0x84,int,4,2,bondsimulation2 setuptimers
+0x88,int,3,2,humansimulation setuptimers
+0x8c,int,3,2,objectsimulation setuptimers
+0x90,int,3,2,serversend setuptimers
+0x94,int,4,2,bondsimulation2 setuptimers

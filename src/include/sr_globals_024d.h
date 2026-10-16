@@ -42,6 +42,7 @@
 #define SR_RVA_BONDOPT              0xf8f7b80u  /* BondOpt[] */
 #define SR_RVA_RADIX                0xff47c80u  /* Radix[] */
 #define SR_RVA_INTERSECT            0x103484a0u  /* Intersect[] */
+#define SR_RVA_OBJECTPACKET         0x1034a5e0u  /* ObjectPacket[] */
 #define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
 #define SR_RVA_TIMERLIST            0x12a81c60u  /* TimerList[] */
 #define SR_RVA_SPEEX                0x12a81d00u  /* Speex[] */

@@ -49,7 +49,7 @@ STRUCTS = {
     'City': ('city', 0xa0b99c),
     'MaterialList': ('materiallist', 0x580),
     'Intersect': ('intersect', 0x84),
-    'TimerList': ('timerlist', 0x54),
+    'TimerList': ('timerlist', 0xa0),  # 0x54 in Linux 0.24c; the 024d profiler uses up to +0x94
     'Speex': ('speex', 0x931000),
     'BsdSocket': ('bsdsocket', 0x20070),
     'Debug': ('debug', 0x523c8),
@@ -74,6 +74,8 @@ STRUCTS = {
     # Phase 4, batch 5.
     'Building': ('building', 0x36168f8),
     'AreaSector': ('area_sector', 0xc0d0000),
+    # Phase 4, batch 6.
+    'ObjectPacket': ('objectpacket', 0xce14),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
