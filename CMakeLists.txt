@@ -37,7 +37,7 @@ target_include_directories(sv_wsock32 PRIVATE src/include src/lifted hook)
 set_source_files_properties(src/lifted/lifted_024d.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
 # Code rewritten by hand from the lifted C (Phase 6): x87 math like the original. The warnings
 # come back on when a file has no lifted style left.
-set_source_files_properties(src/game/bonds.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
+set_source_files_properties(src/game/bonds.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013;/Z7")
 set_source_files_properties(hook/hooks_lifted.c hook/hooks_record.c src/lifted/x87_intrinsics.c src/lifted/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 target_compile_options(sv_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(sv_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
@@ -80,5 +80,5 @@ add_executable(subvulpes-server src/standalone/main.c src/standalone/fn_table.c 
 target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/standalone hook)
 target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
-target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP)
+target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
 set_property(TARGET subvulpes-server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

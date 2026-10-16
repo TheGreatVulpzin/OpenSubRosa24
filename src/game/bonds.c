@@ -10,6 +10,10 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
+/* The type of the bond that pfVar33 points into (pfVar33 = &bond.friction_dir.y, bond + 0x78).
+ * An int load: the lifted C read it as a float, a denormal on the x87 for each test. */
+#define BOND_KIND(p) (*(int *)((char *)(p) - 0x78))
+
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -124,6 +128,7 @@ void __cdecl lf_41de0(void)
   lf_m128 auVar3;
   lf_m128 auVar4;
   float fVar5;
+  int kind_copy;
   float fVar6;
   float fVar7;
   float fVar8;
@@ -1146,7 +1151,7 @@ LAB_00442c75:
         iVar30 = g_timerlist.unk_0070;
         if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
             (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) {
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x0U) {
+          if (BOND_KIND(pfVar33) == 0x0U) {
             local_50 = (float *)&g_timer[g_timerlist.unk_0070].unk_0040;
             uVar13 = rdtsc();
             *local_50 = LF_BITS_F((int)uVar13);
@@ -1154,7 +1159,7 @@ LAB_00442c75:
             bond_partpart(local_c0);
             stoptimer(g_timerlist.unk_0070);
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x1U) {
+          if (BOND_KIND(pfVar33) == 0x1U) {
             fVar6 = pfVar33[-0x19];
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
             pvVar1 = (vec3 *)(pfVar33 + -1);
@@ -1175,7 +1180,7 @@ LAB_00442c75:
               *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) + local_54);
             }
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x2U) {
+          if (BOND_KIND(pfVar33) == 0x2U) {
             fVar6 = pfVar33[-0x19];
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
             local_84 = ((int *)LF_BITS_U(pfVar33[-0x18]));
@@ -1226,7 +1231,7 @@ LAB_00442c75:
               local_9c[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_50) * local_74 + local_9c[(0x160f7a + LF_RELOC / 4)]);
             }
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x3U) {
+          if (BOND_KIND(pfVar33) == 0x3U) {
             fVar5 = pfVar33[-0x19];
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
             local_84 = ((int *)LF_BITS_U(pfVar33[-0x18]));
@@ -1289,7 +1294,7 @@ LAB_00442c75:
               local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
             }
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x4U) {
+          if (BOND_KIND(pfVar33) == 0x4U) {
             local_98 = pfVar33[6];
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
             local_bc = ((int)LF_BITS_U(pfVar33[7]));
@@ -1361,7 +1366,7 @@ LAB_00442c75:
             }
           }
           iVar30 = g_timerlist.unk_007c;
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x5U) {
+          if (BOND_KIND(pfVar33) == 0x5U) {
             /* Type 5: a wheel of an object on the ground. The object and wheel indexes are
              * ints: as floats they are denormals, and each x87 use took about 9000 cycles
              * for each bond. The float math is the lifted one, in the same order. */
@@ -1396,7 +1401,7 @@ LAB_00442c75:
             stoptimer(g_timerlist.unk_007c);
           }
           iVar30 = g_timerlist.unk_0084;
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x7U) {
+          if (BOND_KIND(pfVar33) == 0x7U) {
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0084].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -1445,7 +1450,7 @@ LAB_00442c75:
             stoptimer(g_timerlist.unk_0084);
           }
           iVar30 = g_timerlist.unk_0074;
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x8U) {
+          if (BOND_KIND(pfVar33) == 0x8U) {
             local_50 = (float *)&g_timer[g_timerlist.unk_0074].unk_0040;
             uVar13 = rdtsc();
             *local_50 = LF_BITS_F((int)uVar13);
@@ -1454,7 +1459,7 @@ LAB_00442c75:
             stoptimer(g_timerlist.unk_0074);
           }
           iVar30 = g_timerlist.unk_0078;
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0x9U) {
+          if (BOND_KIND(pfVar33) == 0x9U) {
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0078].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -1489,7 +1494,7 @@ LAB_00442c75:
             stoptimer(g_timerlist.unk_0078);
           }
           iVar30 = g_timerlist.unk_0080;
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0xaU) {
+          if (BOND_KIND(pfVar33) == 0xaU) {
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0080].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -1569,8 +1574,10 @@ LAB_00442c75:
             local_50 = local_88;
             stoptimer(g_timerlist.unk_0080);
           }
-          fVar5 = pfVar33[-0x1e];
-          if (LF_BITS_U(fVar5) == 0xbU) {
+          /* One copy of the type for the next two tests, as the original (a block can change
+           * the type). An int: as a float it is a denormal on the x87. */
+          kind_copy = BOND_KIND(pfVar33);
+          if (kind_copy == 0xb) {
             fVar7 = pfVar33[6];
             fVar10 = -pfVar21[7];
             fVar8 = pfVar33[7];
@@ -1603,7 +1610,7 @@ LAB_00442c75:
             *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd4] =
                  (float)(LF_BITS_F(local_50) * local_54 + *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd4]);
           }
-          if (LF_BITS_U(fVar5) == 0xdU) {
+          if (kind_copy == 0xd) {
             fVar6 = pfVar33[6];
             fVar8 = (float)(pfVar33[-6] * pfVar33[-3]);
             fVar7 = pfVar33[7];
@@ -1662,7 +1669,7 @@ LAB_00442c75:
               local_80[(0x11877e + LF_RELOC / 4)] = (float)(LF_BITS_F(local_50) * local_74 + local_80[(0x11877e + LF_RELOC / 4)]);
             }
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0xeU) {
+          if (BOND_KIND(pfVar33) == 0xeU) {
             local_94 = pfVar33[-0x11];
             local_98 = pfVar33[6];
             local_bc = ((int)LF_BITS_U(pfVar33[7]));
@@ -1748,7 +1755,7 @@ LAB_00442c75:
                    (float)(*(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0xd4] + local_64);
             }
           }
-          if (LF_BITS_U(pfVar33[-0x1e]) == 0xfU) {
+          if (BOND_KIND(pfVar33) == 0xfU) {
             fVar5 = pfVar33[6];
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
             iVar30 = ((int)LF_BITS_U(pfVar33[7])) * 0xe8;

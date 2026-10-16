@@ -72,9 +72,24 @@ void sv_log(const char *fmt, ...)
     va_end(ap);
 }
 
-/* The hook build prints the per-hook profile here. The standalone server has no hooks. */
+/* The main loop calls this every minute. The hook build prints its per-hook profile here.
+ * The standalone server prints the profiler of the game itself when SV_TIMERS is set: each
+ * timer has a name at +0 and its RDTSC cycles of the last tick at +0x48 (stoptimer, RVA
+ * 0xb3f0, adds to it, and the code that starts the timer sets it to 0 each tick). The
+ * table is g_timer (RVA 0x14043a0, 256 records of 0x58 bytes). */
 void sv_hooks_lifted_profile(void)
 {
+    int i;
+    if (!getenv("SV_TIMERS"))
+        return;
+    for (i = 0; i < 256; i++) {
+        const uint8_t *t = (const uint8_t *)sr_base + 0x14043a0 + i * 0x58;
+        uint64_t last;
+        if (!t[0])
+            continue;
+        memcpy(&last, t + 0x48, sizeof last);
+        sv_log("  timer %-24.40s %8.2f Mcycles in the last tick", (const char *)t, last / 1e6);
+    }
 }
 
 /* ------------------------------------------------------------ sampling profiler */
