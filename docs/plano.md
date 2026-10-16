@@ -83,16 +83,29 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 - `tools/progress.py` computes the % of functions and bytes replaced from the CSV. Publish it in `docs/progresso.md`.
 - Each new function counts as done only after it passes the differential test (see Verification).
 
-## Phase 4 — Names
+## Phase 4 — Names (closed 2026-10-17)
 
 Make the lifted C readable without hand work. All names go into the Ghidra project with scripts and into the repository (`analysis/*.csv`, `sr_types.h`), never into `lift.py` (see `CLAUDE.md`).
 
-1. Name the globals of the 024d `.data`. `subrosa.x64` has the names in its symbols, and `tools/re/map_globals.py` maps them by votes. A bulk attempt was not reliable: apply the names in batches and run the gate after each batch.
-2. Type the global arrays and the struct fields (`ApplyTypes.java`), so that the 639 inline `SR_VA` become `g_human[i].field`.
-3. Name and type the parameters (`params.csv`, `ApplyParams.java`).
-4. Split `src/lifted/lifted_024d.c` into one file for each module (net, events, players, items, objects, vehicles, humans, logic, level).
+| Measure in the lifted C | Start | End |
+| --- | ---: | ---: |
+| `DAT_` names | 14870 | about 5000 |
+| Different unnamed addresses | 1473 | 437 |
+| Inline `SR_VA` | 657 | 239 |
+| Typed `unk_` fields used | 1400 | more than 4400 |
 
-Done when: `deps.py` shows almost no inline `SR_VA`, and the gate shows no drop.
+What was done:
+
+1. Globals: about 50 globals with a name, a size and a type (`analysis/024d/data_globals.csv`, `manual_globals.csv`, `tools/re/gen_types.py`). The evidence: equal bytes in the initialized `.data`, or a Linux 0.24c size that fits the gap to the next known global (`tools/re/map_regions.py`).
+2. Field types: `tools/ghidra/InferFields.java` and `tools/re/infer_fields.py` read the type of each field from the instructions (`analysis/structs/024d/`).
+3. Addresses inside a typed global print by name: `((int)&g_player[3].ai_waypoint)`, `((int)&g_human[512])` (`LiftExport.java`, `namedAddress`).
+4. Five pointer parameters with their pointer type (`params.csv`).
+
+Left on purpose:
+
+- About 200 addresses: small statics, the MSVC CRT data, and globals that only the client uses (`texturelist`, `modellist`). The client globals come back in Phase 7.
+- Local variable names (`iVar2`, `local_4`): Phase 6 rewrites the functions by hand.
+- One file for each module: skipped. Five tools read `lifted_024d.c`. In Phase 6 each rewritten function moves to its module (`src/net/`, `src/game/`), so the lifted file gets smaller by itself.
 
 ## Phase 5 — Standalone server
 
