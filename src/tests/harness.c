@@ -7,7 +7,8 @@
  *   so that several harnesses can run at the same time.
  *   HARNESS_RESET=1: put the snapshot back before each function (results do not depend on
  *   the order of the functions).
- *   HARNESS_RETRY=0: do not run a call again from the snapshot when its original crashed.
+ *   HARNESS_RETRY=0: do not run a call again from the snapshot when its original crashed
+ *   or the two runs differ.
  *
  * 1. Load the 024d as a library (its code runs, its entry point does not).
  * 2. Fill its .data section from a snapshot of a running server (hook/record.c).
@@ -1030,18 +1031,19 @@ int main(int argc, char **argv)
             if (getenv("HARNESS_DEBUG") && atoi(getenv("HARNESS_DEBUG")) >= 2)
                 plat_test_dump();
             sv_verify_end(&v, same && env_same && new_ok, NULL);
-            /* The original crashed: often the heap that the earlier calls changed (the writes
-             * of the original runs stay), not the call itself. Put the snapshot back and run
-             * this call once more (HARNESS_RETRY=0 turns it off). The cost is only paid on a
-             * crash; gate.py --reset does the same for every function. */
-            if (!orig_ok && !retried && retry_crash) {
+            /* The original crashed, or the two runs differ: often the heap that the earlier
+             * calls changed (the writes of the original runs stay), not the call itself. Put
+             * the snapshot back and run this call once more (HARNESS_RETRY=0 turns it off).
+             * A real difference of the lifted code shows again from the snapshot. The cost
+             * is only paid on a crash or a difference; gate.py --reset does the same for every
+             * function (building_buildfloorplan of murilo-20261015-221033-normal, call 260). */
+            if ((!orig_ok || (new_ok && (v.fails != fails_before || !same || !env_same))) && !retried &&
+                retry_crash) {
                 apply_snapshot();
                 resolve_imports();
                 retried = 1;
                 goto again;
             }
-            if (orig_ok && retried)
-                retried_ok++;
             if (!orig_ok) {
                 skip++;
                 if (!first[0])
@@ -1061,13 +1063,15 @@ int main(int argc, char **argv)
                              same ? "" : ", return or pointer memory differs");
             } else {
                 ok++;
+                if (retried)
+                    retried_ok++;
             }
         }
         /* A value argument that points into the stack is often a pointer that Ghidra typed
          * as an int: analysis/024d/params.csv gives it a pointer type. Without this note, a
          * function whose calls are all skipped left no line (loadblock, 2026-10-15). */
         if (retried_ok && !first[0])
-            snprintf(first, sizeof first, "%d call(s) run again from the snapshot after the original crashed",
+            snprintf(first, sizeof first, "%d call(s) same when run again from the snapshot",
                      retried_ok);
         if (stack_skip && !first[0])
             snprintf(first, sizeof first, "%d skipped: value points into the stack (check params.csv)", stack_skip);
