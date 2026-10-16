@@ -7,7 +7,7 @@ RE/decompilation project for Sub Rosa (2015).
 ## Rules
 
 - Never version anything in `original/` except `README.md` and `MANIFEST.sha256`. Binaries and assets are proprietary.
-- C tables generated from the 024d `.rdata` and initial `.data` (strings, constants, default values) may be versioned in `src/` (Phase 4.1). The user checked them.
+- C tables generated from the 024d `.rdata` and initial `.data` (strings, constants, default values) may be versioned in `src/` (Phase 5.1). The user checked them.
 - `original/` is read-only. Tools read from it and write to `analysis/`, `build/` or the scratchpad.
 - Run Python with `-I` when reading files from `original/` or `third_party/`.
 - The servers' `config.txt` has passwords. Do not copy its content into docs or commits.

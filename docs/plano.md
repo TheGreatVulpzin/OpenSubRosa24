@@ -6,6 +6,15 @@ The repository is already initialized (commit `b8ca658`): `original/` outside gi
 
 Goal: decompile Sub Rosa to improve servers, add features, optimize and port (Linux, macOS, browser).
 
+The work has two parts, in this order:
+
+1. **The decomp** (Phases 0 to 7): readable C that does the same as the original game and server. The harness proves each function against the original.
+2. **Two products on top of the decomp** (after Phase 7). Names are temporary:
+   - **OpenSubRosa:** the original game and server with optimizations, light QOL and more platforms. It stays compatible with the original 0.24 clients and servers.
+   - **SubVulpes:** a server with a plugin manager and stronger admin tools, and a client that can have features the original game does not support. Where possible it works with the original clients too, and gives extra features to SubVulpes clients.
+
+Until the decomp is done, the two products are only ideas in `docs/ideas.md`. Code changes that make the game different from the original wait for the end of Phase 7.
+
 Decisions made with you:
 
 - **Strategy:** functional decomp + hooks (re3/OpenRCT2 style). Each function is rewritten in C and replaces the original inside the real executable.
@@ -74,7 +83,20 @@ Order: utilities → bitstream/packets → events (`createevent_*`) → players/
 - `tools/progress.py` computes the % of functions and bytes replaced from the CSV. Publish it in `docs/progresso.md`.
 - Each new function counts as done only after it passes the differential test (see Verification).
 
-## Phase 4 — Standalone server (`subvulpes-server`)
+## Phase 4 — Names
+
+Make the lifted C readable without hand work. All names go into the Ghidra project with scripts and into the repository (`analysis/*.csv`, `sr_types.h`), never into `lift.py` (see `CLAUDE.md`).
+
+1. Name the globals of the 024d `.data`. `subrosa.x64` has the names in its symbols, and `tools/re/map_globals.py` maps them by votes. A bulk attempt was not reliable: apply the names in batches and run the gate after each batch.
+2. Type the global arrays and the struct fields (`ApplyTypes.java`), so that the 639 inline `SR_VA` become `g_human[i].field`.
+3. Name and type the parameters (`params.csv`, `ApplyParams.java`).
+4. Split `src/lifted/lifted_024d.c` into one file for each module (net, events, players, items, objects, vehicles, humans, logic, level).
+
+Done when: `deps.py` shows almost no inline `SR_VA`, and the gate shows no drop.
+
+## Phase 5 — Standalone server
+
+A server executable that runs without `subrosadedicated024d.exe`. It runs the same C as the hooked build, so it behaves the same as the original.
 
 Phase 3 is closed (2026-10-16, `docs/progresso.md`): 321 of 340 functions are in C (99.2 % of the code bytes). The lifted C reaches the image only through `SR_VA(va)` = `sr_base + va - 0x400000` (`src/lifted/lift_support.h`) and `sr_import`. Counts in `src/lifted/lifted_024d.c` on 2026-10-16:
 
@@ -87,44 +109,37 @@ Phase 3 is closed (2026-10-16, `docs/progresso.md`): 321 of 340 functions are in
 
 Relocations outside `.text`: 15 in the initial `.data` (all point to `.rdata` strings) and 13 in `.rdata` (CRT tables). The initial `.data` has no pointer to `.text`.
 
-1. **4.1: image region and direct calls** (2 to 3 days).
-   - `subvulpes-server.exe` reserves a region of `SizeOfImage` (`0x25f3b000`, about 607 MB, the same as the original) and sets `sr_base` to it.
+1. **5.1: image region and direct calls** (2 to 3 days).
+   - The new executable reserves a region of `SizeOfImage` (`0x25f3b000`, about 607 MB, the same as the original) and sets `sr_base` to it.
    - A script generates C arrays of `.rdata` and the initial `.data` (versioned in `src/`). At start-up the server copies them to their RVAs in the region and applies the 28 relocations.
    - `lift.py` generates direct calls to the `lf_` functions for the standalone build. The hooked build keeps the calls through the `.exe`, so that the live hooks and the verifier still see every call.
    - Write the `qsort` comparator (`0xd320`) in C.
-2. **4.2: platform layer** (1 to 2 days). Replace `sr_import` with direct links to the CRT and WinSock. Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits.
-3. **In-game test** of `subvulpes-server.exe` with players. The 39 harness-only functions (`serverrecv`, `serversend`, `servercycle`...) run live in C here for the first time. Look at them first when a network bug shows.
-4. **4.3:** named globals in place of the image region, dynamic pools with configurable limits, Linux x64. Watch structs with pointers on 64 bits. SSE in place of x87 changes the float bits of more functions than `buildsomeshit`: decide the accepted precision when this step starts.
+2. **5.2: platform layer** (1 to 2 days). Replace `sr_import` with direct links to the CRT and WinSock. Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits.
+3. **In-game test** with players. The 39 harness-only functions (`serverrecv`, `serversend`, `servercycle`...) run live in C here for the first time. Look at them first when a network bug shows.
 
-Verification: the harness keeps testing the lifted functions against the 024d. No packet replay test for now. Add it if a bug is too hard to find in game.
+The harness keeps testing the functions against the 024d. No packet replay test for now. Add it if a bug is too hard to find in game.
 
-Stay 100% compatible with the 0.24 client.
+## Phase 6 — Readable server
 
-## Phase 5 — Better server
+Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `src/game/`, `src/server/`), as `src/server/accounts.c` and `events.c` already do. The lifted version stays as the fallback until the rewrite is done.
 
-1. Native plugin API (C, loaded by DLL/.so) in place of memory patches.
-2. Port the manager modules as plugins: black market, admin commands (`/heal`, `/tp`, `/npc`, `/imortal`...), death messages, faster truck, starting money, punches, bots.
-3. Admin console / RCON, structured logs, server-side anti-cheat checks.
-4. Own server list if the Cryptic Sea master (`crypticsea.com/anewzero/serverinfo.php`) no longer answers.
-5. Profile `servercycle` and optimize (tick rate, packet sending, collisions).
-6. Fix the input checks of the original server (`docs/protocol.md`, section 12, item 15):
-   - **Voice index (security):** `serverrecv` (0x33650) reads the voice frame index of a type 4 packet with 8 bits and uses it before the `& 0x3f` mask. An index from 64 to 255 makes `memcpy` write up to 255 client bytes up to 48 KB after the 64-entry voice ring. Mask or reject the index before the copy.
-   - Item count of the object part (8 bits, no cap), the server name copy (`strcpy`, longer than the 32 bytes sent) and the human health (`health + 10` in 7 bits, wraps above 117).
+- A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
+- No change of behavior in this phase. When a function shows a place for a future change ("an admin command could go here"), write it in `docs/ideas.md`, not in the code.
+- Order: small functions first (vectors, bitstream, events), then players and accounts, items, objects and vehicles, humans, logic and economy, `servercycle`. The level generation (`area_createsblocks`, `building_buildfloorplan`...) comes last.
+- `tools/progress.py` counts the hand-written functions.
 
-## Phase 6 — Client
+Exception: security fixes for invalid client input (`docs/protocol.md`, section 12, item 15) may go in early. The recordings have only valid input, so the harness does not change. The voice index fix is already in `hook/netguard.c`.
 
-1. Same hook method in `subrosa.exe` (which also imports `WSOCK32.dll`).
-2. Reuse `common/`, `game/`, `net/` from the server. Missing: render, input, audio, voice, menus, editors.
-3. Standalone client with SDL2 + OpenAL. Replace the fixed-pipeline OpenGL with GL 3.3 / GLES 3 (prerequisite for WebGL2).
+## Phase 7 — Client decomp
 
-## Phase 7 — Ports
+Apply the same method to `subrosa.exe` (it also imports `WSOCK32.dll`): hooks, lift, harness, names, standalone, readable rewrite. The client shares `common/`, `game/` and `net/` with the server. New parts: render, input, audio, voice, menus, editors.
 
-1. Linux, macOS (arm64), Windows x64 with the standalone client.
-2. **Browser (Emscripten/WASM):**
-   - Render in WebGL2 (comes from Phase 6.3).
-   - Network: the browser cannot do UDP. The server gets a WebSocket (or WebRTC DataChannel) transport next to UDP.
-   - Memory: dynamic pools from Phase 4.
-   - Assets: the player loads their own copy of the game (file picker + IndexedDB). No hosted assets.
+## After the decomp: OpenSubRosa and SubVulpes
+
+The ideas for both products are in `docs/ideas.md`, with the product each one belongs to. The main groups:
+
+- **OpenSubRosa:** optimization (`servercycle`, tick rate, packets), dynamic pools with configurable limits, Linux / macOS / Windows x64, SDL2 + OpenAL + GL 3.3, browser (WASM), light QOL behind options (option off = original).
+- **SubVulpes:** plugin manager, admin commands and RCON, the server manager modules as plugins, anti-cheat, own server list, client features that need a new protocol.
 
 ---
 
