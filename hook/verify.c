@@ -445,6 +445,7 @@ int sv_verify_init(void)
     int i;
 
     g_enabled = sv_config_int("verify", 1);
+    sv_prof_on = sv_config_int("profile", 0);
     g_log_calls = sv_config_int("log_calls", 1);
     g_full_every = sv_config_int("verify_full_every", 50);
     g_relax = sv_config_int("verify_relax", 200);
@@ -851,6 +852,29 @@ int sv_crash_filter(SvVerify *v, EXCEPTION_POINTERS *ep)
     v->broken = 1;
     v->crashed = 1;
     return EXCEPTION_EXECUTE_HANDLER;
+}
+
+int sv_prof_on;
+
+static int by_cycles(const void *a, const void *b)
+{
+    unsigned __int64 x = (*(SvVerify *const *)a)->cycles, y = (*(SvVerify *const *)b)->cycles;
+    return x < y ? 1 : x > y ? -1 : 0;
+}
+
+void sv_verify_profile(SvVerify **stats, int count, int top)
+{
+    SvVerify *sorted[1024];
+    int i, n = count < 1024 ? count : 1024;
+    if (!sv_prof_on)
+        return;
+    for (i = 0; i < n; i++)
+        sorted[i] = stats[i];
+    qsort(sorted, (size_t)n, sizeof sorted[0], by_cycles);
+    for (i = 0; i < top && i < n && sorted[i]->cycles; i++)
+        sv_log("profile: %-32s %8llu Mcycles (callees included)", sorted[i]->name, sorted[i]->cycles / 1000000);
+    for (i = 0; i < n; i++)
+        stats[i]->cycles = 0;
 }
 
 void sv_verify_summary(const SvVerify *v)

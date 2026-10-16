@@ -11,13 +11,21 @@
 #ifndef SV_HOOK_WRAP_H
 #define SV_HOOK_WRAP_H
 
+#include <intrin.h>
+
 #include "verify.h"
+
+/* subvulpes.ini profile=1: count the CPU cycles of each hook (sv_verify_profile). */
+#define SV_PROF_START() unsigned __int64 prof_t0_ = sv_prof_on ? __rdtsc() : 0
+#define SV_PROF_END(STAT) if (prof_t0_) (STAT).cycles += __rdtsc() - prof_t0_
 
 #define SV_HOOK_VOID(STAT, NEW, ORIG, DETAIL)                                          \
     do {                                                                               \
+        SV_PROF_START();                                                       \
         sv_note_call((STAT).name);                                                     \
         if ((STAT).broken || sv_verify_busy() || sv_original_only()) {                                       \
             ORIG;                                                                      \
+            SV_PROF_END(STAT);                                                 \
             return;                                                                    \
         }                                                                              \
         if (!sv_verify_should(&(STAT))) {                                              \
@@ -26,6 +34,7 @@
             } __except (sv_crash_filter(&(STAT), GetExceptionInformation())) {         \
                 ORIG;                                                                  \
             }                                                                          \
+            SV_PROF_END(STAT);                                                 \
             return;                                                                    \
         }                                                                              \
         sv_track_begin_new(&(STAT));                                                   \
@@ -42,15 +51,21 @@
 #define SV_HOOK_RET_CMP(TYPE, SAME, STAT, NEW, ORIG, DETAIL)                                     \
     do {                                                                               \
         TYPE r_new_ = 0, r_orig_;                                                      \
+        SV_PROF_START();                                                       \
         sv_note_call((STAT).name);                                                     \
         if ((STAT).broken || sv_verify_busy() || sv_original_only())                                         \
-            return ORIG;                                                               \
+        {                                                                      \
+            r_orig_ = ORIG;                                                    \
+            SV_PROF_END(STAT);                                                 \
+            return r_orig_;                                                    \
+        }                                                                      \
         if (!sv_verify_should(&(STAT))) {                                              \
             __try {                                                                    \
                 r_new_ = NEW;                                                          \
             } __except (sv_crash_filter(&(STAT), GetExceptionInformation())) {         \
                 r_new_ = ORIG;                                                         \
             }                                                                          \
+            SV_PROF_END(STAT);                                                 \
             return r_new_;                                                             \
         }                                                                              \
         sv_track_begin_new(&(STAT));                                                   \

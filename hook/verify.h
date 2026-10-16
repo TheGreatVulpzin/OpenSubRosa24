@@ -39,7 +39,14 @@ typedef struct SvVerify {
     int recheck;             /* 1 = the next verification is a full round */
     long unconfirmed;        /* differences in scope rounds (not counted in fails) */
     long near_floats;        /* float words that differ only in the last bits (not counted) */
+    unsigned __int64 cycles; /* profile=1: CPU cycles spent in the hook, callees included */
 } SvVerify;
+
+/* subvulpes.ini profile=1: the hooks count their CPU cycles (hook_wrap.h). */
+extern int sv_prof_on;
+
+/* Log the hooks with the most cycles since the last call (top n), then reset the counters. */
+void sv_verify_profile(SvVerify **stats, int count, int top);
 
 /* Tests only: use another section of the executable instead of .data. Call before sv_verify_init. */
 void sv_verify_set_section(const char *name);

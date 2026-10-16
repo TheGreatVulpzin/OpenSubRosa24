@@ -12448,6 +12448,11 @@ int sv_hooks_lifted_install(void)
     return sv_install_hooks(g_lifted + from, to - from);
 }
 
+void sv_hooks_lifted_profile(void)
+{
+    sv_verify_profile(g_lifted_stats, 277, 25);
+}
+
 void sv_hooks_lifted_summary(void)
 {
     int i;

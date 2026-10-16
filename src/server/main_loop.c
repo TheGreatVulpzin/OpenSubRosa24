@@ -20,6 +20,7 @@
 #include "sr_server.h"
 
 void *sr_import(const char *dll, const char *name);
+void sv_hooks_lifted_profile(void);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
 #define G(type, rva) (*(type *)(sr_base + (rva)))
@@ -274,6 +275,7 @@ void __cdecl sr_dedicatedserverloop(void)
             uint32_t ms = now_ms() - status_ms;
             sv_log("own main loop: %d ticks in %u ms (%.1f ticks/s)", sr_game.ticks - status_ticks, ms,
                    (sr_game.ticks - status_ticks) * 1000.0 / ms);
+            sv_hooks_lifted_profile();  /* profile=1 in subvulpes.ini */
             status_ms += ms;
             status_ticks = sr_game.ticks;
         }
