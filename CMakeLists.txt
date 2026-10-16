@@ -9,6 +9,10 @@ endif()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Functions rewritten by hand from the lifted C (Phase 6). Each file defines lf_<rva>, so
+# tools/lift/lift.py lifts that function no more. Run cmake again after a new file.
+file(GLOB SV_GAME_SOURCES CONFIGURE_DEPENDS src/game/*.c)
+
 add_library(sv_wsock32 SHARED
     hook/proxy.c
     hook/netguard.c
@@ -29,8 +33,7 @@ add_library(sv_wsock32 SHARED
     src/server/events.c
     src/server/players.c
     src/server/main_loop.c
-    src/game/bonds.c
-    src/game/objects.c
+    ${SV_GAME_SOURCES}
 )
 set_target_properties(sv_wsock32 PROPERTIES OUTPUT_NAME wsock32)
 target_include_directories(sv_wsock32 PRIVATE src/include src/lifted hook)
@@ -38,7 +41,7 @@ target_include_directories(sv_wsock32 PRIVATE src/include src/lifted hook)
 set_source_files_properties(src/lifted/lifted_024d.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
 # Code rewritten by hand from the lifted C (Phase 6): x87 math like the original. The warnings
 # come back on when a file has no lifted style left.
-set_source_files_properties(src/game/bonds.c src/game/objects.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013;/Z7")
+set_source_files_properties(${SV_GAME_SOURCES} PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013;/Z7")
 set_source_files_properties(hook/hooks_lifted.c hook/hooks_record.c src/lifted/x87_intrinsics.c src/lifted/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 target_compile_options(sv_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(sv_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
@@ -59,7 +62,7 @@ target_compile_definitions(test_verify PRIVATE _CRT_SECURE_NO_WARNINGS)
 # Offline differential test: loads the 024d as a library, fills .data from a snapshot and
 # compares each lifted function with the original on recorded calls (src/tests/harness.c).
 add_executable(harness src/tests/harness.c hook/verify.c hook/hook.c hook/console.c hook/record.c hook/imports.c
-    src/tests/harness_ui.c src/platform/plat_test.c src/server/accounts.c src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c src/game/bonds.c src/game/objects.c)
+    src/tests/harness_ui.c src/platform/plat_test.c src/server/accounts.c src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c ${SV_GAME_SOURCES})
 target_include_directories(harness PRIVATE src/include src/lifted src/platform hook)
 target_compile_options(harness PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(harness PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152)
@@ -76,7 +79,7 @@ target_compile_options(test_netguard PRIVATE /W4 /WX /utf-8)
 # Phase 5: the dedicated server without the 024d (src/standalone/main.c). The same lifted and
 # hand-written C as the hook DLL, with SR_STANDALONE: game calls go to the C functions.
 add_executable(subvulpes-server src/standalone/main.c src/standalone/fn_table.c src/standalone/image_024d.c
-    src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c src/game/bonds.c src/game/objects.c
+    src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c ${SV_GAME_SOURCES}
     src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c)
 target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/standalone hook)
 target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)

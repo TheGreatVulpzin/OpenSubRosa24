@@ -419,7 +419,7 @@ void __cdecl lf_41de0(void)
           pfVar21[1] = local_74;
           local_60 = ((int *)LF_BITS_U(((float)(fVar5 - LF_BITS_F(piVar18[0x13])))));
           pfVar21[2] = (float)(LF_BITS_F(local_60) * LF_BITS_F(piVar18[0x16]));
-          pfVar21[0xc] = LF_BITS_F(piVar18[0x17]);
+          LF_SET_BITS(pfVar21[0xc], piVar18[0x17]);
           local_70 = (float)(1.0 / (*(float *)((int)&g_particle[0].unk_0008 + (int)local_50) +
                            (&g_particle[0].unk_0008)[iVar29 * 0x3c]));
           pfVar21[10] = (float)(local_70 * *(float *)((int)&g_particle[0].unk_0008 + (int)local_50));
@@ -433,8 +433,8 @@ void __cdecl lf_41de0(void)
           iVar23 = iVar29 * 0xe0;
           local_50 = (float *)(iVar17 + iVar23);
           iVar16 = piVar18[0x21];
-          fVar6 = LF_BITS_F(piVar18[9]);
-          fVar7 = LF_BITS_F(piVar18[10]);
+          LF_SET_BITS(fVar6, piVar18[9]);
+          LF_SET_BITS(fVar7, piVar18[10]);
           local_b8 = (float)((float)(fVar6 * g_human[iVar30].bones[iVar29].rot[1].x +
                      (float)(fVar5 * *(float *)(iVar17 + ((int)&g_human[0].lf_raw[0xf8]) + iVar23))) +
                      fVar7 * g_human[iVar30].bones[iVar29].rot[2].x);
@@ -451,8 +451,8 @@ void __cdecl lf_41de0(void)
           fVar6 = g_human[iVar30].bones[iVar29].pos.y;
           fVar7 = g_human[iVar30].bones[iVar29].pos.z;
           fVar8 = ((vec3 *)(piVar18 + 0xb))->x;
-          fVar9 = LF_BITS_F(piVar18[0xc]);
-          fVar10 = LF_BITS_F(piVar18[0xd]);
+          LF_SET_BITS(fVar9, piVar18[0xc]);
+          LF_SET_BITS(fVar10, piVar18[0xd]);
           local_ac = (float)((float)((float)(fVar8 * g_item[iVar16].rot[0].x) + fVar9 * g_item[iVar16].rot[1].x) +
                      fVar10 * g_item[iVar16].rot[2].x);
           local_a8 = (float)(g_item[iVar16].rot[2].y * fVar10 +
@@ -496,10 +496,10 @@ void __cdecl lf_41de0(void)
           iVar16 = piVar18[0x21];
           *(short *)((int)pfVar21 + -10) = (short)iVar29;
           fVar8 = g_human[iVar30].bones[iVar29].rot[0].z;
-          fVar9 = LF_BITS_F(piVar18[9]);
+          LF_SET_BITS(fVar9, piVar18[9]);
           fVar10 = g_human[iVar30].bones[iVar29].rot[1].x;
           *(short *)(pfVar21 + -2) = (short)iVar16;
-          fVar11 = LF_BITS_F(piVar18[10]);
+          LF_SET_BITS(fVar11, piVar18[10]);
           local_b8 = (float)(fVar11 * g_human[iVar30].bones[iVar29].rot[2].x +
                      ((float)(fVar5 * fVar6 + fVar9 * fVar10)));
           local_b4 = (float)(g_human[iVar30].bones[iVar29].rot[2].y * fVar11 +
@@ -513,8 +513,8 @@ void __cdecl lf_41de0(void)
           fVar6 = g_human[iVar30].bones[iVar29].pos.y;
           fVar7 = g_human[iVar30].bones[iVar29].pos.z;
           fVar8 = ((vec3 *)(piVar18 + 0xb))->x;
-          fVar9 = LF_BITS_F(piVar18[0xc]);
-          fVar10 = LF_BITS_F(piVar18[0xd]);
+          LF_SET_BITS(fVar9, piVar18[0xc]);
+          LF_SET_BITS(fVar10, piVar18[0xd]);
           local_ac = (float)(fVar10 * g_human[iVar30].bones[iVar16].rot[2].x +
                      ((float)(fVar8 * g_human[iVar30].bones[iVar16].rot[0].x +
                      fVar9 * g_human[iVar30].bones[iVar16].rot[1].x)));
@@ -537,7 +537,7 @@ void __cdecl lf_41de0(void)
           pfVar21[-1] = (float)(LF_BITS_F(local_60) * local_5c);
           *pfVar21 = (float)(LF_BITS_F(local_60) * local_58);
           pfVar21[1] = (float)(LF_BITS_F(local_60) * local_54);
-          pfVar21[0xc] = LF_BITS_F(piVar18[0x17]);
+          LF_SET_BITS(pfVar21[0xc], piVar18[0x17]);
           local_d4 = g_human[iVar30].bones[iVar29].mass;
           local_d0 = g_human[iVar30].bones[iVar16].mass;
           local_70 = (float)(1.0 / (local_d4 + local_d0));
@@ -615,13 +615,13 @@ void __cdecl lf_41de0(void)
           local_84 = (int *)iVar16;
           multiply3x3matrices(&local_28,&local_28,(float *)&g_human[iVar30].bones[iVar16].lf_raw[0xa8]
                              );
-          fVar5 = LF_BITS_F(local_a0[0x17]);
+          LF_SET_BITS(fVar5, local_a0[0x17]);
           pfVar21[0xc] = fVar5;
-          local_50 = ((float *)LF_BITS_U(fVar5));
+          local_50 = ((float *)LF_UINT(fVar5));
           if ((((int)local_84 < 3) || (8 < (int)local_84)) ||
              (*(int *)((int)&g_human[0].health + (int)local_60) < 1)) {
             geteulerangles2(&local_94,&local_28);
-            fVar5 = local_94;
+            LF_COPY(fVar5, local_94);
             local_cc = local_94;
             local_c8 = local_90;
             if (*(int *)((int)&g_human[0].health + (int)local_60) < 1) {
@@ -720,7 +720,7 @@ LAB_00442c75:
             pfVar21[-1] = (float)(local_8c * local_40 + pfVar21[-1]);
             *pfVar21 = (float)(local_8c * local_3c + *pfVar21);
             pfVar21[1] = (float)(local_8c * local_38 + pfVar21[1]);
-            fVar5 = LF_BITS_F(local_a0[0x16]);
+            LF_SET_BITS(fVar5, local_a0[0x16]);
           }
           pfVar21[-1] = (float)(fVar5 * pfVar21[-1]);
           *pfVar21 = (float)(fVar5 * *pfVar21);
@@ -732,7 +732,7 @@ LAB_00442c75:
           fVar6 = g_human[iVar30].bones[iVar29].mass * local_70;
           pfVar21[0xb] = fVar6;
           local_60 = *(int **)&g_human[iVar30].bones[iVar16].lf_raw[0x90];
-          pfVar21[3] = LF_BITS_F(local_60);
+          LF_SET_BITS(pfVar21[3], local_60);
           if (LF_BITS_F(local_60) < *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x94]) {
             pfVar21[3] = *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x94];
           }
@@ -860,7 +860,7 @@ LAB_00442c75:
     local_50 = (float *)&g_timer[g_timerlist.unk_0064].unk_0040;
     uVar13 = rdtsc();
     DAT_00603dd0 = local_60;
-    *local_50 = LF_BITS_F((int)uVar13);
+    LF_SET_BITS(*local_50, (int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     if (0 < g_area_sector.unk_0030) {
       puVar19 = &DAT_00583de8;
@@ -1020,17 +1020,17 @@ LAB_00442c75:
     iVar30 = g_timerlist.unk_0068;
     local_50 = (float *)&g_timer[g_timerlist.unk_0068].unk_0040;
     uVar13 = rdtsc();
-    *local_50 = LF_BITS_F((int)uVar13);
+    LF_SET_BITS(*local_50, (int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     pfVar33 = (float *)&DAT_00461e04;
     pfVar21 = &g_human[0].bones[0].rot[1].y;
-    fVar5 = g_yaxis[2];
-    fVar6 = g_yaxis[0];
-    fVar7 = g_yaxis[1];
+    LF_COPY(fVar5, g_yaxis[2]);
+    LF_COPY(fVar6, g_yaxis[0]);
+    LF_COPY(fVar7, g_yaxis[1]);
     do {
-      if ((((LF_BITS_U(pfVar21[-0x42]) != 0x0U) && (LF_BITS_U(pfVar21[-0x34]) != 0x0U)) &&
-          (((((uint)LF_BITS_U(pfVar21[-0x13])) & 8) != 0 || (0.8999999761581421 < *pfVar21)))) &&
-         ((0 < ((int)LF_BITS_U(pfVar21[-0x38])) && (LF_BITS_U(pfVar21[-0x3d]) == 0xffffffffU)))) {
+      if ((((LF_UINT(pfVar21[-0x42]) != 0x0U) && (LF_UINT(pfVar21[-0x34]) != 0x0U)) &&
+          (((((uint)LF_UINT(pfVar21[-0x13])) & 8) != 0 || (0.8999999761581421 < *pfVar21)))) &&
+         ((0 < ((int)LF_UINT(pfVar21[-0x38])) && (LF_UINT(pfVar21[-0x3d]) == 0xffffffffU)))) {
         local_5c = ((float)(fVar7 * pfVar21[1] - fVar5 * *pfVar21)) * 0.1875;
         local_58 = (float)(((float)(((vec3 *)(pfVar21 + -1))->x * fVar5 - pfVar21[1] * fVar6)) * 0.1875);
         local_54 = (float)(((float)(*pfVar21 * fVar6 - fVar7 * ((vec3 *)(pfVar21 + -1))->x)) * 0.1875);
@@ -1128,9 +1128,9 @@ LAB_00442c75:
         pfVar33[-1] = (float)(pfVar33[-1] + local_5c);
         *pfVar33 = (float)(local_58 + *pfVar33);
         pfVar33[1] = (float)(local_54 + pfVar33[1]);
-        fVar7 = g_yaxis[1];
-        fVar6 = g_yaxis[0];
-        fVar5 = g_yaxis[2];
+        LF_COPY(fVar7, g_yaxis[1]);
+        LF_COPY(fVar6, g_yaxis[0]);
+        LF_COPY(fVar5, g_yaxis[2]);
       }
       pfVar21 = pfVar21 + 0xad9;
       pfVar33 = pfVar33 + 0x204;
@@ -1139,7 +1139,7 @@ LAB_00442c75:
     iVar30 = g_timerlist.unk_006c;
     local_50 = (float *)&g_timer[g_timerlist.unk_006c].unk_0040;
     uVar13 = rdtsc();
-    *local_50 = LF_BITS_F((int)uVar13);
+    LF_SET_BITS(*local_50, (int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
     objectwheelsimulation2();
     stoptimer(g_timerlist.unk_006c);
@@ -1154,48 +1154,48 @@ LAB_00442c75:
           if (BOND_KIND(pfVar33) == 0x0U) {
             local_50 = (float *)&g_timer[g_timerlist.unk_0070].unk_0040;
             uVar13 = rdtsc();
-            *local_50 = LF_BITS_F((int)uVar13);
+            LF_SET_BITS(*local_50, (int)uVar13);
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             bond_partpart(local_c0);
             stoptimer(g_timerlist.unk_0070);
           }
           if (BOND_KIND(pfVar33) == 0x1U) {
-            fVar6 = pfVar33[-0x19];
+            LF_COPY(fVar6, pfVar33[-0x19]);
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
             pvVar1 = (vec3 *)(pfVar33 + -1);
             fVar8 = -pfVar33[-2];
-            fVar5 = pfVar33[-2];
-            local_5c = (float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar6)) * 8]) + (float)(fVar7 * pvVar1->x)) +
+            LF_COPY(fVar5, pfVar33[-2]);
+            local_5c = (float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pvVar1->x)) +
                        fVar5 * pfVar33[0x11]);
             local_58 = (float)(pfVar33[0x12] * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
+                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
             local_54 = (float)(fVar5 * pfVar33[0x13] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
+                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 + (pvVar1->x * local_5c + local_58 * *pfVar33)))))
             ;
             if (0.0 < LF_BITS_F(local_50)) {
               calculatefriction(&local_5c,(float *)pvVar1,pfVar33[2]);
-              *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) + local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) + local_58);
-              *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) + local_54);
+              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) + local_5c);
+              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) + local_58);
+              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) + local_54);
             }
           }
           if (BOND_KIND(pfVar33) == 0x2U) {
-            fVar6 = pfVar33[-0x19];
+            LF_COPY(fVar6, pfVar33[-0x19]);
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_84 = ((int *)LF_BITS_U(pfVar33[-0x18]));
+            local_84 = ((int *)LF_UINT(pfVar33[-0x18]));
             local_9c = (float *)((int)local_84 * 0x20);
             fVar8 = -pfVar33[-2];
-            fVar5 = pfVar33[-2];
+            LF_COPY(fVar5, pfVar33[-2]);
             local_7c = (float)(fVar5 * local_9c[(0x160f74 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar6)) * 8]) +
+                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar6)) * 8]) +
                        (float)(fVar7 * ((vec3 *)(pfVar33 + -1))->x))));
             local_78 = (float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
+                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
             local_74 = (float)(fVar5 * local_9c[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
+                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
-            local_bc = ((int)LF_BITS_U(fVar6));
+            local_bc = ((int)LF_UINT(fVar6));
             dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
             local_70 = (float)dVar39;
             if (local_70 <= 1.52587890625E-5) {
@@ -1219,12 +1219,12 @@ LAB_00442c75:
             if (0.0 < LF_BITS_F(local_50)) {
               calculatefriction(&local_7c,(float *)(pfVar33 + -1),pfVar33[2]);
               fVar5 = (float)(local_70 * *local_88);
-              *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar6)) * 8]) + fVar5 * local_7c);
-              *(float *)&((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_BITS_U(fVar6)) * 8]) + local_78 * fVar5);
-              *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar6)) * 8]) + local_74 * fVar5);
+              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) + fVar5 * local_7c);
+              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) + local_78 * fVar5);
+              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) + local_74 * fVar5);
               local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_80))));
               local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_7c);
               local_9c[(0x160f79 + LF_RELOC / 4)] = (float)(local_9c[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_78);
@@ -1232,12 +1232,12 @@ LAB_00442c75:
             }
           }
           if (BOND_KIND(pfVar33) == 0x3U) {
-            fVar5 = pfVar33[-0x19];
+            LF_COPY(fVar5, pfVar33[-0x19]);
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_84 = ((int *)LF_BITS_U(pfVar33[-0x18]));
+            local_84 = ((int *)LF_UINT(pfVar33[-0x18]));
             local_9c = (float *)((int)local_84 * 0x20);
-            local_80 = ((float *)LF_BITS_U(pfVar33[-0x17]));
-            local_a0 = ((int *)LF_BITS_U(pfVar33[-0x16]));
+            local_80 = ((float *)LF_UINT(pfVar33[-0x17]));
+            local_a0 = ((int *)LF_UINT(pfVar33[-0x16]));
             fVar7 = -pfVar33[-2];
             fVar8 = (float)(pfVar33[-0xb] * pfVar33[-2]);
             local_88 = (float *)((int)local_80 * 0x20);
@@ -1246,18 +1246,18 @@ LAB_00442c75:
             local_50 = (float *)((int)local_a0 * 0x20);
             local_5c = (float)((float)(fVar9 * local_88[(0x160f74 + LF_RELOC / 4)] +
                        ((float)((float)((float)(fVar6 * ((vec3 *)(pfVar33 + -1))->x) +
-                       fVar7 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar5)) * 8])) + fVar8 * local_9c[(0x160f74 + LF_RELOC / 4)]))) +
+                       fVar7 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar5)) * 8])) + fVar8 * local_9c[(0x160f74 + LF_RELOC / 4)]))) +
                        fVar10 * local_50[(0x160f74 + LF_RELOC / 4)]);
             local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar10 +
                        ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar9 +
                        ((float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar8 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar5)) * 8]) * fVar7 + (float)(fVar6 * *pfVar33))))))));
+                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar5)) * 8]) * fVar7 + (float)(fVar6 * *pfVar33))))))));
             local_54 = (float)(fVar10 * local_50[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar9 * local_88[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar8 * local_9c[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar7 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar5)) * 8]) + (float)(fVar6 * pfVar33[1]))))))));
+                       ((float)(fVar7 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar5)) * 8]) + (float)(fVar6 * pfVar33[1]))))))));
             local_98 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
-            local_bc = ((int)LF_BITS_U(fVar5));
+            local_bc = ((int)LF_UINT(fVar5));
             dVar39 = _CIsqrt((double)local_98);
             fVar6 = (float)(1.0 / (float)dVar39);
             local_5c = fVar6 * local_5c;
@@ -1273,12 +1273,12 @@ LAB_00442c75:
             if (0.0 < LF_BITS_F(local_80)) {
               calculatefriction(&local_5c,(float *)(pfVar33 + -1),pfVar33[2]);
               fVar6 = local_70 * LF_BITS_F(local_84);
-              *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) + fVar6 * local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(local_58 * fVar6 + LF_BITS_F((&DAT_00583de4)[((int)LF_BITS_U(fVar5)) * 8]));
-              *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]) + local_54 * fVar6);
+              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) + fVar6 * local_5c);
+              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(local_58 * fVar6 + LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]));
+              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) + local_54 * fVar6);
               fVar5 = -local_70 * local_98;
               local_80 = ((float *)LF_BITS_U(((float)(pfVar33[-0xb] * fVar5))));
               local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
@@ -1297,30 +1297,30 @@ LAB_00442c75:
           if (BOND_KIND(pfVar33) == 0x4U) {
             local_98 = pfVar33[6];
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_bc = ((int)LF_BITS_U(pfVar33[7]));
-            local_9c = (float *)(((int)LF_BITS_U(local_98)) * 0x810 + local_bc * 0x80);
-            fVar5 = pfVar33[-0x18];
-            local_80 = ((float *)LF_BITS_U(pfVar33[-0x17]));
-            local_a0 = ((int *)LF_BITS_U(pfVar33[-0x16]));
+            local_bc = ((int)LF_UINT(pfVar33[7]));
+            local_9c = (float *)(((int)LF_UINT(local_98)) * 0x810 + local_bc * 0x80);
+            LF_COPY(fVar5, pfVar33[-0x18]);
+            local_80 = ((float *)LF_UINT(pfVar33[-0x17]));
+            local_a0 = ((int *)LF_UINT(pfVar33[-0x16]));
             local_88 = (float *)((int)local_80 * 0x20);
             fVar7 = -pfVar33[-2];
             fVar8 = (float)(pfVar33[-0xb] * pfVar33[-2]);
             fVar9 = (float)(pfVar33[-10] * pfVar33[-2]);
             local_50 = (float *)((int)local_a0 * 0x20);
             fVar10 = (float)(pfVar33[-9] * pfVar33[-2]);
-            local_5c = (float)((float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_BITS_U(fVar5)) * 8]) +
+            local_5c = (float)((float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar5)) * 8]) +
                        ((float)(fVar6 * ((vec3 *)(pfVar33 + -1))->x + fVar7 * local_9c[(0x118778 + LF_RELOC / 4)]))) +
                        fVar9 * local_88[(0x160f74 + LF_RELOC / 4)]) + fVar10 * local_50[(0x160f74 + LF_RELOC / 4)]);
             local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar10 +
                        ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar9 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_BITS_U(fVar5)) * 8]) * fVar8 +
+                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar5)) * 8]) * fVar8 +
                        ((float)(local_9c[(0x118779 + LF_RELOC / 4)] * fVar7 + (float)(*pfVar33 * fVar6))))))));
             local_54 = (float)(fVar10 * local_50[(0x160f76 + LF_RELOC / 4)] +
                        ((float)(fVar9 * local_88[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_BITS_U(fVar5)) * 8]) +
+                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar5)) * 8]) +
                        ((float)(fVar7 * local_9c[(0x11877a + LF_RELOC / 4)] + (float)(fVar6 * pfVar33[1]))))))));
             local_70 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
-            local_84 = ((int *)LF_BITS_U(fVar5));
+            local_84 = ((int *)LF_UINT(fVar5));
             dVar39 = _CIsqrt((double)local_70);
             local_70 = (float)dVar39;
             if (local_70 <= 1.52587890625E-5) {
@@ -1334,7 +1334,7 @@ LAB_00442c75:
               local_58 = (float)(local_58 * fVar6);
               local_54 = fVar6 * local_54;
             }
-            local_98 = *(float *)(((int)LF_BITS_U(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
+            local_98 = *(float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
             local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].unk_0008)[(int)local_a0 * 0x3c] * pfVar33[-9] +
                               ((&g_particle[0].unk_0008)[(int)local_80 * 0x3c] * pfVar33[-10] +
                               (&g_particle[0].unk_0008)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
@@ -1349,12 +1349,12 @@ LAB_00442c75:
               local_9c[(0x11877e + LF_RELOC / 4)] = (float)(local_9c[(0x11877e + LF_RELOC / 4)] + local_54 * LF_BITS_F(local_80));
               fVar6 = -local_70 * local_98;
               fVar7 = (float)(pfVar33[-0xb] * fVar6);
-              *(float *)&((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_BITS_U(fVar5)) * 8]) + fVar7 * local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(local_58 * fVar7 + LF_BITS_F((&DAT_00583de4)[((int)LF_BITS_U(fVar5)) * 8]));
-              *(float *)&((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]) =
-                   (float)(fVar7 * local_54 + LF_BITS_F((&DAT_00583de8)[((int)LF_BITS_U(fVar5)) * 8]));
+              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) + fVar7 * local_5c);
+              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(local_58 * fVar7 + LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]));
+              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) =
+                   (float)(fVar7 * local_54 + LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]));
               local_9c = ((float *)LF_BITS_U(((float)(pfVar33[-10] * fVar6))));
               local_88[(0x160f78 + LF_RELOC / 4)] = (float)(local_88[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_9c) * local_5c);
               local_88[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[(0x160f79 + LF_RELOC / 4)]);
@@ -1386,7 +1386,7 @@ LAB_00442c75:
             local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->friction_dir.z))));
             proj = (float)(bond->friction_dir.z * local_54 +
                            (bond->friction_dir.x * local_5c + local_58 * bond->friction_dir.y));
-            local_50 = (float *)LF_BITS_U(proj);
+            local_50 = (float *)LF_UINT(proj);
             if (0.0 < proj) {
               fVar35 = (float10)calculatefriction(&local_5c, &bond->friction_dir.x, pfVar33[2]);
               w[20] = (float)(fVar35 + (float10)w[20]);
@@ -1395,7 +1395,7 @@ LAB_00442c75:
               w[14] = (float)(local_54 + w[14]);
               proj = (float)(((float)(local_54 * pfVar33[0x10] + (pfVar33[0xe] * local_5c + pfVar33[0xf] * local_58))) *
                              w[0]);
-              local_50 = (float *)LF_BITS_U(proj);
+              local_50 = (float *)LF_UINT(proj);
               w[2] = (float)(w[2] - proj);
             }
             stoptimer(g_timerlist.unk_007c);
@@ -1405,23 +1405,23 @@ LAB_00442c75:
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0084].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-            fVar5 = pfVar33[6];
-            fVar6 = pfVar33[7];
+            LF_COPY(fVar5, pfVar33[6]);
+            LF_COPY(fVar6, pfVar33[7]);
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_6c = (float)(((float)(LF_BITS_F((&DAT_00461e18)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) *
+            local_6c = (float)(((float)(LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) *
                         pfVar33[-0x13] -
                        pfVar33[-0x12] *
-                       LF_BITS_F((&DAT_00461e14)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]))) +
-                       LF_BITS_F((&DAT_00461de0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
-            local_68 = (float)(LF_BITS_F((&DAT_00461de4)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) +
+                       LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]))) +
+                       LF_BITS_F((&DAT_00461de0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
+            local_68 = (float)(LF_BITS_F((&DAT_00461de4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) +
                        ((float)(pfVar33[-0x12] *
-                        LF_BITS_F((&DAT_00461e10)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) -
+                        LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) -
                        pfVar33[-0x14] *
-                       LF_BITS_F((&DAT_00461e18)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]))));
-            local_64 = (float)(LF_BITS_F((&DAT_00461de8)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) +
+                       LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]))));
+            local_64 = (float)(LF_BITS_F((&DAT_00461de8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) +
                        ((float)(pfVar33[-0x14] *
-                        LF_BITS_F((&DAT_00461e14)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) -
-                       LF_BITS_F((&DAT_00461e10)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) *
+                        LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) -
+                       LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) *
                        pfVar33[-0x13])));
             fVar8 = -pfVar33[-2];
             local_5c = (float)(fVar7 * ((vec3 *)(pfVar33 + -1))->x + fVar8 * local_6c);
@@ -1431,21 +1431,21 @@ LAB_00442c75:
                                 (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
             if (0.0 < LF_BITS_F(local_50)) {
               calculatefriction(&local_5c,pfVar33 + -1,pfVar33[2]);
-              *(float *)&((&DAT_00461df0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(local_5c + LF_BITS_F((&DAT_00461df0)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461df4)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(local_58 + LF_BITS_F((&DAT_00461df4)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461df8)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(local_54 + LF_BITS_F((&DAT_00461df8)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
+              *(float *)&((&DAT_00461df0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(local_5c + LF_BITS_F((&DAT_00461df0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
+              *(float *)&((&DAT_00461df4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(local_58 + LF_BITS_F((&DAT_00461df4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
+              *(float *)&((&DAT_00461df8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(local_54 + LF_BITS_F((&DAT_00461df8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
               local_6c = (float)(pfVar33[-0x12] * local_58 - local_54 * pfVar33[-0x13]);
               local_68 = (float)(local_54 * pfVar33[-0x14] - pfVar33[-0x12] * local_5c);
               local_64 = (float)(pfVar33[-0x13] * local_5c - local_58 * pfVar33[-0x14]);
-              *(float *)&((&DAT_00461e20)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(local_6c + LF_BITS_F((&DAT_00461e20)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461e24)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461e24)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) + local_68);
-              *(float *)&((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_BITS_U(fVar6)) * 0x20 + ((int)LF_BITS_U(fVar5)) * 0x204]) + local_64);
+              *(float *)&((&DAT_00461e20)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(local_6c + LF_BITS_F((&DAT_00461e20)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
+              *(float *)&((&DAT_00461e24)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(LF_BITS_F((&DAT_00461e24)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) + local_68);
+              *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
+                   (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) + local_64);
             }
             stoptimer(g_timerlist.unk_0084);
           }
@@ -1453,7 +1453,7 @@ LAB_00442c75:
           if (BOND_KIND(pfVar33) == 0x8U) {
             local_50 = (float *)&g_timer[g_timerlist.unk_0074].unk_0040;
             uVar13 = rdtsc();
-            *local_50 = LF_BITS_F((int)uVar13);
+            LF_SET_BITS(*local_50, (int)uVar13);
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             bond_bodybody(local_c0);
             stoptimer(g_timerlist.unk_0074);
@@ -1467,14 +1467,14 @@ LAB_00442c75:
             fVar6 = -pfVar21[7];
             uVar32 = (uint)(ushort)*(short *)((int)pfVar21 + -0x1e);
             uVar28 = (uint)*(ushort *)(pfVar21 + -7);
-            fVar5 = pfVar21[7];
+            LF_COPY(fVar5, pfVar21[7]);
             local_5c = (float)((float)(fVar6 * LF_BITS_F((&DAT_00461e10)[uVar25 * 0x204 + uVar32 * 0x20]) + pfVar21[-6])
                        + fVar5 * LF_BITS_F((&DAT_00461e10)[uVar28 * 0x20 + uVar25 * 0x204]));
             local_58 = (float)(LF_BITS_F((&DAT_00461e14)[uVar28 * 0x20 + uVar25 * 0x204]) * fVar5 +
                        ((float)(LF_BITS_F((&DAT_00461e14)[uVar25 * 0x204 + uVar32 * 0x20]) * fVar6 + pfVar21[-5])));
             local_54 = (float)(fVar5 * LF_BITS_F((&DAT_00461e18)[uVar28 * 0x20 + uVar25 * 0x204]) +
                        ((float)(fVar6 * LF_BITS_F((&DAT_00461e18)[uVar25 * 0x204 + uVar32 * 0x20]) + pfVar21[-4])));
-            fVar5 = pfVar21[5];
+            LF_COPY(fVar5, pfVar21[5]);
             *(float *)&((&DAT_00461e20)[uVar25 * 0x204 + uVar32 * 0x20]) =
                  (float)(LF_BITS_F((&DAT_00461e20)[uVar25 * 0x204 + uVar32 * 0x20]) + fVar5 * local_5c);
             *(float *)&((&DAT_00461e24)[uVar25 * 0x204 + uVar32 * 0x20]) =
@@ -1498,79 +1498,79 @@ LAB_00442c75:
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0080].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-            fVar6 = pfVar33[6];
+            LF_COPY(fVar6, pfVar33[6]);
             local_94 = pfVar21[-2];
-            fVar7 = pfVar33[7];
+            LF_COPY(fVar7, pfVar33[7]);
             local_90 = pfVar21[-1];
             local_8c = *pfVar21;
             local_cc = pfVar21[1];
             local_c8 = pfVar21[2];
             local_c4 = pfVar21[3];
-            fVar8 = pfVar33[8];
-            fVar5 = pfVar33[-2];
+            LF_COPY(fVar8, pfVar33[8]);
+            LF_COPY(fVar5, pfVar33[-2]);
             fVar9 = -pfVar33[-2];
-            local_5c = (float)(fVar9 * ((float)(g_item[((int)LF_BITS_U(fVar8))].vel.x +
-                               ((float)(local_c8 * g_item[((int)LF_BITS_U(fVar8))].torque.z -
-                               local_c4 * g_item[((int)LF_BITS_U(fVar8))].torque.y)))) +
+            local_5c = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.x +
+                               ((float)(local_c8 * g_item[((int)LF_UINT(fVar8))].torque.z -
+                               local_c4 * g_item[((int)LF_UINT(fVar8))].torque.y)))) +
                        ((float)(fVar5 * ((float)(((float)(local_90 *
-                                 LF_BITS_F((&DAT_00461e18)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) -
+                                 LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) -
                                 local_8c *
-                                LF_BITS_F((&DAT_00461e14)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]))) +
-                               LF_BITS_F((&DAT_00461de0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]))) +
+                                LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))) +
+                               LF_BITS_F((&DAT_00461de0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))) +
                        pfVar21[-6])));
-            local_58 = (float)(fVar9 * ((float)(g_item[((int)LF_BITS_U(fVar8))].vel.y +
-                               ((float)(g_item[((int)LF_BITS_U(fVar8))].torque.x * local_c4 -
-                               local_cc * g_item[((int)LF_BITS_U(fVar8))].torque.z)))) +
-                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
-                               ((float)(LF_BITS_F((&DAT_00461e10)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) *
+            local_58 = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.y +
+                               ((float)(g_item[((int)LF_UINT(fVar8))].torque.x * local_c4 -
+                               local_cc * g_item[((int)LF_UINT(fVar8))].torque.z)))) +
+                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
+                               ((float)(LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) *
                                 local_8c -
                                local_94 *
-                               LF_BITS_F((&DAT_00461e18)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]))))) +
+                               LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))))) +
                        pfVar21[-5])));
-            local_54 = (float)(fVar9 * ((float)(g_item[((int)LF_BITS_U(fVar8))].vel.z +
-                               ((float)(g_item[((int)LF_BITS_U(fVar8))].torque.y * local_cc -
-                               local_c8 * g_item[((int)LF_BITS_U(fVar8))].torque.x)))) +
-                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+            local_54 = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.z +
+                               ((float)(g_item[((int)LF_UINT(fVar8))].torque.y * local_cc -
+                               local_c8 * g_item[((int)LF_UINT(fVar8))].torque.x)))) +
+                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                                ((float)(local_94 *
-                                LF_BITS_F((&DAT_00461e14)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) -
-                               LF_BITS_F((&DAT_00461e10)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) *
+                                LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) -
+                               LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) *
                                local_90)))) + pfVar21[-4])));
             local_d4 = pfVar33[-0xb];
             local_d0 = pfVar33[-10];
             local_88 = ((float *)LF_BITS_U(-local_d4));
-            *(float *)&((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+            *(float *)&((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                  local_5c * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461df4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+            *(float *)&((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                  local_58 * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461df8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+            *(float *)&((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                  local_54 * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461e20)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
+            *(float *)&((&DAT_00461e20)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
                  (float)(LF_BITS_F(local_88) * ((float)(local_58 * local_8c - local_90 * local_54)) +
-                 LF_BITS_F((&DAT_00461e20)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]));
-            *(float *)&((&DAT_00461e24)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
+                 LF_BITS_F((&DAT_00461e20)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
+            *(float *)&((&DAT_00461e24)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
                  (float)(LF_BITS_F(local_88) * ((float)(local_94 * local_54 - local_5c * local_8c)) +
-                 LF_BITS_F((&DAT_00461e24)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]));
-            *(float *)&((&DAT_00461e28)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
+                 LF_BITS_F((&DAT_00461e24)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
+            *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
                  (float)(LF_BITS_F(local_88) * ((float)(local_5c * local_90 - local_58 * local_94)) +
-                 LF_BITS_F((&DAT_00461e28)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]));
-            g_item[((int)LF_BITS_U(fVar8))].unk_0078 =
-                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_BITS_U(fVar8))].unk_0078) + local_d0 * local_5c))));
-            *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0x7c] =
-                 (float)(local_58 * local_d0 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0x7c]);
-            *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0x80] =
-                 (float)(local_54 * local_d0 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0x80]);
+                 LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
+            g_item[((int)LF_UINT(fVar8))].unk_0078 =
+                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_UINT(fVar8))].unk_0078) + local_d0 * local_5c))));
+            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x7c] =
+                 (float)(local_58 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x7c]);
+            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x80] =
+                 (float)(local_54 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x80]);
             local_6c = (float)(local_58 * local_c4 - local_c8 * local_54);
             local_68 = (float)(local_cc * local_54 - local_5c * local_c4);
             local_64 = (float)(local_c8 * local_5c - local_cc * local_58);
-            g_item[((int)LF_BITS_U(fVar8))].unk_00cc =
-                 ((int)LF_BITS_U(((float)(local_6c * local_d0 + LF_BITS_F(g_item[((int)LF_BITS_U(fVar8))].unk_00cc)))));
-            *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd0] =
-                 (float)(local_68 * local_d0 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd0]);
-            *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4] =
-                 (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_BITS_U(fVar8))].lf_raw[0xd4]);
+            g_item[((int)LF_UINT(fVar8))].unk_00cc =
+                 ((int)LF_BITS_U(((float)(local_6c * local_d0 + LF_BITS_F(g_item[((int)LF_UINT(fVar8))].unk_00cc)))));
+            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd0] =
+                 (float)(local_68 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd0]);
+            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4] =
+                 (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4]);
             local_50 = local_88;
             stoptimer(g_timerlist.unk_0080);
           }
@@ -1578,58 +1578,58 @@ LAB_00442c75:
            * the type). An int: as a float it is a denormal on the x87. */
           kind_copy = BOND_KIND(pfVar33);
           if (kind_copy == 0xb) {
-            fVar7 = pfVar33[6];
+            LF_COPY(fVar7, pfVar33[6]);
             fVar10 = -pfVar21[7];
-            fVar8 = pfVar33[7];
-            fVar9 = pfVar33[8];
-            fVar6 = pfVar21[7];
+            LF_COPY(fVar8, pfVar33[7]);
+            LF_COPY(fVar9, pfVar33[8]);
+            LF_COPY(fVar6, pfVar21[7]);
             local_54 = pfVar21[-2];
             local_5c = (float)(local_54 *
-                       ((float)((float)(fVar10 * LF_BITS_F((&DAT_00461e10)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) +
-                        pfVar21[-6]) + fVar6 * g_item[((int)LF_BITS_U(fVar9))].torque.x)));
+                       ((float)((float)(fVar10 * LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) +
+                        pfVar21[-6]) + fVar6 * g_item[((int)LF_UINT(fVar9))].torque.x)));
             local_58 = (float)(local_54 *
-                       ((float)(g_item[((int)LF_BITS_U(fVar9))].torque.y * fVar6 +
-                       ((float)(LF_BITS_F((&DAT_00461e14)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) * fVar10 +
+                       ((float)(g_item[((int)LF_UINT(fVar9))].torque.y * fVar6 +
+                       ((float)(LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) * fVar10 +
                        pfVar21[-5])))));
             local_54 = (float)(local_54 *
-                       ((float)(fVar6 * g_item[((int)LF_BITS_U(fVar9))].torque.z +
-                       ((float)(fVar10 * LF_BITS_F((&DAT_00461e18)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) +
+                       ((float)(fVar6 * g_item[((int)LF_UINT(fVar9))].torque.z +
+                       ((float)(fVar10 * LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) +
                        pfVar21[-4])))));
-            fVar6 = pfVar21[5];
-            *(float *)&((&DAT_00461e20)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461e20)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) + local_5c * fVar6);
-            *(float *)&((&DAT_00461e24)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461e24)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) + local_58 * fVar6);
-            *(float *)&((&DAT_00461e28)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_BITS_U(fVar8)) * 0x20 + ((int)LF_BITS_U(fVar7)) * 0x204]) + local_54 * fVar6);
+            LF_COPY(fVar6, pfVar21[5]);
+            *(float *)&((&DAT_00461e20)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461e20)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) + local_5c * fVar6);
+            *(float *)&((&DAT_00461e24)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461e24)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) + local_58 * fVar6);
+            *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) =
+                 (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) + local_54 * fVar6);
             local_50 = ((float *)LF_BITS_U(-pfVar21[6]));
-            g_item[((int)LF_BITS_U(fVar9))].unk_00cc =
-                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_BITS_U(fVar9))].unk_00cc) + LF_BITS_F(local_50) * local_5c))));
-            *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd0] =
-                 (float)(local_58 * LF_BITS_F(local_50) + *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd0]);
-            *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd4] =
-                 (float)(LF_BITS_F(local_50) * local_54 + *(float *)&g_item[((int)LF_BITS_U(fVar9))].lf_raw[0xd4]);
+            g_item[((int)LF_UINT(fVar9))].unk_00cc =
+                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_UINT(fVar9))].unk_00cc) + LF_BITS_F(local_50) * local_5c))));
+            *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd0] =
+                 (float)(local_58 * LF_BITS_F(local_50) + *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd0]);
+            *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd4] =
+                 (float)(LF_BITS_F(local_50) * local_54 + *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd4]);
           }
           if (kind_copy == 0xd) {
-            fVar6 = pfVar33[6];
+            LF_COPY(fVar6, pfVar33[6]);
             fVar8 = (float)(pfVar33[-6] * pfVar33[-3]);
-            fVar7 = pfVar33[7];
-            local_84 = ((int *)LF_BITS_U(pfVar33[9]));
-            local_88 = ((float *)LF_BITS_U(pfVar33[8]));
+            LF_COPY(fVar7, pfVar33[7]);
+            local_84 = ((int *)LF_UINT(pfVar33[9]));
+            local_88 = ((float *)LF_UINT(pfVar33[8]));
             fVar9 = -pfVar33[-2];
             local_80 = (float *)((int)local_88 * 0x810 + (int)local_84 * 0x80);
-            fVar5 = pfVar33[-2];
+            LF_COPY(fVar5, pfVar33[-2]);
             local_7c = (float)(fVar5 * local_80[(0x118778 + LF_RELOC / 4)] +
-                       ((float)(fVar9 * LF_BITS_F((&DAT_00461de0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+                       ((float)(fVar9 * LF_BITS_F((&DAT_00461de0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                        fVar8 * ((vec3 *)(pfVar33 + -1))->x)));
             local_78 = (float)(local_80[(0x118779 + LF_RELOC / 4)] * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) * fVar9 +
+                       ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) * fVar9 +
                        (float)(fVar8 * *pfVar33))));
             local_74 = (float)(fVar5 * local_80[(0x11877a + LF_RELOC / 4)] +
-                       ((float)(fVar9 * LF_BITS_F((&DAT_00461de8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+                       ((float)(fVar9 * LF_BITS_F((&DAT_00461de8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                        (float)(fVar8 * pfVar33[1]))));
             local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
-            local_bc = ((int)LF_BITS_U(fVar7));
+            local_bc = ((int)LF_UINT(fVar7));
             local_98 = fVar6;
             dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
             local_70 = (float)dVar39;
@@ -1644,9 +1644,9 @@ LAB_00442c75:
               local_78 = (float)(fVar5 * local_78);
               local_74 = fVar5 * local_74;
             }
-            local_50 = (float *)(((int)LF_BITS_U(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
+            local_50 = (float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
             local_70 = (float)(local_70 /
-                       (*(float *)(((int)LF_BITS_U(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0) +
+                       (*(float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0) +
                        *(float *)((int)local_88 * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + (int)local_84 * 0xe0)));
             local_9c = (float *)((int)local_88 * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + (int)local_84 * 0xe0);
             local_88 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_74 +
@@ -1654,14 +1654,14 @@ LAB_00442c75:
             if (0.0 < LF_BITS_F(local_88)) {
               calculatefriction(&local_7c,(float *)(pfVar33 + -1),pfVar33[2]);
               local_88 = ((float *)LF_BITS_U(((float)(local_70 * *local_9c))));
-              *(float *)&((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+              *(float *)&((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                   (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                    LF_BITS_F(local_88) * local_7c);
-              *(float *)&((&DAT_00461df4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461df4)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+              *(float *)&((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                   (float)(LF_BITS_F((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                    local_78 * LF_BITS_F(local_88));
-              *(float *)&((&DAT_00461df8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_BITS_U(fVar7)) * 0x20 + ((int)LF_BITS_U(fVar6)) * 0x204]) +
+              *(float *)&((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
+                   (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
                    local_74 * LF_BITS_F(local_88));
               local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_50))));
               local_80[(0x11877c + LF_RELOC / 4)] = (float)(local_80[(0x11877c + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_7c);
@@ -1672,26 +1672,26 @@ LAB_00442c75:
           if (BOND_KIND(pfVar33) == 0xeU) {
             local_94 = pfVar33[-0x11];
             local_98 = pfVar33[6];
-            local_bc = ((int)LF_BITS_U(pfVar33[7]));
+            local_bc = ((int)LF_UINT(pfVar33[7]));
             local_90 = pfVar33[-0x10];
             local_8c = pfVar33[-0xf];
             local_cc = pfVar33[-0xe];
             local_c8 = pfVar33[-0xd];
             local_c4 = pfVar33[-0xc];
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_9c = (float *)(((int)LF_BITS_U(local_98)) * 0x810 + local_bc * 0x80);
-            fVar6 = pfVar33[8];
+            local_9c = (float *)(((int)LF_UINT(local_98)) * 0x810 + local_bc * 0x80);
+            LF_COPY(fVar6, pfVar33[8]);
             fVar8 = -pfVar33[-2];
-            local_6c = (float)(g_item[((int)LF_BITS_U(fVar6))].vel.x +
-                       ((float)(local_c8 * g_item[((int)LF_BITS_U(fVar6))].torque.z -
-                       local_c4 * g_item[((int)LF_BITS_U(fVar6))].torque.y)));
-            local_68 = (float)(g_item[((int)LF_BITS_U(fVar6))].vel.y +
-                       ((float)(local_c4 * g_item[((int)LF_BITS_U(fVar6))].torque.x -
-                       local_cc * g_item[((int)LF_BITS_U(fVar6))].torque.z)));
-            local_64 = (float)(g_item[((int)LF_BITS_U(fVar6))].vel.z +
-                       ((float)(local_cc * g_item[((int)LF_BITS_U(fVar6))].torque.y -
-                       g_item[((int)LF_BITS_U(fVar6))].torque.x * local_c8)));
-            fVar5 = pfVar33[-2];
+            local_6c = (float)(g_item[((int)LF_UINT(fVar6))].vel.x +
+                       ((float)(local_c8 * g_item[((int)LF_UINT(fVar6))].torque.z -
+                       local_c4 * g_item[((int)LF_UINT(fVar6))].torque.y)));
+            local_68 = (float)(g_item[((int)LF_UINT(fVar6))].vel.y +
+                       ((float)(local_c4 * g_item[((int)LF_UINT(fVar6))].torque.x -
+                       local_cc * g_item[((int)LF_UINT(fVar6))].torque.z)));
+            local_64 = (float)(g_item[((int)LF_UINT(fVar6))].vel.z +
+                       ((float)(local_cc * g_item[((int)LF_UINT(fVar6))].torque.y -
+                       g_item[((int)LF_UINT(fVar6))].torque.x * local_c8)));
+            LF_COPY(fVar5, pfVar33[-2]);
             local_7c = (float)(fVar5 * local_6c +
                        ((float)(fVar8 * ((float)(local_9c[(0x118778 + LF_RELOC / 4)] +
                                ((float)(local_90 * local_9c[(0x118786 + LF_RELOC / 4)] - local_8c * local_9c[(0x118785 + LF_RELOC / 4)])))) +
@@ -1719,14 +1719,14 @@ LAB_00442c75:
               local_74 = fVar5 * local_74;
             }
             local_70 = (float)(local_70 /
-                       (*(float *)(((int)LF_BITS_U(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0) +
-                       g_item[((int)LF_BITS_U(fVar6))].mass));
-            local_50 = (float *)(((int)LF_BITS_U(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
+                       (*(float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0) +
+                       g_item[((int)LF_UINT(fVar6))].mass));
+            local_50 = (float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
             local_88 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_74 +
                                 (local_7c * ((vec3 *)(pfVar33 + -1))->x + local_78 * *pfVar33)))));
             if (0.0 < LF_BITS_F(local_88)) {
               calculatefriction(&local_7c,(float *)(pfVar33 + -1),pfVar33[2]);
-              local_88 = ((float *)LF_BITS_U(((float)(g_item[((int)LF_BITS_U(fVar6))].mass * local_70))));
+              local_88 = ((float *)LF_BITS_U(((float)(g_item[((int)LF_UINT(fVar6))].mass * local_70))));
               fVar5 = LF_BITS_F(local_88) * local_7c;
               fVar8 = (float)(LF_BITS_F(local_88) * local_78);
               fVar7 = (float)(LF_BITS_F(local_88) * local_74);
@@ -1740,34 +1740,34 @@ LAB_00442c75:
               local_5c = LF_BITS_F(local_50) * local_7c;
               local_58 = (float)(LF_BITS_F(local_50) * local_78);
               local_54 = (float)(LF_BITS_F(local_50) * local_74);
-              g_item[((int)LF_BITS_U(fVar6))].unk_0078 = ((int)LF_BITS_U(((float)(local_5c + LF_BITS_F(g_item[((int)LF_BITS_U(fVar6))].unk_0078)))));
-              *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0x7c] =
-                   (float)(local_58 + *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0x7c]);
-              *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0x80] =
-                   (float)(local_54 + *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0x80]);
+              g_item[((int)LF_UINT(fVar6))].unk_0078 = ((int)LF_BITS_U(((float)(local_5c + LF_BITS_F(g_item[((int)LF_UINT(fVar6))].unk_0078)))));
+              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x7c] =
+                   (float)(local_58 + *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x7c]);
+              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x80] =
+                   (float)(local_54 + *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x80]);
               local_6c = (float)(local_c4 * local_58 - local_c8 * local_54);
               local_68 = (float)(local_cc * local_54 - local_5c * local_c4);
               local_64 = (float)(local_c8 * local_5c - local_cc * local_58);
-              g_item[((int)LF_BITS_U(fVar6))].unk_00cc = ((int)LF_BITS_U(((float)(local_6c + LF_BITS_F(g_item[((int)LF_BITS_U(fVar6))].unk_00cc)))));
-              *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0xd0] =
-                   (float)(*(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0xd0] + local_68);
-              *(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0xd4] =
-                   (float)(*(float *)&g_item[((int)LF_BITS_U(fVar6))].lf_raw[0xd4] + local_64);
+              g_item[((int)LF_UINT(fVar6))].unk_00cc = ((int)LF_BITS_U(((float)(local_6c + LF_BITS_F(g_item[((int)LF_UINT(fVar6))].unk_00cc)))));
+              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd0] =
+                   (float)(*(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd0] + local_68);
+              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd4] =
+                   (float)(*(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd4] + local_64);
             }
           }
           if (BOND_KIND(pfVar33) == 0xfU) {
-            fVar5 = pfVar33[6];
+            LF_COPY(fVar5, pfVar33[6]);
             fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
-            iVar30 = ((int)LF_BITS_U(pfVar33[7])) * 0xe8;
-            local_6c = (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x71fc] + iVar30) +
-                       ((float)(pfVar33[-0x10] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x724c] + iVar30) -
-                       pfVar33[-0xf] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7248] + iVar30))));
-            local_68 = (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7200] + iVar30) +
-                       ((float)(pfVar33[-0xf] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7244] + iVar30) -
-                       pfVar33[-0x11] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x724c] + iVar30))));
-            local_64 = (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7204] + iVar30) +
-                       ((float)(pfVar33[-0x11] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7248] + iVar30) -
-                       pfVar33[-0x10] * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7244] + iVar30))));
+            iVar30 = ((int)LF_UINT(pfVar33[7])) * 0xe8;
+            local_6c = (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x71fc] + iVar30) +
+                       ((float)(pfVar33[-0x10] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x724c] + iVar30) -
+                       pfVar33[-0xf] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7248] + iVar30))));
+            local_68 = (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7200] + iVar30) +
+                       ((float)(pfVar33[-0xf] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7244] + iVar30) -
+                       pfVar33[-0x11] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x724c] + iVar30))));
+            local_64 = (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7204] + iVar30) +
+                       ((float)(pfVar33[-0x11] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7248] + iVar30) -
+                       pfVar33[-0x10] * *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7244] + iVar30))));
             fVar7 = -pfVar33[-2];
             local_5c = (float)(fVar7 * local_6c + (float)(fVar6 * ((vec3 *)(pfVar33 + -1))->x));
             local_58 = (float)(fVar7 * local_68 + (float)(fVar6 * *pfVar33));
@@ -1776,21 +1776,21 @@ LAB_00442c75:
                                 (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
             if (0.0 < LF_BITS_F(local_50)) {
               calculatefriction(&local_5c,pfVar33 + -1,pfVar33[2]);
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7208] + iVar30) =
-                   (float)(local_5c + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7208] + iVar30));
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x720c] + iVar30) =
-                   (float)(local_58 + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x720c] + iVar30));
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7210] + iVar30) =
-                   (float)(local_54 + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7210] + iVar30));
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7208] + iVar30) =
+                   (float)(local_5c + *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7208] + iVar30));
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x720c] + iVar30) =
+                   (float)(local_58 + *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x720c] + iVar30));
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7210] + iVar30) =
+                   (float)(local_54 + *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7210] + iVar30));
               local_6c = (float)(pfVar33[-0xf] * local_58 - pfVar33[-0x10] * local_54);
               local_68 = (float)(local_54 * pfVar33[-0x11] - pfVar33[-0xf] * local_5c);
               local_64 = (float)(pfVar33[-0x10] * local_5c - local_58 * pfVar33[-0x11]);
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7250] + iVar30) =
-                   (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7250] + iVar30) + local_6c);
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7254] + iVar30) =
-                   (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7254] + iVar30) + local_68);
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7258] + iVar30) =
-                   (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x7258] + iVar30) + local_64);
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7250] + iVar30) =
+                   (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7250] + iVar30) + local_6c);
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7254] + iVar30) =
+                   (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7254] + iVar30) + local_68);
+              *(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7258] + iVar30) =
+                   (float)(*(float *)(&g_object[((int)LF_UINT(fVar5))].lf_raw[0x7258] + iVar30) + local_64);
             }
           }
         }
@@ -1939,7 +1939,7 @@ LAB_00442c75:
     stoptimer(g_timerlist.unk_0094);
     pfVar21 = &g_item[0].vel.y;
     do {
-      if ((LF_BITS_U(pfVar21[-0x1c]) != 0x0U) && (LF_BITS_U(pfVar21[-0x1b]) != 0x0U)) {
+      if ((LF_UINT(pfVar21[-0x1c]) != 0x0U) && (LF_UINT(pfVar21[-0x1b]) != 0x0U)) {
         ((vec3 *)(pfVar21 + -1))->x = (float)(pfVar21[2] + ((vec3 *)(pfVar21 + -1))->x);
         *pfVar21 = (float)(pfVar21[3] + *pfVar21);
         pfVar21[1] = (float)(pfVar21[4] + pfVar21[1]);
