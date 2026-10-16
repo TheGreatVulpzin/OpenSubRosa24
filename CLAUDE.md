@@ -13,6 +13,7 @@ RE/decompilation project for Sub Rosa (2015).
 - The servers' `config.txt` has passwords. Do not copy its content into docs or commits.
 - Recordings (`build/recordings/`) hold player names, IP addresses and `config.txt`. Never commit them or copy them into docs.
 - **Fix the lifter in Ghidra, not in text.** Never add a regex rule to `tools/lift/lift.py`. When the lifted C is wrong, find what Ghidra does not know (a type, a struct field, an array global, a function pointer) and add it to the Ghidra project with a script, or write a p-code rule in `tools/ghidra/LiftExport.java`. The only text exception is `LIFT_PATCHES` in `lift.py`: one explicit fix for one decompiler bug in one function.
+- A hand-written function must give 0 harness differences and must not be slower than the original. Measure with the profiler (`subvulpes.ini profile=1`). `src/server/main_loop.c` is an example of code that works but is not well optimized.
 - Every lifter change must keep the harness results: no "calls same" count may drop on any recording (see `docs/lift.md`).
 - Knowledge that must stay goes into the repository (`analysis/*.csv`, `src/include/sr_types.h`, scripts), never only into the Ghidra project. The Ghidra project is not versioned.
 

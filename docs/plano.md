@@ -124,6 +124,8 @@ The harness keeps testing the functions against the 024d. No packet replay test 
 Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `src/game/`, `src/server/`), as `src/server/accounts.c` and `events.c` already do. The lifted version stays as the fallback until the rewrite is done.
 
 - A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
+- A rewritten function must not be slower than the original. Readable code is not a reason for slow code. Measure both versions with the per-hook profiler (`subvulpes.ini profile=1`) on the same server load. Example of what to avoid: `src/server/main_loop.c` works, but it is not well optimized. Rewrite it with the same care as the other functions.
+- An optimization that keeps the harness at 0 differences is allowed in this phase. It is not a change of behavior.
 - No change of behavior in this phase. When a function shows a place for a future change ("an admin command could go here"), write it in `docs/ideas.md`, not in the code.
 - Order: small functions first (vectors, bitstream, events), then players and accounts, items, objects and vehicles, humans, logic and economy, `servercycle`. The level generation (`area_createsblocks`, `building_buildfloorplan`...) comes last.
 - `tools/progress.py` counts the hand-written functions.
