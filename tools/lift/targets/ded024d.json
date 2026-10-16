@@ -17,7 +17,8 @@
     "hook/verify.h",
     "hook/hook.c",
     "hook/imports.c",
-    "CMakeLists.txt"
+    "CMakeLists.txt",
+    "src/game"
   ],
   "recordings_dir": "build/recordings",
   "recordings": [

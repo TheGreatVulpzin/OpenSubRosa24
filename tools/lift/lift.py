@@ -159,6 +159,15 @@ def load_names():
     return names
 
 
+def rewritten_rvas():
+    """Functions rewritten by hand in src/game/ with the lifted symbol (lf_41de0): no lifted
+    body, but the same table entry, live hook and standalone call."""
+    out = set()
+    for f in (ROOT / 'src/game').glob('*.c'):
+        out |= {int(x, 16) for x in re.findall(r'^\w[^;\n]*\blf_([0-9a-f]{5})\(', f.read_text(encoding='utf-8'), re.M)}
+    return out
+
+
 def handwritten_rvas():
     src = (ROOT / 'hook/hooks_024d.c').read_text(encoding='utf-8')
     return {int(x, 16) for x in re.findall(r'\{\s*"\w+",\s*(0x[0-9a-fA-F]+),', src)}
@@ -1019,6 +1028,7 @@ def main():
             eax_only.add(rva)
     names = load_names()
     hand = handwritten_rvas()
+    rewritten = rewritten_rvas()
     side = side_effects(funcs)
     only = {int(x, 16) for x in args.only.split(',')} if args.only else None
 
@@ -1030,6 +1040,8 @@ def main():
             continue
         if rva in hand:
             status[rva] = ('handwritten', '')
+            continue
+        if rva in rewritten:
             continue
         if rva in side and not harness_only(rva, side):
             status[rva] = ('side_effect', side[rva])
@@ -1047,9 +1059,11 @@ def main():
 
     texts = compile_loop(texts, imports_used, status, ROOT / 'src/lifted/lifted_024d.c', args.compile)
 
-    lifted = [r for r, _ in texts]
+    lifted = sorted([r for r, _ in texts] + [r for r in rewritten if only is None or r in only])
     for r in lifted:
         status[r] = ('harness_only', side[r]) if r in side else ('lifted', '')
+    for r in rewritten:
+        status[r] = ('rewritten', 'src/game')
     live = [r for r in lifted if r not in side]
     (ROOT / 'hook/hooks_lifted.c').write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
     (ROOT / 'hook/hooks_record.c').write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
