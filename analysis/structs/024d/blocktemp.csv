@@ -1,0 +1,72 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,8,2,area_createinteriorblocks loadblock
+0x4,int,7,2,area_createinteriorblocks loadblock
+0x8,int,8,2,area_createinteriorblocks loadblock
+0xc,int,2,2,area_createinteriorblocks loadblock
+0x10,int,2,2,area_createinteriorblocks loadblock
+0x14,int,2,2,area_createinteriorblocks loadblock
+0x18,int,2,2,area_createinteriorblocks loadblock
+0x1c,int,2,2,area_createinteriorblocks loadblock
+0x20,int,2,2,area_createinteriorblocks loadblock
+0x24,int,5,2,area_createinteriorblocks loadblock
+0x2c,int,2,2,area_createinteriorblocks loadblock
+0x30,int,2,2,area_createinteriorblocks loadblock
+0x34,int,2,2,area_createinteriorblocks loadblock
+0x38,int,2,2,area_createinteriorblocks loadblock
+0x3c,float,2,2,area_createinteriorblocks loadblock
+0x40,float,1,1,area_createinteriorblocks
+0x44,float,1,1,area_createinteriorblocks
+0x48,float,2,2,area_createinteriorblocks loadblock
+0x4c,float,1,1,area_createinteriorblocks
+0x50,float,1,1,area_createinteriorblocks
+0x54,float,1,1,area_createinteriorblocks
+0x58,float,1,1,area_createinteriorblocks
+0x5c,float,1,1,area_createinteriorblocks
+0x60,float,1,1,area_createinteriorblocks
+0x64,float,1,1,area_createinteriorblocks
+0x68,float,1,1,area_createinteriorblocks
+0x6c,float,1,1,area_createinteriorblocks
+0x70,float,1,1,area_createinteriorblocks
+0x74,float,1,1,area_createinteriorblocks
+0x78,float,1,1,area_createinteriorblocks
+0x7c,float,1,1,area_createinteriorblocks
+0xfc,float,2,2,area_createinteriorblocks loadblock
+0x100,float,1,1,area_createinteriorblocks
+0x104,float,1,1,area_createinteriorblocks
+0x108,float,1,1,area_createinteriorblocks
+0x10c,float,1,1,area_createinteriorblocks
+0x110,float,1,1,area_createinteriorblocks
+0x114,float,1,1,area_createinteriorblocks
+0x118,float,1,1,area_createinteriorblocks
+0x11c,float,1,1,area_createinteriorblocks
+0x120,float,1,1,area_createinteriorblocks
+0x17c,int,2,2,area_createinteriorblocks loadblock
+0x180,int,2,2,area_createinteriorblocks loadblock
+0x190,int,1,1,loadblock
+0x198,float,1,1,area_createinteriorblocks
+0x19c,float,1,1,area_createinteriorblocks
+0x1a0,float,1,1,area_createinteriorblocks
+0x258,float,1,1,area_createinteriorblocks
+0x25c,float,1,1,area_createinteriorblocks
+0x57028,int,5,2,area_createinteriorblocks loadblock
+0x5702c,float,2,2,area_createinteriorblocks loadblock
+0x57030,float,1,1,area_createinteriorblocks
+0x57034,float,1,1,area_createinteriorblocks
+0x57038,float,3,2,area_createinteriorblocks loadblock
+0x5703c,float,1,1,area_createinteriorblocks
+0x57040,float,1,1,area_createinteriorblocks
+0x57044,float,3,1,area_createinteriorblocks
+0x57048,float,1,1,area_createinteriorblocks
+0x5704c,float,1,1,area_createinteriorblocks
+0x57050,float,2,1,area_createinteriorblocks
+0x57054,float,1,1,area_createinteriorblocks
+0x57058,float,1,1,area_createinteriorblocks
+0x57074,int,1,1,area_createinteriorblocks
+0x5708c,int,2,2,area_createinteriorblocks loadblock
+0x57090,int,1,1,loadblock
+0x570a4,int,2,2,area_createinteriorblocks loadblock
+0x570a8,int,1,1,loadblock
+0x570b4,int,1,1,area_createinteriorblocks
+0x57120,int,1,1,area_createinteriorblocks
+0x7602c,int,4,2,eventsimulation resetgame
+0x7602e,int16_t,1,1,eventsimulation

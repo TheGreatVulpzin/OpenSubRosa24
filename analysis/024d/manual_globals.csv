@@ -27,3 +27,8 @@ rva,name,count,evidence
 0xac51a80,scenario,,"map_regions.py (score 0.67, 6 reference functions); the Linux 0.24c size 0x134 fits the 0x140 gap to objecttype"
 0xff47c80,radix,,"map_regions.py (score 0.83, 6 reference functions); the Linux 0.24c size 0x400804 fits the gap to intersect"
 0x2561d740,game_world,,"map_regions.py (score 0.58, 10 reference functions); docs/phase4-inventory.md 4.1: the world clock (+10 each tick, drives the periodic save)"
+0xf270a80,level_editor,,"map_regions.py (score 0.6, 5 reference functions: createlevel, leveleditor_load, leveleditor_save); starts at the end of body; the Linux 0.24c size 0x1c6898 ends exactly at numofevents (0xf437318)"
+0x537c520,blocktemp,,"map_regions.py (score 1.0 on two blocks: loadblock, area_createinteriorblocks); both blocks lie inside the Linux 0.24c size 0x7606c"
+0xf8f7b80,bondopt,,"map_regions.py (score 0.6, 5 reference functions: bond_bodybody, bond_partpart, bondsimulation2...); 0x18 after the end of account; Linux 0.24c size 0x100000"
+0x256ad760,tempmesh,,"map_regions.py (score 0.88, 7 reference functions) on two blocks inside the Linux 0.24c size 0x2d1850; it ends 0x10 before track"
+0x2597efc0,track,,"map_regions.py (score 0.57, 7 reference functions); 0x10 after the end of tempmesh; the Linux 0.24c size 0x578000 ends before the end of .data"

@@ -4839,10 +4839,10 @@ __declspec(naked) static void th_0f620(void)
 }
 static uint8_t expect_0f620[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-void __cdecl lf_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7);
-static void (__cdecl *orig_0f6f0)(int, int, int, float, int, float, undefined4);
+void __cdecl lf_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, int param_7);
+static void (__cdecl *orig_0f6f0)(int, int, int, float, int, float, int);
 static SvVerify v_0f6f0 = { "addbeziersurface", -1 };
-static void __cdecl hk_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7)
+static void __cdecl hk_0f6f0(int param_1, int param_2, int param_3, float param_4, int param_5, float param_6, int param_7)
 {
     SV_HOOK_VOID(v_0f6f0, lf_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0f6f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
@@ -4886,10 +4886,10 @@ __declspec(naked) static void th_0f6f0(void)
 }
 static uint8_t expect_0f6f0[8] = { 0x83, 0xec, 0x40, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7);
-static void (__cdecl *orig_0fc40)(int, undefined4, int, float, int, float, undefined4);
+void __cdecl lf_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, int param_7);
+static void (__cdecl *orig_0fc40)(int, undefined4, int, float, int, float, int);
 static SvVerify v_0fc40 = { "addbeziersurfacetexture", -1 };
-static void __cdecl hk_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, undefined4 param_7)
+static void __cdecl hk_0fc40(int param_1, undefined4 param_2, int param_3, float param_4, int param_5, float param_6, int param_7)
 {
     SV_HOOK_VOID(v_0fc40, lf_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_0fc40(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }

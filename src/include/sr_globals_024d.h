@@ -13,11 +13,12 @@
 #define SR_RVA_DEBUG                0x1579ba0u  /* Debug[] */
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u  /* Stats[] */
+#define SR_RVA_BLOCKTEMP            0x537c520u  /* BlockTemp[] */
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
 #define SR_RVA_SERVER               0x761ea60u  /* Server[] */
 #define SR_RVA_OPTION               0x90dc340u  /* Option[] */
 #define SR_RVA_NUMOFTRACKS          0x90dc520u
-#define SR_RVA_GAME                 0x90dc540u
+#define SR_RVA_GAME                 0x90dc540u  /* Game[] */
 #define SR_RVA_TICKS                0x90dc578u
 #define SR_RVA_ITEM                 0x91022c0u  /* Item[] */
 #define SR_RVA_SYSINFO              0x916d2e0u  /* SysInfo[] */
@@ -34,8 +35,10 @@
 #define SR_RVA_CITYOBJECTTYPE       0xf02e500u  /* CityObjectType[] */
 #define SR_RVA_MATERIALLIST         0xf26fd00u  /* MaterialList[] */
 #define SR_RVA_BODY                 0xf270280u  /* Body[] */
+#define SR_RVA_LEVEL_EDITOR         0xf270a80u  /* LevelEditor[] */
 #define SR_RVA_NUMOFEVENTS          0xf437318u
 #define SR_RVA_ACCOUNT              0xf437b60u
+#define SR_RVA_BONDOPT              0xf8f7b80u  /* BondOpt[] */
 #define SR_RVA_RADIX                0xff47c80u  /* Radix[] */
 #define SR_RVA_INTERSECT            0x103484a0u  /* Intersect[] */
 #define SR_RVA_ITEMTYPE             0x10357400u  /* ItemType[] */
@@ -53,6 +56,8 @@
 #define SR_RVA_NUMOFBULLETS         0x17529a40u
 #define SR_RVA_BSDSOCKET            0x1952d680u  /* BsdSocket[] */
 #define SR_RVA_GAME_WORLD           0x2561d740u  /* GameWorld[] */
+#define SR_RVA_TEMPMESH             0x256ad760u  /* TempMesh[] */
+#define SR_RVA_TRACK                0x2597efc0u  /* Track[] */
 
 /* Capacity of each array (size of the global in the 0.24c ELF / record size). */
 #define SR_MAX_PLAYER               256

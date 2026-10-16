@@ -1,0 +1,51 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,2,2,createtrack lineintersecttrack
+0x4,float,12,4,createtrack lineintersecttrack lineintersecttrackrail objectsimulation
+0x8,float,11,4,createtrack lineintersecttrack lineintersecttrackrail objectsimulation
+0xc,float,11,4,createtrack lineintersecttrack lineintersecttrackrail objectsimulation
+0x10,int,12,1,createtrack
+0x14,float,16,3,createtrack lineintersecttrack lineintersecttrackrail
+0x18,float,7,1,createtrack
+0x1c,float,7,1,createtrack
+0x20,float,9,1,createtrack
+0x24,float,4,1,createtrack
+0x28,float,5,1,createtrack
+0x74,float,3,1,createtrack
+0x78,float,3,1,createtrack
+0x7c,float,3,1,createtrack
+0x80,float,5,1,createtrack
+0x84,float,3,1,createtrack
+0x88,float,5,1,createtrack
+0x254,int,28,3,createtrack lineintersecttrack lineintersecttrackrail
+0x258,int,7,2,createtrack lineintersecttrack
+0x25c,int,7,2,createtrack lineintersecttrack
+0x260,int,7,2,createtrack lineintersecttrack
+0x264,int,1,1,lineintersecttrack
+0x268,int,1,1,lineintersecttrack
+0x300,int,1,1,lineintersecttrackrail
+0x304,int,1,1,lineintersecttrackrail
+0x308,int,1,1,lineintersecttrackrail
+0x30c,int,1,1,lineintersecttrackrail
+0x310,int,1,1,lineintersecttrackrail
+0x498,float,1,1,createtrack
+0x49c,float,1,1,createtrack
+0x4a0,float,1,1,createtrack
+0x4f8,float,1,1,createtrack
+0x4fc,float,1,1,createtrack
+0x500,float,1,1,createtrack
+0x560,float,4,2,createtrack objecttrainsimulation
+0x564,float,3,1,createtrack
+0x568,float,5,2,createtrack objecttrainsimulation
+0x56c,float,4,2,createtrack objecttrainsimulation
+0x570,float,3,1,createtrack
+0x574,float,4,2,createtrack objecttrainsimulation
+0xad8,float,1,1,objecttrainsimulation
+0xae0,float,2,1,objecttrainsimulation
+0xae4,float,1,1,objecttrainsimulation
+0xaf4,float,1,1,resetgame
+0xaf8,float,1,1,resetgame
+0xafc,float,1,1,resetgame
+0x1058,int,1,1,objecttrainsimulation
+0x194b4,float,2,2,buildsomeshit resetgame
+0x194b8,float,2,2,buildsomeshit resetgame
+0x194bc,float,2,2,buildsomeshit resetgame

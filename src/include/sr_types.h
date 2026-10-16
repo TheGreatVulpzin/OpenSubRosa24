@@ -56,30 +56,7 @@ typedef union Account { struct {
     uint8_t unk_40[0xc];
 }; uint8_t lf_raw[0x4c]; } Account;
 
-/* Match state: global "game" (a single one, not an array). 0x25d64 bytes.
- * Layout of the 0.24c server (ELF) and of the 024d. The 0.24b (Mac) has one
- * 4-byte field less at the start: there the tick is at +0x34. Source: dedicatedserverloop,
- * logicsimulation_round and resetgame of the 0.24c, checked in the 024d. */
-typedef union Game { struct {
-    uint8_t unk_00[0x8];
-    int gametype;       /* +0x08 config.txt "gametype=" (0 to 4) */
-    uint8_t unk_0c[0x10];
-    int round_number;   /* +0x1c resetgame adds 1 (likely) */
-    int state;          /* +0x20 1 and 2; manager: 2 = match running */
-    int timer;          /* +0x24 decreases by 1 per tick; 0 changes the state */
-    int wait_time;      /* +0x28 dedicatedserverloop writes 0xe10 (3600 ticks) */
-    int round_time;     /* +0x2c config.txt "roundtime=" * 3600 */
-    uint8_t unk_30[0x4];
-    int unk_34;         /* +0x34 dedicatedserverloop writes 0x4ec */
-    int ticks;          /* +0x38 adds 1 per tick; used in Event.tick */
-    uint8_t unk_3c[0x25d64 - 0x3c];
-}; uint8_t lf_raw[0x25d64]; } Game;
 
-SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
-SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
-SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
-SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
-SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
 SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
@@ -787,6 +764,311 @@ typedef union Body { struct {
 }; uint8_t lf_raw[0x40]; } Body;
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
+
+/* game[]: record of 0x25d64 bytes. */
+typedef union Game { struct {
+    uint8_t pad_0000[0x4];
+    int unk_0004;                        /* +0x0004 1 functions */
+    int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
+    int unk_000c;                        /* +0x000c 2 functions */
+    uint8_t pad_0010[0xc];
+    int round_number;                    /* +0x001c resetgame adds 1 (likely); serversend sends it */
+    int state;                           /* +0x0020 1 and 2; manager: 2 = match running */
+    int timer;                           /* +0x0024 decreases by 1 each tick; 0 changes the state */
+    int wait_time;                       /* +0x0028 dedicatedserverloop writes 0xe10 (3600 ticks) */
+    int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
+    float unk_0030;                      /* +0x0030 1 functions */
+    int unk_0034;                        /* +0x0034 dedicatedserverloop writes 0x4ec */
+    int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
+    uint8_t pad_003c[0x10];
+    float unk_004c;                      /* +0x004c 3 functions */
+    float unk_0050;                      /* +0x0050 3 functions */
+    uint8_t pad_0054[0x4];
+    float unk_0058;                      /* +0x0058 2 functions */
+    float unk_005c;                      /* +0x005c 2 functions */
+    float unk_0060;                      /* +0x0060 2 functions */
+    float unk_0064;                      /* +0x0064 2 functions */
+    float unk_0068;                      /* +0x0068 2 functions */
+    float unk_006c;                      /* +0x006c 2 functions */
+    float unk_0070;                      /* +0x0070 6 functions */
+    float unk_0074;                      /* +0x0074 6 functions */
+    float unk_0078;                      /* +0x0078 6 functions */
+    float unk_007c;                      /* +0x007c 6 functions */
+    float unk_0080;                      /* +0x0080 6 functions */
+    float unk_0084;                      /* +0x0084 6 functions */
+    float unk_0088;                      /* +0x0088 2 functions */
+    int unk_008c;                        /* +0x008c 1 functions */
+    int unk_0090;                        /* +0x0090 7 functions */
+    uint8_t pad_0094[0x4];
+    int unk_0098;                        /* +0x0098 2 functions */
+    int unk_009c;                        /* +0x009c 5 functions */
+    uint8_t pad_00a0[0x10];
+    int unk_00b0;                        /* +0x00b0 2 functions */
+    int unk_00b4;                        /* +0x00b4 2 functions */
+    int unk_00b8;                        /* +0x00b8 2 functions */
+    int unk_00bc;                        /* +0x00bc 2 functions */
+    int unk_00c0;                        /* +0x00c0 2 functions */
+    int unk_00c4;                        /* +0x00c4 2 functions */
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 12 functions */
+    int unk_00d4;                        /* +0x00d4 6 functions */
+    int unk_00d8;                        /* +0x00d8 6 functions */
+    int unk_00dc;                        /* +0x00dc 8 functions */
+    int unk_00e0;                        /* +0x00e0 3 functions */
+    int unk_00e4;                        /* +0x00e4 1 functions */
+    uint8_t pad_00e8[0x8];
+    int unk_00f0;                        /* +0x00f0 4 functions */
+    int unk_00f4;                        /* +0x00f4 5 functions */
+    int unk_00f8;                        /* +0x00f8 5 functions */
+    int unk_00fc;                        /* +0x00fc 2 functions */
+    int unk_0100;                        /* +0x0100 7 functions */
+    int unk_0104;                        /* +0x0104 2 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    uint8_t pad_010c[0x4];
+    int unk_0110;                        /* +0x0110 10 functions */
+    int unk_0114;                        /* +0x0114 5 functions */
+    int unk_0118;                        /* +0x0118 4 functions */
+    int unk_011c;                        /* +0x011c 6 functions */
+    uint8_t pad_0120[0x10];
+    int unk_0130;                        /* +0x0130 1 functions */
+    uint8_t pad_0134[0x4];
+    int unk_0138;                        /* +0x0138 1 functions */
+    uint8_t pad_013c[0x4];
+    int unk_0140;                        /* +0x0140 2 functions */
+    uint8_t pad_0144[0xc];
+    int unk_0150;                        /* +0x0150 7 functions */
+    int unk_0154;                        /* +0x0154 3 functions */
+    int unk_0158;                        /* +0x0158 3 functions */
+    int unk_015c;                        /* +0x015c 4 functions */
+    uint8_t pad_0160[0x10];
+    int unk_0170;                        /* +0x0170 1 functions */
+    uint8_t pad_0174[0xc];
+    int unk_0180;                        /* +0x0180 1 functions */
+    uint8_t pad_0184[0xc];
+    int unk_0190;                        /* +0x0190 7 functions */
+    int unk_0194;                        /* +0x0194 3 functions */
+    int unk_0198;                        /* +0x0198 4 functions */
+    int unk_019c;                        /* +0x019c 5 functions */
+    int unk_01a0;                        /* +0x01a0 1 functions */
+    uint8_t pad_01a4[0xc];
+    int unk_01b0;                        /* +0x01b0 2 functions */
+    int unk_01b4;                        /* +0x01b4 1 functions */
+    int unk_01b8;                        /* +0x01b8 1 functions */
+    uint8_t pad_01bc[0x4];
+    int unk_01c0;                        /* +0x01c0 2 functions */
+    int unk_01c4;                        /* +0x01c4 1 functions */
+    float unk_01c8;                      /* +0x01c8 1 functions */
+    float unk_01cc;                      /* +0x01cc 1 functions */
+    int unk_01d0;                        /* +0x01d0 7 functions */
+    int unk_01d4;                        /* +0x01d4 1 functions */
+    int unk_01d8;                        /* +0x01d8 1 functions */
+    int unk_01dc;                        /* +0x01dc 3 functions */
+    uint8_t pad_01e0[0x20];
+    int unk_0200;                        /* +0x0200 1 functions */
+    uint8_t pad_0204[0x4];
+    float unk_0208;                      /* +0x0208 1 functions */
+    uint8_t pad_020c[0x4];
+    int unk_0210;                        /* +0x0210 7 functions */
+    int unk_0214;                        /* +0x0214 1 functions */
+    int unk_0218;                        /* +0x0218 1 functions */
+    int unk_021c;                        /* +0x021c 3 functions */
+    uint8_t pad_0220[0x20];
+    int unk_0240;                        /* +0x0240 1 functions */
+    uint8_t pad_0244[0x4];
+    float unk_0248;                      /* +0x0248 1 functions */
+    uint8_t pad_024c[0x4];
+    int unk_0250;                        /* +0x0250 7 functions */
+    int unk_0254;                        /* +0x0254 1 functions */
+    int unk_0258;                        /* +0x0258 1 functions */
+    int unk_025c;                        /* +0x025c 3 functions */
+    uint8_t pad_0260[0x20];
+    int unk_0280;                        /* +0x0280 1 functions */
+    uint8_t pad_0284[0x4];
+    float unk_0288;                      /* +0x0288 1 functions */
+    uint8_t pad_028c[0x4];
+    int unk_0290;                        /* +0x0290 7 functions */
+    int unk_0294;                        /* +0x0294 1 functions */
+    int unk_0298;                        /* +0x0298 1 functions */
+    int unk_029c;                        /* +0x029c 2 functions */
+    uint8_t pad_02a0[0x20];
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    uint8_t pad_02c4[0x4];
+    float unk_02c8;                      /* +0x02c8 1 functions */
+    uint8_t pad_02cc[0x4];
+    int unk_02d0;                        /* +0x02d0 4 functions */
+    int unk_02d4;                        /* +0x02d4 3 functions */
+    int unk_02d8;                        /* +0x02d8 3 functions */
+    int unk_02dc;                        /* +0x02dc 3 functions */
+    int unk_02e0;                        /* +0x02e0 2 functions */
+    uint8_t pad_02e4[0xc];
+    int unk_02f0;                        /* +0x02f0 3 functions */
+    int unk_02f4;                        /* +0x02f4 3 functions */
+    int unk_02f8;                        /* +0x02f8 3 functions */
+    int unk_02fc;                        /* +0x02fc 1 functions */
+    int unk_0300;                        /* +0x0300 4 functions */
+    uint8_t pad_0304[0x4];
+    float unk_0308;                      /* +0x0308 3 functions */
+    float unk_030c;                      /* +0x030c 3 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    uint8_t pad_0314[0x2c];
+    int unk_0340;                        /* +0x0340 1 functions */
+    uint8_t pad_0344[0xc];
+    int unk_0350;                        /* +0x0350 1 functions */
+    uint8_t pad_0354[0x2c];
+    int unk_0380;                        /* +0x0380 1 functions */
+    uint8_t pad_0384[0xc];
+    int unk_0390;                        /* +0x0390 1 functions */
+    uint8_t pad_0394[0x2c];
+    int unk_03c0;                        /* +0x03c0 1 functions */
+    uint8_t pad_03c4[0xc];
+    int unk_03d0;                        /* +0x03d0 1 functions */
+    uint8_t pad_03d4[0x2c];
+    int unk_0400;                        /* +0x0400 1 functions */
+    uint8_t pad_0404[0xc];
+    int unk_0410;                        /* +0x0410 1 functions */
+    uint8_t pad_0414[0x2c];
+    int unk_0440;                        /* +0x0440 1 functions */
+    uint8_t pad_0444[0xc];
+    int unk_0450;                        /* +0x0450 1 functions */
+    uint8_t pad_0454[0x2c];
+    int unk_0480;                        /* +0x0480 1 functions */
+    uint8_t pad_0484[0xc];
+    int unk_0490;                        /* +0x0490 1 functions */
+    uint8_t pad_0494[0x2c];
+    int unk_04c0;                        /* +0x04c0 1 functions */
+    uint8_t pad_04c4[0xc];
+    int unk_04d0;                        /* +0x04d0 4 functions */
+    int unk_04d4;                        /* +0x04d4 3 functions */
+    float unk_04d8;                      /* +0x04d8 1 functions */
+    float unk_04dc;                      /* +0x04dc 1 functions */
+    float unk_04e0;                      /* +0x04e0 1 functions */
+    float unk_04e4;                      /* +0x04e4 1 functions */
+    float unk_04e8;                      /* +0x04e8 1 functions */
+    float unk_04ec;                      /* +0x04ec 1 functions */
+    float unk_04f0;                      /* +0x04f0 1 functions */
+    float unk_04f4;                      /* +0x04f4 1 functions */
+    float unk_04f8;                      /* +0x04f8 1 functions */
+    float unk_04fc;                      /* +0x04fc 1 functions */
+    float unk_0500;                      /* +0x0500 1 functions */
+    float unk_0504;                      /* +0x0504 1 functions */
+    int unk_0508;                        /* +0x0508 2 functions */
+    int unk_050c;                        /* +0x050c 1 functions */
+    uint8_t pad_0510[0x8];
+    int unk_0518;                        /* +0x0518 1 functions */
+    uint8_t pad_051c[0x20];
+    int unk_053c;                        /* +0x053c 1 functions */
+    uint8_t pad_0540[0xcac];
+    float unk_11ec;                      /* +0x11ec 1 functions */
+    float unk_11f0;                      /* +0x11f0 1 functions */
+    float unk_11f4;                      /* +0x11f4 1 functions */
+    float unk_11f8;                      /* +0x11f8 1 functions */
+    float unk_11fc;                      /* +0x11fc 1 functions */
+    float unk_1200;                      /* +0x1200 1 functions */
+    uint8_t pad_1204[0x4];
+    int unk_1208;                        /* +0x1208 1 functions */
+    int unk_120c;                        /* +0x120c 6 functions */
+    uint8_t pad_1210[0x4];
+    int unk_1214;                        /* +0x1214 2 functions */
+    int unk_1218;                        /* +0x1218 3 functions */
+    uint8_t pad_121c[0x30];
+    int unk_124c;                        /* +0x124c 5 functions */
+    int unk_1250;                        /* +0x1250 2 functions */
+    int unk_1254;                        /* +0x1254 1 functions */
+    int unk_1258;                        /* +0x1258 4 functions */
+    uint8_t pad_125c[0x20];
+    int unk_127c;                        /* +0x127c 2 functions */
+    int unk_1280;                        /* +0x1280 1 functions */
+    float unk_1284;                      /* +0x1284 1 functions */
+    float unk_1288;                      /* +0x1288 1 functions */
+    int unk_128c;                        /* +0x128c 3 functions */
+    int unk_1290;                        /* +0x1290 1 functions */
+    uint8_t pad_1294[0x4];
+    int unk_1298;                        /* +0x1298 2 functions */
+    uint8_t pad_129c[0x30];
+    int unk_12cc;                        /* +0x12cc 1 functions */
+    uint8_t pad_12d0[0x8];
+    int unk_12d8;                        /* +0x12d8 1 functions */
+    uint8_t pad_12dc[0x30];
+    int unk_130c;                        /* +0x130c 1 functions */
+    uint8_t pad_1310[0x33c];
+    int unk_164c;                        /* +0x164c 2 functions */
+    int unk_1650;                        /* +0x1650 1 functions */
+    float unk_1654;                      /* +0x1654 1 functions */
+    float unk_1658;                      /* +0x1658 1 functions */
+    float unk_165c;                      /* +0x165c 1 functions */
+    int unk_1660;                        /* +0x1660 1 functions */
+    uint8_t pad_1664[0x14];
+    float unk_1678;                      /* +0x1678 1 functions */
+    float unk_167c;                      /* +0x167c 1 functions */
+    float unk_1680;                      /* +0x1680 1 functions */
+    int unk_1684;                        /* +0x1684 1 functions */
+    uint8_t pad_1688[0xd00];
+    int unk_2388;                        /* +0x2388 4 functions */
+    uint8_t pad_238c[0x8];
+    int unk_2394;                        /* +0x2394 2 functions */
+    uint8_t pad_2398[0x430];
+    int unk_27c8;                        /* +0x27c8 1 functions */
+    uint8_t pad_27cc[0xd30];
+    float unk_34fc;                      /* +0x34fc 1 functions */
+    uint8_t pad_3500[0x4];
+    int unk_3504;                        /* +0x3504 2 functions */
+    uint8_t pad_3508[0x8];
+    int unk_3510;                        /* +0x3510 2 functions */
+    uint8_t pad_3514[0x430];
+    int unk_3944;                        /* +0x3944 1 functions */
+    uint8_t pad_3948[0xd30];
+    float unk_4678;                      /* +0x4678 1 functions */
+    uint8_t pad_467c[0x4];
+    int unk_4680;                        /* +0x4680 2 functions */
+    uint8_t pad_4684[0x8];
+    int unk_468c;                        /* +0x468c 3 functions */
+    uint8_t pad_4690[0x430];
+    int unk_4ac0;                        /* +0x4ac0 1 functions */
+    uint8_t pad_4ac4[0xd38];
+    int unk_57fc;                        /* +0x57fc 1 functions */
+    uint8_t pad_5800[0x43c];
+    int unk_5c3c;                        /* +0x5c3c 1 functions */
+    uint8_t pad_5c40[0xd38];
+    int unk_6978;                        /* +0x6978 1 functions */
+    uint8_t pad_697c[0x43c];
+    int unk_6db8;                        /* +0x6db8 1 functions */
+    uint8_t pad_6dbc[0xd38];
+    int unk_7af4;                        /* +0x7af4 1 functions */
+    uint8_t pad_7af8[0x8];
+    int unk_7b00;                        /* +0x7b00 1 functions */
+    uint8_t pad_7b04[0x430];
+    int unk_7f34;                        /* +0x7f34 1 functions */
+    uint8_t pad_7f38[0x1b0a0];
+    int unk_22fd8;                       /* +0x22fd8 1 functions */
+    uint8_t pad_22fdc[0x2800];
+    int unk_257dc;                       /* +0x257dc 1 functions */
+    int unk_257e0;                       /* +0x257e0 1 functions */
+    uint8_t pad_257e4[0x4];
+    int unk_257e8;                       /* +0x257e8 1 functions */
+    float unk_257ec;                     /* +0x257ec 1 functions */
+    int unk_257f0;                       /* +0x257f0 1 functions */
+    float unk_257f4;                     /* +0x257f4 1 functions */
+    float unk_257f8;                     /* +0x257f8 1 functions */
+    float unk_257fc;                     /* +0x257fc 1 functions */
+    float unk_25800;                     /* +0x25800 1 functions */
+    float unk_25804;                     /* +0x25804 1 functions */
+    float unk_25808;                     /* +0x25808 1 functions */
+    uint8_t pad_2580c[0x168];
+    int unk_25974;                       /* +0x25974 1 functions */
+    int unk_25978;                       /* +0x25978 1 functions */
+    uint8_t pad_2597c[0x3e4];
+    int unk_25d60;                       /* +0x25d60 3 functions */
+}; uint8_t lf_raw[0x25d64]; } Game;
+SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
+SR_STATIC_ASSERT(offsetof(Game, round_number) == 0x1c, "Game.round_number");
+SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
+SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
+SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
+SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
+SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
+SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 
 /* particle[]: record of 0x3c0 bytes. */
 typedef union Particle { struct {
@@ -2099,6 +2381,302 @@ typedef union GameWorld { struct {
     float unk_0018;                      /* +0x0018 2 functions */
 }; uint8_t lf_raw[0x1c]; } GameWorld;
 SR_STATIC_ASSERT(sizeof(GameWorld) == 0x1c, "GameWorld");
+
+/* level_editor[]: record of 0x1c6898 bytes. */
+typedef union LevelEditor { struct {
+    uint8_t pad_0000[0x38];
+    int unk_0038;                        /* +0x0038 3 functions */
+    int unk_003c;                        /* +0x003c 3 functions */
+    int unk_0040;                        /* +0x0040 2 functions */
+    int unk_0044;                        /* +0x0044 3 functions */
+    int unk_0048;                        /* +0x0048 3 functions */
+    uint8_t pad_004c[0x4];
+    int unk_0050;                        /* +0x0050 1 functions */
+    uint8_t pad_0054[0x2fe8];
+    int unk_303c;                        /* +0x303c 3 functions */
+    int unk_3040;                        /* +0x3040 3 functions */
+    int unk_3044;                        /* +0x3044 3 functions */
+    int unk_3048;                        /* +0x3048 2 functions */
+    int unk_304c;                        /* +0x304c 3 functions */
+    int unk_3050;                        /* +0x3050 3 functions */
+    int unk_3054;                        /* +0x3054 3 functions */
+    uint8_t pad_3058[0x1c];
+    int unk_3074;                        /* +0x3074 3 functions */
+    int unk_3078;                        /* +0x3078 1 functions */
+    uint8_t pad_307c[0x4];
+    int unk_3080;                        /* +0x3080 1 functions */
+    int unk_3084;                        /* +0x3084 1 functions */
+    int unk_3088;                        /* +0x3088 1 functions */
+    uint8_t pad_308c[0x87b8];
+    int unk_b844;                        /* +0xb844 2 functions */
+    uint8_t pad_b848[0x3fc];
+    char unk_bc44;                       /* +0xbc44 1 functions */
+    uint8_t unk_bc45;                    /* +0xbc45 1 functions */
+    uint8_t unk_bc46;                    /* +0xbc46 1 functions */
+    uint8_t pad_bc47[0x3fe];
+    char unk_c045;                       /* +0xc045 1 functions */
+    uint8_t pad_c046[0xff7fe];
+    int unk_10b844;                      /* +0x10b844 3 functions */
+    uint8_t pad_10b848[0x5];
+    char unk_10b84d;                     /* +0x10b84d 1 functions */
+    char unk_10b84e;                     /* +0x10b84e 1 functions */
+    char unk_10b84f;                     /* +0x10b84f 1 functions */
+    uint8_t pad_10b850[0x3c];
+    int unk_10b88c;                      /* +0x10b88c 3 functions */
+    int unk_10b890;                      /* +0x10b890 2 functions */
+    int unk_10b894;                      /* +0x10b894 3 functions */
+    int unk_10b898;                      /* +0x10b898 3 functions */
+    uint8_t pad_10b89c[0x4];
+    int unk_10b8a0;                      /* +0x10b8a0 3 functions */
+    uint8_t pad_10b8a4[0xbaff4];
+}; uint8_t lf_raw[0x1c6898]; } LevelEditor;
+SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
+
+/* blocktemp[]: record of 0x7606c bytes. */
+typedef union BlockTemp { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 2 functions */
+    int unk_0014;                        /* +0x0014 2 functions */
+    int unk_0018;                        /* +0x0018 2 functions */
+    int unk_001c;                        /* +0x001c 2 functions */
+    int unk_0020;                        /* +0x0020 2 functions */
+    int unk_0024;                        /* +0x0024 2 functions */
+    uint8_t pad_0028[0x4];
+    int unk_002c;                        /* +0x002c 2 functions */
+    int unk_0030;                        /* +0x0030 2 functions */
+    int unk_0034;                        /* +0x0034 2 functions */
+    int unk_0038;                        /* +0x0038 2 functions */
+    float unk_003c;                      /* +0x003c 2 functions */
+    float unk_0040;                      /* +0x0040 1 functions */
+    float unk_0044;                      /* +0x0044 1 functions */
+    float unk_0048;                      /* +0x0048 2 functions */
+    float unk_004c;                      /* +0x004c 1 functions */
+    float unk_0050;                      /* +0x0050 1 functions */
+    float unk_0054;                      /* +0x0054 1 functions */
+    float unk_0058;                      /* +0x0058 1 functions */
+    float unk_005c;                      /* +0x005c 1 functions */
+    float unk_0060;                      /* +0x0060 1 functions */
+    float unk_0064;                      /* +0x0064 1 functions */
+    float unk_0068;                      /* +0x0068 1 functions */
+    float unk_006c;                      /* +0x006c 1 functions */
+    float unk_0070;                      /* +0x0070 1 functions */
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    uint8_t pad_0080[0x7c];
+    float unk_00fc;                      /* +0x00fc 2 functions */
+    float unk_0100;                      /* +0x0100 1 functions */
+    float unk_0104;                      /* +0x0104 1 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    float unk_010c;                      /* +0x010c 1 functions */
+    float unk_0110;                      /* +0x0110 1 functions */
+    float unk_0114;                      /* +0x0114 1 functions */
+    float unk_0118;                      /* +0x0118 1 functions */
+    float unk_011c;                      /* +0x011c 1 functions */
+    float unk_0120;                      /* +0x0120 1 functions */
+    uint8_t pad_0124[0x58];
+    int unk_017c;                        /* +0x017c 2 functions */
+    int unk_0180;                        /* +0x0180 2 functions */
+    uint8_t pad_0184[0xc];
+    int unk_0190;                        /* +0x0190 1 functions */
+    uint8_t pad_0194[0x4];
+    float unk_0198;                      /* +0x0198 1 functions */
+    float unk_019c;                      /* +0x019c 1 functions */
+    float unk_01a0;                      /* +0x01a0 1 functions */
+    uint8_t pad_01a4[0xb4];
+    float unk_0258;                      /* +0x0258 1 functions */
+    float unk_025c;                      /* +0x025c 1 functions */
+    uint8_t pad_0260[0x56dc8];
+    int unk_57028;                       /* +0x57028 2 functions */
+    float unk_5702c;                     /* +0x5702c 2 functions */
+    float unk_57030;                     /* +0x57030 1 functions */
+    float unk_57034;                     /* +0x57034 1 functions */
+    float unk_57038;                     /* +0x57038 2 functions */
+    float unk_5703c;                     /* +0x5703c 1 functions */
+    float unk_57040;                     /* +0x57040 1 functions */
+    float unk_57044;                     /* +0x57044 1 functions */
+    float unk_57048;                     /* +0x57048 1 functions */
+    float unk_5704c;                     /* +0x5704c 1 functions */
+    float unk_57050;                     /* +0x57050 1 functions */
+    float unk_57054;                     /* +0x57054 1 functions */
+    float unk_57058;                     /* +0x57058 1 functions */
+    uint8_t pad_5705c[0x18];
+    int unk_57074;                       /* +0x57074 1 functions */
+    uint8_t pad_57078[0x14];
+    int unk_5708c;                       /* +0x5708c 2 functions */
+    int unk_57090;                       /* +0x57090 1 functions */
+    uint8_t pad_57094[0x10];
+    int unk_570a4;                       /* +0x570a4 2 functions */
+    int unk_570a8;                       /* +0x570a8 1 functions */
+    uint8_t pad_570ac[0x8];
+    int unk_570b4;                       /* +0x570b4 1 functions */
+    uint8_t pad_570b8[0x68];
+    int unk_57120;                       /* +0x57120 1 functions */
+    uint8_t pad_57124[0x1ef08];
+    int unk_7602c;                       /* +0x7602c 2 functions */
+    uint8_t pad_76030[0x3c];
+}; uint8_t lf_raw[0x7606c]; } BlockTemp;
+SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
+
+/* bondopt[]: record of 0x100000 bytes. */
+typedef union BondOpt { struct {
+    int16_t unk_0000;                    /* +0x0000 3 functions */
+    int16_t unk_0002;                    /* +0x0002 3 functions */
+    int16_t unk_0004;                    /* +0x0004 2 functions */
+    int16_t unk_0006;                    /* +0x0006 1 functions */
+    float unk_0008;                      /* +0x0008 5 functions */
+    float unk_000c;                      /* +0x000c 5 functions */
+    float unk_0010;                      /* +0x0010 5 functions */
+    float unk_0014;                      /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 3 functions */
+    float unk_001c;                      /* +0x001c 2 functions */
+    float unk_0020;                      /* +0x0020 2 functions */
+    float unk_0024;                      /* +0x0024 2 functions */
+    float unk_0028;                      /* +0x0028 2 functions */
+    float unk_002c;                      /* +0x002c 2 functions */
+    uint8_t pad_0030[0x4];
+    float unk_0034;                      /* +0x0034 4 functions */
+    float unk_0038;                      /* +0x0038 4 functions */
+    float unk_003c;                      /* +0x003c 4 functions */
+    int16_t unk_0040;                    /* +0x0040 1 functions */
+    int16_t unk_0042;                    /* +0x0042 1 functions */
+    uint8_t pad_0044[0x2];
+    int16_t unk_0046;                    /* +0x0046 1 functions */
+    uint8_t pad_0048[0x10];
+    float unk_0058;                      /* +0x0058 1 functions */
+    uint8_t pad_005c[0x20];
+    float unk_007c;                      /* +0x007c 1 functions */
+    uint8_t pad_0080[0xfff80];
+}; uint8_t lf_raw[0x100000]; } BondOpt;
+SR_STATIC_ASSERT(sizeof(BondOpt) == 0x100000, "BondOpt");
+
+/* tempmesh[]: record of 0x2d1850 bytes. */
+typedef union TempMesh { struct {
+    int unk_0000;                        /* +0x0000 8 functions */
+    float unk_0004;                      /* +0x0004 7 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 6 functions */
+    float unk_0010;                      /* +0x0010 3 functions */
+    float unk_0014;                      /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 3 functions */
+    float unk_001c;                      /* +0x001c 1 functions */
+    float unk_0020;                      /* +0x0020 1 functions */
+    float unk_0024;                      /* +0x0024 1 functions */
+    float unk_0028;                      /* +0x0028 1 functions */
+    float unk_002c;                      /* +0x002c 1 functions */
+    float unk_0030;                      /* +0x0030 1 functions */
+    uint8_t pad_0034[0x2ffd0];
+    float unk_30004;                     /* +0x30004 6 functions */
+    float unk_30008;                     /* +0x30008 5 functions */
+    float unk_3000c;                     /* +0x3000c 6 functions */
+    float unk_30010;                     /* +0x30010 3 functions */
+    float unk_30014;                     /* +0x30014 2 functions */
+    float unk_30018;                     /* +0x30018 3 functions */
+    float unk_3001c;                     /* +0x3001c 1 functions */
+    float unk_30020;                     /* +0x30020 1 functions */
+    float unk_30024;                     /* +0x30024 1 functions */
+    float unk_30028;                     /* +0x30028 1 functions */
+    float unk_3002c;                     /* +0x3002c 1 functions */
+    float unk_30030;                     /* +0x30030 1 functions */
+    uint8_t pad_30034[0x2ffd0];
+    float unk_60004;                     /* +0x60004 5 functions */
+    float unk_60008;                     /* +0x60008 4 functions */
+    float unk_6000c;                     /* +0x6000c 5 functions */
+    float unk_60010;                     /* +0x60010 2 functions */
+    uint8_t pad_60014[0x2fff0];
+    float unk_90004;                     /* +0x90004 4 functions */
+    float unk_90008;                     /* +0x90008 3 functions */
+    uint8_t pad_9000c[0x7fff8];
+    int unk_110004;                      /* +0x110004 8 functions */
+    int unk_110008;                      /* +0x110008 7 functions */
+    int unk_11000c;                      /* +0x11000c 7 functions */
+    int unk_110010;                      /* +0x110010 7 functions */
+    int unk_110014;                      /* +0x110014 7 functions */
+    int unk_110018;                      /* +0x110018 3 functions */
+    int unk_11001c;                      /* +0x11001c 3 functions */
+    int unk_110020;                      /* +0x110020 3 functions */
+    int unk_110024;                      /* +0x110024 3 functions */
+    uint8_t pad_110028[0x3ffe0];
+    int unk_150008;                      /* +0x150008 7 functions */
+    int unk_15000c;                      /* +0x15000c 3 functions */
+    uint8_t pad_150010[0x4fff8];
+    int unk_1a0008;                      /* +0x1a0008 4 functions */
+    int unk_1a000c;                      /* +0x1a000c 1 functions */
+    uint8_t pad_1a0010[0x2fffc];
+    int unk_1d000c;                      /* +0x1d000c 1 functions */
+    uint8_t pad_1d0010[0x101840];
+}; uint8_t lf_raw[0x2d1850]; } TempMesh;
+SR_STATIC_ASSERT(sizeof(TempMesh) == 0x2d1850, "TempMesh");
+
+/* track[]: record of 0x578000 bytes. */
+typedef union Track { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    float unk_0004;                      /* +0x0004 4 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 4 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    float unk_0014;                      /* +0x0014 3 functions */
+    float unk_0018;                      /* +0x0018 1 functions */
+    float unk_001c;                      /* +0x001c 1 functions */
+    float unk_0020;                      /* +0x0020 1 functions */
+    float unk_0024;                      /* +0x0024 1 functions */
+    float unk_0028;                      /* +0x0028 1 functions */
+    uint8_t pad_002c[0x48];
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    float unk_0080;                      /* +0x0080 1 functions */
+    float unk_0084;                      /* +0x0084 1 functions */
+    float unk_0088;                      /* +0x0088 1 functions */
+    uint8_t pad_008c[0x1c8];
+    int unk_0254;                        /* +0x0254 3 functions */
+    int unk_0258;                        /* +0x0258 2 functions */
+    int unk_025c;                        /* +0x025c 2 functions */
+    int unk_0260;                        /* +0x0260 2 functions */
+    int unk_0264;                        /* +0x0264 1 functions */
+    int unk_0268;                        /* +0x0268 1 functions */
+    uint8_t pad_026c[0x94];
+    int unk_0300;                        /* +0x0300 1 functions */
+    int unk_0304;                        /* +0x0304 1 functions */
+    int unk_0308;                        /* +0x0308 1 functions */
+    int unk_030c;                        /* +0x030c 1 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    uint8_t pad_0314[0x184];
+    float unk_0498;                      /* +0x0498 1 functions */
+    float unk_049c;                      /* +0x049c 1 functions */
+    float unk_04a0;                      /* +0x04a0 1 functions */
+    uint8_t pad_04a4[0x54];
+    float unk_04f8;                      /* +0x04f8 1 functions */
+    float unk_04fc;                      /* +0x04fc 1 functions */
+    float unk_0500;                      /* +0x0500 1 functions */
+    uint8_t pad_0504[0x5c];
+    float unk_0560;                      /* +0x0560 2 functions */
+    float unk_0564;                      /* +0x0564 1 functions */
+    float unk_0568;                      /* +0x0568 2 functions */
+    float unk_056c;                      /* +0x056c 2 functions */
+    float unk_0570;                      /* +0x0570 1 functions */
+    float unk_0574;                      /* +0x0574 2 functions */
+    uint8_t pad_0578[0x560];
+    float unk_0ad8;                      /* +0x0ad8 1 functions */
+    uint8_t pad_0adc[0x4];
+    float unk_0ae0;                      /* +0x0ae0 1 functions */
+    float unk_0ae4;                      /* +0x0ae4 1 functions */
+    uint8_t pad_0ae8[0xc];
+    float unk_0af4;                      /* +0x0af4 1 functions */
+    float unk_0af8;                      /* +0x0af8 1 functions */
+    float unk_0afc;                      /* +0x0afc 1 functions */
+    uint8_t pad_0b00[0x558];
+    int unk_1058;                        /* +0x1058 1 functions */
+    uint8_t pad_105c[0x18458];
+    float unk_194b4;                     /* +0x194b4 2 functions */
+    float unk_194b8;                     /* +0x194b8 2 functions */
+    float unk_194bc;                     /* +0x194bc 2 functions */
+    uint8_t pad_194c0[0x55eb40];
+}; uint8_t lf_raw[0x578000]; } Track;
+SR_STATIC_ASSERT(sizeof(Track) == 0x578000, "Track");
 
 #pragma pack(pop)
 

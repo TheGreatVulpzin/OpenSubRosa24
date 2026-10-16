@@ -30,6 +30,9 @@ STRUCTS = {
     'Event': ('event', 0x80),
     'Bullet': ('bullet', 0x5c),
     'Body': ('body', 0x40),
+    # Match state, a single struct (not an array). Fields: analysis/structs/names.csv, and
+    # analysis/structs/024d/game.csv (InferFields.java) for the rest.
+    'Game': ('game', 0x25d64),
     # Regions with a known size and few or no known fields (Phase 4, batch 2). The size is
     # the symbol size of the Linux 0.24c server when the region has no pointer (the i386
     # Mach-O size has alignment padding), else the 32-bit size from the code.
@@ -62,6 +65,12 @@ STRUCTS = {
     'Scenario': ('scenario', 0x134),
     'Radix': ('radix', 0x400804),
     'GameWorld': ('game_world', 0x1c),
+    # Phase 4, batch 4.
+    'LevelEditor': ('level_editor', 0x1c6898),
+    'BlockTemp': ('blocktemp', 0x7606c),
+    'BondOpt': ('bondopt', 0x100000),
+    'TempMesh': ('tempmesh', 0x2d1850),
+    'Track': ('track', 0x578000),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
@@ -131,30 +140,7 @@ typedef union Account { struct {
     uint8_t unk_40[0xc];
 }; uint8_t lf_raw[0x4c]; } Account;
 
-/* Match state: global "game" (a single one, not an array). 0x25d64 bytes.
- * Layout of the 0.24c server (ELF) and of the 024d. The 0.24b (Mac) has one
- * 4-byte field less at the start: there the tick is at +0x34. Source: dedicatedserverloop,
- * logicsimulation_round and resetgame of the 0.24c, checked in the 024d. */
-typedef union Game { struct {
-    uint8_t unk_00[0x8];
-    int gametype;       /* +0x08 config.txt "gametype=" (0 to 4) */
-    uint8_t unk_0c[0x10];
-    int round_number;   /* +0x1c resetgame adds 1 (likely) */
-    int state;          /* +0x20 1 and 2; manager: 2 = match running */
-    int timer;          /* +0x24 decreases by 1 per tick; 0 changes the state */
-    int wait_time;      /* +0x28 dedicatedserverloop writes 0xe10 (3600 ticks) */
-    int round_time;     /* +0x2c config.txt "roundtime=" * 3600 */
-    uint8_t unk_30[0x4];
-    int unk_34;         /* +0x34 dedicatedserverloop writes 0x4ec */
-    int ticks;          /* +0x38 adds 1 per tick; used in Event.tick */
-    uint8_t unk_3c[0x25d64 - 0x3c];
-}; uint8_t lf_raw[0x25d64]; } Game;
 
-SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
-SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
-SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
-SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
-SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
 SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");

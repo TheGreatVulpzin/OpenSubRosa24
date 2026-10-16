@@ -83,7 +83,7 @@ def main():
             for r in csv.DictReader(fh):
                 rows[r['name']] = int(r['rva'], 16)
     by_glob = {g: c for c, (g, _s) in gen_types.STRUCTS.items()}
-    by_glob.update({'game': 'Game', 'account': 'Account'})
+    by_glob.update({'account': 'Account'})
     globals_ = []
     for name, rva in sorted(rows.items(), key=lambda x: x[1]):
         typ = by_glob.get(name)

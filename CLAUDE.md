@@ -4,6 +4,8 @@ RE/decompilation project for Sub Rosa (2015).
 
 **Language:** everything in the repository is in English (code, comments, docs, commit messages). Chat with the user is in Portuguese (BR). Old commits stay in Portuguese.
 
+**Comments:** write code comments in ASD-STE100 style (short sentences, active voice, simple words). No emojis. No dashes as punctuation (use a period or a colon). Keep each comment short: say why, not what the code already shows.
+
 ## Rules
 
 - Never version anything in `original/` except `README.md` and `MANIFEST.sha256`. Binaries and assets are proprietary.

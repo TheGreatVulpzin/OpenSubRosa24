@@ -12,11 +12,12 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0x1579ba0u, "debug", 0x523c8u, 0u },
     { 0x15cbf80u, "human", 0x2b64u, 512u },
     { 0x1b49788u, "stats", 0x8u, 0u },
+    { 0x537c520u, "blocktemp", 0x7606cu, 0u },
     { 0x5592600u, "object", 0x8230u, 1024u },
     { 0x761ea60u, "server", 0x84u, 0u },
     { 0x90dc340u, "option", 0x150u, 0u },
     { 0x90dc520u, "numoftracks", 0x0u, 0u },
-    { 0x90dc540u, "game", 0x0u, 0u },
+    { 0x90dc540u, "game", 0x25d64u, 0u },
     { 0x90dc578u, "ticks", 0x0u, 0u },
     { 0x91022c0u, "item", 0x1acu, 1024u },
     { 0x916d2e0u, "sysinfo", 0x418u, 0u },
@@ -33,8 +34,10 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0xf02e500u, "cityobjecttype", 0x241800u, 0u },
     { 0xf26fd00u, "materiallist", 0x580u, 0u },
     { 0xf270280u, "body", 0x40u, 32u },
+    { 0xf270a80u, "level_editor", 0x1c6898u, 0u },
     { 0xf437318u, "numofevents", 0x0u, 0u },
     { 0xf437b68u, "account", 0x4cu, 65536u },
+    { 0xf8f7b80u, "bondopt", 0x100000u, 0u },
     { 0xff47c80u, "radix", 0x400804u, 0u },
     { 0x103484a0u, "intersect", 0x84u, 0u },
     { 0x10357400u, "itemtype", 0x198u, 64u },
@@ -52,6 +55,8 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0x17529a40u, "numofbullets", 0x0u, 0u },
     { 0x1952d680u, "bsdsocket", 0x20070u, 0u },
     { 0x2561d740u, "game_world", 0x1cu, 0u },
+    { 0x256ad760u, "tempmesh", 0x2d1850u, 0u },
+    { 0x2597efc0u, "track", 0x578000u, 0u },
 };
 
 #endif
