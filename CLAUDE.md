@@ -14,6 +14,7 @@ RE/decompilation project for Sub Rosa (2015).
 - Recordings (`build/recordings/`) hold player names, IP addresses and `config.txt`. Never commit them or copy them into docs.
 - **Fix the lifter in Ghidra, not in text.** Never add a regex rule to `tools/lift/lift.py`. When the lifted C is wrong, find what Ghidra does not know (a type, a struct field, an array global, a function pointer) and add it to the Ghidra project with a script, or write a p-code rule in `tools/ghidra/LiftExport.java`. The only text exception is `LIFT_PATCHES` in `lift.py`: one explicit fix for one decompiler bug in one function.
 - A hand-written function must give 0 harness differences and must not be slower than the original. Measure with the profiler (`subvulpes.ini profile=1`). `src/server/main_loop.c` is an example of code that works but is not well optimized.
+- **Gate cost.** While you work, use the quick gate: `pipeline.sh` (it runs `gate.py --changed --quick`, 1 to 5 min). Run the full gate (`pipeline.sh --full` or `gate.py`, 30 to 40 min) only before a push, and only when the lifted C changed since the last full gate. Put many changes into one pipeline run: do not run the pipeline for each small change.
 - Every lifter change must keep the harness results: no "calls same" count may drop on any recording (see `docs/lift.md`).
 - Knowledge that must stay goes into the repository (`analysis/*.csv`, `src/include/sr_types.h`, scripts), never only into the Ghidra project. The Ghidra project is not versioned.
 
@@ -63,8 +64,8 @@ If the download fails, the session needs network access to `crypticsea.gart.sh` 
 - `tools\build_hook.bat` — builds the hook DLL and the harness.
 - `build/hook/harness.exe <024d_fixed.exe> <sv_snapshot.bin> <sv_args.txt> [filter]` — runs each recorded call with the lifted and the original version and compares them. `HARNESS_DEBUG`, `HARNESS_PROBE` and `HARNESS_WATCH` help to find a difference (`docs/lift.md`). Side-effect functions run in the test environment of `src/platform/plat_test.c` (`docs/side-effects.md`).
 - `tools/lift/lint.py` — float/int conversions and uninitialized variables in the lifted C.
-- `bash tools/lift/pipeline.sh [--params] [--no-gate] [gate options]` — LiftExport, lift, build and gate in one command.
-- `python -I tools/lift/gate.py [--changed] [--jobs N] [--update] [--target NAME]` — harness on every recording of a target (`tools/lift/targets/ded024d.json`), compared function by function with a local baseline. It fails when a "calls same" count drops. `--changed` runs only the functions whose lifted C changed (minutes instead of 40). Run a full gate before a push.
+- `bash tools/lift/pipeline.sh [--params] [--no-gate] [--full] [gate options]` — LiftExport, lift, build and gate in one command. The gate is `--changed --quick` unless you give `--full`.
+- `python -I tools/lift/gate.py [--changed] [--quick] [--jobs N] [--update] [--target NAME]` — harness on every recording of a target (`tools/lift/targets/ded024d.json`), compared function by function with a local baseline. It fails when a "calls same" count drops. `--changed` runs only the functions whose lifted C changed. `--quick` runs only the 4 recordings marked `quick` (282 of 284 tested functions).
 - `python -I tools/lift/deps.py [--func NAME]` — Phase 4 progress: globals, calls and `SR_VA` that the lifted C still takes from the image.
 
 ### Ghidra extensions (installed in `E:\tools\ghidra_12.1.4_PUBLIC\Ghidra\Extensions`)

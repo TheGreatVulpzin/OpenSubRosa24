@@ -3,6 +3,7 @@
 Usage:
   python -I tools/lift/gate.py                      full run of the default target (ded024d)
   python -I tools/lift/gate.py --changed            only the functions whose lifted C changed
+  python -I tools/lift/gate.py --quick              only the recordings marked "quick" in the target
   python -I tools/lift/gate.py --jobs 3             three harnesses at the same time
   python -I tools/lift/gate.py --update             save the results as the new baseline
   python -I tools/lift/gate.py --only murilo        only the recordings whose name has this text
@@ -26,6 +27,11 @@ so a function whose lifted C did not change gives the same results. The script c
 lifted C with the version in git (--ref, default HEAD), runs only the changed functions and
 keeps the baseline values of the others. A change in a "full_run_paths" file runs everything.
 Run a full gate before a push and after a change of many functions.
+
+--quick: only the recordings with "quick" in the target. "quick": true runs the recording,
+"quick": "synth" runs only its +synth run (the recording with the hand-written calls). The
+quick set of ded024d covers 282 of the 284 tested functions in about 1 minute. Use it with
+--changed while you work. A full gate before a push covers the rest.
 
 --reset (or "reset": true in the target): the harness puts the snapshot back before each
 function (HARNESS_RESET=1). Without it, the writes of the original runs stay, and a function
@@ -140,6 +146,7 @@ def main():
     ap.add_argument('--ref', default='HEAD', help='git version for --changed (default HEAD)')
     ap.add_argument('--jobs', type=int, default=2, help='harness runs at the same time (default 2)')
     ap.add_argument('--from-files', action='store_true', help='read the saved outputs, do not run the harness')
+    ap.add_argument('--quick', action='store_true', help='only the recordings marked "quick" in the target')
     ap.add_argument('--no-synth', action='store_true', help='skip the runs with the hand-written calls')
     ap.add_argument('--reset', action='store_true', help='each function starts from the snapshot (HARNESS_RESET=1)')
     a = ap.parse_args()
@@ -170,11 +177,15 @@ def main():
         d = t['recordings_dir'] / r['name']
         if a.only and a.only not in r['name']:
             continue
+        if a.quick and not r.get('quick'):
+            continue
         if not (d / 'sv_snapshot.bin').exists() or not (d / 'sv_args.txt').exists():
             print(f'  {r["name"]}: no recording here, skipped')
             continue
-        runs.append((r['name'], d, d / 'sv_args.txt'))
-        if r.get('synth') and not a.no_synth and t.get('synth') and t['synth'].exists():
+        synth = r.get('synth') and not a.no_synth and t.get('synth') and t['synth'].exists()
+        if not (a.quick and r.get('quick') == 'synth' and synth):
+            runs.append((r['name'], d, d / 'sv_args.txt'))
+        if synth and not (a.quick and r.get('quick') is True):
             merged = Path(tmp.name) / f'{r["name"]}.txt'
             merged.write_bytes((d / 'sv_args.txt').read_bytes() + b'\n' + t['synth'].read_bytes())
             runs.append((r['name'] + '+synth', d, merged))

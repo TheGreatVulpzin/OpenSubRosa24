@@ -22,16 +22,19 @@
   "recordings_dir": "build/recordings",
   "recordings": [
     {
-      "name": "play-20261012"
+      "name": "play-20261012",
+      "quick": true
     },
     {
-      "name": "20261013-1016-smoke"
+      "name": "20261013-1016-smoke",
+      "quick": true
     },
     {
       "name": "20261013-query"
     },
     {
-      "name": "20261013-195210"
+      "name": "20261013-195210",
+      "quick": true
     },
     {
       "name": "20261015-friend"
@@ -42,7 +45,8 @@
     },
     {
       "name": "round-20261015-0141",
-      "synth": true
+      "synth": true,
+      "quick": "synth"
     },
     {
       "name": "murilo-20261015-221033-normal"
