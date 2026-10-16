@@ -21,13 +21,38 @@
   ],
   "recordings_dir": "build/recordings",
   "recordings": [
-    {"name": "play-20261012"},
-    {"name": "20261013-1016-smoke"},
-    {"name": "20261013-query"},
-    {"name": "20261013-195210"},
-    {"name": "20261015-friend"},
-    {"name": "murilo-20261015", "synth": true},
-    {"name": "round-20261015-0141", "synth": true}
+    {
+      "name": "play-20261012"
+    },
+    {
+      "name": "20261013-1016-smoke"
+    },
+    {
+      "name": "20261013-query"
+    },
+    {
+      "name": "20261013-195210"
+    },
+    {
+      "name": "20261015-friend"
+    },
+    {
+      "name": "murilo-20261015",
+      "synth": true
+    },
+    {
+      "name": "round-20261015-0141",
+      "synth": true
+    },
+    {
+      "name": "murilo-20261015-221033-normal"
+    },
+    {
+      "name": "murilo-20261015-221947-subvulpescode"
+    },
+    {
+      "name": "murilo-20261015-222536-subvulpescode"
+    }
   ],
   "synth": "tools/recording/synth_calls.txt",
   "out_dir": "build/gate/ded024d"

@@ -7,12 +7,11 @@
 0x14600 untested createcityobject
 0x146a0 untested lineintersectcityobject
 0x154b0 untested city_createelevator
-0x16a20 untested playerteamkilltax
 0x225e0 untested getobjectrotation3
 0x286b0 untested createmission_transaction
 0x30f00 untested item_sphereintersect
 0x4cee0 untested item_physicssimulation
-0x4e060 untested logic_createcar
 0x4e2c0 untested objectwheelcollision2
 0x4ed30 diff serversend
 0x8cf0 diff logic_addteamcash
+0x46c30 diff building_buildfloorplan
