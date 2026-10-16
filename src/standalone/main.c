@@ -149,9 +149,32 @@ static int map_image(void)
     return 1;
 }
 
+/* A crash: write where it happened, so that a test log is enough to find the line. The
+ * address is given as module+offset (build/hook/subvulpes-server.map and .pdb), and as
+ * an image RVA when it is inside the 024d region (a game address used as code or data). */
+static LONG WINAPI on_crash(EXCEPTION_POINTERS *ep)
+{
+    const EXCEPTION_RECORD *er = ep->ExceptionRecord;
+    uintptr_t at = (uintptr_t)er->ExceptionAddress;
+    HMODULE m = NULL;
+    char name[MAX_PATH] = "?";
+    if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           (const char *)at, &m))
+        GetModuleFileNameA(m, name, sizeof name);
+    sv_log("CRASH: exception %08lx at %s+0x%x, data address %08x", er->ExceptionCode,
+           strrchr(name, '\\') ? strrchr(name, '\\') + 1 : name, (unsigned)(at - (uintptr_t)m),
+           er->NumberParameters >= 2 ? (unsigned)er->ExceptionInformation[1] : 0);
+    if (er->NumberParameters >= 2 && er->ExceptionInformation[1] >= sr_base &&
+        er->ExceptionInformation[1] < sr_base + sr_image_size)
+        sv_log("CRASH: the data address is image RVA 0x%x", (unsigned)(er->ExceptionInformation[1] - sr_base));
+    fflush(stderr);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 int main(void)
 {
     unsigned cw;
+    SetUnhandledExceptionFilter(on_crash);
     if (!map_image())
         return 1;
     sr_fn_init();
