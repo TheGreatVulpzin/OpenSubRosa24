@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/re'))
 import gen_types  # noqa: E402
 
-BASE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'uint8_t': 1, 'int16_t': 2}
+BASE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'uint8_t': 1, 'int16_t': 2, 'double': 8}
 
 # "typedef struct vec3 {...} vec3;" or "typedef union Human { struct {...}; uint8_t lf_raw[N]; } Human;"
 STRUCT_RE = re.compile(r'typedef (?:struct (\w+) \{(.*?)\}|union (\w+) \{ struct \{(.*?)\}; uint8_t lf_raw\[[^\]]+\]; \}) (\w+);', re.S)

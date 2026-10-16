@@ -30,12 +30,35 @@ STRUCTS = {
     'Event': ('event', 0x80),
     'Bullet': ('bullet', 0x5c),
     'Body': ('body', 0x40),
+    # Regions with a known size and few or no known fields (Phase 4, batch 2). The size is
+    # the symbol size of the Linux 0.24c server when the region has no pointer (the i386
+    # Mach-O size has alignment padding), else the 32-bit size from the code.
+    'Particle': ('particle', 0x3c0),
+    'Timer': ('timer', 0x58),
+    'AreaBlock': ('area_block', 0x84),
+    'Area': ('area', 0x100d6c),
+    'Option': ('option', 0x150),
+    'Server': ('server', 0x84),
+    'Stats': ('stats', 0x8),
+    'SysInfo': ('sysinfo', 0x418),
+    'SoundList': ('soundlist', 0x13c),
+    'BlockList': ('blocklist', 0x40354),
+    'City': ('city', 0xa0b99c),
+    'MaterialList': ('materiallist', 0x580),
+    'Intersect': ('intersect', 0x84),
+    'TimerList': ('timerlist', 0x54),
+    'Speex': ('speex', 0x931000),
+    'BsdSocket': ('bsdsocket', 0x20070),
+    'Debug': ('debug', 0x523c8),
+    'FileList': ('filelist', 0x80020),
+    'Parser': ('parser', 0x10010c),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
           'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 4096,
-          'objecttype': 128, 'itemtype': 64, 'body': 32, 'account': 65536}
-TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12,
+          'objecttype': 128, 'itemtype': 64, 'body': 32, 'account': 65536,
+          'area_block': 65536, 'area': 4, 'timer': 256}
+TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}

@@ -5110,12 +5110,12 @@ __declspec(naked) static void th_10da0(void)
 }
 static uint8_t expect_10da0[7] = { 0xd9, 0xee, 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-undefined * __cdecl lf_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7);
-static undefined * (__cdecl *orig_118f0)(int, float, float, float, float, int, uint);
+int __cdecl lf_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7);
+static int (__cdecl *orig_118f0)(int, float, float, float, float, int, uint);
 static SvVerify v_118f0 = { "area_block_addwindow", -1 };
-static undefined * __cdecl hk_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7)
+static int __cdecl hk_118f0(int param_1, float param_2, float param_3, float param_4, float param_5, int param_6, uint param_7)
 {
-    SV_HOOK_RET(undefined *, v_118f0, lf_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+    SV_HOOK_RET(int, v_118f0, lf_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_118f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
 __declspec(naked) static void th_118f0(void)
 {

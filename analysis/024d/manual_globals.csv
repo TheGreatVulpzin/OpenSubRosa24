@@ -13,4 +13,9 @@ rva,name,count,evidence
 0xf437b60,account,65536,createaccount: records at +8 (key and counter before them)
 0x90dc578,ticks,,createevent_message writes it to event.tick; manager: tick counter
 0x103484a0,intersect,,vote map (31.5) and manager (black_market.c uses intersect+0 and +0xc as event positions)
-0x14043e0,timer,256,Linux ELF symbol timer (0x5800 bytes, 0x58 each). Profiler: starttimer/stoptimer with RDTSC (0xb3f0 = stoptimer)
+0x14043a0,timer,256,Linux ELF symbol timer (0x5800 bytes, 0x58 each). Profiler: starttimer/stoptimer with RDTSC (0xb3f0 = stoptimer)
+0x133b2d00,area_block,65536,"docs/phase4-inventory.md 4.1: map_globals.py --min-votes 2, record 0x84 (Linux 0xb0 with 4 pointers), 65536 records = 0x840000 up to fwriteptr"
+0xb7a8ca0,blocklist,,"docs/phase4-inventory.md 4.1: map_globals.py --min-votes 2, Linux 0.24c symbol blocklist (0x40354 bytes)"
+0x16d66040,area,4,"docs/phase4-inventory.md 4.1: 4 records of 0x100d6c (Linux symbol area = 4 x record), createarea keeps a heap pointer at +0x48"
+0x90dc340,option,,"docs/phase4-inventory.md 4.1: settings from config.txt (port +0, max bytes per second +4, name +8), map_globals.py --min-votes 2"
+0x916d2e0,sysinfo,,"map_regions.py (score 0.8) and the size: 0x418 bytes end at soundlist; holds the two _getcwd results (+0, +0x200) and the QueryPerformanceCounter factor at +0x410 (main_loop.c qpc_to_ms)"

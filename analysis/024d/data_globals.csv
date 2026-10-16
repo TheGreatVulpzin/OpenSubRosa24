@@ -30,3 +30,4 @@ rva,name,type,count,evidence
 0x60d00,yaxis2d,float,2,"initialized .data: 0, 1"
 0x60d08,socketid,uint32_t,,"initialized .data: ""7DFP"", the packet magic (docs/protocol.md 3.1). Linux has char[5], but the 024d copies it as one 4-byte int: as char[5] the decompiler split the copy wrong (serversend sent F for P)"
 0x60d10,mag01,uint32_t,2,"initialized .data: 0, 0x9908b0df (Mersenne Twister, a static of genrand_int32)"
+0x204020,debugit,int,,"docs/phase4-inventory.md 3.3: debug flag, 7 reads and no write; map_regions.py gives the Linux 0.24c symbol debugit"

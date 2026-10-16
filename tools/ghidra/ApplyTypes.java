@@ -57,6 +57,7 @@ public class ApplyTypes extends GhidraScript {
             case "char": return CharDataType.dataType;
             case "uint8_t": return ByteDataType.dataType;
             case "int16_t": return ShortDataType.dataType;
+            case "double": return ghidra.program.model.data.DoubleDataType.dataType;
             case "char*": return new PointerDataType(CharDataType.dataType, dtm);
             default:
                 DataType t = types.get(name);
@@ -118,6 +119,20 @@ public class ApplyTypes extends GhidraScript {
                 listing.clearCodeUnits(at, end, false);
                 listing.createData(at, dt);
                 typed++;
+                // An old label inside the typed range ("timer" at +0x40 of g_timer) would still
+                // name its address: the lifter would print "#define timer", which breaks the
+                // field g_game.timer. The struct names the place now.
+                if (dt.getLength() > 1) {
+                    java.util.List<Symbol> inside = new java.util.ArrayList<>();
+                    for (Symbol s : currentProgram.getSymbolTable().getSymbols(
+                            new ghidra.program.model.address.AddressSet(at.add(1), end),
+                            ghidra.program.model.symbol.SymbolType.LABEL, true))
+                        if (s.getSource() != SourceType.DEFAULT) inside.add(s);
+                    for (Symbol s : inside) {
+                        println("  removed label " + s.getName() + " inside " + name);
+                        s.delete();
+                    }
+                }
             }
             // A name that moved (a wrong address in an older CSV) must not stay at the old place.
             for (Symbol s : currentProgram.getSymbolTable().getGlobalSymbols(name))

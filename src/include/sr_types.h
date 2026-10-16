@@ -788,6 +788,163 @@ typedef union Body { struct {
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
 
+/* particle[]: record of 0x3c0 bytes. */
+typedef union Particle { struct {
+    uint8_t pad_0000[0x3c0];
+}; uint8_t lf_raw[0x3c0]; } Particle;
+SR_STATIC_ASSERT(sizeof(Particle) == 0x3c0, "Particle");
+
+/* timer[]: record of 0x58 bytes. */
+typedef union Timer { struct {
+    uint8_t pad_0000[0x58];
+}; uint8_t lf_raw[0x58]; } Timer;
+SR_STATIC_ASSERT(sizeof(Timer) == 0x58, "Timer");
+
+/* area_block[]: record of 0x84 bytes. */
+typedef union AreaBlock { struct {
+    uint8_t pad_0000[0x84];
+}; uint8_t lf_raw[0x84]; } AreaBlock;
+SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
+
+/* area[]: record of 0x100d6c bytes. */
+typedef union Area { struct {
+    uint8_t pad_0000[0x100d6c];
+}; uint8_t lf_raw[0x100d6c]; } Area;
+SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
+
+/* option[]: record of 0x150 bytes. */
+typedef union Option { struct {
+    uint8_t pad_0000[0x150];
+}; uint8_t lf_raw[0x150]; } Option;
+SR_STATIC_ASSERT(sizeof(Option) == 0x150, "Option");
+
+/* server[]: record of 0x84 bytes. */
+typedef union Server { struct {
+    uint8_t pad_0000[0x84];
+}; uint8_t lf_raw[0x84]; } Server;
+SR_STATIC_ASSERT(sizeof(Server) == 0x84, "Server");
+
+/* stats[]: record of 0x8 bytes. */
+typedef union Stats { struct {
+    uint8_t pad_0000[0x8];
+}; uint8_t lf_raw[0x8]; } Stats;
+SR_STATIC_ASSERT(sizeof(Stats) == 0x8, "Stats");
+
+/* sysinfo[]: record of 0x418 bytes. */
+typedef union SysInfo { struct {
+    char start_dir[512];                 /* +0x0000 getpaths: _getcwd into it (docs/phase4-inventory.md 4.1) */
+    char config_dir[512];                /* +0x0200 getpaths: second _getcwd; the harness reads the server folder here (0x916d4e0) */
+    uint8_t pad_0400[0x8];
+    uint32_t frequency[2];               /* +0x0408 getcpufrequency: QueryPerformanceFrequency LowPart (+0x408) and HighPart (+0x40c), 1000000000 by default */
+    double ms_per_tick;                  /* +0x0410 getcpufrequency: 1000.0 / frequency; main_loop.c qpc_to_ms */
+}; uint8_t lf_raw[0x418]; } SysInfo;
+SR_STATIC_ASSERT(sizeof(SysInfo) == 0x418, "SysInfo");
+SR_STATIC_ASSERT(offsetof(SysInfo, start_dir) == 0x0, "SysInfo.start_dir");
+SR_STATIC_ASSERT(offsetof(SysInfo, config_dir) == 0x200, "SysInfo.config_dir");
+SR_STATIC_ASSERT(offsetof(SysInfo, frequency) == 0x408, "SysInfo.frequency");
+SR_STATIC_ASSERT(offsetof(SysInfo, ms_per_tick) == 0x410, "SysInfo.ms_per_tick");
+
+/* soundlist[]: record of 0x13c bytes. */
+typedef union SoundList { struct {
+    uint8_t pad_0000[0x13c];
+}; uint8_t lf_raw[0x13c]; } SoundList;
+SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
+
+/* blocklist[]: record of 0x40354 bytes. */
+typedef union BlockList { struct {
+    uint8_t pad_0000[0x40354];
+}; uint8_t lf_raw[0x40354]; } BlockList;
+SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
+
+/* city[]: record of 0xa0b99c bytes. */
+typedef union City { struct {
+    uint8_t pad_0000[0xa0b99c];
+}; uint8_t lf_raw[0xa0b99c]; } City;
+SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
+
+/* materiallist[]: record of 0x580 bytes. */
+typedef union MaterialList { struct {
+    uint8_t pad_0000[0x580];
+}; uint8_t lf_raw[0x580]; } MaterialList;
+SR_STATIC_ASSERT(sizeof(MaterialList) == 0x580, "MaterialList");
+
+/* intersect[]: record of 0x84 bytes. */
+typedef union Intersect { struct {
+    float pos[3];                        /* +0x0000 lineintersectall, sphereintersectlevel: copy of the hit point (local_18..local_10); manager black_market.c uses +0 as a position */
+    float normal[3];                     /* +0x000c lineintersectall, sphereintersectlevel: copy of the hit normal (local_c..local_4); manager uses +0xc */
+    float fraction;                      /* +0x0018 lineintersectall: set to 1.0, keeps the nearest hit (local_1c < fraction) */
+    float distance;                      /* +0x001c sphereintersectlevel: set to 65536.0, keeps the nearest hit */
+    uint8_t pad_0020[0x58];
+    int index;                           /* +0x0078 lineintersectall: set to -1 before the search */
+    uint8_t pad_007c[0x8];
+}; uint8_t lf_raw[0x84]; } Intersect;
+SR_STATIC_ASSERT(sizeof(Intersect) == 0x84, "Intersect");
+SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
+SR_STATIC_ASSERT(offsetof(Intersect, normal) == 0xc, "Intersect.normal");
+SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
+SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
+SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
+
+/* timerlist[]: record of 0x54 bytes. */
+typedef union TimerList { struct {
+    uint8_t pad_0000[0x54];
+}; uint8_t lf_raw[0x54]; } TimerList;
+SR_STATIC_ASSERT(sizeof(TimerList) == 0x54, "TimerList");
+
+/* speex[]: record of 0x931000 bytes. */
+typedef union Speex { struct {
+    uint8_t pad_0000[0x931000];
+}; uint8_t lf_raw[0x931000]; } Speex;
+SR_STATIC_ASSERT(sizeof(Speex) == 0x931000, "Speex");
+
+/* bsdsocket[]: record of 0x20070 bytes. */
+typedef union BsdSocket { struct {
+    int current;                         /* +0x0000 serversend, pbitread: index into the enabled and socket arrays */
+    int enabled[8];                      /* +0x0004 disablesocket (opens the socket) writes 1 at +4 + i*4; serversend tests it before sendto */
+    int handle[8];                       /* +0x0024 disablesocket: socket() result at +0x24 + i*4; serversend passes it to sendto */
+    uint8_t addr[16];                    /* +0x0044 serversend: sockaddr_in for sendto (port htons at +0x46, address htonl at +0x48) */
+    int addr_len;                        /* +0x0054 serversend: tolen argument of sendto */
+    uint8_t pad_0058[0x4];
+    int send_size;                       /* +0x005c serversend: bytes in the send buffer (13 after the header), checked against 0x10000 */
+    int send_bit;                        /* +0x0060 serversend, pbitwrite: bit position in the current byte */
+    uint8_t send_buf[65536];             /* +0x0064 serversend: packet bytes, magic 7DFP at +0, sendto source */
+    int recv_size;                       /* +0x10064 pbitread: bytes received, upper limit of the read position (signed compare) */
+    int recv_pos;                        /* +0x10068 pbitread: read position, checked against 0x10000 (signed compare) */
+    int recv_bit;                        /* +0x1006c pbitread: bit position in the current byte */
+    uint8_t recv_buf[65536];             /* +0x10070 pbitread: received bytes; ends at the struct size 0x20070 */
+}; uint8_t lf_raw[0x20070]; } BsdSocket;
+SR_STATIC_ASSERT(sizeof(BsdSocket) == 0x20070, "BsdSocket");
+SR_STATIC_ASSERT(offsetof(BsdSocket, current) == 0x0, "BsdSocket.current");
+SR_STATIC_ASSERT(offsetof(BsdSocket, enabled) == 0x4, "BsdSocket.enabled");
+SR_STATIC_ASSERT(offsetof(BsdSocket, handle) == 0x24, "BsdSocket.handle");
+SR_STATIC_ASSERT(offsetof(BsdSocket, addr) == 0x44, "BsdSocket.addr");
+SR_STATIC_ASSERT(offsetof(BsdSocket, addr_len) == 0x54, "BsdSocket.addr_len");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_size) == 0x5c, "BsdSocket.send_size");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_bit) == 0x60, "BsdSocket.send_bit");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_buf) == 0x64, "BsdSocket.send_buf");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_size) == 0x10064, "BsdSocket.recv_size");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_pos) == 0x10068, "BsdSocket.recv_pos");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_bit) == 0x1006c, "BsdSocket.recv_bit");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_buf) == 0x10070, "BsdSocket.recv_buf");
+
+/* debug[]: record of 0x523c8 bytes. */
+typedef union Debug { struct {
+    uint8_t pad_0000[0x523c8];
+}; uint8_t lf_raw[0x523c8]; } Debug;
+SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+
+/* filelist[]: record of 0x80020 bytes. */
+typedef union FileList { struct {
+    uint8_t pad_0000[0x80020];
+}; uint8_t lf_raw[0x80020]; } FileList;
+SR_STATIC_ASSERT(sizeof(FileList) == 0x80020, "FileList");
+
+/* parser[]: record of 0x10010c bytes. */
+typedef union Parser { struct {
+    uint8_t pad_0000[0x10010c];
+}; uint8_t lf_raw[0x10010c]; } Parser;
+SR_STATIC_ASSERT(sizeof(Parser) == 0x10010c, "Parser");
+
 #pragma pack(pop)
 
 #endif /* SR_TYPES_H */
