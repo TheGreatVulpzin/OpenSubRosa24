@@ -45,6 +45,8 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | The game has a stock market: functions to buy and sell stock, and a tax when a player dies. | code (names) | `playerbuystock`, `playersellstock`, `playerdeathtax` |
 | How the prices move. | check | |
 | `economysimulation` is dead code in the 024d server: no function calls it and no pointer to it exists in the binary. Maybe stock prices never change on a dedicated server. | code, check | `economysimulation` (0x53a0) |
+| The team base has a car market (menu 6) that can never sell a car on the 024d: the list of offers (count at `0x17579740`) is never filled, so it is 0 in every snapshot (World and Round). The purchase code and its network event (`updatecarmarket`) exist, but no player can reach them. The shops' car dealer is a different system and works. | code, snapshots (2026-10-15) | `logic_playeractions` menu 6, `createevent_updatecarmarket` (0x68d0) |
+| The world day lasts 3,888,000 clock units: the clock adds 10 per tick, so a day is about 104 minutes. The shops restock every 1800 ticks (about 30 seconds). | code | `logicsimulation_world` (0x5b9b0) |
 
 ### 5. Physics
 
