@@ -1,0 +1,208 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,2,2,building_load building_save
+0x40,int,16,3,building_load building_save building_setupbuild
+0x44,int,16,3,building_load building_save building_setupbuild
+0x48,int,15,3,building_load building_save building_setupbuild
+0x4c,uint32_t,4,3,building_load building_save building_setupbuild
+0x50,uint32_t,3,2,building_save building_setupbuild
+0x54,int,2,2,building_save building_setupbuild
+0x58,int,2,2,building_save building_setupbuild
+0x5c,int,3,3,building_load building_save building_setupbuild
+0x60,int,2,2,building_save building_setupbuild
+0x72,int,1,1,building_save
+0x84,int,1,1,building_save
+0x88,int,3,3,building_load building_save building_setupbuild
+0x8c,int,2,2,building_save building_setupbuild
+0x90,int,2,2,building_save building_setupbuild
+0x94,uint32_t,3,2,building_save building_setupbuild
+0x98,uint32_t,2,2,building_save building_setupbuild
+0x9c,int,1,1,building_setupbuild
+0xa0,int,1,1,building_setupbuild
+0xa4,int,1,1,building_setupbuild
+0xa8,int,1,1,building_setupbuild
+0xd0,int,1,1,building_setupbuild
+0xdc,uint32_t,1,1,building_save
+0xe0,uint32_t,1,1,building_save
+0x124,uint32_t,1,1,building_save
+0x128,uint32_t,1,1,building_save
+0x16c,uint32_t,1,1,building_save
+0x170,uint32_t,1,1,building_save
+0x1b4,uint32_t,1,1,building_save
+0x1b8,uint32_t,1,1,building_save
+0x1fc,uint32_t,1,1,building_save
+0x200,uint32_t,1,1,building_save
+0x244,uint32_t,1,1,building_save
+0x248,uint32_t,1,1,building_save
+0x70c,int,1,1,building_load
+0x710,int,1,1,building_load
+0x124c,int,1,1,building_save
+0x190c,int,1,1,building_load
+0x1910,int,1,1,building_load
+0x1b04c,int,1,1,building_load
+0x1b050,int,1,1,building_load
+0x1b094,int,1,1,building_load
+0x1b098,int,1,1,building_load
+0x4804c,int,1,1,building_save
+0x120004c,int,3,3,building_load building_save building_setupbuild
+0x1200050,int,3,3,building_load building_save building_setupbuild
+0x1200054,int,3,3,building_load building_save building_setupbuild
+0x1200058,int,3,3,building_load building_save building_setupbuild
+0x120005c,int,3,3,building_load building_save building_setupbuild
+0x1200060,int,3,3,building_load building_save building_setupbuild
+0x1200064,int,3,3,building_load building_save building_setupbuild
+0x1200068,int,1,1,building_setupbuild
+0x120006c,int,1,1,building_setupbuild
+0x1200070,int,1,1,building_setupbuild
+0x1200074,int,1,1,building_setupbuild
+0x1200078,int,1,1,building_setupbuild
+0x1200198,int,1,1,building_rotatefloorplan
+0x12001a0,int,1,1,building_rotatefloorplan
+0x12001a4,int,1,1,building_rotatefloorplan
+0x12001a8,int16_t,1,1,building_rotatefloorplan
+0x12001aa,int16_t,1,1,building_rotatefloorplan
+0x12001ac,int16_t,1,1,building_rotatefloorplan
+0x12001ae,int16_t,1,1,building_rotatefloorplan
+0x12001b0,int16_t,1,1,building_rotatefloorplan
+0x12001b2,int16_t,1,1,building_rotatefloorplan
+0x12001b4,int16_t,1,1,building_rotatefloorplan
+0x12001b6,int16_t,1,1,building_rotatefloorplan
+0x12001b8,int16_t,1,1,building_rotatefloorplan
+0x12001ba,int16_t,1,1,building_rotatefloorplan
+0x12001bc,int16_t,1,1,building_rotatefloorplan
+0x12001be,int16_t,1,1,building_rotatefloorplan
+0x12001c0,int16_t,1,1,building_rotatefloorplan
+0x12001c2,int16_t,1,1,building_rotatefloorplan
+0x12001c4,int16_t,1,1,building_rotatefloorplan
+0x12001c6,int16_t,1,1,building_rotatefloorplan
+0x12001cc,int,14,5,building_buildfloorplan building_rotatefloorplan building_setupbuild building_setupfloorplannewer createlevel
+0x12001d0,uint32_t,50,5,building_buildfloorplan building_rotatefloorplan building_setupbuild building_setupfloorplannewer createlevel
+0x12001d4,int,10,4,building_rotatefloorplan building_setupbuild building_setupfloorplannewer createlevel
+0x12001d8,int,7,3,building_rotatefloorplan building_setupbuild building_setupfloorplannewer
+0x12001dc,int,6,3,building_rotatefloorplan building_setupbuild building_setupfloorplannewer
+0x12001e0,int,2,2,building_setupbuild building_setupfloorplannewer
+0x12001e4,int,3,3,building_rotatefloorplan building_setupbuild building_setupfloorplannewer
+0x12001e8,int,2,2,building_setupbuild building_setupfloorplannewer
+0x12001ec,int,2,2,building_setupbuild building_setupfloorplannewer
+0x12001f2,int16_t,2,1,building_setupbuild
+0x12001f6,int16_t,2,1,building_setupbuild
+0x12001fa,int16_t,1,1,building_setupbuild
+0x12001fc,int,1,1,building_setupfloorplannewer
+0x1200202,int16_t,1,1,building_setupbuild
+0x1200206,int16_t,1,1,building_setupbuild
+0x120020a,int16_t,1,1,building_setupbuild
+0x120020e,int16_t,1,1,building_setupbuild
+0x1200214,int,2,2,building_setupbuild building_setupfloorplannewer
+0x1200218,int,2,2,building_setupbuild building_setupfloorplannewer
+0x120021c,int,2,2,building_setupbuild building_setupfloorplannewer
+0x1200220,int,4,3,building_rotatefloorplan building_setupbuild building_setupfloorplannewer
+0x1200224,int,2,2,building_setupbuild building_setupfloorplannewer
+0x1200228,int,1,1,building_setupbuild
+0x120022c,int,1,1,building_setupbuild
+0x1200230,int,1,1,building_setupbuild
+0x1200234,int,1,1,building_setupbuild
+0x1200238,int,1,1,building_setupfloorplannewer
+0x120023c,int,1,1,building_setupfloorplannewer
+0x1200240,int,1,1,building_setupfloorplannewer
+0x1200244,int,1,1,building_setupfloorplannewer
+0x1200248,int,1,1,building_setupfloorplannewer
+0x120024c,int,1,1,building_setupfloorplannewer
+0x12481d8,int,2,2,building_rotatefloorplan building_setupfloorplannewer
+0x12481ec,int,1,1,building_setupfloorplannewer
+0x1248220,int,1,1,building_setupfloorplannewer
+0x12493d8,int,1,1,building_rotatefloorplan
+0x1ec5481,int,1,1,resetgame
+0x24001d8,int,5,3,building_buildfloorplan building_rotatefloorplan building_setupbuild
+0x24001dc,int,2,2,building_rotatefloorplan building_setupbuild
+0x24001e0,int,5,3,building_buildfloorplan building_rotatefloorplan building_setupbuild
+0x24001e4,int,5,3,building_buildfloorplan building_rotatefloorplan building_setupbuild
+0x24001e8,int,2,2,building_rotatefloorplan building_setupbuild
+0x24001ec,int,5,3,building_buildfloorplan building_rotatefloorplan building_setupbuild
+0x24001f0,int,3,2,building_rotatefloorplan building_setupbuild
+0x24001f4,int,2,2,building_rotatefloorplan building_setupbuild
+0x24001f8,int,3,2,building_rotatefloorplan building_setupbuild
+0x24001fc,int,3,2,building_rotatefloorplan building_setupbuild
+0x2400200,int,2,2,building_rotatefloorplan building_setupbuild
+0x2400204,int,3,2,building_rotatefloorplan building_setupbuild
+0x2400208,int,1,1,building_rotatefloorplan
+0x2400210,int,1,1,building_rotatefloorplan
+0x2400214,int,1,1,building_rotatefloorplan
+0x240021c,int,1,1,building_rotatefloorplan
+0x2400220,int,1,1,building_rotatefloorplan
+0x2400228,int,1,1,building_rotatefloorplan
+0x240022c,int,1,1,building_rotatefloorplan
+0x2400234,int,1,1,building_rotatefloorplan
+0x2400238,int,1,1,building_rotatefloorplan
+0x2400240,int,1,1,building_rotatefloorplan
+0x2400244,int,1,1,building_rotatefloorplan
+0x240024c,int,1,1,building_rotatefloorplan
+0x2400250,int,1,1,building_rotatefloorplan
+0x240025c,int,1,1,building_rotatefloorplan
+0x2400364,int,2,1,building_rotatefloorplan
+0x2400368,int,2,1,building_rotatefloorplan
+0x240036c,int,1,1,building_rotatefloorplan
+0x2400370,int,1,1,building_rotatefloorplan
+0x2400374,int,1,1,building_rotatefloorplan
+0x2400378,int,1,1,building_rotatefloorplan
+0x240037c,int16_t,1,1,building_rotatefloorplan
+0x240037e,int16_t,1,1,building_rotatefloorplan
+0x2400380,int16_t,1,1,building_rotatefloorplan
+0x2400382,int16_t,1,1,building_rotatefloorplan
+0x2400384,int16_t,1,1,building_rotatefloorplan
+0x2400386,int16_t,1,1,building_rotatefloorplan
+0x2400388,int16_t,1,1,building_rotatefloorplan
+0x240038a,int16_t,1,1,building_rotatefloorplan
+0x240038c,int16_t,1,1,building_rotatefloorplan
+0x240038e,int16_t,1,1,building_rotatefloorplan
+0x2400390,int16_t,1,1,building_rotatefloorplan
+0x2400392,int16_t,1,1,building_rotatefloorplan
+0x2400394,int16_t,1,1,building_rotatefloorplan
+0x2400396,int16_t,1,1,building_rotatefloorplan
+0x2400398,int16_t,1,1,building_rotatefloorplan
+0x240039a,int16_t,1,1,building_rotatefloorplan
+0x24003a0,int,1,1,building_rotatefloorplan
+0x24003a4,int,1,1,building_rotatefloorplan
+0x24003a8,int,1,1,building_rotatefloorplan
+0x24003ac,int,2,1,building_rotatefloorplan
+0x24003b0,int,1,1,building_rotatefloorplan
+0x2448364,int,1,1,building_rotatefloorplan
+0x2449564,int,1,1,building_rotatefloorplan
+0x3600364,int,2,1,building_rotatefloorplan
+0x3600368,int,1,1,building_rotatefloorplan
+0x360036c,int,2,1,building_rotatefloorplan
+0x3600370,int,2,1,building_rotatefloorplan
+0x3600374,int,1,1,building_rotatefloorplan
+0x3600378,int,2,1,building_rotatefloorplan
+0x360037c,int,2,1,building_rotatefloorplan
+0x3600380,int,1,1,building_rotatefloorplan
+0x3600384,int,2,1,building_rotatefloorplan
+0x3600388,int,2,1,building_rotatefloorplan
+0x360038c,int,1,1,building_rotatefloorplan
+0x3600390,int,2,1,building_rotatefloorplan
+0x3600394,int,1,1,building_rotatefloorplan
+0x360039c,int,1,1,building_rotatefloorplan
+0x36003a0,int,1,1,building_rotatefloorplan
+0x36003a8,int,1,1,building_rotatefloorplan
+0x36003ac,int,1,1,building_rotatefloorplan
+0x36003b4,int,1,1,building_rotatefloorplan
+0x36003b8,int,1,1,building_rotatefloorplan
+0x36003c0,int,1,1,building_rotatefloorplan
+0x36003c4,int,1,1,building_rotatefloorplan
+0x36003cc,int,1,1,building_rotatefloorplan
+0x36003d0,int,1,1,building_rotatefloorplan
+0x36003d8,int,1,1,building_rotatefloorplan
+0x36003dc,int,1,1,building_rotatefloorplan
+0x36003e4,int,1,1,building_rotatefloorplan
+0x36003e8,int,1,1,building_rotatefloorplan
+0x36003f0,int,1,1,building_rotatefloorplan
+0x36004e4,int,8,3,building_load building_save building_setupbuild
+0x36004e9,char,1,1,building_setupbuild
+0x36004ea,char,1,1,building_setupbuild
+0x36004eb,char,1,1,building_setupbuild
+0x3600529,char,1,1,building_setupbuild
+0x3600568,int,1,1,building_setupbuild
+0x36044e8,int,8,3,building_load building_save building_setupbuild
+0x36044ed,char,1,1,building_setupbuild
+0x36044ee,char,1,1,building_setupbuild
+0x36044ef,char,1,1,building_setupbuild
+0x360452d,char,1,1,building_setupbuild
+0x360456c,int,1,1,building_setupbuild

@@ -529,10 +529,10 @@ __declspec(naked) static void th_02cf0(void)
 }
 static uint8_t expect_02cf0[6] = { 0x8b, 0x44, 0x24, 0x04, 0x85, 0xc0 };
 
-void __cdecl lf_02dc0(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5);
-static void (__cdecl *orig_02dc0)(uint, uint, uint, uint, undefined4);
+void __cdecl lf_02dc0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+static void (__cdecl *orig_02dc0)(uint, uint, uint, uint, int);
 static SvVerify v_02dc0 = { "area_interior_setblock", -1 };
-static void __cdecl hk_02dc0(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5)
+static void __cdecl hk_02dc0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
     SV_HOOK_VOID(v_02dc0, lf_02dc0(param_1, param_2, param_3, param_4, param_5), orig_02dc0(param_1, param_2, param_3, param_4, param_5), NULL);
 }
@@ -574,10 +574,10 @@ __declspec(naked) static void th_02dc0(void)
 }
 static uint8_t expect_02dc0[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-void __cdecl lf_02f00(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5);
-static void (__cdecl *orig_02f00)(uint, uint, uint, uint, undefined4);
+void __cdecl lf_02f00(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+static void (__cdecl *orig_02f00)(uint, uint, uint, uint, int);
 static SvVerify v_02f00 = { "area_interior_setobject", -1 };
-static void __cdecl hk_02f00(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5)
+static void __cdecl hk_02f00(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
     SV_HOOK_VOID(v_02f00, lf_02f00(param_1, param_2, param_3, param_4, param_5), orig_02f00(param_1, param_2, param_3, param_4, param_5), NULL);
 }
@@ -8997,10 +8997,10 @@ __declspec(naked) static void th_29650(void)
 }
 static uint8_t expect_29650[5] = { 0x53, 0x8b, 0x5c, 0x24, 0x08 };
 
-void __cdecl lf_296f0(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5);
-static void (__cdecl *orig_296f0)(uint, uint, uint, uint, undefined4);
+void __cdecl lf_296f0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+static void (__cdecl *orig_296f0)(uint, uint, uint, uint, int);
 static SvVerify v_296f0 = { "area_setblock", -1 };
-static void __cdecl hk_296f0(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5)
+static void __cdecl hk_296f0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
     SV_HOOK_VOID(v_296f0, lf_296f0(param_1, param_2, param_3, param_4, param_5), orig_296f0(param_1, param_2, param_3, param_4, param_5), NULL);
 }
@@ -9042,10 +9042,10 @@ __declspec(naked) static void th_296f0(void)
 }
 static uint8_t expect_296f0[5] = { 0x53, 0x8b, 0x5c, 0x24, 0x08 };
 
-void __cdecl lf_29830(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5);
-static void (__cdecl *orig_29830)(uint, uint, uint, uint, undefined4);
+void __cdecl lf_29830(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+static void (__cdecl *orig_29830)(uint, uint, uint, uint, int);
 static SvVerify v_29830 = { "area_setblockcolor", -1 };
-static void __cdecl hk_29830(uint param_1, uint param_2, uint param_3, uint param_4, undefined4 param_5)
+static void __cdecl hk_29830(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
     SV_HOOK_VOID(v_29830, lf_29830(param_1, param_2, param_3, param_4, param_5), orig_29830(param_1, param_2, param_3, param_4, param_5), NULL);
 }

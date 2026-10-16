@@ -13,6 +13,7 @@
 #define SR_RVA_DEBUG                0x1579ba0u  /* Debug[] */
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u  /* Stats[] */
+#define SR_RVA_BUILDING             0x1d65b80u  /* Building[] */
 #define SR_RVA_BLOCKTEMP            0x537c520u  /* BlockTemp[] */
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
 #define SR_RVA_SERVER               0x761ea60u  /* Server[] */
@@ -55,6 +56,7 @@
 #define SR_RVA_BOND                 0x17179a40u  /* Bond[] */
 #define SR_RVA_NUMOFBULLETS         0x17529a40u
 #define SR_RVA_BSDSOCKET            0x1952d680u  /* BsdSocket[] */
+#define SR_RVA_AREA_SECTOR          0x1954d700u  /* AreaSector[] */
 #define SR_RVA_GAME_WORLD           0x2561d740u  /* GameWorld[] */
 #define SR_RVA_TEMPMESH             0x256ad760u  /* TempMesh[] */
 #define SR_RVA_TRACK                0x2597efc0u  /* Track[] */

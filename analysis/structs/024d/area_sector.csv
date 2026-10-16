@@ -1,0 +1,43 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,1,1,resetgame
+0x4,int,2,2,clientrecv resetgame
+0x24,int,1,1,clientrecv
+0x28,int,4,1,clientrecv
+0x2c,int,1,1,clientrecv
+0x30,int,16,6,bondsimulation2 createbond createparticle particlesimulation particletimetolive resetgame
+0x40,int,3,3,area_createsector area_getnextsector createarea
+0x44,int,23,7,area_createblock area_deleteblock area_getblock area_setblock circleintersectarea lineintersectarea sphereintersectarea
+0x844,int16_t,3,2,area_createblock area_getblocktexture
+0x846,int16_t,2,1,area_createblock
+0x848,int16_t,2,1,area_createblock
+0x84a,int16_t,2,1,area_createblock
+0x84c,int16_t,2,1,area_createblock
+0x84e,int16_t,2,1,area_createblock
+0x850,int16_t,2,1,area_createblock
+0x852,int16_t,2,1,area_createblock
+0x2844,int,3,2,area_createblock area_setblockcolor
+0x3044,int,8,8,area_deleteblock area_interior_createblock area_interior_getblock area_interior_getblocklink area_interior_setblock circleintersectarea lineintersectarea sphereintersectarea
+0x3844,uint8_t,2,2,area_interior_createblock area_interior_getblocktexture
+0x3845,char,1,1,area_interior_createblock
+0x3846,char,1,1,area_interior_createblock
+0x3847,char,1,1,area_interior_createblock
+0x3848,char,1,1,area_interior_createblock
+0x3849,char,1,1,area_interior_createblock
+0x384a,char,1,1,area_interior_createblock
+0x384b,char,1,1,area_interior_createblock
+0x4844,int,3,3,area_interior_setobject lineintersectarea sphereintersectarea
+0x5044,int,7,4,area_createsector area_interior_createblock area_interior_setblock area_interior_setobject
+0x5048,int,1,1,area_createsector
+0x504c,int,1,1,area_createsector
+0x5050,int,1,1,area_createsector
+0x5054,int,2,2,area_createsector createarea
+0x5058,int,1,1,area_createsector
+0x505c,int,1,1,area_createsector
+0x5060,int,1,1,area_createsector
+0x5064,int,1,1,area_marksector
+0x5088,int,1,1,area_createsector
+0x588c,int,1,1,area_createsector
+0x60a8,int,2,2,area_getnextsector createarea
+0xb0bc,int,1,1,createarea
+0x6d85069,int,1,1,server_playermessage
+0x6db9854,int,1,1,newspaper_load

@@ -71,6 +71,9 @@ STRUCTS = {
     'BondOpt': ('bondopt', 0x100000),
     'TempMesh': ('tempmesh', 0x2d1850),
     'Track': ('track', 0x578000),
+    # Phase 4, batch 5.
+    'Building': ('building', 0x36168f8),
+    'AreaSector': ('area_sector', 0xc0d0000),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
