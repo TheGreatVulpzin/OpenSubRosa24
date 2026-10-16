@@ -287,6 +287,10 @@ What the tools do:
 - With `verify=1`, the live verifier logs the difference and disables the hook. The original runs from then on.
 - With `verify=0`, the lifted version runs. The track geometry then has the relative error above. The in-game test checklist must include the objects that `createtrack` builds.
 
+### Harness-only difference: building_buildfloorplan
+
+On `murilo-20261015-221033-normal`, call 260 of `building_buildfloorplan` is "different" in a normal gate run. The lifted run calls `free` one more time than the original. The cause is the heap state that the earlier original runs leave behind, not the lifted C. In reset mode (`gate.py --reset` or `HARNESS_RESET=1`) each function starts from the snapshot, and all 8 calls are "same" (2026-10-16). No fix is necessary.
+
 ### Probes
 
 To find where a lifted function starts to differ, compare its intermediate values with the original:
