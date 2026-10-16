@@ -3,7 +3,8 @@
 Usage:
   python -I tools/lift/gate.py                      full run of the default target (ded024d)
   python -I tools/lift/gate.py --changed            only the functions whose lifted C changed
-  python -I tools/lift/gate.py --quick              only the recordings marked "quick" in the target
+  python -I tools/lift/gate.py --quick              only the fewest recordings that test every function
+  python -I tools/lift/gate.py --all-calls          all recorded calls, not the short sv_args.min.txt
   python -I tools/lift/gate.py --jobs 3             three harnesses at the same time
   python -I tools/lift/gate.py --update             save the results as the new baseline
   python -I tools/lift/gate.py --only murilo        only the recordings whose name has this text
@@ -28,10 +29,16 @@ lifted C with the version in git (--ref, default HEAD), runs only the changed fu
 keeps the baseline values of the others. A change in a "full_run_paths" file runs everything.
 Run a full gate before a push and after a change of many functions.
 
---quick: only the recordings with "quick" in the target. "quick": true runs the recording,
-"quick": "synth" runs only its +synth run (the recording with the hand-written calls). The
-quick set of ded024d covers 282 of the 284 tested functions in about 1 minute. Use it with
---changed while you work. A full gate before a push covers the rest.
+--quick: the fewest runs that together test every function of the baseline (a greedy set
+cover: each step takes the run that adds the most functions for each second of run time).
+The set follows the baseline, so a new recording joins it by itself when it tests a new
+function. Without a baseline, the recordings with "quick" in the target are used. Use it
+with --changed while you work.
+
+Short calls: tools/lift/min_calls.py writes <recording>/sv_args.min.txt with a few calls
+for each code path of each function. The gate uses it when it exists. --all-calls runs
+every recorded call. It has its own outputs and baseline in <out_dir>/all. Run it now and
+then (for example once a week), not for each change.
 
 --reset (or "reset": true in the target): the harness puts the snapshot back before each
 function (HARNESS_RESET=1). Without it, the writes of the original runs stay, and a function
@@ -136,6 +143,22 @@ def compare(name, funcs, base, only):
     return errors
 
 
+def quick_runs(baseline, names):
+    """The fewest runs that test every function that any run tests (greedy set cover by
+    new functions for each second). None when a run has no baseline."""
+    if not names or any(n not in baseline for n in names):
+        return None
+    cover = {n: {f for f, v in baseline[n]['funcs'].items() if v['same']} for n in names}
+    secs = {n: max(baseline[n].get('secs', 0), 1) for n in names}
+    want = set().union(*cover.values())
+    chosen, got = [], set()
+    while got != want:
+        n = max((n for n in names if n not in chosen), key=lambda n: len(cover[n] - got) / secs[n])
+        chosen.append(n)
+        got |= cover[n]
+    return set(chosen)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--target', default='ded024d', help='tools/lift/targets/<name>.json')
@@ -146,7 +169,8 @@ def main():
     ap.add_argument('--ref', default='HEAD', help='git version for --changed (default HEAD)')
     ap.add_argument('--jobs', type=int, default=2, help='harness runs at the same time (default 2)')
     ap.add_argument('--from-files', action='store_true', help='read the saved outputs, do not run the harness')
-    ap.add_argument('--quick', action='store_true', help='only the recordings marked "quick" in the target')
+    ap.add_argument('--quick', action='store_true', help='only the fewest runs that test every function')
+    ap.add_argument('--all-calls', action='store_true', help='all recorded calls (not sv_args.min.txt)')
     ap.add_argument('--no-synth', action='store_true', help='skip the runs with the hand-written calls')
     ap.add_argument('--reset', action='store_true', help='each function starts from the snapshot (HARNESS_RESET=1)')
     a = ap.parse_args()
@@ -154,6 +178,8 @@ def main():
     t = load_target(a.target)
     reset = a.reset or t.get('reset', False)
     out = t['out_dir'] / 'reset' if reset else t['out_dir']
+    if a.all_calls:
+        out = out / 'all'
     out.mkdir(parents=True, exist_ok=True)
     baseline_file = out / 'baseline.json'
     baseline = json.loads(baseline_file.read_text()) if baseline_file.exists() else {}
@@ -177,18 +203,25 @@ def main():
         d = t['recordings_dir'] / r['name']
         if a.only and a.only not in r['name']:
             continue
-        if a.quick and not r.get('quick'):
-            continue
         if not (d / 'sv_snapshot.bin').exists() or not (d / 'sv_args.txt').exists():
             print(f'  {r["name"]}: no recording here, skipped')
             continue
-        synth = r.get('synth') and not a.no_synth and t.get('synth') and t['synth'].exists()
-        if not (a.quick and r.get('quick') == 'synth' and synth):
-            runs.append((r['name'], d, d / 'sv_args.txt'))
-        if synth and not (a.quick and r.get('quick') is True):
+        args = d / 'sv_args.txt'
+        if not a.all_calls and (d / 'sv_args.min.txt').exists():
+            args = d / 'sv_args.min.txt'
+        runs.append((r['name'], d, args, r.get('quick') is True))
+        if r.get('synth') and not a.no_synth and t.get('synth') and t['synth'].exists():
             merged = Path(tmp.name) / f'{r["name"]}.txt'
-            merged.write_bytes((d / 'sv_args.txt').read_bytes() + b'\n' + t['synth'].read_bytes())
-            runs.append((r['name'] + '+synth', d, merged))
+            merged.write_bytes(args.read_bytes() + b'\n' + t['synth'].read_bytes())
+            runs.append((r['name'] + '+synth', d, merged, r.get('quick') == 'synth'))
+    if a.quick:
+        keep = quick_runs(baseline, [x[0] for x in runs])
+        if keep is None:
+            print('--quick: no baseline for every run, using the "quick" marks of the target')
+            keep = {x[0] for x in runs if x[3]}
+        runs = [x for x in runs if x[0] in keep]
+        print(f'--quick: {", ".join(x[0] for x in runs)}')
+    runs = [x[:3] for x in runs]
 
     filter_arg = []
     if only is not None:
@@ -244,7 +277,7 @@ def main():
             funcs = merged
             total = {'functions': len([f for f in funcs.values() if f['same'] or f['different'] or f['crashed']]),
                      'same': sum(f['same'] for f in funcs.values())}
-        results[name] = {'total': total, 'funcs': funcs}
+        results[name] = {'total': total, 'funcs': funcs, 'secs': round(secs) or (old or {}).get('secs', 0)}
         was = f' (baseline {old["total"]["same"]})' if old else ' (no baseline)'
         took = f', {secs:.0f} s' if secs else ''
         print(f'{name}: {total["functions"]} functions, {total["same"]} same{was}{took}')

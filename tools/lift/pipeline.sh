@@ -5,12 +5,12 @@
 #   --params   run ApplyParams.java first (after a change to analysis/024d/params.csv).
 #              It writes to the Ghidra project: make a backup first if the change is large.
 #   --no-gate  stop after the build.
-#   --full     full gate (all recordings, all functions, 30-40 min). Use it before a push.
-#              Without it the gate is "--changed --quick" (about 1-5 min).
+#   --full     full gate (all recordings, all functions, about 3 min). Use it before a push.
+#              Without it the gate is "--changed --quick" (about 1 min).
 # Other options go to tools/lift/gate.py (for example --update, --only murilo).
 #
 # Steps: [ApplyParams.java] -> LiftExport.java (5 min) -> lift.py --compile (2-5 min)
-#        -> tools\build_hook.bat -> gate.py (1-5 min, --full 30-40 min). Heavy: run nothing else meanwhile.
+#        -> tools\build_hook.bat -> gate.py (about 1 min, --full about 3 min). Heavy: run nothing else meanwhile.
 # The script stops at the first step that fails. The gate fails when a "calls same" count drops.
 set -euo pipefail
 source "$(dirname "$0")/../ghidra/env.sh"

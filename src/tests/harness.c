@@ -776,6 +776,115 @@ static void set_watch(const char *spec)
     RaiseException(0xE0574348, 0, 0, NULL);
 }
 
+/* Coverage: HARNESS_COVER=<blocks file> (tools/ghidra/ExportBlocks.java). The harness runs
+ * only the original of each call, with an INT3 on each basic block of the function, and
+ * prints "cover <call> <rva> <path hash> <blocks hit>". Each INT3 fires once per call: the
+ * handler puts the byte back and marks the block. tools/lift/min_calls.py keeps a few calls
+ * for each path and writes a shorter sv_args file. */
+typedef struct CoverFunc {
+    uint32_t rva;
+    int n;
+    uint32_t *block;   /* sorted RVAs */
+    uint8_t *byte;     /* the original first byte of each block */
+} CoverFunc;
+static CoverFunc *g_cover;
+static int g_ncover;
+static CoverFunc *g_cover_now;   /* the function of the running call */
+static uint8_t *g_cover_hit;
+
+static LONG CALLBACK cover_handler(EXCEPTION_POINTERS *ep)
+{
+    uint32_t at;
+    int lo, hi;
+    if (ep->ExceptionRecord->ExceptionCode != EXCEPTION_BREAKPOINT || !g_cover_now)
+        return EXCEPTION_CONTINUE_SEARCH;
+    at = (uint32_t)((uintptr_t)ep->ExceptionRecord->ExceptionAddress - sr_base);
+    lo = 0;
+    hi = g_cover_now->n - 1;
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (g_cover_now->block[mid] == at) {
+            *(uint8_t *)(sr_base + at) = g_cover_now->byte[mid];
+            g_cover_hit[mid] = 1;
+            ep->ContextRecord->Eip = (DWORD)(sr_base + at);
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
+        if (g_cover_now->block[mid] < at)
+            lo = mid + 1;
+        else
+            hi = mid - 1;
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+static int load_cover(const char *path)
+{
+    FILE *f = fopen(path, "r");
+    static char line[1 << 16];
+    int cap = 512, most = 0;
+    if (!f)
+        return 0;
+    g_cover = calloc(cap, sizeof(CoverFunc));
+    while (fgets(line, sizeof line, f)) {
+        CoverFunc *c;
+        char *tok = strtok(line, " \r\n");
+        int bcap = 64;
+        if (!tok)
+            continue;
+        if (g_ncover == cap)
+            g_cover = realloc(g_cover, (cap *= 2) * sizeof(CoverFunc));
+        c = &g_cover[g_ncover++];
+        c->rva = strtoul(tok, NULL, 16);
+        c->n = 0;
+        c->block = malloc(bcap * sizeof(uint32_t));
+        while ((tok = strtok(NULL, " \r\n"))) {
+            if (c->n == bcap)
+                c->block = realloc(c->block, (bcap *= 2) * sizeof(uint32_t));
+            c->block[c->n++] = strtoul(tok, NULL, 16);
+        }
+        c->byte = malloc(c->n ? c->n : 1);
+        if (c->n > most)
+            most = c->n;
+    }
+    fclose(f);
+    g_cover_hit = malloc(most ? most : 1);
+    return 1;
+}
+
+/* After the .text is writable: keep the original first byte of each block. */
+static void cover_init(void)
+{
+    IMAGE_NT_HEADERS32 *nt = (IMAGE_NT_HEADERS32 *)(sr_base + ((IMAGE_DOS_HEADER *)sr_base)->e_lfanew);
+    IMAGE_SECTION_HEADER *s = IMAGE_FIRST_SECTION(nt);
+    DWORD old;
+    int i, k;
+    VirtualProtect((void *)(sr_base + s->VirtualAddress), s->Misc.VirtualSize, PAGE_EXECUTE_READWRITE, &old);
+    for (i = 0; i < g_ncover; i++)
+        for (k = 0; k < g_cover[i].n; k++)
+            g_cover[i].byte[k] = *(uint8_t *)(sr_base + g_cover[i].block[k]);
+    AddVectoredExceptionHandler(1, cover_handler);
+}
+
+static CoverFunc *cover_find(uint32_t rva)
+{
+    int i;
+    for (i = 0; i < g_ncover; i++)
+        if (g_cover[i].rva == rva)
+            return &g_cover[i];
+    return NULL;
+}
+
+static void cover_arm(CoverFunc *c, int on)
+{
+    int k;
+    for (k = 0; k < c->n; k++)
+        *(uint8_t *)(sr_base + c->block[k]) = on ? 0xcc : c->byte[k];
+    FlushInstructionCache(GetCurrentProcess(), NULL, 0);
+    if (on)
+        memset(g_cover_hit, 0, c->n);
+    g_cover_now = on ? c : NULL;
+}
+
 static int safe_invoke(void *fn, const uint32_t *args, int n, int kind, uint32_t *r_eax, uint32_t *r_edx,
                        double *r_f)
 {
@@ -921,6 +1030,13 @@ int main(int argc, char **argv)
     lf_x87_init();
     set_probes(getenv("HARNESS_PROBE"));
     set_watch(getenv("HARNESS_WATCH"));
+    if (getenv("HARNESS_COVER")) {
+        if (!load_cover(getenv("HARNESS_COVER"))) {
+            fprintf(stderr, "cannot read the blocks file %s\n", getenv("HARNESS_COVER"));
+            return 1;
+        }
+        cover_init();
+    }
     if (!sv_verify_init()) {
         fprintf(stderr, "verifier: no .data section\n");
         return 1;
@@ -981,6 +1097,32 @@ int main(int argc, char **argv)
             }
             mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
             ncalls++;
+            if (g_cover) {  /* coverage mode: the original only, no comparison */
+                CoverFunc *cf = cover_find(e->rva);
+                uint32_t h = 2166136261u;
+                int hits = 0, run_ok;
+                build_args(c, e->args, a);
+                plat_test_set_packets(c->packets, c->npackets);
+                plat_test_begin(1);
+                if (cf)
+                    cover_arm(cf, 1);
+                run_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
+                if (cf) {
+                    for (k = 0; k < cf->n; k++)
+                        if (g_cover_hit[k]) {
+                            h = (h ^ (uint32_t)k) * 16777619u;
+                            hits++;
+                        }
+                    cover_arm(cf, 0);
+                }
+                plat_test_end(1);
+                if (!run_ok) {
+                    apply_snapshot();
+                    resolve_imports();
+                }
+                printf("cover %d %x %08x %d%s\n", j, e->rva, h, hits, run_ok ? "" : " crashed");
+                continue;
+            }
         again:
             build_args(c, e->args, a);
             fails_before = v.fails;
