@@ -1,0 +1,211 @@
+offset,type,uses,n_funcs,funcs
+0x4,int,1,1,clientrecv
+0x8,int,40,20,bulletsimulation clientrecv createlevel createplayer createscenario_world dedicatedserverloop deleteplayer humansimulation itemlogic logic_cardealer_buy logic_playeractions logic_suits_buy logic_teammissioncomplete logicsimulation playersellstock playersimulation playerteamkilltax resetgame serverrecv serversend
+0xc,int,2,2,clientrecv serversend
+0x1c,int,5,4,clientrecv resetgame serverrecv serversend
+0x20,int,25,11,clientrecv createplayer dedicatedserverloop human_itemsimulation itemweaponsimulation logic_playeractions logicsimulation logicsimulation_round logicsimulation_world resetgame serversend
+0x24,int,26,7,clientrecv logicsimulation logicsimulation_driving logicsimulation_round logicsimulation_world resetgame serversend
+0x28,int,3,3,dedicatedserverloop logicsimulation_round resetgame
+0x2c,int,5,5,dedicatedserverloop logicsimulation logicsimulation_round logicsimulation_world resetgame
+0x30,float,1,1,playerteamkilltax
+0x34,int,2,2,dedicatedserverloop logicsimulation_round
+0x4c,float,3,3,clientrecv resetgame serversend
+0x50,float,3,3,clientrecv resetgame serversend
+0x58,float,2,2,building_buildfloorplan pointinsidebase
+0x5c,float,2,2,building_buildfloorplan pointinsidebase
+0x60,float,2,2,building_buildfloorplan pointinsidebase
+0x64,float,2,2,building_buildfloorplan pointinsidebase
+0x68,float,2,2,building_buildfloorplan pointinsidebase
+0x6c,float,2,2,building_buildfloorplan pointinsidebase
+0x70,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x74,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x78,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x7c,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x80,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x84,float,8,6,building_buildfloorplan createmission_threeway createmission_transaction logic_setteammanager logicsimulation_round pointinsidebasesafe
+0x88,float,3,2,building_buildfloorplan logicsimulation_round
+0x8c,int,1,1,resetgame
+0x90,int,13,7,clientrecv createscenario_world logic_addteamcash logicsimulation logicsimulation_round resetgame serversend
+0x98,int,3,2,economysimulation resetgame
+0x9c,int,12,5,deleteplayer humansimulation logic_setteammanager logicsimulation_world resetgame
+0xb0,int,2,2,building_buildfloorplan eventsimulation
+0xb4,int,2,2,building_buildfloorplan eventsimulation
+0xb8,int,2,2,building_buildfloorplan eventsimulation
+0xbc,int,2,2,building_buildfloorplan eventsimulation
+0xc0,int,4,2,building_buildfloorplan eventsimulation
+0xc4,int,2,2,building_buildfloorplan eventsimulation
+0xc8,int,4,2,building_buildfloorplan eventsimulation
+0xcc,int,2,2,building_buildfloorplan eventsimulation
+0xd0,int,21,12,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction logic_playeractions logic_teammissioncomplete logicsimulation_round logicsimulation_world playersellstock resetgame scenario_getnumofmissions scenario_setmissioninactive
+0xd4,int,8,6,createmission_acquisition createmission_threeway createmission_transaction logic_teammissioncomplete logicsimulation_world scenario_setmissioninactive
+0xd8,int,8,6,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round scenario_getnumofmissions
+0xdc,int,9,8,createmission_acquisition createmission_threeway createmission_transaction logic_playeractions logic_teammissioncomplete logicsimulation_round logicsimulation_world scenario_setmissioninactive
+0xe0,int,4,3,createevent_updatemission createmission_threeway createmission_transaction
+0xe4,int,1,1,createevent_updatemission
+0xf0,int,5,4,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction
+0xf4,int,9,5,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction logic_teammissioncomplete
+0xf8,int,6,5,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction logicsimulation_world
+0xfc,int,2,2,createevent_updatemission createmission_acquisition
+0x100,int,19,7,createevent_updatemission createmission_acquisition createmission_threeway createmission_transaction logic_teammissioncomplete playersellstock scenario_setmissioninactive
+0x104,int,3,2,createmission_threeway logic_teammissioncomplete
+0x108,float,1,1,logic_teammissioncomplete
+0x110,int,17,10,createmission_acquisition createmission_threeway createmission_transaction logic_playeractions logicsimulation_round logicsimulation_world playersellstock resetgame scenario_getnumofmissions scenario_setmissioninactive
+0x114,int,5,5,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_world scenario_setmissioninactive
+0x118,int,4,4,createmission_acquisition createmission_transaction logicsimulation_round scenario_getnumofmissions
+0x11c,int,6,6,createmission_acquisition createmission_transaction logic_playeractions logicsimulation_round logicsimulation_world scenario_setmissioninactive
+0x130,int,1,1,createmission_acquisition
+0x138,int,1,1,logicsimulation_world
+0x140,int,4,2,playersellstock scenario_setmissioninactive
+0x150,int,11,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x154,int,3,3,createmission_acquisition createmission_threeway createmission_transaction
+0x158,int,3,3,createmission_acquisition createmission_transaction scenario_getnumofmissions
+0x15c,int,4,4,createmission_acquisition createmission_transaction logicsimulation_round logicsimulation_world
+0x170,int,1,1,createmission_acquisition
+0x180,int,1,1,playersellstock
+0x190,int,11,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x194,int,3,3,createmission_acquisition createmission_threeway createmission_transaction
+0x198,int,5,4,createmission_acquisition createmission_threeway createmission_transaction scenario_getnumofmissions
+0x19c,int,5,5,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world
+0x1a0,int,1,1,createmission_threeway
+0x1b0,int,2,2,createmission_acquisition createmission_threeway
+0x1b4,int,3,1,createmission_threeway
+0x1b8,int,1,1,createmission_threeway
+0x1c0,int,3,2,createmission_threeway playersellstock
+0x1c4,int,2,1,createmission_threeway
+0x1c8,float,1,1,createmission_threeway
+0x1cc,float,2,1,createmission_threeway
+0x1d0,int,8,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x1d4,int,1,1,createmission_transaction
+0x1d8,int,1,1,scenario_getnumofmissions
+0x1dc,int,3,3,createmission_transaction logicsimulation_round logicsimulation_world
+0x200,int,1,1,playersellstock
+0x208,float,1,1,createmission_transaction
+0x210,int,8,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x214,int,1,1,createmission_transaction
+0x218,int,1,1,scenario_getnumofmissions
+0x21c,int,3,3,createmission_transaction logicsimulation_round logicsimulation_world
+0x240,int,1,1,playersellstock
+0x248,float,1,1,createmission_transaction
+0x250,int,8,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x254,int,1,1,createmission_transaction
+0x258,int,1,1,scenario_getnumofmissions
+0x25c,int,3,3,createmission_transaction logicsimulation_round logicsimulation_world
+0x280,int,1,1,playersellstock
+0x288,float,1,1,createmission_transaction
+0x290,int,8,7,createmission_acquisition createmission_threeway createmission_transaction logicsimulation_round logicsimulation_world playersellstock scenario_getnumofmissions
+0x294,int,1,1,createmission_transaction
+0x298,int,1,1,scenario_getnumofmissions
+0x29c,int,2,2,createmission_transaction logicsimulation_world
+0x2c0,int,1,1,playersellstock
+0x2c8,float,1,1,createmission_transaction
+0x2d0,int,5,4,createmission_acquisition createmission_threeway createmission_transaction playersellstock
+0x2d4,int,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2d8,int,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2dc,int,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2e0,int,3,2,createmission_threeway createmission_transaction
+0x2f0,int,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2f4,int,7,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2f8,int,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x2fc,int,1,1,createmission_acquisition
+0x300,int,5,4,createmission_acquisition createmission_threeway createmission_transaction playersellstock
+0x308,float,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x30c,float,4,3,createmission_acquisition createmission_threeway createmission_transaction
+0x310,int,1,1,playersellstock
+0x340,int,1,1,playersellstock
+0x350,int,1,1,playersellstock
+0x380,int,1,1,playersellstock
+0x390,int,1,1,playersellstock
+0x3c0,int,1,1,playersellstock
+0x3d0,int,1,1,playersellstock
+0x400,int,1,1,playersellstock
+0x410,int,1,1,playersellstock
+0x440,int,1,1,playersellstock
+0x450,int,1,1,playersellstock
+0x480,int,1,1,playersellstock
+0x490,int,1,1,playersellstock
+0x4c0,int,1,1,playersellstock
+0x4d0,int,52,4,building_buildfloorplan createlevel logic_createcar logicsimulation_round
+0x4d4,int,12,3,building_buildfloorplan logic_createcar logicsimulation_round
+0x4d8,float,6,1,building_buildfloorplan
+0x4dc,float,6,1,building_buildfloorplan
+0x4e0,float,6,1,building_buildfloorplan
+0x4e4,float,8,1,building_buildfloorplan
+0x4e8,float,8,1,building_buildfloorplan
+0x4ec,float,8,1,building_buildfloorplan
+0x4f0,float,8,1,building_buildfloorplan
+0x4f4,float,7,1,building_buildfloorplan
+0x4f8,float,6,1,building_buildfloorplan
+0x4fc,float,8,1,building_buildfloorplan
+0x500,float,8,1,building_buildfloorplan
+0x504,float,8,1,building_buildfloorplan
+0x508,int,4,2,logic_createcar logicsimulation_round
+0x50c,int,2,1,logicsimulation_round
+0x518,int,2,1,logicsimulation_round
+0x53c,int,1,1,logic_createcar
+0x11ec,float,1,1,logicsimulation_round
+0x11f0,float,1,1,logicsimulation_round
+0x11f4,float,1,1,logicsimulation_round
+0x11f8,float,1,1,logicsimulation_round
+0x11fc,float,1,1,logicsimulation_round
+0x1200,float,1,1,logicsimulation_round
+0x1208,int,1,1,resetgame
+0x120c,int,8,6,clientrecv createscenario_world logicsimulation logicsimulation_round resetgame serversend
+0x1214,int,3,2,economysimulation resetgame
+0x1218,int,5,3,deleteplayer humansimulation resetgame
+0x124c,int,7,5,logic_teammissioncomplete logicsimulation_round logicsimulation_world resetgame scenario_setmissioninactive
+0x1250,int,2,2,logic_teammissioncomplete scenario_setmissioninactive
+0x1254,int,1,1,logicsimulation_round
+0x1258,int,4,4,logic_teammissioncomplete logicsimulation_round logicsimulation_world scenario_setmissioninactive
+0x127c,int,10,2,logic_teammissioncomplete scenario_setmissioninactive
+0x1280,int,1,1,logic_teammissioncomplete
+0x1284,float,1,1,logic_teammissioncomplete
+0x1288,float,1,1,logic_teammissioncomplete
+0x128c,int,3,3,logic_teammissioncomplete logicsimulation_round logicsimulation_world
+0x1290,int,1,1,logic_teammissioncomplete
+0x1298,int,2,2,logicsimulation_round logicsimulation_world
+0x12cc,int,1,1,logicsimulation_world
+0x12d8,int,1,1,logicsimulation_world
+0x130c,int,1,1,logicsimulation_world
+0x164c,int,3,2,createlevel logicsimulation_round
+0x1650,int,3,1,logicsimulation_round
+0x1654,float,3,1,logicsimulation_round
+0x1658,float,1,1,logicsimulation_round
+0x165c,float,1,1,logicsimulation_round
+0x1660,int,3,1,logicsimulation_round
+0x1678,float,1,1,logicsimulation_round
+0x167c,float,1,1,logicsimulation_round
+0x1680,float,1,1,logicsimulation_round
+0x1684,int,2,1,logicsimulation_round
+0x2388,int,4,4,clientrecv createscenario_world logicsimulation serversend
+0x2394,int,4,2,deleteplayer humansimulation
+0x27c8,int,1,1,createlevel
+0x34fc,float,1,1,createlevel
+0x3504,int,2,2,createscenario_world logicsimulation
+0x3510,int,4,2,deleteplayer humansimulation
+0x3944,int,1,1,createlevel
+0x4678,float,1,1,createlevel
+0x4680,int,2,2,createscenario_world logicsimulation
+0x468c,int,5,3,deleteplayer humansimulation logicsimulation_world
+0x4ac0,int,1,1,createlevel
+0x57fc,int,1,1,logicsimulation
+0x5c3c,int,1,1,createlevel
+0x6978,int,1,1,logicsimulation
+0x6db8,int,1,1,createlevel
+0x7af4,int,1,1,logicsimulation
+0x7b00,int,1,1,logicsimulation_world
+0x7f34,int,1,1,createlevel
+0x22fd8,int,1,1,resetgame
+0x257dc,int,1,1,resetgame
+0x257e0,int,1,1,resetgame
+0x257e8,int,1,1,resetgame
+0x257ec,float,1,1,resetgame
+0x257f0,int,2,1,logicsimulation_driving
+0x257f4,float,1,1,logicsimulation_driving
+0x257f8,float,1,1,logicsimulation_driving
+0x257fc,float,1,1,logicsimulation_driving
+0x25800,float,1,1,logicsimulation_driving
+0x25804,float,1,1,logicsimulation_driving
+0x25808,float,1,1,logicsimulation_driving
+0x25974,int,1,1,resetgame
+0x25978,int,1,1,resetgame
+0x25d60,int,5,3,itemtimetolive logicsimulation_world resetgame

@@ -1,0 +1,14 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,11,5,area_createinteriorblocks area_createsblocks listfiles removeflieextentions setupgame
+0x4,char,4,4,area_createinteriorblocks listfiles removeflieextentions setupgame
+0x5,char,2,2,area_createinteriorblocks removeflieextentions
+0x6,char,1,1,removeflieextentions
+0x7,char,2,1,removeflieextentions
+0x8,char,2,1,removeflieextentions
+0x9,char,1,1,removeflieextentions
+0xa,char,2,1,removeflieextentions
+0xb,char,1,1,removeflieextentions
+0x44,char,3,2,removeflieextentions setupgame
+0x45,char,3,2,removeflieextentions setupgame
+0x46,char,1,1,removeflieextentions
+0x47,char,1,1,removeflieextentions

@@ -1,0 +1,146 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,15,4,createobject setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0xc,int,13,3,setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0x12,char,1,1,setupobjecttypes_cars
+0x16,char,2,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x2c,int,21,5,economy_carmarket player_calcassets setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0x30,float,15,4,createobject setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0x34,float,6,1,setupobjecttypeweight
+0x38,int,142,5,createobject objecttype_addparticle setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x40,float,42,6,createobject objecttype_addparticle objecttype_addwheel setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x44,float,41,6,createobject objecttype_addparticle objecttype_addwheel setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x48,float,42,6,createobject objecttype_addparticle objecttype_addwheel setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x4c,float,36,5,createobject objecttype_addparticle setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x54,float,6,3,createobject setupobjecttypes_helicopters setupobjecttypeweight
+0x58,float,5,2,createobject setupobjecttypeweight
+0x5c,float,6,3,createobject setupobjecttypes_helicopters setupobjecttypeweight
+0x60,float,5,2,setupobjecttypes_helicopters setupobjecttypeweight
+0x68,float,5,1,setupobjectypes_train
+0x6c,float,5,1,setupobjectypes_train
+0x70,float,5,1,setupobjectypes_train
+0x7c,float,1,1,setupobjectypes_train
+0x80,float,1,1,setupobjectypes_train
+0x84,float,1,1,setupobjectypes_train
+0x90,float,1,1,setupobjectypes_train
+0x94,float,1,1,setupobjectypes_train
+0x98,float,1,1,setupobjectypes_train
+0xa4,float,4,1,setupobjectypes_train
+0xa8,float,4,1,setupobjectypes_train
+0xac,float,4,1,setupobjectypes_train
+0xb8,float,1,1,setupobjectypes_train
+0xbc,float,1,1,setupobjectypes_train
+0xc0,float,1,1,setupobjectypes_train
+0xe0,float,2,1,setupobjectypes_train
+0xe4,float,2,1,setupobjectypes_train
+0xe8,float,2,1,setupobjectypes_train
+0xf4,float,1,1,setupobjectypes_train
+0xf8,float,1,1,setupobjectypes_train
+0xfc,float,1,1,setupobjectypes_train
+0x108,float,1,1,setupobjectypes_train
+0x10c,float,1,1,setupobjectypes_train
+0x110,float,1,1,setupobjectypes_train
+0x11c,float,1,1,setupobjectypes_train
+0x120,float,1,1,setupobjectypes_train
+0x124,float,1,1,setupobjectypes_train
+0x53c,int,16,5,createobject setupobjecttypes_cars setupobjecttypes_helicopters setupobjecttypeweight setupobjectypes_train
+0x540,float,1,1,createobject
+0x544,float,1,1,createobject
+0x640,float,1,1,createobject
+0x644,float,1,1,createobject
+0x740,int,5,2,createobject objecttype_addbond
+0x744,int,2,2,createobject objecttype_addbond
+0x748,int,3,2,createobject objecttype_addbond
+0x74c,int,4,2,createobject objecttype_addbond
+0x750,int,1,1,createobject
+0x754,int,2,2,createobject objecttype_addbond
+0x758,int,3,2,createobject objecttype_addbond
+0x131c,int,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1320,int,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1324,int,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1328,int,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x132c,float,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1330,float,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1334,float,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1338,float,24,2,setupobjecttypes_cars setupobjecttypes_helicopters
+0x1344,int,347,5,createobject objecttype_addface setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0x1348,int,2,2,createobject objecttype_addface
+0x134c,int,2,2,createobject objecttype_addface
+0x1350,int,2,2,createobject objecttype_addface
+0x1354,int,2,2,createobject objecttype_addface
+0x1358,int,2,2,createobject objecttype_addface
+0x135c,int,2,2,createobject objecttype_addface
+0x1360,int,2,2,createobject objecttype_addface
+0x1364,int,2,2,createobject objecttype_addface
+0x1368,int,2,2,createobject objecttype_addface
+0x136c,float,1,1,createobject
+0x1370,float,1,1,createobject
+0x1374,float,1,1,createobject
+0x1378,float,1,1,createobject
+0x137c,float,1,1,objecttype_addface
+0x1380,float,2,2,createobject objecttype_addface
+0x1384,int,1,1,createobject
+0x1388,int,1,1,createobject
+0x138c,int,1,1,createobject
+0x1390,int,1,1,createobject
+0x1394,int,1,1,createobject
+0x1398,int,1,1,createobject
+0x139c,int,1,1,createobject
+0x13a0,int,1,1,createobject
+0x13a4,int,1,1,createobject
+0x13ac,float,1,1,createobject
+0x5348,int,110,2,objectsimulation setupobjectypes_train
+0x534c,int,12,1,setupobjectypes_train
+0x5350,int,12,1,setupobjectypes_train
+0x5354,int,12,1,setupobjectypes_train
+0x5358,int,12,1,setupobjectypes_train
+0x535c,float,12,1,setupobjectypes_train
+0x5360,float,12,1,setupobjectypes_train
+0x5364,float,12,1,setupobjectypes_train
+0x5368,float,12,1,setupobjectypes_train
+0x7758,float,12,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x775c,int,21,3,createobject objecttype_addwheel setupobjecttypeweight
+0x7760,int,2,2,createobject objecttype_addwheel
+0x7764,int,3,2,createobject objecttype_addwheel
+0x7768,int,2,2,createobject objecttype_addwheel
+0x776c,float,2,2,createobject objecttype_addwheel
+0x7770,float,3,2,createobject objecttype_addwheel
+0x7774,float,2,2,createobject objecttype_addwheel
+0x7778,float,2,2,createobject objecttype_addwheel
+0x777c,float,2,2,createobject objecttype_addwheel
+0x7780,float,2,1,setupobjecttypeweight
+0x7784,float,3,2,objecttype_addwheel setupobjecttypeweight
+0x7788,float,2,1,setupobjecttypeweight
+0x778c,float,2,2,createobject objecttype_addwheel
+0x7790,float,2,2,createobject objecttype_addwheel
+0x7794,float,2,2,createobject objecttype_addwheel
+0x7798,float,2,2,createobject objecttype_addwheel
+0x77a0,int,1,1,createobject
+0x77a8,int,1,1,createobject
+0x77ac,int,1,1,createobject
+0x77b4,float,1,1,createobject
+0x77c4,float,2,1,setupobjecttypeweight
+0x77c8,float,2,1,setupobjecttypeweight
+0x77cc,float,2,1,setupobjecttypeweight
+0x7fe0,float,12,2,createobject setupobjecttypes_cars
+0x7fe4,float,12,2,createobject setupobjecttypes_cars
+0x807c,int,14,4,createobject setupobjecttypes_cars setupobjecttypes_helicopters setupobjectypes_train
+0x8080,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x8084,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x8088,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x808c,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x8090,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x8094,float,13,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x8098,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x809c,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x80a0,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x80a4,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x80a8,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x80ac,float,8,3,createobject setupobjecttypes_cars setupobjecttypes_helicopters
+0x80b0,float,3,2,createobject setupobjecttypes_cars
+0x80b4,float,3,2,createobject setupobjecttypes_cars
+0x80b8,float,3,2,createobject setupobjecttypes_cars
+0x80bc,float,3,2,createobject setupobjecttypes_cars
+0x80c0,float,3,2,createobject setupobjecttypes_cars
+0x80c4,float,3,2,createobject setupobjecttypes_cars
+0x80c8,float,1,1,createobject
+0x8288,int,5,2,objectsimulation setupobjectypes_train

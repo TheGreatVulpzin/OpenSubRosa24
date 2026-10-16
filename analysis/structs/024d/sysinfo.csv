@@ -1,0 +1,6 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,6,4,getpaths loadaccountsclient loadsaveoptions saveaccountsclient
+0x200,int,4,4,getpaths loadaccountsclient loadsaveoptions saveaccountsclient
+0x408,int,3,1,getcpufrequency
+0x40c,int,3,1,getcpufrequency
+0x410,double,7,4,dedicatedserverloop getcpufrequency stoptimer systemtimer

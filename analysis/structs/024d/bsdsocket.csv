@@ -1,0 +1,146 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,9,4,recvpacket sendpacket serverrecv serversend
+0x4,int,7,6,dedicatedserverloop disablesocket recvpacket sendpacket serverrecv serversend
+0x24,int,8,5,disablesocket recvpacket sendpacket serverrecv serversend
+0x46,int16_t,10,4,disablesocket sendpacket serverrecv serversend
+0x48,int,12,5,disablesocket recvpacket sendpacket serverrecv serversend
+0x54,int,6,5,disablesocket recvpacket sendpacket serverrecv serversend
+0x58,int16_t,3,2,dedicatedserverloop disablesocket
+0x5c,int,167,8,cs_pwrite packevent packposition pbitwrite sendpacket servercycle serverrecv serversend
+0x60,int,110,8,cs_pwrite packevent packposition pbitwrite sendpacket servercycle serverrecv serversend
+0x6a,int,5,3,packposition serverrecv serversend
+0x6c,int,1,1,packevent
+0x6d,int,4,4,packevent packposition serverrecv serversend
+0x6e,int,3,3,packposition serverrecv serversend
+0x71,int,2,2,packevent serversend
+0x72,int,2,2,packevent serversend
+0x75,int,2,2,packevent serversend
+0x76,int,2,2,packevent serversend
+0x79,int,2,2,packevent serversend
+0x7a,int,2,2,packevent serversend
+0x7d,int,2,2,packevent serversend
+0x7e,int,2,2,packevent serversend
+0x81,int,1,1,packevent
+0x82,int,1,1,packevent
+0x85,int,1,1,packevent
+0x86,int,1,1,packevent
+0x89,int,1,1,packevent
+0x8a,int,1,1,packevent
+0x8d,int,2,2,packevent serverrecv
+0x8e,int,2,2,packevent serverrecv
+0x91,int,1,1,packevent
+0x92,int,1,1,packevent
+0x95,int,1,1,packevent
+0x96,int,1,1,packevent
+0x99,int,1,1,packevent
+0x9a,int,1,1,packevent
+0x9d,int,1,1,packevent
+0x9e,int,1,1,packevent
+0xa1,int,1,1,packevent
+0xa2,int,1,1,packevent
+0xa5,int,1,1,packevent
+0xa6,int,1,1,packevent
+0xa9,int,1,1,packevent
+0xaa,int,1,1,packevent
+0xad,int,1,1,packevent
+0xae,int,1,1,packevent
+0xb1,int,1,1,packevent
+0xb2,int,1,1,packevent
+0xb5,int,1,1,packevent
+0xb6,int,1,1,packevent
+0xb9,int,1,1,packevent
+0xba,int,1,1,packevent
+0xbd,int,1,1,packevent
+0xbe,int,1,1,packevent
+0xc1,int,1,1,packevent
+0xc2,int,1,1,packevent
+0xc5,int,1,1,packevent
+0xc6,int,1,1,packevent
+0xc9,int,1,1,packevent
+0xca,int,1,1,packevent
+0xcd,int,1,1,packevent
+0xce,int,1,1,packevent
+0xd1,int,1,1,packevent
+0xd2,int,1,1,packevent
+0xd5,int,1,1,packevent
+0xd6,int,1,1,packevent
+0xd9,int,1,1,packevent
+0xda,int,1,1,packevent
+0xdd,int,1,1,packevent
+0xde,int,1,1,packevent
+0xe1,int,1,1,packevent
+0xe2,int,1,1,packevent
+0xe5,int,1,1,packevent
+0xe6,int,1,1,packevent
+0xe9,int,1,1,packevent
+0xea,int,1,1,packevent
+0xed,int,1,1,packevent
+0xee,int,1,1,packevent
+0xf1,int,1,1,packevent
+0xf2,int,1,1,packevent
+0xf5,int,1,1,packevent
+0xf6,int,1,1,packevent
+0x10064,int,26,7,clientrecv cs_pread pbitread recvpacket serverrecv unpackevent unpackobjectpacket
+0x10068,int,157,7,clientrecv cs_pread pbitread recvpacket serverrecv unpackevent unpackobjectpacket
+0x1006c,int,97,7,clientrecv cs_pread pbitread recvpacket serverrecv unpackevent unpackobjectpacket
+0x10074,char,1,1,getmasterserverip
+0x10078,int,1,1,getmasterserverip
+0x1007c,char,1,1,getmasterserverip
+0x10080,int,1,1,getmasterserverip
+0x10084,char,2,1,getmasterserverip
+0x10088,char,1,1,getmasterserverip
+0x1008c,char,1,1,getmasterserverip
+0x1008d,int,2,2,unpackevent unpackobjectpacket
+0x1008e,int,3,3,serverrecv unpackevent unpackobjectpacket
+0x1008f,int,1,1,serverrecv
+0x10091,int,2,2,unpackevent unpackobjectpacket
+0x10092,int,3,3,serverrecv unpackevent unpackobjectpacket
+0x10093,int,1,1,serverrecv
+0x10095,int,2,2,unpackevent unpackobjectpacket
+0x10096,int,4,3,serverrecv unpackevent unpackobjectpacket
+0x10097,int,2,1,serverrecv
+0x10099,int,2,2,unpackevent unpackobjectpacket
+0x1009a,int,4,3,serverrecv unpackevent unpackobjectpacket
+0x1009b,int,2,1,serverrecv
+0x1009d,int,2,2,unpackevent unpackobjectpacket
+0x1009e,int,3,3,serverrecv unpackevent unpackobjectpacket
+0x1009f,int,1,1,serverrecv
+0x100a1,int,1,1,unpackevent
+0x100a2,int,2,2,serverrecv unpackevent
+0x100a3,int,1,1,serverrecv
+0x100a5,int,1,1,unpackevent
+0x100a6,int,2,2,serverrecv unpackevent
+0x100a7,int,1,1,serverrecv
+0x100a9,int,1,1,unpackevent
+0x100aa,int,2,2,serverrecv unpackevent
+0x100ab,int,1,1,serverrecv
+0x100ad,int,1,1,unpackevent
+0x100b0,char,1,1,serverrecv
+0x100b1,int,1,1,unpackevent
+0x100b2,int,1,1,unpackevent
+0x100b5,int,1,1,unpackevent
+0x100b6,int,1,1,unpackevent
+0x100b9,int,1,1,unpackevent
+0x100ba,int,1,1,unpackevent
+0x100bd,int,1,1,unpackevent
+0x100be,int,1,1,unpackevent
+0x100c1,int,1,1,unpackevent
+0x100c2,int,1,1,unpackevent
+0x100c5,int,1,1,unpackevent
+0x100c6,int,1,1,unpackevent
+0x100c9,int,1,1,unpackevent
+0x100ca,int,1,1,unpackevent
+0x100cd,int,1,1,unpackevent
+0x100ce,int,1,1,unpackevent
+0x100d1,int,1,1,unpackevent
+0x100d2,int,1,1,unpackevent
+0x100d5,int,1,1,unpackevent
+0x100d6,int,1,1,unpackevent
+0x100d9,int,1,1,unpackevent
+0x100da,int,1,1,unpackevent
+0x100dd,int,1,1,unpackevent
+0x100de,int,1,1,unpackevent
+0x100e1,int,1,1,unpackevent
+0x100e2,int,1,1,unpackevent
+0x100e5,int,1,1,unpackevent
+0x100e6,int,1,1,unpackevent

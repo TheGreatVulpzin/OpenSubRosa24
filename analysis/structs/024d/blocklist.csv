@@ -1,0 +1,178 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,50,3,area_block_createbuildinginterior area_createsblocks building_setupbuild
+0x4,uint32_t,3,2,area_createsblocks building_rotatefloorplan
+0x8,uint32_t,3,2,area_createsblocks building_rotatefloorplan
+0xc,int,2,1,area_createsblocks
+0x10,int,1,1,area_createsblocks
+0x28,int,2,1,createlevel
+0x30,int,1,1,createlevel
+0x38,int,1,1,createlevel
+0x40,int,1,1,createlevel
+0x44,int,2,1,createlevel
+0x48,int,2,1,createlevel
+0x4c,int,2,1,area_createsblocks
+0x50,int,1,1,area_createsblocks
+0x54,int,1,1,area_createsblocks
+0x58,int,1,1,area_createsblocks
+0x5c,int,2,2,area_createinteriorblocks area_createsblocks
+0x60,int,2,2,area_createinteriorblocks area_createsblocks
+0x64,int,2,2,area_createinteriorblocks area_createsblocks
+0x68,int,1,1,area_createsblocks
+0x6c,int,1,1,area_createsblocks
+0x70,int,1,1,area_createsblocks
+0x74,int,2,2,area_createsblocks human_itemsimulation
+0x78,int,1,1,area_createsblocks
+0x7c,int,1,1,area_createsblocks
+0x80,int,1,1,area_createsblocks
+0x84,int,1,1,area_createsblocks
+0x88,int,1,1,area_createsblocks
+0x8c,int,1,1,area_createsblocks
+0x90,int,1,1,area_createsblocks
+0x94,int,1,1,area_createsblocks
+0x98,int,1,1,area_createsblocks
+0x9c,int,1,1,area_createsblocks
+0xa0,int,1,1,area_createsblocks
+0xa4,int,1,1,area_createsblocks
+0xa8,int,1,1,area_createsblocks
+0xac,int,1,1,area_createsblocks
+0xb0,int,1,1,area_createsblocks
+0xb4,int,2,1,area_createsblocks
+0xb8,int,2,1,area_createsblocks
+0xbc,int,1,1,area_createsblocks
+0xc0,int,1,1,area_createsblocks
+0xc4,int,3,1,area_createsblocks
+0xc8,int,3,1,area_createsblocks
+0xcc,int,1,1,area_createsblocks
+0xd0,int,1,1,area_createsblocks
+0xd4,int,2,1,area_createsblocks
+0xd8,int,1,1,area_createsblocks
+0xdc,int,1,1,area_createsblocks
+0xe0,int,1,1,area_createsblocks
+0x104,int,4,2,area_createsblocks buildcitystreet
+0x108,int,4,2,area_createsblocks buildcitystreet
+0x10c,int,1,1,area_createsblocks
+0x110,int,1,1,area_createsblocks
+0x114,int,1,1,area_createsblocks
+0x118,int,1,1,area_createsblocks
+0x11c,int,3,2,area_createsblocks buildcitystreet
+0x120,int,2,2,area_createsblocks buildcitystreet
+0x124,int,1,1,area_createsblocks
+0x128,int,1,1,area_createsblocks
+0x12c,int,1,1,area_createsblocks
+0x144,int,1,1,buildcitystreet
+0x15c,int,1,1,buildcitystreet
+0x164,int,3,1,area_createsblocks
+0x168,int,3,1,area_createsblocks
+0x16c,int,1,1,area_createsblocks
+0x170,int,1,1,area_createsblocks
+0x174,int,1,1,area_createsblocks
+0x178,int,1,1,area_createsblocks
+0x17c,int,2,1,area_createsblocks
+0x180,int,1,1,area_createsblocks
+0x184,int,1,1,area_createsblocks
+0x188,int,1,1,area_createsblocks
+0x18c,int,1,1,area_createsblocks
+0x1c4,int,3,3,area_createinteriorblocks building_buildfloorplan human_itemsimulation
+0x1c8,int,1,1,area_createinteriorblocks
+0x1cc,int,1,1,area_createinteriorblocks
+0x1d0,uint32_t,3,3,area_createinteriorblocks building_buildfloorplan human_itemsimulation
+0x1d4,int,2,1,area_createsblocks
+0x1d8,int,4,1,area_createsblocks
+0x1dc,int,3,1,area_createsblocks
+0x1e0,int,1,1,area_createsblocks
+0x1e4,int,2,1,area_createsblocks
+0x1e8,int,4,1,area_createsblocks
+0x1ec,int,3,1,area_createsblocks
+0x1f0,int,1,1,area_createsblocks
+0x1f4,int,2,2,area_createinteriorblocks area_createsblocks
+0x1f8,int,1,1,area_createsblocks
+0x1fc,int,1,1,area_createsblocks
+0x200,int,1,1,area_createsblocks
+0x204,int,2,2,area_createinteriorblocks area_createsblocks
+0x208,int,1,1,area_createsblocks
+0x20c,int,1,1,area_createsblocks
+0x210,int,1,1,area_createsblocks
+0x214,int,2,2,area_createinteriorblocks area_createsblocks
+0x218,int,1,1,area_createsblocks
+0x21c,int,1,1,area_createsblocks
+0x220,int,1,1,area_createsblocks
+0x224,int,2,2,area_createinteriorblocks area_createsblocks
+0x228,int,1,1,area_createsblocks
+0x22c,int,1,1,area_createsblocks
+0x230,int,1,1,area_createsblocks
+0x234,int,2,2,area_createinteriorblocks area_createsblocks
+0x238,int,1,1,area_createsblocks
+0x23c,int,1,1,area_createsblocks
+0x240,int,1,1,area_createsblocks
+0x244,int,2,2,area_createinteriorblocks area_createsblocks
+0x248,int,1,1,area_createsblocks
+0x24c,int,1,1,area_createsblocks
+0x250,int,1,1,area_createsblocks
+0x254,int,2,2,area_createinteriorblocks area_createsblocks
+0x258,int,1,1,area_createsblocks
+0x25c,int,1,1,area_createsblocks
+0x260,int,1,1,area_createsblocks
+0x264,int,2,2,area_createinteriorblocks area_createsblocks
+0x268,int,1,1,area_createsblocks
+0x26c,int,1,1,area_createsblocks
+0x270,int,1,1,area_createsblocks
+0x274,int,2,2,area_createinteriorblocks area_createsblocks
+0x278,int,1,1,area_createsblocks
+0x27c,int,1,1,area_createsblocks
+0x280,int,1,1,area_createsblocks
+0x284,int,1,1,area_createsblocks
+0x288,int,1,1,area_createsblocks
+0x28c,int,1,1,area_createsblocks
+0x290,int,1,1,area_createsblocks
+0x294,int,1,1,area_createsblocks
+0x298,int,1,1,area_createsblocks
+0x29c,int,1,1,area_createsblocks
+0x2a0,int,1,1,area_createsblocks
+0x2a4,int,1,1,area_createsblocks
+0x2a8,int,1,1,area_createsblocks
+0x2ac,int,1,1,area_createsblocks
+0x2b0,int,1,1,area_createsblocks
+0x2b4,int,1,1,area_createsblocks
+0x2b8,int,1,1,area_createsblocks
+0x2bc,int,1,1,area_createsblocks
+0x2c0,int,1,1,area_createsblocks
+0x2c4,int,1,1,area_createsblocks
+0x2c8,int,1,1,area_createsblocks
+0x2cc,int,1,1,area_createsblocks
+0x2d0,int,1,1,area_createsblocks
+0x2d4,int,2,1,area_createsblocks
+0x2d8,int,4,1,area_createsblocks
+0x2dc,int,3,1,area_createsblocks
+0x2e0,int,1,1,area_createsblocks
+0x2e4,int,2,1,area_createsblocks
+0x2e8,int,4,1,area_createsblocks
+0x2ec,int,3,1,area_createsblocks
+0x2f0,int,1,1,area_createsblocks
+0x304,int,2,1,area_createsblocks
+0x308,int,1,1,area_createsblocks
+0x30c,int,1,1,area_createsblocks
+0x310,int,1,1,area_createsblocks
+0x314,int,2,1,area_createsblocks
+0x318,int,1,1,area_createsblocks
+0x31c,int,1,1,area_createsblocks
+0x320,int,1,1,area_createsblocks
+0x324,int,2,1,area_createsblocks
+0x328,int,1,1,area_createsblocks
+0x32c,int,1,1,area_createsblocks
+0x330,int,1,1,area_createsblocks
+0x334,int,4,2,area_createsblocks createlevel
+0x338,int,1,1,area_createsblocks
+0x33c,int,1,1,area_createsblocks
+0x340,int,1,1,area_createsblocks
+0x344,int,2,1,area_createsblocks
+0x348,int,1,1,area_createsblocks
+0x34c,int,1,1,area_createsblocks
+0x350,int,1,1,area_createsblocks
+0x354,int,2,2,area_createinteriorblocks area_createsblocks
+0x358,int,1,1,area_createsblocks
+0x35c,int,1,1,area_createsblocks
+0x360,int,1,1,area_createsblocks
+0x364,int,1,1,area_createsblocks
+0x368,int,1,1,area_createsblocks
+0x36c,int,1,1,area_createsblocks
+0x370,int,1,1,area_createsblocks

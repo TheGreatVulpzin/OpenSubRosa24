@@ -1,0 +1,30 @@
+offset,type,uses,n_funcs,funcs
+0x4,int,3,2,loadsaveoptions servercycle
+0x8,int,2,1,loadsaveoptions
+0x49,char,1,1,dedicatedserverloop
+0x4c,int,1,1,loadsaveoptions
+0x50,int,1,1,loadsaveoptions
+0x54,int,1,1,loadsaveoptions
+0x89,char,1,1,server_playermessage
+0x8a,char,1,1,server_playermessage
+0x8b,char,1,1,server_playermessage
+0xc8,int,2,2,dedicatedserverloop servercycle
+0xcc,int,2,2,dedicatedserverloop servercycle
+0xd0,int,1,1,loadsaveoptions
+0xd4,int,1,1,loadsaveoptions
+0xd8,int,2,1,loadsaveoptions
+0xdc,int,2,1,loadsaveoptions
+0x10c,int,1,1,loadsaveoptions
+0x114,int,4,2,dedicatedserverloop loadsaveoptions
+0x118,int,3,2,dedicatedserverloop loadsaveoptions
+0x11c,int,4,2,dedicatedserverloop loadsaveoptions
+0x120,int,1,1,loadsaveoptions
+0x124,int,2,1,loadsaveoptions
+0x128,int,2,1,loadsaveoptions
+0x12c,int,3,2,calculateplayervoice loadsaveoptions
+0x130,int,2,1,loadsaveoptions
+0x134,int,1,1,loadsaveoptions
+0x138,int,1,1,loadsaveoptions
+0x13c,int,2,1,loadsaveoptions
+0x144,int,3,1,loadsaveoptions
+0x148,float,3,1,loadsaveoptions

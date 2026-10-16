@@ -790,43 +790,237 @@ SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
 
 /* particle[]: record of 0x3c0 bytes. */
 typedef union Particle { struct {
-    uint8_t pad_0000[0x3c0];
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 3 functions */
+    float unk_0008;                      /* +0x0008 5 functions */
+    float unk_000c;                      /* +0x000c 2 functions */
+    float unk_0010;                      /* +0x0010 1 functions */
+    float unk_0014;                      /* +0x0014 12 functions */
+    float unk_0018;                      /* +0x0018 12 functions */
+    float unk_001c;                      /* +0x001c 12 functions */
+    float unk_0020;                      /* +0x0020 2 functions */
+    float unk_0024;                      /* +0x0024 2 functions */
+    float unk_0028;                      /* +0x0028 2 functions */
+    float unk_002c;                      /* +0x002c 12 functions */
+    float unk_0030;                      /* +0x0030 12 functions */
+    float unk_0034;                      /* +0x0034 12 functions */
+    float unk_0038;                      /* +0x0038 2 functions */
+    float unk_003c;                      /* +0x003c 2 functions */
+    float unk_0040;                      /* +0x0040 2 functions */
+    float unk_0044;                      /* +0x0044 1 functions */
+    float unk_0048;                      /* +0x0048 1 functions */
+    float unk_004c;                      /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 4 functions */
+    int unk_0054;                        /* +0x0054 4 functions */
+    int unk_0058;                        /* +0x0058 4 functions */
+    uint8_t pad_005c[0x78];
+    int unk_00d4;                        /* +0x00d4 2 functions */
+    int unk_00d8;                        /* +0x00d8 2 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    uint8_t pad_00e0[0x14];
+    int unk_00f4;                        /* +0x00f4 1 functions */
+    uint8_t pad_00f8[0x4];
+    float unk_00fc;                      /* +0x00fc 1 functions */
+    uint8_t pad_0100[0x4];
+    float unk_0104;                      /* +0x0104 1 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    float unk_010c;                      /* +0x010c 1 functions */
+    float unk_0110;                      /* +0x0110 1 functions */
+    float unk_0114;                      /* +0x0114 1 functions */
+    float unk_0118;                      /* +0x0118 1 functions */
+    float unk_011c;                      /* +0x011c 2 functions */
+    float unk_0120;                      /* +0x0120 2 functions */
+    float unk_0124;                      /* +0x0124 2 functions */
+    float unk_0128;                      /* +0x0128 1 functions */
+    float unk_012c;                      /* +0x012c 1 functions */
+    float unk_0130;                      /* +0x0130 1 functions */
+    uint8_t pad_0134[0xb8];
+    float unk_01ec;                      /* +0x01ec 1 functions */
+    uint8_t pad_01f0[0x4];
+    float unk_01f4;                      /* +0x01f4 1 functions */
+    float unk_01f8;                      /* +0x01f8 1 functions */
+    float unk_01fc;                      /* +0x01fc 1 functions */
+    float unk_0200;                      /* +0x0200 1 functions */
+    float unk_0204;                      /* +0x0204 1 functions */
+    float unk_0208;                      /* +0x0208 1 functions */
+    float unk_020c;                      /* +0x020c 2 functions */
+    float unk_0210;                      /* +0x0210 2 functions */
+    float unk_0214;                      /* +0x0214 2 functions */
+    float unk_0218;                      /* +0x0218 1 functions */
+    float unk_021c;                      /* +0x021c 1 functions */
+    float unk_0220;                      /* +0x0220 1 functions */
+    uint8_t pad_0224[0xb8];
+    float unk_02dc;                      /* +0x02dc 1 functions */
+    uint8_t pad_02e0[0x4];
+    float unk_02e4;                      /* +0x02e4 1 functions */
+    float unk_02e8;                      /* +0x02e8 1 functions */
+    float unk_02ec;                      /* +0x02ec 1 functions */
+    float unk_02f0;                      /* +0x02f0 1 functions */
+    float unk_02f4;                      /* +0x02f4 1 functions */
+    float unk_02f8;                      /* +0x02f8 1 functions */
+    float unk_02fc;                      /* +0x02fc 2 functions */
+    float unk_0300;                      /* +0x0300 2 functions */
+    float unk_0304;                      /* +0x0304 2 functions */
+    float unk_0308;                      /* +0x0308 1 functions */
+    float unk_030c;                      /* +0x030c 1 functions */
+    float unk_0310;                      /* +0x0310 1 functions */
+    uint8_t pad_0314[0xac];
 }; uint8_t lf_raw[0x3c0]; } Particle;
 SR_STATIC_ASSERT(sizeof(Particle) == 0x3c0, "Particle");
 
 /* timer[]: record of 0x58 bytes. */
 typedef union Timer { struct {
-    uint8_t pad_0000[0x58];
+    uint8_t pad_0000[0x1];
+    char unk_0001;                       /* +0x0001 4 functions */
+    uint8_t pad_0002[0x3e];
+    int unk_0040;                        /* +0x0040 6 functions */
+    int unk_0044;                        /* +0x0044 6 functions */
+    int unk_0048;                        /* +0x0048 6 functions */
+    int unk_004c;                        /* +0x004c 6 functions */
+    int unk_0050;                        /* +0x0050 7 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
 }; uint8_t lf_raw[0x58]; } Timer;
 SR_STATIC_ASSERT(sizeof(Timer) == 0x58, "Timer");
 
 /* area_block[]: record of 0x84 bytes. */
 typedef union AreaBlock { struct {
-    uint8_t pad_0000[0x84];
+    uint8_t pad_0000[0x1];
+    char unk_0001;                       /* +0x0001 1 functions */
+    char unk_0002;                       /* +0x0002 1 functions */
+    char unk_0003;                       /* +0x0003 1 functions */
+    uint8_t pad_0004[0x2];
+    char unk_0006;                       /* +0x0006 1 functions */
+    uint8_t pad_0007[0x1];
+    int unk_0008;                        /* +0x0008 1 functions */
+    uint8_t pad_000c[0x8];
+    char unk_0014;                       /* +0x0014 1 functions */
+    uint8_t pad_0015[0x2b];
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 4 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 4 functions */
+    int unk_0058;                        /* +0x0058 4 functions */
+    int unk_005c;                        /* +0x005c 3 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int unk_0064;                        /* +0x0064 2 functions */
+    int unk_0068;                        /* +0x0068 2 functions */
+    int unk_006c;                        /* +0x006c 6 functions */
+    int unk_0070;                        /* +0x0070 6 functions */
+    int unk_0074;                        /* +0x0074 7 functions */
+    int unk_0078;                        /* +0x0078 6 functions */
+    int unk_007c;                        /* +0x007c 1 functions */
+    int unk_0080;                        /* +0x0080 2 functions */
 }; uint8_t lf_raw[0x84]; } AreaBlock;
 SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
 
 /* area[]: record of 0x100d6c bytes. */
 typedef union Area { struct {
-    uint8_t pad_0000[0x100d6c];
+    int unk_0000;                        /* +0x0000 5 functions */
+    float unk_0004;                      /* +0x0004 4 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 4 functions */
+    float unk_0010;                      /* +0x0010 2 functions */
+    float unk_0014;                      /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 2 functions */
+    float unk_001c;                      /* +0x001c 2 functions */
+    float unk_0020;                      /* +0x0020 2 functions */
+    float unk_0024;                      /* +0x0024 2 functions */
+    float unk_0028;                      /* +0x0028 2 functions */
+    float unk_002c;                      /* +0x002c 2 functions */
+    float unk_0030;                      /* +0x0030 2 functions */
+    int unk_0034;                        /* +0x0034 19 functions */
+    int unk_0038;                        /* +0x0038 19 functions */
+    int unk_003c;                        /* +0x003c 19 functions */
+    float unk_0040;                      /* +0x0040 4 functions */
+    float unk_0044;                      /* +0x0044 4 functions */
+    int unk_0048;                        /* +0x0048 18 functions */
+    float unk_004c;                      /* +0x004c 4 functions */
+    float unk_0050;                      /* +0x0050 4 functions */
+    float unk_0054;                      /* +0x0054 4 functions */
+    float unk_0058;                      /* +0x0058 4 functions */
+    float unk_005c;                      /* +0x005c 4 functions */
+    float unk_0060;                      /* +0x0060 4 functions */
+    int unk_0064;                        /* +0x0064 1 functions */
+    uint8_t pad_0068[0x500];
+    int unk_0568;                        /* +0x0568 3 functions */
+    int unk_056c;                        /* +0x056c 18 functions */
+    int unk_0570;                        /* +0x0570 1 functions */
+    uint8_t pad_0574[0x7f8];
+    int unk_0d6c;                        /* +0x0d6c 2 functions */
+    uint8_t pad_0d70[0xffff8];
+    int unk_100d68;                      /* +0x100d68 1 functions */
 }; uint8_t lf_raw[0x100d6c]; } Area;
 SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
 
 /* option[]: record of 0x150 bytes. */
 typedef union Option { struct {
-    uint8_t pad_0000[0x150];
+    uint8_t pad_0000[0x4];
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    uint8_t pad_000c[0x3d];
+    char unk_0049;                       /* +0x0049 1 functions */
+    uint8_t pad_004a[0x2];
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    uint8_t pad_0058[0x31];
+    char unk_0089;                       /* +0x0089 1 functions */
+    char unk_008a;                       /* +0x008a 1 functions */
+    char unk_008b;                       /* +0x008b 1 functions */
+    uint8_t pad_008c[0x3c];
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    uint8_t pad_00e0[0x2c];
+    int unk_010c;                        /* +0x010c 1 functions */
+    uint8_t pad_0110[0x4];
+    int unk_0114;                        /* +0x0114 2 functions */
+    int unk_0118;                        /* +0x0118 2 functions */
+    int unk_011c;                        /* +0x011c 2 functions */
+    int unk_0120;                        /* +0x0120 1 functions */
+    int unk_0124;                        /* +0x0124 1 functions */
+    int unk_0128;                        /* +0x0128 1 functions */
+    int unk_012c;                        /* +0x012c 2 functions */
+    int unk_0130;                        /* +0x0130 1 functions */
+    int unk_0134;                        /* +0x0134 1 functions */
+    int unk_0138;                        /* +0x0138 1 functions */
+    int unk_013c;                        /* +0x013c 1 functions */
+    uint8_t pad_0140[0x4];
+    int unk_0144;                        /* +0x0144 1 functions */
+    float unk_0148;                      /* +0x0148 1 functions */
+    uint8_t pad_014c[0x4];
 }; uint8_t lf_raw[0x150]; } Option;
 SR_STATIC_ASSERT(sizeof(Option) == 0x150, "Option");
 
 /* server[]: record of 0x84 bytes. */
 typedef union Server { struct {
-    uint8_t pad_0000[0x84];
+    int unk_0000;                        /* +0x0000 32 functions */
+    uint8_t pad_0004[0x4];
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x1];
+    char unk_0015;                       /* +0x0015 1 functions */
+    uint8_t pad_0016[0x46];
+    int unk_005c;                        /* +0x005c 2 functions */
+    uint8_t pad_0060[0x4];
+    int unk_0064;                        /* +0x0064 1 functions */
+    uint8_t pad_0068[0x10];
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 2 functions */
+    int unk_0080;                        /* +0x0080 2 functions */
 }; uint8_t lf_raw[0x84]; } Server;
 SR_STATIC_ASSERT(sizeof(Server) == 0x84, "Server");
 
 /* stats[]: record of 0x8 bytes. */
 typedef union Stats { struct {
-    uint8_t pad_0000[0x8];
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
 }; uint8_t lf_raw[0x8]; } Stats;
 SR_STATIC_ASSERT(sizeof(Stats) == 0x8, "Stats");
 
@@ -846,25 +1040,454 @@ SR_STATIC_ASSERT(offsetof(SysInfo, ms_per_tick) == 0x410, "SysInfo.ms_per_tick")
 
 /* soundlist[]: record of 0x13c bytes. */
 typedef union SoundList { struct {
-    uint8_t pad_0000[0x13c];
+    int unk_0000;                        /* +0x0000 1 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    int unk_0014;                        /* +0x0014 1 functions */
+    int unk_0018;                        /* +0x0018 1 functions */
+    int unk_001c;                        /* +0x001c 1 functions */
+    int unk_0020;                        /* +0x0020 1 functions */
+    int unk_0024;                        /* +0x0024 1 functions */
+    int unk_0028;                        /* +0x0028 1 functions */
+    uint8_t pad_002c[0x8];
+    int unk_0034;                        /* +0x0034 1 functions */
+    int unk_0038;                        /* +0x0038 1 functions */
+    int unk_003c;                        /* +0x003c 1 functions */
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    uint8_t pad_0058[0x20];
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 2 functions */
+    uint8_t pad_0080[0x8];
+    int unk_0088;                        /* +0x0088 1 functions */
+    int unk_008c;                        /* +0x008c 2 functions */
+    uint8_t pad_0090[0x8];
+    int unk_0098;                        /* +0x0098 1 functions */
+    int unk_009c;                        /* +0x009c 1 functions */
+    uint8_t pad_00a0[0x8];
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    int unk_00b4;                        /* +0x00b4 1 functions */
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    uint8_t pad_00c0[0x8];
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    int unk_00e4;                        /* +0x00e4 1 functions */
+    int unk_00e8;                        /* +0x00e8 1 functions */
+    int unk_00ec;                        /* +0x00ec 1 functions */
+    int unk_00f0;                        /* +0x00f0 1 functions */
+    uint8_t pad_00f4[0x18];
+    int unk_010c;                        /* +0x010c 2 functions */
+    uint8_t pad_0110[0x1c];
+    int unk_012c;                        /* +0x012c 1 functions */
+    int unk_0130;                        /* +0x0130 2 functions */
+    int unk_0134;                        /* +0x0134 1 functions */
+    int unk_0138;                        /* +0x0138 1 functions */
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
 
 /* blocklist[]: record of 0x40354 bytes. */
 typedef union BlockList { struct {
-    uint8_t pad_0000[0x40354];
+    int unk_0000;                        /* +0x0000 3 functions */
+    uint32_t unk_0004;                   /* +0x0004 2 functions */
+    uint32_t unk_0008;                   /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x14];
+    int unk_0028;                        /* +0x0028 1 functions */
+    uint8_t pad_002c[0x4];
+    int unk_0030;                        /* +0x0030 1 functions */
+    uint8_t pad_0034[0x4];
+    int unk_0038;                        /* +0x0038 1 functions */
+    uint8_t pad_003c[0x4];
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    int unk_005c;                        /* +0x005c 2 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int unk_0064;                        /* +0x0064 2 functions */
+    int unk_0068;                        /* +0x0068 1 functions */
+    int unk_006c;                        /* +0x006c 1 functions */
+    int unk_0070;                        /* +0x0070 1 functions */
+    int unk_0074;                        /* +0x0074 2 functions */
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 1 functions */
+    int unk_0080;                        /* +0x0080 1 functions */
+    int unk_0084;                        /* +0x0084 1 functions */
+    int unk_0088;                        /* +0x0088 1 functions */
+    int unk_008c;                        /* +0x008c 1 functions */
+    int unk_0090;                        /* +0x0090 1 functions */
+    int unk_0094;                        /* +0x0094 1 functions */
+    int unk_0098;                        /* +0x0098 1 functions */
+    int unk_009c;                        /* +0x009c 1 functions */
+    int unk_00a0;                        /* +0x00a0 1 functions */
+    int unk_00a4;                        /* +0x00a4 1 functions */
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    int unk_00b4;                        /* +0x00b4 1 functions */
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    int unk_00c0;                        /* +0x00c0 1 functions */
+    int unk_00c4;                        /* +0x00c4 1 functions */
+    int unk_00c8;                        /* +0x00c8 1 functions */
+    int unk_00cc;                        /* +0x00cc 1 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    uint8_t pad_00e4[0x20];
+    int unk_0104;                        /* +0x0104 2 functions */
+    int unk_0108;                        /* +0x0108 2 functions */
+    int unk_010c;                        /* +0x010c 1 functions */
+    int unk_0110;                        /* +0x0110 1 functions */
+    int unk_0114;                        /* +0x0114 1 functions */
+    int unk_0118;                        /* +0x0118 1 functions */
+    int unk_011c;                        /* +0x011c 2 functions */
+    int unk_0120;                        /* +0x0120 2 functions */
+    int unk_0124;                        /* +0x0124 1 functions */
+    int unk_0128;                        /* +0x0128 1 functions */
+    int unk_012c;                        /* +0x012c 1 functions */
+    uint8_t pad_0130[0x14];
+    int unk_0144;                        /* +0x0144 1 functions */
+    uint8_t pad_0148[0x14];
+    int unk_015c;                        /* +0x015c 1 functions */
+    uint8_t pad_0160[0x4];
+    int unk_0164;                        /* +0x0164 1 functions */
+    int unk_0168;                        /* +0x0168 1 functions */
+    int unk_016c;                        /* +0x016c 1 functions */
+    int unk_0170;                        /* +0x0170 1 functions */
+    int unk_0174;                        /* +0x0174 1 functions */
+    int unk_0178;                        /* +0x0178 1 functions */
+    int unk_017c;                        /* +0x017c 1 functions */
+    int unk_0180;                        /* +0x0180 1 functions */
+    int unk_0184;                        /* +0x0184 1 functions */
+    int unk_0188;                        /* +0x0188 1 functions */
+    int unk_018c;                        /* +0x018c 1 functions */
+    uint8_t pad_0190[0x34];
+    int unk_01c4;                        /* +0x01c4 3 functions */
+    int unk_01c8;                        /* +0x01c8 1 functions */
+    int unk_01cc;                        /* +0x01cc 1 functions */
+    uint32_t unk_01d0;                   /* +0x01d0 3 functions */
+    int unk_01d4;                        /* +0x01d4 1 functions */
+    int unk_01d8;                        /* +0x01d8 1 functions */
+    int unk_01dc;                        /* +0x01dc 1 functions */
+    int unk_01e0;                        /* +0x01e0 1 functions */
+    int unk_01e4;                        /* +0x01e4 1 functions */
+    int unk_01e8;                        /* +0x01e8 1 functions */
+    int unk_01ec;                        /* +0x01ec 1 functions */
+    int unk_01f0;                        /* +0x01f0 1 functions */
+    int unk_01f4;                        /* +0x01f4 2 functions */
+    int unk_01f8;                        /* +0x01f8 1 functions */
+    int unk_01fc;                        /* +0x01fc 1 functions */
+    int unk_0200;                        /* +0x0200 1 functions */
+    int unk_0204;                        /* +0x0204 2 functions */
+    int unk_0208;                        /* +0x0208 1 functions */
+    int unk_020c;                        /* +0x020c 1 functions */
+    int unk_0210;                        /* +0x0210 1 functions */
+    int unk_0214;                        /* +0x0214 2 functions */
+    int unk_0218;                        /* +0x0218 1 functions */
+    int unk_021c;                        /* +0x021c 1 functions */
+    int unk_0220;                        /* +0x0220 1 functions */
+    int unk_0224;                        /* +0x0224 2 functions */
+    int unk_0228;                        /* +0x0228 1 functions */
+    int unk_022c;                        /* +0x022c 1 functions */
+    int unk_0230;                        /* +0x0230 1 functions */
+    int unk_0234;                        /* +0x0234 2 functions */
+    int unk_0238;                        /* +0x0238 1 functions */
+    int unk_023c;                        /* +0x023c 1 functions */
+    int unk_0240;                        /* +0x0240 1 functions */
+    int unk_0244;                        /* +0x0244 2 functions */
+    int unk_0248;                        /* +0x0248 1 functions */
+    int unk_024c;                        /* +0x024c 1 functions */
+    int unk_0250;                        /* +0x0250 1 functions */
+    int unk_0254;                        /* +0x0254 2 functions */
+    int unk_0258;                        /* +0x0258 1 functions */
+    int unk_025c;                        /* +0x025c 1 functions */
+    int unk_0260;                        /* +0x0260 1 functions */
+    int unk_0264;                        /* +0x0264 2 functions */
+    int unk_0268;                        /* +0x0268 1 functions */
+    int unk_026c;                        /* +0x026c 1 functions */
+    int unk_0270;                        /* +0x0270 1 functions */
+    int unk_0274;                        /* +0x0274 2 functions */
+    int unk_0278;                        /* +0x0278 1 functions */
+    int unk_027c;                        /* +0x027c 1 functions */
+    int unk_0280;                        /* +0x0280 1 functions */
+    int unk_0284;                        /* +0x0284 1 functions */
+    int unk_0288;                        /* +0x0288 1 functions */
+    int unk_028c;                        /* +0x028c 1 functions */
+    int unk_0290;                        /* +0x0290 1 functions */
+    int unk_0294;                        /* +0x0294 1 functions */
+    int unk_0298;                        /* +0x0298 1 functions */
+    int unk_029c;                        /* +0x029c 1 functions */
+    int unk_02a0;                        /* +0x02a0 1 functions */
+    int unk_02a4;                        /* +0x02a4 1 functions */
+    int unk_02a8;                        /* +0x02a8 1 functions */
+    int unk_02ac;                        /* +0x02ac 1 functions */
+    int unk_02b0;                        /* +0x02b0 1 functions */
+    int unk_02b4;                        /* +0x02b4 1 functions */
+    int unk_02b8;                        /* +0x02b8 1 functions */
+    int unk_02bc;                        /* +0x02bc 1 functions */
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    int unk_02c4;                        /* +0x02c4 1 functions */
+    int unk_02c8;                        /* +0x02c8 1 functions */
+    int unk_02cc;                        /* +0x02cc 1 functions */
+    int unk_02d0;                        /* +0x02d0 1 functions */
+    int unk_02d4;                        /* +0x02d4 1 functions */
+    int unk_02d8;                        /* +0x02d8 1 functions */
+    int unk_02dc;                        /* +0x02dc 1 functions */
+    int unk_02e0;                        /* +0x02e0 1 functions */
+    int unk_02e4;                        /* +0x02e4 1 functions */
+    int unk_02e8;                        /* +0x02e8 1 functions */
+    int unk_02ec;                        /* +0x02ec 1 functions */
+    int unk_02f0;                        /* +0x02f0 1 functions */
+    uint8_t pad_02f4[0x10];
+    int unk_0304;                        /* +0x0304 1 functions */
+    int unk_0308;                        /* +0x0308 1 functions */
+    int unk_030c;                        /* +0x030c 1 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    int unk_0314;                        /* +0x0314 1 functions */
+    int unk_0318;                        /* +0x0318 1 functions */
+    int unk_031c;                        /* +0x031c 1 functions */
+    int unk_0320;                        /* +0x0320 1 functions */
+    int unk_0324;                        /* +0x0324 1 functions */
+    int unk_0328;                        /* +0x0328 1 functions */
+    int unk_032c;                        /* +0x032c 1 functions */
+    int unk_0330;                        /* +0x0330 1 functions */
+    int unk_0334;                        /* +0x0334 2 functions */
+    int unk_0338;                        /* +0x0338 1 functions */
+    int unk_033c;                        /* +0x033c 1 functions */
+    int unk_0340;                        /* +0x0340 1 functions */
+    int unk_0344;                        /* +0x0344 1 functions */
+    int unk_0348;                        /* +0x0348 1 functions */
+    int unk_034c;                        /* +0x034c 1 functions */
+    int unk_0350;                        /* +0x0350 1 functions */
+    int unk_0354;                        /* +0x0354 2 functions */
+    int unk_0358;                        /* +0x0358 1 functions */
+    int unk_035c;                        /* +0x035c 1 functions */
+    int unk_0360;                        /* +0x0360 1 functions */
+    int unk_0364;                        /* +0x0364 1 functions */
+    int unk_0368;                        /* +0x0368 1 functions */
+    int unk_036c;                        /* +0x036c 1 functions */
+    int unk_0370;                        /* +0x0370 1 functions */
+    uint8_t pad_0374[0x3ffe0];
 }; uint8_t lf_raw[0x40354]; } BlockList;
 SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
 
 /* city[]: record of 0xa0b99c bytes. */
 typedef union City { struct {
-    uint8_t pad_0000[0xa0b99c];
+    int unk_0000;                        /* +0x0000 6 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 7 functions */
+    int unk_000c;                        /* +0x000c 3 functions */
+    int unk_0010;                        /* +0x0010 7 functions */
+    float unk_0014;                      /* +0x0014 4 functions */
+    float unk_0018;                      /* +0x0018 4 functions */
+    float unk_001c;                      /* +0x001c 4 functions */
+    int unk_0020;                        /* +0x0020 5 functions */
+    int unk_0024;                        /* +0x0024 6 functions */
+    int unk_0028;                        /* +0x0028 5 functions */
+    int unk_002c;                        /* +0x002c 5 functions */
+    int unk_0030;                        /* +0x0030 5 functions */
+    int unk_0034;                        /* +0x0034 5 functions */
+    int unk_0038;                        /* +0x0038 5 functions */
+    int unk_003c;                        /* +0x003c 5 functions */
+    int unk_0040;                        /* +0x0040 3 functions */
+    int unk_0044;                        /* +0x0044 2 functions */
+    int unk_0048;                        /* +0x0048 2 functions */
+    uint8_t pad_004c[0x4];
+    int unk_0050;                        /* +0x0050 2 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    int unk_005c;                        /* +0x005c 1 functions */
+    uint8_t pad_0060[0x10];
+    int unk_0070;                        /* +0x0070 1 functions */
+    uint8_t pad_0074[0x4];
+    int unk_0078;                        /* +0x0078 1 functions */
+    uint8_t pad_007c[0x2c];
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    uint8_t pad_00b4[0x4];
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    int unk_00c0;                        /* +0x00c0 1 functions */
+    int unk_00c4;                        /* +0x00c4 1 functions */
+    uint8_t pad_00c8[0xe0];
+    int unk_01a8;                        /* +0x01a8 1 functions */
+    uint8_t pad_01ac[0x8];
+    float unk_01b4;                      /* +0x01b4 1 functions */
+    uint8_t pad_01b8[0x4];
+    float unk_01bc;                      /* +0x01bc 1 functions */
+    uint8_t pad_01c0[0x30];
+    int unk_01f0;                        /* +0x01f0 1 functions */
+    int unk_01f4;                        /* +0x01f4 1 functions */
+    int unk_01f8;                        /* +0x01f8 1 functions */
+    int unk_01fc;                        /* +0x01fc 1 functions */
+    uint8_t pad_0200[0x19e08];
+    int unk_1a008;                       /* +0x1a008 4 functions */
+    int unk_1a00c;                       /* +0x1a00c 6 functions */
+    int unk_1a010;                       /* +0x1a010 4 functions */
+    int unk_1a014;                       /* +0x1a014 4 functions */
+    int unk_1a018;                       /* +0x1a018 2 functions */
+    int unk_1a01c;                       /* +0x1a01c 2 functions */
+    float unk_1a020;                     /* +0x1a020 3 functions */
+    float unk_1a024;                     /* +0x1a024 3 functions */
+    float unk_1a028;                     /* +0x1a028 3 functions */
+    float unk_1a02c;                     /* +0x1a02c 3 functions */
+    float unk_1a030;                     /* +0x1a030 3 functions */
+    float unk_1a034;                     /* +0x1a034 3 functions */
+    char unk_1a038;                      /* +0x1a038 1 functions */
+    char unk_1a039;                      /* +0x1a039 1 functions */
+    uint8_t pad_1a03a[0x97d2];
+    int unk_2380c;                       /* +0x2380c 1 functions */
+    int unk_23810;                       /* +0x23810 1 functions */
+    int unk_23814;                       /* +0x23814 1 functions */
+    int unk_23818;                       /* +0x23818 1 functions */
+    int unk_2381c;                       /* +0x2381c 1 functions */
+    int unk_23820;                       /* +0x23820 1 functions */
+    int unk_23824;                       /* +0x23824 1 functions */
+    int unk_23828;                       /* +0x23828 1 functions */
+    uint8_t pad_2382c[0x5fe4];
+    int unk_29810;                       /* +0x29810 1 functions */
+    uint8_t pad_29814[0x6000];
+    int unk_2f814;                       /* +0x2f814 1 functions */
+    uint8_t pad_2f818[0x180];
+    int unk_2f998;                       /* +0x2f998 9 functions */
+    uint8_t pad_2f99c[0x40];
+    int unk_2f9dc;                       /* +0x2f9dc 8 functions */
+    uint8_t pad_2f9e0[0xc];
+    float unk_2f9ec;                     /* +0x2f9ec 1 functions */
+    float unk_2f9f0;                     /* +0x2f9f0 2 functions */
+    float unk_2f9f4;                     /* +0x2f9f4 1 functions */
+    float unk_2f9f8;                     /* +0x2f9f8 3 functions */
+    float unk_2f9fc;                     /* +0x2f9fc 3 functions */
+    float unk_2fa00;                     /* +0x2fa00 3 functions */
+    float unk_2fa04;                     /* +0x2fa04 3 functions */
+    float unk_2fa08;                     /* +0x2fa08 3 functions */
+    float unk_2fa0c;                     /* +0x2fa0c 3 functions */
+    int unk_2fa10;                       /* +0x2fa10 1 functions */
+    int unk_2fa14;                       /* +0x2fa14 1 functions */
+    int unk_2fa18;                       /* +0x2fa18 1 functions */
+    int unk_2fa1c;                       /* +0x2fa1c 1 functions */
+    int unk_2fa20;                       /* +0x2fa20 1 functions */
+    uint8_t pad_2fa24[0x16c];
+    int unk_2fb90;                       /* +0x2fb90 1 functions */
+    int unk_2fb94;                       /* +0x2fb94 1 functions */
+    uint8_t pad_2fb98[0x8];
+    int unk_2fba0;                       /* +0x2fba0 2 functions */
+    float unk_2fba4;                     /* +0x2fba4 2 functions */
+    float unk_2fba8;                     /* +0x2fba8 2 functions */
+    float unk_2fbac;                     /* +0x2fbac 2 functions */
+    int unk_2fbb0;                       /* +0x2fbb0 2 functions */
+    uint8_t pad_2fbb4[0x3f0];
+    float unk_2ffa4;                     /* +0x2ffa4 2 functions */
+    float unk_2ffa8;                     /* +0x2ffa8 2 functions */
+    float unk_2ffac;                     /* +0x2ffac 2 functions */
+    uint8_t pad_2ffb0[0x2ec];
+    int unk_3029c;                       /* +0x3029c 2 functions */
+    int unk_302a0;                       /* +0x302a0 3 functions */
+    int unk_302a4;                       /* +0x302a4 7 functions */
+    int unk_302a8;                       /* +0x302a8 4 functions */
+    int unk_302ac;                       /* +0x302ac 3 functions */
+    int unk_302b0;                       /* +0x302b0 2 functions */
+    int unk_302b4;                       /* +0x302b4 1 functions */
+    int unk_302b8;                       /* +0x302b8 1 functions */
+    int unk_302bc;                       /* +0x302bc 1 functions */
+    int unk_302c0;                       /* +0x302c0 1 functions */
+    int unk_302c4;                       /* +0x302c4 1 functions */
+    int unk_302c8;                       /* +0x302c8 1 functions */
+    int unk_302cc;                       /* +0x302cc 1 functions */
+    int unk_302d0;                       /* +0x302d0 1 functions */
+    int unk_302d4;                       /* +0x302d4 1 functions */
+    int unk_302d8;                       /* +0x302d8 1 functions */
+    int unk_302dc;                       /* +0x302dc 1 functions */
+    int unk_302e0;                       /* +0x302e0 1 functions */
+    int unk_302e4;                       /* +0x302e4 1 functions */
+    int unk_302e8;                       /* +0x302e8 1 functions */
+    int unk_302ec;                       /* +0x302ec 1 functions */
+    int unk_302f0;                       /* +0x302f0 1 functions */
+    int unk_302f4;                       /* +0x302f4 1 functions */
+    int unk_302f8;                       /* +0x302f8 1 functions */
+    int unk_302fc;                       /* +0x302fc 1 functions */
+    int unk_30300;                       /* +0x30300 1 functions */
+    int unk_30304;                       /* +0x30304 1 functions */
+    int unk_30308;                       /* +0x30308 1 functions */
+    int unk_3030c;                       /* +0x3030c 1 functions */
+    int unk_30310;                       /* +0x30310 1 functions */
+    int unk_30314;                       /* +0x30314 1 functions */
+    int unk_30318;                       /* +0x30318 1 functions */
+    int unk_3031c;                       /* +0x3031c 1 functions */
+    uint8_t pad_30320[0x48];
+    int unk_30368;                       /* +0x30368 1 functions */
+    float unk_3036c;                     /* +0x3036c 2 functions */
+    float unk_30370;                     /* +0x30370 2 functions */
+    float unk_30374;                     /* +0x30374 2 functions */
+    uint8_t pad_30378[0x40];
+    int unk_303b8;                       /* +0x303b8 5 functions */
+    uint8_t pad_303bc[0x18];
+    float unk_303d4;                     /* +0x303d4 1 functions */
+    float unk_303d8;                     /* +0x303d8 1 functions */
+    float unk_303dc;                     /* +0x303dc 1 functions */
+    uint8_t pad_303e0[0x8a0];
+    int unk_30c80;                       /* +0x30c80 2 functions */
+    int unk_30c84;                       /* +0x30c84 1 functions */
+    int unk_30c88;                       /* +0x30c88 1 functions */
+    int unk_30c8c;                       /* +0x30c8c 1 functions */
+    int unk_30c90;                       /* +0x30c90 1 functions */
+    uint8_t pad_30c94[0x9dad08];
 }; uint8_t lf_raw[0xa0b99c]; } City;
 SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {
-    uint8_t pad_0000[0x580];
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    uint8_t pad_0008[0x4];
+    int unk_000c;                        /* +0x000c 1 functions */
+    uint8_t pad_0010[0x1c];
+    int unk_002c;                        /* +0x002c 1 functions */
+    uint8_t pad_0030[0x4];
+    int unk_0034;                        /* +0x0034 1 functions */
+    uint8_t pad_0038[0x24c];
+    int unk_0284;                        /* +0x0284 1 functions */
+    int unk_0288;                        /* +0x0288 2 functions */
+    uint8_t pad_028c[0x10];
+    int unk_029c;                        /* +0x029c 1 functions */
+    int unk_02a0;                        /* +0x02a0 1 functions */
+    int unk_02a4;                        /* +0x02a4 1 functions */
+    uint8_t pad_02a8[0x8];
+    int unk_02b0;                        /* +0x02b0 1 functions */
+    int unk_02b4;                        /* +0x02b4 1 functions */
+    uint8_t pad_02b8[0x8];
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    int unk_02c4;                        /* +0x02c4 1 functions */
+    uint8_t pad_02c8[0x8];
+    int unk_02d0;                        /* +0x02d0 1 functions */
+    uint8_t pad_02d4[0x1c];
+    int unk_02f0;                        /* +0x02f0 1 functions */
+    uint8_t pad_02f4[0x8c];
+    int unk_0380;                        /* +0x0380 1 functions */
+    int unk_0384;                        /* +0x0384 1 functions */
+    uint8_t pad_0388[0x1f8];
 }; uint8_t lf_raw[0x580]; } MaterialList;
 SR_STATIC_ASSERT(sizeof(MaterialList) == 0x580, "MaterialList");
 
@@ -874,9 +1497,31 @@ typedef union Intersect { struct {
     float normal[3];                     /* +0x000c lineintersectall, sphereintersectlevel: copy of the hit normal (local_c..local_4); manager uses +0xc */
     float fraction;                      /* +0x0018 lineintersectall: set to 1.0, keeps the nearest hit (local_1c < fraction) */
     float distance;                      /* +0x001c sphereintersectlevel: set to 65536.0, keeps the nearest hit */
-    uint8_t pad_0020[0x58];
+    float unk_0020;                      /* +0x0020 9 functions */
+    float unk_0024;                      /* +0x0024 9 functions */
+    float unk_0028;                      /* +0x0028 9 functions */
+    uint8_t pad_002c[0x4];
+    int unk_0030;                        /* +0x0030 5 functions */
+    int unk_0034;                        /* +0x0034 6 functions */
+    int unk_0038;                        /* +0x0038 5 functions */
+    int unk_003c;                        /* +0x003c 5 functions */
+    uint8_t pad_0040[0x4];
+    float unk_0044;                      /* +0x0044 5 functions */
+    float unk_0048;                      /* +0x0048 4 functions */
+    float unk_004c;                      /* +0x004c 4 functions */
+    uint8_t pad_0050[0x4];
+    int unk_0054;                        /* +0x0054 7 functions */
+    int unk_0058;                        /* +0x0058 5 functions */
+    int unk_005c;                        /* +0x005c 4 functions */
+    int unk_0060;                        /* +0x0060 4 functions */
+    int unk_0064;                        /* +0x0064 3 functions */
+    int unk_0068;                        /* +0x0068 2 functions */
+    int unk_006c;                        /* +0x006c 5 functions */
+    int unk_0070;                        /* +0x0070 4 functions */
+    int unk_0074;                        /* +0x0074 3 functions */
     int index;                           /* +0x0078 lineintersectall: set to -1 before the search */
-    uint8_t pad_007c[0x8];
+    int unk_007c;                        /* +0x007c 3 functions */
+    int unk_0080;                        /* +0x0080 3 functions */
 }; uint8_t lf_raw[0x84]; } Intersect;
 SR_STATIC_ASSERT(sizeof(Intersect) == 0x84, "Intersect");
 SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
@@ -887,13 +1532,47 @@ SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
 
 /* timerlist[]: record of 0x54 bytes. */
 typedef union TimerList { struct {
-    uint8_t pad_0000[0x54];
+    int unk_0000;                        /* +0x0000 1 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    int unk_0014;                        /* +0x0014 1 functions */
+    int unk_0018;                        /* +0x0018 1 functions */
+    int unk_001c;                        /* +0x001c 1 functions */
+    int unk_0020;                        /* +0x0020 1 functions */
+    int unk_0024;                        /* +0x0024 1 functions */
+    int unk_0028;                        /* +0x0028 1 functions */
+    int unk_002c;                        /* +0x002c 1 functions */
+    int unk_0030;                        /* +0x0030 1 functions */
+    int unk_0034;                        /* +0x0034 1 functions */
+    int unk_0038;                        /* +0x0038 1 functions */
+    int unk_003c;                        /* +0x003c 2 functions */
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
 }; uint8_t lf_raw[0x54]; } TimerList;
 SR_STATIC_ASSERT(sizeof(TimerList) == 0x54, "TimerList");
 
 /* speex[]: record of 0x931000 bytes. */
 typedef union Speex { struct {
-    uint8_t pad_0000[0x931000];
+    uint8_t pad_0000[0x15000];
+    int unk_15000;                       /* +0x15000 2 functions */
+    uint8_t pad_15004[0x4];
+    int unk_15008;                       /* +0x15008 2 functions */
+    uint8_t pad_1500c[0x4200];
+    int unk_1920c;                       /* +0x1920c 2 functions */
+    uint8_t pad_19210[0x920c];
+    int unk_2241c;                       /* +0x2241c 2 functions */
+    uint8_t pad_22420[0x920c];
+    int unk_2b62c;                       /* +0x2b62c 1 functions */
+    uint8_t pad_2b630[0x920c];
+    int unk_3483c;                       /* +0x3483c 1 functions */
+    uint8_t pad_34840[0x920c];
+    int unk_3da4c;                       /* +0x3da4c 1 functions */
+    uint8_t pad_3da50[0x8f35b0];
 }; uint8_t lf_raw[0x931000]; } Speex;
 SR_STATIC_ASSERT(sizeof(Speex) == 0x931000, "Speex");
 
@@ -904,7 +1583,8 @@ typedef union BsdSocket { struct {
     int handle[8];                       /* +0x0024 disablesocket: socket() result at +0x24 + i*4; serversend passes it to sendto */
     uint8_t addr[16];                    /* +0x0044 serversend: sockaddr_in for sendto (port htons at +0x46, address htonl at +0x48) */
     int addr_len;                        /* +0x0054 serversend: tolen argument of sendto */
-    uint8_t pad_0058[0x4];
+    int16_t unk_0058;                    /* +0x0058 2 functions */
+    uint8_t pad_005a[0x2];
     int send_size;                       /* +0x005c serversend: bytes in the send buffer (13 after the header), checked against 0x10000 */
     int send_bit;                        /* +0x0060 serversend, pbitwrite: bit position in the current byte */
     uint8_t send_buf[65536];             /* +0x0064 serversend: packet bytes, magic 7DFP at +0, sendto source */
@@ -929,19 +1609,82 @@ SR_STATIC_ASSERT(offsetof(BsdSocket, recv_buf) == 0x10070, "BsdSocket.recv_buf")
 
 /* debug[]: record of 0x523c8 bytes. */
 typedef union Debug { struct {
-    uint8_t pad_0000[0x523c8];
+    uint8_t pad_0000[0x4f884];
+    int unk_4f884;                       /* +0x4f884 1 functions */
+    uint8_t pad_4f888[0x1c];
+    int unk_4f8a4;                       /* +0x4f8a4 1 functions */
+    uint8_t pad_4f8a8[0x8];
+    int unk_4f8b0;                       /* +0x4f8b0 1 functions */
+    uint8_t pad_4f8b4[0xc];
+    int unk_4f8c0;                       /* +0x4f8c0 1 functions */
+    uint8_t pad_4f8c4[0x80];
+    float unk_4f944;                     /* +0x4f944 1 functions */
+    float unk_4f948;                     /* +0x4f948 1 functions */
+    float unk_4f94c;                     /* +0x4f94c 1 functions */
+    uint8_t pad_4f950[0xc];
+    float unk_4f95c;                     /* +0x4f95c 1 functions */
+    float unk_4f960;                     /* +0x4f960 1 functions */
+    float unk_4f964;                     /* +0x4f964 1 functions */
+    uint8_t pad_4f968[0x30];
+    float unk_4f998;                     /* +0x4f998 1 functions */
+    float unk_4f99c;                     /* +0x4f99c 1 functions */
+    float unk_4f9a0;                     /* +0x4f9a0 1 functions */
+    uint8_t pad_4f9a4[0x2c];
+    float unk_4f9d0;                     /* +0x4f9d0 1 functions */
+    uint8_t pad_4f9d4[0x6c];
+    float unk_4fa40;                     /* +0x4fa40 1 functions */
+    uint8_t pad_4fa44[0x804];
+    int unk_50248;                       /* +0x50248 1 functions */
+    int unk_5024c;                       /* +0x5024c 2 functions */
+    int unk_50250;                       /* +0x50250 2 functions */
+    uint8_t pad_50254[0xf0];
+    int unk_50344;                       /* +0x50344 1 functions */
+    uint8_t pad_50348[0x1f3c];
+    int unk_52284;                       /* +0x52284 1 functions */
+    uint8_t pad_52288[0xfc];
+    int unk_52384;                       /* +0x52384 2 functions */
+    int unk_52388;                       /* +0x52388 1 functions */
+    int16_t unk_5238c;                   /* +0x5238c 1 functions */
+    char unk_5238e;                      /* +0x5238e 1 functions */
+    uint8_t pad_5238f[0x9];
+    int unk_52398;                       /* +0x52398 1 functions */
+    uint8_t pad_5239c[0x28];
+    int unk_523c4;                       /* +0x523c4 2 functions */
 }; uint8_t lf_raw[0x523c8]; } Debug;
 SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
 
 /* filelist[]: record of 0x80020 bytes. */
 typedef union FileList { struct {
-    uint8_t pad_0000[0x80020];
+    int unk_0000;                        /* +0x0000 5 functions */
+    char unk_0004;                       /* +0x0004 4 functions */
+    char unk_0005;                       /* +0x0005 2 functions */
+    char unk_0006;                       /* +0x0006 1 functions */
+    char unk_0007;                       /* +0x0007 1 functions */
+    char unk_0008;                       /* +0x0008 1 functions */
+    char unk_0009;                       /* +0x0009 1 functions */
+    char unk_000a;                       /* +0x000a 1 functions */
+    char unk_000b;                       /* +0x000b 1 functions */
+    uint8_t pad_000c[0x38];
+    char unk_0044;                       /* +0x0044 2 functions */
+    char unk_0045;                       /* +0x0045 2 functions */
+    char unk_0046;                       /* +0x0046 1 functions */
+    char unk_0047;                       /* +0x0047 1 functions */
+    uint8_t pad_0048[0x7ffd8];
 }; uint8_t lf_raw[0x80020]; } FileList;
 SR_STATIC_ASSERT(sizeof(FileList) == 0x80020, "FileList");
 
 /* parser[]: record of 0x10010c bytes. */
 typedef union Parser { struct {
-    uint8_t pad_0000[0x10010c];
+    int unk_0000;                        /* +0x0000 8 functions */
+    int unk_0004;                        /* +0x0004 7 functions */
+    char unk_0008;                       /* +0x0008 5 functions */
+    char unk_0009;                       /* +0x0009 5 functions */
+    char unk_000a;                       /* +0x000a 2 functions */
+    uint8_t pad_000b[0xffffe];
+    char unk_100009;                     /* +0x100009 1 functions */
+    char unk_10000a;                     /* +0x10000a 1 functions */
+    uint8_t pad_10000b[0xfd];
+    int unk_100108;                      /* +0x100108 10 functions */
 }; uint8_t lf_raw[0x10010c]; } Parser;
 SR_STATIC_ASSERT(sizeof(Parser) == 0x10010c, "Parser");
 

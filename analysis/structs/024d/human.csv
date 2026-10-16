@@ -1,0 +1,378 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,88,20,ai_assessthreats bondsimulation2 bulletsimulation clientrecv createhuman deletehuman human_collisionhuman humansimulation item_physicssimulation itemlogic objectsimulation_car objectsimulation_heli objecttimetolive packobjectpacket packobjectpacket2 particletimetolive playerai resetgame server_playermessage serverrecv
+0x4,int,9,2,bondsimulation2 humansimulation
+0x8,int,35,13,ai_assessthreats bulletsimulation calculateplayervoice createhuman deletehuman deleteplayer human_itemsimulation humansimulation itemweaponsimulation logicsimulation_world playerai server_playermessage serverrecv
+0xc,int,13,5,createhuman deleteplayer humansimulation logic_playeractions serverrecv
+0x10,int,16,1,particletimetolive
+0x14,int,57,18,bondsimulation2 createhuman human_calcarmtorque human_calculatearmangles human_collisionhuman humansimulation itemlogic logicsimulation_world objectsimulation_car objectsimulation_heli objecttimetolive packobjectpacket packobjectpacket2 playerai playersimulation scenario_createchase scenario_createtraffic2 unpackobjectpacket
+0x18,int,21,6,humansimulation objectsimulation_car objectsimulation_heli playerai scenario_createchase scenario_createtraffic2
+0x1c,int,4,1,humansimulation
+0x20,int,4,1,humansimulation
+0x24,int,10,3,createhuman humansimulation logicsimulation_world
+0x28,int,40,14,ai_assessthreats bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation itemlogic logic_playeractions packobjectpacket packobjectpacket2 playersimulation playerteamkilltax serversend unpackobjectpacket
+0x30,int,8,1,humansimulation
+0x34,int,8,4,createhuman human_itemsimulation humansimulation logicsimulation_world
+0x38,int,4,2,bondsimulation2 humansimulation
+0x3c,int,6,4,human_calcarmtorque human_calculatearmangles humansimulation playersimulation
+0x44,int,3,1,humansimulation
+0x48,float,27,10,ai_assessthreats humansimulation itemlogic logic_gunstore_buy logic_playeractions logicsimulation_driving packobjectpacket packobjectpacket2 playerai serversend
+0x4c,float,24,8,ai_assessthreats humansimulation logic_gunstore_buy logic_playeractions logicsimulation_driving packobjectpacket packobjectpacket2 serversend
+0x50,float,25,9,ai_assessthreats humansimulation logic_gunstore_buy logic_playeractions logicsimulation_driving packobjectpacket packobjectpacket2 playerai serversend
+0x54,float,1,1,humansimulation
+0x58,float,1,1,humansimulation
+0x5c,float,1,1,humansimulation
+0x60,float,13,9,bondsimulation2 clientrecv humansimulation logic_playeractions logicsimulation_round playerai playersimulation resetgame serversend
+0x64,float,12,6,clientrecv human_calcarmtorque human_calculatearmangles humansimulation playersimulation serversend
+0x80,float,3,1,humansimulation
+0x84,float,1,1,humansimulation
+0x8c,float,15,4,bondsimulation2 createhuman human_calculatelegangles humansimulation
+0x98,float,2,1,createhuman
+0x9c,float,6,3,human_itemsimulation humansimulation playersimulation
+0xa0,float,4,2,humansimulation playersimulation
+0xa4,float,3,2,humansimulation playersimulation
+0xa8,float,4,2,humansimulation playersimulation
+0xac,float,10,3,human_calculatearmangles humansimulation playersimulation
+0xb0,float,10,3,human_calculatearmangles humansimulation playersimulation
+0xb4,float,4,2,human_calculatearmangles playersimulation
+0xb8,float,4,2,human_calculatearmangles playersimulation
+0xc8,float,57,10,ai_assessthreats bondsimulation2 createhuman human_collisionhuman humansimulation item_physicssimulation lineintersecthuman player_loadinventory server_playermessage unpackobjectpacket
+0xcc,float,51,10,ai_assessthreats bondsimulation2 createhuman human_collisionhuman humansimulation item_physicssimulation lineintersecthuman player_loadinventory server_playermessage unpackobjectpacket
+0xd0,float,50,10,ai_assessthreats bondsimulation2 createhuman human_collisionhuman humansimulation item_physicssimulation lineintersecthuman player_loadinventory server_playermessage unpackobjectpacket
+0xd4,float,2,2,createhuman humansimulation
+0xd8,float,2,2,createhuman humansimulation
+0xdc,float,2,2,createhuman humansimulation
+0xe0,float,20,3,bondsimulation2 humansimulation setitempositionhuman
+0xe4,float,21,3,bondsimulation2 humansimulation setitempositionhuman
+0xe8,float,20,3,bondsimulation2 humansimulation setitempositionhuman
+0xf8,float,30,5,bondsimulation2 createhuman humansimulation logic_playeractions unpackobjectpacket
+0xfc,float,30,5,bondsimulation2 createhuman humansimulation logic_playeractions unpackobjectpacket
+0x100,float,29,5,bondsimulation2 createhuman humansimulation logic_playeractions unpackobjectpacket
+0x104,float,46,7,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions unpackobjectpacket
+0x108,float,52,8,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions playerai unpackobjectpacket
+0x10c,float,46,7,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions unpackobjectpacket
+0x110,float,38,8,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions server_playermessage unpackobjectpacket
+0x114,float,37,8,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions server_playermessage unpackobjectpacket
+0x118,float,37,8,bondsimulation2 createhuman human_calculatearmangles human_calculatelegangles humansimulation logic_playeractions server_playermessage unpackobjectpacket
+0x11c,float,12,2,bondsimulation2 humansimulation
+0x120,float,12,2,bondsimulation2 humansimulation
+0x124,float,11,2,bondsimulation2 humansimulation
+0x128,float,5,2,bondsimulation2 humansimulation
+0x12c,float,5,2,bondsimulation2 humansimulation
+0x130,float,5,2,bondsimulation2 humansimulation
+0x140,float,1,1,createhuman
+0x144,float,4,1,createhuman
+0x148,float,1,1,createhuman
+0x14c,float,1,1,createhuman
+0x150,float,1,1,createhuman
+0x154,float,12,2,bondsimulation2 createhuman
+0x158,float,3,3,bondsimulation2 createhuman humansimulation
+0x15c,float,4,3,bondsimulation2 createhuman humansimulation
+0x160,float,4,3,bondsimulation2 createhuman humansimulation
+0x164,float,3,2,bondsimulation2 createhuman
+0x168,float,3,2,bondsimulation2 createhuman
+0x16c,float,3,2,bondsimulation2 createhuman
+0x170,float,2,2,bondsimulation2 createhuman
+0x174,float,2,2,bondsimulation2 createhuman
+0x178,float,2,2,bondsimulation2 createhuman
+0x17c,float,2,2,bondsimulation2 createhuman
+0x180,float,2,2,bondsimulation2 createhuman
+0x184,float,2,2,bondsimulation2 createhuman
+0x188,float,2,2,bondsimulation2 createhuman
+0x18c,float,2,2,bondsimulation2 createhuman
+0x190,float,2,2,bondsimulation2 createhuman
+0x194,float,4,2,bondsimulation2 humansimulation
+0x1a4,int,3,3,bondtimetolive deletebond human_createmuscleball
+0x1a8,float,18,5,human_calcarmtorque humansimulation item_physicssimulation setitempositionhuman unpackobjectpacket
+0x1ac,float,17,4,human_calcarmtorque humansimulation setitempositionhuman unpackobjectpacket
+0x1b0,float,17,4,human_calcarmtorque humansimulation setitempositionhuman unpackobjectpacket
+0x1b4,float,1,1,humansimulation
+0x1b8,float,1,1,humansimulation
+0x1bc,float,1,1,humansimulation
+0x1c0,float,6,3,bondsimulation2 human_calcarmtorque humansimulation
+0x1c4,float,9,3,bondsimulation2 human_calcarmtorque humansimulation
+0x1c8,float,6,3,bondsimulation2 human_calcarmtorque humansimulation
+0x1d8,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1dc,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1e0,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1e4,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1e8,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1ec,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1f0,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1f4,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1f8,float,11,5,human_calcarmtorque human_calculatearmangles humansimulation setitempositionhuman unpackobjectpacket
+0x1fc,float,3,2,bondsimulation2 humansimulation
+0x200,float,3,2,bondsimulation2 humansimulation
+0x204,float,1,1,bondsimulation2
+0x208,float,5,3,bondsimulation2 human_calcarmtorque humansimulation
+0x20c,float,5,3,bondsimulation2 human_calcarmtorque humansimulation
+0x210,float,5,3,bondsimulation2 human_calcarmtorque humansimulation
+0x250,float,2,1,human_calculatearmangles
+0x254,float,2,1,human_calculatearmangles
+0x258,float,2,1,human_calculatearmangles
+0x25c,float,2,1,human_calculatearmangles
+0x260,float,2,1,human_calculatearmangles
+0x264,float,2,1,human_calculatearmangles
+0x268,float,2,1,human_calculatearmangles
+0x26c,float,2,1,human_calculatearmangles
+0x270,float,2,1,human_calculatearmangles
+0x274,float,3,2,bondsimulation2 humansimulation
+0x278,float,8,4,humansimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x27c,float,8,4,humansimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x280,float,8,4,humansimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x288,float,22,6,ai_assessthreats calculateplayervoice human_itemsimulation humansimulation packevent playerai
+0x28c,float,17,5,ai_assessthreats calculateplayervoice human_itemsimulation humansimulation packevent
+0x290,float,16,5,ai_assessthreats calculateplayervoice human_itemsimulation humansimulation packevent
+0x294,float,1,1,humansimulation
+0x298,float,1,1,humansimulation
+0x29c,float,1,1,humansimulation
+0x2a0,float,4,4,bondsimulation2 clientrecv humansimulation serversend
+0x2a4,float,4,4,bondsimulation2 clientrecv humansimulation serversend
+0x2a8,float,4,4,bondsimulation2 clientrecv humansimulation serversend
+0x2b8,float,4,2,human_calculatearmangles humansimulation
+0x2bc,float,4,2,human_calculatearmangles humansimulation
+0x2c0,float,4,2,human_calculatearmangles humansimulation
+0x2c4,float,3,1,humansimulation
+0x2c8,float,3,1,humansimulation
+0x2cc,float,2,1,humansimulation
+0x2d0,float,5,3,ai_assessthreats human_itemsimulation humansimulation
+0x2d4,float,5,3,ai_assessthreats human_itemsimulation humansimulation
+0x2d8,float,5,3,ai_assessthreats human_itemsimulation humansimulation
+0x2dc,float,1,1,bondsimulation2
+0x2e0,float,1,1,bondsimulation2
+0x2e4,float,1,1,bondsimulation2
+0x2e8,float,1,1,bondsimulation2
+0x2ec,float,1,1,bondsimulation2
+0x2f0,float,1,1,bondsimulation2
+0x330,float,2,1,human_calculatearmangles
+0x334,float,2,1,human_calculatearmangles
+0x338,float,2,1,human_calculatearmangles
+0x33c,float,2,1,human_calculatearmangles
+0x340,float,2,1,human_calculatearmangles
+0x344,float,2,1,human_calculatearmangles
+0x348,float,2,1,human_calculatearmangles
+0x34c,float,2,1,human_calculatearmangles
+0x350,float,2,1,human_calculatearmangles
+0x368,float,1,1,humansimulation
+0x36c,float,1,1,humansimulation
+0x370,float,1,1,humansimulation
+0x374,float,1,1,humansimulation
+0x378,float,1,1,humansimulation
+0x37c,float,1,1,humansimulation
+0x380,float,1,1,bondsimulation2
+0x384,float,1,1,bondsimulation2
+0x388,float,1,1,bondsimulation2
+0x398,float,1,1,human_calcarmtorque
+0x39c,float,1,1,human_calcarmtorque
+0x3a0,float,1,1,human_calcarmtorque
+0x3a4,float,1,1,human_calcarmtorque
+0x3a8,float,1,1,human_calcarmtorque
+0x3ac,float,1,1,human_calcarmtorque
+0x3b0,float,1,1,human_calcarmtorque
+0x3b4,float,1,1,human_calcarmtorque
+0x3b8,float,1,1,human_calcarmtorque
+0x3bc,float,1,1,bondsimulation2
+0x3c0,float,1,1,bondsimulation2
+0x3c4,float,1,1,bondsimulation2
+0x3c8,float,1,1,bondsimulation2
+0x3cc,float,1,1,bondsimulation2
+0x3d0,float,1,1,bondsimulation2
+0x444,int,1,1,human_calcarmtorque
+0x448,float,1,1,humansimulation
+0x44c,float,1,1,humansimulation
+0x450,float,1,1,humansimulation
+0x454,float,1,1,humansimulation
+0x458,float,1,1,humansimulation
+0x45c,float,1,1,humansimulation
+0x460,float,1,1,bondsimulation2
+0x464,float,1,1,bondsimulation2
+0x468,float,1,1,bondsimulation2
+0x478,float,1,1,human_calcarmtorque
+0x47c,float,1,1,human_calcarmtorque
+0x480,float,1,1,human_calcarmtorque
+0x484,float,1,1,human_calcarmtorque
+0x488,float,1,1,human_calcarmtorque
+0x48c,float,1,1,human_calcarmtorque
+0x490,float,1,1,human_calcarmtorque
+0x494,float,1,1,human_calcarmtorque
+0x498,float,1,1,human_calcarmtorque
+0x49c,float,1,1,bondsimulation2
+0x4a0,float,1,1,bondsimulation2
+0x4a4,float,1,1,bondsimulation2
+0x4a8,float,1,1,bondsimulation2
+0x4ac,float,1,1,bondsimulation2
+0x4b0,float,1,1,bondsimulation2
+0x524,int,1,1,human_calcarmtorque
+0x528,float,2,2,human_calcarmtorque humansimulation
+0x52c,float,2,2,human_calcarmtorque humansimulation
+0x530,float,2,2,human_calcarmtorque humansimulation
+0x534,float,1,1,humansimulation
+0x538,float,1,1,humansimulation
+0x53c,float,1,1,humansimulation
+0x540,float,2,2,bondsimulation2 human_calcarmtorque
+0x544,float,2,2,bondsimulation2 human_calcarmtorque
+0x548,float,2,2,bondsimulation2 human_calcarmtorque
+0x558,float,5,2,human_calcarmtorque human_calculatearmangles
+0x55c,float,5,2,human_calcarmtorque human_calculatearmangles
+0x560,float,5,2,human_calcarmtorque human_calculatearmangles
+0x564,float,4,2,human_calcarmtorque human_calculatearmangles
+0x568,float,4,2,human_calcarmtorque human_calculatearmangles
+0x56c,float,4,2,human_calcarmtorque human_calculatearmangles
+0x570,float,4,2,human_calcarmtorque human_calculatearmangles
+0x574,float,4,2,human_calcarmtorque human_calculatearmangles
+0x578,float,4,2,human_calcarmtorque human_calculatearmangles
+0x57c,float,1,1,bondsimulation2
+0x580,float,1,1,bondsimulation2
+0x584,float,1,1,bondsimulation2
+0x588,float,1,1,bondsimulation2
+0x58c,float,1,1,bondsimulation2
+0x5b4,float,2,1,human_calculatearmangles
+0x604,int,1,1,human_calcarmtorque
+0x608,float,1,1,humansimulation
+0x60c,float,1,1,humansimulation
+0x610,float,1,1,humansimulation
+0x614,float,1,1,humansimulation
+0x618,float,1,1,humansimulation
+0x61c,float,1,1,humansimulation
+0x6e8,float,1,1,humansimulation
+0x6ec,float,1,1,humansimulation
+0x6f4,float,1,1,humansimulation
+0x7f8,float,3,1,human_calculatearmangles
+0x7fc,float,3,1,human_calculatearmangles
+0x800,float,3,1,human_calculatearmangles
+0x804,float,3,1,human_calculatearmangles
+0x808,float,3,1,human_calculatearmangles
+0x80c,float,3,1,human_calculatearmangles
+0x810,float,3,1,human_calculatearmangles
+0x814,float,3,1,human_calculatearmangles
+0x818,float,3,1,human_calculatearmangles
+0x854,float,2,1,human_calculatearmangles
+0x8f0,float,2,1,human_calculatelegangles
+0x8f4,float,2,1,human_calculatelegangles
+0x8f8,float,2,1,human_calculatelegangles
+0x950,float,2,1,human_calculatelegangles
+0x954,float,2,1,human_calculatelegangles
+0x958,float,2,1,human_calculatelegangles
+0x95c,float,2,1,human_calculatelegangles
+0x960,float,2,1,human_calculatelegangles
+0x964,float,2,1,human_calculatelegangles
+0x968,float,2,1,human_calculatelegangles
+0x96c,float,2,1,human_calculatelegangles
+0x970,float,2,1,human_calculatelegangles
+0x9d0,float,2,1,human_calculatelegangles
+0x9d4,float,2,1,human_calculatelegangles
+0x9d8,float,1,1,human_calculatelegangles
+0xa30,float,1,1,human_calculatelegangles
+0xa34,float,1,1,human_calculatelegangles
+0xa38,float,1,1,human_calculatelegangles
+0xa3c,float,1,1,human_calculatelegangles
+0xa40,float,1,1,human_calculatelegangles
+0xa44,float,1,1,human_calculatelegangles
+0xa48,float,1,1,human_calculatelegangles
+0xa4c,float,1,1,human_calculatelegangles
+0xa50,float,1,1,human_calculatelegangles
+0xb10,float,1,1,human_calculatelegangles
+0xb14,float,1,1,human_calculatelegangles
+0xb18,float,1,1,human_calculatelegangles
+0xb1c,float,1,1,human_calculatelegangles
+0xb20,float,1,1,human_calculatelegangles
+0xb24,float,1,1,human_calculatelegangles
+0xb28,float,1,1,human_calculatelegangles
+0xb2c,float,1,1,human_calculatelegangles
+0xb30,float,1,1,human_calculatelegangles
+0xbf0,float,1,1,human_calculatelegangles
+0xbf4,float,1,1,human_calculatelegangles
+0xbf8,float,1,1,human_calculatelegangles
+0xbfc,float,1,1,human_calculatelegangles
+0xc00,float,1,1,human_calculatelegangles
+0xc04,float,1,1,human_calculatelegangles
+0xc08,float,1,1,human_calculatelegangles
+0xc0c,float,1,1,human_calculatelegangles
+0xc10,float,1,1,human_calculatelegangles
+0xcd0,float,1,1,human_calculatelegangles
+0xcd4,float,1,1,human_calculatelegangles
+0xcd8,float,1,1,human_calculatelegangles
+0xcdc,float,1,1,human_calculatelegangles
+0xce0,float,1,1,human_calculatelegangles
+0xce4,float,1,1,human_calculatelegangles
+0xce8,float,1,1,human_calculatelegangles
+0xcec,float,1,1,human_calculatelegangles
+0xcf0,float,1,1,human_calculatelegangles
+0xdb0,float,1,1,human_calculatelegangles
+0xdb4,float,1,1,human_calculatelegangles
+0xdb8,float,1,1,human_calculatelegangles
+0xdbc,float,1,1,human_calculatelegangles
+0xdc0,float,1,1,human_calculatelegangles
+0xdc4,float,1,1,human_calculatelegangles
+0xdc8,float,1,1,human_calculatelegangles
+0xdcc,float,1,1,human_calculatelegangles
+0xdd0,float,1,1,human_calculatelegangles
+0xec8,int,13,5,bondtimetolive deletebond deletehuman human_createmuscleball humansimulation
+0xecc,int,7,5,bondtimetolive deletebond deletehuman human_createmuscleball humansimulation
+0xed0,int,1,1,human_createmuscleball
+0xed4,int,4,2,human_createmuscleball humansimulation
+0xefc,int,6,4,bondtimetolive deletebond deletehuman humansimulation
+0xf04,int,2,1,humansimulation
+0x26cc,int,12,5,bondtimetolive createjointbond deletebond deletehuman humansimulation
+0x26d0,int,7,5,bondtimetolive createjointbond deletebond deletehuman humansimulation
+0x26d4,int,1,1,createjointbond
+0x26d8,int,1,1,createjointbond
+0x26dc,int,6,4,bondtimetolive deletebond deletehuman humansimulation
+0x2870,float,1,1,createhuman
+0x2874,float,1,1,createhuman
+0x2878,float,1,1,createhuman
+0x28bc,float,1,1,createhuman
+0x28c0,float,1,1,createhuman
+0x28c4,float,1,1,createhuman
+0x2910,float,2,1,itemweaponsimulation
+0x2914,float,2,1,itemweaponsimulation
+0x2918,float,7,2,human_calculatelegangles humansimulation
+0x291c,int,54,17,clientrecv createhuman deletehuman economysimulation human_calcarmtorque human_calculatearmangles human_itemsimulation humansimulation item_removehumanlink linkitem logic_playeractions logicsimulation_world player_calcassets player_saveinventory playerai playersimulation resetgame
+0x2920,int,46,15,clientrecv economysimulation human_calcarmtorque human_calculatearmangles human_itemsimulation humansimulation item_addhumanlink item_removehumanlink logic_playeractions logicsimulation_world player_calcassets player_saveinventory playerai playersimulation resetgame
+0x2924,int,2,2,human_itemsimulation player_saveinventory
+0x2940,int,40,15,clientrecv createhuman deletehuman economysimulation human_calcarmtorque human_calculatearmangles human_itemsimulation humansimulation logic_playeractions logicsimulation_world player_calcassets player_saveinventory playerai playersimulation resetgame
+0x2944,int,20,11,economysimulation human_calcarmtorque human_calculatearmangles human_itemsimulation humansimulation logic_playeractions logicsimulation_world player_calcassets playerai playersimulation resetgame
+0x2948,int,4,4,economysimulation logicsimulation_world player_calcassets playersimulation
+0x2964,int,13,4,clientrecv createhuman human_itemsimulation resetgame
+0x2968,int,2,2,human_itemsimulation resetgame
+0x2988,int,24,6,clientrecv createhuman human_itemsimulation playerai resetgame scenario_createchase
+0x298c,int,5,2,playerai resetgame
+0x29ac,int,14,5,clientrecv createhuman playerai resetgame scenario_createchase
+0x29b0,int,2,2,playerai resetgame
+0x29d0,int,10,3,clientrecv createhuman playerai
+0x29d4,int,1,1,playerai
+0x29f4,int,11,4,clientrecv createhuman playerai server_playermessage
+0x29f8,int,2,2,playerai server_playermessage
+0x2a18,int,1,1,createhuman
+0x2a4c,float,8,1,human_itemsimulation
+0x2a50,float,8,1,human_itemsimulation
+0x2a54,float,8,1,human_itemsimulation
+0x2a58,float,2,1,human_itemsimulation
+0x2a5c,float,2,1,createhuman
+0x2a60,float,2,1,createhuman
+0x2a64,float,2,1,createhuman
+0x2a68,float,2,1,createhuman
+0x2a6c,float,2,1,createhuman
+0x2a70,float,2,1,createhuman
+0x2a74,float,2,1,createhuman
+0x2a78,float,2,1,createhuman
+0x2a7c,float,2,1,createhuman
+0x2a80,float,2,1,createhuman
+0x2a84,float,2,1,createhuman
+0x2a88,float,2,1,createhuman
+0x2b1c,int,6,3,humansimulation itemlogic playerteamkilltax
+0x2b20,float,6,2,bondsimulation2 humansimulation
+0x2b24,int,4,1,human_itemsimulation
+0x2b2c,int,15,3,createhuman logicsimulation_world serverrecv
+0x2b30,int,2,1,createhuman
+0x2b34,int,2,1,createhuman
+0x2b38,int,2,1,createhuman
+0x2b3c,int,1,1,logic_suits_buy
+0x2b40,int,1,1,logic_suits_buy
+0x2b44,int,2,1,unpackobjectpacket
+0x2b48,float,2,1,unpackobjectpacket
+0x2b4c,float,2,1,unpackobjectpacket
+0x2b50,float,2,1,unpackobjectpacket
+0x2b54,int,1,1,unpackobjectpacket
+0x2b58,float,1,1,unpackobjectpacket
+0x2b5c,float,1,1,unpackobjectpacket
+0x2b60,float,1,1,unpackobjectpacket

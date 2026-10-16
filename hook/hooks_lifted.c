@@ -8482,10 +8482,10 @@ __declspec(naked) static void th_272b0(void)
 }
 static uint8_t expect_272b0[5] = { 0xd9, 0xee, 0x83, 0xec, 0x18 };
 
-int __cdecl lf_278c0(undefined4 param_1, undefined4 * param_2, undefined4 * param_3, undefined4 param_4, int param_5);
-static int (__cdecl *orig_278c0)(undefined4, undefined4 *, undefined4 *, undefined4, int);
+int __cdecl lf_278c0(int param_1, undefined4 * param_2, undefined4 * param_3, float param_4, int param_5);
+static int (__cdecl *orig_278c0)(int, undefined4 *, undefined4 *, float, int);
 static SvVerify v_278c0 = { "createparticle", -1 };
-static int __cdecl hk_278c0(undefined4 param_1, undefined4 * param_2, undefined4 * param_3, undefined4 param_4, int param_5)
+static int __cdecl hk_278c0(int param_1, undefined4 * param_2, undefined4 * param_3, float param_4, int param_5)
 {
     SV_HOOK_RET(int, v_278c0, lf_278c0(param_1, param_2, param_3, param_4, param_5), orig_278c0(param_1, param_2, param_3, param_4, param_5), NULL);
 }

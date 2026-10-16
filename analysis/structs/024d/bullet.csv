@@ -1,0 +1,24 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,5,3,bulletsimulation bullettimetolive createbullet
+0x4,int,8,3,bulletsimulation bullettimetolive createbullet
+0x8,int,4,2,bulletsimulation createbullet
+0xc,float,7,2,bulletsimulation createbullet
+0x10,float,3,2,bulletsimulation createbullet
+0x14,float,9,2,bulletsimulation createbullet
+0x18,float,6,2,bulletsimulation createbullet
+0x1c,float,6,2,bulletsimulation createbullet
+0x20,float,6,2,bulletsimulation createbullet
+0x24,float,3,2,bulletsimulation createbullet
+0x28,float,3,2,bulletsimulation createbullet
+0x2c,float,17,2,bulletsimulation createbullet
+0x30,float,17,2,bulletsimulation createbullet
+0x34,float,13,2,bulletsimulation createbullet
+0x38,float,4,1,createbullet
+0x3c,float,4,1,createbullet
+0x40,float,3,1,createbullet
+0x44,float,1,1,createbullet
+0x48,float,1,1,createbullet
+0x4c,float,1,1,createbullet
+0x50,float,7,1,createbullet
+0x54,float,8,1,createbullet
+0x58,float,7,1,createbullet

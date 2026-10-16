@@ -1,0 +1,17 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,26,6,createhuman human_calculatearmangles human_calculatelegangles humansimulation setupbody unpackobjectpacket
+0x4,float,25,6,createhuman createjointbond human_calculatearmangles humansimulation setupbody unpackobjectpacket
+0x8,float,25,6,createhuman createjointbond human_calculatearmangles humansimulation setupbody unpackobjectpacket
+0xc,float,25,6,createhuman createjointbond human_calculatearmangles humansimulation setupbody unpackobjectpacket
+0x10,float,36,5,human_buildmuscles human_calcarmtorque human_calculatearmangles setupbody unpackobjectpacket
+0x14,float,35,5,human_buildmuscles human_calcarmtorque human_calculatearmangles setupbody unpackobjectpacket
+0x18,float,35,5,human_buildmuscles human_calcarmtorque human_calculatearmangles setupbody unpackobjectpacket
+0x1c,float,34,2,createhuman setupbody
+0x20,float,22,2,createhuman setupbody
+0x24,float,22,2,createhuman setupbody
+0x28,float,22,2,createhuman setupbody
+0x2c,float,16,2,createhuman setupbody
+0x30,float,6,2,createhuman setupbody
+0x34,float,6,2,createhuman setupbody
+0x38,float,6,2,createhuman setupbody
+0x3c,float,1,1,setupbody

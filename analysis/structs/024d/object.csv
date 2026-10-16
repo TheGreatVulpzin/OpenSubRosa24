@@ -1,0 +1,361 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,48,13,ai_playercar bondsimulation2 bulletsimulation createobject humansimulation objectenginesimulation2 objectsimulation objecttimetolive objectwheelsimulation2 packobjectpacket packobjectpacket2 player_calcassets resetgame
+0x4,int,20,11,applydamageobject createobject economysimulation getenginetorque2 objectenginesimulation2 objectsimulation objectsimulation_car packobjectpacket player_calcassets player_saveinventory sphereintersectobject
+0x8,int,33,5,createobject humansimulation objectsimulation packobjectpacket packobjectpacket2
+0xc,int,9,8,applydamageobject createobject economysimulation objectsimulation_car objectsimulation_heli player_calcassets player_saveinventory playerai
+0x14,int,3,2,createobject humansimulation
+0x18,int,4,3,createobject economysimulation player_saveinventory
+0x1c,int,10,5,createobject itemtimetolive logicsimulation_world objectsimulation objecttimetolive
+0x20,int,4,3,itemlogic objectsimulation_car objectsimulation_heli
+0x24,float,44,11,ai_playercar createobject createvehicle humansimulation objectsimulation objecttimetolive packobjectpacket packobjectpacket2 scenario_createchase scenario_createtraffic2 unpackobjectpacket
+0x28,float,36,11,ai_playercar createobject createvehicle humansimulation objectsimulation objecttimetolive packobjectpacket packobjectpacket2 scenario_createchase scenario_createtraffic2 unpackobjectpacket
+0x2c,float,38,11,ai_playercar createobject createvehicle humansimulation objectsimulation objecttimetolive packobjectpacket packobjectpacket2 scenario_createchase scenario_createtraffic2 unpackobjectpacket
+0x30,float,4,2,createobject objectsimulation
+0x34,float,3,2,createobject objectsimulation
+0x38,float,3,2,createobject objectsimulation
+0x3c,float,43,11,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectenginesimulation2 objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x40,float,43,11,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectenginesimulation2 objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x44,float,40,11,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectenginesimulation2 objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x48,float,44,10,ai_playercar applydamageobject createobject createvehicle getobjectrotation3 humansimulation objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x4c,float,42,10,ai_playercar applydamageobject createobject createvehicle getobjectrotation3 humansimulation objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x50,float,40,10,ai_playercar applydamageobject createobject createvehicle getobjectrotation3 humansimulation objectsimulation objectsimulation_heli objectwheelsimulation2 unpackobjectpacket
+0x54,float,38,10,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectsimulation objectsimulation_heli objectwheelcollision unpackobjectpacket
+0x58,float,37,10,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectsimulation objectsimulation_heli objectwheelcollision unpackobjectpacket
+0x5c,float,37,10,ai_playercar createobject createvehicle getobjectrotation3 humansimulation object_rotorsimulation objectsimulation objectsimulation_heli objectwheelcollision unpackobjectpacket
+0x60,float,24,6,ai_playercar humansimulation objectsimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x64,float,20,6,ai_playercar humansimulation objectsimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x68,float,20,6,ai_playercar humansimulation objectsimulation packobjectpacket packobjectpacket2 unpackobjectpacket
+0x6c,float,2,1,objectsimulation
+0x70,float,2,1,objectsimulation
+0x74,float,2,1,objectsimulation
+0x84,float,13,5,humansimulation lineintersectobject objectsimulation objecttrainsimulation sphereintersectobject
+0x88,float,11,4,humansimulation lineintersectobject objectsimulation sphereintersectobject
+0x8c,float,11,5,humansimulation lineintersectobject objectsimulation objecttrainsimulation sphereintersectobject
+0x90,float,16,5,humansimulation lineintersectobject objectsimulation objecttrainsimulation sphereintersectobject
+0x94,float,11,4,humansimulation lineintersectobject objectsimulation sphereintersectobject
+0x98,float,11,5,humansimulation lineintersectobject objectsimulation objecttrainsimulation sphereintersectobject
+0xa8,int,32,7,addobjectrotation createobject getobjectrotation2 objectsimulation objectsimulation_heli objecttimetolive particletimetolive
+0xac,int,69,14,addobjectrotation createobject createvehicle getobjectrotation2 getobjectrotation3 lineintersectobject objectsimulation objectsimulation_heli objecttimetolive objecttrainsimulation objectwheelcollision objectwheelsimulation2 particletimetolive sphereintersectobject
+0xb0,int,16,7,addobjectrotation getobjectrotation2 objectsimulation objectsimulation_heli objecttimetolive objecttrainsimulation particletimetolive
+0xb4,int,2,2,addobjectrotation getobjectrotation3
+0xb8,int,2,2,addobjectrotation getobjectrotation3
+0xbc,int,4,3,addobjectrotation createvehicle getobjectrotation3
+0xc0,int,3,2,createvehicle getobjectrotation3
+0xc4,int,1,1,applydamageobject
+0xc8,int,1,1,applydamageobject
+0xd4,int,1,1,getobjectrotation3
+0xd8,int,1,1,getobjectrotation3
+0xdc,int,1,1,getobjectrotation3
+0xe0,int,1,1,getobjectrotation3
+0xfc,int,1,1,object_rotorsimulation
+0x100,int,1,1,object_rotorsimulation
+0x1ac,int,4,2,createobject objectsimulation
+0x1b0,float,2,2,createobject objectsimulation
+0x1b4,float,2,2,createobject objectsimulation
+0x2b0,float,2,2,createobject objectsimulation
+0x2b4,float,1,1,createobject
+0x3b0,int,15,3,bondtimetolive createbond deletebond
+0x3b4,int,11,3,bondtimetolive createbond deletebond
+0x3b8,int,7,2,bondtimetolive deletebond
+0x7b4,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7b8,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7bc,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7c0,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7c4,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7c8,int,3,3,createobject lineintersectobject sphereintersectobject
+0x7cc,int,1,1,createobject
+0x7d0,int,1,1,createobject
+0x7d4,int,1,1,createobject
+0x7d8,int,1,1,createobject
+0x7dc,float,1,1,createobject
+0x7e0,float,1,1,createobject
+0x7e4,float,1,1,createobject
+0x7e8,float,1,1,createobject
+0x7ec,float,1,1,createobject
+0x7f0,int,3,3,bulletsimulation createobject playerai
+0x7f4,int,10,5,bulletsimulation createobject lineintersectobject objectsimulation sphereintersectobject
+0x7f8,int,1,1,createobject
+0x7fc,int,3,3,createobject lineintersectobject sphereintersectobject
+0x800,int,3,3,createobject lineintersectobject sphereintersectobject
+0x804,int,3,3,createobject lineintersectobject sphereintersectobject
+0x808,int,2,2,createobject sphereintersectobject
+0x80c,int,1,1,createobject
+0x810,int,1,1,createobject
+0x834,int,2,2,lineintersectobject sphereintersectobject
+0x4bbc,float,16,3,lineintersectobject objectsimulation sphereintersectobject
+0x4bc0,float,16,3,lineintersectobject objectsimulation sphereintersectobject
+0x4bc4,float,16,3,lineintersectobject objectsimulation sphereintersectobject
+0x4bc8,int,14,3,lineintersectobject objectsimulation sphereintersectobject
+0x4bcc,float,2,1,objectsimulation
+0x4bd0,float,2,1,objectsimulation
+0x4bd4,float,1,1,objectsimulation
+0x4bd8,int,1,1,objectsimulation
+0x5bbc,float,8,4,humansimulation object_rotorsimulation objectsimulation_car objectsimulation_heli
+0x5bc0,float,3,3,humansimulation objectsimulation_car objectsimulation_heli
+0x5bc4,float,6,4,humansimulation object_rotorsimulation objectsimulation_car objectsimulation_heli
+0x5bc8,float,9,4,humansimulation object_rotorsimulation objectsimulation_car objectsimulation_heli
+0x5be4,int,7,4,createobject createvehicle objectsimulation objecttrainsimulation
+0x5be8,int,1,1,createobject
+0x5bec,int,1,1,createobject
+0x5bf0,int,1,1,createobject
+0x5bf4,int,1,1,createobject
+0x5bf8,int,1,1,createobject
+0x5bfc,int,1,1,createobject
+0x5c00,int,1,1,createobject
+0x5e4c,float,10,2,objectenginesimulation2 objectwheelsimulation2
+0x5e50,float,21,4,ai_playercar getenginetorque2 objectenginesimulation2 objectsimulation_car
+0x5e54,float,9,2,objectenginesimulation2 objectsimulation_car
+0x5e58,float,3,2,createobject objectenginesimulation2
+0x5e5c,float,6,1,objectenginesimulation2
+0x5e60,float,6,2,createobject objectenginesimulation2
+0x5e64,float,2,1,createobject
+0x5e68,float,6,2,createobject objectenginesimulation2
+0x5e6c,int,25,2,ai_playercar objectsimulation_car
+0x5e70,int,2,1,objectsimulation_car
+0x5e78,float,16,2,objectenginesimulation2 objectsimulation_car
+0x5e7c,float,6,2,objectenginesimulation2 objectsimulation_car
+0x5e80,float,5,2,objectenginesimulation2 objectsimulation_car
+0x5e84,float,10,2,objectenginesimulation2 objectsimulation_car
+0x5e90,int,5,2,createobject objectenginesimulation2
+0x5e94,int,4,2,createobject objectenginesimulation2
+0x5e98,int,5,2,createobject objectenginesimulation2
+0x5ee0,int,15,3,objectsimulation objectsimulation_car objectsimulation_heli
+0x5ee4,int,3,1,objectsimulation_car
+0x5ee8,int,23,5,createobject lineintersectobject objectenginesimulation2 objectsimulation objectwheelsimulation2
+0x5eec,int,3,3,bulletsimulation createobject objectwheelcollision
+0x5ef0,int,2,2,bulletsimulation createobject
+0x5ef4,int,4,2,bulletsimulation createobject
+0x5ef8,int,7,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5efc,int,7,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5f00,float,8,3,createobject objectwheelcollision objectwheelsimulation2
+0x5f04,float,10,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5f08,float,4,3,createobject objectenginesimulation2 objectwheelsimulation2
+0x5f0c,float,13,5,bondsimulation2 createobject lineintersectobject objectsimulation objectwheelcollision
+0x5f10,float,4,2,createobject objectenginesimulation2
+0x5f14,float,6,3,bondsimulation2 objectenginesimulation2 objectwheelsimulation2
+0x5f18,float,22,3,bondsimulation2 objectenginesimulation2 objectsimulation
+0x5f1c,float,13,5,objectsimulation objectsimulation_heli packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5f20,float,11,6,objectsimulation_car objectwheelcollision objectwheelsimulation2 packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5f24,float,11,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5f28,float,11,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5f2c,float,9,4,createobject objectsimulation objectwheelcollision objectwheelsimulation2
+0x5f30,float,4,2,bondsimulation2 objectwheelsimulation2
+0x5f34,float,4,2,bondsimulation2 objectwheelsimulation2
+0x5f38,float,4,2,bondsimulation2 objectwheelsimulation2
+0x5f3c,float,10,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x5f40,float,12,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x5f44,float,9,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x5f48,float,8,5,objectsimulation objectwheelsimulation2 packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5f4c,float,3,3,createobject objectsimulation objectwheelsimulation2
+0x5f50,float,2,2,createobject objectwheelsimulation2
+0x5f54,float,4,2,createobject objectwheelsimulation2
+0x5f58,float,3,2,createobject objectwheelsimulation2
+0x5f5c,float,9,5,bondsimulation2 objectwheelsimulation2 packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5f70,float,1,1,objectwheelsimulation2
+0x5f74,float,1,1,objectwheelsimulation2
+0x5f78,float,1,1,objectwheelsimulation2
+0x5f7c,float,1,1,objectwheelsimulation2
+0x5f80,float,1,1,objectwheelsimulation2
+0x5f90,int,4,3,createobject objectsimulation objectwheelsimulation2
+0x5f94,int,3,2,createobject objectwheelsimulation2
+0x5f98,float,3,2,createobject objectwheelsimulation2
+0x5f9c,float,3,2,createobject objectwheelsimulation2
+0x5fa4,float,7,2,lineintersectobject objectsimulation
+0x5fa8,float,1,1,objectenginesimulation2
+0x5fac,float,1,1,objectwheelsimulation2
+0x5fb4,float,7,4,objectsimulation_heli packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5fb8,float,10,5,objectsimulation_car objectwheelsimulation2 packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5fbc,float,5,2,createobject objectsimulation
+0x5fc0,float,5,2,createobject objectsimulation
+0x5fc4,float,5,2,createobject objectsimulation
+0x5fc8,float,2,1,objectwheelsimulation2
+0x5fcc,float,2,1,objectwheelsimulation2
+0x5fd0,float,2,1,objectwheelsimulation2
+0x5fd4,float,2,2,objectsimulation objectwheelsimulation2
+0x5fd8,float,4,2,objectsimulation objectwheelsimulation2
+0x5fdc,float,2,2,objectsimulation objectwheelsimulation2
+0x5fe0,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x5fec,float,2,1,objectwheelsimulation2
+0x5ff4,float,7,4,objectwheelsimulation2 packobjectpacket packobjectpacket2 unpackobjectpacket
+0x6008,float,1,1,objectwheelsimulation2
+0x600c,float,1,1,objectwheelsimulation2
+0x6010,float,1,1,objectwheelsimulation2
+0x6014,float,1,1,objectwheelsimulation2
+0x6018,float,1,1,objectwheelsimulation2
+0x604c,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x6078,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x608c,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x60e4,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x6110,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x6124,float,6,3,packobjectpacket packobjectpacket2 unpackobjectpacket
+0x71ec,int,17,5,bondsimulation2 createobject objectenginesimulation2 objectsimulation objectwheelsimulation2
+0x71f0,float,8,4,createobject objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x71f4,float,8,4,createobject objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x71f8,float,7,4,createobject objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x71fc,float,8,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x7200,float,10,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x7204,float,8,3,bondsimulation2 objectsimulation objectwheelsimulation2
+0x7208,float,8,2,bondsimulation2 objectwheelsimulation2
+0x720c,float,8,2,bondsimulation2 objectwheelsimulation2
+0x7210,float,8,2,bondsimulation2 objectwheelsimulation2
+0x7214,float,11,6,bondsimulation2 createobject objectenginesimulation2 objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x7218,float,10,6,bondsimulation2 createobject objectenginesimulation2 objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x721c,float,10,6,bondsimulation2 createobject objectenginesimulation2 objectsimulation objectwheelcollision2 objectwheelsimulation2
+0x7220,float,5,3,bondsimulation2 createobject objectsimulation
+0x7224,float,5,3,bondsimulation2 createobject objectsimulation
+0x7228,float,5,3,bondsimulation2 createobject objectsimulation
+0x722c,float,5,3,bondsimulation2 createobject objectsimulation
+0x7230,float,5,3,bondsimulation2 createobject objectsimulation
+0x7234,float,5,3,bondsimulation2 createobject objectsimulation
+0x7238,float,9,2,bondsimulation2 objectsimulation
+0x723c,float,8,2,bondsimulation2 objectsimulation
+0x7240,float,8,2,bondsimulation2 objectsimulation
+0x7244,float,22,4,bondsimulation2 objectenginesimulation2 objectsimulation objectwheelsimulation2
+0x7248,float,22,4,bondsimulation2 objectenginesimulation2 objectsimulation objectwheelsimulation2
+0x724c,float,22,4,bondsimulation2 objectenginesimulation2 objectsimulation objectwheelsimulation2
+0x7250,float,12,3,bondsimulation2 objectenginesimulation2 objectwheelsimulation2
+0x7254,float,11,3,bondsimulation2 objectenginesimulation2 objectwheelsimulation2
+0x7258,float,11,3,bondsimulation2 objectenginesimulation2 objectwheelsimulation2
+0x725c,float,3,3,createobject objectenginesimulation2 objectwheelsimulation2
+0x7260,float,1,1,createobject
+0x7264,float,1,1,createobject
+0x7268,float,3,3,bondsimulation2 createobject objectsimulation
+0x726c,float,3,3,bondsimulation2 createobject objectsimulation
+0x7270,float,3,3,bondsimulation2 createobject objectsimulation
+0x7274,float,3,3,createobject objectenginesimulation2 objectwheelsimulation2
+0x7278,float,3,2,createobject objectwheelcollision2
+0x727c,float,2,2,createobject objectwheelcollision2
+0x7280,int,2,2,createobject objectwheelsimulation2
+0x7284,int,2,2,createobject objectwheelsimulation2
+0x7288,int,2,2,createobject objectwheelsimulation2
+0x728c,int,2,2,createobject objectwheelsimulation2
+0x7290,float,8,2,createobject objectwheelsimulation2
+0x7294,float,8,2,createobject objectwheelsimulation2
+0x7298,float,8,2,createobject objectwheelsimulation2
+0x729c,float,7,2,createobject objectwheelsimulation2
+0x72a0,float,2,1,createobject
+0x72ac,int,1,1,createobject
+0x72b0,int,1,1,createobject
+0x72b4,int,1,1,createobject
+0x72b8,int,1,1,createobject
+0x72bc,float,5,2,createobject objectsimulation_car
+0x72c0,float,5,2,createobject objectsimulation_car
+0x72c4,float,5,2,createobject objectsimulation_car
+0x72c8,float,4,2,createobject objectsimulation_car
+0x72cc,float,3,2,createobject objectsimulation_car
+0x72d8,float,3,2,createobject objectsimulation
+0x72dc,float,3,2,createobject objectsimulation
+0x72e0,float,3,2,createobject objectsimulation
+0x72e4,float,3,2,bondsimulation2 objectsimulation
+0x72e8,float,5,2,bondsimulation2 objectsimulation
+0x72ec,float,3,2,bondsimulation2 objectsimulation
+0x72f0,float,2,1,bondsimulation2
+0x72f4,float,2,1,bondsimulation2
+0x72f8,float,1,1,bondsimulation2
+0x72fc,float,3,2,createobject objectenginesimulation2
+0x7300,float,3,2,createobject objectenginesimulation2
+0x7304,float,2,2,createobject objectenginesimulation2
+0x7320,float,3,2,bondsimulation2 objectsimulation
+0x7324,float,2,1,bondsimulation2
+0x7328,float,1,1,bondsimulation2
+0x732c,float,2,2,objectenginesimulation2 objectsimulation
+0x7330,float,2,2,objectenginesimulation2 objectsimulation
+0x7334,float,2,2,objectenginesimulation2 objectsimulation
+0x7338,float,3,2,bondsimulation2 objectenginesimulation2
+0x733c,float,1,1,bondsimulation2
+0x7340,float,1,1,bondsimulation2
+0x7344,float,1,1,objectenginesimulation2
+0x73a4,float,1,1,objectsimulation_car
+0x73a8,float,1,1,objectsimulation_car
+0x73ac,float,1,1,objectsimulation_car
+0x73b0,float,1,1,objectsimulation_car
+0x73b4,float,1,1,objectsimulation_car
+0x8021,int,1,1,resetgame
+0x8074,float,6,2,createobject object_rotorsimulation
+0x8078,float,6,2,createobject object_rotorsimulation
+0x807c,float,6,2,createobject object_rotorsimulation
+0x8080,float,8,1,object_rotorsimulation
+0x8084,float,10,1,object_rotorsimulation
+0x8088,float,8,1,object_rotorsimulation
+0x808c,float,3,1,object_rotorsimulation
+0x8090,float,3,1,object_rotorsimulation
+0x8094,float,3,1,object_rotorsimulation
+0x8098,float,5,2,createobject object_rotorsimulation
+0x809c,float,5,2,createobject object_rotorsimulation
+0x80a0,float,5,2,createobject object_rotorsimulation
+0x80a4,float,4,1,object_rotorsimulation
+0x80a8,float,6,1,object_rotorsimulation
+0x80ac,float,4,1,object_rotorsimulation
+0x80b0,float,2,1,object_rotorsimulation
+0x80b4,float,2,1,object_rotorsimulation
+0x80b8,float,2,1,object_rotorsimulation
+0x80bc,float,4,2,createobject object_rotorsimulation
+0x80c0,float,4,2,createobject object_rotorsimulation
+0x80c4,float,4,2,createobject object_rotorsimulation
+0x80c8,float,2,1,object_rotorsimulation
+0x80cc,float,4,1,object_rotorsimulation
+0x80d0,float,2,1,object_rotorsimulation
+0x80d4,float,1,1,object_rotorsimulation
+0x80d8,float,1,1,object_rotorsimulation
+0x80dc,float,1,1,object_rotorsimulation
+0x80e0,float,3,2,createobject object_rotorsimulation
+0x80e4,float,3,2,createobject object_rotorsimulation
+0x80e8,float,3,2,createobject object_rotorsimulation
+0x80ec,float,2,1,object_rotorsimulation
+0x80f0,float,4,1,object_rotorsimulation
+0x80f4,float,2,1,object_rotorsimulation
+0x80f8,float,1,1,object_rotorsimulation
+0x80fc,float,1,1,object_rotorsimulation
+0x8100,float,1,1,object_rotorsimulation
+0x8104,float,8,2,createobject object_rotorsimulation
+0x8108,float,8,2,createobject object_rotorsimulation
+0x810c,float,8,2,createobject object_rotorsimulation
+0x8110,float,6,1,object_rotorsimulation
+0x8114,float,8,1,object_rotorsimulation
+0x8118,float,6,1,object_rotorsimulation
+0x811c,float,3,1,object_rotorsimulation
+0x8120,float,3,1,object_rotorsimulation
+0x8124,float,3,1,object_rotorsimulation
+0x8128,float,6,2,createobject object_rotorsimulation
+0x812c,float,6,2,createobject object_rotorsimulation
+0x8130,float,6,2,createobject object_rotorsimulation
+0x8134,float,2,1,object_rotorsimulation
+0x8138,float,4,1,object_rotorsimulation
+0x813c,float,2,1,object_rotorsimulation
+0x8140,float,1,1,object_rotorsimulation
+0x8144,float,1,1,object_rotorsimulation
+0x8148,float,1,1,object_rotorsimulation
+0x8194,int,4,3,createvehicle objectsimulation resetgame
+0x8198,int,3,1,objectsimulation
+0x819c,int,3,2,objectsimulation objecttrainsimulation
+0x81a0,float,2,2,createobject objectsimulation_car
+0x81a4,float,3,2,createobject objectsimulation_car
+0x81a8,int,4,2,createobject humansimulation
+0x81ac,float,6,2,createobject humansimulation
+0x81b0,float,6,2,createobject humansimulation
+0x81b4,float,4,2,createobject humansimulation
+0x81b8,float,3,2,createobject humansimulation
+0x81bc,float,4,2,createobject humansimulation
+0x81c0,float,2,1,createobject
+0x81c4,float,1,1,createobject
+0x81c8,float,1,1,createobject
+0x81cc,float,1,1,createobject
+0x81d0,float,1,1,createobject
+0x81d4,float,1,1,createobject
+0x81d8,float,1,1,createobject
+0x81dc,float,1,1,createobject
+0x81e0,float,1,1,createobject
+0x81e4,float,1,1,createobject
+0x81e8,float,1,1,createobject
+0x81ec,float,1,1,createobject
+0x81f0,float,1,1,createobject
+0x81f4,float,1,1,createobject
+0x820c,float,6,1,objectsimulation
+0x8210,int,2,1,unpackobjectpacket
+0x8214,float,2,1,unpackobjectpacket
+0x8218,float,2,1,unpackobjectpacket
+0x821c,float,2,1,unpackobjectpacket
+0x8220,int,1,1,unpackobjectpacket
+0x8224,float,1,1,unpackobjectpacket
+0x8228,float,1,1,unpackobjectpacket
+0x822c,float,1,1,unpackobjectpacket

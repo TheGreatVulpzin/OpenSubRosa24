@@ -1,0 +1,8 @@
+offset,type,uses,n_funcs,funcs
+0x15000,int,3,2,serverrecv serversend
+0x15008,int,2,2,serverrecv serversend
+0x1920c,int,4,2,calculateplayervoice resetgame
+0x2241c,int,2,2,calculateplayervoice resetgame
+0x2b62c,int,1,1,resetgame
+0x3483c,int,1,1,resetgame
+0x3da4c,int,1,1,resetgame

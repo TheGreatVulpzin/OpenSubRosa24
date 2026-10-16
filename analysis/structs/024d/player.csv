@@ -1,0 +1,131 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,131,16,calculateplayervoice createevent_updateplayer createplayer dedicatedserverloop deleteplayer economysimulation logic_addteamcash logic_teammissioncomplete logicsimulation logicsimulation_driving logicsimulation_round logicsimulation_world playersimulation resetgame server_playermessage serverrecv
+0x3,char,2,1,fixplayername
+0x6,char,2,2,fixplayername server_playermessage
+0x7,char,1,1,server_playermessage
+0x9,char,1,1,createaccount
+0xa,char,2,2,createevent_updateplayer fixplayername
+0x23,char,3,2,createaccount fixplayername
+0x24,int,3,2,createaccount serverrecv
+0x28,int,3,2,createaccount serverrecv
+0x2c,int,2,1,server_playermessage
+0x30,int,2,1,server_playermessage
+0x34,int,29,7,createplayer deleteplayer logic_playeractions logicsimulation_world playersimulation server_playermessage serverrecv
+0x38,int,15,2,logicsimulation server_playermessage
+0x3c,int,16,6,clientrecv economysimulation logic_playeractions logicsimulation_round resetgame serversend
+0x40,int,66,23,clientrecv createevent_updateplayer createevent_updateplayer_finance createplayer deleteplayer economysimulation logic_addteamcash logic_cardealer_buy logic_gunstore_buy logic_playeractions logic_suits_buy logic_teammissioncomplete logicsimulation_world player_calcassets playerbuystock playerdeathtax playersellstock playersimulation playerteamkilltax resetgame server_playermessage serverrecv serversend
+0x44,int,2,2,bulletsimulation server_playermessage
+0x4c,int,28,5,logic_gunstore_buy logic_playeractions logicsimulation_round logicsimulation_world resetgame
+0x50,int,32,3,logic_cardealer_buy logicsimulation_round logicsimulation_world
+0x54,int,20,3,logic_playeractions logicsimulation_round logicsimulation_world
+0x58,int,8,2,logicsimulation_driving resetgame
+0x5c,int,8,2,logicsimulation_driving resetgame
+0x60,int,5,1,resetgame
+0x64,int,105,28,ai_assessthreats bulletsimulation createevent_updateplayer createhuman createplayer economysimulation human_itemsimulation humansimulation itemweaponsimulation logic_addteamcash logic_player logic_playeractions logic_teammissioncomplete logicsimulation logicsimulation_round logicsimulation_world player_loadinventory playerai playerbuystock playerdeathtax playersellstock playersimulation playerteamkilltax resetgame scenario_createchase scenario_createguards scenario_createtraffic2 serverrecv
+0x68,int,15,1,logicsimulation_round
+0x6c,int,72,16,createevent_updateplayer_finance deleteplayer economysimulation humansimulation logic_addteamcash logic_playeractions logic_teammissioncomplete logicsimulation_world player_calcassets playerbuystock playerdeathtax playersellstock playersimulation playerteamkilltax resetgame serverrecv
+0x70,int,6,3,economysimulation itemweaponsimulation logic_playeractions
+0x74,int,6,1,resetgame
+0x78,int,138,33,calculateplayervoice clientrecv createevent_updateplayer createplayer deletehuman deleteplayer economysimulation humansimulation logic_cardealer_buy logic_gunstore_buy logic_player logic_playeractions logic_suits_buy logicsimulation logicsimulation_driving logicsimulation_round logicsimulation_world packevent packobjectpacket packobjectpacket2 player_calcassets player_loadinventory player_saveinventory playerai playersimulation playerteamkilltax resetgame scenario_createchase scenario_createguards scenario_createtraffic2 server_playermessage serverrecv serversend
+0x7c,float,9,4,ai_playercar playerai playersimulation serverrecv
+0x80,float,11,4,ai_playercar playerai playersimulation serverrecv
+0x84,float,7,4,ai_playercar playerai playersimulation serverrecv
+0x88,float,10,4,ai_playercar playerai playersimulation serverrecv
+0x8c,float,14,4,playerai playersimulation scenario_createguards serverrecv
+0x90,float,10,3,playerai playersimulation serverrecv
+0x94,float,3,2,playersimulation serverrecv
+0x98,float,3,2,playersimulation serverrecv
+0x9c,int,18,4,logicsimulation_world playerai playersimulation serverrecv
+0xa0,int,2,1,playersimulation
+0xa4,float,4,2,clientrecv serversend
+0xa8,float,4,2,clientrecv serversend
+0xac,int,8,2,playersimulation resetgame
+0xb8,float,2,2,createhuman createplayer
+0xbc,int,3,1,logicsimulation_world
+0xc8,int,7,3,playerai playersimulation resetgame
+0xcc,int,1,1,resetgame
+0xd4,int,43,10,clientrecv createplayer logic_player logic_playeractions logicsimulation logicsimulation_round logicsimulation_world resetgame serverrecv serversend
+0xd8,int,13,7,clientrecv logic_cardealer_buy logic_gunstore_buy logic_player logic_playeractions logic_suits_buy serversend
+0xe4,int,21,3,logic_playeractions resetgame serverrecv
+0xe8,int,10,2,logic_playeractions resetgame
+0xec,int,6,2,logic_playeractions serverrecv
+0xf0,int,5,2,logic_playeractions serverrecv
+0xf4,int,5,1,logic_playeractions
+0x100,char,2,1,serverrecv
+0x101,char,1,1,serverrecv
+0x15ec,int,4,1,playersimulation
+0x15f8,int,5,3,clientrecv playersimulation serversend
+0x15fc,int,6,1,playersimulation
+0x161c,int,1,1,playersimulation
+0x1620,int,2,1,playersimulation
+0x1624,int,1,1,playersimulation
+0x1644,int,1,1,playersimulation
+0x1718,int,18,4,createplayer economysimulation player_loadinventory player_saveinventory
+0x171c,int,5,3,economysimulation player_loadinventory player_saveinventory
+0x1720,int,4,2,player_loadinventory player_saveinventory
+0x1724,int,6,2,player_loadinventory player_saveinventory
+0x177c,int,10,4,createplayer economysimulation player_loadinventory player_saveinventory
+0x1780,int,3,2,economysimulation player_loadinventory
+0x1784,int,2,2,economysimulation player_loadinventory
+0x1788,int,2,2,economysimulation player_loadinventory
+0x178c,int,2,2,economysimulation player_loadinventory
+0x17e0,int,2,2,createplayer player_saveinventory
+0x1844,int,2,2,createplayer player_saveinventory
+0x18a8,int,2,2,createplayer player_saveinventory
+0x190c,int,2,2,createplayer player_saveinventory
+0x1970,int,2,2,createplayer player_saveinventory
+0x19d4,int,1,1,createplayer
+0x1a38,int,45,9,createevent_updateplayer dedicatedserverloop logicsimulation_round logicsimulation_world resetgame scenario_createchase scenario_createguards scenario_createtraffic2 serverrecv
+0x1a3c,int,6,2,ai_playercar scenario_createchase
+0x1a40,int,4,1,ai_playercar
+0x1a44,int,23,6,ai_car_nextwaypoint ai_playercar playerai resetgame scenario_createchase scenario_createtraffic2
+0x1a48,int,18,4,playerai resetgame scenario_createchase scenario_createtraffic2
+0x1a4c,float,4,2,playerai resetgame
+0x1a50,float,3,2,playerai resetgame
+0x1a54,float,3,2,playerai resetgame
+0x1a58,int,6,4,ai_car_nextwaypoint ai_playercar scenario_createchase scenario_createtraffic2
+0x1a5c,int,7,4,ai_car_nextwaypoint ai_playercar scenario_createchase scenario_createtraffic2
+0x1a60,int,7,3,ai_playercar scenario_createchase scenario_createtraffic2
+0x1a74,int,2,2,ai_car_nextwaypoint ai_playercar
+0x1a78,int,3,2,ai_car_nextwaypoint ai_playercar
+0x1a7c,int,2,2,ai_car_nextwaypoint ai_playercar
+0x1a80,int,5,2,ai_car_nextwaypoint ai_playercar
+0x214c,int,5,3,ai_car_nextwaypoint scenario_createchase scenario_createtraffic2
+0x2150,int,5,3,ai_car_nextwaypoint scenario_createchase scenario_createtraffic2
+0x2154,int,8,3,ai_playercar createplayer resetgame
+0x2158,int,1,1,ai_playercar
+0x215c,int,2,1,playerai
+0x2160,int,4,1,ai_playercar
+0x2164,int,3,1,playerai
+0x2168,int,16,2,ai_assessthreats playerai
+0x216c,int,6,2,ai_assessthreats playerai
+0x2170,int,5,1,ai_assessthreats
+0x2174,float,3,2,ai_assessthreats playerai
+0x2178,int,1,1,ai_assessthreats
+0x217c,int,1,1,ai_assessthreats
+0x2180,float,11,2,ai_assessthreats playerai
+0x2184,int,2,1,ai_assessthreats
+0x2188,int,3,1,ai_assessthreats
+0x2198,float,1,1,ai_assessthreats
+0x21a0,int,1,1,ai_assessthreats
+0x21b0,float,1,1,ai_assessthreats
+0x22f0,int,7,3,logicsimulation_world scenario_createchase scenario_createguards
+0x22f4,float,2,2,createhuman createplayer
+0x22f8,float,2,2,createhuman createplayer
+0x22fc,float,2,2,createhuman createplayer
+0x2300,float,2,2,createhuman createplayer
+0x2304,float,2,2,createhuman createplayer
+0x2308,float,2,2,createhuman createplayer
+0x230c,float,2,2,createhuman createplayer
+0x2310,float,2,2,createhuman createplayer
+0x2314,float,2,2,createhuman createplayer
+0x2318,float,2,2,createhuman createplayer
+0x231c,float,2,2,createhuman createplayer
+0x2320,float,2,2,createhuman createplayer
+0x23b4,int,4,4,createevent_updateplayer createhuman createplayer serverrecv
+0x23b8,int,4,4,createevent_updateplayer createhuman createplayer serverrecv
+0x23bc,int,4,4,createevent_updateplayer createhuman createplayer serverrecv
+0x23c0,int,3,2,createevent_updateplayer logic_suits_buy
+0x23c4,int,3,2,createevent_updateplayer logic_suits_buy
+0x23c8,char,4,2,packevent server_playermessage
+0x23c9,char,2,1,packevent

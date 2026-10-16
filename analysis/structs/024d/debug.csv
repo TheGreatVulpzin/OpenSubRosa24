@@ -1,0 +1,27 @@
+offset,type,uses,n_funcs,funcs
+0x4f884,int,2,1,bulletsimulation
+0x4f8a4,int,2,1,bulletsimulation
+0x4f8b0,int,1,1,bulletsimulation
+0x4f8c0,int,2,1,bulletsimulation
+0x4f944,float,1,1,bulletsimulation
+0x4f948,float,1,1,bulletsimulation
+0x4f94c,float,1,1,bulletsimulation
+0x4f95c,float,2,1,bulletsimulation
+0x4f960,float,2,1,bulletsimulation
+0x4f964,float,2,1,bulletsimulation
+0x4f998,float,2,1,bulletsimulation
+0x4f99c,float,2,1,bulletsimulation
+0x4f9a0,float,2,1,bulletsimulation
+0x4f9d0,float,1,1,bulletsimulation
+0x4fa40,float,2,1,bulletsimulation
+0x50248,int,1,1,setcpuaffinity
+0x5024c,int,2,2,city_createelevator setcpuaffinity
+0x50250,int,2,2,city_createelevator setcpuaffinity
+0x50344,int,1,1,clientrecv
+0x52284,int,2,1,dedicatedserverloop
+0x52384,int,3,2,debug_resetlogfile dedicatedserverloop
+0x52388,int,1,1,debug_resetlogfile
+0x5238c,int16_t,1,1,debug_resetlogfile
+0x5238e,char,1,1,debug_resetlogfile
+0x52398,int,1,1,bulletsimulation
+0x523c4,int,5,2,debug_resetlogfile dedicatedserverloop

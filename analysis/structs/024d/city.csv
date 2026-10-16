@@ -1,0 +1,136 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,28,6,ai_car_nextwaypoint building_buildfloorplan city_addintersection createlevel logicsimulation scenario_createtraffic2
+0x4,int,1,1,createlevel
+0x8,int,21,7,addcitystreet ai_car_nextwaypoint buildcityinterection buildcitystreet building_buildfloorplan city_addintersection scenario_createtraffic2
+0xc,int,14,3,buildcityinterection buildcitystreet city_addintersection
+0x10,int,20,7,addcitystreet ai_car_nextwaypoint buildcityinterection buildcitystreet building_buildfloorplan city_addintersection scenario_createtraffic2
+0x14,float,10,4,ai_playercar city_addintersection resetgame scenario_createcar
+0x18,float,8,4,ai_playercar city_addintersection resetgame scenario_createcar
+0x1c,float,10,4,ai_playercar city_addintersection resetgame scenario_createcar
+0x20,int,6,5,addcitystreet ai_car_nextwaypoint buildcityinterection building_buildfloorplan city_addintersection
+0x24,int,6,6,addcitystreet ai_car_nextwaypoint ai_playercar buildcityinterection building_buildfloorplan city_addintersection
+0x28,int,5,5,addcitystreet ai_car_nextwaypoint ai_playercar buildcityinterection city_addintersection
+0x2c,int,5,5,addcitystreet ai_car_nextwaypoint ai_playercar buildcityinterection city_addintersection
+0x30,int,14,5,addcitystreet ai_playercar buildcityinterection buildcitystreet city_addintersection
+0x34,int,14,5,addcitystreet ai_playercar buildcityinterection buildcitystreet city_addintersection
+0x38,int,9,5,addcitystreet ai_playercar buildcityinterection buildcitystreet city_addintersection
+0x3c,int,9,5,addcitystreet ai_playercar buildcityinterection buildcitystreet city_addintersection
+0x40,int,6,3,ai_playercar city_addintersection logicsimulation
+0x44,int,2,2,city_addintersection logicsimulation
+0x48,int,4,2,ai_playercar logicsimulation
+0x50,int,3,2,ai_playercar logicsimulation
+0x54,int,1,1,logicsimulation
+0x58,int,1,1,logicsimulation
+0x5c,int,1,1,logicsimulation
+0x70,int,1,1,building_buildfloorplan
+0x78,int,1,1,building_buildfloorplan
+0xa8,int,2,1,logicsimulation
+0xac,int,1,1,logicsimulation
+0xb0,int,3,1,logicsimulation
+0xb8,int,4,1,logicsimulation
+0xbc,int,3,1,logicsimulation
+0xc0,int,4,1,logicsimulation
+0xc4,int,3,1,logicsimulation
+0x1a8,int,1,1,ai_car_nextwaypoint
+0x1b4,float,1,1,objectsimulation
+0x1bc,float,1,1,objectsimulation
+0x1f0,int,1,1,logicsimulation
+0x1f4,int,1,1,logicsimulation
+0x1f8,int,1,1,logicsimulation
+0x1fc,int,1,1,logicsimulation
+0x1a008,int,25,4,addcitystreet createlevel scenario_createchase scenario_createtraffic2
+0x1a00c,int,14,6,addcitystreet ai_car_nextwaypoint ai_playercar buildcitystreet resetgame scenario_createcar
+0x1a010,int,7,4,addcitystreet ai_playercar buildcitystreet scenario_createcar
+0x1a014,int,6,4,addcitystreet ai_playercar buildcitystreet scenario_createcar
+0x1a018,int,7,2,addcitystreet buildcitystreet
+0x1a01c,int,9,2,addcitystreet buildcitystreet
+0x1a020,float,9,3,addcitystreet ai_playercar scenario_createcar
+0x1a024,float,7,3,addcitystreet ai_playercar scenario_createcar
+0x1a028,float,9,3,addcitystreet ai_playercar scenario_createcar
+0x1a02c,float,8,3,addcitystreet ai_playercar scenario_createcar
+0x1a030,float,6,3,addcitystreet ai_playercar scenario_createcar
+0x1a034,float,8,3,addcitystreet ai_playercar scenario_createcar
+0x1a038,char,1,1,addcitystreet
+0x1a039,char,1,1,addcitystreet
+0x2380c,int,9,1,createlevel
+0x23810,int,1,1,createlevel
+0x23814,int,1,1,createlevel
+0x23818,int,1,1,createlevel
+0x2381c,int,1,1,createlevel
+0x23820,int,1,1,createlevel
+0x23824,int,1,1,createlevel
+0x23828,int,1,1,createlevel
+0x29810,int,1,1,createlevel
+0x2f814,int,1,1,createlevel
+0x2f998,int,132,9,building_buildfloorplan city_createelevator createlevel createmission_acquisition economy_carmarket economy_gunmarket humansimulation logic_player resetgame
+0x2f9dc,int,17,8,building_buildfloorplan createmission_acquisition economy_carmarket economy_gunmarket humansimulation logic_player logic_playeractions resetgame
+0x2f9ec,float,6,1,building_buildfloorplan
+0x2f9f0,float,7,2,building_buildfloorplan human_itemsimulation
+0x2f9f4,float,6,1,building_buildfloorplan
+0x2f9f8,float,8,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2f9fc,float,8,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2fa00,float,8,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2fa04,float,8,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2fa08,float,8,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2fa0c,float,7,3,building_buildfloorplan city_createelevator pointinsidebuilding
+0x2fa10,int,2,1,city_createelevator
+0x2fa14,int,1,1,city_createelevator
+0x2fa18,int,1,1,city_createelevator
+0x2fa1c,int,1,1,city_createelevator
+0x2fa20,int,1,1,city_createelevator
+0x2fb90,int,1,1,building_buildfloorplan
+0x2fb94,int,1,1,building_buildfloorplan
+0x2fba0,int,31,2,building_buildfloorplan scenario_createguards
+0x2fba4,float,6,2,building_buildfloorplan scenario_createguards
+0x2fba8,float,6,2,building_buildfloorplan scenario_createguards
+0x2fbac,float,6,2,building_buildfloorplan scenario_createguards
+0x2fbb0,int,6,2,building_buildfloorplan scenario_createguards
+0x2ffa4,float,6,2,building_buildfloorplan scenario_createguards
+0x2ffa8,float,6,2,building_buildfloorplan scenario_createguards
+0x2ffac,float,6,2,building_buildfloorplan scenario_createguards
+0x3029c,int,2,2,logic_cardealer_buy logic_gunstore_buy
+0x302a0,int,4,3,logic_cardealer_buy logic_gunstore_buy logic_suits_buy
+0x302a4,int,67,7,building_buildfloorplan clientrecv economy_carmarket economy_gunmarket logic_cardealer_buy logic_playeractions serversend
+0x302a8,int,8,4,building_buildfloorplan economy_carmarket economy_gunmarket logic_cardealer_buy
+0x302ac,int,6,3,building_buildfloorplan economy_carmarket economy_gunmarket
+0x302b0,int,4,2,economy_carmarket economy_gunmarket
+0x302b4,int,1,1,economy_gunmarket
+0x302b8,int,1,1,economy_gunmarket
+0x302bc,int,1,1,economy_gunmarket
+0x302c0,int,1,1,economy_gunmarket
+0x302c4,int,1,1,economy_gunmarket
+0x302c8,int,1,1,economy_gunmarket
+0x302cc,int,1,1,economy_gunmarket
+0x302d0,int,1,1,economy_gunmarket
+0x302d4,int,1,1,economy_gunmarket
+0x302d8,int,1,1,economy_gunmarket
+0x302dc,int,1,1,economy_gunmarket
+0x302e0,int,1,1,economy_gunmarket
+0x302e4,int,1,1,economy_gunmarket
+0x302e8,int,1,1,economy_gunmarket
+0x302ec,int,1,1,economy_gunmarket
+0x302f0,int,1,1,economy_gunmarket
+0x302f4,int,1,1,economy_gunmarket
+0x302f8,int,1,1,economy_gunmarket
+0x302fc,int,1,1,economy_gunmarket
+0x30300,int,1,1,economy_gunmarket
+0x30304,int,1,1,economy_gunmarket
+0x30308,int,1,1,economy_gunmarket
+0x3030c,int,1,1,economy_gunmarket
+0x30310,int,1,1,economy_gunmarket
+0x30314,int,1,1,economy_gunmarket
+0x30318,int,1,1,economy_gunmarket
+0x3031c,int,1,1,economy_gunmarket
+0x30368,int,2,1,logic_cardealer_buy
+0x3036c,float,2,2,building_buildfloorplan logic_cardealer_buy
+0x30370,float,2,2,building_buildfloorplan logic_cardealer_buy
+0x30374,float,2,2,building_buildfloorplan logic_cardealer_buy
+0x303b8,int,7,5,economy_carmarket economy_gunmarket humansimulation logic_player resetgame
+0x303d4,float,1,1,city_createelevator
+0x303d8,float,2,1,city_createelevator
+0x303dc,float,1,1,city_createelevator
+0x30c80,int,8,2,economy_carmarket economy_gunmarket
+0x30c84,int,1,1,economy_gunmarket
+0x30c88,int,1,1,economy_gunmarket
+0x30c8c,int,1,1,economy_gunmarket
+0x30c90,int,1,1,economy_gunmarket

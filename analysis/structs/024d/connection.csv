@@ -1,0 +1,49 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,9,3,server_playermessage serverrecv serversend
+0x4,int16_t,7,2,serverrecv serversend
+0x8,int,4,2,serverrecv serversend
+0xc,int,5,3,packevent server_playermessage serverrecv
+0x10,int,19,4,packevent server_playermessage serverrecv serversend
+0x14,int,9,2,servercycle serversend
+0x18,int,4,1,servercycle
+0x1c,int,10,2,server_playermessage serverrecv
+0x44,int,7,5,packobjectpacket packobjectpacket2 resetgame serverrecv serversend
+0x4c,int,5,3,packobjectpacket packobjectpacket2 serverrecv
+0x50,float,1,1,addvoice
+0x54,int,14,4,addvoice calculateplayervoice resetgame serversend
+0x58,int,6,2,calculateplayervoice serversend
+0x5c,int,4,1,calculateplayervoice
+0x60,int,4,1,calculateplayervoice
+0x70,float,7,2,addvoice calculateplayervoice
+0x74,int,15,3,addvoice calculateplayervoice resetgame
+0x78,int,3,1,calculateplayervoice
+0x7c,int,2,1,calculateplayervoice
+0x80,int,2,1,calculateplayervoice
+0x90,float,5,2,addvoice calculateplayervoice
+0x94,int,3,2,calculateplayervoice resetgame
+0xb0,float,3,1,addvoice
+0xb4,int,3,2,calculateplayervoice resetgame
+0xd0,float,3,1,addvoice
+0xd4,int,3,2,calculateplayervoice resetgame
+0xf0,float,3,1,addvoice
+0xf4,int,3,2,calculateplayervoice resetgame
+0x110,float,3,1,addvoice
+0x114,int,3,2,calculateplayervoice resetgame
+0x130,float,2,1,addvoice
+0x134,int,3,2,calculateplayervoice resetgame
+0x150,float,1,1,addvoice
+0x154,int,3,2,calculateplayervoice serverrecv
+0x158,int,6,2,packobjectpacket packobjectpacket2
+0x174,int,1,1,packobjectpacket
+0x190,int,1,1,packobjectpacket
+0x1ac,int,1,1,packobjectpacket
+0x1c8,int,1,1,packobjectpacket
+0x1e4,int,1,1,packobjectpacket
+0x7158,int,5,2,packobjectpacket packobjectpacket2
+0x7174,int,1,1,packobjectpacket
+0xf158,float,4,4,packobjectpacket packobjectpacket2 serverrecv serversend
+0xf15c,float,4,4,packobjectpacket packobjectpacket2 serverrecv serversend
+0xf160,float,4,4,packobjectpacket packobjectpacket2 serverrecv serversend
+0xf164,float,2,1,serversend
+0xf168,float,2,1,serversend
+0xf16c,float,1,1,serversend

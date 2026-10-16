@@ -1,0 +1,12 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,7,3,createaccount loadaccountsserver saveaccountsserver
+0x4,int,4,3,createaccount loadaccountsserver saveaccountsserver
+0x8,int,9,5,account_nameexists createaccount loadaccountsserver saveaccountsserver server_writelogfile
+0xc,int,3,1,createaccount
+0x28,int,7,3,createaccount logicsimulation_world serverrecv
+0x2c,int,18,10,createaccount deleteplayer humansimulation loadaccountsserver logic_farbslist newspaper_load playersimulation saveaccountsserver server_playermessage serverrecv
+0x30,uint32_t,10,4,loadaccountsserver logicsimulation_world saveaccountsserver server_writelogfile
+0x34,int,7,4,createaccount loadaccountsserver saveaccountsserver serverrecv
+0x38,int,7,4,createaccount loadaccountsserver saveaccountsserver serverrecv
+0x3c,int,7,4,createaccount loadaccountsserver saveaccountsserver serverrecv
+0x48,int,7,3,logicsimulation_world server_playermessage serverrecv

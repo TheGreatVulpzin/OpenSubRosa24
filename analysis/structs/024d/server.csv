@@ -1,0 +1,11 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,55,32,building_buildfloorplan bulletsimulation createevent_bullet createevent_bullethit createevent_message createevent_sound createevent_updateblock_quad createevent_updatecarmarket createevent_updatedoor createevent_updateitem createevent_updateiteminfo createevent_updatemission createevent_updateobject createevent_updateplayer createevent_updateplayer_finance createevent_updatestocks createhuman createobject createscenario_world dedicatedserverloop deletehuman item_removehumanlink item_removeitemlink logic_addteamcash logic_teammissioncomplete logicsimulation_round logicsimulation_world objectsimulation objecttimetolive resetgame server_playermessage serverrecv
+0x8,int,1,1,dedicatedserverloop
+0xc,int,4,2,clientrecv serversend
+0x10,int,2,1,clientrecv
+0x15,char,1,1,dedicatedserverloop
+0x5c,int,3,2,dedicatedserverloop serverrecv
+0x64,int,5,1,serverrecv
+0x78,int,1,1,serverrecv
+0x7c,int,5,2,resetgame server_playermessage
+0x80,int,3,2,logicsimulation server_playermessage

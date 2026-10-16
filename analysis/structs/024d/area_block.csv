@@ -1,0 +1,24 @@
+offset,type,uses,n_funcs,funcs
+0x1,char,2,1,building_setupbuild
+0x2,char,1,1,building_setupbuild
+0x3,char,1,1,building_setupbuild
+0x6,char,1,1,area_createinteriorblocks
+0x8,int,7,1,area_createinteriorblocks
+0x14,char,1,1,area_createinteriorblocks
+0x40,int,1,1,landscape_buildsectorlods
+0x44,int,7,4,circleintersectspecblock landscape_buildsectorlods lineintersectspecblock sphereintersectspecblock
+0x48,int,3,1,landscape_buildsectorlods
+0x4c,int,3,1,landscape_buildsectorlods
+0x50,int,3,1,landscape_buildsectorlods
+0x54,int,9,4,circleintersectspecblock landscape_buildsectorlods lineintersectspecblock sphereintersectspecblock
+0x58,int,6,4,circleintersectspecblock landscape_buildsectorlods lineintersectspecblock sphereintersectspecblock
+0x5c,int,8,3,circleintersectspecblock landscape_buildsectorlods lineintersectspecblock
+0x60,int,3,2,circleintersectspecblock landscape_buildsectorlods
+0x64,int,4,2,circleintersectspecblock landscape_buildsectorlods
+0x68,int,4,2,circleintersectspecblock landscape_buildsectorlods
+0x6c,int,61,6,area_block_createbuildinginterior area_copyrotateblock area_createblock area_createinteriorblocks area_createsblocks area_interior_createblock
+0x70,int,27,6,area_block_createbuildinginterior area_copyrotateblock area_createblock area_createinteriorblocks area_createsblocks area_interior_createblock
+0x74,int,28,7,area_block_createbuildinginterior area_copyrotateblock area_createblock area_createinteriorblocks area_createsblocks area_interior_createblock building_rotatefloorplan
+0x78,int,7,6,area_block_addwindow area_block_createbuildinginterior area_breakblock circleintersectspecblock lineintersectspecblock sphereintersectspecblock
+0x7c,int,4,1,area_block_createbuildinginterior
+0x80,int,5,2,area_createinteriorblocks building_setupfloorplannewer

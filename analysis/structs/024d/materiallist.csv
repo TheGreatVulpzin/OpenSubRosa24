@@ -1,0 +1,19 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,11,2,building_setupbuild setupgame
+0x4,int,1,1,setupgame
+0xc,int,2,1,setupgame
+0x2c,int,1,1,setupgame
+0x34,int,2,1,setupgame
+0x284,int,2,1,setupgame
+0x288,int,3,2,createlevel setupgame
+0x29c,int,1,1,setupgame
+0x2a0,int,1,1,setupgame
+0x2a4,int,1,1,setupgame
+0x2b0,int,1,1,setupgame
+0x2b4,int,1,1,setupgame
+0x2c0,int,1,1,setupgame
+0x2c4,int,1,1,setupgame
+0x2d0,int,2,1,setupgame
+0x2f0,int,1,1,setupgame
+0x380,int,1,1,setupgame
+0x384,int,1,1,setupgame

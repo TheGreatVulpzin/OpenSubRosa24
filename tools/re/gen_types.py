@@ -169,7 +169,7 @@ def load_names():
 def load_accessed(glob):
     p = ROOT / f'analysis/structs/mac/{glob}.csv'
     if not p.exists():
-        return {}
+        return load_inferred(glob)
     out = {}
     with open(p, encoding='utf-8') as fh:
         for r in csv.DictReader(fh):
@@ -177,6 +177,16 @@ def load_accessed(glob):
             typ = next((CSV_TYPE[t] for t in types if t in CSV_TYPE), 'int')
             out[int(r['offset'], 16)] = (typ, int(r['n_funcs']))
     return out
+
+
+def load_inferred(glob):
+    """Fields read from the 024d instructions (tools/ghidra/InferFields.java and
+    tools/re/infer_fields.py), for the structs that have no Mac access file."""
+    p = ROOT / f'analysis/structs/024d/{glob}.csv'
+    if not p.exists():
+        return {}
+    with open(p, encoding='utf-8') as fh:
+        return {int(r['offset'], 16): (r['type'], int(r['n_funcs'])) for r in csv.DictReader(fh)}
 
 
 def gen_struct(cname, glob, size, named, accessed):

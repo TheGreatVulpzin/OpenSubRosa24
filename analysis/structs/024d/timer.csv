@@ -1,0 +1,8 @@
+offset,type,uses,n_funcs,funcs
+0x1,char,16,4,bondsimulation2 dedicatedserverloop humansimulation objectsimulation
+0x40,int,22,6,bondsimulation2 dedicatedserverloop humansimulation objectsimulation serversend stoptimer
+0x44,int,22,6,bondsimulation2 dedicatedserverloop humansimulation objectsimulation serversend stoptimer
+0x48,int,20,6,bondsimulation2 dedicatedserverloop humansimulation objectsimulation serversend stoptimer
+0x4c,int,20,6,bondsimulation2 dedicatedserverloop humansimulation objectsimulation serversend stoptimer
+0x50,int,21,7,bondsimulation2 bullettimetolive dedicatedserverloop humansimulation objectsimulation serversend stoptimer
+0x54,int,1,1,bullettimetolive

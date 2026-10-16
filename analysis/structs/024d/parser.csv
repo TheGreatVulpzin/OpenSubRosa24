@@ -1,0 +1,9 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,46,8,cs_getline findstring getfloat getstring loadsaveoptions loadtextfile newspaper_load optionreadwriteint
+0x4,int,14,7,cs_getline findstring getfloat getstring loadtextfile newspaper_load optionreadwriteint
+0x8,char,8,5,cs_getline findstring getfloat getstring loadtextfile
+0x9,char,8,5,cs_getline findstring getfloat getstring loadtextfile
+0xa,char,2,2,cs_getline getfloat
+0x100009,char,2,1,getfloat
+0x10000a,char,1,1,getfloat
+0x100108,int,192,10,building_load building_save leveleditor_load leveleditor_save loadaccountsclient loadaccountsserver loadblock loadtextfile saveaccountsclient saveaccountsserver

@@ -1,0 +1,39 @@
+offset,type,uses,n_funcs,funcs
+0x0,int,28,3,economy_gunmarket logic_playeractions setupitemtypes
+0x4,float,28,2,createitem setupitemtypes
+0x8,int,50,11,human_calcarmtorque human_calculatearmangles human_itemsimulation itemlogic linkitem player_loadinventory playersimulation resetgame scenario_createchase server_playermessage setupitemtypes
+0xc,int,8,3,human_calcarmtorque human_calculatearmangles setupitemtypes
+0x10,int,7,2,itemweaponsimulation setupitemtypes
+0x14,int,8,2,itemweaponsimulation setupitemtypes
+0x18,int,7,2,createitem setupitemtypes
+0x1c,int,15,3,createitem playersimulation setupitemtypes
+0x20,float,8,2,itemweaponsimulation setupitemtypes
+0x24,float,7,2,itemweaponsimulation setupitemtypes
+0x28,int,27,1,setupitemtypes
+0x2e,char,1,1,setupitemtypes
+0x32,char,4,1,setupitemtypes
+0x36,char,2,1,setupitemtypes
+0x48,float,6,1,setupitemtypes
+0x4c,float,6,1,setupitemtypes
+0x50,float,6,1,setupitemtypes
+0x54,float,7,2,human_calculatearmangles setupitemtypes
+0x58,float,7,2,human_calculatearmangles setupitemtypes
+0x5c,float,7,2,human_calculatearmangles setupitemtypes
+0x6c,float,8,2,itemweaponsimulation setupitemtypes
+0x70,float,6,1,setupitemtypes
+0x74,float,6,1,setupitemtypes
+0x78,float,6,1,setupitemtypes
+0x7c,float,6,1,setupitemtypes
+0x80,float,52,3,item_sphereintersect itemsimulation setupitemtypes
+0x84,float,51,3,item_sphereintersect itemsimulation setupitemtypes
+0x88,float,52,3,item_sphereintersect itemsimulation setupitemtypes
+0x8c,float,13,3,createitem itemsimulation setupitemtypes
+0x90,float,12,3,createitem itemsimulation setupitemtypes
+0x94,float,12,3,createitem itemsimulation setupitemtypes
+0x98,int,8,4,human_itemsimulation linkitemtoitem playerai setupitemtypes
+0xa0,int,1,1,setupitemtypes
+0xa8,int,1,1,setupitemtypes
+0xb0,int,1,1,setupitemtypes
+0xb8,int,1,1,setupitemtypes
+0xc0,int,1,1,setupitemtypes
+0xd0,int,8,1,setupitemtypes

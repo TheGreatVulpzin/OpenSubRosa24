@@ -54,6 +54,7 @@ If the download fails, the session needs network access to `crypticsea.gart.sh` 
 
 - `tools/re/gen_types.py` — generates `src/include/sr_types.h` from `analysis/structs/names.csv`. Add a known field there, never in the header.
 - `tools/ghidra/types_json.py` then `ApplyTypes.java` — put the structs and the global arrays (`g_human`, `g_object`...) into the Ghidra project. Run both after each change to the structs or the globals. `analysis/024d/data_globals.csv` holds globals with a base type (`float`, `int`, `char*`...) and a count.
+- `tools/ghidra/InferFields.java` then `tools/re/infer_fields.py [--test]` — read the type of each field of the typed globals from all the instructions that use it (x87 = float/double, `jl` after `cmp` = signed...). It writes `analysis/structs/024d/<global>.csv`. `gen_types.py` makes typed `unk_` fields from it for the structs that have no Mac file. A piece without a field becomes an unsigned int in C, which breaks floats and signed compares: run this after you add a struct.
 - `tools/ghidra/ApplyNames.java` — gives the functions their names from `analysis/024d/functions.csv` (only `FUN_` names). Run it after each change to the CSV.
 - `tools/ghidra/ApplyParams.java` — gives parameters their types from `analysis/024d/params.csv` (a pointer typed as `int` makes the harness skip the call). Run it after each change to the CSV.
 - `tools/ghidra/LiftExport.java` — export for the lifter. The p-code rules (float bits, rounding, relocated addresses, struct pieces) live here.
