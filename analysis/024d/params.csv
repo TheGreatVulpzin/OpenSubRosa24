@@ -5,3 +5,8 @@ rva,name,index,type,evidence
 0xbdb0,rotateorientation,0,float *,"(float *)(param_1 + 8); callers pass float pointers cast to int"
 0x286b0,createmission_transaction,2,int *,"reads *(int *)(param_3 + i*4) for i < param_2, the same team list as createmission_acquisition"
 0x16a20,playerteamkilltax,0,int,"player index: compared with 0x100 and used as g_player[param_1]; bulletsimulation passes the bullet owner"
+0x28c90,calculatepointscale,2,float *,"(float *)(param_3 + 4) and (param_3 + 8): the y and z of a vec3, like param_1 and param_4"
+0xad70,init_by_array,0,uint *,"*(int *)(param_1 + i*4): the init_key array of the Mersenne Twister (init_by_array(init_key, key_length))"
+0xf6f0,addbeziersurface,0,float *,"(float *)(param_1 + 0x60): an array of control points; the harness skipped 15 calls (value points into the stack)"
+0xf6f0,addbeziersurface,1,float *,"(float *)(param_2 + 0x40): a second array of points, used the same way"
+0xfc40,addbeziersurfacetexture,0,float *,"(float *)(param_1 + 0x60): the same control points as addbeziersurface"

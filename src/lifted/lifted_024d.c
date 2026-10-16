@@ -5779,7 +5779,7 @@ void __cdecl lf_0ad30(uint param_1)
 #define DAT_012bd6aa (*(undefined *)SR_VA(0x12bd6aa))
 #define g_mt (*(uint (*)[624])SR_VA(0x460dc0))
 #define init_genrand ((void (__cdecl *)(uint))SR_VA(0x40ad30))
-void __cdecl lf_0ad70(int param_1,int param_2)
+void __cdecl lf_0ad70(uint *param_1,int param_2)
 
 {
   uint *puVar1;
@@ -5803,7 +5803,7 @@ void __cdecl lf_0ad70(int param_1,int param_2)
     puVar1 = g_mt + iVar3;
     iVar3 = iVar3 + 1;
     *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc))) =
-         ((uVar2 >> 0x1e ^ uVar2) * 0x19660d ^ *puVar1) + *(int *)(param_1 + iVar4 * 4) + iVar4;
+         ((uVar2 >> 0x1e ^ uVar2) * 0x19660d ^ *puVar1) + param_1[iVar4] + iVar4;
     iVar4 = iVar4 + 1;
     if (0x26f < iVar3) {
       iVar3 = 1;
@@ -8239,7 +8239,7 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #define local_20 (*(float * *)(lf_frame + 0x30))
 #define local_1c (*(float (*)[6])(lf_frame + 0x34))
 #define local_4 (*(uint *)(lf_frame + 0x4c))
-void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int param_5,float param_6,
+void __cdecl lf_0f6f0(float *param_1,float *param_2,int param_3,float param_4,int param_5,float param_6,
                 int param_7)
 
 {
@@ -8273,8 +8273,8 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
   local_2c = (float)(1.0 / (float)param_5);
   local_38 = 0.0;
   if (-1 < param_5) {
-    local_20 = (float *)(param_1 + 0x60);
-    local_30 = (float *)(param_2 + 0x40);
+    local_20 = param_1 + 0x18;
+    local_30 = param_2 + 0x10;
     local_34 = param_5 + 1;
     do {
       pfVar9 = (float *)&DAT_14022d40;
@@ -8492,7 +8492,7 @@ void __cdecl lf_0f6f0(int param_1,int param_2,int param_3,float param_4,int para
 #define local_20 (*(float *)(lf_frame + 0x30))
 #define local_1c (*(float (*)[6])(lf_frame + 0x34))
 #define local_4 (*(uint *)(lf_frame + 0x4c))
-void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,int param_5,float param_6,
+void __cdecl lf_0fc40(float *param_1,undefined4 param_2,int param_3,float param_4,int param_5,float param_6,
           int param_7)
 
 {
@@ -8523,7 +8523,7 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
   local_20 = (float)(1.0 / (float)param_5);
   local_34 = 0.0;
   if (-1 < param_5) {
-    local_2c = (float *)(param_1 + 0x60);
+    local_2c = param_1 + 0x18;
     local_30 = param_5 + 1;
     iVar3 = g_tempmesh.unk_0000;
     do {
@@ -8714,6 +8714,7 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
 #define g_buildblocktype (*(BuildBlockType *)SR_VA(0xbba7200))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define DAT_0bbe9138 (*(undefined *)SR_VA(0xbbe9138))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9154 (*(undefined4 *)SR_VA(0xbbe9154))
 #define _DAT_0bbe9158 (*(float *)SR_VA(0xbbe9158))
@@ -8721,7 +8722,7 @@ void __cdecl lf_0fc40(int param_1,undefined4 param_2,int param_3,float param_4,i
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_5)
 
 {
@@ -8766,7 +8767,8 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     DAT_0bbe90c8 = fVar1;
     uVar3 = area_block_rotatesurface(param_1,0x50000);
     uVar5 = (param_1 - 2U & 3) + 9;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     uVar5 | uVar3);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0;
     DAT_0bbe90c4 = 0x3f800000;
@@ -8780,7 +8782,8 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     _DAT_0bbe9134 = fVar1;
     _DAT_0bbe9158 = fVar1;
     uVar3 = area_block_rotatesurface(param_1,0x40000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     uVar5 | uVar3);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c4 = 0x3f800000;
@@ -8796,7 +8799,7 @@ void __cdecl lf_10140(int param_1,int param_2,int param_3,int param_4,int param_
     uVar3 = area_block_rotatesurface(param_1,0x60000);
     uVar3 = param_1 + 1U | uVar3;
   }
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3);
 LAB_0041039f:
   if (((byte)uVar4 & 8) == 8) {
     DAT_0bbe90a0 = 0x3f800000;
@@ -8814,7 +8817,8 @@ LAB_0041039f:
     _DAT_0bbe9158 = fVar2;
     uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     uVar3 | uVar4);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c4 = 0x3f800000;
@@ -8828,7 +8832,8 @@ LAB_0041039f:
     _DAT_0bbe9134 = fVar2;
     _DAT_0bbe9158 = fVar2;
     uVar4 = area_block_rotatesurface(param_1,0x30000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     uVar3 | uVar4);
     DAT_0bbe90a0 = 0;
     DAT_0bbe90a4 = 1.0;
     DAT_0bbe90a8 = 0x3d800000;
@@ -8863,7 +8868,8 @@ LAB_0041039f:
     uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
   }
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                   uVar3 | uVar4);
   return;
 }
 #undef DAT_0bbe90a0
@@ -8879,6 +8885,7 @@ LAB_0041039f:
 #undef g_buildblocktype
 #undef DAT_0bbe9134
 #undef DAT_0bbe9138
+#undef DAT_0bbe9160
 #undef _DAT_0bbe9130
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe9158
@@ -8902,6 +8909,7 @@ LAB_0041039f:
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define g_buildblocktype (*(BuildBlockType *)SR_VA(0xbba7200))
 #define DAT_0bbe9138 (*(undefined *)SR_VA(0xbbe9138))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
@@ -8909,7 +8917,7 @@ LAB_0041039f:
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 
 {
@@ -8933,11 +8941,11 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe915c = 0;
     _DAT_0bbe9134 = 0;
     _DAT_0bbe9138 = 0;
-    DAT_0bbe90a0 = fVar1;
+    *(float *)&(DAT_0bbe90a0) = fVar1;
     _DAT_0bbe9130 = fVar1;
     uVar3 = area_block_rotatesurface(param_1,0x50000);
     uVar5 = (param_1 - 2U & 3) + 9;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c8 = 0x3f800000;
@@ -8946,13 +8954,13 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe915c = 0;
     _DAT_0bbe9134 = 0;
     _DAT_0bbe9138 = 0x3d800000;
-    DAT_0bbe90a0 = fVar1;
+    *(float *)&(DAT_0bbe90a0) = fVar1;
     DAT_0bbe90c4 = fVar1;
     _DAT_0bbe9130 = fVar1;
     _DAT_0bbe9154 = fVar1;
     uVar3 = area_block_rotatesurface(param_1,0x20000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
-    DAT_0bbe90a0 = 0.0;
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar3);
+    *(float *)&(DAT_0bbe90a0) = 0.0;
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90c8 = 0x3f800000;
@@ -8965,10 +8973,11 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     DAT_0bbe90c4 = fVar1;
     _DAT_0bbe9154 = fVar1;
     uVar3 = area_block_rotatesurface(param_1,0x60000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,param_1 + 1U | uVar3);
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     param_1 + 1U | uVar3);
   }
   if (((byte)uVar4 & 2) == 2) {
-    DAT_0bbe90a0 = 1.0;
+    *(float *)&(DAT_0bbe90a0) = 1.0;
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0;
     fVar2 = (float)(fVar2 + fVar1);
@@ -8983,7 +8992,7 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9154 = fVar2;
     uVar4 = area_block_rotatesurface(param_1,0x50000);
     uVar3 = (param_1 - 2U & 3) + 9;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0;
     DAT_0bbe90c8 = 0x3f800000;
@@ -8992,12 +9001,12 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9158 = 0;
     _DAT_0bbe9134 = 0;
     _DAT_0bbe9138 = 0;
-    DAT_0bbe90a0 = fVar2;
+    *(float *)&(DAT_0bbe90a0) = fVar2;
     DAT_0bbe90c4 = fVar2;
     _DAT_0bbe9130 = fVar2;
     _DAT_0bbe9154 = fVar2;
     uVar4 = area_block_rotatesurface(param_1,0x10000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | uVar4);
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0x3d800000;
     DAT_0bbe90cc = 0x3d800000;
@@ -9008,10 +9017,11 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
     _DAT_0bbe9134 = 0;
     _DAT_0bbe915c = 0x3d800000;
     _DAT_0bbe9138 = 0x3d800000;
-    DAT_0bbe90a0 = fVar2;
+    *(float *)&(DAT_0bbe90a0) = fVar2;
     _DAT_0bbe9130 = fVar2;
     uVar4 = area_block_rotatesurface(param_1,0x60000);
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,param_1 + 1U | uVar4);
+    addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                     param_1 + 1U | uVar4);
     return;
   }
   return;
@@ -9029,6 +9039,7 @@ void __cdecl lf_105c0(int param_1,int param_2,int param_3)
 #undef DAT_0bbe9134
 #undef g_buildblocktype
 #undef DAT_0bbe9138
+#undef DAT_0bbe9160
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe9158
 #undef _DAT_0bbe915c
@@ -9171,6 +9182,7 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define DAT_0bbe90cc (*(float *)SR_VA(0xbbe90cc))
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
 #define _DAT_0bbe915c (*(float *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(float *)SR_VA(0xbbe9138))
@@ -9178,13 +9190,13 @@ void __cdecl lf_10950(float param_1,float param_2,float param_3,float param_4,fl
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_10da0(uint param_1,float *param_2)
 
 {
   uint uVar1;
   
-  DAT_0bbe90a0 = 0.0;
+  *(float *)&(DAT_0bbe90a0) = 0.0;
   if (param_1 == 0) {
     uVar1 = 0x40000;
     DAT_0bbe90a4 = 0.0625;
@@ -9227,7 +9239,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
     _DAT_0bbe9134 = 0.0;
     uVar1 = area_block_rotatesurface(param_1 - 1,0x60000);
   }
-  DAT_0bbe90a0 = (float)(*param_2 + DAT_0bbe90a0);
+  *(float *)&(DAT_0bbe90a0) = (float)(*param_2 + DAT_0bbe90a0);
   DAT_0bbe90a4 = (float)(param_2[1] + DAT_0bbe90a4);
   DAT_0bbe90a8 = (float)(DAT_0bbe90a8 + param_2[2]);
   DAT_0bbe90c4 = (float)(*param_2 + DAT_0bbe90c4);
@@ -9239,7 +9251,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
   _DAT_0bbe9130 = (float)(*param_2 + _DAT_0bbe9130);
   _DAT_0bbe9134 = (float)(param_2[1] + _DAT_0bbe9134);
   _DAT_0bbe9138 = (float)(_DAT_0bbe9138 + param_2[2]);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | param_1);
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | param_1);
   return;
 }
 #undef DAT_0bbe90a0
@@ -9254,6 +9266,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
 #undef DAT_0bbe9134
 #undef DAT_0bbe90cc
 #undef DAT_0bbe9130
+#undef DAT_0bbe9160
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
@@ -9277,6 +9290,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
 #define DAT_0bbe9158 (*(undefined *)SR_VA(0xbbe9158))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
@@ -9284,7 +9298,7 @@ void __cdecl lf_10da0(uint param_1,float *param_2)
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float param_5,int param_6,
           uint param_7)
 
@@ -9303,13 +9317,13 @@ int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float
   _DAT_0bbe9154 = param_2;
   _DAT_0bbe9158 = param_4;
   _DAT_0bbe9134 = param_4;
-  DAT_0bbe90a0 = fVar1;
+  *(float *)&(DAT_0bbe90a0) = fVar1;
   DAT_0bbe90a4 = fVar2;
   DAT_0bbe90c8 = fVar2;
   _DAT_0bbe9130 = fVar1;
   uVar3 = area_block_rotatesurface(param_1,0x50000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | param_7);
-  DAT_0bbe90a0 = param_2;
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | param_7);
+  *(float *)&(DAT_0bbe90a0) = param_2;
   DAT_0bbe90a8 = 0x3d000000;
   DAT_0bbe90cc = 0x3d000000;
   _DAT_0bbe9158 = param_4;
@@ -9322,7 +9336,7 @@ int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float
   DAT_0bbe90c8 = fVar2;
   _DAT_0bbe9154 = fVar1;
   uVar3 = area_block_rotatesurface(param_1,0x60000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | param_7);
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar3 | param_7);
   g_area_block[param_6].unk_0078 = g_area_block[param_6].unk_0078 + 2;
   return param_6 * 0x84 + ((int)&g_area_block[0].unk_0078);
 }
@@ -9339,6 +9353,7 @@ int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float
 #undef DAT_0bbe9158
 #undef DAT_0bbe9134
 #undef DAT_0bbe9130
+#undef DAT_0bbe9160
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
 #undef _DAT_0bbe9154
@@ -9361,6 +9376,7 @@ int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float
 #define DAT_0bbe9158 (*(undefined *)SR_VA(0xbbe9158))
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
@@ -9368,7 +9384,7 @@ int __cdecl lf_118f0(int param_1,float param_2,float param_3,float param_4,float
 #define _DAT_0bbe9130 (*(float *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 
 {
@@ -9376,7 +9392,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   float fVar2;
   uint uVar3;
   
-  DAT_0bbe90a0 = 0.0;
+  *(float *)&(DAT_0bbe90a0) = 0.0;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
   DAT_0bbe90c4 = param_2;
@@ -9390,8 +9406,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9134 = 0;
   uVar3 = area_block_rotatesurface(param_1,0x60000);
   uVar1 = param_1 + 1;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
-  DAT_0bbe90a0 = param_2;
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
+  *(float *)&(DAT_0bbe90a0) = param_2;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
   DAT_0bbe90c4 = param_2;
@@ -9404,7 +9420,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9130 = param_2;
   _DAT_0bbe9138 = 0x3d800000;
   uVar3 = area_block_rotatesurface(param_1,0x20000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,(param_1 - 1U & 3) + 1 | uVar3);
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                   (param_1 - 1U & 3) + 1 | uVar3);
   fVar2 = (float)(1.0 - param_2);
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
@@ -9416,10 +9433,10 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9134 = 0;
   _DAT_0bbe915c = 0x3d800000;
   _DAT_0bbe9138 = 0x3d800000;
-  DAT_0bbe90a0 = fVar2;
+  *(float *)&(DAT_0bbe90a0) = fVar2;
   _DAT_0bbe9130 = fVar2;
   uVar3 = area_block_rotatesurface(param_1,0x60000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0;
   DAT_0bbe90c8 = 0x3f800000;
@@ -9428,13 +9445,14 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9158 = 0;
   _DAT_0bbe9134 = 0;
   _DAT_0bbe9138 = 0;
-  DAT_0bbe90a0 = fVar2;
+  *(float *)&(DAT_0bbe90a0) = fVar2;
   DAT_0bbe90c4 = fVar2;
   _DAT_0bbe9130 = fVar2;
   _DAT_0bbe9154 = fVar2;
   uVar3 = area_block_rotatesurface(param_1,0x10000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,(uVar1 & 3) + 1 | uVar3);
-  DAT_0bbe90a0 = 0.0;
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                   (uVar1 & 3) + 1 | uVar3);
+  *(float *)&(DAT_0bbe90a0) = 0.0;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3d800000;
   DAT_0bbe90cc = 0x3d800000;
@@ -9447,8 +9465,8 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9138 = 0x3d800000;
   _DAT_0bbe9130 = 0.0;
   uVar3 = area_block_rotatesurface(param_1,0x60000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
-  DAT_0bbe90a0 = 0.0;
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
+  *(float *)&(DAT_0bbe90a0) = 0.0;
   DAT_0bbe90a4 = param_3;
   DAT_0bbe90a8 = 0x3d800000;
   DAT_0bbe90c4 = 1.0;
@@ -9461,7 +9479,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
   _DAT_0bbe9130 = 0.0;
   _DAT_0bbe9138 = 0;
   uVar3 = area_block_rotatesurface(param_1,0x30000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
+  addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar1 | uVar3);
   return;
 }
 #undef DAT_0bbe90a0
@@ -9476,6 +9494,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #undef DAT_0bbe9158
 #undef DAT_0bbe9130
 #undef DAT_0bbe9134
+#undef DAT_0bbe9160
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
@@ -9499,6 +9518,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
 #define DAT_0bbe9138 (*(undefined *)SR_VA(0xbbe9138))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define g_cubequad (*(int (*)[24])SR_VA(0x460170))
 #define _DAT_0bbe9154 (*(float *)SR_VA(0xbbe9154))
 #define _DAT_0bbe9158 (*(float *)SR_VA(0xbbe9158))
@@ -9507,7 +9527,7 @@ void __cdecl lf_11a40(int param_1,float param_2,undefined4 param_3)
 #define _DAT_0bbe9134 (*(float *)SR_VA(0xbbe9134))
 #define _DAT_0bbe9138 (*(float *)SR_VA(0xbbe9138))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6
                   ,float param_7,uint param_8,uint *param_9)
 
@@ -9525,7 +9545,7 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
   do {
     if ((uVar7 & param_8) == uVar7) {
       iVar3 = g_cubequad[iVar6 * 4];
-      DAT_0bbe90a0 = (float)(g_cubevertex[iVar3 * 3] * param_5 + param_2);
+      *(float *)&(DAT_0bbe90a0) = (float)(g_cubevertex[iVar3 * 3] * param_5 + param_2);
       DAT_0bbe90a4 = (float)(g_cubevertex[iVar3 * 3 + 1] * param_6 + param_3);
       iVar1 = g_cubequad[iVar6 * 4 + 1];
       DAT_0bbe90a8 = (float)(g_cubevertex[iVar3 * 3 + 2] * param_7 + param_4);
@@ -9565,7 +9585,8 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
       else {
         uVar5 = param_9[iVar6];
       }
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar4);
+      addbeziersurface(&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,uVar5 | uVar4)
+      ;
     }
     iVar6 = iVar6 + 1;
     uVar7 = uVar7 << 1 | (uint)((int)uVar7 < 0);
@@ -9585,6 +9606,7 @@ void __cdecl lf_11d70(int param_1,float param_2,float param_3,float param_4,floa
 #undef DAT_0bbe9130
 #undef DAT_0bbe9134
 #undef DAT_0bbe9138
+#undef DAT_0bbe9160
 #undef g_cubequad
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe9158
@@ -9650,6 +9672,7 @@ void __cdecl lf_11f70(int param_1,undefined4 param_2,float param_3)
 #define DAT_0bbe9158 (*(undefined *)SR_VA(0xbbe9158))
 #define DAT_0bbe9130 (*(undefined *)SR_VA(0xbbe9130))
 #define DAT_0bbe9134 (*(undefined *)SR_VA(0xbbe9134))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define _DAT_0bbe9154 (*(undefined4 *)SR_VA(0xbbe9154))
 #define _DAT_0bbe915c (*(undefined4 *)SR_VA(0xbbe915c))
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
@@ -9657,7 +9680,7 @@ void __cdecl lf_11f70(int param_1,undefined4 param_2,float param_3)
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9134 (*(undefined4 *)SR_VA(0xbbe9134))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 
 {
@@ -9676,7 +9699,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9134 = 0;
   uVar1 = area_block_rotatesurface(param_1,0x60000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,param_1 + 1U | uVar1);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                   param_1 + 1U | uVar1);
   DAT_0bbe90a0 = param_2;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = param_3;
@@ -9690,7 +9714,8 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
   _DAT_0bbe9130 = param_2;
   _DAT_0bbe9138 = param_3;
   uVar1 = area_block_rotatesurface(param_1,0x20000);
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,(param_1 - 1U & 3) + 1 | uVar1);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                   (param_1 - 1U & 3) + 1 | uVar1);
   return;
 }
 #undef DAT_0bbe90a0
@@ -9705,6 +9730,7 @@ void __cdecl lf_120c0(int param_1,undefined4 param_2,undefined4 param_3)
 #undef DAT_0bbe9158
 #undef DAT_0bbe9130
 #undef DAT_0bbe9134
+#undef DAT_0bbe9160
 #undef _DAT_0bbe9154
 #undef _DAT_0bbe915c
 #undef _DAT_0bbe9138
@@ -22881,7 +22907,7 @@ void __cdecl lf_28a90(int param_1,undefined4 param_2,int param_3,int param_4,und
 #define local_24 (*(float *)(lf_frame + 0x4c))
 #define local_20 (*(float *)(lf_frame + 0x50))
 #define local_1c (*(float *)(lf_frame + 0x54))
-void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
+void __cdecl lf_28c90(float *param_1,int param_2,float *param_3,float *param_4)
 
 {
   __declspec(align(16)) uchar lf_frame[0x70];
@@ -22922,43 +22948,43 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
   
   local_5c = 0;
   if (0 < param_2) {
-    pfVar14 = (float *)(param_3 + 4);
+    pfVar15 = param_3 + 1;
     local_54 = 1;
     local_40 = param_2;
     do {
       if (local_54 < param_2) {
         local_50 = param_2 - local_54;
-        pfVar15 = pfVar14;
+        pfVar14 = pfVar15;
         iVar16 = local_54;
         do {
           iVar17 = iVar16 + 1;
-          pfVar21 = pfVar15 + 3;
+          pfVar21 = pfVar14 + 3;
           if (iVar17 < param_2) {
             iVar16 = iVar16 + 2;
             local_48 = param_2 - iVar17;
-            pfVar19 = pfVar15 + 6;
+            pfVar19 = pfVar14 + 6;
             do {
               if (iVar16 < param_2) {
                 pfVar18 = pfVar19 + 4;
                 fVar1 = pfVar19[-1];
                 iVar20 = param_2 - iVar16;
-                fVar2 = pfVar15[2];
+                fVar2 = pfVar14[2];
                 fVar3 = *pfVar19;
                 fVar4 = *pfVar21;
                 fVar5 = pfVar19[1];
-                fVar6 = pfVar15[4];
-                fVar7 = pfVar14[-1];
-                fVar8 = pfVar15[2];
-                fVar9 = *pfVar14;
+                fVar6 = pfVar14[4];
+                fVar7 = pfVar15[-1];
+                fVar8 = pfVar14[2];
+                fVar9 = *pfVar15;
                 fVar10 = *pfVar21;
-                fVar11 = pfVar14[1];
-                fVar12 = pfVar15[4];
+                fVar11 = pfVar15[1];
+                fVar12 = pfVar14[4];
                 do {
                   local_24 = (float)(((float)(fVar5 - fVar6)) * ((float)(pfVar18[-1] - *pfVar21)) -
-                             ((float)(fVar3 - fVar4)) * ((float)(*pfVar18 - pfVar15[4])));
-                  local_20 = (float)(((float)(fVar1 - fVar2)) * (*pfVar18 - pfVar15[4]) -
-                             ((float)(pfVar18[-2] - pfVar15[2])) * (fVar5 - fVar6));
-                  fVar13 = (float)((pfVar18[-2] - pfVar15[2]) * (fVar3 - fVar4) -
+                             ((float)(fVar3 - fVar4)) * ((float)(*pfVar18 - pfVar14[4])));
+                  local_20 = (float)(((float)(fVar1 - fVar2)) * (*pfVar18 - pfVar14[4]) -
+                             ((float)(pfVar18[-2] - pfVar14[2])) * (fVar5 - fVar6));
+                  fVar13 = (float)((pfVar18[-2] - pfVar14[2]) * (fVar3 - fVar4) -
                            (fVar1 - fVar2) * (pfVar18[-1] - *pfVar21));
                   dVar23 = _CIsqrt((double)((float)(fVar13 * fVar13 +
                                            (local_24 * local_24 + local_20 * local_20))));
@@ -22993,41 +23019,41 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
             } while (local_48 != 0);
           }
           local_50 = local_50 + -1;
-          pfVar15 = pfVar21;
+          pfVar14 = pfVar21;
           iVar16 = iVar17;
         } while (local_50 != 0);
       }
       local_54 = local_54 + 1;
-      pfVar14 = pfVar14 + 3;
+      pfVar15 = pfVar15 + 3;
       local_40 = local_40 + -1;
     } while (local_40 != 0);
   }
   local_48 = 0;
   if (0 < param_2) {
-    local_44 = (float *)(param_3 + 8);
+    local_44 = param_3 + 2;
     local_60 = param_1;
     do {
       *local_60 = 0.0;
       local_4c = 0;
-      pfVar14 = (float *)(param_3 + 4);
+      pfVar15 = param_3 + 1;
       do {
         iVar17 = local_4c + 1;
         iVar16 = iVar17;
-        pfVar15 = pfVar14;
-        while (pfVar21 = pfVar15, iVar20 = iVar16, iVar20 < param_2) {
-          pfVar15 = pfVar21 + 3;
+        pfVar14 = pfVar15;
+        while (pfVar21 = pfVar14, iVar20 = iVar16, iVar20 < param_2) {
+          pfVar14 = pfVar21 + 3;
           iVar16 = iVar20 + 1;
           if (iVar16 < param_2) {
             pfVar19 = pfVar21 + 7;
             iVar22 = iVar16;
             do {
               if (((local_4c != local_48) && (iVar20 != local_48)) && (iVar22 != local_48)) {
-                local_24 = (float)(((float)(pfVar21[4] - pfVar14[1])) * ((float)(pfVar19[-1] - *pfVar14)) -
-                           ((float)(*pfVar15 - *pfVar14)) * ((float)(*pfVar19 - pfVar14[1])));
-                local_20 = (float)(((float)(pfVar21[2] - pfVar14[-1])) * (*pfVar19 - pfVar14[1]) -
-                           ((float)(pfVar19[-2] - pfVar14[-1])) * (pfVar21[4] - pfVar14[1]));
-                fVar1 = (float)((pfVar19[-2] - pfVar14[-1]) * (*pfVar15 - *pfVar14) -
-                        (pfVar21[2] - pfVar14[-1]) * (pfVar19[-1] - *pfVar14));
+                local_24 = (float)(((float)(pfVar21[4] - pfVar15[1])) * ((float)(pfVar19[-1] - *pfVar15)) -
+                           ((float)(*pfVar14 - *pfVar15)) * ((float)(*pfVar19 - pfVar15[1])));
+                local_20 = (float)(((float)(pfVar21[2] - pfVar15[-1])) * (*pfVar19 - pfVar15[1]) -
+                           ((float)(pfVar19[-2] - pfVar15[-1])) * (pfVar21[4] - pfVar15[1]));
+                fVar1 = (float)((pfVar19[-2] - pfVar15[-1]) * (*pfVar14 - *pfVar15) -
+                        (pfVar21[2] - pfVar15[-1]) * (pfVar19[-1] - *pfVar15));
                 dVar23 = _CIsqrt((double)((float)(fVar1 * fVar1 + (local_24 * local_24 + local_20 * local_20)))
                                 );
                 if ((float)dVar23 == 0.0) {
@@ -23041,18 +23067,18 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
                   local_20 = (float)(local_20 * local_1c);
                   local_1c = (float)(local_1c * fVar1);
                 }
-                fVar1 = (float)(local_44[-2] - pfVar14[-1]);
-                fVar2 = (float)(local_44[-1] - *pfVar14);
-                fVar3 = (float)(*local_44 - pfVar14[1]);
+                fVar1 = (float)(local_44[-2] - pfVar15[-1]);
+                fVar2 = (float)(local_44[-1] - *pfVar15);
+                fVar3 = (float)(*local_44 - pfVar15[1]);
                 if ((float)(local_1c * fVar3 + (local_24 * fVar1 + fVar2 * local_20)) < 0.0) {
                   local_24 = -local_24;
                   local_20 = -local_20;
                   local_1c = -local_1c;
                 }
                 if (0.009999999776482582 <= ABS((float)(local_1c * fVar3 + (local_24 * fVar1 + local_20 * fVar2)))) {
-                  *local_60 = (float)((float)(((float)(local_1c * ((float)(param_4[2] - pfVar14[1])) +
-                              (local_24 * ((float)(*param_4 - pfVar14[-1])) +
-                              local_20 * ((float)(param_4[1] - *pfVar14))))) /
+                  *local_60 = (float)((float)(((float)(local_1c * ((float)(param_4[2] - pfVar15[1])) +
+                              (local_24 * ((float)(*param_4 - pfVar15[-1])) +
+                              local_20 * ((float)(param_4[1] - *pfVar15))))) /
                               ((float)(fVar2 * local_20 + fVar1 * local_24 + fVar3 * local_1c))) + *local_60);
                 }
               }
@@ -23061,7 +23087,7 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
             } while (iVar22 < param_2);
           }
         }
-        pfVar14 = pfVar14 + 3;
+        pfVar15 = pfVar15 + 3;
         local_4c = iVar17;
       } while (iVar17 < param_2);
       local_60 = local_60 + 1;
@@ -23074,14 +23100,14 @@ void __cdecl lf_28c90(float *param_1,int param_2,int param_3,float *param_4)
     fVar1 = (float)local_5c;
     iVar17 = (param_2 - 4U >> 2) + 1;
     iVar16 = iVar17 * 4;
-    pfVar14 = param_1 + 2;
+    pfVar15 = param_1 + 2;
     do {
       iVar17 = iVar17 + -1;
-      pfVar14[-2] = (float)(pfVar14[-2] / fVar1);
-      pfVar14[-1] = (float)(pfVar14[-1] / fVar1);
-      *pfVar14 = (float)(*pfVar14 / fVar1);
-      pfVar14[1] = (float)(pfVar14[1] / fVar1);
-      pfVar14 = pfVar14 + 4;
+      pfVar15[-2] = (float)(pfVar15[-2] / fVar1);
+      pfVar15[-1] = (float)(pfVar15[-1] / fVar1);
+      *pfVar15 = (float)(*pfVar15 / fVar1);
+      pfVar15[1] = (float)(pfVar15[1] / fVar1);
+      pfVar15 = pfVar15 + 4;
     } while (iVar17 != 0);
   }
   if (iVar16 < param_2) {
@@ -23400,8 +23426,8 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 
 /* ---------------------------------------------------------------- 0x29bf0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define g_blocklist (*(BlockList *)SR_VA(0xbba8ca0))
 #define DAT_0bbe90a0 (*(undefined4 *)SR_VA(0xbbe90a0))
+#define g_blocklist (*(BlockList *)SR_VA(0xbba8ca0))
 #define g_area_block (*(AreaBlock (*)[65536])SR_VA(0x137b2d00))
 #define DAT_0bbe90a8 (*(undefined4 *)SR_VA(0xbbe90a8))
 #define DAT_0bbe90cc (*(undefined4 *)SR_VA(0xbbe90cc))
@@ -23416,6 +23442,7 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #define DAT_0bbe915c (*(undefined *)SR_VA(0xbbe915c))
 #define DAT_0bbe9138 (*(undefined *)SR_VA(0xbbe9138))
 #define DAT_084ceb20 (*(undefined4 *)SR_VA(0x84ceb20))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define g_tempmesh (*(TempMesh *)SR_VA(0x25aad760))
 #define _DAT_0bbe9130 (*(undefined4 *)SR_VA(0xbbe9130))
 #define _DAT_0bbe9158 (*(undefined4 *)SR_VA(0xbbe9158))
@@ -23425,7 +23452,7 @@ void __cdecl lf_29970(uint param_1,uint param_2,uint param_3,uint param_4)
 #define _DAT_0bbe9138 (*(undefined4 *)SR_VA(0xbbe9138))
 #define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
 #define area_block_rotatesurface ((int (__cdecl *)(int, int))SR_VA(0x402cf0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 #define area_block_addwindowhorizontal ((void (__cdecl *)(int, int, int, int, int))SR_VA(0x410140))
 #define area_block_addwindowvertical ((void (__cdecl *)(int, int, int))SR_VA(0x4105c0))
 #define area_block_addwindow ((int (__cdecl *)(int, float, float, float, float, int, uint))SR_VA(0x4118f0))
@@ -23516,7 +23543,8 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
     _DAT_0bbe9154 = 0x3f800000;
     _DAT_0bbe915c = 0x3f800000;
     _DAT_0bbe9138 = 0x3f800000;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000
+                    );
     g_area_block[iVar5].unk_007c = g_area_block[iVar5].unk_007c | 1;
   }
   if (local_1c != 0) {
@@ -23532,7 +23560,8 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
     _DAT_0bbe915c = 0;
     _DAT_0bbe9130 = 0;
     _DAT_0bbe9138 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005
+                    );
     g_area_block[iVar5].unk_007c = g_area_block[iVar5].unk_007c | 0x20;
   }
   iVar6 = 0;
@@ -23558,7 +23587,8 @@ int __cdecl lf_29bf0(int param_1,uint param_2)
       _DAT_0bbe915c = 0x3d800000;
       _DAT_0bbe9138 = 0x3d800000;
       uVar2 = area_block_rotatesurface(iVar6,0x60000);
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,iVar6 + 1U | uVar2);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       iVar6 + 1U | uVar2);
       g_area_block[iVar5].unk_007c =
            g_area_block[iVar5].unk_007c | local_20 << 1 | (uint)((int)local_20 < 0);
     }
@@ -23670,8 +23700,8 @@ LAB_0042a4ca:
   return local_28;
 }
 #undef DAT_00460d18
-#undef g_blocklist
 #undef DAT_0bbe90a0
+#undef g_blocklist
 #undef g_area_block
 #undef DAT_0bbe90a8
 #undef DAT_0bbe90cc
@@ -23686,6 +23716,7 @@ LAB_0042a4ca:
 #undef DAT_0bbe915c
 #undef DAT_0bbe9138
 #undef DAT_084ceb20
+#undef DAT_0bbe9160
 #undef g_tempmesh
 #undef _DAT_0bbe9130
 #undef _DAT_0bbe9158
@@ -23722,6 +23753,7 @@ LAB_0042a4ca:
 #define DAT_0bbe90a8 (*(undefined4 *)SR_VA(0xbbe90a8))
 #define DAT_0bbe90c4 (*(undefined4 *)SR_VA(0xbbe90c4))
 #define DAT_0bbe9154 (*(undefined *)SR_VA(0xbbe9154))
+#define DAT_0bbe9160 (*(undefined4 *)SR_VA(0xbbe9160))
 #define DAT_0bbe916c (*(undefined4 *)SR_VA(0xbbe916c))
 #define g_filelist (*(FileList *)SR_VA(0xe619200))
 #define DAT_0bbe915c (*(undefined *)SR_VA(0xbbe915c))
@@ -23746,7 +23778,7 @@ LAB_0042a4ca:
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_VA(0x40bb80))
 #define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
 #define removeflieextentions ((void (__cdecl *)(int))SR_VA(0x40d680))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
 #define area_block_addbox ((void (__cdecl *)(float, float, float, float, float, float, uint))SR_VA(0x410950))
 #define area_block_addbasicsurface ((void (__cdecl *)(uint, float *))SR_VA(0x410da0))
 #define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
@@ -24024,8 +24056,8 @@ LAB_0042a5e6:
               uVar10 = uVar10 | 0x40000;
             }
           }
-          addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),((int)LF_BITS_U(pfVar17[-6])),pfVar17[-4],((int)LF_BITS_U(pfVar17[-5])),
-                           pfVar17[-3],uVar10);
+          addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,((int)LF_BITS_U(pfVar17[-6])),
+                           pfVar17[-4],((int)LF_BITS_U(pfVar17[-5])),pfVar17[-3],uVar10);
           iVar3 = iVar3 + 1;
           pfVar17 = pfVar17 + 0x57;
         } while (iVar3 < g_blocktemp.unk_0024);
@@ -24256,7 +24288,8 @@ LAB_0042a5e6:
     _DAT_0bbe9134 = 0x3d800000;
     DAT_0bbe90cc = 0;
     _DAT_0bbe9130 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000
+                    );
     if (iVar3 == 1) {
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3f800000;
@@ -24271,7 +24304,8 @@ LAB_0042a5e6:
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
       uVar10 = area_block_rotatesurface(1,0x60000);
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar10 | 2);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       uVar10 | 2);
     }
     g_area_block[iVar6].unk_006c = 1;
     g_area_block[iVar6].unk_0070 = 1;
@@ -24369,7 +24403,8 @@ LAB_0042a5e6:
       uVar10 = area_block_rotatesurface(3,0x60000);
       uVar10 = uVar10 | 4;
 LAB_0042b290:
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar10);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       uVar10);
     }
     else if (iVar3 == 2) {
       DAT_0bbe90a0 = 0;
@@ -24400,7 +24435,8 @@ LAB_0042b290:
     _DAT_0bbe915c = 0;
     _DAT_0bbe9130 = 0;
     _DAT_0bbe9138 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005
+                    );
     g_area_block[iVar6].unk_006c = 1;
     g_area_block[iVar6].unk_0070 = 1;
     g_area_block[iVar6].unk_0074 = 1;
@@ -24473,7 +24509,7 @@ LAB_0042b290:
   DAT_0bbe90c8 = 0x40000000;
   DAT_0bbe90cc = 0x40000000;
   _DAT_0bbe915c = 0x40000000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0x3d800000;
   DAT_0bbe90a8 = 0;
@@ -24486,7 +24522,7 @@ LAB_0042b290:
   _DAT_0bbe9138 = 0x40000000;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9134 = 0x3d800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0x3ff00000;
   DAT_0bbe90a8 = 0x40000000;
@@ -24499,7 +24535,7 @@ LAB_0042b290:
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x30005);
   local_64[1] = 1;
   local_64[2] = 2;
   local_64[3] = 3;
@@ -24542,7 +24578,7 @@ LAB_0042b290:
   DAT_0bbe90c8 = 0x3f800000;
   DAT_0bbe90cc = 0x3f800000;
   _DAT_0bbe915c = 0x3f800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3f700000;
@@ -24555,7 +24591,7 @@ LAB_0042b290:
   DAT_0bbe90cc = 0x3f700000;
   _DAT_0bbe915c = 0x3f700000;
   _DAT_0bbe9138 = 0x3f700000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x50002);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x50002);
   DAT_0bbe90a0 = 0x3d800000;
   DAT_0bbe90a4 = 0x3f800000;
   DAT_0bbe90a8 = 0x3f800000;
@@ -24568,7 +24604,7 @@ LAB_0042b290:
   _DAT_0bbe9154 = 0x3d800000;
   _DAT_0bbe9130 = 0x3d800000;
   _DAT_0bbe9138 = 0x3f800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x20002);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x20002);
   g_area_block[iVar3].unk_006c = 1;
   g_area_block[iVar3].unk_0070 = 1;
   g_area_block[iVar3].unk_0074 = 1;
@@ -24674,7 +24710,8 @@ LAB_0042b290:
     _DAT_0bbe9154 = 0x3d800000;
     _DAT_0bbe9130 = 0x3d800000;
     _DAT_0bbe9138 = 0x40000000;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x20004);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x20004
+                    );
     DAT_0bbe90a0 = 0x3f700000;
     DAT_0bbe90a4 = 0x3f800000;
     DAT_0bbe90a8 = 0;
@@ -24687,7 +24724,8 @@ LAB_0042b290:
     _DAT_0bbe9158 = 0;
     _DAT_0bbe9134 = 0;
     _DAT_0bbe9138 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x10002
+                    );
     if (iVar3 == 0) {
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3d800000;
@@ -24701,7 +24739,8 @@ LAB_0042b290:
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9134 = 0;
       _DAT_0bbe9138 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x50003);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       0x50003);
 LAB_0042bdb3:
       DAT_0bbe90a0 = 0;
       DAT_0bbe90a4 = 0x3f800000;
@@ -24715,7 +24754,8 @@ LAB_0042bdb3:
       _DAT_0bbe915c = 0;
       _DAT_0bbe9130 = 0;
       _DAT_0bbe9138 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x50003);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       0x50003);
       if (iVar3 == 1) {
         uVar21 = 0x40000;
         DAT_0bbe90a4 = 0x3d800000;
@@ -24745,7 +24785,8 @@ LAB_0042be90:
       _DAT_0bbe9130 = 0;
       DAT_0bbe90c4 = 0x3f800000;
       DAT_0bbe90a0 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,uVar21);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,
+                       uVar21);
     }
     DAT_0bbe90a0 = 0x3f800000;
     DAT_0bbe90a4 = 0x3f800000;
@@ -24759,7 +24800,8 @@ LAB_0042be90:
     DAT_0bbe90cc = 0x3fc00000;
     _DAT_0bbe915c = 0x3fc00000;
     _DAT_0bbe9138 = 0x3fc00000;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x60001);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x60001
+                    );
     g_area_block[iVar6].unk_006c = 1;
     g_area_block[iVar6].unk_0070 = 1;
     g_area_block[iVar6].unk_0074 = 2;
@@ -24788,6 +24830,7 @@ LAB_0042be90:
 #undef DAT_0bbe90a8
 #undef DAT_0bbe90c4
 #undef DAT_0bbe9154
+#undef DAT_0bbe9160
 #undef DAT_0bbe916c
 #undef g_filelist
 #undef DAT_0bbe915c
@@ -30302,11 +30345,12 @@ LAB_00434849:
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x34870 */
+#define DAT_020497c0 (*(undefined4 *)SR_VA(0x20497c0))
 #define DAT_020497c8 (*(undefined4 *)SR_VA(0x20497c8))
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define calculatepointscale ((void (__cdecl *)(float *, int, int, float *))SR_VA(0x428c90))
+#define calculatepointscale ((void (__cdecl *)(float *, int, float *, float *))SR_VA(0x428c90))
 #define _CIsqrt lf_CIsqrt
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_30 (*(undefined8 *)(lf_frame + 0x20))
@@ -30454,14 +30498,16 @@ void __cdecl lf_34870(int param_1)
   fVar1 = (float)(fVar1 * 0.25);
   *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(g_zaxis[1] * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * g_zaxis[0]))));
   local_28 = (float)(fVar1 * g_zaxis[2] + local_1c);
-  calculatepointscale((float *)&g_objecttype[param_1].unk_0640,iVar7,((int)SR_VA(0x20497c0)),(float *)&local_30);
+  calculatepointscale((float *)&g_objecttype[param_1].unk_0640,iVar7,(float *)&DAT_020497c0,
+                      (float *)&local_30);
   fVar1 = (float)(g_objecttype[param_1].unk_0034 * 0.25);
   *(double *)&((*(double *)((uchar *)&local_30 + 0))) = LF_BITS_D(CONCAT44(LF_BITS_U((float)(g_xaxis[1] * fVar1 + local_20)),LF_BITS_U((float)(local_24 + fVar1 * g_xaxis[0]))));
   local_28 = (float)(fVar1 * g_xaxis[2] + local_1c);
   calculatepointscale((float *)&g_objecttype[param_1].unk_0540,g_objecttype[param_1].unk_053c,
-                      ((int)SR_VA(0x20497c0)),(float *)&local_30);
+                      (float *)&DAT_020497c0,(float *)&local_30);
   return;
 }
+#undef DAT_020497c0
 #undef DAT_020497c8
 #undef g_xaxis
 #undef g_zaxis
@@ -34594,8 +34640,8 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define landscape_buildsectorlods ((void (__cdecl *)(int))SR_VA(0x401e50))
 #define area_copyrotateblock ((void (__cdecl *)(int, undefined4 *))SR_VA(0x4026d0))
 #define listfiles ((void (__cdecl *)(char *, int, int))SR_VA(0x40d3a0))
-#define addbeziersurface ((void (__cdecl *)(int, int, int, float, int, float, int))SR_VA(0x40f6f0))
-#define addbeziersurfacetexture ((void (__cdecl *)(int, undefined4, int, float, int, float, int))SR_VA(0x40fc40))
+#define addbeziersurface ((void (__cdecl *)(float *, float *, int, float, int, float, int))SR_VA(0x40f6f0))
+#define addbeziersurfacetexture ((void (__cdecl *)(float *, undefined4, int, float, int, float, int))SR_VA(0x40fc40))
 #define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_VA(0x411d70))
 #define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_VA(0x4120c0))
 #define area_createinteriorblocks ((void (__cdecl *)(void))SR_VA(0x42a510))
@@ -34884,7 +34930,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
       if ((iVar1 == 0) || (iVar1 == 2)) {
         DAT_0bbe90a0 = 0x3f800000;
         if (iVar1 == 2) {
@@ -34926,7 +34972,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+        addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
         DAT_0bbe90a0 = 0;
         if (iVar1 == 0) {
           DAT_0bbe90a4 = (float)local_30;
@@ -34967,7 +35013,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+        addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
       }
       if ((iVar1 == 1) || (iVar1 == 3)) {
         DAT_0bbe90a0 = 0;
@@ -35011,7 +35057,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+        addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
         DAT_0bbe90a0 = 0x3f800000;
         if (iVar1 == 3) {
           DAT_0bbe90a4 = (float)local_30;
@@ -35053,7 +35099,7 @@ void __cdecl lf_3e070(void)
         _DAT_0bbe91dc = 0;
         _DAT_0bbe91c0 = 0;
         _DAT_0bbe91c4 = 0;
-        addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+        addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
       }
       g_area_block[(int)local_40].unk_006c = 1;
       g_area_block[(int)local_40].unk_0070 = 1;
@@ -35120,7 +35166,7 @@ void __cdecl lf_3e070(void)
       DAT_0bbe9164 = 0;
       DAT_0bbe917c = 0;
       _DAT_0bbe91c0 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
       g_area_block[iVar1].unk_006c = 1;
       g_area_block[iVar1].unk_0070 = 1;
       g_area_block[iVar1].unk_0074 = 1;
@@ -35184,7 +35230,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
       g_area_block[iVar1].unk_006c = 1;
       g_area_block[iVar1].unk_0070 = 1;
       g_area_block[iVar1].unk_0074 = 1;
@@ -35232,7 +35278,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9128 = 0.0625;
   _DAT_0bbe9158 = 0.0625;
   _DAT_0bbe912c = 0x3f400000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
   local_40 = &g_area_block[iVar1].unk_006c;
   *local_40 = 1;
   g_area_block[iVar1].unk_0070 = 1;
@@ -35274,7 +35320,7 @@ void __cdecl lf_3e070(void)
     _DAT_0bbe91dc = 0;
     _DAT_0bbe91c0 = 0;
     _DAT_0bbe91c4 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     if (((uint)local_40 & 1) != 0) {
       DAT_0bbe90a0 = 0x3f800000;
       DAT_0bbe90a4 = 0.0625;
@@ -35296,7 +35342,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe9130 = 0x3f800000;
       DAT_0bbe9178 = 0x3f800000;
       _DAT_0bbe91d8 = 0x3f800000;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     }
     if (((uint)local_40 & 8) != 0) {
       DAT_0bbe90a0 = 0;
@@ -35319,7 +35365,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91c4 = 0;
       DAT_0bbe9164 = 0x3d800000;
       DAT_0bbe917c = 0x3d800000;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     }
     if (((uint)local_40 & 4) != 0) {
       DAT_0bbe90a0 = 0;
@@ -35342,7 +35388,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91dc = 0;
       _DAT_0bbe91c0 = 0;
       _DAT_0bbe91c4 = 0;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     }
     if (((uint)local_40 & 2) != 0) {
       DAT_0bbe90a0 = 0x3f800000;
@@ -35365,7 +35411,7 @@ void __cdecl lf_3e070(void)
       _DAT_0bbe91d8 = 0x3f800000;
       DAT_0bbe9164 = 0x3d800000;
       DAT_0bbe917c = 0x3d800000;
-      addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+      addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     }
     g_area_block[iVar1].unk_006c = 1;
     g_area_block[iVar1].unk_0070 = 1;
@@ -35389,7 +35435,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9134 = 0.0625;
   DAT_0bbe90cc = 0;
   _DAT_0bbe9130 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0.875;
   DAT_0bbe90a8 = 0x3f800000;
@@ -35402,7 +35448,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x30001);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x30001);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -35415,7 +35461,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9138 = 0;
   _DAT_0bbe9130 = 0x3f800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -35428,7 +35474,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9134 = 0.0;
   _DAT_0bbe9138 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
   area_block_addcorner(1,0x3d800000,0x3d800000);
   g_area_block[iVar1].unk_006c = 1;
   g_area_block[iVar1].unk_0070 = 1;
@@ -35457,7 +35503,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9134 = 0.0625;
   DAT_0bbe90cc = 0;
   _DAT_0bbe9130 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x40000);
   DAT_0bbe90a0 = 0;
   DAT_0bbe90a4 = 0.875;
   DAT_0bbe90a8 = 0x3f800000;
@@ -35470,7 +35516,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9130 = 0;
   _DAT_0bbe9138 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x30001);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x30001);
   DAT_0bbe90a0 = 0x3f800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -35483,7 +35529,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0;
   _DAT_0bbe9138 = 0;
   _DAT_0bbe9130 = 0x3f800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
   DAT_0bbe90a0 = 0x3d800000;
   DAT_0bbe90a4 = 1.0;
   DAT_0bbe90a8 = 0;
@@ -35496,7 +35542,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe9138 = 0;
   DAT_0bbe90c8 = 1.0;
   _DAT_0bbe9130 = 0x3d800000;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0x6000b);
   area_block_addcorner(0,0x3d800000,0x3d800000);
   g_area_block[iVar3].unk_006c = 1;
   g_area_block[iVar3].unk_0070 = 1;
@@ -35555,7 +35601,7 @@ void __cdecl lf_3e070(void)
     _DAT_0bbe91dc = 0;
     _DAT_0bbe91c0 = 0;
     _DAT_0bbe91c4 = 0;
-    addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+    addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
     g_area_block[(int)local_40].unk_006c = 1;
     g_area_block[(int)local_40].unk_0070 = 1;
     g_area_block[(int)local_40].unk_0074 = 1;
@@ -35590,7 +35636,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe912c = 0x40000000;
   _DAT_0bbe9128 = 0.3125;
   _DAT_0bbe9158 = 0.5625;
-  addbeziersurfacetexture(((int)SR_VA(0xbbe90a0)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
+  addbeziersurfacetexture((float *)&DAT_0bbe90a0,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
   _DAT_02165a64 = DAT_0bbe90a0;
   _DAT_02165a6c = DAT_0bbe90a8;
   _DAT_02165a40 = DAT_0bbe90c4;
@@ -35615,7 +35661,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad8 = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9158 + 0.6875);
   _DAT_02165af8 = (float)(_DAT_0bbe9134 + 0.6875);
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x40000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x40000);
   _DAT_02165a64 = DAT_0bbe90c4;
   _DAT_02165a6c = DAT_0bbe90cc;
   _DAT_02165a68 = 2.0;
@@ -35640,7 +35686,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165af8 = 2.0;
   _DAT_02165ad0 = _DAT_0bbe9154;
   _DAT_02165ad4 = 0.0;
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a44 = 2.0;
@@ -35665,7 +35711,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad4 = 2.0;
   _DAT_02165af4 = _DAT_0bbe9130;
   _DAT_02165af8 = 0.0;
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
   g_area_block[iVar3].unk_006c = 4;
   g_area_block[iVar3].unk_0070 = 2;
   g_area_block[iVar3].unk_0074 = 4;
@@ -35705,7 +35751,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe915c = 0x407c0000;
   _DAT_0bbe9154 = 0;
   _DAT_0bbe9158 = 1.0625;
-  addbeziersurfacetexture(((int)SR_VA(0xbbe90a0)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
+  addbeziersurfacetexture((float *)&DAT_0bbe90a0,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a64 = DAT_0bbe90c4;
@@ -35730,7 +35776,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165afc = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9134 - 1.0);
   _DAT_02165af8 = (float)(_DAT_0bbe9158 - 1.0);
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x30000);
   _DAT_02165a64 = DAT_0bbe90a0;
   _DAT_02165a6c = DAT_0bbe90a8;
   _DAT_02165a40 = DAT_0bbe90c4;
@@ -35755,7 +35801,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad8 = _DAT_0bbe915c;
   _DAT_02165ad4 = (float)(_DAT_0bbe9158 + 0.6875);
   _DAT_02165af8 = (float)(_DAT_0bbe9134 + 0.6875);
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x40000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x40000);
   _DAT_02165a64 = DAT_0bbe90c4;
   _DAT_02165a6c = DAT_0bbe90cc;
   _DAT_02165a68 = 2.0;
@@ -35780,7 +35826,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165af8 = 2.0;
   _DAT_02165ad0 = _DAT_0bbe9154;
   _DAT_02165ad4 = 0.0;
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
   _DAT_02165a40 = DAT_0bbe90a0;
   _DAT_02165a48 = DAT_0bbe90a8;
   _DAT_02165a44 = 2.0;
@@ -35805,7 +35851,7 @@ void __cdecl lf_3e070(void)
   _DAT_02165ad4 = 2.0;
   _DAT_02165af4 = _DAT_0bbe9130;
   _DAT_02165af8 = 0.0;
-  addbeziersurfacetexture(((int)SR_VA(0x2165a40)),1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
+  addbeziersurfacetexture((float *)&DAT_02165a40,1,1,1.401298464324817E-45,8,4.203895392974451E-45,0x50000);
   g_area_block[iVar1].unk_006c = 4;
   g_area_block[iVar1].unk_0070 = 2;
   g_area_block[iVar1].unk_0074 = 4;
@@ -35841,7 +35887,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
   local_40 = &g_area_block[iVar3].unk_006c;
   *local_40 = 1;
   g_area_block[iVar3].unk_0070 = 1;
@@ -35880,7 +35926,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
   local_24[0] = 1;
   local_24[1] = 1;
   local_24[2] = 1;
@@ -35926,7 +35972,7 @@ void __cdecl lf_3e070(void)
   _DAT_0bbe91dc = 0;
   _DAT_0bbe91c0 = 0;
   _DAT_0bbe91c4 = 0;
-  addbeziersurface(((int)SR_VA(0xbbe90a0)),((int)SR_VA(0xbbe9160)),1,1.401298464324817E-45,1,1.401298464324817E-45,0);
+  addbeziersurface((float *)&DAT_0bbe90a0,(float *)&DAT_0bbe9160,1,1.401298464324817E-45,1,1.401298464324817E-45,0);
   local_24[0] = 1;
   local_24[1] = 1;
   local_24[2] = 1;
