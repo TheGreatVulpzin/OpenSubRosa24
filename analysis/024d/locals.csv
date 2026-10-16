@@ -1,0 +1,3 @@
+rva,local,type,evidence
+0x56710,local_44,int,"objectsimulation: index i of the object pair loop (1024 x 1024 each tick); as a float its small values are denormals and the x87 loads are slow (sampling profiler)"
+0x56710,local_4c,int,"objectsimulation: index j of the same loop; the slot also holds 1.0 / x in another part"
