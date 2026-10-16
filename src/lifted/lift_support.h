@@ -152,6 +152,13 @@ static __inline void lf_strncpy(void *d, const void *s, unsigned int n)
 #define LF_BITS_D(x) lf_u2d((unsigned long long)(x))
 #define LF_BITS_U64(x) lf_d2u((double)(x))
 
+/* The same bit casts on an lvalue, with integer loads and stores: no value passes the x87.
+ * A small integer in a float is a denormal, and an x87 load of it takes about 100 cycles.
+ * Hand-written code in src/game/ uses these (tools/lift/int_bits.py). */
+#define LF_UINT(x) (*(unsigned int *)&(x))
+#define LF_SET_BITS(x, v) (*(unsigned int *)&(x) = (unsigned int)(v))
+#define LF_COPY(dst, src) (*(unsigned int *)&(dst) = *(const unsigned int *)&(src))
+
 /* The 4 bytes of a CONCAT piece: the bits of a float, the value of an int. */
 #define LF_U32(x) _Generic((x), float: lf_f2u((float)(x)), double: lf_f2u((float)(x)), \
                            long double: lf_f2u((float)(x)), default: (uint)(x))
