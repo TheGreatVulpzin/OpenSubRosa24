@@ -1362,42 +1362,36 @@ LAB_00442c75:
           }
           iVar30 = g_timerlist.unk_007c;
           if (LF_BITS_U(pfVar33[-0x1e]) == 0x5U) {
+            /* Type 5: a wheel of an object on the ground. The object and wheel indexes are
+             * ints: as floats they are denormals, and each x87 use took about 9000 cycles
+             * for each bond. The float math is the lifted one, in the same order. */
+            Bond *bond = (Bond *)((char *)pfVar33 - 0x78);
+            int obj = bond->human_id;  /* type 5: object index */
+            int wheel = bond->bone_a;  /* type 5: wheel index (0x98 bytes each, at object+0x5f0c) */
+            float *w = (float *)(&g_object[obj].lf_raw[0x5f0c] + wheel * 0x98);
+            float k, neg, load, proj;
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_007c].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-            fVar5 = pfVar33[6];
-            fVar6 = pfVar33[7];
-            fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            iVar30 = ((int)LF_BITS_U(fVar6)) * 0x98;
-            fVar8 = -pfVar33[-2];
-            fVar9 = (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f18] + iVar30) *
-                    *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f0c] + iVar30) * pfVar33[-2]);
-            local_5c = (float)((float)(fVar7 * ((vec3 *)(pfVar33 + -1))->x +
-                       fVar8 * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f30] + iVar30)) +
-                       fVar9 * pfVar33[0xe]);
-            local_58 = (float)(fVar9 * pfVar33[0xf] +
-                       ((float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f34] + iVar30) * fVar8 +
-                       (float)(*pfVar33 * fVar7))));
-            local_54 = (float)(fVar9 * pfVar33[0x10] +
-                       ((float)(fVar8 * *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f38] + iVar30) +
-                       (float)(fVar7 * pfVar33[1]))));
-            local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
-                                (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
-            if (0.0 < LF_BITS_F(local_50)) {
-              fVar35 = (float10)calculatefriction(&local_5c,pfVar33 + -1,pfVar33[2]);
-              (&g_object[((int)LF_BITS_U(fVar5))].unk_5f5c)[((int)LF_BITS_U(fVar6)) * 0x26] =
-                   (float)(fVar35 + (float10)(&g_object[((int)LF_BITS_U(fVar5))].unk_5f5c)[((int)LF_BITS_U(fVar6)) * 0x26]);
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f3c] + iVar30) =
-                   (float)(local_5c + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f3c] + iVar30));
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f40] + iVar30) =
-                   (float)(local_58 + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f40] + iVar30));
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f44] + iVar30) =
-                   (float)(local_54 + *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f44] + iVar30));
-              local_50 = ((float *)LF_BITS_U(((float)(((float)(local_54 * pfVar33[0x10] +
-                                   (pfVar33[0xe] * local_5c + pfVar33[0xf] * local_58))) *
-                                  *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f0c] + iVar30)))));
-              *(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) =
-                   (float)(*(float *)(&g_object[((int)LF_BITS_U(fVar5))].lf_raw[0x5f14] + iVar30) - LF_BITS_F(local_50));
+            k = (float)(bond->rest_length * bond->stiffness);
+            neg = -bond->unk_70;
+            load = (float)(w[3] * w[0] * bond->unk_70);
+            local_5c = (float)((float)(k * bond->friction_dir.x + neg * w[9]) + load * pfVar33[0xe]);
+            local_58 = (float)(load * pfVar33[0xf] + ((float)(w[10] * neg + (float)(bond->friction_dir.y * k))));
+            local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->friction_dir.z))));
+            proj = (float)(bond->friction_dir.z * local_54 +
+                           (bond->friction_dir.x * local_5c + local_58 * bond->friction_dir.y));
+            local_50 = (float *)LF_BITS_U(proj);
+            if (0.0 < proj) {
+              fVar35 = (float10)calculatefriction(&local_5c, &bond->friction_dir.x, pfVar33[2]);
+              w[20] = (float)(fVar35 + (float10)w[20]);
+              w[12] = (float)(local_5c + w[12]);
+              w[13] = (float)(local_58 + w[13]);
+              w[14] = (float)(local_54 + w[14]);
+              proj = (float)(((float)(local_54 * pfVar33[0x10] + (pfVar33[0xe] * local_5c + pfVar33[0xf] * local_58))) *
+                             w[0]);
+              local_50 = (float *)LF_BITS_U(proj);
+              w[2] = (float)(w[2] - proj);
             }
             stoptimer(g_timerlist.unk_007c);
           }
