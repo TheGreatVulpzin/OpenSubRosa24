@@ -203,7 +203,7 @@ namespace SubVulpes
         Panel content;
         readonly Dictionary<string, Control> pages = new Dictionary<string, Control>();
         readonly Dictionary<string, Button> navButtons = new Dictionary<string, Button>();
-        Label statusDot, statusText, footer;
+        ToolStripStatusLabel stateDot, stateText, speedStatus, playersStatus, uptimeStatus, message, serverStatus;
         ComboBox presetBox;
         Button startStop;
 
@@ -258,6 +258,9 @@ namespace SubVulpes
             DragEnter += (s, e) => { if (ZipOf(e) != null) e.Effect = DragDropEffects.Copy; };
             DragDrop += (s, e) => { string zip = ZipOf(e); if (zip != null) InstallUpdate(zip); };
 
+            // The pages write to the status bar, so it comes first. It goes into Controls last:
+            // the last control docks first and takes the full width under the sidebar.
+            Control status = StatusBar();
             content = new Panel { Dock = DockStyle.Fill, Padding = new Padding(14, 8, 14, 8) };
             AddPage("Overview", OverviewPage());
             AddPage("Console", ConsolePage());
@@ -267,6 +270,7 @@ namespace SubVulpes
             Controls.Add(content);
             Controls.Add(TopBar());
             Controls.Add(Sidebar());
+            Controls.Add(status);
 
             LoadSettings();
             string saved = settings.Get("preset", Presets[0].Name);
@@ -289,11 +293,6 @@ namespace SubVulpes
         {
             string v = Path.Combine(folder, "version.txt");
             return File.Exists(v) ? ", build " + File.ReadAllText(v).Trim() : "";
-        }
-
-        static Label Hint(string text)
-        {
-            return new Label { Text = text, AutoSize = true, ForeColor = Gray, Margin = new Padding(3, 0, 3, 8) };
         }
 
         static Label Title(string text, Font baseFont)
@@ -330,28 +329,40 @@ namespace SubVulpes
 
         Control TopBar()
         {
-            var bar = new TableLayoutPanel { Dock = DockStyle.Top, Height = 58, ColumnCount = 5, Padding = new Padding(14, 10, 14, 4) };
-            bar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            bar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            var bar = new TableLayoutPanel { Dock = DockStyle.Top, Height = 52, ColumnCount = 3, Padding = new Padding(14, 8, 14, 4) };
             bar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             bar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             bar.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            var big = new Font(Font.FontFamily, Font.Size * 1.5f, FontStyle.Bold);
-            statusDot = new Label { Text = "●", Font = big, AutoSize = true, Anchor = AnchorStyles.Left };
-            statusText = new Label { Font = big, AutoSize = true, Anchor = AnchorStyles.Left };
             presetBox = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 230, Anchor = AnchorStyles.Right, Margin = new Padding(3, 6, 8, 3) };
             presetBox.Items.AddRange(Presets);
             presetBox.SelectedIndexChanged += delegate { OnPreset(); };
             tips.SetToolTip(presetBox, "What do you test? The preset chooses the captures.");
             startStop = new Button { AutoSize = true, Padding = new Padding(18, 4, 18, 4), Font = new Font(Font, FontStyle.Bold), Anchor = AnchorStyles.Right };
             startStop.Click += delegate { if (server == null) StartServer(); else StopServer(); };
-            bar.Controls.Add(statusDot, 0, 0);
-            bar.Controls.Add(statusText, 1, 0);
-            bar.Controls.Add(presetBox, 3, 0);
-            bar.Controls.Add(startStop, 4, 0);
-            footer = new Label { Dock = DockStyle.Bottom, Height = 22, ForeColor = Gray, TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(14, 0, 0, 0) };
-            Controls.Add(footer);
+            bar.Controls.Add(presetBox, 1, 0);
+            bar.Controls.Add(startStop, 2, 0);
             return bar;
+        }
+
+        // State, speed, players and time on the left. Then the last message, and the server
+        // name, mode and port on the right.
+        Control StatusBar()
+        {
+            var strip = new StatusStrip { SizingGrip = true };
+            stateDot = new ToolStripStatusLabel("●") { Margin = new Padding(6, 3, 0, 2) };
+            stateText = new ToolStripStatusLabel { Font = new Font(Font, FontStyle.Bold), Margin = new Padding(0, 3, 6, 2) };
+            speedStatus = Section("Speed of the last minute");
+            playersStatus = Section("Players now");
+            uptimeStatus = Section("Time since the start");
+            message = new ToolStripStatusLabel { Spring = true, TextAlign = ContentAlignment.MiddleLeft, BorderSides = ToolStripStatusLabelBorderSides.Left };
+            serverStatus = Section("Name, mode, port and maximum players of config.txt");
+            strip.Items.AddRange(new ToolStripItem[] { stateDot, stateText, speedStatus, playersStatus, uptimeStatus, message, serverStatus });
+            return strip;
+        }
+
+        static ToolStripStatusLabel Section(string tip)
+        {
+            return new ToolStripStatusLabel { ToolTipText = tip, BorderSides = ToolStripStatusLabelBorderSides.Left, Padding = new Padding(4, 0, 4, 0) };
         }
 
         void AddPage(string name, Control page)
@@ -376,8 +387,8 @@ namespace SubVulpes
 
         void SetState(string text, Color color)
         {
-            statusText.Text = text;
-            statusDot.ForeColor = color;
+            stateText.Text = text;
+            stateDot.ForeColor = color;
             startStop.Text = server == null ? "Start server" : "Stop server";
             presetBox.Enabled = server == null;
         }
@@ -457,6 +468,10 @@ namespace SubVulpes
                 l.Text = "-";
             lastTicks.ForeColor = SystemColors.ControlText;
             marksText.Text = "0";
+            speedStatus.Text = "- ticks/s";
+            speedStatus.ForeColor = SystemColors.ControlText;
+            playersStatus.Text = "- players";
+            uptimeStatus.Text = "00:00:00";
         }
 
         // ------------------------------------------------------------ console
@@ -656,7 +671,7 @@ namespace SubVulpes
             runPanel.Visible = true;
             endPanel.Visible = false;
             SetState("Starting", Orange);
-            footer.Text = "This test: logs\\" + stamp +
+            message.Text = "This test: logs\\" + stamp +
                           (captures.Record ? ". Play at least " + int.Parse(settings.Get("snapshot_after", "600")) / 60 + " min: the memory snapshot comes then." : "");
         }
 
@@ -701,19 +716,23 @@ namespace SubVulpes
                 frozen = false;
                 lastTicks.Text = m.Groups[1].Value;
                 lastTicks.ForeColor = ticks < 55 ? Orange : Green;
+                speedStatus.Text = m.Groups[1].Value + " ticks/s";
+                speedStatus.ForeColor = lastTicks.ForeColor;
                 lowTicks.Text = speeds.Min().ToString("0.0", CultureInfo.InvariantCulture);
                 if (m.Groups[2].Success) {
                     int players = int.Parse(m.Groups[2].Value);
                     maxPlayers = Math.Max(maxPlayers, players);
                     playersText.Text = players + (m.Groups[3].Value != "0" ? " (+" + m.Groups[3].Value + " bots)" : "");
+                    playersStatus.Text = players + (players == 1 ? " player" : " players") +
+                                         (m.Groups[3].Value != "0" ? ", " + m.Groups[3].Value + " bots" : "");
                 }
-                if (statusText.Text == "Running" || statusText.Text == "Frozen?")
+                if (stateText.Text == "Running" || stateText.Text == "Frozen?")
                     SetState("Running", Green);
             } else if (line.Contains("own main loop: running")) {
                 lastSpeedLine = DateTime.Now;
                 SetState("Running", Green);
             } else if (line.Contains("snapshot saved")) {
-                footer.Text = "The memory snapshot is saved. The harness recording is complete: you can stop at any time.";
+                message.Text = "The memory snapshot is saved. The harness recording is complete: you can stop at any time.";
             } else if (line.Contains("CRASH")) {
                 crashed = true;
             }
@@ -723,6 +742,7 @@ namespace SubVulpes
         {
             TimeSpan t = DateTime.Now - started;
             uptimeText.Text = ((int)t.TotalHours).ToString("00") + ":" + t.Minutes.ToString("00") + ":" + t.Seconds.ToString("00");
+            uptimeStatus.Text = uptimeText.Text;
             if (server == null || frozen || (DateTime.Now - lastSpeedLine).TotalSeconds < FreezeSeconds)
                 return;
             // The status line comes each minute. No line for a long time: the main loop stops.
@@ -915,7 +935,7 @@ namespace SubVulpes
                 return;
             }
             string zip = Path.Combine(logsRoot, "test-" + Path.GetFileName(dir) + ".zip");
-            footer.Text = "Packing " + Path.GetFileName(zip) + "...";
+            message.Text = "Packing " + Path.GetFileName(zip) + "...";
             Task.Run(() => {
                 string error = null;
                 try {
@@ -933,11 +953,11 @@ namespace SubVulpes
                 }
                 BeginInvoke(new Action(() => {
                     if (error != null) {
-                        footer.Text = "";
+                        message.Text = "";
                         MessageBox.Show(this, "Cannot make the zip: " + error, Text);
                         return;
                     }
-                    footer.Text = "Send this file to Vulpzin: logs\\" + Path.GetFileName(zip) + " (" +
+                    message.Text = "Send this file to Vulpzin: logs\\" + Path.GetFileName(zip) + " (" +
                                   (new FileInfo(zip).Length / 1048576.0).ToString("0.0", CultureInfo.InvariantCulture) + " MB)";
                     Process.Start("explorer.exe", "/select,\"" + zip + "\"");
                 }));
@@ -1024,7 +1044,7 @@ namespace SubVulpes
                     return;
                 }
                 Text = "SubVulpes test launcher" + Version();
-                footer.Text = "Update installed" + version + ". Old files: backup\\" + Path.GetFileName(backup);
+                message.Text = "Update installed" + version + ". Old files: backup\\" + Path.GetFileName(backup);
             }
         }
 
@@ -1057,7 +1077,7 @@ namespace SubVulpes
             welcomeBox = new TextBox { Width = 300, Height = 54, Multiline = true, ScrollBars = ScrollBars.Vertical };
             page.Controls.Add(SettingsGroup("Server", new[] {
                 Row("Name", nameBox, "The name in the server list."),
-                Row("Password", password, "Empty: everybody can join."),
+                Row("Admin password", password, "In the game, type /admin and this password to become admin."),
                 Row("Welcome text", welcomeBox, "The players see it when they join (readme.txt)."),
             }));
 
@@ -1107,17 +1127,28 @@ namespace SubVulpes
             return box;
         }
 
-        // A label column of fixed width, the field, and a gray hint under the field.
+        // A label column of fixed width and the field. The hint is a tooltip on both.
         Control Row(string label, Control field, string hint)
         {
-            var row = new TableLayoutPanel { AutoSize = true, ColumnCount = 2, Margin = Padding.Empty };
-            row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110));
+            var row = new TableLayoutPanel { AutoSize = true, ColumnCount = 2, Margin = new Padding(0, 0, 0, 4) };
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            row.Controls.Add(new Label { Text = label, AutoSize = true, Anchor = AnchorStyles.Left | AnchorStyles.Top, Margin = new Padding(3, 6, 3, 3) }, 0, 0);
+            var name = new Label { Text = label, AutoSize = true, Anchor = AnchorStyles.Left | AnchorStyles.Top, Margin = new Padding(3, 6, 3, 3) };
+            row.Controls.Add(name, 0, 0);
             row.Controls.Add(field, 1, 0);
-            if (hint != null)
-                row.Controls.Add(Hint(hint), 1, 1);
+            if (hint != null) {
+                Tip(name, hint);
+                Tip(field, hint);
+            }
             return row;
+        }
+
+        // A tooltip on a panel does not show over its children, so each child gets it too.
+        void Tip(Control c, string text)
+        {
+            tips.SetToolTip(c, text);
+            foreach (Control child in c.Controls)
+                Tip(child, text);
         }
 
         static decimal Number(string text, decimal fallback, NumericUpDown box)
@@ -1188,9 +1219,10 @@ namespace SubVulpes
         void UpdateSummary()
         {
             var mode = modeBox.SelectedItem as Mode;
-            footer.Text = config.Exists
-                ? nameBox.Text + "  |  " + (mode != null ? mode.Name : "?") + "  |  port " + portBox.Value + "  |  " + playersBox.Value + " players max"
-                : "config.txt is not in this folder.";
+            serverStatus.Text = config.Exists
+                ? nameBox.Text + "  ·  " + (mode != null ? mode.Name : "?") + "  ·  port " + portBox.Value + "  ·  " + playersBox.Value + " max"
+                : "config.txt is not in this folder";
+            serverStatus.ForeColor = config.Exists ? SystemColors.ControlText : Red;
         }
 
         // ------------------------------------------------------------ close
