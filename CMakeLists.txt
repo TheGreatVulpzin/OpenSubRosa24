@@ -71,6 +71,11 @@ set_property(TARGET harness PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONF
 # The harness stays out of the way of the 024d test copy (0x20000000..0x45f3b000, tools/re/fixed_base.py).
 target_link_options(harness PRIVATE /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
 
+# Phase 5.2: the CRT of the game (MSVCR100.dll) against the new CRT (ucrtbase.dll).
+add_executable(crt_diff src/tests/crt_diff.c)
+target_compile_options(crt_diff PRIVATE /W4 /utf-8)
+target_compile_definitions(crt_diff PRIVATE _CRT_SECURE_NO_WARNINGS)
+
 # Input checks of the proxy (hook/netguard.c): packets made by tools/net/srpacket.py.
 add_executable(test_netguard src/tests/test_netguard.c hook/netguard.c)
 target_include_directories(test_netguard PRIVATE hook)
