@@ -128,6 +128,9 @@ Relocations outside `.text`: 15 in the initial `.data` (all point to `.rdata` st
    - `lift.py` generates direct calls to the `lf_` functions for the standalone build. The hooked build keeps the calls through the `.exe`, so that the live hooks and the verifier still see every call.
    - Write the `qsort` comparator (`0xd320`) in C.
 2. **5.2: platform layer** (1 to 2 days). Replace `sr_import` with direct links to the CRT and WinSock. Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits.
+   - Done 2026-10-17: `src/platform/plat_imports.c` links every import of the game at build time. The server does not load `MSVCR100.dll`, and its speed did not change (61 to 62 ticks/s).
+   - `src/tests/crt_diff.c` compared the two CRTs first: the x87 math intrinsics, `sscanf`, `rand`, `qsort`, `tolower` and `floor` give the same bits. `sprintf` differs only for `%e` and `%f`, and the game prints only `%d`, `%s` and `%03d`.
+   - WinSock: most `WSOCK32.dll` functions go on to `ws2_32.dll`, so they link to `ws2_32`. `recv`, `recvfrom` and `getsockopt` have their own code in `WSOCK32.dll` and come from it (System32 only).
 3. **In-game test** with players. The 39 harness-only functions (`serverrecv`, `serversend`, `servercycle`...) run live in C here for the first time. Look at them first when a network bug shows.
 
 The harness keeps testing the functions against the 024d. No packet replay test for now. Add it if a bug is too hard to find in game.

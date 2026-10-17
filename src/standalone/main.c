@@ -2,7 +2,8 @@
  *
  * Phase 5.1 (docs/plano.md). The game code is the lifted C and the hand-written C. Its
  * memory is a region with the layout of the 024d image: SR_VA() and the g_ globals work as
- * with the hooks. The game imports (MSVCR100, WSOCK32, KERNEL32) come from the system DLLs.
+ * with the hooks. The game imports (MSVCR100, WSOCK32, KERNEL32) come from
+ * src/platform/plat_imports.c (Phase 5.2): the server does not need MSVCR100.dll.
  * Run it in the folder of a server (config.txt, data/, user/).
  */
 #define WIN32_LEAN_AND_MEAN
@@ -21,6 +22,7 @@
 #pragma comment(lib, "dbghelp.lib")
 
 #include "image_024d.h"
+#include "platform.h"
 
 uintptr_t sr_base;  /* the image region (map_image) */
 void sr_fn_init(void);
@@ -149,25 +151,13 @@ static void open_packets(void)
 
 /* ------------------------------------------------------------ imports */
 
-/* A system DLL. Never the copy next to the exe: build/hook also holds the proxy wsock32.dll of
- * the hook build, and LoadLibrary("WSOCK32.dll") would load it (its hooks write over this
- * exe at 024d addresses). MSVCR100.dll can also come from the server folder. */
-static HMODULE load_dll(const char *dll)
-{
-    HMODULE m = LoadLibraryExA(dll, NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
-    if (!m && _stricmp(dll, "WSOCK32.dll") != 0)
-        m = LoadLibraryA(dll);
-    return m;
-}
-
+/* Each import of the game is a function of src/platform/plat_imports.c (Phase 5.2). */
 void *sr_import(const char *dll, const char *name)
 {
-    HMODULE m;
     void *p;
     if (!_stricmp(dll, "MSVCR100.dll") && !strcmp(name, "printf"))
         return (void *)sv_printf;
-    m = load_dll(dll);
-    p = m ? (void *)GetProcAddress(m, name) : NULL;
+    p = plat_lookup(dll, name, 0);
     if (!p) {
         sv_log("import not found: %s!%s", dll, name);
         ExitProcess(1);
@@ -177,8 +167,7 @@ void *sr_import(const char *dll, const char *name)
 
 void *sr_import_ordinal(const char *dll, unsigned ordinal)
 {
-    HMODULE m = load_dll(dll);
-    void *p = m ? (void *)GetProcAddress(m, MAKEINTRESOURCEA(ordinal)) : NULL;
+    void *p = plat_lookup(dll, NULL, ordinal);
     if (!p) {
         sv_log("import not found: %s!#%u", dll, ordinal);
         ExitProcess(1);

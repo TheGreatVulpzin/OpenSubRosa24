@@ -85,8 +85,9 @@ target_compile_options(test_netguard PRIVATE /W4 /WX /utf-8)
 # hand-written C as the hook DLL, with SR_STANDALONE: game calls go to the C functions.
 add_executable(subvulpes-server src/standalone/main.c src/standalone/fn_table.c src/standalone/image_024d.c
     src/lifted/lifted_024d.c src/lifted/lifted_table.c src/lifted/x87_intrinsics.c ${SV_GAME_SOURCES}
-    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c)
-target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/standalone hook)
+    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c
+    src/platform/plat_imports.c)
+target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/standalone src/platform hook)
 target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
 target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
