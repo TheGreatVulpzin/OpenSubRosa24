@@ -25,6 +25,55 @@ void sr_fn_init(void);
 void lf_x87_init(void);
 void __cdecl sr_getpaths(void);
 
+/* ------------------------------------------------------------ console and log */
+
+/* SV_LOG=<file>: a copy of the console output. The console stays visible, as with the
+ * original server. Each line goes to the disk at once, so a crash loses no line. */
+static FILE *g_log;
+
+static void sv_out(const char *s)
+{
+    fputs(s, stdout);
+    fflush(stdout);
+    if (g_log) {
+        fputs(s, g_log);
+        fflush(g_log);
+    }
+}
+
+void sv_log(const char *fmt, ...)
+{
+    char line[1024];
+    va_list ap;
+    va_start(ap, fmt);
+    memcpy(line, "[subvulpes] ", 12);
+    vsnprintf(line + 12, sizeof line - 13, fmt, ap);
+    va_end(ap);
+    strcat(line, "\n");
+    sv_out(line);
+}
+
+/* The printf of the game (port, socketenabled, master server). It replaces the printf of
+ * MSVCR100, which writes to its own stdout and cannot copy the text to the log. */
+static int __cdecl sv_printf(const char *fmt, ...)
+{
+    char text[1024];
+    int n;
+    va_list ap;
+    va_start(ap, fmt);
+    n = vsnprintf(text, sizeof text, fmt, ap);
+    va_end(ap);
+    sv_out(text);
+    return n;
+}
+
+static void open_log(void)
+{
+    const char *path = getenv("SV_LOG");
+    if (path && !(g_log = fopen(path, "w")))
+        sv_log("cannot open the log file %s", path);
+}
+
 /* ------------------------------------------------------------ imports */
 
 /* A system DLL. Never the copy next to the exe: build/hook also holds the proxy wsock32.dll of
@@ -40,10 +89,14 @@ static HMODULE load_dll(const char *dll)
 
 void *sr_import(const char *dll, const char *name)
 {
-    HMODULE m = load_dll(dll);
-    void *p = m ? (void *)GetProcAddress(m, name) : NULL;
+    HMODULE m;
+    void *p;
+    if (!_stricmp(dll, "MSVCR100.dll") && !strcmp(name, "printf"))
+        return (void *)sv_printf;
+    m = load_dll(dll);
+    p = m ? (void *)GetProcAddress(m, name) : NULL;
     if (!p) {
-        fprintf(stderr, "import not found: %s!%s\n", dll, name);
+        sv_log("import not found: %s!%s", dll, name);
         ExitProcess(1);
     }
     return p;
@@ -54,22 +107,10 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
     HMODULE m = load_dll(dll);
     void *p = m ? (void *)GetProcAddress(m, MAKEINTRESOURCEA(ordinal)) : NULL;
     if (!p) {
-        fprintf(stderr, "import not found: %s!#%u\n", dll, ordinal);
+        sv_log("import not found: %s!#%u", dll, ordinal);
         ExitProcess(1);
     }
     return p;
-}
-
-/* ------------------------------------------------------------ log */
-
-void sv_log(const char *fmt, ...)
-{
-    va_list ap;
-    va_start(ap, fmt);
-    fputs("[subvulpes] ", stderr);
-    vfprintf(stderr, fmt, ap);
-    fputc('\n', stderr);
-    va_end(ap);
 }
 
 /* The main loop calls this every minute. The hook build prints its per-hook profile here.
@@ -167,13 +208,13 @@ static LONG WINAPI on_crash(EXCEPTION_POINTERS *ep)
     if (er->NumberParameters >= 2 && er->ExceptionInformation[1] >= sr_base &&
         er->ExceptionInformation[1] < sr_base + sr_image_size)
         sv_log("CRASH: the data address is image RVA 0x%x", (unsigned)(er->ExceptionInformation[1] - sr_base));
-    fflush(stderr);
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
 int main(void)
 {
     unsigned cw;
+    open_log();
     SetUnhandledExceptionFilter(on_crash);
     if (!map_image())
         return 1;
