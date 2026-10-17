@@ -907,12 +907,12 @@ __declspec(naked) static void th_04450(void)
 }
 static uint8_t expect_04450[5] = { 0x83, 0xec, 0x14, 0x53, 0x55 };
 
-void __cdecl lf_04a10(void);
+void __cdecl setupbullettypes(void);
 static void (__cdecl *orig_04a10)(void);
 static SvVerify v_04a10 = { "setupbullettypes", -1 };
 static void __cdecl hk_04a10(void)
 {
-    SV_HOOK_VOID(v_04a10, lf_04a10(), orig_04a10(), NULL);
+    SV_HOOK_VOID(v_04a10, setupbullettypes(), orig_04a10(), NULL);
 }
 __declspec(naked) static void th_04a10(void)
 {
@@ -1641,12 +1641,12 @@ __declspec(naked) static void th_06b30(void)
 }
 static uint8_t expect_06b30[5] = { 0x83, 0xec, 0x0c, 0x53, 0x55 };
 
-int __cdecl lf_07b90(int param_1);
+int __cdecl item_billvalue(int param_1);
 static int (__cdecl *orig_07b90)(int);
 static SvVerify v_07b90 = { "item_billvalue", -1 };
 static int __cdecl hk_07b90(int param_1)
 {
-    SV_HOOK_RET(int, v_07b90, lf_07b90(param_1), orig_07b90(param_1), NULL);
+    SV_HOOK_RET(int, v_07b90, item_billvalue(param_1), orig_07b90(param_1), NULL);
 }
 __declspec(naked) static void th_07b90(void)
 {
@@ -1681,12 +1681,12 @@ __declspec(naked) static void th_07b90(void)
 }
 static uint8_t expect_07b90[7] = { 0x83, 0xec, 0x08, 0x8b, 0x54, 0x24, 0x0c };
 
-int __cdecl lf_07c40(int param_1, int param_2, int param_3);
+int __cdecl item_addbill(int param_1, int param_2, int param_3);
 static int (__cdecl *orig_07c40)(int, int, int);
 static SvVerify v_07c40 = { "item_addbill", -1 };
 static int __cdecl hk_07c40(int param_1, int param_2, int param_3)
 {
-    SV_HOOK_RET(int, v_07c40, lf_07c40(param_1, param_2, param_3), orig_07c40(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_07c40, item_addbill(param_1, param_2, param_3), orig_07c40(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_07c40(void)
 {
@@ -1723,12 +1723,12 @@ __declspec(naked) static void th_07c40(void)
 }
 static uint8_t expect_07c40[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0xac, 0x01, 0x00, 0x00 };
 
-void __cdecl lf_07ce0(int param_1, int param_2);
+void __cdecl item_removebill(int param_1, int param_2);
 static void (__cdecl *orig_07ce0)(int, int);
 static SvVerify v_07ce0 = { "item_removebill", -1 };
 static void __cdecl hk_07ce0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_07ce0, lf_07ce0(param_1, param_2), orig_07ce0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_07ce0, item_removebill(param_1, param_2), orig_07ce0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_07ce0(void)
 {
@@ -1765,12 +1765,12 @@ __declspec(naked) static void th_07ce0(void)
 }
 static uint8_t expect_07ce0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-int __cdecl lf_07d60(int param_1, int param_2);
+int __cdecl linkitemtoitem(int param_1, int param_2);
 static int (__cdecl *orig_07d60)(int, int);
 static SvVerify v_07d60 = { "linkitemtoitem", -1 };
 static int __cdecl hk_07d60(int param_1, int param_2)
 {
-    SV_HOOK_RET(int, v_07d60, lf_07d60(param_1, param_2), orig_07d60(param_1, param_2), NULL);
+    SV_HOOK_RET(int, v_07d60, linkitemtoitem(param_1, param_2), orig_07d60(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_07d60(void)
 {
@@ -1806,12 +1806,12 @@ __declspec(naked) static void th_07d60(void)
 }
 static uint8_t expect_07d60[6] = { 0x56, 0x57, 0x8b, 0x7c, 0x24, 0x0c };
 
-int __cdecl lf_07e00(int param_1, int param_2, int param_3);
+int __cdecl item_addhumanlink(int param_1, int param_2, int param_3);
 static int (__cdecl *orig_07e00)(int, int, int);
 static SvVerify v_07e00 = { "item_addhumanlink", -1 };
 static int __cdecl hk_07e00(int param_1, int param_2, int param_3)
 {
-    SV_HOOK_RET(int, v_07e00, lf_07e00(param_1, param_2, param_3), orig_07e00(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_07e00, item_addhumanlink(param_1, param_2, param_3), orig_07e00(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_07e00(void)
 {
@@ -1848,12 +1848,12 @@ __declspec(naked) static void th_07e00(void)
 }
 static uint8_t expect_07e00[8] = { 0x8b, 0x44, 0x24, 0x08, 0x8b, 0x4c, 0x24, 0x0c };
 
-void __cdecl lf_07e50(uint param_1, uint * param_2, int param_3);
+void __cdecl item_removehumanlink(uint param_1, uint * param_2, int param_3);
 static void (__cdecl *orig_07e50)(uint, uint *, int);
 static SvVerify v_07e50 = { "item_removehumanlink", -1 };
 static void __cdecl hk_07e50(uint param_1, uint * param_2, int param_3)
 {
-    SV_HOOK_VOID(v_07e50, lf_07e50(param_1, param_2, param_3), orig_07e50(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_07e50, item_removehumanlink(param_1, param_2, param_3), orig_07e50(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_07e50(void)
 {
@@ -1891,12 +1891,12 @@ __declspec(naked) static void th_07e50(void)
 }
 static uint8_t expect_07e50[5] = { 0x51, 0x8b, 0x4c, 0x24, 0x0c };
 
-void __cdecl lf_07f80(uint param_1, uint param_2);
+void __cdecl item_removeitemlink(uint param_1, uint param_2);
 static void (__cdecl *orig_07f80)(uint, uint);
 static SvVerify v_07f80 = { "item_removeitemlink", -1 };
 static void __cdecl hk_07f80(uint param_1, uint param_2)
 {
-    SV_HOOK_VOID(v_07f80, lf_07f80(param_1, param_2), orig_07f80(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_07f80, item_removeitemlink(param_1, param_2), orig_07f80(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_07f80(void)
 {
@@ -5679,12 +5679,12 @@ __declspec(naked) static void th_13450(void)
 }
 static uint8_t expect_13450[7] = { 0xd9, 0xe8, 0xb8, 0x28, 0x03, 0x4d, 0x09 };
 
-int __cdecl lf_143b0(int param_1, undefined4 * param_2, float * param_3, int param_4);
+int __cdecl createbullet(int param_1, undefined4 * param_2, float * param_3, int param_4);
 static int (__cdecl *orig_143b0)(int, undefined4 *, float *, int);
 static SvVerify v_143b0 = { "createbullet", -1 };
 static int __cdecl hk_143b0(int param_1, undefined4 * param_2, float * param_3, int param_4)
 {
-    SV_HOOK_RET(int, v_143b0, lf_143b0(param_1, param_2, param_3, param_4), orig_143b0(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_143b0, createbullet(param_1, param_2, param_3, param_4), orig_143b0(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_143b0(void)
 {
@@ -5722,12 +5722,12 @@ __declspec(naked) static void th_143b0(void)
 }
 static uint8_t expect_143b0[7] = { 0x56, 0x8b, 0x35, 0x40, 0x9a, 0x92, 0x17 };
 
-void __cdecl lf_14590(void);
+void __cdecl bullettimetolive(void);
 static void (__cdecl *orig_14590)(void);
 static SvVerify v_14590 = { "bullettimetolive", -1 };
 static void __cdecl hk_14590(void)
 {
-    SV_HOOK_VOID(v_14590, lf_14590(), orig_14590(), NULL);
+    SV_HOOK_VOID(v_14590, bullettimetolive(), orig_14590(), NULL);
 }
 __declspec(naked) static void th_14590(void)
 {
@@ -7054,12 +7054,12 @@ __declspec(naked) static void th_1aa60(void)
 }
 static uint8_t expect_1aa60[5] = { 0x83, 0xec, 0x18, 0x53, 0x55 };
 
-uint __cdecl lf_1b070(int param_1, float * param_2, undefined4 * param_3, undefined4 * param_4);
+uint __cdecl createitem(int param_1, float * param_2, undefined4 * param_3, undefined4 * param_4);
 static uint (__cdecl *orig_1b070)(int, float *, undefined4 *, undefined4 *);
 static SvVerify v_1b070 = { "createitem", -1 };
 static uint __cdecl hk_1b070(int param_1, float * param_2, undefined4 * param_3, undefined4 * param_4)
 {
-    SV_HOOK_RET(uint, v_1b070, lf_1b070(param_1, param_2, param_3, param_4), orig_1b070(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(uint, v_1b070, createitem(param_1, param_2, param_3, param_4), orig_1b070(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_1b070(void)
 {
@@ -7139,12 +7139,12 @@ __declspec(naked) static void th_1b6e0(void)
 }
 static uint8_t expect_1b6e0[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0xac, 0x01, 0x00, 0x00 };
 
-int __cdecl lf_1b870(uint param_1, uint param_2, int param_3, int param_4);
+int __cdecl linkitem(uint param_1, uint param_2, int param_3, int param_4);
 static int (__cdecl *orig_1b870)(uint, uint, int, int);
 static SvVerify v_1b870 = { "linkitem", -1 };
 static int __cdecl hk_1b870(uint param_1, uint param_2, int param_3, int param_4)
 {
-    SV_HOOK_RET(int, v_1b870, lf_1b870(param_1, param_2, param_3, param_4), orig_1b870(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_1b870, linkitem(param_1, param_2, param_3, param_4), orig_1b870(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_1b870(void)
 {
@@ -9725,12 +9725,12 @@ __declspec(naked) static void th_307f0(void)
 }
 static uint8_t expect_307f0[7] = { 0x83, 0xec, 0x24, 0x8b, 0x44, 0x24, 0x30 };
 
-void __cdecl lf_30ab0(void);
+void __cdecl itemtimetolive(void);
 static void (__cdecl *orig_30ab0)(void);
 static SvVerify v_30ab0 = { "itemtimetolive", -1 };
 static void __cdecl hk_30ab0(void)
 {
-    SV_HOOK_VOID(v_30ab0, lf_30ab0(), orig_30ab0(), NULL);
+    SV_HOOK_VOID(v_30ab0, itemtimetolive(), orig_30ab0(), NULL);
 }
 __declspec(naked) static void th_30ab0(void)
 {

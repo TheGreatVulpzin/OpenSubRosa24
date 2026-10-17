@@ -28,7 +28,6 @@ item,0x10,mass,float,,createitem: itemtype+4; bondsimulation2 uses it in the mas
 item,0x14,unk_14,int,,createitem writes 0xffff
 item,0x18,parent_human,int,,createitem writes -1 (likely)
 item,0x1c,parent_item,int,,createitem writes -1 (likely)
-item,0x38,state,int,,manager: state 3 = special phone
 item,0x48,pos,vec3,,createitem: parameter 2 (position)
 item,0x54,pos_prev,vec3,,createitem: copy of the position
 item,0x6c,vel,vec3,,createitem: parameter 3 (velocity)
@@ -57,7 +56,7 @@ item,0x24,num_children,int,,linkitemtoitem: < 8; deleteitem: loop
 item,0xb4,torque,vec3,,itemsimulation zeroes it and accumulates per frame; bondsimulation2 adds crossproduct (likely)
 item,0xf8,linked_item,int,,itemlogic writes an item index; logic_setteammanager zeroes call_state of the linked item
 item,0x114,vehicle_id,int,,player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key)
-item,0x138,cash,int,,item_removebill/logic_playeractions compare the value
+item,0x138,last_bill,int,,item_billvalue adds the bills 0 to last_bill (-1: no bill); item_addbill allows 9 bills (last_bill <= 8)
 item,0x13c,bills_mask,uint32_t,,item_addbill/resetgame change bits
 object,0x4,type,int,,createobject: parameter 1; index into objecttype
 object,0xc,health,int,,createobject writes 100 (likely)
@@ -97,6 +96,18 @@ bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (likely)
 bond,0x74,friction_dir,vec3,,bondsimulation2: scalevector and calculatefriction (likely)
 body,0x4,pos,vec3,,human_calculatearmangles: subtractvectors with the bone position
 itemtype,0x80,size,vec3,,setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass)
+itemtype,0x98,fits_in,int,64,linkitemtoitem: a child item goes into a parent only when fits_in[parent type] != 0 (one int for each of the 64 item types)
+item,0x28,children,int,8,"linkitemtoitem writes the child at children[num_children]; item_removeitemlink moves the last child into the free place. The server manager read +0x38 as a phone state: no game code reads it, and it is children[4]"
+item,0x14,time_to_live,int,,itemtimetolive subtracts 1 when the value is below 0xffff and deletes the item at 0; createitem writes 0xffff (no limit); item_removebill writes 0 when the last bill goes
+item,0x17c,ends,vec3,2,createitem (item type 0x19): (-0.5 -1 0) and (-0.5 1 0) (likely: the two ends in the axes of the item)
+item,0x194,end_pos,vec3,2,createitem (item type 0x19): the position plus ends[i] along g_xaxis and g_yaxis
+itemtype,0x4,mass,float,,createitem copies it to item.mass
+itemtype,0x1c,ammo,int,,"setupitemtypes: the rounds of a magazine (AK-47, M-16 and MP5 30, Uzi 20, 9mm 12, .45 Bullets 6) or the uses of a Bandage (2); createitem copies it to item.ammo"
+bullet,0xc,unk_000c,float,,createbullet: the first float of the bullet type (setupbullettypes)
+bullet,0x10,gravity,float,,createbullet writes 0.0027222 (9.8 / 3600: the fall in one tick at 60 ticks per second)
+bullet,0x38,side,vec3,,"createbullet: back x (x axis or y axis), normalized"
+bullet,0x44,up,vec3,,"createbullet: side x back, normalized"
+bullet,0x50,back,vec3,,"createbullet: -velocity, normalized"
 connection,0xc,unk_0c,int,,packevent: == 0 releases type 2 events
 connection,0x14,send_timer,int,,serversend: < 1 sends and reloads (likely)
 connection,0x18,timeout,int,,servercycle: divided by 0x3c (60) (likely)
@@ -132,8 +143,8 @@ bond,0x98,target,int,,bondsimulation2: type 10 = item index; type 8 = second bon
 human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
 human,0x64,pitch,float,,human_calculatearmangles multiplies it by a constant (likely: vertical angle)
 item,0xa8,angvel,vec3,,item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct
-item,0xe0,cooldown,int,,createitem: itemtype+0x1c; itemlogic decreases by 1; itemweaponsimulation tests == 0
-item,0xe4,unk_e4,int,,createitem: itemtype+0x18
+item,0xe0,ammo,int,,"createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0"
+item,0xe4,unk_e4,int,,"createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7)"
 item,0xec,flags,uint32_t,,itemlogic tests bit 1; human_itemsimulation sets bit 1
 item,0xfc,phone_id,int,,logic_setteammanager compares with team * 1111 (0x457)
 item,0x104,info,int,,createevent_updateiteminfo sends it; itemlogic and eventsimulation write it
@@ -181,3 +192,16 @@ game,0x28,wait_time,int,,"dedicatedserverloop writes 0xe10 (3600 ticks)"
 game,0x2c,round_time,int,,"config.txt roundtime= * 3600"
 game,0x34,unk_0034,int,,"dedicatedserverloop writes 0x4ec"
 game,0x38,ticks,int,,"adds 1 each tick; createevent_message copies it to Event.tick"
+itemtype,0x0,price,int,,"setupitemtypes: the price in the shop (AK-47 500, Magnum 10000, Bandage 100)"
+itemtype,0x8,is_gun,int,,"setupitemtypes: 1 for the 6 guns (AK-47, M-16, Magnum, MP5, Uzi, 9mm), 0 for the other items; linkitem: inventory slot 2 takes only a gun, slots 3 and up only the other items"
+itemtype,0x28,name,char,32,"setupitemtypes: the name of the item type (AK-47, Bandage, Open Briefcase...)"
+itemtype,0x8c,inv_inertia,vec3,,"setupitemtypes: 1 / ((b * b + c * c) / 3) from size: the inverse of the moment of inertia of a box, for a mass of 1"
+item,0x118,inertia,vec3,,createitem: 1 / inv_inertia
+item,0x124,inv_inertia,vec3,,createitem: copy of itemtype.inv_inertia
+stats,0x0,numofbullets,int,,"createbullet adds 1; server_writelogfile writes it to stats.txt as numofbullets="
+stats,0x4,numofmissions,int,,server_writelogfile writes it to stats.txt as numofmissions=
+game,0x25d60,num_newspapers,int,,itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers)
+object,0x1c,time_to_live,int,,"objecttimetolive subtracts 1 when the value is below 0xffff and deletes the object at 0; itemtimetolive writes 0 when the Key of the vehicle goes (the vehicle goes with its key)"
+itemtype,0x10,fire_delay,int,,"setupitemtypes: AK-47 8, M-16 7, MP5 5, Uzi 6, Magnum and 9mm 30 (likely: the ticks between two shots)"
+itemtype,0x14,bullet_type,int,,"setupitemtypes: AK-47 0, M-16 1, MP5, Uzi and 9mm 2, Magnum 3: one of the 4 bullet types of setupbullettypes; createevent_bullet sends it"
+itemtype,0x20,bullet_speed,float,,"setupitemtypes: AK-47 10.67, M-16 14.67, MP5 6.67 (likely: the speed of the bullet in units per tick, x 60 = 640, 880 and 400)"

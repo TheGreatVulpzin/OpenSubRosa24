@@ -1266,7 +1266,7 @@ LAB_00453705:
         g_human[(int)puVar11].health = -100;
       }
       if (g_human[(int)puVar11].health < 1) {
-        piVar17 = &g_human[(int)puVar11].inventory[0].item_id;
+        piVar17 = &g_human[(int)puVar11].inventory[0].items[0];
         local_cc = (int *)0x7;
         do {
           if ((0 < ((InventorySlot *)(piVar17 + -1))->count) && (uVar18 = *piVar17, uVar18 < 0x400))

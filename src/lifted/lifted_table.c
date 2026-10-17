@@ -29,7 +29,7 @@ void lf_03740(void);
 void lf_03d70(void);
 void lf_041c0(void);
 void lf_04450(void);
-void lf_04a10(void);
+void setupbullettypes(void);
 void lf_04bb0(void);
 void lf_05160(void);
 void lf_05280(void);
@@ -49,13 +49,13 @@ void createevent_updateplayer_finance(void);
 void lf_06840(void);
 void lf_068d0(void);
 void lf_06b30(void);
-void lf_07b90(void);
-void lf_07c40(void);
-void lf_07ce0(void);
-void lf_07d60(void);
-void lf_07e00(void);
-void lf_07e50(void);
-void lf_07f80(void);
+void item_billvalue(void);
+void item_addbill(void);
+void item_removebill(void);
+void linkitemtoitem(void);
+void item_addhumanlink(void);
+void item_removehumanlink(void);
+void item_removeitemlink(void);
 void lf_080b0(void);
 void lf_08320(void);
 void lf_08590(void);
@@ -155,8 +155,8 @@ void lf_12f80(void);
 void lf_130d0(void);
 void lf_13450(void);
 void lf_13d80(void);
-void lf_143b0(void);
-void lf_14590(void);
+void createbullet(void);
+void bullettimetolive(void);
 void lf_14600(void);
 void lf_146a0(void);
 void lf_14dd0(void);
@@ -190,9 +190,9 @@ void lf_1a7f0(void);
 void lf_1a990(void);
 void lf_1aa60(void);
 void lf_1ac40(void);
-void lf_1b070(void);
+void createitem(void);
 void lf_1b6e0(void);
-void lf_1b870(void);
+void linkitem(void);
 void lf_1ba30(void);
 void lf_1bc50(void);
 void lf_1c1d0(void);
@@ -255,7 +255,7 @@ void lf_2f130(void);
 void lf_2f420(void);
 void lf_306d0(void);
 void lf_307f0(void);
-void lf_30ab0(void);
+void itemtimetolive(void);
 void lf_30ba0(void);
 void lf_30f00(void);
 void lf_31480(void);
@@ -347,7 +347,7 @@ const LfEntry lf_table[] = {
     { "building_setupbuild", 0x3d70, (void *)lf_03d70, 0, LF_RET_VOID, 4, "", 0 },
     { "building_setupfloorplannewer", 0x41c0, (void *)lf_041c0, 0, LF_RET_VOID, 4, "", 0 },
     { "building_rotatefloorplan", 0x4450, (void *)lf_04450, 0, LF_RET_VOID, 4, "", 0 },
-    { "setupbullettypes", 0x4a10, (void *)lf_04a10, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupbullettypes", 0x4a10, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x4bb0, (void *)lf_04bb0, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "packunitvector", 0x5160, (void *)lf_05160, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "debug_resetlogfile", 0x5280, (void *)lf_05280, 0, LF_RET_VOID, 4, "", 1 },
@@ -367,13 +367,13 @@ const LfEntry lf_table[] = {
     { "createevent_updatestocks", 0x6840, (void *)lf_06840, 0, LF_RET_VOID, 4, "", 0 },
     { "createevent_updatecarmarket", 0x68d0, (void *)lf_068d0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupitemtypes", 0x6b30, (void *)lf_06b30, 0, LF_RET_VOID, 4, "", 0 },
-    { "item_billvalue", 0x7b90, (void *)lf_07b90, 1, LF_RET_INT, 4, "v", 0 },
-    { "item_addbill", 0x7c40, (void *)lf_07c40, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "item_removebill", 0x7ce0, (void *)lf_07ce0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "linkitemtoitem", 0x7d60, (void *)lf_07d60, 2, LF_RET_INT, 4, "vv", 0 },
-    { "item_addhumanlink", 0x7e00, (void *)lf_07e00, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "item_removehumanlink", 0x7e50, (void *)lf_07e50, 3, LF_RET_VOID, 4, "vpv", 0 },
-    { "item_removeitemlink", 0x7f80, (void *)lf_07f80, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "item_billvalue", 0x7b90, (void *)item_billvalue, 1, LF_RET_INT, 4, "v", 0 },
+    { "item_addbill", 0x7c40, (void *)item_addbill, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "item_removebill", 0x7ce0, (void *)item_removebill, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "linkitemtoitem", 0x7d60, (void *)linkitemtoitem, 2, LF_RET_INT, 4, "vv", 0 },
+    { "item_addhumanlink", 0x7e00, (void *)item_addhumanlink, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "item_removehumanlink", 0x7e50, (void *)item_removehumanlink, 3, LF_RET_VOID, 4, "vpv", 0 },
+    { "item_removeitemlink", 0x7f80, (void *)item_removeitemlink, 2, LF_RET_VOID, 4, "vv", 0 },
     { "city_addintersection", 0x80b0, (void *)lf_080b0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "leveleditor_save", 0x8320, (void *)lf_08320, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0x8590, (void *)lf_08590, 0, LF_RET_VOID, 4, "", 1 },
@@ -473,8 +473,8 @@ const LfEntry lf_table[] = {
     { "bond_bodybody", 0x130d0, (void *)lf_130d0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbuildingtypes", 0x13450, (void *)lf_13450, 0, LF_RET_VOID, 4, "", 0 },
     { "building_load", 0x13d80, (void *)lf_13d80, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "createbullet", 0x143b0, (void *)lf_143b0, 4, LF_RET_INT, 4, "vppv", 0 },
-    { "bullettimetolive", 0x14590, (void *)lf_14590, 0, LF_RET_VOID, 4, "", 0 },
+    { "createbullet", 0x143b0, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
+    { "bullettimetolive", 0x14590, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "createcityobject", 0x14600, (void *)lf_14600, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lineintersectcityobject", 0x146a0, (void *)lf_146a0, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectcityobjecttype", 0x14dd0, (void *)lf_14dd0, 8, LF_RET_INT, 4, "pppvpppp", 0 },
@@ -508,9 +508,9 @@ const LfEntry lf_table[] = {
     { "sphereintersectpoint", 0x1a990, (void *)lf_1a990, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x1aa60, (void *)lf_1aa60, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "getmasterserverip", 0x1ac40, (void *)lf_1ac40, 0, LF_RET_INT, 4, "", 1 },
-    { "createitem", 0x1b070, (void *)lf_1b070, 4, LF_RET_INT, 4, "vppp", 0 },
+    { "createitem", 0x1b070, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "setitempositionhuman", 0x1b6e0, (void *)lf_1b6e0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "linkitem", 0x1b870, (void *)lf_1b870, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "linkitem", 0x1b870, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "addcitystreet", 0x1ba30, (void *)lf_1ba30, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "createlandscape", 0x1bc50, (void *)lf_1bc50, 0, LF_RET_VOID, 4, "", 0 },
     { "lineintersectlandscape", 0x1c1d0, (void *)lf_1c1d0, 2, LF_RET_INT, 4, "pp", 0 },
@@ -573,7 +573,7 @@ const LfEntry lf_table[] = {
     { "human_calcarmtorque", 0x2f420, (void *)lf_2f420, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x306d0, (void *)lf_306d0, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "sphereintersecttrianglefull", 0x307f0, (void *)lf_307f0, 8, LF_RET_INT, 4, "ppppvppp", 0 },
-    { "itemtimetolive", 0x30ab0, (void *)lf_30ab0, 0, LF_RET_VOID, 4, "", 0 },
+    { "itemtimetolive", 0x30ab0, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "itemweaponsimulation", 0x30ba0, (void *)lf_30ba0, 1, LF_RET_VOID, 4, "v", 0 },
     { "item_sphereintersect", 0x30f00, (void *)lf_30f00, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lineintersectall", 0x31480, (void *)lf_31480, 2, LF_RET_INT, 4, "pp", 0 },

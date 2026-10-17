@@ -12,10 +12,14 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # Functions rewritten by hand (Phase 6). tools/lift/lift.py finds each one by its real name
 # and lifts it no more. Run cmake again after a new file. src/common and src/net hold clean
 # code. src/game still holds files in the lifted style (no warnings until they are clean).
-file(GLOB SV_CLEAN_SOURCES CONFIGURE_DEPENDS src/common/*.c src/net/*.c)
+file(GLOB SV_CLEAN_SOURCES CONFIGURE_DEPENDS src/common/*.c src/net/*.c src/game/*.c)
 # The operating system calls of the clean code, through the imports of the game.
 list(APPEND SV_CLEAN_SOURCES src/platform/os_calls.c)
-file(GLOB SV_GAME_SOURCES CONFIGURE_DEPENDS src/game/*.c)
+set(SV_GAME_SOURCES)
+foreach(f ai_car bonds humans objects profiler wheels)
+    list(APPEND SV_GAME_SOURCES ${CMAKE_SOURCE_DIR}/src/game/${f}.c)
+endforeach()
+list(REMOVE_ITEM SV_CLEAN_SOURCES ${SV_GAME_SOURCES})
 set(SV_REWRITTEN_SOURCES ${SV_CLEAN_SOURCES} ${SV_GAME_SOURCES})
 set(SV_REWRITTEN_INCLUDES src/common src/net src/game)
 

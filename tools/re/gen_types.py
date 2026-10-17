@@ -128,8 +128,7 @@ typedef union Bone { struct {
 /* Inventory slot. 8 per Human. */
 typedef union InventorySlot { struct {
     int count;      /* +0x00 manager: quantity */
-    int item_id;    /* +0x04 manager: index into items[] */
-    uint8_t unk_08[0x1c];
+    int items[8];   /* +0x04 item_addhumanlink writes items[count]; manager: index into items[] */
 }; uint8_t lf_raw[0x24]; } InventorySlot;
 
 /* Account saved in user/server.srk (docs/formatos.md). */
