@@ -289,24 +289,6 @@ void __cdecl lf_01420(void)
 #undef fopen
 #undef fprintf
 
-/* ---------------------------------------------------------------- 0x1540 */
-
-float10 __cdecl lf_01540(float param_1,float param_2)
-
-{
-  float fVar1;
-  
-  fVar1 = param_2 - param_1;
-  if (!NAN(fVar1) && 3.14159265359 < fVar1 != (fVar1 == 3.14159265359)) {
-    param_1 = (float)(param_1 + 6.28318530718);
-  }
-  if (3.14159265359 <= param_1 - param_2) {
-    return (float10)((float)(param_1 - ((float)(param_2 + 6.28318530718))));
-  }
-  return (float10)((float)(param_1 - param_2));
-}
-
-
 /* ---------------------------------------------------------------- 0x1610 */
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_city (*(City *)SR_VA(0xe699220))
@@ -5129,34 +5111,6 @@ void __cdecl lf_094a0(int param_1)
 #undef pointinsidebase
 #undef pointinsidebuilding
 
-/* ---------------------------------------------------------------- 0x9600 */
-#define _CIcos x87_cos
-#define _CIsin x87_sin
-#define _CIsqrt x87_sqrt
-#define _CIatan2 x87_atan2
-void __cdecl lf_09600(float *param_1,float *param_2)
-
-{
-  double dVar1;
-  double dVar2;
-  
-  dVar1 = _CIatan2((double)param_2[1],(double)param_2[4]);
-  *param_1 = (float)dVar1;
-  dVar1 = _CIsqrt((double)(param_2[6] * param_2[6] + param_2[8] * param_2[8]));
-  dVar1 = _CIatan2((double)-param_2[7],(double)(float)dVar1);
-  param_1[1] = (float)dVar1;
-  dVar1 = _CIsin((double)*param_1);
-  dVar2 = _CIcos((double)*param_1);
-  dVar1 = _CIatan2((double)((float)dVar1 * param_2[5] - (float)dVar2 * param_2[2]),
-                   (double)(*param_2 * (float)dVar2 - param_2[3] * (float)dVar1));
-  param_1[2] = (float)dVar1;
-  return;
-}
-#undef _CIcos
-#undef _CIsin
-#undef _CIsqrt
-#undef _CIatan2
-
 /* ---------------------------------------------------------------- 0x9870 */
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 float10 __cdecl lf_09870(float param_1,float param_2,uint param_3)
@@ -5196,52 +5150,6 @@ float10 __cdecl lf_09870(float param_1,float param_2,uint param_3)
                    (1.0 - fVar2) +
                   ((float)(1.0 - (float)(iVar6 * iVar6 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) * fVar2))
                   * (1.0 - (param_2 - (float)iVar1))));
-}
-#undef _ftol2
-
-/* ---------------------------------------------------------------- 0x9a00 */
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-float10 __cdecl lf_09a00(float param_1,float param_2,uint param_3)
-
-{
-  int iVar1;
-  float fVar2;
-  float fVar3;
-  int iVar4;
-  uint uVar5;
-  int iVar6;
-  int iVar7;
-  int iVar8;
-  uint uVar9;
-  
-  iVar4 = (int)(longlong)param_1;
-  iVar1 = (int)(longlong)param_2;
-  fVar2 = (float)(param_1 - (float)iVar4);
-  uVar5 = iVar1 * 0x39 + iVar4;
-  uVar5 = uVar5 ^ uVar5 * 0x2000;
-  iVar6 = uVar5 * uVar5 * 0x3d73 + 0xc0ae5;
-  uVar9 = iVar4 + 1U & param_3;
-  uVar5 = uVar9 + iVar1 * 0x39;
-  uVar5 = uVar5 ^ uVar5 * 0x2000;
-  iVar7 = uVar5 * uVar5 * 0x3d73 + 0xc0ae5;
-  iVar8 = (iVar1 + 1U & param_3) * 0x39;
-  uVar5 = iVar8 + iVar4;
-  uVar5 = uVar5 ^ uVar5 * 0x2000;
-  iVar4 = uVar5 * uVar5 * 0x3d73 + 0xc0ae5;
-  uVar9 = iVar8 + uVar9;
-  uVar9 = uVar9 ^ uVar9 * 0x2000;
-  iVar8 = uVar9 * uVar9 * 0x3d73 + 0xc0ae5;
-  fVar3 = (3.0 - fVar2 * 2.0) * (fVar2 * fVar2);
-  fVar2 = (float)(param_2 - (float)iVar1);
-  fVar2 = fVar2 * fVar2 * (3.0 - fVar2 * 2.0);
-  return (float10)((float)((1.0 - fVar2) *
-                   ((float)((1.0 - fVar3) *
-                    ((float)(1.0 - (float)(iVar6 * iVar6 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) +
-                   ((float)(1.0 - (float)(iVar7 * iVar7 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) * fVar3))
-                  + ((float)(fVar3 * ((float)(1.0 - (float)(iVar8 * iVar8 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)
-                             ) +
-                    ((float)(1.0 - (float)(iVar4 * iVar4 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) *
-                    (1.0 - fVar3))) * fVar2));
 }
 #undef _ftol2
 
@@ -5499,100 +5407,6 @@ LAB_0040a365:
 #undef local_10
 #undef local_4
 
-/* ---------------------------------------------------------------- 0xa7a0 */
-#define _CIsqrt x87_sqrt
-void __cdecl lf_0a7a0(float *param_1,float *param_2)
-
-{
-  float fVar1;
-  float fVar2;
-  float *pfVar3;
-  double dVar4;
-  
-  pfVar3 = param_2;
-  param_2 = ((float *)LF_BITS_U(((float)(param_2[4] + *param_2 + param_2[8]))));
-  if (LF_BITS_F(param_2) < -1.0) {
-    param_2 = (float *)0xbf800000;
-  }
-  dVar4 = _CIsqrt((double)(LF_BITS_F(param_2) + 1.0));
-  fVar1 = (float)((float10)dVar4 + (float10)dVar4);
-  if (fVar1 <= 1.52587890625E-5) {
-    fVar2 = 0.0;
-  }
-  else {
-    fVar2 = 1.0 / fVar1;
-  }
-  param_1[3] = (float)(fVar1 * 0.25);
-  *param_1 = (float)((pfVar3[7] - pfVar3[5]) * fVar2);
-  param_1[1] = (float)((pfVar3[2] - pfVar3[6]) * fVar2);
-  param_1[2] = (float)((pfVar3[3] - pfVar3[1]) * fVar2);
-  return;
-}
-#undef _CIsqrt
-
-/* ---------------------------------------------------------------- 0xa930 */
-
-void __cdecl lf_0a930(float *param_1,float *param_2,float *param_3)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  float fVar12;
-  float fVar13;
-  float fVar14;
-  float fVar15;
-  float fVar16;
-  float fVar17;
-  float fVar18;
-  float fVar19;
-  float fVar20;
-  float fVar21;
-  float fVar22;
-  float fVar23;
-  float fVar24;
-  
-  fVar1 = param_3[1];
-  fVar2 = param_2[3];
-  fVar3 = *param_2;
-  fVar4 = param_3[2];
-  fVar5 = param_2[1];
-  fVar6 = param_3[3];
-  fVar7 = param_2[2];
-  fVar8 = *param_3;
-  fVar9 = param_3[1];
-  fVar10 = *param_2;
-  fVar11 = param_3[2];
-  fVar12 = param_2[3];
-  fVar13 = param_2[1];
-  fVar14 = *param_3;
-  fVar15 = param_2[2];
-  fVar16 = param_3[3];
-  fVar17 = param_2[3];
-  fVar18 = param_3[3];
-  fVar19 = *param_2;
-  fVar20 = *param_3;
-  fVar21 = param_3[1];
-  fVar22 = param_2[1];
-  fVar23 = param_2[2];
-  fVar24 = param_3[2];
-  *param_1 = (float)((param_2[1] * param_3[2] + (*param_3 * param_2[3] + *param_2 * param_3[3])) -
-             param_2[2] * param_3[1]);
-  param_1[1] = (float)(fVar7 * fVar8 + (fVar5 * fVar6 + (fVar1 * fVar2 - fVar3 * fVar4)));
-  param_1[2] = (float)(fVar15 * fVar16 + ((fVar11 * fVar12 + fVar9 * fVar10) - fVar13 * fVar14));
-  param_1[3] = (float)(((fVar17 * fVar18 - fVar19 * fVar20) - fVar21 * fVar22) - fVar23 * fVar24);
-  return;
-}
-
-
 /* ---------------------------------------------------------------- 0xaa80 */
 #define g_game (*(Game *)SR_VA(0x94dc540))
 int __cdecl lf_0aa80(int param_1)
@@ -5756,27 +5570,6 @@ void __cdecl lf_0ac00(void)
 #undef g_radix
 #undef memset
 
-/* ---------------------------------------------------------------- 0xad30 */
-#define g_mt (*(uint (*)[624])SR_VA(0x460dc0))
-#define g_mti (*(int *)SR_VA(0x460cd0))
-void __cdecl lf_0ad30(uint param_1)
-
-{
-  uint *puVar1;
-  
-  g_mt[0] = param_1;
-  g_mti = 1;
-  puVar1 = g_mt;
-  do {
-    puVar1[1] = (*puVar1 >> 0x1e ^ *puVar1) * 0x6c078965 + g_mti;
-    puVar1 = puVar1 + 1;
-    g_mti = g_mti + 1;
-  } while ((int)puVar1 < ((int)&g_mt[623]));
-  return;
-}
-#undef g_mt
-#undef g_mti
-
 /* ---------------------------------------------------------------- 0xad70 */
 #define DAT_012bd6aa (*(undefined *)SR_VA(0x12bd6aa))
 #define g_mt (*(uint (*)[624])SR_VA(0x460dc0))
@@ -5831,55 +5624,6 @@ LAB_0040adf9:
 }
 #undef DAT_012bd6aa
 #undef g_mt
-#undef init_genrand
-
-/* ---------------------------------------------------------------- 0xae50 */
-#define g_mt (*(uint (*)[624])SR_VA(0x460dc0))
-#define g_mti (*(int *)SR_VA(0x460cd0))
-#define g_mag01 (*(uint (*)[2])SR_VA(0x460d10))
-#define init_genrand ((void (__cdecl *)(uint))SR_FN(0x40ad30))
-int __cdecl lf_0ae50(void)
-
-{
-  uint uVar1;
-  int iVar2;
-  int iVar3;
-  uint *puVar4;
-  uint *puVar5;
-  
-  if (0x26f < g_mti) {
-    if (g_mti == 0x271) {
-      init_genrand(0x1571);
-    }
-    iVar2 = 0;
-    do {
-      iVar3 = iVar2 + 1;
-      uVar1 = (g_mt[iVar2 + 1] ^ g_mt[iVar2]) & 0x7fffffff ^ *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc)));
-      *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc))) = uVar1 >> 1 ^ g_mag01[uVar1 & 1] ^ g_mt[iVar2 + 0x18d];
-      iVar2 = iVar3;
-    } while (iVar3 < 0xe3);
-    if (iVar3 < 0x26f) {
-      puVar4 = g_mt + iVar3;
-      do {
-        puVar5 = puVar4 + 1;
-        uVar1 = (*puVar4 ^ puVar4[1]) & 0x7fffffff ^ *puVar4;
-        *puVar4 = g_mag01[uVar1 & 1] ^ puVar4[-0xe3] ^ uVar1 >> 1;
-        puVar4 = puVar5;
-      } while ((int)puVar5 < ((int)&g_mt[623]));
-    }
-    uVar1 = (g_mt[0] ^ g_mt[0x26f]) & 0x7fffffff ^ g_mt[0x26f];
-    g_mt[0x26f] = uVar1 >> 1 ^ g_mag01[uVar1 & 1] ^ g_mt[0x18c];
-    g_mti = 0;
-  }
-  uVar1 = g_mt[g_mti] ^ g_mt[g_mti] >> 0xb;
-  g_mti = g_mti + 1;
-  uVar1 = uVar1 ^ (uVar1 & 0xff3a58ad) << 7;
-  uVar1 = uVar1 ^ (uVar1 & 0xffffdf8c) << 0xf;
-  return uVar1 >> 0x12 ^ uVar1;
-}
-#undef g_mt
-#undef g_mti
-#undef g_mag01
 #undef init_genrand
 
 /* ---------------------------------------------------------------- 0xb040 */
@@ -6204,97 +5948,6 @@ int __cdecl lf_0b6d0(int param_1,float param_2)
 }
 #undef g_connection
 #undef local_4
-
-/* ---------------------------------------------------------------- 0xbc50 */
-#define _CIcos x87_cos
-#define _CIsin x87_sin
-void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  double dVar10;
-  
-  fVar1 = *param_2;
-  fVar2 = param_2[1];
-  fVar3 = param_2[2];
-  dVar10 = _CIcos((double)param_3);
-  fVar4 = (float)dVar10;
-  dVar10 = _CIsin((double)param_3);
-  fVar5 = (float)dVar10;
-  fVar6 = (float)(fVar3 * param_1[1] - fVar2 * param_1[2]);
-  fVar8 = (float)(fVar1 * param_1[2] - *param_1 * fVar3);
-  fVar9 = (float)(*param_1 * fVar2 - param_1[1] * fVar1);
-  fVar7 = (float)(param_1[2] * fVar3 + (param_1[1] * fVar2 + *param_1 * fVar1));
-  *param_1 = (float)(fVar6 * fVar5 + ((float)(((float)(fVar9 * fVar2 - fVar8 * fVar3)) * fVar4 + fVar7 * fVar1)));
-  param_1[1] = (float)((float)(fVar4 * ((float)(fVar6 * fVar3 - fVar9 * fVar1)) + fVar7 * fVar2) + fVar5 * fVar8);
-  param_1[2] = (float)(fVar9 * fVar5 + ((float)(fVar3 * fVar7 + ((float)(fVar8 * fVar1 - fVar6 * fVar2)) * fVar4)));
-  return;
-}
-#undef _CIcos
-#undef _CIsin
-
-/* ---------------------------------------------------------------- 0xbdb0 */
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define _CIcos x87_cos
-#define _CIsin x87_sin
-void __cdecl lf_0bdb0(float *param_1,float *param_2,float param_3)
-
-{
-  float *pfVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float *pfVar11;
-  int iVar12;
-  double dVar13;
-  
-  fVar2 = *param_2;
-  fVar3 = param_2[1];
-  fVar4 = param_2[2];
-  dVar13 = _CIcos((double)param_3);
-  fVar5 = (float)dVar13;
-  dVar13 = _CIsin((double)param_3);
-  fVar6 = (float)dVar13;
-  pfVar11 = param_1 + 2;
-  iVar12 = 3;
-  do {
-    pfVar1 = pfVar11 + -2;
-    fVar9 = (float)(pfVar11[-1] * fVar4 - *pfVar11 * fVar3);
-    fVar10 = (float)(*pfVar11 * fVar2 - *pfVar1 * fVar4);
-    fVar8 = (float)(*pfVar1 * fVar3 - pfVar11[-1] * fVar2);
-    fVar7 = (float)(*pfVar11 * fVar4 + (pfVar11[-1] * fVar3 + *pfVar1 * fVar2));
-    *pfVar1 = fVar7 * fVar2;
-    pfVar11[-1] = fVar7 * fVar3;
-    *pfVar11 = (float)(fVar4 * fVar7);
-    *pfVar1 = (float)(*pfVar1 + fVar5 * ((float)(fVar8 * fVar3 - fVar10 * fVar4)));
-    pfVar11[-1] = (float)(((float)(fVar4 * fVar9 - fVar8 * fVar2)) * fVar5 + pfVar11[-1]);
-    *pfVar11 = (float)(fVar5 * ((float)(fVar10 * fVar2 - fVar9 * fVar3)) + *pfVar11);
-    *pfVar1 = (float)(*pfVar1 + fVar6 * fVar9);
-    pfVar11[-1] = (float)(pfVar11[-1] + fVar6 * fVar10);
-    *pfVar11 = (float)(fVar6 * fVar8 + *pfVar11);
-    normalizevector(pfVar1,pfVar1);
-    pfVar11 = pfVar11 + 3;
-    iVar12 = iVar12 + -1;
-  } while (iVar12 != 0);
-  return;
-}
-#undef normalizevector
-#undef _CIcos
-#undef _CIsin
 
 /* ---------------------------------------------------------------- 0xc0a0 */
 #define _CIcos x87_cos
@@ -16231,121 +15884,6 @@ void __cdecl lf_1d7a0(int param_1,int param_2)
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x1d8a0 */
-
-void __cdecl lf_1d8a0(float *param_1,float *param_2,float *param_3)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  float fVar12;
-  float fVar13;
-  float fVar14;
-  float fVar15;
-  float fVar16;
-  float fVar17;
-  float fVar18;
-  float fVar19;
-  float fVar20;
-  float fVar21;
-  float fVar22;
-  float fVar23;
-  float fVar24;
-  float fVar25;
-  float fVar26;
-  float fVar27;
-  float fVar28;
-  float fVar29;
-  float fVar30;
-  float fVar31;
-  float fVar32;
-  float fVar33;
-  float fVar34;
-  float fVar35;
-  float fVar36;
-  float fVar37;
-  float fVar38;
-  float fVar39;
-  float fVar40;
-  float fVar41;
-  float fVar42;
-  float fVar43;
-  float fVar44;
-  float fVar45;
-  float fVar46;
-  float fVar47;
-  float fVar48;
-  
-  fVar1 = param_2[4];
-  fVar2 = param_3[1];
-  fVar3 = *param_3;
-  fVar4 = param_2[3];
-  fVar5 = param_2[5];
-  fVar6 = param_3[2];
-  fVar7 = param_2[7];
-  fVar8 = param_3[1];
-  fVar9 = param_2[6];
-  fVar10 = *param_3;
-  fVar11 = param_3[2];
-  fVar12 = param_2[8];
-  fVar13 = param_3[4];
-  fVar14 = param_2[1];
-  fVar15 = *param_2;
-  fVar16 = param_3[3];
-  fVar17 = param_3[5];
-  fVar18 = param_2[2];
-  fVar19 = param_2[4];
-  fVar20 = param_3[4];
-  fVar21 = param_2[3];
-  fVar22 = param_3[3];
-  fVar23 = param_2[5];
-  fVar24 = param_3[5];
-  fVar25 = param_3[4];
-  fVar26 = param_2[7];
-  fVar27 = param_2[6];
-  fVar28 = param_3[3];
-  fVar29 = param_3[5];
-  fVar30 = param_2[8];
-  fVar31 = param_3[7];
-  fVar32 = param_2[1];
-  fVar33 = param_3[6];
-  fVar34 = *param_2;
-  fVar35 = param_3[8];
-  fVar36 = param_2[2];
-  fVar37 = param_2[4];
-  fVar38 = param_3[7];
-  fVar39 = param_3[6];
-  fVar40 = param_2[3];
-  fVar41 = param_2[5];
-  fVar42 = param_3[8];
-  fVar43 = param_3[7];
-  fVar44 = param_2[7];
-  fVar45 = param_2[6];
-  fVar46 = param_3[6];
-  fVar47 = param_3[8];
-  fVar48 = param_2[8];
-  *param_1 = (float)(param_2[2] * param_3[2] + (param_2[1] * param_3[1] + *param_2 * *param_3));
-  param_1[1] = (float)(fVar5 * fVar6 + (fVar3 * fVar4 + fVar1 * fVar2));
-  param_1[2] = (float)(fVar11 * fVar12 + (fVar9 * fVar10 + fVar7 * fVar8));
-  param_1[3] = (float)(fVar17 * fVar18 + (fVar15 * fVar16 + fVar13 * fVar14));
-  param_1[4] = (float)(fVar23 * fVar24 + (fVar21 * fVar22 + fVar19 * fVar20));
-  param_1[5] = (float)(fVar29 * fVar30 + (fVar27 * fVar28 + fVar25 * fVar26));
-  param_1[6] = (float)(fVar35 * fVar36 + (fVar33 * fVar34 + fVar31 * fVar32));
-  param_1[7] = (float)(fVar41 * fVar42 + (fVar39 * fVar40 + fVar37 * fVar38));
-  param_1[8] = (float)(fVar47 * fVar48 + (fVar45 * fVar46 + fVar43 * fVar44));
-  return;
-}
-
-
 /* ---------------------------------------------------------------- 0x1d9e0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define __security_check_cookie(x) ((void)0)
@@ -18310,73 +17848,6 @@ LAB_00420c80:
 #undef local_14
 #undef local_10
 #undef local_c
-
-/* ---------------------------------------------------------------- 0x21a30 */
-#define DAT_0956d2c0 (*(uint *)SR_VA(0x956d2c0))
-#define normalizevector2d ((void (__cdecl *)(float *, float *))SR_FN(0x40bf60))
-void __cdecl lf_21a30(float *param_1,float param_2,float param_3)
-
-{
-  float fVar1;
-  uint uVar2;
-  int iVar3;
-  
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  *param_1 = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10);
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  param_1[1] = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10);
-  normalizevector2d(param_1,param_1);
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  fVar1 = (float)((((float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) + 1.0) * param_2
-          * 0.5 + param_3);
-  *param_1 = fVar1 * *param_1;
-  param_1[1] = (float)(fVar1 * param_1[1]);
-  return;
-}
-#undef DAT_0956d2c0
-#undef normalizevector2d
-
-/* ---------------------------------------------------------------- 0x21b40 */
-#define DAT_0956d2c0 (*(uint *)SR_VA(0x956d2c0))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-void __cdecl lf_21b40(float *param_1,float param_2,float param_3)
-
-{
-  float fVar1;
-  uint uVar2;
-  int iVar3;
-  
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  *param_1 = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10);
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  param_1[1] = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10);
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  param_1[2] = (float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10);
-  normalizevector(param_1,param_1);
-  uVar2 = DAT_0956d2c0 ^ DAT_0956d2c0 << 0xd;
-  iVar3 = uVar2 * uVar2 * 0x3d73 + 0xc0ae5;
-  DAT_0956d2c0 = DAT_0956d2c0 + 1;
-  fVar1 = (float)((((float)(1.0 - (float)(iVar3 * iVar3 + 0xd208dd0dU & 0x7fffffff) * 9.313225746154785E-10)) + 1.0) * param_2
-          * 0.5 + param_3);
-  *param_1 = fVar1 * *param_1;
-  param_1[1] = (float)(fVar1 * param_1[1]);
-  param_1[2] = (float)(fVar1 * param_1[2]);
-  return;
-}
-#undef DAT_0956d2c0
-#undef normalizevector
 
 /* ---------------------------------------------------------------- 0x21e00 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))

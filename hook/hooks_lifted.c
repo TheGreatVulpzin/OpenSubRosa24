@@ -50,12 +50,12 @@ __declspec(naked) static void th_01010(void)
 }
 static uint8_t expect_01010[7] = { 0x8b, 0x44, 0x24, 0x04, 0x8d, 0x50, 0x01 };
 
-float10 __cdecl lf_01540(float param_1, float param_2);
+float10 __cdecl angulardistance(float param_1, float param_2);
 static float10 (__cdecl *orig_01540)(float, float);
 static SvVerify v_01540 = { "angulardistance", -1 };
 static float10 __cdecl hk_01540(float param_1, float param_2)
 {
-    SV_HOOK_RET_FLOAT(float10, v_01540, lf_01540(param_1, param_2), orig_01540(param_1, param_2), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_01540, angulardistance(param_1, param_2), orig_01540(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_01540(void)
 {
@@ -2309,12 +2309,12 @@ __declspec(naked) static void th_094a0(void)
 }
 static uint8_t expect_094a0[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0x08, 0x24, 0x00, 0x00 };
 
-void __cdecl lf_09600(float * param_1, float * param_2);
+void __cdecl geteulerangles2(float * param_1, float * param_2);
 static void (__cdecl *orig_09600)(float *, float *);
 static SvVerify v_09600 = { "geteulerangles2", -1 };
 static void __cdecl hk_09600(float * param_1, float * param_2)
 {
-    SV_HOOK_VOID(v_09600, lf_09600(param_1, param_2), orig_09600(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_09600, geteulerangles2(param_1, param_2), orig_09600(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_09600(void)
 {
@@ -2398,12 +2398,12 @@ __declspec(naked) static void th_09870(void)
 }
 static uint8_t expect_09870[7] = { 0x83, 0xec, 0x14, 0xd9, 0x44, 0x24, 0x18 };
 
-float10 __cdecl lf_09a00(float param_1, float param_2, uint param_3);
+float10 __cdecl serpnoise2d(float param_1, float param_2, uint param_3);
 static float10 (__cdecl *orig_09a00)(float, float, uint);
 static SvVerify v_09a00 = { "serpnoise2d", -1 };
 static float10 __cdecl hk_09a00(float param_1, float param_2, uint param_3)
 {
-    SV_HOOK_RET_FLOAT(float10, v_09a00, lf_09a00(param_1, param_2, param_3), orig_09a00(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_09a00, serpnoise2d(param_1, param_2, param_3), orig_09a00(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_09a00(void)
 {
@@ -2572,12 +2572,12 @@ __declspec(naked) static void th_0a2a0(void)
 }
 static uint8_t expect_0a2a0[9] = { 0x83, 0xec, 0x14, 0xdd, 0x05, 0x68, 0xe6, 0x45, 0x00 };
 
-void __cdecl lf_0a7a0(float * param_1, float * param_2);
+void __cdecl orientationtoquaternion(float * param_1, float * param_2);
 static void (__cdecl *orig_0a7a0)(float *, float *);
 static SvVerify v_0a7a0 = { "orientationtoquaternion", -1 };
 static void __cdecl hk_0a7a0(float * param_1, float * param_2)
 {
-    SV_HOOK_VOID(v_0a7a0, lf_0a7a0(param_1, param_2), orig_0a7a0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0a7a0, orientationtoquaternion(param_1, param_2), orig_0a7a0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0a7a0(void)
 {
@@ -2614,12 +2614,12 @@ __declspec(naked) static void th_0a7a0(void)
 }
 static uint8_t expect_0a7a0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-void __cdecl lf_0a930(float * param_1, float * param_2, float * param_3);
+void __cdecl projectorientation(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0a930)(float *, float *, float *);
 static SvVerify v_0a930 = { "projectorientation", -1 };
 static void __cdecl hk_0a930(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0a930, lf_0a930(param_1, param_2, param_3), orig_0a930(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0a930, projectorientation(param_1, param_2, param_3), orig_0a930(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0a930(void)
 {
@@ -2777,12 +2777,12 @@ __declspec(naked) static void th_0ac00(void)
 }
 static uint8_t expect_0ac00[5] = { 0x53, 0x55, 0x33, 0xc0, 0x56 };
 
-void __cdecl lf_0ad30(uint param_1);
+void __cdecl init_genrand(uint param_1);
 static void (__cdecl *orig_0ad30)(uint);
 static SvVerify v_0ad30 = { "init_genrand", -1 };
 static void __cdecl hk_0ad30(uint param_1)
 {
-    SV_HOOK_VOID(v_0ad30, lf_0ad30(param_1), orig_0ad30(param_1), NULL);
+    SV_HOOK_VOID(v_0ad30, init_genrand(param_1), orig_0ad30(param_1), NULL);
 }
 __declspec(naked) static void th_0ad30(void)
 {
@@ -2860,12 +2860,12 @@ __declspec(naked) static void th_0ad70(void)
 }
 static uint8_t expect_0ad70[8] = { 0x53, 0x56, 0x57, 0x68, 0xaa, 0xd6, 0x2b, 0x01 };
 
-int __cdecl lf_0ae50(void);
+int __cdecl genrand_int32(void);
 static int (__cdecl *orig_0ae50)(void);
 static SvVerify v_0ae50 = { "genrand_int32", -1 };
 static int __cdecl hk_0ae50(void)
 {
-    SV_HOOK_RET(int, v_0ae50, lf_0ae50(), orig_0ae50(), NULL);
+    SV_HOOK_RET(int, v_0ae50, genrand_int32(), orig_0ae50(), NULL);
 }
 __declspec(naked) static void th_0ae50(void)
 {
@@ -3678,12 +3678,12 @@ __declspec(naked) static void th_0bc20(void)
 }
 static uint8_t expect_0bc20[6] = { 0x8b, 0x44, 0x24, 0x04, 0xd9, 0xe8 };
 
-void __cdecl lf_0bc50(float * param_1, float * param_2, float param_3);
+void __cdecl rotatevector(float * param_1, float * param_2, float param_3);
 static void (__cdecl *orig_0bc50)(float *, float *, float);
 static SvVerify v_0bc50 = { "rotatevector", -1 };
 static void __cdecl hk_0bc50(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_VOID(v_0bc50, lf_0bc50(param_1, param_2, param_3), orig_0bc50(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0bc50, rotatevector(param_1, param_2, param_3), orig_0bc50(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0bc50(void)
 {
@@ -3721,12 +3721,12 @@ __declspec(naked) static void th_0bc50(void)
 }
 static uint8_t expect_0bc50[7] = { 0x83, 0xec, 0x18, 0x8b, 0x44, 0x24, 0x20 };
 
-void __cdecl lf_0bdb0(float * param_1, float * param_2, float param_3);
+void __cdecl rotateorientation(float * param_1, float * param_2, float param_3);
 static void (__cdecl *orig_0bdb0)(float *, float *, float);
 static SvVerify v_0bdb0 = { "rotateorientation", -1 };
 static void __cdecl hk_0bdb0(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_VOID(v_0bdb0, lf_0bdb0(param_1, param_2, param_3), orig_0bdb0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0bdb0, rotateorientation(param_1, param_2, param_3), orig_0bdb0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0bdb0(void)
 {
@@ -7552,12 +7552,12 @@ __declspec(naked) static void th_1d7a0(void)
 }
 static uint8_t expect_1d7a0[8] = { 0x83, 0xec, 0x34, 0x56, 0x8b, 0x74, 0x24, 0x3c };
 
-void __cdecl lf_1d8a0(float * param_1, float * param_2, float * param_3);
+void __cdecl multiplyquaternion(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_1d8a0)(float *, float *, float *);
 static SvVerify v_1d8a0 = { "multiplyquaternion", -1 };
 static void __cdecl hk_1d8a0(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_1d8a0, lf_1d8a0(param_1, param_2, param_3), orig_1d8a0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_1d8a0, multiplyquaternion(param_1, param_2, param_3), orig_1d8a0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_1d8a0(void)
 {
@@ -7761,12 +7761,12 @@ __declspec(naked) static void th_20680(void)
 }
 static uint8_t expect_20680[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_21a30(float * param_1, float param_2, float param_3);
+void __cdecl getrandomvector2d(float * param_1, float param_2, float param_3);
 static void (__cdecl *orig_21a30)(float *, float, float);
 static SvVerify v_21a30 = { "getrandomvector2d", -1 };
 static void __cdecl hk_21a30(float * param_1, float param_2, float param_3)
 {
-    SV_HOOK_VOID(v_21a30, lf_21a30(param_1, param_2, param_3), orig_21a30(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_21a30, getrandomvector2d(param_1, param_2, param_3), orig_21a30(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_21a30(void)
 {
@@ -7804,12 +7804,12 @@ __declspec(naked) static void th_21a30(void)
 }
 static uint8_t expect_21a30[7] = { 0x51, 0x8b, 0x0d, 0xc0, 0xd2, 0x56, 0x09 };
 
-void __cdecl lf_21b40(float * param_1, float param_2, float param_3);
+void __cdecl getrandomvector3d(float * param_1, float param_2, float param_3);
 static void (__cdecl *orig_21b40)(float *, float, float);
 static SvVerify v_21b40 = { "getrandomvector3d", -1 };
 static void __cdecl hk_21b40(float * param_1, float param_2, float param_3)
 {
-    SV_HOOK_VOID(v_21b40, lf_21b40(param_1, param_2, param_3), orig_21b40(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_21b40, getrandomvector3d(param_1, param_2, param_3), orig_21b40(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_21b40(void)
 {

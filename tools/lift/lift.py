@@ -160,8 +160,9 @@ def load_names():
 
 
 # The C symbol of each function in the generated table and hooks: lf_<rva>, or the real name
-# of a function that is rewritten by hand in src/game/ (rewritten_rvas).
+# of a function that is rewritten by hand in REWRITTEN_DIRS (rewritten_rvas).
 SYMBOLS = {}
+REWRITTEN_DIRS = ('src/common', 'src/net', 'src/game')
 
 
 def symbol(rva):
@@ -169,13 +170,13 @@ def symbol(rva):
 
 
 def rewritten_rvas(names):
-    """Functions rewritten by hand in src/game/: no lifted body, but the same table entry, live
+    """Functions rewritten by hand in REWRITTEN_DIRS: no lifted body, but the same table entry, live
     hook and standalone call. A definition with the real name of the function
     (analysis/024d/functions.csv) or with lf_<rva>. Fills SYMBOLS."""
     by_name = {n: int(r, 16) for r, n in names.items()}
     definition = re.compile(r'^\w[^;{}#\n]*?\b(\w+)\([^;{}]*\)\s*\{', re.M)
     out = set()
-    for f in sorted((ROOT / 'src/game').glob('*.c')):
+    for f in sorted(f for d in REWRITTEN_DIRS for f in (ROOT / d).glob('*.c')):
         for name in definition.findall(f.read_text(encoding='utf-8')):
             m = re.fullmatch(r'lf_([0-9a-f]{5})', name)
             rva = int(m.group(1), 16) if m else by_name.get(name)
@@ -1082,7 +1083,7 @@ def main():
     for r in lifted:
         status[r] = ('harness_only', side[r]) if r in side else ('lifted', '')
     for r in rewritten:
-        status[r] = ('rewritten', 'src/game')
+        status[r] = ('rewritten', 'by hand')
     live = [r for r in lifted if r not in side]
     (ROOT / 'hook/hooks_lifted.c').write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
     (ROOT / 'hook/hooks_record.c').write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',

@@ -18,6 +18,8 @@
     "hook/hook.c",
     "hook/imports.c",
     "CMakeLists.txt",
+    "src/common",
+    "src/net",
     "src/game"
   ],
   "recordings_dir": "build/recordings",
