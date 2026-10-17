@@ -33,4 +33,9 @@ void sv_ev_end(void);
 /* Install the import wrappers (hook/record_imports.c). */
 int sv_record_imports_install(void);
 
+/* The standalone recording build (src/standalone/record_shim.c): the wrapper of one
+ * import, which calls real, and the CRT functions of the printf wrappers. */
+void *sv_record_wrap(const char *dll, const char *name, void *real);
+void sv_record_imports_printf(void *vfprintf_fn, void *vprintf_fn, void *vsnprintf_fn);
+
 #endif /* SV_RECORD_H */

@@ -15,6 +15,7 @@ typedef struct LfEntry {
     int ret;          /* LF_RET_* */
     int ret_size;     /* LF_RET_INT: 1, 2 or 4 bytes of EAX */
     const char *args; /* one letter per argument dword: 'p' pointer, 'v' value */
+    int side;         /* 1: a side-effect function (files, sockets): recorded with its imports */
 } LfEntry;
 
 extern const LfEntry lf_table[];

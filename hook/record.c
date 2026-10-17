@@ -77,6 +77,23 @@ static void exe_path(char *out, size_t n, const char *file)
     strncat(out, file, n - strlen(out) - 1);
 }
 
+/* The folder of an output file: SV_RECORD_DIR, or the folder of the exe. The standalone
+ * recording build writes into the folder of the test (the launcher sets SV_RECORD_DIR). */
+static void out_path(char *out, size_t n, const char *file)
+{
+    const char *dir = getenv("SV_RECORD_DIR");
+    if (!dir) {
+        exe_path(out, n, file);
+        return;
+    }
+    snprintf(out, n, "%s\\%s", dir, file);
+}
+
+/* The standalone recording build: a C function address becomes the address of the same
+ * function in the 024d image, so that the harness sees a 024d code address. NULL in the
+ * hook build. */
+uint32_t (*sv_record_code)(uint32_t v);
+
 static int g_snap_done;  /* sv_snapshot_check finished (or snapshot_after=0) */
 
 /* ------------------------------------------------------------ what to record
@@ -272,7 +289,7 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
 
     fprintf(g_args, "R %x", rva);
     for (i = 0; i < ndw; i++) {
-        uint32_t v = args[i];
+        uint32_t v = sv_record_code ? sv_record_code(args[i]) : args[i];
         if (v >= sr_base && v < sr_base + g_image_size) {
             fprintf(g_args, " M:%x", v - (uint32_t)sr_base);
         } else if (v >= 0x10000 && readable((void *)v, BLOB)) {
@@ -334,10 +351,12 @@ static int open_args(void)
     IMAGE_NT_HEADERS32 *nt;
     if (g_args)
         return 1;
-    exe_path(path, sizeof path, "sv_args.txt");
+    out_path(path, sizeof path, "sv_args.txt");
     g_args = fopen(path, "a");
+    /* The image region of the standalone server has no PE header: SizeOfImage of the 024d. */
     nt = (IMAGE_NT_HEADERS32 *)(sr_base + ((IMAGE_DOS_HEADER *)sr_base)->e_lfanew);
-    g_image_size = nt->OptionalHeader.SizeOfImage;
+    g_image_size = ((IMAGE_DOS_HEADER *)sr_base)->e_magic == IMAGE_DOS_SIGNATURE ? nt->OptionalHeader.SizeOfImage
+                                                                                  : 0x25f3b000u;
     return g_args != NULL;
 }
 
@@ -461,7 +480,7 @@ void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw)
     t_scope[d].rec = 1;
     scope_printf(&t_scope[d], "R %x", rva);
     for (i = 0; i < ndw; i++) {
-        uint32_t v = args[i];
+        uint32_t v = sv_record_code ? sv_record_code(args[i]) : args[i];
         if (v >= sr_base && v < sr_base + g_image_size) {
             scope_printf(&t_scope[d], " M:%x", v - (uint32_t)sr_base);
         } else if (v >= 0x10000 && readable((void *)v, BLOB)) {
@@ -622,7 +641,7 @@ static DWORD WINAPI snapshot_writer(LPVOID arg)
     char path[MAX_PATH];
     HANDLE f;
     size_t done = 0;
-    exe_path(path, sizeof path, "sv_snapshot.bin");
+    out_path(path, sizeof path, "sv_snapshot.bin");
     f = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     /* WriteFile in 16 MB parts: one call with the whole buffer can fail. */
     while (f != INVALID_HANDLE_VALUE && done < b->len) {
@@ -701,7 +720,9 @@ void sv_snapshot_check(void)
     }
     total += 4;  /* end of the .data pages */
     while (a < 0x7fff0000 && VirtualQuery((void *)a, &mi, sizeof mi)) {
-        if (mi.State == MEM_COMMIT && mi.Type == MEM_PRIVATE && mi.Protect == PAGE_READWRITE &&
+        /* The standalone server keeps the image in private memory: it is not a heap region. */
+        int image = (uintptr_t)mi.BaseAddress >= sr_base && (uintptr_t)mi.BaseAddress - sr_base < 0x25f3b000u;
+        if (mi.State == MEM_COMMIT && mi.Type == MEM_PRIVATE && mi.Protect == PAGE_READWRITE && !image &&
             (const uint8_t *)mi.BaseAddress != used) {
             if (nregions == cap) {
                 cap = cap ? cap * 2 : 64;
@@ -735,6 +756,12 @@ void sv_snapshot_check(void)
             uint32_t idx = (uint32_t)page;
             snap_put(b, &idx, 4);
             snap_put(b, data + page * 4096, 4096);
+            if (sv_record_code) {
+                uint32_t *w = (uint32_t *)(b->data + b->len - 4096);
+                int k;
+                for (k = 0; k < 1024; k++)
+                    w[k] = sv_record_code(w[k]);
+            }
         }
     }
     snap_put(b, &end, 4);

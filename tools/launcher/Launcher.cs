@@ -173,7 +173,8 @@ namespace SubVulpes
         const int FreezeSeconds = 150;
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
-            "subvulpes-server.exe", "subvulpes-server-record.exe", "subvulpes-launcher.exe", "LEIA-ME.txt", "version.txt"
+            "subvulpes-server.exe", "subvulpes-server-record.exe", "subvulpes-launcher.exe", "LEIA-ME.txt", "version.txt",
+            "record_focus.txt"
         };
 
         static readonly Preset[] Presets = {
@@ -181,7 +182,7 @@ namespace SubVulpes
                 "Play as usual. The speed profile shows slow parts. A crash or a freeze writes a small dump.",
                 new Captures { Profile = true, FreezeDump = true }),
             new Preset("Harness Recording",
-                "Records the packets of the session. Do many different things: buy, sell, use the phone, drive, finish a round. The recording of the function calls comes in a later build.",
+                "Records the calls of the game functions and the packets, for the tests of the C code. Play at least 10 minutes: the memory snapshot comes at 10:00. Do many different things: buy, sell, use the phone, drive, finish a round.",
                 new Captures { Packets = true, Record = true }),
             new Preset("Playtest (For Speed Issues)",
                 "Use it when the game is slow. It adds the game timers to the speed profile. Press Ctrl+F12 when the game lags.",
@@ -481,8 +482,8 @@ namespace SubVulpes
             profileBox = Option("Speed profile", "The code position every millisecond. It shows where the server is slow. About 30 MB for each hour.");
             timersBox = Option("Game timers", "The time of each part of the game, in the log each minute.");
             packetsBox = Option("Packet capture", "Every network packet. It lets Vulpzin replay the session. It has the player names and the chat.");
-            recordBox = Option("Harness recording", "The calls of the game functions, for the tests of the C code. It needs the recording build, which comes later.");
-            recordBox.Enabled = false;
+            recordBox = Option("Harness recording", "The calls of the game functions, for the tests of the C code (subvulpes-server-record.exe, about 10% slower). The memory snapshot comes after 10 minutes.");
+            recordBox.Enabled = File.Exists(Path.Combine(folder, "subvulpes-server-record.exe"));
             freezeBox = Option("Freeze dump", "A dump when the server writes no speed line for " + FreezeSeconds + " s.");
             page.Controls.Add(Group("Speed", profileBox, timersBox));
             page.Controls.Add(Group("Session", packetsBox, recordBox));
@@ -589,9 +590,10 @@ namespace SubVulpes
 
         void StartServer()
         {
-            string exe = Path.Combine(folder, "subvulpes-server.exe");
+            // The harness recording runs the recording build of the server (record_shim.c).
+            string exe = Path.Combine(folder, captures.Record ? "subvulpes-server-record.exe" : "subvulpes-server.exe");
             if (!File.Exists(exe)) {
-                MessageBox.Show(this, "subvulpes-server.exe is not in this folder.", Text);
+                MessageBox.Show(this, Path.GetFileName(exe) + " is not in this folder.", Text);
                 return;
             }
             if (dirty)
@@ -613,6 +615,12 @@ namespace SubVulpes
             if (captures.Profile) env["SV_SAMPLE"] = Path.Combine(rel, "profile.txt");
             if (captures.Timers) env["SV_TIMERS"] = "1";
             if (captures.Packets) env["SV_PACKETS"] = Path.Combine(rel, "packets.bin");
+            env.Remove("SV_RECORD_DIR");
+            env.Remove("SV_SNAPSHOT_AFTER");
+            if (captures.Record) {
+                env["SV_RECORD_DIR"] = rel;
+                env["SV_SNAPSHOT_AFTER"] = settings.Get("snapshot_after", "600");
+            }
             if (captures.CrashDump != "none") {
                 env["SV_DUMP"] = Path.Combine(rel, "crash.dmp");
                 env["SV_DUMP_TYPE"] = captures.CrashDump;
@@ -648,7 +656,8 @@ namespace SubVulpes
             runPanel.Visible = true;
             endPanel.Visible = false;
             SetState("Starting", Orange);
-            footer.Text = "This test: logs\\" + stamp;
+            footer.Text = "This test: logs\\" + stamp +
+                          (captures.Record ? ". Play at least " + int.Parse(settings.Get("snapshot_after", "600")) / 60 + " min: the memory snapshot comes then." : "");
         }
 
         string ServerVersion()
@@ -703,6 +712,8 @@ namespace SubVulpes
             } else if (line.Contains("own main loop: running")) {
                 lastSpeedLine = DateTime.Now;
                 SetState("Running", Green);
+            } else if (line.Contains("snapshot saved")) {
+                footer.Text = "The memory snapshot is saved. The harness recording is complete: you can stop at any time.";
             } else if (line.Contains("CRASH")) {
                 crashed = true;
             }

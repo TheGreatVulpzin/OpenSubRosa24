@@ -24,6 +24,35 @@
 #include "image_024d.h"
 #include "platform.h"
 
+#ifdef SR_RECORD
+#include "record.h"
+void sv_record_start(void *vprintf_fn);
+
+/* The WinSock names of the ordinals of the game, for the record wrappers. */
+static const char *wsock_name(unsigned ordinal)
+{
+    switch (ordinal) {
+    case 2: return "bind";
+    case 3: return "closesocket";
+    case 4: return "connect";
+    case 7: return "getsockopt";
+    case 10: return "inet_addr";
+    case 12: return "ioctlsocket";
+    case 16: return "recv";
+    case 17: return "recvfrom";
+    case 18: return "select";
+    case 19: return "send";
+    case 20: return "sendto";
+    case 23: return "socket";
+    case 52: return "gethostbyname";
+    case 55: return "getservbyname";
+    case 115: return "WSAStartup";
+    case 151: return "__WSAFDIsSet";
+    }
+    return "";
+}
+#endif
+
 uintptr_t sr_base;  /* the image region (map_image) */
 void sr_fn_init(void);
 void lf_x87_init(void);
@@ -59,15 +88,21 @@ void sv_log(const char *fmt, ...)
 
 /* The printf of the game (port, socketenabled, master server). It replaces the printf of
  * MSVCR100, which writes to its own stdout and cannot copy the text to the log. */
-static int __cdecl sv_printf(const char *fmt, ...)
+static int __cdecl sv_vprintf(const char *fmt, va_list ap)
 {
     char text[1024];
+    int n = vsnprintf(text, sizeof text, fmt, ap);
+    sv_out(text);
+    return n;
+}
+
+static int __cdecl sv_printf(const char *fmt, ...)
+{
     int n;
     va_list ap;
     va_start(ap, fmt);
-    n = vsnprintf(text, sizeof text, fmt, ap);
+    n = sv_vprintf(fmt, ap);
     va_end(ap);
-    sv_out(text);
     return n;
 }
 
@@ -156,12 +191,16 @@ void *sr_import(const char *dll, const char *name)
 {
     void *p;
     if (!_stricmp(dll, "MSVCR100.dll") && !strcmp(name, "printf"))
-        return (void *)sv_printf;
-    p = plat_lookup(dll, name, 0);
+        p = (void *)sv_printf;
+    else
+        p = plat_lookup(dll, name, 0);
     if (!p) {
         sv_log("import not found: %s!%s", dll, name);
         ExitProcess(1);
     }
+#ifdef SR_RECORD
+    p = sv_record_wrap(dll, name, p);
+#endif
     return p;
 }
 
@@ -175,12 +214,15 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
     /* WSOCK32 ordinal 17 is recvfrom and 20 is sendto. */
     if (g_packets && !_stricmp(dll, "WSOCK32.dll") && ordinal == 17) {
         *(void **)&g_recvfrom = p;
-        return (void *)capture_recvfrom;
+        p = (void *)capture_recvfrom;
     }
     if (g_packets && !_stricmp(dll, "WSOCK32.dll") && ordinal == 20) {
         *(void **)&g_sendto = p;
-        return (void *)capture_sendto;
+        p = (void *)capture_sendto;
     }
+#ifdef SR_RECORD
+    p = sv_record_wrap(dll, wsock_name(ordinal), p);
+#endif
     return p;
 }
 
@@ -250,7 +292,12 @@ static void start_sampler(void)
 static int map_image(void)
 {
     unsigned i;
+#ifdef SR_RECORD
+    /* The base of the fixed-base 024d of the hook recordings (tools/re/fixed_base.py). */
+    uint8_t *base = VirtualAlloc((void *)0x20000000, sr_image_size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+#else
     uint8_t *base = VirtualAlloc(NULL, sr_image_size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+#endif
     if (!base) {
         fprintf(stderr, "cannot allocate the image region (%u MiB, error %lu)\n", sr_image_size >> 20,
                 GetLastError());
@@ -342,6 +389,9 @@ int main(void)
     sv_log("standalone server: image at %p", (void *)sr_base);
     open_packets();
     start_sampler();
+#ifdef SR_RECORD
+    sv_record_start((void *)sv_vprintf);
+#endif
     if (getenv("SV_TEST_CRASH"))
         CreateThread(NULL, 0, test_crash, (void *)(uintptr_t)atoi(getenv("SV_TEST_CRASH")), 0, NULL);
     sr_getpaths();  /* never returns: it runs the main loop */

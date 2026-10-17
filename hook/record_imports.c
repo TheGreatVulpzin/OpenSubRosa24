@@ -610,10 +610,65 @@ static int WINAPI w_wsastartup(WORD version, void *data)
 
 #define CRT "MSVCR100.dll"
 #define K32 "KERNEL32.dll"
+#define WS "WSOCK32.dll"
 
+typedef struct {
+    const char *dll, *name;
+    void *wrapper;
+    void **real;
+} Wrap;
+
+#define WR(dll, name, w, r) { dll, name, (void *)(uintptr_t)w, (void **)&r }
+static const Wrap g_wraps[] = {
+    WR(CRT, "malloc", w_malloc, r_malloc),
+    WR(CRT, "free", w_free, r_free),
+    WR(CRT, "fopen", w_fopen, r_fopen),
+    WR(CRT, "fclose", w_fclose, r_fclose),
+    WR(CRT, "fgetc", w_fgetc, r_fgetc),
+    WR(CRT, "fseek", w_fseek, r_fseek),
+    WR(CRT, "fread", w_fread, r_fread),
+    WR(CRT, "fwrite", w_fwrite, r_fwrite),
+    WR(CRT, "fprintf", w_fprintf, r_fprintf),
+    WR(CRT, "printf", w_printf, r_printf),
+    WR(CRT, "_chdir", w_chdir, r_chdir),
+    WR(CRT, "_getcwd", w_getcwd, r_getcwd),
+    WR(CRT, "_findfirst64i32", w_findfirst, r_findfirst),
+    WR(CRT, "_findnext64i32", w_findnext, r_findnext),
+    WR(CRT, "_findclose", w_findclose, r_findclose),
+    WR(CRT, "_time64", w_time64, r_time64),
+    WR(CRT, "_sleep", w_sleep, r_sleep),
+    WR(CRT, "_tzset", w_tzset, r_tzset),
+    WR(CRT, "__timezone", w_timezone, r_timezone),
+    WR(CRT, "__daylight", w_daylight, r_daylight),
+    WR(K32, "QueryPerformanceCounter", w_qpc, r_qpc),
+    WR(K32, "QueryPerformanceFrequency", w_qpf, r_qpf),
+    WR(K32, "GetSystemTimeAsFileTime", w_gstaft, r_gstaft),
+    WR(K32, "GetCurrentProcess", w_gcp, r_gcp),
+    WR(K32, "GetProcessAffinityMask", w_gpam, r_gpam),
+    WR(K32, "SetProcessAffinityMask", w_spam, r_spam),
+    WR(WS, "sendto", w_sendto, r_sendto),
+    WR(WS, "recvfrom", w_recvfrom, r_recvfrom),
+    WR(WS, "send", w_send, r_send),
+    WR(WS, "recv", w_recv, r_recv),
+    WR(WS, "socket", w_socket, r_socket),
+    WR(WS, "bind", w_bind, r_bind),
+    WR(WS, "connect", w_connect, r_connect),
+    WR(WS, "closesocket", w_closesocket, r_closesocket),
+    WR(WS, "ioctlsocket", w_ioctlsocket, r_ioctlsocket),
+    WR(WS, "getsockopt", w_getsockopt, r_getsockopt),
+    WR(WS, "select", w_select, r_select),
+    WR(WS, "__WSAFDIsSet", w_fdisset, r_fdisset),
+    WR(WS, "gethostbyname", w_gethostbyname, r_gethostbyname),
+    WR(WS, "getservbyname", w_getservbyname, r_getservbyname),
+    WR(WS, "WSAStartup", w_wsastartup, r_wsastartup),
+};
+#undef WR
+
+/* The hook build: each wrapper goes into the IAT of the 024d (WinSock: the proxy stub). */
 int sv_record_imports_install(void)
 {
     HMODULE crt = GetModuleHandleA(CRT);
+    size_t i;
     int n = 0;
     if (!crt) {
         sv_log("record: %s is not loaded", CRT);
@@ -626,51 +681,31 @@ int sv_record_imports_install(void)
         sv_log("record: vfprintf, vprintf or _vsnprintf not found in %s", CRT);
         return 0;
     }
-#define P(dll, name, w, r) n += patch(dll, name, (void *)(uintptr_t)w, (void **)&r)
-    P(CRT, "malloc", w_malloc, r_malloc);
-    P(CRT, "free", w_free, r_free);
-    P(CRT, "fopen", w_fopen, r_fopen);
-    P(CRT, "fclose", w_fclose, r_fclose);
-    P(CRT, "fgetc", w_fgetc, r_fgetc);
-    P(CRT, "fseek", w_fseek, r_fseek);
-    P(CRT, "fread", w_fread, r_fread);
-    P(CRT, "fwrite", w_fwrite, r_fwrite);
-    P(CRT, "fprintf", w_fprintf, r_fprintf);
-    P(CRT, "printf", w_printf, r_printf);
-    P(CRT, "_chdir", w_chdir, r_chdir);
-    P(CRT, "_getcwd", w_getcwd, r_getcwd);
-    P(CRT, "_findfirst64i32", w_findfirst, r_findfirst);
-    P(CRT, "_findnext64i32", w_findnext, r_findnext);
-    P(CRT, "_findclose", w_findclose, r_findclose);
-    P(CRT, "_time64", w_time64, r_time64);
-    P(CRT, "_sleep", w_sleep, r_sleep);
-    P(CRT, "_tzset", w_tzset, r_tzset);
-    P(CRT, "__timezone", w_timezone, r_timezone);
-    P(CRT, "__daylight", w_daylight, r_daylight);
-    P(K32, "QueryPerformanceCounter", w_qpc, r_qpc);
-    P(K32, "QueryPerformanceFrequency", w_qpf, r_qpf);
-    P(K32, "GetSystemTimeAsFileTime", w_gstaft, r_gstaft);
-    P(K32, "GetCurrentProcess", w_gcp, r_gcp);
-    P(K32, "GetProcessAffinityMask", w_gpam, r_gpam);
-    P(K32, "SetProcessAffinityMask", w_spam, r_spam);
-#undef P
-#define W(name, w, r) n += patch_wsock(name, (void *)(uintptr_t)w, (void **)&r)
-    W("sendto", w_sendto, r_sendto);
-    W("recvfrom", w_recvfrom, r_recvfrom);
-    W("send", w_send, r_send);
-    W("recv", w_recv, r_recv);
-    W("socket", w_socket, r_socket);
-    W("bind", w_bind, r_bind);
-    W("connect", w_connect, r_connect);
-    W("closesocket", w_closesocket, r_closesocket);
-    W("ioctlsocket", w_ioctlsocket, r_ioctlsocket);
-    W("getsockopt", w_getsockopt, r_getsockopt);
-    W("select", w_select, r_select);
-    W("__WSAFDIsSet", w_fdisset, r_fdisset);
-    W("gethostbyname", w_gethostbyname, r_gethostbyname);
-    W("getservbyname", w_getservbyname, r_getservbyname);
-    W("WSAStartup", w_wsastartup, r_wsastartup);
-#undef W
+    for (i = 0; i < sizeof g_wraps / sizeof *g_wraps; i++)
+        n += !strcmp(g_wraps[i].dll, WS) ? patch_wsock(g_wraps[i].name, g_wraps[i].wrapper, g_wraps[i].real)
+                                  : patch(g_wraps[i].dll, g_wraps[i].name, g_wraps[i].wrapper, g_wraps[i].real);
     sv_log("record: %d import wrappers installed", n);
     return n;
+}
+
+/* The standalone recording build: the CRT functions that the printf wrappers use. */
+void sv_record_imports_printf(void *vfprintf_fn, void *vprintf_fn, void *vsnprintf_fn)
+{
+    *(void **)&m_vfprintf = vfprintf_fn;
+    *(void **)&m_vprintf = vprintf_fn;
+    *(void **)&m_vsnprintf = vsnprintf_fn;
+}
+
+/* The standalone recording build: sr_import asks for each import here. The wrapper keeps
+ * real, the function of src/platform/plat_imports.c. An import without a wrapper (sprintf,
+ * memcpy...) has no side effect: it stays real. */
+void *sv_record_wrap(const char *dll, const char *name, void *real)
+{
+    size_t i;
+    for (i = 0; i < sizeof g_wraps / sizeof *g_wraps; i++)
+        if (!_stricmp(g_wraps[i].dll, dll) && !strcmp(g_wraps[i].name, name)) {
+            *g_wraps[i].real = real;
+            return g_wraps[i].wrapper;
+        }
+    return real;
 }

@@ -92,3 +92,21 @@ target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
 target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
 set_property(TARGET subvulpes-server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# The harness recording build of the standalone server (src/standalone/record_shim.c). The lifted
+# code is compiled again with /Gh (_penter at each function), in its own object library: the
+# other targets keep the normal code.
+add_library(game_record OBJECT src/lifted/lifted_024d.c)
+target_include_directories(game_record PRIVATE src/include src/lifted src/standalone)
+target_compile_options(game_record PRIVATE /Gh)
+target_compile_definitions(game_record PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
+set_property(TARGET game_record PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+add_executable(subvulpes-server-record src/standalone/main.c src/standalone/fn_table.c src/standalone/image_024d.c
+    $<TARGET_OBJECTS:game_record> src/lifted/lifted_table.c src/lifted/x87_intrinsics.c ${SV_GAME_SOURCES}
+    src/server/accounts.c src/server/events.c src/server/players.c src/server/main_loop.c
+    src/platform/plat_imports.c src/standalone/record_shim.c hook/record.c hook/record_imports.c)
+target_include_directories(subvulpes-server-record PRIVATE src/include src/lifted src/standalone src/platform hook)
+target_compile_options(subvulpes-server-record PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(subvulpes-server-record PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE SR_RECORD)
+target_link_options(subvulpes-server-record PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG /INCREMENTAL:NO)
+set_property(TARGET subvulpes-server-record PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
