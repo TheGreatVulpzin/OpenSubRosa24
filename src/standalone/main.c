@@ -8,6 +8,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <timeapi.h>
+#include <dbghelp.h>
 
 #include <float.h>
 #include <stdarg.h>
@@ -17,6 +18,7 @@
 #include <string.h>
 
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "dbghelp.lib")
 
 #include "image_024d.h"
 
@@ -74,6 +76,77 @@ static void open_log(void)
         sv_log("cannot open the log file %s", path);
 }
 
+/* ------------------------------------------------------------ packet capture */
+
+/* SV_PACKETS=<file>: each UDP datagram that the server receives or sends, in the format of
+ * hook/capture.c (tools/net/capture.py reads it). The file has player names and chat. */
+#define RVA_GAME_TICKS (0x90dc540u + 0x38)
+
+static FILE *g_packets;
+static DWORD g_packets_start, g_packets_flush;
+static int(WINAPI *g_recvfrom)(UINT_PTR, char *, int, int, void *, int *);
+static int(WINAPI *g_sendto)(UINT_PTR, const char *, int, int, const void *, int);
+
+static void capture(uint8_t dir, const void *data, int len, const void *addr)
+{
+    const uint8_t *sa = (const uint8_t *)addr;
+    uint32_t t = GetTickCount() - g_packets_start;
+    uint32_t tick = *(const uint32_t *)(sr_base + RVA_GAME_TICKS), ip = 0;
+    uint16_t port = 0, n = (uint16_t)len;
+    if (len <= 0 || len > 0xffff)
+        return;
+    if (sa && sa[0] == 2 && sa[1] == 0) {  /* sockaddr_in: AF_INET, port (big endian), address */
+        port = (uint16_t)(sa[2] << 8 | sa[3]);
+        memcpy(&ip, sa + 4, 4);
+    }
+    fwrite(&dir, 1, 1, g_packets);
+    fwrite(&t, 4, 1, g_packets);
+    fwrite(&tick, 4, 1, g_packets);
+    fwrite(&ip, 4, 1, g_packets);
+    fwrite(&port, 2, 1, g_packets);
+    fwrite(&n, 2, 1, g_packets);
+    fwrite(data, 1, n, g_packets);
+    /* The launcher stops the server with TerminateProcess: flush each second, so that a stop
+     * loses at most one second of packets. */
+    if (t - g_packets_flush >= 1000) {
+        fflush(g_packets);
+        g_packets_flush = t;
+    }
+}
+
+static int WINAPI capture_recvfrom(UINT_PTR s, char *buf, int len, int flags, void *from, int *fromlen)
+{
+    int n = g_recvfrom(s, buf, len, flags, from, fromlen);
+    if (n > 0)
+        capture(0, buf, n, from);
+    return n;
+}
+
+static int WINAPI capture_sendto(UINT_PTR s, const char *buf, int len, int flags, const void *to, int tolen)
+{
+    int n = g_sendto(s, buf, len, flags, to, tolen);
+    if (n > 0)
+        capture(1, buf, n, to);
+    return n;
+}
+
+static void open_packets(void)
+{
+    const char *path = getenv("SV_PACKETS");
+    uint32_t version = 1, base = (uint32_t)sr_base;
+    if (!path)
+        return;
+    if (!(g_packets = fopen(path, "wb"))) {
+        sv_log("cannot open the packet file %s", path);
+        return;
+    }
+    fwrite("SVPK", 4, 1, g_packets);
+    fwrite(&version, 4, 1, g_packets);
+    fwrite(&base, 4, 1, g_packets);
+    g_packets_start = GetTickCount();
+    sv_log("packet capture: %s", path);
+}
+
 /* ------------------------------------------------------------ imports */
 
 /* A system DLL. Never the copy next to the exe: build/hook also holds the proxy wsock32.dll of
@@ -110,6 +183,15 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
         sv_log("import not found: %s!#%u", dll, ordinal);
         ExitProcess(1);
     }
+    /* WSOCK32 ordinal 17 is recvfrom and 20 is sendto. */
+    if (g_packets && !_stricmp(dll, "WSOCK32.dll") && ordinal == 17) {
+        *(void **)&g_recvfrom = p;
+        return (void *)capture_recvfrom;
+    }
+    if (g_packets && !_stricmp(dll, "WSOCK32.dll") && ordinal == 20) {
+        *(void **)&g_sendto = p;
+        return (void *)capture_sendto;
+    }
     return p;
 }
 
@@ -142,6 +224,7 @@ static FILE *g_samples;
 
 static DWORD WINAPI sampler(void *arg)
 {
+    unsigned count = 0;
     (void)arg;
     timeBeginPeriod(1);
     for (;;) {
@@ -153,6 +236,8 @@ static DWORD WINAPI sampler(void *arg)
         if (GetThreadContext(g_main_thread, &c))
             fprintf(g_samples, "%08lx\n", c.Eip);
         ResumeThread(g_main_thread);
+        if (++count % 1000 == 0)
+            fflush(g_samples);  /* a stop with TerminateProcess loses at most one second */
     }
 }
 
@@ -190,6 +275,35 @@ static int map_image(void)
     return 1;
 }
 
+/* SV_DUMP=<file>: a minidump at a crash. SV_DUMP_TYPE=full adds all the memory (the image
+ * region alone is about 600 MB). The small dump has the stacks and the memory near them. */
+static void write_dump(EXCEPTION_POINTERS *ep)
+{
+    const char *path = getenv("SV_DUMP"), *type = getenv("SV_DUMP_TYPE");
+    int full = type && !strcmp(type, "full");
+    MINIDUMP_EXCEPTION_INFORMATION info;
+    HANDLE f;
+    BOOL ok;
+    if (!path)
+        return;
+    f = CreateFileA(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (f == INVALID_HANDLE_VALUE) {
+        sv_log("CRASH: cannot write the dump %s", path);
+        return;
+    }
+    info.ThreadId = GetCurrentThreadId();
+    info.ExceptionPointers = ep;
+    info.ClientPointers = FALSE;
+    ok = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), f,
+                           (MINIDUMP_TYPE)(full ? MiniDumpWithFullMemory | MiniDumpWithHandleData |
+                                                      MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules
+                                                : MiniDumpWithDataSegs | MiniDumpWithIndirectlyReferencedMemory |
+                                                      MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules),
+                           &info, NULL, NULL);
+    CloseHandle(f);
+    sv_log(ok ? "CRASH: %s dump in %s" : "CRASH: the %s dump failed (%s)", full ? "full" : "small", path);
+}
+
 /* A crash: write where it happened, so that a test log is enough to find the line. The
  * address is given as module+offset (build/hook/subvulpes-server.map and .pdb), and as
  * an image RVA when it is inside the 024d region (a game address used as code or data). */
@@ -208,7 +322,21 @@ static LONG WINAPI on_crash(EXCEPTION_POINTERS *ep)
     if (er->NumberParameters >= 2 && er->ExceptionInformation[1] >= sr_base &&
         er->ExceptionInformation[1] < sr_base + sr_image_size)
         sv_log("CRASH: the data address is image RVA 0x%x", (unsigned)(er->ExceptionInformation[1] - sr_base));
+    if (g_packets)
+        fflush(g_packets);
+    if (g_samples)
+        fflush(g_samples);
+    write_dump(ep);
     return EXCEPTION_EXECUTE_HANDLER;
+}
+
+/* SV_TEST_CRASH=<seconds>: a write to address 0 after that time, to test the crash log and
+ * the dump of a launcher preset. */
+static DWORD WINAPI test_crash(void *arg)
+{
+    Sleep((DWORD)(uintptr_t)arg * 1000);
+    *(volatile int *)0 = 0;
+    return 0;
 }
 
 int main(void)
@@ -223,7 +351,10 @@ int main(void)
     _controlfp_s(&cw, _PC_53, _MCW_PC);
     lf_x87_init();
     sv_log("standalone server: image at %p", (void *)sr_base);
+    open_packets();
     start_sampler();
+    if (getenv("SV_TEST_CRASH"))
+        CreateThread(NULL, 0, test_crash, (void *)(uintptr_t)atoi(getenv("SV_TEST_CRASH")), 0, NULL);
     sr_getpaths();  /* never returns: it runs the main loop */
     return 0;
 }

@@ -280,8 +280,14 @@ void __cdecl sr_dedicatedserverloop(void)
         /* A status line every minute, so a log shows that this loop runs and how fast. */
         if (now_ms() - status_ms >= 60000) {
             uint32_t ms = now_ms() - status_ms;
-            sv_log("own main loop: %d ticks in %u ms (%.1f ticks/s)", sr_game.ticks - status_ticks, ms,
-                   (sr_game.ticks - status_ticks) * 1000.0 / ms);
+            int p, players = 0, bots = 0;
+            /* g_player: 256 records of 0x2408 bytes, active at +0, is_bot at +0x1a38. */
+            for (p = 0; p < 256; p++) {
+                if (G(int, 0xededd00 + p * 0x2408))
+                    G(int, 0xededd00 + p * 0x2408 + 0x1a38) ? bots++ : players++;
+            }
+            sv_log("own main loop: %d ticks in %u ms (%.1f ticks/s), %d players, %d bots",
+                   sr_game.ticks - status_ticks, ms, (sr_game.ticks - status_ticks) * 1000.0 / ms, players, bots);
             sv_hooks_lifted_profile();  /* profile=1 in subvulpes.ini */
             status_ms += ms;
             status_ticks = sr_game.ticks;
