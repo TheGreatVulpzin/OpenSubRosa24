@@ -42,7 +42,7 @@
 #define objectwheelcollision ((void (__cdecl *)(int, int))SR_FN(0x44e500))
 #define __security_check_cookie(x) ((void)0)
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_50 (*(float *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
 #define local_48 (*(int * *)(lf_frame + 0x18))

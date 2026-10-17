@@ -139,6 +139,10 @@ The harness keeps testing the functions against the 024d. No packet replay test 
 
 Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `src/game/`, `src/server/`), as `src/server/accounts.c` and `events.c` already do. The lifted version stays as the fallback until the rewrite is done.
 
+- A rewritten function has its real name (`analysis/024d/functions.csv`), real types and real variable names. `lift.py` finds it by that name and lifts it no more. The table of the harness and the hooks use the same name. The code does not depend on the transition tools: when the rewrite ends, the game compiles without `lift.py`.
+- The x87 math of the game CRT is `x87_sqrt`, `x87_sin` and the others (`src/include/sr_math.h`).
+- First file: `src/game/vectors.c` (13 vector functions, 2026-10-17).
+
 - A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
 - A rewritten function must not be slower than the original. Readable code is not a reason for slow code. Measure both versions with the per-hook profiler (`subvulpes.ini profile=1`) on the same server load. Example of what to avoid: `src/server/main_loop.c` works, but it is not well optimized. Rewrite it with the same care as the other functions.
 - An optimization that keeps the harness at 0 differences is allowed in this phase. It is not a change of behavior.

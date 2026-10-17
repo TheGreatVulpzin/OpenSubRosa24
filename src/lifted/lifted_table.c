@@ -90,21 +90,21 @@ void lf_0b3f0(void);
 void lf_0b4a0(void);
 void lf_0b540(void);
 void lf_0b6d0(void);
-void lf_0b850(void);
-void lf_0b880(void);
-void lf_0b8c0(void);
-void lf_0b900(void);
-void lf_0b9d0(void);
-void lf_0ba00(void);
-void lf_0ba30(void);
-void lf_0ba60(void);
-void lf_0baa0(void);
-void lf_0bb00(void);
-void lf_0bb80(void);
-void lf_0bc20(void);
+void dotproduct(void);
+void crossproduct(void);
+void vectorlength(void);
+void normalizevector(void);
+void addvectors(void);
+void subtractvectors(void);
+void scalevector(void);
+void scaleaddvectors(void);
+void vectordistance(void);
+void projectvector(void);
+void generatetrinormal(void);
+void resetorientation(void);
 void lf_0bc50(void);
 void lf_0bdb0(void);
-void lf_0bf60(void);
+void normalizevector2d(void);
 void lf_0c0a0(void);
 void lf_0c120(void);
 void lf_0c290(void);
@@ -408,21 +408,21 @@ const LfEntry lf_table[] = {
     { "getcpufrequency", 0xb4a0, (void *)lf_0b4a0, 0, LF_RET_VOID, 4, "", 1 },
     { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4, "", 0 },
     { "addvoice", 0xb6d0, (void *)lf_0b6d0, 2, LF_RET_INT, 4, "vv", 0 },
-    { "dotproduct", 0xb850, (void *)lf_0b850, 2, LF_RET_FLOAT, 4, "pp", 0 },
-    { "crossproduct", 0xb880, (void *)lf_0b880, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "vectorlength", 0xb8c0, (void *)lf_0b8c0, 1, LF_RET_FLOAT, 4, "p", 0 },
-    { "normalizevector", 0xb900, (void *)lf_0b900, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "addvectors", 0xb9d0, (void *)lf_0b9d0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "subtractvectors", 0xba00, (void *)lf_0ba00, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "scalevector", 0xba30, (void *)lf_0ba30, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "scaleaddvectors", 0xba60, (void *)lf_0ba60, 4, LF_RET_VOID, 4, "pppv", 0 },
-    { "vectordistance", 0xbaa0, (void *)lf_0baa0, 2, LF_RET_FLOAT, 4, "pp", 0 },
-    { "projectvector", 0xbb00, (void *)lf_0bb00, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "generatetrinormal", 0xbb80, (void *)lf_0bb80, 4, LF_RET_VOID, 4, "pppp", 0 },
-    { "resetorientation", 0xbc20, (void *)lf_0bc20, 1, LF_RET_VOID, 4, "p", 0 },
+    { "dotproduct", 0xb850, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
+    { "crossproduct", 0xb880, (void *)crossproduct, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "vectorlength", 0xb8c0, (void *)vectorlength, 1, LF_RET_FLOAT, 4, "p", 0 },
+    { "normalizevector", 0xb900, (void *)normalizevector, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "addvectors", 0xb9d0, (void *)addvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "subtractvectors", 0xba00, (void *)subtractvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "scalevector", 0xba30, (void *)scalevector, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "scaleaddvectors", 0xba60, (void *)scaleaddvectors, 4, LF_RET_VOID, 4, "pppv", 0 },
+    { "vectordistance", 0xbaa0, (void *)vectordistance, 2, LF_RET_FLOAT, 4, "pp", 0 },
+    { "projectvector", 0xbb00, (void *)projectvector, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "generatetrinormal", 0xbb80, (void *)generatetrinormal, 4, LF_RET_VOID, 4, "pppp", 0 },
+    { "resetorientation", 0xbc20, (void *)resetorientation, 1, LF_RET_VOID, 4, "p", 0 },
     { "rotatevector", 0xbc50, (void *)lf_0bc50, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "rotateorientation", 0xbdb0, (void *)lf_0bdb0, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "normalizevector2d", 0xbf60, (void *)lf_0bf60, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "normalizevector2d", 0xbf60, (void *)normalizevector2d, 2, LF_RET_VOID, 4, "pp", 0 },
     { "rotatevector2d", 0xc0a0, (void *)lf_0c0a0, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectplane", 0xc120, (void *)lf_0c120, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersectplanetwosided", 0xc290, (void *)lf_0c290, 6, LF_RET_INT, 4, "pppppp", 0 },

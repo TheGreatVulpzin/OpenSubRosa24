@@ -64,7 +64,7 @@
 #define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_FN(0x427e80))
 #define objectenginesimulation2 ((void (__cdecl *)(void))SR_FN(0x4324c0))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define auStack_e4 (*(undefined1 (*)[16])(lf_frame + 0x1c))
 #define local_d4 (*(float *)(lf_frame + 0x2c))
 #define local_d0 (*(float *)(lf_frame + 0x30))

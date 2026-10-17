@@ -22,6 +22,7 @@
 #pragma comment(lib, "dbghelp.lib")
 
 #include "image_024d.h"
+#include "sr_math.h"
 #include "platform.h"
 
 #ifdef SR_RECORD
@@ -55,7 +56,6 @@ static const char *wsock_name(unsigned ordinal)
 
 uintptr_t sr_base;  /* the image region (map_image) */
 void sr_fn_init(void);
-void lf_x87_init(void);
 void __cdecl sr_getpaths(void);
 
 /* ------------------------------------------------------------ console and log */
@@ -385,7 +385,7 @@ int main(void)
     sr_fn_init();
     /* The CRT of the 024d sets 53-bit x87 precision at start-up (_setdefaultprecision). */
     _controlfp_s(&cw, _PC_53, _MCW_PC);
-    lf_x87_init();
+    x87_init();
     sv_log("standalone server: image at %p", (void *)sr_base);
     open_packets();
     start_sampler();

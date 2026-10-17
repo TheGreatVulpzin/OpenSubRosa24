@@ -159,12 +159,29 @@ def load_names():
     return names
 
 
-def rewritten_rvas():
-    """Functions rewritten by hand in src/game/ with the lifted symbol (lf_41de0): no lifted
-    body, but the same table entry, live hook and standalone call."""
+# The C symbol of each function in the generated table and hooks: lf_<rva>, or the real name
+# of a function that is rewritten by hand in src/game/ (rewritten_rvas).
+SYMBOLS = {}
+
+
+def symbol(rva):
+    return SYMBOLS.get(rva, f'lf_{rva:05x}')
+
+
+def rewritten_rvas(names):
+    """Functions rewritten by hand in src/game/: no lifted body, but the same table entry, live
+    hook and standalone call. A definition with the real name of the function
+    (analysis/024d/functions.csv) or with lf_<rva>. Fills SYMBOLS."""
+    by_name = {n: int(r, 16) for r, n in names.items()}
+    definition = re.compile(r'^\w[^;{}#\n]*?\b(\w+)\([^;{}]*\)\s*\{', re.M)
     out = set()
-    for f in (ROOT / 'src/game').glob('*.c'):
-        out |= {int(x, 16) for x in re.findall(r'^\w[^;\n]*\blf_([0-9a-f]{5})\(', f.read_text(encoding='utf-8'), re.M)}
+    for f in sorted((ROOT / 'src/game').glob('*.c')):
+        for name in definition.findall(f.read_text(encoding='utf-8')):
+            m = re.fullmatch(r'lf_([0-9a-f]{5})', name)
+            rva = int(m.group(1), 16) if m else by_name.get(name)
+            if rva is not None:
+                out.add(rva)
+                SYMBOLS[rva] = name
     return out
 
 
@@ -603,7 +620,7 @@ def lift_function(f, rva, headers, imports_used):
                 post.append(f'#undef {cname}')
                 continue
             if tgt in X87_INTRINSICS:
-                pre.append(f'#define {cname} lf{tgt}')
+                pre.append(f'#define {cname} x87_{tgt[3:]}')
                 post.append(f'#undef {cname}')
                 continue
             if tgt.startswith('_CI'):
@@ -762,7 +779,7 @@ def gen_hooks(lifted, headers, funcs, names):
         plist = ', '.join(f'{t} {n}' for t, n in params) or 'void'
         types = ', '.join(t for t, _ in params) or 'void'
         args = ', '.join(n for _, n in params)
-        lf = f'lf_{rva:05x}'
+        lf = symbol(rva)
         out.append(f'{ret} {cc} {lf}({plist});')
         out.append(f'static {ret} ({cc} *orig_{rva:05x})({types});')
         out.append(f'static SvVerify v_{rva:05x} = {{ "{nice}", -1 }};')
@@ -798,7 +815,7 @@ def gen_hooks(lifted, headers, funcs, names):
             '}', '',
             'int sv_hooks_lifted_install(void)',
             '{',
-            '    lf_x87_init();',
+            '    x87_init();',
             '    /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */',
             '    int from = sv_config_int("lifted_from", 0);',
             f'    int to = sv_config_int("lifted_to", {len(lifted)});'] + inits + [
@@ -914,11 +931,11 @@ def gen_table(lifted, headers, names, side):
         used[nice] += 1
         if used[nice] > 1:
             nice = f'{nice}_{rva:05x}'
-        out.append(f'void lf_{rva:05x}(void);')
+        out.append(f'void {symbol(rva)}(void);')
         size = 1 if ret in BYTE_TYPES else 2 if ret in WORD_TYPES else 4
         # One letter per argument dword: p = pointer, v = value.
         kinds = ''.join(('vv' if t in WIDE_TYPES else 'p' if t.strip().endswith('*') else 'v') for t, _ in params)
-        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *)lf_{rva:05x}, {dwords}, {kind}, {size}, "{kinds}", '
+        rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *){symbol(rva)}, {dwords}, {kind}, {size}, "{kinds}", '
                     f'{int(rva in side)} }},')
     out += ['', 'const LfEntry lf_table[] = {'] + (rows or ['    { 0 },']) + ['};',
             f'const int lf_table_count = {len(lifted)};', '']
@@ -1030,7 +1047,7 @@ def main():
             eax_only.add(rva)
     names = load_names()
     hand = handwritten_rvas()
-    rewritten = rewritten_rvas()
+    rewritten = rewritten_rvas(names)
     side = side_effects(funcs)
     only = {int(x, 16) for x in args.only.split(',')} if args.only else None
 

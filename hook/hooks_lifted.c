@@ -3155,12 +3155,12 @@ __declspec(naked) static void th_0b6d0(void)
 }
 static uint8_t expect_0b6d0[5] = { 0x51, 0x8b, 0x4c, 0x24, 0x08 };
 
-float10 __cdecl lf_0b850(float * param_1, float * param_2);
+float10 __cdecl dotproduct(float * param_1, float * param_2);
 static float10 (__cdecl *orig_0b850)(float *, float *);
 static SvVerify v_0b850 = { "dotproduct", -1 };
 static float10 __cdecl hk_0b850(float * param_1, float * param_2)
 {
-    SV_HOOK_RET_FLOAT(float10, v_0b850, lf_0b850(param_1, param_2), orig_0b850(param_1, param_2), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_0b850, dotproduct(param_1, param_2), orig_0b850(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0b850(void)
 {
@@ -3201,12 +3201,12 @@ __declspec(naked) static void th_0b850(void)
 }
 static uint8_t expect_0b850[8] = { 0x8b, 0x44, 0x24, 0x04, 0x8b, 0x4c, 0x24, 0x08 };
 
-void __cdecl lf_0b880(float * param_1, float * param_2, float * param_3);
+void __cdecl crossproduct(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0b880)(float *, float *, float *);
 static SvVerify v_0b880 = { "crossproduct", -1 };
 static void __cdecl hk_0b880(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0b880, lf_0b880(param_1, param_2, param_3), orig_0b880(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0b880, crossproduct(param_1, param_2, param_3), orig_0b880(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0b880(void)
 {
@@ -3244,12 +3244,12 @@ __declspec(naked) static void th_0b880(void)
 }
 static uint8_t expect_0b880[8] = { 0x8b, 0x44, 0x24, 0x08, 0x8b, 0x4c, 0x24, 0x0c };
 
-float10 __cdecl lf_0b8c0(float * param_1);
+float10 __cdecl vectorlength(float * param_1);
 static float10 (__cdecl *orig_0b8c0)(float *);
 static SvVerify v_0b8c0 = { "vectorlength", -1 };
 static float10 __cdecl hk_0b8c0(float * param_1)
 {
-    SV_HOOK_RET_FLOAT(float10, v_0b8c0, lf_0b8c0(param_1), orig_0b8c0(param_1), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_0b8c0, vectorlength(param_1), orig_0b8c0(param_1), NULL);
 }
 __declspec(naked) static void th_0b8c0(void)
 {
@@ -3289,12 +3289,12 @@ __declspec(naked) static void th_0b8c0(void)
 }
 static uint8_t expect_0b8c0[7] = { 0x8b, 0x44, 0x24, 0x04, 0xd9, 0x40, 0x04 };
 
-void __cdecl lf_0b900(float * param_1, float * param_2);
+void __cdecl normalizevector(float * param_1, float * param_2);
 static void (__cdecl *orig_0b900)(float *, float *);
 static SvVerify v_0b900 = { "normalizevector", -1 };
 static void __cdecl hk_0b900(float * param_1, float * param_2)
 {
-    SV_HOOK_VOID(v_0b900, lf_0b900(param_1, param_2), orig_0b900(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0b900, normalizevector(param_1, param_2), orig_0b900(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0b900(void)
 {
@@ -3331,12 +3331,12 @@ __declspec(naked) static void th_0b900(void)
 }
 static uint8_t expect_0b900[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-void __cdecl lf_0b9d0(float * param_1, float * param_2, float * param_3);
+void __cdecl addvectors(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0b9d0)(float *, float *, float *);
 static SvVerify v_0b9d0 = { "addvectors", -1 };
 static void __cdecl hk_0b9d0(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0b9d0, lf_0b9d0(param_1, param_2, param_3), orig_0b9d0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0b9d0, addvectors(param_1, param_2, param_3), orig_0b9d0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0b9d0(void)
 {
@@ -3374,12 +3374,12 @@ __declspec(naked) static void th_0b9d0(void)
 }
 static uint8_t expect_0b9d0[6] = { 0x8b, 0x44, 0x24, 0x08, 0xd9, 0x00 };
 
-void __cdecl lf_0ba00(float * param_1, float * param_2, float * param_3);
+void __cdecl subtractvectors(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0ba00)(float *, float *, float *);
 static SvVerify v_0ba00 = { "subtractvectors", -1 };
 static void __cdecl hk_0ba00(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0ba00, lf_0ba00(param_1, param_2, param_3), orig_0ba00(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0ba00, subtractvectors(param_1, param_2, param_3), orig_0ba00(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0ba00(void)
 {
@@ -3417,12 +3417,12 @@ __declspec(naked) static void th_0ba00(void)
 }
 static uint8_t expect_0ba00[6] = { 0x8b, 0x44, 0x24, 0x08, 0xd9, 0x00 };
 
-void __cdecl lf_0ba30(float * param_1, float * param_2, float param_3);
+void __cdecl scalevector(float * param_1, float * param_2, float param_3);
 static void (__cdecl *orig_0ba30)(float *, float *, float);
 static SvVerify v_0ba30 = { "scalevector", -1 };
 static void __cdecl hk_0ba30(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_VOID(v_0ba30, lf_0ba30(param_1, param_2, param_3), orig_0ba30(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0ba30, scalevector(param_1, param_2, param_3), orig_0ba30(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0ba30(void)
 {
@@ -3460,12 +3460,12 @@ __declspec(naked) static void th_0ba30(void)
 }
 static uint8_t expect_0ba30[6] = { 0x8b, 0x44, 0x24, 0x08, 0xd9, 0x00 };
 
-void __cdecl lf_0ba60(float * param_1, float * param_2, float * param_3, float param_4);
+void __cdecl scaleaddvectors(float * param_1, float * param_2, float * param_3, float param_4);
 static void (__cdecl *orig_0ba60)(float *, float *, float *, float);
 static SvVerify v_0ba60 = { "scaleaddvectors", -1 };
 static void __cdecl hk_0ba60(float * param_1, float * param_2, float * param_3, float param_4)
 {
-    SV_HOOK_VOID(v_0ba60, lf_0ba60(param_1, param_2, param_3, param_4), orig_0ba60(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_0ba60, scaleaddvectors(param_1, param_2, param_3, param_4), orig_0ba60(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_0ba60(void)
 {
@@ -3504,12 +3504,12 @@ __declspec(naked) static void th_0ba60(void)
 }
 static uint8_t expect_0ba60[6] = { 0x8b, 0x44, 0x24, 0x0c, 0xd9, 0x00 };
 
-float10 __cdecl lf_0baa0(float * param_1, float * param_2);
+float10 __cdecl vectordistance(float * param_1, float * param_2);
 static float10 (__cdecl *orig_0baa0)(float *, float *);
 static SvVerify v_0baa0 = { "vectordistance", -1 };
 static float10 __cdecl hk_0baa0(float * param_1, float * param_2)
 {
-    SV_HOOK_RET_FLOAT(float10, v_0baa0, lf_0baa0(param_1, param_2), orig_0baa0(param_1, param_2), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_0baa0, vectordistance(param_1, param_2), orig_0baa0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0baa0(void)
 {
@@ -3550,12 +3550,12 @@ __declspec(naked) static void th_0baa0(void)
 }
 static uint8_t expect_0baa0[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x44, 0x24, 0x14 };
 
-void __cdecl lf_0bb00(float * param_1, float * param_2, float * param_3);
+void __cdecl projectvector(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0bb00)(float *, float *, float *);
 static SvVerify v_0bb00 = { "projectvector", -1 };
 static void __cdecl hk_0bb00(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0bb00, lf_0bb00(param_1, param_2, param_3), orig_0bb00(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0bb00, projectvector(param_1, param_2, param_3), orig_0bb00(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0bb00(void)
 {
@@ -3593,12 +3593,12 @@ __declspec(naked) static void th_0bb00(void)
 }
 static uint8_t expect_0bb00[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x44, 0x24, 0x14 };
 
-void __cdecl lf_0bb80(float * param_1, float * param_2, float * param_3, float * param_4);
+void __cdecl generatetrinormal(float * param_1, float * param_2, float * param_3, float * param_4);
 static void (__cdecl *orig_0bb80)(float *, float *, float *, float *);
 static SvVerify v_0bb80 = { "generatetrinormal", -1 };
 static void __cdecl hk_0bb80(float * param_1, float * param_2, float * param_3, float * param_4)
 {
-    SV_HOOK_VOID(v_0bb80, lf_0bb80(param_1, param_2, param_3, param_4), orig_0bb80(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_0bb80, generatetrinormal(param_1, param_2, param_3, param_4), orig_0bb80(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_0bb80(void)
 {
@@ -3637,12 +3637,12 @@ __declspec(naked) static void th_0bb80(void)
 }
 static uint8_t expect_0bb80[7] = { 0x83, 0xec, 0x18, 0x8b, 0x44, 0x24, 0x20 };
 
-void __cdecl lf_0bc20(undefined4 * param_1);
+void __cdecl resetorientation(undefined4 * param_1);
 static void (__cdecl *orig_0bc20)(undefined4 *);
 static SvVerify v_0bc20 = { "resetorientation", -1 };
 static void __cdecl hk_0bc20(undefined4 * param_1)
 {
-    SV_HOOK_VOID(v_0bc20, lf_0bc20(param_1), orig_0bc20(param_1), NULL);
+    SV_HOOK_VOID(v_0bc20, resetorientation(param_1), orig_0bc20(param_1), NULL);
 }
 __declspec(naked) static void th_0bc20(void)
 {
@@ -3764,12 +3764,12 @@ __declspec(naked) static void th_0bdb0(void)
 }
 static uint8_t expect_0bdb0[7] = { 0x83, 0xec, 0x28, 0x8b, 0x44, 0x24, 0x30 };
 
-void __cdecl lf_0bf60(float * param_1, float * param_2);
+void __cdecl normalizevector2d(float * param_1, float * param_2);
 static void (__cdecl *orig_0bf60)(float *, float *);
 static SvVerify v_0bf60 = { "normalizevector2d", -1 };
 static void __cdecl hk_0bf60(float * param_1, float * param_2)
 {
-    SV_HOOK_VOID(v_0bf60, lf_0bf60(param_1, param_2), orig_0bf60(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0bf60, normalizevector2d(param_1, param_2), orig_0bf60(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0bf60(void)
 {
@@ -12359,7 +12359,7 @@ static void relocate(uint8_t *expect, int off)
 
 int sv_hooks_lifted_install(void)
 {
-    lf_x87_init();
+    x87_init();
     /* subvulpes.ini lifted_from / lifted_to: install only a range (to find a bad hook). */
     int from = sv_config_int("lifted_from", 0);
     int to = sv_config_int("lifted_to", 277);

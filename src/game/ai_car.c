@@ -25,7 +25,7 @@ static void *lf_imports[64];
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x40b8c0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
 #define local_4c (*(uint *)(lf_frame + 0x24))

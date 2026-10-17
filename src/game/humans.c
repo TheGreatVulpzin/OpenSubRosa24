@@ -55,10 +55,10 @@
 #define sphereintersectlevel ((undefined4 (__cdecl *)(float *, float))SR_FN(0x44d750))
 #define __security_check_cookie(x) ((void)0)
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
+#define _CIatan2 x87_atan2
 #define local_cc (*(int * *)(lf_frame + 0x14))
 #define local_c8 (*(float *)(lf_frame + 0x18))
 #define local_c4 (*(Bone * *)(lf_frame + 0x1c))

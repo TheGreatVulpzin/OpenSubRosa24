@@ -37,15 +37,8 @@ void *sr_fn(uintptr_t va);
 void *sr_import(const char *dll, const char *name);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
-/* x87 intrinsics of the game CRT, called with normal cdecl arguments (x87_intrinsics.c). */
-void lf_x87_init(void);
-double __cdecl lf_CIsqrt(double x);
-double __cdecl lf_CIsin(double x);
-double __cdecl lf_CIcos(double x);
-double __cdecl lf_CItan(double x);
-double __cdecl lf_CIacos(double x);
-double __cdecl lf_CIatan2(double a, double b);
-double __cdecl lf_CIpow(double a, double b);
+/* x87 intrinsics of the game CRT, called with normal cdecl arguments. */
+#include "sr_math.h"
 
 /* ---------------------------------------------------------------- Ghidra types */
 

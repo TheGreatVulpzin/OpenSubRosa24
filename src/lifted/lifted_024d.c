@@ -5130,10 +5130,10 @@ void __cdecl lf_094a0(int param_1)
 #undef pointinsidebuilding
 
 /* ---------------------------------------------------------------- 0x9600 */
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
+#define _CIatan2 x87_atan2
 void __cdecl lf_09600(float *param_1,float *param_2)
 
 {
@@ -5247,7 +5247,7 @@ float10 __cdecl lf_09a00(float param_1,float param_2,uint param_3)
 
 /* ---------------------------------------------------------------- 0x9be0 */
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIcos lf_CIcos
+#define _CIcos x87_cos
 float10 __cdecl lf_09be0(float param_1,float param_2,uint param_3)
 
 {
@@ -5500,7 +5500,7 @@ LAB_0040a365:
 #undef local_4
 
 /* ---------------------------------------------------------------- 0xa7a0 */
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 void __cdecl lf_0a7a0(float *param_1,float *param_2)
 
 {
@@ -6205,204 +6205,9 @@ int __cdecl lf_0b6d0(int param_1,float param_2)
 #undef g_connection
 #undef local_4
 
-/* ---------------------------------------------------------------- 0xb850 */
-
-float10 __cdecl lf_0b850(float *param_1,float *param_2)
-
-{
-  return (float10)((float)(param_1[2] * param_2[2] + (*param_1 * *param_2 + param_1[1] * param_2[1])));
-}
-
-
-/* ---------------------------------------------------------------- 0xb880 */
-
-void __cdecl lf_0b880(float *param_1,float *param_2,float *param_3)
-
-{
-  *param_1 = (float)(param_2[2] * param_3[1] - param_2[1] * param_3[2]);
-  param_1[1] = (float)(param_3[2] * *param_2 - *param_3 * param_2[2]);
-  param_1[2] = (float)(param_2[1] * *param_3 - *param_2 * param_3[1]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xb8c0 */
-#define _CIsqrt lf_CIsqrt
-float10 __cdecl lf_0b8c0(float *param_1)
-
-{
-  double dVar1;
-  
-  dVar1 = _CIsqrt((double)((float)(param_1[2] * param_1[2] + (*param_1 * *param_1 + param_1[1] * param_1[1]))))
-  ;
-  return (float10)(float)dVar1;
-}
-#undef _CIsqrt
-
-/* ---------------------------------------------------------------- 0xb900 */
-#define _CIsqrt lf_CIsqrt
-void __cdecl lf_0b900(float *param_1,float *param_2)
-
-{
-  float fVar1;
-  double dVar2;
-  
-  dVar2 = _CIsqrt((double)((float)(param_2[2] * param_2[2] + (*param_2 * *param_2 + param_2[1] * param_2[1]))))
-  ;
-  if ((float)dVar2 != 0.0) {
-    fVar1 = (float)(1.0 / (float)dVar2);
-    *param_1 = fVar1 * *param_2;
-    param_1[1] = (float)(fVar1 * param_2[1]);
-    param_1[2] = (float)(fVar1 * param_2[2]);
-    return;
-  }
-  *param_1 = 0.0;
-  param_1[1] = 0.0;
-  param_1[2] = 0.0;
-  return;
-}
-#undef _CIsqrt
-
-/* ---------------------------------------------------------------- 0xb9d0 */
-
-void __cdecl lf_0b9d0(float *param_1,float *param_2,float *param_3)
-
-{
-  *param_1 = (float)(*param_2 + *param_3);
-  param_1[1] = (float)(param_2[1] + param_3[1]);
-  param_1[2] = (float)(param_2[2] + param_3[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xba00 */
-
-void __cdecl lf_0ba00(float *param_1,float *param_2,float *param_3)
-
-{
-  *param_1 = (float)(*param_2 - *param_3);
-  param_1[1] = (float)(param_2[1] - param_3[1]);
-  param_1[2] = (float)(param_2[2] - param_3[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xba30 */
-
-void __cdecl lf_0ba30(float *param_1,float *param_2,float param_3)
-
-{
-  *param_1 = param_3 * *param_2;
-  param_1[1] = (float)(param_2[1] * param_3);
-  param_1[2] = (float)(param_3 * param_2[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xba60 */
-
-void __cdecl lf_0ba60(float *param_1,float *param_2,float *param_3,float param_4)
-
-{
-  *param_1 = (float)(*param_2 + param_4 * *param_3);
-  param_1[1] = (float)(param_3[1] * param_4 + param_2[1]);
-  param_1[2] = (float)(param_4 * param_3[2] + param_2[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xbaa0 */
-#define _CIsqrt lf_CIsqrt
-float10 __cdecl lf_0baa0(float *param_1,float *param_2)
-
-{
-  double dVar1;
-  
-  dVar1 = _CIsqrt((double)((float)(((float)(param_2[2] - param_1[2])) * (param_2[2] - param_1[2]) +
-                          (((float)(param_2[1] - param_1[1])) * (param_2[1] - param_1[1]) +
-                          ((float)(*param_2 - *param_1)) * (*param_2 - *param_1)))));
-  return (float10)(float)dVar1;
-}
-#undef _CIsqrt
-
-/* ---------------------------------------------------------------- 0xbb00 */
-
-void __cdecl lf_0bb00(float *param_1,float *param_2,float *param_3)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  
-  fVar1 = *param_2;
-  fVar2 = param_2[1];
-  fVar3 = param_2[2];
-  *param_1 = (float)(fVar2 * param_3[3] + fVar1 * *param_3 + fVar3 * param_3[6]);
-  param_1[1] = (float)(param_3[7] * fVar3 + (param_3[1] * fVar1 + param_3[4] * fVar2));
-  param_1[2] = (float)(fVar3 * param_3[8] + (param_3[5] * fVar2 + param_3[2] * fVar1));
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0xbb80 */
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-void __cdecl lf_0bb80(float *param_1,float *param_2,float *param_3,float *param_4)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  float fVar12;
-  
-  fVar1 = *param_3;
-  fVar2 = *param_2;
-  fVar3 = param_3[1];
-  fVar4 = param_2[1];
-  fVar5 = param_3[2];
-  fVar6 = param_2[2];
-  fVar7 = *param_4;
-  fVar8 = *param_2;
-  fVar9 = param_4[1];
-  fVar10 = param_2[1];
-  fVar11 = param_4[2];
-  fVar12 = param_2[2];
-  *param_1 = (float)(((float)(fVar5 - fVar6)) * ((float)(fVar9 - fVar10)) - ((float)(fVar3 - fVar4)) * ((float)(fVar11 - fVar12)));
-  param_1[1] = (float)(((float)(fVar1 - fVar2)) * (fVar11 - fVar12) - ((float)(fVar7 - fVar8)) * (fVar5 - fVar6));
-  param_1[2] = (float)((fVar7 - fVar8) * (fVar3 - fVar4) - (fVar1 - fVar2) * (fVar9 - fVar10));
-  normalizevector(param_1,param_1);
-  return;
-}
-#undef normalizevector
-
-/* ---------------------------------------------------------------- 0xbc20 */
-
-void __cdecl lf_0bc20(undefined4 *param_1)
-
-{
-  *param_1 = 0x3f800000;
-  param_1[1] = 0;
-  param_1[2] = 0;
-  param_1[3] = 0;
-  param_1[5] = 0;
-  param_1[6] = 0;
-  param_1[7] = 0;
-  param_1[4] = 0x3f800000;
-  param_1[8] = 0x3f800000;
-  return;
-}
-
-
 /* ---------------------------------------------------------------- 0xbc50 */
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
+#define _CIcos x87_cos
+#define _CIsin x87_sin
 void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
 
 {
@@ -6438,8 +6243,8 @@ void __cdecl lf_0bc50(float *param_1,float *param_2,float param_3)
 
 /* ---------------------------------------------------------------- 0xbdb0 */
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
+#define _CIcos x87_cos
+#define _CIsin x87_sin
 void __cdecl lf_0bdb0(float *param_1,float *param_2,float param_3)
 
 {
@@ -6491,30 +6296,9 @@ void __cdecl lf_0bdb0(float *param_1,float *param_2,float param_3)
 #undef _CIcos
 #undef _CIsin
 
-/* ---------------------------------------------------------------- 0xbf60 */
-#define _CIsqrt lf_CIsqrt
-void __cdecl lf_0bf60(float *param_1,float *param_2)
-
-{
-  float fVar1;
-  double dVar2;
-  
-  dVar2 = _CIsqrt((double)((float)(*param_2 * *param_2 + param_2[1] * param_2[1])));
-  if ((float)dVar2 != 0.0) {
-    fVar1 = (float)(1.0 / (float)dVar2);
-    *param_1 = fVar1 * *param_2;
-    param_1[1] = (float)(fVar1 * param_2[1]);
-    return;
-  }
-  *param_1 = 0.0;
-  param_1[1] = 0.0;
-  return;
-}
-#undef _CIsqrt
-
 /* ---------------------------------------------------------------- 0xc0a0 */
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
+#define _CIcos x87_cos
+#define _CIsin x87_sin
 void __cdecl lf_0c0a0(float *param_1,float param_2)
 
 {
@@ -6711,7 +6495,7 @@ undefined4 __cdecl lf_0c680(float *param_1,float *param_2,float *param_3,float *
 /* ---------------------------------------------------------------- 0xc8f0 */
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -6839,7 +6623,7 @@ undefined4 __cdecl lf_0cca0(float *param_1,float *param_2,float *param_3,float *
 #undef normalizevector2d
 
 /* ---------------------------------------------------------------- 0xcdf0 */
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 undefined4 __cdecl lf_0cdf0(float *param_1,float *param_2,float *param_3,float *param_4,float *param_5,float *param_6
           ,float param_7)
 
@@ -7759,7 +7543,7 @@ int __cdecl lf_0f620(uint param_1,int param_2,int param_3,int param_4)
 #define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_FN(0x402560))
 #define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_FN(0x402620))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_40 (*(float *)(lf_frame + 0x10))
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
@@ -8013,7 +7797,7 @@ void __cdecl lf_0f6f0(float *param_1,float *param_2,int param_3,float param_4,in
 #define tesselatebezier ((float10 (__cdecl *)(int, float, float, float, float, float))SR_FN(0x402560))
 #define tesselatebezierderivative ((float10 (__cdecl *)(float, float, float, float, float, float))SR_FN(0x402620))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
@@ -10879,7 +10663,7 @@ int __cdecl lf_14600(int param_1,undefined4 *param_2,float param_3)
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x40bb80))
 #define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x40c420))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -11155,7 +10939,7 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x40bb80))
 #define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x40c420))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_78 (*(float *)(lf_frame + 0x18))
@@ -13609,9 +13393,9 @@ void __cdecl lf_18720(uint *param_1)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
-#define _CIsin lf_CIsin
-#define _CIatan2 lf_CIatan2
-#define _CIacos lf_CIacos
+#define _CIsin x87_sin
+#define _CIatan2 x87_atan2
+#define _CIacos x87_acos
 #define local_30 (*(float *)(lf_frame + 0x10))
 void __cdecl lf_19060(int param_1)
 
@@ -14177,7 +13961,7 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
 #define crossproduct ((void (__cdecl *)(float *, float *, float *))SR_FN(0x40b880))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define lineintersectplanetwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_FN(0x40c290))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_30 (*(float *)(lf_frame + 0x10))
 #define local_2c (*(float *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -14430,7 +14214,7 @@ undefined4 __cdecl lf_1a700(float *param_1,float *param_2,float *param_3,float *
 
 /* ---------------------------------------------------------------- 0x1a7f0 */
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float *)(lf_frame + 0x20))
@@ -14492,7 +14276,7 @@ undefined4 __cdecl lf_1a7f0(float *param_1,float *param_2,float *param_3,float *
 #undef local_4
 
 /* ---------------------------------------------------------------- 0x1a990 */
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *param_4,float param_5,float *param_6)
 
 {
@@ -14526,7 +14310,7 @@ undefined4 __cdecl lf_1a990(float *param_1,float *param_2,float *param_3,float *
 /* ---------------------------------------------------------------- 0x1aa60 */
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x40ba60))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(float *)(lf_frame + 0x18))
 #define local_4 (*(float *)(lf_frame + 0x1c))
@@ -15158,7 +14942,7 @@ void __cdecl lf_1ba30(int param_1,int param_2,int param_3,int param_4,char *para
 #define DAT_0a61c4c8 (*(undefined4 *)SR_VA(0xa61c4c8))
 #define _DAT_0a01d8c8 (*(undefined4 *)SR_VA(0xa01d8c8))
 #define serpnoise2d ((float10 (__cdecl *)(float, float, uint))SR_FN(0x409a00))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
 void __cdecl lf_1bc50(void)
@@ -16157,7 +15941,7 @@ void __cdecl lf_1d2c0(int param_1)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_18 (*(uint *)(lf_frame + 0x18))
 void __cdecl lf_1d3b0(void)
 
@@ -16650,7 +16434,7 @@ void __cdecl lf_1d9e0(float *param_1,float *param_2,float *param_3)
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_FN(0x40db20))
 #define unpackorientation ((void (__cdecl *)(float *, float *))SR_FN(0x416320))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_64 (*(uint *)(lf_frame + 0x1c))
 #define local_60 (*(float *)(lf_frame + 0x20))
 #define local_5c (*(float *)(lf_frame + 0x24))
@@ -17342,8 +17126,8 @@ LAB_0041e31d:
 #define packorientation ((void (__cdecl *)(float *, uint))SR_FN(0x415df0))
 #define packposition ((void (__cdecl *)(undefined4 *))SR_FN(0x416790))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
-#define _CIpow lf_CIpow
+#define _CIsqrt x87_sqrt
+#define _CIpow x87_pow
 #define local_40 (*(uint *)(lf_frame + 0x10))
 #define local_3c (*(uint *)(lf_frame + 0x14))
 #define local_38 (*(undefined8 *)(lf_frame + 0x18))
@@ -17907,8 +17691,8 @@ LAB_0041fded:
 #define packorientation ((void (__cdecl *)(float *, uint))SR_FN(0x415df0))
 #define packposition ((void (__cdecl *)(undefined4 *))SR_FN(0x416790))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
-#define _CIpow lf_CIpow
+#define _CIsqrt x87_sqrt
+#define _CIpow x87_pow
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
 #define local_50 (*(float *)(lf_frame + 0x20))
@@ -18775,7 +18559,7 @@ void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_8c (*(float *)(lf_frame + 0x14))
 #define local_88 (*(float *)(lf_frame + 0x18))
 #define local_84 (*(float *)(lf_frame + 0x1c))
@@ -19108,10 +18892,10 @@ float10 __cdecl lf_23fa0(int param_1)
 #define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
 #define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bc50))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
+#define _CIatan2 x87_atan2
 #define local_84 (*(float *)(lf_frame + 0x1c))
 #define local_80 (*(int *)(lf_frame + 0x20))
 #define local_74 (*(int *)(lf_frame + 0x2c))
@@ -19558,8 +19342,8 @@ LAB_00424dcf:
 #define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define addobjectrotation ((void (__cdecl *)(int, float *, float *, float))SR_FN(0x421e00))
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
 #define local_1c (*(float *)(lf_frame + 0x14))
 #define local_18 (*(int * *)(lf_frame + 0x18))
 #define local_14 (*(int *)(lf_frame + 0x1c))
@@ -20050,7 +19834,7 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
 #define _DAT_0a01d8c8 (*(float *)SR_VA(0xa01d8c8))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_48 (*(float *)(lf_frame + 0x18))
 #define local_44 (*(float *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
@@ -20827,10 +20611,10 @@ void __cdecl lf_26f90(int param_1)
 #define g_soundlist (*(SoundList *)SR_VA(0x956d700))
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_FN(0x416db0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIatan2 lf_CIatan2
-#define _CItan lf_CItan
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIatan2 x87_atan2
+#define _CItan x87_tan
 #define local_18 (*(float *)(lf_frame + 0x18))
 void __cdecl lf_272b0(int param_1)
 
@@ -21324,7 +21108,7 @@ void __cdecl lf_27ba0(void)
 #undef g_area_sector
 
 /* ---------------------------------------------------------------- 0x27e80 */
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_14 (*(float *)(lf_frame + 0x1c))
 float10 __cdecl lf_27e80(float *param_1,float *param_2,float param_3)
 
@@ -22031,7 +21815,7 @@ void __cdecl lf_28a90(int param_1,undefined4 param_2,int param_3,int param_4,und
 #undef g_objecttype
 
 /* ---------------------------------------------------------------- 0x28c90 */
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_60 (*(float * *)(lf_frame + 0x10))
 #define local_5c (*(int *)(lf_frame + 0x14))
 #define local_54 (*(int *)(lf_frame + 0x1c))
@@ -22270,7 +22054,7 @@ void __cdecl lf_28c90(float *param_1,int param_2,float *param_3,float *param_4)
 
 /* ---------------------------------------------------------------- 0x29300 */
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x40bb80))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_38 (*(float * *)(lf_frame + 0x18))
 #define local_30 (*(int *)(lf_frame + 0x20))
 #define local_24 (*(float *)(lf_frame + 0x2c))
@@ -25929,7 +25713,7 @@ void __cdecl lf_2f090(float *param_1,int param_2,float param_3,uint param_4)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_38 (*(float *)(lf_frame + 0x38))
 #define local_34 (*(float *)(lf_frame + 0x3c))
@@ -26074,10 +25858,10 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define multiplyquaternion ((void (__cdecl *)(float *, float *, float *))SR_FN(0x41d8a0))
 #define __security_check_cookie(x) ((void)0)
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
-#define _CIacos lf_CIacos
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
+#define _CIacos x87_acos
 #define local_120 (*(float *)(lf_frame + 0x10))
 #define local_11c (*(float *)(lf_frame + 0x14))
 #define local_118 (*(float *)(lf_frame + 0x18))
@@ -28382,8 +28166,8 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 #define g_numoftracks (*(undefined4 *)SR_VA(0x94dc520))
 #define g_track (*(Track *)SR_VA(0x25d7efc0))
 #define createtrack ((void (__cdecl *)(int, float *, float, float))SR_FN(0x425e70))
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
+#define _CIcos x87_cos
+#define _CIsin x87_sin
 #define local_80 (*(float *)(lf_frame + 0x10))
 #define local_7c (*(float *)(lf_frame + 0x14))
 #define local_50 (*(float *)(lf_frame + 0x40))
@@ -29501,7 +29285,7 @@ LAB_00434849:
 #define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
 #define calculatepointscale ((void (__cdecl *)(float *, int, float *, float *))SR_FN(0x428c90))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_3c (*(float *)(lf_frame + 0x14))
 #define local_30 (*(undefined8 *)(lf_frame + 0x20))
 #define local_28 (*(float *)(lf_frame + 0x28))
@@ -33099,7 +32883,7 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define addvoice ((int (__cdecl *)(int, float))SR_FN(0x40b6d0))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_24 (*(float *)(lf_frame + 0x1c))
 #define local_1c (*(int *)(lf_frame + 0x24))
 #define local_18 (*(float *)(lf_frame + 0x28))
@@ -33330,7 +33114,7 @@ LAB_0043d4d4:
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
 #define getrandomvector3d ((void (__cdecl *)(float *, float, float))SR_FN(0x421b40))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x431630))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_30 (*(int *)(lf_frame + 0x10))
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_28 (*(float *)(lf_frame + 0x18))
@@ -36098,7 +35882,7 @@ LAB_00441bf7:
 #define area_block_createbuildinginterior ((int (__cdecl *)(int, uint))SR_FN(0x429bf0))
 #define area_createblock ((void (__cdecl *)(uint, uint, uint, uint, uint, ushort *))SR_FN(0x43da50))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_64 (*(float *)(lf_frame + 0x1c))
 #define local_60 (*(double *)(lf_frame + 0x20))
 #define local_58 (*(int *)(lf_frame + 0x28))
@@ -36988,7 +36772,7 @@ LAB_00448999:
 #define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_FN(0x42f130))
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x431630))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_60 (*(float *)(lf_frame + 0x10))
 #define local_5c (*(int *)(lf_frame + 0x14))
 #define local_58 (*(int *)(lf_frame + 0x18))
@@ -37918,11 +37702,11 @@ LAB_0044a385:
 #define multiply3x3matrices ((void (__cdecl *)(float *, float *, float *))SR_FN(0x41d9e0))
 #define human_calcarmtorque ((void (__cdecl *)(int))SR_FN(0x42f420))
 #define __security_check_cookie(x) ((void)0)
-#define _CIcos lf_CIcos
-#define _CIsin lf_CIsin
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
-#define _CIacos lf_CIacos
+#define _CIcos x87_cos
+#define _CIsin x87_sin
+#define _CIsqrt x87_sqrt
+#define _CIatan2 x87_atan2
+#define _CIacos x87_acos
 #define local_a0 (*(float *)(lf_frame + 0x10))
 #define local_9c (*(float *)(lf_frame + 0x14))
 #define local_98 (*(float *)(lf_frame + 0x18))
@@ -39342,7 +39126,7 @@ LAB_0044cda4:
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define item_sphereintersect ((undefined4 (__cdecl *)(int, float *, float))SR_FN(0x430f00))
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_28 (*(Bone * *)(lf_frame + 0x18))
 #define local_24 (*(float *)(lf_frame + 0x1c))
@@ -41067,8 +40851,8 @@ void __cdecl lf_4ed30(void)
 #define lineintersecthuman ((undefined4 (__cdecl *)(int, float *, float *, float))SR_FN(0x42f130))
 #define ai_assessthreats ((void (__cdecl *)(int, int))SR_FN(0x43d500))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
-#define _CIatan2 lf_CIatan2
+#define _CIsqrt x87_sqrt
+#define _CIatan2 x87_atan2
 #define local_5c (*(vec3 * *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))
@@ -42362,7 +42146,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
 #define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x431630))
 #define item_physicssimulation ((void (__cdecl *)(int))SR_FN(0x44cee0))
 #define __security_check_cookie(x) ((void)0)
-#define _CIsqrt lf_CIsqrt
+#define _CIsqrt x87_sqrt
 #define local_5c (*(float *)(lf_frame + 0x14))
 #define local_58 (*(float *)(lf_frame + 0x18))
 #define local_54 (*(float *)(lf_frame + 0x1c))

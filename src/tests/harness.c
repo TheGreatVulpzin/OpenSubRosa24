@@ -40,10 +40,10 @@
 #include "plat_test.h"
 #include "platform.h"
 #include "sr_runtime.h"
+#include "sr_math.h"
 #include "sr_server.h"
 #include "verify.h"
 
-void lf_x87_init(void);
 
 #define MAX_ARGS 64
 #define BLOB 256
@@ -1027,7 +1027,7 @@ int main(int argc, char **argv)
     }
     plat_test_patch_globals();
     imports = resolve_imports();
-    lf_x87_init();
+    x87_init();
     set_probes(getenv("HARNESS_PROBE"));
     set_watch(getenv("HARNESS_WATCH"));
     if (getenv("HARNESS_COVER")) {
