@@ -36,6 +36,18 @@ The 19 functions that are not in C:
 
 32 of the 340 functions are not referenced by the live code (client or editor code, `docs/phase4-inventory.md`). 13 of them have hand-written harness calls (`tools/recording/synth_calls.txt`).
 
+## Functions without a harness call
+
+56 functions have no "same" call in the gate baseline (2026-10-17). No live function is in this list, so new recordings are not necessary for the function count. Record again only when a rewrite changes a code path that no recording covers.
+
+| Group | Count | Functions |
+| --- | ---: | --- |
+| Dead (`†` in `docs/phase4-inventory.md`) | 17 | client accounts, `building_save`, `leveleditor_save`, `clientrecv`, `unpackobjectpacket`, `packobjectpacket2`, `object_rotorsimulation`, `logicsimulation_driving` and 8 small helpers |
+| Dead through a dead caller, or no caller in the C | 14 | `unpackevent`, `unpackorientation`, `unpackangle`, `pbitreadnego` (callers: `clientrecv`, `unpackobjectpacket`), `economysimulation`, `init_by_array`, `testtimer`, `packunitvector`, `packscalar`, `packpositiondelta`, `unpackpositiondelta`, `lerpnoise2d`, `lineintersectline2d`, `sphereintersectline2d` |
+| CRT and `main` (not in C) | 20 | `getpaths`, `dedicatedserverloop` and 18 CRT functions |
+| Hand-written in `src/standalone/fn_table.c` | 4 | `createevent_message`, `createevent_updatedoor`, `createevent_updatemission`, `fixplayername` |
+| Accepted difference (`docs/lift.md`) | 1 | `buildsomeshit` |
+
 ## Phase 4: what the lifted C still takes from the image
 
 `python -I tools/lift/deps.py` on 2026-10-16:
