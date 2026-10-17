@@ -13,6 +13,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # and lifts it no more. Run cmake again after a new file. src/common and src/net hold clean
 # code. src/game still holds files in the lifted style (no warnings until they are clean).
 file(GLOB SV_CLEAN_SOURCES CONFIGURE_DEPENDS src/common/*.c src/net/*.c)
+# The operating system calls of the clean code, through the imports of the game.
+list(APPEND SV_CLEAN_SOURCES src/platform/os_calls.c)
 file(GLOB SV_GAME_SOURCES CONFIGURE_DEPENDS src/game/*.c)
 set(SV_REWRITTEN_SOURCES ${SV_CLEAN_SOURCES} ${SV_GAME_SOURCES})
 set(SV_REWRITTEN_INCLUDES src/common src/net src/game)

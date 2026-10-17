@@ -10,3 +10,5 @@ rva,name,index,type,evidence
 0xf6f0,addbeziersurface,0,float *,"(float *)(param_1 + 0x60): an array of control points; the harness skipped 15 calls (value points into the stack)"
 0xf6f0,addbeziersurface,1,float *,"(float *)(param_2 + 0x40): a second array of points, used the same way"
 0xfc40,addbeziersurfacetexture,0,float *,"(float *)(param_1 + 0x60): the same control points as addbeziersurface"
+0x6380,createevent_updateitem,ret,void,"The ELF declares it void. The body leaves the event offset in EAX, and no caller reads it."
+0x65f0,createevent_updateplayer_finance,ret,void,"The ELF declares it void. The body leaves the event offset in EAX, and no caller reads it."

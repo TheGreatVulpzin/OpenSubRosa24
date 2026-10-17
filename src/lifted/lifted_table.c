@@ -42,10 +42,10 @@ void lf_05be0(void);
 void lf_05f20(void);
 void lf_05fe0(void);
 void lf_061a0(void);
-void lf_06380(void);
-void lf_06420(void);
-void lf_064a0(void);
-void lf_065f0(void);
+void createevent_updateitem(void);
+void createevent_updateiteminfo(void);
+void createevent_updateplayer(void);
+void createevent_updateplayer_finance(void);
 void lf_06840(void);
 void lf_068d0(void);
 void lf_06b30(void);
@@ -122,13 +122,13 @@ void lf_0d2a0(void);
 void lf_0d3a0(void);
 void lf_0d680(void);
 void lf_0d710(void);
-void lf_0d860(void);
-void lf_0d910(void);
-void lf_0d990(void);
+void recvpacket(void);
+void sendpacket(void);
+void cs_pwrite(void);
 void lf_0d9f0(void);
-void lf_0da60(void);
-void lf_0db20(void);
-void lf_0ddb0(void);
+void pbitwrite(void);
+void pbitread(void);
+void pbitwritenego(void);
 void lf_0ddd0(void);
 void lf_0ded0(void);
 void lf_0e4d0(void);
@@ -162,19 +162,19 @@ void lf_146a0(void);
 void lf_14dd0(void);
 void lf_154b0(void);
 void lf_155e0(void);
-void lf_15df0(void);
+void packorientation(void);
 void lf_16320(void);
-void lf_16680(void);
+void packangle(void);
 void lf_16710(void);
-void lf_16790(void);
+void packposition(void);
 void lf_16860(void);
 void lf_16960(void);
 void lf_16a20(void);
-void lf_16bb0(void);
-void lf_16c40(void);
-void lf_16ce0(void);
-void lf_16db0(void);
-void lf_16e30(void);
+void createevent_bullet(void);
+void createevent_bullethit(void);
+void createevent_updateobject(void);
+void createevent_sound(void);
+void createevent_updateblock_quad(void);
 void lf_16f10(void);
 void lf_17b60(void);
 void lf_18570(void);
@@ -360,10 +360,10 @@ const LfEntry lf_table[] = {
     { "player_calcassets", 0x5f20, (void *)lf_05f20, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x5fe0, (void *)lf_05fe0, 1, LF_RET_VOID, 4, "v", 0 },
     { "eventsimulation", 0x61a0, (void *)lf_061a0, 0, LF_RET_VOID, 4, "", 0 },
-    { "createevent_updateitem", 0x6380, (void *)lf_06380, 1, LF_RET_INT, 4, "v", 0 },
-    { "createevent_updateiteminfo", 0x6420, (void *)lf_06420, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateplayer", 0x64a0, (void *)lf_064a0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateplayer_finance", 0x65f0, (void *)lf_065f0, 1, LF_RET_INT, 4, "v", 0 },
+    { "createevent_updateitem", 0x6380, (void *)createevent_updateitem, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateiteminfo", 0x6420, (void *)createevent_updateiteminfo, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateplayer", 0x64a0, (void *)createevent_updateplayer, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateplayer_finance", 0x65f0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatestocks", 0x6840, (void *)lf_06840, 0, LF_RET_VOID, 4, "", 0 },
     { "createevent_updatecarmarket", 0x68d0, (void *)lf_068d0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupitemtypes", 0x6b30, (void *)lf_06b30, 0, LF_RET_VOID, 4, "", 0 },
@@ -440,13 +440,13 @@ const LfEntry lf_table[] = {
     { "listfiles", 0xd3a0, (void *)lf_0d3a0, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "removeflieextentions", 0xd680, (void *)lf_0d680, 1, LF_RET_VOID, 4, "v", 0 },
     { "disablesocket", 0xd710, (void *)lf_0d710, 1, LF_RET_VOID, 4, "v", 1 },
-    { "recvpacket", 0xd860, (void *)lf_0d860, 0, LF_RET_INT, 4, "", 1 },
-    { "sendpacket", 0xd910, (void *)lf_0d910, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "cs_pwrite", 0xd990, (void *)lf_0d990, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "recvpacket", 0xd860, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
+    { "sendpacket", 0xd910, (void *)sendpacket, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "cs_pwrite", 0xd990, (void *)cs_pwrite, 3, LF_RET_INT, 4, "pvv", 0 },
     { "cs_pread", 0xd9f0, (void *)lf_0d9f0, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pbitwrite", 0xda60, (void *)lf_0da60, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitread", 0xdb20, (void *)lf_0db20, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitwritenego", 0xddb0, (void *)lf_0ddb0, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitwrite", 0xda60, (void *)pbitwrite, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitread", 0xdb20, (void *)pbitread, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitwritenego", 0xddb0, (void *)pbitwritenego, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitreadnego", 0xddd0, (void *)lf_0ddd0, 2, LF_RET_INT, 4, "pv", 0 },
     { "createaccount", 0xded0, (void *)lf_0ded0, 1, LF_RET_INT, 4, "v", 0 },
     { "ai_playercar", 0xe4d0, (void *)lf_0e4d0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -480,19 +480,19 @@ const LfEntry lf_table[] = {
     { "lineintersectcityobjecttype", 0x14dd0, (void *)lf_14dd0, 8, LF_RET_INT, 4, "pppvpppp", 0 },
     { "city_createelevator", 0x154b0, (void *)lf_154b0, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)lf_155e0, 0, LF_RET_VOID, 4, "", 0 },
-    { "packorientation", 0x15df0, (void *)lf_15df0, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "packorientation", 0x15df0, (void *)packorientation, 2, LF_RET_VOID, 4, "pv", 0 },
     { "unpackorientation", 0x16320, (void *)lf_16320, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "packangle", 0x16680, (void *)lf_16680, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "packangle", 0x16680, (void *)packangle, 2, LF_RET_VOID, 4, "pv", 0 },
     { "unpackangle", 0x16710, (void *)lf_16710, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "packposition", 0x16790, (void *)lf_16790, 1, LF_RET_VOID, 4, "p", 0 },
+    { "packposition", 0x16790, (void *)packposition, 1, LF_RET_VOID, 4, "p", 0 },
     { "packscalar", 0x16860, (void *)lf_16860, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "playerdeathtax", 0x16960, (void *)lf_16960, 1, LF_RET_VOID, 4, "v", 0 },
     { "playerteamkilltax", 0x16a20, (void *)lf_16a20, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "createevent_bullet", 0x16bb0, (void *)lf_16bb0, 4, LF_RET_VOID, 4, "vppv", 0 },
-    { "createevent_bullethit", 0x16c40, (void *)lf_16c40, 4, LF_RET_VOID, 4, "vvpp", 0 },
-    { "createevent_updateobject", 0x16ce0, (void *)lf_16ce0, 5, LF_RET_VOID, 4, "vvvpp", 0 },
-    { "createevent_sound", 0x16db0, (void *)lf_16db0, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "createevent_updateblock_quad", 0x16e30, (void *)lf_16e30, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
+    { "createevent_bullet", 0x16bb0, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
+    { "createevent_bullethit", 0x16c40, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
+    { "createevent_updateobject", 0x16ce0, (void *)createevent_updateobject, 5, LF_RET_VOID, 4, "vvvpp", 0 },
+    { "createevent_sound", 0x16db0, (void *)createevent_sound, 4, LF_RET_VOID, 4, "vpvv", 0 },
+    { "createevent_updateblock_quad", 0x16e30, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x16f10, (void *)lf_16f10, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x17b60, (void *)lf_17b60, 1, LF_RET_VOID, 4, "v", 0 },
     { "testtimer", 0x18570, (void *)lf_18570, 0, LF_RET_INT64, 4, "", 1 },

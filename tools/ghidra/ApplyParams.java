@@ -1,6 +1,7 @@
 // Give 024d function parameters their types from analysis/024d/params.csv.
 //
-// The CSV has one row per parameter: rva, name, index (0-based), type, evidence. Ghidra often
+// The CSV has one row per parameter: rva, name, index (0-based, or "ret" for the return type),
+// type, evidence. Ghidra often
 // types a pointer parameter as int or undefined4. The lifted table (lift.py) then marks the
 // argument as a value ('v'), and the harness skips each recorded call where the value points
 // into the caller stack. As a pointer ('p'), the harness copies the recorded memory and runs
@@ -41,6 +42,20 @@ public class ApplyParams extends GhidraScript {
                 if (f.size() < 4) continue;
                 Address a = currentProgram.getImageBase().add(Long.decode(f.get(0)));
                 Function fn = getFunctionAt(a);
+                if (fn != null && f.get(2).equals("ret")) {
+                    // The return type. Ghidra types a void function as int when the function
+                    // leaves a value in EAX that no caller reads.
+                    DataType rt = parser.parse(f.get(3));
+                    if (fn.getReturnType().isEquivalent(rt)) {
+                        same++;
+                        continue;
+                    }
+                    println(String.format("%s return: %s -> %s", fn.getName(), fn.getReturnType().getDisplayName(),
+                            rt.getDisplayName()));
+                    fn.setReturnType(rt, SourceType.USER_DEFINED);
+                    changed++;
+                    continue;
+                }
                 int index = Integer.parseInt(f.get(2));
                 if (fn == null || index >= fn.getParameterCount()) {
                     println("no function or parameter " + index + " at " + a + " for " + f.get(1));

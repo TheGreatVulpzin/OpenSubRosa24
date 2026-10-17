@@ -25,6 +25,9 @@ extern uintptr_t sr_base;
 #define sr_events       SR_AT(Event, SR_RVA_EVENT)
 #define sr_numofevents  (*SR_AT(uint32_t, SR_RVA_NUMOFEVENTS))
 #define sr_players      SR_AT(Player, SR_RVA_PLAYER)
+#define sr_items        SR_AT(Item, SR_RVA_ITEM)
+#define sr_bsdsocket    (*SR_AT(BsdSocket, SR_RVA_BSDSOCKET))
+#define sr_socketid     (*SR_AT(uint32_t, 0x60d08u)) /* "7DFP": the first 4 bytes of each packet */
 
 #ifdef __cplusplus
 }

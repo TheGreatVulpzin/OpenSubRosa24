@@ -142,6 +142,9 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 - A rewritten function has its real name (`analysis/024d/functions.csv`), real types and real variable names. `lift.py` finds it by that name and lifts it no more. The table of the harness and the hooks use the same name. The code does not depend on the transition tools: when the rewrite ends, the game compiles without `lift.py`.
 - The x87 math of the game CRT is `x87_sqrt`, `x87_sin` and the others (`src/include/sr_math.h`).
 - First file: `src/game/vectors.c` (13 vector functions, 2026-10-17).
+- Folders: `src/common/` (math, shared by the client and the server), `src/net/` (packets and events), `src/game/`, `src/server/`. The operating system calls of the clean code go through `src/platform/os_calls.c` (`sr_os.h`), so the harness and the recording build see them.
+- Done: math (`src/common/vectors.c`, `random.c`), packets (`src/net/packet.c`) and events (`src/net/events.c`).
+- Waiting: `packevent` and `packobjectpacket` (the recordings run 21% and 47% of their blocks: they wait for a Harness Recording test), `createevent_updatestocks` and `createevent_updatecarmarket` (with the economy, when `Market` has field names), `eventsimulation` (with the doors of the buildings).
 
 - A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
 - A rewritten function must not be slower than the original. Readable code is not a reason for slow code. Measure both versions with the per-hook profiler (`subvulpes.ini profile=1`) on the same server load. Example of what to avoid: `src/server/main_loop.c` works, but it is not well optimized. Rewrite it with the same care as the other functions.

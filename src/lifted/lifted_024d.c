@@ -3,7 +3,7 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
-static void *lf_imports[46];
+static void *lf_imports[45];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -3308,163 +3308,6 @@ void __cdecl lf_061a0(void)
 #undef area_interior_setobject
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x6380 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-int __cdecl lf_06380(uint param_1)
-
-{
-  int iVar1;
-  Event *pEVar2;
-  int lf_eax;
-  
-  iVar1 = g_game.ticks;
-  if ((g_server.unk_0000 != 0) && (param_1 < 0x400)) {
-    lf_eax = g_numofevents * 0x80;
-    g_event[g_numofevents].type = 5;
-    g_event[g_numofevents].tick = iVar1;
-    iVar1 = g_item[param_1].parent_human;
-    g_event[g_numofevents].param =
-         (g_item[param_1].active + g_item[param_1].type * 2) * 0x400 + param_1;
-    g_event[g_numofevents].attach_type = iVar1;
-    iVar1 = g_item[param_1].parent_slot;
-    g_event[g_numofevents].attach_id = g_item[param_1].parent_item;
-    pEVar2 = g_event + g_numofevents;
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (short)g_numofevents + 1;
-    pEVar2->range_mode = iVar1;
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return lf_eax;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_item
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x6420 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_06420(uint param_1)
-
-{
-  int iVar1;
-  Event *pEVar2;
-  uint uVar3;
-  
-  uVar3 = g_numofevents;
-  iVar1 = g_game.ticks;
-  if ((g_server.unk_0000 != 0) && (param_1 < 0x400)) {
-    g_event[g_numofevents].type = 6;
-    g_event[g_numofevents].tick = iVar1;
-    g_event[g_numofevents].param = param_1;
-    g_event[g_numofevents].attach_type = g_item[param_1].call_state;
-    iVar1 = g_item[param_1].unk_010c;
-    pEVar2 = g_event + g_numofevents;
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (short)g_numofevents + 1;
-    pEVar2->attach_id = g_item[param_1].info;
-    g_event[uVar3].range_mode = iVar1;
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_item
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x64a0 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-void __cdecl lf_064a0(int param_1)
-
-{
-  int iVar1;
-  int iVar2;
-  char *pcVar3;
-  char *pcVar4;
-  
-  iVar2 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 7;
-    g_event[g_numofevents].tick = iVar2;
-    iVar2 = g_player[param_1].human_id;
-    g_event[g_numofevents].param =
-         (g_player[param_1].is_bot + (g_player[param_1].active + 2 + g_player[param_1].team * 2) * 2
-         ) * 0x100 + param_1;
-    iVar1 = g_player[param_1].unk_23c0;
-    g_event[g_numofevents].attach_type = iVar2;
-    g_event[g_numofevents].attach_id = g_player[param_1].money;
-    g_event[g_numofevents].range_mode =
-         g_player[param_1].look_a +
-         (g_player[param_1].look_b +
-         (g_player[param_1].look_c + (iVar1 + g_player[param_1].unk_23c4 * 2) * 4) * 8) * 4;
-    pcVar3 = g_player[param_1].name;
-    pcVar4 = g_event[g_numofevents].message;
-    for (iVar2 = 7; iVar2 != 0; iVar2 = iVar2 + -1) {
-      *(undefined4 *)pcVar4 = *(undefined4 *)pcVar3;
-      pcVar3 = pcVar3 + 4;
-      pcVar4 = pcVar4 + 4;
-    }
-    *(undefined2 *)pcVar4 = *(undefined2 *)pcVar3;
-    pcVar4[2] = pcVar3[2];
-    g_event[g_numofevents].message[0x1f] = '\0';
-    g_numofevents = g_numofevents + 1 & 0xffff;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-#undef g_player
-
-/* ---------------------------------------------------------------- 0x65f0 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-int __cdecl lf_065f0(int param_1)
-
-{
-  int iVar1;
-  Event *pEVar2;
-  uint uVar3;
-  int lf_eax;
-  
-  uVar3 = g_numofevents;
-  iVar1 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    lf_eax = g_numofevents * 0x80;
-    g_event[g_numofevents].type = 8;
-    g_event[g_numofevents].tick = iVar1;
-    g_event[g_numofevents].param = param_1;
-    iVar1 = g_player[param_1].stocks;
-    pEVar2 = g_event + g_numofevents;
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (short)g_numofevents + 1;
-    pEVar2->attach_type = g_player[param_1].money;
-    g_event[uVar3].attach_id = iVar1;
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return lf_eax;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-#undef g_player
-
 /* ---------------------------------------------------------------- 0x6840 */
 #define g_market (*(Market *)SR_VA(0x17579600))
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
@@ -4324,7 +4167,7 @@ void __cdecl lf_07e50(uint param_1,uint *param_2,int param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int * *)(lf_frame + 0x18))
 void __cdecl lf_07f80(uint param_1,uint param_2)
@@ -4683,7 +4526,7 @@ undefined4 __cdecl lf_08b00(float *param_1,int param_2,float param_3)
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_market (*(Market *)SR_VA(0x17579600))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_FN(0x406840))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define local_4 (*(int *)(lf_frame + 0x1c))
@@ -4816,7 +4659,7 @@ void __cdecl lf_08cf0(int param_1,float param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_FN(0x406760))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_FN(0x406840))
 #define local_18 (*(int *)(lf_frame + 0x18))
@@ -4997,7 +4840,7 @@ void __cdecl lf_08fe0(float *param_1,int param_2)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 void __cdecl lf_093e0(int param_1,int param_2)
 
 {
@@ -6625,83 +6468,6 @@ void __cdecl lf_0d710(u_long param_1)
 #undef htons
 #undef socket
 
-/* ---------------------------------------------------------------- 0xd860 */
-#define g_socketid (*(uint *)SR_VA(0x460d08))
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-#define recvfrom ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int *))LF_IMPORT_ORD(29, "WSOCK32.DLL", 17))
-int __cdecl lf_0d860(void)
-
-{
-  if (g_bsdsocket.enabled[g_bsdsocket.current] == 0) {
-    return 0;
-  }
-  (*(uint *)((uchar *)&g_bsdsocket + 72)) = 0;
-  g_bsdsocket.recv_size =
-       recvfrom(g_bsdsocket.handle[g_bsdsocket.current],&g_bsdsocket.lf_raw[0x10070],0x10000,0,
-                (sockaddr *)&g_bsdsocket.lf_raw[0x44],&g_bsdsocket.addr_len);
-  if (0 < g_bsdsocket.recv_size) {
-    if (((((uint)(byte)(*(uchar *)((uchar *)&g_bsdsocket + 65648)) == (int)(char)g_socketid) &&
-         ((uint)(byte)(*(uchar *)((uchar *)&g_bsdsocket + 65649)) == (int)(*(uchar *)((uchar *)&g_socketid + 1)))) &&
-        ((uint)(byte)(*(uchar *)((uchar *)&g_bsdsocket + 65650)) == (int)(*(uchar *)((uchar *)&g_socketid + 2)))) &&
-       ((uint)(byte)(*(uchar *)((uchar *)&g_bsdsocket + 65651)) == (int)(*(uchar *)((uchar *)&g_socketid + 3)))) {
-      g_bsdsocket.recv_pos = 4;
-      g_bsdsocket.recv_bit = 0;
-      return g_bsdsocket.recv_size;
-    }
-    g_bsdsocket.recv_size = 0;
-  }
-  return g_bsdsocket.recv_size;
-}
-#undef g_socketid
-#undef g_bsdsocket
-#undef recvfrom
-
-/* ---------------------------------------------------------------- 0xd910 */
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-#define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
-#define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-void __cdecl lf_0d910(u_long param_1,u_short param_2)
-
-{
-  if (g_bsdsocket.enabled[g_bsdsocket.current] != 0) {
-    if (0 < g_bsdsocket.send_bit) {
-      g_bsdsocket.send_size = g_bsdsocket.send_size + 1;
-      g_bsdsocket.send_bit = 0;
-    }
-    (*(uint *)((uchar *)&g_bsdsocket + 72)) = htonl(param_1);
-    (*(ushort *)((uchar *)&g_bsdsocket + 70)) = htons(param_2);
-    sendto(g_bsdsocket.handle[g_bsdsocket.current],&g_bsdsocket.lf_raw[0x64],g_bsdsocket.send_size,0,
-           (sockaddr *)&g_bsdsocket.lf_raw[0x44],g_bsdsocket.addr_len);
-  }
-  return;
-}
-#undef g_bsdsocket
-#undef htons
-#undef sendto
-#undef htonl
-
-/* ---------------------------------------------------------------- 0xd990 */
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
-undefined4 __cdecl lf_0d990(void *param_1,int param_2,int param_3)
-
-{
-  if (0xffff < g_bsdsocket.send_size) {
-    return 0;
-  }
-  if (0 < g_bsdsocket.send_bit) {
-    g_bsdsocket.send_size = g_bsdsocket.send_size + 1;
-    g_bsdsocket.send_bit = 0;
-  }
-  memcpy((void *)((int)g_bsdsocket.handle + g_bsdsocket.send_size + 0x40),param_1,param_2 * param_3)
-  ;
-  g_bsdsocket.send_size = g_bsdsocket.send_size + param_2 * param_3;
-  return 1;
-}
-#undef g_bsdsocket
-#undef memcpy
-
 /* ---------------------------------------------------------------- 0xd9f0 */
 #define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
@@ -6727,107 +6493,6 @@ undefined4 __cdecl lf_0d9f0(void *param_1,int param_2,int param_3)
 }
 #undef g_bsdsocket
 #undef memcpy
-
-/* ---------------------------------------------------------------- 0xda60 */
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-int __cdecl lf_0da60(uint *param_1,uint param_2)
-
-{
-  byte *pbVar1;
-  uint uVar2;
-  uint uVar3;
-  
-  if (0xffff < g_bsdsocket.send_size) {
-    return 0;
-  }
-  uVar3 = ~(-1 << ((byte)param_2 & 0x1f)) & *param_1;
-  if (0 < (int)param_2) {
-    while( true ) {
-      pbVar1 = (byte *)((int)g_bsdsocket.handle + g_bsdsocket.send_size + 0x40);
-      *pbVar1 = *pbVar1 & ~(('\x01' << ((byte)param_2 & 0x1f)) + -1 <<
-                           ((byte)g_bsdsocket.send_bit & 0x1f));
-      pbVar1 = (byte *)((int)g_bsdsocket.handle + g_bsdsocket.send_size + 0x40);
-      *pbVar1 = *pbVar1 | (char)uVar3 << ((byte)g_bsdsocket.send_bit & 0x1f);
-      uVar2 = 8 - g_bsdsocket.send_bit;
-      if (param_2 < uVar2) {
-        g_bsdsocket.send_bit = g_bsdsocket.send_bit + param_2;
-        return 1;
-      }
-      if (param_2 == uVar2) break;
-      g_bsdsocket.send_size = g_bsdsocket.send_size + 1;
-      param_2 = param_2 - uVar2;
-      uVar3 = uVar3 >> ((byte)uVar2 & 0x1f);
-      g_bsdsocket.send_bit = 0;
-      if ((int)param_2 < 1) {
-        return 1;
-      }
-    }
-    g_bsdsocket.send_size = g_bsdsocket.send_size + 1;
-    g_bsdsocket.send_bit = 0;
-  }
-  return 1;
-}
-#undef g_bsdsocket
-
-/* ---------------------------------------------------------------- 0xdb20 */
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-#define local_4 (*(uint *)(lf_frame + 0x1c))
-int __cdecl lf_0db20(uint *param_1,uint param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  uint uVar1;
-  int iVar2;
-  int iVar3;
-
-  
-  if ((g_bsdsocket.recv_pos < 0x10000) &&
-     (((int)param_2 >> 3) + g_bsdsocket.recv_pos <= g_bsdsocket.recv_size)) {
-    iVar3 = 0;
-    local_4 = 0;
-    iVar2 = g_bsdsocket.recv_bit;
-    if (0 < (int)param_2) {
-      while( true ) {
-        local_4 = local_4 | ((uint)((byte)(&g_bsdsocket.lf_raw[0x10070])[g_bsdsocket.recv_pos] >>
-                                   ((byte)iVar2 & 0x1f)) & ~(-1 << ((byte)param_2 & 0x1f))) <<
-                            ((byte)iVar3 & 0x1f);
-        uVar1 = 8 - iVar2;
-        if (param_2 < uVar1) {
-          g_bsdsocket.recv_bit = iVar2 + param_2;
-          *param_1 = local_4;
-          return 1;
-        }
-        if (param_2 == uVar1) break;
-        g_bsdsocket.recv_pos = g_bsdsocket.recv_pos + 1;
-        param_2 = param_2 - uVar1;
-        iVar3 = iVar3 + uVar1;
-        g_bsdsocket.recv_bit = 0;
-        iVar2 = 0;
-        if ((int)param_2 < 1) {
-          *param_1 = local_4;
-          return 1;
-        }
-      }
-      g_bsdsocket.recv_pos = g_bsdsocket.recv_pos + 1;
-      g_bsdsocket.recv_bit = 0;
-    }
-    *param_1 = local_4;
-    return 1;
-  }
-  return 0;
-}
-#undef g_bsdsocket
-#undef local_4
-
-/* ---------------------------------------------------------------- 0xddb0 */
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x40da60))
-int __cdecl lf_0ddb0(uint *param_1,uint param_2)
-
-{
-  pbitwrite(param_1,param_2);
-  return 1;
-}
-#undef pbitwrite
 
 /* ---------------------------------------------------------------- 0xddd0 */
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_FN(0x40db20))
@@ -11027,245 +10692,6 @@ void __cdecl lf_155e0(void)
 #undef g_cityobjecttype
 #undef cityobject_addbox
 
-/* ---------------------------------------------------------------- 0x15df0 */
-#define DAT_0f837b00 (*(undefined *)SR_VA(0xf837b00))
-#define DAT_0f837b04 (*(undefined *)SR_VA(0xf837b04))
-#define DAT_0f837b08 (*(undefined *)SR_VA(0xf837b08))
-#define DAT_0f837b0c (*(undefined *)SR_VA(0xf837b0c))
-#define DAT_0f837b10 (*(undefined *)SR_VA(0xf837b10))
-#define DAT_0f837b14 (*(undefined *)SR_VA(0xf837b14))
-#define DAT_0f837b18 (*(undefined *)SR_VA(0xf837b18))
-#define DAT_0f837b1c (*(undefined *)SR_VA(0xf837b1c))
-#define DAT_0f837b20 (*(undefined *)SR_VA(0xf837b20))
-#define g_octahedron (*(float (*)[18])SR_VA(0x4602c0))
-#define DAT_0f837b24 (*(undefined *)SR_VA(0xf837b24))
-#define g_octahedronindex (*(int (*)[24])SR_VA(0x460308))
-#define DAT_0f837b28 (*(undefined *)SR_VA(0xf837b28))
-#define DAT_0f837b2c (*(undefined *)SR_VA(0xf837b2c))
-#define DAT_0f837b30 (*(undefined *)SR_VA(0xf837b30))
-#define DAT_0f837b34 (*(undefined *)SR_VA(0xf837b34))
-#define DAT_0f837b38 (*(undefined *)SR_VA(0xf837b38))
-#define DAT_0f837b3c (*(undefined *)SR_VA(0xf837b3c))
-#define DAT_0f837b40 (*(undefined *)SR_VA(0xf837b40))
-#define DAT_0f837b44 (*(undefined *)SR_VA(0xf837b44))
-#define _DAT_0f837b00 (*(float *)SR_VA(0xf837b00))
-#define _DAT_0f837b04 (*(float *)SR_VA(0xf837b04))
-#define _DAT_0f837b08 (*(float *)SR_VA(0xf837b08))
-#define _DAT_0f837b0c (*(float *)SR_VA(0xf837b0c))
-#define _DAT_0f837b10 (*(float *)SR_VA(0xf837b10))
-#define _DAT_0f837b14 (*(float *)SR_VA(0xf837b14))
-#define _DAT_0f837b18 (*(float *)SR_VA(0xf837b18))
-#define _DAT_0f837b1c (*(float *)SR_VA(0xf837b1c))
-#define _DAT_0f837b20 (*(float *)SR_VA(0xf837b20))
-#define _DAT_0f837b24 (*(float *)SR_VA(0xf837b24))
-#define _DAT_0f837b28 (*(float *)SR_VA(0xf837b28))
-#define _DAT_0f837b2c (*(float *)SR_VA(0xf837b2c))
-#define _DAT_0f837b30 (*(float *)SR_VA(0xf837b30))
-#define _DAT_0f837b34 (*(float *)SR_VA(0xf837b34))
-#define _DAT_0f837b38 (*(float *)SR_VA(0xf837b38))
-#define _DAT_0f837b3c (*(float *)SR_VA(0xf837b3c))
-#define _DAT_0f837b40 (*(float *)SR_VA(0xf837b40))
-#define _DAT_0f837b44 (*(float *)SR_VA(0xf837b44))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x40da60))
-#define local_28 (*(uint *)(lf_frame + 0x18))
-#define local_24 (*(float *)(lf_frame + 0x1c))
-#define local_20 (*(float *)(lf_frame + 0x20))
-#define local_1c (*(float *)(lf_frame + 0x24))
-#define local_18 (*(float *)(lf_frame + 0x28))
-#define local_14 (*(float *)(lf_frame + 0x2c))
-#define local_10 (*(float *)(lf_frame + 0x30))
-#define local_c (*(float *)(lf_frame + 0x34))
-#define local_8 (*(float *)(lf_frame + 0x38))
-#define local_4 (*(float *)(lf_frame + 0x3c))
-void __cdecl lf_15df0(float *param_1,uint param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-  uint uVar1;
-  int iVar2;
-  uint uVar3;
-  uint uVar4;
-  int iVar5;
-
-
-
-
-
-
-
-
-
-
-  
-  local_28 = (uint)(*param_1 < 0.0);
-  uVar3 = (uint)(*param_1 < 0.0);
-  if (param_1[2] < 0.0) {
-    uVar3 = uVar3 | 2;
-    local_28 = uVar3;
-  }
-  if (param_1[1] < 0.0) {
-    uVar3 = uVar3 | 4;
-    local_28 = uVar3;
-  }
-  iVar5 = g_octahedronindex[uVar3 * 3];
-  _DAT_0f837b00 = g_octahedron[iVar5 * 3];
-  _DAT_0f837b04 = g_octahedron[iVar5 * 3 + 1];
-  uVar4 = 8;
-  _DAT_0f837b08 = g_octahedron[iVar5 * 3 + 2];
-  iVar5 = g_octahedronindex[uVar3 * 3 + 1];
-  iVar2 = g_octahedronindex[uVar3 * 3 + 2];
-  _DAT_0f837b0c = g_octahedron[iVar5 * 3];
-  _DAT_0f837b10 = g_octahedron[iVar5 * 3 + 1];
-  _DAT_0f837b14 = g_octahedron[iVar5 * 3 + 2];
-  _DAT_0f837b18 = g_octahedron[iVar2 * 3];
-  _DAT_0f837b1c = g_octahedron[iVar2 * 3 + 1];
-  _DAT_0f837b20 = g_octahedron[iVar2 * 3 + 2];
-  uVar1 = local_28;
-  if (3 < (int)param_2) {
-    iVar5 = 3;
-    do {
-      _DAT_0f837b24 = (float)(_DAT_0f837b00 + _DAT_0f837b0c);
-      _DAT_0f837b28 = (float)(_DAT_0f837b04 + _DAT_0f837b10);
-      _DAT_0f837b2c = (float)(_DAT_0f837b08 + _DAT_0f837b14);
-      _DAT_0f837b30 = (float)(_DAT_0f837b18 + _DAT_0f837b0c);
-      _DAT_0f837b34 = (float)(_DAT_0f837b1c + _DAT_0f837b10);
-      _DAT_0f837b38 = (float)(_DAT_0f837b20 + _DAT_0f837b14);
-      _DAT_0f837b3c = (float)(_DAT_0f837b18 + _DAT_0f837b00);
-      _DAT_0f837b40 = (float)(_DAT_0f837b04 + _DAT_0f837b1c);
-      _DAT_0f837b44 = (float)(_DAT_0f837b20 + _DAT_0f837b08);
-      normalizevector((float *)&DAT_0f837b24,(float *)&DAT_0f837b24);
-      normalizevector((float *)&DAT_0f837b30,(float *)&DAT_0f837b30);
-      normalizevector((float *)&DAT_0f837b3c,(float *)&DAT_0f837b3c);
-      local_18 = (float)(*param_1 - _DAT_0f837b3c);
-      local_14 = (float)(param_1[1] - _DAT_0f837b40);
-      local_10 = (float)(param_1[2] - _DAT_0f837b44);
-      local_24 = (float)(_DAT_0f837b24 - _DAT_0f837b3c);
-      local_20 = (float)(_DAT_0f837b28 - _DAT_0f837b40);
-      local_1c = (float)(_DAT_0f837b2c - _DAT_0f837b44);
-      local_c = (float)(local_20 * local_10 - local_1c * local_14);
-      local_8 = (float)(local_1c * local_18 - local_10 * local_24);
-      local_4 = (float)(local_14 * local_24 - local_20 * local_18);
-      if ((float)(local_4 * param_1[2] + (*param_1 * local_c + param_1[1] * local_8)) <= 0.0) {
-        local_18 = (float)(*param_1 - _DAT_0f837b24);
-        local_14 = (float)(param_1[1] - _DAT_0f837b28);
-        local_10 = (float)(param_1[2] - _DAT_0f837b2c);
-        local_24 = (float)(_DAT_0f837b30 - _DAT_0f837b24);
-        local_20 = (float)(_DAT_0f837b34 - _DAT_0f837b28);
-        local_1c = (float)(_DAT_0f837b38 - _DAT_0f837b2c);
-        local_c = (float)(local_20 * local_10 - local_1c * local_14);
-        local_8 = (float)(local_1c * local_18 - local_10 * local_24);
-        local_4 = (float)(local_14 * local_24 - local_20 * local_18);
-        if (0.0 < (float)(local_4 * param_1[2] + (*param_1 * local_c + param_1[1] * local_8))) {
-          _DAT_0f837b00 = _DAT_0f837b24;
-          _DAT_0f837b04 = _DAT_0f837b28;
-          _DAT_0f837b08 = _DAT_0f837b2c;
-          _DAT_0f837b18 = _DAT_0f837b30;
-          _DAT_0f837b1c = _DAT_0f837b34;
-          uVar1 = uVar4;
-          _DAT_0f837b20 = _DAT_0f837b38;
-        }
-        else {
-          local_18 = (float)(*param_1 - _DAT_0f837b30);
-          local_14 = (float)(param_1[1] - _DAT_0f837b34);
-          local_10 = (float)(param_1[2] - _DAT_0f837b38);
-          local_24 = (float)(_DAT_0f837b3c - _DAT_0f837b30);
-          local_20 = (float)(_DAT_0f837b40 - _DAT_0f837b34);
-          local_1c = (float)(_DAT_0f837b44 - _DAT_0f837b38);
-          local_c = (float)(local_20 * local_10 - local_1c * local_14);
-          local_8 = (float)(local_1c * local_18 - local_10 * local_24);
-          local_4 = (float)(local_14 * local_24 - local_20 * local_18);
-          if ((float)(local_4 * param_1[2] + (*param_1 * local_c + param_1[1] * local_8)) <= 0.0) {
-            iVar2 = 3;
-            _DAT_0f837b00 = _DAT_0f837b24;
-            _DAT_0f837b04 = _DAT_0f837b28;
-            _DAT_0f837b08 = _DAT_0f837b2c;
-            _DAT_0f837b0c = _DAT_0f837b30;
-            _DAT_0f837b10 = _DAT_0f837b34;
-            _DAT_0f837b14 = _DAT_0f837b38;
-            goto LAB_004162d1;
-          }
-          _DAT_0f837b00 = _DAT_0f837b3c;
-          _DAT_0f837b04 = _DAT_0f837b40;
-          _DAT_0f837b08 = _DAT_0f837b44;
-          _DAT_0f837b0c = _DAT_0f837b30;
-          _DAT_0f837b10 = _DAT_0f837b34;
-          _DAT_0f837b14 = _DAT_0f837b38;
-          uVar1 = 2 << ((byte)iVar5 & 0x1f);
-        }
-      }
-      else {
-        iVar2 = 0;
-        _DAT_0f837b0c = _DAT_0f837b24;
-        _DAT_0f837b10 = _DAT_0f837b28;
-        _DAT_0f837b14 = _DAT_0f837b2c;
-LAB_004162d1:
-        _DAT_0f837b18 = _DAT_0f837b3c;
-        _DAT_0f837b1c = _DAT_0f837b40;
-        uVar1 = iVar2 << ((byte)iVar5 & 0x1f);
-        _DAT_0f837b20 = _DAT_0f837b44;
-      }
-      uVar3 = uVar3 | uVar1;
-      iVar5 = iVar5 + 2;
-      uVar4 = uVar4 << 2 | uVar4 >> 0x1e;
-      uVar1 = uVar3;
-    } while (iVar5 < (int)param_2);
-  }
-  local_28 = uVar1;
-  pbitwrite(&local_28,param_2);
-  return;
-}
-#undef DAT_0f837b00
-#undef DAT_0f837b04
-#undef DAT_0f837b08
-#undef DAT_0f837b0c
-#undef DAT_0f837b10
-#undef DAT_0f837b14
-#undef DAT_0f837b18
-#undef DAT_0f837b1c
-#undef DAT_0f837b20
-#undef g_octahedron
-#undef DAT_0f837b24
-#undef g_octahedronindex
-#undef DAT_0f837b28
-#undef DAT_0f837b2c
-#undef DAT_0f837b30
-#undef DAT_0f837b34
-#undef DAT_0f837b38
-#undef DAT_0f837b3c
-#undef DAT_0f837b40
-#undef DAT_0f837b44
-#undef _DAT_0f837b00
-#undef _DAT_0f837b04
-#undef _DAT_0f837b08
-#undef _DAT_0f837b0c
-#undef _DAT_0f837b10
-#undef _DAT_0f837b14
-#undef _DAT_0f837b18
-#undef _DAT_0f837b1c
-#undef _DAT_0f837b20
-#undef _DAT_0f837b24
-#undef _DAT_0f837b28
-#undef _DAT_0f837b2c
-#undef _DAT_0f837b30
-#undef _DAT_0f837b34
-#undef _DAT_0f837b38
-#undef _DAT_0f837b3c
-#undef _DAT_0f837b40
-#undef _DAT_0f837b44
-#undef normalizevector
-#undef pbitwrite
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
 /* ---------------------------------------------------------------- 0x16320 */
 #define DAT_0f837b00 (*(undefined *)SR_VA(0xf837b00))
 #define DAT_0f837b04 (*(undefined *)SR_VA(0xf837b04))
@@ -11438,30 +10864,6 @@ void __cdecl lf_16320(float *param_1,float *param_2)
 #undef normalizevector
 #undef pbitread
 
-/* ---------------------------------------------------------------- 0x16680 */
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x40da60))
-#define local_8 (*(uint *)(lf_frame + 0x18))
-void __cdecl lf_16680(float *param_1,uint param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  uint uVar1;
-  uint uVar2;
-
-  
-  uVar1 = param_2;
-  uVar2 = (uint)(1 << ((byte)param_2 & 0x1f)) >> 1;
-  local_8 = (uint)(longlong)LF_CHOP(((float)uVar2 / 6.28318530718) * ABS(*param_1));
-  param_2 = local_8 & uVar2 - 1;
-  if (*param_1 < 0.0) {
-    param_2 = param_2 | uVar2;
-  }
-  pbitwrite(&param_2,uVar1);
-  return;
-}
-#undef pbitwrite
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x16710 */
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_FN(0x40db20))
 void __cdecl lf_16710(float *param_1,uint param_2)
@@ -11488,46 +10890,6 @@ void __cdecl lf_16710(float *param_1,uint param_2)
   return;
 }
 #undef pbitread
-
-/* ---------------------------------------------------------------- 0x16790 */
-#define g_bsdsocket (*(BsdSocket *)SR_VA(0x1992d680))
-void __cdecl lf_16790(undefined4 *param_1)
-
-{
-  int iVar1;
-  
-  iVar1 = g_bsdsocket.send_size;
-  if (g_bsdsocket.send_size < 0x10000) {
-    if (0 < g_bsdsocket.send_bit) {
-      g_bsdsocket.send_size = g_bsdsocket.send_size + 1;
-      g_bsdsocket.send_bit = 0;
-    }
-    *(undefined4 *)((int)g_bsdsocket.handle + g_bsdsocket.send_size + 0x40) = *param_1;
-    iVar1 = g_bsdsocket.send_size + 4;
-    if (iVar1 < 0x10000) {
-      if (0 < g_bsdsocket.send_bit) {
-        iVar1 = g_bsdsocket.send_size + 5;
-        g_bsdsocket.send_bit = 0;
-      }
-      g_bsdsocket.send_size = iVar1;
-      *(undefined4 *)((int)g_bsdsocket.handle + iVar1 + 0x40) = param_1[1];
-      iVar1 = g_bsdsocket.send_size + 4;
-      if (iVar1 < 0x10000) {
-        if (0 < g_bsdsocket.send_bit) {
-          iVar1 = g_bsdsocket.send_size + 5;
-          g_bsdsocket.send_bit = 0;
-        }
-        g_bsdsocket.send_size = iVar1;
-        *(undefined4 *)((int)g_bsdsocket.handle + iVar1 + 0x40) = param_1[2];
-        g_bsdsocket.send_size = g_bsdsocket.send_size + 4;
-        iVar1 = g_bsdsocket.send_size;
-      }
-    }
-  }
-  g_bsdsocket.send_size = iVar1;
-  return;
-}
-#undef g_bsdsocket
 
 /* ---------------------------------------------------------------- 0x16860 */
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x40da60))
@@ -11559,7 +10921,7 @@ void __cdecl lf_16860(float *param_1,float param_2,uint param_3)
 /* ---------------------------------------------------------------- 0x16960 */
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_market (*(Market *)SR_VA(0x17579600))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 void __cdecl lf_16960(uint param_1)
 
@@ -11601,7 +10963,7 @@ void __cdecl lf_16960(uint param_1)
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_market (*(Market *)SR_VA(0x17579600))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 void __cdecl lf_16a20(int param_1,int param_2)
 
@@ -11669,221 +11031,6 @@ void __cdecl lf_16a20(int param_1,int param_2)
 #undef createevent_updateplayer
 #undef createevent_updateplayer_finance
 #undef _ftol2
-
-/* ---------------------------------------------------------------- 0x16bb0 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_16bb0(int param_1,undefined4 *param_2,undefined4 *param_3,int param_4)
-
-{
-  Event *pEVar1;
-  int iVar2;
-  
-  iVar2 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 0;
-    g_event[g_numofevents].tick = iVar2;
-    g_event[g_numofevents].pos.x = LF_BITS_F(*param_2);
-    g_event[g_numofevents].pos.y = LF_BITS_F(param_2[1]);
-    g_event[g_numofevents].pos.z = LF_BITS_F(param_2[2]);
-    g_event[g_numofevents].vec.x = LF_BITS_F(*param_3);
-    g_event[g_numofevents].vec.y = LF_BITS_F(param_3[1]);
-    g_event[g_numofevents].vec.z = LF_BITS_F(param_3[2]);
-    g_event[g_numofevents].param = param_1;
-    pEVar1 = g_event + g_numofevents;
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (short)g_numofevents + 1;
-    pEVar1->attach_type = param_4;
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x16c40 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_16c40(int param_1,int param_2,undefined4 *param_3,undefined4 *param_4)
-
-{
-  int iVar1;
-  uint uVar2;
-  int fVar1;
-  
-  uVar2 = g_numofevents;
-  iVar1 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 1;
-    g_event[uVar2].tick = iVar1;
-    g_event[uVar2].pos.x = LF_BITS_F(*param_3);
-    g_event[uVar2].pos.y = LF_BITS_F(param_3[1]);
-    g_event[uVar2].pos.z = LF_BITS_F(param_3[2]);
-    if (param_4 == (undefined4 *)0x0) {
-      fVar1 = 0;
-      g_event[uVar2].vec.x = 0.0;
-      g_event[uVar2].vec.y = 0.0;
-    }
-    else {
-      g_event[uVar2].vec.x = LF_BITS_F(*param_4);
-      g_event[uVar2].vec.y = LF_BITS_F(param_4[1]);
-      fVar1 = param_4[2];
-    }
-    g_event[uVar2].vec.z = LF_BITS_F(fVar1);
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (ushort)g_numofevents + 1;
-    g_event[uVar2].param = param_1;
-    g_event[uVar2].attach_type = param_2;
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x16ce0 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_16ce0(int param_1,int param_2,int param_3,undefined4 *param_4,undefined4 *param_5)
-
-{
-  int iVar1;
-  uint uVar2;
-  int fVar1;
-  
-  uVar2 = g_numofevents;
-  iVar1 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 4;
-    g_event[uVar2].tick = iVar1;
-    g_event[uVar2].param = param_1;
-    g_event[uVar2].attach_type = param_2;
-    g_event[uVar2].attach_id = param_3;
-    if (param_4 == (undefined4 *)0x0) {
-      g_event[uVar2].pos.x = 0.0;
-      g_event[uVar2].pos.y = 0.0;
-      g_event[uVar2].pos.z = 0.0;
-    }
-    else {
-      g_event[uVar2].pos.x = LF_BITS_F(*param_4);
-      g_event[uVar2].pos.y = LF_BITS_F(param_4[1]);
-      g_event[uVar2].pos.z = LF_BITS_F(param_4[2]);
-    }
-    fVar1 = 0;
-    if (param_5 == (undefined4 *)0x0) {
-      g_event[uVar2].vec.x = 0.0;
-      g_event[uVar2].vec.y = 0.0;
-    }
-    else {
-      g_event[uVar2].vec.x = LF_BITS_F(*param_5);
-      g_event[uVar2].vec.y = LF_BITS_F(param_5[1]);
-      fVar1 = param_5[2];
-    }
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (ushort)g_numofevents + 1;
-    g_event[uVar2].vec.z = LF_BITS_F(fVar1);
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x16db0 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_16db0(int param_1,undefined4 *param_2,float param_3,float param_4)
-
-{
-  Event *pEVar1;
-  int iVar2;
-  uint uVar3;
-  
-  uVar3 = g_numofevents;
-  iVar2 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 9;
-    g_event[g_numofevents].tick = iVar2;
-    g_event[g_numofevents].param = param_1;
-    g_event[g_numofevents].pos.x = LF_BITS_F(*param_2);
-    g_event[g_numofevents].pos.y = LF_BITS_F(param_2[1]);
-    pEVar1 = g_event + g_numofevents;
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (short)g_numofevents + 1;
-    (pEVar1->pos).z = LF_BITS_F(param_2[2]);
-    g_numofevents = (uint)(ushort)g_numofevents;
-    g_event[uVar3].sound_a = param_3;
-    g_event[uVar3].sound_b = param_4;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
-
-/* ---------------------------------------------------------------- 0x16e30 */
-#define g_numofevents (*(uint *)SR_VA(0xf837318))
-#define g_server (*(Server *)SR_VA(0x7a1ea60))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-void __cdecl lf_16e30(int param_1,int param_2,int param_3,int param_4,int param_5,int param_6,
-          undefined4 *param_7,undefined4 *param_8)
-
-{
-  int iVar1;
-  uint uVar2;
-  int fVar1;
-  
-  uVar2 = g_numofevents;
-  iVar1 = g_game.ticks;
-  if (g_server.unk_0000 != 0) {
-    g_event[g_numofevents].type = 0x10;
-    g_event[uVar2].tick = iVar1;
-    g_event[uVar2].param = param_2 * 0x10000 + param_1;
-    g_event[uVar2].attach_type = param_4 * 0x10000 + param_3;
-    g_event[uVar2].attach_id = param_5;
-    g_event[uVar2].range_mode = param_6;
-    if (param_7 == (undefined4 *)0x0) {
-      g_event[uVar2].pos.x = 0.0;
-      g_event[uVar2].pos.y = 0.0;
-      g_event[uVar2].pos.z = 0.0;
-    }
-    else {
-      g_event[uVar2].pos.x = LF_BITS_F(*param_7);
-      g_event[uVar2].pos.y = LF_BITS_F(param_7[1]);
-      g_event[uVar2].pos.z = LF_BITS_F(param_7[2]);
-    }
-    fVar1 = 0;
-    if (param_8 == (undefined4 *)0x0) {
-      g_event[uVar2].vec.x = 0.0;
-      g_event[uVar2].vec.y = 0.0;
-    }
-    else {
-      g_event[uVar2].vec.x = LF_BITS_F(*param_8);
-      g_event[uVar2].vec.y = LF_BITS_F(param_8[1]);
-      fVar1 = param_8[2];
-    }
-    (*(ushort *)((uchar *)&g_numofevents + 0)) = (ushort)g_numofevents + 1;
-    g_event[uVar2].vec.z = LF_BITS_F(fVar1);
-    g_numofevents = (uint)(ushort)g_numofevents;
-  }
-  return;
-}
-#undef g_numofevents
-#undef g_server
-#undef g_game
-#undef g_event
 
 /* ---------------------------------------------------------------- 0x16f10 */
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
@@ -14034,22 +13181,22 @@ undefined4 __cdecl lf_1aa60(float *param_1,float *param_2,float *param_3,float *
 #define g_masterserver (*(MasterServer *)SR_VA(0x17579820))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(31, "MSVCR100.DLL", "_sleep"))
+#define _sleep ((void (__cdecl *)(ulong))LF_IMPORT(29, "MSVCR100.DLL", "_sleep"))
 #define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
 #define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(32, "WSOCK32.DLL", 52))
+#define gethostbyname ((hostent * (__stdcall *)(char *))LF_IMPORT_ORD(30, "WSOCK32.DLL", 52))
 #define ioctlsocket ((int (__stdcall *)(SOCKET, long, u_long *))LF_IMPORT_ORD(26, "WSOCK32.DLL", 12))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define socket ((SOCKET (__stdcall *)(int, int, int))LF_IMPORT_ORD(28, "WSOCK32.DLL", 23))
-#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(33, "WSOCK32.DLL", 3))
-#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(34, "WSOCK32.DLL", 10))
-#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(35, "WSOCK32.DLL", 16))
-#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(36, "WSOCK32.DLL", 19))
-#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(37, "WSOCK32.DLL", 7))
-#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(38, "WSOCK32.DLL", 151))
-#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 18))
-#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(40, "WSOCK32.DLL", 4))
-#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(41, "WSOCK32.DLL", 55))
+#define closesocket ((int (__stdcall *)(SOCKET))LF_IMPORT_ORD(31, "WSOCK32.DLL", 3))
+#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(32, "WSOCK32.DLL", 10))
+#define recv ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(33, "WSOCK32.DLL", 16))
+#define send ((int (__stdcall *)(SOCKET, char *, int, int))LF_IMPORT_ORD(34, "WSOCK32.DLL", 19))
+#define getsockopt ((int (__stdcall *)(SOCKET, int, int, char *, int *))LF_IMPORT_ORD(35, "WSOCK32.DLL", 7))
+#define __WSAFDIsSet ((int (__stdcall *)(SOCKET, fd_set *))LF_IMPORT_ORD(36, "WSOCK32.DLL", 151))
+#define select ((int (__stdcall *)(int, fd_set *, fd_set *, fd_set *, timeval *))LF_IMPORT_ORD(37, "WSOCK32.DLL", 18))
+#define connect ((int (__stdcall *)(SOCKET, sockaddr *, int))LF_IMPORT_ORD(38, "WSOCK32.DLL", 4))
+#define getservbyname ((servent * (__stdcall *)(char *, char *))LF_IMPORT_ORD(39, "WSOCK32.DLL", 55))
 #define __security_check_cookie(x) ((void)0)
 #define auStack_26c (*(undefined1 (*)[4])(lf_frame + 0x14))
 #define local_268 (*(int (*)[4])(lf_frame + 0x18))
@@ -14279,7 +13426,7 @@ LAB_0041ae5d:
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
 uint __cdecl lf_1b070(int param_1,float *param_2,undefined4 *param_3,undefined4 *param_4)
 
@@ -14435,7 +13582,7 @@ void __cdecl lf_1b6e0(int param_1,int param_2)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define linkitemtoitem ((int (__cdecl *)(int, int))SR_FN(0x407d60))
 #define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_FN(0x407e00))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
@@ -14767,7 +13914,7 @@ void __cdecl lf_1bc50(void)
 #define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x40c420))
 #define __security_check_cookie(x) ((void)0)
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
+#define floor ((double (__cdecl *)(double))LF_IMPORT(40, "MSVCR100.DLL", "floor"))
 #define local_ac (*(float *)(lf_frame + 0x14))
 #define local_a8 (*(float *)(lf_frame + 0x18))
 #define local_a4 (*(float *)(lf_frame + 0x1c))
@@ -23314,7 +22461,7 @@ undefined4 __cdecl lf_2c020(uint param_1,uint param_2,uint param_3,uint param_4,
 #define lineintersectcityobjecttype ((undefined4 (__cdecl *)(float *, float *, float *, int, float *, float *, float *, float *))SR_FN(0x414dd0))
 #define __security_check_cookie(x) ((void)0)
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define floor ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "floor"))
+#define floor ((double (__cdecl *)(double))LF_IMPORT(40, "MSVCR100.DLL", "floor"))
 #define local_c4 (*(float *)(lf_frame + 0x1c))
 #define local_c0 (*(uint *)(lf_frame + 0x20))
 #define local_bc (*(float * *)(lf_frame + 0x24))
@@ -26167,7 +25314,7 @@ LAB_00430a83:
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_FN(0x407f80))
 void __cdecl lf_30ab0(void)
@@ -27967,7 +27114,7 @@ void __cdecl lf_33570(void)
 #define createplayer ((int (__cdecl *)(void))SR_FN(0x428020))
 #define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(41, "WSOCK32.DLL", 20))
 #define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define __security_check_cookie(x) ((void)0)
@@ -36677,9 +35824,9 @@ LAB_004493b0:
 #define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(0, "MSVCR100.DLL", "strncmp"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define tolower ((int (__cdecl *)(int))LF_IMPORT(43, "MSVCR100.DLL", "tolower"))
+#define tolower ((int (__cdecl *)(int))LF_IMPORT(42, "MSVCR100.DLL", "tolower"))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_FN(0x407f80))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
@@ -37887,7 +37034,7 @@ LAB_0044bd2b:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_cityobject (*(CityObject *)SR_VA(0x16224020))
 #define area_interior_getblocklink ((int (__cdecl *)(uint, uint, uint, uint))SR_FN(0x403130))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define createevent_updatedoor ((void (__cdecl *)(int, int))SR_FN(0x406660))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
 #define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_FN(0x407f80))
@@ -38351,7 +37498,7 @@ void __cdecl lf_4c720(int param_1)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_soundlist (*(SoundList *)SR_VA(0x956d700))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_FN(0x406420))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
 #define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_FN(0x416db0))
@@ -39286,7 +38433,7 @@ undefined4 __cdecl lf_4e060(int param_1,int param_2,undefined4 param_3)
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
 #define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_FN(0x41b870))
@@ -39642,10 +38789,10 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #define _DAT_17929a78 (*(undefined4 *)SR_VA(0x17929a78))
 #define _DAT_17929a7c (*(undefined4 *)SR_VA(0x17929a7c))
 #define _DAT_17929a80 (*(undefined4 *)SR_VA(0x17929a80))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(43, "MSVCR100.DLL", "_time64"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x40d020))
 #define getfloat ((undefined4 (__cdecl *)(void))SR_FN(0x40d110))
 #define getstring ((void (__cdecl *)(undefined1 *, int))SR_FN(0x40d240))
@@ -39917,7 +39064,7 @@ void __cdecl lf_4e7a0(int param_1)
 #define packobjectpacket ((void (__cdecl *)(int, int))SR_FN(0x420680))
 #define calculateplayervoice ((void (__cdecl *)(int, int))SR_FN(0x43cfe0))
 #define htons(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
-#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(30, "WSOCK32.DLL", 20))
+#define sendto ((int (__stdcall *)(SOCKET, char *, int, int, sockaddr *, int))LF_IMPORT_ORD(41, "WSOCK32.DLL", 20))
 #define htonl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(9, "MSVCR100.DLL", "memcpy"))
 #define local_34 (*(uint * *)(lf_frame + 0x1c))
@@ -42006,7 +41153,7 @@ LAB_00454e02:
 #define DAT_0045f330 (*(undefined1 *)SR_VA(0x45f330))
 #define DAT_12e80c44 (*(undefined *)SR_VA(0x12e80c44))
 #define g_building (*(Building *)SR_VA(0x2165b80))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_FN(0x401850))
 #define building_setupbuild ((void (__cdecl *)(void))SR_FN(0x403d70))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x4041c0))
@@ -42572,7 +41719,7 @@ LAB_004556a8:
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
 #define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_FN(0x406420))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-#define createevent_updateplayer_finance ((int (__cdecl *)(int))SR_FN(0x4065f0))
+#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4065f0))
 #define createevent_updatecarmarket ((void (__cdecl *)(int))SR_FN(0x4068d0))
 #define item_billvalue ((int (__cdecl *)(int))SR_FN(0x407b90))
 #define item_addbill ((int (__cdecl *)(int, int, int))SR_FN(0x407c40))
@@ -43594,7 +42741,7 @@ void __cdecl lf_585b0(int param_1)
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_FN(0x401610))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
 #define item_addhumanlink ((int (__cdecl *)(int, int, int))SR_FN(0x407e00))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
@@ -44071,14 +43218,14 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define _DAT_0f837964 (*(float *)SR_VA(0xf837964))
 #define _DAT_0f837968 (*(undefined4 *)SR_VA(0xf837968))
 #define _DAT_0f83796c (*(undefined4 *)SR_VA(0xf83796c))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(44, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(43, "MSVCR100.DLL", "_time64"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(45, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(44, "MSVCR100.DLL", "srand"))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_FN(0x401080))
 #define economy_carmarket ((void (__cdecl *)(void))SR_FN(0x405700))
 #define economy_gunmarket ((void (__cdecl *)(void))SR_FN(0x405870))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
+#define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
 #define createevent_updatestocks ((void (__cdecl *)(void))SR_FN(0x406840))
 #define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
