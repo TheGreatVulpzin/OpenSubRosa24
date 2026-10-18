@@ -394,6 +394,51 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   stoptimer(g_timerlist.bondsetuphuman);
 }
 
+#define g_bondhuman (*(BondHuman (*)[512])SR_VA(0x461dd0))
+#define g_bondparticle (*(BondParticle (*)[16384])SR_VA(0x583dd0))
+#define g_bondopts (*(BondOpt (*)[16384])SR_VA(0xfcf7b80))
+
+/* bondsetupcopy: the solver works on copies. For each human with a body: the velocity, the
+ * angular velocity and the axes of its 15 bones, and a mask of the bones that take part. For
+ * each particle: the velocity. For each bond: the mode. */
+static void setup_copy(void)
+{
+  int h, k, i, n;
+
+  starttimer(g_timerlist.bondsetupcopy);
+  for (h = 0; h < 512; h++) {
+    const Human *hu = &g_human[h];
+    BondHuman *bh = &g_bondhuman[h];
+    bh->active = 0;
+    if (hu->active == 0 || hu->unk_0004 == 0)
+      continue;
+    bh->active = 1;
+    bh->mask = 0;
+    for (k = 0; k < 15; k++) {
+      const Bone *bone = &hu->bones[k];
+      BondBone *w = &bh->bones[k];
+      if (0.0 < bone->unk_cc)
+        bh->mask |= 1 << k;
+      w->vel = bone->vel;
+      w->w = bone->w;
+      w->unk_20 = bone->unk_54;
+      w->axes[0].dir = bone->rot[0];
+      w->axes[0].k = bone->axis_k[0];
+      w->axes[1].dir = bone->rot[1];
+      w->axes[1].k = bone->axis_k[1];
+      w->axes[2].dir = bone->rot[2];
+      w->axes[2].k = bone->axis_k[2];
+    }
+  }
+  n = g_area_sector.num_particles;
+  for (i = 0; i < n; i++)
+    g_bondparticle[i].vel = g_particle[i].vel;
+  n = g_numofbonds;
+  for (i = 0; i < n; i++)
+    g_bondopts[i].mode = (short)g_bond[i].mode;
+  stoptimer(g_timerlist.bondsetupcopy);
+}
+
 void __cdecl lf_41de0(void)
 
 {
@@ -536,107 +581,7 @@ void __cdecl lf_41de0(void)
     } while (local_c0 < g_numofbonds);
   }
   stoptimer(g_timerlist.bondsetup);
-  iVar30 = g_timerlist.bondsetupcopy;
-  local_60 = &g_timer[g_timerlist.bondsetupcopy].start_lo;
-  uVar13 = rdtsc();
-  *local_60 = (int)uVar13;
-  g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-  puVar31 = &DAT_00461dd4;
-  local_84 = &g_human[0].unk_0004;
-  do {
-    iVar30 = ((Human *)(local_84 + -1))->active;
-    puVar31[-1] = 0;
-    if ((iVar30 != 0) && (*local_84 != 0)) {
-      uVar32 = 1;
-      puVar31[-1] = 1;
-      *puVar31 = 0;
-      iVar30 = 0xf;
-      puVar20 = (uint *)(local_84 + 0x39);
-      puVar27 = puVar31 + 5;
-      do {
-        if (0.0 < LF_BITS_F(puVar20[0x2b])) {
-          *puVar31 = *puVar31 | uVar32;
-        }
-        puVar27[-2] = puVar20[-2];
-        uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-        iVar30 = iVar30 + -1;
-        puVar27[-1] = puVar20[-1];
-        *puVar27 = *puVar20;
-        puVar27[10] = puVar20[0x10];
-        puVar27[0xb] = puVar20[0x11];
-        puVar27[0xc] = puVar20[0x12];
-        puVar27[6] = puVar20[0xd];
-        puVar27[7] = puVar20[0xe];
-        puVar27[8] = puVar20[0xf];
-        puVar27[0x12] = puVar20[4];
-        puVar27[0x13] = puVar20[5];
-        puVar27[0x14] = puVar20[6];
-        puVar27[0x15] = puVar20[0x1f];
-        puVar27[0x16] = puVar20[7];
-        puVar27[0x17] = puVar20[8];
-        puVar27[0x18] = puVar20[9];
-        puVar27[0x19] = puVar20[0x20];
-        puVar27[0x1a] = puVar20[10];
-        puVar27[0x1b] = puVar20[0xb];
-        puVar27[0x1c] = puVar20[0xc];
-        puVar27[0x1d] = puVar20[0x21];
-        puVar20 = puVar20 + 0x38;
-        puVar27 = puVar27 + 0x20;
-      } while (iVar30 != 0);
-    }
-    iVar30 = g_area_sector.num_particles;
-    local_84 = local_84 + 0xad9;
-    puVar31 = puVar31 + 0x204;
-  } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-  iVar29 = 0;
-  if (3 < g_area_sector.num_particles) {
-    iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
-    iVar29 = iVar16 * 4;
-    pfVar21 = &g_particle[0].vel.z;
-    pfVar33 = (float *)&DAT_00583dd8;
-    do {
-      pfVar33[-2] = pfVar21[-2];
-      iVar16 = iVar16 + -1;
-      pfVar33[-1] = pfVar21[-1];
-      *pfVar33 = *pfVar21;
-      pfVar33[6] = pfVar21[0x3a];
-      pfVar33[7] = pfVar21[0x3b];
-      pfVar33[8] = pfVar21[0x3c];
-      pfVar33[0xe] = pfVar21[0x76];
-      pfVar33[0xf] = pfVar21[0x77];
-      pfVar33[0x10] = pfVar21[0x78];
-      pfVar33[0x16] = pfVar21[0xb2];
-      pfVar33[0x17] = pfVar21[0xb3];
-      pfVar33[0x18] = pfVar21[0xb4];
-      pfVar21 = pfVar21 + 0xf0;
-      pfVar33 = pfVar33 + 0x20;
-    } while (iVar16 != 0);
-  }
-  if (iVar29 < iVar30) {
-    iVar30 = iVar30 - iVar29;
-    pfVar21 = &g_particle[0].vel.z + iVar29 * 0x3c;
-    pfVar33 = (float *)(&DAT_00583dd8 + iVar29 * 8);
-    do {
-      pfVar33[-2] = pfVar21[-2];
-      iVar30 = iVar30 + -1;
-      pfVar33[-1] = pfVar21[-1];
-      *pfVar33 = *pfVar21;
-      pfVar21 = pfVar21 + 0x3c;
-      pfVar33 = pfVar33 + 8;
-    } while (iVar30 != 0);
-  }
-  if (0 < g_numofbonds) {
-    psVar24 = &g_bondopt.mode;
-    piVar18 = &g_bond[0].mode;
-    iVar30 = g_numofbonds;
-    do {
-      *psVar24 = (short)*piVar18;
-      piVar18 = piVar18 + 0x3b;
-      psVar24 = psVar24 + 0x20;
-      iVar30 = iVar30 + -1;
-    } while (iVar30 != 0);
-  }
-  stoptimer(g_timerlist.bondsetupcopy);
+  setup_copy();
   local_60 = (int *)0x0;
   do {
     piVar18 = local_60;

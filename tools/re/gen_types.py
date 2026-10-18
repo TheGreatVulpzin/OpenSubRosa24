@@ -85,7 +85,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -120,16 +120,20 @@ typedef struct vec3 { float x, y, z; } vec3;
 typedef union Bone { struct {
     vec3 pos;           /* +0x00 createhuman: position */
     vec3 pos_prev;      /* +0x0c createhuman: copy of the position */
-    uint8_t unk_18[0x18];
+    vec3 vel;           /* +0x18 bondsetupcopy copies it to BondBone.vel */
+    uint8_t unk_24[0xc];
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
-    uint8_t unk_54[0x38];
+    vec3 unk_54;        /* +0x54 bondsetupcopy copies it to BondBone.unk_20 */
+    vec3 w;             /* +0x60 bondsetupcopy copies it to BondBone.w (the angular velocity) */
+    uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
     float strength;     /* +0x90 bondsetup type 9: the muscle force, at least strength_min and strength_min2 */
     float strength_min; /* +0x94 */
     float strength_min2; /* +0x98 */
-    uint8_t unk_9c[0xc];
+    float axis_k[3];    /* +0x9c bondsetupcopy copies one to each BondBone axis */
     vec3 target_rot[3]; /* +0xa8 bondsetup type 9: the rotation the muscle holds; identity for a dead human */
-    uint8_t unk_cc[0x10];
+    float unk_cc;       /* +0xcc bondsetupcopy: the bone is in BondHuman.mask when it is above 0 */
+    uint8_t unk_d0[0xc];
     int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
 
@@ -148,6 +152,12 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
+typedef union BondAxis { struct {
+    vec3 dir;
+    float k;
+}; uint8_t lf_raw[0x10]; } BondAxis;
+
 /* Bone record of the bond solver (BondHuman.bones). The solver copies the velocities of the
  * Bone here, adds the changes of each pass, and writes them back. */
 typedef union BondBone { struct {
@@ -161,7 +171,7 @@ typedef union BondBone { struct {
     float pad_3c;
     vec3 dw;            /* +0x40 bond_bodybody adds the change of w */
     float pad_4c;
-    uint8_t unk_50[0x30];
+    BondAxis axes[3];   /* +0x50 bondsetupcopy: Bone.rot[k] and Bone.axis_k[k] */
 }; uint8_t lf_raw[0x80]; } BondBone;
 
 /* Inventory slot. 8 per Human. */
@@ -193,6 +203,7 @@ SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
 SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
 SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
+SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 '''
