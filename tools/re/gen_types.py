@@ -124,7 +124,12 @@ typedef union Bone { struct {
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
     uint8_t unk_54[0x38];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
-    uint8_t unk_90[0x4c];
+    float strength;     /* +0x90 bondsetup type 9: the muscle force, at least strength_min and strength_min2 */
+    float strength_min; /* +0x94 */
+    float strength_min2; /* +0x98 */
+    uint8_t unk_9c[0xc];
+    vec3 target_rot[3]; /* +0xa8 bondsetup type 9: the rotation the muscle holds; identity for a dead human */
+    uint8_t unk_cc[0x10];
     int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
 

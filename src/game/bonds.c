@@ -119,6 +119,25 @@
 #define local_c (*(float *)(lf_frame + 0xf4))
 #define local_8 (*(float *)(lf_frame + 0xf8))
 #define local_4 (*(uint *)(lf_frame + 0xfc))
+/* Give a profiler timer its name and clear its total. */
+static void nametimer(int timer, const char *name)
+{
+  Timer *t = &g_timer[timer];
+  char *d = t->name;
+  while ((*d++ = *name++) != '\0')
+    ;
+  t->total_lo = 0;
+  t->total_hi = 0;
+  t->ms = 0;
+}
+
+static void starttimer(int timer)
+{
+  ulonglong now = rdtsc();
+  g_timer[timer].start_lo = (int)now;
+  g_timer[timer].start_hi = (int)(now >> 0x20);
+}
+
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
  * each side from the masses. */
 static void setup_partpart(const Bond *b, BondOpt *o)
@@ -230,23 +249,149 @@ static void setup_bodybody(const Bond *b, BondOpt *o)
   o->share_b = (float)(ba->mass * inv);
 }
 
-/* Give a profiler timer its name and clear its total. */
-static void nametimer(int timer, const char *name)
+/* bondsetup, type 9: a muscle between two bones of a human. The direction is the turn that
+ * brings bone b back to its target rotation (bone.target_rot), from the Euler angles of the
+ * relative rotation, at most a quarter turn on each axis. A dead human has no target, and the
+ * angles get a dead zone. The share of each side also has the strength of the muscle. */
+static void setup_bodyrotbody(const Bond *b, BondOpt *o)
 {
-  Timer *t = &g_timer[timer];
-  char *d = t->name;
-  while ((*d++ = *name++) != '\0')
-    ;
-  t->total_lo = 0;
-  t->total_hi = 0;
-  t->ms = 0;
-}
+  Human *h = &g_human[b->owner];
+  int ka = b->bone_a, kb = b->target;
+  const Bone *ba = &h->bones[ka];
+  Bone *bb = &h->bones[kb];
+  float m[9], e[3], r[9];
+  float k, e0, e1, lo, hi, inv, sa, sb;
+  int row, col;
 
-static void starttimer(int timer)
-{
-  ulonglong now = rdtsc();
-  g_timer[timer].start_lo = (int)now;
-  g_timer[timer].start_hi = (int)(now >> 0x20);
+  starttimer(g_timerlist.bondsetuphuman);
+  o->b = (short)ka;
+  o->a = (short)b->owner;
+  o->c = (short)kb;
+  /* The rotation of bone b in the frame of bone a. */
+  for (row = 0; row < 3; row++)
+    for (col = 0; col < 3; col++)
+      m[row * 3 + col] = (float)(bb->rot[col].z * ba->rot[row].z +
+                                 (bb->rot[col].x * ba->rot[row].x + bb->rot[col].y * ba->rot[row].y));
+  if (h->health < 1) {
+    bb->target_rot[0].x = 1.0f;
+    bb->target_rot[1].y = 1.0f;
+    bb->target_rot[2].z = 1.0f;
+    bb->target_rot[0].y = 0.0f;
+    bb->target_rot[0].z = 0.0f;
+    bb->target_rot[1].x = 0.0f;
+    bb->target_rot[1].z = 0.0f;
+    bb->target_rot[2].x = 0.0f;
+    bb->target_rot[2].y = 0.0f;
+  }
+  multiply3x3matrices(m, m, (float *)bb->target_rot);
+  k = b->damping;
+  o->damping = k;
+  /* For bones 3 to 8 of a living human, the 024d keeps the direction of the last tick. */
+  if (kb < 3 || 8 < kb || h->health < 1) {
+    geteulerangles2(e, m);
+    e0 = e[0];
+    e1 = e[1];
+    if (h->health < 1) {
+      lo = 0.0f;
+      hi = 0.0f;
+      if (kb == 9) {
+        lo = 0.0f;
+        hi = 0.7853981852531433f;
+      } else if (kb == 12 || kb == 6) {
+        lo = -0.7853981852531433f;
+        hi = 0.0f;
+      } else if (kb == 3) {
+        lo = 0.0f;
+        hi = 0.7853981852531433f;
+      }
+      if (lo <= e[0]) {
+        if (e[0] <= hi)
+          e[0] = 0.0f;
+        else
+          e[0] = (float)(e[0] - hi);
+      } else {
+        e[0] = (float)(e[0] - lo);
+      }
+      lo = -0.7853981852531433f;
+      hi = 0.7853981852531433f;
+      if (kb == 5 || kb == 8) {
+        lo = 0.0f;
+        hi = 0.0f;
+      }
+      if (kb == 4 || kb == 7) {
+        lo = -1.3744467496871948f;
+        hi = 0.0f;
+      }
+      if (kb == 10 || kb == 13) {
+        lo = 0.0f;
+        hi = 1.3744467496871948f;
+      }
+      if (lo <= e[1]) {
+        if (e[1] <= hi)
+          e[1] = 0.0f;
+        else
+          e[1] = e[1] - hi;
+      } else {
+        e[1] = e[1] - lo;
+      }
+      e[0] = e[0] * 0.125f;
+      e[1] = (float)(e[1] * 0.125);
+      e[2] = (float)(e[2] * 0.125);
+      o->damping = (float)(b->damping * 0.5);
+    }
+    if (e[0] < -0.7853981852531433)
+      e[0] = -0.7853981852531433f;
+    if (0.7853981852531433 < e[0])
+      e[0] = 0.7853981852531433f;
+    if (e[1] < -0.7853981852531433)
+      e[1] = -0.7853981852531433f;
+    if (0.7853981852531433 < e[1])
+      e[1] = 0.7853981852531433f;
+    if (e[2] < -0.7853981852531433)
+      e[2] = -0.7853981852531433f;
+    if (0.7853981852531433 < e[2])
+      e[2] = 0.7853981852531433f;
+    /* Each angle turns around one axis of bone a. The axis points into r, the matrix that
+     * rotateorientation turns, as in the 024d. */
+    r[0] = ba->rot[0].x;
+    r[1] = ba->rot[0].y;
+    r[2] = ba->rot[0].z;
+    r[3] = ba->rot[1].x;
+    r[4] = ba->rot[1].y;
+    r[5] = ba->rot[1].z;
+    r[6] = ba->rot[2].x;
+    r[7] = ba->rot[2].y;
+    r[8] = ba->rot[2].z;
+    o->dir.x = (float)(r[6] * e[0]);
+    o->dir.y = (float)(r[7] * e[0]);
+    o->dir.z = (float)(e[0] * r[8]);
+    rotateorientation(r, &r[6], e0);
+    o->dir.x = (float)(o->dir.x + e[1] * r[0]);
+    o->dir.y = (float)(e[1] * r[1] + o->dir.y);
+    o->dir.z = (float)(e[1] * r[2] + o->dir.z);
+    rotateorientation(r, r, e1);
+    o->dir.x = (float)(e[2] * r[3] + o->dir.x);
+    o->dir.y = (float)(e[2] * r[4] + o->dir.y);
+    o->dir.z = (float)(e[2] * r[5] + o->dir.z);
+    k = b->stiffness;
+  }
+  o->dir.x = (float)(k * o->dir.x);
+  o->dir.y = (float)(k * o->dir.y);
+  o->dir.z = (float)(k * o->dir.z);
+  inv = (float)(1.0 / (ba->mass + bb->mass));
+  sa = inv * bb->mass;
+  o->share_a = sa;
+  sb = ba->mass * inv;
+  o->share_b = sb;
+  /* arm_a.x holds the strength of the muscle for this bond type. */
+  o->arm_a.x = bb->strength;
+  if (bb->strength < bb->strength_min)
+    o->arm_a.x = bb->strength_min;
+  if (o->arm_a.x < bb->strength_min2)
+    o->arm_a.x = bb->strength_min2;
+  o->share_a = o->arm_a.x * sa;
+  o->share_b = (float)(sb * o->arm_a.x);
+  stoptimer(g_timerlist.bondsetuphuman);
 }
 
 void __cdecl lf_41de0(void)
@@ -381,206 +526,8 @@ void __cdecl lf_41de0(void)
         if (((Bond *)(piVar18 + -5))->type == 8) {
           setup_bodybody((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
         }
-        iVar30 = g_timerlist.bondsetuphuman;
         if (((Bond *)(piVar18 + -5))->type == 9) {
-          uVar13 = rdtsc();
-          g_timer[g_timerlist.bondsetuphuman].start_lo = (int)uVar13;
-          g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-          iVar30 = local_a0[0x1f];
-          iVar29 = local_a0[0x20];
-          iVar16 = local_a0[0x21];
-          *(short *)((int)pfVar21 + -10) = (short)iVar29;
-          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar30;
-          local_60 = (int *)(iVar30 * 0x2b64);
-          *(short *)(pfVar21 + -2) = (short)iVar16;
-          local_28 = (float)(g_human[iVar30].bones[iVar16].rot[0].z * g_human[iVar30].bones[iVar29].rot[0].z
-                     + (g_human[iVar30].bones[iVar16].rot[0].x *
-                       g_human[iVar30].bones[iVar29].rot[0].x +
-                       g_human[iVar30].bones[iVar16].rot[0].y *
-                       g_human[iVar30].bones[iVar29].rot[0].y));
-          local_24 = (float)(g_human[iVar30].bones[iVar16].rot[1].z * g_human[iVar30].bones[iVar29].rot[0].z
-                     + (g_human[iVar30].bones[iVar16].rot[1].x *
-                       g_human[iVar30].bones[iVar29].rot[0].x +
-                       g_human[iVar30].bones[iVar16].rot[1].y *
-                       g_human[iVar30].bones[iVar29].rot[0].y));
-          local_20 = (float)(g_human[iVar30].bones[iVar16].rot[2].z * g_human[iVar30].bones[iVar29].rot[0].z
-                     + (g_human[iVar30].bones[iVar16].rot[2].x *
-                       g_human[iVar30].bones[iVar29].rot[0].x +
-                       g_human[iVar30].bones[iVar16].rot[2].y *
-                       g_human[iVar30].bones[iVar29].rot[0].y));
-          local_1c = (float)(g_human[iVar30].bones[iVar16].rot[0].z * g_human[iVar30].bones[iVar29].rot[1].z
-                     + (g_human[iVar30].bones[iVar29].rot[1].x *
-                       g_human[iVar30].bones[iVar16].rot[0].x +
-                       g_human[iVar30].bones[iVar16].rot[0].y *
-                       g_human[iVar30].bones[iVar29].rot[1].y));
-          local_18 = (float)(g_human[iVar30].bones[iVar16].rot[1].z * g_human[iVar30].bones[iVar29].rot[1].z
-                     + (g_human[iVar30].bones[iVar16].rot[1].x *
-                       g_human[iVar30].bones[iVar29].rot[1].x +
-                       g_human[iVar30].bones[iVar16].rot[1].y *
-                       g_human[iVar30].bones[iVar29].rot[1].y));
-          local_14 = (float)(g_human[iVar30].bones[iVar16].rot[2].z * g_human[iVar30].bones[iVar29].rot[1].z
-                     + (g_human[iVar30].bones[iVar16].rot[2].x *
-                       g_human[iVar30].bones[iVar29].rot[1].x +
-                       g_human[iVar30].bones[iVar16].rot[2].y *
-                       g_human[iVar30].bones[iVar29].rot[1].y));
-          local_10 = (float)(g_human[iVar30].bones[iVar16].rot[0].z * g_human[iVar30].bones[iVar29].rot[2].z
-                     + (g_human[iVar30].bones[iVar16].rot[0].x *
-                       g_human[iVar30].bones[iVar29].rot[2].x +
-                       g_human[iVar30].bones[iVar16].rot[0].y *
-                       g_human[iVar30].bones[iVar29].rot[2].y));
-          local_c = (float)(g_human[iVar30].bones[iVar16].rot[1].z * g_human[iVar30].bones[iVar29].rot[2].z
-                    + (g_human[iVar30].bones[iVar16].rot[1].x *
-                      g_human[iVar30].bones[iVar29].rot[2].x +
-                      g_human[iVar30].bones[iVar16].rot[1].y *
-                      g_human[iVar30].bones[iVar29].rot[2].y));
-          local_8 = (float)(g_human[iVar30].bones[iVar16].rot[2].z * g_human[iVar30].bones[iVar29].rot[2].z
-                    + (g_human[iVar30].bones[iVar16].rot[2].x *
-                      g_human[iVar30].bones[iVar29].rot[2].x +
-                      g_human[iVar30].bones[iVar16].rot[2].y *
-                      g_human[iVar30].bones[iVar29].rot[2].y));
-          if (g_human[iVar30].health < 1) {
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xa8] = 0x3f800000;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xb8] = 0x3f800000;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xc8] = 0x3f800000;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xac] = 0;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xb0] = 0;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xb4] = 0;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xbc] = 0;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xc0] = 0;
-            *(undefined4 *)&g_human[iVar30].bones[iVar16].lf_raw[0xc4] = 0;
-          }
-          local_84 = (int *)iVar16;
-          multiply3x3matrices(&local_28,&local_28,(float *)&g_human[iVar30].bones[iVar16].lf_raw[0xa8]
-                             );
-          LF_SET_BITS(fVar5, local_a0[0x17]);
-          pfVar21[0xc] = fVar5;
-          local_50 = ((float *)LF_UINT(fVar5));
-          if ((((int)local_84 < 3) || (8 < (int)local_84)) ||
-             (*(int *)((int)&g_human[0].health + (int)local_60) < 1)) {
-            geteulerangles2(&local_94,&local_28);
-            LF_COPY(fVar5, local_94);
-            local_cc = local_94;
-            local_c8 = local_90;
-            if (*(int *)((int)&g_human[0].health + (int)local_60) < 1) {
-              local_5c = 0.0;
-              local_58 = 0.0;
-              if (local_84 == (int *)0x9) {
-                local_5c = 0.0;
-                local_58 = 0.7853981852531433;
-              }
-              else if (local_84 == (int *)0xc) {
-LAB_00442c75:
-                local_5c = -0.7853981852531433;
-                local_58 = 0.0;
-              }
-              else if (local_84 == (int *)0x3) {
-                local_5c = 0.0;
-                local_58 = 0.7853981852531433;
-              }
-              else if (local_84 == (int *)0x6) goto LAB_00442c75;
-              if (local_5c <= local_94) {
-                if (local_94 <= local_58) {
-                  local_94 = 0.0;
-                }
-                else {
-                  local_94 = (float)(local_94 - local_58);
-                }
-              }
-              else {
-                local_94 = (float)(local_94 - local_5c);
-              }
-              local_5c = -0.7853981852531433;
-              local_58 = 0.7853981852531433;
-              if ((local_84 == (int *)0x5) || (local_84 == (int *)0x8)) {
-                local_5c = 0.0;
-                local_58 = 0.0;
-              }
-              if ((local_84 == (int *)0x4) || (local_84 == (int *)0x7)) {
-                local_5c = -1.3744467496871948;
-                local_58 = 0.0;
-              }
-              if ((local_84 == (int *)0xa) || (local_84 == (int *)0xd)) {
-                local_5c = 0.0;
-                local_58 = 1.3744467496871948;
-              }
-              if (local_5c <= local_90) {
-                if (local_90 <= local_58) {
-                  local_90 = 0.0;
-                }
-                else {
-                  local_90 = local_90 - local_58;
-                }
-              }
-              else {
-                local_90 = local_90 - local_5c;
-              }
-              local_94 = local_94 * 0.125;
-              local_90 = (float)(local_90 * 0.125);
-              local_8c = (float)(local_8c * 0.125);
-              pfVar21[0xc] = (float)(LF_BITS_F(local_50) * 0.5);
-            }
-            if (local_94 < -0.7853981852531433) {
-              local_94 = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_94) {
-              local_94 = 0.7853981852531433;
-            }
-            if (local_90 < -0.7853981852531433) {
-              local_90 = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_90) {
-              local_90 = 0.7853981852531433;
-            }
-            if (local_8c < -0.7853981852531433) {
-              local_8c = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_8c) {
-              local_8c = 0.7853981852531433;
-            }
-            local_4c = g_human[iVar30].bones[iVar29].rot[0].x;
-            local_48 = g_human[iVar30].bones[iVar29].rot[0].y;
-            local_44 = g_human[iVar30].bones[iVar29].rot[0].z;
-            local_40 = g_human[iVar30].bones[iVar29].rot[1].x;
-            local_3c = g_human[iVar30].bones[iVar29].rot[1].y;
-            local_38 = g_human[iVar30].bones[iVar29].rot[1].z;
-            local_34 = g_human[iVar30].bones[iVar29].rot[2].x;
-            local_30 = g_human[iVar30].bones[iVar29].rot[2].y;
-            local_2c = g_human[iVar30].bones[iVar29].rot[2].z;
-            pfVar21[-1] = (float)(local_34 * local_94);
-            *pfVar21 = (float)(local_30 * local_94);
-            pfVar21[1] = (float)(local_94 * local_2c);
-            rotateorientation(&local_4c,&local_34,fVar5);
-            pfVar21[-1] = (float)(pfVar21[-1] + local_90 * local_4c);
-            *pfVar21 = (float)(local_90 * local_48 + *pfVar21);
-            pfVar21[1] = (float)(local_90 * local_44 + pfVar21[1]);
-            rotateorientation(&local_4c,&local_4c,local_c8);
-            pfVar21[-1] = (float)(local_8c * local_40 + pfVar21[-1]);
-            *pfVar21 = (float)(local_8c * local_3c + *pfVar21);
-            pfVar21[1] = (float)(local_8c * local_38 + pfVar21[1]);
-            LF_SET_BITS(fVar5, local_a0[0x16]);
-          }
-          pfVar21[-1] = (float)(fVar5 * pfVar21[-1]);
-          *pfVar21 = (float)(fVar5 * *pfVar21);
-          pfVar21[1] = (float)(fVar5 * pfVar21[1]);
-          local_70 = (float)(1.0 / (g_human[iVar30].bones[iVar29].mass + g_human[iVar30].bones[iVar16].mass))
-          ;
-          fVar5 = local_70 * g_human[iVar30].bones[iVar16].mass;
-          pfVar21[10] = fVar5;
-          fVar6 = g_human[iVar30].bones[iVar29].mass * local_70;
-          pfVar21[0xb] = fVar6;
-          local_60 = *(int **)&g_human[iVar30].bones[iVar16].lf_raw[0x90];
-          LF_SET_BITS(pfVar21[3], local_60);
-          if (LF_BITS_F(local_60) < *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x94]) {
-            pfVar21[3] = *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x94];
-          }
-          if (pfVar21[3] < *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98]) {
-            pfVar21[3] = *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98];
-          }
-          iVar30 = g_timerlist.bondsetuphuman;
-          pfVar21[10] = pfVar21[3] * fVar5;
-          pfVar21[0xb] = (float)(fVar6 * pfVar21[3]);
-          stoptimer(iVar30);
-          piVar18 = local_a0;
+          setup_bodyrotbody((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
         }
       }
       local_c0 = local_c0 + 1;
