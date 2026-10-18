@@ -59,6 +59,9 @@
     },
     {
       "name": "murilo-20261015-222536-subvulpescode"
+    },
+    {
+      "name": "vulpzin-20261017-194935-record"
     }
   ],
   "synth": "tools/recording/synth_calls.txt",
