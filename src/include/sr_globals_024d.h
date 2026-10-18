@@ -71,7 +71,7 @@
 #define SR_MAX_BOND                 16384
 #define SR_MAX_BULLET               16384
 #define SR_MAX_EVENT                65536
-#define SR_MAX_PARTICLE             4096
+#define SR_MAX_PARTICLE             16384
 #define SR_MAX_OBJECTTYPE           128
 #define SR_MAX_ITEMTYPE             64
 #define SR_MAX_BODY                 32

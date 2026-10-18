@@ -33,8 +33,24 @@ typedef union Bone { struct {
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
     uint8_t unk_54[0x38];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
-    uint8_t unk_90[0x50];
+    uint8_t unk_90[0x4c];
+    int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
+
+/* Joint bond of a Human (createjointbond): the bond, the bone and the body it holds. */
+typedef union HumanJoint { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int bone;       /* +0x04 createjointbond: parameter 2 */
+    int body;       /* +0x08 createjointbond: parameter 3, index into body[] */
+}; uint8_t lf_raw[0xc]; } HumanJoint;
+
+/* Muscle of a Human (human_createmuscleball). Only the bond is known. */
+typedef union HumanMuscle { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
+    int unk_08;     /* +0x08 human_createmuscleball: parameter 3 */
+    uint8_t unk_0c[0x24];
+}; uint8_t lf_raw[0x30]; } HumanMuscle;
 
 /* Inventory slot. 8 per Human. */
 typedef union InventorySlot { struct {
@@ -62,6 +78,8 @@ SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
 SR_STATIC_ASSERT(offsetof(Bone, rot) == 0x30, "Bone.rot");
 SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
 SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
+SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
+SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 
@@ -225,10 +243,11 @@ typedef union Human { struct {
     uint8_t pad_00c4[0x4];
     Bone bones[15];                      /* +0x00c8 createhuman: loop of 15 with stride 0xe0 */
     uint8_t pad_0de8[0xe0];
-    int unk_0ec8;                        /* +0x0ec8 4 functions */
-    uint8_t pad_0ecc[0x1800];
-    int unk_26cc;                        /* +0x26cc 4 functions */
-    uint8_t pad_26d0[0x1a0];
+    int num_muscles;                     /* +0x0ec8 human_createmuscleball appends to the list at +0xecc */
+    HumanMuscle muscles[128];            /* +0x0ecc human_createmuscleball (stride 0x30); the list ends at the joints (+0x26cc) */
+    int num_joints;                      /* +0x26cc createjointbond appends to the list at +0x26d0 */
+    HumanJoint joints[32];               /* +0x26d0 createjointbond (stride 0xc); createhuman uses floats from +0x2870 */
+    uint8_t pad_2850[0x20];
     int unk_2870;                        /* +0x2870 1 functions */
     uint8_t pad_2874[0x48];
     int unk_28bc;                        /* +0x28bc 1 functions */
@@ -271,6 +290,10 @@ SR_STATIC_ASSERT(offsetof(Human, pitch) == 0x64, "Human.pitch");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons) == 0xbc, "Human.input_buttons");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons_prev) == 0xc0, "Human.input_buttons_prev");
 SR_STATIC_ASSERT(offsetof(Human, bones) == 0xc8, "Human.bones");
+SR_STATIC_ASSERT(offsetof(Human, num_muscles) == 0xec8, "Human.num_muscles");
+SR_STATIC_ASSERT(offsetof(Human, muscles) == 0xecc, "Human.muscles");
+SR_STATIC_ASSERT(offsetof(Human, num_joints) == 0x26cc, "Human.num_joints");
+SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
 SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
 SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
 SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
@@ -391,18 +414,13 @@ typedef union Object { struct {
     float unk_0094;                      /* +0x0094 4 functions */
     float unk_0098;                      /* +0x0098 5 functions */
     uint8_t pad_009c[0xc];
-    int particle_start;                  /* +0x00a8 createobject/deleteparticle/objectsimulation: start of the object's particles */
-    uint8_t pad_00ac[0x18];
-    int unk_00c4;                        /* +0x00c4 1 functions */
-    int unk_00c8;                        /* +0x00c8 1 functions */
-    uint8_t pad_00cc[0x30];
-    int unk_00fc;                        /* +0x00fc 2 functions */
-    int unk_0100;                        /* +0x0100 1 functions */
-    uint8_t pad_0104[0xa8];
+    int num_particles;                   /* +0x00a8 createobject appends to the list at +0xac; particletimetolive loops over it */
+    int particles[64];                   /* +0x00ac createobject appends; particletimetolive renames; createobject uses floats from +0x1ac */
     int unk_01ac;                        /* +0x01ac 2 functions */
     uint8_t pad_01b0[0x200];
-    int unk_03b0;                        /* +0x03b0 2 functions */
-    uint8_t pad_03b4[0x400];
+    int num_bonds;                       /* +0x03b0 createbond appends the bond to the list at +0x3b4, limit 0x7f */
+    int bonds[127];                      /* +0x03b4 createbond appends, limit 0x7f; deletebond removes */
+    uint8_t pad_05b0[0x204];
     int unk_07b4;                        /* +0x07b4 3 functions */
     uint8_t pad_07b8[0x5404];
     float unk_5bbc;                      /* +0x5bbc 4 functions */
@@ -509,7 +527,10 @@ SR_STATIC_ASSERT(offsetof(Object, pos_prev) == 0x30, "Object.pos_prev");
 SR_STATIC_ASSERT(offsetof(Object, rot) == 0x3c, "Object.rot");
 SR_STATIC_ASSERT(offsetof(Object, vel) == 0x60, "Object.vel");
 SR_STATIC_ASSERT(offsetof(Object, vel_prev) == 0x6c, "Object.vel_prev");
-SR_STATIC_ASSERT(offsetof(Object, particle_start) == 0xa8, "Object.particle_start");
+SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles");
+SR_STATIC_ASSERT(offsetof(Object, particles) == 0xac, "Object.particles");
+SR_STATIC_ASSERT(offsetof(Object, num_bonds) == 0x3b0, "Object.num_bonds");
+SR_STATIC_ASSERT(offsetof(Object, bonds) == 0x3b4, "Object.bonds");
 SR_STATIC_ASSERT(offsetof(Object, engine_accel) == 0x5e4c, "Object.engine_accel");
 SR_STATIC_ASSERT(offsetof(Object, engine_rpm) == 0x5e50, "Object.engine_rpm");
 SR_STATIC_ASSERT(offsetof(Object, throttle) == 0x5e54, "Object.throttle");
@@ -641,11 +662,11 @@ SR_STATIC_ASSERT(offsetof(ObjectType, num_seats) == 0x807c, "ObjectType.num_seat
 
 /* bond[]: record of 0xec bytes. */
 typedef union Bond { struct {
-    int state;                           /* +0x0000 createbond writes 0 */
-    int type;                            /* +0x0004 createbond: parameter 1 */
-    int unk_0008;                        /* +0x0008 1 functions */
+    int type;                            /* +0x0000 bondsimulation2 switches on it: 0 particle pair, 5 wheel, 8 joint, 9 and 10 (createjointbond writes 8) */
+    int subtype;                         /* +0x0004 createbond: parameter 1, from the objecttype bond list (+0x744); mode is 0 when it is 1 */
+    int time_to_live;                    /* +0x0008 createbond writes 0x10000 (no limit); bondtimetolive counts it down */
     int mode;                            /* +0x000c createbond: 3, or 0 if type 1; humansimulation toggles 0/3 */
-    int unk_10;                          /* +0x0010 createbond writes 2 */
+    int num_particles;                   /* +0x0010 createbond writes 2; deletebond loops over the particle indices from +0x14 */
     int particle_a;                      /* +0x0014 createbond: parameter 2 (index into particle[]) */
     int particle_b;                      /* +0x0018 createbond: parameter 3 */
     int unk_001c;                        /* +0x001c 1 functions */
@@ -665,8 +686,8 @@ typedef union Bond { struct {
     vec3 friction_dir;                   /* +0x0074 bondsimulation2: scalevector and calculatefriction (likely) */
     int unk_0080;                        /* +0x0080 1 functions */
     uint8_t pad_0084[0x8];
-    int unk_008c;                        /* +0x008c 1 functions */
-    int human_id;                        /* +0x0090 bondsimulation2 types 8 and 10: index into human[] */
+    int num_objects;                     /* +0x008c createbond appends parameter 4 to the list at +0x90; deletebond loops over it */
+    int owner;                           /* +0x0090 types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c) */
     int bone_a;                          /* +0x0094 bondsimulation2: bone index (stride 0xe0) */
     int target;                          /* +0x0098 bondsimulation2: type 10 = item index; type 8 = second bone */
     int unk_009c;                        /* +0x009c 1 functions */
@@ -677,10 +698,11 @@ typedef union Bond { struct {
     uint8_t pad_00c0[0x2c];
 }; uint8_t lf_raw[0xec]; } Bond;
 SR_STATIC_ASSERT(sizeof(Bond) == 0xec, "Bond");
-SR_STATIC_ASSERT(offsetof(Bond, state) == 0x0, "Bond.state");
-SR_STATIC_ASSERT(offsetof(Bond, type) == 0x4, "Bond.type");
+SR_STATIC_ASSERT(offsetof(Bond, type) == 0x0, "Bond.type");
+SR_STATIC_ASSERT(offsetof(Bond, subtype) == 0x4, "Bond.subtype");
+SR_STATIC_ASSERT(offsetof(Bond, time_to_live) == 0x8, "Bond.time_to_live");
 SR_STATIC_ASSERT(offsetof(Bond, mode) == 0xc, "Bond.mode");
-SR_STATIC_ASSERT(offsetof(Bond, unk_10) == 0x10, "Bond.unk_10");
+SR_STATIC_ASSERT(offsetof(Bond, num_particles) == 0x10, "Bond.num_particles");
 SR_STATIC_ASSERT(offsetof(Bond, particle_a) == 0x14, "Bond.particle_a");
 SR_STATIC_ASSERT(offsetof(Bond, particle_b) == 0x18, "Bond.particle_b");
 SR_STATIC_ASSERT(offsetof(Bond, local_a) == 0x34, "Bond.local_a");
@@ -690,7 +712,8 @@ SR_STATIC_ASSERT(offsetof(Bond, rest_length) == 0x60, "Bond.rest_length");
 SR_STATIC_ASSERT(offsetof(Bond, stiffness) == 0x6c, "Bond.stiffness");
 SR_STATIC_ASSERT(offsetof(Bond, unk_70) == 0x70, "Bond.unk_70");
 SR_STATIC_ASSERT(offsetof(Bond, friction_dir) == 0x74, "Bond.friction_dir");
-SR_STATIC_ASSERT(offsetof(Bond, human_id) == 0x90, "Bond.human_id");
+SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
+SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
 SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
 SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
 
@@ -1075,85 +1098,39 @@ SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
 
-/* particle[]: record of 0x3c0 bytes. */
+/* particle[]: record of 0xf0 bytes. */
 typedef union Particle { struct {
-    int unk_0000;                        /* +0x0000 2 functions */
-    int unk_0004;                        /* +0x0004 3 functions */
-    float unk_0008;                      /* +0x0008 5 functions */
-    float unk_000c;                      /* +0x000c 2 functions */
+    int type;                            /* +0x0000 createparticle: parameter 1 */
+    int time_to_live;                    /* +0x0004 createparticle writes 0x10000 (no limit); particletimetolive counts it down */
+    float mass;                          /* +0x0008 createparticle: parameter 4; bondsimulation2 uses 1 / (mass_a + mass_b) */
+    float gravity;                       /* +0x000c createparticle writes 0.0027222; particlesimulation subtracts it from vel.y */
     float unk_0010;                      /* +0x0010 1 functions */
-    float unk_0014;                      /* +0x0014 12 functions */
-    float unk_0018;                      /* +0x0018 12 functions */
-    float unk_001c;                      /* +0x001c 12 functions */
-    float unk_0020;                      /* +0x0020 2 functions */
-    float unk_0024;                      /* +0x0024 2 functions */
-    float unk_0028;                      /* +0x0028 2 functions */
-    float unk_002c;                      /* +0x002c 12 functions */
-    float unk_0030;                      /* +0x0030 12 functions */
-    float unk_0034;                      /* +0x0034 12 functions */
-    float unk_0038;                      /* +0x0038 2 functions */
-    float unk_003c;                      /* +0x003c 2 functions */
-    float unk_0040;                      /* +0x0040 2 functions */
+    vec3 pos;                            /* +0x0014 createparticle: parameter 2 */
+    vec3 pos_prev;                       /* +0x0020 particlesimulation copies pos here before it adds vel */
+    vec3 vel;                            /* +0x002c createparticle: parameter 3; particlesimulation adds it to pos */
+    vec3 vel_prev;                       /* +0x0038 particlesimulation copies vel here */
     float unk_0044;                      /* +0x0044 1 functions */
     float unk_0048;                      /* +0x0048 1 functions */
     float unk_004c;                      /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 4 functions */
-    int unk_0054;                        /* +0x0054 4 functions */
-    int unk_0058;                        /* +0x0058 4 functions */
-    uint8_t pad_005c[0x78];
-    int unk_00d4;                        /* +0x00d4 2 functions */
-    int unk_00d8;                        /* +0x00d8 2 functions */
-    int unk_00dc;                        /* +0x00dc 1 functions */
-    uint8_t pad_00e0[0x14];
-    int unk_00f4;                        /* +0x00f4 1 functions */
-    uint8_t pad_00f8[0x4];
-    float unk_00fc;                      /* +0x00fc 1 functions */
-    uint8_t pad_0100[0x4];
-    float unk_0104;                      /* +0x0104 1 functions */
-    float unk_0108;                      /* +0x0108 1 functions */
-    float unk_010c;                      /* +0x010c 1 functions */
-    float unk_0110;                      /* +0x0110 1 functions */
-    float unk_0114;                      /* +0x0114 1 functions */
-    float unk_0118;                      /* +0x0118 1 functions */
-    float unk_011c;                      /* +0x011c 2 functions */
-    float unk_0120;                      /* +0x0120 2 functions */
-    float unk_0124;                      /* +0x0124 2 functions */
-    float unk_0128;                      /* +0x0128 1 functions */
-    float unk_012c;                      /* +0x012c 1 functions */
-    float unk_0130;                      /* +0x0130 1 functions */
-    uint8_t pad_0134[0xb8];
-    float unk_01ec;                      /* +0x01ec 1 functions */
-    uint8_t pad_01f0[0x4];
-    float unk_01f4;                      /* +0x01f4 1 functions */
-    float unk_01f8;                      /* +0x01f8 1 functions */
-    float unk_01fc;                      /* +0x01fc 1 functions */
-    float unk_0200;                      /* +0x0200 1 functions */
-    float unk_0204;                      /* +0x0204 1 functions */
-    float unk_0208;                      /* +0x0208 1 functions */
-    float unk_020c;                      /* +0x020c 2 functions */
-    float unk_0210;                      /* +0x0210 2 functions */
-    float unk_0214;                      /* +0x0214 2 functions */
-    float unk_0218;                      /* +0x0218 1 functions */
-    float unk_021c;                      /* +0x021c 1 functions */
-    float unk_0220;                      /* +0x0220 1 functions */
-    uint8_t pad_0224[0xb8];
-    float unk_02dc;                      /* +0x02dc 1 functions */
-    uint8_t pad_02e0[0x4];
-    float unk_02e4;                      /* +0x02e4 1 functions */
-    float unk_02e8;                      /* +0x02e8 1 functions */
-    float unk_02ec;                      /* +0x02ec 1 functions */
-    float unk_02f0;                      /* +0x02f0 1 functions */
-    float unk_02f4;                      /* +0x02f4 1 functions */
-    float unk_02f8;                      /* +0x02f8 1 functions */
-    float unk_02fc;                      /* +0x02fc 2 functions */
-    float unk_0300;                      /* +0x0300 2 functions */
-    float unk_0304;                      /* +0x0304 2 functions */
-    float unk_0308;                      /* +0x0308 1 functions */
-    float unk_030c;                      /* +0x030c 1 functions */
-    float unk_0310;                      /* +0x0310 1 functions */
-    uint8_t pad_0314[0xac];
-}; uint8_t lf_raw[0x3c0]; } Particle;
-SR_STATIC_ASSERT(sizeof(Particle) == 0x3c0, "Particle");
+    int num_bonds;                       /* +0x0050 createbond appends to the list at +0x54, limit 31 */
+    int bonds[31];                       /* +0x0054 createbond; deletebond and particletimetolive remove from it */
+    uint8_t pad_00d0[0x4];
+    int num_objects;                     /* +0x00d4 createparticle appends parameter 5 to the list at +0xd8 */
+    int objects[6];                      /* +0x00d8 particletimetolive renames the particle in each object of this list */
+}; uint8_t lf_raw[0xf0]; } Particle;
+SR_STATIC_ASSERT(sizeof(Particle) == 0xf0, "Particle");
+SR_STATIC_ASSERT(offsetof(Particle, type) == 0x0, "Particle.type");
+SR_STATIC_ASSERT(offsetof(Particle, time_to_live) == 0x4, "Particle.time_to_live");
+SR_STATIC_ASSERT(offsetof(Particle, mass) == 0x8, "Particle.mass");
+SR_STATIC_ASSERT(offsetof(Particle, gravity) == 0xc, "Particle.gravity");
+SR_STATIC_ASSERT(offsetof(Particle, pos) == 0x14, "Particle.pos");
+SR_STATIC_ASSERT(offsetof(Particle, pos_prev) == 0x20, "Particle.pos_prev");
+SR_STATIC_ASSERT(offsetof(Particle, vel) == 0x2c, "Particle.vel");
+SR_STATIC_ASSERT(offsetof(Particle, vel_prev) == 0x38, "Particle.vel_prev");
+SR_STATIC_ASSERT(offsetof(Particle, num_bonds) == 0x50, "Particle.num_bonds");
+SR_STATIC_ASSERT(offsetof(Particle, bonds) == 0x54, "Particle.bonds");
+SR_STATIC_ASSERT(offsetof(Particle, num_objects) == 0xd4, "Particle.num_objects");
+SR_STATIC_ASSERT(offsetof(Particle, objects) == 0xd8, "Particle.objects");
 
 /* timer[]: record of 0x58 bytes. */
 typedef union Timer { struct {
@@ -2982,7 +2959,7 @@ typedef union AreaSector { struct {
     int unk_0024;                        /* +0x0024 1 functions */
     int unk_0028;                        /* +0x0028 1 functions */
     int unk_002c;                        /* +0x002c 1 functions */
-    int unk_0030;                        /* +0x0030 6 functions */
+    int num_particles;                   /* +0x0030 createparticle: limit 0x3fff; particlesimulation loops over it */
     uint8_t pad_0034[0xc];
     int unk_0040;                        /* +0x0040 3 functions */
     int unk_0044;                        /* +0x0044 7 functions */
@@ -3033,6 +3010,7 @@ typedef union AreaSector { struct {
     uint8_t pad_6db9858[0x53167a8];
 }; uint8_t lf_raw[0xc0d0000]; } AreaSector;
 SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
+SR_STATIC_ASSERT(offsetof(AreaSector, num_particles) == 0x30, "AreaSector.num_particles");
 
 /* objectpacket[]: record of 0xce14 bytes. */
 typedef union ObjectPacket { struct {

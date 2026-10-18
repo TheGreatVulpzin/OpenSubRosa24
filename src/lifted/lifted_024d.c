@@ -1232,173 +1232,6 @@ int __cdecl lf_03290(uint param_1,uint param_2,uint param_3,uint param_4,int par
 #undef g_area_sector
 #undef g_area
 
-/* ---------------------------------------------------------------- 0x33a0 */
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define local_4 (*(int *)(lf_frame + 0x1c))
-void __cdecl lf_033a0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int *piVar1;
-  int *piVar2;
-  int *piVar3;
-  int iVar4;
-  Bond *pBVar5;
-  int iVar6;
-  int iVar7;
-  Bond *pBVar8;
-
-  
-  if ((-1 < param_1) && (param_1 < g_numofbonds)) {
-    if (0 < g_bond[param_1].unk_10) {
-      local_4 = g_bond[param_1].unk_10;
-      piVar3 = &g_bond[param_1].particle_a;
-      do {
-        iVar4 = *piVar3;
-        if (iVar4 != -1) {
-          iVar6 = 0;
-          piVar2 = &g_particle[0].unk_0050 + iVar4 * 0x3c;
-          if (0 < (&g_particle[0].unk_0050)[iVar4 * 0x3c]) {
-            piVar1 = &g_particle[0].unk_0054 + iVar4 * 0x3c;
-            do {
-              if (*piVar1 == param_1) {
-                *piVar2 = *piVar2 + -1;
-                *piVar1 = (&g_particle[0].unk_0054)[*piVar2 + iVar4 * 0x3c];
-              }
-              else {
-                iVar6 = iVar6 + 1;
-                piVar1 = piVar1 + 1;
-              }
-            } while (iVar6 < *piVar2);
-          }
-        }
-        piVar3 = piVar3 + 1;
-        local_4 = local_4 + -1;
-      } while (local_4 != 0);
-    }
-    if (0 < g_bond[param_1].unk_008c) {
-      iVar4 = g_bond[param_1].unk_008c;
-      piVar3 = &g_bond[param_1].human_id;
-      do {
-        iVar6 = *piVar3;
-        iVar7 = 0;
-        piVar2 = &g_object[iVar6].unk_03b0;
-        if (0 < g_object[iVar6].unk_03b0) {
-          piVar1 = (int *)&g_object[iVar6].lf_raw[0x3b4];
-          do {
-            if (*piVar1 == param_1) {
-              *piVar2 = *piVar2 + -1;
-              *piVar1 = *(int *)(&g_object[iVar6].lf_raw[0x3b4] + *piVar2 * 4);
-            }
-            else {
-              iVar7 = iVar7 + 1;
-              piVar1 = piVar1 + 1;
-            }
-          } while (iVar7 < *piVar2);
-        }
-        piVar3 = piVar3 + 1;
-        iVar4 = iVar4 + -1;
-      } while (iVar4 != 0);
-    }
-    g_numofbonds = g_numofbonds + -1;
-    if (param_1 != g_numofbonds) {
-      pBVar5 = g_bond + g_numofbonds;
-      pBVar8 = g_bond + param_1;
-      for (iVar4 = 0x3b; iVar4 != 0; iVar4 = iVar4 + -1) {
-        pBVar8->state = pBVar5->state;
-        pBVar5 = (Bond *)&pBVar5->type;
-        pBVar8 = (Bond *)&pBVar8->type;
-      }
-      if (0 < g_bond[param_1].unk_10) {
-        iVar4 = g_bond[param_1].unk_10;
-        piVar3 = &g_bond[param_1].particle_a;
-        do {
-          iVar6 = *piVar3;
-          if (iVar6 != -1) {
-            iVar7 = 0;
-            if (0 < (&g_particle[0].unk_0050)[iVar6 * 0x3c]) {
-              piVar2 = &g_particle[0].unk_0054 + iVar6 * 0x3c;
-              do {
-                if (*piVar2 == g_numofbonds) {
-                  *piVar2 = param_1;
-                }
-                iVar7 = iVar7 + 1;
-                piVar2 = piVar2 + 1;
-              } while (iVar7 < (&g_particle[0].unk_0050)[iVar6 * 0x3c]);
-            }
-          }
-          piVar3 = piVar3 + 1;
-          iVar4 = iVar4 + -1;
-        } while (iVar4 != 0);
-      }
-      if (0 < g_bond[param_1].unk_008c) {
-        iVar4 = g_bond[param_1].unk_008c;
-        piVar3 = &g_bond[param_1].human_id;
-        do {
-          iVar6 = *piVar3;
-          iVar7 = 0;
-          if (0 < g_object[iVar6].unk_03b0) {
-            piVar2 = (int *)&g_object[iVar6].lf_raw[0x3b4];
-            do {
-              if (*piVar2 == g_numofbonds) {
-                *piVar2 = param_1;
-              }
-              iVar7 = iVar7 + 1;
-              piVar2 = piVar2 + 1;
-            } while (iVar7 < g_object[iVar6].unk_03b0);
-          }
-          piVar3 = piVar3 + 1;
-          iVar4 = iVar4 + -1;
-        } while (iVar4 != 0);
-      }
-      iVar4 = g_bond[param_1].state;
-      if (iVar4 == 8) {
-        iVar6 = g_bond[param_1].human_id;
-        iVar7 = 0;
-        if (0 < g_human[iVar6].unk_26cc) {
-          piVar3 = (int *)&g_human[iVar6].lf_raw[0x26d0];
-          do {
-            if (*piVar3 == g_numofbonds) {
-              *piVar3 = param_1;
-            }
-            iVar7 = iVar7 + 1;
-            piVar3 = piVar3 + 3;
-          } while (iVar7 < g_human[iVar6].unk_26cc);
-        }
-      }
-      if (iVar4 == 9) {
-        iVar4 = g_bond[param_1].human_id;
-        iVar6 = g_bond[param_1].target * 0xe0;
-        if (*(int *)(iVar6 + ((int)&g_human[0].lf_raw[0x1a4]) + iVar4 * 0x2b64) == g_numofbonds) {
-          *(int *)(iVar6 + ((int)&g_human[0].lf_raw[0x1a4]) + iVar4 * 0x2b64) = param_1;
-        }
-        iVar6 = 0;
-        if (0 < g_human[iVar4].unk_0ec8) {
-          piVar3 = (int *)&g_human[iVar4].lf_raw[0xecc];
-          do {
-            if (*piVar3 == g_numofbonds) {
-              *piVar3 = param_1;
-            }
-            iVar6 = iVar6 + 1;
-            piVar3 = piVar3 + 0xc;
-          } while (iVar6 < g_human[iVar4].unk_0ec8);
-        }
-      }
-    }
-  }
-  return;
-}
-#undef g_human
-#undef g_object
-#undef g_numofbonds
-#undef g_particle
-#undef g_bond
-#undef local_4
-
 /* ---------------------------------------------------------------- 0x3740 */
 #define g_building (*(Building *)SR_VA(0x2165b80))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
@@ -8118,330 +7951,6 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x129b0 */
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x40b8c0))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-#define local_10 (*(int * *)(lf_frame + 0x10))
-#define local_c (*(float *)(lf_frame + 0x14))
-#define local_8 (*(float *)(lf_frame + 0x18))
-#define local_4 (*(float *)(lf_frame + 0x1c))
-int __cdecl lf_129b0(int param_1,int param_2,int param_3,int param_4)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  Bond *_Dst;
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  int *piVar4;
-  float10 fVar5;
-
-
-
-
-  int fVar2;
-  
-  iVar2 = g_numofbonds;
-  if (0x3fff < g_numofbonds) {
-    return -1;
-  }
-  if ((((param_2 == param_3) || (param_2 < 0)) || (g_area_sector.unk_0030 <= param_2)) ||
-     ((param_3 < 0 || (g_area_sector.unk_0030 <= param_3)))) {
-    return -1;
-  }
-  if (0x1e < (&g_particle[0].unk_0050)[param_2 * 0x3c]) {
-    return -1;
-  }
-  if (((&g_particle[0].unk_0050)[param_3 * 0x3c] < 0x1f) &&
-     ((param_4 == -1 || (g_object[param_4].unk_03b0 < 0x7f)))) {
-    iVar3 = 0;
-    if (0 < (&g_particle[0].unk_0050)[param_2 * 0x3c]) {
-      local_10 = &g_particle[0].unk_0054 + param_2 * 0x3c;
-      do {
-        iVar1 = *local_10;
-        if ((param_2 == g_bond[iVar1].particle_a) && (param_3 == g_bond[iVar1].particle_b)) {
-          return -1;
-        }
-        if ((param_2 == g_bond[iVar1].particle_b) && (param_3 == g_bond[iVar1].particle_a)) {
-          return -1;
-        }
-        local_10 = local_10 + 1;
-        iVar3 = iVar3 + 1;
-      } while (iVar3 < (&g_particle[0].unk_0050)[param_2 * 0x3c]);
-    }
-    local_10 = (int *)0x0;
-    if (0 < (&g_particle[0].unk_0050)[param_3 * 0x3c]) {
-      piVar4 = &g_particle[0].unk_0054 + param_3 * 0x3c;
-      do {
-        iVar3 = *piVar4;
-        if ((param_2 == g_bond[iVar3].particle_a) && (param_3 == g_bond[iVar3].particle_b)) {
-          return -1;
-        }
-        if ((param_2 == g_bond[iVar3].particle_b) && (param_3 == g_bond[iVar3].particle_a)) {
-          return -1;
-        }
-        local_10 = (int *)((int)local_10 + 1);
-        piVar4 = piVar4 + 1;
-      } while ((int)local_10 < (&g_particle[0].unk_0050)[param_3 * 0x3c]);
-    }
-    _Dst = g_bond + g_numofbonds;
-    memset(_Dst,0,0xec);
-    _Dst->state = 0;
-    g_bond[iVar2].type = param_1;
-    g_bond[iVar2].unk_0008 = 0x10000;
-    g_bond[iVar2].unk_10 = 2;
-    g_bond[iVar2].particle_a = param_2;
-    g_bond[iVar2].particle_b = param_3;
-    g_bond[iVar2].mode = 3;
-    if (param_1 == 1) {
-      g_bond[iVar2].mode = 0;
-    }
-    local_c = (float)((&g_particle[0].unk_0014)[param_3 * 0x3c] - (&g_particle[0].unk_0014)[param_2 * 0x3c]);
-    local_8 = (float)((&g_particle[0].unk_0018)[param_3 * 0x3c] - (&g_particle[0].unk_0018)[param_2 * 0x3c]);
-    local_4 = (float)((&g_particle[0].unk_001c)[param_3 * 0x3c] - (&g_particle[0].unk_001c)[param_2 * 0x3c]);
-    fVar5 = (float10)vectorlength(&local_c);
-    iVar3 = (&g_particle[0].unk_0050)[param_2 * 0x3c];
-    g_bond[iVar2].rest_length = (float)fVar5;
-    g_bond[iVar2].stiffness = 0.25;
-    g_bond[iVar2].unk_70 = 0.25;
-    iVar1 = g_numofbonds;
-    (&g_particle[0].unk_0054)[iVar3 + param_2 * 0x3c] = g_numofbonds;
-    (&g_particle[0].unk_0050)[param_2 * 0x3c] = (&g_particle[0].unk_0050)[param_2 * 0x3c] + 1;
-    (&g_particle[0].unk_0054)[(&g_particle[0].unk_0050)[param_3 * 0x3c] + param_3 * 0x3c] =
-         g_numofbonds;
-    (&g_particle[0].unk_0050)[param_3 * 0x3c] = (&g_particle[0].unk_0050)[param_3 * 0x3c] + 1;
-    if (param_4 != -1) {
-      g_bond[g_numofbonds].mass_ratio[g_bond[iVar2].unk_008c + 0x11] = LF_BITS_F(param_4);
-      g_bond[iVar2].unk_008c = g_bond[iVar2].unk_008c + 1;
-      *(int *)(&g_object[param_4].lf_raw[0x3b4] + g_object[param_4].unk_03b0 * 4) = g_numofbonds;
-      g_object[param_4].unk_03b0 = g_object[param_4].unk_03b0 + 1;
-    }
-    g_numofbonds = g_numofbonds + 1;
-    return iVar1;
-  }
-  return -1;
-}
-#undef g_object
-#undef g_numofbonds
-#undef g_particle
-#undef g_bond
-#undef g_area_sector
-#undef vectorlength
-#undef memset
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
-/* ---------------------------------------------------------------- 0x12c90 */
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define local_10 (*(int *)(lf_frame + 0x10))
-#define local_c (*(int * *)(lf_frame + 0x14))
-#define local_8 (*(Bond * *)(lf_frame + 0x18))
-#define local_4 (*(int *)(lf_frame + 0x1c))
-void __cdecl lf_12c90(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  Bond *pBVar1;
-  int *piVar2;
-  int *piVar3;
-  int *piVar4;
-  int *piVar5;
-  int iVar6;
-  Bond *pBVar7;
-  int iVar8;
-  int iVar9;
-  Bond *pBVar10;
-
-
-
-
-  
-  local_10 = 0;
-  if (0 < g_numofbonds) {
-    piVar5 = &g_bond[0].unk_10;
-    local_8 = g_bond + g_numofbonds;
-    local_c = &g_bond[0].unk_10;
-    do {
-      iVar6 = g_numofbonds;
-      if (piVar5[-2] < 0x10000) {
-        piVar5[-2] = piVar5[-2] + -1;
-      }
-      if (piVar5[-2] < 1) {
-        if (-1 < local_10) {
-          if (iVar6 <= local_10) {
-            return;
-          }
-          if (0 < *piVar5) {
-            local_4 = *piVar5;
-            piVar4 = piVar5;
-            do {
-              piVar4 = piVar4 + 1;
-              iVar6 = *piVar4;
-              if (iVar6 != -1) {
-                iVar8 = 0;
-                piVar3 = &g_particle[0].unk_0050 + iVar6 * 0x3c;
-                if (0 < (&g_particle[0].unk_0050)[iVar6 * 0x3c]) {
-                  piVar2 = &g_particle[0].unk_0054 + iVar6 * 0x3c;
-                  do {
-                    if (*piVar2 == local_10) {
-                      *piVar3 = *piVar3 + -1;
-                      *piVar2 = (&g_particle[0].unk_0054)[*piVar3 + iVar6 * 0x3c];
-                      piVar5 = local_c;
-                    }
-                    else {
-                      iVar8 = iVar8 + 1;
-                      piVar2 = piVar2 + 1;
-                    }
-                  } while (iVar8 < *piVar3);
-                }
-              }
-              local_4 = local_4 + -1;
-            } while (local_4 != 0);
-          }
-          if (0 < piVar5[0x1f]) {
-            iVar6 = piVar5[0x1f];
-            piVar4 = piVar5 + 0x20;
-            do {
-              iVar8 = *piVar4;
-              iVar9 = 0;
-              piVar3 = &g_object[iVar8].unk_03b0;
-              if (0 < g_object[iVar8].unk_03b0) {
-                piVar2 = (int *)&g_object[iVar8].lf_raw[0x3b4];
-                do {
-                  if (*piVar2 == local_10) {
-                    *piVar3 = *piVar3 + -1;
-                    *piVar2 = *(int *)(&g_object[iVar8].lf_raw[0x3b4] + *piVar3 * 4);
-                  }
-                  else {
-                    iVar9 = iVar9 + 1;
-                    piVar2 = piVar2 + 1;
-                  }
-                  piVar5 = local_c;
-                } while (iVar9 < *piVar3);
-              }
-              piVar4 = piVar4 + 1;
-              iVar6 = iVar6 + -1;
-            } while (iVar6 != 0);
-          }
-          local_8 = local_8 + -1;
-          g_numofbonds = g_numofbonds + -1;
-          if (local_10 != g_numofbonds) {
-            pBVar1 = (Bond *)(piVar5 + -4);
-            pBVar7 = local_8;
-            pBVar10 = pBVar1;
-            for (iVar6 = 0x3b; iVar6 != 0; iVar6 = iVar6 + -1) {
-              pBVar10->state = pBVar7->state;
-              pBVar7 = (Bond *)&pBVar7->type;
-              pBVar10 = (Bond *)&pBVar10->type;
-            }
-            if (0 < *piVar5) {
-              iVar6 = *piVar5;
-              piVar4 = piVar5;
-              do {
-                piVar4 = piVar4 + 1;
-                iVar8 = *piVar4;
-                if ((iVar8 != -1) &&
-                   (iVar9 = 0, piVar5 = local_c, 0 < (&g_particle[0].unk_0050)[iVar8 * 0x3c])) {
-                  piVar3 = &g_particle[0].unk_0054 + iVar8 * 0x3c;
-                  do {
-                    if (*piVar3 == g_numofbonds) {
-                      *piVar3 = local_10;
-                    }
-                    iVar9 = iVar9 + 1;
-                    piVar3 = piVar3 + 1;
-                  } while (iVar9 < (&g_particle[0].unk_0050)[iVar8 * 0x3c]);
-                }
-                iVar6 = iVar6 + -1;
-              } while (iVar6 != 0);
-            }
-            if (0 < piVar5[0x1f]) {
-              iVar6 = piVar5[0x1f];
-              piVar4 = piVar5 + 0x20;
-              do {
-                iVar8 = *piVar4;
-                iVar9 = 0;
-                if (0 < g_object[iVar8].unk_03b0) {
-                  piVar3 = (int *)&g_object[iVar8].lf_raw[0x3b4];
-                  do {
-                    if (*piVar3 == g_numofbonds) {
-                      *piVar3 = local_10;
-                    }
-                    iVar9 = iVar9 + 1;
-                    piVar3 = piVar3 + 1;
-                    piVar5 = local_c;
-                  } while (iVar9 < g_object[iVar8].unk_03b0);
-                }
-                piVar4 = piVar4 + 1;
-                iVar6 = iVar6 + -1;
-              } while (iVar6 != 0);
-            }
-            iVar6 = pBVar1->state;
-            if (iVar6 == 8) {
-              iVar8 = piVar5[0x20];
-              iVar9 = 0;
-              if (0 < g_human[iVar8].unk_26cc) {
-                piVar4 = (int *)&g_human[iVar8].lf_raw[0x26d0];
-                do {
-                  if (*piVar4 == g_numofbonds) {
-                    *piVar4 = local_10;
-                  }
-                  iVar9 = iVar9 + 1;
-                  piVar4 = piVar4 + 3;
-                  piVar5 = local_c;
-                } while (iVar9 < g_human[iVar8].unk_26cc);
-              }
-            }
-            if (iVar6 == 9) {
-              iVar6 = piVar5[0x20];
-              if (*(int *)(piVar5[0x22] * 0xe0 + ((int)&g_human[0].lf_raw[0x1a4]) + iVar6 * 0x2b64) == g_numofbonds) {
-                *(int *)(piVar5[0x22] * 0xe0 + ((int)&g_human[0].lf_raw[0x1a4]) + iVar6 * 0x2b64) = local_10;
-              }
-              iVar8 = 0;
-              piVar5 = local_c;
-              if (0 < g_human[iVar6].unk_0ec8) {
-                piVar4 = (int *)&g_human[iVar6].lf_raw[0xecc];
-                do {
-                  if (*piVar4 == g_numofbonds) {
-                    *piVar4 = local_10;
-                  }
-                  iVar8 = iVar8 + 1;
-                  piVar4 = piVar4 + 0xc;
-                } while (iVar8 < g_human[iVar6].unk_0ec8);
-              }
-            }
-          }
-        }
-      }
-      else {
-        local_10 = local_10 + 1;
-        local_c = piVar5 + 0x3b;
-        piVar5 = local_c;
-      }
-    } while (local_10 < g_numofbonds);
-  }
-  return;
-}
-#undef g_human
-#undef g_object
-#undef g_numofbonds
-#undef g_particle
-#undef g_bond
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
 /* ---------------------------------------------------------------- 0x12f80 */
 #define DAT_00583dd0 (*(undefined4 *)SR_VA(0x583dd0))
 #define DAT_00583dd4 (*(undefined4 *)SR_VA(0x583dd4))
@@ -11367,8 +10876,9 @@ void __cdecl lf_18720(uint *param_1)
   int iVar1;
   int iVar2;
   InventorySlot *pIVar3;
-  int *piVar4;
-  int iVar5;
+  HumanJoint *pHVar4;
+  HumanMuscle *pHVar5;
+  int iVar6;
   
   if (param_1 < (uint *)0x200) {
     iVar2 = g_human[(int)param_1].player_id;
@@ -11376,40 +10886,40 @@ void __cdecl lf_18720(uint *param_1)
       g_player[iVar2].human_id = -1;
     }
     iVar2 = 0;
-    iVar5 = 0;
+    iVar6 = 0;
     pIVar3 = g_human[(int)param_1].inventory;
     do {
       iVar1 = pIVar3->count;
       while (0 < iVar1) {
         item_removehumanlink
-                  (g_human[(int)param_1].inventory[0].items[pIVar3->count + iVar5 + -1],param_1,
+                  (g_human[(int)param_1].inventory[0].items[pIVar3->count + iVar6 + -1],param_1,
                    iVar2);
         iVar1 = pIVar3->count;
       }
-      iVar5 = iVar5 + 9;
+      iVar6 = iVar6 + 9;
       iVar2 = iVar2 + 1;
       pIVar3 = pIVar3 + 1;
-    } while (iVar5 < 0x48);
-    if (0 < g_human[(int)param_1].unk_26cc) {
-      iVar2 = g_human[(int)param_1].unk_26cc;
-      piVar4 = (int *)&g_human[(int)param_1].lf_raw[0x26d0];
+    } while (iVar6 < 0x48);
+    if (0 < g_human[(int)param_1].num_joints) {
+      iVar2 = g_human[(int)param_1].num_joints;
+      pHVar4 = g_human[(int)param_1].joints;
       do {
-        iVar5 = *piVar4;
-        piVar4 = piVar4 + 3;
+        iVar6 = pHVar4->bond;
+        pHVar4 = pHVar4 + 1;
         iVar2 = iVar2 + -1;
-        g_bond[iVar5].state = 0;
-        g_bond[iVar5].unk_0008 = 0;
+        g_bond[iVar6].type = 0;
+        g_bond[iVar6].time_to_live = 0;
       } while (iVar2 != 0);
     }
-    if (0 < g_human[(int)param_1].unk_0ec8) {
-      iVar2 = g_human[(int)param_1].unk_0ec8;
-      piVar4 = (int *)&g_human[(int)param_1].lf_raw[0xecc];
+    if (0 < g_human[(int)param_1].num_muscles) {
+      iVar2 = g_human[(int)param_1].num_muscles;
+      pHVar5 = g_human[(int)param_1].muscles;
       do {
-        iVar5 = *piVar4;
-        piVar4 = piVar4 + 0xc;
+        iVar6 = pHVar5->bond;
+        pHVar5 = pHVar5 + 1;
         iVar2 = iVar2 + -1;
-        g_bond[iVar5].state = 0;
-        g_bond[iVar5].unk_0008 = 0;
+        g_bond[iVar6].type = 0;
+        g_bond[iVar6].time_to_live = 0;
       } while (iVar2 != 0);
     }
     g_human[(int)param_1].active = 0;
@@ -11975,15 +11485,15 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
   
   iVar1 = g_numofbonds;
   iVar2 = param_1 * 0x2b64;
-  *(int *)(iVar2 + ((int)&g_human[0].lf_raw[0x26d0]) + g_human[param_1].unk_26cc * 0xc) = g_numofbonds;
-  *(int *)(iVar2 + ((int)&g_human[0].lf_raw[0x26d4]) + g_human[param_1].unk_26cc * 0xc) = param_2;
-  *(int *)(iVar2 + ((int)&g_human[0].lf_raw[0x26d8]) + g_human[param_1].unk_26cc * 0xc) = param_3;
-  g_human[param_1].unk_26cc = g_human[param_1].unk_26cc + 1;
+  *(int *)(iVar2 + ((int)&g_human[0].joints) + g_human[param_1].num_joints * 0xc) = g_numofbonds;
+  *(int *)(iVar2 + ((int)&g_human[0].lf_raw[0x26d4]) + g_human[param_1].num_joints * 0xc) = param_2;
+  *(int *)(iVar2 + ((int)&g_human[0].lf_raw[0x26d8]) + g_human[param_1].num_joints * 0xc) = param_3;
+  g_human[param_1].num_joints = g_human[param_1].num_joints + 1;
   memset(g_bond + iVar1,0,0xec);
-  g_bond[iVar1].state = 8;
-  g_bond[iVar1].unk_0008 = 0x10000;
+  g_bond[iVar1].type = 8;
+  g_bond[iVar1].time_to_live = 0x10000;
   g_bond[iVar1].mode = 0;
-  g_bond[iVar1].human_id = param_1;
+  g_bond[iVar1].owner = param_1;
   g_bond[iVar1].bone_a = param_2;
   g_bond[iVar1].target = param_3;
   g_bond[iVar1].stiffness = 0.0625;
@@ -16041,7 +15551,7 @@ LAB_00420c80:
 
 /* ---------------------------------------------------------------- 0x21e00 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 void __cdecl lf_21e00(int param_1,float *param_2,float *param_3,float param_4)
 
 {
@@ -16058,98 +15568,85 @@ void __cdecl lf_21e00(int param_1,float *param_2,float *param_3,float param_4)
   int *piVar11;
   int iVar12;
   
-  iVar9 = g_object[param_1].particle_start;
+  iVar9 = g_object[param_1].num_particles;
   iVar10 = 0;
   if (3 < iVar9) {
     iVar12 = (iVar9 - 4U >> 2) + 1;
-    piVar11 = (int *)&g_object[param_1].lf_raw[0xb0];
+    piVar11 = g_object[param_1].particles + 1;
     iVar10 = iVar12 * 4;
     do {
       iVar5 = piVar11[-1];
-      fVar6 = (float)((&g_particle[0].unk_0014)[iVar5 * 0x3c] - *param_2);
-      fVar7 = (float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] - param_2[1]);
-      fVar8 = (float)((&g_particle[0].unk_001c)[iVar5 * 0x3c] - param_2[2]);
+      fVar6 = (float)(g_particle[iVar5].pos.x - *param_2);
+      fVar7 = (float)(g_particle[iVar5].pos.y - param_2[1]);
+      fVar8 = (float)(g_particle[iVar5].pos.z - param_2[2]);
       fVar1 = *param_3;
       fVar2 = param_3[2];
       fVar3 = param_3[1];
       fVar4 = *param_3;
-      (&g_particle[0].unk_002c)[iVar5 * 0x3c] =
-           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 +
-           (&g_particle[0].unk_002c)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar5 * 0x3c] =
-           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + (&g_particle[0].unk_0030)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar5 * 0x3c] =
-           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + (&g_particle[0].unk_0034)[iVar5 * 0x3c]);
+      g_particle[iVar5].vel.x =
+           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 + g_particle[iVar5].vel.x);
+      g_particle[iVar5].vel.y = (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + g_particle[iVar5].vel.y);
+      g_particle[iVar5].vel.z = (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + g_particle[iVar5].vel.z);
       iVar5 = *piVar11;
-      fVar6 = (float)((&g_particle[0].unk_0014)[iVar5 * 0x3c] - *param_2);
-      fVar7 = (float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] - param_2[1]);
-      fVar8 = (float)((&g_particle[0].unk_001c)[iVar5 * 0x3c] - param_2[2]);
+      fVar6 = (float)(g_particle[iVar5].pos.x - *param_2);
+      fVar7 = (float)(g_particle[iVar5].pos.y - param_2[1]);
+      fVar8 = (float)(g_particle[iVar5].pos.z - param_2[2]);
       fVar1 = *param_3;
       fVar2 = param_3[2];
       fVar3 = param_3[1];
       fVar4 = *param_3;
-      (&g_particle[0].unk_002c)[iVar5 * 0x3c] =
-           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 +
-           (&g_particle[0].unk_002c)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar5 * 0x3c] =
-           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + (&g_particle[0].unk_0030)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar5 * 0x3c] =
-           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + (&g_particle[0].unk_0034)[iVar5 * 0x3c]);
+      g_particle[iVar5].vel.x =
+           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 + g_particle[iVar5].vel.x);
+      g_particle[iVar5].vel.y = (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + g_particle[iVar5].vel.y);
+      g_particle[iVar5].vel.z = (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + g_particle[iVar5].vel.z);
       iVar5 = piVar11[1];
-      fVar6 = (float)((&g_particle[0].unk_0014)[iVar5 * 0x3c] - *param_2);
-      fVar7 = (float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] - param_2[1]);
-      fVar8 = (float)((&g_particle[0].unk_001c)[iVar5 * 0x3c] - param_2[2]);
+      fVar6 = (float)(g_particle[iVar5].pos.x - *param_2);
+      fVar7 = (float)(g_particle[iVar5].pos.y - param_2[1]);
+      fVar8 = (float)(g_particle[iVar5].pos.z - param_2[2]);
       fVar1 = *param_3;
       fVar2 = param_3[2];
       fVar3 = param_3[1];
       fVar4 = *param_3;
-      (&g_particle[0].unk_002c)[iVar5 * 0x3c] =
-           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 +
-           (&g_particle[0].unk_002c)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar5 * 0x3c] =
-           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + (&g_particle[0].unk_0030)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar5 * 0x3c] =
-           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + (&g_particle[0].unk_0034)[iVar5 * 0x3c]);
+      g_particle[iVar5].vel.x =
+           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 + g_particle[iVar5].vel.x);
+      g_particle[iVar5].vel.y = (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + g_particle[iVar5].vel.y);
+      g_particle[iVar5].vel.z = (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + g_particle[iVar5].vel.z);
       iVar5 = piVar11[2];
-      fVar6 = (float)((&g_particle[0].unk_0014)[iVar5 * 0x3c] - *param_2);
-      fVar7 = (float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] - param_2[1]);
-      fVar8 = (float)((&g_particle[0].unk_001c)[iVar5 * 0x3c] - param_2[2]);
+      fVar6 = (float)(g_particle[iVar5].pos.x - *param_2);
+      fVar7 = (float)(g_particle[iVar5].pos.y - param_2[1]);
+      fVar8 = (float)(g_particle[iVar5].pos.z - param_2[2]);
       piVar11 = piVar11 + 4;
       iVar12 = iVar12 + -1;
       fVar1 = *param_3;
       fVar2 = param_3[2];
       fVar3 = param_3[1];
       fVar4 = *param_3;
-      (&g_particle[0].unk_002c)[iVar5 * 0x3c] =
-           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 +
-           (&g_particle[0].unk_002c)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar5 * 0x3c] =
-           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + (&g_particle[0].unk_0030)[iVar5 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar5 * 0x3c] =
-           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + (&g_particle[0].unk_0034)[iVar5 * 0x3c]);
+      g_particle[iVar5].vel.x =
+           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 + g_particle[iVar5].vel.x);
+      g_particle[iVar5].vel.y = (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + g_particle[iVar5].vel.y);
+      g_particle[iVar5].vel.z = (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + g_particle[iVar5].vel.z);
     } while (iVar12 != 0);
   }
   if (iVar10 < iVar9) {
-    piVar11 = (int *)((int)(g_object[param_1].rot + 9) + (iVar10 + 1) * 4);
+    piVar11 = g_object[param_1].particles + iVar10;
     iVar9 = iVar9 - iVar10;
     do {
       iVar10 = *piVar11;
       piVar11 = piVar11 + 1;
       iVar9 = iVar9 + -1;
-      fVar6 = (float)((&g_particle[0].unk_0014)[iVar10 * 0x3c] - *param_2);
-      fVar7 = (float)((&g_particle[0].unk_0018)[iVar10 * 0x3c] - param_2[1]);
-      fVar8 = (float)((&g_particle[0].unk_001c)[iVar10 * 0x3c] - param_2[2]);
+      fVar6 = (float)(g_particle[iVar10].pos.x - *param_2);
+      fVar7 = (float)(g_particle[iVar10].pos.y - param_2[1]);
+      fVar8 = (float)(g_particle[iVar10].pos.z - param_2[2]);
       fVar1 = *param_3;
       fVar2 = param_3[2];
       fVar3 = param_3[1];
       fVar4 = *param_3;
-      (&g_particle[0].unk_002c)[iVar10 * 0x3c] =
-           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 +
-           (&g_particle[0].unk_002c)[iVar10 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar10 * 0x3c] =
-           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + (&g_particle[0].unk_0030)[iVar10 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar10 * 0x3c] =
-           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + (&g_particle[0].unk_0034)[iVar10 * 0x3c]);
+      g_particle[iVar10].vel.x =
+           (float)(((float)(fVar7 * param_3[2] - fVar8 * param_3[1])) * param_4 + g_particle[iVar10].vel.x);
+      g_particle[iVar10].vel.y =
+           (float)(((float)(fVar1 * fVar8 - fVar6 * fVar2)) * param_4 + g_particle[iVar10].vel.y);
+      g_particle[iVar10].vel.z =
+           (float)(((float)(fVar3 * fVar6 - fVar7 * fVar4)) * param_4 + g_particle[iVar10].vel.z);
     } while (iVar9 != 0);
   }
   return;
@@ -16162,7 +15659,7 @@ void __cdecl lf_21e00(int param_1,float *param_2,float *param_3,float param_4)
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
 
 {
@@ -16177,35 +15674,30 @@ void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
   param_1[1] = 0.0;
   param_1[2] = 0.0;
   iVar6 = 0;
-  if (0 < g_object[param_2].particle_start) {
-    piVar5 = (int *)&g_object[param_2].lf_raw[0xac];
+  if (0 < g_object[param_2].num_particles) {
+    piVar5 = g_object[param_2].particles;
     do {
       iVar1 = *piVar5;
-      fVar2 = (float)((&g_particle[0].unk_0014)[iVar1 * 0x3c] - *param_3);
-      fVar3 = (float)((&g_particle[0].unk_0018)[iVar1 * 0x3c] - param_3[1]);
-      fVar4 = (float)((&g_particle[0].unk_001c)[iVar1 * 0x3c] - param_3[2]);
-      *param_1 = (float)(((float)((&g_particle[0].unk_0034)[iVar1 * 0x3c] *
-                  ((float)(g_xaxis[1] * fVar2 - g_xaxis[0] * fVar3)) +
-                 ((&g_particle[0].unk_002c)[iVar1 * 0x3c] * ((float)(fVar3 * g_xaxis[2] - fVar4 * g_xaxis[1]))
-                 + (&g_particle[0].unk_0030)[iVar1 * 0x3c] *
-                   ((float)(g_xaxis[0] * fVar4 - fVar2 * g_xaxis[2]))))) * 0.125 * 0.125 * 0.5 + *param_1);
+      fVar2 = (float)(g_particle[iVar1].pos.x - *param_3);
+      fVar3 = (float)(g_particle[iVar1].pos.y - param_3[1]);
+      fVar4 = (float)(g_particle[iVar1].pos.z - param_3[2]);
+      *param_1 = (float)(((float)(g_particle[iVar1].vel.z * ((float)(g_xaxis[1] * fVar2 - g_xaxis[0] * fVar3)) +
+                 (g_particle[iVar1].vel.x * ((float)(fVar3 * g_xaxis[2] - fVar4 * g_xaxis[1])) +
+                 g_particle[iVar1].vel.y * ((float)(g_xaxis[0] * fVar4 - fVar2 * g_xaxis[2]))))) * 0.125 *
+                 0.125 * 0.5 + *param_1);
       iVar1 = *piVar5;
       iVar6 = iVar6 + 1;
-      param_1[1] = (float)(((float)((&g_particle[0].unk_0034)[iVar1 * 0x3c] *
-                    ((float)(g_yaxis[1] * fVar2 - g_yaxis[0] * fVar3)) +
-                   ((&g_particle[0].unk_002c)[iVar1 * 0x3c] *
-                   ((float)(g_yaxis[2] * fVar3 - g_yaxis[1] * fVar4)) +
-                   (&g_particle[0].unk_0030)[iVar1 * 0x3c] *
-                   ((float)(g_yaxis[0] * fVar4 - g_yaxis[2] * fVar2))))) * 0.125 * 0.125 * 0.5 + param_1[1]);
+      param_1[1] = (float)(((float)(g_particle[iVar1].vel.z * ((float)(g_yaxis[1] * fVar2 - g_yaxis[0] * fVar3)) +
+                   (g_particle[iVar1].vel.x * ((float)(g_yaxis[2] * fVar3 - g_yaxis[1] * fVar4)) +
+                   g_particle[iVar1].vel.y * ((float)(g_yaxis[0] * fVar4 - g_yaxis[2] * fVar2))))) * 0.125 *
+                   0.125 * 0.5 + param_1[1]);
       iVar1 = *piVar5;
-      param_1[2] = (float)(((float)((&g_particle[0].unk_0034)[iVar1 * 0x3c] *
-                    ((float)(g_zaxis[1] * fVar2 - fVar3 * g_zaxis[0])) +
-                   (((float)(g_zaxis[2] * fVar3 - g_zaxis[1] * fVar4)) *
-                   (&g_particle[0].unk_002c)[iVar1 * 0x3c] +
-                   (&g_particle[0].unk_0030)[iVar1 * 0x3c] *
-                   ((float)(g_zaxis[0] * fVar4 - g_zaxis[2] * fVar2))))) * 0.125 * 0.125 * 0.5 + param_1[2]);
+      param_1[2] = (float)(((float)(g_particle[iVar1].vel.z * ((float)(g_zaxis[1] * fVar2 - fVar3 * g_zaxis[0])) +
+                   (((float)(g_zaxis[2] * fVar3 - g_zaxis[1] * fVar4)) * g_particle[iVar1].vel.x +
+                   g_particle[iVar1].vel.y * ((float)(g_zaxis[0] * fVar4 - g_zaxis[2] * fVar2))))) * 0.125 *
+                   0.125 * 0.5 + param_1[2]);
       piVar5 = piVar5 + 1;
-    } while (iVar6 < g_object[param_2].particle_start);
+    } while (iVar6 < g_object[param_2].num_particles);
   }
   return;
 }
@@ -16218,7 +15710,7 @@ void __cdecl lf_223d0(float *param_1,int param_2,float *param_3)
 /* ---------------------------------------------------------------- 0x225e0 */
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define __security_check_cookie(x) ((void)0)
 #define _CIsqrt x87_sqrt
 #define local_8c (*(float *)(lf_frame + 0x14))
@@ -16276,7 +15768,7 @@ void __cdecl lf_225e0(float *param_1,int param_2)
 
   
   local_4 = DAT_00460d18 ^ (uint)&local_8c;
-  iVar10 = *(int *)&g_object[param_2].lf_raw[0xb4];
+  iVar10 = g_object[param_2].particles[2];
   local_6c = param_1;
   local_44[0] = 2;
   local_44[1] = 3;
@@ -16286,39 +15778,36 @@ void __cdecl lf_225e0(float *param_1,int param_2)
   local_44[5] = 0xb;
   local_44[6] = 0xd;
   local_44[7] = 0xc;
-  iVar4 = *(int *)&g_object[param_2].lf_raw[0xb8];
-  iVar11 = *(int *)&g_object[param_2].lf_raw[0xc0];
-  iVar5 = *(int *)&g_object[param_2].lf_raw[0xbc];
-  iVar6 = *(int *)&g_object[param_2].lf_raw[0xd4];
-  iVar7 = *(int *)&g_object[param_2].lf_raw[0xd8];
+  iVar4 = g_object[param_2].particles[3];
+  iVar11 = g_object[param_2].particles[5];
+  iVar5 = g_object[param_2].particles[4];
+  iVar6 = g_object[param_2].particles[10];
+  iVar7 = g_object[param_2].particles[0xb];
   local_70 = 0;
-  iVar8 = *(int *)&g_object[param_2].lf_raw[0xe0];
-  iVar9 = *(int *)&g_object[param_2].lf_raw[0xdc];
+  iVar8 = g_object[param_2].particles[0xd];
+  iVar9 = g_object[param_2].particles[0xc];
   local_68 = param_2 * 0x8230;
-  local_8c = ((float)((&g_particle[0].unk_0014)[iVar9 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar8 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar7 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar6 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar5 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar11 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar4 * 0x3c] +
-             ((float)((&g_particle[0].unk_0014)[iVar10 * 0x3c] + 0.0)))))))))))))))) * 0.125;
-  local_88 = (float)(((float)((&g_particle[0].unk_0018)[iVar9 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar8 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar7 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar6 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar11 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar4 * 0x3c] +
-             ((float)((&g_particle[0].unk_0018)[iVar10 * 0x3c] + 0.0)))))))))))))))) * 0.125);
-  local_84 = (float)(((float)((&g_particle[0].unk_001c)[iVar9 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar8 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar7 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar6 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar5 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar11 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar4 * 0x3c] +
-             ((float)((&g_particle[0].unk_001c)[iVar10 * 0x3c] + 0.0)))))))))))))))) * 0.125);
+  local_8c = ((float)(g_particle[iVar9].pos.x +
+             ((float)(g_particle[iVar8].pos.x +
+             ((float)(g_particle[iVar7].pos.x +
+             ((float)(g_particle[iVar6].pos.x +
+             ((float)(g_particle[iVar5].pos.x +
+             ((float)(g_particle[iVar11].pos.x + ((float)(g_particle[iVar4].pos.x + ((float)(g_particle[iVar10].pos.x + 0.0)))))))))))))))) *
+             0.125;
+  local_88 = (float)(((float)(g_particle[iVar9].pos.y +
+             ((float)(g_particle[iVar8].pos.y +
+             ((float)(g_particle[iVar7].pos.y +
+             ((float)(g_particle[iVar6].pos.y +
+             ((float)(g_particle[iVar5].pos.y +
+             ((float)(g_particle[iVar11].pos.y + ((float)(g_particle[iVar4].pos.y + ((float)(g_particle[iVar10].pos.y + 0.0)))))))))))))))) *
+             0.125);
+  local_84 = (float)(((float)(g_particle[iVar9].pos.z +
+             ((float)(g_particle[iVar8].pos.z +
+             ((float)(g_particle[iVar7].pos.z +
+             ((float)(g_particle[iVar6].pos.z +
+             ((float)(g_particle[iVar5].pos.z +
+             ((float)(g_particle[iVar11].pos.z + ((float)(g_particle[iVar4].pos.z + ((float)(g_particle[iVar10].pos.z + 0.0)))))))))))))))) *
+             0.125);
   *param_1 = 0.0;
   param_1[1] = 0.0;
   param_1[2] = 0.0;
@@ -16326,14 +15815,14 @@ void __cdecl lf_225e0(float *param_1,int param_2)
   local_50[1] = 0.0;
   local_50[2] = 0.0;
   do {
-    local_54 = (int *)((int)(g_object[param_2].rot + 9) + (local_44[local_70] + 1) * 4);
+    local_54 = g_object[param_2].particles + local_44[local_70];
     iVar10 = 0;
     pfVar12 = (float *)((int)&g_object[0].rot[0].z + local_68);
     do {
       iVar4 = *local_54;
-      local_7c = (float)((&g_particle[0].unk_0014)[iVar4 * 0x3c] - local_8c);
-      local_78 = (float)((&g_particle[0].unk_0018)[iVar4 * 0x3c] - local_88);
-      local_74 = (float)((&g_particle[0].unk_001c)[iVar4 * 0x3c] - local_84);
+      local_7c = (float)(g_particle[iVar4].pos.x - local_8c);
+      local_78 = (float)(g_particle[iVar4].pos.y - local_88);
+      local_74 = (float)(g_particle[iVar4].pos.z - local_84);
       fVar1 = -((float)(local_78 * pfVar12[-1] + local_7c * pfVar12[-2] + local_74 * *pfVar12));
       local_7c = (float)(fVar1 * pfVar12[-2] + local_7c);
       local_78 = (float)(pfVar12[-1] * fVar1 + local_78);
@@ -16353,12 +15842,9 @@ void __cdecl lf_225e0(float *param_1,int param_2)
         fVar1 = fVar1 * local_74;
       }
       iVar11 = iVar10 + 1;
-      local_60 = (float)(fVar1 * (&g_particle[0].unk_0030)[iVar4 * 0x3c] -
-                 local_78 * (&g_particle[0].unk_0034)[iVar4 * 0x3c]);
-      local_5c = (float)(local_7c * (&g_particle[0].unk_0034)[iVar4 * 0x3c] -
-                 (&g_particle[0].unk_002c)[iVar4 * 0x3c] * fVar1);
-      local_58 = (float)((&g_particle[0].unk_002c)[iVar4 * 0x3c] * local_78 -
-                 local_7c * (&g_particle[0].unk_0030)[iVar4 * 0x3c]);
+      local_60 = (float)(fVar1 * g_particle[iVar4].vel.y - local_78 * g_particle[iVar4].vel.z);
+      local_5c = (float)(local_7c * g_particle[iVar4].vel.z - g_particle[iVar4].vel.x * fVar1);
+      local_58 = (float)(g_particle[iVar4].vel.x * local_78 - local_7c * g_particle[iVar4].vel.y);
       local_6c[iVar10] =
            (float)((float)(*pfVar12 * local_58 + (pfVar12[-2] * local_60 + pfVar12[-1] * local_5c)) + local_6c[iVar10]);
       local_50[iVar10] = (float)(local_50[iVar10] + local_64);
@@ -16466,7 +15952,7 @@ void __cdecl lf_22af0(float *param_1,float *param_2,float *param_3,float *param_
 
 /* ---------------------------------------------------------------- 0x22e20 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
 #define createevent_updateobject ((void (__cdecl *)(int, int, int, undefined4 *, undefined4 *))SR_FN(0x416ce0))
 void __cdecl lf_22e20(int param_1,int param_2)
@@ -16481,27 +15967,21 @@ void __cdecl lf_22e20(int param_1,int param_2)
   if (((g_object[param_1].type != 0xc) && (0 < g_object[param_1].health)) &&
      (iVar4 = g_object[param_1].health - param_2, g_object[param_1].health = iVar4, iVar4 < 1)) {
     uVar5 = rand();
-    iVar4 = g_object[param_1].unk_00c4;
+    iVar4 = g_object[param_1].particles[6];
     fVar3 = (float)(((float)(uVar5 & 0x7f) * 0.25 * 0.25 * 9.800000190734863) / 60.0 + 0.02041666768491268);
     fVar1 = g_object[param_1].rot[1].y;
     fVar2 = g_object[param_1].rot[1].z;
-    (&g_particle[0].unk_002c)[iVar4 * 0x3c] =
-         (float)((float)(fVar3 * g_object[param_1].rot[1].x) + (&g_particle[0].unk_002c)[iVar4 * 0x3c]);
-    (&g_particle[0].unk_0030)[iVar4 * 0x3c] =
-         (float)((&g_particle[0].unk_0030)[iVar4 * 0x3c] + (float)(fVar1 * fVar3));
-    (&g_particle[0].unk_0034)[iVar4 * 0x3c] =
-         (float)((&g_particle[0].unk_0034)[iVar4 * 0x3c] + (float)(fVar3 * fVar2));
+    g_particle[iVar4].vel.x = (float)((float)(fVar3 * g_object[param_1].rot[1].x) + g_particle[iVar4].vel.x);
+    g_particle[iVar4].vel.y = (float)(g_particle[iVar4].vel.y + (float)(fVar1 * fVar3));
+    g_particle[iVar4].vel.z = (float)(g_particle[iVar4].vel.z + (float)(fVar3 * fVar2));
     uVar5 = rand();
-    iVar4 = g_object[param_1].unk_00c8;
+    iVar4 = g_object[param_1].particles[7];
     fVar3 = (float)(((float)(uVar5 & 0x7f) * 0.25 * 0.25 * 9.800000190734863) / 60.0 + 0.02041666768491268);
     fVar1 = g_object[param_1].rot[1].y;
     fVar2 = g_object[param_1].rot[1].z;
-    (&g_particle[0].unk_002c)[iVar4 * 0x3c] =
-         (float)((&g_particle[0].unk_002c)[iVar4 * 0x3c] + (float)(fVar3 * g_object[param_1].rot[1].x));
-    (&g_particle[0].unk_0030)[iVar4 * 0x3c] =
-         (float)((&g_particle[0].unk_0030)[iVar4 * 0x3c] + (float)(fVar1 * fVar3));
-    (&g_particle[0].unk_0034)[iVar4 * 0x3c] =
-         (float)((&g_particle[0].unk_0034)[iVar4 * 0x3c] + (float)(fVar3 * fVar2));
+    g_particle[iVar4].vel.x = (float)(g_particle[iVar4].vel.x + (float)(fVar3 * g_object[param_1].rot[1].x));
+    g_particle[iVar4].vel.y = (float)(g_particle[iVar4].vel.y + (float)(fVar1 * fVar3));
+    g_particle[iVar4].vel.z = (float)(g_particle[iVar4].vel.z + (float)(fVar3 * fVar2));
     createevent_updateobject(param_1,2,0,&g_object[param_1].pos.x,&g_object[param_1].vel.x);
   }
   return;
@@ -16551,7 +16031,7 @@ float10 __cdecl lf_23fa0(int param_1)
 #define DAT_00583de0 (*(undefined4 *)SR_VA(0x583de0))
 #define DAT_00583de4 (*(undefined4 *)SR_VA(0x583de4))
 #define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bc50))
 #define _CIcos x87_cos
 #define _CIsin x87_sin
@@ -16855,27 +16335,24 @@ void __cdecl lf_240e0(int param_1)
   iVar10 = 4;
   do {
     if (iVar10 == 4) {
-      iVar11 = g_object[param_1].unk_00fc;
+      iVar11 = g_object[param_1].particles[0x14];
     }
     else {
-      iVar11 = g_object[param_1].unk_0100;
+      iVar11 = g_object[param_1].particles[0x15];
     }
     iVar1 = iVar10 * 0x24;
     fVar5 = (float)(*(float *)(&g_object[param_1].lf_raw[0x808c] + iVar1) * 0.125 +
-            ((float)((float)(((float)(LF_BITS_F((&g_object[param_1].unk_8074)[iVar10 * 9]) -
-             (&g_particle[0].unk_0014)[iVar11 * 0x3c])) * 0.03125) -
-            LF_BITS_F((&DAT_00583dd0)[iVar11 * 8]) * 0.125)));
+            ((float)((float)(((float)(LF_BITS_F((&g_object[param_1].unk_8074)[iVar10 * 9]) - g_particle[iVar11].pos.x)) * 0.03125)
+            - LF_BITS_F((&DAT_00583dd0)[iVar11 * 8]) * 0.125)));
     fVar2 = (float)(*(float *)(&g_object[param_1].lf_raw[0x8090] + iVar1) * 0.125 +
-            ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x8078] + iVar1) -
-             (&g_particle[0].unk_0018)[iVar11 * 0x3c])) * 0.03125) -
-            LF_BITS_F((&DAT_00583dd4)[iVar11 * 8]) * 0.125)));
+            ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x8078] + iVar1) - g_particle[iVar11].pos.y)) *
+             0.03125) - LF_BITS_F((&DAT_00583dd4)[iVar11 * 8]) * 0.125)));
     fVar4 = (float)(*(float *)(&g_object[param_1].lf_raw[0x8094] + iVar1) * 0.125 +
-            ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x807c] + iVar1) -
-             (&g_particle[0].unk_001c)[iVar11 * 0x3c])) * 0.03125) -
-            LF_BITS_F((&DAT_00583dd8)[iVar11 * 8]) * 0.125)));
-    fVar6 = (float)(1.0 / ((&g_particle[0].unk_0008)[iVar11 * 0x3c] + 64.0));
+            ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x807c] + iVar1) - g_particle[iVar11].pos.z)) *
+             0.03125) - LF_BITS_F((&DAT_00583dd8)[iVar11 * 8]) * 0.125)));
+    fVar6 = (float)(1.0 / (g_particle[iVar11].mass + 64.0));
     fVar7 = (float)(fVar6 * 64.0);
-    fVar3 = (&g_particle[0].unk_0008)[iVar11 * 0x3c];
+    fVar3 = g_particle[iVar11].mass;
     *(float *)&((&DAT_00583de0)[iVar11 * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[iVar11 * 8]) + fVar7 * fVar5);
     *(float *)&((&DAT_00583de4)[iVar11 * 8]) = (float)(fVar2 * fVar7 + LF_BITS_F((&DAT_00583de4)[iVar11 * 8]));
     *(float *)&((&DAT_00583de8)[iVar11 * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[iVar11 * 8]) + fVar4 * fVar7);
@@ -17000,7 +16477,7 @@ LAB_00424dcf:
 /* ---------------------------------------------------------------- 0x24f60 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
 #define addobjectrotation ((void (__cdecl *)(int, float *, float *, float))SR_FN(0x421e00))
 #define _CIsin x87_sin
@@ -17016,15 +16493,17 @@ void __cdecl lf_24f60(int param_1)
 {
   __declspec(align(16)) uchar lf_frame[0x30];
   vec3 *pvVar1;
-  float *pfVar2;
+  vec3 *pvVar2;
   int iVar3;
   float fVar4;
   float fVar5;
   float fVar6;
-  bool bVar7;
-  int *piVar8;
-  int iVar9;
-  double dVar10;
+  float fVar7;
+  float fVar8;
+  bool bVar9;
+  int *piVar10;
+  int iVar11;
+  double dVar12;
 
 
 
@@ -17032,26 +16511,26 @@ void __cdecl lf_24f60(int param_1)
 
 
   
-  bVar7 = false;
-  piVar8 = &g_human[0].vehicle_id;
+  bVar9 = false;
+  piVar10 = &g_human[0].vehicle_id;
   do {
-    if (((((Human *)(piVar8 + -5))->active != 0) && (*piVar8 == param_1)) && (piVar8[1] == 0)) {
-      bVar7 = true;
+    if (((((Human *)(piVar10 + -5))->active != 0) && (*piVar10 == param_1)) && (piVar10[1] == 0)) {
+      bVar9 = true;
     }
-    if (((piVar8[0xad4] != 0) && (piVar8[0xad9] == param_1)) && (piVar8[0xada] == 0)) {
-      bVar7 = true;
+    if (((piVar10[0xad4] != 0) && (piVar10[0xad9] == param_1)) && (piVar10[0xada] == 0)) {
+      bVar9 = true;
     }
-    if (((piVar8[0x15ad] != 0) && (piVar8[0x15b2] == param_1)) && (piVar8[0x15b3] == 0)) {
-      bVar7 = true;
+    if (((piVar10[0x15ad] != 0) && (piVar10[0x15b2] == param_1)) && (piVar10[0x15b3] == 0)) {
+      bVar9 = true;
     }
-    if (((piVar8[0x2086] != 0) && (piVar8[0x208b] == param_1)) && (piVar8[0x208c] == 0)) {
-      bVar7 = true;
+    if (((piVar10[0x2086] != 0) && (piVar10[0x208b] == param_1)) && (piVar10[0x208c] == 0)) {
+      bVar9 = true;
     }
-    piVar8 = piVar8 + 0x2b64;
-  } while ((int)piVar8 < ((int)SR_VA(0x1f38794)));
-  iVar9 = g_object[param_1].health;
-  if ((iVar9 < 1) || (g_object[param_1].unk_0020 != 0)) {
-    bVar7 = false;
+    piVar10 = piVar10 + 0x2b64;
+  } while ((int)piVar10 < ((int)SR_VA(0x1f38794)));
+  iVar11 = g_object[param_1].health;
+  if ((iVar11 < 1) || (g_object[param_1].unk_0020 != 0)) {
+    bVar9 = false;
 LAB_0042501c:
     if (g_object[param_1].unk_5ee0 < 10) {
       g_object[param_1].unk_5ee0 = 0;
@@ -17061,7 +16540,7 @@ LAB_0042501c:
     }
   }
   else {
-    if (!bVar7) goto LAB_0042501c;
+    if (!bVar9) goto LAB_0042501c;
     if (g_object[param_1].unk_5ee0 < 0x7c7) {
       g_object[param_1].unk_5ee0 = g_object[param_1].unk_5ee0 + 10;
     }
@@ -17070,158 +16549,136 @@ LAB_0042501c:
     }
   }
   iVar3 = g_object[param_1].unk_5ee0;
-  fVar5 = (float)(g_object[param_1].rotor_angle + (((float)iVar3 * 2.0 * 3.14159265359) / 60.0) / 60.0);
-  g_object[param_1].rotor_angle = fVar5;
-  g_object[param_1].unk_5fb4 = (float)(fVar5 - (((float)iVar3 * 0.125 * 2.0 * 3.14159265359) / 60.0) / 60.0);
-  if (fVar5 <= 3.14159265359) {
+  fVar4 = (float)(g_object[param_1].rotor_angle + (((float)iVar3 * 2.0 * 3.14159265359) / 60.0) / 60.0);
+  g_object[param_1].rotor_angle = fVar4;
+  g_object[param_1].unk_5fb4 = (float)(fVar4 - (((float)iVar3 * 0.125 * 2.0 * 3.14159265359) / 60.0) / 60.0);
+  if (fVar4 <= 3.14159265359) {
     if (-3.14159265359 <= g_object[param_1].rotor_angle) goto LAB_004250f8;
-    fVar5 = (float)(g_object[param_1].rotor_angle + 6.28318530718);
+    fVar4 = (float)(g_object[param_1].rotor_angle + 6.28318530718);
   }
   else {
-    fVar5 = g_object[param_1].rotor_angle - 6.28318530718;
+    fVar4 = g_object[param_1].rotor_angle - 6.28318530718;
   }
-  g_object[param_1].rotor_angle = fVar5;
+  g_object[param_1].rotor_angle = fVar4;
 LAB_004250f8:
-  if ((bVar7) && (0 < iVar9)) {
-    local_18 = (int *)&g_object[param_1].lf_raw[0xac];
+  if ((bVar9) && (0 < iVar11)) {
+    local_18 = g_object[param_1].particles;
     pvVar1 = g_object[param_1].rot + 1;
     local_14 = 0x14;
     do {
-      iVar9 = *local_18;
-      pfVar2 = &g_particle[0].unk_0038 + iVar9 * 0x3c;
-      *pfVar2 = (&g_particle[0].unk_002c)[iVar9 * 0x3c];
-      (&g_particle[0].unk_003c)[iVar9 * 0x3c] = (&g_particle[0].unk_0030)[iVar9 * 0x3c];
-      (&g_particle[0].unk_0040)[iVar9 * 0x3c] = (&g_particle[0].unk_0034)[iVar9 * 0x3c];
-      dVar10 = _CIsqrt((double)((float)((&g_particle[0].unk_0040)[iVar9 * 0x3c] *
-                                (&g_particle[0].unk_0040)[iVar9 * 0x3c] +
-                               (*pfVar2 * *pfVar2 +
-                               (&g_particle[0].unk_003c)[iVar9 * 0x3c] *
-                               (&g_particle[0].unk_003c)[iVar9 * 0x3c]))));
-      fVar5 = (float)((float)dVar10 * (float)dVar10);
-      normalizevector(&local_c,pfVar2);
-      fVar4 = (float)(((fVar5 * 4.0 * 0.5) / -1000.0) *
+      iVar11 = *local_18;
+      pvVar2 = &g_particle[iVar11].vel_prev;
+      pvVar2->x = g_particle[iVar11].vel.x;
+      g_particle[iVar11].vel_prev.y = g_particle[iVar11].vel.y;
+      g_particle[iVar11].vel_prev.z = g_particle[iVar11].vel.z;
+      fVar4 = g_particle[iVar11].vel_prev.y;
+      fVar5 = g_particle[iVar11].vel_prev.z;
+      dVar12 = _CIsqrt((double)((float)(fVar5 * fVar5 + (pvVar2->x * pvVar2->x + fVar4 * fVar4))));
+      fVar4 = (float)((float)dVar12 * (float)dVar12);
+      normalizevector(&local_c,&pvVar2->x);
+      fVar5 = (float)(((fVar4 * 4.0 * 0.5) / -1000.0) *
               ((float)(local_4 * g_object[param_1].rot[0].z +
               (local_c * g_object[param_1].rot[0].x + local_8 * g_object[param_1].rot[0].y))));
-      (&g_particle[0].unk_002c)[iVar9 * 0x3c] =
-           (float)(fVar4 * g_object[param_1].rot[0].x + (&g_particle[0].unk_002c)[iVar9 * 0x3c]);
-      (&g_particle[0].unk_0030)[iVar9 * 0x3c] =
-           (float)(g_object[param_1].rot[0].y * fVar4 + (&g_particle[0].unk_0030)[iVar9 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar9 * 0x3c] =
-           (float)(fVar4 * g_object[param_1].rot[0].z + (&g_particle[0].unk_0034)[iVar9 * 0x3c]);
+      g_particle[iVar11].vel.x = (float)(fVar5 * g_object[param_1].rot[0].x + g_particle[iVar11].vel.x);
+      g_particle[iVar11].vel.y = (float)(g_object[param_1].rot[0].y * fVar5 + g_particle[iVar11].vel.y);
+      g_particle[iVar11].vel.z = (float)(fVar5 * g_object[param_1].rot[0].z + g_particle[iVar11].vel.z);
       local_18 = local_18 + 1;
       local_14 = local_14 + -1;
-      fVar4 = (float)((((fVar5 + fVar5) * 4.0 * 0.5) / -1000.0) *
+      fVar5 = (float)((((fVar4 + fVar4) * 4.0 * 0.5) / -1000.0) *
               ((float)(local_4 * g_object[param_1].rot[1].z +
               (pvVar1->x * local_c + local_8 * g_object[param_1].rot[1].y))));
-      (&g_particle[0].unk_002c)[iVar9 * 0x3c] =
-           (float)((&g_particle[0].unk_002c)[iVar9 * 0x3c] + fVar4 * pvVar1->x);
-      (&g_particle[0].unk_0030)[iVar9 * 0x3c] =
-           (float)(fVar4 * g_object[param_1].rot[1].y + (&g_particle[0].unk_0030)[iVar9 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar9 * 0x3c] =
-           (float)(fVar4 * g_object[param_1].rot[1].z + (&g_particle[0].unk_0034)[iVar9 * 0x3c]);
-      fVar5 = (float)((((fVar5 + fVar5) * 0.375) / -1000.0) *
+      g_particle[iVar11].vel.x = (float)(g_particle[iVar11].vel.x + fVar5 * pvVar1->x);
+      g_particle[iVar11].vel.y = (float)(fVar5 * g_object[param_1].rot[1].y + g_particle[iVar11].vel.y);
+      g_particle[iVar11].vel.z = (float)(fVar5 * g_object[param_1].rot[1].z + g_particle[iVar11].vel.z);
+      fVar4 = (float)((((fVar4 + fVar4) * 0.375) / -1000.0) *
               ((float)(g_object[param_1].rot[2].y * local_8 + g_object[param_1].rot[2].x * local_c +
               g_object[param_1].rot[2].z * local_4)));
-      (&g_particle[0].unk_002c)[iVar9 * 0x3c] =
-           (float)((&g_particle[0].unk_002c)[iVar9 * 0x3c] + fVar5 * g_object[param_1].rot[2].x);
-      (&g_particle[0].unk_0030)[iVar9 * 0x3c] =
-           (float)(g_object[param_1].rot[2].y * fVar5 + (&g_particle[0].unk_0030)[iVar9 * 0x3c]);
-      (&g_particle[0].unk_0034)[iVar9 * 0x3c] =
-           (float)(fVar5 * g_object[param_1].rot[2].z + (&g_particle[0].unk_0034)[iVar9 * 0x3c]);
+      g_particle[iVar11].vel.x = (float)(g_particle[iVar11].vel.x + fVar4 * g_object[param_1].rot[2].x);
+      g_particle[iVar11].vel.y = (float)(g_object[param_1].rot[2].y * fVar4 + g_particle[iVar11].vel.y);
+      g_particle[iVar11].vel.z = (float)(fVar4 * g_object[param_1].rot[2].z + g_particle[iVar11].vel.z);
     } while (local_14 != 0);
-    iVar9 = 0x15;
-    if (0x15 < g_object[param_1].particle_start) {
-      fVar5 = (float)(g_object[param_1].unk_5bc8 * 0.125 * 0.25 * 3.14159265359 + 0.14726215563703127);
+    iVar11 = 0x15;
+    if (0x15 < g_object[param_1].num_particles) {
+      fVar4 = (float)(g_object[param_1].unk_5bc8 * 0.125 * 0.25 * 3.14159265359 + 0.14726215563703127);
       do {
-        iVar3 = *(int *)((int)(g_object[param_1].rot + 9) + (iVar9 + 1) * 4);
-        if (iVar9 == 0x15) {
-          local_1c = (float)(g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359 + fVar5);
+        iVar3 = g_object[param_1].particles[iVar11];
+        if (iVar11 == 0x15) {
+          local_1c = (float)(g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359 + fVar4);
         }
-        else if (iVar9 == 0x16) {
-          local_1c = (float)(fVar5 - g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359);
+        else if (iVar11 == 0x16) {
+          local_1c = (float)(fVar4 - g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359);
         }
-        else if (iVar9 == 0x17) {
-          local_1c = (float)(fVar5 - g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359);
+        else if (iVar11 == 0x17) {
+          local_1c = (float)(fVar4 - g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359);
         }
         else {
-          local_1c = fVar5;
-          if (iVar9 == 0x18) {
-            local_1c = (float)(g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359 + fVar5);
+          local_1c = fVar4;
+          if (iVar11 == 0x18) {
+            local_1c = (float)(g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359 + fVar4);
           }
         }
-        local_c = (&g_particle[0].unk_002c)[iVar3 * 0x3c];
-        local_8 = (&g_particle[0].unk_0030)[iVar3 * 0x3c];
-        local_4 = (&g_particle[0].unk_0034)[iVar3 * 0x3c];
-        dVar10 = _CIsin((double)local_1c);
-        fVar4 = (float)(((float10)dVar10 * (float10)-160.0) / (float10)60.0);
-        local_c = (float)(local_c + fVar4 * pvVar1->x);
-        local_8 = (float)(fVar4 * g_object[param_1].rot[1].y + local_8);
-        local_4 = (float)(fVar4 * g_object[param_1].rot[1].z + local_4);
-        dVar10 = _CIsqrt((double)((float)(local_4 * local_4 + (local_c * local_c + local_8 * local_8))));
-        fVar4 = (float)dVar10;
-        fVar6 = 0.0;
-        if (fVar4 == 0.0) {
+        local_c = g_particle[iVar3].vel.x;
+        local_8 = g_particle[iVar3].vel.y;
+        local_4 = g_particle[iVar3].vel.z;
+        dVar12 = _CIsin((double)local_1c);
+        fVar5 = (float)(((float10)dVar12 * (float10)-160.0) / (float10)60.0);
+        local_c = (float)(local_c + fVar5 * pvVar1->x);
+        local_8 = (float)(fVar5 * g_object[param_1].rot[1].y + local_8);
+        local_4 = (float)(fVar5 * g_object[param_1].rot[1].z + local_4);
+        dVar12 = _CIsqrt((double)((float)(local_4 * local_4 + (local_c * local_c + local_8 * local_8))));
+        fVar5 = (float)dVar12;
+        fVar8 = 0.0;
+        if (fVar5 == 0.0) {
           local_c = 0.0;
           local_8 = 0.0;
         }
         else {
-          fVar6 = (float)(1.0 / fVar4);
-          local_c = (float)(fVar6 * local_c);
-          local_8 = (float)(local_8 * fVar6);
-          fVar6 = fVar6 * local_4;
+          fVar8 = (float)(1.0 / fVar5);
+          local_c = (float)(fVar8 * local_c);
+          local_8 = (float)(local_8 * fVar8);
+          fVar8 = fVar8 * local_4;
         }
-        fVar4 = (float)((float)(fVar4 * fVar4) * 4.0 * 0.5 * -0.03125 *
-                ((float)(fVar6 * g_object[param_1].rot[1].z +
+        fVar5 = (float)((float)(fVar5 * fVar5) * 4.0 * 0.5 * -0.03125 *
+                ((float)(fVar8 * g_object[param_1].rot[1].z +
                 (pvVar1->x * local_c + local_8 * g_object[param_1].rot[1].y))));
-        (&g_particle[0].unk_002c)[iVar3 * 0x3c] =
-             (float)((&g_particle[0].unk_002c)[iVar3 * 0x3c] + fVar4 * pvVar1->x);
-        (&g_particle[0].unk_0030)[iVar3 * 0x3c] =
-             (float)(fVar4 * g_object[param_1].rot[1].y + (&g_particle[0].unk_0030)[iVar3 * 0x3c]);
-        (&g_particle[0].unk_0034)[iVar3 * 0x3c] =
-             (float)(fVar4 * g_object[param_1].rot[1].z + (&g_particle[0].unk_0034)[iVar3 * 0x3c]);
-        (&g_particle[0].unk_0038)[iVar3 * 0x3c] = (&g_particle[0].unk_002c)[iVar3 * 0x3c];
-        (&g_particle[0].unk_003c)[iVar3 * 0x3c] = (&g_particle[0].unk_0030)[iVar3 * 0x3c];
-        (&g_particle[0].unk_0040)[iVar3 * 0x3c] = (&g_particle[0].unk_0034)[iVar3 * 0x3c];
-        local_4 = fVar6;
-        dVar10 = _CIsqrt((double)((float)((&g_particle[0].unk_0040)[iVar3 * 0x3c] *
-                                  (&g_particle[0].unk_0040)[iVar3 * 0x3c] +
-                                 ((&g_particle[0].unk_0038)[iVar3 * 0x3c] *
-                                 (&g_particle[0].unk_0038)[iVar3 * 0x3c] +
-                                 (&g_particle[0].unk_003c)[iVar3 * 0x3c] *
-                                 (&g_particle[0].unk_003c)[iVar3 * 0x3c]))));
-        fVar4 = (float)dVar10;
-        fVar6 = (float)(fVar4 * fVar4);
+        g_particle[iVar3].vel.x = (float)(g_particle[iVar3].vel.x + fVar5 * pvVar1->x);
+        g_particle[iVar3].vel.y = (float)(fVar5 * g_object[param_1].rot[1].y + g_particle[iVar3].vel.y);
+        g_particle[iVar3].vel.z = (float)(fVar5 * g_object[param_1].rot[1].z + g_particle[iVar3].vel.z);
+        g_particle[iVar3].vel_prev.x = g_particle[iVar3].vel.x;
+        g_particle[iVar3].vel_prev.y = g_particle[iVar3].vel.y;
+        g_particle[iVar3].vel_prev.z = g_particle[iVar3].vel.z;
+        fVar5 = g_particle[iVar3].vel_prev.y;
+        fVar6 = g_particle[iVar3].vel_prev.x;
+        fVar7 = g_particle[iVar3].vel_prev.z;
+        local_4 = fVar8;
+        dVar12 = _CIsqrt((double)((float)(fVar7 * fVar7 + (fVar6 * fVar6 + fVar5 * fVar5))));
+        fVar5 = (float)dVar12;
+        fVar8 = (float)(fVar5 * fVar5);
         local_4 = 0.0;
-        if (fVar4 == 0.0) {
+        if (fVar5 == 0.0) {
           local_c = 0.0;
           local_8 = 0.0;
         }
         else {
-          fVar4 = (float)(1.0 / fVar4);
-          local_c = (float)(fVar4 * (&g_particle[0].unk_0038)[iVar3 * 0x3c]);
-          local_8 = (float)(fVar4 * (&g_particle[0].unk_003c)[iVar3 * 0x3c]);
-          local_4 = fVar4 * (&g_particle[0].unk_0040)[iVar3 * 0x3c];
+          fVar5 = (float)(1.0 / fVar5);
+          local_c = (float)(fVar5 * g_particle[iVar3].vel_prev.x);
+          local_8 = (float)(fVar5 * g_particle[iVar3].vel_prev.y);
+          local_4 = fVar5 * g_particle[iVar3].vel_prev.z;
         }
-        iVar9 = iVar9 + 1;
-        fVar4 = (float)(fVar6 * 4.0 * 0.5 * -0.00390625 *
+        iVar11 = iVar11 + 1;
+        fVar5 = (float)(fVar8 * 4.0 * 0.5 * -0.00390625 *
                 ((float)(local_4 * g_object[param_1].rot[0].z +
                 (local_c * g_object[param_1].rot[0].x + local_8 * g_object[param_1].rot[0].y))));
-        (&g_particle[0].unk_002c)[iVar3 * 0x3c] =
-             (float)(fVar4 * g_object[param_1].rot[0].x + (&g_particle[0].unk_002c)[iVar3 * 0x3c]);
-        (&g_particle[0].unk_0030)[iVar3 * 0x3c] =
-             (float)(g_object[param_1].rot[0].y * fVar4 + (&g_particle[0].unk_0030)[iVar3 * 0x3c]);
-        (&g_particle[0].unk_0034)[iVar3 * 0x3c] =
-             (float)(fVar4 * g_object[param_1].rot[0].z + (&g_particle[0].unk_0034)[iVar3 * 0x3c]);
-        fVar4 = (float)((fVar6 + fVar6) * 0.375 * -0.00390625 *
+        g_particle[iVar3].vel.x = (float)(fVar5 * g_object[param_1].rot[0].x + g_particle[iVar3].vel.x);
+        g_particle[iVar3].vel.y = (float)(g_object[param_1].rot[0].y * fVar5 + g_particle[iVar3].vel.y);
+        g_particle[iVar3].vel.z = (float)(fVar5 * g_object[param_1].rot[0].z + g_particle[iVar3].vel.z);
+        fVar5 = (float)((fVar8 + fVar8) * 0.375 * -0.00390625 *
                 ((float)(g_object[param_1].rot[2].y * local_8 + g_object[param_1].rot[2].x * local_c +
                 g_object[param_1].rot[2].z * local_4)));
-        (&g_particle[0].unk_002c)[iVar3 * 0x3c] =
-             (float)((&g_particle[0].unk_002c)[iVar3 * 0x3c] + fVar4 * g_object[param_1].rot[2].x);
-        (&g_particle[0].unk_0030)[iVar3 * 0x3c] =
-             (float)(g_object[param_1].rot[2].y * fVar4 + (&g_particle[0].unk_0030)[iVar3 * 0x3c]);
-        (&g_particle[0].unk_0034)[iVar3 * 0x3c] =
-             (float)(fVar4 * g_object[param_1].rot[2].z + (&g_particle[0].unk_0034)[iVar3 * 0x3c]);
-      } while (iVar9 < g_object[param_1].particle_start);
+        g_particle[iVar3].vel.x = (float)(g_particle[iVar3].vel.x + fVar5 * g_object[param_1].rot[2].x);
+        g_particle[iVar3].vel.y = (float)(g_object[param_1].rot[2].y * fVar5 + g_particle[iVar3].vel.y);
+        g_particle[iVar3].vel.z = (float)(fVar5 * g_object[param_1].rot[2].z + g_particle[iVar3].vel.z);
+      } while (iVar11 < g_object[param_1].num_particles);
     }
     addobjectrotation(param_1,&g_object[param_1].pos.x,&pvVar1->x,
                       (float)(g_object[param_1].unk_5bc0 * 2.7777778450399637E-4));
@@ -17245,7 +16702,7 @@ LAB_004250f8:
 /* ---------------------------------------------------------------- 0x257a0 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x40ba60))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x40bb80))
 #define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_FN(0x40c680))
@@ -17346,30 +16803,27 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
             g_intersect.normal[2] = LF_BITS_F(local_28);
             g_intersect.unk_0030 = local_48;
             g_intersect.unk_0034 =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
             g_intersect.fraction = local_50;
             g_intersect.unk_0038 =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar4) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar4)];
             g_intersect.unk_003c =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
             calculatebarycentric
                       (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_c,(float *)&local_24,
                        (float *)&local_3c);
             g_intersect.unk_0020 =
-                 (float)((float)(g_intersect.unk_0048 * (&g_particle[0].unk_002c)[g_intersect.unk_0038 * 0x3c] +
-                 g_intersect.unk_0044 * (&g_particle[0].unk_002c)[g_intersect.unk_0034 * 0x3c]) +
-                 g_intersect.unk_004c * (&g_particle[0].unk_002c)[g_intersect.unk_003c * 0x3c]);
+                 (float)((float)(g_intersect.unk_0048 * g_particle[g_intersect.unk_0038].vel.x +
+                 g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.x) +
+                 g_intersect.unk_004c * g_particle[g_intersect.unk_003c].vel.x);
             g_intersect.unk_0024 =
-                 (float)((&g_particle[0].unk_0030)[g_intersect.unk_003c * 0x3c] * g_intersect.unk_004c +
-                 ((float)((&g_particle[0].unk_0030)[g_intersect.unk_0038 * 0x3c] * g_intersect.unk_0048 +
-                 (float)((&g_particle[0].unk_0030)[g_intersect.unk_0034 * 0x3c] * g_intersect.unk_0044))));
+                 (float)(g_particle[g_intersect.unk_003c].vel.y * g_intersect.unk_004c +
+                 ((float)(g_particle[g_intersect.unk_0038].vel.y * g_intersect.unk_0048 +
+                 (float)(g_particle[g_intersect.unk_0034].vel.y * g_intersect.unk_0044))));
             g_intersect.unk_0028 =
-                 (float)(g_intersect.unk_004c * (&g_particle[0].unk_0034)[g_intersect.unk_003c * 0x3c] +
-                 ((float)(g_intersect.unk_0048 * (&g_particle[0].unk_0034)[g_intersect.unk_0038 * 0x3c] +
-                 (float)(g_intersect.unk_0044 * (&g_particle[0].unk_0034)[g_intersect.unk_0034 * 0x3c]))));
+                 (float)(g_intersect.unk_004c * g_particle[g_intersect.unk_003c].vel.z +
+                 ((float)(g_intersect.unk_0048 * g_particle[g_intersect.unk_0038].vel.z +
+                 (float)(g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.z))));
           }
           iVar4 = local_4c;
           if (local_44[-2] == 4) {
@@ -17395,30 +16849,22 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
               g_intersect.normal[2] = LF_BITS_F(local_28);
               g_intersect.unk_0030 = local_48;
               g_intersect.unk_0034 =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
               g_intersect.fraction = local_50;
               g_intersect.unk_0038 =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
               g_intersect.unk_003c =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
               calculatebarycentric
                         (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_c,(float *)&local_24,
                          (float *)&local_3c);
-              g_intersect.unk_0020 =
-                   g_intersect.unk_0044 * (&g_particle[0].unk_002c)[g_intersect.unk_0034 * 0x3c];
-              g_intersect.unk_0024 =
-                   (float)((&g_particle[0].unk_0030)[g_intersect.unk_0034 * 0x3c] * g_intersect.unk_0044);
-              g_intersect.unk_0028 =
-                   (float)(g_intersect.unk_0044 * (&g_particle[0].unk_0034)[g_intersect.unk_0034 * 0x3c]);
+              g_intersect.unk_0020 = g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.x;
+              g_intersect.unk_0024 = (float)(g_particle[g_intersect.unk_0034].vel.y * g_intersect.unk_0044);
+              g_intersect.unk_0028 = (float)(g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.z);
               scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
-                              &g_particle[0].unk_002c + g_intersect.unk_0038 * 0x3c,
-                              g_intersect.unk_0048);
+                              &g_particle[g_intersect.unk_0038].vel.x,g_intersect.unk_0048);
               scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
-                              &g_particle[0].unk_002c + g_intersect.unk_003c * 0x3c,
-                              g_intersect.unk_004c);
+                              &g_particle[g_intersect.unk_003c].vel.x,g_intersect.unk_004c);
               iVar4 = local_4c;
             }
           }
@@ -18136,7 +17582,7 @@ undefined4 __cdecl lf_26db0(float *param_1,float *param_2,int param_3)
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
 #define g_track (*(Track *)SR_VA(0x25d7efc0))
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
 #define lineintersecttrack ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x426bc0))
 #define lineintersecttrackrail ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x426db0))
@@ -18171,19 +17617,18 @@ void __cdecl lf_26f90(int param_1)
       if ((((local_10[-2] <= g_object[param_1].unk_0090) &&
            (*local_10 <= g_object[param_1].unk_0098)) && (g_object[param_1].unk_0084 <= local_10[1])
           ) && (g_object[param_1].unk_008c <= local_10[3])) {
-        local_1c = (int *)&g_object[param_1].lf_raw[0xac];
+        local_1c = g_object[param_1].particles;
         local_14 = 4;
         do {
           iVar2 = *local_1c;
-          iVar12 = lineintersecttrack(&g_object[param_1].pos.x,
-                                      &g_particle[0].unk_0014 + iVar2 * 0x3c,iVar13);
+          iVar12 = lineintersecttrack(&g_object[param_1].pos.x,&g_particle[iVar2].pos.x,iVar13);
           iVar11 = g_numofbonds;
           fVar5 = g_intersect.pos[2];
           if (iVar12 != 0) {
-            fVar3 = (float)(g_intersect.pos[0] - (&g_particle[0].unk_0014)[iVar2 * 0x3c]);
-            fVar4 = (float)(g_intersect.pos[1] - (&g_particle[0].unk_0018)[iVar2 * 0x3c]);
-            g_bond[g_numofbonds].state = 1;
-            fVar1 = (&g_particle[0].unk_001c)[iVar2 * 0x3c];
+            fVar3 = (float)(g_intersect.pos[0] - g_particle[iVar2].pos.x);
+            fVar4 = (float)(g_intersect.pos[1] - g_particle[iVar2].pos.y);
+            g_bond[g_numofbonds].type = 1;
+            fVar1 = g_particle[iVar2].pos.z;
             g_bond[iVar11].particle_a = iVar2;
             fVar8 = g_intersect.normal[2];
             fVar7 = g_intersect.normal[1];
@@ -18212,20 +17657,18 @@ void __cdecl lf_26f90(int param_1)
             }
           }
           iVar2 = *local_1c;
-          iVar12 = lineintersecttrackrail
-                             (&g_object[param_1].pos.x,&g_particle[0].unk_0014 + iVar2 * 0x3c,iVar13
-                             );
+          iVar12 = lineintersecttrackrail(&g_object[param_1].pos.x,&g_particle[iVar2].pos.x,iVar13);
           iVar11 = g_numofbonds;
           if (iVar12 != 0) {
-            fVar5 = (float)(g_intersect.pos[0] - (&g_particle[0].unk_0014)[iVar2 * 0x3c]);
-            fVar1 = (float)(g_intersect.pos[1] - (&g_particle[0].unk_0018)[iVar2 * 0x3c]);
-            g_bond[g_numofbonds].state = 1;
+            fVar5 = (float)(g_intersect.pos[0] - g_particle[iVar2].pos.x);
+            fVar1 = (float)(g_intersect.pos[1] - g_particle[iVar2].pos.y);
+            g_bond[g_numofbonds].type = 1;
             fVar3 = g_intersect.pos[2];
             g_bond[iVar11].particle_a = iVar2;
             fVar10 = g_intersect.normal[2];
             fVar9 = g_intersect.normal[1];
             fVar4 = g_intersect.normal[0];
-            fVar5 = (float)(g_intersect.normal[2] * ((float)(fVar3 - (&g_particle[0].unk_001c)[iVar2 * 0x3c])) +
+            fVar5 = (float)(g_intersect.normal[2] * ((float)(fVar3 - g_particle[iVar2].pos.z)) +
                     (g_intersect.normal[0] * fVar5 + g_intersect.normal[1] * fVar1));
             g_bond[iVar11].rest_length = fVar5;
             if (0.25 < fVar5) {
@@ -18489,284 +17932,6 @@ LAB_0042788c:
 #undef _CIatan2
 #undef _CItan
 #undef local_18
-
-/* ---------------------------------------------------------------- 0x278c0 */
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-int __cdecl lf_278c0(int param_1,undefined4 *param_2,undefined4 *param_3,float param_4,int param_5)
-
-{
-  int iVar1;
-  int iVar2;
-  
-  iVar2 = g_area_sector.unk_0030;
-  if (0x3fff < g_area_sector.unk_0030) {
-    return -1;
-  }
-  iVar1 = g_area_sector.unk_0030 * 0x3c;
-  memset(&g_particle[0].unk_0000 + iVar1,0,0xf0);
-  (&g_particle[0].unk_0000)[iVar1] = param_1;
-  (&g_particle[0].unk_0004)[iVar2 * 0x3c] = 0x10000;
-  (&g_particle[0].unk_0014)[iVar2 * 0x3c] = LF_BITS_F(*param_2);
-  (&g_particle[0].unk_0018)[iVar2 * 0x3c] = LF_BITS_F(param_2[1]);
-  (&g_particle[0].unk_001c)[iVar2 * 0x3c] = LF_BITS_F(param_2[2]);
-  (&g_particle[0].unk_0020)[iVar2 * 0x3c] = LF_BITS_F(*param_2);
-  (&g_particle[0].unk_0024)[iVar2 * 0x3c] = LF_BITS_F(param_2[1]);
-  (&g_particle[0].unk_0028)[iVar2 * 0x3c] = LF_BITS_F(param_2[2]);
-  if (param_3 != (undefined4 *)0x0) {
-    (&g_particle[0].unk_002c)[iVar2 * 0x3c] = LF_BITS_F(*param_3);
-    (&g_particle[0].unk_0030)[iVar2 * 0x3c] = LF_BITS_F(param_3[1]);
-    (&g_particle[0].unk_0034)[iVar2 * 0x3c] = LF_BITS_F(param_3[2]);
-  }
-  (&g_particle[0].unk_0008)[iVar2 * 0x3c] = param_4;
-  (&g_particle[0].unk_000c)[iVar2 * 0x3c] = 0.0027222223579883575;
-  (&g_particle[0].unk_0010)[iVar2 * 0x3c] = 1.0;
-  if (param_5 != -1) {
-    (&g_particle[0].unk_00d8)[(&g_particle[0].unk_00d4)[iVar2 * 0x3c] + iVar2 * 0x3c] = param_5;
-    (&g_particle[0].unk_00d4)[iVar2 * 0x3c] = (&g_particle[0].unk_00d4)[iVar2 * 0x3c] + 1;
-  }
-  g_area_sector.unk_0030 = iVar2 + 1;
-  return iVar2;
-}
-#undef g_particle
-#undef g_area_sector
-#undef memset
-
-/* ---------------------------------------------------------------- 0x279b0 */
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define deletebond ((void (__cdecl *)(int))SR_FN(0x4033a0))
-#define local_c (*(int * *)(lf_frame + 0x14))
-#define local_8 (*(int *)(lf_frame + 0x18))
-#define local_4 (*(int * *)(lf_frame + 0x1c))
-void __cdecl lf_279b0(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int iVar1;
-  int *piVar2;
-  int iVar3;
-  int iVar4;
-  int *piVar5;
-  int iVar6;
-  int *piVar7;
-  int iVar8;
-  float *pfVar9;
-  Particle *pPVar10;
-
-
-
-  
-  iVar6 = 0;
-  if (0 < g_area_sector.unk_0030) {
-    local_c = &g_particle[0].unk_0000 + g_area_sector.unk_0030 * 0x3c;
-    piVar7 = &g_particle[0].unk_0004;
-    local_8 = 0;
-    local_4 = &g_particle[0].unk_0004;
-    iVar4 = g_area_sector.unk_0030;
-    do {
-      if (*piVar7 < 0x10000) {
-        *piVar7 = *piVar7 + -1;
-      }
-      if (*piVar7 < 1) {
-        if (-1 < iVar6) {
-          if (iVar4 <= iVar6) {
-            return;
-          }
-          iVar8 = piVar7[0x13] + -1;
-          if (-1 < iVar8) {
-            pfVar9 = (float *)(&g_particle[0].unk_0050 + piVar7[0x13] + local_8);
-            do {
-              deletebond(((int)LF_BITS_U(*pfVar9)));
-              pfVar9 = pfVar9 + -1;
-              iVar8 = iVar8 + -1;
-              iVar4 = g_area_sector.unk_0030;
-            } while (-1 < iVar8);
-          }
-          local_c = local_c + -0x3c;
-          iVar4 = iVar4 + -1;
-          if (iVar6 == iVar4) {
-            g_area_sector.unk_0030 = iVar4;
-            return;
-          }
-          piVar2 = local_c;
-          pPVar10 = (Particle *)(piVar7 + -1);
-          g_area_sector.unk_0030 = iVar4;
-          for (iVar8 = 0x3c; iVar8 != 0; iVar8 = iVar8 + -1) {
-            pPVar10->unk_0000 = *piVar2;
-            piVar2 = piVar2 + 1;
-            pPVar10 = (Particle *)&pPVar10->unk_0004;
-          }
-          if (0 < piVar7[0x13]) {
-            iVar8 = piVar7[0x13];
-            piVar2 = piVar7 + 0x14;
-            do {
-              iVar1 = *piVar2;
-              iVar3 = 0;
-              if (0 < g_bond[iVar1].unk_10) {
-                piVar5 = &g_bond[iVar1].particle_a;
-                do {
-                  if (*piVar5 == g_area_sector.unk_0030) {
-                    *piVar5 = iVar6;
-                  }
-                  iVar3 = iVar3 + 1;
-                  piVar5 = piVar5 + 1;
-                  iVar4 = g_area_sector.unk_0030;
-                  piVar7 = local_4;
-                } while (iVar3 < g_bond[iVar1].unk_10);
-              }
-              piVar2 = piVar2 + 1;
-              iVar8 = iVar8 + -1;
-            } while (iVar8 != 0);
-          }
-          if (0 < piVar7[0x34]) {
-            iVar8 = piVar7[0x34];
-            piVar2 = piVar7 + 0x35;
-            do {
-              iVar1 = *piVar2;
-              iVar3 = 0;
-              if (0 < g_object[iVar1].particle_start) {
-                piVar5 = (int *)&g_object[iVar1].lf_raw[0xac];
-                do {
-                  if (*piVar5 == g_area_sector.unk_0030) {
-                    *piVar5 = iVar6;
-                  }
-                  iVar3 = iVar3 + 1;
-                  piVar5 = piVar5 + 1;
-                  iVar4 = g_area_sector.unk_0030;
-                  piVar7 = local_4;
-                } while (iVar3 < g_object[iVar1].particle_start);
-              }
-              piVar2 = piVar2 + 1;
-              iVar8 = iVar8 + -1;
-            } while (iVar8 != 0);
-          }
-          piVar2 = &g_human[0].unk_0010;
-          do {
-            if ((((Human *)(piVar2 + -4))->active != 0) && (*piVar2 == iVar4)) {
-              *piVar2 = iVar6;
-            }
-            if ((piVar2[0xad5] != 0) && (piVar2[0xad9] == iVar4)) {
-              piVar2[0xad9] = iVar6;
-            }
-            if ((piVar2[0x15ae] != 0) && (piVar2[0x15b2] == iVar4)) {
-              piVar2[0x15b2] = iVar6;
-            }
-            if ((piVar2[0x2087] != 0) && (piVar2[0x208b] == iVar4)) {
-              piVar2[0x208b] = iVar6;
-            }
-            piVar2 = piVar2 + 0x2b64;
-          } while ((int)piVar2 < ((int)SR_VA(0x1f38790)));
-        }
-      }
-      else {
-        local_8 = local_8 + 0x3c;
-        iVar6 = iVar6 + 1;
-        piVar7 = piVar7 + 0x3c;
-        local_4 = piVar7;
-      }
-    } while (iVar6 < iVar4);
-  }
-  return;
-}
-#undef g_human
-#undef g_object
-#undef g_particle
-#undef g_bond
-#undef g_area_sector
-#undef deletebond
-#undef local_c
-#undef local_8
-#undef local_4
-
-/* ---------------------------------------------------------------- 0x27ba0 */
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-void __cdecl lf_27ba0(void)
-
-{
-  float *pfVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  
-  iVar3 = g_area_sector.unk_0030;
-  iVar4 = 0;
-  if (3 < g_area_sector.unk_0030) {
-    iVar2 = (g_area_sector.unk_0030 - 4U >> 2) + 1;
-    iVar4 = iVar2 * 4;
-    pfVar1 = &g_particle[0].unk_0018;
-    do {
-      pfVar1[2] = pfVar1[-1];
-      pfVar1[3] = *pfVar1;
-      pfVar1[4] = pfVar1[1];
-      pfVar1[-1] = (float)(pfVar1[5] + pfVar1[-1]);
-      *pfVar1 = (float)(*pfVar1 + pfVar1[6]);
-      pfVar1[1] = (float)(pfVar1[1] + pfVar1[7]);
-      pfVar1[8] = pfVar1[5];
-      pfVar1[9] = pfVar1[6];
-      pfVar1[10] = pfVar1[7];
-      pfVar1[6] = (float)(pfVar1[6] - pfVar1[-3]);
-      pfVar1[0x3e] = pfVar1[0x3b];
-      pfVar1[0x3f] = pfVar1[0x3c];
-      pfVar1[0x40] = pfVar1[0x3d];
-      pfVar1[0x3b] = (float)(pfVar1[0x41] + pfVar1[0x3b]);
-      pfVar1[0x3c] = (float)(pfVar1[0x42] + pfVar1[0x3c]);
-      pfVar1[0x3d] = (float)(pfVar1[0x3d] + pfVar1[0x43]);
-      pfVar1[0x44] = pfVar1[0x41];
-      pfVar1[0x45] = pfVar1[0x42];
-      pfVar1[0x46] = pfVar1[0x43];
-      pfVar1[0x42] = (float)(pfVar1[0x42] - pfVar1[0x39]);
-      pfVar1[0x7a] = pfVar1[0x77];
-      pfVar1[0x7b] = pfVar1[0x78];
-      pfVar1[0x7c] = pfVar1[0x79];
-      pfVar1[0x77] = (float)(pfVar1[0x7d] + pfVar1[0x77]);
-      pfVar1[0x78] = (float)(pfVar1[0x78] + pfVar1[0x7e]);
-      pfVar1[0x79] = (float)(pfVar1[0x79] + pfVar1[0x7f]);
-      pfVar1[0x80] = pfVar1[0x7d];
-      pfVar1[0x81] = pfVar1[0x7e];
-      pfVar1[0x82] = pfVar1[0x7f];
-      pfVar1[0x7e] = (float)(pfVar1[0x7e] - pfVar1[0x75]);
-      pfVar1[0xb6] = pfVar1[0xb3];
-      pfVar1[0xb7] = pfVar1[0xb4];
-      pfVar1[0xb8] = pfVar1[0xb5];
-      pfVar1[0xb3] = (float)(pfVar1[0xb9] + pfVar1[0xb3]);
-      iVar2 = iVar2 + -1;
-      pfVar1[0xb4] = (float)(pfVar1[0xba] + pfVar1[0xb4]);
-      pfVar1[0xb5] = (float)(pfVar1[0xb5] + pfVar1[0xbb]);
-      pfVar1[0xbc] = pfVar1[0xb9];
-      pfVar1[0xbd] = pfVar1[0xba];
-      pfVar1[0xbe] = pfVar1[0xbb];
-      pfVar1[0xba] = (float)(pfVar1[0xba] - pfVar1[0xb1]);
-      pfVar1 = pfVar1 + 0xf0;
-    } while (iVar2 != 0);
-  }
-  if (iVar4 < iVar3) {
-    iVar3 = iVar3 - iVar4;
-    pfVar1 = &g_particle[0].unk_0018 + iVar4 * 0x3c;
-    do {
-      iVar3 = iVar3 + -1;
-      pfVar1[2] = pfVar1[-1];
-      pfVar1[3] = *pfVar1;
-      pfVar1[4] = pfVar1[1];
-      pfVar1[-1] = (float)(pfVar1[-1] + pfVar1[5]);
-      *pfVar1 = (float)(*pfVar1 + pfVar1[6]);
-      pfVar1[1] = (float)(pfVar1[7] + pfVar1[1]);
-      pfVar1[8] = pfVar1[5];
-      pfVar1[9] = pfVar1[6];
-      pfVar1[10] = pfVar1[7];
-      pfVar1[6] = (float)(pfVar1[6] - pfVar1[-3]);
-      pfVar1 = pfVar1 + 0x3c;
-    } while (iVar3 != 0);
-  }
-  return;
-}
-#undef g_particle
-#undef g_area_sector
 
 /* ---------------------------------------------------------------- 0x27e80 */
 #define _CIsqrt x87_sqrt
@@ -24027,7 +23192,7 @@ LAB_0042f545:
          (float)(local_120 * g_human[param_1].bones[iVar7 * 3 + 4].rot[0].z +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[1].z * local_11c +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[2].z * local_118);
-    iVar6 = *(int *)&g_human[param_1].bones[iVar7 * 3 + 5].lf_raw[0xdc];
+    iVar6 = g_human[param_1].bones[iVar7 * 3 + 5].bond;
     multiplyquaternion(&local_28,&pvVar1->x,(float *)((int)&g_human[0].bones[4].rot[0].x + local_ec)
                       );
     orientationtoquaternion(&local_e0,&local_28);
@@ -24206,19 +23371,19 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
   createjointbond(param_1,param_2,param_3,param_4);
   iVar2 = g_numofbonds;
   iVar3 = param_1 * 0x2b64;
-  *(int *)(iVar3 + ((int)&g_human[0].lf_raw[0xecc]) + g_human[param_1].unk_0ec8 * 0x30) = g_numofbonds;
-  *(int *)(iVar3 + ((int)&g_human[0].lf_raw[0xed0]) + g_human[param_1].unk_0ec8 * 0x30) = param_2;
-  *(int *)(iVar3 + ((int)&g_human[0].lf_raw[0xed4]) + g_human[param_1].unk_0ec8 * 0x30) = param_3;
-  pfVar1 = (float *)(iVar3 + ((int)&g_human[0].lf_raw[0xef0]) + g_human[param_1].unk_0ec8 * 0x30);
+  *(int *)(iVar3 + ((int)&g_human[0].muscles) + g_human[param_1].num_muscles * 0x30) = g_numofbonds;
+  *(int *)(iVar3 + ((int)&g_human[0].lf_raw[0xed0]) + g_human[param_1].num_muscles * 0x30) = param_2;
+  *(int *)(iVar3 + ((int)&g_human[0].lf_raw[0xed4]) + g_human[param_1].num_muscles * 0x30) = param_3;
+  pfVar1 = (float *)(iVar3 + ((int)&g_human[0].lf_raw[0xef0]) + g_human[param_1].num_muscles * 0x30);
   *pfVar1 = *param_4;
   pfVar1[1] = param_4[1];
   pfVar1[2] = param_4[2];
-  g_human[param_1].unk_0ec8 = g_human[param_1].unk_0ec8 + 1;
+  g_human[param_1].num_muscles = g_human[param_1].num_muscles + 1;
   memset(g_bond + iVar2,0,0xec);
-  g_bond[iVar2].state = 9;
-  g_bond[iVar2].unk_0008 = 0x10000;
+  g_bond[iVar2].type = 9;
+  g_bond[iVar2].time_to_live = 0x10000;
   g_bond[iVar2].mode = 0;
-  g_bond[iVar2].human_id = param_1;
+  g_bond[iVar2].owner = param_1;
   g_bond[iVar2].bone_a = param_2;
   g_bond[iVar2].target = param_3;
   g_bond[iVar2].stiffness = 0.0625;
@@ -24861,7 +24026,7 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define createbond ((int (__cdecl *)(int, int, int, int))SR_FN(0x4129b0))
 #define createparticle ((int (__cdecl *)(int, undefined4 *, undefined4 *, float, int))SR_FN(0x4278c0))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
@@ -24881,20 +24046,21 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
   float fVar4;
   undefined4 uVar5;
   float fVar6;
-  Object *pOVar7;
-  int iVar8;
-  int *piVar9;
-  int *piVar10;
-  float *pfVar11;
-  undefined4 *puVar12;
-  undefined4 *puVar13;
+  float fVar9;
+  Object *pOVar10;
+  int iVar11;
+  int *piVar12;
+  int *piVar13;
   float *pfVar14;
-  int iVar15;
+  undefined4 *puVar15;
   undefined4 *puVar16;
-  uint uVar17;
+  float *pfVar17;
   int iVar18;
-  int iVar19;
-  bool bVar20;
+  undefined4 *puVar19;
+  uint uVar20;
+  int iVar21;
+  int iVar22;
+  bool bVar23;
 
 
 
@@ -24904,339 +24070,337 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
   int fVar7;
   int fVar8;
   
-  iVar18 = 0;
-  pOVar7 = g_object;
+  iVar21 = 0;
+  pOVar10 = g_object;
   do {
-    if (pOVar7->active == 0) {
-      if (iVar18 != -1) {
-        memset(g_object + iVar18,0,0x8230);
-        g_object[iVar18].active = 1;
-        g_object[iVar18].type = param_1;
-        g_object[iVar18].health = 100;
-        g_object[iVar18].time_to_live = 0xffff;
-        g_object[iVar18].unk_0018 = param_5;
-        g_object[iVar18].driver = -1;
-        g_object[iVar18].state = *(int *)(g_objecttype + param_1);
-        iVar8 = g_objecttype[param_1].unk_053c;
-        iVar15 = g_objecttype[param_1].num_particles;
-        g_object[iVar18].pos.x = *param_2;
-        g_object[iVar18].pos.y = param_2[1];
+    if (pOVar10->active == 0) {
+      if (iVar21 != -1) {
+        memset(g_object + iVar21,0,0x8230);
+        g_object[iVar21].active = 1;
+        g_object[iVar21].type = param_1;
+        g_object[iVar21].health = 100;
+        g_object[iVar21].time_to_live = 0xffff;
+        g_object[iVar21].unk_0018 = param_5;
+        g_object[iVar21].driver = -1;
+        g_object[iVar21].state = *(int *)(g_objecttype + param_1);
+        iVar11 = g_objecttype[param_1].unk_053c;
+        iVar18 = g_objecttype[param_1].num_particles;
+        g_object[iVar21].pos.x = *param_2;
+        g_object[iVar21].pos.y = param_2[1];
         local_38 = 0;
-        g_object[iVar18].pos.z = param_2[2];
-        g_object[iVar18].pos_prev.x = *param_2;
-        g_object[iVar18].pos_prev.y = param_2[1];
-        g_object[iVar18].pos_prev.z = param_2[2];
-        g_object[iVar18].rot[0].x = *param_4;
-        g_object[iVar18].rot[0].y = param_4[1];
-        g_object[iVar18].rot[0].z = param_4[2];
-        g_object[iVar18].rot[1].x = param_4[3];
-        g_object[iVar18].rot[1].y = param_4[4];
-        g_object[iVar18].rot[1].z = param_4[5];
-        g_object[iVar18].rot[2].x = param_4[6];
-        g_object[iVar18].rot[2].y = param_4[7];
-        g_object[iVar18].rot[2].z = param_4[8];
-        g_object[iVar18].unk_01ac = iVar8;
+        g_object[iVar21].pos.z = param_2[2];
+        g_object[iVar21].pos_prev.x = *param_2;
+        g_object[iVar21].pos_prev.y = param_2[1];
+        g_object[iVar21].pos_prev.z = param_2[2];
+        g_object[iVar21].rot[0].x = *param_4;
+        g_object[iVar21].rot[0].y = param_4[1];
+        g_object[iVar21].rot[0].z = param_4[2];
+        g_object[iVar21].rot[1].x = param_4[3];
+        g_object[iVar21].rot[1].y = param_4[4];
+        g_object[iVar21].rot[1].z = param_4[5];
+        g_object[iVar21].rot[2].x = param_4[6];
+        g_object[iVar21].rot[2].y = param_4[7];
+        g_object[iVar21].rot[2].z = param_4[8];
+        g_object[iVar21].unk_01ac = iVar11;
         fVar1 = g_objecttype[param_1].unk_0030;
-        g_object[iVar18].engine_power = (float)(g_objecttype[param_1].engine_power * 213.0);
-        g_object[iVar18].unk_5e60 = 32.0;
-        g_object[iVar18].unk_5e64 = 199.99998474121094;
-        g_object[iVar18].unk_5e68 = 0.005000000353902578;
-        if (0 < iVar15) {
-          pfVar11 = (float *)&g_objecttype[param_1].lf_raw[0x48];
+        g_object[iVar21].engine_power = (float)(g_objecttype[param_1].engine_power * 213.0);
+        g_object[iVar21].unk_5e60 = 32.0;
+        g_object[iVar21].unk_5e64 = 199.99998474121094;
+        g_object[iVar21].unk_5e68 = 0.005000000353902578;
+        if (0 < iVar18) {
+          pfVar14 = (float *)&g_objecttype[param_1].lf_raw[0x48];
           do {
-            fVar2 = pfVar11[-2];
-            fVar3 = pfVar11[-1];
-            fVar4 = *pfVar11;
+            fVar2 = pfVar14[-2];
+            fVar3 = pfVar14[-1];
+            fVar4 = *pfVar14;
             local_c = (float)(*param_2 + ((float)(fVar4 * param_4[6] + (fVar3 * param_4[3] + fVar2 * *param_4))));
             local_8 = (float)((float)(fVar4 * param_4[7] + (fVar2 * param_4[1] + fVar3 * param_4[4])) + param_2[1]);
             local_4 = (float)((float)(param_4[5] * fVar3 + param_4[2] * fVar2 + param_4[8] * fVar4) + param_2[2]);
-            iVar8 = createparticle(0,&local_c,param_3,(float)(pfVar11[1] * fVar1),iVar18);
-            pfVar11 = pfVar11 + 5;
-            *(int *)((int)(g_object[iVar18].rot + 9) + (g_object[iVar18].particle_start + 1) * 4) =
-                 iVar8;
-            g_object[iVar18].particle_start = g_object[iVar18].particle_start + 1;
+            iVar11 = createparticle(0,&local_c,param_3,(float)(pfVar14[1] * fVar1),iVar21);
+            pfVar14 = pfVar14 + 5;
+            g_object[iVar21].particles[g_object[iVar21].num_particles] = iVar11;
+            g_object[iVar21].num_particles = g_object[iVar21].num_particles + 1;
             local_38 = local_38 + 1;
           } while ((int)local_38 < g_objecttype[param_1].num_particles);
         }
         local_38 = g_objecttype[param_1].num_bonds;
         if (0 < (int)local_38) {
-          piVar9 = (int *)&g_objecttype[param_1].lf_raw[0x748];
+          piVar12 = (int *)&g_objecttype[param_1].lf_raw[0x748];
           do {
-            createbond(piVar9[-1],*(int *)((int)(g_object[iVar18].rot + 9) + (*piVar9 + 1) * 4),
-                       *(int *)((int)(g_object[iVar18].rot + 9) + (piVar9[1] + 1) * 4),-1);
-            piVar9 = piVar9 + 3;
+            createbond(piVar12[-1],g_object[iVar21].particles[*piVar12],
+                       g_object[iVar21].particles[piVar12[1]],-1);
+            piVar12 = piVar12 + 3;
             local_38 = local_38 + -1;
           } while (local_38 != 0);
         }
         local_2c = g_objecttype[param_1].num_faces;
-        g_object[iVar18].unk_07b4 = local_2c;
+        g_object[iVar21].unk_07b4 = local_2c;
         if (0 < local_2c) {
-          puVar13 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x1350];
-          puVar12 = (undefined4 *)&g_object[iVar18].lf_raw[0x7c0];
-          puVar16 = (undefined4 *)&g_object[iVar18].lf_raw[0x7ec];
+          puVar16 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x1350];
+          puVar15 = (undefined4 *)&g_object[iVar21].lf_raw[0x7c0];
+          puVar19 = (undefined4 *)&g_object[iVar21].lf_raw[0x7ec];
           local_30 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x1380];
           do {
-            uVar5 = puVar13[7];
-            puVar16[-0xd] = local_30[-0xe];
-            puVar12[-1] = puVar13[-1];
-            *puVar12 = *puVar13;
-            puVar12[1] = puVar13[1];
-            puVar12[2] = puVar13[2];
-            puVar12[3] = puVar13[3];
-            puVar12[4] = puVar13[4];
-            puVar12[5] = puVar13[5];
-            puVar12[6] = puVar13[6];
-            puVar12[7] = uVar5;
-            puVar12[8] = puVar13[8];
-            puVar12[9] = puVar13[9];
+            uVar5 = puVar16[7];
+            puVar19[-0xd] = local_30[-0xe];
+            puVar15[-1] = puVar16[-1];
+            *puVar15 = *puVar16;
+            puVar15[1] = puVar16[1];
+            puVar15[2] = puVar16[2];
+            puVar15[3] = puVar16[3];
+            puVar15[4] = puVar16[4];
+            puVar15[5] = puVar16[5];
+            puVar15[6] = puVar16[6];
+            puVar15[7] = uVar5;
+            puVar15[8] = puVar16[8];
+            puVar15[9] = puVar16[9];
             local_2c = local_2c + -1;
-            puVar12[10] = puVar13[10];
+            puVar15[10] = puVar16[10];
             uVar5 = local_30[1];
-            *puVar16 = *local_30;
-            puVar16[1] = uVar5;
-            puVar16[2] = 8;
-            puVar13 = puVar13 + 0x10;
-            puVar12 = puVar12 + 0x10;
+            *puVar19 = *local_30;
+            puVar19[1] = uVar5;
+            puVar19[2] = 8;
             puVar16 = puVar16 + 0x10;
+            puVar15 = puVar15 + 0x10;
+            puVar19 = puVar19 + 0x10;
             local_30 = local_30 + 0x10;
           } while (local_2c != 0);
         }
         local_38 = 0;
-        if (0 < g_object[iVar18].particle_start) {
-          piVar9 = (int *)&g_object[iVar18].lf_raw[0x2b0];
-          piVar10 = &g_objecttype[param_1].unk_0640;
+        if (0 < g_object[iVar21].num_particles) {
+          piVar12 = (int *)&g_object[iVar21].lf_raw[0x2b0];
+          piVar13 = &g_objecttype[param_1].unk_0640;
           do {
-            piVar9[-0x40] = piVar10[-0x40];
+            piVar12[-0x40] = piVar13[-0x40];
             local_38 = local_38 + 1;
-            iVar8 = *piVar10;
-            piVar10 = piVar10 + 1;
-            *piVar9 = iVar8;
-            piVar9 = piVar9 + 1;
-          } while ((int)local_38 < g_object[iVar18].particle_start);
+            iVar11 = *piVar13;
+            piVar13 = piVar13 + 1;
+            *piVar12 = iVar11;
+            piVar12 = piVar12 + 1;
+          } while ((int)local_38 < g_object[iVar21].num_particles);
         }
         local_2c = g_objecttype[param_1].num_wheels;
-        g_object[iVar18].unk_81a0 = g_objecttype[param_1].unk_7fe0;
+        g_object[iVar21].unk_81a0 = g_objecttype[param_1].unk_7fe0;
         fVar1 = g_objecttype[param_1].unk_7fe4;
-        g_object[iVar18].num_wheels = local_2c;
-        g_object[iVar18].unk_81a4 = fVar1;
+        g_object[iVar21].num_wheels = local_2c;
+        g_object[iVar21].unk_81a4 = fVar1;
         if (0 < local_2c) {
-          pfVar11 = (float *)&g_object[iVar18].lf_raw[0x5f2c];
-          pfVar14 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
+          pfVar14 = (float *)&g_object[iVar21].lf_raw[0x5f2c];
+          pfVar17 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
           do {
-            fVar1 = pfVar14[3];
-            fVar7 = ((int)LF_BITS_U(pfVar14[1]));
-            iVar8 = *(int *)((int)(g_object[iVar18].rot + 9) + (((int)LF_BITS_U(*pfVar14)) + 1) * 4);
-            iVar15 = *(int *)((int)(g_object[iVar18].rot + 9) + (fVar7 + 1) * 4);
+            fVar1 = pfVar17[3];
+            fVar9 = pfVar17[1];
+            iVar11 = g_object[iVar21].particles[((int)LF_BITS_U(*pfVar17))];
+            iVar18 = g_object[iVar21].particles[((int)LF_BITS_U(fVar9))];
             local_2c = local_2c + -1;
-            fVar2 = (&g_particle[0].unk_0018)[iVar15 * 0x3c];
-            fVar3 = (&g_particle[0].unk_0018)[iVar8 * 0x3c];
-            fVar4 = (&g_particle[0].unk_001c)[iVar15 * 0x3c];
-            fVar8 = ((int)LF_BITS_U(pfVar14[-1]));
-            fVar6 = (&g_particle[0].unk_001c)[iVar8 * 0x3c];
-            pfVar11[-2] = (float)((&g_particle[0].unk_0014)[iVar8 * 0x3c] +
-                          fVar1 * ((float)((&g_particle[0].unk_0014)[iVar15 * 0x3c] -
-                                  (&g_particle[0].unk_0014)[iVar8 * 0x3c])));
-            pfVar11[-1] = (float)(((float)(fVar2 - fVar3)) * fVar1 + (&g_particle[0].unk_0018)[iVar8 * 0x3c]);
-            *pfVar11 = (float)(fVar1 * ((float)(fVar4 - fVar6)) + (&g_particle[0].unk_001c)[iVar8 * 0x3c]);
-            pfVar11[-0x10] = LF_BITS_F(fVar8);
-            fVar1 = pfVar14[0xf];
-            pfVar11[-0xb] = pfVar14[2];
-            pfVar11[-0xf] = fVar1;
-            fVar1 = *pfVar14;
-            pfVar11[-10] = pfVar14[3];
-            pfVar11[-0xd] = fVar1;
-            fVar1 = pfVar14[5];
-            pfVar11[-0xc] = LF_BITS_F(fVar7);
-            pfVar11[-8] = fVar1;
-            pfVar11[-0xe] = 1.1210387714598537E-44;
-            pfVar11[-9] = pfVar14[4];
-            pfVar11[-7] = pfVar14[6];
-            pfVar11[8] = pfVar14[10];
-            pfVar11[9] = pfVar14[0xb];
-            pfVar11[10] = pfVar14[0xc];
-            pfVar11[0xb] = pfVar14[0xd];
-            pfVar11 = pfVar11 + 0x26;
-            pfVar14 = pfVar14 + 0x11;
+            fVar2 = g_particle[iVar18].pos.y;
+            fVar3 = g_particle[iVar11].pos.y;
+            fVar4 = g_particle[iVar18].pos.z;
+            fVar8 = ((int)LF_BITS_U(pfVar17[-1]));
+            fVar6 = g_particle[iVar11].pos.z;
+            pfVar14[-2] = (float)(g_particle[iVar11].pos.x +
+                          fVar1 * ((float)(g_particle[iVar18].pos.x - g_particle[iVar11].pos.x)));
+            pfVar14[-1] = (float)(((float)(fVar2 - fVar3)) * fVar1 + g_particle[iVar11].pos.y);
+            *pfVar14 = (float)(fVar1 * ((float)(fVar4 - fVar6)) + g_particle[iVar11].pos.z);
+            pfVar14[-0x10] = LF_BITS_F(fVar8);
+            fVar1 = pfVar17[0xf];
+            pfVar14[-0xb] = pfVar17[2];
+            pfVar14[-0xf] = fVar1;
+            fVar1 = *pfVar17;
+            pfVar14[-10] = pfVar17[3];
+            pfVar14[-0xd] = fVar1;
+            fVar1 = pfVar17[5];
+            pfVar14[-0xc] = fVar9;
+            pfVar14[-8] = fVar1;
+            pfVar14[-0xe] = 1.1210387714598537E-44;
+            pfVar14[-9] = pfVar17[4];
+            pfVar14[-7] = pfVar17[6];
+            pfVar14[8] = pfVar17[10];
+            pfVar14[9] = pfVar17[0xb];
+            pfVar14[10] = pfVar17[0xc];
+            pfVar14[0xb] = pfVar17[0xd];
+            pfVar14 = pfVar14 + 0x26;
+            pfVar17 = pfVar17 + 0x11;
           } while (local_2c != 0);
         }
-        iVar8 = g_objecttype[1].num_wheels;
+        iVar11 = g_objecttype[1].num_wheels;
         if ((g_objecttype[param_1].num_wheels < 1) || (param_1 != 1)) {
           if (param_1 == 0xb) {
-            g_object[iVar18].unk_8074 = ((int)LF_BITS_U(((float)(*param_2 - param_4[6] * 4.0))));
-            *(float *)&g_object[iVar18].lf_raw[0x8078] = (float)(param_2[1] - param_4[7] * 4.0);
-            *(float *)&g_object[iVar18].lf_raw[0x807c] = (float)(param_2[2] - param_4[8] * 4.0);
-            g_object[iVar18].unk_8098 = ((int)LF_BITS_U(((float)(param_4[6] * 4.0 + *param_2))));
-            *(float *)&g_object[iVar18].lf_raw[0x809c] = (float)(param_4[7] * 4.0 + param_2[1]);
-            *(float *)&g_object[iVar18].lf_raw[0x80a0] = (float)(param_4[8] * 4.0 + param_2[2]);
-            g_object[iVar18].unk_80bc = ((int)LF_BITS_U(((float)(*param_2 - *param_4))));
-            *(float *)&g_object[iVar18].lf_raw[0x80c0] = (float)(param_2[1] - param_4[1]);
-            *(float *)&g_object[iVar18].lf_raw[0x80c4] = (float)(param_2[2] - param_4[2]);
-            g_object[iVar18].unk_80e0 = ((int)LF_BITS_U(((float)(*param_2 + *param_4))));
-            *(float *)&g_object[iVar18].lf_raw[0x80e4] = (float)(param_2[1] + param_4[1]);
-            *(float *)&g_object[iVar18].lf_raw[0x80e8] = (float)(param_2[2] + param_4[2]);
-            g_object[iVar18].unk_8104 = ((int)LF_BITS_U(*param_2));
-            *(float *)&g_object[iVar18].lf_raw[0x8108] = param_2[1];
-            *(float *)&g_object[iVar18].lf_raw[0x810c] = param_2[2];
-            g_object[iVar18].unk_8128 = ((int)LF_BITS_U(((float)(*param_2 - param_4[3]))));
-            *(float *)&g_object[iVar18].lf_raw[0x812c] = (float)(param_2[1] - param_4[4]);
-            *(float *)&g_object[iVar18].lf_raw[0x8130] = (float)(param_2[2] - param_4[5]);
+            g_object[iVar21].unk_8074 = ((int)LF_BITS_U(((float)(*param_2 - param_4[6] * 4.0))));
+            *(float *)&g_object[iVar21].lf_raw[0x8078] = (float)(param_2[1] - param_4[7] * 4.0);
+            *(float *)&g_object[iVar21].lf_raw[0x807c] = (float)(param_2[2] - param_4[8] * 4.0);
+            g_object[iVar21].unk_8098 = ((int)LF_BITS_U(((float)(param_4[6] * 4.0 + *param_2))));
+            *(float *)&g_object[iVar21].lf_raw[0x809c] = (float)(param_4[7] * 4.0 + param_2[1]);
+            *(float *)&g_object[iVar21].lf_raw[0x80a0] = (float)(param_4[8] * 4.0 + param_2[2]);
+            g_object[iVar21].unk_80bc = ((int)LF_BITS_U(((float)(*param_2 - *param_4))));
+            *(float *)&g_object[iVar21].lf_raw[0x80c0] = (float)(param_2[1] - param_4[1]);
+            *(float *)&g_object[iVar21].lf_raw[0x80c4] = (float)(param_2[2] - param_4[2]);
+            g_object[iVar21].unk_80e0 = ((int)LF_BITS_U(((float)(*param_2 + *param_4))));
+            *(float *)&g_object[iVar21].lf_raw[0x80e4] = (float)(param_2[1] + param_4[1]);
+            *(float *)&g_object[iVar21].lf_raw[0x80e8] = (float)(param_2[2] + param_4[2]);
+            g_object[iVar21].unk_8104 = ((int)LF_BITS_U(*param_2));
+            *(float *)&g_object[iVar21].lf_raw[0x8108] = param_2[1];
+            *(float *)&g_object[iVar21].lf_raw[0x810c] = param_2[2];
+            g_object[iVar21].unk_8128 = ((int)LF_BITS_U(((float)(*param_2 - param_4[3]))));
+            *(float *)&g_object[iVar21].lf_raw[0x812c] = (float)(param_2[1] - param_4[4]);
+            *(float *)&g_object[iVar21].lf_raw[0x8130] = (float)(param_2[2] - param_4[5]);
           }
         }
         else {
-          g_object[iVar18].unk_71ec = g_objecttype[1].num_wheels;
-          g_object[iVar18].num_wheels = 0;
+          g_object[iVar21].unk_71ec = g_objecttype[1].num_wheels;
+          g_object[iVar21].num_wheels = 0;
           local_38 = 0;
-          if (0 < iVar8) {
-            puVar13 = (undefined4 *)&g_object[iVar18].lf_raw[0x5f2c];
-            puVar12 = (undefined4 *)&g_object[iVar18].lf_raw[0x71f8];
+          if (0 < iVar11) {
+            puVar16 = (undefined4 *)&g_object[iVar21].lf_raw[0x5f2c];
+            puVar15 = (undefined4 *)&g_object[iVar21].lf_raw[0x71f8];
             do {
-              g_object[iVar18].num_wheels = 0;
-              puVar12[-2] = puVar13[-2];
-              uVar17 = local_38 & 1;
-              puVar12[-1] = puVar13[-1];
-              iVar8 = local_38 + 1;
-              *puVar12 = *puVar13;
-              *(float *)&(puVar12[7]) = *param_4;
-              *(float *)&(puVar12[8]) = param_4[1];
-              *(float *)&(puVar12[9]) = param_4[2];
-              *(float *)&(puVar12[10]) = param_4[3];
-              *(float *)&(puVar12[0xb]) = param_4[4];
-              *(float *)&(puVar12[0xc]) = param_4[5];
-              *(float *)&(puVar12[0xd]) = param_4[6];
-              *(float *)&(puVar12[0xe]) = param_4[7];
-              *(float *)&(puVar12[0xf]) = param_4[8];
-              puVar12[0x1f] = puVar13[-9];
-              if (uVar17 != 0) {
-                iVar8 = local_38 - 1;
+              g_object[iVar21].num_wheels = 0;
+              puVar15[-2] = puVar16[-2];
+              uVar20 = local_38 & 1;
+              puVar15[-1] = puVar16[-1];
+              iVar11 = local_38 + 1;
+              *puVar15 = *puVar16;
+              *(float *)&(puVar15[7]) = *param_4;
+              *(float *)&(puVar15[8]) = param_4[1];
+              *(float *)&(puVar15[9]) = param_4[2];
+              *(float *)&(puVar15[10]) = param_4[3];
+              *(float *)&(puVar15[0xb]) = param_4[4];
+              *(float *)&(puVar15[0xc]) = param_4[5];
+              *(float *)&(puVar15[0xd]) = param_4[6];
+              *(float *)&(puVar15[0xe]) = param_4[7];
+              *(float *)&(puVar15[0xf]) = param_4[8];
+              puVar15[0x1f] = puVar16[-9];
+              if (uVar20 != 0) {
+                iVar11 = local_38 - 1;
               }
-              iVar8 = iVar8 * 0x98;
-              puVar12[0x22] = puVar13[-0xd];
-              puVar12[0x23] = puVar13[-0xc];
-              puVar12[0x24] = *(undefined4 *)(iVar8 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar18 * 0x8230);
-              puVar12[0x25] = *(undefined4 *)(&g_object[iVar18].lf_raw[0x5efc] + iVar8);
-              puVar12[0x26] = puVar13[-0xb];
-              puVar12[0x27] = puVar13[-10];
-              *(float *)&(puVar12[0x28]) = (float)(*(float *)(&g_object[iVar18].lf_raw[0x5f00] + iVar8) * 0.0);
-              fVar1 = *(float *)(&g_object[iVar18].lf_raw[0x5f04] + iVar8) * 0.0;
-              *(float *)&(puVar12[0x29]) = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar12[0x26]) + LF_BITS_F(puVar12[0x27])) + LF_BITS_F(puVar12[0x28]))));
-              *(float *)&(puVar12[0x26]) = (float)(LF_BITS_F(puVar12[0x26]) / fVar1);
-              *(float *)&(puVar12[0x27]) = (float)(LF_BITS_F(puVar12[0x27]) / fVar1);
-              *(float *)&(puVar12[0x28]) = (float)(LF_BITS_F(puVar12[0x28]) / fVar1);
-              *(float *)&(puVar12[0x29]) = (float)(LF_BITS_F(puVar12[0x29]) / fVar1);
-              if (uVar17 == 0) {
-                puVar12[0x2a] = 0xbe000000;
-              }
-              else {
-                puVar12[0x2a] = 0x3e000000;
-              }
-              puVar12[0x2d] = puVar13[-0xd];
-              puVar12[0x2e] = puVar13[-0xc];
-              puVar12[0x2f] = *(undefined4 *)(&g_object[iVar18].lf_raw[0x5ef8] + iVar8);
-              puVar12[0x30] = *(undefined4 *)(&g_object[iVar18].lf_raw[0x5efc] + iVar8);
-              *(float *)&(puVar12[0x31]) = LF_BITS_F(puVar13[-0xb]) * 0.875;
-              *(float *)&(puVar12[0x32]) = (float)(LF_BITS_F(puVar13[-10]) * 0.875);
-              *(float *)&(puVar12[0x33]) = *(float *)(&g_object[iVar18].lf_raw[0x5f00] + iVar8) * 0.125;
-              fVar1 = (float)(*(float *)(&g_object[iVar18].lf_raw[0x5f04] + iVar8) * 0.125);
-              *(float *)&(puVar12[0x34]) = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar12[0x31]) + LF_BITS_F(puVar12[0x32])) + LF_BITS_F(puVar12[0x33]))));
-              *(float *)&(puVar12[0x31]) = (float)(LF_BITS_F(puVar12[0x31]) / fVar1);
-              *(float *)&(puVar12[0x32]) = (float)(LF_BITS_F(puVar12[0x32]) / fVar1);
-              *(float *)&(puVar12[0x33]) = (float)(LF_BITS_F(puVar12[0x33]) / fVar1);
-              *(float *)&(puVar12[0x34]) = (float)(LF_BITS_F(puVar12[0x34]) / fVar1);
-              if (uVar17 == 0) {
-                puVar12[0x35] = 0x3e000000;
+              iVar11 = iVar11 * 0x98;
+              puVar15[0x22] = puVar16[-0xd];
+              puVar15[0x23] = puVar16[-0xc];
+              puVar15[0x24] = *(undefined4 *)(iVar11 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar21 * 0x8230);
+              puVar15[0x25] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5efc] + iVar11);
+              puVar15[0x26] = puVar16[-0xb];
+              puVar15[0x27] = puVar16[-10];
+              *(float *)&(puVar15[0x28]) = (float)(*(float *)(&g_object[iVar21].lf_raw[0x5f00] + iVar11) * 0.0);
+              fVar1 = *(float *)(&g_object[iVar21].lf_raw[0x5f04] + iVar11) * 0.0;
+              *(float *)&(puVar15[0x29]) = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar15[0x26]) + LF_BITS_F(puVar15[0x27])) + LF_BITS_F(puVar15[0x28]))));
+              *(float *)&(puVar15[0x26]) = (float)(LF_BITS_F(puVar15[0x26]) / fVar1);
+              *(float *)&(puVar15[0x27]) = (float)(LF_BITS_F(puVar15[0x27]) / fVar1);
+              *(float *)&(puVar15[0x28]) = (float)(LF_BITS_F(puVar15[0x28]) / fVar1);
+              *(float *)&(puVar15[0x29]) = (float)(LF_BITS_F(puVar15[0x29]) / fVar1);
+              if (uVar20 == 0) {
+                puVar15[0x2a] = 0xbe000000;
               }
               else {
-                puVar12[0x35] = 0xbe000000;
+                puVar15[0x2a] = 0x3e000000;
               }
-              fVar1 = LF_BITS_F(puVar13[-8]);
+              puVar15[0x2d] = puVar16[-0xd];
+              puVar15[0x2e] = puVar16[-0xc];
+              puVar15[0x2f] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5ef8] + iVar11);
+              puVar15[0x30] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5efc] + iVar11);
+              *(float *)&(puVar15[0x31]) = LF_BITS_F(puVar16[-0xb]) * 0.875;
+              *(float *)&(puVar15[0x32]) = (float)(LF_BITS_F(puVar16[-10]) * 0.875);
+              *(float *)&(puVar15[0x33]) = *(float *)(&g_object[iVar21].lf_raw[0x5f00] + iVar11) * 0.125;
+              fVar1 = (float)(*(float *)(&g_object[iVar21].lf_raw[0x5f04] + iVar11) * 0.125);
+              *(float *)&(puVar15[0x34]) = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar15[0x31]) + LF_BITS_F(puVar15[0x32])) + LF_BITS_F(puVar15[0x33]))));
+              *(float *)&(puVar15[0x31]) = (float)(LF_BITS_F(puVar15[0x31]) / fVar1);
+              *(float *)&(puVar15[0x32]) = (float)(LF_BITS_F(puVar15[0x32]) / fVar1);
+              *(float *)&(puVar15[0x33]) = (float)(LF_BITS_F(puVar15[0x33]) / fVar1);
+              *(float *)&(puVar15[0x34]) = (float)(LF_BITS_F(puVar15[0x34]) / fVar1);
+              if (uVar20 == 0) {
+                puVar15[0x35] = 0x3e000000;
+              }
+              else {
+                puVar15[0x35] = 0xbe000000;
+              }
+              fVar1 = LF_BITS_F(puVar16[-8]);
               local_38 = local_38 + 1;
-              puVar13 = puVar13 + 0x26;
-              *(float *)&(puVar12[0x20]) = fVar1;
-              puVar12[0x21] = 0x3e000000;
+              puVar16 = puVar16 + 0x26;
+              *(float *)&(puVar15[0x20]) = fVar1;
+              puVar15[0x21] = 0x3e000000;
               fVar1 = (float)(fVar1 * 0.5);
               fVar2 = (float)(fVar1 * fVar1 * 0.5);
-              *(float *)&(puVar12[0x19]) = fVar2;
+              *(float *)&(puVar15[0x19]) = fVar2;
               fVar1 = (float)((fVar1 * 3.0 * fVar1 + 0.0625) / 12.0);
-              *(float *)&(puVar12[0x1a]) = fVar1;
-              *(float *)&(puVar12[0x1b]) = fVar1;
-              *(float *)&(puVar12[0x1c]) = (float)(1.0 / fVar2);
-              *(float *)&(puVar12[0x1d]) = (float)(1.0 / fVar1);
-              *(float *)&(puVar12[0x1e]) = 1.0 / fVar1;
-              puVar12 = puVar12 + 0x3a;
+              *(float *)&(puVar15[0x1a]) = fVar1;
+              *(float *)&(puVar15[0x1b]) = fVar1;
+              *(float *)&(puVar15[0x1c]) = (float)(1.0 / fVar2);
+              *(float *)&(puVar15[0x1d]) = (float)(1.0 / fVar1);
+              *(float *)&(puVar15[0x1e]) = 1.0 / fVar1;
+              puVar15 = puVar15 + 0x3a;
             } while ((int)local_38 < g_objecttype[1].num_wheels);
           }
         }
-        iVar15 = g_objecttype[param_1].num_seats;
-        iVar8 = 0;
-        g_object[iVar18].unk_5e90 = 2;
-        g_object[iVar18].unk_5e94 = 2;
-        g_object[iVar18].unk_5e98 = 3;
-        g_object[iVar18].num_seats = iVar15;
-        if (3 < iVar15) {
-          iVar19 = (iVar15 - 4U >> 2) + 1;
-          iVar8 = iVar19 * 4;
-          puVar13 = (undefined4 *)&g_object[iVar18].lf_raw[0x81b4];
-          puVar12 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x8088];
+        iVar18 = g_objecttype[param_1].num_seats;
+        iVar11 = 0;
+        g_object[iVar21].unk_5e90 = 2;
+        g_object[iVar21].unk_5e94 = 2;
+        g_object[iVar21].unk_5e98 = 3;
+        g_object[iVar21].num_seats = iVar18;
+        if (3 < iVar18) {
+          iVar22 = (iVar18 - 4U >> 2) + 1;
+          iVar11 = iVar22 * 4;
+          puVar16 = (undefined4 *)&g_object[iVar21].lf_raw[0x81b4];
+          puVar15 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x8088];
           do {
-            puVar13[-2] = puVar12[-2];
-            iVar19 = iVar19 + -1;
-            puVar13[-1] = puVar12[-1];
-            *puVar13 = *puVar12;
-            puVar13[1] = puVar12[1];
-            puVar13[2] = puVar12[2];
-            puVar13[3] = puVar12[3];
-            puVar13[4] = puVar12[4];
-            puVar13[5] = puVar12[5];
-            puVar13[6] = puVar12[6];
-            puVar13[7] = puVar12[7];
-            puVar13[8] = puVar12[8];
-            puVar13[9] = puVar12[9];
-            puVar13 = puVar13 + 0xc;
-            puVar12 = puVar12 + 0xc;
-          } while (iVar19 != 0);
+            puVar16[-2] = puVar15[-2];
+            iVar22 = iVar22 + -1;
+            puVar16[-1] = puVar15[-1];
+            *puVar16 = *puVar15;
+            puVar16[1] = puVar15[1];
+            puVar16[2] = puVar15[2];
+            puVar16[3] = puVar15[3];
+            puVar16[4] = puVar15[4];
+            puVar16[5] = puVar15[5];
+            puVar16[6] = puVar15[6];
+            puVar16[7] = puVar15[7];
+            puVar16[8] = puVar15[8];
+            puVar16[9] = puVar15[9];
+            puVar16 = puVar16 + 0xc;
+            puVar15 = puVar15 + 0xc;
+          } while (iVar22 != 0);
         }
-        if (iVar8 < iVar15) {
-          iVar15 = iVar15 - iVar8;
-          puVar13 = (undefined4 *)(&g_objecttype[param_1].lf_raw[0x8088] + iVar8 * 0xc);
-          puVar12 = (undefined4 *)(iVar18 * 0x8230 + ((int)&g_object[0].lf_raw[0x81b4]) + iVar8 * 0xc);
+        if (iVar11 < iVar18) {
+          iVar18 = iVar18 - iVar11;
+          puVar16 = (undefined4 *)(&g_objecttype[param_1].lf_raw[0x8088] + iVar11 * 0xc);
+          puVar15 = (undefined4 *)(iVar21 * 0x8230 + ((int)&g_object[0].lf_raw[0x81b4]) + iVar11 * 0xc);
           do {
-            puVar12[-2] = puVar13[-2];
-            iVar15 = iVar15 + -1;
-            puVar12[-1] = puVar13[-1];
-            *puVar12 = *puVar13;
-            puVar13 = puVar13 + 3;
-            puVar12 = puVar12 + 3;
-          } while (iVar15 != 0);
+            puVar15[-2] = puVar16[-2];
+            iVar18 = iVar18 + -1;
+            puVar15[-1] = puVar16[-1];
+            *puVar15 = *puVar16;
+            puVar16 = puVar16 + 3;
+            puVar15 = puVar15 + 3;
+          } while (iVar18 != 0);
         }
-        bVar20 = g_server.unk_0000 != 0;
-        g_object[iVar18].unk_5be4 = -1;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5be8] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5bec] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5bf0] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5bf4] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5bf8] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5bfc] = 0xffffffff;
-        *(undefined4 *)&g_object[iVar18].lf_raw[0x5c00] = 0xffffffff;
-        iVar8 = g_game.ticks;
-        if (bVar20) {
+        bVar23 = g_server.unk_0000 != 0;
+        g_object[iVar21].unk_5be4 = -1;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5be8] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5bec] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5bf0] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5bf4] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5bf8] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5bfc] = 0xffffffff;
+        *(undefined4 *)&g_object[iVar21].lf_raw[0x5c00] = 0xffffffff;
+        iVar11 = g_game.ticks;
+        if (bVar23) {
           g_event[g_numofevents].type = 3;
-          g_event[g_numofevents].tick = iVar8;
-          iVar8 = g_object[iVar18].type;
-          iVar15 = g_object[iVar18].unk_0018;
-          g_event[g_numofevents].param = iVar18;
-          g_event[g_numofevents].attach_type = iVar8;
-          g_event[g_numofevents].attach_id = iVar15;
+          g_event[g_numofevents].tick = iVar11;
+          iVar11 = g_object[iVar21].type;
+          iVar18 = g_object[iVar21].unk_0018;
+          g_event[g_numofevents].param = iVar21;
+          g_event[g_numofevents].attach_type = iVar11;
+          g_event[g_numofevents].attach_id = iVar18;
           g_numofevents = g_numofevents + 1 & 0xffff;
         }
-        return iVar18;
+        return iVar21;
       }
       return -1;
     }
-    pOVar7 = pOVar7 + 1;
-    iVar18 = iVar18 + 1;
-  } while ((int)pOVar7 < ((int)&g_object[1024]));
+    pOVar10 = pOVar10 + 1;
+    iVar21 = iVar21 + 1;
+  } while ((int)pOVar10 < ((int)&g_object[1024]));
   return -1;
 }
 #undef g_object
@@ -25263,7 +24427,7 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 void __cdecl lf_32340(void)
 
 {
@@ -25289,7 +24453,7 @@ void __cdecl lf_32340(void)
             iVar1 = *piVar3;
             piVar3 = piVar3 + 1;
             iVar4 = iVar4 + -1;
-            (&g_particle[0].unk_0004)[iVar1 * 0x3c] = 0;
+            g_particle[iVar1].time_to_live = 0;
           } while (iVar4 != 0);
         }
         piVar3 = &g_human[0].vehicle_id;
@@ -25679,15 +24843,12 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
             g_intersect.normal[1] = LF_BITS_F(local_44);
             g_intersect.normal[2] = LF_BITS_F(local_40);
             g_intersect.unk_0034 =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
             g_intersect.distance = local_54;
             g_intersect.unk_0038 =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
             g_intersect.unk_003c =
-                 *(int *)((int)(g_object[param_1].rot + 9) +
-                         (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
+                 g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
             calculatebarycentric
                       (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_30,(float *)&local_18,
                        (float *)&local_3c);
@@ -25707,15 +24868,12 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
               g_intersect.normal[1] = LF_BITS_F(local_44);
               g_intersect.normal[2] = LF_BITS_F(local_40);
               g_intersect.unk_0034 =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
               g_intersect.distance = local_54;
               g_intersect.unk_0038 =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
               g_intersect.unk_003c =
-                   *(int *)((int)(g_object[param_1].rot + 9) +
-                           (*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar3) + 1) * 4);
+                   g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar3)];
               calculatebarycentric
                         (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_30,(float *)&local_3c
                          ,(float *)&local_c);
@@ -30422,10 +29580,10 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   param_1 = 0;
   do {
     if ((param_1 < 4) || (param_1 - 6U < 4)) {
-      piVar6 = (int *)&g_object[iVar5].lf_raw[0xbc];
+      piVar6 = g_object[iVar5].particles + 4;
       iVar7 = 2;
       do {
-        createbond(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
+        createbond(0,g_object[iVar4].particles[param_1],*piVar6,-1);
         piVar6 = piVar6 + 1;
         iVar7 = iVar7 + -1;
       } while (iVar7 != 0);
@@ -30452,10 +29610,10 @@ int __cdecl lf_3ccc0(int param_1,float *param_2,float *param_3)
   param_1 = 2;
   do {
     if ((param_1 < 6) || (7 < param_1)) {
-      piVar6 = (int *)&g_object[iVar5].lf_raw[0xbc];
+      piVar6 = g_object[iVar5].particles + 4;
       iVar7 = 2;
       do {
-        createbond(0,*(int *)((int)(g_object[iVar4].rot + 9) + (param_1 + 1) * 4),*piVar6,-1);
+        createbond(0,g_object[iVar4].particles[param_1],*piVar6,-1);
         piVar6 = piVar6 + 1;
         iVar7 = iVar7 + -1;
       } while (iVar7 != 0);
@@ -34355,7 +33513,7 @@ LAB_00448999:
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define g_intersect (*(Intersect *)SR_VA(0x107484a0))
 #define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define DAT_0f837324 (*(undefined *)SR_VA(0xf837324))
 #define g_numofbullets (*(int *)SR_VA(0x17929a40))
 #define g_bullet (*(Bullet (*)[16384])SR_VA(0x1809ba0))
@@ -34703,27 +33861,18 @@ LAB_004493b0:
             local_40 = local_38 * local_34;
             local_3c = local_38 * local_30;
             local_38 = (float)(local_2c * local_38);
-            fVar4 = (float)((fVar3 * local_1c) / (&g_particle[0].unk_0008)[local_10 * 0x3c]);
-            (&g_particle[0].unk_002c)[local_10 * 0x3c] =
-                 (float)((&g_particle[0].unk_002c)[local_10 * 0x3c] + local_40 * fVar4);
-            (&g_particle[0].unk_0030)[local_10 * 0x3c] =
-                 (float)(local_3c * fVar4 + (&g_particle[0].unk_0030)[local_10 * 0x3c]);
-            (&g_particle[0].unk_0034)[local_10 * 0x3c] =
-                 (float)((&g_particle[0].unk_0034)[local_10 * 0x3c] + local_38 * fVar4);
-            fVar4 = (float)((local_18 * fVar3) / (&g_particle[0].unk_0008)[local_c * 0x3c]);
-            (&g_particle[0].unk_002c)[local_c * 0x3c] =
-                 (float)(fVar4 * local_40 + (&g_particle[0].unk_002c)[local_c * 0x3c]);
-            (&g_particle[0].unk_0030)[local_c * 0x3c] =
-                 (float)(local_3c * fVar4 + (&g_particle[0].unk_0030)[local_c * 0x3c]);
-            (&g_particle[0].unk_0034)[local_c * 0x3c] =
-                 (float)(fVar4 * local_38 + (&g_particle[0].unk_0034)[local_c * 0x3c]);
-            fVar3 = (float)((local_14 * fVar3) / (&g_particle[0].unk_0008)[local_8 * 0x3c]);
-            (&g_particle[0].unk_002c)[local_8 * 0x3c] =
-                 (float)((&g_particle[0].unk_002c)[local_8 * 0x3c] + fVar3 * local_40);
-            (&g_particle[0].unk_0030)[local_8 * 0x3c] =
-                 (float)((&g_particle[0].unk_0030)[local_8 * 0x3c] + fVar3 * local_3c);
-            (&g_particle[0].unk_0034)[local_8 * 0x3c] =
-                 (float)(local_38 * fVar3 + (&g_particle[0].unk_0034)[local_8 * 0x3c]);
+            fVar4 = (float)((fVar3 * local_1c) / g_particle[local_10].mass);
+            g_particle[local_10].vel.x = (float)(g_particle[local_10].vel.x + local_40 * fVar4);
+            g_particle[local_10].vel.y = (float)(local_3c * fVar4 + g_particle[local_10].vel.y);
+            g_particle[local_10].vel.z = (float)(g_particle[local_10].vel.z + local_38 * fVar4);
+            fVar4 = (float)((local_18 * fVar3) / g_particle[local_c].mass);
+            g_particle[local_c].vel.x = (float)(fVar4 * local_40 + g_particle[local_c].vel.x);
+            g_particle[local_c].vel.y = (float)(local_3c * fVar4 + g_particle[local_c].vel.y);
+            g_particle[local_c].vel.z = (float)(fVar4 * local_38 + g_particle[local_c].vel.z);
+            fVar3 = (float)((local_14 * fVar3) / g_particle[local_8].mass);
+            g_particle[local_8].vel.x = (float)(g_particle[local_8].vel.x + fVar3 * local_40);
+            g_particle[local_8].vel.y = (float)(g_particle[local_8].vel.y + fVar3 * local_3c);
+            g_particle[local_8].vel.z = (float)(local_38 * fVar3 + g_particle[local_8].vel.z);
           }
           *(undefined4 *)((int)&g_bullet[0].ttl + iVar11) = 0;
         }
@@ -35657,8 +34806,8 @@ LAB_0044b6cf:
     local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].pitch - 0.07363107800483704))));
     rotatevector(&local_70,g_xaxis,LF_BITS_F(local_94));
     iVar8 = g_numofbonds;
-    g_bond[g_numofbonds].state = 10;
-    g_bond[g_numofbonds].human_id = param_1;
+    g_bond[g_numofbonds].type = 10;
+    g_bond[g_numofbonds].owner = param_1;
     g_bond[g_numofbonds].bone_a = 8;
     g_bond[g_numofbonds].target = iVar9;
     g_bond[g_numofbonds].mode = 0;
@@ -35687,8 +34836,8 @@ LAB_0044b6cf:
     if (iVar5 == 0x19) {
       return;
     }
-    g_bond[iVar7].state = 0xb;
-    g_bond[iVar7].human_id = param_1;
+    g_bond[iVar7].type = 0xb;
+    g_bond[iVar7].owner = param_1;
     g_bond[iVar7].bone_a = 8;
     g_bond[iVar7].target = iVar9;
     g_bond[iVar7].mode = 0;
@@ -35816,8 +34965,8 @@ LAB_0044b6cf:
       local_7c = 0.125;
       local_80 = 0.5;
     }
-    g_bond[g_numofbonds].state = 10;
-    g_bond[iVar8].human_id = iVar9;
+    g_bond[g_numofbonds].type = 10;
+    g_bond[iVar8].owner = iVar9;
     g_bond[iVar8].bone_a = 5;
     g_bond[iVar8].target = iVar7;
     g_bond[iVar8].mode = 0;
@@ -35838,8 +34987,8 @@ LAB_0044b6cf:
       return;
     }
     if (0 < iVar5) {
-      g_bond[iVar8].state = 0xb;
-      g_bond[iVar8].human_id = iVar9;
+      g_bond[iVar8].type = 0xb;
+      g_bond[iVar8].owner = iVar9;
       g_bond[iVar8].bone_a = 5;
       g_bond[iVar8].target = iVar7;
       g_bond[iVar8].mode = 0;
@@ -36870,8 +36019,8 @@ void __cdecl lf_4cee0(int param_1)
         if (((iVar10 != 5) && (iVar10 != 8)) &&
            (iVar8 = item_sphereintersect(param_1,(float *)pBVar12,0.125), iVar8 != 0)) {
           fVar4 = (float)(0.125 - g_intersect.distance);
-          g_bond[iVar9].state = 0xe;
-          g_bond[iVar9].human_id = local_2c;
+          g_bond[iVar9].type = 0xe;
+          g_bond[iVar9].owner = local_2c;
           g_bond[iVar9].bone_a = iVar10;
           g_bond[iVar9].target = param_1;
           iVar11 = iVar9 + 1;
@@ -37584,8 +36733,8 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
       local_c = (float)(g_intersect.pos[0] - local_18);
       local_8 = (float)(g_intersect.pos[1] - local_14);
       local_4 = (float)(g_intersect.pos[2] - local_10);
-      g_bond[g_numofbonds].state = 0xf;
-      g_bond[iVar5].human_id = param_1;
+      g_bond[g_numofbonds].type = 0xf;
+      g_bond[iVar5].owner = param_1;
       g_bond[iVar5].bone_a = param_2;
       normalizevector(&local_c,&local_c);
       iVar6 = g_intersect.unk_0064;
@@ -37672,10 +36821,8 @@ void __cdecl lf_4e500(int param_1,int param_2)
   local_18 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f24]) + iVar8);
   local_14 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f28]) + iVar8);
   local_10 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f2c]) + iVar8);
-  iVar3 = *(int *)((int)(g_object[param_1].rot + 9) + (*(int *)(iVar9 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar8) + 1) * 4)
-  ;
-  iVar4 = *(int *)((int)(g_object[param_1].rot + 9) +
-                  (*(int *)(&g_object[param_1].lf_raw[0x5efc] + iVar9) + 1) * 4);
+  iVar3 = g_object[param_1].particles[*(int *)(iVar9 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar8)];
+  iVar4 = g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x5efc] + iVar9)];
   iVar7 = circleintersectlevel
                     (&local_18,&g_object[param_1].rot[0].x,*(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f0c]) + iVar8));
   iVar8 = g_numofbonds;
@@ -37684,7 +36831,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
     local_8 = (float)(local_14 - g_intersect.pos[1]);
     local_4 = (float)(local_10 - g_intersect.pos[2]);
     iVar7 = *(int *)(&g_object[param_1].lf_raw[0x5eec] + iVar9);
-    g_bond[g_numofbonds].state = 5;
+    g_bond[g_numofbonds].type = 5;
     g_bond[iVar8].particle_a = iVar3;
     fVar2 = *(float *)(&g_object[param_1].lf_raw[0x5f00] + iVar9);
     g_bond[iVar8].particle_b = iVar4;
@@ -37712,7 +36859,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
     g_bond[iVar8].unk_0080 = iVar3;
     local_18 = g_object[param_1].rot[2].x;
     local_14 = g_object[param_1].rot[2].y;
-    g_bond[iVar8].human_id = param_1;
+    g_bond[iVar8].owner = param_1;
     local_10 = g_object[param_1].rot[2].z;
     g_bond[iVar8].bone_a = param_2;
     rotatevector(&local_18,&g_object[param_1].rot[1].x,(&g_object[param_1].unk_5f20)[param_2 * 0x26]
@@ -42335,7 +41482,7 @@ void __cdecl lf_590f0(void)
       iVar15 = g_game.gametype;
     }
   }
-  g_area_sector.unk_0030 = 0;
+  g_area_sector.num_particles = 0;
   g_numofbonds = 0;
   piVar2 = &g_speex.unk_2241c;
   pPVar3 = g_player;

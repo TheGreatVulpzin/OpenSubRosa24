@@ -26,7 +26,7 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0x93dd880u, "event", 0x80u, 65536u },
     { 0xac51a80u, "scenario", 0x134u, 0u },
     { 0xac51bc0u, "objecttype", 0x828cu, 128u },
-    { 0xb3e7200u, "particle", 0x3c0u, 4096u },
+    { 0xb3e7200u, "particle", 0xf0u, 16384u },
     { 0xb7a7200u, "buildblocktype", 0x1a80u, 0u },
     { 0xb7a8ca0u, "blocklist", 0x40354u, 0u },
     { 0xe219200u, "filelist", 0x80020u, 0u },

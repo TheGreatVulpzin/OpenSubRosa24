@@ -120,8 +120,8 @@ void __cdecl lf_22f90(void)
           iVar14 = *(int *)((int)(g_object[0].rot + 9) + (((int)LF_UINT(pfVar13[-0x21])) + local_40 + 1) * 4);
           iVar4 = *(int *)((int)(g_object[0].rot + 9) + (((int)LF_UINT(pfVar13[-0x20])) + local_40 + 1) * 4);
           if (DAT_00603dd0 == 0) {
-            local_58 = (float)((&g_particle[0].unk_0008)[iVar4 * 0x3c] * pfVar13[-0x1e] +
-                       (&g_particle[0].unk_0008)[iVar14 * 0x3c] * pfVar13[-0x1f]);
+            local_58 = (float)((&g_particle[0].mass)[iVar4 * 0x3c] * pfVar13[-0x1e] +
+                       (&g_particle[0].mass)[iVar14 * 0x3c] * pfVar13[-0x1f]);
             local_54 = (float)(local_58 + pfVar13[-0x1d]);
             local_58 = (float)(local_58 / local_54);
             local_54 = (float)(pfVar13[-0x1d] / local_54);
@@ -131,19 +131,19 @@ void __cdecl lf_22f90(void)
             LF_COPY(fVar1, pfVar13[-0xc]);
             local_6c = pfVar13[-0xb];
             local_74 = (float)(local_6c *
-                       ((float)(((float)(((float)((&g_particle[0].unk_0014)[iVar14 * 0x3c] +
-                         fVar17 * ((float)((&g_particle[0].unk_0014)[iVar4 * 0x3c] -
-                                  (&g_particle[0].unk_0014)[iVar14 * 0x3c])))) - pfVar13[-0x16])) +
+                       ((float)(((float)(((float)((&g_particle[0].pos.x)[iVar14 * 0x3c] +
+                         fVar17 * ((float)((&g_particle[0].pos.x)[iVar4 * 0x3c] -
+                                  (&g_particle[0].pos.x)[iVar14 * 0x3c])))) - pfVar13[-0x16])) +
                        fVar1 * *(float *)((int)&g_object[0].rot[1].x + iVar16))));
             local_70 = (float)(((float)(*(float *)((int)&g_object[0].rot[1].y + iVar16) * fVar1 +
-                       ((float)(((float)(((float)((&g_particle[0].unk_0018)[iVar4 * 0x3c] -
-                         (&g_particle[0].unk_0018)[iVar14 * 0x3c])) * fVar17 +
-                        (&g_particle[0].unk_0018)[iVar14 * 0x3c])) - pfVar13[-0x15])))) * local_6c);
+                       ((float)(((float)(((float)((&g_particle[0].pos.y)[iVar4 * 0x3c] -
+                         (&g_particle[0].pos.y)[iVar14 * 0x3c])) * fVar17 +
+                        (&g_particle[0].pos.y)[iVar14 * 0x3c])) - pfVar13[-0x15])))) * local_6c);
             local_6c = (float)(local_6c *
                        ((float)(fVar1 * *(float *)((int)&g_object[0].rot[1].z + iVar16) +
-                       ((float)(((float)(fVar17 * ((float)((&g_particle[0].unk_001c)[iVar4 * 0x3c] -
-                                  (&g_particle[0].unk_001c)[iVar14 * 0x3c])) +
-                        (&g_particle[0].unk_001c)[iVar14 * 0x3c])) - pfVar13[-0x14])))));
+                       ((float)(((float)(fVar17 * ((float)((&g_particle[0].pos.z)[iVar4 * 0x3c] -
+                                  (&g_particle[0].pos.z)[iVar14 * 0x3c])) +
+                        (&g_particle[0].pos.z)[iVar14 * 0x3c])) - pfVar13[-0x14])))));
             pfVar13[-1] = local_74;
             *pfVar13 = local_70;
             pfVar13[1] = local_6c;
@@ -273,22 +273,22 @@ LAB_0042360a:
           fVar2 = *(float *)(&g_object[0].lf_raw[0x7298] + iVar15);
           local_38 = iVar6 * 0xf0;
           fVar3 = *(float *)(&g_object[0].lf_raw[0x729c] + iVar15);
-          fVar8 = (float)(((float)(((float)((float)((float)(fVar1 * (&g_particle[0].unk_0014)[iVar5 * 0x3c] +
-                    fVar17 * (&g_particle[0].unk_0014)[iVar14 * 0x3c]) +
-                    fVar2 * (&g_particle[0].unk_0014)[iVar4 * 0x3c]) +
-                   fVar3 * (&g_particle[0].unk_0014)[iVar6 * 0x3c])) -
+          fVar8 = (float)(((float)(((float)((float)((float)(fVar1 * (&g_particle[0].pos.x)[iVar5 * 0x3c] +
+                    fVar17 * (&g_particle[0].pos.x)[iVar14 * 0x3c]) +
+                    fVar2 * (&g_particle[0].pos.x)[iVar4 * 0x3c]) +
+                   fVar3 * (&g_particle[0].pos.x)[iVar6 * 0x3c])) -
                   *(float *)((int)&g_object[0].rot[1].x + iVar16) * 0.125)) -
                   *(float *)(&g_object[0].lf_raw[0x71f0] + iVar15));
-          fVar7 = (float)(((float)(((float)((&g_particle[0].unk_0018)[iVar6 * 0x3c] * fVar3 +
-                   ((float)((&g_particle[0].unk_0018)[iVar4 * 0x3c] * fVar2 +
-                   ((float)((&g_particle[0].unk_0018)[iVar5 * 0x3c] * fVar1 +
-                   (float)((&g_particle[0].unk_0018)[iVar14 * 0x3c] * fVar17))))))) -
+          fVar7 = (float)(((float)(((float)((&g_particle[0].pos.y)[iVar6 * 0x3c] * fVar3 +
+                   ((float)((&g_particle[0].pos.y)[iVar4 * 0x3c] * fVar2 +
+                   ((float)((&g_particle[0].pos.y)[iVar5 * 0x3c] * fVar1 +
+                   (float)((&g_particle[0].pos.y)[iVar14 * 0x3c] * fVar17))))))) -
                   *(float *)((int)&g_object[0].rot[1].y + iVar16) * 0.125)) -
                   *(float *)(&g_object[0].lf_raw[0x71f4] + iVar15));
-          fVar17 = (float)(((float)(((float)(fVar3 * (&g_particle[0].unk_001c)[iVar6 * 0x3c] +
-                    ((float)(fVar2 * (&g_particle[0].unk_001c)[iVar4 * 0x3c] +
-                    ((float)(fVar1 * (&g_particle[0].unk_001c)[iVar5 * 0x3c] +
-                    (float)(fVar17 * (&g_particle[0].unk_001c)[iVar14 * 0x3c]))))))) -
+          fVar17 = (float)(((float)(((float)(fVar3 * (&g_particle[0].pos.z)[iVar6 * 0x3c] +
+                    ((float)(fVar2 * (&g_particle[0].pos.z)[iVar4 * 0x3c] +
+                    ((float)(fVar1 * (&g_particle[0].pos.z)[iVar5 * 0x3c] +
+                    (float)(fVar17 * (&g_particle[0].pos.z)[iVar14 * 0x3c]))))))) -
                    *(float *)((int)&g_object[0].rot[1].z + iVar16) * 0.125)) -
                    *(float *)(&g_object[0].lf_raw[0x71f8] + iVar15));
           *(float *)(iVar16 + ((int)&g_object[0].unk_5f48) + local_50 * 0x98) =
@@ -342,13 +342,13 @@ LAB_0042360a:
           local_10 = (float)(local_68 + local_74);
           local_c = (float)(local_64 + local_70);
           local_8 = (float)(local_60 + local_6c);
-          local_4c = (float)((&g_particle[0].unk_0008)[iVar5 * 0x3c] *
+          local_4c = (float)((&g_particle[0].mass)[iVar5 * 0x3c] *
                      *(float *)(&g_object[0].lf_raw[0x7294] + iVar15) +
-                     (&g_particle[0].unk_0008)[iVar14 * 0x3c] *
+                     (&g_particle[0].mass)[iVar14 * 0x3c] *
                      *(float *)(&g_object[0].lf_raw[0x7290] + iVar15));
-          local_58 = (float)((&g_particle[0].unk_0008)[iVar4 * 0x3c] *
+          local_58 = (float)((&g_particle[0].mass)[iVar4 * 0x3c] *
                      *(float *)(&g_object[0].lf_raw[0x7298] + iVar15) +
-                     (&g_particle[0].unk_0008)[iVar6 * 0x3c] *
+                     (&g_particle[0].mass)[iVar6 * 0x3c] *
                      *(float *)(&g_object[0].lf_raw[0x729c] + iVar15) + local_4c);
           local_5c = (float)(local_58 + *(float *)(&g_object[0].lf_raw[0x7274] + iVar15));
           local_58 = (float)(local_58 / local_5c);

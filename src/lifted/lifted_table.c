@@ -24,7 +24,7 @@ void lf_02f00(void);
 void lf_03030(void);
 void lf_03130(void);
 void lf_03290(void);
-void lf_033a0(void);
+void deletebond(void);
 void lf_03740(void);
 void lf_03d70(void);
 void lf_041c0(void);
@@ -149,8 +149,8 @@ void lf_120c0(void);
 void lf_121d0(void);
 void lf_12450(void);
 void lf_126b0(void);
-void lf_129b0(void);
-void lf_12c90(void);
+void createbond(void);
+void bondtimetolive(void);
 void lf_12f80(void);
 void lf_130d0(void);
 void lf_13450(void);
@@ -224,9 +224,9 @@ void lf_26bc0(void);
 void lf_26db0(void);
 void lf_26f90(void);
 void lf_272b0(void);
-void lf_278c0(void);
-void lf_279b0(void);
-void lf_27ba0(void);
+void createparticle(void);
+void particletimetolive(void);
+void particlesimulation(void);
 void lf_27e80(void);
 void lf_28020(void);
 void lf_28190(void);
@@ -342,7 +342,7 @@ const LfEntry lf_table[] = {
     { "area_interior_getblock", 0x3030, (void *)lf_03030, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocklink", 0x3130, (void *)lf_03130, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocktexture", 0x3290, (void *)lf_03290, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "deletebond", 0x33a0, (void *)lf_033a0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "deletebond", 0x33a0, (void *)deletebond, 1, LF_RET_VOID, 4, "v", 0 },
     { "building_save", 0x3740, (void *)lf_03740, 1, LF_RET_VOID, 4, "v", 1 },
     { "building_setupbuild", 0x3d70, (void *)lf_03d70, 0, LF_RET_VOID, 4, "", 0 },
     { "building_setupfloorplannewer", 0x41c0, (void *)lf_041c0, 0, LF_RET_VOID, 4, "", 0 },
@@ -467,8 +467,8 @@ const LfEntry lf_table[] = {
     { "area_interior_createblock", 0x121d0, (void *)lf_121d0, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "lineintersectnormalblock", 0x12450, (void *)lf_12450, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "lineintersectspecblock", 0x126b0, (void *)lf_126b0, 8, LF_RET_INT, 4, "ppppppvv", 0 },
-    { "createbond", 0x129b0, (void *)lf_129b0, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "bondtimetolive", 0x12c90, (void *)lf_12c90, 0, LF_RET_VOID, 4, "", 0 },
+    { "createbond", 0x129b0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "bondtimetolive", 0x12c90, (void *)bondtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "bond_partpart", 0x12f80, (void *)lf_12f80, 1, LF_RET_VOID, 4, "v", 0 },
     { "bond_bodybody", 0x130d0, (void *)lf_130d0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbuildingtypes", 0x13450, (void *)lf_13450, 0, LF_RET_VOID, 4, "", 0 },
@@ -542,9 +542,9 @@ const LfEntry lf_table[] = {
     { "lineintersecttrackrail", 0x26db0, (void *)lf_26db0, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0x26f90, (void *)lf_26f90, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_car", 0x272b0, (void *)lf_272b0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createparticle", 0x278c0, (void *)lf_278c0, 5, LF_RET_INT, 4, "vppvv", 0 },
-    { "particletimetolive", 0x279b0, (void *)lf_279b0, 0, LF_RET_VOID, 4, "", 0 },
-    { "particlesimulation", 0x27ba0, (void *)lf_27ba0, 0, LF_RET_VOID, 4, "", 0 },
+    { "createparticle", 0x278c0, (void *)createparticle, 5, LF_RET_INT, 4, "vppvv", 0 },
+    { "particletimetolive", 0x279b0, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
+    { "particlesimulation", 0x27ba0, (void *)particlesimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "calculatefriction", 0x27e80, (void *)lf_27e80, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "createplayer", 0x28020, (void *)lf_28020, 0, LF_RET_INT, 4, "", 0 },
     { "scenario_armhuman", 0x28190, (void *)lf_28190, 3, LF_RET_INT, 4, "vvv", 0 },

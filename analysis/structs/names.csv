@@ -86,10 +86,10 @@ bullet,0x8,owner,int,,createbullet: parameter 4
 bullet,0x14,pos,vec3,,createbullet: parameter 2
 bullet,0x20,pos_prev,vec3,,createbullet: copy of the position
 bullet,0x2c,vel,vec3,,createbullet: parameter 3
-bond,0x0,state,int,,createbond writes 0
-bond,0x4,type,int,,createbond: parameter 1
+bond,0x0,type,int,,"bondsimulation2 switches on it: 0 particle pair, 5 wheel, 8 joint, 9 and 10 (createjointbond writes 8)"
+bond,0x4,subtype,int,,"createbond: parameter 1, from the objecttype bond list (+0x744); mode is 0 when it is 1"
 bond,0xc,mode,int,,"createbond: 3, or 0 if type 1; humansimulation toggles 0/3"
-bond,0x10,unk_10,int,,createbond writes 2
+bond,0x10,num_particles,int,,"createbond writes 2; deletebond loops over the particle indices from +0x14"
 bond,0x14,particle_a,int,,createbond: parameter 2 (index into particle[])
 bond,0x18,particle_b,int,,createbond: parameter 3
 bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (likely)
@@ -126,7 +126,7 @@ account,0x44,look_c,int,,createaccount: rand() & 3
 player,0x1a38,is_bot,int,,scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy
 player,0x1a48,num_path,int,,resetgame/scenario_createtraffic2: counter of the list at +0x1a4c (stride 0x1c)
 player,0x2168,num_threats,int,,ai_assessthreats: loop and limit < 0x10
-object,0xa8,particle_start,int,,createobject/deleteparticle/objectsimulation: start of the object's particles
+object,0xa8,num_particles,int,,"createobject appends to the list at +0xac; particletimetolive loops over it"
 object,0x5e50,engine_rpm,float,,getenginetorque2/objectenginesimulation2 (likely)
 object,0x5e6c,gear,int,,objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely)
 object,0x81a8,num_seats,int,,createobject copies from objecttype.num_seats; humansimulation reads it
@@ -137,7 +137,7 @@ bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of t
 bond,0x4c,mass_ratio,float,2,bondsimulation2 type 10: item_mass/(sum) and bone_mass/(sum)
 bond,0x6c,stiffness,float,,bondsimulation2: force = (distance - rest_length) * stiffness
 bond,0x70,unk_70,float,,bondsimulation2 copies it to bondopt+0x3c and uses it negated
-bond,0x90,human_id,int,,bondsimulation2 types 8 and 10: index into human[]
+bond,0x90,owner,int,,"types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c)"
 bond,0x94,bone_a,int,,bondsimulation2: bone index (stride 0xe0)
 bond,0x98,target,int,,bondsimulation2: type 10 = item index; type 8 = second bone
 human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
@@ -205,3 +205,25 @@ object,0x1c,time_to_live,int,,"objecttimetolive subtracts 1 when the value is be
 itemtype,0x10,fire_delay,int,,"setupitemtypes: AK-47 8, M-16 7, MP5 5, Uzi 6, Magnum and 9mm 30 (likely: the ticks between two shots)"
 itemtype,0x14,bullet_type,int,,"setupitemtypes: AK-47 0, M-16 1, MP5, Uzi and 9mm 2, Magnum 3: one of the 4 bullet types of setupbullettypes; createevent_bullet sends it"
 itemtype,0x20,bullet_speed,float,,"setupitemtypes: AK-47 10.67, M-16 14.67, MP5 6.67 (likely: the speed of the bullet in units per tick, x 60 = 640, 880 and 400)"
+bond,0x8,time_to_live,int,,"createbond writes 0x10000 (no limit); bondtimetolive counts it down"
+bond,0x8c,num_objects,int,,"createbond appends parameter 4 to the list at +0x90; deletebond loops over it"
+object,0x3b0,num_bonds,int,,"createbond appends the bond to the list at +0x3b4, limit 0x7f"
+particle,0x0,type,int,,createparticle: parameter 1
+particle,0x4,time_to_live,int,,"createparticle writes 0x10000 (no limit); particletimetolive counts it down"
+particle,0x8,mass,float,,"createparticle: parameter 4; bondsimulation2 uses 1 / (mass_a + mass_b)"
+particle,0xc,gravity,float,,"createparticle writes 0.0027222; particlesimulation subtracts it from vel.y"
+particle,0x14,pos,vec3,,createparticle: parameter 2
+particle,0x20,pos_prev,vec3,,particlesimulation copies pos here before it adds vel
+particle,0x2c,vel,vec3,,"createparticle: parameter 3; particlesimulation adds it to pos"
+particle,0x38,vel_prev,vec3,,particlesimulation copies vel here
+particle,0x50,num_bonds,int,,"createbond appends to the list at +0x54, limit 31"
+particle,0x54,bonds,int,31,createbond; deletebond and particletimetolive remove from it
+particle,0xd4,num_objects,int,,createparticle appends parameter 5 to the list at +0xd8
+particle,0xd8,objects,int,6,particletimetolive renames the particle in each object of this list
+area_sector,0x30,num_particles,int,,"createparticle: limit 0x3fff; particlesimulation loops over it"
+object,0xac,particles,int,64,"createobject appends; particletimetolive renames; createobject uses floats from +0x1ac"
+object,0x3b4,bonds,int,127,"createbond appends, limit 0x7f; deletebond removes"
+human,0xec8,num_muscles,int,,human_createmuscleball appends to the list at +0xecc
+human,0xecc,muscles,HumanMuscle,128,"human_createmuscleball (stride 0x30); the list ends at the joints (+0x26cc)"
+human,0x26cc,num_joints,int,,createjointbond appends to the list at +0x26d0
+human,0x26d0,joints,HumanJoint,32,"createjointbond (stride 0xc); createhuman uses floats from +0x2870"

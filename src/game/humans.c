@@ -589,8 +589,8 @@ LAB_00452144:
             iVar14 = g_numofbonds;
             if (iVar15 != 0) {
               fVar24 = (float)(local_c8 - g_intersect.distance);
-              g_bond[g_numofbonds].state = 7;
-              g_bond[g_numofbonds].human_id = (int)local_a4;
+              g_bond[g_numofbonds].type = 7;
+              g_bond[g_numofbonds].owner = (int)local_a4;
               g_bond[g_numofbonds].bone_a = iVar21;
               g_bond[g_numofbonds].rest_length = fVar24;
               pBVar8 = g_bond + g_numofbonds;
@@ -750,8 +750,8 @@ LAB_0045230e:
                 iVar14 = g_intersect.unk_003c;
                 iVar21 = g_intersect.unk_0038;
                 if (iVar16 != 0) {
-                  g_bond[g_numofbonds].state = 4;
-                  g_bond[iVar15].human_id = (int)local_a4;
+                  g_bond[g_numofbonds].type = 4;
+                  g_bond[iVar15].owner = (int)local_a4;
                   iVar10 = g_intersect.unk_0034;
                   g_bond[iVar15].bone_a = ((int)LF_UINT(fVar24));
                   iVar16 = g_human[(int)puVar11].unk_001c;
@@ -781,12 +781,12 @@ LAB_0045230e:
                       (LF_UINT(local_c0) != 0x5U)) &&
                      ((LF_UINT(local_c0) != 0x8U &&
                       ((LF_UINT(local_c0) != 0x4U && (LF_UINT(local_c0) != 0x7U)))))) {
-                    local_48 = (float)((&g_particle[0].unk_002c)[iVar10 * 0x3c] * fVar3);
-                    local_44 = (float)((&g_particle[0].unk_0030)[iVar10 * 0x3c] * fVar3);
-                    local_40 = (float)((&g_particle[0].unk_0034)[iVar10 * 0x3c] * fVar3);
-                    scaleaddvectors(&local_48,&local_48,&g_particle[0].unk_002c + iVar21 * 0x3c,
+                    local_48 = (float)((&g_particle[0].vel.x)[iVar10 * 0x3c] * fVar3);
+                    local_44 = (float)((&g_particle[0].vel.y)[iVar10 * 0x3c] * fVar3);
+                    local_40 = (float)((&g_particle[0].vel.z)[iVar10 * 0x3c] * fVar3);
+                    scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar21 * 0x3c,
                                     fVar4);
-                    scaleaddvectors(&local_48,&local_48,&g_particle[0].unk_002c + iVar14 * 0x3c,
+                    scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar14 * 0x3c,
                                     g_intersect.unk_004c);
                     scaleaddvectors(&local_3c,&local_48,(float *)local_c4,-1.0);
                     local_c0 = (float)(g_intersect.normal[2] * local_34 +
@@ -1202,8 +1202,8 @@ LAB_00453705:
       g_human[(int)puVar11].pos.x = g_human[(int)puVar11].bones[0].pos.x;
       g_human[(int)puVar11].pos.y = g_human[(int)puVar11].bones[0].pos.y;
       g_human[(int)puVar11].pos.z = g_human[(int)puVar11].bones[0].pos.z;
-      if (0 < g_human[(int)puVar11].unk_26cc) {
-        iVar21 = g_human[(int)puVar11].unk_26cc;
+      if (0 < g_human[(int)puVar11].num_joints) {
+        iVar21 = g_human[(int)puVar11].num_joints;
         piVar17 = (int *)&g_human[(int)puVar11].lf_raw[0xed4];
         piVar20 = (int *)&g_human[(int)puVar11].lf_raw[0x26d0];
         do {
@@ -1221,9 +1221,9 @@ LAB_00453705:
           iVar21 = iVar21 + -1;
         } while (iVar21 != 0);
       }
-      if (0 < g_human[(int)puVar11].unk_0ec8) {
+      if (0 < g_human[(int)puVar11].num_muscles) {
         iVar21 = g_human[(int)puVar11].health;
-        iVar14 = g_human[(int)puVar11].unk_0ec8;
+        iVar14 = g_human[(int)puVar11].num_muscles;
         piVar17 = (int *)&g_human[(int)puVar11].lf_raw[0xed4];
         do {
           iVar15 = piVar17[-2];

@@ -388,18 +388,18 @@ void __cdecl lf_41de0(void)
     do {
       piVar18 = local_a0;
       if (local_a0[-2] < 0x100) {
-        if (((Bond *)(local_a0 + -5))->state == 0) {
+        if (((Bond *)(local_a0 + -5))->type == 0) {
           iVar30 = local_a0[1];
           iVar29 = *local_a0;
           *(short *)((int)pfVar21 + -10) = (short)iVar30;
           local_50 = (float *)(iVar30 * 0xf0);
           ((BondOpt *)(pfVar21 + -3))->unk_0000 = (short)iVar29;
-          local_7c = (float)((&g_particle[0].unk_0014)[iVar30 * 0x3c] -
-                     (&g_particle[0].unk_0014)[iVar29 * 0x3c]);
-          local_78 = (float)((&g_particle[0].unk_0018)[iVar30 * 0x3c] -
-                     (&g_particle[0].unk_0018)[iVar29 * 0x3c]);
-          local_74 = (float)((&g_particle[0].unk_001c)[iVar30 * 0x3c] -
-                     (&g_particle[0].unk_001c)[iVar29 * 0x3c]);
+          local_7c = (float)((&g_particle[0].pos.x)[iVar30 * 0x3c] -
+                     (&g_particle[0].pos.x)[iVar29 * 0x3c]);
+          local_78 = (float)((&g_particle[0].pos.y)[iVar30 * 0x3c] -
+                     (&g_particle[0].pos.y)[iVar29 * 0x3c]);
+          local_74 = (float)((&g_particle[0].pos.z)[iVar30 * 0x3c] -
+                     (&g_particle[0].pos.z)[iVar29 * 0x3c]);
           local_60 = ((int *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
           dVar39 = _CIsqrt((double)LF_BITS_F(local_60));
           fVar5 = (float)dVar39;
@@ -420,12 +420,12 @@ void __cdecl lf_41de0(void)
           local_60 = ((int *)LF_BITS_U(((float)(fVar5 - LF_BITS_F(piVar18[0x13])))));
           pfVar21[2] = (float)(LF_BITS_F(local_60) * LF_BITS_F(piVar18[0x16]));
           LF_SET_BITS(pfVar21[0xc], piVar18[0x17]);
-          local_70 = (float)(1.0 / (*(float *)((int)&g_particle[0].unk_0008 + (int)local_50) +
-                           (&g_particle[0].unk_0008)[iVar29 * 0x3c]));
-          pfVar21[10] = (float)(local_70 * *(float *)((int)&g_particle[0].unk_0008 + (int)local_50));
-          pfVar21[0xb] = (float)(local_70 * (&g_particle[0].unk_0008)[iVar29 * 0x3c]);
+          local_70 = (float)(1.0 / (*(float *)((int)&g_particle[0].mass + (int)local_50) +
+                           (&g_particle[0].mass)[iVar29 * 0x3c]));
+          pfVar21[10] = (float)(local_70 * *(float *)((int)&g_particle[0].mass + (int)local_50));
+          pfVar21[0xb] = (float)(local_70 * (&g_particle[0].mass)[iVar29 * 0x3c]);
         }
-        if (((Bond *)(piVar18 + -5))->state == 10) {
+        if (((Bond *)(piVar18 + -5))->type == 10) {
           iVar30 = piVar18[0x1f];
           iVar29 = piVar18[0x20];
           fVar5 = ((vec3 *)(piVar18 + 8))->x;
@@ -486,7 +486,7 @@ void __cdecl lf_41de0(void)
           piVar18[0xe] = ((int)LF_BITS_U((local_70 * local_d0)));
           piVar18[0xf] = ((int)LF_BITS_U(((float)(local_d4 * local_70))));
         }
-        if (((Bond *)(piVar18 + -5))->state == 8) {
+        if (((Bond *)(piVar18 + -5))->type == 8) {
           iVar30 = piVar18[0x1f];
           fVar5 = ((vec3 *)(piVar18 + 8))->x;
           iVar29 = piVar18[0x20];
@@ -545,7 +545,7 @@ void __cdecl lf_41de0(void)
           pfVar21[0xb] = (float)(local_d4 * local_70);
         }
         iVar30 = g_timerlist.unk_0060;
-        if (((Bond *)(piVar18 + -5))->state == 9) {
+        if (((Bond *)(piVar18 + -5))->type == 9) {
           uVar13 = rdtsc();
           g_timer[g_timerlist.unk_0060].unk_0040 = (int)uVar13;
           g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
@@ -800,15 +800,15 @@ LAB_00442c75:
         puVar27 = puVar27 + 0x20;
       } while (iVar30 != 0);
     }
-    iVar30 = g_area_sector.unk_0030;
+    iVar30 = g_area_sector.num_particles;
     local_84 = local_84 + 0xad9;
     puVar31 = puVar31 + 0x204;
   } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
   iVar29 = 0;
-  if (3 < g_area_sector.unk_0030) {
-    iVar16 = (g_area_sector.unk_0030 - 4U >> 2) + 1;
+  if (3 < g_area_sector.num_particles) {
+    iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
     iVar29 = iVar16 * 4;
-    pfVar21 = &g_particle[0].unk_0034;
+    pfVar21 = &g_particle[0].vel.z;
     pfVar33 = (float *)&DAT_00583dd8;
     do {
       pfVar33[-2] = pfVar21[-2];
@@ -830,7 +830,7 @@ LAB_00442c75:
   }
   if (iVar29 < iVar30) {
     iVar30 = iVar30 - iVar29;
-    pfVar21 = &g_particle[0].unk_0034 + iVar29 * 0x3c;
+    pfVar21 = &g_particle[0].vel.z + iVar29 * 0x3c;
     pfVar33 = (float *)(&DAT_00583dd8 + iVar29 * 8);
     do {
       pfVar33[-2] = pfVar21[-2];
@@ -862,9 +862,9 @@ LAB_00442c75:
     DAT_00603dd0 = local_60;
     LF_SET_BITS(*local_50, (int)uVar13);
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-    if (0 < g_area_sector.unk_0030) {
+    if (0 < g_area_sector.num_particles) {
       puVar19 = &DAT_00583de8;
-      iVar30 = g_area_sector.unk_0030;
+      iVar30 = g_area_sector.num_particles;
       do {
         puVar19[-2] = 0;
         iVar30 = iVar30 + -1;
@@ -1209,11 +1209,11 @@ LAB_00442c75:
               local_78 = (float)(fVar5 * local_78);
               local_74 = fVar5 * local_74;
             }
-            local_88 = &g_particle[0].unk_0008 + (int)local_84 * 0x3c;
+            local_88 = &g_particle[0].mass + (int)local_84 * 0x3c;
             local_70 = (float)(local_70 /
-                       ((&g_particle[0].unk_0008)[(int)local_84 * 0x3c] +
-                       (&g_particle[0].unk_0008)[local_bc * 0x3c]));
-            local_80 = &g_particle[0].unk_0008 + local_bc * 0x3c;
+                       ((&g_particle[0].mass)[(int)local_84 * 0x3c] +
+                       (&g_particle[0].mass)[local_bc * 0x3c]));
+            local_80 = &g_particle[0].mass + local_bc * 0x3c;
             local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_74 +
                                 (local_7c * ((vec3 *)(pfVar33 + -1))->x + local_78 * *pfVar33)))));
             if (0.0 < LF_BITS_F(local_50)) {
@@ -1263,10 +1263,10 @@ LAB_00442c75:
             local_5c = fVar6 * local_5c;
             local_58 = (float)(local_58 * fVar6);
             local_54 = (float)(fVar6 * local_54);
-            local_98 = (&g_particle[0].unk_0008)[local_bc * 0x3c];
-            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].unk_0008)[(int)local_a0 * 0x3c] * pfVar33[-9] +
-                              ((&g_particle[0].unk_0008)[(int)local_80 * 0x3c] * pfVar33[-10] +
-                              (&g_particle[0].unk_0008)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
+            local_98 = (&g_particle[0].mass)[local_bc * 0x3c];
+            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].mass)[(int)local_a0 * 0x3c] * pfVar33[-9] +
+                              ((&g_particle[0].mass)[(int)local_80 * 0x3c] * pfVar33[-10] +
+                              (&g_particle[0].mass)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
             local_70 = (float)((float)dVar39 / (LF_BITS_F(local_84) + local_98));
             local_80 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
                                 (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
@@ -1335,9 +1335,9 @@ LAB_00442c75:
               local_54 = fVar6 * local_54;
             }
             local_98 = *(float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
-            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].unk_0008)[(int)local_a0 * 0x3c] * pfVar33[-9] +
-                              ((&g_particle[0].unk_0008)[(int)local_80 * 0x3c] * pfVar33[-10] +
-                              (&g_particle[0].unk_0008)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
+            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].mass)[(int)local_a0 * 0x3c] * pfVar33[-9] +
+                              ((&g_particle[0].mass)[(int)local_80 * 0x3c] * pfVar33[-10] +
+                              (&g_particle[0].mass)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
             local_70 = (float)(local_70 / (LF_BITS_F(local_84) + local_98));
             local_80 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
                                 (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
@@ -1371,7 +1371,7 @@ LAB_00442c75:
              * ints: as floats they are denormals, and each x87 use took about 9000 cycles
              * for each bond. The float math is the lifted one, in the same order. */
             Bond *bond = (Bond *)((char *)pfVar33 - 0x78);
-            int obj = bond->human_id;  /* type 5: object index */
+            int obj = bond->owner;     /* type 5: object index */
             int wheel = bond->bone_a;  /* type 5: wheel index (0x98 bytes each, at object+0x5f0c) */
             float *w = (float *)(&g_object[obj].lf_raw[0x5f0c] + wheel * 0x98);
             float k, neg, load, proj;
@@ -1811,10 +1811,10 @@ LAB_00442c75:
     uVar13 = rdtsc();
     g_timer[g_timerlist.unk_0064].unk_0040 = (int)uVar13;
     g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-    iVar29 = g_area_sector.unk_0030;
+    iVar29 = g_area_sector.num_particles;
     iVar30 = 0;
-    if (3 < g_area_sector.unk_0030) {
-      iVar16 = (g_area_sector.unk_0030 - 4U >> 2) + 1;
+    if (3 < g_area_sector.num_particles) {
+      iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
       iVar30 = iVar16 * 4;
       pfVar21 = (float *)&DAT_00583dd4;
       do {
@@ -2012,13 +2012,13 @@ LAB_00442c75:
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
   g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-  iVar29 = g_area_sector.unk_0030;
+  iVar29 = g_area_sector.num_particles;
   iVar30 = 0;
-  if (3 < g_area_sector.unk_0030) {
-    iVar16 = (g_area_sector.unk_0030 - 4U >> 2) + 1;
+  if (3 < g_area_sector.num_particles) {
+    iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
     iVar30 = iVar16 * 4;
     pfVar21 = (float *)&DAT_00583dd8;
-    pfVar33 = &g_particle[0].unk_0034;
+    pfVar33 = &g_particle[0].vel.z;
     do {
       pfVar33[-2] = pfVar21[-2];
       iVar16 = iVar16 + -1;
@@ -2039,7 +2039,7 @@ LAB_00442c75:
   }
   if (iVar30 < iVar29) {
     iVar29 = iVar29 - iVar30;
-    pfVar21 = &g_particle[0].unk_0034 + iVar30 * 0x3c;
+    pfVar21 = &g_particle[0].vel.z + iVar30 * 0x3c;
     pfVar33 = (float *)(&DAT_00583dd8 + iVar30 * 8);
     do {
       pfVar21[-2] = pfVar33[-2];

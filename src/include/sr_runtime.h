@@ -32,6 +32,10 @@ extern uintptr_t sr_base;
 #define sr_bullets      SR_AT(Bullet, SR_RVA_BULLET)
 #define sr_numofbullets (*SR_AT(int, SR_RVA_NUMOFBULLETS))
 #define sr_stats        (*SR_AT(Stats, SR_RVA_STATS))
+#define sr_particles    SR_AT(Particle, SR_RVA_PARTICLE)
+#define sr_numofparticles (SR_AT(AreaSector, SR_RVA_AREA_SECTOR)->num_particles)
+#define sr_bonds        SR_AT(Bond, SR_RVA_BOND)
+#define sr_numofbonds   (*SR_AT(int, SR_RVA_NUMOFBONDS))
 #define sr_bsdsocket    (*SR_AT(BsdSocket, SR_RVA_BSDSOCKET))
 #define sr_socketid     (*SR_AT(uint32_t, 0x60d08u)) /* "7DFP": the first 4 bytes of each packet */
 

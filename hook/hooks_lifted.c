@@ -749,12 +749,12 @@ __declspec(naked) static void th_03290(void)
 }
 static uint8_t expect_03290[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-void __cdecl lf_033a0(int param_1);
+void __cdecl deletebond(int param_1);
 static void (__cdecl *orig_033a0)(int);
 static SvVerify v_033a0 = { "deletebond", -1 };
 static void __cdecl hk_033a0(int param_1)
 {
-    SV_HOOK_VOID(v_033a0, lf_033a0(param_1), orig_033a0(param_1), NULL);
+    SV_HOOK_VOID(v_033a0, deletebond(param_1), orig_033a0(param_1), NULL);
 }
 __declspec(naked) static void th_033a0(void)
 {
@@ -5476,12 +5476,12 @@ __declspec(naked) static void th_126b0(void)
 }
 static uint8_t expect_126b0[7] = { 0x83, 0xec, 0x58, 0x8b, 0x4c, 0x24, 0x70 };
 
-int __cdecl lf_129b0(int param_1, int param_2, int param_3, int param_4);
+int __cdecl createbond(int param_1, int param_2, int param_3, int param_4);
 static int (__cdecl *orig_129b0)(int, int, int, int);
 static SvVerify v_129b0 = { "createbond", -1 };
 static int __cdecl hk_129b0(int param_1, int param_2, int param_3, int param_4)
 {
-    SV_HOOK_RET(int, v_129b0, lf_129b0(param_1, param_2, param_3, param_4), orig_129b0(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_129b0, createbond(param_1, param_2, param_3, param_4), orig_129b0(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_129b0(void)
 {
@@ -5519,12 +5519,12 @@ __declspec(naked) static void th_129b0(void)
 }
 static uint8_t expect_129b0[13] = { 0x83, 0xec, 0x10, 0x81, 0x3d, 0x28, 0x9a, 0x57, 0x17, 0x00, 0x40, 0x00, 0x00 };
 
-void __cdecl lf_12c90(void);
+void __cdecl bondtimetolive(void);
 static void (__cdecl *orig_12c90)(void);
 static SvVerify v_12c90 = { "bondtimetolive", -1 };
 static void __cdecl hk_12c90(void)
 {
-    SV_HOOK_VOID(v_12c90, lf_12c90(), orig_12c90(), NULL);
+    SV_HOOK_VOID(v_12c90, bondtimetolive(), orig_12c90(), NULL);
 }
 __declspec(naked) static void th_12c90(void)
 {
@@ -8484,12 +8484,12 @@ __declspec(naked) static void th_272b0(void)
 }
 static uint8_t expect_272b0[5] = { 0xd9, 0xee, 0x83, 0xec, 0x18 };
 
-int __cdecl lf_278c0(int param_1, undefined4 * param_2, undefined4 * param_3, float param_4, int param_5);
+int __cdecl createparticle(int param_1, undefined4 * param_2, undefined4 * param_3, float param_4, int param_5);
 static int (__cdecl *orig_278c0)(int, undefined4 *, undefined4 *, float, int);
 static SvVerify v_278c0 = { "createparticle", -1 };
 static int __cdecl hk_278c0(int param_1, undefined4 * param_2, undefined4 * param_3, float param_4, int param_5)
 {
-    SV_HOOK_RET(int, v_278c0, lf_278c0(param_1, param_2, param_3, param_4, param_5), orig_278c0(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_RET(int, v_278c0, createparticle(param_1, param_2, param_3, param_4, param_5), orig_278c0(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_278c0(void)
 {
@@ -8528,12 +8528,12 @@ __declspec(naked) static void th_278c0(void)
 }
 static uint8_t expect_278c0[7] = { 0x53, 0x8b, 0x1d, 0x30, 0xd7, 0x94, 0x19 };
 
-void __cdecl lf_279b0(void);
+void __cdecl particletimetolive(void);
 static void (__cdecl *orig_279b0)(void);
 static SvVerify v_279b0 = { "particletimetolive", -1 };
 static void __cdecl hk_279b0(void)
 {
-    SV_HOOK_VOID(v_279b0, lf_279b0(), orig_279b0(), NULL);
+    SV_HOOK_VOID(v_279b0, particletimetolive(), orig_279b0(), NULL);
 }
 __declspec(naked) static void th_279b0(void)
 {
@@ -8567,12 +8567,12 @@ __declspec(naked) static void th_279b0(void)
 }
 static uint8_t expect_279b0[6] = { 0x8b, 0x15, 0x30, 0xd7, 0x94, 0x19 };
 
-void __cdecl lf_27ba0(void);
+void __cdecl particlesimulation(void);
 static void (__cdecl *orig_27ba0)(void);
 static SvVerify v_27ba0 = { "particlesimulation", -1 };
 static void __cdecl hk_27ba0(void)
 {
-    SV_HOOK_VOID(v_27ba0, lf_27ba0(), orig_27ba0(), NULL);
+    SV_HOOK_VOID(v_27ba0, particlesimulation(), orig_27ba0(), NULL);
 }
 __declspec(naked) static void th_27ba0(void)
 {

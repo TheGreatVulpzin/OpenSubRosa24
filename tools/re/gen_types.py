@@ -36,7 +36,7 @@ STRUCTS = {
     # Regions with a known size and few or no known fields (Phase 4, batch 2). The size is
     # the symbol size of the Linux 0.24c server when the region has no pointer (the i386
     # Mach-O size has alignment padding), else the 32-bit size from the code.
-    'Particle': ('particle', 0x3c0),
+    'Particle': ('particle', 0xf0),  # createparticle memsets 0xf0 bytes
     'Timer': ('timer', 0x58),
     'AreaBlock': ('area_block', 0x84),
     'Area': ('area', 0x100d6c),
@@ -79,11 +79,11 @@ STRUCTS = {
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
-          'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 4096,
+          'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 16384,
           'objecttype': 128, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -122,8 +122,24 @@ typedef union Bone { struct {
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
     uint8_t unk_54[0x38];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
-    uint8_t unk_90[0x50];
+    uint8_t unk_90[0x4c];
+    int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
+
+/* Joint bond of a Human (createjointbond): the bond, the bone and the body it holds. */
+typedef union HumanJoint { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int bone;       /* +0x04 createjointbond: parameter 2 */
+    int body;       /* +0x08 createjointbond: parameter 3, index into body[] */
+}; uint8_t lf_raw[0xc]; } HumanJoint;
+
+/* Muscle of a Human (human_createmuscleball). Only the bond is known. */
+typedef union HumanMuscle { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
+    int unk_08;     /* +0x08 human_createmuscleball: parameter 3 */
+    uint8_t unk_0c[0x24];
+}; uint8_t lf_raw[0x30]; } HumanMuscle;
 
 /* Inventory slot. 8 per Human. */
 typedef union InventorySlot { struct {
@@ -151,6 +167,8 @@ SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
 SR_STATIC_ASSERT(offsetof(Bone, rot) == 0x30, "Bone.rot");
 SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
 SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
+SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
+SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 '''

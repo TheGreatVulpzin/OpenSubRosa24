@@ -4,7 +4,7 @@ rva,name,count,evidence
 0x17529a40,numofbullets,,createbullet: counter with limit 0x3fff
 0x17179a40,bond,16384,createbond (0x129b0): particle_a at +0x14
 0x17179a28,numofbonds,,createbond: counter with limit 0x3fff
-0xb3e7200,particle,4096,"createbond: particle+0x50 (number of bonds, limit 31)"
+0xb3e7200,particle,16384,"createbond: particle+0x50 (number of bonds, limit 31)"
 0x93dd880,event,65536,createevent_message (0x6260): writes type 2 at +0x0
 0xf437318,numofevents,,createevent_message: event index
 0x10357400,itemtype,64,createitem: itemtype+4 copied to item.mass
