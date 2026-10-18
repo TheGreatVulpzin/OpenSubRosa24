@@ -152,6 +152,18 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 - No change of behavior in this phase. When a function shows a place for a future change ("an admin command could go here"), write it in `docs/ideas.md`, not in the code.
 - Order: small functions first (vectors, bitstream, events), then players and accounts, items, objects and vehicles, humans, logic and economy, `servercycle`. The level generation (`area_createsblocks`, `building_buildfloorplan`...) comes last.
 - `tools/progress.py` counts the hand-written functions.
+- Speed: `python -I tools/lift/bench.py --all` at the end of each lot (the harness times each function on the recorded calls, `HARNESS_TIME=1`). The times move by about 30% from one run to the next: only large ratios that repeat mean something.
+- Slow lifted functions (bench.py, 2026-10-18, recording 20261013-195210, 3 runs). Fix each one when its lot comes. The likely cause is the old one: float locals that hold integers (denormals on the x87, `FixIntLocals.java`).
+
+  | Function | C / original | When it runs |
+  | --- | --- | --- |
+  | `logicsimulation_world` | 9.5 to 9.7 | each tick |
+  | `building_buildfloorplan` | 4.5 to 7.1 | level load |
+  | `packobjectpacket` | 3.3 to 5.2 | each tick, for each player |
+  | `logicsimulation` | 3.7 to 5.7 | each tick |
+  | `packevent` | 2.6 to 3.8 | each tick, for each player |
+  | `deleteplayer` | 2.4 to 3.2 | a player leaves |
+  | `sphereintersectcityobjecttype` | 2.4 to 3.0 | collisions |
 
 Exception: security fixes for invalid client input (`docs/protocol.md`, section 12, item 15) may go in early. The recordings have only valid input, so the harness does not change. The voice index fix is already in `hook/netguard.c`.
 
