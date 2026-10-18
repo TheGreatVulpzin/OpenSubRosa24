@@ -636,6 +636,49 @@ void sv_track_switch_to_original(void)
     protect_scope(PAGE_READONLY);
 }
 
+/* HARNESS_TIME: the pages that a tracked pair of runs wrote, with their state before the
+ * call. sv_time_restore puts them back before each timed run, so the two versions start from
+ * the same state with no page protection in the timed part. */
+static uint32_t g_time_index[MAX_PAGES];
+static uint8_t *g_time_before[MAX_PAGES];
+static uint32_t g_time_count, g_time_cap;
+
+static void time_add(uint32_t page, const uint8_t *before)
+{
+    if (g_time_count == g_time_cap) {
+        g_time_before[g_time_count] = malloc(PAGE);
+        if (!g_time_before[g_time_count])
+            return;
+        g_time_cap++;
+    }
+    g_time_index[g_time_count] = page;
+    memcpy(g_time_before[g_time_count], before, PAGE);
+    g_time_count++;
+}
+
+void sv_time_restore(void)
+{
+    uint32_t i;
+    for (i = 0; i < g_time_count; i++)
+        memcpy(g_data + (size_t)g_time_index[i] * PAGE, g_time_before[i], PAGE);
+    if (g_holdrand)
+        *g_holdrand = g_holdrand_before;
+}
+
+void sv_time_capture(void)
+{
+    uint32_t i;
+    g_active = NULL;
+    protect_scope(PAGE_READWRITE);
+    g_time_count = 0;
+    for (i = 0; i < g_orig.count; i++)
+        time_add(g_orig.index[i], g_orig.before[i]);
+    for (i = 0; i < g_new.count; i++)
+        if (find_page(&g_orig, g_new.index[i]) < 0)
+            time_add(g_new.index[i], g_new.before[i]);
+    sv_time_restore();
+}
+
 static uint32_t g_ignore[16][2];  /* [rva, rva + size) */
 static int g_nignore;
 

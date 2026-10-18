@@ -29,6 +29,7 @@
 #include <windows.h>
 
 #include <ctype.h>
+#include <intrin.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -885,6 +886,13 @@ static void cover_arm(CoverFunc *c, int on)
     g_cover_now = on ? c : NULL;
 }
 
+/* HARNESS_TIME=1: no comparison. Each call runs the C version and the original once with the
+ * verifier (a warm-up that also finds the pages they write), then once each from the same
+ * state with no page protection, in turns (the first of the two changes with each call). The
+ * cycles of the timed runs add up for each function. tools/lift/bench.py adds the results of
+ * all the recordings. */
+static int g_time;
+
 static int safe_invoke(void *fn, const uint32_t *args, int n, int kind, uint32_t *r_eax, uint32_t *r_edx,
                        double *r_f)
 {
@@ -1028,6 +1036,7 @@ int main(int argc, char **argv)
     plat_test_patch_globals();
     imports = resolve_imports();
     x87_init();
+    g_time = getenv("HARNESS_TIME") && atoi(getenv("HARNESS_TIME")) != 0;
     set_probes(getenv("HARNESS_PROBE"));
     set_watch(getenv("HARNESS_WATCH"));
     if (getenv("HARNESS_COVER")) {
@@ -1060,6 +1069,8 @@ int main(int argc, char **argv)
         const LfEntry *e = table_entry(i);
         SvVerify v;
         int ok = 0, diff = 0, skip = 0, crash = 0, ncalls = 0, stack_skip = 0, retried_ok = 0;
+        unsigned __int64 time_new = 0, time_orig = 0;
+        int time_n = 0;
         char first[320] = "";
         if (!filter_match(e->name))
             continue;
@@ -1097,6 +1108,59 @@ int main(int argc, char **argv)
             }
             mask = e->ret_size == 1 ? 0xffu : e->ret_size == 2 ? 0xffffu : 0xffffffffu;
             ncalls++;
+            if (g_time) {
+                unsigned __int64 t0, t1;
+                int side, run_ok;
+                /* A tracked pair of runs warms up the code and the cache of each side and finds
+                 * the pages that the two versions write. Each timed run then starts from the
+                 * state before the call, so a function that changes the game (a purchase, a new
+                 * bond) takes the same path in both versions. */
+                build_args(c, e->args, a);
+                plat_test_set_packets(c->packets, c->npackets);
+                sv_track_begin_new(&v);
+                plat_test_begin(0);
+                run_ok = safe_invoke(e->lifted, a, c->n, e->ret, &ne, &de, &fe);
+                plat_test_end(0);
+                sv_track_switch_to_original();
+                build_args(c, e->args, a);
+                plat_test_set_packets(c->packets, c->npackets);
+                plat_test_begin(1);
+                run_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo) && run_ok;
+                plat_test_end(1);
+                sv_time_capture();
+                /* Each side runs 4 times from the same state. The first run fills the cache with
+                 * the data of this side, and the fastest of the other 3 counts: an interrupt or
+                 * a page fault then changes one run, not the result. */
+                for (side = 0; side < 2 && run_ok; side++) {
+                    int orig = (side + j) & 1, rep;
+                    unsigned __int64 best = ~0ull;
+                    for (rep = 0; rep < 4 && run_ok; rep++) {
+                        sv_time_restore();
+                        build_args(c, e->args, a);
+                        plat_test_set_packets(c->packets, c->npackets);
+                        plat_test_begin(orig);
+                        t0 = __rdtsc();
+                        run_ok = safe_invoke(orig ? (void *)(sr_base + e->rva) : e->lifted, a, c->n, e->ret,
+                                             orig ? &no : &ne, orig ? &dorig : &de, orig ? &fo : &fe);
+                        t1 = __rdtsc();
+                        plat_test_end(orig);
+                        if (rep > 0 && t1 - t0 < best)
+                            best = t1 - t0;
+                    }
+                    if (orig)
+                        time_orig += best;
+                    else
+                        time_new += best;
+                }
+                sv_time_restore();
+                if (run_ok) {
+                    time_n++;
+                } else {
+                    apply_snapshot();
+                    resolve_imports();
+                }
+                continue;
+            }
             if (g_cover) {  /* coverage mode: the original only, no comparison */
                 CoverFunc *cf = cover_find(e->rva);
                 uint32_t h = 2166136261u;
@@ -1217,6 +1281,11 @@ int main(int argc, char **argv)
                      retried_ok);
         if (stack_skip && !first[0])
             snprintf(first, sizeof first, "%d skipped: value points into the stack (check params.csv)", stack_skip);
+        if (g_time) {
+            if (time_n)
+                printf("time %s %d %I64u %I64u\n", e->name, time_n, time_new, time_orig);
+            continue;
+        }
         if (!ncalls) {
             if (skip) {
                 total_skip += skip;

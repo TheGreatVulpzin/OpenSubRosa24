@@ -89,6 +89,11 @@ void sv_track_begin_new(SvVerify *v);
  * Call between the new version and the original. */
 void sv_track_switch_to_original(void);
 
+/* HARNESS_TIME, after the original run of a tracked pair: keep the pages that the two runs
+ * wrote and put them back to the state before the call. sv_time_restore puts them back again. */
+void sv_time_capture(void);
+void sv_time_restore(void);
+
 /* Stop recording, compare, and keep the result of the original.
  * same_return: 1 if the return values are equal (or if the function returns void).
  * detail: short text for the log (can be NULL). */
