@@ -5558,12 +5558,12 @@ __declspec(naked) static void th_12c90(void)
 }
 static uint8_t expect_12c90[10] = { 0x83, 0xec, 0x10, 0x56, 0x8b, 0x35, 0x28, 0x9a, 0x57, 0x17 };
 
-void __cdecl lf_12f80(int param_1);
+void __cdecl bond_partpart(int param_1);
 static void (__cdecl *orig_12f80)(int);
 static SvVerify v_12f80 = { "bond_partpart", -1 };
 static void __cdecl hk_12f80(int param_1)
 {
-    SV_HOOK_VOID(v_12f80, lf_12f80(param_1), orig_12f80(param_1), NULL);
+    SV_HOOK_VOID(v_12f80, bond_partpart(param_1), orig_12f80(param_1), NULL);
 }
 __declspec(naked) static void th_12f80(void)
 {
@@ -5599,12 +5599,12 @@ __declspec(naked) static void th_12f80(void)
 }
 static uint8_t expect_12f80[7] = { 0x83, 0xec, 0x18, 0x8b, 0x44, 0x24, 0x1c };
 
-void __cdecl lf_130d0(int param_1);
+void __cdecl bond_bodybody(int param_1);
 static void (__cdecl *orig_130d0)(int);
 static SvVerify v_130d0 = { "bond_bodybody", -1 };
 static void __cdecl hk_130d0(int param_1)
 {
-    SV_HOOK_VOID(v_130d0, lf_130d0(param_1), orig_130d0(param_1), NULL);
+    SV_HOOK_VOID(v_130d0, bond_bodybody(param_1), orig_130d0(param_1), NULL);
 }
 __declspec(naked) static void th_130d0(void)
 {

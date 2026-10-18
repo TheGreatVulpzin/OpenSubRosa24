@@ -136,7 +136,7 @@ bond,0x34,local_a,vec3,,bondsimulation2: point on the bone (weights of the 3 row
 bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of the rows of item.rot)
 bond,0x4c,mass_ratio,float,2,bondsimulation2 type 10: item_mass/(sum) and bone_mass/(sum)
 bond,0x6c,stiffness,float,,bondsimulation2: force = (distance - rest_length) * stiffness
-bond,0x70,unk_70,float,,bondsimulation2 copies it to bondopt+0x3c and uses it negated
+bond,0x70,damping,float,,"bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir"
 bond,0x90,owner,int,,"types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c)"
 bond,0x94,bone_a,int,,bondsimulation2: bone index (stride 0xe0)
 bond,0x98,target,int,,bondsimulation2: type 10 = item index; type 8 = second bone
@@ -227,3 +227,19 @@ human,0xec8,num_muscles,int,,human_createmuscleball appends to the list at +0xec
 human,0xecc,muscles,HumanMuscle,128,"human_createmuscleball (stride 0x30); the list ends at the joints (+0x26cc)"
 human,0x26cc,num_joints,int,,createjointbond appends to the list at +0x26d0
 human,0x26d0,joints,HumanJoint,32,"createjointbond (stride 0xc); createhuman uses floats from +0x2870"
+bondopt,0x0,a,int16_t,,"type 0: particle a; body bonds: the human"
+bondopt,0x2,b,int16_t,,"type 0: particle b; body bonds: bone a"
+bondopt,0x4,c,int16_t,,body bonds: bone b
+bondopt,0x6,mode,int16_t,,bondsimulation2 copies bond.mode
+bondopt,0x8,dir,vec3,,"type 0: unit vector from a to b; bond_bodybody: the position error"
+bondopt,0x14,bias,float,,"type 0: (length - rest_length) * stiffness"
+bondopt,0x18,arm_a,vec3,,bond_bodybody: the point on bone a (w x arm)
+bondopt,0x24,arm_b,vec3,,bond_bodybody: the point on bone b
+bondopt,0x34,share_a,float,,"type 0: mass_b / (mass_a + mass_b), the part of the change for a"
+bondopt,0x38,share_b,float,,"type 0: mass_a / (mass_a + mass_b), the part of the change for b"
+bondopt,0x3c,damping,float,,bondsimulation2 copies bond.damping
+bondparticle,0x0,vel,vec3,,bondsimulation2 copies particle.vel
+bondparticle,0x10,dv,vec3,,"bondsimulation2 clears it; bond_partpart adds the change of vel"
+bondhuman,0x0,active,int,,bondsimulation2: 1 for an active human with a body
+bondhuman,0x4,mask,int,,bondsimulation2: one bit for each bone with a positive value at Bone+0xc4
+bondhuman,0x10,bones,BondBone,16,bond_bodybody: stride 0x80

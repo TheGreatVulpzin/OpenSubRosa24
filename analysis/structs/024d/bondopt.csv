@@ -16,8 +16,3 @@ offset,type,uses,n_funcs,funcs
 0x34,float,10,4,bond_bodybody bond_partpart bondsimulation2 human_calculatearmangles
 0x38,float,10,4,bond_bodybody bond_partpart bondsimulation2 human_calculatearmangles
 0x3c,float,13,4,bond_bodybody bond_partpart bondsimulation2 human_calculatearmangles
-0x40,int16_t,3,1,bondsimulation2
-0x42,int16_t,2,1,bondsimulation2
-0x46,int16_t,2,1,bondsimulation2
-0x58,float,1,1,bondsimulation2
-0x7c,float,2,1,bondsimulation2

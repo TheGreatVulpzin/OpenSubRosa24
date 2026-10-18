@@ -747,7 +747,7 @@ LAB_0045770a:
               g_numofbonds = g_numofbonds + 1;
               g_bond[iVar7].stiffness = 0.125;
               local_48 = (int *)0x1;
-              g_bond[iVar7].unk_70 = 0.25;
+              g_bond[iVar7].damping = 0.25;
               g_bond[iVar7].mode = 0;
               g_bond[iVar7].friction_dir.x = fVar2;
               g_bond[iVar7].friction_dir.y = fVar17;
@@ -803,10 +803,10 @@ LAB_0045770a:
               g_bond[iVar13].rest_length = 0.25;
             }
             g_bond[iVar13].stiffness = 0.125;
-            g_bond[iVar13].unk_70 = 0.25;
+            g_bond[iVar13].damping = 0.25;
             if (iVar7 != 0) {
               g_bond[iVar13].stiffness = 0.0078125;
-              g_bond[iVar13].unk_70 = 0.03125;
+              g_bond[iVar13].damping = 0.03125;
             }
             g_numofbonds = g_numofbonds + 1;
             iVar7 = *(int *)((int)g_object[0].rot + iVar15 + -0x34);
@@ -893,7 +893,7 @@ LAB_00457ea9:
                        (float)(g_intersect.normal[1] * local_c + g_intersect.normal[0] * local_10 +
                        (float)(g_intersect.normal[2] * local_8));
                   g_bond[iVar11].stiffness = 0.0625;
-                  g_bond[iVar11].unk_70 = 0.25;
+                  g_bond[iVar11].damping = 0.25;
                   g_bond[iVar11].mode = 0;
                   g_bond[iVar11].friction_dir.x = fVar2;
                   g_bond[iVar11].friction_dir.y = fVar17;

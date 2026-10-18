@@ -8,6 +8,8 @@
 
 #define SR_RVA_CUBEQUAD             0x60170u
 #define SR_RVA_CUBEVERTEX           0x60174u
+#define SR_RVA_BONDHUMAN            0x61dd0u  /* BondHuman[] */
+#define SR_RVA_BONDPARTICLE         0x183dd0u  /* BondParticle[] */
 #define SR_RVA_TIMER                0x14043a0u  /* Timer[] */
 #define SR_RVA_BULLET               0x1409ba0u  /* Bullet[] */
 #define SR_RVA_DEBUG                0x1579ba0u  /* Debug[] */
@@ -73,6 +75,9 @@
 #define SR_MAX_EVENT                65536
 #define SR_MAX_PARTICLE             16384
 #define SR_MAX_OBJECTTYPE           128
+#define SR_MAX_BONDOPT              16384
+#define SR_MAX_BONDPARTICLE         16384
+#define SR_MAX_BONDHUMAN            512
 #define SR_MAX_ITEMTYPE             64
 #define SR_MAX_BODY                 32
 #define SR_MAX_ACCOUNT              65536

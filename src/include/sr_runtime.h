@@ -36,6 +36,9 @@ extern uintptr_t sr_base;
 #define sr_numofparticles (SR_AT(AreaSector, SR_RVA_AREA_SECTOR)->num_particles)
 #define sr_bonds        SR_AT(Bond, SR_RVA_BOND)
 #define sr_numofbonds   (*SR_AT(int, SR_RVA_NUMOFBONDS))
+#define sr_bondopt      SR_AT(BondOpt, SR_RVA_BONDOPT)
+#define sr_bondparticles SR_AT(BondParticle, SR_RVA_BONDPARTICLE)
+#define sr_bondhumans   SR_AT(BondHuman, SR_RVA_BONDHUMAN)
 #define sr_bsdsocket    (*SR_AT(BsdSocket, SR_RVA_BSDSOCKET))
 #define sr_socketid     (*SR_AT(uint32_t, 0x60d08u)) /* "7DFP": the first 4 bytes of each packet */
 

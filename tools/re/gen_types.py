@@ -68,7 +68,9 @@ STRUCTS = {
     # Phase 4, batch 4.
     'LevelEditor': ('level_editor', 0x1c6898),
     'BlockTemp': ('blocktemp', 0x7606c),
-    'BondOpt': ('bondopt', 0x100000),
+    'BondOpt': ('bondopt', 0x40),  # one record for each bond: 0x100000 / 0x40 = 16384
+    'BondParticle': ('bondparticle', 0x20),
+    'BondHuman': ('bondhuman', 0x810),
     'TempMesh': ('tempmesh', 0x2d1850),
     'Track': ('track', 0x578000),
     # Phase 4, batch 5.
@@ -80,10 +82,10 @@ STRUCTS = {
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
           'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 16384,
-          'objecttype': 128, 'itemtype': 64, 'body': 32, 'account': 65536,
+          'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -141,6 +143,22 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* Bone record of the bond solver (BondHuman.bones). The solver copies the velocities of the
+ * Bone here, adds the changes of each pass, and writes them back. */
+typedef union BondBone { struct {
+    vec3 vel;           /* +0x00 bondsimulation2 copies Bone+0x18 */
+    float pad_0c;
+    vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
+    float pad_1c;
+    vec3 unk_20;        /* +0x20 bondsimulation2 copies Bone+0x54 */
+    float pad_2c;
+    vec3 w;             /* +0x30 bondsimulation2 copies Bone+0x60; bond_bodybody: w x r */
+    float pad_3c;
+    vec3 dw;            /* +0x40 bond_bodybody adds the change of w */
+    float pad_4c;
+    uint8_t unk_50[0x30];
+}; uint8_t lf_raw[0x80]; } BondBone;
+
 /* Inventory slot. 8 per Human. */
 typedef union InventorySlot { struct {
     int count;      /* +0x00 manager: quantity */
@@ -169,6 +187,7 @@ SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
 SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
 SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
 SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
+SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 '''

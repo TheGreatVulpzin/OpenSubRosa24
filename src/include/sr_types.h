@@ -52,6 +52,22 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* Bone record of the bond solver (BondHuman.bones). The solver copies the velocities of the
+ * Bone here, adds the changes of each pass, and writes them back. */
+typedef union BondBone { struct {
+    vec3 vel;           /* +0x00 bondsimulation2 copies Bone+0x18 */
+    float pad_0c;
+    vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
+    float pad_1c;
+    vec3 unk_20;        /* +0x20 bondsimulation2 copies Bone+0x54 */
+    float pad_2c;
+    vec3 w;             /* +0x30 bondsimulation2 copies Bone+0x60; bond_bodybody: w x r */
+    float pad_3c;
+    vec3 dw;            /* +0x40 bond_bodybody adds the change of w */
+    float pad_4c;
+    uint8_t unk_50[0x30];
+}; uint8_t lf_raw[0x80]; } BondBone;
+
 /* Inventory slot. 8 per Human. */
 typedef union InventorySlot { struct {
     int count;      /* +0x00 manager: quantity */
@@ -80,6 +96,7 @@ SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
 SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
 SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
 SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
+SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 
@@ -682,7 +699,7 @@ typedef union Bond { struct {
     float rest_length;                   /* +0x0060 bondsimulation2: (dist - rest) * k (likely) */
     uint8_t pad_0064[0x8];
     float stiffness;                     /* +0x006c bondsimulation2: force = (distance - rest_length) * stiffness */
-    float unk_70;                        /* +0x0070 bondsimulation2 copies it to bondopt+0x3c and uses it negated */
+    float damping;                       /* +0x0070 bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir */
     vec3 friction_dir;                   /* +0x0074 bondsimulation2: scalevector and calculatefriction (likely) */
     int unk_0080;                        /* +0x0080 1 functions */
     uint8_t pad_0084[0x8];
@@ -710,7 +727,7 @@ SR_STATIC_ASSERT(offsetof(Bond, local_b) == 0x40, "Bond.local_b");
 SR_STATIC_ASSERT(offsetof(Bond, mass_ratio) == 0x4c, "Bond.mass_ratio");
 SR_STATIC_ASSERT(offsetof(Bond, rest_length) == 0x60, "Bond.rest_length");
 SR_STATIC_ASSERT(offsetof(Bond, stiffness) == 0x6c, "Bond.stiffness");
-SR_STATIC_ASSERT(offsetof(Bond, unk_70) == 0x70, "Bond.unk_70");
+SR_STATIC_ASSERT(offsetof(Bond, damping) == 0x70, "Bond.damping");
 SR_STATIC_ASSERT(offsetof(Bond, friction_dir) == 0x74, "Bond.friction_dir");
 SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
 SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
@@ -2523,37 +2540,56 @@ typedef union BlockTemp { struct {
 }; uint8_t lf_raw[0x7606c]; } BlockTemp;
 SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
 
-/* bondopt[]: record of 0x100000 bytes. */
+/* bondopt[]: record of 0x40 bytes. */
 typedef union BondOpt { struct {
-    int16_t unk_0000;                    /* +0x0000 3 functions */
-    int16_t unk_0002;                    /* +0x0002 3 functions */
-    int16_t unk_0004;                    /* +0x0004 2 functions */
-    int16_t unk_0006;                    /* +0x0006 1 functions */
-    float unk_0008;                      /* +0x0008 5 functions */
-    float unk_000c;                      /* +0x000c 5 functions */
-    float unk_0010;                      /* +0x0010 5 functions */
-    float unk_0014;                      /* +0x0014 2 functions */
-    float unk_0018;                      /* +0x0018 3 functions */
-    float unk_001c;                      /* +0x001c 2 functions */
-    float unk_0020;                      /* +0x0020 2 functions */
-    float unk_0024;                      /* +0x0024 2 functions */
-    float unk_0028;                      /* +0x0028 2 functions */
-    float unk_002c;                      /* +0x002c 2 functions */
+    int16_t a;                           /* +0x0000 type 0: particle a; body bonds: the human */
+    int16_t b;                           /* +0x0002 type 0: particle b; body bonds: bone a */
+    int16_t c;                           /* +0x0004 body bonds: bone b */
+    int16_t mode;                        /* +0x0006 bondsimulation2 copies bond.mode */
+    vec3 dir;                            /* +0x0008 type 0: unit vector from a to b; bond_bodybody: the position error */
+    float bias;                          /* +0x0014 type 0: (length - rest_length) * stiffness */
+    vec3 arm_a;                          /* +0x0018 bond_bodybody: the point on bone a (w x arm) */
+    vec3 arm_b;                          /* +0x0024 bond_bodybody: the point on bone b */
     uint8_t pad_0030[0x4];
-    float unk_0034;                      /* +0x0034 4 functions */
-    float unk_0038;                      /* +0x0038 4 functions */
-    float unk_003c;                      /* +0x003c 4 functions */
-    int16_t unk_0040;                    /* +0x0040 1 functions */
-    int16_t unk_0042;                    /* +0x0042 1 functions */
-    uint8_t pad_0044[0x2];
-    int16_t unk_0046;                    /* +0x0046 1 functions */
-    uint8_t pad_0048[0x10];
-    float unk_0058;                      /* +0x0058 1 functions */
-    uint8_t pad_005c[0x20];
-    float unk_007c;                      /* +0x007c 1 functions */
-    uint8_t pad_0080[0xfff80];
-}; uint8_t lf_raw[0x100000]; } BondOpt;
-SR_STATIC_ASSERT(sizeof(BondOpt) == 0x100000, "BondOpt");
+    float share_a;                       /* +0x0034 type 0: mass_b / (mass_a + mass_b), the part of the change for a */
+    float share_b;                       /* +0x0038 type 0: mass_a / (mass_a + mass_b), the part of the change for b */
+    float damping;                       /* +0x003c bondsimulation2 copies bond.damping */
+}; uint8_t lf_raw[0x40]; } BondOpt;
+SR_STATIC_ASSERT(sizeof(BondOpt) == 0x40, "BondOpt");
+SR_STATIC_ASSERT(offsetof(BondOpt, a) == 0x0, "BondOpt.a");
+SR_STATIC_ASSERT(offsetof(BondOpt, b) == 0x2, "BondOpt.b");
+SR_STATIC_ASSERT(offsetof(BondOpt, c) == 0x4, "BondOpt.c");
+SR_STATIC_ASSERT(offsetof(BondOpt, mode) == 0x6, "BondOpt.mode");
+SR_STATIC_ASSERT(offsetof(BondOpt, dir) == 0x8, "BondOpt.dir");
+SR_STATIC_ASSERT(offsetof(BondOpt, bias) == 0x14, "BondOpt.bias");
+SR_STATIC_ASSERT(offsetof(BondOpt, arm_a) == 0x18, "BondOpt.arm_a");
+SR_STATIC_ASSERT(offsetof(BondOpt, arm_b) == 0x24, "BondOpt.arm_b");
+SR_STATIC_ASSERT(offsetof(BondOpt, share_a) == 0x34, "BondOpt.share_a");
+SR_STATIC_ASSERT(offsetof(BondOpt, share_b) == 0x38, "BondOpt.share_b");
+SR_STATIC_ASSERT(offsetof(BondOpt, damping) == 0x3c, "BondOpt.damping");
+
+/* bondparticle[]: record of 0x20 bytes. */
+typedef union BondParticle { struct {
+    vec3 vel;                            /* +0x0000 bondsimulation2 copies particle.vel */
+    uint8_t pad_000c[0x4];
+    vec3 dv;                             /* +0x0010 bondsimulation2 clears it; bond_partpart adds the change of vel */
+    uint8_t pad_001c[0x4];
+}; uint8_t lf_raw[0x20]; } BondParticle;
+SR_STATIC_ASSERT(sizeof(BondParticle) == 0x20, "BondParticle");
+SR_STATIC_ASSERT(offsetof(BondParticle, vel) == 0x0, "BondParticle.vel");
+SR_STATIC_ASSERT(offsetof(BondParticle, dv) == 0x10, "BondParticle.dv");
+
+/* bondhuman[]: record of 0x810 bytes. */
+typedef union BondHuman { struct {
+    int active;                          /* +0x0000 bondsimulation2: 1 for an active human with a body */
+    int mask;                            /* +0x0004 bondsimulation2: one bit for each bone with a positive value at Bone+0xc4 */
+    uint8_t pad_0008[0x8];
+    BondBone bones[16];                  /* +0x0010 bond_bodybody: stride 0x80 */
+}; uint8_t lf_raw[0x810]; } BondHuman;
+SR_STATIC_ASSERT(sizeof(BondHuman) == 0x810, "BondHuman");
+SR_STATIC_ASSERT(offsetof(BondHuman, active) == 0x0, "BondHuman.active");
+SR_STATIC_ASSERT(offsetof(BondHuman, mask) == 0x4, "BondHuman.mask");
+SR_STATIC_ASSERT(offsetof(BondHuman, bones) == 0x10, "BondHuman.bones");
 
 /* tempmesh[]: record of 0x2d1850 bytes. */
 typedef union TempMesh { struct {

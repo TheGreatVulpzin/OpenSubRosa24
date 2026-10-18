@@ -384,7 +384,7 @@ void __cdecl lf_41de0(void)
   local_c0 = 0;
   if (0 < g_numofbonds) {
     local_a0 = &g_bond[0].particle_a;
-    pfVar21 = &g_bondopt.unk_000c;
+    pfVar21 = &g_bondopt.dir.y;
     do {
       piVar18 = local_a0;
       if (local_a0[-2] < 0x100) {
@@ -393,7 +393,7 @@ void __cdecl lf_41de0(void)
           iVar29 = *local_a0;
           *(short *)((int)pfVar21 + -10) = (short)iVar30;
           local_50 = (float *)(iVar30 * 0xf0);
-          ((BondOpt *)(pfVar21 + -3))->unk_0000 = (short)iVar29;
+          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar29;
           local_7c = (float)((&g_particle[0].pos.x)[iVar30 * 0x3c] -
                      (&g_particle[0].pos.x)[iVar29 * 0x3c]);
           local_78 = (float)((&g_particle[0].pos.y)[iVar30 * 0x3c] -
@@ -490,7 +490,7 @@ void __cdecl lf_41de0(void)
           iVar30 = piVar18[0x1f];
           fVar5 = ((vec3 *)(piVar18 + 8))->x;
           iVar29 = piVar18[0x20];
-          ((BondOpt *)(pfVar21 + -3))->unk_0000 = (short)iVar30;
+          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar30;
           fVar6 = *(float *)(iVar29 * 0xe0 + ((int)&g_human[0].lf_raw[0xf8]) + iVar30 * 0x2b64);
           fVar7 = *(float *)(iVar29 * 0xe0 + ((int)&g_human[0].lf_raw[0xfc]) + iVar30 * 0x2b64);
           iVar16 = piVar18[0x21];
@@ -553,7 +553,7 @@ void __cdecl lf_41de0(void)
           iVar29 = local_a0[0x20];
           iVar16 = local_a0[0x21];
           *(short *)((int)pfVar21 + -10) = (short)iVar29;
-          ((BondOpt *)(pfVar21 + -3))->unk_0000 = (short)iVar30;
+          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar30;
           local_60 = (int *)(iVar30 * 0x2b64);
           *(short *)(pfVar21 + -2) = (short)iVar16;
           local_28 = (float)(g_human[iVar30].bones[iVar16].rot[0].z * g_human[iVar30].bones[iVar29].rot[0].z
@@ -842,7 +842,7 @@ LAB_00442c75:
     } while (iVar30 != 0);
   }
   if (0 < g_numofbonds) {
-    psVar24 = &g_bondopt.unk_0006;
+    psVar24 = &g_bondopt.mode;
     piVar18 = &g_bond[0].mode;
     iVar30 = g_numofbonds;
     do {
@@ -1146,7 +1146,7 @@ LAB_00442c75:
     local_c0 = 0;
     if (0 < g_numofbonds) {
       pfVar33 = &g_bond[0].friction_dir.y;
-      pfVar21 = &g_bondopt.unk_0020;
+      pfVar21 = &g_bondopt.arm_a.z;
       do {
         iVar30 = g_timerlist.unk_0070;
         if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
@@ -1379,8 +1379,8 @@ LAB_00442c75:
             g_timer[g_timerlist.unk_007c].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
             k = (float)(bond->rest_length * bond->stiffness);
-            neg = -bond->unk_70;
-            load = (float)(w[3] * w[0] * bond->unk_70);
+            neg = -bond->damping;
+            load = (float)(w[3] * w[0] * bond->damping);
             local_5c = (float)((float)(k * bond->friction_dir.x + neg * w[9]) + load * pfVar33[0xe]);
             local_58 = (float)(load * pfVar33[0xf] + ((float)(w[10] * neg + (float)(bond->friction_dir.y * k))));
             local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->friction_dir.z))));
@@ -1463,7 +1463,7 @@ LAB_00442c75:
             uVar13 = rdtsc();
             g_timer[g_timerlist.unk_0078].unk_0040 = (int)uVar13;
             g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-            uVar25 = (uint)(ushort)((BondOpt *)(pfVar21 + -8))->unk_0000;
+            uVar25 = (uint)(ushort)((BondOpt *)(pfVar21 + -8))->a;
             fVar6 = -pfVar21[7];
             uVar32 = (uint)(ushort)*(short *)((int)pfVar21 + -0x1e);
             uVar28 = (uint)*(ushort *)(pfVar21 + -7);

@@ -7,6 +7,8 @@ typedef struct SrGlobalInfo { unsigned rva; const char *name; unsigned elem_size
 static const SrGlobalInfo sr_global_table[] = {
     { 0x60170u, "cubequad", 0x0u, 0u },
     { 0x60174u, "cubevertex", 0x0u, 0u },
+    { 0x61dd0u, "bondhuman", 0x810u, 512u },
+    { 0x183dd0u, "bondparticle", 0x20u, 16384u },
     { 0x14043a0u, "timer", 0x58u, 256u },
     { 0x1409ba0u, "bullet", 0x5cu, 16384u },
     { 0x1579ba0u, "debug", 0x523c8u, 0u },
@@ -38,7 +40,7 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0xf270a80u, "level_editor", 0x1c6898u, 0u },
     { 0xf437318u, "numofevents", 0x0u, 0u },
     { 0xf437b68u, "account", 0x4cu, 65536u },
-    { 0xf8f7b80u, "bondopt", 0x100000u, 0u },
+    { 0xf8f7b80u, "bondopt", 0x40u, 16384u },
     { 0xff47c80u, "radix", 0x400804u, 0u },
     { 0x103484a0u, "intersect", 0x84u, 0u },
     { 0x1034a5e0u, "objectpacket", 0xce14u, 0u },

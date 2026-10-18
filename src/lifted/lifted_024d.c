@@ -7951,164 +7951,6 @@ undefined4 __cdecl lf_126b0(float *param_1,float *param_2,float *param_3,float *
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x12f80 */
-#define DAT_00583dd0 (*(undefined4 *)SR_VA(0x583dd0))
-#define DAT_00583dd4 (*(undefined4 *)SR_VA(0x583dd4))
-#define DAT_00583dd8 (*(undefined4 *)SR_VA(0x583dd8))
-#define DAT_00583de0 (*(undefined4 *)SR_VA(0x583de0))
-#define DAT_00583de4 (*(undefined4 *)SR_VA(0x583de4))
-#define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
-void __cdecl lf_12f80(int param_1)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  uint uVar6;
-  uint uVar7;
-  
-  fVar1 = (&g_bondopt.unk_0008)[param_1 * 0x10];
-  uVar6 = (uint)(ushort)(&g_bondopt.unk_0000)[param_1 * 0x20];
-  uVar7 = (uint)(ushort)(&g_bondopt.unk_0002)[param_1 * 0x20];
-  fVar2 = (&g_bondopt.unk_000c)[param_1 * 0x10];
-  fVar3 = (&g_bondopt.unk_0010)[param_1 * 0x10];
-  fVar4 = (float)(((float)(fVar2 * ((float)(LF_BITS_F((&DAT_00583dd4)[uVar7 * 8]) - LF_BITS_F((&DAT_00583dd4)[uVar6 * 8]))) +
-           fVar1 * ((float)(LF_BITS_F((&DAT_00583dd0)[uVar7 * 8]) - LF_BITS_F((&DAT_00583dd0)[uVar6 * 8]))) +
-          fVar3 * ((float)(LF_BITS_F((&DAT_00583dd8)[uVar7 * 8]) - LF_BITS_F((&DAT_00583dd8)[uVar6 * 8]))))) *
-          (&g_bondopt.unk_003c)[param_1 * 0x10] + (&g_bondopt.unk_0014)[param_1 * 0x10]);
-  fVar5 = fVar4 * (&g_bondopt.unk_0034)[param_1 * 0x10];
-  *(float *)&((&DAT_00583de0)[uVar6 * 8]) = (float)(fVar5 * fVar1 + LF_BITS_F((&DAT_00583de0)[uVar6 * 8]));
-  *(float *)&((&DAT_00583de4)[uVar6 * 8]) = (float)(fVar2 * fVar5 + LF_BITS_F((&DAT_00583de4)[uVar6 * 8]));
-  *(float *)&((&DAT_00583de8)[uVar6 * 8]) = (float)(fVar5 * fVar3 + LF_BITS_F((&DAT_00583de8)[uVar6 * 8]));
-  fVar4 = (float)(-fVar4 * (&g_bondopt.unk_0038)[param_1 * 0x10]);
-  *(float *)&((&DAT_00583de0)[uVar7 * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[uVar7 * 8]) + fVar4 * fVar1);
-  *(float *)&((&DAT_00583de4)[uVar7 * 8]) = (float)(LF_BITS_F((&DAT_00583de4)[uVar7 * 8]) + fVar4 * fVar2);
-  *(float *)&((&DAT_00583de8)[uVar7 * 8]) = (float)(fVar3 * fVar4 + LF_BITS_F((&DAT_00583de8)[uVar7 * 8]));
-  return;
-}
-#undef DAT_00583dd0
-#undef DAT_00583dd4
-#undef DAT_00583dd8
-#undef DAT_00583de0
-#undef DAT_00583de4
-#undef DAT_00583de8
-#undef g_bondopt
-
-/* ---------------------------------------------------------------- 0x130d0 */
-#define DAT_00461de0 (*(undefined4 *)SR_VA(0x461de0))
-#define DAT_00461de4 (*(undefined4 *)SR_VA(0x461de4))
-#define DAT_00461de8 (*(undefined4 *)SR_VA(0x461de8))
-#define DAT_00461df0 (*(undefined4 *)SR_VA(0x461df0))
-#define DAT_00461df4 (*(undefined4 *)SR_VA(0x461df4))
-#define DAT_00461df8 (*(undefined4 *)SR_VA(0x461df8))
-#define DAT_00461e10 (*(undefined4 *)SR_VA(0x461e10))
-#define DAT_00461e14 (*(undefined4 *)SR_VA(0x461e14))
-#define DAT_00461e18 (*(undefined4 *)SR_VA(0x461e18))
-#define DAT_00461e20 (*(undefined4 *)SR_VA(0x461e20))
-#define DAT_00461e24 (*(undefined4 *)SR_VA(0x461e24))
-#define DAT_00461e28 (*(undefined4 *)SR_VA(0x461e28))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
-void __cdecl lf_130d0(int param_1)
-
-{
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  uint uVar12;
-  uint uVar13;
-  uint uVar14;
-  
-  fVar1 = (&g_bondopt.unk_0018)[param_1 * 0x10];
-  uVar13 = (uint)(ushort)(&g_bondopt.unk_0000)[param_1 * 0x20];
-  uVar12 = (uint)(ushort)(&g_bondopt.unk_0002)[param_1 * 0x20];
-  fVar2 = (&g_bondopt.unk_001c)[param_1 * 0x10];
-  fVar3 = (&g_bondopt.unk_0020)[param_1 * 0x10];
-  fVar4 = (&g_bondopt.unk_0024)[param_1 * 0x10];
-  fVar5 = (&g_bondopt.unk_0028)[param_1 * 0x10];
-  fVar6 = (&g_bondopt.unk_002c)[param_1 * 0x10];
-  uVar14 = (uint)(ushort)(&g_bondopt.unk_0004)[param_1 * 0x20];
-  fVar7 = (&g_bondopt.unk_003c)[param_1 * 0x10];
-  fVar8 = -(&g_bondopt.unk_003c)[param_1 * 0x10];
-  fVar10 = (float)(fVar8 * ((float)(LF_BITS_F((&DAT_00461de0)[uVar14 * 0x20 + uVar13 * 0x204]) +
-                   ((float)(fVar5 * LF_BITS_F((&DAT_00461e18)[uVar14 * 0x20 + uVar13 * 0x204]) -
-                   fVar6 * LF_BITS_F((&DAT_00461e14)[uVar14 * 0x20 + uVar13 * 0x204]))))) +
-           ((float)((&g_bondopt.unk_0008)[param_1 * 0x10] +
-           fVar7 * ((float)(LF_BITS_F((&DAT_00461de0)[uVar13 * 0x204 + uVar12 * 0x20]) +
-                   ((float)(fVar2 * LF_BITS_F((&DAT_00461e18)[uVar13 * 0x204 + uVar12 * 0x20]) -
-                   fVar3 * LF_BITS_F((&DAT_00461e14)[uVar13 * 0x204 + uVar12 * 0x20]))))))));
-  fVar9 = (float)(((float)(LF_BITS_F((&DAT_00461de4)[uVar14 * 0x20 + uVar13 * 0x204]) +
-          ((float)(LF_BITS_F((&DAT_00461e10)[uVar14 * 0x20 + uVar13 * 0x204]) * fVar6 -
-          fVar4 * LF_BITS_F((&DAT_00461e18)[uVar14 * 0x20 + uVar13 * 0x204]))))) * fVar8 +
-          ((float)(((float)(LF_BITS_F((&DAT_00461de4)[uVar13 * 0x204 + uVar12 * 0x20]) +
-          ((float)(fVar3 * LF_BITS_F((&DAT_00461e10)[uVar13 * 0x204 + uVar12 * 0x20]) -
-          fVar1 * LF_BITS_F((&DAT_00461e18)[uVar13 * 0x204 + uVar12 * 0x20]))))) * fVar7 +
-          (&g_bondopt.unk_000c)[param_1 * 0x10])));
-  fVar8 = (float)(fVar8 * ((float)(LF_BITS_F((&DAT_00461de8)[uVar14 * 0x20 + uVar13 * 0x204]) +
-                  ((float)(LF_BITS_F((&DAT_00461e14)[uVar14 * 0x20 + uVar13 * 0x204]) * fVar4 -
-                  fVar5 * LF_BITS_F((&DAT_00461e10)[uVar14 * 0x20 + uVar13 * 0x204]))))) +
-          ((float)(fVar7 * ((float)(LF_BITS_F((&DAT_00461de8)[uVar13 * 0x204 + uVar12 * 0x20]) +
-                  ((float)(fVar1 * LF_BITS_F((&DAT_00461e14)[uVar13 * 0x204 + uVar12 * 0x20]) -
-                  LF_BITS_F((&DAT_00461e10)[uVar13 * 0x204 + uVar12 * 0x20]) * fVar2)))) +
-          (&g_bondopt.unk_0010)[param_1 * 0x10])));
-  fVar7 = (&g_bondopt.unk_0038)[param_1 * 0x10];
-  fVar11 = -(&g_bondopt.unk_0034)[param_1 * 0x10];
-  *(float *)&((&DAT_00461df0)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(LF_BITS_F((&DAT_00461df0)[uVar13 * 0x204 + uVar12 * 0x20]) + fVar10 * fVar11);
-  *(float *)&((&DAT_00461df4)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(LF_BITS_F((&DAT_00461df4)[uVar13 * 0x204 + uVar12 * 0x20]) + fVar9 * fVar11);
-  *(float *)&((&DAT_00461df8)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(LF_BITS_F((&DAT_00461df8)[uVar13 * 0x204 + uVar12 * 0x20]) + fVar8 * fVar11);
-  *(float *)&((&DAT_00461e20)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(fVar11 * ((float)(fVar9 * fVar3 - fVar8 * fVar2)) +
-       LF_BITS_F((&DAT_00461e20)[uVar13 * 0x204 + uVar12 * 0x20]));
-  *(float *)&((&DAT_00461e24)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(fVar11 * ((float)(fVar8 * fVar1 - fVar3 * fVar10)) +
-       LF_BITS_F((&DAT_00461e24)[uVar13 * 0x204 + uVar12 * 0x20]));
-  *(float *)&((&DAT_00461e28)[uVar13 * 0x204 + uVar12 * 0x20]) =
-       (float)(LF_BITS_F((&DAT_00461e28)[uVar13 * 0x204 + uVar12 * 0x20]) +
-       ((float)(fVar10 * fVar2 - fVar9 * fVar1)) * fVar11);
-  *(float *)&((&DAT_00461df0)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(LF_BITS_F((&DAT_00461df0)[uVar14 * 0x20 + uVar13 * 0x204]) + fVar7 * fVar10);
-  *(float *)&((&DAT_00461df4)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(fVar9 * fVar7 + LF_BITS_F((&DAT_00461df4)[uVar14 * 0x20 + uVar13 * 0x204]));
-  *(float *)&((&DAT_00461df8)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(fVar8 * fVar7 + LF_BITS_F((&DAT_00461df8)[uVar14 * 0x20 + uVar13 * 0x204]));
-  *(float *)&((&DAT_00461e20)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(((float)(fVar9 * fVar6 - fVar5 * fVar8)) * fVar7 +
-       LF_BITS_F((&DAT_00461e20)[uVar14 * 0x20 + uVar13 * 0x204]));
-  *(float *)&((&DAT_00461e24)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(((float)(fVar4 * fVar8 - fVar6 * fVar10)) * fVar7 +
-       LF_BITS_F((&DAT_00461e24)[uVar14 * 0x20 + uVar13 * 0x204]));
-  *(float *)&((&DAT_00461e28)[uVar14 * 0x20 + uVar13 * 0x204]) =
-       (float)(fVar7 * ((float)(fVar5 * fVar10 - fVar9 * fVar4)) +
-       LF_BITS_F((&DAT_00461e28)[uVar14 * 0x20 + uVar13 * 0x204]));
-  return;
-}
-#undef DAT_00461de0
-#undef DAT_00461de4
-#undef DAT_00461de8
-#undef DAT_00461df0
-#undef DAT_00461df4
-#undef DAT_00461df8
-#undef DAT_00461e10
-#undef DAT_00461e14
-#undef DAT_00461e18
-#undef DAT_00461e20
-#undef DAT_00461e24
-#undef DAT_00461e28
-#undef g_bondopt
-
 /* ---------------------------------------------------------------- 0x13450 */
 #define g_buildblocktype (*(BuildBlockType *)SR_VA(0xbba7200))
 #define DAT_094d0330 (*(undefined *)SR_VA(0x94d0330))
@@ -11497,7 +11339,7 @@ int __cdecl lf_19ee0(int param_1,int param_2,int param_3,float *param_4)
   g_bond[iVar1].bone_a = param_2;
   g_bond[iVar1].target = param_3;
   g_bond[iVar1].stiffness = 0.0625;
-  g_bond[iVar1].unk_70 = 0.125;
+  g_bond[iVar1].damping = 0.125;
   g_numofbonds = iVar1 + 1;
   g_bond[iVar1].local_a.x = *param_4;
   g_bond[iVar1].local_a.y = param_4[1];
@@ -16025,13 +15867,8 @@ float10 __cdecl lf_23fa0(int param_1)
 
 /* ---------------------------------------------------------------- 0x240e0 */
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_00583dd0 (*(undefined4 *)SR_VA(0x583dd0))
-#define DAT_00583dd4 (*(undefined4 *)SR_VA(0x583dd4))
-#define DAT_00583dd8 (*(undefined4 *)SR_VA(0x583dd8))
-#define DAT_00583de0 (*(undefined4 *)SR_VA(0x583de0))
-#define DAT_00583de4 (*(undefined4 *)SR_VA(0x583de4))
-#define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
 #define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
+#define g_bondparticle (*(BondParticle (*)[16384])SR_VA(0x583dd0))
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bc50))
 #define _CIcos x87_cos
 #define _CIsin x87_sin
@@ -16343,19 +16180,19 @@ void __cdecl lf_240e0(int param_1)
     iVar1 = iVar10 * 0x24;
     fVar5 = (float)(*(float *)(&g_object[param_1].lf_raw[0x808c] + iVar1) * 0.125 +
             ((float)((float)(((float)(LF_BITS_F((&g_object[param_1].unk_8074)[iVar10 * 9]) - g_particle[iVar11].pos.x)) * 0.03125)
-            - LF_BITS_F((&DAT_00583dd0)[iVar11 * 8]) * 0.125)));
+            - g_bondparticle[iVar11].vel.x * 0.125)));
     fVar2 = (float)(*(float *)(&g_object[param_1].lf_raw[0x8090] + iVar1) * 0.125 +
             ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x8078] + iVar1) - g_particle[iVar11].pos.y)) *
-             0.03125) - LF_BITS_F((&DAT_00583dd4)[iVar11 * 8]) * 0.125)));
+             0.03125) - g_bondparticle[iVar11].vel.y * 0.125)));
     fVar4 = (float)(*(float *)(&g_object[param_1].lf_raw[0x8094] + iVar1) * 0.125 +
             ((float)((float)(((float)(*(float *)(&g_object[param_1].lf_raw[0x807c] + iVar1) - g_particle[iVar11].pos.z)) *
-             0.03125) - LF_BITS_F((&DAT_00583dd8)[iVar11 * 8]) * 0.125)));
+             0.03125) - g_bondparticle[iVar11].vel.z * 0.125)));
     fVar6 = (float)(1.0 / (g_particle[iVar11].mass + 64.0));
     fVar7 = (float)(fVar6 * 64.0);
     fVar3 = g_particle[iVar11].mass;
-    *(float *)&((&DAT_00583de0)[iVar11 * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[iVar11 * 8]) + fVar7 * fVar5);
-    *(float *)&((&DAT_00583de4)[iVar11 * 8]) = (float)(fVar2 * fVar7 + LF_BITS_F((&DAT_00583de4)[iVar11 * 8]));
-    *(float *)&((&DAT_00583de8)[iVar11 * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[iVar11 * 8]) + fVar4 * fVar7);
+    g_bondparticle[iVar11].dv.x = (float)(g_bondparticle[iVar11].dv.x + fVar7 * fVar5);
+    g_bondparticle[iVar11].dv.y = (float)(fVar2 * fVar7 + g_bondparticle[iVar11].dv.y);
+    g_bondparticle[iVar11].dv.z = (float)(g_bondparticle[iVar11].dv.z + fVar4 * fVar7);
     iVar10 = iVar10 + 1;
     fVar3 = -((float)(fVar6 * fVar3));
     *(float *)(&g_object[param_1].lf_raw[0x8080] + iVar1) =
@@ -16443,13 +16280,8 @@ LAB_00424dcf:
   } while( true );
 }
 #undef g_object
-#undef DAT_00583dd0
-#undef DAT_00583dd4
-#undef DAT_00583dd8
-#undef DAT_00583de0
-#undef DAT_00583de4
-#undef DAT_00583de8
 #undef g_particle
+#undef g_bondparticle
 #undef rotatevector
 #undef _CIcos
 #undef _CIsin
@@ -17643,7 +17475,7 @@ void __cdecl lf_26f90(int param_1)
             g_numofbonds = g_numofbonds + 1;
             g_bond[iVar11].stiffness = 0.015625;
             g_object[param_1].unk_819c = iVar13;
-            g_bond[iVar11].unk_70 = 0.25;
+            g_bond[iVar11].damping = 0.25;
             g_bond[iVar11].mode = 0;
             g_bond[iVar11].friction_dir.x = fVar6;
             g_bond[iVar11].friction_dir.y = fVar7;
@@ -17676,7 +17508,7 @@ void __cdecl lf_26f90(int param_1)
             }
             g_numofbonds = g_numofbonds + 1;
             g_bond[iVar11].stiffness = 0.00390625;
-            g_bond[iVar11].unk_70 = 0.125;
+            g_bond[iVar11].damping = 0.125;
             g_bond[iVar11].mode = 0;
             g_bond[iVar11].friction_dir.x = fVar4;
             g_bond[iVar11].friction_dir.y = fVar9;
@@ -22672,7 +22504,7 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
+#define g_bondopt (*(BondOpt (*)[16384])SR_VA(0xfcf7b80))
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
@@ -23131,14 +22963,14 @@ LAB_0042f545:
     local_120 = local_108 * local_104;
     local_11c = (float)(local_108 * local_100);
     local_118 = (float)(local_108 * local_fc);
-    (&g_bondopt.unk_0008)[((int)LF_BITS_U(local_b8)) * 0x10] =
+    g_bondopt[((int)LF_BITS_U(local_b8))].dir.x =
          (float)(local_120 * pvVar2->x + local_11c * g_human[param_1].bones[iVar7 * 3 + 3].rot[1].x +
          local_118 * g_human[param_1].bones[iVar7 * 3 + 3].rot[2].x);
-    (&g_bondopt.unk_000c)[((int)LF_BITS_U(local_b8)) * 0x10] =
+    g_bondopt[((int)LF_BITS_U(local_b8))].dir.y =
          (float)(g_human[param_1].bones[iVar7 * 3 + 3].rot[2].y * local_118 +
          (g_human[param_1].bones[iVar7 * 3 + 3].rot[0].y * local_120 +
          g_human[param_1].bones[iVar7 * 3 + 3].rot[1].y * local_11c));
-    (&g_bondopt.unk_0010)[((int)LF_BITS_U(local_b8)) * 0x10] =
+    g_bondopt[((int)LF_BITS_U(local_b8))].dir.z =
          (float)(local_120 * g_human[param_1].bones[iVar7 * 3 + 3].rot[0].z +
          g_human[param_1].bones[iVar7 * 3 + 3].rot[1].z * local_11c +
          g_human[param_1].bones[iVar7 * 3 + 3].rot[2].z * local_118);
@@ -23180,15 +23012,15 @@ LAB_0042f545:
     local_120 = local_108 * local_104;
     local_11c = (float)(local_108 * local_100);
     local_118 = (float)(local_108 * local_fc);
-    (&g_bondopt.unk_0008)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.x =
          (float)(local_120 * pvVar1->x + local_11c * g_human[param_1].bones[iVar7 * 3 + 4].rot[1].x +
          local_118 * g_human[param_1].bones[iVar7 * 3 + 4].rot[2].x);
-    (&g_bondopt.unk_000c)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.y =
          (float)(g_human[param_1].bones[iVar7 * 3 + 4].rot[2].y * local_118 +
          (g_human[param_1].bones[iVar7 * 3 + 4].rot[0].y * local_120 +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[1].y * local_11c));
     pvVar1 = g_human[param_1].bones[iVar7 * 3 + 5].rot;
-    (&g_bondopt.unk_0010)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.z =
          (float)(local_120 * g_human[param_1].bones[iVar7 * 3 + 4].rot[0].z +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[1].z * local_11c +
          g_human[param_1].bones[iVar7 * 3 + 4].rot[2].z * local_118);
@@ -23253,14 +23085,14 @@ LAB_0042f545:
     iVar8 = iVar7 + 1;
     fVar5 = (float)(local_108 * local_100);
     fVar4 = (float)(local_108 * local_fc);
-    (&g_bondopt.unk_0008)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.x =
          (float)(fVar3 * pvVar1->x + fVar5 * g_human[param_1].bones[iVar7 * 3 + 5].rot[1].x +
          fVar4 * g_human[param_1].bones[iVar7 * 3 + 5].rot[2].x);
-    (&g_bondopt.unk_000c)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.y =
          (float)(g_human[param_1].bones[iVar7 * 3 + 5].rot[2].y * fVar4 +
          (g_human[param_1].bones[iVar7 * 3 + 5].rot[0].y * fVar3 +
          g_human[param_1].bones[iVar7 * 3 + 5].rot[1].y * fVar5));
-    (&g_bondopt.unk_0010)[iVar6 * 0x10] =
+    g_bondopt[iVar6].dir.z =
          (float)(fVar3 * g_human[param_1].bones[iVar7 * 3 + 5].rot[0].z +
          g_human[param_1].bones[iVar7 * 3 + 5].rot[1].z * fVar5 +
          g_human[param_1].bones[iVar7 * 3 + 5].rot[2].z * fVar4);
@@ -23387,7 +23219,7 @@ void __cdecl lf_306d0(int param_1,int param_2,int param_3,float *param_4)
   g_bond[iVar2].bone_a = param_2;
   g_bond[iVar2].target = param_3;
   g_bond[iVar2].stiffness = 0.0625;
-  g_bond[iVar2].unk_70 = 0.125;
+  g_bond[iVar2].damping = 0.125;
   *(int *)(param_3 * 0xe0 + ((int)&g_human[0].lf_raw[0x1a4]) + iVar3) = iVar2;
   g_numofbonds = iVar2 + 1;
   return;
@@ -25231,7 +25063,6 @@ void __cdecl lf_33570(void)
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define DAT_10770c00 (*(int *)SR_VA(0x10770c00))
 #define g_game (*(Game *)SR_VA(0x94dc540))
-#define DAT_004c4b40 (*(undefined *)SR_VA(0x4c4b40))
 #define DAT_107485a0 (*(undefined4 *)SR_VA(0x107485a0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_currentversion (*(int *)SR_VA(0x4603c8))
@@ -25658,7 +25489,7 @@ void __cdecl lf_33650(void)
               } while (iVar16 < 0x200);
             }
             if ((g_debugit != 0) && (g_player[((int)LF_BITS_U(fVar10))].money < 5000000)) {
-              g_player[((int)LF_BITS_U(fVar10))].money = (int)((undefined *)0x4c4b40);
+              g_player[((int)LF_BITS_U(fVar10))].money = 5000000;
             }
             if (g_player[((int)LF_BITS_U(fVar10))].money < 0) {
               g_player[((int)LF_BITS_U(fVar10))].money = 0;
@@ -25995,7 +25826,6 @@ LAB_00434849:
 #undef g_server
 #undef DAT_10770c00
 #undef g_game
-#undef DAT_004c4b40
 #undef DAT_107485a0
 #undef g_event
 #undef g_currentversion
@@ -34435,7 +34265,7 @@ LAB_0044a385:
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
+#define g_bondopt (*(BondOpt (*)[16384])SR_VA(0xfcf7b80))
 #define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
@@ -34458,7 +34288,7 @@ LAB_0044a385:
 #define local_a0 (*(float *)(lf_frame + 0x10))
 #define local_9c (*(float *)(lf_frame + 0x14))
 #define local_98 (*(float *)(lf_frame + 0x18))
-#define local_94 (*(float * *)(lf_frame + 0x1c))
+#define local_94 (*(vec3 * *)(lf_frame + 0x1c))
 #define local_90 (*(float *)(lf_frame + 0x20))
 #define local_8c (*(float *)(lf_frame + 0x24))
 #define local_88 (*(float *)(lf_frame + 0x28))
@@ -34665,9 +34495,9 @@ LAB_0044a71d:
   *(undefined4 *)&g_human[param_1].bones[1].lf_raw[0xc4] = 0;
   if (iVar9 == -1) {
     puVar2 = &g_human[param_1].bones[1].lf_raw[0xb4];
-    local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].unk_00b4 * 0.5 + local_58))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)(g_human[param_1].unk_00b4 * 0.5 + local_58))));
     rotateorientation((float *)puVar1,(float *)puVar2,LF_BITS_F(local_94));
-    local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].unk_00b8 * 0.75 + g_human[param_1].pitch * 0.5))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)(g_human[param_1].unk_00b8 * 0.75 + g_human[param_1].pitch * 0.5))));
     rotateorientation((float *)puVar1,(float *)puVar1,LF_BITS_F(local_94));
     rotateorientation((float *)puVar1,(float *)puVar2,local_74);
     pfVar11 = (float *)&g_human[param_1].bones[2].lf_raw[0xa8];
@@ -34680,16 +34510,16 @@ LAB_0044a71d:
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xc4] = 0;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xb8] = 0x3f800000;
     *(undefined4 *)&g_human[param_1].bones[2].lf_raw[0xc8] = 0x3f800000;
-    local_94 = ((float *)LF_BITS_U(((float)((g_human[param_1].unk_00b4 * 0.5 - local_74) + 0.04908738521234375))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)((g_human[param_1].unk_00b4 * 0.5 - local_74) + 0.04908738521234375))));
     rotateorientation(pfVar11,g_yaxis,LF_BITS_F(local_94));
     if ((g_human[param_1].unk_003c == 2) && (LF_BITS_U(local_90) != 0x0U)) {
       rotateorientation(pfVar11,(float *)&g_human[param_1].bones[2].lf_raw[0xc0],0.19634954631328583);
     }
     fVar12 = (float)(g_human[param_1].unk_00b8 * 0.25 + g_human[param_1].pitch * 0.5);
-    local_94 = ((float *)LF_BITS_U(fVar12));
+    local_94 = ((vec3 *)LF_BITS_U(fVar12));
   }
   else {
-    local_94 = ((float *)LF_BITS_U(((float)(local_58 + local_74))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)(local_58 + local_74))));
     rotateorientation((float *)puVar1,(float *)&g_human[param_1].bones[1].lf_raw[0xb4],LF_BITS_F(local_94)
                      );
     rotateorientation((float *)puVar1,(float *)puVar1,local_54);
@@ -34721,7 +34551,7 @@ LAB_0044b6cf:
     local_30 = 0.0;
     local_3c = 1.0;
     local_2c = 1.0;
-    local_94 = ((float *)LF_BITS_U(((float)(LF_BITS_F(g_body[1].unk_0010) * 0.0 + 0.0))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)(LF_BITS_F(g_body[1].unk_0010) * 0.0 + 0.0))));
     local_a0 = (float)((float)((float)(LF_BITS_F(g_body[1].unk_0010) + 0.0) + LF_BITS_F(g_body[1].unk_0014) * 0.0) +
                LF_BITS_F(g_body[1].unk_0018) * 0.0);
     local_9c = (float)((float)(LF_BITS_F(local_94) + LF_BITS_F(g_body[1].unk_0014)) + LF_BITS_F(g_body[1].unk_0018) * 0.0);
@@ -34803,7 +34633,7 @@ LAB_0044b6cf:
     local_6c = 0.0;
     local_68 = 0.0;
     rotatevector(&local_70,g_yaxis,local_58);
-    local_94 = ((float *)LF_BITS_U(((float)(g_human[param_1].pitch - 0.07363107800483704))));
+    local_94 = ((vec3 *)LF_BITS_U(((float)(g_human[param_1].pitch - 0.07363107800483704))));
     rotatevector(&local_70,g_xaxis,LF_BITS_F(local_94));
     iVar8 = g_numofbonds;
     g_bond[g_numofbonds].type = 10;
@@ -34812,7 +34642,7 @@ LAB_0044b6cf:
     g_bond[g_numofbonds].target = iVar9;
     g_bond[g_numofbonds].mode = 0;
     g_bond[g_numofbonds].stiffness = 0.25;
-    g_bond[g_numofbonds].unk_70 = 0.25;
+    g_bond[g_numofbonds].damping = 0.25;
     *(undefined4 *)&g_bond[g_numofbonds].lf_raw[0x84] = 0x3e888889;
     local_8c = (float)(local_70 + ((float)(local_64 - local_a0)));
     local_88 = (float)(((float)(local_60 - local_9c)) + local_6c);
@@ -34843,9 +34673,9 @@ LAB_0044b6cf:
     g_bond[iVar7].mode = 0;
     pvVar3 = g_human[param_1].bones[8].rot;
     g_bond[iVar7].stiffness = 0.0625;
-    g_bond[iVar7].unk_70 = 0.25;
+    g_bond[iVar7].damping = 0.25;
     *(undefined4 *)&g_bond[iVar7].lf_raw[0x84] = 0x3e888889;
-    (&g_bondopt.unk_007c)[iVar8 * 0x10] = g_bond[iVar7].unk_70;
+    g_bondopt[iVar7].damping = g_bond[iVar7].damping;
     local_28 = (float)(g_human[param_1].bones[8].rot[0].z * g_item[iVar9].rot[0].z +
                (g_item[iVar9].rot[0].x * pvVar3->x +
                g_human[param_1].bones[8].rot[0].y * g_item[iVar9].rot[0].y));
@@ -34904,28 +34734,28 @@ LAB_0044b6cf:
     dVar10 = _CIacos((double)local_64);
     iVar5 = g_numofbonds;
     local_a0 = (float)((float10)dVar10 + (float10)dVar10);
-    pfVar11 = &g_bondopt.unk_0008 + g_numofbonds * 0x10;
-    *pfVar11 = local_a0 * local_70;
-    (&g_bondopt.unk_000c)[iVar5 * 0x10] = (float)(local_6c * local_a0);
-    (&g_bondopt.unk_0010)[iVar5 * 0x10] = (float)(local_a0 * local_68);
-    local_8c = *pfVar11;
-    local_88 = (&g_bondopt.unk_000c)[iVar5 * 0x10];
-    local_84 = (&g_bondopt.unk_0010)[iVar5 * 0x10];
-    projectvector(pfVar11,&local_8c,&pvVar3->x);
-    local_94 = ((float *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
-    *pfVar11 = LF_BITS_F(local_94) * *pfVar11;
-    (&g_bondopt.unk_000c)[iVar5 * 0x10] = (float)((&g_bondopt.unk_000c)[iVar5 * 0x10] * LF_BITS_F(local_94));
-    (&g_bondopt.unk_0010)[iVar5 * 0x10] = (float)(LF_BITS_F(local_94) * (&g_bondopt.unk_0010)[iVar5 * 0x10]);
+    pvVar4 = &g_bondopt[g_numofbonds].dir;
+    pvVar4->x = local_a0 * local_70;
+    g_bondopt[iVar5].dir.y = (float)(local_6c * local_a0);
+    g_bondopt[iVar5].dir.z = (float)(local_a0 * local_68);
+    local_8c = pvVar4->x;
+    local_88 = g_bondopt[iVar5].dir.y;
+    local_84 = g_bondopt[iVar5].dir.z;
+    projectvector(&pvVar4->x,&local_8c,&pvVar3->x);
+    local_94 = ((vec3 *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
+    pvVar4->x = LF_BITS_F(local_94) * pvVar4->x;
+    g_bondopt[iVar5].dir.y = (float)(g_bondopt[iVar5].dir.y * LF_BITS_F(local_94));
+    g_bondopt[iVar5].dir.z = (float)(LF_BITS_F(local_94) * g_bondopt[iVar5].dir.z);
     fVar12 = (float)(1.0 / (g_human[param_1].bones[8].mass + g_item[iVar9].mass));
-    (&g_bondopt.unk_0034)[iVar5 * 0x10] = (float)(fVar12 * g_item[iVar9].mass);
-    (&g_bondopt.unk_0038)[iVar5 * 0x10] = (float)(fVar12 * g_human[param_1].bones[8].mass);
+    g_bondopt[iVar5].share_a = (float)(fVar12 * g_item[iVar9].mass);
+    g_bondopt[iVar5].share_b = (float)(fVar12 * g_human[param_1].bones[8].mass);
     local_90 = g_item[iVar9].inertia.x;
-    (&g_bondopt.unk_0018)[iVar5 * 0x10] = local_90;
+    g_bondopt[iVar5].arm_a.x = local_90;
     if (g_item[iVar9].inertia.y < local_90) {
-      (&g_bondopt.unk_0018)[iVar5 * 0x10] = g_item[iVar9].inertia.y;
+      g_bondopt[iVar5].arm_a.x = g_item[iVar9].inertia.y;
     }
-    if (g_item[iVar9].inertia.z < (&g_bondopt.unk_0018)[iVar5 * 0x10]) {
-      (&g_bondopt.unk_0018)[iVar5 * 0x10] = g_item[iVar9].inertia.z;
+    if (g_item[iVar9].inertia.z < g_bondopt[iVar5].arm_a.x) {
+      g_bondopt[iVar5].arm_a.x = g_item[iVar9].inertia.z;
     }
     g_numofbonds = g_numofbonds + 1;
     iVar9 = local_50;
@@ -34971,7 +34801,7 @@ LAB_0044b6cf:
     g_bond[iVar8].target = iVar7;
     g_bond[iVar8].mode = 0;
     g_bond[iVar8].stiffness = 0.0625;
-    g_bond[iVar8].unk_70 = 0.09375;
+    g_bond[iVar8].damping = 0.09375;
     *(undefined4 *)&g_bond[iVar8].lf_raw[0x84] = 0x3e888889;
     g_bond[iVar8].local_a.x = 0.0;
     g_bond[iVar8].local_a.y = 0.0;
@@ -34995,9 +34825,9 @@ LAB_0044b6cf:
       g_bond[iVar8].stiffness = 0.03125;
       pvVar3 = g_human[param_1].bones[5].rot + 1;
       pvVar4 = g_human[param_1].bones[5].rot + 2;
-      g_bond[iVar8].unk_70 = 0.25;
+      g_bond[iVar8].damping = 0.25;
       *(undefined4 *)&g_bond[iVar8].lf_raw[0x84] = 0x3e888889;
-      (&g_bondopt.unk_003c)[iVar8 * 0x10] = g_bond[iVar8].unk_70;
+      g_bondopt[iVar8].damping = g_bond[iVar8].damping;
       local_28 = (float)(g_human[param_1].bones[5].rot[0].z * g_item[iVar7].rot[0].z +
                  (g_item[iVar7].rot[0].x * g_human[param_1].bones[5].rot[0].x +
                  g_human[param_1].bones[5].rot[0].y * g_item[iVar7].rot[0].y));
@@ -35047,34 +34877,34 @@ LAB_0044b6cf:
       iVar9 = g_numofbonds;
       local_98 = (float)dVar10;
       local_74 = LF_BITS_F((g_numofbonds * 0x40));
-      (&g_bondopt.unk_0008)[g_numofbonds * 0x10] = local_a0;
-      local_94 = &g_bondopt.unk_0008 + iVar9 * 0x10;
-      (&g_bondopt.unk_000c)[iVar9 * 0x10] = local_9c;
-      (&g_bondopt.unk_0010)[iVar9 * 0x10] = local_98;
-      local_8c = *local_94;
-      local_88 = (&g_bondopt.unk_000c)[iVar9 * 0x10];
-      local_84 = (&g_bondopt.unk_0010)[iVar9 * 0x10];
-      *local_94 = local_8c * g_human[param_1].bones[5].rot[0].x;
-      (&g_bondopt.unk_000c)[iVar9 * 0x10] = (float)(g_human[param_1].bones[5].rot[0].y * local_8c);
-      (&g_bondopt.unk_0010)[iVar9 * 0x10] = (float)(local_8c * g_human[param_1].bones[5].rot[0].z);
-      scaleaddvectors(local_94,local_94,&pvVar3->x,local_88);
-      pfVar11 = local_94;
-      scaleaddvectors(local_94,local_94,&pvVar4->x,local_84);
-      local_94 = ((float *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
-      *pfVar11 = LF_BITS_F(local_94) * *pfVar11;
-      pfVar11[1] = (float)(pfVar11[1] * LF_BITS_F(local_94));
-      pfVar11[2] = (float)(LF_BITS_F(local_94) * pfVar11[2]);
+      g_bondopt[g_numofbonds].dir.x = local_a0;
+      local_94 = &g_bondopt[iVar9].dir;
+      g_bondopt[iVar9].dir.y = local_9c;
+      g_bondopt[iVar9].dir.z = local_98;
+      local_8c = local_94->x;
+      local_88 = g_bondopt[iVar9].dir.y;
+      local_84 = g_bondopt[iVar9].dir.z;
+      local_94->x = local_8c * g_human[param_1].bones[5].rot[0].x;
+      g_bondopt[iVar9].dir.y = (float)(g_human[param_1].bones[5].rot[0].y * local_8c);
+      g_bondopt[iVar9].dir.z = (float)(local_8c * g_human[param_1].bones[5].rot[0].z);
+      scaleaddvectors(&local_94->x,&local_94->x,&pvVar3->x,local_88);
+      pvVar3 = local_94;
+      scaleaddvectors(&local_94->x,&local_94->x,&pvVar4->x,local_84);
+      local_94 = ((vec3 *)LF_BITS_U(g_bond[g_numofbonds].stiffness));
+      pvVar3->x = LF_BITS_F(local_94) * pvVar3->x;
+      pvVar3->y = (float)(pvVar3->y * LF_BITS_F(local_94));
+      pvVar3->z = (float)(LF_BITS_F(local_94) * pvVar3->z);
       fVar12 = (float)(1.0 / (g_human[param_1].bones[5].mass + g_item[iVar7].mass));
-      *(float *)((int)&g_bondopt.unk_0034 + ((int)LF_BITS_U(local_74))) = (float)(fVar12 * g_item[iVar7].mass);
-      *(float *)((int)&g_bondopt.unk_0038 + ((int)LF_BITS_U(local_74))) = (float)(fVar12 * g_human[param_1].bones[5].mass)
-      ;
+      *(float *)((int)&g_bondopt[0].share_a + ((int)LF_BITS_U(local_74))) = (float)(fVar12 * g_item[iVar7].mass);
+      *(float *)((int)&g_bondopt[0].share_b + ((int)LF_BITS_U(local_74))) =
+           (float)(fVar12 * g_human[param_1].bones[5].mass);
       local_90 = g_item[iVar7].inertia.x;
-      *(float *)((int)&g_bondopt.unk_0018 + ((int)LF_BITS_U(local_74))) = local_90;
+      *(float *)((int)&g_bondopt[0].arm_a.x + ((int)LF_BITS_U(local_74))) = local_90;
       if (g_item[iVar7].inertia.y < local_90) {
-        *(float *)((int)&g_bondopt.unk_0018 + ((int)LF_BITS_U(local_74))) = g_item[iVar7].inertia.y;
+        *(float *)((int)&g_bondopt[0].arm_a.x + ((int)LF_BITS_U(local_74))) = g_item[iVar7].inertia.y;
       }
-      if (g_item[iVar7].inertia.z < *(float *)((int)&g_bondopt.unk_0018 + ((int)LF_BITS_U(local_74)))) {
-        *(float *)((int)&g_bondopt.unk_0018 + ((int)LF_BITS_U(local_74))) = g_item[iVar7].inertia.z;
+      if (g_item[iVar7].inertia.z < *(float *)((int)&g_bondopt[0].arm_a.x + ((int)LF_BITS_U(local_74)))) {
+        *(float *)((int)&g_bondopt[0].arm_a.x + ((int)LF_BITS_U(local_74))) = g_item[iVar7].inertia.z;
       }
       g_numofbonds = g_numofbonds + 1;
       human_calcarmtorque(local_50);
@@ -36027,7 +35857,7 @@ void __cdecl lf_4cee0(int param_1)
           g_bond[iVar9].rest_length = fVar4;
           g_numofbonds = iVar11;
           g_bond[iVar9].stiffness = 0.03125;
-          g_bond[iVar9].unk_70 = 0.125;
+          g_bond[iVar9].damping = 0.125;
           g_bond[iVar9].mode = 0;
           g_bond[iVar9].friction_dir.x = g_intersect.normal[0];
           g_bond[iVar9].friction_dir.y = g_intersect.normal[1];
@@ -36752,7 +36582,7 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
            (g_intersect.normal[0] * ((float)(g_intersect.pos[0] - local_c)) +
            g_intersect.normal[1] * ((float)(g_intersect.pos[1] - local_8))));
       g_bond[iVar5].stiffness = 0.03125;
-      g_bond[iVar5].unk_70 = 0.0625;
+      g_bond[iVar5].damping = 0.0625;
       g_bond[iVar5].unk_0080 = (&DAT_17150030)[iVar6 * 0x16];
       g_bond[iVar5].friction_dir.x = fVar5;
       g_bond[iVar5].friction_dir.y = fVar6;
@@ -36845,7 +36675,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
          ((float)(g_intersect.normal[2] * local_4 +
          (g_intersect.normal[0] * local_c + g_intersect.normal[1] * local_8))));
     g_bond[iVar8].stiffness = 0.0625;
-    g_bond[iVar8].unk_70 = 0.25;
+    g_bond[iVar8].damping = 0.25;
     g_bond[iVar8].mode = 0;
     g_bond[iVar8].friction_dir.x = fVar2;
     g_bond[iVar8].friction_dir.y = fVar5;

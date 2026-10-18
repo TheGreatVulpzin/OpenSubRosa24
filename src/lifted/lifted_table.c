@@ -151,8 +151,8 @@ void lf_12450(void);
 void lf_126b0(void);
 void createbond(void);
 void bondtimetolive(void);
-void lf_12f80(void);
-void lf_130d0(void);
+void bond_partpart(void);
+void bond_bodybody(void);
 void lf_13450(void);
 void lf_13d80(void);
 void createbullet(void);
@@ -469,8 +469,8 @@ const LfEntry lf_table[] = {
     { "lineintersectspecblock", 0x126b0, (void *)lf_126b0, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "createbond", 0x129b0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "bondtimetolive", 0x12c90, (void *)bondtimetolive, 0, LF_RET_VOID, 4, "", 0 },
-    { "bond_partpart", 0x12f80, (void *)lf_12f80, 1, LF_RET_VOID, 4, "v", 0 },
-    { "bond_bodybody", 0x130d0, (void *)lf_130d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "bond_partpart", 0x12f80, (void *)bond_partpart, 1, LF_RET_VOID, 4, "v", 0 },
+    { "bond_bodybody", 0x130d0, (void *)bond_bodybody, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbuildingtypes", 0x13450, (void *)lf_13450, 0, LF_RET_VOID, 4, "", 0 },
     { "building_load", 0x13d80, (void *)lf_13d80, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbullet", 0x143b0, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },

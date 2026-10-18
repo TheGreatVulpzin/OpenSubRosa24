@@ -172,7 +172,7 @@ int createbond(int subtype, int particle_a, int particle_b, int object)
     d.z = (float)(pb->pos.z - pa->pos.z);
     b->rest_length = vectorlength(&d);
     b->stiffness = 0.25f;
-    b->unk_70 = 0.25f;
+    b->damping = 0.25f;
     pa->bonds[pa->num_bonds++] = n;
     pb->bonds[pb->num_bonds++] = n;
     if (object != -1) {

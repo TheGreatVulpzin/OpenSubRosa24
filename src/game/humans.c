@@ -596,7 +596,7 @@ LAB_00452144:
               pBVar8 = g_bond + g_numofbonds;
               g_numofbonds = g_numofbonds + 1;
               pBVar8->stiffness = 0.0625;
-              g_bond[iVar14].unk_70 = 0.125;
+              g_bond[iVar14].damping = 0.125;
               g_bond[iVar14].mode = 0;
               g_bond[iVar14].friction_dir.x = g_intersect.normal[0];
               g_bond[iVar14].friction_dir.y = g_intersect.normal[1];
@@ -769,7 +769,7 @@ LAB_0045230e:
                     g_bond[iVar15].stiffness = (float)(((float)((int)LF_UINT(local_c8)) * 0.0625) / 100.0);
                   }
                   g_numofbonds = g_numofbonds + 1;
-                  g_bond[iVar15].unk_70 = 0.25;
+                  g_bond[iVar15].damping = 0.25;
                   fVar24 = g_intersect.normal[0];
                   g_bond[iVar15].mode = 0;
                   g_bond[iVar15].friction_dir.x = fVar24;
@@ -1229,7 +1229,7 @@ LAB_00453705:
           iVar15 = piVar17[-2];
           g_bond[iVar15].mode = 0;
           g_bond[iVar15].stiffness = 0.0625;
-          g_bond[iVar15].unk_70 = 0.125;
+          g_bond[iVar15].damping = 0.125;
           if (iVar21 < 0x19) {
             fVar24 = g_human[(int)puVar11].unk_2b20;
             g_bond[iVar15].mode = 1;
@@ -1252,7 +1252,7 @@ LAB_00453705:
               local_c8 = 0.1875;
             }
             g_bond[iVar15].stiffness = (float)(local_c8 * 0.0625 * local_c8);
-            g_bond[iVar15].unk_70 = (float)(local_c8 * 0.125);
+            g_bond[iVar15].damping = (float)(local_c8 * 0.125);
           }
           piVar17 = piVar17 + 0xc;
           iVar14 = iVar14 + -1;
