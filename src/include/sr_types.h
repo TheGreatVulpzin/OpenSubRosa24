@@ -61,6 +61,15 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* A wheel body of an object (Object.wheel_bodies). Only the velocity changes of the solver are known. */
+typedef union WheelBody { struct {
+    uint8_t unk_00[0x18];
+    vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
+    uint8_t unk_24[0x3c];
+    vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
+    uint8_t unk_6c[0x7c];
+}; uint8_t lf_raw[0xe8]; } WheelBody;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -113,6 +122,7 @@ SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
 SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
+SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 
@@ -234,7 +244,7 @@ SR_STATIC_ASSERT(offsetof(Player, look_c) == 0x23bc, "Player.look_c");
 /* human[]: record of 0x2b64 bytes. */
 typedef union Human { struct {
     int active;                          /* +0x0000 createhuman writes 1 */
-    int unk_0004;                        /* +0x0004 2 functions */
+    int has_physics;                     /* +0x0004 humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it */
     int player_id;                       /* +0x0008 createhuman: parameter 3 (owner) */
     int unk_000c;                        /* +0x000c 3 functions */
     int unk_0010;                        /* +0x0010 1 functions */
@@ -312,6 +322,7 @@ typedef union Human { struct {
 }; uint8_t lf_raw[0x2b64]; } Human;
 SR_STATIC_ASSERT(sizeof(Human) == 0x2b64, "Human");
 SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
+SR_STATIC_ASSERT(offsetof(Human, has_physics) == 0x4, "Human.has_physics");
 SR_STATIC_ASSERT(offsetof(Human, player_id) == 0x8, "Human.player_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_id) == 0x14, "Human.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_seat) == 0x18, "Human.vehicle_seat");
@@ -338,7 +349,7 @@ SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
 /* item[]: record of 0x1ac bytes. */
 typedef union Item { struct {
     int active;                          /* +0x0000 createitem writes 1 */
-    int unk_0004;                        /* +0x0004 3 functions */
+    int has_physics;                     /* +0x0004 bondsimulation2 clears the velocity changes only of the active items with it (the same role as human.has_physics) */
     int unk_0008;                        /* +0x0008 2 functions */
     int type;                            /* +0x000c createitem: parameter 1 (item type) */
     float mass;                          /* +0x0010 createitem: itemtype+4; bondsimulation2 uses it in the mass ratio with Bone.mass */
@@ -353,15 +364,13 @@ typedef union Item { struct {
     int unk_0060;                        /* +0x0060 1 functions */
     uint8_t pad_0064[0x8];
     vec3 vel;                            /* +0x006c createitem: parameter 3 (velocity) */
-    int unk_0078;                        /* +0x0078 2 functions */
-    uint8_t pad_007c[0x8];
+    vec3 dv;                             /* +0x0078 bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel */
     vec3 rot[3];                         /* +0x0084 createitem: parameter 4 (3x3 matrix) */
     vec3 angvel;                         /* +0x00a8 item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct */
     vec3 torque;                         /* +0x00b4 itemsimulation zeroes it and accumulates per frame; bondsimulation2 adds crossproduct (likely) */
     int unk_00c0;                        /* +0x00c0 1 functions */
     uint8_t pad_00c4[0x8];
-    int unk_00cc;                        /* +0x00cc 2 functions */
-    uint8_t pad_00d0[0x8];
+    vec3 dw;                             /* +0x00cc bondsimulation2 clears it at the start of each solver pass; the bonds add the change of angvel */
     int unk_00d8;                        /* +0x00d8 3 functions */
     int unk_00dc;                        /* +0x00dc 1 functions */
     int ammo;                            /* +0x00e0 createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0 */
@@ -390,6 +399,7 @@ typedef union Item { struct {
 }; uint8_t lf_raw[0x1ac]; } Item;
 SR_STATIC_ASSERT(sizeof(Item) == 0x1ac, "Item");
 SR_STATIC_ASSERT(offsetof(Item, active) == 0x0, "Item.active");
+SR_STATIC_ASSERT(offsetof(Item, has_physics) == 0x4, "Item.has_physics");
 SR_STATIC_ASSERT(offsetof(Item, type) == 0xc, "Item.type");
 SR_STATIC_ASSERT(offsetof(Item, mass) == 0x10, "Item.mass");
 SR_STATIC_ASSERT(offsetof(Item, time_to_live) == 0x14, "Item.time_to_live");
@@ -401,9 +411,11 @@ SR_STATIC_ASSERT(offsetof(Item, children) == 0x28, "Item.children");
 SR_STATIC_ASSERT(offsetof(Item, pos) == 0x48, "Item.pos");
 SR_STATIC_ASSERT(offsetof(Item, pos_prev) == 0x54, "Item.pos_prev");
 SR_STATIC_ASSERT(offsetof(Item, vel) == 0x6c, "Item.vel");
+SR_STATIC_ASSERT(offsetof(Item, dv) == 0x78, "Item.dv");
 SR_STATIC_ASSERT(offsetof(Item, rot) == 0x84, "Item.rot");
 SR_STATIC_ASSERT(offsetof(Item, angvel) == 0xa8, "Item.angvel");
 SR_STATIC_ASSERT(offsetof(Item, torque) == 0xb4, "Item.torque");
+SR_STATIC_ASSERT(offsetof(Item, dw) == 0xcc, "Item.dw");
 SR_STATIC_ASSERT(offsetof(Item, ammo) == 0xe0, "Item.ammo");
 SR_STATIC_ASSERT(offsetof(Item, unk_e4) == 0xe4, "Item.unk_e4");
 SR_STATIC_ASSERT(offsetof(Item, flags) == 0xec, "Item.flags");
@@ -515,8 +527,9 @@ typedef union Object { struct {
     uint8_t pad_6114[0x10];
     float unk_6124;                      /* +0x6124 4 functions */
     uint8_t pad_6128[0x10c4];
-    int unk_71ec;                        /* +0x71ec 6 functions */
-    uint8_t pad_71f0[0xe84];
+    int num_wheel_bodies;                /* +0x71ec createobject copies objecttype.num_wheels; a second list next to the wheels at +0x5f0c */
+    WheelBody wheel_bodies[16];          /* +0x71f0 stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8 */
+    uint8_t pad_8070[0x4];
     int unk_8074;                        /* +0x8074 2 functions */
     uint8_t pad_8078[0x20];
     int unk_8098;                        /* +0x8098 1 functions */
@@ -572,6 +585,8 @@ SR_STATIC_ASSERT(offsetof(Object, gear) == 0x5e6c, "Object.gear");
 SR_STATIC_ASSERT(offsetof(Object, gear_ratio) == 0x5e78, "Object.gear_ratio");
 SR_STATIC_ASSERT(offsetof(Object, num_wheels) == 0x5ee8, "Object.num_wheels");
 SR_STATIC_ASSERT(offsetof(Object, rotor_angle) == 0x5f1c, "Object.rotor_angle");
+SR_STATIC_ASSERT(offsetof(Object, num_wheel_bodies) == 0x71ec, "Object.num_wheel_bodies");
+SR_STATIC_ASSERT(offsetof(Object, wheel_bodies) == 0x71f0, "Object.wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
 
 /* connection[]: record of 0xf170 bytes. */

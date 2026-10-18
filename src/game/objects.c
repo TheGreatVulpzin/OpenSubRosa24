@@ -622,7 +622,7 @@ LAB_0045770a:
         }
       }
       iVar7 = 0;
-      if (0 < *(int *)((int)&g_object[0].unk_71ec + iVar15)) {
+      if (0 < *(int *)((int)&g_object[0].num_wheel_bodies + iVar15)) {
         pfVar20 = (float *)(&g_object[0].lf_raw[0x71f4] + iVar15);
         do {
           pfVar19 = pfVar20 + 8;
@@ -662,7 +662,7 @@ LAB_0045770a:
           objectwheelcollision2(local_44,iVar7);
           iVar7 = iVar7 + 1;
           pfVar20 = pfVar20 + 0x3a;
-        } while (iVar7 < *(int *)((int)&g_object[0].unk_71ec + iVar15));
+        } while (iVar7 < *(int *)((int)&g_object[0].num_wheel_bodies + iVar15));
       }
       pfVar20 = local_40;
       iVar7 = 0;

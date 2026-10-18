@@ -408,7 +408,7 @@ static void setup_copy(void)
     const Human *hu = &g_human[h];
     BondHuman *bh = &g_bondhuman[h];
     bh->active = 0;
-    if (hu->active == 0 || hu->unk_0004 == 0)
+    if (hu->active == 0 || hu->has_physics == 0)
       continue;
     bh->active = 1;
     bh->mask = 0;
@@ -435,6 +435,67 @@ static void setup_copy(void)
   for (i = 0; i < n; i++)
     g_bondopts[i].mode = (short)g_bond[i].mode;
   stoptimer(g_timerlist.bondsetupcopy);
+}
+
+#define g_bondpass (*(int *)SR_VA(0x603dd0))
+
+/* bondloopcopy: the start of each solver pass. The pass number goes into a global (the wheels
+ * use it), and each velocity change starts at 0: the particles, the items with physics, the
+ * wheel bodies of the objects, and the bones of the humans in the solver. */
+static void loop_clear(int pass)
+{
+  int i, k, n;
+
+  starttimer(g_timerlist.bondloopcopy);
+  g_bondpass = pass;
+  n = g_area_sector.num_particles;
+  for (i = 0; i < n; i++) {
+    g_bondparticle[i].dv.x = 0.0f;
+    g_bondparticle[i].dv.y = 0.0f;
+    g_bondparticle[i].dv.z = 0.0f;
+  }
+  for (i = 0; i < 1024; i++) {
+    Item *it = &g_item[i];
+    if (it->active == 0 || it->has_physics == 0)
+      continue;
+    it->dv.x = 0.0f;
+    it->dv.y = 0.0f;
+    it->dv.z = 0.0f;
+    it->dw.x = 0.0f;
+    it->dw.y = 0.0f;
+    it->dw.z = 0.0f;
+  }
+  for (i = 0; i < 1024; i++) {
+    Object *o = &g_object[i];
+    if (o->active == 0)
+      continue;
+    for (k = 0; k < o->num_wheel_bodies; k++) {
+      WheelBody *w = &o->wheel_bodies[k];
+      w->dv.x = 0.0f;
+      w->dv.y = 0.0f;
+      w->dv.z = 0.0f;
+      w->dw.x = 0.0f;
+      w->dw.y = 0.0f;
+      w->dw.z = 0.0f;
+    }
+  }
+  for (i = 0; i < 512; i++) {
+    BondHuman *bh = &g_bondhuman[i];
+    if (bh->active == 0)
+      continue;
+    for (k = 0; k < 15; k++) {
+      BondBone *b = &bh->bones[k];
+      if ((bh->mask & 1 << k) == 0)
+        continue;
+      b->dv.x = 0.0f;
+      b->dv.y = 0.0f;
+      b->dv.z = 0.0f;
+      b->dw.x = 0.0f;
+      b->dw.y = 0.0f;
+      b->dw.z = 0.0f;
+    }
+  }
+  stoptimer(g_timerlist.bondloopcopy);
 }
 
 void __cdecl lf_41de0(void)
@@ -583,167 +644,7 @@ void __cdecl lf_41de0(void)
   local_60 = (int *)0x0;
   do {
     piVar18 = local_60;
-    iVar30 = g_timerlist.bondloopcopy;
-    local_50 = (float *)&g_timer[g_timerlist.bondloopcopy].start_lo;
-    uVar13 = rdtsc();
-    DAT_00603dd0 = local_60;
-    LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-    if (0 < g_area_sector.num_particles) {
-      puVar19 = &DAT_00583de8;
-      iVar30 = g_area_sector.num_particles;
-      do {
-        puVar19[-2] = 0;
-        iVar30 = iVar30 + -1;
-        puVar19[-1] = 0;
-        *puVar19 = 0;
-        puVar19 = puVar19 + 8;
-      } while (iVar30 != 0);
-    }
-    puVar19 = (undefined4 *)&g_item[0].lf_raw[0x80];
-    do {
-      if ((puVar19[-0x20] != 0) && (puVar19[-0x1f] != 0)) {
-        puVar19[-2] = 0;
-        puVar19[-1] = 0;
-        *puVar19 = 0;
-        puVar19[0x13] = 0;
-        puVar19[0x14] = 0;
-        puVar19[0x15] = 0;
-      }
-      if ((puVar19[0x4b] != 0) && (puVar19[0x4c] != 0)) {
-        puVar19[0x69] = 0;
-        puVar19[0x6a] = 0;
-        puVar19[0x6b] = 0;
-        puVar19[0x7e] = 0;
-        puVar19[0x7f] = 0;
-        puVar19[0x80] = 0;
-      }
-      if ((puVar19[0xb6] != 0) && (puVar19[0xb7] != 0)) {
-        puVar19[0xd4] = 0;
-        puVar19[0xd5] = 0;
-        puVar19[0xd6] = 0;
-        puVar19[0xe9] = 0;
-        puVar19[0xea] = 0;
-        puVar19[0xeb] = 0;
-      }
-      if ((puVar19[0x121] != 0) && (puVar19[0x122] != 0)) {
-        puVar19[0x13f] = 0;
-        puVar19[0x140] = 0;
-        puVar19[0x141] = 0;
-        puVar19[0x154] = 0;
-        puVar19[0x155] = 0;
-        puVar19[0x156] = 0;
-      }
-      if ((puVar19[0x18c] != 0) && (puVar19[0x18d] != 0)) {
-        puVar19[0x1aa] = 0;
-        puVar19[0x1ab] = 0;
-        puVar19[0x1ac] = 0;
-        puVar19[0x1bf] = 0;
-        puVar19[0x1c0] = 0;
-        puVar19[0x1c1] = 0;
-      }
-      if ((puVar19[0x1f7] != 0) && (puVar19[0x1f8] != 0)) {
-        puVar19[0x215] = 0;
-        puVar19[0x216] = 0;
-        puVar19[0x217] = 0;
-        puVar19[0x22a] = 0;
-        puVar19[0x22b] = 0;
-        puVar19[0x22c] = 0;
-      }
-      if ((puVar19[0x262] != 0) && (puVar19[0x263] != 0)) {
-        puVar19[0x280] = 0;
-        puVar19[0x281] = 0;
-        puVar19[0x282] = 0;
-        puVar19[0x295] = 0;
-        puVar19[0x296] = 0;
-        puVar19[0x297] = 0;
-      }
-      if ((puVar19[0x2cd] != 0) && (puVar19[0x2ce] != 0)) {
-        puVar19[0x2eb] = 0;
-        puVar19[0x2ec] = 0;
-        puVar19[0x2ed] = 0;
-        puVar19[0x300] = 0;
-        puVar19[0x301] = 0;
-        puVar19[0x302] = 0;
-      }
-      puVar19 = puVar19 + 0x358;
-    } while ((int)puVar19 < ((int)&g_sysinfo.lf_raw[0x60]));
-    piVar34 = &g_object[0].unk_71ec;
-    do {
-      if ((((Object *)(piVar34 + -0x1c7b))->active != 0) && (iVar30 = 0, 0 < *piVar34)) {
-        piVar22 = piVar34 + 9;
-        do {
-          piVar22[-2] = 0;
-          iVar30 = iVar30 + 1;
-          piVar22[-1] = 0;
-          *piVar22 = 0;
-          piVar22[0x10] = 0;
-          piVar22[0x11] = 0;
-          piVar22[0x12] = 0;
-          piVar22 = piVar22 + 0x3a;
-        } while (iVar30 < *piVar34);
-      }
-      piVar34 = piVar34 + 0x208c;
-    } while ((int)piVar34 < ((int)SR_VA(0x7a257ec)));
-    puVar31 = &DAT_00461dd4;
-    do {
-      if (puVar31[-1] != 0) {
-        uVar32 = 1;
-        puVar20 = puVar31 + 9;
-        iVar30 = 3;
-        do {
-          if ((*puVar31 & uVar32) != 0) {
-            puVar20[-2] = 0;
-            puVar20[-1] = 0;
-            *puVar20 = 0;
-            puVar20[10] = 0;
-            puVar20[0xb] = 0;
-            puVar20[0xc] = 0;
-          }
-          uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-          if ((*puVar31 & uVar32) != 0) {
-            puVar20[0x1e] = 0;
-            puVar20[0x1f] = 0;
-            puVar20[0x20] = 0;
-            puVar20[0x2a] = 0;
-            puVar20[0x2b] = 0;
-            puVar20[0x2c] = 0;
-          }
-          uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-          if ((*puVar31 & uVar32) != 0) {
-            puVar20[0x3e] = 0;
-            puVar20[0x3f] = 0;
-            puVar20[0x40] = 0;
-            puVar20[0x4a] = 0;
-            puVar20[0x4b] = 0;
-            puVar20[0x4c] = 0;
-          }
-          uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-          if ((*puVar31 & uVar32) != 0) {
-            puVar20[0x5e] = 0;
-            puVar20[0x5f] = 0;
-            puVar20[0x60] = 0;
-            puVar20[0x6a] = 0;
-            puVar20[0x6b] = 0;
-            puVar20[0x6c] = 0;
-          }
-          uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-          if ((*puVar31 & uVar32) != 0) {
-            puVar20[0x7e] = 0;
-            puVar20[0x7f] = 0;
-            puVar20[0x80] = 0;
-            puVar20[0x8a] = 0;
-            puVar20[0x8b] = 0;
-            puVar20[0x8c] = 0;
-          }
-          uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-          puVar20 = puVar20 + 0xa0;
-          iVar30 = iVar30 + -1;
-        } while (iVar30 != 0);
-      }
-      puVar31 = puVar31 + 0x204;
-    } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    stoptimer(g_timerlist.bondloopcopy);
+    loop_clear((int)local_60);
     iVar30 = g_timerlist.bondhuman;
     local_50 = (float *)&g_timer[g_timerlist.bondhuman].start_lo;
     uVar13 = rdtsc();
@@ -1283,21 +1184,21 @@ void __cdecl lf_41de0(void)
             *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
                  (float)(LF_BITS_F(local_88) * ((float)(local_5c * local_90 - local_58 * local_94)) +
                  LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
-            g_item[((int)LF_UINT(fVar8))].unk_0078 =
-                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_UINT(fVar8))].unk_0078) + local_d0 * local_5c))));
-            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x7c] =
-                 (float)(local_58 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x7c]);
-            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x80] =
-                 (float)(local_54 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0x80]);
+            g_item[((int)LF_UINT(fVar8))].dv.x =
+                 (float)(g_item[((int)LF_UINT(fVar8))].dv.x + local_d0 * local_5c);
+            g_item[((int)LF_UINT(fVar8))].dv.y =
+                 (float)(local_58 * local_d0 + g_item[((int)LF_UINT(fVar8))].dv.y);
+            g_item[((int)LF_UINT(fVar8))].dv.z =
+                 (float)(local_54 * local_d0 + g_item[((int)LF_UINT(fVar8))].dv.z);
             local_6c = (float)(local_58 * local_c4 - local_c8 * local_54);
             local_68 = (float)(local_cc * local_54 - local_5c * local_c4);
             local_64 = (float)(local_c8 * local_5c - local_cc * local_58);
-            g_item[((int)LF_UINT(fVar8))].unk_00cc =
-                 ((int)LF_BITS_U(((float)(local_6c * local_d0 + LF_BITS_F(g_item[((int)LF_UINT(fVar8))].unk_00cc)))));
-            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd0] =
-                 (float)(local_68 * local_d0 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd0]);
-            *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4] =
-                 (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4]);
+            g_item[((int)LF_UINT(fVar8))].dw.x =
+                 (float)(local_6c * local_d0 + g_item[((int)LF_UINT(fVar8))].dw.x);
+            g_item[((int)LF_UINT(fVar8))].dw.y =
+                 (float)(local_68 * local_d0 + g_item[((int)LF_UINT(fVar8))].dw.y);
+            g_item[((int)LF_UINT(fVar8))].dw.z =
+                 (float)(local_d0 * local_64 + g_item[((int)LF_UINT(fVar8))].dw.z);
             local_50 = local_88;
             stoptimer(g_timerlist.bondbodyitem);
           }
@@ -1330,12 +1231,12 @@ void __cdecl lf_41de0(void)
             *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) =
                  (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar8)) * 0x20 + ((int)LF_UINT(fVar7)) * 0x204]) + local_54 * fVar6);
             local_50 = ((float *)LF_BITS_U(-pfVar21[6]));
-            g_item[((int)LF_UINT(fVar9))].unk_00cc =
-                 ((int)LF_BITS_U(((float)(LF_BITS_F(g_item[((int)LF_UINT(fVar9))].unk_00cc) + LF_BITS_F(local_50) * local_5c))));
-            *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd0] =
-                 (float)(local_58 * LF_BITS_F(local_50) + *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd0]);
-            *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd4] =
-                 (float)(LF_BITS_F(local_50) * local_54 + *(float *)&g_item[((int)LF_UINT(fVar9))].lf_raw[0xd4]);
+            g_item[((int)LF_UINT(fVar9))].dw.x =
+                 (float)(g_item[((int)LF_UINT(fVar9))].dw.x + LF_BITS_F(local_50) * local_5c);
+            g_item[((int)LF_UINT(fVar9))].dw.y =
+                 (float)(local_58 * LF_BITS_F(local_50) + g_item[((int)LF_UINT(fVar9))].dw.y);
+            g_item[((int)LF_UINT(fVar9))].dw.z =
+                 (float)(LF_BITS_F(local_50) * local_54 + g_item[((int)LF_UINT(fVar9))].dw.z);
           }
           if (kind_copy == 0xd) {
             LF_COPY(fVar6, pfVar33[6]);
@@ -1467,19 +1368,19 @@ void __cdecl lf_41de0(void)
               local_5c = LF_BITS_F(local_50) * local_7c;
               local_58 = (float)(LF_BITS_F(local_50) * local_78);
               local_54 = (float)(LF_BITS_F(local_50) * local_74);
-              g_item[((int)LF_UINT(fVar6))].unk_0078 = ((int)LF_BITS_U(((float)(local_5c + LF_BITS_F(g_item[((int)LF_UINT(fVar6))].unk_0078)))));
-              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x7c] =
-                   (float)(local_58 + *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x7c]);
-              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x80] =
-                   (float)(local_54 + *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0x80]);
+              g_item[((int)LF_UINT(fVar6))].dv.x = (float)(local_5c + g_item[((int)LF_UINT(fVar6))].dv.x);
+              g_item[((int)LF_UINT(fVar6))].dv.y =
+                   (float)(local_58 + g_item[((int)LF_UINT(fVar6))].dv.y);
+              g_item[((int)LF_UINT(fVar6))].dv.z =
+                   (float)(local_54 + g_item[((int)LF_UINT(fVar6))].dv.z);
               local_6c = (float)(local_c4 * local_58 - local_c8 * local_54);
               local_68 = (float)(local_cc * local_54 - local_5c * local_c4);
               local_64 = (float)(local_c8 * local_5c - local_cc * local_58);
-              g_item[((int)LF_UINT(fVar6))].unk_00cc = ((int)LF_BITS_U(((float)(local_6c + LF_BITS_F(g_item[((int)LF_UINT(fVar6))].unk_00cc)))));
-              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd0] =
-                   (float)(*(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd0] + local_68);
-              *(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd4] =
-                   (float)(*(float *)&g_item[((int)LF_UINT(fVar6))].lf_raw[0xd4] + local_64);
+              g_item[((int)LF_UINT(fVar6))].dw.x = (float)(local_6c + g_item[((int)LF_UINT(fVar6))].dw.x);
+              g_item[((int)LF_UINT(fVar6))].dw.y =
+                   (float)(g_item[((int)LF_UINT(fVar6))].dw.y + local_68);
+              g_item[((int)LF_UINT(fVar6))].dw.z =
+                   (float)(g_item[((int)LF_UINT(fVar6))].dw.z + local_64);
             }
           }
           if (BOND_KIND(pfVar33) == 0xfU) {
@@ -1695,7 +1596,7 @@ void __cdecl lf_41de0(void)
       }
       pfVar21 = pfVar21 + 0x6b;
     } while ((int)pfVar21 < ((int)&g_sysinfo.lf_raw[0x50]));
-    piVar34 = &g_object[0].unk_71ec;
+    piVar34 = &g_object[0].num_wheel_bodies;
     do {
       if ((((Object *)(piVar34 + -0x1c7b))->active != 0) && (iVar30 = 0, 0 < *piVar34)) {
         pfVar21 = (float *)(piVar34 + 5);
@@ -1778,7 +1679,7 @@ void __cdecl lf_41de0(void)
     } while (iVar29 != 0);
   }
   piVar34 = &DAT_00461de8;
-  piVar18 = &g_human[0].unk_0004;
+  piVar18 = &g_human[0].has_physics;
   do {
     if ((((Human *)(piVar18 + -1))->active != 0) && (*piVar18 != 0)) {
       iVar30 = 3;

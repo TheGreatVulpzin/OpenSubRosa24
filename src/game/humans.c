@@ -1258,9 +1258,9 @@ LAB_00453705:
           iVar14 = iVar14 + -1;
         } while (iVar14 != 0);
       }
-      g_human[(int)puVar11].unk_0004 = 1;
+      g_human[(int)puVar11].has_physics = 1;
       if ((local_9c != -1) && (LF_UINT(local_a0) == 0x0U)) {
-        g_human[(int)puVar11].unk_0004 = 0;
+        g_human[(int)puVar11].has_physics = 0;
       }
       if (g_human[(int)puVar11].bones[0].pos.y < -32.0) {
         g_human[(int)puVar11].health = -100;

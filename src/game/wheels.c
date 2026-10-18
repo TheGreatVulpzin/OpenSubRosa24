@@ -215,7 +215,7 @@ void __cdecl lf_22f90(void)
         } while (local_50 < *(int *)((int)&g_object[0].num_wheels + iVar16));
       }
       local_50 = 0;
-      if (0 < *(int *)((int)&g_object[0].unk_71ec + iVar16)) {
+      if (0 < *(int *)((int)&g_object[0].num_wheel_bodies + iVar16)) {
         do {
           iVar4 = local_40;
           iVar14 = local_50;
@@ -377,7 +377,7 @@ LAB_0042360a:
           *(float *)&((&DAT_00583de0)[iVar6 * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[iVar6 * 8]) + local_48 * local_10);
           *(float *)&((&DAT_00583de4)[iVar6 * 8]) = (float)(local_c * local_48 + LF_BITS_F((&DAT_00583de4)[iVar6 * 8]));
           *(float *)&((&DAT_00583de8)[iVar6 * 8]) = (float)(local_8 * local_48 + LF_BITS_F((&DAT_00583de8)[iVar6 * 8]));
-        } while (local_50 < *(int *)((int)&g_object[0].unk_71ec + iVar16));
+        } while (local_50 < *(int *)((int)&g_object[0].num_wheel_bodies + iVar16));
       }
     }
     local_44 = local_44 + 1;
