@@ -119,6 +119,117 @@
 #define local_c (*(float *)(lf_frame + 0xf4))
 #define local_8 (*(float *)(lf_frame + 0xf8))
 #define local_4 (*(uint *)(lf_frame + 0xfc))
+/* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
+ * each side from the masses. */
+static void setup_partpart(const Bond *b, BondOpt *o)
+{
+  const Particle *pa = &g_particle[b->particle_a];
+  const Particle *pb = &g_particle[b->particle_b];
+  vec3 d;
+  float len, inv;
+
+  o->b = (short)b->particle_b;
+  o->a = (short)b->particle_a;
+  d.x = (float)(pb->pos.x - pa->pos.x);
+  d.y = (float)(pb->pos.y - pa->pos.y);
+  d.z = (float)(pb->pos.z - pa->pos.z);
+  len = (float)x87_sqrt((double)(float)(d.z * d.z + (d.x * d.x + d.y * d.y)));
+  if (len <= 1.52587890625E-5) {
+    d.x = 0.0f;
+    d.y = 0.0f;
+    d.z = 0.0f;
+  } else {
+    inv = (float)(1.0 / len);
+    d.x = inv * d.x;
+    d.y = (float)(inv * d.y);
+    d.z = (float)(inv * d.z);
+  }
+  o->dir = d;
+  o->bias = (float)((float)(len - b->rest_length) * b->stiffness);
+  o->damping = b->damping;
+  inv = (float)(1.0 / (pb->mass + pa->mass));
+  o->share_a = (float)(inv * pb->mass);
+  o->share_b = (float)(inv * pa->mass);
+}
+
+/* bondsetup, type 10: an item in the hand. The two lever arms, the error between the two points
+ * (no longer than 0.125), and the share of each side, which goes into the bond. */
+static void setup_bodyitem(Bond *b, BondOpt *o)
+{
+  const Bone *bone = &g_human[b->owner].bones[b->bone_a];
+  const Item *it = &g_item[b->target];
+  const vec3 la = b->local_a, lb = b->local_b;
+  vec3 ra, rb, p, e;
+  float len, f, k, inv, m_bone, m_item;
+
+  ra.x = (float)((float)(la.y * bone->rot[1].x + (float)(la.x * bone->rot[0].x)) + la.z * bone->rot[2].x);
+  ra.y = (float)(bone->rot[2].y * la.z + (float)(bone->rot[1].y * la.y + (float)(bone->rot[0].y * la.x)));
+  ra.z = (float)(la.z * bone->rot[2].z + (float)(la.y * bone->rot[1].z + (float)(la.x * bone->rot[0].z)));
+  o->arm_a = ra;
+  rb.x = (float)((float)((float)(lb.x * it->rot[0].x) + lb.y * it->rot[1].x) + lb.z * it->rot[2].x);
+  rb.y = (float)(it->rot[2].y * lb.z + (float)(it->rot[1].y * lb.y + (float)(it->rot[0].y * lb.x)));
+  rb.z = (float)(lb.z * it->rot[2].z + (float)(lb.y * it->rot[1].z + (float)(lb.x * it->rot[0].z)));
+  o->arm_b = rb;
+  p.x = (float)(it->pos.x + rb.x);
+  p.y = (float)(rb.y + it->pos.y);
+  p.z = (float)(rb.z + it->pos.z);
+  e.x = (float)((float)(bone->pos.x + ra.x) - p.x);
+  e.y = (float)((float)(ra.y + bone->pos.y) - p.y);
+  e.z = (float)((float)(ra.z + bone->pos.z) - p.z);
+  len = (float)x87_sqrt((double)(float)(e.y * e.y + e.x * e.x + e.z * e.z));
+  if (0.125 < len) {
+    f = (float)(0.125 / len);
+    e.x = f * e.x;
+    e.y = (float)(e.y * f);
+    e.z = (float)(f * e.z);
+  }
+  k = b->stiffness;
+  o->dir.x = k * e.x;
+  o->dir.y = (float)(e.y * k);
+  o->dir.z = (float)(k * e.z);
+  m_bone = bone->mass;
+  m_item = it->mass;
+  inv = (float)(1.0 / (m_bone + m_item));
+  b->mass_ratio[0] = inv * m_item;
+  b->mass_ratio[1] = (float)(m_bone * inv);
+}
+
+/* bondsetup, type 8: a joint between two bones of a human. */
+static void setup_bodybody(const Bond *b, BondOpt *o)
+{
+  const Bone *ba = &g_human[b->owner].bones[b->bone_a];
+  const Bone *bb = &g_human[b->owner].bones[b->target];
+  const vec3 la = b->local_a, lb = b->local_b;
+  vec3 ra, rb, p, e;
+  float k, inv;
+
+  o->a = (short)b->owner;
+  o->b = (short)b->bone_a;
+  o->c = (short)b->target;
+  ra.x = (float)(la.z * ba->rot[2].x + (float)(la.x * ba->rot[0].x + la.y * ba->rot[1].x));
+  ra.y = (float)(ba->rot[2].y * la.z + (float)(ba->rot[1].y * la.y + (float)(ba->rot[0].y * la.x)));
+  ra.z = (float)(la.z * ba->rot[2].z + (float)(la.y * ba->rot[1].z + (float)(la.x * ba->rot[0].z)));
+  o->arm_a = ra;
+  rb.x = (float)(lb.z * bb->rot[2].x + (float)(lb.x * bb->rot[0].x + lb.y * bb->rot[1].x));
+  rb.y = (float)(bb->rot[2].y * lb.z + (float)(bb->rot[1].y * lb.y + (float)(bb->rot[0].y * lb.x)));
+  rb.z = (float)(lb.z * bb->rot[2].z + (float)(lb.y * bb->rot[1].z + (float)(lb.x * bb->rot[0].z)));
+  o->arm_b = rb;
+  p.x = (float)(bb->pos.x + rb.x);
+  p.y = (float)(rb.y + bb->pos.y);
+  p.z = (float)(rb.z + bb->pos.z);
+  e.x = (float)((float)(ba->pos.x + ra.x) - p.x);
+  e.y = (float)((float)(ra.y + ba->pos.y) - p.y);
+  e.z = (float)((float)(ra.z + ba->pos.z) - p.z);
+  k = b->stiffness;
+  o->dir.x = (float)(k * e.x);
+  o->dir.y = (float)(k * e.y);
+  o->dir.z = (float)(k * e.z);
+  o->damping = b->damping;
+  inv = (float)(1.0 / (ba->mass + bb->mass));
+  o->share_a = inv * bb->mass;
+  o->share_b = (float)(ba->mass * inv);
+}
+
 /* Give a profiler timer its name and clear its total. */
 static void nametimer(int timer, const char *name)
 {
@@ -262,160 +373,13 @@ void __cdecl lf_41de0(void)
       piVar18 = local_a0;
       if (local_a0[-2] < 0x100) {
         if (((Bond *)(local_a0 + -5))->type == 0) {
-          iVar30 = local_a0[1];
-          iVar29 = *local_a0;
-          *(short *)((int)pfVar21 + -10) = (short)iVar30;
-          local_50 = (float *)(iVar30 * 0xf0);
-          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar29;
-          local_7c = (float)((&g_particle[0].pos.x)[iVar30 * 0x3c] -
-                     (&g_particle[0].pos.x)[iVar29 * 0x3c]);
-          local_78 = (float)((&g_particle[0].pos.y)[iVar30 * 0x3c] -
-                     (&g_particle[0].pos.y)[iVar29 * 0x3c]);
-          local_74 = (float)((&g_particle[0].pos.z)[iVar30 * 0x3c] -
-                     (&g_particle[0].pos.z)[iVar29 * 0x3c]);
-          local_60 = ((int *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
-          dVar39 = _CIsqrt((double)LF_BITS_F(local_60));
-          fVar5 = (float)dVar39;
-          if (fVar5 <= 1.52587890625E-5) {
-            local_7c = 0.0;
-            local_78 = 0.0;
-            local_74 = 0.0;
-          }
-          else {
-            fVar6 = (float)(1.0 / fVar5);
-            local_7c = fVar6 * local_7c;
-            local_78 = (float)(fVar6 * local_78);
-            local_74 = (float)(fVar6 * local_74);
-          }
-          pfVar21[-1] = local_7c;
-          *pfVar21 = local_78;
-          pfVar21[1] = local_74;
-          local_60 = ((int *)LF_BITS_U(((float)(fVar5 - LF_BITS_F(piVar18[0x13])))));
-          pfVar21[2] = (float)(LF_BITS_F(local_60) * LF_BITS_F(piVar18[0x16]));
-          LF_SET_BITS(pfVar21[0xc], piVar18[0x17]);
-          local_70 = (float)(1.0 / (*(float *)((int)&g_particle[0].mass + (int)local_50) +
-                           (&g_particle[0].mass)[iVar29 * 0x3c]));
-          pfVar21[10] = (float)(local_70 * *(float *)((int)&g_particle[0].mass + (int)local_50));
-          pfVar21[0xb] = (float)(local_70 * (&g_particle[0].mass)[iVar29 * 0x3c]);
+          setup_partpart((Bond *)(local_a0 + -5), (BondOpt *)(pfVar21 + -3));
         }
         if (((Bond *)(piVar18 + -5))->type == 10) {
-          iVar30 = piVar18[0x1f];
-          iVar29 = piVar18[0x20];
-          fVar5 = ((vec3 *)(piVar18 + 8))->x;
-          iVar17 = iVar30 * 0x2b64;
-          iVar23 = iVar29 * 0xe0;
-          local_50 = (float *)(iVar17 + iVar23);
-          iVar16 = piVar18[0x21];
-          LF_SET_BITS(fVar6, piVar18[9]);
-          LF_SET_BITS(fVar7, piVar18[10]);
-          local_b8 = (float)((float)(fVar6 * g_human[iVar30].bones[iVar29].rot[1].x +
-                     (float)(fVar5 * *(float *)(iVar17 + ((int)&g_human[0].lf_raw[0xf8]) + iVar23))) +
-                     fVar7 * g_human[iVar30].bones[iVar29].rot[2].x);
-          local_b4 = (float)(g_human[iVar30].bones[iVar29].rot[2].y * fVar7 +
-                     ((float)(g_human[iVar30].bones[iVar29].rot[1].y * fVar6 +
-                     (float)(*(float *)(iVar17 + ((int)&g_human[0].lf_raw[0xfc]) + iVar23) * fVar5))));
-          local_b0 = (float)(fVar7 * g_human[iVar30].bones[iVar29].rot[2].z +
-                     ((float)(fVar6 * g_human[iVar30].bones[iVar29].rot[1].z +
-                     (float)(fVar5 * g_human[iVar30].bones[iVar29].rot[0].z))));
-          pfVar21[3] = local_b8;
-          pfVar21[4] = local_b4;
-          pfVar21[5] = local_b0;
-          fVar5 = g_human[iVar30].bones[iVar29].pos.x;
-          fVar6 = g_human[iVar30].bones[iVar29].pos.y;
-          fVar7 = g_human[iVar30].bones[iVar29].pos.z;
-          fVar8 = ((vec3 *)(piVar18 + 0xb))->x;
-          LF_SET_BITS(fVar9, piVar18[0xc]);
-          LF_SET_BITS(fVar10, piVar18[0xd]);
-          local_ac = (float)((float)((float)(fVar8 * g_item[iVar16].rot[0].x) + fVar9 * g_item[iVar16].rot[1].x) +
-                     fVar10 * g_item[iVar16].rot[2].x);
-          local_a8 = (float)(g_item[iVar16].rot[2].y * fVar10 +
-                     ((float)(g_item[iVar16].rot[1].y * fVar9 + (float)(g_item[iVar16].rot[0].y * fVar8))));
-          local_a4 = (float)(fVar10 * g_item[iVar16].rot[2].z +
-                     ((float)(fVar9 * g_item[iVar16].rot[1].z + (float)(fVar8 * g_item[iVar16].rot[0].z))));
-          pfVar21[6] = local_ac;
-          pfVar21[7] = local_a8;
-          pfVar21[8] = local_a4;
-          local_6c = (float)(g_item[iVar16].pos.x + local_ac);
-          local_68 = (float)(local_a8 + g_item[iVar16].pos.y);
-          local_64 = (float)(local_a4 + g_item[iVar16].pos.z);
-          local_5c = (float)(((float)(fVar5 + local_b8)) - local_6c);
-          local_58 = (float)(((float)(local_b4 + fVar6)) - local_68);
-          local_54 = (float)(((float)(local_b0 + fVar7)) - local_64);
-          local_60 = ((int *)LF_BITS_U(((float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54))));
-          dVar39 = _CIsqrt((double)LF_BITS_F(local_60));
-          if (0.125 < (float)dVar39) {
-            fVar5 = (float)(0.125 / (float)dVar39);
-            local_5c = fVar5 * local_5c;
-            local_58 = (float)(local_58 * fVar5);
-            local_54 = (float)(fVar5 * local_54);
-          }
-          local_60 = (int *)piVar18[0x16];
-          pfVar21[-1] = LF_BITS_F(local_60) * local_5c;
-          *pfVar21 = (float)(local_58 * LF_BITS_F(local_60));
-          pfVar21[1] = (float)(LF_BITS_F(local_60) * local_54);
-          local_d4 = *(float *)((int)(g_human[0].bones[0].rot + 7) + (int)local_50 + 8);
-          local_d0 = g_item[iVar16].mass;
-          local_70 = (float)(1.0 / (local_d4 + local_d0));
-          piVar18[0xe] = ((int)LF_BITS_U((local_70 * local_d0)));
-          piVar18[0xf] = ((int)LF_BITS_U(((float)(local_d4 * local_70))));
+          setup_bodyitem((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
         }
         if (((Bond *)(piVar18 + -5))->type == 8) {
-          iVar30 = piVar18[0x1f];
-          fVar5 = ((vec3 *)(piVar18 + 8))->x;
-          iVar29 = piVar18[0x20];
-          ((BondOpt *)(pfVar21 + -3))->a = (short)iVar30;
-          fVar6 = *(float *)(iVar29 * 0xe0 + ((int)&g_human[0].lf_raw[0xf8]) + iVar30 * 0x2b64);
-          fVar7 = *(float *)(iVar29 * 0xe0 + ((int)&g_human[0].lf_raw[0xfc]) + iVar30 * 0x2b64);
-          iVar16 = piVar18[0x21];
-          *(short *)((int)pfVar21 + -10) = (short)iVar29;
-          fVar8 = g_human[iVar30].bones[iVar29].rot[0].z;
-          LF_SET_BITS(fVar9, piVar18[9]);
-          fVar10 = g_human[iVar30].bones[iVar29].rot[1].x;
-          *(short *)(pfVar21 + -2) = (short)iVar16;
-          LF_SET_BITS(fVar11, piVar18[10]);
-          local_b8 = (float)(fVar11 * g_human[iVar30].bones[iVar29].rot[2].x +
-                     ((float)(fVar5 * fVar6 + fVar9 * fVar10)));
-          local_b4 = (float)(g_human[iVar30].bones[iVar29].rot[2].y * fVar11 +
-                     ((float)(g_human[iVar30].bones[iVar29].rot[1].y * fVar9 + (float)(fVar7 * fVar5))));
-          local_b0 = (float)(fVar11 * g_human[iVar30].bones[iVar29].rot[2].z +
-                     ((float)(fVar9 * g_human[iVar30].bones[iVar29].rot[1].z + (float)(fVar5 * fVar8))));
-          pfVar21[3] = local_b8;
-          pfVar21[4] = local_b4;
-          pfVar21[5] = local_b0;
-          fVar5 = g_human[iVar30].bones[iVar29].pos.x;
-          fVar6 = g_human[iVar30].bones[iVar29].pos.y;
-          fVar7 = g_human[iVar30].bones[iVar29].pos.z;
-          fVar8 = ((vec3 *)(piVar18 + 0xb))->x;
-          LF_SET_BITS(fVar9, piVar18[0xc]);
-          LF_SET_BITS(fVar10, piVar18[0xd]);
-          local_ac = (float)(fVar10 * g_human[iVar30].bones[iVar16].rot[2].x +
-                     ((float)(fVar8 * g_human[iVar30].bones[iVar16].rot[0].x +
-                     fVar9 * g_human[iVar30].bones[iVar16].rot[1].x)));
-          local_a8 = (float)(g_human[iVar30].bones[iVar16].rot[2].y * fVar10 +
-                     ((float)(g_human[iVar30].bones[iVar16].rot[1].y * fVar9 +
-                     (float)(g_human[iVar30].bones[iVar16].rot[0].y * fVar8))));
-          local_a4 = (float)(fVar10 * g_human[iVar30].bones[iVar16].rot[2].z +
-                     ((float)(fVar9 * g_human[iVar30].bones[iVar16].rot[1].z +
-                     (float)(fVar8 * g_human[iVar30].bones[iVar16].rot[0].z))));
-          pfVar21[6] = local_ac;
-          pfVar21[7] = local_a8;
-          pfVar21[8] = local_a4;
-          local_6c = (float)(g_human[iVar30].bones[iVar16].pos.x + local_ac);
-          local_68 = (float)(local_a8 + g_human[iVar30].bones[iVar16].pos.y);
-          local_64 = (float)(local_a4 + g_human[iVar30].bones[iVar16].pos.z);
-          local_5c = (float)(((float)(fVar5 + local_b8)) - local_6c);
-          local_58 = (float)(((float)(local_b4 + fVar6)) - local_68);
-          local_54 = (float)(((float)(local_b0 + fVar7)) - local_64);
-          local_60 = (int *)piVar18[0x16];
-          pfVar21[-1] = (float)(LF_BITS_F(local_60) * local_5c);
-          *pfVar21 = (float)(LF_BITS_F(local_60) * local_58);
-          pfVar21[1] = (float)(LF_BITS_F(local_60) * local_54);
-          LF_SET_BITS(pfVar21[0xc], piVar18[0x17]);
-          local_d4 = g_human[iVar30].bones[iVar29].mass;
-          local_d0 = g_human[iVar30].bones[iVar16].mass;
-          local_70 = (float)(1.0 / (local_d4 + local_d0));
-          pfVar21[10] = local_70 * local_d0;
-          pfVar21[0xb] = (float)(local_d4 * local_70);
+          setup_bodybody((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
         }
         iVar30 = g_timerlist.bondsetuphuman;
         if (((Bond *)(piVar18 + -5))->type == 9) {
