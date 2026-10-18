@@ -91,8 +91,7 @@ void particlesimulation(void)
 }
 
 /* A particle at the end of its life loses its bonds, and the last particle takes its slot.
- * The loop then looks at the moved particle again, so it loses one more tick, as in the
- * 024d. */
+ * The moved particle gets the test again, so it loses one more tick. */
 void particletimetolive(void)
 {
     Particle *particles = sr_particles;

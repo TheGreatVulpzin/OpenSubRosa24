@@ -3,9 +3,6 @@
  * genrand_int32 is the Mersenne Twister MT19937, with its state in two game globals.
  * The other functions use an integer hash: the random vectors hash a global counter, and
  * serpnoise2d hashes the corners of a grid cell (value noise).
- *
- * The float math runs on the x87 (this file compiles with /arch:IA32). Keep the order of the
- * terms and each (float): a change gives a different last bit.
  */
 #include "random.h"
 

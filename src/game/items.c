@@ -6,9 +6,6 @@
  *
  * A cash item holds up to 10 bills: 3 bits each in bills_mask, bill 0 in the low bits.
  * last_bill is the index of the last bill (-1: no bill).
- *
- * The float math runs on the x87 (this file compiles with /arch:IA32). Keep the order of the
- * terms and each (float): a change gives a different last bit.
  */
 #include "items.h"
 
@@ -25,7 +22,7 @@
 #define g_xaxis (*SR_AT(vec3, 0x60cd4))   /* (1 0 0) */
 #define g_yaxis (*SR_AT(vec3, 0x60ce0))   /* (0 1 0) */
 
-/* The bill at index i (3 bits) moves by the shift (i * 3) & 31, as in the 024d. */
+/* The shift of the bill at index i (3 bits each): (i * 3) & 31. */
 #define BILL_SHIFT(i) ((uint32_t)((i) * 3) & 31)
 
 /* The value of all the bills of a cash item. */

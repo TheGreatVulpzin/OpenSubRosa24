@@ -33540,8 +33540,8 @@ void __cdecl lf_48ec0(void)
           fVar5 = *(float *)((int)&g_bullet[0].vel.z + iVar11);
           dVar14 = _CIsqrt((double)((float)(fVar5 * fVar5 + (fVar4 * fVar4 + fVar3 * fVar3))));
           iVar9 = (int)(longlong)
-                       ((float)dVar14 * 5.5 * *(float *)((int)&g_bullet[0].unk_000c + iVar11) * 60.0
-                       - 2.0);
+                       ((float)dVar14 * 5.5 * *(float *)((int)&g_bullet[0].mass + iVar11) * 60.0 -
+                       2.0);
           if (iVar9 < 1) {
             iVar9 = 0;
           }
@@ -33592,10 +33592,10 @@ LAB_004493b0:
             g_human[local_58].unk_0044 = iVar9 * 6;
           }
           fVar3 = *(float *)(local_10 * 0xe0 + ((int)&g_human[0].lf_raw[0x154]) + local_58 * 0x2b64) * 0.125;
-          local_60 = *(float *)((int)&g_bullet[0].unk_000c + iVar11);
+          local_60 = *(float *)((int)&g_bullet[0].mass + iVar11);
           local_60 = (float)(local_60 / (fVar3 + local_60));
           if ((g_human[local_58].health < 1) && (0 < g_human[local_58].health + iVar9)) {
-            local_60 = *(float *)((int)&g_bullet[0].unk_000c + iVar11);
+            local_60 = *(float *)((int)&g_bullet[0].mass + iVar11);
             local_60 = (float)(local_60 / (fVar3 * 0.25 + local_60));
             uVar8 = rand();
             g_human[local_58].bones[1].vel.y =
@@ -33638,8 +33638,8 @@ LAB_004493b0:
               fVar5 = *(float *)((int)&g_bullet[0].vel.z + iVar11);
               dVar14 = _CIsqrt((double)((float)(fVar5 * fVar5 + (fVar4 * fVar4 + fVar3 * fVar3))));
               iVar7 = (int)(longlong)
-                           ((float)dVar14 * 1.5 * *(float *)((int)&g_bullet[0].unk_000c + iVar11) *
-                            60.0 - 2.0);
+                           ((float)dVar14 * 1.5 * *(float *)((int)&g_bullet[0].mass + iVar11) * 60.0
+                           - 2.0);
               if (iVar7 < 1) {
                 iVar7 = 0;
               }
@@ -33659,8 +33659,8 @@ LAB_004493b0:
             fVar4 = *(float *)((int)&g_bullet[0].vel.z + iVar11);
             dVar14 = _CIsqrt((double)((float)(fVar4 * fVar4 + (*pfVar1 * *pfVar1 + fVar3 * fVar3))));
             iVar9 = (int)(longlong)
-                         ((float)dVar14 * 1.5 * *(float *)((int)&g_bullet[0].unk_000c + iVar11) *
-                          60.0 - 2.0);
+                         ((float)dVar14 * 1.5 * *(float *)((int)&g_bullet[0].mass + iVar11) * 60.0 -
+                         2.0);
             if (iVar9 < 1) {
               iVar9 = 0;
             }
@@ -33681,7 +33681,7 @@ LAB_004493b0:
               createevent_bullethit(0,2,&local_4c,&local_34);
               applydamageobject(local_5c,iVar9);
             }
-            fVar3 = *(float *)((int)&g_bullet[0].unk_000c + iVar11);
+            fVar3 = *(float *)((int)&g_bullet[0].mass + iVar11);
             local_38 = (float)(local_2c * *(float *)((int)&g_bullet[0].vel.z + iVar11) +
                        (local_34 * *pfVar1 + local_30 * *(float *)((int)&g_bullet[0].vel.y + iVar11)));
             local_40 = local_38 * local_34;

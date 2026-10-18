@@ -1,18 +1,14 @@
 /* Math for 3D vectors (vec3), orientations (3 rows of vec3), quaternions and angles.
- *
- * The float math runs on the x87 (this file compiles with /arch:IA32). Each sum and product
- * keeps 53-bit precision, and each (float) rounds the value to a float. Keep the order of the
- * terms and each (float): a change gives a different last bit.
  */
 #include "vectors.h"
 
 #include "sr_math.h"
 
-/* The constants of the 024d (double). */
+/* The values of pi that the game uses (double). */
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
 
-/* a . b. The 024d adds x and y first, then z. */
+/* a . b: x and y first, then z. */
 float dotproduct(const vec3 *a, const vec3 *b)
 {
     return (float)(a->z * b->z + (a->x * b->x + a->y * b->y));
@@ -196,7 +192,7 @@ void rotatevector(vec3 *v, const vec3 *axis, float angle)
 }
 
 /* Turns each row of rot by angle radians around the unit vector axis, then makes the row a
- * unit vector again. Each step writes the row, as the 024d does. */
+ * unit vector again. Each step writes the row before the next step reads it. */
 void rotateorientation(vec3 rot[3], const vec3 *axis, float angle)
 {
     float ax = axis->x, ay = axis->y, az = axis->z;

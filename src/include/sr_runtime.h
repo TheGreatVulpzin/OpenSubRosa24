@@ -1,7 +1,5 @@
-/* Access to the game globals while the code runs inside subrosadedicated024d.exe.
- *
- * The 024d uses ASLR: the real address of each global is sr_base + RVA.
- * In Phase 4 (own server), these macros will point to our own arrays.
+/* Access to the game globals: the real address of each global is sr_base + RVA, where
+ * sr_base is the base of the game image.
  */
 #ifndef SR_RUNTIME_H
 #define SR_RUNTIME_H

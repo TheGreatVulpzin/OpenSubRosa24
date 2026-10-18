@@ -103,7 +103,7 @@ item,0x17c,ends,vec3,2,createitem (item type 0x19): (-0.5 -1 0) and (-0.5 1 0) (
 item,0x194,end_pos,vec3,2,createitem (item type 0x19): the position plus ends[i] along g_xaxis and g_yaxis
 itemtype,0x4,mass,float,,createitem copies it to item.mass
 itemtype,0x1c,ammo,int,,"setupitemtypes: the rounds of a magazine (AK-47, M-16 and MP5 30, Uzi 20, 9mm 12, .45 Bullets 6) or the uses of a Bandage (2); createitem copies it to item.ammo"
-bullet,0xc,unk_000c,float,,createbullet: the first float of the bullet type (setupbullettypes)
+bullet,0xc,mass,float,,"createbullet copies the mass of the bullet type (setupbullettypes, in kg)"
 bullet,0x10,gravity,float,,createbullet writes 0.0027222 (9.8 / 3600: the fall in one tick at 60 ticks per second)
 bullet,0x38,side,vec3,,"createbullet: back x (x axis or y axis), normalized"
 bullet,0x44,up,vec3,,"createbullet: side x back, normalized"

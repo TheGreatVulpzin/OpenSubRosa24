@@ -2,9 +2,6 @@
  *
  * The bullets are a packed list of up to 16384 (sr_bullets, sr_numofbullets): a bullet at
  * the end of its life takes the last bullet into its place.
- *
- * The float math runs on the x87 (this file compiles with /arch:IA32). Keep the order of the
- * terms and each (float): a change gives a different last bit.
  */
 #include "bullets.h"
 
@@ -17,17 +14,26 @@
 #define MAX_BULLETS 0x4000
 
 /* Game globals. */
-#define g_bullettypes SR_AT(float, 0xf437320) /* 4 bullet types, 6 floats each */
+#define g_bullettypes SR_AT(BulletType, 0xf437320)
 #define g_xaxis (*SR_AT(vec3, 0x60cd4))       /* (1 0 0) */
 #define g_yaxis (*SR_AT(vec3, 0x60ce0))       /* (0 1 0) */
 
-/* The 4 bullet types, 6 floats each, as raw bits (the meaning of most values is not known
- * yet). The first value goes to Bullet.unk_000c. */
-static const uint32_t bullettypes[4][6] = {
-    { 0x3c23d70a, 0x3b956f22, 0x3bf9b131, 0x3d1fbe77, 0, 0x3fc00000 },
-    { 0x3bcb295f, 0x3b80522c, 0x3bb630a9, 0x3d3851ec, 0, 0x3fc00000 },
-    { 0x3c03126f, 0x3c0249c2, 0x3c1374bc, 0x3c9ba5e3, 0, 0x3fc00000 },
-    { 0x3c83126f, 0x3bbf1af7, 0x3c3295ea, 0x3d03126f, 0, 0x3fc00000 },
+/* A bullet type: real cartridge data in kilograms and meters. ItemType.bullet_type selects
+ * one. */
+typedef struct BulletType {
+    float mass;    /* the recoil uses mass * bullet_speed / (gun mass + mass) */
+    float drag;    /* the cross section over the mass: pi * caliber^2 / 4 / mass */
+    float caliber; /* the diameter of the bullet */
+    float length;  /* the length of the case */
+    float unk_10;
+    float unk_14;
+} BulletType;
+
+static const BulletType bullettypes[4] = {
+    { 0.01f, 0.0045603672f, 0.00762f, 0.039f, 0.0f, 1.5f },   /* 7.62x39 (AK-47) */
+    { 0.0062f, 0.0039160457f, 0.00556f, 0.045f, 0.0f, 1.5f }, /* 5.56x45 (M-16) */
+    { 0.008f, 0.0079521555f, 0.009f, 0.019f, 0.0f, 1.5f },    /* 9x19 (MP5, Uzi, 9mm) */
+    { 0.016f, 0.0058320719f, 0.0109f, 0.032f, 0.0f, 1.5f },   /* .44 Magnum */
 };
 
 void setupbullettypes(void)
@@ -71,15 +77,14 @@ int createbullet(int type, const vec3 *pos, const vec3 *vel, int owner)
     normalizevector(&b->up, &b->up);
     b->vel = *vel;
     sr_stats.numofbullets++;
-    b->unk_000c = g_bullettypes[type * 6];
+    b->mass = g_bullettypes[type].mass;
     b->gravity = 0.0027222223579883575f;
     sr_numofbullets = n + 1;
     return n;
 }
 
 /* Count down the life of each bullet. A bullet at the end of its life takes the last bullet
- * into its place. The loop then looks at the moved bullet again, so it loses one more tick,
- * as in the 024d. */
+ * into its place. The moved bullet gets the test again, so it loses one more tick. */
 void bullettimetolive(void)
 {
     Bullet *bullets = sr_bullets;

@@ -4,7 +4,7 @@
  * moves the counter (sr_numofevents). The server sends each client the events that the client
  * did not confirm yet (Connection.event_ack). Only the server makes events.
  *
- * The vectors are copied as raw bytes, as the 024d does: the x87 does not load them.
+ * The vectors are copied as raw bytes, so no float load changes their bits.
  */
 #include "events.h"
 

@@ -783,7 +783,7 @@ typedef union Bullet { struct {
     int type;                            /* +0x0000 createbullet: parameter 1 */
     int ttl;                             /* +0x0004 createbullet writes 600 */
     int owner;                           /* +0x0008 createbullet: parameter 4 */
-    float unk_000c;                      /* +0x000c createbullet: the first float of the bullet type (setupbullettypes) */
+    float mass;                          /* +0x000c createbullet copies the mass of the bullet type (setupbullettypes, in kg) */
     float gravity;                       /* +0x0010 createbullet writes 0.0027222 (9.8 / 3600: the fall in one tick at 60 ticks per second) */
     vec3 pos;                            /* +0x0014 createbullet: parameter 2 */
     vec3 pos_prev;                       /* +0x0020 createbullet: copy of the position */
@@ -796,7 +796,7 @@ SR_STATIC_ASSERT(sizeof(Bullet) == 0x5c, "Bullet");
 SR_STATIC_ASSERT(offsetof(Bullet, type) == 0x0, "Bullet.type");
 SR_STATIC_ASSERT(offsetof(Bullet, ttl) == 0x4, "Bullet.ttl");
 SR_STATIC_ASSERT(offsetof(Bullet, owner) == 0x8, "Bullet.owner");
-SR_STATIC_ASSERT(offsetof(Bullet, unk_000c) == 0xc, "Bullet.unk_000c");
+SR_STATIC_ASSERT(offsetof(Bullet, mass) == 0xc, "Bullet.mass");
 SR_STATIC_ASSERT(offsetof(Bullet, gravity) == 0x10, "Bullet.gravity");
 SR_STATIC_ASSERT(offsetof(Bullet, pos) == 0x14, "Bullet.pos");
 SR_STATIC_ASSERT(offsetof(Bullet, pos_prev) == 0x20, "Bullet.pos_prev");

@@ -4,9 +4,6 @@
  * send buffer from the low bit of each byte up, and pbitread takes them from the receive
  * buffer in the same order. cs_pwrite and packposition add whole bytes: they first move to
  * the next byte. Each received packet starts with the 4 bytes of the socket id ("7DFP").
- *
- * The float math runs on the x87 (this file compiles with /arch:IA32). Keep the order of the
- * terms and each (float): a change gives a different last bit.
  */
 #include "packet.h"
 
@@ -120,8 +117,8 @@ int cs_pwrite(const void *data, int size, int count)
 }
 
 /* Receive one packet on the current socket. A packet that does not start with the socket id
- * counts as 0 bytes. The first byte compares as a signed char, as in the 024d: an id byte of
- * 0x80 or more never matches. */
+ * counts as 0 bytes. The first byte compares as a signed char, so an id byte of 0x80 or more
+ * never matches. */
 int recvpacket(void)
 {
     BsdSocket *bs = &sr_bsdsocket;
@@ -195,8 +192,7 @@ static const int octahedron_faces[8][3] = {
     { 5, 3, 4 }, { 5, 4, 1 }, { 5, 2, 3 }, { 5, 1, 2 }, { 4, 3, 0 }, { 1, 4, 0 }, { 3, 2, 0 }, { 2, 1, 0 },
 };
 
-/* The 024d keeps the triangle and the midpoints of its edges in a global. This code writes
- * them there too, so the memory of the game stays the same. */
+/* packorientation keeps the triangle and the midpoints of its edges in a global. */
 #define g_tri SR_AT(vec3, 0xf437b00) /* 3 corners */
 #define g_mid (g_tri + 3)           /* corner 0 + 1, corner 2 + 1, corner 2 + 0 */
 
@@ -211,7 +207,7 @@ static __forceinline float side(const vec3 *v, const vec3 *a, const vec3 *b)
     return (float)(cz * v->z + (v->x * cx + v->y * cy));
 }
 
-/* side and midpoint are inline: as calls, packorientation was 2% slower than the 024d. */
+/* side and midpoint are inline: as calls, packorientation is 2% slower. */
 static __forceinline void midpoint(vec3 *m, const vec3 *a, const vec3 *b)
 {
     m->x = (float)(a->x + b->x);
@@ -238,7 +234,7 @@ void packorientation(const vec3 *dir, uint32_t bits)
         midpoint(&mid[0], &tri[0], &tri[1]);
         midpoint(&mid[1], &tri[2], &tri[1]);
         midpoint(&mid[2], &tri[2], &tri[0]);
-        /* The tests keep the form of the 024d: a NaN fails each one. */
+        /* Each test is false for a NaN, so the form of each test matters. */
         if (side(dir, &mid[0], &mid[2]) <= 0.0) {
             if (0.0 < side(dir, &mid[1], &mid[0])) {
                 tri[0] = mid[0];
@@ -260,7 +256,7 @@ void packorientation(const vec3 *dir, uint32_t bits)
             sub = 0;
         }
         code |= sub;
-        one = one << 2 | one >> 30; /* 1 << pos, as a rotation like the 024d */
+        one = one << 2 | one >> 30; /* 1 << pos, as a rotation */
     }
     pbitwrite(&code, bits);
 }

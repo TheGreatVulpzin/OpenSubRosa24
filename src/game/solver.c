@@ -2,7 +2,7 @@
  *
  * bondsimulation2 copies the velocities into the work arrays (BondParticle, BondHuman), and
  * prepares one BondOpt record for each bond. Each function here reads one record and adds
- * the changes to dv (and dw). The float math keeps the order of the 024d.
+ * the changes to dv (and dw).
  */
 #include "solver.h"
 

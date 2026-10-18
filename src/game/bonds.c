@@ -1,11 +1,9 @@
-/* bondsimulation2 (RVA 0x41de0): the bond solver of the physics, rewritten by hand.
+/* bondsimulation2: the bond solver of the physics, once for each tick.
  *
- * Phase 6 (docs/plano.md). The first version is the lifted C, unchanged. Each step makes
- * it readable and faster and keeps the harness at 0 differences: the float math keeps its
- * order and its (float) rounding points (x87, 53-bit precision, as the original).
- *
- * The function keeps the symbol lf_41de0: tools/lift/lift.py sees the definition here and
- * lifts it no more, but keeps it in the table, the live hooks and the standalone server.
+ * Each section has a profiler timer with its name. bondsetup prepares one BondOpt record for
+ * each bond (setup_partpart and the others). bondsetupcopy copies the velocities into the work
+ * arrays (setup_copy). The loop then does a number of solver passes over all the bonds, and the
+ * end copies the velocities back. The parts from the loop on are not yet clean C.
  */
 #include "lift_support.h"
 #include "lift_os.h"
@@ -286,7 +284,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   multiply3x3matrices(m, m, (float *)bb->target_rot);
   k = b->damping;
   o->damping = k;
-  /* For bones 3 to 8 of a living human, the 024d keeps the direction of the last tick. */
+  /* For bones 3 to 8 of a living human, the direction of the last tick stays. */
   if (kb < 3 || 8 < kb || h->health < 1) {
     geteulerangles2(e, m);
     e0 = e[0];
