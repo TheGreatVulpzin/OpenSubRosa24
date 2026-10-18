@@ -14,13 +14,13 @@ void __cdecl lf_0b3f0(int param_1)
 {
     Timer *t = &g_timer[param_1];
     uint64_t now = __rdtsc();
-    uint64_t start = (uint64_t)(uint32_t)t->unk_0044 << 32 | (uint32_t)t->unk_0040;
-    uint64_t total = ((uint64_t)(uint32_t)t->unk_004c << 32 | (uint32_t)t->unk_0048) + (now - start);
+    uint64_t start = (uint64_t)(uint32_t)t->start_hi << 32 | (uint32_t)t->start_lo;
+    uint64_t total = ((uint64_t)(uint32_t)t->total_hi << 32 | (uint32_t)t->total_lo) + (now - start);
     double cycles, ms;
     int64_t whole;
 
-    t->unk_0048 = (int)(uint32_t)total;
-    t->unk_004c = (int)(uint32_t)(total >> 32);
+    t->total_lo = (int)(uint32_t)total;
+    t->total_hi = (int)(uint32_t)(total >> 32);
     if (total >> 63) {
         cycles = 9223372036854775808.0 + (double)(int64_t)(total & 0x7fffffffffffffffull);
     } else {
@@ -36,7 +36,7 @@ void __cdecl lf_0b3f0(int param_1)
         fld ms
         fisttp whole
     }
-    t->unk_0050 = (int)(uint32_t)whole;
+    t->ms = (int)(uint32_t)whole;
 }
 
 #undef g_sysinfo

@@ -111,21 +111,21 @@ void __cdecl lf_56710(void)
 
   float fVar7;
   
-  iVar15 = g_timerlist.unk_008c;
+  iVar15 = g_timerlist.objectsim;
   local_4 = DAT_00460d18 ^ (uint)&local_50;
-  iVar7 = g_timerlist.unk_008c * 0x58;
+  iVar7 = g_timerlist.objectsim * 0x58;
   pcVar14 = ((char *)SR_VA(0x45f364));
   do {
     cVar1 = *pcVar14;
     pcVar14[iVar7 + 0x13a503c] = cVar1;
     pcVar14 = pcVar14 + 1;
   } while (cVar1 != '\0');
-  g_timer[iVar15].unk_0048 = 0;
-  g_timer[iVar15].unk_004c = 0;
-  g_timer[iVar15].unk_0050 = 0;
+  g_timer[iVar15].total_lo = 0;
+  g_timer[iVar15].total_hi = 0;
+  g_timer[iVar15].ms = 0;
   uVar4 = rdtsc();
-  g_timer[iVar15].unk_0040 = (int)uVar4;
-  g_timer[iVar15].unk_0044 = (int)((ulonglong)uVar4 >> 0x20);
+  g_timer[iVar15].start_lo = (int)uVar4;
+  g_timer[iVar15].start_hi = (int)((ulonglong)uVar4 >> 0x20);
   DAT_1992d668 = 0;
   local_44 = 0;
   local_2c = 0.0;
@@ -911,7 +911,7 @@ LAB_00457ea9:
         local_44 = local_44 + 1;
         iVar15 = iVar15 + 0x8230;
       } while (iVar15 < 0x208c000);
-      stoptimer(g_timerlist.unk_008c);
+      stoptimer(g_timerlist.objectsim);
       return;
     }
   } while( true );

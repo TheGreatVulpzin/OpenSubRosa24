@@ -243,3 +243,25 @@ bondparticle,0x10,dv,vec3,,"bondsimulation2 clears it; bond_partpart adds the ch
 bondhuman,0x0,active,int,,bondsimulation2: 1 for an active human with a body
 bondhuman,0x4,mask,int,,bondsimulation2: one bit for each bone with a positive value at Bone+0xc4
 bondhuman,0x10,bones,BondBone,16,bond_bodybody: stride 0x80
+timer,0x0,name,char,64,"bondsimulation2 copies the timer name here, for example ""bondsim"""
+timer,0x40,start_lo,int,,"the code that starts a timer writes the low half of rdtsc"
+timer,0x44,start_hi,int,,the high half of rdtsc at the start
+timer,0x48,total_lo,int,,"stoptimer adds the cycles since the start; bondsimulation2 clears it"
+timer,0x4c,total_hi,int,,the high half of the total
+timer,0x50,ms,int,,stoptimer: the total in milliseconds
+timerlist,0x54,bondsim,int,,"timer index; the code names the timer ""bondsim"""
+timerlist,0x58,bondsetup,int,,"timer index; the code names the timer ""bondsetup"""
+timerlist,0x5c,bondsetupcopy,int,,"timer index; the code names the timer ""bondsetupcopy"""
+timerlist,0x60,bondsetuphuman,int,,"timer index; the code names the timer ""bondsetuphuman"""
+timerlist,0x64,bondloopcopy,int,,"timer index; the code names the timer ""bondloopcopy"""
+timerlist,0x68,bondhuman,int,,"timer index; the code names the timer ""bondhuman"""
+timerlist,0x6c,bondwheelsim,int,,"timer index; the code names the timer ""bondwheelsim"""
+timerlist,0x70,bondpartpart,int,,"timer index; the code names the timer ""bondpartpart"""
+timerlist,0x74,bondbodybody,int,,"timer index; the code names the timer ""bondbodybody"""
+timerlist,0x78,bondbodyrotbody,int,,"timer index; the code names the timer ""bondbodyrotbody"""
+timerlist,0x7c,bondwheelcollevel,int,,"timer index; the code names the timer ""bondwheelcollevel"""
+timerlist,0x80,bondbodyitem,int,,"timer index; the code names the timer ""bondbodyitem"""
+timerlist,0x84,bondbodylevel,int,,"timer index; the code names the timer ""bondbodylevel"""
+timerlist,0x8c,objectsim,int,,"timer index; the code names the timer ""objectsim"""
+timerlist,0x90,packetbuild,int,,"timer index; the code names the timer ""packetbuild"""
+timerlist,0x94,bondtest,int,,"timer index; the code names the timer ""bondtest"""

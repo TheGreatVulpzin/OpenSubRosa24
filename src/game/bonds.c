@@ -119,6 +119,25 @@
 #define local_c (*(float *)(lf_frame + 0xf4))
 #define local_8 (*(float *)(lf_frame + 0xf8))
 #define local_4 (*(uint *)(lf_frame + 0xfc))
+/* Give a profiler timer its name and clear its total. */
+static void nametimer(int timer, const char *name)
+{
+  Timer *t = &g_timer[timer];
+  char *d = t->name;
+  while ((*d++ = *name++) != '\0')
+    ;
+  t->total_lo = 0;
+  t->total_hi = 0;
+  t->ms = 0;
+}
+
+static void starttimer(int timer)
+{
+  ulonglong now = rdtsc();
+  g_timer[timer].start_lo = (int)now;
+  g_timer[timer].start_hi = (int)(now >> 0x20);
+}
+
 void __cdecl lf_41de0(void)
 
 {
@@ -218,169 +237,23 @@ void __cdecl lf_41de0(void)
 
 
   
-  iVar30 = g_timerlist.unk_0054;
   local_4 = DAT_00460d18 ^ (uint)auStack_e4;
-  iVar29 = g_timerlist.unk_0054 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45eea8));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar29 + 0x13a54f8] = cVar12;
-    iVar16 = g_timerlist.unk_0094;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  iVar29 = g_timerlist.unk_0094 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee9c));
-  g_timer[iVar30].unk_0048 = 0;
-  g_timer[iVar30].unk_004c = 0;
-  g_timer[iVar30].unk_0050 = 0;
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar29 + 0x13a5504] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar16].unk_0048 = 0;
-  g_timer[iVar16].unk_004c = 0;
-  g_timer[iVar16].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0058;
-  iVar16 = g_timerlist.unk_0058 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee90));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a5510] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_005c;
-  iVar16 = g_timerlist.unk_005c * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee80));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a5520] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0060;
-  iVar16 = g_timerlist.unk_0060 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee70));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a5530] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0064;
-  iVar16 = g_timerlist.unk_0064 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee60));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a5540] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0068;
-  iVar16 = g_timerlist.unk_0068 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee54));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a554c] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_006c;
-  iVar16 = g_timerlist.unk_006c * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee44));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a555c] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0070;
-  iVar16 = g_timerlist.unk_0070 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee34));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a556c] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0074;
-  iVar16 = g_timerlist.unk_0074 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee24));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a557c] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0078;
-  iVar16 = g_timerlist.unk_0078 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee14));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a558c] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_007c;
-  iVar16 = g_timerlist.unk_007c * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ee00));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a55a0] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0080;
-  iVar16 = g_timerlist.unk_0080 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45edf0));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a55b0] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  iVar29 = g_timerlist.unk_0084;
-  iVar16 = g_timerlist.unk_0084 * 0x58;
-  pcVar15 = ((char *)SR_VA(0x45ede0));
-  do {
-    cVar12 = *pcVar15;
-    pcVar15[iVar16 + 0x13a55c0] = cVar12;
-    pcVar15 = pcVar15 + 1;
-  } while (cVar12 != '\0');
-  g_timer[iVar29].unk_0048 = 0;
-  g_timer[iVar29].unk_004c = 0;
-  g_timer[iVar29].unk_0050 = 0;
-  uVar13 = rdtsc();
-  g_timer[iVar30].unk_0040 = (int)uVar13;
-  g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
-  iVar30 = g_timerlist.unk_0058;
-  local_60 = &g_timer[g_timerlist.unk_0058].unk_0040;
-  uVar13 = rdtsc();
-  *local_60 = (int)uVar13;
-  g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+  nametimer(g_timerlist.bondsim, "bondsim");
+  nametimer(g_timerlist.bondtest, "bondtest");
+  nametimer(g_timerlist.bondsetup, "bondsetup");
+  nametimer(g_timerlist.bondsetupcopy, "bondsetupcopy");
+  nametimer(g_timerlist.bondsetuphuman, "bondsetuphuman");
+  nametimer(g_timerlist.bondloopcopy, "bondloopcopy");
+  nametimer(g_timerlist.bondhuman, "bondhuman");
+  nametimer(g_timerlist.bondwheelsim, "bondwheelsim");
+  nametimer(g_timerlist.bondpartpart, "bondpartpart");
+  nametimer(g_timerlist.bondbodybody, "bondbodybody");
+  nametimer(g_timerlist.bondbodyrotbody, "bondbodyrotbody");
+  nametimer(g_timerlist.bondwheelcollevel, "bondwheelcollevel");
+  nametimer(g_timerlist.bondbodyitem, "bondbodyitem");
+  nametimer(g_timerlist.bondbodylevel, "bondbodylevel");
+  starttimer(g_timerlist.bondsim);
+  starttimer(g_timerlist.bondsetup);
   local_c0 = 0;
   if (0 < g_numofbonds) {
     local_a0 = &g_bond[0].particle_a;
@@ -544,11 +417,11 @@ void __cdecl lf_41de0(void)
           pfVar21[10] = local_70 * local_d0;
           pfVar21[0xb] = (float)(local_d4 * local_70);
         }
-        iVar30 = g_timerlist.unk_0060;
+        iVar30 = g_timerlist.bondsetuphuman;
         if (((Bond *)(piVar18 + -5))->type == 9) {
           uVar13 = rdtsc();
-          g_timer[g_timerlist.unk_0060].unk_0040 = (int)uVar13;
-          g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+          g_timer[g_timerlist.bondsetuphuman].start_lo = (int)uVar13;
+          g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
           iVar30 = local_a0[0x1f];
           iVar29 = local_a0[0x20];
           iVar16 = local_a0[0x21];
@@ -739,7 +612,7 @@ LAB_00442c75:
           if (pfVar21[3] < *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98]) {
             pfVar21[3] = *(float *)&g_human[iVar30].bones[iVar16].lf_raw[0x98];
           }
-          iVar30 = g_timerlist.unk_0060;
+          iVar30 = g_timerlist.bondsetuphuman;
           pfVar21[10] = pfVar21[3] * fVar5;
           pfVar21[0xb] = (float)(fVar6 * pfVar21[3]);
           stoptimer(iVar30);
@@ -751,12 +624,12 @@ LAB_00442c75:
       pfVar21 = pfVar21 + 0x10;
     } while (local_c0 < g_numofbonds);
   }
-  stoptimer(g_timerlist.unk_0058);
-  iVar30 = g_timerlist.unk_005c;
-  local_60 = &g_timer[g_timerlist.unk_005c].unk_0040;
+  stoptimer(g_timerlist.bondsetup);
+  iVar30 = g_timerlist.bondsetupcopy;
+  local_60 = &g_timer[g_timerlist.bondsetupcopy].start_lo;
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
-  g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+  g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
   puVar31 = &DAT_00461dd4;
   local_84 = &g_human[0].unk_0004;
   do {
@@ -852,16 +725,16 @@ LAB_00442c75:
       iVar30 = iVar30 + -1;
     } while (iVar30 != 0);
   }
-  stoptimer(g_timerlist.unk_005c);
+  stoptimer(g_timerlist.bondsetupcopy);
   local_60 = (int *)0x0;
   do {
     piVar18 = local_60;
-    iVar30 = g_timerlist.unk_0064;
-    local_50 = (float *)&g_timer[g_timerlist.unk_0064].unk_0040;
+    iVar30 = g_timerlist.bondloopcopy;
+    local_50 = (float *)&g_timer[g_timerlist.bondloopcopy].start_lo;
     uVar13 = rdtsc();
     DAT_00603dd0 = local_60;
     LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     if (0 < g_area_sector.num_particles) {
       puVar19 = &DAT_00583de8;
       iVar30 = g_area_sector.num_particles;
@@ -1016,12 +889,12 @@ LAB_00442c75:
       }
       puVar31 = puVar31 + 0x204;
     } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    stoptimer(g_timerlist.unk_0064);
-    iVar30 = g_timerlist.unk_0068;
-    local_50 = (float *)&g_timer[g_timerlist.unk_0068].unk_0040;
+    stoptimer(g_timerlist.bondloopcopy);
+    iVar30 = g_timerlist.bondhuman;
+    local_50 = (float *)&g_timer[g_timerlist.bondhuman].start_lo;
     uVar13 = rdtsc();
     LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     pfVar33 = (float *)&DAT_00461e04;
     pfVar21 = &g_human[0].bones[0].rot[1].y;
     LF_COPY(fVar5, g_yaxis[2]);
@@ -1135,29 +1008,29 @@ LAB_00442c75:
       pfVar21 = pfVar21 + 0xad9;
       pfVar33 = pfVar33 + 0x204;
     } while ((int)pfVar21 < ((int)SR_VA(0x1f38888)));
-    stoptimer(g_timerlist.unk_0068);
-    iVar30 = g_timerlist.unk_006c;
-    local_50 = (float *)&g_timer[g_timerlist.unk_006c].unk_0040;
+    stoptimer(g_timerlist.bondhuman);
+    iVar30 = g_timerlist.bondwheelsim;
+    local_50 = (float *)&g_timer[g_timerlist.bondwheelsim].start_lo;
     uVar13 = rdtsc();
     LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     objectwheelsimulation2();
-    stoptimer(g_timerlist.unk_006c);
+    stoptimer(g_timerlist.bondwheelsim);
     local_c0 = 0;
     if (0 < g_numofbonds) {
       pfVar33 = &g_bond[0].friction_dir.y;
       pfVar21 = &g_bondopt.arm_a.z;
       do {
-        iVar30 = g_timerlist.unk_0070;
+        iVar30 = g_timerlist.bondpartpart;
         if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
             (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) {
           if (BOND_KIND(pfVar33) == 0x0U) {
-            local_50 = (float *)&g_timer[g_timerlist.unk_0070].unk_0040;
+            local_50 = (float *)&g_timer[g_timerlist.bondpartpart].start_lo;
             uVar13 = rdtsc();
             LF_SET_BITS(*local_50, (int)uVar13);
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             bond_partpart(local_c0);
-            stoptimer(g_timerlist.unk_0070);
+            stoptimer(g_timerlist.bondpartpart);
           }
           if (BOND_KIND(pfVar33) == 0x1U) {
             LF_COPY(fVar6, pfVar33[-0x19]);
@@ -1365,7 +1238,7 @@ LAB_00442c75:
               local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
             }
           }
-          iVar30 = g_timerlist.unk_007c;
+          iVar30 = g_timerlist.bondwheelcollevel;
           if (BOND_KIND(pfVar33) == 0x5U) {
             /* Type 5: a wheel of an object on the ground. The object and wheel indexes are
              * ints: as floats they are denormals, and each x87 use took about 9000 cycles
@@ -1376,8 +1249,8 @@ LAB_00442c75:
             float *w = (float *)(&g_object[obj].lf_raw[0x5f0c] + wheel * 0x98);
             float k, neg, load, proj;
             uVar13 = rdtsc();
-            g_timer[g_timerlist.unk_007c].unk_0040 = (int)uVar13;
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[g_timerlist.bondwheelcollevel].start_lo = (int)uVar13;
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             k = (float)(bond->rest_length * bond->stiffness);
             neg = -bond->damping;
             load = (float)(w[3] * w[0] * bond->damping);
@@ -1398,13 +1271,13 @@ LAB_00442c75:
               local_50 = (float *)LF_UINT(proj);
               w[2] = (float)(w[2] - proj);
             }
-            stoptimer(g_timerlist.unk_007c);
+            stoptimer(g_timerlist.bondwheelcollevel);
           }
-          iVar30 = g_timerlist.unk_0084;
+          iVar30 = g_timerlist.bondbodylevel;
           if (BOND_KIND(pfVar33) == 0x7U) {
             uVar13 = rdtsc();
-            g_timer[g_timerlist.unk_0084].unk_0040 = (int)uVar13;
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[g_timerlist.bondbodylevel].start_lo = (int)uVar13;
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             LF_COPY(fVar5, pfVar33[6]);
             LF_COPY(fVar6, pfVar33[7]);
             fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
@@ -1447,22 +1320,22 @@ LAB_00442c75:
               *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
                    (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) + local_64);
             }
-            stoptimer(g_timerlist.unk_0084);
+            stoptimer(g_timerlist.bondbodylevel);
           }
-          iVar30 = g_timerlist.unk_0074;
+          iVar30 = g_timerlist.bondbodybody;
           if (BOND_KIND(pfVar33) == 0x8U) {
-            local_50 = (float *)&g_timer[g_timerlist.unk_0074].unk_0040;
+            local_50 = (float *)&g_timer[g_timerlist.bondbodybody].start_lo;
             uVar13 = rdtsc();
             LF_SET_BITS(*local_50, (int)uVar13);
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             bond_bodybody(local_c0);
-            stoptimer(g_timerlist.unk_0074);
+            stoptimer(g_timerlist.bondbodybody);
           }
-          iVar30 = g_timerlist.unk_0078;
+          iVar30 = g_timerlist.bondbodyrotbody;
           if (BOND_KIND(pfVar33) == 0x9U) {
             uVar13 = rdtsc();
-            g_timer[g_timerlist.unk_0078].unk_0040 = (int)uVar13;
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[g_timerlist.bondbodyrotbody].start_lo = (int)uVar13;
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             uVar25 = (uint)(ushort)((BondOpt *)(pfVar21 + -8))->a;
             fVar6 = -pfVar21[7];
             uVar32 = (uint)(ushort)*(short *)((int)pfVar21 + -0x1e);
@@ -1491,13 +1364,13 @@ LAB_00442c75:
             *(float *)&((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]) =
                  (float)(local_54 * LF_BITS_F(local_50) + LF_BITS_F((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]))
             ;
-            stoptimer(g_timerlist.unk_0078);
+            stoptimer(g_timerlist.bondbodyrotbody);
           }
-          iVar30 = g_timerlist.unk_0080;
+          iVar30 = g_timerlist.bondbodyitem;
           if (BOND_KIND(pfVar33) == 0xaU) {
             uVar13 = rdtsc();
-            g_timer[g_timerlist.unk_0080].unk_0040 = (int)uVar13;
-            g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+            g_timer[g_timerlist.bondbodyitem].start_lo = (int)uVar13;
+            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
             LF_COPY(fVar6, pfVar33[6]);
             local_94 = pfVar21[-2];
             LF_COPY(fVar7, pfVar33[7]);
@@ -1572,7 +1445,7 @@ LAB_00442c75:
             *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4] =
                  (float)(local_d0 * local_64 + *(float *)&g_item[((int)LF_UINT(fVar8))].lf_raw[0xd4]);
             local_50 = local_88;
-            stoptimer(g_timerlist.unk_0080);
+            stoptimer(g_timerlist.bondbodyitem);
           }
           /* One copy of the type for the next two tests, as the original (a block can change
            * the type). An int: as a float it is a denormal on the x87. */
@@ -1800,17 +1673,17 @@ LAB_00442c75:
         piVar18 = local_60;
       } while (local_c0 < g_numofbonds);
     }
-    iVar30 = g_timerlist.unk_006c;
-    local_60 = &g_timer[g_timerlist.unk_006c].unk_0040;
+    iVar30 = g_timerlist.bondwheelsim;
+    local_60 = &g_timer[g_timerlist.bondwheelsim].start_lo;
     uVar13 = rdtsc();
     *local_60 = (int)uVar13;
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     objectenginesimulation2();
-    stoptimer(g_timerlist.unk_006c);
-    iVar30 = g_timerlist.unk_0064;
+    stoptimer(g_timerlist.bondwheelsim);
+    iVar30 = g_timerlist.bondloopcopy;
     uVar13 = rdtsc();
-    g_timer[g_timerlist.unk_0064].unk_0040 = (int)uVar13;
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[g_timerlist.bondloopcopy].start_lo = (int)uVar13;
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     iVar29 = g_area_sector.num_particles;
     iVar30 = 0;
     if (3 < g_area_sector.num_particles) {
@@ -1845,11 +1718,11 @@ LAB_00442c75:
         pfVar21 = pfVar21 + 8;
       } while (iVar29 != 0);
     }
-    iVar30 = g_timerlist.unk_0094;
-    local_60 = &g_timer[g_timerlist.unk_0094].unk_0040;
+    iVar30 = g_timerlist.bondtest;
+    local_60 = &g_timer[g_timerlist.bondtest].start_lo;
     uVar13 = rdtsc();
     *local_60 = (int)uVar13;
-    g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
     puVar31 = &DAT_00461dd4;
     if (DAT_019cbf68 == 0) {
       do {
@@ -1936,7 +1809,7 @@ LAB_00442c75:
         puVar31 = puVar31 + 0x204;
       } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
     }
-    stoptimer(g_timerlist.unk_0094);
+    stoptimer(g_timerlist.bondtest);
     pfVar21 = &g_item[0].vel.y;
     do {
       if ((LF_UINT(pfVar21[-0x1c]) != 0x0U) && (LF_UINT(pfVar21[-0x1b]) != 0x0U)) {
@@ -2004,14 +1877,14 @@ LAB_00442c75:
       }
       piVar34 = piVar34 + 0x208c;
     } while ((int)piVar34 < ((int)SR_VA(0x7a257ec)));
-    stoptimer(g_timerlist.unk_0064);
-    iVar30 = g_timerlist.unk_005c;
+    stoptimer(g_timerlist.bondloopcopy);
+    iVar30 = g_timerlist.bondsetupcopy;
     local_60 = (int *)((int)piVar18 + 1);
   } while ((int)local_60 < 0x20);
-  local_60 = &g_timer[g_timerlist.unk_005c].unk_0040;
+  local_60 = &g_timer[g_timerlist.bondsetupcopy].start_lo;
   uVar13 = rdtsc();
   *local_60 = (int)uVar13;
-  g_timer[iVar30].unk_0044 = (int)((ulonglong)uVar13 >> 0x20);
+  g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
   iVar29 = g_area_sector.num_particles;
   iVar30 = 0;
   if (3 < g_area_sector.num_particles) {
@@ -2111,8 +1984,8 @@ LAB_00442c75:
     piVar18 = piVar18 + 0xad9;
     piVar34 = piVar34 + 0x204;
   } while ((int)piVar18 < ((int)SR_VA(0x1f38784)));
-  stoptimer(g_timerlist.unk_005c);
-  stoptimer(g_timerlist.unk_0054);
+  stoptimer(g_timerlist.bondsetupcopy);
+  stoptimer(g_timerlist.bondsim);
   _DAT_020a5a30 = g_numofbonds;
   g_numofbonds = DAT_14022d24;
   return;

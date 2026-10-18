@@ -1151,17 +1151,21 @@ SR_STATIC_ASSERT(offsetof(Particle, objects) == 0xd8, "Particle.objects");
 
 /* timer[]: record of 0x58 bytes. */
 typedef union Timer { struct {
-    uint8_t pad_0000[0x1];
-    char unk_0001;                       /* +0x0001 4 functions */
-    uint8_t pad_0002[0x3e];
-    int unk_0040;                        /* +0x0040 6 functions */
-    int unk_0044;                        /* +0x0044 6 functions */
-    int unk_0048;                        /* +0x0048 6 functions */
-    int unk_004c;                        /* +0x004c 6 functions */
-    int unk_0050;                        /* +0x0050 7 functions */
+    char name[64];                       /* +0x0000 bondsimulation2 copies the timer name here, for example "bondsim" */
+    int start_lo;                        /* +0x0040 the code that starts a timer writes the low half of rdtsc */
+    int start_hi;                        /* +0x0044 the high half of rdtsc at the start */
+    int total_lo;                        /* +0x0048 stoptimer adds the cycles since the start; bondsimulation2 clears it */
+    int total_hi;                        /* +0x004c the high half of the total */
+    int ms;                              /* +0x0050 stoptimer: the total in milliseconds */
     int unk_0054;                        /* +0x0054 1 functions */
 }; uint8_t lf_raw[0x58]; } Timer;
 SR_STATIC_ASSERT(sizeof(Timer) == 0x58, "Timer");
+SR_STATIC_ASSERT(offsetof(Timer, name) == 0x0, "Timer.name");
+SR_STATIC_ASSERT(offsetof(Timer, start_lo) == 0x40, "Timer.start_lo");
+SR_STATIC_ASSERT(offsetof(Timer, start_hi) == 0x44, "Timer.start_hi");
+SR_STATIC_ASSERT(offsetof(Timer, total_lo) == 0x48, "Timer.total_lo");
+SR_STATIC_ASSERT(offsetof(Timer, total_hi) == 0x4c, "Timer.total_hi");
+SR_STATIC_ASSERT(offsetof(Timer, ms) == 0x50, "Timer.ms");
 
 /* area_block[]: record of 0x84 bytes. */
 typedef union AreaBlock { struct {
@@ -1836,26 +1840,42 @@ typedef union TimerList { struct {
     int unk_0048;                        /* +0x0048 1 functions */
     int unk_004c;                        /* +0x004c 1 functions */
     int unk_0050;                        /* +0x0050 1 functions */
-    int unk_0054;                        /* +0x0054 2 functions */
-    int unk_0058;                        /* +0x0058 2 functions */
-    int unk_005c;                        /* +0x005c 2 functions */
-    int unk_0060;                        /* +0x0060 2 functions */
-    int unk_0064;                        /* +0x0064 2 functions */
-    int unk_0068;                        /* +0x0068 2 functions */
-    int unk_006c;                        /* +0x006c 2 functions */
-    int unk_0070;                        /* +0x0070 2 functions */
-    int unk_0074;                        /* +0x0074 2 functions */
-    int unk_0078;                        /* +0x0078 2 functions */
-    int unk_007c;                        /* +0x007c 2 functions */
-    int unk_0080;                        /* +0x0080 2 functions */
-    int unk_0084;                        /* +0x0084 2 functions */
+    int bondsim;                         /* +0x0054 timer index; the code names the timer "bondsim" */
+    int bondsetup;                       /* +0x0058 timer index; the code names the timer "bondsetup" */
+    int bondsetupcopy;                   /* +0x005c timer index; the code names the timer "bondsetupcopy" */
+    int bondsetuphuman;                  /* +0x0060 timer index; the code names the timer "bondsetuphuman" */
+    int bondloopcopy;                    /* +0x0064 timer index; the code names the timer "bondloopcopy" */
+    int bondhuman;                       /* +0x0068 timer index; the code names the timer "bondhuman" */
+    int bondwheelsim;                    /* +0x006c timer index; the code names the timer "bondwheelsim" */
+    int bondpartpart;                    /* +0x0070 timer index; the code names the timer "bondpartpart" */
+    int bondbodybody;                    /* +0x0074 timer index; the code names the timer "bondbodybody" */
+    int bondbodyrotbody;                 /* +0x0078 timer index; the code names the timer "bondbodyrotbody" */
+    int bondwheelcollevel;               /* +0x007c timer index; the code names the timer "bondwheelcollevel" */
+    int bondbodyitem;                    /* +0x0080 timer index; the code names the timer "bondbodyitem" */
+    int bondbodylevel;                   /* +0x0084 timer index; the code names the timer "bondbodylevel" */
     int unk_0088;                        /* +0x0088 2 functions */
-    int unk_008c;                        /* +0x008c 2 functions */
-    int unk_0090;                        /* +0x0090 2 functions */
-    int unk_0094;                        /* +0x0094 2 functions */
+    int objectsim;                       /* +0x008c timer index; the code names the timer "objectsim" */
+    int packetbuild;                     /* +0x0090 timer index; the code names the timer "packetbuild" */
+    int bondtest;                        /* +0x0094 timer index; the code names the timer "bondtest" */
     uint8_t pad_0098[0x8];
 }; uint8_t lf_raw[0xa0]; } TimerList;
 SR_STATIC_ASSERT(sizeof(TimerList) == 0xa0, "TimerList");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsim) == 0x54, "TimerList.bondsim");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetup) == 0x58, "TimerList.bondsetup");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetupcopy) == 0x5c, "TimerList.bondsetupcopy");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetuphuman) == 0x60, "TimerList.bondsetuphuman");
+SR_STATIC_ASSERT(offsetof(TimerList, bondloopcopy) == 0x64, "TimerList.bondloopcopy");
+SR_STATIC_ASSERT(offsetof(TimerList, bondhuman) == 0x68, "TimerList.bondhuman");
+SR_STATIC_ASSERT(offsetof(TimerList, bondwheelsim) == 0x6c, "TimerList.bondwheelsim");
+SR_STATIC_ASSERT(offsetof(TimerList, bondpartpart) == 0x70, "TimerList.bondpartpart");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodybody) == 0x74, "TimerList.bondbodybody");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodyrotbody) == 0x78, "TimerList.bondbodyrotbody");
+SR_STATIC_ASSERT(offsetof(TimerList, bondwheelcollevel) == 0x7c, "TimerList.bondwheelcollevel");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodyitem) == 0x80, "TimerList.bondbodyitem");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodylevel) == 0x84, "TimerList.bondbodylevel");
+SR_STATIC_ASSERT(offsetof(TimerList, objectsim) == 0x8c, "TimerList.objectsim");
+SR_STATIC_ASSERT(offsetof(TimerList, packetbuild) == 0x90, "TimerList.packetbuild");
+SR_STATIC_ASSERT(offsetof(TimerList, bondtest) == 0x94, "TimerList.bondtest");
 
 /* speex[]: record of 0x931000 bytes. */
 typedef union Speex { struct {

@@ -196,13 +196,13 @@ void __cdecl lf_51060(void)
     cVar6 = *pcVar13;
     pcVar13[iVar21 + 0x13a50f0] = cVar6;
   } while (cVar6 != '\0');
-  g_timer[iVar23].unk_0048 = 0;
-  g_timer[iVar23].unk_004c = 0;
-  g_timer[iVar23].unk_0050 = 0;
-  local_cc = &g_timer[iVar23].unk_0040;
+  g_timer[iVar23].total_lo = 0;
+  g_timer[iVar23].total_hi = 0;
+  g_timer[iVar23].ms = 0;
+  local_cc = &g_timer[iVar23].start_lo;
   uVar7 = rdtsc();
   *local_cc = (int)uVar7;
-  g_timer[iVar23].unk_0044 = (int)((ulonglong)uVar7 >> 0x20);
+  g_timer[iVar23].start_hi = (int)((ulonglong)uVar7 >> 0x20);
   piVar17 = &g_object[0].unk_5bdc;
   do {
     *piVar17 = 4;

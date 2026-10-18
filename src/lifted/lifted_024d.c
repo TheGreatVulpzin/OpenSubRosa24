@@ -4907,23 +4907,23 @@ void __cdecl lf_0b4a0(void)
 void __cdecl lf_0b540(void)
 
 {
-  g_timerlist.unk_0090 = 0x40;
+  g_timerlist.packetbuild = 0x40;
   g_timerlist.unk_0088 = 0x41;
-  g_timerlist.unk_008c = 0x42;
-  g_timerlist.unk_0094 = 0x43;
-  g_timerlist.unk_0054 = 0x44;
-  g_timerlist.unk_0058 = 0x45;
-  g_timerlist.unk_005c = 0x46;
-  g_timerlist.unk_0060 = 0x47;
-  g_timerlist.unk_0064 = 0x48;
-  g_timerlist.unk_0068 = 0x49;
-  g_timerlist.unk_006c = 0x4a;
-  g_timerlist.unk_0070 = 0x4b;
-  g_timerlist.unk_0074 = 0x4c;
-  g_timerlist.unk_0078 = 0x4d;
-  g_timerlist.unk_007c = 0x4e;
-  g_timerlist.unk_0080 = 0x4f;
-  g_timerlist.unk_0084 = 0x50;
+  g_timerlist.objectsim = 0x42;
+  g_timerlist.bondtest = 0x43;
+  g_timerlist.bondsim = 0x44;
+  g_timerlist.bondsetup = 0x45;
+  g_timerlist.bondsetupcopy = 0x46;
+  g_timerlist.bondsetuphuman = 0x47;
+  g_timerlist.bondloopcopy = 0x48;
+  g_timerlist.bondhuman = 0x49;
+  g_timerlist.bondwheelsim = 0x4a;
+  g_timerlist.bondpartpart = 0x4b;
+  g_timerlist.bondbodybody = 0x4c;
+  g_timerlist.bondbodyrotbody = 0x4d;
+  g_timerlist.bondwheelcollevel = 0x4e;
+  g_timerlist.bondbodyitem = 0x4f;
+  g_timerlist.bondbodylevel = 0x50;
   g_timerlist.unk_0004 = 0x51;
   g_timerlist.unk_0008 = 0x52;
   g_timerlist.unk_000c = 0x53;
@@ -37064,9 +37064,9 @@ void __cdecl lf_4ed30(void)
 
 
   
-  iVar10 = g_timerlist.unk_0090;
+  iVar10 = g_timerlist.packetbuild;
   iVar7 = DAT_0204afc0;
-  iVar8 = g_timerlist.unk_0090 * 0x58;
+  iVar8 = g_timerlist.packetbuild * 0x58;
   pcVar6 = ((char *)SR_VA(0x45f1d8));
   local_18 = DAT_0204afc0;
   do {
@@ -37074,13 +37074,13 @@ void __cdecl lf_4ed30(void)
     pcVar6[iVar8 + 0x13a51c8] = cVar1;
     pcVar6 = pcVar6 + 1;
   } while (cVar1 != '\0');
-  g_timer[iVar10].unk_0048 = 0;
-  g_timer[iVar10].unk_004c = 0;
-  g_timer[iVar10].unk_0050 = 0;
-  local_24 = &g_timer[iVar10].unk_0040;
+  g_timer[iVar10].total_lo = 0;
+  g_timer[iVar10].total_hi = 0;
+  g_timer[iVar10].ms = 0;
+  local_24 = &g_timer[iVar10].start_lo;
   uVar4 = rdtsc();
   *local_24 = (int)uVar4;
-  g_timer[iVar10].unk_0044 = (int)((ulonglong)uVar4 >> 0x20);
+  g_timer[iVar10].start_hi = (int)((ulonglong)uVar4 >> 0x20);
   local_2c = 0;
   if (0 < iVar7) {
     do {
@@ -37364,7 +37364,7 @@ void __cdecl lf_4ed30(void)
       local_2c = local_2c + 1;
     } while (local_2c < local_18);
   }
-  stoptimer(g_timerlist.unk_0090);
+  stoptimer(g_timerlist.packetbuild);
   return;
 }
 #undef g_player
