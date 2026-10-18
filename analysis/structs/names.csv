@@ -271,3 +271,6 @@ object,0x71ec,num_wheel_bodies,int,,"createobject copies objecttype.num_wheels; 
 object,0x71f0,wheel_bodies,WheelBody,16,"stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8"
 human,0x4,has_physics,int,,"humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it"
 item,0x4,has_physics,int,,"bondsimulation2 clears the velocity changes only of the active items with it (the same role as human.has_physics)"
+human,0x38,on_ground,int,,"humansimulation writes 0, and 1 when the ground test under the feet finds the ground"
+human,0x8c,stance,float,,"humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick"
+human,0x2b20,body_strength,float,,"humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it"

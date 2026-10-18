@@ -419,7 +419,7 @@ static void setup_copy(void)
         bh->mask |= 1 << k;
       w->vel = bone->vel;
       w->w = bone->w;
-      w->unk_20 = bone->unk_54;
+      w->torque = bone->torque;
       w->axes[0].dir = bone->rot[0];
       w->axes[0].k = bone->axis_k[0];
       w->axes[1].dir = bone->rot[1];
@@ -496,6 +496,96 @@ static void loop_clear(int pass)
     }
   }
   stoptimer(g_timerlist.bondloopcopy);
+}
+
+/* A vector longer than limit gets the length limit. */
+static void clamp_length(vec3 *v, float len, float limit)
+{
+  float inv, z = 0.0f;
+  if (limit < len) {
+    if (len == 0.0) {
+      v->x = 0.0f;
+      v->y = 0.0f;
+    } else {
+      inv = (float)(1.0 / len);
+      v->x = (float)(inv * v->x);
+      v->y = (float)(inv * v->y);
+      z = inv * v->z;
+    }
+    v->x = (float)(limit * v->x);
+    v->y = (float)(limit * v->y);
+    v->z = (float)(limit * z);
+  }
+}
+
+/* bondhuman: a human who stands upright on the ground keeps the balance. Bone 0 gets a turn
+ * that brings it back to the vertical (its length is at most a limit from the stance and the
+ * body strength), a
+ * turn toward the direction that the human faces (human.axis), and less of the turn it has
+ * now. The sum, with a limit, goes into BondBone.torque. */
+static void loop_balance(void)
+{
+  const vec3 up = *(const vec3 *)g_yaxis;
+  int h;
+
+  starttimer(g_timerlist.bondhuman);
+  for (h = 0; h < 512; h++) {
+    const Human *hu = &g_human[h];
+    const vec3 *r1 = &hu->bones[0].rot[1], *r2 = &hu->bones[0].rot[2];
+    BondBone *w = &g_bondhuman[h].bones[0];
+    vec3 a, face, t;
+    float limit, len, s;
+
+    if (hu->active == 0 || hu->on_ground == 0 || hu->health < 1 || hu->vehicle_id != -1)
+      continue;
+    if ((hu->input_buttons & 8) == 0 && !(0.8999999761581421 < r1->y))
+      continue;
+    /* The turn back to the vertical: rot[1] x up. */
+    a.x = (float)(up.y * r1->z - up.z * r1->y) * 0.1875f;
+    a.y = (float)((float)(r1->x * up.z - r1->z * up.x) * 0.1875);
+    a.z = (float)((float)(r1->y * up.x - up.y * r1->x) * 0.1875);
+    limit = (float)((float)((float)((2.0 - hu->stance) / 60.0) * hu->body_strength) * 0.5);
+    len = (float)x87_sqrt((double)(float)(a.y * a.y + a.x * a.x + a.z * a.z));
+    clamp_length(&a, len, limit);
+    /* The turn toward the facing direction, around the vertical only. */
+    face = *(const vec3 *)g_zaxis;
+    rotatevector(&face.x, g_yaxis, hu->axis);
+    t.x = 0.0f;
+    t.y = (float)((float)(r2->x * face.z - r2->z * face.x) * 0.125);
+    t.z = 0.0f;
+    s = (float)(r1->y + 0.30000001192092896);
+    if (0.0 <= s) {  /* this form sends a NaN to 0 */
+      if (1.0 < s)
+        s = 1.0f;
+    } else {
+      s = 0.0f;
+    }
+    limit = (float)((s + s) / 60.0);
+    len = (float)x87_sqrt((double)(float)(t.y * t.y + 0.0 + 0.0));
+    clamp_length(&t, len, limit);
+    a.x = (float)(t.x + a.x);
+    a.y = (float)(a.y + t.y);
+    a.z = (float)(t.z + a.z);
+    /* Less of the turn that the bone has now. */
+    a.x = (float)(a.x - w->w.x * 0.5);
+    a.y = (float)(a.y - w->w.y * 0.5);
+    a.z = (float)(a.z - w->w.z * 0.5);
+    len = (float)x87_sqrt((double)(float)(a.y * a.y + a.x * a.x + a.z * a.z));
+    limit = (float)(hu->body_strength * 0.008888889104127884);
+    if (limit < len) {
+      s = (float)(limit / len);
+      a.x = (float)(s * a.x);
+      a.y = (float)(s * a.y);
+      a.z = (float)(s * a.z);
+    }
+    a.x = a.x * 0.125f;
+    a.y = (float)(a.y * 0.125);
+    a.z = (float)(a.z * 0.125);
+    w->torque.x = (float)(w->torque.x + a.x);
+    w->torque.y = (float)(a.y + w->torque.y);
+    w->torque.z = (float)(a.z + w->torque.z);
+  }
+  stoptimer(g_timerlist.bondhuman);
 }
 
 void __cdecl lf_41de0(void)
@@ -645,125 +735,7 @@ void __cdecl lf_41de0(void)
   do {
     piVar18 = local_60;
     loop_clear((int)local_60);
-    iVar30 = g_timerlist.bondhuman;
-    local_50 = (float *)&g_timer[g_timerlist.bondhuman].start_lo;
-    uVar13 = rdtsc();
-    LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-    pfVar33 = (float *)&DAT_00461e04;
-    pfVar21 = &g_human[0].bones[0].rot[1].y;
-    LF_COPY(fVar5, g_yaxis[2]);
-    LF_COPY(fVar6, g_yaxis[0]);
-    LF_COPY(fVar7, g_yaxis[1]);
-    do {
-      if ((((LF_UINT(pfVar21[-0x42]) != 0x0U) && (LF_UINT(pfVar21[-0x34]) != 0x0U)) &&
-          (((((uint)LF_UINT(pfVar21[-0x13])) & 8) != 0 || (0.8999999761581421 < *pfVar21)))) &&
-         ((0 < ((int)LF_UINT(pfVar21[-0x38])) && (LF_UINT(pfVar21[-0x3d]) == 0xffffffffU)))) {
-        local_5c = ((float)(fVar7 * pfVar21[1] - fVar5 * *pfVar21)) * 0.1875;
-        local_58 = (float)(((float)(((vec3 *)(pfVar21 + -1))->x * fVar5 - pfVar21[1] * fVar6)) * 0.1875);
-        local_54 = (float)(((float)(*pfVar21 * fVar6 - fVar7 * ((vec3 *)(pfVar21 + -1))->x)) * 0.1875);
-        local_84 = ((int *)LF_BITS_U(((float)((float)(((float)((2.0 - pfVar21[-0x1f]) / 60.0)) * pfVar21[0xa86]) * 0.5))));
-        local_50 = ((float *)LF_BITS_U(((float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54))));
-        dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
-        local_50 = ((float *)LF_BITS_U((float)dVar39));
-        if (LF_BITS_F(local_84) < LF_BITS_F(local_50)) {
-          fVar5 = 0.0;
-          if (LF_BITS_F(local_50) == 0.0) {
-            local_5c = 0.0;
-            local_58 = 0.0;
-            local_80 = local_50;
-          }
-          else {
-            local_80 = ((float *)LF_BITS_U(((float)(1.0 / LF_BITS_F(local_50)))));
-            local_5c = (float)(LF_BITS_F(local_80) * local_5c);
-            local_58 = (float)(LF_BITS_F(local_80) * local_58);
-            fVar5 = LF_BITS_F(local_80) * local_54;
-          }
-          local_5c = (float)(LF_BITS_F(local_84) * local_5c);
-          local_58 = (float)(LF_BITS_F(local_84) * local_58);
-          local_54 = (float)(LF_BITS_F(local_84) * fVar5);
-        }
-        local_94 = g_zaxis[0];
-        local_90 = g_zaxis[1];
-        local_8c = g_zaxis[2];
-        rotatevector(&local_94,g_yaxis,pfVar21[-0x2a]);
-        local_6c = 0.0;
-        local_68 = (float)(((float)(pfVar21[2] * local_8c - pfVar21[4] * local_94)) * 0.125);
-        local_64 = 0.0;
-        local_70 = (float)(*pfVar21 + 0.30000001192092896);
-        if (0.0 <= local_70) {
-          if (1.0 < local_70) {
-            local_70 = 1.0;
-          }
-        }
-        else {
-          local_70 = 0.0;
-        }
-        local_84 = ((int *)LF_BITS_U(((float)((local_70 + local_70) / 60.0))));
-        local_50 = ((float *)LF_BITS_U(((float)(local_68 * local_68 + 0.0 + 0.0))));
-        dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
-        pfVar14 = ((float *)LF_BITS_U((float)dVar39));
-        if (LF_BITS_F(local_84) < LF_BITS_F(pfVar14)) {
-          fVar5 = 0.0;
-          if (LF_BITS_F(pfVar14) == 0.0) {
-            local_6c = 0.0;
-            local_68 = 0.0;
-            local_80 = pfVar14;
-          }
-          else {
-            local_80 = ((float *)LF_BITS_U(((float)(1.0 / LF_BITS_F(pfVar14)))));
-            local_6c = (float)(LF_BITS_F(local_80) * local_6c);
-            local_68 = (float)(LF_BITS_F(local_80) * local_68);
-            fVar5 = LF_BITS_F(local_80) * local_64;
-          }
-          local_6c = (float)(local_6c * LF_BITS_F(local_84));
-          local_68 = (float)(LF_BITS_F(local_84) * local_68);
-          local_64 = (float)(LF_BITS_F(local_84) * fVar5);
-        }
-        local_5c = (float)(local_6c + local_5c);
-        local_58 = (float)(local_58 + local_68);
-        local_54 = (float)(local_64 + local_54);
-        local_50 = ((float *)LF_BITS_U(((float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54))));
-        dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
-        local_80 = ((float *)LF_BITS_U((float)dVar39));
-        local_74 = 0.0;
-        if (LF_BITS_F(local_80) == 0.0) {
-          local_7c = 0.0;
-          local_78 = 0.0;
-        }
-        else {
-          local_80 = ((float *)LF_BITS_U(((float)(1.0 / LF_BITS_F(local_80)))));
-          local_7c = (float)(LF_BITS_F(local_80) * local_5c);
-          local_78 = (float)(LF_BITS_F(local_80) * local_58);
-          local_74 = LF_BITS_F(local_80) * local_54;
-        }
-        local_5c = (float)(local_5c - pfVar33[3] * 0.5);
-        local_58 = (float)(local_58 - pfVar33[4] * 0.5);
-        local_54 = (float)(local_54 - pfVar33[5] * 0.5);
-        local_50 = ((float *)LF_BITS_U(((float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54))));
-        dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
-        local_70 = (float)dVar39;
-        local_84 = ((int *)LF_BITS_U(((float)(pfVar21[0xa86] * 0.008888889104127884))));
-        if (LF_BITS_F(local_84) < local_70) {
-          local_50 = ((float *)LF_BITS_U(((float)(LF_BITS_F(local_84) / local_70))));
-          local_5c = (float)(LF_BITS_F(local_50) * local_5c);
-          local_58 = (float)(LF_BITS_F(local_50) * local_58);
-          local_54 = (float)(LF_BITS_F(local_50) * local_54);
-        }
-        local_5c = local_5c * 0.125;
-        local_58 = (float)(local_58 * 0.125);
-        local_54 = (float)(local_54 * 0.125);
-        pfVar33[-1] = (float)(pfVar33[-1] + local_5c);
-        *pfVar33 = (float)(local_58 + *pfVar33);
-        pfVar33[1] = (float)(local_54 + pfVar33[1]);
-        LF_COPY(fVar7, g_yaxis[1]);
-        LF_COPY(fVar6, g_yaxis[0]);
-        LF_COPY(fVar5, g_yaxis[2]);
-      }
-      pfVar21 = pfVar21 + 0xad9;
-      pfVar33 = pfVar33 + 0x204;
-    } while ((int)pfVar21 < ((int)SR_VA(0x1f38888)));
-    stoptimer(g_timerlist.bondhuman);
+    loop_balance();
     iVar30 = g_timerlist.bondwheelsim;
     local_50 = (float *)&g_timer[g_timerlist.bondwheelsim].start_lo;
     uVar13 = rdtsc();

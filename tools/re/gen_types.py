@@ -123,7 +123,7 @@ typedef union Bone { struct {
     vec3 vel;           /* +0x18 bondsetupcopy copies it to BondBone.vel */
     uint8_t unk_24[0xc];
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
-    vec3 unk_54;        /* +0x54 bondsetupcopy copies it to BondBone.unk_20 */
+    vec3 torque;        /* +0x54 bondsetupcopy copies it to BondBone.torque */
     vec3 w;             /* +0x60 bondsetupcopy copies it to BondBone.w (the angular velocity) */
     uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
@@ -174,7 +174,7 @@ typedef union BondBone { struct {
     float pad_0c;
     vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
     float pad_1c;
-    vec3 unk_20;        /* +0x20 bondsimulation2 copies Bone+0x54 */
+    vec3 torque;        /* +0x20 bondsetupcopy copies Bone.torque; bondhuman adds the balance turn */
     float pad_2c;
     vec3 w;             /* +0x30 bondsimulation2 copies Bone+0x60; bond_bodybody: w x r */
     float pad_3c;

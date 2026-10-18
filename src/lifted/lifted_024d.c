@@ -10812,7 +10812,7 @@ void __cdecl lf_19060(int param_1)
 
   
   iVar9 = param_1 * 0x2b64;
-  dVar10 = _CIacos((double)g_human[param_1].unk_008c);
+  dVar10 = _CIacos((double)g_human[param_1].stance);
   fVar4 = (float)dVar10;
   if (g_human[param_1].health < 1) {
     iVar7 = 9;
@@ -33621,12 +33621,12 @@ LAB_004493b0:
           fVar4 = *(float *)((int)&g_bullet[0].vel.y + iVar11);
           *(undefined4 *)((int)&g_bullet[0].ttl + iVar11) = 0;
           local_20 = (float)(local_3c * fVar3 - fVar4 * local_40);
-          g_human[local_58].bones[iVar6].unk_54.x =
-               (float)(local_28 * local_60 + g_human[local_58].bones[iVar6].unk_54.x);
-          g_human[local_58].bones[iVar6].unk_54.y =
-               (float)(local_24 * local_60 + g_human[local_58].bones[iVar6].unk_54.y);
-          g_human[local_58].bones[iVar6].unk_54.z =
-               (float)(local_60 * local_20 + g_human[local_58].bones[iVar6].unk_54.z);
+          g_human[local_58].bones[iVar6].torque.x =
+               (float)(local_28 * local_60 + g_human[local_58].bones[iVar6].torque.x);
+          g_human[local_58].bones[iVar6].torque.y =
+               (float)(local_24 * local_60 + g_human[local_58].bones[iVar6].torque.y);
+          g_human[local_58].bones[iVar6].torque.z =
+               (float)(local_60 * local_20 + g_human[local_58].bones[iVar6].torque.z);
         }
         if (local_5c != -1) {
           if (local_54 == -1) {
@@ -38558,7 +38558,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
     else {
       g_human[iVar13].unk_0098 = LF_BITS_F(g_player[param_3].unk_00b8);
     }
-    g_human[iVar13].unk_008c = 1.0;
+    g_human[iVar13].stance = 1.0;
     g_human[iVar13].health = 100;
     uVar9 = rand();
     g_human[iVar13].unk_0034 = ((uVar9 & 3) + 3) * 0xe10;

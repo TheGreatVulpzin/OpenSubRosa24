@@ -224,20 +224,20 @@ void __cdecl lf_51060(void)
       if ((g_human[(int)local_a4].input_buttons & 8) != 0) {
         local_cc = (int *)0x3f200000;
       }
-      if (LF_BITS_F(local_cc) - 0.015625 <= g_human[(int)local_a4].unk_008c) {
-        if (LF_BITS_F(local_cc) + 0.015625 < g_human[(int)local_a4].unk_008c) {
-          local_cc = ((int *)LF_BITS_U((g_human[(int)local_a4].unk_008c - 0.015625)));
+      if (LF_BITS_F(local_cc) - 0.015625 <= g_human[(int)local_a4].stance) {
+        if (LF_BITS_F(local_cc) + 0.015625 < g_human[(int)local_a4].stance) {
+          local_cc = ((int *)LF_BITS_U((g_human[(int)local_a4].stance - 0.015625)));
         }
       }
       else {
-        local_cc = ((int *)LF_BITS_U((g_human[(int)local_a4].unk_008c + 0.015625)));
+        local_cc = ((int *)LF_BITS_U((g_human[(int)local_a4].stance + 0.015625)));
       }
       iVar14 = g_human[(int)local_a4].unk_0044;
-      g_human[(int)local_a4].unk_008c = LF_BITS_F(local_cc);
+      g_human[(int)local_a4].stance = LF_BITS_F(local_cc);
       if (0 < iVar14) {
         g_human[(int)local_a4].unk_0044 = iVar14 + -1;
       }
-      g_human[(int)local_a4].unk_0038 = 0;
+      g_human[(int)local_a4].on_ground = 0;
       if (local_9c == -1) {
         g_human[(int)local_a4].axis = g_human[(int)local_a4].unk_00ac;
         g_human[(int)local_a4].pitch = g_human[(int)local_a4].unk_00b0;
@@ -249,7 +249,7 @@ void __cdecl lf_51060(void)
       }
       iVar14 = g_human[(int)local_a4].health;
       g_human[(int)local_a4].unk_0084 = fVar24;
-      g_human[(int)local_a4].unk_2b20 = 1.0;
+      g_human[(int)local_a4].body_strength = 1.0;
       if (iVar14 < 0x19) {
         local_cc = ((int *)LF_BITS_U((float)iVar14));
         local_c4 = ((Bone *)LF_BITS_U(((float)(LF_BITS_F(local_cc) / 25.0))));
@@ -264,7 +264,7 @@ void __cdecl lf_51060(void)
           local_c8 = (float)(((float10)((float)(LF_BITS_F(local_cc) / 10.0)) * fVar26 + fVar26) *
                             (float10)local_c8);
         }
-        g_human[(int)puVar11].unk_2b20 = local_c8;
+        g_human[(int)puVar11].body_strength = local_c8;
       }
       local_a0 = 0.0;
       if ((0 < g_human[(int)puVar11].inventory[0].count) ||
@@ -345,7 +345,7 @@ void __cdecl lf_51060(void)
         LF_COPY(fVar4, g_yaxis[0]);
         do {
           if ((((Object *)(piVar17 + -2))->active != 0) && (*piVar17 != 3)) {
-            local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+            local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
             local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x + LF_BITS_F(local_cc) * fVar4);
             local_44 = (float)(fVar3 * LF_BITS_F(local_cc) + g_human[(int)puVar11].bones[0].pos.y);
             local_40 = (float)(LF_BITS_F(local_cc) * fVar24 + g_human[(int)puVar11].bones[0].pos.z);
@@ -370,7 +370,7 @@ void __cdecl lf_51060(void)
           piVar17 = piVar17 + 0x208c;
           iVar21 = iVar21 + 1;
         } while ((int)piVar17 < ((int)SR_VA(0x7a1e608)));
-        local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+        local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
         local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x +
                    LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x);
         local_44 = (float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
@@ -382,7 +382,7 @@ void __cdecl lf_51060(void)
         local_34 = g_human[(int)puVar11].bones[0].pos.z;
         iVar21 = lineintersectlevel(&local_3c,&local_48,1);
         if ((iVar21 == 0) || (g_intersect.normal[1] <= 0.699999988079071)) {
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
           local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
                      g_xaxis[0] * 0.1875);
@@ -407,7 +407,7 @@ void __cdecl lf_51060(void)
             local_b4 = (float)(g_intersect.unk_0028 + 0.0);
           }
           LF_COPY(fVar24, local_c0);
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
           local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_xaxis[0] * 0.1875)
           ;
@@ -432,7 +432,7 @@ void __cdecl lf_51060(void)
             local_b4 = (float)(g_intersect.unk_0028 + local_b4);
             local_c0 = fVar24;
           }
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
           local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
                      g_zaxis[0] * 0.1875);
@@ -457,7 +457,7 @@ void __cdecl lf_51060(void)
             local_b4 = (float)(g_intersect.unk_0028 + local_b4);
             local_c0 = fVar24;
           }
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].unk_008c * 1.125))));
+          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
           local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
                      LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_zaxis[0] * 0.1875)
           ;
@@ -529,7 +529,7 @@ LAB_00451f2d:
                               (g_human[(int)puVar11].bones[0].rot[1].y * local_44 +
                               g_human[(int)puVar11].bones[0].rot[1].x * local_48)))));
             local_c8 = (float)((float)(fVar24 * 0.125 * fVar24 *
-                       ((float)(g_human[(int)puVar11].unk_008c * 1.125 -
+                       ((float)(g_human[(int)puVar11].stance * 1.125 -
                        ((float)(g_human[(int)puVar11].bones[0].rot[1].z *
                         ((float)(g_human[(int)puVar11].bones[0].pos.z - local_a8)) +
                        (g_human[(int)puVar11].bones[0].rot[1].y *
@@ -555,7 +555,7 @@ LAB_00451f2d:
 LAB_00452109:
           uVar18 = g_human[(int)puVar11].input_buttons;
           local_c0 = 1.401298464324817E-45;
-          g_human[(int)puVar11].unk_0038 = 1;
+          g_human[(int)puVar11].on_ground = 1;
           if (((uVar18 & 4) != 0) && ((g_human[(int)puVar11].input_buttons_prev & 4) == 0)) {
             local_c0 = 0.0;
             *(undefined4 *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] = 0x3e2aaaab;
@@ -676,7 +676,7 @@ LAB_0045230e:
             local_c8 = 0.0;
           }
           local_c4 = ((Bone *)LF_BITS_U(((float)((float)(((float)((local_c8 * 0.125 + 0.125) / 60.0)) * 1.25) *
-                             g_human[(int)puVar11].unk_2b20))));
+                             g_human[(int)puVar11].body_strength))));
           if (LF_BITS_F(local_c4) < fVar24) {
             fVar3 = (float)(LF_BITS_F(local_c4) / fVar24);
             local_48 = fVar3 * local_48;
@@ -1231,7 +1231,7 @@ LAB_00453705:
           g_bond[iVar15].stiffness = 0.0625;
           g_bond[iVar15].damping = 0.125;
           if (iVar21 < 0x19) {
-            fVar24 = g_human[(int)puVar11].unk_2b20;
+            fVar24 = g_human[(int)puVar11].body_strength;
             g_bond[iVar15].mode = 1;
             g_bond[iVar15].stiffness = (float)(fVar24 * 0.125 * 0.5);
           }

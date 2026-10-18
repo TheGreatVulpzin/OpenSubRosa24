@@ -32,7 +32,7 @@ typedef union Bone { struct {
     vec3 vel;           /* +0x18 bondsetupcopy copies it to BondBone.vel */
     uint8_t unk_24[0xc];
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
-    vec3 unk_54;        /* +0x54 bondsetupcopy copies it to BondBone.unk_20 */
+    vec3 torque;        /* +0x54 bondsetupcopy copies it to BondBone.torque */
     vec3 w;             /* +0x60 bondsetupcopy copies it to BondBone.w (the angular velocity) */
     uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
@@ -83,7 +83,7 @@ typedef union BondBone { struct {
     float pad_0c;
     vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
     float pad_1c;
-    vec3 unk_20;        /* +0x20 bondsimulation2 copies Bone+0x54 */
+    vec3 torque;        /* +0x20 bondsetupcopy copies Bone.torque; bondhuman adds the balance turn */
     float pad_2c;
     vec3 w;             /* +0x30 bondsimulation2 copies Bone+0x60; bond_bodybody: w x r */
     float pad_3c;
@@ -257,7 +257,7 @@ typedef union Human { struct {
     uint8_t pad_002c[0x4];
     int unk_0030;                        /* +0x0030 2 functions */
     int unk_0034;                        /* +0x0034 4 functions */
-    int unk_0038;                        /* +0x0038 2 functions */
+    int on_ground;                       /* +0x0038 humansimulation writes 0, and 1 when the ground test under the feet finds the ground */
     int unk_003c;                        /* +0x003c 4 functions */
     uint8_t pad_0040[0x4];
     int unk_0044;                        /* +0x0044 2 functions */
@@ -270,7 +270,7 @@ typedef union Human { struct {
     float unk_0080;                      /* +0x0080 1 functions */
     float unk_0084;                      /* +0x0084 1 functions */
     uint8_t pad_0088[0x4];
-    float unk_008c;                      /* +0x008c 4 functions */
+    float stance;                        /* +0x008c humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick */
     uint8_t pad_0090[0x8];
     float unk_0098;                      /* +0x0098 1 functions */
     int unk_009c;                        /* +0x009c 2 functions */
@@ -304,7 +304,7 @@ typedef union Human { struct {
     vec3 colors[4];                      /* +0x2a5c createhuman copies from player.colors */
     uint8_t pad_2a8c[0x90];
     int bleeding;                        /* +0x2b1c manager: knife writes 1 (likely: bleeding) */
-    float unk_2b20;                      /* +0x2b20 2 functions */
+    float body_strength;                 /* +0x2b20 humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it */
     int unk_2b24;                        /* +0x2b24 1 functions */
     int unk_2b28;                        /* +0x2b28 1 functions */
     int team;                            /* +0x2b2c createhuman copies from player.team */
@@ -328,9 +328,11 @@ SR_STATIC_ASSERT(offsetof(Human, vehicle_id) == 0x14, "Human.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_seat) == 0x18, "Human.vehicle_seat");
 SR_STATIC_ASSERT(offsetof(Human, despawn_timer) == 0x24, "Human.despawn_timer");
 SR_STATIC_ASSERT(offsetof(Human, health) == 0x28, "Human.health");
+SR_STATIC_ASSERT(offsetof(Human, on_ground) == 0x38, "Human.on_ground");
 SR_STATIC_ASSERT(offsetof(Human, pos) == 0x48, "Human.pos");
 SR_STATIC_ASSERT(offsetof(Human, axis) == 0x60, "Human.axis");
 SR_STATIC_ASSERT(offsetof(Human, pitch) == 0x64, "Human.pitch");
+SR_STATIC_ASSERT(offsetof(Human, stance) == 0x8c, "Human.stance");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons) == 0xbc, "Human.input_buttons");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons_prev) == 0xc0, "Human.input_buttons_prev");
 SR_STATIC_ASSERT(offsetof(Human, bones) == 0xc8, "Human.bones");
@@ -341,6 +343,7 @@ SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
 SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
 SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
 SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
+SR_STATIC_ASSERT(offsetof(Human, body_strength) == 0x2b20, "Human.body_strength");
 SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
 SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
 SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
