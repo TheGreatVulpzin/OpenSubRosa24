@@ -749,13 +749,13 @@ LAB_0045770a:
               local_48 = (int *)0x1;
               g_bond[iVar7].damping = 0.25;
               g_bond[iVar7].mode = 0;
-              g_bond[iVar7].friction_dir.x = fVar2;
-              g_bond[iVar7].friction_dir.y = fVar17;
-              g_bond[iVar7].friction_dir.z = fVar7;
-              g_bond[iVar7].unk_00bc = 0;
-              *(undefined4 *)&g_bond[iVar7].lf_raw[0xc0] = 0;
-              *(undefined4 *)&g_bond[iVar7].lf_raw[0xc4] = 0;
-              g_bond[iVar7].unk_0080 = 0x3f19999a;
+              g_bond[iVar7].normal.x = fVar2;
+              g_bond[iVar7].normal.y = fVar17;
+              g_bond[iVar7].normal.z = fVar7;
+              g_bond[iVar7].surface_vel.x = 0.0f;
+              g_bond[iVar7].surface_vel.y = 0.0f;
+              g_bond[iVar7].surface_vel.z = 0.0f;
+              g_bond[iVar7].friction = 0.6f;
             }
           }
           else {
@@ -811,13 +811,13 @@ LAB_0045770a:
             g_numofbonds = g_numofbonds + 1;
             iVar7 = *(int *)((int)g_object[0].rot + iVar15 + -0x34);
             g_bond[iVar13].mode = 0;
-            g_bond[iVar13].friction_dir.x = local_3c;
-            g_bond[iVar13].friction_dir.y = local_38;
-            g_bond[iVar13].friction_dir.z = local_34;
-            g_bond[iVar13].unk_00bc = 0;
-            *(undefined4 *)&g_bond[iVar13].lf_raw[0xc0] = 0;
-            *(undefined4 *)&g_bond[iVar13].lf_raw[0xc4] = 0;
-            g_bond[iVar13].unk_0080 = 0x3f19999a;
+            g_bond[iVar13].normal.x = local_3c;
+            g_bond[iVar13].normal.y = local_38;
+            g_bond[iVar13].normal.z = local_34;
+            g_bond[iVar13].surface_vel.x = 0.0f;
+            g_bond[iVar13].surface_vel.y = 0.0f;
+            g_bond[iVar13].surface_vel.z = 0.0f;
+            g_bond[iVar13].friction = 0.6f;
             if ((iVar7 == 2) && (0x14 < local_4c)) {
               applydamageobject(local_44,100);
             }
@@ -870,7 +870,7 @@ LAB_00457ea9:
                                                                ),
                                              &g_particle[0].pos.x + iVar7 * 0x3c,0);
                 iVar11 = g_numofbonds;
-                iVar13 = g_intersect.unk_0034;
+                iVar13 = g_intersect.tri_particles[0];
                 if (iVar12 != 0) {
                   local_10 = (float)(g_intersect.pos[0] - (&g_particle[0].pos.x)[iVar7 * 0x3c]);
                   local_c = (float)(g_intersect.pos[1] - (&g_particle[0].pos.y)[iVar7 * 0x3c]);
@@ -878,14 +878,14 @@ LAB_00457ea9:
                   g_bond[g_numofbonds].type = 3;
                   g_bond[g_numofbonds].particle_a = iVar7;
                   g_bond[g_numofbonds].particle_b = iVar13;
-                  fVar2 = g_intersect.unk_0044;
-                  g_bond[g_numofbonds].unk_001c = g_intersect.unk_0038;
-                  g_bond[g_numofbonds].unk_0020 = g_intersect.unk_003c;
-                  g_bond[g_numofbonds].mass_ratio[0] = fVar2;
+                  fVar2 = g_intersect.tri_weights[0];
+                  g_bond[g_numofbonds].particle_c = g_intersect.tri_particles[1];
+                  g_bond[g_numofbonds].particle_d = g_intersect.tri_particles[2];
+                  g_bond[g_numofbonds].weights[0] = fVar2;
                   pBVar6 = g_bond + g_numofbonds;
                   g_numofbonds = g_numofbonds + 1;
-                  pBVar6->mass_ratio[1] = g_intersect.unk_0048;
-                  g_bond[iVar11].unk_0054 = g_intersect.unk_004c;
+                  pBVar6->weights[1] = g_intersect.tri_weights[1];
+                  g_bond[iVar11].weights[2] = g_intersect.tri_weights[2];
                   fVar3 = g_intersect.normal[2];
                   fVar17 = g_intersect.normal[1];
                   fVar2 = g_intersect.normal[0];
@@ -895,10 +895,10 @@ LAB_00457ea9:
                   g_bond[iVar11].stiffness = 0.0625;
                   g_bond[iVar11].damping = 0.25;
                   g_bond[iVar11].mode = 0;
-                  g_bond[iVar11].friction_dir.x = fVar2;
-                  g_bond[iVar11].friction_dir.y = fVar17;
-                  g_bond[iVar11].friction_dir.z = fVar3;
-                  g_bond[iVar11].unk_0080 = 0x3ecccccd;
+                  g_bond[iVar11].normal.x = fVar2;
+                  g_bond[iVar11].normal.y = fVar17;
+                  g_bond[iVar11].normal.z = fVar3;
+                  g_bond[iVar11].friction = 0.4f;
                 }
                 piVar16 = piVar16 + 1;
                 local_40 = (float *)((int)local_40 + -1);

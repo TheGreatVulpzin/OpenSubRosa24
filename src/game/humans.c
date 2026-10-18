@@ -598,10 +598,10 @@ LAB_00452144:
               pBVar8->stiffness = 0.0625;
               g_bond[iVar14].damping = 0.125;
               g_bond[iVar14].mode = 0;
-              g_bond[iVar14].friction_dir.x = g_intersect.normal[0];
-              g_bond[iVar14].friction_dir.y = g_intersect.normal[1];
-              g_bond[iVar14].friction_dir.z = g_intersect.normal[2];
-              g_bond[iVar14].unk_0080 = 0x3f000000;
+              g_bond[iVar14].normal.x = g_intersect.normal[0];
+              g_bond[iVar14].normal.y = g_intersect.normal[1];
+              g_bond[iVar14].normal.z = g_intersect.normal[2];
+              g_bond[iVar14].friction = 0.5f;
               g_bond[iVar14].unk_0028 = ((int)LF_BITS_U(((float)(g_intersect.pos[0] - *pfVar19))));
               *(float *)&g_bond[iVar14].lf_raw[0x2c] = (float)(g_intersect.pos[1] - pfVar19[1]);
               *(float *)&g_bond[iVar14].lf_raw[0x30] = (float)(g_intersect.pos[2] - pfVar19[2]);
@@ -746,22 +746,22 @@ LAB_0045230e:
                 iVar16 = sphereintersectobject
                                    ((*(uint *)((uchar *)&local_98 + 0)),(float *)&local_c4[-1].lf_raw[0xc8],local_c8);
                 iVar15 = g_numofbonds;
-                fVar3 = g_intersect.unk_0044;
-                iVar14 = g_intersect.unk_003c;
-                iVar21 = g_intersect.unk_0038;
+                fVar3 = g_intersect.tri_weights[0];
+                iVar14 = g_intersect.tri_particles[2];
+                iVar21 = g_intersect.tri_particles[1];
                 if (iVar16 != 0) {
                   g_bond[g_numofbonds].type = 4;
                   g_bond[iVar15].owner = (int)local_a4;
-                  iVar10 = g_intersect.unk_0034;
+                  iVar10 = g_intersect.tri_particles[0];
                   g_bond[iVar15].bone_a = ((int)LF_UINT(fVar24));
                   iVar16 = g_human[(int)puVar11].unk_001c;
                   g_bond[iVar15].particle_b = iVar10;
-                  g_bond[iVar15].unk_001c = iVar21;
-                  g_bond[iVar15].unk_0020 = iVar14;
-                  g_bond[iVar15].mass_ratio[0] = fVar3;
-                  fVar4 = g_intersect.unk_0048;
-                  g_bond[iVar15].mass_ratio[1] = g_intersect.unk_0048;
-                  g_bond[iVar15].unk_0054 = g_intersect.unk_004c;
+                  g_bond[iVar15].particle_c = iVar21;
+                  g_bond[iVar15].particle_d = iVar14;
+                  g_bond[iVar15].weights[0] = fVar3;
+                  fVar4 = g_intersect.tri_weights[1];
+                  g_bond[iVar15].weights[1] = g_intersect.tri_weights[1];
+                  g_bond[iVar15].weights[2] = g_intersect.tri_weights[2];
                   g_bond[iVar15].rest_length = (float)(local_c8 - g_intersect.distance);
                   g_bond[iVar15].stiffness = 0.0625;
                   if ((*(uint *)((uchar *)&local_98 + 0)) == iVar16) {
@@ -772,10 +772,10 @@ LAB_0045230e:
                   g_bond[iVar15].damping = 0.25;
                   fVar24 = g_intersect.normal[0];
                   g_bond[iVar15].mode = 0;
-                  g_bond[iVar15].friction_dir.x = fVar24;
-                  g_bond[iVar15].friction_dir.y = g_intersect.normal[1];
-                  g_bond[iVar15].friction_dir.z = g_intersect.normal[2];
-                  g_bond[iVar15].unk_0080 = 0x3dcccccd;
+                  g_bond[iVar15].normal.x = fVar24;
+                  g_bond[iVar15].normal.y = g_intersect.normal[1];
+                  g_bond[iVar15].normal.z = g_intersect.normal[2];
+                  g_bond[iVar15].friction = 0.1f;
                   LF_COPY(fVar24, local_c0);
                   if ((((*(uint *)((uchar *)&local_98 + 0)) != g_human[(int)puVar11].unk_001c) &&
                       (LF_UINT(local_c0) != 0x5U)) &&
@@ -787,7 +787,7 @@ LAB_0045230e:
                     scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar21 * 0x3c,
                                     fVar4);
                     scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar14 * 0x3c,
-                                    g_intersect.unk_004c);
+                                    g_intersect.tri_weights[2]);
                     scaleaddvectors(&local_3c,&local_48,(float *)local_c4,-1.0);
                     local_c0 = (float)(g_intersect.normal[2] * local_34 +
                                (local_38 * g_intersect.normal[1] + g_intersect.normal[0] * local_3c));

@@ -10988,7 +10988,7 @@ void __cdecl lf_19380(float param_1)
             if (((LF_BITS_U(LF_BITS_F(fVar4)) != 0xbU) && (LF_BITS_U(LF_BITS_F(fVar4)) != 0xeU)) &&
                ((LF_BITS_U(LF_BITS_F(fVar4)) != 0xaU && (LF_BITS_U(LF_BITS_F(fVar4)) != 0xdU)))) {
               fVar8 = 0;
-              pfVar5 = &g_bond[g_numofbonds].friction_dir.z;
+              pfVar5 = &g_bond[g_numofbonds].normal.z;
               pvVar4 = (vec3 *)(pfVar3 + -2);
               do {
                 if ((((LF_BITS_U(LF_BITS_F(fVar8)) != 0xbU) && (LF_BITS_U(LF_BITS_F(fVar8)) != 0xeU)) &&
@@ -16634,28 +16634,28 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
             g_intersect.normal[1] = LF_BITS_F(local_2c);
             g_intersect.normal[2] = LF_BITS_F(local_28);
             g_intersect.unk_0030 = local_48;
-            g_intersect.unk_0034 =
+            g_intersect.tri_particles[0] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
             g_intersect.fraction = local_50;
-            g_intersect.unk_0038 =
+            g_intersect.tri_particles[1] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar4)];
-            g_intersect.unk_003c =
+            g_intersect.tri_particles[2] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
             calculatebarycentric
-                      (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_c,(float *)&local_24,
+                      (g_intersect.tri_weights,g_intersect.pos,(float *)&local_c,(float *)&local_24,
                        (float *)&local_3c);
             g_intersect.unk_0020 =
-                 (float)((float)(g_intersect.unk_0048 * g_particle[g_intersect.unk_0038].vel.x +
-                 g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.x) +
-                 g_intersect.unk_004c * g_particle[g_intersect.unk_003c].vel.x);
+                 (float)((float)(g_intersect.tri_weights[1] * g_particle[g_intersect.tri_particles[1]].vel.x +
+                 g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.x) +
+                 g_intersect.tri_weights[2] * g_particle[g_intersect.tri_particles[2]].vel.x);
             g_intersect.unk_0024 =
-                 (float)(g_particle[g_intersect.unk_003c].vel.y * g_intersect.unk_004c +
-                 ((float)(g_particle[g_intersect.unk_0038].vel.y * g_intersect.unk_0048 +
-                 (float)(g_particle[g_intersect.unk_0034].vel.y * g_intersect.unk_0044))));
+                 (float)(g_particle[g_intersect.tri_particles[2]].vel.y * g_intersect.tri_weights[2] +
+                 ((float)(g_particle[g_intersect.tri_particles[1]].vel.y * g_intersect.tri_weights[1] +
+                 (float)(g_particle[g_intersect.tri_particles[0]].vel.y * g_intersect.tri_weights[0]))));
             g_intersect.unk_0028 =
-                 (float)(g_intersect.unk_004c * g_particle[g_intersect.unk_003c].vel.z +
-                 ((float)(g_intersect.unk_0048 * g_particle[g_intersect.unk_0038].vel.z +
-                 (float)(g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.z))));
+                 (float)(g_intersect.tri_weights[2] * g_particle[g_intersect.tri_particles[2]].vel.z +
+                 ((float)(g_intersect.tri_weights[1] * g_particle[g_intersect.tri_particles[1]].vel.z +
+                 (float)(g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.z))));
           }
           iVar4 = local_4c;
           if (local_44[-2] == 4) {
@@ -16680,23 +16680,28 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
               g_intersect.normal[1] = LF_BITS_F(local_2c);
               g_intersect.normal[2] = LF_BITS_F(local_28);
               g_intersect.unk_0030 = local_48;
-              g_intersect.unk_0034 =
+              g_intersect.tri_particles[0] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
               g_intersect.fraction = local_50;
-              g_intersect.unk_0038 =
+              g_intersect.tri_particles[1] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
-              g_intersect.unk_003c =
+              g_intersect.tri_particles[2] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
               calculatebarycentric
-                        (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_c,(float *)&local_24,
-                         (float *)&local_3c);
-              g_intersect.unk_0020 = g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.x;
-              g_intersect.unk_0024 = (float)(g_particle[g_intersect.unk_0034].vel.y * g_intersect.unk_0044);
-              g_intersect.unk_0028 = (float)(g_intersect.unk_0044 * g_particle[g_intersect.unk_0034].vel.z);
+                        (g_intersect.tri_weights,g_intersect.pos,(float *)&local_c,
+                         (float *)&local_24,(float *)&local_3c);
+              g_intersect.unk_0020 =
+                   g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.x;
+              g_intersect.unk_0024 =
+                   (float)(g_particle[g_intersect.tri_particles[0]].vel.y * g_intersect.tri_weights[0]);
+              g_intersect.unk_0028 =
+                   (float)(g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.z);
               scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
-                              &g_particle[g_intersect.unk_0038].vel.x,g_intersect.unk_0048);
+                              &g_particle[g_intersect.tri_particles[1]].vel.x,
+                              g_intersect.tri_weights[1]);
               scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
-                              &g_particle[g_intersect.unk_003c].vel.x,g_intersect.unk_004c);
+                              &g_particle[g_intersect.tri_particles[2]].vel.x,
+                              g_intersect.tri_weights[2]);
               iVar4 = local_4c;
             }
           }
@@ -16722,7 +16727,7 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
             g_intersect.normal[1] = LF_BITS_F(local_2c);
             g_intersect.normal[2] = LF_BITS_F(local_28);
             g_intersect.fraction = local_50;
-            g_intersect.unk_0034 = iVar5;
+            g_intersect.tri_particles[0] = iVar5;
           }
           iVar5 = iVar5 + 1;
           pfVar6 = pfVar6 + 0x26;
@@ -17477,13 +17482,13 @@ void __cdecl lf_26f90(int param_1)
             g_object[param_1].unk_819c = iVar13;
             g_bond[iVar11].damping = 0.25;
             g_bond[iVar11].mode = 0;
-            g_bond[iVar11].friction_dir.x = fVar6;
-            g_bond[iVar11].friction_dir.y = fVar7;
-            g_bond[iVar11].friction_dir.z = fVar8;
-            g_bond[iVar11].unk_00bc = 0;
-            *(undefined4 *)&g_bond[iVar11].lf_raw[0xc0] = 0;
-            *(undefined4 *)&g_bond[iVar11].lf_raw[0xc4] = 0;
-            g_bond[iVar11].unk_0080 = 0;
+            g_bond[iVar11].normal.x = fVar6;
+            g_bond[iVar11].normal.y = fVar7;
+            g_bond[iVar11].normal.z = fVar8;
+            g_bond[iVar11].surface_vel.x = 0.0;
+            g_bond[iVar11].surface_vel.y = 0.0;
+            g_bond[iVar11].surface_vel.z = 0.0;
+            g_bond[iVar11].friction = 0.0;
             if (iVar2 != -1) {
               g_object[iVar2].unk_819c = iVar13;
             }
@@ -17510,13 +17515,13 @@ void __cdecl lf_26f90(int param_1)
             g_bond[iVar11].stiffness = 0.00390625;
             g_bond[iVar11].damping = 0.125;
             g_bond[iVar11].mode = 0;
-            g_bond[iVar11].friction_dir.x = fVar4;
-            g_bond[iVar11].friction_dir.y = fVar9;
-            g_bond[iVar11].friction_dir.z = fVar10;
-            g_bond[iVar11].unk_00bc = 0;
-            *(undefined4 *)&g_bond[iVar11].lf_raw[0xc0] = 0;
-            *(undefined4 *)&g_bond[iVar11].lf_raw[0xc4] = 0;
-            g_bond[iVar11].unk_0080 = 0;
+            g_bond[iVar11].normal.x = fVar4;
+            g_bond[iVar11].normal.y = fVar9;
+            g_bond[iVar11].normal.z = fVar10;
+            g_bond[iVar11].surface_vel.x = 0.0;
+            g_bond[iVar11].surface_vel.y = 0.0;
+            g_bond[iVar11].surface_vel.z = 0.0;
+            g_bond[iVar11].friction = 0.0;
           }
           local_1c = local_1c + 1;
           local_14 = local_14 + -1;
@@ -22469,7 +22474,7 @@ undefined4 __cdecl lf_2f130(int param_1,float *param_2,float *param_3,float para
             g_intersect.normal[1] = local_1c;
             g_intersect.normal[2] = local_18;
             g_intersect.fraction = fVar3;
-            g_intersect.unk_0034 = iVar9;
+            g_intersect.tri_particles[0] = iVar9;
           }
         }
       }
@@ -24671,16 +24676,16 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
             g_intersect.normal[0] = LF_BITS_F(local_48);
             g_intersect.normal[1] = LF_BITS_F(local_44);
             g_intersect.normal[2] = LF_BITS_F(local_40);
-            g_intersect.unk_0034 =
+            g_intersect.tri_particles[0] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
             g_intersect.distance = local_54;
-            g_intersect.unk_0038 =
+            g_intersect.tri_particles[1] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar5)];
-            g_intersect.unk_003c =
+            g_intersect.tri_particles[2] =
                  g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
             calculatebarycentric
-                      (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_30,(float *)&local_18,
-                       (float *)&local_3c);
+                      (g_intersect.tri_weights,g_intersect.pos,(float *)&local_30,(float *)&local_18
+                       ,(float *)&local_3c);
           }
           if (piVar6[-2] == 4) {
             generatetrinormal((float *)&local_48,(float *)&local_30,(float *)&local_3c,
@@ -24696,16 +24701,16 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
               g_intersect.normal[0] = LF_BITS_F(local_48);
               g_intersect.normal[1] = LF_BITS_F(local_44);
               g_intersect.normal[2] = LF_BITS_F(local_40);
-              g_intersect.unk_0034 =
+              g_intersect.tri_particles[0] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar1)];
               g_intersect.distance = local_54;
-              g_intersect.unk_0038 =
+              g_intersect.tri_particles[1] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar2)];
-              g_intersect.unk_003c =
+              g_intersect.tri_particles[2] =
                    g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x4bc8] + iVar3)];
               calculatebarycentric
-                        (&g_intersect.unk_0044,g_intersect.pos,(float *)&local_30,(float *)&local_3c
-                         ,(float *)&local_c);
+                        (g_intersect.tri_weights,g_intersect.pos,(float *)&local_30,
+                         (float *)&local_3c,(float *)&local_c);
             }
           }
         }
@@ -33468,10 +33473,10 @@ void __cdecl lf_48ec0(void)
                                             pfVar1,0.0), iVar7 != 0)) &&
                (g_intersect.fraction < local_60)) &&
               ((iVar7 = *piVar12, iVar7 != *(int *)((int)&g_bullet[0].owner + iVar11) ||
-               ((g_intersect.unk_0034 != 5 && (g_intersect.unk_0034 != 8)))))) &&
+               ((g_intersect.tri_particles[0] != 5 && (g_intersect.tri_particles[0] != 8)))))) &&
              ((iVar7 == -1 || (g_player[iVar7].unk_0044 == 0)))) {
             local_4c = g_intersect.pos[0];
-            local_10 = g_intersect.unk_0034;
+            local_10 = g_intersect.tri_particles[0];
             local_48 = g_intersect.pos[1];
             local_44 = g_intersect.pos[2];
             local_34 = g_intersect.normal[0];
@@ -33496,15 +33501,15 @@ void __cdecl lf_48ec0(void)
             local_44 = g_intersect.pos[2];
             local_58 = -1;
             local_34 = g_intersect.normal[0];
-            local_10 = g_intersect.unk_0034;
-            local_c = g_intersect.unk_0038;
+            local_10 = g_intersect.tri_particles[0];
+            local_c = g_intersect.tri_particles[1];
             local_30 = g_intersect.normal[1];
-            local_8 = g_intersect.unk_003c;
+            local_8 = g_intersect.tri_particles[2];
             local_2c = g_intersect.normal[2];
             local_60 = g_intersect.fraction;
-            local_1c = g_intersect.unk_0044;
-            local_18 = g_intersect.unk_0048;
-            local_14 = g_intersect.unk_004c;
+            local_1c = g_intersect.tri_weights[0];
+            local_18 = g_intersect.tri_weights[1];
+            local_14 = g_intersect.tri_weights[2];
             local_5c = iVar9;
           }
           pOVar10 = pOVar10 + 1;
@@ -35850,9 +35855,9 @@ void __cdecl lf_4cee0(int param_1)
           g_bond[iVar9].stiffness = 0.03125;
           g_bond[iVar9].damping = 0.125;
           g_bond[iVar9].mode = 0;
-          g_bond[iVar9].friction_dir.x = g_intersect.normal[0];
-          g_bond[iVar9].friction_dir.y = g_intersect.normal[1];
-          g_bond[iVar9].friction_dir.z = g_intersect.normal[2];
+          g_bond[iVar9].normal.x = g_intersect.normal[0];
+          g_bond[iVar9].normal.y = g_intersect.normal[1];
+          g_bond[iVar9].normal.z = g_intersect.normal[2];
           fVar4 = g_intersect.pos[0];
           g_bond[iVar9].local_a.x = (float)(g_intersect.pos[0] - (pBVar12->pos).x);
           fVar5 = g_intersect.pos[1];
@@ -35862,7 +35867,7 @@ void __cdecl lf_4cee0(int param_1)
           g_bond[iVar9].local_b.x = (float)(fVar4 - g_item[param_1].pos.x);
           g_bond[iVar9].local_b.y = (float)(fVar5 - g_item[param_1].pos.y);
           g_bond[iVar9].local_b.z = (float)(fVar6 - g_item[param_1].pos.z);
-          g_bond[iVar9].unk_0080 = 0x3ecccccd;
+          g_bond[iVar9].friction = 0.4000000059604645;
         }
         iVar10 = iVar10 + 1;
         pBVar12 = pBVar12 + 1;
@@ -36573,10 +36578,10 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
            g_intersect.normal[1] * ((float)(g_intersect.pos[1] - local_8))));
       g_bond[iVar8].stiffness = 0.03125;
       g_bond[iVar8].damping = 0.0625;
-      g_bond[iVar8].unk_0080 = (&DAT_17150030)[iVar9 * 0x16];
-      g_bond[iVar8].friction_dir.x = fVar5;
-      g_bond[iVar8].friction_dir.y = fVar6;
-      g_bond[iVar8].friction_dir.z = g_intersect.normal[2];
+      g_bond[iVar8].friction = LF_BITS_F((&DAT_17150030)[iVar9 * 0x16]);
+      g_bond[iVar8].normal.x = fVar5;
+      g_bond[iVar8].normal.y = fVar6;
+      g_bond[iVar8].normal.z = g_intersect.normal[2];
       g_bond[iVar8].local_a.x = (float)(fVar3 - *(float *)(g_object[param_1].wheel_bodies + param_2));
       g_bond[iVar8].local_a.y = (float)(fVar4 - *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x4])
       ;
@@ -36657,8 +36662,8 @@ void __cdecl lf_4e500(int param_1,int param_2)
     g_bond[iVar8].particle_a = iVar3;
     fVar2 = *(float *)(&g_object[param_1].lf_raw[0x5f00] + iVar9);
     g_bond[iVar8].particle_b = iVar4;
-    g_bond[iVar8].mass_ratio[0] = fVar2;
-    g_bond[iVar8].mass_ratio[1] = *(float *)(&g_object[param_1].lf_raw[0x5f04] + iVar9);
+    g_bond[iVar8].weights[0] = fVar2;
+    g_bond[iVar8].weights[1] = *(float *)(&g_object[param_1].lf_raw[0x5f04] + iVar9);
     fVar6 = g_intersect.normal[2];
     fVar5 = g_intersect.normal[1];
     fVar2 = g_intersect.normal[0];
@@ -36669,16 +36674,16 @@ void __cdecl lf_4e500(int param_1,int param_2)
     g_bond[iVar8].stiffness = 0.0625;
     g_bond[iVar8].damping = 0.25;
     g_bond[iVar8].mode = 0;
-    g_bond[iVar8].friction_dir.x = fVar2;
-    g_bond[iVar8].friction_dir.y = fVar5;
-    g_bond[iVar8].friction_dir.z = fVar6;
+    g_bond[iVar8].normal.x = fVar2;
+    g_bond[iVar8].normal.y = fVar5;
+    g_bond[iVar8].normal.z = fVar6;
     if (iVar7 == 0) {
-      iVar3 = (&DAT_17150030)[g_intersect.unk_0064 * 0x16];
+      fVar2 = LF_BITS_F((&DAT_17150030)[g_intersect.unk_0064 * 0x16]);
     }
     else {
-      iVar3 = 0x3e99999a;
+      fVar2 = 0.30000001192092896;
     }
-    g_bond[iVar8].unk_0080 = iVar3;
+    g_bond[iVar8].friction = fVar2;
     local_18 = g_object[param_1].rot[2].x;
     local_14 = g_object[param_1].rot[2].y;
     g_bond[iVar8].owner = param_1;

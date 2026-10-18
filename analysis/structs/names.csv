@@ -93,7 +93,7 @@ bond,0x10,num_particles,int,,"createbond writes 2; deletebond loops over the par
 bond,0x14,particle_a,int,,createbond: parameter 2 (index into particle[])
 bond,0x18,particle_b,int,,createbond: parameter 3
 bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (likely)
-bond,0x74,friction_dir,vec3,,bondsimulation2: scalevector and calculatefriction (likely)
+bond,0x74,normal,vec3,,"contact bonds (types 1 to 4, 7): the normal of the hit surface (g_intersect.normal)"
 body,0x4,pos,vec3,,human_calculatearmangles: subtractvectors with the bone position
 itemtype,0x80,size,vec3,,setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass)
 itemtype,0x98,fits_in,int,64,linkitemtoitem: a child item goes into a parent only when fits_in[parent type] != 0 (one int for each of the 64 item types)
@@ -134,7 +134,7 @@ objecttype,0x807c,num_seats,int,,setupobjecttypes_*: list of vec3 at +0x8080; cr
 objecttype,0x5348,num_quads,int,,setupobjectypes_train: 4 particle indices per record (stride 0x20); objectsimulation (likely)
 bond,0x34,local_a,vec3,,bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation)
 bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of the rows of item.rot)
-bond,0x4c,mass_ratio,float,2,bondsimulation2 type 10: item_mass/(sum) and bone_mass/(sum)
+bond,0x4c,weights,float,3,"types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1]"
 bond,0x6c,stiffness,float,,bondsimulation2: force = (distance - rest_length) * stiffness
 bond,0x70,damping,float,,"bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir"
 bond,0x90,owner,int,,"types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c)"
@@ -274,3 +274,9 @@ item,0x4,has_physics,int,,"bondsimulation2 clears the velocity changes only of t
 human,0x38,on_ground,int,,"humansimulation writes 0, and 1 when the ground test under the feet finds the ground"
 human,0x8c,stance,float,,"humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick"
 human,0x2b20,body_strength,float,,"humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it"
+bond,0x1c,particle_c,int,,"types 3 and 4: the second particle of the hit triangle (g_intersect.tri_particles[1])"
+bond,0x20,particle_d,int,,"types 3 and 4: the third particle of the hit triangle (g_intersect.tri_particles[2])"
+bond,0x80,friction,float,,"contact bonds: objectsimulation writes 0.6 against the level and 0.4 against an object; calculatefriction uses it"
+bond,0xbc,surface_vel,vec3,,"contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level"
+intersect,0x34,tri_particles,int,3,"lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle"
+intersect,0x44,tri_weights,float,3,"lineintersectobject and sphereintersectobject: the barycentric weights of the hit point"

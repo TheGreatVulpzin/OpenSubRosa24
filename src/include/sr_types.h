@@ -720,22 +720,21 @@ typedef union Bond { struct {
     int num_particles;                   /* +0x0010 createbond writes 2; deletebond loops over the particle indices from +0x14 */
     int particle_a;                      /* +0x0014 createbond: parameter 2 (index into particle[]) */
     int particle_b;                      /* +0x0018 createbond: parameter 3 */
-    int unk_001c;                        /* +0x001c 1 functions */
-    int unk_0020;                        /* +0x0020 1 functions */
+    int particle_c;                      /* +0x001c types 3 and 4: the second particle of the hit triangle (g_intersect.tri_particles[1]) */
+    int particle_d;                      /* +0x0020 types 3 and 4: the third particle of the hit triangle (g_intersect.tri_particles[2]) */
     uint8_t pad_0024[0x4];
     int unk_0028;                        /* +0x0028 1 functions */
     uint8_t pad_002c[0x8];
     vec3 local_a;                        /* +0x0034 bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation) */
     vec3 local_b;                        /* +0x0040 bondsimulation2 type 10: point on the item (weights of the rows of item.rot) */
-    float mass_ratio[2];                 /* +0x004c bondsimulation2 type 10: item_mass/(sum) and bone_mass/(sum) */
-    float unk_0054;                      /* +0x0054 1 functions */
+    float weights[3];                    /* +0x004c types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1] */
     uint8_t pad_0058[0x8];
     float rest_length;                   /* +0x0060 bondsimulation2: (dist - rest) * k (likely) */
     uint8_t pad_0064[0x8];
     float stiffness;                     /* +0x006c bondsimulation2: force = (distance - rest_length) * stiffness */
     float damping;                       /* +0x0070 bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir */
-    vec3 friction_dir;                   /* +0x0074 bondsimulation2: scalevector and calculatefriction (likely) */
-    int unk_0080;                        /* +0x0080 1 functions */
+    vec3 normal;                         /* +0x0074 contact bonds (types 1 to 4, 7): the normal of the hit surface (g_intersect.normal) */
+    float friction;                      /* +0x0080 contact bonds: objectsimulation writes 0.6 against the level and 0.4 against an object; calculatefriction uses it */
     uint8_t pad_0084[0x8];
     int num_objects;                     /* +0x008c createbond appends parameter 4 to the list at +0x90; deletebond loops over it */
     int owner;                           /* +0x0090 types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c) */
@@ -745,8 +744,8 @@ typedef union Bond { struct {
     uint8_t pad_00a0[0x10];
     int unk_00b0;                        /* +0x00b0 1 functions */
     uint8_t pad_00b4[0x8];
-    int unk_00bc;                        /* +0x00bc 1 functions */
-    uint8_t pad_00c0[0x2c];
+    vec3 surface_vel;                    /* +0x00bc contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level */
+    uint8_t pad_00c8[0x24];
 }; uint8_t lf_raw[0xec]; } Bond;
 SR_STATIC_ASSERT(sizeof(Bond) == 0xec, "Bond");
 SR_STATIC_ASSERT(offsetof(Bond, type) == 0x0, "Bond.type");
@@ -756,17 +755,21 @@ SR_STATIC_ASSERT(offsetof(Bond, mode) == 0xc, "Bond.mode");
 SR_STATIC_ASSERT(offsetof(Bond, num_particles) == 0x10, "Bond.num_particles");
 SR_STATIC_ASSERT(offsetof(Bond, particle_a) == 0x14, "Bond.particle_a");
 SR_STATIC_ASSERT(offsetof(Bond, particle_b) == 0x18, "Bond.particle_b");
+SR_STATIC_ASSERT(offsetof(Bond, particle_c) == 0x1c, "Bond.particle_c");
+SR_STATIC_ASSERT(offsetof(Bond, particle_d) == 0x20, "Bond.particle_d");
 SR_STATIC_ASSERT(offsetof(Bond, local_a) == 0x34, "Bond.local_a");
 SR_STATIC_ASSERT(offsetof(Bond, local_b) == 0x40, "Bond.local_b");
-SR_STATIC_ASSERT(offsetof(Bond, mass_ratio) == 0x4c, "Bond.mass_ratio");
+SR_STATIC_ASSERT(offsetof(Bond, weights) == 0x4c, "Bond.weights");
 SR_STATIC_ASSERT(offsetof(Bond, rest_length) == 0x60, "Bond.rest_length");
 SR_STATIC_ASSERT(offsetof(Bond, stiffness) == 0x6c, "Bond.stiffness");
 SR_STATIC_ASSERT(offsetof(Bond, damping) == 0x70, "Bond.damping");
-SR_STATIC_ASSERT(offsetof(Bond, friction_dir) == 0x74, "Bond.friction_dir");
+SR_STATIC_ASSERT(offsetof(Bond, normal) == 0x74, "Bond.normal");
+SR_STATIC_ASSERT(offsetof(Bond, friction) == 0x80, "Bond.friction");
 SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
 SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
 SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
 SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
+SR_STATIC_ASSERT(offsetof(Bond, surface_vel) == 0xbc, "Bond.surface_vel");
 
 /* event[]: record of 0x80 bytes. */
 typedef union Event { struct {
@@ -1823,13 +1826,9 @@ typedef union Intersect { struct {
     float unk_0028;                      /* +0x0028 9 functions */
     uint8_t pad_002c[0x4];
     int unk_0030;                        /* +0x0030 5 functions */
-    int unk_0034;                        /* +0x0034 6 functions */
-    int unk_0038;                        /* +0x0038 5 functions */
-    int unk_003c;                        /* +0x003c 5 functions */
+    int tri_particles[3];                /* +0x0034 lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle */
     uint8_t pad_0040[0x4];
-    float unk_0044;                      /* +0x0044 5 functions */
-    float unk_0048;                      /* +0x0048 4 functions */
-    float unk_004c;                      /* +0x004c 4 functions */
+    float tri_weights[3];                /* +0x0044 lineintersectobject and sphereintersectobject: the barycentric weights of the hit point */
     uint8_t pad_0050[0x4];
     int unk_0054;                        /* +0x0054 7 functions */
     int unk_0058;                        /* +0x0058 5 functions */
@@ -1849,6 +1848,8 @@ SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
 SR_STATIC_ASSERT(offsetof(Intersect, normal) == 0xc, "Intersect.normal");
 SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
 SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
+SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
+SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
 
 /* timerlist[]: record of 0xa0 bytes. */

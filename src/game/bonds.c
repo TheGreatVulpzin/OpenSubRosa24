@@ -8,7 +8,7 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
-/* The type of the bond that pfVar33 points into (pfVar33 = &bond.friction_dir.y, bond + 0x78).
+/* The type of the bond that pfVar33 points into (pfVar33 = &bond.normal.y, bond + 0x78).
  * An int load: the lifted C read it as a float, a denormal on the x87 for each test. */
 #define BOND_KIND(p) (*(int *)((char *)(p) - 0x78))
 
@@ -207,8 +207,8 @@ static void setup_bodyitem(Bond *b, BondOpt *o)
   m_bone = bone->mass;
   m_item = it->mass;
   inv = (float)(1.0 / (m_bone + m_item));
-  b->mass_ratio[0] = inv * m_item;
-  b->mass_ratio[1] = (float)(m_bone * inv);
+  b->weights[0] = inv * m_item;
+  b->weights[1] = (float)(m_bone * inv);
 }
 
 /* bondsetup, type 8: a joint between two bones of a human. */
@@ -745,7 +745,7 @@ void __cdecl lf_41de0(void)
     stoptimer(g_timerlist.bondwheelsim);
     local_c0 = 0;
     if (0 < g_numofbonds) {
-      pfVar33 = &g_bond[0].friction_dir.y;
+      pfVar33 = &g_bond[0].normal.y;
       pfVar21 = &g_bondopt.arm_a.z;
       do {
         iVar30 = g_timerlist.bondpartpart;
@@ -981,14 +981,14 @@ void __cdecl lf_41de0(void)
             k = (float)(bond->rest_length * bond->stiffness);
             neg = -bond->damping;
             load = (float)(w[3] * w[0] * bond->damping);
-            local_5c = (float)((float)(k * bond->friction_dir.x + neg * w[9]) + load * pfVar33[0xe]);
-            local_58 = (float)(load * pfVar33[0xf] + ((float)(w[10] * neg + (float)(bond->friction_dir.y * k))));
-            local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->friction_dir.z))));
-            proj = (float)(bond->friction_dir.z * local_54 +
-                           (bond->friction_dir.x * local_5c + local_58 * bond->friction_dir.y));
+            local_5c = (float)((float)(k * bond->normal.x + neg * w[9]) + load * pfVar33[0xe]);
+            local_58 = (float)(load * pfVar33[0xf] + ((float)(w[10] * neg + (float)(bond->normal.y * k))));
+            local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->normal.z))));
+            proj = (float)(bond->normal.z * local_54 +
+                           (bond->normal.x * local_5c + local_58 * bond->normal.y));
             local_50 = (float *)LF_UINT(proj);
             if (0.0 < proj) {
-              fVar35 = (float10)calculatefriction(&local_5c, &bond->friction_dir.x, pfVar33[2]);
+              fVar35 = (float10)calculatefriction(&local_5c, &bond->normal.x, pfVar33[2]);
               w[20] = (float)(fVar35 + (float10)w[20]);
               w[12] = (float)(local_5c + w[12]);
               w[13] = (float)(local_58 + w[13]);
