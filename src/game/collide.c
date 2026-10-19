@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "intersect.h"
+#include "sr_math.h"
 #include "sr_runtime.h"
 #include "vectors.h"
 
@@ -22,11 +23,9 @@
 int __cdecl lf_40aa0(float *hit, float *normal, float *dist, uint32_t area, float *pos, float radius);
 int __cdecl lf_2c0c0(float *hit, float *normal, float *t, uint32_t area, float *from, float *to);
 int __cdecl lf_41550(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float radius);
-int __cdecl lf_146a0(float *hit, float *normal, float *t, int object, float *from, float *to);
 #define sphereintersectarea lf_40aa0
 #define lineintersectarea lf_2c0c0
 #define circleintersectarea lf_41550
-#define lineintersectcityobject lf_146a0
 
 /* Copies a hit point and its normal into the Intersect record, bit for bit. */
 static void keep_hit(const vec3 *hit, const vec3 *normal)
@@ -627,4 +626,120 @@ int sphereintersectcityobjecttype(vec3 *hit, vec3 *normal, float *dist, int type
         }
     }
     return *dist < 65536.0 ? 1 : 0;
+}
+
+/* The hit point on a face with a grid: face_u in 8 steps from a along a -> b, face_v in 4 steps
+ * from a along a -> d. with_length: the length comes from vectorlength (the second triangle of
+ * a quad), else from a square root of the sum. */
+static void face_grid(const CityFace *face, const vec3 *hit, const vec3 *a, const vec3 *b, const vec3 *d, int with_length)
+{
+    vec3 e1, e2, q;
+    float l1, l2;
+
+    if (face->grid < 1) {
+        g_intersect.face_u = -1;
+        return;
+    }
+    e1.x = (float)(b->x - a->x);
+    e1.y = (float)(b->y - a->y);
+    e1.z = (float)(b->z - a->z);
+    e2.x = (float)(d->x - a->x);
+    e2.y = (float)(d->y - a->y);
+    e2.z = (float)(d->z - a->z);
+    q.x = (float)(hit->x - a->x);
+    q.y = (float)(hit->y - a->y);
+    q.z = (float)(hit->z - a->z);
+    if (with_length)
+        l1 = vectorlength(&e1);
+    else
+        l1 = (float)x87_sqrt((double)(float)(e1.z * e1.z + (e1.x * e1.x + e1.y * e1.y)));
+    normalizevector(&e1, &e1);
+    if (with_length)
+        l2 = vectorlength(&e2);
+    else
+        l2 = (float)x87_sqrt((double)(float)(e2.z * e2.z + (e2.x * e2.x + e2.y * e2.y)));
+    normalizevector(&e2, &e2);
+    g_intersect.face_u = (int)(long long)((((float)(q.z * e1.z + (q.x * e1.x + q.y * e1.y))) * 8.0) / l1);
+    g_intersect.face_v = (int)(long long)((((float)(q.z * e2.z + (q.x * e2.x + e2.y * q.y))) * 4.0) / l2);
+}
+
+/* Moves a corner of the mesh of a city object type into the world. */
+static void city_corner(vec3 *out, const CityObjectTypeRec *ct, int v, const CityObjectRec *co)
+{
+    projectvector(out, &ct->verts[v], co->rot);
+}
+
+static void city_move(vec3 *v, const CityObjectRec *co)
+{
+    v->x = (float)(co->pos.x + v->x);
+    v->y = (float)(co->pos.y + v->y);
+    v->z = (float)(co->pos.z + v->z);
+}
+
+/* The line from -> to against city object obj: the mesh of its type, turned by rot and placed
+ * at pos. hit, normal and *t get the nearest hit (t is the part of the line before it). A quad
+ * tests its second triangle with the normal of the first. A triangle face with a grid takes the
+ * fourth corner of the quad before it in this call (0 before any quad). */
+int lineintersectcityobject(float *hitp, float *normalp, float *t, int obj, float *from, float *to)
+{
+    const CityObjectRec *co = &g_cityobjects[obj];
+    const CityObjectTypeRec *ct = &g_cityobjecttypes[co->type];
+    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
+    vec3 *hit = (vec3 *)hitp, *normal = (vec3 *)normalp;
+    const CityFace *face;
+    vec3 a, b, c, d = {0.0f, 0.0f, 0.0f}, n, h;
+    float lim, tt;
+    int f;
+
+    lim = co->pos.x - ct->radius;
+    if (!(lim <= s->x || lim <= e->x))
+        return 0;
+    lim = co->pos.y - ct->radius;
+    if (s->y < lim && e->y < lim)
+        return 0;
+    lim = co->pos.z - ct->radius;
+    if (s->z < lim && e->z < lim)
+        return 0;
+    lim = co->pos.x + ct->radius;
+    if (lim < s->x && lim < e->x)
+        return 0;
+    lim = co->pos.y + ct->radius;
+    if (lim < s->y && lim < e->y)
+        return 0;
+    lim = co->pos.z + ct->radius;
+    if (lim < s->z && lim < e->z)
+        return 0;
+    *t = 1.0f;
+    if (!(0 < ct->num_faces))
+        return 0;
+    for (f = 0; f < ct->num_faces; f++) {
+        face = &ct->faces[f];
+        city_corner(&a, ct, face->verts[0], co);
+        city_corner(&b, ct, face->verts[1], co);
+        city_corner(&c, ct, face->verts[2], co);
+        generatetrinormal(&n, &a, &b, &c);
+        city_move(&a, co);
+        city_move(&b, co);
+        city_move(&c, co);
+        if (face->corners == 4) {
+            city_corner(&d, ct, face->verts[3], co);
+            city_move(&d, co);
+        }
+        if (lineintersecttriangle(&h, &n, &tt, s, e, &a, &b, &c) != 0 && tt < *t) {
+            *hit = h;
+            *normal = n;
+            *t = tt;
+            face_grid(face, hit, &a, &b, &d, 0);
+        }
+        if (face->corners == 4 && lineintersecttriangle(&h, &n, &tt, s, e, &a, &c, &d) != 0 && tt < *t) {
+            *hit = h;
+            *normal = n;
+            *t = tt;
+            face_grid(face, hit, &a, &b, &d, 1);
+        }
+    }
+    if (!(*t < 1.0))
+        return 0;
+    g_intersect.surface_vel = co->vel;
+    return 1;
 }

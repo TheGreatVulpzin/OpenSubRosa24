@@ -102,10 +102,10 @@ typedef union Wheel { struct {
 /* A city object (an elevator, a door): the global cityobject holds 1024 records of 0x54 bytes. */
 typedef union CityObjectRec { struct {
     int active;         /* +0x00 createcityobject writes 1; the line tests skip a record with 0 */
-    int unk_04;         /* +0x04 */
-    float unk_08[3];    /* +0x08 lineintersectcityobject, the packets */
+    int type;           /* +0x04 index into the cityobjecttype records */
+    vec3 pos;           /* +0x08 lineintersectcityobject: the mesh of the type moves to it */
     vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
-    float unk_20[9];    /* +0x20 the packets */
+    vec3 rot[3];        /* +0x20 lineintersectcityobject: the mesh of the type turns by it */
     int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
@@ -135,7 +135,7 @@ typedef union TrackPiece { struct {
 typedef union CityFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into CityObjectTypeRec.verts */
-    int unk_14;         /* +0x14 */
+    int grid;           /* +0x14 lineintersectcityobject: above 0, a hit gets Intersect.face_u and face_v */
 }; uint8_t lf_raw[0x18]; } CityFace;
 
 /* A city object type (an elevator, a door): the global cityobjecttype holds 256 records of
@@ -1930,8 +1930,8 @@ typedef union Intersect { struct {
     int unk_0070;                        /* +0x0070 4 functions */
     int unk_0074;                        /* +0x0074 3 functions */
     int index;                           /* +0x0078 lineintersectall: set to -1 before the search */
-    int unk_007c;                        /* +0x007c 3 functions */
-    int unk_0080;                        /* +0x0080 3 functions */
+    int face_u;                          /* +0x007c lineintersectcityobject: the hit point on a face with a grid, in 8 steps along its first edge; -1 when the face has no grid */
+    int face_v;                          /* +0x0080 lineintersectcityobject: the hit point on a face with a grid, in 4 steps along its second edge */
 }; uint8_t lf_raw[0x84]; } Intersect;
 SR_STATIC_ASSERT(sizeof(Intersect) == 0x84, "Intersect");
 SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
@@ -1946,6 +1946,8 @@ SR_STATIC_ASSERT(offsetof(Intersect, block) == 0x54, "Intersect.block");
 SR_STATIC_ASSERT(offsetof(Intersect, material) == 0x64, "Intersect.material");
 SR_STATIC_ASSERT(offsetof(Intersect, area_material) == 0x68, "Intersect.area_material");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
+SR_STATIC_ASSERT(offsetof(Intersect, face_u) == 0x7c, "Intersect.face_u");
+SR_STATIC_ASSERT(offsetof(Intersect, face_v) == 0x80, "Intersect.face_v");
 
 /* timerlist[]: record of 0xa0 bytes. */
 typedef union TimerList { struct {

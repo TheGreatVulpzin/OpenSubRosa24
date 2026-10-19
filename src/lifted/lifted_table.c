@@ -158,7 +158,7 @@ void lf_13d80(void);
 void createbullet(void);
 void bullettimetolive(void);
 void lf_14600(void);
-void lf_146a0(void);
+void lineintersectcityobject(void);
 void lf_14dd0(void);
 void lf_154b0(void);
 void lf_155e0(void);
@@ -476,7 +476,7 @@ const LfEntry lf_table[] = {
     { "createbullet", 0x143b0, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
     { "bullettimetolive", 0x14590, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "createcityobject", 0x14600, (void *)lf_14600, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "lineintersectcityobject", 0x146a0, (void *)lf_146a0, 6, LF_RET_INT, 4, "pppvpp", 0 },
+    { "lineintersectcityobject", 0x146a0, (void *)lineintersectcityobject, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectcityobjecttype", 0x14dd0, (void *)lf_14dd0, 8, LF_RET_INT, 4, "pppvpppp", 0 },
     { "city_createelevator", 0x154b0, (void *)lf_154b0, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)lf_155e0, 0, LF_RET_VOID, 4, "", 0 },

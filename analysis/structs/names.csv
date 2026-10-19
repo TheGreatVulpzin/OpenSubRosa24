@@ -321,3 +321,5 @@ object,0x7b4,num_faces,int,,"createobject copies objecttype.num_faces; the line 
 object,0x7b8,faces,ObjectFace,272,"createobject copies the faces of the object type; stride 0x40, the list ends at +0x4bb8"
 object,0x4bbc,verts,ObjectVertex,256,"stride 0x10: the corners of the faces; the list ends at drive_input (+0x5bbc)"
 intersect,0x30,face,int,,"sphereintersectobject and lineintersectobject: the face of the hit; -1 for a wheel"
+intersect,0x7c,face_u,int,,"lineintersectcityobject: the hit point on a face with a grid, in 8 steps along its first edge; -1 when the face has no grid"
+intersect,0x80,face_v,int,,"lineintersectcityobject: the hit point on a face with a grid, in 4 steps along its second edge"

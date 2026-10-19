@@ -5803,12 +5803,12 @@ __declspec(naked) static void th_14600(void)
 }
 static uint8_t expect_14600[8] = { 0x56, 0x33, 0xf6, 0xb8, 0x20, 0x40, 0x22, 0x16 };
 
-undefined4 __cdecl lf_146a0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6);
+undefined4 __cdecl lineintersectcityobject(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6);
 static undefined4 (__cdecl *orig_146a0)(float *, float *, float *, int, float *, float *);
 static SvVerify v_146a0 = { "lineintersectcityobject", -1 };
 static undefined4 __cdecl hk_146a0(float * param_1, float * param_2, float * param_3, int param_4, float * param_5, float * param_6)
 {
-    SV_HOOK_RET(undefined4, v_146a0, lf_146a0(param_1, param_2, param_3, param_4, param_5, param_6), orig_146a0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET(undefined4, v_146a0, lineintersectcityobject(param_1, param_2, param_3, param_4, param_5, param_6), orig_146a0(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_146a0(void)
 {

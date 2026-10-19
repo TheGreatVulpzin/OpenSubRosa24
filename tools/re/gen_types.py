@@ -194,10 +194,10 @@ typedef union Wheel { struct {
 /* A city object (an elevator, a door): the global cityobject holds 1024 records of 0x54 bytes. */
 typedef union CityObjectRec { struct {
     int active;         /* +0x00 createcityobject writes 1; the line tests skip a record with 0 */
-    int unk_04;         /* +0x04 */
-    float unk_08[3];    /* +0x08 lineintersectcityobject, the packets */
+    int type;           /* +0x04 index into the cityobjecttype records */
+    vec3 pos;           /* +0x08 lineintersectcityobject: the mesh of the type moves to it */
     vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
-    float unk_20[9];    /* +0x20 the packets */
+    vec3 rot[3];        /* +0x20 lineintersectcityobject: the mesh of the type turns by it */
     int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
@@ -227,7 +227,7 @@ typedef union TrackPiece { struct {
 typedef union CityFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into CityObjectTypeRec.verts */
-    int unk_14;         /* +0x14 */
+    int grid;           /* +0x14 lineintersectcityobject: above 0, a hit gets Intersect.face_u and face_v */
 }; uint8_t lf_raw[0x18]; } CityFace;
 
 /* A city object type (an elevator, a door): the global cityobjecttype holds 256 records of

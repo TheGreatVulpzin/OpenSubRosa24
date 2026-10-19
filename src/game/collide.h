@@ -18,4 +18,6 @@ int lineintersecttrackrail(float *from, float *to, int k);
 int sphereintersectcityobjecttype(vec3 *hit, vec3 *normal, float *dist, int type, const vec3 *pos, const vec3 rot[3],
                                   const vec3 *center, float r);
 
+int lineintersectcityobject(float *hit, float *normal, float *t, int obj, float *from, float *to);
+
 #endif /* SR_COLLIDE_H */
