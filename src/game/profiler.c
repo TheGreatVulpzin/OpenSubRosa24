@@ -4,15 +4,15 @@
  * The physics loops call it many times in each tick, so it must be fast. The math gives
  * the same bits as the 024d on the x87 (53-bit precision).
  */
-#include "lift_support.h"
-#include "lift_os.h"
+#include "profiler.h"
 
-#define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
-#define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
+#include <stdint.h>
 
-void __cdecl lf_0b3f0(int param_1)
+#define g_sysinfo (*SR_AT(SysInfo, 0x916d2e0))
+
+void stoptimer(int timer)
 {
-    Timer *t = &g_timer[param_1];
+    Timer *t = &g_timer[timer];
     uint64_t now = __rdtsc();
     uint64_t start = (uint64_t)(uint32_t)t->start_hi << 32 | (uint32_t)t->start_lo;
     uint64_t total = ((uint64_t)(uint32_t)t->total_hi << 32 | (uint32_t)t->total_lo) + (now - start);
@@ -24,8 +24,8 @@ void __cdecl lf_0b3f0(int param_1)
     if (total >> 63) {
         cycles = 9223372036854775808.0 + (double)(int64_t)(total & 0x7fffffffffffffffull);
     } else {
-        /* The 024d rounds the 64-bit count to a double before the multiply. Without the
-         * store, the x87 keeps all 64 bits and the result can change by 1. */
+        /* The count is rounded to a double before the multiply. Without the store, the x87
+         * keeps all 64 bits and the result can change by 1. */
         volatile double rounded = (double)(int64_t)total;
         cycles = rounded;
     }
@@ -39,5 +39,3 @@ void __cdecl lf_0b3f0(int param_1)
     t->ms = (int)(uint32_t)whole;
 }
 
-#undef g_sysinfo
-#undef g_timer

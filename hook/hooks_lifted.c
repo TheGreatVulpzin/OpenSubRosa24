@@ -3036,12 +3036,12 @@ __declspec(naked) static void th_0b150(void)
 }
 static uint8_t expect_0b150[8] = { 0x8b, 0x44, 0x24, 0x04, 0xd9, 0x44, 0x24, 0x1c };
 
-void __cdecl lf_0b3f0(int param_1);
+void __cdecl stoptimer(int param_1);
 static void (__cdecl *orig_0b3f0)(int);
 static SvVerify v_0b3f0 = { "stoptimer", -1 };
 static void __cdecl hk_0b3f0(int param_1)
 {
-    SV_HOOK_VOID(v_0b3f0, lf_0b3f0(param_1), orig_0b3f0(param_1), NULL);
+    SV_HOOK_VOID(v_0b3f0, stoptimer(param_1), orig_0b3f0(param_1), NULL);
 }
 __declspec(naked) static void th_0b3f0(void)
 {
@@ -7597,12 +7597,12 @@ __declspec(naked) static void th_1d8a0(void)
 }
 static uint8_t expect_1d8a0[7] = { 0x83, 0xec, 0x24, 0x8b, 0x44, 0x24, 0x2c };
 
-void __cdecl lf_1d9e0(float * param_1, float * param_2, float * param_3);
+void __cdecl multiply3x3matrices(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_1d9e0)(float *, float *, float *);
 static SvVerify v_1d9e0 = { "multiply3x3matrices", -1 };
 static void __cdecl hk_1d9e0(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_1d9e0, lf_1d9e0(param_1, param_2, param_3), orig_1d9e0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_1d9e0, multiply3x3matrices(param_1, param_2, param_3), orig_1d9e0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_1d9e0(void)
 {
@@ -8606,12 +8606,12 @@ __declspec(naked) static void th_27ba0(void)
 }
 static uint8_t expect_27ba0[6] = { 0x8b, 0x15, 0x30, 0xd7, 0x94, 0x19 };
 
-float10 __cdecl lf_27e80(float * param_1, float * param_2, float param_3);
+float10 __cdecl calculatefriction(float * param_1, float * param_2, float param_3);
 static float10 (__cdecl *orig_27e80)(float *, float *, float);
 static SvVerify v_27e80 = { "calculatefriction", -1 };
 static float10 __cdecl hk_27e80(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_RET_FLOAT(float10, v_27e80, lf_27e80(param_1, param_2, param_3), orig_27e80(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_27e80, calculatefriction(param_1, param_2, param_3), orig_27e80(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_27e80(void)
 {

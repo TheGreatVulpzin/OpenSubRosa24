@@ -10,9 +10,8 @@
 #define g_timer SR_AT(Timer, 0x14043a0)
 #define g_timerlist (*SR_AT(TimerList, 0x12a81c60))
 
-/* stoptimer has no clean version yet: the call goes to the lifted C in profiler.c. */
-void __cdecl lf_0b3f0(int timer);
-#define stoptimer lf_0b3f0
+/* The end of a timer: adds the cycles since starttimer to the total, in cycles and in ms. */
+void stoptimer(int timer);
 
 /* Give a profiler timer its name and clear its total. */
 static __inline void nametimer(int timer, const char *name)

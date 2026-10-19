@@ -248,3 +248,18 @@ void normalizevector2d(float out[2], const float v[2])
     out[0] = 0.0f;
     out[1] = 0.0f;
 }
+
+/* out = a * b. Each sum starts at 0, so a product of -0 gives +0. out may be a or b. */
+void multiply3x3matrices(vec3 out[3], const vec3 a[3], const vec3 b[3])
+{
+    vec3 m[3];
+    int i;
+    for (i = 0; i < 3; i++) {
+        m[i].x = (float)(b[2].x * a[i].z + (float)(b[1].x * a[i].y + (float)(b[0].x * a[i].x + 0.0f)));
+        m[i].y = (float)(a[i].z * b[2].y + (float)(b[1].y * a[i].y + (float)(a[i].x * b[0].y + 0.0f)));
+        m[i].z = (float)(b[2].z * a[i].z + (float)(b[1].z * a[i].y + (float)(b[0].z * a[i].x + 0.0f)));
+    }
+    out[0] = m[0];
+    out[1] = m[1];
+    out[2] = m[2];
+}

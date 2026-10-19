@@ -6,6 +6,7 @@
  */
 #include "solver.h"
 
+#include "sr_math.h"
 #include "sr_runtime.h"
 
 /* A bond between two particles: the change acts along the bond, in the ratio of the masses. */
@@ -64,4 +65,33 @@ void bond_bodybody(int i)
     b->dw.x = (float)((float)(ey * rb.z - rb.y * ez) * sb + b->dw.x);
     b->dw.y = (float)((float)(rb.x * ez - rb.z * ex) * sb + b->dw.y);
     b->dw.z = (float)(sb * (float)(rb.y * ex - ey * rb.x) + b->dw.z);
+}
+
+float calculatefriction(vec3 *v, const vec3 *n, float friction)
+{
+    float vx = v->x, vy = v->y, vz = v->z, d, ex, ey, ez, len, inv, limit, lost = 0.0f;
+    double along;
+
+    d = (float)(vz * n->z + (vy * n->y + vx * n->x));
+    v->x = d * n->x;
+    v->y = (float)(d * n->y);
+    d = (float)(d * n->z);
+    v->z = d;
+    ex = (float)(vx - v->x);
+    ey = (float)(vy - v->y);
+    ez = (float)(vz - d);
+    len = (float)x87_sqrt((double)(float)(ez * ez + (ex * ex + ey * ey)));
+    if (len <= 1.52587890625E-5)
+        return 0.0f;
+    inv = (float)(1.0 / len);
+    along = x87_sqrt((double)(float)(v->y * v->y + v->x * v->x + d * d));
+    limit = (float)((float)along * friction);
+    if (limit < len) {
+        lost = (float)((float)((len - limit) * (float)along) * 60.0 * 8.0);
+        len = limit;
+    }
+    v->x = (float)(inv * ex * len + v->x);
+    v->y = (float)((float)(ey * inv) * len + v->y);
+    v->z = (float)(len * (float)(inv * ez) + v->z);
+    return lost;
 }

@@ -13426,81 +13426,6 @@ void __cdecl lf_1d7a0(int param_1,int param_2)
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x1d9e0 */
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define __security_check_cookie(x) ((void)0)
-#define local_34 (*(undefined4 *)(lf_frame + 0x1c))
-#define local_2c (*(float *)(lf_frame + 0x24))
-#define local_28 (*(float (*)[4])(lf_frame + 0x28))
-#define local_18 (*(int *)(lf_frame + 0x38))
-#define local_14 (*(int *)(lf_frame + 0x3c))
-#define local_10 (*(int *)(lf_frame + 0x40))
-#define local_c (*(int *)(lf_frame + 0x44))
-#define local_8 (*(int *)(lf_frame + 0x48))
-#define local_4 (*(uint *)(lf_frame + 0x4c))
-void __cdecl lf_1d9e0(float *param_1,float *param_2,float *param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-
-  int iVar1;
-  float *pfVar2;
-  float *pfVar3;
-  float *pfVar4;
-  int iVar5;
-
-
-
-
-
-
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)&local_2c;
-  iVar1 = -(int)param_2;
-  iVar5 = 3;
-  pfVar2 = param_2 + 2;
-  pfVar4 = local_28 + 1;
-  do {
-    pfVar4[-1] = 0.0;
-    pfVar3 = pfVar2 + 3;
-    iVar5 = iVar5 + -1;
-    local_2c = (float)(param_3[3] * pfVar2[-1] + ((float)(*param_3 * pfVar2[-2] + pfVar4[-1])));
-    pfVar4[-1] = (float)(param_3[6] * *pfVar2 + local_2c);
-    *pfVar4 = 0.0;
-    local_2c = (float)(param_3[4] * pfVar2[-1] + ((float)(pfVar2[-2] * param_3[1] + *pfVar4)));
-    *pfVar4 = (float)(*pfVar2 * param_3[7] + local_2c);
-    *(undefined4 *)(((undefined *)&local_34) + iVar1 + (int)pfVar3) = 0;
-    local_2c = (float)(param_3[5] * pfVar2[-1] +
-               ((float)(param_3[2] * pfVar2[-2] + *(float *)(((undefined *)&local_34) + iVar1 + (int)pfVar3))));
-    *(float *)(((undefined *)&local_34) + iVar1 + (int)pfVar3) = (float)(param_3[8] * *pfVar2 + local_2c);
-    pfVar2 = pfVar3;
-    pfVar4 = pfVar4 + 3;
-  } while (iVar5 != 0);
-  *param_1 = local_28[0];
-  param_1[1] = local_28[1];
-  param_1[2] = local_28[2];
-  param_1[3] = local_28[3];
-  param_1[4] = LF_BITS_F(local_18);
-  param_1[5] = LF_BITS_F(local_14);
-  param_1[6] = LF_BITS_F(local_10);
-  param_1[7] = LF_BITS_F(local_c);
-  param_1[8] = LF_BITS_F(local_8);
-  return;
-}
-#undef DAT_00460d18
-#undef __security_check_cookie
-#undef local_34
-#undef local_2c
-#undef local_28
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
 /* ---------------------------------------------------------------- 0x1dba0 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_body (*(Body (*)[32])SR_VA(0xf670280))
@@ -17765,54 +17690,6 @@ LAB_0042788c:
 #undef _CIatan2
 #undef _CItan
 #undef local_18
-
-/* ---------------------------------------------------------------- 0x27e80 */
-#define _CIsqrt x87_sqrt
-#define local_14 (*(float *)(lf_frame + 0x1c))
-float10 __cdecl lf_27e80(float *param_1,float *param_2,float param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  float fVar6;
-  double dVar7;
-
-  
-  local_14 = 0.0;
-  fVar1 = *param_1;
-  fVar2 = param_1[1];
-  fVar3 = param_1[2];
-  fVar4 = (float)(fVar3 * param_2[2] + (fVar2 * param_2[1] + fVar1 * *param_2));
-  *param_1 = fVar4 * *param_2;
-  param_1[1] = (float)(fVar4 * param_2[1]);
-  fVar4 = (float)(fVar4 * param_2[2]);
-  param_1[2] = fVar4;
-  fVar1 = (float)(fVar1 - *param_1);
-  fVar2 = (float)(fVar2 - param_1[1]);
-  fVar3 = (float)(fVar3 - fVar4);
-  dVar7 = _CIsqrt((double)((float)(fVar3 * fVar3 + (fVar1 * fVar1 + fVar2 * fVar2))));
-  fVar5 = (float)dVar7;
-  if (fVar5 <= 1.52587890625E-5) {
-    return (float10)0.0;
-  }
-  fVar6 = (float)(1.0 / fVar5);
-  dVar7 = _CIsqrt((double)((float)(param_1[1] * param_1[1] + *param_1 * *param_1 + fVar4 * fVar4)));
-  fVar4 = (float)((float)dVar7 * param_3);
-  if (fVar4 < fVar5) {
-    local_14 = (float)((float)((fVar5 - fVar4) * (float)dVar7) * 60.0 * 8.0);
-    fVar5 = fVar4;
-  }
-  *param_1 = (float)(fVar6 * fVar1 * fVar5 + *param_1);
-  param_1[1] = (float)((float)(fVar2 * fVar6) * fVar5 + param_1[1]);
-  param_1[2] = (float)(fVar5 * ((float)(fVar6 * fVar3)) + param_1[2]);
-  return (float10)local_14;
-}
-#undef _CIsqrt
-#undef local_14
 
 /* ---------------------------------------------------------------- 0x28020 */
 #define g_cityobjecttype (*(CityObjectType *)SR_VA(0xf42e500))

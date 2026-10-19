@@ -86,7 +86,7 @@ void lf_0b0b0(void);
 void lf_0b150(void);
 void lf_0b230(void);
 void lf_0b300(void);
-void lf_0b3f0(void);
+void stoptimer(void);
 void lf_0b4a0(void);
 void lf_0b540(void);
 void lf_0b6d0(void);
@@ -203,7 +203,7 @@ void lf_1d3b0(void);
 void lf_1d4d0(void);
 void lf_1d7a0(void);
 void multiplyquaternion(void);
-void lf_1d9e0(void);
+void multiply3x3matrices(void);
 void lf_1dba0(void);
 void lf_1f4a0(void);
 void lf_20680(void);
@@ -227,7 +227,7 @@ void lf_272b0(void);
 void createparticle(void);
 void particletimetolive(void);
 void particlesimulation(void);
-void lf_27e80(void);
+void calculatefriction(void);
 void lf_28020(void);
 void lf_28190(void);
 void lf_28230(void);
@@ -404,7 +404,7 @@ const LfEntry lf_table[] = {
     { "objecttype_addface", 0xb150, (void *)lf_0b150, 8, LF_RET_VOID, 4, "vvvvvvvv", 0 },
     { "gettimeofday", 0xb230, (void *)lf_0b230, 2, LF_RET_INT, 4, "pp", 1 },
     { "setcpuaffinity", 0xb300, (void *)lf_0b300, 0, LF_RET_VOID, 4, "", 1 },
-    { "stoptimer", 0xb3f0, (void *)lf_0b3f0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "stoptimer", 0xb3f0, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xb4a0, (void *)lf_0b4a0, 0, LF_RET_VOID, 4, "", 1 },
     { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4, "", 0 },
     { "addvoice", 0xb6d0, (void *)lf_0b6d0, 2, LF_RET_INT, 4, "vv", 0 },
@@ -521,7 +521,7 @@ const LfEntry lf_table[] = {
     { "logic_setteammanager", 0x1d4d0, (void *)lf_1d4d0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_gunstore_buy", 0x1d7a0, (void *)lf_1d7a0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "multiplyquaternion", 0x1d8a0, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "multiply3x3matrices", 0x1d9e0, (void *)lf_1d9e0, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "multiply3x3matrices", 0x1d9e0, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "unpackobjectpacket", 0x1dba0, (void *)lf_1dba0, 0, LF_RET_VOID, 4, "", 0 },
     { "packobjectpacket2", 0x1f4a0, (void *)lf_1f4a0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "packobjectpacket", 0x20680, (void *)lf_20680, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -545,7 +545,7 @@ const LfEntry lf_table[] = {
     { "createparticle", 0x278c0, (void *)createparticle, 5, LF_RET_INT, 4, "vppvv", 0 },
     { "particletimetolive", 0x279b0, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "particlesimulation", 0x27ba0, (void *)particlesimulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "calculatefriction", 0x27e80, (void *)lf_27e80, 3, LF_RET_FLOAT, 4, "ppv", 0 },
+    { "calculatefriction", 0x27e80, (void *)calculatefriction, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "createplayer", 0x28020, (void *)lf_28020, 0, LF_RET_INT, 4, "", 0 },
     { "scenario_armhuman", 0x28190, (void *)lf_28190, 3, LF_RET_INT, 4, "vvv", 0 },
     { "createmission_threeway", 0x28230, (void *)lf_28230, 3, LF_RET_VOID, 4, "vvp", 0 },

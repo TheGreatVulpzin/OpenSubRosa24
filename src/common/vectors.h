@@ -29,5 +29,6 @@ void projectorientation(quat *out, const quat *p, const quat *q);
 void rotatevector(vec3 *v, const vec3 *axis, float angle);
 void rotateorientation(vec3 rot[3], const vec3 *axis, float angle);
 void multiplyquaternion(vec3 out[3], const vec3 p[3], const vec3 q[3]);
+void multiply3x3matrices(vec3 out[3], const vec3 a[3], const vec3 b[3]);
 
 #endif /* SR_VECTORS_H */

@@ -24,13 +24,9 @@
 #define g_numofdynamicbonds (*SR_AT(int, 0x1ca5a30)) /* the bonds with the contacts of the last tick */
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
-void __cdecl lf_1d9e0(float *out, float *a, float *b);
 void __cdecl lf_22f90(void);
-long double __cdecl lf_27e80(float *v, float *normal, float friction);
 void __cdecl lf_324c0(void);
-#define multiply3x3matrices lf_1d9e0
 #define objectwheelsimulation2 lf_22f90
-#define calculatefriction lf_27e80
 #define objectenginesimulation2 lf_324c0
 
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
@@ -179,7 +175,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
     bb->target_rot[2].x = 0.0f;
     bb->target_rot[2].y = 0.0f;
   }
-  multiply3x3matrices(m, m, (float *)bb->target_rot);
+  multiply3x3matrices((vec3 *)m, (const vec3 *)m, bb->target_rot);
   k = b->damping;
   o->damping = k;
   /* For bones 3 to 8 of a living human, the direction of the last tick stays. */
@@ -499,7 +495,7 @@ static void contact_level(const Bond *b)
   v.z = (float)(d * b->surface_vel.z + (float)(nd * pa->vel.z + (float)(k * n.z)));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   pa->dv.x = (float)(pa->dv.x + v.x);
   pa->dv.y = (float)(pa->dv.y + v.y);
   pa->dv.z = (float)(pa->dv.z + v.z);
@@ -533,7 +529,7 @@ static void contact_particle(const Bond *b)
   len = (float)(len / (mb->mass + ma->mass));
   if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   f = (float)(len * mb->mass);
   pa->dv.x = (float)(pa->dv.x + f * v.x);
   pa->dv.y = (float)(pa->dv.y + v.y * f);
@@ -603,7 +599,7 @@ static void contact_triangle(const Bond *b)
   s = (float)((float)len / (mt + ma));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   f = s * mt;
   pa->dv.x = (float)(pa->dv.x + f * v.x);
   pa->dv.y = (float)(v.y * f + pa->dv.y);
@@ -645,7 +641,7 @@ static void contact_bone_triangle(const Bond *b)
   len = (float)(len / (mt + mb));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   f = len * mt;
   x->dv.x = (float)(x->dv.x + f * v.x);
   x->dv.y = (float)(v.y * f + x->dv.y);
@@ -670,7 +666,7 @@ static void contact_wheel(const Bond *b)
   v.z = (float)(roll * rd.z + (float)(nd * w->vel.z + (float)(k * n.z)));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  w->slip = (float)(calculatefriction(&v.x, (float *)&b->normal, b->friction) + (long double)w->slip);
+  w->slip = (float)(calculatefriction(&v, &b->normal, b->friction) + (double)w->slip);
   w->dv.x = (float)(v.x + w->dv.x);
   w->dv.y = (float)(v.y + w->dv.y);
   w->dv.z = (float)(v.z + w->dv.z);
@@ -695,7 +691,7 @@ static void contact_bone_level(const Bond *b)
   v.z = (float)(nd * p.z + (float)(k * n.z));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   x->dv.x = (float)(v.x + x->dv.x);
   x->dv.y = (float)(v.y + x->dv.y);
   x->dv.z = (float)(v.z + x->dv.z);
@@ -822,7 +818,7 @@ static void contact_bone_bone(const Bond *b)
   s = (float)(unit_or_zero(&v) / (mx + my));
   if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   f = (float)(s * my);
   x->dv.x = (float)(x->dv.x + f * v.x);
   x->dv.y = (float)(x->dv.y + v.y * f);
@@ -856,7 +852,7 @@ static void contact_bone_item(const Bond *b)
   s = (float)(unit_or_zero(&v) / (mx + it->mass));
   if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   f = (float)(it->mass * s);
   a.x = f * v.x;
   a.y = (float)(f * v.y);
@@ -898,7 +894,7 @@ static void contact_wheelbody(const Bond *b)
   v.z = (float)(nd * p.z + (float)(k * n.z));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  calculatefriction(&v, &b->normal, b->friction);
   wb->dv.x = (float)(v.x + wb->dv.x);
   wb->dv.y = (float)(v.y + wb->dv.y);
   wb->dv.z = (float)(v.z + wb->dv.z);
