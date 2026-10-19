@@ -173,6 +173,8 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
   | `deleteplayer` | 2.4 to 3.2 | a player leaves |
   | `sphereintersectcityobjecttype` | 2.4 to 3.0 | collisions |
 
+  The clean `humansimulation` (lot C4, 2026-10-19) gives 1.05 to 1.12 in 3 runs. The lifted version gave 1.17. The time includes its lifted callees (`lineintersectlevel`, `sphereintersectlevel`, `sphereintersectobject`), the likely cause. Measure it again after the lot of the collisions. `bondsimulation2` gives 0.97 to 1.05.
+
 Exception: security fixes for invalid client input (`docs/protocol.md`, section 12, item 15) may go in early. The recordings have only valid input, so the harness does not change. The voice index fix is already in `hook/netguard.c`.
 
 ## Phase 7 — Client decomp
