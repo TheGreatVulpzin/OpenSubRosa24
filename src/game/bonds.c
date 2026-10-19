@@ -9,7 +9,7 @@
 #include "lift_os.h"
 
 /* The type of the bond that pfVar33 points into (pfVar33 = &bond.normal.y, bond + 0x78).
- * An int load: the lifted C read it as a float, a denormal on the x87 for each test. */
+ * An int load: as a float, the type is a denormal on the x87, and each test is slow. */
 #define BOND_KIND(p) (*(int *)((char *)(p) - 0x78))
 
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
@@ -350,7 +350,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
     if (0.7853981852531433 < e[2])
       e[2] = 0.7853981852531433f;
     /* Each angle turns around one axis of bone a. The axis points into r, the matrix that
-     * rotateorientation turns, as in the 024d. */
+     * rotateorientation turns, so each turn uses the axis that the turn before it moved. */
     r[0] = ba->rot[0].x;
     r[1] = ba->rot[0].y;
     r[2] = ba->rot[0].z;
@@ -518,11 +518,10 @@ static void clamp_length(vec3 *v, float len, float limit)
   }
 }
 
-/* bondhuman: a human who stands upright on the ground keeps the balance. Bone 0 gets a turn
- * that brings it back to the vertical (its length is at most a limit from the stance and the
- * body strength), a
- * turn toward the direction that the human faces (human.axis), and less of the turn it has
- * now. The sum, with a limit, goes into BondBone.torque. */
+/* bondhuman: a human who stands upright on the ground keeps the balance. Bone 0 gets three
+ * turns: one back to the vertical (its length is at most a limit from the stance and the body
+ * strength), one toward the direction that the human faces (human.axis), and less of the turn
+ * it has now. The sum, with a limit, goes into BondBone.torque. */
 static void loop_balance(void)
 {
   const vec3 up = *(const vec3 *)g_yaxis;
@@ -586,6 +585,178 @@ static void loop_balance(void)
     w->torque.z = (float)(a.z + w->torque.z);
   }
   stoptimer(g_timerlist.bondhuman);
+}
+
+/* The contact bonds hold a point against a hit surface. The velocity change pushes the point
+ * out along the normal (the stretch rest_length * stiffness, plus the damped speed against the
+ * surface), and calculatefriction removes a part of the sideways speed. A contact only pushes:
+ * when the change points into the surface, nothing happens. */
+
+/* Type 1: a particle against a fixed surface that moves with surface_vel. */
+static void contact_level(const Bond *b)
+{
+  BondParticle *pa = &g_bondparticle[b->particle_a];
+  const vec3 n = b->normal;
+  float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
+  vec3 v;
+
+  v.x = (float)((float)(nd * pa->vel.x + (float)(k * n.x)) + d * b->surface_vel.x);
+  v.y = (float)(b->surface_vel.y * d + (float)(pa->vel.y * nd + (float)(k * n.y)));
+  v.z = (float)(d * b->surface_vel.z + (float)(nd * pa->vel.z + (float)(k * n.z)));
+  if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
+    return;
+  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  pa->dv.x = (float)(pa->dv.x + v.x);
+  pa->dv.y = (float)(pa->dv.y + v.y);
+  pa->dv.z = (float)(pa->dv.z + v.z);
+}
+
+/* Type 2: particle a against particle b. Each side gets its share of the change from the
+ * masses. */
+static void contact_particle(const Bond *b)
+{
+  BondParticle *pa = &g_bondparticle[b->particle_a], *pb = &g_bondparticle[b->particle_b];
+  const Particle *ma = &g_particle[b->particle_a], *mb = &g_particle[b->particle_b];
+  const vec3 n = b->normal;
+  float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
+  float len, inv, f;
+  vec3 v;
+
+  v.x = (float)(d * pb->vel.x + (float)(nd * pa->vel.x + (float)(k * n.x)));
+  v.y = (float)(pb->vel.y * d + (float)(pa->vel.y * nd + (float)(k * n.y)));
+  v.z = (float)(d * pb->vel.z + (float)(nd * pa->vel.z + (float)(k * n.z)));
+  len = (float)x87_sqrt((double)(float)(v.z * v.z + (v.x * v.x + v.y * v.y)));
+  if (len <= 1.52587890625E-5) {
+    v.z = 0.0f;
+    v.x = 0.0f;
+    v.y = 0.0f;
+  } else {
+    inv = (float)(1.0 / len);
+    v.x = inv * v.x;
+    v.y = (float)(inv * v.y);
+    v.z = inv * v.z;
+  }
+  len = (float)(len / (mb->mass + ma->mass));
+  if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
+    return;
+  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  f = (float)(len * mb->mass);
+  pa->dv.x = (float)(pa->dv.x + f * v.x);
+  pa->dv.y = (float)(pa->dv.y + v.y * f);
+  pa->dv.z = (float)(pa->dv.z + v.z * f);
+  f = (float)(-len * ma->mass);
+  pb->dv.x = (float)(pb->dv.x + f * v.x);
+  pb->dv.y = (float)(pb->dv.y + f * v.y);
+  pb->dv.z = (float)(f * v.z + pb->dv.z);
+}
+
+/* The change of the 3 particles of a hit triangle, each in the ratio of its weight. */
+static void push_triangle(const Bond *b, float g, const vec3 *v)
+{
+  BondParticle *pb = &g_bondparticle[b->particle_b];
+  BondParticle *pc = &g_bondparticle[b->particle_c];
+  BondParticle *pd = &g_bondparticle[b->particle_d];
+  float f;
+
+  f = (float)(b->weights[0] * g);
+  pb->dv.x = (float)(pb->dv.x + f * v->x);
+  pb->dv.y = (float)(v->y * f + pb->dv.y);
+  pb->dv.z = (float)(f * v->z + pb->dv.z);
+  f = (float)(b->weights[1] * g);
+  pc->dv.x = (float)(pc->dv.x + f * v->x);
+  pc->dv.y = (float)(v->y * f + pc->dv.y);
+  pc->dv.z = (float)(f * v->z + pc->dv.z);
+  f = (float)(g * b->weights[2]);
+  pd->dv.x = (float)(pd->dv.x + f * v->x);
+  pd->dv.y = (float)(pd->dv.y + f * v->y);
+  pd->dv.z = (float)(f * v->z + pd->dv.z);
+}
+
+/* The mass of the hit point of a triangle: the masses of its 3 particles with the weights. */
+static float triangle_mass(const Bond *b)
+{
+  return (float)(g_particle[b->particle_d].mass * b->weights[2] +
+                 (g_particle[b->particle_c].mass * b->weights[1] + g_particle[b->particle_b].mass * b->weights[0]));
+}
+
+/* Type 3: particle a against a triangle of another object (particles b, c and d). */
+static void contact_triangle(const Bond *b)
+{
+  BondParticle *pa = &g_bondparticle[b->particle_a];
+  const BondParticle *pb = &g_bondparticle[b->particle_b];
+  const BondParticle *pc = &g_bondparticle[b->particle_c];
+  const BondParticle *pd = &g_bondparticle[b->particle_d];
+  const vec3 n = b->normal;
+  float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
+  float wb = (float)(b->weights[0] * b->damping), wc = (float)(b->weights[1] * b->damping);
+  float wd = (float)(b->weights[2] * b->damping);
+  float inv, ma, mt, s, f;
+  double len;
+  vec3 v;
+
+  v.x = (float)((float)(wc * pc->vel.x + (float)((float)((float)(k * n.x) + nd * pa->vel.x) + wb * pb->vel.x)) +
+                wd * pd->vel.x);
+  v.y = (float)(pd->vel.y * wd + (float)(pc->vel.y * wc + (float)(pb->vel.y * wb + (float)(pa->vel.y * nd + (float)(k * n.y)))));
+  v.z = (float)(wd * pd->vel.z + (float)(wc * pc->vel.z + (float)(wb * pb->vel.z + (float)(nd * pa->vel.z + (float)(k * n.z)))));
+  /* No test for a short vector here, unlike types 2 and 4. */
+  len = x87_sqrt((double)(float)(v.y * v.y + v.x * v.x + v.z * v.z));
+  inv = (float)(1.0 / (float)len);
+  v.x = inv * v.x;
+  v.y = (float)(v.y * inv);
+  v.z = (float)(inv * v.z);
+  ma = g_particle[b->particle_a].mass;
+  mt = triangle_mass(b);
+  s = (float)((float)len / (mt + ma));
+  if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
+    return;
+  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  f = s * mt;
+  pa->dv.x = (float)(pa->dv.x + f * v.x);
+  pa->dv.y = (float)(v.y * f + pa->dv.y);
+  pa->dv.z = (float)(pa->dv.z + v.z * f);
+  push_triangle(b, -s * ma, &v);
+}
+
+/* Type 4: a bone of a human against a triangle of an object. */
+static void contact_bone_triangle(const Bond *b)
+{
+  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
+  const BondParticle *pb = &g_bondparticle[b->particle_b];
+  const BondParticle *pc = &g_bondparticle[b->particle_c];
+  const BondParticle *pd = &g_bondparticle[b->particle_d];
+  const vec3 n = b->normal;
+  float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
+  float wb = (float)(b->weights[0] * b->damping), wc = (float)(b->weights[1] * b->damping);
+  float wd = (float)(b->weights[2] * b->damping);
+  float len, inv, mb, mt, f;
+  vec3 v;
+
+  v.x = (float)((float)((float)(wb * pb->vel.x + (float)(k * n.x + nd * x->vel.x)) + wc * pc->vel.x) +
+                wd * pd->vel.x);
+  v.y = (float)(pd->vel.y * wd + (float)(pc->vel.y * wc + (float)(pb->vel.y * wb + (float)(x->vel.y * nd + (float)(n.y * k)))));
+  v.z = (float)(wd * pd->vel.z + (float)(wc * pc->vel.z + (float)(wb * pb->vel.z + (float)(nd * x->vel.z + (float)(k * n.z)))));
+  len = (float)x87_sqrt((double)(float)(v.y * v.y + v.x * v.x + v.z * v.z));
+  if (len <= 1.52587890625E-5) {
+    v.z = 0.0f;
+    v.x = 0.0f;
+    v.y = 0.0f;
+  } else {
+    inv = (float)(1.0 / len);
+    v.x = inv * v.x;
+    v.y = (float)(v.y * inv);
+    v.z = inv * v.z;
+  }
+  mb = g_human[b->owner].bones[b->bone_a].mass;
+  mt = triangle_mass(b);
+  len = (float)(len / (mt + mb));
+  if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
+    return;
+  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  f = len * mt;
+  x->dv.x = (float)(x->dv.x + f * v.x);
+  x->dv.y = (float)(v.y * f + x->dv.y);
+  x->dv.z = (float)(x->dv.z + v.z * f);
+  push_triangle(b, -len * mb, &v);
 }
 
 void __cdecl lf_41de0(void)
@@ -759,217 +930,18 @@ void __cdecl lf_41de0(void)
             bond_partpart(local_c0);
             stoptimer(g_timerlist.bondpartpart);
           }
-          if (BOND_KIND(pfVar33) == 0x1U) {
-            LF_COPY(fVar6, pfVar33[-0x19]);
-            fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            pvVar1 = (vec3 *)(pfVar33 + -1);
-            fVar8 = -pfVar33[-2];
-            LF_COPY(fVar5, pfVar33[-2]);
-            local_5c = (float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pvVar1->x)) +
-                       fVar5 * pfVar33[0x11]);
-            local_58 = (float)(pfVar33[0x12] * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
-            local_54 = (float)(fVar5 * pfVar33[0x13] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
-            local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 + (pvVar1->x * local_5c + local_58 * *pfVar33)))))
-            ;
-            if (0.0 < LF_BITS_F(local_50)) {
-              calculatefriction(&local_5c,(float *)pvVar1,pfVar33[2]);
-              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) + local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) + local_58);
-              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) = (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) + local_54);
-            }
-          }
-          if (BOND_KIND(pfVar33) == 0x2U) {
-            LF_COPY(fVar6, pfVar33[-0x19]);
-            fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_84 = ((int *)LF_UINT(pfVar33[-0x18]));
-            local_9c = (float *)((int)local_84 * 0x20);
-            fVar8 = -pfVar33[-2];
-            LF_COPY(fVar5, pfVar33[-2]);
-            local_7c = (float)(fVar5 * local_9c[(0x160f74 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar6)) * 8]) +
-                       (float)(fVar7 * ((vec3 *)(pfVar33 + -1))->x))));
-            local_78 = (float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar6)) * 8]) * fVar8 + (float)(fVar7 * *pfVar33))));
-            local_74 = (float)(fVar5 * local_9c[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar6)) * 8]) + (float)(fVar7 * pfVar33[1]))));
-            local_50 = ((float *)LF_BITS_U(((float)(local_74 * local_74 + (local_7c * local_7c + local_78 * local_78)))));
-            local_bc = ((int)LF_UINT(fVar6));
-            dVar39 = _CIsqrt((double)LF_BITS_F(local_50));
-            local_70 = (float)dVar39;
-            if (local_70 <= 1.52587890625E-5) {
-              local_74 = 0.0;
-              local_7c = 0.0;
-              local_78 = 0.0;
-            }
-            else {
-              fVar5 = (float)(1.0 / local_70);
-              local_7c = fVar5 * local_7c;
-              local_78 = (float)(fVar5 * local_78);
-              local_74 = fVar5 * local_74;
-            }
-            local_88 = &g_particle[0].mass + (int)local_84 * 0x3c;
-            local_70 = (float)(local_70 /
-                       ((&g_particle[0].mass)[(int)local_84 * 0x3c] +
-                       (&g_particle[0].mass)[local_bc * 0x3c]));
-            local_80 = &g_particle[0].mass + local_bc * 0x3c;
-            local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_74 +
-                                (local_7c * ((vec3 *)(pfVar33 + -1))->x + local_78 * *pfVar33)))));
-            if (0.0 < LF_BITS_F(local_50)) {
-              calculatefriction(&local_7c,(float *)(pfVar33 + -1),pfVar33[2]);
-              fVar5 = (float)(local_70 * *local_88);
-              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar6)) * 8]) + fVar5 * local_7c);
-              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar6)) * 8]) + local_78 * fVar5);
-              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar6)) * 8]) + local_74 * fVar5);
-              local_50 = ((float *)LF_BITS_U(((float)(-local_70 * *local_80))));
-              local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_7c);
-              local_9c[(0x160f79 + LF_RELOC / 4)] = (float)(local_9c[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_50) * local_78);
-              local_9c[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_50) * local_74 + local_9c[(0x160f7a + LF_RELOC / 4)]);
-            }
-          }
-          if (BOND_KIND(pfVar33) == 0x3U) {
-            LF_COPY(fVar5, pfVar33[-0x19]);
-            fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_84 = ((int *)LF_UINT(pfVar33[-0x18]));
-            local_9c = (float *)((int)local_84 * 0x20);
-            local_80 = ((float *)LF_UINT(pfVar33[-0x17]));
-            local_a0 = ((int *)LF_UINT(pfVar33[-0x16]));
-            fVar7 = -pfVar33[-2];
-            fVar8 = (float)(pfVar33[-0xb] * pfVar33[-2]);
-            local_88 = (float *)((int)local_80 * 0x20);
-            fVar9 = (float)(pfVar33[-10] * pfVar33[-2]);
-            fVar10 = (float)(pfVar33[-9] * pfVar33[-2]);
-            local_50 = (float *)((int)local_a0 * 0x20);
-            local_5c = (float)((float)(fVar9 * local_88[(0x160f74 + LF_RELOC / 4)] +
-                       ((float)((float)((float)(fVar6 * ((vec3 *)(pfVar33 + -1))->x) +
-                       fVar7 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar5)) * 8])) + fVar8 * local_9c[(0x160f74 + LF_RELOC / 4)]))) +
-                       fVar10 * local_50[(0x160f74 + LF_RELOC / 4)]);
-            local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar10 +
-                       ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar9 +
-                       ((float)(local_9c[(0x160f75 + LF_RELOC / 4)] * fVar8 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar5)) * 8]) * fVar7 + (float)(fVar6 * *pfVar33))))))));
-            local_54 = (float)(fVar10 * local_50[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar9 * local_88[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * local_9c[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar7 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar5)) * 8]) + (float)(fVar6 * pfVar33[1]))))))));
-            local_98 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
-            local_bc = ((int)LF_UINT(fVar5));
-            dVar39 = _CIsqrt((double)local_98);
-            fVar6 = (float)(1.0 / (float)dVar39);
-            local_5c = fVar6 * local_5c;
-            local_58 = (float)(local_58 * fVar6);
-            local_54 = (float)(fVar6 * local_54);
-            local_98 = (&g_particle[0].mass)[local_bc * 0x3c];
-            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].mass)[(int)local_a0 * 0x3c] * pfVar33[-9] +
-                              ((&g_particle[0].mass)[(int)local_80 * 0x3c] * pfVar33[-10] +
-                              (&g_particle[0].mass)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
-            local_70 = (float)((float)dVar39 / (LF_BITS_F(local_84) + local_98));
-            local_80 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
-                                (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
-            if (0.0 < LF_BITS_F(local_80)) {
-              calculatefriction(&local_5c,(float *)(pfVar33 + -1),pfVar33[2]);
-              fVar6 = local_70 * LF_BITS_F(local_84);
-              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) + fVar6 * local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(local_58 * fVar6 + LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]));
-              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) + local_54 * fVar6);
-              fVar5 = -local_70 * local_98;
-              local_80 = ((float *)LF_BITS_U(((float)(pfVar33[-0xb] * fVar5))));
-              local_9c[(0x160f78 + LF_RELOC / 4)] = (float)(local_9c[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
-              local_9c[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[(0x160f79 + LF_RELOC / 4)]);
-              local_9c[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_80) * local_54 + local_9c[(0x160f7a + LF_RELOC / 4)]);
-              local_9c = ((float *)LF_BITS_U(((float)(pfVar33[-10] * fVar5))));
-              local_88[(0x160f78 + LF_RELOC / 4)] = (float)(local_88[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_9c) * local_5c);
-              local_88[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[(0x160f79 + LF_RELOC / 4)]);
-              local_88[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[(0x160f7a + LF_RELOC / 4)]);
-              local_88 = ((float *)LF_BITS_U(((float)(fVar5 * pfVar33[-9]))));
-              local_50[(0x160f78 + LF_RELOC / 4)] = (float)(local_50[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_5c);
-              local_50[(0x160f79 + LF_RELOC / 4)] = (float)(local_50[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_58);
-              local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
-            }
-          }
-          if (BOND_KIND(pfVar33) == 0x4U) {
-            local_98 = pfVar33[6];
-            fVar6 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_bc = ((int)LF_UINT(pfVar33[7]));
-            local_9c = (float *)(((int)LF_UINT(local_98)) * 0x810 + local_bc * 0x80);
-            LF_COPY(fVar5, pfVar33[-0x18]);
-            local_80 = ((float *)LF_UINT(pfVar33[-0x17]));
-            local_a0 = ((int *)LF_UINT(pfVar33[-0x16]));
-            local_88 = (float *)((int)local_80 * 0x20);
-            fVar7 = -pfVar33[-2];
-            fVar8 = (float)(pfVar33[-0xb] * pfVar33[-2]);
-            fVar9 = (float)(pfVar33[-10] * pfVar33[-2]);
-            local_50 = (float *)((int)local_a0 * 0x20);
-            fVar10 = (float)(pfVar33[-9] * pfVar33[-2]);
-            local_5c = (float)((float)((float)(fVar8 * LF_BITS_F((&DAT_00583dd0)[((int)LF_UINT(fVar5)) * 8]) +
-                       ((float)(fVar6 * ((vec3 *)(pfVar33 + -1))->x + fVar7 * local_9c[(0x118778 + LF_RELOC / 4)]))) +
-                       fVar9 * local_88[(0x160f74 + LF_RELOC / 4)]) + fVar10 * local_50[(0x160f74 + LF_RELOC / 4)]);
-            local_58 = (float)(local_50[(0x160f75 + LF_RELOC / 4)] * fVar10 +
-                       ((float)(local_88[(0x160f75 + LF_RELOC / 4)] * fVar9 +
-                       ((float)(LF_BITS_F((&DAT_00583dd4)[((int)LF_UINT(fVar5)) * 8]) * fVar8 +
-                       ((float)(local_9c[(0x118779 + LF_RELOC / 4)] * fVar7 + (float)(*pfVar33 * fVar6))))))));
-            local_54 = (float)(fVar10 * local_50[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar9 * local_88[(0x160f76 + LF_RELOC / 4)] +
-                       ((float)(fVar8 * LF_BITS_F((&DAT_00583dd8)[((int)LF_UINT(fVar5)) * 8]) +
-                       ((float)(fVar7 * local_9c[(0x11877a + LF_RELOC / 4)] + (float)(fVar6 * pfVar33[1]))))))));
-            local_70 = (float)(local_58 * local_58 + local_5c * local_5c + local_54 * local_54);
-            local_84 = ((int *)LF_UINT(fVar5));
-            dVar39 = _CIsqrt((double)local_70);
-            local_70 = (float)dVar39;
-            if (local_70 <= 1.52587890625E-5) {
-              local_54 = 0.0;
-              local_5c = 0.0;
-              local_58 = 0.0;
-            }
-            else {
-              fVar6 = (float)(1.0 / local_70);
-              local_5c = fVar6 * local_5c;
-              local_58 = (float)(local_58 * fVar6);
-              local_54 = fVar6 * local_54;
-            }
-            local_98 = *(float *)(((int)LF_UINT(local_98)) * 0x2b64 + ((int)&g_human[0].lf_raw[0x154]) + local_bc * 0xe0);
-            local_84 = ((int *)LF_BITS_U(((float)((&g_particle[0].mass)[(int)local_a0 * 0x3c] * pfVar33[-9] +
-                              ((&g_particle[0].mass)[(int)local_80 * 0x3c] * pfVar33[-10] +
-                              (&g_particle[0].mass)[(int)local_84 * 0x3c] * pfVar33[-0xb])))));
-            local_70 = (float)(local_70 / (LF_BITS_F(local_84) + local_98));
-            local_80 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
-                                (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
-            if (0.0 < LF_BITS_F(local_80)) {
-              calculatefriction(&local_5c,(float *)(pfVar33 + -1),pfVar33[2]);
-              local_80 = ((float *)LF_BITS_U((local_70 * LF_BITS_F(local_84))));
-              local_9c[(0x11877c + LF_RELOC / 4)] = (float)(local_9c[(0x11877c + LF_RELOC / 4)] + LF_BITS_F(local_80) * local_5c);
-              local_9c[(0x11877d + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_80) + local_9c[(0x11877d + LF_RELOC / 4)]);
-              local_9c[(0x11877e + LF_RELOC / 4)] = (float)(local_9c[(0x11877e + LF_RELOC / 4)] + local_54 * LF_BITS_F(local_80));
-              fVar6 = -local_70 * local_98;
-              fVar7 = (float)(pfVar33[-0xb] * fVar6);
-              *(float *)&((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(LF_BITS_F((&DAT_00583de0)[((int)LF_UINT(fVar5)) * 8]) + fVar7 * local_5c);
-              *(float *)&((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(local_58 * fVar7 + LF_BITS_F((&DAT_00583de4)[((int)LF_UINT(fVar5)) * 8]));
-              *(float *)&((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]) =
-                   (float)(fVar7 * local_54 + LF_BITS_F((&DAT_00583de8)[((int)LF_UINT(fVar5)) * 8]));
-              local_9c = ((float *)LF_BITS_U(((float)(pfVar33[-10] * fVar6))));
-              local_88[(0x160f78 + LF_RELOC / 4)] = (float)(local_88[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_9c) * local_5c);
-              local_88[(0x160f79 + LF_RELOC / 4)] = (float)(local_58 * LF_BITS_F(local_9c) + local_88[(0x160f79 + LF_RELOC / 4)]);
-              local_88[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_9c) * local_54 + local_88[(0x160f7a + LF_RELOC / 4)]);
-              local_88 = ((float *)LF_BITS_U(((float)(fVar6 * pfVar33[-9]))));
-              local_50[(0x160f78 + LF_RELOC / 4)] = (float)(local_50[(0x160f78 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_5c);
-              local_50[(0x160f79 + LF_RELOC / 4)] = (float)(local_50[(0x160f79 + LF_RELOC / 4)] + LF_BITS_F(local_88) * local_58);
-              local_50[(0x160f7a + LF_RELOC / 4)] = (float)(LF_BITS_F(local_88) * local_54 + local_50[(0x160f7a + LF_RELOC / 4)]);
-            }
-          }
+          if (BOND_KIND(pfVar33) == 0x1U)
+            contact_level((Bond *)((char *)pfVar33 - 0x78));
+          if (BOND_KIND(pfVar33) == 0x2U)
+            contact_particle((Bond *)((char *)pfVar33 - 0x78));
+          if (BOND_KIND(pfVar33) == 0x3U)
+            contact_triangle((Bond *)((char *)pfVar33 - 0x78));
+          if (BOND_KIND(pfVar33) == 0x4U)
+            contact_bone_triangle((Bond *)((char *)pfVar33 - 0x78));
           iVar30 = g_timerlist.bondwheelcollevel;
           if (BOND_KIND(pfVar33) == 0x5U) {
             /* Type 5: a wheel of an object on the ground. The object and wheel indexes are
-             * ints: as floats they are denormals, and each x87 use took about 9000 cycles
-             * for each bond. The float math is the lifted one, in the same order. */
+             * ints: as floats they are denormals, and each x87 use costs about 9000 cycles. */
             Bond *bond = (Bond *)((char *)pfVar33 - 0x78);
             int obj = bond->owner;     /* type 5: object index */
             int wheel = bond->bone_a;  /* type 5: wheel index (0x98 bytes each, at object+0x5f0c) */
