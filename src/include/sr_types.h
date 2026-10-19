@@ -99,6 +99,17 @@ typedef union Wheel { struct {
     float unk_84[5];    /* +0x84 objectwheelsimulation2 */
 }; uint8_t lf_raw[0x98]; } Wheel;
 
+/* A city object (an elevator, a door): the global cityobject holds 1024 records of 0x54 bytes. */
+typedef union CityObjectRec { struct {
+    int active;         /* +0x00 createcityobject writes 1; the line tests skip a record with 0 */
+    int unk_04;         /* +0x04 */
+    float unk_08[3];    /* +0x08 lineintersectcityobject, the packets */
+    vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
+    float unk_20[9];    /* +0x20 the packets */
+    int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
+    float unk_50;       /* +0x50 the packets */
+}; uint8_t lf_raw[0x54]; } CityObjectRec;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -153,6 +164,7 @@ SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
 SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
+SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
@@ -1260,7 +1272,7 @@ SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
 
 /* area[]: record of 0x100d6c bytes. */
 typedef union Area { struct {
-    int unk_0000;                        /* +0x0000 5 functions */
+    int active;                          /* +0x0000 the collision tests of the level skip an area with 0 */
     float unk_0004;                      /* +0x0004 4 functions */
     float unk_0008;                      /* +0x0008 4 functions */
     float unk_000c;                      /* +0x000c 4 functions */
@@ -1296,6 +1308,7 @@ typedef union Area { struct {
     int unk_100d68;                      /* +0x100d68 1 functions */
 }; uint8_t lf_raw[0x100d6c]; } Area;
 SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
+SR_STATIC_ASSERT(offsetof(Area, active) == 0x0, "Area.active");
 
 /* option[]: record of 0x150 bytes. */
 typedef union Option { struct {
@@ -1852,12 +1865,10 @@ typedef union Intersect { struct {
     uint8_t pad_0040[0x4];
     float tri_weights[3];                /* +0x0044 lineintersectobject and sphereintersectobject: the barycentric weights of the hit point */
     uint8_t pad_0050[0x4];
-    int unk_0054;                        /* +0x0054 7 functions */
-    int unk_0058;                        /* +0x0058 5 functions */
-    int unk_005c;                        /* +0x005c 4 functions */
+    int block[3];                        /* +0x0054 lineintersectarea: the block of the hit (area_breakblock takes it); lineintersectlevel writes -1 in [0] for a city object */
     int unk_0060;                        /* +0x0060 4 functions */
-    int unk_0064;                        /* +0x0064 3 functions */
-    int unk_0068;                        /* +0x0068 2 functions */
+    int material;                        /* +0x0064 circleintersectlevel copies area_material for the nearest hit; objectwheelcollision reads the friction of the material */
+    int area_material;                   /* +0x0068 circleintersectarea writes the material of its hit */
     int unk_006c;                        /* +0x006c 5 functions */
     int unk_0070;                        /* +0x0070 4 functions */
     int unk_0074;                        /* +0x0074 3 functions */
@@ -1873,6 +1884,9 @@ SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
 SR_STATIC_ASSERT(offsetof(Intersect, surface_vel) == 0x20, "Intersect.surface_vel");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
+SR_STATIC_ASSERT(offsetof(Intersect, block) == 0x54, "Intersect.block");
+SR_STATIC_ASSERT(offsetof(Intersect, material) == 0x64, "Intersect.material");
+SR_STATIC_ASSERT(offsetof(Intersect, area_material) == 0x68, "Intersect.area_material");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
 
 /* timerlist[]: record of 0xa0 bytes. */

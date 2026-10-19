@@ -86,7 +86,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -191,6 +191,17 @@ typedef union Wheel { struct {
     float unk_84[5];    /* +0x84 objectwheelsimulation2 */
 }; uint8_t lf_raw[0x98]; } Wheel;
 
+/* A city object (an elevator, a door): the global cityobject holds 1024 records of 0x54 bytes. */
+typedef union CityObjectRec { struct {
+    int active;         /* +0x00 createcityobject writes 1; the line tests skip a record with 0 */
+    int unk_04;         /* +0x04 */
+    float unk_08[3];    /* +0x08 lineintersectcityobject, the packets */
+    vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
+    float unk_20[9];    /* +0x20 the packets */
+    int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
+    float unk_50;       /* +0x50 the packets */
+}; uint8_t lf_raw[0x54]; } CityObjectRec;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -245,6 +256,7 @@ SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
 SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
+SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");

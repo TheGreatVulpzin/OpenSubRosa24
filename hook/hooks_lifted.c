@@ -9847,12 +9847,12 @@ __declspec(naked) static void th_30f00(void)
 }
 static uint8_t expect_30f00[9] = { 0x83, 0xec, 0x50, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
-undefined4 __cdecl lf_31480(float * param_1, float * param_2);
+undefined4 __cdecl lineintersectall(float * param_1, float * param_2);
 static undefined4 (__cdecl *orig_31480)(float *, float *);
 static SvVerify v_31480 = { "lineintersectall", -1 };
 static undefined4 __cdecl hk_31480(float * param_1, float * param_2)
 {
-    SV_HOOK_RET(undefined4, v_31480, lf_31480(param_1, param_2), orig_31480(param_1, param_2), NULL);
+    SV_HOOK_RET(undefined4, v_31480, lineintersectall(param_1, param_2), orig_31480(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_31480(void)
 {
@@ -9888,12 +9888,12 @@ __declspec(naked) static void th_31480(void)
 }
 static uint8_t expect_31480[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
 
-undefined4 __cdecl lf_31630(float * param_1, float * param_2, int param_3);
+undefined4 __cdecl lineintersectlevel(float * param_1, float * param_2, int param_3);
 static undefined4 (__cdecl *orig_31630)(float *, float *, int);
 static SvVerify v_31630 = { "lineintersectlevel", -1 };
 static undefined4 __cdecl hk_31630(float * param_1, float * param_2, int param_3)
 {
-    SV_HOOK_RET(undefined4, v_31630, lf_31630(param_1, param_2, param_3), orig_31630(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_31630, lineintersectlevel(param_1, param_2, param_3), orig_31630(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_31630(void)
 {
@@ -10923,12 +10923,12 @@ __declspec(naked) static void th_4cee0(void)
 }
 static uint8_t expect_4cee0[5] = { 0x83, 0xec, 0x2c, 0x53, 0x55 };
 
-undefined4 __cdecl lf_4d630(float * param_1, float * param_2, float param_3);
+undefined4 __cdecl circleintersectlevel(float * param_1, float * param_2, float param_3);
 static undefined4 (__cdecl *orig_4d630)(float *, float *, float);
 static SvVerify v_4d630 = { "circleintersectlevel", -1 };
 static undefined4 __cdecl hk_4d630(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_RET(undefined4, v_4d630, lf_4d630(param_1, param_2, param_3), orig_4d630(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_4d630, circleintersectlevel(param_1, param_2, param_3), orig_4d630(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_4d630(void)
 {
@@ -10965,12 +10965,12 @@ __declspec(naked) static void th_4d630(void)
 }
 static uint8_t expect_4d630[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
 
-undefined4 __cdecl lf_4d750(float * param_1, float param_2);
+undefined4 __cdecl sphereintersectlevel(float * param_1, float param_2);
 static undefined4 (__cdecl *orig_4d750)(float *, float);
 static SvVerify v_4d750 = { "sphereintersectlevel", -1 };
 static undefined4 __cdecl hk_4d750(float * param_1, float param_2)
 {
-    SV_HOOK_RET(undefined4, v_4d750, lf_4d750(param_1, param_2), orig_4d750(param_1, param_2), NULL);
+    SV_HOOK_RET(undefined4, v_4d750, sphereintersectlevel(param_1, param_2), orig_4d750(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_4d750(void)
 {

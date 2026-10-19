@@ -10,6 +10,7 @@
 #include <math.h>
 #include <stdint.h>
 
+#include "collide.h"
 #include "events.h"
 #include "items.h"
 #include "profiler.h"
@@ -40,11 +41,9 @@ void __cdecl lf_19060(int human);
 void __cdecl lf_19380(int human);
 void __cdecl lf_223d0(float *out, int object, float *pos);
 int __cdecl lf_257a0(int object, float *from, float *to, int mode);
-int __cdecl lf_31630(float *from, float *to, int mode);
 int __cdecl lf_32bb0(int object, float *pos, float radius);
 void __cdecl lf_4a440(int human);
 void __cdecl lf_4bd60(int human);
-int __cdecl lf_4d750(float *pos, float radius);
 #define playersellstock lf_05be0
 #define pointinsidebuilding lf_08a60
 #define playerdeathtax lf_16960
@@ -54,11 +53,9 @@ int __cdecl lf_4d750(float *pos, float radius);
 #define human_collisionhuman lf_19380
 #define getobjectrotation2 lf_223d0
 #define lineintersectobject lf_257a0
-#define lineintersectlevel lf_31630
 #define sphereintersectobject lf_32bb0
 #define human_calculatearmangles lf_4a440
 #define human_itemsimulation lf_4bd60
-#define sphereintersectlevel lf_4d750
 
 
 /* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do

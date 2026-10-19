@@ -313,3 +313,7 @@ intersect,0x20,surface_vel,vec3,,"lineintersectobject: the velocity of the hit s
 body,0x0,parent,int,,"humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent"
 object,0x84,box_min,vec3,,"lineintersectobject: no hit when both ends are below it; humansimulation tests a human against the box, 2 units larger"
 object,0x90,box_max,vec3,,"the other corner of the box (lineintersectobject, sphereintersectobject, humansimulation)"
+intersect,0x54,block,int,3,"lineintersectarea: the block of the hit (area_breakblock takes it); lineintersectlevel writes -1 in [0] for a city object"
+intersect,0x64,material,int,,"circleintersectlevel copies area_material for the nearest hit; objectwheelcollision reads the friction of the material"
+intersect,0x68,area_material,int,,"circleintersectarea writes the material of its hit"
+area,0x0,active,int,,"the collision tests of the level skip an area with 0"

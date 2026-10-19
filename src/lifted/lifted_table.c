@@ -258,8 +258,8 @@ void sphereintersecttrianglefull(void);
 void itemtimetolive(void);
 void lf_30ba0(void);
 void lf_30f00(void);
-void lf_31480(void);
-void lf_31630(void);
+void lineintersectall(void);
+void lineintersectlevel(void);
 void lf_31800(void);
 void lf_32340(void);
 void lf_324c0(void);
@@ -288,8 +288,8 @@ void lf_4bd60(void);
 void lf_4c720(void);
 void lf_4c8c0(void);
 void lf_4cee0(void);
-void lf_4d630(void);
-void lf_4d750(void);
+void circleintersectlevel(void);
+void sphereintersectlevel(void);
 void lf_4d850(void);
 void lf_4da10(void);
 void lf_4e060(void);
@@ -576,8 +576,8 @@ const LfEntry lf_table[] = {
     { "itemtimetolive", 0x30ab0, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "itemweaponsimulation", 0x30ba0, (void *)lf_30ba0, 1, LF_RET_VOID, 4, "v", 0 },
     { "item_sphereintersect", 0x30f00, (void *)lf_30f00, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "lineintersectall", 0x31480, (void *)lf_31480, 2, LF_RET_INT, 4, "pp", 0 },
-    { "lineintersectlevel", 0x31630, (void *)lf_31630, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersectall", 0x31480, (void *)lineintersectall, 2, LF_RET_INT, 4, "pp", 0 },
+    { "lineintersectlevel", 0x31630, (void *)lineintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
     { "createobject", 0x31800, (void *)lf_31800, 5, LF_RET_INT, 4, "vpppv", 0 },
     { "objecttimetolive", 0x32340, (void *)lf_32340, 0, LF_RET_VOID, 4, "", 0 },
     { "objectenginesimulation2", 0x324c0, (void *)lf_324c0, 0, LF_RET_VOID, 4, "", 0 },
@@ -606,8 +606,8 @@ const LfEntry lf_table[] = {
     { "human_buildmuscles", 0x4c720, (void *)lf_4c720, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemlogic", 0x4c8c0, (void *)lf_4c8c0, 0, LF_RET_VOID, 4, "", 0 },
     { "item_physicssimulation", 0x4cee0, (void *)lf_4cee0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "circleintersectlevel", 0x4d630, (void *)lf_4d630, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "sphereintersectlevel", 0x4d750, (void *)lf_4d750, 2, LF_RET_INT, 4, "pv", 0 },
+    { "circleintersectlevel", 0x4d630, (void *)circleintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "sphereintersectlevel", 0x4d750, (void *)sphereintersectlevel, 2, LF_RET_INT, 4, "pv", 0 },
     { "buildcityinterection", 0x4d850, (void *)lf_4d850, 1, LF_RET_VOID, 4, "v", 0 },
     { "buildcitystreet", 0x4da10, (void *)lf_4da10, 1, LF_RET_VOID, 4, "v", 0 },
     { "logic_createcar", 0x4e060, (void *)lf_4e060, 3, LF_RET_INT, 4, "vvv", 0 },
