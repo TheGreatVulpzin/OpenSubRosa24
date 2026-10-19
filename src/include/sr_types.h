@@ -54,9 +54,10 @@ typedef union HumanJoint { struct {
 /* Muscle of a Human (human_createmuscleball). Only the bond is known. */
 typedef union HumanMuscle { struct {
     int bond;       /* +0x00 index into bond[] */
-    int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
+    int parent;     /* +0x04 human_createmuscleball: the parent bone */
     int bone;       /* +0x08 human_createmuscleball: parameter 3; humansimulation: a bone index (0 to 14) */
-    uint8_t unk_0c[0x24];
+    uint8_t unk_0c[0x18];
+    vec3 pos;       /* +0x24 human_createmuscleball: the joint, in the frame of the parent bone */
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
 /* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
@@ -946,9 +947,7 @@ SR_STATIC_ASSERT(offsetof(Bullet, back) == 0x50, "Bullet.back");
 typedef union Body { struct {
     int parent;                          /* +0x0000 humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent */
     vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
-    int unk_0010;                        /* +0x0010 3 functions */
-    int unk_0014;                        /* +0x0014 4 functions */
-    int unk_0018;                        /* +0x0018 4 functions */
+    vec3 joint;                          /* +0x0010 human_buildmuscles: the joint of the bone with its parent, in the frame of the parent */
     float unk_001c;                      /* +0x001c 2 functions */
     float unk_0020;                      /* +0x0020 3 functions */
     float unk_0024;                      /* +0x0024 3 functions */
@@ -962,6 +961,7 @@ typedef union Body { struct {
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
 SR_STATIC_ASSERT(offsetof(Body, parent) == 0x0, "Body.parent");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
+SR_STATIC_ASSERT(offsetof(Body, joint) == 0x10, "Body.joint");
 
 /* game[]: record of 0x25d64 bytes. */
 typedef union Game { struct {

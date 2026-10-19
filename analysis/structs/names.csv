@@ -352,3 +352,4 @@ area_block,0x78,num_hideable,int,,"bits 16 to 25 of a block word hide the faces 
 area_block,0x60,num_tris,int,,"circleintersectspecblock: the loose triangles of the mesh"
 area_block,0x64,tris,int,,"a pointer to 3 indexes into verts for each loose triangle"
 area_block,0x68,tri_slots,int,,"a pointer to the texture slot of each loose triangle"
+body,0x10,joint,vec3,,"human_buildmuscles: the joint of the bone with its parent, in the frame of the parent"

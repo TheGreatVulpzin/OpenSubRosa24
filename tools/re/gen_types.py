@@ -146,9 +146,10 @@ typedef union HumanJoint { struct {
 /* Muscle of a Human (human_createmuscleball). Only the bond is known. */
 typedef union HumanMuscle { struct {
     int bond;       /* +0x00 index into bond[] */
-    int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
+    int parent;     /* +0x04 human_createmuscleball: the parent bone */
     int bone;       /* +0x08 human_createmuscleball: parameter 3; humansimulation: a bone index (0 to 14) */
-    uint8_t unk_0c[0x24];
+    uint8_t unk_0c[0x18];
+    vec3 pos;       /* +0x24 human_createmuscleball: the joint, in the frame of the parent bone */
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
 /* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */

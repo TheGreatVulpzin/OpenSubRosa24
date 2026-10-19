@@ -31,22 +31,15 @@
 #define g_numofaccounts (*SR_AT(int, 0xf437b64))
 
 /* Game functions with no clean version yet: the calls go to the lifted C. Ghidra types the
- * index of playersellstock, human_collisionhuman and deletehuman as a float or a pointer:
- * the stack holds the same 4 bytes as the int here. */
+ * index of playersellstock as a float: the stack holds the same 4 bytes as the int here. */
 void __cdecl lf_05be0(int player, int stocks);
 void __cdecl lf_16960(uint32_t player);
 void __cdecl lf_16a20(int player, int tax);
-void __cdecl lf_18720(int human);
-void __cdecl lf_19060(int human);
-void __cdecl lf_19380(int human);
 void __cdecl lf_4a440(int human);
 void __cdecl lf_4bd60(int human);
 #define playersellstock lf_05be0
 #define playerdeathtax lf_16960
 #define playerteamkilltax lf_16a20
-#define deletehuman lf_18720
-#define human_calculatelegangles lf_19060
-#define human_collisionhuman lf_19380
 #define human_calculatearmangles lf_4a440
 #define human_itemsimulation lf_4bd60
 
