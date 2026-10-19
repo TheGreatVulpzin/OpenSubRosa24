@@ -302,7 +302,7 @@ void lf_4f720(void);
 void lf_500e0(void);
 void lf_502a0(void);
 void lf_50ae0(void);
-void lf_51060(void);
+void humansimulation(void);
 void lf_542a0(void);
 void lf_54e40(void);
 void lf_55700(void);
@@ -620,7 +620,7 @@ const LfEntry lf_table[] = {
     { "player_loadinventory", 0x500e0, (void *)lf_500e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },
     { "createhuman", 0x50ae0, (void *)lf_50ae0, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "humansimulation", 0x51060, (void *)lf_51060, 0, LF_RET_VOID, 4, "", 0 },
+    { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4, "", 0 },
     { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v", 0 },

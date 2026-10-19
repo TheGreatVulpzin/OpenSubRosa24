@@ -1,113 +1,65 @@
-/* humansimulation (RVA 0x51060): the people: bones, muscles, items in hand, rewritten by hand.
+/* humansimulation: the people, once for each tick.
  *
- * Phase 6 (docs/plano.md). The first version is the lifted C, unchanged. Each step makes
- * it readable and faster and keeps the harness at 0 differences: the float math keeps its
- * order and its (float) rounding points (x87, 53-bit precision, as the original).
- *
- * The function keeps the symbol lf_51060: tools/lift/lift.py sees the definition here
- * and lifts it no more, but keeps it in the table, the live hooks and the standalone server.
+ * For each active human: human_begin (timers, stance, strength, the step of the bones), then
+ * human_onfoot (the floor, the contact bonds, the walk, the seat search) or human_invehicle
+ * (the seat and the driver input), the leg and arm angles, and human_finish (the bond modes,
+ * the items, the health, the despawn and the joint angles).
  */
-#include "lift_support.h"
-#include "lift_os.h"
+#include "humans.h"
 
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_body (*(Body (*)[32])SR_VA(0xf670280))
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_soundlist (*(SoundList *)SR_VA(0x956d700))
-#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
-#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
-#define g_city (*(City *)SR_VA(0xe699220))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define g_intersect (*(Intersect *)SR_VA(0x107484a0))
-#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
-#define g_xaxis (*(float (*)[3])SR_VA(0x460cd4))
-#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
-#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
-#define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
-#define playersellstock ((void (__cdecl *)(float, int))SR_FN(0x405be0))
-#define createevent_updateitem ((int (__cdecl *)(uint))SR_FN(0x406380))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-#define item_removehumanlink ((void (__cdecl *)(uint, uint *, int))SR_FN(0x407e50))
-#define item_removeitemlink ((void (__cdecl *)(uint, uint))SR_FN(0x407f80))
-#define pointinsidebuilding ((undefined4 (__cdecl *)(int, float *, float))SR_FN(0x408a60))
-#define stoptimer ((void (__cdecl *)(int))SR_FN(0x40b3f0))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x40ba60))
-#define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
-#define playerdeathtax ((void (__cdecl *)(uint))SR_FN(0x416960))
-#define playerteamkilltax ((void (__cdecl *)(int, int))SR_FN(0x416a20))
-#define createevent_bullethit ((void (__cdecl *)(int, int, undefined4 *, undefined4 *))SR_FN(0x416c40))
-#define createevent_sound ((void (__cdecl *)(int, undefined4 *, float, float))SR_FN(0x416db0))
-#define deletehuman ((void (__cdecl *)(uint *))SR_FN(0x418720))
-#define human_calculatelegangles ((void (__cdecl *)(int))SR_FN(0x419060))
-#define human_collisionhuman ((void (__cdecl *)(float))SR_FN(0x419380))
-#define getobjectrotation2 ((void (__cdecl *)(float *, int, float *))SR_FN(0x4223d0))
-#define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_FN(0x4257a0))
-#define lineintersectlevel ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x431630))
-#define sphereintersectobject ((undefined4 (__cdecl *)(int, float *, float))SR_FN(0x432bb0))
-#define human_calculatearmangles ((void (__cdecl *)(int))SR_FN(0x44a440))
-#define human_itemsimulation ((void (__cdecl *)(int))SR_FN(0x44bd60))
-#define sphereintersectlevel ((undefined4 (__cdecl *)(float *, float))SR_FN(0x44d750))
-#define __security_check_cookie(x) ((void)0)
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define _CIcos x87_cos
-#define _CIsin x87_sin
-#define _CIsqrt x87_sqrt
-#define _CIatan2 x87_atan2
-#define local_cc (*(int * *)(lf_frame + 0x14))
-#define local_c8 (*(float *)(lf_frame + 0x18))
-#define local_c4 (*(Bone * *)(lf_frame + 0x1c))
-#define local_c0 (*(float *)(lf_frame + 0x20))
-#define local_bc (*(float *)(lf_frame + 0x24))
-#define local_b8 (*(float *)(lf_frame + 0x28))
-#define local_b4 (*(float *)(lf_frame + 0x2c))
-#define local_b0 (*(float *)(lf_frame + 0x30))
-#define local_ac (*(float *)(lf_frame + 0x34))
-#define local_a8 (*(float *)(lf_frame + 0x38))
-#define local_a4 (*(uint * *)(lf_frame + 0x3c))
-#define local_a0 (*(float *)(lf_frame + 0x40))
-#define local_9c (*(int *)(lf_frame + 0x44))
-#define local_98 (*(double *)(lf_frame + 0x48))
-#define local_90 (*(float *)(lf_frame + 0x50))
-#define local_8c (*(float *)(lf_frame + 0x54))
-#define local_88 (*(float *)(lf_frame + 0x58))
-#define local_84 (*(float *)(lf_frame + 0x5c))
-#define local_80 (*(float *)(lf_frame + 0x60))
-#define local_7c (*(float *)(lf_frame + 0x64))
-#define local_78 (*(float *)(lf_frame + 0x68))
-#define local_74 (*(float *)(lf_frame + 0x6c))
-#define local_70 (*(float *)(lf_frame + 0x70))
-#define local_6c (*(float *)(lf_frame + 0x74))
-#define local_68 (*(float *)(lf_frame + 0x78))
-#define local_64 (*(float *)(lf_frame + 0x7c))
-#define local_60 (*(float *)(lf_frame + 0x80))
-#define local_5c (*(float *)(lf_frame + 0x84))
-#define local_58 (*(float *)(lf_frame + 0x88))
-#define local_54 (*(float *)(lf_frame + 0x8c))
-#define local_50 (*(float *)(lf_frame + 0x90))
-#define local_4c (*(float *)(lf_frame + 0x94))
-#define local_48 (*(float *)(lf_frame + 0x98))
-#define local_44 (*(float *)(lf_frame + 0x9c))
-#define local_40 (*(float *)(lf_frame + 0xa0))
-#define local_3c (*(float *)(lf_frame + 0xa4))
-#define local_38 (*(float *)(lf_frame + 0xa8))
-#define local_34 (*(float *)(lf_frame + 0xac))
-#define local_30 (*(float *)(lf_frame + 0xb0))
-#define local_2c (*(float *)(lf_frame + 0xb4))
-#define local_28 (*(float *)(lf_frame + 0xb8))
-#define local_24 (*(undefined4 *)(lf_frame + 0xbc))
-#define local_20 (*(undefined4 *)(lf_frame + 0xc0))
-#define local_1c (*(undefined4 *)(lf_frame + 0xc4))
-#define local_18 (*(float *)(lf_frame + 0xc8))
-#define local_14 (*(float *)(lf_frame + 0xcc))
-#define local_10 (*(float *)(lf_frame + 0xd0))
-#define local_c (*(uint *)(lf_frame + 0xd4))
-#define g_numofaccounts DAT_0f837b64
+#include <math.h>
+#include <stdint.h>
+
+#include "events.h"
+#include "items.h"
+#include "profiler.h"
+#include "sr_math.h"
+#include "sr_runtime.h"
+#include "vectors.h"
+
+/* Game globals. */
+#define g_xaxis (*SR_AT(vec3, 0x60cd4)) /* (1 0 0) */
+#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
+#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
+#define g_body SR_AT(Body, 0xf270280)    /* the bone tree: the parent and the offset of each bone */
+#define g_city (*SR_AT(City, 0xe299220))
+#define g_soundlist (*SR_AT(SoundList, 0x916d700))
+#define g_intersect (*SR_AT(Intersect, 0x103484a0))
+#define g_account SR_AT(Account, 0xf437b68)
+#define g_numofaccounts (*SR_AT(int, 0xf437b64))
+
+/* Game functions with no clean version yet: the calls go to the lifted C. Ghidra types the
+ * index of playersellstock, human_collisionhuman and deletehuman as a float or a pointer:
+ * the stack holds the same 4 bytes as the int here. */
+void __cdecl lf_05be0(int player, int stocks);
+int __cdecl lf_08a60(int building, float *pos, float margin);
+void __cdecl lf_16960(uint32_t player);
+void __cdecl lf_16a20(int player, int tax);
+void __cdecl lf_18720(int human);
+void __cdecl lf_19060(int human);
+void __cdecl lf_19380(int human);
+void __cdecl lf_223d0(float *out, int object, float *pos);
+int __cdecl lf_257a0(int object, float *from, float *to, int mode);
+int __cdecl lf_31630(float *from, float *to, int mode);
+int __cdecl lf_32bb0(int object, float *pos, float radius);
+void __cdecl lf_4a440(int human);
+void __cdecl lf_4bd60(int human);
+int __cdecl lf_4d750(float *pos, float radius);
+#define playersellstock lf_05be0
+#define pointinsidebuilding lf_08a60
+#define playerdeathtax lf_16960
+#define playerteamkilltax lf_16a20
+#define deletehuman lf_18720
+#define human_calculatelegangles lf_19060
+#define human_collisionhuman lf_19380
+#define getobjectrotation2 lf_223d0
+#define lineintersectobject lf_257a0
+#define lineintersectlevel lf_31630
+#define sphereintersectobject lf_32bb0
+#define human_calculatearmangles lf_4a440
+#define human_itemsimulation lf_4bd60
+#define sphereintersectlevel lf_4d750
+
 
 /* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do
  * not hold an item leave the solver (mode 0x100). The joint list reads the bone of the muscle
@@ -119,7 +71,7 @@ static void human_bond_modes(Human *hu, int in_vehicle, int has_item)
   float c;
 
   for (k = 0; k < hu->num_joints; k++) {
-    b = &g_bond[hu->joints[k].bond];
+    b = &sr_bonds[hu->joints[k].bond];
     b->mode = 0;
     if (hu->health < 0)
       b->mode = 3;
@@ -128,7 +80,7 @@ static void human_bond_modes(Human *hu, int in_vehicle, int has_item)
   }
   health = hu->health;
   for (k = 0; k < hu->num_muscles; k++) {
-    b = &g_bond[hu->muscles[k].bond];
+    b = &sr_bonds[hu->muscles[k].bond];
     b->mode = 0;
     b->stiffness = 0.0625f;
     b->damping = 0.125f;
@@ -157,19 +109,19 @@ static void human_bond_modes(Human *hu, int in_vehicle, int has_item)
 static void human_dropitems(Human *hu)
 {
   int k;
-  uint item;
+  uint32_t item;
 
   for (k = 0; k < 7; k++) {
-    if (hu->inventory[k].count <= 0 || (uint)hu->inventory[k].items[0] >= 0x400)
+    if (hu->inventory[k].count <= 0 || (uint32_t)hu->inventory[k].items[0] >= 0x400)
       continue;
-    item = (uint)hu->inventory[k].items[0];
-    if (g_item[item].parent_item == -1) {
-      if (g_item[item].parent_human != -1) {
-        item_removehumanlink(item, (uint *)g_item[item].parent_human, g_item[item].parent_slot);
+    item = (uint32_t)hu->inventory[k].items[0];
+    if (sr_items[item].parent_item == -1) {
+      if (sr_items[item].parent_human != -1) {
+        item_removehumanlink(item, sr_items[item].parent_human, sr_items[item].parent_slot);
         createevent_updateitem(item);
       }
     } else {
-      item_removeitemlink(item, g_item[item].parent_item);
+      item_removeitemlink(item, sr_items[item].parent_item);
       createevent_updateitem(item);
     }
   }
@@ -181,15 +133,15 @@ static void human_bleed(Human *hu, int h)
   int health = hu->health;
   vec3 p;
 
-  if (health <= -5 || (hu->bleeding == 0 && 0 < health) || (char)(h * h * h) != (char)g_game.ticks)
+  if (health <= -5 || (hu->bleeding == 0 && 0 < health) || (char)(h * h * h) != (char)sr_game.ticks)
     return;
   health = health < 11 ? health - 1 : health - 2;
   hu->health = health;
   if (0 < health) {
-    p.x = (float)(g_yaxis[0] * 0.5 + hu->pos.x);
-    p.y = (float)(g_yaxis[1] * 0.5 + hu->pos.y);
-    p.z = (float)(g_yaxis[2] * 0.5 + hu->pos.z);
-    createevent_bullethit(0, 3, (undefined4 *)&p, (undefined4 *)&p);
+    p.x = (float)(g_yaxis.x * 0.5 + hu->pos.x);
+    p.y = (float)(g_yaxis.y * 0.5 + hu->pos.y);
+    p.z = (float)(g_yaxis.z * 0.5 + hu->pos.z);
+    createevent_bullethit(0, 3, &p, &p);
   }
 }
 
@@ -197,7 +149,7 @@ static void human_bleed(Human *hu, int h)
  * player costs its account 5% of the money above 10000. */
 static void human_releaseplayer(Human *hu)
 {
-  int player = hu->player_id, acc, extra, gametype = g_game.gametype;
+  int player = hu->player_id, acc, extra, gametype = sr_game.gametype;
 
   if (player == -1) {
     acc = hu->account;
@@ -206,28 +158,28 @@ static void human_releaseplayer(Human *hu)
     if (-1 < acc && acc < g_numofaccounts) {
       extra = g_account[acc].money - 10000;
       if (0 < extra)
-        g_account[acc].money = g_account[acc].money - (int)(longlong)((double)extra * 0.05000000074505806);
+        g_account[acc].money = g_account[acc].money - (int)(long long)((double)extra * 0.05000000074505806);
     }
     hu->account = -1;
     return;
   }
-  if (g_game.gametype == 4 && (uint)player < 0x100)
-    playersellstock(LF_BITS_F(player), g_player[player].stocks);
-  playerdeathtax((uint)player);
+  if (sr_game.gametype == 4 && (uint32_t)player < 0x100)
+    playersellstock(player, sr_players[player].stocks);
+  playerdeathtax((uint32_t)player);
   if (gametype == 4) {
-    if (g_game.team0_manager == hu->player_id)
-      g_game.team0_manager = -1;
-    if (g_game.team1_manager == hu->player_id)
-      g_game.team1_manager = -1;
-    if (g_game.team2_manager == hu->player_id)
-      g_game.team2_manager = -1;
-    if (g_game.team3_manager == hu->player_id)
-      g_game.team3_manager = -1;
-    if (g_game.team4_manager == hu->player_id)
-      g_game.team4_manager = -1;
-    g_player[player].team = 7;
+    if (sr_game.team0_manager == hu->player_id)
+      sr_game.team0_manager = -1;
+    if (sr_game.team1_manager == hu->player_id)
+      sr_game.team1_manager = -1;
+    if (sr_game.team2_manager == hu->player_id)
+      sr_game.team2_manager = -1;
+    if (sr_game.team3_manager == hu->player_id)
+      sr_game.team3_manager = -1;
+    if (sr_game.team4_manager == hu->player_id)
+      sr_game.team4_manager = -1;
+    sr_players[player].team = 7;
   }
-  g_player[player].human_id = -1;
+  sr_players[player].human_id = -1;
   createevent_updateplayer(player);
   hu->player_id = -1;
 }
@@ -243,7 +195,7 @@ static void human_despawn(Human *hu)
       human_releaseplayer(hu);
     t = hu->despawn_timer - 1;
     hu->despawn_timer = t;
-    if (g_game.gametype == 3 && t < 4)
+    if (sr_game.gametype == 3 && t < 4)
       hu->despawn_timer = 4;
   } else if (hu->player_id == -1) {
     hu->despawn_timer = hu->despawn_timer - 1;
@@ -265,9 +217,9 @@ static void human_heal(Human *hu)
     if (BUILDING_TYPE(i) != 6 || pointinsidebuilding(i, &hu->pos.x, 0.0f) == 0)
       continue;
     if (hu->player_id == -1) {
-      if (g_game.gametype == 4)
+      if (sr_game.gametype == 4)
         hu->despawn_timer = 0;
-    } else if ((g_game.ticks & 0x1f) == 0 && -5 < hu->health && hu->health < 100) {
+    } else if ((sr_game.ticks & 0x1f) == 0 && -5 < hu->health && hu->health < 100) {
       hu->health = hu->health + 1;
       hu->bleeding = 0;
     }
@@ -294,12 +246,12 @@ static void human_jointangles(Human *hu)
     m20 = (float)(r[0].z * q[2].z + (r[0].x * q[2].x + r[0].y * q[2].y));
     m21 = (float)(r[1].z * q[2].z + (r[1].x * q[2].x + r[1].y * q[2].y));
     m22 = (float)(r[2].z * q[2].z + (r[2].x * q[2].x + r[2].y * q[2].y));
-    a = (float)_CIatan2((double)m12, (double)m22);
-    len = (float)_CIsqrt((double)(m00 * m00 + m01 * m01));
-    hu->bones[k].joint_angles.y = (float)_CIatan2((double)-m02, (double)len);
-    s = (float)_CIsin((double)a);
-    c = (float)_CIcos((double)a);
-    hu->bones[k].joint_angles.z = (float)_CIatan2((double)(s * m20 - c * m10), (double)(c * m11 - m21 * s));
+    a = (float)x87_atan2((double)m12, (double)m22);
+    len = (float)x87_sqrt((double)(m00 * m00 + m01 * m01));
+    hu->bones[k].joint_angles.y = (float)x87_atan2((double)-m02, (double)len);
+    s = (float)x87_sin((double)a);
+    c = (float)x87_cos((double)a);
+    hu->bones[k].joint_angles.z = (float)x87_atan2((double)(s * m20 - c * m10), (double)(c * m11 - m21 * s));
     hu->bones[k].joint_angles.x = a;
   }
 }
@@ -308,7 +260,7 @@ static void human_jointangles(Human *hu)
  * start of the tick (-1: on foot). has_item: an item is in slot 0 or 1 of the inventory. */
 static void human_finish(int h, int vehicle, int has_item)
 {
-  Human *hu = &g_human[h];
+  Human *hu = &sr_humans[h];
   int k;
 
   hu->pos = hu->bones[0].pos;
@@ -324,11 +276,11 @@ static void human_finish(int h, int vehicle, int has_item)
     human_itemsimulation(h);
   human_bleed(hu, h);
   if (hu->vehicle_id == -1)
-    human_collisionhuman(LF_BITS_F(h));
+    human_collisionhuman(h);
   human_despawn(hu);
   human_heal(hu);
   if (hu->despawn_timer < 1)
-    deletehuman((uint *)h);
+    deletehuman(h);
   hu->input_buttons_prev = hu->input_buttons;
   for (k = 0; k < 15; k++)
     hu->bones[k].pos_prev = hu->bones[k].pos;
@@ -341,8 +293,8 @@ static float human_strength(int h, int health)
 {
   float hp = (float)health, q = (float)(hp / 25.0), phase, s;
 
-  phase = (float)((float)((float)((h * h * h + g_game.ticks) & 0x1ff) * 0.001953125) * 6.28318530718);
-  s = (float)((double)q * 0.5 + 0.375 + (1.0 - (double)q) * (_CIsin((double)phase) * 0.25));
+  phase = (float)((float)((float)((h * h * h + sr_game.ticks) & 0x1ff) * 0.001953125) * 6.28318530718);
+  s = (float)((double)q * 0.5 + 0.375 + (1.0 - (double)q) * (x87_sin((double)phase) * 0.25));
   if (health < 10)
     s = (float)(((double)(float)(hp / 10.0) * 0.5 + 0.5) * (double)s);
   return s;
@@ -374,13 +326,13 @@ static void human_movebones(Human *hu, int in_vehicle)
     b->pos.y = (float)(b->vel.y + b->pos.y);
     b->pos.z = (float)(b->vel.z + b->pos.z);
     b->vel.y = (float)(b->vel.y - 0.0027222223579883575);
-    len = (float)_CIsqrt((double)(float)(b->w.z * b->w.z + (b->w.x * b->w.x + b->w.y * b->w.y)));
+    len = (float)x87_sqrt((double)(float)(b->w.z * b->w.z + (b->w.x * b->w.x + b->w.y * b->w.y)));
     if (1.52587890625E-5 < len) {
       inv = (float)(1.0 / len);
       axis.x = (float)(inv * b->w.x);
       axis.y = (float)(inv * b->w.y);
       axis.z = (float)(inv * b->w.z);
-      rotateorientation(&b->rot[0].x, &axis.x, len);
+      rotateorientation(b->rot, &axis, len);
     }
     if (k == 0 && lineintersectlevel(&b->pos_prev.x, &b->pos.x, 1) != 0) {
       b->pos.x = (float)(g_intersect.pos[0] + g_intersect.normal[0] * 0.0625);
@@ -395,7 +347,7 @@ static void human_movebones(Human *hu, int in_vehicle)
  * Returns 1 when an item is in slot 0 or 1 of the inventory. */
 static int human_begin(int h, int vehicle)
 {
-  Human *hu = &g_human[h];
+  Human *hu = &sr_humans[h];
   float target = 1.0f, stance;
 
   if (0 < hu->protect_timer)
@@ -447,21 +399,21 @@ static void human_addfloor(vec3 *pos, vec3 *vel)
 }
 
 /* The end of a ray down from bone 0, the stance * 1.125 long along rot[1], moved by side * k. */
-static void human_feet(const Bone *b0, float stance, const float side[3], float k, vec3 *to)
+static void human_feet(const Bone *b0, float stance, const vec3 *side, float k, vec3 *to)
 {
   float d = (float)(-stance * 1.125);
 
-  to->x = (float)((float)(b0->pos.x + d * b0->rot[1].x) + side[0] * k);
-  to->y = (float)((float)(d * b0->rot[1].y + b0->pos.y) + side[1] * k);
-  to->z = (float)((float)(d * b0->rot[1].z + b0->pos.z) + side[2] * k);
+  to->x = (float)((float)(b0->pos.x + d * b0->rot[1].x) + side->x * k);
+  to->y = (float)((float)(d * b0->rot[1].y + b0->pos.y) + side->y * k);
+  to->z = (float)((float)(d * b0->rot[1].z + b0->pos.z) + side->z * k);
 }
 
 /* The start of a ray: bone 0 moved by side * k, then 0.375 down. */
-static void human_hip(const Bone *b0, const float side[3], float k, vec3 *from)
+static void human_hip(const Bone *b0, const vec3 *side, float k, vec3 *from)
 {
-  from->x = (float)((float)(b0->pos.x + side[0] * k) - g_yaxis[0] * 0.375);
-  from->y = (float)((float)(b0->pos.y + side[1] * k) - g_yaxis[1] * 0.375);
-  from->z = (float)((float)(side[2] * k + b0->pos.z) - g_yaxis[2] * 0.375);
+  from->x = (float)((float)(b0->pos.x + side->x * k) - g_yaxis.x * 0.375);
+  from->y = (float)((float)(b0->pos.y + side->y * k) - g_yaxis.y * 0.375);
+  from->z = (float)((float)(side->z * k + b0->pos.z) - g_yaxis.z * 0.375);
 }
 
 /* Finds the floor under a living human: first the objects (a ray along the up axis), then the
@@ -478,15 +430,15 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
   pos->x = pos->y = pos->z = 0.0f;
   vel->x = vel->y = vel->z = 0.0f;
   for (o = 0; o < 1024; o++) {
-    if (g_object[o].active == 0 || g_object[o].state == 3)
+    if (sr_objects[o].active == 0 || sr_objects[o].state == 3)
       continue;
     d = (float)(-hu->stance * 1.125);
-    to.x = (float)(b0->pos.x + d * g_yaxis[0]);
-    to.y = (float)(g_yaxis[1] * d + b0->pos.y);
-    to.z = (float)(d * g_yaxis[2] + b0->pos.z);
-    from.x = (float)(b0->pos.x + g_yaxis[0] * 0.125);
-    from.y = (float)(b0->pos.y + g_yaxis[1] * 0.125);
-    from.z = (float)(g_yaxis[2] * 0.125 + b0->pos.z);
+    to.x = (float)(b0->pos.x + d * g_yaxis.x);
+    to.y = (float)(g_yaxis.y * d + b0->pos.y);
+    to.z = (float)(d * g_yaxis.z + b0->pos.z);
+    from.x = (float)(b0->pos.x + g_yaxis.x * 0.125);
+    from.y = (float)(b0->pos.y + g_yaxis.y * 0.125);
+    from.z = (float)(g_yaxis.z * 0.125 + b0->pos.z);
     if (lineintersectobject(o, &from.x, &to.x, 0) != 0) {
       human_addfloor(pos, vel);
       return 1;
@@ -501,39 +453,39 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
     human_addfloor(pos, vel);
     return 1;
   }
-  human_feet(b0, hu->stance, g_xaxis, -0.1875f, &to);
-  from.x = (float)((float)(b0->pos.x - g_xaxis[0] * 0.1875) - g_yaxis[0] * 0.375);
-  from.y = (float)((float)(b0->pos.y - g_xaxis[1] * 0.1875) - g_yaxis[1] * 0.375);
-  from.z = (float)((float)(b0->pos.z - g_xaxis[2] * 0.1875) - g_yaxis[2] * 0.375);
+  human_feet(b0, hu->stance, &g_xaxis, -0.1875f, &to);
+  from.x = (float)((float)(b0->pos.x - g_xaxis.x * 0.1875) - g_yaxis.x * 0.375);
+  from.y = (float)((float)(b0->pos.y - g_xaxis.y * 0.1875) - g_yaxis.y * 0.375);
+  from.z = (float)((float)(b0->pos.z - g_xaxis.z * 0.1875) - g_yaxis.z * 0.375);
   if (human_floorray(&from, &to)) {
     n = 1;
     human_addfloor(pos, vel);
   }
-  human_feet(b0, hu->stance, g_xaxis, 0.1875f, &to);
-  human_hip(b0, g_xaxis, 0.1875f, &from);
+  human_feet(b0, hu->stance, &g_xaxis, 0.1875f, &to);
+  human_hip(b0, &g_xaxis, 0.1875f, &from);
   if (human_floorray(&from, &to)) {
     n++;
     human_addfloor(pos, vel);
   }
-  human_feet(b0, hu->stance, g_zaxis, -0.1875f, &to);
-  from.x = (float)((float)(b0->pos.x - g_zaxis[0] * 0.1875) - g_yaxis[0] * 0.375);
-  from.y = (float)((float)(b0->pos.y - g_zaxis[1] * 0.1875) - g_yaxis[1] * 0.375);
-  from.z = (float)((float)(b0->pos.z - g_zaxis[2] * 0.1875) - g_yaxis[2] * 0.375);
+  human_feet(b0, hu->stance, &g_zaxis, -0.1875f, &to);
+  from.x = (float)((float)(b0->pos.x - g_zaxis.x * 0.1875) - g_yaxis.x * 0.375);
+  from.y = (float)((float)(b0->pos.y - g_zaxis.y * 0.1875) - g_yaxis.y * 0.375);
+  from.z = (float)((float)(b0->pos.z - g_zaxis.z * 0.1875) - g_yaxis.z * 0.375);
   if (human_floorray(&from, &to)) {
     n++;
     human_addfloor(pos, vel);
   }
-  human_feet(b0, hu->stance, g_zaxis, 0.1875f, &to);
-  human_hip(b0, g_zaxis, 0.1875f, &from);
+  human_feet(b0, hu->stance, &g_zaxis, 0.1875f, &to);
+  human_hip(b0, &g_zaxis, 0.1875f, &from);
   if (human_floorray(&from, &to)) {
     n++;
     human_addfloor(pos, vel);
   }
   if (n != 0)
     return n;
-  to.x = (float)(b0->pos.x - g_yaxis[0] * 0.5);
-  to.y = (float)(b0->pos.y - g_yaxis[1] * 0.5);
-  to.z = (float)(b0->pos.z - g_yaxis[2] * 0.5);
+  to.x = (float)(b0->pos.x - g_yaxis.x * 0.5);
+  to.y = (float)(b0->pos.y - g_yaxis.y * 0.5);
+  to.z = (float)(b0->pos.z - g_yaxis.z * 0.5);
   from = b0->pos;
   if (human_floorray(&from, &to)) {
     human_addfloor(pos, vel);
@@ -566,7 +518,7 @@ static int human_stand(Human *hu, vec3 *floor_vel)
   vel.z = (float)(inv * vel.z);
   *floor_vel = vel;
   if ((hu->input_buttons & 8) != 0 || 0.8999999761581421 < r1->y) {
-    a = ABS(r1->y);
+    a = (float)fabs(r1->y);
     rel.x = (float)(b0->vel.x - vel.x);
     rel.y = (float)(b0->vel.y - vel.y);
     rel.z = (float)(b0->vel.z - vel.z);
@@ -617,13 +569,13 @@ static void human_levelcontacts(Human *hu, int h)
     bk = &hu->bones[k];
     if (sphereintersectlevel(&bk->pos.x, r) == 0)
       continue;
-    i = g_numofbonds;
-    b = &g_bond[i];
+    i = sr_numofbonds;
+    b = &sr_bonds[i];
     b->type = 7;
     b->owner = h;
     b->bone_a = k;
     b->rest_length = (float)(r - g_intersect.distance);
-    g_numofbonds = i + 1;
+    sr_numofbonds = i + 1;
     b->stiffness = 0.0625f;
     b->damping = 0.125f;
     b->mode = 0;
@@ -634,7 +586,7 @@ static void human_levelcontacts(Human *hu, int h)
     b->arm.x = (float)(g_intersect.pos[0] - bk->pos.x);
     b->arm.y = (float)(g_intersect.pos[1] - bk->pos.y);
     b->arm.z = (float)(g_intersect.pos[2] - bk->pos.z);
-    speed = (float)_CIsqrt((double)(float)(hu->bones[0].vel.z * hu->bones[0].vel.z +
+    speed = (float)x87_sqrt((double)(float)(hu->bones[0].vel.z * hu->bones[0].vel.z +
                                            (hu->bones[0].vel.x * hu->bones[0].vel.x +
                                             hu->bones[0].vel.y * hu->bones[0].vel.y)));
     if (0.25 < speed)
@@ -652,13 +604,13 @@ static void human_walk(Human *hu, const vec3 *floor_vel)
   vec3 m[3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}}, d;
   float side, fwd, len, inv, speed, step, f, vz, phase;
 
-  rotateorientation(&m[0].x, g_yaxis, hu->axis);
+  rotateorientation(m, &g_yaxis, hu->axis);
   fwd = -hu->input_axes[3];
   side = hu->input_axes[1];
   d.x = (float)(side * m[0].x + (float)(fwd * m[2].x + 0.0));
   d.y = (float)(m[0].y * side + (float)(m[2].y * fwd + 0.0));
   d.z = (float)(side * m[0].z + (float)(fwd * m[2].z + 0.0));
-  len = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+  len = (float)x87_sqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
   if (len == 0.0) {
     d.x = 0.0f;
     d.z = 0.0f;
@@ -677,7 +629,7 @@ static void human_walk(Human *hu, const vec3 *floor_vel)
   d.x = (float)((float)(floor_vel->x + speed * d.x) - b0->vel.x);
   d.z = (float)((float)(floor_vel->z + (float)(speed * d.z)) - b0->vel.z);
   d.y = 0.0f;
-  step = (float)_CIsqrt((double)(float)(d.x * d.x + 0.0 + d.z * d.z));
+  step = (float)x87_sqrt((double)(float)(d.x * d.x + 0.0 + d.z * d.z));
   f = (float)(step / 0.07500000298023224);
   if (0.0 <= f) {
     if (2.0 < f)
@@ -702,7 +654,7 @@ static void human_walk(Human *hu, const vec3 *floor_vel)
   b0->vel.z = (float)(b0->vel.z - (float)((float)(vz - floor_vel->z) * 0.050000011920928955));
   d.x = (float)(b0->vel.x - floor_vel->x);
   d.z = (float)(b0->vel.z - floor_vel->z);
-  step = (float)_CIsqrt((double)(float)(d.x * d.x + 0.0f + d.z * d.z));
+  step = (float)x87_sqrt((double)(float)(d.x * d.x + 0.0f + d.z * d.z));
   phase = (float)(step * 3.14159265359 * 0.5 + hu->walk_phase);
   hu->walk_phase = phase;
   if (phase >= 6.28318530718)
@@ -724,7 +676,7 @@ static void human_objectcontacts(Human *hu, int h)
   int o, k, i, p0, p1, p2, last;
 
   for (o = 0; o < 1024; o++) {
-    ob = &g_object[o];
+    ob = &sr_objects[o];
     if (ob->active == 0 || ob->state == 3)
       continue;
     if (!(ob->box_min.x - 2.0 <= b0->pos.x && b0->pos.x <= ob->box_max.x + 2.0 && ob->box_min.z - 2.0 <= b0->pos.z &&
@@ -743,8 +695,8 @@ static void human_objectcontacts(Human *hu, int h)
       p2 = g_intersect.tri_particles[2];
       p1 = g_intersect.tri_particles[1];
       p0 = g_intersect.tri_particles[0];
-      i = g_numofbonds;
-      b = &g_bond[i];
+      i = sr_numofbonds;
+      b = &sr_bonds[i];
       b->type = 4;
       b->owner = h;
       b->bone_a = k;
@@ -760,7 +712,7 @@ static void human_objectcontacts(Human *hu, int h)
       b->stiffness = 0.0625f;
       if (o == last)
         b->stiffness = (float)(((float)(100 - hu->last_vehicle_timer) * 0.0625) / 100.0);
-      g_numofbonds = g_numofbonds + 1;
+      sr_numofbonds = sr_numofbonds + 1;
       b->damping = 0.25f;
       b->mode = 0;
       b->normal.x = g_intersect.normal[0];
@@ -769,19 +721,19 @@ static void human_objectcontacts(Human *hu, int h)
       b->friction = 0.1f;
       if (o == hu->last_vehicle || k == 5 || k == 8 || k == 4 || k == 7)
         continue;
-      v.x = (float)(g_particle[p0].vel.x * w0);
-      v.y = (float)(g_particle[p0].vel.y * w0);
-      v.z = (float)(g_particle[p0].vel.z * w0);
-      scaleaddvectors(&v.x, &v.x, &g_particle[p1].vel.x, w1);
-      scaleaddvectors(&v.x, &v.x, &g_particle[p2].vel.x, g_intersect.tri_weights[2]);
-      scaleaddvectors(&rel.x, &v.x, &bk->vel.x, -1.0f);
+      v.x = (float)(sr_particles[p0].vel.x * w0);
+      v.y = (float)(sr_particles[p0].vel.y * w0);
+      v.z = (float)(sr_particles[p0].vel.z * w0);
+      scaleaddvectors(&v, &v, &sr_particles[p1].vel, w1);
+      scaleaddvectors(&v, &v, &sr_particles[p2].vel, g_intersect.tri_weights[2]);
+      scaleaddvectors(&rel, &v, &bk->vel, -1.0f);
       s = (float)(g_intersect.normal[2] * rel.z + (rel.y * g_intersect.normal[1] + g_intersect.normal[0] * rel.x));
       if (!(0.1666666716337204 < s))
         continue;
       hu->health = hu->health - 0x78;
-      if ((uint)(hu->health + 0x77) < 0x78) {
-        createevent_sound(g_soundlist.humanhit, (undefined4 *)&hu->pos.x, 1.0f, 0.5f);
-        if (hu->player_id != -1 && g_player[hu->player_id].team == 7 && 0 < hu->protect_timer && ob->driver != -1)
+      if ((uint32_t)(hu->health + 0x77) < 0x78) {
+        createevent_sound(g_soundlist.humanhit, &hu->pos, 1.0f, 0.5f);
+        if (hu->player_id != -1 && sr_players[hu->player_id].team == 7 && 0 < hu->protect_timer && ob->driver != -1)
           playerteamkilltax(ob->driver, 100);
       }
     }
@@ -799,7 +751,7 @@ static void human_entervehicle(Human *hu)
   if ((hu->input_buttons & 0x800) == 0 || (hu->input_buttons_prev & 0x800) != 0)
     return;
   for (o = 0; o < 1024; o++) {
-    ob = &g_object[o];
+    ob = &sr_objects[o];
     if (ob->active == 0)
       continue;
     for (s = 0; s < ob->num_seats; s++) {
@@ -812,12 +764,12 @@ static void human_entervehicle(Human *hu)
       d.x = (float)(p.x - hu->pos.x);
       d.y = (float)(p.y - hu->pos.y);
       d.z = (float)(p.z - hu->pos.z);
-      dist = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+      dist = (float)x87_sqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
       if (!(dist < best))
         continue;
       taken = 0;
       for (other = 0; other < 512; other++)
-        if (g_human[other].active != 0 && g_human[other].vehicle_id == o && g_human[other].vehicle_seat == s) {
+        if (sr_humans[other].active != 0 && sr_humans[other].vehicle_id == o && sr_humans[other].vehicle_seat == s) {
           taken = 1;
           break;
         }
@@ -828,7 +780,7 @@ static void human_entervehicle(Human *hu)
       d.x = (float)(p.x - hu->pos.x);
       d.y = (float)(p.y - hu->pos.y);
       d.z = (float)(p.z - hu->pos.z);
-      best = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+      best = (float)x87_sqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
     }
   }
 }
@@ -836,7 +788,7 @@ static void human_entervehicle(Human *hu)
 /* The tick of a human on foot. */
 static void human_onfoot(int h)
 {
-  Human *hu = &g_human[h];
+  Human *hu = &sr_humans[h];
   vec3 floor_vel;
   int standing = 0;
 
@@ -857,7 +809,7 @@ static void human_onfoot(int h)
 /* The length of a vector, with the float rounding of the sum. */
 static float human_length(float sq)
 {
-  return (float)_CIsqrt((double)sq);
+  return (float)x87_sqrt((double)sq);
 }
 
 /* A sitting human: bone 0 sits at the seat of the vehicle and turns with it. The driver gives
@@ -867,16 +819,16 @@ static float human_length(float sq)
  * tick. has_item: the bones 1 to 8 hold an item and stay in the solver. */
 static void human_invehicle(int h, int vehicle, int seat, int has_item)
 {
-  Human *hu = &g_human[h];
-  Object *ob = &g_object[vehicle];
+  Human *hu = &sr_humans[h];
+  Object *ob = &sr_objects[vehicle];
   Bone *b0 = &hu->bones[0], *bk;
   const Bone *bp;
   vec3 *r = b0->rot, w;
   float f, len, x, y, z;
   int k, t;
-  uint buttons;
+  uint32_t buttons;
 
-  hu->axis = (float)((float)_CIatan2((double)-ob->rot[2].x, (double)ob->rot[2].z) + hu->vehicle_axis);
+  hu->axis = (float)((float)x87_atan2((double)-ob->rot[2].x, (double)ob->rot[2].z) + hu->vehicle_axis);
   hu->pitch = 0.0f;
   if (900 < hu->protect_timer)
     hu->protect_timer = 900;
@@ -969,10 +921,10 @@ static void human_invehicle(int h, int vehicle, int seat, int has_item)
     bk->rot[1] = bp->rot[1];
     bk->rot[2] = bp->rot[2];
     if (hu->exit_timer == 0 && (k == 9 || k == 12))
-      rotateorientation(&bk->rot[0].x, &bk->rot[0].x, -1.5707963705062866f);
+      rotateorientation(bk->rot, &bk->rot[0], -1.5707963705062866f);
     if (k == 1 || k == 2) {
-      rotateorientation(&bk->rot[0].x, &bk->rot[1].x, (float)(hu->view_axis * 0.5));
-      rotateorientation(&bk->rot[0].x, &bk->rot[0].x, (float)(hu->view_pitch * 0.5));
+      rotateorientation(bk->rot, &bk->rot[1], (float)(hu->view_axis * 0.5));
+      rotateorientation(bk->rot, &bk->rot[0], (float)(hu->view_pitch * 0.5));
     }
     x = g_body[k].pos.x;
     bk->pos.x = (float)(x * bk->rot[0].x + bp->pos.x);
@@ -997,7 +949,7 @@ static void human_invehicle(int h, int vehicle, int seat, int has_item)
     t = hu->exit_timer + 1;
     hu->exit_timer = t;
     f = human_length((float)(hu->vel.z * hu->vel.z + (hu->vel.x * hu->vel.x + hu->vel.y * hu->vel.y)));
-    if ((int)(longlong)(f * 60.0 + 1.0) + 0x1e <= t) {
+    if ((int)(long long)(f * 60.0 + 1.0) + 0x1e <= t) {
       hu->view_axis = hu->axis;
       ob->drive_buttons = 4;
       hu->view_pitch = hu->pitch;
@@ -1023,228 +975,29 @@ static void human_invehicle(int h, int vehicle, int seat, int has_item)
     hu->exit_timer = 1;
 }
 
-void __cdecl lf_51060(void)
-
+void humansimulation(void)
 {
-  __declspec(align(16)) uchar lf_frame[0xe0];
-  vec3 *pvVar1;
-  int *piVar2;
-  float fVar3;
-  float fVar4;
-  float fVar5;
-  char cVar6;
-  undefined8 uVar7;
-  Bond *pBVar8;
-  Bone *pBVar9;
-  int iVar10;
-  uint *puVar11;
-  uint *puVar12;
-  char *pcVar13;
-  int iVar14;
-  int iVar15;
-  int iVar16;
-  int *piVar17;
-  uint uVar18;
-  float *pfVar19;
-  int *piVar20;
-  int iVar21;
-  Body *pBVar22;
-  int iVar23;
-  float fVar24;
-  bool bVar25;
-  float10 fVar26;
-  double dVar27;
+  Human *hu;
+  int h, o, vehicle, seat, has_item;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  iVar23 = g_timerlist.humansim;
-  local_c = DAT_00460d18 ^ (uint)&local_cc;
-  iVar21 = g_timerlist.humansim * 0x58;
-  pcVar13 = ((char *)SR_VA(0x45f2b0) - 1);
-  do {
-    pcVar13 = pcVar13 + 1;
-    cVar6 = *pcVar13;
-    pcVar13[iVar21 + 0x13a50f0] = cVar6;
-  } while (cVar6 != '\0');
-  g_timer[iVar23].total_lo = 0;
-  g_timer[iVar23].total_hi = 0;
-  g_timer[iVar23].ms = 0;
-  local_cc = &g_timer[iVar23].start_lo;
-  uVar7 = rdtsc();
-  *local_cc = (int)uVar7;
-  g_timer[iVar23].start_hi = (int)((ulonglong)uVar7 >> 0x20);
-  piVar17 = (int *)&g_object[0].drive_buttons;
-  do {
-    *piVar17 = 4;
-    piVar17 = piVar17 + 0x208c;
-  } while ((int)piVar17 < ((int)SR_VA(0x7a241dc)));
-  local_a4 = (uint *)0x0;
-  do {
-    puVar11 = local_a4;
-    fVar24 = 0.0;
-    iVar23 = (int)local_a4 * 0x2b64;
-    if (g_human[(int)local_a4].active != 0) {
-      local_9c = g_human[(int)local_a4].vehicle_id;
-      local_98 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_98 + 4)),g_human[(int)local_a4].vehicle_seat));
-      LF_SET_BITS(local_a0, human_begin((int)local_a4, local_9c));
-      if (local_9c == -1) {
-        human_onfoot((int)local_a4);
-      }
-      else {
-        human_invehicle((int)local_a4, local_9c, (int)(*(uint *)((uchar *)&local_98 + 0)), (int)LF_UINT(local_a0));
-      }
-      human_calculatelegangles((int)local_a4);
-      human_calculatearmangles((int)local_a4);
-      human_finish((int)local_a4, local_9c, (int)LF_UINT(local_a0));
-    }
-    local_a4 = (uint *)((int)local_a4 + 1);
-    if (0x1ff < (int)local_a4) {
-      stoptimer(g_timerlist.humansim);
-      return;
-    }
-  } while( true );
+  nametimer(g_timerlist.humansim, "humansim");
+  starttimer(g_timerlist.humansim);
+  for (o = 0; o < 1024; o++)
+    sr_objects[o].drive_buttons = 4;
+  for (h = 0; h < 512; h++) {
+    hu = &sr_humans[h];
+    if (hu->active == 0)
+      continue;
+    vehicle = hu->vehicle_id;
+    seat = hu->vehicle_seat;
+    has_item = human_begin(h, vehicle);
+    if (vehicle == -1)
+      human_onfoot(h);
+    else
+      human_invehicle(h, vehicle, seat, has_item);
+    human_calculatelegangles(h);
+    human_calculatearmangles(h);
+    human_finish(h, vehicle, has_item);
+  }
+  stoptimer(g_timerlist.humansim);
 }
-#undef g_human
-#undef g_body
-#undef DAT_00460d18
-#undef g_object
-#undef g_game
-#undef g_item
-#undef g_soundlist
-#undef g_particle
-#undef DAT_0f837b64
-#undef g_city
-#undef g_player
-#undef g_account
-#undef g_intersect
-#undef g_timerlist
-#undef g_xaxis
-#undef g_yaxis
-#undef g_zaxis
-#undef g_numofbonds
-#undef g_bond
-#undef g_timer
-#undef playersellstock
-#undef createevent_updateitem
-#undef createevent_updateplayer
-#undef item_removehumanlink
-#undef item_removeitemlink
-#undef pointinsidebuilding
-#undef stoptimer
-#undef scaleaddvectors
-#undef rotateorientation
-#undef playerdeathtax
-#undef playerteamkilltax
-#undef createevent_bullethit
-#undef createevent_sound
-#undef deletehuman
-#undef human_calculatelegangles
-#undef human_collisionhuman
-#undef getobjectrotation2
-#undef lineintersectobject
-#undef lineintersectlevel
-#undef sphereintersectobject
-#undef human_calculatearmangles
-#undef human_itemsimulation
-#undef sphereintersectlevel
-#undef __security_check_cookie
-#undef _ftol2
-#undef _CIcos
-#undef _CIsin
-#undef _CIsqrt
-#undef _CIatan2
-#undef local_cc
-#undef local_c8
-#undef local_c4
-#undef local_c0
-#undef local_bc
-#undef local_b8
-#undef local_b4
-#undef local_b0
-#undef local_ac
-#undef local_a8
-#undef local_a4
-#undef local_a0
-#undef local_9c
-#undef local_98
-#undef local_90
-#undef local_8c
-#undef local_88
-#undef local_84
-#undef local_80
-#undef local_7c
-#undef local_78
-#undef local_74
-#undef local_70
-#undef local_6c
-#undef local_68
-#undef local_64
-#undef local_60
-#undef local_5c
-#undef local_58
-#undef local_54
-#undef local_50
-#undef local_4c
-#undef local_48
-#undef local_44
-#undef local_40
-#undef local_3c
-#undef local_38
-#undef local_34
-#undef local_30
-#undef local_2c
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-

@@ -8,9 +8,9 @@
  */
 #include "bonds.h"
 
-#include <intrin.h>
 #include <stdint.h>
 
+#include "profiler.h"
 #include "solver.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
@@ -19,42 +19,19 @@
 /* Game globals. */
 #define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
 #define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
-#define g_timer SR_AT(Timer, 0x14043a0)
-#define g_timerlist (*SR_AT(TimerList, 0x12a81c60))
 #define g_bondpass (*SR_AT(int, 0x203dd0))          /* the number of the solver pass; the wheels read it */
 #define g_numofstaticbonds (*SR_AT(int, 0x13c22d24)) /* the bonds before the contacts of this tick */
 #define g_numofdynamicbonds (*SR_AT(int, 0x1ca5a30)) /* the bonds with the contacts of the last tick */
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
-void __cdecl lf_0b3f0(int timer);
 void __cdecl lf_1d9e0(float *out, float *a, float *b);
 void __cdecl lf_22f90(void);
 long double __cdecl lf_27e80(float *v, float *normal, float friction);
 void __cdecl lf_324c0(void);
-#define stoptimer lf_0b3f0
 #define multiply3x3matrices lf_1d9e0
 #define objectwheelsimulation2 lf_22f90
 #define calculatefriction lf_27e80
 #define objectenginesimulation2 lf_324c0
-
-/* Give a profiler timer its name and clear its total. */
-static void nametimer(int timer, const char *name)
-{
-  Timer *t = &g_timer[timer];
-  char *d = t->name;
-  while ((*d++ = *name++) != '\0')
-    ;
-  t->total_lo = 0;
-  t->total_hi = 0;
-  t->ms = 0;
-}
-
-static void starttimer(int timer)
-{
-  unsigned __int64 now = __rdtsc();
-  g_timer[timer].start_lo = (int)now;
-  g_timer[timer].start_hi = (int)(now >> 0x20);
-}
 
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
  * each side from the masses. */

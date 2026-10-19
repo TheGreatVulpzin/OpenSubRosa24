@@ -11380,12 +11380,12 @@ __declspec(naked) static void th_50ae0(void)
 }
 static uint8_t expect_50ae0[5] = { 0x83, 0xec, 0x1c, 0x53, 0x55 };
 
-void __cdecl lf_51060(void);
+void __cdecl humansimulation(void);
 static void (__cdecl *orig_51060)(void);
 static SvVerify v_51060 = { "humansimulation", -1 };
 static void __cdecl hk_51060(void)
 {
-    SV_HOOK_VOID(v_51060, lf_51060(), orig_51060(), NULL);
+    SV_HOOK_VOID(v_51060, humansimulation(), orig_51060(), NULL);
 }
 __declspec(naked) static void th_51060(void)
 {
