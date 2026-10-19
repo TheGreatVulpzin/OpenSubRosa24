@@ -61,11 +61,13 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
-/* A wheel body of an object (Object.wheel_bodies). Only the velocity changes of the solver are known. */
+/* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
 typedef union WheelBody { struct {
-    uint8_t unk_00[0x18];
+    uint8_t unk_00[0xc];
+    vec3 vel;           /* +0x0c bondsimulation2 type 15: the velocity of the body */
     vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
-    uint8_t unk_24[0x3c];
+    uint8_t unk_24[0x30];
+    vec3 w;             /* +0x54 bondsimulation2 type 15: the angular velocity (w x arm) */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
     uint8_t unk_6c[0x7c];
 }; uint8_t lf_raw[0xe8]; } WheelBody;
@@ -740,8 +742,8 @@ typedef union Bond { struct {
     int num_objects;                     /* +0x008c createbond appends parameter 4 to the list at +0x90; deletebond loops over it */
     int owner;                           /* +0x0090 types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c) */
     int bone_a;                          /* +0x0094 bondsimulation2: bone index (stride 0xe0) */
-    int target;                          /* +0x0098 bondsimulation2: type 10 = item index; type 8 = second bone */
-    int unk_009c;                        /* +0x009c 1 functions */
+    int target;                          /* +0x0098 bondsimulation2: types 10, 11 and 14 = item index; type 13 = the second human; type 8 = second bone */
+    int bone_b;                          /* +0x009c type 13: the bone of the second human (target) that bone_a touches */
     uint8_t pad_00a0[0x10];
     vec3 roll_dir;                       /* +0x00b0 type 5: the direction in which the wheel rolls on the ground (objectwheelcollision: the wheel axle crossed twice with the normal) */
     vec3 surface_vel;                    /* +0x00bc contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level */
@@ -770,6 +772,7 @@ SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
 SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
 SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
 SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
+SR_STATIC_ASSERT(offsetof(Bond, bone_b) == 0x9c, "Bond.bone_b");
 SR_STATIC_ASSERT(offsetof(Bond, roll_dir) == 0xb0, "Bond.roll_dir");
 SR_STATIC_ASSERT(offsetof(Bond, surface_vel) == 0xbc, "Bond.surface_vel");
 

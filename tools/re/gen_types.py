@@ -152,11 +152,13 @@ typedef union HumanMuscle { struct {
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
-/* A wheel body of an object (Object.wheel_bodies). Only the velocity changes of the solver are known. */
+/* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
 typedef union WheelBody { struct {
-    uint8_t unk_00[0x18];
+    uint8_t unk_00[0xc];
+    vec3 vel;           /* +0x0c bondsimulation2 type 15: the velocity of the body */
     vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
-    uint8_t unk_24[0x3c];
+    uint8_t unk_24[0x30];
+    vec3 w;             /* +0x54 bondsimulation2 type 15: the angular velocity (w x arm) */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
     uint8_t unk_6c[0x7c];
 }; uint8_t lf_raw[0xe8]; } WheelBody;

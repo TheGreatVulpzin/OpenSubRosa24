@@ -139,7 +139,7 @@ bond,0x6c,stiffness,float,,bondsimulation2: force = (distance - rest_length) * s
 bond,0x70,damping,float,,"bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir"
 bond,0x90,owner,int,,"types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c)"
 bond,0x94,bone_a,int,,bondsimulation2: bone index (stride 0xe0)
-bond,0x98,target,int,,bondsimulation2: type 10 = item index; type 8 = second bone
+bond,0x98,target,int,,"bondsimulation2: types 10, 11 and 14 = item index; type 13 = the second human; type 8 = second bone"
 human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
 human,0x64,pitch,float,,human_calculatearmangles multiplies it by a constant (likely: vertical angle)
 item,0xa8,angvel,vec3,,item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct
@@ -282,3 +282,4 @@ intersect,0x44,tri_weights,float,3,"lineintersectobject and sphereintersectobjec
 object,0x5eec,wheels,Wheel,32,"stride 0x98: objectwheelcollision reads wheels[i] (particles, radius, steer, pos); the list ends at num_wheel_bodies (+0x71ec)"
 bond,0x28,arm,vec3,,"type 7: the hit point minus the bone position (humansimulation); the push turns the bone around it"
 bond,0xb0,roll_dir,vec3,,"type 5: the direction in which the wheel rolls on the ground (objectwheelcollision: the wheel axle crossed twice with the normal)"
+bond,0x9c,bone_b,int,,"type 13: the bone of the second human (target) that bone_a touches"
