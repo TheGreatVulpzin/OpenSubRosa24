@@ -159,7 +159,35 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 - A rewritten function must not be slower than the original. Readable code is not a reason for slow code. Measure both versions with the per-hook profiler (`subvulpes.ini profile=1`) on the same server load. Example of what to avoid: `src/server/main_loop.c` works, but it is not well optimized. Rewrite it with the same care as the other functions.
 - An optimization that keeps the harness at 0 differences is allowed in this phase. It is not a change of behavior.
 - No change of behavior in this phase. When a function shows a place for a future change ("an admin command could go here"), write it in `docs/ideas.md`, not in the code.
-- Order: small functions first (vectors, bitstream, events), then players and accounts, items, objects and vehicles, humans, logic and economy, `servercycle`. The level generation (`area_createsblocks`, `building_buildfloorplan`...) comes last.
+- Order: the groups below, in this order. The level generation comes last.
+
+### The groups of the rewrite (2026-10-19)
+
+Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). That is 92 of 316 functions, 19.4% of the code bytes.
+
+Next, in this order (sizes from `analysis/024d/functions.csv`):
+
+| # | Group | Functions | Size |
+| --- | --- | ---: | ---: |
+| 1 | Collision with the block areas, and the 2D tests | 29 | 22 KB |
+| 2 | Humans (the rest) | 11 | 18 KB |
+| 3 | Items and weapons (the rest) | 7 | 16 KB |
+| 4 | Objects and vehicles | 27 | 67 KB |
+| 5 | Server network | 24 | 36 KB |
+| 6 | Players, logic, economy and missions | 47 | 42 KB |
+| 7 | System and main loop (also a rewrite of `src/server/main_loop.c`) | 22 | 5 KB |
+| 8 | Map and buildings | 57 | 72 KB |
+
+1. Collision with the block areas, and the 2D tests: `sphereintersectarea`, `lineintersectarea`, `circleintersectarea`, `sphereintersectnormalblock`, `sphereintersectspecblock`, `lineintersectnormalblock`, `lineintersectspecblock`, `circleintersectnormalblock`, `circleintersectspecblock`, `lineintersectcityobjecttype`, `lineintersecttrack`, `lineintersecthuman`, `item_sphereintersect`, `sphereintersectpoint`, `sphereintersectline2d`, `lineintersectline2d`, `lineintersectcircle2d`, `pointdistanceline`, `pointinsidebase`, `pointinsidebasesafe`, `pointinsidebuilding`, `rotatevector2d`, `area_getblock`, `area_getblocktexture`, `area_interior_getblock`, `area_interior_getblocktexture`, `area_interior_getblocklink`, `area_getnextchunk`, `area_getnextsector`.
+2. Humans: `human_calculatearmangles`, `human_calculatelegangles`, `human_calcarmtorque`, `human_collisionhuman`, `createhuman`, `deletehuman`, `human_buildmuscles`, `human_createmuscleball`, `createjointbond`, `setupbody`, `setitempositionhuman`.
+3. Items and weapons: `itemsimulation`, `human_itemsimulation`, `item_physicssimulation`, `itemlogic`, `itemweaponsimulation`, `bulletsimulation`, `setupitemtypes`.
+4. Objects and vehicles (also the lifted-style files `objects.c`, `wheels.c`, `ai_car.c`): `objectsimulation`, `objectsimulation_car`, `objectsimulation_heli`, `objecttrainsimulation`, `object_rotorsimulation`, `objectwheelsimulation2`, `objectenginesimulation2`, `objectwheelcollision`, `objectwheelcollision2`, `getenginetorque2`, `getobjectrotation3`, `addobjectrotation`, `applydamageobject`, `objecttimetolive`, `createobject`, `createvehicle`, `objecttype_addbond`, `objecttype_addface`, `objecttype_addparticle`, `objecttype_addwheel`, `objecttype_calcquadweights`, `setupobjecttypeweight`, `setupobjecttypes_cars`, `setupobjecttypes_helicopters`, `setupobjectypes_train`, `ai_playercar`, `ai_car_nextwaypoint`.
+5. Server network: `serverrecv`, `serversend`, `servercycle`, `packevent`, `unpackevent`, `packobjectpacket`, `packobjectpacket2`, `unpackobjectpacket`, `packpositiondelta`, `unpackpositiondelta`, `packscalar`, `packunitvector`, `unpackangle`, `unpackorientation`, `pbitreadnego`, `clientrecv`, `getmasterserverip`, `disablesocket`, `server_playermessage`, `calculateplayervoice`, `addvoice`, `createevent_updatecarmarket`, `createevent_updatestocks`, `eventsimulation`.
+6. Players, logic, economy and missions: `createplayer`, `deleteplayer`, `playersimulation`, `playerai`, `player_calcassets`, `player_loadinventory`, `player_saveinventory`, `playerbuystock`, `playersellstock`, `playerdeathtax`, `playerteamkilltax`, `createaccount`, `account_nameexists`, `loadaccountsclient`, `saveaccountsclient`, `saveaccountsserver`, the 10 `logic_*`, the 5 `logicsimulation*`, the 3 `economy*`, the 3 `createmission_*`, `createscenario_world`, the 7 `scenario_*`, `resetgame`, `setupgame`, `ai_assessthreats`.
+7. System and main loop: `setcpuaffinity`, `getcpufrequency`, `gettimeofday`, `systemtimer`, `testtimer`, `setuptimers`, `server_writelogfile`, `debug_resetlogfile`, `loadsaveoptions`, `optionreadwriteint`, `loadtextfile`, `listfiles`, `findstring`, `getstring`, `getfloat`, `cs_getline`, `cs_pread`, `csradixsort`, `removeflieextentions`, `sprintf_comma`, `__aulldiv`, `init_by_array`.
+8. Map and buildings: `createlevel`, `createlandscape`, `landscape_buildsectorlods`, `createarea`, `createtrack`, `buildsomeshit`, `buildcitystreet`, `buildcityinterection`, `addcitystreet`, `city_addintersection`, `city_createelevator`, `createcityobject`, `cityobject_addbox`, `setupcityobjecttypes`, `setupbuildingtypes`, the 6 `building_*`, the `area_create*`, `area_block_*`, `area_interior_create*`, `area_interior_set*` and `area_set*` functions, `area_copyrotateblock`, `area_deleteblock`, `area_breakblock`, `area_marksector`, `loadblock`, `leveleditor_load`, `leveleditor_save`, `newspaper_load`, `addbeziersurface`, `addbeziersurfacetexture`, `tesselatebezier`, `tesselatebezierderivative`, `calculatepointscale`, `cerpnoise2d`, `lerpnoise2d`.
+
+Groups 5 and 6 hold the slow lifted functions of the table below (`packobjectpacket`, `packevent`, `logicsimulation_world`, `logicsimulation`): they run each tick, some for each player.
 - `tools/progress.py` counts the hand-written functions.
 - Speed: `python -I tools/lift/bench.py --all` at the end of each lot (the harness times each function on the recorded calls, `HARNESS_TIME=1`). The times move by about 30% from one run to the next: only large ratios that repeat mean something.
 - Slow lifted functions (bench.py, 2026-10-18, recording 20261013-195210, 3 runs). Fix each one when its lot comes. The likely cause is the old one: float locals that hold integers (denormals on the x87, `FixIntLocals.java`).
