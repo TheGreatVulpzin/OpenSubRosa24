@@ -85,7 +85,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -161,6 +161,32 @@ typedef union WheelBody { struct {
     uint8_t unk_6c[0x7c];
 }; uint8_t lf_raw[0xe8]; } WheelBody;
 
+/* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
+typedef union Wheel { struct {
+    int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
+    int unk_04;         /* +0x04 bulletsimulation writes 1 with popped */
+    int health;         /* +0x08 bulletsimulation subtracts the damage of a hit */
+    int particle_a;     /* +0x0c index into Object.particles */
+    int particle_b;     /* +0x10 index into Object.particles */
+    float weight_a;     /* +0x14 objectwheelcollision copies it to Bond.weights[0] */
+    float weight_b;     /* +0x18 objectwheelcollision copies it to Bond.weights[1] */
+    float unk_1c;       /* +0x1c */
+    float radius;       /* +0x20 objectwheelcollision: the circle against the level; bulletsimulation writes 0.25 for a popped tire */
+    float unk_24;       /* +0x24 */
+    float dspin;        /* +0x28 bondsimulation2 type 5 subtracts the push along Bond.roll_dir times the radius */
+    float spin;         /* +0x2c the angular speed: bondsimulation2 type 5 rolls the ground contact with spin * radius */
+    float angle;        /* +0x30 the turn of the wheel; objectsimulation_heli turns wheel 0 as the rotor; the packets send it */
+    float steer;        /* +0x34 objectwheelcollision turns the axle around Object.rot[1] by this angle */
+    vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
+    vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
+    vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
+    int unk_5c;         /* +0x5c the packets send it */
+    float unk_60[4];    /* +0x60 */
+    float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
+    uint8_t unk_74[0x10];
+    float unk_84[5];    /* +0x84 objectwheelsimulation2 */
+}; uint8_t lf_raw[0x98]; } Wheel;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -214,6 +240,8 @@ SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
+SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
+SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 '''

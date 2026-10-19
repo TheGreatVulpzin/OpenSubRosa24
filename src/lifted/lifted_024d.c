@@ -13871,87 +13871,87 @@ LAB_0041e31d:
         g_object[uVar12].rot[0].z = fVar6;
         pbitread(&local_48,8);
         local_44 = (float)((float)(local_48 & 0x7f) / 20.37183271576126);
-        g_object[uVar12].rotor_angle = local_44;
+        g_object[uVar12].wheels[0].angle = local_44;
         if ((char)local_48 < '\0') {
-          g_object[uVar12].rotor_angle = -local_44;
+          g_object[uVar12].wheels[0].angle = -local_44;
         }
         pbitread((uint *)&local_4c,8);
         local_44 = (float)((float)(((uint)LF_BITS_U(local_4c)) & 0x7f) / 20.37183271576126);
-        g_object[uVar12].unk_5fb4 = local_44;
+        g_object[uVar12].wheels[1].angle = local_44;
         if (SUB41(local_4c,0) < '\0') {
-          g_object[uVar12].unk_5fb4 = -local_44;
+          g_object[uVar12].wheels[1].angle = -local_44;
         }
         pbitread(&local_50,8);
         local_44 = (float)((float)(local_50 & 0x7f) / 20.37183271576126);
-        g_object[uVar12].unk_604c = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[2].angle = local_44;
         if ((char)local_50 < '\0') {
-          g_object[uVar12].unk_604c = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[2].angle = -local_44;
         }
         pbitread(&local_54,8);
         local_44 = (float)((float)(local_54 & 0x7f) / 20.37183271576126);
-        g_object[uVar12].unk_60e4 = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[3].angle = local_44;
         if ((char)local_54 < '\0') {
-          g_object[uVar12].unk_60e4 = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[3].angle = -local_44;
         }
         pbitread(&local_40,8);
         local_44 = (float)((float)(local_40 & 0x7f) / 20.37183271576126);
-        g_object[uVar12].unk_5f20 = local_44;
+        g_object[uVar12].wheels[0].steer = local_44;
         if ((char)local_40 < '\0') {
-          g_object[uVar12].unk_5f20 = -local_44;
+          g_object[uVar12].wheels[0].steer = -local_44;
         }
         pbitread(&local_3c,8);
         local_44 = (float)((float)(local_3c & 0x7f) / 20.37183271576126);
-        g_object[uVar12].unk_5fb8 = local_44;
+        g_object[uVar12].wheels[1].steer = local_44;
         if ((char)local_3c < '\0') {
-          g_object[uVar12].unk_5fb8 = -local_44;
+          g_object[uVar12].wheels[1].steer = -local_44;
         }
         pbitread(&local_38,6);
         local_44 = (float)(local_38 & 0x1f) * 0.03125;
-        g_object[uVar12].unk_5f48 = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[0].unk_5c = ((int)LF_BITS_U(local_44));
         if ((local_38 & 0x20) != 0) {
-          g_object[uVar12].unk_5f48 = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[0].unk_5c = ((int)LF_BITS_U(-local_44));
         }
         pbitread(&local_34,6);
         local_44 = (float)((float)(local_34 & 0x1f) * 0.03125);
-        g_object[uVar12].unk_5fe0 = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[1].unk_5c = ((int)LF_BITS_U(local_44));
         if ((local_34 & 0x20) != 0) {
-          g_object[uVar12].unk_5fe0 = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[1].unk_5c = ((int)LF_BITS_U(-local_44));
         }
         pbitread(&local_30,6);
         local_44 = (float)((float)(local_30 & 0x1f) * 0.03125);
-        g_object[uVar12].unk_6078 = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[2].unk_5c = ((int)LF_BITS_U(local_44));
         if ((local_30 & 0x20) != 0) {
-          g_object[uVar12].unk_6078 = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[2].unk_5c = ((int)LF_BITS_U(-local_44));
         }
         pbitread(&local_2c,6);
         local_44 = (float)((float)(local_2c & 0x1f) * 0.03125);
-        g_object[uVar12].unk_6110 = ((int)LF_BITS_U(local_44));
+        g_object[uVar12].wheels[3].unk_5c = ((int)LF_BITS_U(local_44));
         if ((local_2c & 0x20) != 0) {
-          g_object[uVar12].unk_6110 = ((int)LF_BITS_U(-local_44));
+          g_object[uVar12].wheels[3].unk_5c = ((int)LF_BITS_U(-local_44));
         }
         pbitread(&local_28,6);
         local_44 = (float)((float)(local_28 & 0x1f) * 0.03125);
-        g_object[uVar12].unk_5f5c = local_44;
+        g_object[uVar12].wheels[0].slip = local_44;
         if ((local_28 & 0x20) != 0) {
-          g_object[uVar12].unk_5f5c = -local_44;
+          g_object[uVar12].wheels[0].slip = -local_44;
         }
         pbitread(&local_24,6);
         local_44 = (float)((float)(local_24 & 0x1f) * 0.03125);
-        g_object[uVar12].unk_5ff4 = local_44;
+        g_object[uVar12].wheels[1].slip = local_44;
         if ((local_24 & 0x20) != 0) {
-          g_object[uVar12].unk_5ff4 = -local_44;
+          g_object[uVar12].wheels[1].slip = -local_44;
         }
         pbitread(&local_20,6);
         local_44 = (float)((float)(local_20 & 0x1f) * 0.03125);
-        g_object[uVar12].unk_608c = local_44;
+        g_object[uVar12].wheels[2].slip = local_44;
         if ((local_20 & 0x20) != 0) {
-          g_object[uVar12].unk_608c = -local_44;
+          g_object[uVar12].wheels[2].slip = -local_44;
         }
         pbitread(&local_1c,6);
         local_44 = (float)((float)(local_1c & 0x1f) * 0.03125);
-        g_object[uVar12].unk_6124 = local_44;
+        g_object[uVar12].wheels[3].slip = local_44;
         if ((local_1c & 0x20) != 0) {
-          g_object[uVar12].unk_6124 = -local_44;
+          g_object[uVar12].wheels[3].slip = -local_44;
         }
         pbitread(&local_18,8);
         local_44 = (float)(local_18 & 0x7f) * 0.0078125;
@@ -14518,123 +14518,123 @@ LAB_0041fa77:
         uVar13 = 0x1f;
 LAB_0041fded:
         packorientation(&g_object[uVar8].rot[2].x,uVar13);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].rotor_angle) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[0].angle) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar8].rotor_angle < 0.0) {
+        if (g_object[uVar8].wheels[0].angle < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5fb4) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[1].angle) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar8].unk_5fb4 < 0.0) {
+        if (g_object[uVar8].wheels[1].angle < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_604c)) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[2].angle) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (LF_BITS_F(g_object[uVar8].unk_604c) < 0.0) {
+        if (g_object[uVar8].wheels[2].angle < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_60e4)) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[3].angle) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (LF_BITS_F(g_object[uVar8].unk_60e4) < 0.0) {
+        if (g_object[uVar8].wheels[3].angle < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5f20) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[0].steer) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar8].unk_5f20 < 0.0) {
+        if (g_object[uVar8].wheels[0].steer < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5fb8) * 20.37183271576126);
+        uVar1 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[1].steer) * 20.37183271576126);
         (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
         uVar13 = (uint)(*(uint *)((uchar *)&local_38 + 0));
         local_38 = uVar1 & 0xffffffff0000007f;
-        if (g_object[uVar8].unk_5fb8 < 0.0) {
+        if (g_object[uVar8].wheels[1].steer < 0.0) {
           local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar13) & 0xffffffff0000007f | 0x80;
         }
         pbitwrite((uint *)&local_38,8);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_5f48)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].wheels[0].unk_5c)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar8].unk_5f48) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].wheels[0].unk_5c) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_5fe0)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].wheels[1].unk_5c)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar8].unk_5fe0) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].wheels[1].unk_5c) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_6078)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].wheels[2].unk_5c)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar8].unk_6078) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].wheels[2].unk_5c) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].unk_6110)) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(LF_BITS_F(g_object[uVar8].wheels[3].unk_5c)) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (LF_BITS_F(g_object[uVar8].unk_6110) < 0.0) {
+        if (LF_BITS_F(g_object[uVar8].wheels[3].unk_5c) < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5f5c) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[0].slip) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar8].unk_5f5c < 0.0) {
+        if (g_object[uVar8].wheels[0].slip < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_5ff4) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[1].slip) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar8].unk_5ff4 < 0.0) {
+        if (g_object[uVar8].wheels[1].slip < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_608c) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[2].slip) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar8].unk_608c < 0.0) {
+        if (g_object[uVar8].wheels[2].slip < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
-        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].unk_6124) * 32.0);
+        local_38 = (ulonglong)LF_CHOP(ABS(g_object[uVar8].wheels[3].slip) * 32.0);
         local_3c = (uint)(*(uint *)((uchar *)&local_38 + 0));
         if (0x1f < (uint)(*(uint *)((uchar *)&local_38 + 0))) {
           local_3c = 0x1f;
         }
-        if (g_object[uVar8].unk_6124 < 0.0) {
+        if (g_object[uVar8].wheels[3].slip < 0.0) {
           local_3c = local_3c | 0x20;
         }
         pbitwrite(&local_3c,6);
@@ -15151,111 +15151,111 @@ LAB_00420e39:
         uVar10 = 0x1f;
 LAB_0042119f:
         packorientation(&g_object[((int)LF_BITS_U(fVar9))].rot[2].x,uVar10);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].rotor_angle) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[0].angle) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (g_object[((int)LF_BITS_U(fVar9))].rotor_angle < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[0].angle < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_5fb4) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[1].angle) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_5fb4 < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[1].angle < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_604c)) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[2].angle) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_604c) < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[2].angle < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_60e4)) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[3].angle) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_60e4) < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[3].angle < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_5f20) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[0].steer) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_5f20 < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[0].steer < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_5fb8) * 20.37183271576126);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[1].steer) * 20.37183271576126);
         local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7f));
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_5fb8 < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[1].steer < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x80));
         }
         pbitwrite((uint *)&local_4c,8);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_5f48)) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[0].unk_5c)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_5f48) < 0.0) {
+        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[0].unk_5c) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_5fe0)) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[1].unk_5c)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_5fe0) < 0.0) {
+        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[1].unk_5c) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_6078)) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[2].unk_5c)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_6078) < 0.0) {
+        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[2].unk_5c) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_6110)) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[3].unk_5c)) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].unk_6110) < 0.0) {
+        if (LF_BITS_F(g_object[((int)LF_BITS_U(fVar9))].wheels[3].unk_5c) < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_5f5c) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[0].slip) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_5f5c < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[0].slip < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_5ff4) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[1].slip) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_5ff4 < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[1].slip < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_608c) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[2].slip) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_608c < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[2].slip < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
-        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].unk_6124) * 32.0);
+        local_48 = (longlong)LF_CHOP(ABS(g_object[((int)LF_BITS_U(fVar9))].wheels[3].slip) * 32.0);
         local_4c = (float)(*(float *)((uchar *)&local_48 + 0));
         if (0x1f < ((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0))))) {
           local_4c = 4.344025239406933E-44;
         }
-        if (g_object[((int)LF_BITS_U(fVar9))].unk_6124 < 0.0) {
+        if (g_object[((int)LF_BITS_U(fVar9))].wheels[3].slip < 0.0) {
           local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x20));
         }
         pbitwrite((uint *)&local_4c,6);
@@ -16381,17 +16381,19 @@ LAB_0042501c:
     }
   }
   iVar3 = g_object[param_1].unk_5ee0;
-  fVar4 = (float)(g_object[param_1].rotor_angle + (((float)iVar3 * 2.0 * 3.14159265359) / 60.0) / 60.0);
-  g_object[param_1].rotor_angle = fVar4;
-  g_object[param_1].unk_5fb4 = (float)(fVar4 - (((float)iVar3 * 0.125 * 2.0 * 3.14159265359) / 60.0) / 60.0);
-  if (fVar4 <= 3.14159265359) {
-    if (-3.14159265359 <= g_object[param_1].rotor_angle) goto LAB_004250f8;
-    fVar4 = (float)(g_object[param_1].rotor_angle + 6.28318530718);
+  fVar5 = (float)(g_object[param_1].wheels[0].angle + (((float)iVar3 * 2.0 * 3.14159265359) / 60.0) / 60.0);
+  g_object[param_1].wheels[0].angle = fVar5;
+  g_object[param_1].wheels[1].angle =
+       (float)(fVar5 - (((float)iVar3 * 0.125 * 2.0 * 3.14159265359) / 60.0) / 60.0);
+  fVar4 = g_object[param_1].wheels[0].angle;
+  if (fVar5 <= 3.14159265359) {
+    if (-3.14159265359 <= fVar4) goto LAB_004250f8;
+    fVar4 = (float)(g_object[param_1].wheels[0].angle + 6.28318530718);
   }
   else {
-    fVar4 = g_object[param_1].rotor_angle - 6.28318530718;
+    fVar4 = fVar4 - 6.28318530718;
   }
-  g_object[param_1].rotor_angle = fVar4;
+  g_object[param_1].wheels[0].angle = fVar4;
 LAB_004250f8:
   if ((bVar9) && (0 < iVar11)) {
     local_18 = g_object[param_1].particles;
@@ -16711,10 +16713,10 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
       } while (local_48 < local_40);
     }
     if (param_4 != 0) {
-      iVar1 = *(int *)((int)&g_object[0].num_wheels + iVar4);
+      iVar1 = *(int *)((int)g_object[0].wheels[0].unk_60 + iVar4 + -100);
       iVar5 = 0;
       if (0 < iVar1) {
-        pfVar6 = (float *)(&g_object[0].lf_raw[0x5f24] + iVar4);
+        pfVar6 = (float *)((int)g_object[0].wheels[0].unk_60 + iVar4 + -0x28);
         do {
           iVar4 = lineintersectsphere((float *)&local_18,(float *)&local_30,&local_50,param_2,
                                       param_3,pfVar6,pfVar6[-6]);
@@ -17692,17 +17694,17 @@ void __cdecl lf_272b0(int param_1)
     local_18 = (float)((float10)1.570796326795 - (float10)dVar8);
   }
   if (fVar1 <= 0.0) {
-    g_object[param_1].unk_5f20 = -local_18;
+    g_object[param_1].wheels[0].steer = -local_18;
     local_18 = -fVar4;
   }
   else {
-    g_object[param_1].unk_5f20 = fVar4;
+    g_object[param_1].wheels[0].steer = fVar4;
   }
-  g_object[param_1].unk_5fb8 = local_18;
+  g_object[param_1].wheels[1].steer = local_18;
   if (g_object[param_1].type == 1) {
-    fVar1 = g_object[param_1].unk_5f20;
-    dVar8 = _CIcos((double)-fVar1);
-    dVar9 = _CIsin((double)-fVar1);
+    fVar1 = -g_object[param_1].wheels[0].steer;
+    dVar8 = _CIcos((double)fVar1);
+    dVar9 = _CIsin((double)fVar1);
     fVar1 = (float)((float)((float10)dVar8 * (float10)0.25) + 0.0);
     fVar4 = (float)((float)((float10)dVar9 * (float10)0.25) + 0.4375);
     fVar6 = (2.0 - fVar1) * 0.5;
@@ -17714,8 +17716,8 @@ void __cdecl lf_272b0(int param_1)
     *(float *)&g_object[param_1].wheel_bodies[0].lf_raw[0xd4] = fVar1 * fVar5;
     *(float *)&g_object[param_1].wheel_bodies[0].lf_raw[0xd8] = (float)(fVar1 * fVar4);
     *(undefined4 *)&g_object[param_1].wheel_bodies[0].lf_raw[0xdc] = 0x3e000000;
-    dVar8 = _CIcos((double)g_object[param_1].unk_5fb8);
-    dVar9 = _CIsin((double)g_object[param_1].unk_5fb8);
+    dVar8 = _CIcos((double)g_object[param_1].wheels[1].steer);
+    dVar9 = _CIsin((double)g_object[param_1].wheels[1].steer);
     fVar1 = (float)((float)((float10)dVar8 * (float10)0.25) + 0.0);
     fVar4 = (float)((float)((float10)dVar9 * (float10)0.25) + 0.4375);
     fVar6 = (2.0 - fVar1) * 0.5;
@@ -23886,9 +23888,9 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
   int *piVar12;
   int *piVar13;
   float *pfVar14;
-  undefined4 *puVar15;
+  float *pfVar15;
   undefined4 *puVar16;
-  float *pfVar17;
+  undefined4 *puVar17;
   int iVar18;
   undefined4 *puVar19;
   uint uVar20;
@@ -23971,31 +23973,31 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         g_object[iVar21].unk_07b4 = local_2c;
         if (0 < local_2c) {
           puVar16 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x1350];
-          puVar15 = (undefined4 *)&g_object[iVar21].lf_raw[0x7c0];
+          puVar17 = (undefined4 *)&g_object[iVar21].lf_raw[0x7c0];
           puVar19 = (undefined4 *)&g_object[iVar21].lf_raw[0x7ec];
           local_30 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x1380];
           do {
             uVar5 = puVar16[7];
             puVar19[-0xd] = local_30[-0xe];
-            puVar15[-1] = puVar16[-1];
-            *puVar15 = *puVar16;
-            puVar15[1] = puVar16[1];
-            puVar15[2] = puVar16[2];
-            puVar15[3] = puVar16[3];
-            puVar15[4] = puVar16[4];
-            puVar15[5] = puVar16[5];
-            puVar15[6] = puVar16[6];
-            puVar15[7] = uVar5;
-            puVar15[8] = puVar16[8];
-            puVar15[9] = puVar16[9];
+            puVar17[-1] = puVar16[-1];
+            *puVar17 = *puVar16;
+            puVar17[1] = puVar16[1];
+            puVar17[2] = puVar16[2];
+            puVar17[3] = puVar16[3];
+            puVar17[4] = puVar16[4];
+            puVar17[5] = puVar16[5];
+            puVar17[6] = puVar16[6];
+            puVar17[7] = uVar5;
+            puVar17[8] = puVar16[8];
+            puVar17[9] = puVar16[9];
             local_2c = local_2c + -1;
-            puVar15[10] = puVar16[10];
+            puVar17[10] = puVar16[10];
             uVar5 = local_30[1];
             *puVar19 = *local_30;
             puVar19[1] = uVar5;
             puVar19[2] = 8;
             puVar16 = puVar16 + 0x10;
-            puVar15 = puVar15 + 0x10;
+            puVar17 = puVar17 + 0x10;
             puVar19 = puVar19 + 0x10;
             local_30 = local_30 + 0x10;
           } while (local_2c != 0);
@@ -24019,42 +24021,43 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         g_object[iVar21].num_wheels = local_2c;
         g_object[iVar21].unk_81a4 = fVar1;
         if (0 < local_2c) {
-          pfVar14 = (float *)&g_object[iVar21].lf_raw[0x5f2c];
-          pfVar17 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
+          pfVar14 = &g_object[iVar21].wheels[0].pos.z;
+          pfVar15 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
           do {
-            fVar1 = pfVar17[3];
-            fVar9 = pfVar17[1];
-            iVar11 = g_object[iVar21].particles[((int)LF_BITS_U(*pfVar17))];
+            fVar1 = pfVar15[3];
+            fVar9 = pfVar15[1];
+            iVar11 = g_object[iVar21].particles[((int)LF_BITS_U(*pfVar15))];
             iVar18 = g_object[iVar21].particles[((int)LF_BITS_U(fVar9))];
             local_2c = local_2c + -1;
             fVar2 = g_particle[iVar18].pos.y;
             fVar3 = g_particle[iVar11].pos.y;
             fVar4 = g_particle[iVar18].pos.z;
-            fVar8 = ((int)LF_BITS_U(pfVar17[-1]));
+            fVar8 = ((int)LF_BITS_U(pfVar15[-1]));
             fVar6 = g_particle[iVar11].pos.z;
-            pfVar14[-2] = (float)(g_particle[iVar11].pos.x +
-                          fVar1 * ((float)(g_particle[iVar18].pos.x - g_particle[iVar11].pos.x)));
+            ((vec3 *)(pfVar14 + -2))->x =
+                 (float)(g_particle[iVar11].pos.x +
+                 fVar1 * ((float)(g_particle[iVar18].pos.x - g_particle[iVar11].pos.x)));
             pfVar14[-1] = (float)(((float)(fVar2 - fVar3)) * fVar1 + g_particle[iVar11].pos.y);
             *pfVar14 = (float)(fVar1 * ((float)(fVar4 - fVar6)) + g_particle[iVar11].pos.z);
             pfVar14[-0x10] = LF_BITS_F(fVar8);
-            fVar1 = pfVar17[0xf];
-            pfVar14[-0xb] = pfVar17[2];
+            fVar1 = pfVar15[0xf];
+            pfVar14[-0xb] = pfVar15[2];
             pfVar14[-0xf] = fVar1;
-            fVar1 = *pfVar17;
-            pfVar14[-10] = pfVar17[3];
+            fVar1 = *pfVar15;
+            pfVar14[-10] = pfVar15[3];
             pfVar14[-0xd] = fVar1;
-            fVar1 = pfVar17[5];
+            fVar1 = pfVar15[5];
             pfVar14[-0xc] = fVar9;
             pfVar14[-8] = fVar1;
             pfVar14[-0xe] = 1.1210387714598537E-44;
-            pfVar14[-9] = pfVar17[4];
-            pfVar14[-7] = pfVar17[6];
-            pfVar14[8] = pfVar17[10];
-            pfVar14[9] = pfVar17[0xb];
-            pfVar14[10] = pfVar17[0xc];
-            pfVar14[0xb] = pfVar17[0xd];
+            pfVar14[-9] = pfVar15[4];
+            pfVar14[-7] = pfVar15[6];
+            pfVar14[8] = pfVar15[10];
+            pfVar14[9] = pfVar15[0xb];
+            pfVar14[10] = pfVar15[0xc];
+            pfVar14[0xb] = pfVar15[0xd];
             pfVar14 = pfVar14 + 0x26;
-            pfVar17 = pfVar17 + 0x11;
+            pfVar15 = pfVar15 + 0x11;
           } while (local_2c != 0);
         }
         iVar11 = g_objecttype[1].num_wheels;
@@ -24085,84 +24088,83 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
           g_object[iVar21].num_wheels = 0;
           local_38 = 0;
           if (0 < iVar11) {
-            puVar16 = (undefined4 *)&g_object[iVar21].lf_raw[0x5f2c];
-            puVar15 = (undefined4 *)&g_object[iVar21].wheel_bodies[0].lf_raw[0x8];
+            pfVar14 = &g_object[iVar21].wheels[0].pos.z;
+            pfVar15 = (float *)&g_object[iVar21].wheel_bodies[0].lf_raw[0x8];
             do {
               g_object[iVar21].num_wheels = 0;
-              puVar15[-2] = puVar16[-2];
+              pfVar15[-2] = ((vec3 *)(pfVar14 + -2))->x;
               uVar20 = local_38 & 1;
-              puVar15[-1] = puVar16[-1];
+              pfVar15[-1] = pfVar14[-1];
               iVar11 = local_38 + 1;
-              *puVar15 = *puVar16;
-              *(float *)&(puVar15[7]) = *param_4;
-              *(float *)&(puVar15[8]) = param_4[1];
-              *(float *)&(puVar15[9]) = param_4[2];
-              *(float *)&(puVar15[10]) = param_4[3];
-              *(float *)&(puVar15[0xb]) = param_4[4];
-              *(float *)&(puVar15[0xc]) = param_4[5];
-              *(float *)&(puVar15[0xd]) = param_4[6];
-              *(float *)&(puVar15[0xe]) = param_4[7];
-              *(float *)&(puVar15[0xf]) = param_4[8];
-              puVar15[0x1f] = puVar16[-9];
+              *pfVar15 = *pfVar14;
+              pfVar15[7] = *param_4;
+              pfVar15[8] = param_4[1];
+              pfVar15[9] = param_4[2];
+              pfVar15[10] = param_4[3];
+              pfVar15[0xb] = param_4[4];
+              pfVar15[0xc] = param_4[5];
+              pfVar15[0xd] = param_4[6];
+              pfVar15[0xe] = param_4[7];
+              pfVar15[0xf] = param_4[8];
+              pfVar15[0x1f] = pfVar14[-9];
               if (uVar20 != 0) {
                 iVar11 = local_38 - 1;
               }
-              iVar11 = iVar11 * 0x98;
-              puVar15[0x22] = puVar16[-0xd];
-              puVar15[0x23] = puVar16[-0xc];
-              puVar15[0x24] = *(undefined4 *)(iVar11 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar21 * 0x8230);
-              puVar15[0x25] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5efc] + iVar11);
-              puVar15[0x26] = puVar16[-0xb];
-              puVar15[0x27] = puVar16[-10];
-              *(float *)&(puVar15[0x28]) = (float)(*(float *)(&g_object[iVar21].lf_raw[0x5f00] + iVar11) * 0.0);
-              fVar1 = *(float *)(&g_object[iVar21].lf_raw[0x5f04] + iVar11) * 0.0;
-              *(float *)&(puVar15[0x29]) = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar15[0x26]) + LF_BITS_F(puVar15[0x27])) + LF_BITS_F(puVar15[0x28]))));
-              *(float *)&(puVar15[0x26]) = (float)(LF_BITS_F(puVar15[0x26]) / fVar1);
-              *(float *)&(puVar15[0x27]) = (float)(LF_BITS_F(puVar15[0x27]) / fVar1);
-              *(float *)&(puVar15[0x28]) = (float)(LF_BITS_F(puVar15[0x28]) / fVar1);
-              *(float *)&(puVar15[0x29]) = (float)(LF_BITS_F(puVar15[0x29]) / fVar1);
+              pfVar15[0x22] = pfVar14[-0xd];
+              pfVar15[0x23] = pfVar14[-0xc];
+              pfVar15[0x24] = *(float *)(iVar11 * 0x98 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar21 * 0x8230);
+              pfVar15[0x25] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
+              pfVar15[0x26] = pfVar14[-0xb];
+              pfVar15[0x27] = pfVar14[-10];
+              pfVar15[0x28] = (float)(g_object[iVar21].wheels[iVar11].weight_a * 0.0);
+              fVar1 = g_object[iVar21].wheels[iVar11].weight_b * 0.0;
+              pfVar15[0x29] = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(pfVar15[0x26] + pfVar15[0x27]) + pfVar15[0x28])));
+              pfVar15[0x26] = (float)(pfVar15[0x26] / fVar1);
+              pfVar15[0x27] = (float)(pfVar15[0x27] / fVar1);
+              pfVar15[0x28] = (float)(pfVar15[0x28] / fVar1);
+              pfVar15[0x29] = (float)(pfVar15[0x29] / fVar1);
               if (uVar20 == 0) {
-                puVar15[0x2a] = 0xbe000000;
+                pfVar15[0x2a] = -0.125;
               }
               else {
-                puVar15[0x2a] = 0x3e000000;
+                pfVar15[0x2a] = 0.125;
               }
-              puVar15[0x2d] = puVar16[-0xd];
-              puVar15[0x2e] = puVar16[-0xc];
-              puVar15[0x2f] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5ef8] + iVar11);
-              puVar15[0x30] = *(undefined4 *)(&g_object[iVar21].lf_raw[0x5efc] + iVar11);
-              *(float *)&(puVar15[0x31]) = LF_BITS_F(puVar16[-0xb]) * 0.875;
-              *(float *)&(puVar15[0x32]) = (float)(LF_BITS_F(puVar16[-10]) * 0.875);
-              *(float *)&(puVar15[0x33]) = *(float *)(&g_object[iVar21].lf_raw[0x5f00] + iVar11) * 0.125;
-              fVar1 = (float)(*(float *)(&g_object[iVar21].lf_raw[0x5f04] + iVar11) * 0.125);
-              *(float *)&(puVar15[0x34]) = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(LF_BITS_F(puVar15[0x31]) + LF_BITS_F(puVar15[0x32])) + LF_BITS_F(puVar15[0x33]))));
-              *(float *)&(puVar15[0x31]) = (float)(LF_BITS_F(puVar15[0x31]) / fVar1);
-              *(float *)&(puVar15[0x32]) = (float)(LF_BITS_F(puVar15[0x32]) / fVar1);
-              *(float *)&(puVar15[0x33]) = (float)(LF_BITS_F(puVar15[0x33]) / fVar1);
-              *(float *)&(puVar15[0x34]) = (float)(LF_BITS_F(puVar15[0x34]) / fVar1);
+              pfVar15[0x2d] = pfVar14[-0xd];
+              pfVar15[0x2e] = pfVar14[-0xc];
+              pfVar15[0x2f] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_a);
+              pfVar15[0x30] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
+              pfVar15[0x31] = pfVar14[-0xb] * 0.875;
+              pfVar15[0x32] = (float)(pfVar14[-10] * 0.875);
+              pfVar15[0x33] = g_object[iVar21].wheels[iVar11].weight_a * 0.125;
+              fVar1 = (float)(g_object[iVar21].wheels[iVar11].weight_b * 0.125);
+              pfVar15[0x34] = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(pfVar15[0x31] + pfVar15[0x32]) + pfVar15[0x33])));
+              pfVar15[0x31] = (float)(pfVar15[0x31] / fVar1);
+              pfVar15[0x32] = (float)(pfVar15[0x32] / fVar1);
+              pfVar15[0x33] = (float)(pfVar15[0x33] / fVar1);
+              pfVar15[0x34] = (float)(pfVar15[0x34] / fVar1);
               if (uVar20 == 0) {
-                puVar15[0x35] = 0x3e000000;
+                pfVar15[0x35] = 0.125;
               }
               else {
-                puVar15[0x35] = 0xbe000000;
+                pfVar15[0x35] = -0.125;
               }
-              fVar1 = LF_BITS_F(puVar16[-8]);
+              fVar1 = pfVar14[-8];
               local_38 = local_38 + 1;
-              puVar16 = puVar16 + 0x26;
-              *(float *)&(puVar15[0x20]) = fVar1;
-              puVar15[0x21] = 0x3e000000;
+              pfVar14 = pfVar14 + 0x26;
+              pfVar15[0x20] = fVar1;
+              pfVar15[0x21] = 0.125;
               fVar1 = (float)(fVar1 * 0.5);
               fVar2 = (float)(fVar1 * fVar1 * 0.5);
-              *(float *)&(puVar15[0x19]) = fVar2;
+              pfVar15[0x19] = fVar2;
               fVar1 = (float)((fVar1 * 3.0 * fVar1 + 0.0625) / 12.0);
-              *(float *)&(puVar15[0x1a]) = fVar1;
-              *(float *)&(puVar15[0x1b]) = fVar1;
-              *(float *)&(puVar15[0x1c]) = (float)(1.0 / fVar2);
-              *(float *)&(puVar15[0x1d]) = (float)(1.0 / fVar1);
-              *(float *)&(puVar15[0x1e]) = 1.0 / fVar1;
-              puVar15 = puVar15 + 0x3a;
+              pfVar15[0x1a] = fVar1;
+              pfVar15[0x1b] = fVar1;
+              pfVar15[0x1c] = (float)(1.0 / fVar2);
+              pfVar15[0x1d] = (float)(1.0 / fVar1);
+              pfVar15[0x1e] = 1.0 / fVar1;
+              pfVar15 = pfVar15 + 0x3a;
             } while ((int)local_38 < g_objecttype[1].num_wheels);
           }
         }
@@ -24176,36 +24178,36 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
           iVar22 = (iVar18 - 4U >> 2) + 1;
           iVar11 = iVar22 * 4;
           puVar16 = (undefined4 *)&g_object[iVar21].lf_raw[0x81b4];
-          puVar15 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x8088];
+          puVar17 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x8088];
           do {
-            puVar16[-2] = puVar15[-2];
+            puVar16[-2] = puVar17[-2];
             iVar22 = iVar22 + -1;
-            puVar16[-1] = puVar15[-1];
-            *puVar16 = *puVar15;
-            puVar16[1] = puVar15[1];
-            puVar16[2] = puVar15[2];
-            puVar16[3] = puVar15[3];
-            puVar16[4] = puVar15[4];
-            puVar16[5] = puVar15[5];
-            puVar16[6] = puVar15[6];
-            puVar16[7] = puVar15[7];
-            puVar16[8] = puVar15[8];
-            puVar16[9] = puVar15[9];
+            puVar16[-1] = puVar17[-1];
+            *puVar16 = *puVar17;
+            puVar16[1] = puVar17[1];
+            puVar16[2] = puVar17[2];
+            puVar16[3] = puVar17[3];
+            puVar16[4] = puVar17[4];
+            puVar16[5] = puVar17[5];
+            puVar16[6] = puVar17[6];
+            puVar16[7] = puVar17[7];
+            puVar16[8] = puVar17[8];
+            puVar16[9] = puVar17[9];
             puVar16 = puVar16 + 0xc;
-            puVar15 = puVar15 + 0xc;
+            puVar17 = puVar17 + 0xc;
           } while (iVar22 != 0);
         }
         if (iVar11 < iVar18) {
           iVar18 = iVar18 - iVar11;
           puVar16 = (undefined4 *)(&g_objecttype[param_1].lf_raw[0x8088] + iVar11 * 0xc);
-          puVar15 = (undefined4 *)(iVar21 * 0x8230 + ((int)&g_object[0].lf_raw[0x81b4]) + iVar11 * 0xc);
+          puVar17 = (undefined4 *)(iVar21 * 0x8230 + ((int)&g_object[0].lf_raw[0x81b4]) + iVar11 * 0xc);
           do {
-            puVar15[-2] = puVar16[-2];
+            puVar17[-2] = puVar16[-2];
             iVar18 = iVar18 + -1;
-            puVar15[-1] = puVar16[-1];
-            *puVar15 = *puVar16;
+            puVar17[-1] = puVar16[-1];
+            *puVar17 = *puVar16;
             puVar16 = puVar16 + 3;
-            puVar15 = puVar15 + 3;
+            puVar17 = puVar17 + 3;
           } while (iVar18 != 0);
         }
         bVar23 = g_server.unk_0000 != 0;
@@ -24355,216 +24357,215 @@ void __cdecl lf_324c0(void)
 
 {
   __declspec(align(16)) uchar lf_frame[0x30];
-  float fVar1;
+  int iVar1;
   float fVar2;
   float fVar3;
   float fVar4;
-  float *pfVar5;
-  int iVar6;
+  float fVar5;
+  float *pfVar6;
   int iVar7;
   int iVar8;
   int iVar9;
-  int iVar10;
-  int *piVar11;
-  int iVar12;
-  float10 fVar13;
+  int *piVar10;
+  int iVar11;
+  float10 fVar12;
 
 
   
-  iVar10 = 0;
   iVar9 = 0;
-  iVar12 = 0;
+  iVar8 = 0;
+  iVar11 = 0;
   do {
-    if (*(int *)((int)&((Object *)(g_object[0].rot + -5))->active + iVar9) != 0) {
-      if (*(int *)((int)g_object[0].rot + iVar9 + -0x38) == 1) {
-        iVar8 = 0;
-        if (0 < *(int *)((int)g_object[0].wheel_bodies + iVar9 + -4)) {
-          pfVar5 = (float *)(&g_object[0].wheel_bodies[0].lf_raw[0x28] + iVar9);
+    if (*(int *)((int)&((Object *)(g_object[0].rot + -5))->active + iVar8) != 0) {
+      if (*(int *)((int)g_object[0].rot + iVar8 + -0x38) == 1) {
+        iVar7 = 0;
+        if (0 < *(int *)((int)g_object[0].wheel_bodies + iVar8 + -4)) {
+          pfVar6 = (float *)(&g_object[0].wheel_bodies[0].lf_raw[0x28] + iVar8);
           do {
-            fVar2 = (float)(pfVar5[0xd] * pfVar5[1] + (pfVar5[0xb] * pfVar5[-1] + pfVar5[0xc] * *pfVar5));
-            if (iVar8 < 2) {
-              if (1.0 < *(float *)((int)&g_object[0].unk_5e84 + iVar9)) {
+            fVar3 = (float)(pfVar6[0xd] * pfVar6[1] + (pfVar6[0xb] * pfVar6[-1] + pfVar6[0xc] * *pfVar6));
+            if (iVar7 < 2) {
+              if (1.0 < *(float *)((int)g_object[0].wheels + iVar8 + -0x68)) {
                 local_14 = 0.0;
               }
               else {
-                local_14 = (float)(*(float *)((int)&g_object[0].unk_5e84 + iVar9) / 60.0);
+                local_14 = (float)(*(float *)((int)g_object[0].wheels + iVar8 + -0x68) / 60.0);
               }
             }
             else {
-              local_14 = (float)(*(float *)((int)&g_object[0].unk_5e84 + iVar9) / 60.0);
+              local_14 = (float)(*(float *)((int)g_object[0].wheels + iVar8 + -0x68) / 60.0);
             }
-            fVar3 = (float)(local_14 * 4.0);
-            local_14 = fVar3;
-            if ((-fVar3 <= fVar2) && (local_14 = -fVar3, fVar2 <= fVar3)) {
-              local_14 = -fVar2;
+            fVar4 = (float)(local_14 * 4.0);
+            local_14 = fVar4;
+            if ((-fVar4 <= fVar3) && (local_14 = -fVar4, fVar3 <= fVar4)) {
+              local_14 = -fVar3;
             }
-            iVar8 = iVar8 + 1;
-            fVar2 = (float)((float)(local_14 * 0.5) * pfVar5[0x11]);
-            pfVar5[0xe] = (float)(pfVar5[0xe] + fVar2 * pfVar5[-1]);
-            pfVar5[0xf] = (float)(*pfVar5 * fVar2 + pfVar5[0xf]);
-            pfVar5[0x10] = (float)(fVar2 * pfVar5[1] + pfVar5[0x10]);
-            pfVar5 = pfVar5 + 0x3a;
-          } while (iVar8 < *(int *)((int)g_object[0].wheel_bodies + iVar9 + -4));
+            iVar7 = iVar7 + 1;
+            fVar3 = (float)((float)(local_14 * 0.5) * pfVar6[0x11]);
+            pfVar6[0xe] = (float)(pfVar6[0xe] + fVar3 * pfVar6[-1]);
+            pfVar6[0xf] = (float)(*pfVar6 * fVar3 + pfVar6[0xf]);
+            pfVar6[0x10] = (float)(fVar3 * pfVar6[1] + pfVar6[0x10]);
+            pfVar6 = pfVar6 + 0x3a;
+          } while (iVar7 < *(int *)((int)g_object[0].wheel_bodies + iVar8 + -4));
         }
-        fVar13 = (float10)getenginetorque2(iVar10);
-        *(float *)((int)&g_object[0].engine_accel + iVar9) =
-             (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar9) /
+        fVar12 = (float10)getenginetorque2(iVar9);
+        *(float *)((int)&g_object[0].engine_accel + iVar8) =
+             (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar8) /
                        (float10)3600.0) *
-                      (fVar13 * (float10)*(float *)((int)&g_object[0].throttle + iVar9))) /
-                     ((float10)*(float *)((int)&g_object[0].unk_5e68 + iVar9) *
-                     (float10)*(float *)((int)&g_object[0].unk_5e60 + iVar9))) * (float10)0.03125 +
-                    (float10)*(float *)((int)&g_object[0].engine_accel + iVar9)) -
-             (1.125 - *(float *)((int)&g_object[0].throttle + iVar9)) *
-             (*(float *)((int)&g_object[0].engine_rpm + iVar9) * 0.125 * 0.125 * 0.125 * 0.25));
-        *(undefined4 *)((int)&g_object[0].unk_5e5c + iVar9) = 0;
-        *(float *)((int)&g_object[0].engine_rpm + iVar9) =
-             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) +
-             *(float *)((int)&g_object[0].engine_accel + iVar9));
-        *(undefined4 *)((int)&g_object[0].engine_accel + iVar9) = 0;
+                      (fVar12 * (float10)*(float *)((int)&g_object[0].throttle + iVar8))) /
+                     ((float10)*(float *)((int)&g_object[0].unk_5e68 + iVar8) *
+                     (float10)*(float *)((int)&g_object[0].unk_5e60 + iVar8))) * (float10)0.03125 +
+                    (float10)*(float *)((int)&g_object[0].engine_accel + iVar8)) -
+             (1.125 - *(float *)((int)&g_object[0].throttle + iVar8)) *
+             (*(float *)((int)&g_object[0].engine_rpm + iVar8) * 0.125 * 0.125 * 0.125 * 0.25));
+        *(undefined4 *)((int)&g_object[0].unk_5e5c + iVar8) = 0;
+        *(float *)((int)&g_object[0].engine_rpm + iVar8) =
+             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) +
+             *(float *)((int)&g_object[0].engine_accel + iVar8));
+        *(undefined4 *)((int)&g_object[0].engine_accel + iVar8) = 0;
         local_10 = 0.0;
-        if ((*(float *)((int)&g_object[0].gear_ratio + iVar9) != 0.0) &&
-           (iVar8 = 0, 0 < *(int *)((int)&g_object[0].unk_5e90 + iVar9))) {
-          piVar11 = (int *)((int)&g_object[0].unk_5e94 + iVar9);
+        if ((*(float *)((int)g_object[0].wheels + iVar8 + -0x74) != 0.0) &&
+           (iVar7 = 0, 0 < *(int *)((int)g_object[0].wheels + iVar8 + -0x5c))) {
+          piVar10 = (int *)((int)g_object[0].wheels + iVar8 + -0x58);
           do {
-            iVar6 = *piVar11;
-            fVar2 = (float)(ABS(*(float *)((int)&g_object[0].unk_5e7c + iVar9)) *
-                    *(float *)(iVar6 * 0xe8 + ((int)&g_object[0].lf_raw[0x7274]) + iVar9));
-            iVar8 = iVar8 + 1;
-            piVar11 = piVar11 + 1;
-            fVar3 = (float)(*(float *)((int)&g_object[0].unk_5e68 + iVar9) *
-                    *(float *)((int)&g_object[0].unk_5e60 + iVar9) *
-                    ABS(*(float *)((int)&g_object[0].gear_ratio + iVar9)));
-            fVar4 = (float)(1.0 / (fVar2 + fVar3));
-            fVar1 = (float)((float)(((float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) -
-                    ((float)(*(float *)(&g_object[0].wheel_bodies[iVar6].lf_raw[0x5c] + iVar9) *
-                     *(float *)((int)&g_object[0].rot[0].z + iVar9) +
-                    (*(float *)(&g_object[0].wheel_bodies[iVar6].lf_raw[0x54] + iVar9) *
-                    *(float *)((int)&g_object[0].rot[0].x + iVar9) +
-                    *(float *)(&g_object[0].wheel_bodies[iVar6].lf_raw[0x58] + iVar9) *
-                    *(float *)((int)&g_object[0].rot[0].y + iVar9)))) *
-                    *(float *)((int)&g_object[0].gear_ratio + iVar9))) *
-                    *(float *)((int)&g_object[0].unk_5e80 + iVar9)) * 0.015625);
-            fVar3 = *(float *)((int)&g_object[0].unk_5e7c + iVar9) * (fVar1 * ((float)(fVar4 * fVar3)));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.x + iVar9) =
-                 (float)(fVar3 * *(float *)((int)&g_object[0].rot[0].x + iVar9) +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.x + iVar9));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.y + iVar9) =
-                 (float)(*(float *)((int)&g_object[0].rot[0].y + iVar9) * fVar3 +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.y + iVar9));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.z + iVar9) =
-                 (float)(fVar3 * *(float *)((int)&g_object[0].rot[0].z + iVar9) +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar6].dw.z + iVar9));
-            local_10 = (float)(local_10 - fVar4 * fVar2 * fVar1);
-          } while (iVar8 < *(int *)((int)&g_object[0].unk_5e90 + iVar9));
+            iVar1 = *piVar10;
+            fVar3 = (float)(ABS(*(float *)((int)g_object[0].wheels + iVar8 + -0x70)) *
+                    *(float *)(iVar1 * 0xe8 + ((int)&g_object[0].lf_raw[0x7274]) + iVar8));
+            iVar7 = iVar7 + 1;
+            piVar10 = piVar10 + 1;
+            fVar4 = (float)(*(float *)((int)&g_object[0].unk_5e68 + iVar8) *
+                    *(float *)((int)&g_object[0].unk_5e60 + iVar8) *
+                    ABS(*(float *)((int)g_object[0].wheels + iVar8 + -0x74)));
+            fVar5 = (float)(1.0 / (fVar3 + fVar4));
+            fVar2 = (float)((float)(((float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) -
+                    ((float)(*(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x5c] + iVar8) *
+                     *(float *)((int)&g_object[0].rot[0].z + iVar8) +
+                    (*(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x54] + iVar8) *
+                    *(float *)((int)&g_object[0].rot[0].x + iVar8) +
+                    *(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x58] + iVar8) *
+                    *(float *)((int)&g_object[0].rot[0].y + iVar8)))) *
+                    *(float *)((int)g_object[0].wheels + iVar8 + -0x74))) *
+                    *(float *)((int)g_object[0].wheels + iVar8 + -0x6c)) * 0.015625);
+            fVar4 = *(float *)((int)g_object[0].wheels + iVar8 + -0x70) * (fVar2 * ((float)(fVar5 * fVar4)));
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.x + iVar8) =
+                 (float)(fVar4 * *(float *)((int)&g_object[0].rot[0].x + iVar8) +
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.x + iVar8));
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.y + iVar8) =
+                 (float)(*(float *)((int)&g_object[0].rot[0].y + iVar8) * fVar4 +
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.y + iVar8));
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.z + iVar8) =
+                 (float)(fVar4 * *(float *)((int)&g_object[0].rot[0].z + iVar8) +
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.z + iVar8));
+            local_10 = (float)(local_10 - fVar5 * fVar3 * fVar2);
+          } while (iVar7 < *(int *)((int)g_object[0].wheels + iVar8 + -0x5c));
         }
-        *(float *)((int)&g_object[0].engine_rpm + iVar9) =
-             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) + local_10);
+        *(float *)((int)&g_object[0].engine_rpm + iVar8) =
+             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) + local_10);
       }
       else {
-        iVar8 = 0;
-        if (0 < *(int *)((int)&g_object[0].num_wheels + iVar9)) {
-          pfVar5 = (float *)(&g_object[0].lf_raw[0x5f18] + iVar9);
+        iVar7 = 0;
+        if (0 < *(int *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -100)) {
+          pfVar6 = (float *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -0x34);
           do {
-            iVar8 = iVar8 + 1;
-            *pfVar5 = (float)(pfVar5[-2] * pfVar5[-1] + *pfVar5);
-            pfVar5 = pfVar5 + 0x26;
-          } while (iVar8 < *(int *)((int)&g_object[0].num_wheels + iVar9));
+            iVar7 = iVar7 + 1;
+            *pfVar6 = (float)(pfVar6[-2] * pfVar6[-1] + *pfVar6);
+            pfVar6 = pfVar6 + 0x26;
+          } while (iVar7 < *(int *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -100));
         }
-        iVar8 = 0;
-        if (0 < *(int *)((int)&g_object[0].num_wheels + iVar9)) {
-          pfVar5 = (float *)(&g_object[0].lf_raw[0x5f18] + iVar9);
+        iVar7 = 0;
+        if (0 < *(int *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -100)) {
+          pfVar6 = (float *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -0x34);
           do {
-            if (iVar8 < 2) {
-              if (1.0 < *(float *)((int)&g_object[0].unk_5e84 + iVar9)) {
+            if (iVar7 < 2) {
+              if (1.0 < *(float *)((int)g_object[0].wheels + iVar8 + -0x68)) {
                 local_14 = 0.0;
               }
               else {
-                local_14 = (float)(*(float *)((int)&g_object[0].unk_5e84 + iVar9) / 60.0);
+                local_14 = (float)(*(float *)((int)g_object[0].wheels + iVar8 + -0x68) / 60.0);
               }
             }
             else {
-              local_14 = (float)(*(float *)((int)&g_object[0].unk_5e84 + iVar9) / 60.0);
+              local_14 = (float)(*(float *)((int)g_object[0].wheels + iVar8 + -0x68) / 60.0);
             }
-            if (-local_14 <= *pfVar5) {
-              if (*pfVar5 <= local_14) {
-                *pfVar5 = 0.0;
+            if (-local_14 <= *pfVar6) {
+              if (*pfVar6 <= local_14) {
+                *pfVar6 = 0.0;
               }
               else {
-                *pfVar5 = (float)(*pfVar5 - local_14);
+                *pfVar6 = (float)(*pfVar6 - local_14);
               }
             }
             else {
-              *pfVar5 = (float)(local_14 + *pfVar5);
+              *pfVar6 = (float)(local_14 + *pfVar6);
             }
-            iVar8 = iVar8 + 1;
-            pfVar5 = pfVar5 + 0x26;
-          } while (iVar8 < *(int *)((int)&g_object[0].num_wheels + iVar9));
+            iVar7 = iVar7 + 1;
+            pfVar6 = pfVar6 + 0x26;
+          } while (iVar7 < *(int *)((int)g_object[0].wheels[0].unk_60 + iVar8 + -100));
         }
-        fVar13 = (float10)getenginetorque2(iVar10);
-        pfVar5 = (float *)(*(int *)((int)&g_object[0].unk_5e94 + iVar9) * 0x98 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar9);
-        *(float *)((int)&g_object[0].engine_accel + iVar9) =
-             (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar9) /
+        fVar12 = (float10)getenginetorque2(iVar9);
+        iVar7 = *(int *)((int)g_object[0].wheels + iVar8 + -0x54);
+        pfVar6 = (float *)(*(int *)((int)g_object[0].wheels + iVar8 + -0x58) * 0x98 + ((int)&g_object[0].lf_raw[0x5f18]) +
+                          iVar8);
+        *(float *)((int)&g_object[0].engine_accel + iVar8) =
+             (float)((float)(((((float10)*(float *)((int)&g_object[0].engine_power + iVar8) /
                        (float10)3600.0) *
-                      (fVar13 * (float10)*(float *)((int)&g_object[0].throttle + iVar9))) /
-                     ((float10)*(float *)((int)&g_object[0].unk_5e68 + iVar9) *
-                     (float10)*(float *)((int)&g_object[0].unk_5e60 + iVar9))) * (float10)0.03125 +
-                    (float10)*(float *)((int)&g_object[0].engine_accel + iVar9)) -
-             (1.125 - *(float *)((int)&g_object[0].throttle + iVar9)) *
-             (*(float *)((int)&g_object[0].engine_rpm + iVar9) * 0.125 * 0.125 * 0.125 * 0.25));
-        fVar2 = (float)(*(float *)((int)&g_object[0].unk_5e5c + iVar9) -
-                (*pfVar5 -
-                *(float *)(*(int *)((int)&g_object[0].unk_5e98 + iVar9) * 0x98 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar9)))
-        ;
-        *(float *)((int)&g_object[0].unk_5e5c + iVar9) =
-             (float)(*(float *)((int)&g_object[0].unk_5e5c + iVar9) - fVar2 * 0.9846153855323792);
-        fVar2 = fVar2 * 0.015384615398943424;
-        *pfVar5 = (float)(*pfVar5 + fVar2);
-        iVar8 = *(int *)((int)&g_object[0].unk_5e98 + iVar9) * 0x98;
-        *(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar9) = (float)(*(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar9) - fVar2);
-        *(float *)((int)&g_object[0].engine_rpm + iVar9) =
-             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) +
-             *(float *)((int)&g_object[0].engine_accel + iVar9));
-        *(undefined4 *)((int)&g_object[0].engine_accel + iVar9) = 0;
+                      (fVar12 * (float10)*(float *)((int)&g_object[0].throttle + iVar8))) /
+                     ((float10)*(float *)((int)&g_object[0].unk_5e68 + iVar8) *
+                     (float10)*(float *)((int)&g_object[0].unk_5e60 + iVar8))) * (float10)0.03125 +
+                    (float10)*(float *)((int)&g_object[0].engine_accel + iVar8)) -
+             (1.125 - *(float *)((int)&g_object[0].throttle + iVar8)) *
+             (*(float *)((int)&g_object[0].engine_rpm + iVar8) * 0.125 * 0.125 * 0.125 * 0.25));
+        fVar3 = (float)(*(float *)((int)&g_object[0].unk_5e5c + iVar8) -
+                (*pfVar6 - *(float *)(iVar7 * 0x98 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar8)));
+        *(float *)((int)&g_object[0].unk_5e5c + iVar8) =
+             (float)(*(float *)((int)&g_object[0].unk_5e5c + iVar8) - fVar3 * 0.9846153855323792);
+        fVar3 = fVar3 * 0.015384615398943424;
+        *pfVar6 = (float)(*pfVar6 + fVar3);
+        iVar7 = *(int *)((int)g_object[0].wheels + iVar8 + -0x54) * 0x98;
+        *(float *)(iVar7 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar8) = (float)(*(float *)(iVar7 + ((int)&g_object[0].lf_raw[0x5f18]) + iVar8) - fVar3);
+        *(float *)((int)&g_object[0].engine_rpm + iVar8) =
+             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) +
+             *(float *)((int)&g_object[0].engine_accel + iVar8));
+        *(undefined4 *)((int)&g_object[0].engine_accel + iVar8) = 0;
         local_10 = 0.0;
-        if ((*(float *)((int)&g_object[0].gear_ratio + iVar9) != 0.0) &&
-           (iVar8 = 0, 0 < *(int *)((int)&g_object[0].unk_5e90 + iVar9))) {
+        if ((*(float *)((int)g_object[0].wheels + iVar8 + -0x74) != 0.0) &&
+           (iVar7 = 0, 0 < *(int *)((int)g_object[0].wheels + iVar8 + -0x5c))) {
           do {
-            iVar6 = (&g_object[0].unk_5e94)[iVar12 + iVar8] * 0x98;
-            iVar7 = iVar6 + iVar9;
-            fVar2 = (float)((*(float *)(iVar6 + ((int)&g_object[0].lf_raw[0x5f08]) + iVar9) / *(float *)(iVar6 + ((int)&g_object[0].lf_raw[0x5f10]) + iVar9))
-                    * ABS(*(float *)((int)&g_object[0].unk_5e7c + iVar9)));
-            fVar3 = (float)(*(float *)((int)&g_object[0].unk_5e68 + iVar9) *
-                    *(float *)((int)&g_object[0].unk_5e60 + iVar9) *
-                    ABS(*(float *)((int)&g_object[0].gear_ratio + iVar9)));
-            fVar4 = (float)(1.0 / (fVar2 + fVar3));
-            local_14 = (float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) -
-                       *(float *)((int)&g_object[0].gear_ratio + iVar9) *
-                       *(float *)(&g_object[0].lf_raw[0x5f18] + iVar7));
-            if (iVar8 == 0) {
-              local_14 = *(float *)((int)&g_object[0].unk_5e5c + iVar9) * 0.5 *
-                         *(float *)((int)&g_object[0].gear_ratio + iVar9) + local_14;
+            iVar1 = *(int *)((int)g_object[0].wheels + (iVar11 + iVar7) * 4 + -0x58);
+            fVar3 = (float)((*(float *)(iVar1 * 0x98 + ((int)&g_object[0].lf_raw[0x5f08]) + iVar8) /
+                    *(float *)(iVar1 * 0x98 + ((int)&g_object[0].lf_raw[0x5f10]) + iVar8)) *
+                    ABS(*(float *)((int)g_object[0].wheels + iVar8 + -0x70)));
+            fVar4 = (float)(*(float *)((int)&g_object[0].unk_5e68 + iVar8) *
+                    *(float *)((int)&g_object[0].unk_5e60 + iVar8) *
+                    ABS(*(float *)((int)g_object[0].wheels + iVar8 + -0x74)));
+            fVar5 = (float)(1.0 / (fVar3 + fVar4));
+            local_14 = (float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) -
+                       *(float *)((int)g_object[0].wheels + iVar8 + -0x74) *
+                       *(float *)((int)g_object[0].wheels[iVar1].unk_60 + iVar8 + -0x34));
+            if (iVar7 == 0) {
+              local_14 = *(float *)((int)&g_object[0].unk_5e5c + iVar8) * 0.5 *
+                         *(float *)((int)g_object[0].wheels + iVar8 + -0x74) + local_14;
             }
-            else if (iVar8 == 1) {
+            else if (iVar7 == 1) {
               local_14 = (float)(local_14 -
-                         *(float *)((int)&g_object[0].unk_5e5c + iVar9) * 0.5 *
-                         *(float *)((int)&g_object[0].gear_ratio + iVar9));
+                         *(float *)((int)&g_object[0].unk_5e5c + iVar8) * 0.5 *
+                         *(float *)((int)g_object[0].wheels + iVar8 + -0x74));
             }
-            iVar8 = iVar8 + 1;
-            fVar1 = (float)((float)(*(float *)((int)&g_object[0].unk_5e80 + iVar9) * local_14) * 0.125);
-            *(float *)(&g_object[0].lf_raw[0x5f18] + iVar7) =
-                 (float)(*(float *)(&g_object[0].lf_raw[0x5f18] + iVar7) +
-                 *(float *)((int)&g_object[0].unk_5e7c + iVar9) * (fVar1 * ((float)(fVar4 * fVar3))));
-            local_10 = (float)(local_10 - fVar4 * fVar2 * fVar1);
-          } while (iVar8 < *(int *)((int)&g_object[0].unk_5e90 + iVar9));
+            iVar7 = iVar7 + 1;
+            fVar2 = (float)((float)(*(float *)((int)g_object[0].wheels + iVar8 + -0x6c) * local_14) * 0.125);
+            *(float *)((int)g_object[0].wheels[iVar1].unk_60 + iVar8 + -0x34) =
+                 (float)(*(float *)((int)g_object[0].wheels[iVar1].unk_60 + iVar8 + -0x34) +
+                 *(float *)((int)g_object[0].wheels + iVar8 + -0x70) * (fVar2 * ((float)(fVar5 * fVar4))));
+            local_10 = (float)(local_10 - fVar5 * fVar3 * fVar2);
+          } while (iVar7 < *(int *)((int)g_object[0].wheels + iVar8 + -0x5c));
         }
-        *(float *)((int)&g_object[0].engine_rpm + iVar9) =
-             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar9) + local_10);
+        *(float *)((int)&g_object[0].engine_rpm + iVar8) =
+             (float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) + local_10);
       }
     }
-    iVar12 = iVar12 + 0x208c;
-    iVar10 = iVar10 + 1;
-    iVar9 = iVar9 + 0x8230;
-  } while (iVar12 < 0x823000);
+    iVar11 = iVar11 + 0x208c;
+    iVar9 = iVar9 + 1;
+    iVar8 = iVar8 + 0x8230;
+  } while (iVar11 < 0x823000);
   return;
 }
 #undef g_object
@@ -33633,10 +33634,10 @@ LAB_004493b0:
           g_human[local_58].bones[iVar6].torque.z =
                (float)(local_60 * local_20 + g_human[local_58].bones[iVar6].torque.z);
         }
+        iVar9 = local_10;
         if (local_5c != -1) {
           if (local_54 == -1) {
-            iVar9 = local_10 * 0x98;
-            if (0 < *(int *)(&g_object[local_5c].lf_raw[0x5ef4] + iVar9)) {
+            if (0 < g_object[local_5c].wheels[local_10].health) {
               fVar3 = *(float *)((int)&g_bullet[0].vel.y + iVar11);
               pfVar1 = (float *)((int)&g_bullet[0].vel.x + iVar11);
               fVar4 = *pfVar1;
@@ -33648,12 +33649,12 @@ LAB_004493b0:
               if (iVar7 < 1) {
                 iVar7 = 0;
               }
-              *(int *)(&g_object[local_5c].lf_raw[0x5ef4] + iVar9) =
-                   *(int *)(&g_object[local_5c].lf_raw[0x5ef4] + iVar9) - iVar7;
-              if (*(int *)(&g_object[local_5c].lf_raw[0x5ef4] + iVar9) < 1) {
-                *(undefined4 *)(&g_object[local_5c].lf_raw[0x5f0c] + iVar9) = 0x3e800000;
-                *(undefined4 *)(&g_object[local_5c].lf_raw[0x5eec] + iVar9) = 1;
-                *(undefined4 *)(&g_object[local_5c].lf_raw[0x5ef0] + iVar9) = 1;
+              piVar12 = &g_object[local_5c].wheels[iVar9].health;
+              *piVar12 = *piVar12 - iVar7;
+              if (g_object[local_5c].wheels[iVar9].health < 1) {
+                g_object[local_5c].wheels[iVar9].radius = 0.25;
+                g_object[local_5c].wheels[iVar9].popped = 1;
+                g_object[local_5c].wheels[iVar9].unk_04 = 1;
                 createevent_updateobject(local_5c,1,local_10,&local_4c,pfVar1);
               }
             }
@@ -36627,7 +36628,7 @@ void __cdecl lf_4e500(int param_1,int param_2)
 
 {
   __declspec(align(16)) uchar lf_frame[0x30];
-  int *piVar1;
+  vec3 *pvVar1;
   float fVar2;
   int iVar3;
   int iVar4;
@@ -36635,7 +36636,6 @@ void __cdecl lf_4e500(int param_1,int param_2)
   float fVar6;
   int iVar7;
   int iVar8;
-  int iVar9;
 
 
 
@@ -36643,65 +36643,64 @@ void __cdecl lf_4e500(int param_1,int param_2)
 
 
   
-  iVar9 = param_2 * 0x98;
-  iVar8 = param_1 * 0x8230;
-  local_18 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f24]) + iVar8);
-  local_14 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f28]) + iVar8);
-  local_10 = *(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f2c]) + iVar8);
-  iVar3 = g_object[param_1].particles[*(int *)(iVar9 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar8)];
-  iVar4 = g_object[param_1].particles[*(int *)(&g_object[param_1].lf_raw[0x5efc] + iVar9)];
-  iVar7 = circleintersectlevel
-                    (&local_18,&g_object[param_1].rot[0].x,*(float *)(iVar9 + ((int)&g_object[0].lf_raw[0x5f0c]) + iVar8));
-  iVar8 = g_numofbonds;
-  if (iVar7 != 0) {
+  iVar8 = param_2 * 0x98;
+  iVar7 = param_1 * 0x8230;
+  local_18 = *(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f24]) + iVar7);
+  local_14 = *(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f28]) + iVar7);
+  local_10 = *(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f2c]) + iVar7);
+  iVar3 = g_object[param_1].particles[*(int *)(iVar8 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar7)];
+  iVar4 = g_object[param_1].particles[g_object[param_1].wheels[param_2].particle_b];
+  iVar8 = circleintersectlevel
+                    (&local_18,&g_object[param_1].rot[0].x,*(float *)(iVar8 + ((int)&g_object[0].lf_raw[0x5f0c]) + iVar7));
+  iVar7 = g_numofbonds;
+  if (iVar8 != 0) {
     local_c = (float)(local_18 - g_intersect.pos[0]);
     local_8 = (float)(local_14 - g_intersect.pos[1]);
     local_4 = (float)(local_10 - g_intersect.pos[2]);
-    iVar7 = *(int *)(&g_object[param_1].lf_raw[0x5eec] + iVar9);
+    iVar8 = g_object[param_1].wheels[param_2].popped;
     g_bond[g_numofbonds].type = 5;
-    g_bond[iVar8].particle_a = iVar3;
-    fVar2 = *(float *)(&g_object[param_1].lf_raw[0x5f00] + iVar9);
-    g_bond[iVar8].particle_b = iVar4;
-    g_bond[iVar8].weights[0] = fVar2;
-    g_bond[iVar8].weights[1] = *(float *)(&g_object[param_1].lf_raw[0x5f04] + iVar9);
+    g_bond[iVar7].particle_a = iVar3;
+    fVar2 = g_object[param_1].wheels[param_2].weight_a;
+    g_bond[iVar7].particle_b = iVar4;
+    g_bond[iVar7].weights[0] = fVar2;
+    g_bond[iVar7].weights[1] = g_object[param_1].wheels[param_2].weight_b;
     fVar6 = g_intersect.normal[2];
     fVar5 = g_intersect.normal[1];
     fVar2 = g_intersect.normal[0];
-    g_bond[iVar8].rest_length =
-         (float)(*(float *)(&g_object[param_1].lf_raw[0x5f0c] + iVar9) -
+    g_bond[iVar7].rest_length =
+         (float)(g_object[param_1].wheels[param_2].radius -
          ((float)(g_intersect.normal[2] * local_4 +
          (g_intersect.normal[0] * local_c + g_intersect.normal[1] * local_8))));
-    g_bond[iVar8].stiffness = 0.0625;
-    g_bond[iVar8].damping = 0.25;
-    g_bond[iVar8].mode = 0;
-    g_bond[iVar8].normal.x = fVar2;
-    g_bond[iVar8].normal.y = fVar5;
-    g_bond[iVar8].normal.z = fVar6;
-    if (iVar7 == 0) {
+    g_bond[iVar7].stiffness = 0.0625;
+    g_bond[iVar7].damping = 0.25;
+    g_bond[iVar7].mode = 0;
+    g_bond[iVar7].normal.x = fVar2;
+    g_bond[iVar7].normal.y = fVar5;
+    g_bond[iVar7].normal.z = fVar6;
+    if (iVar8 == 0) {
       fVar2 = LF_BITS_F((&DAT_17150030)[g_intersect.unk_0064 * 0x16]);
     }
     else {
       fVar2 = 0.30000001192092896;
     }
-    g_bond[iVar8].friction = fVar2;
+    g_bond[iVar7].friction = fVar2;
     local_18 = g_object[param_1].rot[2].x;
     local_14 = g_object[param_1].rot[2].y;
-    g_bond[iVar8].owner = param_1;
+    g_bond[iVar7].owner = param_1;
     local_10 = g_object[param_1].rot[2].z;
-    g_bond[iVar8].bone_a = param_2;
-    rotatevector(&local_18,&g_object[param_1].rot[1].x,(&g_object[param_1].unk_5f20)[param_2 * 0x26]
-                );
+    g_bond[iVar7].bone_a = param_2;
+    rotatevector(&local_18,&g_object[param_1].rot[1].x,g_object[param_1].wheels[param_2].steer);
     fVar6 = g_intersect.normal[2];
     fVar5 = g_intersect.normal[1];
     fVar2 = g_intersect.normal[0];
-    piVar1 = &g_bond[iVar8].unk_00b0;
+    pvVar1 = &g_bond[iVar7].roll_dir;
     local_c = (float)(local_10 * g_intersect.normal[1] - local_14 * g_intersect.normal[2]);
     local_8 = (float)(local_18 * g_intersect.normal[2] - g_intersect.normal[0] * local_10);
     local_4 = (float)(g_intersect.normal[0] * local_14 - g_intersect.normal[1] * local_18);
-    *piVar1 = ((int)LF_BITS_U(((float)(local_4 * g_intersect.normal[1] - local_8 * g_intersect.normal[2]))));
-    *(float *)&g_bond[iVar8].lf_raw[0xb4] = (float)(local_c * fVar6 - fVar2 * local_4);
-    *(float *)&g_bond[iVar8].lf_raw[0xb8] = (float)(local_8 * fVar2 - local_c * fVar5);
-    normalizevector((float *)piVar1,(float *)piVar1);
+    pvVar1->x = (float)(local_4 * g_intersect.normal[1] - local_8 * g_intersect.normal[2]);
+    g_bond[iVar7].roll_dir.y = (float)(local_c * fVar6 - fVar2 * local_4);
+    g_bond[iVar7].roll_dir.z = (float)(local_8 * fVar2 - local_c * fVar5);
+    normalizevector(&pvVar1->x,&pvVar1->x);
     g_numofbonds = g_numofbonds + 1;
   }
   return;

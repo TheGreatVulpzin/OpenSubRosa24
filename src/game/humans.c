@@ -602,9 +602,9 @@ LAB_00452144:
               g_bond[iVar14].normal.y = g_intersect.normal[1];
               g_bond[iVar14].normal.z = g_intersect.normal[2];
               g_bond[iVar14].friction = 0.5f;
-              g_bond[iVar14].unk_0028 = ((int)LF_BITS_U(((float)(g_intersect.pos[0] - *pfVar19))));
-              *(float *)&g_bond[iVar14].lf_raw[0x2c] = (float)(g_intersect.pos[1] - pfVar19[1]);
-              *(float *)&g_bond[iVar14].lf_raw[0x30] = (float)(g_intersect.pos[2] - pfVar19[2]);
+              g_bond[iVar14].arm.x = (float)(g_intersect.pos[0] - *pfVar19);
+              g_bond[iVar14].arm.y = (float)(g_intersect.pos[1] - pfVar19[1]);
+              g_bond[iVar14].arm.z = (float)(g_intersect.pos[2] - pfVar19[2]);
               fVar24 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c];
               fVar3 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18];
               fVar4 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20];

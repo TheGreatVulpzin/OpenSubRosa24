@@ -70,6 +70,32 @@ typedef union WheelBody { struct {
     uint8_t unk_6c[0x7c];
 }; uint8_t lf_raw[0xe8]; } WheelBody;
 
+/* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
+typedef union Wheel { struct {
+    int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
+    int unk_04;         /* +0x04 bulletsimulation writes 1 with popped */
+    int health;         /* +0x08 bulletsimulation subtracts the damage of a hit */
+    int particle_a;     /* +0x0c index into Object.particles */
+    int particle_b;     /* +0x10 index into Object.particles */
+    float weight_a;     /* +0x14 objectwheelcollision copies it to Bond.weights[0] */
+    float weight_b;     /* +0x18 objectwheelcollision copies it to Bond.weights[1] */
+    float unk_1c;       /* +0x1c */
+    float radius;       /* +0x20 objectwheelcollision: the circle against the level; bulletsimulation writes 0.25 for a popped tire */
+    float unk_24;       /* +0x24 */
+    float dspin;        /* +0x28 bondsimulation2 type 5 subtracts the push along Bond.roll_dir times the radius */
+    float spin;         /* +0x2c the angular speed: bondsimulation2 type 5 rolls the ground contact with spin * radius */
+    float angle;        /* +0x30 the turn of the wheel; objectsimulation_heli turns wheel 0 as the rotor; the packets send it */
+    float steer;        /* +0x34 objectwheelcollision turns the axle around Object.rot[1] by this angle */
+    vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
+    vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
+    vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
+    int unk_5c;         /* +0x5c the packets send it */
+    float unk_60[4];    /* +0x60 */
+    float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
+    uint8_t unk_74[0x10];
+    float unk_84[5];    /* +0x84 objectwheelsimulation2 */
+}; uint8_t lf_raw[0x98]; } Wheel;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -123,6 +149,8 @@ SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
 SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
 SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
+SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
+SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 
@@ -503,34 +531,8 @@ typedef union Object { struct {
     int unk_5ee0;                        /* +0x5ee0 6 functions */
     int unk_5ee4;                        /* +0x5ee4 1 functions */
     int num_wheels;                      /* +0x5ee8 createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels) */
-    uint8_t pad_5eec[0x30];
-    float rotor_angle;                   /* +0x5f1c objectsimulation_heli updates it; unpackobjectpacket reads it with unpackangle */
-    float unk_5f20;                      /* +0x5f20 5 functions */
-    uint8_t pad_5f24[0x24];
-    int unk_5f48;                        /* +0x5f48 3 functions */
-    uint8_t pad_5f4c[0x10];
-    float unk_5f5c;                      /* +0x5f5c 4 functions */
-    uint8_t pad_5f60[0x54];
-    float unk_5fb4;                      /* +0x5fb4 4 functions */
-    float unk_5fb8;                      /* +0x5fb8 5 functions */
-    uint8_t pad_5fbc[0x24];
-    int unk_5fe0;                        /* +0x5fe0 3 functions */
-    uint8_t pad_5fe4[0x10];
-    float unk_5ff4;                      /* +0x5ff4 4 functions */
-    uint8_t pad_5ff8[0x54];
-    int unk_604c;                        /* +0x604c 3 functions */
-    uint8_t pad_6050[0x28];
-    int unk_6078;                        /* +0x6078 3 functions */
-    uint8_t pad_607c[0x10];
-    float unk_608c;                      /* +0x608c 4 functions */
-    uint8_t pad_6090[0x54];
-    int unk_60e4;                        /* +0x60e4 3 functions */
-    uint8_t pad_60e8[0x28];
-    int unk_6110;                        /* +0x6110 3 functions */
-    uint8_t pad_6114[0x10];
-    float unk_6124;                      /* +0x6124 4 functions */
-    uint8_t pad_6128[0x10c4];
-    int num_wheel_bodies;                /* +0x71ec createobject copies objecttype.num_wheels; a second list next to the wheels at +0x5f0c */
+    Wheel wheels[32];                    /* +0x5eec stride 0x98: objectwheelcollision reads wheels[i] (particles, radius, steer, pos); the list ends at num_wheel_bodies (+0x71ec) */
+    int num_wheel_bodies;                /* +0x71ec createobject copies objecttype.num_wheels; a second list after Object.wheels */
     WheelBody wheel_bodies[16];          /* +0x71f0 stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8 */
     uint8_t pad_8070[0x4];
     int unk_8074;                        /* +0x8074 2 functions */
@@ -587,7 +589,7 @@ SR_STATIC_ASSERT(offsetof(Object, engine_power) == 0x5e58, "Object.engine_power"
 SR_STATIC_ASSERT(offsetof(Object, gear) == 0x5e6c, "Object.gear");
 SR_STATIC_ASSERT(offsetof(Object, gear_ratio) == 0x5e78, "Object.gear_ratio");
 SR_STATIC_ASSERT(offsetof(Object, num_wheels) == 0x5ee8, "Object.num_wheels");
-SR_STATIC_ASSERT(offsetof(Object, rotor_angle) == 0x5f1c, "Object.rotor_angle");
+SR_STATIC_ASSERT(offsetof(Object, wheels) == 0x5eec, "Object.wheels");
 SR_STATIC_ASSERT(offsetof(Object, num_wheel_bodies) == 0x71ec, "Object.num_wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, wheel_bodies) == 0x71f0, "Object.wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
@@ -723,8 +725,7 @@ typedef union Bond { struct {
     int particle_c;                      /* +0x001c types 3 and 4: the second particle of the hit triangle (g_intersect.tri_particles[1]) */
     int particle_d;                      /* +0x0020 types 3 and 4: the third particle of the hit triangle (g_intersect.tri_particles[2]) */
     uint8_t pad_0024[0x4];
-    int unk_0028;                        /* +0x0028 1 functions */
-    uint8_t pad_002c[0x8];
+    vec3 arm;                            /* +0x0028 type 7: the hit point minus the bone position (humansimulation); the push turns the bone around it */
     vec3 local_a;                        /* +0x0034 bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation) */
     vec3 local_b;                        /* +0x0040 bondsimulation2 type 10: point on the item (weights of the rows of item.rot) */
     float weights[3];                    /* +0x004c types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1] */
@@ -742,8 +743,7 @@ typedef union Bond { struct {
     int target;                          /* +0x0098 bondsimulation2: type 10 = item index; type 8 = second bone */
     int unk_009c;                        /* +0x009c 1 functions */
     uint8_t pad_00a0[0x10];
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    uint8_t pad_00b4[0x8];
+    vec3 roll_dir;                       /* +0x00b0 type 5: the direction in which the wheel rolls on the ground (objectwheelcollision: the wheel axle crossed twice with the normal) */
     vec3 surface_vel;                    /* +0x00bc contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level */
     uint8_t pad_00c8[0x24];
 }; uint8_t lf_raw[0xec]; } Bond;
@@ -757,6 +757,7 @@ SR_STATIC_ASSERT(offsetof(Bond, particle_a) == 0x14, "Bond.particle_a");
 SR_STATIC_ASSERT(offsetof(Bond, particle_b) == 0x18, "Bond.particle_b");
 SR_STATIC_ASSERT(offsetof(Bond, particle_c) == 0x1c, "Bond.particle_c");
 SR_STATIC_ASSERT(offsetof(Bond, particle_d) == 0x20, "Bond.particle_d");
+SR_STATIC_ASSERT(offsetof(Bond, arm) == 0x28, "Bond.arm");
 SR_STATIC_ASSERT(offsetof(Bond, local_a) == 0x34, "Bond.local_a");
 SR_STATIC_ASSERT(offsetof(Bond, local_b) == 0x40, "Bond.local_b");
 SR_STATIC_ASSERT(offsetof(Bond, weights) == 0x4c, "Bond.weights");
@@ -769,6 +770,7 @@ SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
 SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
 SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
 SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
+SR_STATIC_ASSERT(offsetof(Bond, roll_dir) == 0xb0, "Bond.roll_dir");
 SR_STATIC_ASSERT(offsetof(Bond, surface_vel) == 0xbc, "Bond.surface_vel");
 
 /* event[]: record of 0x80 bytes. */

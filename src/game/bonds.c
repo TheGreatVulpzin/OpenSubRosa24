@@ -759,6 +759,60 @@ static void contact_bone_triangle(const Bond *b)
   push_triangle(b, -len * mb, &v);
 }
 
+/* Type 5: a wheel of an object on the ground. The ground moves against the wheel at
+ * spin * radius along roll_dir. The push goes into the hub, the friction into Wheel.slip,
+ * and the part of the push along roll_dir slows the spin. */
+static void contact_wheel(const Bond *b)
+{
+  Wheel *w = &g_object[b->owner].wheels[b->bone_a];
+  const vec3 n = b->normal, rd = b->roll_dir;
+  float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
+  float roll = (float)(w->spin * w->radius * b->damping);
+  float proj;
+  vec3 v;
+
+  v.x = (float)((float)(k * n.x + nd * w->vel.x) + roll * rd.x);
+  v.y = (float)(roll * rd.y + (float)(w->vel.y * nd + (float)(n.y * k)));
+  v.z = (float)(roll * rd.z + (float)(nd * w->vel.z + (float)(k * n.z)));
+  if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
+    return;
+  w->slip = (float)(calculatefriction(&v.x, (float *)&b->normal, b->friction) + (float10)w->slip);
+  w->dv.x = (float)(v.x + w->dv.x);
+  w->dv.y = (float)(v.y + w->dv.y);
+  w->dv.z = (float)(v.z + w->dv.z);
+  proj = (float)((float)(v.z * rd.z + (rd.x * v.x + rd.y * v.y)) * w->radius);
+  w->dspin = (float)(w->dspin - proj);
+}
+
+/* Type 7: a bone of a human against a fixed surface. The hit point is arm from the bone, so
+ * its velocity has the turn of the bone in it, and the push also turns the bone. */
+static void contact_bone_level(const Bond *b)
+{
+  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
+  const vec3 n = b->normal, r = b->arm;
+  float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
+  vec3 p, v, t;
+
+  p.x = (float)((float)(x->w.z * r.y - r.z * x->w.y) + x->vel.x);
+  p.y = (float)(x->vel.y + (float)(r.z * x->w.x - r.x * x->w.z));
+  p.z = (float)(x->vel.z + (float)(r.x * x->w.y - x->w.x * r.y));
+  v.x = (float)(k * n.x + nd * p.x);
+  v.y = (float)(nd * p.y + (float)(k * n.y));
+  v.z = (float)(nd * p.z + (float)(k * n.z));
+  if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
+    return;
+  calculatefriction(&v.x, (float *)&b->normal, b->friction);
+  x->dv.x = (float)(v.x + x->dv.x);
+  x->dv.y = (float)(v.y + x->dv.y);
+  x->dv.z = (float)(v.z + x->dv.z);
+  t.x = (float)(r.z * v.y - v.z * r.y);
+  t.y = (float)(v.z * r.x - r.z * v.x);
+  t.z = (float)(r.y * v.x - v.y * r.x);
+  x->dw.x = (float)(t.x + x->dw.x);
+  x->dw.y = (float)(x->dw.y + t.y);
+  x->dw.z = (float)(x->dw.z + t.z);
+}
+
 void __cdecl lf_41de0(void)
 
 {
@@ -938,87 +992,14 @@ void __cdecl lf_41de0(void)
             contact_triangle((Bond *)((char *)pfVar33 - 0x78));
           if (BOND_KIND(pfVar33) == 0x4U)
             contact_bone_triangle((Bond *)((char *)pfVar33 - 0x78));
-          iVar30 = g_timerlist.bondwheelcollevel;
           if (BOND_KIND(pfVar33) == 0x5U) {
-            /* Type 5: a wheel of an object on the ground. The object and wheel indexes are
-             * ints: as floats they are denormals, and each x87 use costs about 9000 cycles. */
-            Bond *bond = (Bond *)((char *)pfVar33 - 0x78);
-            int obj = bond->owner;     /* type 5: object index */
-            int wheel = bond->bone_a;  /* type 5: wheel index (0x98 bytes each, at object+0x5f0c) */
-            float *w = (float *)(&g_object[obj].lf_raw[0x5f0c] + wheel * 0x98);
-            float k, neg, load, proj;
-            uVar13 = rdtsc();
-            g_timer[g_timerlist.bondwheelcollevel].start_lo = (int)uVar13;
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-            k = (float)(bond->rest_length * bond->stiffness);
-            neg = -bond->damping;
-            load = (float)(w[3] * w[0] * bond->damping);
-            local_5c = (float)((float)(k * bond->normal.x + neg * w[9]) + load * pfVar33[0xe]);
-            local_58 = (float)(load * pfVar33[0xf] + ((float)(w[10] * neg + (float)(bond->normal.y * k))));
-            local_54 = (float)(load * pfVar33[0x10] + ((float)(neg * w[11] + (float)(k * bond->normal.z))));
-            proj = (float)(bond->normal.z * local_54 +
-                           (bond->normal.x * local_5c + local_58 * bond->normal.y));
-            local_50 = (float *)LF_UINT(proj);
-            if (0.0 < proj) {
-              fVar35 = (float10)calculatefriction(&local_5c, &bond->normal.x, pfVar33[2]);
-              w[20] = (float)(fVar35 + (float10)w[20]);
-              w[12] = (float)(local_5c + w[12]);
-              w[13] = (float)(local_58 + w[13]);
-              w[14] = (float)(local_54 + w[14]);
-              proj = (float)(((float)(local_54 * pfVar33[0x10] + (pfVar33[0xe] * local_5c + pfVar33[0xf] * local_58))) *
-                             w[0]);
-              local_50 = (float *)LF_UINT(proj);
-              w[2] = (float)(w[2] - proj);
-            }
+            starttimer(g_timerlist.bondwheelcollevel);
+            contact_wheel((Bond *)((char *)pfVar33 - 0x78));
             stoptimer(g_timerlist.bondwheelcollevel);
           }
-          iVar30 = g_timerlist.bondbodylevel;
           if (BOND_KIND(pfVar33) == 0x7U) {
-            uVar13 = rdtsc();
-            g_timer[g_timerlist.bondbodylevel].start_lo = (int)uVar13;
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-            LF_COPY(fVar5, pfVar33[6]);
-            LF_COPY(fVar6, pfVar33[7]);
-            fVar7 = (float)(pfVar33[-6] * pfVar33[-3]);
-            local_6c = (float)(((float)(LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) *
-                        pfVar33[-0x13] -
-                       pfVar33[-0x12] *
-                       LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]))) +
-                       LF_BITS_F((&DAT_00461de0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
-            local_68 = (float)(LF_BITS_F((&DAT_00461de4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) +
-                       ((float)(pfVar33[-0x12] *
-                        LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) -
-                       pfVar33[-0x14] *
-                       LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]))));
-            local_64 = (float)(LF_BITS_F((&DAT_00461de8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) +
-                       ((float)(pfVar33[-0x14] *
-                        LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) -
-                       LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) *
-                       pfVar33[-0x13])));
-            fVar8 = -pfVar33[-2];
-            local_5c = (float)(fVar7 * ((vec3 *)(pfVar33 + -1))->x + fVar8 * local_6c);
-            local_58 = (float)(fVar8 * local_68 + (float)(fVar7 * *pfVar33));
-            local_54 = (float)(fVar8 * local_64 + (float)(fVar7 * pfVar33[1]));
-            local_50 = ((float *)LF_BITS_U(((float)(pfVar33[1] * local_54 +
-                                (((vec3 *)(pfVar33 + -1))->x * local_5c + local_58 * *pfVar33)))));
-            if (0.0 < LF_BITS_F(local_50)) {
-              calculatefriction(&local_5c,pfVar33 + -1,pfVar33[2]);
-              *(float *)&((&DAT_00461df0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(local_5c + LF_BITS_F((&DAT_00461df0)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461df4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(local_58 + LF_BITS_F((&DAT_00461df4)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461df8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(local_54 + LF_BITS_F((&DAT_00461df8)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
-              local_6c = (float)(pfVar33[-0x12] * local_58 - local_54 * pfVar33[-0x13]);
-              local_68 = (float)(local_54 * pfVar33[-0x14] - pfVar33[-0x12] * local_5c);
-              local_64 = (float)(pfVar33[-0x13] * local_5c - local_58 * pfVar33[-0x14]);
-              *(float *)&((&DAT_00461e20)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(local_6c + LF_BITS_F((&DAT_00461e20)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]));
-              *(float *)&((&DAT_00461e24)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461e24)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) + local_68);
-              *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) =
-                   (float)(LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar6)) * 0x20 + ((int)LF_UINT(fVar5)) * 0x204]) + local_64);
-            }
+            starttimer(g_timerlist.bondbodylevel);
+            contact_bone_level((Bond *)((char *)pfVar33 - 0x78));
             stoptimer(g_timerlist.bondbodylevel);
           }
           iVar30 = g_timerlist.bondbodybody;

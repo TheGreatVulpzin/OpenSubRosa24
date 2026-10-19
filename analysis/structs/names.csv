@@ -151,7 +151,6 @@ item,0x104,info,int,,createevent_updateiteminfo sends it; itemlogic and eventsim
 item,0x134,num_bills,int,,item_addbill and logic_playeractions add 1
 object,0x8,state,int,,objectsimulation compares with 1 and 2; packobjectpacket ignores 3 (likely: object state)
 object,0x5ee8,num_wheels,int,,createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels)
-object,0x5f1c,rotor_angle,float,,objectsimulation_heli updates it; unpackobjectpacket reads it with unpackangle
 player,0x4c,num_purchases,int,,logic_gunstore_buy and logic_playeractions: limit < 10
 player,0xac,hud_mode,int,,getinputs_human adds 1; drawhud compares with 0 and 1
 object,0x5e4c,engine_accel,float,,"objectenginesimulation2: computed, added to engine_rpm and zeroed"
@@ -267,7 +266,7 @@ timerlist,0x90,packetbuild,int,,"timer index; the code names the timer ""packetb
 timerlist,0x94,bondtest,int,,"timer index; the code names the timer ""bondtest"""
 item,0x78,dv,vec3,,bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel
 item,0xcc,dw,vec3,,bondsimulation2 clears it at the start of each solver pass; the bonds add the change of angvel
-object,0x71ec,num_wheel_bodies,int,,"createobject copies objecttype.num_wheels; a second list next to the wheels at +0x5f0c"
+object,0x71ec,num_wheel_bodies,int,,"createobject copies objecttype.num_wheels; a second list after Object.wheels"
 object,0x71f0,wheel_bodies,WheelBody,16,"stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8"
 human,0x4,has_physics,int,,"humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it"
 item,0x4,has_physics,int,,"bondsimulation2 clears the velocity changes only of the active items with it (the same role as human.has_physics)"
@@ -280,3 +279,6 @@ bond,0x80,friction,float,,"contact bonds: objectsimulation writes 0.6 against th
 bond,0xbc,surface_vel,vec3,,"contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level"
 intersect,0x34,tri_particles,int,3,"lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle"
 intersect,0x44,tri_weights,float,3,"lineintersectobject and sphereintersectobject: the barycentric weights of the hit point"
+object,0x5eec,wheels,Wheel,32,"stride 0x98: objectwheelcollision reads wheels[i] (particles, radius, steer, pos); the list ends at num_wheel_bodies (+0x71ec)"
+bond,0x28,arm,vec3,,"type 7: the hit point minus the bone position (humansimulation); the push turns the bone around it"
+bond,0xb0,roll_dir,vec3,,"type 5: the direction in which the wheel rolls on the ground (objectwheelcollision: the wheel axle crossed twice with the normal)"

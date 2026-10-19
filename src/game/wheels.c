@@ -223,12 +223,12 @@ void __cdecl lf_22f90(void)
           local_30 = *(float *)((int)&g_object[0].rot[0].y + iVar16);
           local_2c = *(float *)((int)&g_object[0].rot[0].z + iVar16);
           if (local_50 == 0) {
-            fVar17 = *(float *)((int)&g_object[0].unk_5f20 + iVar16);
+            fVar17 = *(float *)(&g_object[0].lf_raw[0x5f20] + iVar16);
 LAB_0042360a:
             rotatevector(&local_34,(float *)((int)&g_object[0].rot[1].x + iVar16),fVar17);
           }
           else if (local_50 == 1) {
-            fVar17 = *(float *)((int)&g_object[0].unk_5fb8 + iVar16);
+            fVar17 = *(float *)(&g_object[0].lf_raw[0x5fb8] + iVar16);
             goto LAB_0042360a;
           }
           iVar14 = iVar14 * 0xe8;
@@ -291,7 +291,7 @@ LAB_0042360a:
                     (float)(fVar17 * (&g_particle[0].pos.z)[iVar14 * 0x3c]))))))) -
                    *(float *)((int)&g_object[0].rot[1].z + iVar16) * 0.125)) -
                    *(float *)(&g_object[0].lf_raw[0x71f8] + iVar15));
-          *(float *)(iVar16 + ((int)&g_object[0].unk_5f48) + local_50 * 0x98) =
+          *(float *)(iVar16 + ((int)&g_object[0].lf_raw[0x5f48]) + local_50 * 0x98) =
                -((float)(fVar17 * *(float *)((int)&g_object[0].rot[1].z + iVar16) +
                 (fVar7 * *(float *)((int)&g_object[0].rot[1].y + iVar16) +
                 fVar8 * *(float *)((int)&g_object[0].rot[1].x + iVar16))));
