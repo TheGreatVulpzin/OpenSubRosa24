@@ -195,9 +195,9 @@ void lf_1b6e0(void);
 void linkitem(void);
 void lf_1ba30(void);
 void lf_1bc50(void);
-void lf_1c1d0(void);
+void lineintersectlandscape(void);
 void lf_1c8f0(void);
-void lf_1cdf0(void);
+void sphereintersectlandscape(void);
 void lf_1d2c0(void);
 void lf_1d3b0(void);
 void lf_1d4d0(void);
@@ -513,9 +513,9 @@ const LfEntry lf_table[] = {
     { "linkitem", 0x1b870, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "addcitystreet", 0x1ba30, (void *)lf_1ba30, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "createlandscape", 0x1bc50, (void *)lf_1bc50, 0, LF_RET_VOID, 4, "", 0 },
-    { "lineintersectlandscape", 0x1c1d0, (void *)lf_1c1d0, 2, LF_RET_INT, 4, "pp", 0 },
+    { "lineintersectlandscape", 0x1c1d0, (void *)lineintersectlandscape, 2, LF_RET_INT, 4, "pp", 0 },
     { "circleintersectlandscape", 0x1c8f0, (void *)lf_1c8f0, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "sphereintersectlandscape", 0x1cdf0, (void *)lf_1cdf0, 2, LF_RET_INT, 4, "pv", 0 },
+    { "sphereintersectlandscape", 0x1cdf0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 4, "pv", 0 },
     { "logic_farbslist", 0x1d2c0, (void *)lf_1d2c0, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation_driving", 0x1d3b0, (void *)lf_1d3b0, 0, LF_RET_VOID, 4, "", 0 },
     { "logic_setteammanager", 0x1d4d0, (void *)lf_1d4d0, 2, LF_RET_VOID, 4, "vv", 0 },

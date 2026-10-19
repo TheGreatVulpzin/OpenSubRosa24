@@ -7266,12 +7266,12 @@ __declspec(naked) static void th_1bc50(void)
 }
 static uint8_t expect_1bc50[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-undefined4 __cdecl lf_1c1d0(float * param_1, float * param_2);
+undefined4 __cdecl lineintersectlandscape(float * param_1, float * param_2);
 static undefined4 (__cdecl *orig_1c1d0)(float *, float *);
 static SvVerify v_1c1d0 = { "lineintersectlandscape", -1 };
 static undefined4 __cdecl hk_1c1d0(float * param_1, float * param_2)
 {
-    SV_HOOK_RET(undefined4, v_1c1d0, lf_1c1d0(param_1, param_2), orig_1c1d0(param_1, param_2), NULL);
+    SV_HOOK_RET(undefined4, v_1c1d0, lineintersectlandscape(param_1, param_2), orig_1c1d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_1c1d0(void)
 {
@@ -7349,12 +7349,12 @@ __declspec(naked) static void th_1c8f0(void)
 }
 static uint8_t expect_1c8f0[5] = { 0x83, 0xec, 0x64, 0x53, 0x55 };
 
-undefined4 __cdecl lf_1cdf0(float * param_1, float param_2);
+undefined4 __cdecl sphereintersectlandscape(float * param_1, float param_2);
 static undefined4 (__cdecl *orig_1cdf0)(float *, float);
 static SvVerify v_1cdf0 = { "sphereintersectlandscape", -1 };
 static undefined4 __cdecl hk_1cdf0(float * param_1, float param_2)
 {
-    SV_HOOK_RET(undefined4, v_1cdf0, lf_1cdf0(param_1, param_2), orig_1cdf0(param_1, param_2), NULL);
+    SV_HOOK_RET(undefined4, v_1cdf0, sphereintersectlandscape(param_1, param_2), orig_1cdf0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_1cdf0(void)
 {

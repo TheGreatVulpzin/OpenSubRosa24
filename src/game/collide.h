@@ -2,6 +2,8 @@
 #ifndef SR_COLLIDE_H
 #define SR_COLLIDE_H
 
+int sphereintersectlandscape(float *pos, float radius);
+int lineintersectlandscape(float *from, float *to);
 int sphereintersectlevel(float *pos, float radius);
 int lineintersectlevel(float *from, float *to, int with_objects);
 int lineintersectall(float *from, float *to);

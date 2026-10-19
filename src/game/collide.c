@@ -3,6 +3,7 @@
  * there is a hit. */
 #include "collide.h"
 
+#include <math.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -18,15 +19,11 @@
 #define NUM_CITYOBJECTS 1024
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
-int __cdecl lf_1cdf0(float *pos, float radius);
-int __cdecl lf_1c1d0(float *from, float *to);
 int __cdecl lf_1c8f0(float *pos, float *rot, float radius);
 int __cdecl lf_40aa0(float *hit, float *normal, float *dist, uint32_t area, float *pos, float radius);
 int __cdecl lf_2c0c0(float *hit, float *normal, float *t, uint32_t area, float *from, float *to);
 int __cdecl lf_41550(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float radius);
 int __cdecl lf_146a0(float *hit, float *normal, float *t, int object, float *from, float *to);
-#define sphereintersectlandscape lf_1cdf0
-#define lineintersectlandscape lf_1c1d0
 #define circleintersectlandscape lf_1c8f0
 #define sphereintersectarea lf_40aa0
 #define lineintersectarea lf_2c0c0
@@ -280,6 +277,212 @@ int lineintersectobject(int obj, float *from, float *to, int with_wheels)
                 g_intersect.fraction = t;
                 g_intersect.tri_particles[0] = w;
             }
+        }
+    }
+    return g_intersect.fraction < 1.0 ? 1 : 0;
+}
+
+/* The landscape (the global "landscape" of the Linux 0.24c): an origin, then a grid of
+ * 2049 x 2049 heights, 8 units apart. Each cell is two triangles. */
+#define g_land_origin (*SR_AT(vec3, 0x9c1d8c0))
+#define g_land_height SR_AT(float, 0x9c1d8cc)
+#define LAND_CELLS 0x800
+#define LAND_ROW 0x801
+
+/* Clamps a cell index to 0..LAND_CELLS. */
+static int land_clamp(int i)
+{
+    if (i < 0)
+        i = 0;
+    if (LAND_CELLS < i)
+        i = LAND_CELLS;
+    return i;
+}
+
+/* Keeps a hit on the landscape (it does not move). */
+static void keep_land_hit(const vec3 *hit, const vec3 *normal, float dist)
+{
+    memcpy(g_intersect.pos, hit, sizeof g_intersect.pos);
+    memcpy(g_intersect.normal, normal, sizeof g_intersect.normal);
+    g_intersect.fraction = 0.0f;
+    g_intersect.surface_vel.x = 0.0f;
+    g_intersect.surface_vel.y = 0.0f;
+    g_intersect.surface_vel.z = 0.0f;
+    g_intersect.distance = dist;
+}
+
+/* A sphere against the cells of the landscape under it. distance gets the distance of the
+ * nearest hit. */
+int sphereintersectlandscape(float *pos, float radius)
+{
+    const vec3 *p = (const vec3 *)pos;
+    vec3 a, b, c, normal, hit;
+    float x8, z8, x18, z18, dist;
+    int x0, x1, z0, z1, x, z, i;
+
+    x0 = land_clamp(-(int)(long long)(((p->x - g_land_origin.x) - radius) * -0.125) - 1);
+    z0 = land_clamp(-(int)(long long)(((p->z - g_land_origin.z) - radius) * -0.125) - 1);
+    x1 = land_clamp(1 - (int)(long long)((radius + (p->x - g_land_origin.x)) * -0.125));
+    z1 = land_clamp(1 - (int)(long long)(((p->z - g_land_origin.z) + radius) * -0.125));
+    g_intersect.fraction = 1.0f;
+    g_intersect.distance = 65536.0f;
+    for (z = z0; z <= z1; z++) {
+        for (x = x0; x <= x1; x++) {
+            if ((unsigned)x >= LAND_CELLS || (unsigned)z >= LAND_CELLS)
+                continue;
+            i = z * LAND_ROW + x;
+            x8 = (float)((float)x * 8.0);
+            z8 = (float)((float)z * 8.0);
+            x18 = (float)((float)(x + 1) * 8.0);
+            z18 = (float)((float)(z + 1) * 8.0);
+            a.x = (float)(g_land_origin.x + x8);
+            a.y = (float)(g_land_origin.y + g_land_height[i]);
+            a.z = (float)(g_land_origin.z + z8);
+            b.x = (float)(g_land_origin.x + x18);
+            b.y = (float)(g_land_origin.y + g_land_height[i + 1]);
+            b.z = (float)(g_land_origin.z + z8);
+            c.x = (float)(x18 + g_land_origin.x);
+            c.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW + 1]);
+            c.z = (float)(g_land_origin.z + z18);
+            generatetrinormal(&normal, &a, &b, &c);
+            if (sphereintersecttriangle(&hit, &normal, &dist, p, radius, &a, &b, &c) != 0 && dist < g_intersect.distance)
+                keep_land_hit(&hit, &normal, dist);
+            b.x = (float)(g_land_origin.x + x18);
+            b.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW + 1]);
+            b.z = (float)(g_land_origin.z + z18);
+            c.x = (float)(x8 + g_land_origin.x);
+            c.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW]);
+            c.z = (float)(g_land_origin.z + z18);
+            generatetrinormal(&normal, &a, &b, &c);
+            if (sphereintersecttriangle(&hit, &normal, &dist, p, radius, &a, &b, &c) != 0 && dist < g_intersect.distance)
+                keep_land_hit(&hit, &normal, dist);
+        }
+    }
+    return g_intersect.distance < 65536.0 ? 1 : 0;
+}
+
+/* Tests the two triangles of landscape cell (x, z) against the line from -> to. */
+static void line_land_cell(int x, int z, const vec3 *from, const vec3 *to)
+{
+    vec3 a, b, c, normal, hit;
+    float x8, z8, x18, z18, t;
+    int i = z * LAND_ROW + x;
+
+    x8 = (float)((float)x * 8.0);
+    z8 = (float)((float)z * 8.0);
+    x18 = (float)((float)(x + 1) * 8.0);
+    z18 = (float)((float)(z + 1) * 8.0);
+    a.x = (float)(g_land_origin.x + x8);
+    a.y = (float)(g_land_origin.y + g_land_height[i]);
+    a.z = (float)(g_land_origin.z + z8);
+    b.x = (float)(g_land_origin.x + x18);
+    b.y = (float)(g_land_origin.y + g_land_height[i + 1]);
+    b.z = (float)(g_land_origin.z + z8);
+    c.x = (float)(x18 + g_land_origin.x);
+    c.y = (float)(g_land_height[i + LAND_ROW + 1] + g_land_origin.y);
+    c.z = (float)(g_land_origin.z + z18);
+    generatetrinormal(&normal, &a, &b, &c);
+    if (lineintersecttriangle(&hit, &normal, &t, from, to, &a, &b, &c) != 0 && t < g_intersect.fraction) {
+        memcpy(g_intersect.pos, &hit, sizeof g_intersect.pos);
+        memcpy(g_intersect.normal, &normal, sizeof g_intersect.normal);
+        g_intersect.fraction = t;
+        g_intersect.surface_vel.x = 0.0f;
+        g_intersect.surface_vel.y = 0.0f;
+        g_intersect.surface_vel.z = 0.0f;
+    }
+    b.x = (float)(g_land_origin.x + x18);
+    b.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW + 1]);
+    b.z = (float)(g_land_origin.z + z18);
+    c.x = (float)(x8 + g_land_origin.x);
+    c.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW]);
+    c.z = (float)(g_land_origin.z + z18);
+    generatetrinormal(&normal, &a, &b, &c);
+    if (lineintersecttriangle(&hit, &normal, &t, from, to, &a, &b, &c) != 0 && t < g_intersect.fraction) {
+        memcpy(g_intersect.pos, &hit, sizeof g_intersect.pos);
+        memcpy(g_intersect.normal, &normal, sizeof g_intersect.normal);
+        g_intersect.fraction = t;
+        g_intersect.surface_vel.x = 0.0f;
+        g_intersect.surface_vel.y = 0.0f;
+        g_intersect.surface_vel.z = 0.0f;
+    }
+}
+
+/* The line from -> to against the landscape: a walk over the cells that the line crosses (the
+ * step of y is always 0), at most 0x4000 cells. fraction gets the part of the line before the
+ * nearest hit. */
+int lineintersectlandscape(float *from, float *to)
+{
+    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
+    const float *origin = &g_land_origin.x;
+    uint32_t cell[3], end[3];
+    int step[3], k, axis, n, i, cx, cz;
+    float a[3], b[3], c[3], d, frac, f2, m;
+    double t, fl;
+    uint32_t dz, dx;
+
+    for (k = 0; k < 3; k++) {
+        cell[k] = (uint32_t)(long long)((from[k] - origin[k]) * 0.125);
+        end[k] = (uint32_t)(long long)((to[k] - origin[k]) * 0.125);
+        a[k] = (float)((to[k] - from[k]) * 0.125);
+        if (k == 1)
+            a[1] = 0.0f;
+        step[k] = a[k] <= 0.0 ? -1 : 1;
+        d = (float)fabs(a[k]);
+        a[k] = d;
+        b[k] = d;
+        c[k] = d;
+    }
+    for (k = 0; k < 3; k++) {
+        frac = (float)(from[k] * 0.125);
+        t = (double)frac;
+        fl = floor((double)frac);
+        frac = (float)(t - (fl + 0.5));
+        if (0 < step[k])
+            frac = -frac;
+        f2 = (float)(frac + frac);
+        m = k == 0 ? c[1] : c[0];
+        m = f2 * m;
+        a[k] = (float)(m - a[k]);
+        m = k == 2 ? c[1] : c[2];
+        m = f2 * m;
+        b[k] = (float)(m - b[k]);
+    }
+    dz = end[2] - cell[2];
+    dx = end[0] - cell[0];
+    n = (int)(((dz ^ (uint32_t)((int)dz >> 31)) - (uint32_t)((int)dz >> 31)) +
+              ((dx ^ (uint32_t)((int)dx >> 31)) - (uint32_t)((int)dx >> 31)));
+    if (0x4000 < n)
+        n = 0x4000;
+    g_intersect.block[0] = -1;
+    g_intersect.fraction = 1.0f;
+    if (n < 0)
+        return 0;
+    for (i = 0; i <= n; i++) {
+        cx = (int)cell[0];
+        cz = (int)cell[2];
+        if (cell[0] < LAND_CELLS && cell[2] < LAND_CELLS)
+            line_land_cell(cx, cz, s, e);
+        if ((uint32_t)cx == end[0] && (uint32_t)cz == end[2])
+            break;
+        axis = a[1] <= a[0];
+        if (a[2] <= b[0] || axis == 1)
+            axis = b[2] < b[1] ? 2 : 1;
+        cell[axis] += (uint32_t)step[axis];
+        if (axis == 0) {
+            a[0] = (float)(a[0] + c[1]);
+            a[1] = (float)(a[1] - c[1]);
+            a[2] = (float)(a[2] - c[2]);
+            b[0] = (float)(b[0] + c[2]);
+        } else if (axis == 1) {
+            a[0] = (float)(a[0] - c[0]);
+            a[1] = (float)(c[0] + a[1]);
+            b[1] = (float)(c[2] + b[1]);
+            b[2] = (float)(b[2] - c[2]);
+        } else {
+            a[2] = (float)(c[0] + a[2]);
+            b[0] = (float)(b[0] - c[0]);
+            b[1] = (float)(b[1] - c[1]);
+            b[2] = (float)(b[2] + c[1]);
         }
     }
     return g_intersect.fraction < 1.0 ? 1 : 0;
