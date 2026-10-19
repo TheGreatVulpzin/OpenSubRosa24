@@ -238,7 +238,7 @@ typedef union CityObjectTypeRec { struct {
     vec3 verts[256];    /* +0x08 the corners of the faces */
     int num_faces;      /* +0xc08 */
     CityFace faces[256]; /* +0xc0c */
-    uint8_t unk_240c[0xc];
+    vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
 /* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */

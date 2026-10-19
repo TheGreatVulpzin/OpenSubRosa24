@@ -22,10 +22,8 @@
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
 int __cdecl lf_40aa0(float *hit, float *normal, float *dist, uint32_t area, float *pos, float radius);
-int __cdecl lf_2c0c0(float *hit, float *normal, float *t, uint32_t area, float *from, float *to);
 int __cdecl lf_41550(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float radius);
 #define sphereintersectarea lf_40aa0
-#define lineintersectarea lf_2c0c0
 #define circleintersectarea lf_41550
 
 /* Copies a hit point and its normal into the Intersect record, bit for bit. */
@@ -80,7 +78,7 @@ int lineintersectlevel(float *from, float *to, int with_objects)
         for (o = 0; o < NUM_CITYOBJECTS; o++) {
             if (g_cityobjects[o].active != 0 && lineintersectcityobject(&hit.x, &normal.x, &t, o, from, to) != 0 &&
                 t < g_intersect.fraction) {
-                g_intersect.block[0] = -1;
+                g_intersect.block_area = -1;
                 keep_hit(&hit, &normal);
                 g_intersect.surface_vel = g_cityobjects[o].vel;
                 g_intersect.fraction = t;
@@ -111,7 +109,7 @@ int lineintersectall(float *from, float *to)
     for (o = 0; o < NUM_CITYOBJECTS; o++) {
         if (g_cityobjects[o].active != 0 && lineintersectcityobject(&hit.x, &normal.x, &t, o, from, to) != 0 &&
             t < g_intersect.fraction) {
-            g_intersect.block[0] = -1;
+            g_intersect.block_area = -1;
             keep_hit(&hit, &normal);
             g_intersect.fraction = t;
             g_intersect.surface_vel = g_cityobjects[o].vel;
@@ -451,7 +449,7 @@ int lineintersectlandscape(float *from, float *to)
               ((dx ^ (uint32_t)((int)dx >> 31)) - (uint32_t)((int)dx >> 31)));
     if (0x4000 < n)
         n = 0x4000;
-    g_intersect.block[0] = -1;
+    g_intersect.block_area = -1;
     g_intersect.fraction = 1.0f;
     if (n < 0)
         return 0;
@@ -664,50 +662,43 @@ static void face_grid(const CityFace *face, const vec3 *hit, const vec3 *a, cons
     g_intersect.face_v = (int)(long long)((((float)(q.z * e2.z + (q.x * e2.x + e2.y * q.y))) * 4.0) / l2);
 }
 
-/* Moves a corner of the mesh of a city object type into the world. */
-static void city_corner(vec3 *out, const CityObjectTypeRec *ct, int v, const CityObjectRec *co)
+/* Moves corner v of a mesh to pos. */
+static void city_move(vec3 *v, const vec3 *pos)
 {
-    projectvector(out, &ct->verts[v], co->rot);
+    v->x = (float)(pos->x + v->x);
+    v->y = (float)(pos->y + v->y);
+    v->z = (float)(pos->z + v->z);
 }
 
-static void city_move(vec3 *v, const CityObjectRec *co)
+/* The line s -> e against the mesh of city object type `type`, turned by rot and placed at pos.
+ * hit, normal and *t get the nearest hit (t is the part of the line before it). A quad tests
+ * its second triangle with the normal of the first. A triangle face with a grid takes the fourth
+ * corner of the quad before it in this call (0 before any quad). */
+static int city_mesh_line(vec3 *hit, vec3 *normal, float *t, int type, const vec3 *pos, const vec3 rot[3],
+                          const vec3 *s, const vec3 *e)
 {
-    v->x = (float)(co->pos.x + v->x);
-    v->y = (float)(co->pos.y + v->y);
-    v->z = (float)(co->pos.z + v->z);
-}
-
-/* The line from -> to against city object obj: the mesh of its type, turned by rot and placed
- * at pos. hit, normal and *t get the nearest hit (t is the part of the line before it). A quad
- * tests its second triangle with the normal of the first. A triangle face with a grid takes the
- * fourth corner of the quad before it in this call (0 before any quad). */
-int lineintersectcityobject(float *hitp, float *normalp, float *t, int obj, float *from, float *to)
-{
-    const CityObjectRec *co = &g_cityobjects[obj];
-    const CityObjectTypeRec *ct = &g_cityobjecttypes[co->type];
-    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
-    vec3 *hit = (vec3 *)hitp, *normal = (vec3 *)normalp;
+    const CityObjectTypeRec *ct = &g_cityobjecttypes[type];
     const CityFace *face;
     vec3 a, b, c, d = {0.0f, 0.0f, 0.0f}, n, h;
     float lim, tt;
     int f;
 
-    lim = co->pos.x - ct->radius;
+    lim = pos->x - ct->radius;
     if (!(lim <= s->x || lim <= e->x))
         return 0;
-    lim = co->pos.y - ct->radius;
+    lim = pos->y - ct->radius;
     if (s->y < lim && e->y < lim)
         return 0;
-    lim = co->pos.z - ct->radius;
+    lim = pos->z - ct->radius;
     if (s->z < lim && e->z < lim)
         return 0;
-    lim = co->pos.x + ct->radius;
+    lim = pos->x + ct->radius;
     if (lim < s->x && lim < e->x)
         return 0;
-    lim = co->pos.y + ct->radius;
+    lim = pos->y + ct->radius;
     if (lim < s->y && lim < e->y)
         return 0;
-    lim = co->pos.z + ct->radius;
+    lim = pos->z + ct->radius;
     if (lim < s->z && lim < e->z)
         return 0;
     *t = 1.0f;
@@ -715,16 +706,16 @@ int lineintersectcityobject(float *hitp, float *normalp, float *t, int obj, floa
         return 0;
     for (f = 0; f < ct->num_faces; f++) {
         face = &ct->faces[f];
-        city_corner(&a, ct, face->verts[0], co);
-        city_corner(&b, ct, face->verts[1], co);
-        city_corner(&c, ct, face->verts[2], co);
+        projectvector(&a, &ct->verts[face->verts[0]], rot);
+        projectvector(&b, &ct->verts[face->verts[1]], rot);
+        projectvector(&c, &ct->verts[face->verts[2]], rot);
         generatetrinormal(&n, &a, &b, &c);
-        city_move(&a, co);
-        city_move(&b, co);
-        city_move(&c, co);
+        city_move(&a, pos);
+        city_move(&b, pos);
+        city_move(&c, pos);
         if (face->corners == 4) {
-            city_corner(&d, ct, face->verts[3], co);
-            city_move(&d, co);
+            projectvector(&d, &ct->verts[face->verts[3]], rot);
+            city_move(&d, pos);
         }
         if (lineintersecttriangle(&h, &n, &tt, s, e, &a, &b, &c) != 0 && tt < *t) {
             *hit = h;
@@ -739,9 +730,32 @@ int lineintersectcityobject(float *hitp, float *normalp, float *t, int obj, floa
             face_grid(face, hit, &a, &b, &d, 1);
         }
     }
-    if (!(*t < 1.0))
+    return *t < 1.0 ? 1 : 0;
+}
+
+/* The line from -> to against city object obj. See city_mesh_line. */
+int lineintersectcityobject(float *hit, float *normal, float *t, int obj, float *from, float *to)
+{
+    const CityObjectRec *co = &g_cityobjects[obj];
+
+    if (!city_mesh_line((vec3 *)hit, (vec3 *)normal, t, co->type, &co->pos, co->rot, (const vec3 *)from,
+                        (const vec3 *)to))
         return 0;
     g_intersect.surface_vel = co->vel;
+    return 1;
+}
+
+/* The line from -> to against the mesh of city object type `type` in a block. See
+ * city_mesh_line. */
+int lineintersectcityobjecttype(float *hit, float *normal, float *t, int type, float *pos, float *rot, float *from,
+                                float *to)
+{
+    if (!city_mesh_line((vec3 *)hit, (vec3 *)normal, t, type, (const vec3 *)pos, (const vec3 *)rot,
+                        (const vec3 *)from, (const vec3 *)to))
+        return 0;
+    g_intersect.surface_vel.x = 0.0f;
+    g_intersect.surface_vel.y = 0.0f;
+    g_intersect.surface_vel.z = 0.0f;
     return 1;
 }
 

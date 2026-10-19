@@ -147,8 +147,8 @@ void lf_11d70(void);
 void lf_11f70(void);
 void lf_120c0(void);
 void lf_121d0(void);
-void lf_12450(void);
-void lf_126b0(void);
+void lineintersectnormalblock(void);
+void lineintersectspecblock(void);
 void createbond(void);
 void bondtimetolive(void);
 void bond_partpart(void);
@@ -159,7 +159,7 @@ void createbullet(void);
 void bullettimetolive(void);
 void lf_14600(void);
 void lineintersectcityobject(void);
-void lf_14dd0(void);
+void lineintersectcityobjecttype(void);
 void lf_154b0(void);
 void lf_155e0(void);
 void packorientation(void);
@@ -242,7 +242,7 @@ void lf_29970(void);
 void lf_29bf0(void);
 void lf_2a510(void);
 void lf_2c020(void);
-void lf_2c0c0(void);
+void lineintersectarea(void);
 void lf_2cda0(void);
 void lf_2d2d0(void);
 void lf_2d7f0(void);
@@ -465,8 +465,8 @@ const LfEntry lf_table[] = {
     { "area_block_addoutdoor", 0x11f70, (void *)lf_11f70, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addcorner", 0x120c0, (void *)lf_120c0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_interior_createblock", 0x121d0, (void *)lf_121d0, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
-    { "lineintersectnormalblock", 0x12450, (void *)lf_12450, 8, LF_RET_INT, 4, "ppppppvv", 0 },
-    { "lineintersectspecblock", 0x126b0, (void *)lf_126b0, 8, LF_RET_INT, 4, "ppppppvv", 0 },
+    { "lineintersectnormalblock", 0x12450, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
+    { "lineintersectspecblock", 0x126b0, (void *)lineintersectspecblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "createbond", 0x129b0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "bondtimetolive", 0x12c90, (void *)bondtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "bond_partpart", 0x12f80, (void *)bond_partpart, 1, LF_RET_VOID, 4, "v", 0 },
@@ -477,7 +477,7 @@ const LfEntry lf_table[] = {
     { "bullettimetolive", 0x14590, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "createcityobject", 0x14600, (void *)lf_14600, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lineintersectcityobject", 0x146a0, (void *)lineintersectcityobject, 6, LF_RET_INT, 4, "pppvpp", 0 },
-    { "lineintersectcityobjecttype", 0x14dd0, (void *)lf_14dd0, 8, LF_RET_INT, 4, "pppvpppp", 0 },
+    { "lineintersectcityobjecttype", 0x14dd0, (void *)lineintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppp", 0 },
     { "city_createelevator", 0x154b0, (void *)lf_154b0, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)lf_155e0, 0, LF_RET_VOID, 4, "", 0 },
     { "packorientation", 0x15df0, (void *)packorientation, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -560,7 +560,7 @@ const LfEntry lf_table[] = {
     { "area_block_createbuildinginterior", 0x29bf0, (void *)lf_29bf0, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_createinteriorblocks", 0x2a510, (void *)lf_2a510, 0, LF_RET_VOID, 4, "", 1 },
     { "area_breakblock", 0x2c020, (void *)lf_2c020, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
-    { "lineintersectarea", 0x2c0c0, (void *)lf_2c0c0, 6, LF_RET_INT, 4, "pppvpp", 0 },
+    { "lineintersectarea", 0x2c0c0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "sphereintersectnormalblock", 0x2cda0, (void *)lf_2cda0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "sphereintersectspecblock", 0x2d2d0, (void *)lf_2d2d0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "circleintersectnormalblock", 0x2d7f0, (void *)lf_2d7f0, 9, LF_RET_INT, 4, "pppppvpvv", 0 },

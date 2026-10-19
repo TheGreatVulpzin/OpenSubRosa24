@@ -146,7 +146,7 @@ typedef union CityObjectTypeRec { struct {
     vec3 verts[256];    /* +0x08 the corners of the faces */
     int num_faces;      /* +0xc08 */
     CityFace faces[256]; /* +0xc0c */
-    uint8_t unk_240c[0xc];
+    vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
 /* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */
@@ -1336,24 +1336,29 @@ typedef union AreaBlock { struct {
     char unk_0014;                       /* +0x0014 1 functions */
     uint8_t pad_0015[0x2b];
     int unk_0040;                        /* +0x0040 1 functions */
-    int unk_0044;                        /* +0x0044 4 functions */
+    int verts;                           /* +0x0044 a pointer to the corners (vec3) of the mesh of the block type, in blocks */
     int unk_0048;                        /* +0x0048 1 functions */
     int unk_004c;                        /* +0x004c 1 functions */
     int unk_0050;                        /* +0x0050 1 functions */
-    int unk_0054;                        /* +0x0054 4 functions */
-    int unk_0058;                        /* +0x0058 4 functions */
-    int unk_005c;                        /* +0x005c 3 functions */
+    int num_faces;                       /* +0x0054 the faces of the mesh */
+    int faces;                           /* +0x0058 a pointer to 4 indexes into verts for each face */
+    int face_slots;                      /* +0x005c a pointer to the texture slot of each face */
     int unk_0060;                        /* +0x0060 2 functions */
     int unk_0064;                        /* +0x0064 2 functions */
     int unk_0068;                        /* +0x0068 2 functions */
     int unk_006c;                        /* +0x006c 6 functions */
     int unk_0070;                        /* +0x0070 6 functions */
     int unk_0074;                        /* +0x0074 7 functions */
-    int unk_0078;                        /* +0x0078 6 functions */
+    int num_hideable;                    /* +0x0078 bits 16 to 25 of a block word hide the faces below this count */
     int unk_007c;                        /* +0x007c 1 functions */
     int unk_0080;                        /* +0x0080 2 functions */
 }; uint8_t lf_raw[0x84]; } AreaBlock;
 SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
+SR_STATIC_ASSERT(offsetof(AreaBlock, verts) == 0x44, "AreaBlock.verts");
+SR_STATIC_ASSERT(offsetof(AreaBlock, num_faces) == 0x54, "AreaBlock.num_faces");
+SR_STATIC_ASSERT(offsetof(AreaBlock, faces) == 0x58, "AreaBlock.faces");
+SR_STATIC_ASSERT(offsetof(AreaBlock, face_slots) == 0x5c, "AreaBlock.face_slots");
+SR_STATIC_ASSERT(offsetof(AreaBlock, num_hideable) == 0x78, "AreaBlock.num_hideable");
 
 /* area[]: record of 0x100d6c bytes. */
 typedef union Area { struct {
@@ -1940,13 +1945,13 @@ typedef union Intersect { struct {
     uint8_t pad_0040[0x4];
     float tri_weights[3];                /* +0x0044 lineintersectobject and sphereintersectobject: the barycentric weights of the hit point */
     uint8_t pad_0050[0x4];
-    int block[3];                        /* +0x0054 lineintersectarea: the block of the hit (area_breakblock takes it); lineintersectlevel writes -1 in [0] for a city object */
-    int unk_0060;                        /* +0x0060 4 functions */
+    int block_area;                      /* +0x0054 lineintersectarea: the area of the hit block; lineintersectlevel writes -1 for a city object */
+    int block[3];                        /* +0x0058 lineintersectarea: x, y and z of the hit block (area_breakblock takes them) */
     int material;                        /* +0x0064 circleintersectlevel copies area_material for the nearest hit; objectwheelcollision reads the friction of the material */
     int area_material;                   /* +0x0068 circleintersectarea writes the material of its hit */
-    int unk_006c;                        /* +0x006c 5 functions */
-    int unk_0070;                        /* +0x0070 4 functions */
-    int unk_0074;                        /* +0x0074 3 functions */
+    int block_face;                      /* +0x006c the face of the hit block: 0 to 5 for a cube, the texture slot of the face for a special block (area_getblocktexture) */
+    int block_word;                      /* +0x0070 lineintersectarea: the word of the hit block; 0 for a city object */
+    int spec_face;                       /* +0x0074 lineintersectspecblock: the face of the mesh of the hit block */
     int index;                           /* +0x0078 lineintersectall: set to -1 before the search */
     int face_u;                          /* +0x007c lineintersectcityobject: the hit point on a face with a grid, in 8 steps along its first edge; -1 when the face has no grid */
     int face_v;                          /* +0x0080 lineintersectcityobject: the hit point on a face with a grid, in 4 steps along its second edge */
@@ -1960,9 +1965,13 @@ SR_STATIC_ASSERT(offsetof(Intersect, surface_vel) == 0x20, "Intersect.surface_ve
 SR_STATIC_ASSERT(offsetof(Intersect, face) == 0x30, "Intersect.face");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
-SR_STATIC_ASSERT(offsetof(Intersect, block) == 0x54, "Intersect.block");
+SR_STATIC_ASSERT(offsetof(Intersect, block_area) == 0x54, "Intersect.block_area");
+SR_STATIC_ASSERT(offsetof(Intersect, block) == 0x58, "Intersect.block");
 SR_STATIC_ASSERT(offsetof(Intersect, material) == 0x64, "Intersect.material");
 SR_STATIC_ASSERT(offsetof(Intersect, area_material) == 0x68, "Intersect.area_material");
+SR_STATIC_ASSERT(offsetof(Intersect, block_face) == 0x6c, "Intersect.block_face");
+SR_STATIC_ASSERT(offsetof(Intersect, block_word) == 0x70, "Intersect.block_word");
+SR_STATIC_ASSERT(offsetof(Intersect, spec_face) == 0x74, "Intersect.spec_face");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
 SR_STATIC_ASSERT(offsetof(Intersect, face_u) == 0x7c, "Intersect.face_u");
 SR_STATIC_ASSERT(offsetof(Intersect, face_v) == 0x80, "Intersect.face_v");
