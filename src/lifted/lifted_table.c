@@ -279,7 +279,7 @@ void lf_3da50(void);
 void lf_3e070(void);
 void lf_40aa0(void);
 void lf_41550(void);
-void lf_41de0(void);
+void bondsimulation2(void);
 void lf_46c30(void);
 void lf_48ec0(void);
 void lf_49940(void);
@@ -597,7 +597,7 @@ const LfEntry lf_table[] = {
     { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
     { "sphereintersectarea", 0x40aa0, (void *)lf_40aa0, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "circleintersectarea", 0x41550, (void *)lf_41550, 7, LF_RET_INT, 4, "pppvppv", 0 },
-    { "bondsimulation2", 0x41de0, (void *)lf_41de0, 0, LF_RET_VOID, 4, "", 0 },
+    { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
     { "bulletsimulation", 0x48ec0, (void *)lf_48ec0, 0, LF_RET_VOID, 4, "", 0 },
     { "server_playermessage", 0x49940, (void *)lf_49940, 2, LF_RET_INT, 4, "vp", 0 },

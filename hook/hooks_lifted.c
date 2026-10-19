@@ -10601,12 +10601,12 @@ __declspec(naked) static void th_41550(void)
 }
 static uint8_t expect_41550[8] = { 0x83, 0xec, 0x78, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_41de0(void);
+void __cdecl bondsimulation2(void);
 static void (__cdecl *orig_41de0)(void);
 static SvVerify v_41de0 = { "bondsimulation2", -1 };
 static void __cdecl hk_41de0(void)
 {
-    SV_HOOK_VOID(v_41de0, lf_41de0(), orig_41de0(), NULL);
+    SV_HOOK_VOID(v_41de0, bondsimulation2(), orig_41de0(), NULL);
 }
 __declspec(naked) static void th_41de0(void)
 {

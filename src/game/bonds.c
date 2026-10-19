@@ -2,119 +2,41 @@
  *
  * Each section has a profiler timer with its name. bondsetup prepares one BondOpt record for
  * each bond (setup_partpart and the others). bondsetupcopy copies the velocities into the work
- * arrays (setup_copy). The loop then does a number of solver passes over all the bonds, and the
- * end copies the velocities back. The parts from the loop on are not yet clean C.
+ * arrays (setup_copy). Then 32 solver passes go over the bonds: each bond adds its velocity
+ * change to dv and dw, and the end of the pass adds them to the velocities. The end copies
+ * the velocities back (copy_back).
  */
-#include "lift_support.h"
-#include "lift_os.h"
+#include "bonds.h"
 
-/* The type of the bond that pfVar33 points into (pfVar33 = &bond.normal.y, bond + 0x78).
- * An int load: as a float, the type is a denormal on the x87, and each test is slow. */
-#define BOND_KIND(p) (*(int *)((char *)(p) - 0x78))
+#include <intrin.h>
+#include <stdint.h>
 
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_00603dd0 (*(int * *)SR_VA(0x603dd0))
-#define g_numofstaticbonds (*(int *)SR_VA(0x14022d24))
-#define g_numofdynamicbonds (*(int *)SR_VA(0x20a5a30))
-#define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
-#define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
-#define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define DAT_00461dd4 (*(undefined4 *)SR_VA(0x461dd4))
-#define DAT_00461de0 (*(undefined4 *)SR_VA(0x461de0))
-#define DAT_00461de4 (*(undefined4 *)SR_VA(0x461de4))
-#define DAT_00461de8 (*(undefined4 *)SR_VA(0x461de8))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define DAT_00461df0 (*(undefined4 *)SR_VA(0x461df0))
-#define DAT_00461df4 (*(undefined4 *)SR_VA(0x461df4))
-#define DAT_00461df8 (*(undefined4 *)SR_VA(0x461df8))
-#define DAT_00461e04 (*(undefined4 *)SR_VA(0x461e04))
-#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
-#define DAT_00461e10 (*(undefined4 *)SR_VA(0x461e10))
-#define DAT_00461e14 (*(undefined4 *)SR_VA(0x461e14))
-#define DAT_00461e18 (*(undefined4 *)SR_VA(0x461e18))
-#define DAT_00461e20 (*(undefined4 *)SR_VA(0x461e20))
-#define DAT_00461e24 (*(undefined4 *)SR_VA(0x461e24))
-#define DAT_00461e28 (*(undefined4 *)SR_VA(0x461e28))
-#define DAT_00583dd0 (*(undefined4 *)SR_VA(0x583dd0))
-#define DAT_00583dd4 (*(undefined4 *)SR_VA(0x583dd4))
-#define DAT_00583dd8 (*(undefined4 *)SR_VA(0x583dd8))
-#define DAT_00583de0 (*(undefined4 *)SR_VA(0x583de0))
-#define DAT_00583de4 (*(undefined4 *)SR_VA(0x583de4))
-#define g_bondopt (*(BondOpt *)SR_VA(0xfcf7b80))
-#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
-#define DAT_00583de8 (*(undefined4 *)SR_VA(0x583de8))
-#define g_numofbonds (*(int *)SR_VA(0x17579a28))
-#define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
-#define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_FN(0x409600))
-#define stoptimer ((void (__cdecl *)(int))SR_FN(0x40b3f0))
-#define rotatevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bc50))
-#define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
-#define bond_partpart ((void (__cdecl *)(int))SR_FN(0x412f80))
-#define bond_bodybody ((void (__cdecl *)(int))SR_FN(0x4130d0))
-#define multiply3x3matrices ((void (__cdecl *)(float *, float *, float *))SR_FN(0x41d9e0))
-#define objectwheelsimulation2 ((void (__cdecl *)(void))SR_FN(0x422f90))
-#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_FN(0x427e80))
-#define objectenginesimulation2 ((void (__cdecl *)(void))SR_FN(0x4324c0))
-#define __security_check_cookie(x) ((void)0)
-#define _CIsqrt x87_sqrt
-#define auStack_e4 (*(undefined1 (*)[16])(lf_frame + 0x1c))
-#define local_d4 (*(float *)(lf_frame + 0x2c))
-#define local_d0 (*(float *)(lf_frame + 0x30))
-#define local_cc (*(float *)(lf_frame + 0x34))
-#define local_c8 (*(float *)(lf_frame + 0x38))
-#define local_c4 (*(float *)(lf_frame + 0x3c))
-#define local_c0 (*(int *)(lf_frame + 0x40))
-#define local_bc (*(int *)(lf_frame + 0x44))
-#define local_b8 (*(float *)(lf_frame + 0x48))
-#define local_b4 (*(float *)(lf_frame + 0x4c))
-#define local_b0 (*(float *)(lf_frame + 0x50))
-#define local_ac (*(float *)(lf_frame + 0x54))
-#define local_a8 (*(float *)(lf_frame + 0x58))
-#define local_a4 (*(float *)(lf_frame + 0x5c))
-#define local_a0 (*(int * *)(lf_frame + 0x60))
-#define local_9c (*(float * *)(lf_frame + 0x64))
-#define local_98 (*(float *)(lf_frame + 0x68))
-#define local_94 (*(float *)(lf_frame + 0x6c))
-#define local_90 (*(float *)(lf_frame + 0x70))
-#define local_8c (*(float *)(lf_frame + 0x74))
-#define local_88 (*(float * *)(lf_frame + 0x78))
-#define local_84 (*(int * *)(lf_frame + 0x7c))
-#define local_80 (*(float * *)(lf_frame + 0x80))
-#define local_7c (*(float *)(lf_frame + 0x84))
-#define local_78 (*(float *)(lf_frame + 0x88))
-#define local_74 (*(float *)(lf_frame + 0x8c))
-#define local_70 (*(float *)(lf_frame + 0x90))
-#define local_6c (*(float *)(lf_frame + 0x94))
-#define local_68 (*(float *)(lf_frame + 0x98))
-#define local_64 (*(float *)(lf_frame + 0x9c))
-#define local_60 (*(int * *)(lf_frame + 0xa0))
-#define local_5c (*(float *)(lf_frame + 0xa4))
-#define local_58 (*(float *)(lf_frame + 0xa8))
-#define local_54 (*(float *)(lf_frame + 0xac))
-#define local_50 (*(float * *)(lf_frame + 0xb0))
-#define local_4c (*(float *)(lf_frame + 0xb4))
-#define local_48 (*(float *)(lf_frame + 0xb8))
-#define local_44 (*(float *)(lf_frame + 0xbc))
-#define local_40 (*(float *)(lf_frame + 0xc0))
-#define local_3c (*(float *)(lf_frame + 0xc4))
-#define local_38 (*(float *)(lf_frame + 0xc8))
-#define local_34 (*(float *)(lf_frame + 0xcc))
-#define local_30 (*(float *)(lf_frame + 0xd0))
-#define local_2c (*(float *)(lf_frame + 0xd4))
-#define local_28 (*(float *)(lf_frame + 0xd8))
-#define local_24 (*(float *)(lf_frame + 0xdc))
-#define local_20 (*(float *)(lf_frame + 0xe0))
-#define local_1c (*(float *)(lf_frame + 0xe4))
-#define local_18 (*(float *)(lf_frame + 0xe8))
-#define local_14 (*(float *)(lf_frame + 0xec))
-#define local_10 (*(float *)(lf_frame + 0xf0))
-#define local_c (*(float *)(lf_frame + 0xf4))
-#define local_8 (*(float *)(lf_frame + 0xf8))
-#define local_4 (*(uint *)(lf_frame + 0xfc))
+#include "solver.h"
+#include "sr_math.h"
+#include "sr_runtime.h"
+#include "vectors.h"
+
+/* Game globals. */
+#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
+#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
+#define g_timer SR_AT(Timer, 0x14043a0)
+#define g_timerlist (*SR_AT(TimerList, 0x12a81c60))
+#define g_bondpass (*SR_AT(int, 0x203dd0))          /* the number of the solver pass; the wheels read it */
+#define g_numofstaticbonds (*SR_AT(int, 0x13c22d24)) /* the bonds before the contacts of this tick */
+#define g_numofdynamicbonds (*SR_AT(int, 0x1ca5a30)) /* the bonds with the contacts of the last tick */
+
+/* Game functions with no clean version yet: the calls go to the lifted C. */
+void __cdecl lf_0b3f0(int timer);
+void __cdecl lf_1d9e0(float *out, float *a, float *b);
+void __cdecl lf_22f90(void);
+long double __cdecl lf_27e80(float *v, float *normal, float friction);
+void __cdecl lf_324c0(void);
+#define stoptimer lf_0b3f0
+#define multiply3x3matrices lf_1d9e0
+#define objectwheelsimulation2 lf_22f90
+#define calculatefriction lf_27e80
+#define objectenginesimulation2 lf_324c0
+
 /* Give a profiler timer its name and clear its total. */
 static void nametimer(int timer, const char *name)
 {
@@ -129,7 +51,7 @@ static void nametimer(int timer, const char *name)
 
 static void starttimer(int timer)
 {
-  ulonglong now = rdtsc();
+  unsigned __int64 now = __rdtsc();
   g_timer[timer].start_lo = (int)now;
   g_timer[timer].start_hi = (int)(now >> 0x20);
 }
@@ -138,8 +60,8 @@ static void starttimer(int timer)
  * each side from the masses. */
 static void setup_partpart(const Bond *b, BondOpt *o)
 {
-  const Particle *pa = &g_particle[b->particle_a];
-  const Particle *pb = &g_particle[b->particle_b];
+  const Particle *pa = &sr_particles[b->particle_a];
+  const Particle *pb = &sr_particles[b->particle_b];
   vec3 d;
   float len, inv;
 
@@ -171,8 +93,8 @@ static void setup_partpart(const Bond *b, BondOpt *o)
  * (no longer than 0.125), and the share of each side, which goes into the bond. */
 static void setup_bodyitem(Bond *b, BondOpt *o)
 {
-  const Bone *bone = &g_human[b->owner].bones[b->bone_a];
-  const Item *it = &g_item[b->target];
+  const Bone *bone = &sr_humans[b->owner].bones[b->bone_a];
+  const Item *it = &sr_items[b->target];
   const vec3 la = b->local_a, lb = b->local_b;
   vec3 ra, rb, p, e;
   float len, f, k, inv, m_bone, m_item;
@@ -212,8 +134,8 @@ static void setup_bodyitem(Bond *b, BondOpt *o)
 /* bondsetup, type 8: a joint between two bones of a human. */
 static void setup_bodybody(const Bond *b, BondOpt *o)
 {
-  const Bone *ba = &g_human[b->owner].bones[b->bone_a];
-  const Bone *bb = &g_human[b->owner].bones[b->target];
+  const Bone *ba = &sr_humans[b->owner].bones[b->bone_a];
+  const Bone *bb = &sr_humans[b->owner].bones[b->target];
   const vec3 la = b->local_a, lb = b->local_b;
   vec3 ra, rb, p, e;
   float k, inv;
@@ -251,11 +173,12 @@ static void setup_bodybody(const Bond *b, BondOpt *o)
  * angles get a dead zone. The share of each side also has the strength of the muscle. */
 static void setup_bodyrotbody(const Bond *b, BondOpt *o)
 {
-  Human *h = &g_human[b->owner];
+  Human *h = &sr_humans[b->owner];
   int ka = b->bone_a, kb = b->target;
   const Bone *ba = &h->bones[ka];
   Bone *bb = &h->bones[kb];
-  float m[9], e[3], r[9];
+  float m[9];
+  vec3 e, r[3];
   float k, e0, e1, lo, hi, inv, sa, sb;
   int row, col;
 
@@ -284,9 +207,9 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   o->damping = k;
   /* For bones 3 to 8 of a living human, the direction of the last tick stays. */
   if (kb < 3 || 8 < kb || h->health < 1) {
-    geteulerangles2(e, m);
-    e0 = e[0];
-    e1 = e[1];
+    geteulerangles2(&e, (const vec3 *)m);
+    e0 = e.x;
+    e1 = e.y;
     if (h->health < 1) {
       lo = 0.0f;
       hi = 0.0f;
@@ -300,13 +223,13 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
         lo = 0.0f;
         hi = 0.7853981852531433f;
       }
-      if (lo <= e[0]) {
-        if (e[0] <= hi)
-          e[0] = 0.0f;
+      if (lo <= e.x) {
+        if (e.x <= hi)
+          e.x = 0.0f;
         else
-          e[0] = (float)(e[0] - hi);
+          e.x = (float)(e.x - hi);
       } else {
-        e[0] = (float)(e[0] - lo);
+        e.x = (float)(e.x - lo);
       }
       lo = -0.7853981852531433f;
       hi = 0.7853981852531433f;
@@ -322,53 +245,53 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
         lo = 0.0f;
         hi = 1.3744467496871948f;
       }
-      if (lo <= e[1]) {
-        if (e[1] <= hi)
-          e[1] = 0.0f;
+      if (lo <= e.y) {
+        if (e.y <= hi)
+          e.y = 0.0f;
         else
-          e[1] = e[1] - hi;
+          e.y = e.y - hi;
       } else {
-        e[1] = e[1] - lo;
+        e.y = e.y - lo;
       }
-      e[0] = e[0] * 0.125f;
-      e[1] = (float)(e[1] * 0.125);
-      e[2] = (float)(e[2] * 0.125);
+      e.x = e.x * 0.125f;
+      e.y = (float)(e.y * 0.125);
+      e.z = (float)(e.z * 0.125);
       o->damping = (float)(b->damping * 0.5);
     }
-    if (e[0] < -0.7853981852531433)
-      e[0] = -0.7853981852531433f;
-    if (0.7853981852531433 < e[0])
-      e[0] = 0.7853981852531433f;
-    if (e[1] < -0.7853981852531433)
-      e[1] = -0.7853981852531433f;
-    if (0.7853981852531433 < e[1])
-      e[1] = 0.7853981852531433f;
-    if (e[2] < -0.7853981852531433)
-      e[2] = -0.7853981852531433f;
-    if (0.7853981852531433 < e[2])
-      e[2] = 0.7853981852531433f;
+    if (e.x < -0.7853981852531433)
+      e.x = -0.7853981852531433f;
+    if (0.7853981852531433 < e.x)
+      e.x = 0.7853981852531433f;
+    if (e.y < -0.7853981852531433)
+      e.y = -0.7853981852531433f;
+    if (0.7853981852531433 < e.y)
+      e.y = 0.7853981852531433f;
+    if (e.z < -0.7853981852531433)
+      e.z = -0.7853981852531433f;
+    if (0.7853981852531433 < e.z)
+      e.z = 0.7853981852531433f;
     /* Each angle turns around one axis of bone a. The axis points into r, the matrix that
      * rotateorientation turns, so each turn uses the axis that the turn before it moved. */
-    r[0] = ba->rot[0].x;
-    r[1] = ba->rot[0].y;
-    r[2] = ba->rot[0].z;
-    r[3] = ba->rot[1].x;
-    r[4] = ba->rot[1].y;
-    r[5] = ba->rot[1].z;
-    r[6] = ba->rot[2].x;
-    r[7] = ba->rot[2].y;
-    r[8] = ba->rot[2].z;
-    o->dir.x = (float)(r[6] * e[0]);
-    o->dir.y = (float)(r[7] * e[0]);
-    o->dir.z = (float)(e[0] * r[8]);
-    rotateorientation(r, &r[6], e0);
-    o->dir.x = (float)(o->dir.x + e[1] * r[0]);
-    o->dir.y = (float)(e[1] * r[1] + o->dir.y);
-    o->dir.z = (float)(e[1] * r[2] + o->dir.z);
-    rotateorientation(r, r, e1);
-    o->dir.x = (float)(e[2] * r[3] + o->dir.x);
-    o->dir.y = (float)(e[2] * r[4] + o->dir.y);
-    o->dir.z = (float)(e[2] * r[5] + o->dir.z);
+    r[0].x = ba->rot[0].x;
+    r[0].y = ba->rot[0].y;
+    r[0].z = ba->rot[0].z;
+    r[1].x = ba->rot[1].x;
+    r[1].y = ba->rot[1].y;
+    r[1].z = ba->rot[1].z;
+    r[2].x = ba->rot[2].x;
+    r[2].y = ba->rot[2].y;
+    r[2].z = ba->rot[2].z;
+    o->dir.x = (float)(r[2].x * e.x);
+    o->dir.y = (float)(r[2].y * e.x);
+    o->dir.z = (float)(e.x * r[2].z);
+    rotateorientation(r, &r[2], e0);
+    o->dir.x = (float)(o->dir.x + e.y * r[0].x);
+    o->dir.y = (float)(e.y * r[0].y + o->dir.y);
+    o->dir.z = (float)(e.y * r[0].z + o->dir.z);
+    rotateorientation(r, &r[0], e1);
+    o->dir.x = (float)(e.z * r[1].x + o->dir.x);
+    o->dir.y = (float)(e.z * r[1].y + o->dir.y);
+    o->dir.z = (float)(e.z * r[1].z + o->dir.z);
     k = b->stiffness;
   }
   o->dir.x = (float)(k * o->dir.x);
@@ -390,9 +313,6 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   stoptimer(g_timerlist.bondsetuphuman);
 }
 
-#define g_bondhuman (*(BondHuman (*)[512])SR_VA(0x461dd0))
-#define g_bondparticle (*(BondParticle (*)[16384])SR_VA(0x583dd0))
-#define g_bondopts (*(BondOpt (*)[16384])SR_VA(0xfcf7b80))
 
 /* bondsetupcopy: the solver works on copies. For each human with a body: the velocity, the
  * angular velocity and the axes of its 15 bones, and a mask of the bones that take part. For
@@ -403,8 +323,8 @@ static void setup_copy(void)
 
   starttimer(g_timerlist.bondsetupcopy);
   for (h = 0; h < 512; h++) {
-    const Human *hu = &g_human[h];
-    BondHuman *bh = &g_bondhuman[h];
+    const Human *hu = &sr_humans[h];
+    BondHuman *bh = &sr_bondhumans[h];
     bh->active = 0;
     if (hu->active == 0 || hu->has_physics == 0)
       continue;
@@ -426,16 +346,15 @@ static void setup_copy(void)
       w->axes[2].k = bone->axis_k[2];
     }
   }
-  n = g_area_sector.num_particles;
+  n = sr_numofparticles;
   for (i = 0; i < n; i++)
-    g_bondparticle[i].vel = g_particle[i].vel;
-  n = g_numofbonds;
+    sr_bondparticles[i].vel = sr_particles[i].vel;
+  n = sr_numofbonds;
   for (i = 0; i < n; i++)
-    g_bondopts[i].mode = (short)g_bond[i].mode;
+    sr_bondopt[i].mode = (short)sr_bonds[i].mode;
   stoptimer(g_timerlist.bondsetupcopy);
 }
 
-#define g_bondpass (*(int *)SR_VA(0x603dd0))
 
 /* bondloopcopy: the start of each solver pass. The pass number goes into a global (the wheels
  * use it), and each velocity change starts at 0: the particles, the items with physics, the
@@ -446,14 +365,14 @@ static void loop_clear(int pass)
 
   starttimer(g_timerlist.bondloopcopy);
   g_bondpass = pass;
-  n = g_area_sector.num_particles;
+  n = sr_numofparticles;
   for (i = 0; i < n; i++) {
-    g_bondparticle[i].dv.x = 0.0f;
-    g_bondparticle[i].dv.y = 0.0f;
-    g_bondparticle[i].dv.z = 0.0f;
+    sr_bondparticles[i].dv.x = 0.0f;
+    sr_bondparticles[i].dv.y = 0.0f;
+    sr_bondparticles[i].dv.z = 0.0f;
   }
   for (i = 0; i < 1024; i++) {
-    Item *it = &g_item[i];
+    Item *it = &sr_items[i];
     if (it->active == 0 || it->has_physics == 0)
       continue;
     it->dv.x = 0.0f;
@@ -464,7 +383,7 @@ static void loop_clear(int pass)
     it->dw.z = 0.0f;
   }
   for (i = 0; i < 1024; i++) {
-    Object *o = &g_object[i];
+    Object *o = &sr_objects[i];
     if (o->active == 0)
       continue;
     for (k = 0; k < o->num_wheel_bodies; k++) {
@@ -478,7 +397,7 @@ static void loop_clear(int pass)
     }
   }
   for (i = 0; i < 512; i++) {
-    BondHuman *bh = &g_bondhuman[i];
+    BondHuman *bh = &sr_bondhumans[i];
     if (bh->active == 0)
       continue;
     for (k = 0; k < 15; k++) {
@@ -522,14 +441,14 @@ static void clamp_length(vec3 *v, float len, float limit)
  * it has now. The sum, with a limit, goes into BondBone.ang_momentum. */
 static void loop_balance(void)
 {
-  const vec3 up = *(const vec3 *)g_yaxis;
+  const vec3 up = g_yaxis;
   int h;
 
   starttimer(g_timerlist.bondhuman);
   for (h = 0; h < 512; h++) {
-    const Human *hu = &g_human[h];
+    const Human *hu = &sr_humans[h];
     const vec3 *r1 = &hu->bones[0].rot[1], *r2 = &hu->bones[0].rot[2];
-    BondBone *w = &g_bondhuman[h].bones[0];
+    BondBone *w = &sr_bondhumans[h].bones[0];
     vec3 a, face, t;
     float limit, len, s;
 
@@ -545,8 +464,8 @@ static void loop_balance(void)
     len = (float)x87_sqrt((double)(float)(a.y * a.y + a.x * a.x + a.z * a.z));
     clamp_length(&a, len, limit);
     /* The turn toward the facing direction, around the vertical only. */
-    face = *(const vec3 *)g_zaxis;
-    rotatevector(&face.x, g_yaxis, hu->axis);
+    face = g_zaxis;
+    rotatevector(&face, &g_yaxis, hu->axis);
     t.x = 0.0f;
     t.y = (float)((float)(r2->x * face.z - r2->z * face.x) * 0.125);
     t.z = 0.0f;
@@ -593,7 +512,7 @@ static void loop_balance(void)
 /* Type 1: a particle against a fixed surface that moves with surface_vel. */
 static void contact_level(const Bond *b)
 {
-  BondParticle *pa = &g_bondparticle[b->particle_a];
+  BondParticle *pa = &sr_bondparticles[b->particle_a];
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
   vec3 v;
@@ -613,8 +532,8 @@ static void contact_level(const Bond *b)
  * masses. */
 static void contact_particle(const Bond *b)
 {
-  BondParticle *pa = &g_bondparticle[b->particle_a], *pb = &g_bondparticle[b->particle_b];
-  const Particle *ma = &g_particle[b->particle_a], *mb = &g_particle[b->particle_b];
+  BondParticle *pa = &sr_bondparticles[b->particle_a], *pb = &sr_bondparticles[b->particle_b];
+  const Particle *ma = &sr_particles[b->particle_a], *mb = &sr_particles[b->particle_b];
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
   float len, inv, f;
@@ -651,9 +570,9 @@ static void contact_particle(const Bond *b)
 /* The change of the 3 particles of a hit triangle, each in the ratio of its weight. */
 static void push_triangle(const Bond *b, float g, const vec3 *v)
 {
-  BondParticle *pb = &g_bondparticle[b->particle_b];
-  BondParticle *pc = &g_bondparticle[b->particle_c];
-  BondParticle *pd = &g_bondparticle[b->particle_d];
+  BondParticle *pb = &sr_bondparticles[b->particle_b];
+  BondParticle *pc = &sr_bondparticles[b->particle_c];
+  BondParticle *pd = &sr_bondparticles[b->particle_d];
   float f;
 
   f = (float)(b->weights[0] * g);
@@ -673,17 +592,17 @@ static void push_triangle(const Bond *b, float g, const vec3 *v)
 /* The mass of the hit point of a triangle: the masses of its 3 particles with the weights. */
 static float triangle_mass(const Bond *b)
 {
-  return (float)(g_particle[b->particle_d].mass * b->weights[2] +
-                 (g_particle[b->particle_c].mass * b->weights[1] + g_particle[b->particle_b].mass * b->weights[0]));
+  return (float)(sr_particles[b->particle_d].mass * b->weights[2] +
+                 (sr_particles[b->particle_c].mass * b->weights[1] + sr_particles[b->particle_b].mass * b->weights[0]));
 }
 
 /* Type 3: particle a against a triangle of another object (particles b, c and d). */
 static void contact_triangle(const Bond *b)
 {
-  BondParticle *pa = &g_bondparticle[b->particle_a];
-  const BondParticle *pb = &g_bondparticle[b->particle_b];
-  const BondParticle *pc = &g_bondparticle[b->particle_c];
-  const BondParticle *pd = &g_bondparticle[b->particle_d];
+  BondParticle *pa = &sr_bondparticles[b->particle_a];
+  const BondParticle *pb = &sr_bondparticles[b->particle_b];
+  const BondParticle *pc = &sr_bondparticles[b->particle_c];
+  const BondParticle *pd = &sr_bondparticles[b->particle_d];
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   float wb = (float)(b->weights[0] * b->damping), wc = (float)(b->weights[1] * b->damping);
@@ -702,7 +621,7 @@ static void contact_triangle(const Bond *b)
   v.x = inv * v.x;
   v.y = (float)(v.y * inv);
   v.z = (float)(inv * v.z);
-  ma = g_particle[b->particle_a].mass;
+  ma = sr_particles[b->particle_a].mass;
   mt = triangle_mass(b);
   s = (float)((float)len / (mt + ma));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
@@ -718,10 +637,10 @@ static void contact_triangle(const Bond *b)
 /* Type 4: a bone of a human against a triangle of an object. */
 static void contact_bone_triangle(const Bond *b)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
-  const BondParticle *pb = &g_bondparticle[b->particle_b];
-  const BondParticle *pc = &g_bondparticle[b->particle_c];
-  const BondParticle *pd = &g_bondparticle[b->particle_d];
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
+  const BondParticle *pb = &sr_bondparticles[b->particle_b];
+  const BondParticle *pc = &sr_bondparticles[b->particle_c];
+  const BondParticle *pd = &sr_bondparticles[b->particle_d];
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   float wb = (float)(b->weights[0] * b->damping), wc = (float)(b->weights[1] * b->damping);
@@ -744,7 +663,7 @@ static void contact_bone_triangle(const Bond *b)
     v.y = (float)(v.y * inv);
     v.z = inv * v.z;
   }
-  mb = g_human[b->owner].bones[b->bone_a].mass;
+  mb = sr_humans[b->owner].bones[b->bone_a].mass;
   mt = triangle_mass(b);
   len = (float)(len / (mt + mb));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
@@ -762,7 +681,7 @@ static void contact_bone_triangle(const Bond *b)
  * and the part of the push along roll_dir slows the spin. */
 static void contact_wheel(const Bond *b)
 {
-  Wheel *w = &g_object[b->owner].wheels[b->bone_a];
+  Wheel *w = &sr_objects[b->owner].wheels[b->bone_a];
   const vec3 n = b->normal, rd = b->roll_dir;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   float roll = (float)(w->spin * w->radius * b->damping);
@@ -774,7 +693,7 @@ static void contact_wheel(const Bond *b)
   v.z = (float)(roll * rd.z + (float)(nd * w->vel.z + (float)(k * n.z)));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
-  w->slip = (float)(calculatefriction(&v.x, (float *)&b->normal, b->friction) + (float10)w->slip);
+  w->slip = (float)(calculatefriction(&v.x, (float *)&b->normal, b->friction) + (long double)w->slip);
   w->dv.x = (float)(v.x + w->dv.x);
   w->dv.y = (float)(v.y + w->dv.y);
   w->dv.z = (float)(v.z + w->dv.z);
@@ -786,7 +705,7 @@ static void contact_wheel(const Bond *b)
  * its velocity has the turn of the bone in it, and the push also turns the bone. */
 static void contact_bone_level(const Bond *b)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   const vec3 n = b->normal, r = b->arm;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   vec3 p, v, t;
@@ -816,8 +735,8 @@ static void contact_bone_level(const Bond *b)
  * Each bone gets its share. */
 static void bond_bodyrotbody(const BondOpt *o)
 {
-  BondHuman *h = &g_bondhuman[(ushort)o->a];
-  BondBone *x = &h->bones[(ushort)o->b], *y = &h->bones[(ushort)o->c];
+  BondHuman *h = &sr_bondhumans[(uint16_t)o->a];
+  BondBone *x = &h->bones[(uint16_t)o->b], *y = &h->bones[(uint16_t)o->c];
   float d = o->damping, nd = -o->damping, ns;
   vec3 v;
 
@@ -838,8 +757,8 @@ static void bond_bodyrotbody(const BondOpt *o)
  * weights[0] and to the item with weights[1], and each also turns around its point. */
 static void bond_bodyitem(const Bond *b, const BondOpt *o)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
-  Item *it = &g_item[b->target];
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
+  Item *it = &sr_items[b->target];
   const vec3 ra = o->arm_a, rb = o->arm_b;
   float d = b->damping, nd = -b->damping;
   float sb = b->weights[0], si = b->weights[1], ns = -sb;
@@ -872,8 +791,8 @@ static void bond_bodyitem(const Bond *b, const BondOpt *o)
  * between the bone and the item. arm_a.x holds the gain: the smallest inertia of the item. */
 static void bond_itemrot(const Bond *b, const BondOpt *o)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
-  Item *it = &g_item[b->target];
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
+  Item *it = &sr_items[b->target];
   float d = o->damping, nd = -o->damping, g = o->arm_a.x, ns;
   vec3 v;
 
@@ -912,9 +831,9 @@ static float unit_or_zero(vec3 *v)
  * the change from the bone masses. */
 static void contact_bone_bone(const Bond *b)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
-  BondBone *y = &g_bondhuman[b->target].bones[b->bone_b];
-  float mx = g_human[b->owner].bones[b->bone_a].mass, my = g_human[b->target].bones[b->bone_b].mass;
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
+  BondBone *y = &sr_bondhumans[b->target].bones[b->bone_b];
+  float mx = sr_humans[b->owner].bones[b->bone_a].mass, my = sr_humans[b->target].bones[b->bone_b].mass;
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
   float s, f;
@@ -941,9 +860,9 @@ static void contact_bone_bone(const Bond *b)
  * local_b on the item, so the push also turns both. */
 static void contact_bone_item(const Bond *b)
 {
-  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
-  Item *it = &g_item[b->target];
-  float mx = g_human[b->owner].bones[b->bone_a].mass;
+  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
+  Item *it = &sr_items[b->target];
+  float mx = sr_humans[b->owner].bones[b->bone_a].mass;
   const vec3 n = b->normal, ra = b->local_a, rb = b->local_b;
   float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
   float s, f;
@@ -989,7 +908,7 @@ static void contact_bone_item(const Bond *b)
 /* Type 15: a wheel body of an object against a fixed surface, at the point local_a. */
 static void contact_wheelbody(const Bond *b)
 {
-  WheelBody *wb = &g_object[b->owner].wheel_bodies[b->bone_a];
+  WheelBody *wb = &sr_objects[b->owner].wheel_bodies[b->bone_a];
   const vec3 n = b->normal, r = b->local_a;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   vec3 p, v, t;
@@ -1017,8 +936,8 @@ static void contact_wheelbody(const Bond *b)
 /* The end of each pass: each particle takes its velocity change. */
 static void apply_particles(void)
 {
-  BondParticle *p = &g_bondparticle[0];
-  int i, n = g_area_sector.num_particles;
+  BondParticle *p = &sr_bondparticles[0];
+  int i, n = sr_numofparticles;
 
   for (i = 0; i < n; i++, p++) {
     p->vel.x = (float)(p->dv.x + p->vel.x);
@@ -1035,15 +954,15 @@ static void apply_bones(void)
   BondHuman *h;
   BondBone *x;
   const BondAxis *a;
-  uint bit;
+  unsigned bit;
   float f;
   int i;
 
-  for (h = &g_bondhuman[0]; h < &g_bondhuman[512]; h++) {
+  for (h = &sr_bondhumans[0]; h < &sr_bondhumans[512]; h++) {
     if (h->active == 0)
       continue;
     for (i = 0, bit = 1; i < 15; i++, bit <<= 1) {
-      if (((uint)h->mask & bit) == 0)
+      if (((unsigned)h->mask & bit) == 0)
         continue;
       x = &h->bones[i];
       a = x->axes;
@@ -1080,7 +999,7 @@ static void apply_items(void)
   const vec3 *r;
   float f;
 
-  for (it = &g_item[0]; it < &g_item[1024]; it++) {
+  for (it = &sr_items[0]; it < &sr_items[1024]; it++) {
     if (it->active == 0 || it->has_physics == 0)
       continue;
     r = it->rot;
@@ -1120,7 +1039,7 @@ static void apply_wheelbodies(void)
   float f;
   int i;
 
-  for (o = &g_object[0]; o < &g_object[1024]; o++) {
+  for (o = &sr_objects[0]; o < &sr_objects[1024]; o++) {
     if (o->active == 0)
       continue;
     for (i = 0; i < o->num_wheel_bodies; i++) {
@@ -1159,15 +1078,15 @@ static void apply_wheelbodies(void)
 static void copy_back(void)
 {
   Human *h;
-  int i, j, n = g_area_sector.num_particles;
+  int i, j, n = sr_numofparticles;
 
   for (i = 0; i < n; i++)
-    g_particle[i].vel = g_bondparticle[i].vel;
-  for (i = 0, h = &g_human[0]; i < 512; i++, h++) {
+    sr_particles[i].vel = sr_bondparticles[i].vel;
+  for (i = 0, h = &sr_humans[0]; i < 512; i++, h++) {
     if (h->active == 0 || h->has_physics == 0)
       continue;
     for (j = 0; j < 15; j++) {
-      const BondBone *x = &g_bondhuman[i].bones[j];
+      const BondBone *x = &sr_bondhumans[i].bones[j];
       h->bones[j].vel = x->vel;
       h->bones[j].ang_momentum = x->ang_momentum;
       h->bones[j].w = x->w;
@@ -1175,106 +1094,11 @@ static void copy_back(void)
   }
 }
 
-void __cdecl lf_41de0(void)
-
+void bondsimulation2(void)
 {
-  __declspec(align(16)) uchar lf_frame[0x100];
-  vec3 *pvVar1;
-  lf_m128 auVar2;
-  lf_m128 auVar3;
-  lf_m128 auVar4;
-  float fVar5;
-  int kind_copy;
-  float fVar6;
-  float fVar7;
-  float fVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  char cVar12;
-  undefined8 uVar13;
-  float *pfVar14;
-  char *pcVar15;
-  int iVar16;
-  int iVar17;
-  int *piVar18;
-  undefined4 *puVar19;
-  uint *puVar20;
-  float *pfVar21;
-  int *piVar22;
-  int iVar23;
-  short *psVar24;
-  uint uVar25;
-  int *piVar26;
-  uint *puVar27;
-  uint uVar28;
-  int iVar29;
-  int iVar30;
-  uint *puVar31;
-  uint uVar32;
-  float *pfVar33;
-  int *piVar34;
-  float10 fVar35;
-  lf_m128 auVar36;
-  lf_m128 auVar37;
-  lf_m128 auVar38;
-  double dVar39;
+  int i, pass, type;
+  unsigned mode;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)auStack_e4;
   nametimer(g_timerlist.bondsim, "bondsim");
   nametimer(g_timerlist.bondtest, "bondtest");
   nametimer(g_timerlist.bondsetup, "bondsetup");
@@ -1291,103 +1115,82 @@ void __cdecl lf_41de0(void)
   nametimer(g_timerlist.bondbodylevel, "bondbodylevel");
   starttimer(g_timerlist.bondsim);
   starttimer(g_timerlist.bondsetup);
-  local_c0 = 0;
-  if (0 < g_numofbonds) {
-    local_a0 = &g_bond[0].particle_a;
-    pfVar21 = &g_bondopt.dir.y;
-    do {
-      piVar18 = local_a0;
-      if (local_a0[-2] < 0x100) {
-        if (((Bond *)(local_a0 + -5))->type == 0) {
-          setup_partpart((Bond *)(local_a0 + -5), (BondOpt *)(pfVar21 + -3));
-        }
-        if (((Bond *)(piVar18 + -5))->type == 10) {
-          setup_bodyitem((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
-        }
-        if (((Bond *)(piVar18 + -5))->type == 8) {
-          setup_bodybody((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
-        }
-        if (((Bond *)(piVar18 + -5))->type == 9) {
-          setup_bodyrotbody((Bond *)(piVar18 + -5), (BondOpt *)(pfVar21 + -3));
-        }
-      }
-      local_c0 = local_c0 + 1;
-      local_a0 = piVar18 + 0x3b;
-      pfVar21 = pfVar21 + 0x10;
-    } while (local_c0 < g_numofbonds);
+  for (i = 0; i < sr_numofbonds; i++) {
+    Bond *b = &sr_bonds[i];
+    BondOpt *o = &sr_bondopt[i];
+    if (b->mode >= 0x100)
+      continue;
+    if (b->type == 0)
+      setup_partpart(b, o);
+    if (b->type == 10)
+      setup_bodyitem(b, o);
+    if (b->type == 8)
+      setup_bodybody(b, o);
+    if (b->type == 9)
+      setup_bodyrotbody(b, o);
   }
   stoptimer(g_timerlist.bondsetup);
   setup_copy();
-  local_60 = (int *)0x0;
-  do {
-    piVar18 = local_60;
-    loop_clear((int)local_60);
+  for (pass = 0; pass < 32; pass++) {
+    loop_clear(pass);
     loop_balance();
     starttimer(g_timerlist.bondwheelsim);
     objectwheelsimulation2();
     stoptimer(g_timerlist.bondwheelsim);
-    local_c0 = 0;
-    if (0 < g_numofbonds) {
-      pfVar33 = &g_bond[0].normal.y;
-      pfVar21 = &g_bondopt.arm_a.z;
-      do {
-        if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
-            (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) {
-          if (BOND_KIND(pfVar33) == 0x0U) {
-            starttimer(g_timerlist.bondpartpart);
-            bond_partpart(local_c0);
-            stoptimer(g_timerlist.bondpartpart);
-          }
-          if (BOND_KIND(pfVar33) == 0x1U)
-            contact_level((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0x2U)
-            contact_particle((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0x3U)
-            contact_triangle((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0x4U)
-            contact_bone_triangle((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0x5U) {
-            starttimer(g_timerlist.bondwheelcollevel);
-            contact_wheel((Bond *)((char *)pfVar33 - 0x78));
-            stoptimer(g_timerlist.bondwheelcollevel);
-          }
-          if (BOND_KIND(pfVar33) == 0x7U) {
-            starttimer(g_timerlist.bondbodylevel);
-            contact_bone_level((Bond *)((char *)pfVar33 - 0x78));
-            stoptimer(g_timerlist.bondbodylevel);
-          }
-          if (BOND_KIND(pfVar33) == 0x8U) {
-            starttimer(g_timerlist.bondbodybody);
-            bond_bodybody(local_c0);
-            stoptimer(g_timerlist.bondbodybody);
-          }
-          if (BOND_KIND(pfVar33) == 0x9U) {
-            starttimer(g_timerlist.bondbodyrotbody);
-            bond_bodyrotbody((BondOpt *)(pfVar21 - 8));
-            stoptimer(g_timerlist.bondbodyrotbody);
-          }
-          if (BOND_KIND(pfVar33) == 0xaU) {
-            starttimer(g_timerlist.bondbodyitem);
-            bond_bodyitem((Bond *)((char *)pfVar33 - 0x78), (BondOpt *)(pfVar21 - 8));
-            stoptimer(g_timerlist.bondbodyitem);
-          }
-          /* One read of the type for the next two tests. An int: as a float it is a denormal
-           * on the x87. */
-          kind_copy = BOND_KIND(pfVar33);
-          if (kind_copy == 0xb)
-            bond_itemrot((Bond *)((char *)pfVar33 - 0x78), (BondOpt *)(pfVar21 - 8));
-          if (kind_copy == 0xd)
-            contact_bone_bone((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0xeU)
-            contact_bone_item((Bond *)((char *)pfVar33 - 0x78));
-          if (BOND_KIND(pfVar33) == 0xfU)
-            contact_wheelbody((Bond *)((char *)pfVar33 - 0x78));
-        }
-        local_c0 = local_c0 + 1;
-        pfVar21 = pfVar21 + 0x10;
-        pfVar33 = pfVar33 + 0x3b;
-        piVar18 = local_60;
-      } while (local_c0 < g_numofbonds);
+    for (i = 0; i < sr_numofbonds; i++) {
+      Bond *b = &sr_bonds[i];
+      BondOpt *o = &sr_bondopt[i];
+      /* A bond takes part in the passes whose number has all the bits of its mode. */
+      mode = (uint16_t)o->mode;
+      if (((unsigned)pass & mode) != mode)
+        continue;
+      type = b->type;
+      if (type == 0) {
+        starttimer(g_timerlist.bondpartpart);
+        bond_partpart(i);
+        stoptimer(g_timerlist.bondpartpart);
+      }
+      if (type == 1)
+        contact_level(b);
+      if (type == 2)
+        contact_particle(b);
+      if (type == 3)
+        contact_triangle(b);
+      if (type == 4)
+        contact_bone_triangle(b);
+      if (type == 5) {
+        starttimer(g_timerlist.bondwheelcollevel);
+        contact_wheel(b);
+        stoptimer(g_timerlist.bondwheelcollevel);
+      }
+      if (type == 7) {
+        starttimer(g_timerlist.bondbodylevel);
+        contact_bone_level(b);
+        stoptimer(g_timerlist.bondbodylevel);
+      }
+      if (type == 8) {
+        starttimer(g_timerlist.bondbodybody);
+        bond_bodybody(i);
+        stoptimer(g_timerlist.bondbodybody);
+      }
+      if (type == 9) {
+        starttimer(g_timerlist.bondbodyrotbody);
+        bond_bodyrotbody(o);
+        stoptimer(g_timerlist.bondbodyrotbody);
+      }
+      if (type == 10) {
+        starttimer(g_timerlist.bondbodyitem);
+        bond_bodyitem(b, o);
+        stoptimer(g_timerlist.bondbodyitem);
+      }
+      if (type == 11)
+        bond_itemrot(b, o);
+      if (type == 13)
+        contact_bone_bone(b);
+      if (type == 14)
+        contact_bone_item(b);
+      if (type == 15)
+        contact_wheelbody(b);
     }
     starttimer(g_timerlist.bondwheelsim);
     objectenginesimulation2();
@@ -1400,118 +1203,12 @@ void __cdecl lf_41de0(void)
     apply_items();
     apply_wheelbodies();
     stoptimer(g_timerlist.bondloopcopy);
-    local_60 = (int *)((int)piVar18 + 1);
-  } while ((int)local_60 < 0x20);
+  }
   starttimer(g_timerlist.bondsetupcopy);
   copy_back();
   stoptimer(g_timerlist.bondsetupcopy);
   stoptimer(g_timerlist.bondsim);
   /* The contact bonds of this tick end here: the list goes back to the static bonds. */
-  g_numofdynamicbonds = g_numofbonds;
-  g_numofbonds = g_numofstaticbonds;
-  return;
+  g_numofdynamicbonds = sr_numofbonds;
+  sr_numofbonds = g_numofstaticbonds;
 }
-#undef g_human
-#undef g_sysinfo
-#undef DAT_00460d18
-#undef DAT_00603dd0
-#undef g_numofstaticbonds
-#undef g_numofdynamicbonds
-#undef g_yaxis
-#undef g_zaxis
-#undef g_timer
-#undef g_object
-#undef DAT_00461dd4
-#undef DAT_00461de0
-#undef DAT_00461de4
-#undef DAT_00461de8
-#undef g_item
-#undef DAT_00461df0
-#undef DAT_00461df4
-#undef DAT_00461df8
-#undef DAT_00461e04
-#undef g_particle
-#undef DAT_00461e10
-#undef DAT_00461e14
-#undef DAT_00461e18
-#undef DAT_00461e20
-#undef DAT_00461e24
-#undef DAT_00461e28
-#undef DAT_00583dd0
-#undef DAT_00583dd4
-#undef DAT_00583dd8
-#undef DAT_00583de0
-#undef DAT_00583de4
-#undef g_bondopt
-#undef g_timerlist
-#undef DAT_00583de8
-#undef g_numofbonds
-#undef g_bond
-#undef g_area_sector
-#undef geteulerangles2
-#undef stoptimer
-#undef rotatevector
-#undef rotateorientation
-#undef bond_partpart
-#undef bond_bodybody
-#undef multiply3x3matrices
-#undef objectwheelsimulation2
-#undef calculatefriction
-#undef objectenginesimulation2
-#undef __security_check_cookie
-#undef _CIsqrt
-#undef auStack_e4
-#undef local_d4
-#undef local_d0
-#undef local_cc
-#undef local_c8
-#undef local_c4
-#undef local_c0
-#undef local_bc
-#undef local_b8
-#undef local_b4
-#undef local_b0
-#undef local_ac
-#undef local_a8
-#undef local_a4
-#undef local_a0
-#undef local_9c
-#undef local_98
-#undef local_94
-#undef local_90
-#undef local_8c
-#undef local_88
-#undef local_84
-#undef local_80
-#undef local_7c
-#undef local_78
-#undef local_74
-#undef local_70
-#undef local_6c
-#undef local_68
-#undef local_64
-#undef local_60
-#undef local_5c
-#undef local_58
-#undef local_54
-#undef local_50
-#undef local_4c
-#undef local_48
-#undef local_44
-#undef local_40
-#undef local_3c
-#undef local_38
-#undef local_34
-#undef local_30
-#undef local_2c
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
