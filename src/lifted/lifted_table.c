@@ -221,7 +221,7 @@ void lf_24f60(void);
 void lineintersectobject(void);
 void lf_25e70(void);
 void lf_26bc0(void);
-void lf_26db0(void);
+void lineintersecttrackrail(void);
 void lf_26f90(void);
 void lf_272b0(void);
 void createparticle(void);
@@ -247,7 +247,7 @@ void lf_2cda0(void);
 void lf_2d2d0(void);
 void lf_2d7f0(void);
 void lf_2daf0(void);
-void lf_2dfc0(void);
+void sphereintersectcityobjecttype(void);
 void lf_2e310(void);
 void lf_2efd0(void);
 void lf_2f090(void);
@@ -539,7 +539,7 @@ const LfEntry lf_table[] = {
     { "lineintersectobject", 0x257a0, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0x26bc0, (void *)lf_26bc0, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "lineintersecttrackrail", 0x26db0, (void *)lf_26db0, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersecttrackrail", 0x26db0, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0x26f90, (void *)lf_26f90, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_car", 0x272b0, (void *)lf_272b0, 1, LF_RET_VOID, 4, "v", 0 },
     { "createparticle", 0x278c0, (void *)createparticle, 5, LF_RET_INT, 4, "vppvv", 0 },
@@ -565,7 +565,7 @@ const LfEntry lf_table[] = {
     { "sphereintersectspecblock", 0x2d2d0, (void *)lf_2d2d0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "circleintersectnormalblock", 0x2d7f0, (void *)lf_2d7f0, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
     { "circleintersectspecblock", 0x2daf0, (void *)lf_2daf0, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
-    { "sphereintersectcityobjecttype", 0x2dfc0, (void *)lf_2dfc0, 8, LF_RET_INT, 4, "pppvpppv", 0 },
+    { "sphereintersectcityobjecttype", 0x2dfc0, (void *)sphereintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "clientrecv", 0x2e310, (void *)lf_2e310, 0, LF_RET_VOID, 4, "", 1 },
     { "packpositiondelta", 0x2efd0, (void *)lf_2efd0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "unpackpositiondelta", 0x2f090, (void *)lf_2f090, 4, LF_RET_VOID, 4, "pvvv", 0 },

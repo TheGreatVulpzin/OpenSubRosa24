@@ -539,3 +539,92 @@ int circleintersectlandscape(float *pos, float *rot, float radius)
     }
     return best < 65536.0 ? 1 : 0;
 }
+
+#define g_track SR_AT(TrackPiece, 0x2597efc0)
+
+/* The line from -> to against the rail triangles of track piece k (triangle 14 on), when from
+ * is within 64 of its center on each axis. fraction gets the part of the line before the
+ * nearest hit. */
+int lineintersecttrackrail(float *from, float *to, int k)
+{
+    const TrackPiece *tp = &g_track[k];
+    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
+    vec3 a, b, c, normal, hit;
+    float t;
+    int i, n;
+
+    if (!(fabs((float)(s->x - tp->pos.x)) <= 64.0 && fabs((float)(s->z - tp->pos.z)) <= 64.0 &&
+          fabs((float)(s->y - tp->pos.y)) <= 64.0))
+        return 0;
+    g_intersect.fraction = 1.0f;
+    n = tp->num_tris;
+    if (!(14 < n))
+        return 0;
+    for (i = 14; i < n; i++) {
+        a = tp->verts[tp->tris[i][0]];
+        b = tp->verts[tp->tris[i][1]];
+        c = tp->verts[tp->tris[i][2]];
+        generatetrinormal(&normal, &a, &b, &c);
+        if (lineintersecttriangle(&hit, &normal, &t, s, e, &a, &b, &c) != 0 && t < g_intersect.fraction) {
+            memcpy(g_intersect.pos, &hit, sizeof g_intersect.pos);
+            memcpy(g_intersect.normal, &normal, sizeof g_intersect.normal);
+            g_intersect.fraction = t;
+        }
+    }
+    return g_intersect.fraction < 1.0 ? 1 : 0;
+}
+
+#define g_cityobjecttypes SR_AT(CityObjectTypeRec, 0xf02e500)
+
+/* A sphere (center, radius r) against the mesh of city object type `type`, turned by rot and
+ * placed at pos. hit, normal and *dist get the nearest hit. A quad tests its second triangle
+ * with the normal of the first. */
+int sphereintersectcityobjecttype(vec3 *hit, vec3 *normal, float *dist, int type, const vec3 *pos, const vec3 rot[3],
+                                  const vec3 *center, float r)
+{
+    const CityObjectTypeRec *ct = &g_cityobjecttypes[type];
+    const CityFace *face;
+    vec3 a, b, c, d, n, h;
+    float rad = ct->radius, t;
+    int f;
+
+    if (!(pos->x - rad <= r + center->x && pos->y - rad <= center->y + r && pos->z - rad <= center->z + r &&
+          center->x - r <= pos->x + rad && center->y - r <= rad + pos->y && center->z - r <= pos->z + rad))
+        return 0;
+    *dist = 65536.0f;
+    if (!(0 < ct->num_faces))
+        return 0;
+    for (f = 0; f < ct->num_faces; f++) {
+        face = &ct->faces[f];
+        projectvector(&a, &ct->verts[face->verts[0]], rot);
+        projectvector(&b, &ct->verts[face->verts[1]], rot);
+        projectvector(&c, &ct->verts[face->verts[2]], rot);
+        generatetrinormal(&n, &a, &b, &c);
+        a.x = (float)(pos->x + a.x);
+        a.y = (float)(a.y + pos->y);
+        a.z = (float)(pos->z + a.z);
+        b.x = (float)(pos->x + b.x);
+        b.y = (float)(b.y + pos->y);
+        b.z = (float)(pos->z + b.z);
+        c.x = (float)(pos->x + c.x);
+        c.y = (float)(c.y + pos->y);
+        c.z = (float)(pos->z + c.z);
+        if (face->corners == 4) {
+            projectvector(&d, &ct->verts[face->verts[3]], rot);
+            d.x = (float)(pos->x + d.x);
+            d.y = (float)(d.y + pos->y);
+            d.z = (float)(pos->z + d.z);
+        }
+        if (sphereintersecttriangle(&h, &n, &t, center, r, &a, &b, &c) != 0 && t < *dist) {
+            *hit = h;
+            *normal = n;
+            *dist = t;
+        }
+        if (face->corners == 4 && sphereintersecttriangle(&h, &n, &t, center, r, &a, &c, &d) != 0 && t < *dist) {
+            *hit = h;
+            *normal = n;
+            *dist = t;
+        }
+    }
+    return *dist < 65536.0 ? 1 : 0;
+}

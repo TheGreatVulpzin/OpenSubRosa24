@@ -86,7 +86,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -212,6 +212,35 @@ typedef union ObjectFace { struct {
     int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
 }; uint8_t lf_raw[0x40]; } ObjectFace;
 
+/* A piece of the track (the rails): the global track holds 4096 records of 0x578 bytes. */
+typedef union TrackPiece { struct {
+    int unk_00;         /* +0x00 createtrack, lineintersecttrack */
+    vec3 pos;           /* +0x04 the center: lineintersecttrackrail tests only a line that starts within 64 of it */
+    int unk_10;         /* +0x10 createtrack */
+    vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */
+    int num_tris;       /* +0x254 createtrack: the number of triangles */
+    int tris[66][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    uint8_t unk_570[8];
+}; uint8_t lf_raw[0x578]; } TrackPiece;
+
+/* A face of the mesh of a city object type (CityObjectTypeRec.faces). */
+typedef union CityFace { struct {
+    int corners;        /* +0x00 3 or 4 */
+    int verts[4];       /* +0x04 indexes into CityObjectTypeRec.verts */
+    int unk_14;         /* +0x14 */
+}; uint8_t lf_raw[0x18]; } CityFace;
+
+/* A city object type (an elevator, a door): the global cityobjecttype holds 256 records of
+ * 0x2418 bytes. The mesh is in the frame of the object. */
+typedef union CityObjectTypeRec { struct {
+    float radius;       /* +0x00 sphereintersectcityobjecttype: the half size of the box around the mesh */
+    float unk_04;       /* +0x04 */
+    vec3 verts[256];    /* +0x08 the corners of the faces */
+    int num_faces;      /* +0xc08 */
+    CityFace faces[256]; /* +0xc0c */
+    uint8_t unk_240c[0xc];
+}; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
+
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {
     vec3 pos;           /* +0x00 the world position (objectsimulation moves it with the particle) */
@@ -275,6 +304,11 @@ SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
 SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
 SR_STATIC_ASSERT(sizeof(ObjectFace) == 0x40, "ObjectFace");
 SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
+SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
+SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
+SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
+SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
+SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");

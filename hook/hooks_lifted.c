@@ -8360,12 +8360,12 @@ __declspec(naked) static void th_26bc0(void)
 }
 static uint8_t expect_26bc0[8] = { 0x83, 0xec, 0x3c, 0x53, 0x8b, 0x5c, 0x24, 0x44 };
 
-undefined4 __cdecl lf_26db0(float * param_1, float * param_2, int param_3);
+undefined4 __cdecl lineintersecttrackrail(float * param_1, float * param_2, int param_3);
 static undefined4 (__cdecl *orig_26db0)(float *, float *, int);
 static SvVerify v_26db0 = { "lineintersecttrackrail", -1 };
 static undefined4 __cdecl hk_26db0(float * param_1, float * param_2, int param_3)
 {
-    SV_HOOK_RET(undefined4, v_26db0, lf_26db0(param_1, param_2, param_3), orig_26db0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_26db0, lineintersecttrackrail(param_1, param_2, param_3), orig_26db0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_26db0(void)
 {
@@ -9415,12 +9415,12 @@ __declspec(naked) static void th_2daf0(void)
 }
 static uint8_t expect_2daf0[9] = { 0x83, 0xec, 0x58, 0xd9, 0x05, 0xb0, 0xe6, 0x45, 0x00 };
 
-undefined4 __cdecl lf_2dfc0(float * param_1, float * param_2, float * param_3, float param_4, float * param_5, float * param_6, float * param_7, float param_8);
+undefined4 __cdecl sphereintersectcityobjecttype(float * param_1, float * param_2, float * param_3, float param_4, float * param_5, float * param_6, float * param_7, float param_8);
 static undefined4 (__cdecl *orig_2dfc0)(float *, float *, float *, float, float *, float *, float *, float);
 static SvVerify v_2dfc0 = { "sphereintersectcityobjecttype", -1 };
 static undefined4 __cdecl hk_2dfc0(float * param_1, float * param_2, float * param_3, float param_4, float * param_5, float * param_6, float * param_7, float param_8)
 {
-    SV_HOOK_RET(undefined4, v_2dfc0, lf_2dfc0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2dfc0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+    SV_HOOK_RET(undefined4, v_2dfc0, sphereintersectcityobjecttype(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_2dfc0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
 __declspec(naked) static void th_2dfc0(void)
 {

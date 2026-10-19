@@ -27,6 +27,7 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0x916d2e0u, "sysinfo", 0x418u, 0u },
     { 0x916d700u, "soundlist", 0x13cu, 0u },
     { 0x93dd880u, "event", 0x80u, 65536u },
+    { 0x9c1d8c0u, "landscape", 0x0u, 0u },
     { 0xac51a80u, "scenario", 0x134u, 0u },
     { 0xac51bc0u, "objecttype", 0x828cu, 128u },
     { 0xb3e7200u, "particle", 0xf0u, 16384u },

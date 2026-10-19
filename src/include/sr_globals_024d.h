@@ -28,6 +28,7 @@
 #define SR_RVA_SYSINFO              0x916d2e0u  /* SysInfo[] */
 #define SR_RVA_SOUNDLIST            0x916d700u  /* SoundList[] */
 #define SR_RVA_EVENT                0x93dd880u  /* Event[] */
+#define SR_RVA_LANDSCAPE            0x9c1d8c0u
 #define SR_RVA_SCENARIO             0xac51a80u  /* Scenario[] */
 #define SR_RVA_OBJECTTYPE           0xac51bc0u  /* ObjectType[] */
 #define SR_RVA_PARTICLE             0xb3e7200u  /* Particle[] */
