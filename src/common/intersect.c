@@ -52,14 +52,19 @@ int lineintersectplanetwosided(vec3 *hit, const vec3 *n, float *t, const vec3 *f
     return 1;
 }
 
-/* 0 <= the turn of the edge a -> b against the hit point, along n: the hit is on the inner side. */
-static int inside_edge(const vec3 *hit, const vec3 *n, const vec3 *a, const vec3 *b)
+/* The turn of the edge a -> b against the hit point, along n: 0 or more on the inner side. */
+static float edge_side(const vec3 *hit, const vec3 *n, const vec3 *a, const vec3 *b)
 {
-    return 0.0 <= (float)(((float)(((float)(hit->x - a->x)) * ((float)(b->y - a->y)) -
+    return (float)(((float)(((float)(hit->x - a->x)) * ((float)(b->y - a->y)) -
                                    ((float)(b->x - a->x)) * ((float)(hit->y - a->y)))) * n->z +
                           (((float)(((float)(b->z - a->z)) * (hit->y - a->y) -
                                     (b->y - a->y) * ((float)(hit->z - a->z)))) * n->x +
                            ((float)((b->x - a->x) * (hit->z - a->z) - (hit->x - a->x) * (b->z - a->z))) * n->y));
+}
+
+static int inside_edge(const vec3 *hit, const vec3 *n, const vec3 *a, const vec3 *b)
+{
+    return 0.0 <= edge_side(hit, n, a, b);
 }
 
 /* The line from -> to against the triangle a b c with the normal n, from the front only. */
@@ -68,6 +73,67 @@ int lineintersecttriangle(vec3 *hit, const vec3 *n, float *t, const vec3 *from, 
 {
     return lineintersectplane(hit, n, t, from, to, a) != 0 && inside_edge(hit, n, a, b) && inside_edge(hit, n, b, c) &&
            inside_edge(hit, n, c, a);
+}
+
+/* As lineintersecttriangle. two_sided: the line may cross the plane from both sides. */
+int lineintersecttriangletwosided(vec3 *hit, const vec3 *n, float *t, const vec3 *from, const vec3 *to, const vec3 *a,
+                                  const vec3 *b, const vec3 *c, int two_sided)
+{
+    int crosses;
+
+    if (two_sided == 0)
+        crosses = lineintersectplane(hit, n, t, from, to, a);
+    else
+        crosses = lineintersectplanetwosided(hit, n, t, from, to, a);
+    if (crosses == 0)
+        return 0;
+    if (edge_side(hit, n, a, b) < 0.0 || edge_side(hit, n, b, c) < 0.0)
+        return 0;
+    return 0.0 <= edge_side(hit, n, c, a);
+}
+
+/* The line from -> to against the sphere (center c, radius r): *t gets the fraction of the line
+ * at the first hit, and n the unit vector from the center to the hit. */
+int lineintersectsphere(vec3 *hit, vec3 *n, float *t, const vec3 *from, const vec3 *to, const vec3 *c, float r)
+{
+    vec3 d;
+    float yy, xx, zz, qx, qy, qz, along, qq, miss, rr, f;
+    double back, len;
+
+    d.x = (float)(to->x - from->x);
+    d.y = (float)(to->y - from->y);
+    d.z = (float)(to->z - from->z);
+    yy = d.y * d.y;
+    xx = d.x * d.x;
+    zz = d.z * d.z;
+    qx = (float)(c->x - from->x);
+    qy = (float)(c->y - from->y);
+    qz = (float)(c->z - from->z);
+    normalizevector(&d, &d);
+    along = (float)(qz * d.z + (qy * d.y + qx * d.x));
+    *t = along;
+    if (!(0.0 <= along))
+        return 0;
+    qq = (float)(qy * qy + qx * qx + qz * qz);
+    miss = (float)(qq - along * along);
+    rr = r * r;
+    if (rr < miss || qq < rr)
+        return 0;
+    back = x87_sqrt((double)(rr - miss));
+    len = x87_sqrt((double)(float)(zz + (yy + xx)));
+    f = (float)((along - (float)back) / (float)len);
+    *t = f;
+    if (!(f <= 1.0))
+        return 0;
+    d.x = (float)(to->x - from->x);
+    d.y = (float)(to->y - from->y);
+    d.z = (float)(to->z - from->z);
+    scaleaddvectors(hit, from, &d, *t);
+    n->x = (float)(hit->x - c->x);
+    n->y = (float)(hit->y - c->y);
+    n->z = (float)(hit->z - c->z);
+    normalizevector(n, n);
+    return 1;
 }
 
 /* The weights of p on the triangle a b c: for each corner, the distance of p from the opposite

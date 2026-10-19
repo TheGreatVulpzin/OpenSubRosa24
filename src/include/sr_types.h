@@ -110,6 +110,22 @@ typedef union CityObjectRec { struct {
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
+/* A face of the mesh of an object (Object.faces): a triangle or a quad of Object.verts. */
+typedef union ObjectFace { struct {
+    int corners;        /* +0x00 3 or 4 */
+    int verts[4];       /* +0x04 indexes into Object.verts */
+    int unk_14[4];      /* +0x14 */
+    float unk_24[5];    /* +0x24 */
+    int unk_38;         /* +0x38 bulletsimulation, playerai */
+    int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
+}; uint8_t lf_raw[0x40]; } ObjectFace;
+
+/* A corner of the mesh of an object (Object.verts). */
+typedef union ObjectVertex { struct {
+    vec3 pos;           /* +0x00 the world position (objectsimulation moves it with the particle) */
+    int particle;       /* +0x0c index into Object.particles */
+}; uint8_t lf_raw[0x10]; } ObjectVertex;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -165,6 +181,8 @@ SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
 SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
 SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
+SR_STATIC_ASSERT(sizeof(ObjectFace) == 0x40, "ObjectFace");
+SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
@@ -518,8 +536,10 @@ typedef union Object { struct {
     int num_bonds;                       /* +0x03b0 createbond appends the bond to the list at +0x3b4, limit 0x7f */
     int bonds[127];                      /* +0x03b4 createbond appends, limit 0x7f; deletebond removes */
     uint8_t pad_05b0[0x204];
-    int unk_07b4;                        /* +0x07b4 3 functions */
-    uint8_t pad_07b8[0x5404];
+    int num_faces;                       /* +0x07b4 createobject copies objecttype.num_faces; the line and sphere tests loop over the faces */
+    ObjectFace faces[272];               /* +0x07b8 createobject copies the faces of the object type; stride 0x40, the list ends at +0x4bb8 */
+    uint8_t pad_4bb8[0x4];
+    ObjectVertex verts[256];             /* +0x4bbc stride 0x10: the corners of the faces; the list ends at drive_input (+0x5bbc) */
     float drive_input[4];                /* +0x5bbc humansimulation copies Human.input_axes of the driver; objectsimulation_car and _heli read them */
     uint8_t pad_5bcc[0x10];
     uint32_t drive_buttons;              /* +0x5bdc humansimulation: Human.input_buttons of the driver, 4 when nobody drives; objectsimulation_car tests bits 2 and 4 */
@@ -603,6 +623,9 @@ SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles"
 SR_STATIC_ASSERT(offsetof(Object, particles) == 0xac, "Object.particles");
 SR_STATIC_ASSERT(offsetof(Object, num_bonds) == 0x3b0, "Object.num_bonds");
 SR_STATIC_ASSERT(offsetof(Object, bonds) == 0x3b4, "Object.bonds");
+SR_STATIC_ASSERT(offsetof(Object, num_faces) == 0x7b4, "Object.num_faces");
+SR_STATIC_ASSERT(offsetof(Object, faces) == 0x7b8, "Object.faces");
+SR_STATIC_ASSERT(offsetof(Object, verts) == 0x4bbc, "Object.verts");
 SR_STATIC_ASSERT(offsetof(Object, drive_input) == 0x5bbc, "Object.drive_input");
 SR_STATIC_ASSERT(offsetof(Object, drive_buttons) == 0x5bdc, "Object.drive_buttons");
 SR_STATIC_ASSERT(offsetof(Object, engine_accel) == 0x5e4c, "Object.engine_accel");
@@ -1860,7 +1883,7 @@ typedef union Intersect { struct {
     float distance;                      /* +0x001c sphereintersectlevel: set to 65536.0, keeps the nearest hit */
     vec3 surface_vel;                    /* +0x0020 lineintersectobject: the velocity of the hit surface; humansimulation pulls a standing human toward it */
     uint8_t pad_002c[0x4];
-    int unk_0030;                        /* +0x0030 5 functions */
+    int face;                            /* +0x0030 sphereintersectobject and lineintersectobject: the face of the hit; -1 for a wheel */
     int tri_particles[3];                /* +0x0034 lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle */
     uint8_t pad_0040[0x4];
     float tri_weights[3];                /* +0x0044 lineintersectobject and sphereintersectobject: the barycentric weights of the hit point */
@@ -1882,6 +1905,7 @@ SR_STATIC_ASSERT(offsetof(Intersect, normal) == 0xc, "Intersect.normal");
 SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
 SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
 SR_STATIC_ASSERT(offsetof(Intersect, surface_vel) == 0x20, "Intersect.surface_vel");
+SR_STATIC_ASSERT(offsetof(Intersect, face) == 0x30, "Intersect.face");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
 SR_STATIC_ASSERT(offsetof(Intersect, block) == 0x54, "Intersect.block");

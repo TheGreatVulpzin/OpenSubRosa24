@@ -6,7 +6,9 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "intersect.h"
 #include "sr_runtime.h"
+#include "vectors.h"
 
 /* Game globals. */
 #define g_intersect (*SR_AT(Intersect, 0x103484a0))
@@ -145,4 +147,140 @@ int circleintersectlevel(float *pos, float *rot, float radius)
         }
     }
     return 65536.0 <= g_intersect.distance ? 0 : 1;
+}
+
+/* Keeps a hit on face f of object ob, with the triangle of the corners i, j, k: the face, the
+ * 3 particles of the corners and their weights at the hit point. */
+static void keep_face_hit(const Object *ob, int f, const vec3 *hit, const vec3 *normal, int i, int j, int k,
+                          const vec3 *a, const vec3 *b, const vec3 *c)
+{
+    memcpy(g_intersect.pos, hit, sizeof g_intersect.pos);
+    memcpy(g_intersect.normal, normal, sizeof g_intersect.normal);
+    g_intersect.face = f;
+    g_intersect.tri_particles[0] = ob->particles[ob->verts[i].particle];
+    g_intersect.tri_particles[1] = ob->particles[ob->verts[j].particle];
+    g_intersect.tri_particles[2] = ob->particles[ob->verts[k].particle];
+    calculatebarycentric((vec3 *)g_intersect.tri_weights, (const vec3 *)g_intersect.pos, a, b, c);
+}
+
+/* A sphere against the faces of object obj (a quad is two triangles). distance gets the distance
+ * of the nearest hit. An object of type 12 skips the faces with no health left. */
+int sphereintersectobject(int obj, float *pos, float radius)
+{
+    const Object *ob = &sr_objects[obj];
+    const vec3 *p = (const vec3 *)pos;
+    const ObjectFace *face;
+    vec3 a, b, c, d, normal, hit;
+    float dist;
+    int f, n, type;
+
+    if (!(ob->box_min.x <= radius + p->x && ob->box_min.y <= p->y + radius && ob->box_min.z <= p->z + radius &&
+          p->x - radius <= ob->box_max.x && p->y - radius <= ob->box_max.y && p->z - radius <= ob->box_max.z))
+        return 0;
+    n = ob->num_faces;
+    g_intersect.distance = 65536.0f;
+    if (n <= 0)
+        return 0;
+    type = ob->type;
+    for (f = 0; f < n; f++) {
+        face = &ob->faces[f];
+        if (type == 12 && !(0 < face->health))
+            continue;
+        a = ob->verts[face->verts[0]].pos;
+        b = ob->verts[face->verts[1]].pos;
+        c = ob->verts[face->verts[2]].pos;
+        d = ob->verts[face->verts[3]].pos;
+        generatetrinormal(&normal, &a, &b, &c);
+        if (sphereintersecttrianglefull(&hit, &normal, &dist, p, radius, &a, &b, &c) != 0 && dist < g_intersect.distance) {
+            g_intersect.distance = dist;
+            keep_face_hit(ob, f, &hit, &normal, face->verts[0], face->verts[1], face->verts[2], &a, &b, &c);
+        }
+        if (face->corners == 4) {
+            generatetrinormal(&normal, &a, &c, &d);
+            if (sphereintersecttrianglefull(&hit, &normal, &dist, p, radius, &a, &c, &d) != 0 &&
+                dist < g_intersect.distance) {
+                g_intersect.distance = dist;
+                keep_face_hit(ob, f, &hit, &normal, face->verts[0], face->verts[2], face->verts[3], &a, &c, &d);
+            }
+        }
+    }
+    return g_intersect.distance < 65536.0 ? 1 : 0;
+}
+
+/* The line from -> to against the faces of object obj, from both sides (a face with no health
+ * left does not count), and with_wheels: against the wheels too. fraction gets the part of the
+ * line before the nearest hit, and surface_vel the velocity of the hit point of a face. */
+int lineintersectobject(int obj, float *from, float *to, int with_wheels)
+{
+    const Object *ob = &sr_objects[obj];
+    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
+    const ObjectFace *face;
+    const Particle *q0, *q1, *q2;
+    vec3 a, b, c, normal, hit;
+    float t;
+    int f, n, w;
+
+    if (s->x < ob->box_min.x && e->x < ob->box_min.x)
+        return 0;
+    if (!((ob->box_min.y <= s->y || ob->box_min.y <= e->y) && (ob->box_min.z <= s->z || ob->box_min.z <= e->z) &&
+          (s->x <= ob->box_max.x || e->x <= ob->box_max.x) && (s->y <= ob->box_max.y || e->y <= ob->box_max.y) &&
+          (s->z <= ob->box_max.z || e->z <= ob->box_max.z)))
+        return 0;
+    n = ob->num_faces;
+    g_intersect.fraction = 1.0f;
+    for (f = 0; f < n; f++) {
+        face = &ob->faces[f];
+        if (!(0 < face->health))
+            continue;
+        a = ob->verts[face->verts[0]].pos;
+        b = ob->verts[face->verts[1]].pos;
+        c = ob->verts[face->verts[2]].pos;
+        generatetrinormal(&normal, &a, &b, &c);
+        if (lineintersecttriangletwosided(&hit, &normal, &t, s, e, &a, &b, &c, 1) != 0 && t < g_intersect.fraction) {
+            g_intersect.fraction = t;
+            keep_face_hit(ob, f, &hit, &normal, face->verts[0], face->verts[1], face->verts[2], &a, &b, &c);
+            q0 = &sr_particles[g_intersect.tri_particles[0]];
+            q1 = &sr_particles[g_intersect.tri_particles[1]];
+            q2 = &sr_particles[g_intersect.tri_particles[2]];
+            g_intersect.surface_vel.x = (float)((float)(g_intersect.tri_weights[1] * q1->vel.x +
+                                                        g_intersect.tri_weights[0] * q0->vel.x) +
+                                                g_intersect.tri_weights[2] * q2->vel.x);
+            g_intersect.surface_vel.y = (float)(q2->vel.y * g_intersect.tri_weights[2] +
+                                                (float)(q1->vel.y * g_intersect.tri_weights[1] +
+                                                        (float)(q0->vel.y * g_intersect.tri_weights[0])));
+            g_intersect.surface_vel.z = (float)(g_intersect.tri_weights[2] * q2->vel.z +
+                                                (float)(g_intersect.tri_weights[1] * q1->vel.z +
+                                                        (float)(g_intersect.tri_weights[0] * q0->vel.z)));
+        }
+        if (face->corners == 4) {
+            b = c;
+            c = ob->verts[face->verts[3]].pos;
+            generatetrinormal(&normal, &a, &b, &c);
+            if (lineintersecttriangletwosided(&hit, &normal, &t, s, e, &a, &b, &c, 1) != 0 && t < g_intersect.fraction) {
+                g_intersect.fraction = t;
+                keep_face_hit(ob, f, &hit, &normal, face->verts[0], face->verts[2], face->verts[3], &a, &b, &c);
+                q0 = &sr_particles[g_intersect.tri_particles[0]];
+                g_intersect.surface_vel.x = g_intersect.tri_weights[0] * q0->vel.x;
+                g_intersect.surface_vel.y = (float)(q0->vel.y * g_intersect.tri_weights[0]);
+                g_intersect.surface_vel.z = (float)(g_intersect.tri_weights[0] * q0->vel.z);
+                scaleaddvectors(&g_intersect.surface_vel, &g_intersect.surface_vel,
+                                &sr_particles[g_intersect.tri_particles[1]].vel, g_intersect.tri_weights[1]);
+                scaleaddvectors(&g_intersect.surface_vel, &g_intersect.surface_vel,
+                                &sr_particles[g_intersect.tri_particles[2]].vel, g_intersect.tri_weights[2]);
+            }
+        }
+    }
+    if (with_wheels != 0) {
+        for (w = 0; w < ob->num_wheels; w++) {
+            if (lineintersectsphere(&hit, &normal, &t, s, e, &ob->wheels[w].pos, ob->wheels[w].radius) != 0 &&
+                t < g_intersect.fraction) {
+                g_intersect.face = -1;
+                memcpy(g_intersect.pos, &hit, sizeof g_intersect.pos);
+                memcpy(g_intersect.normal, &normal, sizeof g_intersect.normal);
+                g_intersect.fraction = t;
+                g_intersect.tri_particles[0] = w;
+            }
+        }
+    }
+    return g_intersect.fraction < 1.0 ? 1 : 0;
 }

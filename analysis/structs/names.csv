@@ -317,3 +317,7 @@ intersect,0x54,block,int,3,"lineintersectarea: the block of the hit (area_breakb
 intersect,0x64,material,int,,"circleintersectlevel copies area_material for the nearest hit; objectwheelcollision reads the friction of the material"
 intersect,0x68,area_material,int,,"circleintersectarea writes the material of its hit"
 area,0x0,active,int,,"the collision tests of the level skip an area with 0"
+object,0x7b4,num_faces,int,,"createobject copies objecttype.num_faces; the line and sphere tests loop over the faces"
+object,0x7b8,faces,ObjectFace,272,"createobject copies the faces of the object type; stride 0x40, the list ends at +0x4bb8"
+object,0x4bbc,verts,ObjectVertex,256,"stride 0x10: the corners of the faces; the list ends at drive_input (+0x5bbc)"
+intersect,0x30,face,int,,"sphereintersectobject and lineintersectobject: the face of the hit; -1 for a wheel"

@@ -109,7 +109,7 @@ void lf_0c0a0(void);
 void lineintersectplane(void);
 void lineintersectplanetwosided(void);
 void lineintersecttriangle(void);
-void lf_0c680(void);
+void lineintersecttriangletwosided(void);
 void lf_0c8f0(void);
 void lf_0cab0(void);
 void lf_0cca0(void);
@@ -188,7 +188,7 @@ void lf_1a000(void);
 void sphereintersecttriangle(void);
 void sphereintersectline(void);
 void lf_1a990(void);
-void lf_1aa60(void);
+void lineintersectsphere(void);
 void lf_1ac40(void);
 void createitem(void);
 void lf_1b6e0(void);
@@ -210,7 +210,7 @@ void lf_20680(void);
 void getrandomvector2d(void);
 void getrandomvector3d(void);
 void lf_21e00(void);
-void lf_223d0(void);
+void getobjectrotation2(void);
 void lf_225e0(void);
 void calculatebarycentric(void);
 void lf_22e20(void);
@@ -218,7 +218,7 @@ void lf_22f90(void);
 void lf_23fa0(void);
 void lf_240e0(void);
 void lf_24f60(void);
-void lf_257a0(void);
+void lineintersectobject(void);
 void lf_25e70(void);
 void lf_26bc0(void);
 void lf_26db0(void);
@@ -263,7 +263,7 @@ void lineintersectlevel(void);
 void lf_31800(void);
 void lf_32340(void);
 void lf_324c0(void);
-void lf_32bb0(void);
+void sphereintersectobject(void);
 void lf_32fe0(void);
 void lf_33350(void);
 void lf_33570(void);
@@ -427,7 +427,7 @@ const LfEntry lf_table[] = {
     { "lineintersectplane", 0xc120, (void *)lineintersectplane, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersectplanetwosided", 0xc290, (void *)lineintersectplanetwosided, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersecttriangle", 0xc420, (void *)lineintersecttriangle, 8, LF_RET_INT, 4, "pppppppp", 0 },
-    { "lineintersecttriangletwosided", 0xc680, (void *)lf_0c680, 9, LF_RET_INT, 4, "ppppppppv", 0 },
+    { "lineintersecttriangletwosided", 0xc680, (void *)lineintersecttriangletwosided, 9, LF_RET_INT, 4, "ppppppppv", 0 },
     { "pointdistanceline", 0xc8f0, (void *)lf_0c8f0, 3, LF_RET_FLOAT, 4, "ppp", 0 },
     { "lineintersectline2d", 0xcab0, (void *)lf_0cab0, 7, LF_RET_INT, 4, "ppppppp", 0 },
     { "sphereintersectline2d", 0xcca0, (void *)lf_0cca0, 7, LF_RET_INT, 4, "ppppppv", 0 },
@@ -506,7 +506,7 @@ const LfEntry lf_table[] = {
     { "sphereintersecttriangle", 0x1a700, (void *)sphereintersecttriangle, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "sphereintersectline", 0x1a7f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
     { "sphereintersectpoint", 0x1a990, (void *)lf_1a990, 6, LF_RET_INT, 4, "ppppvp", 0 },
-    { "lineintersectsphere", 0x1aa60, (void *)lf_1aa60, 7, LF_RET_INT, 4, "ppppppv", 0 },
+    { "lineintersectsphere", 0x1aa60, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "getmasterserverip", 0x1ac40, (void *)lf_1ac40, 0, LF_RET_INT, 4, "", 1 },
     { "createitem", 0x1b070, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "setitempositionhuman", 0x1b6e0, (void *)lf_1b6e0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -528,7 +528,7 @@ const LfEntry lf_table[] = {
     { "getrandomvector2d", 0x21a30, (void *)getrandomvector2d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomvector3d", 0x21b40, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "addobjectrotation", 0x21e00, (void *)lf_21e00, 4, LF_RET_VOID, 4, "vppv", 0 },
-    { "getobjectrotation2", 0x223d0, (void *)lf_223d0, 3, LF_RET_VOID, 4, "pvp", 0 },
+    { "getobjectrotation2", 0x223d0, (void *)getobjectrotation2, 3, LF_RET_VOID, 4, "pvp", 0 },
     { "getobjectrotation3", 0x225e0, (void *)lf_225e0, 2, LF_RET_VOID, 4, "pv", 0 },
     { "calculatebarycentric", 0x22af0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
     { "applydamageobject", 0x22e20, (void *)lf_22e20, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -536,7 +536,7 @@ const LfEntry lf_table[] = {
     { "getenginetorque2", 0x23fa0, (void *)lf_23fa0, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "object_rotorsimulation", 0x240e0, (void *)lf_240e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0x24f60, (void *)lf_24f60, 1, LF_RET_VOID, 4, "v", 0 },
-    { "lineintersectobject", 0x257a0, (void *)lf_257a0, 4, LF_RET_INT, 4, "vppv", 0 },
+    { "lineintersectobject", 0x257a0, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0x26bc0, (void *)lf_26bc0, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0x26db0, (void *)lf_26db0, 3, LF_RET_INT, 4, "ppv", 0 },
@@ -581,7 +581,7 @@ const LfEntry lf_table[] = {
     { "createobject", 0x31800, (void *)lf_31800, 5, LF_RET_INT, 4, "vpppv", 0 },
     { "objecttimetolive", 0x32340, (void *)lf_32340, 0, LF_RET_VOID, 4, "", 0 },
     { "objectenginesimulation2", 0x324c0, (void *)lf_324c0, 0, LF_RET_VOID, 4, "", 0 },
-    { "sphereintersectobject", 0x32bb0, (void *)lf_32bb0, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "sphereintersectobject", 0x32bb0, (void *)sphereintersectobject, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4, "p", 0 },
     { "scenario_createcar", 0x33350, (void *)lf_33350, 6, LF_RET_INT, 4, "vvvvvv", 0 },
     { "servercycle", 0x33570, (void *)lf_33570, 0, LF_RET_VOID, 4, "", 1 },

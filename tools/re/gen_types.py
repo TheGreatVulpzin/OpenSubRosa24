@@ -86,7 +86,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -202,6 +202,22 @@ typedef union CityObjectRec { struct {
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
+/* A face of the mesh of an object (Object.faces): a triangle or a quad of Object.verts. */
+typedef union ObjectFace { struct {
+    int corners;        /* +0x00 3 or 4 */
+    int verts[4];       /* +0x04 indexes into Object.verts */
+    int unk_14[4];      /* +0x14 */
+    float unk_24[5];    /* +0x24 */
+    int unk_38;         /* +0x38 bulletsimulation, playerai */
+    int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
+}; uint8_t lf_raw[0x40]; } ObjectFace;
+
+/* A corner of the mesh of an object (Object.verts). */
+typedef union ObjectVertex { struct {
+    vec3 pos;           /* +0x00 the world position (objectsimulation moves it with the particle) */
+    int particle;       /* +0x0c index into Object.particles */
+}; uint8_t lf_raw[0x10]; } ObjectVertex;
+
 /* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
 typedef union BondAxis { struct {
     vec3 dir;
@@ -257,6 +273,8 @@ SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
 SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
 SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
 SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
+SR_STATIC_ASSERT(sizeof(ObjectFace) == 0x40, "ObjectFace");
+SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");

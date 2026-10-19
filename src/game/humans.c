@@ -14,6 +14,7 @@
 #include "events.h"
 #include "items.h"
 #include "profiler.h"
+#include "rigid.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -39,9 +40,6 @@ void __cdecl lf_16a20(int player, int tax);
 void __cdecl lf_18720(int human);
 void __cdecl lf_19060(int human);
 void __cdecl lf_19380(int human);
-void __cdecl lf_223d0(float *out, int object, float *pos);
-int __cdecl lf_257a0(int object, float *from, float *to, int mode);
-int __cdecl lf_32bb0(int object, float *pos, float radius);
 void __cdecl lf_4a440(int human);
 void __cdecl lf_4bd60(int human);
 #define playersellstock lf_05be0
@@ -51,9 +49,6 @@ void __cdecl lf_4bd60(int human);
 #define deletehuman lf_18720
 #define human_calculatelegangles lf_19060
 #define human_collisionhuman lf_19380
-#define getobjectrotation2 lf_223d0
-#define lineintersectobject lf_257a0
-#define sphereintersectobject lf_32bb0
 #define human_calculatearmangles lf_4a440
 #define human_itemsimulation lf_4bd60
 
@@ -906,7 +901,7 @@ static void human_invehicle(int h, int vehicle, int seat, int has_item)
     r[0].z = f;
   }
   /* Bone 0 turns with the vehicle: ang_momentum and w get its angular velocity. */
-  getobjectrotation2(&w.x, vehicle, &ob->pos.x);
+  getobjectrotation2(&w, vehicle, &ob->pos);
   b0->ang_momentum = w;
   b0->w = w;
   for (k = 1; k < 15; k++) {
