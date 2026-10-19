@@ -107,6 +107,234 @@
 #define local_14 (*(float *)(lf_frame + 0xcc))
 #define local_10 (*(float *)(lf_frame + 0xd0))
 #define local_c (*(uint *)(lf_frame + 0xd4))
+#define g_numofaccounts DAT_0f837b64
+
+/* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do
+ * not hold an item leave the solver (mode 0x100). The joint list reads the bone of the muscle
+ * with the same index. A muscle is weaker below 25 health and while stun_timer runs. */
+static void human_bond_modes(Human *hu, int in_vehicle, int has_item)
+{
+  int k, health;
+  Bond *b;
+  float c;
+
+  for (k = 0; k < hu->num_joints; k++) {
+    b = &g_bond[hu->joints[k].bond];
+    b->mode = 0;
+    if (hu->health < 0)
+      b->mode = 3;
+    if (in_vehicle && (has_item == 0 || 8 < hu->muscles[k].bone))
+      b->mode = 0x100;
+  }
+  health = hu->health;
+  for (k = 0; k < hu->num_muscles; k++) {
+    b = &g_bond[hu->muscles[k].bond];
+    b->mode = 0;
+    b->stiffness = 0.0625f;
+    b->damping = 0.125f;
+    if (health < 25) {
+      b->mode = 1;
+      b->stiffness = (float)(hu->body_strength * 0.125 * 0.5);
+    }
+    if (health < 1)
+      b->stiffness = 0.0625f;
+    if (in_vehicle && (has_item == 0 || 8 < hu->muscles[k].bone))
+      b->mode = 0x100;
+    if (0 < health && 0 < hu->stun_timer && hu->muscles[k].bone == 1) {
+      c = (float)(1.0 - (float)hu->stun_timer / 180.0);
+      if (c < 0.0)
+        c = 0.0f;
+      c = (float)(c * c);
+      if (c < 0.1875)
+        c = 0.1875f;
+      b->stiffness = (float)(c * 0.0625 * c);
+      b->damping = (float)(c * 0.125);
+    }
+  }
+}
+
+/* A dead human drops the first item of the first 7 inventory slots. */
+static void human_dropitems(Human *hu)
+{
+  int k;
+  uint item;
+
+  for (k = 0; k < 7; k++) {
+    if (hu->inventory[k].count <= 0 || (uint)hu->inventory[k].items[0] >= 0x400)
+      continue;
+    item = (uint)hu->inventory[k].items[0];
+    if (g_item[item].parent_item == -1) {
+      if (g_item[item].parent_human != -1) {
+        item_removehumanlink(item, (uint *)g_item[item].parent_human, g_item[item].parent_slot);
+        createevent_updateitem(item);
+      }
+    } else {
+      item_removeitemlink(item, g_item[item].parent_item);
+      createevent_updateitem(item);
+    }
+  }
+}
+
+/* A bleeding or dead human loses health once each 256 ticks (the tick of each human differs). */
+static void human_bleed(Human *hu, int h)
+{
+  int health = hu->health;
+  vec3 p;
+
+  if (health <= -5 || (hu->bleeding == 0 && 0 < health) || (char)(h * h * h) != (char)g_game.ticks)
+    return;
+  health = health < 11 ? health - 1 : health - 2;
+  hu->health = health;
+  if (0 < health) {
+    p.x = (float)(g_yaxis[0] * 0.5 + hu->pos.x);
+    p.y = (float)(g_yaxis[1] * 0.5 + hu->pos.y);
+    p.z = (float)(g_yaxis[2] * 0.5 + hu->pos.z);
+    createevent_bullethit(0, 3, (undefined4 *)&p, (undefined4 *)&p);
+  }
+}
+
+/* The player of a dead human pays the death tax and loses the human. A dead human without a
+ * player costs its account 5% of the money above 10000. */
+static void human_releaseplayer(Human *hu)
+{
+  int player = hu->player_id, acc, extra, gametype = g_game.gametype;
+
+  if (player == -1) {
+    acc = hu->account;
+    if (acc == -1)
+      return;
+    if (-1 < acc && acc < g_numofaccounts) {
+      extra = g_account[acc].money - 10000;
+      if (0 < extra)
+        g_account[acc].money = g_account[acc].money - (int)(longlong)((double)extra * 0.05000000074505806);
+    }
+    hu->account = -1;
+    return;
+  }
+  if (g_game.gametype == 4 && (uint)player < 0x100)
+    playersellstock(LF_BITS_F(player), g_player[player].stocks);
+  playerdeathtax((uint)player);
+  if (gametype == 4) {
+    if (g_game.team0_manager == hu->player_id)
+      g_game.team0_manager = -1;
+    if (g_game.team1_manager == hu->player_id)
+      g_game.team1_manager = -1;
+    if (g_game.team2_manager == hu->player_id)
+      g_game.team2_manager = -1;
+    if (g_game.team3_manager == hu->player_id)
+      g_game.team3_manager = -1;
+    if (g_game.team4_manager == hu->player_id)
+      g_game.team4_manager = -1;
+    g_player[player].team = 7;
+  }
+  g_player[player].human_id = -1;
+  createevent_updateplayer(player);
+  hu->player_id = -1;
+}
+
+/* despawn_timer: 3600 while a player has the human. A dead one counts down (at least 4 in
+ * gametype 3) and lets its player go at 2700. A human without a player counts down. */
+static void human_despawn(Human *hu)
+{
+  int t;
+
+  if (hu->health < -4) {
+    if (hu->despawn_timer < 0xa8c)
+      human_releaseplayer(hu);
+    t = hu->despawn_timer - 1;
+    hu->despawn_timer = t;
+    if (g_game.gametype == 3 && t < 4)
+      hu->despawn_timer = 4;
+  } else if (hu->player_id == -1) {
+    hu->despawn_timer = hu->despawn_timer - 1;
+  } else {
+    hu->despawn_timer = 0xe10;
+  }
+}
+
+/* The type of building i of the city (records of 0x9dc bytes). */
+#define BUILDING_TYPE(i) ((&g_city.building_type)[(i) * 0x277])
+
+/* In a building of type 6, a human with a player heals 1 health each 32 ticks and stops the
+ * bleeding. A human without a player there goes at once in gametype 4. */
+static void human_heal(Human *hu)
+{
+  int i;
+
+  for (i = 0; i < g_city.num_buildings; i++) {
+    if (BUILDING_TYPE(i) != 6 || pointinsidebuilding(i, &hu->pos.x, 0.0f) == 0)
+      continue;
+    if (hu->player_id == -1) {
+      if (g_game.gametype == 4)
+        hu->despawn_timer = 0;
+    } else if ((g_game.ticks & 0x1f) == 0 && -5 < hu->health && hu->health < 100) {
+      hu->health = hu->health + 1;
+      hu->bleeding = 0;
+    }
+  }
+}
+
+/* The angles of each bone against its parent bone: the rotation of the bone in the frame of the
+ * parent, as three angles (atan2). */
+static void human_jointangles(Human *hu)
+{
+  int k;
+  const vec3 *r, *q;
+  float m00, m01, m02, m10, m11, m12, m20, m21, m22, a, len, s, c;
+
+  for (k = 1; k < 15; k++) {
+    r = hu->bones[k].rot;
+    q = hu->bones[g_body[k].parent].rot;
+    m00 = (float)(q[0].z * r[0].z + (r[0].y * q[0].y + r[0].x * q[0].x));
+    m01 = (float)(r[1].z * q[0].z + (r[1].y * q[0].y + r[1].x * q[0].x));
+    m02 = (float)(r[2].z * q[0].z + (r[2].y * q[0].y + r[2].x * q[0].x));
+    m10 = (float)(q[1].z * r[0].z + (r[0].x * q[1].x + q[1].y * r[0].y));
+    m11 = (float)(q[1].z * r[1].z + (r[1].x * q[1].x + q[1].y * r[1].y));
+    m12 = (float)(q[1].z * r[2].z + (r[2].x * q[1].x + q[1].y * r[2].y));
+    m20 = (float)(r[0].z * q[2].z + (r[0].x * q[2].x + r[0].y * q[2].y));
+    m21 = (float)(r[1].z * q[2].z + (r[1].x * q[2].x + r[1].y * q[2].y));
+    m22 = (float)(r[2].z * q[2].z + (r[2].x * q[2].x + r[2].y * q[2].y));
+    a = (float)_CIatan2((double)m12, (double)m22);
+    len = (float)_CIsqrt((double)(m00 * m00 + m01 * m01));
+    hu->bones[k].joint_angles.y = (float)_CIatan2((double)-m02, (double)len);
+    s = (float)_CIsin((double)a);
+    c = (float)_CIcos((double)a);
+    hu->bones[k].joint_angles.z = (float)_CIatan2((double)(s * m20 - c * m10), (double)(c * m11 - m21 * s));
+    hu->bones[k].joint_angles.x = a;
+  }
+}
+
+/* The end of the tick of a human, after the leg and arm angles. vehicle is the vehicle at the
+ * start of the tick (-1: on foot). has_item: an item is in slot 0 or 1 of the inventory. */
+static void human_finish(int h, int vehicle, int has_item)
+{
+  Human *hu = &g_human[h];
+  int k;
+
+  hu->pos = hu->bones[0].pos;
+  human_bond_modes(hu, vehicle != -1, has_item);
+  hu->has_physics = 1;
+  if (vehicle != -1 && has_item == 0)
+    hu->has_physics = 0;
+  if (hu->bones[0].pos.y < -32.0)
+    hu->health = -100;
+  if (hu->health < 1)
+    human_dropitems(hu);
+  else
+    human_itemsimulation(h);
+  human_bleed(hu, h);
+  if (hu->vehicle_id == -1)
+    human_collisionhuman(LF_BITS_F(h));
+  human_despawn(hu);
+  human_heal(hu);
+  if (hu->despawn_timer < 1)
+    deletehuman((uint *)h);
+  hu->input_buttons_prev = hu->input_buttons;
+  for (k = 0; k < 15; k++)
+    hu->bones[k].pos_prev = hu->bones[k].pos;
+  human_jointangles(hu);
+}
+
 void __cdecl lf_51060(void)
 
 {
@@ -1196,278 +1424,9 @@ LAB_00453705:
           g_human[(int)puVar11].exit_timer = 1;
         }
       }
-      puVar12 = local_a4;
       human_calculatelegangles((int)local_a4);
-      human_calculatearmangles((int)puVar12);
-      g_human[(int)puVar11].pos.x = g_human[(int)puVar11].bones[0].pos.x;
-      g_human[(int)puVar11].pos.y = g_human[(int)puVar11].bones[0].pos.y;
-      g_human[(int)puVar11].pos.z = g_human[(int)puVar11].bones[0].pos.z;
-      if (0 < g_human[(int)puVar11].num_joints) {
-        iVar21 = g_human[(int)puVar11].num_joints;
-        piVar17 = (int *)&g_human[(int)puVar11].lf_raw[0xed4];
-        piVar20 = (int *)&g_human[(int)puVar11].lf_raw[0x26d0];
-        do {
-          iVar14 = g_human[(int)puVar11].health;
-          piVar2 = &g_bond[*piVar20].mode;
-          *piVar2 = 0;
-          if (iVar14 < 0) {
-            *piVar2 = 3;
-          }
-          if ((local_9c != -1) && ((LF_UINT(local_a0) == 0x0U || (8 < *piVar17)))) {
-            *piVar2 = 0x100;
-          }
-          piVar20 = piVar20 + 3;
-          piVar17 = piVar17 + 0xc;
-          iVar21 = iVar21 + -1;
-        } while (iVar21 != 0);
-      }
-      if (0 < g_human[(int)puVar11].num_muscles) {
-        iVar21 = g_human[(int)puVar11].health;
-        iVar14 = g_human[(int)puVar11].num_muscles;
-        piVar17 = (int *)&g_human[(int)puVar11].lf_raw[0xed4];
-        do {
-          iVar15 = piVar17[-2];
-          g_bond[iVar15].mode = 0;
-          g_bond[iVar15].stiffness = 0.0625;
-          g_bond[iVar15].damping = 0.125;
-          if (iVar21 < 0x19) {
-            fVar24 = g_human[(int)puVar11].body_strength;
-            g_bond[iVar15].mode = 1;
-            g_bond[iVar15].stiffness = (float)(fVar24 * 0.125 * 0.5);
-          }
-          if (iVar21 < 1) {
-            g_bond[iVar15].stiffness = 0.0625;
-          }
-          if ((local_9c != -1) && ((LF_UINT(local_a0) == 0x0U || (8 < *piVar17)))) {
-            g_bond[iVar15].mode = 0x100;
-          }
-          if (((0 < iVar21) && (local_cc = (int *)g_human[(int)puVar11].stun_timer, 0 < (int)local_cc)
-              ) && (*piVar17 == 1)) {
-            local_c8 = (float)(1.0 - (float)(int)local_cc / 180.0);
-            if (local_c8 < 0.0) {
-              local_c8 = 0.0;
-            }
-            local_c8 = (float)(local_c8 * local_c8);
-            if (local_c8 < 0.1875) {
-              local_c8 = 0.1875;
-            }
-            g_bond[iVar15].stiffness = (float)(local_c8 * 0.0625 * local_c8);
-            g_bond[iVar15].damping = (float)(local_c8 * 0.125);
-          }
-          piVar17 = piVar17 + 0xc;
-          iVar14 = iVar14 + -1;
-        } while (iVar14 != 0);
-      }
-      g_human[(int)puVar11].has_physics = 1;
-      if ((local_9c != -1) && (LF_UINT(local_a0) == 0x0U)) {
-        g_human[(int)puVar11].has_physics = 0;
-      }
-      if (g_human[(int)puVar11].bones[0].pos.y < -32.0) {
-        g_human[(int)puVar11].health = -100;
-      }
-      if (g_human[(int)puVar11].health < 1) {
-        piVar17 = &g_human[(int)puVar11].inventory[0].items[0];
-        local_cc = (int *)0x7;
-        do {
-          if ((0 < ((InventorySlot *)(piVar17 + -1))->count) && (uVar18 = *piVar17, uVar18 < 0x400))
-          {
-            if (g_item[uVar18].parent_item == 0xffffffff) {
-              if ((uint *)g_item[uVar18].parent_human != (uint *)0xffffffff) {
-                item_removehumanlink
-                          (uVar18,(uint *)g_item[uVar18].parent_human,g_item[uVar18].parent_slot);
-                createevent_updateitem(uVar18);
-              }
-            }
-            else {
-              item_removeitemlink(uVar18,g_item[uVar18].parent_item);
-              createevent_updateitem(uVar18);
-            }
-          }
-          piVar17 = piVar17 + 9;
-          local_cc = (int *)((int)local_cc + -1);
-        } while (local_cc != (int *)0x0);
-      }
-      else {
-        human_itemsimulation((int)local_a4);
-      }
-      iVar21 = g_human[(int)puVar11].health;
-      if ((-5 < iVar21) &&
-         (((g_human[(int)puVar11].bleeding != 0 || (iVar21 < 1)) &&
-          (cVar6 = (char)local_a4, (char)(cVar6 * cVar6 * cVar6) == (char)g_game.ticks)))) {
-        if (iVar21 < 0xb) {
-          iVar21 = iVar21 + -1;
-        }
-        else {
-          iVar21 = iVar21 + -2;
-        }
-        g_human[(int)puVar11].health = iVar21;
-        if (0 < iVar21) {
-          local_48 = (float)(g_yaxis[0] * 0.5 + g_human[(int)puVar11].pos.x);
-          local_44 = (float)(g_yaxis[1] * 0.5 + g_human[(int)puVar11].pos.y);
-          local_40 = (float)(g_yaxis[2] * 0.5 + g_human[(int)puVar11].pos.z);
-          createevent_bullethit(0,3,&local_48,&local_48);
-        }
-      }
-      if (g_human[(int)puVar11].vehicle_id == -1) {
-        human_collisionhuman(LF_BITS_F(local_a4));
-      }
-      iVar21 = g_game.gametype;
-      if (g_human[(int)puVar11].health < -4) {
-        if (g_human[(int)puVar11].despawn_timer < 0xa8c) {
-          LF_SET_BITS(fVar24, g_human[(int)puVar11].player_id);
-          if (LF_UINT(fVar24) == 0xffffffffU) {
-            iVar21 = g_human[(int)puVar11].account;
-            if (iVar21 != -1) {
-              if ((-1 < iVar21) && (iVar21 < DAT_0f837b64)) {
-                local_cc = (int *)(g_account[iVar21].money + -10000);
-                if (0 < (int)local_cc) {
-                  g_account[iVar21].money =
-                       g_account[iVar21].money -
-                       (int)(longlong)((double)(int)local_cc * 0.05000000074505806);
-                }
-              }
-              g_human[(int)puVar11].account = -1;
-            }
-          }
-          else {
-            if ((g_game.gametype == 4) && (((uint)LF_UINT(fVar24)) < 0x100)) {
-              playersellstock(fVar24,g_player[((int)LF_UINT(fVar24))].stocks);
-            }
-            playerdeathtax(((uint)LF_UINT(fVar24)));
-            if (iVar21 == 4) {
-              iVar21 = g_human[(int)puVar11].player_id;
-              if (g_game.team0_manager == iVar21) {
-                g_game.team0_manager = -1;
-              }
-              if (g_game.team1_manager == iVar21) {
-                g_game.team1_manager = -1;
-              }
-              if (g_game.team2_manager == iVar21) {
-                g_game.team2_manager = -1;
-              }
-              if (g_game.team3_manager == iVar21) {
-                g_game.team3_manager = -1;
-              }
-              if (g_game.team4_manager == iVar21) {
-                g_game.team4_manager = -1;
-              }
-              g_player[((int)LF_UINT(fVar24))].team = 7;
-            }
-            g_player[((int)LF_UINT(fVar24))].human_id = -1;
-            createevent_updateplayer(((int)LF_UINT(fVar24)));
-            g_human[(int)puVar11].player_id = -1;
-          }
-        }
-        iVar21 = g_human[(int)puVar11].despawn_timer + -1;
-        bVar25 = g_game.gametype == 3;
-        g_human[(int)puVar11].despawn_timer = iVar21;
-        if ((bVar25) && (iVar21 < 4)) {
-          g_human[(int)puVar11].despawn_timer = 4;
-        }
-      }
-      else if (g_human[(int)puVar11].player_id == -1) {
-        g_human[(int)puVar11].despawn_timer = g_human[(int)puVar11].despawn_timer + -1;
-      }
-      else {
-        g_human[(int)puVar11].despawn_timer = 0xe10;
-      }
-      iVar21 = 0;
-      if (0 < g_city.num_buildings) {
-        piVar17 = &g_city.building_type;
-        do {
-          if ((*piVar17 == 6) &&
-             (iVar14 = pointinsidebuilding(iVar21,&g_human[(int)puVar11].pos.x,0.0), iVar14 != 0)) {
-            if (g_human[(int)puVar11].player_id == -1) {
-              if (g_game.gametype == 4) {
-                g_human[(int)puVar11].despawn_timer = 0;
-              }
-            }
-            else if ((((g_game.ticks & 0x1fU) == 0) &&
-                     (iVar14 = g_human[(int)puVar11].health, -5 < iVar14)) && (iVar14 < 100)) {
-              g_human[(int)puVar11].health = iVar14 + 1;
-              g_human[(int)puVar11].bleeding = 0;
-            }
-          }
-          iVar21 = iVar21 + 1;
-          piVar17 = piVar17 + 0x277;
-        } while (iVar21 < g_city.num_buildings);
-      }
-      if (g_human[(int)puVar11].despawn_timer < 1) {
-        deletehuman(local_a4);
-      }
-      g_human[(int)puVar11].input_buttons_prev = g_human[(int)puVar11].input_buttons;
-      iVar21 = 3;
-      pfVar19 = &g_human[(int)puVar11].bones[0].pos_prev.y;
-      do {
-        iVar21 = iVar21 + -1;
-        ((vec3 *)(pfVar19 + -1))->x = pfVar19[-4];
-        *pfVar19 = pfVar19[-3];
-        pfVar19[1] = pfVar19[-2];
-        pfVar19[0x37] = pfVar19[0x34];
-        pfVar19[0x38] = pfVar19[0x35];
-        pfVar19[0x39] = pfVar19[0x36];
-        pfVar19[0x6f] = pfVar19[0x6c];
-        pfVar19[0x70] = pfVar19[0x6d];
-        pfVar19[0x71] = pfVar19[0x6e];
-        pfVar19[0xa7] = pfVar19[0xa4];
-        pfVar19[0xa8] = pfVar19[0xa5];
-        pfVar19[0xa9] = pfVar19[0xa6];
-        pfVar19[0xdf] = pfVar19[0xdc];
-        pfVar19[0xe0] = pfVar19[0xdd];
-        pfVar19[0xe1] = pfVar19[0xde];
-        pfVar19 = pfVar19 + 0x118;
-      } while (iVar21 != 0);
-      pBVar22 = g_body + 1;
-      pfVar19 = &g_human[(int)puVar11].bones[1].rot[0].z;
-      do {
-        iVar21 = *(int *)pBVar22;
-        iVar14 = iVar21 * 0xe0;
-        local_84 = (float)(*(float *)(iVar14 + ((int)&g_human[0].lf_raw[0x100]) + iVar23) * *pfVar19 +
-                   (pfVar19[-1] * *(float *)(iVar14 + ((int)&g_human[0].lf_raw[0xfc]) + iVar23) +
-                   ((vec3 *)(pfVar19 + -2))->x * *(float *)(iVar14 + ((int)&g_human[0].lf_raw[0xf8]) + iVar23)));
-        local_80 = (float)(pfVar19[3] * g_human[(int)puVar11].bones[iVar21].rot[0].z +
-                   (pfVar19[2] * g_human[(int)puVar11].bones[iVar21].rot[0].y +
-                   pfVar19[1] * g_human[(int)puVar11].bones[iVar21].rot[0].x));
-        local_7c = (float)(pfVar19[6] * g_human[(int)puVar11].bones[iVar21].rot[0].z +
-                   (pfVar19[5] * g_human[(int)puVar11].bones[iVar21].rot[0].y +
-                   pfVar19[4] * g_human[(int)puVar11].bones[iVar21].rot[0].x));
-        local_78 = (float)(g_human[(int)puVar11].bones[iVar21].rot[1].z * *pfVar19 +
-                   (((vec3 *)(pfVar19 + -2))->x * g_human[(int)puVar11].bones[iVar21].rot[1].x +
-                   g_human[(int)puVar11].bones[iVar21].rot[1].y * pfVar19[-1]));
-        local_74 = (float)(g_human[(int)puVar11].bones[iVar21].rot[1].z * pfVar19[3] +
-                   (pfVar19[1] * g_human[(int)puVar11].bones[iVar21].rot[1].x +
-                   g_human[(int)puVar11].bones[iVar21].rot[1].y * pfVar19[2]));
-        local_70 = (float)(g_human[(int)puVar11].bones[iVar21].rot[1].z * pfVar19[6] +
-                   (pfVar19[4] * g_human[(int)puVar11].bones[iVar21].rot[1].x +
-                   g_human[(int)puVar11].bones[iVar21].rot[1].y * pfVar19[5]));
-        local_6c = (float)(*pfVar19 * g_human[(int)puVar11].bones[iVar21].rot[2].z +
-                   (((vec3 *)(pfVar19 + -2))->x * g_human[(int)puVar11].bones[iVar21].rot[2].x +
-                   pfVar19[-1] * g_human[(int)puVar11].bones[iVar21].rot[2].y));
-        local_68 = (float)(pfVar19[3] * g_human[(int)puVar11].bones[iVar21].rot[2].z +
-                   (pfVar19[1] * g_human[(int)puVar11].bones[iVar21].rot[2].x +
-                   pfVar19[2] * g_human[(int)puVar11].bones[iVar21].rot[2].y));
-        local_64 = (float)(pfVar19[6] * g_human[(int)puVar11].bones[iVar21].rot[2].z +
-                   (pfVar19[4] * g_human[(int)puVar11].bones[iVar21].rot[2].x +
-                   pfVar19[5] * g_human[(int)puVar11].bones[iVar21].rot[2].y));
-        dVar27 = _CIatan2((double)local_70,(double)local_64);
-        local_90 = (float)dVar27;
-        dVar27 = _CIsqrt((double)(local_84 * local_84 + local_80 * local_80));
-        local_48 = (float)dVar27;
-        dVar27 = _CIatan2((double)-local_7c,(double)local_48);
-        local_8c = (float)dVar27;
-        dVar27 = _CIsin((double)local_90);
-        local_44 = (float)dVar27;
-        dVar27 = _CIcos((double)local_90);
-        local_40 = (float)dVar27;
-        dVar27 = _CIatan2((double)(local_44 * local_6c - local_40 * local_78),
-                          (double)(local_40 * local_74 - local_68 * local_44));
-        local_88 = (float)dVar27;
-        pBVar22 = pBVar22 + 1;
-        pfVar19[0x26] = local_90;
-        pfVar19[0x27] = local_8c;
-        pfVar19[0x28] = local_88;
-        pfVar19 = pfVar19 + 0x38;
-      } while ((int)pBVar22 < ((int)&g_body[15]));
+      human_calculatearmangles((int)local_a4);
+      human_finish((int)local_a4, local_9c, (int)LF_UINT(local_a0));
     }
     local_a4 = (uint *)((int)local_a4 + 1);
     if (0x1ff < (int)local_a4) {
