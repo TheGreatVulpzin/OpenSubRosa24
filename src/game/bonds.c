@@ -813,6 +813,63 @@ static void contact_bone_level(const Bond *b)
   x->dw.z = (float)(x->dw.z + t.z);
 }
 
+/* Type 9: the turn that a muscle holds between bones b and c of human a. The change of the
+ * angular velocity removes the turn error (dir) and a part of the difference of the two turns.
+ * Each bone gets its share. */
+static void bond_bodyrotbody(const BondOpt *o)
+{
+  BondHuman *h = &g_bondhuman[(ushort)o->a];
+  BondBone *x = &h->bones[(ushort)o->b], *y = &h->bones[(ushort)o->c];
+  float d = o->damping, nd = -o->damping, ns;
+  vec3 v;
+
+  v.x = (float)((float)(nd * x->w.x + o->dir.x) + d * y->w.x);
+  v.y = (float)(y->w.y * d + (float)(x->w.y * nd + o->dir.y));
+  v.z = (float)(d * y->w.z + (float)(nd * x->w.z + o->dir.z));
+  x->dw.x = (float)(x->dw.x + o->share_a * v.x);
+  x->dw.y = (float)(v.y * o->share_a + x->dw.y);
+  x->dw.z = (float)(x->dw.z + v.z * o->share_a);
+  ns = -o->share_b;
+  y->dw.x = (float)(y->dw.x + ns * v.x);
+  y->dw.y = (float)(v.y * ns + y->dw.y);
+  y->dw.z = (float)(v.z * ns + y->dw.z);
+}
+
+/* Type 10: a bone of a human holds an item at a point. The velocity of the hold point on the
+ * bone (arm_a) and on the item (arm_b) must be equal. The change goes to the bone with the share
+ * weights[0] and to the item with weights[1], and each also turns around its point. */
+static void bond_bodyitem(const Bond *b, const BondOpt *o)
+{
+  BondBone *x = &g_bondhuman[b->owner].bones[b->bone_a];
+  Item *it = &g_item[b->target];
+  const vec3 ra = o->arm_a, rb = o->arm_b;
+  float d = b->damping, nd = -b->damping;
+  float sb = b->weights[0], si = b->weights[1], ns = -sb;
+  vec3 v, t;
+
+  v.x = (float)(nd * (float)(it->vel.x + (float)(rb.y * it->torque.z - rb.z * it->torque.y)) +
+                (float)(d * (float)((float)(ra.y * x->w.z - ra.z * x->w.y) + x->vel.x) + o->dir.x));
+  v.y = (float)(nd * (float)(it->vel.y + (float)(it->torque.x * rb.z - rb.x * it->torque.z)) +
+                (float)(d * (float)(x->vel.y + (float)(x->w.x * ra.z - ra.x * x->w.z)) + o->dir.y));
+  v.z = (float)(nd * (float)(it->vel.z + (float)(it->torque.y * rb.x - rb.y * it->torque.x)) +
+                (float)(d * (float)(x->vel.z + (float)(ra.x * x->w.y - x->w.x * ra.y)) + o->dir.z));
+  x->dv.x = (float)(x->dv.x + v.x * ns);
+  x->dv.y = (float)(x->dv.y + v.y * ns);
+  x->dv.z = (float)(x->dv.z + v.z * ns);
+  x->dw.x = (float)(ns * (float)(v.y * ra.z - ra.y * v.z) + x->dw.x);
+  x->dw.y = (float)(ns * (float)(ra.x * v.z - v.x * ra.z) + x->dw.y);
+  x->dw.z = (float)(ns * (float)(v.x * ra.y - v.y * ra.x) + x->dw.z);
+  it->dv.x = (float)(it->dv.x + si * v.x);
+  it->dv.y = (float)(v.y * si + it->dv.y);
+  it->dv.z = (float)(v.z * si + it->dv.z);
+  t.x = (float)(v.y * rb.z - rb.y * v.z);
+  t.y = (float)(rb.x * v.z - v.x * rb.z);
+  t.z = (float)(rb.y * v.x - rb.x * v.y);
+  it->dw.x = (float)(t.x * si + it->dw.x);
+  it->dw.y = (float)(t.y * si + it->dw.y);
+  it->dw.z = (float)(si * t.z + it->dw.z);
+}
+
 void __cdecl lf_41de0(void)
 
 {
@@ -1011,120 +1068,14 @@ void __cdecl lf_41de0(void)
             bond_bodybody(local_c0);
             stoptimer(g_timerlist.bondbodybody);
           }
-          iVar30 = g_timerlist.bondbodyrotbody;
           if (BOND_KIND(pfVar33) == 0x9U) {
-            uVar13 = rdtsc();
-            g_timer[g_timerlist.bondbodyrotbody].start_lo = (int)uVar13;
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-            uVar25 = (uint)(ushort)((BondOpt *)(pfVar21 + -8))->a;
-            fVar6 = -pfVar21[7];
-            uVar32 = (uint)(ushort)*(short *)((int)pfVar21 + -0x1e);
-            uVar28 = (uint)*(ushort *)(pfVar21 + -7);
-            LF_COPY(fVar5, pfVar21[7]);
-            local_5c = (float)((float)(fVar6 * LF_BITS_F((&DAT_00461e10)[uVar25 * 0x204 + uVar32 * 0x20]) + pfVar21[-6])
-                       + fVar5 * LF_BITS_F((&DAT_00461e10)[uVar28 * 0x20 + uVar25 * 0x204]));
-            local_58 = (float)(LF_BITS_F((&DAT_00461e14)[uVar28 * 0x20 + uVar25 * 0x204]) * fVar5 +
-                       ((float)(LF_BITS_F((&DAT_00461e14)[uVar25 * 0x204 + uVar32 * 0x20]) * fVar6 + pfVar21[-5])));
-            local_54 = (float)(fVar5 * LF_BITS_F((&DAT_00461e18)[uVar28 * 0x20 + uVar25 * 0x204]) +
-                       ((float)(fVar6 * LF_BITS_F((&DAT_00461e18)[uVar25 * 0x204 + uVar32 * 0x20]) + pfVar21[-4])));
-            LF_COPY(fVar5, pfVar21[5]);
-            *(float *)&((&DAT_00461e20)[uVar25 * 0x204 + uVar32 * 0x20]) =
-                 (float)(LF_BITS_F((&DAT_00461e20)[uVar25 * 0x204 + uVar32 * 0x20]) + fVar5 * local_5c);
-            *(float *)&((&DAT_00461e24)[uVar25 * 0x204 + uVar32 * 0x20]) =
-                 (float)(local_58 * fVar5 + LF_BITS_F((&DAT_00461e24)[uVar25 * 0x204 + uVar32 * 0x20]));
-            *(float *)&((&DAT_00461e28)[uVar25 * 0x204 + uVar32 * 0x20]) =
-                 (float)(LF_BITS_F((&DAT_00461e28)[uVar25 * 0x204 + uVar32 * 0x20]) + local_54 * fVar5);
-            local_50 = ((float *)LF_BITS_U(-pfVar21[6]));
-            *(float *)&((&DAT_00461e20)[uVar28 * 0x20 + uVar25 * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461e20)[uVar28 * 0x20 + uVar25 * 0x204]) + LF_BITS_F(local_50) * local_5c)
-            ;
-            *(float *)&((&DAT_00461e24)[uVar28 * 0x20 + uVar25 * 0x204]) =
-                 (float)(local_58 * LF_BITS_F(local_50) + LF_BITS_F((&DAT_00461e24)[uVar28 * 0x20 + uVar25 * 0x204]))
-            ;
-            *(float *)&((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]) =
-                 (float)(local_54 * LF_BITS_F(local_50) + LF_BITS_F((&DAT_00461e28)[uVar28 * 0x20 + uVar25 * 0x204]))
-            ;
+            starttimer(g_timerlist.bondbodyrotbody);
+            bond_bodyrotbody((BondOpt *)(pfVar21 - 8));
             stoptimer(g_timerlist.bondbodyrotbody);
           }
-          iVar30 = g_timerlist.bondbodyitem;
           if (BOND_KIND(pfVar33) == 0xaU) {
-            uVar13 = rdtsc();
-            g_timer[g_timerlist.bondbodyitem].start_lo = (int)uVar13;
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-            LF_COPY(fVar6, pfVar33[6]);
-            local_94 = pfVar21[-2];
-            LF_COPY(fVar7, pfVar33[7]);
-            local_90 = pfVar21[-1];
-            local_8c = *pfVar21;
-            local_cc = pfVar21[1];
-            local_c8 = pfVar21[2];
-            local_c4 = pfVar21[3];
-            LF_COPY(fVar8, pfVar33[8]);
-            LF_COPY(fVar5, pfVar33[-2]);
-            fVar9 = -pfVar33[-2];
-            local_5c = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.x +
-                               ((float)(local_c8 * g_item[((int)LF_UINT(fVar8))].torque.z -
-                               local_c4 * g_item[((int)LF_UINT(fVar8))].torque.y)))) +
-                       ((float)(fVar5 * ((float)(((float)(local_90 *
-                                 LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) -
-                                local_8c *
-                                LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))) +
-                               LF_BITS_F((&DAT_00461de0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))) +
-                       pfVar21[-6])));
-            local_58 = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.y +
-                               ((float)(g_item[((int)LF_UINT(fVar8))].torque.x * local_c4 -
-                               local_cc * g_item[((int)LF_UINT(fVar8))].torque.z)))) +
-                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
-                               ((float)(LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) *
-                                local_8c -
-                               local_94 *
-                               LF_BITS_F((&DAT_00461e18)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]))))) +
-                       pfVar21[-5])));
-            local_54 = (float)(fVar9 * ((float)(g_item[((int)LF_UINT(fVar8))].vel.z +
-                               ((float)(g_item[((int)LF_UINT(fVar8))].torque.y * local_cc -
-                               local_c8 * g_item[((int)LF_UINT(fVar8))].torque.x)))) +
-                       ((float)(fVar5 * ((float)(LF_BITS_F((&DAT_00461de8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
-                               ((float)(local_94 *
-                                LF_BITS_F((&DAT_00461e14)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) -
-                               LF_BITS_F((&DAT_00461e10)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) *
-                               local_90)))) + pfVar21[-4])));
-            local_d4 = pfVar33[-0xb];
-            local_d0 = pfVar33[-10];
-            local_88 = ((float *)LF_BITS_U(-local_d4));
-            *(float *)&((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df0)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
-                 local_5c * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df4)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
-                 local_58 * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F((&DAT_00461df8)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) +
-                 local_54 * LF_BITS_F(local_88));
-            *(float *)&((&DAT_00461e20)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F(local_88) * ((float)(local_58 * local_8c - local_90 * local_54)) +
-                 LF_BITS_F((&DAT_00461e20)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
-            *(float *)&((&DAT_00461e24)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F(local_88) * ((float)(local_94 * local_54 - local_5c * local_8c)) +
-                 LF_BITS_F((&DAT_00461e24)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
-            *(float *)&((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]) =
-                 (float)(LF_BITS_F(local_88) * ((float)(local_5c * local_90 - local_58 * local_94)) +
-                 LF_BITS_F((&DAT_00461e28)[((int)LF_UINT(fVar7)) * 0x20 + ((int)LF_UINT(fVar6)) * 0x204]));
-            g_item[((int)LF_UINT(fVar8))].dv.x =
-                 (float)(g_item[((int)LF_UINT(fVar8))].dv.x + local_d0 * local_5c);
-            g_item[((int)LF_UINT(fVar8))].dv.y =
-                 (float)(local_58 * local_d0 + g_item[((int)LF_UINT(fVar8))].dv.y);
-            g_item[((int)LF_UINT(fVar8))].dv.z =
-                 (float)(local_54 * local_d0 + g_item[((int)LF_UINT(fVar8))].dv.z);
-            local_6c = (float)(local_58 * local_c4 - local_c8 * local_54);
-            local_68 = (float)(local_cc * local_54 - local_5c * local_c4);
-            local_64 = (float)(local_c8 * local_5c - local_cc * local_58);
-            g_item[((int)LF_UINT(fVar8))].dw.x =
-                 (float)(local_6c * local_d0 + g_item[((int)LF_UINT(fVar8))].dw.x);
-            g_item[((int)LF_UINT(fVar8))].dw.y =
-                 (float)(local_68 * local_d0 + g_item[((int)LF_UINT(fVar8))].dw.y);
-            g_item[((int)LF_UINT(fVar8))].dw.z =
-                 (float)(local_d0 * local_64 + g_item[((int)LF_UINT(fVar8))].dw.z);
-            local_50 = local_88;
+            starttimer(g_timerlist.bondbodyitem);
+            bond_bodyitem((Bond *)((char *)pfVar33 - 0x78), (BondOpt *)(pfVar21 - 8));
             stoptimer(g_timerlist.bondbodyitem);
           }
           /* One copy of the type for the next two tests, as the original (a block can change
