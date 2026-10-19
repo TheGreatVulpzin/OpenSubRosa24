@@ -2,6 +2,8 @@
  * and writes the hit point, the normal and the distance or fraction. */
 #include "intersect.h"
 
+#include <math.h>
+
 #include "sr_math.h"
 #include "vectors.h"
 
@@ -351,4 +353,145 @@ int circleintersecttriangle(vec3 *hit, vec3 *n, float *dist, const vec3 *pos, co
     circle_edge(hit, n, dist, pos, rot, b, c);
     circle_edge(hit, n, dist, pos, rot, c, a);
     return r <= *dist ? 0 : 1;
+}
+
+/* The sphere (center, r) against point p. On a hit, normal gets the unit vector from p to the
+ * center, hit gets the center and *dist gets the depth. It returns 0 also on a hit. */
+int sphereintersectpoint(vec3 *hit, vec3 *normal, float *dist, const vec3 *center, float r, const vec3 *p)
+{
+    float dx = (float)(center->x - p->x), dy = (float)(center->y - p->y), dz = (float)(center->z - p->z);
+    float len = (float)x87_sqrt((double)(float)(dz * dz + (dy * dy + dx * dx)));
+    float inv;
+
+    if (len < r) {
+        inv = (float)(1.0 / len);
+        normal->x = inv * dx;
+        normal->y = (float)(dy * inv);
+        normal->z = (float)(inv * dz);
+        *hit = *center;
+        *dist = (float)(r - len);
+    }
+    return 0;
+}
+
+/* The distance from point p to the segment a -> b. */
+float pointdistanceline(const vec3 *a, const vec3 *b, const vec3 *p)
+{
+    vec3 d, q, foot;
+    float f;
+
+    d.x = (float)(b->x - a->x);
+    d.y = (float)(b->y - a->y);
+    d.z = (float)(b->z - a->z);
+    q.x = (float)(p->x - b->x);
+    q.y = (float)(p->y - b->y);
+    q.z = (float)(p->z - b->z);
+    f = (float)(d.y * q.y + d.x * q.x + d.z * q.z);
+    if (0.0 <= f) {
+        d.x = (float)(b->x - p->x);
+        d.y = (float)(b->y - p->y);
+        d.z = (float)(b->z - p->z);
+        return (float)x87_sqrt((double)(float)(d.z * d.z + (d.x * d.x + d.y * d.y)));
+    }
+    q.x = (float)(p->x - a->x);
+    q.y = (float)(p->y - a->y);
+    q.z = (float)(p->z - a->z);
+    if ((float)(d.z * q.z + (q.y * d.y + q.x * d.x)) <= 0.0)
+        return vectordistance(p, a);
+    normalizevector(&d, &d);
+    f = -(float)(d.y * q.y + d.x * q.x + d.z * q.z);
+    foot.x = (float)(p->x + f * d.x);
+    foot.y = (float)(p->y + f * d.y);
+    foot.z = (float)(d.z * f + p->z);
+    return vectordistance(&foot, a);
+}
+
+/* The 2D line a -> b against the segment c -> d, from the front side of the segment only. n gets
+ * the unit normal of the segment, *t the part of a -> b before the hit and hit the hit point. */
+int lineintersectline2d(float hit[2], float n[2], float *t, const float a[2], const float b[2], const float c[2],
+                        const float d[2])
+{
+    float ny, bx, ax, by, ay, s, y;
+
+    n[0] = (float)(c[1] - d[1]);
+    ny = (float)(d[0] - c[0]);
+    n[1] = ny;
+    if (!(0.0 <= (float)(ny * (float)(a[1] - c[1]) + n[0] * (float)(a[0] - c[0])) &&
+          (float)(n[0] * (float)(b[0] - c[0]) + (float)(b[1] - c[1]) * ny) <= 0.0))
+        return 0;
+    normalizevector2d(n, n);
+    *t = (float)(n[1] * (float)(c[1] - a[1]) + n[0] * (float)(c[0] - a[0]));
+    bx = b[0];
+    ax = a[0];
+    by = b[1];
+    ay = a[1];
+    s = (float)(*t / (float)((float)(bx - ax) * n[0] + (float)(by - ay) * n[1]));
+    *t = s;
+    hit[0] = (float)(a[0] + s * (bx - ax));
+    y = (float)((by - ay) * s + a[1]);
+    hit[1] = y;
+    return 0.0 <= (float)((float)(d[1] - c[1]) * (float)(y - c[1]) + (float)(d[0] - c[0]) * (float)(hit[0] - c[0])) &&
+                   0.0 <= (float)((float)(c[1] - d[1]) * (float)(hit[1] - d[1]) +
+                                  (float)(c[0] - d[0]) * (float)(hit[0] - d[0]))
+               ? 1
+               : 0;
+}
+
+/* The 2D circle (p, r) against the segment a -> b. n gets the unit normal of the segment, hit
+ * the nearest point of the segment and *t the signed distance over r. */
+int sphereintersectline2d(float hit[2], float n[2], float *t, const float p[2], const float a[2], const float b[2],
+                          float r)
+{
+    float d;
+
+    if (!(0.0 <= (float)((float)(b[1] - a[1]) * (float)(p[1] - a[1]) + (float)(b[0] - a[0]) * (float)(p[0] - a[0])) &&
+          0.0 <= (float)((float)(a[1] - b[1]) * (float)(p[1] - b[1]) + (float)(a[0] - b[0]) * (float)(p[0] - b[0]))))
+        return 0;
+    n[0] = (float)(a[1] - b[1]);
+    n[1] = (float)(b[0] - a[0]);
+    normalizevector2d(n, n);
+    d = (float)((float)(p[1] - a[1]) * n[1] + n[0] * (float)(p[0] - a[0]));
+    if (!(fabs(d) <= r))
+        return 0;
+    hit[0] = (float)(p[0] + -d * n[0]);
+    hit[1] = (float)(-d * n[1] + p[1]);
+    *t = (float)(d / r);
+    return 1;
+}
+
+/* The 2D segment a -> b against the circle (c, r). n gets the unit direction of the segment, hit
+ * the first point inside the circle and *t its distance from a. */
+int lineintersectcircle2d(float hit[2], float n[2], float *t, const float a[2], const float b[2], const float c[2],
+                          float r)
+{
+    double len, back;
+    float dy, inv, ux, uy, along, px, py, ex, ey, dd, k;
+
+    n[0] = (float)(b[0] - a[0]);
+    dy = (float)(b[1] - a[1]);
+    n[1] = dy;
+    len = x87_sqrt((double)(float)(n[0] * n[0] + dy * dy));
+    inv = (float)(1.0 / (float)len);
+    ux = inv * n[0];
+    n[0] = ux;
+    uy = n[1] * inv;
+    n[1] = uy;
+    along = (float)(ux * (float)(c[0] - a[0]) + uy * (float)(c[1] - a[1]));
+    if (along < 0.0)
+        return 0;
+    if (!(along <= (float)len))
+        return 0;
+    px = (float)(a[0] + along * ux);
+    py = (float)(uy * along + a[1]);
+    ex = (float)(px - c[0]);
+    ey = (float)(py - c[1]);
+    dd = (float)x87_sqrt((double)(float)(ex * ex + ey * ey));
+    if (!(dd <= r))
+        return 0;
+    back = x87_sqrt((double)(r * r - dd * dd));
+    k = -(float)back;
+    hit[0] = (float)(px + k * n[0]);
+    hit[1] = (float)(k * n[1] + py);
+    *t = (float)(along - (float)back);
+    return 1;
 }

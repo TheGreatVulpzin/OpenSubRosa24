@@ -110,10 +110,10 @@ void lineintersectplane(void);
 void lineintersectplanetwosided(void);
 void lineintersecttriangle(void);
 void lineintersecttriangletwosided(void);
-void lf_0c8f0(void);
-void lf_0cab0(void);
-void lf_0cca0(void);
-void lf_0cdf0(void);
+void pointdistanceline(void);
+void lineintersectline2d(void);
+void sphereintersectline2d(void);
+void lineintersectcircle2d(void);
 void lf_0d020(void);
 void lf_0d0c0(void);
 void lf_0d110(void);
@@ -187,7 +187,7 @@ void lf_19ee0(void);
 void circleintersecttriangle(void);
 void sphereintersecttriangle(void);
 void sphereintersectline(void);
-void lf_1a990(void);
+void sphereintersectpoint(void);
 void lineintersectsphere(void);
 void lf_1ac40(void);
 void createitem(void);
@@ -220,7 +220,7 @@ void lf_240e0(void);
 void lf_24f60(void);
 void lineintersectobject(void);
 void lf_25e70(void);
-void lf_26bc0(void);
+void lineintersecttrack(void);
 void lineintersecttrackrail(void);
 void lf_26f90(void);
 void lf_272b0(void);
@@ -243,21 +243,21 @@ void lf_29bf0(void);
 void lf_2a510(void);
 void lf_2c020(void);
 void lineintersectarea(void);
-void lf_2cda0(void);
-void lf_2d2d0(void);
-void lf_2d7f0(void);
-void lf_2daf0(void);
+void sphereintersectnormalblock(void);
+void sphereintersectspecblock(void);
+void circleintersectnormalblock(void);
+void circleintersectspecblock(void);
 void sphereintersectcityobjecttype(void);
 void lf_2e310(void);
 void lf_2efd0(void);
 void lf_2f090(void);
-void lf_2f130(void);
+void lineintersecthuman(void);
 void lf_2f420(void);
 void lf_306d0(void);
 void sphereintersecttrianglefull(void);
 void itemtimetolive(void);
 void lf_30ba0(void);
-void lf_30f00(void);
+void item_sphereintersect(void);
 void lineintersectall(void);
 void lineintersectlevel(void);
 void lf_31800(void);
@@ -277,8 +277,8 @@ void lf_3cfe0(void);
 void lf_3d500(void);
 void lf_3da50(void);
 void lf_3e070(void);
-void lf_40aa0(void);
-void lf_41550(void);
+void sphereintersectarea(void);
+void circleintersectarea(void);
 void bondsimulation2(void);
 void lf_46c30(void);
 void lf_48ec0(void);
@@ -428,10 +428,10 @@ const LfEntry lf_table[] = {
     { "lineintersectplanetwosided", 0xc290, (void *)lineintersectplanetwosided, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersecttriangle", 0xc420, (void *)lineintersecttriangle, 8, LF_RET_INT, 4, "pppppppp", 0 },
     { "lineintersecttriangletwosided", 0xc680, (void *)lineintersecttriangletwosided, 9, LF_RET_INT, 4, "ppppppppv", 0 },
-    { "pointdistanceline", 0xc8f0, (void *)lf_0c8f0, 3, LF_RET_FLOAT, 4, "ppp", 0 },
-    { "lineintersectline2d", 0xcab0, (void *)lf_0cab0, 7, LF_RET_INT, 4, "ppppppp", 0 },
-    { "sphereintersectline2d", 0xcca0, (void *)lf_0cca0, 7, LF_RET_INT, 4, "ppppppv", 0 },
-    { "lineintersectcircle2d", 0xcdf0, (void *)lf_0cdf0, 7, LF_RET_INT, 4, "ppppppv", 0 },
+    { "pointdistanceline", 0xc8f0, (void *)pointdistanceline, 3, LF_RET_FLOAT, 4, "ppp", 0 },
+    { "lineintersectline2d", 0xcab0, (void *)lineintersectline2d, 7, LF_RET_INT, 4, "ppppppp", 0 },
+    { "sphereintersectline2d", 0xcca0, (void *)sphereintersectline2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
+    { "lineintersectcircle2d", 0xcdf0, (void *)lineintersectcircle2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "loadtextfile", 0xd020, (void *)lf_0d020, 1, LF_RET_VOID, 4, "p", 1 },
     { "findstring", 0xd0c0, (void *)lf_0d0c0, 1, LF_RET_INT, 1, "p", 0 },
     { "getfloat", 0xd110, (void *)lf_0d110, 0, LF_RET_INT, 4, "", 0 },
@@ -505,7 +505,7 @@ const LfEntry lf_table[] = {
     { "circleintersecttriangle", 0x1a000, (void *)circleintersecttriangle, 9, LF_RET_INT, 4, "pppppvppp", 0 },
     { "sphereintersecttriangle", 0x1a700, (void *)sphereintersecttriangle, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "sphereintersectline", 0x1a7f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
-    { "sphereintersectpoint", 0x1a990, (void *)lf_1a990, 6, LF_RET_INT, 4, "ppppvp", 0 },
+    { "sphereintersectpoint", 0x1a990, (void *)sphereintersectpoint, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x1aa60, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "getmasterserverip", 0x1ac40, (void *)lf_1ac40, 0, LF_RET_INT, 4, "", 1 },
     { "createitem", 0x1b070, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
@@ -538,7 +538,7 @@ const LfEntry lf_table[] = {
     { "objectsimulation_heli", 0x24f60, (void *)lf_24f60, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0x257a0, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "lineintersecttrack", 0x26bc0, (void *)lf_26bc0, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersecttrack", 0x26bc0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0x26db0, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0x26f90, (void *)lf_26f90, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_car", 0x272b0, (void *)lf_272b0, 1, LF_RET_VOID, 4, "v", 0 },
@@ -561,21 +561,21 @@ const LfEntry lf_table[] = {
     { "area_createinteriorblocks", 0x2a510, (void *)lf_2a510, 0, LF_RET_VOID, 4, "", 1 },
     { "area_breakblock", 0x2c020, (void *)lf_2c020, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x2c0c0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
-    { "sphereintersectnormalblock", 0x2cda0, (void *)lf_2cda0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
-    { "sphereintersectspecblock", 0x2d2d0, (void *)lf_2d2d0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
-    { "circleintersectnormalblock", 0x2d7f0, (void *)lf_2d7f0, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
-    { "circleintersectspecblock", 0x2daf0, (void *)lf_2daf0, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
+    { "sphereintersectnormalblock", 0x2cda0, (void *)sphereintersectnormalblock, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
+    { "sphereintersectspecblock", 0x2d2d0, (void *)sphereintersectspecblock, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
+    { "circleintersectnormalblock", 0x2d7f0, (void *)circleintersectnormalblock, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
+    { "circleintersectspecblock", 0x2daf0, (void *)circleintersectspecblock, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
     { "sphereintersectcityobjecttype", 0x2dfc0, (void *)sphereintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "clientrecv", 0x2e310, (void *)lf_2e310, 0, LF_RET_VOID, 4, "", 1 },
     { "packpositiondelta", 0x2efd0, (void *)lf_2efd0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "unpackpositiondelta", 0x2f090, (void *)lf_2f090, 4, LF_RET_VOID, 4, "pvvv", 0 },
-    { "lineintersecthuman", 0x2f130, (void *)lf_2f130, 4, LF_RET_INT, 4, "vppv", 0 },
+    { "lineintersecthuman", 0x2f130, (void *)lineintersecthuman, 4, LF_RET_INT, 4, "vppv", 0 },
     { "human_calcarmtorque", 0x2f420, (void *)lf_2f420, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x306d0, (void *)lf_306d0, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "sphereintersecttrianglefull", 0x307f0, (void *)sphereintersecttrianglefull, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "itemtimetolive", 0x30ab0, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "itemweaponsimulation", 0x30ba0, (void *)lf_30ba0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "item_sphereintersect", 0x30f00, (void *)lf_30f00, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "item_sphereintersect", 0x30f00, (void *)item_sphereintersect, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lineintersectall", 0x31480, (void *)lineintersectall, 2, LF_RET_INT, 4, "pp", 0 },
     { "lineintersectlevel", 0x31630, (void *)lineintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
     { "createobject", 0x31800, (void *)lf_31800, 5, LF_RET_INT, 4, "vpppv", 0 },
@@ -595,8 +595,8 @@ const LfEntry lf_table[] = {
     { "ai_assessthreats", 0x3d500, (void *)lf_3d500, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_createblock", 0x3da50, (void *)lf_3da50, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
-    { "sphereintersectarea", 0x40aa0, (void *)lf_40aa0, 6, LF_RET_INT, 4, "pppvpv", 0 },
-    { "circleintersectarea", 0x41550, (void *)lf_41550, 7, LF_RET_INT, 4, "pppvppv", 0 },
+    { "sphereintersectarea", 0x40aa0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
+    { "circleintersectarea", 0x41550, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },
     { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
     { "bulletsimulation", 0x48ec0, (void *)lf_48ec0, 0, LF_RET_VOID, 4, "", 0 },

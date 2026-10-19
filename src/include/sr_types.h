@@ -122,7 +122,7 @@ typedef union ObjectFace { struct {
 
 /* A piece of the track (the rails): the global track holds 4096 records of 0x578 bytes. */
 typedef union TrackPiece { struct {
-    int unk_00;         /* +0x00 createtrack, lineintersecttrack */
+    int type;           /* +0x00 createtrack; lineintersecttrack tests all the triangles of type 1, else the first 14 */
     vec3 pos;           /* +0x04 the center: lineintersecttrackrail tests only a line that starts within 64 of it */
     int unk_10;         /* +0x10 createtrack */
     vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */
@@ -1343,9 +1343,9 @@ typedef union AreaBlock { struct {
     int num_faces;                       /* +0x0054 the faces of the mesh */
     int faces;                           /* +0x0058 a pointer to 4 indexes into verts for each face */
     int face_slots;                      /* +0x005c a pointer to the texture slot of each face */
-    int unk_0060;                        /* +0x0060 2 functions */
-    int unk_0064;                        /* +0x0064 2 functions */
-    int unk_0068;                        /* +0x0068 2 functions */
+    int num_tris;                        /* +0x0060 circleintersectspecblock: the loose triangles of the mesh */
+    int tris;                            /* +0x0064 a pointer to 3 indexes into verts for each loose triangle */
+    int tri_slots;                       /* +0x0068 a pointer to the texture slot of each loose triangle */
     int unk_006c;                        /* +0x006c 6 functions */
     int unk_0070;                        /* +0x0070 6 functions */
     int unk_0074;                        /* +0x0074 7 functions */
@@ -1358,6 +1358,9 @@ SR_STATIC_ASSERT(offsetof(AreaBlock, verts) == 0x44, "AreaBlock.verts");
 SR_STATIC_ASSERT(offsetof(AreaBlock, num_faces) == 0x54, "AreaBlock.num_faces");
 SR_STATIC_ASSERT(offsetof(AreaBlock, faces) == 0x58, "AreaBlock.faces");
 SR_STATIC_ASSERT(offsetof(AreaBlock, face_slots) == 0x5c, "AreaBlock.face_slots");
+SR_STATIC_ASSERT(offsetof(AreaBlock, num_tris) == 0x60, "AreaBlock.num_tris");
+SR_STATIC_ASSERT(offsetof(AreaBlock, tris) == 0x64, "AreaBlock.tris");
+SR_STATIC_ASSERT(offsetof(AreaBlock, tri_slots) == 0x68, "AreaBlock.tri_slots");
 SR_STATIC_ASSERT(offsetof(AreaBlock, num_hideable) == 0x78, "AreaBlock.num_hideable");
 
 /* area[]: record of 0x100d6c bytes. */

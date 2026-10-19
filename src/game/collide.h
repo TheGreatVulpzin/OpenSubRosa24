@@ -16,6 +16,9 @@ int circleintersectlevel(float *pos, float *rot, float radius);
 int sphereintersectobject(int obj, float *pos, float radius);
 int lineintersectobject(int obj, float *from, float *to, int with_wheels);
 int lineintersecttrackrail(float *from, float *to, int k);
+int lineintersecttrack(float *from, float *to, int k);
+int lineintersecthuman(int human, float *from, float *to, float r);
+int item_sphereintersect(int item, float *pos, float r);
 
 int sphereintersectcityobjecttype(vec3 *hit, vec3 *normal, float *dist, int type, const vec3 *pos, const vec3 rot[3],
                                   const vec3 *center, float r);
@@ -30,6 +33,16 @@ int lineintersectnormalblock(vec3 *hit, vec3 *normal, float *t, const vec3 *from
 int lineintersectspecblock(vec3 *hit, vec3 *normal, float *t, const vec3 *from, const vec3 *to, const int cell[3],
                            uint32_t word, float size);
 int lineintersectarea(float *hit, float *normal, float *t, uint32_t area, float *from, float *to);
+int sphereintersectnormalblock(vec3 *hit, vec3 *normal, float *dist, const vec3 *center, float r, const int cell[3],
+                               uint32_t word, float size);
+int sphereintersectspecblock(vec3 *hit, vec3 *normal, float *dist, const vec3 *center, float r, const int cell[3],
+                             uint32_t word, float size);
+int sphereintersectarea(float *hit, float *normal, float *dist, uint32_t area, float *pos, float r);
+int circleintersectnormalblock(vec3 *hit, vec3 *normal, float *dist, const vec3 *pos, const vec3 *rot, float r,
+                               const int cell[3], uint32_t word, float size);
+int circleintersectspecblock(vec3 *hit, vec3 *normal, float *dist, const vec3 *pos, const vec3 *rot, float r,
+                             const int cell[3], uint32_t word, float size);
+int circleintersectarea(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float r);
 
 int pointinsidebase(float *pos, int team, float margin);
 int pointinsidebasesafe(float *pos, int team, float margin);

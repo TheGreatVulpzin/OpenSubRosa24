@@ -18,13 +18,9 @@
 #define g_cityobjects SR_AT(CityObjectRec, 0x15e24020)
 #define g_game (*SR_AT(Game, SR_RVA_GAME))
 #define g_city (*SR_AT(City, 0xe299220))
+#define g_cubevertex SR_AT(vec3, 0x60018)                       /* the 8 corners of a cube of side 1 */
+#define g_cubequad ((const int (*)[4])SR_AT(int, SR_RVA_CUBEQUAD)) /* the 4 corners of each face */
 #define NUM_CITYOBJECTS 1024
-
-/* Game functions with no clean version yet: the calls go to the lifted C. */
-int __cdecl lf_40aa0(float *hit, float *normal, float *dist, uint32_t area, float *pos, float radius);
-int __cdecl lf_41550(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float radius);
-#define sphereintersectarea lf_40aa0
-#define circleintersectarea lf_41550
 
 /* Copies a hit point and its normal into the Intersect record, bit for bit. */
 static void keep_hit(const vec3 *hit, const vec3 *normal)
@@ -540,25 +536,21 @@ int circleintersectlandscape(float *pos, float *rot, float radius)
 
 #define g_track SR_AT(TrackPiece, 0x2597efc0)
 
-/* The line from -> to against the rail triangles of track piece k (triangle 14 on), when from
- * is within 64 of its center on each axis. fraction gets the part of the line before the
- * nearest hit. */
-int lineintersecttrackrail(float *from, float *to, int k)
+/* The line s -> e against triangles first..last-1 of track piece tp, when s is within 64 of its
+ * center on each axis. Intersect.fraction gets the part of the line before the nearest hit. */
+static int track_line(const vec3 *s, const vec3 *e, const TrackPiece *tp, int first, int last)
 {
-    const TrackPiece *tp = &g_track[k];
-    const vec3 *s = (const vec3 *)from, *e = (const vec3 *)to;
     vec3 a, b, c, normal, hit;
     float t;
-    int i, n;
+    int i;
 
     if (!(fabs((float)(s->x - tp->pos.x)) <= 64.0 && fabs((float)(s->z - tp->pos.z)) <= 64.0 &&
           fabs((float)(s->y - tp->pos.y)) <= 64.0))
         return 0;
     g_intersect.fraction = 1.0f;
-    n = tp->num_tris;
-    if (!(14 < n))
+    if (!(first < last))
         return 0;
-    for (i = 14; i < n; i++) {
+    for (i = first; i < last; i++) {
         a = tp->verts[tp->tris[i][0]];
         b = tp->verts[tp->tris[i][1]];
         c = tp->verts[tp->tris[i][2]];
@@ -570,6 +562,21 @@ int lineintersecttrackrail(float *from, float *to, int k)
         }
     }
     return g_intersect.fraction < 1.0 ? 1 : 0;
+}
+
+/* The line from -> to against the rail triangles of track piece k (triangle 14 on). */
+int lineintersecttrackrail(float *from, float *to, int k)
+{
+    return track_line((const vec3 *)from, (const vec3 *)to, &g_track[k], 14, g_track[k].num_tris);
+}
+
+/* The line from -> to against the ground triangles of track piece k: the first 14, or all of
+ * them for a piece of type 1. */
+int lineintersecttrack(float *from, float *to, int k)
+{
+    const TrackPiece *tp = &g_track[k];
+
+    return track_line((const vec3 *)from, (const vec3 *)to, tp, 0, tp->type == 1 ? tp->num_tris : 14);
 }
 
 #define g_cityobjecttypes SR_AT(CityObjectTypeRec, 0xf02e500)
@@ -787,4 +794,118 @@ int pointinsidebuilding(int building, float *pos, float margin)
 {
     return inside_box((const vec3 *)pos, BUILDING_VEC(building_min, building), BUILDING_VEC(building_max, building),
                       margin);
+}
+
+/* The line from -> to against the bones of human `human`: a sphere around each of the 15 bones,
+ * made larger by r. The nearest hit goes into the Intersect record, with the bone in
+ * tri_particles[0]. */
+int lineintersecthuman(int human, float *fromp, float *top, float r)
+{
+    static const float bone_radius[15] = {0.375f, 0.25f, 0.1875f, 0.125f, 0.125f, 0.0625f, 0.125f, 0.125f,
+                                          0.0625f, 0.125f, 0.125f, 0.125f, 0.125f, 0.125f, 0.125f};
+    const vec3 *s = (const vec3 *)fromp, *e = (const vec3 *)top;
+    vec3 dir, q, hit, n;
+    float dx, sq_y, sq_z, along, q2, perp2, rr, t, br;
+    double back, len;
+    int i;
+
+    g_intersect.fraction = 1.0f;
+    for (i = 0; i < 15; i++) {
+        const vec3 *bp = &sr_humans[human].bones[i].pos;
+
+        br = bone_radius[i];
+        dx = (float)(e->x - s->x);
+        dir.y = (float)(e->y - s->y);
+        dir.z = (float)(e->z - s->z);
+        sq_y = dir.y * dir.y;
+        sq_z = dir.z * dir.z;
+        q.x = (float)(bp->x - s->x);
+        q.y = (float)(bp->y - s->y);
+        q.z = (float)(bp->z - s->z);
+        dir.x = dx;
+        normalizevector(&dir, &dir);
+        along = (float)(q.z * dir.z + (q.y * dir.y + q.x * dir.x));
+        if (!(0.0 <= along))
+            continue;
+        q2 = (float)(q.y * q.y + q.x * q.x + q.z * q.z);
+        perp2 = (float)(q2 - along * along);
+        rr = (float)(br + r) * (br + r);
+        if (!(perp2 <= rr && rr <= q2))
+            continue;
+        back = x87_sqrt((double)(rr - perp2));
+        len = x87_sqrt((double)(float)(sq_z + (sq_y + dx * dx)));
+        t = (float)((along - (float)back) / (float)len);
+        if (!(t <= 1.0))
+            continue;
+        dir.y = (float)(e->y - s->y);
+        dir.z = (float)(e->z - s->z);
+        hit.x = (float)(dx * t + s->x);
+        hit.y = (float)(dir.y * t + s->y);
+        hit.z = (float)(t * dir.z + s->z);
+        n.x = (float)(hit.x - bp->x);
+        n.y = (float)(hit.y - bp->y);
+        n.z = (float)(hit.z - bp->z);
+        normalizevector(&n, &n);
+        if (t < g_intersect.fraction) {
+            memcpy(g_intersect.pos, &hit, sizeof g_intersect.pos);
+            memcpy(g_intersect.normal, &n, sizeof g_intersect.normal);
+            g_intersect.fraction = t;
+            g_intersect.tri_particles[0] = i;
+        }
+    }
+    if (1.0 <= g_intersect.fraction)
+        return 0;
+    return 1;
+}
+
+/* A corner of the box of item `item`: corner v of the unit cube, scaled to the size of its type,
+ * turned and moved to the item. */
+static void item_corner(vec3 *out, const Item *it, const ItemType *ty, int v)
+{
+    float fx = (float)((g_cubevertex[v].x - 0.5) * 2.0 * ty->size.x);
+    float fy = (float)((g_cubevertex[v].y - 0.5) * 2.0 * ty->size.y);
+    float fz = (float)((g_cubevertex[v].z - 0.5) * 2.0 * ty->size.z);
+
+    out->x = (float)((float)((float)(fx * it->rot[0].x + it->pos.x) + fy * it->rot[1].x) + fz * it->rot[2].x);
+    out->y = (float)(fz * it->rot[2].y + (float)(it->rot[1].y * fy + (float)(it->rot[0].y * fx + it->pos.y)));
+    out->z = (float)(fz * it->rot[2].z + (float)(fy * it->rot[1].z + (float)(fx * it->rot[0].z + it->pos.z)));
+}
+
+/* The sphere (pos, r) against the box of item `item`. The nearest hit goes into the Intersect
+ * record, with the face of the box. */
+int item_sphereintersect(int item, float *pos, float r)
+{
+    const Item *it = &sr_items[item];
+    const ItemType *ty = &sr_itemtypes[it->type];
+    vec3 a, b, c, d, n, h;
+    float t;
+    int f;
+
+    g_intersect.distance = 65536.0f;
+    for (f = 0; f < 6; f++) {
+        const int *q = g_cubequad[f];
+
+        item_corner(&a, it, ty, q[0]);
+        item_corner(&b, it, ty, q[1]);
+        item_corner(&c, it, ty, q[2]);
+        item_corner(&d, it, ty, q[3]);
+        generatetrinormal(&n, &a, &b, &c);
+        if (sphereintersecttrianglefull(&h, &n, &t, (const vec3 *)pos, r, &a, &b, &c) != 0 &&
+            t < g_intersect.distance) {
+            memcpy(g_intersect.pos, &h, sizeof g_intersect.pos);
+            g_intersect.face = f;
+            memcpy(g_intersect.normal, &n, sizeof g_intersect.normal);
+            g_intersect.distance = t;
+        }
+        if (sphereintersecttrianglefull(&h, &n, &t, (const vec3 *)pos, r, &a, &c, &d) != 0 &&
+            t < g_intersect.distance) {
+            memcpy(g_intersect.pos, &h, sizeof g_intersect.pos);
+            g_intersect.face = f;
+            memcpy(g_intersect.normal, &n, sizeof g_intersect.normal);
+            g_intersect.distance = t;
+        }
+    }
+    if (65536.0 <= g_intersect.distance)
+        return 0;
+    return 1;
 }

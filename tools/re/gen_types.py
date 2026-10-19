@@ -214,7 +214,7 @@ typedef union ObjectFace { struct {
 
 /* A piece of the track (the rails): the global track holds 4096 records of 0x578 bytes. */
 typedef union TrackPiece { struct {
-    int unk_00;         /* +0x00 createtrack, lineintersecttrack */
+    int type;           /* +0x00 createtrack; lineintersecttrack tests all the triangles of type 1, else the first 14 */
     vec3 pos;           /* +0x04 the center: lineintersecttrackrail tests only a line that starts within 64 of it */
     int unk_10;         /* +0x10 createtrack */
     vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */

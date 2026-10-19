@@ -20,4 +20,13 @@ int sphereintersecttrianglefull(vec3 *hit, vec3 *n, float *dist, const vec3 *cen
 int circleintersecttriangle(vec3 *hit, vec3 *n, float *dist, const vec3 *pos, const vec3 *rot, float r, const vec3 *a,
                             const vec3 *b, const vec3 *c);
 
+int sphereintersectpoint(vec3 *hit, vec3 *normal, float *dist, const vec3 *center, float r, const vec3 *p);
+float pointdistanceline(const vec3 *a, const vec3 *b, const vec3 *p);
+int lineintersectline2d(float hit[2], float n[2], float *t, const float a[2], const float b[2], const float c[2],
+                        const float d[2]);
+int sphereintersectline2d(float hit[2], float n[2], float *t, const float p[2], const float a[2], const float b[2],
+                          float r);
+int lineintersectcircle2d(float hit[2], float n[2], float *t, const float a[2], const float b[2], const float c[2],
+                          float r);
+
 #endif /* SR_INTERSECT_H */
