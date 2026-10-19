@@ -14,6 +14,8 @@ int createjointbond(int human, int bone_a, int target, const vec3 *pos);
 void human_createmuscleball(int human, int parent, int bone, const vec3 *pos);
 void human_buildmuscles(int human);
 void setitempositionhuman(int item, int human);
+void setupbody(void);
+int createhuman(float *pos, float *rot, int player);
 
 /* human_pose.c */
 void human_calculatelegangles(int human);

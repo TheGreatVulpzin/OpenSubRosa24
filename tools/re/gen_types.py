@@ -126,7 +126,10 @@ typedef union Bone { struct {
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
     vec3 ang_momentum;  /* +0x54 the angular momentum; bondsetupcopy copies it to BondBone.ang_momentum */
     vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
-    uint8_t unk_6c[0x20];
+    uint8_t unk_6c[0xc];
+    float radius;       /* +0x78 createhuman: Body.radius */
+    float fixed_7c;     /* +0x7c createhuman writes 0.3125; no other code reads it */
+    vec3 half_size;     /* +0x80 createhuman: Body.half_size */
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
     vec3 inertia;       /* +0x90 along each row of rot: humansimulation makes ang_momentum = inertia * w */
     vec3 inv_inertia;   /* +0x9c bondsetupcopy copies it to the BondBone axes: bondtest makes w from ang_momentum */

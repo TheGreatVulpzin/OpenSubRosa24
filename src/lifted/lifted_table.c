@@ -182,7 +182,7 @@ void lf_185a0(void);
 void deletehuman(void);
 void human_calculatelegangles(void);
 void human_collisionhuman(void);
-void lf_19610(void);
+void setupbody(void);
 void createjointbond(void);
 void circleintersecttriangle(void);
 void sphereintersecttriangle(void);
@@ -301,7 +301,7 @@ void lf_4ed30(void);
 void lf_4f720(void);
 void lf_500e0(void);
 void lf_502a0(void);
-void lf_50ae0(void);
+void createhuman(void);
 void humansimulation(void);
 void lf_542a0(void);
 void lf_54e40(void);
@@ -500,7 +500,7 @@ const LfEntry lf_table[] = {
     { "deletehuman", 0x18720, (void *)deletehuman, 1, LF_RET_VOID, 4, "p", 0 },
     { "human_calculatelegangles", 0x19060, (void *)human_calculatelegangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_collisionhuman", 0x19380, (void *)human_collisionhuman, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupbody", 0x19610, (void *)lf_19610, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupbody", 0x19610, (void *)setupbody, 0, LF_RET_VOID, 4, "", 0 },
     { "createjointbond", 0x19ee0, (void *)createjointbond, 4, LF_RET_INT, 4, "vvvp", 0 },
     { "circleintersecttriangle", 0x1a000, (void *)circleintersecttriangle, 9, LF_RET_INT, 4, "pppppvppp", 0 },
     { "sphereintersecttriangle", 0x1a700, (void *)sphereintersecttriangle, 8, LF_RET_INT, 4, "ppppvppp", 0 },
@@ -619,7 +619,7 @@ const LfEntry lf_table[] = {
     { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p", 0 },
     { "player_loadinventory", 0x500e0, (void *)lf_500e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },
-    { "createhuman", 0x50ae0, (void *)lf_50ae0, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "createhuman", 0x50ae0, (void *)createhuman, 3, LF_RET_INT, 4, "ppv", 0 },
     { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4, "", 0 },
     { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },

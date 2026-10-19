@@ -6740,12 +6740,12 @@ __declspec(naked) static void th_19380(void)
 }
 static uint8_t expect_19380[8] = { 0x83, 0xec, 0x1c, 0x55, 0x8b, 0x6c, 0x24, 0x24 };
 
-void __cdecl lf_19610(void);
+void __cdecl setupbody(void);
 static void (__cdecl *orig_19610)(void);
 static SvVerify v_19610 = { "setupbody", -1 };
 static void __cdecl hk_19610(void)
 {
-    SV_HOOK_VOID(v_19610, lf_19610(), orig_19610(), NULL);
+    SV_HOOK_VOID(v_19610, setupbody(), orig_19610(), NULL);
 }
 __declspec(naked) static void th_19610(void)
 {
@@ -11338,12 +11338,12 @@ __declspec(naked) static void th_500e0(void)
 }
 static uint8_t expect_500e0[7] = { 0x83, 0xec, 0x38, 0x8b, 0x4c, 0x24, 0x3c };
 
-int __cdecl lf_50ae0(float * param_1, float * param_2, int param_3);
+int __cdecl createhuman(float * param_1, float * param_2, int param_3);
 static int (__cdecl *orig_50ae0)(float *, float *, int);
 static SvVerify v_50ae0 = { "createhuman", -1 };
 static int __cdecl hk_50ae0(float * param_1, float * param_2, int param_3)
 {
-    SV_HOOK_RET(int, v_50ae0, lf_50ae0(param_1, param_2, param_3), orig_50ae0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_50ae0, createhuman(param_1, param_2, param_3), orig_50ae0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_50ae0(void)
 {

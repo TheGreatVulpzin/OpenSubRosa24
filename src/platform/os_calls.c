@@ -2,6 +2,7 @@
  * finds its import at the first call. */
 #include "sr_os.h"
 
+void *sr_import(const char *dll, const char *name);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
 /* WSOCK32 ordinals of the game. */
@@ -22,4 +23,13 @@ int os_sendto(uintptr_t socket, const char *buf, int len, int flags, const void 
     if (!call)
         *(void **)&call = sr_import_ordinal("WSOCK32.dll", WSOCK_SENDTO);
     return call(socket, buf, len, flags, to, tolen);
+}
+
+/* rand of the CRT of the game: the game and the rewritten code share one sequence. */
+int os_rand(void)
+{
+    static int(__cdecl * call)(void);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "rand");
+    return call();
 }

@@ -34,7 +34,10 @@ typedef union Bone { struct {
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
     vec3 ang_momentum;  /* +0x54 the angular momentum; bondsetupcopy copies it to BondBone.ang_momentum */
     vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
-    uint8_t unk_6c[0x20];
+    uint8_t unk_6c[0xc];
+    float radius;       /* +0x78 createhuman: Body.radius */
+    float fixed_7c;     /* +0x7c createhuman writes 0.3125; no other code reads it */
+    vec3 half_size;     /* +0x80 createhuman: Body.half_size */
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
     vec3 inertia;       /* +0x90 along each row of rot: humansimulation makes ang_momentum = inertia * w */
     vec3 inv_inertia;   /* +0x9c bondsetupcopy copies it to the BondBone axes: bondtest makes w from ang_momentum */
@@ -291,7 +294,7 @@ typedef union Player { struct {
     int hud_mode;                        /* +0x00ac getinputs_human adds 1; drawhud compares with 0 and 1 */
     float unk_00b0;                      /* +0x00b0 4 functions */
     float unk_00b4;                      /* +0x00b4 4 functions */
-    int unk_00b8;                        /* +0x00b8 2 functions */
+    float body_param;                    /* +0x00b8 createplayer writes 1.0; createhuman copies it to Human.body_param */
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x4];
     int unk_00c4;                        /* +0x00c4 2 functions */
@@ -356,6 +359,7 @@ SR_STATIC_ASSERT(offsetof(Player, input_pitch) == 0x90, "Player.input_pitch");
 SR_STATIC_ASSERT(offsetof(Player, input_extra) == 0x94, "Player.input_extra");
 SR_STATIC_ASSERT(offsetof(Player, input_buttons) == 0x9c, "Player.input_buttons");
 SR_STATIC_ASSERT(offsetof(Player, hud_mode) == 0xac, "Player.hud_mode");
+SR_STATIC_ASSERT(offsetof(Player, body_param) == 0xb8, "Player.body_param");
 SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
 SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");
 SR_STATIC_ASSERT(offsetof(Player, menu_building) == 0xd8, "Player.menu_building");
@@ -399,7 +403,7 @@ typedef union Human { struct {
     uint8_t pad_0088[0x4];
     float stance;                        /* +0x008c humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick */
     uint8_t pad_0090[0x8];
-    float unk_0098;                      /* +0x0098 1 functions */
+    float body_param;                    /* +0x0098 createhuman: Player.body_param, or 1.0 for a human with no player; no other code reads it */
     float input_axes[4];                 /* +0x009c playersimulation: the analog inputs from the client; walking uses [1] sideways and [3] forward; the driver copies all 4 to Object.drive_input */
     float view_axis;                     /* +0x00ac playersimulation: the view angle from the client; on foot humansimulation copies it to axis */
     float view_pitch;                    /* +0x00b0 playersimulation: the view pitch from the client; on foot humansimulation copies it to pitch */
@@ -415,10 +419,10 @@ typedef union Human { struct {
     int num_joints;                      /* +0x26cc createjointbond appends to the list at +0x26d0 */
     HumanJoint joints[32];               /* +0x26d0 createjointbond (stride 0xc); createhuman uses floats from +0x2870 */
     uint8_t pad_2850[0x20];
-    int unk_2870;                        /* +0x2870 1 functions */
-    uint8_t pad_2874[0x48];
-    int unk_28bc;                        /* +0x28bc 1 functions */
-    uint8_t pad_28c0[0x50];
+    vec3 spawn_pos;                      /* +0x2870 createhuman: the place of the new human; no other code reads it */
+    uint8_t pad_287c[0x40];
+    vec3 spawn_pos2;                     /* +0x28bc createhuman: the place of the new human; no other code reads it */
+    uint8_t pad_28c8[0x48];
     float unk_2910;                      /* +0x2910 1 functions */
     float unk_2914;                      /* +0x2914 1 functions */
     float walk_phase;                    /* +0x2918 humansimulation adds the step length and wraps it at 2 pi; human_calculatelegangles takes its sine */
@@ -467,6 +471,7 @@ SR_STATIC_ASSERT(offsetof(Human, pitch) == 0x64, "Human.pitch");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_axis) == 0x80, "Human.vehicle_axis");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_pitch) == 0x84, "Human.vehicle_pitch");
 SR_STATIC_ASSERT(offsetof(Human, stance) == 0x8c, "Human.stance");
+SR_STATIC_ASSERT(offsetof(Human, body_param) == 0x98, "Human.body_param");
 SR_STATIC_ASSERT(offsetof(Human, input_axes) == 0x9c, "Human.input_axes");
 SR_STATIC_ASSERT(offsetof(Human, view_axis) == 0xac, "Human.view_axis");
 SR_STATIC_ASSERT(offsetof(Human, view_pitch) == 0xb0, "Human.view_pitch");
@@ -477,6 +482,8 @@ SR_STATIC_ASSERT(offsetof(Human, num_muscles) == 0xec8, "Human.num_muscles");
 SR_STATIC_ASSERT(offsetof(Human, muscles) == 0xecc, "Human.muscles");
 SR_STATIC_ASSERT(offsetof(Human, num_joints) == 0x26cc, "Human.num_joints");
 SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
+SR_STATIC_ASSERT(offsetof(Human, spawn_pos) == 0x2870, "Human.spawn_pos");
+SR_STATIC_ASSERT(offsetof(Human, spawn_pos2) == 0x28bc, "Human.spawn_pos2");
 SR_STATIC_ASSERT(offsetof(Human, walk_phase) == 0x2918, "Human.walk_phase");
 SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
 SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
@@ -948,20 +955,21 @@ typedef union Body { struct {
     int parent;                          /* +0x0000 humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent */
     vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
     vec3 joint;                          /* +0x0010 human_buildmuscles: the joint of the bone with its parent, in the frame of the parent */
-    float unk_001c;                      /* +0x001c 2 functions */
-    float unk_0020;                      /* +0x0020 3 functions */
-    float unk_0024;                      /* +0x0024 3 functions */
-    float unk_0028;                      /* +0x0028 3 functions */
-    int unk_002c;                        /* +0x002c 1 functions */
-    float unk_0030;                      /* +0x0030 2 functions */
-    float unk_0034;                      /* +0x0034 1 functions */
-    float unk_0038;                      /* +0x0038 1 functions */
-    uint8_t pad_003c[0x4];
+    float radius;                        /* +0x001c setupbody writes 0.0625; it rounds the corners of the box of the bone */
+    vec3 half_size;                      /* +0x0020 setupbody: the half size of the box of the bone along each axis */
+    float mass;                          /* +0x002c setupbody; createhuman copies it to Bone.mass */
+    vec3 inv_inertia;                    /* +0x0030 setupbody: 1 / the inertia of the box per unit of mass; createhuman copies it to Bone.inv_inertia */
+    float unread_3c;                     /* +0x003c setupbody writes 0.375 for bone 3; no code reads it */
 }; uint8_t lf_raw[0x40]; } Body;
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
 SR_STATIC_ASSERT(offsetof(Body, parent) == 0x0, "Body.parent");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
 SR_STATIC_ASSERT(offsetof(Body, joint) == 0x10, "Body.joint");
+SR_STATIC_ASSERT(offsetof(Body, radius) == 0x1c, "Body.radius");
+SR_STATIC_ASSERT(offsetof(Body, half_size) == 0x20, "Body.half_size");
+SR_STATIC_ASSERT(offsetof(Body, mass) == 0x2c, "Body.mass");
+SR_STATIC_ASSERT(offsetof(Body, inv_inertia) == 0x30, "Body.inv_inertia");
+SR_STATIC_ASSERT(offsetof(Body, unread_3c) == 0x3c, "Body.unread_3c");
 
 /* game[]: record of 0x25d64 bytes. */
 typedef union Game { struct {
