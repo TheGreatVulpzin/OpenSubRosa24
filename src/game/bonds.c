@@ -170,7 +170,7 @@ static void setup_bodybody(const Bond *b, BondOpt *o)
 /* bondsetup, type 9: a muscle between two bones of a human. The direction is the turn that
  * brings bone b back to its target rotation (bone.target_rot), from the Euler angles of the
  * relative rotation, at most a quarter turn on each axis. A dead human has no target, and the
- * angles get a dead zone. The share of each side also has the strength of the muscle. */
+ * angles get a dead zone. The share of each side also has the largest inertia of bone b. */
 static void setup_bodyrotbody(const Bond *b, BondOpt *o)
 {
   Human *h = &sr_humans[b->owner];
@@ -302,12 +302,12 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   o->share_a = sa;
   sb = ba->mass * inv;
   o->share_b = sb;
-  /* arm_a.x holds the strength of the muscle for this bond type. */
-  o->arm_a.x = bb->strength;
-  if (bb->strength < bb->strength_min)
-    o->arm_a.x = bb->strength_min;
-  if (o->arm_a.x < bb->strength_min2)
-    o->arm_a.x = bb->strength_min2;
+  /* arm_a.x holds the gain for this bond type: the largest inertia of bone b. */
+  o->arm_a.x = bb->inertia.x;
+  if (bb->inertia.x < bb->inertia.y)
+    o->arm_a.x = bb->inertia.y;
+  if (o->arm_a.x < bb->inertia.z)
+    o->arm_a.x = bb->inertia.z;
   o->share_a = o->arm_a.x * sa;
   o->share_b = (float)(sb * o->arm_a.x);
   stoptimer(g_timerlist.bondsetuphuman);
@@ -333,17 +333,17 @@ static void setup_copy(void)
     for (k = 0; k < 15; k++) {
       const Bone *bone = &hu->bones[k];
       BondBone *w = &bh->bones[k];
-      if (0.0 < bone->unk_cc)
+      if (0.0 < bone->in_solver)
         bh->mask |= 1 << k;
       w->vel = bone->vel;
       w->w = bone->w;
       w->ang_momentum = bone->ang_momentum;
       w->axes[0].dir = bone->rot[0];
-      w->axes[0].k = bone->axis_k[0];
+      w->axes[0].k = bone->inv_inertia.x;
       w->axes[1].dir = bone->rot[1];
-      w->axes[1].k = bone->axis_k[1];
+      w->axes[1].k = bone->inv_inertia.y;
       w->axes[2].dir = bone->rot[2];
-      w->axes[2].k = bone->axis_k[2];
+      w->axes[2].k = bone->inv_inertia.z;
     }
   }
   n = sr_numofparticles;

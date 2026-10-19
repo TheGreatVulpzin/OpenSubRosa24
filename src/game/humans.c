@@ -187,9 +187,9 @@ void __cdecl lf_51060(void)
 
 
   
-  iVar23 = g_timerlist.unk_0088;
+  iVar23 = g_timerlist.humansim;
   local_c = DAT_00460d18 ^ (uint)&local_cc;
-  iVar21 = g_timerlist.unk_0088 * 0x58;
+  iVar21 = g_timerlist.humansim * 0x58;
   pcVar13 = ((char *)SR_VA(0x45f2b0) - 1);
   do {
     pcVar13 = pcVar13 + 1;
@@ -203,7 +203,7 @@ void __cdecl lf_51060(void)
   uVar7 = rdtsc();
   *local_cc = (int)uVar7;
   g_timer[iVar23].start_hi = (int)((ulonglong)uVar7 >> 0x20);
-  piVar17 = &g_object[0].unk_5bdc;
+  piVar17 = (int *)&g_object[0].drive_buttons;
   do {
     *piVar17 = 4;
     piVar17 = piVar17 + 0x208c;
@@ -215,8 +215,8 @@ void __cdecl lf_51060(void)
     iVar23 = (int)local_a4 * 0x2b64;
     if (g_human[(int)local_a4].active != 0) {
       iVar21 = 0;
-      if (0 < g_human[(int)local_a4].unk_0034) {
-        g_human[(int)local_a4].unk_0034 = g_human[(int)local_a4].unk_0034 + -1;
+      if (0 < g_human[(int)local_a4].protect_timer) {
+        g_human[(int)local_a4].protect_timer = g_human[(int)local_a4].protect_timer + -1;
       }
       local_9c = g_human[(int)local_a4].vehicle_id;
       local_cc = (int *)0x3f800000;
@@ -232,23 +232,23 @@ void __cdecl lf_51060(void)
       else {
         local_cc = ((int *)LF_BITS_U((g_human[(int)local_a4].stance + 0.015625)));
       }
-      iVar14 = g_human[(int)local_a4].unk_0044;
+      iVar14 = g_human[(int)local_a4].stun_timer;
       g_human[(int)local_a4].stance = LF_BITS_F(local_cc);
       if (0 < iVar14) {
-        g_human[(int)local_a4].unk_0044 = iVar14 + -1;
+        g_human[(int)local_a4].stun_timer = iVar14 + -1;
       }
       g_human[(int)local_a4].on_ground = 0;
       if (local_9c == -1) {
-        g_human[(int)local_a4].axis = g_human[(int)local_a4].unk_00ac;
-        g_human[(int)local_a4].pitch = g_human[(int)local_a4].unk_00b0;
-        g_human[(int)local_a4].unk_0080 = 0.0;
+        g_human[(int)local_a4].axis = g_human[(int)local_a4].view_axis;
+        g_human[(int)local_a4].pitch = g_human[(int)local_a4].view_pitch;
+        g_human[(int)local_a4].vehicle_axis = 0.0;
       }
       else {
-        g_human[(int)local_a4].unk_0080 = g_human[(int)local_a4].unk_00ac;
-        fVar24 = g_human[(int)local_a4].unk_00b0;
+        g_human[(int)local_a4].vehicle_axis = g_human[(int)local_a4].view_axis;
+        fVar24 = g_human[(int)local_a4].view_pitch;
       }
       iVar14 = g_human[(int)local_a4].health;
-      g_human[(int)local_a4].unk_0084 = fVar24;
+      g_human[(int)local_a4].vehicle_pitch = fVar24;
       g_human[(int)local_a4].body_strength = 1.0;
       if (iVar14 < 0x19) {
         local_cc = ((int *)LF_BITS_U((float)iVar14));
@@ -361,9 +361,9 @@ void __cdecl lf_51060(void)
               local_b0 = (float)(g_intersect.pos[0] + 0.0);
               local_ac = (float)(g_intersect.pos[1] + 0.0);
               local_a8 = (float)(g_intersect.pos[2] + 0.0);
-              local_bc = (float)(g_intersect.unk_0020 + 0.0);
-              local_b8 = (float)(g_intersect.unk_0024 + 0.0);
-              local_b4 = (float)(g_intersect.unk_0028 + 0.0);
+              local_bc = (float)(g_intersect.surface_vel.x + 0.0);
+              local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
+              local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
               goto LAB_00451f2d;
             }
           }
@@ -402,9 +402,9 @@ void __cdecl lf_51060(void)
             local_b0 = (float)(g_intersect.pos[0] + 0.0);
             local_ac = (float)(g_intersect.pos[1] + 0.0);
             local_a8 = (float)(g_intersect.pos[2] + 0.0);
-            local_bc = (float)(g_intersect.unk_0020 + 0.0);
-            local_b8 = (float)(g_intersect.unk_0024 + 0.0);
-            local_b4 = (float)(g_intersect.unk_0028 + 0.0);
+            local_bc = (float)(g_intersect.surface_vel.x + 0.0);
+            local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
+            local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
           }
           LF_COPY(fVar24, local_c0);
           local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
@@ -427,9 +427,9 @@ void __cdecl lf_51060(void)
             local_b0 = (float)(g_intersect.pos[0] + local_b0);
             local_ac = (float)(g_intersect.pos[1] + local_ac);
             local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.unk_0020 + local_bc);
-            local_b8 = (float)(g_intersect.unk_0024 + local_b8);
-            local_b4 = (float)(g_intersect.unk_0028 + local_b4);
+            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
+            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
+            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
             local_c0 = fVar24;
           }
           local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
@@ -452,9 +452,9 @@ void __cdecl lf_51060(void)
             local_b0 = (float)(g_intersect.pos[0] + local_b0);
             local_ac = (float)(g_intersect.pos[1] + local_ac);
             local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.unk_0020 + local_bc);
-            local_b8 = (float)(g_intersect.unk_0024 + local_b8);
-            local_b4 = (float)(g_intersect.unk_0028 + local_b4);
+            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
+            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
+            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
             local_c0 = fVar24;
           }
           local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
@@ -477,9 +477,9 @@ void __cdecl lf_51060(void)
             local_b0 = (float)(g_intersect.pos[0] + local_b0);
             local_ac = (float)(g_intersect.pos[1] + local_ac);
             local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.unk_0020 + local_bc);
-            local_b8 = (float)(g_intersect.unk_0024 + local_b8);
-            local_b4 = (float)(g_intersect.unk_0028 + local_b4);
+            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
+            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
+            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
             local_c0 = fVar24;
           }
           if (LF_UINT(fVar24) == 0x0U) {
@@ -495,9 +495,9 @@ void __cdecl lf_51060(void)
               local_b0 = (float)(g_intersect.pos[0] + local_b0);
               local_ac = (float)(g_intersect.pos[1] + local_ac);
               local_a8 = (float)(g_intersect.pos[2] + local_a8);
-              local_bc = (float)(g_intersect.unk_0020 + local_bc);
-              local_b8 = (float)(g_intersect.unk_0024 + local_b8);
-              local_b4 = (float)(g_intersect.unk_0028 + local_b4);
+              local_bc = (float)(g_intersect.surface_vel.x + local_bc);
+              local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
+              local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
               goto LAB_00451f2d;
             }
           }
@@ -508,9 +508,9 @@ void __cdecl lf_51060(void)
           local_b0 = (float)(g_intersect.pos[0] + 0.0);
           local_ac = (float)(g_intersect.pos[1] + 0.0);
           local_a8 = (float)(g_intersect.pos[2] + 0.0);
-          local_bc = (float)(g_intersect.unk_0020 + 0.0);
-          local_b8 = (float)(g_intersect.unk_0024 + 0.0);
-          local_b4 = (float)(g_intersect.unk_0028 + 0.0);
+          local_bc = (float)(g_intersect.surface_vel.x + 0.0);
+          local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
+          local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
 LAB_00451f2d:
           local_cc = ((int *)LF_BITS_U(((float)(1.0 / (float)((int)LF_UINT(local_c0))))));
           local_b0 = (float)(LF_BITS_F(local_cc) * local_b0);
@@ -630,8 +630,8 @@ LAB_0045230e:
           local_20 = 0x3f800000;
           local_10 = 1.0;
           rotateorientation(&local_30,g_yaxis,g_human[(int)puVar11].axis);
-          fVar3 = -LF_BITS_F(g_human[(int)puVar11].unk_00a8);
-          LF_SET_BITS(fVar24, g_human[(int)puVar11].unk_00a0);
+          fVar3 = -g_human[(int)puVar11].input_axes[3];
+          fVar24 = g_human[(int)puVar11].input_axes[1];
           local_48 = (float)(fVar24 * local_30 + ((float)(fVar3 * local_18 + 0.0)));
           local_44 = (float)(local_2c * fVar24 + ((float)(local_14 * fVar3 + 0.0)));
           local_40 = (float)(fVar24 * local_28 + ((float)(fVar3 * local_10 + 0.0)));
@@ -648,10 +648,10 @@ LAB_0045230e:
             local_40 = (float)(LF_BITS_F(local_c4) * local_40);
           }
           local_c0 = 0.15000000596046448;
-          if (g_human[(int)puVar11].unk_003c == 1) {
+          if (g_human[(int)puVar11].move_mode == 1) {
             local_c0 = 0.05000000074505806;
           }
-          if (g_human[(int)puVar11].unk_003c == 2) {
+          if (g_human[(int)puVar11].move_mode == 2) {
             local_c0 = 0.02500000037252903;
           }
           if ((g_human[(int)puVar11].input_buttons & 8) != 0) {
@@ -705,17 +705,17 @@ LAB_0045230e:
           local_cc = ((int *)LF_BITS_U(((float)(local_48 * local_48 + (float)local_98 + local_40 * local_40))));
           local_c8 = fVar24;
           dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
-          fVar24 = (float)((float)dVar27 * 3.14159265359 * 0.5 + g_human[(int)puVar11].unk_2918);
-          g_human[(int)puVar11].unk_2918 = fVar24;
+          fVar24 = (float)((float)dVar27 * 3.14159265359 * 0.5 + g_human[(int)puVar11].walk_phase);
+          g_human[(int)puVar11].walk_phase = fVar24;
           if (!NAN(fVar24) && 6.28318530718 < fVar24 != (fVar24 == 6.28318530718)) {
-            g_human[(int)puVar11].unk_2918 = (float)(fVar24 - 6.28318530718);
+            g_human[(int)puVar11].walk_phase = (float)(fVar24 - 6.28318530718);
           }
         }
-        if (g_human[(int)puVar11].unk_0020 < 1) {
-          g_human[(int)puVar11].unk_001c = -1;
+        if (g_human[(int)puVar11].last_vehicle_timer < 1) {
+          g_human[(int)puVar11].last_vehicle = -1;
         }
         else {
-          g_human[(int)puVar11].unk_0020 = g_human[(int)puVar11].unk_0020 + -1;
+          g_human[(int)puVar11].last_vehicle_timer = g_human[(int)puVar11].last_vehicle_timer + -1;
         }
         local_98 = LF_BITS_D((((ulonglong)LF_BITS_U64(local_98)) & 0xffffffff00000000));
         local_cc = (int *)0x0;
@@ -754,7 +754,7 @@ LAB_0045230e:
                   g_bond[iVar15].owner = (int)local_a4;
                   iVar10 = g_intersect.tri_particles[0];
                   g_bond[iVar15].bone_a = ((int)LF_UINT(fVar24));
-                  iVar16 = g_human[(int)puVar11].unk_001c;
+                  iVar16 = g_human[(int)puVar11].last_vehicle;
                   g_bond[iVar15].particle_b = iVar10;
                   g_bond[iVar15].particle_c = iVar21;
                   g_bond[iVar15].particle_d = iVar14;
@@ -765,7 +765,7 @@ LAB_0045230e:
                   g_bond[iVar15].rest_length = (float)(local_c8 - g_intersect.distance);
                   g_bond[iVar15].stiffness = 0.0625;
                   if ((*(uint *)((uchar *)&local_98 + 0)) == iVar16) {
-                    LF_SET_BITS(local_c8, (100 - g_human[(int)puVar11].unk_0020));
+                    LF_SET_BITS(local_c8, (100 - g_human[(int)puVar11].last_vehicle_timer));
                     g_bond[iVar15].stiffness = (float)(((float)((int)LF_UINT(local_c8)) * 0.0625) / 100.0);
                   }
                   g_numofbonds = g_numofbonds + 1;
@@ -777,7 +777,7 @@ LAB_0045230e:
                   g_bond[iVar15].normal.z = g_intersect.normal[2];
                   g_bond[iVar15].friction = 0.1f;
                   LF_COPY(fVar24, local_c0);
-                  if ((((*(uint *)((uchar *)&local_98 + 0)) != g_human[(int)puVar11].unk_001c) &&
+                  if ((((*(uint *)((uchar *)&local_98 + 0)) != g_human[(int)puVar11].last_vehicle) &&
                       (LF_UINT(local_c0) != 0x5U)) &&
                      ((LF_UINT(local_c0) != 0x8U &&
                       ((LF_UINT(local_c0) != 0x4U && (LF_UINT(local_c0) != 0x7U)))))) {
@@ -794,11 +794,11 @@ LAB_0045230e:
                     if ((0.1666666716337204 < local_c0) &&
                        (g_human[(int)puVar11].health = g_human[(int)puVar11].health + -0x78,
                        g_human[(int)puVar11].health + 0x77U < 0x78)) {
-                      createevent_sound(g_soundlist.unk_008c,&g_human[(int)puVar11].pos.x,lf_u2f(0x3f800000)
+                      createevent_sound(g_soundlist.humanhit,&g_human[(int)puVar11].pos.x,lf_u2f(0x3f800000)
                                         ,lf_u2f(0x3f000000));
                       if ((((g_human[(int)puVar11].player_id != -1) &&
                            (g_player[g_human[(int)puVar11].player_id].team == 7)) &&
-                          (0 < g_human[(int)puVar11].unk_0034)) &&
+                          (0 < g_human[(int)puVar11].protect_timer)) &&
                          (LF_BITS_U(LF_BITS_F(local_cc[(0x1664985 + LF_RELOC / 4)])) != 0xffffffffU)) {
                         playerteamkilltax(local_cc[(0x1664985 + LF_RELOC / 4)],100);
                       }
@@ -872,21 +872,21 @@ LAB_00452eb1:
         LF_SET_BITS(fVar24, (local_9c * 0x8230));
         local_c8 = fVar24;
         dVar27 = _CIatan2((double)-g_object[local_9c].rot[2].x,(double)g_object[local_9c].rot[2].z);
-        g_human[(int)puVar11].axis = (float)((float)dVar27 + g_human[(int)puVar11].unk_0080);
+        g_human[(int)puVar11].axis = (float)((float)dVar27 + g_human[(int)puVar11].vehicle_axis);
         g_human[(int)puVar11].pitch = 0.0;
-        if (900 < g_human[(int)puVar11].unk_0034) {
-          g_human[(int)puVar11].unk_0034 = 900;
+        if (900 < g_human[(int)puVar11].protect_timer) {
+          g_human[(int)puVar11].protect_timer = 900;
         }
         if (g_human[(int)puVar11].vehicle_seat == 0) {
           uVar18 = g_human[(int)puVar11].input_buttons;
           iVar21 = g_human[(int)puVar11].player_id;
-          g_object[iVar14].unk_5bbc = LF_BITS_F(g_human[(int)puVar11].unk_009c);
-          LF_SET_BITS(fVar3, g_human[(int)puVar11].unk_00a0);
-          g_object[iVar14].unk_5bdc = uVar18;
-          g_object[iVar14].unk_5bc0 = fVar3;
+          g_object[iVar14].drive_input[0] = g_human[(int)puVar11].input_axes[0];
+          fVar3 = g_human[(int)puVar11].input_axes[1];
+          g_object[iVar14].drive_buttons = uVar18;
+          g_object[iVar14].drive_input[1] = fVar3;
           g_object[iVar14].driver = iVar21;
-          g_object[iVar14].unk_5bc4 = LF_BITS_F(g_human[(int)puVar11].unk_00a4);
-          g_object[iVar14].unk_5bc8 = LF_BITS_F(g_human[(int)puVar11].unk_00a8);
+          g_object[iVar14].drive_input[2] = g_human[(int)puVar11].input_axes[2];
+          g_object[iVar14].drive_input[3] = g_human[(int)puVar11].input_axes[3];
         }
         iVar21 = (*(uint *)((uchar *)&local_98 + 0)) * 0xc;
         fVar3 = *(float *)(&g_object[iVar14].lf_raw[0x81ac] + iVar21);
@@ -896,8 +896,8 @@ LAB_00452eb1:
              (float)(g_object[iVar14].rot[0].y * fVar3 + g_object[iVar14].pos.y);
         g_human[(int)puVar11].bones[0].pos.z =
              (float)(fVar3 * g_object[iVar14].rot[0].z + g_object[iVar14].pos.z);
-        if (0 < g_human[(int)puVar11].unk_0030) {
-          fVar3 = (float)(((float)g_human[(int)puVar11].unk_0030 *
+        if (0 < g_human[(int)puVar11].exit_timer) {
+          fVar3 = (float)(((float)g_human[(int)puVar11].exit_timer *
                   *(float *)(&g_object[iVar14].lf_raw[0x81ac] + iVar21)) / 15.0);
           g_human[(int)puVar11].bones[0].pos.x =
                (float)(fVar3 * g_object[iVar14].rot[0].x + g_human[(int)puVar11].bones[0].pos.x);
@@ -932,7 +932,7 @@ LAB_00452eb1:
         g_human[(int)puVar11].bones[0].rot[2].x = g_object[iVar14].rot[2].x;
         g_human[(int)puVar11].bones[0].rot[2].y = g_object[iVar14].rot[2].y;
         g_human[(int)puVar11].bones[0].rot[2].z = g_object[iVar14].rot[2].z;
-        if (0 < g_human[(int)puVar11].unk_0030) {
+        if (0 < g_human[(int)puVar11].exit_timer) {
           fVar3 = g_human[(int)puVar11].bones[0].rot[2].y;
           fVar4 = g_human[(int)puVar11].bones[0].rot[2].x;
           fVar5 = g_human[(int)puVar11].bones[0].rot[2].z;
@@ -1082,26 +1082,26 @@ LAB_00452eb1:
                  g_human[(int)puVar11].bones[iVar21].rot[2].y;
             g_human[(int)puVar11].bones[((int)LF_UINT(local_c0))].rot[2].z =
                  g_human[(int)puVar11].bones[iVar21].rot[2].z;
-            if ((g_human[(int)puVar11].unk_0030 == 0) &&
+            if ((g_human[(int)puVar11].exit_timer == 0) &&
                ((LF_UINT(local_c0) == 0x9U || (LF_UINT(local_c0) == 0xcU)))) {
               pvVar1 = g_human[(int)puVar11].bones[((int)LF_UINT(local_c0))].rot;
               rotateorientation(&pvVar1->x,&pvVar1->x,-1.5707963705062866);
             }
             if (LF_UINT(local_c0) == 0x1U) {
-              local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar11].unk_00ac * 0.5))));
+              local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar11].view_axis * 0.5))));
               rotateorientation(&g_human[(int)puVar11].bones[1].rot[0].x,
                                 &g_human[(int)puVar11].bones[1].rot[1].x,LF_BITS_F(local_c4));
-              fVar24 = g_human[(int)puVar11].unk_00b0;
+              fVar24 = g_human[(int)puVar11].view_pitch;
               pBVar9 = g_human[(int)puVar11].bones + 1;
 LAB_00453705:
               local_c4 = ((Bone *)LF_BITS_U(((float)(fVar24 * 0.5))));
               rotateorientation(&pBVar9->rot[0].x,&pBVar9->rot[0].x,LF_BITS_F(local_c4));
             }
             else if (LF_UINT(local_c0) == 0x2U) {
-              local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar11].unk_00ac * 0.5))));
+              local_c4 = ((Bone *)LF_BITS_U(((float)(g_human[(int)puVar11].view_axis * 0.5))));
               rotateorientation(&g_human[(int)puVar11].bones[2].rot[0].x,
                                 &g_human[(int)puVar11].bones[2].rot[1].x,LF_BITS_F(local_c4));
-              fVar24 = g_human[(int)puVar11].unk_00b0;
+              fVar24 = g_human[(int)puVar11].view_pitch;
               pBVar9 = g_human[(int)puVar11].bones + 2;
               goto LAB_00453705;
             }
@@ -1145,32 +1145,32 @@ LAB_00453705:
           }
           LF_SET_BITS(local_c0, (((int)LF_UINT(local_c0)) + 1));
         } while (((int)LF_UINT(local_c0)) < 0xf);
-        g_human[(int)puVar11].unk_001c = local_9c;
+        g_human[(int)puVar11].last_vehicle = local_9c;
         uVar18 = g_human[(int)puVar11].input_buttons & 0x800;
-        g_human[(int)puVar11].unk_0020 = 100;
+        g_human[(int)puVar11].last_vehicle_timer = 100;
         if (uVar18 == 0) {
-          g_human[(int)puVar11].unk_0030 = 0;
+          g_human[(int)puVar11].exit_timer = 0;
         }
-        if ((uVar18 == 0x800) && (0 < g_human[(int)puVar11].unk_0030)) {
-          iVar21 = g_human[(int)puVar11].unk_0030 + 1;
-          g_human[(int)puVar11].unk_0030 = iVar21;
+        if ((uVar18 == 0x800) && (0 < g_human[(int)puVar11].exit_timer)) {
+          iVar21 = g_human[(int)puVar11].exit_timer + 1;
+          g_human[(int)puVar11].exit_timer = iVar21;
           local_cc = ((int *)LF_BITS_U(((float)(*(float *)&g_human[(int)puVar11].lf_raw[0x5c] *
                              *(float *)&g_human[(int)puVar11].lf_raw[0x5c] +
-                            (LF_BITS_F(g_human[(int)puVar11].unk_0054) *
-                            LF_BITS_F(g_human[(int)puVar11].unk_0054) +
+                            (g_human[(int)puVar11].vel.x *
+                            g_human[(int)puVar11].vel.x +
                             *(float *)&g_human[(int)puVar11].lf_raw[0x58] *
                             *(float *)&g_human[(int)puVar11].lf_raw[0x58])))));
           dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
           local_cc = ((int *)LF_BITS_U((float)dVar27));
           if ((int)(longlong)(LF_BITS_F(local_cc) * 60.0 + 1.0) + 0x1e <= iVar21) {
             iVar21 = 0;
-            g_human[(int)puVar11].unk_00ac = g_human[(int)puVar11].axis;
+            g_human[(int)puVar11].view_axis = g_human[(int)puVar11].axis;
             local_c4 = g_human[(int)puVar11].bones;
             fVar3 = g_human[(int)puVar11].pitch;
-            *(undefined4 *)((int)&g_object[0].unk_5bdc + ((int)LF_UINT(fVar24))) = 4;
-            g_human[(int)puVar11].unk_00b0 = fVar3;
+            *(undefined4 *)((int)&g_object[0].drive_buttons + ((int)LF_UINT(fVar24))) = 4;
+            g_human[(int)puVar11].view_pitch = fVar3;
             g_human[(int)puVar11].vehicle_id = -1;
-            g_human[(int)puVar11].unk_0030 = 0;
+            g_human[(int)puVar11].exit_timer = 0;
             do {
               if (((iVar21 != 0xb) && (iVar21 != 0xe)) &&
                  (iVar14 = lineintersectlevel((float *)((int)&g_object[0].rot[-2].x + ((int)LF_UINT(fVar24))),
@@ -1186,14 +1186,14 @@ LAB_00453705:
         }
         if (g_human[(int)puVar11].health < 1) {
           fVar3 = g_human[(int)puVar11].axis;
-          *(undefined4 *)((int)&g_object[0].unk_5bdc + ((int)LF_UINT(fVar24))) = 4;
-          g_human[(int)puVar11].unk_00ac = fVar3;
+          *(undefined4 *)((int)&g_object[0].drive_buttons + ((int)LF_UINT(fVar24))) = 4;
+          g_human[(int)puVar11].view_axis = fVar3;
           g_human[(int)puVar11].vehicle_id = -1;
-          g_human[(int)puVar11].unk_00b0 = g_human[(int)puVar11].pitch;
+          g_human[(int)puVar11].view_pitch = g_human[(int)puVar11].pitch;
         }
         if (((g_human[(int)puVar11].input_buttons & 0x800) != 0) &&
            ((g_human[(int)puVar11].input_buttons_prev & 0x800) == 0)) {
-          g_human[(int)puVar11].unk_0030 = 1;
+          g_human[(int)puVar11].exit_timer = 1;
         }
       }
       puVar12 = local_a4;
@@ -1241,7 +1241,7 @@ LAB_00453705:
           if ((local_9c != -1) && ((LF_UINT(local_a0) == 0x0U || (8 < *piVar17)))) {
             g_bond[iVar15].mode = 0x100;
           }
-          if (((0 < iVar21) && (local_cc = (int *)g_human[(int)puVar11].unk_0044, 0 < (int)local_cc)
+          if (((0 < iVar21) && (local_cc = (int *)g_human[(int)puVar11].stun_timer, 0 < (int)local_cc)
               ) && (*piVar17 == 1)) {
             local_c8 = (float)(1.0 - (float)(int)local_cc / 180.0);
             if (local_c8 < 0.0) {
@@ -1316,7 +1316,7 @@ LAB_00453705:
         if (g_human[(int)puVar11].despawn_timer < 0xa8c) {
           LF_SET_BITS(fVar24, g_human[(int)puVar11].player_id);
           if (LF_UINT(fVar24) == 0xffffffffU) {
-            iVar21 = g_human[(int)puVar11].unk_000c;
+            iVar21 = g_human[(int)puVar11].account;
             if (iVar21 != -1) {
               if ((-1 < iVar21) && (iVar21 < DAT_0f837b64)) {
                 local_cc = (int *)(g_account[iVar21].money + -10000);
@@ -1326,7 +1326,7 @@ LAB_00453705:
                        (int)(longlong)((double)(int)local_cc * 0.05000000074505806);
                 }
               }
-              g_human[(int)puVar11].unk_000c = -1;
+              g_human[(int)puVar11].account = -1;
             }
           }
           else {
@@ -1336,20 +1336,20 @@ LAB_00453705:
             playerdeathtax(((uint)LF_UINT(fVar24)));
             if (iVar21 == 4) {
               iVar21 = g_human[(int)puVar11].player_id;
-              if (g_game.unk_009c == iVar21) {
-                g_game.unk_009c = -1;
+              if (g_game.team0_manager == iVar21) {
+                g_game.team0_manager = -1;
               }
-              if (g_game.unk_1218 == iVar21) {
-                g_game.unk_1218 = -1;
+              if (g_game.team1_manager == iVar21) {
+                g_game.team1_manager = -1;
               }
-              if (g_game.unk_2394 == iVar21) {
-                g_game.unk_2394 = -1;
+              if (g_game.team2_manager == iVar21) {
+                g_game.team2_manager = -1;
               }
-              if (g_game.unk_3510 == iVar21) {
-                g_game.unk_3510 = -1;
+              if (g_game.team3_manager == iVar21) {
+                g_game.team3_manager = -1;
               }
-              if (g_game.unk_468c == iVar21) {
-                g_game.unk_468c = -1;
+              if (g_game.team4_manager == iVar21) {
+                g_game.team4_manager = -1;
               }
               g_player[((int)LF_UINT(fVar24))].team = 7;
             }
@@ -1372,8 +1372,8 @@ LAB_00453705:
         g_human[(int)puVar11].despawn_timer = 0xe10;
       }
       iVar21 = 0;
-      if (0 < g_city.unk_2f998) {
-        piVar17 = &g_city.unk_2f9dc;
+      if (0 < g_city.num_buildings) {
+        piVar17 = &g_city.building_type;
         do {
           if ((*piVar17 == 6) &&
              (iVar14 = pointinsidebuilding(iVar21,&g_human[(int)puVar11].pos.x,0.0), iVar14 != 0)) {
@@ -1390,7 +1390,7 @@ LAB_00453705:
           }
           iVar21 = iVar21 + 1;
           piVar17 = piVar17 + 0x277;
-        } while (iVar21 < g_city.unk_2f998);
+        } while (iVar21 < g_city.num_buildings);
       }
       if (g_human[(int)puVar11].despawn_timer < 1) {
         deletehuman(local_a4);
@@ -1471,7 +1471,7 @@ LAB_00453705:
     }
     local_a4 = (uint *)((int)local_a4 + 1);
     if (0x1ff < (int)local_a4) {
-      stoptimer(g_timerlist.unk_0088);
+      stoptimer(g_timerlist.humansim);
       return;
     }
   } while( true );

@@ -2501,10 +2501,10 @@ void __cdecl lf_05700(void)
   
   iVar7 = 0;
   local_4 = 0;
-  if (0 < g_city.unk_2f998) {
+  if (0 < g_city.num_buildings) {
     do {
       piVar8 = (int *)((int)&g_city.unk_302a8 + iVar7);
-      if (*(int *)((int)&g_city.unk_2f9dc + iVar7) == 2) {
+      if (*(int *)((int)&g_city.building_type + iVar7) == 2) {
         iVar6 = 0;
         bVar4 = false;
         if (0 < *(int *)((int)&g_city.unk_302a4 + iVar7)) {
@@ -2567,7 +2567,7 @@ void __cdecl lf_05700(void)
       }
       local_4 = local_4 + 1;
       iVar7 = iVar7 + 0x9dc;
-    } while (local_4 < g_city.unk_2f998);
+    } while (local_4 < g_city.num_buildings);
   }
   return;
 }
@@ -2594,10 +2594,10 @@ void __cdecl lf_05870(void)
   iVar4 = g_itemtype[9].price;
   iVar3 = g_itemtype[8].price;
   local_4 = 0;
-  if (0 < g_city.unk_2f998) {
+  if (0 < g_city.num_buildings) {
     iVar5 = 0;
     do {
-      if (*(int *)((int)&g_city.unk_2f9dc + iVar5) == 7) {
+      if (*(int *)((int)&g_city.building_type + iVar5) == 7) {
         *(undefined4 *)((int)&g_city.unk_302a4 + iVar5) = 0;
         *(undefined4 *)((int)&g_city.unk_302a8 + iVar5) = 6;
         *(int *)(iVar5 + ((int)&g_city.unk_302ac) + *(int *)((int)&g_city.unk_302a4 + iVar5) * 0xc) =
@@ -2660,7 +2660,7 @@ void __cdecl lf_05870(void)
       }
       local_4 = local_4 + 1;
       iVar5 = iVar5 + 0x9dc;
-    } while (local_4 < g_city.unk_2f998);
+    } while (local_4 < g_city.num_buildings);
   }
   return;
 }
@@ -4123,12 +4123,12 @@ void __cdecl lf_094a0(int param_1)
   int iVar4;
   int *piVar5;
   
-  iVar3 = g_city.unk_2f998;
+  iVar3 = g_city.num_buildings;
   uVar1 = g_player[param_1].human_id;
   if (uVar1 < 0x200) {
     iVar4 = 0;
-    if (0 < g_city.unk_2f998) {
-      piVar5 = &g_city.unk_2f9dc;
+    if (0 < g_city.num_buildings) {
+      piVar5 = &g_city.building_type;
       do {
         iVar2 = *piVar5;
         if ((((iVar2 == 2) || (iVar2 == 4)) || (iVar2 == 7)) &&
@@ -4146,7 +4146,7 @@ void __cdecl lf_094a0(int param_1)
     }
     iVar4 = 0;
     if (0 < iVar3) {
-      piVar5 = &g_city.unk_2f9dc;
+      piVar5 = &g_city.building_type;
       do {
         if ((*piVar5 == 5) &&
            (iVar2 = pointinsidebuilding(iVar4,&g_human[uVar1].pos.x,0.0), iVar2 != 0)) {
@@ -4292,24 +4292,24 @@ void __cdecl lf_0a1b0(float param_1)
   {
     g_account[g_player[((int)LF_BITS_U(param_1))].unk_0034].money = g_player[((int)LF_BITS_U(param_1))].money;
   }
-  if (LF_BITS_U(LF_BITS_F(g_game.unk_009c)) == LF_BITS_U(param_1)) {
-    g_game.unk_009c = -1;
+  if (LF_BITS_U(LF_BITS_F(g_game.team0_manager)) == LF_BITS_U(param_1)) {
+    g_game.team0_manager = -1;
   }
-  if (LF_BITS_U(LF_BITS_F(g_game.unk_1218)) == LF_BITS_U(param_1)) {
-    g_game.unk_1218 = -1;
+  if (LF_BITS_U(LF_BITS_F(g_game.team1_manager)) == LF_BITS_U(param_1)) {
+    g_game.team1_manager = -1;
   }
-  if (LF_BITS_U(LF_BITS_F(g_game.unk_2394)) == LF_BITS_U(param_1)) {
-    g_game.unk_2394 = -1;
+  if (LF_BITS_U(LF_BITS_F(g_game.team2_manager)) == LF_BITS_U(param_1)) {
+    g_game.team2_manager = -1;
   }
-  if (LF_BITS_U(LF_BITS_F(g_game.unk_3510)) == LF_BITS_U(param_1)) {
-    g_game.unk_3510 = -1;
+  if (LF_BITS_U(LF_BITS_F(g_game.team3_manager)) == LF_BITS_U(param_1)) {
+    g_game.team3_manager = -1;
   }
-  if (LF_BITS_U(LF_BITS_F(g_game.unk_468c)) == LF_BITS_U(param_1)) {
-    g_game.unk_468c = -1;
+  if (LF_BITS_U(LF_BITS_F(g_game.team4_manager)) == LF_BITS_U(param_1)) {
+    g_game.team4_manager = -1;
   }
   iVar1 = g_player[((int)LF_BITS_U(param_1))].human_id;
   if ((iVar1 != -1) && (LF_BITS_U(LF_BITS_F(g_human[iVar1].player_id)) == LF_BITS_U(param_1))) {
-    g_human[iVar1].unk_000c = g_player[((int)LF_BITS_U(param_1))].unk_0034;
+    g_human[iVar1].account = g_player[((int)LF_BITS_U(param_1))].unk_0034;
     g_human[iVar1].player_id = -1;
   }
   g_player[((int)LF_BITS_U(param_1))].active = 0;
@@ -4361,37 +4361,37 @@ void __cdecl lf_0a2a0(void)
       if (iVar1 != -1) {
         if (g_human[iVar1].vehicle_id == -1) {
           if (local_14[0x14] == 1) {
-            g_human[iVar1].unk_009c = ((int)LF_BITS_U(local_4[-1]));
-            g_human[iVar1].unk_00a0 = ((int)LF_BITS_U(*local_4));
-            g_human[iVar1].unk_00a4 = ((int)LF_BITS_U(local_4[1]));
-            g_human[iVar1].unk_00a8 = ((int)LF_BITS_U(local_4[2]));
-            g_human[iVar1].unk_00ac = local_4[3];
-            g_human[iVar1].unk_00b0 = local_4[4];
+            g_human[iVar1].input_axes[0] = local_4[-1];
+            g_human[iVar1].input_axes[1] = *local_4;
+            g_human[iVar1].input_axes[2] = local_4[1];
+            g_human[iVar1].input_axes[3] = local_4[2];
+            g_human[iVar1].view_axis = local_4[3];
+            g_human[iVar1].view_pitch = local_4[4];
             g_human[iVar1].unk_00b4 = local_4[5];
             g_human[iVar1].unk_00b8 = local_4[6];
           }
           else {
-            g_human[iVar1].unk_00ac = g_human[iVar1].axis;
-            g_human[iVar1].unk_00b0 = g_human[iVar1].pitch;
+            g_human[iVar1].view_axis = g_human[iVar1].axis;
+            g_human[iVar1].view_pitch = g_human[iVar1].pitch;
           }
           if (g_human[iVar1].vehicle_id != -1) goto LAB_0040a365;
         }
         else {
 LAB_0040a365:
           if ((local_14[0x14] == 2) || (local_14[0x14] == 3)) {
-            g_human[iVar1].unk_009c = ((int)LF_BITS_U(local_4[-1]));
-            g_human[iVar1].unk_00a0 = ((int)LF_BITS_U(*local_4));
-            g_human[iVar1].unk_00a4 = ((int)LF_BITS_U(local_4[1]));
-            g_human[iVar1].unk_00a8 = ((int)LF_BITS_U(local_4[2]));
-            g_human[iVar1].unk_00ac = local_4[3];
-            g_human[iVar1].unk_00b0 = local_4[4];
+            g_human[iVar1].input_axes[0] = local_4[-1];
+            g_human[iVar1].input_axes[1] = *local_4;
+            g_human[iVar1].input_axes[2] = local_4[1];
+            g_human[iVar1].input_axes[3] = local_4[2];
+            g_human[iVar1].view_axis = local_4[3];
+            g_human[iVar1].view_pitch = local_4[4];
             g_human[iVar1].unk_00b4 = local_4[5];
             g_human[iVar1].unk_00b8 = local_4[6];
           }
         }
         g_human[iVar1].input_buttons = local_14[9];
         iVar2 = g_human[iVar1].health;
-        g_human[iVar1].unk_003c = local_14[0xd];
+        g_human[iVar1].move_mode = local_14[0xd];
         local_14[0x55d] = iVar2;
         if (iVar2 < 0) {
           local_14[0x55d] = 0;
@@ -4908,7 +4908,7 @@ void __cdecl lf_0b540(void)
 
 {
   g_timerlist.packetbuild = 0x40;
-  g_timerlist.unk_0088 = 0x41;
+  g_timerlist.humansim = 0x41;
   g_timerlist.objectsim = 0x42;
   g_timerlist.bondtest = 0x43;
   g_timerlist.bondsim = 0x44;
@@ -8793,9 +8793,9 @@ undefined4 __cdecl lf_146a0(float *param_1,float *param_2,float *param_3,int par
         piVar5 = piVar5 + 6;
       } while (local_20 < *(int *)((int)&g_cityobjecttype.unk_0c08 + local_4));
       if (*param_3 < 1.0) {
-        g_intersect.unk_0020 = (&g_cityobject.unk_0014)[param_4 * 0x15];
-        g_intersect.unk_0024 = (&g_cityobject.unk_0018)[param_4 * 0x15];
-        g_intersect.unk_0028 = (&g_cityobject.unk_001c)[param_4 * 0x15];
+        g_intersect.surface_vel.x = (&g_cityobject.unk_0014)[param_4 * 0x15];
+        g_intersect.surface_vel.y = (&g_cityobject.unk_0018)[param_4 * 0x15];
+        g_intersect.surface_vel.z = (&g_cityobject.unk_001c)[param_4 * 0x15];
         return 1;
       }
     }
@@ -9066,9 +9066,9 @@ undefined4 __cdecl lf_14dd0(float *param_1,float *param_2,float *param_3,int par
         piVar4 = piVar4 + 6;
       } while (local_20 < *(int *)((int)&g_cityobjecttype.unk_0c08 + local_4));
       if (*param_3 < 1.0) {
-        g_intersect.unk_0020 = 0.0;
-        g_intersect.unk_0024 = 0.0;
-        g_intersect.unk_0028 = 0.0;
+        g_intersect.surface_vel.x = 0.0;
+        g_intersect.surface_vel.y = 0.0;
+        g_intersect.surface_vel.z = 0.0;
         return 1;
       }
     }
@@ -9140,7 +9140,7 @@ int __cdecl lf_154b0(float *param_1)
   iVar4 = -1;
   iVar3 = 0;
   g_debug.unk_5024c = 0x457;
-  if (0 < g_city.unk_2f998) {
+  if (0 < g_city.num_buildings) {
     pfVar2 = &g_city.unk_2f9fc;
     do {
       if ((((pfVar2[-1] < *param_1 != (pfVar2[-1] == *param_1)) &&
@@ -9151,7 +9151,7 @@ int __cdecl lf_154b0(float *param_1)
       }
       iVar3 = iVar3 + 1;
       pfVar2 = pfVar2 + 0x277;
-    } while (iVar3 < g_city.unk_2f998);
+    } while (iVar3 < g_city.num_buildings);
     if (iVar4 != -1) {
       iVar3 = (&g_city.unk_2fa10)[iVar4 * 0x277];
       if (iVar3 == -1) {
@@ -10819,7 +10819,7 @@ void __cdecl lf_19060(int param_1)
     pBVar6 = g_body + 9;
     pfVar8 = &g_human[param_1].bones[9].rot[2].z;
     do {
-      iVar3 = *(int *)pBVar6;
+      iVar3 = pBVar6->parent;
       iVar5 = iVar3 * 0xe0;
       dVar10 = _CIatan2((double)((float)(*(float *)(iVar5 + ((int)&g_human[0].lf_raw[0x10c]) + iVar9) * *pfVar8 +
                                 (*(float *)(iVar5 + ((int)&g_human[0].lf_raw[0x104]) + iVar9) * ((vec3 *)(pfVar8 + -2))->x +
@@ -10864,7 +10864,7 @@ void __cdecl lf_19060(int param_1)
   g_human[param_1].bones[9].target_rot[2].y = 0.0;
   g_human[param_1].bones[9].target_rot[1].y = 1.0;
   g_human[param_1].bones[9].target_rot[2].z = 1.0;
-  dVar10 = _CIsin((double)g_human[param_1].unk_2918);
+  dVar10 = _CIsin((double)g_human[param_1].walk_phase);
   rotateorientation(&pvVar2->x,&pvVar2->x,
                     (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 -
                            (float10)fVar4));
@@ -10889,7 +10889,7 @@ void __cdecl lf_19060(int param_1)
   g_human[param_1].bones[0xb].target_rot[2].y = 0.0;
   g_human[param_1].bones[0xb].target_rot[1].y = 1.0;
   g_human[param_1].bones[0xb].target_rot[2].z = 1.0;
-  dVar10 = _CIsin((double)g_human[param_1].unk_2918);
+  dVar10 = _CIsin((double)g_human[param_1].walk_phase);
   rotateorientation(&pvVar2->x,&pvVar2->x,
                     (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 -
                            (float10)fVar4));
@@ -10903,7 +10903,7 @@ void __cdecl lf_19060(int param_1)
   g_human[param_1].bones[0xc].target_rot[2].y = 0.0;
   g_human[param_1].bones[0xc].target_rot[1].y = 1.0;
   g_human[param_1].bones[0xc].target_rot[2].z = 1.0;
-  dVar10 = _CIsin((double)g_human[param_1].unk_2918);
+  dVar10 = _CIsin((double)g_human[param_1].walk_phase);
   rotateorientation(&pvVar2->x,&pvVar2->x,
                     (float)((float10)dVar10 * (float10)-3.14159265359 * (float10)0.125 -
                            (float10)fVar4));
@@ -10928,7 +10928,7 @@ void __cdecl lf_19060(int param_1)
   g_human[param_1].bones[0xe].target_rot[2].y = 0.0;
   g_human[param_1].bones[0xe].target_rot[1].y = 1.0;
   g_human[param_1].bones[0xe].target_rot[2].z = 1.0;
-  dVar10 = _CIsin((double)g_human[param_1].unk_2918);
+  dVar10 = _CIsin((double)g_human[param_1].walk_phase);
   rotateorientation(&pvVar2->x,&pvVar2->x,
                     (float)((float10)dVar10 * (float10)3.14159265359 * (float10)0.125 -
                            (float10)fVar4));
@@ -11061,13 +11061,13 @@ void __cdecl lf_19610(void)
   
   g_body[0].unk_001c = 0.0625;
   g_body[0].unk_0020 = 0.25;
-  (*(uint *)((uchar *)&g_body[0] + 0)) = 0;
-  (*(uint *)((uchar *)&g_body[1] + 0)) = 0;
+  g_body[0].parent = 0;
+  g_body[1].parent = 0;
   g_body[0].unk_0024 = 0.125;
-  (*(uint *)((uchar *)&g_body[2] + 0)) = 1;
-  (*(uint *)((uchar *)&g_body[9] + 0)) = 0;
+  g_body[2].parent = 1;
+  g_body[9].parent = 0;
   g_body[0].unk_0028 = 0.09375;
-  (*(uint *)((uchar *)&g_body[10] + 0)) = 9;
+  g_body[10].parent = 9;
   g_body[0].pos.x = 0.0;
   g_body[0].pos.y = 0.0;
   g_body[0].pos.z = 0.0;
@@ -11106,12 +11106,12 @@ void __cdecl lf_19610(void)
   g_body[9].unk_0018 = 0;
   g_body[9].unk_002c = 0x41400000;
   g_body[10].unk_001c = 0.0625;
-  (*(uint *)((uchar *)&g_body[0xb] + 0)) = 10;
+  g_body[0xb].parent = 10;
   g_body[10].unk_0020 = 0.09375;
-  (*(uint *)((uchar *)&g_body[0xc] + 0)) = 0;
+  g_body[0xc].parent = 0;
   g_body[10].unk_0028 = 0.09375;
-  (*(uint *)((uchar *)&g_body[0xd] + 0)) = 0xc;
-  (*(uint *)((uchar *)&g_body[0xe] + 0)) = 0xd;
+  g_body[0xd].parent = 0xc;
+  g_body[0xe].parent = 0xd;
   g_body[10].unk_0024 = 0.25;
   g_body[10].pos.x = 0.0;
   g_body[10].pos.y = -0.5;
@@ -11155,11 +11155,11 @@ void __cdecl lf_19610(void)
   g_body[0xd].unk_002c = 0x40e00000;
   g_body[0xe].unk_001c = 0.0625;
   g_body[0xe].unk_0024 = 0.0625;
-  (*(uint *)((uchar *)&g_body[3] + 0)) = 1;
-  (*(uint *)((uchar *)&g_body[4] + 0)) = 3;
+  g_body[3].parent = 1;
+  g_body[4].parent = 3;
   g_body[0xe].unk_0020 = 0.09375;
-  (*(uint *)((uchar *)&g_body[5] + 0)) = 4;
-  (*(uint *)((uchar *)&g_body[6] + 0)) = 1;
+  g_body[5].parent = 4;
+  g_body[6].parent = 1;
   g_body[0xe].unk_0028 = 0.1875;
   g_body[0xe].pos.y = -0.25;
   g_body[0xe].pos.z = 0.0;
@@ -11208,9 +11208,9 @@ void __cdecl lf_19610(void)
   g_body[6].unk_0024 = 0.1875;
   g_body[6].unk_0014 = 0x3e400000;
   g_body[6].pos.y = 0.0;
-  (*(uint *)((uchar *)&g_body[7] + 0)) = 6;
+  g_body[7].parent = 6;
   g_body[6].pos.z = 0.0;
-  (*(uint *)((uchar *)&g_body[8] + 0)) = 7;
+  g_body[8].parent = 7;
   g_body[6].unk_0018 = 0;
   g_body[6].pos.x = 0.25;
   g_body[6].unk_0010 = 0x3e800000;
@@ -12476,9 +12476,9 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
           g_intersect.normal[1] = LF_BITS_F(local_74);
           g_intersect.normal[2] = LF_BITS_F(local_70);
           g_intersect.fraction = local_ac;
-          g_intersect.unk_0020 = 0.0;
-          g_intersect.unk_0024 = 0.0;
-          g_intersect.unk_0028 = 0.0;
+          g_intersect.surface_vel.x = 0.0;
+          g_intersect.surface_vel.y = 0.0;
+          g_intersect.surface_vel.z = 0.0;
         }
         local_90 = (float)(DAT_0a01d8c0 + local_60);
         local_8c = (float)(DAT_0a01d8c4 + LF_BITS_F((&DAT_0a01d8cc)[iVar9]));
@@ -12502,9 +12502,9 @@ undefined4 __cdecl lf_1c1d0(float *param_1,float *param_2)
           g_intersect.normal[1] = LF_BITS_F(local_74);
           g_intersect.normal[2] = LF_BITS_F(local_70);
           g_intersect.fraction = local_ac;
-          g_intersect.unk_0020 = 0.0;
-          g_intersect.unk_0024 = 0.0;
-          g_intersect.unk_0028 = 0.0;
+          g_intersect.surface_vel.x = 0.0;
+          g_intersect.surface_vel.y = 0.0;
+          g_intersect.surface_vel.z = 0.0;
         }
       }
       if ((uVar5 == local_28[3]) && (uVar6 == local_28[5])) break;
@@ -12736,9 +12736,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
             g_intersect.normal[1] = LF_BITS_F(local_14);
             g_intersect.normal[2] = LF_BITS_F(local_10);
             g_intersect.fraction = 0.0;
-            g_intersect.unk_0020 = 0.0;
-            g_intersect.unk_0024 = 0.0;
-            g_intersect.unk_0028 = 0.0;
+            g_intersect.surface_vel.x = 0.0;
+            g_intersect.surface_vel.y = 0.0;
+            g_intersect.surface_vel.z = 0.0;
             g_intersect.distance = local_54;
             local_58 = local_54;
           }
@@ -12760,9 +12760,9 @@ undefined4 __cdecl lf_1c8f0(float *param_1,float *param_2,float param_3)
           fVar5 = DAT_0a01d8c4;
           if ((iVar4 != 0) && (local_54 < local_58)) {
             g_intersect.fraction = 0.0;
-            g_intersect.unk_0020 = 0.0;
-            g_intersect.unk_0024 = 0.0;
-            g_intersect.unk_0028 = 0.0;
+            g_intersect.surface_vel.x = 0.0;
+            g_intersect.surface_vel.y = 0.0;
+            g_intersect.surface_vel.z = 0.0;
             g_intersect.pos[0] = LF_BITS_F(local_c);
             g_intersect.pos[1] = LF_BITS_F(local_8);
             g_intersect.pos[2] = LF_BITS_F(local_4);
@@ -12968,9 +12968,9 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
             g_intersect.normal[1] = LF_BITS_F(local_14);
             g_intersect.normal[2] = LF_BITS_F(local_10);
             g_intersect.fraction = 0.0;
-            g_intersect.unk_0020 = 0.0;
-            g_intersect.unk_0024 = 0.0;
-            g_intersect.unk_0028 = 0.0;
+            g_intersect.surface_vel.x = 0.0;
+            g_intersect.surface_vel.y = 0.0;
+            g_intersect.surface_vel.z = 0.0;
             g_intersect.distance = local_54;
           }
           local_24 = (float)(DAT_0a01d8c0 + local_50);
@@ -12991,9 +12991,9 @@ undefined4 __cdecl lf_1cdf0(float *param_1,float param_2)
           fVar5 = DAT_0a01d8c4;
           if ((iVar4 != 0) && (local_54 < g_intersect.distance)) {
             g_intersect.fraction = 0.0;
-            g_intersect.unk_0020 = 0.0;
-            g_intersect.unk_0024 = 0.0;
-            g_intersect.unk_0028 = 0.0;
+            g_intersect.surface_vel.x = 0.0;
+            g_intersect.surface_vel.y = 0.0;
+            g_intersect.surface_vel.z = 0.0;
             g_intersect.pos[0] = LF_BITS_F(local_c);
             g_intersect.pos[1] = LF_BITS_F(local_8);
             g_intersect.pos[2] = LF_BITS_F(local_4);
@@ -13244,7 +13244,7 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
   local_4 = DAT_00460d18 ^ (uint)&local_3c;
   local_3c = param_1;
   local_2c = param_2;
-  if ((&g_game.unk_009c)[((int)LF_BITS_U(param_1)) * 0x45f] == -1) {
+  if ((&g_game.team0_manager)[((int)LF_BITS_U(param_1)) * 0x45f] == -1) {
     piVar3 = &g_item[0].linked_item;
     do {
       if ((((Item *)(piVar3 + -0x3e))->active != 0) && (piVar3[-0x3b] == 0x17)) {
@@ -13304,7 +13304,7 @@ void __cdecl lf_1d4d0(float param_1,int param_2)
       createevent_updateiteminfo(uVar2);
     }
     pcVar1 = g_teamname[((int)LF_BITS_U(fVar3))];
-    (&g_game.unk_009c)[((int)LF_BITS_U(param_1)) * 0x45f] = local_2c;
+    (&g_game.team0_manager)[((int)LF_BITS_U(param_1)) * 0x45f] = local_2c;
     sprintf(&DAT_00461780,"%s is now manager of %s",local_2c * 0x2408 + ((int)&g_player[0].name),pcVar1);
     createevent_message(0,&DAT_00461780,0xffffffff,0);
   }
@@ -13678,26 +13678,25 @@ void __cdecl lf_1dba0(void)
               pbitread(&local_50,0x10);
               local_10 = LF_BITS_F((local_50 & 0x7fff));
               local_4c = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
-              *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd0] = local_4c;
+              g_human[uVar12].bones[uVar10].joint_angles.x = local_4c;
               if ((local_50 & 0x8000) != 0) {
-                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd0] = -local_4c;
+                g_human[uVar12].bones[uVar10].joint_angles.x = -local_4c;
               }
               pbitread(&local_48,0x10);
               local_10 = LF_BITS_F((local_48 & 0x7fff));
               local_4c = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
-              *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd4] = local_4c;
+              g_human[uVar12].bones[uVar10].joint_angles.y = local_4c;
               if ((local_48 & 0x8000) != 0) {
-                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd4] = -local_4c;
+                g_human[uVar12].bones[uVar10].joint_angles.y = -local_4c;
               }
               pbitread((uint *)&local_44,0x10);
               uVar11 = local_64;
               local_10 = LF_BITS_F((((uint)LF_BITS_U(local_44)) & 0x7fff));
-              *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd8] = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
+              g_human[uVar12].bones[uVar10].joint_angles.z = (float)((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
               if ((((uint)LF_BITS_U(local_44)) & 0x8000) != 0) {
-                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd8] =
-                     -((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
+                g_human[uVar12].bones[uVar10].joint_angles.z = -((float)((int)LF_BITS_U(local_10)) / 5215.189175234883);
               }
-              iVar13 = *(int *)(g_body + local_64);
+              iVar13 = g_body[local_64].parent;
               fVar6 = LF_BITS_F(g_body[local_64].unk_0010);
               g_human[uVar12].bones[uVar10].pos.x =
                    (float)(fVar6 * *(float *)(iVar13 * 0xe0 + ((int)&g_human[0].lf_raw[0xf8]) + iVar16) +
@@ -13738,12 +13737,11 @@ void __cdecl lf_1dba0(void)
               g_human[uVar12].bones[uVar10].rot[2].x = g_human[uVar12].bones[iVar13].rot[2].x;
               g_human[uVar12].bones[uVar10].rot[2].y = g_human[uVar12].bones[iVar13].rot[2].y;
               g_human[uVar12].bones[uVar10].rot[2].z = g_human[uVar12].bones[iVar13].rot[2].z;
-              rotateorientation(&pvVar3->x,&pvVar3->x,
-                                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd0]);
+              rotateorientation(&pvVar3->x,&pvVar3->x,g_human[uVar12].bones[uVar10].joint_angles.x);
               rotateorientation(&pvVar3->x,&g_human[uVar12].bones[uVar10].rot[1].x,
-                                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd4]);
+                                g_human[uVar12].bones[uVar10].joint_angles.y);
               rotateorientation(&pvVar3->x,&g_human[uVar12].bones[uVar10].rot[2].x,
-                                *(float *)&g_human[uVar12].bones[uVar10].lf_raw[0xd8]);
+                                g_human[uVar12].bones[uVar10].joint_angles.z);
               local_c = (float)(g_body[uVar11].pos.x - LF_BITS_F(g_body[uVar11].unk_0010));
               local_8 = (float)(g_body[uVar11].pos.y - LF_BITS_F(g_body[uVar11].unk_0014));
               local_4 = (float)(g_body[uVar11].pos.z - LF_BITS_F(g_body[uVar11].unk_0018));
@@ -14466,31 +14464,28 @@ LAB_0041fa77:
               packorientation(&g_human[iVar9].bones[0].rot[2].x,0x1f);
             }
             else {
-              uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd0]) * 5215.189175234883);
+              uVar1 = (ulonglong)LF_CHOP(ABS(g_human[iVar9].bones[iVar5].joint_angles.x) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
               uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd0] < 0.0) {
+              if (g_human[iVar9].bones[iVar5].joint_angles.x < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
-              uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd4]) * 5215.189175234883);
+              uVar1 = (ulonglong)LF_CHOP(ABS(g_human[iVar9].bones[iVar5].joint_angles.y) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
               uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd4] < 0.0) {
+              if (g_human[iVar9].bones[iVar5].joint_angles.y < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
               local_40 = CONCAT22((*(ushort *)((uchar *)&local_40 + 2)),lf_fpucw());
-              uVar1 = (ulonglong)
-                      LF_CHOP(ABS(*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd8]) * 5215.189175234883);
+              uVar1 = (ulonglong)LF_CHOP(ABS(g_human[iVar9].bones[iVar5].joint_angles.z) * 5215.189175234883);
               (*(uint *)((uchar *)&local_38 + 0)) = (uint)uVar1;
               uVar8 = (uint)(*(uint *)((uchar *)&local_38 + 0));
               local_38 = uVar1 & 0xffffffff00007fff;
-              if (*(float *)&g_human[iVar9].bones[iVar5].lf_raw[0xd8] < 0.0) {
+              if (g_human[iVar9].bones[iVar5].joint_angles.z < 0.0) {
                 local_38 = CONCAT44((*(uint *)((uchar *)&local_38 + 4)),uVar8) & 0xffffffff00007fff | 0x8000;
               }
               pbitwrite((uint *)&local_38,0x10);
@@ -15102,27 +15097,24 @@ LAB_00420e39:
             }
             else {
               local_48 = (longlong)
-                         LF_CHOP(ABS(*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd0]) *
-                               5215.189175234883);
+                         LF_CHOP(ABS(g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.x) * 5215.189175234883);
               local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7fff));
-              if (*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd0] < 0.0) {
+              if (g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.x < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
               pbitwrite((uint *)&local_4c,0x10);
               local_48 = (longlong)
-                         LF_CHOP(ABS(*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd4]) *
-                               5215.189175234883);
+                         LF_CHOP(ABS(g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.y) * 5215.189175234883);
               local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7fff));
-              if (*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd4] < 0.0) {
+              if (g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.y < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
               pbitwrite((uint *)&local_4c,0x10);
               local_58 = LF_BITS_F(CONCAT22((*(ushort *)((uchar *)&local_58 + 2)),lf_fpucw()));
               local_48 = (longlong)
-                         LF_CHOP(ABS(*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd8]) *
-                               5215.189175234883);
+                         LF_CHOP(ABS(g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.z) * 5215.189175234883);
               local_4c = LF_BITS_F((((uint)LF_BITS_U((float)(*(float *)((uchar *)&local_48 + 0)))) & 0x7fff));
-              if (*(float *)&g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].lf_raw[0xd8] < 0.0) {
+              if (g_human[((int)LF_BITS_U(fVar9))].bones[iVar11].joint_angles.z < 0.0) {
                 local_4c = LF_BITS_F((((uint)LF_BITS_U(local_4c)) | 0x8000));
               }
               pbitwrite((uint *)&local_4c,0x10);
@@ -16136,9 +16128,9 @@ void __cdecl lf_240e0(int param_1)
         if (iVar10 == 0) {
           rotatevector(&local_14,&local_38,1.5707963705062866);
         }
-        fVar2 = g_object[param_1].unk_5bc8;
-        dVar16 = _CIatan2((double)(g_object[param_1].unk_5bbc * (float)dVar15),1.0);
-        dVar17 = _CIatan2((double)(g_object[param_1].unk_5bc4 * (float)dVar14),1.0);
+        fVar2 = g_object[param_1].drive_input[3];
+        dVar16 = _CIatan2((double)(g_object[param_1].drive_input[0] * (float)dVar15),1.0);
+        dVar17 = _CIatan2((double)(g_object[param_1].drive_input[2] * (float)dVar14),1.0);
         rotatevector(&local_14,&local_38,
                      (float)((float10)dVar17 * (float10)0.25 +
                             (float10)(float)((float10)((float)(fVar2 * 0.0625 * 3.14159265359 + 0.04908738521234375)) -
@@ -16433,22 +16425,22 @@ LAB_004250f8:
     } while (local_14 != 0);
     iVar11 = 0x15;
     if (0x15 < g_object[param_1].num_particles) {
-      fVar4 = (float)(g_object[param_1].unk_5bc8 * 0.125 * 0.25 * 3.14159265359 + 0.14726215563703127);
+      fVar4 = (float)(g_object[param_1].drive_input[3] * 0.125 * 0.25 * 3.14159265359 + 0.14726215563703127);
       do {
         iVar3 = g_object[param_1].particles[iVar11];
         if (iVar11 == 0x15) {
-          local_1c = (float)(g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359 + fVar4);
+          local_1c = (float)(g_object[param_1].drive_input[2] * 0.125 * 0.125 * 0.25 * 3.14159265359 + fVar4);
         }
         else if (iVar11 == 0x16) {
-          local_1c = (float)(fVar4 - g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359);
+          local_1c = (float)(fVar4 - g_object[param_1].drive_input[0] * 0.125 * 0.125 * 3.14159265359);
         }
         else if (iVar11 == 0x17) {
-          local_1c = (float)(fVar4 - g_object[param_1].unk_5bc4 * 0.125 * 0.125 * 0.25 * 3.14159265359);
+          local_1c = (float)(fVar4 - g_object[param_1].drive_input[2] * 0.125 * 0.125 * 0.25 * 3.14159265359);
         }
         else {
           local_1c = fVar4;
           if (iVar11 == 0x18) {
-            local_1c = (float)(g_object[param_1].unk_5bbc * 0.125 * 0.125 * 3.14159265359 + fVar4);
+            local_1c = (float)(g_object[param_1].drive_input[0] * 0.125 * 0.125 * 3.14159265359 + fVar4);
           }
         }
         local_c = g_particle[iVar3].vel.x;
@@ -16515,7 +16507,7 @@ LAB_004250f8:
       } while (iVar11 < g_object[param_1].num_particles);
     }
     addobjectrotation(param_1,&g_object[param_1].pos.x,&pvVar1->x,
-                      (float)(g_object[param_1].unk_5bc0 * 2.7777778450399637E-4));
+                      (float)(g_object[param_1].drive_input[1] * 2.7777778450399637E-4));
   }
   return;
 }
@@ -16646,15 +16638,15 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
             calculatebarycentric
                       (g_intersect.tri_weights,g_intersect.pos,(float *)&local_c,(float *)&local_24,
                        (float *)&local_3c);
-            g_intersect.unk_0020 =
+            g_intersect.surface_vel.x =
                  (float)((float)(g_intersect.tri_weights[1] * g_particle[g_intersect.tri_particles[1]].vel.x +
                  g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.x) +
                  g_intersect.tri_weights[2] * g_particle[g_intersect.tri_particles[2]].vel.x);
-            g_intersect.unk_0024 =
+            g_intersect.surface_vel.y =
                  (float)(g_particle[g_intersect.tri_particles[2]].vel.y * g_intersect.tri_weights[2] +
                  ((float)(g_particle[g_intersect.tri_particles[1]].vel.y * g_intersect.tri_weights[1] +
                  (float)(g_particle[g_intersect.tri_particles[0]].vel.y * g_intersect.tri_weights[0]))));
-            g_intersect.unk_0028 =
+            g_intersect.surface_vel.z =
                  (float)(g_intersect.tri_weights[2] * g_particle[g_intersect.tri_particles[2]].vel.z +
                  ((float)(g_intersect.tri_weights[1] * g_particle[g_intersect.tri_particles[1]].vel.z +
                  (float)(g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.z))));
@@ -16692,16 +16684,16 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
               calculatebarycentric
                         (g_intersect.tri_weights,g_intersect.pos,(float *)&local_c,
                          (float *)&local_24,(float *)&local_3c);
-              g_intersect.unk_0020 =
+              g_intersect.surface_vel.x =
                    g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.x;
-              g_intersect.unk_0024 =
+              g_intersect.surface_vel.y =
                    (float)(g_particle[g_intersect.tri_particles[0]].vel.y * g_intersect.tri_weights[0]);
-              g_intersect.unk_0028 =
+              g_intersect.surface_vel.z =
                    (float)(g_intersect.tri_weights[0] * g_particle[g_intersect.tri_particles[0]].vel.z);
-              scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
+              scaleaddvectors(&g_intersect.surface_vel.x,&g_intersect.surface_vel.x,
                               &g_particle[g_intersect.tri_particles[1]].vel.x,
                               g_intersect.tri_weights[1]);
-              scaleaddvectors(&g_intersect.unk_0020,&g_intersect.unk_0020,
+              scaleaddvectors(&g_intersect.surface_vel.x,&g_intersect.surface_vel.x,
                               &g_particle[g_intersect.tri_particles[2]].vel.x,
                               g_intersect.tri_weights[2]);
               iVar4 = local_4c;
@@ -17574,7 +17566,7 @@ void __cdecl lf_272b0(int param_1)
   double dVar9;
 
   
-  if (g_object[param_1].unk_5bc8 <= 0.0) {
+  if (g_object[param_1].drive_input[3] <= 0.0) {
     if ((float10)g_object[param_1].throttle <= (float10)0.0 + (float10)0.125) {
       g_object[param_1].throttle = 0.0;
     }
@@ -17583,21 +17575,21 @@ void __cdecl lf_272b0(int param_1)
     }
   }
   else {
-    g_object[param_1].throttle = ABS(g_object[param_1].unk_5bc8);
+    g_object[param_1].throttle = ABS(g_object[param_1].drive_input[3]);
   }
-  uVar2 = g_object[param_1].unk_5bdc;
+  uVar2 = g_object[param_1].drive_buttons;
   g_object[param_1].unk_5e80 = 1.0;
   g_object[param_1].unk_5ee4 = 0;
   if ((uVar2 & 2) != 0) {
     g_object[param_1].unk_5e80 = 0.0;
   }
-  if (-0.5 <= g_object[param_1].unk_5bc4) {
-    if (g_object[param_1].unk_5bc4 <= 0.5) {
+  if (-0.5 <= g_object[param_1].drive_input[2]) {
+    if (g_object[param_1].drive_input[2] <= 0.5) {
       g_object[param_1].gear = 0;
       g_object[param_1].unk_5e80 = 0.0;
     }
-    else if (0.5 <= g_object[param_1].unk_5bbc) {
-      if (1.5 <= g_object[param_1].unk_5bbc) {
+    else if (0.5 <= g_object[param_1].drive_input[0]) {
+      if (1.5 <= g_object[param_1].drive_input[0]) {
         g_object[param_1].gear = -1;
       }
       else {
@@ -17608,8 +17600,8 @@ void __cdecl lf_272b0(int param_1)
       g_object[param_1].gear = 2;
     }
   }
-  else if (0.5 <= g_object[param_1].unk_5bbc) {
-    if (1.5 <= g_object[param_1].unk_5bbc) {
+  else if (0.5 <= g_object[param_1].drive_input[0]) {
+    if (1.5 <= g_object[param_1].drive_input[0]) {
       g_object[param_1].unk_5ee4 = 1;
     }
     else {
@@ -17670,10 +17662,10 @@ void __cdecl lf_272b0(int param_1)
   if (iVar3 == -1) {
     g_object[param_1].gear_ratio = -10.5;
   }
-  if (g_object[param_1].unk_5bc8 < 0.0) {
-    g_object[param_1].unk_5e84 = -g_object[param_1].unk_5bc8;
+  if (g_object[param_1].drive_input[3] < 0.0) {
+    g_object[param_1].unk_5e84 = -g_object[param_1].drive_input[3];
   }
-  if ((g_object[param_1].unk_5bdc & 4) != 0) {
+  if ((g_object[param_1].drive_buttons & 4) != 0) {
     g_object[param_1].unk_5e84 = 2.0;
   }
   if (g_object[param_1].gear_ratio == 0.0) {
@@ -17682,7 +17674,7 @@ void __cdecl lf_272b0(int param_1)
   else {
     g_object[param_1].unk_5e7c = (float)(1.0 / g_object[param_1].gear_ratio);
   }
-  fVar1 = (float)(g_object[param_1].unk_5bc0 * 0.75);
+  fVar1 = (float)(g_object[param_1].drive_input[1] * 0.75);
   fVar4 = ABS(fVar1);
   if (fVar4 <= 0.0) {
     local_18 = 0.0;
@@ -17753,12 +17745,12 @@ void __cdecl lf_272b0(int param_1)
   } while ((int)piVar7 < ((int)SR_VA(0x1f38794)));
   g_object[param_1].unk_5ee0 = 0;
 LAB_0042788c:
-  fVar1 = g_object[param_1].unk_5bc8;
+  fVar1 = g_object[param_1].drive_input[3];
   g_object[param_1].unk_5e70 = iVar3;
   if (fVar1 <= 0.0) {
     return;
   }
-  g_object[param_1].unk_5bc8 = 0.0;
+  g_object[param_1].drive_input[3] = 0.0;
   return;
 }
 #undef g_human
@@ -22670,7 +22662,7 @@ void __cdecl lf_2f420(int param_1)
   
   local_4 = DAT_00460d18 ^ (uint)&local_120;
   iVar9 = param_1 * 0x2b64;
-  if (g_human[param_1].unk_003c == 2) {
+  if (g_human[param_1].move_mode == 2) {
     local_e8 = -0.7853981852531433;
   }
   else {
@@ -22772,7 +22764,7 @@ LAB_0042f545:
       }
     }
     if (g_itemtype[local_e4].is_gun != 0) {
-      iVar6 = g_human[param_1].unk_003c;
+      iVar6 = g_human[param_1].move_mode;
       local_114 = -0.0625;
       local_110 = 0.0625;
       local_10c = -0.7250000238418579;
@@ -23730,9 +23722,9 @@ undefined4 __cdecl lf_31480(float *param_1,float *param_2)
       g_intersect.normal[1] = LF_BITS_F(local_8);
       g_intersect.normal[2] = LF_BITS_F(local_4);
       g_intersect.fraction = local_1c;
-      g_intersect.unk_0020 = pfVar4[-2];
-      g_intersect.unk_0024 = pfVar4[-1];
-      g_intersect.unk_0028 = *pfVar4;
+      g_intersect.surface_vel.x = pfVar4[-2];
+      g_intersect.surface_vel.y = pfVar4[-1];
+      g_intersect.surface_vel.z = *pfVar4;
       g_intersect.index = iVar1;
     }
     pfVar4 = pfVar4 + 0x15;
@@ -23803,9 +23795,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
       g_intersect.normal[0] = LF_BITS_F(local_c);
       g_intersect.normal[1] = LF_BITS_F(local_8);
       g_intersect.normal[2] = LF_BITS_F(local_4);
-      g_intersect.unk_0020 = 0.0;
-      g_intersect.unk_0024 = 0.0;
-      g_intersect.unk_0028 = 0.0;
+      g_intersect.surface_vel.x = 0.0;
+      g_intersect.surface_vel.y = 0.0;
+      g_intersect.surface_vel.z = 0.0;
       g_intersect.fraction = local_1c;
     }
     pAVar3 = pAVar3 + 1;
@@ -23826,9 +23818,9 @@ undefined4 __cdecl lf_31630(float *param_1,float *param_2,int param_3)
         g_intersect.normal[0] = LF_BITS_F(local_c);
         g_intersect.normal[1] = LF_BITS_F(local_8);
         g_intersect.normal[2] = LF_BITS_F(local_4);
-        g_intersect.unk_0020 = pfVar4[-2];
-        g_intersect.unk_0024 = pfVar4[-1];
-        g_intersect.unk_0028 = *pfVar4;
+        g_intersect.surface_vel.x = pfVar4[-2];
+        g_intersect.surface_vel.y = pfVar4[-1];
+        g_intersect.surface_vel.z = *pfVar4;
         g_intersect.fraction = local_1c;
       }
       pfVar4 = pfVar4 + 0x15;
@@ -23944,16 +23936,16 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         g_object[iVar21].unk_5e64 = 199.99998474121094;
         g_object[iVar21].unk_5e68 = 0.005000000353902578;
         if (0 < iVar18) {
-          pfVar14 = (float *)&g_objecttype[param_1].lf_raw[0x48];
+          pfVar15 = (float *)&g_objecttype[param_1].lf_raw[0x48];
           do {
-            fVar2 = pfVar14[-2];
-            fVar3 = pfVar14[-1];
-            fVar4 = *pfVar14;
+            fVar2 = pfVar15[-2];
+            fVar3 = pfVar15[-1];
+            fVar4 = *pfVar15;
             local_c = (float)(*param_2 + ((float)(fVar4 * param_4[6] + (fVar3 * param_4[3] + fVar2 * *param_4))));
             local_8 = (float)((float)(fVar4 * param_4[7] + (fVar2 * param_4[1] + fVar3 * param_4[4])) + param_2[1]);
             local_4 = (float)((float)(param_4[5] * fVar3 + param_4[2] * fVar2 + param_4[8] * fVar4) + param_2[2]);
-            iVar11 = createparticle(0,&local_c,param_3,(float)(pfVar14[1] * fVar1),iVar21);
-            pfVar14 = pfVar14 + 5;
+            iVar11 = createparticle(0,&local_c,param_3,(float)(pfVar15[1] * fVar1),iVar21);
+            pfVar15 = pfVar15 + 5;
             g_object[iVar21].particles[g_object[iVar21].num_particles] = iVar11;
             g_object[iVar21].num_particles = g_object[iVar21].num_particles + 1;
             local_38 = local_38 + 1;
@@ -24021,43 +24013,43 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         g_object[iVar21].num_wheels = local_2c;
         g_object[iVar21].unk_81a4 = fVar1;
         if (0 < local_2c) {
-          pfVar14 = &g_object[iVar21].wheels[0].pos.z;
-          pfVar15 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
+          pfVar15 = &g_object[iVar21].wheels[0].pos.z;
+          pfVar14 = (float *)&g_objecttype[param_1].lf_raw[0x7764];
           do {
-            fVar1 = pfVar15[3];
-            fVar9 = pfVar15[1];
-            iVar11 = g_object[iVar21].particles[((int)LF_BITS_U(*pfVar15))];
+            fVar1 = pfVar14[3];
+            fVar9 = pfVar14[1];
+            iVar11 = g_object[iVar21].particles[((int)LF_BITS_U(*pfVar14))];
             iVar18 = g_object[iVar21].particles[((int)LF_BITS_U(fVar9))];
             local_2c = local_2c + -1;
             fVar2 = g_particle[iVar18].pos.y;
             fVar3 = g_particle[iVar11].pos.y;
             fVar4 = g_particle[iVar18].pos.z;
-            fVar8 = ((int)LF_BITS_U(pfVar15[-1]));
+            fVar8 = ((int)LF_BITS_U(pfVar14[-1]));
             fVar6 = g_particle[iVar11].pos.z;
-            ((vec3 *)(pfVar14 + -2))->x =
+            ((vec3 *)(pfVar15 + -2))->x =
                  (float)(g_particle[iVar11].pos.x +
                  fVar1 * ((float)(g_particle[iVar18].pos.x - g_particle[iVar11].pos.x)));
-            pfVar14[-1] = (float)(((float)(fVar2 - fVar3)) * fVar1 + g_particle[iVar11].pos.y);
-            *pfVar14 = (float)(fVar1 * ((float)(fVar4 - fVar6)) + g_particle[iVar11].pos.z);
-            pfVar14[-0x10] = LF_BITS_F(fVar8);
-            fVar1 = pfVar15[0xf];
-            pfVar14[-0xb] = pfVar15[2];
-            pfVar14[-0xf] = fVar1;
-            fVar1 = *pfVar15;
-            pfVar14[-10] = pfVar15[3];
-            pfVar14[-0xd] = fVar1;
-            fVar1 = pfVar15[5];
-            pfVar14[-0xc] = fVar9;
-            pfVar14[-8] = fVar1;
-            pfVar14[-0xe] = 1.1210387714598537E-44;
-            pfVar14[-9] = pfVar15[4];
-            pfVar14[-7] = pfVar15[6];
-            pfVar14[8] = pfVar15[10];
-            pfVar14[9] = pfVar15[0xb];
-            pfVar14[10] = pfVar15[0xc];
-            pfVar14[0xb] = pfVar15[0xd];
-            pfVar14 = pfVar14 + 0x26;
-            pfVar15 = pfVar15 + 0x11;
+            pfVar15[-1] = (float)(((float)(fVar2 - fVar3)) * fVar1 + g_particle[iVar11].pos.y);
+            *pfVar15 = (float)(fVar1 * ((float)(fVar4 - fVar6)) + g_particle[iVar11].pos.z);
+            pfVar15[-0x10] = LF_BITS_F(fVar8);
+            fVar1 = pfVar14[0xf];
+            pfVar15[-0xb] = pfVar14[2];
+            pfVar15[-0xf] = fVar1;
+            fVar1 = *pfVar14;
+            pfVar15[-10] = pfVar14[3];
+            pfVar15[-0xd] = fVar1;
+            fVar1 = pfVar14[5];
+            pfVar15[-0xc] = fVar9;
+            pfVar15[-8] = fVar1;
+            pfVar15[-0xe] = 1.1210387714598537E-44;
+            pfVar15[-9] = pfVar14[4];
+            pfVar15[-7] = pfVar14[6];
+            pfVar15[8] = pfVar14[10];
+            pfVar15[9] = pfVar14[0xb];
+            pfVar15[10] = pfVar14[0xc];
+            pfVar15[0xb] = pfVar14[0xd];
+            pfVar15 = pfVar15 + 0x26;
+            pfVar14 = pfVar14 + 0x11;
           } while (local_2c != 0);
         }
         iVar11 = g_objecttype[1].num_wheels;
@@ -24088,83 +24080,83 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
           g_object[iVar21].num_wheels = 0;
           local_38 = 0;
           if (0 < iVar11) {
-            pfVar14 = &g_object[iVar21].wheels[0].pos.z;
-            pfVar15 = (float *)&g_object[iVar21].wheel_bodies[0].lf_raw[0x8];
+            pfVar15 = &g_object[iVar21].wheels[0].pos.z;
+            pfVar14 = (float *)&g_object[iVar21].wheel_bodies[0].lf_raw[0x8];
             do {
               g_object[iVar21].num_wheels = 0;
-              pfVar15[-2] = ((vec3 *)(pfVar14 + -2))->x;
+              pfVar14[-2] = ((vec3 *)(pfVar15 + -2))->x;
               uVar20 = local_38 & 1;
-              pfVar15[-1] = pfVar14[-1];
+              pfVar14[-1] = pfVar15[-1];
               iVar11 = local_38 + 1;
-              *pfVar15 = *pfVar14;
-              pfVar15[7] = *param_4;
-              pfVar15[8] = param_4[1];
-              pfVar15[9] = param_4[2];
-              pfVar15[10] = param_4[3];
-              pfVar15[0xb] = param_4[4];
-              pfVar15[0xc] = param_4[5];
-              pfVar15[0xd] = param_4[6];
-              pfVar15[0xe] = param_4[7];
-              pfVar15[0xf] = param_4[8];
-              pfVar15[0x1f] = pfVar14[-9];
+              *pfVar14 = *pfVar15;
+              pfVar14[7] = *param_4;
+              pfVar14[8] = param_4[1];
+              pfVar14[9] = param_4[2];
+              pfVar14[10] = param_4[3];
+              pfVar14[0xb] = param_4[4];
+              pfVar14[0xc] = param_4[5];
+              pfVar14[0xd] = param_4[6];
+              pfVar14[0xe] = param_4[7];
+              pfVar14[0xf] = param_4[8];
+              pfVar14[0x1f] = pfVar15[-9];
               if (uVar20 != 0) {
                 iVar11 = local_38 - 1;
               }
-              pfVar15[0x22] = pfVar14[-0xd];
-              pfVar15[0x23] = pfVar14[-0xc];
-              pfVar15[0x24] = *(float *)(iVar11 * 0x98 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar21 * 0x8230);
-              pfVar15[0x25] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
-              pfVar15[0x26] = pfVar14[-0xb];
-              pfVar15[0x27] = pfVar14[-10];
-              pfVar15[0x28] = (float)(g_object[iVar21].wheels[iVar11].weight_a * 0.0);
+              pfVar14[0x22] = pfVar15[-0xd];
+              pfVar14[0x23] = pfVar15[-0xc];
+              pfVar14[0x24] = *(float *)(iVar11 * 0x98 + ((int)&g_object[0].lf_raw[0x5ef8]) + iVar21 * 0x8230);
+              pfVar14[0x25] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
+              pfVar14[0x26] = pfVar15[-0xb];
+              pfVar14[0x27] = pfVar15[-10];
+              pfVar14[0x28] = (float)(g_object[iVar21].wheels[iVar11].weight_a * 0.0);
               fVar1 = g_object[iVar21].wheels[iVar11].weight_b * 0.0;
-              pfVar15[0x29] = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(pfVar15[0x26] + pfVar15[0x27]) + pfVar15[0x28])));
-              pfVar15[0x26] = (float)(pfVar15[0x26] / fVar1);
-              pfVar15[0x27] = (float)(pfVar15[0x27] / fVar1);
-              pfVar15[0x28] = (float)(pfVar15[0x28] / fVar1);
-              pfVar15[0x29] = (float)(pfVar15[0x29] / fVar1);
+              pfVar14[0x29] = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(pfVar14[0x26] + pfVar14[0x27]) + pfVar14[0x28])));
+              pfVar14[0x26] = (float)(pfVar14[0x26] / fVar1);
+              pfVar14[0x27] = (float)(pfVar14[0x27] / fVar1);
+              pfVar14[0x28] = (float)(pfVar14[0x28] / fVar1);
+              pfVar14[0x29] = (float)(pfVar14[0x29] / fVar1);
               if (uVar20 == 0) {
-                pfVar15[0x2a] = -0.125;
+                pfVar14[0x2a] = -0.125;
               }
               else {
-                pfVar15[0x2a] = 0.125;
+                pfVar14[0x2a] = 0.125;
               }
-              pfVar15[0x2d] = pfVar14[-0xd];
-              pfVar15[0x2e] = pfVar14[-0xc];
-              pfVar15[0x2f] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_a);
-              pfVar15[0x30] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
-              pfVar15[0x31] = pfVar14[-0xb] * 0.875;
-              pfVar15[0x32] = (float)(pfVar14[-10] * 0.875);
-              pfVar15[0x33] = g_object[iVar21].wheels[iVar11].weight_a * 0.125;
+              pfVar14[0x2d] = pfVar15[-0xd];
+              pfVar14[0x2e] = pfVar15[-0xc];
+              pfVar14[0x2f] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_a);
+              pfVar14[0x30] = LF_BITS_F(g_object[iVar21].wheels[iVar11].particle_b);
+              pfVar14[0x31] = pfVar15[-0xb] * 0.875;
+              pfVar14[0x32] = (float)(pfVar15[-10] * 0.875);
+              pfVar14[0x33] = g_object[iVar21].wheels[iVar11].weight_a * 0.125;
               fVar1 = (float)(g_object[iVar21].wheels[iVar11].weight_b * 0.125);
-              pfVar15[0x34] = fVar1;
-              fVar1 = (float)(fVar1 + ((float)((float)(pfVar15[0x31] + pfVar15[0x32]) + pfVar15[0x33])));
-              pfVar15[0x31] = (float)(pfVar15[0x31] / fVar1);
-              pfVar15[0x32] = (float)(pfVar15[0x32] / fVar1);
-              pfVar15[0x33] = (float)(pfVar15[0x33] / fVar1);
-              pfVar15[0x34] = (float)(pfVar15[0x34] / fVar1);
+              pfVar14[0x34] = fVar1;
+              fVar1 = (float)(fVar1 + ((float)((float)(pfVar14[0x31] + pfVar14[0x32]) + pfVar14[0x33])));
+              pfVar14[0x31] = (float)(pfVar14[0x31] / fVar1);
+              pfVar14[0x32] = (float)(pfVar14[0x32] / fVar1);
+              pfVar14[0x33] = (float)(pfVar14[0x33] / fVar1);
+              pfVar14[0x34] = (float)(pfVar14[0x34] / fVar1);
               if (uVar20 == 0) {
-                pfVar15[0x35] = 0.125;
+                pfVar14[0x35] = 0.125;
               }
               else {
-                pfVar15[0x35] = -0.125;
+                pfVar14[0x35] = -0.125;
               }
-              fVar1 = pfVar14[-8];
+              fVar1 = pfVar15[-8];
               local_38 = local_38 + 1;
-              pfVar14 = pfVar14 + 0x26;
-              pfVar15[0x20] = fVar1;
-              pfVar15[0x21] = 0.125;
+              pfVar15 = pfVar15 + 0x26;
+              pfVar14[0x20] = fVar1;
+              pfVar14[0x21] = 0.125;
               fVar1 = (float)(fVar1 * 0.5);
               fVar2 = (float)(fVar1 * fVar1 * 0.5);
-              pfVar15[0x19] = fVar2;
+              pfVar14[0x19] = fVar2;
               fVar1 = (float)((fVar1 * 3.0 * fVar1 + 0.0625) / 12.0);
-              pfVar15[0x1a] = fVar1;
-              pfVar15[0x1b] = fVar1;
-              pfVar15[0x1c] = (float)(1.0 / fVar2);
-              pfVar15[0x1d] = (float)(1.0 / fVar1);
-              pfVar15[0x1e] = 1.0 / fVar1;
-              pfVar15 = pfVar15 + 0x3a;
+              pfVar14[0x1a] = fVar1;
+              pfVar14[0x1b] = fVar1;
+              pfVar14[0x1c] = (float)(1.0 / fVar2);
+              pfVar14[0x1d] = (float)(1.0 / fVar1);
+              pfVar14[0x1e] = 1.0 / fVar1;
+              pfVar14 = pfVar14 + 0x3a;
             } while ((int)local_38 < g_objecttype[1].num_wheels);
           }
         }
@@ -24177,24 +24169,24 @@ int __cdecl lf_31800(int param_1,float *param_2,undefined4 *param_3,float *param
         if (3 < iVar18) {
           iVar22 = (iVar18 - 4U >> 2) + 1;
           iVar11 = iVar22 * 4;
-          puVar16 = (undefined4 *)&g_object[iVar21].lf_raw[0x81b4];
-          puVar17 = (undefined4 *)&g_objecttype[param_1].lf_raw[0x8088];
+          pfVar15 = &g_object[iVar21].seats[0].z;
+          pfVar14 = (float *)&g_objecttype[param_1].lf_raw[0x8088];
           do {
-            puVar16[-2] = puVar17[-2];
+            ((vec3 *)(pfVar15 + -2))->x = pfVar14[-2];
             iVar22 = iVar22 + -1;
-            puVar16[-1] = puVar17[-1];
-            *puVar16 = *puVar17;
-            puVar16[1] = puVar17[1];
-            puVar16[2] = puVar17[2];
-            puVar16[3] = puVar17[3];
-            puVar16[4] = puVar17[4];
-            puVar16[5] = puVar17[5];
-            puVar16[6] = puVar17[6];
-            puVar16[7] = puVar17[7];
-            puVar16[8] = puVar17[8];
-            puVar16[9] = puVar17[9];
-            puVar16 = puVar16 + 0xc;
-            puVar17 = puVar17 + 0xc;
+            pfVar15[-1] = pfVar14[-1];
+            *pfVar15 = *pfVar14;
+            pfVar15[1] = pfVar14[1];
+            pfVar15[2] = pfVar14[2];
+            pfVar15[3] = pfVar14[3];
+            pfVar15[4] = pfVar14[4];
+            pfVar15[5] = pfVar14[5];
+            pfVar15[6] = pfVar14[6];
+            pfVar15[7] = pfVar14[7];
+            pfVar15[8] = pfVar14[8];
+            pfVar15[9] = pfVar14[9];
+            pfVar15 = pfVar15 + 0xc;
+            pfVar14 = pfVar14 + 0xc;
           } while (iVar22 != 0);
         }
         if (iVar11 < iVar18) {
@@ -29744,7 +29736,7 @@ void __cdecl lf_3d500(int param_1,int param_2)
     local_30 = 0;
     do {
       if ((((*(int *)((int)&g_human[0].active + local_30) != 0) &&
-           (0 < *(int *)((int)&g_human[0].health + local_30))) &&
+           (0 < *(int *)((int)g_human[0].input_axes + local_30 + -0x74))) &&
           (iVar8 = *(int *)((int)&g_human[0].player_id + local_30), iVar8 != -1)) &&
          (iVar9 = param_1 * 0x2408, g_player[iVar8].team != g_player[param_1].team)) {
         pBVar1 = g_human[param_2].bones + 2;
@@ -32766,7 +32758,7 @@ LAB_004471be:
     }
   }
   puVar6 = local_44;
-  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] = 0;
+  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] = 0;
   if (0 < param_7) {
     local_58 = ((int)LF_BITS_U(param_3));
     local_4c = LF_BITS_D((((ulonglong)LF_BITS_U64(local_4c)) & 0xffffffff00000000));
@@ -32781,103 +32773,103 @@ LAB_004471be:
             piVar12 = &DAT_006043e0 + ((*(uint *)((uchar *)&local_4c + 0)) + ((int)LF_BITS_U(local_54))) * 0x480;
             do {
               if (piVar12[1] != 0) {
-                (&g_city.unk_2ffa4)[g_city.unk_2f998 * 0x277] =
+                (&g_city.unk_2ffa4)[g_city.num_buildings * 0x277] =
                      (float)((float)(int)(iVar11 + param_2) * 4.0 + 2.0);
-                (&g_city.unk_2ffa8)[g_city.unk_2f998 * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
+                (&g_city.unk_2ffa8)[g_city.num_buildings * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
                 local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                (&g_city.unk_2ffac)[g_city.unk_2f998 * 0x277] = local_64;
+                (&g_city.unk_2ffac)[g_city.num_buildings * 0x277] = local_64;
               }
               iVar9 = *piVar12;
               if (0 < iVar9) {
-                if ((&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] < 0x40) {
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba4) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                if ((&g_city.unk_2fba0)[g_city.num_buildings * 0x277] < 0x40) {
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba4) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)(int)(iVar11 + param_2) * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba8) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba8) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)local_58 * 4.0 + 1.25);
                   local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbac) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = local_64;
-                  *(int *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbb0) +
-                          (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = iVar9 + -1;
-                  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] =
-                       (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] + 1;
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbac) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = local_64;
+                  *(int *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbb0) +
+                          (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = iVar9 + -1;
+                  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] =
+                       (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] + 1;
                 }
               }
               if (piVar12[0x13] != 0) {
-                (&g_city.unk_2ffa4)[g_city.unk_2f998 * 0x277] =
+                (&g_city.unk_2ffa4)[g_city.num_buildings * 0x277] =
                      (float)((float)(int)(iVar11 + 1 + param_2) * 4.0 + 2.0);
-                (&g_city.unk_2ffa8)[g_city.unk_2f998 * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
+                (&g_city.unk_2ffa8)[g_city.num_buildings * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
                 local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                (&g_city.unk_2ffac)[g_city.unk_2f998 * 0x277] = local_64;
+                (&g_city.unk_2ffac)[g_city.num_buildings * 0x277] = local_64;
               }
               iVar9 = piVar12[0x12];
               if (0 < iVar9) {
-                if ((&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] < 0x40) {
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba4) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                if ((&g_city.unk_2fba0)[g_city.num_buildings * 0x277] < 0x40) {
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba4) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)(int)(iVar11 + 1 + param_2) * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba8) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba8) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)local_58 * 4.0 + 1.25);
                   local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbac) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = local_64;
-                  *(int *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbb0) +
-                          (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = iVar9 + -1;
-                  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] =
-                       (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] + 1;
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbac) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = local_64;
+                  *(int *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbb0) +
+                          (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = iVar9 + -1;
+                  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] =
+                       (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] + 1;
                 }
               }
               if (piVar12[0x25] != 0) {
-                (&g_city.unk_2ffa4)[g_city.unk_2f998 * 0x277] =
+                (&g_city.unk_2ffa4)[g_city.num_buildings * 0x277] =
                      (float)((float)(int)(iVar11 + 2 + param_2) * 4.0 + 2.0);
-                (&g_city.unk_2ffa8)[g_city.unk_2f998 * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
+                (&g_city.unk_2ffa8)[g_city.num_buildings * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
                 local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                (&g_city.unk_2ffac)[g_city.unk_2f998 * 0x277] = local_64;
+                (&g_city.unk_2ffac)[g_city.num_buildings * 0x277] = local_64;
               }
               iVar9 = piVar12[0x24];
               if (0 < iVar9) {
-                if ((&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] < 0x40) {
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba4) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                if ((&g_city.unk_2fba0)[g_city.num_buildings * 0x277] < 0x40) {
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba4) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)(int)(iVar11 + 2 + param_2) * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba8) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba8) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)local_58 * 4.0 + 1.25);
                   local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbac) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = local_64;
-                  *(int *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbb0) +
-                          (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = iVar9 + -1;
-                  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] =
-                       (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] + 1;
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbac) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = local_64;
+                  *(int *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbb0) +
+                          (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = iVar9 + -1;
+                  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] =
+                       (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] + 1;
                 }
               }
               if (piVar12[0x37] != 0) {
-                (&g_city.unk_2ffa4)[g_city.unk_2f998 * 0x277] =
+                (&g_city.unk_2ffa4)[g_city.num_buildings * 0x277] =
                      (float)((float)(int)(iVar11 + 3 + param_2) * 4.0 + 2.0);
-                (&g_city.unk_2ffa8)[g_city.unk_2f998 * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
+                (&g_city.unk_2ffa8)[g_city.num_buildings * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
                 local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                (&g_city.unk_2ffac)[g_city.unk_2f998 * 0x277] = local_64;
+                (&g_city.unk_2ffac)[g_city.num_buildings * 0x277] = local_64;
               }
               iVar9 = piVar12[0x36];
               if (0 < iVar9) {
-                if ((&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] < 0x40) {
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba4) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                if ((&g_city.unk_2fba0)[g_city.num_buildings * 0x277] < 0x40) {
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba4) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)(int)(iVar11 + 3 + param_2) * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba8) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba8) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)local_58 * 4.0 + 1.25);
                   local_64 = (float)((float)local_50 * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbac) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = local_64;
-                  *(int *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbb0) +
-                          (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = iVar9 + -1;
-                  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] =
-                       (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] + 1;
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbac) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = local_64;
+                  *(int *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbb0) +
+                          (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = iVar9 + -1;
+                  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] =
+                       (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] + 1;
                 }
               }
               iVar11 = iVar11 + 4;
@@ -32890,29 +32882,30 @@ LAB_004471be:
             iVar11 = ((int)LF_BITS_U(param_5)) - iVar11;
             do {
               if (piVar12[1] != 0) {
-                (&g_city.unk_2ffa4)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(local_64)) * 4.0 + 2.0);
-                (&g_city.unk_2ffa8)[g_city.unk_2f998 * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
+                (&g_city.unk_2ffa4)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(local_64)) * 4.0 + 2.0)
+                ;
+                (&g_city.unk_2ffa8)[g_city.num_buildings * 0x277] = (float)((float)local_58 * 4.0 + 2.25);
                 fVar3 = (float)((float)local_50 * 4.0 + 2.0);
                 local_60 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_60 + 4)),LF_BITS_U(fVar3)));
-                (&g_city.unk_2ffac)[g_city.unk_2f998 * 0x277] = fVar3;
+                (&g_city.unk_2ffac)[g_city.num_buildings * 0x277] = fVar3;
               }
               iVar9 = *piVar12;
               if (0 < iVar9) {
-                if ((&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] < 0x40) {
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba4) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                if ((&g_city.unk_2fba0)[g_city.num_buildings * 0x277] < 0x40) {
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba4) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)((int)LF_BITS_U(local_64)) * 4.0 + 2.0);
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fba8) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) =
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fba8) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) =
                        (float)((float)local_58 * 4.0 + 1.25);
                   fVar3 = (float)((float)local_50 * 4.0 + 2.0);
                   local_60 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_60 + 4)),LF_BITS_U(fVar3)));
-                  *(float *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbac) +
-                            (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = fVar3;
-                  *(int *)(g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_2fbb0) +
-                          (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] * 0x10) = iVar9 + -1;
-                  (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] =
-                       (&g_city.unk_2fba0)[g_city.unk_2f998 * 0x277] + 1;
+                  *(float *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbac) +
+                            (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = fVar3;
+                  *(int *)(g_city.num_buildings * 0x9dc + ((int)&g_city.unk_2fbb0) +
+                          (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] * 0x10) = iVar9 + -1;
+                  (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] =
+                       (&g_city.unk_2fba0)[g_city.num_buildings * 0x277] + 1;
                 }
               }
               local_64 = LF_BITS_F((((int)LF_BITS_U(local_64)) + 1));
@@ -33170,128 +33163,129 @@ LAB_004471be:
       piVar12 = piVar12 + 0x1a;
     } while (iVar13 < iVar11);
   }
-  (&g_city.unk_2fb90)[g_city.unk_2f998 * 0x277] = (&g_city.unk_0020)[iVar9 * 0x1a];
-  (&g_city.unk_2fb94)[g_city.unk_2f998 * 0x277] = (&g_city.unk_0024)[iVar9 * 0x1a];
+  (&g_city.unk_2fb90)[g_city.num_buildings * 0x277] = (&g_city.unk_0020)[iVar9 * 0x1a];
+  (&g_city.unk_2fb94)[g_city.num_buildings * 0x277] = (&g_city.unk_0024)[iVar9 * 0x1a];
   if (param_8 == (undefined4 *)0xa) {
-    (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 3;
-    (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
-    (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
-    (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-    (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)(int)param_2 * 4.0;
-    (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
-    (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)param_4 * 4.0;
-    (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
-    (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
-    (&g_city.unk_2fa0c)[g_city.unk_2f998 * 0x277] = (float)((float)(param_4 + param_6) * 4.0);
-    g_city.unk_2f998 = g_city.unk_2f998 + 1;
+    (&g_city.building_type)[g_city.num_buildings * 0x277] = 3;
+    (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
+    (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
+    (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+    (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)(int)param_2 * 4.0;
+    (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
+    (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)param_4 * 4.0;
+    (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
+    (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+    (&g_city.unk_2fa0c)[g_city.num_buildings * 0x277] = (float)((float)(param_4 + param_6) * 4.0);
+    g_city.num_buildings = g_city.num_buildings + 1;
     return (int *)(param_4 + param_6);
   }
   if (param_8 == (undefined4 *)0xb) {
-    (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 2;
-    (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
+    (&g_city.building_type)[g_city.num_buildings * 0x277] = 2;
+    (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
     fVar3 = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
-    (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = fVar3;
-    (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-    (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)(int)param_2 * 4.0;
-    (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = fVar3;
-    (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)param_4 * 4.0;
-    (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
-    (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
-    (&g_city.unk_2fa0c)[g_city.unk_2f998 * 0x277] = (float)((float)(param_6 + param_4) * 4.0);
-    (&g_city.unk_3036c)[g_city.unk_2f998 * 0x277] =
+    (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = fVar3;
+    (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+    (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)(int)param_2 * 4.0;
+    (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = fVar3;
+    (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)param_4 * 4.0;
+    (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
+    (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+    (&g_city.unk_2fa0c)[g_city.num_buildings * 0x277] = (float)((float)(param_6 + param_4) * 4.0);
+    (&g_city.unk_3036c)[g_city.num_buildings * 0x277] =
          (float)((float)(int)(g_building.unk_12001cc + 2 + param_2) * 4.0);
     piVar12 = (int *)((g_building.unk_12001d0 - 6) + param_4);
-    (&g_city.unk_30370)[g_city.unk_2f998 * 0x277] = (float)(fVar3 + 2.0);
-    (&g_city.unk_30374)[g_city.unk_2f998 * 0x277] = (float)((float)(int)piVar12 * 4.0);
-    (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] = 0;
-    g_city.unk_2f998 = g_city.unk_2f998 + 1;
+    (&g_city.unk_30370)[g_city.num_buildings * 0x277] = (float)(fVar3 + 2.0);
+    (&g_city.unk_30374)[g_city.num_buildings * 0x277] = (float)((float)(int)piVar12 * 4.0);
+    (&g_city.unk_302a4)[g_city.num_buildings * 0x277] = 0;
+    g_city.num_buildings = g_city.num_buildings + 1;
     return piVar12;
   }
   if (param_8 == (undefined4 *)0xc) {
-    (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 5;
-    (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
-    (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
-    (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-    (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)(int)param_2 * 4.0;
-    (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
-    (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)param_4 * 4.0;
-    (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
-    (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+    (&g_city.building_type)[g_city.num_buildings * 0x277] = 5;
+    (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
+    (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
+    (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+    (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)(int)param_2 * 4.0;
+    (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
+    (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)param_4 * 4.0;
+    (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
+    (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
   }
   else {
     if (param_8 == (undefined4 *)0xd) {
-      (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 4;
-      (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
-      (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
-      (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-      (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)(int)param_2 * 4.0;
-      (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
-      (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)param_4 * 4.0;
-      (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
-      (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
-      piVar12 = (int *)(g_city.unk_2f998 * 0x9dc);
+      (&g_city.building_type)[g_city.num_buildings * 0x277] = 4;
+      (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
+      (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
+      (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+      (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)(int)param_2 * 4.0;
+      (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
+      (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)param_4 * 4.0;
+      (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0)
+      ;
+      (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+      piVar12 = (int *)(g_city.num_buildings * 0x9dc);
       piVar12[(0x39b230b + LF_RELOC / 4)] = ((int)LF_BITS_U(((float)((float)(param_4 + param_6) * 4.0))));
-      (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] = 0;
+      (&g_city.unk_302a4)[g_city.num_buildings * 0x277] = 0;
       if (g_server.unk_0000 != 0) {
-        (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] = 0;
+        (&g_city.unk_302a4)[g_city.num_buildings * 0x277] = 0;
         *(undefined4 *)
-         (g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_302a8) + (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] * 0xc
-         ) = 0;
+         (g_city.num_buildings * 0x9dc + ((int)&g_city.unk_302a8) +
+         (&g_city.unk_302a4)[g_city.num_buildings * 0x277] * 0xc) = 0;
         *(undefined4 *)
-         (g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_302ac) + (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] * 0xc
-         ) = 5000;
-        (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] =
-             (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] + 1;
+         (g_city.num_buildings * 0x9dc + ((int)&g_city.unk_302ac) +
+         (&g_city.unk_302a4)[g_city.num_buildings * 0x277] * 0xc) = 5000;
+        (&g_city.unk_302a4)[g_city.num_buildings * 0x277] =
+             (&g_city.unk_302a4)[g_city.num_buildings * 0x277] + 1;
         *(undefined4 *)
-         (g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_302a8) + (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] * 0xc
-         ) = 1;
+         (g_city.num_buildings * 0x9dc + ((int)&g_city.unk_302a8) +
+         (&g_city.unk_302a4)[g_city.num_buildings * 0x277] * 0xc) = 1;
         *(undefined4 *)
-         (g_city.unk_2f998 * 0x9dc + ((int)&g_city.unk_302ac) + (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] * 0xc
-         ) = 1000;
-        iVar11 = g_city.unk_2f998;
-        (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] =
-             (&g_city.unk_302a4)[g_city.unk_2f998 * 0x277] + 1;
+         (g_city.num_buildings * 0x9dc + ((int)&g_city.unk_302ac) +
+         (&g_city.unk_302a4)[g_city.num_buildings * 0x277] * 0xc) = 1000;
+        iVar11 = g_city.num_buildings;
+        (&g_city.unk_302a4)[g_city.num_buildings * 0x277] =
+             (&g_city.unk_302a4)[g_city.num_buildings * 0x277] + 1;
         piVar12 = &g_city.unk_302a4 + iVar11 * 0x277;
       }
-      g_city.unk_2f998 = g_city.unk_2f998 + 1;
+      g_city.num_buildings = g_city.num_buildings + 1;
       return piVar12;
     }
     if (param_8 != (undefined4 *)0xe) {
       if (param_8 != (undefined4 *)0xf) {
         return param_8;
       }
-      (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 6;
-      (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
-      (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
+      (&g_city.building_type)[g_city.num_buildings * 0x277] = 6;
+      (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
+      (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
       iVar9 = g_building.unk_24001d8;
       iVar11 = g_building.unk_24001d8 + param_2;
-      (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-      (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)((float)iVar11 * 4.0);
+      (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+      (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)((float)iVar11 * 4.0);
       iVar11 = g_building.unk_24001e0;
-      (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
-      (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)((float)(iVar11 + param_4) * 4.0);
-      (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] =
+      (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
+      (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)((float)(iVar11 + param_4) * 4.0);
+      (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] =
            (float)((float)(int)(g_building.unk_24001e4 + iVar9 + param_2) * 4.0);
-      (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+      (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
       piVar12 = (int *)(g_building.unk_24001ec + iVar11 + param_4);
-      (&g_city.unk_2fa0c)[g_city.unk_2f998 * 0x277] = (float)((float)(int)piVar12 * 4.0);
+      (&g_city.unk_2fa0c)[g_city.num_buildings * 0x277] = (float)((float)(int)piVar12 * 4.0);
       goto LAB_00448999;
     }
-    (&g_city.unk_2f9dc)[g_city.unk_2f998 * 0x277] = 7;
-    (&g_city.unk_2f9ec)[g_city.unk_2f998 * 0x277] = (float)((float)(int)param_2 * 4.0);
-    (&g_city.unk_2f9f0)[g_city.unk_2f998 * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
-    (&g_city.unk_2f9f4)[g_city.unk_2f998 * 0x277] = (float)((float)param_4 * 4.0);
-    (&g_city.unk_2f9f8)[g_city.unk_2f998 * 0x277] = (float)(int)param_2 * 4.0;
-    (&g_city.unk_2f9fc)[g_city.unk_2f998 * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
-    (&g_city.unk_2fa00)[g_city.unk_2f998 * 0x277] = (float)param_4 * 4.0;
-    (&g_city.unk_2fa04)[g_city.unk_2f998 * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
-    (&g_city.unk_2fa08)[g_city.unk_2f998 * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
+    (&g_city.building_type)[g_city.num_buildings * 0x277] = 7;
+    (&g_city.unk_2f9ec)[g_city.num_buildings * 0x277] = (float)((float)(int)param_2 * 4.0);
+    (&g_city.unk_2f9f0)[g_city.num_buildings * 0x277] = (float)((float)((int)LF_BITS_U(param_3)) * 4.0);
+    (&g_city.unk_2f9f4)[g_city.num_buildings * 0x277] = (float)((float)param_4 * 4.0);
+    (&g_city.unk_2f9f8)[g_city.num_buildings * 0x277] = (float)(int)param_2 * 4.0;
+    (&g_city.unk_2f9fc)[g_city.num_buildings * 0x277] = (float)((int)LF_BITS_U(param_3)) * 4.0;
+    (&g_city.unk_2fa00)[g_city.num_buildings * 0x277] = (float)param_4 * 4.0;
+    (&g_city.unk_2fa04)[g_city.num_buildings * 0x277] = (float)((float)(int)(param_2 + ((int)LF_BITS_U(param_5))) * 4.0);
+    (&g_city.unk_2fa08)[g_city.num_buildings * 0x277] = (float)((float)(((int)LF_BITS_U(param_3)) + 1) * 4.0);
   }
-  (&g_city.unk_2fa0c)[g_city.unk_2f998 * 0x277] = (float)((float)(param_4 + param_6) * 4.0);
-  piVar12 = (int *)(g_city.unk_2f998 * 0x9dc);
+  (&g_city.unk_2fa0c)[g_city.num_buildings * 0x277] = (float)((float)(param_4 + param_6) * 4.0);
+  piVar12 = (int *)(g_city.num_buildings * 0x9dc);
   piVar12[(0x39b2531 + LF_RELOC / 4)] = 0;
 LAB_00448999:
-  g_city.unk_2f998 = g_city.unk_2f998 + 1;
+  g_city.num_buildings = g_city.num_buildings + 1;
   return piVar12;
 }
 #undef g_city
@@ -33572,7 +33566,7 @@ LAB_0044935f:
             if (iVar7 != -1) {
               iVar6 = g_human[local_58].player_id;
               if ((((iVar6 != -1) && (iVar7 != iVar6)) && (g_player[iVar6].team == 7)) &&
-                 (0 < g_human[local_58].unk_0034)) {
+                 (0 < g_human[local_58].protect_timer)) {
                 playerteamkilltax(iVar7,iVar9);
                 goto LAB_004493b0;
               }
@@ -33593,9 +33587,9 @@ LAB_004493b0:
           }
           iVar6 = local_10;
           iVar7 = *(int *)((int)&g_bullet[0].type + iVar11);
-          g_human[local_58].unk_0044 = iVar9 * 3;
+          g_human[local_58].stun_timer = iVar9 * 3;
           if (iVar7 == 3) {
-            g_human[local_58].unk_0044 = iVar9 * 6;
+            g_human[local_58].stun_timer = iVar9 * 6;
           }
           fVar3 = *(float *)(local_10 * 0xe0 + ((int)&g_human[0].lf_raw[0x154]) + local_58 * 0x2b64) * 0.125;
           local_60 = *(float *)((int)&g_bullet[0].mass + iVar11);
@@ -34393,7 +34387,7 @@ void __cdecl lf_4a440(int param_1)
   if (g_human[param_1].health < 1) {
     iVar6 = 1;
     do {
-      iVar2 = *(int *)(g_body + iVar6);
+      iVar2 = g_body[iVar6].parent;
       local_1c = (float)(g_human[param_1].bones[iVar6].rot[0].z * g_human[param_1].bones[iVar2].rot[1].z +
                  (g_human[param_1].bones[iVar6].rot[0].x * g_human[param_1].bones[iVar2].rot[1].x +
                  g_human[param_1].bones[iVar6].rot[0].y * g_human[param_1].bones[iVar2].rot[1].y));
@@ -34461,7 +34455,7 @@ LAB_0044a71d:
     } while( true );
   }
   local_74 = 0.39269909262657166;
-  if (g_human[param_1].unk_003c == 2) {
+  if (g_human[param_1].move_mode == 2) {
     local_74 = 0.7853981852531433;
   }
   if ((g_human[param_1].input_buttons & 2) != 0) {
@@ -34478,8 +34472,8 @@ LAB_0044a71d:
   local_58 = 0.0;
   local_54 = 0.0;
   if (iVar6 != -1) {
-    local_58 = (float)(g_human[param_1].unk_00ac + 0.0);
-    local_54 = (float)(g_human[param_1].unk_00b0 + 0.0);
+    local_58 = (float)(g_human[param_1].view_axis + 0.0);
+    local_54 = (float)(g_human[param_1].view_pitch + 0.0);
   }
   pvVar1 = g_human[param_1].bones[1].target_rot;
   pvVar1->x = 1.0;
@@ -34510,7 +34504,7 @@ LAB_0044a71d:
     g_human[param_1].bones[2].target_rot[2].z = 1.0;
     local_94 = ((vec3 *)LF_BITS_U(((float)((g_human[param_1].unk_00b4 * 0.5 - local_74) + 0.04908738521234375))));
     rotateorientation(&pvVar8->x,g_yaxis,LF_BITS_F(local_94));
-    if ((g_human[param_1].unk_003c == 2) && (LF_BITS_U(local_90) != 0x0U)) {
+    if ((g_human[param_1].move_mode == 2) && (LF_BITS_U(local_90) != 0x0U)) {
       rotateorientation(&pvVar8->x,&g_human[param_1].bones[2].target_rot[2].x,0.19634954631328583);
     }
     fVar9 = (float)(g_human[param_1].unk_00b8 * 0.25 + g_human[param_1].pitch * 0.5);
@@ -35187,7 +35181,7 @@ void __cdecl lf_4bd60(int param_1)
         *(float *)((int)g_human[param_1].colors + iVar5 + -0x18) =
              (float)(g_item[uVar9].rot[1].z * 0.25 +
              *(float *)((int)g_human[param_1].colors + iVar5 + -0x18));
-        *(int *)((int)g_human[param_1].colors + iVar5 + -0x14) = g_human[param_1].unk_009c;
+        *(float *)((int)g_human[param_1].colors + iVar5 + -0x14) = g_human[param_1].input_axes[0];
       }
     }
   }
@@ -35203,7 +35197,7 @@ void __cdecl lf_4bd60(int param_1)
       local_c = 0.0;
       local_18 = 1.0;
       local_8 = 1.0;
-      rotateorientation(&local_28,g_yaxis,LF_BITS_F(g_human[param_1].unk_009c));
+      rotateorientation(&local_28,g_yaxis,g_human[param_1].input_axes[0]);
       iVar7 = uVar9 * 0x10;
       *(float *)(iVar7 + ((int)&g_human[0].unk_2a3c) + param_1 * 0x2b64) = (float)(g_item[iVar5].end_pos[0].x + local_28);
       *(float *)((int)g_human[param_1].colors + iVar7 + -0x1c) =
@@ -35222,7 +35216,7 @@ void __cdecl lf_4bd60(int param_1)
            (float)(*(float *)((int)g_human[param_1].colors + iVar7 + -0x1c) - local_c * 0.125);
       *(float *)((int)g_human[param_1].colors + iVar7 + -0x18) =
            (float)(*(float *)((int)g_human[param_1].colors + iVar7 + -0x18) - local_8 * 0.125);
-      *(int *)((int)g_human[param_1].colors + iVar7 + -0x14) = g_human[param_1].unk_009c;
+      *(float *)((int)g_human[param_1].colors + iVar7 + -0x14) = g_human[param_1].input_axes[0];
     }
     uVar6 = g_human[param_1].input_buttons;
     if ((uVar6 & 1) != 0) {
@@ -35320,7 +35314,7 @@ void __cdecl lf_4bd60(int param_1)
         iVar3 = pIVar4->items[0];
         g_item[iVar3].unk_0008 = 0;
         if (g_itemtype[g_item[iVar3].type].is_gun != 0) {
-          g_human[param_1].unk_0034 = 0;
+          g_human[param_1].protect_timer = 0;
         }
         setitempositionhuman(iVar3,iVar5);
         iVar7 = iVar7 + 1;
@@ -38295,7 +38289,7 @@ void __cdecl lf_502a0(void)
   g_soundlist.unk_0078 = 0x13;
   g_soundlist.unk_007c = 0x14;
   g_soundlist.unk_0088 = 0x15;
-  g_soundlist.unk_008c = 0x16;
+  g_soundlist.humanhit = 0x16;
   g_soundlist.unk_0098 = 0x17;
   g_soundlist.unk_009c = 0x18;
   g_soundlist.unk_00b8 = 0x19;
@@ -38556,7 +38550,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
     memset(g_human + iVar13,0,0x2b64);
     g_human[iVar13].active = 1;
     g_human[iVar13].player_id = param_3;
-    g_human[iVar13].unk_000c = -1;
+    g_human[iVar13].account = -1;
     g_human[iVar13].despawn_timer = 0xe10;
     if (param_3 == -1) {
       g_human[iVar13].unk_0098 = 1.0;
@@ -38567,7 +38561,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
     g_human[iVar13].stance = 1.0;
     g_human[iVar13].health = 100;
     uVar9 = rand();
-    g_human[iVar13].unk_0034 = ((uVar9 & 3) + 3) * 0xe10;
+    g_human[iVar13].protect_timer = ((uVar9 & 3) + 3) * 0xe10;
     g_human[iVar13].vehicle_id = -1;
     g_human[iVar13].input_buttons_prev = 0x3c0;
     g_human[iVar13].inventory[0].count = 0;
@@ -38584,7 +38578,7 @@ int __cdecl lf_50ae0(float *param_1,float *param_2,int param_3)
       fVar1 = ((vec3 *)(pfVar11 + -2))->x;
       fVar2 = pfVar11[-1];
       fVar3 = *pfVar11;
-      for (fVar4 = pfVar11[-3]; LF_BITS_U(fVar4) != 0x0U; fVar4 = *(float *)(g_body + ((int)LF_BITS_U(fVar4)))) {
+      for (fVar4 = pfVar11[-3]; LF_BITS_U(fVar4) != 0x0U; fVar4 = LF_BITS_F(g_body[((int)LF_BITS_U(fVar4))].parent)) {
         fVar1 = (float)(g_body[((int)LF_BITS_U(fVar4))].pos.x + fVar1);
         fVar2 = (float)(g_body[((int)LF_BITS_U(fVar4))].pos.y + fVar2);
         fVar3 = (float)(g_body[((int)LF_BITS_U(fVar4))].pos.z + fVar3);
@@ -39184,7 +39178,7 @@ void __cdecl lf_54e40(void)
   g_game.unk_5c3c = 0;
   g_game.unk_6db8 = 0;
   g_game.unk_7f34 = 0;
-  g_city.unk_2f998 = 0;
+  g_city.num_buildings = 0;
   if (g_game.gametype != 1) {
     if (0 < g_level_editor.unk_0038) {
       piVar9 = &g_level_editor.unk_003c;
@@ -39925,7 +39919,7 @@ LAB_00455968:
             *(int *)((int)g_player[0].input_axes + iVar11 + -4) = iVar16;
             uVar15 = local_34;
             if (iVar16 != -1) {
-              g_human[iVar16].unk_000c = *(int *)((int)g_player[0].account_id + iVar11 + 0x10);
+              g_human[iVar16].account = *(int *)((int)g_player[0].account_id + iVar11 + 0x10);
               g_human[iVar16].axis = -1.5707963705062866;
               createevent_updateplayer(((int)LF_BITS_U(fVar13)));
               createevent_updateplayer_finance(((int)LF_BITS_U(fVar13)));
@@ -39946,16 +39940,16 @@ LAB_00455cd2:
             if ((0 < (int)uVar17) &&
                (iVar16 = *(int *)((int)g_player[0].input_extra + iVar11 + 0x44),
                (int)uVar17 < (&g_city.unk_302a4)[iVar16 * 0x277] + 1)) {
-              if ((&g_city.unk_2f9dc)[iVar16 * 0x277] == 4) {
+              if ((&g_city.building_type)[iVar16 * 0x277] == 4) {
                 logic_suits_buy(((int)LF_BITS_U(local_48)),uVar17);
                 local_30 = 1;
               }
-              if ((&g_city.unk_2f9dc)
+              if ((&g_city.building_type)
                   [*(int *)((int)g_player[0].input_extra + iVar11 + 0x44) * 0x277] == 2) {
                 logic_cardealer_buy(((int)LF_BITS_U(local_48)),uVar17);
                 local_30 = 1;
               }
-              if ((&g_city.unk_2f9dc)
+              if ((&g_city.building_type)
                   [*(int *)((int)g_player[0].input_extra + iVar11 + 0x44) * 0x277] == 7) {
                 logic_gunstore_buy(((int)LF_BITS_U(local_48)),uVar17);
                 local_30 = 0;
@@ -41013,21 +41007,21 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
   else {
     iVar3 = param_1;
     if (param_1 == 0) {
-      if (g_city.unk_2f998 == 0) {
+      if (g_city.num_buildings == 0) {
         return 0;
       }
       iVar7 = 0;
       iVar3 = rand();
-      iVar3 = iVar3 % g_city.unk_2f998;
+      iVar3 = iVar3 % g_city.num_buildings;
       do {
         iVar8 = iVar3 * 0x9dc;
-        if ((&g_city.unk_2f9dc)[iVar3 * 0x277] == 3) break;
+        if ((&g_city.building_type)[iVar3 * 0x277] == 3) break;
         iVar3 = rand();
-        iVar8 = iVar3 / g_city.unk_2f998;
-        iVar3 = iVar3 % g_city.unk_2f998;
+        iVar8 = iVar3 / g_city.num_buildings;
+        iVar3 = iVar3 % g_city.num_buildings;
         iVar7 = iVar7 + 1;
       } while (iVar7 < 0x400);
-      if ((&g_city.unk_2f9dc)[iVar3 * 0x277] != 3) {
+      if ((&g_city.building_type)[iVar3 * 0x277] != 3) {
         return iVar8;
       }
       iVar3 = scenario_createguards(iVar3,iVar1,local_8);
@@ -42028,15 +42022,15 @@ void __cdecl lf_590f0(void)
             }
             local_2c = local_2c + 1;
           } while ((int)local_2c < 4);
-          if (0 < g_city.unk_2f998) {
+          if (0 < g_city.num_buildings) {
             iVar12 = 0;
-            if (0 < g_city.unk_2f998) {
-              piVar2 = &g_city.unk_2f9dc;
+            if (0 < g_city.num_buildings) {
+              piVar2 = &g_city.building_type;
               do {
                 if (*piVar2 == 3) break;
                 iVar12 = iVar12 + 1;
                 piVar2 = piVar2 + 0x277;
-              } while (iVar12 < g_city.unk_2f998);
+              } while (iVar12 < g_city.num_buildings);
             }
             if (g_game.gametype == 2) {
               scenario_createguards(iVar12,0x16,&DAT_00989680);
@@ -43166,12 +43160,12 @@ void __cdecl lf_5b9b0(void)
       if (4 < iVar4) {
         iVar4 = 4;
       }
-      if ((&g_game.unk_009c)[iVar4 * 0x45f] == -1) {
+      if ((&g_game.team0_manager)[iVar4 * 0x45f] == -1) {
         sprintf(&DAT_004617c0,"%s open",g_teamname[iVar4]);
       }
       else {
         sprintf(&DAT_004617c0,"%s manager: %s",g_teamname[iVar4],
-                (&g_game.unk_009c)[iVar4 * 0x45f] * 0x2408 + ((int)&g_player[0].name));
+                (&g_game.team0_manager)[iVar4 * 0x45f] * 0x2408 + ((int)&g_player[0].name));
       }
       createevent_message(0,&DAT_004617c0,0xffffffff,0);
       if (0 < (&g_market.unk_0000)[iVar4 * 5]) {
@@ -43278,8 +43272,8 @@ void __cdecl lf_5b9b0(void)
               if (((uint)LF_BITS_U(fVar15)) < 0x100) {
                 playersellstock(fVar15,piVar6[2]);
               }
-              if (LF_BITS_U(LF_BITS_F((&g_game.unk_009c)[*piVar6 * 0x45f])) == LF_BITS_U(fVar15)) {
-                (&g_game.unk_009c)[*piVar6 * 0x45f] = -1;
+              if (LF_BITS_U(LF_BITS_F((&g_game.team0_manager)[*piVar6 * 0x45f])) == LF_BITS_U(fVar15)) {
+                (&g_game.team0_manager)[*piVar6 * 0x45f] = -1;
               }
               *piVar6 = 7;
               g_human[fVar2].team = local_40;
@@ -43297,19 +43291,19 @@ void __cdecl lf_5b9b0(void)
             }
           }
           fVar3 = LF_BITS_F(*piVar6);
-          if (((&g_game.unk_009c)[((int)LF_BITS_U(fVar3)) * 0x45f] == -1) &&
+          if (((&g_game.team0_manager)[((int)LF_BITS_U(fVar3)) * 0x45f] == -1) &&
              (iVar4 = pointinsidebasesafe(&g_human[fVar2].pos.x,((int)LF_BITS_U(fVar3)),0.0), iVar4 != 0)) {
             logic_setteammanager(fVar3,((int)LF_BITS_U(fVar15)));
           }
         }
         if (LF_BITS_U(LF_BITS_F(*piVar6)) == 0x7U) {
           local_40 = 0;
-          piVar7 = &g_game.unk_009c;
+          piVar7 = &g_game.team0_manager;
           do {
             iVar4 = pointinsidebasesafe(&g_human[fVar2].pos.x,local_40,0.0);
             if (iVar4 != 0) {
               iVar4 = *piVar7;
-              g_human[fVar2].unk_0034 = 0;
+              g_human[fVar2].protect_timer = 0;
               if ((iVar4 == -1) ||
                  ((g_player[iVar4].human_id != -1 &&
                   (iVar4 = pointinsidebasesafe(&g_human[g_player[iVar4].human_id].pos.x,local_40,0.0

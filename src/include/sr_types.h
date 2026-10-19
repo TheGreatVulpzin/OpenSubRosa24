@@ -36,13 +36,11 @@ typedef union Bone { struct {
     vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
     uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
-    float strength;     /* +0x90 bondsetup type 9: the muscle force, at least strength_min and strength_min2 */
-    float strength_min; /* +0x94 */
-    float strength_min2; /* +0x98 */
-    float axis_k[3];    /* +0x9c bondsetupcopy copies one to each BondBone axis */
+    vec3 inertia;       /* +0x90 along each row of rot: humansimulation makes ang_momentum = inertia * w */
+    vec3 inv_inertia;   /* +0x9c bondsetupcopy copies it to the BondBone axes: bondtest makes w from ang_momentum */
     vec3 target_rot[3]; /* +0xa8 bondsetup type 9: the rotation the muscle holds; identity for a dead human */
-    float unk_cc;       /* +0xcc bondsetupcopy: the bone is in BondHuman.mask when it is above 0 */
-    uint8_t unk_d0[0xc];
+    float in_solver;    /* +0xcc humansimulation writes 1 (0 for some bones in a vehicle); bondsetupcopy: in BondHuman.mask when above 0 */
+    vec3 joint_angles;  /* +0xd0 humansimulation: the turn from the parent bone (atan2 of the relative rotation) */
     int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
 
@@ -57,7 +55,7 @@ typedef union HumanJoint { struct {
 typedef union HumanMuscle { struct {
     int bond;       /* +0x00 index into bond[] */
     int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
-    int unk_08;     /* +0x08 human_createmuscleball: parameter 3 */
+    int bone;       /* +0x08 human_createmuscleball: parameter 3; humansimulation: a bone index (0 to 14) */
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
@@ -279,39 +277,35 @@ typedef union Human { struct {
     int active;                          /* +0x0000 createhuman writes 1 */
     int has_physics;                     /* +0x0004 humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it */
     int player_id;                       /* +0x0008 createhuman: parameter 3 (owner) */
-    int unk_000c;                        /* +0x000c 3 functions */
+    int account;                         /* +0x000c deleteplayer keeps the account index of a player who leaves; humansimulation takes 5% of the money above 10000 when that human dies; -1: none */
     int unk_0010;                        /* +0x0010 1 functions */
     int vehicle_id;                      /* +0x0014 createhuman writes -1; packobjectpacket sends it if != -1 */
     int vehicle_seat;                    /* +0x0018 playerai compares with 0 (driver) and 1 */
-    int unk_001c;                        /* +0x001c 2 functions */
-    int unk_0020;                        /* +0x0020 1 functions */
+    int last_vehicle;                    /* +0x001c humansimulation: the vehicle the human sat in; the type 4 bonds against it start soft; -1 when last_vehicle_timer ends */
+    int last_vehicle_timer;              /* +0x0020 humansimulation writes 100 in a vehicle and counts it down on foot */
     int despawn_timer;                   /* +0x0024 createhuman writes 0xe10 (3600) (likely) */
     int health;                          /* +0x0028 createhuman writes 100; manager: health */
     uint8_t pad_002c[0x4];
-    int unk_0030;                        /* +0x0030 2 functions */
-    int unk_0034;                        /* +0x0034 4 functions */
+    int exit_timer;                      /* +0x0030 humansimulation counts it up while button 0x800 is down in a vehicle; the human gets out when it passes 30 + speed * 60 */
+    int protect_timer;                   /* +0x0034 createhuman: 3 to 6 times 3600 ticks; counts down; a team kill of a human with it above 0 costs a tax (bulletsimulation, humansimulation) */
     int on_ground;                       /* +0x0038 humansimulation writes 0, and 1 when the ground test under the feet finds the ground */
-    int unk_003c;                        /* +0x003c 4 functions */
+    int move_mode;                       /* +0x003c playersimulation: from the client; humansimulation walks at 0.15, 0.05 (1) or 0.025 (2); human_calculatearmangles: 2 raises the arms */
     uint8_t pad_0040[0x4];
-    int unk_0044;                        /* +0x0044 2 functions */
+    int stun_timer;                      /* +0x0044 bulletsimulation writes 3 (or 6) times the damage; humansimulation counts it down and makes the muscles weak while it runs */
     vec3 pos;                            /* +0x0048 manager: global position; logic_playeractions uses it in pointinsidebase */
-    int unk_0054;                        /* +0x0054 1 functions */
-    uint8_t pad_0058[0x8];
+    vec3 vel;                            /* +0x0054 follows pos; humansimulation: the time to get out of a vehicle grows with its length */
     float axis;                          /* +0x0060 getinputs_human: debug label "humanaxis" */
     float pitch;                         /* +0x0064 human_calculatearmangles multiplies it by a constant (likely: vertical angle) */
     uint8_t pad_0068[0x18];
-    float unk_0080;                      /* +0x0080 1 functions */
-    float unk_0084;                      /* +0x0084 1 functions */
+    float vehicle_axis;                  /* +0x0080 humansimulation: view_axis while in a vehicle (0 on foot); axis = the object turn + vehicle_axis */
+    float vehicle_pitch;                 /* +0x0084 humansimulation: view_pitch while in a vehicle (0 on foot) */
     uint8_t pad_0088[0x4];
     float stance;                        /* +0x008c humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick */
     uint8_t pad_0090[0x8];
     float unk_0098;                      /* +0x0098 1 functions */
-    int unk_009c;                        /* +0x009c 2 functions */
-    int unk_00a0;                        /* +0x00a0 1 functions */
-    int unk_00a4;                        /* +0x00a4 1 functions */
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    float unk_00ac;                      /* +0x00ac 4 functions */
-    float unk_00b0;                      /* +0x00b0 4 functions */
+    float input_axes[4];                 /* +0x009c playersimulation: the analog inputs from the client; walking uses [1] sideways and [3] forward; the driver copies all 4 to Object.drive_input */
+    float view_axis;                     /* +0x00ac playersimulation: the view angle from the client; on foot humansimulation copies it to axis */
+    float view_pitch;                    /* +0x00b0 playersimulation: the view pitch from the client; on foot humansimulation copies it to pitch */
     float unk_00b4;                      /* +0x00b4 1 functions */
     float unk_00b8;                      /* +0x00b8 1 functions */
     uint32_t input_buttons;              /* +0x00bc humansimulation tests bits &1 &8 &0x10 */
@@ -330,7 +324,7 @@ typedef union Human { struct {
     uint8_t pad_28c0[0x50];
     float unk_2910;                      /* +0x2910 1 functions */
     float unk_2914;                      /* +0x2914 1 functions */
-    float unk_2918;                      /* +0x2918 2 functions */
+    float walk_phase;                    /* +0x2918 humansimulation adds the step length and wraps it at 2 pi; human_calculatelegangles takes its sine */
     InventorySlot inventory[8];          /* +0x291c createhuman: loop of 8 with stride 0x24; manager: count +0 and item +4 */
     int unk_2a3c;                        /* +0x2a3c 1 functions */
     uint8_t pad_2a40[0x1c];
@@ -357,15 +351,28 @@ SR_STATIC_ASSERT(sizeof(Human) == 0x2b64, "Human");
 SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
 SR_STATIC_ASSERT(offsetof(Human, has_physics) == 0x4, "Human.has_physics");
 SR_STATIC_ASSERT(offsetof(Human, player_id) == 0x8, "Human.player_id");
+SR_STATIC_ASSERT(offsetof(Human, account) == 0xc, "Human.account");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_id) == 0x14, "Human.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_seat) == 0x18, "Human.vehicle_seat");
+SR_STATIC_ASSERT(offsetof(Human, last_vehicle) == 0x1c, "Human.last_vehicle");
+SR_STATIC_ASSERT(offsetof(Human, last_vehicle_timer) == 0x20, "Human.last_vehicle_timer");
 SR_STATIC_ASSERT(offsetof(Human, despawn_timer) == 0x24, "Human.despawn_timer");
 SR_STATIC_ASSERT(offsetof(Human, health) == 0x28, "Human.health");
+SR_STATIC_ASSERT(offsetof(Human, exit_timer) == 0x30, "Human.exit_timer");
+SR_STATIC_ASSERT(offsetof(Human, protect_timer) == 0x34, "Human.protect_timer");
 SR_STATIC_ASSERT(offsetof(Human, on_ground) == 0x38, "Human.on_ground");
+SR_STATIC_ASSERT(offsetof(Human, move_mode) == 0x3c, "Human.move_mode");
+SR_STATIC_ASSERT(offsetof(Human, stun_timer) == 0x44, "Human.stun_timer");
 SR_STATIC_ASSERT(offsetof(Human, pos) == 0x48, "Human.pos");
+SR_STATIC_ASSERT(offsetof(Human, vel) == 0x54, "Human.vel");
 SR_STATIC_ASSERT(offsetof(Human, axis) == 0x60, "Human.axis");
 SR_STATIC_ASSERT(offsetof(Human, pitch) == 0x64, "Human.pitch");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_axis) == 0x80, "Human.vehicle_axis");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_pitch) == 0x84, "Human.vehicle_pitch");
 SR_STATIC_ASSERT(offsetof(Human, stance) == 0x8c, "Human.stance");
+SR_STATIC_ASSERT(offsetof(Human, input_axes) == 0x9c, "Human.input_axes");
+SR_STATIC_ASSERT(offsetof(Human, view_axis) == 0xac, "Human.view_axis");
+SR_STATIC_ASSERT(offsetof(Human, view_pitch) == 0xb0, "Human.view_pitch");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons) == 0xbc, "Human.input_buttons");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons_prev) == 0xc0, "Human.input_buttons_prev");
 SR_STATIC_ASSERT(offsetof(Human, bones) == 0xc8, "Human.bones");
@@ -373,6 +380,7 @@ SR_STATIC_ASSERT(offsetof(Human, num_muscles) == 0xec8, "Human.num_muscles");
 SR_STATIC_ASSERT(offsetof(Human, muscles) == 0xecc, "Human.muscles");
 SR_STATIC_ASSERT(offsetof(Human, num_joints) == 0x26cc, "Human.num_joints");
 SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
+SR_STATIC_ASSERT(offsetof(Human, walk_phase) == 0x2918, "Human.walk_phase");
 SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
 SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
 SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
@@ -504,12 +512,9 @@ typedef union Object { struct {
     uint8_t pad_05b0[0x204];
     int unk_07b4;                        /* +0x07b4 3 functions */
     uint8_t pad_07b8[0x5404];
-    float unk_5bbc;                      /* +0x5bbc 4 functions */
-    float unk_5bc0;                      /* +0x5bc0 3 functions */
-    float unk_5bc4;                      /* +0x5bc4 4 functions */
-    float unk_5bc8;                      /* +0x5bc8 4 functions */
+    float drive_input[4];                /* +0x5bbc humansimulation copies Human.input_axes of the driver; objectsimulation_car and _heli read them */
     uint8_t pad_5bcc[0x10];
-    int unk_5bdc;                        /* +0x5bdc 2 functions */
+    uint32_t drive_buttons;              /* +0x5bdc humansimulation: Human.input_buttons of the driver, 4 when nobody drives; objectsimulation_car tests bits 2 and 4 */
     uint8_t pad_5be0[0x4];
     int unk_5be4;                        /* +0x5be4 3 functions */
     uint8_t pad_5be8[0x264];
@@ -562,7 +567,8 @@ typedef union Object { struct {
     float unk_81a0;                      /* +0x81a0 2 functions */
     float unk_81a4;                      /* +0x81a4 2 functions */
     int num_seats;                       /* +0x81a8 createobject copies from objecttype.num_seats; humansimulation reads it */
-    uint8_t pad_81ac[0x60];
+    vec3 seats[7];                       /* +0x81ac createobject copies objecttype seats; humansimulation places a sitting human there (x along rot[0], y along rot[1], z along rot[2]) */
+    uint8_t pad_8200[0xc];
     float unk_820c;                      /* +0x820c 1 functions */
     int unk_8210;                        /* +0x8210 2 functions */
     int unk_8214;                        /* +0x8214 2 functions */
@@ -587,6 +593,8 @@ SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles"
 SR_STATIC_ASSERT(offsetof(Object, particles) == 0xac, "Object.particles");
 SR_STATIC_ASSERT(offsetof(Object, num_bonds) == 0x3b0, "Object.num_bonds");
 SR_STATIC_ASSERT(offsetof(Object, bonds) == 0x3b4, "Object.bonds");
+SR_STATIC_ASSERT(offsetof(Object, drive_input) == 0x5bbc, "Object.drive_input");
+SR_STATIC_ASSERT(offsetof(Object, drive_buttons) == 0x5bdc, "Object.drive_buttons");
 SR_STATIC_ASSERT(offsetof(Object, engine_accel) == 0x5e4c, "Object.engine_accel");
 SR_STATIC_ASSERT(offsetof(Object, engine_rpm) == 0x5e50, "Object.engine_rpm");
 SR_STATIC_ASSERT(offsetof(Object, throttle) == 0x5e54, "Object.throttle");
@@ -598,6 +606,7 @@ SR_STATIC_ASSERT(offsetof(Object, wheels) == 0x5eec, "Object.wheels");
 SR_STATIC_ASSERT(offsetof(Object, num_wheel_bodies) == 0x71ec, "Object.num_wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, wheel_bodies) == 0x71f0, "Object.wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
+SR_STATIC_ASSERT(offsetof(Object, seats) == 0x81ac, "Object.seats");
 
 /* connection[]: record of 0xf170 bytes. */
 typedef union Connection { struct {
@@ -836,7 +845,7 @@ SR_STATIC_ASSERT(offsetof(Bullet, back) == 0x50, "Bullet.back");
 
 /* body[]: record of 0x40 bytes. */
 typedef union Body { struct {
-    uint8_t pad_0000[0x4];
+    int parent;                          /* +0x0000 humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent */
     vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
     int unk_0010;                        /* +0x0010 3 functions */
     int unk_0014;                        /* +0x0014 4 functions */
@@ -852,6 +861,7 @@ typedef union Body { struct {
     uint8_t pad_003c[0x4];
 }; uint8_t lf_raw[0x40]; } Body;
 SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
+SR_STATIC_ASSERT(offsetof(Body, parent) == 0x0, "Body.parent");
 SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
 
 /* game[]: record of 0x25d64 bytes. */
@@ -890,7 +900,7 @@ typedef union Game { struct {
     int unk_0090;                        /* +0x0090 7 functions */
     uint8_t pad_0094[0x4];
     int unk_0098;                        /* +0x0098 2 functions */
-    int unk_009c;                        /* +0x009c 5 functions */
+    int team0_manager;                   /* +0x009c logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
     uint8_t pad_00a0[0x10];
     int unk_00b0;                        /* +0x00b0 2 functions */
     int unk_00b4;                        /* +0x00b4 2 functions */
@@ -1059,7 +1069,7 @@ typedef union Game { struct {
     int unk_120c;                        /* +0x120c 6 functions */
     uint8_t pad_1210[0x4];
     int unk_1214;                        /* +0x1214 2 functions */
-    int unk_1218;                        /* +0x1218 3 functions */
+    int team1_manager;                   /* +0x1218 as team0_manager, team record 1 */
     uint8_t pad_121c[0x30];
     int unk_124c;                        /* +0x124c 5 functions */
     int unk_1250;                        /* +0x1250 2 functions */
@@ -1095,7 +1105,7 @@ typedef union Game { struct {
     uint8_t pad_1688[0xd00];
     int unk_2388;                        /* +0x2388 4 functions */
     uint8_t pad_238c[0x8];
-    int unk_2394;                        /* +0x2394 2 functions */
+    int team2_manager;                   /* +0x2394 as team0_manager, team record 2 */
     uint8_t pad_2398[0x430];
     int unk_27c8;                        /* +0x27c8 1 functions */
     uint8_t pad_27cc[0xd30];
@@ -1103,7 +1113,7 @@ typedef union Game { struct {
     uint8_t pad_3500[0x4];
     int unk_3504;                        /* +0x3504 2 functions */
     uint8_t pad_3508[0x8];
-    int unk_3510;                        /* +0x3510 2 functions */
+    int team3_manager;                   /* +0x3510 as team0_manager, team record 3 */
     uint8_t pad_3514[0x430];
     int unk_3944;                        /* +0x3944 1 functions */
     uint8_t pad_3948[0xd30];
@@ -1111,7 +1121,7 @@ typedef union Game { struct {
     uint8_t pad_467c[0x4];
     int unk_4680;                        /* +0x4680 2 functions */
     uint8_t pad_4684[0x8];
-    int unk_468c;                        /* +0x468c 3 functions */
+    int team4_manager;                   /* +0x468c as team0_manager, team record 4 */
     uint8_t pad_4690[0x430];
     int unk_4ac0;                        /* +0x4ac0 1 functions */
     uint8_t pad_4ac4[0xd38];
@@ -1158,6 +1168,11 @@ SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
 SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
 SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
+SR_STATIC_ASSERT(offsetof(Game, team1_manager) == 0x1218, "Game.team1_manager");
+SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
+SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
+SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
 SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
 
 /* particle[]: record of 0xf0 bytes. */
@@ -1398,7 +1413,7 @@ typedef union SoundList { struct {
     int unk_007c;                        /* +0x007c 2 functions */
     uint8_t pad_0080[0x8];
     int unk_0088;                        /* +0x0088 1 functions */
-    int unk_008c;                        /* +0x008c 2 functions */
+    int humanhit;                        /* +0x008c setupgame writes 0x16; humansimulation plays it when an object hits a human hard */
     uint8_t pad_0090[0x8];
     int unk_0098;                        /* +0x0098 1 functions */
     int unk_009c;                        /* +0x009c 1 functions */
@@ -1430,6 +1445,7 @@ typedef union SoundList { struct {
     int unk_0138;                        /* +0x0138 1 functions */
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
+SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 
 /* blocklist[]: record of 0x40354 bytes. */
 typedef union BlockList { struct {
@@ -1703,9 +1719,9 @@ typedef union City { struct {
     uint8_t pad_29814[0x6000];
     int unk_2f814;                       /* +0x2f814 1 functions */
     uint8_t pad_2f818[0x180];
-    int unk_2f998;                       /* +0x2f998 9 functions */
+    int num_buildings;                   /* +0x2f998 createlevel writes 0; economy_carmarket, resetgame and humansimulation loop over the buildings */
     uint8_t pad_2f99c[0x40];
-    int unk_2f9dc;                       /* +0x2f9dc 8 functions */
+    int building_type;                   /* +0x2f9dc the type of building 0, records of 0x9dc bytes: 2 car market, 3 mission, 6 healing (humansimulation) */
     uint8_t pad_2f9e0[0xc];
     float unk_2f9ec;                     /* +0x2f9ec 1 functions */
     float unk_2f9f0;                     /* +0x2f9f0 2 functions */
@@ -1788,6 +1804,8 @@ typedef union City { struct {
     uint8_t pad_30c94[0x9dad08];
 }; uint8_t lf_raw[0xa0b99c]; } City;
 SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
+SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
+SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {
@@ -1829,9 +1847,7 @@ typedef union Intersect { struct {
     float normal[3];                     /* +0x000c lineintersectall, sphereintersectlevel: copy of the hit normal (local_c..local_4); manager uses +0xc */
     float fraction;                      /* +0x0018 lineintersectall: set to 1.0, keeps the nearest hit (local_1c < fraction) */
     float distance;                      /* +0x001c sphereintersectlevel: set to 65536.0, keeps the nearest hit */
-    float unk_0020;                      /* +0x0020 9 functions */
-    float unk_0024;                      /* +0x0024 9 functions */
-    float unk_0028;                      /* +0x0028 9 functions */
+    vec3 surface_vel;                    /* +0x0020 lineintersectobject: the velocity of the hit surface; humansimulation pulls a standing human toward it */
     uint8_t pad_002c[0x4];
     int unk_0030;                        /* +0x0030 5 functions */
     int tri_particles[3];                /* +0x0034 lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle */
@@ -1856,6 +1872,7 @@ SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
 SR_STATIC_ASSERT(offsetof(Intersect, normal) == 0xc, "Intersect.normal");
 SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
 SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
+SR_STATIC_ASSERT(offsetof(Intersect, surface_vel) == 0x20, "Intersect.surface_vel");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
 SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
 SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
@@ -1896,7 +1913,7 @@ typedef union TimerList { struct {
     int bondwheelcollevel;               /* +0x007c timer index; the code names the timer "bondwheelcollevel" */
     int bondbodyitem;                    /* +0x0080 timer index; the code names the timer "bondbodyitem" */
     int bondbodylevel;                   /* +0x0084 timer index; the code names the timer "bondbodylevel" */
-    int unk_0088;                        /* +0x0088 2 functions */
+    int humansim;                        /* +0x0088 timer index; the code names the timer "humansim" */
     int objectsim;                       /* +0x008c timer index; the code names the timer "objectsim" */
     int packetbuild;                     /* +0x0090 timer index; the code names the timer "packetbuild" */
     int bondtest;                        /* +0x0094 timer index; the code names the timer "bondtest" */
@@ -1916,6 +1933,7 @@ SR_STATIC_ASSERT(offsetof(TimerList, bondbodyrotbody) == 0x78, "TimerList.bondbo
 SR_STATIC_ASSERT(offsetof(TimerList, bondwheelcollevel) == 0x7c, "TimerList.bondwheelcollevel");
 SR_STATIC_ASSERT(offsetof(TimerList, bondbodyitem) == 0x80, "TimerList.bondbodyitem");
 SR_STATIC_ASSERT(offsetof(TimerList, bondbodylevel) == 0x84, "TimerList.bondbodylevel");
+SR_STATIC_ASSERT(offsetof(TimerList, humansim) == 0x88, "TimerList.humansim");
 SR_STATIC_ASSERT(offsetof(TimerList, objectsim) == 0x8c, "TimerList.objectsim");
 SR_STATIC_ASSERT(offsetof(TimerList, packetbuild) == 0x90, "TimerList.packetbuild");
 SR_STATIC_ASSERT(offsetof(TimerList, bondtest) == 0x94, "TimerList.bondtest");

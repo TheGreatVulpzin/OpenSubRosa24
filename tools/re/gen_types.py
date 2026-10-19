@@ -127,13 +127,11 @@ typedef union Bone { struct {
     vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
     uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
-    float strength;     /* +0x90 bondsetup type 9: the muscle force, at least strength_min and strength_min2 */
-    float strength_min; /* +0x94 */
-    float strength_min2; /* +0x98 */
-    float axis_k[3];    /* +0x9c bondsetupcopy copies one to each BondBone axis */
+    vec3 inertia;       /* +0x90 along each row of rot: humansimulation makes ang_momentum = inertia * w */
+    vec3 inv_inertia;   /* +0x9c bondsetupcopy copies it to the BondBone axes: bondtest makes w from ang_momentum */
     vec3 target_rot[3]; /* +0xa8 bondsetup type 9: the rotation the muscle holds; identity for a dead human */
-    float unk_cc;       /* +0xcc bondsetupcopy: the bone is in BondHuman.mask when it is above 0 */
-    uint8_t unk_d0[0xc];
+    float in_solver;    /* +0xcc humansimulation writes 1 (0 for some bones in a vehicle); bondsetupcopy: in BondHuman.mask when above 0 */
+    vec3 joint_angles;  /* +0xd0 humansimulation: the turn from the parent bone (atan2 of the relative rotation) */
     int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
 }; uint8_t lf_raw[0xe0]; } Bone;
 
@@ -148,7 +146,7 @@ typedef union HumanJoint { struct {
 typedef union HumanMuscle { struct {
     int bond;       /* +0x00 index into bond[] */
     int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
-    int unk_08;     /* +0x08 human_createmuscleball: parameter 3 */
+    int bone;       /* +0x08 human_createmuscleball: parameter 3; humansimulation: a bone index (0 to 14) */
     uint8_t unk_0c[0x24];
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
