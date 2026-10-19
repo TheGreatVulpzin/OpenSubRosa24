@@ -1,0 +1,3162 @@
+/* The record types of the lifted C (src/lifted/lifted_024d.c and the lifted-style files of
+ * src/game), frozen on 2026-10-19 as a copy of src/include/sr_types.h. Do not edit it and do
+ * not regenerate it: the lifted C uses these names. New names go only into sr_types.h (the
+ * clean code). tools/re/gen_types.py checks that each record has the same size in both.
+ *
+ * 32-bit layout of Sub Rosa 0.24 (equal in the i386 Mach-O and in the 024d PE).
+ */
+#ifndef SR_TYPES_LIFTED_H
+#define SR_TYPES_LIFTED_H
+
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+#define SR_STATIC_ASSERT static_assert
+#else
+#define SR_STATIC_ASSERT _Static_assert
+#endif
+
+#pragma pack(push, 1)
+
+typedef struct vec3 { float x, y, z; } vec3;
+
+/* Body bone (ragdoll). 15 per Human, starting at Human+0xc8.
+ * Source: createhuman and bondsimulation2 (Mach-O). */
+typedef union Bone { struct {
+    vec3 pos;           /* +0x00 createhuman: position */
+    vec3 pos_prev;      /* +0x0c createhuman: copy of the position */
+    vec3 vel;           /* +0x18 bondsetupcopy copies it to BondBone.vel */
+    uint8_t unk_24[0xc];
+    vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
+    vec3 ang_momentum;  /* +0x54 the angular momentum; bondsetupcopy copies it to BondBone.ang_momentum */
+    vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
+    uint8_t unk_6c[0x20];
+    float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
+    vec3 inertia;       /* +0x90 along each row of rot: humansimulation makes ang_momentum = inertia * w */
+    vec3 inv_inertia;   /* +0x9c bondsetupcopy copies it to the BondBone axes: bondtest makes w from ang_momentum */
+    vec3 target_rot[3]; /* +0xa8 bondsetup type 9: the rotation the muscle holds; identity for a dead human */
+    float in_solver;    /* +0xcc humansimulation writes 1 (0 for some bones in a vehicle); bondsetupcopy: in BondHuman.mask when above 0 */
+    vec3 joint_angles;  /* +0xd0 humansimulation: the turn from the parent bone (atan2 of the relative rotation) */
+    int bond;           /* +0xdc deletebond: the type 9 bond of the bone */
+}; uint8_t lf_raw[0xe0]; } Bone;
+
+/* Joint bond of a Human (createjointbond): the bond, the bone and the body it holds. */
+typedef union HumanJoint { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int bone;       /* +0x04 createjointbond: parameter 2 */
+    int body;       /* +0x08 createjointbond: parameter 3, index into body[] */
+}; uint8_t lf_raw[0xc]; } HumanJoint;
+
+/* Muscle of a Human (human_createmuscleball). Only the bond is known. */
+typedef union HumanMuscle { struct {
+    int bond;       /* +0x00 index into bond[] */
+    int unk_04;     /* +0x04 human_createmuscleball: parameter 2 */
+    int bone;       /* +0x08 human_createmuscleball: parameter 3; humansimulation: a bone index (0 to 14) */
+    uint8_t unk_0c[0x24];
+}; uint8_t lf_raw[0x30]; } HumanMuscle;
+
+/* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
+typedef union WheelBody { struct {
+    uint8_t unk_00[0xc];
+    vec3 vel;           /* +0x0c bondsimulation2 type 15: the velocity of the body */
+    vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
+    vec3 rot[3];        /* +0x24 bondsimulation2 projects ang_momentum on each row */
+    vec3 ang_momentum;  /* +0x48 bondsimulation2 adds dw to it each pass */
+    vec3 w;             /* +0x54 the angular velocity: bondsimulation2 makes it from ang_momentum, rot and inv_inertia */
+    vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
+    uint8_t unk_6c[0xc];
+    vec3 inv_inertia;   /* +0x78 bondsimulation2: the factor of each row of rot */
+    uint8_t unk_84[0x64];
+}; uint8_t lf_raw[0xe8]; } WheelBody;
+
+/* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
+typedef union Wheel { struct {
+    int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
+    int unk_04;         /* +0x04 bulletsimulation writes 1 with popped */
+    int health;         /* +0x08 bulletsimulation subtracts the damage of a hit */
+    int particle_a;     /* +0x0c index into Object.particles */
+    int particle_b;     /* +0x10 index into Object.particles */
+    float weight_a;     /* +0x14 objectwheelcollision copies it to Bond.weights[0] */
+    float weight_b;     /* +0x18 objectwheelcollision copies it to Bond.weights[1] */
+    float unk_1c;       /* +0x1c */
+    float radius;       /* +0x20 objectwheelcollision: the circle against the level; bulletsimulation writes 0.25 for a popped tire */
+    float unk_24;       /* +0x24 */
+    float dspin;        /* +0x28 bondsimulation2 type 5 subtracts the push along Bond.roll_dir times the radius */
+    float spin;         /* +0x2c the angular speed: bondsimulation2 type 5 rolls the ground contact with spin * radius */
+    float angle;        /* +0x30 the turn of the wheel; objectsimulation_heli turns wheel 0 as the rotor; the packets send it */
+    float steer;        /* +0x34 objectwheelcollision turns the axle around Object.rot[1] by this angle */
+    vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
+    vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
+    vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
+    int unk_5c;         /* +0x5c the packets send it */
+    float unk_60[4];    /* +0x60 */
+    float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
+    uint8_t unk_74[0x10];
+    float unk_84[5];    /* +0x84 objectwheelsimulation2 */
+}; uint8_t lf_raw[0x98]; } Wheel;
+
+/* An axis of a BondBone: a row of Bone.rot and its Bone.axis_k. */
+typedef union BondAxis { struct {
+    vec3 dir;
+    float k;
+}; uint8_t lf_raw[0x10]; } BondAxis;
+
+/* Bone record of the bond solver (BondHuman.bones). The solver copies the velocities of the
+ * Bone here, adds the changes of each pass, and writes them back. */
+typedef union BondBone { struct {
+    vec3 vel;           /* +0x00 bondsimulation2 copies Bone+0x18 */
+    float pad_0c;
+    vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
+    float pad_1c;
+    vec3 ang_momentum;  /* +0x20 bondsetupcopy copies Bone.ang_momentum; the bonds add dw, bondhuman the balance turn */
+    float pad_2c;
+    vec3 w;             /* +0x30 the angular velocity: bondtest makes it from ang_momentum and the axes */
+    float pad_3c;
+    vec3 dw;            /* +0x40 bond_bodybody adds the change of w */
+    float pad_4c;
+    BondAxis axes[3];   /* +0x50 bondsetupcopy: Bone.rot[k] and Bone.axis_k[k] */
+}; uint8_t lf_raw[0x80]; } BondBone;
+
+/* Inventory slot. 8 per Human. */
+typedef union InventorySlot { struct {
+    int count;      /* +0x00 manager: quantity */
+    int items[8];   /* +0x04 item_addhumanlink writes items[count]; manager: index into items[] */
+}; uint8_t lf_raw[0x24]; } InventorySlot;
+
+/* Account saved in user/server.srk (docs/formatos.md). */
+typedef union Account { struct {
+    uint32_t id[2];     /* +0x00 equal to Player.account_id */
+    char name[32];      /* +0x08 */
+    int name_locked;    /* +0x28 not saved to the file; createaccount writes 5 */
+    int money;          /* +0x2c new account: 1000 */
+    int unk_30;         /* +0x30 */
+    int look_a;         /* +0x34 rand() % 3 */
+    int look_b;         /* +0x38 rand() & 7 */
+    int look_c;         /* +0x3c rand() & 3 */
+    uint8_t unk_40[0xc];
+}; uint8_t lf_raw[0x4c]; } Account;
+
+
+
+SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
+SR_STATIC_ASSERT(sizeof(Bone) == 0xe0, "Bone");
+SR_STATIC_ASSERT(offsetof(Bone, rot) == 0x30, "Bone.rot");
+SR_STATIC_ASSERT(offsetof(Bone, mass) == 0x8c, "Bone.mass");
+SR_STATIC_ASSERT(sizeof(InventorySlot) == 0x24, "InventorySlot");
+SR_STATIC_ASSERT(sizeof(HumanJoint) == 0xc, "HumanJoint");
+SR_STATIC_ASSERT(sizeof(HumanMuscle) == 0x30, "HumanMuscle");
+SR_STATIC_ASSERT(sizeof(BondBone) == 0x80, "BondBone");
+SR_STATIC_ASSERT(sizeof(BondAxis) == 0x10, "BondAxis");
+SR_STATIC_ASSERT(sizeof(WheelBody) == 0xe8, "WheelBody");
+SR_STATIC_ASSERT(sizeof(Wheel) == 0x98, "Wheel");
+SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
+SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
+SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
+
+
+/* player[]: record of 0x2408 bytes. */
+typedef union Player { struct {
+    int active;                          /* +0x0000 createplayer writes 1 */
+    char name[32];                       /* +0x0004 createaccount copies 32 bytes to the account */
+    uint32_t account_id[2];              /* +0x0024 createaccount compares with account+0x00 and +0x04 */
+    int unk_002c;                        /* +0x002c 1 functions */
+    int unk_0030;                        /* +0x0030 1 functions */
+    int unk_0034;                        /* +0x0034 7 functions */
+    int unk_0038;                        /* +0x0038 2 functions */
+    int unk_003c;                        /* +0x003c 7 functions */
+    int money;                           /* +0x0040 createplayer writes 50000; manager (black_market.c) uses it as the balance; logic_gunstore_buy */
+    int unk_0044;                        /* +0x0044 1 functions */
+    float unk_0048;                      /* +0x0048 1 functions */
+    int num_purchases;                   /* +0x004c logic_gunstore_buy and logic_playeractions: limit < 10 */
+    int unk_0050;                        /* +0x0050 3 functions */
+    int unk_0054;                        /* +0x0054 3 functions */
+    int unk_0058;                        /* +0x0058 2 functions */
+    int unk_005c;                        /* +0x005c 2 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int team;                            /* +0x0064 createplayer writes 7; createhuman copies it to human.team; logic_addteamcash */
+    int unk_0068;                        /* +0x0068 1 functions */
+    int stocks;                          /* +0x006c playerbuystock/playersellstock; economysimulation */
+    int unk_0070;                        /* +0x0070 3 functions */
+    int unk_0074;                        /* +0x0074 1 functions */
+    int human_id;                        /* +0x0078 createplayer writes -1; manager: the player's body */
+    float input_axes[4];                 /* +0x007c getinputs_human/car/heli write floats */
+    float yaw;                           /* +0x008c manager (ANALISE-NPCS.md): player yaw */
+    float input_pitch;                   /* +0x0090 getinputs_* write it; neighbor of yaw (likely) */
+    float input_extra[2];                /* +0x0094 serverrecv reads it from the network together with the axes (2 floats after input_pitch) */
+    uint32_t input_buttons;              /* +0x009c getinputs_* write bits */
+    int unk_00a0;                        /* +0x00a0 1 functions */
+    int unk_00a4;                        /* +0x00a4 2 functions */
+    int unk_00a8;                        /* +0x00a8 2 functions */
+    int hud_mode;                        /* +0x00ac getinputs_human adds 1; drawhud compares with 0 and 1 */
+    float unk_00b0;                      /* +0x00b0 4 functions */
+    float unk_00b4;                      /* +0x00b4 4 functions */
+    int unk_00b8;                        /* +0x00b8 2 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    uint8_t pad_00c0[0x4];
+    int unk_00c4;                        /* +0x00c4 2 functions */
+    int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
+    int unk_00cc;                        /* +0x00cc 5 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int menu;                            /* +0x00d4 playermenu compares with 1 and 2; logic_player writes 9 */
+    int menu_building;                   /* +0x00d8 logic_cardealer_buy uses it as an index (stride 0x9dc); serversend sends 16 bits */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 12 functions */
+    int num_actions;                     /* +0x00e4 player_addaction_chat/menu: action index (stride 0x54) */
+    int unk_00e8;                        /* +0x00e8 4 functions */
+    uint8_t pad_00ec[0x1500];
+    int unk_15ec;                        /* +0x15ec 4 functions */
+    int unk_15f0;                        /* +0x15f0 2 functions */
+    int unk_15f4;                        /* +0x15f4 2 functions */
+    int unk_15f8;                        /* +0x15f8 1 functions */
+    int unk_15fc;                        /* +0x15fc 2 functions */
+    uint8_t pad_1600[0x20];
+    int unk_1620;                        /* +0x1620 1 functions */
+    uint8_t pad_1624[0x414];
+    int is_bot;                          /* +0x1a38 scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy */
+    int unk_1a3c;                        /* +0x1a3c 2 functions */
+    int unk_1a40;                        /* +0x1a40 1 functions */
+    int ai_waypoint;                     /* +0x1a44 ai_playercar/ai_car_nextwaypoint: index into the path (stride 0x1c at +0x1a58) */
+    int num_path;                        /* +0x1a48 resetgame/scenario_createtraffic2: counter of the list at +0x1a4c (stride 0x1c) */
+    uint8_t pad_1a4c[0x700];
+    int unk_214c;                        /* +0x214c 3 functions */
+    int unk_2150;                        /* +0x2150 3 functions */
+    int unk_2154;                        /* +0x2154 3 functions */
+    int unk_2158;                        /* +0x2158 1 functions */
+    int unk_215c;                        /* +0x215c 1 functions */
+    int unk_2160;                        /* +0x2160 1 functions */
+    int unk_2164;                        /* +0x2164 1 functions */
+    int num_threats;                     /* +0x2168 ai_assessthreats: loop and limit < 0x10 */
+    int unk_216c;                        /* +0x216c 2 functions */
+    int unk_2170;                        /* +0x2170 1 functions */
+    uint8_t pad_2174[0x17c];
+    int unk_22f0;                        /* +0x22f0 3 functions */
+    vec3 colors[4];                      /* +0x22f4 createplayer initializes 4 vectors; createhuman copies them to human+0x2a5c (likely: clothes colors) */
+    uint8_t pad_2324[0x90];
+    int look_a;                          /* +0x23b4 createplayer: rand() % 3; equal to account.look_a */
+    int look_b;                          /* +0x23b8 createplayer: rand() & 7 */
+    int look_c;                          /* +0x23bc createplayer: rand() & 3 */
+    int unk_23c0;                        /* +0x23c0 4 functions */
+    int unk_23c4;                        /* +0x23c4 4 functions */
+    int unk_23c8;                        /* +0x23c8 1 functions */
+    uint8_t pad_23cc[0x3c];
+}; uint8_t lf_raw[0x2408]; } Player;
+SR_STATIC_ASSERT(sizeof(Player) == 0x2408, "Player");
+SR_STATIC_ASSERT(offsetof(Player, active) == 0x0, "Player.active");
+SR_STATIC_ASSERT(offsetof(Player, name) == 0x4, "Player.name");
+SR_STATIC_ASSERT(offsetof(Player, account_id) == 0x24, "Player.account_id");
+SR_STATIC_ASSERT(offsetof(Player, money) == 0x40, "Player.money");
+SR_STATIC_ASSERT(offsetof(Player, num_purchases) == 0x4c, "Player.num_purchases");
+SR_STATIC_ASSERT(offsetof(Player, team) == 0x64, "Player.team");
+SR_STATIC_ASSERT(offsetof(Player, stocks) == 0x6c, "Player.stocks");
+SR_STATIC_ASSERT(offsetof(Player, human_id) == 0x78, "Player.human_id");
+SR_STATIC_ASSERT(offsetof(Player, input_axes) == 0x7c, "Player.input_axes");
+SR_STATIC_ASSERT(offsetof(Player, yaw) == 0x8c, "Player.yaw");
+SR_STATIC_ASSERT(offsetof(Player, input_pitch) == 0x90, "Player.input_pitch");
+SR_STATIC_ASSERT(offsetof(Player, input_extra) == 0x94, "Player.input_extra");
+SR_STATIC_ASSERT(offsetof(Player, input_buttons) == 0x9c, "Player.input_buttons");
+SR_STATIC_ASSERT(offsetof(Player, hud_mode) == 0xac, "Player.hud_mode");
+SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
+SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");
+SR_STATIC_ASSERT(offsetof(Player, menu_building) == 0xd8, "Player.menu_building");
+SR_STATIC_ASSERT(offsetof(Player, num_actions) == 0xe4, "Player.num_actions");
+SR_STATIC_ASSERT(offsetof(Player, is_bot) == 0x1a38, "Player.is_bot");
+SR_STATIC_ASSERT(offsetof(Player, ai_waypoint) == 0x1a44, "Player.ai_waypoint");
+SR_STATIC_ASSERT(offsetof(Player, num_path) == 0x1a48, "Player.num_path");
+SR_STATIC_ASSERT(offsetof(Player, num_threats) == 0x2168, "Player.num_threats");
+SR_STATIC_ASSERT(offsetof(Player, colors) == 0x22f4, "Player.colors");
+SR_STATIC_ASSERT(offsetof(Player, look_a) == 0x23b4, "Player.look_a");
+SR_STATIC_ASSERT(offsetof(Player, look_b) == 0x23b8, "Player.look_b");
+SR_STATIC_ASSERT(offsetof(Player, look_c) == 0x23bc, "Player.look_c");
+
+/* human[]: record of 0x2b64 bytes. */
+typedef union Human { struct {
+    int active;                          /* +0x0000 createhuman writes 1 */
+    int has_physics;                     /* +0x0004 humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it */
+    int player_id;                       /* +0x0008 createhuman: parameter 3 (owner) */
+    int account;                         /* +0x000c deleteplayer keeps the account index of a player who leaves; humansimulation takes 5% of the money above 10000 when that human dies; -1: none */
+    int unk_0010;                        /* +0x0010 1 functions */
+    int vehicle_id;                      /* +0x0014 createhuman writes -1; packobjectpacket sends it if != -1 */
+    int vehicle_seat;                    /* +0x0018 playerai compares with 0 (driver) and 1 */
+    int last_vehicle;                    /* +0x001c humansimulation: the vehicle the human sat in; the type 4 bonds against it start soft; -1 when last_vehicle_timer ends */
+    int last_vehicle_timer;              /* +0x0020 humansimulation writes 100 in a vehicle and counts it down on foot */
+    int despawn_timer;                   /* +0x0024 createhuman writes 0xe10 (3600) (likely) */
+    int health;                          /* +0x0028 createhuman writes 100; manager: health */
+    uint8_t pad_002c[0x4];
+    int exit_timer;                      /* +0x0030 humansimulation counts it up while button 0x800 is down in a vehicle; the human gets out when it passes 30 + speed * 60 */
+    int protect_timer;                   /* +0x0034 createhuman: 3 to 6 times 3600 ticks; counts down; a team kill of a human with it above 0 costs a tax (bulletsimulation, humansimulation) */
+    int on_ground;                       /* +0x0038 humansimulation writes 0, and 1 when the ground test under the feet finds the ground */
+    int move_mode;                       /* +0x003c playersimulation: from the client; humansimulation walks at 0.15, 0.05 (1) or 0.025 (2); human_calculatearmangles: 2 raises the arms */
+    uint8_t pad_0040[0x4];
+    int stun_timer;                      /* +0x0044 bulletsimulation writes 3 (or 6) times the damage; humansimulation counts it down and makes the muscles weak while it runs */
+    vec3 pos;                            /* +0x0048 manager: global position; logic_playeractions uses it in pointinsidebase */
+    vec3 vel;                            /* +0x0054 follows pos; humansimulation: the time to get out of a vehicle grows with its length */
+    float axis;                          /* +0x0060 getinputs_human: debug label "humanaxis" */
+    float pitch;                         /* +0x0064 human_calculatearmangles multiplies it by a constant (likely: vertical angle) */
+    uint8_t pad_0068[0x18];
+    float vehicle_axis;                  /* +0x0080 humansimulation: view_axis while in a vehicle (0 on foot); axis = the object turn + vehicle_axis */
+    float vehicle_pitch;                 /* +0x0084 humansimulation: view_pitch while in a vehicle (0 on foot) */
+    uint8_t pad_0088[0x4];
+    float stance;                        /* +0x008c humansimulation moves it toward 1.0 (0.625 while button 8, crouch, is down) by 1/64 each tick */
+    uint8_t pad_0090[0x8];
+    float unk_0098;                      /* +0x0098 1 functions */
+    float input_axes[4];                 /* +0x009c playersimulation: the analog inputs from the client; walking uses [1] sideways and [3] forward; the driver copies all 4 to Object.drive_input */
+    float view_axis;                     /* +0x00ac playersimulation: the view angle from the client; on foot humansimulation copies it to axis */
+    float view_pitch;                    /* +0x00b0 playersimulation: the view pitch from the client; on foot humansimulation copies it to pitch */
+    float unk_00b4;                      /* +0x00b4 1 functions */
+    float unk_00b8;                      /* +0x00b8 1 functions */
+    uint32_t input_buttons;              /* +0x00bc humansimulation tests bits &1 &8 &0x10 */
+    uint32_t input_buttons_prev;         /* +0x00c0 createhuman writes 0x3c0; bit tests like +0xbc (likely: buttons of the previous frame) */
+    uint8_t pad_00c4[0x4];
+    Bone bones[15];                      /* +0x00c8 createhuman: loop of 15 with stride 0xe0 */
+    uint8_t pad_0de8[0xe0];
+    int num_muscles;                     /* +0x0ec8 human_createmuscleball appends to the list at +0xecc */
+    HumanMuscle muscles[128];            /* +0x0ecc human_createmuscleball (stride 0x30); the list ends at the joints (+0x26cc) */
+    int num_joints;                      /* +0x26cc createjointbond appends to the list at +0x26d0 */
+    HumanJoint joints[32];               /* +0x26d0 createjointbond (stride 0xc); createhuman uses floats from +0x2870 */
+    uint8_t pad_2850[0x20];
+    int unk_2870;                        /* +0x2870 1 functions */
+    uint8_t pad_2874[0x48];
+    int unk_28bc;                        /* +0x28bc 1 functions */
+    uint8_t pad_28c0[0x50];
+    float unk_2910;                      /* +0x2910 1 functions */
+    float unk_2914;                      /* +0x2914 1 functions */
+    float walk_phase;                    /* +0x2918 humansimulation adds the step length and wraps it at 2 pi; human_calculatelegangles takes its sine */
+    InventorySlot inventory[8];          /* +0x291c createhuman: loop of 8 with stride 0x24; manager: count +0 and item +4 */
+    int unk_2a3c;                        /* +0x2a3c 1 functions */
+    uint8_t pad_2a40[0x1c];
+    vec3 colors[4];                      /* +0x2a5c createhuman copies from player.colors */
+    uint8_t pad_2a8c[0x90];
+    int bleeding;                        /* +0x2b1c manager: knife writes 1 (likely: bleeding) */
+    float body_strength;                 /* +0x2b20 humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it */
+    int unk_2b24;                        /* +0x2b24 1 functions */
+    int unk_2b28;                        /* +0x2b28 1 functions */
+    int team;                            /* +0x2b2c createhuman copies from player.team */
+    int look_b;                          /* +0x2b30 createhuman copies from player.look_b */
+    int look_c;                          /* +0x2b34 createhuman copies from player.look_c */
+    int look_a;                          /* +0x2b38 createhuman copies from player.look_a */
+    int unk_2b3c;                        /* +0x2b3c 2 functions */
+    int unk_2b40;                        /* +0x2b40 2 functions */
+    int unk_2b44;                        /* +0x2b44 1 functions */
+    int unk_2b48;                        /* +0x2b48 1 functions */
+    uint8_t pad_2b4c[0x8];
+    int unk_2b54;                        /* +0x2b54 1 functions */
+    int unk_2b58;                        /* +0x2b58 1 functions */
+    uint8_t pad_2b5c[0x8];
+}; uint8_t lf_raw[0x2b64]; } Human;
+SR_STATIC_ASSERT(sizeof(Human) == 0x2b64, "Human");
+SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
+SR_STATIC_ASSERT(offsetof(Human, has_physics) == 0x4, "Human.has_physics");
+SR_STATIC_ASSERT(offsetof(Human, player_id) == 0x8, "Human.player_id");
+SR_STATIC_ASSERT(offsetof(Human, account) == 0xc, "Human.account");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_id) == 0x14, "Human.vehicle_id");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_seat) == 0x18, "Human.vehicle_seat");
+SR_STATIC_ASSERT(offsetof(Human, last_vehicle) == 0x1c, "Human.last_vehicle");
+SR_STATIC_ASSERT(offsetof(Human, last_vehicle_timer) == 0x20, "Human.last_vehicle_timer");
+SR_STATIC_ASSERT(offsetof(Human, despawn_timer) == 0x24, "Human.despawn_timer");
+SR_STATIC_ASSERT(offsetof(Human, health) == 0x28, "Human.health");
+SR_STATIC_ASSERT(offsetof(Human, exit_timer) == 0x30, "Human.exit_timer");
+SR_STATIC_ASSERT(offsetof(Human, protect_timer) == 0x34, "Human.protect_timer");
+SR_STATIC_ASSERT(offsetof(Human, on_ground) == 0x38, "Human.on_ground");
+SR_STATIC_ASSERT(offsetof(Human, move_mode) == 0x3c, "Human.move_mode");
+SR_STATIC_ASSERT(offsetof(Human, stun_timer) == 0x44, "Human.stun_timer");
+SR_STATIC_ASSERT(offsetof(Human, pos) == 0x48, "Human.pos");
+SR_STATIC_ASSERT(offsetof(Human, vel) == 0x54, "Human.vel");
+SR_STATIC_ASSERT(offsetof(Human, axis) == 0x60, "Human.axis");
+SR_STATIC_ASSERT(offsetof(Human, pitch) == 0x64, "Human.pitch");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_axis) == 0x80, "Human.vehicle_axis");
+SR_STATIC_ASSERT(offsetof(Human, vehicle_pitch) == 0x84, "Human.vehicle_pitch");
+SR_STATIC_ASSERT(offsetof(Human, stance) == 0x8c, "Human.stance");
+SR_STATIC_ASSERT(offsetof(Human, input_axes) == 0x9c, "Human.input_axes");
+SR_STATIC_ASSERT(offsetof(Human, view_axis) == 0xac, "Human.view_axis");
+SR_STATIC_ASSERT(offsetof(Human, view_pitch) == 0xb0, "Human.view_pitch");
+SR_STATIC_ASSERT(offsetof(Human, input_buttons) == 0xbc, "Human.input_buttons");
+SR_STATIC_ASSERT(offsetof(Human, input_buttons_prev) == 0xc0, "Human.input_buttons_prev");
+SR_STATIC_ASSERT(offsetof(Human, bones) == 0xc8, "Human.bones");
+SR_STATIC_ASSERT(offsetof(Human, num_muscles) == 0xec8, "Human.num_muscles");
+SR_STATIC_ASSERT(offsetof(Human, muscles) == 0xecc, "Human.muscles");
+SR_STATIC_ASSERT(offsetof(Human, num_joints) == 0x26cc, "Human.num_joints");
+SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
+SR_STATIC_ASSERT(offsetof(Human, walk_phase) == 0x2918, "Human.walk_phase");
+SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
+SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
+SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
+SR_STATIC_ASSERT(offsetof(Human, body_strength) == 0x2b20, "Human.body_strength");
+SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
+SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
+SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
+SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
+
+/* item[]: record of 0x1ac bytes. */
+typedef union Item { struct {
+    int active;                          /* +0x0000 createitem writes 1 */
+    int has_physics;                     /* +0x0004 bondsimulation2 clears the velocity changes only of the active items with it (the same role as human.has_physics) */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int type;                            /* +0x000c createitem: parameter 1 (item type) */
+    float mass;                          /* +0x0010 createitem: itemtype+4; bondsimulation2 uses it in the mass ratio with Bone.mass */
+    int time_to_live;                    /* +0x0014 itemtimetolive subtracts 1 when the value is below 0xffff and deletes the item at 0; createitem writes 0xffff (no limit); item_removebill writes 0 when the last bill goes */
+    int parent_human;                    /* +0x0018 createitem writes -1 (likely) */
+    int parent_item;                     /* +0x001c createitem writes -1 (likely) */
+    int parent_slot;                     /* +0x0020 clientrecv: index * 0x24 + 0x291c (InventorySlot of the body) */
+    int num_children;                    /* +0x0024 linkitemtoitem: < 8; deleteitem: loop */
+    int children[8];                     /* +0x0028 linkitemtoitem writes the child at children[num_children]; item_removeitemlink moves the last child into the free place. The server manager read +0x38 as a phone state: no game code reads it, and it is children[4] */
+    vec3 pos;                            /* +0x0048 createitem: parameter 2 (position) */
+    vec3 pos_prev;                       /* +0x0054 createitem: copy of the position */
+    int unk_0060;                        /* +0x0060 1 functions */
+    uint8_t pad_0064[0x8];
+    vec3 vel;                            /* +0x006c createitem: parameter 3 (velocity) */
+    vec3 dv;                             /* +0x0078 bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel */
+    vec3 rot[3];                         /* +0x0084 createitem: parameter 4 (3x3 matrix) */
+    vec3 ang_momentum;                   /* +0x00a8 the angular momentum: bondsimulation2 adds dw to it each pass; item_physicssimulation damps it with scalevector */
+    vec3 angvel;                         /* +0x00b4 the angular velocity: bondsimulation2 makes it from ang_momentum along the rows of rot, times inv_inertia; the bonds use angvel x arm */
+    int unk_00c0;                        /* +0x00c0 1 functions */
+    uint8_t pad_00c4[0x8];
+    vec3 dw;                             /* +0x00cc bondsimulation2 clears it at the start of each solver pass; the bonds add the change of ang_momentum */
+    int unk_00d8;                        /* +0x00d8 3 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int ammo;                            /* +0x00e0 createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0 */
+    int unk_e4;                          /* +0x00e4 createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7) */
+    int unk_00e8;                        /* +0x00e8 1 functions */
+    uint32_t flags;                      /* +0x00ec itemlogic tests bit 1; human_itemsimulation sets bit 1 */
+    int unk_00f0;                        /* +0x00f0 1 functions */
+    int unk_00f4;                        /* +0x00f4 3 functions */
+    int linked_item;                     /* +0x00f8 itemlogic writes an item index; logic_setteammanager zeroes call_state of the linked item */
+    int phone_id;                        /* +0x00fc logic_setteammanager compares with team * 1111 (0x457) */
+    int unk_0100;                        /* +0x0100 1 functions */
+    int info;                            /* +0x0104 createevent_updateiteminfo sends it; itemlogic and eventsimulation write it */
+    int phone_number;                    /* +0x0108 manager: dialed number */
+    int unk_010c;                        /* +0x010c 5 functions */
+    int call_state;                      /* +0x0110 manager: call state */
+    int vehicle_id;                      /* +0x0114 player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key) */
+    vec3 inertia;                        /* +0x0118 createitem: 1 / inv_inertia */
+    vec3 inv_inertia;                    /* +0x0124 createitem: copy of itemtype.inv_inertia */
+    int unk_0130;                        /* +0x0130 1 functions */
+    int num_bills;                       /* +0x0134 item_addbill and logic_playeractions add 1 */
+    int last_bill;                       /* +0x0138 item_billvalue adds the bills 0 to last_bill (-1: no bill); item_addbill allows 9 bills (last_bill <= 8) */
+    uint32_t bills_mask;                 /* +0x013c item_addbill/resetgame change bits */
+    uint8_t pad_0140[0x3c];
+    vec3 ends[2];                        /* +0x017c createitem (item type 0x19): (-0.5 -1 0) and (-0.5 1 0) (likely: the two ends in the axes of the item) */
+    vec3 end_pos[2];                     /* +0x0194 createitem (item type 0x19): the position plus ends[i] along g_xaxis and g_yaxis */
+}; uint8_t lf_raw[0x1ac]; } Item;
+SR_STATIC_ASSERT(sizeof(Item) == 0x1ac, "Item");
+SR_STATIC_ASSERT(offsetof(Item, active) == 0x0, "Item.active");
+SR_STATIC_ASSERT(offsetof(Item, has_physics) == 0x4, "Item.has_physics");
+SR_STATIC_ASSERT(offsetof(Item, type) == 0xc, "Item.type");
+SR_STATIC_ASSERT(offsetof(Item, mass) == 0x10, "Item.mass");
+SR_STATIC_ASSERT(offsetof(Item, time_to_live) == 0x14, "Item.time_to_live");
+SR_STATIC_ASSERT(offsetof(Item, parent_human) == 0x18, "Item.parent_human");
+SR_STATIC_ASSERT(offsetof(Item, parent_item) == 0x1c, "Item.parent_item");
+SR_STATIC_ASSERT(offsetof(Item, parent_slot) == 0x20, "Item.parent_slot");
+SR_STATIC_ASSERT(offsetof(Item, num_children) == 0x24, "Item.num_children");
+SR_STATIC_ASSERT(offsetof(Item, children) == 0x28, "Item.children");
+SR_STATIC_ASSERT(offsetof(Item, pos) == 0x48, "Item.pos");
+SR_STATIC_ASSERT(offsetof(Item, pos_prev) == 0x54, "Item.pos_prev");
+SR_STATIC_ASSERT(offsetof(Item, vel) == 0x6c, "Item.vel");
+SR_STATIC_ASSERT(offsetof(Item, dv) == 0x78, "Item.dv");
+SR_STATIC_ASSERT(offsetof(Item, rot) == 0x84, "Item.rot");
+SR_STATIC_ASSERT(offsetof(Item, ang_momentum) == 0xa8, "Item.ang_momentum");
+SR_STATIC_ASSERT(offsetof(Item, angvel) == 0xb4, "Item.angvel");
+SR_STATIC_ASSERT(offsetof(Item, dw) == 0xcc, "Item.dw");
+SR_STATIC_ASSERT(offsetof(Item, ammo) == 0xe0, "Item.ammo");
+SR_STATIC_ASSERT(offsetof(Item, unk_e4) == 0xe4, "Item.unk_e4");
+SR_STATIC_ASSERT(offsetof(Item, flags) == 0xec, "Item.flags");
+SR_STATIC_ASSERT(offsetof(Item, linked_item) == 0xf8, "Item.linked_item");
+SR_STATIC_ASSERT(offsetof(Item, phone_id) == 0xfc, "Item.phone_id");
+SR_STATIC_ASSERT(offsetof(Item, info) == 0x104, "Item.info");
+SR_STATIC_ASSERT(offsetof(Item, phone_number) == 0x108, "Item.phone_number");
+SR_STATIC_ASSERT(offsetof(Item, call_state) == 0x110, "Item.call_state");
+SR_STATIC_ASSERT(offsetof(Item, vehicle_id) == 0x114, "Item.vehicle_id");
+SR_STATIC_ASSERT(offsetof(Item, inertia) == 0x118, "Item.inertia");
+SR_STATIC_ASSERT(offsetof(Item, inv_inertia) == 0x124, "Item.inv_inertia");
+SR_STATIC_ASSERT(offsetof(Item, num_bills) == 0x134, "Item.num_bills");
+SR_STATIC_ASSERT(offsetof(Item, last_bill) == 0x138, "Item.last_bill");
+SR_STATIC_ASSERT(offsetof(Item, bills_mask) == 0x13c, "Item.bills_mask");
+SR_STATIC_ASSERT(offsetof(Item, ends) == 0x17c, "Item.ends");
+SR_STATIC_ASSERT(offsetof(Item, end_pos) == 0x194, "Item.end_pos");
+
+/* object[]: record of 0x8230 bytes. */
+typedef union Object { struct {
+    int active;                          /* +0x0000 manager: free slot with flag 0 */
+    int type;                            /* +0x0004 createobject: parameter 1; index into objecttype */
+    int state;                           /* +0x0008 objectsimulation compares with 1 and 2; packobjectpacket ignores 3 (likely: object state) */
+    int health;                          /* +0x000c createobject writes 100 (likely) */
+    uint8_t pad_0010[0x4];
+    int driver;                          /* +0x0014 createobject writes -1 (likely) */
+    int unk_0018;                        /* +0x0018 4 functions */
+    int time_to_live;                    /* +0x001c objecttimetolive subtracts 1 when the value is below 0xffff and deletes the object at 0; itemtimetolive writes 0 when the Key of the vehicle goes (the vehicle goes with its key) */
+    int unk_0020;                        /* +0x0020 3 functions */
+    vec3 pos;                            /* +0x0024 createobject: parameter 2 */
+    vec3 pos_prev;                       /* +0x0030 createobject: copy of pos */
+    vec3 rot[3];                         /* +0x003c createobject: matrix from parameter 4; objectsimulation normalizes it and does crossproduct */
+    vec3 vel;                            /* +0x0060 objectsimulation zeroes, adds and scales */
+    vec3 vel_prev;                       /* +0x006c objectsimulation copies from vel */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    float unk_0080;                      /* +0x0080 1 functions */
+    vec3 box_min;                        /* +0x0084 lineintersectobject: no hit when both ends are below it; humansimulation tests a human against the box, 2 units larger */
+    vec3 box_max;                        /* +0x0090 the other corner of the box (lineintersectobject, sphereintersectobject, humansimulation) */
+    uint8_t pad_009c[0xc];
+    int num_particles;                   /* +0x00a8 createobject appends to the list at +0xac; particletimetolive loops over it */
+    int particles[64];                   /* +0x00ac createobject appends; particletimetolive renames; createobject uses floats from +0x1ac */
+    int unk_01ac;                        /* +0x01ac 2 functions */
+    uint8_t pad_01b0[0x200];
+    int num_bonds;                       /* +0x03b0 createbond appends the bond to the list at +0x3b4, limit 0x7f */
+    int bonds[127];                      /* +0x03b4 createbond appends, limit 0x7f; deletebond removes */
+    uint8_t pad_05b0[0x204];
+    int unk_07b4;                        /* +0x07b4 3 functions */
+    uint8_t pad_07b8[0x5404];
+    float drive_input[4];                /* +0x5bbc humansimulation copies Human.input_axes of the driver; objectsimulation_car and _heli read them */
+    uint8_t pad_5bcc[0x10];
+    uint32_t drive_buttons;              /* +0x5bdc humansimulation: Human.input_buttons of the driver, 4 when nobody drives; objectsimulation_car tests bits 2 and 4 */
+    uint8_t pad_5be0[0x4];
+    int unk_5be4;                        /* +0x5be4 3 functions */
+    uint8_t pad_5be8[0x264];
+    float engine_accel;                  /* +0x5e4c objectenginesimulation2: computed, added to engine_rpm and zeroed */
+    float engine_rpm;                    /* +0x5e50 getenginetorque2/objectenginesimulation2 (likely) */
+    float throttle;                      /* +0x5e54 objectenginesimulation2: enters as (1 - x) in the acceleration (likely) */
+    float engine_power;                  /* +0x5e58 createobject: objecttype+0x7758 * constant; manager (truck_speed) changes the engine force */
+    float unk_5e5c;                      /* +0x5e5c 1 functions */
+    float unk_5e60;                      /* +0x5e60 2 functions */
+    float unk_5e64;                      /* +0x5e64 1 functions */
+    float unk_5e68;                      /* +0x5e68 2 functions */
+    int gear;                            /* +0x5e6c objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely) */
+    int unk_5e70;                        /* +0x5e70 1 functions */
+    uint8_t pad_5e74[0x4];
+    float gear_ratio;                    /* +0x5e78 objectenginesimulation2: if != 0 it couples engine and wheels; objectsimulation_car writes it per gear (likely) */
+    float unk_5e7c;                      /* +0x5e7c 2 functions */
+    float unk_5e80;                      /* +0x5e80 2 functions */
+    float unk_5e84;                      /* +0x5e84 2 functions */
+    uint8_t pad_5e88[0x8];
+    int unk_5e90;                        /* +0x5e90 2 functions */
+    int unk_5e94;                        /* +0x5e94 2 functions */
+    int unk_5e98;                        /* +0x5e98 2 functions */
+    uint8_t pad_5e9c[0x44];
+    int unk_5ee0;                        /* +0x5ee0 6 functions */
+    int unk_5ee4;                        /* +0x5ee4 1 functions */
+    int num_wheels;                      /* +0x5ee8 createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels) */
+    Wheel wheels[32];                    /* +0x5eec stride 0x98: objectwheelcollision reads wheels[i] (particles, radius, steer, pos); the list ends at num_wheel_bodies (+0x71ec) */
+    int num_wheel_bodies;                /* +0x71ec createobject copies objecttype.num_wheels; a second list after Object.wheels */
+    WheelBody wheel_bodies[16];          /* +0x71f0 stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8 */
+    uint8_t pad_8070[0x4];
+    int unk_8074;                        /* +0x8074 2 functions */
+    uint8_t pad_8078[0x20];
+    int unk_8098;                        /* +0x8098 1 functions */
+    uint8_t pad_809c[0x20];
+    int unk_80bc;                        /* +0x80bc 1 functions */
+    uint8_t pad_80c0[0x20];
+    int unk_80e0;                        /* +0x80e0 1 functions */
+    uint8_t pad_80e4[0x20];
+    int unk_8104;                        /* +0x8104 2 functions */
+    uint8_t pad_8108[0x8];
+    int unk_8110;                        /* +0x8110 1 functions */
+    uint8_t pad_8114[0x8];
+    int unk_811c;                        /* +0x811c 1 functions */
+    uint8_t pad_8120[0x8];
+    int unk_8128;                        /* +0x8128 2 functions */
+    uint8_t pad_812c[0x68];
+    int unk_8194;                        /* +0x8194 3 functions */
+    int unk_8198;                        /* +0x8198 1 functions */
+    int unk_819c;                        /* +0x819c 2 functions */
+    float unk_81a0;                      /* +0x81a0 2 functions */
+    float unk_81a4;                      /* +0x81a4 2 functions */
+    int num_seats;                       /* +0x81a8 createobject copies from objecttype.num_seats; humansimulation reads it */
+    vec3 seats[7];                       /* +0x81ac createobject copies objecttype seats; humansimulation places a sitting human there (x along rot[0], y along rot[1], z along rot[2]) */
+    uint8_t pad_8200[0xc];
+    float unk_820c;                      /* +0x820c 1 functions */
+    int unk_8210;                        /* +0x8210 2 functions */
+    int unk_8214;                        /* +0x8214 2 functions */
+    uint8_t pad_8218[0x8];
+    int unk_8220;                        /* +0x8220 2 functions */
+    int unk_8224;                        /* +0x8224 2 functions */
+    uint8_t pad_8228[0x8];
+}; uint8_t lf_raw[0x8230]; } Object;
+SR_STATIC_ASSERT(sizeof(Object) == 0x8230, "Object");
+SR_STATIC_ASSERT(offsetof(Object, active) == 0x0, "Object.active");
+SR_STATIC_ASSERT(offsetof(Object, type) == 0x4, "Object.type");
+SR_STATIC_ASSERT(offsetof(Object, state) == 0x8, "Object.state");
+SR_STATIC_ASSERT(offsetof(Object, health) == 0xc, "Object.health");
+SR_STATIC_ASSERT(offsetof(Object, driver) == 0x14, "Object.driver");
+SR_STATIC_ASSERT(offsetof(Object, time_to_live) == 0x1c, "Object.time_to_live");
+SR_STATIC_ASSERT(offsetof(Object, pos) == 0x24, "Object.pos");
+SR_STATIC_ASSERT(offsetof(Object, pos_prev) == 0x30, "Object.pos_prev");
+SR_STATIC_ASSERT(offsetof(Object, rot) == 0x3c, "Object.rot");
+SR_STATIC_ASSERT(offsetof(Object, vel) == 0x60, "Object.vel");
+SR_STATIC_ASSERT(offsetof(Object, vel_prev) == 0x6c, "Object.vel_prev");
+SR_STATIC_ASSERT(offsetof(Object, box_min) == 0x84, "Object.box_min");
+SR_STATIC_ASSERT(offsetof(Object, box_max) == 0x90, "Object.box_max");
+SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles");
+SR_STATIC_ASSERT(offsetof(Object, particles) == 0xac, "Object.particles");
+SR_STATIC_ASSERT(offsetof(Object, num_bonds) == 0x3b0, "Object.num_bonds");
+SR_STATIC_ASSERT(offsetof(Object, bonds) == 0x3b4, "Object.bonds");
+SR_STATIC_ASSERT(offsetof(Object, drive_input) == 0x5bbc, "Object.drive_input");
+SR_STATIC_ASSERT(offsetof(Object, drive_buttons) == 0x5bdc, "Object.drive_buttons");
+SR_STATIC_ASSERT(offsetof(Object, engine_accel) == 0x5e4c, "Object.engine_accel");
+SR_STATIC_ASSERT(offsetof(Object, engine_rpm) == 0x5e50, "Object.engine_rpm");
+SR_STATIC_ASSERT(offsetof(Object, throttle) == 0x5e54, "Object.throttle");
+SR_STATIC_ASSERT(offsetof(Object, engine_power) == 0x5e58, "Object.engine_power");
+SR_STATIC_ASSERT(offsetof(Object, gear) == 0x5e6c, "Object.gear");
+SR_STATIC_ASSERT(offsetof(Object, gear_ratio) == 0x5e78, "Object.gear_ratio");
+SR_STATIC_ASSERT(offsetof(Object, num_wheels) == 0x5ee8, "Object.num_wheels");
+SR_STATIC_ASSERT(offsetof(Object, wheels) == 0x5eec, "Object.wheels");
+SR_STATIC_ASSERT(offsetof(Object, num_wheel_bodies) == 0x71ec, "Object.num_wheel_bodies");
+SR_STATIC_ASSERT(offsetof(Object, wheel_bodies) == 0x71f0, "Object.wheel_bodies");
+SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
+SR_STATIC_ASSERT(offsetof(Object, seats) == 0x81ac, "Object.seats");
+
+/* connection[]: record of 0xf170 bytes. */
+typedef union Connection { struct {
+    uint32_t ip;                         /* +0x0000 manager (ANALISE-NPCS.md) */
+    int port;                            /* +0x0004 manager (ANALISE-NPCS.md) */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int unk_0c;                          /* +0x000c packevent: == 0 releases type 2 events */
+    int player_id;                       /* +0x0010 manager (ANALISE-NPCS.md) */
+    int send_timer;                      /* +0x0014 serversend: < 1 sends and reloads (likely) */
+    int timeout;                         /* +0x0018 servercycle: divided by 0x3c (60) (likely) */
+    int packets_received;                /* +0x001c serverrecv increments (likely) */
+    uint8_t pad_0020[0x24];
+    int event_ack;                       /* +0x0044 serverrecv reads 16 bits from the client; serversend sends events from event_ack to numofevents (max. 31 per packet, circular buffer of 0x10000) */
+    uint8_t pad_0048[0x4];
+    uint32_t sequence;                   /* +0x004c packobjectpacket2: compares bits &3 and &0x1f (likely) */
+    uint8_t pad_0050[0x104];
+    int unk_0154;                        /* +0x0154 2 functions */
+    uint8_t pad_0158[0xf000];
+    vec3 camera_pos;                     /* +0xf158 packobjectpacket: copyvector for distance */
+    vec3 listener_pos;                   /* +0xf164 packevent: vectordistance for sound range */
+}; uint8_t lf_raw[0xf170]; } Connection;
+SR_STATIC_ASSERT(sizeof(Connection) == 0xf170, "Connection");
+SR_STATIC_ASSERT(offsetof(Connection, ip) == 0x0, "Connection.ip");
+SR_STATIC_ASSERT(offsetof(Connection, port) == 0x4, "Connection.port");
+SR_STATIC_ASSERT(offsetof(Connection, unk_0c) == 0xc, "Connection.unk_0c");
+SR_STATIC_ASSERT(offsetof(Connection, player_id) == 0x10, "Connection.player_id");
+SR_STATIC_ASSERT(offsetof(Connection, send_timer) == 0x14, "Connection.send_timer");
+SR_STATIC_ASSERT(offsetof(Connection, timeout) == 0x18, "Connection.timeout");
+SR_STATIC_ASSERT(offsetof(Connection, packets_received) == 0x1c, "Connection.packets_received");
+SR_STATIC_ASSERT(offsetof(Connection, event_ack) == 0x44, "Connection.event_ack");
+SR_STATIC_ASSERT(offsetof(Connection, sequence) == 0x4c, "Connection.sequence");
+SR_STATIC_ASSERT(offsetof(Connection, camera_pos) == 0xf158, "Connection.camera_pos");
+SR_STATIC_ASSERT(offsetof(Connection, listener_pos) == 0xf164, "Connection.listener_pos");
+
+/* itemtype[]: record of 0x198 bytes. */
+typedef union ItemType { struct {
+    int price;                           /* +0x0000 setupitemtypes: the price in the shop (AK-47 500, Magnum 10000, Bandage 100) */
+    float mass;                          /* +0x0004 createitem copies it to item.mass */
+    int is_gun;                          /* +0x0008 setupitemtypes: 1 for the 6 guns (AK-47, M-16, Magnum, MP5, Uzi, 9mm), 0 for the other items; linkitem: inventory slot 2 takes only a gun, slots 3 and up only the other items */
+    uint8_t pad_000c[0x4];
+    int fire_delay;                      /* +0x0010 setupitemtypes: AK-47 8, M-16 7, MP5 5, Uzi 6, Magnum and 9mm 30 (likely: the ticks between two shots) */
+    int bullet_type;                     /* +0x0014 setupitemtypes: AK-47 0, M-16 1, MP5, Uzi and 9mm 2, Magnum 3: one of the 4 bullet types of setupbullettypes; createevent_bullet sends it */
+    int unk_0018;                        /* +0x0018 1 functions */
+    int ammo;                            /* +0x001c setupitemtypes: the rounds of a magazine (AK-47, M-16 and MP5 30, Uzi 20, 9mm 12, .45 Bullets 6) or the uses of a Bandage (2); createitem copies it to item.ammo */
+    float bullet_speed;                  /* +0x0020 setupitemtypes: AK-47 10.67, M-16 14.67, MP5 6.67 (likely: the speed of the bullet in units per tick, x 60 = 640, 880 and 400) */
+    int unk_0024;                        /* +0x0024 1 functions */
+    char name[32];                       /* +0x0028 setupitemtypes: the name of the item type (AK-47, Bandage, Open Briefcase...) */
+    uint8_t pad_0048[0x8];
+    int unk_0050;                        /* +0x0050 1 functions */
+    uint8_t pad_0054[0x18];
+    float unk_006c;                      /* +0x006c 1 functions */
+    int unk_0070;                        /* +0x0070 1 functions */
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 1 functions */
+    vec3 size;                           /* +0x0080 setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass) */
+    vec3 inv_inertia;                    /* +0x008c setupitemtypes: 1 / ((b * b + c * c) / 3) from size: the inverse of the moment of inertia of a box, for a mass of 1 */
+    int fits_in[64];                     /* +0x0098 linkitemtoitem: a child item goes into a parent only when fits_in[parent type] != 0 (one int for each of the 64 item types) */
+}; uint8_t lf_raw[0x198]; } ItemType;
+SR_STATIC_ASSERT(sizeof(ItemType) == 0x198, "ItemType");
+SR_STATIC_ASSERT(offsetof(ItemType, price) == 0x0, "ItemType.price");
+SR_STATIC_ASSERT(offsetof(ItemType, mass) == 0x4, "ItemType.mass");
+SR_STATIC_ASSERT(offsetof(ItemType, is_gun) == 0x8, "ItemType.is_gun");
+SR_STATIC_ASSERT(offsetof(ItemType, fire_delay) == 0x10, "ItemType.fire_delay");
+SR_STATIC_ASSERT(offsetof(ItemType, bullet_type) == 0x14, "ItemType.bullet_type");
+SR_STATIC_ASSERT(offsetof(ItemType, ammo) == 0x1c, "ItemType.ammo");
+SR_STATIC_ASSERT(offsetof(ItemType, bullet_speed) == 0x20, "ItemType.bullet_speed");
+SR_STATIC_ASSERT(offsetof(ItemType, name) == 0x28, "ItemType.name");
+SR_STATIC_ASSERT(offsetof(ItemType, size) == 0x80, "ItemType.size");
+SR_STATIC_ASSERT(offsetof(ItemType, inv_inertia) == 0x8c, "ItemType.inv_inertia");
+SR_STATIC_ASSERT(offsetof(ItemType, fits_in) == 0x98, "ItemType.fits_in");
+
+/* objecttype[]: record of 0x828c bytes. */
+typedef union ObjectType { struct {
+    uint8_t pad_0000[0xc];
+    int unk_000c;                        /* +0x000c 1 functions */
+    uint8_t pad_0010[0x1c];
+    int unk_002c;                        /* +0x002c 4 functions */
+    float unk_0030;                      /* +0x0030 4 functions */
+    float unk_0034;                      /* +0x0034 1 functions */
+    int num_particles;                   /* +0x0038 objecttype_addparticle increments (stride 0x14) */
+    uint8_t pad_003c[0x7c];
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    uint8_t pad_00bc[0x24];
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    uint8_t pad_00e4[0x38];
+    int unk_011c;                        /* +0x011c 1 functions */
+    uint8_t pad_0120[0x41c];
+    int unk_053c;                        /* +0x053c 5 functions */
+    int unk_0540;                        /* +0x0540 1 functions */
+    uint8_t pad_0544[0xfc];
+    int unk_0640;                        /* +0x0640 1 functions */
+    uint8_t pad_0644[0xfc];
+    int num_bonds;                       /* +0x0740 objecttype_addbond increments (stride 0xc) */
+    uint8_t pad_0744[0xc00];
+    int num_faces;                       /* +0x1344 objecttype_addface increments (stride 0x40) */
+    uint8_t pad_1348[0x4000];
+    int num_quads;                       /* +0x5348 setupobjectypes_train: 4 particle indices per record (stride 0x20); objectsimulation (likely) */
+    uint8_t pad_534c[0x2000];
+    int unk_734c;                        /* +0x734c 1 functions */
+    uint8_t pad_7350[0x408];
+    float engine_power;                  /* +0x7758 createobject copies it (× constant) to object.engine_power */
+    int num_wheels;                      /* +0x775c objecttype_addwheel increments (stride 0x44) */
+    uint8_t pad_7760[0x880];
+    float unk_7fe0;                      /* +0x7fe0 2 functions */
+    float unk_7fe4;                      /* +0x7fe4 2 functions */
+    uint8_t pad_7fe8[0x94];
+    int num_seats;                       /* +0x807c setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats) */
+    uint8_t pad_8080[0x208];
+    int unk_8288;                        /* +0x8288 1 functions */
+}; uint8_t lf_raw[0x828c]; } ObjectType;
+SR_STATIC_ASSERT(sizeof(ObjectType) == 0x828c, "ObjectType");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_particles) == 0x38, "ObjectType.num_particles");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_bonds) == 0x740, "ObjectType.num_bonds");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_faces) == 0x1344, "ObjectType.num_faces");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_quads) == 0x5348, "ObjectType.num_quads");
+SR_STATIC_ASSERT(offsetof(ObjectType, engine_power) == 0x7758, "ObjectType.engine_power");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_wheels) == 0x775c, "ObjectType.num_wheels");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_seats) == 0x807c, "ObjectType.num_seats");
+
+/* bond[]: record of 0xec bytes. */
+typedef union Bond { struct {
+    int type;                            /* +0x0000 bondsimulation2 switches on it: 0 particle pair, 5 wheel, 8 joint, 9 and 10 (createjointbond writes 8) */
+    int subtype;                         /* +0x0004 createbond: parameter 1, from the objecttype bond list (+0x744); mode is 0 when it is 1 */
+    int time_to_live;                    /* +0x0008 createbond writes 0x10000 (no limit); bondtimetolive counts it down */
+    int mode;                            /* +0x000c createbond: 3, or 0 if type 1; humansimulation toggles 0/3 */
+    int num_particles;                   /* +0x0010 createbond writes 2; deletebond loops over the particle indices from +0x14 */
+    int particle_a;                      /* +0x0014 createbond: parameter 2 (index into particle[]) */
+    int particle_b;                      /* +0x0018 createbond: parameter 3 */
+    int particle_c;                      /* +0x001c types 3 and 4: the second particle of the hit triangle (g_intersect.tri_particles[1]) */
+    int particle_d;                      /* +0x0020 types 3 and 4: the third particle of the hit triangle (g_intersect.tri_particles[2]) */
+    uint8_t pad_0024[0x4];
+    vec3 arm;                            /* +0x0028 type 7: the hit point minus the bone position (humansimulation); the push turns the bone around it */
+    vec3 local_a;                        /* +0x0034 bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation) */
+    vec3 local_b;                        /* +0x0040 bondsimulation2 type 10: point on the item (weights of the rows of item.rot) */
+    float weights[3];                    /* +0x004c types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1] */
+    uint8_t pad_0058[0x8];
+    float rest_length;                   /* +0x0060 bondsimulation2: (dist - rest) * k (likely) */
+    uint8_t pad_0064[0x8];
+    float stiffness;                     /* +0x006c bondsimulation2: force = (distance - rest_length) * stiffness */
+    float damping;                       /* +0x0070 bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir */
+    vec3 normal;                         /* +0x0074 contact bonds (types 1 to 4, 7): the normal of the hit surface (g_intersect.normal) */
+    float friction;                      /* +0x0080 contact bonds: objectsimulation writes 0.6 against the level and 0.4 against an object; calculatefriction uses it */
+    uint8_t pad_0084[0x8];
+    int num_objects;                     /* +0x008c createbond appends parameter 4 to the list at +0x90; deletebond loops over it */
+    int owner;                           /* +0x0090 types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c) */
+    int bone_a;                          /* +0x0094 bondsimulation2: bone index (stride 0xe0) */
+    int target;                          /* +0x0098 bondsimulation2: types 10, 11 and 14 = item index; type 13 = the second human; type 8 = second bone */
+    int bone_b;                          /* +0x009c type 13: the bone of the second human (target) that bone_a touches */
+    uint8_t pad_00a0[0x10];
+    vec3 roll_dir;                       /* +0x00b0 type 5: the direction in which the wheel rolls on the ground (objectwheelcollision: the wheel axle crossed twice with the normal) */
+    vec3 surface_vel;                    /* +0x00bc contact bonds: the velocity of the hit surface; objectsimulation writes 0 for the level */
+    uint8_t pad_00c8[0x24];
+}; uint8_t lf_raw[0xec]; } Bond;
+SR_STATIC_ASSERT(sizeof(Bond) == 0xec, "Bond");
+SR_STATIC_ASSERT(offsetof(Bond, type) == 0x0, "Bond.type");
+SR_STATIC_ASSERT(offsetof(Bond, subtype) == 0x4, "Bond.subtype");
+SR_STATIC_ASSERT(offsetof(Bond, time_to_live) == 0x8, "Bond.time_to_live");
+SR_STATIC_ASSERT(offsetof(Bond, mode) == 0xc, "Bond.mode");
+SR_STATIC_ASSERT(offsetof(Bond, num_particles) == 0x10, "Bond.num_particles");
+SR_STATIC_ASSERT(offsetof(Bond, particle_a) == 0x14, "Bond.particle_a");
+SR_STATIC_ASSERT(offsetof(Bond, particle_b) == 0x18, "Bond.particle_b");
+SR_STATIC_ASSERT(offsetof(Bond, particle_c) == 0x1c, "Bond.particle_c");
+SR_STATIC_ASSERT(offsetof(Bond, particle_d) == 0x20, "Bond.particle_d");
+SR_STATIC_ASSERT(offsetof(Bond, arm) == 0x28, "Bond.arm");
+SR_STATIC_ASSERT(offsetof(Bond, local_a) == 0x34, "Bond.local_a");
+SR_STATIC_ASSERT(offsetof(Bond, local_b) == 0x40, "Bond.local_b");
+SR_STATIC_ASSERT(offsetof(Bond, weights) == 0x4c, "Bond.weights");
+SR_STATIC_ASSERT(offsetof(Bond, rest_length) == 0x60, "Bond.rest_length");
+SR_STATIC_ASSERT(offsetof(Bond, stiffness) == 0x6c, "Bond.stiffness");
+SR_STATIC_ASSERT(offsetof(Bond, damping) == 0x70, "Bond.damping");
+SR_STATIC_ASSERT(offsetof(Bond, normal) == 0x74, "Bond.normal");
+SR_STATIC_ASSERT(offsetof(Bond, friction) == 0x80, "Bond.friction");
+SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
+SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
+SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
+SR_STATIC_ASSERT(offsetof(Bond, target) == 0x98, "Bond.target");
+SR_STATIC_ASSERT(offsetof(Bond, bone_b) == 0x9c, "Bond.bone_b");
+SR_STATIC_ASSERT(offsetof(Bond, roll_dir) == 0xb0, "Bond.roll_dir");
+SR_STATIC_ASSERT(offsetof(Bond, surface_vel) == 0xbc, "Bond.surface_vel");
+
+/* event[]: record of 0x80 bytes. */
+typedef union Event { struct {
+    int type;                            /* +0x0000 packevent: pbitwrite 6 bits; createevent_sound writes 9 */
+    int tick;                            /* +0x0004 packevent: 28 bits; compared with game+0x34 (age < 600) */
+    vec3 pos;                            /* +0x0008 packevent: cs_pwrite 3 floats; createevent_sound: position */
+    vec3 vec;                            /* +0x0014 packevent: cs_pwrite 3 floats */
+    int param;                           /* +0x0020 createevent_sound: sound id; packevent: 4 bits in some types */
+    int attach_type;                     /* +0x0024 packevent: 1 = human (uses human+0x288), 2 = item (uses item.pos) */
+    int attach_id;                       /* +0x0028 packevent: human/item index; 10 bits, signed */
+    int range_mode;                      /* +0x002c packevent: 0 reduces, 2 doubles the range by distance */
+    float sound_a;                       /* +0x0030 createevent_sound: parameter 3 */
+    float sound_b;                       /* +0x0034 createevent_sound: parameter 4 */
+    uint8_t pad_0038[0x8];
+    char message[64];                    /* +0x0040 createevent_message: memcpy of the text (max. 63 characters) */
+}; uint8_t lf_raw[0x80]; } Event;
+SR_STATIC_ASSERT(sizeof(Event) == 0x80, "Event");
+SR_STATIC_ASSERT(offsetof(Event, type) == 0x0, "Event.type");
+SR_STATIC_ASSERT(offsetof(Event, tick) == 0x4, "Event.tick");
+SR_STATIC_ASSERT(offsetof(Event, pos) == 0x8, "Event.pos");
+SR_STATIC_ASSERT(offsetof(Event, vec) == 0x14, "Event.vec");
+SR_STATIC_ASSERT(offsetof(Event, param) == 0x20, "Event.param");
+SR_STATIC_ASSERT(offsetof(Event, attach_type) == 0x24, "Event.attach_type");
+SR_STATIC_ASSERT(offsetof(Event, attach_id) == 0x28, "Event.attach_id");
+SR_STATIC_ASSERT(offsetof(Event, range_mode) == 0x2c, "Event.range_mode");
+SR_STATIC_ASSERT(offsetof(Event, sound_a) == 0x30, "Event.sound_a");
+SR_STATIC_ASSERT(offsetof(Event, sound_b) == 0x34, "Event.sound_b");
+SR_STATIC_ASSERT(offsetof(Event, message) == 0x40, "Event.message");
+
+/* bullet[]: record of 0x5c bytes. */
+typedef union Bullet { struct {
+    int type;                            /* +0x0000 createbullet: parameter 1 */
+    int ttl;                             /* +0x0004 createbullet writes 600 */
+    int owner;                           /* +0x0008 createbullet: parameter 4 */
+    float mass;                          /* +0x000c createbullet copies the mass of the bullet type (setupbullettypes, in kg) */
+    float gravity;                       /* +0x0010 createbullet writes 0.0027222 (9.8 / 3600: the fall in one tick at 60 ticks per second) */
+    vec3 pos;                            /* +0x0014 createbullet: parameter 2 */
+    vec3 pos_prev;                       /* +0x0020 createbullet: copy of the position */
+    vec3 vel;                            /* +0x002c createbullet: parameter 3 */
+    vec3 side;                           /* +0x0038 createbullet: back x (x axis or y axis), normalized */
+    vec3 up;                             /* +0x0044 createbullet: side x back, normalized */
+    vec3 back;                           /* +0x0050 createbullet: -velocity, normalized */
+}; uint8_t lf_raw[0x5c]; } Bullet;
+SR_STATIC_ASSERT(sizeof(Bullet) == 0x5c, "Bullet");
+SR_STATIC_ASSERT(offsetof(Bullet, type) == 0x0, "Bullet.type");
+SR_STATIC_ASSERT(offsetof(Bullet, ttl) == 0x4, "Bullet.ttl");
+SR_STATIC_ASSERT(offsetof(Bullet, owner) == 0x8, "Bullet.owner");
+SR_STATIC_ASSERT(offsetof(Bullet, mass) == 0xc, "Bullet.mass");
+SR_STATIC_ASSERT(offsetof(Bullet, gravity) == 0x10, "Bullet.gravity");
+SR_STATIC_ASSERT(offsetof(Bullet, pos) == 0x14, "Bullet.pos");
+SR_STATIC_ASSERT(offsetof(Bullet, pos_prev) == 0x20, "Bullet.pos_prev");
+SR_STATIC_ASSERT(offsetof(Bullet, vel) == 0x2c, "Bullet.vel");
+SR_STATIC_ASSERT(offsetof(Bullet, side) == 0x38, "Bullet.side");
+SR_STATIC_ASSERT(offsetof(Bullet, up) == 0x44, "Bullet.up");
+SR_STATIC_ASSERT(offsetof(Bullet, back) == 0x50, "Bullet.back");
+
+/* body[]: record of 0x40 bytes. */
+typedef union Body { struct {
+    int parent;                          /* +0x0000 humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent */
+    vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
+    int unk_0010;                        /* +0x0010 3 functions */
+    int unk_0014;                        /* +0x0014 4 functions */
+    int unk_0018;                        /* +0x0018 4 functions */
+    float unk_001c;                      /* +0x001c 2 functions */
+    float unk_0020;                      /* +0x0020 3 functions */
+    float unk_0024;                      /* +0x0024 3 functions */
+    float unk_0028;                      /* +0x0028 3 functions */
+    int unk_002c;                        /* +0x002c 1 functions */
+    float unk_0030;                      /* +0x0030 2 functions */
+    float unk_0034;                      /* +0x0034 1 functions */
+    float unk_0038;                      /* +0x0038 1 functions */
+    uint8_t pad_003c[0x4];
+}; uint8_t lf_raw[0x40]; } Body;
+SR_STATIC_ASSERT(sizeof(Body) == 0x40, "Body");
+SR_STATIC_ASSERT(offsetof(Body, parent) == 0x0, "Body.parent");
+SR_STATIC_ASSERT(offsetof(Body, pos) == 0x4, "Body.pos");
+
+/* game[]: record of 0x25d64 bytes. */
+typedef union Game { struct {
+    uint8_t pad_0000[0x4];
+    int unk_0004;                        /* +0x0004 1 functions */
+    int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
+    int unk_000c;                        /* +0x000c 2 functions */
+    uint8_t pad_0010[0xc];
+    int round_number;                    /* +0x001c resetgame adds 1 (likely); serversend sends it */
+    int state;                           /* +0x0020 1 and 2; manager: 2 = match running */
+    int timer;                           /* +0x0024 decreases by 1 each tick; 0 changes the state */
+    int wait_time;                       /* +0x0028 dedicatedserverloop writes 0xe10 (3600 ticks) */
+    int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
+    float unk_0030;                      /* +0x0030 1 functions */
+    int unk_0034;                        /* +0x0034 dedicatedserverloop writes 0x4ec */
+    int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
+    uint8_t pad_003c[0x10];
+    float unk_004c;                      /* +0x004c 3 functions */
+    float unk_0050;                      /* +0x0050 3 functions */
+    uint8_t pad_0054[0x4];
+    float unk_0058;                      /* +0x0058 2 functions */
+    float unk_005c;                      /* +0x005c 2 functions */
+    float unk_0060;                      /* +0x0060 2 functions */
+    float unk_0064;                      /* +0x0064 2 functions */
+    float unk_0068;                      /* +0x0068 2 functions */
+    float unk_006c;                      /* +0x006c 2 functions */
+    float unk_0070;                      /* +0x0070 6 functions */
+    float unk_0074;                      /* +0x0074 6 functions */
+    float unk_0078;                      /* +0x0078 6 functions */
+    float unk_007c;                      /* +0x007c 6 functions */
+    float unk_0080;                      /* +0x0080 6 functions */
+    float unk_0084;                      /* +0x0084 6 functions */
+    float unk_0088;                      /* +0x0088 2 functions */
+    int unk_008c;                        /* +0x008c 1 functions */
+    int unk_0090;                        /* +0x0090 7 functions */
+    uint8_t pad_0094[0x4];
+    int unk_0098;                        /* +0x0098 2 functions */
+    int team0_manager;                   /* +0x009c logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
+    uint8_t pad_00a0[0x10];
+    int unk_00b0;                        /* +0x00b0 2 functions */
+    int unk_00b4;                        /* +0x00b4 2 functions */
+    int unk_00b8;                        /* +0x00b8 2 functions */
+    int unk_00bc;                        /* +0x00bc 2 functions */
+    int unk_00c0;                        /* +0x00c0 2 functions */
+    int unk_00c4;                        /* +0x00c4 2 functions */
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 12 functions */
+    int unk_00d4;                        /* +0x00d4 6 functions */
+    int unk_00d8;                        /* +0x00d8 6 functions */
+    int unk_00dc;                        /* +0x00dc 8 functions */
+    int unk_00e0;                        /* +0x00e0 3 functions */
+    int unk_00e4;                        /* +0x00e4 1 functions */
+    uint8_t pad_00e8[0x8];
+    int unk_00f0;                        /* +0x00f0 4 functions */
+    int unk_00f4;                        /* +0x00f4 5 functions */
+    int unk_00f8;                        /* +0x00f8 5 functions */
+    int unk_00fc;                        /* +0x00fc 2 functions */
+    int unk_0100;                        /* +0x0100 7 functions */
+    int unk_0104;                        /* +0x0104 2 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    uint8_t pad_010c[0x4];
+    int unk_0110;                        /* +0x0110 10 functions */
+    int unk_0114;                        /* +0x0114 5 functions */
+    int unk_0118;                        /* +0x0118 4 functions */
+    int unk_011c;                        /* +0x011c 6 functions */
+    uint8_t pad_0120[0x10];
+    int unk_0130;                        /* +0x0130 1 functions */
+    uint8_t pad_0134[0x4];
+    int unk_0138;                        /* +0x0138 1 functions */
+    uint8_t pad_013c[0x4];
+    int unk_0140;                        /* +0x0140 2 functions */
+    uint8_t pad_0144[0xc];
+    int unk_0150;                        /* +0x0150 7 functions */
+    int unk_0154;                        /* +0x0154 3 functions */
+    int unk_0158;                        /* +0x0158 3 functions */
+    int unk_015c;                        /* +0x015c 4 functions */
+    uint8_t pad_0160[0x10];
+    int unk_0170;                        /* +0x0170 1 functions */
+    uint8_t pad_0174[0xc];
+    int unk_0180;                        /* +0x0180 1 functions */
+    uint8_t pad_0184[0xc];
+    int unk_0190;                        /* +0x0190 7 functions */
+    int unk_0194;                        /* +0x0194 3 functions */
+    int unk_0198;                        /* +0x0198 4 functions */
+    int unk_019c;                        /* +0x019c 5 functions */
+    int unk_01a0;                        /* +0x01a0 1 functions */
+    uint8_t pad_01a4[0xc];
+    int unk_01b0;                        /* +0x01b0 2 functions */
+    int unk_01b4;                        /* +0x01b4 1 functions */
+    int unk_01b8;                        /* +0x01b8 1 functions */
+    uint8_t pad_01bc[0x4];
+    int unk_01c0;                        /* +0x01c0 2 functions */
+    int unk_01c4;                        /* +0x01c4 1 functions */
+    float unk_01c8;                      /* +0x01c8 1 functions */
+    float unk_01cc;                      /* +0x01cc 1 functions */
+    int unk_01d0;                        /* +0x01d0 7 functions */
+    int unk_01d4;                        /* +0x01d4 1 functions */
+    int unk_01d8;                        /* +0x01d8 1 functions */
+    int unk_01dc;                        /* +0x01dc 3 functions */
+    uint8_t pad_01e0[0x20];
+    int unk_0200;                        /* +0x0200 1 functions */
+    uint8_t pad_0204[0x4];
+    float unk_0208;                      /* +0x0208 1 functions */
+    uint8_t pad_020c[0x4];
+    int unk_0210;                        /* +0x0210 7 functions */
+    int unk_0214;                        /* +0x0214 1 functions */
+    int unk_0218;                        /* +0x0218 1 functions */
+    int unk_021c;                        /* +0x021c 3 functions */
+    uint8_t pad_0220[0x20];
+    int unk_0240;                        /* +0x0240 1 functions */
+    uint8_t pad_0244[0x4];
+    float unk_0248;                      /* +0x0248 1 functions */
+    uint8_t pad_024c[0x4];
+    int unk_0250;                        /* +0x0250 7 functions */
+    int unk_0254;                        /* +0x0254 1 functions */
+    int unk_0258;                        /* +0x0258 1 functions */
+    int unk_025c;                        /* +0x025c 3 functions */
+    uint8_t pad_0260[0x20];
+    int unk_0280;                        /* +0x0280 1 functions */
+    uint8_t pad_0284[0x4];
+    float unk_0288;                      /* +0x0288 1 functions */
+    uint8_t pad_028c[0x4];
+    int unk_0290;                        /* +0x0290 7 functions */
+    int unk_0294;                        /* +0x0294 1 functions */
+    int unk_0298;                        /* +0x0298 1 functions */
+    int unk_029c;                        /* +0x029c 2 functions */
+    uint8_t pad_02a0[0x20];
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    uint8_t pad_02c4[0x4];
+    float unk_02c8;                      /* +0x02c8 1 functions */
+    uint8_t pad_02cc[0x4];
+    int unk_02d0;                        /* +0x02d0 4 functions */
+    int unk_02d4;                        /* +0x02d4 3 functions */
+    int unk_02d8;                        /* +0x02d8 3 functions */
+    int unk_02dc;                        /* +0x02dc 3 functions */
+    int unk_02e0;                        /* +0x02e0 2 functions */
+    uint8_t pad_02e4[0xc];
+    int unk_02f0;                        /* +0x02f0 3 functions */
+    int unk_02f4;                        /* +0x02f4 3 functions */
+    int unk_02f8;                        /* +0x02f8 3 functions */
+    int unk_02fc;                        /* +0x02fc 1 functions */
+    int unk_0300;                        /* +0x0300 4 functions */
+    uint8_t pad_0304[0x4];
+    float unk_0308;                      /* +0x0308 3 functions */
+    float unk_030c;                      /* +0x030c 3 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    uint8_t pad_0314[0x2c];
+    int unk_0340;                        /* +0x0340 1 functions */
+    uint8_t pad_0344[0xc];
+    int unk_0350;                        /* +0x0350 1 functions */
+    uint8_t pad_0354[0x2c];
+    int unk_0380;                        /* +0x0380 1 functions */
+    uint8_t pad_0384[0xc];
+    int unk_0390;                        /* +0x0390 1 functions */
+    uint8_t pad_0394[0x2c];
+    int unk_03c0;                        /* +0x03c0 1 functions */
+    uint8_t pad_03c4[0xc];
+    int unk_03d0;                        /* +0x03d0 1 functions */
+    uint8_t pad_03d4[0x2c];
+    int unk_0400;                        /* +0x0400 1 functions */
+    uint8_t pad_0404[0xc];
+    int unk_0410;                        /* +0x0410 1 functions */
+    uint8_t pad_0414[0x2c];
+    int unk_0440;                        /* +0x0440 1 functions */
+    uint8_t pad_0444[0xc];
+    int unk_0450;                        /* +0x0450 1 functions */
+    uint8_t pad_0454[0x2c];
+    int unk_0480;                        /* +0x0480 1 functions */
+    uint8_t pad_0484[0xc];
+    int unk_0490;                        /* +0x0490 1 functions */
+    uint8_t pad_0494[0x2c];
+    int unk_04c0;                        /* +0x04c0 1 functions */
+    uint8_t pad_04c4[0xc];
+    int unk_04d0;                        /* +0x04d0 4 functions */
+    int unk_04d4;                        /* +0x04d4 3 functions */
+    float unk_04d8;                      /* +0x04d8 1 functions */
+    float unk_04dc;                      /* +0x04dc 1 functions */
+    float unk_04e0;                      /* +0x04e0 1 functions */
+    float unk_04e4;                      /* +0x04e4 1 functions */
+    float unk_04e8;                      /* +0x04e8 1 functions */
+    float unk_04ec;                      /* +0x04ec 1 functions */
+    float unk_04f0;                      /* +0x04f0 1 functions */
+    float unk_04f4;                      /* +0x04f4 1 functions */
+    float unk_04f8;                      /* +0x04f8 1 functions */
+    float unk_04fc;                      /* +0x04fc 1 functions */
+    float unk_0500;                      /* +0x0500 1 functions */
+    float unk_0504;                      /* +0x0504 1 functions */
+    int unk_0508;                        /* +0x0508 2 functions */
+    int unk_050c;                        /* +0x050c 1 functions */
+    uint8_t pad_0510[0x8];
+    int unk_0518;                        /* +0x0518 1 functions */
+    uint8_t pad_051c[0x20];
+    int unk_053c;                        /* +0x053c 1 functions */
+    uint8_t pad_0540[0xcac];
+    float unk_11ec;                      /* +0x11ec 1 functions */
+    float unk_11f0;                      /* +0x11f0 1 functions */
+    float unk_11f4;                      /* +0x11f4 1 functions */
+    float unk_11f8;                      /* +0x11f8 1 functions */
+    float unk_11fc;                      /* +0x11fc 1 functions */
+    float unk_1200;                      /* +0x1200 1 functions */
+    uint8_t pad_1204[0x4];
+    int unk_1208;                        /* +0x1208 1 functions */
+    int unk_120c;                        /* +0x120c 6 functions */
+    uint8_t pad_1210[0x4];
+    int unk_1214;                        /* +0x1214 2 functions */
+    int team1_manager;                   /* +0x1218 as team0_manager, team record 1 */
+    uint8_t pad_121c[0x30];
+    int unk_124c;                        /* +0x124c 5 functions */
+    int unk_1250;                        /* +0x1250 2 functions */
+    int unk_1254;                        /* +0x1254 1 functions */
+    int unk_1258;                        /* +0x1258 4 functions */
+    uint8_t pad_125c[0x20];
+    int unk_127c;                        /* +0x127c 2 functions */
+    int unk_1280;                        /* +0x1280 1 functions */
+    float unk_1284;                      /* +0x1284 1 functions */
+    float unk_1288;                      /* +0x1288 1 functions */
+    int unk_128c;                        /* +0x128c 3 functions */
+    int unk_1290;                        /* +0x1290 1 functions */
+    uint8_t pad_1294[0x4];
+    int unk_1298;                        /* +0x1298 2 functions */
+    uint8_t pad_129c[0x30];
+    int unk_12cc;                        /* +0x12cc 1 functions */
+    uint8_t pad_12d0[0x8];
+    int unk_12d8;                        /* +0x12d8 1 functions */
+    uint8_t pad_12dc[0x30];
+    int unk_130c;                        /* +0x130c 1 functions */
+    uint8_t pad_1310[0x33c];
+    int unk_164c;                        /* +0x164c 2 functions */
+    int unk_1650;                        /* +0x1650 1 functions */
+    float unk_1654;                      /* +0x1654 1 functions */
+    float unk_1658;                      /* +0x1658 1 functions */
+    float unk_165c;                      /* +0x165c 1 functions */
+    int unk_1660;                        /* +0x1660 1 functions */
+    uint8_t pad_1664[0x14];
+    float unk_1678;                      /* +0x1678 1 functions */
+    float unk_167c;                      /* +0x167c 1 functions */
+    float unk_1680;                      /* +0x1680 1 functions */
+    int unk_1684;                        /* +0x1684 1 functions */
+    uint8_t pad_1688[0xd00];
+    int unk_2388;                        /* +0x2388 4 functions */
+    uint8_t pad_238c[0x8];
+    int team2_manager;                   /* +0x2394 as team0_manager, team record 2 */
+    uint8_t pad_2398[0x430];
+    int unk_27c8;                        /* +0x27c8 1 functions */
+    uint8_t pad_27cc[0xd30];
+    float unk_34fc;                      /* +0x34fc 1 functions */
+    uint8_t pad_3500[0x4];
+    int unk_3504;                        /* +0x3504 2 functions */
+    uint8_t pad_3508[0x8];
+    int team3_manager;                   /* +0x3510 as team0_manager, team record 3 */
+    uint8_t pad_3514[0x430];
+    int unk_3944;                        /* +0x3944 1 functions */
+    uint8_t pad_3948[0xd30];
+    float unk_4678;                      /* +0x4678 1 functions */
+    uint8_t pad_467c[0x4];
+    int unk_4680;                        /* +0x4680 2 functions */
+    uint8_t pad_4684[0x8];
+    int team4_manager;                   /* +0x468c as team0_manager, team record 4 */
+    uint8_t pad_4690[0x430];
+    int unk_4ac0;                        /* +0x4ac0 1 functions */
+    uint8_t pad_4ac4[0xd38];
+    int unk_57fc;                        /* +0x57fc 1 functions */
+    uint8_t pad_5800[0x43c];
+    int unk_5c3c;                        /* +0x5c3c 1 functions */
+    uint8_t pad_5c40[0xd38];
+    int unk_6978;                        /* +0x6978 1 functions */
+    uint8_t pad_697c[0x43c];
+    int unk_6db8;                        /* +0x6db8 1 functions */
+    uint8_t pad_6dbc[0xd38];
+    int unk_7af4;                        /* +0x7af4 1 functions */
+    uint8_t pad_7af8[0x8];
+    int unk_7b00;                        /* +0x7b00 1 functions */
+    uint8_t pad_7b04[0x430];
+    int unk_7f34;                        /* +0x7f34 1 functions */
+    uint8_t pad_7f38[0x1b0a0];
+    int unk_22fd8;                       /* +0x22fd8 1 functions */
+    uint8_t pad_22fdc[0x2800];
+    int unk_257dc;                       /* +0x257dc 1 functions */
+    int unk_257e0;                       /* +0x257e0 1 functions */
+    uint8_t pad_257e4[0x4];
+    int unk_257e8;                       /* +0x257e8 1 functions */
+    float unk_257ec;                     /* +0x257ec 1 functions */
+    int unk_257f0;                       /* +0x257f0 1 functions */
+    float unk_257f4;                     /* +0x257f4 1 functions */
+    float unk_257f8;                     /* +0x257f8 1 functions */
+    float unk_257fc;                     /* +0x257fc 1 functions */
+    float unk_25800;                     /* +0x25800 1 functions */
+    float unk_25804;                     /* +0x25804 1 functions */
+    float unk_25808;                     /* +0x25808 1 functions */
+    uint8_t pad_2580c[0x168];
+    int unk_25974;                       /* +0x25974 1 functions */
+    int unk_25978;                       /* +0x25978 1 functions */
+    uint8_t pad_2597c[0x3e4];
+    int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
+}; uint8_t lf_raw[0x25d64]; } Game;
+SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
+SR_STATIC_ASSERT(offsetof(Game, round_number) == 0x1c, "Game.round_number");
+SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
+SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
+SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
+SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
+SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
+SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
+SR_STATIC_ASSERT(offsetof(Game, team1_manager) == 0x1218, "Game.team1_manager");
+SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
+SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
+SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
+SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
+
+/* particle[]: record of 0xf0 bytes. */
+typedef union Particle { struct {
+    int type;                            /* +0x0000 createparticle: parameter 1 */
+    int time_to_live;                    /* +0x0004 createparticle writes 0x10000 (no limit); particletimetolive counts it down */
+    float mass;                          /* +0x0008 createparticle: parameter 4; bondsimulation2 uses 1 / (mass_a + mass_b) */
+    float gravity;                       /* +0x000c createparticle writes 0.0027222; particlesimulation subtracts it from vel.y */
+    float unk_0010;                      /* +0x0010 1 functions */
+    vec3 pos;                            /* +0x0014 createparticle: parameter 2 */
+    vec3 pos_prev;                       /* +0x0020 particlesimulation copies pos here before it adds vel */
+    vec3 vel;                            /* +0x002c createparticle: parameter 3; particlesimulation adds it to pos */
+    vec3 vel_prev;                       /* +0x0038 particlesimulation copies vel here */
+    float unk_0044;                      /* +0x0044 1 functions */
+    float unk_0048;                      /* +0x0048 1 functions */
+    float unk_004c;                      /* +0x004c 1 functions */
+    int num_bonds;                       /* +0x0050 createbond appends to the list at +0x54, limit 31 */
+    int bonds[31];                       /* +0x0054 createbond; deletebond and particletimetolive remove from it */
+    uint8_t pad_00d0[0x4];
+    int num_objects;                     /* +0x00d4 createparticle appends parameter 5 to the list at +0xd8 */
+    int objects[6];                      /* +0x00d8 particletimetolive renames the particle in each object of this list */
+}; uint8_t lf_raw[0xf0]; } Particle;
+SR_STATIC_ASSERT(sizeof(Particle) == 0xf0, "Particle");
+SR_STATIC_ASSERT(offsetof(Particle, type) == 0x0, "Particle.type");
+SR_STATIC_ASSERT(offsetof(Particle, time_to_live) == 0x4, "Particle.time_to_live");
+SR_STATIC_ASSERT(offsetof(Particle, mass) == 0x8, "Particle.mass");
+SR_STATIC_ASSERT(offsetof(Particle, gravity) == 0xc, "Particle.gravity");
+SR_STATIC_ASSERT(offsetof(Particle, pos) == 0x14, "Particle.pos");
+SR_STATIC_ASSERT(offsetof(Particle, pos_prev) == 0x20, "Particle.pos_prev");
+SR_STATIC_ASSERT(offsetof(Particle, vel) == 0x2c, "Particle.vel");
+SR_STATIC_ASSERT(offsetof(Particle, vel_prev) == 0x38, "Particle.vel_prev");
+SR_STATIC_ASSERT(offsetof(Particle, num_bonds) == 0x50, "Particle.num_bonds");
+SR_STATIC_ASSERT(offsetof(Particle, bonds) == 0x54, "Particle.bonds");
+SR_STATIC_ASSERT(offsetof(Particle, num_objects) == 0xd4, "Particle.num_objects");
+SR_STATIC_ASSERT(offsetof(Particle, objects) == 0xd8, "Particle.objects");
+
+/* timer[]: record of 0x58 bytes. */
+typedef union Timer { struct {
+    char name[64];                       /* +0x0000 bondsimulation2 copies the timer name here, for example "bondsim" */
+    int start_lo;                        /* +0x0040 the code that starts a timer writes the low half of rdtsc */
+    int start_hi;                        /* +0x0044 the high half of rdtsc at the start */
+    int total_lo;                        /* +0x0048 stoptimer adds the cycles since the start; bondsimulation2 clears it */
+    int total_hi;                        /* +0x004c the high half of the total */
+    int ms;                              /* +0x0050 stoptimer: the total in milliseconds */
+    int unk_0054;                        /* +0x0054 1 functions */
+}; uint8_t lf_raw[0x58]; } Timer;
+SR_STATIC_ASSERT(sizeof(Timer) == 0x58, "Timer");
+SR_STATIC_ASSERT(offsetof(Timer, name) == 0x0, "Timer.name");
+SR_STATIC_ASSERT(offsetof(Timer, start_lo) == 0x40, "Timer.start_lo");
+SR_STATIC_ASSERT(offsetof(Timer, start_hi) == 0x44, "Timer.start_hi");
+SR_STATIC_ASSERT(offsetof(Timer, total_lo) == 0x48, "Timer.total_lo");
+SR_STATIC_ASSERT(offsetof(Timer, total_hi) == 0x4c, "Timer.total_hi");
+SR_STATIC_ASSERT(offsetof(Timer, ms) == 0x50, "Timer.ms");
+
+/* area_block[]: record of 0x84 bytes. */
+typedef union AreaBlock { struct {
+    uint8_t pad_0000[0x1];
+    char unk_0001;                       /* +0x0001 1 functions */
+    char unk_0002;                       /* +0x0002 1 functions */
+    char unk_0003;                       /* +0x0003 1 functions */
+    uint8_t pad_0004[0x2];
+    char unk_0006;                       /* +0x0006 1 functions */
+    uint8_t pad_0007[0x1];
+    int unk_0008;                        /* +0x0008 1 functions */
+    uint8_t pad_000c[0x8];
+    char unk_0014;                       /* +0x0014 1 functions */
+    uint8_t pad_0015[0x2b];
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 4 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 4 functions */
+    int unk_0058;                        /* +0x0058 4 functions */
+    int unk_005c;                        /* +0x005c 3 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int unk_0064;                        /* +0x0064 2 functions */
+    int unk_0068;                        /* +0x0068 2 functions */
+    int unk_006c;                        /* +0x006c 6 functions */
+    int unk_0070;                        /* +0x0070 6 functions */
+    int unk_0074;                        /* +0x0074 7 functions */
+    int unk_0078;                        /* +0x0078 6 functions */
+    int unk_007c;                        /* +0x007c 1 functions */
+    int unk_0080;                        /* +0x0080 2 functions */
+}; uint8_t lf_raw[0x84]; } AreaBlock;
+SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
+
+/* area[]: record of 0x100d6c bytes. */
+typedef union Area { struct {
+    int unk_0000;                        /* +0x0000 5 functions */
+    float unk_0004;                      /* +0x0004 4 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 4 functions */
+    float unk_0010;                      /* +0x0010 2 functions */
+    float unk_0014;                      /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 2 functions */
+    float unk_001c;                      /* +0x001c 2 functions */
+    float unk_0020;                      /* +0x0020 2 functions */
+    float unk_0024;                      /* +0x0024 2 functions */
+    float unk_0028;                      /* +0x0028 2 functions */
+    float unk_002c;                      /* +0x002c 2 functions */
+    float unk_0030;                      /* +0x0030 2 functions */
+    int unk_0034;                        /* +0x0034 19 functions */
+    int unk_0038;                        /* +0x0038 19 functions */
+    int unk_003c;                        /* +0x003c 19 functions */
+    float unk_0040;                      /* +0x0040 4 functions */
+    float unk_0044;                      /* +0x0044 4 functions */
+    int unk_0048;                        /* +0x0048 18 functions */
+    float unk_004c;                      /* +0x004c 4 functions */
+    float unk_0050;                      /* +0x0050 4 functions */
+    float unk_0054;                      /* +0x0054 4 functions */
+    float unk_0058;                      /* +0x0058 4 functions */
+    float unk_005c;                      /* +0x005c 4 functions */
+    float unk_0060;                      /* +0x0060 4 functions */
+    int unk_0064;                        /* +0x0064 1 functions */
+    uint8_t pad_0068[0x500];
+    int unk_0568;                        /* +0x0568 3 functions */
+    int unk_056c;                        /* +0x056c 18 functions */
+    int unk_0570;                        /* +0x0570 1 functions */
+    uint8_t pad_0574[0x7f8];
+    int unk_0d6c;                        /* +0x0d6c 2 functions */
+    uint8_t pad_0d70[0xffff8];
+    int unk_100d68;                      /* +0x100d68 1 functions */
+}; uint8_t lf_raw[0x100d6c]; } Area;
+SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
+
+/* option[]: record of 0x150 bytes. */
+typedef union Option { struct {
+    uint8_t pad_0000[0x4];
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    uint8_t pad_000c[0x3d];
+    char unk_0049;                       /* +0x0049 1 functions */
+    uint8_t pad_004a[0x2];
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    uint8_t pad_0058[0x31];
+    char unk_0089;                       /* +0x0089 1 functions */
+    char unk_008a;                       /* +0x008a 1 functions */
+    char unk_008b;                       /* +0x008b 1 functions */
+    uint8_t pad_008c[0x3c];
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    uint8_t pad_00e0[0x2c];
+    int unk_010c;                        /* +0x010c 1 functions */
+    uint8_t pad_0110[0x4];
+    int unk_0114;                        /* +0x0114 2 functions */
+    int unk_0118;                        /* +0x0118 2 functions */
+    int unk_011c;                        /* +0x011c 2 functions */
+    int unk_0120;                        /* +0x0120 1 functions */
+    int unk_0124;                        /* +0x0124 1 functions */
+    int unk_0128;                        /* +0x0128 1 functions */
+    int unk_012c;                        /* +0x012c 2 functions */
+    int unk_0130;                        /* +0x0130 1 functions */
+    int unk_0134;                        /* +0x0134 1 functions */
+    int unk_0138;                        /* +0x0138 1 functions */
+    int unk_013c;                        /* +0x013c 1 functions */
+    uint8_t pad_0140[0x4];
+    int unk_0144;                        /* +0x0144 1 functions */
+    float unk_0148;                      /* +0x0148 1 functions */
+    uint8_t pad_014c[0x4];
+}; uint8_t lf_raw[0x150]; } Option;
+SR_STATIC_ASSERT(sizeof(Option) == 0x150, "Option");
+
+/* server[]: record of 0x84 bytes. */
+typedef union Server { struct {
+    int unk_0000;                        /* +0x0000 32 functions */
+    uint8_t pad_0004[0x4];
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x1];
+    char unk_0015;                       /* +0x0015 1 functions */
+    uint8_t pad_0016[0x46];
+    int unk_005c;                        /* +0x005c 2 functions */
+    uint8_t pad_0060[0x4];
+    int unk_0064;                        /* +0x0064 1 functions */
+    uint8_t pad_0068[0x10];
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 2 functions */
+    int unk_0080;                        /* +0x0080 2 functions */
+}; uint8_t lf_raw[0x84]; } Server;
+SR_STATIC_ASSERT(sizeof(Server) == 0x84, "Server");
+
+/* stats[]: record of 0x8 bytes. */
+typedef union Stats { struct {
+    int numofbullets;                    /* +0x0000 createbullet adds 1; server_writelogfile writes it to stats.txt as numofbullets= */
+    int numofmissions;                   /* +0x0004 server_writelogfile writes it to stats.txt as numofmissions= */
+}; uint8_t lf_raw[0x8]; } Stats;
+SR_STATIC_ASSERT(sizeof(Stats) == 0x8, "Stats");
+SR_STATIC_ASSERT(offsetof(Stats, numofbullets) == 0x0, "Stats.numofbullets");
+SR_STATIC_ASSERT(offsetof(Stats, numofmissions) == 0x4, "Stats.numofmissions");
+
+/* sysinfo[]: record of 0x418 bytes. */
+typedef union SysInfo { struct {
+    char start_dir[512];                 /* +0x0000 getpaths: _getcwd into it (docs/phase4-inventory.md 4.1) */
+    char config_dir[512];                /* +0x0200 getpaths: second _getcwd; the harness reads the server folder here (0x916d4e0) */
+    uint8_t pad_0400[0x8];
+    uint32_t frequency[2];               /* +0x0408 getcpufrequency: QueryPerformanceFrequency LowPart (+0x408) and HighPart (+0x40c), 1000000000 by default */
+    double ms_per_tick;                  /* +0x0410 getcpufrequency: 1000.0 / frequency; main_loop.c qpc_to_ms */
+}; uint8_t lf_raw[0x418]; } SysInfo;
+SR_STATIC_ASSERT(sizeof(SysInfo) == 0x418, "SysInfo");
+SR_STATIC_ASSERT(offsetof(SysInfo, start_dir) == 0x0, "SysInfo.start_dir");
+SR_STATIC_ASSERT(offsetof(SysInfo, config_dir) == 0x200, "SysInfo.config_dir");
+SR_STATIC_ASSERT(offsetof(SysInfo, frequency) == 0x408, "SysInfo.frequency");
+SR_STATIC_ASSERT(offsetof(SysInfo, ms_per_tick) == 0x410, "SysInfo.ms_per_tick");
+
+/* soundlist[]: record of 0x13c bytes. */
+typedef union SoundList { struct {
+    int unk_0000;                        /* +0x0000 1 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    int unk_0014;                        /* +0x0014 1 functions */
+    int unk_0018;                        /* +0x0018 1 functions */
+    int unk_001c;                        /* +0x001c 1 functions */
+    int unk_0020;                        /* +0x0020 1 functions */
+    int unk_0024;                        /* +0x0024 1 functions */
+    int unk_0028;                        /* +0x0028 1 functions */
+    uint8_t pad_002c[0x8];
+    int unk_0034;                        /* +0x0034 1 functions */
+    int unk_0038;                        /* +0x0038 1 functions */
+    int unk_003c;                        /* +0x003c 1 functions */
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    uint8_t pad_0058[0x20];
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 2 functions */
+    uint8_t pad_0080[0x8];
+    int unk_0088;                        /* +0x0088 1 functions */
+    int humanhit;                        /* +0x008c setupgame writes 0x16; humansimulation plays it when an object hits a human hard */
+    uint8_t pad_0090[0x8];
+    int unk_0098;                        /* +0x0098 1 functions */
+    int unk_009c;                        /* +0x009c 1 functions */
+    uint8_t pad_00a0[0x8];
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    int unk_00b4;                        /* +0x00b4 1 functions */
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    uint8_t pad_00c0[0x8];
+    int unk_00c8;                        /* +0x00c8 2 functions */
+    int unk_00cc;                        /* +0x00cc 2 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    int unk_00e4;                        /* +0x00e4 1 functions */
+    int unk_00e8;                        /* +0x00e8 1 functions */
+    int unk_00ec;                        /* +0x00ec 1 functions */
+    int unk_00f0;                        /* +0x00f0 1 functions */
+    uint8_t pad_00f4[0x18];
+    int unk_010c;                        /* +0x010c 2 functions */
+    uint8_t pad_0110[0x1c];
+    int unk_012c;                        /* +0x012c 1 functions */
+    int unk_0130;                        /* +0x0130 2 functions */
+    int unk_0134;                        /* +0x0134 1 functions */
+    int unk_0138;                        /* +0x0138 1 functions */
+}; uint8_t lf_raw[0x13c]; } SoundList;
+SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
+SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
+
+/* blocklist[]: record of 0x40354 bytes. */
+typedef union BlockList { struct {
+    int unk_0000;                        /* +0x0000 3 functions */
+    uint32_t unk_0004;                   /* +0x0004 2 functions */
+    uint32_t unk_0008;                   /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x14];
+    int unk_0028;                        /* +0x0028 1 functions */
+    uint8_t pad_002c[0x4];
+    int unk_0030;                        /* +0x0030 1 functions */
+    uint8_t pad_0034[0x4];
+    int unk_0038;                        /* +0x0038 1 functions */
+    uint8_t pad_003c[0x4];
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    int unk_005c;                        /* +0x005c 2 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    int unk_0064;                        /* +0x0064 2 functions */
+    int unk_0068;                        /* +0x0068 1 functions */
+    int unk_006c;                        /* +0x006c 1 functions */
+    int unk_0070;                        /* +0x0070 1 functions */
+    int unk_0074;                        /* +0x0074 2 functions */
+    int unk_0078;                        /* +0x0078 1 functions */
+    int unk_007c;                        /* +0x007c 1 functions */
+    int unk_0080;                        /* +0x0080 1 functions */
+    int unk_0084;                        /* +0x0084 1 functions */
+    int unk_0088;                        /* +0x0088 1 functions */
+    int unk_008c;                        /* +0x008c 1 functions */
+    int unk_0090;                        /* +0x0090 1 functions */
+    int unk_0094;                        /* +0x0094 1 functions */
+    int unk_0098;                        /* +0x0098 1 functions */
+    int unk_009c;                        /* +0x009c 1 functions */
+    int unk_00a0;                        /* +0x00a0 1 functions */
+    int unk_00a4;                        /* +0x00a4 1 functions */
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    int unk_00b4;                        /* +0x00b4 1 functions */
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    int unk_00c0;                        /* +0x00c0 1 functions */
+    int unk_00c4;                        /* +0x00c4 1 functions */
+    int unk_00c8;                        /* +0x00c8 1 functions */
+    int unk_00cc;                        /* +0x00cc 1 functions */
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    int unk_00d4;                        /* +0x00d4 1 functions */
+    int unk_00d8;                        /* +0x00d8 1 functions */
+    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    uint8_t pad_00e4[0x20];
+    int unk_0104;                        /* +0x0104 2 functions */
+    int unk_0108;                        /* +0x0108 2 functions */
+    int unk_010c;                        /* +0x010c 1 functions */
+    int unk_0110;                        /* +0x0110 1 functions */
+    int unk_0114;                        /* +0x0114 1 functions */
+    int unk_0118;                        /* +0x0118 1 functions */
+    int unk_011c;                        /* +0x011c 2 functions */
+    int unk_0120;                        /* +0x0120 2 functions */
+    int unk_0124;                        /* +0x0124 1 functions */
+    int unk_0128;                        /* +0x0128 1 functions */
+    int unk_012c;                        /* +0x012c 1 functions */
+    uint8_t pad_0130[0x14];
+    int unk_0144;                        /* +0x0144 1 functions */
+    uint8_t pad_0148[0x14];
+    int unk_015c;                        /* +0x015c 1 functions */
+    uint8_t pad_0160[0x4];
+    int unk_0164;                        /* +0x0164 1 functions */
+    int unk_0168;                        /* +0x0168 1 functions */
+    int unk_016c;                        /* +0x016c 1 functions */
+    int unk_0170;                        /* +0x0170 1 functions */
+    int unk_0174;                        /* +0x0174 1 functions */
+    int unk_0178;                        /* +0x0178 1 functions */
+    int unk_017c;                        /* +0x017c 1 functions */
+    int unk_0180;                        /* +0x0180 1 functions */
+    int unk_0184;                        /* +0x0184 1 functions */
+    int unk_0188;                        /* +0x0188 1 functions */
+    int unk_018c;                        /* +0x018c 1 functions */
+    uint8_t pad_0190[0x34];
+    int unk_01c4;                        /* +0x01c4 3 functions */
+    int unk_01c8;                        /* +0x01c8 1 functions */
+    int unk_01cc;                        /* +0x01cc 1 functions */
+    uint32_t unk_01d0;                   /* +0x01d0 3 functions */
+    int unk_01d4;                        /* +0x01d4 1 functions */
+    int unk_01d8;                        /* +0x01d8 1 functions */
+    int unk_01dc;                        /* +0x01dc 1 functions */
+    int unk_01e0;                        /* +0x01e0 1 functions */
+    int unk_01e4;                        /* +0x01e4 1 functions */
+    int unk_01e8;                        /* +0x01e8 1 functions */
+    int unk_01ec;                        /* +0x01ec 1 functions */
+    int unk_01f0;                        /* +0x01f0 1 functions */
+    int unk_01f4;                        /* +0x01f4 2 functions */
+    int unk_01f8;                        /* +0x01f8 1 functions */
+    int unk_01fc;                        /* +0x01fc 1 functions */
+    int unk_0200;                        /* +0x0200 1 functions */
+    int unk_0204;                        /* +0x0204 2 functions */
+    int unk_0208;                        /* +0x0208 1 functions */
+    int unk_020c;                        /* +0x020c 1 functions */
+    int unk_0210;                        /* +0x0210 1 functions */
+    int unk_0214;                        /* +0x0214 2 functions */
+    int unk_0218;                        /* +0x0218 1 functions */
+    int unk_021c;                        /* +0x021c 1 functions */
+    int unk_0220;                        /* +0x0220 1 functions */
+    int unk_0224;                        /* +0x0224 2 functions */
+    int unk_0228;                        /* +0x0228 1 functions */
+    int unk_022c;                        /* +0x022c 1 functions */
+    int unk_0230;                        /* +0x0230 1 functions */
+    int unk_0234;                        /* +0x0234 2 functions */
+    int unk_0238;                        /* +0x0238 1 functions */
+    int unk_023c;                        /* +0x023c 1 functions */
+    int unk_0240;                        /* +0x0240 1 functions */
+    int unk_0244;                        /* +0x0244 2 functions */
+    int unk_0248;                        /* +0x0248 1 functions */
+    int unk_024c;                        /* +0x024c 1 functions */
+    int unk_0250;                        /* +0x0250 1 functions */
+    int unk_0254;                        /* +0x0254 2 functions */
+    int unk_0258;                        /* +0x0258 1 functions */
+    int unk_025c;                        /* +0x025c 1 functions */
+    int unk_0260;                        /* +0x0260 1 functions */
+    int unk_0264;                        /* +0x0264 2 functions */
+    int unk_0268;                        /* +0x0268 1 functions */
+    int unk_026c;                        /* +0x026c 1 functions */
+    int unk_0270;                        /* +0x0270 1 functions */
+    int unk_0274;                        /* +0x0274 2 functions */
+    int unk_0278;                        /* +0x0278 1 functions */
+    int unk_027c;                        /* +0x027c 1 functions */
+    int unk_0280;                        /* +0x0280 1 functions */
+    int unk_0284;                        /* +0x0284 1 functions */
+    int unk_0288;                        /* +0x0288 1 functions */
+    int unk_028c;                        /* +0x028c 1 functions */
+    int unk_0290;                        /* +0x0290 1 functions */
+    int unk_0294;                        /* +0x0294 1 functions */
+    int unk_0298;                        /* +0x0298 1 functions */
+    int unk_029c;                        /* +0x029c 1 functions */
+    int unk_02a0;                        /* +0x02a0 1 functions */
+    int unk_02a4;                        /* +0x02a4 1 functions */
+    int unk_02a8;                        /* +0x02a8 1 functions */
+    int unk_02ac;                        /* +0x02ac 1 functions */
+    int unk_02b0;                        /* +0x02b0 1 functions */
+    int unk_02b4;                        /* +0x02b4 1 functions */
+    int unk_02b8;                        /* +0x02b8 1 functions */
+    int unk_02bc;                        /* +0x02bc 1 functions */
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    int unk_02c4;                        /* +0x02c4 1 functions */
+    int unk_02c8;                        /* +0x02c8 1 functions */
+    int unk_02cc;                        /* +0x02cc 1 functions */
+    int unk_02d0;                        /* +0x02d0 1 functions */
+    int unk_02d4;                        /* +0x02d4 1 functions */
+    int unk_02d8;                        /* +0x02d8 1 functions */
+    int unk_02dc;                        /* +0x02dc 1 functions */
+    int unk_02e0;                        /* +0x02e0 1 functions */
+    int unk_02e4;                        /* +0x02e4 1 functions */
+    int unk_02e8;                        /* +0x02e8 1 functions */
+    int unk_02ec;                        /* +0x02ec 1 functions */
+    int unk_02f0;                        /* +0x02f0 1 functions */
+    uint8_t pad_02f4[0x10];
+    int unk_0304;                        /* +0x0304 1 functions */
+    int unk_0308;                        /* +0x0308 1 functions */
+    int unk_030c;                        /* +0x030c 1 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    int unk_0314;                        /* +0x0314 1 functions */
+    int unk_0318;                        /* +0x0318 1 functions */
+    int unk_031c;                        /* +0x031c 1 functions */
+    int unk_0320;                        /* +0x0320 1 functions */
+    int unk_0324;                        /* +0x0324 1 functions */
+    int unk_0328;                        /* +0x0328 1 functions */
+    int unk_032c;                        /* +0x032c 1 functions */
+    int unk_0330;                        /* +0x0330 1 functions */
+    int unk_0334;                        /* +0x0334 2 functions */
+    int unk_0338;                        /* +0x0338 1 functions */
+    int unk_033c;                        /* +0x033c 1 functions */
+    int unk_0340;                        /* +0x0340 1 functions */
+    int unk_0344;                        /* +0x0344 1 functions */
+    int unk_0348;                        /* +0x0348 1 functions */
+    int unk_034c;                        /* +0x034c 1 functions */
+    int unk_0350;                        /* +0x0350 1 functions */
+    int unk_0354;                        /* +0x0354 2 functions */
+    int unk_0358;                        /* +0x0358 1 functions */
+    int unk_035c;                        /* +0x035c 1 functions */
+    int unk_0360;                        /* +0x0360 1 functions */
+    int unk_0364;                        /* +0x0364 1 functions */
+    int unk_0368;                        /* +0x0368 1 functions */
+    int unk_036c;                        /* +0x036c 1 functions */
+    int unk_0370;                        /* +0x0370 1 functions */
+    uint8_t pad_0374[0x3ffe0];
+}; uint8_t lf_raw[0x40354]; } BlockList;
+SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
+
+/* city[]: record of 0xa0b99c bytes. */
+typedef union City { struct {
+    int unk_0000;                        /* +0x0000 6 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 7 functions */
+    int unk_000c;                        /* +0x000c 3 functions */
+    int unk_0010;                        /* +0x0010 7 functions */
+    float unk_0014;                      /* +0x0014 4 functions */
+    float unk_0018;                      /* +0x0018 4 functions */
+    float unk_001c;                      /* +0x001c 4 functions */
+    int unk_0020;                        /* +0x0020 5 functions */
+    int unk_0024;                        /* +0x0024 6 functions */
+    int unk_0028;                        /* +0x0028 5 functions */
+    int unk_002c;                        /* +0x002c 5 functions */
+    int unk_0030;                        /* +0x0030 5 functions */
+    int unk_0034;                        /* +0x0034 5 functions */
+    int unk_0038;                        /* +0x0038 5 functions */
+    int unk_003c;                        /* +0x003c 5 functions */
+    int unk_0040;                        /* +0x0040 3 functions */
+    int unk_0044;                        /* +0x0044 2 functions */
+    int unk_0048;                        /* +0x0048 2 functions */
+    uint8_t pad_004c[0x4];
+    int unk_0050;                        /* +0x0050 2 functions */
+    int unk_0054;                        /* +0x0054 1 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    int unk_005c;                        /* +0x005c 1 functions */
+    uint8_t pad_0060[0x10];
+    int unk_0070;                        /* +0x0070 1 functions */
+    uint8_t pad_0074[0x4];
+    int unk_0078;                        /* +0x0078 1 functions */
+    uint8_t pad_007c[0x2c];
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    uint8_t pad_00b4[0x4];
+    int unk_00b8;                        /* +0x00b8 1 functions */
+    int unk_00bc;                        /* +0x00bc 1 functions */
+    int unk_00c0;                        /* +0x00c0 1 functions */
+    int unk_00c4;                        /* +0x00c4 1 functions */
+    uint8_t pad_00c8[0xe0];
+    int unk_01a8;                        /* +0x01a8 1 functions */
+    uint8_t pad_01ac[0x8];
+    float unk_01b4;                      /* +0x01b4 1 functions */
+    uint8_t pad_01b8[0x4];
+    float unk_01bc;                      /* +0x01bc 1 functions */
+    uint8_t pad_01c0[0x30];
+    int unk_01f0;                        /* +0x01f0 1 functions */
+    int unk_01f4;                        /* +0x01f4 1 functions */
+    int unk_01f8;                        /* +0x01f8 1 functions */
+    int unk_01fc;                        /* +0x01fc 1 functions */
+    uint8_t pad_0200[0x19e08];
+    int unk_1a008;                       /* +0x1a008 4 functions */
+    int unk_1a00c;                       /* +0x1a00c 6 functions */
+    int unk_1a010;                       /* +0x1a010 4 functions */
+    int unk_1a014;                       /* +0x1a014 4 functions */
+    int unk_1a018;                       /* +0x1a018 2 functions */
+    int unk_1a01c;                       /* +0x1a01c 2 functions */
+    float unk_1a020;                     /* +0x1a020 3 functions */
+    float unk_1a024;                     /* +0x1a024 3 functions */
+    float unk_1a028;                     /* +0x1a028 3 functions */
+    float unk_1a02c;                     /* +0x1a02c 3 functions */
+    float unk_1a030;                     /* +0x1a030 3 functions */
+    float unk_1a034;                     /* +0x1a034 3 functions */
+    char unk_1a038;                      /* +0x1a038 1 functions */
+    char unk_1a039;                      /* +0x1a039 1 functions */
+    uint8_t pad_1a03a[0x97d2];
+    int unk_2380c;                       /* +0x2380c 1 functions */
+    int unk_23810;                       /* +0x23810 1 functions */
+    int unk_23814;                       /* +0x23814 1 functions */
+    int unk_23818;                       /* +0x23818 1 functions */
+    int unk_2381c;                       /* +0x2381c 1 functions */
+    int unk_23820;                       /* +0x23820 1 functions */
+    int unk_23824;                       /* +0x23824 1 functions */
+    int unk_23828;                       /* +0x23828 1 functions */
+    uint8_t pad_2382c[0x5fe4];
+    int unk_29810;                       /* +0x29810 1 functions */
+    uint8_t pad_29814[0x6000];
+    int unk_2f814;                       /* +0x2f814 1 functions */
+    uint8_t pad_2f818[0x180];
+    int num_buildings;                   /* +0x2f998 createlevel writes 0; economy_carmarket, resetgame and humansimulation loop over the buildings */
+    uint8_t pad_2f99c[0x40];
+    int building_type;                   /* +0x2f9dc the type of building 0, records of 0x9dc bytes: 2 car market, 3 mission, 6 healing (humansimulation) */
+    uint8_t pad_2f9e0[0xc];
+    float unk_2f9ec;                     /* +0x2f9ec 1 functions */
+    float unk_2f9f0;                     /* +0x2f9f0 2 functions */
+    float unk_2f9f4;                     /* +0x2f9f4 1 functions */
+    float unk_2f9f8;                     /* +0x2f9f8 3 functions */
+    float unk_2f9fc;                     /* +0x2f9fc 3 functions */
+    float unk_2fa00;                     /* +0x2fa00 3 functions */
+    float unk_2fa04;                     /* +0x2fa04 3 functions */
+    float unk_2fa08;                     /* +0x2fa08 3 functions */
+    float unk_2fa0c;                     /* +0x2fa0c 3 functions */
+    int unk_2fa10;                       /* +0x2fa10 1 functions */
+    int unk_2fa14;                       /* +0x2fa14 1 functions */
+    int unk_2fa18;                       /* +0x2fa18 1 functions */
+    int unk_2fa1c;                       /* +0x2fa1c 1 functions */
+    int unk_2fa20;                       /* +0x2fa20 1 functions */
+    uint8_t pad_2fa24[0x16c];
+    int unk_2fb90;                       /* +0x2fb90 1 functions */
+    int unk_2fb94;                       /* +0x2fb94 1 functions */
+    uint8_t pad_2fb98[0x8];
+    int unk_2fba0;                       /* +0x2fba0 2 functions */
+    float unk_2fba4;                     /* +0x2fba4 2 functions */
+    float unk_2fba8;                     /* +0x2fba8 2 functions */
+    float unk_2fbac;                     /* +0x2fbac 2 functions */
+    int unk_2fbb0;                       /* +0x2fbb0 2 functions */
+    uint8_t pad_2fbb4[0x3f0];
+    float unk_2ffa4;                     /* +0x2ffa4 2 functions */
+    float unk_2ffa8;                     /* +0x2ffa8 2 functions */
+    float unk_2ffac;                     /* +0x2ffac 2 functions */
+    uint8_t pad_2ffb0[0x2ec];
+    int unk_3029c;                       /* +0x3029c 2 functions */
+    int unk_302a0;                       /* +0x302a0 3 functions */
+    int unk_302a4;                       /* +0x302a4 7 functions */
+    int unk_302a8;                       /* +0x302a8 4 functions */
+    int unk_302ac;                       /* +0x302ac 3 functions */
+    int unk_302b0;                       /* +0x302b0 2 functions */
+    int unk_302b4;                       /* +0x302b4 1 functions */
+    int unk_302b8;                       /* +0x302b8 1 functions */
+    int unk_302bc;                       /* +0x302bc 1 functions */
+    int unk_302c0;                       /* +0x302c0 1 functions */
+    int unk_302c4;                       /* +0x302c4 1 functions */
+    int unk_302c8;                       /* +0x302c8 1 functions */
+    int unk_302cc;                       /* +0x302cc 1 functions */
+    int unk_302d0;                       /* +0x302d0 1 functions */
+    int unk_302d4;                       /* +0x302d4 1 functions */
+    int unk_302d8;                       /* +0x302d8 1 functions */
+    int unk_302dc;                       /* +0x302dc 1 functions */
+    int unk_302e0;                       /* +0x302e0 1 functions */
+    int unk_302e4;                       /* +0x302e4 1 functions */
+    int unk_302e8;                       /* +0x302e8 1 functions */
+    int unk_302ec;                       /* +0x302ec 1 functions */
+    int unk_302f0;                       /* +0x302f0 1 functions */
+    int unk_302f4;                       /* +0x302f4 1 functions */
+    int unk_302f8;                       /* +0x302f8 1 functions */
+    int unk_302fc;                       /* +0x302fc 1 functions */
+    int unk_30300;                       /* +0x30300 1 functions */
+    int unk_30304;                       /* +0x30304 1 functions */
+    int unk_30308;                       /* +0x30308 1 functions */
+    int unk_3030c;                       /* +0x3030c 1 functions */
+    int unk_30310;                       /* +0x30310 1 functions */
+    int unk_30314;                       /* +0x30314 1 functions */
+    int unk_30318;                       /* +0x30318 1 functions */
+    int unk_3031c;                       /* +0x3031c 1 functions */
+    uint8_t pad_30320[0x48];
+    int unk_30368;                       /* +0x30368 1 functions */
+    float unk_3036c;                     /* +0x3036c 2 functions */
+    float unk_30370;                     /* +0x30370 2 functions */
+    float unk_30374;                     /* +0x30374 2 functions */
+    uint8_t pad_30378[0x40];
+    int unk_303b8;                       /* +0x303b8 5 functions */
+    uint8_t pad_303bc[0x18];
+    float unk_303d4;                     /* +0x303d4 1 functions */
+    float unk_303d8;                     /* +0x303d8 1 functions */
+    float unk_303dc;                     /* +0x303dc 1 functions */
+    uint8_t pad_303e0[0x8a0];
+    int unk_30c80;                       /* +0x30c80 2 functions */
+    int unk_30c84;                       /* +0x30c84 1 functions */
+    int unk_30c88;                       /* +0x30c88 1 functions */
+    int unk_30c8c;                       /* +0x30c8c 1 functions */
+    int unk_30c90;                       /* +0x30c90 1 functions */
+    uint8_t pad_30c94[0x9dad08];
+}; uint8_t lf_raw[0xa0b99c]; } City;
+SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
+SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
+SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
+
+/* materiallist[]: record of 0x580 bytes. */
+typedef union MaterialList { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    uint8_t pad_0008[0x4];
+    int unk_000c;                        /* +0x000c 1 functions */
+    uint8_t pad_0010[0x1c];
+    int unk_002c;                        /* +0x002c 1 functions */
+    uint8_t pad_0030[0x4];
+    int unk_0034;                        /* +0x0034 1 functions */
+    uint8_t pad_0038[0x24c];
+    int unk_0284;                        /* +0x0284 1 functions */
+    int unk_0288;                        /* +0x0288 2 functions */
+    uint8_t pad_028c[0x10];
+    int unk_029c;                        /* +0x029c 1 functions */
+    int unk_02a0;                        /* +0x02a0 1 functions */
+    int unk_02a4;                        /* +0x02a4 1 functions */
+    uint8_t pad_02a8[0x8];
+    int unk_02b0;                        /* +0x02b0 1 functions */
+    int unk_02b4;                        /* +0x02b4 1 functions */
+    uint8_t pad_02b8[0x8];
+    int unk_02c0;                        /* +0x02c0 1 functions */
+    int unk_02c4;                        /* +0x02c4 1 functions */
+    uint8_t pad_02c8[0x8];
+    int unk_02d0;                        /* +0x02d0 1 functions */
+    uint8_t pad_02d4[0x1c];
+    int unk_02f0;                        /* +0x02f0 1 functions */
+    uint8_t pad_02f4[0x8c];
+    int unk_0380;                        /* +0x0380 1 functions */
+    int unk_0384;                        /* +0x0384 1 functions */
+    uint8_t pad_0388[0x1f8];
+}; uint8_t lf_raw[0x580]; } MaterialList;
+SR_STATIC_ASSERT(sizeof(MaterialList) == 0x580, "MaterialList");
+
+/* intersect[]: record of 0x84 bytes. */
+typedef union Intersect { struct {
+    float pos[3];                        /* +0x0000 lineintersectall, sphereintersectlevel: copy of the hit point (local_18..local_10); manager black_market.c uses +0 as a position */
+    float normal[3];                     /* +0x000c lineintersectall, sphereintersectlevel: copy of the hit normal (local_c..local_4); manager uses +0xc */
+    float fraction;                      /* +0x0018 lineintersectall: set to 1.0, keeps the nearest hit (local_1c < fraction) */
+    float distance;                      /* +0x001c sphereintersectlevel: set to 65536.0, keeps the nearest hit */
+    vec3 surface_vel;                    /* +0x0020 lineintersectobject: the velocity of the hit surface; humansimulation pulls a standing human toward it */
+    uint8_t pad_002c[0x4];
+    int unk_0030;                        /* +0x0030 5 functions */
+    int tri_particles[3];                /* +0x0034 lineintersectobject and sphereintersectobject: the 3 particles of the hit triangle */
+    uint8_t pad_0040[0x4];
+    float tri_weights[3];                /* +0x0044 lineintersectobject and sphereintersectobject: the barycentric weights of the hit point */
+    uint8_t pad_0050[0x4];
+    int unk_0054;                        /* +0x0054 7 functions */
+    int unk_0058;                        /* +0x0058 5 functions */
+    int unk_005c;                        /* +0x005c 4 functions */
+    int unk_0060;                        /* +0x0060 4 functions */
+    int unk_0064;                        /* +0x0064 3 functions */
+    int unk_0068;                        /* +0x0068 2 functions */
+    int unk_006c;                        /* +0x006c 5 functions */
+    int unk_0070;                        /* +0x0070 4 functions */
+    int unk_0074;                        /* +0x0074 3 functions */
+    int index;                           /* +0x0078 lineintersectall: set to -1 before the search */
+    int unk_007c;                        /* +0x007c 3 functions */
+    int unk_0080;                        /* +0x0080 3 functions */
+}; uint8_t lf_raw[0x84]; } Intersect;
+SR_STATIC_ASSERT(sizeof(Intersect) == 0x84, "Intersect");
+SR_STATIC_ASSERT(offsetof(Intersect, pos) == 0x0, "Intersect.pos");
+SR_STATIC_ASSERT(offsetof(Intersect, normal) == 0xc, "Intersect.normal");
+SR_STATIC_ASSERT(offsetof(Intersect, fraction) == 0x18, "Intersect.fraction");
+SR_STATIC_ASSERT(offsetof(Intersect, distance) == 0x1c, "Intersect.distance");
+SR_STATIC_ASSERT(offsetof(Intersect, surface_vel) == 0x20, "Intersect.surface_vel");
+SR_STATIC_ASSERT(offsetof(Intersect, tri_particles) == 0x34, "Intersect.tri_particles");
+SR_STATIC_ASSERT(offsetof(Intersect, tri_weights) == 0x44, "Intersect.tri_weights");
+SR_STATIC_ASSERT(offsetof(Intersect, index) == 0x78, "Intersect.index");
+
+/* timerlist[]: record of 0xa0 bytes. */
+typedef union TimerList { struct {
+    int unk_0000;                        /* +0x0000 1 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    int unk_0014;                        /* +0x0014 1 functions */
+    int unk_0018;                        /* +0x0018 1 functions */
+    int unk_001c;                        /* +0x001c 1 functions */
+    int unk_0020;                        /* +0x0020 1 functions */
+    int unk_0024;                        /* +0x0024 1 functions */
+    int unk_0028;                        /* +0x0028 1 functions */
+    int unk_002c;                        /* +0x002c 1 functions */
+    int unk_0030;                        /* +0x0030 1 functions */
+    int unk_0034;                        /* +0x0034 1 functions */
+    int unk_0038;                        /* +0x0038 1 functions */
+    int unk_003c;                        /* +0x003c 2 functions */
+    int unk_0040;                        /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 1 functions */
+    int unk_0048;                        /* +0x0048 1 functions */
+    int unk_004c;                        /* +0x004c 1 functions */
+    int unk_0050;                        /* +0x0050 1 functions */
+    int bondsim;                         /* +0x0054 timer index; the code names the timer "bondsim" */
+    int bondsetup;                       /* +0x0058 timer index; the code names the timer "bondsetup" */
+    int bondsetupcopy;                   /* +0x005c timer index; the code names the timer "bondsetupcopy" */
+    int bondsetuphuman;                  /* +0x0060 timer index; the code names the timer "bondsetuphuman" */
+    int bondloopcopy;                    /* +0x0064 timer index; the code names the timer "bondloopcopy" */
+    int bondhuman;                       /* +0x0068 timer index; the code names the timer "bondhuman" */
+    int bondwheelsim;                    /* +0x006c timer index; the code names the timer "bondwheelsim" */
+    int bondpartpart;                    /* +0x0070 timer index; the code names the timer "bondpartpart" */
+    int bondbodybody;                    /* +0x0074 timer index; the code names the timer "bondbodybody" */
+    int bondbodyrotbody;                 /* +0x0078 timer index; the code names the timer "bondbodyrotbody" */
+    int bondwheelcollevel;               /* +0x007c timer index; the code names the timer "bondwheelcollevel" */
+    int bondbodyitem;                    /* +0x0080 timer index; the code names the timer "bondbodyitem" */
+    int bondbodylevel;                   /* +0x0084 timer index; the code names the timer "bondbodylevel" */
+    int humansim;                        /* +0x0088 timer index; the code names the timer "humansim" */
+    int objectsim;                       /* +0x008c timer index; the code names the timer "objectsim" */
+    int packetbuild;                     /* +0x0090 timer index; the code names the timer "packetbuild" */
+    int bondtest;                        /* +0x0094 timer index; the code names the timer "bondtest" */
+    uint8_t pad_0098[0x8];
+}; uint8_t lf_raw[0xa0]; } TimerList;
+SR_STATIC_ASSERT(sizeof(TimerList) == 0xa0, "TimerList");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsim) == 0x54, "TimerList.bondsim");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetup) == 0x58, "TimerList.bondsetup");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetupcopy) == 0x5c, "TimerList.bondsetupcopy");
+SR_STATIC_ASSERT(offsetof(TimerList, bondsetuphuman) == 0x60, "TimerList.bondsetuphuman");
+SR_STATIC_ASSERT(offsetof(TimerList, bondloopcopy) == 0x64, "TimerList.bondloopcopy");
+SR_STATIC_ASSERT(offsetof(TimerList, bondhuman) == 0x68, "TimerList.bondhuman");
+SR_STATIC_ASSERT(offsetof(TimerList, bondwheelsim) == 0x6c, "TimerList.bondwheelsim");
+SR_STATIC_ASSERT(offsetof(TimerList, bondpartpart) == 0x70, "TimerList.bondpartpart");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodybody) == 0x74, "TimerList.bondbodybody");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodyrotbody) == 0x78, "TimerList.bondbodyrotbody");
+SR_STATIC_ASSERT(offsetof(TimerList, bondwheelcollevel) == 0x7c, "TimerList.bondwheelcollevel");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodyitem) == 0x80, "TimerList.bondbodyitem");
+SR_STATIC_ASSERT(offsetof(TimerList, bondbodylevel) == 0x84, "TimerList.bondbodylevel");
+SR_STATIC_ASSERT(offsetof(TimerList, humansim) == 0x88, "TimerList.humansim");
+SR_STATIC_ASSERT(offsetof(TimerList, objectsim) == 0x8c, "TimerList.objectsim");
+SR_STATIC_ASSERT(offsetof(TimerList, packetbuild) == 0x90, "TimerList.packetbuild");
+SR_STATIC_ASSERT(offsetof(TimerList, bondtest) == 0x94, "TimerList.bondtest");
+
+/* speex[]: record of 0x931000 bytes. */
+typedef union Speex { struct {
+    uint8_t pad_0000[0x15000];
+    int unk_15000;                       /* +0x15000 2 functions */
+    uint8_t pad_15004[0x4];
+    int unk_15008;                       /* +0x15008 2 functions */
+    uint8_t pad_1500c[0x4200];
+    int unk_1920c;                       /* +0x1920c 2 functions */
+    uint8_t pad_19210[0x920c];
+    int unk_2241c;                       /* +0x2241c 2 functions */
+    uint8_t pad_22420[0x920c];
+    int unk_2b62c;                       /* +0x2b62c 1 functions */
+    uint8_t pad_2b630[0x920c];
+    int unk_3483c;                       /* +0x3483c 1 functions */
+    uint8_t pad_34840[0x920c];
+    int unk_3da4c;                       /* +0x3da4c 1 functions */
+    uint8_t pad_3da50[0x8f35b0];
+}; uint8_t lf_raw[0x931000]; } Speex;
+SR_STATIC_ASSERT(sizeof(Speex) == 0x931000, "Speex");
+
+/* bsdsocket[]: record of 0x20070 bytes. */
+typedef union BsdSocket { struct {
+    int current;                         /* +0x0000 serversend, pbitread: index into the enabled and socket arrays */
+    int enabled[8];                      /* +0x0004 disablesocket (opens the socket) writes 1 at +4 + i*4; serversend tests it before sendto */
+    int handle[8];                       /* +0x0024 disablesocket: socket() result at +0x24 + i*4; serversend passes it to sendto */
+    uint8_t addr[16];                    /* +0x0044 serversend: sockaddr_in for sendto (port htons at +0x46, address htonl at +0x48) */
+    int addr_len;                        /* +0x0054 serversend: tolen argument of sendto */
+    int16_t unk_0058;                    /* +0x0058 2 functions */
+    uint8_t pad_005a[0x2];
+    int send_size;                       /* +0x005c serversend: bytes in the send buffer (13 after the header), checked against 0x10000 */
+    int send_bit;                        /* +0x0060 serversend, pbitwrite: bit position in the current byte */
+    uint8_t send_buf[65536];             /* +0x0064 serversend: packet bytes, magic 7DFP at +0, sendto source */
+    int recv_size;                       /* +0x10064 pbitread: bytes received, upper limit of the read position (signed compare) */
+    int recv_pos;                        /* +0x10068 pbitread: read position, checked against 0x10000 (signed compare) */
+    int recv_bit;                        /* +0x1006c pbitread: bit position in the current byte */
+    uint8_t recv_buf[65536];             /* +0x10070 pbitread: received bytes; ends at the struct size 0x20070 */
+}; uint8_t lf_raw[0x20070]; } BsdSocket;
+SR_STATIC_ASSERT(sizeof(BsdSocket) == 0x20070, "BsdSocket");
+SR_STATIC_ASSERT(offsetof(BsdSocket, current) == 0x0, "BsdSocket.current");
+SR_STATIC_ASSERT(offsetof(BsdSocket, enabled) == 0x4, "BsdSocket.enabled");
+SR_STATIC_ASSERT(offsetof(BsdSocket, handle) == 0x24, "BsdSocket.handle");
+SR_STATIC_ASSERT(offsetof(BsdSocket, addr) == 0x44, "BsdSocket.addr");
+SR_STATIC_ASSERT(offsetof(BsdSocket, addr_len) == 0x54, "BsdSocket.addr_len");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_size) == 0x5c, "BsdSocket.send_size");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_bit) == 0x60, "BsdSocket.send_bit");
+SR_STATIC_ASSERT(offsetof(BsdSocket, send_buf) == 0x64, "BsdSocket.send_buf");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_size) == 0x10064, "BsdSocket.recv_size");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_pos) == 0x10068, "BsdSocket.recv_pos");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_bit) == 0x1006c, "BsdSocket.recv_bit");
+SR_STATIC_ASSERT(offsetof(BsdSocket, recv_buf) == 0x10070, "BsdSocket.recv_buf");
+
+/* debug[]: record of 0x523c8 bytes. */
+typedef union Debug { struct {
+    uint8_t pad_0000[0x4f884];
+    int unk_4f884;                       /* +0x4f884 1 functions */
+    uint8_t pad_4f888[0x1c];
+    int unk_4f8a4;                       /* +0x4f8a4 1 functions */
+    uint8_t pad_4f8a8[0x8];
+    int unk_4f8b0;                       /* +0x4f8b0 1 functions */
+    uint8_t pad_4f8b4[0xc];
+    int unk_4f8c0;                       /* +0x4f8c0 1 functions */
+    uint8_t pad_4f8c4[0x80];
+    float unk_4f944;                     /* +0x4f944 1 functions */
+    float unk_4f948;                     /* +0x4f948 1 functions */
+    float unk_4f94c;                     /* +0x4f94c 1 functions */
+    uint8_t pad_4f950[0xc];
+    float unk_4f95c;                     /* +0x4f95c 1 functions */
+    float unk_4f960;                     /* +0x4f960 1 functions */
+    float unk_4f964;                     /* +0x4f964 1 functions */
+    uint8_t pad_4f968[0x30];
+    float unk_4f998;                     /* +0x4f998 1 functions */
+    float unk_4f99c;                     /* +0x4f99c 1 functions */
+    float unk_4f9a0;                     /* +0x4f9a0 1 functions */
+    uint8_t pad_4f9a4[0x2c];
+    float unk_4f9d0;                     /* +0x4f9d0 1 functions */
+    uint8_t pad_4f9d4[0x6c];
+    float unk_4fa40;                     /* +0x4fa40 1 functions */
+    uint8_t pad_4fa44[0x804];
+    int unk_50248;                       /* +0x50248 1 functions */
+    int unk_5024c;                       /* +0x5024c 2 functions */
+    int unk_50250;                       /* +0x50250 2 functions */
+    uint8_t pad_50254[0xf0];
+    int unk_50344;                       /* +0x50344 1 functions */
+    uint8_t pad_50348[0x1f3c];
+    int unk_52284;                       /* +0x52284 1 functions */
+    uint8_t pad_52288[0xfc];
+    int unk_52384;                       /* +0x52384 2 functions */
+    int unk_52388;                       /* +0x52388 1 functions */
+    int16_t unk_5238c;                   /* +0x5238c 1 functions */
+    char unk_5238e;                      /* +0x5238e 1 functions */
+    uint8_t pad_5238f[0x9];
+    int unk_52398;                       /* +0x52398 1 functions */
+    uint8_t pad_5239c[0x28];
+    int unk_523c4;                       /* +0x523c4 2 functions */
+}; uint8_t lf_raw[0x523c8]; } Debug;
+SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+
+/* filelist[]: record of 0x80020 bytes. */
+typedef union FileList { struct {
+    int unk_0000;                        /* +0x0000 5 functions */
+    char unk_0004;                       /* +0x0004 4 functions */
+    char unk_0005;                       /* +0x0005 2 functions */
+    char unk_0006;                       /* +0x0006 1 functions */
+    char unk_0007;                       /* +0x0007 1 functions */
+    char unk_0008;                       /* +0x0008 1 functions */
+    char unk_0009;                       /* +0x0009 1 functions */
+    char unk_000a;                       /* +0x000a 1 functions */
+    char unk_000b;                       /* +0x000b 1 functions */
+    uint8_t pad_000c[0x38];
+    char unk_0044;                       /* +0x0044 2 functions */
+    char unk_0045;                       /* +0x0045 2 functions */
+    char unk_0046;                       /* +0x0046 1 functions */
+    char unk_0047;                       /* +0x0047 1 functions */
+    uint8_t pad_0048[0x7ffd8];
+}; uint8_t lf_raw[0x80020]; } FileList;
+SR_STATIC_ASSERT(sizeof(FileList) == 0x80020, "FileList");
+
+/* parser[]: record of 0x10010c bytes. */
+typedef union Parser { struct {
+    int unk_0000;                        /* +0x0000 8 functions */
+    int unk_0004;                        /* +0x0004 7 functions */
+    char unk_0008;                       /* +0x0008 5 functions */
+    char unk_0009;                       /* +0x0009 5 functions */
+    char unk_000a;                       /* +0x000a 2 functions */
+    uint8_t pad_000b[0xffffe];
+    char unk_100009;                     /* +0x100009 1 functions */
+    char unk_10000a;                     /* +0x10000a 1 functions */
+    uint8_t pad_10000b[0xfd];
+    int unk_100108;                      /* +0x100108 10 functions */
+}; uint8_t lf_raw[0x10010c]; } Parser;
+SR_STATIC_ASSERT(sizeof(Parser) == 0x10010c, "Parser");
+
+/* cityobjecttype[]: record of 0x241800 bytes. */
+typedef union CityObjectType { struct {
+    float unk_0000;                      /* +0x0000 3 functions */
+    int unk_0004;                        /* +0x0004 1 functions */
+    float unk_0008;                      /* +0x0008 1 functions */
+    float unk_000c;                      /* +0x000c 1 functions */
+    float unk_0010;                      /* +0x0010 1 functions */
+    uint8_t pad_0014[0xbf4];
+    int unk_0c08;                        /* +0x0c08 4 functions */
+    int unk_0c0c;                        /* +0x0c0c 4 functions */
+    int unk_0c10;                        /* +0x0c10 4 functions */
+    int unk_0c14;                        /* +0x0c14 4 functions */
+    int unk_0c18;                        /* +0x0c18 4 functions */
+    int unk_0c1c;                        /* +0x0c1c 4 functions */
+    int unk_0c20;                        /* +0x0c20 2 functions */
+    uint8_t pad_0c24[0x4];
+    int unk_0c28;                        /* +0x0c28 3 functions */
+    uint8_t pad_0c2c[0x17e0];
+    float unk_240c;                      /* +0x240c 2 functions */
+    float unk_2410;                      /* +0x2410 2 functions */
+    float unk_2414;                      /* +0x2414 2 functions */
+    float unk_2418;                      /* +0x2418 1 functions */
+    uint8_t pad_241c[0x2408];
+    float unk_4824;                      /* +0x4824 1 functions */
+    float unk_4828;                      /* +0x4828 1 functions */
+    float unk_482c;                      /* +0x482c 1 functions */
+    float unk_4830;                      /* +0x4830 1 functions */
+    int unk_4834;                        /* +0x4834 1 functions */
+    float unk_4838;                      /* +0x4838 1 functions */
+    float unk_483c;                      /* +0x483c 1 functions */
+    float unk_4840;                      /* +0x4840 1 functions */
+    uint8_t pad_4844[0xbf4];
+    int unk_5438;                        /* +0x5438 1 functions */
+    int unk_543c;                        /* +0x543c 1 functions */
+    int unk_5440;                        /* +0x5440 1 functions */
+    int unk_5444;                        /* +0x5444 1 functions */
+    int unk_5448;                        /* +0x5448 1 functions */
+    int unk_544c;                        /* +0x544c 1 functions */
+    int unk_5450;                        /* +0x5450 1 functions */
+    uint8_t pad_5454[0x3c0c];
+    float unk_9060;                      /* +0x9060 1 functions */
+    uint8_t pad_9064[0x2408];
+    float unk_b46c;                      /* +0xb46c 1 functions */
+    float unk_b470;                      /* +0xb470 1 functions */
+    float unk_b474;                      /* +0xb474 1 functions */
+    float unk_b478;                      /* +0xb478 1 functions */
+    uint8_t pad_b47c[0x2408];
+    float unk_d884;                      /* +0xd884 1 functions */
+    float unk_d888;                      /* +0xd888 1 functions */
+    float unk_d88c;                      /* +0xd88c 1 functions */
+    uint8_t pad_d890[0x4830];
+    float unk_120c0;                     /* +0x120c0 1 functions */
+    uint8_t pad_120c4[0x4];
+    float unk_120c8;                     /* +0x120c8 1 functions */
+    float unk_120cc;                     /* +0x120cc 1 functions */
+    float unk_120d0;                     /* +0x120d0 1 functions */
+    float unk_120d4;                     /* +0x120d4 1 functions */
+    float unk_120d8;                     /* +0x120d8 1 functions */
+    float unk_120dc;                     /* +0x120dc 1 functions */
+    float unk_120e0;                     /* +0x120e0 1 functions */
+    float unk_120e4;                     /* +0x120e4 1 functions */
+    float unk_120e8;                     /* +0x120e8 1 functions */
+    float unk_120ec;                     /* +0x120ec 1 functions */
+    float unk_120f0;                     /* +0x120f0 1 functions */
+    float unk_120f4;                     /* +0x120f4 1 functions */
+    uint8_t pad_120f8[0x23d4];
+    float unk_144cc;                     /* +0x144cc 1 functions */
+    float unk_144d0;                     /* +0x144d0 1 functions */
+    float unk_144d4;                     /* +0x144d4 1 functions */
+    float unk_144d8;                     /* +0x144d8 1 functions */
+    uint8_t pad_144dc[0x22d324];
+}; uint8_t lf_raw[0x241800]; } CityObjectType;
+SR_STATIC_ASSERT(sizeof(CityObjectType) == 0x241800, "CityObjectType");
+
+/* cityobject[]: record of 0x15000 bytes. */
+typedef union CityObject { struct {
+    int unk_0000;                        /* +0x0000 7 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 2 functions */
+    float unk_0010;                      /* +0x0010 2 functions */
+    float unk_0014;                      /* +0x0014 3 functions */
+    float unk_0018;                      /* +0x0018 3 functions */
+    float unk_001c;                      /* +0x001c 3 functions */
+    float unk_0020;                      /* +0x0020 1 functions */
+    float unk_0024;                      /* +0x0024 1 functions */
+    float unk_0028;                      /* +0x0028 1 functions */
+    float unk_002c;                      /* +0x002c 3 functions */
+    float unk_0030;                      /* +0x0030 1 functions */
+    float unk_0034;                      /* +0x0034 1 functions */
+    float unk_0038;                      /* +0x0038 3 functions */
+    float unk_003c;                      /* +0x003c 1 functions */
+    float unk_0040;                      /* +0x0040 1 functions */
+    int unk_0044;                        /* +0x0044 2 functions */
+    int unk_0048;                        /* +0x0048 3 functions */
+    int unk_004c;                        /* +0x004c 4 functions */
+    float unk_0050;                      /* +0x0050 3 functions */
+    int unk_0054;                        /* +0x0054 6 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    float unk_005c;                      /* +0x005c 1 functions */
+    float unk_0060;                      /* +0x0060 1 functions */
+    float unk_0064;                      /* +0x0064 1 functions */
+    uint8_t pad_0068[0xc];
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    float unk_0080;                      /* +0x0080 1 functions */
+    float unk_0084;                      /* +0x0084 1 functions */
+    float unk_0088;                      /* +0x0088 1 functions */
+    float unk_008c;                      /* +0x008c 1 functions */
+    float unk_0090;                      /* +0x0090 1 functions */
+    float unk_0094;                      /* +0x0094 1 functions */
+    uint8_t pad_0098[0x14f68];
+}; uint8_t lf_raw[0x15000]; } CityObject;
+SR_STATIC_ASSERT(sizeof(CityObject) == 0x15000, "CityObject");
+
+/* masterserver[]: record of 0x208 bytes. */
+typedef union MasterServer { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    int16_t unk_0004;                    /* +0x0004 2 functions */
+    char unk_0006;                       /* +0x0006 1 functions */
+    char unk_0007;                       /* +0x0007 1 functions */
+    char unk_0008;                       /* +0x0008 1 functions */
+    char unk_0009;                       /* +0x0009 1 functions */
+    char unk_000a;                       /* +0x000a 1 functions */
+    char unk_000b;                       /* +0x000b 1 functions */
+    char unk_000c;                       /* +0x000c 1 functions */
+    uint8_t pad_000d[0x39];
+    char unk_0046;                       /* +0x0046 1 functions */
+    char unk_0047;                       /* +0x0047 1 functions */
+    uint8_t pad_0048[0xec];
+    int unk_0134;                        /* +0x0134 1 functions */
+    int unk_0138;                        /* +0x0138 1 functions */
+    uint8_t pad_013c[0xcc];
+}; uint8_t lf_raw[0x208]; } MasterServer;
+SR_STATIC_ASSERT(sizeof(MasterServer) == 0x208, "MasterServer");
+
+/* buildblocktype[]: record of 0x1a80 bytes. */
+typedef union BuildBlockType { struct {
+    int unk_0000;                        /* +0x0000 1 functions */
+    char unk_0004;                       /* +0x0004 1 functions */
+    uint8_t pad_0005[0x3b];
+    int unk_0040;                        /* +0x0040 2 functions */
+    float unk_0044;                      /* +0x0044 3 functions */
+    float unk_0048;                      /* +0x0048 3 functions */
+    float unk_004c;                      /* +0x004c 3 functions */
+    float unk_0050;                      /* +0x0050 3 functions */
+    int unk_0054;                        /* +0x0054 3 functions */
+    int unk_0058;                        /* +0x0058 1 functions */
+    int unk_005c;                        /* +0x005c 1 functions */
+    float unk_0060;                      /* +0x0060 1 functions */
+    float unk_0064;                      /* +0x0064 1 functions */
+    float unk_0068;                      /* +0x0068 1 functions */
+    float unk_006c;                      /* +0x006c 1 functions */
+    int unk_0070;                        /* +0x0070 1 functions */
+    int unk_0074;                        /* +0x0074 1 functions */
+    int unk_0078;                        /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    float unk_0080;                      /* +0x0080 1 functions */
+    float unk_0084;                      /* +0x0084 1 functions */
+    float unk_0088;                      /* +0x0088 1 functions */
+    int unk_008c;                        /* +0x008c 1 functions */
+    int unk_0090;                        /* +0x0090 1 functions */
+    int unk_0094;                        /* +0x0094 1 functions */
+    float unk_0098;                      /* +0x0098 1 functions */
+    float unk_009c;                      /* +0x009c 1 functions */
+    float unk_00a0;                      /* +0x00a0 1 functions */
+    float unk_00a4;                      /* +0x00a4 1 functions */
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    int unk_00ac;                        /* +0x00ac 1 functions */
+    int unk_00b0;                        /* +0x00b0 1 functions */
+    float unk_00b4;                      /* +0x00b4 1 functions */
+    float unk_00b8;                      /* +0x00b8 1 functions */
+    float unk_00bc;                      /* +0x00bc 1 functions */
+    float unk_00c0;                      /* +0x00c0 1 functions */
+    int unk_00c4;                        /* +0x00c4 1 functions */
+    int unk_00c8;                        /* +0x00c8 1 functions */
+    int unk_00cc;                        /* +0x00cc 1 functions */
+    float unk_00d0;                      /* +0x00d0 1 functions */
+    float unk_00d4;                      /* +0x00d4 1 functions */
+    float unk_00d8;                      /* +0x00d8 1 functions */
+    float unk_00dc;                      /* +0x00dc 1 functions */
+    int unk_00e0;                        /* +0x00e0 1 functions */
+    int unk_00e4;                        /* +0x00e4 1 functions */
+    int unk_00e8;                        /* +0x00e8 1 functions */
+    float unk_00ec;                      /* +0x00ec 1 functions */
+    float unk_00f0;                      /* +0x00f0 1 functions */
+    float unk_00f4;                      /* +0x00f4 1 functions */
+    float unk_00f8;                      /* +0x00f8 1 functions */
+    int unk_00fc;                        /* +0x00fc 1 functions */
+    int unk_0100;                        /* +0x0100 1 functions */
+    int unk_0104;                        /* +0x0104 1 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    float unk_010c;                      /* +0x010c 1 functions */
+    float unk_0110;                      /* +0x0110 1 functions */
+    float unk_0114;                      /* +0x0114 1 functions */
+    int unk_0118;                        /* +0x0118 1 functions */
+    int unk_011c;                        /* +0x011c 1 functions */
+    uint8_t pad_0120[0x88];
+    int unk_01a8;                        /* +0x01a8 1 functions */
+    int16_t unk_01ac;                    /* +0x01ac 1 functions */
+    uint8_t pad_01ae[0x3a];
+    int unk_01e8;                        /* +0x01e8 1 functions */
+    float unk_01ec;                      /* +0x01ec 1 functions */
+    float unk_01f0;                      /* +0x01f0 1 functions */
+    float unk_01f4;                      /* +0x01f4 1 functions */
+    float unk_01f8;                      /* +0x01f8 1 functions */
+    int unk_01fc;                        /* +0x01fc 1 functions */
+    uint8_t pad_0200[0x4];
+    int unk_0204;                        /* +0x0204 1 functions */
+    float unk_0208;                      /* +0x0208 1 functions */
+    float unk_020c;                      /* +0x020c 1 functions */
+    float unk_0210;                      /* +0x0210 1 functions */
+    float unk_0214;                      /* +0x0214 1 functions */
+    int unk_0218;                        /* +0x0218 1 functions */
+    uint8_t pad_021c[0x4];
+    int unk_0220;                        /* +0x0220 1 functions */
+    float unk_0224;                      /* +0x0224 1 functions */
+    float unk_0228;                      /* +0x0228 1 functions */
+    float unk_022c;                      /* +0x022c 1 functions */
+    float unk_0230;                      /* +0x0230 1 functions */
+    int unk_0234;                        /* +0x0234 1 functions */
+    uint8_t pad_0238[0x4];
+    int unk_023c;                        /* +0x023c 1 functions */
+    float unk_0240;                      /* +0x0240 1 functions */
+    float unk_0244;                      /* +0x0244 1 functions */
+    float unk_0248;                      /* +0x0248 1 functions */
+    float unk_024c;                      /* +0x024c 1 functions */
+    int unk_0250;                        /* +0x0250 1 functions */
+    uint8_t pad_0254[0xfc];
+    int unk_0350;                        /* +0x0350 1 functions */
+    int unk_0354;                        /* +0x0354 1 functions */
+    int16_t unk_0358;                    /* +0x0358 1 functions */
+    uint8_t pad_035a[0x36];
+    int unk_0390;                        /* +0x0390 1 functions */
+    float unk_0394;                      /* +0x0394 1 functions */
+    float unk_0398;                      /* +0x0398 1 functions */
+    float unk_039c;                      /* +0x039c 1 functions */
+    float unk_03a0;                      /* +0x03a0 1 functions */
+    int unk_03a4;                        /* +0x03a4 1 functions */
+    uint8_t pad_03a8[0x4];
+    int unk_03ac;                        /* +0x03ac 1 functions */
+    float unk_03b0;                      /* +0x03b0 1 functions */
+    float unk_03b4;                      /* +0x03b4 1 functions */
+    float unk_03b8;                      /* +0x03b8 1 functions */
+    float unk_03bc;                      /* +0x03bc 1 functions */
+    int unk_03c0;                        /* +0x03c0 1 functions */
+    uint8_t pad_03c4[0x4];
+    int unk_03c8;                        /* +0x03c8 1 functions */
+    float unk_03cc;                      /* +0x03cc 1 functions */
+    float unk_03d0;                      /* +0x03d0 1 functions */
+    float unk_03d4;                      /* +0x03d4 1 functions */
+    float unk_03d8;                      /* +0x03d8 1 functions */
+    int unk_03dc;                        /* +0x03dc 1 functions */
+    uint8_t pad_03e0[0x4];
+    int unk_03e4;                        /* +0x03e4 1 functions */
+    float unk_03e8;                      /* +0x03e8 1 functions */
+    float unk_03ec;                      /* +0x03ec 1 functions */
+    float unk_03f0;                      /* +0x03f0 1 functions */
+    float unk_03f4;                      /* +0x03f4 1 functions */
+    int unk_03f8;                        /* +0x03f8 1 functions */
+    uint8_t pad_03fc[0xfc];
+    int unk_04f8;                        /* +0x04f8 1 functions */
+    int unk_04fc;                        /* +0x04fc 1 functions */
+    uint8_t pad_0500[0x38];
+    int unk_0538;                        /* +0x0538 1 functions */
+    float unk_053c;                      /* +0x053c 1 functions */
+    float unk_0540;                      /* +0x0540 1 functions */
+    float unk_0544;                      /* +0x0544 1 functions */
+    float unk_0548;                      /* +0x0548 1 functions */
+    int unk_054c;                        /* +0x054c 1 functions */
+    uint8_t pad_0550[0x4];
+    int unk_0554;                        /* +0x0554 1 functions */
+    float unk_0558;                      /* +0x0558 1 functions */
+    float unk_055c;                      /* +0x055c 1 functions */
+    float unk_0560;                      /* +0x0560 1 functions */
+    float unk_0564;                      /* +0x0564 1 functions */
+    int unk_0568;                        /* +0x0568 1 functions */
+    uint8_t pad_056c[0x4];
+    int unk_0570;                        /* +0x0570 1 functions */
+    float unk_0574;                      /* +0x0574 1 functions */
+    float unk_0578;                      /* +0x0578 1 functions */
+    float unk_057c;                      /* +0x057c 1 functions */
+    float unk_0580;                      /* +0x0580 1 functions */
+    int unk_0584;                        /* +0x0584 1 functions */
+    uint8_t pad_0588[0x4];
+    int unk_058c;                        /* +0x058c 1 functions */
+    float unk_0590;                      /* +0x0590 1 functions */
+    float unk_0594;                      /* +0x0594 1 functions */
+    float unk_0598;                      /* +0x0598 1 functions */
+    float unk_059c;                      /* +0x059c 1 functions */
+    int unk_05a0;                        /* +0x05a0 1 functions */
+    uint8_t pad_05a4[0x4];
+    int unk_05a8;                        /* +0x05a8 1 functions */
+    float unk_05ac;                      /* +0x05ac 1 functions */
+    float unk_05b0;                      /* +0x05b0 1 functions */
+    float unk_05b4;                      /* +0x05b4 1 functions */
+    float unk_05b8;                      /* +0x05b8 1 functions */
+    int unk_05bc;                        /* +0x05bc 1 functions */
+    uint8_t pad_05c0[0x14c0];
+}; uint8_t lf_raw[0x1a80]; } BuildBlockType;
+SR_STATIC_ASSERT(sizeof(BuildBlockType) == 0x1a80, "BuildBlockType");
+
+/* market[]: record of 0x204 bytes. */
+typedef union Market { struct {
+    int unk_0000;                        /* +0x0000 10 functions */
+    float unk_0004;                      /* +0x0004 13 functions */
+    float unk_0008;                      /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 3 functions */
+    int unk_0010;                        /* +0x0010 5 functions */
+    int unk_0014;                        /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 6 functions */
+    float unk_001c;                      /* +0x001c 1 functions */
+    int unk_0020;                        /* +0x0020 2 functions */
+    int unk_0024;                        /* +0x0024 2 functions */
+    uint8_t pad_0028[0x4];
+    float unk_002c;                      /* +0x002c 2 functions */
+    uint8_t pad_0030[0x4];
+    int unk_0034;                        /* +0x0034 1 functions */
+    uint8_t pad_0038[0x8];
+    float unk_0040;                      /* +0x0040 1 functions */
+    uint8_t pad_0044[0x4];
+    int unk_0048;                        /* +0x0048 1 functions */
+    uint8_t pad_004c[0x10];
+    int unk_005c;                        /* +0x005c 1 functions */
+    uint8_t pad_0060[0xe0];
+    int unk_0140;                        /* +0x0140 2 functions */
+    int unk_0144;                        /* +0x0144 2 functions */
+    int unk_0148;                        /* +0x0148 2 functions */
+    int unk_014c;                        /* +0x014c 2 functions */
+    uint8_t pad_0150[0xb4];
+}; uint8_t lf_raw[0x204]; } Market;
+SR_STATIC_ASSERT(sizeof(Market) == 0x204, "Market");
+
+/* scenario[]: record of 0x134 bytes. */
+typedef union Scenario { struct {
+    int unk_0000;                        /* +0x0000 3 functions */
+    int unk_0004;                        /* +0x0004 3 functions */
+    int unk_0008;                        /* +0x0008 1 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0xf8];
+    int unk_010c;                        /* +0x010c 5 functions */
+    int unk_0110;                        /* +0x0110 1 functions */
+    int unk_0114;                        /* +0x0114 1 functions */
+    uint8_t pad_0118[0x14];
+    int unk_012c;                        /* +0x012c 3 functions */
+    int unk_0130;                        /* +0x0130 1 functions */
+}; uint8_t lf_raw[0x134]; } Scenario;
+SR_STATIC_ASSERT(sizeof(Scenario) == 0x134, "Scenario");
+
+/* radix[]: record of 0x400804 bytes. */
+typedef union Radix { struct {
+    int unk_0000;                        /* +0x0000 5 functions */
+    int unk_0004;                        /* +0x0004 5 functions */
+    int unk_0008;                        /* +0x0008 4 functions */
+    int unk_000c;                        /* +0x000c 1 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0xffff0];
+    int unk_100004;                      /* +0x100004 1 functions */
+    int unk_100008;                      /* +0x100008 1 functions */
+    uint8_t pad_10000c[0xffff8];
+    int unk_200004;                      /* +0x200004 5 functions */
+    int unk_200008;                      /* +0x200008 4 functions */
+    int unk_20000c;                      /* +0x20000c 1 functions */
+    int unk_200010;                      /* +0x200010 1 functions */
+    int unk_200014;                      /* +0x200014 1 functions */
+    uint8_t pad_200018[0xfffec];
+    int unk_300004;                      /* +0x300004 2 functions */
+    int unk_300008;                      /* +0x300008 2 functions */
+    int unk_30000c;                      /* +0x30000c 1 functions */
+    int unk_300010;                      /* +0x300010 1 functions */
+    int unk_300014;                      /* +0x300014 1 functions */
+    uint8_t pad_300018[0xfffec];
+    int unk_400004;                      /* +0x400004 1 functions */
+    int unk_400008;                      /* +0x400008 1 functions */
+    int unk_40000c;                      /* +0x40000c 1 functions */
+    int unk_400010;                      /* +0x400010 1 functions */
+    int unk_400014;                      /* +0x400014 1 functions */
+    int unk_400018;                      /* +0x400018 1 functions */
+    int unk_40001c;                      /* +0x40001c 1 functions */
+    int unk_400020;                      /* +0x400020 1 functions */
+    int unk_400024;                      /* +0x400024 1 functions */
+    int unk_400028;                      /* +0x400028 1 functions */
+    uint8_t pad_40002c[0x3d8];
+    int unk_400404;                      /* +0x400404 1 functions */
+    int unk_400408;                      /* +0x400408 1 functions */
+    int unk_40040c;                      /* +0x40040c 1 functions */
+    int unk_400410;                      /* +0x400410 1 functions */
+    int unk_400414;                      /* +0x400414 1 functions */
+    int unk_400418;                      /* +0x400418 1 functions */
+    int unk_40041c;                      /* +0x40041c 1 functions */
+    int unk_400420;                      /* +0x400420 1 functions */
+    int unk_400424;                      /* +0x400424 1 functions */
+    int unk_400428;                      /* +0x400428 1 functions */
+    int unk_40042c;                      /* +0x40042c 1 functions */
+    uint8_t pad_400430[0x3d4];
+}; uint8_t lf_raw[0x400804]; } Radix;
+SR_STATIC_ASSERT(sizeof(Radix) == 0x400804, "Radix");
+
+/* game_world[]: record of 0x1c bytes. */
+typedef union GameWorld { struct {
+    int unk_0000;                        /* +0x0000 7 functions */
+    float unk_0004;                      /* +0x0004 4 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 4 functions */
+    float unk_0010;                      /* +0x0010 2 functions */
+    float unk_0014;                      /* +0x0014 1 functions */
+    float unk_0018;                      /* +0x0018 2 functions */
+}; uint8_t lf_raw[0x1c]; } GameWorld;
+SR_STATIC_ASSERT(sizeof(GameWorld) == 0x1c, "GameWorld");
+
+/* level_editor[]: record of 0x1c6898 bytes. */
+typedef union LevelEditor { struct {
+    uint8_t pad_0000[0x38];
+    int unk_0038;                        /* +0x0038 3 functions */
+    int unk_003c;                        /* +0x003c 3 functions */
+    int unk_0040;                        /* +0x0040 2 functions */
+    int unk_0044;                        /* +0x0044 3 functions */
+    int unk_0048;                        /* +0x0048 3 functions */
+    uint8_t pad_004c[0x4];
+    int unk_0050;                        /* +0x0050 1 functions */
+    uint8_t pad_0054[0x2fe8];
+    int unk_303c;                        /* +0x303c 3 functions */
+    int unk_3040;                        /* +0x3040 3 functions */
+    int unk_3044;                        /* +0x3044 3 functions */
+    int unk_3048;                        /* +0x3048 2 functions */
+    int unk_304c;                        /* +0x304c 3 functions */
+    int unk_3050;                        /* +0x3050 3 functions */
+    int unk_3054;                        /* +0x3054 3 functions */
+    uint8_t pad_3058[0x1c];
+    int unk_3074;                        /* +0x3074 3 functions */
+    int unk_3078;                        /* +0x3078 1 functions */
+    uint8_t pad_307c[0x4];
+    int unk_3080;                        /* +0x3080 1 functions */
+    int unk_3084;                        /* +0x3084 1 functions */
+    int unk_3088;                        /* +0x3088 1 functions */
+    uint8_t pad_308c[0x87b8];
+    int unk_b844;                        /* +0xb844 2 functions */
+    uint8_t pad_b848[0x3fc];
+    char unk_bc44;                       /* +0xbc44 1 functions */
+    uint8_t unk_bc45;                    /* +0xbc45 1 functions */
+    uint8_t unk_bc46;                    /* +0xbc46 1 functions */
+    uint8_t pad_bc47[0x3fe];
+    char unk_c045;                       /* +0xc045 1 functions */
+    uint8_t pad_c046[0xff7fe];
+    int unk_10b844;                      /* +0x10b844 3 functions */
+    uint8_t pad_10b848[0x5];
+    char unk_10b84d;                     /* +0x10b84d 1 functions */
+    char unk_10b84e;                     /* +0x10b84e 1 functions */
+    char unk_10b84f;                     /* +0x10b84f 1 functions */
+    uint8_t pad_10b850[0x3c];
+    int unk_10b88c;                      /* +0x10b88c 3 functions */
+    int unk_10b890;                      /* +0x10b890 2 functions */
+    int unk_10b894;                      /* +0x10b894 3 functions */
+    int unk_10b898;                      /* +0x10b898 3 functions */
+    uint8_t pad_10b89c[0x4];
+    int unk_10b8a0;                      /* +0x10b8a0 3 functions */
+    uint8_t pad_10b8a4[0xbaff4];
+}; uint8_t lf_raw[0x1c6898]; } LevelEditor;
+SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
+
+/* blocktemp[]: record of 0x7606c bytes. */
+typedef union BlockTemp { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 2 functions */
+    int unk_0014;                        /* +0x0014 2 functions */
+    int unk_0018;                        /* +0x0018 2 functions */
+    int unk_001c;                        /* +0x001c 2 functions */
+    int unk_0020;                        /* +0x0020 2 functions */
+    int unk_0024;                        /* +0x0024 2 functions */
+    uint8_t pad_0028[0x4];
+    int unk_002c;                        /* +0x002c 2 functions */
+    int unk_0030;                        /* +0x0030 2 functions */
+    int unk_0034;                        /* +0x0034 2 functions */
+    int unk_0038;                        /* +0x0038 2 functions */
+    float unk_003c;                      /* +0x003c 2 functions */
+    float unk_0040;                      /* +0x0040 1 functions */
+    float unk_0044;                      /* +0x0044 1 functions */
+    float unk_0048;                      /* +0x0048 2 functions */
+    float unk_004c;                      /* +0x004c 1 functions */
+    float unk_0050;                      /* +0x0050 1 functions */
+    float unk_0054;                      /* +0x0054 1 functions */
+    float unk_0058;                      /* +0x0058 1 functions */
+    float unk_005c;                      /* +0x005c 1 functions */
+    float unk_0060;                      /* +0x0060 1 functions */
+    float unk_0064;                      /* +0x0064 1 functions */
+    float unk_0068;                      /* +0x0068 1 functions */
+    float unk_006c;                      /* +0x006c 1 functions */
+    float unk_0070;                      /* +0x0070 1 functions */
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    uint8_t pad_0080[0x7c];
+    float unk_00fc;                      /* +0x00fc 2 functions */
+    float unk_0100;                      /* +0x0100 1 functions */
+    float unk_0104;                      /* +0x0104 1 functions */
+    float unk_0108;                      /* +0x0108 1 functions */
+    float unk_010c;                      /* +0x010c 1 functions */
+    float unk_0110;                      /* +0x0110 1 functions */
+    float unk_0114;                      /* +0x0114 1 functions */
+    float unk_0118;                      /* +0x0118 1 functions */
+    float unk_011c;                      /* +0x011c 1 functions */
+    float unk_0120;                      /* +0x0120 1 functions */
+    uint8_t pad_0124[0x58];
+    int unk_017c;                        /* +0x017c 2 functions */
+    int unk_0180;                        /* +0x0180 2 functions */
+    uint8_t pad_0184[0xc];
+    int unk_0190;                        /* +0x0190 1 functions */
+    uint8_t pad_0194[0x4];
+    float unk_0198;                      /* +0x0198 1 functions */
+    float unk_019c;                      /* +0x019c 1 functions */
+    float unk_01a0;                      /* +0x01a0 1 functions */
+    uint8_t pad_01a4[0xb4];
+    float unk_0258;                      /* +0x0258 1 functions */
+    float unk_025c;                      /* +0x025c 1 functions */
+    uint8_t pad_0260[0x56dc8];
+    int unk_57028;                       /* +0x57028 2 functions */
+    float unk_5702c;                     /* +0x5702c 2 functions */
+    float unk_57030;                     /* +0x57030 1 functions */
+    float unk_57034;                     /* +0x57034 1 functions */
+    float unk_57038;                     /* +0x57038 2 functions */
+    float unk_5703c;                     /* +0x5703c 1 functions */
+    float unk_57040;                     /* +0x57040 1 functions */
+    float unk_57044;                     /* +0x57044 1 functions */
+    float unk_57048;                     /* +0x57048 1 functions */
+    float unk_5704c;                     /* +0x5704c 1 functions */
+    float unk_57050;                     /* +0x57050 1 functions */
+    float unk_57054;                     /* +0x57054 1 functions */
+    float unk_57058;                     /* +0x57058 1 functions */
+    uint8_t pad_5705c[0x18];
+    int unk_57074;                       /* +0x57074 1 functions */
+    uint8_t pad_57078[0x14];
+    int unk_5708c;                       /* +0x5708c 2 functions */
+    int unk_57090;                       /* +0x57090 1 functions */
+    uint8_t pad_57094[0x10];
+    int unk_570a4;                       /* +0x570a4 2 functions */
+    int unk_570a8;                       /* +0x570a8 1 functions */
+    uint8_t pad_570ac[0x8];
+    int unk_570b4;                       /* +0x570b4 1 functions */
+    uint8_t pad_570b8[0x68];
+    int unk_57120;                       /* +0x57120 1 functions */
+    uint8_t pad_57124[0x1ef08];
+    int unk_7602c;                       /* +0x7602c 2 functions */
+    uint8_t pad_76030[0x3c];
+}; uint8_t lf_raw[0x7606c]; } BlockTemp;
+SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
+
+/* bondopt[]: record of 0x40 bytes. */
+typedef union BondOpt { struct {
+    int16_t a;                           /* +0x0000 type 0: particle a; body bonds: the human */
+    int16_t b;                           /* +0x0002 type 0: particle b; body bonds: bone a */
+    int16_t c;                           /* +0x0004 body bonds: bone b */
+    int16_t mode;                        /* +0x0006 bondsimulation2 copies bond.mode */
+    vec3 dir;                            /* +0x0008 type 0: unit vector from a to b; bond_bodybody: the position error */
+    float bias;                          /* +0x0014 type 0: (length - rest_length) * stiffness */
+    vec3 arm_a;                          /* +0x0018 bond_bodybody: the point on bone a (w x arm) */
+    vec3 arm_b;                          /* +0x0024 bond_bodybody: the point on bone b */
+    uint8_t pad_0030[0x4];
+    float share_a;                       /* +0x0034 type 0: mass_b / (mass_a + mass_b), the part of the change for a */
+    float share_b;                       /* +0x0038 type 0: mass_a / (mass_a + mass_b), the part of the change for b */
+    float damping;                       /* +0x003c bondsimulation2 copies bond.damping */
+}; uint8_t lf_raw[0x40]; } BondOpt;
+SR_STATIC_ASSERT(sizeof(BondOpt) == 0x40, "BondOpt");
+SR_STATIC_ASSERT(offsetof(BondOpt, a) == 0x0, "BondOpt.a");
+SR_STATIC_ASSERT(offsetof(BondOpt, b) == 0x2, "BondOpt.b");
+SR_STATIC_ASSERT(offsetof(BondOpt, c) == 0x4, "BondOpt.c");
+SR_STATIC_ASSERT(offsetof(BondOpt, mode) == 0x6, "BondOpt.mode");
+SR_STATIC_ASSERT(offsetof(BondOpt, dir) == 0x8, "BondOpt.dir");
+SR_STATIC_ASSERT(offsetof(BondOpt, bias) == 0x14, "BondOpt.bias");
+SR_STATIC_ASSERT(offsetof(BondOpt, arm_a) == 0x18, "BondOpt.arm_a");
+SR_STATIC_ASSERT(offsetof(BondOpt, arm_b) == 0x24, "BondOpt.arm_b");
+SR_STATIC_ASSERT(offsetof(BondOpt, share_a) == 0x34, "BondOpt.share_a");
+SR_STATIC_ASSERT(offsetof(BondOpt, share_b) == 0x38, "BondOpt.share_b");
+SR_STATIC_ASSERT(offsetof(BondOpt, damping) == 0x3c, "BondOpt.damping");
+
+/* bondparticle[]: record of 0x20 bytes. */
+typedef union BondParticle { struct {
+    vec3 vel;                            /* +0x0000 bondsimulation2 copies particle.vel */
+    uint8_t pad_000c[0x4];
+    vec3 dv;                             /* +0x0010 bondsimulation2 clears it; bond_partpart adds the change of vel */
+    uint8_t pad_001c[0x4];
+}; uint8_t lf_raw[0x20]; } BondParticle;
+SR_STATIC_ASSERT(sizeof(BondParticle) == 0x20, "BondParticle");
+SR_STATIC_ASSERT(offsetof(BondParticle, vel) == 0x0, "BondParticle.vel");
+SR_STATIC_ASSERT(offsetof(BondParticle, dv) == 0x10, "BondParticle.dv");
+
+/* bondhuman[]: record of 0x810 bytes. */
+typedef union BondHuman { struct {
+    int active;                          /* +0x0000 bondsimulation2: 1 for an active human with a body */
+    int mask;                            /* +0x0004 bondsimulation2: one bit for each bone with a positive value at Bone+0xc4 */
+    uint8_t pad_0008[0x8];
+    BondBone bones[16];                  /* +0x0010 bond_bodybody: stride 0x80 */
+}; uint8_t lf_raw[0x810]; } BondHuman;
+SR_STATIC_ASSERT(sizeof(BondHuman) == 0x810, "BondHuman");
+SR_STATIC_ASSERT(offsetof(BondHuman, active) == 0x0, "BondHuman.active");
+SR_STATIC_ASSERT(offsetof(BondHuman, mask) == 0x4, "BondHuman.mask");
+SR_STATIC_ASSERT(offsetof(BondHuman, bones) == 0x10, "BondHuman.bones");
+
+/* tempmesh[]: record of 0x2d1850 bytes. */
+typedef union TempMesh { struct {
+    int unk_0000;                        /* +0x0000 8 functions */
+    float unk_0004;                      /* +0x0004 7 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 6 functions */
+    float unk_0010;                      /* +0x0010 3 functions */
+    float unk_0014;                      /* +0x0014 2 functions */
+    float unk_0018;                      /* +0x0018 3 functions */
+    float unk_001c;                      /* +0x001c 1 functions */
+    float unk_0020;                      /* +0x0020 1 functions */
+    float unk_0024;                      /* +0x0024 1 functions */
+    float unk_0028;                      /* +0x0028 1 functions */
+    float unk_002c;                      /* +0x002c 1 functions */
+    float unk_0030;                      /* +0x0030 1 functions */
+    uint8_t pad_0034[0x2ffd0];
+    float unk_30004;                     /* +0x30004 6 functions */
+    float unk_30008;                     /* +0x30008 5 functions */
+    float unk_3000c;                     /* +0x3000c 6 functions */
+    float unk_30010;                     /* +0x30010 3 functions */
+    float unk_30014;                     /* +0x30014 2 functions */
+    float unk_30018;                     /* +0x30018 3 functions */
+    float unk_3001c;                     /* +0x3001c 1 functions */
+    float unk_30020;                     /* +0x30020 1 functions */
+    float unk_30024;                     /* +0x30024 1 functions */
+    float unk_30028;                     /* +0x30028 1 functions */
+    float unk_3002c;                     /* +0x3002c 1 functions */
+    float unk_30030;                     /* +0x30030 1 functions */
+    uint8_t pad_30034[0x2ffd0];
+    float unk_60004;                     /* +0x60004 5 functions */
+    float unk_60008;                     /* +0x60008 4 functions */
+    float unk_6000c;                     /* +0x6000c 5 functions */
+    float unk_60010;                     /* +0x60010 2 functions */
+    uint8_t pad_60014[0x2fff0];
+    float unk_90004;                     /* +0x90004 4 functions */
+    float unk_90008;                     /* +0x90008 3 functions */
+    uint8_t pad_9000c[0x7fff8];
+    int unk_110004;                      /* +0x110004 8 functions */
+    int unk_110008;                      /* +0x110008 7 functions */
+    int unk_11000c;                      /* +0x11000c 7 functions */
+    int unk_110010;                      /* +0x110010 7 functions */
+    int unk_110014;                      /* +0x110014 7 functions */
+    int unk_110018;                      /* +0x110018 3 functions */
+    int unk_11001c;                      /* +0x11001c 3 functions */
+    int unk_110020;                      /* +0x110020 3 functions */
+    int unk_110024;                      /* +0x110024 3 functions */
+    uint8_t pad_110028[0x3ffe0];
+    int unk_150008;                      /* +0x150008 7 functions */
+    int unk_15000c;                      /* +0x15000c 3 functions */
+    uint8_t pad_150010[0x4fff8];
+    int unk_1a0008;                      /* +0x1a0008 4 functions */
+    int unk_1a000c;                      /* +0x1a000c 1 functions */
+    uint8_t pad_1a0010[0x2fffc];
+    int unk_1d000c;                      /* +0x1d000c 1 functions */
+    uint8_t pad_1d0010[0x101840];
+}; uint8_t lf_raw[0x2d1850]; } TempMesh;
+SR_STATIC_ASSERT(sizeof(TempMesh) == 0x2d1850, "TempMesh");
+
+/* track[]: record of 0x578000 bytes. */
+typedef union Track { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    float unk_0004;                      /* +0x0004 4 functions */
+    float unk_0008;                      /* +0x0008 4 functions */
+    float unk_000c;                      /* +0x000c 4 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    float unk_0014;                      /* +0x0014 3 functions */
+    float unk_0018;                      /* +0x0018 1 functions */
+    float unk_001c;                      /* +0x001c 1 functions */
+    float unk_0020;                      /* +0x0020 1 functions */
+    float unk_0024;                      /* +0x0024 1 functions */
+    float unk_0028;                      /* +0x0028 1 functions */
+    uint8_t pad_002c[0x48];
+    float unk_0074;                      /* +0x0074 1 functions */
+    float unk_0078;                      /* +0x0078 1 functions */
+    float unk_007c;                      /* +0x007c 1 functions */
+    float unk_0080;                      /* +0x0080 1 functions */
+    float unk_0084;                      /* +0x0084 1 functions */
+    float unk_0088;                      /* +0x0088 1 functions */
+    uint8_t pad_008c[0x1c8];
+    int unk_0254;                        /* +0x0254 3 functions */
+    int unk_0258;                        /* +0x0258 2 functions */
+    int unk_025c;                        /* +0x025c 2 functions */
+    int unk_0260;                        /* +0x0260 2 functions */
+    int unk_0264;                        /* +0x0264 1 functions */
+    int unk_0268;                        /* +0x0268 1 functions */
+    uint8_t pad_026c[0x94];
+    int unk_0300;                        /* +0x0300 1 functions */
+    int unk_0304;                        /* +0x0304 1 functions */
+    int unk_0308;                        /* +0x0308 1 functions */
+    int unk_030c;                        /* +0x030c 1 functions */
+    int unk_0310;                        /* +0x0310 1 functions */
+    uint8_t pad_0314[0x184];
+    float unk_0498;                      /* +0x0498 1 functions */
+    float unk_049c;                      /* +0x049c 1 functions */
+    float unk_04a0;                      /* +0x04a0 1 functions */
+    uint8_t pad_04a4[0x54];
+    float unk_04f8;                      /* +0x04f8 1 functions */
+    float unk_04fc;                      /* +0x04fc 1 functions */
+    float unk_0500;                      /* +0x0500 1 functions */
+    uint8_t pad_0504[0x5c];
+    float unk_0560;                      /* +0x0560 2 functions */
+    float unk_0564;                      /* +0x0564 1 functions */
+    float unk_0568;                      /* +0x0568 2 functions */
+    float unk_056c;                      /* +0x056c 2 functions */
+    float unk_0570;                      /* +0x0570 1 functions */
+    float unk_0574;                      /* +0x0574 2 functions */
+    uint8_t pad_0578[0x560];
+    float unk_0ad8;                      /* +0x0ad8 1 functions */
+    uint8_t pad_0adc[0x4];
+    float unk_0ae0;                      /* +0x0ae0 1 functions */
+    float unk_0ae4;                      /* +0x0ae4 1 functions */
+    uint8_t pad_0ae8[0xc];
+    float unk_0af4;                      /* +0x0af4 1 functions */
+    float unk_0af8;                      /* +0x0af8 1 functions */
+    float unk_0afc;                      /* +0x0afc 1 functions */
+    uint8_t pad_0b00[0x558];
+    int unk_1058;                        /* +0x1058 1 functions */
+    uint8_t pad_105c[0x18458];
+    float unk_194b4;                     /* +0x194b4 2 functions */
+    float unk_194b8;                     /* +0x194b8 2 functions */
+    float unk_194bc;                     /* +0x194bc 2 functions */
+    uint8_t pad_194c0[0x55eb40];
+}; uint8_t lf_raw[0x578000]; } Track;
+SR_STATIC_ASSERT(sizeof(Track) == 0x578000, "Track");
+
+/* building[]: record of 0x36168f8 bytes. */
+typedef union Building { struct {
+    int unk_0000;                        /* +0x0000 2 functions */
+    uint8_t pad_0004[0x3c];
+    int unk_0040;                        /* +0x0040 3 functions */
+    int unk_0044;                        /* +0x0044 3 functions */
+    int unk_0048;                        /* +0x0048 3 functions */
+    uint32_t unk_004c;                   /* +0x004c 3 functions */
+    uint32_t unk_0050;                   /* +0x0050 2 functions */
+    int unk_0054;                        /* +0x0054 2 functions */
+    int unk_0058;                        /* +0x0058 2 functions */
+    int unk_005c;                        /* +0x005c 3 functions */
+    int unk_0060;                        /* +0x0060 2 functions */
+    uint8_t pad_0064[0x20];
+    int unk_0084;                        /* +0x0084 1 functions */
+    int unk_0088;                        /* +0x0088 3 functions */
+    int unk_008c;                        /* +0x008c 2 functions */
+    int unk_0090;                        /* +0x0090 2 functions */
+    uint32_t unk_0094;                   /* +0x0094 2 functions */
+    uint32_t unk_0098;                   /* +0x0098 2 functions */
+    int unk_009c;                        /* +0x009c 1 functions */
+    int unk_00a0;                        /* +0x00a0 1 functions */
+    int unk_00a4;                        /* +0x00a4 1 functions */
+    int unk_00a8;                        /* +0x00a8 1 functions */
+    uint8_t pad_00ac[0x24];
+    int unk_00d0;                        /* +0x00d0 1 functions */
+    uint8_t pad_00d4[0x8];
+    uint32_t unk_00dc;                   /* +0x00dc 1 functions */
+    uint32_t unk_00e0;                   /* +0x00e0 1 functions */
+    uint8_t pad_00e4[0x40];
+    uint32_t unk_0124;                   /* +0x0124 1 functions */
+    uint32_t unk_0128;                   /* +0x0128 1 functions */
+    uint8_t pad_012c[0x40];
+    uint32_t unk_016c;                   /* +0x016c 1 functions */
+    uint32_t unk_0170;                   /* +0x0170 1 functions */
+    uint8_t pad_0174[0x40];
+    uint32_t unk_01b4;                   /* +0x01b4 1 functions */
+    uint32_t unk_01b8;                   /* +0x01b8 1 functions */
+    uint8_t pad_01bc[0x40];
+    uint32_t unk_01fc;                   /* +0x01fc 1 functions */
+    uint32_t unk_0200;                   /* +0x0200 1 functions */
+    uint8_t pad_0204[0x40];
+    uint32_t unk_0244;                   /* +0x0244 1 functions */
+    uint32_t unk_0248;                   /* +0x0248 1 functions */
+    uint8_t pad_024c[0x4c0];
+    int unk_070c;                        /* +0x070c 1 functions */
+    int unk_0710;                        /* +0x0710 1 functions */
+    uint8_t pad_0714[0xb38];
+    int unk_124c;                        /* +0x124c 1 functions */
+    uint8_t pad_1250[0x6bc];
+    int unk_190c;                        /* +0x190c 1 functions */
+    int unk_1910;                        /* +0x1910 1 functions */
+    uint8_t pad_1914[0x19738];
+    int unk_1b04c;                       /* +0x1b04c 1 functions */
+    int unk_1b050;                       /* +0x1b050 1 functions */
+    uint8_t pad_1b054[0x40];
+    int unk_1b094;                       /* +0x1b094 1 functions */
+    int unk_1b098;                       /* +0x1b098 1 functions */
+    uint8_t pad_1b09c[0x2cfb0];
+    int unk_4804c;                       /* +0x4804c 1 functions */
+    uint8_t pad_48050[0x11b7ffc];
+    int unk_120004c;                     /* +0x120004c 3 functions */
+    int unk_1200050;                     /* +0x1200050 3 functions */
+    int unk_1200054;                     /* +0x1200054 3 functions */
+    int unk_1200058;                     /* +0x1200058 3 functions */
+    int unk_120005c;                     /* +0x120005c 3 functions */
+    int unk_1200060;                     /* +0x1200060 3 functions */
+    int unk_1200064;                     /* +0x1200064 3 functions */
+    int unk_1200068;                     /* +0x1200068 1 functions */
+    int unk_120006c;                     /* +0x120006c 1 functions */
+    int unk_1200070;                     /* +0x1200070 1 functions */
+    int unk_1200074;                     /* +0x1200074 1 functions */
+    int unk_1200078;                     /* +0x1200078 1 functions */
+    uint8_t pad_120007c[0x11c];
+    int unk_1200198;                     /* +0x1200198 1 functions */
+    uint8_t pad_120019c[0x4];
+    int unk_12001a0;                     /* +0x12001a0 1 functions */
+    int unk_12001a4;                     /* +0x12001a4 1 functions */
+    int16_t unk_12001a8;                 /* +0x12001a8 1 functions */
+    int16_t unk_12001aa;                 /* +0x12001aa 1 functions */
+    int16_t unk_12001ac;                 /* +0x12001ac 1 functions */
+    int16_t unk_12001ae;                 /* +0x12001ae 1 functions */
+    int16_t unk_12001b0;                 /* +0x12001b0 1 functions */
+    int16_t unk_12001b2;                 /* +0x12001b2 1 functions */
+    int16_t unk_12001b4;                 /* +0x12001b4 1 functions */
+    int16_t unk_12001b6;                 /* +0x12001b6 1 functions */
+    int16_t unk_12001b8;                 /* +0x12001b8 1 functions */
+    int16_t unk_12001ba;                 /* +0x12001ba 1 functions */
+    int16_t unk_12001bc;                 /* +0x12001bc 1 functions */
+    int16_t unk_12001be;                 /* +0x12001be 1 functions */
+    int16_t unk_12001c0;                 /* +0x12001c0 1 functions */
+    int16_t unk_12001c2;                 /* +0x12001c2 1 functions */
+    int16_t unk_12001c4;                 /* +0x12001c4 1 functions */
+    int16_t unk_12001c6;                 /* +0x12001c6 1 functions */
+    uint8_t pad_12001c8[0x4];
+    int unk_12001cc;                     /* +0x12001cc 5 functions */
+    uint32_t unk_12001d0;                /* +0x12001d0 5 functions */
+    int unk_12001d4;                     /* +0x12001d4 4 functions */
+    int unk_12001d8;                     /* +0x12001d8 3 functions */
+    int unk_12001dc;                     /* +0x12001dc 3 functions */
+    int unk_12001e0;                     /* +0x12001e0 2 functions */
+    int unk_12001e4;                     /* +0x12001e4 3 functions */
+    int unk_12001e8;                     /* +0x12001e8 2 functions */
+    int unk_12001ec;                     /* +0x12001ec 2 functions */
+    uint8_t pad_12001f0[0x2];
+    int16_t unk_12001f2;                 /* +0x12001f2 1 functions */
+    uint8_t pad_12001f4[0x2];
+    int16_t unk_12001f6;                 /* +0x12001f6 1 functions */
+    uint8_t pad_12001f8[0x2];
+    int16_t unk_12001fa;                 /* +0x12001fa 1 functions */
+    int unk_12001fc;                     /* +0x12001fc 1 functions */
+    uint8_t pad_1200200[0x2];
+    int16_t unk_1200202;                 /* +0x1200202 1 functions */
+    uint8_t pad_1200204[0x2];
+    int16_t unk_1200206;                 /* +0x1200206 1 functions */
+    uint8_t pad_1200208[0x2];
+    int16_t unk_120020a;                 /* +0x120020a 1 functions */
+    uint8_t pad_120020c[0x2];
+    int16_t unk_120020e;                 /* +0x120020e 1 functions */
+    uint8_t pad_1200210[0x4];
+    int unk_1200214;                     /* +0x1200214 2 functions */
+    int unk_1200218;                     /* +0x1200218 2 functions */
+    int unk_120021c;                     /* +0x120021c 2 functions */
+    int unk_1200220;                     /* +0x1200220 3 functions */
+    int unk_1200224;                     /* +0x1200224 2 functions */
+    int unk_1200228;                     /* +0x1200228 1 functions */
+    int unk_120022c;                     /* +0x120022c 1 functions */
+    int unk_1200230;                     /* +0x1200230 1 functions */
+    int unk_1200234;                     /* +0x1200234 1 functions */
+    int unk_1200238;                     /* +0x1200238 1 functions */
+    int unk_120023c;                     /* +0x120023c 1 functions */
+    int unk_1200240;                     /* +0x1200240 1 functions */
+    int unk_1200244;                     /* +0x1200244 1 functions */
+    int unk_1200248;                     /* +0x1200248 1 functions */
+    int unk_120024c;                     /* +0x120024c 1 functions */
+    uint8_t pad_1200250[0x47f88];
+    int unk_12481d8;                     /* +0x12481d8 2 functions */
+    uint8_t pad_12481dc[0x10];
+    int unk_12481ec;                     /* +0x12481ec 1 functions */
+    uint8_t pad_12481f0[0x30];
+    int unk_1248220;                     /* +0x1248220 1 functions */
+    uint8_t pad_1248224[0x11b4];
+    int unk_12493d8;                     /* +0x12493d8 1 functions */
+    uint8_t pad_12493dc[0x11b6dfc];
+    int unk_24001d8;                     /* +0x24001d8 3 functions */
+    int unk_24001dc;                     /* +0x24001dc 2 functions */
+    int unk_24001e0;                     /* +0x24001e0 3 functions */
+    int unk_24001e4;                     /* +0x24001e4 3 functions */
+    int unk_24001e8;                     /* +0x24001e8 2 functions */
+    int unk_24001ec;                     /* +0x24001ec 3 functions */
+    int unk_24001f0;                     /* +0x24001f0 2 functions */
+    int unk_24001f4;                     /* +0x24001f4 2 functions */
+    int unk_24001f8;                     /* +0x24001f8 2 functions */
+    int unk_24001fc;                     /* +0x24001fc 2 functions */
+    int unk_2400200;                     /* +0x2400200 2 functions */
+    int unk_2400204;                     /* +0x2400204 2 functions */
+    int unk_2400208;                     /* +0x2400208 1 functions */
+    uint8_t pad_240020c[0x4];
+    int unk_2400210;                     /* +0x2400210 1 functions */
+    int unk_2400214;                     /* +0x2400214 1 functions */
+    uint8_t pad_2400218[0x4];
+    int unk_240021c;                     /* +0x240021c 1 functions */
+    int unk_2400220;                     /* +0x2400220 1 functions */
+    uint8_t pad_2400224[0x4];
+    int unk_2400228;                     /* +0x2400228 1 functions */
+    int unk_240022c;                     /* +0x240022c 1 functions */
+    uint8_t pad_2400230[0x4];
+    int unk_2400234;                     /* +0x2400234 1 functions */
+    int unk_2400238;                     /* +0x2400238 1 functions */
+    uint8_t pad_240023c[0x4];
+    int unk_2400240;                     /* +0x2400240 1 functions */
+    int unk_2400244;                     /* +0x2400244 1 functions */
+    uint8_t pad_2400248[0x4];
+    int unk_240024c;                     /* +0x240024c 1 functions */
+    int unk_2400250;                     /* +0x2400250 1 functions */
+    uint8_t pad_2400254[0x8];
+    int unk_240025c;                     /* +0x240025c 1 functions */
+    uint8_t pad_2400260[0x104];
+    int unk_2400364;                     /* +0x2400364 1 functions */
+    int unk_2400368;                     /* +0x2400368 1 functions */
+    int unk_240036c;                     /* +0x240036c 1 functions */
+    int unk_2400370;                     /* +0x2400370 1 functions */
+    int unk_2400374;                     /* +0x2400374 1 functions */
+    int unk_2400378;                     /* +0x2400378 1 functions */
+    int16_t unk_240037c;                 /* +0x240037c 1 functions */
+    int16_t unk_240037e;                 /* +0x240037e 1 functions */
+    int16_t unk_2400380;                 /* +0x2400380 1 functions */
+    int16_t unk_2400382;                 /* +0x2400382 1 functions */
+    int16_t unk_2400384;                 /* +0x2400384 1 functions */
+    int16_t unk_2400386;                 /* +0x2400386 1 functions */
+    int16_t unk_2400388;                 /* +0x2400388 1 functions */
+    int16_t unk_240038a;                 /* +0x240038a 1 functions */
+    int16_t unk_240038c;                 /* +0x240038c 1 functions */
+    int16_t unk_240038e;                 /* +0x240038e 1 functions */
+    int16_t unk_2400390;                 /* +0x2400390 1 functions */
+    int16_t unk_2400392;                 /* +0x2400392 1 functions */
+    int16_t unk_2400394;                 /* +0x2400394 1 functions */
+    int16_t unk_2400396;                 /* +0x2400396 1 functions */
+    int16_t unk_2400398;                 /* +0x2400398 1 functions */
+    int16_t unk_240039a;                 /* +0x240039a 1 functions */
+    uint8_t pad_240039c[0x4];
+    int unk_24003a0;                     /* +0x24003a0 1 functions */
+    int unk_24003a4;                     /* +0x24003a4 1 functions */
+    int unk_24003a8;                     /* +0x24003a8 1 functions */
+    int unk_24003ac;                     /* +0x24003ac 1 functions */
+    int unk_24003b0;                     /* +0x24003b0 1 functions */
+    uint8_t pad_24003b4[0x47fb0];
+    int unk_2448364;                     /* +0x2448364 1 functions */
+    uint8_t pad_2448368[0x11fc];
+    int unk_2449564;                     /* +0x2449564 1 functions */
+    uint8_t pad_2449568[0x11b6dfc];
+    int unk_3600364;                     /* +0x3600364 1 functions */
+    int unk_3600368;                     /* +0x3600368 1 functions */
+    int unk_360036c;                     /* +0x360036c 1 functions */
+    int unk_3600370;                     /* +0x3600370 1 functions */
+    int unk_3600374;                     /* +0x3600374 1 functions */
+    int unk_3600378;                     /* +0x3600378 1 functions */
+    int unk_360037c;                     /* +0x360037c 1 functions */
+    int unk_3600380;                     /* +0x3600380 1 functions */
+    int unk_3600384;                     /* +0x3600384 1 functions */
+    int unk_3600388;                     /* +0x3600388 1 functions */
+    int unk_360038c;                     /* +0x360038c 1 functions */
+    int unk_3600390;                     /* +0x3600390 1 functions */
+    int unk_3600394;                     /* +0x3600394 1 functions */
+    uint8_t pad_3600398[0x4];
+    int unk_360039c;                     /* +0x360039c 1 functions */
+    int unk_36003a0;                     /* +0x36003a0 1 functions */
+    uint8_t pad_36003a4[0x4];
+    int unk_36003a8;                     /* +0x36003a8 1 functions */
+    int unk_36003ac;                     /* +0x36003ac 1 functions */
+    uint8_t pad_36003b0[0x4];
+    int unk_36003b4;                     /* +0x36003b4 1 functions */
+    int unk_36003b8;                     /* +0x36003b8 1 functions */
+    uint8_t pad_36003bc[0x4];
+    int unk_36003c0;                     /* +0x36003c0 1 functions */
+    int unk_36003c4;                     /* +0x36003c4 1 functions */
+    uint8_t pad_36003c8[0x4];
+    int unk_36003cc;                     /* +0x36003cc 1 functions */
+    int unk_36003d0;                     /* +0x36003d0 1 functions */
+    uint8_t pad_36003d4[0x4];
+    int unk_36003d8;                     /* +0x36003d8 1 functions */
+    int unk_36003dc;                     /* +0x36003dc 1 functions */
+    uint8_t pad_36003e0[0x4];
+    int unk_36003e4;                     /* +0x36003e4 1 functions */
+    int unk_36003e8;                     /* +0x36003e8 1 functions */
+    uint8_t pad_36003ec[0x4];
+    int unk_36003f0;                     /* +0x36003f0 1 functions */
+    uint8_t pad_36003f4[0xf0];
+    int unk_36004e4;                     /* +0x36004e4 3 functions */
+    uint8_t pad_36004e8[0x1];
+    char unk_36004e9;                    /* +0x36004e9 1 functions */
+    char unk_36004ea;                    /* +0x36004ea 1 functions */
+    char unk_36004eb;                    /* +0x36004eb 1 functions */
+    uint8_t pad_36004ec[0x3d];
+    char unk_3600529;                    /* +0x3600529 1 functions */
+    uint8_t pad_360052a[0x3e];
+    int unk_3600568;                     /* +0x3600568 1 functions */
+    uint8_t pad_360056c[0x3f7c];
+    int unk_36044e8;                     /* +0x36044e8 3 functions */
+    uint8_t pad_36044ec[0x1];
+    char unk_36044ed;                    /* +0x36044ed 1 functions */
+    char unk_36044ee;                    /* +0x36044ee 1 functions */
+    char unk_36044ef;                    /* +0x36044ef 1 functions */
+    uint8_t pad_36044f0[0x3d];
+    char unk_360452d;                    /* +0x360452d 1 functions */
+    uint8_t pad_360452e[0x3e];
+    int unk_360456c;                     /* +0x360456c 1 functions */
+    uint8_t pad_3604570[0x12388];
+}; uint8_t lf_raw[0x36168f8]; } Building;
+SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
+
+/* area_sector[]: record of 0xc0d0000 bytes. */
+typedef union AreaSector { struct {
+    int unk_0000;                        /* +0x0000 1 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    uint8_t pad_0008[0x1c];
+    int unk_0024;                        /* +0x0024 1 functions */
+    int unk_0028;                        /* +0x0028 1 functions */
+    int unk_002c;                        /* +0x002c 1 functions */
+    int num_particles;                   /* +0x0030 createparticle: limit 0x3fff; particlesimulation loops over it */
+    uint8_t pad_0034[0xc];
+    int unk_0040;                        /* +0x0040 3 functions */
+    int unk_0044;                        /* +0x0044 7 functions */
+    uint8_t pad_0048[0x7fc];
+    int16_t unk_0844;                    /* +0x0844 2 functions */
+    int16_t unk_0846;                    /* +0x0846 1 functions */
+    int16_t unk_0848;                    /* +0x0848 1 functions */
+    int16_t unk_084a;                    /* +0x084a 1 functions */
+    int16_t unk_084c;                    /* +0x084c 1 functions */
+    int16_t unk_084e;                    /* +0x084e 1 functions */
+    int16_t unk_0850;                    /* +0x0850 1 functions */
+    int16_t unk_0852;                    /* +0x0852 1 functions */
+    uint8_t pad_0854[0x1ff0];
+    int unk_2844;                        /* +0x2844 2 functions */
+    uint8_t pad_2848[0x7fc];
+    int unk_3044;                        /* +0x3044 8 functions */
+    uint8_t pad_3048[0x7fc];
+    uint8_t unk_3844;                    /* +0x3844 2 functions */
+    char unk_3845;                       /* +0x3845 1 functions */
+    char unk_3846;                       /* +0x3846 1 functions */
+    char unk_3847;                       /* +0x3847 1 functions */
+    char unk_3848;                       /* +0x3848 1 functions */
+    char unk_3849;                       /* +0x3849 1 functions */
+    char unk_384a;                       /* +0x384a 1 functions */
+    char unk_384b;                       /* +0x384b 1 functions */
+    uint8_t pad_384c[0xff8];
+    int unk_4844;                        /* +0x4844 3 functions */
+    uint8_t pad_4848[0x7fc];
+    int unk_5044;                        /* +0x5044 4 functions */
+    int unk_5048;                        /* +0x5048 1 functions */
+    int unk_504c;                        /* +0x504c 1 functions */
+    int unk_5050;                        /* +0x5050 1 functions */
+    int unk_5054;                        /* +0x5054 2 functions */
+    int unk_5058;                        /* +0x5058 1 functions */
+    int unk_505c;                        /* +0x505c 1 functions */
+    int unk_5060;                        /* +0x5060 1 functions */
+    int unk_5064;                        /* +0x5064 1 functions */
+    uint8_t pad_5068[0x20];
+    int unk_5088;                        /* +0x5088 1 functions */
+    uint8_t pad_508c[0x800];
+    int unk_588c;                        /* +0x588c 1 functions */
+    uint8_t pad_5890[0x818];
+    int unk_60a8;                        /* +0x60a8 2 functions */
+    uint8_t pad_60ac[0x5010];
+    int unk_b0bc;                        /* +0xb0bc 1 functions */
+    uint8_t pad_b0c0[0x6dae794];
+    int unk_6db9854;                     /* +0x6db9854 1 functions */
+    uint8_t pad_6db9858[0x53167a8];
+}; uint8_t lf_raw[0xc0d0000]; } AreaSector;
+SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
+SR_STATIC_ASSERT(offsetof(AreaSector, num_particles) == 0x30, "AreaSector.num_particles");
+
+/* objectpacket[]: record of 0xce14 bytes. */
+typedef union ObjectPacket { struct {
+    int unk_0000;                        /* +0x0000 3 functions */
+    int unk_0004;                        /* +0x0004 2 functions */
+    int unk_0008;                        /* +0x0008 2 functions */
+    int unk_000c;                        /* +0x000c 2 functions */
+    int unk_0010;                        /* +0x0010 1 functions */
+    uint8_t pad_0014[0x3f0];
+    int unk_0404;                        /* +0x0404 3 functions */
+    int unk_0408;                        /* +0x0408 2 functions */
+    int unk_040c;                        /* +0x040c 2 functions */
+    int unk_0410;                        /* +0x0410 2 functions */
+    int unk_0414;                        /* +0x0414 2 functions */
+    uint8_t pad_0418[0x3f0];
+    int unk_0808;                        /* +0x0808 3 functions */
+    int unk_080c;                        /* +0x080c 2 functions */
+    int unk_0810;                        /* +0x0810 2 functions */
+    uint8_t pad_0814[0x3f8];
+    int unk_0c0c;                        /* +0x0c0c 3 functions */
+    int unk_0c10;                        /* +0x0c10 2 functions */
+    int unk_0c14;                        /* +0x0c14 2 functions */
+    uint8_t pad_0c18[0x1f8];
+    int unk_0e10;                        /* +0x0e10 1 functions */
+    int unk_0e14;                        /* +0x0e14 1 functions */
+    int unk_0e18;                        /* +0x0e18 1 functions */
+    int unk_0e1c;                        /* +0x0e1c 1 functions */
+    int unk_0e20;                        /* +0x0e20 1 functions */
+    int unk_0e24;                        /* +0x0e24 1 functions */
+    int unk_0e28;                        /* +0x0e28 1 functions */
+    uint8_t pad_0e2c[0xbfe8];
+}; uint8_t lf_raw[0xce14]; } ObjectPacket;
+SR_STATIC_ASSERT(sizeof(ObjectPacket) == 0xce14, "ObjectPacket");
+
+#pragma pack(pop)
+
+#endif /* SR_TYPES_LIFTED_H */

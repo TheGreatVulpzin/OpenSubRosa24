@@ -144,7 +144,8 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 - First file: `src/game/vectors.c` (13 vector functions, 2026-10-17).
 - Folders: `src/common/` (math, shared by the client and the server), `src/net/` (packets and events), `src/game/`, `src/server/`. The operating system calls of the clean code go through `src/platform/os_calls.c` (`sr_os.h`), so the harness and the recording build see them.
 - Done: math (`src/common/vectors.c`, `random.c`), packets (`src/net/packet.c`) and events (`src/net/events.c`). Particles and bonds (`src/game/particles.c`), the bond pair functions (`src/game/solver.c`) and the bond solver `bondsimulation2` (`src/game/bonds.c`, 2026-10-18: bench.py 1.02 against the original). `bondsimulation2` still calls five functions in the lifted C: `stoptimer`, `multiply3x3matrices`, `objectwheelsimulation2`, `calculatefriction` and `objectenginesimulation2`.
-- Next step after lot C4: stop the daily use of Ghidra. Each naming pass costs about 15 minutes of ApplyTypes and LiftExport, and a name that leaves `sr_types.h` breaks the lifted C (as `unk_0090` in `objects.c`). The plan:
+- Done on 2026-10-19 (after lot C4): `src/lifted/sr_types_lifted.h` is the frozen header of the lifted C, `gen_types.py` checks the sizes against it, and `pipeline.sh` runs Ghidra only with `--export`. The reason and the plan:
+- Stop the daily use of Ghidra. Each naming pass costs about 15 minutes of ApplyTypes and LiftExport, and a name that leaves `sr_types.h` breaks the lifted C (as `unk_0090` in `objects.c`). The plan:
   1. Freeze `src/lifted/lifted_024d.c` with a header of its own: a copy of today's `sr_types.h`, with the old names (`unk_` and the others).
   2. The clean code (`src/common`, `src/net`, `src/game`, `src/server`) keeps the `sr_types.h` from `gen_types.py`. New names go only there.
   3. The `SR_STATIC_ASSERT` checks of size and offset in both headers make sure that the layout is the same.

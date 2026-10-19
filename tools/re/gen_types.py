@@ -12,6 +12,7 @@ breaks the build.
 Usage: python -I tools/re/gen_types.py
 """
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 
@@ -373,6 +374,22 @@ def gen_global_table():
     return chr(10).join(lines)
 
 
+def check_frozen(header):
+    """Each record in the frozen header of the lifted C must have the same size as in the new header."""
+    pat = re.compile(r'\}; uint8_t lf_raw\[(0x[0-9a-f]+)\]; \} (\w+);')
+    frozen = ROOT / 'src/lifted/sr_types_lifted.h'
+    if not frozen.exists():
+        return
+    old = {name: int(size, 16) for size, name in pat.findall(frozen.read_text(encoding='utf-8'))}
+    new = {name: int(size, 16) for size, name in pat.findall(header)}
+    bad = [f'{n}: 0x{old[n]:x} in sr_types_lifted.h, 0x{new[n]:x} in sr_types.h'
+           for n in sorted(old) if n in new and old[n] != new[n]]
+    gone = [n for n in sorted(old) if n not in new]
+    if bad or gone:
+        raise SystemExit('the layout differs from the frozen header of the lifted C:\n  ' +
+                         '\n  '.join(bad + [f'{n}: not in sr_types.h' for n in gone]))
+
+
 def main():
     names = load_names()
     parts = [HEADER]
@@ -381,7 +398,9 @@ def main():
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'
     out.mkdir(parents=True, exist_ok=True)
-    (out / 'sr_types.h').write_text('\n\n'.join(parts), encoding='utf-8', newline='\n')
+    header = '\n\n'.join(parts)
+    check_frozen(header)
+    (out / 'sr_types.h').write_text(header, encoding='utf-8', newline='\n')
     (out / 'sr_globals_024d.h').write_text(gen_globals(), encoding='utf-8', newline='\n')
     (out / 'sr_global_table.h').write_text(gen_global_table(), encoding='utf-8', newline='\n')
     print('generated: src/include/sr_types.h, src/include/sr_globals_024d.h')

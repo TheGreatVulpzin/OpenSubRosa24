@@ -13,7 +13,7 @@
 
 /* Structs of the game (Human, Object, Player...): ApplyTypes.java puts the same types into
  * Ghidra, so the pseudo-C uses them. */
-#include "sr_types.h"
+#include "sr_types_lifted.h"
 
 extern uintptr_t sr_base;
 
