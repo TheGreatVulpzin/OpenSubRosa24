@@ -8,11 +8,11 @@ void lf_012f0(void);
 void lf_01420(void);
 void angulardistance(void);
 void lf_01610(void);
-void lf_01850(void);
-void lf_01bc0(void);
-void lf_01cd0(void);
+void area_getblock(void);
+void area_getblocktexture(void);
+void area_getnextsector(void);
 void lf_01cf0(void);
-void lf_01e20(void);
+void area_getnextchunk(void);
 void lf_01e50(void);
 void lf_02560(void);
 void lf_02620(void);
@@ -21,9 +21,9 @@ void lf_029a0(void);
 void lf_02cf0(void);
 void lf_02dc0(void);
 void lf_02f00(void);
-void lf_03030(void);
-void lf_03130(void);
-void lf_03290(void);
+void area_interior_getblock(void);
+void area_interior_getblocklink(void);
+void area_interior_getblocktexture(void);
 void deletebond(void);
 void lf_03740(void);
 void lf_03d70(void);
@@ -60,9 +60,9 @@ void lf_080b0(void);
 void lf_08320(void);
 void lf_08590(void);
 void lf_08880(void);
-void lf_089c0(void);
-void lf_08a60(void);
-void lf_08b00(void);
+void pointinsidebase(void);
+void pointinsidebuilding(void);
+void pointinsidebasesafe(void);
 void lf_08cf0(void);
 void lf_08fe0(void);
 void lf_093e0(void);
@@ -105,7 +105,7 @@ void resetorientation(void);
 void rotatevector(void);
 void rotateorientation(void);
 void normalizevector2d(void);
-void lf_0c0a0(void);
+void rotatevector2d(void);
 void lineintersectplane(void);
 void lineintersectplanetwosided(void);
 void lineintersecttriangle(void);
@@ -326,11 +326,11 @@ const LfEntry lf_table[] = {
     { "server_writelogfile", 0x1420, (void *)lf_01420, 0, LF_RET_VOID, 4, "", 1 },
     { "angulardistance", 0x1540, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "ai_car_nextwaypoint", 0x1610, (void *)lf_01610, 1, LF_RET_VOID, 4, "v", 0 },
-    { "area_getblock", 0x1850, (void *)lf_01850, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_getblocktexture", 0x1bc0, (void *)lf_01bc0, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "area_getnextsector", 0x1cd0, (void *)lf_01cd0, 0, LF_RET_INT, 4, "", 0 },
+    { "area_getblock", 0x1850, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_getblocktexture", 0x1bc0, (void *)area_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_getnextsector", 0x1cd0, (void *)area_getnextsector, 0, LF_RET_INT, 4, "", 0 },
     { "area_marksector", 0x1cf0, (void *)lf_01cf0, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "area_getnextchunk", 0x1e20, (void *)lf_01e20, 1, LF_RET_INT, 4, "v", 0 },
+    { "area_getnextchunk", 0x1e20, (void *)area_getnextchunk, 1, LF_RET_INT, 4, "v", 0 },
     { "landscape_buildsectorlods", 0x1e50, (void *)lf_01e50, 1, LF_RET_VOID, 4, "v", 1 },
     { "tesselatebezier", 0x2560, (void *)lf_02560, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "tesselatebezierderivative", 0x2620, (void *)lf_02620, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
@@ -339,9 +339,9 @@ const LfEntry lf_table[] = {
     { "area_block_rotatesurface", 0x2cf0, (void *)lf_02cf0, 2, LF_RET_INT, 4, "vv", 0 },
     { "area_interior_setblock", 0x2dc0, (void *)lf_02dc0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_setobject", 0x2f00, (void *)lf_02f00, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_interior_getblock", 0x3030, (void *)lf_03030, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_interior_getblocklink", 0x3130, (void *)lf_03130, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_interior_getblocktexture", 0x3290, (void *)lf_03290, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_interior_getblock", 0x3030, (void *)area_interior_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_interior_getblocklink", 0x3130, (void *)area_interior_getblocklink, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_interior_getblocktexture", 0x3290, (void *)area_interior_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "deletebond", 0x33a0, (void *)deletebond, 1, LF_RET_VOID, 4, "v", 0 },
     { "building_save", 0x3740, (void *)lf_03740, 1, LF_RET_VOID, 4, "v", 1 },
     { "building_setupbuild", 0x3d70, (void *)lf_03d70, 0, LF_RET_VOID, 4, "", 0 },
@@ -378,9 +378,9 @@ const LfEntry lf_table[] = {
     { "leveleditor_save", 0x8320, (void *)lf_08320, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0x8590, (void *)lf_08590, 0, LF_RET_VOID, 4, "", 1 },
     { "sprintf_comma", 0x8880, (void *)lf_08880, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "pointinsidebase", 0x89c0, (void *)lf_089c0, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pointinsidebuilding", 0x8a60, (void *)lf_08a60, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "pointinsidebasesafe", 0x8b00, (void *)lf_08b00, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pointinsidebase", 0x89c0, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pointinsidebuilding", 0x8a60, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "pointinsidebasesafe", 0x8b00, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
     { "logic_addteamcash", 0x8cf0, (void *)lf_08cf0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_teammissioncomplete", 0x8fe0, (void *)lf_08fe0, 2, LF_RET_VOID, 4, "pv", 0 },
     { "logic_suits_buy", 0x93e0, (void *)lf_093e0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -423,7 +423,7 @@ const LfEntry lf_table[] = {
     { "rotatevector", 0xbc50, (void *)rotatevector, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "rotateorientation", 0xbdb0, (void *)rotateorientation, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "normalizevector2d", 0xbf60, (void *)normalizevector2d, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "rotatevector2d", 0xc0a0, (void *)lf_0c0a0, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "rotatevector2d", 0xc0a0, (void *)rotatevector2d, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectplane", 0xc120, (void *)lineintersectplane, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersectplanetwosided", 0xc290, (void *)lineintersectplanetwosided, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersecttriangle", 0xc420, (void *)lineintersecttriangle, 8, LF_RET_INT, 4, "pppppppp", 0 },

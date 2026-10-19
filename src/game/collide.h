@@ -20,4 +20,8 @@ int sphereintersectcityobjecttype(vec3 *hit, vec3 *normal, float *dist, int type
 
 int lineintersectcityobject(float *hit, float *normal, float *t, int obj, float *from, float *to);
 
+int pointinsidebase(float *pos, int team, float margin);
+int pointinsidebasesafe(float *pos, int team, float margin);
+int pointinsidebuilding(int building, float *pos, float margin);
+
 #endif /* SR_COLLIDE_H */

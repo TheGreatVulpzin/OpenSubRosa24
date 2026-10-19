@@ -34,7 +34,6 @@
  * index of playersellstock, human_collisionhuman and deletehuman as a float or a pointer:
  * the stack holds the same 4 bytes as the int here. */
 void __cdecl lf_05be0(int player, int stocks);
-int __cdecl lf_08a60(int building, float *pos, float margin);
 void __cdecl lf_16960(uint32_t player);
 void __cdecl lf_16a20(int player, int tax);
 void __cdecl lf_18720(int human);
@@ -43,7 +42,6 @@ void __cdecl lf_19380(int human);
 void __cdecl lf_4a440(int human);
 void __cdecl lf_4bd60(int human);
 #define playersellstock lf_05be0
-#define pointinsidebuilding lf_08a60
 #define playerdeathtax lf_16960
 #define playerteamkilltax lf_16a20
 #define deletehuman lf_18720

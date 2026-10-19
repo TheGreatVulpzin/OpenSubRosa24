@@ -86,7 +86,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -241,6 +241,34 @@ typedef union CityObjectTypeRec { struct {
     uint8_t unk_240c[0xc];
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
+/* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */
+typedef union AreaChunk { struct {
+    int used;           /* +0x000 area_getnextchunk takes a chunk with 0 */
+    int sectors[512];   /* +0x004 the BlockSector of each sector, or -1: index x + 8 * z + 64 * y */
+}; uint8_t lf_raw[0x804]; } AreaChunk;
+
+/* A sector of 8 x 8 x 8 blocks of an area: the global area_sector holds 8192 records of
+ * 0x6068 bytes after its first 0x40 bytes. Each block list has index x + 8 * z + 64 * y.
+ * A block word: the high 3 bits give the kind (2 normal, 4 special, 6 link to the block at
+ * x - bits 0..7, y - bits 16..23, z - bits 8..15). */
+typedef union BlockSector { struct {
+    int used;           /* +0x0000 area_getnextsector takes a sector with 0 */
+    uint32_t blocks[512];           /* +0x0004 the outer blocks */
+    uint16_t textures[512][8];      /* +0x0804 area_getblocktexture: one for each face of a block */
+    int unk_2804[512];
+    uint32_t interior[512];         /* +0x3004 the blocks of the interiors */
+    uint8_t interior_textures[512][8]; /* +0x3804 area_interior_getblocktexture */
+    uint32_t cityobjects[512];      /* +0x4804 above 0: a city object type in bits 0..9, a turn of 90 degrees times bits 10..11 */
+    int unk_5004[4];
+    int area;           /* +0x5014 area_createsector: the area of the sector */
+    int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
+    uint8_t unk_5024[0x24];
+    int unk_5048;
+    uint8_t unk_504c[0x800];
+    int unk_584c;
+    uint8_t unk_5850[0x818];
+}; uint8_t lf_raw[0x6068]; } BlockSector;
+
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {
     vec3 pos;           /* +0x00 the world position (objectsimulation moves it with the particle) */
@@ -307,6 +335,10 @@ SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
+SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
+SR_STATIC_ASSERT(sizeof(BlockSector) == 0x6068, "BlockSector");
+SR_STATIC_ASSERT(offsetof(BlockSector, cityobjects) == 0x4804, "BlockSector.cityobjects");
+SR_STATIC_ASSERT(offsetof(BlockSector, area) == 0x5014, "BlockSector.area");
 SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
 SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");

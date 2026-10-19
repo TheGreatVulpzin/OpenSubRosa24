@@ -149,6 +149,34 @@ typedef union CityObjectTypeRec { struct {
     uint8_t unk_240c[0xc];
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
+/* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */
+typedef union AreaChunk { struct {
+    int used;           /* +0x000 area_getnextchunk takes a chunk with 0 */
+    int sectors[512];   /* +0x004 the BlockSector of each sector, or -1: index x + 8 * z + 64 * y */
+}; uint8_t lf_raw[0x804]; } AreaChunk;
+
+/* A sector of 8 x 8 x 8 blocks of an area: the global area_sector holds 8192 records of
+ * 0x6068 bytes after its first 0x40 bytes. Each block list has index x + 8 * z + 64 * y.
+ * A block word: the high 3 bits give the kind (2 normal, 4 special, 6 link to the block at
+ * x - bits 0..7, y - bits 16..23, z - bits 8..15). */
+typedef union BlockSector { struct {
+    int used;           /* +0x0000 area_getnextsector takes a sector with 0 */
+    uint32_t blocks[512];           /* +0x0004 the outer blocks */
+    uint16_t textures[512][8];      /* +0x0804 area_getblocktexture: one for each face of a block */
+    int unk_2804[512];
+    uint32_t interior[512];         /* +0x3004 the blocks of the interiors */
+    uint8_t interior_textures[512][8]; /* +0x3804 area_interior_getblocktexture */
+    uint32_t cityobjects[512];      /* +0x4804 above 0: a city object type in bits 0..9, a turn of 90 degrees times bits 10..11 */
+    int unk_5004[4];
+    int area;           /* +0x5014 area_createsector: the area of the sector */
+    int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
+    uint8_t unk_5024[0x24];
+    int unk_5048;
+    uint8_t unk_504c[0x800];
+    int unk_584c;
+    uint8_t unk_5850[0x818];
+}; uint8_t lf_raw[0x6068]; } BlockSector;
+
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {
     vec3 pos;           /* +0x00 the world position (objectsimulation moves it with the particle) */
@@ -215,6 +243,10 @@ SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
+SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
+SR_STATIC_ASSERT(sizeof(BlockSector) == 0x6068, "BlockSector");
+SR_STATIC_ASSERT(offsetof(BlockSector, cityobjects) == 0x4804, "BlockSector.cityobjects");
+SR_STATIC_ASSERT(offsetof(BlockSector, area) == 0x5014, "BlockSector.area");
 SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
 SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
@@ -950,18 +982,10 @@ typedef union Game { struct {
     float unk_004c;                      /* +0x004c 3 functions */
     float unk_0050;                      /* +0x0050 3 functions */
     uint8_t pad_0054[0x4];
-    float unk_0058;                      /* +0x0058 2 functions */
-    float unk_005c;                      /* +0x005c 2 functions */
-    float unk_0060;                      /* +0x0060 2 functions */
-    float unk_0064;                      /* +0x0064 2 functions */
-    float unk_0068;                      /* +0x0068 2 functions */
-    float unk_006c;                      /* +0x006c 2 functions */
-    float unk_0070;                      /* +0x0070 6 functions */
-    float unk_0074;                      /* +0x0074 6 functions */
-    float unk_0078;                      /* +0x0078 6 functions */
-    float unk_007c;                      /* +0x007c 6 functions */
-    float unk_0080;                      /* +0x0080 6 functions */
-    float unk_0084;                      /* +0x0084 6 functions */
+    vec3 team0_base_min;                 /* +0x0058 pointinsidebase: the box of the base of team 0; team records are 0x117c bytes */
+    vec3 team0_base_max;                 /* +0x0064 pointinsidebase */
+    vec3 team0_safe_min;                 /* +0x0070 pointinsidebasesafe: the box of the safe zone of team 0 */
+    vec3 team0_safe_max;                 /* +0x007c pointinsidebasesafe */
     float unk_0088;                      /* +0x0088 2 functions */
     int unk_008c;                        /* +0x008c 1 functions */
     int unk_0090;                        /* +0x0090 7 functions */
@@ -1235,6 +1259,10 @@ SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
 SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
 SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+SR_STATIC_ASSERT(offsetof(Game, team0_base_min) == 0x58, "Game.team0_base_min");
+SR_STATIC_ASSERT(offsetof(Game, team0_base_max) == 0x64, "Game.team0_base_max");
+SR_STATIC_ASSERT(offsetof(Game, team0_safe_min) == 0x70, "Game.team0_safe_min");
+SR_STATIC_ASSERT(offsetof(Game, team0_safe_max) == 0x7c, "Game.team0_safe_max");
 SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
 SR_STATIC_ASSERT(offsetof(Game, team1_manager) == 0x1218, "Game.team1_manager");
 SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
@@ -1330,42 +1358,34 @@ SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
 /* area[]: record of 0x100d6c bytes. */
 typedef union Area { struct {
     int active;                          /* +0x0000 the collision tests of the level skip an area with 0 */
-    float unk_0004;                      /* +0x0004 4 functions */
-    float unk_0008;                      /* +0x0008 4 functions */
-    float unk_000c;                      /* +0x000c 4 functions */
-    float unk_0010;                      /* +0x0010 2 functions */
-    float unk_0014;                      /* +0x0014 2 functions */
-    float unk_0018;                      /* +0x0018 2 functions */
-    float unk_001c;                      /* +0x001c 2 functions */
-    float unk_0020;                      /* +0x0020 2 functions */
-    float unk_0024;                      /* +0x0024 2 functions */
-    float unk_0028;                      /* +0x0028 2 functions */
-    float unk_002c;                      /* +0x002c 2 functions */
-    float unk_0030;                      /* +0x0030 2 functions */
-    int unk_0034;                        /* +0x0034 19 functions */
-    int unk_0038;                        /* +0x0038 19 functions */
-    int unk_003c;                        /* +0x003c 19 functions */
-    float unk_0040;                      /* +0x0040 4 functions */
-    float unk_0044;                      /* +0x0044 4 functions */
-    int unk_0048;                        /* +0x0048 18 functions */
-    float unk_004c;                      /* +0x004c 4 functions */
-    float unk_0050;                      /* +0x0050 4 functions */
-    float unk_0054;                      /* +0x0054 4 functions */
-    float unk_0058;                      /* +0x0058 4 functions */
-    float unk_005c;                      /* +0x005c 4 functions */
-    float unk_0060;                      /* +0x0060 4 functions */
+    vec3 origin;                         /* +0x0004 createarea: parameter 2; the collision tests move a point into the frame of the area from it */
+    vec3 axes[3];                        /* +0x0010 createarea writes the identity; the collision tests project a point on them */
+    int size_x;                          /* +0x0034 createarea: the size in chunks of 64 blocks */
+    int size_y;                          /* +0x0038 createarea: the size in chunks of 64 blocks */
+    int size_z;                          /* +0x003c createarea: the size in chunks of 64 blocks */
+    float block_size;                    /* +0x0040 createarea: the side of a block */
+    float inv_block_size;                /* +0x0044 createarea: 1 / block_size */
+    int chunk_index;                     /* +0x0048 createarea: a pointer to size_x * size_y * size_z ints, the chunk of each place or -1; index (size_z * y + z) * size_x + x */
+    vec3 box_min;                        /* +0x004c createarea: origin; the sphere tests skip the area outside the box */
+    vec3 box_max;                        /* +0x0058 createarea: origin + 64 * block_size * the size */
     int unk_0064;                        /* +0x0064 1 functions */
     uint8_t pad_0068[0x500];
-    int unk_0568;                        /* +0x0568 3 functions */
-    int unk_056c;                        /* +0x056c 18 functions */
-    int unk_0570;                        /* +0x0570 1 functions */
-    uint8_t pad_0574[0x7f8];
-    int unk_0d6c;                        /* +0x0d6c 2 functions */
-    uint8_t pad_0d70[0xffff8];
+    AreaChunk chunks[512];               /* +0x0568 area_getnextchunk takes a chunk with used 0 */
     int unk_100d68;                      /* +0x100d68 1 functions */
 }; uint8_t lf_raw[0x100d6c]; } Area;
 SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
 SR_STATIC_ASSERT(offsetof(Area, active) == 0x0, "Area.active");
+SR_STATIC_ASSERT(offsetof(Area, origin) == 0x4, "Area.origin");
+SR_STATIC_ASSERT(offsetof(Area, axes) == 0x10, "Area.axes");
+SR_STATIC_ASSERT(offsetof(Area, size_x) == 0x34, "Area.size_x");
+SR_STATIC_ASSERT(offsetof(Area, size_y) == 0x38, "Area.size_y");
+SR_STATIC_ASSERT(offsetof(Area, size_z) == 0x3c, "Area.size_z");
+SR_STATIC_ASSERT(offsetof(Area, block_size) == 0x40, "Area.block_size");
+SR_STATIC_ASSERT(offsetof(Area, inv_block_size) == 0x44, "Area.inv_block_size");
+SR_STATIC_ASSERT(offsetof(Area, chunk_index) == 0x48, "Area.chunk_index");
+SR_STATIC_ASSERT(offsetof(Area, box_min) == 0x4c, "Area.box_min");
+SR_STATIC_ASSERT(offsetof(Area, box_max) == 0x58, "Area.box_max");
+SR_STATIC_ASSERT(offsetof(Area, chunks) == 0x568, "Area.chunks");
 
 /* option[]: record of 0x150 bytes. */
 typedef union Option { struct {
@@ -1794,12 +1814,8 @@ typedef union City { struct {
     float unk_2f9ec;                     /* +0x2f9ec 1 functions */
     float unk_2f9f0;                     /* +0x2f9f0 2 functions */
     float unk_2f9f4;                     /* +0x2f9f4 1 functions */
-    float unk_2f9f8;                     /* +0x2f9f8 3 functions */
-    float unk_2f9fc;                     /* +0x2f9fc 3 functions */
-    float unk_2fa00;                     /* +0x2fa00 3 functions */
-    float unk_2fa04;                     /* +0x2fa04 3 functions */
-    float unk_2fa08;                     /* +0x2fa08 3 functions */
-    float unk_2fa0c;                     /* +0x2fa0c 3 functions */
+    vec3 building_min;                   /* +0x2f9f8 pointinsidebuilding: the box of building 0, records of 0x9dc bytes */
+    vec3 building_max;                   /* +0x2fa04 pointinsidebuilding */
     int unk_2fa10;                       /* +0x2fa10 1 functions */
     int unk_2fa14;                       /* +0x2fa14 1 functions */
     int unk_2fa18;                       /* +0x2fa18 1 functions */
@@ -1874,6 +1890,8 @@ typedef union City { struct {
 SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
 SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
+SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");
+SR_STATIC_ASSERT(offsetof(City, building_max) == 0x2fa04, "City.building_max");
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {

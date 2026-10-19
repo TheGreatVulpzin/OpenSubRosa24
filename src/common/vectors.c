@@ -249,6 +249,15 @@ void normalizevector2d(float out[2], const float v[2])
     out[1] = 0.0f;
 }
 
+/* Turns x and y of v by angle (radians). */
+void rotatevector2d(float v[2], float angle)
+{
+    float x = v[0], y = v[1];
+    float c = (float)x87_cos(angle), s = (float)x87_sin(angle);
+    v[0] = (float)(s * -y + c * v[0]);
+    v[1] = (float)(x * s + v[1] * c);
+}
+
 /* out = a * b. Each sum starts at 0, so a product of -0 gives +0. out may be a or b. */
 void multiply3x3matrices(vec3 out[3], const vec3 a[3], const vec3 b[3])
 {

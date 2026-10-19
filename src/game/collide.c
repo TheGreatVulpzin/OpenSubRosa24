@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "area.h"
 #include "intersect.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
@@ -14,9 +15,9 @@
 
 /* Game globals. */
 #define g_intersect (*SR_AT(Intersect, 0x103484a0))
-#define g_areas SR_AT(Area, SR_RVA_AREA)
 #define g_cityobjects SR_AT(CityObjectRec, 0x15e24020)
-#define NUM_AREAS 4
+#define g_game (*SR_AT(Game, SR_RVA_GAME))
+#define g_city (*SR_AT(City, 0xe299220))
 #define NUM_CITYOBJECTS 1024
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
@@ -742,4 +743,34 @@ int lineintersectcityobject(float *hitp, float *normalp, float *t, int obj, floa
         return 0;
     g_intersect.surface_vel = co->vel;
     return 1;
+}
+
+/* p is inside the box lo..hi, made larger by margin on each side. */
+static int inside_box(const vec3 *p, const vec3 *lo, const vec3 *hi, float margin)
+{
+    return lo->x - margin <= p->x && p->x < hi->x + margin && lo->y - margin <= p->y && p->y < hi->y + margin &&
+           lo->z - margin <= p->z && p->z < hi->z + margin;
+}
+
+/* The team records and the building records repeat the fields of record 0. */
+#define TEAM_VEC(field, team) ((const vec3 *)((const char *)&g_game.field + (team) * 0x117c))
+#define BUILDING_VEC(field, b) ((const vec3 *)((const char *)&g_city.field + (b) * 0x9dc))
+
+/* pos is in the base of team `team`. */
+int pointinsidebase(float *pos, int team, float margin)
+{
+    return inside_box((const vec3 *)pos, TEAM_VEC(team0_base_min, team), TEAM_VEC(team0_base_max, team), margin);
+}
+
+/* pos is in the safe zone of the base of team `team`. */
+int pointinsidebasesafe(float *pos, int team, float margin)
+{
+    return inside_box((const vec3 *)pos, TEAM_VEC(team0_safe_min, team), TEAM_VEC(team0_safe_max, team), margin);
+}
+
+/* pos is in the box of building `building`. */
+int pointinsidebuilding(int building, float *pos, float margin)
+{
+    return inside_box((const vec3 *)pos, BUILDING_VEC(building_min, building), BUILDING_VEC(building_max, building),
+                      margin);
 }

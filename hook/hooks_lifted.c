@@ -137,12 +137,12 @@ __declspec(naked) static void th_01610(void)
 }
 static uint8_t expect_01610[8] = { 0x51, 0x53, 0x55, 0x56, 0x8b, 0x74, 0x24, 0x14 };
 
-int __cdecl lf_01850(uint param_1, uint param_2, uint param_3, uint param_4);
+int __cdecl area_getblock(uint param_1, uint param_2, uint param_3, uint param_4);
 static int (__cdecl *orig_01850)(uint, uint, uint, uint);
 static SvVerify v_01850 = { "area_getblock", -1 };
 static int __cdecl hk_01850(uint param_1, uint param_2, uint param_3, uint param_4)
 {
-    SV_HOOK_RET(int, v_01850, lf_01850(param_1, param_2, param_3, param_4), orig_01850(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_01850, area_getblock(param_1, param_2, param_3, param_4), orig_01850(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_01850(void)
 {
@@ -180,12 +180,12 @@ __declspec(naked) static void th_01850(void)
 }
 static uint8_t expect_01850[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-int __cdecl lf_01bc0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+int __cdecl area_getblocktexture(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
 static int (__cdecl *orig_01bc0)(uint, uint, uint, uint, int);
 static SvVerify v_01bc0 = { "area_getblocktexture", -1 };
 static int __cdecl hk_01bc0(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
-    SV_HOOK_RET(int, v_01bc0, lf_01bc0(param_1, param_2, param_3, param_4, param_5), orig_01bc0(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_RET(int, v_01bc0, area_getblocktexture(param_1, param_2, param_3, param_4, param_5), orig_01bc0(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_01bc0(void)
 {
@@ -224,12 +224,12 @@ __declspec(naked) static void th_01bc0(void)
 }
 static uint8_t expect_01bc0[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-int __cdecl lf_01cd0(void);
+int __cdecl area_getnextsector(void);
 static int (__cdecl *orig_01cd0)(void);
 static SvVerify v_01cd0 = { "area_getnextsector", -1 };
 static int __cdecl hk_01cd0(void)
 {
-    SV_HOOK_RET(int, v_01cd0, lf_01cd0(), orig_01cd0(), NULL);
+    SV_HOOK_RET(int, v_01cd0, area_getnextsector(), orig_01cd0(), NULL);
 }
 __declspec(naked) static void th_01cd0(void)
 {
@@ -306,12 +306,12 @@ __declspec(naked) static void th_01cf0(void)
 }
 static uint8_t expect_01cf0[5] = { 0x51, 0x8b, 0x4c, 0x24, 0x08 };
 
-int __cdecl lf_01e20(int param_1);
+int __cdecl area_getnextchunk(int param_1);
 static int (__cdecl *orig_01e20)(int);
 static SvVerify v_01e20 = { "area_getnextchunk", -1 };
 static int __cdecl hk_01e20(int param_1)
 {
-    SV_HOOK_RET(int, v_01e20, lf_01e20(param_1), orig_01e20(param_1), NULL);
+    SV_HOOK_RET(int, v_01e20, area_getnextchunk(param_1), orig_01e20(param_1), NULL);
 }
 __declspec(naked) static void th_01e20(void)
 {
@@ -619,12 +619,12 @@ __declspec(naked) static void th_02f00(void)
 }
 static uint8_t expect_02f00[8] = { 0x83, 0xec, 0x08, 0x53, 0x8b, 0x5c, 0x24, 0x10 };
 
-int __cdecl lf_03030(uint param_1, uint param_2, uint param_3, uint param_4);
+int __cdecl area_interior_getblock(uint param_1, uint param_2, uint param_3, uint param_4);
 static int (__cdecl *orig_03030)(uint, uint, uint, uint);
 static SvVerify v_03030 = { "area_interior_getblock", -1 };
 static int __cdecl hk_03030(uint param_1, uint param_2, uint param_3, uint param_4)
 {
-    SV_HOOK_RET(int, v_03030, lf_03030(param_1, param_2, param_3, param_4), orig_03030(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_03030, area_interior_getblock(param_1, param_2, param_3, param_4), orig_03030(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_03030(void)
 {
@@ -662,12 +662,12 @@ __declspec(naked) static void th_03030(void)
 }
 static uint8_t expect_03030[7] = { 0x8b, 0x4c, 0x24, 0x04, 0x83, 0xf9, 0x03 };
 
-int __cdecl lf_03130(uint param_1, uint param_2, uint param_3, uint param_4);
+int __cdecl area_interior_getblocklink(uint param_1, uint param_2, uint param_3, uint param_4);
 static int (__cdecl *orig_03130)(uint, uint, uint, uint);
 static SvVerify v_03130 = { "area_interior_getblocklink", -1 };
 static int __cdecl hk_03130(uint param_1, uint param_2, uint param_3, uint param_4)
 {
-    SV_HOOK_RET(int, v_03130, lf_03130(param_1, param_2, param_3, param_4), orig_03130(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_03130, area_interior_getblocklink(param_1, param_2, param_3, param_4), orig_03130(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_03130(void)
 {
@@ -705,12 +705,12 @@ __declspec(naked) static void th_03130(void)
 }
 static uint8_t expect_03130[5] = { 0x51, 0x8b, 0x4c, 0x24, 0x08 };
 
-int __cdecl lf_03290(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
+int __cdecl area_interior_getblocktexture(uint param_1, uint param_2, uint param_3, uint param_4, int param_5);
 static int (__cdecl *orig_03290)(uint, uint, uint, uint, int);
 static SvVerify v_03290 = { "area_interior_getblocktexture", -1 };
 static int __cdecl hk_03290(uint param_1, uint param_2, uint param_3, uint param_4, int param_5)
 {
-    SV_HOOK_RET(int, v_03290, lf_03290(param_1, param_2, param_3, param_4, param_5), orig_03290(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_RET(int, v_03290, area_interior_getblocktexture(param_1, param_2, param_3, param_4, param_5), orig_03290(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_03290(void)
 {
@@ -2018,12 +2018,12 @@ __declspec(naked) static void th_08880(void)
 }
 static uint8_t expect_08880[5] = { 0x8b, 0x4c, 0x24, 0x08, 0x56 };
 
-undefined4 __cdecl lf_089c0(float * param_1, int param_2, float param_3);
+undefined4 __cdecl pointinsidebase(float * param_1, int param_2, float param_3);
 static undefined4 (__cdecl *orig_089c0)(float *, int, float);
 static SvVerify v_089c0 = { "pointinsidebase", -1 };
 static undefined4 __cdecl hk_089c0(float * param_1, int param_2, float param_3)
 {
-    SV_HOOK_RET(undefined4, v_089c0, lf_089c0(param_1, param_2, param_3), orig_089c0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_089c0, pointinsidebase(param_1, param_2, param_3), orig_089c0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_089c0(void)
 {
@@ -2060,12 +2060,12 @@ __declspec(naked) static void th_089c0(void)
 }
 static uint8_t expect_089c0[8] = { 0x8b, 0x4c, 0x24, 0x08, 0x8b, 0x54, 0x24, 0x04 };
 
-undefined4 __cdecl lf_08a60(int param_1, float * param_2, float param_3);
+undefined4 __cdecl pointinsidebuilding(int param_1, float * param_2, float param_3);
 static undefined4 (__cdecl *orig_08a60)(int, float *, float);
 static SvVerify v_08a60 = { "pointinsidebuilding", -1 };
 static undefined4 __cdecl hk_08a60(int param_1, float * param_2, float param_3)
 {
-    SV_HOOK_RET(undefined4, v_08a60, lf_08a60(param_1, param_2, param_3), orig_08a60(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_08a60, pointinsidebuilding(param_1, param_2, param_3), orig_08a60(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_08a60(void)
 {
@@ -2102,12 +2102,12 @@ __declspec(naked) static void th_08a60(void)
 }
 static uint8_t expect_08a60[8] = { 0x8b, 0x4c, 0x24, 0x04, 0x8b, 0x54, 0x24, 0x08 };
 
-undefined4 __cdecl lf_08b00(float * param_1, int param_2, float param_3);
+undefined4 __cdecl pointinsidebasesafe(float * param_1, int param_2, float param_3);
 static undefined4 (__cdecl *orig_08b00)(float *, int, float);
 static SvVerify v_08b00 = { "pointinsidebasesafe", -1 };
 static undefined4 __cdecl hk_08b00(float * param_1, int param_2, float param_3)
 {
-    SV_HOOK_RET(undefined4, v_08b00, lf_08b00(param_1, param_2, param_3), orig_08b00(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_08b00, pointinsidebasesafe(param_1, param_2, param_3), orig_08b00(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_08b00(void)
 {
@@ -3808,12 +3808,12 @@ __declspec(naked) static void th_0bf60(void)
 }
 static uint8_t expect_0bf60[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-void __cdecl lf_0c0a0(float * param_1, float param_2);
+void __cdecl rotatevector2d(float * param_1, float param_2);
 static void (__cdecl *orig_0c0a0)(float *, float);
 static SvVerify v_0c0a0 = { "rotatevector2d", -1 };
 static void __cdecl hk_0c0a0(float * param_1, float param_2)
 {
-    SV_HOOK_VOID(v_0c0a0, lf_0c0a0(param_1, param_2), orig_0c0a0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0c0a0, rotatevector2d(param_1, param_2), orig_0c0a0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0c0a0(void)
 {

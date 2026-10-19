@@ -22,6 +22,7 @@ void projectvector(vec3 *out, const vec3 *v, const vec3 rot[3]);
 void generatetrinormal(vec3 *out, const vec3 *p0, const vec3 *p1, const vec3 *p2);
 void resetorientation(vec3 rot[3]);
 void normalizevector2d(float out[2], const float v[2]);
+void rotatevector2d(float v[2], float angle);
 float angulardistance(float a, float b);
 void geteulerangles2(vec3 *angles, const vec3 rot[3]);
 void orientationtoquaternion(quat *q, const vec3 rot[3]);
