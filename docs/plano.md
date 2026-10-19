@@ -143,7 +143,7 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 - The x87 math of the game CRT is `x87_sqrt`, `x87_sin` and the others (`src/include/sr_math.h`).
 - First file: `src/game/vectors.c` (13 vector functions, 2026-10-17).
 - Folders: `src/common/` (math, shared by the client and the server), `src/net/` (packets and events), `src/game/`, `src/server/`. The operating system calls of the clean code go through `src/platform/os_calls.c` (`sr_os.h`), so the harness and the recording build see them.
-- Done: math (`src/common/vectors.c`, `random.c`), packets (`src/net/packet.c`) and events (`src/net/events.c`).
+- Done: math (`src/common/vectors.c`, `random.c`), packets (`src/net/packet.c`) and events (`src/net/events.c`). Particles and bonds (`src/game/particles.c`), the bond pair functions (`src/game/solver.c`) and the bond solver `bondsimulation2` (`src/game/bonds.c`, 2026-10-18: bench.py 1.02 against the original). `bondsimulation2` still calls five functions in the lifted C: `stoptimer`, `multiply3x3matrices`, `objectwheelsimulation2`, `calculatefriction` and `objectenginesimulation2`.
 - Waiting: `packevent` and `packobjectpacket` (the recordings run 21% and 47% of their blocks: they wait for a Harness Recording test), `createevent_updatestocks` and `createevent_updatecarmarket` (with the economy, when `Market` has field names), `eventsimulation` (with the doors of the buildings).
 
 - A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
