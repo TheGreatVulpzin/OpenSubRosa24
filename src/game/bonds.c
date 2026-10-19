@@ -16,9 +16,8 @@
 #define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define DAT_00603dd0 (*(int * *)SR_VA(0x603dd0))
-#define DAT_019cbf68 (*(int *)SR_VA(0x19cbf68))
-#define DAT_14022d24 (*(undefined4 *)SR_VA(0x14022d24))
-#define DAT_020a5a30 (*(undefined *)SR_VA(0x20a5a30))
+#define g_numofstaticbonds (*(int *)SR_VA(0x14022d24))
+#define g_numofdynamicbonds (*(int *)SR_VA(0x20a5a30))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
 #define g_zaxis (*(float (*)[3])SR_VA(0x460cec))
 #define g_timer (*(Timer (*)[256])SR_VA(0x18043a0))
@@ -32,7 +31,7 @@
 #define DAT_00461df4 (*(undefined4 *)SR_VA(0x461df4))
 #define DAT_00461df8 (*(undefined4 *)SR_VA(0x461df8))
 #define DAT_00461e04 (*(undefined4 *)SR_VA(0x461e04))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define DAT_00461e10 (*(undefined4 *)SR_VA(0x461e10))
 #define DAT_00461e14 (*(undefined4 *)SR_VA(0x461e14))
 #define DAT_00461e18 (*(undefined4 *)SR_VA(0x461e18))
@@ -50,7 +49,6 @@
 #define g_numofbonds (*(int *)SR_VA(0x17579a28))
 #define g_bond (*(Bond (*)[16384])SR_VA(0x17579a40))
 #define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define _DAT_020a5a30 (*(int *)SR_VA(0x20a5a30))
 #define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_FN(0x409600))
 #define stoptimer ((void (__cdecl *)(int))SR_FN(0x40b3f0))
 #define rotatevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bc50))
@@ -419,7 +417,7 @@ static void setup_copy(void)
         bh->mask |= 1 << k;
       w->vel = bone->vel;
       w->w = bone->w;
-      w->torque = bone->torque;
+      w->ang_momentum = bone->ang_momentum;
       w->axes[0].dir = bone->rot[0];
       w->axes[0].k = bone->axis_k[0];
       w->axes[1].dir = bone->rot[1];
@@ -521,7 +519,7 @@ static void clamp_length(vec3 *v, float len, float limit)
 /* bondhuman: a human who stands upright on the ground keeps the balance. Bone 0 gets three
  * turns: one back to the vertical (its length is at most a limit from the stance and the body
  * strength), one toward the direction that the human faces (human.axis), and less of the turn
- * it has now. The sum, with a limit, goes into BondBone.torque. */
+ * it has now. The sum, with a limit, goes into BondBone.ang_momentum. */
 static void loop_balance(void)
 {
   const vec3 up = *(const vec3 *)g_yaxis;
@@ -580,9 +578,9 @@ static void loop_balance(void)
     a.x = a.x * 0.125f;
     a.y = (float)(a.y * 0.125);
     a.z = (float)(a.z * 0.125);
-    w->torque.x = (float)(w->torque.x + a.x);
-    w->torque.y = (float)(a.y + w->torque.y);
-    w->torque.z = (float)(a.z + w->torque.z);
+    w->ang_momentum.x = (float)(w->ang_momentum.x + a.x);
+    w->ang_momentum.y = (float)(a.y + w->ang_momentum.y);
+    w->ang_momentum.z = (float)(a.z + w->ang_momentum.z);
   }
   stoptimer(g_timerlist.bondhuman);
 }
@@ -847,11 +845,11 @@ static void bond_bodyitem(const Bond *b, const BondOpt *o)
   float sb = b->weights[0], si = b->weights[1], ns = -sb;
   vec3 v, t;
 
-  v.x = (float)(nd * (float)(it->vel.x + (float)(rb.y * it->torque.z - rb.z * it->torque.y)) +
+  v.x = (float)(nd * (float)(it->vel.x + (float)(rb.y * it->angvel.z - rb.z * it->angvel.y)) +
                 (float)(d * (float)((float)(ra.y * x->w.z - ra.z * x->w.y) + x->vel.x) + o->dir.x));
-  v.y = (float)(nd * (float)(it->vel.y + (float)(it->torque.x * rb.z - rb.x * it->torque.z)) +
+  v.y = (float)(nd * (float)(it->vel.y + (float)(it->angvel.x * rb.z - rb.x * it->angvel.z)) +
                 (float)(d * (float)(x->vel.y + (float)(x->w.x * ra.z - ra.x * x->w.z)) + o->dir.y));
-  v.z = (float)(nd * (float)(it->vel.z + (float)(it->torque.y * rb.x - rb.y * it->torque.x)) +
+  v.z = (float)(nd * (float)(it->vel.z + (float)(it->angvel.y * rb.x - rb.y * it->angvel.x)) +
                 (float)(d * (float)(x->vel.z + (float)(ra.x * x->w.y - x->w.x * ra.y)) + o->dir.z));
   x->dv.x = (float)(x->dv.x + v.x * ns);
   x->dv.y = (float)(x->dv.y + v.y * ns);
@@ -879,9 +877,9 @@ static void bond_itemrot(const Bond *b, const BondOpt *o)
   float d = o->damping, nd = -o->damping, g = o->arm_a.x, ns;
   vec3 v;
 
-  v.x = (float)(g * (float)((float)(nd * x->w.x + o->dir.x) + d * it->torque.x));
-  v.y = (float)(g * (float)(it->torque.y * d + (float)(x->w.y * nd + o->dir.y)));
-  v.z = (float)(g * (float)(d * it->torque.z + (float)(nd * x->w.z + o->dir.z)));
+  v.x = (float)(g * (float)((float)(nd * x->w.x + o->dir.x) + d * it->angvel.x));
+  v.y = (float)(g * (float)(it->angvel.y * d + (float)(x->w.y * nd + o->dir.y)));
+  v.z = (float)(g * (float)(d * it->angvel.z + (float)(nd * x->w.z + o->dir.z)));
   x->dw.x = (float)(x->dw.x + v.x * o->share_a);
   x->dw.y = (float)(x->dw.y + v.y * o->share_a);
   x->dw.z = (float)(x->dw.z + v.z * o->share_a);
@@ -951,9 +949,9 @@ static void contact_bone_item(const Bond *b)
   float s, f;
   vec3 p, v, a, t;
 
-  p.x = (float)(it->vel.x + (float)(rb.y * it->torque.z - rb.z * it->torque.y));
-  p.y = (float)(it->vel.y + (float)(rb.z * it->torque.x - rb.x * it->torque.z));
-  p.z = (float)(it->vel.z + (float)(rb.x * it->torque.y - it->torque.x * rb.y));
+  p.x = (float)(it->vel.x + (float)(rb.y * it->angvel.z - rb.z * it->angvel.y));
+  p.y = (float)(it->vel.y + (float)(rb.z * it->angvel.x - rb.x * it->angvel.z));
+  p.z = (float)(it->vel.z + (float)(rb.x * it->angvel.y - it->angvel.x * rb.y));
   v.x = (float)(d * p.x + (float)(nd * (float)(x->vel.x + (float)(ra.y * x->w.z - ra.z * x->w.y)) + k * n.x));
   v.y = (float)(d * p.y +
                 (float)(nd * (float)(x->vel.y + (float)(x->w.x * ra.z - ra.x * x->w.z)) + (float)(k * n.y)));
@@ -1014,6 +1012,167 @@ static void contact_wheelbody(const Bond *b)
   wb->dw.x = (float)(wb->dw.x + t.x);
   wb->dw.y = (float)(wb->dw.y + t.y);
   wb->dw.z = (float)(wb->dw.z + t.z);
+}
+
+/* The end of each pass: each particle takes its velocity change. */
+static void apply_particles(void)
+{
+  BondParticle *p = &g_bondparticle[0];
+  int i, n = g_area_sector.num_particles;
+
+  for (i = 0; i < n; i++, p++) {
+    p->vel.x = (float)(p->dv.x + p->vel.x);
+    p->vel.y = (float)(p->dv.y + p->vel.y);
+    p->vel.z = (float)(p->dv.z + p->vel.z);
+  }
+}
+
+/* bondtest: each bone in the mask of an active human takes its velocity changes. The angular
+ * velocity w comes from the angular momentum: its part along each axis of the bone, times the
+ * inverse inertia k of that axis. */
+static void apply_bones(void)
+{
+  BondHuman *h;
+  BondBone *x;
+  const BondAxis *a;
+  uint bit;
+  float f;
+  int i;
+
+  for (h = &g_bondhuman[0]; h < &g_bondhuman[512]; h++) {
+    if (h->active == 0)
+      continue;
+    for (i = 0, bit = 1; i < 15; i++, bit <<= 1) {
+      if (((uint)h->mask & bit) == 0)
+        continue;
+      x = &h->bones[i];
+      a = x->axes;
+      x->vel.x = (float)(x->dv.x + x->vel.x);
+      x->vel.y = (float)(x->dv.y + x->vel.y);
+      x->vel.z = (float)(x->dv.z + x->vel.z);
+      x->ang_momentum.x = (float)(x->dw.x + x->ang_momentum.x);
+      x->ang_momentum.y = (float)(x->dw.y + x->ang_momentum.y);
+      x->ang_momentum.z = (float)(x->dw.z + x->ang_momentum.z);
+      f = (float)((float)(x->ang_momentum.z * a[0].dir.z +
+                          (x->ang_momentum.y * a[0].dir.y + x->ang_momentum.x * a[0].dir.x)) * a[0].k);
+      x->w.x = f * a[0].dir.x;
+      x->w.y = (float)(f * a[0].dir.y);
+      x->w.z = (float)(f * a[0].dir.z);
+      f = (float)((float)(x->ang_momentum.z * a[1].dir.z +
+                          (x->ang_momentum.y * a[1].dir.y + x->ang_momentum.x * a[1].dir.x)) * a[1].k);
+      x->w.x = (float)(x->w.x + f * a[1].dir.x);
+      x->w.y = (float)(f * a[1].dir.y + x->w.y);
+      x->w.z = (float)(f * a[1].dir.z + x->w.z);
+      f = (float)((float)(x->ang_momentum.z * a[2].dir.z +
+                          (x->ang_momentum.y * a[2].dir.y + x->ang_momentum.x * a[2].dir.x)) * a[2].k);
+      x->w.x = (float)(f * a[2].dir.x + x->w.x);
+      x->w.y = (float)(f * a[2].dir.y + x->w.y);
+      x->w.z = (float)(f * a[2].dir.z + x->w.z);
+    }
+  }
+}
+
+/* Each active item with physics takes its velocity changes. angvel comes from ang_momentum:
+ * its part along each row of rot, times inv_inertia. */
+static void apply_items(void)
+{
+  Item *it;
+  const vec3 *r;
+  float f;
+
+  for (it = &g_item[0]; it < &g_item[1024]; it++) {
+    if (it->active == 0 || it->has_physics == 0)
+      continue;
+    r = it->rot;
+    it->vel.x = (float)(it->dv.x + it->vel.x);
+    it->vel.y = (float)(it->dv.y + it->vel.y);
+    it->vel.z = (float)(it->dv.z + it->vel.z);
+    it->ang_momentum.x = (float)(it->dw.x + it->ang_momentum.x);
+    it->ang_momentum.y = (float)(it->dw.y + it->ang_momentum.y);
+    it->ang_momentum.z = (float)(it->dw.z + it->ang_momentum.z);
+    it->angvel.x = 0.0f;
+    it->angvel.y = 0.0f;
+    it->angvel.z = 0.0f;
+    f = (float)((float)(it->ang_momentum.z * r[0].z + (it->ang_momentum.y * r[0].y + it->ang_momentum.x * r[0].x)) *
+                it->inv_inertia.x);
+    it->angvel.x = (float)(it->angvel.x + f * r[0].x);
+    it->angvel.y = (float)(f * r[0].y + it->angvel.y);
+    it->angvel.z = (float)(f * r[0].z + it->angvel.z);
+    f = (float)((float)(it->ang_momentum.z * r[1].z + (it->ang_momentum.y * r[1].y + r[1].x * it->ang_momentum.x)) *
+                it->inv_inertia.y);
+    it->angvel.x = (float)(it->angvel.x + f * r[1].x);
+    it->angvel.y = (float)(f * r[1].y + it->angvel.y);
+    it->angvel.z = (float)(f * r[1].z + it->angvel.z);
+    f = (float)((float)(it->ang_momentum.z * r[2].z + (it->ang_momentum.y * r[2].y + it->ang_momentum.x * r[2].x)) *
+                it->inv_inertia.z);
+    it->angvel.x = (float)(f * r[2].x + it->angvel.x);
+    it->angvel.y = (float)(f * r[2].y + it->angvel.y);
+    it->angvel.z = (float)(f * r[2].z + it->angvel.z);
+  }
+}
+
+/* Each wheel body of an active object takes its velocity changes, as the items. */
+static void apply_wheelbodies(void)
+{
+  Object *o;
+  WheelBody *wb;
+  const vec3 *r;
+  float f;
+  int i;
+
+  for (o = &g_object[0]; o < &g_object[1024]; o++) {
+    if (o->active == 0)
+      continue;
+    for (i = 0; i < o->num_wheel_bodies; i++) {
+      wb = &o->wheel_bodies[i];
+      r = wb->rot;
+      wb->vel.x = (float)(wb->dv.x + wb->vel.x);
+      wb->vel.y = (float)(wb->dv.y + wb->vel.y);
+      wb->vel.z = (float)(wb->dv.z + wb->vel.z);
+      wb->ang_momentum.x = (float)(wb->dw.x + wb->ang_momentum.x);
+      wb->ang_momentum.y = (float)(wb->dw.y + wb->ang_momentum.y);
+      wb->ang_momentum.z = (float)(wb->dw.z + wb->ang_momentum.z);
+      wb->w.x = 0.0f;
+      wb->w.y = 0.0f;
+      wb->w.z = 0.0f;
+      f = (float)((float)(r[0].z * wb->ang_momentum.z + (wb->ang_momentum.y * r[0].y + wb->ang_momentum.x * r[0].x)) *
+                  wb->inv_inertia.x);
+      wb->w.x = (float)(wb->w.x + f * r[0].x);
+      wb->w.y = (float)(r[0].y * f + wb->w.y);
+      wb->w.z = (float)(f * r[0].z + wb->w.z);
+      f = (float)((float)(r[1].z * wb->ang_momentum.z + (wb->ang_momentum.y * r[1].y + wb->ang_momentum.x * r[1].x)) *
+                  wb->inv_inertia.y);
+      wb->w.x = (float)(wb->w.x + f * r[1].x);
+      wb->w.y = (float)(r[1].y * f + wb->w.y);
+      wb->w.z = (float)(f * r[1].z + wb->w.z);
+      f = (float)((float)(r[2].z * wb->ang_momentum.z + (r[2].x * wb->ang_momentum.x + wb->ang_momentum.y * r[2].y)) *
+                  wb->inv_inertia.z);
+      wb->w.x = (float)(wb->w.x + f * r[2].x);
+      wb->w.y = (float)(r[2].y * f + wb->w.y);
+      wb->w.z = (float)(f * r[2].z + wb->w.z);
+    }
+  }
+}
+
+/* After the last pass: the solver velocities go back to the particles and to the bones of
+ * each active human with physics. */
+static void copy_back(void)
+{
+  Human *h;
+  int i, j, n = g_area_sector.num_particles;
+
+  for (i = 0; i < n; i++)
+    g_particle[i].vel = g_bondparticle[i].vel;
+  for (i = 0, h = &g_human[0]; i < 512; i++, h++) {
+    if (h->active == 0 || h->has_physics == 0)
+      continue;
+    for (j = 0; j < 15; j++) {
+      const BondBone *x = &g_bondhuman[i].bones[j];
+      h->bones[j].vel = x->vel;
+      h->bones[j].ang_momentum = x->ang_momentum;
+      h->bones[j].w = x->w;
+    }
+  }
 }
 
 void __cdecl lf_41de0(void)
@@ -1164,11 +1323,7 @@ void __cdecl lf_41de0(void)
     piVar18 = local_60;
     loop_clear((int)local_60);
     loop_balance();
-    iVar30 = g_timerlist.bondwheelsim;
-    local_50 = (float *)&g_timer[g_timerlist.bondwheelsim].start_lo;
-    uVar13 = rdtsc();
-    LF_SET_BITS(*local_50, (int)uVar13);
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
+    starttimer(g_timerlist.bondwheelsim);
     objectwheelsimulation2();
     stoptimer(g_timerlist.bondwheelsim);
     local_c0 = 0;
@@ -1176,14 +1331,10 @@ void __cdecl lf_41de0(void)
       pfVar33 = &g_bond[0].normal.y;
       pfVar21 = &g_bondopt.arm_a.z;
       do {
-        iVar30 = g_timerlist.bondpartpart;
         if (((uint)local_60 & (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) ==
             (uint)(ushort)*(short *)((int)pfVar21 + -0x1a)) {
           if (BOND_KIND(pfVar33) == 0x0U) {
-            local_50 = (float *)&g_timer[g_timerlist.bondpartpart].start_lo;
-            uVar13 = rdtsc();
-            LF_SET_BITS(*local_50, (int)uVar13);
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
+            starttimer(g_timerlist.bondpartpart);
             bond_partpart(local_c0);
             stoptimer(g_timerlist.bondpartpart);
           }
@@ -1205,12 +1356,8 @@ void __cdecl lf_41de0(void)
             contact_bone_level((Bond *)((char *)pfVar33 - 0x78));
             stoptimer(g_timerlist.bondbodylevel);
           }
-          iVar30 = g_timerlist.bondbodybody;
           if (BOND_KIND(pfVar33) == 0x8U) {
-            local_50 = (float *)&g_timer[g_timerlist.bondbodybody].start_lo;
-            uVar13 = rdtsc();
-            LF_SET_BITS(*local_50, (int)uVar13);
-            g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
+            starttimer(g_timerlist.bondbodybody);
             bond_bodybody(local_c0);
             stoptimer(g_timerlist.bondbodybody);
           }
@@ -1242,330 +1389,34 @@ void __cdecl lf_41de0(void)
         piVar18 = local_60;
       } while (local_c0 < g_numofbonds);
     }
-    iVar30 = g_timerlist.bondwheelsim;
-    local_60 = &g_timer[g_timerlist.bondwheelsim].start_lo;
-    uVar13 = rdtsc();
-    *local_60 = (int)uVar13;
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
+    starttimer(g_timerlist.bondwheelsim);
     objectenginesimulation2();
     stoptimer(g_timerlist.bondwheelsim);
-    iVar30 = g_timerlist.bondloopcopy;
-    uVar13 = rdtsc();
-    g_timer[g_timerlist.bondloopcopy].start_lo = (int)uVar13;
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-    iVar29 = g_area_sector.num_particles;
-    iVar30 = 0;
-    if (3 < g_area_sector.num_particles) {
-      iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
-      iVar30 = iVar16 * 4;
-      pfVar21 = (float *)&DAT_00583dd4;
-      do {
-        iVar16 = iVar16 + -1;
-        pfVar21[-1] = (float)(pfVar21[3] + pfVar21[-1]);
-        *pfVar21 = (float)(pfVar21[4] + *pfVar21);
-        pfVar21[1] = (float)(pfVar21[5] + pfVar21[1]);
-        pfVar21[7] = (float)(pfVar21[0xb] + pfVar21[7]);
-        pfVar21[8] = (float)(pfVar21[0xc] + pfVar21[8]);
-        pfVar21[9] = (float)(pfVar21[0xd] + pfVar21[9]);
-        pfVar21[0xf] = (float)(pfVar21[0x13] + pfVar21[0xf]);
-        pfVar21[0x10] = (float)(pfVar21[0x14] + pfVar21[0x10]);
-        pfVar21[0x11] = (float)(pfVar21[0x15] + pfVar21[0x11]);
-        pfVar21[0x17] = (float)(pfVar21[0x1b] + pfVar21[0x17]);
-        pfVar21[0x18] = (float)(pfVar21[0x1c] + pfVar21[0x18]);
-        pfVar21[0x19] = (float)(pfVar21[0x1d] + pfVar21[0x19]);
-        pfVar21 = pfVar21 + 0x20;
-      } while (iVar16 != 0);
-    }
-    if (iVar30 < iVar29) {
-      iVar29 = iVar29 - iVar30;
-      pfVar21 = (float *)(&DAT_00583dd4 + iVar30 * 8);
-      do {
-        iVar29 = iVar29 + -1;
-        pfVar21[-1] = (float)(pfVar21[3] + pfVar21[-1]);
-        *pfVar21 = (float)(pfVar21[4] + *pfVar21);
-        pfVar21[1] = (float)(pfVar21[5] + pfVar21[1]);
-        pfVar21 = pfVar21 + 8;
-      } while (iVar29 != 0);
-    }
-    iVar30 = g_timerlist.bondtest;
-    local_60 = &g_timer[g_timerlist.bondtest].start_lo;
-    uVar13 = rdtsc();
-    *local_60 = (int)uVar13;
-    g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-    puVar31 = &DAT_00461dd4;
-    if (DAT_019cbf68 == 0) {
-      do {
-        if (puVar31[-1] != 0) {
-          uVar32 = 1;
-          pfVar21 = (float *)(puVar31 + 4);
-          iVar30 = 0xf;
-          do {
-            if ((*puVar31 & uVar32) != 0) {
-              pfVar21[-1] = (float)(pfVar21[3] + pfVar21[-1]);
-              *pfVar21 = (float)(pfVar21[4] + *pfVar21);
-              pfVar21[1] = (float)(pfVar21[5] + pfVar21[1]);
-              pfVar21[7] = (float)(pfVar21[0xf] + pfVar21[7]);
-              pfVar21[8] = (float)(pfVar21[0x10] + pfVar21[8]);
-              pfVar21[9] = (float)(pfVar21[0x11] + pfVar21[9]);
-              fVar5 = (float)(((float)(pfVar21[9] * pfVar21[0x15] +
-                      (pfVar21[8] * pfVar21[0x14] + pfVar21[7] * pfVar21[0x13]))) * pfVar21[0x16]);
-              pfVar21[0xb] = fVar5 * pfVar21[0x13];
-              pfVar21[0xc] = (float)(fVar5 * pfVar21[0x14]);
-              pfVar21[0xd] = (float)(fVar5 * pfVar21[0x15]);
-              fVar5 = (float)(((float)(pfVar21[9] * pfVar21[0x19] +
-                      (pfVar21[8] * pfVar21[0x18] + pfVar21[7] * pfVar21[0x17]))) * pfVar21[0x1a]);
-              pfVar21[0xb] = (float)(pfVar21[0xb] + fVar5 * pfVar21[0x17]);
-              pfVar21[0xc] = (float)(fVar5 * pfVar21[0x18] + pfVar21[0xc]);
-              pfVar21[0xd] = (float)(fVar5 * pfVar21[0x19] + pfVar21[0xd]);
-              local_60 = ((int *)LF_BITS_U(((float)(((float)(pfVar21[9] * pfVar21[0x1d] +
-                                 (pfVar21[8] * pfVar21[0x1c] + pfVar21[7] * pfVar21[0x1b]))) *
-                                pfVar21[0x1e]))));
-              pfVar21[0xb] = (float)(LF_BITS_F(local_60) * pfVar21[0x1b] + pfVar21[0xb]);
-              pfVar21[0xc] = (float)(LF_BITS_F(local_60) * pfVar21[0x1c] + pfVar21[0xc]);
-              pfVar21[0xd] = (float)(LF_BITS_F(local_60) * pfVar21[0x1d] + pfVar21[0xd]);
-            }
-            pfVar21 = pfVar21 + 0x20;
-            uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-            iVar30 = iVar30 + -1;
-          } while (iVar30 != 0);
-        }
-        puVar31 = puVar31 + 0x204;
-      } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    }
-    else {
-      do {
-        if (puVar31[-1] != 0) {
-          uVar32 = 1;
-          pfVar21 = (float *)(puVar31 + 3);
-          iVar30 = 0xf;
-          do {
-            if ((*puVar31 & uVar32) != 0) {
-              *pfVar21 = (float)(*pfVar21 + pfVar21[4]);
-              pfVar21[1] = (float)(pfVar21[1] + pfVar21[5]);
-              pfVar21[2] = (float)(pfVar21[2] + pfVar21[6]);
-              pfVar21[3] = (float)(pfVar21[3] + pfVar21[7]);
-              pfVar21[8] = (float)(pfVar21[0x10] + pfVar21[8]);
-              pfVar21[9] = (float)(pfVar21[0x11] + pfVar21[9]);
-              pfVar21[10] = (float)(pfVar21[0x12] + pfVar21[10]);
-              pfVar21[0xb] = (float)(pfVar21[0x13] + pfVar21[0xb]);
-              auVar2 = *(lf_m128 *)(pfVar21 + 0x14);
-              fVar5 = (*(float *)((uchar *)&auVar2 + 12));
-              auVar36 = *(lf_m128 *)(pfVar21 + 8);
-              auVar37 = lf_dpps(auVar36,auVar2,0x7f);
-              auVar3 = *(lf_m128 *)(pfVar21 + 0x18);
-              fVar6 = (*(float *)((uchar *)&auVar3 + 12));
-              auVar38 = lf_dpps(auVar36,auVar3,0x7f);
-              auVar4 = *(lf_m128 *)(pfVar21 + 0x1c);
-              fVar7 = (*(float *)((uchar *)&auVar4 + 12));
-              auVar36 = lf_dpps(auVar36,auVar4,0x7f);
-              pfVar21[0xc] = (float)((float)((float)(fVar7 * (*(float *)((uchar *)&auVar36 + 0))) * (*(float *)((uchar *)&auVar4 + 0))) +
-                             ((float)((float)((float)(fVar6 * (*(float *)((uchar *)&auVar38 + 0))) * (*(float *)((uchar *)&auVar3 + 0))) +
-                             (float)((float)(fVar5 * (*(float *)((uchar *)&auVar37 + 0))) * (*(float *)((uchar *)&auVar2 + 0))))));
-              pfVar21[0xd] = (float)((float)((float)(fVar7 * (*(float *)((uchar *)&auVar36 + 4))) * (*(float *)((uchar *)&auVar4 + 4))) +
-                             ((float)((float)((float)(fVar6 * (*(float *)((uchar *)&auVar38 + 4))) * (*(float *)((uchar *)&auVar3 + 4))) +
-                             (float)((float)(fVar5 * (*(float *)((uchar *)&auVar37 + 4))) * (*(float *)((uchar *)&auVar2 + 4))))));
-              pfVar21[0xe] = (float)((float)((float)(fVar7 * (*(float *)((uchar *)&auVar36 + 8))) * (*(float *)((uchar *)&auVar4 + 8))) +
-                             ((float)((float)((float)(fVar6 * (*(float *)((uchar *)&auVar38 + 8))) * (*(float *)((uchar *)&auVar3 + 8))) +
-                             (float)((float)(fVar5 * (*(float *)((uchar *)&auVar37 + 8))) * (*(float *)((uchar *)&auVar2 + 8))))));
-              pfVar21[0xf] = (float)((float)((float)(fVar7 * (*(float *)((uchar *)&auVar36 + 12))) * fVar7) +
-                             ((float)((float)((float)(fVar6 * (*(float *)((uchar *)&auVar38 + 12))) * fVar6) + (float)((float)(fVar5 * (*(float *)((uchar *)&auVar37 + 12))) * fVar5))));
-            }
-            pfVar21 = pfVar21 + 0x20;
-            uVar32 = uVar32 << 1 | (uint)((int)uVar32 < 0);
-            iVar30 = iVar30 + -1;
-          } while (iVar30 != 0);
-        }
-        puVar31 = puVar31 + 0x204;
-      } while ((int)puVar31 < ((int)SR_VA(0x563dd4)));
-    }
+    starttimer(g_timerlist.bondloopcopy);
+    apply_particles();
+    starttimer(g_timerlist.bondtest);
+    apply_bones();
     stoptimer(g_timerlist.bondtest);
-    pfVar21 = &g_item[0].vel.y;
-    do {
-      if ((LF_UINT(pfVar21[-0x1c]) != 0x0U) && (LF_UINT(pfVar21[-0x1b]) != 0x0U)) {
-        ((vec3 *)(pfVar21 + -1))->x = (float)(pfVar21[2] + ((vec3 *)(pfVar21 + -1))->x);
-        *pfVar21 = (float)(pfVar21[3] + *pfVar21);
-        pfVar21[1] = (float)(pfVar21[4] + pfVar21[1]);
-        pfVar21[0xe] = (float)(pfVar21[0x17] + pfVar21[0xe]);
-        pfVar21[0xf] = (float)(pfVar21[0x18] + pfVar21[0xf]);
-        pfVar21[0x10] = (float)(pfVar21[0x19] + pfVar21[0x10]);
-        pfVar21[0x11] = 0.0;
-        pfVar21[0x12] = 0.0;
-        pfVar21[0x13] = 0.0;
-        fVar5 = (float)(((float)(pfVar21[0x10] * pfVar21[7] + (pfVar21[0xf] * pfVar21[6] + pfVar21[0xe] * pfVar21[5])))
-                * pfVar21[0x2d]);
-        pfVar21[0x11] = (float)(pfVar21[0x11] + fVar5 * pfVar21[5]);
-        pfVar21[0x12] = (float)(fVar5 * pfVar21[6] + pfVar21[0x12]);
-        pfVar21[0x13] = (float)(fVar5 * pfVar21[7] + pfVar21[0x13]);
-        fVar5 = (float)(((float)(pfVar21[0x10] * pfVar21[10] + (pfVar21[0xf] * pfVar21[9] + pfVar21[8] * pfVar21[0xe]))
-                ) * pfVar21[0x2e]);
-        pfVar21[0x11] = (float)(pfVar21[0x11] + fVar5 * pfVar21[8]);
-        pfVar21[0x12] = (float)(fVar5 * pfVar21[9] + pfVar21[0x12]);
-        pfVar21[0x13] = (float)(fVar5 * pfVar21[10] + pfVar21[0x13]);
-        local_60 = ((int *)LF_BITS_U(((float)(((float)(pfVar21[0x10] * pfVar21[0xd] +
-                           (pfVar21[0xf] * pfVar21[0xc] + pfVar21[0xe] * pfVar21[0xb]))) *
-                          pfVar21[0x2f]))));
-        pfVar21[0x11] = (float)(LF_BITS_F(local_60) * pfVar21[0xb] + pfVar21[0x11]);
-        pfVar21[0x12] = (float)(LF_BITS_F(local_60) * pfVar21[0xc] + pfVar21[0x12]);
-        pfVar21[0x13] = (float)(LF_BITS_F(local_60) * pfVar21[0xd] + pfVar21[0x13]);
-      }
-      pfVar21 = pfVar21 + 0x6b;
-    } while ((int)pfVar21 < ((int)&g_sysinfo.lf_raw[0x50]));
-    piVar34 = &g_object[0].num_wheel_bodies;
-    do {
-      if ((((Object *)(piVar34 + -0x1c7b))->active != 0) && (iVar30 = 0, 0 < *piVar34)) {
-        pfVar21 = (float *)(piVar34 + 5);
-        do {
-          pfVar21[-1] = (float)(pfVar21[2] + pfVar21[-1]);
-          *pfVar21 = (float)(pfVar21[3] + *pfVar21);
-          pfVar21[1] = (float)(pfVar21[4] + pfVar21[1]);
-          pfVar21[0xe] = (float)(pfVar21[0x14] + pfVar21[0xe]);
-          pfVar21[0xf] = (float)(pfVar21[0x15] + pfVar21[0xf]);
-          pfVar21[0x10] = (float)(pfVar21[0x16] + pfVar21[0x10]);
-          pfVar21[0x11] = 0.0;
-          pfVar21[0x12] = 0.0;
-          pfVar21[0x13] = 0.0;
-          fVar5 = (float)(((float)(pfVar21[7] * pfVar21[0x10] +
-                  (pfVar21[0xf] * pfVar21[6] + pfVar21[0xe] * pfVar21[5]))) * pfVar21[0x1a]);
-          pfVar21[0x11] = (float)(pfVar21[0x11] + fVar5 * pfVar21[5]);
-          pfVar21[0x12] = (float)(pfVar21[6] * fVar5 + pfVar21[0x12]);
-          pfVar21[0x13] = (float)(fVar5 * pfVar21[7] + pfVar21[0x13]);
-          fVar5 = (float)(((float)(pfVar21[10] * pfVar21[0x10] +
-                  (pfVar21[0xf] * pfVar21[9] + pfVar21[0xe] * pfVar21[8]))) * pfVar21[0x1b]);
-          pfVar21[0x11] = (float)(pfVar21[0x11] + fVar5 * pfVar21[8]);
-          pfVar21[0x12] = (float)(pfVar21[9] * fVar5 + pfVar21[0x12]);
-          pfVar21[0x13] = (float)(fVar5 * pfVar21[10] + pfVar21[0x13]);
-          iVar30 = iVar30 + 1;
-          local_60 = ((int *)LF_BITS_U(((float)(((float)(pfVar21[0xd] * pfVar21[0x10] +
-                             (pfVar21[0xb] * pfVar21[0xe] + pfVar21[0xf] * pfVar21[0xc]))) *
-                            pfVar21[0x1c]))));
-          pfVar21[0x11] = (float)(pfVar21[0x11] + LF_BITS_F(local_60) * pfVar21[0xb]);
-          pfVar21[0x12] = (float)(pfVar21[0xc] * LF_BITS_F(local_60) + pfVar21[0x12]);
-          pfVar21[0x13] = (float)(LF_BITS_F(local_60) * pfVar21[0xd] + pfVar21[0x13]);
-          pfVar21 = pfVar21 + 0x3a;
-        } while (iVar30 < *piVar34);
-      }
-      piVar34 = piVar34 + 0x208c;
-    } while ((int)piVar34 < ((int)SR_VA(0x7a257ec)));
+    apply_items();
+    apply_wheelbodies();
     stoptimer(g_timerlist.bondloopcopy);
-    iVar30 = g_timerlist.bondsetupcopy;
     local_60 = (int *)((int)piVar18 + 1);
   } while ((int)local_60 < 0x20);
-  local_60 = &g_timer[g_timerlist.bondsetupcopy].start_lo;
-  uVar13 = rdtsc();
-  *local_60 = (int)uVar13;
-  g_timer[iVar30].start_hi = (int)((ulonglong)uVar13 >> 0x20);
-  iVar29 = g_area_sector.num_particles;
-  iVar30 = 0;
-  if (3 < g_area_sector.num_particles) {
-    iVar16 = (g_area_sector.num_particles - 4U >> 2) + 1;
-    iVar30 = iVar16 * 4;
-    pfVar21 = (float *)&DAT_00583dd8;
-    pfVar33 = &g_particle[0].vel.z;
-    do {
-      pfVar33[-2] = pfVar21[-2];
-      iVar16 = iVar16 + -1;
-      pfVar33[-1] = pfVar21[-1];
-      *pfVar33 = *pfVar21;
-      pfVar33[0x3a] = pfVar21[6];
-      pfVar33[0x3b] = pfVar21[7];
-      pfVar33[0x3c] = pfVar21[8];
-      pfVar33[0x76] = pfVar21[0xe];
-      pfVar33[0x77] = pfVar21[0xf];
-      pfVar33[0x78] = pfVar21[0x10];
-      pfVar33[0xb2] = pfVar21[0x16];
-      pfVar33[0xb3] = pfVar21[0x17];
-      pfVar33[0xb4] = pfVar21[0x18];
-      pfVar21 = pfVar21 + 0x20;
-      pfVar33 = pfVar33 + 0xf0;
-    } while (iVar16 != 0);
-  }
-  if (iVar30 < iVar29) {
-    iVar29 = iVar29 - iVar30;
-    pfVar21 = &g_particle[0].vel.z + iVar30 * 0x3c;
-    pfVar33 = (float *)(&DAT_00583dd8 + iVar30 * 8);
-    do {
-      pfVar21[-2] = pfVar33[-2];
-      iVar29 = iVar29 + -1;
-      pfVar21[-1] = pfVar33[-1];
-      *pfVar21 = *pfVar33;
-      pfVar21 = pfVar21 + 0x3c;
-      pfVar33 = pfVar33 + 8;
-    } while (iVar29 != 0);
-  }
-  piVar34 = &DAT_00461de8;
-  piVar18 = &g_human[0].has_physics;
-  do {
-    if ((((Human *)(piVar18 + -1))->active != 0) && (*piVar18 != 0)) {
-      iVar30 = 3;
-      piVar22 = piVar34;
-      piVar26 = piVar18 + 0x39;
-      do {
-        piVar26[-2] = piVar22[-2];
-        piVar26[-1] = piVar22[-1];
-        *piVar26 = *piVar22;
-        piVar26[0xd] = piVar22[6];
-        piVar26[0xe] = piVar22[7];
-        piVar26[0xf] = piVar22[8];
-        piVar26[0x10] = piVar22[10];
-        piVar26[0x11] = piVar22[0xb];
-        piVar26[0x12] = piVar22[0xc];
-        piVar26[0x36] = piVar22[0x1e];
-        piVar26[0x37] = piVar22[0x1f];
-        piVar26[0x38] = piVar22[0x20];
-        piVar26[0x45] = piVar22[0x26];
-        piVar26[0x46] = piVar22[0x27];
-        piVar26[0x47] = piVar22[0x28];
-        piVar26[0x48] = piVar22[0x2a];
-        piVar26[0x49] = piVar22[0x2b];
-        piVar26[0x4a] = piVar22[0x2c];
-        piVar26[0x6e] = piVar22[0x3e];
-        piVar26[0x6f] = piVar22[0x3f];
-        piVar26[0x70] = piVar22[0x40];
-        piVar26[0x7d] = piVar22[0x46];
-        piVar26[0x7e] = piVar22[0x47];
-        piVar26[0x7f] = piVar22[0x48];
-        piVar26[0x80] = piVar22[0x4a];
-        piVar26[0x81] = piVar22[0x4b];
-        piVar26[0x82] = piVar22[0x4c];
-        piVar26[0xa6] = piVar22[0x5e];
-        piVar26[0xa7] = piVar22[0x5f];
-        piVar26[0xa8] = piVar22[0x60];
-        piVar26[0xb5] = piVar22[0x66];
-        piVar26[0xb6] = piVar22[0x67];
-        piVar26[0xb7] = piVar22[0x68];
-        piVar26[0xb8] = piVar22[0x6a];
-        piVar26[0xb9] = piVar22[0x6b];
-        piVar26[0xba] = piVar22[0x6c];
-        piVar26[0xde] = piVar22[0x7e];
-        piVar26[0xdf] = piVar22[0x7f];
-        piVar26[0xe0] = piVar22[0x80];
-        piVar26[0xed] = piVar22[0x86];
-        piVar26[0xee] = piVar22[0x87];
-        iVar30 = iVar30 + -1;
-        piVar26[0xef] = piVar22[0x88];
-        piVar26[0xf0] = piVar22[0x8a];
-        piVar26[0xf1] = piVar22[0x8b];
-        piVar26[0xf2] = piVar22[0x8c];
-        piVar22 = piVar22 + 0xa0;
-        piVar26 = piVar26 + 0x118;
-      } while (iVar30 != 0);
-    }
-    piVar18 = piVar18 + 0xad9;
-    piVar34 = piVar34 + 0x204;
-  } while ((int)piVar18 < ((int)SR_VA(0x1f38784)));
+  starttimer(g_timerlist.bondsetupcopy);
+  copy_back();
   stoptimer(g_timerlist.bondsetupcopy);
   stoptimer(g_timerlist.bondsim);
-  _DAT_020a5a30 = g_numofbonds;
-  g_numofbonds = DAT_14022d24;
+  /* The contact bonds of this tick end here: the list goes back to the static bonds. */
+  g_numofdynamicbonds = g_numofbonds;
+  g_numofbonds = g_numofstaticbonds;
   return;
 }
 #undef g_human
 #undef g_sysinfo
 #undef DAT_00460d18
 #undef DAT_00603dd0
-#undef DAT_019cbf68
-#undef DAT_14022d24
-#undef DAT_020a5a30
+#undef g_numofstaticbonds
+#undef g_numofdynamicbonds
 #undef g_yaxis
 #undef g_zaxis
 #undef g_timer
@@ -1597,7 +1448,6 @@ void __cdecl lf_41de0(void)
 #undef g_numofbonds
 #undef g_bond
 #undef g_area_sector
-#undef _DAT_020a5a30
 #undef geteulerangles2
 #undef stoptimer
 #undef rotatevector

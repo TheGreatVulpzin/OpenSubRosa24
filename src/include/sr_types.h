@@ -32,8 +32,8 @@ typedef union Bone { struct {
     vec3 vel;           /* +0x18 bondsetupcopy copies it to BondBone.vel */
     uint8_t unk_24[0xc];
     vec3 rot[3];        /* +0x30 createhuman: matrix from parameter 2; bondsimulation2 uses all 3 rows */
-    vec3 torque;        /* +0x54 bondsetupcopy copies it to BondBone.torque */
-    vec3 w;             /* +0x60 bondsetupcopy copies it to BondBone.w (the angular velocity) */
+    vec3 ang_momentum;  /* +0x54 the angular momentum; bondsetupcopy copies it to BondBone.ang_momentum */
+    vec3 w;             /* +0x60 the angular velocity; bondsetupcopy copies it to BondBone.w */
     uint8_t unk_6c[0x20];
     float mass;         /* +0x8c bondsimulation2: mass ratio with Item.mass */
     float strength;     /* +0x90 bondsetup type 9: the muscle force, at least strength_min and strength_min2 */
@@ -66,10 +66,13 @@ typedef union WheelBody { struct {
     uint8_t unk_00[0xc];
     vec3 vel;           /* +0x0c bondsimulation2 type 15: the velocity of the body */
     vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
-    uint8_t unk_24[0x30];
-    vec3 w;             /* +0x54 bondsimulation2 type 15: the angular velocity (w x arm) */
+    vec3 rot[3];        /* +0x24 bondsimulation2 projects ang_momentum on each row */
+    vec3 ang_momentum;  /* +0x48 bondsimulation2 adds dw to it each pass */
+    vec3 w;             /* +0x54 the angular velocity: bondsimulation2 makes it from ang_momentum, rot and inv_inertia */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
-    uint8_t unk_6c[0x7c];
+    uint8_t unk_6c[0xc];
+    vec3 inv_inertia;   /* +0x78 bondsimulation2: the factor of each row of rot */
+    uint8_t unk_84[0x64];
 }; uint8_t lf_raw[0xe8]; } WheelBody;
 
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
@@ -111,9 +114,9 @@ typedef union BondBone { struct {
     float pad_0c;
     vec3 dv;            /* +0x10 bond_bodybody adds the change of vel */
     float pad_1c;
-    vec3 torque;        /* +0x20 bondsetupcopy copies Bone.torque; bondhuman adds the balance turn */
+    vec3 ang_momentum;  /* +0x20 bondsetupcopy copies Bone.ang_momentum; the bonds add dw, bondhuman the balance turn */
     float pad_2c;
-    vec3 w;             /* +0x30 bondsimulation2 copies Bone+0x60; bond_bodybody: w x r */
+    vec3 w;             /* +0x30 the angular velocity: bondtest makes it from ang_momentum and the axes */
     float pad_3c;
     vec3 dw;            /* +0x40 bond_bodybody adds the change of w */
     float pad_4c;
@@ -399,11 +402,11 @@ typedef union Item { struct {
     vec3 vel;                            /* +0x006c createitem: parameter 3 (velocity) */
     vec3 dv;                             /* +0x0078 bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel */
     vec3 rot[3];                         /* +0x0084 createitem: parameter 4 (3x3 matrix) */
-    vec3 angvel;                         /* +0x00a8 item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct */
-    vec3 torque;                         /* +0x00b4 itemsimulation zeroes it and accumulates per frame; bondsimulation2 adds crossproduct (likely) */
+    vec3 ang_momentum;                   /* +0x00a8 the angular momentum: bondsimulation2 adds dw to it each pass; item_physicssimulation damps it with scalevector */
+    vec3 angvel;                         /* +0x00b4 the angular velocity: bondsimulation2 makes it from ang_momentum along the rows of rot, times inv_inertia; the bonds use angvel x arm */
     int unk_00c0;                        /* +0x00c0 1 functions */
     uint8_t pad_00c4[0x8];
-    vec3 dw;                             /* +0x00cc bondsimulation2 clears it at the start of each solver pass; the bonds add the change of angvel */
+    vec3 dw;                             /* +0x00cc bondsimulation2 clears it at the start of each solver pass; the bonds add the change of ang_momentum */
     int unk_00d8;                        /* +0x00d8 3 functions */
     int unk_00dc;                        /* +0x00dc 1 functions */
     int ammo;                            /* +0x00e0 createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0 */
@@ -446,8 +449,8 @@ SR_STATIC_ASSERT(offsetof(Item, pos_prev) == 0x54, "Item.pos_prev");
 SR_STATIC_ASSERT(offsetof(Item, vel) == 0x6c, "Item.vel");
 SR_STATIC_ASSERT(offsetof(Item, dv) == 0x78, "Item.dv");
 SR_STATIC_ASSERT(offsetof(Item, rot) == 0x84, "Item.rot");
-SR_STATIC_ASSERT(offsetof(Item, angvel) == 0xa8, "Item.angvel");
-SR_STATIC_ASSERT(offsetof(Item, torque) == 0xb4, "Item.torque");
+SR_STATIC_ASSERT(offsetof(Item, ang_momentum) == 0xa8, "Item.ang_momentum");
+SR_STATIC_ASSERT(offsetof(Item, angvel) == 0xb4, "Item.angvel");
 SR_STATIC_ASSERT(offsetof(Item, dw) == 0xcc, "Item.dw");
 SR_STATIC_ASSERT(offsetof(Item, ammo) == 0xe0, "Item.ammo");
 SR_STATIC_ASSERT(offsetof(Item, unk_e4) == 0xe4, "Item.unk_e4");

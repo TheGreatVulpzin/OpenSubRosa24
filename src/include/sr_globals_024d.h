@@ -15,6 +15,7 @@
 #define SR_RVA_DEBUG                0x1579ba0u  /* Debug[] */
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u  /* Stats[] */
+#define SR_RVA_NUMOFDYNAMICBONDS    0x1ca5a30u
 #define SR_RVA_BUILDING             0x1d65b80u  /* Building[] */
 #define SR_RVA_BLOCKTEMP            0x537c520u  /* BlockTemp[] */
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
@@ -49,6 +50,7 @@
 #define SR_RVA_TIMERLIST            0x12a81c60u  /* TimerList[] */
 #define SR_RVA_SPEEX                0x12a81d00u  /* Speex[] */
 #define SR_RVA_AREA_BLOCK           0x133b2d00u  /* AreaBlock[] */
+#define SR_RVA_NUMOFSTATICBONDS     0x13c22d24u
 #define SR_RVA_PARSER               0x13d22d60u  /* Parser[] */
 #define SR_RVA_CITYOBJECT           0x15e24020u  /* CityObject[] */
 #define SR_RVA_CONNECTION           0x15e39020u  /* Connection[] */

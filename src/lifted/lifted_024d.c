@@ -12047,9 +12047,9 @@ void __cdecl lf_1b6e0(int param_1,int param_2)
     g_item[param_1].vel.x = g_human[param_2].bones[0].vel.x;
     g_item[param_1].vel.y = g_human[param_2].bones[0].vel.y;
     g_item[param_1].vel.z = g_human[param_2].bones[0].vel.z;
-    g_item[param_1].angvel.x = 0.0;
-    g_item[param_1].angvel.y = 0.0;
-    g_item[param_1].angvel.z = 0.0;
+    g_item[param_1].ang_momentum.x = 0.0;
+    g_item[param_1].ang_momentum.y = 0.0;
+    g_item[param_1].ang_momentum.z = 0.0;
   }
   return;
 }
@@ -24379,8 +24379,8 @@ void __cdecl lf_324c0(void)
     if (*(int *)((int)&((Object *)(g_object[0].rot + -5))->active + iVar8) != 0) {
       if (*(int *)((int)g_object[0].rot + iVar8 + -0x38) == 1) {
         iVar7 = 0;
-        if (0 < *(int *)((int)g_object[0].wheel_bodies + iVar8 + -4)) {
-          pfVar6 = (float *)(&g_object[0].wheel_bodies[0].lf_raw[0x28] + iVar8);
+        if (0 < *(int *)((int)g_object[0].wheel_bodies[0].rot + iVar8 + -0x28)) {
+          pfVar6 = (float *)((int)&g_object[0].wheel_bodies[0].rot[0].y + iVar8);
           do {
             fVar3 = (float)(pfVar6[0xd] * pfVar6[1] + (pfVar6[0xb] * pfVar6[-1] + pfVar6[0xc] * *pfVar6));
             if (iVar7 < 2) {
@@ -24405,7 +24405,7 @@ void __cdecl lf_324c0(void)
             pfVar6[0xf] = (float)(*pfVar6 * fVar3 + pfVar6[0xf]);
             pfVar6[0x10] = (float)(fVar3 * pfVar6[1] + pfVar6[0x10]);
             pfVar6 = pfVar6 + 0x3a;
-          } while (iVar7 < *(int *)((int)g_object[0].wheel_bodies + iVar8 + -4));
+          } while (iVar7 < *(int *)((int)g_object[0].wheel_bodies[0].rot + iVar8 + -0x28));
         }
         fVar12 = (float10)getenginetorque2(iVar9);
         *(float *)((int)&g_object[0].engine_accel + iVar8) =
@@ -24437,24 +24437,24 @@ void __cdecl lf_324c0(void)
                     ABS(*(float *)((int)g_object[0].wheels + iVar8 + -0x74)));
             fVar5 = (float)(1.0 / (fVar3 + fVar4));
             fVar2 = (float)((float)(((float)(*(float *)((int)&g_object[0].engine_rpm + iVar8) -
-                    ((float)(*(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x5c] + iVar8) *
+                    ((float)(*(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[4].z + iVar8) *
                      *(float *)((int)&g_object[0].rot[0].z + iVar8) +
-                    (*(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x54] + iVar8) *
+                    (*(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[4].x + iVar8) *
                     *(float *)((int)&g_object[0].rot[0].x + iVar8) +
-                    *(float *)(&g_object[0].wheel_bodies[iVar1].lf_raw[0x58] + iVar8) *
+                    *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[4].y + iVar8) *
                     *(float *)((int)&g_object[0].rot[0].y + iVar8)))) *
                     *(float *)((int)g_object[0].wheels + iVar8 + -0x74))) *
                     *(float *)((int)g_object[0].wheels + iVar8 + -0x6c)) * 0.015625);
             fVar4 = *(float *)((int)g_object[0].wheels + iVar8 + -0x70) * (fVar2 * ((float)(fVar5 * fVar4)));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.x + iVar8) =
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].x + iVar8) =
                  (float)(fVar4 * *(float *)((int)&g_object[0].rot[0].x + iVar8) +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.x + iVar8));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.y + iVar8) =
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].x + iVar8));
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].y + iVar8) =
                  (float)(*(float *)((int)&g_object[0].rot[0].y + iVar8) * fVar4 +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.y + iVar8));
-            *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.z + iVar8) =
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].y + iVar8));
+            *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].z + iVar8) =
                  (float)(fVar4 * *(float *)((int)&g_object[0].rot[0].z + iVar8) +
-                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].dw.z + iVar8));
+                 *(float *)((int)&g_object[0].wheel_bodies[iVar1].rot[5].z + iVar8));
             local_10 = (float)(local_10 - fVar5 * fVar3 * fVar2);
           } while (iVar7 < *(int *)((int)g_object[0].wheels + iVar8 + -0x5c));
         }
@@ -33627,12 +33627,12 @@ LAB_004493b0:
           fVar4 = *(float *)((int)&g_bullet[0].vel.y + iVar11);
           *(undefined4 *)((int)&g_bullet[0].ttl + iVar11) = 0;
           local_20 = (float)(local_3c * fVar3 - fVar4 * local_40);
-          g_human[local_58].bones[iVar6].torque.x =
-               (float)(local_28 * local_60 + g_human[local_58].bones[iVar6].torque.x);
-          g_human[local_58].bones[iVar6].torque.y =
-               (float)(local_24 * local_60 + g_human[local_58].bones[iVar6].torque.y);
-          g_human[local_58].bones[iVar6].torque.z =
-               (float)(local_60 * local_20 + g_human[local_58].bones[iVar6].torque.z);
+          g_human[local_58].bones[iVar6].ang_momentum.x =
+               (float)(local_28 * local_60 + g_human[local_58].bones[iVar6].ang_momentum.x);
+          g_human[local_58].bones[iVar6].ang_momentum.y =
+               (float)(local_24 * local_60 + g_human[local_58].bones[iVar6].ang_momentum.y);
+          g_human[local_58].bones[iVar6].ang_momentum.z =
+               (float)(local_60 * local_20 + g_human[local_58].bones[iVar6].ang_momentum.z);
         }
         iVar9 = local_10;
         if (local_5c != -1) {
@@ -35745,43 +35745,45 @@ void __cdecl lf_4cee0(int param_1)
   g_item[param_1].vel.x = g_item[param_1].vel.x * 0.9950000047683716;
   g_item[param_1].vel.y = (float)(g_item[param_1].vel.y * 0.9950000047683716);
   g_item[param_1].vel.z = (float)(g_item[param_1].vel.z * 0.9950000047683716);
-  g_item[param_1].angvel.x = g_item[param_1].angvel.x * 0.8999999761581421;
-  g_item[param_1].angvel.y = (float)(g_item[param_1].angvel.y * 0.8999999761581421);
-  g_item[param_1].angvel.z = (float)(g_item[param_1].angvel.z * 0.8999999761581421);
+  g_item[param_1].ang_momentum.x = g_item[param_1].ang_momentum.x * 0.8999999761581421;
+  g_item[param_1].ang_momentum.y = (float)(g_item[param_1].ang_momentum.y * 0.8999999761581421);
+  g_item[param_1].ang_momentum.z = (float)(g_item[param_1].ang_momentum.z * 0.8999999761581421);
   g_item[param_1].pos.x = (float)(g_item[param_1].pos.x + g_item[param_1].vel.x);
   g_item[param_1].pos.y = (float)(g_item[param_1].pos.y + g_item[param_1].vel.y);
   g_item[param_1].pos.z = (float)(g_item[param_1].pos.z + g_item[param_1].vel.z);
-  g_item[param_1].torque.x = 0.0;
-  g_item[param_1].torque.y = 0.0;
-  g_item[param_1].torque.z = 0.0;
-  fVar4 = (float)(((float)(g_item[param_1].angvel.z * g_item[param_1].rot[0].z +
-          (g_item[param_1].rot[0].y * g_item[param_1].angvel.y + pvVar3->x * g_item[param_1].angvel.x))
-          ) * g_item[param_1].inv_inertia.x);
-  g_item[param_1].torque.x = (float)(g_item[param_1].torque.x + fVar4 * pvVar3->x);
-  g_item[param_1].torque.y = (float)(g_item[param_1].rot[0].y * fVar4 + g_item[param_1].torque.y);
-  g_item[param_1].torque.z = (float)(fVar4 * g_item[param_1].rot[0].z + g_item[param_1].torque.z);
-  fVar4 = (float)(((float)(g_item[param_1].rot[1].z * g_item[param_1].angvel.z +
-          (g_item[param_1].rot[1].x * g_item[param_1].angvel.x +
-          g_item[param_1].rot[1].y * g_item[param_1].angvel.y))) * g_item[param_1].inv_inertia.y);
-  g_item[param_1].torque.x = (float)(g_item[param_1].torque.x + fVar4 * g_item[param_1].rot[1].x);
-  g_item[param_1].torque.y = (float)(g_item[param_1].rot[1].y * fVar4 + g_item[param_1].torque.y);
-  g_item[param_1].torque.z = (float)(fVar4 * g_item[param_1].rot[1].z + g_item[param_1].torque.z);
-  fVar4 = (float)(((float)(g_item[param_1].rot[2].z * g_item[param_1].angvel.z +
-          (g_item[param_1].rot[2].y * g_item[param_1].angvel.y +
-          g_item[param_1].rot[2].x * g_item[param_1].angvel.x))) * g_item[param_1].inv_inertia.z);
-  g_item[param_1].torque.x = (float)(g_item[param_1].torque.x + fVar4 * g_item[param_1].rot[2].x);
-  g_item[param_1].torque.y = (float)(fVar4 * g_item[param_1].rot[2].y + g_item[param_1].torque.y);
-  g_item[param_1].torque.z = (float)(fVar4 * g_item[param_1].rot[2].z + g_item[param_1].torque.z);
-  fVar4 = g_item[param_1].torque.y;
-  fVar5 = g_item[param_1].torque.x;
-  fVar6 = g_item[param_1].torque.z;
+  g_item[param_1].angvel.x = 0.0;
+  g_item[param_1].angvel.y = 0.0;
+  g_item[param_1].angvel.z = 0.0;
+  fVar4 = (float)(((float)(g_item[param_1].ang_momentum.z * g_item[param_1].rot[0].z +
+          (g_item[param_1].rot[0].y * g_item[param_1].ang_momentum.y +
+          pvVar3->x * g_item[param_1].ang_momentum.x))) * g_item[param_1].inv_inertia.x);
+  g_item[param_1].angvel.x = (float)(g_item[param_1].angvel.x + fVar4 * pvVar3->x);
+  g_item[param_1].angvel.y = (float)(g_item[param_1].rot[0].y * fVar4 + g_item[param_1].angvel.y);
+  g_item[param_1].angvel.z = (float)(fVar4 * g_item[param_1].rot[0].z + g_item[param_1].angvel.z);
+  fVar4 = (float)(((float)(g_item[param_1].rot[1].z * g_item[param_1].ang_momentum.z +
+          (g_item[param_1].rot[1].x * g_item[param_1].ang_momentum.x +
+          g_item[param_1].rot[1].y * g_item[param_1].ang_momentum.y))) * g_item[param_1].inv_inertia.y)
+  ;
+  g_item[param_1].angvel.x = (float)(g_item[param_1].angvel.x + fVar4 * g_item[param_1].rot[1].x);
+  g_item[param_1].angvel.y = (float)(g_item[param_1].rot[1].y * fVar4 + g_item[param_1].angvel.y);
+  g_item[param_1].angvel.z = (float)(fVar4 * g_item[param_1].rot[1].z + g_item[param_1].angvel.z);
+  fVar4 = (float)(((float)(g_item[param_1].rot[2].z * g_item[param_1].ang_momentum.z +
+          (g_item[param_1].rot[2].y * g_item[param_1].ang_momentum.y +
+          g_item[param_1].rot[2].x * g_item[param_1].ang_momentum.x))) * g_item[param_1].inv_inertia.z)
+  ;
+  g_item[param_1].angvel.x = (float)(g_item[param_1].angvel.x + fVar4 * g_item[param_1].rot[2].x);
+  g_item[param_1].angvel.y = (float)(fVar4 * g_item[param_1].rot[2].y + g_item[param_1].angvel.y);
+  g_item[param_1].angvel.z = (float)(fVar4 * g_item[param_1].rot[2].z + g_item[param_1].angvel.z);
+  fVar4 = g_item[param_1].angvel.y;
+  fVar5 = g_item[param_1].angvel.x;
+  fVar6 = g_item[param_1].angvel.z;
   dVar13 = _CIsqrt((double)((float)(fVar6 * fVar6 + (fVar5 * fVar5 + fVar4 * fVar4))));
   fVar4 = (float)dVar13;
   if (1.52587890625E-5 < fVar4) {
     local_1c = (float)(1.0 / fVar4);
-    local_24 = (float)(local_1c * g_item[param_1].torque.x);
-    local_20 = (float)(g_item[param_1].torque.y * local_1c);
-    local_1c = (float)(local_1c * g_item[param_1].torque.z);
+    local_24 = (float)(local_1c * g_item[param_1].angvel.x);
+    local_20 = (float)(g_item[param_1].angvel.y * local_1c);
+    local_1c = (float)(local_1c * g_item[param_1].angvel.z);
     rotateorientation(&pvVar3->x,&local_24,fVar4);
   }
   pfVar7 = &g_item[param_1].end_pos[0].z;
@@ -35808,13 +35810,13 @@ void __cdecl lf_4cee0(int param_1)
     fVar4 = *pfVar7;
     pfVar7 = pfVar7 + 3;
     local_24 = (float)((float)(((float)(pvVar1->x - ((float)(local_18 + g_item[param_1].pos.x)))) * 0.125) -
-               ((float)(((float)(g_item[param_1].torque.z * local_14 - g_item[param_1].torque.y * local_10)) +
+               ((float)(((float)(g_item[param_1].angvel.z * local_14 - g_item[param_1].angvel.y * local_10)) +
                g_item[param_1].vel.x)) * 0.125);
     local_20 = (float)((float)(((float)(*pfVar2 - ((float)(local_14 + g_item[param_1].pos.y)))) * 0.125) -
-               ((float)(((float)(local_10 * g_item[param_1].torque.x - g_item[param_1].torque.z * local_18)) +
+               ((float)(((float)(local_10 * g_item[param_1].angvel.x - g_item[param_1].angvel.z * local_18)) +
                g_item[param_1].vel.y)) * 0.125);
     local_1c = (float)((float)(((float)(fVar4 - ((float)(local_10 + g_item[param_1].pos.z)))) * 0.125) -
-               ((float)(((float)(g_item[param_1].torque.y * local_18 - local_14 * g_item[param_1].torque.x)) +
+               ((float)(((float)(g_item[param_1].angvel.y * local_18 - local_14 * g_item[param_1].angvel.x)) +
                g_item[param_1].vel.z)) * 0.125);
     g_item[param_1].dv.x = (float)(local_24 + g_item[param_1].dv.x);
     g_item[param_1].dv.y = (float)(local_20 + g_item[param_1].dv.y);
@@ -35832,9 +35834,9 @@ void __cdecl lf_4cee0(int param_1)
   g_item[param_1].vel.x = (float)(g_item[param_1].dv.x + g_item[param_1].vel.x);
   g_item[param_1].vel.y = (float)(g_item[param_1].dv.y + g_item[param_1].vel.y);
   g_item[param_1].vel.z = (float)(g_item[param_1].dv.z + g_item[param_1].vel.z);
-  g_item[param_1].angvel.x = (float)(g_item[param_1].angvel.x + g_item[param_1].dw.x);
-  g_item[param_1].angvel.y = (float)(g_item[param_1].dw.y + g_item[param_1].angvel.y);
-  g_item[param_1].angvel.z = (float)(g_item[param_1].dw.z + g_item[param_1].angvel.z);
+  g_item[param_1].ang_momentum.x = (float)(g_item[param_1].ang_momentum.x + g_item[param_1].dw.x);
+  g_item[param_1].ang_momentum.y = (float)(g_item[param_1].dw.y + g_item[param_1].ang_momentum.y);
+  g_item[param_1].ang_momentum.z = (float)(g_item[param_1].dw.z + g_item[param_1].ang_momentum.z);
   local_2c = 0;
   do {
     if (*(int *)((int)(local_28 + -1) + 0x18) != 0) {
@@ -36522,7 +36524,7 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
 
 {
   __declspec(align(16)) uchar lf_frame[0x30];
-  undefined1 *puVar1;
+  vec3 *pvVar1;
   float fVar2;
   float fVar3;
   float fVar4;
@@ -36540,19 +36542,19 @@ void __cdecl lf_4e2c0(int param_1,int param_2)
   float fVar5;
   
   local_20 = 0;
-  puVar1 = &g_object[param_1].wheel_bodies[param_2].lf_raw[0x24];
+  pvVar1 = g_object[param_1].wheel_bodies[param_2].rot;
   do {
     fVar2 = *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x8c];
     if (local_20 == 0) {
       fVar2 = -fVar2;
     }
-    local_18 = (float)(*(float *)(g_object[param_1].wheel_bodies + param_2) + fVar2 * *(float *)puVar1);
-    local_14 = (float)(*(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x28] * fVar2 +
+    local_18 = (float)(*(float *)(g_object[param_1].wheel_bodies + param_2) + fVar2 * pvVar1->x);
+    local_14 = (float)(g_object[param_1].wheel_bodies[param_2].rot[0].y * fVar2 +
                *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x4]);
-    local_10 = (float)(fVar2 * *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x2c] +
+    local_10 = (float)(fVar2 * g_object[param_1].wheel_bodies[param_2].rot[0].z +
                *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x8]);
     iVar9 = circleintersectlevel
-                      (&local_18,(float *)puVar1,
+                      (&local_18,&pvVar1->x,
                        *(float *)&g_object[param_1].wheel_bodies[param_2].lf_raw[0x88]);
     iVar8 = g_numofbonds;
     if (iVar9 != 0) {

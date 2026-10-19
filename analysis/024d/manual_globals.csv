@@ -37,3 +37,5 @@ rva,name,count,evidence
 0x1034a5e0,objectpacket,,"map_regions.py block score 1.0 (packobjectpacket, packobjectpacket2, unpackobjectpacket); the Linux 0.24c size 0xce14 ends 0xc before itemtype"
 0x183dd0,bondparticle,16384,"bondsimulation2 copies particle.vel to +0x0 (stride 0x20); bond_partpart adds to +0x10"
 0x61dd0,bondhuman,512,"bondsimulation2 loops over 512 humans (stride 0x810) up to 0x563dd0; bond_bodybody: bones at +0x10, stride 0x80"
+0x13c22d24,numofstaticbonds,,"bondsimulation2 sets numofbonds to it at the end (the Linux 0.24c names it); two more functions write it"
+0x1ca5a30,numofdynamicbonds,,"bondsimulation2 keeps numofbonds in it before the reset to numofstaticbonds (the Linux 0.24c names it)"

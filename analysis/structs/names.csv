@@ -53,7 +53,7 @@ human,0xbc,input_buttons,uint32_t,,humansimulation tests bits &1 &8 &0x10
 human,0xc0,input_buttons_prev,uint32_t,,createhuman writes 0x3c0; bit tests like +0xbc (likely: buttons of the previous frame)
 item,0x20,parent_slot,int,,clientrecv: index * 0x24 + 0x291c (InventorySlot of the body)
 item,0x24,num_children,int,,linkitemtoitem: < 8; deleteitem: loop
-item,0xb4,torque,vec3,,itemsimulation zeroes it and accumulates per frame; bondsimulation2 adds crossproduct (likely)
+item,0xb4,angvel,vec3,,"the angular velocity: bondsimulation2 makes it from ang_momentum along the rows of rot, times inv_inertia; the bonds use angvel x arm"
 item,0xf8,linked_item,int,,itemlogic writes an item index; logic_setteammanager zeroes call_state of the linked item
 item,0x114,vehicle_id,int,,player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key)
 item,0x138,last_bill,int,,item_billvalue adds the bills 0 to last_bill (-1: no bill); item_addbill allows 9 bills (last_bill <= 8)
@@ -142,7 +142,7 @@ bond,0x94,bone_a,int,,bondsimulation2: bone index (stride 0xe0)
 bond,0x98,target,int,,"bondsimulation2: types 10, 11 and 14 = item index; type 13 = the second human; type 8 = second bone"
 human,0x60,axis,float,,"getinputs_human: debug label ""humanaxis"""
 human,0x64,pitch,float,,human_calculatearmangles multiplies it by a constant (likely: vertical angle)
-item,0xa8,angvel,vec3,,item_physicssimulation damps it with scalevector; itemsimulation uses it in dotproduct
+item,0xa8,ang_momentum,vec3,,"the angular momentum: bondsimulation2 adds dw to it each pass; item_physicssimulation damps it with scalevector"
 item,0xe0,ammo,int,,"createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0"
 item,0xe4,unk_e4,int,,"createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7)"
 item,0xec,flags,uint32_t,,itemlogic tests bit 1; human_itemsimulation sets bit 1
@@ -265,7 +265,7 @@ timerlist,0x8c,objectsim,int,,"timer index; the code names the timer ""objectsim
 timerlist,0x90,packetbuild,int,,"timer index; the code names the timer ""packetbuild"""
 timerlist,0x94,bondtest,int,,"timer index; the code names the timer ""bondtest"""
 item,0x78,dv,vec3,,bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel
-item,0xcc,dw,vec3,,bondsimulation2 clears it at the start of each solver pass; the bonds add the change of angvel
+item,0xcc,dw,vec3,,bondsimulation2 clears it at the start of each solver pass; the bonds add the change of ang_momentum
 object,0x71ec,num_wheel_bodies,int,,"createobject copies objecttype.num_wheels; a second list after Object.wheels"
 object,0x71f0,wheel_bodies,WheelBody,16,"stride 0xe8; bondsimulation2, objectwheelsimulation2 and objectsimulation loop over num_wheels; num_seats follows at +0x81a8"
 human,0x4,has_physics,int,,"humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it"
