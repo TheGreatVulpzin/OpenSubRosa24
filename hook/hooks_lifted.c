@@ -3850,12 +3850,12 @@ __declspec(naked) static void th_0c0a0(void)
 }
 static uint8_t expect_0c0a0[8] = { 0x83, 0xec, 0x0c, 0x56, 0x8b, 0x74, 0x24, 0x14 };
 
-undefined4 __cdecl lf_0c120(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6);
+undefined4 __cdecl lineintersectplane(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6);
 static undefined4 (__cdecl *orig_0c120)(float *, float *, float *, float *, float *, float *);
 static SvVerify v_0c120 = { "lineintersectplane", -1 };
 static undefined4 __cdecl hk_0c120(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6)
 {
-    SV_HOOK_RET(undefined4, v_0c120, lf_0c120(param_1, param_2, param_3, param_4, param_5, param_6), orig_0c120(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET(undefined4, v_0c120, lineintersectplane(param_1, param_2, param_3, param_4, param_5, param_6), orig_0c120(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_0c120(void)
 {
@@ -3895,12 +3895,12 @@ __declspec(naked) static void th_0c120(void)
 }
 static uint8_t expect_0c120[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x54, 0x24, 0x14 };
 
-undefined4 __cdecl lf_0c290(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6);
+undefined4 __cdecl lineintersectplanetwosided(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6);
 static undefined4 (__cdecl *orig_0c290)(float *, float *, float *, float *, float *, float *);
 static SvVerify v_0c290 = { "lineintersectplanetwosided", -1 };
 static undefined4 __cdecl hk_0c290(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6)
 {
-    SV_HOOK_RET(undefined4, v_0c290, lf_0c290(param_1, param_2, param_3, param_4, param_5, param_6), orig_0c290(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET(undefined4, v_0c290, lineintersectplanetwosided(param_1, param_2, param_3, param_4, param_5, param_6), orig_0c290(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_0c290(void)
 {
@@ -3940,12 +3940,12 @@ __declspec(naked) static void th_0c290(void)
 }
 static uint8_t expect_0c290[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x44, 0x24, 0x24 };
 
-undefined4 __cdecl lf_0c420(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8);
+undefined4 __cdecl lineintersecttriangle(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8);
 static undefined4 (__cdecl *orig_0c420)(float *, float *, float *, float *, float *, float *, float *, float *);
 static SvVerify v_0c420 = { "lineintersecttriangle", -1 };
 static undefined4 __cdecl hk_0c420(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float * param_6, float * param_7, float * param_8)
 {
-    SV_HOOK_RET(undefined4, v_0c420, lf_0c420(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_0c420(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+    SV_HOOK_RET(undefined4, v_0c420, lineintersecttriangle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_0c420(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
 __declspec(naked) static void th_0c420(void)
 {
@@ -6870,12 +6870,12 @@ __declspec(naked) static void th_1a000(void)
 }
 static uint8_t expect_1a000[7] = { 0x83, 0xec, 0x38, 0x8b, 0x44, 0x24, 0x44 };
 
-undefined4 __cdecl lf_1a700(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
+undefined4 __cdecl sphereintersecttriangle(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
 static undefined4 (__cdecl *orig_1a700)(float *, float *, float *, float *, float, float *, float *, float *);
 static SvVerify v_1a700 = { "sphereintersecttriangle", -1 };
 static undefined4 __cdecl hk_1a700(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8)
 {
-    SV_HOOK_RET(undefined4, v_1a700, lf_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+    SV_HOOK_RET(undefined4, v_1a700, sphereintersecttriangle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_1a700(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
 __declspec(naked) static void th_1a700(void)
 {
@@ -6917,12 +6917,12 @@ __declspec(naked) static void th_1a700(void)
 }
 static uint8_t expect_1a700[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x54, 0x24, 0x24 };
 
-undefined4 __cdecl lf_1a7f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7);
+undefined4 __cdecl sphereintersectline(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7);
 static undefined4 (__cdecl *orig_1a7f0)(float *, float *, float *, float *, float, float *, float *);
 static SvVerify v_1a7f0 = { "sphereintersectline", -1 };
 static undefined4 __cdecl hk_1a7f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7)
 {
-    SV_HOOK_RET(undefined4, v_1a7f0, lf_1a7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_1a7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+    SV_HOOK_RET(undefined4, v_1a7f0, sphereintersectline(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_1a7f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
 __declspec(naked) static void th_1a7f0(void)
 {
@@ -7978,12 +7978,12 @@ __declspec(naked) static void th_225e0(void)
 }
 static uint8_t expect_225e0[6] = { 0x81, 0xec, 0x8c, 0x00, 0x00, 0x00 };
 
-void __cdecl lf_22af0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5);
+void __cdecl calculatebarycentric(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5);
 static void (__cdecl *orig_22af0)(float *, float *, float *, float *, float *);
 static SvVerify v_22af0 = { "calculatebarycentric", -1 };
 static void __cdecl hk_22af0(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5)
 {
-    SV_HOOK_VOID(v_22af0, lf_22af0(param_1, param_2, param_3, param_4, param_5), orig_22af0(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_VOID(v_22af0, calculatebarycentric(param_1, param_2, param_3, param_4, param_5), orig_22af0(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_22af0(void)
 {
@@ -9678,12 +9678,12 @@ __declspec(naked) static void th_306d0(void)
 }
 static uint8_t expect_306d0[5] = { 0x8b, 0x44, 0x24, 0x08, 0x53 };
 
-undefined4 __cdecl lf_307f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
+undefined4 __cdecl sphereintersecttrianglefull(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8);
 static undefined4 (__cdecl *orig_307f0)(float *, float *, float *, float *, float, float *, float *, float *);
 static SvVerify v_307f0 = { "sphereintersecttrianglefull", -1 };
 static undefined4 __cdecl hk_307f0(float * param_1, float * param_2, float * param_3, float * param_4, float param_5, float * param_6, float * param_7, float * param_8)
 {
-    SV_HOOK_RET(undefined4, v_307f0, lf_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+    SV_HOOK_RET(undefined4, v_307f0, sphereintersecttrianglefull(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_307f0(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
 __declspec(naked) static void th_307f0(void)
 {
