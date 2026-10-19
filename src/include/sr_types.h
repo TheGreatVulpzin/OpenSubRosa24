@@ -496,12 +496,8 @@ typedef union Object { struct {
     float unk_0078;                      /* +0x0078 1 functions */
     float unk_007c;                      /* +0x007c 1 functions */
     float unk_0080;                      /* +0x0080 1 functions */
-    float unk_0084;                      /* +0x0084 5 functions */
-    float unk_0088;                      /* +0x0088 4 functions */
-    float unk_008c;                      /* +0x008c 5 functions */
-    float unk_0090;                      /* +0x0090 5 functions */
-    float unk_0094;                      /* +0x0094 4 functions */
-    float unk_0098;                      /* +0x0098 5 functions */
+    vec3 box_min;                        /* +0x0084 lineintersectobject: no hit when both ends are below it; humansimulation tests a human against the box, 2 units larger */
+    vec3 box_max;                        /* +0x0090 the other corner of the box (lineintersectobject, sphereintersectobject, humansimulation) */
     uint8_t pad_009c[0xc];
     int num_particles;                   /* +0x00a8 createobject appends to the list at +0xac; particletimetolive loops over it */
     int particles[64];                   /* +0x00ac createobject appends; particletimetolive renames; createobject uses floats from +0x1ac */
@@ -589,6 +585,8 @@ SR_STATIC_ASSERT(offsetof(Object, pos_prev) == 0x30, "Object.pos_prev");
 SR_STATIC_ASSERT(offsetof(Object, rot) == 0x3c, "Object.rot");
 SR_STATIC_ASSERT(offsetof(Object, vel) == 0x60, "Object.vel");
 SR_STATIC_ASSERT(offsetof(Object, vel_prev) == 0x6c, "Object.vel_prev");
+SR_STATIC_ASSERT(offsetof(Object, box_min) == 0x84, "Object.box_min");
+SR_STATIC_ASSERT(offsetof(Object, box_max) == 0x90, "Object.box_max");
 SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles");
 SR_STATIC_ASSERT(offsetof(Object, particles) == 0xac, "Object.particles");
 SR_STATIC_ASSERT(offsetof(Object, num_bonds) == 0x3b0, "Object.num_bonds");

@@ -16586,15 +16586,16 @@ undefined4 __cdecl lf_257a0(int param_1,float *param_2,float *param_3,int param_
 
   
   iVar4 = param_1 * 0x8230;
-  if ((*param_2 < g_object[param_1].unk_0084) && (*param_3 < g_object[param_1].unk_0084)) {
+  if ((*param_2 < g_object[param_1].box_min.x) && (*param_3 < g_object[param_1].box_min.x)) {
     return 0;
   }
-  if ((((((g_object[param_1].unk_0088 <= param_2[1]) || (g_object[param_1].unk_0088 <= param_3[1]))
-        && ((g_object[param_1].unk_008c <= param_2[2] || (g_object[param_1].unk_008c <= param_3[2]))
-           )) && ((*param_2 <= g_object[param_1].unk_0090 ||
-                  (*param_3 <= g_object[param_1].unk_0090)))) &&
-      ((param_2[1] <= g_object[param_1].unk_0094 || (param_3[1] <= g_object[param_1].unk_0094)))) &&
-     ((param_2[2] <= g_object[param_1].unk_0098 || (param_3[2] <= g_object[param_1].unk_0098)))) {
+  if ((((((g_object[param_1].box_min.y <= param_2[1]) || (g_object[param_1].box_min.y <= param_3[1])
+         ) && ((g_object[param_1].box_min.z <= param_2[2] ||
+               (g_object[param_1].box_min.z <= param_3[2])))) &&
+       ((*param_2 <= g_object[param_1].box_max.x || (*param_3 <= g_object[param_1].box_max.x)))) &&
+      ((param_2[1] <= g_object[param_1].box_max.y || (param_3[1] <= g_object[param_1].box_max.y))))
+     && ((param_2[2] <= g_object[param_1].box_max.z || (param_3[2] <= g_object[param_1].box_max.z)))
+     ) {
     local_40 = g_object[param_1].unk_07b4;
     g_intersect.fraction = 1.0;
     local_48 = 0;
@@ -17445,9 +17446,10 @@ void __cdecl lf_26f90(int param_1)
   if (0 < g_numoftracks) {
     local_10 = &g_track.unk_0568;
     do {
-      if ((((local_10[-2] <= g_object[param_1].unk_0090) &&
-           (*local_10 <= g_object[param_1].unk_0098)) && (g_object[param_1].unk_0084 <= local_10[1])
-          ) && (g_object[param_1].unk_008c <= local_10[3])) {
+      if ((((local_10[-2] <= g_object[param_1].box_max.x) &&
+           (*local_10 <= g_object[param_1].box_max.z)) &&
+          (g_object[param_1].box_min.x <= local_10[1])) &&
+         (g_object[param_1].box_min.z <= local_10[3])) {
         local_1c = g_object[param_1].particles;
         local_14 = 4;
         do {
@@ -24626,12 +24628,12 @@ undefined4 __cdecl lf_32bb0(int param_1,float *param_2,float param_3)
 
 
   
-  if (((((g_object[param_1].unk_0084 <= param_3 + *param_2) &&
-        (g_object[param_1].unk_0088 <= param_2[1] + param_3)) &&
-       (g_object[param_1].unk_008c <= param_2[2] + param_3)) &&
-      ((*param_2 - param_3 <= g_object[param_1].unk_0090 &&
-       (param_2[1] - param_3 <= g_object[param_1].unk_0094)))) &&
-     (param_2[2] - param_3 <= g_object[param_1].unk_0098)) {
+  if (((((g_object[param_1].box_min.x <= param_3 + *param_2) &&
+        (g_object[param_1].box_min.y <= param_2[1] + param_3)) &&
+       (g_object[param_1].box_min.z <= param_2[2] + param_3)) &&
+      ((*param_2 - param_3 <= g_object[param_1].box_max.x &&
+       (param_2[1] - param_3 <= g_object[param_1].box_max.y)))) &&
+     (param_2[2] - param_3 <= g_object[param_1].box_max.z)) {
     local_4c = g_object[param_1].unk_07b4;
     g_intersect.distance = 65536.0;
     local_58 = 0;

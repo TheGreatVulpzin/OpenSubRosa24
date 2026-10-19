@@ -17,7 +17,7 @@
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_soundlist (*(SoundList *)SR_VA(0x956d700))
-#define g_particle (*(Particle (*)[4096])SR_VA(0xb7e7200))
+#define g_particle (*(Particle (*)[16384])SR_VA(0xb7e7200))
 #define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
 #define g_city (*(City *)SR_VA(0xe699220))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
@@ -429,6 +429,431 @@ static int human_begin(int h, int vehicle)
   return 0 < hu->inventory[0].count || 0 < hu->inventory[1].count;
 }
 
+/* A ray against the level that finds a floor (the normal points up more than 0.7). */
+static int human_floorray(vec3 *from, vec3 *to)
+{
+  return lineintersectlevel(&from->x, &to->x, 1) != 0 && 0.699999988079071 < g_intersect.normal[1];
+}
+
+/* Adds the hit point and the velocity of the hit surface to the sums of the floor. */
+static void human_addfloor(vec3 *pos, vec3 *vel)
+{
+  pos->x = (float)(g_intersect.pos[0] + pos->x);
+  pos->y = (float)(g_intersect.pos[1] + pos->y);
+  pos->z = (float)(g_intersect.pos[2] + pos->z);
+  vel->x = (float)(g_intersect.surface_vel.x + vel->x);
+  vel->y = (float)(g_intersect.surface_vel.y + vel->y);
+  vel->z = (float)(g_intersect.surface_vel.z + vel->z);
+}
+
+/* The end of a ray down from bone 0, the stance * 1.125 long along rot[1], moved by side * k. */
+static void human_feet(const Bone *b0, float stance, const float side[3], float k, vec3 *to)
+{
+  float d = (float)(-stance * 1.125);
+
+  to->x = (float)((float)(b0->pos.x + d * b0->rot[1].x) + side[0] * k);
+  to->y = (float)((float)(d * b0->rot[1].y + b0->pos.y) + side[1] * k);
+  to->z = (float)((float)(d * b0->rot[1].z + b0->pos.z) + side[2] * k);
+}
+
+/* The start of a ray: bone 0 moved by side * k, then 0.375 down. */
+static void human_hip(const Bone *b0, const float side[3], float k, vec3 *from)
+{
+  from->x = (float)((float)(b0->pos.x + side[0] * k) - g_yaxis[0] * 0.375);
+  from->y = (float)((float)(b0->pos.y + side[1] * k) - g_yaxis[1] * 0.375);
+  from->z = (float)((float)(side[2] * k + b0->pos.z) - g_yaxis[2] * 0.375);
+}
+
+/* Finds the floor under a living human: first the objects (a ray along the up axis), then the
+ * level (a ray down along bone 0, else 4 rays around it, else a short ray straight down).
+ * pos and vel get the mean hit point and the mean velocity of the floor. Returns the number of
+ * hits (0: no floor). */
+static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
+{
+  const Bone *b0 = &hu->bones[0];
+  vec3 from, to;
+  float d;
+  int o, n = 0;
+
+  pos->x = pos->y = pos->z = 0.0f;
+  vel->x = vel->y = vel->z = 0.0f;
+  for (o = 0; o < 1024; o++) {
+    if (g_object[o].active == 0 || g_object[o].state == 3)
+      continue;
+    d = (float)(-hu->stance * 1.125);
+    to.x = (float)(b0->pos.x + d * g_yaxis[0]);
+    to.y = (float)(g_yaxis[1] * d + b0->pos.y);
+    to.z = (float)(d * g_yaxis[2] + b0->pos.z);
+    from.x = (float)(b0->pos.x + g_yaxis[0] * 0.125);
+    from.y = (float)(b0->pos.y + g_yaxis[1] * 0.125);
+    from.z = (float)(g_yaxis[2] * 0.125 + b0->pos.z);
+    if (lineintersectobject(o, &from.x, &to.x, 0) != 0) {
+      human_addfloor(pos, vel);
+      return 1;
+    }
+  }
+  d = (float)(-hu->stance * 1.125);
+  to.x = (float)(b0->pos.x + d * b0->rot[1].x);
+  to.y = (float)(d * b0->rot[1].y + b0->pos.y);
+  to.z = (float)(d * b0->rot[1].z + b0->pos.z);
+  from = b0->pos;
+  if (lineintersectlevel(&from.x, &to.x, 1) != 0 && !(g_intersect.normal[1] <= 0.699999988079071)) {
+    human_addfloor(pos, vel);
+    return 1;
+  }
+  human_feet(b0, hu->stance, g_xaxis, -0.1875f, &to);
+  from.x = (float)((float)(b0->pos.x - g_xaxis[0] * 0.1875) - g_yaxis[0] * 0.375);
+  from.y = (float)((float)(b0->pos.y - g_xaxis[1] * 0.1875) - g_yaxis[1] * 0.375);
+  from.z = (float)((float)(b0->pos.z - g_xaxis[2] * 0.1875) - g_yaxis[2] * 0.375);
+  if (human_floorray(&from, &to)) {
+    n = 1;
+    human_addfloor(pos, vel);
+  }
+  human_feet(b0, hu->stance, g_xaxis, 0.1875f, &to);
+  human_hip(b0, g_xaxis, 0.1875f, &from);
+  if (human_floorray(&from, &to)) {
+    n++;
+    human_addfloor(pos, vel);
+  }
+  human_feet(b0, hu->stance, g_zaxis, -0.1875f, &to);
+  from.x = (float)((float)(b0->pos.x - g_zaxis[0] * 0.1875) - g_yaxis[0] * 0.375);
+  from.y = (float)((float)(b0->pos.y - g_zaxis[1] * 0.1875) - g_yaxis[1] * 0.375);
+  from.z = (float)((float)(b0->pos.z - g_zaxis[2] * 0.1875) - g_yaxis[2] * 0.375);
+  if (human_floorray(&from, &to)) {
+    n++;
+    human_addfloor(pos, vel);
+  }
+  human_feet(b0, hu->stance, g_zaxis, 0.1875f, &to);
+  human_hip(b0, g_zaxis, 0.1875f, &from);
+  if (human_floorray(&from, &to)) {
+    n++;
+    human_addfloor(pos, vel);
+  }
+  if (n != 0)
+    return n;
+  to.x = (float)(b0->pos.x - g_yaxis[0] * 0.5);
+  to.y = (float)(b0->pos.y - g_yaxis[1] * 0.5);
+  to.z = (float)(b0->pos.z - g_yaxis[2] * 0.5);
+  from = b0->pos;
+  if (human_floorray(&from, &to)) {
+    human_addfloor(pos, vel);
+    return 1;
+  }
+  return 0;
+}
+
+/* A human on the floor stands: bone 0 gets a push along rot[1] that holds it at the stance
+ * height above the floor (at most 1/18 per tick), when the crouch button is down or the bone is
+ * upright. Button 4 makes it jump. Returns 1 when the human stands on the floor after this.
+ * floor_vel gets the velocity of the floor. */
+static int human_stand(Human *hu, vec3 *floor_vel)
+{
+  Bone *b0 = &hu->bones[0];
+  const vec3 *r1 = &b0->rot[1];
+  vec3 pos, vel, rel;
+  float inv, a, dot, push;
+  int n, standing;
+
+  n = human_findfloor(hu, &pos, &vel);
+  if (n == 0)
+    return 0;
+  inv = (float)(1.0 / (float)n);
+  pos.x = (float)(inv * pos.x);
+  pos.y = (float)(pos.y * inv);
+  pos.z = (float)(pos.z * inv);
+  vel.x = (float)(inv * vel.x);
+  vel.y = (float)(vel.y * inv);
+  vel.z = (float)(inv * vel.z);
+  *floor_vel = vel;
+  if ((hu->input_buttons & 8) != 0 || 0.8999999761581421 < r1->y) {
+    a = ABS(r1->y);
+    rel.x = (float)(b0->vel.x - vel.x);
+    rel.y = (float)(b0->vel.y - vel.y);
+    rel.z = (float)(b0->vel.z - vel.z);
+    dot = (float)(r1->z * rel.z + (r1->y * rel.y + r1->x * rel.x));
+    push = (float)((float)(a * 0.125 * a *
+                           (float)(hu->stance * 1.125 -
+                                   (float)(r1->z * (float)(b0->pos.z - pos.z) +
+                                           (r1->y * (float)(b0->pos.y - pos.y) + r1->x * (float)(b0->pos.x - pos.x))))) -
+                   dot * 0.75);
+    if (!(push <= 0.0555555559694767))
+      push = 0.0555555559694767f;
+    if (!(push <= 0.0)) {
+      b0->vel.x = (float)(r1->x * push + b0->vel.x);
+      b0->vel.y = (float)(r1->y * push + b0->vel.y);
+      b0->vel.z = (float)(push * r1->z + b0->vel.z);
+    }
+  }
+  standing = 1;
+  hu->on_ground = 1;
+  if ((hu->input_buttons & 4) != 0 && (hu->input_buttons_prev & 4) == 0) {
+    standing = 0;
+    b0->vel.y = 0.16666667f;
+    hu->bones[1].vel.y = 0.16666667f;
+  }
+  return standing;
+}
+
+/* Each bone that touches the level gets a contact bond (type 7). Bone 0 has a radius of 0.25,
+ * the hands and feet 0.0625, the others 0.125. A living human skips the hands and the bones
+ * 5 and 8. A fast hit of bone 0 costs 120 health. */
+static void human_levelcontacts(Human *hu, int h)
+{
+  Bone *bk;
+  Bond *b;
+  float r, speed;
+  int k, i;
+
+  for (k = 0; k < 15; k++) {
+    if (k == 5 || k == 8)
+      continue;
+    r = 0.125f;
+    if (k == 11 || k == 14 || k == 10 || k == 13 || k == 4 || k == 7)
+      r = 0.0625f;
+    if (0 < hu->health && k == 0)
+      r = 0.25f;
+    else if (0 < hu->health && (k == 11 || k == 14 || k == 10 || k == 13))
+      continue;
+    bk = &hu->bones[k];
+    if (sphereintersectlevel(&bk->pos.x, r) == 0)
+      continue;
+    i = g_numofbonds;
+    b = &g_bond[i];
+    b->type = 7;
+    b->owner = h;
+    b->bone_a = k;
+    b->rest_length = (float)(r - g_intersect.distance);
+    g_numofbonds = i + 1;
+    b->stiffness = 0.0625f;
+    b->damping = 0.125f;
+    b->mode = 0;
+    b->normal.x = g_intersect.normal[0];
+    b->normal.y = g_intersect.normal[1];
+    b->normal.z = g_intersect.normal[2];
+    b->friction = 0.5f;
+    b->arm.x = (float)(g_intersect.pos[0] - bk->pos.x);
+    b->arm.y = (float)(g_intersect.pos[1] - bk->pos.y);
+    b->arm.z = (float)(g_intersect.pos[2] - bk->pos.z);
+    speed = (float)_CIsqrt((double)(float)(hu->bones[0].vel.z * hu->bones[0].vel.z +
+                                           (hu->bones[0].vel.x * hu->bones[0].vel.x +
+                                            hu->bones[0].vel.y * hu->bones[0].vel.y)));
+    if (0.25 < speed)
+      hu->health = hu->health - 0x78;
+  }
+}
+
+/* A standing human walks: bone 0 moves toward the floor velocity plus the input direction
+ * (input_axes[1] sideways, input_axes[3] forward, turned by axis) at 0.15, or 0.05 and 0.025
+ * in move modes 1 and 2, less while crouched. The change has a limit from the speed and the
+ * body strength. Then 5% of the speed against the floor goes, and walk_phase moves on. */
+static void human_walk(Human *hu, const vec3 *floor_vel)
+{
+  Bone *b0 = &hu->bones[0];
+  vec3 m[3] = {{1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}}, d;
+  float side, fwd, len, inv, speed, step, f, vz, phase;
+
+  rotateorientation(&m[0].x, g_yaxis, hu->axis);
+  fwd = -hu->input_axes[3];
+  side = hu->input_axes[1];
+  d.x = (float)(side * m[0].x + (float)(fwd * m[2].x + 0.0));
+  d.y = (float)(m[0].y * side + (float)(m[2].y * fwd + 0.0));
+  d.z = (float)(side * m[0].z + (float)(fwd * m[2].z + 0.0));
+  len = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+  if (len == 0.0) {
+    d.x = 0.0f;
+    d.z = 0.0f;
+  } else {
+    inv = (float)(1.0 / len);
+    d.x = inv * d.x;
+    d.z = (float)(inv * d.z);
+  }
+  speed = 0.15000000596046448f;
+  if (hu->move_mode == 1)
+    speed = 0.05000000074505806f;
+  if (hu->move_mode == 2)
+    speed = 0.02500000037252903f;
+  if ((hu->input_buttons & 8) != 0)
+    speed = (float)(speed * 0.625);
+  d.x = (float)((float)(floor_vel->x + speed * d.x) - b0->vel.x);
+  d.z = (float)((float)(floor_vel->z + (float)(speed * d.z)) - b0->vel.z);
+  d.y = 0.0f;
+  step = (float)_CIsqrt((double)(float)(d.x * d.x + 0.0 + d.z * d.z));
+  f = (float)(step / 0.07500000298023224);
+  if (0.0 <= f) {
+    if (2.0 < f)
+      f = 2.0f;
+  } else {
+    f = 0.0f;
+  }
+  f = (float)((float)((float)((f * 0.125 + 0.125) / 60.0) * 1.25) * hu->body_strength);
+  if (f < step) {
+    f = (float)(f / step);
+    d.x = f * d.x;
+    d.y = (float)(f * 0.0);
+    d.z = (float)(f * d.z);
+  }
+  b0->vel.x = (float)(d.x + b0->vel.x);
+  b0->vel.y = (float)(b0->vel.y + d.y);
+  b0->vel.z = (float)(b0->vel.z + d.z);
+  vz = b0->vel.z;
+  d.y = (float)((float)(b0->vel.y - floor_vel->y) * 0.050000011920928955);
+  b0->vel.x = (float)(b0->vel.x - (float)(b0->vel.x - floor_vel->x) * 0.050000011920928955);
+  b0->vel.y = (float)(b0->vel.y - d.y);
+  b0->vel.z = (float)(b0->vel.z - (float)((float)(vz - floor_vel->z) * 0.050000011920928955));
+  d.x = (float)(b0->vel.x - floor_vel->x);
+  d.z = (float)(b0->vel.z - floor_vel->z);
+  step = (float)_CIsqrt((double)(float)(d.x * d.x + 0.0f + d.z * d.z));
+  phase = (float)(step * 3.14159265359 * 0.5 + hu->walk_phase);
+  hu->walk_phase = phase;
+  if (phase >= 6.28318530718)
+    hu->walk_phase = (float)(phase - 6.28318530718);
+}
+
+/* Each bone near an object (its box, 2 units larger) that touches a triangle of the object gets
+ * a contact bond (type 4). The bonds against the vehicle the human just left start soft. A fast
+ * hit of the object (not with the hands, the feet or the knees) costs 120 health. When it
+ * kills, the hit sound plays, and the driver pays a team kill tax for a protected human. */
+static void human_objectcontacts(Human *hu, int h)
+{
+  const Bone *b0 = &hu->bones[0];
+  Bone *bk;
+  Object *ob;
+  Bond *b;
+  vec3 v, rel;
+  float r, w0, w1, s;
+  int o, k, i, p0, p1, p2, last;
+
+  for (o = 0; o < 1024; o++) {
+    ob = &g_object[o];
+    if (ob->active == 0 || ob->state == 3)
+      continue;
+    if (!(ob->box_min.x - 2.0 <= b0->pos.x && b0->pos.x <= ob->box_max.x + 2.0 && ob->box_min.z - 2.0 <= b0->pos.z &&
+          b0->pos.z <= ob->box_max.z + 2.0 && ob->box_min.y - 2.0 <= b0->pos.y && b0->pos.y <= ob->box_max.y + 2.0))
+      continue;
+    for (k = 0; k < 15; k++) {
+      if (k == 11 || k == 14 || k == 10 || k == 13)
+        continue;
+      r = 0.25f;
+      if (k == 5 || k == 8)
+        r = 0.0625f;
+      bk = &hu->bones[k];
+      if (sphereintersectobject(o, &bk->pos.x, r) == 0)
+        continue;
+      w0 = g_intersect.tri_weights[0];
+      p2 = g_intersect.tri_particles[2];
+      p1 = g_intersect.tri_particles[1];
+      p0 = g_intersect.tri_particles[0];
+      i = g_numofbonds;
+      b = &g_bond[i];
+      b->type = 4;
+      b->owner = h;
+      b->bone_a = k;
+      last = hu->last_vehicle;
+      b->particle_b = p0;
+      b->particle_c = p1;
+      b->particle_d = p2;
+      b->weights[0] = w0;
+      w1 = g_intersect.tri_weights[1];
+      b->weights[1] = w1;
+      b->weights[2] = g_intersect.tri_weights[2];
+      b->rest_length = (float)(r - g_intersect.distance);
+      b->stiffness = 0.0625f;
+      if (o == last)
+        b->stiffness = (float)(((float)(100 - hu->last_vehicle_timer) * 0.0625) / 100.0);
+      g_numofbonds = g_numofbonds + 1;
+      b->damping = 0.25f;
+      b->mode = 0;
+      b->normal.x = g_intersect.normal[0];
+      b->normal.y = g_intersect.normal[1];
+      b->normal.z = g_intersect.normal[2];
+      b->friction = 0.1f;
+      if (o == hu->last_vehicle || k == 5 || k == 8 || k == 4 || k == 7)
+        continue;
+      v.x = (float)(g_particle[p0].vel.x * w0);
+      v.y = (float)(g_particle[p0].vel.y * w0);
+      v.z = (float)(g_particle[p0].vel.z * w0);
+      scaleaddvectors(&v.x, &v.x, &g_particle[p1].vel.x, w1);
+      scaleaddvectors(&v.x, &v.x, &g_particle[p2].vel.x, g_intersect.tri_weights[2]);
+      scaleaddvectors(&rel.x, &v.x, &bk->vel.x, -1.0f);
+      s = (float)(g_intersect.normal[2] * rel.z + (rel.y * g_intersect.normal[1] + g_intersect.normal[0] * rel.x));
+      if (!(0.1666666716337204 < s))
+        continue;
+      hu->health = hu->health - 0x78;
+      if ((uint)(hu->health + 0x77) < 0x78) {
+        createevent_sound(g_soundlist.humanhit, (undefined4 *)&hu->pos.x, 1.0f, 0.5f);
+        if (hu->player_id != -1 && g_player[hu->player_id].team == 7 && 0 < hu->protect_timer && ob->driver != -1)
+          playerteamkilltax(ob->driver, 100);
+      }
+    }
+  }
+}
+
+/* Button 0x800 puts the human into the nearest free seat closer than 1.5. */
+static void human_entervehicle(Human *hu)
+{
+  const Object *ob;
+  vec3 p, d;
+  float best = 1.5f, dist, sx, sy, sz;
+  int o, s, other, taken;
+
+  if ((hu->input_buttons & 0x800) == 0 || (hu->input_buttons_prev & 0x800) != 0)
+    return;
+  for (o = 0; o < 1024; o++) {
+    ob = &g_object[o];
+    if (ob->active == 0)
+      continue;
+    for (s = 0; s < ob->num_seats; s++) {
+      sx = ob->seats[s].x;
+      sy = ob->seats[s].y;
+      sz = ob->seats[s].z;
+      p.x = (float)((float)((float)(sx * ob->rot[0].x + ob->pos.x) + sy * ob->rot[1].x) + sz * ob->rot[2].x);
+      p.y = (float)(ob->rot[2].y * sz + (float)(ob->rot[1].y * sy + (float)(ob->rot[0].y * sx + ob->pos.y)));
+      p.z = (float)(sz * ob->rot[2].z + (float)(sy * ob->rot[1].z + (float)(sx * ob->rot[0].z + ob->pos.z)));
+      d.x = (float)(p.x - hu->pos.x);
+      d.y = (float)(p.y - hu->pos.y);
+      d.z = (float)(p.z - hu->pos.z);
+      dist = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+      if (!(dist < best))
+        continue;
+      taken = 0;
+      for (other = 0; other < 512; other++)
+        if (g_human[other].active != 0 && g_human[other].vehicle_id == o && g_human[other].vehicle_seat == s) {
+          taken = 1;
+          break;
+        }
+      if (taken)
+        continue;
+      hu->vehicle_id = o;
+      hu->vehicle_seat = s;
+      d.x = (float)(p.x - hu->pos.x);
+      d.y = (float)(p.y - hu->pos.y);
+      d.z = (float)(p.z - hu->pos.z);
+      best = (float)_CIsqrt((double)(float)(d.z * d.z + (d.y * d.y + d.x * d.x)));
+    }
+  }
+}
+
+/* The tick of a human on foot. */
+static void human_onfoot(int h)
+{
+  Human *hu = &g_human[h];
+  vec3 floor_vel;
+  int standing = 0;
+
+  if (0 < hu->health)
+    standing = human_stand(hu, &floor_vel);
+  human_levelcontacts(hu, h);
+  if (standing)
+    human_walk(hu, &floor_vel);
+  if (hu->last_vehicle_timer < 1)
+    hu->last_vehicle = -1;
+  else
+    hu->last_vehicle_timer = hu->last_vehicle_timer - 1;
+  human_objectcontacts(hu, h);
+  hu->pos = hu->bones[0].pos;
+  human_entervehicle(hu);
+}
+
 /* The length of a vector, with the float rounding of the sum. */
 static float human_length(float sq)
 {
@@ -709,543 +1134,7 @@ void __cdecl lf_51060(void)
       local_98 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_98 + 4)),g_human[(int)local_a4].vehicle_seat));
       LF_SET_BITS(local_a0, human_begin((int)local_a4, local_9c));
       if (local_9c == -1) {
-        local_c0 = 0.0;
-        if (g_human[(int)puVar11].health < 1) goto LAB_00452144;
-        iVar21 = 0;
-        local_b0 = 0.0;
-        piVar17 = &g_object[0].state;
-        local_ac = 0.0;
-        local_a8 = 0.0;
-        local_bc = 0.0;
-        local_b8 = 0.0;
-        local_b4 = 0.0;
-        LF_COPY(fVar24, g_yaxis[2]);
-        LF_COPY(fVar3, g_yaxis[1]);
-        LF_COPY(fVar4, g_yaxis[0]);
-        do {
-          if ((((Object *)(piVar17 + -2))->active != 0) && (*piVar17 != 3)) {
-            local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-            local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x + LF_BITS_F(local_cc) * fVar4);
-            local_44 = (float)(fVar3 * LF_BITS_F(local_cc) + g_human[(int)puVar11].bones[0].pos.y);
-            local_40 = (float)(LF_BITS_F(local_cc) * fVar24 + g_human[(int)puVar11].bones[0].pos.z);
-            local_3c = (float)(g_human[(int)puVar11].bones[0].pos.x + fVar4 * 0.125);
-            local_38 = (float)(g_human[(int)puVar11].bones[0].pos.y + fVar3 * 0.125);
-            local_34 = (float)(fVar24 * 0.125 + g_human[(int)puVar11].bones[0].pos.z);
-            iVar14 = lineintersectobject(iVar21,&local_3c,&local_48,0);
-            LF_COPY(fVar4, g_yaxis[0]);
-            LF_COPY(fVar3, g_yaxis[1]);
-            LF_COPY(fVar24, g_yaxis[2]);
-            if (iVar14 != 0) {
-              local_c0 = 1.401298464324817E-45;
-              local_b0 = (float)(g_intersect.pos[0] + 0.0);
-              local_ac = (float)(g_intersect.pos[1] + 0.0);
-              local_a8 = (float)(g_intersect.pos[2] + 0.0);
-              local_bc = (float)(g_intersect.surface_vel.x + 0.0);
-              local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
-              local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
-              goto LAB_00451f2d;
-            }
-          }
-          piVar17 = piVar17 + 0x208c;
-          iVar21 = iVar21 + 1;
-        } while ((int)piVar17 < ((int)SR_VA(0x7a1e608)));
-        local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-        local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x +
-                   LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x);
-        local_44 = (float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                   g_human[(int)puVar11].bones[0].pos.y);
-        local_40 = (float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                   g_human[(int)puVar11].bones[0].pos.z);
-        local_3c = g_human[(int)puVar11].bones[0].pos.x;
-        local_38 = g_human[(int)puVar11].bones[0].pos.y;
-        local_34 = g_human[(int)puVar11].bones[0].pos.z;
-        iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-        if ((iVar21 == 0) || (g_intersect.normal[1] <= 0.699999988079071)) {
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-          local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
-                     g_xaxis[0] * 0.1875);
-          local_44 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y)) - g_xaxis[1] * 0.1875);
-          local_40 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z)) - g_xaxis[2] * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - g_xaxis[0] * 0.1875)) -
-                     g_yaxis[0] * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - g_xaxis[1] * 0.1875)) -
-                     g_yaxis[1] * 0.375);
-          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - g_xaxis[2] * 0.1875)) -
-                     g_yaxis[2] * 0.375);
-          iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-          if ((iVar21 != 0) && (0.699999988079071 < g_intersect.normal[1])) {
-            local_c0 = 1.401298464324817E-45;
-            local_b0 = (float)(g_intersect.pos[0] + 0.0);
-            local_ac = (float)(g_intersect.pos[1] + 0.0);
-            local_a8 = (float)(g_intersect.pos[2] + 0.0);
-            local_bc = (float)(g_intersect.surface_vel.x + 0.0);
-            local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
-            local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
-          }
-          LF_COPY(fVar24, local_c0);
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-          local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_xaxis[0] * 0.1875)
-          ;
-          local_44 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y) + g_xaxis[1] * 0.1875);
-          local_40 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z) + g_xaxis[2] * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + g_xaxis[0] * 0.1875)) -
-                     g_yaxis[0] * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + g_xaxis[1] * 0.1875)) -
-                     g_yaxis[1] * 0.375);
-          local_34 = (float)(((float)(g_xaxis[2] * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
-                     g_yaxis[2] * 0.375);
-          iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-          if ((iVar21 != 0) && (0.699999988079071 < g_intersect.normal[1])) {
-            LF_SET_BITS(fVar24, (((int)LF_UINT(fVar24)) + 1));
-            local_b0 = (float)(g_intersect.pos[0] + local_b0);
-            local_ac = (float)(g_intersect.pos[1] + local_ac);
-            local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
-            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
-            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
-            local_c0 = fVar24;
-          }
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-          local_48 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x)) -
-                     g_zaxis[0] * 0.1875);
-          local_44 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y)) - g_zaxis[1] * 0.1875);
-          local_40 = (float)(((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z)) - g_zaxis[2] * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x - g_zaxis[0] * 0.1875)) -
-                     g_yaxis[0] * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y - g_zaxis[1] * 0.1875)) -
-                     g_yaxis[1] * 0.375);
-          local_34 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.z - g_zaxis[2] * 0.1875)) -
-                     g_yaxis[2] * 0.375);
-          iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-          if ((iVar21 != 0) && (0.699999988079071 < g_intersect.normal[1])) {
-            LF_SET_BITS(fVar24, (((int)LF_UINT(fVar24)) + 1));
-            local_b0 = (float)(g_intersect.pos[0] + local_b0);
-            local_ac = (float)(g_intersect.pos[1] + local_ac);
-            local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
-            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
-            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
-            local_c0 = fVar24;
-          }
-          local_cc = ((int *)LF_BITS_U(((float)(-g_human[(int)puVar11].stance * 1.125))));
-          local_48 = (float)((float)(g_human[(int)puVar11].bones[0].pos.x +
-                     LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].x) + g_zaxis[0] * 0.1875)
-          ;
-          local_44 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].y +
-                     g_human[(int)puVar11].bones[0].pos.y) + g_zaxis[1] * 0.1875);
-          local_40 = (float)((float)(LF_BITS_F(local_cc) * g_human[(int)puVar11].bones[0].rot[1].z +
-                     g_human[(int)puVar11].bones[0].pos.z) + g_zaxis[2] * 0.1875);
-          local_3c = (float)(((float)(g_human[(int)puVar11].bones[0].pos.x + g_zaxis[0] * 0.1875)) -
-                     g_yaxis[0] * 0.375);
-          local_38 = (float)(((float)(g_human[(int)puVar11].bones[0].pos.y + g_zaxis[1] * 0.1875)) -
-                     g_yaxis[1] * 0.375);
-          local_34 = (float)(((float)(g_zaxis[2] * 0.1875 + g_human[(int)puVar11].bones[0].pos.z)) -
-                     g_yaxis[2] * 0.375);
-          iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-          if ((iVar21 != 0) && (0.699999988079071 < g_intersect.normal[1])) {
-            LF_SET_BITS(fVar24, (((int)LF_UINT(fVar24)) + 1));
-            local_b0 = (float)(g_intersect.pos[0] + local_b0);
-            local_ac = (float)(g_intersect.pos[1] + local_ac);
-            local_a8 = (float)(g_intersect.pos[2] + local_a8);
-            local_bc = (float)(g_intersect.surface_vel.x + local_bc);
-            local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
-            local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
-            local_c0 = fVar24;
-          }
-          if (LF_UINT(fVar24) == 0x0U) {
-            local_48 = (float)(g_human[(int)puVar11].bones[0].pos.x - g_yaxis[0] * 0.5);
-            local_44 = (float)(g_human[(int)puVar11].bones[0].pos.y - g_yaxis[1] * 0.5);
-            local_40 = (float)(g_human[(int)puVar11].bones[0].pos.z - g_yaxis[2] * 0.5);
-            local_3c = g_human[(int)puVar11].bones[0].pos.x;
-            local_38 = g_human[(int)puVar11].bones[0].pos.y;
-            local_34 = g_human[(int)puVar11].bones[0].pos.z;
-            iVar21 = lineintersectlevel(&local_3c,&local_48,1);
-            if ((iVar21 != 0) && (0.699999988079071 < g_intersect.normal[1])) {
-              local_c0 = 1.401298464324817E-45;
-              local_b0 = (float)(g_intersect.pos[0] + local_b0);
-              local_ac = (float)(g_intersect.pos[1] + local_ac);
-              local_a8 = (float)(g_intersect.pos[2] + local_a8);
-              local_bc = (float)(g_intersect.surface_vel.x + local_bc);
-              local_b8 = (float)(g_intersect.surface_vel.y + local_b8);
-              local_b4 = (float)(g_intersect.surface_vel.z + local_b4);
-              goto LAB_00451f2d;
-            }
-          }
-          else if (0 < ((int)LF_UINT(fVar24))) goto LAB_00451f2d;
-        }
-        else {
-          local_c0 = 1.401298464324817E-45;
-          local_b0 = (float)(g_intersect.pos[0] + 0.0);
-          local_ac = (float)(g_intersect.pos[1] + 0.0);
-          local_a8 = (float)(g_intersect.pos[2] + 0.0);
-          local_bc = (float)(g_intersect.surface_vel.x + 0.0);
-          local_b8 = (float)(g_intersect.surface_vel.y + 0.0);
-          local_b4 = (float)(g_intersect.surface_vel.z + 0.0);
-LAB_00451f2d:
-          local_cc = ((int *)LF_BITS_U(((float)(1.0 / (float)((int)LF_UINT(local_c0))))));
-          local_b0 = (float)(LF_BITS_F(local_cc) * local_b0);
-          local_ac = (float)(local_ac * LF_BITS_F(local_cc));
-          local_a8 = (float)(local_a8 * LF_BITS_F(local_cc));
-          local_bc = (float)(LF_BITS_F(local_cc) * local_bc);
-          local_b8 = (float)(local_b8 * LF_BITS_F(local_cc));
-          local_b4 = (float)(LF_BITS_F(local_cc) * local_b4);
-          if (((g_human[(int)puVar11].input_buttons & 8) != 0) ||
-             (0.8999999761581421 < g_human[(int)puVar11].bones[0].rot[1].y)) {
-            fVar24 = ABS(g_human[(int)puVar11].bones[0].rot[1].y);
-            local_48 = (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] - local_bc);
-            local_44 = (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] - local_b8);
-            local_40 = (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] - local_b4);
-            local_cc = ((int *)LF_BITS_U(((float)(g_human[(int)puVar11].bones[0].rot[1].z * local_40 +
-                              (g_human[(int)puVar11].bones[0].rot[1].y * local_44 +
-                              g_human[(int)puVar11].bones[0].rot[1].x * local_48)))));
-            local_c8 = (float)((float)(fVar24 * 0.125 * fVar24 *
-                       ((float)(g_human[(int)puVar11].stance * 1.125 -
-                       ((float)(g_human[(int)puVar11].bones[0].rot[1].z *
-                        ((float)(g_human[(int)puVar11].bones[0].pos.z - local_a8)) +
-                       (g_human[(int)puVar11].bones[0].rot[1].y *
-                       ((float)(g_human[(int)puVar11].bones[0].pos.y - local_ac)) +
-                       g_human[(int)puVar11].bones[0].rot[1].x *
-                       ((float)(g_human[(int)puVar11].bones[0].pos.x - local_b0)))))))) - LF_BITS_F(local_cc) * 0.75);
-            if (local_c8 <= 0.0555555559694767) {
-              if (local_c8 <= 0.0) goto LAB_00452109;
-            }
-            else {
-              local_c8 = 0.0555555559694767;
-            }
-            *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] =
-                 (float)(g_human[(int)puVar11].bones[0].rot[1].x * local_c8 +
-                 *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18]);
-            *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] =
-                 (float)(g_human[(int)puVar11].bones[0].rot[1].y * local_c8 +
-                 *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c]);
-            *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] =
-                 (float)(local_c8 * g_human[(int)puVar11].bones[0].rot[1].z +
-                 *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20]);
-          }
-LAB_00452109:
-          uVar18 = g_human[(int)puVar11].input_buttons;
-          local_c0 = 1.401298464324817E-45;
-          g_human[(int)puVar11].on_ground = 1;
-          if (((uVar18 & 4) != 0) && ((g_human[(int)puVar11].input_buttons_prev & 4) == 0)) {
-            local_c0 = 0.0;
-            *(undefined4 *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] = 0x3e2aaaab;
-            *(undefined4 *)&g_human[(int)puVar11].bones[1].lf_raw[0x1c] = 0x3e2aaaab;
-          }
-        }
-LAB_00452144:
-        iVar21 = 0;
-        do {
-          if ((iVar21 != 5) && (iVar21 != 8)) {
-            local_c8 = 0.125;
-            if ((iVar21 == 0xb) || (iVar21 == 0xe)) {
-              local_c8 = 0.0625;
-            }
-            if ((iVar21 == 10) || (iVar21 == 0xd)) {
-              local_c8 = 0.0625;
-            }
-            if ((iVar21 == 4) || (iVar21 == 7)) {
-              local_c8 = 0.0625;
-            }
-            iVar14 = g_human[(int)puVar11].health;
-            if ((iVar14 < 1) || (iVar21 != 0)) {
-              if ((((iVar21 == 0xb) || (iVar21 == 0xe)) && (0 < iVar14)) ||
-                 (((iVar21 == 10 || (iVar21 == 0xd)) && (0 < iVar14)))) goto LAB_0045230e;
-            }
-            else {
-              local_c8 = 0.25;
-            }
-            pfVar19 = (float *)(iVar21 * 0xe0 + ((int)&g_human[0].bones) + iVar23);
-            iVar15 = sphereintersectlevel(pfVar19,local_c8);
-            iVar14 = g_numofbonds;
-            if (iVar15 != 0) {
-              fVar24 = (float)(local_c8 - g_intersect.distance);
-              g_bond[g_numofbonds].type = 7;
-              g_bond[g_numofbonds].owner = (int)local_a4;
-              g_bond[g_numofbonds].bone_a = iVar21;
-              g_bond[g_numofbonds].rest_length = fVar24;
-              pBVar8 = g_bond + g_numofbonds;
-              g_numofbonds = g_numofbonds + 1;
-              pBVar8->stiffness = 0.0625;
-              g_bond[iVar14].damping = 0.125;
-              g_bond[iVar14].mode = 0;
-              g_bond[iVar14].normal.x = g_intersect.normal[0];
-              g_bond[iVar14].normal.y = g_intersect.normal[1];
-              g_bond[iVar14].normal.z = g_intersect.normal[2];
-              g_bond[iVar14].friction = 0.5f;
-              g_bond[iVar14].arm.x = (float)(g_intersect.pos[0] - *pfVar19);
-              g_bond[iVar14].arm.y = (float)(g_intersect.pos[1] - pfVar19[1]);
-              g_bond[iVar14].arm.z = (float)(g_intersect.pos[2] - pfVar19[2]);
-              fVar24 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c];
-              fVar3 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18];
-              fVar4 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20];
-              local_cc = ((int *)LF_BITS_U(((float)(fVar4 * fVar4 + (fVar3 * fVar3 + fVar24 * fVar24)))));
-              dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
-              local_cc = ((int *)LF_BITS_U((float)dVar27));
-              if (0.25 < LF_BITS_F(local_cc)) {
-                g_human[(int)puVar11].health = g_human[(int)puVar11].health + -0x78;
-              }
-            }
-          }
-LAB_0045230e:
-          iVar21 = iVar21 + 1;
-        } while (iVar21 < 0xf);
-        if (LF_UINT(local_c0) != 0x0U) {
-          local_30 = 1.0;
-          local_2c = 0.0;
-          local_28 = 0.0;
-          local_24 = 0;
-          local_1c = 0;
-          local_18 = 0.0;
-          local_14 = 0.0;
-          local_20 = 0x3f800000;
-          local_10 = 1.0;
-          rotateorientation(&local_30,g_yaxis,g_human[(int)puVar11].axis);
-          fVar3 = -g_human[(int)puVar11].input_axes[3];
-          fVar24 = g_human[(int)puVar11].input_axes[1];
-          local_48 = (float)(fVar24 * local_30 + ((float)(fVar3 * local_18 + 0.0)));
-          local_44 = (float)(local_2c * fVar24 + ((float)(local_14 * fVar3 + 0.0)));
-          local_40 = (float)(fVar24 * local_28 + ((float)(fVar3 * local_10 + 0.0)));
-          local_cc = ((int *)LF_BITS_U(((float)(local_40 * local_40 + (local_44 * local_44 + local_48 * local_48)))));
-          dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
-          local_c4 = ((Bone *)LF_BITS_U((float)dVar27));
-          if (LF_BITS_F(local_c4) == 0.0) {
-            local_48 = 0.0;
-            local_40 = 0.0;
-          }
-          else {
-            local_c4 = ((Bone *)LF_BITS_U(((float)(1.0 / LF_BITS_F(local_c4)))));
-            local_48 = LF_BITS_F(local_c4) * local_48;
-            local_40 = (float)(LF_BITS_F(local_c4) * local_40);
-          }
-          local_c0 = 0.15000000596046448;
-          if (g_human[(int)puVar11].move_mode == 1) {
-            local_c0 = 0.05000000074505806;
-          }
-          if (g_human[(int)puVar11].move_mode == 2) {
-            local_c0 = 0.02500000037252903;
-          }
-          if ((g_human[(int)puVar11].input_buttons & 8) != 0) {
-            local_c0 = (float)(local_c0 * 0.625);
-          }
-          local_48 = (float)(((float)(local_bc + local_c0 * local_48)) -
-                     *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18]);
-          local_40 = (float)(((float)(local_b4 + (float)(local_c0 * local_40))) -
-                     *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20]);
-          local_44 = 0.0;
-          local_98 = 0.0;
-          local_cc = ((int *)LF_BITS_U(((float)(local_48 * local_48 + 0.0 + local_40 * local_40))));
-          dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
-          fVar24 = (float)dVar27;
-          local_c8 = (float)(fVar24 / 0.07500000298023224);
-          if (0.0 <= local_c8) {
-            if (2.0 < local_c8) {
-              local_c8 = 2.0;
-            }
-          }
-          else {
-            local_c8 = 0.0;
-          }
-          local_c4 = ((Bone *)LF_BITS_U(((float)((float)(((float)((local_c8 * 0.125 + 0.125) / 60.0)) * 1.25) *
-                             g_human[(int)puVar11].body_strength))));
-          if (LF_BITS_F(local_c4) < fVar24) {
-            fVar3 = (float)(LF_BITS_F(local_c4) / fVar24);
-            local_48 = fVar3 * local_48;
-            local_44 = (float)(fVar3 * 0.0);
-            local_40 = (float)(fVar3 * local_40);
-          }
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] =
-               (float)(local_48 + *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18]);
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] =
-               (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] + local_44);
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] =
-               (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] + local_40);
-          fVar3 = *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20];
-          local_44 = (float)(((float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] - local_b8)) * 0.050000011920928955)
-          ;
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] =
-               (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] -
-               ((float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] - local_bc)) * 0.050000011920928955);
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] =
-               (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x1c] - local_44);
-          *(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] =
-               (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] -
-               (float)(((float)(fVar3 - local_b4)) * 0.050000011920928955));
-          local_48 = (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x18] - local_bc);
-          local_40 = (float)(*(float *)&g_human[(int)puVar11].bones[0].lf_raw[0x20] - local_b4);
-          local_cc = ((int *)LF_BITS_U(((float)(local_48 * local_48 + (float)local_98 + local_40 * local_40))));
-          local_c8 = fVar24;
-          dVar27 = _CIsqrt((double)LF_BITS_F(local_cc));
-          fVar24 = (float)((float)dVar27 * 3.14159265359 * 0.5 + g_human[(int)puVar11].walk_phase);
-          g_human[(int)puVar11].walk_phase = fVar24;
-          if (!NAN(fVar24) && 6.28318530718 < fVar24 != (fVar24 == 6.28318530718)) {
-            g_human[(int)puVar11].walk_phase = (float)(fVar24 - 6.28318530718);
-          }
-        }
-        if (g_human[(int)puVar11].last_vehicle_timer < 1) {
-          g_human[(int)puVar11].last_vehicle = -1;
-        }
-        else {
-          g_human[(int)puVar11].last_vehicle_timer = g_human[(int)puVar11].last_vehicle_timer + -1;
-        }
-        local_98 = LF_BITS_D((((ulonglong)LF_BITS_U64(local_98)) & 0xffffffff00000000));
-        local_cc = (int *)0x0;
-        do {
-          if (((((LF_BITS_U(LF_BITS_F(local_cc[(0x1664980 + LF_RELOC / 4)])) != 0x0U) && (LF_BITS_U(LF_BITS_F(local_cc[(0x1664982 + LF_RELOC / 4)])) != 0x3U))
-               && ((LF_BITS_F(local_cc[(0x16649a1 + LF_RELOC / 4)]) - 2.0 <= g_human[(int)puVar11].bones[0].pos.x &&
-                   ((g_human[(int)puVar11].bones[0].pos.x <= LF_BITS_F(local_cc[(0x16649a4 + LF_RELOC / 4)]) + 2.0 &&
-                    (fVar24 = g_human[(int)puVar11].bones[0].pos.z,
-                    LF_BITS_F(local_cc[(0x16649a3 + LF_RELOC / 4)]) - 2.0 < fVar24 !=
-                    (LF_BITS_F(local_cc[(0x16649a3 + LF_RELOC / 4)]) - 2.0 == fVar24))))))) &&
-              (g_human[(int)puVar11].bones[0].pos.z <= LF_BITS_F(local_cc[(0x16649a6 + LF_RELOC / 4)]) + 2.0)) &&
-             ((fVar24 = g_human[(int)puVar11].bones[0].pos.y,
-              LF_BITS_F(local_cc[(0x16649a2 + LF_RELOC / 4)]) - 2.0 < fVar24 !=
-              (LF_BITS_F(local_cc[(0x16649a2 + LF_RELOC / 4)]) - 2.0 == fVar24) &&
-              (fVar24 = g_human[(int)puVar11].bones[0].pos.y,
-              fVar24 < LF_BITS_F(local_cc[(0x16649a5 + LF_RELOC / 4)]) + 2.0 !=
-              (fVar24 == LF_BITS_F(local_cc[(0x16649a5 + LF_RELOC / 4)]) + 2.0))))) {
-            local_c4 = (Bone *)&g_human[(int)puVar11].bones[0].lf_raw[0x18];
-            local_c0 = 0.0;
-            do {
-              LF_COPY(fVar24, local_c0);
-              if ((((LF_UINT(local_c0) != 0xbU) && (LF_UINT(local_c0) != 0xeU)) &&
-                  (LF_UINT(local_c0) != 0xaU)) && (LF_UINT(local_c0) != 0xdU)) {
-                local_c8 = 0.25;
-                if ((LF_UINT(local_c0) == 0x5U) || (LF_UINT(local_c0) == 0x8U)) {
-                  local_c8 = 0.0625;
-                }
-                iVar16 = sphereintersectobject
-                                   ((*(uint *)((uchar *)&local_98 + 0)),(float *)&local_c4[-1].lf_raw[0xc8],local_c8);
-                iVar15 = g_numofbonds;
-                fVar3 = g_intersect.tri_weights[0];
-                iVar14 = g_intersect.tri_particles[2];
-                iVar21 = g_intersect.tri_particles[1];
-                if (iVar16 != 0) {
-                  g_bond[g_numofbonds].type = 4;
-                  g_bond[iVar15].owner = (int)local_a4;
-                  iVar10 = g_intersect.tri_particles[0];
-                  g_bond[iVar15].bone_a = ((int)LF_UINT(fVar24));
-                  iVar16 = g_human[(int)puVar11].last_vehicle;
-                  g_bond[iVar15].particle_b = iVar10;
-                  g_bond[iVar15].particle_c = iVar21;
-                  g_bond[iVar15].particle_d = iVar14;
-                  g_bond[iVar15].weights[0] = fVar3;
-                  fVar4 = g_intersect.tri_weights[1];
-                  g_bond[iVar15].weights[1] = g_intersect.tri_weights[1];
-                  g_bond[iVar15].weights[2] = g_intersect.tri_weights[2];
-                  g_bond[iVar15].rest_length = (float)(local_c8 - g_intersect.distance);
-                  g_bond[iVar15].stiffness = 0.0625;
-                  if ((*(uint *)((uchar *)&local_98 + 0)) == iVar16) {
-                    LF_SET_BITS(local_c8, (100 - g_human[(int)puVar11].last_vehicle_timer));
-                    g_bond[iVar15].stiffness = (float)(((float)((int)LF_UINT(local_c8)) * 0.0625) / 100.0);
-                  }
-                  g_numofbonds = g_numofbonds + 1;
-                  g_bond[iVar15].damping = 0.25;
-                  fVar24 = g_intersect.normal[0];
-                  g_bond[iVar15].mode = 0;
-                  g_bond[iVar15].normal.x = fVar24;
-                  g_bond[iVar15].normal.y = g_intersect.normal[1];
-                  g_bond[iVar15].normal.z = g_intersect.normal[2];
-                  g_bond[iVar15].friction = 0.1f;
-                  LF_COPY(fVar24, local_c0);
-                  if ((((*(uint *)((uchar *)&local_98 + 0)) != g_human[(int)puVar11].last_vehicle) &&
-                      (LF_UINT(local_c0) != 0x5U)) &&
-                     ((LF_UINT(local_c0) != 0x8U &&
-                      ((LF_UINT(local_c0) != 0x4U && (LF_UINT(local_c0) != 0x7U)))))) {
-                    local_48 = (float)((&g_particle[0].vel.x)[iVar10 * 0x3c] * fVar3);
-                    local_44 = (float)((&g_particle[0].vel.y)[iVar10 * 0x3c] * fVar3);
-                    local_40 = (float)((&g_particle[0].vel.z)[iVar10 * 0x3c] * fVar3);
-                    scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar21 * 0x3c,
-                                    fVar4);
-                    scaleaddvectors(&local_48,&local_48,&g_particle[0].vel.x + iVar14 * 0x3c,
-                                    g_intersect.tri_weights[2]);
-                    scaleaddvectors(&local_3c,&local_48,(float *)local_c4,-1.0);
-                    local_c0 = (float)(g_intersect.normal[2] * local_34 +
-                               (local_38 * g_intersect.normal[1] + g_intersect.normal[0] * local_3c));
-                    if ((0.1666666716337204 < local_c0) &&
-                       (g_human[(int)puVar11].health = g_human[(int)puVar11].health + -0x78,
-                       g_human[(int)puVar11].health + 0x77U < 0x78)) {
-                      createevent_sound(g_soundlist.humanhit,&g_human[(int)puVar11].pos.x,lf_u2f(0x3f800000)
-                                        ,lf_u2f(0x3f000000));
-                      if ((((g_human[(int)puVar11].player_id != -1) &&
-                           (g_player[g_human[(int)puVar11].player_id].team == 7)) &&
-                          (0 < g_human[(int)puVar11].protect_timer)) &&
-                         (LF_BITS_U(LF_BITS_F(local_cc[(0x1664985 + LF_RELOC / 4)])) != 0xffffffffU)) {
-                        playerteamkilltax(local_cc[(0x1664985 + LF_RELOC / 4)],100);
-                      }
-                    }
-                  }
-                }
-              }
-              local_c4 = local_c4 + 1;
-              LF_SET_BITS(local_c0, (((int)LF_UINT(fVar24)) + 1));
-            } while (((int)LF_UINT(local_c0)) < 0xf);
-          }
-          local_98 = LF_BITS_D(CONCAT44((*(uint *)((uchar *)&local_98 + 4)),(*(uint *)((uchar *)&local_98 + 0)) + 1));
-          local_cc = local_cc + 0x208c;
-        } while ((int)local_cc < 0x208c000);
-        g_human[(int)puVar11].pos.x = g_human[(int)puVar11].bones[0].pos.x;
-        g_human[(int)puVar11].pos.y = g_human[(int)puVar11].bones[0].pos.y;
-        g_human[(int)puVar11].pos.z = g_human[(int)puVar11].bones[0].pos.z;
-        local_c8 = 1.5;
-        if (((g_human[(int)puVar11].input_buttons & 0x800) != 0) &&
-           ((g_human[(int)puVar11].input_buttons_prev & 0x800) == 0)) {
-          local_c0 = 0.0;
-          pfVar19 = &g_object[0].pos.y;
-          do {
-            if ((LF_UINT(pfVar19[-10]) != 0x0U) && (iVar21 = 0, 0 < ((int)LF_UINT(pfVar19[0x2060])))) {
-              local_cc = (int *)(pfVar19 + 0x2062);
-              do {
-                LF_SET_BITS(fVar24, local_cc[-1]);
-                LF_SET_BITS(fVar3, *local_cc);
-                LF_SET_BITS(fVar4, local_cc[1]);
-                local_48 = (float)((float)((float)(fVar24 * pfVar19[5] + ((vec3 *)(pfVar19 + -1))->x) + fVar3 * pfVar19[8]) +
-                           fVar4 * pfVar19[0xb]);
-                local_44 = (float)(pfVar19[0xc] * fVar4 +
-                           ((float)(pfVar19[9] * fVar3 + ((float)(pfVar19[6] * fVar24 + *pfVar19)))));
-                local_40 = (float)(fVar4 * pfVar19[0xd] +
-                           ((float)(fVar3 * pfVar19[10] + ((float)(fVar24 * pfVar19[7] + pfVar19[1])))));
-                local_60 = (float)(local_48 - g_human[(int)puVar11].pos.x);
-                local_5c = (float)(local_44 - g_human[(int)puVar11].pos.y);
-                local_58 = (float)(local_40 - g_human[(int)puVar11].pos.z);
-                local_c4 = ((Bone *)LF_BITS_U(((float)(local_58 * local_58 + (local_5c * local_5c + local_60 * local_60)))))
-                ;
-                dVar27 = _CIsqrt((double)LF_BITS_F(local_c4));
-                local_c4 = ((Bone *)LF_BITS_U((float)dVar27));
-                if (LF_BITS_F(local_c4) < local_c8) {
-                  piVar17 = &g_human[0].vehicle_id;
-                  do {
-                    if (((((Human *)(piVar17 + -5))->active != 0) && (LF_BITS_U(LF_BITS_F(*piVar17)) == LF_UINT(local_c0)))
-                       && (piVar17[1] == iVar21)) goto LAB_00452eb1;
-                    piVar17 = piVar17 + 0xad9;
-                  } while ((int)piVar17 < ((int)SR_VA(0x1f38794)));
-                  g_human[(int)puVar11].vehicle_id = ((int)LF_UINT(local_c0));
-                  g_human[(int)puVar11].vehicle_seat = iVar21;
-                  local_54 = (float)(local_48 - g_human[(int)puVar11].pos.x);
-                  local_50 = (float)(local_44 - g_human[(int)puVar11].pos.y);
-                  local_4c = (float)(local_40 - g_human[(int)puVar11].pos.z);
-                  local_c4 = ((Bone *)LF_BITS_U(((float)(local_4c * local_4c +
-                                     (local_50 * local_50 + local_54 * local_54)))));
-                  dVar27 = _CIsqrt((double)LF_BITS_F(local_c4));
-                  local_c8 = (float)dVar27;
-                }
-LAB_00452eb1:
-                local_cc = local_cc + 3;
-                iVar21 = iVar21 + 1;
-              } while (iVar21 < ((int)LF_UINT(pfVar19[0x2060])));
-            }
-            LF_SET_BITS(local_c0, (((int)LF_UINT(local_c0)) + 1));
-            pfVar19 = pfVar19 + 0x208c;
-          } while ((int)pfVar19 < ((int)SR_VA(0x7a1e628)));
-        }
+        human_onfoot((int)local_a4);
       }
       else {
         human_invehicle((int)local_a4, local_9c, (int)(*(uint *)((uchar *)&local_98 + 0)), (int)LF_UINT(local_a0));

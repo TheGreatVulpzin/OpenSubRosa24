@@ -311,3 +311,5 @@ soundlist,0x8c,humanhit,int,,"setupgame writes 0x16; humansimulation plays it wh
 timerlist,0x88,humansim,int,,"timer index; the code names the timer ""humansim"""
 intersect,0x20,surface_vel,vec3,,"lineintersectobject: the velocity of the hit surface; humansimulation pulls a standing human toward it"
 body,0x0,parent,int,,"humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent"
+object,0x84,box_min,vec3,,"lineintersectobject: no hit when both ends are below it; humansimulation tests a human against the box, 2 units larger"
+object,0x90,box_max,vec3,,"the other corner of the box (lineintersectobject, sphereintersectobject, humansimulation)"

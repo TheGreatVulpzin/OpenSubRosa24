@@ -21,10 +21,12 @@ NUM_SEATS = 0x81a8
 PLAYER, ACCOUNT, VEHICLE, SEAT, DESPAWN, HEALTH = 0x8, 0xc, 0x14, 0x18, 0x24, 0x28
 EXIT_TIMER, BUTTONS, BUTTONS_PREV = 0x30, 0xbc, 0xc0
 INVENTORY0_COUNT, BLEEDING = 0x291c, 0x2b1c
+MOVE_MODE, INPUT_AXES, POS, BONE0_POS = 0x3c, 0x9c, 0x48, 0xc8
 
 
 def cases(h, car):
-    """Each case: a list of (offset in the human, value). None: the object index."""
+    """Each case: a list of (offset in the human, value), with a float value for a float field.
+    'at_seat' puts bone 0 and pos at seat 0 of the object."""
     in_car = [(VEHICLE, car), (SEAT, 0), (HEALTH, 100)]
     return {
         'drive': in_car + [(EXIT_TIMER, 0), (BUTTONS, 0), (BUTTONS_PREV, 0)],
@@ -38,7 +40,22 @@ def cases(h, car):
         'bleed': [(VEHICLE, -1), (HEALTH, 50), (BLEEDING, 1)],
         'bleed_low': [(VEHICLE, -1), (HEALTH, 8), (BLEEDING, 1)],
         'despawn': [(VEHICLE, -1), (PLAYER, -1), (DESPAWN, 1)],
+        'walk': [(VEHICLE, -1), (INPUT_AXES + 4, 0.5), (INPUT_AXES + 12, 1.0)],
+        'walk_mode1': [(VEHICLE, -1), (MOVE_MODE, 1), (INPUT_AXES + 12, 1.0)],
+        'walk_mode2': [(VEHICLE, -1), (MOVE_MODE, 2), (INPUT_AXES + 4, -1.0)],
+        'crouch': [(VEHICLE, -1), (BUTTONS, 8), (INPUT_AXES + 12, 1.0)],
+        'jump': [(VEHICLE, -1), (BUTTONS, 4), (BUTTONS_PREV, 0)],
+        'enter': [(VEHICLE, -1), (BUTTONS, 0x800), (BUTTONS_PREV, 0), 'at_seat'],
     }
+
+
+def seat_position(snap, car):
+    """The world position of seat 0 of an object: pos + x rot[0] + y rot[1] + z rot[2]."""
+    o = OBJECTS + car * OBJECT_SIZE
+    pos = snap.read(o + 0x24, 'fff')
+    rot = snap.read(o + 0x3c, 'fffffffff')
+    seat = snap.read(o + 0x81ac, 'fff')
+    return [pos[i] + seat[0] * rot[i] + seat[1] * rot[3 + i] + seat[2] * rot[6 + i] for i in range(3)]
 
 
 def main():
@@ -56,8 +73,14 @@ def main():
         if want and name not in want:
             continue
         snap = Snapshot(rec / 'sv_snapshot.bin')
-        for off, value in edits:
-            snap.write(HUMANS + h * HUMAN_SIZE + off, 'i', value)
+        for edit in edits:
+            if edit == 'at_seat':
+                p = seat_position(snap, car)
+                snap.write(HUMANS + h * HUMAN_SIZE + BONE0_POS, 'fff', *p)
+                snap.write(HUMANS + h * HUMAN_SIZE + POS, 'fff', *p)
+                continue
+            off, value = edit
+            snap.write(HUMANS + h * HUMAN_SIZE + off, 'f' if isinstance(value, float) else 'i', value)
         if name.startswith('bleed'):
             ticks = snap.read(GAME_TICKS, 'i')[0]
             snap.write(GAME_TICKS, 'i', (ticks & ~0xff) | ((h * h * h) & 0xff))

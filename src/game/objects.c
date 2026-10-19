@@ -131,7 +131,7 @@ void __cdecl lf_56710(void)
   local_2c = 0.0;
   local_30 = 0.0;
   pfVar20 = &g_object[0].vel.y;
-  local_40 = &g_object[0].unk_0090;
+  local_40 = &g_object[0].box_max.x;
   do {
     pfVar19 = local_40;
     if (LF_UINT(pfVar20[-0x19]) != 0x0U) {
