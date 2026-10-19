@@ -184,7 +184,7 @@ void lf_19060(void);
 void lf_19380(void);
 void lf_19610(void);
 void lf_19ee0(void);
-void lf_1a000(void);
+void circleintersecttriangle(void);
 void sphereintersecttriangle(void);
 void sphereintersectline(void);
 void lf_1a990(void);
@@ -196,7 +196,7 @@ void linkitem(void);
 void lf_1ba30(void);
 void lf_1bc50(void);
 void lineintersectlandscape(void);
-void lf_1c8f0(void);
+void circleintersectlandscape(void);
 void sphereintersectlandscape(void);
 void lf_1d2c0(void);
 void lf_1d3b0(void);
@@ -502,7 +502,7 @@ const LfEntry lf_table[] = {
     { "human_collisionhuman", 0x19380, (void *)lf_19380, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbody", 0x19610, (void *)lf_19610, 0, LF_RET_VOID, 4, "", 0 },
     { "createjointbond", 0x19ee0, (void *)lf_19ee0, 4, LF_RET_INT, 4, "vvvp", 0 },
-    { "circleintersecttriangle", 0x1a000, (void *)lf_1a000, 9, LF_RET_INT, 4, "pppppvppp", 0 },
+    { "circleintersecttriangle", 0x1a000, (void *)circleintersecttriangle, 9, LF_RET_INT, 4, "pppppvppp", 0 },
     { "sphereintersecttriangle", 0x1a700, (void *)sphereintersecttriangle, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "sphereintersectline", 0x1a7f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
     { "sphereintersectpoint", 0x1a990, (void *)lf_1a990, 6, LF_RET_INT, 4, "ppppvp", 0 },
@@ -514,7 +514,7 @@ const LfEntry lf_table[] = {
     { "addcitystreet", 0x1ba30, (void *)lf_1ba30, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "createlandscape", 0x1bc50, (void *)lf_1bc50, 0, LF_RET_VOID, 4, "", 0 },
     { "lineintersectlandscape", 0x1c1d0, (void *)lineintersectlandscape, 2, LF_RET_INT, 4, "pp", 0 },
-    { "circleintersectlandscape", 0x1c8f0, (void *)lf_1c8f0, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "circleintersectlandscape", 0x1c8f0, (void *)circleintersectlandscape, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlandscape", 0x1cdf0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 4, "pv", 0 },
     { "logic_farbslist", 0x1d2c0, (void *)lf_1d2c0, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation_driving", 0x1d3b0, (void *)lf_1d3b0, 0, LF_RET_VOID, 4, "", 0 },

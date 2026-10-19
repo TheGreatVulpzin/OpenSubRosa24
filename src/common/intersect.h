@@ -17,5 +17,7 @@ int sphereintersecttriangle(vec3 *hit, const vec3 *n, float *dist, const vec3 *c
                             const vec3 *b, const vec3 *c);
 int sphereintersecttrianglefull(vec3 *hit, vec3 *n, float *dist, const vec3 *center, float r, const vec3 *a,
                                 const vec3 *b, const vec3 *c);
+int circleintersecttriangle(vec3 *hit, vec3 *n, float *dist, const vec3 *pos, const vec3 *rot, float r, const vec3 *a,
+                            const vec3 *b, const vec3 *c);
 
 #endif /* SR_INTERSECT_H */

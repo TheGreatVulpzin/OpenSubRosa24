@@ -6822,12 +6822,12 @@ __declspec(naked) static void th_19ee0(void)
 }
 static uint8_t expect_19ee0[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0x64, 0x2b, 0x00, 0x00 };
 
-undefined4 __cdecl lf_1a000(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, float * param_7, float * param_8, float * param_9);
+undefined4 __cdecl circleintersecttriangle(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, float * param_7, float * param_8, float * param_9);
 static undefined4 (__cdecl *orig_1a000)(float *, float *, float *, float *, float *, float, float *, float *, float *);
 static SvVerify v_1a000 = { "circleintersecttriangle", -1 };
 static undefined4 __cdecl hk_1a000(float * param_1, float * param_2, float * param_3, float * param_4, float * param_5, float param_6, float * param_7, float * param_8, float * param_9)
 {
-    SV_HOOK_RET(undefined4, v_1a000, lf_1a000(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_1a000(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
+    SV_HOOK_RET(undefined4, v_1a000, circleintersecttriangle(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_1a000(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
 }
 __declspec(naked) static void th_1a000(void)
 {
@@ -7307,12 +7307,12 @@ __declspec(naked) static void th_1c1d0(void)
 }
 static uint8_t expect_1c1d0[6] = { 0x81, 0xec, 0xac, 0x00, 0x00, 0x00 };
 
-undefined4 __cdecl lf_1c8f0(float * param_1, float * param_2, float param_3);
+undefined4 __cdecl circleintersectlandscape(float * param_1, float * param_2, float param_3);
 static undefined4 (__cdecl *orig_1c8f0)(float *, float *, float);
 static SvVerify v_1c8f0 = { "circleintersectlandscape", -1 };
 static undefined4 __cdecl hk_1c8f0(float * param_1, float * param_2, float param_3)
 {
-    SV_HOOK_RET(undefined4, v_1c8f0, lf_1c8f0(param_1, param_2, param_3), orig_1c8f0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_1c8f0, circleintersectlandscape(param_1, param_2, param_3), orig_1c8f0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_1c8f0(void)
 {

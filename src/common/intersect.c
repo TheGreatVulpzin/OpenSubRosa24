@@ -264,3 +264,91 @@ int sphereintersecttrianglefull(vec3 *hit, vec3 *n, float *dist, const vec3 *cen
     }
     return 65536.0 <= *dist ? 0 : 1;
 }
+
+/* The side of the hit point against the edge p -> q of a triangle with the normal n:
+ * 0 or more on the inner side. */
+static float circle_edge_side(const vec3 *hit, const vec3 *n, const vec3 *p, const vec3 *q)
+{
+    vec3 e, h, s;
+
+    e.x = (float)(q->x - p->x);
+    e.y = (float)(q->y - p->y);
+    e.z = (float)(q->z - p->z);
+    h.x = (float)(hit->x - p->x);
+    h.y = (float)(hit->y - p->y);
+    h.z = (float)(hit->z - p->z);
+    crossproduct(&s, &e, &h);
+    return (float)(n->z * s.z + (n->x * s.x + n->y * s.y));
+}
+
+/* An edge p -> q against the plane of the wheel: a nearer hit moves hit, n (from the hit to the
+ * center) and *dist. */
+static void circle_edge(vec3 *hit, vec3 *n, float *dist, const vec3 *pos, const vec3 *rot, const vec3 *p, const vec3 *q)
+{
+    vec3 e, d;
+    float t, len;
+
+    if (lineintersectplanetwosided(&e, rot, &t, p, q, pos) == 0)
+        return;
+    d.x = (float)(pos->x - e.x);
+    d.y = (float)(pos->y - e.y);
+    d.z = (float)(pos->z - e.z);
+    len = (float)x87_sqrt((double)(float)(d.z * d.z + (d.x * d.x + d.y * d.y)));
+    if (!(len < *dist))
+        return;
+    *hit = e;
+    n->x = (float)(pos->x - e.x);
+    n->y = (float)(pos->y - e.y);
+    n->z = (float)(pos->z - e.z);
+    normalizevector(n, n);
+    *dist = len;
+}
+
+/* A wheel (a circle of radius r at pos, in the plane with the normal rot) against the triangle
+ * a b c with the normal n. First the point of the triangle plane nearest to the center, on the
+ * line where the two planes meet, then the 3 edges against the plane of the wheel. n gets the
+ * vector from an edge hit to the center, and *dist the distance (r when there is no hit). */
+int circleintersecttriangle(vec3 *hit, vec3 *n, float *dist, const vec3 *pos, const vec3 *rot, float r, const vec3 *a,
+                            const vec3 *b, const vec3 *c)
+{
+    vec3 cr, q, u, p, w;
+    float lsq, pd, ad, s, len;
+
+    *dist = r;
+    cr.x = (float)(n->y * rot->z - n->z * rot->y);
+    cr.y = (float)(rot->x * n->z - rot->z * n->x);
+    cr.z = (float)(rot->y * n->x - rot->x * n->y);
+    lsq = (float)(cr.y * cr.y + cr.x * cr.x + cr.z * cr.z);
+    if (1.52587890625E-5 <= lsq) {
+        pd = (float)(pos->z * rot->z + (rot->y * pos->y + pos->x * rot->x));
+        ad = (float)(n->z * a->z + (a->y * n->y + a->x * n->x));
+        q.x = ad * rot->x;
+        q.y = (float)(rot->y * ad);
+        q.z = (float)(ad * rot->z);
+        u.x = (float)(pd * n->x - q.x);
+        u.y = (float)((float)(n->y * pd) - q.y);
+        u.z = (float)((float)(pd * n->z) - q.z);
+        p.x = (float)(((float)(u.z * cr.y - cr.z * u.y)) / lsq);
+        p.y = (float)(((float)(u.x * cr.z - cr.x * u.z)) / lsq);
+        p.z = (float)(((float)(u.y * cr.x - cr.y * u.x)) / lsq);
+        w.x = (float)(pos->x - p.x);
+        w.y = (float)(pos->y - p.y);
+        w.z = (float)(pos->z - p.z);
+        normalizevector(&cr, &cr);
+        s = (float)(cr.z * w.z + (cr.y * w.y + cr.x * w.x));
+        hit->x = (float)(p.x + s * cr.x);
+        hit->y = (float)(p.y + s * cr.y);
+        hit->z = (float)(p.z + cr.z * s);
+        w.x = (float)(pos->x - hit->x);
+        w.y = (float)(pos->y - hit->y);
+        w.z = (float)(pos->z - hit->z);
+        len = (float)x87_sqrt((double)(float)(w.z * w.z + (w.x * w.x + w.y * w.y)));
+        if (len < r && 0.0 <= circle_edge_side(hit, n, a, b) && 0.0 <= circle_edge_side(hit, n, b, c) &&
+            0.0 <= circle_edge_side(hit, n, c, a))
+            *dist = len;
+    }
+    circle_edge(hit, n, dist, pos, rot, a, b);
+    circle_edge(hit, n, dist, pos, rot, b, c);
+    circle_edge(hit, n, dist, pos, rot, c, a);
+    return r <= *dist ? 0 : 1;
+}

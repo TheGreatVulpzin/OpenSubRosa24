@@ -19,12 +19,10 @@
 #define NUM_CITYOBJECTS 1024
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
-int __cdecl lf_1c8f0(float *pos, float *rot, float radius);
 int __cdecl lf_40aa0(float *hit, float *normal, float *dist, uint32_t area, float *pos, float radius);
 int __cdecl lf_2c0c0(float *hit, float *normal, float *t, uint32_t area, float *from, float *to);
 int __cdecl lf_41550(float *hit, float *normal, float *dist, uint32_t area, float *pos, float *rot, float radius);
 int __cdecl lf_146a0(float *hit, float *normal, float *t, int object, float *from, float *to);
-#define circleintersectlandscape lf_1c8f0
 #define sphereintersectarea lf_40aa0
 #define lineintersectarea lf_2c0c0
 #define circleintersectarea lf_41550
@@ -486,4 +484,58 @@ int lineintersectlandscape(float *from, float *to)
         }
     }
     return g_intersect.fraction < 1.0 ? 1 : 0;
+}
+
+/* A wheel (a circle at pos in the plane with the normal rot) against the cells of the landscape
+ * under it. distance gets the distance of the nearest hit. */
+int circleintersectlandscape(float *pos, float *rot, float radius)
+{
+    const vec3 *p = (const vec3 *)pos, *n = (const vec3 *)rot;
+    vec3 a, b, c, normal, hit;
+    float x8, z8, x18, z18, dist, best = 65536.0f;
+    int x0, x1, z0, z1, x, z, i;
+
+    x0 = land_clamp((int)(long long)(((p->x - g_land_origin.x) - radius) * 0.125));
+    x1 = land_clamp((int)(long long)((radius + (p->x - g_land_origin.x)) * 0.125));
+    z0 = land_clamp((int)(long long)(((p->z - g_land_origin.z) - radius) * 0.125));
+    z1 = land_clamp((int)(long long)((radius + (p->z - g_land_origin.z)) * 0.125));
+    g_intersect.fraction = 1.0f;
+    g_intersect.distance = 65536.0f;
+    for (z = z0; z <= z1; z++) {
+        for (x = x0; x <= x1; x++) {
+            if ((unsigned)x >= LAND_CELLS || (unsigned)z >= LAND_CELLS)
+                continue;
+            i = z * LAND_ROW + x;
+            x8 = (float)((float)x * 8.0);
+            z8 = (float)((float)z * 8.0);
+            x18 = (float)((float)(x + 1) * 8.0);
+            z18 = (float)((float)(z + 1) * 8.0);
+            a.x = (float)(g_land_origin.x + x8);
+            a.y = (float)(g_land_origin.y + g_land_height[i]);
+            a.z = (float)(g_land_origin.z + z8);
+            b.x = (float)(g_land_origin.x + x18);
+            b.y = (float)(g_land_origin.y + g_land_height[i + 1]);
+            b.z = (float)(g_land_origin.z + z8);
+            c.x = (float)(x18 + g_land_origin.x);
+            c.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW + 1]);
+            c.z = (float)(g_land_origin.z + z18);
+            generatetrinormal(&normal, &a, &b, &c);
+            if (circleintersecttriangle(&hit, &normal, &dist, p, n, radius, &a, &b, &c) != 0 && dist < best) {
+                keep_land_hit(&hit, &normal, dist);
+                best = dist;
+            }
+            b.x = (float)(g_land_origin.x + x18);
+            b.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW + 1]);
+            b.z = (float)(g_land_origin.z + z18);
+            c.x = (float)(x8 + g_land_origin.x);
+            c.y = (float)(g_land_origin.y + g_land_height[i + LAND_ROW]);
+            c.z = (float)(g_land_origin.z + z18);
+            generatetrinormal(&normal, &a, &b, &c);
+            if (circleintersecttriangle(&hit, &normal, &dist, p, n, radius, &a, &b, &c) != 0 && dist < best) {
+                keep_land_hit(&hit, &normal, dist);
+                best = dist;
+            }
+        }
+    }
+    return best < 65536.0 ? 1 : 0;
 }
