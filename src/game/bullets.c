@@ -14,20 +14,8 @@
 #define MAX_BULLETS 0x4000
 
 /* Game globals. */
-#define g_bullettypes SR_AT(BulletType, 0xf437320)
 #define g_xaxis (*SR_AT(vec3, 0x60cd4))       /* (1 0 0) */
 #define g_yaxis (*SR_AT(vec3, 0x60ce0))       /* (0 1 0) */
-
-/* A bullet type: real cartridge data in kilograms and meters. ItemType.bullet_type selects
- * one. */
-typedef struct BulletType {
-    float mass;    /* the recoil uses mass * bullet_speed / (gun mass + mass) */
-    float drag;    /* the cross section over the mass: pi * caliber^2 / 4 / mass */
-    float caliber; /* the diameter of the bullet */
-    float length;  /* the length of the case */
-    float unk_10;
-    float unk_14;
-} BulletType;
 
 static const BulletType bullettypes[4] = {
     { 0.01f, 0.0045603672f, 0.00762f, 0.039f, 0.0f, 1.5f },   /* 7.62x39 (AK-47) */

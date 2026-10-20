@@ -86,7 +86,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -155,6 +155,12 @@ typedef union HumanMuscle { struct {
     vec3 pos;       /* +0x24 human_createmuscleball: the joint, in the frame of the parent bone */
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* The target of a hand on a held door (Human.hand_grips). */
+typedef union HandGrip { struct {
+    vec3 pos;           /* +0x00 human_itemsimulation: the hand target in world space */
+    float axis;         /* +0x0c human_itemsimulation: input_axes[0] */
+}; uint8_t lf_raw[0x10]; } HandGrip;
+
 /* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
 typedef union WheelBody { struct {
     uint8_t unk_00[0xc];
@@ -172,7 +178,7 @@ typedef union WheelBody { struct {
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
-    int unk_04;         /* +0x04 bulletsimulation writes 1 with popped */
+    int deflated;       /* +0x04 bulletsimulation writes 1 with popped (likely: the client) */
     int health;         /* +0x08 bulletsimulation subtracts the damage of a hit */
     int particle_a;     /* +0x0c index into Object.particles */
     int particle_b;     /* +0x10 index into Object.particles */
@@ -202,7 +208,9 @@ typedef union CityObjectRec { struct {
     vec3 pos;           /* +0x08 lineintersectcityobject: the mesh of the type moves to it */
     vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
     vec3 rot[3];        /* +0x20 lineintersectcityobject: the mesh of the type turns by it */
-    int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
+    int building;       /* +0x44 index of the city building record (0x9dc bytes) */
+    int floor;          /* +0x48 human_itemsimulation writes the target floor when it is below num_floors */
+    int num_floors;     /* +0x4c */
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
@@ -211,8 +219,9 @@ typedef union ObjectFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into Object.verts */
     int unk_14[4];      /* +0x14 */
-    float unk_24[5];    /* +0x24 */
-    int unk_38;         /* +0x38 bulletsimulation, playerai */
+    float unk_24[4];    /* +0x24 */
+    float armor;        /* +0x34 bulletsimulation: a window face loses 8 - armor health per hit when armor < 8 */
+    int is_window;      /* +0x38 bulletsimulation, playerai: 1 for a window face */
     int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
 }; uint8_t lf_raw[0x40]; } ObjectFace;
 

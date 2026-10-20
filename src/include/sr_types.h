@@ -63,6 +63,12 @@ typedef union HumanMuscle { struct {
     vec3 pos;       /* +0x24 human_createmuscleball: the joint, in the frame of the parent bone */
 }; uint8_t lf_raw[0x30]; } HumanMuscle;
 
+/* The target of a hand on a held door (Human.hand_grips). */
+typedef union HandGrip { struct {
+    vec3 pos;           /* +0x00 human_itemsimulation: the hand target in world space */
+    float axis;         /* +0x0c human_itemsimulation: input_axes[0] */
+}; uint8_t lf_raw[0x10]; } HandGrip;
+
 /* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
 typedef union WheelBody { struct {
     uint8_t unk_00[0xc];
@@ -80,7 +86,7 @@ typedef union WheelBody { struct {
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
-    int unk_04;         /* +0x04 bulletsimulation writes 1 with popped */
+    int deflated;       /* +0x04 bulletsimulation writes 1 with popped (likely: the client) */
     int health;         /* +0x08 bulletsimulation subtracts the damage of a hit */
     int particle_a;     /* +0x0c index into Object.particles */
     int particle_b;     /* +0x10 index into Object.particles */
@@ -110,7 +116,9 @@ typedef union CityObjectRec { struct {
     vec3 pos;           /* +0x08 lineintersectcityobject: the mesh of the type moves to it */
     vec3 vel;           /* +0x14 lineintersectlevel copies it to Intersect.surface_vel on a hit */
     vec3 rot[3];        /* +0x20 lineintersectcityobject: the mesh of the type turns by it */
-    int unk_44[3];      /* +0x44 city_createelevator, human_itemsimulation */
+    int building;       /* +0x44 index of the city building record (0x9dc bytes) */
+    int floor;          /* +0x48 human_itemsimulation writes the target floor when it is below num_floors */
+    int num_floors;     /* +0x4c */
     float unk_50;       /* +0x50 the packets */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
@@ -119,8 +127,9 @@ typedef union ObjectFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into Object.verts */
     int unk_14[4];      /* +0x14 */
-    float unk_24[5];    /* +0x24 */
-    int unk_38;         /* +0x38 bulletsimulation, playerai */
+    float unk_24[4];    /* +0x24 */
+    float armor;        /* +0x34 bulletsimulation: a window face loses 8 - armor health per hit when armor < 8 */
+    int is_window;      /* +0x38 bulletsimulation, playerai: 1 for a window face */
     int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
 }; uint8_t lf_raw[0x40]; } ObjectFace;
 
@@ -269,7 +278,7 @@ typedef union Player { struct {
     int unk_0038;                        /* +0x0038 2 functions */
     int unk_003c;                        /* +0x003c 7 functions */
     int money;                           /* +0x0040 createplayer writes 50000; manager (black_market.c) uses it as the balance; logic_gunstore_buy */
-    int unk_0044;                        /* +0x0044 1 functions */
+    int immune;                          /* +0x0044 bulletsimulation: no hit on the human of a player with it (no 024d code writes it) */
     float unk_0048;                      /* +0x0048 1 functions */
     int num_purchases;                   /* +0x004c logic_gunstore_buy and logic_playeractions: limit < 10 */
     int unk_0050;                        /* +0x0050 3 functions */
@@ -280,7 +289,7 @@ typedef union Player { struct {
     int team;                            /* +0x0064 createplayer writes 7; createhuman copies it to human.team; logic_addteamcash */
     int unk_0068;                        /* +0x0068 1 functions */
     int stocks;                          /* +0x006c playerbuystock/playersellstock; economysimulation */
-    int unk_0070;                        /* +0x0070 3 functions */
+    int top_of_team;                     /* +0x0070 economysimulation: 1 for the player with the most assets of each team; itemweaponsimulation lets only this player shoot outside game state 2 */
     int unk_0074;                        /* +0x0074 1 functions */
     int human_id;                        /* +0x0078 createplayer writes -1; manager: the player's body */
     float input_axes[4];                 /* +0x007c getinputs_human/car/heli write floats */
@@ -349,9 +358,11 @@ SR_STATIC_ASSERT(offsetof(Player, active) == 0x0, "Player.active");
 SR_STATIC_ASSERT(offsetof(Player, name) == 0x4, "Player.name");
 SR_STATIC_ASSERT(offsetof(Player, account_id) == 0x24, "Player.account_id");
 SR_STATIC_ASSERT(offsetof(Player, money) == 0x40, "Player.money");
+SR_STATIC_ASSERT(offsetof(Player, immune) == 0x44, "Player.immune");
 SR_STATIC_ASSERT(offsetof(Player, num_purchases) == 0x4c, "Player.num_purchases");
 SR_STATIC_ASSERT(offsetof(Player, team) == 0x64, "Player.team");
 SR_STATIC_ASSERT(offsetof(Player, stocks) == 0x6c, "Player.stocks");
+SR_STATIC_ASSERT(offsetof(Player, top_of_team) == 0x70, "Player.top_of_team");
 SR_STATIC_ASSERT(offsetof(Player, human_id) == 0x78, "Player.human_id");
 SR_STATIC_ASSERT(offsetof(Player, input_axes) == 0x7c, "Player.input_axes");
 SR_STATIC_ASSERT(offsetof(Player, yaw) == 0x8c, "Player.yaw");
@@ -423,17 +434,15 @@ typedef union Human { struct {
     uint8_t pad_287c[0x40];
     vec3 spawn_pos2;                     /* +0x28bc createhuman: the place of the new human; no other code reads it */
     uint8_t pad_28c8[0x48];
-    float unk_2910;                      /* +0x2910 1 functions */
-    float unk_2914;                      /* +0x2914 1 functions */
+    float recoil[2];                     /* +0x2910 itemweaponsimulation adds (recoil + random) * 0.25 and random.y * 0.25 (the server does not read it) */
     float walk_phase;                    /* +0x2918 humansimulation adds the step length and wraps it at 2 pi; human_calculatelegangles takes its sine */
     InventorySlot inventory[8];          /* +0x291c createhuman: loop of 8 with stride 0x24; manager: count +0 and item +4 */
-    int unk_2a3c;                        /* +0x2a3c 1 functions */
-    uint8_t pad_2a40[0x1c];
+    HandGrip hand_grips[2];              /* +0x2a3c human_itemsimulation: the hand target on a held door */
     vec3 colors[4];                      /* +0x2a5c createhuman copies from player.colors */
     uint8_t pad_2a8c[0x90];
     int bleeding;                        /* +0x2b1c manager: knife writes 1 (likely: bleeding) */
     float body_strength;                 /* +0x2b20 humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it */
-    int unk_2b24;                        /* +0x2b24 1 functions */
+    int reload_timer;                    /* +0x2b24 human_itemsimulation writes 60 after a magazine moves and counts it down */
     int unk_2b28;                        /* +0x2b28 1 functions */
     int team;                            /* +0x2b2c createhuman copies from player.team */
     int look_b;                          /* +0x2b30 createhuman copies from player.look_b */
@@ -486,11 +495,14 @@ SR_STATIC_ASSERT(offsetof(Human, num_joints) == 0x26cc, "Human.num_joints");
 SR_STATIC_ASSERT(offsetof(Human, joints) == 0x26d0, "Human.joints");
 SR_STATIC_ASSERT(offsetof(Human, spawn_pos) == 0x2870, "Human.spawn_pos");
 SR_STATIC_ASSERT(offsetof(Human, spawn_pos2) == 0x28bc, "Human.spawn_pos2");
+SR_STATIC_ASSERT(offsetof(Human, recoil) == 0x2910, "Human.recoil");
 SR_STATIC_ASSERT(offsetof(Human, walk_phase) == 0x2918, "Human.walk_phase");
 SR_STATIC_ASSERT(offsetof(Human, inventory) == 0x291c, "Human.inventory");
+SR_STATIC_ASSERT(offsetof(Human, hand_grips) == 0x2a3c, "Human.hand_grips");
 SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
 SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
 SR_STATIC_ASSERT(offsetof(Human, body_strength) == 0x2b20, "Human.body_strength");
+SR_STATIC_ASSERT(offsetof(Human, reload_timer) == 0x2b24, "Human.reload_timer");
 SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
 SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
 SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
@@ -500,7 +512,7 @@ SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
 typedef union Item { struct {
     int active;                          /* +0x0000 createitem writes 1 */
     int has_physics;                     /* +0x0004 bondsimulation2 clears the velocity changes only of the active items with it (the same role as human.has_physics) */
-    int unk_0008;                        /* +0x0008 2 functions */
+    int at_rest;                         /* +0x0008 itemsimulation writes 1 when more than 3 corners touch and vel, its change and angvel are small; it skips the physics of an item with it; human_itemsimulation clears it for held items */
     int type;                            /* +0x000c createitem: parameter 1 (item type) */
     float mass;                          /* +0x0010 createitem: itemtype+4; bondsimulation2 uses it in the mass ratio with Bone.mass */
     int time_to_live;                    /* +0x0014 itemtimetolive subtracts 1 when the value is below 0xffff and deletes the item at 0; createitem writes 0xffff (no limit); item_removebill writes 0 when the last bill goes */
@@ -511,27 +523,25 @@ typedef union Item { struct {
     int children[8];                     /* +0x0028 linkitemtoitem writes the child at children[num_children]; item_removeitemlink moves the last child into the free place. The server manager read +0x38 as a phone state: no game code reads it, and it is children[4] */
     vec3 pos;                            /* +0x0048 createitem: parameter 2 (position) */
     vec3 pos_prev;                       /* +0x0054 createitem: copy of the position */
-    int unk_0060;                        /* +0x0060 1 functions */
-    uint8_t pad_0064[0x8];
+    vec3 contact_vel;                    /* +0x0060 itemsimulation: copy of vel after the level hit; the corner impulses use it */
     vec3 vel;                            /* +0x006c createitem: parameter 3 (velocity) */
     vec3 dv;                             /* +0x0078 bondsimulation2 clears it at the start of each solver pass; the bonds add the change of vel */
     vec3 rot[3];                         /* +0x0084 createitem: parameter 4 (3x3 matrix) */
     vec3 ang_momentum;                   /* +0x00a8 the angular momentum: bondsimulation2 adds dw to it each pass; item_physicssimulation damps it with scalevector */
     vec3 angvel;                         /* +0x00b4 the angular velocity: bondsimulation2 makes it from ang_momentum along the rows of rot, times inv_inertia; the bonds use angvel x arm */
-    int unk_00c0;                        /* +0x00c0 1 functions */
-    uint8_t pad_00c4[0x8];
+    vec3 contact_angvel;                 /* +0x00c0 itemsimulation: copy of angvel for the corner impulses */
     vec3 dw;                             /* +0x00cc bondsimulation2 clears it at the start of each solver pass; the bonds add the change of ang_momentum */
-    int unk_00d8;                        /* +0x00d8 3 functions */
+    int cooldown;                        /* +0x00d8 itemweaponsimulation: fire_delay after a shot, counts down; itemlogic: 180 after a phone dials */
     int unk_00dc;                        /* +0x00dc 1 functions */
     int ammo;                            /* +0x00e0 createitem: itemtype.ammo; itemlogic subtracts 1; itemweaponsimulation does not fire at 0 */
     int unk_e4;                          /* +0x00e4 createitem: itemtype+0x18 (AK-47, M-16, MP5 and Uzi 90, Magnum 18, 9mm 32). The server never reads it: the client uses it (maybe the recoil, the aim spread, an animation time, or the range or volume of the shot sound). Check in the client (Phase 7) */
-    int unk_00e8;                        /* +0x00e8 1 functions */
+    int trigger_ticks;                   /* +0x00e8 itemweaponsimulation: ticks the trigger is down; fires when it equals 2 (Magnum 6) */
     uint32_t flags;                      /* +0x00ec itemlogic tests bit 1; human_itemsimulation sets bit 1 */
-    int unk_00f0;                        /* +0x00f0 1 functions */
-    int unk_00f4;                        /* +0x00f4 3 functions */
+    uint32_t flags_prev;                 /* +0x00f0 itemlogic copies flags here and clears flags each tick */
+    int countdown;                       /* +0x00f4 itemsimulation subtracts 1 while above 0 (the writer is not known) */
     int linked_item;                     /* +0x00f8 itemlogic writes an item index; logic_setteammanager zeroes call_state of the linked item */
     int phone_id;                        /* +0x00fc logic_setteammanager compares with team * 1111 (0x457) */
-    int unk_0100;                        /* +0x0100 1 functions */
+    int ring_ticks;                      /* +0x0100 itemlogic: ticks a phone rings; the call ends after 0x2ff */
     int info;                            /* +0x0104 createevent_updateiteminfo sends it; itemlogic and eventsimulation write it */
     int phone_number;                    /* +0x0108 manager: dialed number */
     int unk_010c;                        /* +0x010c 5 functions */
@@ -550,6 +560,7 @@ typedef union Item { struct {
 SR_STATIC_ASSERT(sizeof(Item) == 0x1ac, "Item");
 SR_STATIC_ASSERT(offsetof(Item, active) == 0x0, "Item.active");
 SR_STATIC_ASSERT(offsetof(Item, has_physics) == 0x4, "Item.has_physics");
+SR_STATIC_ASSERT(offsetof(Item, at_rest) == 0x8, "Item.at_rest");
 SR_STATIC_ASSERT(offsetof(Item, type) == 0xc, "Item.type");
 SR_STATIC_ASSERT(offsetof(Item, mass) == 0x10, "Item.mass");
 SR_STATIC_ASSERT(offsetof(Item, time_to_live) == 0x14, "Item.time_to_live");
@@ -560,17 +571,24 @@ SR_STATIC_ASSERT(offsetof(Item, num_children) == 0x24, "Item.num_children");
 SR_STATIC_ASSERT(offsetof(Item, children) == 0x28, "Item.children");
 SR_STATIC_ASSERT(offsetof(Item, pos) == 0x48, "Item.pos");
 SR_STATIC_ASSERT(offsetof(Item, pos_prev) == 0x54, "Item.pos_prev");
+SR_STATIC_ASSERT(offsetof(Item, contact_vel) == 0x60, "Item.contact_vel");
 SR_STATIC_ASSERT(offsetof(Item, vel) == 0x6c, "Item.vel");
 SR_STATIC_ASSERT(offsetof(Item, dv) == 0x78, "Item.dv");
 SR_STATIC_ASSERT(offsetof(Item, rot) == 0x84, "Item.rot");
 SR_STATIC_ASSERT(offsetof(Item, ang_momentum) == 0xa8, "Item.ang_momentum");
 SR_STATIC_ASSERT(offsetof(Item, angvel) == 0xb4, "Item.angvel");
+SR_STATIC_ASSERT(offsetof(Item, contact_angvel) == 0xc0, "Item.contact_angvel");
 SR_STATIC_ASSERT(offsetof(Item, dw) == 0xcc, "Item.dw");
+SR_STATIC_ASSERT(offsetof(Item, cooldown) == 0xd8, "Item.cooldown");
 SR_STATIC_ASSERT(offsetof(Item, ammo) == 0xe0, "Item.ammo");
 SR_STATIC_ASSERT(offsetof(Item, unk_e4) == 0xe4, "Item.unk_e4");
+SR_STATIC_ASSERT(offsetof(Item, trigger_ticks) == 0xe8, "Item.trigger_ticks");
 SR_STATIC_ASSERT(offsetof(Item, flags) == 0xec, "Item.flags");
+SR_STATIC_ASSERT(offsetof(Item, flags_prev) == 0xf0, "Item.flags_prev");
+SR_STATIC_ASSERT(offsetof(Item, countdown) == 0xf4, "Item.countdown");
 SR_STATIC_ASSERT(offsetof(Item, linked_item) == 0xf8, "Item.linked_item");
 SR_STATIC_ASSERT(offsetof(Item, phone_id) == 0xfc, "Item.phone_id");
+SR_STATIC_ASSERT(offsetof(Item, ring_ticks) == 0x100, "Item.ring_ticks");
 SR_STATIC_ASSERT(offsetof(Item, info) == 0x104, "Item.info");
 SR_STATIC_ASSERT(offsetof(Item, phone_number) == 0x108, "Item.phone_number");
 SR_STATIC_ASSERT(offsetof(Item, call_state) == 0x110, "Item.call_state");
@@ -593,7 +611,7 @@ typedef union Object { struct {
     int driver;                          /* +0x0014 createobject writes -1 (likely) */
     int unk_0018;                        /* +0x0018 4 functions */
     int time_to_live;                    /* +0x001c objecttimetolive subtracts 1 when the value is below 0xffff and deletes the object at 0; itemtimetolive writes 0 when the Key of the vehicle goes (the vehicle goes with its key) */
-    int unk_0020;                        /* +0x0020 3 functions */
+    int key_away;                        /* +0x0020 itemlogic: 1 when the key of the vehicle is not with a human in it; objectsimulation_car and _heli stop the engine */
     vec3 pos;                            /* +0x0024 createobject: parameter 2 */
     vec3 pos_prev;                       /* +0x0030 createobject: copy of pos */
     vec3 rot[3];                         /* +0x003c createobject: matrix from parameter 4; objectsimulation normalizes it and does crossproduct */
@@ -688,6 +706,7 @@ SR_STATIC_ASSERT(offsetof(Object, state) == 0x8, "Object.state");
 SR_STATIC_ASSERT(offsetof(Object, health) == 0xc, "Object.health");
 SR_STATIC_ASSERT(offsetof(Object, driver) == 0x14, "Object.driver");
 SR_STATIC_ASSERT(offsetof(Object, time_to_live) == 0x1c, "Object.time_to_live");
+SR_STATIC_ASSERT(offsetof(Object, key_away) == 0x20, "Object.key_away");
 SR_STATIC_ASSERT(offsetof(Object, pos) == 0x24, "Object.pos");
 SR_STATIC_ASSERT(offsetof(Object, pos_prev) == 0x30, "Object.pos_prev");
 SR_STATIC_ASSERT(offsetof(Object, rot) == 0x3c, "Object.rot");
@@ -758,20 +777,16 @@ typedef union ItemType { struct {
     int one_handed;                      /* +0x000c setupitemtypes: 1 for the guns held in one hand (Magnum, Uzi, 9mm) */
     int fire_delay;                      /* +0x0010 setupitemtypes: AK-47 8, M-16 7, MP5 5, Uzi 6, Magnum and 9mm 30 (likely: the ticks between two shots) */
     int bullet_type;                     /* +0x0014 setupitemtypes: AK-47 0, M-16 1, MP5, Uzi and 9mm 2, Magnum 3: one of the 4 bullet types of setupbullettypes; createevent_bullet sends it */
-    int unk_0018;                        /* +0x0018 1 functions */
+    int client_param;                    /* +0x0018 setupitemtypes: 90 rifles and SMGs, 18 Magnum, 32 9mm; createitem copies it to item+0xe4 */
     int ammo;                            /* +0x001c setupitemtypes: the rounds of a magazine (AK-47, M-16 and MP5 30, Uzi 20, 9mm 12, .45 Bullets 6) or the uses of a Bandage (2); createitem copies it to item.ammo */
     float bullet_speed;                  /* +0x0020 setupitemtypes: AK-47 10.67, M-16 14.67, MP5 6.67 (likely: the speed of the bullet in units per tick, x 60 = 640, 880 and 400) */
-    int unk_0024;                        /* +0x0024 1 functions */
+    float spread;                        /* +0x0024 setupitemtypes: 0.033333335 for all guns; itemweaponsimulation: the range of getrandomvector3d */
     char name[32];                       /* +0x0028 setupitemtypes: the name of the item type (AK-47, Bandage, Open Briefcase...) */
-    uint8_t pad_0048[0x8];
-    int unk_0050;                        /* +0x0050 1 functions */
+    vec3 muzzle;                         /* +0x0048 setupitemtypes: (0 0 z) with z -0.625 rifles, -0.375 Uzi, -0.4375 Magnum, -0.3125 9mm (likely: the server does not read it) */
     vec3 grip;                           /* +0x0054 setupitemtypes: the point of the item that the right hand holds (human_calculatearmangles) */
     uint8_t pad_0060[0xc];
-    float unk_006c;                      /* +0x006c 1 functions */
-    int unk_0070;                        /* +0x0070 1 functions */
-    float unk_0074;                      /* +0x0074 1 functions */
-    float unk_0078;                      /* +0x0078 1 functions */
-    int unk_007c;                        /* +0x007c 1 functions */
+    float recoil;                        /* +0x006c setupitemtypes: bullet mass * bullet_speed * 0.25 (Magnum and 9mm 0.5); itemweaponsimulation adds a random 2D kick of it to Human.recoil */
+    float shape[4];                      /* +0x0070 setupitemtypes only (likely client model sizes) */
     vec3 size;                           /* +0x0080 setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass) */
     vec3 inv_inertia;                    /* +0x008c setupitemtypes: 1 / ((b * b + c * c) / 3) from size: the inverse of the moment of inertia of a box, for a mass of 1 */
     int fits_in[64];                     /* +0x0098 linkitemtoitem: a child item goes into a parent only when fits_in[parent type] != 0 (one int for each of the 64 item types) */
@@ -783,10 +798,15 @@ SR_STATIC_ASSERT(offsetof(ItemType, is_gun) == 0x8, "ItemType.is_gun");
 SR_STATIC_ASSERT(offsetof(ItemType, one_handed) == 0xc, "ItemType.one_handed");
 SR_STATIC_ASSERT(offsetof(ItemType, fire_delay) == 0x10, "ItemType.fire_delay");
 SR_STATIC_ASSERT(offsetof(ItemType, bullet_type) == 0x14, "ItemType.bullet_type");
+SR_STATIC_ASSERT(offsetof(ItemType, client_param) == 0x18, "ItemType.client_param");
 SR_STATIC_ASSERT(offsetof(ItemType, ammo) == 0x1c, "ItemType.ammo");
 SR_STATIC_ASSERT(offsetof(ItemType, bullet_speed) == 0x20, "ItemType.bullet_speed");
+SR_STATIC_ASSERT(offsetof(ItemType, spread) == 0x24, "ItemType.spread");
 SR_STATIC_ASSERT(offsetof(ItemType, name) == 0x28, "ItemType.name");
+SR_STATIC_ASSERT(offsetof(ItemType, muzzle) == 0x48, "ItemType.muzzle");
 SR_STATIC_ASSERT(offsetof(ItemType, grip) == 0x54, "ItemType.grip");
+SR_STATIC_ASSERT(offsetof(ItemType, recoil) == 0x6c, "ItemType.recoil");
+SR_STATIC_ASSERT(offsetof(ItemType, shape) == 0x70, "ItemType.shape");
 SR_STATIC_ASSERT(offsetof(ItemType, size) == 0x80, "ItemType.size");
 SR_STATIC_ASSERT(offsetof(ItemType, inv_inertia) == 0x8c, "ItemType.inv_inertia");
 SR_STATIC_ASSERT(offsetof(ItemType, fits_in) == 0x98, "ItemType.fits_in");
@@ -1536,7 +1556,7 @@ typedef union SoundList { struct {
     int unk_00b8;                        /* +0x00b8 1 functions */
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x8];
-    int unk_00c8;                        /* +0x00c8 2 functions */
+    int phone_ring;                      /* +0x00c8 itemlogic plays it every 128 ticks while a phone rings */
     int unk_00cc;                        /* +0x00cc 2 functions */
     int unk_00d0;                        /* +0x00d0 1 functions */
     int unk_00d4;                        /* +0x00d4 1 functions */
@@ -1548,7 +1568,7 @@ typedef union SoundList { struct {
     int unk_00ec;                        /* +0x00ec 1 functions */
     int unk_00f0;                        /* +0x00f0 1 functions */
     uint8_t pad_00f4[0x18];
-    int unk_010c;                        /* +0x010c 2 functions */
+    int magazine;                        /* +0x010c human_itemsimulation plays it when a magazine goes in or out of a gun */
     uint8_t pad_0110[0x1c];
     int unk_012c;                        /* +0x012c 1 functions */
     int unk_0130;                        /* +0x0130 2 functions */
@@ -1557,6 +1577,8 @@ typedef union SoundList { struct {
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
+SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
+SR_STATIC_ASSERT(offsetof(SoundList, magazine) == 0x10c, "SoundList.magazine");
 
 /* blocklist[]: record of 0x40354 bytes. */
 typedef union BlockList { struct {
@@ -1585,7 +1607,7 @@ typedef union BlockList { struct {
     int unk_0068;                        /* +0x0068 1 functions */
     int unk_006c;                        /* +0x006c 1 functions */
     int unk_0070;                        /* +0x0070 1 functions */
-    int unk_0074;                        /* +0x0074 2 functions */
+    int elevator_block;                  /* +0x0074 setup 0x3e070: base + 0xb; human_itemsimulation: a block link equal to it (with bit 31) starts an elevator (likely) */
     int unk_0078;                        /* +0x0078 1 functions */
     int unk_007c;                        /* +0x007c 1 functions */
     int unk_0080;                        /* +0x0080 1 functions */
@@ -1642,10 +1664,10 @@ typedef union BlockList { struct {
     int unk_0188;                        /* +0x0188 1 functions */
     int unk_018c;                        /* +0x018c 1 functions */
     uint8_t pad_0190[0x34];
-    int unk_01c4;                        /* +0x01c4 3 functions */
+    int base_door_first;                 /* +0x01c4 0x2a510 writes 4 ids (+0x1c4..+0x1d0); human_itemsimulation opens the base door for a link in the range (likely) */
     int unk_01c8;                        /* +0x01c8 1 functions */
     int unk_01cc;                        /* +0x01cc 1 functions */
-    uint32_t unk_01d0;                   /* +0x01d0 3 functions */
+    int base_door_last;                  /* +0x01d0 as base_door_first */
     int unk_01d4;                        /* +0x01d4 1 functions */
     int unk_01d8;                        /* +0x01d8 1 functions */
     int unk_01dc;                        /* +0x01dc 1 functions */
@@ -1750,6 +1772,9 @@ typedef union BlockList { struct {
     uint8_t pad_0374[0x3ffe0];
 }; uint8_t lf_raw[0x40354]; } BlockList;
 SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
+SR_STATIC_ASSERT(offsetof(BlockList, elevator_block) == 0x74, "BlockList.elevator_block");
+SR_STATIC_ASSERT(offsetof(BlockList, base_door_first) == 0x1c4, "BlockList.base_door_first");
+SR_STATIC_ASSERT(offsetof(BlockList, base_door_last) == 0x1d0, "BlockList.base_door_last");
 
 /* city[]: record of 0xa0b99c bytes. */
 typedef union City { struct {

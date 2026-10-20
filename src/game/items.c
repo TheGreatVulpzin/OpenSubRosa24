@@ -172,7 +172,7 @@ uint32_t createitem(int type, const vec3 *pos, const vec3 *vel, const vec3 rot[3
         memcpy(&it->vel, vel, sizeof it->vel);
     memcpy(it->rot, rot, sizeof it->rot);
     it->inv_inertia = t->inv_inertia;
-    it->unk_e4 = t->unk_0018;
+    it->unk_e4 = t->client_param;
     it->ammo = t->ammo;
     it->linked_item = -1;
     it->vehicle_id = -1;
