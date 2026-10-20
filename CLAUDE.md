@@ -25,6 +25,8 @@ RE/decompilation project for Sub Rosa (2015).
 
 Do one group of `docs/plano.md` ("The groups of the rewrite") in each session. Split a large group (4, 8) into steps of about 15 KB.
 
+Two kinds of session do a group. An Opus session writes the plan of the group to `build/plans/group<N>.md` and writes no code. Several plan sessions may run at the same time (2 or 3, for the usage limit). A Sonnet session then does steps 2 to 6 from the plan file. When it finds a fact that the plan does not have (a bug in a clean helper, a shared helper, a name), it writes the fact into the plan file. Before it adds a name, it looks for that offset in `names.csv`: another group may already have a name for it.
+
 1. Plan: for each function, read its lifted C (`git show HEAD:src/lifted/lifted_024d.c`, marker `/* --- 0x<rva> */`). Write down the offsets, the rounding points, the NaN compare forms, the dead code and the locals that the code uses again.
 2. Names: add each field that the clean code uses to `analysis/structs/names.csv` (or to `tools/re/gen_types.py` for a custom type), then run `gen_types.py`.
 3. Write the clean C in `src/game`, `src/common` or `src/net`. Remove the `lf_XXXXX` alias of the function from its callers.
