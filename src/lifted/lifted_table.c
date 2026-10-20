@@ -48,7 +48,7 @@ void createevent_updateplayer(void);
 void createevent_updateplayer_finance(void);
 void lf_06840(void);
 void lf_068d0(void);
-void lf_06b30(void);
+void setupitemtypes(void);
 void item_billvalue(void);
 void item_addbill(void);
 void item_removebill(void);
@@ -256,7 +256,7 @@ void human_calcarmtorque(void);
 void human_createmuscleball(void);
 void sphereintersecttrianglefull(void);
 void itemtimetolive(void);
-void lf_30ba0(void);
+void itemweaponsimulation(void);
 void item_sphereintersect(void);
 void lineintersectall(void);
 void lineintersectlevel(void);
@@ -281,13 +281,13 @@ void sphereintersectarea(void);
 void circleintersectarea(void);
 void bondsimulation2(void);
 void lf_46c30(void);
-void lf_48ec0(void);
+void bulletsimulation(void);
 void lf_49940(void);
 void human_calculatearmangles(void);
-void lf_4bd60(void);
+void human_itemsimulation(void);
 void human_buildmuscles(void);
-void lf_4c8c0(void);
-void lf_4cee0(void);
+void itemlogic(void);
+void item_physicssimulation(void);
 void circleintersectlevel(void);
 void sphereintersectlevel(void);
 void lf_4d850(void);
@@ -303,7 +303,7 @@ void lf_500e0(void);
 void lf_502a0(void);
 void createhuman(void);
 void humansimulation(void);
-void lf_542a0(void);
+void itemsimulation(void);
 void lf_54e40(void);
 void lf_55700(void);
 void lf_56710(void);
@@ -366,7 +366,7 @@ const LfEntry lf_table[] = {
     { "createevent_updateplayer_finance", 0x65f0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatestocks", 0x6840, (void *)lf_06840, 0, LF_RET_VOID, 4, "", 0 },
     { "createevent_updatecarmarket", 0x68d0, (void *)lf_068d0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupitemtypes", 0x6b30, (void *)lf_06b30, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupitemtypes", 0x6b30, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "item_billvalue", 0x7b90, (void *)item_billvalue, 1, LF_RET_INT, 4, "v", 0 },
     { "item_addbill", 0x7c40, (void *)item_addbill, 3, LF_RET_INT, 4, "vvv", 0 },
     { "item_removebill", 0x7ce0, (void *)item_removebill, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -574,7 +574,7 @@ const LfEntry lf_table[] = {
     { "human_createmuscleball", 0x306d0, (void *)human_createmuscleball, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "sphereintersecttrianglefull", 0x307f0, (void *)sphereintersecttrianglefull, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "itemtimetolive", 0x30ab0, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
-    { "itemweaponsimulation", 0x30ba0, (void *)lf_30ba0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "itemweaponsimulation", 0x30ba0, (void *)itemweaponsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "item_sphereintersect", 0x30f00, (void *)item_sphereintersect, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lineintersectall", 0x31480, (void *)lineintersectall, 2, LF_RET_INT, 4, "pp", 0 },
     { "lineintersectlevel", 0x31630, (void *)lineintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
@@ -599,13 +599,13 @@ const LfEntry lf_table[] = {
     { "circleintersectarea", 0x41550, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },
     { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
-    { "bulletsimulation", 0x48ec0, (void *)lf_48ec0, 0, LF_RET_VOID, 4, "", 0 },
+    { "bulletsimulation", 0x48ec0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "server_playermessage", 0x49940, (void *)lf_49940, 2, LF_RET_INT, 4, "vp", 0 },
     { "human_calculatearmangles", 0x4a440, (void *)human_calculatearmangles, 1, LF_RET_VOID, 4, "v", 0 },
-    { "human_itemsimulation", 0x4bd60, (void *)lf_4bd60, 1, LF_RET_VOID, 4, "v", 0 },
+    { "human_itemsimulation", 0x4bd60, (void *)human_itemsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_buildmuscles", 0x4c720, (void *)human_buildmuscles, 1, LF_RET_VOID, 4, "v", 0 },
-    { "itemlogic", 0x4c8c0, (void *)lf_4c8c0, 0, LF_RET_VOID, 4, "", 0 },
-    { "item_physicssimulation", 0x4cee0, (void *)lf_4cee0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "itemlogic", 0x4c8c0, (void *)itemlogic, 0, LF_RET_VOID, 4, "", 0 },
+    { "item_physicssimulation", 0x4cee0, (void *)item_physicssimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "circleintersectlevel", 0x4d630, (void *)circleintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlevel", 0x4d750, (void *)sphereintersectlevel, 2, LF_RET_INT, 4, "pv", 0 },
     { "buildcityinterection", 0x4d850, (void *)lf_4d850, 1, LF_RET_VOID, 4, "v", 0 },
@@ -621,7 +621,7 @@ const LfEntry lf_table[] = {
     { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },
     { "createhuman", 0x50ae0, (void *)createhuman, 3, LF_RET_INT, 4, "ppv", 0 },
     { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "itemsimulation", 0x542a0, (void *)lf_542a0, 0, LF_RET_VOID, 4, "", 0 },
+    { "itemsimulation", 0x542a0, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation", 0x56710, (void *)lf_56710, 0, LF_RET_VOID, 4, "", 0 },

@@ -23,4 +23,7 @@ void setupbullettypes(void);
 int createbullet(int type, const vec3 *pos, const vec3 *vel, int owner);
 void bullettimetolive(void);
 
+/* bullet_sim.c */
+void bulletsimulation(void);
+
 #endif /* SR_BULLETS_H */

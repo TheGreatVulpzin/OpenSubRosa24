@@ -35,11 +35,9 @@
 void __cdecl lf_05be0(int player, int stocks);
 void __cdecl lf_16960(uint32_t player);
 void __cdecl lf_16a20(int player, int tax);
-void __cdecl lf_4bd60(int human);
 #define playersellstock lf_05be0
 #define playerdeathtax lf_16960
 #define playerteamkilltax lf_16a20
-#define human_itemsimulation lf_4bd60
 
 
 /* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do

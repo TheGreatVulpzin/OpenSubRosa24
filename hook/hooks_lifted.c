@@ -1602,12 +1602,12 @@ __declspec(naked) static void th_068d0(void)
 }
 static uint8_t expect_068d0[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
-void __cdecl lf_06b30(void);
+void __cdecl setupitemtypes(void);
 static void (__cdecl *orig_06b30)(void);
 static SvVerify v_06b30 = { "setupitemtypes", -1 };
 static void __cdecl hk_06b30(void)
 {
-    SV_HOOK_VOID(v_06b30, lf_06b30(), orig_06b30(), NULL);
+    SV_HOOK_VOID(v_06b30, setupitemtypes(), orig_06b30(), NULL);
 }
 __declspec(naked) static void th_06b30(void)
 {
@@ -9764,12 +9764,12 @@ __declspec(naked) static void th_30ab0(void)
 }
 static uint8_t expect_30ab0[6] = { 0x53, 0x55, 0x56, 0x57, 0x33, 0xdb };
 
-void __cdecl lf_30ba0(int param_1);
+void __cdecl itemweaponsimulation(int param_1);
 static void (__cdecl *orig_30ba0)(int);
 static SvVerify v_30ba0 = { "itemweaponsimulation", -1 };
 static void __cdecl hk_30ba0(int param_1)
 {
-    SV_HOOK_VOID(v_30ba0, lf_30ba0(param_1), orig_30ba0(param_1), NULL);
+    SV_HOOK_VOID(v_30ba0, itemweaponsimulation(param_1), orig_30ba0(param_1), NULL);
 }
 __declspec(naked) static void th_30ba0(void)
 {
@@ -10640,12 +10640,12 @@ __declspec(naked) static void th_41de0(void)
 }
 static uint8_t expect_41de0[6] = { 0x81, 0xec, 0xe4, 0x00, 0x00, 0x00 };
 
-void __cdecl lf_48ec0(void);
+void __cdecl bulletsimulation(void);
 static void (__cdecl *orig_48ec0)(void);
 static SvVerify v_48ec0 = { "bulletsimulation", -1 };
 static void __cdecl hk_48ec0(void)
 {
-    SV_HOOK_VOID(v_48ec0, lf_48ec0(), orig_48ec0(), NULL);
+    SV_HOOK_VOID(v_48ec0, bulletsimulation(), orig_48ec0(), NULL);
 }
 __declspec(naked) static void th_48ec0(void)
 {
@@ -10761,12 +10761,12 @@ __declspec(naked) static void th_4a440(void)
 }
 static uint8_t expect_4a440[6] = { 0x81, 0xec, 0xa0, 0x00, 0x00, 0x00 };
 
-void __cdecl lf_4bd60(int param_1);
+void __cdecl human_itemsimulation(int param_1);
 static void (__cdecl *orig_4bd60)(int);
 static SvVerify v_4bd60 = { "human_itemsimulation", -1 };
 static void __cdecl hk_4bd60(int param_1)
 {
-    SV_HOOK_VOID(v_4bd60, lf_4bd60(param_1), orig_4bd60(param_1), NULL);
+    SV_HOOK_VOID(v_4bd60, human_itemsimulation(param_1), orig_4bd60(param_1), NULL);
 }
 __declspec(naked) static void th_4bd60(void)
 {
@@ -10843,12 +10843,12 @@ __declspec(naked) static void th_4c720(void)
 }
 static uint8_t expect_4c720[9] = { 0x83, 0xec, 0x0c, 0xd9, 0x05, 0xd0, 0x02, 0x67, 0x0f };
 
-void __cdecl lf_4c8c0(void);
+void __cdecl itemlogic(void);
 static void (__cdecl *orig_4c8c0)(void);
 static SvVerify v_4c8c0 = { "itemlogic", -1 };
 static void __cdecl hk_4c8c0(void)
 {
-    SV_HOOK_VOID(v_4c8c0, lf_4c8c0(), orig_4c8c0(), NULL);
+    SV_HOOK_VOID(v_4c8c0, itemlogic(), orig_4c8c0(), NULL);
 }
 __declspec(naked) static void th_4c8c0(void)
 {
@@ -10882,12 +10882,12 @@ __declspec(naked) static void th_4c8c0(void)
 }
 static uint8_t expect_4c8c0[5] = { 0x83, 0xec, 0x0c, 0x53, 0x55 };
 
-void __cdecl lf_4cee0(int param_1);
+void __cdecl item_physicssimulation(int param_1);
 static void (__cdecl *orig_4cee0)(int);
 static SvVerify v_4cee0 = { "item_physicssimulation", -1 };
 static void __cdecl hk_4cee0(int param_1)
 {
-    SV_HOOK_VOID(v_4cee0, lf_4cee0(param_1), orig_4cee0(param_1), NULL);
+    SV_HOOK_VOID(v_4cee0, item_physicssimulation(param_1), orig_4cee0(param_1), NULL);
 }
 __declspec(naked) static void th_4cee0(void)
 {
@@ -11419,12 +11419,12 @@ __declspec(naked) static void th_51060(void)
 }
 static uint8_t expect_51060[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_542a0(void);
+void __cdecl itemsimulation(void);
 static void (__cdecl *orig_542a0)(void);
 static SvVerify v_542a0 = { "itemsimulation", -1 };
 static void __cdecl hk_542a0(void)
 {
-    SV_HOOK_VOID(v_542a0, lf_542a0(), orig_542a0(), NULL);
+    SV_HOOK_VOID(v_542a0, itemsimulation(), orig_542a0(), NULL);
 }
 __declspec(naked) static void th_542a0(void)
 {

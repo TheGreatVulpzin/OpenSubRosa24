@@ -14,8 +14,11 @@ A snapshot is about 120 MB. With --run, the script runs the harness on each case
 the case at once. The cover count is the number of basic blocks of the function that the case
 reaches (HARNESS_COVER):
 
-    python -I tools/lift/synth_items.py --run <recording dir> <work dir> [case,...]
+    python -I tools/lift/synth_items.py --run [--no-cover] <recording dir> <work dir> [case,...]
+
+--no-cover skips the cover run. The base snapshot is read once and copied in memory for each case.
 """
+import copy
 import math
 import os
 import re
@@ -55,8 +58,8 @@ IDENTITY = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 class Case:
     """One snapshot with helpers to write items, humans and bullets."""
 
-    def __init__(self, rec, ctx):
-        self.s = Snapshot(rec / 'sv_snapshot.bin')
+    def __init__(self, base, ctx):
+        self.s = copy.deepcopy(base)
         self.ctx = ctx
         self.next_free = 0
 
@@ -592,14 +595,16 @@ FUNC_NAMES = {0x6b30: 'setupitemtypes', 0x30ba0: 'itemweaponsimulation', 0x4c8c0
               0x4bd60: 'human_itemsimulation', 0x48ec0: 'bulletsimulation'}
 
 
-def run_harness(d, rva):
+def run_harness(d, rva, cover=True):
     """Run the harness on one case. Returns the result line and the number of blocks reached."""
     cmd = [str(ROOT / 'build/hook/harness.exe'), str(ROOT / 'build/hook/024d_fixed.exe'),
            str(d / 'sv_snapshot.bin'), str(d / 'sv_args.txt'), FUNC_NAMES[rva]]
     env = dict(os.environ, HARNESS_ENV_DIR=str(d / 'env'))
-    cover = dict(env, HARNESS_COVER=str(ROOT / 'build/lift/blocks.txt'))
-    out = subprocess.run(cmd, capture_output=True, text=True, errors='replace', env=cover, cwd=ROOT).stdout
-    blocks = [int(ln.split()[4]) for ln in out.splitlines() if ln.startswith('cover ') and len(ln.split()) > 4]
+    covered = dict(env, HARNESS_COVER=str(ROOT / 'build/lift/blocks.txt'))
+    blocks = []
+    if cover:
+        out = subprocess.run(cmd, capture_output=True, text=True, errors='replace', env=covered, cwd=ROOT).stdout
+        blocks = [int(ln.split()[4]) for ln in out.splitlines() if ln.startswith('cover ') and len(ln.split()) > 4]
     out = subprocess.run(cmd, capture_output=True, text=True, errors='replace', env=env, cwd=ROOT).stdout
     res = [ln for ln in out.splitlines() if 'functions tested' in ln]
     return (res[-1] if res else 'NO RESULT: ' + out[-300:]), (blocks[0] if blocks else 0)
@@ -609,6 +614,9 @@ def main():
     run = '--run' in sys.argv
     if run:
         sys.argv.remove('--run')
+    cover = '--no-cover' not in sys.argv
+    if not cover:
+        sys.argv.remove('--no-cover')
     rec, out = Path(sys.argv[1]), Path(sys.argv[2])
     base = Snapshot(rec / 'sv_snapshot.bin')
     with_physics = lambda s, a: s.read(a, 'i')[0] != 0 and s.read(a + 4, 'i')[0] != 0
@@ -629,7 +637,7 @@ def main():
     for name in sorted(FUNCS_OF):
         if want and name not in want:
             continue
-        c = Case(rec, ctx)
+        c = Case(base, ctx)
         make = cases(c)[name]
         args = make()
         d = out / name
@@ -638,7 +646,7 @@ def main():
         (d / 'sv_args.txt').write_text('\n'.join(args) + '\n')
         if run:
             rva = int(args[0].split()[1], 16)
-            result, blocks = run_harness(d, rva)
+            result, blocks = run_harness(d, rva, cover)
             print('%-22s %-24s blocks %3d  %s' % (name, FUNC_NAMES[rva], blocks, result), flush=True)
             shutil.rmtree(d, ignore_errors=True)
         else:
