@@ -21,6 +21,28 @@ RE/decompilation project for Sub Rosa (2015).
 - Every lifter change must keep the harness results: no "calls same" count may drop on any recording (see `docs/lift.md`).
 - Knowledge that must stay goes into the repository (`analysis/*.csv`, `src/include/sr_types.h`, scripts), never only into the Ghidra project. The Ghidra project is not versioned.
 
+## Rewrite workflow (Phase 6)
+
+Do one group of `docs/plano.md` ("The groups of the rewrite") in each session. Split a large group (4, 8) into steps of about 15 KB.
+
+1. Plan: for each function, read its lifted C (`git show HEAD:src/lifted/lifted_024d.c`, marker `/* --- 0x<rva> */`). Write down the offsets, the rounding points, the NaN compare forms, the dead code and the locals that the code uses again.
+2. Names: add each field that the clean code uses to `analysis/structs/names.csv` (or to `tools/re/gen_types.py` for a custom type), then run `gen_types.py`.
+3. Write the clean C in `src/game`, `src/common` or `src/net`. Remove the `lf_XXXXX` alias of the function from its callers.
+4. Run `bash tools/lift/pipeline.sh`. Then run `gate.py --all-calls --funcs <names>` and the synthetic tests of the paths that you changed.
+5. Get a review from another model before each commit. Then run the full gate (`gate.py`) before you ask for a push.
+6. At the end of the group, write or update the doc of its system in `docs/game/` (how the system works, its records and its functions). Mark the group done in `docs/plano.md`.
+
+Traps:
+
+- `pipeline.sh` exits with 0 when the build fails. Search its log for `error C` and `build failed`.
+- In Git Bash, run the build with `cmd //c "tools\\build_hook.bat"`. `cmd /c` does not run it.
+- The lifted-style files in `src/game` (`objects.c`, `wheels.c`, `ai_car.c`) use the frozen header. Do not change their `unk_` names.
+- Do not write C that has escapes (`\n`) through a heredoc, `sed` or a Python one-liner in Bash. Use the Write or Edit tool.
+- Rounding: a store to memory rounds a value to a float, and a register does not. A lifted frame local (`*(float *)(lf_frame + n)`) is a memory store. In the clean C, put an explicit `(float)` cast where the original rounds. A value that stays in a register in the original (for example `1 / s` in `orientationtoquaternion`) stays a `double`.
+- The lifted C calls the other functions through `SR_FN`, so it uses the original helpers. When a caller becomes clean, it calls the clean helpers, and a hidden difference in a helper can show for the first time. Find it with `HARNESS_WATCH` (the writer of a different byte), `HARNESS_PROBE` (the values in the original) and the disassembly (`dumpbin /disasm:nobytes /range:<va>,<va>`).
+- `rand` of the game: call `os_rand()` (`src/include/sr_os.h`), never the `rand` of the CRT.
+- Structure: each original function stays one function with the same name, parameters and bit-exact result. Inside it, a `static` helper may replace code that repeats or split a long function. When the helper matches a function of `subrosa.x64` (symbols), use that name. A value that a helper returns is rounded to a float: make sure that the original rounds at that point.
+
 ## Key binaries
 
 - `original/client/subrosa.x64` — Linux ELF64 **with symbols**. Source of truth for function names.
