@@ -163,14 +163,14 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 
 ### The groups of the rewrite (2026-10-19)
 
-Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). That is 92 of 316 functions, 19.4% of the code bytes.
+Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). Group 1 (2026-10-19): the block areas and the 2D tests (`area.c`, `collide_area.c`). Group 2 (2026-10-19): the rest of the humans (`human_body.c`, `human_pose.c`, `human_arms.c`). That is 132 of 316 functions.
 
 Next, in this order (sizes from `analysis/024d/functions.csv`):
 
 | # | Group | Functions | Size |
 | --- | --- | ---: | ---: |
-| 1 | Collision with the block areas, and the 2D tests | 29 | 22 KB |
-| 2 | Humans (the rest) | 11 | 18 KB |
+| 1 | Collision with the block areas, and the 2D tests (done) | 29 | 22 KB |
+| 2 | Humans, the rest (done) | 11 | 18 KB |
 | 3 | Items and weapons (the rest) | 7 | 16 KB |
 | 4 | Objects and vehicles | 27 | 67 KB |
 | 5 | Server network | 24 | 36 KB |
