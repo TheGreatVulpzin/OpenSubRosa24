@@ -39,3 +39,50 @@ void stoptimer(int timer)
     t->ms = (int)(uint32_t)whole;
 }
 
+
+/* Gives each section of the tick the index of its timer. The numbers start at 0x40, and
+ * the order of the lines below sets them. */
+void setuptimers(void)
+{
+    TimerList *tl = &g_timerlist;
+    int next = 0x40;
+
+    tl->packetbuild = next++;
+    tl->humansim = next++;
+    tl->objectsim = next++;
+    tl->bondtest = next++;
+    tl->bondsim = next++;
+    tl->bondsetup = next++;
+    tl->bondsetupcopy = next++;
+    tl->bondsetuphuman = next++;
+    tl->bondloopcopy = next++;
+    tl->bondhuman = next++;
+    tl->bondwheelsim = next++;
+    tl->bondpartpart = next++;
+    tl->bondbodybody = next++;
+    tl->bondbodyrotbody = next++;
+    tl->bondwheelcollevel = next++;
+    tl->bondbodyitem = next++;
+    tl->bondbodylevel = next++;
+    tl->raycast = next++;
+    tl->buildframelist = next++;
+    tl->renderdepth = next++;
+    tl->rendersectors = next++;
+    tl->rendersectorshadow = next++;
+    tl->buildsectorshadow = next++;
+    tl->renderinterior = next++;
+    tl->renderinteriorwindows = next++;
+    tl->renderinteriorshadow = next++;
+    tl->rendermodels = next++;
+    tl->rendermodelshadow = next++;
+    tl->renderlandscape = next++;
+    tl->renderatmosphere = next++;
+    tl->renderalpha = next++;
+    tl->physicssim = next++;
+    tl->buildinterior = next++;
+    tl->optimizeinterior = next++;
+    tl->setupinterior = next++;
+    tl->allocinterior = next++;
+    tl->shadowinterior = next++;
+    tl->numoftimers = next;
+}

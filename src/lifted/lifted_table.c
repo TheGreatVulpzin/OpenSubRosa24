@@ -59,7 +59,7 @@ void item_removeitemlink(void);
 void lf_080b0(void);
 void lf_08320(void);
 void lf_08590(void);
-void lf_08880(void);
+void sprintf_comma(void);
 void pointinsidebase(void);
 void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
@@ -77,9 +77,9 @@ void orientationtoquaternion(void);
 void projectorientation(void);
 void lf_0aa80(void);
 void lf_0ab20(void);
-void lf_0ac00(void);
+void csradixsort(void);
 void init_genrand(void);
-void lf_0ad70(void);
+void init_by_array(void);
 void genrand_int32(void);
 void lf_0b040(void);
 void lf_0b0b0(void);
@@ -88,7 +88,7 @@ void lf_0b230(void);
 void lf_0b300(void);
 void stoptimer(void);
 void lf_0b4a0(void);
-void lf_0b540(void);
+void setuptimers(void);
 void addvoice(void);
 void dotproduct(void);
 void crossproduct(void);
@@ -119,8 +119,8 @@ void checkstring(void);
 void getint(void);
 void getstring(void);
 void cs_getline(void);
-void lf_0d3a0(void);
-void lf_0d680(void);
+void listfiles(void);
+void removeflieextentions(void);
 void disablesocket(void);
 void recvpacket(void);
 void sendpacket(void);
@@ -377,7 +377,7 @@ const LfEntry lf_table[] = {
     { "city_addintersection", 0x80b0, (void *)lf_080b0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "leveleditor_save", 0x8320, (void *)lf_08320, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0x8590, (void *)lf_08590, 0, LF_RET_VOID, 4, "", 1 },
-    { "sprintf_comma", 0x8880, (void *)lf_08880, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "sprintf_comma", 0x8880, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
     { "pointinsidebase", 0x89c0, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidebuilding", 0x8a60, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
     { "pointinsidebasesafe", 0x8b00, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
@@ -395,9 +395,9 @@ const LfEntry lf_table[] = {
     { "projectorientation", 0xa930, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "scenario_getnumofmissions", 0xaa80, (void *)lf_0aa80, 1, LF_RET_INT, 4, "v", 0 },
     { "scenario_setmissioninactive", 0xab20, (void *)lf_0ab20, 1, LF_RET_VOID, 4, "v", 0 },
-    { "csradixsort", 0xac00, (void *)lf_0ac00, 0, LF_RET_VOID, 4, "", 0 },
+    { "csradixsort", 0xac00, (void *)csradixsort, 0, LF_RET_VOID, 4, "", 0 },
     { "init_genrand", 0xad30, (void *)init_genrand, 1, LF_RET_VOID, 4, "v", 0 },
-    { "init_by_array", 0xad70, (void *)lf_0ad70, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "init_by_array", 0xad70, (void *)init_by_array, 2, LF_RET_VOID, 4, "pv", 0 },
     { "genrand_int32", 0xae50, (void *)genrand_int32, 0, LF_RET_INT, 4, "", 0 },
     { "objecttype_addparticle", 0xb040, (void *)lf_0b040, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "objecttype_addbond", 0xb0b0, (void *)lf_0b0b0, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -406,7 +406,7 @@ const LfEntry lf_table[] = {
     { "setcpuaffinity", 0xb300, (void *)lf_0b300, 0, LF_RET_VOID, 4, "", 1 },
     { "stoptimer", 0xb3f0, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xb4a0, (void *)lf_0b4a0, 0, LF_RET_VOID, 4, "", 1 },
-    { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4, "", 0 },
+    { "setuptimers", 0xb540, (void *)setuptimers, 0, LF_RET_VOID, 4, "", 0 },
     { "addvoice", 0xb6d0, (void *)addvoice, 2, LF_RET_INT, 4, "vv", 0 },
     { "dotproduct", 0xb850, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "crossproduct", 0xb880, (void *)crossproduct, 3, LF_RET_VOID, 4, "ppp", 0 },
@@ -437,8 +437,8 @@ const LfEntry lf_table[] = {
     { "getint", 0xd110, (void *)getint, 0, LF_RET_INT, 4, "", 0 },
     { "getstring", 0xd240, (void *)getstring, 2, LF_RET_VOID, 4, "pv", 0 },
     { "cs_getline", 0xd2a0, (void *)cs_getline, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "listfiles", 0xd3a0, (void *)lf_0d3a0, 3, LF_RET_VOID, 4, "pvv", 1 },
-    { "removeflieextentions", 0xd680, (void *)lf_0d680, 1, LF_RET_VOID, 4, "v", 0 },
+    { "listfiles", 0xd3a0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
+    { "removeflieextentions", 0xd680, (void *)removeflieextentions, 1, LF_RET_VOID, 4, "v", 0 },
     { "disablesocket", 0xd710, (void *)disablesocket, 1, LF_RET_VOID, 4, "v", 1 },
     { "recvpacket", 0xd860, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
     { "sendpacket", 0xd910, (void *)sendpacket, 2, LF_RET_VOID, 4, "vv", 1 },

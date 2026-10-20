@@ -13,9 +13,8 @@
 #include "packet.h"
 #include "server.h"
 #include "sr_math.h"
+#include "util.h"
 #include "vectors.h"
-
-void __cdecl lf_0ac00(void); /* csradixsort: sorts radix.keys, the order goes to radix.order */
 
 #define sr_cityobjects SR_AT(CityObjectRec, SR_RVA_CITYOBJECT)
 #define EVENT_FILLER 0x12 /* the type of a placeholder: the client skips it */
@@ -284,7 +283,7 @@ int item_is_sent(const Item *it, int index, uint32_t sequence, const vec3 *ref)
  * to 0 is the entry with the highest score first. */
 static void sort_entries(void)
 {
-    lf_0ac00();
+    csradixsort();
 }
 
 /* Add the scores of all humans, pick the best 8 and give each picked human a score of 0 again.

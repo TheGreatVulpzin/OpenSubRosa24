@@ -3,7 +3,7 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
-static void *lf_imports[26];
+static void *lf_imports[22];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -2885,29 +2885,6 @@ void __cdecl lf_08590(void)
 #undef local_44
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x8880 */
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-void __cdecl lf_08880(char *param_1,int param_2)
-
-{
-  if (999999999 < param_2) {
-    sprintf(param_1,"%d,%03d,%03d,%03d",param_2 / 1000000000,(param_2 / 1000000) % 1000,
-            (param_2 / 1000) % 1000,param_2 % 1000);
-    return;
-  }
-  if (999999 < param_2) {
-    sprintf(param_1,"%d,%03d,%03d",param_2 / 1000000,(param_2 / 1000) % 1000,param_2 % 1000);
-    return;
-  }
-  if (999 < param_2) {
-    sprintf(param_1,"%d,%03d",param_2 / 1000,param_2 % 1000);
-    return;
-  }
-  sprintf(param_1,"%d",param_2);
-  return;
-}
-#undef sprintf
-
 /* ---------------------------------------------------------------- 0x8cf0 */
 #define g_cityobjecttype (*(CityObjectType *)SR_VA(0xf42e500))
 #define g_numofevents (*(uint *)SR_VA(0xf837318))
@@ -3736,129 +3713,6 @@ void __cdecl lf_0ab20(int param_1)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xac00 */
-#define g_radix (*(Radix *)SR_VA(0x10347c80))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memset"))
-void __cdecl lf_0ac00(void)
-
-{
-  int iVar1;
-  int iVar2;
-  int *piVar3;
-  int *piVar4;
-  uint uVar5;
-  int iVar6;
-  
-  iVar1 = 0;
-  if (0 < g_radix.unk_0000) {
-    do {
-      (&g_radix.unk_0004)[iVar1] = iVar1;
-      iVar1 = iVar1 + 1;
-    } while (iVar1 < g_radix.unk_0000);
-  }
-  iVar1 = 0;
-  do {
-    memset(&g_radix.unk_400004,0,0x400);
-    iVar2 = 0;
-    if (0 < g_radix.unk_0000) {
-      do {
-        (&g_radix.unk_100004)[iVar2] = (&g_radix.unk_0004)[iVar2];
-        piVar3 = &g_radix.unk_0004 + iVar2;
-        iVar2 = iVar2 + 1;
-        (&g_radix.unk_400004)
-        [(uint)(&g_radix.unk_200004)[*piVar3] >> ((char)iVar1 * '\b' & 0x1fU) & 0xff] =
-             (&g_radix.unk_400004)
-             [(uint)(&g_radix.unk_200004)[*piVar3] >> ((char)iVar1 * '\b' & 0x1fU) & 0xff] + 1;
-      } while (iVar2 < g_radix.unk_0000);
-    }
-    iVar2 = 0;
-    g_radix.unk_400404 = 0;
-    piVar3 = &g_radix.unk_400404;
-    do {
-      piVar4 = piVar3 + 5;
-      piVar3[1] = piVar3[-0x100] + *piVar3;
-      iVar6 = piVar3[-0x100] + *piVar3 + piVar3[-0xff];
-      piVar3[2] = iVar6;
-      iVar6 = iVar6 + piVar3[-0xfe];
-      piVar3[3] = iVar6;
-      iVar6 = iVar6 + piVar3[-0xfd];
-      piVar3[4] = iVar6;
-      *piVar4 = piVar3[-0xfc] + iVar6;
-      piVar3 = piVar4;
-    } while ((int)piVar4 < ((int)&g_radix.lf_raw[0x400800]));
-    if (0 < g_radix.unk_0000) {
-      do {
-        piVar3 = &g_radix.unk_100004 + iVar2;
-        iVar2 = iVar2 + 1;
-        uVar5 = (uint)(&g_radix.unk_200004)[*piVar3] >> ((char)iVar1 * '\b' & 0x1fU) & 0xff;
-        (&g_radix.unk_0004)[(&g_radix.unk_400404)[uVar5]] = *piVar3;
-        (&g_radix.unk_400404)[uVar5] = (&g_radix.unk_400404)[uVar5] + 1;
-      } while (iVar2 < g_radix.unk_0000);
-    }
-    iVar1 = iVar1 + 1;
-  } while (iVar1 < 4);
-  (&g_radix.unk_0004)[g_radix.unk_0000] = -1;
-  return;
-}
-#undef g_radix
-#undef memset
-
-/* ---------------------------------------------------------------- 0xad70 */
-#define DAT_012bd6aa (*(undefined *)SR_VA(0x12bd6aa))
-#define g_mt (*(uint (*)[624])SR_VA(0x460dc0))
-#define init_genrand ((void (__cdecl *)(uint))SR_FN(0x40ad30))
-void __cdecl lf_0ad70(uint *param_1,int param_2)
-
-{
-  uint *puVar1;
-  uint uVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  
-  init_genrand(&DAT_012bd6aa);
-  iVar4 = 0;
-  iVar3 = 1;
-  if (param_2 < 0x270) {
-    iVar5 = 0x270;
-  }
-  else {
-    iVar5 = param_2;
-    if (param_2 == 0) goto LAB_0040adf9;
-  }
-  do {
-    uVar2 = *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc)));
-    puVar1 = g_mt + iVar3;
-    iVar3 = iVar3 + 1;
-    *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc))) =
-         ((uVar2 >> 0x1e ^ uVar2) * 0x19660d ^ *puVar1) + param_1[iVar4] + iVar4;
-    iVar4 = iVar4 + 1;
-    if (0x26f < iVar3) {
-      iVar3 = 1;
-    }
-    if (param_2 <= iVar4) {
-      iVar4 = 0;
-    }
-    iVar5 = iVar5 + -1;
-  } while (iVar5 != 0);
-LAB_0040adf9:
-  iVar4 = 0x26f;
-  do {
-    uVar2 = *(uint *)(iVar3 * 4 + ((int)SR_VA(0x460dbc)));
-    g_mt[iVar3] = ((uVar2 >> 0x1e ^ uVar2) * 0x5d588b65 ^ g_mt[iVar3]) - iVar3;
-    iVar3 = iVar3 + 1;
-    if (0x26f < iVar3) {
-      iVar3 = 1;
-    }
-    iVar4 = iVar4 + -1;
-  } while (iVar4 != 0);
-  g_mt[0] = 0x80000000;
-  return;
-}
-#undef DAT_012bd6aa
-#undef g_mt
-#undef init_genrand
-
 /* ---------------------------------------------------------------- 0xb040 */
 #define g_objecttype (*(ObjectType (*)[128])SR_VA(0xb051bc0))
 void __cdecl lf_0b040(int param_1,undefined4 param_2,undefined4 param_3,undefined4 param_4,undefined4 param_5)
@@ -4065,176 +3919,6 @@ void __cdecl lf_0b4a0(void)
 #undef g_sysinfo
 #undef QueryPerformanceFrequency
 #undef local_8
-
-/* ---------------------------------------------------------------- 0xb540 */
-#define g_timerlist (*(TimerList *)SR_VA(0x12e81c60))
-void __cdecl lf_0b540(void)
-
-{
-  g_timerlist.packetbuild = 0x40;
-  g_timerlist.humansim = 0x41;
-  g_timerlist.objectsim = 0x42;
-  g_timerlist.bondtest = 0x43;
-  g_timerlist.bondsim = 0x44;
-  g_timerlist.bondsetup = 0x45;
-  g_timerlist.bondsetupcopy = 0x46;
-  g_timerlist.bondsetuphuman = 0x47;
-  g_timerlist.bondloopcopy = 0x48;
-  g_timerlist.bondhuman = 0x49;
-  g_timerlist.bondwheelsim = 0x4a;
-  g_timerlist.bondpartpart = 0x4b;
-  g_timerlist.bondbodybody = 0x4c;
-  g_timerlist.bondbodyrotbody = 0x4d;
-  g_timerlist.bondwheelcollevel = 0x4e;
-  g_timerlist.bondbodyitem = 0x4f;
-  g_timerlist.bondbodylevel = 0x50;
-  g_timerlist.unk_0004 = 0x51;
-  g_timerlist.unk_0008 = 0x52;
-  g_timerlist.unk_000c = 0x53;
-  g_timerlist.unk_0010 = 0x54;
-  g_timerlist.unk_0014 = 0x55;
-  g_timerlist.unk_0018 = 0x56;
-  g_timerlist.unk_0020 = 0x57;
-  g_timerlist.unk_0024 = 0x58;
-  g_timerlist.unk_0028 = 0x59;
-  g_timerlist.unk_001c = 0x5a;
-  g_timerlist.unk_002c = 0x5b;
-  g_timerlist.unk_0030 = 0x5c;
-  g_timerlist.unk_0034 = 0x5d;
-  g_timerlist.unk_0038 = 0x5e;
-  g_timerlist.unk_003c = 0x5f;
-  g_timerlist.unk_0040 = 0x60;
-  g_timerlist.unk_0044 = 0x61;
-  g_timerlist.unk_0048 = 0x62;
-  g_timerlist.unk_004c = 99;
-  g_timerlist.unk_0050 = 100;
-  g_timerlist.unk_0000 = 0x65;
-  return;
-}
-#undef g_timerlist
-
-/* ---------------------------------------------------------------- 0xd3a0 */
-#define g_filelist (*(FileList *)SR_VA(0xe619200))
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define LAB_0040d320 (*(undefined *)SR_FN(0x40d320))
-#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(20, "MSVCR100.DLL", "qsort"))
-#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(21, "MSVCR100.DLL", "_findclose"))
-#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(22, "MSVCR100.DLL", "_findnext64i32"))
-#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(23, "MSVCR100.DLL", "_findfirst64i32"))
-#define __security_check_cookie(x) ((void)0)
-#define local_12c (*(_finddata64i32_t *)(lf_frame + 0x14))
-#define local_4 (*(uint *)(lf_frame + 0x13c))
-void __cdecl lf_0d3a0(char *param_1,int param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x140];
-  char cVar1;
-  int iVar2;
-  intptr_t _FindHandle;
-  intptr_t iVar3;
-  char *pcVar4;
-  char *pcVar5;
-  int iVar6;
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)&local_12c;
-  _FindHandle = _findfirst64i32(param_1,&local_12c);
-  iVar6 = param_2 * 0x10004;
-  (&g_filelist.unk_0000)[param_2 * 0x4001] = 0;
-  iVar3 = _FindHandle;
-  do {
-    if ((iVar3 == -1) || (iVar2 = (&g_filelist.unk_0000)[param_2 * 0x4001], 0x3ff < iVar2)) {
-      *(undefined1 *)((&g_filelist.unk_0000)[param_2 * 0x4001] * 0x40 + ((int)&g_filelist.unk_0004) + iVar6) = 0;
-      _findclose(_FindHandle);
-      qsort(&g_filelist.unk_0004 + iVar6,(&g_filelist.unk_0000)[param_2 * 0x4001],0x40,
-            (_PtFuncCompare *)&LAB_0040d320);
-      return;
-    }
-    if (param_3 == 0) {
-      if (((byte)local_12c.attrib & 0x10) == 0) {
-        pcVar4 = local_12c.name;
-        pcVar5 = (char *)(iVar2 * 0x40 + ((int)&g_filelist.unk_0004) + iVar6);
-        do {
-          cVar1 = *pcVar4;
-          *pcVar5 = cVar1;
-          pcVar4 = pcVar4 + 1;
-          pcVar5 = pcVar5 + 1;
-        } while (cVar1 != '\0');
-LAB_0040d46c:
-        (&g_filelist.unk_0000)[param_2 * 0x4001] = (&g_filelist.unk_0000)[param_2 * 0x4001] + 1;
-      }
-    }
-    else if ((((byte)local_12c.attrib & 0x10) != 0) && (local_12c.name[0] != '.')) {
-      pcVar4 = local_12c.name;
-      pcVar5 = (char *)(iVar2 * 0x40 + ((int)&g_filelist.unk_0004) + iVar6);
-      do {
-        cVar1 = *pcVar4;
-        *pcVar5 = cVar1;
-        pcVar4 = pcVar4 + 1;
-        pcVar5 = pcVar5 + 1;
-      } while (cVar1 != '\0');
-      goto LAB_0040d46c;
-    }
-    iVar3 = _findnext64i32(_FindHandle,&local_12c);
-  } while( true );
-}
-#undef g_filelist
-#undef DAT_00460d18
-#undef LAB_0040d320
-#undef qsort
-#undef _findclose
-#undef _findnext64i32
-#undef _findfirst64i32
-#undef __security_check_cookie
-#undef local_12c
-#undef local_4
-
-/* ---------------------------------------------------------------- 0xd680 */
-#define g_filelist (*(FileList *)SR_VA(0xe619200))
-void __cdecl lf_0d680(int param_1)
-
-{
-  char cVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  
-  iVar5 = param_1 * 0x10004;
-  iVar3 = 0;
-  if (0 < (&g_filelist.unk_0000)[param_1 * 0x4001]) {
-    iVar4 = iVar5 + ((int)&g_filelist.unk_0004);
-    do {
-      iVar2 = 0;
-      do {
-        if ((*(char *)(iVar4 + iVar2) == '\0') || (*(char *)(iVar4 + iVar2) == '.')) break;
-        cVar1 = *(char *)(iVar5 + ((int)&g_filelist.unk_0005) + iVar2);
-        if ((cVar1 == '\0') || (cVar1 == '.')) {
-          iVar2 = iVar2 + 1;
-          break;
-        }
-        cVar1 = *(char *)(iVar5 + ((int)&g_filelist.unk_0006) + iVar2);
-        if ((cVar1 == '\0') || (cVar1 == '.')) {
-          iVar2 = iVar2 + 2;
-          break;
-        }
-        cVar1 = *(char *)(iVar5 + ((int)&g_filelist.unk_0007) + iVar2);
-        if ((cVar1 == '\0') || (cVar1 == '.')) {
-          iVar2 = iVar2 + 3;
-          break;
-        }
-        iVar2 = iVar2 + 4;
-      } while (iVar2 < 0x40);
-      *(undefined1 *)(iVar5 + ((int)&g_filelist.unk_0004) + iVar2) = 0;
-      iVar3 = iVar3 + 1;
-      iVar5 = iVar5 + 0x40;
-      iVar4 = iVar4 + 0x40;
-    } while (iVar3 < (&g_filelist.unk_0000)[param_1 * 0x4001]);
-  }
-  return;
-}
-#undef g_filelist
 
 /* ---------------------------------------------------------------- 0xded0 */
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
@@ -21541,7 +21225,7 @@ void __cdecl lf_502a0(void)
 #define DAT_0045f330 (*(undefined1 *)SR_VA(0x45f330))
 #define DAT_12e80c44 (*(undefined *)SR_VA(0x12e80c44))
 #define g_building (*(Building *)SR_VA(0x2165b80))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(24, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(20, "MSVCR100.DLL", "srand"))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_FN(0x401850))
 #define building_setupbuild ((void (__cdecl *)(void))SR_FN(0x403d70))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x4041c0))
@@ -23606,9 +23290,9 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define _DAT_0f837964 (*(float *)SR_VA(0xf837964))
 #define _DAT_0f837968 (*(undefined4 *)SR_VA(0xf837968))
 #define _DAT_0f83796c (*(undefined4 *)SR_VA(0xf83796c))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(25, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(21, "MSVCR100.DLL", "_time64"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(24, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(20, "MSVCR100.DLL", "srand"))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_FN(0x401080))
 #define economy_carmarket ((void (__cdecl *)(void))SR_FN(0x405700))
 #define economy_gunmarket ((void (__cdecl *)(void))SR_FN(0x405870))

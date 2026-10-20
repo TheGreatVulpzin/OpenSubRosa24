@@ -13,6 +13,9 @@
 /* The end of a timer: adds the cycles since starttimer to the total, in cycles and in ms. */
 void stoptimer(int timer);
 
+/* Gives each profiler section its timer index, from 0x40. */
+void setuptimers(void);
+
 /* Give a profiler timer its name and clear its total. */
 static __inline void nametimer(int timer, const char *name)
 {

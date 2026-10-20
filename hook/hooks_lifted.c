@@ -1976,12 +1976,12 @@ __declspec(naked) static void th_080b0(void)
 }
 static uint8_t expect_080b0[5] = { 0xa1, 0x20, 0x92, 0x69, 0x0e };
 
-void __cdecl lf_08880(char * param_1, int param_2);
+void __cdecl sprintf_comma(char * param_1, int param_2);
 static void (__cdecl *orig_08880)(char *, int);
 static SvVerify v_08880 = { "sprintf_comma", -1 };
 static void __cdecl hk_08880(char * param_1, int param_2)
 {
-    SV_HOOK_VOID(v_08880, lf_08880(param_1, param_2), orig_08880(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_08880, sprintf_comma(param_1, param_2), orig_08880(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_08880(void)
 {
@@ -2740,12 +2740,12 @@ __declspec(naked) static void th_0ab20(void)
 }
 static uint8_t expect_0ab20[5] = { 0x83, 0xec, 0x0c, 0x53, 0x55 };
 
-void __cdecl lf_0ac00(void);
+void __cdecl csradixsort(void);
 static void (__cdecl *orig_0ac00)(void);
 static SvVerify v_0ac00 = { "csradixsort", -1 };
 static void __cdecl hk_0ac00(void)
 {
-    SV_HOOK_VOID(v_0ac00, lf_0ac00(), orig_0ac00(), NULL);
+    SV_HOOK_VOID(v_0ac00, csradixsort(), orig_0ac00(), NULL);
 }
 __declspec(naked) static void th_0ac00(void)
 {
@@ -2820,12 +2820,12 @@ __declspec(naked) static void th_0ad30(void)
 }
 static uint8_t expect_0ad30[9] = { 0x8b, 0x44, 0x24, 0x04, 0xa3, 0xc0, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_0ad70(uint * param_1, int param_2);
+void __cdecl init_by_array(uint * param_1, int param_2);
 static void (__cdecl *orig_0ad70)(uint *, int);
 static SvVerify v_0ad70 = { "init_by_array", -1 };
 static void __cdecl hk_0ad70(uint * param_1, int param_2)
 {
-    SV_HOOK_VOID(v_0ad70, lf_0ad70(param_1, param_2), orig_0ad70(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0ad70, init_by_array(param_1, param_2), orig_0ad70(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0ad70(void)
 {
@@ -3077,12 +3077,12 @@ __declspec(naked) static void th_0b3f0(void)
 }
 static uint8_t expect_0b3f0[7] = { 0x83, 0xec, 0x0c, 0x8d, 0x44, 0x24, 0x04 };
 
-void __cdecl lf_0b540(void);
+void __cdecl setuptimers(void);
 static void (__cdecl *orig_0b540)(void);
 static SvVerify v_0b540 = { "setuptimers", -1 };
 static void __cdecl hk_0b540(void)
 {
-    SV_HOOK_VOID(v_0b540, lf_0b540(), orig_0b540(), NULL);
+    SV_HOOK_VOID(v_0b540, setuptimers(), orig_0b540(), NULL);
 }
 __declspec(naked) static void th_0b540(void)
 {
@@ -4383,12 +4383,12 @@ __declspec(naked) static void th_0d2a0(void)
 }
 static uint8_t expect_0d2a0[5] = { 0xa1, 0x60, 0x2d, 0x12, 0x14 };
 
-void __cdecl lf_0d680(int param_1);
+void __cdecl removeflieextentions(int param_1);
 static void (__cdecl *orig_0d680)(int);
 static SvVerify v_0d680 = { "removeflieextentions", -1 };
 static void __cdecl hk_0d680(int param_1)
 {
-    SV_HOOK_VOID(v_0d680, lf_0d680(param_1), orig_0d680(param_1), NULL);
+    SV_HOOK_VOID(v_0d680, removeflieextentions(param_1), orig_0d680(param_1), NULL);
 }
 __declspec(naked) static void th_0d680(void)
 {

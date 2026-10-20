@@ -17,20 +17,7 @@ void __cdecl sr_loadaccountsserver(void);
 void __cdecl sr_dedicatedserverloop(void);
 void __cdecl sr_getpaths(void);
 
-/* The qsort comparator of listfiles (RVA 0xd320, no name in the symbols). It compares two
- * names as unsigned bytes and returns -1, 0 or 1, like the original (SBB EAX, EAX). */
-static int __cdecl sr_cmp_names(const void *a, const void *b)
-{
-    const unsigned char *p = a, *q = b;
-    for (;;) {
-        if (*p != *q)
-            return *p < *q ? -1 : 1;
-        if (*p == 0)
-            return 0;
-        p++;
-        q++;
-    }
-}
+int __cdecl comparestrings(const void *a, const void *b);
 
 static const struct {
     uint32_t rva;
@@ -40,7 +27,7 @@ static const struct {
     { 0x6660, (void *)sr_createevent_updatedoor },
     { 0x6760, (void *)sr_createevent_updatemission },
     { 0xa580, (void *)sr_fixplayername },
-    { 0xd320, (void *)sr_cmp_names },
+    { 0xd320, (void *)comparestrings },
     { 0xe2e0, (void *)sr_loadaccountsserver },
     { 0x5c8d0, (void *)sr_dedicatedserverloop },
     { 0x5cd10, (void *)sr_getpaths },

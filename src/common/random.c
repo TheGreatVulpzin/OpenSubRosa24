@@ -111,3 +111,34 @@ float serpnoise2d(float x, float y, uint32_t mask)
     sy = (float)(fy * fy * (3.0 - fy * 2.0));
     return (float)((1.0 - sy) * (float)((1.0 - sx) * n00 + n10 * sx) + (float)(sx * n11 + n01 * (1.0 - sx)) * sy);
 }
+
+/* Seeds the generator from an array of numbers. The array is read again from the start when
+ * it is shorter than the 624 words of the state. */
+void init_by_array(const uint32_t *key, int length)
+{
+    uint32_t *mt = g_mt;
+    int i = 1, j = 0, k;
+
+    init_genrand(19650218u);
+    k = MT_N > length ? MT_N : length;
+    for (; k; k--) {
+        mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >> 30)) * 1664525u)) + key[j] + (uint32_t)j;
+        i++;
+        j++;
+        if (i >= MT_N) {
+            mt[0] = mt[MT_N - 1];
+            i = 1;
+        }
+        if (j >= length)
+            j = 0;
+    }
+    for (k = MT_N - 1; k; k--) {
+        mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >> 30)) * 1566083941u)) - (uint32_t)i;
+        i++;
+        if (i >= MT_N) {
+            mt[0] = mt[MT_N - 1];
+            i = 1;
+        }
+    }
+    mt[0] = MT_UPPER;
+}
