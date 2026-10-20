@@ -5,7 +5,7 @@ void lf_01010(void);
 void lf_01080(void);
 void lf_011d0(void);
 void lf_012f0(void);
-void lf_01420(void);
+void server_writelogfile(void);
 void angulardistance(void);
 void lf_01610(void);
 void area_getblock(void);
@@ -32,8 +32,8 @@ void lf_04450(void);
 void setupbullettypes(void);
 void lf_04bb0(void);
 void packunitvector(void);
-void lf_05280(void);
-void lf_05350(void);
+void debug_resetlogfile(void);
+void systemtimer(void);
 void lf_053a0(void);
 void lf_05700(void);
 void lf_05870(void);
@@ -84,10 +84,10 @@ void genrand_int32(void);
 void lf_0b040(void);
 void lf_0b0b0(void);
 void lf_0b150(void);
-void lf_0b230(void);
-void lf_0b300(void);
+void gettimeofday(void);
+void setcpuaffinity(void);
 void stoptimer(void);
-void lf_0b4a0(void);
+void getcpufrequency(void);
 void setuptimers(void);
 void addvoice(void);
 void dotproduct(void);
@@ -177,7 +177,7 @@ void createevent_sound(void);
 void createevent_updateblock_quad(void);
 void packevent(void);
 void unpackevent(void);
-void lf_18570(void);
+void testtimer(void);
 void lf_185a0(void);
 void deletehuman(void);
 void human_calculatelegangles(void);
@@ -316,14 +316,14 @@ void lf_5aa60(void);
 void lf_5ae70(void);
 void lf_5b9b0(void);
 void lf_5c580(void);
-void lf_5cf70(void);
+void __aulldiv(void);
 
 const LfEntry lf_table[] = {
     { "account_nameexists", 0x1010, (void *)lf_01010, 1, LF_RET_INT, 4, "p", 0 },
     { "saveaccountsserver", 0x1080, (void *)lf_01080, 0, LF_RET_VOID, 4, "", 1 },
     { "saveaccountsclient", 0x11d0, (void *)lf_011d0, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsclient", 0x12f0, (void *)lf_012f0, 0, LF_RET_VOID, 4, "", 1 },
-    { "server_writelogfile", 0x1420, (void *)lf_01420, 0, LF_RET_VOID, 4, "", 1 },
+    { "server_writelogfile", 0x1420, (void *)server_writelogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "angulardistance", 0x1540, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "ai_car_nextwaypoint", 0x1610, (void *)lf_01610, 1, LF_RET_VOID, 4, "v", 0 },
     { "area_getblock", 0x1850, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -350,8 +350,8 @@ const LfEntry lf_table[] = {
     { "setupbullettypes", 0x4a10, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x4bb0, (void *)lf_04bb0, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "packunitvector", 0x5160, (void *)packunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "debug_resetlogfile", 0x5280, (void *)lf_05280, 0, LF_RET_VOID, 4, "", 1 },
-    { "systemtimer", 0x5350, (void *)lf_05350, 0, LF_RET_INT, 4, "", 1 },
+    { "debug_resetlogfile", 0x5280, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
+    { "systemtimer", 0x5350, (void *)systemtimer, 0, LF_RET_INT, 4, "", 1 },
     { "economysimulation", 0x53a0, (void *)lf_053a0, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_carmarket", 0x5700, (void *)lf_05700, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_gunmarket", 0x5870, (void *)lf_05870, 0, LF_RET_VOID, 4, "", 0 },
@@ -402,10 +402,10 @@ const LfEntry lf_table[] = {
     { "objecttype_addparticle", 0xb040, (void *)lf_0b040, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "objecttype_addbond", 0xb0b0, (void *)lf_0b0b0, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "objecttype_addface", 0xb150, (void *)lf_0b150, 8, LF_RET_VOID, 4, "vvvvvvvv", 0 },
-    { "gettimeofday", 0xb230, (void *)lf_0b230, 2, LF_RET_INT, 4, "pp", 1 },
-    { "setcpuaffinity", 0xb300, (void *)lf_0b300, 0, LF_RET_VOID, 4, "", 1 },
+    { "gettimeofday", 0xb230, (void *)gettimeofday, 2, LF_RET_INT, 4, "pp", 1 },
+    { "setcpuaffinity", 0xb300, (void *)setcpuaffinity, 0, LF_RET_VOID, 4, "", 1 },
     { "stoptimer", 0xb3f0, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
-    { "getcpufrequency", 0xb4a0, (void *)lf_0b4a0, 0, LF_RET_VOID, 4, "", 1 },
+    { "getcpufrequency", 0xb4a0, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "setuptimers", 0xb540, (void *)setuptimers, 0, LF_RET_VOID, 4, "", 0 },
     { "addvoice", 0xb6d0, (void *)addvoice, 2, LF_RET_INT, 4, "vv", 0 },
     { "dotproduct", 0xb850, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
@@ -495,7 +495,7 @@ const LfEntry lf_table[] = {
     { "createevent_updateblock_quad", 0x16e30, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x16f10, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x17b60, (void *)unpackevent, 1, LF_RET_VOID, 4, "v", 0 },
-    { "testtimer", 0x18570, (void *)lf_18570, 0, LF_RET_INT64, 4, "", 1 },
+    { "testtimer", 0x18570, (void *)testtimer, 0, LF_RET_INT64, 4, "", 1 },
     { "newspaper_load", 0x185a0, (void *)lf_185a0, 0, LF_RET_VOID, 4, "", 1 },
     { "deletehuman", 0x18720, (void *)deletehuman, 1, LF_RET_VOID, 4, "p", 0 },
     { "human_calculatelegangles", 0x19060, (void *)human_calculatelegangles, 1, LF_RET_VOID, 4, "v", 0 },
@@ -634,6 +634,6 @@ const LfEntry lf_table[] = {
     { "logicsimulation_round", 0x5ae70, (void *)lf_5ae70, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation_world", 0x5b9b0, (void *)lf_5b9b0, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation", 0x5c580, (void *)lf_5c580, 0, LF_RET_VOID, 4, "", 1 },
-    { "__aulldiv", 0x5cf70, (void *)lf_5cf70, 4, LF_RET_INT64, 4, "vvvv", 0 },
+    { "__aulldiv", 0x5cf70, (void *)__aulldiv, 4, LF_RET_INT64, 4, "vvvv", 0 },
 };
 const int lf_table_count = 316;

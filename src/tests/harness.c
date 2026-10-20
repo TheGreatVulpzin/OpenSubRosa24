@@ -927,6 +927,8 @@ static const char *known_difference(const char *name)
     static const char *const known[][2] = {
         /* sscanf("%d") finds no number: the original returns an uninitialized stack value. */
         { "getint", "returns an uninitialized local when there is no number" },
+        /* The original ends with _ftol2, which gives a 32-bit result and leaves EDX unset. */
+        { "testtimer", "EDX is not set by the original" },
         /* x87 precision: the error grows through the computation (docs/lift.md, "Float precision"). */
         { "buildsomeshit", "x87 precision" },
     };

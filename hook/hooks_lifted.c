@@ -11743,12 +11743,12 @@ __declspec(naked) static void th_5aa60(void)
 }
 static uint8_t expect_5aa60[8] = { 0x83, 0xec, 0x24, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-undefined8 __cdecl lf_5cf70(uint param_1, uint param_2, uint param_3, uint param_4);
+undefined8 __cdecl __aulldiv(uint param_1, uint param_2, uint param_3, uint param_4);
 static undefined8 (__cdecl *orig_5cf70)(uint, uint, uint, uint);
 static SvVerify v_5cf70 = { "__aulldiv", -1 };
 static undefined8 __cdecl hk_5cf70(uint param_1, uint param_2, uint param_3, uint param_4)
 {
-    SV_HOOK_RET(undefined8, v_5cf70, lf_5cf70(param_1, param_2, param_3, param_4), orig_5cf70(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(undefined8, v_5cf70, __aulldiv(param_1, param_2, param_3, param_4), orig_5cf70(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_5cf70(void)
 {
