@@ -30,5 +30,40 @@ uint32_t os_inet_addr(const char *text);
 void os_sleep(unsigned long ms);
 
 int os_rand(void);
+void os_srand(unsigned seed);
+int64_t os_time64(int64_t *out);
+
+/* Files of the CRT of the game. FILE * is a void *. */
+void *os_fopen(const char *path, const char *mode);
+int os_fclose(void *file);
+int os_fgetc(void *file);
+int os_chdir(const char *path);
+
+/* fprintf and sscanf take a list of arguments, so a wrapper cannot pass them on. The
+ * function returns the import and the macro calls it: os_fprintf(file, "%d", value). */
+typedef int(__cdecl *os_fprintf_fn)(void *file, const char *format, ...);
+typedef int(__cdecl *os_sscanf_fn)(const char *text, const char *format, ...);
+os_fprintf_fn os_fprintf_import(void);
+os_sscanf_fn os_sscanf_import(void);
+#define os_fprintf (os_fprintf_import())
+#define os_sscanf (os_sscanf_import())
+
+/* File search of the CRT. data is a _finddata64i32_t. */
+intptr_t os_findfirst64i32(const char *pattern, void *data);
+int os_findnext64i32(intptr_t handle, void *data);
+int os_findclose(intptr_t handle);
+
+/* Time zone of the CRT. */
+void os_tzset(void);
+long *os_timezone(void);
+int *os_daylight(void);
+
+/* KERNEL32: the performance counter, the clock and the process affinity. */
+int os_qpc(int64_t *count);
+int os_qpf(int64_t *frequency);
+void os_getsystemtimeasfiletime(uint32_t *filetime);
+void *os_getcurrentprocess(void);
+int os_getprocessaffinitymask(void *process, uintptr_t *process_mask, uintptr_t *system_mask);
+int os_setprocessaffinitymask(void *process, uintptr_t mask);
 
 #endif /* SR_OS_H */

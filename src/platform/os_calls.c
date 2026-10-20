@@ -158,3 +158,167 @@ void os_sleep(unsigned long ms)
         *(void **)&call = sr_import("MSVCR100.DLL", "_sleep");
     call(ms);
 }
+
+/* Files of the CRT. FILE * is a void * here: the CRT of the game owns the FILE. */
+void *os_fopen(const char *path, const char *mode)
+{
+    static void *(__cdecl * call)(const char *, const char *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fopen");
+    return call(path, mode);
+}
+
+int os_fclose(void *file)
+{
+    static int(__cdecl * call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fclose");
+    return call(file);
+}
+
+int os_fgetc(void *file)
+{
+    static int(__cdecl * call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fgetc");
+    return call(file);
+}
+
+/* fprintf and sscanf take a list of arguments that a wrapper cannot pass on. These two
+ * functions return the import, and sr_os.h makes a macro of each. */
+os_fprintf_fn os_fprintf_import(void)
+{
+    static os_fprintf_fn call;
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fprintf");
+    return call;
+}
+
+os_sscanf_fn os_sscanf_import(void)
+{
+    static os_sscanf_fn call;
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "sscanf");
+    return call;
+}
+
+int os_chdir(const char *path)
+{
+    static int(__cdecl * call)(const char *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_chdir");
+    return call(path);
+}
+
+int64_t os_time64(int64_t *out)
+{
+    static int64_t(__cdecl * call)(int64_t *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_time64");
+    return call(out);
+}
+
+void os_srand(unsigned seed)
+{
+    static void(__cdecl * call)(unsigned);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "srand");
+    call(seed);
+}
+
+intptr_t os_findfirst64i32(const char *pattern, void *data)
+{
+    static intptr_t(__cdecl * call)(const char *, void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_findfirst64i32");
+    return call(pattern, data);
+}
+
+int os_findnext64i32(intptr_t handle, void *data)
+{
+    static int(__cdecl * call)(intptr_t, void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_findnext64i32");
+    return call(handle, data);
+}
+
+int os_findclose(intptr_t handle)
+{
+    static int(__cdecl * call)(intptr_t);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_findclose");
+    return call(handle);
+}
+
+void os_tzset(void)
+{
+    static void(__cdecl * call)(void);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "_tzset");
+    call();
+}
+
+long *os_timezone(void)
+{
+    static long *(__cdecl * call)(void);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "__timezone");
+    return call();
+}
+
+int *os_daylight(void)
+{
+    static int *(__cdecl * call)(void);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "__daylight");
+    return call();
+}
+
+/* Time and process calls of KERNEL32. */
+int os_qpc(int64_t *count)
+{
+    static int(__stdcall * call)(int64_t *);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "QueryPerformanceCounter");
+    return call(count);
+}
+
+int os_qpf(int64_t *frequency)
+{
+    static int(__stdcall * call)(int64_t *);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "QueryPerformanceFrequency");
+    return call(frequency);
+}
+
+void os_getsystemtimeasfiletime(uint32_t *filetime)
+{
+    static void(__stdcall * call)(uint32_t *);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "GetSystemTimeAsFileTime");
+    call(filetime);
+}
+
+void *os_getcurrentprocess(void)
+{
+    static void *(__stdcall * call)(void);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "GetCurrentProcess");
+    return call();
+}
+
+int os_getprocessaffinitymask(void *process, uintptr_t *process_mask, uintptr_t *system_mask)
+{
+    static int(__stdcall * call)(void *, uintptr_t *, uintptr_t *);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "GetProcessAffinityMask");
+    return call(process, process_mask, system_mask);
+}
+
+int os_setprocessaffinitymask(void *process, uintptr_t mask)
+{
+    static int(__stdcall * call)(void *, uintptr_t);
+    if (!call)
+        *(void **)&call = sr_import("KERNEL32.dll", "SetProcessAffinityMask");
+    return call(process, mask);
+}
