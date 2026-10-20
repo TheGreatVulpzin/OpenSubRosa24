@@ -47,3 +47,14 @@ These change only what happens with invalid client input. The recordings have on
 | Browser (Emscripten / WASM) | both | | WebGL2 render. The browser cannot use UDP: the server needs a WebSocket or WebRTC DataChannel transport next to UDP. The player loads their own copy of the game files (file picker + IndexedDB), no hosted assets. |
 | Light QOL behind options (option off = original) | OpenSubRosa | | |
 | Client features that need a new protocol | SubVulpes | | The SubVulpes server keeps the original protocol for original clients. |
+
+## Security fixes for the network code (found in group 5)
+
+Each one changes behavior only for invalid input from a client or an admin. The list with the reason of each is in `docs/protocol.md`, section 12, item 15.
+
+- Mask `num_actions` and the voice frame index to 6 bits in `serverrecv` (`src/net/server.c`).
+- Ignore a type 4 packet from a connection with `player_id` -1.
+- Test `it < 0x400` before the write in `/phone` (`src/net/commands.c`).
+- Stop the kick list at 41368 entries.
+- Link `hook/netguard.c` into the standalone server, or move its checks into `serverrecv`.
+
