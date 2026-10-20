@@ -40,3 +40,4 @@ rva,name,count,evidence
 0x13c22d24,numofstaticbonds,,"bondsimulation2 sets numofbonds to it at the end (the Linux 0.24c names it); two more functions write it"
 0x1ca5a30,numofdynamicbonds,,"bondsimulation2 keeps numofbonds in it before the reset to numofstaticbonds (the Linux 0.24c names it)"
 0x9c1d8c0,landscape,,"the Linux 0.24c name; an origin vec3, then 2049 x 2049 float heights 8 units apart (sphereintersectlandscape, createlandscape)"
+0x17529a60,config,,"loadsaveoptions: 9 ints of client window settings; the Linux 0.24c and Mac symbol config"

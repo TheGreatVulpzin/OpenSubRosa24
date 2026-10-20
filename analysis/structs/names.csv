@@ -119,7 +119,7 @@ account,0x8,id,uint32_t,2,global account: key(+0) and n(+4) before the records; 
 account,0x10,name,char,32,saveaccountsserver: 32 bytes
 account,0x30,name_locked,int,,createaccount writes 5
 account,0x34,money,int,,createaccount writes 1000
-account,0x38,unk_30,int,,saveaccountsserver
+account,0x38,playtime,int,,"logicsimulation_world adds 5 for each active player and each of its humans; server_writelogfile writes it divided by 10. offset = field + 8"
 account,0x3c,look_a,int,,createaccount: rand() % 3
 account,0x40,look_b,int,,createaccount: rand() & 7
 account,0x44,look_c,int,,createaccount: rand() & 3
@@ -447,8 +447,8 @@ game,0xb0,team0_doors,DoorBlock,2,"eventsimulation: the doors of the team record
 speex,0x10000,voice_ring,VoiceRing,256,"serverrecv type 4 writes the voice frames of each player; calculateplayervoice and serversend read them"
 bsdsocket,0x58,port,int16_t,,"disablesocket: option.port (16 bits), then the port of the address in network order"
 radix,0x0,count,int,,"packobjectpacket: the number of entries; csradixsort sorts keys and values"
-radix,0x4,order,int,524288,"csradixsort: the sorted order of the entries"
-radix,0x200004,keys,int,262144,"packobjectpacket: the score of each entry"
+radix,0x4,order,int,262144,"csradixsort: the sorted order of the entries, 0..count-1 at the start of the sort"
+radix,0x200004,keys,uint32_t,262144,"packobjectpacket: the score of each entry; csradixsort reads each key as unsigned"
 radix,0x300004,values,int,262144,"packobjectpacket: the id of each entry"
 object,0x5ee0,rpm_net,int,,"packobjectpacket: 13 bits; objectsimulation adds or subtracts 10 and resets it to 2000 (likely the engine sound)"
 game,0xc,round_mode,int,,"serversend: 4 bits in the new game packet"
@@ -474,3 +474,67 @@ object,0x8210,net_tick,int,,"unpackobjectpacket: the tick of the last state of t
 object,0x8214,net_pos,vec3,,"unpackobjectpacket: the place at net_tick"
 object,0x8220,net_tick_prev,int,,"unpackobjectpacket: the tick of the state before"
 object,0x8224,net_pos_prev,vec3,,"unpackobjectpacket: the place at net_tick_prev"
+debug,0x50248,affinity_set,int,,setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds
+debug,0x5024c,affinity_before,int,,setcpuaffinity writes the process mask plus 10000
+debug,0x50250,affinity_after,int,,setcpuaffinity writes the process mask plus 10000 after the change
+debug,0x52284,log_text,char,256,dedicatedserverloop writes the physics line with sprintf
+debug,0x52384,log_path,char,64,debug_resetlogfile writes the file name dedlog.txt
+debug,0x523c4,log_file,void*,,debug_resetlogfile and dedicatedserverloop: FILE * of the log
+radix,0x100004,temp,int,262144,csradixsort: copy of order at the start of each pass
+radix,0x400004,bucket_count,int,256,csradixsort: the number of keys in each bucket of the pass
+radix,0x400404,bucket_offset,int,256,csradixsort: the first output index of each bucket
+parser,0x0,pos,int,,"loadtextfile writes 0; getint, getstring, cs_getline and findstring move it"
+parser,0x4,size,int,,loadtextfile: the number of bytes of the file
+parser,0x8,text,char,1048576,loadtextfile: the file bytes and a 0 at the end
+parser,0x100008,number,char,256,getint: the digits for sscanf
+parser,0x100108,file,void*,,loadtextfile: FILE * of the open file
+filelist,0x0,list,FileListSlot,8,listfiles: list number * 0x10004 bytes
+config,0x0,screenwidth,int,,"loadsaveoptions: key screenwidth=, default 1024"
+config,0x4,screenheight,int,,"loadsaveoptions: key screenheight=, default 640"
+config,0x8,colordepth,int,,"loadsaveoptions: key colordepth=, default 32"
+config,0xc,depthbits,int,,"loadsaveoptions: key depthbits=, default 24"
+config,0x10,stencilbits,int,,"loadsaveoptions: key stencilbits=, default 8"
+config,0x14,fullscreen,int,,"loadsaveoptions: key fullscreen=, default 0"
+config,0x18,sound,int,,"loadsaveoptions: key sound=, default 1"
+config,0x1c,unused_1c,int,,loadsaveoptions writes 1; no key and no reader
+config,0x20,joystick,int,,"loadsaveoptions: key joystick=, default 1"
+option,0x8,name,char,64,"loadsaveoptions: key name=, default Agent and a random number"
+option,0x48,servername,char,64,loadsaveoptions: key servername=; dedicatedserverloop copies it to the server name
+option,0xd0,unused_d0,int,,loadsaveoptions writes 2; no reader
+option,0xd4,unused_d4,int,,loadsaveoptions writes 2; no reader
+option,0xd8,soundvolume,int,,"loadsaveoptions: key soundvolume=, default 0x50"
+option,0xdc,musicvolume,int,,"loadsaveoptions: key musicvolume=, default 0x50"
+option,0x10c,invertmouse,int,,loadsaveoptions: key invertmouse=
+option,0x114,maxnumofplayers,int,,"loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128"
+option,0x118,gametype,int,,"loadsaveoptions: key gametype=, default 3"
+option,0x11c,roundtime,int,,"loadsaveoptions: key roundtime=, default 7; dedicatedserverloop clamps it to 1 to 30"
+option,0x120,setcpuaffinity,int,,loadsaveoptions: key setcpuaffinity=; no reader
+option,0x124,occlusion,int,,"loadsaveoptions: key occlusion=, default 1"
+option,0x128,voicemin,int,,"loadsaveoptions: key voicemin=, default 0x800"
+option,0x130,voiceholdtotalk,int,,"loadsaveoptions: key voiceholdtotalk=, default 1"
+option,0x134,voicekey,int,,loadsaveoptions: key voicekey=
+option,0x138,voicemb,int,,loadsaveoptions: key voicemb=
+option,0x13c,help,int,,"loadsaveoptions: key help=, default 1"
+option,0x144,voiceboost,int,,"loadsaveoptions: key voiceboost=, default 100"
+option,0x148,voiceboost_scale,float,,"loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0"
+timerlist,0x0,numoftimers,int,,"setuptimers: the next free timer index, 0x40 at the start and 0x65 at the end"
+timerlist,0x4,raycast,int,,"timer index; the code names the timer ""raycast"""
+timerlist,0x8,buildframelist,int,,"timer index; the code names the timer ""buildframelist"""
+timerlist,0xc,renderdepth,int,,"timer index; the code names the timer ""renderdepth"""
+timerlist,0x10,rendersectors,int,,"timer index; the code names the timer ""rendersectors"""
+timerlist,0x14,rendersectorshadow,int,,"timer index; the code names the timer ""rendersectorshadow"""
+timerlist,0x18,buildsectorshadow,int,,"timer index; the code names the timer ""buildsectorshadow"""
+timerlist,0x1c,rendermodels,int,,"timer index; the code names the timer ""rendermodels"""
+timerlist,0x20,renderinterior,int,,"timer index; the code names the timer ""renderinterior"""
+timerlist,0x24,renderinteriorwindows,int,,"timer index; the code names the timer ""renderinteriorwindows"""
+timerlist,0x28,renderinteriorshadow,int,,"timer index; the code names the timer ""renderinteriorshadow"""
+timerlist,0x2c,rendermodelshadow,int,,"timer index; the code names the timer ""rendermodelshadow"""
+timerlist,0x30,renderlandscape,int,,"timer index; the code names the timer ""renderlandscape"""
+timerlist,0x34,renderatmosphere,int,,"timer index; the code names the timer ""renderatmosphere"""
+timerlist,0x38,renderalpha,int,,"timer index; the code names the timer ""renderalpha"""
+timerlist,0x3c,physicssim,int,,"timer index; the code names the timer ""physicssim"""
+timerlist,0x40,buildinterior,int,,"timer index; the code names the timer ""buildinterior"""
+timerlist,0x44,optimizeinterior,int,,"timer index; the code names the timer ""optimizeinterior"""
+timerlist,0x48,setupinterior,int,,"timer index; the code names the timer ""setupinterior"""
+timerlist,0x4c,allocinterior,int,,"timer index; the code names the timer ""allocinterior"""
+timerlist,0x50,shadowinterior,int,,"timer index; the code names the timer ""shadowinterior"""

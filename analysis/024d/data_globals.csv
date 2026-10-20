@@ -33,3 +33,6 @@ rva,name,type,count,evidence
 0x204020,debugit,int,,"docs/phase4-inventory.md 3.3: debug flag, 7 reads and no write; map_regions.py gives the Linux 0.24c symbol debugit"
 0x60dc0,mt,uint32_t,624,"Mersenne Twister state: genrand_int32 reads (&mt)[mti]; map_regions.py gives the symbol mt (Linux unsigned long[624], 32-bit 0x9c0); ends before 0x61780"
 0x203dd0,bondpass,int,,"bondsimulation2 writes the number of the solver pass; objectwheelsimulation2 tests it with 0"
+0x10348524,slogfp,void*,,"server_writelogfile: FILE * of stats.txt (fopen w); Linux 0.24c symbol slogfp"
+0x61840,tzset_done,int,,"gettimeofday: _tzset runs once, then the flag is 1"
+0x204380,dedicated,int,,"dedicatedserverloop: the Linux 0.24c symbol dedicated"

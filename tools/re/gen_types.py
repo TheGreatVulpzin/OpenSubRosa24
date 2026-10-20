@@ -44,6 +44,7 @@ STRUCTS = {
     'Option': ('option', 0x150),
     'Server': ('server', 0x84),
     'Stats': ('stats', 0x8),
+    'Config': ('config', 0x24),  # the client window settings that config.txt sets
     'SysInfo': ('sysinfo', 0x418),
     'SoundList': ('soundlist', 0x13c),
     'BlockList': ('blocklist', 0x40354),
@@ -88,7 +89,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
-             'Stock': 0x14, 'VoiceRing': 0x9210}
+             'Stock': 0x14, 'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -324,8 +325,8 @@ typedef union Account { struct {
     char name[32];      /* +0x08 */
     int name_locked;    /* +0x28 not saved to the file; createaccount writes 5 */
     int money;          /* +0x2c new account: 1000 */
-    int unk_30;         /* +0x30 */
-    int look_a;         /* +0x34 rand() % 3 */
+    int playtime;       /* +0x30 logicsimulation_world adds 5 for each human; the stats file shows it divided by 10 */
+    int look_a;        /* +0x34 rand() % 3 */
     int look_b;         /* +0x38 rand() & 7 */
     int look_c;         /* +0x3c rand() & 3 */
     uint8_t unk_40[8];
@@ -384,6 +385,12 @@ typedef union Stock { struct {
     int price_int;      /* +0x0c createevent_updatestocks writes (int)price */
     int unk_10;
 }; uint8_t lf_raw[0x14]; } Stock;
+
+/* One list of file names (listfiles): up to 1024 names of 64 bytes. */
+typedef union FileListSlot { struct {
+    int count;
+    char name[1024][64];
+}; uint8_t lf_raw[0x10004]; } FileListSlot;
 
 /* The voice frames of one player (Speex.voice_ring): a ring of 64 frames that the client sends. */
 typedef union VoiceRing { struct {
@@ -449,6 +456,7 @@ SR_STATIC_ASSERT(sizeof(NetEntry) == 8, "NetEntry");
 SR_STATIC_ASSERT(sizeof(NetCandidate) == 0xc, "NetCandidate");
 SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
+SR_STATIC_ASSERT(sizeof(FileListSlot) == 0x10004, "FileListSlot");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
 SR_STATIC_ASSERT(sizeof(VoiceChannel) == 0x29228, "VoiceChannel");

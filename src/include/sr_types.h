@@ -230,8 +230,8 @@ typedef union Account { struct {
     char name[32];      /* +0x08 */
     int name_locked;    /* +0x28 not saved to the file; createaccount writes 5 */
     int money;          /* +0x2c new account: 1000 */
-    int unk_30;         /* +0x30 */
-    int look_a;         /* +0x34 rand() % 3 */
+    int playtime;       /* +0x30 logicsimulation_world adds 5 for each human; the stats file shows it divided by 10 */
+    int look_a;        /* +0x34 rand() % 3 */
     int look_b;         /* +0x38 rand() & 7 */
     int look_c;         /* +0x3c rand() & 3 */
     uint8_t unk_40[8];
@@ -290,6 +290,12 @@ typedef union Stock { struct {
     int price_int;      /* +0x0c createevent_updatestocks writes (int)price */
     int unk_10;
 }; uint8_t lf_raw[0x14]; } Stock;
+
+/* One list of file names (listfiles): up to 1024 names of 64 bytes. */
+typedef union FileListSlot { struct {
+    int count;
+    char name[1024][64];
+}; uint8_t lf_raw[0x10004]; } FileListSlot;
 
 /* The voice frames of one player (Speex.voice_ring): a ring of 64 frames that the client sends. */
 typedef union VoiceRing { struct {
@@ -355,6 +361,7 @@ SR_STATIC_ASSERT(sizeof(NetEntry) == 8, "NetEntry");
 SR_STATIC_ASSERT(sizeof(NetCandidate) == 0xc, "NetCandidate");
 SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
+SR_STATIC_ASSERT(sizeof(FileListSlot) == 0x10004, "FileListSlot");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
 SR_STATIC_ASSERT(sizeof(VoiceChannel) == 0x29228, "VoiceChannel");
@@ -1555,48 +1562,61 @@ SR_STATIC_ASSERT(offsetof(Area, chunks) == 0x568, "Area.chunks");
 typedef union Option { struct {
     int port;                            /* +0x0000 disablesocket: read as 16 bits */
     int bandwidth;                       /* +0x0004 servercycle: servermaxbytespersecond= */
-    int unk_0008;                        /* +0x0008 1 functions */
-    uint8_t pad_000c[0x3d];
-    char unk_0049;                       /* +0x0049 1 functions */
-    uint8_t pad_004a[0x2];
-    int unk_004c;                        /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 1 functions */
-    int unk_0054;                        /* +0x0054 1 functions */
-    uint8_t pad_0058[0x30];
+    char name[64];                       /* +0x0008 loadsaveoptions: key name=, default Agent and a random number */
+    char servername[64];                 /* +0x0048 loadsaveoptions: key servername=; dedicatedserverloop copies it to the server name */
     char password[50];                   /* +0x0088 server_playermessage /admin: serverpassword= */
     uint8_t pad_00ba[0xe];
     int net_on;                          /* +0x00c8 servercycle; main_loop writes 1 */
     int master_on;                       /* +0x00cc servercycle; main_loop writes 1 */
-    int unk_00d0;                        /* +0x00d0 1 functions */
-    int unk_00d4;                        /* +0x00d4 1 functions */
-    int unk_00d8;                        /* +0x00d8 1 functions */
-    int unk_00dc;                        /* +0x00dc 1 functions */
+    int unused_d0;                       /* +0x00d0 loadsaveoptions writes 2; no reader */
+    int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
+    int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
+    int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
     uint8_t pad_00e0[0x2c];
-    int unk_010c;                        /* +0x010c 1 functions */
+    int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
-    int unk_0114;                        /* +0x0114 2 functions */
-    int unk_0118;                        /* +0x0118 2 functions */
-    int unk_011c;                        /* +0x011c 2 functions */
-    int unk_0120;                        /* +0x0120 1 functions */
-    int unk_0124;                        /* +0x0124 1 functions */
-    int unk_0128;                        /* +0x0128 1 functions */
+    int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
+    int gametype;                        /* +0x0118 loadsaveoptions: key gametype=, default 3 */
+    int roundtime;                       /* +0x011c loadsaveoptions: key roundtime=, default 7; dedicatedserverloop clamps it to 1 to 30 */
+    int setcpuaffinity;                  /* +0x0120 loadsaveoptions: key setcpuaffinity=; no reader */
+    int occlusion;                       /* +0x0124 loadsaveoptions: key occlusion=, default 1 */
+    int voicemin;                        /* +0x0128 loadsaveoptions: key voicemin=, default 0x800 */
     int voicechat;                       /* +0x012c calculateplayervoice */
-    int unk_0130;                        /* +0x0130 1 functions */
-    int unk_0134;                        /* +0x0134 1 functions */
-    int unk_0138;                        /* +0x0138 1 functions */
-    int unk_013c;                        /* +0x013c 1 functions */
+    int voiceholdtotalk;                 /* +0x0130 loadsaveoptions: key voiceholdtotalk=, default 1 */
+    int voicekey;                        /* +0x0134 loadsaveoptions: key voicekey= */
+    int voicemb;                         /* +0x0138 loadsaveoptions: key voicemb= */
+    int help;                            /* +0x013c loadsaveoptions: key help=, default 1 */
     uint8_t pad_0140[0x4];
-    int unk_0144;                        /* +0x0144 1 functions */
-    float unk_0148;                      /* +0x0148 1 functions */
+    int voiceboost;                      /* +0x0144 loadsaveoptions: key voiceboost=, default 100 */
+    float voiceboost_scale;              /* +0x0148 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
     uint8_t pad_014c[0x4];
 }; uint8_t lf_raw[0x150]; } Option;
 SR_STATIC_ASSERT(sizeof(Option) == 0x150, "Option");
 SR_STATIC_ASSERT(offsetof(Option, port) == 0x0, "Option.port");
 SR_STATIC_ASSERT(offsetof(Option, bandwidth) == 0x4, "Option.bandwidth");
+SR_STATIC_ASSERT(offsetof(Option, name) == 0x8, "Option.name");
+SR_STATIC_ASSERT(offsetof(Option, servername) == 0x48, "Option.servername");
 SR_STATIC_ASSERT(offsetof(Option, password) == 0x88, "Option.password");
 SR_STATIC_ASSERT(offsetof(Option, net_on) == 0xc8, "Option.net_on");
 SR_STATIC_ASSERT(offsetof(Option, master_on) == 0xcc, "Option.master_on");
+SR_STATIC_ASSERT(offsetof(Option, unused_d0) == 0xd0, "Option.unused_d0");
+SR_STATIC_ASSERT(offsetof(Option, unused_d4) == 0xd4, "Option.unused_d4");
+SR_STATIC_ASSERT(offsetof(Option, soundvolume) == 0xd8, "Option.soundvolume");
+SR_STATIC_ASSERT(offsetof(Option, musicvolume) == 0xdc, "Option.musicvolume");
+SR_STATIC_ASSERT(offsetof(Option, invertmouse) == 0x10c, "Option.invertmouse");
+SR_STATIC_ASSERT(offsetof(Option, maxnumofplayers) == 0x114, "Option.maxnumofplayers");
+SR_STATIC_ASSERT(offsetof(Option, gametype) == 0x118, "Option.gametype");
+SR_STATIC_ASSERT(offsetof(Option, roundtime) == 0x11c, "Option.roundtime");
+SR_STATIC_ASSERT(offsetof(Option, setcpuaffinity) == 0x120, "Option.setcpuaffinity");
+SR_STATIC_ASSERT(offsetof(Option, occlusion) == 0x124, "Option.occlusion");
+SR_STATIC_ASSERT(offsetof(Option, voicemin) == 0x128, "Option.voicemin");
 SR_STATIC_ASSERT(offsetof(Option, voicechat) == 0x12c, "Option.voicechat");
+SR_STATIC_ASSERT(offsetof(Option, voiceholdtotalk) == 0x130, "Option.voiceholdtotalk");
+SR_STATIC_ASSERT(offsetof(Option, voicekey) == 0x134, "Option.voicekey");
+SR_STATIC_ASSERT(offsetof(Option, voicemb) == 0x138, "Option.voicemb");
+SR_STATIC_ASSERT(offsetof(Option, help) == 0x13c, "Option.help");
+SR_STATIC_ASSERT(offsetof(Option, voiceboost) == 0x144, "Option.voiceboost");
+SR_STATIC_ASSERT(offsetof(Option, voiceboost_scale) == 0x148, "Option.voiceboost_scale");
 
 /* server[]: record of 0x84 bytes. */
 typedef union Server { struct {
@@ -1634,6 +1654,29 @@ typedef union Stats { struct {
 SR_STATIC_ASSERT(sizeof(Stats) == 0x8, "Stats");
 SR_STATIC_ASSERT(offsetof(Stats, numofbullets) == 0x0, "Stats.numofbullets");
 SR_STATIC_ASSERT(offsetof(Stats, numofmissions) == 0x4, "Stats.numofmissions");
+
+/* config[]: record of 0x24 bytes. */
+typedef union Config { struct {
+    int screenwidth;                     /* +0x0000 loadsaveoptions: key screenwidth=, default 1024 */
+    int screenheight;                    /* +0x0004 loadsaveoptions: key screenheight=, default 640 */
+    int colordepth;                      /* +0x0008 loadsaveoptions: key colordepth=, default 32 */
+    int depthbits;                       /* +0x000c loadsaveoptions: key depthbits=, default 24 */
+    int stencilbits;                     /* +0x0010 loadsaveoptions: key stencilbits=, default 8 */
+    int fullscreen;                      /* +0x0014 loadsaveoptions: key fullscreen=, default 0 */
+    int sound;                           /* +0x0018 loadsaveoptions: key sound=, default 1 */
+    int unused_1c;                       /* +0x001c loadsaveoptions writes 1; no key and no reader */
+    int joystick;                        /* +0x0020 loadsaveoptions: key joystick=, default 1 */
+}; uint8_t lf_raw[0x24]; } Config;
+SR_STATIC_ASSERT(sizeof(Config) == 0x24, "Config");
+SR_STATIC_ASSERT(offsetof(Config, screenwidth) == 0x0, "Config.screenwidth");
+SR_STATIC_ASSERT(offsetof(Config, screenheight) == 0x4, "Config.screenheight");
+SR_STATIC_ASSERT(offsetof(Config, colordepth) == 0x8, "Config.colordepth");
+SR_STATIC_ASSERT(offsetof(Config, depthbits) == 0xc, "Config.depthbits");
+SR_STATIC_ASSERT(offsetof(Config, stencilbits) == 0x10, "Config.stencilbits");
+SR_STATIC_ASSERT(offsetof(Config, fullscreen) == 0x14, "Config.fullscreen");
+SR_STATIC_ASSERT(offsetof(Config, sound) == 0x18, "Config.sound");
+SR_STATIC_ASSERT(offsetof(Config, unused_1c) == 0x1c, "Config.unused_1c");
+SR_STATIC_ASSERT(offsetof(Config, joystick) == 0x20, "Config.joystick");
 
 /* sysinfo[]: record of 0x418 bytes. */
 typedef union SysInfo { struct {
@@ -2133,27 +2176,27 @@ SR_STATIC_ASSERT(offsetof(Intersect, face_v) == 0x80, "Intersect.face_v");
 
 /* timerlist[]: record of 0xa0 bytes. */
 typedef union TimerList { struct {
-    int unk_0000;                        /* +0x0000 1 functions */
-    int unk_0004;                        /* +0x0004 1 functions */
-    int unk_0008;                        /* +0x0008 1 functions */
-    int unk_000c;                        /* +0x000c 1 functions */
-    int unk_0010;                        /* +0x0010 1 functions */
-    int unk_0014;                        /* +0x0014 1 functions */
-    int unk_0018;                        /* +0x0018 1 functions */
-    int unk_001c;                        /* +0x001c 1 functions */
-    int unk_0020;                        /* +0x0020 1 functions */
-    int unk_0024;                        /* +0x0024 1 functions */
-    int unk_0028;                        /* +0x0028 1 functions */
-    int unk_002c;                        /* +0x002c 1 functions */
-    int unk_0030;                        /* +0x0030 1 functions */
-    int unk_0034;                        /* +0x0034 1 functions */
-    int unk_0038;                        /* +0x0038 1 functions */
-    int unk_003c;                        /* +0x003c 2 functions */
-    int unk_0040;                        /* +0x0040 1 functions */
-    int unk_0044;                        /* +0x0044 1 functions */
-    int unk_0048;                        /* +0x0048 1 functions */
-    int unk_004c;                        /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 1 functions */
+    int numoftimers;                     /* +0x0000 setuptimers: the next free timer index, 0x40 at the start and 0x65 at the end */
+    int raycast;                         /* +0x0004 timer index; the code names the timer "raycast" */
+    int buildframelist;                  /* +0x0008 timer index; the code names the timer "buildframelist" */
+    int renderdepth;                     /* +0x000c timer index; the code names the timer "renderdepth" */
+    int rendersectors;                   /* +0x0010 timer index; the code names the timer "rendersectors" */
+    int rendersectorshadow;              /* +0x0014 timer index; the code names the timer "rendersectorshadow" */
+    int buildsectorshadow;               /* +0x0018 timer index; the code names the timer "buildsectorshadow" */
+    int rendermodels;                    /* +0x001c timer index; the code names the timer "rendermodels" */
+    int renderinterior;                  /* +0x0020 timer index; the code names the timer "renderinterior" */
+    int renderinteriorwindows;           /* +0x0024 timer index; the code names the timer "renderinteriorwindows" */
+    int renderinteriorshadow;            /* +0x0028 timer index; the code names the timer "renderinteriorshadow" */
+    int rendermodelshadow;               /* +0x002c timer index; the code names the timer "rendermodelshadow" */
+    int renderlandscape;                 /* +0x0030 timer index; the code names the timer "renderlandscape" */
+    int renderatmosphere;                /* +0x0034 timer index; the code names the timer "renderatmosphere" */
+    int renderalpha;                     /* +0x0038 timer index; the code names the timer "renderalpha" */
+    int physicssim;                      /* +0x003c timer index; the code names the timer "physicssim" */
+    int buildinterior;                   /* +0x0040 timer index; the code names the timer "buildinterior" */
+    int optimizeinterior;                /* +0x0044 timer index; the code names the timer "optimizeinterior" */
+    int setupinterior;                   /* +0x0048 timer index; the code names the timer "setupinterior" */
+    int allocinterior;                   /* +0x004c timer index; the code names the timer "allocinterior" */
+    int shadowinterior;                  /* +0x0050 timer index; the code names the timer "shadowinterior" */
     int bondsim;                         /* +0x0054 timer index; the code names the timer "bondsim" */
     int bondsetup;                       /* +0x0058 timer index; the code names the timer "bondsetup" */
     int bondsetupcopy;                   /* +0x005c timer index; the code names the timer "bondsetupcopy" */
@@ -2174,6 +2217,27 @@ typedef union TimerList { struct {
     uint8_t pad_0098[0x8];
 }; uint8_t lf_raw[0xa0]; } TimerList;
 SR_STATIC_ASSERT(sizeof(TimerList) == 0xa0, "TimerList");
+SR_STATIC_ASSERT(offsetof(TimerList, numoftimers) == 0x0, "TimerList.numoftimers");
+SR_STATIC_ASSERT(offsetof(TimerList, raycast) == 0x4, "TimerList.raycast");
+SR_STATIC_ASSERT(offsetof(TimerList, buildframelist) == 0x8, "TimerList.buildframelist");
+SR_STATIC_ASSERT(offsetof(TimerList, renderdepth) == 0xc, "TimerList.renderdepth");
+SR_STATIC_ASSERT(offsetof(TimerList, rendersectors) == 0x10, "TimerList.rendersectors");
+SR_STATIC_ASSERT(offsetof(TimerList, rendersectorshadow) == 0x14, "TimerList.rendersectorshadow");
+SR_STATIC_ASSERT(offsetof(TimerList, buildsectorshadow) == 0x18, "TimerList.buildsectorshadow");
+SR_STATIC_ASSERT(offsetof(TimerList, rendermodels) == 0x1c, "TimerList.rendermodels");
+SR_STATIC_ASSERT(offsetof(TimerList, renderinterior) == 0x20, "TimerList.renderinterior");
+SR_STATIC_ASSERT(offsetof(TimerList, renderinteriorwindows) == 0x24, "TimerList.renderinteriorwindows");
+SR_STATIC_ASSERT(offsetof(TimerList, renderinteriorshadow) == 0x28, "TimerList.renderinteriorshadow");
+SR_STATIC_ASSERT(offsetof(TimerList, rendermodelshadow) == 0x2c, "TimerList.rendermodelshadow");
+SR_STATIC_ASSERT(offsetof(TimerList, renderlandscape) == 0x30, "TimerList.renderlandscape");
+SR_STATIC_ASSERT(offsetof(TimerList, renderatmosphere) == 0x34, "TimerList.renderatmosphere");
+SR_STATIC_ASSERT(offsetof(TimerList, renderalpha) == 0x38, "TimerList.renderalpha");
+SR_STATIC_ASSERT(offsetof(TimerList, physicssim) == 0x3c, "TimerList.physicssim");
+SR_STATIC_ASSERT(offsetof(TimerList, buildinterior) == 0x40, "TimerList.buildinterior");
+SR_STATIC_ASSERT(offsetof(TimerList, optimizeinterior) == 0x44, "TimerList.optimizeinterior");
+SR_STATIC_ASSERT(offsetof(TimerList, setupinterior) == 0x48, "TimerList.setupinterior");
+SR_STATIC_ASSERT(offsetof(TimerList, allocinterior) == 0x4c, "TimerList.allocinterior");
+SR_STATIC_ASSERT(offsetof(TimerList, shadowinterior) == 0x50, "TimerList.shadowinterior");
 SR_STATIC_ASSERT(offsetof(TimerList, bondsim) == 0x54, "TimerList.bondsim");
 SR_STATIC_ASSERT(offsetof(TimerList, bondsetup) == 0x58, "TimerList.bondsetup");
 SR_STATIC_ASSERT(offsetof(TimerList, bondsetupcopy) == 0x5c, "TimerList.bondsetupcopy");
@@ -2259,60 +2323,46 @@ typedef union Debug { struct {
     uint8_t pad_4f9d4[0x6c];
     float unk_4fa40;                     /* +0x4fa40 1 functions */
     uint8_t pad_4fa44[0x804];
-    int unk_50248;                       /* +0x50248 1 functions */
-    int unk_5024c;                       /* +0x5024c 2 functions */
-    int unk_50250;                       /* +0x50250 2 functions */
+    int affinity_set;                    /* +0x50248 setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds */
+    int affinity_before;                 /* +0x5024c setcpuaffinity writes the process mask plus 10000 */
+    int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
     uint8_t pad_50254[0xf0];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x1f3c];
-    int unk_52284;                       /* +0x52284 1 functions */
-    uint8_t pad_52288[0xfc];
-    int unk_52384;                       /* +0x52384 2 functions */
-    int unk_52388;                       /* +0x52388 1 functions */
-    int16_t unk_5238c;                   /* +0x5238c 1 functions */
-    char unk_5238e;                      /* +0x5238e 1 functions */
-    uint8_t pad_5238f[0x9];
-    int unk_52398;                       /* +0x52398 1 functions */
-    uint8_t pad_5239c[0x28];
-    int unk_523c4;                       /* +0x523c4 2 functions */
+    char log_text[256];                  /* +0x52284 dedicatedserverloop writes the physics line with sprintf */
+    char log_path[64];                   /* +0x52384 debug_resetlogfile writes the file name dedlog.txt */
+    void* log_file;                      /* +0x523c4 debug_resetlogfile and dedicatedserverloop: FILE * of the log */
 }; uint8_t lf_raw[0x523c8]; } Debug;
 SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
+SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
+SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
+SR_STATIC_ASSERT(offsetof(Debug, log_text) == 0x52284, "Debug.log_text");
+SR_STATIC_ASSERT(offsetof(Debug, log_path) == 0x52384, "Debug.log_path");
+SR_STATIC_ASSERT(offsetof(Debug, log_file) == 0x523c4, "Debug.log_file");
 
 /* filelist[]: record of 0x80020 bytes. */
 typedef union FileList { struct {
-    int unk_0000;                        /* +0x0000 5 functions */
-    char unk_0004;                       /* +0x0004 4 functions */
-    char unk_0005;                       /* +0x0005 2 functions */
-    char unk_0006;                       /* +0x0006 1 functions */
-    char unk_0007;                       /* +0x0007 1 functions */
-    char unk_0008;                       /* +0x0008 1 functions */
-    char unk_0009;                       /* +0x0009 1 functions */
-    char unk_000a;                       /* +0x000a 1 functions */
-    char unk_000b;                       /* +0x000b 1 functions */
-    uint8_t pad_000c[0x38];
-    char unk_0044;                       /* +0x0044 2 functions */
-    char unk_0045;                       /* +0x0045 2 functions */
-    char unk_0046;                       /* +0x0046 1 functions */
-    char unk_0047;                       /* +0x0047 1 functions */
-    uint8_t pad_0048[0x7ffd8];
+    FileListSlot list[8];                /* +0x0000 listfiles: list number * 0x10004 bytes */
 }; uint8_t lf_raw[0x80020]; } FileList;
 SR_STATIC_ASSERT(sizeof(FileList) == 0x80020, "FileList");
+SR_STATIC_ASSERT(offsetof(FileList, list) == 0x0, "FileList.list");
 
 /* parser[]: record of 0x10010c bytes. */
 typedef union Parser { struct {
-    int unk_0000;                        /* +0x0000 8 functions */
-    int unk_0004;                        /* +0x0004 7 functions */
-    char unk_0008;                       /* +0x0008 5 functions */
-    char unk_0009;                       /* +0x0009 5 functions */
-    char unk_000a;                       /* +0x000a 2 functions */
-    uint8_t pad_000b[0xffffe];
-    char unk_100009;                     /* +0x100009 1 functions */
-    char unk_10000a;                     /* +0x10000a 1 functions */
-    uint8_t pad_10000b[0xfd];
-    int unk_100108;                      /* +0x100108 10 functions */
+    int pos;                             /* +0x0000 loadtextfile writes 0; getint, getstring, cs_getline and findstring move it */
+    int size;                            /* +0x0004 loadtextfile: the number of bytes of the file */
+    char text[1048576];                  /* +0x0008 loadtextfile: the file bytes and a 0 at the end */
+    char number[256];                    /* +0x100008 getint: the digits for sscanf */
+    void* file;                          /* +0x100108 loadtextfile: FILE * of the open file */
 }; uint8_t lf_raw[0x10010c]; } Parser;
 SR_STATIC_ASSERT(sizeof(Parser) == 0x10010c, "Parser");
+SR_STATIC_ASSERT(offsetof(Parser, pos) == 0x0, "Parser.pos");
+SR_STATIC_ASSERT(offsetof(Parser, size) == 0x4, "Parser.size");
+SR_STATIC_ASSERT(offsetof(Parser, text) == 0x8, "Parser.text");
+SR_STATIC_ASSERT(offsetof(Parser, number) == 0x100008, "Parser.number");
+SR_STATIC_ASSERT(offsetof(Parser, file) == 0x100108, "Parser.file");
 
 /* cityobjecttype[]: record of 0x241800 bytes. */
 typedef union CityObjectType { struct {
@@ -2640,38 +2690,21 @@ SR_STATIC_ASSERT(sizeof(Scenario) == 0x134, "Scenario");
 /* radix[]: record of 0x400804 bytes. */
 typedef union Radix { struct {
     int count;                           /* +0x0000 packobjectpacket: the number of entries; csradixsort sorts keys and values */
-    int order[524288];                   /* +0x0004 csradixsort: the sorted order of the entries */
-    int keys[262144];                    /* +0x200004 packobjectpacket: the score of each entry */
+    int order[262144];                   /* +0x0004 csradixsort: the sorted order of the entries, 0..count-1 at the start of the sort */
+    int temp[262144];                    /* +0x100004 csradixsort: copy of order at the start of each pass */
+    uint32_t keys[262144];               /* +0x200004 packobjectpacket: the score of each entry; csradixsort reads each key as unsigned */
     int values[262144];                  /* +0x300004 packobjectpacket: the id of each entry */
-    int unk_400004;                      /* +0x400004 1 functions */
-    int unk_400008;                      /* +0x400008 1 functions */
-    int unk_40000c;                      /* +0x40000c 1 functions */
-    int unk_400010;                      /* +0x400010 1 functions */
-    int unk_400014;                      /* +0x400014 1 functions */
-    int unk_400018;                      /* +0x400018 1 functions */
-    int unk_40001c;                      /* +0x40001c 1 functions */
-    int unk_400020;                      /* +0x400020 1 functions */
-    int unk_400024;                      /* +0x400024 1 functions */
-    int unk_400028;                      /* +0x400028 1 functions */
-    uint8_t pad_40002c[0x3d8];
-    int unk_400404;                      /* +0x400404 1 functions */
-    int unk_400408;                      /* +0x400408 1 functions */
-    int unk_40040c;                      /* +0x40040c 1 functions */
-    int unk_400410;                      /* +0x400410 1 functions */
-    int unk_400414;                      /* +0x400414 1 functions */
-    int unk_400418;                      /* +0x400418 1 functions */
-    int unk_40041c;                      /* +0x40041c 1 functions */
-    int unk_400420;                      /* +0x400420 1 functions */
-    int unk_400424;                      /* +0x400424 1 functions */
-    int unk_400428;                      /* +0x400428 1 functions */
-    int unk_40042c;                      /* +0x40042c 1 functions */
-    uint8_t pad_400430[0x3d4];
+    int bucket_count[256];               /* +0x400004 csradixsort: the number of keys in each bucket of the pass */
+    int bucket_offset[256];              /* +0x400404 csradixsort: the first output index of each bucket */
 }; uint8_t lf_raw[0x400804]; } Radix;
 SR_STATIC_ASSERT(sizeof(Radix) == 0x400804, "Radix");
 SR_STATIC_ASSERT(offsetof(Radix, count) == 0x0, "Radix.count");
 SR_STATIC_ASSERT(offsetof(Radix, order) == 0x4, "Radix.order");
+SR_STATIC_ASSERT(offsetof(Radix, temp) == 0x100004, "Radix.temp");
 SR_STATIC_ASSERT(offsetof(Radix, keys) == 0x200004, "Radix.keys");
 SR_STATIC_ASSERT(offsetof(Radix, values) == 0x300004, "Radix.values");
+SR_STATIC_ASSERT(offsetof(Radix, bucket_count) == 0x400004, "Radix.bucket_count");
+SR_STATIC_ASSERT(offsetof(Radix, bucket_offset) == 0x400404, "Radix.bucket_offset");
 
 /* game_world[]: record of 0x1c bytes. */
 typedef union GameWorld { struct {

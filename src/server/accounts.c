@@ -65,7 +65,7 @@ void __cdecl sr_loadaccountsserver(void)
                 a->look_c = rand_() & 3;
                 continue;
             }
-            game_fread(&a->unk_30, 4, 1, account_file);
+            game_fread(&a->playtime, 4, 1, account_file);
             game_fread(&a->look_a, 4, 1, account_file);
             game_fread(&a->look_b, 4, 1, account_file);
             game_fread(&a->look_c, 4, 1, account_file);

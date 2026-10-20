@@ -60,6 +60,7 @@ static const SrGlobalInfo sr_global_table[] = {
     { 0x17179a28u, "numofbonds", 0x0u, 0u },
     { 0x17179a40u, "bond", 0xecu, 16384u },
     { 0x17529a40u, "numofbullets", 0x0u, 0u },
+    { 0x17529a60u, "config", 0x24u, 0u },
     { 0x1952d680u, "bsdsocket", 0x20070u, 0u },
     { 0x1954d700u, "area_sector", 0xc0d0000u, 0u },
     { 0x2561d740u, "game_world", 0x1cu, 0u },

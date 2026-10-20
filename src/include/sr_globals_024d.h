@@ -61,6 +61,7 @@
 #define SR_RVA_NUMOFBONDS           0x17179a28u
 #define SR_RVA_BOND                 0x17179a40u  /* Bond[] */
 #define SR_RVA_NUMOFBULLETS         0x17529a40u
+#define SR_RVA_CONFIG               0x17529a60u  /* Config[] */
 #define SR_RVA_BSDSOCKET            0x1952d680u  /* BsdSocket[] */
 #define SR_RVA_AREA_SECTOR          0x1954d700u  /* AreaSector[] */
 #define SR_RVA_GAME_WORLD           0x2561d740u  /* GameWorld[] */
