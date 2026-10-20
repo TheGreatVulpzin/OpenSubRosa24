@@ -187,3 +187,4 @@ Slots 0 and 1 are the hands and slots 2 to 6 are the pockets. Button 0x10 choose
 - A broken window sends its event again on each hit, and an object hit always ends the bullet.
 - `item_physicssimulation` can write past the end of the bond list. The game has no size test there.
 - A phone call sets the `linked_item` of the caller only when the call goes out. The called phone gets its link at the answer.
+- The arm of a door end rounds `ends.x * rot[0]` to a float before the next term, in all 3 components. The assembly does this. The lifted C did not round the x component. No test sees it, because `ends.x` is -0.5 and the product is exact.
