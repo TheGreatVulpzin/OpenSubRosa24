@@ -86,7 +86,9 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068}
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
+             'Stock': 0x14, 'VoiceRing': 0x9210}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -194,7 +196,7 @@ typedef union Wheel { struct {
     vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
     vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
     vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
-    int unk_5c;         /* +0x5c the packets send it */
+    float unk_5c;       /* +0x5c the packets send it as a signed scalar of 6 bits */
     float unk_60[4];    /* +0x60 */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
     uint8_t unk_74[0x10];
@@ -326,8 +328,74 @@ typedef union Account { struct {
     int look_a;         /* +0x34 rand() % 3 */
     int look_b;         /* +0x38 rand() & 7 */
     int look_c;         /* +0x3c rand() & 3 */
-    uint8_t unk_40[0xc];
+    uint8_t unk_40[8];
+    int ban_time;       /* +0x48 serverrecv: above 0 drops the player. server_playermessage /bany writes it */
 }; uint8_t lf_raw[0x4c]; } Account;
+
+/* A voice slot of a Connection: one speaker that the client hears. */
+typedef union VoiceSlot { struct {
+    int active;         /* +0x00 */
+    int player;         /* +0x04 the speaker */
+    int human;          /* +0x08 the body of the speaker, -1 for a radio */
+    int item;           /* +0x0c the radio item, -1 for a direct voice */
+    uint8_t unk_10[0xc];
+    float distance;     /* +0x1c calculateplayervoice writes it, addvoice reads it */
+}; uint8_t lf_raw[0x20]; } VoiceSlot;
+
+/* The score of a human or an object for a connection: it grows each tick until the entry is sent. */
+typedef union NetPriority { struct {
+    int score;          /* +0x00 packobjectpacket */
+    uint8_t unk_04[0x18];
+}; uint8_t lf_raw[0x1c]; } NetPriority;
+
+/* An action of a player that the client sends: a menu choice, a chat text or an item action. */
+typedef union PlayerAction { struct {
+    int kind;           /* +0x00 0 menu, 1 chat, 2 item */
+    int arg_a;          /* +0x04 menu id (8 bits), text length (6 bits), item a (16 bits) */
+    int arg_b;          /* +0x08 menu value, chat mode (4 bits), item b (16 bits) */
+    uint8_t unk_0c[8];
+    char text[64];      /* +0x14 */
+}; uint8_t lf_raw[0x54]; } PlayerAction;
+
+/* An entry of a list of ObjectPacket: an id and the mode it is sent in. */
+typedef union NetEntry { struct {
+    int id;
+    int mode;
+}; uint8_t lf_raw[8]; } NetEntry;
+
+/* packobjectpacket2: a human or an object that can go in the packet. */
+typedef union NetCandidate { struct {
+    int kind;           /* +0x00 0 human, 1 object */
+    int id;
+    int score;
+}; uint8_t lf_raw[0xc]; } NetCandidate;
+
+/* A door of a team record (eventsimulation): the block it opens and its object. */
+typedef union DoorBlock { struct {
+    int x, y, z;
+    int object;
+}; uint8_t lf_raw[0x10]; } DoorBlock;
+
+/* A stock of the market (createevent_updatestocks). */
+typedef union Stock { struct {
+    int unk_00;
+    float price;        /* +0x04 */
+    float unk_08;
+    int price_int;      /* +0x0c createevent_updatestocks writes (int)price */
+    int unk_10;
+}; uint8_t lf_raw[0x14]; } Stock;
+
+/* The voice frames of one player (Speex.voice_ring): a ring of 64 frames that the client sends. */
+typedef union VoiceRing { struct {
+    uint8_t unk_0000[0x5000];
+    int head;           /* +0x5000 the next frame index */
+    int unk_5004;
+    int size[64];       /* +0x5008 */
+    int mode[64];       /* +0x5108 */
+    uint8_t data[64][256]; /* +0x5208 */
+    int unk_9208;
+    int voice_off;      /* +0x920c 1 bit from the client: a speaker with it set is not heard */
+}; uint8_t lf_raw[0x9210]; } VoiceRing;
 
 
 
@@ -357,6 +425,18 @@ SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
+SR_STATIC_ASSERT(sizeof(VoiceSlot) == 0x20, "VoiceSlot");
+SR_STATIC_ASSERT(sizeof(NetPriority) == 0x1c, "NetPriority");
+SR_STATIC_ASSERT(sizeof(PlayerAction) == 0x54, "PlayerAction");
+SR_STATIC_ASSERT(offsetof(PlayerAction, text) == 0x14, "PlayerAction.text");
+SR_STATIC_ASSERT(sizeof(NetEntry) == 8, "NetEntry");
+SR_STATIC_ASSERT(sizeof(NetCandidate) == 0xc, "NetCandidate");
+SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
+SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
+SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
+SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
+SR_STATIC_ASSERT(offsetof(VoiceSlot, distance) == 0x1c, "VoiceSlot.distance");
+SR_STATIC_ASSERT(offsetof(Account, ban_time) == 0x48, "Account.ban_time");
 '''
 
 

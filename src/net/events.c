@@ -13,6 +13,12 @@
 #include "sr_runtime.h"
 
 #define MAX_ITEMS 0x400
+#define sr_market (*SR_AT(Market, SR_RVA_MARKET))
+/* The first event that eventsimulation did not handle yet (it lives in BlockTemp). */
+#define lastevent (*SR_AT(uint32_t, 0x53f254c))
+
+void __cdecl lf_01cf0(uint32_t area, int x, int y, int z);                      /* area_marksector */
+void __cdecl lf_02f00(uint32_t area, uint32_t x, uint32_t y, uint32_t z, int object); /* area_interior_setobject */
 
 /* The next free event, with its type and the tick of now. */
 static Event *new_event(int type)
@@ -171,4 +177,70 @@ void createevent_updateblock_quad(int area, int x, int y, int z, int block, int 
     copy_vec(&ev->pos, pos);
     copy_vec(&ev->vec, normal);
     next_event();
+}
+
+/* Event 17: a human of a player (the player takes it over at a join). */
+void createevent_updatehuman(int human, int player)
+{
+    const Human *h = &sr_humans[human];
+    Event *ev;
+    if (sr_server == 0)
+        return;
+    ev = new_event(17);
+    ev->param = human;
+    ev->attach_type = h->active;
+    ev->attach_id = player;
+    next_event();
+}
+
+/* Event 13: the prices of the 5 stocks as integers: two in param, two in attach_type. */
+void createevent_updatestocks(void)
+{
+    Stock *s = sr_market.stocks;
+    Event *ev;
+    int k;
+    if (sr_server == 0)
+        return;
+    for (k = 0; k < 5; k++)
+        s[k].price_int = (int)(long long)s[k].price;
+    ev = new_event(13);
+    ev->param = s[1].price_int * 0x10000 + s[0].price_int;
+    ev->attach_type = s[3].price_int * 0x10000 + s[2].price_int;
+    ev->attach_id = s[4].price_int;
+    next_event();
+}
+
+/* Event 14: a row of the car market (3 numbers for each row). */
+void createevent_updatecarmarket(int row)
+{
+    const Market *m = &sr_market;
+    Event *ev;
+    if (sr_server == 0)
+        return;
+    ev = new_event(14);
+    ev->param = row * 0x10 + m->car_base;
+    ev->attach_type = m->car_rows[row * 3];
+    ev->attach_id = m->car_rows[row * 3 + 1];
+    ev->range_mode = m->car_rows[row * 3 + 2];
+    next_event();
+}
+
+/* Handle the events that the server made since the last tick. Event 10 opens or closes the 2
+ * doors of a team: the door block gets the door object, or none. */
+void eventsimulation(void)
+{
+    while (lastevent != sr_numofevents) {
+        const Event *ev = &sr_events[lastevent];
+        if (ev->type == 10) {
+            const DoorBlock *door = (const DoorBlock *)((const uint8_t *)sr_game.team0_doors + ev->param * 0x117c);
+            int open = ev->attach_type;
+            int d;
+            for (d = 0; d < 2; d++, door++) {
+                uint32_t object = open == 0 ? ((uint32_t)door->object << 10 | 9) : 0;
+                lf_02f00(0, (uint32_t)door->x, (uint32_t)door->y, (uint32_t)door->z, (int)object);
+                lf_01cf0(0, door->x, door->y, door->z);
+            }
+        }
+        lastevent = (lastevent + 1) & 0xffff;
+    }
 }

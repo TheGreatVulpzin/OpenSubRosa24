@@ -31,7 +31,7 @@ void lf_041c0(void);
 void lf_04450(void);
 void setupbullettypes(void);
 void lf_04bb0(void);
-void lf_05160(void);
+void packunitvector(void);
 void lf_05280(void);
 void lf_05350(void);
 void lf_053a0(void);
@@ -41,13 +41,13 @@ void lf_05b40(void);
 void lf_05be0(void);
 void lf_05f20(void);
 void lf_05fe0(void);
-void lf_061a0(void);
+void eventsimulation(void);
 void createevent_updateitem(void);
 void createevent_updateiteminfo(void);
 void createevent_updateplayer(void);
 void createevent_updateplayer_finance(void);
-void lf_06840(void);
-void lf_068d0(void);
+void createevent_updatestocks(void);
+void createevent_updatecarmarket(void);
 void setupitemtypes(void);
 void item_billvalue(void);
 void item_addbill(void);
@@ -89,7 +89,7 @@ void lf_0b300(void);
 void stoptimer(void);
 void lf_0b4a0(void);
 void lf_0b540(void);
-void lf_0b6d0(void);
+void addvoice(void);
 void dotproduct(void);
 void crossproduct(void);
 void vectorlength(void);
@@ -121,15 +121,15 @@ void lf_0d240(void);
 void lf_0d2a0(void);
 void lf_0d3a0(void);
 void lf_0d680(void);
-void lf_0d710(void);
+void disablesocket(void);
 void recvpacket(void);
 void sendpacket(void);
 void cs_pwrite(void);
-void lf_0d9f0(void);
+void cs_pread(void);
 void pbitwrite(void);
 void pbitread(void);
 void pbitwritenego(void);
-void lf_0ddd0(void);
+void pbitreadnego(void);
 void lf_0ded0(void);
 void lf_0e4d0(void);
 void lf_0f2b0(void);
@@ -163,11 +163,11 @@ void lineintersectcityobjecttype(void);
 void lf_154b0(void);
 void lf_155e0(void);
 void packorientation(void);
-void lf_16320(void);
+void unpackorientation(void);
 void packangle(void);
-void lf_16710(void);
+void unpackangle(void);
 void packposition(void);
-void lf_16860(void);
+void packscalar(void);
 void lf_16960(void);
 void lf_16a20(void);
 void createevent_bullet(void);
@@ -189,7 +189,7 @@ void sphereintersecttriangle(void);
 void sphereintersectline(void);
 void sphereintersectpoint(void);
 void lineintersectsphere(void);
-void lf_1ac40(void);
+void getmasterserverip(void);
 void createitem(void);
 void setitempositionhuman(void);
 void linkitem(void);
@@ -249,8 +249,8 @@ void circleintersectnormalblock(void);
 void circleintersectspecblock(void);
 void sphereintersectcityobjecttype(void);
 void lf_2e310(void);
-void lf_2efd0(void);
-void lf_2f090(void);
+void packpositiondelta(void);
+void unpackpositiondelta(void);
 void lineintersecthuman(void);
 void human_calcarmtorque(void);
 void human_createmuscleball(void);
@@ -266,14 +266,14 @@ void lf_324c0(void);
 void sphereintersectobject(void);
 void lf_32fe0(void);
 void lf_33350(void);
-void lf_33570(void);
-void lf_33650(void);
+void servercycle(void);
+void serverrecv(void);
 void lf_34870(void);
 void lf_34c10(void);
 void lf_3a610(void);
 void lf_3b0c0(void);
 void lf_3ccc0(void);
-void lf_3cfe0(void);
+void calculateplayervoice(void);
 void lf_3d500(void);
 void lf_3da50(void);
 void lf_3e070(void);
@@ -282,7 +282,7 @@ void circleintersectarea(void);
 void bondsimulation2(void);
 void lf_46c30(void);
 void bulletsimulation(void);
-void lf_49940(void);
+void server_playermessage(void);
 void human_calculatearmangles(void);
 void human_itemsimulation(void);
 void human_buildmuscles(void);
@@ -349,7 +349,7 @@ const LfEntry lf_table[] = {
     { "building_rotatefloorplan", 0x4450, (void *)lf_04450, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbullettypes", 0x4a10, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x4bb0, (void *)lf_04bb0, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
-    { "packunitvector", 0x5160, (void *)lf_05160, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "packunitvector", 0x5160, (void *)packunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "debug_resetlogfile", 0x5280, (void *)lf_05280, 0, LF_RET_VOID, 4, "", 1 },
     { "systemtimer", 0x5350, (void *)lf_05350, 0, LF_RET_INT, 4, "", 1 },
     { "economysimulation", 0x53a0, (void *)lf_053a0, 0, LF_RET_VOID, 4, "", 0 },
@@ -359,13 +359,13 @@ const LfEntry lf_table[] = {
     { "playersellstock", 0x5be0, (void *)lf_05be0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "player_calcassets", 0x5f20, (void *)lf_05f20, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x5fe0, (void *)lf_05fe0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "eventsimulation", 0x61a0, (void *)lf_061a0, 0, LF_RET_VOID, 4, "", 0 },
+    { "eventsimulation", 0x61a0, (void *)eventsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createevent_updateitem", 0x6380, (void *)createevent_updateitem, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateiteminfo", 0x6420, (void *)createevent_updateiteminfo, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateplayer", 0x64a0, (void *)createevent_updateplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateplayer_finance", 0x65f0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updatestocks", 0x6840, (void *)lf_06840, 0, LF_RET_VOID, 4, "", 0 },
-    { "createevent_updatecarmarket", 0x68d0, (void *)lf_068d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updatestocks", 0x6840, (void *)createevent_updatestocks, 0, LF_RET_VOID, 4, "", 0 },
+    { "createevent_updatecarmarket", 0x68d0, (void *)createevent_updatecarmarket, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupitemtypes", 0x6b30, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "item_billvalue", 0x7b90, (void *)item_billvalue, 1, LF_RET_INT, 4, "v", 0 },
     { "item_addbill", 0x7c40, (void *)item_addbill, 3, LF_RET_INT, 4, "vvv", 0 },
@@ -407,7 +407,7 @@ const LfEntry lf_table[] = {
     { "stoptimer", 0xb3f0, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xb4a0, (void *)lf_0b4a0, 0, LF_RET_VOID, 4, "", 1 },
     { "setuptimers", 0xb540, (void *)lf_0b540, 0, LF_RET_VOID, 4, "", 0 },
-    { "addvoice", 0xb6d0, (void *)lf_0b6d0, 2, LF_RET_INT, 4, "vv", 0 },
+    { "addvoice", 0xb6d0, (void *)addvoice, 2, LF_RET_INT, 4, "vv", 0 },
     { "dotproduct", 0xb850, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "crossproduct", 0xb880, (void *)crossproduct, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "vectorlength", 0xb8c0, (void *)vectorlength, 1, LF_RET_FLOAT, 4, "p", 0 },
@@ -439,15 +439,15 @@ const LfEntry lf_table[] = {
     { "cs_getline", 0xd2a0, (void *)lf_0d2a0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "listfiles", 0xd3a0, (void *)lf_0d3a0, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "removeflieextentions", 0xd680, (void *)lf_0d680, 1, LF_RET_VOID, 4, "v", 0 },
-    { "disablesocket", 0xd710, (void *)lf_0d710, 1, LF_RET_VOID, 4, "v", 1 },
+    { "disablesocket", 0xd710, (void *)disablesocket, 1, LF_RET_VOID, 4, "v", 1 },
     { "recvpacket", 0xd860, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
     { "sendpacket", 0xd910, (void *)sendpacket, 2, LF_RET_VOID, 4, "vv", 1 },
     { "cs_pwrite", 0xd990, (void *)cs_pwrite, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "cs_pread", 0xd9f0, (void *)lf_0d9f0, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "cs_pread", 0xd9f0, (void *)cs_pread, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwrite", 0xda60, (void *)pbitwrite, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitread", 0xdb20, (void *)pbitread, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitwritenego", 0xddb0, (void *)pbitwritenego, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitreadnego", 0xddd0, (void *)lf_0ddd0, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitreadnego", 0xddd0, (void *)pbitreadnego, 2, LF_RET_INT, 4, "pv", 0 },
     { "createaccount", 0xded0, (void *)lf_0ded0, 1, LF_RET_INT, 4, "v", 0 },
     { "ai_playercar", 0xe4d0, (void *)lf_0e4d0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createarea", 0xf2b0, (void *)lf_0f2b0, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
@@ -481,11 +481,11 @@ const LfEntry lf_table[] = {
     { "city_createelevator", 0x154b0, (void *)lf_154b0, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x155e0, (void *)lf_155e0, 0, LF_RET_VOID, 4, "", 0 },
     { "packorientation", 0x15df0, (void *)packorientation, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "unpackorientation", 0x16320, (void *)lf_16320, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "unpackorientation", 0x16320, (void *)unpackorientation, 2, LF_RET_VOID, 4, "pp", 0 },
     { "packangle", 0x16680, (void *)packangle, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "unpackangle", 0x16710, (void *)lf_16710, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "unpackangle", 0x16710, (void *)unpackangle, 2, LF_RET_VOID, 4, "pv", 0 },
     { "packposition", 0x16790, (void *)packposition, 1, LF_RET_VOID, 4, "p", 0 },
-    { "packscalar", 0x16860, (void *)lf_16860, 3, LF_RET_VOID, 4, "pvv", 0 },
+    { "packscalar", 0x16860, (void *)packscalar, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "playerdeathtax", 0x16960, (void *)lf_16960, 1, LF_RET_VOID, 4, "v", 0 },
     { "playerteamkilltax", 0x16a20, (void *)lf_16a20, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createevent_bullet", 0x16bb0, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
@@ -507,7 +507,7 @@ const LfEntry lf_table[] = {
     { "sphereintersectline", 0x1a7f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
     { "sphereintersectpoint", 0x1a990, (void *)sphereintersectpoint, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x1aa60, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
-    { "getmasterserverip", 0x1ac40, (void *)lf_1ac40, 0, LF_RET_INT, 4, "", 1 },
+    { "getmasterserverip", 0x1ac40, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
     { "createitem", 0x1b070, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "setitempositionhuman", 0x1b6e0, (void *)setitempositionhuman, 2, LF_RET_VOID, 4, "vv", 0 },
     { "linkitem", 0x1b870, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -567,8 +567,8 @@ const LfEntry lf_table[] = {
     { "circleintersectspecblock", 0x2daf0, (void *)circleintersectspecblock, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
     { "sphereintersectcityobjecttype", 0x2dfc0, (void *)sphereintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "clientrecv", 0x2e310, (void *)lf_2e310, 0, LF_RET_VOID, 4, "", 1 },
-    { "packpositiondelta", 0x2efd0, (void *)lf_2efd0, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "unpackpositiondelta", 0x2f090, (void *)lf_2f090, 4, LF_RET_VOID, 4, "pvvv", 0 },
+    { "packpositiondelta", 0x2efd0, (void *)packpositiondelta, 4, LF_RET_VOID, 4, "vpvv", 0 },
+    { "unpackpositiondelta", 0x2f090, (void *)unpackpositiondelta, 4, LF_RET_VOID, 4, "pvvv", 0 },
     { "lineintersecthuman", 0x2f130, (void *)lineintersecthuman, 4, LF_RET_INT, 4, "vppv", 0 },
     { "human_calcarmtorque", 0x2f420, (void *)human_calcarmtorque, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x306d0, (void *)human_createmuscleball, 4, LF_RET_VOID, 4, "vvvp", 0 },
@@ -584,14 +584,14 @@ const LfEntry lf_table[] = {
     { "sphereintersectobject", 0x32bb0, (void *)sphereintersectobject, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4, "p", 0 },
     { "scenario_createcar", 0x33350, (void *)lf_33350, 6, LF_RET_INT, 4, "vvvvvv", 0 },
-    { "servercycle", 0x33570, (void *)lf_33570, 0, LF_RET_VOID, 4, "", 1 },
-    { "serverrecv", 0x33650, (void *)lf_33650, 0, LF_RET_VOID, 4, "", 1 },
+    { "servercycle", 0x33570, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
+    { "serverrecv", 0x33650, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },
     { "setupobjecttypeweight", 0x34870, (void *)lf_34870, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupobjecttypes_cars", 0x34c10, (void *)lf_34c10, 0, LF_RET_VOID, 4, "", 0 },
     { "setupobjecttypes_helicopters", 0x3a610, (void *)lf_3a610, 0, LF_RET_VOID, 4, "", 0 },
     { "setupobjectypes_train", 0x3b0c0, (void *)lf_3b0c0, 0, LF_RET_VOID, 4, "", 0 },
     { "createvehicle", 0x3ccc0, (void *)lf_3ccc0, 3, LF_RET_INT, 4, "vpp", 0 },
-    { "calculateplayervoice", 0x3cfe0, (void *)lf_3cfe0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "calculateplayervoice", 0x3cfe0, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_assessthreats", 0x3d500, (void *)lf_3d500, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_createblock", 0x3da50, (void *)lf_3da50, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
@@ -600,7 +600,7 @@ const LfEntry lf_table[] = {
     { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
     { "bulletsimulation", 0x48ec0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "server_playermessage", 0x49940, (void *)lf_49940, 2, LF_RET_INT, 4, "vp", 0 },
+    { "server_playermessage", 0x49940, (void *)server_playermessage, 2, LF_RET_INT, 4, "vp", 0 },
     { "human_calculatearmangles", 0x4a440, (void *)human_calculatearmangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_itemsimulation", 0x4bd60, (void *)human_itemsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_buildmuscles", 0x4c720, (void *)human_buildmuscles, 1, LF_RET_VOID, 4, "v", 0 },

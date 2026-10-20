@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sr_math.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -95,6 +96,16 @@ int pbitwritenego(const uint32_t *value, uint32_t bits)
     return 1;
 }
 
+/* Read bits as a value where all bits set means -1 (0xffffffff). A failed read keeps the
+ * bit count as the value. */
+int pbitreadnego(uint32_t *value, uint32_t bits)
+{
+    uint32_t v = bits;
+    pbitread(&v, bits);
+    *value = v == (1u << (bits & 31)) - 1 ? 0xffffffffu : v;
+    return 1;
+}
+
 /* Move to the next whole byte when some bits of the current byte are in use. */
 static void align_send(BsdSocket *bs)
 {
@@ -113,6 +124,26 @@ int cs_pwrite(const void *data, int size, int count)
     align_send(bs);
     memcpy(&bs->send_buf[bs->send_size], data, (size_t)(size * count));
     bs->send_size += size * count;
+    return 1;
+}
+
+/* Read size * count bytes at the next whole byte. Returns 0 when the packet has too few bytes.
+ * The size test comes before the move to the next byte, so a read can pass the end by one. */
+int cs_pread(void *dst, int size, int count)
+{
+    BsdSocket *bs = &sr_bsdsocket;
+    size_t n;
+    if (bs->recv_pos > 0xffff)
+        return 0;
+    n = (size_t)(size * count);
+    if (bs->recv_size < (int)(n + (size_t)bs->recv_pos))
+        return 0;
+    if (bs->recv_bit > 0) {
+        bs->recv_pos++;
+        bs->recv_bit = 0;
+    }
+    memcpy(dst, &bs->recv_buf[bs->recv_pos], n);
+    bs->recv_pos += (int)n;
     return 1;
 }
 
@@ -259,4 +290,142 @@ void packorientation(const vec3 *dir, uint32_t bits)
         one = one << 2 | one >> 30; /* 1 << pos, as a rotation */
     }
     pbitwrite(&code, bits);
+}
+
+/* A number in 0..range as bits - 1 bits of size and one sign bit (the top bit). */
+void packscalar(const float *x, float range, uint32_t bits)
+{
+    uint32_t half = (1u << (bits & 31)) >> 1;
+    uint32_t v = (uint32_t)(long long)(((float)half / range) * fabs(*x));
+    if (v > half - 1)
+        v = half - 1;
+    if (*x < 0.0)
+        v |= half;
+    pbitwrite(&v, bits);
+}
+
+/* The reverse of packscalar with the range 1.0. */
+float unpackscalar(uint32_t raw, uint32_t bits)
+{
+    uint32_t half = (1u << (bits & 31)) >> 1;
+    float v = (float)((raw & (half - 1)) * (1.0 / half));
+    return (raw & half) == half ? -v : v;
+}
+
+/* An angle in radians from bits - 1 bits of size and a sign bit. A failed read keeps the bit
+ * count as the raw value. */
+void unpackangle(float *out, uint32_t bits)
+{
+    uint32_t raw = bits, half, m;
+    float a;
+    pbitread(&raw, bits);
+    half = (1u << (bits & 31)) >> 1;
+    m = (half - 1) & raw;
+    a = (float)((double)m / ((double)half / 6.28318530718));
+    *out = a;
+    if ((raw & half) == half)
+        *out = -a;
+}
+
+/* A unit vector as the axis of its largest component (and the sign of it), and the two other
+ * components divided by it: 2 * magnitude + sign. */
+void packunitvector(uint32_t out[3], const float v[3], uint8_t bits)
+{
+    uint32_t axis = fabs(v[0]) < fabs(v[1]);
+    uint32_t *o = out + 1;
+    double scale;
+    int i;
+    if (fabs(v[axis]) < fabs(v[2]))
+        axis = 2;
+    out[0] = axis;
+    if (v[axis] < 0.0)
+        out[0] = axis | 4;
+    scale = (double)((1 << (bits & 31)) - 1);
+    for (i = 0; i < 3; i++) {
+        int k;
+        if ((uint32_t)i == axis)
+            continue;
+        k = (int)(long long)(fabs((double)v[i] / v[axis]) * scale);
+        *o = (uint32_t)(k * 2);
+        if (v[i] < 0.0)
+            *o = (uint32_t)(k * 2) | 1;
+        o++;
+    }
+}
+
+/* The difference a - b of 3 components as signed numbers in -range..range. */
+void packpositiondelta(const vec3 *a, const vec3 *b, float range, uint32_t bits)
+{
+    uint32_t half = (1u << (bits & 31)) >> 1, v;
+    const float *pa = &a->x, *pb = &b->x;
+    int i;
+    for (i = 0; i < 3; i++) {
+        float d = (float)(pa[i] - pb[i]);
+        v = (uint32_t)(long long)(fabs(d) * ((float)half / range));
+        if (v > half - 1)
+            v = half - 1;
+        if (d < 0.0)
+            v |= half;
+        pbitwrite(&v, bits);
+    }
+}
+
+/* ref + the difference of packpositiondelta. A failed read keeps the previous raw value. */
+void unpackpositiondelta(vec3 *out, const vec3 *ref, float range, uint32_t bits)
+{
+    uint32_t half = (1u << (bits & 31)) >> 1, raw = half;
+    float *po = &out->x;
+    const float *pr = &ref->x;
+    int i;
+    for (i = 0; i < 3; i++) {
+        float d;
+        pbitread(&raw, bits);
+        d = (float)((double)((half - 1) & raw) / ((float)half / range));
+        if ((half & raw) == half)
+            d = -d;
+        po[i] = (float)(pr[i] + d);
+    }
+}
+
+/* The reverse of packorientation: the face from the first 3 bits, then each pair of bits
+ * picks one of the 4 triangles. The result is the normalized sum of the 3 corners. */
+void unpackorientation(vec3 *out, uint32_t bits)
+{
+    vec3 *tri = g_tri, *mid = g_mid;
+    uint32_t code = bits;
+    int k, pos;
+    pbitread(&code, bits);
+    for (k = 0; k < 3; k++)
+        tri[k] = octahedron[octahedron_faces[code & 7][k]];
+    for (pos = 3; pos < (int)bits; pos += 2) {
+        midpoint(&mid[0], &tri[0], &tri[1]);
+        midpoint(&mid[1], &tri[2], &tri[1]);
+        midpoint(&mid[2], &tri[2], &tri[0]);
+        switch ((code >> (pos & 31)) & 3) {
+        case 0:
+            tri[1] = mid[0];
+            tri[2] = mid[2];
+            break;
+        case 1:
+            tri[0] = mid[0];
+            tri[2] = mid[1];
+            break;
+        case 2:
+            tri[0] = mid[2];
+            tri[1] = mid[1];
+            break;
+        default:
+            tri[0] = mid[0];
+            tri[1] = mid[1];
+            tri[2] = mid[2];
+            break;
+        }
+    }
+    out->x = (float)(tri[1].x + tri[0].x);
+    out->y = (float)(tri[1].y + tri[0].y);
+    out->z = (float)(tri[1].z + tri[0].z);
+    out->x = (float)(out->x + tri[2].x);
+    out->y = (float)(out->y + tri[2].y);
+    out->z = (float)(out->z + tri[2].z);
+    normalizevector(out, out);
 }

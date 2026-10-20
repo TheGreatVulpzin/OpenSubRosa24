@@ -993,12 +993,12 @@ __declspec(naked) static void th_04bb0(void)
 }
 static uint8_t expect_04bb0[6] = { 0xd9, 0x05, 0x18, 0x00, 0x46, 0x00 };
 
-void __cdecl lf_05160(uint * param_1, float * param_2, byte param_3);
+void __cdecl packunitvector(uint * param_1, float * param_2, byte param_3);
 static void (__cdecl *orig_05160)(uint *, float *, byte);
 static SvVerify v_05160 = { "packunitvector", -1 };
 static void __cdecl hk_05160(uint * param_1, float * param_2, byte param_3)
 {
-    SV_HOOK_VOID(v_05160, lf_05160(param_1, param_2, param_3), orig_05160(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_05160, packunitvector(param_1, param_2, param_3), orig_05160(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_05160(void)
 {
@@ -1319,12 +1319,12 @@ __declspec(naked) static void th_05fe0(void)
 }
 static uint8_t expect_05fe0[10] = { 0x8b, 0x4c, 0x24, 0x04, 0x69, 0xc9, 0x08, 0x24, 0x00, 0x00 };
 
-void __cdecl lf_061a0(void);
+void __cdecl eventsimulation(void);
 static void (__cdecl *orig_061a0)(void);
 static SvVerify v_061a0 = { "eventsimulation", -1 };
 static void __cdecl hk_061a0(void)
 {
-    SV_HOOK_VOID(v_061a0, lf_061a0(), orig_061a0(), NULL);
+    SV_HOOK_VOID(v_061a0, eventsimulation(), orig_061a0(), NULL);
 }
 __declspec(naked) static void th_061a0(void)
 {
@@ -1522,12 +1522,12 @@ __declspec(naked) static void th_065f0(void)
 }
 static uint8_t expect_065f0[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
-void __cdecl lf_06840(void);
+void __cdecl createevent_updatestocks(void);
 static void (__cdecl *orig_06840)(void);
 static SvVerify v_06840 = { "createevent_updatestocks", -1 };
 static void __cdecl hk_06840(void)
 {
-    SV_HOOK_VOID(v_06840, lf_06840(), orig_06840(), NULL);
+    SV_HOOK_VOID(v_06840, createevent_updatestocks(), orig_06840(), NULL);
 }
 __declspec(naked) static void th_06840(void)
 {
@@ -1561,12 +1561,12 @@ __declspec(naked) static void th_06840(void)
 }
 static uint8_t expect_06840[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
-void __cdecl lf_068d0(int param_1);
+void __cdecl createevent_updatecarmarket(int param_1);
 static void (__cdecl *orig_068d0)(int);
 static SvVerify v_068d0 = { "createevent_updatecarmarket", -1 };
 static void __cdecl hk_068d0(int param_1)
 {
-    SV_HOOK_VOID(v_068d0, lf_068d0(param_1), orig_068d0(param_1), NULL);
+    SV_HOOK_VOID(v_068d0, createevent_updatecarmarket(param_1), orig_068d0(param_1), NULL);
 }
 __declspec(naked) static void th_068d0(void)
 {
@@ -3116,12 +3116,12 @@ __declspec(naked) static void th_0b540(void)
 }
 static uint8_t expect_0b540[10] = { 0xc7, 0x05, 0xf0, 0x1c, 0xe8, 0x12, 0x40, 0x00, 0x00, 0x00 };
 
-int __cdecl lf_0b6d0(int param_1, float param_2);
+int __cdecl addvoice(int param_1, float param_2);
 static int (__cdecl *orig_0b6d0)(int, float);
 static SvVerify v_0b6d0 = { "addvoice", -1 };
 static int __cdecl hk_0b6d0(int param_1, float param_2)
 {
-    SV_HOOK_RET(int, v_0b6d0, lf_0b6d0(param_1, param_2), orig_0b6d0(param_1, param_2), NULL);
+    SV_HOOK_RET(int, v_0b6d0, addvoice(param_1, param_2), orig_0b6d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0b6d0(void)
 {
@@ -4466,12 +4466,12 @@ __declspec(naked) static void th_0d990(void)
 }
 static uint8_t expect_0d990[5] = { 0xa1, 0xdc, 0xd6, 0x92, 0x19 };
 
-undefined4 __cdecl lf_0d9f0(void * param_1, int param_2, int param_3);
+undefined4 __cdecl cs_pread(void * param_1, int param_2, int param_3);
 static undefined4 (__cdecl *orig_0d9f0)(void *, int, int);
 static SvVerify v_0d9f0 = { "cs_pread", -1 };
 static undefined4 __cdecl hk_0d9f0(void * param_1, int param_2, int param_3)
 {
-    SV_HOOK_RET(undefined4, v_0d9f0, lf_0d9f0(param_1, param_2, param_3), orig_0d9f0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_0d9f0, cs_pread(param_1, param_2, param_3), orig_0d9f0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0d9f0(void)
 {
@@ -4631,12 +4631,12 @@ __declspec(naked) static void th_0ddb0(void)
 }
 static uint8_t expect_0ddb0[8] = { 0x8b, 0x44, 0x24, 0x08, 0x8b, 0x4c, 0x24, 0x04 };
 
-int __cdecl lf_0ddd0(uint * param_1, uint param_2);
+int __cdecl pbitreadnego(uint * param_1, uint param_2);
 static int (__cdecl *orig_0ddd0)(uint *, uint);
 static SvVerify v_0ddd0 = { "pbitreadnego", -1 };
 static int __cdecl hk_0ddd0(uint * param_1, uint param_2)
 {
-    SV_HOOK_RET(int, v_0ddd0, lf_0ddd0(param_1, param_2), orig_0ddd0(param_1, param_2), NULL);
+    SV_HOOK_RET(int, v_0ddd0, pbitreadnego(param_1, param_2), orig_0ddd0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0ddd0(void)
 {
@@ -6016,12 +6016,12 @@ __declspec(naked) static void th_15df0(void)
 }
 static uint8_t expect_15df0[5] = { 0x83, 0xec, 0x28, 0xd9, 0xee };
 
-void __cdecl lf_16320(float * param_1, float * param_2);
+void __cdecl unpackorientation(float * param_1, float * param_2);
 static void (__cdecl *orig_16320)(float *, float *);
 static SvVerify v_16320 = { "unpackorientation", -1 };
 static void __cdecl hk_16320(float * param_1, float * param_2)
 {
-    SV_HOOK_VOID(v_16320, lf_16320(param_1, param_2), orig_16320(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_16320, unpackorientation(param_1, param_2), orig_16320(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_16320(void)
 {
@@ -6100,12 +6100,12 @@ __declspec(naked) static void th_16680(void)
 }
 static uint8_t expect_16680[7] = { 0x83, 0xec, 0x08, 0x8b, 0x4c, 0x24, 0x10 };
 
-void __cdecl lf_16710(float * param_1, uint param_2);
+void __cdecl unpackangle(float * param_1, uint param_2);
 static void (__cdecl *orig_16710)(float *, uint);
 static SvVerify v_16710 = { "unpackangle", -1 };
 static void __cdecl hk_16710(float * param_1, uint param_2)
 {
-    SV_HOOK_VOID(v_16710, lf_16710(param_1, param_2), orig_16710(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_16710, unpackangle(param_1, param_2), orig_16710(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_16710(void)
 {
@@ -6183,12 +6183,12 @@ __declspec(naked) static void th_16790(void)
 }
 static uint8_t expect_16790[5] = { 0xa1, 0xdc, 0xd6, 0x92, 0x19 };
 
-void __cdecl lf_16860(float * param_1, float param_2, uint param_3);
+void __cdecl packscalar(float * param_1, float param_2, uint param_3);
 static void (__cdecl *orig_16860)(float *, float, uint);
 static SvVerify v_16860 = { "packscalar", -1 };
 static void __cdecl hk_16860(float * param_1, float param_2, uint param_3)
 {
-    SV_HOOK_VOID(v_16860, lf_16860(param_1, param_2, param_3), orig_16860(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_16860, packscalar(param_1, param_2, param_3), orig_16860(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_16860(void)
 {
@@ -9462,12 +9462,12 @@ __declspec(naked) static void th_2dfc0(void)
 }
 static uint8_t expect_2dfc0[7] = { 0x83, 0xec, 0x4c, 0x8b, 0x4c, 0x24, 0x68 };
 
-void __cdecl lf_2efd0(int param_1, float * param_2, float param_3, uint param_4);
+void __cdecl packpositiondelta(int param_1, float * param_2, float param_3, uint param_4);
 static void (__cdecl *orig_2efd0)(int, float *, float, uint);
 static SvVerify v_2efd0 = { "packpositiondelta", -1 };
 static void __cdecl hk_2efd0(int param_1, float * param_2, float param_3, uint param_4)
 {
-    SV_HOOK_VOID(v_2efd0, lf_2efd0(param_1, param_2, param_3, param_4), orig_2efd0(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_2efd0, packpositiondelta(param_1, param_2, param_3, param_4), orig_2efd0(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_2efd0(void)
 {
@@ -9506,12 +9506,12 @@ __declspec(naked) static void th_2efd0(void)
 }
 static uint8_t expect_2efd0[7] = { 0x83, 0xec, 0x10, 0x8b, 0x4c, 0x24, 0x20 };
 
-void __cdecl lf_2f090(float * param_1, int param_2, float param_3, uint param_4);
+void __cdecl unpackpositiondelta(float * param_1, int param_2, float param_3, uint param_4);
 static void (__cdecl *orig_2f090)(float *, int, float, uint);
 static SvVerify v_2f090 = { "unpackpositiondelta", -1 };
 static void __cdecl hk_2f090(float * param_1, int param_2, float param_3, uint param_4)
 {
-    SV_HOOK_VOID(v_2f090, lf_2f090(param_1, param_2, param_3, param_4), orig_2f090(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_2f090, unpackpositiondelta(param_1, param_2, param_3, param_4), orig_2f090(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_2f090(void)
 {
@@ -10380,12 +10380,12 @@ __declspec(naked) static void th_3ccc0(void)
 }
 static uint8_t expect_3ccc0[8] = { 0x83, 0xec, 0x18, 0x83, 0x7c, 0x24, 0x1c, 0x00 };
 
-void __cdecl lf_3cfe0(int param_1, int param_2);
+void __cdecl calculateplayervoice(int param_1, int param_2);
 static void (__cdecl *orig_3cfe0)(int, int);
 static SvVerify v_3cfe0 = { "calculateplayervoice", -1 };
 static void __cdecl hk_3cfe0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_3cfe0, lf_3cfe0(param_1, param_2), orig_3cfe0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_3cfe0, calculateplayervoice(param_1, param_2), orig_3cfe0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_3cfe0(void)
 {
@@ -10679,12 +10679,12 @@ __declspec(naked) static void th_48ec0(void)
 }
 static uint8_t expect_48ec0[6] = { 0x83, 0xec, 0x60, 0x56, 0x33, 0xf6 };
 
-undefined4 __cdecl lf_49940(int param_1, char * param_2);
+undefined4 __cdecl server_playermessage(int param_1, char * param_2);
 static undefined4 (__cdecl *orig_49940)(int, char *);
 static SvVerify v_49940 = { "server_playermessage", -1 };
 static undefined4 __cdecl hk_49940(int param_1, char * param_2)
 {
-    SV_HOOK_RET(undefined4, v_49940, lf_49940(param_1, param_2), orig_49940(param_1, param_2), NULL);
+    SV_HOOK_RET(undefined4, v_49940, server_playermessage(param_1, param_2), orig_49940(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_49940(void)
 {

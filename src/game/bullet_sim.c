@@ -191,7 +191,7 @@ static float bullet_find_hit(Bullet *b, Hit *hit)
             g_intersect.fraction < best &&
             (pid != b->owner ||
              (g_intersect.tri_particles[0] != BONE_LEFT_HAND && g_intersect.tri_particles[0] != BONE_RIGHT_HAND)) &&
-            (pid == -1 || sr_players[pid].immune == 0)) {
+            (pid == -1 || sr_players[pid].godmode == 0)) {
             memcpy(&hit->pos, g_intersect.pos, sizeof hit->pos);
             memcpy(&hit->normal, g_intersect.normal, sizeof hit->normal);
             hit->part = g_intersect.tri_particles[0];

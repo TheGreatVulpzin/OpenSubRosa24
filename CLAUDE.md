@@ -31,7 +31,10 @@ Two kinds of session do a group. An Opus session writes the plan of the group to
 
 1. Plan: for each function, read its lifted C (`git show HEAD:src/lifted/lifted_024d.c`, marker `/* --- 0x<rva> */`). Write down the offsets, the rounding points, the NaN compare forms, the dead code and the locals that the code uses again.
 2. Names: add each field that the clean code uses to `analysis/structs/names.csv` (or to `tools/re/gen_types.py` for a custom type), then run `gen_types.py`.
-3. Write the clean C in `src/game`, `src/common` or `src/net`. Remove the `lf_XXXXX` alias of the function from its callers.
+3. Write the clean C in `src/game`, `src/common` or `src/net`. Remove the `lf_XXXXX` alias of the function from its callers.
+   - **Comments describe the code only.** Say what the code does and why, in short STE sentences. Never write about the process: no "the original", "as the original", "the 024d", "lifted C", "not rewritten yet", "by hand", no phase, no harness history. Describe the behavior itself. Example: write "the list has no size limit", not "the list has no size limit in the original". A call to a function of another file gets the comment "Game functions of other files.".
+   - When the code keeps a quirk on purpose (a local that keeps an old value, an index past an array), say the quirk in plain words: what happens and for which input. Put the reason it must stay (the bit-exact result) in `docs/game/`, not in the code.
+   - Check before each commit: `grep -n -i "original\|lifted\|rewritten\|024d" <the files you wrote>` must find nothing. The reviewer (step 5) checks this too.
 4. Run `bash tools/lift/pipeline.sh`. Then run `gate.py --all-calls --funcs <names>` and the synthetic tests of the paths that you changed.
 5. Get a review from another model before each commit. Then run the full gate (`gate.py`) before you ask for a push.
 6. At the end of the group, write or update the doc of its system in `docs/game/` (how the system works, its records and its functions). Mark the group done in `docs/plano.md`.
