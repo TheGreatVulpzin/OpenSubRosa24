@@ -6534,12 +6534,12 @@ __declspec(naked) static void th_16e30(void)
 }
 static uint8_t expect_16e30[7] = { 0x83, 0x3d, 0x60, 0xea, 0xa1, 0x07, 0x00 };
 
-void __cdecl lf_16f10(float param_1, int param_2);
+void __cdecl packevent(float param_1, int param_2);
 static void (__cdecl *orig_16f10)(float, int);
 static SvVerify v_16f10 = { "packevent", -1 };
 static void __cdecl hk_16f10(float param_1, int param_2)
 {
-    SV_HOOK_VOID(v_16f10, lf_16f10(param_1, param_2), orig_16f10(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_16f10, packevent(param_1, param_2), orig_16f10(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_16f10(void)
 {
@@ -6576,12 +6576,12 @@ __declspec(naked) static void th_16f10(void)
 }
 static uint8_t expect_16f10[5] = { 0xa1, 0x78, 0xc5, 0x4d, 0x09 };
 
-void __cdecl lf_17b60(uint param_1);
+void __cdecl unpackevent(uint param_1);
 static void (__cdecl *orig_17b60)(uint);
 static SvVerify v_17b60 = { "unpackevent", -1 };
 static void __cdecl hk_17b60(uint param_1)
 {
-    SV_HOOK_VOID(v_17b60, lf_17b60(param_1), orig_17b60(param_1), NULL);
+    SV_HOOK_VOID(v_17b60, unpackevent(param_1), orig_17b60(param_1), NULL);
 }
 __declspec(naked) static void th_17b60(void)
 {
@@ -7640,12 +7640,12 @@ __declspec(naked) static void th_1d9e0(void)
 }
 static uint8_t expect_1d9e0[8] = { 0x83, 0xec, 0x2c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_1dba0(void);
+void __cdecl unpackobjectpacket(void);
 static void (__cdecl *orig_1dba0)(void);
 static SvVerify v_1dba0 = { "unpackobjectpacket", -1 };
 static void __cdecl hk_1dba0(void)
 {
-    SV_HOOK_VOID(v_1dba0, lf_1dba0(), orig_1dba0(), NULL);
+    SV_HOOK_VOID(v_1dba0, unpackobjectpacket(), orig_1dba0(), NULL);
 }
 __declspec(naked) static void th_1dba0(void)
 {
@@ -7679,12 +7679,12 @@ __declspec(naked) static void th_1dba0(void)
 }
 static uint8_t expect_1dba0[5] = { 0x83, 0xec, 0x64, 0x53, 0x55 };
 
-void __cdecl lf_1f4a0(int param_1, int param_2);
+void __cdecl packobjectpacket2(int param_1, int param_2);
 static void (__cdecl *orig_1f4a0)(int, int);
 static SvVerify v_1f4a0 = { "packobjectpacket2", -1 };
 static void __cdecl hk_1f4a0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_1f4a0, lf_1f4a0(param_1, param_2), orig_1f4a0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_1f4a0, packobjectpacket2(param_1, param_2), orig_1f4a0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_1f4a0(void)
 {
@@ -7721,12 +7721,12 @@ __declspec(naked) static void th_1f4a0(void)
 }
 static uint8_t expect_1f4a0[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_20680(int param_1, int param_2);
+void __cdecl packobjectpacket(int param_1, int param_2);
 static void (__cdecl *orig_20680)(int, int);
 static SvVerify v_20680 = { "packobjectpacket", -1 };
 static void __cdecl hk_20680(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_20680, lf_20680(param_1, param_2), orig_20680(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_20680, packobjectpacket(param_1, param_2), orig_20680(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_20680(void)
 {

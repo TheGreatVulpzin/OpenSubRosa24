@@ -438,12 +438,330 @@ def codec_cases(c):
         case('unpackorientation_%d' % i, 'R 16320 P:0:000000000000000000000000 V:%x' % bits)
     return out
 
+# BsdSocket receive cursor, for the cases that read a packet from the buffer.
+BSD = 0x1952d680
+RECV_SIZE, RECV_POS, RECV_BIT, RECV_BUF = BSD + 0x10064, BSD + 0x10068, BSD + 0x1006c, BSD + 0x10070
+EVENTS, EVENT_SIZE = 0x93dd880, 0x80
+OBJECTS, OBJECT_SIZE = 0x5592600, 0x8230
+CITYOBJECTS, CITYOBJECT_SIZE = 0x15e24020, 0x54
+
+
+def load_recv(cc, data, pos=4):
+    """Put data in the receive buffer, as recvpacket leaves it."""
+    for i, b in enumerate(data):
+        cc.s.write(RECV_BUF + i, 'B', b)
+    cc.wr(RECV_SIZE, len(data))
+    cc.wr(RECV_POS, pos)
+    cc.wr(RECV_BIT, 0)
+
+
+def event_bytes(ev):
+    w = sp.PacketWriter()
+    ev.write(w)
+    return w.getvalue()
+
+
+SAMPLE_EVENTS = {
+    0: dict(weapon=3, shooter=77, pos=(1.0, 2.0, 3.0), vel=(0.5, -0.25, 9.0)),
+    1: dict(kind=2, target=40, pos=(4.0, 5.0, 6.0), normal=(0.0, 1.0, 0.0)),
+    2: dict(text=b'hello from the server', attach_type=0, attach_id=-1, range_mode=1),
+    3: dict(object=55, object_type=9, variant=-1),
+    4: dict(object=56, arg_a=3, arg_b=700, vec_a=(1.0, 1.5, 2.0), vec_b=(3.0, 3.5, 4.0)),
+    5: dict(item_key=0x12345, parent_human=-1, parent_item=7, parent_slot=3),
+    6: dict(item=100, call_state=3, info=4321, info2=1),
+    7: dict(packed=0x1234, human=-1, money=-5000, look=0x2abc, name=b'Playername'),
+    8: dict(player=9, money=123456, stocks=-4),
+    9: dict(sound=12, pos=(7.0, 8.0, 9.0), volume=0.75, pitch=1.25),
+    10: dict(door=2, open=1),
+    11: dict(a=1, b=-2, c=3, d=-4),
+    12: dict(a=10, b=-20, c=30, d=-40),
+    13: dict(a=100, b=200, c=300),
+    14: dict(a=5, b=6, c=7, d=0x12345),
+    15: dict(a=11, b=12, c=13),
+    16: dict(a=1, b=-2, c=3, d=-1, vec_a=(1.0, 2.0, 3.0), vec_b=(0.0, 0.0, 1.0)),
+    17: dict(human=300, active=1, player=-1),
+}
+
+
+def event_cases(c):
+    """unpackevent: one event of each type in the receive buffer, and some broken ones."""
+    out = {}
+
+    def case(name, data, pos=4, index=0x1234):
+        def build(cc):
+            load_recv(cc, data, pos)
+            return ['R 17b60 V:%x' % index]
+        out[name] = build
+    head = b'7DFP'
+    for t, f in SAMPLE_EVENTS.items():
+        case('unpackevent_%d' % t, head + event_bytes(sp.Event(t, 5000, f)))
+    case('unpackevent_filler', head + event_bytes(sp.Event(sp.EV_FILLER)))
+    case('unpackevent_nego', head + event_bytes(sp.Event(3, 9, dict(object=1, object_type=2, variant=15))))
+    case('unpackevent_text_empty', head + event_bytes(sp.Event(2, 9, dict(text=b''))))
+    case('unpackevent_text_long', head + event_bytes(sp.Event(2, 9, dict(text=b'x' * 63))))
+    for t in (2, 4, 7, 9, 16):
+        data = head + event_bytes(sp.Event(t, 5000, SAMPLE_EVENTS[t]))
+        case('unpackevent_cut_%d' % t, data[:len(data) - 9])
+    return out
+
+
+def world_blocks(ctx):
+    h = ctx['h']
+    pos = (10.0, 20.0, 30.0)
+    oa, ob = (1.0, 0.0, 0.0), (0.0, 1.0, 0.0)
+    joints = [(0.1 * k, -0.2, 0.3) for k in range(14)]
+    return dict(
+        humans=[sp.HumanBlock(h, 0, -1, 2, 80, 1, pos, oa, ob, joints)],
+        humans_car=[sp.HumanBlock(h, 0, 3, 1, 50, 0, pos, (0.0, 0.6, 0.8), (0.0, -0.8, 0.6), joints[:8])],
+        objects=[sp.ObjectBlock(5, 0, pos, oa, ob, [0.1, -0.2, 0.3, 0.4, 0.5, -0.6],
+                                [0.1, -0.2, 0.3, 0.4, 0.5, -0.6, 0.7, 0.9], (0.5, -0.25, 1.0), 1234)],
+        objects1=[sp.ObjectBlock(6, 1, pos, (0.0, 0.0, 1.0), (1.0, 0.0, 0.0), [0.0] * 6, [0.0] * 8,
+                                 (0.0, 0.0, 0.0), 77)],
+        objects2=[sp.ObjectBlock(7, 2, pos)],
+        items=[sp.ItemBlock(ctx['free'][0], pos, oa, ob), sp.ItemBlock(ctx['free'][1], pos, ob, oa, (3, 4, 0x1234567))],
+        cityobjects=[sp.CityObjectBlock(9, pos, oa, ob, 3, 4, -0.5)],
+    )
+
+
+def object_cases(c):
+    """unpackobjectpacket: the four lists in the receive buffer."""
+    out = {}
+    blocks = world_blocks(c.ctx)
+
+    def case(name, humans=(), objects=(), items=(), cityobjects=()):
+        def build(cc):
+            w = sp.PacketWriter()
+            for lst in (humans, objects, items, cityobjects):
+                w.write_bits(len(lst), 8)
+                for b in lst:
+                    b.write(w)
+            load_recv(cc, w.getvalue())
+            return ['R 1dba0']
+        out[name] = build
+    case('unpackobjectpacket_humans', blocks['humans'])
+    case('unpackobjectpacket_humans_car', blocks['humans_car'])
+    case('unpackobjectpacket_objects', objects=blocks['objects'])
+    case('unpackobjectpacket_objects1', objects=blocks['objects1'])
+    case('unpackobjectpacket_objects2', objects=blocks['objects2'])
+    case('unpackobjectpacket_items', items=blocks['items'])
+    case('unpackobjectpacket_cityobjects', cityobjects=blocks['cityobjects'])
+    case('unpackobjectpacket_all', blocks['humans'], blocks['objects'] + blocks['objects1'] + blocks['objects2'],
+         blocks['items'], blocks['cityobjects'])
+    case('unpackobjectpacket_empty')
+    return out
+
+
+def state_packet(ctx, rnd, ticks, blocks=None, **kw):
+    blocks = blocks or {}
+    st = sp.State(game_id=rnd, tick=ticks, phase=kw.get('phase', 1), phase_timer=777, world=0x12345,
+                  team_counts=(3, 4, 5), player=ctx['p'], human=kw.get('human', -1), look_yaw=1.25, look_pitch=-0.5,
+                  menu=kw.get('menu', 0), menu_building=0, shop=[(1, 2, 3), (4, 5, 6)], money=-777, action_ack=9,
+                  health=88, unk_15f0=5, unk_15f4=6, inventory=[[1, 2], [], [3], [], [], [4, 5, 6], []],
+                  event_total=0x1234, first_event=kw.get('first', 0x1234), events=kw.get('events', []))
+    st.humans = blocks.get('humans', [])
+    st.objects = blocks.get('objects', [])
+    st.items = blocks.get('items', [])
+    st.cityobjects = blocks.get('cityobjects', [])
+    w = sp.PacketWriter()
+    st.write(w)
+    return w.getvalue()
+
+
+def client_cases(c):
+    """clientrecv: the packets of the server, read by the client."""
+    ctx = c.ctx
+    ip, port = c.addr()
+    rnd = c.rd(GAME + 0x1c)
+    ticks = c.rd(TICKS)
+    blocks = world_blocks(ctx)
+    out = {}
+
+    def case(name, packets, edit=None):
+        def build(cc):
+            if edit:
+                edit(cc)
+            return ['R 2e310'] + [recv_line(p, ip, port) for p in packets]
+        out[name] = build
+    evs = [sp.Event(t, 5000, f) for t, f in SAMPLE_EVENTS.items()]
+    allb = dict(humans=blocks['humans'], objects=blocks['objects'] + blocks['objects1'],
+                items=blocks['items'], cityobjects=blocks['cityobjects'])
+    case('clientrecv_idle', [])
+    case('clientrecv_timeout', [], lambda cc: cc.wr(0x1954d700 + 0x28, 0x4af))
+    case('clientrecv_newgame', [packet(sp.NewGame())])
+    case('clientrecv_state', [state_packet(ctx, rnd, ticks + 1, allb, human=ctx['h'], events=evs[:10])])
+    case('clientrecv_state_shop', [state_packet(ctx, rnd, ticks + 1, allb, menu=10, events=evs[10:])])
+    case('clientrecv_state_phase2', [state_packet(ctx, rnd, ticks + 1, allb, phase=2)])
+    case('clientrecv_state_old', [state_packet(ctx, rnd, ticks - 5, allb)])
+    case('clientrecv_state_skip', [state_packet(ctx, rnd, ticks - 50, allb)])
+    case('clientrecv_state_other_round', [state_packet(ctx, rnd + 1, ticks + 1, allb)])
+    case('clientrecv_state_next_event', [state_packet(ctx, rnd, ticks + 1, allb, events=evs[:3])],
+         lambda cc: cc.wr(0xf437318, 0x1234))
+
+    def held(cc):
+        base = ITEMS + ctx['free'][0] * ITEM_SIZE
+        cc.s.write(base, 'i', 1)
+        cc.s.write(base + 0x18, 'ii', ctx['h'], -1)
+        cc.s.write(base + 0x20, 'i', 2)
+    case('clientrecv_state_items_held', [state_packet(ctx, rnd, ticks + 1, dict(items=blocks['items']))], held)
+    full = state_packet(ctx, rnd, ticks + 1, allb, human=ctx['h'], events=evs[:6])
+    case('garbage_clientrecv_state_cut', [full[:len(full) - 25]])
+    case('garbage_clientrecv_state_cut_early', [full[:60]])
+    voice = [sp.VoiceSlot(3, -1, [sp.VoiceFrame(i, 1, bytes([i + 1] * 5)) for i in range(4)]) if i % 2 == 0 else None
+             for i in range(8)]
+    case('clientrecv_voice', [packet(sp.Voice(voice))])
+    case('clientrecv_voice_item', [packet(sp.Voice([sp.VoiceSlot(-1, 9, [sp.VoiceFrame(60 + i, 2, b'')
+                                                                          for i in range(4)])] + [None] * 7))])
+    case('clientrecv_two', [packet(sp.Voice([None] * 8)), full])
+    return out
+
+
+def packevent_cases(c):
+    """packevent: one event in the ring, written for a connection."""
+    ctx = c.ctx
+    p, conn = ctx['p'], ctx['conn']
+    out = {}
+    IDX = 0x2000
+
+    def case(name, typ, admin=0, age=0, edit=None, **f):
+        def build(cc):
+            e = EVENTS + IDX * EVENT_SIZE
+            for k in range(0, EVENT_SIZE, 4):
+                cc.s.write(e + k, 'i', 0)
+            cc.s.write(e, 'ii', typ, cc.rd(TICKS) - age)
+            cc.s.write(e + 0x8, 'fff', *f.get('pos', (1.0, 2.0, 3.0)))
+            cc.s.write(e + 0x14, 'fff', *f.get('vec', (0.5, 0.25, -1.0)))
+            cc.s.write(e + 0x20, 'iiii', f.get('param', 5), f.get('attach_type', 1), f.get('attach_id', 2),
+                       f.get('range_mode', 1))
+            cc.s.write(e + 0x30, 'ff', 0.75, 1.5)
+            for i, b in enumerate(f.get('text', b'chat text here').ljust(64, b'\0')[:64]):
+                cc.s.write(e + 0x40 + i, 'B', b)
+            cc.conn(conn, C_ADMIN, admin)
+            if edit:
+                edit(cc)
+            return ['R 16f10 V:%x V:%x' % (IDX, conn)]
+        out[name] = build
+    for t in range(0, 19):
+        case('packevent_%d' % t, t, 1, param=0x1235 if t != 2 else 11)
+    for t in range(0, 19):
+        case('packevent_user_%d' % t, t, 0, param=0x1235 if t != 2 else 11, attach_type=3)
+    case('packevent_old_message', 2, 1, age=700, attach_type=1)
+    case('packevent_old_message3', 2, 1, age=700, attach_type=3)
+    case('packevent_old_sound', 9, 1, age=700)
+    case('packevent_admin_msg_user', 2, 0, attach_type=4)
+    case('packevent_admin_msg_admin', 2, 1, attach_type=4)
+    other = ctx['others'][0]
+
+    def human_pos(cc):
+        hid = cc.rd(PLAYERS + other * PLAYER_SIZE + P_HUMAN)
+        cc.s.write(CONNS + conn * CONN_SIZE + 0xf164, 'fff', 0.0, 0.0, 0.0)
+        cc.s.write(HUMANS + hid * HUMAN_SIZE + 0xc8 + 0xe0 * 2, 'fff', 1.0, 1.0, 1.0)
+    for rm in (0, 1, 2):
+        case('packevent_range_human_%d' % rm, 2, 0, attach_type=1, attach_id=other, range_mode=rm, edit=human_pos)
+        case('packevent_range_item_%d' % rm, 2, 0, attach_type=2, attach_id=ctx['free'][0], range_mode=rm)
+
+    def far(cc):
+        human_pos(cc)
+        cc.s.write(CONNS + conn * CONN_SIZE + 0xf164, 'fff', 900.0, 0.0, 0.0)
+    case('packevent_far_human', 2, 0, attach_type=1, attach_id=other, range_mode=0, edit=far)
+
+    def own_text(cc):
+        for i, b in enumerate(b'what I said'.ljust(64, b'\0')):
+            cc.s.write(PLAYERS + p * PLAYER_SIZE + 0x23c8 + i, 'B', b)
+        cc.conn(conn, C_PLAYER, p)
+    hp = c.rd(PLAYERS + p * PLAYER_SIZE + P_HUMAN)
+    case('packevent_own_text', 2, 0, attach_type=1, attach_id=hp, edit=own_text)
+    case('packevent_own_text_other', 2, 0, attach_type=1, attach_id=hp + 1, edit=own_text)
+    case('packevent_no_player', 2, 0, attach_type=1, attach_id=hp, edit=lambda cc: cc.conn(conn, C_PLAYER, -1))
+    case('packevent_attach_none', 2, 0, attach_type=1, attach_id=-1)
+    return out
+
+
+def item_at(cc, i, pos, vel=(0.0, 0.0, 0.0), angvel=(0.0, 0.0, 0.0), ph=-1, pi=-1, slot=0, typ=1):
+    a = ITEMS + i * ITEM_SIZE
+    for k in range(0, ITEM_SIZE, 4):
+        cc.s.write(a + k, 'i', 0)
+    cc.s.write(a, 'i', 1)
+    cc.s.write(a + 0xc, 'i', typ)
+    cc.s.write(a + 0x18, 'iii', ph, pi, slot)
+    cc.s.write(a + 0x48, 'fff', *pos)
+    cc.s.write(a + 0x6c, 'fff', *vel)
+    cc.s.write(a + 0xb4, 'fff', *angvel)
+    cc.s.write(a + 0x84, 'fffffffff', 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+
+
+def objectpacket_cases(c):
+    """packobjectpacket and packobjectpacket2: the conn and the player of ctx."""
+    ctx = c.ctx
+    p, conn, h = ctx['p'], ctx['conn'], ctx['h']
+    out = {}
+    first, second = ctx['free'][:2]
+
+    def case(rva, name, edit=None, seq=0, behind=0, args=None):
+        def build(cc):
+            cc.conn(conn, 0x4c, seq, 'I')
+            if behind:
+                cc.wr(0xf437318, 100 + behind)
+                cc.conn(conn, 0x44, 100)
+            if edit:
+                edit(cc)
+            return ['R %s V:%x V:%x' % ((rva,) + (args or (conn, p)))]
+        out[name] = build
+
+    def cars(cc):
+        for k in range(20):
+            o = OBJECTS + k * OBJECT_SIZE
+            cc.s.write(o, 'iii', 1, 12 if k == 3 else 1, 3 if k == 7 else 1)
+            cc.s.write(o + 0x24, 'fff', 5.0 * k, 3.0, 2.0)
+            cc.s.write(o + 0x3c, 'fffffffff', 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+
+    def city(cc):
+        for k in range(0, 100, 3):
+            cc.s.write(CITYOBJECTS + k * CITYOBJECT_SIZE, 'i', 1)
+            cc.s.write(CITYOBJECTS + k * CITYOBJECT_SIZE + 0x8, 'fff', float(k), 1.0, 2.0)
+
+    def many_items(cc):
+        for k in range(300):
+            item_at(cc, 1023 - k, (5.0, 5.0, 5.0))
+    for rva, tag in (('20680', 'packobjectpacket'), ('1f4a0', 'packobjectpacket2')):
+        case(rva, tag + '_basic')
+        case(rva, tag + '_behind', behind=40)
+        case(rva, tag + '_behind_small', behind=20)
+        case(rva, tag + '_nohuman', edit=lambda cc: cc.player(p, P_HUMAN, -1))
+        case(rva, tag + '_noplayer', args=(conn, 0xffffffff))
+        case(rva, tag + '_dead', edit=lambda cc: cc.s.write(HUMANS + h * HUMAN_SIZE + 0x28, 'i', 0))
+        for seq in (0, 1, 3, 5, 0x40):
+            case(rva, tag + '_seq%d' % seq, seq=seq, edit=lambda cc: (
+                item_at(cc, first, (5.0, 5.0, 5.0)), item_at(cc, second, (500.0, 5.0, 5.0), (3.0, 0.0, 0.0))))
+        case(rva, tag + '_items_moving', seq=7, edit=lambda cc: (
+            item_at(cc, first, (50.0, 5.0, 5.0), (0.5, 0.0, 0.0)),
+            item_at(cc, second, (50.0, 5.0, 5.0), (0.0, 0.0, 0.0), (0.0, 0.5, 0.0))))
+        case(rva, tag + '_items_still', seq=7, edit=lambda cc: (
+            item_at(cc, first, (50.0, 5.0, 5.0)), item_at(cc, second, (50.0, 5.0, 5.0), ph=0, slot=1)))
+        case(rva, tag + '_items_held', seq=7, edit=lambda cc: (
+            item_at(cc, first, (5.0, 5.0, 5.0), ph=0, slot=1), item_at(cc, second, (5.0, 5.0, 5.0), ph=0, slot=3)))
+        case(rva, tag + '_items_nan', seq=7, edit=lambda cc: item_at(
+            cc, first, (50.0, 5.0, 5.0), (float('nan'), 0.0, 0.0), (float('nan'), 0.0, 0.0)))
+        case(rva, tag + '_items_cash', edit=lambda cc: (
+            item_at(cc, first, (5.0, 5.0, 5.0), typ=0x10),
+            cc.s.write(ITEMS + first * ITEM_SIZE + 0x134, 'iiI', 3, 4, 0x1234567)))
+        case(rva, tag + '_items_many', edit=many_items)
+        case(rva, tag + '_objects', edit=cars)
+        case(rva, tag + '_objects_ownvehicle', edit=lambda cc: (
+            cars(cc), cc.s.write(HUMANS + h * HUMAN_SIZE + 0x14, 'i', 4)))
+        case(rva, tag + '_humans_vehicle', edit=lambda cc: [
+            cc.s.write(HUMANS + k * HUMAN_SIZE + 0x14, 'i', 4) for k in range(0, 40, 2)])
+        case(rva, tag + '_cityobjects', edit=city)
+    return out
+
+
 
 FUNCS = {'serverrecv': recv_cases, 'server_playermessage': message_cases, 'calculateplayervoice': voice_cases,
-         'codec': codec_cases}
+         'codec': codec_cases, 'unpackevent': event_cases, 'unpackobjectpacket': object_cases,
+         'clientrecv': client_cases, 'packevent': packevent_cases, 'packobjectpacket': objectpacket_cases}
 RVA_NAME = {'33650': 'serverrecv', '49940': 'server_playermessage', '3cfe0': 'calculateplayervoice',
             '16860': 'packscalar', 'ddd0': 'pbitreadnego', '16710': 'unpackangle', '5160': 'packunitvector',
-            '2efd0': 'packpositiondelta', '2f090': 'unpackpositiondelta', '16320': 'unpackorientation'}
+            '2efd0': 'packpositiondelta', '2f090': 'unpackpositiondelta', '16320': 'unpackorientation', '17b60': 'unpackevent', '1dba0': 'unpackobjectpacket',
+            '2e310': 'clientrecv', '16f10': 'packevent', '20680': 'packobjectpacket', '1f4a0': 'packobjectpacket2'}
 
 
 def set_recv_buffer(cc, data):

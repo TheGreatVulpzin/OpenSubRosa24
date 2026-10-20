@@ -5,7 +5,7 @@ This folder describes how each rewritten game system works. Each page lists the 
 | Page | Files | System |
 | --- | --- | --- |
 | [math.md](math.md) | `src/common/vectors.c`, `random.c`, `intersect.c` | Vectors, orientations, random numbers and intersection tests. |
-| [network.md](network.md) | `src/net/packet.c`, `events.c` | The bit stream of a packet and the server events. |
+| [network.md](network.md) | `src/net/packet.c`, `events.c`, `server.c`, `netpack.c`, `commands.c`, `master.c`, `client.c` | The bit stream, the events, the server receive and send, priorities, voice, chat commands and the client decoder. |
 | [accounts.md](accounts.md) | `src/server/accounts.c` | The accounts in `user/server.srk`. |
 | [items.md](items.md) | `src/game/items.c`, `item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullets.c`, `bullet_sim.c` | Items, their places and motion, guns, phones, cash bills and bullets. |
 | [physics.md](physics.md) | `src/game/particles.c`, `solver.c`, `bonds.c` | Particles, bonds and the bond solver. |

@@ -102,7 +102,7 @@ typedef union Wheel { struct {
     vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
     vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
     vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
-    int unk_5c;         /* +0x5c the packets send it */
+    float spin_net;      /* +0x5c the packets send it as a signed scalar of 6 bits */
     float unk_60[4];    /* +0x60 */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
     uint8_t unk_74[0x10];
@@ -119,7 +119,7 @@ typedef union CityObjectRec { struct {
     int building;       /* +0x44 index of the city building record (0x9dc bytes) */
     int floor;          /* +0x48 human_itemsimulation writes the target floor when it is below num_floors */
     int num_floors;     /* +0x4c */
-    float unk_50;       /* +0x50 the packets */
+    float net_scalar;    /* +0x50 the packets send it as a signed scalar of 6 bits */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
 /* A face of the mesh of an object (Object.faces): a triangle or a quad of Object.verts. */
@@ -303,6 +303,22 @@ typedef union VoiceRing { struct {
     int voice_off;      /* +0x920c 1 bit from the client: a speaker with it set is not heard */
 }; uint8_t lf_raw[0x9210]; } VoiceRing;
 
+/* A voice channel of the client: one of the 8 speakers that the client plays (global at RVA
+ * 0xeca4bc0). The frames are in a ring of 64 as in VoiceRing. */
+typedef union VoiceChannel { struct {
+    int active;         /* +0x00 */
+    int unk_04;
+    int human;          /* +0x08 the body of the speaker, -1 for a radio */
+    int item;           /* +0x0c the radio item, -1 for a direct voice */
+    uint8_t unk_10[0x5010];
+    int head;           /* +0x5020 the next frame index */
+    int unk_5024;
+    int size[64];       /* +0x5028 */
+    int mode[64];       /* +0x5128 */
+    uint8_t data[64][256]; /* +0x5228 */
+    uint8_t unk_9228[0x20000];
+}; uint8_t lf_raw[0x29228]; } VoiceChannel;
+
 
 
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
@@ -341,6 +357,8 @@ SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
+SR_STATIC_ASSERT(sizeof(VoiceChannel) == 0x29228, "VoiceChannel");
+SR_STATIC_ASSERT(offsetof(VoiceChannel, head) == 0x5020, "VoiceChannel.head");
 SR_STATIC_ASSERT(offsetof(VoiceSlot, distance) == 0x1c, "VoiceSlot.distance");
 SR_STATIC_ASSERT(offsetof(Account, ban_time) == 0x48, "Account.ban_time");
 
@@ -396,8 +414,8 @@ typedef union Player { struct {
     int action_tail;                     /* +0x00e8 clientrecv */
     PlayerAction actions[64];            /* +0x00ec serverrecv type 4 writes the ring; player_addaction_chat/menu */
     int hud_health;                      /* +0x15ec serversend: 8 bits */
-    int hud_unk6;                        /* +0x15f0 serversend: 6 bits */
-    int hud_unk8;                        /* +0x15f4 serversend: 8 bits */
+    int hud_value6;                      /* +0x15f0 serversend: 6 bits */
+    int hud_value8;                      /* +0x15f4 serversend: 8 bits */
     InventorySlot hud_inventory[7];      /* +0x15f8 serversend: count 4 bits and 8 items of 16 bits */
     uint8_t pad_16f4[0x344];
     int is_bot;                          /* +0x1a38 scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy */
@@ -459,8 +477,8 @@ SR_STATIC_ASSERT(offsetof(Player, num_actions) == 0xe4, "Player.num_actions");
 SR_STATIC_ASSERT(offsetof(Player, action_tail) == 0xe8, "Player.action_tail");
 SR_STATIC_ASSERT(offsetof(Player, actions) == 0xec, "Player.actions");
 SR_STATIC_ASSERT(offsetof(Player, hud_health) == 0x15ec, "Player.hud_health");
-SR_STATIC_ASSERT(offsetof(Player, hud_unk6) == 0x15f0, "Player.hud_unk6");
-SR_STATIC_ASSERT(offsetof(Player, hud_unk8) == 0x15f4, "Player.hud_unk8");
+SR_STATIC_ASSERT(offsetof(Player, hud_value6) == 0x15f0, "Player.hud_value6");
+SR_STATIC_ASSERT(offsetof(Player, hud_value8) == 0x15f4, "Player.hud_value8");
 SR_STATIC_ASSERT(offsetof(Player, hud_inventory) == 0x15f8, "Player.hud_inventory");
 SR_STATIC_ASSERT(offsetof(Player, is_bot) == 0x1a38, "Player.is_bot");
 SR_STATIC_ASSERT(offsetof(Player, ai_waypoint) == 0x1a44, "Player.ai_waypoint");
@@ -538,12 +556,10 @@ typedef union Human { struct {
     int look_a;                          /* +0x2b38 createhuman copies from player.look_a */
     int unk_2b3c;                        /* +0x2b3c 2 functions */
     int unk_2b40;                        /* +0x2b40 2 functions */
-    int unk_2b44;                        /* +0x2b44 1 functions */
-    int unk_2b48;                        /* +0x2b48 1 functions */
-    uint8_t pad_2b4c[0x8];
-    int unk_2b54;                        /* +0x2b54 1 functions */
-    int unk_2b58;                        /* +0x2b58 1 functions */
-    uint8_t pad_2b5c[0x8];
+    int net_tick;                        /* +0x2b44 unpackobjectpacket: the tick of the last state of the human */
+    vec3 net_pos;                        /* +0x2b48 unpackobjectpacket: the place at net_tick */
+    int net_tick_prev;                   /* +0x2b54 unpackobjectpacket: the tick of the state before */
+    vec3 net_pos_prev;                   /* +0x2b58 unpackobjectpacket: the place at net_tick_prev */
 }; uint8_t lf_raw[0x2b64]; } Human;
 SR_STATIC_ASSERT(sizeof(Human) == 0x2b64, "Human");
 SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
@@ -595,6 +611,10 @@ SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
 SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
 SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
 SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
+SR_STATIC_ASSERT(offsetof(Human, net_tick) == 0x2b44, "Human.net_tick");
+SR_STATIC_ASSERT(offsetof(Human, net_pos) == 0x2b48, "Human.net_pos");
+SR_STATIC_ASSERT(offsetof(Human, net_tick_prev) == 0x2b54, "Human.net_tick_prev");
+SR_STATIC_ASSERT(offsetof(Human, net_pos_prev) == 0x2b58, "Human.net_pos_prev");
 
 /* item[]: record of 0x1ac bytes. */
 typedef union Item { struct {
@@ -748,7 +768,7 @@ typedef union Object { struct {
     int unk_5e94;                        /* +0x5e94 2 functions */
     int unk_5e98;                        /* +0x5e98 2 functions */
     uint8_t pad_5e9c[0x44];
-    int unk_5ee0;                        /* +0x5ee0 6 functions */
+    int rpm_net;                         /* +0x5ee0 packobjectpacket: 13 bits; objectsimulation adds or subtracts 10 and resets it to 2000 (likely the engine sound) */
     int unk_5ee4;                        /* +0x5ee4 1 functions */
     int num_wheels;                      /* +0x5ee8 createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels) */
     Wheel wheels[32];                    /* +0x5eec stride 0x98: objectwheelcollision reads wheels[i] (particles, radius, steer, pos); the list ends at num_wheel_bodies (+0x71ec) */
@@ -780,12 +800,10 @@ typedef union Object { struct {
     vec3 seats[7];                       /* +0x81ac createobject copies objecttype seats; humansimulation places a sitting human there (x along rot[0], y along rot[1], z along rot[2]) */
     uint8_t pad_8200[0xc];
     float unk_820c;                      /* +0x820c 1 functions */
-    int unk_8210;                        /* +0x8210 2 functions */
-    int unk_8214;                        /* +0x8214 2 functions */
-    uint8_t pad_8218[0x8];
-    int unk_8220;                        /* +0x8220 2 functions */
-    int unk_8224;                        /* +0x8224 2 functions */
-    uint8_t pad_8228[0x8];
+    int net_tick;                        /* +0x8210 unpackobjectpacket: the tick of the last state of the object */
+    vec3 net_pos;                        /* +0x8214 unpackobjectpacket: the place at net_tick */
+    int net_tick_prev;                   /* +0x8220 unpackobjectpacket: the tick of the state before */
+    vec3 net_pos_prev;                   /* +0x8224 unpackobjectpacket: the place at net_tick_prev */
 }; uint8_t lf_raw[0x8230]; } Object;
 SR_STATIC_ASSERT(sizeof(Object) == 0x8230, "Object");
 SR_STATIC_ASSERT(offsetof(Object, active) == 0x0, "Object.active");
@@ -817,12 +835,17 @@ SR_STATIC_ASSERT(offsetof(Object, throttle) == 0x5e54, "Object.throttle");
 SR_STATIC_ASSERT(offsetof(Object, engine_power) == 0x5e58, "Object.engine_power");
 SR_STATIC_ASSERT(offsetof(Object, gear) == 0x5e6c, "Object.gear");
 SR_STATIC_ASSERT(offsetof(Object, gear_ratio) == 0x5e78, "Object.gear_ratio");
+SR_STATIC_ASSERT(offsetof(Object, rpm_net) == 0x5ee0, "Object.rpm_net");
 SR_STATIC_ASSERT(offsetof(Object, num_wheels) == 0x5ee8, "Object.num_wheels");
 SR_STATIC_ASSERT(offsetof(Object, wheels) == 0x5eec, "Object.wheels");
 SR_STATIC_ASSERT(offsetof(Object, num_wheel_bodies) == 0x71ec, "Object.num_wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, wheel_bodies) == 0x71f0, "Object.wheel_bodies");
 SR_STATIC_ASSERT(offsetof(Object, num_seats) == 0x81a8, "Object.num_seats");
 SR_STATIC_ASSERT(offsetof(Object, seats) == 0x81ac, "Object.seats");
+SR_STATIC_ASSERT(offsetof(Object, net_tick) == 0x8210, "Object.net_tick");
+SR_STATIC_ASSERT(offsetof(Object, net_pos) == 0x8214, "Object.net_pos");
+SR_STATIC_ASSERT(offsetof(Object, net_tick_prev) == 0x8220, "Object.net_tick_prev");
+SR_STATIC_ASSERT(offsetof(Object, net_pos_prev) == 0x8224, "Object.net_pos_prev");
 
 /* connection[]: record of 0xf170 bytes. */
 typedef union Connection { struct {
@@ -1098,9 +1121,9 @@ SR_STATIC_ASSERT(offsetof(Body, unread_3c) == 0x3c, "Body.unread_3c");
 /* game[]: record of 0x25d64 bytes. */
 typedef union Game { struct {
     uint8_t pad_0000[0x4];
-    int unk_0004;                        /* +0x0004 1 functions */
+    int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
-    int unk_000c;                        /* +0x000c 2 functions */
+    int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
     uint8_t pad_0010[0xc];
     int round_number;                    /* +0x001c resetgame adds 1 (likely); serversend sends it */
     int state;                           /* +0x0020 1 and 2; manager: 2 = match running */
@@ -1111,8 +1134,8 @@ typedef union Game { struct {
     int unk_0034;                        /* +0x0034 dedicatedserverloop writes 0x4ec */
     int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
     uint8_t pad_003c[0x10];
-    float unk_004c;                      /* +0x004c 3 functions */
-    float unk_0050;                      /* +0x0050 3 functions */
+    float start_angle_a;                 /* +0x004c serversend: packangle 16 in the new game packet */
+    float start_angle_b;                 /* +0x0050 serversend: packangle 16 in the new game packet */
     uint8_t pad_0054[0x4];
     vec3 team0_base_min;                 /* +0x0058 pointinsidebase: the box of the base of team 0; team records are 0x117c bytes */
     vec3 team0_base_max;                 /* +0x0064 pointinsidebase */
@@ -1120,7 +1143,7 @@ typedef union Game { struct {
     vec3 team0_safe_max;                 /* +0x007c pointinsidebasesafe */
     float unk_0088;                      /* +0x0088 2 functions */
     int unk_008c;                        /* +0x008c 1 functions */
-    int unk_0090;                        /* +0x0090 7 functions */
+    int team0_members;                   /* +0x0090 serversend: 6 bits in the state packet; the team records are 0x117c bytes */
     uint8_t pad_0094[0x4];
     int unk_0098;                        /* +0x0098 2 functions */
     int team0_manager;                   /* +0x009c logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
@@ -1282,7 +1305,7 @@ typedef union Game { struct {
     float unk_1200;                      /* +0x1200 1 functions */
     uint8_t pad_1204[0x4];
     int unk_1208;                        /* +0x1208 1 functions */
-    int unk_120c;                        /* +0x120c 6 functions */
+    int team1_members;                   /* +0x120c serversend: 6 bits in the state packet */
     uint8_t pad_1210[0x4];
     int unk_1214;                        /* +0x1214 2 functions */
     int team1_manager;                   /* +0x1218 as team0_manager, team record 1 */
@@ -1319,7 +1342,7 @@ typedef union Game { struct {
     float unk_1680;                      /* +0x1680 1 functions */
     int unk_1684;                        /* +0x1684 1 functions */
     uint8_t pad_1688[0xd00];
-    int unk_2388;                        /* +0x2388 4 functions */
+    int team2_members;                   /* +0x2388 serversend: 6 bits in the state packet */
     uint8_t pad_238c[0x8];
     int team2_manager;                   /* +0x2394 as team0_manager, team record 2 */
     uint8_t pad_2398[0x430];
@@ -1376,7 +1399,9 @@ typedef union Game { struct {
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, link_state) == 0x4, "Game.link_state");
 SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
+SR_STATIC_ASSERT(offsetof(Game, round_mode) == 0xc, "Game.round_mode");
 SR_STATIC_ASSERT(offsetof(Game, round_number) == 0x1c, "Game.round_number");
 SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
 SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
@@ -1384,13 +1409,18 @@ SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
 SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
 SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+SR_STATIC_ASSERT(offsetof(Game, start_angle_a) == 0x4c, "Game.start_angle_a");
+SR_STATIC_ASSERT(offsetof(Game, start_angle_b) == 0x50, "Game.start_angle_b");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_min) == 0x58, "Game.team0_base_min");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_max) == 0x64, "Game.team0_base_max");
 SR_STATIC_ASSERT(offsetof(Game, team0_safe_min) == 0x70, "Game.team0_safe_min");
 SR_STATIC_ASSERT(offsetof(Game, team0_safe_max) == 0x7c, "Game.team0_safe_max");
+SR_STATIC_ASSERT(offsetof(Game, team0_members) == 0x90, "Game.team0_members");
 SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
 SR_STATIC_ASSERT(offsetof(Game, team0_doors) == 0xb0, "Game.team0_doors");
+SR_STATIC_ASSERT(offsetof(Game, team1_members) == 0x120c, "Game.team1_members");
 SR_STATIC_ASSERT(offsetof(Game, team1_manager) == 0x1218, "Game.team1_manager");
+SR_STATIC_ASSERT(offsetof(Game, team2_members) == 0x2388, "Game.team2_members");
 SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
 SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
@@ -1988,31 +2018,8 @@ typedef union City { struct {
     uint8_t pad_2ffb0[0x2ec];
     int unk_3029c;                       /* +0x3029c 2 functions */
     int unk_302a0;                       /* +0x302a0 3 functions */
-    int unk_302a4;                       /* +0x302a4 7 functions */
-    int unk_302a8;                       /* +0x302a8 4 functions */
-    int unk_302ac;                       /* +0x302ac 3 functions */
-    int unk_302b0;                       /* +0x302b0 2 functions */
-    int unk_302b4;                       /* +0x302b4 1 functions */
-    int unk_302b8;                       /* +0x302b8 1 functions */
-    int unk_302bc;                       /* +0x302bc 1 functions */
-    int unk_302c0;                       /* +0x302c0 1 functions */
-    int unk_302c4;                       /* +0x302c4 1 functions */
-    int unk_302c8;                       /* +0x302c8 1 functions */
-    int unk_302cc;                       /* +0x302cc 1 functions */
-    int unk_302d0;                       /* +0x302d0 1 functions */
-    int unk_302d4;                       /* +0x302d4 1 functions */
-    int unk_302d8;                       /* +0x302d8 1 functions */
-    int unk_302dc;                       /* +0x302dc 1 functions */
-    int unk_302e0;                       /* +0x302e0 1 functions */
-    int unk_302e4;                       /* +0x302e4 1 functions */
-    int unk_302e8;                       /* +0x302e8 1 functions */
-    int unk_302ec;                       /* +0x302ec 1 functions */
-    int unk_302f0;                       /* +0x302f0 1 functions */
-    int unk_302f4;                       /* +0x302f4 1 functions */
-    int unk_302f8;                       /* +0x302f8 1 functions */
-    int unk_302fc;                       /* +0x302fc 1 functions */
-    int unk_30300;                       /* +0x30300 1 functions */
-    int unk_30304;                       /* +0x30304 1 functions */
+    int shop_count;                      /* +0x302a4 serversend: the rows of the shop of building 0 (menu 10), records of 0x9dc bytes */
+    int shop_rows[24];                   /* +0x302a8 serversend: 8 rows of 3 numbers: 8, 24 and 4 bits */
     int unk_30308;                       /* +0x30308 1 functions */
     int unk_3030c;                       /* +0x3030c 1 functions */
     int unk_30310;                       /* +0x30310 1 functions */
@@ -2043,6 +2050,8 @@ SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings")
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
 SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");
 SR_STATIC_ASSERT(offsetof(City, building_max) == 0x2fa04, "City.building_max");
+SR_STATIC_ASSERT(offsetof(City, shop_count) == 0x302a4, "City.shop_count");
+SR_STATIC_ASSERT(offsetof(City, shop_rows) == 0x302a8, "City.shop_rows");
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {
@@ -2254,7 +2263,7 @@ typedef union Debug { struct {
     int unk_5024c;                       /* +0x5024c 2 functions */
     int unk_50250;                       /* +0x50250 2 functions */
     uint8_t pad_50254[0xf0];
-    int unk_50344;                       /* +0x50344 1 functions */
+    int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x1f3c];
     int unk_52284;                       /* +0x52284 1 functions */
     uint8_t pad_52288[0xfc];
@@ -2268,6 +2277,7 @@ typedef union Debug { struct {
     int unk_523c4;                       /* +0x523c4 2 functions */
 }; uint8_t lf_raw[0x523c8]; } Debug;
 SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 
 /* filelist[]: record of 0x80020 bytes. */
 typedef union FileList { struct {
@@ -2629,27 +2639,10 @@ SR_STATIC_ASSERT(sizeof(Scenario) == 0x134, "Scenario");
 
 /* radix[]: record of 0x400804 bytes. */
 typedef union Radix { struct {
-    int unk_0000;                        /* +0x0000 5 functions */
-    int unk_0004;                        /* +0x0004 5 functions */
-    int unk_0008;                        /* +0x0008 4 functions */
-    int unk_000c;                        /* +0x000c 1 functions */
-    int unk_0010;                        /* +0x0010 1 functions */
-    uint8_t pad_0014[0xffff0];
-    int unk_100004;                      /* +0x100004 1 functions */
-    int unk_100008;                      /* +0x100008 1 functions */
-    uint8_t pad_10000c[0xffff8];
-    int unk_200004;                      /* +0x200004 5 functions */
-    int unk_200008;                      /* +0x200008 4 functions */
-    int unk_20000c;                      /* +0x20000c 1 functions */
-    int unk_200010;                      /* +0x200010 1 functions */
-    int unk_200014;                      /* +0x200014 1 functions */
-    uint8_t pad_200018[0xfffec];
-    int unk_300004;                      /* +0x300004 2 functions */
-    int unk_300008;                      /* +0x300008 2 functions */
-    int unk_30000c;                      /* +0x30000c 1 functions */
-    int unk_300010;                      /* +0x300010 1 functions */
-    int unk_300014;                      /* +0x300014 1 functions */
-    uint8_t pad_300018[0xfffec];
+    int count;                           /* +0x0000 packobjectpacket: the number of entries; csradixsort sorts keys and values */
+    int order[524288];                   /* +0x0004 csradixsort: the sorted order of the entries */
+    int keys[262144];                    /* +0x200004 packobjectpacket: the score of each entry */
+    int values[262144];                  /* +0x300004 packobjectpacket: the id of each entry */
     int unk_400004;                      /* +0x400004 1 functions */
     int unk_400008;                      /* +0x400008 1 functions */
     int unk_40000c;                      /* +0x40000c 1 functions */
@@ -2675,10 +2668,14 @@ typedef union Radix { struct {
     uint8_t pad_400430[0x3d4];
 }; uint8_t lf_raw[0x400804]; } Radix;
 SR_STATIC_ASSERT(sizeof(Radix) == 0x400804, "Radix");
+SR_STATIC_ASSERT(offsetof(Radix, count) == 0x0, "Radix.count");
+SR_STATIC_ASSERT(offsetof(Radix, order) == 0x4, "Radix.order");
+SR_STATIC_ASSERT(offsetof(Radix, keys) == 0x200004, "Radix.keys");
+SR_STATIC_ASSERT(offsetof(Radix, values) == 0x300004, "Radix.values");
 
 /* game_world[]: record of 0x1c bytes. */
 typedef union GameWorld { struct {
-    int unk_0000;                        /* +0x0000 7 functions */
+    int seed;                            /* +0x0000 serversend: 30 bits in the state packet */
     float unk_0004;                      /* +0x0004 4 functions */
     float unk_0008;                      /* +0x0008 4 functions */
     float unk_000c;                      /* +0x000c 4 functions */
@@ -2687,6 +2684,7 @@ typedef union GameWorld { struct {
     float unk_0018;                      /* +0x0018 2 functions */
 }; uint8_t lf_raw[0x1c]; } GameWorld;
 SR_STATIC_ASSERT(sizeof(GameWorld) == 0x1c, "GameWorld");
+SR_STATIC_ASSERT(offsetof(GameWorld, seed) == 0x0, "GameWorld.seed");
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {
@@ -3277,11 +3275,11 @@ SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {
     int unk_0000;                        /* +0x0000 1 functions */
-    int unk_0004;                        /* +0x0004 2 functions */
+    int client_game_id;                  /* +0x0004 clientrecv type 6: the round number of the new game */
     uint8_t pad_0008[0x1c];
-    int unk_0024;                        /* +0x0024 1 functions */
-    int unk_0028;                        /* +0x0028 1 functions */
-    int unk_002c;                        /* +0x002c 1 functions */
+    int client_connected;                /* +0x0024 clientrecv writes 1 after a state packet */
+    int client_timeout;                  /* +0x0028 clientrecv: ticks without a packet; above 0x4af the client leaves the game */
+    int client_event_total;              /* +0x002c clientrecv: 16 bits in the state packet */
     int num_particles;                   /* +0x0030 createparticle: limit 0x3fff; particlesimulation loops over it */
     uint8_t pad_0034[0xc];
     int unk_0040;                        /* +0x0040 3 functions */
@@ -3333,6 +3331,10 @@ typedef union AreaSector { struct {
     uint8_t pad_6db9858[0x53167a8];
 }; uint8_t lf_raw[0xc0d0000]; } AreaSector;
 SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
+SR_STATIC_ASSERT(offsetof(AreaSector, client_game_id) == 0x4, "AreaSector.client_game_id");
+SR_STATIC_ASSERT(offsetof(AreaSector, client_connected) == 0x24, "AreaSector.client_connected");
+SR_STATIC_ASSERT(offsetof(AreaSector, client_timeout) == 0x28, "AreaSector.client_timeout");
+SR_STATIC_ASSERT(offsetof(AreaSector, client_event_total) == 0x2c, "AreaSector.client_event_total");
 SR_STATIC_ASSERT(offsetof(AreaSector, num_particles) == 0x30, "AreaSector.num_particles");
 
 /* objectpacket[]: record of 0xce14 bytes. */

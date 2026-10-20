@@ -479,7 +479,7 @@ Fields of `connection` (0xf170 bytes per entry) that the protocol touches:
 | `+0x1c` | `idle` | ticks since the last join or input |
 | `+0x44` | `event_ack` | first event to send |
 | `+0x4c` | `sequence` | counter of packets sent; selects which items are sent |
-| `+0x54 + k*0x20` (k < 8) | voice slots | `+0x0` active, `+0x4` speaker player, `+0x8` human, `+0xc` item, `+0x10` distance |
+| `+0x54 + k*0x20` (k < 8) | voice slots | `+0x0` active, `+0x4` speaker player, `+0x8` human, `+0xc` item, `+0x1c` distance |
 | `+0x154` | `spectate` | human watched while dead |
 | `+0x158 + i*0x1c` | object priorities | accumulators for objects |
 | `+0x7158 + i*0x1c` | human priorities | accumulators for humans |

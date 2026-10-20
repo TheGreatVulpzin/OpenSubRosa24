@@ -196,7 +196,7 @@ typedef union Wheel { struct {
     vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
     vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
     vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
-    float unk_5c;       /* +0x5c the packets send it as a signed scalar of 6 bits */
+    float spin_net;      /* +0x5c the packets send it as a signed scalar of 6 bits */
     float unk_60[4];    /* +0x60 */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
     uint8_t unk_74[0x10];
@@ -213,7 +213,7 @@ typedef union CityObjectRec { struct {
     int building;       /* +0x44 index of the city building record (0x9dc bytes) */
     int floor;          /* +0x48 human_itemsimulation writes the target floor when it is below num_floors */
     int num_floors;     /* +0x4c */
-    float unk_50;       /* +0x50 the packets */
+    float net_scalar;    /* +0x50 the packets send it as a signed scalar of 6 bits */
 }; uint8_t lf_raw[0x54]; } CityObjectRec;
 
 /* A face of the mesh of an object (Object.faces): a triangle or a quad of Object.verts. */
@@ -397,6 +397,22 @@ typedef union VoiceRing { struct {
     int voice_off;      /* +0x920c 1 bit from the client: a speaker with it set is not heard */
 }; uint8_t lf_raw[0x9210]; } VoiceRing;
 
+/* A voice channel of the client: one of the 8 speakers that the client plays (global at RVA
+ * 0xeca4bc0). The frames are in a ring of 64 as in VoiceRing. */
+typedef union VoiceChannel { struct {
+    int active;         /* +0x00 */
+    int unk_04;
+    int human;          /* +0x08 the body of the speaker, -1 for a radio */
+    int item;           /* +0x0c the radio item, -1 for a direct voice */
+    uint8_t unk_10[0x5010];
+    int head;           /* +0x5020 the next frame index */
+    int unk_5024;
+    int size[64];       /* +0x5028 */
+    int mode[64];       /* +0x5128 */
+    uint8_t data[64][256]; /* +0x5228 */
+    uint8_t unk_9228[0x20000];
+}; uint8_t lf_raw[0x29228]; } VoiceChannel;
+
 
 
 SR_STATIC_ASSERT(sizeof(vec3) == 12, "vec3");
@@ -435,6 +451,8 @@ SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
+SR_STATIC_ASSERT(sizeof(VoiceChannel) == 0x29228, "VoiceChannel");
+SR_STATIC_ASSERT(offsetof(VoiceChannel, head) == 0x5020, "VoiceChannel.head");
 SR_STATIC_ASSERT(offsetof(VoiceSlot, distance) == 0x1c, "VoiceSlot.distance");
 SR_STATIC_ASSERT(offsetof(Account, ban_time) == 0x48, "Account.ban_time");
 '''

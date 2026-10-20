@@ -12,6 +12,8 @@
 #define sr_masterserver   (*SR_AT(MasterServer, SR_RVA_MASTERSERVER))
 #define sr_connections    SR_AT(Connection, SR_RVA_CONNECTION)
 #define sr_speex          (*SR_AT(Speex, SR_RVA_SPEEX))
+#define sr_city           (*SR_AT(City, SR_RVA_CITY))
+#define sr_game_world     (*SR_AT(GameWorld, SR_RVA_GAME_WORLD))
 #define sr_market         (*SR_AT(Market, SR_RVA_MARKET))
 #define sr_objectpacket   (*SR_AT(ObjectPacket, SR_RVA_OBJECTPACKET))
 #define sr_radix          (*SR_AT(Radix, SR_RVA_RADIX))
@@ -31,5 +33,12 @@ int getmasterserverip(void);
 int server_playermessage(int player, char *text);
 void calculateplayervoice(int conn, int player);
 void serversend(void);
+void packevent(int index, int conn);
+void packobjectpacket(int conn, int player);
+void packobjectpacket2(int conn, int player);
+int item_is_sent(const Item *it, int index, uint32_t sequence, const vec3 *ref);
+void unpackevent(int index);
+void unpackobjectpacket(void);
+void clientrecv(void);
 
 #endif /* SR_NET_SERVER_H */

@@ -175,8 +175,8 @@ void createevent_bullethit(void);
 void createevent_updateobject(void);
 void createevent_sound(void);
 void createevent_updateblock_quad(void);
-void lf_16f10(void);
-void lf_17b60(void);
+void packevent(void);
+void unpackevent(void);
 void lf_18570(void);
 void lf_185a0(void);
 void deletehuman(void);
@@ -204,9 +204,9 @@ void lf_1d4d0(void);
 void lf_1d7a0(void);
 void multiplyquaternion(void);
 void multiply3x3matrices(void);
-void lf_1dba0(void);
-void lf_1f4a0(void);
-void lf_20680(void);
+void unpackobjectpacket(void);
+void packobjectpacket2(void);
+void packobjectpacket(void);
 void getrandomvector2d(void);
 void getrandomvector3d(void);
 void lf_21e00(void);
@@ -248,7 +248,7 @@ void sphereintersectspecblock(void);
 void circleintersectnormalblock(void);
 void circleintersectspecblock(void);
 void sphereintersectcityobjecttype(void);
-void lf_2e310(void);
+void clientrecv(void);
 void packpositiondelta(void);
 void unpackpositiondelta(void);
 void lineintersecthuman(void);
@@ -297,7 +297,7 @@ void lf_4e0d0(void);
 void lf_4e2c0(void);
 void lf_4e500(void);
 void lf_4e7a0(void);
-void lf_4ed30(void);
+void serversend(void);
 void lf_4f720(void);
 void lf_500e0(void);
 void lf_502a0(void);
@@ -493,8 +493,8 @@ const LfEntry lf_table[] = {
     { "createevent_updateobject", 0x16ce0, (void *)createevent_updateobject, 5, LF_RET_VOID, 4, "vvvpp", 0 },
     { "createevent_sound", 0x16db0, (void *)createevent_sound, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "createevent_updateblock_quad", 0x16e30, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
-    { "packevent", 0x16f10, (void *)lf_16f10, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "unpackevent", 0x17b60, (void *)lf_17b60, 1, LF_RET_VOID, 4, "v", 0 },
+    { "packevent", 0x16f10, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "unpackevent", 0x17b60, (void *)unpackevent, 1, LF_RET_VOID, 4, "v", 0 },
     { "testtimer", 0x18570, (void *)lf_18570, 0, LF_RET_INT64, 4, "", 1 },
     { "newspaper_load", 0x185a0, (void *)lf_185a0, 0, LF_RET_VOID, 4, "", 1 },
     { "deletehuman", 0x18720, (void *)deletehuman, 1, LF_RET_VOID, 4, "p", 0 },
@@ -522,9 +522,9 @@ const LfEntry lf_table[] = {
     { "logic_gunstore_buy", 0x1d7a0, (void *)lf_1d7a0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "multiplyquaternion", 0x1d8a0, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "multiply3x3matrices", 0x1d9e0, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "unpackobjectpacket", 0x1dba0, (void *)lf_1dba0, 0, LF_RET_VOID, 4, "", 0 },
-    { "packobjectpacket2", 0x1f4a0, (void *)lf_1f4a0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "packobjectpacket", 0x20680, (void *)lf_20680, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "unpackobjectpacket", 0x1dba0, (void *)unpackobjectpacket, 0, LF_RET_VOID, 4, "", 0 },
+    { "packobjectpacket2", 0x1f4a0, (void *)packobjectpacket2, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "packobjectpacket", 0x20680, (void *)packobjectpacket, 2, LF_RET_VOID, 4, "vv", 0 },
     { "getrandomvector2d", 0x21a30, (void *)getrandomvector2d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomvector3d", 0x21b40, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "addobjectrotation", 0x21e00, (void *)lf_21e00, 4, LF_RET_VOID, 4, "vppv", 0 },
@@ -566,7 +566,7 @@ const LfEntry lf_table[] = {
     { "circleintersectnormalblock", 0x2d7f0, (void *)circleintersectnormalblock, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
     { "circleintersectspecblock", 0x2daf0, (void *)circleintersectspecblock, 9, LF_RET_INT, 4, "pppppvpvv", 0 },
     { "sphereintersectcityobjecttype", 0x2dfc0, (void *)sphereintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppv", 0 },
-    { "clientrecv", 0x2e310, (void *)lf_2e310, 0, LF_RET_VOID, 4, "", 1 },
+    { "clientrecv", 0x2e310, (void *)clientrecv, 0, LF_RET_VOID, 4, "", 1 },
     { "packpositiondelta", 0x2efd0, (void *)packpositiondelta, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "unpackpositiondelta", 0x2f090, (void *)unpackpositiondelta, 4, LF_RET_VOID, 4, "pvvv", 0 },
     { "lineintersecthuman", 0x2f130, (void *)lineintersecthuman, 4, LF_RET_INT, 4, "vppv", 0 },
@@ -615,7 +615,7 @@ const LfEntry lf_table[] = {
     { "objectwheelcollision2", 0x4e2c0, (void *)lf_4e2c0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision", 0x4e500, (void *)lf_4e500, 2, LF_RET_VOID, 4, "vv", 0 },
     { "loadsaveoptions", 0x4e7a0, (void *)lf_4e7a0, 1, LF_RET_VOID, 4, "v", 1 },
-    { "serversend", 0x4ed30, (void *)lf_4ed30, 0, LF_RET_VOID, 4, "", 1 },
+    { "serversend", 0x4ed30, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p", 0 },
     { "player_loadinventory", 0x500e0, (void *)lf_500e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },

@@ -15,6 +15,7 @@
 
 #include "events.h"
 #include "packet.h"
+#include "profiler.h"
 #include "sr_math.h"
 #include "sr_os.h"
 #include "sr_server.h"
@@ -557,4 +558,180 @@ void serverrecv(void)
                 sr_connections[i].idle_ticks = 3000;
         }
     }
+}
+
+/* The packet that tells a client the game changed: the round number, the game type and the
+ * two start angles. */
+static void send_new_game(Connection *c)
+{
+    BsdSocket *bs = &sr_bsdsocket;
+    uint8_t kind = 6;
+    memcpy(bs->send_buf, &sr_socketid, 4);
+    bs->send_buf[4] = kind;
+    memcpy(&bs->send_buf[5], &sr_game.round_number, 4);
+    bs->send_bit = 0;
+    bs->send_size = 9;
+    pbitwrite((const uint32_t *)&sr_game.gametype, 4);
+    pbitwrite((const uint32_t *)&sr_game.round_mode, 4);
+    packangle(&sr_game.start_angle_a, 16);
+    packangle(&sr_game.start_angle_b, 16);
+    sr_serverinfo.last_packet_size = bs->send_size;
+    c->credit += bs->send_size;
+    sendpacket(c->ip, (uint16_t)c->port);
+}
+
+/* The rows of the shop of the building that a player looks at (menu 10). */
+static void write_shop(int building)
+{
+    const int *shop = (const int *)((const uint8_t *)&sr_city.shop_count + building * 0x9dc);
+    int count = shop[0], k;
+    pbitwrite((const uint32_t *)&shop[0], 8);
+    for (k = 0; k < count; k++) {
+        pbitwrite((const uint32_t *)&shop[1 + 3 * k], 8);
+        pbitwrite((const uint32_t *)&shop[2 + 3 * k], 24);
+        pbitwrite((const uint32_t *)&shop[3 + 3 * k], 4);
+    }
+}
+
+/* The inventory that the client shows: 7 slots, each with a count and the item numbers. */
+static void write_hud_inventory(const Player *pl)
+{
+    int s, j;
+    for (s = 0; s < 7; s++) {
+        const int *slot = &pl->hud_inventory[s].count;
+        pbitwrite((const uint32_t *)slot, 4);
+        for (j = 1; j <= slot[0]; j++)
+            pbitwrite((const uint32_t *)&slot[j], 16);
+    }
+}
+
+/* The type 5 packet: the state of the game, the player and the events that the client did not
+ * confirm. The number of events is written again when all events are in, so the count fits. */
+static void send_state(Connection *c, int conn)
+{
+    BsdSocket *bs = &sr_bsdsocket;
+    int p = c->player_id, k, hid, ack, count, size, bit, end_size, end_bit;
+    Player *pl = &sr_players[p];
+    vec3 vel = { 0.0f, 0.0f, 0.0f };
+    if (p == -1 || (hid = pl->human_id) == -1 || sr_humans[hid].health < -4)
+        c->listener_pos = c->camera_pos;
+    else
+        c->listener_pos = sr_humans[hid].pos;
+    memcpy(bs->send_buf, &sr_socketid, 4);
+    bs->send_buf[4] = 5;
+    memcpy(&bs->send_buf[5], &sr_game.round_number, 4);
+    bs->send_bit = 0;
+    memcpy(&bs->send_buf[9], &sr_game.ticks, 4);
+    bs->send_size = 13;
+    pbitwrite((const uint32_t *)&sr_game.state, 4);
+    if (sr_game.state == 1) {
+        for (k = 0; k < 32; k++)
+            pbitwrite((const uint32_t *)&sr_players[k].ready, 1);
+    }
+    pbitwrite((const uint32_t *)&sr_game.timer, 16);
+    pbitwrite((const uint32_t *)&sr_game_world.seed, 30);
+    pbitwrite((const uint32_t *)&sr_game.team0_members, 6);
+    pbitwrite((const uint32_t *)&sr_game.team1_members, 6);
+    pbitwrite((const uint32_t *)&sr_game.team2_members, 6);
+    pbitwrite((const uint32_t *)&p, 8);
+    pbitwrite((const uint32_t *)&pl->human_id, 10);
+    if (p != -1 && pl->human_id != -1) {
+        const Human *hm = &sr_humans[pl->human_id];
+        memcpy(&pl->look_yaw, &hm->axis, 4);
+        memcpy(&pl->look_pitch, &hm->pitch, 4);
+        vel = hm->bones[2].vel;
+    }
+    packangle(&pl->look_yaw, 16);
+    packangle(&pl->look_pitch, 16);
+    packposition(&vel);
+    pbitwrite((const uint32_t *)&pl->menu, 8);
+    pbitwrite((const uint32_t *)&pl->menu_building, 16);
+    if (pl->menu == 10)
+        write_shop(pl->menu_building);
+    cs_pwrite(&pl->money, 4, 1);
+    pbitwrite((const uint32_t *)&pl->num_actions, 8);
+    pbitwrite((const uint32_t *)&pl->hud_health, 8);
+    pbitwrite((const uint32_t *)&pl->hud_value6, 6);
+    pbitwrite((const uint32_t *)&pl->hud_value8, 8);
+    write_hud_inventory(pl);
+    packobjectpacket(conn, p);
+    pbitwrite(&sr_numofevents, 16);
+    size = bs->send_size;
+    bit = bs->send_bit;
+    ack = c->event_ack;
+    count = (int)sr_numofevents < ack ? (int)sr_numofevents - ack + 0x10000 : (int)sr_numofevents - ack;
+    if (count > 31)
+        count = 31;
+    if (sr_numofconnections == 0)
+        count = 0;
+    pbitwrite((const uint32_t *)&count, 6);
+    pbitwrite((const uint32_t *)&c->event_ack, 16);
+    for (k = 0; k < count; k++) {
+        packevent(ack, conn);
+        ack = (ack + 1) & 0xffff;
+    }
+    end_size = bs->send_size;
+    end_bit = bs->send_bit;
+    bs->send_size = size;
+    bs->send_bit = bit;
+    pbitwrite((const uint32_t *)&count, 6);
+    c->credit += end_size;
+    sr_serverinfo.last_packet_size = end_size;
+    bs->send_size = end_size;
+    bs->send_bit = end_bit;
+    sendpacket(c->ip, (uint16_t)c->port);
+}
+
+/* The type 8 packet: the voice frames of the speakers that the client hears. For each slot,
+ * the last 4 frames of the speaker go out. */
+static void send_voice(Connection *c, int conn)
+{
+    BsdSocket *bs = &sr_bsdsocket;
+    int s;
+    memcpy(bs->send_buf, &sr_socketid, 4);
+    bs->send_buf[4] = 8;
+    bs->send_bit = 0;
+    bs->send_size = 5;
+    calculateplayervoice(conn, c->player_id);
+    for (s = 0; s < VOICE_SLOTS; s++) {
+        const VoiceSlot *slot = &c->voice[s];
+        pbitwrite((const uint32_t *)&slot->active, 1);
+        if (slot->active != 0) {
+            const VoiceRing *ring = &sr_speex.voice_ring[slot->player];
+            uint32_t k = (uint32_t)(ring->head - 4) & 0x3f;
+            pbitwrite((const uint32_t *)&slot->human, 8);
+            pbitwrite((const uint32_t *)&slot->item, 8);
+            while ((int)k != ring->head) {
+                pbitwrite(&k, 6);
+                pbitwrite((const uint32_t *)&ring->size[k], 8);
+                pbitwrite((const uint32_t *)&ring->mode[k], 2);
+                cs_pwrite(ring->data[k], ring->size[k], 1);
+                k = (k + 1) & 0x3f;
+            }
+        }
+    }
+    sr_serverinfo.last_packet_size = bs->send_size;
+    c->credit += bs->send_size;
+    sendpacket(c->ip, (uint16_t)c->port);
+}
+
+/* Each tick: send to each connection that has used up its credit. A client in another round
+ * gets the new game packet. A client in this round gets the state and then the voice. */
+void serversend(void)
+{
+    int n = sr_numofconnections, i;
+    nametimer(g_timerlist.packetbuild, "packetbuild");
+    starttimer(g_timerlist.packetbuild);
+    for (i = 0; i < n; i++) {
+        Connection *c = &sr_connections[i];
+        if (c->credit >= 1)
+            continue;
+        if (c->game_id != sr_game.round_number) {
+            send_new_game(c);
+        } else {
+            send_state(c, i);
+            send_voice(c, i);
+        }
+    }
+    stoptimer(g_timerlist.packetbuild);
 }
