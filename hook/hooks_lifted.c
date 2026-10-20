@@ -4220,12 +4220,12 @@ __declspec(naked) static void th_0cdf0(void)
 }
 static uint8_t expect_0cdf0[7] = { 0x83, 0xec, 0x10, 0x8b, 0x44, 0x24, 0x24 };
 
-bool __cdecl lf_0d0c0(char * param_1);
+bool __cdecl checkstring(char * param_1);
 static bool (__cdecl *orig_0d0c0)(char *);
 static SvVerify v_0d0c0 = { "checkstring", -1 };
 static bool __cdecl hk_0d0c0(char * param_1)
 {
-    SV_HOOK_RET(bool, v_0d0c0, lf_0d0c0(param_1), orig_0d0c0(param_1), NULL);
+    SV_HOOK_RET(bool, v_0d0c0, checkstring(param_1), orig_0d0c0(param_1), NULL);
 }
 __declspec(naked) static void th_0d0c0(void)
 {
@@ -4261,12 +4261,12 @@ __declspec(naked) static void th_0d0c0(void)
 }
 static uint8_t expect_0d0c0[7] = { 0x53, 0x8b, 0x1d, 0x64, 0x2d, 0x12, 0x14 };
 
-undefined4 __cdecl lf_0d110(void);
+undefined4 __cdecl getint(void);
 static undefined4 (__cdecl *orig_0d110)(void);
 static SvVerify v_0d110 = { "getint", -1 };
 static undefined4 __cdecl hk_0d110(void)
 {
-    SV_HOOK_RET(undefined4, v_0d110, lf_0d110(), orig_0d110(), NULL);
+    SV_HOOK_RET(undefined4, v_0d110, getint(), orig_0d110(), NULL);
 }
 __declspec(naked) static void th_0d110(void)
 {
@@ -4299,12 +4299,12 @@ __declspec(naked) static void th_0d110(void)
 }
 static uint8_t expect_0d110[6] = { 0x51, 0xa1, 0x60, 0x2d, 0x12, 0x14 };
 
-void __cdecl lf_0d240(undefined1 * param_1, int param_2);
+void __cdecl getstring(undefined1 * param_1, int param_2);
 static void (__cdecl *orig_0d240)(undefined1 *, int);
 static SvVerify v_0d240 = { "getstring", -1 };
 static void __cdecl hk_0d240(undefined1 * param_1, int param_2)
 {
-    SV_HOOK_VOID(v_0d240, lf_0d240(param_1, param_2), orig_0d240(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0d240, getstring(param_1, param_2), orig_0d240(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0d240(void)
 {
@@ -4341,12 +4341,12 @@ __declspec(naked) static void th_0d240(void)
 }
 static uint8_t expect_0d240[6] = { 0x8b, 0x0d, 0x60, 0x2d, 0x12, 0x14 };
 
-void __cdecl lf_0d2a0(int param_1, int param_2);
+void __cdecl cs_getline(int param_1, int param_2);
 static void (__cdecl *orig_0d2a0)(int, int);
 static SvVerify v_0d2a0 = { "cs_getline", -1 };
 static void __cdecl hk_0d2a0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_0d2a0, lf_0d2a0(param_1, param_2), orig_0d2a0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0d2a0, cs_getline(param_1, param_2), orig_0d2a0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0d2a0(void)
 {
@@ -8958,12 +8958,12 @@ __declspec(naked) static void th_29300(void)
 }
 static uint8_t expect_29300[5] = { 0x83, 0xec, 0x38, 0xd9, 0xee };
 
-bool __cdecl lf_29650(char * param_1);
+bool __cdecl findstring(char * param_1);
 static bool (__cdecl *orig_29650)(char *);
 static SvVerify v_29650 = { "findstring", -1 };
 static bool __cdecl hk_29650(char * param_1)
 {
-    SV_HOOK_RET(bool, v_29650, lf_29650(param_1), orig_29650(param_1), NULL);
+    SV_HOOK_RET(bool, v_29650, findstring(param_1), orig_29650(param_1), NULL);
 }
 __declspec(naked) static void th_29650(void)
 {

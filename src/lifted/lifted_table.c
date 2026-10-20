@@ -114,11 +114,11 @@ void pointdistanceline(void);
 void lineintersectline2d(void);
 void sphereintersectline2d(void);
 void lineintersectcircle2d(void);
-void lf_0d020(void);
-void lf_0d0c0(void);
-void lf_0d110(void);
-void lf_0d240(void);
-void lf_0d2a0(void);
+void loadtextfile(void);
+void checkstring(void);
+void getint(void);
+void getstring(void);
+void cs_getline(void);
 void lf_0d3a0(void);
 void lf_0d680(void);
 void disablesocket(void);
@@ -235,7 +235,7 @@ void lf_286b0(void);
 void lf_28a90(void);
 void lf_28c90(void);
 void lf_29300(void);
-void lf_29650(void);
+void findstring(void);
 void lf_296f0(void);
 void lf_29830(void);
 void lf_29970(void);
@@ -296,7 +296,7 @@ void lf_4e060(void);
 void lf_4e0d0(void);
 void lf_4e2c0(void);
 void lf_4e500(void);
-void lf_4e7a0(void);
+void loadsaveoptions(void);
 void serversend(void);
 void lf_4f720(void);
 void lf_500e0(void);
@@ -432,11 +432,11 @@ const LfEntry lf_table[] = {
     { "lineintersectline2d", 0xcab0, (void *)lineintersectline2d, 7, LF_RET_INT, 4, "ppppppp", 0 },
     { "sphereintersectline2d", 0xcca0, (void *)sphereintersectline2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "lineintersectcircle2d", 0xcdf0, (void *)lineintersectcircle2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
-    { "loadtextfile", 0xd020, (void *)lf_0d020, 1, LF_RET_VOID, 4, "p", 1 },
-    { "checkstring", 0xd0c0, (void *)lf_0d0c0, 1, LF_RET_INT, 1, "p", 0 },
-    { "getint", 0xd110, (void *)lf_0d110, 0, LF_RET_INT, 4, "", 0 },
-    { "getstring", 0xd240, (void *)lf_0d240, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "cs_getline", 0xd2a0, (void *)lf_0d2a0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "loadtextfile", 0xd020, (void *)loadtextfile, 1, LF_RET_VOID, 4, "p", 1 },
+    { "checkstring", 0xd0c0, (void *)checkstring, 1, LF_RET_INT, 1, "p", 0 },
+    { "getint", 0xd110, (void *)getint, 0, LF_RET_INT, 4, "", 0 },
+    { "getstring", 0xd240, (void *)getstring, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "cs_getline", 0xd2a0, (void *)cs_getline, 2, LF_RET_VOID, 4, "vv", 0 },
     { "listfiles", 0xd3a0, (void *)lf_0d3a0, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "removeflieextentions", 0xd680, (void *)lf_0d680, 1, LF_RET_VOID, 4, "v", 0 },
     { "disablesocket", 0xd710, (void *)disablesocket, 1, LF_RET_VOID, 4, "v", 1 },
@@ -553,7 +553,7 @@ const LfEntry lf_table[] = {
     { "objecttype_addwheel", 0x28a90, (void *)lf_28a90, 12, LF_RET_VOID, 4, "vvvvpvvvvvvv", 0 },
     { "calculatepointscale", 0x28c90, (void *)lf_28c90, 4, LF_RET_VOID, 4, "pvpp", 0 },
     { "objecttype_calcquadweights", 0x29300, (void *)lf_29300, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "findstring", 0x29650, (void *)lf_29650, 1, LF_RET_INT, 1, "p", 0 },
+    { "findstring", 0x29650, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
     { "area_setblock", 0x296f0, (void *)lf_296f0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_setblockcolor", 0x29830, (void *)lf_29830, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_deleteblock", 0x29970, (void *)lf_29970, 4, LF_RET_VOID, 4, "vvvv", 0 },
@@ -614,7 +614,7 @@ const LfEntry lf_table[] = {
     { "logic_cardealer_buy", 0x4e0d0, (void *)lf_4e0d0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision2", 0x4e2c0, (void *)lf_4e2c0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision", 0x4e500, (void *)lf_4e500, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "loadsaveoptions", 0x4e7a0, (void *)lf_4e7a0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "loadsaveoptions", 0x4e7a0, (void *)loadsaveoptions, 1, LF_RET_VOID, 4, "v", 1 },
     { "serversend", 0x4ed30, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p", 0 },
     { "player_loadinventory", 0x500e0, (void *)lf_500e0, 1, LF_RET_VOID, 4, "v", 0 },

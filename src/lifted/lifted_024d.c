@@ -3,7 +3,7 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
-static void *lf_imports[28];
+static void *lf_imports[26];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -4113,158 +4113,14 @@ void __cdecl lf_0b540(void)
 }
 #undef g_timerlist
 
-/* ---------------------------------------------------------------- 0xd020 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define fgetc ((int (__cdecl *)(FILE *))LF_IMPORT(20, "MSVCR100.DLL", "fgetc"))
-void __cdecl lf_0d020(char *param_1)
-
-{
-  FILE *_File;
-  int iVar1;
-  
-  g_parser.unk_0004 = 0;
-  g_parser.unk_100108 = (int)fopen(param_1,"rb");
-  if ((FILE *)g_parser.unk_100108 != (FILE *)0x0) {
-    iVar1 = fgetc((FILE *)g_parser.unk_100108);
-    _File = (FILE *)g_parser.unk_100108;
-    while (g_parser.unk_100108 = (int)_File, iVar1 != -1) {
-      (&g_parser.unk_0008)[g_parser.unk_0004] = (char)iVar1;
-      g_parser.unk_0004 = g_parser.unk_0004 + 1;
-      iVar1 = fgetc(_File);
-      _File = (FILE *)g_parser.unk_100108;
-    }
-    (&g_parser.unk_0008)[g_parser.unk_0004] = '\0';
-    fclose(_File);
-  }
-  g_parser.unk_0000 = 0;
-  return;
-}
-#undef g_parser
-#undef fclose
-#undef fopen
-#undef fgetc
-
-/* ---------------------------------------------------------------- 0xd0c0 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-bool __cdecl lf_0d0c0(char *param_1)
-
-{
-  char *pcVar1;
-  int iVar2;
-  
-  iVar2 = 0;
-  if (g_parser.unk_0000 < g_parser.unk_0004) {
-    pcVar1 = param_1;
-    do {
-      if ((*pcVar1 == '\0') || (*pcVar1 != *(char *)(g_parser.unk_0000 + ((int)&g_parser.unk_0008) + iVar2)))
-      break;
-      pcVar1 = pcVar1 + 1;
-      iVar2 = iVar2 + 1;
-    } while ((int)(pcVar1 + (g_parser.unk_0000 - (int)param_1)) < g_parser.unk_0004);
-  }
-  return param_1[iVar2] == '\0';
-}
-#undef g_parser
-
-/* ---------------------------------------------------------------- 0xd110 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(21, "MSVCR100.DLL", "sscanf"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x1c))
-undefined4 __cdecl lf_0d110(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  char cVar1;
-  int iVar2;
-
-  
-  for (; (g_parser.unk_0000 < g_parser.unk_0004 &&
-         (((cVar1 = (&g_parser.unk_0008)[g_parser.unk_0000], cVar1 < '0' || ('9' < cVar1)) &&
-          (cVar1 != '-')))); g_parser.unk_0000 = g_parser.unk_0000 + 1) {
-  }
-  iVar2 = 0;
-  if (g_parser.unk_0000 < g_parser.unk_0004) {
-    do {
-      if ((0xfe < iVar2) ||
-         (((cVar1 = (&g_parser.unk_0008)[g_parser.unk_0000], cVar1 < '0' || ('9' < cVar1)) &&
-          (cVar1 != '-')))) break;
-      (&g_parser.lf_raw[0x100008])[iVar2] = cVar1;
-      g_parser.unk_0000 = g_parser.unk_0000 + 1;
-      iVar2 = iVar2 + 1;
-    } while (g_parser.unk_0000 < g_parser.unk_0004);
-  }
-  (&g_parser.lf_raw[0x100008])[iVar2] = 0;
-  sscanf(&g_parser.lf_raw[0x100008],"%d",&local_4);
-  return local_4;
-}
-#undef g_parser
-#undef sscanf
-#undef local_4
-
-/* ---------------------------------------------------------------- 0xd240 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-void __cdecl lf_0d240(undefined1 *param_1,int param_2)
-
-{
-  char cVar1;
-  int iVar2;
-  
-  iVar2 = 0;
-  if (g_parser.unk_0004 <= g_parser.unk_0000) {
-    *param_1 = 0;
-    return;
-  }
-  do {
-    if (((param_2 + -1 <= iVar2) || (cVar1 = (&g_parser.unk_0008)[g_parser.unk_0000], cVar1 == '\r')
-        ) || (cVar1 == '\n')) break;
-    param_1[iVar2] = cVar1;
-    g_parser.unk_0000 = g_parser.unk_0000 + 1;
-    iVar2 = iVar2 + 1;
-  } while (g_parser.unk_0000 < g_parser.unk_0004);
-  param_1[iVar2] = 0;
-  return;
-}
-#undef g_parser
-
-/* ---------------------------------------------------------------- 0xd2a0 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-void __cdecl lf_0d2a0(int param_1,int param_2)
-
-{
-  char cVar1;
-  int iVar2;
-  
-  iVar2 = 0;
-  if (g_parser.unk_0000 < g_parser.unk_0004) {
-    do {
-      if (((param_2 + -1 <= iVar2) ||
-          (cVar1 = (&g_parser.unk_0008)[g_parser.unk_0000], cVar1 == '\r')) || (cVar1 == '\n'))
-      break;
-      *(char *)(iVar2 + param_1) = cVar1;
-      g_parser.unk_0000 = g_parser.unk_0000 + 1;
-      iVar2 = iVar2 + 1;
-    } while (g_parser.unk_0000 < g_parser.unk_0004);
-  }
-  *(undefined1 *)(iVar2 + param_1) = 0;
-  for (; (g_parser.unk_0000 < g_parser.unk_0004 &&
-         (((&g_parser.unk_0008)[g_parser.unk_0000] == '\r' ||
-          ((&g_parser.unk_0008)[g_parser.unk_0000] == '\n'))));
-      g_parser.unk_0000 = g_parser.unk_0000 + 1) {
-  }
-  return;
-}
-#undef g_parser
-
 /* ---------------------------------------------------------------- 0xd3a0 */
 #define g_filelist (*(FileList *)SR_VA(0xe619200))
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define LAB_0040d320 (*(undefined *)SR_FN(0x40d320))
-#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(22, "MSVCR100.DLL", "qsort"))
-#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(23, "MSVCR100.DLL", "_findclose"))
-#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(24, "MSVCR100.DLL", "_findnext64i32"))
-#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(25, "MSVCR100.DLL", "_findfirst64i32"))
+#define qsort ((void (__cdecl *)(void *, size_t, size_t, _PtFuncCompare *))LF_IMPORT(20, "MSVCR100.DLL", "qsort"))
+#define _findclose ((int (__cdecl *)(intptr_t))LF_IMPORT(21, "MSVCR100.DLL", "_findclose"))
+#define _findnext64i32 ((int (__cdecl *)(intptr_t, _finddata64i32_t *))LF_IMPORT(22, "MSVCR100.DLL", "_findnext64i32"))
+#define _findfirst64i32 ((intptr_t (__cdecl *)(char *, _finddata64i32_t *))LF_IMPORT(23, "MSVCR100.DLL", "_findfirst64i32"))
 #define __security_check_cookie(x) ((void)0)
 #define local_12c (*(_finddata64i32_t *)(lf_frame + 0x14))
 #define local_4 (*(uint *)(lf_frame + 0x13c))
@@ -10785,34 +10641,6 @@ void __cdecl lf_29300(float *param_1,float *param_2,float *param_3)
 #undef local_c
 #undef local_8
 #undef local_4
-
-/* ---------------------------------------------------------------- 0x29650 */
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define findstring ((bool (__cdecl *)(char *))SR_FN(0x40d0c0))
-bool __cdecl lf_29650(char *param_1)
-
-{
-  char *pcVar1;
-  char cVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  
-  iVar3 = g_parser.unk_0004;
-  iVar5 = g_parser.unk_0000;
-  while ((iVar5 < iVar3 && (g_parser.unk_0000 = iVar5, iVar4 = findstring(param_1), iVar4 == 0))) {
-    iVar5 = iVar5 + 1;
-  }
-  pcVar1 = param_1 + 1;
-  do {
-    cVar2 = *param_1;
-    param_1 = param_1 + 1;
-  } while (cVar2 != '\0');
-  g_parser.unk_0000 = (int)(param_1 + (iVar5 - (int)pcVar1));
-  return (int)(param_1 + (iVar5 - (int)pcVar1)) < iVar3;
-}
-#undef g_parser
-#undef findstring
 
 /* ---------------------------------------------------------------- 0x296f0 */
 #define g_area (*(Area (*)[4])SR_VA(0x17166040))
@@ -20585,280 +20413,6 @@ void __cdecl lf_4e500(int param_1,int param_2)
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x4e7a0 */
-#define g_option (*(Option *)SR_VA(0x94dc340))
-#define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
-#define DAT_17929a60 (*(undefined *)SR_VA(0x17929a60))
-#define DAT_17929a64 (*(undefined *)SR_VA(0x17929a64))
-#define DAT_17929a68 (*(undefined *)SR_VA(0x17929a68))
-#define DAT_17929a6c (*(undefined *)SR_VA(0x17929a6c))
-#define DAT_17929a70 (*(undefined *)SR_VA(0x17929a70))
-#define DAT_17929a74 (*(undefined *)SR_VA(0x17929a74))
-#define DAT_17929a78 (*(undefined *)SR_VA(0x17929a78))
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define DAT_17929a7c (*(undefined *)SR_VA(0x17929a7c))
-#define DAT_17929a80 (*(undefined *)SR_VA(0x17929a80))
-#define _DAT_17929a60 (*(undefined4 *)SR_VA(0x17929a60))
-#define _DAT_17929a64 (*(undefined4 *)SR_VA(0x17929a64))
-#define _DAT_17929a68 (*(undefined4 *)SR_VA(0x17929a68))
-#define _DAT_17929a6c (*(undefined4 *)SR_VA(0x17929a6c))
-#define _DAT_17929a70 (*(undefined4 *)SR_VA(0x17929a70))
-#define _DAT_17929a74 (*(undefined4 *)SR_VA(0x17929a74))
-#define _DAT_17929a78 (*(undefined4 *)SR_VA(0x17929a78))
-#define _DAT_17929a7c (*(undefined4 *)SR_VA(0x17929a7c))
-#define _DAT_17929a80 (*(undefined4 *)SR_VA(0x17929a80))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(26, "MSVCR100.DLL", "_time64"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(27, "MSVCR100.DLL", "srand"))
-#define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x40d020))
-#define getfloat ((undefined4 (__cdecl *)(void))SR_FN(0x40d110))
-#define getstring ((void (__cdecl *)(undefined1 *, int))SR_FN(0x40d240))
-#define optionreadwriteint ((bool (__cdecl *)(char *))SR_FN(0x429650))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-void __cdecl lf_4e7a0(int param_1)
-
-{
-  uint uVar1;
-  int iVar2;
-  __time64_t _Var3;
-  float fVar1;
-  
-  _chdir(g_sysinfo.config_dir);
-  if (param_1 != 0) {
-    _chdir(g_sysinfo.start_dir);
-    return;
-  }
-  _DAT_17929a60 = 0x400;
-  _DAT_17929a64 = 0x280;
-  _DAT_17929a68 = 0x20;
-  _DAT_17929a6c = 0x18;
-  _DAT_17929a70 = 8;
-  _DAT_17929a74 = 0;
-  _DAT_17929a78 = 1;
-  _DAT_17929a7c = 1;
-  _DAT_17929a80 = 1;
-  (*(uint *)((uchar *)&g_option + 0)) = 0x6bc0;
-  g_option.unk_0004 = 100000;
-  g_option.unk_00d8 = 0x50;
-  g_option.unk_00dc = 0x50;
-  g_option.unk_011c = 7;
-  g_option.unk_0114 = 0x10;
-  _Var3 = _time64((__time64_t *)0x0);
-  srand((uint)_Var3);
-  uVar1 = rand();
-  sprintf((char *)&g_option.unk_0008,"Agent %d",uVar1 & 0x1ff);
-  (*(uchar *)((uchar *)&g_option + 72)) = 'S';
-  g_option.unk_0049 = 'u';
-  (*(uchar *)((uchar *)&g_option + 74)) = 'b';
-  (*(uchar *)((uchar *)&g_option + 75)) = ' ';
-  (*(uchar *)((uchar *)&g_option.unk_004c + 0)) = 'R';
-  (*(uchar *)((uchar *)&g_option.unk_004c + 1)) = 'o';
-  (*(uchar *)((uchar *)&g_option.unk_004c + 2)) = 's';
-  (*(uchar *)((uchar *)&g_option.unk_004c + 3)) = 'a';
-  (*(uchar *)((uchar *)&g_option.unk_0050 + 0)) = ' ';
-  (*(uchar *)((uchar *)&g_option.unk_0050 + 1)) = 'S';
-  (*(uchar *)((uchar *)&g_option.unk_0050 + 2)) = 'e';
-  (*(uchar *)((uchar *)&g_option.unk_0050 + 3)) = 'r';
-  (*(uchar *)((uchar *)&g_option.unk_0054 + 0)) = 'v';
-  (*(uchar *)((uchar *)&g_option.unk_0054 + 1)) = 'e';
-  (*(uchar *)((uchar *)&g_option.unk_0054 + 2)) = 'r';
-  (*(uchar *)((uchar *)&g_option.unk_0054 + 3)) = '\0';
-  g_option.unk_0118 = 3;
-  _Var3 = _time64((__time64_t *)0x0);
-  srand((uint)_Var3);
-  iVar2 = rand();
-  sprintf(&g_option.lf_raw[0x88],"%d",iVar2);
-  g_option.unk_00d0 = 2;
-  g_option.unk_00d4 = 2;
-  g_option.unk_0128 = 0x800;
-  g_option.unk_012c = 0;
-  g_option.unk_0130 = 1;
-  g_option.unk_0144 = 100;
-  g_option.unk_013c = 1;
-  g_option.unk_0124 = 1;
-  loadtextfile("config.txt");
-  iVar2 = optionreadwriteint("screenwidth=");
-  if (iVar2 != 0) {
-    _DAT_17929a60 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("screenheight=");
-  if (iVar2 != 0) {
-    _DAT_17929a64 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("colordepth=");
-  if (iVar2 != 0) {
-    _DAT_17929a68 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("depthbits=");
-  if (iVar2 != 0) {
-    _DAT_17929a6c = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("stencilbits=");
-  if (iVar2 != 0) {
-    _DAT_17929a70 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("fullscreen=");
-  if (iVar2 != 0) {
-    _DAT_17929a74 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("joystick=");
-  if (iVar2 != 0) {
-    _DAT_17929a80 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("sound=");
-  if (iVar2 != 0) {
-    _DAT_17929a78 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("soundvolume=");
-  if (iVar2 != 0) {
-    g_option.unk_00d8 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("musicvolume=");
-  if (iVar2 != 0) {
-    g_option.unk_00dc = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("port=");
-  if (iVar2 != 0) {
-    (*(uint *)((uchar *)&g_option + 0)) = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("servermaxbytespersecond=");
-  if (iVar2 != 0) {
-    g_option.unk_0004 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("name=");
-  if (iVar2 != 0) {
-    getstring((undefined1 *)&g_option.unk_0008,0x1e);
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("servername=");
-  if (iVar2 != 0) {
-    getstring(&g_option.lf_raw[0x48],0x32);
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("serverpassword=");
-  if (iVar2 != 0) {
-    getstring(&g_option.lf_raw[0x88],0x32);
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("gametype=");
-  if (iVar2 != 0) {
-    g_option.unk_0118 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("invertmouse=");
-  if (iVar2 != 0) {
-    g_option.unk_010c = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("maxnumofplayers=");
-  if (iVar2 != 0) {
-    g_option.unk_0114 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("roundtime=");
-  if (iVar2 != 0) {
-    g_option.unk_011c = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("setcpuaffinity=");
-  if (iVar2 != 0) {
-    g_option.unk_0120 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voicechat=");
-  if (iVar2 != 0) {
-    g_option.unk_012c = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voiceholdtotalk=");
-  if (iVar2 != 0) {
-    g_option.unk_0130 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voicekey=");
-  if (iVar2 != 0) {
-    g_option.unk_0134 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voicemb=");
-  if (iVar2 != 0) {
-    g_option.unk_0138 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voicemin=");
-  if (iVar2 != 0) {
-    g_option.unk_0128 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("voiceboost=");
-  if (iVar2 != 0) {
-    g_option.unk_0144 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("help=");
-  if (iVar2 != 0) {
-    g_option.unk_013c = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  iVar2 = optionreadwriteint("occlusion=");
-  if (iVar2 != 0) {
-    g_option.unk_0124 = getfloat();
-  }
-  g_parser.unk_0000 = 0;
-  g_option.unk_0148 = (float)((float)g_option.unk_0144 / 100.0);
-  fVar1 = 0.125;
-  if ((0.125 <= g_option.unk_0148) && (fVar1 = 4.0, g_option.unk_0148 <= 4.0)) {
-    _chdir(g_sysinfo.start_dir);
-    return;
-  }
-  g_option.unk_0148 = fVar1;
-  _chdir(g_sysinfo.start_dir);
-  return;
-}
-#undef g_option
-#undef g_sysinfo
-#undef DAT_17929a60
-#undef DAT_17929a64
-#undef DAT_17929a68
-#undef DAT_17929a6c
-#undef DAT_17929a70
-#undef DAT_17929a74
-#undef DAT_17929a78
-#undef g_parser
-#undef DAT_17929a7c
-#undef DAT_17929a80
-#undef _DAT_17929a60
-#undef _DAT_17929a64
-#undef _DAT_17929a68
-#undef _DAT_17929a6c
-#undef _DAT_17929a70
-#undef _DAT_17929a74
-#undef _DAT_17929a78
-#undef _DAT_17929a7c
-#undef _DAT_17929a80
-#undef _time64
-#undef sprintf
-#undef rand
-#undef srand
-#undef loadtextfile
-#undef getfloat
-#undef getstring
-#undef optionreadwriteint
-#undef _chdir
-
 /* ---------------------------------------------------------------- 0x4f720 */
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
@@ -21987,7 +21541,7 @@ void __cdecl lf_502a0(void)
 #define DAT_0045f330 (*(undefined1 *)SR_VA(0x45f330))
 #define DAT_12e80c44 (*(undefined *)SR_VA(0x12e80c44))
 #define g_building (*(Building *)SR_VA(0x2165b80))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(27, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(24, "MSVCR100.DLL", "srand"))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_FN(0x401850))
 #define building_setupbuild ((void (__cdecl *)(void))SR_FN(0x403d70))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x4041c0))
@@ -24052,9 +23606,9 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define _DAT_0f837964 (*(float *)SR_VA(0xf837964))
 #define _DAT_0f837968 (*(undefined4 *)SR_VA(0xf837968))
 #define _DAT_0f83796c (*(undefined4 *)SR_VA(0xf83796c))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(26, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(25, "MSVCR100.DLL", "_time64"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(27, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(24, "MSVCR100.DLL", "srand"))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_FN(0x401080))
 #define economy_carmarket ((void (__cdecl *)(void))SR_FN(0x405700))
 #define economy_gunmarket ((void (__cdecl *)(void))SR_FN(0x405870))
