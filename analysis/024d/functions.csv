@@ -117,8 +117,8 @@ rva,size,name,source,confidence,evidence
 0xcca0,333,sphereintersectline2d,review,0.95,"Projects a 2D point onto a segment (both end-point dot-product checks, normal from the segment, normalizevector2d) and returns the signed distance if within the radius, same logic as the ELF sphereintersectline2d."
 0xcdf0,405,lineintersectcircle2d,review,0.85,"Three square roots, six pointers plus a float radius, same shape and size as the ELF lineintersectcircle2d (399 bytes in the ELF)."
 0xd020,128,loadtextfile,anchor,0.975,features
-0xd0c0,69,findstring,callgraph,1.0,votes=12
-0xd110,140,getfloat,anchor,0.773,features
+0xd0c0,69,checkstring,review,1.0,"Compares the key with the text at the cursor and does not move the cursor, same loop as the ELF checkstring (0xa3957); only caller is findstring."
+0xd110,140,getint,review,1.0,"Reads digits and minus signs, then sscanf with %d and no decimal point in the digit set, same as the ELF getint (0xa39d1); the ELF getfloat accepts a point."
 0xd240,91,getstring,review,0.95,"Copies the parser buffer up to CR/LF or the size limit without skipping the line break, same as the ELF getstring."
 0xd2a0,123,cs_getline,review,0.97,"Copies a line from the parser buffer and then skips the trailing CR/LF characters, same as the ELF cs_getline."
 0xd3a0,302,listfiles,review,0.95,"_findfirst64i32/_findnext64i32 loop collecting files or directories (skipping '.') into 0x40-byte entries with a 0x3ff cap, then qsort, same as the ELF listfiles."
@@ -238,7 +238,7 @@ rva,size,name,source,confidence,evidence
 0x28a90,497,objecttype_addwheel,review,0.93,"Appends a wheel record (stride 0x44, counter at objecttype+0x775c) from 12 parameters and computes the wheel position by interpolating between two particles, same as the ELF objecttype_addwheel; currently named objecttype_addparticle (the real one is 0xb040)."
 0x28c90,1637,calculatepointscale,review,0.95,"Four nested loops over the object-type points (param_2 count) that test every 4-point combination with subtract/cross/normalize/dot products, identical structure to the ELF calculatepointscale; called twice by setupobjecttypeweight."
 0x29300,741,objecttype_calcquadweights,review,0.9,"Called 12 times by the train setup (setupobjectypes_train) like the ELF objecttype_calcquadweights, and builds quad weights with generatetrinormal and a square root; size 741 bytes vs 731 in the ELF."
-0x29650,80,optionreadwriteint,callgraph,1.0,votes=168
+0x29650,80,findstring,review,1.0,"Calls checkstring at each position, then puts the cursor after the key and returns pos < size, same as the ELF findstring (0xa38c5)."
 0x296f0,320,area_setblock,review,0.95,"Creates the chunk and sector on demand (area_createchunk, area_createsector), writes the exterior block array and calls area_marksector, same as the ELF area_setblock."
 0x29830,320,area_setblockcolor,review,0.95,"Same as area_setblock but writes the color array (sector+0xa00 ints), same as the ELF area_setblockcolor."
 0x29970,625,area_deleteblock,callgraph,1.0,votes=14

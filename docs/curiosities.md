@@ -31,7 +31,7 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | The dedicated server keeps about 636 MB of fixed arrays for players, objects and items. The operating system gives memory only to the pages that the game writes, so most of it costs nothing. | code | `.data` section |
 | The server asks the Cryptic Sea master server for the list with a plain HTTP request to `www.crypticsea.com/anewzero/serverinfo.php`. | code | `getmasterserverip` (0x1ac40) |
 | Before it reads `config.txt`, the server sets defaults: the name "Agent" plus a random number up to 511, the server name "Sub Rosa Server", and a server password that is a random number seeded with the clock. | code | `loadsaveoptions` (0x4e7a0) |
-| The config reader skips everything up to the first digit or minus sign. When the value has no number, the result is whatever was on the stack. | code | `getfloat` (0xd110) |
+| The config reader skips everything up to the first digit or minus sign. When the value has no number, the result is whatever was on the stack. | code | `getint` (0xd110) |
 
 ### 3. Players and chat
 

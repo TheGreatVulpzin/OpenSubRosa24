@@ -4222,7 +4222,7 @@ static uint8_t expect_0cdf0[7] = { 0x83, 0xec, 0x10, 0x8b, 0x44, 0x24, 0x24 };
 
 bool __cdecl lf_0d0c0(char * param_1);
 static bool (__cdecl *orig_0d0c0)(char *);
-static SvVerify v_0d0c0 = { "findstring", -1 };
+static SvVerify v_0d0c0 = { "checkstring", -1 };
 static bool __cdecl hk_0d0c0(char * param_1)
 {
     SV_HOOK_RET(bool, v_0d0c0, lf_0d0c0(param_1), orig_0d0c0(param_1), NULL);
@@ -4263,7 +4263,7 @@ static uint8_t expect_0d0c0[7] = { 0x53, 0x8b, 0x1d, 0x64, 0x2d, 0x12, 0x14 };
 
 undefined4 __cdecl lf_0d110(void);
 static undefined4 (__cdecl *orig_0d110)(void);
-static SvVerify v_0d110 = { "getfloat", -1 };
+static SvVerify v_0d110 = { "getint", -1 };
 static undefined4 __cdecl hk_0d110(void)
 {
     SV_HOOK_RET(undefined4, v_0d110, lf_0d110(), orig_0d110(), NULL);
@@ -8960,7 +8960,7 @@ static uint8_t expect_29300[5] = { 0x83, 0xec, 0x38, 0xd9, 0xee };
 
 bool __cdecl lf_29650(char * param_1);
 static bool (__cdecl *orig_29650)(char *);
-static SvVerify v_29650 = { "optionreadwriteint", -1 };
+static SvVerify v_29650 = { "findstring", -1 };
 static bool __cdecl hk_29650(char * param_1)
 {
     SV_HOOK_RET(bool, v_29650, lf_29650(param_1), orig_29650(param_1), NULL);
@@ -11890,8 +11890,8 @@ static SvHook g_lifted[] = {
     { "lineintersectline2d", 0xcab0, (void *)th_0cab0, 8, expect_0cab0, mask_all, (void **)&orig_0cab0, 0, 0 },
     { "sphereintersectline2d", 0xcca0, (void *)th_0cca0, 7, expect_0cca0, mask_all, (void **)&orig_0cca0, 0, 0 },
     { "lineintersectcircle2d", 0xcdf0, (void *)th_0cdf0, 7, expect_0cdf0, mask_all, (void **)&orig_0cdf0, 0, 0 },
-    { "findstring", 0xd0c0, (void *)th_0d0c0, 7, expect_0d0c0, mask_all, (void **)&orig_0d0c0, 0, 0 },
-    { "getfloat", 0xd110, (void *)th_0d110, 6, expect_0d110, mask_all, (void **)&orig_0d110, 0, 0 },
+    { "checkstring", 0xd0c0, (void *)th_0d0c0, 7, expect_0d0c0, mask_all, (void **)&orig_0d0c0, 0, 0 },
+    { "getint", 0xd110, (void *)th_0d110, 6, expect_0d110, mask_all, (void **)&orig_0d110, 0, 0 },
     { "getstring", 0xd240, (void *)th_0d240, 6, expect_0d240, mask_all, (void **)&orig_0d240, 0, 0 },
     { "cs_getline", 0xd2a0, (void *)th_0d2a0, 5, expect_0d2a0, mask_all, (void **)&orig_0d2a0, 0, 0 },
     { "removeflieextentions", 0xd680, (void *)th_0d680, 6, expect_0d680, mask_all, (void **)&orig_0d680, 0, 0 },
@@ -12001,7 +12001,7 @@ static SvHook g_lifted[] = {
     { "objecttype_addwheel", 0x28a90, (void *)th_28a90, 7, expect_28a90, mask_all, (void **)&orig_28a90, 0, 0 },
     { "calculatepointscale", 0x28c90, (void *)th_28c90, 5, expect_28c90, mask_all, (void **)&orig_28c90, 0, 0 },
     { "objecttype_calcquadweights", 0x29300, (void *)th_29300, 5, expect_29300, mask_all, (void **)&orig_29300, 0, 0 },
-    { "optionreadwriteint", 0x29650, (void *)th_29650, 5, expect_29650, mask_all, (void **)&orig_29650, 0, 0 },
+    { "findstring", 0x29650, (void *)th_29650, 5, expect_29650, mask_all, (void **)&orig_29650, 0, 0 },
     { "area_setblock", 0x296f0, (void *)th_296f0, 5, expect_296f0, mask_all, (void **)&orig_296f0, 0, 0 },
     { "area_setblockcolor", 0x29830, (void *)th_29830, 5, expect_29830, mask_all, (void **)&orig_29830, 0, 0 },
     { "area_deleteblock", 0x29970, (void *)th_29970, 8, expect_29970, mask_all, (void **)&orig_29970, 0, 0 },

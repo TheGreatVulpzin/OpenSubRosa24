@@ -926,7 +926,7 @@ static const char *known_difference(const char *name)
 {
     static const char *const known[][2] = {
         /* sscanf("%d") finds no number: the original returns an uninitialized stack value. */
-        { "getfloat", "returns an uninitialized local when there is no number" },
+        { "getint", "returns an uninitialized local when there is no number" },
         /* x87 precision: the error grows through the computation (docs/lift.md, "Float precision"). */
         { "buildsomeshit", "x87 precision" },
     };

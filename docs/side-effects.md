@@ -23,7 +23,7 @@ Limits:
 
 - A function that receives a file opened before the call (a `FILE *` from the server process) cannot run in the harness.
 - A call recorded without `record_imports=1` has no packets: `recvfrom` then gives no data.
-- `getfloat` is a known difference: when `sscanf` finds no number, the original returns an uninitialized local.
+- `getint` is a known difference: when `sscanf` finds no number, the original returns an uninitialized local.
 
 ## Hand-written: loadaccountsserver
 
