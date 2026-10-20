@@ -58,3 +58,11 @@ Each one changes behavior only for invalid input from a client or an admin. The 
 - Stop the kick list at 41368 entries.
 - Link `hook/netguard.c` into the standalone server, or move its checks into `serverrecv`.
 
+
+## System code (found in group 7)
+
+- Call `timeBeginPeriod(1)` before the main loop. The loop sleeps 1 ms, and the system timer resolution sets how long the sleep lasts, so the ticks have jitter. Measure the tick time with and without it. (SubVulpes)
+- Check the size of the file in `loadtextfile`. A `config.txt` or `readme.txt` over 1 MB writes past the parser buffer. (both)
+- Check the name length and the list size in `listfiles`. A name of 64 bytes or more runs into the next name, and a list with 1024 names writes a 0 into the next list. (both)
+- Stop `getint` from returning a random value when the text has no number. The clean code returns 0. (both)
+- Fix the offset of `gettimeofday` (11644473600000000 in place of 116444736000000000). The function is not used now. (both)

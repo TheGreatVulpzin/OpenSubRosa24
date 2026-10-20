@@ -165,7 +165,7 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
 
 How each finished system works: [docs/game/](game/README.md).
 
-Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). Group 1 (2026-10-19): the block areas and the 2D tests (`area.c`, `collide_area.c`). Group 2 (2026-10-19): the rest of the humans (`human_body.c`, `human_pose.c`, `human_arms.c`). Group 3 (2026-10-20): the items, the guns and the bullets (`item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullet_sim.c`). Group 5 (2026-10-20): the server network (`server.c`, `netpack.c`, `commands.c`, `master.c`, `client.c`, the codecs in `packet.c`, the events in `events.c`). That is 163 of 316 functions.
+Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). Group 1 (2026-10-19): the block areas and the 2D tests (`area.c`, `collide_area.c`). Group 2 (2026-10-19): the rest of the humans (`human_body.c`, `human_pose.c`, `human_arms.c`). Group 3 (2026-10-20): the items, the guns and the bullets (`item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullet_sim.c`). Group 7 (2026-10-20): the system and the main loop (`parser.c`, `options.c`, `files.c`, `util.c`, `system.c`, `main_loop.c`). Group 5 (2026-10-20): the server network (`server.c`, `netpack.c`, `commands.c`, `master.c`, `client.c`, the codecs in `packet.c`, the events in `events.c`). That is 184 of 316 functions.
 
 Next, in this order (sizes from `analysis/024d/functions.csv`):
 
@@ -177,7 +177,7 @@ Next, in this order (sizes from `analysis/024d/functions.csv`):
 | 4 | Objects and vehicles | 27 | 67 KB |
 | 5 | Server network (done) | 24 | 36 KB |
 | 6 | Players, logic, economy and missions | 47 | 42 KB |
-| 7 | System and main loop (also a rewrite of `src/server/main_loop.c`) | 22 | 5 KB |
+| 7 | System and main loop (done) | 22 | 5 KB |
 | 8 | Map and buildings | 57 | 72 KB |
 
 1. Collision with the block areas, and the 2D tests: `sphereintersectarea`, `lineintersectarea`, `circleintersectarea`, `sphereintersectnormalblock`, `sphereintersectspecblock`, `lineintersectnormalblock`, `lineintersectspecblock`, `circleintersectnormalblock`, `circleintersectspecblock`, `lineintersectcityobjecttype`, `lineintersecttrack`, `lineintersecthuman`, `item_sphereintersect`, `sphereintersectpoint`, `sphereintersectline2d`, `lineintersectline2d`, `lineintersectcircle2d`, `pointdistanceline`, `pointinsidebase`, `pointinsidebasesafe`, `pointinsidebuilding`, `rotatevector2d`, `area_getblock`, `area_getblocktexture`, `area_interior_getblock`, `area_interior_getblocktexture`, `area_interior_getblocklink`, `area_getnextchunk`, `area_getnextsector`.

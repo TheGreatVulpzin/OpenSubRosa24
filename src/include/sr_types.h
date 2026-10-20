@@ -1138,7 +1138,7 @@ typedef union Game { struct {
     int wait_time;                       /* +0x0028 dedicatedserverloop writes 0xe10 (3600 ticks) */
     int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
     float unk_0030;                      /* +0x0030 1 functions */
-    int unk_0034;                        /* +0x0034 dedicatedserverloop writes 0x4ec */
+    int end_time;                        /* +0x0034 dedicatedserverloop writes 0x4ec (1260 ticks); logicsimulation copies it to timer when the state changes to 3 */
     int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
     uint8_t pad_003c[0x10];
     float start_angle_a;                 /* +0x004c serversend: packangle 16 in the new game packet */
@@ -1414,7 +1414,7 @@ SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
 SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
 SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
 SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
-SR_STATIC_ASSERT(offsetof(Game, unk_0034) == 0x34, "Game.unk_0034");
+SR_STATIC_ASSERT(offsetof(Game, end_time) == 0x34, "Game.end_time");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_a) == 0x4c, "Game.start_angle_a");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_b) == 0x50, "Game.start_angle_b");
@@ -1622,11 +1622,10 @@ SR_STATIC_ASSERT(offsetof(Option, voiceboost_scale) == 0x148, "Option.voiceboost
 typedef union Server { struct {
     int active;                          /* +0x0000 sr_server */
     uint8_t pad_0004[0x4];
-    int unk_0008;                        /* +0x0008 1 functions */
+    int unused_08;                       /* +0x0008 dedicatedserverloop writes 1; no reader in the 024d or the Linux 0.24c */
     int last_packet_size;                /* +0x000c serversend and clientrecv */
     int max_packet_size;                 /* +0x0010 clientrecv */
-    char name[32];                       /* +0x0014 serverrecv type 0 reply */
-    uint8_t pad_0034[0x28];
+    char name[72];                       /* +0x0014 serverrecv type 0 reply sends the first 32 bytes; dedicatedserverloop copies Option.servername here */
     int max_players;                     /* +0x005c serverrecv */
     uint8_t pad_0060[0x4];
     int num_players;                     /* +0x0064 serverrecv: count of the human players */
@@ -1637,6 +1636,7 @@ typedef union Server { struct {
 }; uint8_t lf_raw[0x84]; } Server;
 SR_STATIC_ASSERT(sizeof(Server) == 0x84, "Server");
 SR_STATIC_ASSERT(offsetof(Server, active) == 0x0, "Server.active");
+SR_STATIC_ASSERT(offsetof(Server, unused_08) == 0x8, "Server.unused_08");
 SR_STATIC_ASSERT(offsetof(Server, last_packet_size) == 0xc, "Server.last_packet_size");
 SR_STATIC_ASSERT(offsetof(Server, max_packet_size) == 0x10, "Server.max_packet_size");
 SR_STATIC_ASSERT(offsetof(Server, name) == 0x14, "Server.name");

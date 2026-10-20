@@ -93,8 +93,8 @@ int gettimeofday(int *tv, int *tz)
     return 0;
 }
 
-/* The result is an int. The seconds are far too big (see EPOCH_OFFSET), so the sum is out of
- * the range of an int and the result is -2147483648. */
+/* The result is an int. For most clock values the milliseconds do not fit in an int (see
+ * EPOCH_OFFSET), and the result is -2147483648. */
 int testtimer(void)
 {
     int tv[2];
@@ -117,7 +117,7 @@ void debug_resetlogfile(void)
     }
 }
 
-/* The play time is in units of 0.1 s. The average has no value when there is no account. */
+/* The play time is in units of 0.1 s. With no account, the average is 0. */
 void server_writelogfile(void)
 {
     uint32_t total = 0, average = 0;

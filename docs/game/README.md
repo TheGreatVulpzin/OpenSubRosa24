@@ -10,6 +10,7 @@ This folder describes how each rewritten game system works. Each page lists the 
 | [items.md](items.md) | `src/game/items.c`, `item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullets.c`, `bullet_sim.c` | Items, their places and motion, guns, phones, cash bills and bullets. |
 | [physics.md](physics.md) | `src/game/particles.c`, `solver.c`, `bonds.c` | Particles, bonds and the bond solver. |
 | [humans.md](humans.md) | `src/game/humans.c`, `human_body.c`, `human_pose.c`, `human_arms.c` | The people: bones, walking, vehicles, arms and death. |
+| [system.md](system.md) | `src/common/parser.c`, `files.c`, `util.c`, `system.c`, `src/game/options.c`, `profiler.c`, `src/server/main_loop.c` | The text parser, the settings, the profiler timers, the file lists, the radix sort, the clock, the log files and the main loop. |
 | [collision.md](collision.md) | `src/game/collide.c`, `collide_area.c`, `area.c`, `rigid.c` | Collision tests against the level, objects, humans and items. |
 
 Related pages:

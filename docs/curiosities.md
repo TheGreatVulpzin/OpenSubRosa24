@@ -32,6 +32,10 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | The server asks the Cryptic Sea master server for the list with a plain HTTP request to `www.crypticsea.com/anewzero/serverinfo.php`. | code | `getmasterserverip` (0x1ac40) |
 | Before it reads `config.txt`, the server sets defaults: the name "Agent" plus a random number up to 511, the server name "Sub Rosa Server", and a server password that is a random number seeded with the clock. | code | `loadsaveoptions` (0x4e7a0) |
 | The config reader skips everything up to the first digit or minus sign. When the value has no number, the result is whatever was on the stack. | code | `getint` (0xd110) |
+| The server has a function that converts the Windows clock to the Unix clock, but the offset is 10 times too small: it subtracts it before the divide by 10. The seconds that it returns are about 330 years too big. Nothing calls it. | code | `gettimeofday` (0xb230) |
+| The text reader keeps the whole file in a 1 MB buffer and never checks the size. A config or readme file over 1 MB writes over the data that follows the buffer. | code | `loadtextfile` (0xd020) |
+| A list of file names has room for 1024 names of 64 bytes. A full list writes its end marker into the count of the next list, and a long name runs into the next name. | code | `listfiles` (0xd3a0) |
+| The server has code that binds the process to the first CPU, but nothing calls it. The `setcpuaffinity=` key in `config.txt` is read and then ignored. | code | `setcpuaffinity` (0xb300) |
 
 ### 3. Players and chat
 

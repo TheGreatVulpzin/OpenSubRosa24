@@ -59,7 +59,7 @@ def key(s, data):
     return 'M:%x' % SCRATCH
 
 
-# The average of the stats file has no value with no account: the original prints a leftover
+# The average of the stats file has no value with no account: the game prints a leftover
 # register, the new code prints 0.
 EXPECTED_DIFFERENT = {'server_writelogfile_none'}
 

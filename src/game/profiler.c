@@ -2,7 +2,7 @@
  * start of the timer to its total, and writes the total in milliseconds.
  *
  * The physics loops call it many times in each tick, so it must be fast. The math gives
- * the same bits as the 024d on the x87 (53-bit precision).
+ * the same bits as the x87 code (53-bit precision).
  */
 #include "profiler.h"
 
