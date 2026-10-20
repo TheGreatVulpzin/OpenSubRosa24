@@ -106,7 +106,7 @@ void human_collisionhuman(int human)
                 b->target = human;
                 b->bone_b = i;
                 b->mode = 3;
-                d.x = inv * d.x;
+                d.x = (float)(inv * d.x);
                 d.y = (float)(d.y * inv);
                 d.z = (float)(inv * d.z);
                 b->rest_length = (float)(0.375 - len);

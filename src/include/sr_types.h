@@ -407,8 +407,8 @@ typedef union Human { struct {
     float input_axes[4];                 /* +0x009c playersimulation: the analog inputs from the client; walking uses [1] sideways and [3] forward; the driver copies all 4 to Object.drive_input */
     float view_axis;                     /* +0x00ac playersimulation: the view angle from the client; on foot humansimulation copies it to axis */
     float view_pitch;                    /* +0x00b0 playersimulation: the view pitch from the client; on foot humansimulation copies it to pitch */
-    float unk_00b4;                      /* +0x00b4 1 functions */
-    float unk_00b8;                      /* +0x00b8 1 functions */
+    float arm_axis;                      /* +0x00b4 human_calculatearmangles turns the chest by half of it; no code writes it, so it stays 0 */
+    float arm_pitch;                     /* +0x00b8 human_calculatearmangles bends the chest and the head with it; no code writes it, so it stays 0 */
     uint32_t input_buttons;              /* +0x00bc humansimulation tests bits &1 &8 &0x10 */
     uint32_t input_buttons_prev;         /* +0x00c0 createhuman writes 0x3c0; bit tests like +0xbc (likely: buttons of the previous frame) */
     uint8_t pad_00c4[0x4];
@@ -475,6 +475,8 @@ SR_STATIC_ASSERT(offsetof(Human, body_param) == 0x98, "Human.body_param");
 SR_STATIC_ASSERT(offsetof(Human, input_axes) == 0x9c, "Human.input_axes");
 SR_STATIC_ASSERT(offsetof(Human, view_axis) == 0xac, "Human.view_axis");
 SR_STATIC_ASSERT(offsetof(Human, view_pitch) == 0xb0, "Human.view_pitch");
+SR_STATIC_ASSERT(offsetof(Human, arm_axis) == 0xb4, "Human.arm_axis");
+SR_STATIC_ASSERT(offsetof(Human, arm_pitch) == 0xb8, "Human.arm_pitch");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons) == 0xbc, "Human.input_buttons");
 SR_STATIC_ASSERT(offsetof(Human, input_buttons_prev) == 0xc0, "Human.input_buttons_prev");
 SR_STATIC_ASSERT(offsetof(Human, bones) == 0xc8, "Human.bones");
@@ -753,7 +755,7 @@ typedef union ItemType { struct {
     int price;                           /* +0x0000 setupitemtypes: the price in the shop (AK-47 500, Magnum 10000, Bandage 100) */
     float mass;                          /* +0x0004 createitem copies it to item.mass */
     int is_gun;                          /* +0x0008 setupitemtypes: 1 for the 6 guns (AK-47, M-16, Magnum, MP5, Uzi, 9mm), 0 for the other items; linkitem: inventory slot 2 takes only a gun, slots 3 and up only the other items */
-    uint8_t pad_000c[0x4];
+    int one_handed;                      /* +0x000c setupitemtypes: 1 for the guns held in one hand (Magnum, Uzi, 9mm) */
     int fire_delay;                      /* +0x0010 setupitemtypes: AK-47 8, M-16 7, MP5 5, Uzi 6, Magnum and 9mm 30 (likely: the ticks between two shots) */
     int bullet_type;                     /* +0x0014 setupitemtypes: AK-47 0, M-16 1, MP5, Uzi and 9mm 2, Magnum 3: one of the 4 bullet types of setupbullettypes; createevent_bullet sends it */
     int unk_0018;                        /* +0x0018 1 functions */
@@ -763,7 +765,8 @@ typedef union ItemType { struct {
     char name[32];                       /* +0x0028 setupitemtypes: the name of the item type (AK-47, Bandage, Open Briefcase...) */
     uint8_t pad_0048[0x8];
     int unk_0050;                        /* +0x0050 1 functions */
-    uint8_t pad_0054[0x18];
+    vec3 grip;                           /* +0x0054 setupitemtypes: the point of the item that the right hand holds (human_calculatearmangles) */
+    uint8_t pad_0060[0xc];
     float unk_006c;                      /* +0x006c 1 functions */
     int unk_0070;                        /* +0x0070 1 functions */
     float unk_0074;                      /* +0x0074 1 functions */
@@ -777,11 +780,13 @@ SR_STATIC_ASSERT(sizeof(ItemType) == 0x198, "ItemType");
 SR_STATIC_ASSERT(offsetof(ItemType, price) == 0x0, "ItemType.price");
 SR_STATIC_ASSERT(offsetof(ItemType, mass) == 0x4, "ItemType.mass");
 SR_STATIC_ASSERT(offsetof(ItemType, is_gun) == 0x8, "ItemType.is_gun");
+SR_STATIC_ASSERT(offsetof(ItemType, one_handed) == 0xc, "ItemType.one_handed");
 SR_STATIC_ASSERT(offsetof(ItemType, fire_delay) == 0x10, "ItemType.fire_delay");
 SR_STATIC_ASSERT(offsetof(ItemType, bullet_type) == 0x14, "ItemType.bullet_type");
 SR_STATIC_ASSERT(offsetof(ItemType, ammo) == 0x1c, "ItemType.ammo");
 SR_STATIC_ASSERT(offsetof(ItemType, bullet_speed) == 0x20, "ItemType.bullet_speed");
 SR_STATIC_ASSERT(offsetof(ItemType, name) == 0x28, "ItemType.name");
+SR_STATIC_ASSERT(offsetof(ItemType, grip) == 0x54, "ItemType.grip");
 SR_STATIC_ASSERT(offsetof(ItemType, size) == 0x80, "ItemType.size");
 SR_STATIC_ASSERT(offsetof(ItemType, inv_inertia) == 0x8c, "ItemType.inv_inertia");
 SR_STATIC_ASSERT(offsetof(ItemType, fits_in) == 0x98, "ItemType.fits_in");
@@ -857,7 +862,8 @@ typedef union Bond { struct {
     float damping;                       /* +0x0070 bondsimulation2 copies it to bondopt.damping; bond_partpart: the gain on the velocity along dir */
     vec3 normal;                         /* +0x0074 contact bonds (types 1 to 4, 7): the normal of the hit surface (g_intersect.normal) */
     float friction;                      /* +0x0080 contact bonds: objectsimulation writes 0.6 against the level and 0.4 against an object; calculatefriction uses it */
-    uint8_t pad_0084[0x8];
+    float unread_84;                     /* +0x0084 human_calculatearmangles writes 4/15 for the item bonds (types 10 and 11); no code reads it */
+    uint8_t pad_0088[0x4];
     int num_objects;                     /* +0x008c createbond appends parameter 4 to the list at +0x90; deletebond loops over it */
     int owner;                           /* +0x0090 types 8, 9 and 10: human index; type 5: object index; type 0: first object of the list (count +0x8c) */
     int bone_a;                          /* +0x0094 bondsimulation2: bone index (stride 0xe0) */
@@ -887,6 +893,7 @@ SR_STATIC_ASSERT(offsetof(Bond, stiffness) == 0x6c, "Bond.stiffness");
 SR_STATIC_ASSERT(offsetof(Bond, damping) == 0x70, "Bond.damping");
 SR_STATIC_ASSERT(offsetof(Bond, normal) == 0x74, "Bond.normal");
 SR_STATIC_ASSERT(offsetof(Bond, friction) == 0x80, "Bond.friction");
+SR_STATIC_ASSERT(offsetof(Bond, unread_84) == 0x84, "Bond.unread_84");
 SR_STATIC_ASSERT(offsetof(Bond, num_objects) == 0x8c, "Bond.num_objects");
 SR_STATIC_ASSERT(offsetof(Bond, owner) == 0x90, "Bond.owner");
 SR_STATIC_ASSERT(offsetof(Bond, bone_a) == 0x94, "Bond.bone_a");
@@ -953,8 +960,8 @@ SR_STATIC_ASSERT(offsetof(Bullet, back) == 0x50, "Bullet.back");
 /* body[]: record of 0x40 bytes. */
 typedef union Body { struct {
     int parent;                          /* +0x0000 humansimulation: the bone that bone k hangs from; pos is the offset in the frame of the parent */
-    vec3 pos;                            /* +0x0004 human_calculatearmangles: subtractvectors with the bone position */
-    vec3 joint;                          /* +0x0010 human_buildmuscles: the joint of the bone with its parent, in the frame of the parent */
+    vec3 pos;                            /* +0x0004 setupbody: the place of the bone in the frame of its parent; createhuman adds the places up the tree */
+    vec3 joint;                          /* +0x0010 human_buildmuscles: the joint of the bone with its parent, in the frame of the parent; human_calcarmtorque: the shoulder */
     float radius;                        /* +0x001c setupbody writes 0.0625; it rounds the corners of the box of the bone */
     vec3 half_size;                      /* +0x0020 setupbody: the half size of the box of the bone along each axis */
     float mass;                          /* +0x002c setupbody; createhuman copies it to Bone.mass */

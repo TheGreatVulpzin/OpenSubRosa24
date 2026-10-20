@@ -149,16 +149,16 @@ void geteulerangles2(vec3 *angles, const vec3 rot[3])
 void orientationtoquaternion(quat *q, const vec3 rot[3])
 {
     float trace = (float)(rot[1].y + rot[0].x + rot[2].z);
-    float s, inv;
-    double root;
+    float s;
+    double root, inv; /* not rounded to a float */
     if (trace < -1.0)
         trace = -1.0f;
     root = x87_sqrt(trace + 1.0);
     s = (float)(root + root);
-    if (s <= 1.52587890625E-5)
-        inv = 0.0f;
+    if (!(1.52587890625E-5 < s)) /* a NaN also gives 0 */
+        inv = 0.0;
     else
-        inv = (float)(1.0 / s);
+        inv = 1.0 / s;
     q->w = (float)(s * 0.25);
     q->x = (float)((rot[2].y - rot[1].z) * inv);
     q->y = (float)((rot[0].z - rot[2].x) * inv);

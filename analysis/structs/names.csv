@@ -94,7 +94,7 @@ bond,0x14,particle_a,int,,createbond: parameter 2 (index into particle[])
 bond,0x18,particle_b,int,,createbond: parameter 3
 bond,0x60,rest_length,float,,bondsimulation2: (dist - rest) * k (likely)
 bond,0x74,normal,vec3,,"contact bonds (types 1 to 4, 7): the normal of the hit surface (g_intersect.normal)"
-body,0x4,pos,vec3,,human_calculatearmangles: subtractvectors with the bone position
+body,0x4,pos,vec3,,"setupbody: the place of the bone in the frame of its parent; createhuman adds the places up the tree"
 itemtype,0x80,size,vec3,,setupitemtypes: products of 0x80/0x84/0x88 (likely: dimensions for mass)
 itemtype,0x98,fits_in,int,64,linkitemtoitem: a child item goes into a parent only when fits_in[parent type] != 0 (one int for each of the 64 item types)
 item,0x28,children,int,8,"linkitemtoitem writes the child at children[num_children]; item_removeitemlink moves the last child into the free place. The server manager read +0x38 as a phone state: no game code reads it, and it is children[4]"
@@ -352,7 +352,7 @@ area_block,0x78,num_hideable,int,,"bits 16 to 25 of a block word hide the faces 
 area_block,0x60,num_tris,int,,"circleintersectspecblock: the loose triangles of the mesh"
 area_block,0x64,tris,int,,"a pointer to 3 indexes into verts for each loose triangle"
 area_block,0x68,tri_slots,int,,"a pointer to the texture slot of each loose triangle"
-body,0x10,joint,vec3,,"human_buildmuscles: the joint of the bone with its parent, in the frame of the parent"
+body,0x10,joint,vec3,,"human_buildmuscles: the joint of the bone with its parent, in the frame of the parent; human_calcarmtorque: the shoulder"
 body,0x1c,radius,float,,"setupbody writes 0.0625; it rounds the corners of the box of the bone"
 body,0x20,half_size,vec3,,"setupbody: the half size of the box of the bone along each axis"
 body,0x2c,mass,float,,"setupbody; createhuman copies it to Bone.mass"
@@ -362,3 +362,8 @@ player,0xb8,body_param,float,,"createplayer writes 1.0; createhuman copies it to
 human,0x98,body_param,float,,"createhuman: Player.body_param, or 1.0 for a human with no player; no other code reads it"
 human,0x2870,spawn_pos,vec3,,"createhuman: the place of the new human; no other code reads it"
 human,0x28bc,spawn_pos2,vec3,,"createhuman: the place of the new human; no other code reads it"
+human,0xb4,arm_axis,float,,"human_calculatearmangles turns the chest by half of it; no code writes it, so it stays 0"
+human,0xb8,arm_pitch,float,,"human_calculatearmangles bends the chest and the head with it; no code writes it, so it stays 0"
+itemtype,0xc,one_handed,int,,"setupitemtypes: 1 for the guns held in one hand (Magnum, Uzi, 9mm)"
+itemtype,0x54,grip,vec3,,"setupitemtypes: the point of the item that the right hand holds (human_calculatearmangles)"
+bond,0x84,unread_84,float,,"human_calculatearmangles writes 4/15 for the item bonds (types 10 and 11); no code reads it"

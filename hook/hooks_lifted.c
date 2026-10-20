@@ -9593,12 +9593,12 @@ __declspec(naked) static void th_2f130(void)
 }
 static uint8_t expect_2f130[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_2f420(int param_1);
+void __cdecl human_calcarmtorque(int param_1);
 static void (__cdecl *orig_2f420)(int);
 static SvVerify v_2f420 = { "human_calcarmtorque", -1 };
 static void __cdecl hk_2f420(int param_1)
 {
-    SV_HOOK_VOID(v_2f420, lf_2f420(param_1), orig_2f420(param_1), NULL);
+    SV_HOOK_VOID(v_2f420, human_calcarmtorque(param_1), orig_2f420(param_1), NULL);
 }
 __declspec(naked) static void th_2f420(void)
 {
@@ -10720,12 +10720,12 @@ __declspec(naked) static void th_49940(void)
 }
 static uint8_t expect_49940[7] = { 0x8b, 0x44, 0x24, 0x04, 0x83, 0xec, 0x40 };
 
-void __cdecl lf_4a440(int param_1);
+void __cdecl human_calculatearmangles(int param_1);
 static void (__cdecl *orig_4a440)(int);
 static SvVerify v_4a440 = { "human_calculatearmangles", -1 };
 static void __cdecl hk_4a440(int param_1)
 {
-    SV_HOOK_VOID(v_4a440, lf_4a440(param_1), orig_4a440(param_1), NULL);
+    SV_HOOK_VOID(v_4a440, human_calculatearmangles(param_1), orig_4a440(param_1), NULL);
 }
 __declspec(naked) static void th_4a440(void)
 {

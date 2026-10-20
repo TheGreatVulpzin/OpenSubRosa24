@@ -21,4 +21,8 @@ int createhuman(float *pos, float *rot, int player);
 void human_calculatelegangles(int human);
 void human_collisionhuman(int human);
 
+/* human_arms.c */
+void human_calculatearmangles(int human);
+void human_calcarmtorque(int human);
+
 #endif /* SR_HUMANS_H */

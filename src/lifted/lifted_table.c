@@ -252,7 +252,7 @@ void lf_2e310(void);
 void lf_2efd0(void);
 void lf_2f090(void);
 void lineintersecthuman(void);
-void lf_2f420(void);
+void human_calcarmtorque(void);
 void human_createmuscleball(void);
 void sphereintersecttrianglefull(void);
 void itemtimetolive(void);
@@ -283,7 +283,7 @@ void bondsimulation2(void);
 void lf_46c30(void);
 void lf_48ec0(void);
 void lf_49940(void);
-void lf_4a440(void);
+void human_calculatearmangles(void);
 void lf_4bd60(void);
 void human_buildmuscles(void);
 void lf_4c8c0(void);
@@ -570,7 +570,7 @@ const LfEntry lf_table[] = {
     { "packpositiondelta", 0x2efd0, (void *)lf_2efd0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "unpackpositiondelta", 0x2f090, (void *)lf_2f090, 4, LF_RET_VOID, 4, "pvvv", 0 },
     { "lineintersecthuman", 0x2f130, (void *)lineintersecthuman, 4, LF_RET_INT, 4, "vppv", 0 },
-    { "human_calcarmtorque", 0x2f420, (void *)lf_2f420, 1, LF_RET_VOID, 4, "v", 0 },
+    { "human_calcarmtorque", 0x2f420, (void *)human_calcarmtorque, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x306d0, (void *)human_createmuscleball, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "sphereintersecttrianglefull", 0x307f0, (void *)sphereintersecttrianglefull, 8, LF_RET_INT, 4, "ppppvppp", 0 },
     { "itemtimetolive", 0x30ab0, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
@@ -601,7 +601,7 @@ const LfEntry lf_table[] = {
     { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
     { "bulletsimulation", 0x48ec0, (void *)lf_48ec0, 0, LF_RET_VOID, 4, "", 0 },
     { "server_playermessage", 0x49940, (void *)lf_49940, 2, LF_RET_INT, 4, "vp", 0 },
-    { "human_calculatearmangles", 0x4a440, (void *)lf_4a440, 1, LF_RET_VOID, 4, "v", 0 },
+    { "human_calculatearmangles", 0x4a440, (void *)human_calculatearmangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_itemsimulation", 0x4bd60, (void *)lf_4bd60, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_buildmuscles", 0x4c720, (void *)human_buildmuscles, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemlogic", 0x4c8c0, (void *)lf_4c8c0, 0, LF_RET_VOID, 4, "", 0 },
