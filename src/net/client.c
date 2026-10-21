@@ -287,7 +287,7 @@ static void read_objects(ObjectPacket *op, uint32_t *id, uint32_t *mode)
         unpackangle(&ob->wheels[1].steer, 8);
         for (k = 0; k < 4; k++) {
             pbitread(&raw, 6);
-            ob->wheels[k].spin_net = unpackscalar(raw, 6);
+            ob->wheels[k].travel = unpackscalar(raw, 6);
         }
         for (k = 0; k < 4; k++) {
             pbitread(&raw, 6);

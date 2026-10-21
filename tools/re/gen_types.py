@@ -87,7 +87,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
@@ -164,19 +164,35 @@ typedef union HandGrip { struct {
     float axis;         /* +0x0c human_itemsimulation: input_axes[0] */
 }; uint8_t lf_raw[0x10]; } HandGrip;
 
-/* A wheel body of an object (Object.wheel_bodies). Only the velocities of the solver are known. */
+/* A solid wheel of an object (Object.wheel_bodies, a car with wheel bodies). */
 typedef union WheelBody { struct {
-    uint8_t unk_00[0xc];
+    vec3 pos;           /* +0x00 objectwheelsimulation2: the center of the body */
     vec3 vel;           /* +0x0c bondsimulation2 type 15: the velocity of the body */
     vec3 dv;            /* +0x18 bondsimulation2 clears it at the start of each pass */
     vec3 rot[3];        /* +0x24 bondsimulation2 projects ang_momentum on each row */
     vec3 ang_momentum;  /* +0x48 bondsimulation2 adds dw to it each pass */
     vec3 w;             /* +0x54 the angular velocity: bondsimulation2 makes it from ang_momentum, rot and inv_inertia */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
-    uint8_t unk_6c[0xc];
+    float axle_inv_inertia; /* +0x6c objectwheelsimulation2: the inverse inertia of the axle */
+    uint8_t unk_70[8];
     vec3 inv_inertia;   /* +0x78 bondsimulation2: the factor of each row of rot */
-    uint8_t unk_84[0x64];
+    float mass;         /* +0x84 objectwheelsimulation2: the mass of the body */
+    float radius;       /* +0x88 objectwheelcollision2: the radius of the tire */
+    float half_width;   /* +0x8c objectwheelcollision2: half the width of the tire */
+    int particles[4];   /* +0x90 indexes into Object.particles: the hub */
+    float weights[4];   /* +0xa0 the weight of each hub particle */
+    uint8_t unk_b0[0x1c];
+    float steer_weights[4]; /* +0xcc objectsimulation_car: the weights of a steered body (no server code reads them) */
+    float steer_side;   /* +0xdc objectsimulation_car: 0.125 for body 0, -0.125 for body 1 */
+    uint8_t unk_e0[8];
 }; uint8_t lf_raw[0xe8]; } WheelBody;
+
+/* A point of a rotor (Object.rotor): the blade tips, the hub and the tail. */
+typedef union RotorPoint { struct {
+    vec3 pos;           /* +0x00 object_rotorsimulation: the place of the point */
+    vec3 vel;           /* +0x0c object_rotorsimulation: the velocity */
+    vec3 vel_prev;      /* +0x18 object_rotorsimulation: the velocity of the last pass */
+}; uint8_t lf_raw[0x24]; } RotorPoint;
 
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
@@ -187,9 +203,9 @@ typedef union Wheel { struct {
     int particle_b;     /* +0x10 index into Object.particles */
     float weight_a;     /* +0x14 objectwheelcollision copies it to Bond.weights[0] */
     float weight_b;     /* +0x18 objectwheelcollision copies it to Bond.weights[1] */
-    float unk_1c;       /* +0x1c */
+    float mass;         /* +0x1c objectwheelsimulation2: share = mass / (mass + the mass of the particles) */
     float radius;       /* +0x20 objectwheelcollision: the circle against the level; bulletsimulation writes 0.25 for a popped tire */
-    float unk_24;       /* +0x24 */
+    float inv_inertia;  /* +0x24 objectenginesimulation2: spin += inv_inertia * dspin */
     float dspin;        /* +0x28 bondsimulation2 type 5 subtracts the push along Bond.roll_dir times the radius */
     float spin;         /* +0x2c the angular speed: bondsimulation2 type 5 rolls the ground contact with spin * radius */
     float angle;        /* +0x30 the turn of the wheel; objectsimulation_heli turns wheel 0 as the rotor; the packets send it */
@@ -197,11 +213,16 @@ typedef union Wheel { struct {
     vec3 pos;           /* +0x38 objectwheelcollision: the center of the circle */
     vec3 vel;           /* +0x44 bondsimulation2 type 5: the velocity of the hub */
     vec3 dv;            /* +0x50 bondsimulation2 type 5 adds the change of vel */
-    float spin_net;      /* +0x5c the packets send it as a signed scalar of 6 bits */
-    float unk_60[4];    /* +0x60 */
+    float travel;       /* +0x5c objectsimulation: the offset of the hub along rot[1]; the packets send it as a signed scalar of 6 bits */
+    float ride_height;  /* +0x60 objectwheelsimulation2: the height of the hub above the body */
+    float spring;       /* +0x64 objectwheelsimulation2: the spring force of the wheel */
+    float damper;       /* +0x68 objectwheelsimulation2: the damping force of the wheel */
+    float vertical;     /* +0x6c objectwheelsimulation2: the gain of the spring and the damper along rot[1] */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
     uint8_t unk_74[0x10];
-    float unk_84[5];    /* +0x84 objectwheelsimulation2 */
+    float share_wheel;  /* +0x84 objectwheelsimulation2: the share of the wheel in the push (pass 0 writes it) */
+    float share_body;   /* +0x88 objectwheelsimulation2: the share of the particles in the push (pass 0 writes it) */
+    vec3 spring_offset; /* +0x8c objectwheelsimulation2: the spring offset of the hub (pass 0 writes it) */
 }; uint8_t lf_raw[0x98]; } Wheel;
 
 /* A city object (an elevator, a door): the global cityobject holds 1024 records of 0x54 bytes. */
@@ -235,8 +256,10 @@ typedef union TrackPiece { struct {
     int unk_10;         /* +0x10 createtrack */
     vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */
     int num_tris;       /* +0x254 createtrack: the number of triangles */
-    int tris[66][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
-    uint8_t unk_570[8];
+    int tris[64][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    uint8_t pad_558[8];
+    vec3 box_min;       /* +0x560 createtrack: the box of the corners; objecttrainsimulation tests it */
+    vec3 box_max;       /* +0x56c createtrack: the box of the corners */
 }; uint8_t lf_raw[0x578]; } TrackPiece;
 
 /* A face of the mesh of a city object type (CityObjectTypeRec.faces). */
@@ -446,6 +469,12 @@ SR_STATIC_ASSERT(offsetof(BlockSector, area) == 0x5014, "BlockSector.area");
 SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
 SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
+SR_STATIC_ASSERT(sizeof(RotorPoint) == 0x24, "RotorPoint");
+SR_STATIC_ASSERT(offsetof(WheelBody, inv_inertia) == 0x78, "WheelBody.inv_inertia");
+SR_STATIC_ASSERT(offsetof(WheelBody, particles) == 0x90, "WheelBody.particles");
+SR_STATIC_ASSERT(offsetof(WheelBody, steer_side) == 0xdc, "WheelBody.steer_side");
+SR_STATIC_ASSERT(offsetof(TrackPiece, box_min) == 0x560, "TrackPiece.box_min");
+SR_STATIC_ASSERT(offsetof(TrackPiece, box_max) == 0x56c, "TrackPiece.box_max");
 SR_STATIC_ASSERT(sizeof(Account) == 0x4c, "Account");
 SR_STATIC_ASSERT(offsetof(Account, money) == 0x2c, "Account.money");
 SR_STATIC_ASSERT(sizeof(VoiceSlot) == 0x20, "VoiceSlot");

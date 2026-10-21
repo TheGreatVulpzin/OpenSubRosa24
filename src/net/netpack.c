@@ -473,7 +473,7 @@ static void write_objects(const ObjectPacket *op)
         packangle(&ob->wheels[0].steer, 8);
         packangle(&ob->wheels[1].steer, 8);
         for (k = 0; k < 4; k++)
-            packscalar(&ob->wheels[k].spin_net, 1.0f, 6);
+            packscalar(&ob->wheels[k].travel, 1.0f, 6);
         for (k = 0; k < 4; k++)
             packscalar(&ob->wheels[k].slip, 1.0f, 6);
         packscalar(&ob->vel.x, 1.0f, 8);

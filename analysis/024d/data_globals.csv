@@ -36,3 +36,4 @@ rva,name,type,count,evidence
 0x10348524,slogfp,void*,,"server_writelogfile: FILE * of stats.txt (fopen w); Linux 0.24c symbol slogfp"
 0x61840,tzset_done,int,,"gettimeofday: _tzset runs once, then the flag is 1"
 0x204380,dedicated,int,,"dedicatedserverloop: the Linux 0.24c symbol dedicated"
+0x1952d668,train_near,int,1,"objectsimulation: 0 at the start, 1 when the locomotive moves toward City.crossing within 160; logicsimulation reads it"

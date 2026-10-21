@@ -149,7 +149,7 @@ item,0xec,flags,uint32_t,,itemlogic tests bit 1; human_itemsimulation sets bit 1
 item,0xfc,phone_id,int,,logic_setteammanager compares with team * 1111 (0x457)
 item,0x104,info,int,,createevent_updateiteminfo sends it; itemlogic and eventsimulation write it
 item,0x134,num_bills,int,,item_addbill and logic_playeractions add 1
-object,0x8,state,int,,objectsimulation compares with 1 and 2; packobjectpacket ignores 3 (likely: object state)
+object,0x8,state,int,,1 car (objectsimulation_car), 2 helicopter, 3 train car (objecttrainsimulation); humans and netpack skip 3
 object,0x5ee8,num_wheels,int,,createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels)
 player,0x4c,num_purchases,int,,logic_gunstore_buy and logic_playeractions: limit < 10
 player,0xac,hud_mode,int,,getinputs_human adds 1; drawhud compares with 0 and 1
@@ -539,3 +539,28 @@ timerlist,0x48,setupinterior,int,,"timer index; the code names the timer ""setup
 timerlist,0x4c,allocinterior,int,,"timer index; the code names the timer ""allocinterior"""
 timerlist,0x50,shadowinterior,int,,"timer index; the code names the timer ""shadowinterior"""
 server,0x8,unused_08,int,,"dedicatedserverloop writes 1; no reader in the 024d or the Linux 0.24c"
+object,0x1ac,num_frame_particles,int,,objectsimulation: the first N particles give the frame of the object (rot)
+object,0x1b0,frame_weight_x,float,64,objectsimulation: rot[0] = sum of weight * (particle - center)
+object,0x2b0,frame_weight_z,float,64,objectsimulation: rot[2] the same way
+object,0x5be4,linked_object,int,,objectsimulation: no contact with the linked object; objecttrainsimulation copies track_last to it (the next car of a train)
+object,0x5e5c,differential,float,,objectenginesimulation2: spin difference of the two driven wheels; 0 for type 1
+object,0x5e60,engine_inertia,float,,objectenginesimulation2: the torque is divided by engine_inertia * engine_scale (likely)
+object,0x5e68,engine_scale,float,,objectenginesimulation2: see engine_inertia (likely)
+object,0x5e70,gear_prev,int,,objectsimulation_car: the gear of the last tick; a change plays the gear sound
+object,0x5e7c,gear_ratio_inv,float,,"objectsimulation_car: 1 / gear_ratio, 0 in neutral"
+object,0x5e80,clutch,float,,"objectsimulation_car: 1, 0 in neutral or with button 2"
+object,0x5e84,brake,float,,objectsimulation_car: -input[3] when below 0; 2 with button 4 (hand brake); 1 when the buttons are -1
+object,0x5e90,num_driven,int,,objectenginesimulation2: the number of driven wheels
+object,0x5e94,driven_wheels,int,16,objectenginesimulation2: wheel indices (wheel body indices for type 1)
+object,0x5ee4,gear_auto,int,,objectsimulation_car: 1 with automatic gears (input[2] < -0.5 and input[0] >= 1.5)
+object,0x8074,rotor,RotorPoint,6,"object_rotorsimulation: 2 blade tips, 2 more points, hub (4), tail (5)"
+object,0x8194,track_target,int,,objectsimulation type 12: the station track piece (0x1c or 0x4a)
+object,0x8198,stop_ticks,int,,objectsimulation type 12: ticks at the station; the train leaves at 0x4b0
+object,0x819c,track_last,int,,objecttrainsimulation: the track piece under the train
+object,0x81a0,axle_width,float,,objectsimulation_car: outer wheel angle (Ackermann): cot(o) = cot(i) + axle_width / wheelbase
+object,0x81a4,wheelbase,float,,objectsimulation_car: see axle_width
+object,0x820c,crash_noise,float,,objectsimulation: adds the impact speed; plays the crash sound above 2
+particle,0x44,vel_last,vec3,,objectsimulation: the vel of the last tick; the change is the impact speed
+city,0x1b4,crossing,vec3,,objectsimulation: a locomotive sets g_train_near when it moves toward it within 160 (x and z; likely a level crossing)
+soundlist,0x7c,crash,int,,objectsimulation: an object impact
+soundlist,0x130,gear,int,,objectsimulation_car: a gear change
