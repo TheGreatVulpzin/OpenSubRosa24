@@ -7936,12 +7936,12 @@ __declspec(naked) static void th_223d0(void)
 }
 static uint8_t expect_223d0[6] = { 0xd9, 0xee, 0x8b, 0x4c, 0x24, 0x04 };
 
-void __cdecl lf_225e0(float * param_1, int param_2);
+void __cdecl getobjectrotation3(float * param_1, int param_2);
 static void (__cdecl *orig_225e0)(float *, int);
 static SvVerify v_225e0 = { "getobjectrotation3", -1 };
 static void __cdecl hk_225e0(float * param_1, int param_2)
 {
-    SV_HOOK_VOID(v_225e0, lf_225e0(param_1, param_2), orig_225e0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_225e0, getobjectrotation3(param_1, param_2), orig_225e0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_225e0(void)
 {
@@ -8065,12 +8065,12 @@ __declspec(naked) static void th_22e20(void)
 }
 static uint8_t expect_22e20[8] = { 0x83, 0xec, 0x0c, 0x53, 0x8b, 0x5c, 0x24, 0x14 };
 
-void __cdecl lf_22f90(void);
+void __cdecl objectwheelsimulation2(void);
 static void (__cdecl *orig_22f90)(void);
 static SvVerify v_22f90 = { "objectwheelsimulation2", -1 };
 static void __cdecl hk_22f90(void)
 {
-    SV_HOOK_VOID(v_22f90, lf_22f90(), orig_22f90(), NULL);
+    SV_HOOK_VOID(v_22f90, objectwheelsimulation2(), orig_22f90(), NULL);
 }
 __declspec(naked) static void th_22f90(void)
 {
@@ -8402,12 +8402,12 @@ __declspec(naked) static void th_26db0(void)
 }
 static uint8_t expect_26db0[8] = { 0x83, 0xec, 0x3c, 0x53, 0x8b, 0x5c, 0x24, 0x44 };
 
-void __cdecl lf_26f90(int param_1);
+void __cdecl objecttrainsimulation(int param_1);
 static void (__cdecl *orig_26f90)(int);
 static SvVerify v_26f90 = { "objecttrainsimulation", -1 };
 static void __cdecl hk_26f90(int param_1)
 {
-    SV_HOOK_VOID(v_26f90, lf_26f90(param_1), orig_26f90(param_1), NULL);
+    SV_HOOK_VOID(v_26f90, objecttrainsimulation(param_1), orig_26f90(param_1), NULL);
 }
 __declspec(naked) static void th_26f90(void)
 {
@@ -11172,12 +11172,12 @@ __declspec(naked) static void th_4e0d0(void)
 }
 static uint8_t expect_4e0d0[8] = { 0x83, 0xec, 0x40, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_4e2c0(int param_1, int param_2);
+void __cdecl objectwheelcollision2(int param_1, int param_2);
 static void (__cdecl *orig_4e2c0)(int, int);
 static SvVerify v_4e2c0 = { "objectwheelcollision2", -1 };
 static void __cdecl hk_4e2c0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_4e2c0, lf_4e2c0(param_1, param_2), orig_4e2c0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_4e2c0, objectwheelcollision2(param_1, param_2), orig_4e2c0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_4e2c0(void)
 {
@@ -11214,12 +11214,12 @@ __declspec(naked) static void th_4e2c0(void)
 }
 static uint8_t expect_4e2c0[7] = { 0x83, 0xec, 0x20, 0x8b, 0x4c, 0x24, 0x28 };
 
-void __cdecl lf_4e500(int param_1, int param_2);
+void __cdecl objectwheelcollision(int param_1, int param_2);
 static void (__cdecl *orig_4e500)(int, int);
 static SvVerify v_4e500 = { "objectwheelcollision", -1 };
 static void __cdecl hk_4e500(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_4e500, lf_4e500(param_1, param_2), orig_4e500(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_4e500, objectwheelcollision(param_1, param_2), orig_4e500(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_4e500(void)
 {

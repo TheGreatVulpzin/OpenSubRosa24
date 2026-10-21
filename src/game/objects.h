@@ -3,6 +3,7 @@
 #define SR_OBJECTS_H
 
 #include "sr_math.h"
+#include "sr_runtime.h"
 #include "sr_types.h"
 
 void objectsimulation(void);
@@ -39,6 +40,27 @@ static __inline float object_normalize(vec3 *out, const vec3 *in)
     out->z = (float)(inv * in->z);
   }
   return s;
+}
+
+/* Add a contact bond of the given type for a particle. The stretch is at most 0.25. The caller
+ * sets the friction and the surface velocity. */
+static __inline void contact_bond(int type, int particle, const float n[3], float rest, float stiffness,
+                                  float damping)
+{
+  Bond *b = &sr_bonds[sr_numofbonds];
+
+  b->type = type;
+  b->particle_a = particle;
+  b->rest_length = rest;
+  if (0.25 < rest)
+    b->rest_length = 0.25f;
+  b->stiffness = stiffness;
+  b->damping = damping;
+  b->mode = 0;
+  b->normal.x = n[0];
+  b->normal.y = n[1];
+  b->normal.z = n[2];
+  sr_numofbonds++;
 }
 
 #endif /* SR_OBJECTS_H */

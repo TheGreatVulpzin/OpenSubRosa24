@@ -24,10 +24,6 @@
 #define g_numofstaticbonds (*SR_AT(int, 0x13c22d24)) /* the bonds before the contacts of this tick */
 #define g_numofdynamicbonds (*SR_AT(int, 0x1ca5a30)) /* the bonds with the contacts of the last tick */
 
-/* Game functions with no clean version yet: the calls go to the lifted C. */
-void __cdecl lf_22f90(void);
-#define objectwheelsimulation2 lf_22f90
-
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
  * each side from the masses. */
 static void setup_partpart(const Bond *b, BondOpt *o)

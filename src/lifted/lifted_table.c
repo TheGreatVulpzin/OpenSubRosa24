@@ -211,10 +211,10 @@ void getrandomvector2d(void);
 void getrandomvector3d(void);
 void addobjectrotation(void);
 void getobjectrotation2(void);
-void lf_225e0(void);
+void getobjectrotation3(void);
 void calculatebarycentric(void);
 void lf_22e20(void);
-void lf_22f90(void);
+void objectwheelsimulation2(void);
 void getenginetorque2(void);
 void object_rotorsimulation(void);
 void objectsimulation_heli(void);
@@ -222,7 +222,7 @@ void lineintersectobject(void);
 void lf_25e70(void);
 void lineintersecttrack(void);
 void lineintersecttrackrail(void);
-void lf_26f90(void);
+void objecttrainsimulation(void);
 void objectsimulation_car(void);
 void createparticle(void);
 void particletimetolive(void);
@@ -294,8 +294,8 @@ void lf_4d850(void);
 void lf_4da10(void);
 void lf_4e060(void);
 void lf_4e0d0(void);
-void lf_4e2c0(void);
-void lf_4e500(void);
+void objectwheelcollision2(void);
+void objectwheelcollision(void);
 void loadsaveoptions(void);
 void serversend(void);
 void lf_4f720(void);
@@ -529,10 +529,10 @@ const LfEntry lf_table[] = {
     { "getrandomvector3d", 0x21b40, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "addobjectrotation", 0x21e00, (void *)addobjectrotation, 4, LF_RET_VOID, 4, "vppv", 0 },
     { "getobjectrotation2", 0x223d0, (void *)getobjectrotation2, 3, LF_RET_VOID, 4, "pvp", 0 },
-    { "getobjectrotation3", 0x225e0, (void *)lf_225e0, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "getobjectrotation3", 0x225e0, (void *)getobjectrotation3, 2, LF_RET_VOID, 4, "pv", 0 },
     { "calculatebarycentric", 0x22af0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
     { "applydamageobject", 0x22e20, (void *)lf_22e20, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectwheelsimulation2", 0x22f90, (void *)lf_22f90, 0, LF_RET_VOID, 4, "", 0 },
+    { "objectwheelsimulation2", 0x22f90, (void *)objectwheelsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "getenginetorque2", 0x23fa0, (void *)getenginetorque2, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "object_rotorsimulation", 0x240e0, (void *)object_rotorsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0x24f60, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
@@ -540,7 +540,7 @@ const LfEntry lf_table[] = {
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0x26bc0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0x26db0, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "objecttrainsimulation", 0x26f90, (void *)lf_26f90, 1, LF_RET_VOID, 4, "v", 0 },
+    { "objecttrainsimulation", 0x26f90, (void *)objecttrainsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_car", 0x272b0, (void *)objectsimulation_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "createparticle", 0x278c0, (void *)createparticle, 5, LF_RET_INT, 4, "vppvv", 0 },
     { "particletimetolive", 0x279b0, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
@@ -612,8 +612,8 @@ const LfEntry lf_table[] = {
     { "buildcitystreet", 0x4da10, (void *)lf_4da10, 1, LF_RET_VOID, 4, "v", 0 },
     { "logic_createcar", 0x4e060, (void *)lf_4e060, 3, LF_RET_INT, 4, "vvv", 0 },
     { "logic_cardealer_buy", 0x4e0d0, (void *)lf_4e0d0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectwheelcollision2", 0x4e2c0, (void *)lf_4e2c0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectwheelcollision", 0x4e500, (void *)lf_4e500, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "objectwheelcollision2", 0x4e2c0, (void *)objectwheelcollision2, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "objectwheelcollision", 0x4e500, (void *)objectwheelcollision, 2, LF_RET_VOID, 4, "vv", 0 },
     { "loadsaveoptions", 0x4e7a0, (void *)loadsaveoptions, 1, LF_RET_VOID, 4, "v", 1 },
     { "serversend", 0x4ed30, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p", 0 },
