@@ -81,6 +81,8 @@ Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_
 | `int typed as float (denormal literal)` | Ghidra typed an int parameter as float (`param_1 == 1.4013e-45`). |
 | `compile_error` | The pseudo-C does not compile. |
 
+Two functions stay at `compile_error` in the 024d lift: `__ValidateImageBase` (0x5d5b0) and `__FindPESection` (0x5d5f0). They are CRT helpers (Ghidra FID match, Visual Studio 2010) that read the PE headers. The first error is `C2143` (a missing `{` before `__cdecl`). The `C2146` on `pImageBase` is a follow-up error. No lifted function calls them. The CRT startup code, which the lifter does not lift, may call them. They are not game code. The standalone server does not use them: its CRT is the static one of its own build.
+
 ## Results
 
 First complete run (2026-10-12): 141 of 340 functions lifted and compiled. Automatic test on an idle server (180 s): no crash, 10 lifted functions called and verified, 0 differences.
