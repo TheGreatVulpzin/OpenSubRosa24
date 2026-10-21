@@ -96,12 +96,12 @@ __declspec(naked) static void th_01540(void)
 }
 static uint8_t expect_01540[6] = { 0xd9, 0x44, 0x24, 0x08, 0xd9, 0xc0 };
 
-void __cdecl lf_01610(uint param_1);
+void __cdecl ai_car_nextwaypoint(uint param_1);
 static void (__cdecl *orig_01610)(uint);
 static SvVerify v_01610 = { "ai_car_nextwaypoint", -1 };
 static void __cdecl hk_01610(uint param_1)
 {
-    SV_HOOK_VOID(v_01610, lf_01610(param_1), orig_01610(param_1), NULL);
+    SV_HOOK_VOID(v_01610, ai_car_nextwaypoint(param_1), orig_01610(param_1), NULL);
 }
 __declspec(naked) static void th_01610(void)
 {
@@ -2900,12 +2900,12 @@ __declspec(naked) static void th_0ae50(void)
 }
 static uint8_t expect_0ae50[5] = { 0xa1, 0xd0, 0x0c, 0x46, 0x00 };
 
-void __cdecl lf_0b040(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5);
+void __cdecl objecttype_addparticle(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5);
 static void (__cdecl *orig_0b040)(int, undefined4, undefined4, undefined4, undefined4);
 static SvVerify v_0b040 = { "objecttype_addparticle", -1 };
 static void __cdecl hk_0b040(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5)
 {
-    SV_HOOK_VOID(v_0b040, lf_0b040(param_1, param_2, param_3, param_4, param_5), orig_0b040(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_VOID(v_0b040, objecttype_addparticle(param_1, param_2, param_3, param_4, param_5), orig_0b040(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_0b040(void)
 {
@@ -2945,12 +2945,12 @@ __declspec(naked) static void th_0b040(void)
 }
 static uint8_t expect_0b040[8] = { 0x8b, 0x4c, 0x24, 0x04, 0xd9, 0x44, 0x24, 0x08 };
 
-int __cdecl lf_0b0b0(int param_1, undefined4 param_2, int param_3, int param_4);
+int __cdecl objecttype_addbond(int param_1, undefined4 param_2, int param_3, int param_4);
 static int (__cdecl *orig_0b0b0)(int, undefined4, int, int);
 static SvVerify v_0b0b0 = { "objecttype_addbond", -1 };
 static int __cdecl hk_0b0b0(int param_1, undefined4 param_2, int param_3, int param_4)
 {
-    SV_HOOK_RET(int, v_0b0b0, lf_0b0b0(param_1, param_2, param_3, param_4), orig_0b0b0(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_RET(int, v_0b0b0, objecttype_addbond(param_1, param_2, param_3, param_4), orig_0b0b0(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_0b0b0(void)
 {
@@ -2988,12 +2988,12 @@ __declspec(naked) static void th_0b0b0(void)
 }
 static uint8_t expect_0b0b0[10] = { 0x8b, 0x44, 0x24, 0x04, 0x69, 0xc0, 0x8c, 0x82, 0x00, 0x00 };
 
-void __cdecl lf_0b150(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8);
+void __cdecl objecttype_addface(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8);
 static void (__cdecl *orig_0b150)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4);
 static SvVerify v_0b150 = { "objecttype_addface", -1 };
 static void __cdecl hk_0b150(int param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8)
 {
-    SV_HOOK_VOID(v_0b150, lf_0b150(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_0b150(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
+    SV_HOOK_VOID(v_0b150, objecttype_addface(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), orig_0b150(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), NULL);
 }
 __declspec(naked) static void th_0b150(void)
 {
@@ -4712,12 +4712,12 @@ __declspec(naked) static void th_0ded0(void)
 }
 static uint8_t expect_0ded0[8] = { 0x83, 0xec, 0x2c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_0e4d0(float param_1, int param_2);
+void __cdecl ai_playercar(float param_1, int param_2);
 static void (__cdecl *orig_0e4d0)(float, int);
 static SvVerify v_0e4d0 = { "ai_playercar", -1 };
 static void __cdecl hk_0e4d0(float param_1, int param_2)
 {
-    SV_HOOK_VOID(v_0e4d0, lf_0e4d0(param_1, param_2), orig_0e4d0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_0e4d0, ai_playercar(param_1, param_2), orig_0e4d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_0e4d0(void)
 {
@@ -8819,12 +8819,12 @@ __declspec(naked) static void th_286b0(void)
 }
 static uint8_t expect_286b0[8] = { 0x83, 0xec, 0x68, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_28a90(int param_1, undefined4 param_2, int param_3, int param_4, undefined4 * param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8, float param_9, undefined4 param_10, undefined4 param_11, undefined4 param_12);
+void __cdecl objecttype_addwheel(int param_1, undefined4 param_2, int param_3, int param_4, undefined4 * param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8, float param_9, undefined4 param_10, undefined4 param_11, undefined4 param_12);
 static void (__cdecl *orig_28a90)(int, undefined4, int, int, undefined4 *, undefined4, undefined4, undefined4, float, undefined4, undefined4, undefined4);
 static SvVerify v_28a90 = { "objecttype_addwheel", -1 };
 static void __cdecl hk_28a90(int param_1, undefined4 param_2, int param_3, int param_4, undefined4 * param_5, undefined4 param_6, undefined4 param_7, undefined4 param_8, float param_9, undefined4 param_10, undefined4 param_11, undefined4 param_12)
 {
-    SV_HOOK_VOID(v_28a90, lf_28a90(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11, param_12), orig_28a90(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11, param_12), NULL);
+    SV_HOOK_VOID(v_28a90, objecttype_addwheel(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11, param_12), orig_28a90(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9, param_10, param_11, param_12), NULL);
 }
 __declspec(naked) static void th_28a90(void)
 {
@@ -8915,12 +8915,12 @@ __declspec(naked) static void th_28c90(void)
 }
 static uint8_t expect_28c90[5] = { 0x83, 0xec, 0x60, 0xd9, 0xee };
 
-void __cdecl lf_29300(float * param_1, float * param_2, float * param_3);
+void __cdecl objecttype_calcquadweights(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_29300)(float *, float *, float *);
 static SvVerify v_29300 = { "objecttype_calcquadweights", -1 };
 static void __cdecl hk_29300(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_29300, lf_29300(param_1, param_2, param_3), orig_29300(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_29300, objecttype_calcquadweights(param_1, param_2, param_3), orig_29300(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_29300(void)
 {
@@ -9930,12 +9930,12 @@ __declspec(naked) static void th_31630(void)
 }
 static uint8_t expect_31630[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
 
-int __cdecl lf_31800(int param_1, float * param_2, undefined4 * param_3, float * param_4, int param_5);
+int __cdecl createobject(int param_1, float * param_2, undefined4 * param_3, float * param_4, int param_5);
 static int (__cdecl *orig_31800)(int, float *, undefined4 *, float *, int);
 static SvVerify v_31800 = { "createobject", -1 };
 static int __cdecl hk_31800(int param_1, float * param_2, undefined4 * param_3, float * param_4, int param_5)
 {
-    SV_HOOK_RET(int, v_31800, lf_31800(param_1, param_2, param_3, param_4, param_5), orig_31800(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_RET(int, v_31800, createobject(param_1, param_2, param_3, param_4, param_5), orig_31800(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_31800(void)
 {
@@ -10180,12 +10180,12 @@ __declspec(naked) static void th_33350(void)
 }
 static uint8_t expect_33350[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_34870(int param_1);
+void __cdecl setupobjecttypeweight(int param_1);
 static void (__cdecl *orig_34870)(int);
 static SvVerify v_34870 = { "setupobjecttypeweight", -1 };
 static void __cdecl hk_34870(int param_1)
 {
-    SV_HOOK_VOID(v_34870, lf_34870(param_1), orig_34870(param_1), NULL);
+    SV_HOOK_VOID(v_34870, setupobjecttypeweight(param_1), orig_34870(param_1), NULL);
 }
 __declspec(naked) static void th_34870(void)
 {
@@ -10221,12 +10221,12 @@ __declspec(naked) static void th_34870(void)
 }
 static uint8_t expect_34870[5] = { 0x83, 0xec, 0x3c, 0xd9, 0xee };
 
-void __cdecl lf_34c10(void);
+void __cdecl setupobjecttypes_cars(void);
 static void (__cdecl *orig_34c10)(void);
 static SvVerify v_34c10 = { "setupobjecttypes_cars", -1 };
 static void __cdecl hk_34c10(void)
 {
-    SV_HOOK_VOID(v_34c10, lf_34c10(), orig_34c10(), NULL);
+    SV_HOOK_VOID(v_34c10, setupobjecttypes_cars(), orig_34c10(), NULL);
 }
 __declspec(naked) static void th_34c10(void)
 {
@@ -10260,12 +10260,12 @@ __declspec(naked) static void th_34c10(void)
 }
 static uint8_t expect_34c10[6] = { 0x81, 0xec, 0x88, 0x00, 0x00, 0x00 };
 
-void __cdecl lf_3a610(void);
+void __cdecl setupobjecttypes_helicopters(void);
 static void (__cdecl *orig_3a610)(void);
 static SvVerify v_3a610 = { "setupobjecttypes_helicopters", -1 };
 static void __cdecl hk_3a610(void)
 {
-    SV_HOOK_VOID(v_3a610, lf_3a610(), orig_3a610(), NULL);
+    SV_HOOK_VOID(v_3a610, setupobjecttypes_helicopters(), orig_3a610(), NULL);
 }
 __declspec(naked) static void th_3a610(void)
 {
@@ -10299,12 +10299,12 @@ __declspec(naked) static void th_3a610(void)
 }
 static uint8_t expect_3a610[8] = { 0x83, 0xec, 0x38, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_3b0c0(void);
+void __cdecl setupobjectypes_train(void);
 static void (__cdecl *orig_3b0c0)(void);
 static SvVerify v_3b0c0 = { "setupobjectypes_train", -1 };
 static void __cdecl hk_3b0c0(void)
 {
-    SV_HOOK_VOID(v_3b0c0, lf_3b0c0(), orig_3b0c0(), NULL);
+    SV_HOOK_VOID(v_3b0c0, setupobjectypes_train(), orig_3b0c0(), NULL);
 }
 __declspec(naked) static void th_3b0c0(void)
 {
@@ -10338,12 +10338,12 @@ __declspec(naked) static void th_3b0c0(void)
 }
 static uint8_t expect_3b0c0[6] = { 0x81, 0xec, 0xf4, 0x00, 0x00, 0x00 };
 
-int __cdecl lf_3ccc0(int param_1, float * param_2, float * param_3);
+int __cdecl createvehicle(int param_1, float * param_2, float * param_3);
 static int (__cdecl *orig_3ccc0)(int, float *, float *);
 static SvVerify v_3ccc0 = { "createvehicle", -1 };
 static int __cdecl hk_3ccc0(int param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_RET(int, v_3ccc0, lf_3ccc0(param_1, param_2, param_3), orig_3ccc0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_3ccc0, createvehicle(param_1, param_2, param_3), orig_3ccc0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_3ccc0(void)
 {

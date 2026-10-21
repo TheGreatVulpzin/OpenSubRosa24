@@ -43,6 +43,20 @@ static void copy_vec(vec3 *dst, const vec3 *src)
         memset(dst, 0, sizeof *dst);
 }
 
+/* Event 3: an object was made. The clients get its type and its color. */
+void createevent_createobject(int object)
+{
+    const Object *o = &sr_objects[object];
+    Event *ev;
+    if (sr_server == 0)
+        return;
+    ev = new_event(3);
+    ev->param = object;
+    ev->attach_type = o->type;
+    ev->attach_id = o->color;
+    next_event();
+}
+
 /* Event 5: the place of an item (on a human, in an item, in a slot), its type and state. */
 void createevent_updateitem(uint32_t item)
 {

@@ -6,6 +6,7 @@
 
 #include "sr_types.h"
 
+void createevent_createobject(int object);
 void createevent_updateitem(uint32_t item);
 void createevent_updateiteminfo(uint32_t item);
 void createevent_updateplayer(int player);

@@ -97,3 +97,31 @@ A particle that touches the level deep (its line from the center crosses the lev
 ## Speed
 
 `objectwheelsimulation2` and `objectenginesimulation2` run 32 times for each tick. The loops are flat: they use pointers to the object, the wheel and the particle. Bench (`tools/lift/bench.py`, 3 runs, 2026-10-21): `objectsimulation`, `objectwheelsimulation2` and `objectenginesimulation2` are within the noise of the old code (ratio 0.93 to 1.09). `objecttrainsimulation` is 1.07 to 1.19 slower on 7 calls (a train exists only in some recordings). `objectwheelcollision` moves between 1.04 and 1.38 on 4 calls.
+
+## Object types and creation (group 4 part B)
+
+Files: `object_types.c` (the append helpers, `objecttype_calcquadweights`, `setupobjecttypeweight`), `vehicle_types.c` (the three setups), `object_create.c` (`createobject`, `createvehicle`), `ai_car.c` (the bot driver).
+
+**Types.** `ObjectType` (128 records of 0x828c bytes) holds the lists of a vehicle: `particles` (TypeParticle), `bonds` (TypeBond), `faces` (TypeFace), `quads` (TypeQuad, train only), `wheels` (TypeWheel), `seats`. Every `objecttype_add*` helper writes at the count and adds 1. No setup resets a count. A second run of a setup appends all records again, except the bonds (`objecttype_addbond` skips a pair that exists). The recordings take the snapshot after `setupgame`, so the gate always tests this second run. `tools/lift/synth_types.py` (`fresh_*` cases) clears the types and tests the first run.
+
+**Types in use.** 0 Town Car, 1 Town Car 2 (wheel bodies, a hitch particle 20), 2 Metro, 3 Limo, 4 Turbo, 5 Turbo S, 6 Beamer, 7 Van, 8 Minivan, 9 Truck (hitch particle 20), 10 Trailer (hitch particle 16, state 0, no engine), 11 Helicopter, 12 Train, 13 Bogie. A car is a grid of 16 points (vans, truck and trailer: 12) in 3 (2) box segments, a roof, a cabin box with window faces, and 4 wheels (the truck has 6). The setup order is 0, 1, 2, 3, 4, 5, 7, 8, 6, 9, 10. `setupobjecttypeweight` writes the global `pointtemp`, so the order is part of the result.
+
+**setupobjecttypeweight.** It makes the masses a share of 1, moves the wheels to the center of the particles, sets `radius` (1.125 times the largest distance from the frame center) and makes the two frame weight tables with `calculatepointscale`.
+
+**createobject.** It takes the first free slot (no free slot gives -1). It copies the type: one particle for each type particle (turned by `rot`, moved to `pos`), one bond for each type bond, the faces (the object face has armor and the window flag 4 bytes lower than the type face, and `health` 8), the frame weights, the wheels and the seats. A type 1 car gets one `WheelBody` for each wheel. A type 11 helicopter gets the six `rotor` points. The create event (type 3) goes out only on a server.
+
+**createvehicle.** Only type 0 (the train): a locomotive (type 12, `track_target` 0x4a) and two bogies (type 13, `linked_object` = the locomotive) tied to it with bonds. `rot` is overwritten with the frame of the locomotive. Another type gives -1.
+
+**AI driving.** `ai_playercar(player, object)` follows `Player.waypoints` (road, dir, lane, turn). It steers toward a point on the lane line, takes the speed from the distance to the next crossing (`CityIntersection.red` stops it) and to the car ahead, changes lane (chase bots only), and backs out when `stuck_ticks` reaches 0xb4. The result goes to `input_axes`. `ai_car_nextwaypoint` picks the side to leave a crossing by (toward `ai_dest_x`, `ai_dest_z`, with random picks) and consumes `os_rand` calls in a fixed order.
+
+Odd behavior that the code keeps:
+
+- `objecttype_addbond` returns the byte offset of the type record (`type * 0x828c`), not a bond index.
+- The bogie has bonds of a particle with itself (6 of 21).
+- The Metro roof has armor 0.
+- `WheelBody.axle_inv_inertia` is written with `r * r * 0.5`, which is an inertia, not an inverse. The name stays.
+- The `* 0.0` in the wheel body weights stays: it turns a weight into 0 and -0.
+- The helicopter centroid sums over `num_frame_particles`, which is set to `num_particles` at that point. A second run of the setup therefore includes the points of the first run.
+- Train points (quads) share the index space with the particles: a quad index starts at `num_particles`.
+- `ai_playercar` steering clamps leave a NaN as it is. The lane change reads the current waypoint, the turn reads the next one.
+- `ai_car_nextwaypoint` tries at most 512 random sides. After that it uses the last side with no test, even if it has no road.

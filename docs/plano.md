@@ -167,7 +167,7 @@ How each finished system works: [docs/game/](game/README.md).
 
 Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). Group 1 (2026-10-19): the block areas and the 2D tests (`area.c`, `collide_area.c`). Group 2 (2026-10-19): the rest of the humans (`human_body.c`, `human_pose.c`, `human_arms.c`). Group 3 (2026-10-20): the items, the guns and the bullets (`item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullet_sim.c`). Group 7 (2026-10-20): the system and the main loop (`parser.c`, `options.c`, `files.c`, `util.c`, `system.c`, `main_loop.c`). Group 5 (2026-10-20): the server network (`server.c`, `netpack.c`, `commands.c`, `master.c`, `client.c`, the codecs in `packet.c`, the events in `events.c`). That is 184 of 316 functions.
 
-Group 4, part A (done 2026-10-21): `objectsimulation`, `objectsimulation_car`, `objectsimulation_heli`, `object_rotorsimulation`, `objecttrainsimulation`, `objectwheelsimulation2`, `objectenginesimulation2`, `objectwheelcollision`, `objectwheelcollision2`, `getenginetorque2`, `getobjectrotation3`, `addobjectrotation`, `applydamageobject`, `objecttimetolive` in `src/game/objects.c`, `vehicles.c` and `wheels.c`. How they work: [game/objects.md](game/objects.md). Test: `tools/lift/synth_vehicles.py`.
+Group 4, part A (done 2026-10-21): `objectsimulation`, `objectsimulation_car`, `objectsimulation_heli`, `object_rotorsimulation`, `objecttrainsimulation`, `objectwheelsimulation2`, `objectenginesimulation2`, `objectwheelcollision`, `objectwheelcollision2`, `getenginetorque2`, `getobjectrotation3`, `addobjectrotation`, `applydamageobject`, `objecttimetolive` in `src/game/objects.c`, `vehicles.c` and `wheels.c`. How they work: [game/objects.md](game/objects.md). Test: `tools/lift/synth_vehicles.py`. Group 4, part B (done 2026-10-21): `objecttype_addparticle`, `objecttype_addbond`, `objecttype_addface`, `objecttype_addwheel`, `objecttype_calcquadweights`, `setupobjecttypeweight`, `setupobjecttypes_cars`, `setupobjecttypes_helicopters`, `setupobjectypes_train`, `createobject`, `createvehicle`, `ai_car_nextwaypoint`, `ai_playercar` in `object_types.c`, `vehicle_types.c`, `object_create.c` and `ai_car.c`. Test: `tools/lift/synth_types.py`. **Group 4 is done.**
 
 Next, in this order (sizes from `analysis/024d/functions.csv`):
 
@@ -176,7 +176,7 @@ Next, in this order (sizes from `analysis/024d/functions.csv`):
 | 1 | Collision with the block areas, and the 2D tests (done) | 29 | 22 KB |
 | 2 | Humans, the rest (done) | 11 | 18 KB |
 | 3 | Items and weapons, the rest (done) | 7 | 16 KB |
-| 4 | Objects and vehicles (part A done: the simulation, 14 functions; part B: creation, types and `ai_car.c`) | 27 | 67 KB |
+| 4 | Objects and vehicles (done: part A the simulation, part B creation, types and `ai_car.c`) | 27 | 67 KB |
 | 5 | Server network (done) | 24 | 36 KB |
 | 6 | Players, logic, economy and missions | 47 | 42 KB |
 | 7 | System and main loop (done) | 22 | 5 KB |

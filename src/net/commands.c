@@ -13,12 +13,12 @@
 
 #include "events.h"
 #include "items.h"
+#include "objects.h"
 #include "server.h"
 #include "sr_server.h"
 
 /* Game functions of other files. */
 int __cdecl lf_28190(int human, int kind, int count); /* scenario_armhuman */
-int __cdecl lf_31800(int type, vec3 *pos, int *vel, vec3 rot[3], int flag); /* createobject */
 
 #define msgbuf SR_AT(char, 0x61848)                  /* the scratch text of the game, 64 bytes */
 #define filtered_word SR_AT(const char, 0x5efec)     /* the word that the chat filter replaces */
@@ -130,7 +130,7 @@ static void make_heli(int human)
     mat[0].x = 1.0f;
     mat[1].y = 1.0f;
     mat[2].z = 1.0f;
-    lf_31800(0xb, &pos, NULL, mat, 1);
+    createobject(0xb, &pos, NULL, mat, 1);
 }
 
 /* /kick NAME: kick the last connection whose player has this name, and add its ip to the

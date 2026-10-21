@@ -6,6 +6,9 @@
 #include "sr_runtime.h"
 #include "sr_types.h"
 
+int createobject(int type, const vec3 *pos, const vec3 *vel, const vec3 rot[3], int color);
+int createvehicle(int type, const vec3 *pos, vec3 rot[3]);
+
 void objectsimulation(void);
 void objecttimetolive(void);
 void applydamageobject(int obj, int damage);

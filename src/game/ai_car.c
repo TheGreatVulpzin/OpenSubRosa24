@@ -1,439 +1,334 @@
-/* ai_playercar (RVA 0xe4d0): the driving of a car by the AI, rewritten by hand.
+/* The driving of a car by the AI.
  *
- * Phase 6 (docs/plano.md). The first version is the lifted C, unchanged. Each step makes
- * it readable and faster and keeps the harness at 0 differences: the float math keeps its
- * order and its (float) rounding points (x87, 53-bit precision, as the original).
+ * A bot car follows a list of road points (Player.waypoints): the road, the side of the road,
+ * the lane and the turn at the next crossing. ai_playercar steers toward a point on the lane
+ * of the current road, picks a speed from the distance to the next crossing and to the car
+ * ahead, and writes the result in the input axes of the player. ai_car_nextwaypoint adds the
+ * next road point at a crossing.
  *
- * The function keeps the symbol lf_0e4d0: tools/lift/lift.py sees the definition here
- * and lifts it no more, but keeps it in the table, the live hooks and the standalone server.
+ * The input axes: 0 and 2 select the gear (forward or back), 1 is the steering, 3 is the
+ * throttle and the brake.
+ *
+ * Float rules: a value that the code stores in a float rounds to a float. A value inside one
+ * expression stays a double. The sums keep their order, so the results are bit exact.
  */
-#include "lift_support.h"
-#include "lift_os.h"
+#include "ai_car.h"
 
-/* Imports of the game (MSVCR100, KERNEL32...), resolved on the first call, as in the
- * lifted file. The indexes come from the lifted C. */
-static void *lf_imports[64];
-#define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
-#define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
+#include <math.h>
 
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_city (*(City *)SR_VA(0xe699220))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(6, "MSVCR100.DLL", "rand"))
-#define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_FN(0x401610))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x40b850))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x40b8c0))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x40b900))
-#define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x40baa0))
-#define _CIsqrt x87_sqrt
-#define local_54 (*(float *)(lf_frame + 0x1c))
-#define local_50 (*(float *)(lf_frame + 0x20))
-#define local_4c (*(uint *)(lf_frame + 0x24))
-#define local_3c (*(float *)(lf_frame + 0x34))
-#define local_38 (*(float *)(lf_frame + 0x38))
-#define local_34 (*(float *)(lf_frame + 0x3c))
-#define local_30 (*(float *)(lf_frame + 0x40))
-#define local_28 (*(float *)(lf_frame + 0x48))
-#define local_24 (*(float *)(lf_frame + 0x4c))
-#define local_20 (*(float *)(lf_frame + 0x50))
-#define local_1c (*(float *)(lf_frame + 0x54))
-#define local_18 (*(float *)(lf_frame + 0x58))
-#define local_14 (*(float *)(lf_frame + 0x5c))
-#define local_10 (*(float *)(lf_frame + 0x60))
-#define local_c (*(float *)(lf_frame + 0x64))
-#define local_8 (*(float *)(lf_frame + 0x68))
-#define local_4 (*(float *)(lf_frame + 0x6c))
-void __cdecl lf_0e4d0(float param_1,int param_2)
+#include "sr_math.h"
+#include "sr_os.h"
+#include "sr_runtime.h"
+#include "vectors.h"
 
+/* Game globals. */
+#define sr_city (*SR_AT(City, SR_RVA_CITY))
+
+/* A value in the range -1 to 1 (steering or throttle). A value that is not a number stays as it is. */
+static float clamp_unit(float v)
 {
-  __declspec(align(16)) uchar lf_frame[0x70];
-  float fVar1;
-  float fVar2;
-  float fVar3;
-  float fVar4;
-  int iVar5;
-  int iVar6;
-  int iVar7;
-  int iVar8;
-  float fVar9;
-  float fVar10;
-  float fVar11;
-  Player *pPVar12;
-  uint uVar13;
-  int *piVar14;
-  int iVar15;
-  int iVar16;
-  float *pfVar17;
-  float10 fVar18;
-  double dVar19;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  float fVar13;
-  
-  LF_COPY(fVar13, param_1);
-  if ((1 < g_object[param_2].gear) && (g_object[param_2].engine_rpm < 4.363323129986111)) {
-    g_object[param_2].gear = g_object[param_2].gear + -1;
-  }
-  if ((g_object[param_2].gear < 4) && (8.726646259972222 < g_object[param_2].engine_rpm)) {
-    g_object[param_2].gear = g_object[param_2].gear + 1;
-  }
-  iVar5 = g_object[param_2].gear;
-  fVar1 = 1.0;
-  if ((iVar5 == 1) || (iVar5 == 2)) {
-    g_player[((int)LF_UINT(param_1))].input_axes[0] = 0.0;
-  }
-  else {
-    g_player[((int)LF_UINT(param_1))].input_axes[0] = 1.0;
-  }
-  iVar16 = ((int)LF_UINT(param_1)) * 0x2408;
-  if ((iVar5 == 1) || (iVar5 == 3)) {
-    fVar1 = -1.0;
-  }
-  iVar5 = g_player[((int)LF_UINT(param_1))].ai_waypoint;
-  g_player[((int)LF_UINT(param_1))].input_axes[2] = fVar1;
-  iVar5 = iVar5 * 0x1c;
-  iVar15 = *(int *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a58] + iVar5);
-  if (iVar15 == -1) {
-    return;
-  }
-  iVar6 = (&g_city.unk_1a010)[iVar15 * 0x13];
-  iVar7 = (&g_city.unk_1a00c)[iVar15 * 0x13];
-  if (*(int *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a5c] + iVar5) == 0) {
-    local_18 = (&g_city.unk_0014)[iVar7 * 0x1a];
-    local_14 = (&g_city.unk_0018)[iVar7 * 0x1a];
-    local_10 = (&g_city.unk_001c)[iVar7 * 0x1a];
-    local_30 = (&g_city.unk_0014)[iVar6 * 0x1a];
-    fVar1 = (&g_city.unk_001c)[iVar6 * 0x1a];
-  }
-  else {
-    local_18 = (&g_city.unk_0014)[iVar6 * 0x1a];
-    local_14 = (&g_city.unk_0018)[iVar6 * 0x1a];
-    local_10 = (&g_city.unk_001c)[iVar6 * 0x1a];
-    local_30 = (&g_city.unk_0014)[iVar7 * 0x1a];
-    fVar1 = (&g_city.unk_001c)[iVar7 * 0x1a];
-  }
-  fVar2 = g_object[param_2].pos.x;
-  fVar3 = g_object[param_2].pos.y;
-  local_1c = g_object[param_2].pos.z;
-  local_50 = 16.0;
-  if (g_player[((int)LF_UINT(param_1))].unk_1a3c != 0) {
-    local_50 = 32.0;
-  }
-  local_50 = (float)(local_50 -
-             ABS((float)(((float)(local_10 - local_1c)) * (&g_city.unk_1a034)[iVar15 * 0x13] +
-                 ((&g_city.unk_1a02c)[iVar15 * 0x13] * ((float)(local_18 - fVar2)) +
-                 ((float)(local_14 - fVar3)) * (&g_city.unk_1a030)[iVar15 * 0x13]))) * 0.75);
-  if (local_50 < 0.0) {
-    local_50 = 0.0;
-  }
-  iVar8 = *(int *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a5c] + iVar5);
-  local_28 = (float)*(int *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a60] + iVar5) * 4.0;
-  if (iVar8 == 0) {
-    local_28 = (float)(local_28 + 2.0);
-    fVar4 = local_28 * (&g_city.unk_1a02c)[iVar15 * 0x13];
-    fVar10 = local_28 * (&g_city.unk_1a030)[iVar15 * 0x13];
-    fVar9 = (&g_city.unk_1a034)[iVar15 * 0x13] * local_28;
-    fVar11 = local_28 * (&g_city.unk_1a02c)[iVar15 * 0x13];
-    local_28 = local_28 * (&g_city.unk_1a034)[iVar15 * 0x13];
-    local_24 = (&g_city.unk_1a020)[iVar15 * 0x13] * local_50;
-    local_20 = local_50 * (&g_city.unk_1a024)[iVar15 * 0x13];
-    local_50 = local_50 * (&g_city.unk_1a028)[iVar15 * 0x13];
-    local_c = (&g_city.unk_1a020)[iVar15 * 0x13];
-    local_8 = (&g_city.unk_1a024)[iVar15 * 0x13];
-    local_4 = (&g_city.unk_1a028)[iVar15 * 0x13];
-  }
-  else {
-    local_28 = (float)(-2.0 - local_28);
-    fVar4 = local_28 * (&g_city.unk_1a02c)[iVar15 * 0x13];
-    fVar10 = local_28 * (&g_city.unk_1a030)[iVar15 * 0x13];
-    fVar9 = (&g_city.unk_1a034)[iVar15 * 0x13] * local_28;
-    fVar11 = local_28 * (&g_city.unk_1a02c)[iVar15 * 0x13];
-    local_28 = local_28 * (&g_city.unk_1a034)[iVar15 * 0x13];
-    local_50 = -local_50;
-    local_24 = local_50 * (&g_city.unk_1a020)[iVar15 * 0x13];
-    local_20 = local_50 * (&g_city.unk_1a024)[iVar15 * 0x13];
-    local_50 = local_50 * (&g_city.unk_1a028)[iVar15 * 0x13];
-    local_c = -(&g_city.unk_1a020)[iVar15 * 0x13];
-    local_8 = -(&g_city.unk_1a024)[iVar15 * 0x13];
-    local_4 = -(&g_city.unk_1a028)[iVar15 * 0x13];
-  }
-  local_10 = (float)(local_10 + fVar9);
-  local_14 = (float)(fVar10 + local_14);
-  local_18 = (float)(fVar4 + local_18);
-  local_1c = (float)(local_50 + local_1c);
-  local_20 = (float)(local_20 + fVar3);
-  local_24 = (float)(local_24 + fVar2);
-  local_28 = (float)(local_28 + fVar1);
-  local_30 = (float)(fVar11 + local_30);
-  if ((&g_city.unk_1a014)[iVar15 * 0x13] == 0) {
-    if (iVar8 == 0) {
-      fVar1 = -(float)(&g_city.unk_003c)[iVar6 * 0x1a];
-    }
-    else {
-      fVar1 = (float)(&g_city.unk_0034)[iVar7 * 0x1a];
-    }
-  }
-  else if (iVar8 == 0) {
-    fVar1 = -(float)(&g_city.unk_0038)[iVar6 * 0x1a];
-  }
-  else {
-    fVar1 = (float)(&g_city.unk_0030)[iVar7 * 0x1a];
-  }
-  local_30 = (float)((float)(fVar1 * 6.0) * (&g_city.unk_1a020)[iVar15 * 0x13] + local_30);
-  local_28 = (float)(fVar1 * 6.0 * (&g_city.unk_1a028)[iVar15 * 0x13] + local_28);
-  fVar1 = (float)(local_4 * ((float)(local_1c - local_10)) +
-          (local_c * ((float)(local_24 - local_18)) + local_8 * ((float)(local_20 - local_14))));
-  local_24 = (float)(fVar1 * local_c + local_18);
-  local_20 = (float)(local_8 * fVar1 + local_14);
-  local_1c = (float)(local_10 + local_4 * fVar1);
-  local_3c = (float)(local_24 - g_object[param_2].pos.x);
-  local_38 = (float)(local_20 - g_object[param_2].pos.y);
-  local_34 = (float)(local_1c - g_object[param_2].pos.z);
-  normalizevector(&local_3c,&local_3c);
-  local_14 = (float)(local_3c * g_object[param_2].rot[2].z - local_34 * g_object[param_2].rot[2].x);
-  local_54 = (float)(g_object[param_2].rot[1].z *
-             ((float)(local_38 * g_object[param_2].rot[2].x - g_object[param_2].rot[2].y * local_3c)) +
-             (((float)(local_34 * g_object[param_2].rot[2].y - local_38 * g_object[param_2].rot[2].z)) *
-             g_object[param_2].rot[1].x + g_object[param_2].rot[1].y * local_14));
-  if ((float)(local_34 * g_object[param_2].rot[2].z +
-      (local_3c * g_object[param_2].rot[2].x + g_object[param_2].rot[2].y * local_38)) <= 0.7070000171661377) {
-LAB_0040eaa5:
-    if (-1.0 <= local_54) {
-      if (1.0 < local_54) {
-        local_54 = 1.0;
-      }
-    }
-    else {
-      local_54 = -1.0;
-    }
-  }
-  else if (0.0 <= local_54) {
-    if (local_54 <= 0.0) goto LAB_0040eaa5;
-    local_54 = 1.0;
-  }
-  else {
-    local_54 = -1.0;
-  }
-  g_player[((int)LF_UINT(param_1))].input_axes[1] = (float)(local_54 + g_player[((int)LF_UINT(param_1))].input_axes[1]);
-  local_18 = (float)(local_30 - g_object[param_2].pos.x);
-  local_10 = (float)(local_28 - g_object[param_2].pos.z);
-  iVar15 = (&g_city.unk_1a00c)
-           [(*(uint *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a5c] + iVar5) ^ 1) + iVar15 * 0x13];
-  iVar6 = *(int *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a58] + iVar5);
-  local_50 = (float)(local_10 * local_4 + (local_8 * 0.0 + local_18 * local_c));
-  local_4c = (uint)(iVar6 == (&g_city.unk_0024)[iVar15 * 0x1a]);
-  if (iVar6 == (&g_city.unk_0028)[iVar15 * 0x1a]) {
-    local_4c = 2;
-  }
-  if (iVar6 == (&g_city.unk_002c)[iVar15 * 0x1a]) {
-    local_4c = 3;
-  }
-  if ((iVar15 == 4) && (local_4c == 3)) {
-    local_50 = (float)(local_50 - 14.0);
-  }
-  if ((local_50 < 6.0) &&
-     (((&g_city.unk_0050)[iVar15 * 0x1a + local_4c] == 0 || (g_player[((int)LF_UINT(param_1))].unk_1a3c != 0)))
-     ) {
-    *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a58] + iVar5) =
-         *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a74] + iVar5);
-    iVar5 = g_player[((int)LF_UINT(param_1))].ai_waypoint * 0x1c;
-    *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a5c] + iVar5) =
-         *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a78] + iVar5);
-    iVar5 = g_player[((int)LF_UINT(param_1))].ai_waypoint * 0x1c;
-    *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a60] + iVar5) =
-         *(undefined4 *)(&g_player[((int)LF_UINT(param_1))].lf_raw[0x1a7c] + iVar5);
-    ai_car_nextwaypoint(((uint)LF_UINT(param_1)));
-  }
-  iVar5 = g_player[((int)LF_UINT(param_1))].unk_2154;
-  if (((iVar5 != -1) && (g_player[((int)LF_UINT(param_1))].unk_2158 == (&g_city.unk_0040)[iVar5 * 0x1a])) &&
-     (fVar18 = (float10)vectordistance(&g_object[param_2].pos.x,&g_city.unk_0014 + iVar5 * 0x1a),
-     (float10)32.0 < fVar18)) {
-    (&g_city.unk_0040)[iVar5 * 0x1a] = (&g_city.unk_0040)[iVar5 * 0x1a] + 1;
-    (&g_city.unk_0048)[iVar5 * 0x1a] = 0;
-    g_player[((int)LF_UINT(param_1))].unk_2154 = -1;
-  }
-  local_3c = (float)(local_24 - g_object[param_2].pos.x);
-  local_38 = (float)(local_20 - g_object[param_2].pos.y);
-  local_34 = (float)(local_1c - g_object[param_2].pos.z);
-  normalizevector(&local_3c,&local_3c);
-  pPVar12 = g_player + ((int)LF_UINT(param_1));
-  fVar1 = local_3c * g_object[param_2].rot[2].x;
-  fVar1 = (float)(ABS((float)(local_34 * g_object[param_2].rot[2].z + (g_object[param_2].rot[2].y * local_38 + fVar1)))
-          * ABS((float)(local_38 * g_object[param_2].rot[2].y + fVar1 +
-                local_34 * g_object[param_2].rot[2].z)) * 0.75 + 0.25);
-  fVar2 = fVar1 * 20.0;
-  if ((pPVar12->unk_1a3c != 0) &&
-     (fVar2 = fVar1 * 30.0,
-     *(int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a80]) + g_player[((int)LF_UINT(param_1))].ai_waypoint * 0x1c) == 0)) {
-    fVar2 = fVar1 * 40.0;
-  }
-  param_1 = (float)(fVar2 / 60.0);
-  local_54 = (float)((local_50 * 0.5) / 60.0);
-  if (local_50 < 2.0) {
-    local_54 = 0.0;
-  }
-  if ((&g_city.unk_0050)[iVar15 * 0x1a + local_4c] == 0) {
-    if (*(int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a80]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c) == 0) {
-      local_54 = param_1;
-    }
-    else {
-      local_54 = (float)(((local_50 + 16.0) * 0.5) / 60.0);
-    }
-  }
-  if (pPVar12->unk_1a3c != 0) {
-    local_54 = (float)(local_54 * 4.0);
-  }
-  if (local_54 < param_1) {
-    param_1 = local_54;
-  }
-  if (0 < g_player[((int)LF_UINT(fVar13))].unk_1a40) {
-    g_player[((int)LF_UINT(fVar13))].unk_1a40 = g_player[((int)LF_UINT(fVar13))].unk_1a40 + -1;
-  }
-  iVar5 = 0;
-  pfVar17 = &g_object[0].pos.z;
-  do {
-    LF_COPY(fVar1, param_1);
-    if ((iVar5 != param_2) && (LF_UINT(pfVar17[-0xb]) != 0x0U)) {
-      local_3c = (float)(((vec3 *)(pfVar17 + -2))->x - g_object[param_2].pos.x);
-      local_38 = (float)(pfVar17[-1] - g_object[param_2].pos.y);
-      local_34 = (float)(*pfVar17 - g_object[param_2].pos.z);
-      if ((ABS(local_3c) < 64.0) && (ABS(local_34) < 64.0)) {
-        fVar2 = ABS((float)(g_object[param_2].rot[0].z * local_34 +
-                    (g_object[param_2].rot[0].x * local_3c + local_38 * g_object[param_2].rot[0].y)));
-        if ((((g_player[((int)LF_UINT(fVar13))].unk_1a3c != 0) && (g_player[((int)LF_UINT(fVar13))].unk_1a40 < 1)) &&
-            (2.0 < (float)(local_4 * local_34 + (local_c * local_3c + local_8 * local_38)))) && (fVar2 < 2.0))
-        {
-          uVar13 = rand();
-          if ((uVar13 & 1) == 0) {
-            piVar14 = (int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c);
-            iVar15 = *piVar14;
-            if (1 < iVar15) goto LAB_0040ef80;
-LAB_0040efa2:
-            iVar15 = iVar15 + 1;
-          }
-          else {
-LAB_0040ef80:
-            iVar15 = *(int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c);
-            piVar14 = (int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c);
-            if (iVar15 < -1) goto LAB_0040efa2;
-            iVar15 = iVar15 + -1;
-          }
-          *piVar14 = iVar15;
-          if (2 < *(int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c)) {
-            *(undefined4 *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c) = 2;
-          }
-          if (*(int *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c) < -2) {
-            *(undefined4 *)(iVar16 + ((int)&g_player[0].lf_raw[0x1a60]) + g_player[((int)LF_UINT(fVar13))].ai_waypoint * 0x1c) =
-                 0xfffffffe;
-          }
-          g_player[((int)LF_UINT(fVar13))].unk_1a40 = 0x3c;
-        }
-        if ((2.0 < (float)(local_34 * local_4 + (local_38 * local_8 + local_c * local_3c))) && (fVar2 < 2.0)) {
-          fVar18 = (float10)dotproduct(&g_object[param_2].rot[2].x,pfVar17 + 10);
-          if ((float10)0.0 < fVar18) {
-            fVar18 = (float10)vectordistance(&g_object[param_2].pos.x,(float *)(pfVar17 + -2));
-            local_50 = (float)(fVar18 - (float10)8.0);
-            if (local_50 < 0.0) {
-              local_50 = 0.0;
-            }
-            if ((g_player[((int)LF_UINT(fVar13))].unk_1a3c != 0) && (local_50 < 16.0)) {
-              local_50 = 16.0;
-            }
-            fVar18 = (float10)vectorlength(pfVar17 + 0xd);
-            fVar1 = (float)(fVar18 + (float10)((float)((local_50 * 0.5) / 60.0)));
-            if (fVar1 < param_1) goto LAB_0040f118;
-          }
-          LF_COPY(fVar1, param_1);
-        }
-      }
-    }
-LAB_0040f118:
-    param_1 = fVar1;
-    iVar5 = iVar5 + 1;
-    pfVar17 = pfVar17 + 0x208c;
-  } while ((int)pfVar17 < ((int)SR_VA(0x7a1e62c)));
-  iVar5 = g_player[((int)LF_UINT(fVar13))].unk_2160;
-  fVar1 = (float)(g_object[param_2].vel.z * g_object[param_2].rot[2].z +
-          (g_object[param_2].rot[2].y * g_object[param_2].vel.y +
-          g_object[param_2].vel.x * g_object[param_2].rot[2].x)) + param_1;
-  local_54 = (float)(fVar1 * 3.0);
-  if (iVar5 < 0xb4) {
-    fVar2 = g_object[param_2].vel.y;
-    fVar3 = g_object[param_2].vel.x;
-    fVar4 = g_object[param_2].vel.z;
-    dVar19 = _CIsqrt((double)((float)(fVar4 * fVar4 + (fVar3 * fVar3 + fVar2 * fVar2))));
-    if (((float)dVar19 < 0.03333333507180214) && (0.06666667014360428 < fVar1)) {
-      g_player[((int)LF_UINT(fVar13))].unk_2160 = iVar5 + 1;
-      goto LAB_0040f22c;
-    }
-  }
-  else {
-    local_54 = 1.0;
-    g_player[((int)LF_UINT(fVar13))].input_axes[2] = 1.0;
-    g_player[((int)LF_UINT(fVar13))].input_axes[0] = 2.0;
-    g_player[((int)LF_UINT(fVar13))].input_axes[1] = 0.0;
-    if (0x117 < iVar5) {
-      local_54 = -1.0;
-    }
-    g_player[((int)LF_UINT(fVar13))].unk_2160 = iVar5 + 1;
-    if (iVar5 + 1 < 0x140) goto LAB_0040f22c;
-  }
-  g_player[((int)LF_UINT(fVar13))].unk_2160 = 0;
-LAB_0040f22c:
-  if (local_54 < 0.0) {
-    local_54 = (float)(local_54 * 4.0);
-  }
-  if (-1.0 <= local_54) {
-    if (local_54 <= 1.0) {
-      g_player[((int)LF_UINT(fVar13))].input_axes[3] = local_54;
-      return;
-    }
-    g_player[((int)LF_UINT(fVar13))].input_axes[3] = 1.0;
-    return;
-  }
-  g_player[((int)LF_UINT(fVar13))].input_axes[3] = -1.0;
-  return;
+  if (v < -1.0f)
+    return -1.0f;
+  if (v > 1.0f)
+    return 1.0f;
+  return v;
 }
-#undef g_player
-#undef g_object
-#undef g_city
-#undef rand
-#undef ai_car_nextwaypoint
-#undef dotproduct
-#undef vectorlength
-#undef normalizevector
-#undef vectordistance
-#undef _CIsqrt
-#undef local_54
-#undef local_50
-#undef local_4c
-#undef local_3c
-#undef local_38
-#undef local_34
-#undef local_30
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
 
+/* Which side of a crossing a road is on: 0 for the first side, 1 to 3 for the others. The last
+ * side that matches wins. */
+static int crossing_side(const CityIntersection *c, int road)
+{
+  int d = 0;
+
+  if (road == c->roads[1])
+    d = 1;
+  if (road == c->roads[2])
+    d = 2;
+  if (road == c->roads[3])
+    d = 3;
+  return d;
+}
+
+/* Add the next road point after the current one. The car comes to the crossing at the end of
+ * the current road and takes one of its other roads. */
+void ai_car_nextwaypoint(int player)
+{
+  Player *p = &sr_players[player];
+  AiWaypoint *wp = &p->waypoints[p->ai_waypoint];
+  AiWaypoint *next = &p->waypoints[p->ai_waypoint + 1];
+  int road = wp->road;
+  const CityIntersection *c = &sr_city.intersections[sr_city.roads[road].ends[wp->dir ^ 1]];
+  int d = crossing_side(c, road);
+  int u, tries, x4;
+
+  /* At the goal the car picks a new goal: a random crossing. */
+  if (c->x == p->ai_dest_x && c->z == p->ai_dest_z) {
+    int j = 0;
+
+    if (sr_city.num_intersections > 0)
+      j = os_rand() % sr_city.num_intersections;
+    p->ai_dest_x = sr_city.intersections[j].x;
+    p->ai_dest_z = sr_city.intersections[j].z;
+  }
+
+  /* The side to leave by: toward the goal. The crossing 4 splits the city in two parts. */
+  x4 = sr_city.intersections[4].x;
+  if (c->z == p->ai_dest_z)
+    u = (c->x < p->ai_dest_x) ? 0 : 2;
+  else if (c->x < x4 && d != 0)
+    u = 0;
+  else if (c->x <= x4 || d == 2)
+    u = (p->ai_dest_z <= c->z) ? 3 : 1;
+  else
+    u = 2;
+
+  /* A side with no road, or the road of the car, gets a random side. After 512 tries the last
+   * side is used with no test. */
+  for (tries = 0; tries < 0x200; tries++) {
+    if (c->roads[u] != road && c->roads[u] != -1)
+      break;
+    u = os_rand() & 3;
+  }
+
+  next->road = c->roads[u];
+  next->dir = (u >= 2);
+  next->lane = os_rand() & 1;
+  next->turn = 0;
+  if (u == ((d + 1) & 3))
+    next->turn = -1;
+  if (u == ((d - 1) & 3))
+    next->turn = 1;
+}
+
+/* Drive the car `object` of the bot `player` for one tick. */
+void ai_playercar(int player, int object)
+{
+  Object *o = &sr_objects[object];
+  Player *p = &sr_players[player];
+  const vec3 *r0 = &o->rot[0];
+  const vec3 *r1 = &o->rot[1];
+  const vec3 *r2 = &o->rot[2];
+  AiWaypoint *wp;
+  const CityRoad *rd;
+  CityIntersection *a, *b, *c;
+  vec3 from, p3, dc, v, dd, e, cross, rr;
+  float to_x, to_z, lat, lateral, off, s, shift, m, tt, steer, fwd;
+  float q_x, q_z, ahead, f, k, target, lim, vd, thr, sp, ah, sd, cand, len2;
+  double fd;
+  int g, side, next_isec, j, st;
+
+  /* The gear follows the rpm. */
+  if (o->gear > 1 && (double)o->engine_rpm < 4.363323129986111)
+    o->gear--;
+  if (o->gear < 4 && 8.726646259972222 < (double)o->engine_rpm)
+    o->gear++;
+  g = o->gear;
+  p->input_axes[0] = (g == 1 || g == 2) ? 0.0f : 1.0f;
+  p->input_axes[2] = (g == 1 || g == 3) ? -1.0f : 1.0f;
+
+  wp = &p->waypoints[p->ai_waypoint];
+  if (wp->road == -1)
+    return;
+  rd = &sr_city.roads[wp->road];
+  a = &sr_city.intersections[rd->ends[0]];
+  b = &sr_city.intersections[rd->ends[1]];
+
+  /* The road runs from `from` to `to`. A road point with dir 1 runs the other way. */
+  if (wp->dir == 0) {
+    from = a->pos;
+    to_x = b->pos.x;
+    to_z = b->pos.z;
+  } else {
+    from = b->pos;
+    to_x = a->pos.x;
+    to_z = a->pos.z;
+  }
+
+  /* How far the car may be from the line of the road: less the farther it is from the start. */
+  lat = p->ai_chase ? 32.0f : 16.0f;
+  dd.x = (float)(from.x - o->pos.x);
+  dd.y = (float)(from.y - o->pos.y);
+  dd.z = (float)(from.z - o->pos.z);
+  s = (float)((dd.y * rd->side.y + rd->side.x * dd.x) + dd.z * rd->side.z);
+  lat = (float)(lat - fabsf(s) * 0.75);
+  if (lat < 0.0f)
+    lat = 0.0f;
+
+  /* The lane: the offset from the middle of the road, and the direction of the car. */
+  if (wp->dir == 0) {
+    off = (float)((double)wp->lane * 4.0 + 2.0);
+    dc = rd->dir;
+    lateral = lat;
+  } else {
+    off = (float)(-2.0 - (double)wp->lane * 4.0);
+    dc.x = -rd->dir.x;
+    dc.y = -rd->dir.y;
+    dc.z = -rd->dir.z;
+    lateral = -lat;
+  }
+  from.x = (float)(from.x + off * rd->side.x);
+  from.y = (float)(from.y + off * rd->side.y);
+  from.z = (float)(from.z + off * rd->side.z);
+  to_x = (float)(off * rd->side.x + to_x);
+  to_z = (float)(off * rd->side.z + to_z);
+  p3.x = (float)(lateral * rd->dir.x + o->pos.x);
+  p3.y = (float)(lateral * rd->dir.y + o->pos.y);
+  p3.z = (float)(lateral * rd->dir.z + o->pos.z);
+
+  /* The end of the road is moved by the reach of the crossing. */
+  if (rd->kind == 0)
+    shift = (wp->dir == 0) ? -(float)b->extent[3] : (float)a->extent[1];
+  else
+    shift = (wp->dir == 0) ? -(float)b->extent[2] : (float)a->extent[0];
+  m = (float)(shift * 6.0);
+  to_x = (float)(m * rd->dir.x + to_x);
+  to_z = (float)(m * rd->dir.z + to_z);
+
+  /* The aim point: the car projected on the lane line. */
+  e.x = (float)(p3.x - from.x);
+  e.y = (float)(p3.y - from.y);
+  e.z = (float)(p3.z - from.z);
+  tt = (float)((dc.y * e.y + dc.x * e.x) + dc.z * e.z);
+  p3.x = (float)(tt * dc.x + from.x);
+  p3.y = (float)(tt * dc.y + from.y);
+  p3.z = (float)(tt * dc.z + from.z);
+
+  /* Steering: the side of the aim direction in the frame of the car. */
+  v.x = (float)(p3.x - o->pos.x);
+  v.y = (float)(p3.y - o->pos.y);
+  v.z = (float)(p3.z - o->pos.z);
+  normalizevector(&v, &v);
+  cross.x = (float)(r2->y * v.z - v.y * r2->z);
+  cross.y = (float)(v.x * r2->z - v.z * r2->x);
+  cross.z = (float)(v.y * r2->x - r2->y * v.x);
+  steer = (float)((r1->y * cross.y + cross.x * r1->x) + r1->z * cross.z);
+  fwd = (float)((v.y * r2->y + v.x * r2->x) + v.z * r2->z);
+  if (fwd > 0.707f && steer < 0.0f)
+    steer = -1.0f;
+  else if (fwd > 0.707f && steer > 0.0f)
+    steer = 1.0f;
+  else
+    steer = clamp_unit(steer);
+  p->input_axes[1] = (float)(steer + p->input_axes[1]);
+
+  /* The distance to the crossing at the end of the road, along the lane. */
+  q_x = (float)(to_x - o->pos.x);
+  q_z = (float)(to_z - o->pos.z);
+  next_isec = rd->ends[wp->dir ^ 1];
+  c = &sr_city.intersections[next_isec];
+  ahead = (float)((q_x * dc.x + dc.y * 0.0) + q_z * dc.z);
+  side = crossing_side(c, wp->road);
+  if (next_isec == 4 && side == 3)
+    ahead = (float)(ahead - 14.0);
+
+  /* At the crossing the car takes the next road point (a chase car ignores the lights). */
+  if (ahead < 6.0f && (c->red[side] == 0 || p->ai_chase != 0)) {
+    const AiWaypoint *nx = &p->waypoints[p->ai_waypoint + 1];
+
+    wp->road = nx->road;
+    wp->dir = nx->dir;
+    wp->lane = nx->lane;
+    ai_car_nextwaypoint(player);
+  }
+
+  /* A car that waited at a light starts when it is far from the crossing. */
+  j = p->wait_isec;
+  if (j != -1 && p->wait_light == sr_city.intersections[j].light &&
+      vectordistance(&o->pos, &sr_city.intersections[j].pos) > 32.0f) {
+    sr_city.intersections[j].light++;
+    sr_city.intersections[j].light_timer = 0;
+    p->wait_isec = -1;
+  }
+
+  /* The speed: slower when the car does not look along the lane, and at the crossing. */
+  v.x = (float)(p3.x - o->pos.x);
+  v.y = (float)(p3.y - o->pos.y);
+  v.z = (float)(p3.z - o->pos.z);
+  normalizevector(&v, &v);
+  f = (float)((v.y * r2->y + v.x * r2->x) + v.z * r2->z);
+  k = (float)(fabsf(f) * fabsf(f) * 0.75 + 0.25);
+  {
+    const AiWaypoint *nx = &p->waypoints[p->ai_waypoint + 1];
+
+    target = (float)(k * 20.0 / 60.0);
+    if (p->ai_chase) {
+      target = (float)(k * 30.0 / 60.0);
+      if (nx->turn == 0)
+        target = (float)(k * 40.0 / 60.0);
+    }
+    lim = (float)((ahead * 0.5) / 60.0);
+    if (ahead < 2.0f)
+      lim = 0.0f;
+    if (c->red[side] == 0)
+      lim = (nx->turn == 0) ? target : (float)(((ahead + 16.0) * 0.5) / 60.0);
+  }
+  if (p->ai_chase)
+    lim = (float)(lim * 4.0);
+  if (lim < target)
+    target = lim;
+  if (p->lane_cooldown > 0)
+    p->lane_cooldown--;
+
+  /* The other objects close in front: change lane (a chase car) or keep behind them. */
+  for (j = 0; j < 1024; j++) {
+    const Object *oj = &sr_objects[j];
+
+    if (j == object || !oj->active)
+      continue;
+    rr.x = (float)(oj->pos.x - o->pos.x);
+    rr.y = (float)(oj->pos.y - o->pos.y);
+    rr.z = (float)(oj->pos.z - o->pos.z);
+    if (!(fabsf(rr.x) < 64.0f) || !(fabsf(rr.z) < 64.0f))
+      continue;
+    sd = fabsf((float)((rr.y * r0->y + r0->x * rr.x) + r0->z * rr.z));
+    ah = (float)((dc.y * rr.y + dc.x * rr.x) + dc.z * rr.z);
+    if (p->ai_chase && p->lane_cooldown < 1 && ah > 2.0f && sd < 2.0f) {
+      int *lane = &p->waypoints[p->ai_waypoint].lane;
+
+      if ((os_rand() & 1) == 0)
+        *lane = (*lane >= 2) ? *lane - 1 : *lane + 1;
+      else
+        *lane = (*lane < -1) ? *lane + 1 : *lane - 1;
+      if (*lane > 2)
+        *lane = 2;
+      if (*lane < -2)
+        *lane = -2;
+      p->lane_cooldown = 60;
+    }
+    if (ah > 2.0f && sd < 2.0f && dotproduct(&o->rot[2], &oj->rot[2]) > 0.0f) {
+      len2 = (float)(vectordistance(&o->pos, &oj->pos) - 8.0);
+      if (len2 < 0.0f)
+        len2 = 0.0f;
+      if (p->ai_chase && len2 < 16.0f)
+        len2 = 16.0f;
+      cand = (float)(vectorlength(&oj->vel) + (float)((len2 * 0.5) / 60.0));
+      if (cand < target)
+        target = cand;
+    }
+  }
+
+  /* The throttle: three times the speed along the car plus the wanted speed. A car that does not move for 3 seconds
+   * backs out for 2 seconds and then tries again. */
+  vd = (float)((o->vel.x * r2->x + r2->y * o->vel.y) + o->vel.z * r2->z);
+  fd = (double)vd + target;
+  thr = (float)(fd * 3.0);
+  st = p->stuck_ticks;
+  if (st < 0xb4) {
+    sp = (float)x87_sqrt((float)((o->vel.x * o->vel.x + o->vel.y * o->vel.y) + o->vel.z * o->vel.z));
+    if (sp < 0.03333333507180214f && 0.06666667014360428 < fd)
+      p->stuck_ticks = st + 1;
+    else
+      p->stuck_ticks = 0;
+  } else {
+    thr = 1.0f;
+    p->input_axes[2] = 1.0f;
+    p->input_axes[0] = 2.0f;
+    p->input_axes[1] = 0.0f;
+    if (st >= 0x118)
+      thr = -1.0f;
+    p->stuck_ticks = (st + 1 < 0x140) ? st + 1 : 0;
+  }
+  if (thr < 0.0f)
+    thr = (float)(thr * 4.0);
+  p->input_axes[3] = clamp_unit(thr);
+}
