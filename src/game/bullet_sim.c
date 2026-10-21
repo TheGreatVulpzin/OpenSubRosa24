@@ -11,6 +11,7 @@
 
 #include "collide.h"
 #include "events.h"
+#include "objects.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -21,11 +22,9 @@
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
 void __cdecl lf_16a20(int player, int tax);
-void __cdecl lf_22e20(int object, int damage);
 int __cdecl lf_2c020(uint32_t area, uint32_t x, uint32_t y, uint32_t z, uint32_t word, int spec_face, vec3 *pos,
                      vec3 *vel);
 #define playerteamkilltax lf_16a20
-#define applydamageobject lf_22e20
 #define area_breakblock lf_2c020
 
 #define GAMETYPE_TEAMS 3

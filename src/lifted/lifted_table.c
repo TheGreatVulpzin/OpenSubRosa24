@@ -213,7 +213,7 @@ void addobjectrotation(void);
 void getobjectrotation2(void);
 void getobjectrotation3(void);
 void calculatebarycentric(void);
-void lf_22e20(void);
+void applydamageobject(void);
 void objectwheelsimulation2(void);
 void getenginetorque2(void);
 void object_rotorsimulation(void);
@@ -261,7 +261,7 @@ void item_sphereintersect(void);
 void lineintersectall(void);
 void lineintersectlevel(void);
 void lf_31800(void);
-void lf_32340(void);
+void objecttimetolive(void);
 void objectenginesimulation2(void);
 void sphereintersectobject(void);
 void lf_32fe0(void);
@@ -306,7 +306,7 @@ void humansimulation(void);
 void itemsimulation(void);
 void lf_54e40(void);
 void lf_55700(void);
-void lf_56710(void);
+void objectsimulation(void);
 void lf_58320(void);
 void lf_585b0(void);
 void lf_587f0(void);
@@ -531,7 +531,7 @@ const LfEntry lf_table[] = {
     { "getobjectrotation2", 0x223d0, (void *)getobjectrotation2, 3, LF_RET_VOID, 4, "pvp", 0 },
     { "getobjectrotation3", 0x225e0, (void *)getobjectrotation3, 2, LF_RET_VOID, 4, "pv", 0 },
     { "calculatebarycentric", 0x22af0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
-    { "applydamageobject", 0x22e20, (void *)lf_22e20, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "applydamageobject", 0x22e20, (void *)applydamageobject, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelsimulation2", 0x22f90, (void *)objectwheelsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "getenginetorque2", 0x23fa0, (void *)getenginetorque2, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "object_rotorsimulation", 0x240e0, (void *)object_rotorsimulation, 1, LF_RET_VOID, 4, "v", 0 },
@@ -579,7 +579,7 @@ const LfEntry lf_table[] = {
     { "lineintersectall", 0x31480, (void *)lineintersectall, 2, LF_RET_INT, 4, "pp", 0 },
     { "lineintersectlevel", 0x31630, (void *)lineintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
     { "createobject", 0x31800, (void *)lf_31800, 5, LF_RET_INT, 4, "vpppv", 0 },
-    { "objecttimetolive", 0x32340, (void *)lf_32340, 0, LF_RET_VOID, 4, "", 0 },
+    { "objecttimetolive", 0x32340, (void *)objecttimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "objectenginesimulation2", 0x324c0, (void *)objectenginesimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "sphereintersectobject", 0x32bb0, (void *)sphereintersectobject, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4, "p", 0 },
@@ -624,7 +624,7 @@ const LfEntry lf_table[] = {
     { "itemsimulation", 0x542a0, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v", 0 },
-    { "objectsimulation", 0x56710, (void *)lf_56710, 0, LF_RET_VOID, 4, "", 0 },
+    { "objectsimulation", 0x56710, (void *)objectsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_createguards", 0x58320, (void *)lf_58320, 3, LF_RET_INT, 4, "vvv", 0 },
     { "scenario_createtraffic2", 0x585b0, (void *)lf_585b0, 1, LF_RET_VOID, 4, "v", 0 },
     { "scenario_createchase", 0x587f0, (void *)lf_587f0, 2, LF_RET_INT, 4, "vv", 0 },

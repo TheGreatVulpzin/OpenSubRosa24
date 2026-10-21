@@ -99,6 +99,12 @@ typedef union RotorPoint { struct {
     vec3 vel_prev;      /* +0x18 object_rotorsimulation: the velocity of the last pass */
 }; uint8_t lf_raw[0x24]; } RotorPoint;
 
+/* A point made of 4 particles of an object type (ObjectType.quads). */
+typedef union TypeQuad { struct {
+    int particles[4];   /* +0x00 objectsimulation: indexes into Object.particles */
+    float weights[4];   /* +0x10 objectsimulation: the weight of each particle */
+}; uint8_t lf_raw[0x20]; } TypeQuad;
+
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
@@ -999,8 +1005,8 @@ typedef union ObjectType { struct {
     uint8_t pad_0744[0xc00];
     int num_faces;                       /* +0x1344 objecttype_addface increments (stride 0x40) */
     uint8_t pad_1348[0x4000];
-    int num_quads;                       /* +0x5348 setupobjectypes_train: 4 particle indices per record (stride 0x20); objectsimulation (likely) */
-    uint8_t pad_534c[0x2000];
+    int num_quads;                       /* +0x5348 setupobjectypes_train sets it to num_particles */
+    TypeQuad quads[256];                 /* +0x534c objectsimulation: a point made of 4 particles and 4 weights; the points go after the particles in one index space */
     int unk_734c;                        /* +0x734c 1 functions */
     uint8_t pad_7350[0x408];
     float engine_power;                  /* +0x7758 createobject copies it (× constant) to object.engine_power */
@@ -1011,16 +1017,18 @@ typedef union ObjectType { struct {
     uint8_t pad_7fe8[0x94];
     int num_seats;                       /* +0x807c setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats) */
     uint8_t pad_8080[0x208];
-    int unk_8288;                        /* +0x8288 1 functions */
+    int window_face;                     /* +0x8288 objectsimulation (type 12): the face whose health is 8 while the locomotive moves and 0 when it stops */
 }; uint8_t lf_raw[0x828c]; } ObjectType;
 SR_STATIC_ASSERT(sizeof(ObjectType) == 0x828c, "ObjectType");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_particles) == 0x38, "ObjectType.num_particles");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_bonds) == 0x740, "ObjectType.num_bonds");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_faces) == 0x1344, "ObjectType.num_faces");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_quads) == 0x5348, "ObjectType.num_quads");
+SR_STATIC_ASSERT(offsetof(ObjectType, quads) == 0x534c, "ObjectType.quads");
 SR_STATIC_ASSERT(offsetof(ObjectType, engine_power) == 0x7758, "ObjectType.engine_power");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_wheels) == 0x775c, "ObjectType.num_wheels");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_seats) == 0x807c, "ObjectType.num_seats");
+SR_STATIC_ASSERT(offsetof(ObjectType, window_face) == 0x8288, "ObjectType.window_face");
 
 /* bond[]: record of 0xec bytes. */
 typedef union Bond { struct {

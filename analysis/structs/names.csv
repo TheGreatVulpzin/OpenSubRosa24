@@ -131,7 +131,7 @@ object,0x5e50,engine_rpm,float,,getenginetorque2/objectenginesimulation2 (likely
 object,0x5e6c,gear,int,,objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely)
 object,0x81a8,num_seats,int,,createobject copies from objecttype.num_seats; humansimulation reads it
 objecttype,0x807c,num_seats,int,,setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats)
-objecttype,0x5348,num_quads,int,,setupobjectypes_train: 4 particle indices per record (stride 0x20); objectsimulation (likely)
+objecttype,0x5348,num_quads,int,,setupobjectypes_train sets it to num_particles, then appends quads; objectsimulation reads it as the number of vertices
 bond,0x34,local_a,vec3,,bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation)
 bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of the rows of item.rot)
 bond,0x4c,weights,float,3,"types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1]"
@@ -564,3 +564,5 @@ particle,0x44,vel_last,vec3,,objectsimulation: the vel of the last tick; the cha
 city,0x1b4,crossing,vec3,,objectsimulation: a locomotive sets g_train_near when it moves toward it within 160 (x and z; likely a level crossing)
 soundlist,0x7c,crash,int,,objectsimulation: an object impact
 soundlist,0x130,gear,int,,objectsimulation_car: a gear change
+objecttype,0x534c,quads,TypeQuad,256,"objectsimulation: a point made of 4 particles and 4 weights; the points go after the particles in one index space"
+objecttype,0x8288,window_face,int,,"objectsimulation (type 12): the face whose health is 8 while the locomotive moves and 0 when it stops"

@@ -8023,12 +8023,12 @@ __declspec(naked) static void th_22af0(void)
 }
 static uint8_t expect_22af0[8] = { 0x83, 0xec, 0x24, 0x53, 0x8b, 0x5c, 0x24, 0x34 };
 
-void __cdecl lf_22e20(int param_1, int param_2);
+void __cdecl applydamageobject(int param_1, int param_2);
 static void (__cdecl *orig_22e20)(int, int);
 static SvVerify v_22e20 = { "applydamageobject", -1 };
 static void __cdecl hk_22e20(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_22e20, lf_22e20(param_1, param_2), orig_22e20(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_22e20, applydamageobject(param_1, param_2), orig_22e20(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_22e20(void)
 {
@@ -9974,12 +9974,12 @@ __declspec(naked) static void th_31800(void)
 }
 static uint8_t expect_31800[6] = { 0x83, 0xec, 0x38, 0x56, 0x33, 0xf6 };
 
-void __cdecl lf_32340(void);
+void __cdecl objecttimetolive(void);
 static void (__cdecl *orig_32340)(void);
 static SvVerify v_32340 = { "objecttimetolive", -1 };
 static void __cdecl hk_32340(void)
 {
-    SV_HOOK_VOID(v_32340, lf_32340(), orig_32340(), NULL);
+    SV_HOOK_VOID(v_32340, objecttimetolive(), orig_32340(), NULL);
 }
 __declspec(naked) static void th_32340(void)
 {
@@ -11499,12 +11499,12 @@ __declspec(naked) static void th_55700(void)
 }
 static uint8_t expect_55700[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_56710(void);
+void __cdecl objectsimulation(void);
 static void (__cdecl *orig_56710)(void);
 static SvVerify v_56710 = { "objectsimulation", -1 };
 static void __cdecl hk_56710(void)
 {
-    SV_HOOK_VOID(v_56710, lf_56710(), orig_56710(), NULL);
+    SV_HOOK_VOID(v_56710, objectsimulation(), orig_56710(), NULL);
 }
 __declspec(naked) static void th_56710(void)
 {

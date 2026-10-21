@@ -87,7 +87,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
@@ -193,6 +193,12 @@ typedef union RotorPoint { struct {
     vec3 vel;           /* +0x0c object_rotorsimulation: the velocity */
     vec3 vel_prev;      /* +0x18 object_rotorsimulation: the velocity of the last pass */
 }; uint8_t lf_raw[0x24]; } RotorPoint;
+
+/* A point made of 4 particles of an object type (ObjectType.quads). */
+typedef union TypeQuad { struct {
+    int particles[4];   /* +0x00 objectsimulation: indexes into Object.particles */
+    float weights[4];   /* +0x10 objectsimulation: the weight of each particle */
+}; uint8_t lf_raw[0x20]; } TypeQuad;
 
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {

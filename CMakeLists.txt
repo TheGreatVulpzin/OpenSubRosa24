@@ -16,7 +16,7 @@ file(GLOB SV_CLEAN_SOURCES CONFIGURE_DEPENDS src/common/*.c src/net/*.c src/game
 # The operating system calls of the clean code, through the imports of the game.
 list(APPEND SV_CLEAN_SOURCES src/platform/os_calls.c)
 set(SV_GAME_SOURCES)
-foreach(f ai_car objects)
+foreach(f ai_car)
     list(APPEND SV_GAME_SOURCES ${CMAKE_SOURCE_DIR}/src/game/${f}.c)
 endforeach()
 list(REMOVE_ITEM SV_CLEAN_SOURCES ${SV_GAME_SOURCES})
