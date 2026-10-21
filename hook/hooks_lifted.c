@@ -8149,12 +8149,12 @@ __declspec(naked) static void th_23fa0(void)
 }
 static uint8_t expect_23fa0[10] = { 0x8b, 0x4c, 0x24, 0x04, 0x69, 0xc9, 0x30, 0x82, 0x00, 0x00 };
 
-void __cdecl lf_240e0(int param_1);
+void __cdecl object_rotorsimulation(int param_1);
 static void (__cdecl *orig_240e0)(int);
 static SvVerify v_240e0 = { "object_rotorsimulation", -1 };
 static void __cdecl hk_240e0(int param_1)
 {
-    SV_HOOK_VOID(v_240e0, lf_240e0(param_1), orig_240e0(param_1), NULL);
+    SV_HOOK_VOID(v_240e0, object_rotorsimulation(param_1), orig_240e0(param_1), NULL);
 }
 __declspec(naked) static void th_240e0(void)
 {
@@ -8443,12 +8443,12 @@ __declspec(naked) static void th_26f90(void)
 }
 static uint8_t expect_26f90[6] = { 0x83, 0xec, 0x1c, 0x53, 0x33, 0xdb };
 
-void __cdecl lf_272b0(int param_1);
+void __cdecl objectsimulation_car(int param_1);
 static void (__cdecl *orig_272b0)(int);
 static SvVerify v_272b0 = { "objectsimulation_car", -1 };
 static void __cdecl hk_272b0(int param_1)
 {
-    SV_HOOK_VOID(v_272b0, lf_272b0(param_1), orig_272b0(param_1), NULL);
+    SV_HOOK_VOID(v_272b0, objectsimulation_car(param_1), orig_272b0(param_1), NULL);
 }
 __declspec(naked) static void th_272b0(void)
 {

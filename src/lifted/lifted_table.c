@@ -216,14 +216,14 @@ void calculatebarycentric(void);
 void lf_22e20(void);
 void lf_22f90(void);
 void getenginetorque2(void);
-void lf_240e0(void);
+void object_rotorsimulation(void);
 void objectsimulation_heli(void);
 void lineintersectobject(void);
 void lf_25e70(void);
 void lineintersecttrack(void);
 void lineintersecttrackrail(void);
 void lf_26f90(void);
-void lf_272b0(void);
+void objectsimulation_car(void);
 void createparticle(void);
 void particletimetolive(void);
 void particlesimulation(void);
@@ -534,14 +534,14 @@ const LfEntry lf_table[] = {
     { "applydamageobject", 0x22e20, (void *)lf_22e20, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelsimulation2", 0x22f90, (void *)lf_22f90, 0, LF_RET_VOID, 4, "", 0 },
     { "getenginetorque2", 0x23fa0, (void *)getenginetorque2, 1, LF_RET_FLOAT, 4, "v", 0 },
-    { "object_rotorsimulation", 0x240e0, (void *)lf_240e0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "object_rotorsimulation", 0x240e0, (void *)object_rotorsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0x24f60, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0x257a0, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0x26bc0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0x26db0, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0x26f90, (void *)lf_26f90, 1, LF_RET_VOID, 4, "v", 0 },
-    { "objectsimulation_car", 0x272b0, (void *)lf_272b0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "objectsimulation_car", 0x272b0, (void *)objectsimulation_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "createparticle", 0x278c0, (void *)createparticle, 5, LF_RET_INT, 4, "vppvv", 0 },
     { "particletimetolive", 0x279b0, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "particlesimulation", 0x27ba0, (void *)particlesimulation, 0, LF_RET_VOID, 4, "", 0 },
