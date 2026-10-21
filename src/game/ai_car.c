@@ -103,7 +103,9 @@ void ai_car_nextwaypoint(int player)
 /* Drive the car `object` of the bot `player` for one tick. */
 void ai_playercar(int player, int object)
 {
-  Object *o = &sr_objects[object];
+  Object *objs = sr_objects;
+  Object *o = &objs[object];
+  const Object *oj;
   Player *p = &sr_players[player];
   const vec3 *r0 = &o->rot[0];
   const vec3 *r1 = &o->rot[1];
@@ -270,17 +272,15 @@ void ai_playercar(int player, int object)
     p->lane_cooldown--;
 
   /* The other objects close in front: change lane (a chase car) or keep behind them. */
-  for (j = 0; j < 1024; j++) {
-    const Object *oj = &sr_objects[j];
-
+  for (j = 0, oj = objs; j < 1024; j++, oj++) {
     if (j == object || !oj->active)
       continue;
     rr.x = (float)(oj->pos.x - o->pos.x);
-    rr.y = (float)(oj->pos.y - o->pos.y);
     rr.z = (float)(oj->pos.z - o->pos.z);
-    if (!(fabsf(rr.x) < 64.0f) || !(fabsf(rr.z) < 64.0f))
+    if (!(fabs(rr.x) < 64.0) || !(fabs(rr.z) < 64.0))
       continue;
-    sd = fabsf((float)((rr.y * r0->y + r0->x * rr.x) + r0->z * rr.z));
+    rr.y = (float)(oj->pos.y - o->pos.y);
+    sd = (float)fabs((float)((rr.y * r0->y + r0->x * rr.x) + r0->z * rr.z));
     ah = (float)((dc.y * rr.y + dc.x * rr.x) + dc.z * rr.z);
     if (p->ai_chase && p->lane_cooldown < 1 && ah > 2.0f && sd < 2.0f) {
       int *lane = &p->waypoints[p->ai_waypoint].lane;
