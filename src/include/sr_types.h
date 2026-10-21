@@ -79,14 +79,17 @@ typedef union WheelBody { struct {
     vec3 w;             /* +0x54 the angular velocity: bondsimulation2 makes it from ang_momentum, rot and inv_inertia */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
     float axle_inv_inertia; /* +0x6c objectwheelsimulation2: the inverse inertia of the axle */
-    uint8_t unk_70[8];
+    float axle_inv_inertia_y; /* +0x70 createobject writes the three values of the axle */
+    float axle_inv_inertia_z; /* +0x74 */
     vec3 inv_inertia;   /* +0x78 bondsimulation2: the factor of each row of rot */
     float mass;         /* +0x84 objectwheelsimulation2: the mass of the body */
     float radius;       /* +0x88 objectwheelcollision2: the radius of the tire */
     float half_width;   /* +0x8c objectwheelcollision2: half the width of the tire */
     int particles[4];   /* +0x90 indexes into Object.particles: the hub */
     float weights[4];   /* +0xa0 the weight of each hub particle */
-    uint8_t unk_b0[0x1c];
+    float side;         /* +0xb0 createobject: the side of the hub anchor, -0.125 for an even body */
+    uint8_t unused_b4[8];
+    int steer_particles[4]; /* +0xbc createobject: the particles of the steered anchor */
     float steer_weights[4]; /* +0xcc objectsimulation_car: the weights of a steered body (no server code reads them) */
     float steer_side;   /* +0xdc objectsimulation_car: 0.125 for body 0, -0.125 for body 1 */
     uint8_t unk_e0[8];
@@ -104,6 +107,83 @@ typedef union TypeQuad { struct {
     int particles[4];   /* +0x00 objectsimulation: indexes into Object.particles */
     float weights[4];   /* +0x10 objectsimulation: the weight of each particle */
 }; uint8_t lf_raw[0x20]; } TypeQuad;
+
+/* A particle of an object type (ObjectType.particles). */
+typedef union TypeParticle { struct {
+    uint8_t pad_00[4];
+    vec3 pos;           /* +0x04 objecttype_addparticle */
+    float mass;         /* +0x10 setupobjecttypeweight divides it by the sum */
+}; uint8_t lf_raw[0x14]; } TypeParticle;
+
+/* A bond of an object type (ObjectType.bonds). createobject makes a Bond from it. */
+typedef union TypeBond { struct {
+    int subtype;        /* +0x00 */
+    int particle_a;     /* +0x04 */
+    int particle_b;     /* +0x08 */
+}; uint8_t lf_raw[0xc]; } TypeBond;
+
+/* A face of an object type (ObjectType.faces). */
+typedef union TypeFace { struct {
+    int corners;        /* +0x00 3 or 4 */
+    int verts[4];       /* +0x04 */
+    int links[4];       /* +0x14 -1 none. The setups write them after objecttype_addface */
+    float link_weights[4]; /* +0x24 */
+    float extra;        /* +0x34 objecttype_addface parameter 7, always 1.0. createobject does not copy it */
+    float armor;        /* +0x38 createobject copies it to ObjectFace.armor */
+    int is_window;      /* +0x3c createobject copies it to ObjectFace.is_window */
+}; uint8_t lf_raw[0x40]; } TypeFace;
+
+/* A wheel of an object type (ObjectType.wheels). createobject copies it to Object.wheels. */
+typedef union TypeWheel { struct {
+    int popped;         /* +0x00 */
+    int particle_a;     /* +0x04 */
+    int particle_b;     /* +0x08 */
+    float weight_a;     /* +0x0c */
+    float weight_b;     /* +0x10 */
+    float mass;         /* +0x14 */
+    float radius;       /* +0x18 */
+    float inv_inertia;  /* +0x1c */
+    vec3 pos;           /* +0x20 objecttype_addwheel: on the line between the two particles. setupobjecttypeweight centers it */
+    float ride_height;  /* +0x2c objecttype_addwheel adds it to pos.y. createobject copies it to Wheel.ride_height */
+    float suspension[3]; /* +0x30 createobject copies it to Wheel.spring, damper and vertical */
+    uint8_t pad_3c[4];
+    int deflated;       /* +0x40 createobject copies it to Wheel.deflated */
+}; uint8_t lf_raw[0x44]; } TypeWheel;
+
+/* A road point of an AI car (Player.waypoints). */
+typedef union AiWaypoint { struct {
+    uint8_t pad_00[0xc];
+    int road;           /* +0x0c index into City.roads, -1 none */
+    int dir;            /* +0x10 0: from ends[0] to ends[1] */
+    int lane;           /* +0x14 */
+    int turn;           /* +0x18 -1, 0 or 1 */
+}; uint8_t lf_raw[0x1c]; } AiWaypoint;
+
+/* A crossing of the city (City.intersections). */
+typedef union CityIntersection { struct {
+    int x;              /* +0x00 block */
+    int y;              /* +0x04 */
+    int z;              /* +0x08 */
+    vec3 pos;           /* +0x0c x * 4, (y + 1) * 4, z * 4 */
+    int roads[4];       /* +0x18 index into City.roads, -1 none */
+    int extent[4];      /* +0x28 how far the roads reach on each side, same order as roads */
+    int light;          /* +0x38 */
+    int light_max;      /* +0x3c */
+    int light_timer;    /* +0x40 */
+    uint8_t pad_44[4];
+    int red[4];         /* +0x48 nonzero: cars stop at this side */
+    uint8_t pad_58[0x10];
+}; uint8_t lf_raw[0x68]; } CityIntersection;
+
+/* A road of the city (City.roads). */
+typedef union CityRoad { struct {
+    int ends[2];        /* +0x00 index into City.intersections */
+    int kind;           /* +0x08 0 along x, 1 along z */
+    int width[2];       /* +0x0c lanes on the two sides */
+    vec3 dir;           /* +0x14 unit vector from ends[0] to ends[1] */
+    vec3 side;          /* +0x20 */
+    char name[32];      /* +0x2c */
+}; uint8_t lf_raw[0x4c]; } CityRoad;
 
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
@@ -153,8 +233,8 @@ typedef union CityObjectRec { struct {
 typedef union ObjectFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into Object.verts */
-    int unk_14[4];      /* +0x14 */
-    float unk_24[4];    /* +0x24 */
+    int links[4];       /* +0x14 createobject copies it from the type: a particle of a neighbor face, -1 none */
+    float link_weights[4]; /* +0x24 the weight of each link */
     float armor;        /* +0x34 bulletsimulation: a window face loses 8 - armor health per hit when armor < 8 */
     int is_window;      /* +0x38 bulletsimulation, playerai: 1 for a window face */
     int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
@@ -461,17 +541,17 @@ typedef union Player { struct {
     InventorySlot hud_inventory[7];      /* +0x15f8 serversend: count 4 bits and 8 items of 16 bits */
     uint8_t pad_16f4[0x344];
     int is_bot;                          /* +0x1a38 scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy */
-    int unk_1a3c;                        /* +0x1a3c 2 functions */
-    int unk_1a40;                        /* +0x1a40 1 functions */
-    int ai_waypoint;                     /* +0x1a44 ai_playercar/ai_car_nextwaypoint: index into the path (stride 0x1c at +0x1a58) */
-    int num_path;                        /* +0x1a48 resetgame/scenario_createtraffic2: counter of the list at +0x1a4c (stride 0x1c) */
-    uint8_t pad_1a4c[0x700];
-    int unk_214c;                        /* +0x214c 3 functions */
-    int unk_2150;                        /* +0x2150 3 functions */
-    int unk_2154;                        /* +0x2154 3 functions */
-    int unk_2158;                        /* +0x2158 1 functions */
+    int ai_chase;                        /* +0x1a3c scenario_createchase writes 1; ai_playercar: lateral 32 not 16, faster, lane changes, ignores red lights */
+    int lane_cooldown;                   /* +0x1a40 ai_playercar: 60 after a lane change, counts down */
+    int ai_waypoint;                     /* +0x1a44 ai_playercar/ai_car_nextwaypoint: index into waypoints (stride 0x1c at +0x1a4c) */
+    int num_path;                        /* +0x1a48 resetgame/scenario_createtraffic2: counter of the list waypoints at +0x1a4c (stride 0x1c) */
+    AiWaypoint waypoints[64];            /* +0x1a4c stride 0x1c; ai_waypoint indexes it; scenario_createtraffic2 writes [num_path] */
+    int ai_dest_x;                       /* +0x214c ai_car_nextwaypoint: block x of the target intersection; a new random one when reached */
+    int ai_dest_z;                       /* +0x2150 ai_car_nextwaypoint: block z of the target intersection */
+    int wait_isec;                       /* +0x2154 ai_playercar: the intersection of a light the car waits at, -1 none */
+    int wait_light;                      /* +0x2158 ai_playercar: the light count seen at wait_isec */
     int unk_215c;                        /* +0x215c 1 functions */
-    int unk_2160;                        /* +0x2160 1 functions */
+    int stuck_ticks;                     /* +0x2160 ai_playercar: ticks with no speed; at 0xb4 the car backs out, 0 again at 0x140 */
     int unk_2164;                        /* +0x2164 1 functions */
     int num_threats;                     /* +0x2168 ai_assessthreats: loop and limit < 0x10 */
     int unk_216c;                        /* +0x216c 2 functions */
@@ -523,8 +603,16 @@ SR_STATIC_ASSERT(offsetof(Player, hud_value6) == 0x15f0, "Player.hud_value6");
 SR_STATIC_ASSERT(offsetof(Player, hud_value8) == 0x15f4, "Player.hud_value8");
 SR_STATIC_ASSERT(offsetof(Player, hud_inventory) == 0x15f8, "Player.hud_inventory");
 SR_STATIC_ASSERT(offsetof(Player, is_bot) == 0x1a38, "Player.is_bot");
+SR_STATIC_ASSERT(offsetof(Player, ai_chase) == 0x1a3c, "Player.ai_chase");
+SR_STATIC_ASSERT(offsetof(Player, lane_cooldown) == 0x1a40, "Player.lane_cooldown");
 SR_STATIC_ASSERT(offsetof(Player, ai_waypoint) == 0x1a44, "Player.ai_waypoint");
 SR_STATIC_ASSERT(offsetof(Player, num_path) == 0x1a48, "Player.num_path");
+SR_STATIC_ASSERT(offsetof(Player, waypoints) == 0x1a4c, "Player.waypoints");
+SR_STATIC_ASSERT(offsetof(Player, ai_dest_x) == 0x214c, "Player.ai_dest_x");
+SR_STATIC_ASSERT(offsetof(Player, ai_dest_z) == 0x2150, "Player.ai_dest_z");
+SR_STATIC_ASSERT(offsetof(Player, wait_isec) == 0x2154, "Player.wait_isec");
+SR_STATIC_ASSERT(offsetof(Player, wait_light) == 0x2158, "Player.wait_light");
+SR_STATIC_ASSERT(offsetof(Player, stuck_ticks) == 0x2160, "Player.stuck_ticks");
 SR_STATIC_ASSERT(offsetof(Player, num_threats) == 0x2168, "Player.num_threats");
 SR_STATIC_ASSERT(offsetof(Player, colors) == 0x22f4, "Player.colors");
 SR_STATIC_ASSERT(offsetof(Player, look_a) == 0x23b4, "Player.look_a");
@@ -759,7 +847,7 @@ typedef union Object { struct {
     int health;                          /* +0x000c createobject writes 100 (likely) */
     uint8_t pad_0010[0x4];
     int driver;                          /* +0x0014 createobject writes -1 (likely) */
-    int unk_0018;                        /* +0x0018 4 functions */
+    int color;                           /* +0x0018 createobject: parameter 5 (shop row value, 1 for the admin helicopter); player_saveinventory keeps it with the key; the create event sends it */
     int time_to_live;                    /* +0x001c objecttimetolive subtracts 1 when the value is below 0xffff and deletes the object at 0; itemtimetolive writes 0 when the Key of the vehicle goes (the vehicle goes with its key) */
     int key_away;                        /* +0x0020 itemlogic: 1 when the key of the vehicle is not with a human in it; objectsimulation_car and _heli stop the engine */
     vec3 pos;                            /* +0x0024 createobject: parameter 2 */
@@ -790,14 +878,15 @@ typedef union Object { struct {
     uint32_t drive_buttons;              /* +0x5bdc humansimulation: Human.input_buttons of the driver, 4 when nobody drives; objectsimulation_car tests bits 2 and 4 */
     uint8_t pad_5be0[0x4];
     int linked_object;                   /* +0x5be4 objectsimulation: no contact with the linked object; objecttrainsimulation copies track_last to it (the next car of a train) */
-    uint8_t pad_5be8[0x264];
+    int unused_5be8[7];                  /* +0x5be8 createobject writes -1 to the 7 ints after linked_object. No reader */
+    uint8_t pad_5c04[0x248];
     float engine_accel;                  /* +0x5e4c objectenginesimulation2: computed, added to engine_rpm and zeroed */
     float engine_rpm;                    /* +0x5e50 getenginetorque2/objectenginesimulation2 (likely) */
     float throttle;                      /* +0x5e54 objectenginesimulation2: enters as (1 - x) in the acceleration (likely) */
     float engine_power;                  /* +0x5e58 createobject: objecttype+0x7758 * constant; manager (truck_speed) changes the engine force */
     float differential;                  /* +0x5e5c objectenginesimulation2: spin difference of the two driven wheels; 0 for type 1 */
     float engine_inertia;                /* +0x5e60 objectenginesimulation2: the torque is divided by engine_inertia * engine_scale (likely) */
-    float unk_5e64;                      /* +0x5e64 1 functions */
+    float engine_max;                    /* +0x5e64 createobject writes 199.99998474121094 (likely the top rpm) */
     float engine_scale;                  /* +0x5e68 objectenginesimulation2: see engine_inertia (likely) */
     int gear;                            /* +0x5e6c objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely) */
     int gear_prev;                       /* +0x5e70 objectsimulation_car: the gear of the last tick; a change plays the gear sound */
@@ -839,6 +928,7 @@ SR_STATIC_ASSERT(offsetof(Object, type) == 0x4, "Object.type");
 SR_STATIC_ASSERT(offsetof(Object, state) == 0x8, "Object.state");
 SR_STATIC_ASSERT(offsetof(Object, health) == 0xc, "Object.health");
 SR_STATIC_ASSERT(offsetof(Object, driver) == 0x14, "Object.driver");
+SR_STATIC_ASSERT(offsetof(Object, color) == 0x18, "Object.color");
 SR_STATIC_ASSERT(offsetof(Object, time_to_live) == 0x1c, "Object.time_to_live");
 SR_STATIC_ASSERT(offsetof(Object, key_away) == 0x20, "Object.key_away");
 SR_STATIC_ASSERT(offsetof(Object, pos) == 0x24, "Object.pos");
@@ -861,12 +951,14 @@ SR_STATIC_ASSERT(offsetof(Object, verts) == 0x4bbc, "Object.verts");
 SR_STATIC_ASSERT(offsetof(Object, drive_input) == 0x5bbc, "Object.drive_input");
 SR_STATIC_ASSERT(offsetof(Object, drive_buttons) == 0x5bdc, "Object.drive_buttons");
 SR_STATIC_ASSERT(offsetof(Object, linked_object) == 0x5be4, "Object.linked_object");
+SR_STATIC_ASSERT(offsetof(Object, unused_5be8) == 0x5be8, "Object.unused_5be8");
 SR_STATIC_ASSERT(offsetof(Object, engine_accel) == 0x5e4c, "Object.engine_accel");
 SR_STATIC_ASSERT(offsetof(Object, engine_rpm) == 0x5e50, "Object.engine_rpm");
 SR_STATIC_ASSERT(offsetof(Object, throttle) == 0x5e54, "Object.throttle");
 SR_STATIC_ASSERT(offsetof(Object, engine_power) == 0x5e58, "Object.engine_power");
 SR_STATIC_ASSERT(offsetof(Object, differential) == 0x5e5c, "Object.differential");
 SR_STATIC_ASSERT(offsetof(Object, engine_inertia) == 0x5e60, "Object.engine_inertia");
+SR_STATIC_ASSERT(offsetof(Object, engine_max) == 0x5e64, "Object.engine_max");
 SR_STATIC_ASSERT(offsetof(Object, engine_scale) == 0x5e68, "Object.engine_scale");
 SR_STATIC_ASSERT(offsetof(Object, gear) == 0x5e6c, "Object.gear");
 SR_STATIC_ASSERT(offsetof(Object, gear_prev) == 0x5e70, "Object.gear_prev");
@@ -982,53 +1074,61 @@ SR_STATIC_ASSERT(offsetof(ItemType, fits_in) == 0x98, "ItemType.fits_in");
 
 /* objecttype[]: record of 0x828c bytes. */
 typedef union ObjectType { struct {
-    uint8_t pad_0000[0xc];
-    int unk_000c;                        /* +0x000c 1 functions */
-    uint8_t pad_0010[0x1c];
-    int unk_002c;                        /* +0x002c 4 functions */
-    float unk_0030;                      /* +0x0030 4 functions */
-    float unk_0034;                      /* +0x0034 1 functions */
+    int state;                           /* +0x0000 setups: 1 car, 0 trailer and train, 2 helicopter, 3 bogie; createobject copies it to Object.state */
+    uint8_t pad_0004[0x8];
+    char name[32];                       /* +0x000c setups: Town Car, Helicopter, Train (strcpy) */
+    int price;                           /* +0x002c setups: Town Car 1000, Turbo 20000, Helicopter 1000000; economy_carmarket and player_calcassets read it */
+    float mass;                          /* +0x0030 setups: 1000 car, 32000 train; createobject multiplies the particle mass by it */
+    float radius;                        /* +0x0034 setupobjecttypeweight: 1.125 times the largest distance of a particle from the center of the frame points */
     int num_particles;                   /* +0x0038 objecttype_addparticle increments (stride 0x14) */
-    uint8_t pad_003c[0x7c];
-    int unk_00b8;                        /* +0x00b8 1 functions */
-    uint8_t pad_00bc[0x24];
-    int unk_00e0;                        /* +0x00e0 1 functions */
-    uint8_t pad_00e4[0x38];
-    int unk_011c;                        /* +0x011c 1 functions */
-    uint8_t pad_0120[0x41c];
-    int unk_053c;                        /* +0x053c 5 functions */
-    int unk_0540;                        /* +0x0540 1 functions */
-    uint8_t pad_0544[0xfc];
-    int unk_0640;                        /* +0x0640 1 functions */
-    uint8_t pad_0644[0xfc];
+    TypeParticle particles[64];          /* +0x003c objecttype_addparticle appends (stride 0x14) */
+    int num_frame_particles;             /* +0x053c setups: the first n particles give the frame; setupobjecttypeweight; createobject copies it to Object.num_frame_particles */
+    float frame_weight_x[64];            /* +0x0540 setupobjecttypeweight: calculatepointscale toward the center plus radius / 4 along the x axis */
+    float frame_weight_z[64];            /* +0x0640 setupobjecttypeweight: calculatepointscale toward the center plus radius / 4 along the z axis */
     int num_bonds;                       /* +0x0740 objecttype_addbond increments (stride 0xc) */
-    uint8_t pad_0744[0xc00];
+    TypeBond bonds[256];                 /* +0x0744 objecttype_addbond appends (stride 0xc) */
     int num_faces;                       /* +0x1344 objecttype_addface increments (stride 0x40) */
-    uint8_t pad_1348[0x4000];
-    int num_quads;                       /* +0x5348 setupobjectypes_train sets it to num_particles */
+    TypeFace faces[256];                 /* +0x1348 objecttype_addface appends (stride 0x40) */
+    int num_quads;                       /* +0x5348 setupobjectypes_train sets it to num_particles, then appends quads; objectsimulation reads it as the number of vertices */
     TypeQuad quads[256];                 /* +0x534c objectsimulation: a point made of 4 particles and 4 weights; the points go after the particles in one index space */
     int unk_734c;                        /* +0x734c 1 functions */
     uint8_t pad_7350[0x408];
     float engine_power;                  /* +0x7758 createobject copies it (× constant) to object.engine_power */
     int num_wheels;                      /* +0x775c objecttype_addwheel increments (stride 0x44) */
-    uint8_t pad_7760[0x880];
-    float unk_7fe0;                      /* +0x7fe0 2 functions */
-    float unk_7fe4;                      /* +0x7fe4 2 functions */
+    TypeWheel wheels[32];                /* +0x7760 objecttype_addwheel appends (stride 0x44) */
+    float axle_width;                    /* +0x7fe0 setups: 1.0 or 1.125; createobject copies it to Object.axle_width */
+    float wheelbase;                     /* +0x7fe4 setups: Town Car 3.1171875; createobject copies it to Object.wheelbase */
     uint8_t pad_7fe8[0x94];
     int num_seats;                       /* +0x807c setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats) */
-    uint8_t pad_8080[0x208];
-    int window_face;                     /* +0x8288 objectsimulation (type 12): the face whose health is 8 while the locomotive moves and 0 when it stops */
+    vec3 seats[7];                       /* +0x8080 setups: seat places (up to 6 used); createobject copies num_seats of them */
+    uint8_t pad_80d4[0x1b4];
+    int door_face;                       /* +0x8288 setupobjectypes_train: index of the first face with armor 256 (the door face of the locomotive); objectsimulation (type 12) reads it: its health is 8 while the locomotive moves and 0 when it stops */
 }; uint8_t lf_raw[0x828c]; } ObjectType;
 SR_STATIC_ASSERT(sizeof(ObjectType) == 0x828c, "ObjectType");
+SR_STATIC_ASSERT(offsetof(ObjectType, state) == 0x0, "ObjectType.state");
+SR_STATIC_ASSERT(offsetof(ObjectType, name) == 0xc, "ObjectType.name");
+SR_STATIC_ASSERT(offsetof(ObjectType, price) == 0x2c, "ObjectType.price");
+SR_STATIC_ASSERT(offsetof(ObjectType, mass) == 0x30, "ObjectType.mass");
+SR_STATIC_ASSERT(offsetof(ObjectType, radius) == 0x34, "ObjectType.radius");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_particles) == 0x38, "ObjectType.num_particles");
+SR_STATIC_ASSERT(offsetof(ObjectType, particles) == 0x3c, "ObjectType.particles");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_frame_particles) == 0x53c, "ObjectType.num_frame_particles");
+SR_STATIC_ASSERT(offsetof(ObjectType, frame_weight_x) == 0x540, "ObjectType.frame_weight_x");
+SR_STATIC_ASSERT(offsetof(ObjectType, frame_weight_z) == 0x640, "ObjectType.frame_weight_z");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_bonds) == 0x740, "ObjectType.num_bonds");
+SR_STATIC_ASSERT(offsetof(ObjectType, bonds) == 0x744, "ObjectType.bonds");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_faces) == 0x1344, "ObjectType.num_faces");
+SR_STATIC_ASSERT(offsetof(ObjectType, faces) == 0x1348, "ObjectType.faces");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_quads) == 0x5348, "ObjectType.num_quads");
 SR_STATIC_ASSERT(offsetof(ObjectType, quads) == 0x534c, "ObjectType.quads");
 SR_STATIC_ASSERT(offsetof(ObjectType, engine_power) == 0x7758, "ObjectType.engine_power");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_wheels) == 0x775c, "ObjectType.num_wheels");
+SR_STATIC_ASSERT(offsetof(ObjectType, wheels) == 0x7760, "ObjectType.wheels");
+SR_STATIC_ASSERT(offsetof(ObjectType, axle_width) == 0x7fe0, "ObjectType.axle_width");
+SR_STATIC_ASSERT(offsetof(ObjectType, wheelbase) == 0x7fe4, "ObjectType.wheelbase");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_seats) == 0x807c, "ObjectType.num_seats");
-SR_STATIC_ASSERT(offsetof(ObjectType, window_face) == 0x8288, "ObjectType.window_face");
+SR_STATIC_ASSERT(offsetof(ObjectType, seats) == 0x8080, "ObjectType.seats");
+SR_STATIC_ASSERT(offsetof(ObjectType, door_face) == 0x8288, "ObjectType.door_face");
 
 /* bond[]: record of 0xec bytes. */
 typedef union Bond { struct {
@@ -1999,68 +2099,11 @@ SR_STATIC_ASSERT(offsetof(BlockList, base_door_last) == 0x1d0, "BlockList.base_d
 
 /* city[]: record of 0xa0b99c bytes. */
 typedef union City { struct {
-    int unk_0000;                        /* +0x0000 6 functions */
+    int num_intersections;               /* +0x0000 city_addintersection appends (stride 0x68 at +0x8); ai_car_nextwaypoint picks rand % it */
     int unk_0004;                        /* +0x0004 1 functions */
-    int unk_0008;                        /* +0x0008 7 functions */
-    int unk_000c;                        /* +0x000c 3 functions */
-    int unk_0010;                        /* +0x0010 7 functions */
-    float unk_0014;                      /* +0x0014 4 functions */
-    float unk_0018;                      /* +0x0018 4 functions */
-    float unk_001c;                      /* +0x001c 4 functions */
-    int unk_0020;                        /* +0x0020 5 functions */
-    int unk_0024;                        /* +0x0024 6 functions */
-    int unk_0028;                        /* +0x0028 5 functions */
-    int unk_002c;                        /* +0x002c 5 functions */
-    int unk_0030;                        /* +0x0030 5 functions */
-    int unk_0034;                        /* +0x0034 5 functions */
-    int unk_0038;                        /* +0x0038 5 functions */
-    int unk_003c;                        /* +0x003c 5 functions */
-    int unk_0040;                        /* +0x0040 3 functions */
-    int unk_0044;                        /* +0x0044 2 functions */
-    int unk_0048;                        /* +0x0048 2 functions */
-    uint8_t pad_004c[0x4];
-    int unk_0050;                        /* +0x0050 2 functions */
-    int unk_0054;                        /* +0x0054 1 functions */
-    int unk_0058;                        /* +0x0058 1 functions */
-    int unk_005c;                        /* +0x005c 1 functions */
-    uint8_t pad_0060[0x10];
-    int unk_0070;                        /* +0x0070 1 functions */
-    uint8_t pad_0074[0x4];
-    int unk_0078;                        /* +0x0078 1 functions */
-    uint8_t pad_007c[0x2c];
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    int unk_00ac;                        /* +0x00ac 1 functions */
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    uint8_t pad_00b4[0x4];
-    int unk_00b8;                        /* +0x00b8 1 functions */
-    int unk_00bc;                        /* +0x00bc 1 functions */
-    int unk_00c0;                        /* +0x00c0 1 functions */
-    int unk_00c4;                        /* +0x00c4 1 functions */
-    uint8_t pad_00c8[0xe0];
-    int unk_01a8;                        /* +0x01a8 1 functions */
-    uint8_t pad_01ac[0x8];
-    vec3 crossing;                       /* +0x01b4 objectsimulation: a locomotive sets g_train_near when it moves toward it within 160 (x and z; likely a level crossing) */
-    uint8_t pad_01c0[0x30];
-    int unk_01f0;                        /* +0x01f0 1 functions */
-    int unk_01f4;                        /* +0x01f4 1 functions */
-    int unk_01f8;                        /* +0x01f8 1 functions */
-    int unk_01fc;                        /* +0x01fc 1 functions */
-    uint8_t pad_0200[0x19e08];
-    int unk_1a008;                       /* +0x1a008 4 functions */
-    int unk_1a00c;                       /* +0x1a00c 6 functions */
-    int unk_1a010;                       /* +0x1a010 4 functions */
-    int unk_1a014;                       /* +0x1a014 4 functions */
-    int unk_1a018;                       /* +0x1a018 2 functions */
-    int unk_1a01c;                       /* +0x1a01c 2 functions */
-    float unk_1a020;                     /* +0x1a020 3 functions */
-    float unk_1a024;                     /* +0x1a024 3 functions */
-    float unk_1a028;                     /* +0x1a028 3 functions */
-    float unk_1a02c;                     /* +0x1a02c 3 functions */
-    float unk_1a030;                     /* +0x1a030 3 functions */
-    float unk_1a034;                     /* +0x1a034 3 functions */
-    char unk_1a038;                      /* +0x1a038 1 functions */
-    char unk_1a039;                      /* +0x1a039 1 functions */
-    uint8_t pad_1a03a[0x97d2];
+    CityIntersection intersections[1024]; /* +0x0008 0x8 + 1024 * 0x68 = 0x1a008 */
+    int num_roads;                       /* +0x1a008 addcitystreet: the count and the index of the next record */
+    CityRoad roads[512];                 /* +0x1a00c stride 0x4c; 0x1a00c + 512 * 0x4c = 0x2380c */
     int unk_2380c;                       /* +0x2380c 1 functions */
     int unk_23810;                       /* +0x23810 1 functions */
     int unk_23814;                       /* +0x23814 1 functions */
@@ -2132,7 +2175,10 @@ typedef union City { struct {
     uint8_t pad_30c94[0x9dad08];
 }; uint8_t lf_raw[0xa0b99c]; } City;
 SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
-SR_STATIC_ASSERT(offsetof(City, crossing) == 0x1b4, "City.crossing");
+SR_STATIC_ASSERT(offsetof(City, num_intersections) == 0x0, "City.num_intersections");
+SR_STATIC_ASSERT(offsetof(City, intersections) == 0x8, "City.intersections");
+SR_STATIC_ASSERT(offsetof(City, num_roads) == 0x1a008, "City.num_roads");
+SR_STATIC_ASSERT(offsetof(City, roads) == 0x1a00c, "City.roads");
 SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
 SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");

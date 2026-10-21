@@ -45,7 +45,7 @@ player,0x9c,input_buttons,uint32_t,,getinputs_* write bits
 player,0xd4,menu,int,,playermenu compares with 1 and 2; logic_player writes 9
 player,0xd8,menu_building,int,,logic_cardealer_buy uses it as an index (stride 0x9dc); serversend sends 16 bits
 player,0xe4,num_actions,int,,player_addaction_chat/menu: action index (stride 0x54)
-player,0x1a44,ai_waypoint,int,,ai_playercar/ai_car_nextwaypoint: index into the path (stride 0x1c at +0x1a58)
+player,0x1a44,ai_waypoint,int,,ai_playercar/ai_car_nextwaypoint: index into waypoints (stride 0x1c at +0x1a4c)
 human,0x14,vehicle_id,int,,createhuman writes -1; packobjectpacket sends it if != -1
 human,0x18,vehicle_seat,int,,playerai compares with 0 (driver) and 1
 human,0x48,pos,vec3,,manager: global position; logic_playeractions uses it in pointinsidebase
@@ -124,14 +124,14 @@ account,0x3c,look_a,int,,createaccount: rand() % 3
 account,0x40,look_b,int,,createaccount: rand() & 7
 account,0x44,look_c,int,,createaccount: rand() & 3
 player,0x1a38,is_bot,int,,scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy
-player,0x1a48,num_path,int,,resetgame/scenario_createtraffic2: counter of the list at +0x1a4c (stride 0x1c)
+player,0x1a48,num_path,int,,resetgame/scenario_createtraffic2: counter of the list waypoints at +0x1a4c (stride 0x1c)
 player,0x2168,num_threats,int,,ai_assessthreats: loop and limit < 0x10
 object,0xa8,num_particles,int,,"createobject appends to the list at +0xac; particletimetolive loops over it"
 object,0x5e50,engine_rpm,float,,getenginetorque2/objectenginesimulation2 (likely)
 object,0x5e6c,gear,int,,objectsimulation_car writes 1 and 3; ai_playercar compares > 1 (likely)
 object,0x81a8,num_seats,int,,createobject copies from objecttype.num_seats; humansimulation reads it
 objecttype,0x807c,num_seats,int,,setupobjecttypes_*: list of vec3 at +0x8080; createobject copies it to object+0x81ac (likely: seats)
-objecttype,0x5348,num_quads,int,,setupobjectypes_train sets it to num_particles, then appends quads; objectsimulation reads it as the number of vertices
+objecttype,0x5348,num_quads,int,,"setupobjectypes_train sets it to num_particles, then appends quads; objectsimulation reads it as the number of vertices"
 bond,0x34,local_a,vec3,,bondsimulation2: point on the bone (weights of the 3 rows of the Bone rotation)
 bond,0x40,local_b,vec3,,bondsimulation2 type 10: point on the item (weights of the rows of item.rot)
 bond,0x4c,weights,float,3,"types 3 and 4: the barycentric weights of the hit triangle (g_intersect.tri_weights); type 10 keeps the mass shares of the item and the bone in weights[0] and [1]"
@@ -561,8 +561,37 @@ object,0x81a0,axle_width,float,,objectsimulation_car: outer wheel angle (Ackerma
 object,0x81a4,wheelbase,float,,objectsimulation_car: see axle_width
 object,0x820c,crash_noise,float,,objectsimulation: adds the impact speed; plays the crash sound above 2
 particle,0x44,vel_last,vec3,,objectsimulation: the vel of the last tick; the change is the impact speed
-city,0x1b4,crossing,vec3,,objectsimulation: a locomotive sets g_train_near when it moves toward it within 160 (x and z; likely a level crossing)
 soundlist,0x7c,crash,int,,objectsimulation: an object impact
 soundlist,0x130,gear,int,,objectsimulation_car: a gear change
 objecttype,0x534c,quads,TypeQuad,256,"objectsimulation: a point made of 4 particles and 4 weights; the points go after the particles in one index space"
-objecttype,0x8288,window_face,int,,"objectsimulation (type 12): the face whose health is 8 while the locomotive moves and 0 when it stops"
+objecttype,0x8288,door_face,int,,"setupobjectypes_train: index of the first face with armor 256 (the door face of the locomotive); objectsimulation (type 12) reads it: its health is 8 while the locomotive moves and 0 when it stops"
+objecttype,0x0,state,int,,"setups: 1 car, 0 trailer and train, 2 helicopter, 3 bogie; createobject copies it to Object.state"
+objecttype,0xc,name,char,32,"setups: Town Car, Helicopter, Train (strcpy)"
+objecttype,0x2c,price,int,,"setups: Town Car 1000, Turbo 20000, Helicopter 1000000; economy_carmarket and player_calcassets read it"
+objecttype,0x30,mass,float,,"setups: 1000 car, 32000 train; createobject multiplies the particle mass by it"
+objecttype,0x34,radius,float,,"setupobjecttypeweight: 1.125 times the largest distance of a particle from the center of the frame points"
+objecttype,0x3c,particles,TypeParticle,64,"objecttype_addparticle appends (stride 0x14)"
+objecttype,0x53c,num_frame_particles,int,,"setups: the first n particles give the frame; setupobjecttypeweight; createobject copies it to Object.num_frame_particles"
+objecttype,0x540,frame_weight_x,float,64,"setupobjecttypeweight: calculatepointscale toward the center plus radius / 4 along the x axis"
+objecttype,0x640,frame_weight_z,float,64,"setupobjecttypeweight: calculatepointscale toward the center plus radius / 4 along the z axis"
+objecttype,0x744,bonds,TypeBond,256,"objecttype_addbond appends (stride 0xc)"
+objecttype,0x1348,faces,TypeFace,256,"objecttype_addface appends (stride 0x40)"
+objecttype,0x7760,wheels,TypeWheel,32,"objecttype_addwheel appends (stride 0x44)"
+objecttype,0x7fe0,axle_width,float,,"setups: 1.0 or 1.125; createobject copies it to Object.axle_width"
+objecttype,0x7fe4,wheelbase,float,,"setups: Town Car 3.1171875; createobject copies it to Object.wheelbase"
+objecttype,0x8080,seats,vec3,7,"setups: seat places (up to 6 used); createobject copies num_seats of them"
+object,0x18,color,int,,"createobject: parameter 5 (shop row value, 1 for the admin helicopter); player_saveinventory keeps it with the key; the create event sends it"
+object,0x5be8,unused_5be8,int,7,"createobject writes -1 to the 7 ints after linked_object. No reader"
+object,0x5e64,engine_max,float,,"createobject writes 199.99998474121094 (likely the top rpm)"
+player,0x1a3c,ai_chase,int,,"scenario_createchase writes 1; ai_playercar: lateral 32 not 16, faster, lane changes, ignores red lights"
+player,0x1a40,lane_cooldown,int,,"ai_playercar: 60 after a lane change, counts down"
+player,0x1a4c,waypoints,AiWaypoint,64,"stride 0x1c; ai_waypoint indexes it; scenario_createtraffic2 writes [num_path]"
+player,0x214c,ai_dest_x,int,,"ai_car_nextwaypoint: block x of the target intersection; a new random one when reached"
+player,0x2150,ai_dest_z,int,,"ai_car_nextwaypoint: block z of the target intersection"
+player,0x2154,wait_isec,int,,"ai_playercar: the intersection of a light the car waits at, -1 none"
+player,0x2158,wait_light,int,,"ai_playercar: the light count seen at wait_isec"
+player,0x2160,stuck_ticks,int,,"ai_playercar: ticks with no speed; at 0xb4 the car backs out, 0 again at 0x140"
+city,0x0,num_intersections,int,,"city_addintersection appends (stride 0x68 at +0x8); ai_car_nextwaypoint picks rand % it"
+city,0x8,intersections,CityIntersection,1024,"0x8 + 1024 * 0x68 = 0x1a008"
+city,0x1a008,num_roads,int,,"addcitystreet: the count and the index of the next record"
+city,0x1a00c,roads,CityRoad,512,"stride 0x4c; 0x1a00c + 512 * 0x4c = 0x2380c"

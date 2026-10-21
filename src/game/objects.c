@@ -332,8 +332,8 @@ static void object_update(Object *o, int obj)
 static void locomotive(Object *o, int obj)
 {
   const vec3 *r2 = &o->rot[2];
-  float dx = (float)(sr_city.crossing.x - o->pos.x);
-  float dz = (float)(sr_city.crossing.z - o->pos.z);
+  float dx = (float)(sr_city.intersections[4].pos.x - o->pos.x);
+  float dz = (float)(sr_city.intersections[4].pos.z - o->pos.z);
   float thr = 0.4f;
   float fw, sp, t;
   int f, tp, k;
@@ -347,7 +347,7 @@ static void locomotive(Object *o, int obj)
   fw = (float)((o->vel.y * r2->y + r2->x * o->vel.x) + r2->z * o->vel.z);
   o->rpm_net = (int)((fabs(fw) * 120.0) * 60.0);
   sp = -fw;
-  f = sr_objecttypes[12].window_face;
+  f = sr_objecttypes[12].door_face;
   face = &o->faces[f];
   if (sp >= 0.01666666753590107) {
     if (face->health < 8) {

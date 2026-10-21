@@ -87,7 +87,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
@@ -174,14 +174,17 @@ typedef union WheelBody { struct {
     vec3 w;             /* +0x54 the angular velocity: bondsimulation2 makes it from ang_momentum, rot and inv_inertia */
     vec3 dw;            /* +0x60 bondsimulation2 clears it at the start of each pass */
     float axle_inv_inertia; /* +0x6c objectwheelsimulation2: the inverse inertia of the axle */
-    uint8_t unk_70[8];
+    float axle_inv_inertia_y; /* +0x70 createobject writes the three values of the axle */
+    float axle_inv_inertia_z; /* +0x74 */
     vec3 inv_inertia;   /* +0x78 bondsimulation2: the factor of each row of rot */
     float mass;         /* +0x84 objectwheelsimulation2: the mass of the body */
     float radius;       /* +0x88 objectwheelcollision2: the radius of the tire */
     float half_width;   /* +0x8c objectwheelcollision2: half the width of the tire */
     int particles[4];   /* +0x90 indexes into Object.particles: the hub */
     float weights[4];   /* +0xa0 the weight of each hub particle */
-    uint8_t unk_b0[0x1c];
+    float side;         /* +0xb0 createobject: the side of the hub anchor, -0.125 for an even body */
+    uint8_t unused_b4[8];
+    int steer_particles[4]; /* +0xbc createobject: the particles of the steered anchor */
     float steer_weights[4]; /* +0xcc objectsimulation_car: the weights of a steered body (no server code reads them) */
     float steer_side;   /* +0xdc objectsimulation_car: 0.125 for body 0, -0.125 for body 1 */
     uint8_t unk_e0[8];
@@ -199,6 +202,83 @@ typedef union TypeQuad { struct {
     int particles[4];   /* +0x00 objectsimulation: indexes into Object.particles */
     float weights[4];   /* +0x10 objectsimulation: the weight of each particle */
 }; uint8_t lf_raw[0x20]; } TypeQuad;
+
+/* A particle of an object type (ObjectType.particles). */
+typedef union TypeParticle { struct {
+    uint8_t pad_00[4];
+    vec3 pos;           /* +0x04 objecttype_addparticle */
+    float mass;         /* +0x10 setupobjecttypeweight divides it by the sum */
+}; uint8_t lf_raw[0x14]; } TypeParticle;
+
+/* A bond of an object type (ObjectType.bonds). createobject makes a Bond from it. */
+typedef union TypeBond { struct {
+    int subtype;        /* +0x00 */
+    int particle_a;     /* +0x04 */
+    int particle_b;     /* +0x08 */
+}; uint8_t lf_raw[0xc]; } TypeBond;
+
+/* A face of an object type (ObjectType.faces). */
+typedef union TypeFace { struct {
+    int corners;        /* +0x00 3 or 4 */
+    int verts[4];       /* +0x04 */
+    int links[4];       /* +0x14 -1 none. The setups write them after objecttype_addface */
+    float link_weights[4]; /* +0x24 */
+    float extra;        /* +0x34 objecttype_addface parameter 7, always 1.0. createobject does not copy it */
+    float armor;        /* +0x38 createobject copies it to ObjectFace.armor */
+    int is_window;      /* +0x3c createobject copies it to ObjectFace.is_window */
+}; uint8_t lf_raw[0x40]; } TypeFace;
+
+/* A wheel of an object type (ObjectType.wheels). createobject copies it to Object.wheels. */
+typedef union TypeWheel { struct {
+    int popped;         /* +0x00 */
+    int particle_a;     /* +0x04 */
+    int particle_b;     /* +0x08 */
+    float weight_a;     /* +0x0c */
+    float weight_b;     /* +0x10 */
+    float mass;         /* +0x14 */
+    float radius;       /* +0x18 */
+    float inv_inertia;  /* +0x1c */
+    vec3 pos;           /* +0x20 objecttype_addwheel: on the line between the two particles. setupobjecttypeweight centers it */
+    float ride_height;  /* +0x2c objecttype_addwheel adds it to pos.y. createobject copies it to Wheel.ride_height */
+    float suspension[3]; /* +0x30 createobject copies it to Wheel.spring, damper and vertical */
+    uint8_t pad_3c[4];
+    int deflated;       /* +0x40 createobject copies it to Wheel.deflated */
+}; uint8_t lf_raw[0x44]; } TypeWheel;
+
+/* A road point of an AI car (Player.waypoints). */
+typedef union AiWaypoint { struct {
+    uint8_t pad_00[0xc];
+    int road;           /* +0x0c index into City.roads, -1 none */
+    int dir;            /* +0x10 0: from ends[0] to ends[1] */
+    int lane;           /* +0x14 */
+    int turn;           /* +0x18 -1, 0 or 1 */
+}; uint8_t lf_raw[0x1c]; } AiWaypoint;
+
+/* A crossing of the city (City.intersections). */
+typedef union CityIntersection { struct {
+    int x;              /* +0x00 block */
+    int y;              /* +0x04 */
+    int z;              /* +0x08 */
+    vec3 pos;           /* +0x0c x * 4, (y + 1) * 4, z * 4 */
+    int roads[4];       /* +0x18 index into City.roads, -1 none */
+    int extent[4];      /* +0x28 how far the roads reach on each side, same order as roads */
+    int light;          /* +0x38 */
+    int light_max;      /* +0x3c */
+    int light_timer;    /* +0x40 */
+    uint8_t pad_44[4];
+    int red[4];         /* +0x48 nonzero: cars stop at this side */
+    uint8_t pad_58[0x10];
+}; uint8_t lf_raw[0x68]; } CityIntersection;
+
+/* A road of the city (City.roads). */
+typedef union CityRoad { struct {
+    int ends[2];        /* +0x00 index into City.intersections */
+    int kind;           /* +0x08 0 along x, 1 along z */
+    int width[2];       /* +0x0c lanes on the two sides */
+    vec3 dir;           /* +0x14 unit vector from ends[0] to ends[1] */
+    vec3 side;          /* +0x20 */
+    char name[32];      /* +0x2c */
+}; uint8_t lf_raw[0x4c]; } CityRoad;
 
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
@@ -248,8 +328,8 @@ typedef union CityObjectRec { struct {
 typedef union ObjectFace { struct {
     int corners;        /* +0x00 3 or 4 */
     int verts[4];       /* +0x04 indexes into Object.verts */
-    int unk_14[4];      /* +0x14 */
-    float unk_24[4];    /* +0x24 */
+    int links[4];       /* +0x14 createobject copies it from the type: a particle of a neighbor face, -1 none */
+    float link_weights[4]; /* +0x24 the weight of each link */
     float armor;        /* +0x34 bulletsimulation: a window face loses 8 - armor health per hit when armor < 8 */
     int is_window;      /* +0x38 bulletsimulation, playerai: 1 for a window face */
     int health;         /* +0x3c createobject writes 8; bullets lower it; an object of type 12 skips a face at 0 */
