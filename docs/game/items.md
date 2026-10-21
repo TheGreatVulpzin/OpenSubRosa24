@@ -146,7 +146,7 @@ Slots 0 and 1 are the hands and slots 2 to 6 are the pockets. Button 0x10 choose
 1. The bullet loses speed to the air (drag of its type) and moves.
 2. The server finds the nearest hit on a human (not the hands of the owner, not an immune player) or on an object.
 3. The level wins when it is nearer. A block may break. The bullet ends.
-4. A human hit does damage from the speed times the mass. The head multiplies it by 2, 3 or 4. A team kill can cost a tax. The human may bleed, gets a stun time and gets a push on the bone. The bullet ends.
+4. A human hit does damage from the speed times the mass. The head multiplies it by 2, 3 or 4. The team kill tax (a shot at a human of the same team) works only in game type 3, the round mode. Game type 4 taxes a shot at a protected human of team 7 instead. Other game types have no tax. The human may bleed, gets a stun time and gets a push on the bone. The bullet ends.
 5. An object hit on a wheel lowers its health. A flat wheel gets a smaller radius. A window face loses health and breaks at 0. Any other face damages the object. The face particles get a push. The bullet ends.
 
 ## Functions

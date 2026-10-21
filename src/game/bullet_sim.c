@@ -80,7 +80,7 @@ static void bullet_human_hit(Bullet *b, Hit *hit)
         else
             dmg = dmg * 4;
     }
-    /* A team kill costs a tax. Game type 4 taxes a hit on a protected human of team 7. */
+    /* The team kill tax works only in game type 3 (round mode). Game type 4 taxes a hit on a protected human of team 7. */
     if (sr_game.gametype == GAMETYPE_BASES) {
         if (b->owner != -1 && hu->player_id != -1 && b->owner != hu->player_id &&
             sr_players[hu->player_id].team == TEAM_NEUTRAL && hu->protect_timer > 0)
