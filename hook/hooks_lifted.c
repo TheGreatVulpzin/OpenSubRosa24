@@ -7849,12 +7849,12 @@ __declspec(naked) static void th_21b40(void)
 }
 static uint8_t expect_21b40[7] = { 0x51, 0x8b, 0x0d, 0xc0, 0xd2, 0x56, 0x09 };
 
-void __cdecl lf_21e00(int param_1, float * param_2, float * param_3, float param_4);
+void __cdecl addobjectrotation(int param_1, float * param_2, float * param_3, float param_4);
 static void (__cdecl *orig_21e00)(int, float *, float *, float);
 static SvVerify v_21e00 = { "addobjectrotation", -1 };
 static void __cdecl hk_21e00(int param_1, float * param_2, float * param_3, float param_4)
 {
-    SV_HOOK_VOID(v_21e00, lf_21e00(param_1, param_2, param_3, param_4), orig_21e00(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_21e00, addobjectrotation(param_1, param_2, param_3, param_4), orig_21e00(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_21e00(void)
 {
@@ -8104,12 +8104,12 @@ __declspec(naked) static void th_22f90(void)
 }
 static uint8_t expect_22f90[8] = { 0x83, 0xec, 0x78, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-float10 __cdecl lf_23fa0(int param_1);
+float10 __cdecl getenginetorque2(int param_1);
 static float10 (__cdecl *orig_23fa0)(int);
 static SvVerify v_23fa0 = { "getenginetorque2", -1 };
 static float10 __cdecl hk_23fa0(int param_1)
 {
-    SV_HOOK_RET_FLOAT(float10, v_23fa0, lf_23fa0(param_1), orig_23fa0(param_1), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_23fa0, getenginetorque2(param_1), orig_23fa0(param_1), NULL);
 }
 __declspec(naked) static void th_23fa0(void)
 {
@@ -8190,12 +8190,12 @@ __declspec(naked) static void th_240e0(void)
 }
 static uint8_t expect_240e0[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_24f60(int param_1);
+void __cdecl objectsimulation_heli(int param_1);
 static void (__cdecl *orig_24f60)(int);
 static SvVerify v_24f60 = { "objectsimulation_heli", -1 };
 static void __cdecl hk_24f60(int param_1)
 {
-    SV_HOOK_VOID(v_24f60, lf_24f60(param_1), orig_24f60(param_1), NULL);
+    SV_HOOK_VOID(v_24f60, objectsimulation_heli(param_1), orig_24f60(param_1), NULL);
 }
 __declspec(naked) static void th_24f60(void)
 {
@@ -10013,12 +10013,12 @@ __declspec(naked) static void th_32340(void)
 }
 static uint8_t expect_32340[5] = { 0xd9, 0xee, 0x53, 0x55, 0x56 };
 
-void __cdecl lf_324c0(void);
+void __cdecl objectenginesimulation2(void);
 static void (__cdecl *orig_324c0)(void);
 static SvVerify v_324c0 = { "objectenginesimulation2", -1 };
 static void __cdecl hk_324c0(void)
 {
-    SV_HOOK_VOID(v_324c0, lf_324c0(), orig_324c0(), NULL);
+    SV_HOOK_VOID(v_324c0, objectenginesimulation2(), orig_324c0(), NULL);
 }
 __declspec(naked) static void th_324c0(void)
 {

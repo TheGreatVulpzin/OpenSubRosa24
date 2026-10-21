@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 
+#include "objects.h"
 #include "profiler.h"
 #include "solver.h"
 #include "sr_math.h"
@@ -25,9 +26,7 @@
 
 /* Game functions with no clean version yet: the calls go to the lifted C. */
 void __cdecl lf_22f90(void);
-void __cdecl lf_324c0(void);
 #define objectwheelsimulation2 lf_22f90
-#define objectenginesimulation2 lf_324c0
 
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
  * each side from the masses. */
