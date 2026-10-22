@@ -8,6 +8,7 @@ of all the recordings, one run at a time (two runs at the same time disturb the 
   python -I tools/lift/bench.py --all        every function in the table
   python -I tools/lift/bench.py --all-calls  every recorded call, not the short files (much slower)
   python -I tools/lift/bench.py --only NAME  only the recordings with NAME in their name
+  python -I tools/lift/bench.py --funcs a,b  only these functions (the harness runs only their calls)
 
 The short call files (sv_args.min.txt) have 2 calls for each code path of each function, so
 they cover the same functions as the full files in a small part of the time.
@@ -37,6 +38,7 @@ def main():
     ap.add_argument('--all-calls', action='store_true', help='sv_args.txt in place of sv_args.min.txt')
     ap.add_argument('--only', help='only the recordings with this text in the name')
     ap.add_argument('--warn', type=float, default=1.05, help='mark a ratio above this (default 1.05)')
+    ap.add_argument('--funcs', help='only these functions (names separated by commas)')
     a = ap.parse_args()
 
     t = gate.load_target(a.target)
@@ -45,6 +47,13 @@ def main():
     total = defaultdict(lambda: [0, 0, 0])  # name -> calls, cycles of the C version, of the original
     out = Path(t['out_dir']) / 'bench'
     out.mkdir(parents=True, exist_ok=True)
+    only = a.funcs.split(',') if a.funcs else None
+    filter_arg = []
+    if only:
+        # Same filter file as gate.py: one name for each line, passed as @file.
+        lst = out / 'funcs.txt'
+        lst.write_text('\n'.join(only) + '\n')
+        filter_arg = ['@' + str(lst)]
     t0 = time.time()
     for r in t['recordings']:
         d = t['recordings_dir'] / r['name']
@@ -58,7 +67,7 @@ def main():
         with tempfile.TemporaryDirectory() as env_dir:
             env = dict(os.environ, HARNESS_TIME='1', HARNESS_ENV_DIR=env_dir, SV_UI_WIDTH='220',
                        SV_LOG_FILE=str(out / f'{r["name"]}.log'))
-            p = subprocess.run([str(t['harness']), str(t['image']), str(d / 'sv_snapshot.bin'), str(args)],
+            p = subprocess.run([str(t['harness']), str(t['image']), str(d / 'sv_snapshot.bin'), str(args)] + filter_arg,
                                capture_output=True, text=True, errors='replace', env=env, cwd=ROOT)
         (out / f'{r["name"]}.txt').write_text(p.stdout + p.stderr, encoding='utf-8')
         n = 0
@@ -74,7 +83,7 @@ def main():
     print(f'{time.time() - t0:.0f} s\n')
 
     rows = [(name, c, new, orig) for name, (c, new, orig) in total.items()
-            if a.all or name in rewritten]
+            if (name in only if only else a.all or name in rewritten)]
     rows.sort(key=lambda x: -(x[2] / x[3] if x[3] else 0))
     print(f'{"function":32s} {"calls":>7s} {"C cyc/call":>11s} {"orig cyc/call":>13s} {"ratio":>6s}')
     slow = 0

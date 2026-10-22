@@ -29,7 +29,7 @@ Do every item before reporting "done". Show proof of each item in report. Paste 
 1. Run `bash tools/lift/pipeline.sh`. Search its log for `error C` and `build failed`. Script exits 0 when build fails.
 2. Run `git status`. After lift, `src/lifted/lifted_024d.c`, `src/lifted/lifted_table.c` and `hook/hooks_lifted.c` must show changes. Commit them with the step.
 3. Run `bash tools/lift/step.sh <functions>`. Summary must name each function of the step. Missing function = not tested.
-4. Run `python -I tools/lift/bench.py` for each function that runs every tick.
+4. Run `python -I tools/lift/bench.py --funcs <functions of the step, plus the rewritten functions they call>`. Report the ratio of each. Above 1.05 = slower: fix it.
 5. Run `grep -n -i "original\|lifted\|rewritten\|024d" <files you wrote>`. Must find nothing.
 6. Docs and `names.csv` must agree. Field meaning changed: `grep` its name in `docs/`, fix each hit.
 7. Tell user step needs review by another model. Step with float math needs strong model.
