@@ -83,7 +83,7 @@ void createevent_updateiteminfo(uint32_t item)
     ev->param = (int)item;
     ev->attach_type = it->call_state;
     ev->attach_id = it->info;
-    ev->range_mode = it->unk_010c;
+    ev->range_mode = it->phone_line;
     next_event();
 }
 
@@ -98,7 +98,7 @@ void createevent_updateplayer(int player)
     ev->param = (p->is_bot + (p->active + 2 + p->team * 2) * 2) * 0x100 + player;
     ev->attach_type = p->human_id;
     ev->attach_id = p->money;
-    ev->range_mode = p->look_a + (p->look_b + (p->look_c + (p->unk_23c0 + p->unk_23c4 * 2) * 4) * 8) * 4;
+    ev->range_mode = p->look_a + (p->look_b + (p->look_c + (p->look_d + p->look_e * 2) * 4) * 8) * 4;
     memcpy(ev->message, p->name, 31);
     ev->message[31] = '\0';
     next_event();

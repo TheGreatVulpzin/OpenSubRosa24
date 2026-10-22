@@ -89,7 +89,9 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
-             'Stock': 0x14, 'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
+             'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
+             'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
+             'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -488,12 +490,64 @@ typedef union DoorBlock { struct {
 
 /* A stock of the market (createevent_updatestocks). */
 typedef union Stock { struct {
-    int unk_00;
+    int shares;
     float price;        /* +0x04 */
-    float unk_08;
+    float open_price;
     int price_int;      /* +0x0c createevent_updatestocks writes (int)price */
-    int unk_10;
+    int stake;
 }; uint8_t lf_raw[0x14]; } Stock;
+
+/* A mission of a team. */
+typedef union Mission { struct {
+    int active;
+    int scenario;
+    int kind;
+    int item;
+    int partner;
+    int unk_14;
+    uint8_t pad_18[8];
+    int item_type;
+    int cash;
+    int expire;
+    int site;
+    int stake;
+    int stake_min;
+    float own_growth;
+    float other_growth;
+}; uint8_t lf_raw[0x40]; } Mission;
+
+/* A car place at a team base. */
+typedef union TeamCarSpot { struct {
+    int used;
+    vec3 pos;
+    vec3 rot[3];
+}; uint8_t lf_raw[0x34]; } TeamCarSpot;
+
+/* An item in a saved inventory slot. */
+typedef union SavedItem { struct {
+    int type;
+    int a;
+    int b;
+}; uint8_t lf_raw[0xc]; } SavedItem;
+
+typedef union SavedSlot { struct {
+    int count;
+    SavedItem items[8];
+}; uint8_t lf_raw[0x64]; } SavedSlot;
+
+/* A threat seen by an AI player. */
+typedef union Threat { struct {
+    int human;
+    vec3 pos;
+    float level;
+    int timer;
+}; uint8_t lf_raw[0x18]; } Threat;
+
+/* A guard place in a building. */
+typedef union GuardSpot { struct {
+    vec3 pos;
+    int dir;
+}; uint8_t lf_raw[0x10]; } GuardSpot;
 
 /* One list of file names (listfiles): up to 1024 names of 64 bytes. */
 typedef union FileListSlot { struct {
@@ -571,6 +625,14 @@ SR_STATIC_ASSERT(sizeof(NetEntry) == 8, "NetEntry");
 SR_STATIC_ASSERT(sizeof(NetCandidate) == 0xc, "NetCandidate");
 SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
+SR_STATIC_ASSERT(sizeof(Mission) == 0x40, "Mission");
+SR_STATIC_ASSERT(offsetof(Mission, item_type) == 0x20, "Mission.item_type");
+SR_STATIC_ASSERT(offsetof(Mission, other_growth) == 0x3c, "Mission.other_growth");
+SR_STATIC_ASSERT(sizeof(TeamCarSpot) == 0x34, "TeamCarSpot");
+SR_STATIC_ASSERT(sizeof(SavedItem) == 0xc, "SavedItem");
+SR_STATIC_ASSERT(sizeof(SavedSlot) == 0x64, "SavedSlot");
+SR_STATIC_ASSERT(sizeof(Threat) == 0x18, "Threat");
+SR_STATIC_ASSERT(sizeof(GuardSpot) == 0x10, "GuardSpot");
 SR_STATIC_ASSERT(sizeof(FileListSlot) == 0x10004, "FileListSlot");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");

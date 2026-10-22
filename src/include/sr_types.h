@@ -393,12 +393,64 @@ typedef union DoorBlock { struct {
 
 /* A stock of the market (createevent_updatestocks). */
 typedef union Stock { struct {
-    int unk_00;
+    int shares;
     float price;        /* +0x04 */
-    float unk_08;
+    float open_price;
     int price_int;      /* +0x0c createevent_updatestocks writes (int)price */
-    int unk_10;
+    int stake;
 }; uint8_t lf_raw[0x14]; } Stock;
+
+/* A mission of a team. */
+typedef union Mission { struct {
+    int active;
+    int scenario;
+    int kind;
+    int item;
+    int partner;
+    int unk_14;
+    uint8_t pad_18[8];
+    int item_type;
+    int cash;
+    int expire;
+    int site;
+    int stake;
+    int stake_min;
+    float own_growth;
+    float other_growth;
+}; uint8_t lf_raw[0x40]; } Mission;
+
+/* A car place at a team base. */
+typedef union TeamCarSpot { struct {
+    int used;
+    vec3 pos;
+    vec3 rot[3];
+}; uint8_t lf_raw[0x34]; } TeamCarSpot;
+
+/* An item in a saved inventory slot. */
+typedef union SavedItem { struct {
+    int type;
+    int a;
+    int b;
+}; uint8_t lf_raw[0xc]; } SavedItem;
+
+typedef union SavedSlot { struct {
+    int count;
+    SavedItem items[8];
+}; uint8_t lf_raw[0x64]; } SavedSlot;
+
+/* A threat seen by an AI player. */
+typedef union Threat { struct {
+    int human;
+    vec3 pos;
+    float level;
+    int timer;
+}; uint8_t lf_raw[0x18]; } Threat;
+
+/* A guard place in a building. */
+typedef union GuardSpot { struct {
+    vec3 pos;
+    int dir;
+}; uint8_t lf_raw[0x10]; } GuardSpot;
 
 /* One list of file names (listfiles): up to 1024 names of 64 bytes. */
 typedef union FileListSlot { struct {
@@ -476,6 +528,14 @@ SR_STATIC_ASSERT(sizeof(NetEntry) == 8, "NetEntry");
 SR_STATIC_ASSERT(sizeof(NetCandidate) == 0xc, "NetCandidate");
 SR_STATIC_ASSERT(sizeof(DoorBlock) == 0x10, "DoorBlock");
 SR_STATIC_ASSERT(sizeof(Stock) == 0x14, "Stock");
+SR_STATIC_ASSERT(sizeof(Mission) == 0x40, "Mission");
+SR_STATIC_ASSERT(offsetof(Mission, item_type) == 0x20, "Mission.item_type");
+SR_STATIC_ASSERT(offsetof(Mission, other_growth) == 0x3c, "Mission.other_growth");
+SR_STATIC_ASSERT(sizeof(TeamCarSpot) == 0x34, "TeamCarSpot");
+SR_STATIC_ASSERT(sizeof(SavedItem) == 0xc, "SavedItem");
+SR_STATIC_ASSERT(sizeof(SavedSlot) == 0x64, "SavedSlot");
+SR_STATIC_ASSERT(sizeof(Threat) == 0x18, "Threat");
+SR_STATIC_ASSERT(sizeof(GuardSpot) == 0x10, "GuardSpot");
 SR_STATIC_ASSERT(sizeof(FileListSlot) == 0x10004, "FileListSlot");
 SR_STATIC_ASSERT(sizeof(VoiceRing) == 0x9210, "VoiceRing");
 SR_STATIC_ASSERT(offsetof(VoiceRing, voice_off) == 0x920c, "VoiceRing.voice_off");
@@ -494,35 +554,35 @@ typedef union Player { struct {
     int admin_tries;                     /* +0x0030 server_playermessage /admin: fewer than 5 tries */
     int account;                         /* +0x0034 serverrecv: createaccount result, an index into the accounts */
     int chat_block;                      /* +0x0038 server_playermessage returns 1 when above 0 (likely a mute) */
-    int ready;                           /* +0x003c serversend: 1 bit for the players 0 to 31 */
+    int ready;                           /* +0x003c economysimulation pays it when above 0; menu 2 value 5 writes 1; resetgame writes 0; logicsimulation_round starts the round when all humans have it */
     int money;                           /* +0x0040 createplayer writes 50000; manager (black_market.c) uses it as the balance; logic_gunstore_buy */
     int godmode;                         /* +0x0044 server_playermessage /godmode xors it; bulletsimulation: no hit on the human of a player with it */
     float unk_0048;                      /* +0x0048 1 functions */
     int num_purchases;                   /* +0x004c logic_gunstore_buy and logic_playeractions: limit < 10 */
-    int unk_0050;                        /* +0x0050 3 functions */
-    int unk_0054;                        /* +0x0054 3 functions */
-    int unk_0058;                        /* +0x0058 2 functions */
-    int unk_005c;                        /* +0x005c 2 functions */
-    int unk_0060;                        /* +0x0060 2 functions */
+    int num_cars;                        /* +0x0050 logic_cardealer_buy: limit < 3, adds 1; the day reset subtracts 1 */
+    int small_bills;                     /* +0x0054 logic_playeractions menus 11 and 12: bills 1 and 2 add 1, limit < 40; the day reset writes 0 */
+    int checkpoints;                     /* +0x0058 logicsimulation_driving: the number of checkpoints reached; resetgame writes 0 */
+    uint32_t checkpoint_mask;            /* +0x005c logicsimulation_driving: bit i = checkpoint i reached */
+    int unused_60;                       /* +0x0060 resetgame writes 0 (grep for a reader first; rename if you find one) */
     int team;                            /* +0x0064 createplayer writes 7; createhuman copies it to human.team; logic_addteamcash */
-    int unk_0068;                        /* +0x0068 1 functions */
+    int countdown;                       /* +0x0068 logicsimulation_round subtracts 1 while above 0 (no group 6 code writes it) */
     int stocks;                          /* +0x006c playerbuystock/playersellstock; economysimulation */
     int top_of_team;                     /* +0x0070 economysimulation: 1 for the player with the most assets of each team; itemweaponsimulation lets only this player shoot outside game state 2 */
-    int unk_0074;                        /* +0x0074 1 functions */
+    int unused_74;                       /* +0x0074 resetgame writes 0 (grep for a reader first) */
     int human_id;                        /* +0x0078 createplayer writes -1; manager: the player's body */
     float input_axes[4];                 /* +0x007c getinputs_human/car/heli write floats */
     float yaw;                           /* +0x008c manager (ANALISE-NPCS.md): player yaw */
     float input_pitch;                   /* +0x0090 getinputs_* write it; neighbor of yaw (likely) */
     float input_extra[2];                /* +0x0094 serverrecv reads it from the network together with the axes (2 floats after input_pitch) */
     uint32_t input_buttons;              /* +0x009c getinputs_* write bits */
-    int unk_00a0;                        /* +0x00a0 1 functions */
+    uint32_t input_buttons_prev;         /* +0x00a0 playersimulation copies input_buttons here at the end of each tick */
     float look_yaw;                      /* +0x00a4 serversend: Human.axis copied, packangle 16 */
     float look_pitch;                    /* +0x00a8 serversend: Human.pitch copied, packangle 16 */
-    int hud_mode;                        /* +0x00ac getinputs_human adds 1; drawhud compares with 0 and 1 */
+    int move_mode;                       /* +0x00ac rename hud_mode: playersimulation copies it to Human.move_mode; resetgame writes 1. Users: src/net/server.c:471 */
     float unk_00b0;                      /* +0x00b0 4 functions */
     float unk_00b4;                      /* +0x00b4 4 functions */
     float body_param;                    /* +0x00b8 createplayer writes 1.0; createhuman copies it to Human.body_param */
-    int unk_00bc;                        /* +0x00bc 1 functions */
+    int leave_ticks;                     /* +0x00bc logicsimulation_world: ticks outside the base with button 0x40000 down; at 180 the player leaves the team */
     uint8_t pad_00c0[0x4];
     int unk_00c4;                        /* +0x00c4 2 functions */
     int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
@@ -539,7 +599,8 @@ typedef union Player { struct {
     int hud_value6;                      /* +0x15f0 serversend: 6 bits */
     int hud_value8;                      /* +0x15f4 serversend: 8 bits */
     InventorySlot hud_inventory[7];      /* +0x15f8 serversend: count 4 bits and 8 items of 16 bits */
-    uint8_t pad_16f4[0x344];
+    uint8_t pad_16f4[0x24];
+    SavedSlot saved_items[8];            /* +0x1718 player_saveinventory, economysimulation, player_loadinventory; createplayer clears the 8 counts (0x1718 + 8 * 0x64 = is_bot) */
     int is_bot;                          /* +0x1a38 scenario_createchase writes 1; logicsimulation_round filters == 0; manager: bots do not buy */
     int ai_chase;                        /* +0x1a3c scenario_createchase writes 1; ai_playercar: lateral 32 not 16, faster, lane changes, ignores red lights */
     int lane_cooldown;                   /* +0x1a40 ai_playercar: 60 after a lane change, counts down */
@@ -550,21 +611,20 @@ typedef union Player { struct {
     int ai_dest_z;                       /* +0x2150 ai_car_nextwaypoint: block z of the target intersection */
     int wait_isec;                       /* +0x2154 ai_playercar: the intersection of a light the car waits at, -1 none */
     int wait_light;                      /* +0x2158 ai_playercar: the light count seen at wait_isec */
-    int unk_215c;                        /* +0x215c 1 functions */
+    int ai_wait;                         /* +0x215c playerai: the AI does nothing while above 0 and subtracts 1 */
     int stuck_ticks;                     /* +0x2160 ai_playercar: ticks with no speed; at 0xb4 the car backs out, 0 again at 0x140 */
-    int unk_2164;                        /* +0x2164 1 functions */
+    int ai_wreck_ticks;                  /* +0x2164 playerai: ticks in a vehicle with health < 1; above 0xb3 the AI presses 0x800 (get out) */
     int num_threats;                     /* +0x2168 ai_assessthreats: loop and limit < 0x10 */
-    int unk_216c;                        /* +0x216c 2 functions */
-    int unk_2170;                        /* +0x2170 1 functions */
-    uint8_t pad_2174[0x17c];
-    int unk_22f0;                        /* +0x22f0 3 functions */
+    int ai_target;                       /* +0x216c ai_assessthreats: the index of the nearest threat with level > 8; playerai aims at it */
+    Threat threats[16];                  /* +0x2170 ai_assessthreats: limit num_threats < 16; 0x2170 + 16 * 0x18 = 0x22f0 */
+    int despawn_time;                    /* +0x22f0 scenario_*: the world clock when the bot goes; logicsimulation_world deletes the bot after it */
     vec3 colors[4];                      /* +0x22f4 createplayer initializes 4 vectors; createhuman copies them to human+0x2a5c (likely: clothes colors) */
     uint8_t pad_2324[0x90];
     int look_a;                          /* +0x23b4 createplayer: rand() % 3; equal to account.look_a */
     int look_b;                          /* +0x23b8 createplayer: rand() & 7 */
     int look_c;                          /* +0x23bc createplayer: rand() & 3 */
-    int unk_23c0;                        /* +0x23c0 4 functions */
-    int unk_23c4;                        /* +0x23c4 4 functions */
+    int look_d;                          /* +0x23c0 logic_suits_buy row 1 writes 1 and Human.look_d; events.c packs it with look_a..c */
+    int look_e;                          /* +0x23c4 logic_suits_buy row 2; as look_d */
     char orig_text[64];                  /* +0x23c8 server_playermessage: the text before the chat filter. packevent sends it to the own player */
 }; uint8_t lf_raw[0x2408]; } Player;
 SR_STATIC_ASSERT(sizeof(Player) == 0x2408, "Player");
@@ -579,19 +639,28 @@ SR_STATIC_ASSERT(offsetof(Player, ready) == 0x3c, "Player.ready");
 SR_STATIC_ASSERT(offsetof(Player, money) == 0x40, "Player.money");
 SR_STATIC_ASSERT(offsetof(Player, godmode) == 0x44, "Player.godmode");
 SR_STATIC_ASSERT(offsetof(Player, num_purchases) == 0x4c, "Player.num_purchases");
+SR_STATIC_ASSERT(offsetof(Player, num_cars) == 0x50, "Player.num_cars");
+SR_STATIC_ASSERT(offsetof(Player, small_bills) == 0x54, "Player.small_bills");
+SR_STATIC_ASSERT(offsetof(Player, checkpoints) == 0x58, "Player.checkpoints");
+SR_STATIC_ASSERT(offsetof(Player, checkpoint_mask) == 0x5c, "Player.checkpoint_mask");
+SR_STATIC_ASSERT(offsetof(Player, unused_60) == 0x60, "Player.unused_60");
 SR_STATIC_ASSERT(offsetof(Player, team) == 0x64, "Player.team");
+SR_STATIC_ASSERT(offsetof(Player, countdown) == 0x68, "Player.countdown");
 SR_STATIC_ASSERT(offsetof(Player, stocks) == 0x6c, "Player.stocks");
 SR_STATIC_ASSERT(offsetof(Player, top_of_team) == 0x70, "Player.top_of_team");
+SR_STATIC_ASSERT(offsetof(Player, unused_74) == 0x74, "Player.unused_74");
 SR_STATIC_ASSERT(offsetof(Player, human_id) == 0x78, "Player.human_id");
 SR_STATIC_ASSERT(offsetof(Player, input_axes) == 0x7c, "Player.input_axes");
 SR_STATIC_ASSERT(offsetof(Player, yaw) == 0x8c, "Player.yaw");
 SR_STATIC_ASSERT(offsetof(Player, input_pitch) == 0x90, "Player.input_pitch");
 SR_STATIC_ASSERT(offsetof(Player, input_extra) == 0x94, "Player.input_extra");
 SR_STATIC_ASSERT(offsetof(Player, input_buttons) == 0x9c, "Player.input_buttons");
+SR_STATIC_ASSERT(offsetof(Player, input_buttons_prev) == 0xa0, "Player.input_buttons_prev");
 SR_STATIC_ASSERT(offsetof(Player, look_yaw) == 0xa4, "Player.look_yaw");
 SR_STATIC_ASSERT(offsetof(Player, look_pitch) == 0xa8, "Player.look_pitch");
-SR_STATIC_ASSERT(offsetof(Player, hud_mode) == 0xac, "Player.hud_mode");
+SR_STATIC_ASSERT(offsetof(Player, move_mode) == 0xac, "Player.move_mode");
 SR_STATIC_ASSERT(offsetof(Player, body_param) == 0xb8, "Player.body_param");
+SR_STATIC_ASSERT(offsetof(Player, leave_ticks) == 0xbc, "Player.leave_ticks");
 SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
 SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");
 SR_STATIC_ASSERT(offsetof(Player, menu_building) == 0xd8, "Player.menu_building");
@@ -602,6 +671,7 @@ SR_STATIC_ASSERT(offsetof(Player, hud_health) == 0x15ec, "Player.hud_health");
 SR_STATIC_ASSERT(offsetof(Player, hud_value6) == 0x15f0, "Player.hud_value6");
 SR_STATIC_ASSERT(offsetof(Player, hud_value8) == 0x15f4, "Player.hud_value8");
 SR_STATIC_ASSERT(offsetof(Player, hud_inventory) == 0x15f8, "Player.hud_inventory");
+SR_STATIC_ASSERT(offsetof(Player, saved_items) == 0x1718, "Player.saved_items");
 SR_STATIC_ASSERT(offsetof(Player, is_bot) == 0x1a38, "Player.is_bot");
 SR_STATIC_ASSERT(offsetof(Player, ai_chase) == 0x1a3c, "Player.ai_chase");
 SR_STATIC_ASSERT(offsetof(Player, lane_cooldown) == 0x1a40, "Player.lane_cooldown");
@@ -612,12 +682,19 @@ SR_STATIC_ASSERT(offsetof(Player, ai_dest_x) == 0x214c, "Player.ai_dest_x");
 SR_STATIC_ASSERT(offsetof(Player, ai_dest_z) == 0x2150, "Player.ai_dest_z");
 SR_STATIC_ASSERT(offsetof(Player, wait_isec) == 0x2154, "Player.wait_isec");
 SR_STATIC_ASSERT(offsetof(Player, wait_light) == 0x2158, "Player.wait_light");
+SR_STATIC_ASSERT(offsetof(Player, ai_wait) == 0x215c, "Player.ai_wait");
 SR_STATIC_ASSERT(offsetof(Player, stuck_ticks) == 0x2160, "Player.stuck_ticks");
+SR_STATIC_ASSERT(offsetof(Player, ai_wreck_ticks) == 0x2164, "Player.ai_wreck_ticks");
 SR_STATIC_ASSERT(offsetof(Player, num_threats) == 0x2168, "Player.num_threats");
+SR_STATIC_ASSERT(offsetof(Player, ai_target) == 0x216c, "Player.ai_target");
+SR_STATIC_ASSERT(offsetof(Player, threats) == 0x2170, "Player.threats");
+SR_STATIC_ASSERT(offsetof(Player, despawn_time) == 0x22f0, "Player.despawn_time");
 SR_STATIC_ASSERT(offsetof(Player, colors) == 0x22f4, "Player.colors");
 SR_STATIC_ASSERT(offsetof(Player, look_a) == 0x23b4, "Player.look_a");
 SR_STATIC_ASSERT(offsetof(Player, look_b) == 0x23b8, "Player.look_b");
 SR_STATIC_ASSERT(offsetof(Player, look_c) == 0x23bc, "Player.look_c");
+SR_STATIC_ASSERT(offsetof(Player, look_d) == 0x23c0, "Player.look_d");
+SR_STATIC_ASSERT(offsetof(Player, look_e) == 0x23c4, "Player.look_e");
 SR_STATIC_ASSERT(offsetof(Player, orig_text) == 0x23c8, "Player.orig_text");
 
 /* human[]: record of 0x2b64 bytes. */
@@ -654,8 +731,8 @@ typedef union Human { struct {
     float input_axes[4];                 /* +0x009c playersimulation: the analog inputs from the client; walking uses [1] sideways and [3] forward; the driver copies all 4 to Object.drive_input */
     float view_axis;                     /* +0x00ac playersimulation: the view angle from the client; on foot humansimulation copies it to axis */
     float view_pitch;                    /* +0x00b0 playersimulation: the view pitch from the client; on foot humansimulation copies it to pitch */
-    float arm_axis;                      /* +0x00b4 human_calculatearmangles turns the chest by half of it; no code writes it, so it stays 0 */
-    float arm_pitch;                     /* +0x00b8 human_calculatearmangles bends the chest and the head with it; no code writes it, so it stays 0 */
+    float arm_axis;                      /* +0x00b4 playersimulation writes Player.input_extra[0] */
+    float arm_pitch;                     /* +0x00b8 playersimulation writes Player.input_extra[1] */
     uint32_t input_buttons;              /* +0x00bc humansimulation tests bits &1 &8 &0x10 */
     uint32_t input_buttons_prev;         /* +0x00c0 createhuman writes 0x3c0; bit tests like +0xbc (likely: buttons of the previous frame) */
     uint8_t pad_00c4[0x4];
@@ -684,8 +761,8 @@ typedef union Human { struct {
     int look_b;                          /* +0x2b30 createhuman copies from player.look_b */
     int look_c;                          /* +0x2b34 createhuman copies from player.look_c */
     int look_a;                          /* +0x2b38 createhuman copies from player.look_a */
-    int unk_2b3c;                        /* +0x2b3c 2 functions */
-    int unk_2b40;                        /* +0x2b40 2 functions */
+    int look_d;                          /* +0x2b3c logic_suits_buy copies Player.look_d (the client reads it) */
+    int look_e;                          /* +0x2b40 as look_d */
     int net_tick;                        /* +0x2b44 unpackobjectpacket: the tick of the last state of the human */
     vec3 net_pos;                        /* +0x2b48 unpackobjectpacket: the place at net_tick */
     int net_tick_prev;                   /* +0x2b54 unpackobjectpacket: the tick of the state before */
@@ -741,6 +818,8 @@ SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
 SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
 SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
 SR_STATIC_ASSERT(offsetof(Human, look_a) == 0x2b38, "Human.look_a");
+SR_STATIC_ASSERT(offsetof(Human, look_d) == 0x2b3c, "Human.look_d");
+SR_STATIC_ASSERT(offsetof(Human, look_e) == 0x2b40, "Human.look_e");
 SR_STATIC_ASSERT(offsetof(Human, net_tick) == 0x2b44, "Human.net_tick");
 SR_STATIC_ASSERT(offsetof(Human, net_pos) == 0x2b48, "Human.net_pos");
 SR_STATIC_ASSERT(offsetof(Human, net_tick_prev) == 0x2b54, "Human.net_tick_prev");
@@ -782,7 +861,7 @@ typedef union Item { struct {
     int ring_ticks;                      /* +0x0100 itemlogic: ticks a phone rings; the call ends after 0x2ff */
     int info;                            /* +0x0104 createevent_updateiteminfo sends it; itemlogic and eventsimulation write it */
     int phone_number;                    /* +0x0108 manager: dialed number */
-    int unk_010c;                        /* +0x010c 5 functions */
+    int phone_line;                      /* +0x010c logic_setteammanager and logicsimulation_round: 0 and 1 for the two phones of a team; createevent_updateiteminfo sends it (range_mode) */
     int call_state;                      /* +0x0110 manager: call state */
     int vehicle_id;                      /* +0x0114 player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key) */
     vec3 inertia;                        /* +0x0118 createitem: 1 / inv_inertia */
@@ -829,6 +908,7 @@ SR_STATIC_ASSERT(offsetof(Item, phone_id) == 0xfc, "Item.phone_id");
 SR_STATIC_ASSERT(offsetof(Item, ring_ticks) == 0x100, "Item.ring_ticks");
 SR_STATIC_ASSERT(offsetof(Item, info) == 0x104, "Item.info");
 SR_STATIC_ASSERT(offsetof(Item, phone_number) == 0x108, "Item.phone_number");
+SR_STATIC_ASSERT(offsetof(Item, phone_line) == 0x10c, "Item.phone_line");
 SR_STATIC_ASSERT(offsetof(Item, call_state) == 0x110, "Item.call_state");
 SR_STATIC_ASSERT(offsetof(Item, vehicle_id) == 0x114, "Item.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Item, inertia) == 0x118, "Item.inertia");
@@ -1281,7 +1361,7 @@ typedef union Game { struct {
     int timer;                           /* +0x0024 decreases by 1 each tick; 0 changes the state */
     int wait_time;                       /* +0x0028 dedicatedserverloop writes 0xe10 (3600 ticks) */
     int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
-    float unk_0030;                      /* +0x0030 1 functions */
+    float teamkill_rate;                 /* +0x0030 playerteamkilltax writes 0.05f (no reader in the server) */
     int end_time;                        /* +0x0034 dedicatedserverloop writes 0x4ec (1260 ticks); logicsimulation copies it to timer when the state changes to 3 */
     int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
     uint8_t pad_003c[0x10];
@@ -1292,162 +1372,18 @@ typedef union Game { struct {
     vec3 team0_base_max;                 /* +0x0064 pointinsidebase */
     vec3 team0_safe_min;                 /* +0x0070 pointinsidebasesafe: the box of the safe zone of team 0 */
     vec3 team0_safe_max;                 /* +0x007c pointinsidebasesafe */
-    float unk_0088;                      /* +0x0088 2 functions */
-    int unk_008c;                        /* +0x008c 1 functions */
+    float team0_angle;                   /* +0x0088 the facing of the base of team 0: setteammanager and logicsimulation_round turn the phones and the spawned humans by angle - pi/2 */
+    int team0_unused_8c;                 /* +0x008c resetgame writes 0 */
     int team0_members;                   /* +0x0090 serversend: 6 bits in the state packet; the team records are 0x117c bytes */
     uint8_t pad_0094[0x4];
-    int unk_0098;                        /* +0x0098 2 functions */
+    int team0_cash;                      /* +0x0098 economysimulation: salary bonus cash / 2 and price growth cash / 100 - 0.5; resetgame writes 0 */
     int team0_manager;                   /* +0x009c logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
     uint8_t pad_00a0[0x10];
     DoorBlock team0_doors[2];            /* +0x00b0 eventsimulation: the doors of the team record 0; the next record is 0x117c later */
-    int unk_00d0;                        /* +0x00d0 12 functions */
-    int unk_00d4;                        /* +0x00d4 6 functions */
-    int unk_00d8;                        /* +0x00d8 6 functions */
-    int unk_00dc;                        /* +0x00dc 8 functions */
-    int unk_00e0;                        /* +0x00e0 3 functions */
-    int unk_00e4;                        /* +0x00e4 1 functions */
-    uint8_t pad_00e8[0x8];
-    int unk_00f0;                        /* +0x00f0 4 functions */
-    int unk_00f4;                        /* +0x00f4 5 functions */
-    int unk_00f8;                        /* +0x00f8 5 functions */
-    int unk_00fc;                        /* +0x00fc 2 functions */
-    int unk_0100;                        /* +0x0100 7 functions */
-    int unk_0104;                        /* +0x0104 2 functions */
-    float unk_0108;                      /* +0x0108 1 functions */
-    uint8_t pad_010c[0x4];
-    int unk_0110;                        /* +0x0110 10 functions */
-    int unk_0114;                        /* +0x0114 5 functions */
-    int unk_0118;                        /* +0x0118 4 functions */
-    int unk_011c;                        /* +0x011c 6 functions */
-    uint8_t pad_0120[0x10];
-    int unk_0130;                        /* +0x0130 1 functions */
-    uint8_t pad_0134[0x4];
-    int unk_0138;                        /* +0x0138 1 functions */
-    uint8_t pad_013c[0x4];
-    int unk_0140;                        /* +0x0140 2 functions */
-    uint8_t pad_0144[0xc];
-    int unk_0150;                        /* +0x0150 7 functions */
-    int unk_0154;                        /* +0x0154 3 functions */
-    int unk_0158;                        /* +0x0158 3 functions */
-    int unk_015c;                        /* +0x015c 4 functions */
-    uint8_t pad_0160[0x10];
-    int unk_0170;                        /* +0x0170 1 functions */
-    uint8_t pad_0174[0xc];
-    int unk_0180;                        /* +0x0180 1 functions */
-    uint8_t pad_0184[0xc];
-    int unk_0190;                        /* +0x0190 7 functions */
-    int unk_0194;                        /* +0x0194 3 functions */
-    int unk_0198;                        /* +0x0198 4 functions */
-    int unk_019c;                        /* +0x019c 5 functions */
-    int unk_01a0;                        /* +0x01a0 1 functions */
-    uint8_t pad_01a4[0xc];
-    int unk_01b0;                        /* +0x01b0 2 functions */
-    int unk_01b4;                        /* +0x01b4 1 functions */
-    int unk_01b8;                        /* +0x01b8 1 functions */
-    uint8_t pad_01bc[0x4];
-    int unk_01c0;                        /* +0x01c0 2 functions */
-    int unk_01c4;                        /* +0x01c4 1 functions */
-    float unk_01c8;                      /* +0x01c8 1 functions */
-    float unk_01cc;                      /* +0x01cc 1 functions */
-    int unk_01d0;                        /* +0x01d0 7 functions */
-    int unk_01d4;                        /* +0x01d4 1 functions */
-    int unk_01d8;                        /* +0x01d8 1 functions */
-    int unk_01dc;                        /* +0x01dc 3 functions */
-    uint8_t pad_01e0[0x20];
-    int unk_0200;                        /* +0x0200 1 functions */
-    uint8_t pad_0204[0x4];
-    float unk_0208;                      /* +0x0208 1 functions */
-    uint8_t pad_020c[0x4];
-    int unk_0210;                        /* +0x0210 7 functions */
-    int unk_0214;                        /* +0x0214 1 functions */
-    int unk_0218;                        /* +0x0218 1 functions */
-    int unk_021c;                        /* +0x021c 3 functions */
-    uint8_t pad_0220[0x20];
-    int unk_0240;                        /* +0x0240 1 functions */
-    uint8_t pad_0244[0x4];
-    float unk_0248;                      /* +0x0248 1 functions */
-    uint8_t pad_024c[0x4];
-    int unk_0250;                        /* +0x0250 7 functions */
-    int unk_0254;                        /* +0x0254 1 functions */
-    int unk_0258;                        /* +0x0258 1 functions */
-    int unk_025c;                        /* +0x025c 3 functions */
-    uint8_t pad_0260[0x20];
-    int unk_0280;                        /* +0x0280 1 functions */
-    uint8_t pad_0284[0x4];
-    float unk_0288;                      /* +0x0288 1 functions */
-    uint8_t pad_028c[0x4];
-    int unk_0290;                        /* +0x0290 7 functions */
-    int unk_0294;                        /* +0x0294 1 functions */
-    int unk_0298;                        /* +0x0298 1 functions */
-    int unk_029c;                        /* +0x029c 2 functions */
-    uint8_t pad_02a0[0x20];
-    int unk_02c0;                        /* +0x02c0 1 functions */
-    uint8_t pad_02c4[0x4];
-    float unk_02c8;                      /* +0x02c8 1 functions */
-    uint8_t pad_02cc[0x4];
-    int unk_02d0;                        /* +0x02d0 4 functions */
-    int unk_02d4;                        /* +0x02d4 3 functions */
-    int unk_02d8;                        /* +0x02d8 3 functions */
-    int unk_02dc;                        /* +0x02dc 3 functions */
-    int unk_02e0;                        /* +0x02e0 2 functions */
-    uint8_t pad_02e4[0xc];
-    int unk_02f0;                        /* +0x02f0 3 functions */
-    int unk_02f4;                        /* +0x02f4 3 functions */
-    int unk_02f8;                        /* +0x02f8 3 functions */
-    int unk_02fc;                        /* +0x02fc 1 functions */
-    int unk_0300;                        /* +0x0300 4 functions */
-    uint8_t pad_0304[0x4];
-    float unk_0308;                      /* +0x0308 3 functions */
-    float unk_030c;                      /* +0x030c 3 functions */
-    int unk_0310;                        /* +0x0310 1 functions */
-    uint8_t pad_0314[0x2c];
-    int unk_0340;                        /* +0x0340 1 functions */
-    uint8_t pad_0344[0xc];
-    int unk_0350;                        /* +0x0350 1 functions */
-    uint8_t pad_0354[0x2c];
-    int unk_0380;                        /* +0x0380 1 functions */
-    uint8_t pad_0384[0xc];
-    int unk_0390;                        /* +0x0390 1 functions */
-    uint8_t pad_0394[0x2c];
-    int unk_03c0;                        /* +0x03c0 1 functions */
-    uint8_t pad_03c4[0xc];
-    int unk_03d0;                        /* +0x03d0 1 functions */
-    uint8_t pad_03d4[0x2c];
-    int unk_0400;                        /* +0x0400 1 functions */
-    uint8_t pad_0404[0xc];
-    int unk_0410;                        /* +0x0410 1 functions */
-    uint8_t pad_0414[0x2c];
-    int unk_0440;                        /* +0x0440 1 functions */
-    uint8_t pad_0444[0xc];
-    int unk_0450;                        /* +0x0450 1 functions */
-    uint8_t pad_0454[0x2c];
-    int unk_0480;                        /* +0x0480 1 functions */
-    uint8_t pad_0484[0xc];
-    int unk_0490;                        /* +0x0490 1 functions */
-    uint8_t pad_0494[0x2c];
-    int unk_04c0;                        /* +0x04c0 1 functions */
-    uint8_t pad_04c4[0xc];
-    int unk_04d0;                        /* +0x04d0 4 functions */
-    int unk_04d4;                        /* +0x04d4 3 functions */
-    float unk_04d8;                      /* +0x04d8 1 functions */
-    float unk_04dc;                      /* +0x04dc 1 functions */
-    float unk_04e0;                      /* +0x04e0 1 functions */
-    float unk_04e4;                      /* +0x04e4 1 functions */
-    float unk_04e8;                      /* +0x04e8 1 functions */
-    float unk_04ec;                      /* +0x04ec 1 functions */
-    float unk_04f0;                      /* +0x04f0 1 functions */
-    float unk_04f4;                      /* +0x04f4 1 functions */
-    float unk_04f8;                      /* +0x04f8 1 functions */
-    float unk_04fc;                      /* +0x04fc 1 functions */
-    float unk_0500;                      /* +0x0500 1 functions */
-    float unk_0504;                      /* +0x0504 1 functions */
-    int unk_0508;                        /* +0x0508 2 functions */
-    int unk_050c;                        /* +0x050c 1 functions */
-    uint8_t pad_0510[0x8];
-    int unk_0518;                        /* +0x0518 1 functions */
-    uint8_t pad_051c[0x20];
-    int unk_053c;                        /* +0x053c 1 functions */
-    uint8_t pad_0540[0xcac];
+    Mission team0_missions[16];          /* +0x00d0 createmission_*, scenario_*, logic_teammissioncomplete; createevent_updatemission packs it */
+    int team0_num_car_spots;             /* +0x04d0 logic_createcar and logicsimulation_round: the number of car places of the base */
+    TeamCarSpot team0_car_spots[16];     /* +0x04d4 logic_createcar: the first spot with used 0 (stride 0x34). Check that 16 does not overlap a named field */
+    uint8_t pad_0814[0x9d8];
     float unk_11ec;                      /* +0x11ec 1 functions */
     float unk_11f0;                      /* +0x11f0 1 functions */
     float unk_11f4;                      /* +0x11f4 1 functions */
@@ -1529,23 +1465,17 @@ typedef union Game { struct {
     uint8_t pad_7b04[0x430];
     int unk_7f34;                        /* +0x7f34 1 functions */
     uint8_t pad_7f38[0x1b0a0];
-    int unk_22fd8;                       /* +0x22fd8 1 functions */
+    int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
     uint8_t pad_22fdc[0x2800];
-    int unk_257dc;                       /* +0x257dc 1 functions */
-    int unk_257e0;                       /* +0x257e0 1 functions */
+    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     uint8_t pad_257e4[0x4];
-    int unk_257e8;                       /* +0x257e8 1 functions */
-    float unk_257ec;                     /* +0x257ec 1 functions */
-    int unk_257f0;                       /* +0x257f0 1 functions */
-    float unk_257f4;                     /* +0x257f4 1 functions */
-    float unk_257f8;                     /* +0x257f8 1 functions */
-    float unk_257fc;                     /* +0x257fc 1 functions */
-    float unk_25800;                     /* +0x25800 1 functions */
-    float unk_25804;                     /* +0x25804 1 functions */
-    float unk_25808;                     /* +0x25808 1 functions */
-    uint8_t pad_2580c[0x168];
-    int unk_25974;                       /* +0x25974 1 functions */
-    int unk_25978;                       /* +0x25978 1 functions */
+    int unused_257e8;                    /* +0x257e8 resetgame clears this field. No reader in the server */
+    float unused_257ec;                  /* +0x257ec resetgame clears this field. No reader in the server */
+    int num_checkpoints;                 /* +0x257f0 logicsimulation_driving loop limit */
+    vec3 checkpoints[32];                /* +0x257f4 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
+    int unused_25974;                    /* +0x25974 resetgame clears this field. No reader in the server */
+    int unused_25978;                    /* +0x25978 resetgame clears this field. No reader in the server */
     uint8_t pad_2597c[0x3e4];
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
@@ -1558,6 +1488,7 @@ SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
 SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
 SR_STATIC_ASSERT(offsetof(Game, wait_time) == 0x28, "Game.wait_time");
 SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
+SR_STATIC_ASSERT(offsetof(Game, teamkill_rate) == 0x30, "Game.teamkill_rate");
 SR_STATIC_ASSERT(offsetof(Game, end_time) == 0x34, "Game.end_time");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_a) == 0x4c, "Game.start_angle_a");
@@ -1566,15 +1497,30 @@ SR_STATIC_ASSERT(offsetof(Game, team0_base_min) == 0x58, "Game.team0_base_min");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_max) == 0x64, "Game.team0_base_max");
 SR_STATIC_ASSERT(offsetof(Game, team0_safe_min) == 0x70, "Game.team0_safe_min");
 SR_STATIC_ASSERT(offsetof(Game, team0_safe_max) == 0x7c, "Game.team0_safe_max");
+SR_STATIC_ASSERT(offsetof(Game, team0_angle) == 0x88, "Game.team0_angle");
+SR_STATIC_ASSERT(offsetof(Game, team0_unused_8c) == 0x8c, "Game.team0_unused_8c");
 SR_STATIC_ASSERT(offsetof(Game, team0_members) == 0x90, "Game.team0_members");
+SR_STATIC_ASSERT(offsetof(Game, team0_cash) == 0x98, "Game.team0_cash");
 SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
 SR_STATIC_ASSERT(offsetof(Game, team0_doors) == 0xb0, "Game.team0_doors");
+SR_STATIC_ASSERT(offsetof(Game, team0_missions) == 0xd0, "Game.team0_missions");
+SR_STATIC_ASSERT(offsetof(Game, team0_num_car_spots) == 0x4d0, "Game.team0_num_car_spots");
+SR_STATIC_ASSERT(offsetof(Game, team0_car_spots) == 0x4d4, "Game.team0_car_spots");
 SR_STATIC_ASSERT(offsetof(Game, team1_members) == 0x120c, "Game.team1_members");
 SR_STATIC_ASSERT(offsetof(Game, team1_manager) == 0x1218, "Game.team1_manager");
 SR_STATIC_ASSERT(offsetof(Game, team2_members) == 0x2388, "Game.team2_members");
 SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
 SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
+SR_STATIC_ASSERT(offsetof(Game, unused_22fd8) == 0x22fd8, "Game.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(Game, unused_257dc) == 0x257dc, "Game.unused_257dc");
+SR_STATIC_ASSERT(offsetof(Game, unused_257e0) == 0x257e0, "Game.unused_257e0");
+SR_STATIC_ASSERT(offsetof(Game, unused_257e8) == 0x257e8, "Game.unused_257e8");
+SR_STATIC_ASSERT(offsetof(Game, unused_257ec) == 0x257ec, "Game.unused_257ec");
+SR_STATIC_ASSERT(offsetof(Game, num_checkpoints) == 0x257f0, "Game.num_checkpoints");
+SR_STATIC_ASSERT(offsetof(Game, checkpoints) == 0x257f4, "Game.checkpoints");
+SR_STATIC_ASSERT(offsetof(Game, unused_25974) == 0x25974, "Game.unused_25974");
+SR_STATIC_ASSERT(offsetof(Game, unused_25978) == 0x25978, "Game.unused_25978");
 SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
 
 /* particle[]: record of 0xf0 bytes. */
@@ -2135,15 +2081,9 @@ typedef union City { struct {
     int unk_2fb90;                       /* +0x2fb90 1 functions */
     int unk_2fb94;                       /* +0x2fb94 1 functions */
     uint8_t pad_2fb98[0x8];
-    int unk_2fba0;                       /* +0x2fba0 2 functions */
-    float unk_2fba4;                     /* +0x2fba4 2 functions */
-    float unk_2fba8;                     /* +0x2fba8 2 functions */
-    float unk_2fbac;                     /* +0x2fbac 2 functions */
-    int unk_2fbb0;                       /* +0x2fbb0 2 functions */
-    uint8_t pad_2fbb4[0x3f0];
-    float unk_2ffa4;                     /* +0x2ffa4 2 functions */
-    float unk_2ffa8;                     /* +0x2ffa8 2 functions */
-    float unk_2ffac;                     /* +0x2ffac 2 functions */
+    int num_guard_spots;                 /* +0x2fba0 scenario_createguards (building 0, records of 0x9dc bytes) */
+    GuardSpot guard_spots[64];           /* +0x2fba4 scenario_createguards: pos and dir 0..3 (0x2fba4 + 64 * 0x10 = 0x2ffa4) */
+    vec3 prize_pos;                      /* +0x2ffa4 scenario_createguards: the place of the prize item */
     uint8_t pad_2ffb0[0x2ec];
     int unk_3029c;                       /* +0x3029c 2 functions */
     int unk_302a0;                       /* +0x302a0 3 functions */
@@ -2156,10 +2096,8 @@ typedef union City { struct {
     int unk_30318;                       /* +0x30318 1 functions */
     int unk_3031c;                       /* +0x3031c 1 functions */
     uint8_t pad_30320[0x48];
-    int unk_30368;                       /* +0x30368 1 functions */
-    float unk_3036c;                     /* +0x3036c 2 functions */
-    float unk_30370;                     /* +0x30370 2 functions */
-    float unk_30374;                     /* +0x30374 2 functions */
+    int car_spawn_next;                  /* +0x30368 logic_cardealer_buy: the next car place, (n + 1) & 7 */
+    vec3 car_spawn_pos;                  /* +0x3036c logic_cardealer_buy: car place n is at z - 4 n */
     uint8_t pad_30378[0x40];
     int unk_303b8;                       /* +0x303b8 5 functions */
     uint8_t pad_303bc[0x18];
@@ -2183,8 +2121,13 @@ SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings")
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
 SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");
 SR_STATIC_ASSERT(offsetof(City, building_max) == 0x2fa04, "City.building_max");
+SR_STATIC_ASSERT(offsetof(City, num_guard_spots) == 0x2fba0, "City.num_guard_spots");
+SR_STATIC_ASSERT(offsetof(City, guard_spots) == 0x2fba4, "City.guard_spots");
+SR_STATIC_ASSERT(offsetof(City, prize_pos) == 0x2ffa4, "City.prize_pos");
 SR_STATIC_ASSERT(offsetof(City, shop_count) == 0x302a4, "City.shop_count");
 SR_STATIC_ASSERT(offsetof(City, shop_rows) == 0x302a8, "City.shop_rows");
+SR_STATIC_ASSERT(offsetof(City, car_spawn_next) == 0x30368, "City.car_spawn_next");
+SR_STATIC_ASSERT(offsetof(City, car_spawn_pos) == 0x3036c, "City.car_spawn_pos");
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {
@@ -2750,8 +2693,8 @@ SR_STATIC_ASSERT(sizeof(BuildBlockType) == 0x1a80, "BuildBlockType");
 
 /* market[]: record of 0x204 bytes. */
 typedef union Market { struct {
-    Stock stocks[5];                     /* +0x0000 createevent_updatestocks */
-    uint8_t pad_0064[0xdc];
+    Stock stocks[8];                     /* +0x0000 playerbuystock and playerteamkilltax also index teams 5 to 7 */
+    uint8_t pad_00a0[0xa0];
     int car_base;                        /* +0x0140 createevent_updatecarmarket */
     int car_rows[48];                    /* +0x0144 createevent_updatecarmarket: 3 ints for each row */
 }; uint8_t lf_raw[0x204]; } Market;
@@ -2762,20 +2705,23 @@ SR_STATIC_ASSERT(offsetof(Market, car_rows) == 0x144, "Market.car_rows");
 
 /* scenario[]: record of 0x134 bytes. */
 typedef union Scenario { struct {
-    int unk_0000;                        /* +0x0000 3 functions */
-    int unk_0004;                        /* +0x0004 3 functions */
-    int unk_0008;                        /* +0x0008 1 functions */
-    int unk_000c;                        /* +0x000c 1 functions */
-    int unk_0010;                        /* +0x0010 1 functions */
-    uint8_t pad_0014[0xf8];
-    int unk_010c;                        /* +0x010c 5 functions */
-    int unk_0110;                        /* +0x0110 1 functions */
-    int unk_0114;                        /* +0x0114 1 functions */
+    int next_id;                         /* +0x0000 createmission_*: the id of the next scenario, +1 each mission set */
+    int item_cycle;                      /* +0x0004 createmission_*: the prize item type is 0x11 + it; it goes 0..5 */
+    int num_teams;                       /* +0x0008 createscenario_world: the teams that need a mission */
+    int teams[64];                       /* +0x000c createscenario_world: the list, shuffled; 0xc + 64 * 4 = 0x10c */
+    int items[3];                        /* +0x010c createmission_* and scenario_createguards/chase: the prize items of the mission set */
     uint8_t pad_0118[0x14];
-    int unk_012c;                        /* +0x012c 3 functions */
-    int unk_0130;                        /* +0x0130 1 functions */
+    int site;                            /* +0x012c scenario_createguards: the building; scenario_createchase: 0xff; createmission_acquisition copies it to Mission.site */
+    int avg_members;                     /* +0x0130 createscenario_world: the mean team size of the list, at least 1 */
 }; uint8_t lf_raw[0x134]; } Scenario;
 SR_STATIC_ASSERT(sizeof(Scenario) == 0x134, "Scenario");
+SR_STATIC_ASSERT(offsetof(Scenario, next_id) == 0x0, "Scenario.next_id");
+SR_STATIC_ASSERT(offsetof(Scenario, item_cycle) == 0x4, "Scenario.item_cycle");
+SR_STATIC_ASSERT(offsetof(Scenario, num_teams) == 0x8, "Scenario.num_teams");
+SR_STATIC_ASSERT(offsetof(Scenario, teams) == 0xc, "Scenario.teams");
+SR_STATIC_ASSERT(offsetof(Scenario, items) == 0x10c, "Scenario.items");
+SR_STATIC_ASSERT(offsetof(Scenario, site) == 0x12c, "Scenario.site");
+SR_STATIC_ASSERT(offsetof(Scenario, avg_members) == 0x130, "Scenario.avg_members");
 
 /* radix[]: record of 0x400804 bytes. */
 typedef union Radix { struct {
@@ -2798,16 +2744,17 @@ SR_STATIC_ASSERT(offsetof(Radix, bucket_offset) == 0x400404, "Radix.bucket_offse
 
 /* game_world[]: record of 0x1c bytes. */
 typedef union GameWorld { struct {
-    int seed;                            /* +0x0000 serversend: 30 bits in the state packet */
-    float unk_0004;                      /* +0x0004 4 functions */
-    float unk_0008;                      /* +0x0008 4 functions */
-    float unk_000c;                      /* +0x000c 4 functions */
-    float unk_0010;                      /* +0x0010 2 functions */
+    int clock;                           /* +0x0000 rename seed: logicsimulation_world adds 10 each tick (0x1a5e00 at start, the round ends at 0x3b5380); missions expire against it; serversend sends 30 bits. Users: src/net/server.c, src/net/client.c */
+    vec3 spawn;                          /* +0x0004 logic_playeractions menu 1: the new human appears near it; the newspapers appear at spawn - 4 */
+    float spawn_size_x;                  /* +0x0010 menu 1: x += (size_x - 2) * (rand & 0xff) / 512 */
     float unk_0014;                      /* +0x0014 1 functions */
-    float unk_0018;                      /* +0x0018 2 functions */
+    float spawn_size_z;                  /* +0x0018 menu 1: z += size_z / 4 + (size_z - 2) * (rand & 0xff) / 512 */
 }; uint8_t lf_raw[0x1c]; } GameWorld;
 SR_STATIC_ASSERT(sizeof(GameWorld) == 0x1c, "GameWorld");
-SR_STATIC_ASSERT(offsetof(GameWorld, seed) == 0x0, "GameWorld.seed");
+SR_STATIC_ASSERT(offsetof(GameWorld, clock) == 0x0, "GameWorld.clock");
+SR_STATIC_ASSERT(offsetof(GameWorld, spawn) == 0x4, "GameWorld.spawn");
+SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_x) == 0x10, "GameWorld.spawn_size_x");
+SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_z) == 0x18, "GameWorld.spawn_size_z");
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {

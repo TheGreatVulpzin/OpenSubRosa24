@@ -411,7 +411,7 @@ static void read_state(int bytes)
             pbitread((uint32_t *)&sr_players[k].ready, 1);
     }
     pbitread((uint32_t *)&sr_game.timer, 16);
-    pbitread((uint32_t *)&sr_game_world.seed, 30);
+    pbitread((uint32_t *)&sr_game_world.clock, 30);
     pbitread((uint32_t *)&sr_game.team0_members, 6);
     pbitread((uint32_t *)&sr_game.team1_members, 6);
     pbitread((uint32_t *)&sr_game.team2_members, 6);

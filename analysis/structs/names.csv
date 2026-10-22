@@ -152,7 +152,7 @@ item,0x134,num_bills,int,,item_addbill and logic_playeractions add 1
 object,0x8,state,int,,1 car (objectsimulation_car), 2 helicopter, 3 train car (objecttrainsimulation); humans and netpack skip 3
 object,0x5ee8,num_wheels,int,,createobject writes it; objectsimulation uses it as a loop limit (likely: copy of objecttype.num_wheels)
 player,0x4c,num_purchases,int,,logic_gunstore_buy and logic_playeractions: limit < 10
-player,0xac,hud_mode,int,,getinputs_human adds 1; drawhud compares with 0 and 1
+player,0xac,move_mode,int,,rename hud_mode: playersimulation copies it to Human.move_mode; resetgame writes 1. Users: src/net/server.c:471
 object,0x5e4c,engine_accel,float,,"objectenginesimulation2: computed, added to engine_rpm and zeroed"
 object,0x5e54,throttle,float,,objectenginesimulation2: enters as (1 - x) in the acceleration (likely)
 object,0x5e58,engine_power,float,,createobject: objecttype+0x7758 * constant; manager (truck_speed) changes the engine force
@@ -362,8 +362,8 @@ player,0xb8,body_param,float,,"createplayer writes 1.0; createhuman copies it to
 human,0x98,body_param,float,,"createhuman: Player.body_param, or 1.0 for a human with no player; no other code reads it"
 human,0x2870,spawn_pos,vec3,,"createhuman: the place of the new human; no other code reads it"
 human,0x28bc,spawn_pos2,vec3,,"createhuman: the place of the new human; no other code reads it"
-human,0xb4,arm_axis,float,,"human_calculatearmangles turns the chest by half of it; no code writes it, so it stays 0"
-human,0xb8,arm_pitch,float,,"human_calculatearmangles bends the chest and the head with it; no code writes it, so it stays 0"
+human,0xb4,arm_axis,float,,playersimulation writes Player.input_extra[0]
+human,0xb8,arm_pitch,float,,playersimulation writes Player.input_extra[1]
 itemtype,0xc,one_handed,int,,"setupitemtypes: 1 for the guns held in one hand (Magnum, Uzi, 9mm)"
 itemtype,0x54,grip,vec3,,"setupitemtypes: the point of the item that the right hand holds (human_calculatearmangles)"
 bond,0x84,unread_84,float,,"human_calculatearmangles writes 4/15 for the item bonds (types 10 and 11); no code reads it"
@@ -401,7 +401,7 @@ player,0x2c,is_admin,int,,"server_playermessage /admin"
 player,0x30,admin_tries,int,,"server_playermessage /admin: fewer than 5 tries"
 player,0x34,account,int,,"serverrecv: createaccount result, an index into the accounts"
 player,0x38,chat_block,int,,"server_playermessage returns 1 when above 0 (likely a mute)"
-player,0x3c,ready,int,,"serversend: 1 bit for the players 0 to 31"
+player,0x3c,ready,int,,economysimulation pays it when above 0; menu 2 value 5 writes 1; resetgame writes 0; logicsimulation_round starts the round when all humans have it
 player,0xa4,look_yaw,float,,"serversend: Human.axis copied, packangle 16"
 player,0xa8,look_pitch,float,,"serversend: Human.pitch copied, packangle 16"
 player,0xe8,action_tail,int,,"clientrecv"
@@ -430,7 +430,7 @@ option,0x12c,voicechat,int,,"calculateplayervoice"
 masterserver,0x0,ip,uint32_t,,"getmasterserverip"
 masterserver,0x4,port,int16_t,,"getmasterserverip"
 masterserver,0x6,info,char,512,"getmasterserverip: 8 strings of 64 bytes"
-market,0x0,stocks,Stock,5,"createevent_updatestocks"
+market,0x0,stocks,Stock,8,playerbuystock and playerteamkilltax also index teams 5 to 7
 market,0x140,car_base,int,,"createevent_updatecarmarket"
 market,0x144,car_rows,int,48,"createevent_updatecarmarket: 3 ints for each row"
 objectpacket,0x0,num_humans,int,,"packobjectpacket"
@@ -457,7 +457,7 @@ game,0x50,start_angle_b,float,,"serversend: packangle 16 in the new game packet"
 game,0x90,team0_members,int,,"serversend: 6 bits in the state packet; the team records are 0x117c bytes"
 game,0x120c,team1_members,int,,"serversend: 6 bits in the state packet"
 game,0x2388,team2_members,int,,"serversend: 6 bits in the state packet"
-game_world,0x0,seed,int,,"serversend: 30 bits in the state packet"
+game_world,0x0,clock,int,,"rename seed: logicsimulation_world adds 10 each tick (0x1a5e00 at start, the round ends at 0x3b5380); missions expire against it; serversend sends 30 bits. Users: src/net/server.c, src/net/client.c"
 city,0x302a4,shop_count,int,,"serversend: the rows of the shop of building 0 (menu 10), records of 0x9dc bytes"
 city,0x302a8,shop_rows,int,24,"serversend: 8 rows of 3 numbers: 8, 24 and 4 bits"
 area_sector,0x4,client_game_id,int,,"clientrecv type 6: the round number of the new game"
@@ -595,3 +595,54 @@ city,0x0,num_intersections,int,,"city_addintersection appends (stride 0x68 at +0
 city,0x8,intersections,CityIntersection,1024,"0x8 + 1024 * 0x68 = 0x1a008"
 city,0x1a008,num_roads,int,,"addcitystreet: the count and the index of the next record"
 city,0x1a00c,roads,CityRoad,512,"stride 0x4c; 0x1a00c + 512 * 0x4c = 0x2380c"
+player,0x50,num_cars,int,,"logic_cardealer_buy: limit < 3, adds 1; the day reset subtracts 1"
+player,0x54,small_bills,int,,"logic_playeractions menus 11 and 12: bills 1 and 2 add 1, limit < 40; the day reset writes 0"
+player,0x58,checkpoints,int,,logicsimulation_driving: the number of checkpoints reached; resetgame writes 0
+player,0x5c,checkpoint_mask,uint32_t,,logicsimulation_driving: bit i = checkpoint i reached
+player,0x60,unused_60,int,,resetgame writes 0 (grep for a reader first; rename if you find one)
+player,0x68,countdown,int,,logicsimulation_round subtracts 1 while above 0 (no group 6 code writes it)
+player,0x74,unused_74,int,,resetgame writes 0 (grep for a reader first)
+player,0xa0,input_buttons_prev,uint32_t,,playersimulation copies input_buttons here at the end of each tick
+player,0xbc,leave_ticks,int,,logicsimulation_world: ticks outside the base with button 0x40000 down; at 180 the player leaves the team
+player,0x1718,saved_items,SavedSlot,8,"player_saveinventory, economysimulation, player_loadinventory; createplayer clears the 8 counts (0x1718 + 8 * 0x64 = is_bot)"
+player,0x215c,ai_wait,int,,playerai: the AI does nothing while above 0 and subtracts 1
+player,0x2164,ai_wreck_ticks,int,,playerai: ticks in a vehicle with health < 1; above 0xb3 the AI presses 0x800 (get out)
+player,0x216c,ai_target,int,,ai_assessthreats: the index of the nearest threat with level > 8; playerai aims at it
+player,0x2170,threats,Threat,16,ai_assessthreats: limit num_threats < 16; 0x2170 + 16 * 0x18 = 0x22f0
+player,0x22f0,despawn_time,int,,scenario_*: the world clock when the bot goes; logicsimulation_world deletes the bot after it
+player,0x23c0,look_d,int,,logic_suits_buy row 1 writes 1 and Human.look_d; events.c packs it with look_a..c
+player,0x23c4,look_e,int,,logic_suits_buy row 2; as look_d
+human,0x2b3c,look_d,int,,logic_suits_buy copies Player.look_d (the client reads it)
+human,0x2b40,look_e,int,,as look_d
+item,0x10c,phone_line,int,,logic_setteammanager and logicsimulation_round: 0 and 1 for the two phones of a team; createevent_updateiteminfo sends it (range_mode)
+game,0x30,teamkill_rate,float,,playerteamkilltax writes 0.05f (no reader in the server)
+game,0x88,team0_angle,float,,the facing of the base of team 0: setteammanager and logicsimulation_round turn the phones and the spawned humans by angle - pi/2
+game,0x8c,team0_unused_8c,int,,resetgame writes 0
+game,0x98,team0_cash,int,,economysimulation: salary bonus cash / 2 and price growth cash / 100 - 0.5; resetgame writes 0
+game,0xd0,team0_missions,Mission,16,"createmission_*, scenario_*, logic_teammissioncomplete; createevent_updatemission packs it"
+game,0x4d0,team0_num_car_spots,int,,logic_createcar and logicsimulation_round: the number of car places of the base
+game,0x4d4,team0_car_spots,TeamCarSpot,16,logic_createcar: the first spot with used 0 (stride 0x34). Check that 16 does not overlap a named field
+game,0x257f0,num_checkpoints,int,,logicsimulation_driving loop limit
+game,0x257f4,checkpoints,vec3,32,logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask)
+scenario,0x0,next_id,int,,"createmission_*: the id of the next scenario, +1 each mission set"
+scenario,0x4,item_cycle,int,,createmission_*: the prize item type is 0x11 + it; it goes 0..5
+scenario,0x8,num_teams,int,,createscenario_world: the teams that need a mission
+scenario,0xc,teams,int,64,"createscenario_world: the list, shuffled; 0xc + 64 * 4 = 0x10c"
+scenario,0x10c,items,int,3,createmission_* and scenario_createguards/chase: the prize items of the mission set
+scenario,0x12c,site,int,,scenario_createguards: the building; scenario_createchase: 0xff; createmission_acquisition copies it to Mission.site
+scenario,0x130,avg_members,int,,"createscenario_world: the mean team size of the list, at least 1"
+game_world,0x4,spawn,vec3,,logic_playeractions menu 1: the new human appears near it; the newspapers appear at spawn - 4
+game_world,0x10,spawn_size_x,float,,menu 1: x += (size_x - 2) * (rand & 0xff) / 512
+game_world,0x18,spawn_size_z,float,,menu 1: z += size_z / 4 + (size_z - 2) * (rand & 0xff) / 512
+city,0x2fba0,num_guard_spots,int,,"scenario_createguards (building 0, records of 0x9dc bytes)"
+city,0x2fba4,guard_spots,GuardSpot,64,scenario_createguards: pos and dir 0..3 (0x2fba4 + 64 * 0x10 = 0x2ffa4)
+city,0x2ffa4,prize_pos,vec3,,scenario_createguards: the place of the prize item
+city,0x30368,car_spawn_next,int,,"logic_cardealer_buy: the next car place, (n + 1) & 7"
+city,0x3036c,car_spawn_pos,vec3,,logic_cardealer_buy: car place n is at z - 4 n
+game,0x257dc,unused_257dc,int,,resetgame clears this field. No reader in the server
+game,0x257e0,unused_257e0,int,,resetgame clears this field. No reader in the server
+game,0x257e8,unused_257e8,int,,resetgame clears this field. No reader in the server
+game,0x257ec,unused_257ec,float,,resetgame clears this field. No reader in the server
+game,0x22fd8,unused_22fd8,int,,resetgame clears this field. No reader in the server
+game,0x25974,unused_25974,int,,resetgame clears this field. No reader in the server
+game,0x25978,unused_25978,int,,resetgame clears this field. No reader in the server

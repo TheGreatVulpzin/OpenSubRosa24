@@ -468,7 +468,7 @@ static void handle_input(InputState *st)
     cs_pread(&pl->input_extra[1], 4, 1);
     cs_pread(&pl->input_buttons, 4, 1);
     pbitread((uint32_t *)&pl->input_mode, 8);
-    pbitread((uint32_t *)&pl->hud_mode, 4);
+    pbitread((uint32_t *)&pl->move_mode, 4);
     pbitread((uint32_t *)&c->event_ack, 16);
     cs_pread(&c->camera_pos, 4, 3);
     pbitread(&st->count, 4);
@@ -629,7 +629,7 @@ static void send_state(Connection *c, int conn)
             pbitwrite((const uint32_t *)&sr_players[k].ready, 1);
     }
     pbitwrite((const uint32_t *)&sr_game.timer, 16);
-    pbitwrite((const uint32_t *)&sr_game_world.seed, 30);
+    pbitwrite((const uint32_t *)&sr_game_world.clock, 30);
     pbitwrite((const uint32_t *)&sr_game.team0_members, 6);
     pbitwrite((const uint32_t *)&sr_game.team1_members, 6);
     pbitwrite((const uint32_t *)&sr_game.team2_members, 6);
