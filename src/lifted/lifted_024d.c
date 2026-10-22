@@ -3,231 +3,9 @@
 #include "lift_support.h"
 #include "lift_os.h"
 
-static void *lf_imports[12];
+static void *lf_imports[11];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
-
-/* ---------------------------------------------------------------- 0x1010 */
-#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(0, "MSVCR100.DLL", "strncmp"))
-undefined4 __cdecl lf_01010(char *param_1)
-
-{
-  char cVar1;
-  char *pcVar2;
-  size_t _MaxCount;
-  int iVar3;
-  int iVar4;
-  
-  pcVar2 = param_1;
-  do {
-    cVar1 = *pcVar2;
-    pcVar2 = pcVar2 + 1;
-  } while (cVar1 != '\0');
-  _MaxCount = (int)pcVar2 - (int)(param_1 + 1);
-  if (0x18 < (int)_MaxCount) {
-    _MaxCount = 0x18;
-  }
-  iVar4 = 0;
-  if (0 < DAT_0f837b64) {
-    pcVar2 = g_account[0].name;
-    do {
-      iVar3 = strncmp(param_1,pcVar2,_MaxCount);
-      if (iVar3 == 0) {
-        return 1;
-      }
-      iVar4 = iVar4 + 1;
-      pcVar2 = pcVar2 + 0x4c;
-    } while (iVar4 < DAT_0f837b64);
-  }
-  return 0;
-}
-#undef DAT_0f837b64
-#undef g_account
-#undef strncmp
-
-/* ---------------------------------------------------------------- 0x1080 */
-#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
-#define g_account_header (*(undefined4 *)SR_VA(0xf837b60))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x1c))
-void __cdecl lf_01080(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  uint *_Str;
-  int iVar1;
-
-  
-  g_parser.unk_100108 = (int)fopen("user/server.srk","wb");
-  if ((FILE *)g_parser.unk_100108 != (FILE *)0x0) {
-    local_4 = 3;
-    (*g_p_fwrite)(&local_4,4,1,(FILE *)g_parser.unk_100108);
-    (*g_p_fwrite)(&g_account_header,4,1,(FILE *)g_parser.unk_100108);
-    (*g_p_fwrite)(&DAT_0f837b64,4,1,(FILE *)g_parser.unk_100108);
-    iVar1 = 0;
-    if (0 < DAT_0f837b64) {
-      _Str = g_account[0].id + 1;
-      do {
-        (*g_p_fwrite)((Account *)(_Str + -1),4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 1,1,0x20,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 10,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 0xb,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 0xc,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 0xd,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 0xe,4,1,(FILE *)g_parser.unk_100108);
-        iVar1 = iVar1 + 1;
-        _Str = _Str + 0x13;
-      } while (iVar1 < DAT_0f837b64);
-    }
-    fclose((FILE *)g_parser.unk_100108);
-  }
-  return;
-}
-#undef DAT_0f837b64
-#undef g_account_header
-#undef g_account
-#undef g_parser
-#undef g_p_fwrite
-#undef fclose
-#undef fopen
-#undef local_4
-
-/* ---------------------------------------------------------------- 0x11d0 */
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
-#define DAT_01f497a0 (*(int *)SR_VA(0x1f497a0))
-#define DAT_01f497a8 (*(undefined *)SR_VA(0x1f497a8))
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define local_48 (*(undefined4 *)(lf_frame + 0x18))
-#define local_44 (*(char (*)[64])(lf_frame + 0x1c))
-#define local_4 (*(uint *)(lf_frame + 0x5c))
-void __cdecl lf_011d0(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x60];
-  undefined *_Str;
-  int iVar1;
-
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)&local_48;
-  _chdir(g_sysinfo.config_dir);
-  sprintf(local_44,"client.srk");
-  g_parser.unk_100108 = (int)fopen(local_44,"wb");
-  if ((FILE *)g_parser.unk_100108 != (FILE *)0x0) {
-    local_48 = 1;
-    (*g_p_fwrite)(&local_48,4,1,(FILE *)g_parser.unk_100108);
-    (*g_p_fwrite)(&DAT_01f497a0,4,1,(FILE *)g_parser.unk_100108);
-    iVar1 = 0;
-    if (0 < DAT_01f497a0) {
-      _Str = &DAT_01f497a8;
-      do {
-        (*g_p_fwrite)(_Str + -4,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 4,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fwrite)(_Str + 8,4,1,(FILE *)g_parser.unk_100108);
-        iVar1 = iVar1 + 1;
-        _Str = _Str + 0x10;
-      } while (iVar1 < DAT_01f497a0);
-    }
-    fclose((FILE *)g_parser.unk_100108);
-  }
-  _chdir(g_sysinfo.start_dir);
-  return;
-}
-#undef DAT_00460d18
-#undef g_sysinfo
-#undef DAT_01f497a0
-#undef DAT_01f497a8
-#undef g_parser
-#undef g_p_fwrite
-#undef fclose
-#undef fopen
-#undef sprintf
-#undef __security_check_cookie
-#undef _chdir
-#undef local_48
-#undef local_44
-#undef local_4
-
-/* ---------------------------------------------------------------- 0x12f0 */
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_01f497a0 (*(int *)SR_VA(0x1f497a0))
-#define g_sysinfo (*(SysInfo *)SR_VA(0x956d2e0))
-#define DAT_01f497a8 (*(undefined *)SR_VA(0x1f497a8))
-#define g_parser (*(Parser *)SR_VA(0x14122d60))
-#define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
-#define local_48 (*(int *)(lf_frame + 0x18))
-#define local_44 (*(char (*)[64])(lf_frame + 0x1c))
-#define local_4 (*(uint *)(lf_frame + 0x5c))
-void __cdecl lf_012f0(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x60];
-  undefined *_DstBuf;
-  int iVar1;
-
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)&local_48;
-  iVar1 = 0;
-  DAT_01f497a0 = 0;
-  _chdir(g_sysinfo.config_dir);
-  sprintf(local_44,"client.srk");
-  g_parser.unk_100108 = (int)fopen(local_44,"rb");
-  if ((FILE *)g_parser.unk_100108 != (FILE *)0x0) {
-    (*g_p_fread)(&local_48,4,1,(FILE *)g_parser.unk_100108);
-    if ((local_48 == 1) &&
-       ((*g_p_fread)(&DAT_01f497a0,4,1,(FILE *)g_parser.unk_100108), 0 < DAT_01f497a0)) {
-      _DstBuf = &DAT_01f497a8;
-      do {
-        (*g_p_fread)(_DstBuf + -4,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fread)(_DstBuf,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fread)(_DstBuf + 4,4,1,(FILE *)g_parser.unk_100108);
-        (*g_p_fread)(_DstBuf + 8,4,1,(FILE *)g_parser.unk_100108);
-        iVar1 = iVar1 + 1;
-        _DstBuf = _DstBuf + 0x10;
-      } while (iVar1 < DAT_01f497a0);
-    }
-    fclose((FILE *)g_parser.unk_100108);
-  }
-  _chdir(g_sysinfo.start_dir);
-  return;
-}
-#undef DAT_00460d18
-#undef DAT_01f497a0
-#undef g_sysinfo
-#undef DAT_01f497a8
-#undef g_parser
-#undef g_p_fread
-#undef fclose
-#undef fopen
-#undef sprintf
-#undef __security_check_cookie
-#undef _chdir
-#undef local_48
-#undef local_44
-#undef local_4
 
 /* ---------------------------------------------------------------- 0x1cf0 */
 #define g_area (*(Area (*)[4])SR_VA(0x17166040))
@@ -261,9 +39,9 @@ void __cdecl lf_01cf0(uint param_1,int param_2,int param_3,int param_4)
 /* ---------------------------------------------------------------- 0x1e50 */
 #define g_area_block (*(AreaBlock (*)[65536])SR_VA(0x137b2d00))
 #define g_tempmesh (*(TempMesh *)SR_VA(0x25aad760))
-#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(5, "MSVCR100.DLL", "malloc"))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(6, "MSVCR100.DLL", "free"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(7, "MSVCR100.DLL", "memcpy"))
+#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(0, "MSVCR100.DLL", "malloc"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(1, "MSVCR100.DLL", "free"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(2, "MSVCR100.DLL", "memcpy"))
 void __cdecl lf_01e50(int param_1)
 
 {
@@ -605,9 +383,9 @@ void __cdecl lf_026d0(int param_1,undefined4 *param_2)
 #define g_blocktemp (*(BlockTemp *)SR_VA(0x577c520))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(3, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
 #define iStack_50 (*(int *)(lf_frame + 0x10))
 #define local_4c (*(int *)(lf_frame + 0x14))
@@ -862,9 +640,9 @@ void __cdecl lf_02f00(uint param_1,uint param_2,uint param_3,uint param_4,int pa
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(3, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define local_50 (*(undefined4 *)(lf_frame + 0x20))
@@ -1513,7 +1291,7 @@ void __cdecl lf_041c0(void)
 #define g_building (*(Building *)SR_VA(0x2165b80))
 #define g_blocklist (*(BlockList *)SR_VA(0xbba8ca0))
 #define g_area_block (*(AreaBlock (*)[65536])SR_VA(0x137b2d00))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(6, "MSVCR100.DLL", "memset"))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_10 (*(int *)(lf_frame + 0x20))
 #define local_c (*(int *)(lf_frame + 0x24))
@@ -1855,92 +1633,6 @@ void __cdecl lf_04bb0(int param_1,float param_2,float param_3,float param_4,floa
 #undef g_cubequad
 #undef g_cityobjecttype
 
-/* ---------------------------------------------------------------- 0x5fe0 */
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_object (*(Object (*)[1024])SR_VA(0x5992600))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_05fe0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int *piVar1;
-  int iVar2;
-  int *piVar3;
-  int iVar4;
-  int iVar5;
-  int iVar6;
-  int *piVar7;
-  int *piVar8;
-  int iVar9;
-
-  
-  iVar4 = param_1 * 0x2408;
-  piVar3 = (int *)&g_player[param_1].lf_raw[0x1718];
-  *piVar3 = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x177c] = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x17e0] = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x1844] = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x18a8] = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x190c] = 0;
-  *(undefined4 *)&g_player[param_1].lf_raw[0x1970] = 0;
-  if (g_player[param_1].human_id != -1) {
-    iVar5 = 0;
-    piVar7 = g_human[g_player[param_1].human_id].inventory[0].items;
-    do {
-      local_8 = ((InventorySlot *)(piVar7 + -1))->count;
-      piVar8 = piVar7;
-      if (0 < local_8) {
-        do {
-          iVar2 = *piVar8;
-          iVar9 = g_item[iVar2].type;
-          if (iVar9 < 0xd) {
-            *(int *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x171c]) + iVar4) = iVar9;
-            *(undefined4 *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x1720]) + iVar4) = 0;
-            *(undefined4 *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x1724]) + iVar4) = 0;
-            iVar9 = iVar5 + *piVar3 * 0xc;
-            if (g_item[iVar2].num_children < 1) {
-              iVar6 = g_item[iVar2].ammo;
-LAB_00406158:
-              *(int *)(iVar9 + ((int)&g_player[0].lf_raw[0x1724]) + iVar4) = iVar6;
-            }
-            else {
-              iVar6 = g_item[g_item[iVar2].children[0]].ammo;
-              *(undefined4 *)(iVar9 + ((int)&g_player[0].lf_raw[0x1720]) + iVar4) = 1;
-              *(int *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x1724]) + iVar4) = iVar6;
-              if (0 < g_item[iVar2].ammo) {
-                piVar1 = (int *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x1724]) + iVar4);
-                *piVar1 = *piVar1 + 1;
-              }
-            }
-            *piVar3 = *piVar3 + 1;
-          }
-          else if (((iVar9 == 0x18) && (iVar2 = g_item[iVar2].vehicle_id, iVar2 != -1)) &&
-                  (0 < g_object[iVar2].health)) {
-            *(undefined4 *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x171c]) + iVar4) = 0x18;
-            iVar6 = g_object[iVar2].unk_0018;
-            *(int *)(iVar5 + *piVar3 * 0xc + ((int)&g_player[0].lf_raw[0x1720]) + iVar4) = g_object[iVar2].type;
-            iVar9 = iVar5 + *piVar3 * 0xc;
-            goto LAB_00406158;
-          }
-          local_8 = local_8 + -1;
-          piVar8 = piVar8 + 1;
-        } while (local_8 != 0);
-      }
-      piVar7 = piVar7 + 9;
-      iVar5 = iVar5 + 100;
-      piVar3 = piVar3 + 0x19;
-    } while (iVar5 < 700);
-  }
-  return;
-}
-#undef g_player
-#undef g_human
-#undef g_object
-#undef g_item
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x80b0 */
 #define g_city (*(City *)SR_VA(0xe699220))
 void __cdecl lf_080b0(int param_1,int param_2,int param_3)
@@ -1972,9 +1664,9 @@ void __cdecl lf_080b0(int param_1,int param_2,int param_3)
 #define g_level_editor (*(LevelEditor *)SR_VA(0xf670a80))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_p_fwrite (*(code * *)SR_VA(0x13ff2d00))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(3, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
 #define local_48 (*(undefined4 *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
@@ -2058,9 +1750,9 @@ void __cdecl lf_08320(void)
 #define g_level_editor (*(LevelEditor *)SR_VA(0xf670a80))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(3, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define __security_check_cookie(x) ((void)0)
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char (*)[64])(lf_frame + 0x1c))
@@ -2354,361 +2046,12 @@ float10 __cdecl lf_09be0(float param_1,float param_2,uint param_3)
 #undef _ftol2
 #undef _CIcos
 
-/* ---------------------------------------------------------------- 0xa1b0 */
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define playersellstock ((void (__cdecl *)(float, int))SR_FN(0x405be0))
-#define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
-void __cdecl lf_0a1b0(float param_1)
-
-{
-  int iVar1;
-  
-  playersellstock(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
-  if (((uint)LF_BITS_U(param_1)) < 0x100) {
-    playersellstock(param_1,g_player[((int)LF_BITS_U(param_1))].stocks);
-  }
-  if (((g_game.gametype == 3) || (g_game.gametype == 4)) && (g_player[((int)LF_BITS_U(param_1))].unk_0034 != -1))
-  {
-    g_account[g_player[((int)LF_BITS_U(param_1))].unk_0034].money = g_player[((int)LF_BITS_U(param_1))].money;
-  }
-  if (LF_BITS_U(LF_BITS_F(g_game.team0_manager)) == LF_BITS_U(param_1)) {
-    g_game.team0_manager = -1;
-  }
-  if (LF_BITS_U(LF_BITS_F(g_game.team1_manager)) == LF_BITS_U(param_1)) {
-    g_game.team1_manager = -1;
-  }
-  if (LF_BITS_U(LF_BITS_F(g_game.team2_manager)) == LF_BITS_U(param_1)) {
-    g_game.team2_manager = -1;
-  }
-  if (LF_BITS_U(LF_BITS_F(g_game.team3_manager)) == LF_BITS_U(param_1)) {
-    g_game.team3_manager = -1;
-  }
-  if (LF_BITS_U(LF_BITS_F(g_game.team4_manager)) == LF_BITS_U(param_1)) {
-    g_game.team4_manager = -1;
-  }
-  iVar1 = g_player[((int)LF_BITS_U(param_1))].human_id;
-  if ((iVar1 != -1) && (LF_BITS_U(LF_BITS_F(g_human[iVar1].player_id)) == LF_BITS_U(param_1))) {
-    g_human[iVar1].account = g_player[((int)LF_BITS_U(param_1))].unk_0034;
-    g_human[iVar1].player_id = -1;
-  }
-  g_player[((int)LF_BITS_U(param_1))].active = 0;
-  createevent_updateplayer(((int)LF_BITS_U(param_1)));
-  return;
-}
-#undef g_human
-#undef g_account
-#undef g_game
-#undef g_player
-#undef playersellstock
-#undef createevent_updateplayer
-
-/* ---------------------------------------------------------------- 0xa2a0 */
-#define g_cityobjecttype (*(CityObjectType *)SR_VA(0xf42e500))
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define g_market (*(Market *)SR_VA(0x17579600))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define local_14 (*(int * *)(lf_frame + 0x1c))
-#define local_10 (*(uint *)(lf_frame + 0x20))
-#define local_4 (*(float * *)(lf_frame + 0x2c))
-void __cdecl lf_0a2a0(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-  int iVar1;
-  int iVar2;
-  uint uVar3;
-  InventorySlot *pIVar4;
-  InventorySlot *pIVar5;
-  int *piVar6;
-  int *piVar7;
-  int iVar8;
-
-
-
-  
-  local_14 = &g_player[0].human_id;
-  local_4 = g_player[0].input_axes + 1;
-  do {
-    iVar8 = 0;
-    if (((Player *)(local_14 + -0x1e))->active != 0) {
-      iVar1 = *local_14;
-      if (iVar1 != -1) {
-        if (g_human[iVar1].vehicle_id == -1) {
-          if (local_14[0x14] == 1) {
-            g_human[iVar1].input_axes[0] = local_4[-1];
-            g_human[iVar1].input_axes[1] = *local_4;
-            g_human[iVar1].input_axes[2] = local_4[1];
-            g_human[iVar1].input_axes[3] = local_4[2];
-            g_human[iVar1].view_axis = local_4[3];
-            g_human[iVar1].view_pitch = local_4[4];
-            g_human[iVar1].unk_00b4 = local_4[5];
-            g_human[iVar1].unk_00b8 = local_4[6];
-          }
-          else {
-            g_human[iVar1].view_axis = g_human[iVar1].axis;
-            g_human[iVar1].view_pitch = g_human[iVar1].pitch;
-          }
-          if (g_human[iVar1].vehicle_id != -1) goto LAB_0040a365;
-        }
-        else {
-LAB_0040a365:
-          if ((local_14[0x14] == 2) || (local_14[0x14] == 3)) {
-            g_human[iVar1].input_axes[0] = local_4[-1];
-            g_human[iVar1].input_axes[1] = *local_4;
-            g_human[iVar1].input_axes[2] = local_4[1];
-            g_human[iVar1].input_axes[3] = local_4[2];
-            g_human[iVar1].view_axis = local_4[3];
-            g_human[iVar1].view_pitch = local_4[4];
-            g_human[iVar1].unk_00b4 = local_4[5];
-            g_human[iVar1].unk_00b8 = local_4[6];
-          }
-        }
-        g_human[iVar1].input_buttons = local_14[9];
-        iVar2 = g_human[iVar1].health;
-        g_human[iVar1].move_mode = local_14[0xd];
-        local_14[0x55d] = iVar2;
-        if (iVar2 < 0) {
-          local_14[0x55d] = 0;
-        }
-        piVar6 = local_14 + 0x561;
-        pIVar5 = g_human[iVar1].inventory;
-        do {
-          local_10 = pIVar5->count;
-          piVar6[-1] = local_10;
-          piVar7 = piVar6;
-          pIVar4 = pIVar5;
-          if (0 < (int)local_10) {
-            do {
-              iVar1 = pIVar4->items[0];
-              uVar3 = g_item[iVar1].type;
-              *piVar7 = uVar3;
-              if (iVar8 < 2) {
-                if (((g_itemtype[uVar3].is_gun != 0) && (0 < g_item[iVar1].num_children)) &&
-                   (iVar2 = g_item[g_item[iVar1].children[0]].ammo, *piVar7 = uVar3 | 0x100,
-                   iVar2 == 0)) {
-                  *piVar7 = uVar3 | 0x300;
-                }
-                if (0 < g_itemtype[uVar3].ammo) {
-                  *piVar7 = *piVar7 | g_item[iVar1].ammo << 8;
-                }
-              }
-              local_10 = local_10 - 1;
-              piVar7 = piVar7 + 1;
-              pIVar4 = (InventorySlot *)pIVar4->items;
-            } while (local_10 != 0);
-          }
-          iVar8 = iVar8 + 1;
-          piVar6 = piVar6 + 9;
-          pIVar5 = pIVar5 + 1;
-        } while (iVar8 < 7);
-      }
-      if (g_game.gametype == 4) {
-        iVar8 = local_14[-0x11];
-        if (iVar8 != -1) {
-          iVar1 = local_14[-5];
-          if ((iVar1 < 0) || (4 < iVar1)) {
-            g_account[iVar8].money = local_14[-0xe];
-          }
-          else {
-            g_account[iVar8].money =
-                 (int)(longlong)
-                      ((&g_market.unk_0004)[iVar1 * 5] * 0.949999988079071 * (float)local_14[-3] +
-                      (float)local_14[-0xe]);
-          }
-        }
-      }
-      else if ((g_game.gametype == 3) && (iVar8 = local_14[-0x11], iVar8 != -1)) {
-        if (local_14[-5] == -1) {
-          g_account[iVar8].money = local_14[-0xe];
-        }
-        else {
-          g_account[iVar8].money =
-               (int)(longlong)
-                    ((&g_market.unk_0004)[local_14[-5] * 5] * 0.9900000095367432 * (float)local_14[-3] +
-                    (float)local_14[-0xe]);
-        }
-      }
-      local_14[10] = local_14[9];
-    }
-    local_4 = local_4 + 0x902;
-    local_14 = local_14 + 0x902;
-    if (((int)&g_cityobjecttype.lf_raw[0x7f]) < (int)local_4) {
-      return;
-    }
-  } while( true );
-}
-#undef g_cityobjecttype
-#undef g_human
-#undef g_account
-#undef g_itemtype
-#undef g_game
-#undef g_item
-#undef g_player
-#undef g_market
-#undef _ftol2
-#undef local_14
-#undef local_10
-#undef local_4
-
-/* ---------------------------------------------------------------- 0xded0 */
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
-#define DAT_0f837b64 (*(int *)SR_VA(0xf837b64))
-#define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
-#define account_nameexists ((undefined4 (__cdecl *)(char *))SR_FN(0x401010))
-#define __security_check_cookie(x) ((void)0)
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
-#define local_2c (*(char * *)(lf_frame + 0x14))
-#define local_28 (*(int *)(lf_frame + 0x18))
-#define local_24 (*(char (*)[32])(lf_frame + 0x1c))
-#define local_4 (*(uint *)(lf_frame + 0x3c))
-int __cdecl lf_0ded0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-  char cVar1;
-  int iVar2;
-  char *pcVar3;
-  int iVar4;
-  uint uVar5;
-  uint uVar6;
-  Account *pAVar7;
-  char *pcVar8;
-
-
-
-
-  
-  local_4 = DAT_00460d18 ^ (uint)&local_2c;
-  iVar2 = 0;
-  if (0 < DAT_0f837b64) {
-    pAVar7 = g_account;
-    do {
-      if (g_player[param_1].account_id[0] == pAVar7->id[0]) {
-        if (g_player[param_1].account_id[1] != g_account[iVar2].id[1]) {
-          return -1;
-        }
-        iVar4 = 8;
-        if (g_account[iVar2].name_locked != 0) {
-          pcVar3 = g_account[iVar2].name;
-          pcVar8 = g_player[param_1].name;
-          for (; iVar4 != 0; iVar4 = iVar4 + -1) {
-            *(undefined4 *)pcVar8 = *(undefined4 *)pcVar3;
-            pcVar3 = pcVar3 + 4;
-            pcVar8 = pcVar8 + 4;
-          }
-          return iVar2;
-        }
-        pcVar3 = g_player[param_1].name;
-        pcVar8 = g_account[iVar2].name;
-        for (; iVar4 != 0; iVar4 = iVar4 + -1) {
-          *(undefined4 *)pcVar8 = *(undefined4 *)pcVar3;
-          pcVar3 = pcVar3 + 4;
-          pcVar8 = pcVar8 + 4;
-        }
-        g_account[iVar2].name_locked = 5;
-        return iVar2;
-      }
-      iVar2 = iVar2 + 1;
-      pAVar7 = pAVar7 + 1;
-    } while (iVar2 < DAT_0f837b64);
-  }
-  if (0xfffe < DAT_0f837b64) {
-    return -1;
-  }
-  memset(g_account + DAT_0f837b64,0,0x4c);
-  g_account[DAT_0f837b64].id[0] = g_player[param_1].account_id[0];
-  local_2c = g_player[param_1].name;
-  g_account[DAT_0f837b64].id[1] = g_player[param_1].account_id[1];
-  pcVar3 = local_2c;
-  do {
-    cVar1 = *pcVar3;
-    pcVar3 = pcVar3 + 1;
-  } while (cVar1 != '\0');
-  local_28 = (int)pcVar3 - (param_1 * 0x2408 + ((int)&g_player[0].lf_raw[0x5]));
-  if (0x18 < local_28) {
-    local_28 = 0x18;
-  }
-  iVar2 = 1;
-  do {
-    pcVar3 = local_2c;
-    iVar4 = account_nameexists(local_2c);
-    if (iVar4 == 0) break;
-    *(undefined1 *)(local_28 + ((int)&g_player[0].name) + param_1 * 0x2408) = 0;
-    sprintf(local_24,"(%d)",iVar2);
-    pcVar3 = local_24;
-    do {
-      cVar1 = *pcVar3;
-      pcVar3 = pcVar3 + 1;
-    } while (cVar1 != '\0');
-    uVar5 = (int)pcVar3 - (int)local_24;
-    pcVar3 = local_2c + -1;
-    do {
-      pcVar8 = pcVar3 + 1;
-      pcVar3 = pcVar3 + 1;
-    } while (*pcVar8 != '\0');
-    pcVar8 = local_24;
-    for (uVar6 = uVar5 >> 2; uVar6 != 0; uVar6 = uVar6 - 1) {
-      *(undefined4 *)pcVar3 = *(undefined4 *)pcVar8;
-      pcVar8 = pcVar8 + 4;
-      pcVar3 = pcVar3 + 4;
-    }
-    iVar2 = iVar2 + 1;
-    for (uVar5 = uVar5 & 3; uVar5 != 0; uVar5 = uVar5 - 1) {
-      *pcVar3 = *pcVar8;
-      pcVar8 = pcVar8 + 1;
-      pcVar3 = pcVar3 + 1;
-    }
-    g_player[param_1].name[0x1f] = '\0';
-    pcVar3 = local_2c;
-  } while (iVar2 < 1000);
-  pcVar8 = g_account[DAT_0f837b64].name;
-  for (iVar2 = 8; iVar2 != 0; iVar2 = iVar2 + -1) {
-    *(undefined4 *)pcVar8 = *(undefined4 *)pcVar3;
-    pcVar3 = pcVar3 + 4;
-    pcVar8 = pcVar8 + 4;
-  }
-  g_account[DAT_0f837b64].money = 1000;
-  iVar2 = rand();
-  g_account[DAT_0f837b64].look_a = iVar2 % 3;
-  uVar5 = rand();
-  g_account[DAT_0f837b64].look_b = uVar5 & 7;
-  uVar5 = rand();
-  g_account[DAT_0f837b64].look_c = uVar5 & 3;
-  iVar2 = DAT_0f837b64;
-  DAT_0f837b64 = DAT_0f837b64 + 1;
-  return iVar2;
-}
-#undef g_player
-#undef DAT_00460d18
-#undef DAT_0f837b64
-#undef g_account
-#undef sprintf
-#undef rand
-#undef account_nameexists
-#undef __security_check_cookie
-#undef memset
-#undef local_2c
-#undef local_28
-#undef local_24
-#undef local_4
-
 /* ---------------------------------------------------------------- 0xf2b0 */
 #define g_game_world (*(GameWorld *)SR_VA(0x25a1d740))
 #define g_area (*(Area (*)[4])SR_VA(0x17166040))
 #define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
-#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(5, "MSVCR100.DLL", "malloc"))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(6, "MSVCR100.DLL", "free"))
+#define malloc ((void * (__cdecl *)(size_t))LF_IMPORT(0, "MSVCR100.DLL", "malloc"))
+#define free ((void (__cdecl *)(void *))LF_IMPORT(1, "MSVCR100.DLL", "free"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 #define local_4 (*(int *)(lf_frame + 0x1c))
 void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int param_5,float param_6)
@@ -2807,7 +2150,7 @@ void __cdecl lf_0f2b0(uint param_1,float *param_2,int param_3,int param_4,int pa
 #define g_area (*(Area (*)[4])SR_VA(0x17166040))
 #define g_area_sector (*(AreaSector *)SR_VA(0x1994d700))
 #define area_getnextsector ((int (__cdecl *)(void))SR_FN(0x401cd0))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(6, "MSVCR100.DLL", "memset"))
 int __cdecl lf_0f4a0(uint param_1,uint param_2,uint param_3,uint param_4,uint param_5)
 
 {
@@ -4878,12 +4221,12 @@ void __cdecl lf_13450(void)
 #define DAT_00460d18 (*(uint *)SR_VA(0x460d18))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_p_fread (*(code * *)SR_VA(0x95022a4))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(1, "MSVCR100.DLL", "fclose"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(2, "MSVCR100.DLL", "fopen"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(3, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "fopen"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x4041c0))
 #define __security_check_cookie(x) ((void)0)
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(6, "MSVCR100.DLL", "memset"))
 #define local_54 (*(int *)(lf_frame + 0x1c))
 #define iStack_50 (*(int *)(lf_frame + 0x20))
 #define iStack_4c (*(int *)(lf_frame + 0x24))
@@ -5307,7 +4650,7 @@ void __cdecl lf_155e0(void)
 #define DAT_09fdd8a4 (*(undefined *)SR_VA(0x9fdd8a4))
 #define g_parser (*(Parser *)SR_VA(0x14122d60))
 #define g_radix (*(Radix *)SR_VA(0x10347c80))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define sprintf_comma ((void (__cdecl *)(char *, int))SR_FN(0x408880))
 #define csradixsort ((void (__cdecl *)(void))SR_FN(0x40ac00))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x40d020))
@@ -5651,7 +4994,7 @@ void __cdecl lf_1bc50(void)
 #define DAT_00461d48 (*(undefined4 *)SR_VA(0x461d48))
 #define DAT_00603fa0 (*(undefined1 *)SR_VA(0x603fa0))
 #define g_radix (*(Radix *)SR_VA(0x10347c80))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
 #define sprintf_comma ((void (__cdecl *)(char *, int))SR_FN(0x408880))
 #define csradixsort ((void (__cdecl *)(void))SR_FN(0x40ac00))
@@ -5797,7 +5140,7 @@ void __cdecl lf_1d3b0(void)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_teamname (*(char * (*)[8])SR_VA(0x460438))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
 #define createevent_updateiteminfo ((void (__cdecl *)(uint))SR_FN(0x406420))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
@@ -6434,83 +5777,6 @@ void __cdecl lf_25e70(int param_1,float *param_2,float param_3,float param_4)
 #undef local_8
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x28020 */
-#define g_cityobjecttype (*(CityObjectType *)SR_VA(0xf42e500))
-#define g_game (*(Game *)SR_VA(0x94dc540))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
-int __cdecl lf_28020(void)
-
-{
-  Player *pPVar1;
-  int iVar2;
-  uint uVar3;
-  int iVar4;
-  bool bVar5;
-  int fVar2;
-  int fVar1;
-  
-  iVar4 = 0;
-  pPVar1 = g_player;
-  do {
-    if (pPVar1->active == 0) {
-      if (iVar4 == -1) {
-        return -1;
-      }
-      memset(g_player + iVar4,0,0x2408);
-      g_player[iVar4].active = 1;
-      g_player[iVar4].team = 7;
-      g_player[iVar4].money = 50000;
-      g_player[iVar4].unk_0034 = -1;
-      g_player[iVar4].human_id = -1;
-      bVar5 = g_game.state == 1;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x1718] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x177c] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x17e0] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x1844] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x18a8] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x190c] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x1970] = 0;
-      *(undefined4 *)&g_player[iVar4].lf_raw[0x19d4] = 0;
-      g_player[iVar4].menu = 0;
-      if ((bVar5) && (g_game.gametype == 3)) {
-        g_player[iVar4].menu = 2;
-      }
-      g_player[iVar4].unk_00b8 = 0x3f800000;
-      rand();
-      g_player[iVar4].colors[0].x = 0.046875;
-      g_player[iVar4].colors[0].y = 0.046875;
-      g_player[iVar4].colors[0].z = -0.15000000596046448;
-      g_player[iVar4].colors[2].x = -0.046875;
-      g_player[iVar4].colors[2].y = 0.046875;
-      g_player[iVar4].colors[2].z = -0.15000000596046448;
-      g_player[iVar4].colors[1].x = 1.0;
-      g_player[iVar4].colors[1].y = 1.0;
-      g_player[iVar4].colors[1].z = 1.0;
-      g_player[iVar4].colors[3].x = 1.0;
-      g_player[iVar4].colors[3].y = 1.0;
-      g_player[iVar4].colors[3].z = 1.0;
-      iVar2 = rand();
-      g_player[iVar4].look_a = iVar2 % 3;
-      uVar3 = rand();
-      g_player[iVar4].look_b = uVar3 & 7;
-      uVar3 = rand();
-      g_player[iVar4].look_c = uVar3 & 3;
-      g_player[iVar4].unk_2154 = -1;
-      return iVar4;
-    }
-    pPVar1 = pPVar1 + 1;
-    iVar4 = iVar4 + 1;
-  } while ((int)pPVar1 < ((int)&g_cityobjecttype));
-  return -1;
-}
-#undef g_cityobjecttype
-#undef g_game
-#undef g_player
-#undef rand
-#undef memset
-
 /* ---------------------------------------------------------------- 0x28190 */
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
@@ -6553,7 +5819,7 @@ int __cdecl lf_28190(int param_1,int param_2,int param_3)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_scenario (*(Scenario *)SR_VA(0xb051a80))
 #define g_market (*(Market *)SR_VA(0x17579600))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_FN(0x406760))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
 #define __security_check_cookie(x) ((void)0)
@@ -6823,7 +6089,7 @@ void __cdecl lf_28230(undefined4 param_1,int param_2,undefined4 *param_3)
 #define g_game (*(Game *)SR_VA(0x94dc540))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_scenario (*(Scenario *)SR_VA(0xb051a80))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_FN(0x406760))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
 #define __security_check_cookie(x) ((void)0)
@@ -7798,7 +7064,7 @@ LAB_0042a4ca:
 #define area_block_addbasicsurface ((void (__cdecl *)(uint, float *))SR_FN(0x410da0))
 #define area_block_addbeam ((void (__cdecl *)(int, float, float, float, float, float, float, uint, uint *))SR_FN(0x411d70))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(8, "MSVCR100.DLL", "_chdir"))
 #define local_98 (*(float *)(lf_frame + 0x18))
 #define local_94 (*(float *)(lf_frame + 0x1c))
 #define local_90 (*(float *)(lf_frame + 0x20))
@@ -9635,7 +8901,7 @@ void __cdecl lf_3da50(uint param_1,uint param_2,uint param_3,uint param_4,uint p
 #define area_block_addcorner ((void (__cdecl *)(int, undefined4, undefined4))SR_FN(0x4120c0))
 #define area_createinteriorblocks ((void (__cdecl *)(void))SR_FN(0x42a510))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(8, "MSVCR100.DLL", "_chdir"))
 #define auStack_44 (*(undefined1 (*)[4])(lf_frame + 0x1c))
 #define local_40 (*(int * *)(lf_frame + 0x20))
 #define local_3c (*(int * *)(lf_frame + 0x24))
@@ -12533,7 +11799,7 @@ void __cdecl lf_4e0d0(int param_1,int param_2)
 #define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_yaxis (*(float (*)[3])SR_VA(0x460ce0))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define angulardistance ((float10 (__cdecl *)(float, float))SR_FN(0x401540))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x40b850))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x40b8c0))
@@ -12883,125 +12149,6 @@ LAB_00450088:
 #undef local_28
 #undef local_4
 
-/* ---------------------------------------------------------------- 0x500e0 */
-#define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
-#define g_itemtype (*(ItemType (*)[64])SR_VA(0x10757400))
-#define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
-#define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
-#define linkitem ((int (__cdecl *)(uint, uint, int, int))SR_FN(0x41b870))
-#define logic_createcar ((undefined4 (__cdecl *)(int, int, undefined4))SR_FN(0x44e060))
-#define local_30 (*(int *)(lf_frame + 0x10))
-#define local_2c (*(int *)(lf_frame + 0x14))
-#define local_28 (*(int *)(lf_frame + 0x18))
-#define local_24 (*(undefined4 *)(lf_frame + 0x1c))
-#define local_20 (*(undefined4 *)(lf_frame + 0x20))
-#define local_1c (*(undefined4 *)(lf_frame + 0x24))
-#define local_18 (*(undefined4 *)(lf_frame + 0x28))
-#define local_14 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_10 (*(undefined4 *)(lf_frame + 0x30))
-#define local_c (*(undefined4 *)(lf_frame + 0x34))
-#define local_8 (*(undefined4 *)(lf_frame + 0x38))
-#define local_4 (*(undefined4 *)(lf_frame + 0x3c))
-void __cdecl lf_500e0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-  uint uVar1;
-  int iVar2;
-  uint uVar3;
-  uint uVar4;
-  int iVar5;
-  int *piVar6;
-  int iVar7;
-  int *piVar8;
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  uVar1 = g_player[param_1].team;
-  iVar2 = g_player[param_1].human_id;
-  if (iVar2 != -1) {
-    local_30 = ((int)LF_BITS_U(g_human[iVar2].bones[0].pos.x));
-    piVar6 = (int *)&g_player[param_1].lf_raw[0x1718];
-    local_2c = ((int)LF_BITS_U(g_human[iVar2].bones[0].pos.y));
-    iVar7 = 0;
-    local_28 = ((int)LF_BITS_U(g_human[iVar2].bones[0].pos.z));
-    local_24 = 0x3f800000;
-    local_20 = 0;
-    local_1c = 0;
-    local_18 = 0;
-    local_10 = 0;
-    local_c = 0;
-    local_8 = 0;
-    local_14 = 0x3f800000;
-    local_4 = 0x3f800000;
-    do {
-      param_1 = 0;
-      if (0 < *piVar6) {
-        piVar8 = piVar6 + 1;
-        do {
-          iVar5 = *piVar8;
-          if (iVar5 < 0xd) {
-            uVar3 = createitem(iVar5,(float *)&local_30,(undefined4 *)0x0,&local_24);
-            if (g_itemtype[*piVar8].is_gun == 0) {
-              g_item[uVar3].ammo = piVar8[2];
-            }
-            else if (0 < piVar8[1]) {
-              uVar4 = createitem(*piVar8 + 1,(float *)&local_30,(undefined4 *)0x0,&local_24);
-              g_item[uVar4].ammo = piVar8[2];
-              linkitem(uVar3,uVar4,-1,0);
-              linkitem(uVar3,0xffffffff,iVar2,iVar7);
-              goto LAB_00450260;
-            }
-            linkitem(uVar3,0xffffffff,iVar2,iVar7);
-          }
-          else if (((iVar5 == 0x18) && (uVar1 < 3)) &&
-                  (iVar5 = logic_createcar(piVar8[1],uVar1,piVar8[2]), iVar5 != -1)) {
-            uVar3 = createitem(0x18,(float *)&local_30,(undefined4 *)0x0,&local_24);
-            g_item[uVar3].vehicle_id = iVar5;
-            linkitem(uVar3,0xffffffff,iVar2,iVar7);
-          }
-LAB_00450260:
-          param_1 = param_1 + 1;
-          piVar8 = piVar8 + 3;
-        } while (param_1 < *piVar6);
-      }
-      iVar7 = iVar7 + 1;
-      piVar6 = piVar6 + 0x19;
-    } while (iVar7 < 7);
-  }
-  return;
-}
-#undef g_human
-#undef g_itemtype
-#undef g_item
-#undef g_player
-#undef createitem
-#undef linkitem
-#undef logic_createcar
-#undef local_30
-#undef local_2c
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-#undef local_4
-
 /* ---------------------------------------------------------------- 0x502a0 */
 #define DAT_17929aa0 (*(int *)SR_VA(0x17929aa0))
 #define DAT_1792a230 (*(undefined *)SR_VA(0x1792a230))
@@ -13161,7 +12308,7 @@ LAB_00450260:
 #define setupobjecttypes_helicopters ((void (__cdecl *)(void))SR_FN(0x43a610))
 #define setupobjectypes_train ((void (__cdecl *)(void))SR_FN(0x43b0c0))
 #define area_createsblocks ((void (__cdecl *)(void))SR_FN(0x43e070))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(4, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(8, "MSVCR100.DLL", "_chdir"))
 void __cdecl lf_502a0(void)
 
 {
@@ -13652,7 +12799,7 @@ void __cdecl lf_502a0(void)
 #define DAT_0045f330 (*(undefined1 *)SR_VA(0x45f330))
 #define DAT_12e80c44 (*(undefined *)SR_VA(0x12e80c44))
 #define g_building (*(Building *)SR_VA(0x2165b80))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(10, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(9, "MSVCR100.DLL", "srand"))
 #define area_getblock ((int (__cdecl *)(uint, uint, uint, uint))SR_FN(0x401850))
 #define building_setupbuild ((void (__cdecl *)(void))SR_FN(0x403d70))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x4041c0))
@@ -13669,7 +12816,7 @@ void __cdecl lf_502a0(void)
 #define buildcityinterection ((void (__cdecl *)(int))SR_FN(0x44d850))
 #define buildcitystreet ((void (__cdecl *)(int))SR_FN(0x44da10))
 #define __security_check_cookie(x) ((void)0)
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(8, "MSVCR100.DLL", "memset"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(6, "MSVCR100.DLL", "memset"))
 #define local_18 (*(float *)(lf_frame + 0x18))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_10 (*(undefined4 *)(lf_frame + 0x20))
@@ -14212,7 +13359,7 @@ LAB_004556a8:
 #define g_city (*(City *)SR_VA(0xe699220))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define g_market (*(Market *)SR_VA(0x17579600))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define playerbuystock ((void (__cdecl *)(int, int))SR_FN(0x405b40))
 #define playersellstock ((void (__cdecl *)(float, int))SR_FN(0x405be0))
 #define createevent_message ((void (__cdecl *)(int, char *, int, int))SR_FN(0x406260))
@@ -14945,8 +14092,8 @@ LAB_004560f2:
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
 #define rand_exref (*(undefined * *)SR_VA(0x45e070))
 #define rand_exref ((code *)rand)
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
@@ -15114,8 +14261,8 @@ int __cdecl lf_58320(int param_1,int param_2,int param_3)
 #define g_human (*(Human (*)[512])SR_VA(0x19cbf80))
 #define g_object (*(Object (*)[1024])SR_VA(0x5992600))
 #define g_city (*(City *)SR_VA(0xe699220))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_FN(0x401610))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
 #define createplayer ((int (__cdecl *)(void))SR_FN(0x428020))
@@ -15237,8 +14384,8 @@ void __cdecl lf_585b0(int param_1)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_scenario (*(Scenario *)SR_VA(0xb051a80))
 #define g_city (*(City *)SR_VA(0xe699220))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define ai_car_nextwaypoint ((void (__cdecl *)(uint))SR_FN(0x401610))
 #define createevent_updateitem ((void (__cdecl *)(uint))SR_FN(0x406380))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x4064a0))
@@ -15522,7 +14669,7 @@ int __cdecl lf_587f0(int param_1,int param_2)
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_scenario (*(Scenario *)SR_VA(0xb051a80))
 #define g_city (*(City *)SR_VA(0xe699220))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define createevent_updatemission ((int (__cdecl *)(int, int))SR_FN(0x406760))
 #define scenario_createguards ((int (__cdecl *)(int, int, int))SR_FN(0x458320))
 #define scenario_createchase ((int (__cdecl *)(int, int))SR_FN(0x4587f0))
@@ -15717,9 +14864,9 @@ int __cdecl lf_58ef0(int param_1,int param_2,int *param_3)
 #define _DAT_0f837964 (*(float *)SR_VA(0xf837964))
 #define _DAT_0f837968 (*(undefined4 *)SR_VA(0xf837968))
 #define _DAT_0f83796c (*(undefined4 *)SR_VA(0xf83796c))
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(11, "MSVCR100.DLL", "_time64"))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(10, "MSVCR100.DLL", "srand"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(10, "MSVCR100.DLL", "_time64"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(9, "MSVCR100.DLL", "srand"))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_FN(0x401080))
 #define economy_carmarket ((void (__cdecl *)(void))SR_FN(0x405700))
 #define economy_gunmarket ((void (__cdecl *)(void))SR_FN(0x405870))
@@ -16770,7 +15917,7 @@ void __cdecl lf_590f0(void)
 #define g_server (*(Server *)SR_VA(0x7a1ea60))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_scenario (*(Scenario *)SR_VA(0xb051a80))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define scenario_getnumofmissions ((int (__cdecl *)(int))SR_FN(0x40aa80))
 #define createmission_threeway ((void (__cdecl *)(undefined4, int, undefined4 *))SR_FN(0x428230))
 #define createmission_transaction ((void (__cdecl *)(undefined4, int, int *))SR_FN(0x4286b0))
@@ -16981,7 +16128,7 @@ LAB_0045ad91:
 #define g_item (*(Item (*)[1024])SR_VA(0x95022c0))
 #define g_event (*(Event (*)[65536])SR_VA(0x97dd880))
 #define g_player (*(Player (*)[256])SR_VA(0xf1edd00))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(9, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(7, "MSVCR100.DLL", "rand"))
 #define player_saveinventory ((void (__cdecl *)(int))SR_FN(0x405fe0))
 #define rotateorientation ((void (__cdecl *)(float *, float *, float))SR_FN(0x40bdb0))
 #define createitem ((uint (__cdecl *)(int, float *, undefined4 *, undefined4 *))SR_FN(0x41b070))
@@ -17463,7 +16610,7 @@ void __cdecl lf_5ae70(void)
 #define g_game_world (*(GameWorld *)SR_VA(0x25a1d740))
 #define g_account (*(Account (*)[65536])SR_VA(0xf837b68))
 #define g_debugit (*(int *)SR_VA(0x604020))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(3, "MSVCR100.DLL", "sprintf"))
+#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(5, "MSVCR100.DLL", "sprintf"))
 #define saveaccountsserver ((void (__cdecl *)(void))SR_FN(0x401080))
 #define server_writelogfile ((void (__cdecl *)(void))SR_FN(0x401420))
 #define economy_carmarket ((void (__cdecl *)(void))SR_FN(0x405700))

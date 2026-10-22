@@ -60,16 +60,25 @@ void createevent_createobject(int object)
 /* Event 5: the place of an item (on a human, in an item, in a slot), its type and state. */
 void createevent_updateitem(uint32_t item)
 {
+    const Game *game = SR_AT(Game, SR_RVA_GAME);
+    uint32_t *count = SR_AT(uint32_t, SR_RVA_NUMOFEVENTS);
+    Event *events = sr_events;
     const Item *it = &sr_items[item];
     Event *ev;
+    uint32_t index;
+    int param;
     if (sr_server == 0 || item >= MAX_ITEMS)
         return;
-    ev = new_event(5);
-    ev->param = (it->active + it->type * 2) * 0x400 + (int)item;
+    param = (it->active + it->type * 2) * 0x400 + (int)item;
+    index = *count;
+    ev = &events[index];
+    ev->type = 5;
+    ev->tick = game->ticks;
+    ev->param = param;
     ev->attach_type = it->parent_human;
     ev->attach_id = it->parent_item;
     ev->range_mode = it->parent_slot;
-    next_event();
+    *count = (index + 1) & 0xffff;
 }
 
 /* Event 6: the call state and the info of an item. */

@@ -15,19 +15,12 @@
 
 #include "events.h"
 #include "packet.h"
+#include "player.h"
 #include "profiler.h"
 #include "sr_math.h"
 #include "sr_os.h"
 #include "sr_server.h"
 #include "vectors.h"
-
-/* Game functions of other files. */
-int __cdecl lf_28020(void);          /* createplayer */
-void __cdecl lf_0a1b0(int player);   /* deleteplayer */
-int __cdecl lf_0ded0(int player);    /* createaccount */
-#define createplayer lf_28020
-#define deleteplayer lf_0a1b0
-#define createaccount lf_0ded0
 
 #define VOICE_SLOTS 8
 #define IDLE_LIMIT 0x4b0 /* ticks without a packet before a connection drops */

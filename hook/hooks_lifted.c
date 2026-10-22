@@ -10,12 +10,12 @@
 #include "record.h"
 #include "verify.h"
 
-undefined4 __cdecl lf_01010(char * param_1);
+undefined4 __cdecl account_nameexists(char * param_1);
 static undefined4 (__cdecl *orig_01010)(char *);
 static SvVerify v_01010 = { "account_nameexists", -1 };
 static undefined4 __cdecl hk_01010(char * param_1)
 {
-    SV_HOOK_RET(undefined4, v_01010, lf_01010(param_1), orig_01010(param_1), NULL);
+    SV_HOOK_RET(undefined4, v_01010, account_nameexists(param_1), orig_01010(param_1), NULL);
 }
 __declspec(naked) static void th_01010(void)
 {
@@ -1278,12 +1278,12 @@ __declspec(naked) static void th_05f20(void)
 }
 static uint8_t expect_05f20[5] = { 0x8b, 0x44, 0x24, 0x04, 0x56 };
 
-void __cdecl lf_05fe0(int param_1);
+void __cdecl player_saveinventory(int param_1);
 static void (__cdecl *orig_05fe0)(int);
 static SvVerify v_05fe0 = { "player_saveinventory", -1 };
 static void __cdecl hk_05fe0(int param_1)
 {
-    SV_HOOK_VOID(v_05fe0, lf_05fe0(param_1), orig_05fe0(param_1), NULL);
+    SV_HOOK_VOID(v_05fe0, player_saveinventory(param_1), orig_05fe0(param_1), NULL);
 }
 __declspec(naked) static void th_05fe0(void)
 {
@@ -2494,12 +2494,12 @@ __declspec(naked) static void th_09be0(void)
 }
 static uint8_t expect_09be0[7] = { 0x83, 0xec, 0x18, 0xd9, 0x44, 0x24, 0x1c };
 
-void __cdecl lf_0a1b0(float param_1);
+void __cdecl deleteplayer(float param_1);
 static void (__cdecl *orig_0a1b0)(float);
 static SvVerify v_0a1b0 = { "deleteplayer", -1 };
 static void __cdecl hk_0a1b0(float param_1)
 {
-    SV_HOOK_VOID(v_0a1b0, lf_0a1b0(param_1), orig_0a1b0(param_1), NULL);
+    SV_HOOK_VOID(v_0a1b0, deleteplayer(param_1), orig_0a1b0(param_1), NULL);
 }
 __declspec(naked) static void th_0a1b0(void)
 {
@@ -2535,12 +2535,12 @@ __declspec(naked) static void th_0a1b0(void)
 }
 static uint8_t expect_0a1b0[6] = { 0x56, 0x57, 0x8b, 0x7c, 0x24, 0x0c };
 
-void __cdecl lf_0a2a0(void);
+void __cdecl playersimulation(void);
 static void (__cdecl *orig_0a2a0)(void);
 static SvVerify v_0a2a0 = { "playersimulation", -1 };
 static void __cdecl hk_0a2a0(void)
 {
-    SV_HOOK_VOID(v_0a2a0, lf_0a2a0(), orig_0a2a0(), NULL);
+    SV_HOOK_VOID(v_0a2a0, playersimulation(), orig_0a2a0(), NULL);
 }
 __declspec(naked) static void th_0a2a0(void)
 {
@@ -4672,12 +4672,12 @@ __declspec(naked) static void th_0ddd0(void)
 }
 static uint8_t expect_0ddd0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-int __cdecl lf_0ded0(int param_1);
+int __cdecl createaccount(int param_1);
 static int (__cdecl *orig_0ded0)(int);
 static SvVerify v_0ded0 = { "createaccount", -1 };
 static int __cdecl hk_0ded0(int param_1)
 {
-    SV_HOOK_RET(int, v_0ded0, lf_0ded0(param_1), orig_0ded0(param_1), NULL);
+    SV_HOOK_RET(int, v_0ded0, createaccount(param_1), orig_0ded0(param_1), NULL);
 }
 __declspec(naked) static void th_0ded0(void)
 {
@@ -8653,12 +8653,12 @@ __declspec(naked) static void th_27e80(void)
 }
 static uint8_t expect_27e80[5] = { 0x83, 0xec, 0x14, 0xd9, 0xee };
 
-int __cdecl lf_28020(void);
+int __cdecl createplayer(void);
 static int (__cdecl *orig_28020)(void);
 static SvVerify v_28020 = { "createplayer", -1 };
 static int __cdecl hk_28020(void)
 {
-    SV_HOOK_RET(int, v_28020, lf_28020(), orig_28020(), NULL);
+    SV_HOOK_RET(int, v_28020, createplayer(), orig_28020(), NULL);
 }
 __declspec(naked) static void th_28020(void)
 {
@@ -11297,12 +11297,12 @@ __declspec(naked) static void th_4f720(void)
 }
 static uint8_t expect_4f720[8] = { 0x83, 0xec, 0x5c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_500e0(int param_1);
+void __cdecl player_loadinventory(int param_1);
 static void (__cdecl *orig_500e0)(int);
 static SvVerify v_500e0 = { "player_loadinventory", -1 };
 static void __cdecl hk_500e0(int param_1)
 {
-    SV_HOOK_VOID(v_500e0, lf_500e0(param_1), orig_500e0(param_1), NULL);
+    SV_HOOK_VOID(v_500e0, player_loadinventory(param_1), orig_500e0(param_1), NULL);
 }
 __declspec(naked) static void th_500e0(void)
 {
