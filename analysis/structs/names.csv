@@ -647,3 +647,22 @@ game,0x257ec,unused_257ec,float,,resetgame clears this field. No reader in the s
 game,0x22fd8,unused_22fd8,int,,resetgame clears this field. No reader in the server
 game,0x25974,unused_25974,int,,resetgame clears this field. No reader in the server
 game,0x25978,unused_25978,int,,resetgame clears this field. No reader in the server
+soundlist,0x0,num_sounds,int,,setupgame: count 47 after sound identifiers 0 through 46
+materiallist,0x0,num_materials,int,,setupgame: material identifiers and the file list
+materiallist,0x4,presets,int,160,setupgame: material identifiers and the file list
+materiallist,0x284,preset_end,int,,setupgame: material identifiers and the file list
+materiallist,0x288,tile_material,int,,setupgame: material identifiers and the file list
+materiallist,0x28c,street_x_left,int,,setupgame: material identifiers and the file list
+materiallist,0x290,street_x_right,int,,setupgame: material identifiers and the file list
+materiallist,0x294,street_z_left,int,,setupgame: material identifiers and the file list
+materiallist,0x298,street_z_right,int,,setupgame: material identifiers and the file list
+materiallist,0x29c,carpet,int,,setupgame: material identifiers and the file list
+materiallist,0x2a0,misc_2a0,int,,setupgame: material identifiers and the file list
+materiallist,0x2a4,misc_2a4,int,,setupgame: material identifiers and the file list
+materiallist,0x2b0,misc_2b0,int,,setupgame: material identifiers and the file list
+materiallist,0x2b4,marble,int,,setupgame: material identifiers and the file list
+materiallist,0x2c0,ceiling,int,,setupgame: material identifiers and the file list
+materiallist,0x2c4,misc_2c4,int,,setupgame: material identifiers and the file list
+materiallist,0x2d0,flagged_material,int,,setupgame: material identifiers and the file list
+materiallist,0x2f0,sign,int,,setupgame: material identifiers and the file list
+materiallist,0x380,file_materials,int,128,setupgame: material identifiers and the file list

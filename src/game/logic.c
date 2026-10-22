@@ -17,10 +17,6 @@
 #include "util.h"
 #include "vectors.h"
 
-/* Game functions of other files. */
-void __cdecl lf_590f0(void);
-#define resetgame lf_590f0
-
 #define g_yaxis (*SR_AT(vec3, 0x60ce0))
 #define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))
 #define BUILDING_FIELD(field, building) \

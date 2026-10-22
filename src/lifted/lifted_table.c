@@ -300,7 +300,7 @@ void loadsaveoptions(void);
 void serversend(void);
 void playerai(void);
 void player_loadinventory(void);
-void lf_502a0(void);
+void setupgame(void);
 void createhuman(void);
 void humansimulation(void);
 void itemsimulation(void);
@@ -311,7 +311,7 @@ void scenario_createguards(void);
 void scenario_createtraffic2(void);
 void scenario_createchase(void);
 void createmission_acquisition(void);
-void lf_590f0(void);
+void resetgame(void);
 void createscenario_world(void);
 void logicsimulation_round(void);
 void logicsimulation_world(void);
@@ -618,7 +618,7 @@ const LfEntry lf_table[] = {
     { "serversend", 0x4ed30, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x4f720, (void *)playerai, 1, LF_RET_VOID, 4, "p", 0 },
     { "player_loadinventory", 0x500e0, (void *)player_loadinventory, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupgame", 0x502a0, (void *)setupgame, 0, LF_RET_VOID, 4, "", 1 },
     { "createhuman", 0x50ae0, (void *)createhuman, 3, LF_RET_INT, 4, "ppv", 0 },
     { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemsimulation", 0x542a0, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
@@ -629,7 +629,7 @@ const LfEntry lf_table[] = {
     { "scenario_createtraffic2", 0x585b0, (void *)scenario_createtraffic2, 1, LF_RET_VOID, 4, "v", 0 },
     { "scenario_createchase", 0x587f0, (void *)scenario_createchase, 2, LF_RET_INT, 4, "vv", 0 },
     { "createmission_acquisition", 0x58ef0, (void *)createmission_acquisition, 3, LF_RET_INT, 4, "vvp", 0 },
-    { "resetgame", 0x590f0, (void *)lf_590f0, 0, LF_RET_VOID, 4, "", 1 },
+    { "resetgame", 0x590f0, (void *)resetgame, 0, LF_RET_VOID, 4, "", 1 },
     { "createscenario_world", 0x5aa60, (void *)createscenario_world, 0, LF_RET_VOID, 4, "", 0 },
     { "logicsimulation_round", 0x5ae70, (void *)logicsimulation_round, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation_world", 0x5b9b0, (void *)logicsimulation_world, 0, LF_RET_VOID, 4, "", 1 },

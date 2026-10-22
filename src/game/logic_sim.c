@@ -19,10 +19,6 @@
 #include "util.h"
 #include "vectors.h"
 
-/* Game functions of other files. */
-void __cdecl lf_590f0(void);
-#define resetgame lf_590f0
-
 static void reset_purchases(void)
 {
     int i;

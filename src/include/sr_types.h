@@ -151,6 +151,15 @@ typedef union TypeWheel { struct {
 }; uint8_t lf_raw[0x44]; } TypeWheel;
 
 /* A road point of an AI car (Player.waypoints). */
+/* Parameters and a name for one surface material. */
+typedef union MaterialRec { struct {
+    float parameters[4];
+    int flags;
+    char name[68];
+}; uint8_t lf_raw[0x58]; } MaterialRec;
+SR_STATIC_ASSERT(sizeof(MaterialRec) == 0x58, "MaterialRec");
+SR_STATIC_ASSERT(offsetof(MaterialRec, name) == 0x14, "MaterialRec.name");
+
 typedef union AiWaypoint { struct {
     vec3 pos;           /* +0x00 playerai walks to this position */
     int road;           /* +0x0c index into City.roads, -1 none */
@@ -1783,7 +1792,7 @@ SR_STATIC_ASSERT(offsetof(SysInfo, ms_per_tick) == 0x410, "SysInfo.ms_per_tick")
 
 /* soundlist[]: record of 0x13c bytes. */
 typedef union SoundList { struct {
-    int unk_0000;                        /* +0x0000 1 functions */
+    int num_sounds;                      /* +0x0000 setupgame: count 47 after sound identifiers 0 through 46 */
     int unk_0004;                        /* +0x0004 1 functions */
     int unk_0008;                        /* +0x0008 1 functions */
     int unk_000c;                        /* +0x000c 1 functions */
@@ -1832,6 +1841,7 @@ typedef union SoundList { struct {
     int unk_0138;                        /* +0x0138 1 functions */
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
+SR_STATIC_ASSERT(offsetof(SoundList, num_sounds) == 0x0, "SoundList.num_sounds");
 SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
@@ -2123,37 +2133,49 @@ SR_STATIC_ASSERT(offsetof(City, car_spawn_pos) == 0x3036c, "City.car_spawn_pos")
 
 /* materiallist[]: record of 0x580 bytes. */
 typedef union MaterialList { struct {
-    int unk_0000;                        /* +0x0000 2 functions */
-    int unk_0004;                        /* +0x0004 1 functions */
-    uint8_t pad_0008[0x4];
-    int unk_000c;                        /* +0x000c 1 functions */
-    uint8_t pad_0010[0x1c];
-    int unk_002c;                        /* +0x002c 1 functions */
-    uint8_t pad_0030[0x4];
-    int unk_0034;                        /* +0x0034 1 functions */
-    uint8_t pad_0038[0x24c];
-    int unk_0284;                        /* +0x0284 1 functions */
-    int unk_0288;                        /* +0x0288 2 functions */
-    uint8_t pad_028c[0x10];
-    int unk_029c;                        /* +0x029c 1 functions */
-    int unk_02a0;                        /* +0x02a0 1 functions */
-    int unk_02a4;                        /* +0x02a4 1 functions */
+    int num_materials;                   /* +0x0000 setupgame: material identifiers and the file list */
+    int presets[160];                    /* +0x0004 setupgame: material identifiers and the file list */
+    int preset_end;                      /* +0x0284 setupgame: material identifiers and the file list */
+    int tile_material;                   /* +0x0288 setupgame: material identifiers and the file list */
+    int street_x_left;                   /* +0x028c setupgame: material identifiers and the file list */
+    int street_x_right;                  /* +0x0290 setupgame: material identifiers and the file list */
+    int street_z_left;                   /* +0x0294 setupgame: material identifiers and the file list */
+    int street_z_right;                  /* +0x0298 setupgame: material identifiers and the file list */
+    int carpet;                          /* +0x029c setupgame: material identifiers and the file list */
+    int misc_2a0;                        /* +0x02a0 setupgame: material identifiers and the file list */
+    int misc_2a4;                        /* +0x02a4 setupgame: material identifiers and the file list */
     uint8_t pad_02a8[0x8];
-    int unk_02b0;                        /* +0x02b0 1 functions */
-    int unk_02b4;                        /* +0x02b4 1 functions */
+    int misc_2b0;                        /* +0x02b0 setupgame: material identifiers and the file list */
+    int marble;                          /* +0x02b4 setupgame: material identifiers and the file list */
     uint8_t pad_02b8[0x8];
-    int unk_02c0;                        /* +0x02c0 1 functions */
-    int unk_02c4;                        /* +0x02c4 1 functions */
+    int ceiling;                         /* +0x02c0 setupgame: material identifiers and the file list */
+    int misc_2c4;                        /* +0x02c4 setupgame: material identifiers and the file list */
     uint8_t pad_02c8[0x8];
-    int unk_02d0;                        /* +0x02d0 1 functions */
+    int flagged_material;                /* +0x02d0 setupgame: material identifiers and the file list */
     uint8_t pad_02d4[0x1c];
-    int unk_02f0;                        /* +0x02f0 1 functions */
+    int sign;                            /* +0x02f0 setupgame: material identifiers and the file list */
     uint8_t pad_02f4[0x8c];
-    int unk_0380;                        /* +0x0380 1 functions */
-    int unk_0384;                        /* +0x0384 1 functions */
-    uint8_t pad_0388[0x1f8];
+    int file_materials[128];             /* +0x0380 setupgame: material identifiers and the file list */
 }; uint8_t lf_raw[0x580]; } MaterialList;
 SR_STATIC_ASSERT(sizeof(MaterialList) == 0x580, "MaterialList");
+SR_STATIC_ASSERT(offsetof(MaterialList, num_materials) == 0x0, "MaterialList.num_materials");
+SR_STATIC_ASSERT(offsetof(MaterialList, presets) == 0x4, "MaterialList.presets");
+SR_STATIC_ASSERT(offsetof(MaterialList, preset_end) == 0x284, "MaterialList.preset_end");
+SR_STATIC_ASSERT(offsetof(MaterialList, tile_material) == 0x288, "MaterialList.tile_material");
+SR_STATIC_ASSERT(offsetof(MaterialList, street_x_left) == 0x28c, "MaterialList.street_x_left");
+SR_STATIC_ASSERT(offsetof(MaterialList, street_x_right) == 0x290, "MaterialList.street_x_right");
+SR_STATIC_ASSERT(offsetof(MaterialList, street_z_left) == 0x294, "MaterialList.street_z_left");
+SR_STATIC_ASSERT(offsetof(MaterialList, street_z_right) == 0x298, "MaterialList.street_z_right");
+SR_STATIC_ASSERT(offsetof(MaterialList, carpet) == 0x29c, "MaterialList.carpet");
+SR_STATIC_ASSERT(offsetof(MaterialList, misc_2a0) == 0x2a0, "MaterialList.misc_2a0");
+SR_STATIC_ASSERT(offsetof(MaterialList, misc_2a4) == 0x2a4, "MaterialList.misc_2a4");
+SR_STATIC_ASSERT(offsetof(MaterialList, misc_2b0) == 0x2b0, "MaterialList.misc_2b0");
+SR_STATIC_ASSERT(offsetof(MaterialList, marble) == 0x2b4, "MaterialList.marble");
+SR_STATIC_ASSERT(offsetof(MaterialList, ceiling) == 0x2c0, "MaterialList.ceiling");
+SR_STATIC_ASSERT(offsetof(MaterialList, misc_2c4) == 0x2c4, "MaterialList.misc_2c4");
+SR_STATIC_ASSERT(offsetof(MaterialList, flagged_material) == 0x2d0, "MaterialList.flagged_material");
+SR_STATIC_ASSERT(offsetof(MaterialList, sign) == 0x2f0, "MaterialList.sign");
+SR_STATIC_ASSERT(offsetof(MaterialList, file_materials) == 0x380, "MaterialList.file_materials");
 
 /* intersect[]: record of 0x84 bytes. */
 typedef union Intersect { struct {

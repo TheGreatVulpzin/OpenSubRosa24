@@ -87,7 +87,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
-             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
@@ -248,6 +248,15 @@ typedef union TypeWheel { struct {
 }; uint8_t lf_raw[0x44]; } TypeWheel;
 
 /* A road point of an AI car (Player.waypoints). */
+/* Parameters and a name for one surface material. */
+typedef union MaterialRec { struct {
+    float parameters[4];
+    int flags;
+    char name[68];
+}; uint8_t lf_raw[0x58]; } MaterialRec;
+SR_STATIC_ASSERT(sizeof(MaterialRec) == 0x58, "MaterialRec");
+SR_STATIC_ASSERT(offsetof(MaterialRec, name) == 0x14, "MaterialRec.name");
+
 typedef union AiWaypoint { struct {
     vec3 pos;           /* +0x00 playerai walks to this position */
     int road;           /* +0x0c index into City.roads, -1 none */

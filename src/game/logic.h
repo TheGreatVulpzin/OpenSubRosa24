@@ -23,7 +23,7 @@
 #define g_headlines ((char (*)[0x100])SR_AT(char, 0x9bdd8a4))
 #define g_modellist SR_AT(int, 0x17529aa0)
 #define g_texturelist SR_AT(int, 0x13e22e80)
-#define g_materials ((uint8_t (*)[0x58])SR_AT(uint8_t, 0x16d50024))
+#define g_materials SR_AT(MaterialRec, 0x16d50024)
 
 void logic_player(int player);
 void logic_playeractions(int player);
@@ -33,6 +33,8 @@ void logic_cardealer_buy(int player, int row);
 int logic_createcar(int type, int team, int color);
 void logic_setteammanager(int team, int player);
 void logic_farbslist(int rank);
+void resetgame(void);
+void setupgame(void);
 void logicsimulation(void);
 void logicsimulation_driving(void);
 void logicsimulation_world(void);
