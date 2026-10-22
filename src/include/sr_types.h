@@ -152,7 +152,7 @@ typedef union TypeWheel { struct {
 
 /* A road point of an AI car (Player.waypoints). */
 typedef union AiWaypoint { struct {
-    uint8_t pad_00[0xc];
+    vec3 pos;           /* +0x00 playerai walks to this position */
     int road;           /* +0x0c index into City.roads, -1 none */
     int dir;            /* +0x10 0: from ends[0] to ends[1] */
     int lane;           /* +0x14 */

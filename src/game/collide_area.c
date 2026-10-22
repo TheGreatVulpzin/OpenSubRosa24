@@ -47,27 +47,32 @@ static void block_base(vec3 *base, const int cell[3], float size)
 int lineintersectnormalblock(vec3 *hit, vec3 *normal, float *t, const vec3 *from, const vec3 *to, const int cell[3],
                              uint32_t word, float size)
 {
+    uintptr_t image_base = sr_base;
+    const vec3 *vertices = (const vec3 *)(image_base + 0x60018);
+    const vec3 *normals = (const vec3 *)(image_base + 0x60078);
+    const int (*quads)[4] = (const int (*)[4])(image_base + SR_RVA_CUBEQUAD);
+    Intersect *intersect = (Intersect *)(image_base + 0x103484a0);
     vec3 base, a, b, c;
     int f;
 
     block_base(&base, cell, size);
     for (f = 0; f < 6; f++) {
-        const int *q = g_cubequad[f];
+        const int *q = quads[f];
 
         if ((word & 1u << f) == 0 || (word & 0x40u << f) == 0)
             continue;
-        block_corner(&a, &g_cubevertex[q[0]], &base, size);
-        block_corner(&b, &g_cubevertex[q[1]], &base, size);
-        block_corner(&c, &g_cubevertex[q[2]], &base, size);
-        *normal = g_cubenormal[f];
+        block_corner(&a, &vertices[q[0]], &base, size);
+        block_corner(&b, &vertices[q[1]], &base, size);
+        block_corner(&c, &vertices[q[2]], &base, size);
+        *normal = normals[f];
         if (lineintersecttriangle(hit, normal, t, from, to, &a, &b, &c) != 0) {
-            g_intersect.block_face = f;
+            intersect->block_face = f;
             return 1;
         }
-        block_corner(&b, &g_cubevertex[q[2]], &base, size);
-        block_corner(&c, &g_cubevertex[q[3]], &base, size);
+        b = c;
+        block_corner(&c, &vertices[q[3]], &base, size);
         if (lineintersecttriangle(hit, normal, t, from, to, &a, &b, &c) != 0) {
-            g_intersect.block_face = f;
+            intersect->block_face = f;
             return 1;
         }
     }

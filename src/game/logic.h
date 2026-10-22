@@ -35,6 +35,10 @@ void logic_setteammanager(int team, int player);
 void logic_farbslist(int rank);
 void logicsimulation(void);
 void logicsimulation_driving(void);
+void logicsimulation_world(void);
+void logicsimulation_round(void);
+void ai_assessthreats(int player, int human);
+void playerai(int player);
 
 /* Each team occupies 0x117c bytes in the game state. */
 #define TEAM_FIELD(field, team) \

@@ -116,15 +116,26 @@ void createevent_updateplayer(int player)
 /* Event 8: the money and the stocks of a player. */
 void createevent_updateplayer_finance(int player)
 {
-    const Player *p = &sr_players[player];
+    uintptr_t image_base = sr_base;
+    const Player *p = (const Player *)(image_base + SR_RVA_PLAYER) + player;
+    const Game *game = (const Game *)(image_base + SR_RVA_GAME);
+    uint32_t *count = (uint32_t *)(image_base + SR_RVA_NUMOFEVENTS);
+    Event *events = (Event *)(image_base + SR_RVA_EVENT);
     Event *ev;
-    if (sr_server == 0)
+    uint32_t index;
+    if (*(const int *)(image_base + SR_RVA_SERVER) == 0)
         return;
-    ev = new_event(8);
+    index = *count;
+    ev = &events[index];
+    ev->type = 8;
+    ev->tick = game->ticks;
     ev->param = player;
-    ev->attach_type = p->money;
-    ev->attach_id = p->stocks;
-    next_event();
+    {
+        int money = p->money, stocks = p->stocks;
+        *count = (index + 1) & 0xffff;
+        ev->attach_type = money;
+        ev->attach_id = stocks;
+    }
 }
 
 /* Event 0: a bullet leaves a weapon. */

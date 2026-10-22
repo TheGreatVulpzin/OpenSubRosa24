@@ -10422,12 +10422,12 @@ __declspec(naked) static void th_3cfe0(void)
 }
 static uint8_t expect_3cfe0[6] = { 0x83, 0xec, 0x24, 0x57, 0x33, 0xff };
 
-void __cdecl lf_3d500(int param_1, int param_2);
+void __cdecl ai_assessthreats(int param_1, int param_2);
 static void (__cdecl *orig_3d500)(int, int);
 static SvVerify v_3d500 = { "ai_assessthreats", -1 };
 static void __cdecl hk_3d500(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_3d500, lf_3d500(param_1, param_2), orig_3d500(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_3d500, ai_assessthreats(param_1, param_2), orig_3d500(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_3d500(void)
 {
@@ -11256,12 +11256,12 @@ __declspec(naked) static void th_4e500(void)
 }
 static uint8_t expect_4e500[5] = { 0x83, 0xec, 0x1c, 0x53, 0x55 };
 
-void __cdecl lf_4f720(float * param_1);
+void __cdecl playerai(float * param_1);
 static void (__cdecl *orig_4f720)(float *);
 static SvVerify v_4f720 = { "playerai", -1 };
 static void __cdecl hk_4f720(float * param_1)
 {
-    SV_HOOK_VOID(v_4f720, lf_4f720(param_1), orig_4f720(param_1), NULL);
+    SV_HOOK_VOID(v_4f720, playerai(param_1), orig_4f720(param_1), NULL);
 }
 __declspec(naked) static void th_4f720(void)
 {

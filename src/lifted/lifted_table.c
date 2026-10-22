@@ -274,7 +274,7 @@ void setupobjecttypes_helicopters(void);
 void setupobjectypes_train(void);
 void createvehicle(void);
 void calculateplayervoice(void);
-void lf_3d500(void);
+void ai_assessthreats(void);
 void lf_3da50(void);
 void lf_3e070(void);
 void sphereintersectarea(void);
@@ -298,7 +298,7 @@ void objectwheelcollision2(void);
 void objectwheelcollision(void);
 void loadsaveoptions(void);
 void serversend(void);
-void lf_4f720(void);
+void playerai(void);
 void player_loadinventory(void);
 void lf_502a0(void);
 void createhuman(void);
@@ -313,8 +313,8 @@ void scenario_createchase(void);
 void createmission_acquisition(void);
 void lf_590f0(void);
 void createscenario_world(void);
-void lf_5ae70(void);
-void lf_5b9b0(void);
+void logicsimulation_round(void);
+void logicsimulation_world(void);
 void logicsimulation(void);
 void __aulldiv(void);
 
@@ -592,7 +592,7 @@ const LfEntry lf_table[] = {
     { "setupobjectypes_train", 0x3b0c0, (void *)setupobjectypes_train, 0, LF_RET_VOID, 4, "", 0 },
     { "createvehicle", 0x3ccc0, (void *)createvehicle, 3, LF_RET_INT, 4, "vpp", 0 },
     { "calculateplayervoice", 0x3cfe0, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "ai_assessthreats", 0x3d500, (void *)lf_3d500, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "ai_assessthreats", 0x3d500, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_createblock", 0x3da50, (void *)lf_3da50, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
     { "sphereintersectarea", 0x40aa0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
@@ -616,7 +616,7 @@ const LfEntry lf_table[] = {
     { "objectwheelcollision", 0x4e500, (void *)objectwheelcollision, 2, LF_RET_VOID, 4, "vv", 0 },
     { "loadsaveoptions", 0x4e7a0, (void *)loadsaveoptions, 1, LF_RET_VOID, 4, "v", 1 },
     { "serversend", 0x4ed30, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
-    { "playerai", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "p", 0 },
+    { "playerai", 0x4f720, (void *)playerai, 1, LF_RET_VOID, 4, "p", 0 },
     { "player_loadinventory", 0x500e0, (void *)player_loadinventory, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupgame", 0x502a0, (void *)lf_502a0, 0, LF_RET_VOID, 4, "", 1 },
     { "createhuman", 0x50ae0, (void *)createhuman, 3, LF_RET_INT, 4, "ppv", 0 },
@@ -631,8 +631,8 @@ const LfEntry lf_table[] = {
     { "createmission_acquisition", 0x58ef0, (void *)createmission_acquisition, 3, LF_RET_INT, 4, "vvp", 0 },
     { "resetgame", 0x590f0, (void *)lf_590f0, 0, LF_RET_VOID, 4, "", 1 },
     { "createscenario_world", 0x5aa60, (void *)createscenario_world, 0, LF_RET_VOID, 4, "", 0 },
-    { "logicsimulation_round", 0x5ae70, (void *)lf_5ae70, 0, LF_RET_VOID, 4, "", 1 },
-    { "logicsimulation_world", 0x5b9b0, (void *)lf_5b9b0, 0, LF_RET_VOID, 4, "", 1 },
+    { "logicsimulation_round", 0x5ae70, (void *)logicsimulation_round, 0, LF_RET_VOID, 4, "", 1 },
+    { "logicsimulation_world", 0x5b9b0, (void *)logicsimulation_world, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation", 0x5c580, (void *)logicsimulation, 0, LF_RET_VOID, 4, "", 1 },
     { "__aulldiv", 0x5cf70, (void *)__aulldiv, 4, LF_RET_INT64, 4, "vvvv", 0 },
 };

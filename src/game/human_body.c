@@ -221,6 +221,13 @@ void setupbody(void)
  * no player, with random colors). It returns the human, or -1 when all 512 are in use. */
 int createhuman(float *posp, float *rot, int player)
 {
+    uintptr_t image_base = sr_base;
+    Human *humans = (Human *)(image_base + SR_RVA_HUMAN);
+    const Player *players = (const Player *)(image_base + SR_RVA_PLAYER);
+    const Body *body = (const Body *)(image_base + 0xf270280);
+    Event *events = (Event *)(image_base + SR_RVA_EVENT);
+    uint32_t *event_count = (uint32_t *)(image_base + SR_RVA_NUMOFEVENTS);
+    const Game *game = (const Game *)(image_base + SR_RVA_GAME);
     const vec3 *pos = (const vec3 *)posp;
     Human *hu;
     Event *ev;
@@ -228,17 +235,17 @@ int createhuman(float *posp, float *rot, int player)
     int h, k, p, s;
 
     for (h = 0; h < NUM_HUMANS; h++)
-        if (sr_humans[h].active == 0)
+        if (humans[h].active == 0)
             break;
     if (h == NUM_HUMANS)
         return -1;
-    hu = &sr_humans[h];
+    hu = &humans[h];
     memset(hu, 0, sizeof *hu);
     hu->active = 1;
     hu->player_id = player;
     hu->account = -1;
     hu->despawn_timer = 0xe10;
-    hu->body_param = player == -1 ? 1.0f : sr_players[player].body_param;
+    hu->body_param = player == -1 ? 1.0f : players[player].body_param;
     hu->stance = 1.0f;
     hu->health = 100;
     hu->protect_timer = (((uint32_t)os_rand() & 3) + 3) * 0xe10;
@@ -247,17 +254,17 @@ int createhuman(float *posp, float *rot, int player)
     for (s = 0; s < NUM_SLOTS; s++)
         hu->inventory[s].count = 0;
     for (k = 0; k < NUM_BONES; k++) {
-        const Body *bd = &g_body[k];
+        const Body *bd = &body[k];
         Bone *b = &hu->bones[k];
 
         /* The place of the bone in the frame of the human: the sum of the offsets to the hip. */
         lx = bd->pos.x;
         ly = bd->pos.y;
         lz = bd->pos.z;
-        for (p = bd->parent; p != 0; p = g_body[p].parent) {
-            lx = (float)(g_body[p].pos.x + lx);
-            ly = (float)(g_body[p].pos.y + ly);
-            lz = (float)(g_body[p].pos.z + lz);
+        for (p = bd->parent; p != 0; p = body[p].parent) {
+            lx = (float)(body[p].pos.x + lx);
+            ly = (float)(body[p].pos.y + ly);
+            lz = (float)(body[p].pos.z + lz);
         }
         wx = (float)(pos->x + (float)(ly * rot[3] + lx * rot[0] + lz * rot[6]));
         wy = (float)((float)(rot[7] * lz + (lx * rot[1] + rot[4] * ly)) + pos->y);
@@ -275,7 +282,15 @@ int createhuman(float *posp, float *rot, int player)
         b->inertia.x = (float)(1.0 / b->inv_inertia.x);
         b->inertia.y = (float)(1.0 / b->inv_inertia.y);
         b->inertia.z = (float)(1.0 / b->inv_inertia.z);
-        resetorientation(b->target_rot);
+        b->target_rot[0].x = 1.0f;
+        b->target_rot[0].y = 0;
+        b->target_rot[0].z = 0;
+        b->target_rot[1].x = 0;
+        b->target_rot[1].y = 1.0f;
+        b->target_rot[1].z = 0;
+        b->target_rot[2].x = 0;
+        b->target_rot[2].y = 0;
+        b->target_rot[2].z = 1.0f;
     }
     human_buildmuscles(h);
     hu->spawn_pos = *pos;
@@ -299,7 +314,7 @@ int createhuman(float *posp, float *rot, int player)
         hu->colors[3].y = f;
         hu->colors[3].z = 1.0f;
     } else {
-        const Player *pl = &sr_players[player];
+        const Player *pl = &players[player];
 
         memcpy(hu->colors, pl->colors, sizeof hu->colors);
         hu->team = pl->team;
@@ -307,14 +322,14 @@ int createhuman(float *posp, float *rot, int player)
         hu->look_b = pl->look_b;
         hu->look_c = pl->look_c;
     }
-    if (sr_server != 0) {
-        ev = &sr_events[sr_numofevents];
+    if (*(const int *)(image_base + SR_RVA_SERVER) != 0) {
+        ev = &events[*event_count];
         ev->type = EVENT_HUMAN;
-        ev->tick = sr_game.ticks;
+        ev->tick = game->ticks;
         ev->param = h;
         ev->attach_type = hu->active;
         ev->attach_id = hu->player_id;
-        sr_numofevents = (sr_numofevents + 1) & 0xffff;
+        *event_count = (*event_count + 1) & 0xffff;
     }
     return h;
 }

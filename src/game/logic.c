@@ -19,11 +19,7 @@
 
 /* Game functions of other files. */
 void __cdecl lf_590f0(void);
-void __cdecl lf_5ae70(void);
-void __cdecl lf_5b9b0(void);
 #define resetgame lf_590f0
-#define logicsimulation_round lf_5ae70
-#define logicsimulation_world lf_5b9b0
 
 #define g_yaxis (*SR_AT(vec3, 0x60ce0))
 #define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))
@@ -45,15 +41,18 @@ static void put_item(int item, int human, int first, int last)
 
 void logic_player(int player)
 {
-    Player *p = &sr_players[player];
+    uintptr_t image_base = sr_base;
+    Player *p = (Player *)(image_base + SR_RVA_PLAYER) + player;
+    const City *city = (const City *)(image_base + SR_RVA_CITY);
+    const uint8_t *types = (const uint8_t *)&city->building_type;
     int human = p->human_id;
-    int count = g_city.num_buildings, building;
+    int count = city->num_buildings, building, bank = -1;
     Human *h;
     if ((uint32_t)human >= 512)
         return;
-    h = &sr_humans[human];
+    h = (Human *)(image_base + SR_RVA_HUMAN) + human;
     for (building = 0; building < count; ++building) {
-        int type = *(int *)BUILDING_FIELD(building_type, building);
+        int type = *(const int *)(types + building * 0x9dc);
         if ((type == 2 || type == 4 || type == 7) &&
             pointinsidebuilding(building, &h->pos.x, 0)) {
             if (!p->menu) {
@@ -62,16 +61,17 @@ void logic_player(int player)
             }
             return;
         }
+        /* A later shop takes priority over this bank. */
+        if (type == 5 && bank == -1 && pointinsidebuilding(building, &h->pos.x, 0))
+            bank = building;
     }
-    for (building = 0; building < count; ++building)
-        if (*(int *)BUILDING_FIELD(building_type, building) == 5 &&
-            pointinsidebuilding(building, &h->pos.x, 0)) {
-            if (!p->menu) {
-                p->menu_building = building;
-                p->menu = 12;
-            }
-            return;
+    if (bank != -1) {
+        if (!p->menu) {
+            p->menu_building = bank;
+            p->menu = 12;
         }
+        return;
+    }
     if (p->team < 5 && pointinsidebase(&h->pos.x, p->team, 0)) {
         if (!p->menu)
             p->menu = 3;
