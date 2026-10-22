@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 #include "collide.h"
+#include "economy.h"
 #include "events.h"
 #include "items.h"
 #include "profiler.h"
@@ -29,16 +30,6 @@
 #define g_intersect (*SR_AT(Intersect, 0x103484a0))
 #define g_account SR_AT(Account, 0xf437b68)
 #define g_numofaccounts (*SR_AT(int, 0xf437b64))
-
-/* Game functions with no clean version yet: the calls go to the lifted C. Ghidra types the
- * index of playersellstock as a float: the stack holds the same 4 bytes as the int here. */
-void __cdecl lf_05be0(int player, int stocks);
-void __cdecl lf_16960(uint32_t player);
-void __cdecl lf_16a20(int player, int tax);
-#define playersellstock lf_05be0
-#define playerdeathtax lf_16960
-#define playerteamkilltax lf_16a20
-
 
 /* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do
  * not hold an item leave the solver (mode 0x100). The joint list reads the bone of the muscle
