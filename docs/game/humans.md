@@ -155,7 +155,7 @@ The other functions of these files are `static`. They are parts of `humansimulat
 
 - A dead human without a player costs its account 5 percent of the money above 10000.
 - In game type 3, a dead human counts down by at least 4 each tick. In game type 4, a human without a player goes at once in a healing building.
-- `arm_axis` and `arm_pitch` are read by the arm code. No code writes them, so they stay 0.
+- The arm code reads `arm_axis` and `arm_pitch`. `playersimulation` writes them from `Player.input_extra[0]` and `[1]`. This copy uses input mode 1 on foot, or mode 2 or 3 in a vehicle.
 - `spawn_pos`, `spawn_pos2` and `body_param` are written when the human is made. No other code reads them.
 - The wobble of the strength uses the human index and the tick. The result differs for each human.
 - A NaN in a quaternion angle becomes -1 (`clamp_w`). This avoids a NaN in the arm angles.

@@ -34,12 +34,12 @@ void lf_04bb0(void);
 void packunitvector(void);
 void debug_resetlogfile(void);
 void systemtimer(void);
-void lf_053a0(void);
-void lf_05700(void);
-void lf_05870(void);
-void lf_05b40(void);
-void lf_05be0(void);
-void lf_05f20(void);
+void economysimulation(void);
+void economy_carmarket(void);
+void economy_gunmarket(void);
+void playerbuystock(void);
+void playersellstock(void);
+void player_calcassets(void);
 void lf_05fe0(void);
 void eventsimulation(void);
 void createevent_updateitem(void);
@@ -63,8 +63,8 @@ void sprintf_comma(void);
 void pointinsidebase(void);
 void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
-void lf_08cf0(void);
-void lf_08fe0(void);
+void logic_addteamcash(void);
+void logic_teammissioncomplete(void);
 void lf_093e0(void);
 void lf_094a0(void);
 void geteulerangles2(void);
@@ -75,8 +75,8 @@ void lf_0a1b0(void);
 void lf_0a2a0(void);
 void orientationtoquaternion(void);
 void projectorientation(void);
-void lf_0aa80(void);
-void lf_0ab20(void);
+void scenario_getnumofmissions(void);
+void scenario_setmissioninactive(void);
 void csradixsort(void);
 void init_genrand(void);
 void init_by_array(void);
@@ -168,8 +168,8 @@ void packangle(void);
 void unpackangle(void);
 void packposition(void);
 void packscalar(void);
-void lf_16960(void);
-void lf_16a20(void);
+void playerdeathtax(void);
+void playerteamkilltax(void);
 void createevent_bullet(void);
 void createevent_bullethit(void);
 void createevent_updateobject(void);
@@ -352,12 +352,12 @@ const LfEntry lf_table[] = {
     { "packunitvector", 0x5160, (void *)packunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "debug_resetlogfile", 0x5280, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "systemtimer", 0x5350, (void *)systemtimer, 0, LF_RET_INT, 4, "", 1 },
-    { "economysimulation", 0x53a0, (void *)lf_053a0, 0, LF_RET_VOID, 4, "", 0 },
-    { "economy_carmarket", 0x5700, (void *)lf_05700, 0, LF_RET_VOID, 4, "", 0 },
-    { "economy_gunmarket", 0x5870, (void *)lf_05870, 0, LF_RET_VOID, 4, "", 0 },
-    { "playerbuystock", 0x5b40, (void *)lf_05b40, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "playersellstock", 0x5be0, (void *)lf_05be0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "player_calcassets", 0x5f20, (void *)lf_05f20, 1, LF_RET_VOID, 4, "v", 0 },
+    { "economysimulation", 0x53a0, (void *)economysimulation, 0, LF_RET_VOID, 4, "", 0 },
+    { "economy_carmarket", 0x5700, (void *)economy_carmarket, 0, LF_RET_VOID, 4, "", 0 },
+    { "economy_gunmarket", 0x5870, (void *)economy_gunmarket, 0, LF_RET_VOID, 4, "", 0 },
+    { "playerbuystock", 0x5b40, (void *)playerbuystock, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "playersellstock", 0x5be0, (void *)playersellstock, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "player_calcassets", 0x5f20, (void *)player_calcassets, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x5fe0, (void *)lf_05fe0, 1, LF_RET_VOID, 4, "v", 0 },
     { "eventsimulation", 0x61a0, (void *)eventsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createevent_updateitem", 0x6380, (void *)createevent_updateitem, 1, LF_RET_VOID, 4, "v", 0 },
@@ -381,8 +381,8 @@ const LfEntry lf_table[] = {
     { "pointinsidebase", 0x89c0, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidebuilding", 0x8a60, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
     { "pointinsidebasesafe", 0x8b00, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "logic_addteamcash", 0x8cf0, (void *)lf_08cf0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_teammissioncomplete", 0x8fe0, (void *)lf_08fe0, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "logic_addteamcash", 0x8cf0, (void *)logic_addteamcash, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_teammissioncomplete", 0x8fe0, (void *)logic_teammissioncomplete, 2, LF_RET_VOID, 4, "pv", 0 },
     { "logic_suits_buy", 0x93e0, (void *)lf_093e0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_player", 0x94a0, (void *)lf_094a0, 1, LF_RET_VOID, 4, "v", 0 },
     { "geteulerangles2", 0x9600, (void *)geteulerangles2, 2, LF_RET_VOID, 4, "pp", 0 },
@@ -393,8 +393,8 @@ const LfEntry lf_table[] = {
     { "playersimulation", 0xa2a0, (void *)lf_0a2a0, 0, LF_RET_VOID, 4, "", 0 },
     { "orientationtoquaternion", 0xa7a0, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
     { "projectorientation", 0xa930, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "scenario_getnumofmissions", 0xaa80, (void *)lf_0aa80, 1, LF_RET_INT, 4, "v", 0 },
-    { "scenario_setmissioninactive", 0xab20, (void *)lf_0ab20, 1, LF_RET_VOID, 4, "v", 0 },
+    { "scenario_getnumofmissions", 0xaa80, (void *)scenario_getnumofmissions, 1, LF_RET_INT, 4, "v", 0 },
+    { "scenario_setmissioninactive", 0xab20, (void *)scenario_setmissioninactive, 1, LF_RET_VOID, 4, "v", 0 },
     { "csradixsort", 0xac00, (void *)csradixsort, 0, LF_RET_VOID, 4, "", 0 },
     { "init_genrand", 0xad30, (void *)init_genrand, 1, LF_RET_VOID, 4, "v", 0 },
     { "init_by_array", 0xad70, (void *)init_by_array, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -486,8 +486,8 @@ const LfEntry lf_table[] = {
     { "unpackangle", 0x16710, (void *)unpackangle, 2, LF_RET_VOID, 4, "pv", 0 },
     { "packposition", 0x16790, (void *)packposition, 1, LF_RET_VOID, 4, "p", 0 },
     { "packscalar", 0x16860, (void *)packscalar, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "playerdeathtax", 0x16960, (void *)lf_16960, 1, LF_RET_VOID, 4, "v", 0 },
-    { "playerteamkilltax", 0x16a20, (void *)lf_16a20, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "playerdeathtax", 0x16960, (void *)playerdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
+    { "playerteamkilltax", 0x16a20, (void *)playerteamkilltax, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createevent_bullet", 0x16bb0, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
     { "createevent_bullethit", 0x16c40, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createevent_updateobject", 0x16ce0, (void *)createevent_updateobject, 5, LF_RET_VOID, 4, "vvvpp", 0 },

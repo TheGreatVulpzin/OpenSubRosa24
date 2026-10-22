@@ -1036,12 +1036,12 @@ __declspec(naked) static void th_05160(void)
 }
 static uint8_t expect_05160[5] = { 0x83, 0xec, 0x08, 0x53, 0x56 };
 
-void __cdecl lf_053a0(void);
+void __cdecl economysimulation(void);
 static void (__cdecl *orig_053a0)(void);
 static SvVerify v_053a0 = { "economysimulation", -1 };
 static void __cdecl hk_053a0(void)
 {
-    SV_HOOK_VOID(v_053a0, lf_053a0(), orig_053a0(), NULL);
+    SV_HOOK_VOID(v_053a0, economysimulation(), orig_053a0(), NULL);
 }
 __declspec(naked) static void th_053a0(void)
 {
@@ -1075,12 +1075,12 @@ __declspec(naked) static void th_053a0(void)
 }
 static uint8_t expect_053a0[5] = { 0x83, 0xec, 0x0c, 0xd9, 0xe8 };
 
-void __cdecl lf_05700(void);
+void __cdecl economy_carmarket(void);
 static void (__cdecl *orig_05700)(void);
 static SvVerify v_05700 = { "economy_carmarket", -1 };
 static void __cdecl hk_05700(void)
 {
-    SV_HOOK_VOID(v_05700, lf_05700(), orig_05700(), NULL);
+    SV_HOOK_VOID(v_05700, economy_carmarket(), orig_05700(), NULL);
 }
 __declspec(naked) static void th_05700(void)
 {
@@ -1114,12 +1114,12 @@ __declspec(naked) static void th_05700(void)
 }
 static uint8_t expect_05700[6] = { 0x83, 0xec, 0x08, 0x56, 0x33, 0xf6 };
 
-void __cdecl lf_05870(void);
+void __cdecl economy_gunmarket(void);
 static void (__cdecl *orig_05870)(void);
 static SvVerify v_05870 = { "economy_gunmarket", -1 };
 static void __cdecl hk_05870(void)
 {
-    SV_HOOK_VOID(v_05870, lf_05870(), orig_05870(), NULL);
+    SV_HOOK_VOID(v_05870, economy_gunmarket(), orig_05870(), NULL);
 }
 __declspec(naked) static void th_05870(void)
 {
@@ -1153,12 +1153,12 @@ __declspec(naked) static void th_05870(void)
 }
 static uint8_t expect_05870[6] = { 0x51, 0x33, 0xc9, 0x89, 0x0c, 0x24 };
 
-void __cdecl lf_05b40(int param_1, int param_2);
+void __cdecl playerbuystock(int param_1, int param_2);
 static void (__cdecl *orig_05b40)(int, int);
 static SvVerify v_05b40 = { "playerbuystock", -1 };
 static void __cdecl hk_05b40(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_05b40, lf_05b40(param_1, param_2), orig_05b40(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_05b40, playerbuystock(param_1, param_2), orig_05b40(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_05b40(void)
 {
@@ -1195,12 +1195,12 @@ __declspec(naked) static void th_05b40(void)
 }
 static uint8_t expect_05b40[5] = { 0x55, 0x8b, 0x6c, 0x24, 0x08 };
 
-void __cdecl lf_05be0(float param_1, int param_2);
+void __cdecl playersellstock(float param_1, int param_2);
 static void (__cdecl *orig_05be0)(float, int);
 static SvVerify v_05be0 = { "playersellstock", -1 };
 static void __cdecl hk_05be0(float param_1, int param_2)
 {
-    SV_HOOK_VOID(v_05be0, lf_05be0(param_1, param_2), orig_05be0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_05be0, playersellstock(param_1, param_2), orig_05be0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_05be0(void)
 {
@@ -1237,12 +1237,12 @@ __declspec(naked) static void th_05be0(void)
 }
 static uint8_t expect_05be0[8] = { 0x83, 0xec, 0x08, 0x53, 0x8b, 0x5c, 0x24, 0x10 };
 
-void __cdecl lf_05f20(float param_1);
+void __cdecl player_calcassets(float param_1);
 static void (__cdecl *orig_05f20)(float);
 static SvVerify v_05f20 = { "player_calcassets", -1 };
 static void __cdecl hk_05f20(float param_1)
 {
-    SV_HOOK_VOID(v_05f20, lf_05f20(param_1), orig_05f20(param_1), NULL);
+    SV_HOOK_VOID(v_05f20, player_calcassets(param_1), orig_05f20(param_1), NULL);
 }
 __declspec(naked) static void th_05f20(void)
 {
@@ -2144,12 +2144,12 @@ __declspec(naked) static void th_08b00(void)
 }
 static uint8_t expect_08b00[8] = { 0x8b, 0x4c, 0x24, 0x08, 0x8b, 0x54, 0x24, 0x04 };
 
-void __cdecl lf_08cf0(int param_1, float param_2);
+void __cdecl logic_addteamcash(int param_1, float param_2);
 static void (__cdecl *orig_08cf0)(int, float);
 static SvVerify v_08cf0 = { "logic_addteamcash", -1 };
 static void __cdecl hk_08cf0(int param_1, float param_2)
 {
-    SV_HOOK_VOID(v_08cf0, lf_08cf0(param_1, param_2), orig_08cf0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_08cf0, logic_addteamcash(param_1, param_2), orig_08cf0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_08cf0(void)
 {
@@ -2186,12 +2186,12 @@ __declspec(naked) static void th_08cf0(void)
 }
 static uint8_t expect_08cf0[7] = { 0x83, 0xec, 0x08, 0x8b, 0x4c, 0x24, 0x0c };
 
-void __cdecl lf_08fe0(float * param_1, int param_2);
+void __cdecl logic_teammissioncomplete(float * param_1, int param_2);
 static void (__cdecl *orig_08fe0)(float *, int);
 static SvVerify v_08fe0 = { "logic_teammissioncomplete", -1 };
 static void __cdecl hk_08fe0(float * param_1, int param_2)
 {
-    SV_HOOK_VOID(v_08fe0, lf_08fe0(param_1, param_2), orig_08fe0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_08fe0, logic_teammissioncomplete(param_1, param_2), orig_08fe0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_08fe0(void)
 {
@@ -2659,12 +2659,12 @@ __declspec(naked) static void th_0a930(void)
 }
 static uint8_t expect_0a930[7] = { 0x83, 0xec, 0x10, 0x8b, 0x4c, 0x24, 0x18 };
 
-int __cdecl lf_0aa80(int param_1);
+int __cdecl scenario_getnumofmissions(int param_1);
 static int (__cdecl *orig_0aa80)(int);
 static SvVerify v_0aa80 = { "scenario_getnumofmissions", -1 };
 static int __cdecl hk_0aa80(int param_1)
 {
-    SV_HOOK_RET(int, v_0aa80, lf_0aa80(param_1), orig_0aa80(param_1), NULL);
+    SV_HOOK_RET(int, v_0aa80, scenario_getnumofmissions(param_1), orig_0aa80(param_1), NULL);
 }
 __declspec(naked) static void th_0aa80(void)
 {
@@ -2699,12 +2699,12 @@ __declspec(naked) static void th_0aa80(void)
 }
 static uint8_t expect_0aa80[10] = { 0x8b, 0x4c, 0x24, 0x04, 0x69, 0xc9, 0x7c, 0x11, 0x00, 0x00 };
 
-void __cdecl lf_0ab20(int param_1);
+void __cdecl scenario_setmissioninactive(int param_1);
 static void (__cdecl *orig_0ab20)(int);
 static SvVerify v_0ab20 = { "scenario_setmissioninactive", -1 };
 static void __cdecl hk_0ab20(int param_1)
 {
-    SV_HOOK_VOID(v_0ab20, lf_0ab20(param_1), orig_0ab20(param_1), NULL);
+    SV_HOOK_VOID(v_0ab20, scenario_setmissioninactive(param_1), orig_0ab20(param_1), NULL);
 }
 __declspec(naked) static void th_0ab20(void)
 {
@@ -6226,12 +6226,12 @@ __declspec(naked) static void th_16860(void)
 }
 static uint8_t expect_16860[7] = { 0x83, 0xec, 0x08, 0x8b, 0x4c, 0x24, 0x14 };
 
-void __cdecl lf_16960(uint param_1);
+void __cdecl playerdeathtax(uint param_1);
 static void (__cdecl *orig_16960)(uint);
 static SvVerify v_16960 = { "playerdeathtax", -1 };
 static void __cdecl hk_16960(uint param_1)
 {
-    SV_HOOK_VOID(v_16960, lf_16960(param_1), orig_16960(param_1), NULL);
+    SV_HOOK_VOID(v_16960, playerdeathtax(param_1), orig_16960(param_1), NULL);
 }
 __declspec(naked) static void th_16960(void)
 {
@@ -6267,12 +6267,12 @@ __declspec(naked) static void th_16960(void)
 }
 static uint8_t expect_16960[5] = { 0x55, 0x8b, 0x6c, 0x24, 0x08 };
 
-void __cdecl lf_16a20(int param_1, int param_2);
+void __cdecl playerteamkilltax(int param_1, int param_2);
 static void (__cdecl *orig_16a20)(int, int);
 static SvVerify v_16a20 = { "playerteamkilltax", -1 };
 static void __cdecl hk_16a20(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_16a20, lf_16a20(param_1, param_2), orig_16a20(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_16a20, playerteamkilltax(param_1, param_2), orig_16a20(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_16a20(void)
 {
