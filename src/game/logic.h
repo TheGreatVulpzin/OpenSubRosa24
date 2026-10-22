@@ -34,4 +34,24 @@ static __inline Mission *team_missions(int team)
     return (Mission *)TEAM_FIELD(team0_missions, team);
 }
 
+/* A full list uses slot 16, directly after the mission array. */
+static __inline int scenario_getnextmission(int team)
+{
+    int slot;
+    Mission *missions = team_missions(team);
+    for (slot = 0; slot < 16; ++slot)
+        if (!missions[slot].active)
+            break;
+    return slot;
+}
+
+static __inline void safe_center(int team, vec3 *out)
+{
+    const vec3 *min = (const vec3 *)TEAM_FIELD(team0_safe_min, team);
+    const vec3 *max = (const vec3 *)TEAM_FIELD(team0_safe_max, team);
+    out->x = (float)((double)(float)((double)min->x + max->x) * 0.5);
+    out->y = (float)((double)(float)((double)min->y + max->y) * 0.5);
+    out->z = (float)((double)(float)((double)min->z + max->z) * 0.5);
+}
+
 #endif

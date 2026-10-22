@@ -14,11 +14,9 @@
 #include "events.h"
 #include "items.h"
 #include "objects.h"
+#include "scenario.h"
 #include "server.h"
 #include "sr_server.h"
-
-/* Game functions of other files. */
-int __cdecl lf_28190(int human, int kind, int count); /* scenario_armhuman */
 
 #define msgbuf SR_AT(char, 0x61848)                  /* the scratch text of the game, 64 bytes */
 #define filtered_word SR_AT(const char, 0x5efec)     /* the word that the chat filter replaces */
@@ -200,7 +198,7 @@ static void admin_commands(int player, const char *text, int n)
     if (strncmp(text, "/phone", 6) == 0)
         give_phone(player);
     if (strncmp(text, "/arm", 4) == 0 && p->human_id != -1)
-        lf_28190(p->human_id, 2, 4);
+        scenario_armhuman(p->human_id, 2, 4);
     if (strncmp(text, "/cash", 5) == 0)
         p->money += 100000;
     if (strncmp(text, "/resetgame", 10) == 0)

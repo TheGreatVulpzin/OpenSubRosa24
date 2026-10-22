@@ -8691,12 +8691,12 @@ __declspec(naked) static void th_28020(void)
 }
 static uint8_t expect_28020[6] = { 0x55, 0x57, 0x33, 0xff, 0x33, 0xed };
 
-int __cdecl lf_28190(int param_1, int param_2, int param_3);
+int __cdecl scenario_armhuman(int param_1, int param_2, int param_3);
 static int (__cdecl *orig_28190)(int, int, int);
 static SvVerify v_28190 = { "scenario_armhuman", -1 };
 static int __cdecl hk_28190(int param_1, int param_2, int param_3)
 {
-    SV_HOOK_RET(int, v_28190, lf_28190(param_1, param_2, param_3), orig_28190(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_28190, scenario_armhuman(param_1, param_2, param_3), orig_28190(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_28190(void)
 {
@@ -8733,12 +8733,12 @@ __declspec(naked) static void th_28190(void)
 }
 static uint8_t expect_28190[5] = { 0x57, 0x8b, 0x7c, 0x24, 0x08 };
 
-void __cdecl lf_28230(undefined4 param_1, int param_2, undefined4 * param_3);
+void __cdecl createmission_threeway(undefined4 param_1, int param_2, undefined4 * param_3);
 static void (__cdecl *orig_28230)(undefined4, int, undefined4 *);
 static SvVerify v_28230 = { "createmission_threeway", -1 };
 static void __cdecl hk_28230(undefined4 param_1, int param_2, undefined4 * param_3)
 {
-    SV_HOOK_VOID(v_28230, lf_28230(param_1, param_2, param_3), orig_28230(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_28230, createmission_threeway(param_1, param_2, param_3), orig_28230(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_28230(void)
 {
@@ -8776,12 +8776,12 @@ __declspec(naked) static void th_28230(void)
 }
 static uint8_t expect_28230[8] = { 0x83, 0xec, 0x70, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_286b0(undefined4 param_1, int param_2, int * param_3);
+void __cdecl createmission_transaction(undefined4 param_1, int param_2, int * param_3);
 static void (__cdecl *orig_286b0)(undefined4, int, int *);
 static SvVerify v_286b0 = { "createmission_transaction", -1 };
 static void __cdecl hk_286b0(undefined4 param_1, int param_2, int * param_3)
 {
-    SV_HOOK_VOID(v_286b0, lf_286b0(param_1, param_2, param_3), orig_286b0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_286b0, createmission_transaction(param_1, param_2, param_3), orig_286b0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_286b0(void)
 {
@@ -10135,12 +10135,12 @@ __declspec(naked) static void th_32fe0(void)
 }
 static uint8_t expect_32fe0[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-int __cdecl lf_33350(int param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6);
+int __cdecl scenario_createcar(int param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6);
 static int (__cdecl *orig_33350)(int, undefined4, int, int, int, float);
 static SvVerify v_33350 = { "scenario_createcar", -1 };
 static int __cdecl hk_33350(int param_1, undefined4 param_2, int param_3, int param_4, int param_5, float param_6)
 {
-    SV_HOOK_RET(int, v_33350, lf_33350(param_1, param_2, param_3, param_4, param_5, param_6), orig_33350(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET(int, v_33350, scenario_createcar(param_1, param_2, param_3, param_4, param_5, param_6), orig_33350(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_33350(void)
 {
@@ -11538,12 +11538,12 @@ __declspec(naked) static void th_56710(void)
 }
 static uint8_t expect_56710[8] = { 0x83, 0xec, 0x50, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-int __cdecl lf_58320(int param_1, int param_2, int param_3);
+int __cdecl scenario_createguards(int param_1, int param_2, int param_3);
 static int (__cdecl *orig_58320)(int, int, int);
 static SvVerify v_58320 = { "scenario_createguards", -1 };
 static int __cdecl hk_58320(int param_1, int param_2, int param_3)
 {
-    SV_HOOK_RET(int, v_58320, lf_58320(param_1, param_2, param_3), orig_58320(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_58320, scenario_createguards(param_1, param_2, param_3), orig_58320(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_58320(void)
 {
@@ -11580,12 +11580,12 @@ __declspec(naked) static void th_58320(void)
 }
 static uint8_t expect_58320[8] = { 0x83, 0xec, 0x40, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_585b0(int param_1);
+void __cdecl scenario_createtraffic2(int param_1);
 static void (__cdecl *orig_585b0)(int);
 static SvVerify v_585b0 = { "scenario_createtraffic2", -1 };
 static void __cdecl hk_585b0(int param_1)
 {
-    SV_HOOK_VOID(v_585b0, lf_585b0(param_1), orig_585b0(param_1), NULL);
+    SV_HOOK_VOID(v_585b0, scenario_createtraffic2(param_1), orig_585b0(param_1), NULL);
 }
 __declspec(naked) static void th_585b0(void)
 {
@@ -11621,12 +11621,12 @@ __declspec(naked) static void th_585b0(void)
 }
 static uint8_t expect_585b0[10] = { 0x83, 0xec, 0x1c, 0x83, 0x3d, 0x28, 0x32, 0x6b, 0x0e, 0x00 };
 
-int __cdecl lf_587f0(int param_1, int param_2);
+int __cdecl scenario_createchase(int param_1, int param_2);
 static int (__cdecl *orig_587f0)(int, int);
 static SvVerify v_587f0 = { "scenario_createchase", -1 };
 static int __cdecl hk_587f0(int param_1, int param_2)
 {
-    SV_HOOK_RET(int, v_587f0, lf_587f0(param_1, param_2), orig_587f0(param_1, param_2), NULL);
+    SV_HOOK_RET(int, v_587f0, scenario_createchase(param_1, param_2), orig_587f0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_587f0(void)
 {
@@ -11662,12 +11662,12 @@ __declspec(naked) static void th_587f0(void)
 }
 static uint8_t expect_587f0[10] = { 0x83, 0xec, 0x40, 0x83, 0x3d, 0x28, 0x32, 0x6b, 0x0e, 0x00 };
 
-int __cdecl lf_58ef0(int param_1, int param_2, int * param_3);
+int __cdecl createmission_acquisition(int param_1, int param_2, int * param_3);
 static int (__cdecl *orig_58ef0)(int, int, int *);
 static SvVerify v_58ef0 = { "createmission_acquisition", -1 };
 static int __cdecl hk_58ef0(int param_1, int param_2, int * param_3)
 {
-    SV_HOOK_RET(int, v_58ef0, lf_58ef0(param_1, param_2, param_3), orig_58ef0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_58ef0, createmission_acquisition(param_1, param_2, param_3), orig_58ef0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_58ef0(void)
 {
@@ -11704,12 +11704,12 @@ __declspec(naked) static void th_58ef0(void)
 }
 static uint8_t expect_58ef0[9] = { 0x83, 0xec, 0x08, 0x8b, 0x0d, 0x40, 0xd7, 0xa1, 0x25 };
 
-void __cdecl lf_5aa60(void);
+void __cdecl createscenario_world(void);
 static void (__cdecl *orig_5aa60)(void);
 static SvVerify v_5aa60 = { "createscenario_world", -1 };
 static void __cdecl hk_5aa60(void)
 {
-    SV_HOOK_VOID(v_5aa60, lf_5aa60(), orig_5aa60(), NULL);
+    SV_HOOK_VOID(v_5aa60, createscenario_world(), orig_5aa60(), NULL);
 }
 __declspec(naked) static void th_5aa60(void)
 {
