@@ -25,6 +25,17 @@
 #define g_texturelist SR_AT(int, 0x13e22e80)
 #define g_materials ((uint8_t (*)[0x58])SR_AT(uint8_t, 0x16d50024))
 
+void logic_player(int player);
+void logic_playeractions(int player);
+void logic_suits_buy(int player, int row);
+void logic_gunstore_buy(int player, int row);
+void logic_cardealer_buy(int player, int row);
+int logic_createcar(int type, int team, int color);
+void logic_setteammanager(int team, int player);
+void logic_farbslist(int rank);
+void logicsimulation(void);
+void logicsimulation_driving(void);
+
 /* Each team occupies 0x117c bytes in the game state. */
 #define TEAM_FIELD(field, team) \
     ((void *)((uint8_t *)&sr_game.field + (team) * 0x117c))

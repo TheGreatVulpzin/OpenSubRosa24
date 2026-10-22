@@ -387,6 +387,7 @@ player,0x44,godmode,int,,"server_playermessage /godmode xors it; bulletsimulatio
 player,0x70,top_of_team,int,,"economysimulation: 1 for the player with the most assets of each team; itemweaponsimulation lets only this player shoot outside game state 2"
 object,0x20,key_away,int,,"itemlogic: 1 when the key of the vehicle is not with a human in it; objectsimulation_car and _heli stop the engine"
 soundlist,0xc8,phone_ring,int,,"itemlogic plays it every 128 ticks while a phone rings"
+soundlist,0xcc,digit,int,10,"logic_playeractions plays one sound for each phone digit 0 through 9"
 soundlist,0x10c,magazine,int,,"human_itemsimulation plays it when a magazine goes in or out of a gun"
 blocklist,0x74,elevator_block,int,,"setup 0x3e070: base + 0xb; human_itemsimulation: a block link equal to it (with bit 31) starts an elevator (likely)"
 blocklist,0x1c4,base_door_first,int,,"0x2a510 writes 4 ids (+0x1c4..+0x1d0); human_itemsimulation opens the base door for a link in the range (likely)"

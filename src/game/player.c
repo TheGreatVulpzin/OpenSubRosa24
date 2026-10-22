@@ -10,10 +10,6 @@
 #include "server.h"
 #include "sr_os.h"
 
-/* Game functions of other files. */
-int __cdecl lf_4e060(int type, int team, int color);
-#define logic_createcar lf_4e060
-
 int createplayer(void)
 {
     int i, j;

@@ -2228,12 +2228,12 @@ __declspec(naked) static void th_08fe0(void)
 }
 static uint8_t expect_08fe0[7] = { 0x83, 0xec, 0x18, 0x8b, 0x44, 0x24, 0x1c };
 
-void __cdecl lf_093e0(int param_1, int param_2);
+void __cdecl logic_suits_buy(int param_1, int param_2);
 static void (__cdecl *orig_093e0)(int, int);
 static SvVerify v_093e0 = { "logic_suits_buy", -1 };
 static void __cdecl hk_093e0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_093e0, lf_093e0(param_1, param_2), orig_093e0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_093e0, logic_suits_buy(param_1, param_2), orig_093e0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_093e0(void)
 {
@@ -2270,12 +2270,12 @@ __declspec(naked) static void th_093e0(void)
 }
 static uint8_t expect_093e0[5] = { 0x8b, 0x54, 0x24, 0x08, 0x53 };
 
-void __cdecl lf_094a0(int param_1);
+void __cdecl logic_player(int param_1);
 static void (__cdecl *orig_094a0)(int);
 static SvVerify v_094a0 = { "logic_player", -1 };
 static void __cdecl hk_094a0(int param_1)
 {
-    SV_HOOK_VOID(v_094a0, lf_094a0(param_1), orig_094a0(param_1), NULL);
+    SV_HOOK_VOID(v_094a0, logic_player(param_1), orig_094a0(param_1), NULL);
 }
 __declspec(naked) static void th_094a0(void)
 {
@@ -7390,12 +7390,12 @@ __declspec(naked) static void th_1cdf0(void)
 }
 static uint8_t expect_1cdf0[5] = { 0x83, 0xec, 0x5c, 0x53, 0x55 };
 
-void __cdecl lf_1d2c0(int param_1);
+void __cdecl logic_farbslist(int param_1);
 static void (__cdecl *orig_1d2c0)(int);
 static SvVerify v_1d2c0 = { "logic_farbslist", -1 };
 static void __cdecl hk_1d2c0(int param_1)
 {
-    SV_HOOK_VOID(v_1d2c0, lf_1d2c0(param_1), orig_1d2c0(param_1), NULL);
+    SV_HOOK_VOID(v_1d2c0, logic_farbslist(param_1), orig_1d2c0(param_1), NULL);
 }
 __declspec(naked) static void th_1d2c0(void)
 {
@@ -7431,12 +7431,12 @@ __declspec(naked) static void th_1d2c0(void)
 }
 static uint8_t expect_1d2c0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-void __cdecl lf_1d3b0(void);
+void __cdecl logicsimulation_driving(void);
 static void (__cdecl *orig_1d3b0)(void);
 static SvVerify v_1d3b0 = { "logicsimulation_driving", -1 };
 static void __cdecl hk_1d3b0(void)
 {
-    SV_HOOK_VOID(v_1d3b0, lf_1d3b0(), orig_1d3b0(), NULL);
+    SV_HOOK_VOID(v_1d3b0, logicsimulation_driving(), orig_1d3b0(), NULL);
 }
 __declspec(naked) static void th_1d3b0(void)
 {
@@ -7470,12 +7470,12 @@ __declspec(naked) static void th_1d3b0(void)
 }
 static uint8_t expect_1d3b0[5] = { 0x83, 0xec, 0x18, 0x53, 0x55 };
 
-void __cdecl lf_1d4d0(float param_1, int param_2);
+void __cdecl logic_setteammanager(float param_1, int param_2);
 static void (__cdecl *orig_1d4d0)(float, int);
 static SvVerify v_1d4d0 = { "logic_setteammanager", -1 };
 static void __cdecl hk_1d4d0(float param_1, int param_2)
 {
-    SV_HOOK_VOID(v_1d4d0, lf_1d4d0(param_1, param_2), orig_1d4d0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_1d4d0, logic_setteammanager(param_1, param_2), orig_1d4d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_1d4d0(void)
 {
@@ -7512,12 +7512,12 @@ __declspec(naked) static void th_1d4d0(void)
 }
 static uint8_t expect_1d4d0[8] = { 0x83, 0xec, 0x3c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_1d7a0(int param_1, int param_2);
+void __cdecl logic_gunstore_buy(int param_1, int param_2);
 static void (__cdecl *orig_1d7a0)(int, int);
 static SvVerify v_1d7a0 = { "logic_gunstore_buy", -1 };
 static void __cdecl hk_1d7a0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_1d7a0, lf_1d7a0(param_1, param_2), orig_1d7a0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_1d7a0, logic_gunstore_buy(param_1, param_2), orig_1d7a0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_1d7a0(void)
 {
@@ -11088,12 +11088,12 @@ __declspec(naked) static void th_4da10(void)
 }
 static uint8_t expect_4da10[8] = { 0x83, 0xec, 0x34, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-undefined4 __cdecl lf_4e060(int param_1, int param_2, undefined4 param_3);
+undefined4 __cdecl logic_createcar(int param_1, int param_2, undefined4 param_3);
 static undefined4 (__cdecl *orig_4e060)(int, int, undefined4);
 static SvVerify v_4e060 = { "logic_createcar", -1 };
 static undefined4 __cdecl hk_4e060(int param_1, int param_2, undefined4 param_3)
 {
-    SV_HOOK_RET(undefined4, v_4e060, lf_4e060(param_1, param_2, param_3), orig_4e060(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(undefined4, v_4e060, logic_createcar(param_1, param_2, param_3), orig_4e060(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_4e060(void)
 {
@@ -11130,12 +11130,12 @@ __declspec(naked) static void th_4e060(void)
 }
 static uint8_t expect_4e060[7] = { 0x8b, 0x4c, 0x24, 0x08, 0x83, 0xf9, 0xff };
 
-void __cdecl lf_4e0d0(int param_1, int param_2);
+void __cdecl logic_cardealer_buy(int param_1, int param_2);
 static void (__cdecl *orig_4e0d0)(int, int);
 static SvVerify v_4e0d0 = { "logic_cardealer_buy", -1 };
 static void __cdecl hk_4e0d0(int param_1, int param_2)
 {
-    SV_HOOK_VOID(v_4e0d0, lf_4e0d0(param_1, param_2), orig_4e0d0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_4e0d0, logic_cardealer_buy(param_1, param_2), orig_4e0d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_4e0d0(void)
 {
@@ -11458,12 +11458,12 @@ __declspec(naked) static void th_542a0(void)
 }
 static uint8_t expect_542a0[8] = { 0x83, 0xec, 0x5c, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_55700(float param_1);
+void __cdecl logic_playeractions(float param_1);
 static void (__cdecl *orig_55700)(float);
 static SvVerify v_55700 = { "logic_playeractions", -1 };
 static void __cdecl hk_55700(float param_1)
 {
-    SV_HOOK_VOID(v_55700, lf_55700(param_1), orig_55700(param_1), NULL);
+    SV_HOOK_VOID(v_55700, logic_playeractions(param_1), orig_55700(param_1), NULL);
 }
 __declspec(naked) static void th_55700(void)
 {

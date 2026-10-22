@@ -1822,16 +1822,7 @@ typedef union SoundList { struct {
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x8];
     int phone_ring;                      /* +0x00c8 itemlogic plays it every 128 ticks while a phone rings */
-    int unk_00cc;                        /* +0x00cc 2 functions */
-    int unk_00d0;                        /* +0x00d0 1 functions */
-    int unk_00d4;                        /* +0x00d4 1 functions */
-    int unk_00d8;                        /* +0x00d8 1 functions */
-    int unk_00dc;                        /* +0x00dc 1 functions */
-    int unk_00e0;                        /* +0x00e0 1 functions */
-    int unk_00e4;                        /* +0x00e4 1 functions */
-    int unk_00e8;                        /* +0x00e8 1 functions */
-    int unk_00ec;                        /* +0x00ec 1 functions */
-    int unk_00f0;                        /* +0x00f0 1 functions */
+    int digit[10];                       /* +0x00cc logic_playeractions plays one sound for each phone digit 0 through 9 */
     uint8_t pad_00f4[0x18];
     int magazine;                        /* +0x010c human_itemsimulation plays it when a magazine goes in or out of a gun */
     uint8_t pad_0110[0x1c];
@@ -1844,6 +1835,7 @@ SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
 SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
+SR_STATIC_ASSERT(offsetof(SoundList, digit) == 0xcc, "SoundList.digit");
 SR_STATIC_ASSERT(offsetof(SoundList, magazine) == 0x10c, "SoundList.magazine");
 SR_STATIC_ASSERT(offsetof(SoundList, gear) == 0x130, "SoundList.gear");
 

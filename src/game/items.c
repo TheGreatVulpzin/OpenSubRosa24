@@ -118,7 +118,10 @@ int item_addhumanlink(int item, int human, int slot)
  * place. */
 void item_removehumanlink(uint32_t item, int human, int slot)
 {
-    InventorySlot *s = &sr_humans[human].inventory[slot];
+    const uintptr_t base = sr_base;
+    Human *humans = (Human *)(base + SR_RVA_HUMAN);
+    InventorySlot *s = &humans[human].inventory[slot];
+    Item *it = (Item *)(base + SR_RVA_ITEM) + item;
     int i = 0;
     while (i < s->count) {
         if ((uint32_t)s->items[i] != item) {
@@ -126,8 +129,20 @@ void item_removehumanlink(uint32_t item, int human, int slot)
             continue;
         }
         s->items[i] = s->items[--s->count];
-        sr_items[item].parent_human = -1;
-        createevent_updateitem(item);
+        it->parent_human = -1;
+        if (*(const int *)(base + SR_RVA_SERVER) && item < MAX_ITEMS) {
+            uint32_t *count = (uint32_t *)(base + SR_RVA_NUMOFEVENTS);
+            uint32_t index = *count;
+            Event *ev = (Event *)(base + SR_RVA_EVENT) + index;
+            const Game *game = (const Game *)(base + SR_RVA_GAME);
+            ev->type = 5;
+            ev->tick = game->ticks;
+            ev->param = (it->active + it->type * 2) * 0x400 + (int)item;
+            ev->attach_type = -1;
+            ev->attach_id = it->parent_item;
+            ev->range_mode = it->parent_slot;
+            *count = (index + 1) & 0xffff;
+        }
     }
 }
 

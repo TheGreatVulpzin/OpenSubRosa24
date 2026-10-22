@@ -65,8 +65,8 @@ void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
 void logic_addteamcash(void);
 void logic_teammissioncomplete(void);
-void lf_093e0(void);
-void lf_094a0(void);
+void logic_suits_buy(void);
+void logic_player(void);
 void geteulerangles2(void);
 void lf_09870(void);
 void serpnoise2d(void);
@@ -198,10 +198,10 @@ void lf_1bc50(void);
 void lineintersectlandscape(void);
 void circleintersectlandscape(void);
 void sphereintersectlandscape(void);
-void lf_1d2c0(void);
-void lf_1d3b0(void);
-void lf_1d4d0(void);
-void lf_1d7a0(void);
+void logic_farbslist(void);
+void logicsimulation_driving(void);
+void logic_setteammanager(void);
+void logic_gunstore_buy(void);
 void multiplyquaternion(void);
 void multiply3x3matrices(void);
 void unpackobjectpacket(void);
@@ -292,8 +292,8 @@ void circleintersectlevel(void);
 void sphereintersectlevel(void);
 void lf_4d850(void);
 void lf_4da10(void);
-void lf_4e060(void);
-void lf_4e0d0(void);
+void logic_createcar(void);
+void logic_cardealer_buy(void);
 void objectwheelcollision2(void);
 void objectwheelcollision(void);
 void loadsaveoptions(void);
@@ -305,7 +305,7 @@ void createhuman(void);
 void humansimulation(void);
 void itemsimulation(void);
 void lf_54e40(void);
-void lf_55700(void);
+void logic_playeractions(void);
 void objectsimulation(void);
 void scenario_createguards(void);
 void scenario_createtraffic2(void);
@@ -315,7 +315,7 @@ void lf_590f0(void);
 void createscenario_world(void);
 void lf_5ae70(void);
 void lf_5b9b0(void);
-void lf_5c580(void);
+void logicsimulation(void);
 void __aulldiv(void);
 
 const LfEntry lf_table[] = {
@@ -383,8 +383,8 @@ const LfEntry lf_table[] = {
     { "pointinsidebasesafe", 0x8b00, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
     { "logic_addteamcash", 0x8cf0, (void *)logic_addteamcash, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_teammissioncomplete", 0x8fe0, (void *)logic_teammissioncomplete, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "logic_suits_buy", 0x93e0, (void *)lf_093e0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_player", 0x94a0, (void *)lf_094a0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "logic_suits_buy", 0x93e0, (void *)logic_suits_buy, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_player", 0x94a0, (void *)logic_player, 1, LF_RET_VOID, 4, "v", 0 },
     { "geteulerangles2", 0x9600, (void *)geteulerangles2, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lerpnoise2d", 0x9870, (void *)lf_09870, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "serpnoise2d", 0x9a00, (void *)serpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
@@ -516,10 +516,10 @@ const LfEntry lf_table[] = {
     { "lineintersectlandscape", 0x1c1d0, (void *)lineintersectlandscape, 2, LF_RET_INT, 4, "pp", 0 },
     { "circleintersectlandscape", 0x1c8f0, (void *)circleintersectlandscape, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlandscape", 0x1cdf0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 4, "pv", 0 },
-    { "logic_farbslist", 0x1d2c0, (void *)lf_1d2c0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "logicsimulation_driving", 0x1d3b0, (void *)lf_1d3b0, 0, LF_RET_VOID, 4, "", 0 },
-    { "logic_setteammanager", 0x1d4d0, (void *)lf_1d4d0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_gunstore_buy", 0x1d7a0, (void *)lf_1d7a0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_farbslist", 0x1d2c0, (void *)logic_farbslist, 1, LF_RET_VOID, 4, "v", 0 },
+    { "logicsimulation_driving", 0x1d3b0, (void *)logicsimulation_driving, 0, LF_RET_VOID, 4, "", 0 },
+    { "logic_setteammanager", 0x1d4d0, (void *)logic_setteammanager, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_gunstore_buy", 0x1d7a0, (void *)logic_gunstore_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "multiplyquaternion", 0x1d8a0, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "multiply3x3matrices", 0x1d9e0, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "unpackobjectpacket", 0x1dba0, (void *)unpackobjectpacket, 0, LF_RET_VOID, 4, "", 0 },
@@ -610,8 +610,8 @@ const LfEntry lf_table[] = {
     { "sphereintersectlevel", 0x4d750, (void *)sphereintersectlevel, 2, LF_RET_INT, 4, "pv", 0 },
     { "buildcityinterection", 0x4d850, (void *)lf_4d850, 1, LF_RET_VOID, 4, "v", 0 },
     { "buildcitystreet", 0x4da10, (void *)lf_4da10, 1, LF_RET_VOID, 4, "v", 0 },
-    { "logic_createcar", 0x4e060, (void *)lf_4e060, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "logic_cardealer_buy", 0x4e0d0, (void *)lf_4e0d0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_createcar", 0x4e060, (void *)logic_createcar, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "logic_cardealer_buy", 0x4e0d0, (void *)logic_cardealer_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision2", 0x4e2c0, (void *)objectwheelcollision2, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision", 0x4e500, (void *)objectwheelcollision, 2, LF_RET_VOID, 4, "vv", 0 },
     { "loadsaveoptions", 0x4e7a0, (void *)loadsaveoptions, 1, LF_RET_VOID, 4, "v", 1 },
@@ -623,7 +623,7 @@ const LfEntry lf_table[] = {
     { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemsimulation", 0x542a0, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },
-    { "logic_playeractions", 0x55700, (void *)lf_55700, 1, LF_RET_VOID, 4, "v", 0 },
+    { "logic_playeractions", 0x55700, (void *)logic_playeractions, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation", 0x56710, (void *)objectsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_createguards", 0x58320, (void *)scenario_createguards, 3, LF_RET_INT, 4, "vvv", 0 },
     { "scenario_createtraffic2", 0x585b0, (void *)scenario_createtraffic2, 1, LF_RET_VOID, 4, "v", 0 },
@@ -633,7 +633,7 @@ const LfEntry lf_table[] = {
     { "createscenario_world", 0x5aa60, (void *)createscenario_world, 0, LF_RET_VOID, 4, "", 0 },
     { "logicsimulation_round", 0x5ae70, (void *)lf_5ae70, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation_world", 0x5b9b0, (void *)lf_5b9b0, 0, LF_RET_VOID, 4, "", 1 },
-    { "logicsimulation", 0x5c580, (void *)lf_5c580, 0, LF_RET_VOID, 4, "", 1 },
+    { "logicsimulation", 0x5c580, (void *)logicsimulation, 0, LF_RET_VOID, 4, "", 1 },
     { "__aulldiv", 0x5cf70, (void *)__aulldiv, 4, LF_RET_INT64, 4, "vvvv", 0 },
 };
 const int lf_table_count = 316;
