@@ -100,6 +100,45 @@ void ai_car_nextwaypoint(int player)
     next->turn = 1;
 }
 
+/* One active object `oj` near the car `o`. A chase car in the same lane changes lane. An object
+ * ahead that drives the same way lowers the wanted speed `target`. */
+static void near_object(Player *p, const Object *o, const Object *oj, const vec3 *dc, float *target)
+{
+  vec3 rr;
+  float sd, ah, len2, cand;
+
+  rr.x = (float)(oj->pos.x - o->pos.x);
+  rr.z = (float)(oj->pos.z - o->pos.z);
+  if (!(fabs(rr.x) < 64.0) || !(fabs(rr.z) < 64.0))
+    return;
+  rr.y = (float)(oj->pos.y - o->pos.y);
+  sd = (float)fabs((float)((rr.y * o->rot[0].y + o->rot[0].x * rr.x) + o->rot[0].z * rr.z));
+  ah = (float)((dc->y * rr.y + dc->x * rr.x) + dc->z * rr.z);
+  if (p->ai_chase && p->lane_cooldown < 1 && ah > 2.0f && sd < 2.0f) {
+    int *lane = &p->waypoints[p->ai_waypoint].lane;
+
+    if ((os_rand() & 1) == 0)
+      *lane = (*lane >= 2) ? *lane - 1 : *lane + 1;
+    else
+      *lane = (*lane < -1) ? *lane + 1 : *lane - 1;
+    if (*lane > 2)
+      *lane = 2;
+    if (*lane < -2)
+      *lane = -2;
+    p->lane_cooldown = 60;
+  }
+  if (ah > 2.0f && sd < 2.0f && dotproduct(&o->rot[2], &oj->rot[2]) > 0.0f) {
+    len2 = (float)(vectordistance(&o->pos, &oj->pos) - 8.0);
+    if (len2 < 0.0f)
+      len2 = 0.0f;
+    if (p->ai_chase && len2 < 16.0f)
+      len2 = 16.0f;
+    cand = (float)(vectorlength(&oj->vel) + (float)((len2 * 0.5) / 60.0));
+    if (cand < *target)
+      *target = cand;
+  }
+}
+
 /* Drive the car `object` of the bot `player` for one tick. */
 void ai_playercar(int player, int object)
 {
@@ -107,15 +146,14 @@ void ai_playercar(int player, int object)
   Object *o = &objs[object];
   const Object *oj;
   Player *p = &sr_players[player];
-  const vec3 *r0 = &o->rot[0];
   const vec3 *r1 = &o->rot[1];
   const vec3 *r2 = &o->rot[2];
   AiWaypoint *wp;
   const CityRoad *rd;
   CityIntersection *a, *b, *c;
-  vec3 from, p3, dc, v, dd, e, cross, rr;
+  vec3 from, p3, dc, v, dd, e, cross;
   float to_x, to_z, lat, lateral, off, s, shift, m, tt, steer, fwd;
-  float q_x, q_z, ahead, f, k, target, lim, vd, thr, sp, ah, sd, cand, len2;
+  float q_x, q_z, ahead, f, k, target, lim, vd, thr, sp;
   double fd;
   int g, side, next_isec, j, st;
 
@@ -271,41 +309,11 @@ void ai_playercar(int player, int object)
   if (p->lane_cooldown > 0)
     p->lane_cooldown--;
 
-  /* The other objects close in front: change lane (a chase car) or keep behind them. */
-  for (j = 0, oj = objs; j < 1024; j++, oj++) {
-    if (j == object || !oj->active)
-      continue;
-    rr.x = (float)(oj->pos.x - o->pos.x);
-    rr.z = (float)(oj->pos.z - o->pos.z);
-    if (!(fabs(rr.x) < 64.0) || !(fabs(rr.z) < 64.0))
-      continue;
-    rr.y = (float)(oj->pos.y - o->pos.y);
-    sd = (float)fabs((float)((rr.y * r0->y + r0->x * rr.x) + r0->z * rr.z));
-    ah = (float)((dc.y * rr.y + dc.x * rr.x) + dc.z * rr.z);
-    if (p->ai_chase && p->lane_cooldown < 1 && ah > 2.0f && sd < 2.0f) {
-      int *lane = &p->waypoints[p->ai_waypoint].lane;
-
-      if ((os_rand() & 1) == 0)
-        *lane = (*lane >= 2) ? *lane - 1 : *lane + 1;
-      else
-        *lane = (*lane < -1) ? *lane + 1 : *lane - 1;
-      if (*lane > 2)
-        *lane = 2;
-      if (*lane < -2)
-        *lane = -2;
-      p->lane_cooldown = 60;
-    }
-    if (ah > 2.0f && sd < 2.0f && dotproduct(&o->rot[2], &oj->rot[2]) > 0.0f) {
-      len2 = (float)(vectordistance(&o->pos, &oj->pos) - 8.0);
-      if (len2 < 0.0f)
-        len2 = 0.0f;
-      if (p->ai_chase && len2 < 16.0f)
-        len2 = 16.0f;
-      cand = (float)(vectorlength(&oj->vel) + (float)((len2 * 0.5) / 60.0));
-      if (cand < target)
-        target = cand;
-    }
-  }
+  /* The other objects close in front: change lane (a chase car) or keep behind them. Most
+   * objects are not active, so the loop only tests the flag and leaves the work to a helper. */
+  for (j = 0, oj = objs; j < 1024; j++, oj++)
+    if (j != object && oj->active)
+      near_object(p, o, oj, &dc, &target);
 
   /* The throttle: three times the speed along the car plus the wanted speed. A car that does not move for 3 seconds
    * backs out for 2 seconds and then tries again. */
