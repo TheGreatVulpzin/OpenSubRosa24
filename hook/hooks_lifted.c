@@ -8274,12 +8274,12 @@ __declspec(naked) static void th_257a0(void)
 }
 static uint8_t expect_257a0[7] = { 0x83, 0xec, 0x50, 0x8b, 0x4c, 0x24, 0x54 };
 
-void __cdecl lf_25e70(int param_1, float * param_2, float param_3, float param_4);
+void __cdecl createtrack(int param_1, float * param_2, float param_3, float param_4);
 static void (__cdecl *orig_25e70)(int, float *, float, float);
 static SvVerify v_25e70 = { "createtrack", -1 };
 static void __cdecl hk_25e70(int param_1, float * param_2, float param_3, float param_4)
 {
-    SV_HOOK_VOID(v_25e70, lf_25e70(param_1, param_2, param_3, param_4), orig_25e70(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_25e70, createtrack(param_1, param_2, param_3, param_4), orig_25e70(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_25e70(void)
 {
@@ -10094,12 +10094,12 @@ __declspec(naked) static void th_32bb0(void)
 }
 static uint8_t expect_32bb0[8] = { 0x8b, 0x4c, 0x24, 0x04, 0x8b, 0x54, 0x24, 0x08 };
 
-void __cdecl lf_32fe0(float * param_1);
+void __cdecl buildsomeshit(float * param_1);
 static void (__cdecl *orig_32fe0)(float *);
 static SvVerify v_32fe0 = { "buildsomeshit", -1 };
 static void __cdecl hk_32fe0(float * param_1)
 {
-    SV_HOOK_VOID(v_32fe0, lf_32fe0(param_1), orig_32fe0(param_1), NULL);
+    SV_HOOK_VOID(v_32fe0, buildsomeshit(param_1), orig_32fe0(param_1), NULL);
 }
 __declspec(naked) static void th_32fe0(void)
 {

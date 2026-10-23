@@ -219,7 +219,7 @@ void getenginetorque2(void);
 void object_rotorsimulation(void);
 void objectsimulation_heli(void);
 void lineintersectobject(void);
-void lf_25e70(void);
+void createtrack(void);
 void lineintersecttrack(void);
 void lineintersecttrackrail(void);
 void objecttrainsimulation(void);
@@ -264,7 +264,7 @@ void createobject(void);
 void objecttimetolive(void);
 void objectenginesimulation2(void);
 void sphereintersectobject(void);
-void lf_32fe0(void);
+void buildsomeshit(void);
 void scenario_createcar(void);
 void servercycle(void);
 void serverrecv(void);
@@ -537,7 +537,7 @@ const LfEntry lf_table[] = {
     { "object_rotorsimulation", 0x240e0, (void *)object_rotorsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0x24f60, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0x257a0, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
-    { "createtrack", 0x25e70, (void *)lf_25e70, 4, LF_RET_VOID, 4, "vpvv", 0 },
+    { "createtrack", 0x25e70, (void *)createtrack, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0x26bc0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0x26db0, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0x26f90, (void *)objecttrainsimulation, 1, LF_RET_VOID, 4, "v", 0 },
@@ -582,7 +582,7 @@ const LfEntry lf_table[] = {
     { "objecttimetolive", 0x32340, (void *)objecttimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "objectenginesimulation2", 0x324c0, (void *)objectenginesimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "sphereintersectobject", 0x32bb0, (void *)sphereintersectobject, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "buildsomeshit", 0x32fe0, (void *)lf_32fe0, 1, LF_RET_VOID, 4, "p", 0 },
+    { "buildsomeshit", 0x32fe0, (void *)buildsomeshit, 1, LF_RET_VOID, 4, "p", 0 },
     { "scenario_createcar", 0x33350, (void *)scenario_createcar, 6, LF_RET_INT, 4, "vvvvvv", 0 },
     { "servercycle", 0x33570, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
     { "serverrecv", 0x33650, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },

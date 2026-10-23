@@ -259,35 +259,12 @@ Two rules in `LiftExport.java` put the rounding points of the original back into
 - `storeRounding`: the original rounds a value to `float` only when it stores it (`fstp dword ptr [esp+10h]`). The decompiler p-code has only 4-byte float ops, so it does not show these stores. The rule follows the x87 stack in the machine code after each float op. When the result goes to a `float` store before another x87 instruction uses it, the rule prints `(float)(...)` around the op. A Ghidra listing shows `faddp st(1),st` as `FADDP` without operands.
 - `floatGrouping`: Ghidra prints `FLOAT_ADD(x, FLOAT_ADD(y, z))` as `x + y + z`, which C reads as `(x + y) + z`. Float math is not associative, so the rule puts the parentheses back. The same applies to `*` and `/`.
 
-These two rules made `createlandscape` (a 2049 x 2049 height map) bit-exact. Known functions that still have precision differences (the verifier disables their hooks, so the original runs):
+These two rules made `createlandscape` (a 2049 x 2049 height map) bit-exact.
 
-| Function | Difference |
-| --- | --- |
-| `buildsomeshit` | 5873 floats in the last bits, 4 floats about 230 to 720 steps apart |
+`buildsomeshit` also matches all recorded calls. Its mean angle keeps double precision before
+`sin` and `cos`. Each sine or cosine result and each point component rounds to `float`.
 
 `/fp:fast` makes the differences larger.
-
-### Accepted difference: buildsomeshit
-
-`buildsomeshit` (0x32fe0) builds the track geometry with `sin`, `cos` and `createtrack`. `createlevel` calls it once per level, after `createlandscape`. The difference is accepted: no C version of the function can give the same bits.
-
-Result of one harness call (`build/hook/subvulpes.log`, 2026-10-14):
-
-- 5873 floats are at most `verify_float_ulps` (4) steps apart.
-- 4 floats in `g_object` are 228 to 720 steps apart. That is a relative error of about 1e-4 (2^-23 for each step).
-- The return value and the `rand()` state are the same.
-
-Why the bits differ:
-
-1. The 024d keeps the intermediate values in x87 registers at 53-bit precision (control word `0x27F`). It rounds them to `float` only when it stores them.
-2. The sine and cosine results go through many operations before a store. The lifted C rounds at other points. The decompiler p-code does not show where the original keeps a value in a register.
-3. Each step adds a small error, and the error grows through the chain of calculations. `storeRounding` and `floatGrouping` do not remove it.
-
-What the tools do:
-
-- The harness counts these calls as "known" (`known_difference()` in `src/tests/harness.c`, "x87 precision"). They do not count as a failure, and they are not in the "calls same" count.
-- With `verify=1`, the live verifier logs the difference and disables the hook. The original runs from then on.
-- With `verify=0`, the lifted version runs. The track geometry then has the relative error above. The in-game test checklist must include the objects that `createtrack` builds.
 
 ### Harness-only difference: building_buildfloorplan
 

@@ -99,6 +99,35 @@ def cases():
 
     result['surface'] = ('addbeziersurface', surface(0xf6f0, False))
     result['surface_world_uv'] = ('addbeziersurfacetexture', surface(0xfc40, True))
+
+    def track(snapshot):
+        snapshot.write(0x90dc520, 'i', 0)
+        snapshot.write(0x9c1d8c0, 'fff', 2048, 0, -1024)
+        shapes = [
+            (0, [(2100, 5, 100), (2102, 5, 100), (2140, 7, 132), (2138, 7, 132)], 0, 0),
+            (1, [(128, 4, 16), (130, 4, 16), (158, 7, 45), (156, 7, 45)], 1.75, -0.625),
+            (2, [(128, 4, 16), (130, 4, 16), (158, 7, 45), (156, 7, 45)], 0, 0),
+            (0, [(18428, 10, 500), (18430, 10, 500), (18436, 10, 530), (18434, 10, 530)], 0, 0),
+            (1, [(64, 0, 8)] * 4, 0, 0),
+            (0, [(10000000, 0.125, 3.333), (10000002, 0.25, 1.125),
+                 (10000032, 2.333, 30.125), (9999999, 1.666, 32.875)], 0.333, 0.625),
+        ]
+        lines = []
+        for i, (kind, points, drop, rise) in enumerate(shapes):
+            address = POINTS + i * 0x100
+            for j, point in enumerate(points):
+                snapshot.write(address + j * 12, 'fff', *point)
+            lines.append('R 25e70 V:%x M:%x V:%x V:%x' % (kind, address, bits(drop), bits(rise)))
+        return lines
+
+    def track_loop(snapshot):
+        snapshot.write(0x9c1d8c0, 'fff', 2048, 0, -1024)
+        snapshot.write(POINTS, 'fff', 2100, 4.25, 100)
+        snapshot.write(POINTS + 0x100, 'fff', 128, -0.0, 12)
+        return ['R 32fe0 M:%x' % POINTS, 'R 32fe0 M:%x' % (POINTS + 0x100)]
+
+    result['track'] = ('createtrack', track)
+    result['track_loop'] = ('buildsomeshit', track_loop)
     return result
 
 
@@ -127,7 +156,9 @@ def main():
         summary = run_harness(folder, function)
         (args.work / (name + '.log')).write_text(summary + '\n', encoding='utf-8')
         ok = summary.startswith('1 functions tested')
-        ok = ok and not re.search(r'\b[1-9][0-9]* (?:different|(?:\w+ )?crashed|skipped)\b', summary)
+        matched = re.search(r': (\d+) calls same', summary)
+        ok = ok and matched is not None and int(matched.group(1)) == len(lines)
+        ok = ok and not re.search(r'\b[1-9][0-9]* (?:different|known differences|(?:\w+ )?crashed|skipped)\b', summary)
         bad += not ok
         print('%s %s: %s%s' % (name, function, summary, '' if ok else ' CHECK'), flush=True)
         if ok:
