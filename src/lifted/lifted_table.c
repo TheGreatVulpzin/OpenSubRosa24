@@ -135,8 +135,8 @@ void ai_playercar(void);
 void lf_0f2b0(void);
 void lf_0f4a0(void);
 void lf_0f620(void);
-void lf_0f6f0(void);
-void lf_0fc40(void);
+void addbeziersurface(void);
+void addbeziersurfacetexture(void);
 void lf_10140(void);
 void lf_105c0(void);
 void lf_10950(void);
@@ -453,8 +453,8 @@ const LfEntry lf_table[] = {
     { "createarea", 0xf2b0, (void *)lf_0f2b0, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "area_createsector", 0xf4a0, (void *)lf_0f4a0, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_createchunk", 0xf620, (void *)lf_0f620, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "addbeziersurface", 0xf6f0, (void *)lf_0f6f0, 7, LF_RET_VOID, 4, "ppvvvvv", 0 },
-    { "addbeziersurfacetexture", 0xfc40, (void *)lf_0fc40, 7, LF_RET_VOID, 4, "pvvvvvv", 0 },
+    { "addbeziersurface", 0xf6f0, (void *)addbeziersurface, 7, LF_RET_VOID, 4, "ppvvvvv", 0 },
+    { "addbeziersurfacetexture", 0xfc40, (void *)addbeziersurfacetexture, 7, LF_RET_VOID, 4, "pvvvvvv", 0 },
     { "area_block_addwindowhorizontal", 0x10140, (void *)lf_10140, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_block_addwindowvertical", 0x105c0, (void *)lf_105c0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbox", 0x10950, (void *)lf_10950, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },

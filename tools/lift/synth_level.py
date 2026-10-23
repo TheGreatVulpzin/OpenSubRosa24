@@ -71,6 +71,34 @@ def cases():
         [(0.00125, 0.000125, 0.3333), (10000000, 0.1, -10000000),
          (0.333, 0.00001, 2000.25), (-100.0625, 800.125, 0.666),
          (3.14159, -0.125, 0.625)], (0.125, 0.375, 0.625)))
+
+    def surface(rva, world_uv):
+        def build(snapshot):
+            snapshot.write(0x256ad760, 'i', 2)
+            snapshot.write(0x256ad760 + 0x110004, 'i', 1)
+            for j in range(4):
+                for k in range(4):
+                    snapshot.write(POINTS + (j * 4 + k) * 12, 'fff',
+                                   k * 1.25 + j * 0.125 - 2,
+                                   (j * j - 2 * k) * 0.2 + (j % 2) * 0.03125,
+                                   j * 1.5 + k * 0.0625)
+                    snapshot.write(LIGHT + (j * 4 + k) * 8, 'ff',
+                                   k * 0.333 + j * 0.125, j * 0.375 - k * 0.0625)
+            for base, size in ((0x761ea20, 12), (0x13c22d40, 8), (0xb0661c0, 12)):
+                for i in range(size):
+                    snapshot.write(base + i * 4, 'f', 13.25 + i)
+            for i in range(64):
+                snapshot.write(0x256ad760 + 0x90004 + i * 12 + 8, 'f', -123.25)
+            uv = 'V:0' if world_uv else 'M:%x' % LIGHT
+            return ['R %x M:%x %s V:%x V:%x V:%x V:%x V:30007' %
+                    (rva, POINTS, uv, su & 0xffffffff, du, sv & 0xffffffff, dv)
+                    for su, du, sv, dv in ((2, 3, 2, 3), (2, 2, 3, 2), (2, 1, 2, 1),
+                                          (0, 2, 2, 1), (2, 1, 0, 2),
+                                          (-1, 2, 2, 1), (2, 1, -1, 2), (0, 1, 0, 1))]
+        return build
+
+    result['surface'] = ('addbeziersurface', surface(0xf6f0, False))
+    result['surface_world_uv'] = ('addbeziersurfacetexture', surface(0xfc40, True))
     return result
 
 
