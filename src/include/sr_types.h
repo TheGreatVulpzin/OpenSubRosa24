@@ -194,6 +194,37 @@ typedef union CityRoad { struct {
     char name[32];      /* +0x2c */
 }; uint8_t lf_raw[0x4c]; } CityRoad;
 
+/* A city block and its inner dimensions. */
+typedef struct CityBlock {
+    int x, z;
+    int size_x, height, size_z;
+    int inner_x, inner_z;
+    uint8_t pad_1c[0x14];
+} CityBlock;
+
+/* Records of the level editor. */
+typedef struct LevelIntersection {
+    int x, y, z;
+} LevelIntersection;
+
+typedef struct LevelStreet {
+    int a, b;
+    int axis;
+    int lanes_a, lanes_b;
+    char name[32];
+} LevelStreet;
+
+typedef struct LevelBuilding {
+    char name[64];
+    int x, y, z;
+    int turns;
+    uint8_t unsaved[4];
+} LevelBuilding;
+
+/* Vertex indices of the temporary mesh. */
+typedef struct MeshQuad { int verts[4]; } MeshQuad;
+typedef struct MeshTri { int verts[3]; } MeshTri;
+
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
@@ -253,10 +284,12 @@ typedef union ObjectFace { struct {
 typedef union TrackPiece { struct {
     int type;           /* +0x00 createtrack; lineintersecttrack tests all the triangles of type 1, else the first 14 */
     vec3 pos;           /* +0x04 the center: lineintersecttrackrail tests only a line that starts within 64 of it */
-    int unk_10;         /* +0x10 createtrack */
+    int num_verts;      /* +0x10 the number of vertices */
     vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */
     int num_tris;       /* +0x254 createtrack: the number of triangles */
-    int tris[64][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    int tris[48][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    vec3 center[8];     /* +0x498 the midpoint between the two edges */
+    vec3 across[8];     /* +0x4f8 the unit direction from edge B to edge A */
     uint8_t pad_558[8];
     vec3 box_min;       /* +0x560 createtrack: the box of the corners; objecttrainsimulation tests it */
     vec3 box_max;       /* +0x56c createtrack: the box of the corners */
@@ -512,6 +545,12 @@ SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
 SR_STATIC_ASSERT(sizeof(ObjectFace) == 0x40, "ObjectFace");
 SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
+SR_STATIC_ASSERT(sizeof(CityBlock) == 0x30, "CityBlock");
+SR_STATIC_ASSERT(sizeof(LevelIntersection) == 0xc, "LevelIntersection");
+SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
+SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
+SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
+SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
 SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
@@ -520,6 +559,8 @@ SR_STATIC_ASSERT(offsetof(BlockSector, cityobjects) == 0x4804, "BlockSector.city
 SR_STATIC_ASSERT(offsetof(BlockSector, area) == 0x5014, "BlockSector.area");
 SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
 SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
+SR_STATIC_ASSERT(offsetof(TrackPiece, center) == 0x498, "TrackPiece.center");
+SR_STATIC_ASSERT(offsetof(TrackPiece, across) == 0x4f8, "TrackPiece.across");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(RotorPoint) == 0x24, "RotorPoint");
 SR_STATIC_ASSERT(offsetof(WheelBody, inv_inertia) == 0x78, "WheelBody.inv_inertia");
@@ -1855,22 +1896,8 @@ typedef union BlockList { struct {
     int unk_0000;                        /* +0x0000 3 functions */
     uint32_t unk_0004;                   /* +0x0004 2 functions */
     uint32_t unk_0008;                   /* +0x0008 2 functions */
-    int unk_000c;                        /* +0x000c 1 functions */
-    int unk_0010;                        /* +0x0010 1 functions */
-    uint8_t pad_0014[0x14];
-    int unk_0028;                        /* +0x0028 1 functions */
-    uint8_t pad_002c[0x4];
-    int unk_0030;                        /* +0x0030 1 functions */
-    uint8_t pad_0034[0x4];
-    int unk_0038;                        /* +0x0038 1 functions */
-    uint8_t pad_003c[0x4];
-    int unk_0040;                        /* +0x0040 1 functions */
-    int unk_0044;                        /* +0x0044 1 functions */
-    int unk_0048;                        /* +0x0048 1 functions */
-    int unk_004c;                        /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 1 functions */
-    int unk_0054;                        /* +0x0054 1 functions */
-    int unk_0058;                        /* +0x0058 1 functions */
+    int edge[16];                        /* +0x000c createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform) */
+    int slab[4];                         /* +0x004c createlevel: level tile kinds 2..5 (index kind - 2): a block and its 3 turns */
     int unk_005c;                        /* +0x005c 2 functions */
     int unk_0060;                        /* +0x0060 2 functions */
     int unk_0064;                        /* +0x0064 2 functions */
@@ -1906,22 +1933,7 @@ typedef union BlockList { struct {
     int unk_00dc;                        /* +0x00dc 1 functions */
     int unk_00e0;                        /* +0x00e0 1 functions */
     uint8_t pad_00e4[0x20];
-    int unk_0104;                        /* +0x0104 2 functions */
-    int unk_0108;                        /* +0x0108 2 functions */
-    int unk_010c;                        /* +0x010c 1 functions */
-    int unk_0110;                        /* +0x0110 1 functions */
-    int unk_0114;                        /* +0x0114 1 functions */
-    int unk_0118;                        /* +0x0118 1 functions */
-    int unk_011c;                        /* +0x011c 2 functions */
-    int unk_0120;                        /* +0x0120 2 functions */
-    int unk_0124;                        /* +0x0124 1 functions */
-    int unk_0128;                        /* +0x0128 1 functions */
-    int unk_012c;                        /* +0x012c 1 functions */
-    uint8_t pad_0130[0x14];
-    int unk_0144;                        /* +0x0144 1 functions */
-    uint8_t pad_0148[0x14];
-    int unk_015c;                        /* +0x015c 1 functions */
-    uint8_t pad_0160[0x4];
+    int slope6[24];                      /* +0x0104 4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling */
     int unk_0164;                        /* +0x0164 1 functions */
     int unk_0168;                        /* +0x0168 1 functions */
     int unk_016c;                        /* +0x016c 1 functions */
@@ -2023,14 +2035,8 @@ typedef union BlockList { struct {
     int unk_0328;                        /* +0x0328 1 functions */
     int unk_032c;                        /* +0x032c 1 functions */
     int unk_0330;                        /* +0x0330 1 functions */
-    int unk_0334;                        /* +0x0334 2 functions */
-    int unk_0338;                        /* +0x0338 1 functions */
-    int unk_033c;                        /* +0x033c 1 functions */
-    int unk_0340;                        /* +0x0340 1 functions */
-    int unk_0344;                        /* +0x0344 1 functions */
-    int unk_0348;                        /* +0x0348 1 functions */
-    int unk_034c;                        /* +0x034c 1 functions */
-    int unk_0350;                        /* +0x0350 1 functions */
+    int fence[4];                        /* +0x0334 createlevel: level tile kinds 8..11 (index kind - 8) */
+    int fence_end[4];                    /* +0x0344 createlevel: level tile kinds 12..15. The code indexes 8 ints from 0x334 */
     int unk_0354;                        /* +0x0354 2 functions */
     int unk_0358;                        /* +0x0358 1 functions */
     int unk_035c;                        /* +0x035c 1 functions */
@@ -2042,29 +2048,27 @@ typedef union BlockList { struct {
     uint8_t pad_0374[0x3ffe0];
 }; uint8_t lf_raw[0x40354]; } BlockList;
 SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
+SR_STATIC_ASSERT(offsetof(BlockList, edge) == 0xc, "BlockList.edge");
+SR_STATIC_ASSERT(offsetof(BlockList, slab) == 0x4c, "BlockList.slab");
 SR_STATIC_ASSERT(offsetof(BlockList, elevator_block) == 0x74, "BlockList.elevator_block");
+SR_STATIC_ASSERT(offsetof(BlockList, slope6) == 0x104, "BlockList.slope6");
 SR_STATIC_ASSERT(offsetof(BlockList, base_door_first) == 0x1c4, "BlockList.base_door_first");
 SR_STATIC_ASSERT(offsetof(BlockList, base_door_last) == 0x1d0, "BlockList.base_door_last");
+SR_STATIC_ASSERT(offsetof(BlockList, fence) == 0x334, "BlockList.fence");
+SR_STATIC_ASSERT(offsetof(BlockList, fence_end) == 0x344, "BlockList.fence_end");
 
 /* city[]: record of 0xa0b99c bytes. */
 typedef union City { struct {
     int num_intersections;               /* +0x0000 city_addintersection appends (stride 0x68 at +0x8); ai_car_nextwaypoint picks rand % it */
-    int unk_0004;                        /* +0x0004 1 functions */
+    int unused_04;                       /* +0x0004 createlevel writes 0. No reader in the server */
     CityIntersection intersections[1024]; /* +0x0008 0x8 + 1024 * 0x68 = 0x1a008 */
     int num_roads;                       /* +0x1a008 addcitystreet: the count and the index of the next record */
     CityRoad roads[512];                 /* +0x1a00c stride 0x4c; 0x1a00c + 512 * 0x4c = 0x2380c */
-    int unk_2380c;                       /* +0x2380c 1 functions */
-    int unk_23810;                       /* +0x23810 1 functions */
-    int unk_23814;                       /* +0x23814 1 functions */
-    int unk_23818;                       /* +0x23818 1 functions */
-    int unk_2381c;                       /* +0x2381c 1 functions */
-    int unk_23820;                       /* +0x23820 1 functions */
-    int unk_23824;                       /* +0x23824 1 functions */
-    int unk_23828;                       /* +0x23828 1 functions */
-    uint8_t pad_2382c[0x5fe4];
-    int unk_29810;                       /* +0x29810 1 functions */
+    int num_blocks;                      /* +0x2380c createlevel writes 0, then appends one record of 0x30 at +0x23810 (the ELF has addcityblock) */
+    CityBlock blocks[512];               /* +0x23810 0x23810 + 512 * 0x30 = 0x29810 */
+    int unused_29810;                    /* +0x29810 createlevel writes 0 (no other reader found, records 0x29814..0x2f814) */
     uint8_t pad_29814[0x6000];
-    int unk_2f814;                       /* +0x2f814 1 functions */
+    int unused_2f814;                    /* +0x2f814 createlevel writes 0 (no other reader found, records 0x2f818..0x2f998) */
     uint8_t pad_2f818[0x180];
     int num_buildings;                   /* +0x2f998 createlevel writes 0; economy_carmarket, resetgame and humansimulation loop over the buildings */
     uint8_t pad_2f99c[0x40];
@@ -2117,9 +2121,14 @@ typedef union City { struct {
 }; uint8_t lf_raw[0xa0b99c]; } City;
 SR_STATIC_ASSERT(sizeof(City) == 0xa0b99c, "City");
 SR_STATIC_ASSERT(offsetof(City, num_intersections) == 0x0, "City.num_intersections");
+SR_STATIC_ASSERT(offsetof(City, unused_04) == 0x4, "City.unused_04");
 SR_STATIC_ASSERT(offsetof(City, intersections) == 0x8, "City.intersections");
 SR_STATIC_ASSERT(offsetof(City, num_roads) == 0x1a008, "City.num_roads");
 SR_STATIC_ASSERT(offsetof(City, roads) == 0x1a00c, "City.roads");
+SR_STATIC_ASSERT(offsetof(City, num_blocks) == 0x2380c, "City.num_blocks");
+SR_STATIC_ASSERT(offsetof(City, blocks) == 0x23810, "City.blocks");
+SR_STATIC_ASSERT(offsetof(City, unused_29810) == 0x29810, "City.unused_29810");
+SR_STATIC_ASSERT(offsetof(City, unused_2f814) == 0x2f814, "City.unused_2f814");
 SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
 SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");
@@ -2762,64 +2771,38 @@ typedef union GameWorld { struct {
     int clock;                           /* +0x0000 rename seed: logicsimulation_world adds 10 each tick (0x1a5e00 at start, the round ends at 0x3b5380); missions expire against it; serversend sends 30 bits. Users: src/net/server.c, src/net/client.c */
     vec3 spawn;                          /* +0x0004 logic_playeractions menu 1: the new human appears near it; the newspapers appear at spawn - 4 */
     float spawn_size_x;                  /* +0x0010 menu 1: x += (size_x - 2) * (rand & 0xff) / 512 */
-    float unk_0014;                      /* +0x0014 1 functions */
+    float spawn_size_y;                  /* +0x0014 buildsomeshit writes 4 (+0x4 spawn, +0x10 size_x, +0x18 size_z are group 6) */
     float spawn_size_z;                  /* +0x0018 menu 1: z += size_z / 4 + (size_z - 2) * (rand & 0xff) / 512 */
 }; uint8_t lf_raw[0x1c]; } GameWorld;
 SR_STATIC_ASSERT(sizeof(GameWorld) == 0x1c, "GameWorld");
 SR_STATIC_ASSERT(offsetof(GameWorld, clock) == 0x0, "GameWorld.clock");
 SR_STATIC_ASSERT(offsetof(GameWorld, spawn) == 0x4, "GameWorld.spawn");
 SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_x) == 0x10, "GameWorld.spawn_size_x");
+SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_y) == 0x14, "GameWorld.spawn_size_y");
 SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_z) == 0x18, "GameWorld.spawn_size_z");
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {
     uint8_t pad_0000[0x38];
-    int unk_0038;                        /* +0x0038 3 functions */
-    int unk_003c;                        /* +0x003c 3 functions */
-    int unk_0040;                        /* +0x0040 2 functions */
-    int unk_0044;                        /* +0x0044 3 functions */
-    int unk_0048;                        /* +0x0048 3 functions */
-    uint8_t pad_004c[0x4];
-    int unk_0050;                        /* +0x0050 1 functions */
-    uint8_t pad_0054[0x2fe8];
-    int unk_303c;                        /* +0x303c 3 functions */
-    int unk_3040;                        /* +0x3040 3 functions */
-    int unk_3044;                        /* +0x3044 3 functions */
-    int unk_3048;                        /* +0x3048 2 functions */
-    int unk_304c;                        /* +0x304c 3 functions */
-    int unk_3050;                        /* +0x3050 3 functions */
-    int unk_3054;                        /* +0x3054 3 functions */
-    uint8_t pad_3058[0x1c];
-    int unk_3074;                        /* +0x3074 3 functions */
-    int unk_3078;                        /* +0x3078 1 functions */
-    uint8_t pad_307c[0x4];
-    int unk_3080;                        /* +0x3080 1 functions */
-    int unk_3084;                        /* +0x3084 1 functions */
-    int unk_3088;                        /* +0x3088 1 functions */
-    uint8_t pad_308c[0x87b8];
-    int unk_b844;                        /* +0xb844 2 functions */
-    uint8_t pad_b848[0x3fc];
-    char unk_bc44;                       /* +0xbc44 1 functions */
-    uint8_t unk_bc45;                    /* +0xbc45 1 functions */
-    uint8_t unk_bc46;                    /* +0xbc46 1 functions */
-    uint8_t pad_bc47[0x3fe];
-    char unk_c045;                       /* +0xc045 1 functions */
-    uint8_t pad_c046[0xff7fe];
-    int unk_10b844;                      /* +0x10b844 3 functions */
-    uint8_t pad_10b848[0x5];
-    char unk_10b84d;                     /* +0x10b84d 1 functions */
-    char unk_10b84e;                     /* +0x10b84e 1 functions */
-    char unk_10b84f;                     /* +0x10b84f 1 functions */
-    uint8_t pad_10b850[0x3c];
-    int unk_10b88c;                      /* +0x10b88c 3 functions */
-    int unk_10b890;                      /* +0x10b890 2 functions */
-    int unk_10b894;                      /* +0x10b894 3 functions */
-    int unk_10b898;                      /* +0x10b898 3 functions */
-    uint8_t pad_10b89c[0x4];
-    int unk_10b8a0;                      /* +0x10b8a0 3 functions */
-    uint8_t pad_10b8a4[0xbaff4];
+    int num_intersections;               /* +0x0038 createlevel: one city_addintersection for each record */
+    LevelIntersection intersections[1024]; /* +0x003c 0x3c + 1024 * 0xc = 0x303c (the next count) */
+    int num_streets;                     /* +0x303c createlevel: one addcitystreet for each record */
+    LevelStreet streets[512];            /* +0x3040 stride 0x34; the count is likely (check leveleditor_load before you fix it) */
+    uint8_t pad_9840[0x2004];
+    uint8_t tiles[1048576];              /* +0xb844 createlevel: tiles[z * 1024 + x] for x and z 1..510; low 4 bits: material, high 4 bits: kind */
+    int num_buildings;                   /* +0x10b844 createlevel: building_load and building_buildfloorplan for each record */
+    uint8_t pad_10b848[0x4];
+    LevelBuilding buildings[1024];       /* +0x10b84c stride 0x54, the name is at +0 (the x of record 0 is read at 0x10b88c); the count is likely */
+    uint8_t pad_12084c[0xa604c];
 }; uint8_t lf_raw[0x1c6898]; } LevelEditor;
 SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
+SR_STATIC_ASSERT(offsetof(LevelEditor, num_intersections) == 0x38, "LevelEditor.num_intersections");
+SR_STATIC_ASSERT(offsetof(LevelEditor, intersections) == 0x3c, "LevelEditor.intersections");
+SR_STATIC_ASSERT(offsetof(LevelEditor, num_streets) == 0x303c, "LevelEditor.num_streets");
+SR_STATIC_ASSERT(offsetof(LevelEditor, streets) == 0x3040, "LevelEditor.streets");
+SR_STATIC_ASSERT(offsetof(LevelEditor, tiles) == 0xb844, "LevelEditor.tiles");
+SR_STATIC_ASSERT(offsetof(LevelEditor, num_buildings) == 0x10b844, "LevelEditor.num_buildings");
+SR_STATIC_ASSERT(offsetof(LevelEditor, buildings) == 0x10b84c, "LevelEditor.buildings");
 
 /* blocktemp[]: record of 0x7606c bytes. */
 typedef union BlockTemp { struct {
@@ -2964,61 +2947,33 @@ SR_STATIC_ASSERT(offsetof(BondHuman, bones) == 0x10, "BondHuman.bones");
 
 /* tempmesh[]: record of 0x2d1850 bytes. */
 typedef union TempMesh { struct {
-    int unk_0000;                        /* +0x0000 8 functions */
-    float unk_0004;                      /* +0x0004 7 functions */
-    float unk_0008;                      /* +0x0008 4 functions */
-    float unk_000c;                      /* +0x000c 6 functions */
-    float unk_0010;                      /* +0x0010 3 functions */
-    float unk_0014;                      /* +0x0014 2 functions */
-    float unk_0018;                      /* +0x0018 3 functions */
-    float unk_001c;                      /* +0x001c 1 functions */
-    float unk_0020;                      /* +0x0020 1 functions */
-    float unk_0024;                      /* +0x0024 1 functions */
-    float unk_0028;                      /* +0x0028 1 functions */
-    float unk_002c;                      /* +0x002c 1 functions */
-    float unk_0030;                      /* +0x0030 1 functions */
-    uint8_t pad_0034[0x2ffd0];
-    float unk_30004;                     /* +0x30004 6 functions */
-    float unk_30008;                     /* +0x30008 5 functions */
-    float unk_3000c;                     /* +0x3000c 6 functions */
-    float unk_30010;                     /* +0x30010 3 functions */
-    float unk_30014;                     /* +0x30014 2 functions */
-    float unk_30018;                     /* +0x30018 3 functions */
-    float unk_3001c;                     /* +0x3001c 1 functions */
-    float unk_30020;                     /* +0x30020 1 functions */
-    float unk_30024;                     /* +0x30024 1 functions */
-    float unk_30028;                     /* +0x30028 1 functions */
-    float unk_3002c;                     /* +0x3002c 1 functions */
-    float unk_30030;                     /* +0x30030 1 functions */
-    uint8_t pad_30034[0x2ffd0];
-    float unk_60004;                     /* +0x60004 5 functions */
-    float unk_60008;                     /* +0x60008 4 functions */
-    float unk_6000c;                     /* +0x6000c 5 functions */
-    float unk_60010;                     /* +0x60010 2 functions */
-    uint8_t pad_60014[0x2fff0];
-    float unk_90004;                     /* +0x90004 4 functions */
-    float unk_90008;                     /* +0x90008 3 functions */
-    uint8_t pad_9000c[0x7fff8];
-    int unk_110004;                      /* +0x110004 8 functions */
-    int unk_110008;                      /* +0x110008 7 functions */
-    int unk_11000c;                      /* +0x11000c 7 functions */
-    int unk_110010;                      /* +0x110010 7 functions */
-    int unk_110014;                      /* +0x110014 7 functions */
-    int unk_110018;                      /* +0x110018 3 functions */
-    int unk_11001c;                      /* +0x11001c 3 functions */
-    int unk_110020;                      /* +0x110020 3 functions */
-    int unk_110024;                      /* +0x110024 3 functions */
-    uint8_t pad_110028[0x3ffe0];
-    int unk_150008;                      /* +0x150008 7 functions */
-    int unk_15000c;                      /* +0x15000c 3 functions */
-    uint8_t pad_150010[0x4fff8];
-    int unk_1a0008;                      /* +0x1a0008 4 functions */
-    int unk_1a000c;                      /* +0x1a000c 1 functions */
-    uint8_t pad_1a0010[0x2fffc];
-    int unk_1d000c;                      /* +0x1d000c 1 functions */
-    uint8_t pad_1d0010[0x101840];
+    int num_verts;                       /* +0x0000 addbeziersurface adds 1 for each vertex */
+    vec3 verts[16384];                   /* +0x0004 0x4 + 16384 * 12 = 0x30004 */
+    vec3 normals[16384];                 /* +0x30004 addbeziersurface: unit cross of the two derivatives */
+    vec3 tangents[16384];                /* +0x60004 addbeziersurface: the unit u derivative */
+    vec3 uvs[16384];                     /* +0x90004 x and y only (stride 12); area_setupsblock (0x1e50) copies 2 floats */
+    uint8_t pad_c0004[0x50000];
+    int num_quads;                       /* +0x110004 addbeziersurface adds steps_u * steps_v quads */
+    MeshQuad quads[16384];               /* +0x110008 0x110008 + 16384 * 16 = 0x150008 */
+    int quad_slots[16384];               /* +0x150008 low 16 bits: the texture slot; bits 16 to 19: the UV axis 1..6 (area_setupsblock) */
+    uint8_t pad_160008[0x40000];
+    int num_tris;                        /* +0x1a0008 area_setupsblock (0x1e50) copies num_tris * 12 bytes */
+    MeshTri tris[16384];                 /* +0x1a000c 0x1a000c + 16384 * 12 = 0x1d000c */
+    int tri_slots[16384];                /* +0x1d000c area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots */
+    uint8_t pad_1e000c[0xf1844];
 }; uint8_t lf_raw[0x2d1850]; } TempMesh;
 SR_STATIC_ASSERT(sizeof(TempMesh) == 0x2d1850, "TempMesh");
+SR_STATIC_ASSERT(offsetof(TempMesh, num_verts) == 0x0, "TempMesh.num_verts");
+SR_STATIC_ASSERT(offsetof(TempMesh, verts) == 0x4, "TempMesh.verts");
+SR_STATIC_ASSERT(offsetof(TempMesh, normals) == 0x30004, "TempMesh.normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, tangents) == 0x60004, "TempMesh.tangents");
+SR_STATIC_ASSERT(offsetof(TempMesh, uvs) == 0x90004, "TempMesh.uvs");
+SR_STATIC_ASSERT(offsetof(TempMesh, num_quads) == 0x110004, "TempMesh.num_quads");
+SR_STATIC_ASSERT(offsetof(TempMesh, quads) == 0x110008, "TempMesh.quads");
+SR_STATIC_ASSERT(offsetof(TempMesh, quad_slots) == 0x150008, "TempMesh.quad_slots");
+SR_STATIC_ASSERT(offsetof(TempMesh, num_tris) == 0x1a0008, "TempMesh.num_tris");
+SR_STATIC_ASSERT(offsetof(TempMesh, tris) == 0x1a000c, "TempMesh.tris");
+SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots");
 
 /* track[]: record of 0x578000 bytes. */
 typedef union Track { struct {

@@ -88,6 +88,8 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
+             'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
+             'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
@@ -291,6 +293,37 @@ typedef union CityRoad { struct {
     char name[32];      /* +0x2c */
 }; uint8_t lf_raw[0x4c]; } CityRoad;
 
+/* A city block and its inner dimensions. */
+typedef struct CityBlock {
+    int x, z;
+    int size_x, height, size_z;
+    int inner_x, inner_z;
+    uint8_t pad_1c[0x14];
+} CityBlock;
+
+/* Records of the level editor. */
+typedef struct LevelIntersection {
+    int x, y, z;
+} LevelIntersection;
+
+typedef struct LevelStreet {
+    int a, b;
+    int axis;
+    int lanes_a, lanes_b;
+    char name[32];
+} LevelStreet;
+
+typedef struct LevelBuilding {
+    char name[64];
+    int x, y, z;
+    int turns;
+    uint8_t unsaved[4];
+} LevelBuilding;
+
+/* Vertex indices of the temporary mesh. */
+typedef struct MeshQuad { int verts[4]; } MeshQuad;
+typedef struct MeshTri { int verts[3]; } MeshTri;
+
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
@@ -350,10 +383,12 @@ typedef union ObjectFace { struct {
 typedef union TrackPiece { struct {
     int type;           /* +0x00 createtrack; lineintersecttrack tests all the triangles of type 1, else the first 14 */
     vec3 pos;           /* +0x04 the center: lineintersecttrackrail tests only a line that starts within 64 of it */
-    int unk_10;         /* +0x10 createtrack */
+    int num_verts;      /* +0x10 the number of vertices */
     vec3 verts[48];     /* +0x14 createtrack: the corners of the triangles */
     int num_tris;       /* +0x254 createtrack: the number of triangles */
-    int tris[64][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    int tris[48][3];    /* +0x258 indexes into verts; triangles 14 on are the rails */
+    vec3 center[8];     /* +0x498 the midpoint between the two edges */
+    vec3 across[8];     /* +0x4f8 the unit direction from edge B to edge A */
     uint8_t pad_558[8];
     vec3 box_min;       /* +0x560 createtrack: the box of the corners; objecttrainsimulation tests it */
     vec3 box_max;       /* +0x56c createtrack: the box of the corners */
@@ -609,6 +644,12 @@ SR_STATIC_ASSERT(sizeof(CityObjectRec) == 0x54, "CityObjectRec");
 SR_STATIC_ASSERT(sizeof(ObjectFace) == 0x40, "ObjectFace");
 SR_STATIC_ASSERT(sizeof(ObjectVertex) == 0x10, "ObjectVertex");
 SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
+SR_STATIC_ASSERT(sizeof(CityBlock) == 0x30, "CityBlock");
+SR_STATIC_ASSERT(sizeof(LevelIntersection) == 0xc, "LevelIntersection");
+SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
+SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
+SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
+SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
 SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
@@ -617,6 +658,8 @@ SR_STATIC_ASSERT(offsetof(BlockSector, cityobjects) == 0x4804, "BlockSector.city
 SR_STATIC_ASSERT(offsetof(BlockSector, area) == 0x5014, "BlockSector.area");
 SR_STATIC_ASSERT(offsetof(CityObjectTypeRec, faces) == 0xc0c, "CityObjectTypeRec.faces");
 SR_STATIC_ASSERT(offsetof(TrackPiece, tris) == 0x258, "TrackPiece.tris");
+SR_STATIC_ASSERT(offsetof(TrackPiece, center) == 0x498, "TrackPiece.center");
+SR_STATIC_ASSERT(offsetof(TrackPiece, across) == 0x4f8, "TrackPiece.across");
 SR_STATIC_ASSERT(offsetof(Wheel, slip) == 0x70, "Wheel.slip");
 SR_STATIC_ASSERT(sizeof(RotorPoint) == 0x24, "RotorPoint");
 SR_STATIC_ASSERT(offsetof(WheelBody, inv_inertia) == 0x78, "WheelBody.inv_inertia");

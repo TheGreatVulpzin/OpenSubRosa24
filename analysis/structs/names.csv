@@ -669,3 +669,32 @@ materiallist,0x380,file_materials,int,128,setupgame: material identifiers and th
 area_sector,0x0,unused_0,int,,resetgame writes 0. No reader in the server
 blocktemp,0x7602c,unused_7602c,int,,resetgame writes 0. No reader in the server
 player,0xcc,unused_cc,int,,resetgame writes 0 for the test player next to input_mode. No reader in the server
+city,0x4,unused_04,int,,createlevel writes 0. No reader in the server
+city,0x2380c,num_blocks,int,,"createlevel writes 0, then appends one record of 0x30 at +0x23810 (the ELF has addcityblock)"
+city,0x23810,blocks,CityBlock,512,0x23810 + 512 * 0x30 = 0x29810
+city,0x29810,unused_29810,int,,"createlevel writes 0 (no other reader found, records 0x29814..0x2f814)"
+city,0x2f814,unused_2f814,int,,"createlevel writes 0 (no other reader found, records 0x2f818..0x2f998)"
+level_editor,0x38,num_intersections,int,,createlevel: one city_addintersection for each record
+level_editor,0x3c,intersections,LevelIntersection,1024,0x3c + 1024 * 0xc = 0x303c (the next count)
+level_editor,0x303c,num_streets,int,,createlevel: one addcitystreet for each record
+level_editor,0x3040,streets,LevelStreet,512,stride 0x34; the count is likely (check leveleditor_load before you fix it)
+level_editor,0xb844,tiles,uint8_t,1048576,"createlevel: tiles[z * 1024 + x] for x and z 1..510; low 4 bits: material, high 4 bits: kind"
+level_editor,0x10b844,num_buildings,int,,createlevel: building_load and building_buildfloorplan for each record
+level_editor,0x10b84c,buildings,LevelBuilding,1024,"stride 0x54, the name is at +0 (the x of record 0 is read at 0x10b88c); the count is likely"
+game_world,0x14,spawn_size_y,float,,"buildsomeshit writes 4 (+0x4 spawn, +0x10 size_x, +0x18 size_z are group 6)"
+tempmesh,0x0,num_verts,int,,addbeziersurface adds 1 for each vertex
+tempmesh,0x4,verts,vec3,16384,0x4 + 16384 * 12 = 0x30004
+tempmesh,0x30004,normals,vec3,16384,addbeziersurface: unit cross of the two derivatives
+tempmesh,0x60004,tangents,vec3,16384,addbeziersurface: the unit u derivative
+tempmesh,0x90004,uvs,vec3,16384,x and y only (stride 12); area_setupsblock (0x1e50) copies 2 floats
+tempmesh,0x110004,num_quads,int,,addbeziersurface adds steps_u * steps_v quads
+tempmesh,0x110008,quads,MeshQuad,16384,0x110008 + 16384 * 16 = 0x150008
+tempmesh,0x150008,quad_slots,int,16384,low 16 bits: the texture slot; bits 16 to 19: the UV axis 1..6 (area_setupsblock)
+tempmesh,0x1a0008,num_tris,int,,area_setupsblock (0x1e50) copies num_tris * 12 bytes
+tempmesh,0x1a000c,tris,MeshTri,16384,0x1a000c + 16384 * 12 = 0x1d000c
+tempmesh,0x1d000c,tri_slots,int,16384,area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots
+blocklist,0xc,edge,int,16,"createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform)"
+blocklist,0x4c,slab,int,4,createlevel: level tile kinds 2..5 (index kind - 2): a block and its 3 turns
+blocklist,0x104,slope6,int,24,"4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling"
+blocklist,0x334,fence,int,4,createlevel: level tile kinds 8..11 (index kind - 8)
+blocklist,0x344,fence_end,int,4,createlevel: level tile kinds 12..15. The code indexes 8 ints from 0x334

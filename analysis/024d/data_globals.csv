@@ -37,3 +37,7 @@ rva,name,type,count,evidence
 0x61840,tzset_done,int,,"gettimeofday: _tzset runs once, then the flag is 1"
 0x204380,dedicated,int,,"dedicatedserverloop: the Linux 0.24c symbol dedicated"
 0x1952d668,train_near,int,1,"objectsimulation: 0 at the start, 1 when the locomotive moves toward City.crossing within 160; logicsimulation reads it"
+0x761ea20,bezier_curve,float,12,The four control points of the curve at the current v
+0x13c22d40,bezier_curve_uv,float,8,The four control UVs at the current v
+0xb0661c0,bezier_curve_dv,float,12,The four control points of the v derivative
+0x12a80c44,level_marks,uint8_t,4096,createlevel clears the list
