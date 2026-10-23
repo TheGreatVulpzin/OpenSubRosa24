@@ -1,6 +1,6 @@
 rva,name,votes,second,ref_size,refs
 0x60170,cubequad,14.0,7.0,0x60,ded024b_linux+ded024c_linux+mac_i386
-0x60174,cubevertex,10.5,3.5,0x60,ded024b_linux+ded024c_linux+mac_i386
+0x60018,cubevertex,10.5,3.5,0x60,asm_area_block_addbox+asm_area_block_addbeam
 0x1579ba0,debug,10.5,4.0,0x523e0,ded024b_linux+ded024c_linux+mac_i386
 0x15cbf80,human,105.0,49.0,0x56c800,ded024b_linux+ded024c_linux+mac_i386
 0x1b49788,stats,10.5,3.5,0x20,ded024b_linux+ded024c_linux+mac_i386

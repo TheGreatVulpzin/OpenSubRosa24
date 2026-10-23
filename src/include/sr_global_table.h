@@ -5,8 +5,8 @@
 typedef struct SrGlobalInfo { unsigned rva; const char *name; unsigned elem_size; unsigned count; } SrGlobalInfo;
 
 static const SrGlobalInfo sr_global_table[] = {
+    { 0x60018u, "cubevertex", 0x0u, 0u },
     { 0x60170u, "cubequad", 0x0u, 0u },
-    { 0x60174u, "cubevertex", 0x0u, 0u },
     { 0x61dd0u, "bondhuman", 0x810u, 512u },
     { 0x183dd0u, "bondparticle", 0x20u, 16384u },
     { 0x14043a0u, "timer", 0x58u, 256u },

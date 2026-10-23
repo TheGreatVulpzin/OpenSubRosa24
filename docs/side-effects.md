@@ -116,10 +116,10 @@ The lifter marks 52 functions `side_effect`. The verifier cannot test them, beca
 | Time | 0xb230 | gettimeofday | `GetSystemTimeAsFileTime`, `__daylight`, `__timezone`, `_tzset` | - | `GetSystemTimeAsFileTime` |
 | Time | 0xb4a0 | getcpufrequency | `QueryPerformanceFrequency` | - | `QueryPerformanceFrequency` |
 | Time | 0x18570 | testtimer | - | testtimer → gettimeofday (`GetSystemTimeAsFileTime`), +3 more | `GetSystemTimeAsFileTime` |
-| Heap | 0x1e50 | landscape_buildsectorlods | `free`, `malloc` | - | `free` |
+| Heap | 0x1e50 | area_setupsblock | `free`, `malloc` | - | `free` |
 | Heap | 0xf2b0 | createarea | `free`, `malloc` | - | `malloc` |
-| Heap | 0x29bf0 | area_block_createbuildinginterior | - | area_block_createbuildinginterior → landscape_buildsectorlods (`free`), +1 more | `free` |
-| Heap | 0x46c30 | building_buildfloorplan | - | building_buildfloorplan → area_block_createbuildinginterior → landscape_buildsectorlods (`free`), +1 more | `free` |
+| Heap | 0x29bf0 | area_block_createbuildinginterior | - | area_block_createbuildinginterior → area_setupsblock (`free`), +1 more | `free` |
+| Heap | 0x46c30 | building_buildfloorplan | - | building_buildfloorplan → area_block_createbuildinginterior → area_setupsblock (`free`), +1 more | `free` |
 | Other | 0xb300 | setcpuaffinity | `GetCurrentProcess`, `GetProcessAffinityMask`, `SetProcessAffinityMask` | - | `SetProcessAffinityMask` |
 | CRT | 0x5ce18 | __security_check_cookie | - | __security_check_cookie → __report_gsfailure (`GetCurrentProcess`), +5 more | `UnhandledExceptionFilter` |
 | CRT | 0x5d08c | __tmainCRTStartup | 9 imports: `HeapSetInformation`, `InterlockedCompareExchange`, `InterlockedExchange`, ... | __tmainCRTStartup → getpaths (`WSAStartup`), +32 more | `Sleep` |

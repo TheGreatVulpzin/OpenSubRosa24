@@ -13,12 +13,12 @@ void area_getblocktexture(void);
 void area_getnextsector(void);
 void area_marksector(void);
 void area_getnextchunk(void);
-void lf_01e50(void);
+void area_setupsblock(void);
 void tesselatebezier(void);
 void tesselatebezierderivative(void);
-void lf_026d0(void);
-void lf_029a0(void);
-void lf_02cf0(void);
+void area_copyrotateblock(void);
+void loadblock(void);
+void area_block_rotatesurface(void);
 void area_interior_setblock(void);
 void area_interior_setobject(void);
 void area_interior_getblock(void);
@@ -57,8 +57,8 @@ void item_addhumanlink(void);
 void item_removehumanlink(void);
 void item_removeitemlink(void);
 void city_addintersection(void);
-void lf_08320(void);
-void lf_08590(void);
+void leveleditor_save(void);
+void leveleditor_load(void);
 void sprintf_comma(void);
 void pointinsidebase(void);
 void pointinsidebuilding(void);
@@ -139,11 +139,11 @@ void addbeziersurface(void);
 void addbeziersurfacetexture(void);
 void lf_10140(void);
 void lf_105c0(void);
-void lf_10950(void);
+void area_block_addbox(void);
 void lf_10da0(void);
 void lf_118f0(void);
 void lf_11a40(void);
-void lf_11d70(void);
+void area_block_addbeam(void);
 void lf_11f70(void);
 void lf_120c0(void);
 void area_interior_createblock(void);
@@ -331,12 +331,12 @@ const LfEntry lf_table[] = {
     { "area_getnextsector", 0x1cd0, (void *)area_getnextsector, 0, LF_RET_INT, 4, "", 0 },
     { "area_marksector", 0x1cf0, (void *)area_marksector, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_getnextchunk", 0x1e20, (void *)area_getnextchunk, 1, LF_RET_INT, 4, "v", 0 },
-    { "landscape_buildsectorlods", 0x1e50, (void *)lf_01e50, 1, LF_RET_VOID, 4, "v", 1 },
+    { "area_setupsblock", 0x1e50, (void *)area_setupsblock, 1, LF_RET_VOID, 4, "v", 1 },
     { "tesselatebezier", 0x2560, (void *)tesselatebezier, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "tesselatebezierderivative", 0x2620, (void *)tesselatebezierderivative, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
-    { "area_copyrotateblock", 0x26d0, (void *)lf_026d0, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "loadblock", 0x29a0, (void *)lf_029a0, 1, LF_RET_VOID, 4, "p", 1 },
-    { "area_block_rotatesurface", 0x2cf0, (void *)lf_02cf0, 2, LF_RET_INT, 4, "vv", 0 },
+    { "area_copyrotateblock", 0x26d0, (void *)area_copyrotateblock, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "loadblock", 0x29a0, (void *)loadblock, 1, LF_RET_VOID, 4, "p", 1 },
+    { "area_block_rotatesurface", 0x2cf0, (void *)area_block_rotatesurface, 2, LF_RET_INT, 4, "vv", 0 },
     { "area_interior_setblock", 0x2dc0, (void *)area_interior_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_setobject", 0x2f00, (void *)area_interior_setobject, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_getblock", 0x3030, (void *)area_interior_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -375,8 +375,8 @@ const LfEntry lf_table[] = {
     { "item_removehumanlink", 0x7e50, (void *)item_removehumanlink, 3, LF_RET_VOID, 4, "vpv", 0 },
     { "item_removeitemlink", 0x7f80, (void *)item_removeitemlink, 2, LF_RET_VOID, 4, "vv", 0 },
     { "city_addintersection", 0x80b0, (void *)city_addintersection, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "leveleditor_save", 0x8320, (void *)lf_08320, 0, LF_RET_VOID, 4, "", 1 },
-    { "leveleditor_load", 0x8590, (void *)lf_08590, 0, LF_RET_VOID, 4, "", 1 },
+    { "leveleditor_save", 0x8320, (void *)leveleditor_save, 0, LF_RET_VOID, 4, "", 1 },
+    { "leveleditor_load", 0x8590, (void *)leveleditor_load, 0, LF_RET_VOID, 4, "", 1 },
     { "sprintf_comma", 0x8880, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
     { "pointinsidebase", 0x89c0, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidebuilding", 0x8a60, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
@@ -457,11 +457,11 @@ const LfEntry lf_table[] = {
     { "addbeziersurfacetexture", 0xfc40, (void *)addbeziersurfacetexture, 7, LF_RET_VOID, 4, "pvvvvvv", 0 },
     { "area_block_addwindowhorizontal", 0x10140, (void *)lf_10140, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_block_addwindowvertical", 0x105c0, (void *)lf_105c0, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_addbox", 0x10950, (void *)lf_10950, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
+    { "area_block_addbox", 0x10950, (void *)area_block_addbox, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "area_block_addbasicsurface", 0x10da0, (void *)lf_10da0, 2, LF_RET_VOID, 4, "vp", 0 },
     { "area_block_addwindow", 0x118f0, (void *)lf_118f0, 7, LF_RET_INT, 4, "vvvvvvv", 0 },
     { "area_block_adddoor", 0x11a40, (void *)lf_11a40, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_addbeam", 0x11d70, (void *)lf_11d70, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
+    { "area_block_addbeam", 0x11d70, (void *)area_block_addbeam, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
     { "area_block_addoutdoor", 0x11f70, (void *)lf_11f70, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addcorner", 0x120c0, (void *)lf_120c0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_interior_createblock", 0x121d0, (void *)area_interior_createblock, 6, LF_RET_VOID, 4, "vvvvvp", 0 },

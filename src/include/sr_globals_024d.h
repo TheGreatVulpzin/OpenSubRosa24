@@ -6,8 +6,8 @@
 #ifndef SR_GLOBALS_024D_H
 #define SR_GLOBALS_024D_H
 
+#define SR_RVA_CUBEVERTEX           0x60018u
 #define SR_RVA_CUBEQUAD             0x60170u
-#define SR_RVA_CUBEVERTEX           0x60174u
 #define SR_RVA_BONDHUMAN            0x61dd0u  /* BondHuman[] */
 #define SR_RVA_BONDPARTICLE         0x183dd0u  /* BondParticle[] */
 #define SR_RVA_TIMER                0x14043a0u  /* Timer[] */

@@ -125,6 +125,26 @@ def parse(text):
     return funcs, total
 
 
+def rename_baseline(baseline, pairs):
+    renamed = {run: dict(result, funcs=dict(result['funcs'])) for run, result in baseline.items()}
+    for pair in pairs:
+        names = pair.split(':')
+        if len(names) != 2 or not all(names) or names[0] == names[1]:
+            raise ValueError('Use OLD:NEW for each baseline rename')
+        old, new = names
+        found = False
+        for run, result in renamed.items():
+            funcs = result['funcs']
+            if old in funcs:
+                if new in funcs:
+                    raise ValueError(f'{run}: both {old} and {new} exist')
+                funcs[new] = funcs.pop(old)
+                found = True
+        if not found and not any(new in result['funcs'] for result in renamed.values()):
+            raise ValueError(f'No baseline function named {old}')
+    return renamed
+
+
 def compare(name, funcs, base, only):
     errors = []
     for f, b in sorted(base.items()):
@@ -163,6 +183,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--target', default='ded024d', help='tools/lift/targets/<name>.json')
     ap.add_argument('--update', action='store_true', help='save the results as the new baseline')
+    ap.add_argument('--rename-baseline', action='append', default=[], metavar='OLD:NEW',
+                    help='rename a baseline function key before the count checks. Requires --update')
     ap.add_argument('--only', help='only recordings whose name contains this text')
     ap.add_argument('--funcs', help='only these functions (names separated by commas)')
     ap.add_argument('--changed', action='store_true', help='only the functions whose lifted C changed')
@@ -183,6 +205,13 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     baseline_file = out / 'baseline.json'
     baseline = json.loads(baseline_file.read_text()) if baseline_file.exists() else {}
+    if a.rename_baseline:
+        if not a.update:
+            ap.error('--rename-baseline requires --update')
+        try:
+            baseline = rename_baseline(baseline, a.rename_baseline)
+        except ValueError as error:
+            ap.error(str(error))
 
     only = None
     if a.funcs:

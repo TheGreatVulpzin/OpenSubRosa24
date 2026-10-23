@@ -38,7 +38,7 @@ Limits of the method: it is static. A call through a computed pointer cannot be 
 
 - **102 imports**: 21 from `WSOCK32.dll` (all by ordinal), 61 from `MSVCR100.dll`, 20 from `KERNEL32.dll`. 534 call sites. 7 imports are used only by code that nothing calls: `gethostname`, `_tzset`, `__timezone`, `__daylight`, `GetProcessAffinityMask`, `SetProcessAffinityMask`, `fputc`.
 - **The server has no threads, no GUI and no registry access.** The Windows API used is only: timers (`QueryPerformanceCounter`/`Frequency`, `Sleep`), the CRT start-up and crash handler, and WinSock 1.1.
-- **Dynamic memory is used at 2 places only** (`createarea`, `landscape_buildsectorlods`). Everything else is in the 606 MiB (`0x25e997e0` bytes) of static `.data`. Only about 111 MiB of it has a name in the CSVs (section 4).
+- **Dynamic memory is used at 2 places only** (`createarea`, `area_setupsblock`). Everything else is in the 606 MiB (`0x25e997e0` bytes) of static `.data`. Only about 111 MiB of it has a name in the CSVs (section 4).
 - **Files**: reads `config.txt`, `user/server.srk`, `data/city.sbc`, `data/building/*.sbb`, `data/block/*.sbl` and (optional) `readme.txt`. Writes `user/server.srk` and `stats.txt`. The `dedlog.txt` debug log can never start, because its flag is never set. Details in section 3.
 - **About 40 % of the decoded instructions are x87** (41,955 in 271 functions). The only SSE2 use is one `cvttsd2si` in `_ftol2` and 14 `movaps` in `bondsimulation2`. The CRT sets the x87 precision to 53 bits at start-up. This is the biggest risk for an exact port (section 7).
 - **`rand()` is used by 21 functions (47 sites) and is seeded from the clock.** `createlevel` calls `srand(0)`, but no function below it calls `rand`, so the level does not depend on the generator. All uses are bit masks or `% n` with a small `n`, none scales by `RAND_MAX` (section 7, R2).
@@ -51,13 +51,13 @@ The 024d calls most imports with `call [IAT]`. Some of them are reached only thr
 
 ### 2.1 Memory
 
-The game code allocates from the heap in two functions only. `createarea` (`0xf2b0`) frees and allocates one block per level area (4 areas, record size `0x100d6c`), and `landscape_buildsectorlods` (`0x1e50`) does the same for 4 buffers in each `area_block` record (record size `0x84`; the name says landscape, but the address is the `area_block` array of section 4). In both cases the pointer is stored **inside a global struct** (see section 7, R3). `memcpy` and `memset` come from `MSVCR100` through thunks. `memset` clears each new record in the `create*` functions with the size of the struct.
+The game code allocates from the heap in two functions only. `createarea` (`0xf2b0`) frees and allocates one block per level area (4 areas, record size `0x100d6c`), and `area_setupsblock` (`0x1e50`) does the same for 8 buffers in each `area_block` record (record size `0x84`; see the `area_block` array of section 4). In both cases the pointer is stored **inside a global struct** (see section 7, R3). `memcpy` and `memset` come from `MSVCR100` through thunks. `memset` clears each new record in the `create*` functions with the size of the struct.
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
-| `malloc` | MSVCR100 | 2 | 0x1e50 landscape_buildsectorlods; 0xf2b0 createarea | Heap block for per-area volume data (`createarea`: x·y·z·4 bytes; pointer kept in the area record) and for the four per-sector buffers of the landscape LODs (`landscape_buildsectorlods`: count·12 bytes each). The only dynamic allocation in the game code. |
-| `free` | MSVCR100 | 2 | 0x1e50 landscape_buildsectorlods; 0xf2b0 createarea | Releases the same blocks before they are rebuilt. |
-| `memcpy` | MSVCR100 | 15 | 0x1e50 landscape_buildsectorlods ×4; 0x6260 createevent_message; 0xa650 sub_a650~†; 0xd990 cs_pwrite; 0xd9f0 cs_pread†; 0x2e310 clientrecv†; 0x2ebc0 sub_2ebc0~†; 0x33650 serverrecv ×4; 0x4ed30 serversend | Packet assembly and parsing (`serverrecv`, `serversend`, `createevent_message`), voice frames, LOD buffers, `cs_pwrite`. |
+| `malloc` | MSVCR100 | 2 | 0x1e50 area_setupsblock; 0xf2b0 createarea | Heap block for per-area volume data (`createarea`: x·y·z·4 bytes; pointer kept in the area record) and for the eight buffers of each block mesh (`area_setupsblock`: vertices, normals, tangents, UV pairs, quads, face slots, triangles and triangle slots). The only dynamic allocation in the game code. |
+| `free` | MSVCR100 | 2 | 0x1e50 area_setupsblock; 0xf2b0 createarea | Releases the same blocks before they are rebuilt. |
+| `memcpy` | MSVCR100 | 15 | 0x1e50 area_setupsblock ×4; 0x6260 createevent_message; 0xa650 sub_a650~†; 0xd990 cs_pwrite; 0xd9f0 cs_pread†; 0x2e310 clientrecv†; 0x2ebc0 sub_2ebc0~†; 0x33650 serverrecv ×4; 0x4ed30 serversend | Packet assembly and parsing (`serverrecv`, `serversend`, `createevent_message`), voice frames, block mesh buffers, `cs_pwrite`. |
 | `memset` | MSVCR100 | 18 | 0x4450 building_rotatefloorplan; 0xac00 csradixsort; 0xded0 createaccount; 0xf4a0 area_createsector ×3; 0x129b0 createbond; 0x13d80 building_load; 0x143b0 createbullet; 0x19ee0 createjointbond; 0x1b070 createitem; 0x278c0 createparticle; 0x28020 createplayer; 0x306d0 human_createmuscleball; 0x31800 createobject; 0x33650 serverrecv; 0x50ae0 createhuman; 0x54e40 createlevel | Clears new records in the `create*` functions (`createplayer`, `createhuman`, `createitem`, `createobject`, `createbond`, `createbullet`, `createparticle`, ...), `createlevel` and `serverrecv`. |
 | `HeapSetInformation` | KERNEL32 | 1 | 0x5d08c __tmainCRTStartup | CRT startup: turns on the terminate-on-corruption heap option. |
 | `EncodePointer` | KERNEL32 | 2 | 0x5d25c sub_5d25c~; 0x5d492 __onexit | CRT startup (`__tmainCRTStartup`) and `__onexit`: pointer obfuscation for the atexit table. |
@@ -290,7 +290,7 @@ Sources: `analysis/024d/globals.csv`, `analysis/024d/manual_globals.csv`, `src/i
 | `0x1b49788` | `stats` | 32 B | one block | Counters written to `stats.txt` (`numofbullets`, `numofmissions`) | keep |
 | `0x90dc520` | `numoftracks` | 20 B | one block | Track counters (ELF symbol `numoftracks`) | keep |
 | `0x103484a0` | `intersect` | small | one block | Intersection test result record (`black_market.c` of the server manager reads `+0` and `+0xc` as positions) | keep |
-| `0x60170`, `0x60174` | `cubequad`, `cubevertex` | `0x60` each | constants | Unit cube tables (initialised data) | keep |
+| `0x60018`, `0x60170` | `cubevertex`, `cubequad` | `0x60` each | constants | Unit cube tables (initialised data) | keep |
 
 Not named in the CSVs, but of fixed meaning (for Phase 4 they matter as much as the named ones):
 
@@ -324,7 +324,7 @@ Gaps between two named globals (RVA of the end of the first and the start of the
 | `parser` end `0x13e22e68` → `connection` `0x15e39020` | 32.1 MiB | |
 | `numofbullets` `0x17529a40` → `bsdsocket` `0x1952d680` | 32.0 MiB | |
 | `server` end `0x761eb00` → `option` `0x90dc340` | 26.7 MiB | |
-| `cubevertex` end `0x601d4` → `timer` `0x14043a0` | 19.6 MiB | The initialised data and the CRT cookie are at the start. |
+| `cubequad` end `0x601d0` → `timer` `0x14043a0` | 19.6 MiB | The initialised data and the CRT cookie are at the start. |
 | `event` end `0x9bdd880` → `objecttype` `0xac51bc0` | 16.4 MiB | Contains the `landscape` height map (16.0 MiB). |
 | `account` end `0xf8f7b68` → `intersect` `0x103484a0` | 10.3 MiB | |
 | `objecttype` end `0xb0661c0` → `particle` `0xb3e7200` | 3.5 MiB | |

@@ -1929,7 +1929,7 @@ static SvHook g_record[] = {
     { "record_saveaccountsclient", 0x11d0, (void *)rt_011d0, 8, expect_r011d0, mask_all, &orig_r011d0, 0, 0 },
     { "record_loadaccountsclient", 0x12f0, (void *)rt_012f0, 8, expect_r012f0, mask_all, &orig_r012f0, 0, 0 },
     { "record_server_writelogfile", 0x1420, (void *)rt_01420, 8, expect_r01420, mask_all, &orig_r01420, 0, 0 },
-    { "record_landscape_buildsectorlods", 0x1e50, (void *)rt_01e50, 8, expect_r01e50, mask_all, &orig_r01e50, 0, 0 },
+    { "record_area_setupsblock", 0x1e50, (void *)rt_01e50, 8, expect_r01e50, mask_all, &orig_r01e50, 0, 0 },
     { "record_loadblock", 0x29a0, (void *)rt_029a0, 8, expect_r029a0, mask_all, &orig_r029a0, 0, 0 },
     { "record_building_save", 0x3740, (void *)rt_03740, 8, expect_r03740, mask_all, &orig_r03740, 0, 0 },
     { "record_debug_resetlogfile", 0x5280, (void *)rt_05280, 7, expect_r05280, mask_all, &orig_r05280, 0, 0 },

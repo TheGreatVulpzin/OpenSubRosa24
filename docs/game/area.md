@@ -74,3 +74,57 @@ It clears the chunk use flags and the sector use flags for that area.
 The inverse scale rounds to float at its store.
 Each maximum bound uses double products and an addition, then rounds once to float at its store.
 The bounds span 64 cells per chunk.
+
+## Block and city files
+
+`loadblock` reads `data/block/<name>.sbl`. It accepts versions 1 and 2.
+Both versions store the dimensions, six side markers and surface records.
+Each surface stores its two subdivision counts, two curve degrees, slot, automatic-side flag and sixteen point/UV pairs.
+The first word of each `BlockSurface` stays unchanged.
+Version 2 also stores boxes. Version 1 sets `num_boxes` to zero.
+
+`leveleditor_load` and `leveleditor_save` use version 6 of `data/city.sbc`.
+The file holds intersections, streets, the 1024 by 1024 tile grid and building entries, in that order.
+Each building entry saves its name, position and turn count. Its `unsaved` field stays unchanged.
+The file counts have no bounds checks. A mismatched version closes the file without loading its records.
+Both loaders and the city writer store the file handle in `Parser.file` and keep its value after close.
+
+## Mesh storage and turns
+
+`area_setupsblock` first projects UV pairs for quads that have a known side.
+
+| Side | UV pair |
+| --- | --- |
+| 0x10000 | z, y |
+| 0x20000 | 1 - z, y |
+| 0x30000 | x, z |
+| 0x40000 | x, 1 - z |
+| 0x50000 | 1 - x, y |
+| 0x60000 | x, y |
+
+Quads run in index order. When quads share a vertex, the last quad supplies its UV pair.
+Each subtraction rounds once to float at the store.
+
+The mesh buffers are replaced in this order: vertices, normals, tangents, UV pairs, faces, face slots, triangles and triangle slots.
+Each replacement frees its previous pointer before it allocates the new buffer, even for a null pointer or a zero size.
+Vertex data uses bit copies. UV pairs use eight bytes per vertex, while the temporary mesh uses a twelve-byte stride.
+Face slots keep only their low sixteen bits. Triangle slots keep all bits.
+
+`area_block_rotatesurface` turns all sixteen control points about y, including the inner points.
+Each turn maps x to `1 - z` and z to the previous x.
+Its side cycle is 0x60000, 0x10000, 0x50000, 0x20000, then 0x60000 again.
+
+`area_copyrotateblock` swaps the x and z dimensions and rotates the temporary vertices, normals and tangents.
+Horizontal quads cycle their four indexes. Vertical quads turn their side and cycle texture slots 1 through 4.
+The function changes the temporary mesh and the target dimensions. It does not copy the mesh buffers into the block record.
+
+## Boxes and beams
+
+`area_block_addbox` creates all six cube faces, with four separate vertices per face.
+Each component rounds the scaled cube coordinate to float, then rounds the sum with the position to float.
+Normals and tangents come from the cube tables.
+
+`area_block_addbeam` creates only the faces selected by its mask.
+It writes four surface corners, rotates the surface and adds a bilinear surface for each selected face.
+Its scaled coordinate and position sum stay in double until the final store to float.
+The bottom face uses texture entry 5. The top face uses entry 0.

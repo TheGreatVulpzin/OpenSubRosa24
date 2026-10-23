@@ -446,12 +446,12 @@ __declspec(naked) static void th_02620(void)
 }
 static uint8_t expect_02620[7] = { 0x8b, 0x44, 0x24, 0x04, 0x83, 0xf8, 0x01 };
 
-void __cdecl lf_026d0(int param_1, undefined4 * param_2);
+void __cdecl area_copyrotateblock(int param_1, undefined4 * param_2);
 static void (__cdecl *orig_026d0)(int, undefined4 *);
 static SvVerify v_026d0 = { "area_copyrotateblock", -1 };
 static void __cdecl hk_026d0(int param_1, undefined4 * param_2)
 {
-    SV_HOOK_VOID(v_026d0, lf_026d0(param_1, param_2), orig_026d0(param_1, param_2), NULL);
+    SV_HOOK_VOID(v_026d0, area_copyrotateblock(param_1, param_2), orig_026d0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_026d0(void)
 {
@@ -488,12 +488,12 @@ __declspec(naked) static void th_026d0(void)
 }
 static uint8_t expect_026d0[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x44, 0x24, 0x10 };
 
-int __cdecl lf_02cf0(int param_1, int param_2);
+int __cdecl area_block_rotatesurface(int param_1, int param_2);
 static int (__cdecl *orig_02cf0)(int, int);
 static SvVerify v_02cf0 = { "area_block_rotatesurface", -1 };
 static int __cdecl hk_02cf0(int param_1, int param_2)
 {
-    SV_HOOK_RET(int, v_02cf0, lf_02cf0(param_1, param_2), orig_02cf0(param_1, param_2), NULL);
+    SV_HOOK_RET(int, v_02cf0, area_block_rotatesurface(param_1, param_2), orig_02cf0(param_1, param_2), NULL);
 }
 __declspec(naked) static void th_02cf0(void)
 {
@@ -5023,12 +5023,12 @@ __declspec(naked) static void th_105c0(void)
 }
 static uint8_t expect_105c0[8] = { 0x8b, 0x4c, 0x24, 0x08, 0x8b, 0x44, 0x24, 0x0c };
 
-void __cdecl lf_10950(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, uint param_7);
+void __cdecl area_block_addbox(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, uint param_7);
 static void (__cdecl *orig_10950)(float, float, float, float, float, float, uint);
 static SvVerify v_10950 = { "area_block_addbox", -1 };
 static void __cdecl hk_10950(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6, uint param_7)
 {
-    SV_HOOK_VOID(v_10950, lf_10950(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_10950(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+    SV_HOOK_VOID(v_10950, area_block_addbox(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_10950(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
 __declspec(naked) static void th_10950(void)
 {
@@ -5201,12 +5201,12 @@ __declspec(naked) static void th_11a40(void)
 }
 static uint8_t expect_11a40[7] = { 0xd9, 0xee, 0x56, 0x8b, 0x74, 0x24, 0x08 };
 
-void __cdecl lf_11d70(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9);
+void __cdecl area_block_addbeam(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9);
 static void (__cdecl *orig_11d70)(int, float, float, float, float, float, float, uint, uint *);
 static SvVerify v_11d70 = { "area_block_addbeam", -1 };
 static void __cdecl hk_11d70(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7, uint param_8, uint * param_9)
 {
-    SV_HOOK_VOID(v_11d70, lf_11d70(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_11d70(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
+    SV_HOOK_VOID(v_11d70, area_block_addbeam(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), orig_11d70(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, param_9), NULL);
 }
 __declspec(naked) static void th_11d70(void)
 {

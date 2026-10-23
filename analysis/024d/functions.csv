@@ -11,7 +11,7 @@ rva,size,name,source,confidence,evidence
 0x1cd0,31,area_getnextsector,callgraph,1.0,votes=7
 0x1cf0,217,area_marksector,review,0.97,"Resolves the sector of a block coordinate and stores 1 in the sector dirty flag, same logic as the ELF area_marksector; called after every block write."
 0x1e20,41,area_getnextchunk,review,0.97,"Scans the 0x200 chunk records (0x804-byte stride) of an area for an unused one and returns -1 when full, same as the ELF area_getnextchunk."
-0x1e50,1795,landscape_buildsectorlods,anchor,0.908,features
+0x1e50,1795,area_setupsblock,review,0.95,"Copies tempmesh buffers into the area_block record with free/malloc pairs; called by the three block setup functions; the ELF area_setupsblock"
 0x2560,187,tesselatebezier,callgraph,1.0,votes=88
 0x2620,174,tesselatebezierderivative,callgraph,1.0,votes=40
 0x26d0,610,area_copyrotateblock,callgraph,1.0,votes=128
