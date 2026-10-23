@@ -32,4 +32,18 @@ uint32_t area_interior_getblocklink(uint32_t area, int x, int y, int z);
 int area_getnextchunk(int area);
 int area_getnextsector(void);
 
+void area_marksector(uint32_t area, int x, int y, int z);
+int area_createchunk(uint32_t area, int cx, int cy, int cz);
+int area_createsector(uint32_t area, uint32_t chunk, int sx, int sy, int sz);
+void area_setblock(uint32_t area, int x, int y, int z, uint32_t word);
+void area_setblockcolor(uint32_t area, int x, int y, int z, uint32_t color);
+void area_interior_setblock(uint32_t area, int x, int y, int z, uint32_t word);
+void area_interior_setobject(uint32_t area, int x, int y, int z, uint32_t object);
+void area_deleteblock(uint32_t area, int x, int y, int z);
+int area_breakblock(uint32_t area, int x, int y, int z, uint32_t word, int face,
+                    const vec3 *pos, const vec3 *vel);
+void area_createblock(uint32_t area, int x, int y, int z, uint32_t word, const uint16_t tex[8]);
+void area_interior_createblock(uint32_t area, int x, int y, int z, uint32_t word, const uint16_t tex[8]);
+void createarea(uint32_t area, const vec3 *origin, int size_x, int size_y, int size_z, float block_size);
+
 #endif /* SR_AREA_H */

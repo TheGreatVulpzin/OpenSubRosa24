@@ -23,19 +23,12 @@
 #define g_level_marks SR_AT(uint8_t, 0x12a80c44)
 
 /* Game functions of other files. */
-void __cdecl lf_0f2b0(uint32_t area, const vec3 *origin, int size_x, int size_y, int size_z, float scale);
-void __cdecl lf_3da50(uint32_t area, uint32_t x, uint32_t y, uint32_t z,
-                     uint32_t block, const uint16_t *materials);
-void __cdecl lf_296f0(uint32_t area, uint32_t x, uint32_t y, uint32_t z, int block);
 void __cdecl lf_13d80(const char *name, int flags);
 void __cdecl lf_03d70(void);
 void __cdecl lf_041c0(void);
 void __cdecl lf_04450(void);
 int *__cdecl lf_46c30(uint32_t area, int x, int y, int z,
                      int size_x, int size_z, int floors, int kind);
-#define createarea lf_0f2b0
-#define area_createblock lf_3da50
-#define area_setblock lf_296f0
 #define building_load lf_13d80
 #define building_setupbuild lf_03d70
 #define building_setupfloorplannewer lf_041c0

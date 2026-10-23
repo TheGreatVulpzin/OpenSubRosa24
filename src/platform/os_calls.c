@@ -5,6 +5,22 @@
 void *sr_import(const char *dll, const char *name);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
+void *os_malloc(size_t size)
+{
+    static void *(__cdecl *call)(size_t);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "malloc");
+    return call(size);
+}
+
+void os_free(void *pointer)
+{
+    static void(__cdecl *call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "free");
+    call(pointer);
+}
+
 /* WSOCK32 ordinals of the game. */
 #define WSOCK_CLOSESOCKET 3
 #define WSOCK_BIND 2

@@ -8,6 +8,10 @@
 #define SR_OS_H
 
 #include <stdint.h>
+#include <stddef.h>
+
+void *os_malloc(size_t size);
+void os_free(void *pointer);
 
 int os_recvfrom(uintptr_t socket, char *buf, int len, int flags, void *from, int *fromlen);
 int os_sendto(uintptr_t socket, const char *buf, int len, int flags, const void *to, int tolen);

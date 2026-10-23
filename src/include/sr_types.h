@@ -313,6 +313,20 @@ typedef union CityObjectTypeRec { struct {
     vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
+typedef struct BlockSurface {
+    int unused_00;
+    int nu, nv, tu, tv;
+    vec3 ctrl[16];
+    float uv[16][2];
+    int slot, auto_side;
+} BlockSurface;
+
+typedef struct BlockBox {
+    vec3 verts[8];
+    int slots[6];
+    int faces;
+} BlockBox;
+
 /* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */
 typedef union AreaChunk { struct {
     int used;           /* +0x000 area_getnextchunk takes a chunk with 0 */
@@ -327,17 +341,18 @@ typedef union BlockSector { struct {
     int used;           /* +0x0000 area_getnextsector takes a sector with 0 */
     uint32_t blocks[512];           /* +0x0004 the outer blocks */
     uint16_t textures[512][8];      /* +0x0804 area_getblocktexture: one for each face of a block */
-    int unk_2804[512];
+    uint32_t colors[512];
     uint32_t interior[512];         /* +0x3004 the blocks of the interiors */
     uint8_t interior_textures[512][8]; /* +0x3804 area_interior_getblocktexture */
     uint32_t cityobjects[512];      /* +0x4804 above 0: a city object type in bits 0..9, a turn of 90 degrees times bits 10..11 */
-    int unk_5004[4];
+    int interior_models[4];
     int area;           /* +0x5014 area_createsector: the area of the sector */
     int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
-    uint8_t unk_5024[0x24];
-    int unk_5048;
+    int dirty;
+    uint8_t unk_5028[0x20];
+    int num_meshes;
     uint8_t unk_504c[0x800];
-    int unk_584c;
+    int unused_584c;
     uint8_t unk_5850[0x818];
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 
@@ -1627,44 +1642,44 @@ SR_STATIC_ASSERT(offsetof(Timer, ms) == 0x50, "Timer.ms");
 
 /* area_block[]: record of 0x84 bytes. */
 typedef union AreaBlock { struct {
-    uint8_t pad_0000[0x1];
-    char unk_0001;                       /* +0x0001 1 functions */
-    char unk_0002;                       /* +0x0002 1 functions */
-    char unk_0003;                       /* +0x0003 1 functions */
-    uint8_t pad_0004[0x2];
-    char unk_0006;                       /* +0x0006 1 functions */
-    uint8_t pad_0007[0x1];
-    int unk_0008;                        /* +0x0008 1 functions */
-    uint8_t pad_000c[0x8];
-    char unk_0014;                       /* +0x0014 1 functions */
-    uint8_t pad_0015[0x2b];
-    int unk_0040;                        /* +0x0040 1 functions */
+    char name[64];                       /* +0x0000 area_createinteriorblocks stores the block name */
+    int num_verts;                       /* +0x0040 area_setupsblock copies tempmesh.num_verts */
     int verts;                           /* +0x0044 a pointer to the corners (vec3) of the mesh of the block type, in blocks */
-    int unk_0048;                        /* +0x0048 1 functions */
-    int unk_004c;                        /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 1 functions */
+    int normals;                         /* +0x0048 area_setupsblock allocates a pointer to vec3 normals */
+    int tangents;                        /* +0x004c area_setupsblock allocates a pointer to vec3 tangents */
+    int uvs;                             /* +0x0050 area_setupsblock allocates a pointer to float UV pairs */
     int num_faces;                       /* +0x0054 the faces of the mesh */
     int faces;                           /* +0x0058 a pointer to 4 indexes into verts for each face */
     int face_slots;                      /* +0x005c a pointer to the texture slot of each face */
     int num_tris;                        /* +0x0060 circleintersectspecblock: the loose triangles of the mesh */
     int tris;                            /* +0x0064 a pointer to 3 indexes into verts for each loose triangle */
     int tri_slots;                       /* +0x0068 a pointer to the texture slot of each loose triangle */
-    int unk_006c;                        /* +0x006c 6 functions */
-    int unk_0070;                        /* +0x0070 6 functions */
-    int unk_0074;                        /* +0x0074 7 functions */
+    int size_x;                          /* +0x006c area_createblock creates links over this x size */
+    int size_y;                          /* +0x0070 area_createblock creates links over this y size */
+    int size_z;                          /* +0x0074 area_createblock creates links over this z size */
     int num_hideable;                    /* +0x0078 bits 16 to 25 of a block word hide the faces below this count */
-    int unk_007c;                        /* +0x007c 1 functions */
-    int unk_0080;                        /* +0x0080 2 functions */
+    int open_sides;                      /* +0x007c area_block_createbuildinginterior sets the floor and wall bits */
+    int is_door;                         /* +0x0080 area_createinteriorblocks sets 1 for garage and base doors */
 }; uint8_t lf_raw[0x84]; } AreaBlock;
 SR_STATIC_ASSERT(sizeof(AreaBlock) == 0x84, "AreaBlock");
+SR_STATIC_ASSERT(offsetof(AreaBlock, name) == 0x0, "AreaBlock.name");
+SR_STATIC_ASSERT(offsetof(AreaBlock, num_verts) == 0x40, "AreaBlock.num_verts");
 SR_STATIC_ASSERT(offsetof(AreaBlock, verts) == 0x44, "AreaBlock.verts");
+SR_STATIC_ASSERT(offsetof(AreaBlock, normals) == 0x48, "AreaBlock.normals");
+SR_STATIC_ASSERT(offsetof(AreaBlock, tangents) == 0x4c, "AreaBlock.tangents");
+SR_STATIC_ASSERT(offsetof(AreaBlock, uvs) == 0x50, "AreaBlock.uvs");
 SR_STATIC_ASSERT(offsetof(AreaBlock, num_faces) == 0x54, "AreaBlock.num_faces");
 SR_STATIC_ASSERT(offsetof(AreaBlock, faces) == 0x58, "AreaBlock.faces");
 SR_STATIC_ASSERT(offsetof(AreaBlock, face_slots) == 0x5c, "AreaBlock.face_slots");
 SR_STATIC_ASSERT(offsetof(AreaBlock, num_tris) == 0x60, "AreaBlock.num_tris");
 SR_STATIC_ASSERT(offsetof(AreaBlock, tris) == 0x64, "AreaBlock.tris");
 SR_STATIC_ASSERT(offsetof(AreaBlock, tri_slots) == 0x68, "AreaBlock.tri_slots");
+SR_STATIC_ASSERT(offsetof(AreaBlock, size_x) == 0x6c, "AreaBlock.size_x");
+SR_STATIC_ASSERT(offsetof(AreaBlock, size_y) == 0x70, "AreaBlock.size_y");
+SR_STATIC_ASSERT(offsetof(AreaBlock, size_z) == 0x74, "AreaBlock.size_z");
 SR_STATIC_ASSERT(offsetof(AreaBlock, num_hideable) == 0x78, "AreaBlock.num_hideable");
+SR_STATIC_ASSERT(offsetof(AreaBlock, open_sides) == 0x7c, "AreaBlock.open_sides");
+SR_STATIC_ASSERT(offsetof(AreaBlock, is_door) == 0x80, "AreaBlock.is_door");
 
 /* area[]: record of 0x100d6c bytes. */
 typedef union Area { struct {
@@ -1679,10 +1694,10 @@ typedef union Area { struct {
     int chunk_index;                     /* +0x0048 createarea: a pointer to size_x * size_y * size_z ints, the chunk of each place or -1; index (size_z * y + z) * size_x + x */
     vec3 box_min;                        /* +0x004c createarea: origin; the sphere tests skip the area outside the box */
     vec3 box_max;                        /* +0x0058 createarea: origin + 64 * block_size * the size */
-    int unk_0064;                        /* +0x0064 1 functions */
+    int unused_0064;                     /* +0x0064 createarea writes 0. No reader in the server or Mac client */
     uint8_t pad_0068[0x500];
     AreaChunk chunks[512];               /* +0x0568 area_getnextchunk takes a chunk with used 0 */
-    int unk_100d68;                      /* +0x100d68 1 functions */
+    int num_sectors;                     /* +0x100d68 area_createsector increments it. createarea keeps its value */
 }; uint8_t lf_raw[0x100d6c]; } Area;
 SR_STATIC_ASSERT(sizeof(Area) == 0x100d6c, "Area");
 SR_STATIC_ASSERT(offsetof(Area, active) == 0x0, "Area.active");
@@ -1696,7 +1711,9 @@ SR_STATIC_ASSERT(offsetof(Area, inv_block_size) == 0x44, "Area.inv_block_size");
 SR_STATIC_ASSERT(offsetof(Area, chunk_index) == 0x48, "Area.chunk_index");
 SR_STATIC_ASSERT(offsetof(Area, box_min) == 0x4c, "Area.box_min");
 SR_STATIC_ASSERT(offsetof(Area, box_max) == 0x58, "Area.box_max");
+SR_STATIC_ASSERT(offsetof(Area, unused_0064) == 0x64, "Area.unused_0064");
 SR_STATIC_ASSERT(offsetof(Area, chunks) == 0x568, "Area.chunks");
+SR_STATIC_ASSERT(offsetof(Area, num_sectors) == 0x100d68, "Area.num_sectors");
 
 /* option[]: record of 0x150 bytes. */
 typedef union Option { struct {
@@ -1893,169 +1910,84 @@ SR_STATIC_ASSERT(offsetof(SoundList, gear) == 0x130, "SoundList.gear");
 
 /* blocklist[]: record of 0x40354 bytes. */
 typedef union BlockList { struct {
-    int unk_0000;                        /* +0x0000 3 functions */
-    uint32_t unk_0004;                   /* +0x0004 2 functions */
-    uint32_t unk_0008;                   /* +0x0008 2 functions */
+    int num_blocks;                      /* +0x0000 area_createsblocks assigns these block ids in setup order */
+    int turn_first;                      /* +0x0004 area_createsblocks assigns these block ids in setup order */
+    int turn_end;                        /* +0x0008 area_createsblocks assigns these block ids in setup order */
     int edge[16];                        /* +0x000c createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform) */
     int slab[4];                         /* +0x004c createlevel: level tile kinds 2..5 (index kind - 2): a block and its 3 turns */
-    int unk_005c;                        /* +0x005c 2 functions */
-    int unk_0060;                        /* +0x0060 2 functions */
-    int unk_0064;                        /* +0x0064 2 functions */
-    int unk_0068;                        /* +0x0068 1 functions */
-    int unk_006c;                        /* +0x006c 1 functions */
-    int unk_0070;                        /* +0x0070 1 functions */
+    int trim[4];                         /* +0x005c area_createsblocks assigns these block ids in setup order */
+    int misc_6c[2];                      /* +0x006c area_createsblocks assigns these block ids in setup order */
     int elevator_block;                  /* +0x0074 setup 0x3e070: base + 0xb; human_itemsimulation: a block link equal to it (with bit 31) starts an elevator (likely) */
-    int unk_0078;                        /* +0x0078 1 functions */
-    int unk_007c;                        /* +0x007c 1 functions */
-    int unk_0080;                        /* +0x0080 1 functions */
-    int unk_0084;                        /* +0x0084 1 functions */
-    int unk_0088;                        /* +0x0088 1 functions */
-    int unk_008c;                        /* +0x008c 1 functions */
-    int unk_0090;                        /* +0x0090 1 functions */
-    int unk_0094;                        /* +0x0094 1 functions */
-    int unk_0098;                        /* +0x0098 1 functions */
-    int unk_009c;                        /* +0x009c 1 functions */
-    int unk_00a0;                        /* +0x00a0 1 functions */
-    int unk_00a4;                        /* +0x00a4 1 functions */
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    int unk_00ac;                        /* +0x00ac 1 functions */
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    int unk_00b4;                        /* +0x00b4 1 functions */
-    int unk_00b8;                        /* +0x00b8 1 functions */
-    int unk_00bc;                        /* +0x00bc 1 functions */
-    int unk_00c0;                        /* +0x00c0 1 functions */
-    int unk_00c4;                        /* +0x00c4 1 functions */
-    int unk_00c8;                        /* +0x00c8 1 functions */
-    int unk_00cc;                        /* +0x00cc 1 functions */
-    int unk_00d0;                        /* +0x00d0 1 functions */
-    int unk_00d4;                        /* +0x00d4 1 functions */
-    int unk_00d8;                        /* +0x00d8 1 functions */
-    int unk_00dc;                        /* +0x00dc 1 functions */
-    int unk_00e0;                        /* +0x00e0 1 functions */
-    uint8_t pad_00e4[0x20];
+    int misc_78[5];                      /* +0x0078 area_createsblocks assigns these block ids in setup order */
+    int misc_8c[10];                     /* +0x008c area_createsblocks assigns these block ids in setup order */
+    int corner_up[4];                    /* +0x00b4 area_createsblocks assigns these block ids in setup order */
+    int slope4[16];                      /* +0x00c4 area_createsblocks assigns these block ids in setup order */
     int slope6[24];                      /* +0x0104 4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling */
-    int unk_0164;                        /* +0x0164 1 functions */
-    int unk_0168;                        /* +0x0168 1 functions */
-    int unk_016c;                        /* +0x016c 1 functions */
-    int unk_0170;                        /* +0x0170 1 functions */
-    int unk_0174;                        /* +0x0174 1 functions */
-    int unk_0178;                        /* +0x0178 1 functions */
-    int unk_017c;                        /* +0x017c 1 functions */
-    int unk_0180;                        /* +0x0180 1 functions */
-    int unk_0184;                        /* +0x0184 1 functions */
-    int unk_0188;                        /* +0x0188 1 functions */
-    int unk_018c;                        /* +0x018c 1 functions */
-    uint8_t pad_0190[0x34];
+    int ramp6[24];                       /* +0x0164 area_createsblocks assigns these block ids in setup order */
     int base_door_first;                 /* +0x01c4 0x2a510 writes 4 ids (+0x1c4..+0x1d0); human_itemsimulation opens the base door for a link in the range (likely) */
-    int unk_01c8;                        /* +0x01c8 1 functions */
-    int unk_01cc;                        /* +0x01cc 1 functions */
+    int base_door_mid[2];                /* +0x01c8 area_createsblocks assigns these block ids in setup order */
     int base_door_last;                  /* +0x01d0 as base_door_first */
-    int unk_01d4;                        /* +0x01d4 1 functions */
-    int unk_01d8;                        /* +0x01d8 1 functions */
-    int unk_01dc;                        /* +0x01dc 1 functions */
-    int unk_01e0;                        /* +0x01e0 1 functions */
-    int unk_01e4;                        /* +0x01e4 1 functions */
-    int unk_01e8;                        /* +0x01e8 1 functions */
-    int unk_01ec;                        /* +0x01ec 1 functions */
-    int unk_01f0;                        /* +0x01f0 1 functions */
-    int unk_01f4;                        /* +0x01f4 2 functions */
-    int unk_01f8;                        /* +0x01f8 1 functions */
-    int unk_01fc;                        /* +0x01fc 1 functions */
-    int unk_0200;                        /* +0x0200 1 functions */
-    int unk_0204;                        /* +0x0204 2 functions */
-    int unk_0208;                        /* +0x0208 1 functions */
-    int unk_020c;                        /* +0x020c 1 functions */
-    int unk_0210;                        /* +0x0210 1 functions */
-    int unk_0214;                        /* +0x0214 2 functions */
-    int unk_0218;                        /* +0x0218 1 functions */
-    int unk_021c;                        /* +0x021c 1 functions */
-    int unk_0220;                        /* +0x0220 1 functions */
-    int unk_0224;                        /* +0x0224 2 functions */
-    int unk_0228;                        /* +0x0228 1 functions */
-    int unk_022c;                        /* +0x022c 1 functions */
-    int unk_0230;                        /* +0x0230 1 functions */
-    int unk_0234;                        /* +0x0234 2 functions */
-    int unk_0238;                        /* +0x0238 1 functions */
-    int unk_023c;                        /* +0x023c 1 functions */
-    int unk_0240;                        /* +0x0240 1 functions */
-    int unk_0244;                        /* +0x0244 2 functions */
-    int unk_0248;                        /* +0x0248 1 functions */
-    int unk_024c;                        /* +0x024c 1 functions */
-    int unk_0250;                        /* +0x0250 1 functions */
-    int unk_0254;                        /* +0x0254 2 functions */
-    int unk_0258;                        /* +0x0258 1 functions */
-    int unk_025c;                        /* +0x025c 1 functions */
-    int unk_0260;                        /* +0x0260 1 functions */
-    int unk_0264;                        /* +0x0264 2 functions */
-    int unk_0268;                        /* +0x0268 1 functions */
-    int unk_026c;                        /* +0x026c 1 functions */
-    int unk_0270;                        /* +0x0270 1 functions */
-    int unk_0274;                        /* +0x0274 2 functions */
-    int unk_0278;                        /* +0x0278 1 functions */
-    int unk_027c;                        /* +0x027c 1 functions */
-    int unk_0280;                        /* +0x0280 1 functions */
-    int unk_0284;                        /* +0x0284 1 functions */
-    int unk_0288;                        /* +0x0288 1 functions */
-    int unk_028c;                        /* +0x028c 1 functions */
-    int unk_0290;                        /* +0x0290 1 functions */
-    int unk_0294;                        /* +0x0294 1 functions */
-    int unk_0298;                        /* +0x0298 1 functions */
-    int unk_029c;                        /* +0x029c 1 functions */
-    int unk_02a0;                        /* +0x02a0 1 functions */
-    int unk_02a4;                        /* +0x02a4 1 functions */
-    int unk_02a8;                        /* +0x02a8 1 functions */
-    int unk_02ac;                        /* +0x02ac 1 functions */
-    int unk_02b0;                        /* +0x02b0 1 functions */
-    int unk_02b4;                        /* +0x02b4 1 functions */
-    int unk_02b8;                        /* +0x02b8 1 functions */
-    int unk_02bc;                        /* +0x02bc 1 functions */
-    int unk_02c0;                        /* +0x02c0 1 functions */
-    int unk_02c4;                        /* +0x02c4 1 functions */
-    int unk_02c8;                        /* +0x02c8 1 functions */
-    int unk_02cc;                        /* +0x02cc 1 functions */
-    int unk_02d0;                        /* +0x02d0 1 functions */
-    int unk_02d4;                        /* +0x02d4 1 functions */
-    int unk_02d8;                        /* +0x02d8 1 functions */
-    int unk_02dc;                        /* +0x02dc 1 functions */
-    int unk_02e0;                        /* +0x02e0 1 functions */
-    int unk_02e4;                        /* +0x02e4 1 functions */
-    int unk_02e8;                        /* +0x02e8 1 functions */
-    int unk_02ec;                        /* +0x02ec 1 functions */
-    int unk_02f0;                        /* +0x02f0 1 functions */
-    uint8_t pad_02f4[0x10];
-    int unk_0304;                        /* +0x0304 1 functions */
-    int unk_0308;                        /* +0x0308 1 functions */
-    int unk_030c;                        /* +0x030c 1 functions */
-    int unk_0310;                        /* +0x0310 1 functions */
-    int unk_0314;                        /* +0x0314 1 functions */
-    int unk_0318;                        /* +0x0318 1 functions */
-    int unk_031c;                        /* +0x031c 1 functions */
-    int unk_0320;                        /* +0x0320 1 functions */
-    int unk_0324;                        /* +0x0324 1 functions */
-    int unk_0328;                        /* +0x0328 1 functions */
-    int unk_032c;                        /* +0x032c 1 functions */
-    int unk_0330;                        /* +0x0330 1 functions */
+    int corner_a[4];                     /* +0x01d4 area_createsblocks assigns these block ids in setup order */
+    int corner_b[4];                     /* +0x01e4 area_createsblocks assigns these block ids in setup order */
+    int railing[4];                      /* +0x01f4 area_createsblocks assigns these block ids in setup order */
+    int railing_left[4];                 /* +0x0204 area_createsblocks assigns these block ids in setup order */
+    int railing_right[4];                /* +0x0214 area_createsblocks assigns these block ids in setup order */
+    int ceiling_edge[4];                 /* +0x0224 area_createsblocks assigns these block ids in setup order */
+    int ceiling_edge_right[4];           /* +0x0234 area_createsblocks assigns these block ids in setup order */
+    int stairs_balcony[4];               /* +0x0244 area_createsblocks assigns these block ids in setup order */
+    int stairs[4];                       /* +0x0254 area_createsblocks assigns these block ids in setup order */
+    int stairs_floor[4];                 /* +0x0264 area_createsblocks assigns these block ids in setup order */
+    int stairs_ceiling[4];               /* +0x0274 area_createsblocks assigns these block ids in setup order */
+    int misc_284[20];                    /* +0x0284 area_createsblocks assigns these block ids in setup order */
+    int hill_a[4];                       /* +0x02d4 area_createsblocks assigns these block ids in setup order */
+    int hill_b[4];                       /* +0x02e4 area_createsblocks assigns these block ids in setup order */
+    int unused_2f4[4];                   /* +0x02f4 area_createsblocks assigns these block ids in setup order */
+    int flat[4];                         /* +0x0304 area_createsblocks assigns these block ids in setup order */
+    int rail_low[4];                     /* +0x0314 area_createsblocks assigns these block ids in setup order */
+    int rail_low2[4];                    /* +0x0324 area_createsblocks assigns these block ids in setup order */
     int fence[4];                        /* +0x0334 createlevel: level tile kinds 8..11 (index kind - 8) */
     int fence_end[4];                    /* +0x0344 createlevel: level tile kinds 12..15. The code indexes 8 ints from 0x334 */
-    int unk_0354;                        /* +0x0354 2 functions */
-    int unk_0358;                        /* +0x0358 1 functions */
-    int unk_035c;                        /* +0x035c 1 functions */
-    int unk_0360;                        /* +0x0360 1 functions */
-    int unk_0364;                        /* +0x0364 1 functions */
-    int unk_0368;                        /* +0x0368 1 functions */
-    int unk_036c;                        /* +0x036c 1 functions */
-    int unk_0370;                        /* +0x0370 1 functions */
-    uint8_t pad_0374[0x3ffe0];
+    int file_blocks[65536];              /* +0x0354 area_createsblocks assigns these block ids in setup order */
 }; uint8_t lf_raw[0x40354]; } BlockList;
 SR_STATIC_ASSERT(sizeof(BlockList) == 0x40354, "BlockList");
+SR_STATIC_ASSERT(offsetof(BlockList, num_blocks) == 0x0, "BlockList.num_blocks");
+SR_STATIC_ASSERT(offsetof(BlockList, turn_first) == 0x4, "BlockList.turn_first");
+SR_STATIC_ASSERT(offsetof(BlockList, turn_end) == 0x8, "BlockList.turn_end");
 SR_STATIC_ASSERT(offsetof(BlockList, edge) == 0xc, "BlockList.edge");
 SR_STATIC_ASSERT(offsetof(BlockList, slab) == 0x4c, "BlockList.slab");
+SR_STATIC_ASSERT(offsetof(BlockList, trim) == 0x5c, "BlockList.trim");
+SR_STATIC_ASSERT(offsetof(BlockList, misc_6c) == 0x6c, "BlockList.misc_6c");
 SR_STATIC_ASSERT(offsetof(BlockList, elevator_block) == 0x74, "BlockList.elevator_block");
+SR_STATIC_ASSERT(offsetof(BlockList, misc_78) == 0x78, "BlockList.misc_78");
+SR_STATIC_ASSERT(offsetof(BlockList, misc_8c) == 0x8c, "BlockList.misc_8c");
+SR_STATIC_ASSERT(offsetof(BlockList, corner_up) == 0xb4, "BlockList.corner_up");
+SR_STATIC_ASSERT(offsetof(BlockList, slope4) == 0xc4, "BlockList.slope4");
 SR_STATIC_ASSERT(offsetof(BlockList, slope6) == 0x104, "BlockList.slope6");
+SR_STATIC_ASSERT(offsetof(BlockList, ramp6) == 0x164, "BlockList.ramp6");
 SR_STATIC_ASSERT(offsetof(BlockList, base_door_first) == 0x1c4, "BlockList.base_door_first");
+SR_STATIC_ASSERT(offsetof(BlockList, base_door_mid) == 0x1c8, "BlockList.base_door_mid");
 SR_STATIC_ASSERT(offsetof(BlockList, base_door_last) == 0x1d0, "BlockList.base_door_last");
+SR_STATIC_ASSERT(offsetof(BlockList, corner_a) == 0x1d4, "BlockList.corner_a");
+SR_STATIC_ASSERT(offsetof(BlockList, corner_b) == 0x1e4, "BlockList.corner_b");
+SR_STATIC_ASSERT(offsetof(BlockList, railing) == 0x1f4, "BlockList.railing");
+SR_STATIC_ASSERT(offsetof(BlockList, railing_left) == 0x204, "BlockList.railing_left");
+SR_STATIC_ASSERT(offsetof(BlockList, railing_right) == 0x214, "BlockList.railing_right");
+SR_STATIC_ASSERT(offsetof(BlockList, ceiling_edge) == 0x224, "BlockList.ceiling_edge");
+SR_STATIC_ASSERT(offsetof(BlockList, ceiling_edge_right) == 0x234, "BlockList.ceiling_edge_right");
+SR_STATIC_ASSERT(offsetof(BlockList, stairs_balcony) == 0x244, "BlockList.stairs_balcony");
+SR_STATIC_ASSERT(offsetof(BlockList, stairs) == 0x254, "BlockList.stairs");
+SR_STATIC_ASSERT(offsetof(BlockList, stairs_floor) == 0x264, "BlockList.stairs_floor");
+SR_STATIC_ASSERT(offsetof(BlockList, stairs_ceiling) == 0x274, "BlockList.stairs_ceiling");
+SR_STATIC_ASSERT(offsetof(BlockList, misc_284) == 0x284, "BlockList.misc_284");
+SR_STATIC_ASSERT(offsetof(BlockList, hill_a) == 0x2d4, "BlockList.hill_a");
+SR_STATIC_ASSERT(offsetof(BlockList, hill_b) == 0x2e4, "BlockList.hill_b");
+SR_STATIC_ASSERT(offsetof(BlockList, unused_2f4) == 0x2f4, "BlockList.unused_2f4");
+SR_STATIC_ASSERT(offsetof(BlockList, flat) == 0x304, "BlockList.flat");
+SR_STATIC_ASSERT(offsetof(BlockList, rail_low) == 0x314, "BlockList.rail_low");
+SR_STATIC_ASSERT(offsetof(BlockList, rail_low2) == 0x324, "BlockList.rail_low2");
 SR_STATIC_ASSERT(offsetof(BlockList, fence) == 0x334, "BlockList.fence");
 SR_STATIC_ASSERT(offsetof(BlockList, fence_end) == 0x344, "BlockList.fence_end");
+SR_STATIC_ASSERT(offsetof(BlockList, file_blocks) == 0x354, "BlockList.file_blocks");
 
 /* city[]: record of 0xa0b99c bytes. */
 typedef union City { struct {
@@ -2806,92 +2738,36 @@ SR_STATIC_ASSERT(offsetof(LevelEditor, buildings) == 0x10b84c, "LevelEditor.buil
 
 /* blocktemp[]: record of 0x7606c bytes. */
 typedef union BlockTemp { struct {
-    int unk_0000;                        /* +0x0000 2 functions */
-    int unk_0004;                        /* +0x0004 2 functions */
-    int unk_0008;                        /* +0x0008 2 functions */
-    int unk_000c;                        /* +0x000c 2 functions */
-    int unk_0010;                        /* +0x0010 2 functions */
-    int unk_0014;                        /* +0x0014 2 functions */
-    int unk_0018;                        /* +0x0018 2 functions */
-    int unk_001c;                        /* +0x001c 2 functions */
-    int unk_0020;                        /* +0x0020 2 functions */
-    int unk_0024;                        /* +0x0024 2 functions */
-    uint8_t pad_0028[0x4];
-    int unk_002c;                        /* +0x002c 2 functions */
-    int unk_0030;                        /* +0x0030 2 functions */
-    int unk_0034;                        /* +0x0034 2 functions */
-    int unk_0038;                        /* +0x0038 2 functions */
-    float unk_003c;                      /* +0x003c 2 functions */
-    float unk_0040;                      /* +0x0040 1 functions */
-    float unk_0044;                      /* +0x0044 1 functions */
-    float unk_0048;                      /* +0x0048 2 functions */
-    float unk_004c;                      /* +0x004c 1 functions */
-    float unk_0050;                      /* +0x0050 1 functions */
-    float unk_0054;                      /* +0x0054 1 functions */
-    float unk_0058;                      /* +0x0058 1 functions */
-    float unk_005c;                      /* +0x005c 1 functions */
-    float unk_0060;                      /* +0x0060 1 functions */
-    float unk_0064;                      /* +0x0064 1 functions */
-    float unk_0068;                      /* +0x0068 1 functions */
-    float unk_006c;                      /* +0x006c 1 functions */
-    float unk_0070;                      /* +0x0070 1 functions */
-    float unk_0074;                      /* +0x0074 1 functions */
-    float unk_0078;                      /* +0x0078 1 functions */
-    float unk_007c;                      /* +0x007c 1 functions */
-    uint8_t pad_0080[0x7c];
-    float unk_00fc;                      /* +0x00fc 2 functions */
-    float unk_0100;                      /* +0x0100 1 functions */
-    float unk_0104;                      /* +0x0104 1 functions */
-    float unk_0108;                      /* +0x0108 1 functions */
-    float unk_010c;                      /* +0x010c 1 functions */
-    float unk_0110;                      /* +0x0110 1 functions */
-    float unk_0114;                      /* +0x0114 1 functions */
-    float unk_0118;                      /* +0x0118 1 functions */
-    float unk_011c;                      /* +0x011c 1 functions */
-    float unk_0120;                      /* +0x0120 1 functions */
-    uint8_t pad_0124[0x58];
-    int unk_017c;                        /* +0x017c 2 functions */
-    int unk_0180;                        /* +0x0180 2 functions */
-    uint8_t pad_0184[0xc];
-    int unk_0190;                        /* +0x0190 1 functions */
-    uint8_t pad_0194[0x4];
-    float unk_0198;                      /* +0x0198 1 functions */
-    float unk_019c;                      /* +0x019c 1 functions */
-    float unk_01a0;                      /* +0x01a0 1 functions */
-    uint8_t pad_01a4[0xb4];
-    float unk_0258;                      /* +0x0258 1 functions */
-    float unk_025c;                      /* +0x025c 1 functions */
-    uint8_t pad_0260[0x56dc8];
-    int unk_57028;                       /* +0x57028 2 functions */
-    float unk_5702c;                     /* +0x5702c 2 functions */
-    float unk_57030;                     /* +0x57030 1 functions */
-    float unk_57034;                     /* +0x57034 1 functions */
-    float unk_57038;                     /* +0x57038 2 functions */
-    float unk_5703c;                     /* +0x5703c 1 functions */
-    float unk_57040;                     /* +0x57040 1 functions */
-    float unk_57044;                     /* +0x57044 1 functions */
-    float unk_57048;                     /* +0x57048 1 functions */
-    float unk_5704c;                     /* +0x5704c 1 functions */
-    float unk_57050;                     /* +0x57050 1 functions */
-    float unk_57054;                     /* +0x57054 1 functions */
-    float unk_57058;                     /* +0x57058 1 functions */
-    uint8_t pad_5705c[0x18];
-    int unk_57074;                       /* +0x57074 1 functions */
-    uint8_t pad_57078[0x14];
-    int unk_5708c;                       /* +0x5708c 2 functions */
-    int unk_57090;                       /* +0x57090 1 functions */
-    uint8_t pad_57094[0x10];
-    int unk_570a4;                       /* +0x570a4 2 functions */
-    int unk_570a8;                       /* +0x570a8 1 functions */
-    uint8_t pad_570ac[0x8];
-    int unk_570b4;                       /* +0x570b4 1 functions */
-    uint8_t pad_570b8[0x68];
-    int unk_57120;                       /* +0x57120 1 functions */
-    uint8_t pad_57124[0x1ef08];
+    int size_x;                          /* +0x0000 loadblock reads this field from the block file */
+    int size_y;                          /* +0x0004 loadblock reads this field from the block file */
+    int size_z;                          /* +0x0008 loadblock reads this field from the block file */
+    int floor;                           /* +0x000c loadblock reads this field from the block file */
+    int ceiling;                         /* +0x0010 loadblock reads this field from the block file */
+    int wall_z1;                         /* +0x0014 loadblock reads this field from the block file */
+    int wall_x0;                         /* +0x0018 loadblock reads this field from the block file */
+    int wall_z0;                         /* +0x001c loadblock reads this field from the block file */
+    int wall_x1;                         /* +0x0020 loadblock reads this field from the block file */
+    int num_surfaces;                    /* +0x0024 loadblock reads this field from the block file */
+    BlockSurface surfaces[1024];         /* +0x0028 loadblock reads this field from the block file */
+    int num_boxes;                       /* +0x57028 loadblock reads this field from the block file */
+    BlockBox boxes[1024];                /* +0x5702c loadblock reads this field from the block file */
     int unused_7602c;                    /* +0x7602c resetgame writes 0. No reader in the server */
     uint8_t pad_76030[0x3c];
 }; uint8_t lf_raw[0x7606c]; } BlockTemp;
 SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
+SR_STATIC_ASSERT(offsetof(BlockTemp, size_x) == 0x0, "BlockTemp.size_x");
+SR_STATIC_ASSERT(offsetof(BlockTemp, size_y) == 0x4, "BlockTemp.size_y");
+SR_STATIC_ASSERT(offsetof(BlockTemp, size_z) == 0x8, "BlockTemp.size_z");
+SR_STATIC_ASSERT(offsetof(BlockTemp, floor) == 0xc, "BlockTemp.floor");
+SR_STATIC_ASSERT(offsetof(BlockTemp, ceiling) == 0x10, "BlockTemp.ceiling");
+SR_STATIC_ASSERT(offsetof(BlockTemp, wall_z1) == 0x14, "BlockTemp.wall_z1");
+SR_STATIC_ASSERT(offsetof(BlockTemp, wall_x0) == 0x18, "BlockTemp.wall_x0");
+SR_STATIC_ASSERT(offsetof(BlockTemp, wall_z0) == 0x1c, "BlockTemp.wall_z0");
+SR_STATIC_ASSERT(offsetof(BlockTemp, wall_x1) == 0x20, "BlockTemp.wall_x1");
+SR_STATIC_ASSERT(offsetof(BlockTemp, num_surfaces) == 0x24, "BlockTemp.num_surfaces");
+SR_STATIC_ASSERT(offsetof(BlockTemp, surfaces) == 0x28, "BlockTemp.surfaces");
+SR_STATIC_ASSERT(offsetof(BlockTemp, num_boxes) == 0x57028, "BlockTemp.num_boxes");
+SR_STATIC_ASSERT(offsetof(BlockTemp, boxes) == 0x5702c, "BlockTemp.boxes");
 SR_STATIC_ASSERT(offsetof(BlockTemp, unused_7602c) == 0x7602c, "BlockTemp.unused_7602c");
 
 /* bondopt[]: record of 0x40 bytes. */

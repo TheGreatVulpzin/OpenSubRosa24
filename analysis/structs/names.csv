@@ -701,3 +701,58 @@ blocklist,0x344,fence_end,int,4,createlevel: level tile kinds 12..15. The code i
 building,0x12001cc,build_size_x,int,,building_setupbuild copies size_x for level construction
 building,0x12001d0,build_size_z,int,,building_setupbuild copies size_z for level construction
 building,0x12001d4,build_floors,int,,building_setupbuild copies floors for level construction
+area,0x64,unused_0064,int,,createarea writes 0. No reader in the server or Mac client
+area,0x100d68,num_sectors,int,,area_createsector increments it. createarea keeps its value
+area_block,0x0,name,char,64,area_createinteriorblocks stores the block name
+area_block,0x40,num_verts,int,,area_setupsblock copies tempmesh.num_verts
+area_block,0x48,normals,int,,area_setupsblock allocates a pointer to vec3 normals
+area_block,0x4c,tangents,int,,area_setupsblock allocates a pointer to vec3 tangents
+area_block,0x50,uvs,int,,area_setupsblock allocates a pointer to float UV pairs
+area_block,0x6c,size_x,int,,area_createblock creates links over this x size
+area_block,0x70,size_y,int,,area_createblock creates links over this y size
+area_block,0x74,size_z,int,,area_createblock creates links over this z size
+area_block,0x7c,open_sides,int,,area_block_createbuildinginterior sets the floor and wall bits
+area_block,0x80,is_door,int,,area_createinteriorblocks sets 1 for garage and base doors
+blocklist,0x0,num_blocks,int,,area_createsblocks assigns these block ids in setup order
+blocklist,0x4,turn_first,int,,area_createsblocks assigns these block ids in setup order
+blocklist,0x8,turn_end,int,,area_createsblocks assigns these block ids in setup order
+blocklist,0x5c,trim,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x6c,misc_6c,int,2,area_createsblocks assigns these block ids in setup order
+blocklist,0x78,misc_78,int,5,area_createsblocks assigns these block ids in setup order
+blocklist,0x8c,misc_8c,int,10,area_createsblocks assigns these block ids in setup order
+blocklist,0xb4,corner_up,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0xc4,slope4,int,16,area_createsblocks assigns these block ids in setup order
+blocklist,0x164,ramp6,int,24,area_createsblocks assigns these block ids in setup order
+blocklist,0x1c8,base_door_mid,int,2,area_createsblocks assigns these block ids in setup order
+blocklist,0x1d4,corner_a,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x1e4,corner_b,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x1f4,railing,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x204,railing_left,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x214,railing_right,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x224,ceiling_edge,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x234,ceiling_edge_right,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x244,stairs_balcony,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x254,stairs,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x264,stairs_floor,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x274,stairs_ceiling,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x284,misc_284,int,20,area_createsblocks assigns these block ids in setup order
+blocklist,0x2d4,hill_a,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x2e4,hill_b,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x2f4,unused_2f4,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x304,flat,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x314,rail_low,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x324,rail_low2,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x354,file_blocks,int,65536,area_createsblocks assigns these block ids in setup order
+blocktemp,0x0,size_x,int,,loadblock reads this field from the block file
+blocktemp,0x4,size_y,int,,loadblock reads this field from the block file
+blocktemp,0x8,size_z,int,,loadblock reads this field from the block file
+blocktemp,0xc,floor,int,,loadblock reads this field from the block file
+blocktemp,0x10,ceiling,int,,loadblock reads this field from the block file
+blocktemp,0x14,wall_z1,int,,loadblock reads this field from the block file
+blocktemp,0x18,wall_x0,int,,loadblock reads this field from the block file
+blocktemp,0x1c,wall_z0,int,,loadblock reads this field from the block file
+blocktemp,0x20,wall_x1,int,,loadblock reads this field from the block file
+blocktemp,0x24,num_surfaces,int,,loadblock reads this field from the block file
+blocktemp,0x28,surfaces,BlockSurface,1024,loadblock reads this field from the block file
+blocktemp,0x57028,num_boxes,int,,loadblock reads this field from the block file
+blocktemp,0x5702c,boxes,BlockBox,1024,loadblock reads this field from the block file

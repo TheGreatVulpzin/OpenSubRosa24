@@ -16,6 +16,7 @@
 #define SR_RVA_HUMAN                0x15cbf80u  /* Human[] */
 #define SR_RVA_STATS                0x1b49788u  /* Stats[] */
 #define SR_RVA_NUMOFDYNAMICBONDS    0x1ca5a30u
+#define SR_RVA_SURFACETEMP2         0x1d65a40u
 #define SR_RVA_BUILDING             0x1d65b80u  /* Building[] */
 #define SR_RVA_BLOCKTEMP            0x537c520u  /* BlockTemp[] */
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
@@ -34,6 +35,8 @@
 #define SR_RVA_PARTICLE             0xb3e7200u  /* Particle[] */
 #define SR_RVA_BUILDBLOCKTYPE       0xb7a7200u  /* BuildBlockType[] */
 #define SR_RVA_BLOCKLIST            0xb7a8ca0u  /* BlockList[] */
+#define SR_RVA_SURFACETEMP          0xb7e90a0u
+#define SR_RVA_AREA_INTERIOR        0xb7e91e0u
 #define SR_RVA_FILELIST             0xe219200u  /* FileList[] */
 #define SR_RVA_CITY                 0xe299220u  /* City[] */
 #define SR_RVA_PLAYER               0xededd00u  /* Player[] */

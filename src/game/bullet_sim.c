@@ -14,17 +14,13 @@
 #include "events.h"
 #include "objects.h"
 #include "sr_os.h"
+#include "area.h"
 #include "sr_runtime.h"
 #include "vectors.h"
 
 /* Game globals. */
 #define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
 #define g_object SR_AT(Object, SR_RVA_OBJECT)
-
-/* Game functions of other files. */
-int __cdecl lf_2c020(uint32_t area, uint32_t x, uint32_t y, uint32_t z, uint32_t word, int spec_face, vec3 *pos,
-                     vec3 *vel);
-#define area_breakblock lf_2c020
 
 #define GAMETYPE_TEAMS 3
 #define GAMETYPE_BASES 4

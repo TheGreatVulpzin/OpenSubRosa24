@@ -90,6 +90,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
              'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
+             'BlockSurface': 0x15c, 'BlockBox': 0x7c,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
@@ -412,6 +413,20 @@ typedef union CityObjectTypeRec { struct {
     vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
+typedef struct BlockSurface {
+    int unused_00;
+    int nu, nv, tu, tv;
+    vec3 ctrl[16];
+    float uv[16][2];
+    int slot, auto_side;
+} BlockSurface;
+
+typedef struct BlockBox {
+    vec3 verts[8];
+    int slots[6];
+    int faces;
+} BlockBox;
+
 /* A chunk of an area: 8 x 8 x 8 sectors (Area.chunks). */
 typedef union AreaChunk { struct {
     int used;           /* +0x000 area_getnextchunk takes a chunk with 0 */
@@ -426,17 +441,18 @@ typedef union BlockSector { struct {
     int used;           /* +0x0000 area_getnextsector takes a sector with 0 */
     uint32_t blocks[512];           /* +0x0004 the outer blocks */
     uint16_t textures[512][8];      /* +0x0804 area_getblocktexture: one for each face of a block */
-    int unk_2804[512];
+    uint32_t colors[512];
     uint32_t interior[512];         /* +0x3004 the blocks of the interiors */
     uint8_t interior_textures[512][8]; /* +0x3804 area_interior_getblocktexture */
     uint32_t cityobjects[512];      /* +0x4804 above 0: a city object type in bits 0..9, a turn of 90 degrees times bits 10..11 */
-    int unk_5004[4];
+    int interior_models[4];
     int area;           /* +0x5014 area_createsector: the area of the sector */
     int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
-    uint8_t unk_5024[0x24];
-    int unk_5048;
+    int dirty;
+    uint8_t unk_5028[0x20];
+    int num_meshes;
     uint8_t unk_504c[0x800];
-    int unk_584c;
+    int unused_584c;
     uint8_t unk_5850[0x818];
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 

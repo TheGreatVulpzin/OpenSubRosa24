@@ -11,7 +11,7 @@ void ai_car_nextwaypoint(void);
 void area_getblock(void);
 void area_getblocktexture(void);
 void area_getnextsector(void);
-void lf_01cf0(void);
+void area_marksector(void);
 void area_getnextchunk(void);
 void lf_01e50(void);
 void tesselatebezier(void);
@@ -19,8 +19,8 @@ void tesselatebezierderivative(void);
 void lf_026d0(void);
 void lf_029a0(void);
 void lf_02cf0(void);
-void lf_02dc0(void);
-void lf_02f00(void);
+void area_interior_setblock(void);
+void area_interior_setobject(void);
 void area_interior_getblock(void);
 void area_interior_getblocklink(void);
 void area_interior_getblocktexture(void);
@@ -132,9 +132,9 @@ void pbitwritenego(void);
 void pbitreadnego(void);
 void createaccount(void);
 void ai_playercar(void);
-void lf_0f2b0(void);
-void lf_0f4a0(void);
-void lf_0f620(void);
+void createarea(void);
+void area_createsector(void);
+void area_createchunk(void);
 void addbeziersurface(void);
 void addbeziersurfacetexture(void);
 void lf_10140(void);
@@ -146,7 +146,7 @@ void lf_11a40(void);
 void lf_11d70(void);
 void lf_11f70(void);
 void lf_120c0(void);
-void lf_121d0(void);
+void area_interior_createblock(void);
 void lineintersectnormalblock(void);
 void lineintersectspecblock(void);
 void createbond(void);
@@ -236,12 +236,12 @@ void objecttype_addwheel(void);
 void calculatepointscale(void);
 void objecttype_calcquadweights(void);
 void findstring(void);
-void lf_296f0(void);
-void lf_29830(void);
-void lf_29970(void);
+void area_setblock(void);
+void area_setblockcolor(void);
+void area_deleteblock(void);
 void lf_29bf0(void);
 void lf_2a510(void);
-void lf_2c020(void);
+void area_breakblock(void);
 void lineintersectarea(void);
 void sphereintersectnormalblock(void);
 void sphereintersectspecblock(void);
@@ -275,7 +275,7 @@ void setupobjectypes_train(void);
 void createvehicle(void);
 void calculateplayervoice(void);
 void ai_assessthreats(void);
-void lf_3da50(void);
+void area_createblock(void);
 void lf_3e070(void);
 void sphereintersectarea(void);
 void circleintersectarea(void);
@@ -329,7 +329,7 @@ const LfEntry lf_table[] = {
     { "area_getblock", 0x1850, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_getblocktexture", 0x1bc0, (void *)area_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_getnextsector", 0x1cd0, (void *)area_getnextsector, 0, LF_RET_INT, 4, "", 0 },
-    { "area_marksector", 0x1cf0, (void *)lf_01cf0, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_marksector", 0x1cf0, (void *)area_marksector, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_getnextchunk", 0x1e20, (void *)area_getnextchunk, 1, LF_RET_INT, 4, "v", 0 },
     { "landscape_buildsectorlods", 0x1e50, (void *)lf_01e50, 1, LF_RET_VOID, 4, "v", 1 },
     { "tesselatebezier", 0x2560, (void *)tesselatebezier, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
@@ -337,8 +337,8 @@ const LfEntry lf_table[] = {
     { "area_copyrotateblock", 0x26d0, (void *)lf_026d0, 2, LF_RET_VOID, 4, "vp", 0 },
     { "loadblock", 0x29a0, (void *)lf_029a0, 1, LF_RET_VOID, 4, "p", 1 },
     { "area_block_rotatesurface", 0x2cf0, (void *)lf_02cf0, 2, LF_RET_INT, 4, "vv", 0 },
-    { "area_interior_setblock", 0x2dc0, (void *)lf_02dc0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_interior_setobject", 0x2f00, (void *)lf_02f00, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_interior_setblock", 0x2dc0, (void *)area_interior_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_interior_setobject", 0x2f00, (void *)area_interior_setobject, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_getblock", 0x3030, (void *)area_interior_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocklink", 0x3130, (void *)area_interior_getblocklink, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocktexture", 0x3290, (void *)area_interior_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
@@ -450,9 +450,9 @@ const LfEntry lf_table[] = {
     { "pbitreadnego", 0xddd0, (void *)pbitreadnego, 2, LF_RET_INT, 4, "pv", 0 },
     { "createaccount", 0xded0, (void *)createaccount, 1, LF_RET_INT, 4, "v", 0 },
     { "ai_playercar", 0xe4d0, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "createarea", 0xf2b0, (void *)lf_0f2b0, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
-    { "area_createsector", 0xf4a0, (void *)lf_0f4a0, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "area_createchunk", 0xf620, (void *)lf_0f620, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "createarea", 0xf2b0, (void *)createarea, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
+    { "area_createsector", 0xf4a0, (void *)area_createsector, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_createchunk", 0xf620, (void *)area_createchunk, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "addbeziersurface", 0xf6f0, (void *)addbeziersurface, 7, LF_RET_VOID, 4, "ppvvvvv", 0 },
     { "addbeziersurfacetexture", 0xfc40, (void *)addbeziersurfacetexture, 7, LF_RET_VOID, 4, "pvvvvvv", 0 },
     { "area_block_addwindowhorizontal", 0x10140, (void *)lf_10140, 5, LF_RET_VOID, 4, "vvvvv", 0 },
@@ -464,7 +464,7 @@ const LfEntry lf_table[] = {
     { "area_block_addbeam", 0x11d70, (void *)lf_11d70, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
     { "area_block_addoutdoor", 0x11f70, (void *)lf_11f70, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addcorner", 0x120c0, (void *)lf_120c0, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_interior_createblock", 0x121d0, (void *)lf_121d0, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
+    { "area_interior_createblock", 0x121d0, (void *)area_interior_createblock, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "lineintersectnormalblock", 0x12450, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "lineintersectspecblock", 0x126b0, (void *)lineintersectspecblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "createbond", 0x129b0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -554,12 +554,12 @@ const LfEntry lf_table[] = {
     { "calculatepointscale", 0x28c90, (void *)calculatepointscale, 4, LF_RET_VOID, 4, "pvpp", 0 },
     { "objecttype_calcquadweights", 0x29300, (void *)objecttype_calcquadweights, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "findstring", 0x29650, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
-    { "area_setblock", 0x296f0, (void *)lf_296f0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_setblockcolor", 0x29830, (void *)lf_29830, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_deleteblock", 0x29970, (void *)lf_29970, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_setblock", 0x296f0, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_setblockcolor", 0x29830, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_deleteblock", 0x29970, (void *)area_deleteblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_block_createbuildinginterior", 0x29bf0, (void *)lf_29bf0, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_createinteriorblocks", 0x2a510, (void *)lf_2a510, 0, LF_RET_VOID, 4, "", 1 },
-    { "area_breakblock", 0x2c020, (void *)lf_2c020, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
+    { "area_breakblock", 0x2c020, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x2c0c0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "sphereintersectnormalblock", 0x2cda0, (void *)sphereintersectnormalblock, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "sphereintersectspecblock", 0x2d2d0, (void *)sphereintersectspecblock, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
@@ -593,7 +593,7 @@ const LfEntry lf_table[] = {
     { "createvehicle", 0x3ccc0, (void *)createvehicle, 3, LF_RET_INT, 4, "vpp", 0 },
     { "calculateplayervoice", 0x3cfe0, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_assessthreats", 0x3d500, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "area_createblock", 0x3da50, (void *)lf_3da50, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
+    { "area_createblock", 0x3da50, (void *)area_createblock, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
     { "sphereintersectarea", 0x40aa0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "circleintersectarea", 0x41550, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },

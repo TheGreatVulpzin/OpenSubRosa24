@@ -4,15 +4,9 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "area.h"
 #include "logic.h"
 #include "vectors.h"
-
-/* Game functions of other files. */
-void __cdecl lf_3da50(uint32_t area, uint32_t x, uint32_t y, uint32_t z,
-                     uint32_t block, const uint16_t *materials);
-void __cdecl lf_02f00(uint32_t area, uint32_t x, uint32_t y, uint32_t z, int object);
-#define area_createblock lf_3da50
-#define area_interior_setobject lf_02f00
 
 void city_addintersection(int x, int y, int z)
 {

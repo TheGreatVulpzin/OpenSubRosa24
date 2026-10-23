@@ -10,15 +10,13 @@
 
 #include <string.h>
 
+#include "area.h"
 #include "sr_runtime.h"
 
 #define MAX_ITEMS 0x400
 #define sr_market (*SR_AT(Market, SR_RVA_MARKET))
 /* The first event that eventsimulation did not handle yet (it lives in BlockTemp). */
 #define lastevent (*SR_AT(uint32_t, 0x53f254c))
-
-void __cdecl lf_01cf0(uint32_t area, int x, int y, int z);                      /* area_marksector */
-void __cdecl lf_02f00(uint32_t area, uint32_t x, uint32_t y, uint32_t z, int object); /* area_interior_setobject */
 
 /* The next free event, with its type and the tick of now. */
 static Event *new_event(int type)
@@ -271,8 +269,8 @@ void eventsimulation(void)
             int d;
             for (d = 0; d < 2; d++, door++) {
                 uint32_t object = open == 0 ? ((uint32_t)door->object << 10 | 9) : 0;
-                lf_02f00(0, (uint32_t)door->x, (uint32_t)door->y, (uint32_t)door->z, (int)object);
-                lf_01cf0(0, door->x, door->y, door->z);
+                area_interior_setobject(0, (uint32_t)door->x, (uint32_t)door->y, (uint32_t)door->z, (int)object);
+                area_marksector(0, door->x, door->y, door->z);
             }
         }
         lastevent = (lastevent + 1) & 0xffff;
