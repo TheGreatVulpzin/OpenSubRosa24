@@ -1,5 +1,6 @@
 /* Asset identifiers and game reset. */
 #include "logic.h"
+#include "level.h"
 
 #include <string.h>
 
@@ -23,12 +24,10 @@ void __cdecl lf_13450(void);
 void __cdecl lf_155e0(void);
 void __cdecl lf_185a0(void);
 void __cdecl lf_3e070(void);
-void __cdecl lf_54e40(void);
 #define setupbuildingtypes lf_13450
 #define setupcityobjecttypes lf_155e0
 #define newspaper_load lf_185a0
 #define area_createsblocks lf_3e070
-#define createlevel lf_54e40
 
 #define g_materiallist (*SR_AT(MaterialList, SR_RVA_MATERIALLIST))
 #define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))

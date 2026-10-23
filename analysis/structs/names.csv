@@ -698,3 +698,6 @@ blocklist,0x4c,slab,int,4,createlevel: level tile kinds 2..5 (index kind - 2): a
 blocklist,0x104,slope6,int,24,"4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling"
 blocklist,0x334,fence,int,4,createlevel: level tile kinds 8..11 (index kind - 8)
 blocklist,0x344,fence_end,int,4,createlevel: level tile kinds 12..15. The code indexes 8 ints from 0x334
+building,0x12001cc,build_size_x,int,,building_setupbuild copies size_x for level construction
+building,0x12001d0,build_size_z,int,,building_setupbuild copies size_z for level construction
+building,0x12001d4,build_floors,int,,building_setupbuild copies floors for level construction

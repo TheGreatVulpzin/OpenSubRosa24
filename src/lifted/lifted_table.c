@@ -194,7 +194,7 @@ void createitem(void);
 void setitempositionhuman(void);
 void linkitem(void);
 void addcitystreet(void);
-void lf_1bc50(void);
+void createlandscape(void);
 void lineintersectlandscape(void);
 void circleintersectlandscape(void);
 void sphereintersectlandscape(void);
@@ -304,7 +304,7 @@ void setupgame(void);
 void createhuman(void);
 void humansimulation(void);
 void itemsimulation(void);
-void lf_54e40(void);
+void createlevel(void);
 void logic_playeractions(void);
 void objectsimulation(void);
 void scenario_createguards(void);
@@ -512,7 +512,7 @@ const LfEntry lf_table[] = {
     { "setitempositionhuman", 0x1b6e0, (void *)setitempositionhuman, 2, LF_RET_VOID, 4, "vv", 0 },
     { "linkitem", 0x1b870, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "addcitystreet", 0x1ba30, (void *)addcitystreet, 5, LF_RET_VOID, 4, "vvvvp", 0 },
-    { "createlandscape", 0x1bc50, (void *)lf_1bc50, 0, LF_RET_VOID, 4, "", 0 },
+    { "createlandscape", 0x1bc50, (void *)createlandscape, 0, LF_RET_VOID, 4, "", 0 },
     { "lineintersectlandscape", 0x1c1d0, (void *)lineintersectlandscape, 2, LF_RET_INT, 4, "pp", 0 },
     { "circleintersectlandscape", 0x1c8f0, (void *)circleintersectlandscape, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlandscape", 0x1cdf0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 4, "pv", 0 },
@@ -622,7 +622,7 @@ const LfEntry lf_table[] = {
     { "createhuman", 0x50ae0, (void *)createhuman, 3, LF_RET_INT, 4, "ppv", 0 },
     { "humansimulation", 0x51060, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemsimulation", 0x542a0, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "createlevel", 0x54e40, (void *)lf_54e40, 0, LF_RET_VOID, 4, "", 1 },
+    { "createlevel", 0x54e40, (void *)createlevel, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_playeractions", 0x55700, (void *)logic_playeractions, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation", 0x56710, (void *)objectsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_createguards", 0x58320, (void *)scenario_createguards, 3, LF_RET_INT, 4, "vvv", 0 },

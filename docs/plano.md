@@ -191,6 +191,10 @@ Next, in this order (sizes from `analysis/024d/functions.csv`):
 7. System and main loop: `setcpuaffinity`, `getcpufrequency`, `gettimeofday`, `systemtimer`, `testtimer`, `setuptimers`, `server_writelogfile`, `debug_resetlogfile`, `loadsaveoptions`, `loadtextfile`, `listfiles`, `checkstring`, `findstring`, `getstring`, `getint`, `cs_getline`, `cs_pread`, `csradixsort`, `removeflieextentions`, `sprintf_comma`, `__aulldiv`, `init_by_array`.
 8. Map and buildings: `createlevel`, `createlandscape`, `landscape_buildsectorlods`, `createarea`, `createtrack`, `buildsomeshit`, `buildcitystreet`, `buildcityinterection`, `addcitystreet`, `city_addintersection`, `city_createelevator`, `createcityobject`, `cityobject_addbox`, `setupcityobjecttypes`, `setupbuildingtypes`, the 6 `building_*`, the `area_create*`, `area_block_*`, `area_interior_create*`, `area_interior_set*` and `area_set*` functions, `area_copyrotateblock`, `area_deleteblock`, `area_breakblock`, `area_marksector`, `loadblock`, `leveleditor_load`, `leveleditor_save`, `newspaper_load`, `addbeziersurface`, `addbeziersurfacetexture`, `tesselatebezier`, `tesselatebezierderivative`, `calculatepointscale`, `cerpnoise2d`, `lerpnoise2d`.
 
+Part 8A is complete (2026-10-23): 15 functions for noise, point weights, curves, surfaces,
+track geometry, streets, terrain and level construction. See [Level construction](game/level.md).
+Parts 8B and 8C remain open. The three shared Building dimensions already have their final names.
+
 Groups 5 and 6 hold the slow lifted functions of the table below (`packobjectpacket`, `packevent`, `logicsimulation_world`, `logicsimulation`): they run each tick, some for each player.
 - `tools/progress.py` counts the hand-written functions.
 - Speed: `python -I tools/lift/bench.py --all` at the end of each lot (the harness times each function on the recorded calls, `HARNESS_TIME=1`). The times move by about 30% from one run to the next: only large ratios that repeat mean something.

@@ -4,5 +4,7 @@
 
 void createtrack(int type, const float *points, float drop_end, float rise_start);
 void buildsomeshit(const float *start);
+void createlandscape(void);
+void createlevel(void);
 
 #endif

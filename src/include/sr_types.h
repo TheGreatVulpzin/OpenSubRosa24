@@ -3137,9 +3137,9 @@ typedef union Building { struct {
     int16_t unk_12001c4;                 /* +0x12001c4 1 functions */
     int16_t unk_12001c6;                 /* +0x12001c6 1 functions */
     uint8_t pad_12001c8[0x4];
-    int unk_12001cc;                     /* +0x12001cc 5 functions */
-    uint32_t unk_12001d0;                /* +0x12001d0 5 functions */
-    int unk_12001d4;                     /* +0x12001d4 4 functions */
+    int build_size_x;                    /* +0x12001cc building_setupbuild copies size_x for level construction */
+    int build_size_z;                    /* +0x12001d0 building_setupbuild copies size_z for level construction */
+    int build_floors;                    /* +0x12001d4 building_setupbuild copies floors for level construction */
     int unk_12001d8;                     /* +0x12001d8 3 functions */
     int unk_12001dc;                     /* +0x12001dc 3 functions */
     int unk_12001e0;                     /* +0x12001e0 2 functions */
@@ -3312,6 +3312,9 @@ typedef union Building { struct {
     uint8_t pad_3604570[0x12388];
 }; uint8_t lf_raw[0x36168f8]; } Building;
 SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
+SR_STATIC_ASSERT(offsetof(Building, build_size_x) == 0x12001cc, "Building.build_size_x");
+SR_STATIC_ASSERT(offsetof(Building, build_size_z) == 0x12001d0, "Building.build_size_z");
+SR_STATIC_ASSERT(offsetof(Building, build_floors) == 0x12001d4, "Building.build_floors");
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {

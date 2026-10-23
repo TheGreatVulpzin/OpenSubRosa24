@@ -2,8 +2,14 @@
 #include "level.h"
 
 #include <stdint.h>
+#include <string.h>
 
+#include "area.h"
+#include "city.h"
+#include "logic.h"
+#include "random.h"
 #include "sr_math.h"
+#include "sr_os.h"
 #include "sr_runtime.h"
 #include "sr_types.h"
 #include "vectors.h"
@@ -12,7 +18,29 @@
 #define g_numoftracks (*SR_AT(int, 0x90dc520))
 #define g_land_origin (*SR_AT(vec3, 0x9c1d8c0))
 #define g_land_height SR_AT(float, 0x9c1d8cc)
-#define g_game_world (*SR_AT(GameWorld, 0x2561d740))
+#define g_level_editor (*SR_AT(LevelEditor, SR_RVA_LEVEL_EDITOR))
+#define g_building (*SR_AT(Building, SR_RVA_BUILDING))
+#define g_level_marks SR_AT(uint8_t, 0x12a80c44)
+
+/* Game functions of other files. */
+void __cdecl lf_0f2b0(uint32_t area, const vec3 *origin, int size_x, int size_y, int size_z, float scale);
+void __cdecl lf_3da50(uint32_t area, uint32_t x, uint32_t y, uint32_t z,
+                     uint32_t block, const uint16_t *materials);
+void __cdecl lf_296f0(uint32_t area, uint32_t x, uint32_t y, uint32_t z, int block);
+void __cdecl lf_13d80(const char *name, int flags);
+void __cdecl lf_03d70(void);
+void __cdecl lf_041c0(void);
+void __cdecl lf_04450(void);
+int *__cdecl lf_46c30(uint32_t area, int x, int y, int z,
+                     int size_x, int size_z, int floors, int kind);
+#define createarea lf_0f2b0
+#define area_createblock lf_3da50
+#define area_setblock lf_296f0
+#define building_load lf_13d80
+#define building_setupbuild lf_03d70
+#define building_setupfloorplannewer lf_041c0
+#define building_rotatefloorplan lf_04450
+#define building_buildfloorplan lf_46c30
 
 static float track_span(const vec3 *a, const vec3 *b, int z_first)
 {
@@ -256,4 +284,221 @@ void buildsomeshit(const float *start)
     g_game_world.spawn_size_x = 16.0f;
     g_game_world.spawn_size_y = 4.0f;
     g_game_world.spawn_size_z = 16.0f;
+}
+
+static float level_blend_weight(float value)
+{
+    if (0.0 <= value) {
+        if (1.0 < value)
+            value = 1.0f;
+    } else {
+        value = 0.0f;
+    }
+    return value;
+}
+
+void createlandscape(void)
+{
+    int x, z;
+    g_land_origin.x = -4096.0f;
+    g_land_origin.z = -4096.0f;
+    for (z = 0; z <= 0x800; z++) {
+        for (x = 0; x <= 0x800; x++) {
+            float dx = (float)(x - 640), dz = (float)(z - 640);
+            float distance = (float)x87_sqrt((float)(dx * dx + dz * dz));
+            float fall = (float)((float)(distance * 0.0078125) - 1.5);
+            float fx = (float)((float)x * 0.125), fz = (float)((float)z * 0.125);
+            float n1, n2, n3, n4, n5, f2;
+            float *height = &g_land_height[z * 0x801 + x];
+            fall = (float)(fall * 0.5);
+            if (0.0 <= fall) {
+                if (3.0 < fall)
+                    fall = 3.0f;
+            } else {
+                fall = 0.0f;
+            }
+            n1 = serpnoise2d((float)(fx * 0.5), (float)(fz * 0.5), 0xffffffffu);
+            n2 = serpnoise2d(fx, fz, 0xffffffffu);
+            n3 = serpnoise2d((float)(fx * 0.25), (float)(fz * 0.25), 0xffffffffu);
+            n4 = serpnoise2d((float)(fx * 0.125), (float)(fz * 0.125), 0xffffffffu);
+            n5 = serpnoise2d((float)(fx * 0.125 * 0.5), (float)(fz * 0.125 * 0.5), 0xffffffffu);
+            f2 = (float)(fall * fall);
+            *height = (float)((n5 + f2 * 0.25) * 32.0 * f2
+                + (float)((n4 + f2) * 16.0
+                + (float)(n3 * 8.0 + (float)((float)(n2 + n2 + 23.75) + (float)(n1 * 4.0)))));
+            if ((uint32_t)(z - 0x1f1) < 0x11f && (uint32_t)(x - 0x1f1) < 0x11f) {
+                float t = -1.0f, f;
+                if (z <= 0x200) {
+                    f = level_blend_weight((float)((float)(0x200 - z) * 0.0625));
+                    if (-1.0 < f) t = f;
+                }
+                if (z >= 0x300) {
+                    f = level_blend_weight((float)((float)(z - 0x300) * 0.0625));
+                    if (t < f) t = f;
+                }
+                if (x <= 0x200) {
+                    f = level_blend_weight((float)((float)(0x200 - x) * 0.0625));
+                    if (t < f) t = f;
+                }
+                if (x >= 0x300) {
+                    f = level_blend_weight((float)((float)(x - 0x300) * 0.0625));
+                    if (t < f) t = f;
+                }
+                if (-1.0 < t)
+                    *height = (float)((1.0 - t) * 23.75 + (double)*height * t);
+            }
+            if (x >= 0x201 && x <= 0x2ff && z >= 0x201 && z <= 0x2ff) {
+                *height = 16.0f;
+                if (z == 0x201 || x == 0x201 || z == 0x2ff || x == 0x2ff)
+                    *height = 20.0f;
+            }
+        }
+    }
+}
+
+static void level_materials(uint16_t materials[8], uint16_t value)
+{
+    int i;
+    for (i = 0; i < 8; i++)
+        materials[i] = value;
+}
+
+static void level_fix_ground(int x, int z)
+{
+    uint32_t word = area_getblock(0, x, 5, z);
+    if ((word & 0xe0000000u) == 0x40000000u)
+        area_setblock(0, x, 5, z, (int)(word & 0xffffffdfu));
+}
+
+void createlevel(void)
+{
+    static const char *const base_names[5] = { "base1", "base2", "base3", "base4", "base5" };
+    static const struct { const char *name; int kind; } shops[] = {
+        { "dealership2", 11 }, { "gunshop", 14 }, { "hospital0", 15 },
+        { "aoffice1", 10 }, { "conveniencestore1", 13 }
+    };
+    const vec3 start = { 448.0f, 24.0f, 615.0f };
+    const vec3 origin = { 0.0f, 0.0f, 0.0f };
+    uint16_t materials[8];
+    int x, y, z, i, j, k;
+
+    os_srand(0);
+    memset(g_level_marks, 0, 0x1000);
+    createlandscape();
+    buildsomeshit((const float *)&start);
+    createarea(0, &origin, 64, 8, 64, 4.0f);
+    g_city.num_intersections = 0;
+    g_city.num_roads = 0;
+    g_city.num_blocks = 0;
+    g_city.unused_29810 = 0;
+    g_city.unused_2f814 = 0;
+    for (k = 0; k < 8; k++)
+        *(int *)TEAM_FIELD(team0_num_car_spots, k) = 0;
+    g_city.num_buildings = 0;
+    if (sr_game.gametype != 1) {
+        CityBlock *block;
+        for (i = 0; i < g_level_editor.num_intersections; i++) {
+            const LevelIntersection *entry = &g_level_editor.intersections[i];
+            city_addintersection(entry->x, 5, entry->z);
+        }
+        for (i = 0; i < g_level_editor.num_streets; i++) {
+            const LevelStreet *entry = &g_level_editor.streets[i];
+            addcitystreet(entry->a, entry->b, entry->lanes_a, entry->lanes_b, entry->name);
+        }
+        g_city.unused_04 = 0;
+        block = &g_city.blocks[g_city.num_blocks];
+        block->x = block->z = 0;
+        block->size_x = 32;
+        block->height = 6;
+        block->size_z = 32;
+        block->inner_x = block->inner_z = 24;
+        g_city.num_blocks++;
+    }
+    level_materials(materials, 3);
+    for (y = 0; y < 6; y++) {
+        for (z = 0; z < 512; z++) {
+            for (x = 0; x < 512; x++) {
+                if (z < 0x88 || z > 0x97)
+                    area_createblock(0, x, y, z, 0x40000000u, materials);
+            }
+        }
+    }
+    if (sr_game.gametype == 1) {
+        building_setupbuild();
+        building_setupfloorplannewer();
+        building_buildfloorplan(0, 0x24, 6, 0x24, g_building.build_size_x,
+                               g_building.build_size_z, g_building.build_floors, 0);
+        if (sr_game.gametype == 1)
+            return;
+    }
+    for (i = 0; i < g_city.num_roads; i++)
+        buildcitystreet(i);
+    for (i = 0; i < g_city.num_intersections; i++)
+        buildcityinterection(i);
+    level_materials(materials, 0);
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 8; j++) {
+            int mask = (i == 0) | ((j == 7) << 1) | ((i == 7) << 2) | ((j == 0) << 3);
+            x = 0x1ea + j;
+            z = 0x9b + i;
+            area_createblock(0, x, 6, z, (uint32_t)g_blocklist.edge[mask] | 0x80000000u, materials);
+            level_fix_ground(x, z);
+        }
+    }
+    for (z = 1; z <= 510; z++) {
+        for (x = 1; x <= 510; x++) {
+            int tile = g_level_editor.tiles[z * 1024 + x];
+            int kind, low;
+            uint32_t word;
+            if (tile == 0)
+                continue;
+            level_materials(materials, 3);
+            area_createblock(0, x, 5, z, 0x40000000u, materials);
+            low = tile & 15;
+            level_materials(materials, low == 0 ? 0 : low == 1 ? 3 : (uint16_t)g_materiallist.tile_material);
+            kind = tile >> 4;
+            if (kind == 1) {
+                int mask = ((g_level_editor.tiles[(z - 1) * 1024 + x] & 0xf0) != 0x10)
+                    | (((g_level_editor.tiles[z * 1024 + x + 1] & 0xf0) != 0x10) << 1)
+                    | (((g_level_editor.tiles[(z + 1) * 1024 + x] & 0xf0) != 0x10) << 2)
+                    | (((g_level_editor.tiles[z * 1024 + x - 1] & 0xf0) != 0x10) << 3);
+                word = (uint32_t)g_blocklist.edge[mask] | 0x80000000u;
+            } else if (kind >= 2 && kind <= 5) {
+                word = (uint32_t)g_blocklist.slab[kind - 2] | 0x80000000u;
+            } else if (kind == 6) {
+                word = 0x40000000u;
+            } else if (kind >= 8 && kind <= 15) {
+                word = (uint32_t)((const int *)g_blocklist.fence)[kind - 8] | 0x80000000u;
+            } else {
+                continue;
+            }
+            area_createblock(0, x, 6, z, word, materials);
+            level_fix_ground(x, z);
+        }
+    }
+    for (i = 0; i < g_level_editor.num_buildings; i++) {
+        const LevelBuilding *entry = &g_level_editor.buildings[i];
+        int kind = 9;
+        building_load(entry->name, 0);
+        building_setupbuild();
+        for (k = entry->turns; k > 0; k--)
+            building_rotatefloorplan();
+        building_setupfloorplannewer();
+        for (j = 0; j < 5; j++) {
+            if (strcmp(entry->name, base_names[j]) == 0) {
+                kind = j;
+                break;
+            }
+        }
+        if ((uint32_t)kind < 5)
+            *(float *)TEAM_FIELD(team0_angle, kind) = (float)((float)entry->turns * 3.14159265359 * 0.5);
+        for (j = 0; j < 5; j++) {
+            if (strcmp(entry->name, shops[j].name) == 0) {
+                kind = shops[j].kind;
+                break;
+            }
+        }
+        building_buildfloorplan(0, entry->x, 6, entry->z, g_building.build_size_x,
+                               g_building.build_size_z, g_building.build_floors, kind);
+    }
 }

@@ -185,6 +185,36 @@ def cases():
     result['city_roads'] = ('addcitystreet', append_roads)
     result['city_intersection_blocks'] = ('buildcityinterection', build_intersections)
     result['city_street_blocks'] = ('buildcitystreet', build_roads)
+
+    def landscape(snapshot):
+        snapshot.write(0x9c1d8c0 + 4, 'f', 7.25)
+        return ['R 1bc50']
+
+    def build_level(gametype):
+        def build(snapshot):
+            editor = 0xf270a80
+            snapshot.write(0x90dc540 + 8, 'i', gametype)
+            snapshot.write(city + 4, 'i', 0x123456)
+            snapshot.write(0x9c1d8c0 + 4, 'f', 7.25)
+            snapshot.write(0x12a80c44, '4096s', b'\x7f' * 4096)
+            snapshot.write(editor + 0x38, 'i', 0)
+            snapshot.write(editor + 0x303c, 'i', 0)
+            snapshot.write(editor + 0x10b844, 'i', 0)
+            snapshot.write(editor + 0xb844, '1048576s', bytes(1048576))
+            if gametype != 1:
+                snapshot.write(0xf26fd00 + 0x288, 'I', 0x12340005)
+                for kind in range(16):
+                    x = 96 + (kind % 4) * 3
+                    z = 96 + (kind // 4) * 3
+                    low = kind % 3 if kind else 2
+                    snapshot.write(editor + 0xb844 + z * 1024 + x, 'B', (kind << 4) | low)
+                snapshot.write(editor + 0xb844 + 510 * 1024 + 510, 'B', 0x11)
+            return ['R 54e40']
+        return build
+
+    result['landscape'] = ('createlandscape', landscape)
+    result['level_tiles'] = ('createlevel', build_level(0))
+    result['level_single_building'] = ('createlevel', build_level(1))
     return result
 
 

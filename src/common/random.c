@@ -63,7 +63,7 @@ static float hash_unit(uint32_t n)
     uint32_t v;
     n ^= n << 13;
     v = n * n * 15731u + 789221u;
-    return (float)(1.0 - (float)((v * v + 0xd208dd0du) & 0x7fffffff) * 9.313225746154785E-10);
+    return (float)(1.0 - (double)((v * v + 0xd208dd0du) & 0x7fffffff) * 9.313225746154785E-10);
 }
 
 static float random_unit(void)

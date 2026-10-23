@@ -7227,12 +7227,12 @@ __declspec(naked) static void th_1ba30(void)
 }
 static uint8_t expect_1ba30[5] = { 0x53, 0x8b, 0x5c, 0x24, 0x08 };
 
-void __cdecl lf_1bc50(void);
+void __cdecl createlandscape(void);
 static void (__cdecl *orig_1bc50)(void);
 static SvVerify v_1bc50 = { "createlandscape", -1 };
 static void __cdecl hk_1bc50(void)
 {
-    SV_HOOK_VOID(v_1bc50, lf_1bc50(), orig_1bc50(), NULL);
+    SV_HOOK_VOID(v_1bc50, createlandscape(), orig_1bc50(), NULL);
 }
 __declspec(naked) static void th_1bc50(void)
 {
