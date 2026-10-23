@@ -595,7 +595,7 @@ typedef union Player { struct {
     uint8_t pad_00c0[0x4];
     int unk_00c4;                        /* +0x00c4 2 functions */
     int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
-    int unk_00cc;                        /* +0x00cc 5 functions */
+    int unused_cc;                       /* +0x00cc resetgame writes 0 for the test player next to input_mode. No reader in the server */
     int unk_00d0;                        /* +0x00d0 1 functions */
     int menu;                            /* +0x00d4 playermenu compares with 1 and 2; logic_player writes 9 */
     int menu_building;                   /* +0x00d8 logic_cardealer_buy uses it as an index (stride 0x9dc); serversend sends 16 bits */
@@ -671,6 +671,7 @@ SR_STATIC_ASSERT(offsetof(Player, move_mode) == 0xac, "Player.move_mode");
 SR_STATIC_ASSERT(offsetof(Player, body_param) == 0xb8, "Player.body_param");
 SR_STATIC_ASSERT(offsetof(Player, leave_ticks) == 0xbc, "Player.leave_ticks");
 SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
+SR_STATIC_ASSERT(offsetof(Player, unused_cc) == 0xcc, "Player.unused_cc");
 SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");
 SR_STATIC_ASSERT(offsetof(Player, menu_building) == 0xd8, "Player.menu_building");
 SR_STATIC_ASSERT(offsetof(Player, num_actions) == 0xe4, "Player.num_actions");
@@ -2904,10 +2905,11 @@ typedef union BlockTemp { struct {
     uint8_t pad_570b8[0x68];
     int unk_57120;                       /* +0x57120 1 functions */
     uint8_t pad_57124[0x1ef08];
-    int unk_7602c;                       /* +0x7602c 2 functions */
+    int unused_7602c;                    /* +0x7602c resetgame writes 0. No reader in the server */
     uint8_t pad_76030[0x3c];
 }; uint8_t lf_raw[0x7606c]; } BlockTemp;
 SR_STATIC_ASSERT(sizeof(BlockTemp) == 0x7606c, "BlockTemp");
+SR_STATIC_ASSERT(offsetof(BlockTemp, unused_7602c) == 0x7602c, "BlockTemp.unused_7602c");
 
 /* bondopt[]: record of 0x40 bytes. */
 typedef union BondOpt { struct {
@@ -3358,7 +3360,7 @@ SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {
-    int unk_0000;                        /* +0x0000 1 functions */
+    int unused_0;                        /* +0x0000 resetgame writes 0. No reader in the server */
     int client_game_id;                  /* +0x0004 clientrecv type 6: the round number of the new game */
     uint8_t pad_0008[0x1c];
     int client_connected;                /* +0x0024 clientrecv writes 1 after a state packet */
@@ -3415,6 +3417,7 @@ typedef union AreaSector { struct {
     uint8_t pad_6db9858[0x53167a8];
 }; uint8_t lf_raw[0xc0d0000]; } AreaSector;
 SR_STATIC_ASSERT(sizeof(AreaSector) == 0xc0d0000, "AreaSector");
+SR_STATIC_ASSERT(offsetof(AreaSector, unused_0) == 0x0, "AreaSector.unused_0");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_game_id) == 0x4, "AreaSector.client_game_id");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_connected) == 0x24, "AreaSector.client_connected");
 SR_STATIC_ASSERT(offsetof(AreaSector, client_timeout) == 0x28, "AreaSector.client_timeout");

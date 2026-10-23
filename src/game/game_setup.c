@@ -187,7 +187,7 @@ void resetgame(void)
     sr_game.unused_22fd8 = 0;
     round = sr_server ? sr_game.round_number + 1 : g_area_sector.client_game_id;
     sr_game.ticks = 0;
-    g_area_sector.unk_0000 = 0;
+    g_area_sector.unused_0 = 0;
     *SR_AT(int, 0x9c1d8a4) = 0;
     sr_game.round_number = round;
     if (!sr_server)
@@ -244,7 +244,7 @@ void resetgame(void)
     g_tiremarkstart = 0;
     g_tiremarkend = 0;
     sr_numofevents = 0;
-    g_blocktemp.unk_7602c = 0;
+    g_blocktemp.unused_7602c = 0;
     for (i = 0; i < sr_numofconnections; ++i) {
         sr_connections[i].event_ack = 0;
         for (j = 0; j < 8; ++j)
@@ -276,7 +276,7 @@ void resetgame(void)
         sr_players[0].human_id = createhuman(&pos.x, &rot[0].x, 0);
         sr_humans[sr_players[0].human_id].axis = 3.1415927410125732f;
         sr_players[0].input_mode = 0;
-        sr_players[0].unk_00cc = 0;
+        sr_players[0].unused_cc = 0;
         resetorientation(rot);
         test_inventory(0, &pos, rot, 1);
     }

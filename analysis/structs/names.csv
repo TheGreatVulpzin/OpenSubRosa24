@@ -666,3 +666,6 @@ materiallist,0x2c4,misc_2c4,int,,setupgame: material identifiers and the file li
 materiallist,0x2d0,flagged_material,int,,setupgame: material identifiers and the file list
 materiallist,0x2f0,sign,int,,setupgame: material identifiers and the file list
 materiallist,0x380,file_materials,int,128,setupgame: material identifiers and the file list
+area_sector,0x0,unused_0,int,,resetgame writes 0. No reader in the server
+blocktemp,0x7602c,unused_7602c,int,,resetgame writes 0. No reader in the server
+player,0xcc,unused_cc,int,,resetgame writes 0 for the test player next to input_mode. No reader in the server
