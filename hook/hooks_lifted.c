@@ -1933,12 +1933,12 @@ __declspec(naked) static void th_07f80(void)
 }
 static uint8_t expect_07f80[8] = { 0x83, 0xec, 0x0c, 0x55, 0x8b, 0x6c, 0x24, 0x18 };
 
-void __cdecl lf_080b0(int param_1, int param_2, int param_3);
+void __cdecl city_addintersection(int param_1, int param_2, int param_3);
 static void (__cdecl *orig_080b0)(int, int, int);
 static SvVerify v_080b0 = { "city_addintersection", -1 };
 static void __cdecl hk_080b0(int param_1, int param_2, int param_3)
 {
-    SV_HOOK_VOID(v_080b0, lf_080b0(param_1, param_2, param_3), orig_080b0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_080b0, city_addintersection(param_1, param_2, param_3), orig_080b0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_080b0(void)
 {
@@ -7182,12 +7182,12 @@ __declspec(naked) static void th_1b870(void)
 }
 static uint8_t expect_1b870[5] = { 0x57, 0x8b, 0x7c, 0x24, 0x08 };
 
-void __cdecl lf_1ba30(int param_1, int param_2, int param_3, int param_4, char * param_5);
+void __cdecl addcitystreet(int param_1, int param_2, int param_3, int param_4, char * param_5);
 static void (__cdecl *orig_1ba30)(int, int, int, int, char *);
 static SvVerify v_1ba30 = { "addcitystreet", -1 };
 static void __cdecl hk_1ba30(int param_1, int param_2, int param_3, int param_4, char * param_5)
 {
-    SV_HOOK_VOID(v_1ba30, lf_1ba30(param_1, param_2, param_3, param_4, param_5), orig_1ba30(param_1, param_2, param_3, param_4, param_5), NULL);
+    SV_HOOK_VOID(v_1ba30, addcitystreet(param_1, param_2, param_3, param_4, param_5), orig_1ba30(param_1, param_2, param_3, param_4, param_5), NULL);
 }
 __declspec(naked) static void th_1ba30(void)
 {
@@ -11006,12 +11006,12 @@ __declspec(naked) static void th_4d750(void)
 }
 static uint8_t expect_4d750[5] = { 0xd9, 0xe8, 0x83, 0xec, 0x1c };
 
-void __cdecl lf_4d850(int param_1);
+void __cdecl buildcityinterection(int param_1);
 static void (__cdecl *orig_4d850)(int);
 static SvVerify v_4d850 = { "buildcityinterection", -1 };
 static void __cdecl hk_4d850(int param_1)
 {
-    SV_HOOK_VOID(v_4d850, lf_4d850(param_1), orig_4d850(param_1), NULL);
+    SV_HOOK_VOID(v_4d850, buildcityinterection(param_1), orig_4d850(param_1), NULL);
 }
 __declspec(naked) static void th_4d850(void)
 {
@@ -11047,12 +11047,12 @@ __declspec(naked) static void th_4d850(void)
 }
 static uint8_t expect_4d850[8] = { 0x83, 0xec, 0x14, 0xa1, 0x18, 0x0d, 0x46, 0x00 };
 
-void __cdecl lf_4da10(int param_1);
+void __cdecl buildcitystreet(int param_1);
 static void (__cdecl *orig_4da10)(int);
 static SvVerify v_4da10 = { "buildcitystreet", -1 };
 static void __cdecl hk_4da10(int param_1)
 {
-    SV_HOOK_VOID(v_4da10, lf_4da10(param_1), orig_4da10(param_1), NULL);
+    SV_HOOK_VOID(v_4da10, buildcitystreet(param_1), orig_4da10(param_1), NULL);
 }
 __declspec(naked) static void th_4da10(void)
 {

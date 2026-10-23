@@ -128,6 +128,63 @@ def cases():
 
     result['track'] = ('createtrack', track)
     result['track_loop'] = ('buildsomeshit', track_loop)
+
+    city = 0xe299220
+
+    def intersection(snapshot, index, x, y, z, extent=(0, 0, 0, 0), roads=(-1, -1, -1, -1)):
+        address = city + 8 + index * 0x68
+        snapshot.write(address, 'iii', x, y, z)
+        snapshot.write(address + 0xc, 'fff', x * 4, (y + 1) * 4, z * 4)
+        snapshot.write(address + 0x18, 'iiii', *roads)
+        snapshot.write(address + 0x28, 'iiii', *extent)
+
+    def append_intersections(snapshot):
+        snapshot.write(city, 'i', 0)
+        for i in range(3):
+            snapshot.write(city + 8 + i * 0x68 + 0x40, 'i', 73 + i)
+        return ['R 80b0 V:%x V:%x V:%x' % (x & 0xffffffff, y & 0xffffffff, z & 0xffffffff)
+                for x, y, z in ((64, 5, 64), (-3, -1, 8), (127, 6, 192))]
+
+    def append_roads(snapshot):
+        snapshot.write(city, 'i', 4)
+        snapshot.write(city + 0x1a008, 'i', 0)
+        for i, point in enumerate(((64, 5, 64), (96, 5, 64), (96, 7, 96), (64, 7, 96))):
+            intersection(snapshot, i, *point, extent=(4, 0, 1, 2))
+        name = SCRATCH + 0x3000
+        for i, value in enumerate(b'Boundary road\0'):
+            snapshot.write(name + i, 'B', value)
+        return ['R 1ba30 V:%x V:%x V:%x V:%x M:%x' % (a, b, wa, wb, name)
+                for a, b, wa, wb in ((0, 1, 2, 3), (1, 2, 1, 1), (2, 3, 3, 2), (3, 3, 1, 1))]
+
+    def build_intersections(snapshot):
+        snapshot.write(city, 'i', 2)
+        intersection(snapshot, 0, 64, 5, 64, (2, 3, 4, 1), (0, 1, 2, 3))
+        intersection(snapshot, 1, 98, 6, 73, roads=(-1, 0, -1, 1))
+        return ['R 4d850 V:0', 'R 4d850 V:1']
+
+    def build_roads(snapshot):
+        snapshot.write(city, 'i', 10)
+        snapshot.write(city + 0x1a008, 'i', 5)
+        for offset, value in ((0x28c, 0x1234000b), (0x290, 0x5678000c),
+                              (0x294, 0x1000d), (0x298, 0x1000e)):
+            snapshot.write(0xf26fd00 + offset, 'I', value)
+        roads = [
+            (0, (64, 5, 64), (92, 7, 64), 2, 3),
+            (0, (64, 9, 112), (92, 7, 112), 1, 1),
+            (1, (144, 6, 64), (144, 7, 92), 3, 2),
+            (1, (192, 8, 64), (192, 7, 92), 2, 1),
+            (0, (64, 5, 160), (88, 5, 160), 2, 0),
+        ]
+        for i, (axis, a, b, wa, wb) in enumerate(roads):
+            intersection(snapshot, i * 2, *a, extent=(2, 2, 2, 2))
+            intersection(snapshot, i * 2 + 1, *b, extent=(2, 2, 2, 2))
+            snapshot.write(city + 0x1a00c + i * 0x4c, 'iiiii', i * 2, i * 2 + 1, axis, wa, wb)
+        return ['R 4da10 V:%x' % i for i in range(len(roads))]
+
+    result['city_intersections'] = ('city_addintersection', append_intersections)
+    result['city_roads'] = ('addcitystreet', append_roads)
+    result['city_intersection_blocks'] = ('buildcityinterection', build_intersections)
+    result['city_street_blocks'] = ('buildcitystreet', build_roads)
     return result
 
 

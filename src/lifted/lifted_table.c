@@ -56,7 +56,7 @@ void linkitemtoitem(void);
 void item_addhumanlink(void);
 void item_removehumanlink(void);
 void item_removeitemlink(void);
-void lf_080b0(void);
+void city_addintersection(void);
 void lf_08320(void);
 void lf_08590(void);
 void sprintf_comma(void);
@@ -193,7 +193,7 @@ void getmasterserverip(void);
 void createitem(void);
 void setitempositionhuman(void);
 void linkitem(void);
-void lf_1ba30(void);
+void addcitystreet(void);
 void lf_1bc50(void);
 void lineintersectlandscape(void);
 void circleintersectlandscape(void);
@@ -290,8 +290,8 @@ void itemlogic(void);
 void item_physicssimulation(void);
 void circleintersectlevel(void);
 void sphereintersectlevel(void);
-void lf_4d850(void);
-void lf_4da10(void);
+void buildcityinterection(void);
+void buildcitystreet(void);
 void logic_createcar(void);
 void logic_cardealer_buy(void);
 void objectwheelcollision2(void);
@@ -374,7 +374,7 @@ const LfEntry lf_table[] = {
     { "item_addhumanlink", 0x7e00, (void *)item_addhumanlink, 3, LF_RET_INT, 4, "vvv", 0 },
     { "item_removehumanlink", 0x7e50, (void *)item_removehumanlink, 3, LF_RET_VOID, 4, "vpv", 0 },
     { "item_removeitemlink", 0x7f80, (void *)item_removeitemlink, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "city_addintersection", 0x80b0, (void *)lf_080b0, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "city_addintersection", 0x80b0, (void *)city_addintersection, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "leveleditor_save", 0x8320, (void *)lf_08320, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0x8590, (void *)lf_08590, 0, LF_RET_VOID, 4, "", 1 },
     { "sprintf_comma", 0x8880, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -511,7 +511,7 @@ const LfEntry lf_table[] = {
     { "createitem", 0x1b070, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "setitempositionhuman", 0x1b6e0, (void *)setitempositionhuman, 2, LF_RET_VOID, 4, "vv", 0 },
     { "linkitem", 0x1b870, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "addcitystreet", 0x1ba30, (void *)lf_1ba30, 5, LF_RET_VOID, 4, "vvvvp", 0 },
+    { "addcitystreet", 0x1ba30, (void *)addcitystreet, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "createlandscape", 0x1bc50, (void *)lf_1bc50, 0, LF_RET_VOID, 4, "", 0 },
     { "lineintersectlandscape", 0x1c1d0, (void *)lineintersectlandscape, 2, LF_RET_INT, 4, "pp", 0 },
     { "circleintersectlandscape", 0x1c8f0, (void *)circleintersectlandscape, 3, LF_RET_INT, 4, "ppv", 0 },
@@ -608,8 +608,8 @@ const LfEntry lf_table[] = {
     { "item_physicssimulation", 0x4cee0, (void *)item_physicssimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "circleintersectlevel", 0x4d630, (void *)circleintersectlevel, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlevel", 0x4d750, (void *)sphereintersectlevel, 2, LF_RET_INT, 4, "pv", 0 },
-    { "buildcityinterection", 0x4d850, (void *)lf_4d850, 1, LF_RET_VOID, 4, "v", 0 },
-    { "buildcitystreet", 0x4da10, (void *)lf_4da10, 1, LF_RET_VOID, 4, "v", 0 },
+    { "buildcityinterection", 0x4d850, (void *)buildcityinterection, 1, LF_RET_VOID, 4, "v", 0 },
+    { "buildcitystreet", 0x4da10, (void *)buildcitystreet, 1, LF_RET_VOID, 4, "v", 0 },
     { "logic_createcar", 0x4e060, (void *)logic_createcar, 3, LF_RET_INT, 4, "vvv", 0 },
     { "logic_cardealer_buy", 0x4e0d0, (void *)logic_cardealer_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelcollision2", 0x4e2c0, (void *)objectwheelcollision2, 2, LF_RET_VOID, 4, "vv", 0 },
