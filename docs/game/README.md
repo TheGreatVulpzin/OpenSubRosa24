@@ -13,6 +13,7 @@ This folder describes how each rewritten game system works. Each page lists the 
 | [system.md](system.md) | `src/common/parser.c`, `files.c`, `util.c`, `system.c`, `src/game/options.c`, `profiler.c`, `src/server/main_loop.c` | The text parser, the settings, the profiler timers, the file lists, the radix sort, the clock, the log files and the main loop. |
 | [objects.md](objects.md) | `src/game/objects.c`, `vehicles.c`, `wheels.c`, `object_types.c`, `vehicle_types.c`, `object_create.c`, `ai_car.c` | Objects and vehicles: the frame, the engine, the wheels, the helicopter, the train and the contacts. |
 | [collision.md](collision.md) | `src/game/collide.c`, `collide_area.c`, `area.c`, `rigid.c` | Collision tests against the level, objects, humans and items. |
+| [logic.md](logic.md) | `src/game/account_db.c`, `player.c`, `economy.c`, `logic.c`, `logic_sim.c`, `player_ai.c`, `scenario.c`, `missions.c`, `game_setup.c` | Players, accounts, shops, stocks, missions, round and world flow, bot controls and game reset. |
 
 Related pages:
 
