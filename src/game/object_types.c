@@ -6,6 +6,8 @@
  */
 #include "object_types.h"
 
+#include <math.h>
+
 #include "sr_math.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -15,9 +17,100 @@
 #define g_xaxis (*SR_AT(vec3, 0x60cd4))    /* (1 0 0) */
 #define g_zaxis (*SR_AT(vec3, 0x60cec))    /* (0 0 1) */
 
-/* Game functions of other files. */
-void __cdecl lf_28c90(float *out, int n, const vec3 *points, const vec3 *light);
-#define calculatepointscale lf_28c90
+static __forceinline vec3 point_delta(const vec3 *point, const vec3 *base)
+{
+  vec3 delta;
+  delta.x = (float)(point->x - base->x);
+  delta.y = (float)(point->y - base->y);
+  delta.z = (float)(point->z - base->z);
+  return delta;
+}
+
+/* The normal points from the second edge toward the first edge. */
+static __forceinline vec3 point_plane_normal(const vec3 *j, const vec3 *m)
+{
+  vec3 normal;
+  float length, inv;
+  normal.x = (float)(j->z * m->y - j->y * m->z);
+  normal.y = (float)(j->x * m->z - m->x * j->z);
+  normal.z = (float)(m->x * j->y - j->x * m->y);
+  length = (float)x87_sqrt((float)(normal.z * normal.z
+      + (normal.x * normal.x + normal.y * normal.y)));
+  if (length == 0.0f) {
+    normal.x = normal.y = normal.z = 0.0f;
+  } else {
+    inv = (float)(1.0 / length);
+    normal.x = (float)(inv * normal.x);
+    normal.y = (float)(normal.y * inv);
+    normal.z = (float)(inv * normal.z);
+  }
+  return normal;
+}
+
+/* Each nonflat set of four points contributes to the point weights. */
+void calculatepointscale(float *out, int n, const vec3 *points, const vec3 *light)
+{
+  int a, b, c, d, k, i, j, m;
+  int count = 0;
+  float total;
+  for (a = 0; a < n; a++) {
+    for (b = a + 1; b < n; b++) {
+      vec3 e = point_delta(&points[a], &points[b]);
+      for (c = b + 1; c < n; c++) {
+        vec3 edge = point_delta(&points[c], &points[b]);
+        for (d = c + 1; d < n; d++) {
+          vec3 other = point_delta(&points[d], &points[b]);
+          vec3 normal = point_plane_normal(&edge, &other);
+          float dot = (float)(normal.z * e.z + (normal.x * e.x + e.y * normal.y));
+          if (dot < 0.0f) {
+            normal.x = -normal.x;
+            normal.y = -normal.y;
+            normal.z = -normal.z;
+          }
+          dot = (float)(normal.z * e.z + (normal.y * e.y + e.x * normal.x));
+          if (0.01f <= fabs(dot))
+            count++;
+        }
+      }
+    }
+  }
+  for (k = 0; k < n; k++) {
+    out[k] = 0.0f;
+    for (i = 0; i < n; i++) {
+      for (j = i + 1; j < n; j++) {
+        for (m = j + 1; m < n; m++) {
+          const vec3 *base = &points[i];
+          vec3 normal, e, edge, other;
+          float dot, numerator, denominator;
+          if (k == i || k == j || k == m)
+            continue;
+          edge = point_delta(&points[j], base);
+          other = point_delta(&points[m], base);
+          normal = point_plane_normal(&edge, &other);
+          e = point_delta(&points[k], base);
+          dot = (float)(normal.z * e.z + (normal.x * e.x + e.y * normal.y));
+          if (dot < 0.0f) {
+            normal.x = -normal.x;
+            normal.y = -normal.y;
+            normal.z = -normal.z;
+          }
+          dot = (float)(normal.z * e.z + (normal.x * e.x + normal.y * e.y));
+          if (0.01f <= fabs(dot)) {
+            numerator = (float)(normal.z * (float)(light->z - base->z)
+                + (normal.x * (float)(light->x - base->x)
+                + normal.y * (float)(light->y - base->y)));
+            denominator = (float)(e.y * normal.y + e.x * normal.x + e.z * normal.z);
+            out[k] = (float)((float)(numerator / denominator) + out[k]);
+          }
+        }
+      }
+    }
+  }
+  total = (float)count;
+  /* A flat point set divides by zero. */
+  for (k = 0; k < n; k++)
+    out[k] = (float)(out[k] / total);
+}
 
 /* Append a particle. The first 4 bytes of the record stay as they are. */
 void objecttype_addparticle(int type, float x, float y, float z, float mass)

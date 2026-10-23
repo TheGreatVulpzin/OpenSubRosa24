@@ -6,6 +6,7 @@
  */
 #include "random.h"
 
+#include "sr_math.h"
 #include "sr_runtime.h"
 #include "vectors.h"
 
@@ -96,8 +97,33 @@ void getrandomvector3d(float out[3], float range, float min)
     out[2] = (float)(length * out[2]);
 }
 
-/* Value noise at (x, y): the hash of the 4 corners of the grid cell, mixed with a smooth
- * step. mask wraps the cell numbers (a power of two minus 1). */
+/* Linear interpolation of the four grid corners. mask wraps the next cell numbers. */
+float lerpnoise2d(float x, float y, uint32_t mask)
+{
+    int x0 = (int)(long long)x, y0 = (int)(long long)y;
+    uint32_t x1 = ((uint32_t)x0 + 1) & mask;
+    uint32_t row0 = (uint32_t)y0 * 57, row1 = (((uint32_t)y0 + 1) & mask) * 57;
+    float n00 = hash_unit(row0 + (uint32_t)x0), n10 = hash_unit(x1 + row0);
+    float n01 = hash_unit(row1 + (uint32_t)x0), n11 = hash_unit(row1 + x1);
+    float fx = (float)(x - (float)x0);
+    return (float)((float)(y - (float)y0) * (double)(float)(n11 * (double)fx + n01 * (1.0 - fx))
+        + (float)(n00 * (1.0 - fx) + n10 * (double)fx) * (1.0 - ((double)y - (float)y0)));
+}
+
+float cerpnoise2d(float x, float y, uint32_t mask)
+{
+    int x0 = (int)(long long)x, y0 = (int)(long long)y;
+    uint32_t x1 = ((uint32_t)x0 + 1) & mask;
+    uint32_t row0 = (uint32_t)y0 * 57, row1 = (((uint32_t)y0 + 1) & mask) * 57;
+    float n00 = hash_unit(row0 + (uint32_t)x0), n10 = hash_unit(x1 + row0);
+    float n01 = hash_unit(row1 + (uint32_t)x0), n11 = hash_unit(row1 + x1);
+    float sx = (float)((1.0 - (float)x87_cos((float)(x - (float)x0) * 3.14159265359)) * 0.5);
+    float sy = (float)((1.0 - (float)x87_cos((float)(y - (float)y0) * 3.14159265359)) * 0.5);
+    return (float)(sy * (double)(float)(n11 * (double)sx + n01 * (1.0 - sx))
+        + (float)(n00 * (1.0 - sx) + sx * (double)n10) * (1.0 - sy));
+}
+
+/* Smooth interpolation between the four grid corners. */
 float serpnoise2d(float x, float y, uint32_t mask)
 {
     int x0 = (int)(long long)x, y0 = (int)(long long)y;

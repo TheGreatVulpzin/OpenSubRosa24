@@ -346,12 +346,12 @@ __declspec(naked) static void th_01e20(void)
 }
 static uint8_t expect_01e20[10] = { 0x8b, 0x4c, 0x24, 0x04, 0x69, 0xc9, 0x6c, 0x0d, 0x10, 0x00 };
 
-float10 __cdecl lf_02560(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6);
+float10 __cdecl tesselatebezier(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6);
 static float10 (__cdecl *orig_02560)(int, float, float, float, float, float);
 static SvVerify v_02560 = { "tesselatebezier", -1 };
 static float10 __cdecl hk_02560(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6)
 {
-    SV_HOOK_RET_FLOAT(float10, v_02560, lf_02560(param_1, param_2, param_3, param_4, param_5, param_6), orig_02560(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_02560, tesselatebezier(param_1, param_2, param_3, param_4, param_5, param_6), orig_02560(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_02560(void)
 {
@@ -396,12 +396,12 @@ __declspec(naked) static void th_02560(void)
 }
 static uint8_t expect_02560[8] = { 0xd9, 0x44, 0x24, 0x08, 0x8b, 0x44, 0x24, 0x04 };
 
-float10 __cdecl lf_02620(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6);
+float10 __cdecl tesselatebezierderivative(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6);
 static float10 (__cdecl *orig_02620)(float, float, float, float, float, float);
 static SvVerify v_02620 = { "tesselatebezierderivative", -1 };
 static float10 __cdecl hk_02620(float param_1, float param_2, float param_3, float param_4, float param_5, float param_6)
 {
-    SV_HOOK_RET_FLOAT(float10, v_02620, lf_02620(param_1, param_2, param_3, param_4, param_5, param_6), orig_02620(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_02620, tesselatebezierderivative(param_1, param_2, param_3, param_4, param_5, param_6), orig_02620(param_1, param_2, param_3, param_4, param_5, param_6), NULL);
 }
 __declspec(naked) static void th_02620(void)
 {
@@ -2353,12 +2353,12 @@ __declspec(naked) static void th_09600(void)
 }
 static uint8_t expect_09600[8] = { 0x83, 0xec, 0x0c, 0x56, 0x8b, 0x74, 0x24, 0x18 };
 
-float10 __cdecl lf_09870(float param_1, float param_2, uint param_3);
+float10 __cdecl lerpnoise2d(float param_1, float param_2, uint param_3);
 static float10 (__cdecl *orig_09870)(float, float, uint);
 static SvVerify v_09870 = { "lerpnoise2d", -1 };
 static float10 __cdecl hk_09870(float param_1, float param_2, uint param_3)
 {
-    SV_HOOK_RET_FLOAT(float10, v_09870, lf_09870(param_1, param_2, param_3), orig_09870(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_09870, lerpnoise2d(param_1, param_2, param_3), orig_09870(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_09870(void)
 {
@@ -2447,12 +2447,12 @@ __declspec(naked) static void th_09a00(void)
 }
 static uint8_t expect_09a00[7] = { 0x83, 0xec, 0x14, 0xd9, 0x44, 0x24, 0x18 };
 
-float10 __cdecl lf_09be0(float param_1, float param_2, uint param_3);
+float10 __cdecl cerpnoise2d(float param_1, float param_2, uint param_3);
 static float10 (__cdecl *orig_09be0)(float, float, uint);
 static SvVerify v_09be0 = { "cerpnoise2d", -1 };
 static float10 __cdecl hk_09be0(float param_1, float param_2, uint param_3)
 {
-    SV_HOOK_RET_FLOAT(float10, v_09be0, lf_09be0(param_1, param_2, param_3), orig_09be0(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET_FLOAT(float10, v_09be0, cerpnoise2d(param_1, param_2, param_3), orig_09be0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_09be0(void)
 {
@@ -8871,12 +8871,12 @@ __declspec(naked) static void th_28a90(void)
 }
 static uint8_t expect_28a90[7] = { 0x83, 0xec, 0x0c, 0x8b, 0x4c, 0x24, 0x10 };
 
-void __cdecl lf_28c90(float * param_1, int param_2, float * param_3, float * param_4);
+void __cdecl calculatepointscale(float * param_1, int param_2, float * param_3, float * param_4);
 static void (__cdecl *orig_28c90)(float *, int, float *, float *);
 static SvVerify v_28c90 = { "calculatepointscale", -1 };
 static void __cdecl hk_28c90(float * param_1, int param_2, float * param_3, float * param_4)
 {
-    SV_HOOK_VOID(v_28c90, lf_28c90(param_1, param_2, param_3, param_4), orig_28c90(param_1, param_2, param_3, param_4), NULL);
+    SV_HOOK_VOID(v_28c90, calculatepointscale(param_1, param_2, param_3, param_4), orig_28c90(param_1, param_2, param_3, param_4), NULL);
 }
 __declspec(naked) static void th_28c90(void)
 {

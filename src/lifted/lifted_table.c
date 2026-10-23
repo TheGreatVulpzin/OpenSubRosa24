@@ -14,8 +14,8 @@ void area_getnextsector(void);
 void lf_01cf0(void);
 void area_getnextchunk(void);
 void lf_01e50(void);
-void lf_02560(void);
-void lf_02620(void);
+void tesselatebezier(void);
+void tesselatebezierderivative(void);
 void lf_026d0(void);
 void lf_029a0(void);
 void lf_02cf0(void);
@@ -68,9 +68,9 @@ void logic_teammissioncomplete(void);
 void logic_suits_buy(void);
 void logic_player(void);
 void geteulerangles2(void);
-void lf_09870(void);
+void lerpnoise2d(void);
 void serpnoise2d(void);
-void lf_09be0(void);
+void cerpnoise2d(void);
 void deleteplayer(void);
 void playersimulation(void);
 void orientationtoquaternion(void);
@@ -233,7 +233,7 @@ void scenario_armhuman(void);
 void createmission_threeway(void);
 void createmission_transaction(void);
 void objecttype_addwheel(void);
-void lf_28c90(void);
+void calculatepointscale(void);
 void objecttype_calcquadweights(void);
 void findstring(void);
 void lf_296f0(void);
@@ -332,8 +332,8 @@ const LfEntry lf_table[] = {
     { "area_marksector", 0x1cf0, (void *)lf_01cf0, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_getnextchunk", 0x1e20, (void *)area_getnextchunk, 1, LF_RET_INT, 4, "v", 0 },
     { "landscape_buildsectorlods", 0x1e50, (void *)lf_01e50, 1, LF_RET_VOID, 4, "v", 1 },
-    { "tesselatebezier", 0x2560, (void *)lf_02560, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
-    { "tesselatebezierderivative", 0x2620, (void *)lf_02620, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
+    { "tesselatebezier", 0x2560, (void *)tesselatebezier, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
+    { "tesselatebezierderivative", 0x2620, (void *)tesselatebezierderivative, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "area_copyrotateblock", 0x26d0, (void *)lf_026d0, 2, LF_RET_VOID, 4, "vp", 0 },
     { "loadblock", 0x29a0, (void *)lf_029a0, 1, LF_RET_VOID, 4, "p", 1 },
     { "area_block_rotatesurface", 0x2cf0, (void *)lf_02cf0, 2, LF_RET_INT, 4, "vv", 0 },
@@ -386,9 +386,9 @@ const LfEntry lf_table[] = {
     { "logic_suits_buy", 0x93e0, (void *)logic_suits_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_player", 0x94a0, (void *)logic_player, 1, LF_RET_VOID, 4, "v", 0 },
     { "geteulerangles2", 0x9600, (void *)geteulerangles2, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "lerpnoise2d", 0x9870, (void *)lf_09870, 3, LF_RET_FLOAT, 4, "vvv", 0 },
+    { "lerpnoise2d", 0x9870, (void *)lerpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "serpnoise2d", 0x9a00, (void *)serpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
-    { "cerpnoise2d", 0x9be0, (void *)lf_09be0, 3, LF_RET_FLOAT, 4, "vvv", 0 },
+    { "cerpnoise2d", 0x9be0, (void *)cerpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "deleteplayer", 0xa1b0, (void *)deleteplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "playersimulation", 0xa2a0, (void *)playersimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "orientationtoquaternion", 0xa7a0, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
@@ -551,7 +551,7 @@ const LfEntry lf_table[] = {
     { "createmission_threeway", 0x28230, (void *)createmission_threeway, 3, LF_RET_VOID, 4, "vvp", 0 },
     { "createmission_transaction", 0x286b0, (void *)createmission_transaction, 3, LF_RET_VOID, 4, "vvp", 0 },
     { "objecttype_addwheel", 0x28a90, (void *)objecttype_addwheel, 12, LF_RET_VOID, 4, "vvvvpvvvvvvv", 0 },
-    { "calculatepointscale", 0x28c90, (void *)lf_28c90, 4, LF_RET_VOID, 4, "pvpp", 0 },
+    { "calculatepointscale", 0x28c90, (void *)calculatepointscale, 4, LF_RET_VOID, 4, "pvpp", 0 },
     { "objecttype_calcquadweights", 0x29300, (void *)objecttype_calcquadweights, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "findstring", 0x29650, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
     { "area_setblock", 0x296f0, (void *)lf_296f0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
