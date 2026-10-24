@@ -28,7 +28,15 @@ Goal: a deep and integrated plugin system. A plugin can change almost any part o
 | --- | --- | --- | --- |
 | Native (C, DLL or `.so`) | Trusted authors | Maximum | None. Level 1 protection only (see below) |
 | Lua | Anyone | About 10 to 50 times slower than C | Sandbox |
-| WASM | Authors in C, Rust, Zig, Go | About 1.2 to 2 times slower than C | Isolated memory and time limit |
+| WASM | Authors in any language that compiles to WASM (Rust, Go, Zig, C#, C) | About 1.2 to 2 times slower than C | Isolated memory and time limit |
+
+Ease of writing, from easy to hard:
+
+1. Lua. One text file. The author installs nothing.
+2. WASM. The author chooses the language and gives one `.wasm` file. The same file runs on Windows and Linux. The author needs a compiler and the SDK.
+3. Native. The server is x86 32 bit and MSVC. A native plugin must be a 32 bit DLL, built with a compatible compiler, and it must match the struct layout of `sr_types.h`. Each new platform needs another DLL.
+
+Native plugins are for the core and for trusted authors. WASM is the main way to write fast plugins for third parties. Without an SDK (a template folder, the types of the API and one build command), WASM is not easier than native. Plan the SDK with the WASM host.
 
 Design:
 
@@ -41,7 +49,7 @@ Order of work:
 
 1. C API, events and native plugins.
 2. Lua host. It tests the API with real plugins.
-3. WASM host, only if someone needs speed with a sandbox.
+3. WASM host and SDK. This comes right after Lua. It gives fast plugins to authors who cannot build a 32 bit native DLL.
 
 Cost: each new function of the API is work in three places. Keep the API small and stable. Plugins need an order (priority) and a way to cancel an event (for example `on_chat` returns "block").
 
