@@ -41,3 +41,7 @@ rva,name,type,count,evidence
 0x13c22d40,bezier_curve_uv,float,8,The four control UVs at the current v
 0xb0661c0,bezier_curve_dv,float,12,The four control points of the v derivative
 0x12a80c44,level_marks,uint8_t,4096,createlevel clears the list
+0x2043a0,floorplan2,FloorplanCell,262144,building_setupfloorplannewer prepares the cells for placement
+0x9bdd8a0,newspaper,Newspaper,,newspaper_load reads news and adds the money ranking
+0x60d40,newspaper_line,char,,newspaper_load formats one account rank
+0x203f20,newspaper_money,char,,sprintf_comma formats the account money

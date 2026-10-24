@@ -946,12 +946,12 @@ __declspec(naked) static void th_04a10(void)
 }
 static uint8_t expect_04a10[6] = { 0xd9, 0x05, 0x90, 0xe3, 0x45, 0x00 };
 
-void __cdecl lf_04bb0(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7);
+void __cdecl cityobject_addbox(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7);
 static void (__cdecl *orig_04bb0)(int, float, float, float, float, float, float);
 static SvVerify v_04bb0 = { "cityobject_addbox", -1 };
 static void __cdecl hk_04bb0(int param_1, float param_2, float param_3, float param_4, float param_5, float param_6, float param_7)
 {
-    SV_HOOK_VOID(v_04bb0, lf_04bb0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_04bb0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
+    SV_HOOK_VOID(v_04bb0, cityobject_addbox(param_1, param_2, param_3, param_4, param_5, param_6, param_7), orig_04bb0(param_1, param_2, param_3, param_4, param_5, param_6, param_7), NULL);
 }
 __declspec(naked) static void th_04bb0(void)
 {
@@ -5640,12 +5640,12 @@ __declspec(naked) static void th_130d0(void)
 }
 static uint8_t expect_130d0[7] = { 0x83, 0xec, 0x3c, 0x8b, 0x54, 0x24, 0x40 };
 
-void __cdecl lf_13450(void);
+void __cdecl setupbuildingtypes(void);
 static void (__cdecl *orig_13450)(void);
 static SvVerify v_13450 = { "setupbuildingtypes", -1 };
 static void __cdecl hk_13450(void)
 {
-    SV_HOOK_VOID(v_13450, lf_13450(), orig_13450(), NULL);
+    SV_HOOK_VOID(v_13450, setupbuildingtypes(), orig_13450(), NULL);
 }
 __declspec(naked) static void th_13450(void)
 {
@@ -5761,12 +5761,12 @@ __declspec(naked) static void th_14590(void)
 }
 static uint8_t expect_14590[7] = { 0x53, 0x8b, 0x1d, 0x40, 0x9a, 0x92, 0x17 };
 
-int __cdecl lf_14600(int param_1, undefined4 * param_2, float param_3);
+int __cdecl createcityobject(int param_1, undefined4 * param_2, float param_3);
 static int (__cdecl *orig_14600)(int, undefined4 *, float);
 static SvVerify v_14600 = { "createcityobject", -1 };
 static int __cdecl hk_14600(int param_1, undefined4 * param_2, float param_3)
 {
-    SV_HOOK_RET(int, v_14600, lf_14600(param_1, param_2, param_3), orig_14600(param_1, param_2, param_3), NULL);
+    SV_HOOK_RET(int, v_14600, createcityobject(param_1, param_2, param_3), orig_14600(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_14600(void)
 {
@@ -5895,12 +5895,12 @@ __declspec(naked) static void th_14dd0(void)
 }
 static uint8_t expect_14dd0[6] = { 0x81, 0xec, 0x84, 0x00, 0x00, 0x00 };
 
-int __cdecl lf_154b0(float * param_1);
+int __cdecl city_createelevator(float * param_1);
 static int (__cdecl *orig_154b0)(float *);
 static SvVerify v_154b0 = { "city_createelevator", -1 };
 static int __cdecl hk_154b0(float * param_1)
 {
-    SV_HOOK_RET(int, v_154b0, lf_154b0(param_1), orig_154b0(param_1), NULL);
+    SV_HOOK_RET(int, v_154b0, city_createelevator(param_1), orig_154b0(param_1), NULL);
 }
 __declspec(naked) static void th_154b0(void)
 {
@@ -5935,12 +5935,12 @@ __declspec(naked) static void th_154b0(void)
 }
 static uint8_t expect_154b0[10] = { 0x83, 0xec, 0x0c, 0x53, 0x8b, 0x1d, 0xb8, 0x8b, 0x6c, 0x0e };
 
-void __cdecl lf_155e0(void);
+void __cdecl setupcityobjecttypes(void);
 static void (__cdecl *orig_155e0)(void);
 static SvVerify v_155e0 = { "setupcityobjecttypes", -1 };
 static void __cdecl hk_155e0(void)
 {
-    SV_HOOK_VOID(v_155e0, lf_155e0(), orig_155e0(), NULL);
+    SV_HOOK_VOID(v_155e0, setupcityobjecttypes(), orig_155e0(), NULL);
 }
 __declspec(naked) static void th_155e0(void)
 {

@@ -759,3 +759,25 @@ blocktemp,0x5702c,boxes,BlockBox,1024,loadblock reads this field from the block 
 buildblocktype,0x0,name,char,64,The block type name occupies the first 64 bytes
 buildblocktype,0x40,pieces,BuildPiece,8,Window builders read each piece at a stride of 0x1c
 buildingtype,0x0,interior_blocks,int,4194304,area_block_createbuildinginterior caches one block id per code
+building,0x0,name,char,64,building_load reads the name after the version
+building,0x40,size_x,int,,building_load reads the column count
+building,0x44,size_z,int,,building_load reads the row count
+building,0x48,floors,int,,building_load reads the floor count
+building,0x4c,cells,BuildingCell,262144,The file plan uses a grid of 64 floors by 64 rows by 64 columns
+building,0x120004c,areas,BuildingArea,16,building_load reads six integers per area
+building,0x12001d8,build_cells,BuildingCell,262144,building_setupbuild resolves blocks and materials
+building,0x24001d8,build_areas,BuildingArea,16,building_setupbuild copies the areas
+building,0x2400364,rot_cells,BuildingCell,262144,building_rotatefloorplan keeps a copy before the turn
+building,0x3600364,rot_areas,BuildingArea,16,building_rotatefloorplan keeps the areas before the turn
+building,0x36004e4,num_materials,int,,The number of material names in the file
+building,0x36004e8,materials,char,16384,256 material names of 64 bytes each
+building,0x36044e8,num_blocks,int,,The number of block names in the file
+building,0x36044ec,blocks,char,16384,256 block names of 64 bytes each
+buildingtype,0x1000000,num_pieces,int,,setupbuildingtypes copies 32 pieces
+buildingtype,0x1000004,pieces,BuildPieceCopy,256,The piece table omits the source index
+buildingtype,0x1001804,parts,BuildingPart,64,Colors for each building part
+city,0x2f9ec,building_pos,vec3,,The world position of building 0 with a record stride of 0x9dc
+city,0x2fa10,elevator,int,,city_createelevator keeps the city object id or -1
+city,0x2fa14,elevator_block,int,3,The cell coordinates of the elevator
+city,0x2fa20,num_floors,int,,city_createelevator copies the floor count to the city object
+city,0x2fb90,street_roads,int,2,building_buildfloorplan reads the roads of the nearest intersection

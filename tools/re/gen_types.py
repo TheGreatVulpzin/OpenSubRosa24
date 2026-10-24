@@ -92,6 +92,8 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
              'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
              'BlockSurface': 0x15c, 'BlockBox': 0x7c, 'BuildPiece': 0x1c,
+             'BuildingCell': 0x48, 'FloorplanCell': 0x48, 'BuildingArea': 0x18,
+             'BuildPieceCopy': 0x18, 'BuildingPart': 0x300,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
@@ -407,7 +409,7 @@ typedef union CityFace { struct {
  * 0x2418 bytes. The mesh is in the frame of the object. */
 typedef union CityObjectTypeRec { struct {
     float radius;       /* +0x00 sphereintersectcityobjecttype: the half size of the box around the mesh */
-    float unk_04;       /* +0x04 */
+    int num_verts;      /* +0x04 */
     vec3 verts[256];    /* +0x08 the corners of the faces */
     int num_faces;      /* +0xc08 */
     CityFace faces[256]; /* +0xc0c */
@@ -429,6 +431,56 @@ typedef union BuildPiece { struct {
 SR_STATIC_ASSERT(sizeof(BuildPiece) == 0x1c, "BuildPiece");
 SR_STATIC_ASSERT(offsetof(BuildPiece, flags) == 0x14, "BuildPiece.flags");
 SR_STATIC_ASSERT(offsetof(BuildPiece, index) == 0x18, "BuildPiece.index");
+
+/* A cell in a building file and its working copies. */
+typedef union BuildingCell { struct {
+    uint32_t outer, inner;
+    int wall_row, wall_col;
+    int interior_bit18, interior_bit16;
+    int16_t tex_outer[8], tex_inner[8];
+    int spare, color, guard_dir, prize;
+}; uint8_t lf_raw[0x48]; } BuildingCell;
+
+/* A cell ready for placement in the world. */
+typedef union FloorplanCell { struct {
+    uint32_t outer, inner;
+    int wall_row, wall_col;
+    int interior_bit18, interior_bit16, interior_bit17;
+    int16_t tex_outer[8], tex_inner[8];
+    int color, guard_dir, prize;
+}; uint8_t lf_raw[0x48]; } FloorplanCell;
+
+typedef union BuildingArea { struct {
+    int x, y, z;
+    int size_x, size_y, size_z;
+}; uint8_t lf_raw[0x18]; } BuildingArea;
+
+typedef union BuildPieceCopy { struct {
+    int kind;
+    float x, width, y, height;
+    int flags;
+}; uint8_t lf_raw[0x18]; } BuildPieceCopy;
+
+typedef union BuildingPart { struct {
+    vec3 colors[3];
+    uint8_t pad_24[0xc];
+    float team_colors[15];
+}; uint8_t lf_raw[0x300]; } BuildingPart;
+
+typedef union Newspaper { struct {
+    int num_lines;
+    char lines[1024][256];
+    int unk_40004;
+}; uint8_t lf_raw[0x40008]; } Newspaper;
+
+SR_STATIC_ASSERT(sizeof(BuildingCell) == 0x48, "BuildingCell");
+SR_STATIC_ASSERT(offsetof(BuildingCell, tex_outer) == 0x18, "BuildingCell.tex_outer");
+SR_STATIC_ASSERT(sizeof(FloorplanCell) == 0x48, "FloorplanCell");
+SR_STATIC_ASSERT(offsetof(FloorplanCell, tex_inner) == 0x2c, "FloorplanCell.tex_inner");
+SR_STATIC_ASSERT(sizeof(BuildingArea) == 0x18, "BuildingArea");
+SR_STATIC_ASSERT(sizeof(BuildPieceCopy) == 0x18, "BuildPieceCopy");
+SR_STATIC_ASSERT(sizeof(BuildingPart) == 0x300, "BuildingPart");
+SR_STATIC_ASSERT(sizeof(Newspaper) == 0x40008, "Newspaper");
 
 typedef struct BlockSurface {
     int unused_00;
@@ -559,10 +611,10 @@ typedef union NetCandidate { struct {
     int score;
 }; uint8_t lf_raw[0xc]; } NetCandidate;
 
-/* A door of a team record (eventsimulation): the block it opens and its object. */
+/* A door of a team record: the block it opens and its turn. */
 typedef union DoorBlock { struct {
     int x, y, z;
-    int object;
+    int turn;
 }; uint8_t lf_raw[0x10]; } DoorBlock;
 
 /* A stock of the market (createevent_updatestocks). */

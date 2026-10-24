@@ -306,7 +306,7 @@ typedef union CityFace { struct {
  * 0x2418 bytes. The mesh is in the frame of the object. */
 typedef union CityObjectTypeRec { struct {
     float radius;       /* +0x00 sphereintersectcityobjecttype: the half size of the box around the mesh */
-    float unk_04;       /* +0x04 */
+    int num_verts;      /* +0x04 */
     vec3 verts[256];    /* +0x08 the corners of the faces */
     int num_faces;      /* +0xc08 */
     CityFace faces[256]; /* +0xc0c */
@@ -328,6 +328,56 @@ typedef union BuildPiece { struct {
 SR_STATIC_ASSERT(sizeof(BuildPiece) == 0x1c, "BuildPiece");
 SR_STATIC_ASSERT(offsetof(BuildPiece, flags) == 0x14, "BuildPiece.flags");
 SR_STATIC_ASSERT(offsetof(BuildPiece, index) == 0x18, "BuildPiece.index");
+
+/* A cell in a building file and its working copies. */
+typedef union BuildingCell { struct {
+    uint32_t outer, inner;
+    int wall_row, wall_col;
+    int interior_bit18, interior_bit16;
+    int16_t tex_outer[8], tex_inner[8];
+    int spare, color, guard_dir, prize;
+}; uint8_t lf_raw[0x48]; } BuildingCell;
+
+/* A cell ready for placement in the world. */
+typedef union FloorplanCell { struct {
+    uint32_t outer, inner;
+    int wall_row, wall_col;
+    int interior_bit18, interior_bit16, interior_bit17;
+    int16_t tex_outer[8], tex_inner[8];
+    int color, guard_dir, prize;
+}; uint8_t lf_raw[0x48]; } FloorplanCell;
+
+typedef union BuildingArea { struct {
+    int x, y, z;
+    int size_x, size_y, size_z;
+}; uint8_t lf_raw[0x18]; } BuildingArea;
+
+typedef union BuildPieceCopy { struct {
+    int kind;
+    float x, width, y, height;
+    int flags;
+}; uint8_t lf_raw[0x18]; } BuildPieceCopy;
+
+typedef union BuildingPart { struct {
+    vec3 colors[3];
+    uint8_t pad_24[0xc];
+    float team_colors[15];
+}; uint8_t lf_raw[0x300]; } BuildingPart;
+
+typedef union Newspaper { struct {
+    int num_lines;
+    char lines[1024][256];
+    int unk_40004;
+}; uint8_t lf_raw[0x40008]; } Newspaper;
+
+SR_STATIC_ASSERT(sizeof(BuildingCell) == 0x48, "BuildingCell");
+SR_STATIC_ASSERT(offsetof(BuildingCell, tex_outer) == 0x18, "BuildingCell.tex_outer");
+SR_STATIC_ASSERT(sizeof(FloorplanCell) == 0x48, "FloorplanCell");
+SR_STATIC_ASSERT(offsetof(FloorplanCell, tex_inner) == 0x2c, "FloorplanCell.tex_inner");
+SR_STATIC_ASSERT(sizeof(BuildingArea) == 0x18, "BuildingArea");
+SR_STATIC_ASSERT(sizeof(BuildPieceCopy) == 0x18, "BuildPieceCopy");
+SR_STATIC_ASSERT(sizeof(BuildingPart) == 0x300, "BuildingPart");
+SR_STATIC_ASSERT(sizeof(Newspaper) == 0x40008, "Newspaper");
 
 typedef struct BlockSurface {
     int unused_00;
@@ -458,10 +508,10 @@ typedef union NetCandidate { struct {
     int score;
 }; uint8_t lf_raw[0xc]; } NetCandidate;
 
-/* A door of a team record (eventsimulation): the block it opens and its object. */
+/* A door of a team record: the block it opens and its turn. */
 typedef union DoorBlock { struct {
     int x, y, z;
-    int object;
+    int turn;
 }; uint8_t lf_raw[0x10]; } DoorBlock;
 
 /* A stock of the market (createevent_updatestocks). */
@@ -2022,19 +2072,14 @@ typedef union City { struct {
     uint8_t pad_2f99c[0x40];
     int building_type;                   /* +0x2f9dc the type of building 0, records of 0x9dc bytes: 2 car market, 3 mission, 6 healing (humansimulation) */
     uint8_t pad_2f9e0[0xc];
-    float unk_2f9ec;                     /* +0x2f9ec 1 functions */
-    float unk_2f9f0;                     /* +0x2f9f0 2 functions */
-    float unk_2f9f4;                     /* +0x2f9f4 1 functions */
+    vec3 building_pos;                   /* +0x2f9ec The world position of building 0 with a record stride of 0x9dc */
     vec3 building_min;                   /* +0x2f9f8 pointinsidebuilding: the box of building 0, records of 0x9dc bytes */
     vec3 building_max;                   /* +0x2fa04 pointinsidebuilding */
-    int unk_2fa10;                       /* +0x2fa10 1 functions */
-    int unk_2fa14;                       /* +0x2fa14 1 functions */
-    int unk_2fa18;                       /* +0x2fa18 1 functions */
-    int unk_2fa1c;                       /* +0x2fa1c 1 functions */
-    int unk_2fa20;                       /* +0x2fa20 1 functions */
+    int elevator;                        /* +0x2fa10 city_createelevator keeps the city object id or -1 */
+    int elevator_block[3];               /* +0x2fa14 The cell coordinates of the elevator */
+    int num_floors;                      /* +0x2fa20 city_createelevator copies the floor count to the city object */
     uint8_t pad_2fa24[0x16c];
-    int unk_2fb90;                       /* +0x2fb90 1 functions */
-    int unk_2fb94;                       /* +0x2fb94 1 functions */
+    int street_roads[2];                 /* +0x2fb90 building_buildfloorplan reads the roads of the nearest intersection */
     uint8_t pad_2fb98[0x8];
     int num_guard_spots;                 /* +0x2fba0 scenario_createguards (building 0, records of 0x9dc bytes) */
     GuardSpot guard_spots[64];           /* +0x2fba4 scenario_createguards: pos and dir 0..3 (0x2fba4 + 64 * 0x10 = 0x2ffa4) */
@@ -2079,8 +2124,13 @@ SR_STATIC_ASSERT(offsetof(City, unused_29810) == 0x29810, "City.unused_29810");
 SR_STATIC_ASSERT(offsetof(City, unused_2f814) == 0x2f814, "City.unused_2f814");
 SR_STATIC_ASSERT(offsetof(City, num_buildings) == 0x2f998, "City.num_buildings");
 SR_STATIC_ASSERT(offsetof(City, building_type) == 0x2f9dc, "City.building_type");
+SR_STATIC_ASSERT(offsetof(City, building_pos) == 0x2f9ec, "City.building_pos");
 SR_STATIC_ASSERT(offsetof(City, building_min) == 0x2f9f8, "City.building_min");
 SR_STATIC_ASSERT(offsetof(City, building_max) == 0x2fa04, "City.building_max");
+SR_STATIC_ASSERT(offsetof(City, elevator) == 0x2fa10, "City.elevator");
+SR_STATIC_ASSERT(offsetof(City, elevator_block) == 0x2fa14, "City.elevator_block");
+SR_STATIC_ASSERT(offsetof(City, num_floors) == 0x2fa20, "City.num_floors");
+SR_STATIC_ASSERT(offsetof(City, street_roads) == 0x2fb90, "City.street_roads");
 SR_STATIC_ASSERT(offsetof(City, num_guard_spots) == 0x2fba0, "City.num_guard_spots");
 SR_STATIC_ASSERT(offsetof(City, guard_spots) == 0x2fba4, "City.guard_spots");
 SR_STATIC_ASSERT(offsetof(City, prize_pos) == 0x2ffa4, "City.prize_pos");
@@ -2510,10 +2560,15 @@ SR_STATIC_ASSERT(offsetof(BuildBlockTypeRec, pieces) == 0x40, "BuildBlockTypeRec
 /* buildingtype[]: record of 0x100d804 bytes. */
 typedef union BuildingType { struct {
     int interior_blocks[4194304];        /* +0x0000 area_block_createbuildinginterior caches one block id per code */
-    uint8_t pad_1000000[0xd804];
+    int num_pieces;                      /* +0x1000000 setupbuildingtypes copies 32 pieces */
+    BuildPieceCopy pieces[256];          /* +0x1000004 The piece table omits the source index */
+    BuildingPart parts[64];              /* +0x1001804 Colors for each building part */
 }; uint8_t lf_raw[0x100d804]; } BuildingType;
 SR_STATIC_ASSERT(sizeof(BuildingType) == 0x100d804, "BuildingType");
 SR_STATIC_ASSERT(offsetof(BuildingType, interior_blocks) == 0x0, "BuildingType.interior_blocks");
+SR_STATIC_ASSERT(offsetof(BuildingType, num_pieces) == 0x1000000, "BuildingType.num_pieces");
+SR_STATIC_ASSERT(offsetof(BuildingType, pieces) == 0x1000004, "BuildingType.pieces");
+SR_STATIC_ASSERT(offsetof(BuildingType, parts) == 0x1001804, "BuildingType.parts");
 
 /* market[]: record of 0x204 bytes. */
 typedef union Market { struct {
@@ -2788,277 +2843,44 @@ SR_STATIC_ASSERT(sizeof(Track) == 0x578000, "Track");
 
 /* building[]: record of 0x36168f8 bytes. */
 typedef union Building { struct {
-    int unk_0000;                        /* +0x0000 2 functions */
-    uint8_t pad_0004[0x3c];
-    int unk_0040;                        /* +0x0040 3 functions */
-    int unk_0044;                        /* +0x0044 3 functions */
-    int unk_0048;                        /* +0x0048 3 functions */
-    uint32_t unk_004c;                   /* +0x004c 3 functions */
-    uint32_t unk_0050;                   /* +0x0050 2 functions */
-    int unk_0054;                        /* +0x0054 2 functions */
-    int unk_0058;                        /* +0x0058 2 functions */
-    int unk_005c;                        /* +0x005c 3 functions */
-    int unk_0060;                        /* +0x0060 2 functions */
-    uint8_t pad_0064[0x20];
-    int unk_0084;                        /* +0x0084 1 functions */
-    int unk_0088;                        /* +0x0088 3 functions */
-    int unk_008c;                        /* +0x008c 2 functions */
-    int unk_0090;                        /* +0x0090 2 functions */
-    uint32_t unk_0094;                   /* +0x0094 2 functions */
-    uint32_t unk_0098;                   /* +0x0098 2 functions */
-    int unk_009c;                        /* +0x009c 1 functions */
-    int unk_00a0;                        /* +0x00a0 1 functions */
-    int unk_00a4;                        /* +0x00a4 1 functions */
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    uint8_t pad_00ac[0x24];
-    int unk_00d0;                        /* +0x00d0 1 functions */
-    uint8_t pad_00d4[0x8];
-    uint32_t unk_00dc;                   /* +0x00dc 1 functions */
-    uint32_t unk_00e0;                   /* +0x00e0 1 functions */
-    uint8_t pad_00e4[0x40];
-    uint32_t unk_0124;                   /* +0x0124 1 functions */
-    uint32_t unk_0128;                   /* +0x0128 1 functions */
-    uint8_t pad_012c[0x40];
-    uint32_t unk_016c;                   /* +0x016c 1 functions */
-    uint32_t unk_0170;                   /* +0x0170 1 functions */
-    uint8_t pad_0174[0x40];
-    uint32_t unk_01b4;                   /* +0x01b4 1 functions */
-    uint32_t unk_01b8;                   /* +0x01b8 1 functions */
-    uint8_t pad_01bc[0x40];
-    uint32_t unk_01fc;                   /* +0x01fc 1 functions */
-    uint32_t unk_0200;                   /* +0x0200 1 functions */
-    uint8_t pad_0204[0x40];
-    uint32_t unk_0244;                   /* +0x0244 1 functions */
-    uint32_t unk_0248;                   /* +0x0248 1 functions */
-    uint8_t pad_024c[0x4c0];
-    int unk_070c;                        /* +0x070c 1 functions */
-    int unk_0710;                        /* +0x0710 1 functions */
-    uint8_t pad_0714[0xb38];
-    int unk_124c;                        /* +0x124c 1 functions */
-    uint8_t pad_1250[0x6bc];
-    int unk_190c;                        /* +0x190c 1 functions */
-    int unk_1910;                        /* +0x1910 1 functions */
-    uint8_t pad_1914[0x19738];
-    int unk_1b04c;                       /* +0x1b04c 1 functions */
-    int unk_1b050;                       /* +0x1b050 1 functions */
-    uint8_t pad_1b054[0x40];
-    int unk_1b094;                       /* +0x1b094 1 functions */
-    int unk_1b098;                       /* +0x1b098 1 functions */
-    uint8_t pad_1b09c[0x2cfb0];
-    int unk_4804c;                       /* +0x4804c 1 functions */
-    uint8_t pad_48050[0x11b7ffc];
-    int unk_120004c;                     /* +0x120004c 3 functions */
-    int unk_1200050;                     /* +0x1200050 3 functions */
-    int unk_1200054;                     /* +0x1200054 3 functions */
-    int unk_1200058;                     /* +0x1200058 3 functions */
-    int unk_120005c;                     /* +0x120005c 3 functions */
-    int unk_1200060;                     /* +0x1200060 3 functions */
-    int unk_1200064;                     /* +0x1200064 3 functions */
-    int unk_1200068;                     /* +0x1200068 1 functions */
-    int unk_120006c;                     /* +0x120006c 1 functions */
-    int unk_1200070;                     /* +0x1200070 1 functions */
-    int unk_1200074;                     /* +0x1200074 1 functions */
-    int unk_1200078;                     /* +0x1200078 1 functions */
-    uint8_t pad_120007c[0x11c];
-    int unk_1200198;                     /* +0x1200198 1 functions */
-    uint8_t pad_120019c[0x4];
-    int unk_12001a0;                     /* +0x12001a0 1 functions */
-    int unk_12001a4;                     /* +0x12001a4 1 functions */
-    int16_t unk_12001a8;                 /* +0x12001a8 1 functions */
-    int16_t unk_12001aa;                 /* +0x12001aa 1 functions */
-    int16_t unk_12001ac;                 /* +0x12001ac 1 functions */
-    int16_t unk_12001ae;                 /* +0x12001ae 1 functions */
-    int16_t unk_12001b0;                 /* +0x12001b0 1 functions */
-    int16_t unk_12001b2;                 /* +0x12001b2 1 functions */
-    int16_t unk_12001b4;                 /* +0x12001b4 1 functions */
-    int16_t unk_12001b6;                 /* +0x12001b6 1 functions */
-    int16_t unk_12001b8;                 /* +0x12001b8 1 functions */
-    int16_t unk_12001ba;                 /* +0x12001ba 1 functions */
-    int16_t unk_12001bc;                 /* +0x12001bc 1 functions */
-    int16_t unk_12001be;                 /* +0x12001be 1 functions */
-    int16_t unk_12001c0;                 /* +0x12001c0 1 functions */
-    int16_t unk_12001c2;                 /* +0x12001c2 1 functions */
-    int16_t unk_12001c4;                 /* +0x12001c4 1 functions */
-    int16_t unk_12001c6;                 /* +0x12001c6 1 functions */
-    uint8_t pad_12001c8[0x4];
+    char name[64];                       /* +0x0000 building_load reads the name after the version */
+    int size_x;                          /* +0x0040 building_load reads the column count */
+    int size_z;                          /* +0x0044 building_load reads the row count */
+    int floors;                          /* +0x0048 building_load reads the floor count */
+    BuildingCell cells[262144];          /* +0x004c The file plan uses a grid of 64 floors by 64 rows by 64 columns */
+    BuildingArea areas[16];              /* +0x120004c building_load reads six integers per area */
     int build_size_x;                    /* +0x12001cc building_setupbuild copies size_x for level construction */
     int build_size_z;                    /* +0x12001d0 building_setupbuild copies size_z for level construction */
     int build_floors;                    /* +0x12001d4 building_setupbuild copies floors for level construction */
-    int unk_12001d8;                     /* +0x12001d8 3 functions */
-    int unk_12001dc;                     /* +0x12001dc 3 functions */
-    int unk_12001e0;                     /* +0x12001e0 2 functions */
-    int unk_12001e4;                     /* +0x12001e4 3 functions */
-    int unk_12001e8;                     /* +0x12001e8 2 functions */
-    int unk_12001ec;                     /* +0x12001ec 2 functions */
-    uint8_t pad_12001f0[0x2];
-    int16_t unk_12001f2;                 /* +0x12001f2 1 functions */
-    uint8_t pad_12001f4[0x2];
-    int16_t unk_12001f6;                 /* +0x12001f6 1 functions */
-    uint8_t pad_12001f8[0x2];
-    int16_t unk_12001fa;                 /* +0x12001fa 1 functions */
-    int unk_12001fc;                     /* +0x12001fc 1 functions */
-    uint8_t pad_1200200[0x2];
-    int16_t unk_1200202;                 /* +0x1200202 1 functions */
-    uint8_t pad_1200204[0x2];
-    int16_t unk_1200206;                 /* +0x1200206 1 functions */
-    uint8_t pad_1200208[0x2];
-    int16_t unk_120020a;                 /* +0x120020a 1 functions */
-    uint8_t pad_120020c[0x2];
-    int16_t unk_120020e;                 /* +0x120020e 1 functions */
-    uint8_t pad_1200210[0x4];
-    int unk_1200214;                     /* +0x1200214 2 functions */
-    int unk_1200218;                     /* +0x1200218 2 functions */
-    int unk_120021c;                     /* +0x120021c 2 functions */
-    int unk_1200220;                     /* +0x1200220 3 functions */
-    int unk_1200224;                     /* +0x1200224 2 functions */
-    int unk_1200228;                     /* +0x1200228 1 functions */
-    int unk_120022c;                     /* +0x120022c 1 functions */
-    int unk_1200230;                     /* +0x1200230 1 functions */
-    int unk_1200234;                     /* +0x1200234 1 functions */
-    int unk_1200238;                     /* +0x1200238 1 functions */
-    int unk_120023c;                     /* +0x120023c 1 functions */
-    int unk_1200240;                     /* +0x1200240 1 functions */
-    int unk_1200244;                     /* +0x1200244 1 functions */
-    int unk_1200248;                     /* +0x1200248 1 functions */
-    int unk_120024c;                     /* +0x120024c 1 functions */
-    uint8_t pad_1200250[0x47f88];
-    int unk_12481d8;                     /* +0x12481d8 2 functions */
-    uint8_t pad_12481dc[0x10];
-    int unk_12481ec;                     /* +0x12481ec 1 functions */
-    uint8_t pad_12481f0[0x30];
-    int unk_1248220;                     /* +0x1248220 1 functions */
-    uint8_t pad_1248224[0x11b4];
-    int unk_12493d8;                     /* +0x12493d8 1 functions */
-    uint8_t pad_12493dc[0x11b6dfc];
-    int unk_24001d8;                     /* +0x24001d8 3 functions */
-    int unk_24001dc;                     /* +0x24001dc 2 functions */
-    int unk_24001e0;                     /* +0x24001e0 3 functions */
-    int unk_24001e4;                     /* +0x24001e4 3 functions */
-    int unk_24001e8;                     /* +0x24001e8 2 functions */
-    int unk_24001ec;                     /* +0x24001ec 3 functions */
-    int unk_24001f0;                     /* +0x24001f0 2 functions */
-    int unk_24001f4;                     /* +0x24001f4 2 functions */
-    int unk_24001f8;                     /* +0x24001f8 2 functions */
-    int unk_24001fc;                     /* +0x24001fc 2 functions */
-    int unk_2400200;                     /* +0x2400200 2 functions */
-    int unk_2400204;                     /* +0x2400204 2 functions */
-    int unk_2400208;                     /* +0x2400208 1 functions */
-    uint8_t pad_240020c[0x4];
-    int unk_2400210;                     /* +0x2400210 1 functions */
-    int unk_2400214;                     /* +0x2400214 1 functions */
-    uint8_t pad_2400218[0x4];
-    int unk_240021c;                     /* +0x240021c 1 functions */
-    int unk_2400220;                     /* +0x2400220 1 functions */
-    uint8_t pad_2400224[0x4];
-    int unk_2400228;                     /* +0x2400228 1 functions */
-    int unk_240022c;                     /* +0x240022c 1 functions */
-    uint8_t pad_2400230[0x4];
-    int unk_2400234;                     /* +0x2400234 1 functions */
-    int unk_2400238;                     /* +0x2400238 1 functions */
-    uint8_t pad_240023c[0x4];
-    int unk_2400240;                     /* +0x2400240 1 functions */
-    int unk_2400244;                     /* +0x2400244 1 functions */
-    uint8_t pad_2400248[0x4];
-    int unk_240024c;                     /* +0x240024c 1 functions */
-    int unk_2400250;                     /* +0x2400250 1 functions */
-    uint8_t pad_2400254[0x8];
-    int unk_240025c;                     /* +0x240025c 1 functions */
-    uint8_t pad_2400260[0x104];
-    int unk_2400364;                     /* +0x2400364 1 functions */
-    int unk_2400368;                     /* +0x2400368 1 functions */
-    int unk_240036c;                     /* +0x240036c 1 functions */
-    int unk_2400370;                     /* +0x2400370 1 functions */
-    int unk_2400374;                     /* +0x2400374 1 functions */
-    int unk_2400378;                     /* +0x2400378 1 functions */
-    int16_t unk_240037c;                 /* +0x240037c 1 functions */
-    int16_t unk_240037e;                 /* +0x240037e 1 functions */
-    int16_t unk_2400380;                 /* +0x2400380 1 functions */
-    int16_t unk_2400382;                 /* +0x2400382 1 functions */
-    int16_t unk_2400384;                 /* +0x2400384 1 functions */
-    int16_t unk_2400386;                 /* +0x2400386 1 functions */
-    int16_t unk_2400388;                 /* +0x2400388 1 functions */
-    int16_t unk_240038a;                 /* +0x240038a 1 functions */
-    int16_t unk_240038c;                 /* +0x240038c 1 functions */
-    int16_t unk_240038e;                 /* +0x240038e 1 functions */
-    int16_t unk_2400390;                 /* +0x2400390 1 functions */
-    int16_t unk_2400392;                 /* +0x2400392 1 functions */
-    int16_t unk_2400394;                 /* +0x2400394 1 functions */
-    int16_t unk_2400396;                 /* +0x2400396 1 functions */
-    int16_t unk_2400398;                 /* +0x2400398 1 functions */
-    int16_t unk_240039a;                 /* +0x240039a 1 functions */
-    uint8_t pad_240039c[0x4];
-    int unk_24003a0;                     /* +0x24003a0 1 functions */
-    int unk_24003a4;                     /* +0x24003a4 1 functions */
-    int unk_24003a8;                     /* +0x24003a8 1 functions */
-    int unk_24003ac;                     /* +0x24003ac 1 functions */
-    int unk_24003b0;                     /* +0x24003b0 1 functions */
-    uint8_t pad_24003b4[0x47fb0];
-    int unk_2448364;                     /* +0x2448364 1 functions */
-    uint8_t pad_2448368[0x11fc];
-    int unk_2449564;                     /* +0x2449564 1 functions */
-    uint8_t pad_2449568[0x11b6dfc];
-    int unk_3600364;                     /* +0x3600364 1 functions */
-    int unk_3600368;                     /* +0x3600368 1 functions */
-    int unk_360036c;                     /* +0x360036c 1 functions */
-    int unk_3600370;                     /* +0x3600370 1 functions */
-    int unk_3600374;                     /* +0x3600374 1 functions */
-    int unk_3600378;                     /* +0x3600378 1 functions */
-    int unk_360037c;                     /* +0x360037c 1 functions */
-    int unk_3600380;                     /* +0x3600380 1 functions */
-    int unk_3600384;                     /* +0x3600384 1 functions */
-    int unk_3600388;                     /* +0x3600388 1 functions */
-    int unk_360038c;                     /* +0x360038c 1 functions */
-    int unk_3600390;                     /* +0x3600390 1 functions */
-    int unk_3600394;                     /* +0x3600394 1 functions */
-    uint8_t pad_3600398[0x4];
-    int unk_360039c;                     /* +0x360039c 1 functions */
-    int unk_36003a0;                     /* +0x36003a0 1 functions */
-    uint8_t pad_36003a4[0x4];
-    int unk_36003a8;                     /* +0x36003a8 1 functions */
-    int unk_36003ac;                     /* +0x36003ac 1 functions */
-    uint8_t pad_36003b0[0x4];
-    int unk_36003b4;                     /* +0x36003b4 1 functions */
-    int unk_36003b8;                     /* +0x36003b8 1 functions */
-    uint8_t pad_36003bc[0x4];
-    int unk_36003c0;                     /* +0x36003c0 1 functions */
-    int unk_36003c4;                     /* +0x36003c4 1 functions */
-    uint8_t pad_36003c8[0x4];
-    int unk_36003cc;                     /* +0x36003cc 1 functions */
-    int unk_36003d0;                     /* +0x36003d0 1 functions */
-    uint8_t pad_36003d4[0x4];
-    int unk_36003d8;                     /* +0x36003d8 1 functions */
-    int unk_36003dc;                     /* +0x36003dc 1 functions */
-    uint8_t pad_36003e0[0x4];
-    int unk_36003e4;                     /* +0x36003e4 1 functions */
-    int unk_36003e8;                     /* +0x36003e8 1 functions */
-    uint8_t pad_36003ec[0x4];
-    int unk_36003f0;                     /* +0x36003f0 1 functions */
-    uint8_t pad_36003f4[0xf0];
-    int unk_36004e4;                     /* +0x36004e4 3 functions */
-    uint8_t pad_36004e8[0x1];
-    char unk_36004e9;                    /* +0x36004e9 1 functions */
-    char unk_36004ea;                    /* +0x36004ea 1 functions */
-    char unk_36004eb;                    /* +0x36004eb 1 functions */
-    uint8_t pad_36004ec[0x3d];
-    char unk_3600529;                    /* +0x3600529 1 functions */
-    uint8_t pad_360052a[0x3e];
-    int unk_3600568;                     /* +0x3600568 1 functions */
-    uint8_t pad_360056c[0x3f7c];
-    int unk_36044e8;                     /* +0x36044e8 3 functions */
-    uint8_t pad_36044ec[0x1];
-    char unk_36044ed;                    /* +0x36044ed 1 functions */
-    char unk_36044ee;                    /* +0x36044ee 1 functions */
-    char unk_36044ef;                    /* +0x36044ef 1 functions */
-    uint8_t pad_36044f0[0x3d];
-    char unk_360452d;                    /* +0x360452d 1 functions */
-    uint8_t pad_360452e[0x3e];
-    int unk_360456c;                     /* +0x360456c 1 functions */
-    uint8_t pad_3604570[0x12388];
+    BuildingCell build_cells[262144];    /* +0x12001d8 building_setupbuild resolves blocks and materials */
+    BuildingArea build_areas[16];        /* +0x24001d8 building_setupbuild copies the areas */
+    uint8_t pad_2400358[0xc];
+    BuildingCell rot_cells[262144];      /* +0x2400364 building_rotatefloorplan keeps a copy before the turn */
+    BuildingArea rot_areas[16];          /* +0x3600364 building_rotatefloorplan keeps the areas before the turn */
+    int num_materials;                   /* +0x36004e4 The number of material names in the file */
+    char materials[16384];               /* +0x36004e8 256 material names of 64 bytes each */
+    int num_blocks;                      /* +0x36044e8 The number of block names in the file */
+    char blocks[16384];                  /* +0x36044ec 256 block names of 64 bytes each */
+    uint8_t pad_36084ec[0xe40c];
 }; uint8_t lf_raw[0x36168f8]; } Building;
 SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
+SR_STATIC_ASSERT(offsetof(Building, name) == 0x0, "Building.name");
+SR_STATIC_ASSERT(offsetof(Building, size_x) == 0x40, "Building.size_x");
+SR_STATIC_ASSERT(offsetof(Building, size_z) == 0x44, "Building.size_z");
+SR_STATIC_ASSERT(offsetof(Building, floors) == 0x48, "Building.floors");
+SR_STATIC_ASSERT(offsetof(Building, cells) == 0x4c, "Building.cells");
+SR_STATIC_ASSERT(offsetof(Building, areas) == 0x120004c, "Building.areas");
 SR_STATIC_ASSERT(offsetof(Building, build_size_x) == 0x12001cc, "Building.build_size_x");
 SR_STATIC_ASSERT(offsetof(Building, build_size_z) == 0x12001d0, "Building.build_size_z");
 SR_STATIC_ASSERT(offsetof(Building, build_floors) == 0x12001d4, "Building.build_floors");
+SR_STATIC_ASSERT(offsetof(Building, build_cells) == 0x12001d8, "Building.build_cells");
+SR_STATIC_ASSERT(offsetof(Building, build_areas) == 0x24001d8, "Building.build_areas");
+SR_STATIC_ASSERT(offsetof(Building, rot_cells) == 0x2400364, "Building.rot_cells");
+SR_STATIC_ASSERT(offsetof(Building, rot_areas) == 0x3600364, "Building.rot_areas");
+SR_STATIC_ASSERT(offsetof(Building, num_materials) == 0x36004e4, "Building.num_materials");
+SR_STATIC_ASSERT(offsetof(Building, materials) == 0x36004e8, "Building.materials");
+SR_STATIC_ASSERT(offsetof(Building, num_blocks) == 0x36044e8, "Building.num_blocks");
+SR_STATIC_ASSERT(offsetof(Building, blocks) == 0x36044ec, "Building.blocks");
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {

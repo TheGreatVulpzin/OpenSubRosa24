@@ -14,6 +14,7 @@
 #include "humans.h"
 
 #include "area.h"
+#include "buildings.h"
 #include "collide.h"
 #include "events.h"
 #include "intersect.h"
@@ -21,10 +22,6 @@
 #include "sr_runtime.h"
 #include "sr_server.h"
 #include "vectors.h"
-
-/* Game functions with no clean version yet: the calls go to the lifted C. */
-int __cdecl lf_154b0(float *pos);
-#define city_createelevator lf_154b0
 
 #define MAX_ITEMS 0x400
 #define NUM_SLOTS 7 /* the slots that hold items on the body: two hands and five pockets */
@@ -101,7 +98,7 @@ static void reach(Human *hu, const Keys *k)
     link = area_interior_getblocklink(g_intersect.block_area, g_intersect.block[0], g_intersect.block[1],
                                       g_intersect.block[2]);
     if (link == ((uint32_t)g_blocklist.elevator_block | 0x80000000u) &&
-        (e = city_createelevator((float *)&head->pos)) != -1) {
+        (e = city_createelevator(&head->pos)) != -1) {
         /* The game reads the building of the record 0 here, not of the record e. */
         g_cityobjects[e].floor = (int)((head->pos.y - g_building_y(g_cityobjects[0].building)) * 0.25);
     }

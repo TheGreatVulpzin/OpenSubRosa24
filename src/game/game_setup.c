@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "block_mesh.h"
+#include "buildings.h"
 #include "bullets.h"
 #include "economy.h"
 #include "events.h"
@@ -19,14 +20,6 @@
 #include "sr_os.h"
 #include "sr_server.h"
 #include "vectors.h"
-
-/* Game functions of other files. */
-void __cdecl lf_13450(void);
-void __cdecl lf_155e0(void);
-void __cdecl lf_185a0(void);
-#define setupbuildingtypes lf_13450
-#define setupcityobjecttypes lf_155e0
-#define newspaper_load lf_185a0
 
 #define g_materiallist (*SR_AT(MaterialList, SR_RVA_MATERIALLIST))
 #define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))

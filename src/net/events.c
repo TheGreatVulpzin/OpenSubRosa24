@@ -268,7 +268,7 @@ void eventsimulation(void)
             int open = ev->attach_type;
             int d;
             for (d = 0; d < 2; d++, door++) {
-                uint32_t object = open == 0 ? ((uint32_t)door->object << 10 | 9) : 0;
+                uint32_t object = open == 0 ? ((uint32_t)door->turn << 10 | 9) : 0;
                 area_interior_setobject(0, (uint32_t)door->x, (uint32_t)door->y, (uint32_t)door->z, (int)object);
                 area_marksector(0, door->x, door->y, door->z);
             }
