@@ -738,7 +738,7 @@ blocklist,0x274,stairs_ceiling,int,4,area_createsblocks assigns these block ids 
 blocklist,0x284,misc_284,int,20,area_createsblocks assigns these block ids in setup order
 blocklist,0x2d4,hill_a,int,4,area_createsblocks assigns these block ids in setup order
 blocklist,0x2e4,hill_b,int,4,area_createsblocks assigns these block ids in setup order
-blocklist,0x2f4,unused_2f4,int,4,area_createsblocks assigns these block ids in setup order
+blocklist,0x2f4,unused_2f4,int,4,area_createsblocks leaves these four words unchanged
 blocklist,0x304,flat,int,4,area_createsblocks assigns these block ids in setup order
 blocklist,0x314,rail_low,int,4,area_createsblocks assigns these block ids in setup order
 blocklist,0x324,rail_low2,int,4,area_createsblocks assigns these block ids in setup order

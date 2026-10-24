@@ -25,4 +25,6 @@ int area_block_createbuildinginterior(int scratch, uint32_t code);
 
 void area_createinteriorblocks(void);
 
+void area_createsblocks(void);
+
 #endif

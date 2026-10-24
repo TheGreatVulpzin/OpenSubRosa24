@@ -190,3 +190,39 @@ The same builder creates ceiling edges, railings, balcony stairs, trim and three
 Each shape has four turns. Rotation also swaps its x and z dimensions.
 The fixed shapes keep their existing `is_door` fields. Trim also keeps its existing name.
 Stair height and depth updates round to float after each increment or decrement.
+
+## Block ids and terrain shapes
+
+`area_createsblocks` assigns the block ids before it builds any geometry.
+
+| Ids | Use |
+| --- | --- |
+| 0 through 15 | Edge masks |
+| 16 through 61 | Slab, trim and miscellaneous ids |
+| 62 through 77 | Four rows of quarter-height slopes |
+| 78 through 101 | Four rows of sixth-height slopes |
+| 102 through 125 | Four rows of sixth-height ramps |
+| 128 through 199 | Eighteen groups of four turns |
+| 200 onward | Four ids for each block file, then four upper corners |
+
+The slope counter keeps the last id, 125, before the next range starts at 128.
+`turn_first` is 128. `turn_end` is the id after the last file block and also the first upper-corner id.
+The four words at `unused_2f4` keep their previous values.
+The builder fills `BuildingType.interior_blocks` with -1 before it creates the file blocks and fixed interiors.
+
+Terrain construction follows this order: ramps, sixth-height slopes, quarter-height slopes, slab, edges, two corner groups, upper corners, two hills and five railing forms.
+Ramp height starts at zero. Its increment is the float value of one sixth, promoted to double.
+The ramp base `h + 0.0625` stays in double for the three faces and the test that selects a height of one or two.
+Each control-point height rounds at its store. The accumulated height rounds after each increment.
+
+Only the slab and hills set the endpoints of the two inner control rows.
+The builders preserve other control points. A surface turn still rotates all sixteen points.
+The hill shells copy endpoints into the second control grid. Their y offsets round after addition or subtraction.
+
+Sixth-height slopes use UV corners (0,0), (1,0), (1,1), (0,1).
+Quarter-height slopes, slab, edge tops, upper corners and the flat railing bases use (0,1), (1,1), (1,0), (0,0).
+Edge side UVs have a top v of 0.0625 and a bottom v of zero.
+The two corner groups retain those edge UVs. Hills and fence beams also retain their previous UV corners.
+Inner UV entries keep their previous values throughout these changes.
+
+Both large block builders run once when each level is set up.

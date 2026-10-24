@@ -193,7 +193,9 @@ Next, in this order (sizes from `analysis/024d/functions.csv`):
 
 Part 8A is complete (2026-10-23): 15 functions for noise, point weights, curves, surfaces,
 track geometry, streets, terrain and level construction. See [Level construction](game/level.md).
-Parts 8B and 8C remain open. The three shared Building dimensions already have their final names.
+Part 8B is complete (2026-10-23): 30 functions for area cells, sectors, block files,
+interior surfaces and block construction. See [Block areas](game/area.md).
+Part 8C remains open. The three shared Building dimensions already have their final names.
 
 Groups 5 and 6 hold the slow lifted functions of the table below (`packobjectpacket`, `packevent`, `logicsimulation_world`, `logicsimulation`): they run each tick, some for each player.
 - `tools/progress.py` counts the hand-written functions.

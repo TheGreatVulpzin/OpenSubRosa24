@@ -1957,7 +1957,7 @@ typedef union BlockList { struct {
     int misc_284[20];                    /* +0x0284 area_createsblocks assigns these block ids in setup order */
     int hill_a[4];                       /* +0x02d4 area_createsblocks assigns these block ids in setup order */
     int hill_b[4];                       /* +0x02e4 area_createsblocks assigns these block ids in setup order */
-    int unused_2f4[4];                   /* +0x02f4 area_createsblocks assigns these block ids in setup order */
+    int unused_2f4[4];                   /* +0x02f4 area_createsblocks leaves these four words unchanged */
     int flat[4];                         /* +0x0304 area_createsblocks assigns these block ids in setup order */
     int rail_low[4];                     /* +0x0314 area_createsblocks assigns these block ids in setup order */
     int rail_low2[4];                    /* +0x0324 area_createsblocks assigns these block ids in setup order */

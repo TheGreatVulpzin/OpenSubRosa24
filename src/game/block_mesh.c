@@ -797,3 +797,302 @@ void area_createinteriorblocks(void)
         block_finish(block, 1, 1, 2);
     }
 }
+
+static void block_ids(int *ids, int count)
+{
+    int i;
+    for (i = 0; i < count; i++)
+        ids[i] = g_blocklist.num_blocks++;
+}
+
+static void block_store(int block, int height)
+{
+    g_area_block[block].size_x = 1;
+    g_area_block[block].size_y = height;
+    g_area_block[block].size_z = 1;
+    area_setupsblock(block);
+}
+
+static void surface_uv_rect(float top, float bottom)
+{
+    float *uv = g_surface_uv;
+    uv[0] = 0; uv[1] = top;
+    uv[6] = 1; uv[7] = top;
+    uv[30] = 1; uv[31] = bottom;
+    uv[24] = 0; uv[25] = bottom;
+}
+
+static void terrain_top(int row, float low, float high)
+{
+    surface_set(0, row == 0 || row == 1 ? low : high, 0,
+                1, row == 1 || row == 2 ? low : high, 0,
+                1, row == 2 || row == 3 ? low : high, 1,
+                0, row == 3 || row == 0 ? low : high, 1);
+}
+
+static void terrain_floor(void)
+{
+    surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 1, 0, .0625f, 1);
+}
+
+static void terrain_texture(const vec3 *points, int flags)
+{
+    /* This builder does not read its UV argument. */
+    addbeziersurfacetexture((const float *)points, (const float *)(uintptr_t)1, 1, 1, 8, 3, flags);
+}
+
+static void terrain_shell(void)
+{
+    vec3 *s = g_surface;
+    vec3 *t = SR_AT(vec3, SR_RVA_SURFACETEMP2);
+    int row;
+    for (row = 0; row < 4; row++) {
+        int a = row * 4, b = a + 3;
+        t[a] = s[b];
+        t[b] = s[a];
+        t[a].y = (float)((double)s[b].y + .6875);
+        t[b].y = (float)((double)s[a].y + .6875);
+    }
+    terrain_texture(t, 0x40000);
+    for (row = 0; row < 4; row++) {
+        int a = row * 4, b = a + 3;
+        t[a] = s[b];
+        t[b] = s[b];
+        t[a].y = 0;
+        t[b].y = 2;
+    }
+    terrain_texture(t, 0x50000);
+    for (row = 0; row < 4; row++) {
+        int a = row * 4, b = a + 3;
+        t[a] = s[a];
+        t[b] = s[a];
+        t[a].y = 2;
+        t[b].y = 0;
+    }
+    terrain_texture(t, 0x50000);
+}
+
+void area_createsblocks(void)
+{
+    const double sixth = .1666666716337204;
+    static const vec3 hills[2][4][2] = {
+        {{{0, .0625f, 1.9375f}, {0, .0625f, .0625f}},
+         {{1, .0625f, 1.9375f}, {2, .0625f, .0625f}},
+         {{2, .3125f, 3}, {4, .3125f, 2}},
+         {{2, .5625f, 4}, {4, .5625f, 4}}},
+        {{{2, .5625f, 0}, {4, .5625f, 0}},
+         {{2, .8125f, 1}, {4, .8125f, 2}},
+         {{1, 1.0625f, 2.0625f}, {2, 1.0625f, 3.9375f}},
+         {{0, 1.0625f, 2.0625f}, {0, 1.0625f, 3.9375f}}}
+    };
+    int *turns[18] = {
+        g_blocklist.corner_a, g_blocklist.corner_b,
+        g_blocklist.ceiling_edge, g_blocklist.ceiling_edge_right,
+        g_blocklist.railing, g_blocklist.railing_left, g_blocklist.railing_right,
+        g_blocklist.stairs_balcony, g_blocklist.stairs, g_blocklist.stairs_floor,
+        g_blocklist.stairs_ceiling, g_blocklist.hill_a, g_blocklist.hill_b,
+        g_blocklist.flat, g_blocklist.rail_low, g_blocklist.rail_low2,
+        g_blocklist.fence, g_blocklist.fence_end
+    };
+    uint32_t tex[6] = {1, 1, 1, 1, 1, 1};
+    int i, j, row, block, result;
+    float h;
+    vec3 *s = g_surface;
+    vec3 *t = SR_AT(vec3, SR_RVA_SURFACETEMP2);
+    g_blocklist.num_blocks = 0;
+    block_ids(g_blocklist.edge, 16);
+    block_ids(g_blocklist.slab, 4);
+    block_ids(g_blocklist.trim, 4);
+    block_ids(g_blocklist.misc_6c, 2);
+    block_ids(&g_blocklist.elevator_block, 1);
+    block_ids(g_blocklist.misc_78, 5);
+    block_ids(g_blocklist.misc_284, 20);
+    block_ids(g_blocklist.misc_8c, 10);
+    block_ids(g_blocklist.slope4, 16);
+    block_ids(g_blocklist.slope6, 24);
+    for (i = 0; i < 24; i++)
+        g_blocklist.ramp6[i] = g_blocklist.num_blocks + i;
+    /* The counter keeps the last slope id until the turn range starts. */
+    g_blocklist.num_blocks += 23;
+    g_blocklist.turn_first = (g_blocklist.num_blocks + 4) & ~3;
+    for (i = 0; i < 18; i++)
+        for (j = 0; j < 4; j++)
+            turns[i][j] = g_blocklist.turn_first + i * 4 + j;
+    g_blocklist.num_blocks = g_blocklist.turn_first + 0x48;
+    os_chdir("data");
+    result = os_chdir("block");
+    listfiles("*.sbl", 0, 0);
+    if (result == 0) {
+        os_chdir("..");
+        os_chdir("..");
+    }
+    for (i = 0; i < g_filelist.list[0].count; i++)
+        block_ids(&g_blocklist.file_blocks[4 * i], 4);
+    for (i = 0; i < 4; i++)
+        g_blocklist.corner_up[i] = g_blocklist.num_blocks + i;
+    g_blocklist.turn_end = g_blocklist.num_blocks;
+    g_blocklist.num_blocks += 4;
+    memset(g_buildingtype.interior_blocks, 0xff, sizeof(g_buildingtype.interior_blocks));
+    area_createinteriorblocks();
+
+    for (row = 0; row < 4; row++) {
+        h = 0;
+        for (j = 0; j < 6; j++) {
+            double top = (double)h + .0625;
+            float low = (float)top, high = (float)(top + sixth);
+            float bottom_high = (float)((double)h + sixth);
+            mesh_reset();
+            terrain_top(row, low, high);
+            surface_uv_rect(1, 0);
+            surface_emit(0);
+            if (row == 0 || row == 2) {
+                surface_set(1, row == 2 ? low : high, 0,
+                            0, row == 0 ? low : high, 0,
+                            0, row == 0 ? h : bottom_high, 0,
+                            1, row == 2 ? h : bottom_high, 0);
+                surface_uv_rect((float)sixth, 0);
+                surface_emit(0);
+                surface_set(0, row == 0 ? low : high, 1,
+                            1, row == 2 ? low : high, 1,
+                            1, row == 2 ? h : bottom_high, 1,
+                            0, row == 0 ? h : bottom_high, 1);
+            } else {
+                surface_set(0, row == 1 ? low : high, 0,
+                            0, row == 3 ? low : high, 1,
+                            0, row == 3 ? h : bottom_high, 1,
+                            0, row == 1 ? h : bottom_high, 0);
+                surface_uv_rect((float)sixth, 0);
+                surface_emit(0);
+                surface_set(1, row == 3 ? low : high, 1,
+                            1, row == 1 ? low : high, 0,
+                            1, row == 1 ? h : bottom_high, 0,
+                            1, row == 3 ? h : bottom_high, 1);
+            }
+            surface_uv_rect((float)sixth, 0);
+            surface_emit(0);
+            block_store(g_blocklist.ramp6[row * 6 + j], top + sixth >= 1.0 ? 2 : 1);
+            h = (float)((double)h + sixth);
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        int count = i == 0 ? 6 : 4;
+        int *ids = i == 0 ? g_blocklist.slope6 : g_blocklist.slope4;
+        double step = i == 0 ? sixth : .25;
+        for (row = 0; row < 4; row++) {
+            h = 0;
+            for (j = 0; j < count; j++) {
+                float high = (float)((double)h + step);
+                mesh_reset();
+                terrain_top(row, h, high);
+                surface_uv_rect(i == 0 ? 0.0f : 1.0f, i == 0 ? 1.0f : 0.0f);
+                surface_emit(0);
+                block_store(ids[row * count + j], 1);
+                h = (float)((double)h + step);
+            }
+        }
+    }
+    mesh_reset();
+    for (row = 0; row < 4; row++) {
+        float z = row == 0 ? 0 : row == 1 ? .25f : row == 2 ? .75f : 1;
+        float y = row < 2 ? 0 : .0625f;
+        s[row * 4] = (vec3){0, y, z};
+        s[row * 4 + 3] = (vec3){1, y, z};
+    }
+    surface_uv_rect(1, 0);
+    addbeziersurface((const float *)s, g_surface_uv, 1, 1, 8, 3, 0x30000);
+    block_finish(g_blocklist.slab[0], 1, 1, 1);
+    for (i = 0; i < 16; i++) {
+        mesh_reset();
+        terrain_floor();
+        surface_uv_rect(1, 0);
+        surface_emit(0);
+        if (i & 1) {
+            surface_set(1, .0625f, 0, 0, .0625f, 0, 0, 0, 0, 1, 0, 0);
+            surface_uv_rect(.0625f, 0);
+            surface_emit(0);
+        }
+        if (i & 8) {
+            surface_set(0, .0625f, 0, 0, .0625f, 1, 0, 0, 1, 0, 0, 0);
+            surface_uv_rect(.0625f, 0);
+            surface_emit(0);
+        }
+        if (i & 4) {
+            surface_set(0, .0625f, 1, 1, .0625f, 1, 1, 0, 1, 0, 0, 1);
+            surface_uv_rect(.0625f, 0);
+            surface_emit(0);
+        }
+        if (i & 2) {
+            surface_set(1, .0625f, 1, 1, .0625f, 0, 1, 0, 0, 1, 0, 1);
+            surface_uv_rect(.0625f, 0);
+            surface_emit(0);
+        }
+        block_store(g_blocklist.edge[i], 1);
+    }
+    for (i = 0; i < 2; i++) {
+        mesh_reset();
+        terrain_floor();
+        surface_emit(0x40000);
+        surface_set(0, .875f, 1, 1, .875f, 1, 1, .875f, 0, 0, .875f, 0);
+        surface_emit(0x30001);
+        surface_set(1, 1, 0, 0, 1, 0, 0, .875f, 0, 1, .875f, 0);
+        surface_emit(0x6000b);
+        if (i == 0) {
+            surface_set(1, 1, 0, .9375f, 1, 0, .9375f, 0, 0, 1, 0, 0);
+        } else {
+            surface_set(.0625f, 1, 0, 0, 1, 0, 0, 0, 0, .0625f, 0, 0);
+        }
+        surface_emit(0x6000b);
+        area_block_addcorner(i == 0 ? 1 : 0, .0625f, .0625f);
+        block_finish(i == 0 ? g_blocklist.corner_a[0] : g_blocklist.corner_b[0], 1, 1, 1);
+    }
+    for (i = 0; i < 4; i++) {
+        mesh_reset();
+        surface_set(0, i == 0 || i == 3 ? 1.0f : 0.0f, 0,
+                    1, i == 0 || i == 1 ? 1.0f : 0.0f, 0,
+                    1, i == 1 || i == 2 ? 1.0f : 0.0f, 1,
+                    0, i == 2 || i == 3 ? 1.0f : 0.0f, 1);
+        surface_uv_rect(1, 0);
+        surface_emit(0);
+        block_store(g_blocklist.corner_up[i], 1);
+    }
+    for (i = 0; i < 2; i++) {
+        mesh_reset();
+        for (row = 0; row < 4; row++) {
+            s[row * 4] = hills[i][row][0];
+            s[row * 4 + 3] = hills[i][row][1];
+        }
+        terrain_texture(s, 0x30000);
+        if (i == 1) {
+            for (row = 0; row < 4; row++) {
+                int a = row * 4, b = a + 3;
+                t[a] = s[a];
+                t[b] = s[b];
+                t[a].y = (float)((double)s[a].y - 1.0);
+                t[b].y = (float)((double)s[b].y - 1.0);
+            }
+            terrain_texture(t, 0x30000);
+        }
+        terrain_shell();
+        block_finish(i == 0 ? g_blocklist.hill_a[0] : g_blocklist.hill_b[0], 4, 2, 4);
+    }
+    for (i = 0; i < 5; i++) {
+        mesh_reset();
+        if (i < 3) {
+            terrain_floor();
+            surface_uv_rect(1, 0);
+            surface_emit(0);
+        }
+        if (i == 1 || i == 2) {
+            area_block_addbeam(0, 0, 0, 0, 1, .3125f, .0625f, 0x2a, tex);
+        } else if (i == 3) {
+            area_block_addbeam(0, 0, 0, 0, 1, .0625f, 1, 0x22, tex);
+            area_block_addbeam(0, 0, 0, 0, 1, .3125f, .0625f, 0x2a, tex);
+        } else if (i == 4) {
+            area_block_addbeam(0, 0, 0, 0, 1, .0625f, 1, 0x32, tex);
+            area_block_addbeam(0, 0, 0, 0, .0625f, .3125f, .0625f, 0x32, tex);
+        }
+        block = i == 0 ? g_blocklist.flat[0] : i == 1 ? g_blocklist.rail_low[0] :
+                i == 2 ? g_blocklist.rail_low2[0] : i == 3 ? g_blocklist.fence[0] : g_blocklist.fence_end[0];
+        block_finish(block, 1, 1, 1);
+    }
+}

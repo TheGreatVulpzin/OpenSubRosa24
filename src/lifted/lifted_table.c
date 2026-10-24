@@ -276,7 +276,7 @@ void createvehicle(void);
 void calculateplayervoice(void);
 void ai_assessthreats(void);
 void area_createblock(void);
-void lf_3e070(void);
+void area_createsblocks(void);
 void sphereintersectarea(void);
 void circleintersectarea(void);
 void bondsimulation2(void);
@@ -594,7 +594,7 @@ const LfEntry lf_table[] = {
     { "calculateplayervoice", 0x3cfe0, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_assessthreats", 0x3d500, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_createblock", 0x3da50, (void *)area_createblock, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
-    { "area_createsblocks", 0x3e070, (void *)lf_3e070, 0, LF_RET_VOID, 4, "", 1 },
+    { "area_createsblocks", 0x3e070, (void *)area_createsblocks, 0, LF_RET_VOID, 4, "", 1 },
     { "sphereintersectarea", 0x40aa0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "circleintersectarea", 0x41550, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },
     { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
