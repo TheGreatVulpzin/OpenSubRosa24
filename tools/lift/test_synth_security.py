@@ -89,10 +89,16 @@ class SecurityTests(unittest.TestCase):
                 if name.startswith('menu6_'):
                     self.assertEqual(cc.rd(net.PLAYERS + 0xd4), 6)
                     self.assertEqual(cc.rd(net.PLAYERS + 0x64), 0)
-                    self.assertIn(cc.rd(net.PLAYERS + net.P_ACTIONS + 8), (0, -1, -100000))
+                    self.assertEqual(cc.rd(net.PLAYERS + net.P_ACTIONS + 8), security.MENU6_VALUES[name])
                 if name == 'bank_items_full':
                     self.assertTrue(all(cc.rd(net.ITEMS + i * net.ITEM_SIZE) == 1 for i in range(1024)))
                     self.assertEqual(cc.rd(net.HUMANS + 0x291c), 0)
+                if name == 'wallet_items_full':
+                    self.assertEqual(cc.rd(net.ITEMS + 0xc), 16)
+                    self.assertEqual(cc.rd(net.HUMANS + 0x291c), 1)
+                    self.assertEqual(cc.rd(net.HUMANS + 0x2920), 0)
+                if name in {'phone_items_full', 'dealer_items_full', 'market_items_full'}:
+                    self.assertTrue(all(cc.rd(net.ITEMS + i * net.ITEM_SIZE + 0xc) == 0 for i in range(1024)))
                 if name.startswith('input_actions_zero_'):
                     self.assertEqual([s.split()[1] for s in args if s.startswith('R ')], ['33650', '55700'])
                 if name.startswith('kick_'):

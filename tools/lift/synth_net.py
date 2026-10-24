@@ -835,8 +835,10 @@ def main():
             if name.startswith('garbage_') and (not want or name not in want):
                 continue
             if name in {'input_actions_high', 'input_voice_big', 'input_player_minus1', 'join_takeover', 'join_short',
-                        'phone_nohuman'}:
+                        'phone_nohuman', 'message'}:
                 if want and name in want:
+                    if name == 'message':
+                        raise SystemExit('message: use --invalid with message_short or message_max')
                     raise SystemExit(name + ': use --invalid for the security expectation')
                 continue
             cc = Case(base, ctx)

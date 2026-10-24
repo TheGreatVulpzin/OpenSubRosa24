@@ -148,7 +148,7 @@ def cases():
             s.write(CITY + 0x2f9dc, 'i', shop)
             s.write(CITY + 0x302a4, 'i', 2)
             s.write(CITY + 0x302a8, 'iiiiii', 0, 100, 0, 1, 100, 1)
-            values = MENU_VALUES
+            values = range(1, 17) if menu_id == 6 else MENU_VALUES
             for i, value in enumerate(values, first):
                 p = PLAYER + i * PS
                 s.write(p, 'i', 1)

@@ -26,10 +26,15 @@ PACKET_CASES = ('input_actions_high', 'input_voice_big', 'input_player_minus1',
                 'input_actions_wrap', 'join_takeover', 'join_short', 'input_cut_trailer', 'input_cut_all',
                 'garbage_input_cut_voice', 'garbage_input_cut_actions', 'garbage_input_cut_head')
 STATE_CASES = ('input_actions_zero_64', 'input_actions_zero_255', 'menu6_zero', 'menu6_minus1',
-               'menu6_minus100000', 'bank_items_full', 'phone_nohuman', 'kick_last', 'kick_full',
+               'menu6_minus100000', 'menu6_high', 'menu6_intmin', 'menu6_intmax',
+               'bank_items_full', 'wallet_items_full', 'dealer_items_full', 'market_items_full',
+               'phone_items_full', 'phone_nohuman', 'message_short', 'message_max', 'chat_high_bytes',
+               'kick_last', 'kick_full',
                'join_same_account_256', 'join_full_new', 'read_short_bits', 'read_short_bytes')
 MARKET = 0x17179600
 KICK_CAPACITY = (net.NUMKICKED - net.KICKED) // 4
+MENU6_VALUES = {'menu6_zero': 0, 'menu6_minus1': -1, 'menu6_minus100000': -100000,
+                'menu6_high': 17, 'menu6_intmin': -2147483648, 'menu6_intmax': 2147483647}
 
 
 class StrictReader(net.sp.PacketReader):
@@ -210,10 +215,86 @@ def state_case(cc, name):
         checks += ['%x 4 %s' % (player + off, struct.pack('<i', start & 63).hex()) for off in (0xe4, 0xe8)]
         unchanged(player + net.P_ACTIONS, 64 * 0x54)
         return args, checks
+    if name in {'phone_items_full', 'wallet_items_full', 'dealer_items_full', 'market_items_full'}:
+        cc.player(p, net.P_HUMAN, h)
+        cc.player(p, net.P_BLOCK, 0)
+        for i in range(1024):
+            cc.wr(net.ITEMS + i * net.ITEM_SIZE, 1)
+            cc.wr(net.ITEMS + i * net.ITEM_SIZE + 0xc, 0)
+        human = net.HUMANS + h * net.HUMAN_SIZE
+        for slot in range(8):
+            cc.wr(human + 0x291c + slot * 0x24, 0)
+        if name == 'phone_items_full':
+            args = net.message_cases(cc)['phone'](cc)
+        else:
+            menu = 10 if name == 'dealer_items_full' else 6
+            cc.player(p, 0x64, 0)
+            cc.player(p, 0xd4, menu)
+            cc.player(p, net.P_MONEY, 10000)
+            cc.player(p, net.P_NUMACT, 1)
+            cc.player(p, 0xe8, 0)
+            cc.s.write(player + net.P_ACTIONS, 'iii', 0, menu, 1)
+            if name == 'wallet_items_full':
+                cc.s.write(player + net.P_ACTIONS, 'iii', 2, 0, 2)
+                cc.s.write(human + 0x291c, 'ii', 1, 0)
+                cc.wr(net.ITEMS + 0xc, 16)
+                cc.s.write(net.ITEMS + 0x134, 'iii', 0, 1, 26)
+            else:
+                cc.wr(net.SERVER, 1)
+                cc.wr(0x5592600, 0)  # A car slot remains free.
+                cc.s.write(human + 0x48, 'fff', 0, 0, 0)
+                if name == 'dealer_items_full':
+                    city = 0xe299220
+                    cc.player(p, 0xd8, 0)
+                    cc.player(p, 0x50, 0)
+                    cc.wr(city + 0x2f9dc, 2)
+                    cc.wr(city + 0x302a4, 1)
+                    cc.s.write(city + 0x302a8, 'iii', 0, 100, 0)
+                    cc.wr(city + 0x30368, 0)
+                    cc.s.write(city + 0x3036c, 'fff', 0, 0, 0)
+                    checks.append('%x 4 01000000' % (player + 0x50))
+                else:
+                    cc.s.write(net.GAME + 0x58, 'fff', -100, -100, -100)
+                    cc.s.write(net.GAME + 0x64, 'fff', 100, 100, 100)
+                    cc.wr(net.GAME + 0x4d0, 1)
+                    cc.s.write(net.GAME + 0x4d4, 'i12f', 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+                    cc.wr(MARKET + 0x140, 1)
+                    cc.s.write(MARKET + 0x144, 'iii', 0, 0, 100)
+                    checks.append('%x 4 00000000' % (MARKET + 0x14c))
+            args = ['R 55700 V:%x' % p]
+            checks.append('%x 4 01000000' % (player + 0xe8))
+        for offset in (0xfc, 0x114, 0x138, 0x13c):
+            cc.wr(net.ITEMS - net.ITEM_SIZE + offset, 0x12345678)
+        unchanged(net.ITEMS - net.ITEM_SIZE, net.ITEM_SIZE - 0x20)
+        unchanged(net.ITEMS, net.ITEM_SIZE * 1024)
+        unchanged(human + 0x291c, 8 * 0x24)
+        return args, checks
+    if name in {'message_short', 'message_max', 'chat_high_bytes'}:
+        cc.player(p, net.P_IS_ADMIN, 1)
+        cc.player(p, net.P_BLOCK, 0)
+        payload = bytes(range(128, 256)) if name == 'chat_high_bytes' else b'x' * (54 if name == 'message_max' else 1)
+        if name == 'chat_high_bytes':
+            args = []
+            for k, start in enumerate(range(0, len(payload), 63)):
+                text = payload[start:start + 63]
+                address = cc.text(p, k, text)
+                args.append('R 49940 V:%x M:%x' % (p, address))
+                unchanged(address, 64)
+            checks.append('61848 %x %s' % (len(text) + 1, (text + b'\0').hex()))
+            return args, checks
+        address = cc.text(p, 0, b'/message ' + payload)
+        cc.wr(net.SERVER, 1)
+        index = cc.rd(0xf437318)
+        event = net.EVENTS + index * net.EVENT_SIZE
+        checks.append('61848 %x %s' % (len(payload) + 1, (payload + b'\0').hex()))
+        checks.append('%x 4 %s' % (0xf437318, struct.pack('<i', (index + 1) & 0xffff).hex()))
+        checks.append('%x 4 02000000' % event)
+        checks.append('%x 10 %s' % (event + 0x20, struct.pack('<4i', len(payload), 0, -1, 0).hex()))
+        checks.append('%x %x %s' % (event + 0x40, len(payload) + 1, (payload + b'\0').hex()))
+        return ['R 49940 V:%x M:%x' % (p, address)], checks
     if name.startswith('menu6_') or name == 'bank_items_full':
         menu = 12 if name == 'bank_items_full' else 6
-        value = {'menu6_zero': 0, 'menu6_minus1': -1, 'menu6_minus100000': -100000,
-                 'bank_items_full': 3}[name]
+        value = 3 if name == 'bank_items_full' else MENU6_VALUES[name]
         cc.player(p, net.P_HUMAN, h)
         cc.player(p, 0x64, 0)  # team
         cc.player(p, 0xd4, menu)
@@ -231,17 +312,24 @@ def state_case(cc, name):
             unchanged(net.ITEMS, net.ITEM_SIZE * 1024)
             unchanged(net.HUMANS + h * net.HUMAN_SIZE + 0x291c, 8 * 0x24)
         else:
-            # A readable row before the table must not produce a purchase.
-            row = MARKET + 0x144 + (value - 1) * 12
-            cc.s.write(row, 'iii', 0, 0, 1)
+            # A row outside the table must not cause a purchase.
+            if -100000 <= value <= 17:
+                row = MARKET + 0x144 + (value - 1) * 12
+                cc.s.write(row, 'iii', 0, 0, 1)
             cc.wr(MARKET + 0x140, 16)
-            unchanged(row, 12)
+            if -100000 <= value <= 17:
+                unchanged(row, 12)
             unchanged(MARKET, 0x204)
         unchanged(player + net.P_MONEY, 4)
         unchanged(player + 0xd4, 4)
         return ['R 55700 V:%x' % p], checks
     if name == 'phone_nohuman':
         args = net.message_cases(cc)[name](cc)
+        cc.wr(net.ITEMS, 1)
+        cc.wr(net.ITEMS + 0xc, 23)
+        cc.wr(net.ITEMS + 0x14, 100)
+        cc.wr(net.ITEMS + 0xf8, -1)
+        cc.wr(net.ITEMS + 0xfc, 0x1a0a)
         unchanged(net.ITEMS, 1024 * net.ITEM_SIZE)
         unchanged(0xf437318, 4)  # event count
         return args, checks
@@ -270,8 +358,13 @@ def run_case(d, checks, timeout):
     if checks:
         env['HARNESS_CLEAN_CHECKS'] = str(d / 'checks.txt')
         if d.name.startswith('menu6_'):
-            value = {'menu6_zero': 0, 'menu6_minus1': -1, 'menu6_minus100000': -100000}[d.name]
-            env['HARNESS_FORBID_READ'] = '%x' % (MARKET + 0x144 + (value - 1) * 12)
+            value = MENU6_VALUES[d.name]
+            if -100000 <= value <= 17:
+                env['HARNESS_FORBID_READ'] = '%x' % (MARKET + 0x144 + (value - 1) * 12)
+        elif d.name.startswith('message_'):
+            line = (d / 'sv_args.txt').read_text().splitlines()[0]
+            address = int(line.split('M:')[1], 16)
+            env['HARNESS_FORBID_READ'] = '%x' % (address + 64)
     else:
         env['HARNESS_INVALID'] = '1'
     cmd = [str(net.ROOT / 'build/hook/harness.exe'), str(net.ROOT / 'build/hook/024d_fixed.exe'),

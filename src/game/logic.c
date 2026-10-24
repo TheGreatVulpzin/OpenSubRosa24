@@ -137,8 +137,10 @@ void logic_cardealer_buy(int player, int row)
     car = createobject(entry[0], &pos, NULL, rot, entry[2]);
     p->money -= entry[1];
     key = createitem(24, &pos, NULL, rot);
-    sr_items[key].vehicle_id = car;
-    put_item(key, p->human_id, 2, 6);
+    if (key != -1) {
+        sr_items[key].vehicle_id = car;
+        put_item(key, p->human_id, 2, 6);
+    }
     ++p->num_cars;
     createevent_updateplayer(player);
     if (sr_game.gametype == 3)
@@ -268,10 +270,12 @@ static void item_action(int human, PlayerAction *action)
             int bill = (it->bills_mask >> ((selected * 3) & 31)) & 7;
             if (h->inventory[other].count == 0) {
                 int made = createitem(16, &it->pos, &it->vel, it->rot);
-                sr_items[made].bills_mask = bill;
-                sr_items[made].last_bill = 0;
-                linkitem(made, UINT32_MAX, human, other);
-                item_removebill(item, selected);
+                if (made != -1) {
+                    sr_items[made].bills_mask = bill;
+                    sr_items[made].last_bill = 0;
+                    linkitem(made, UINT32_MAX, human, other);
+                    item_removebill(item, selected);
+                }
             } else {
                 int held = h->inventory[other].items[0];
                 if (sr_items[held].type == 16 && item_addbill(held, 0, bill))
@@ -306,11 +310,13 @@ static void bank_action(int player, int value, int own)
                 int item;
                 resetorientation(rot);
                 item = createitem(16, &h->pos, NULL, rot);
-                sr_items[item].last_bill = 0;
-                sr_items[item].bills_mask = value;
-                linkitem(item, UINT32_MAX, p->human_id, 0);
-                *balance -= g_dollarbillvalue[value];
-                success = 1;
+                if (item != -1) {
+                    sr_items[item].last_bill = 0;
+                    sr_items[item].bills_mask = value;
+                    linkitem(item, UINT32_MAX, p->human_id, 0);
+                    *balance -= g_dollarbillvalue[value];
+                    success = 1;
+                }
             } else {
                 int item = h->inventory[0].items[0];
                 if (sr_items[item].type == 16 && item_addbill(item, 0, value)) {
@@ -461,24 +467,28 @@ void logic_playeractions(int player)
                     if (value == 16)
                         p->menu = 3;
                 } else if (id == 6) {
-                    int *row = g_market.car_rows + (value - 1) * 3;
-                    if (value - 1 < g_market.car_base && row[2] > 0 && row[2] <= p->money) {
-                        int car = row[0], color = row[1], price = row[2];
-                        int inside = pointinsidebase(&h->pos.x, p->team, 0);
-                        int object;
-                        if (inside && car != -1 && (object = logic_createcar(car, p->team, color)) != -1) {
-                            vec3 rot[3];
-                            int key;
-                            p->menu = 3;
-                            resetorientation(rot);
-                            key = createitem(24, &h->pos, NULL, rot);
-                            sr_items[key].vehicle_id = object;
-                            put_item(key, human, 2, 5);
-                            p->money -= price;
-                            if (sr_game.gametype == 3)
-                                createevent_updateplayer_finance(player);
-                            row[2] = 0;
-                            createevent_updatecarmarket(value - 1);
+                    if (value >= 1 && value - 1 < g_market.car_base) {
+                        int *row = g_market.car_rows + (value - 1) * 3;
+                        if (row[2] > 0 && row[2] <= p->money) {
+                            int car = row[0], color = row[1], price = row[2];
+                            int inside = pointinsidebase(&h->pos.x, p->team, 0);
+                            int object;
+                            if (inside && car != -1 && (object = logic_createcar(car, p->team, color)) != -1) {
+                                vec3 rot[3];
+                                int key;
+                                p->menu = 3;
+                                resetorientation(rot);
+                                key = createitem(24, &h->pos, NULL, rot);
+                                if (key != -1) {
+                                    sr_items[key].vehicle_id = object;
+                                    put_item(key, human, 2, 5);
+                                }
+                                p->money -= price;
+                                if (sr_game.gametype == 3)
+                                    createevent_updateplayer_finance(player);
+                                row[2] = 0;
+                                createevent_updatecarmarket(value - 1);
+                            }
                         }
                     }
                     if (value == 16)

@@ -67,8 +67,10 @@ static void list_connections(int first, int last)
 static void give_phone(int player)
 {
     int i;
-    int human;
+    int human = sr_players[player].human_id;
     uint32_t it;
+    if (human == -1)
+        return;
     for (i = 0; i < SR_MAX_ITEM; i++) {
         Item *item = &sr_items[i];
         if (item->active != 0 && item->type == 0x17 && item->phone_id == PHONE_ID) {
@@ -85,9 +87,9 @@ static void give_phone(int player)
     human = sr_players[player].human_id;
     it = createitem(0x17, &sr_humans[human].bones[0].pos, NULL, sr_humans[human].bones[0].rot);
     human = sr_players[player].human_id;
-    sr_items[it].phone_id = PHONE_ID;
-    if (it >= 0x400)
+    if (it >= SR_MAX_ITEM)
         return;
+    sr_items[it].phone_id = PHONE_ID;
     if (human == -1) {
         if (sr_items[it].parent_item != -1) {
             item_removeitemlink(it, (uint32_t)sr_items[it].parent_item);
@@ -131,8 +133,7 @@ static void make_heli(int human)
     createobject(0xb, &pos, NULL, mat, 1);
 }
 
-/* /kick NAME: kick the last connection whose player has this name, and add its ip to the
- * kick list (the list has no size limit). */
+/* /kick NAME: kick the last connection with this name if the kick list has space. */
 static void kick_player(const char *name)
 {
     int i, found = -1;
@@ -141,7 +142,7 @@ static void kick_player(const char *name)
         if (pid != -1 && strcmp(name, sr_players[pid].name) == 0)
             found = i;
     }
-    if (found != -1) {
+    if (found != -1 && sr_numofkicked < 41368) {
         sr_kickedip[sr_numofkicked] = sr_connections[found].ip;
         sr_numofkicked++;
         sr_connections[found].idle_ticks = 0x4b0;
@@ -231,7 +232,9 @@ static void admin_commands(int player, const char *text, int n)
     if (strncmp(text, "/kick ", 6) == 0)
         kick_player(text + 6);
     if (strncmp(text, "/message ", 9) == 0) {
-        memcpy(msgbuf, text + 9, 64); /* reads past the text */
+        size_t length = strnlen(text + 9, 64 - 9);
+        memcpy(msgbuf, text + 9, length);
+        msgbuf[length] = '\0';
         sr_createevent_message(0, msgbuf, -1, 0);
     }
     if (strncmp(text, "/clearkick", 10) == 0)
@@ -253,7 +256,7 @@ int server_playermessage(int player, char *text)
     if (len > 63)
         len = 63;
     for (n = 0; n < len; n++)
-        msgbuf[n] = (char)tolower(text[n]);
+        msgbuf[n] = (char)tolower((unsigned char)text[n]);
     msgbuf[len] = '\0';
     p->orig_text[0] = '\0';
     total = (int)strlen(msgbuf) - 5;

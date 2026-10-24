@@ -39,6 +39,13 @@ These change only what happens with invalid client input. The recordings have on
 | A4: ignore input from a connection with a negative `player_id` | `handle_input`, `src/net/server.c` | Done. Covers the old connection after an account takeover. |
 | A5: cap the connection pool at 256 | `handle_join`, `add_connection`, `src/net/server.c` | Done. At capacity, a new account cannot join. A connected account reuses its current slot. |
 | A6: discard short joins and inputs before state changes | `serverrecv`, `src/net/packet.c` | Done. Includes input trailers. A short read stops all later reads until the next packet. |
+| B1: check the phone item index before each write | `give_phone`, `src/net/commands.c` | Done. A full item pool cannot cause a write outside the pool. |
+| B2: ignore `/phone` when the admin has no human | `give_phone`, `src/net/commands.c` | Done. The command returns before it removes phones or reads human data. |
+| B3: stop the kick list at 41368 entries | `kick_player`, `src/net/commands.c` | Done. The last free entry works. A full list ignores the command. |
+| B4: bound the `/message` copy with `strnlen` and add a null byte | `admin_commands`, `src/net/commands.c` | Done. The copy reads at most the 55 bytes left in the chat buffer. |
+| B6: convert each chat byte to `unsigned char` before `tolower` | `server_playermessage`, `src/net/commands.c` | Done. Bytes 128 through 255 stay within the input range of `tolower`. |
+| C1: check both bounds of menu 6 before the table access | `logic_playeractions`, `src/game/logic.c` | Done. Ignore values below 1 or with an index at or above `car_base`. The value 16 still closes the menu. |
+| C2: check item creation in the dealer, wallet, bank, and car market | `logic_cardealer_buy`, `item_action`, `bank_action`, `logic_playeractions`, `src/game/logic.c` | Done. If the item pool is full, cash transfers keep their balances and bills. Car purchases still complete but skip the key write and link when no item slot is free. |
 | Item count of the object part (8 bits, no cap) | `serverrecv` | Open |
 | Server name copy (`strcpy`, longer than the 32 bytes sent) | | Open |
 | Human health (`health + 10` in 7 bits, wraps above 117) | | Open |
@@ -61,8 +68,7 @@ These change only what happens with invalid client input. The recordings have on
 Each one changes behavior only for invalid input from a client or an admin. The list with the reason of each is in `docs/protocol.md`, section 12, item 15.
 
 - S1 checks are complete. See A1 through A6 in the security table above.
-- Test `it < 0x400` before the write in `/phone` (`src/net/commands.c`).
-- Stop the kick list at 41368 entries.
+- S2 and S3 checks are complete. See B1 through B4, B6, C1, and C2 in the security table above.
 - The server checks also apply to the standalone server. `hook/netguard.c` stays unchanged.
 
 

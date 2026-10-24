@@ -105,7 +105,7 @@ for name in "${names[@]}"; do
         done
         rm -rf "$work"
         ;;
-    sys|level|buildings|area)
+    sys|level|buildings|area|logic)
         python -I "tools/lift/synth_$name.py" --run "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         ;;
     *)
