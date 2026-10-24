@@ -23,16 +23,13 @@ void *sr_fn(uintptr_t va);
 #define genrand_int32       ((uint32_t(__cdecl *)(void))(sr_base + 0xae50))
 #endif
 
-/* Original: 024d RVA 0xe2e0 (loadaccountsserver in the 0.24c ELF).
- *
- * Read the accounts from user/server.srk. The key gets a new random value first. It stays
+/* Read the accounts from user/server.srk. The key gets a new random value first. It stays
  * when the file is missing. Versions 1 to 3 are read, other versions are ignored. Version 1
  * has no look: the game rolls it with rand(). Version 2 rolls it again when it is all zero.
  *
- * The count comes from the file and is not checked against the 65536 accounts, as in the
- * original. Calls go to the game CRT (its FILE objects and its rand() state) and to the fread
- * pointer of the game. The original reads an uninitialized version when the file is empty.
- * This version reads 0 and ignores the file. */
+ * The count comes from the file and is not checked against the 65536 accounts. Calls go to
+ * the game CRT (its FILE objects and its rand() state) and to the fread pointer of the game.
+ * An empty file leaves the version at 0, so the file is ignored. */
 void __cdecl sr_loadaccountsserver(void)
 {
     void *(__cdecl *fopen_)(const char *, const char *);

@@ -4,8 +4,7 @@
 #include "sr_runtime.h"
 #include "sr_server.h"
 
-/* Original: 024d RVA 0xa580 (fixplayername in the 0.24c ELF).
- * Clean the player name: replace '/' with a space, remove spaces at both ends,
+/* Clean the player name: replace '/' with a space, remove spaces at both ends,
  * and use "Noname" if the name is empty. The name has 32 bytes (31 + '\0'). */
 void __cdecl sr_fixplayername(int id)
 {

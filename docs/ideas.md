@@ -17,6 +17,7 @@ Columns: **Product** is OpenSubRosa, SubVulpes or both. **Where** is the functio
 | --- | --- | --- | --- |
 | Dynamic pools with configurable limits (players, objects, items) | OpenSubRosa | the global arrays of `.data` (606 MB) | Default limits = the original limits. Also necessary for WASM. |
 | Profile and optimize the tick (tick rate, packet sending, collisions) | OpenSubRosa | `servercycle`, `serversend`, `bondsimulation2` | `hook/` has a per-hook profiler (`subvulpes.ini profile=1`). |
+| Speed of the level build: `buildcityinterection` and `buildcitystreet` measured 1.06 to 1.07 against the original in three full runs, and `createlevel` 1.23 in two calls. They run at map load only | OpenSubRosa | `src/game/city.c`, `src/game/level.c` | Measure again with `bench.py --all-calls`. The cause is not known. |
 | Linux x64 and macOS servers | OpenSubRosa | `src/platform/` | SSE in place of x87 changes the float bits. Decide the accepted precision first. |
 | Own server list if the Cryptic Sea master does not answer | both | `getmasterserverip` | The master is `crypticsea.com/anewzero/serverinfo.php`. |
 | Native plugin API (C, loaded from a DLL or `.so`) | SubVulpes | | Replaces the memory patches of the server manager. Plan with Lua and WASM hosts, hash check and game modes: [plugins.md](plugins.md). |
@@ -36,6 +37,8 @@ These change only what happens with invalid client input. The recordings have on
 | Item count of the object part (8 bits, no cap) | `serverrecv` | Open |
 | Server name copy (`strcpy`, longer than the 32 bytes sent) | | Open |
 | Human health (`health + 10` in 7 bits, wraps above 117) | | Open |
+| Line count of `readme.txt`: a full file writes past the line array (1033 lines of 256 bytes in an array of 1024) | `newspaper_load` | Open. The input is a server file, not client input. |
+| Material and block counts of a `.sbb` file have no limit. `building_load` writes past the name arrays (256 of 64 bytes). `building_setupbuild` indexes `mat_map[256]` and `block_map[1024]` on the stack | `building_load`, `building_setupbuild` | Open. The input is a data file. It matters when packages can bring buildings. |
 
 ## Client
 

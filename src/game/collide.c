@@ -274,7 +274,7 @@ int lineintersectobject(int obj, float *from, float *to, int with_wheels)
     return g_intersect.fraction < 1.0 ? 1 : 0;
 }
 
-/* The landscape (the global "landscape" of the Linux 0.24c): an origin, then a grid of
+/* The landscape: an origin, then a grid of
  * 2049 x 2049 heights, 8 units apart. Each cell is two triangles. */
 #define g_land_origin (*SR_AT(vec3, 0x9c1d8c0))
 #define g_land_height SR_AT(float, 0x9c1d8cc)

@@ -9,9 +9,7 @@
 #include "sr_runtime.h"
 #include "sr_server.h"
 
-/* Original: 024d RVA 0x6260 (createevent_message in the 0.24c ELF).
- *
- * Create a text message event (type 2).
+/* Create a text message event (type 2).
  *   kind   = message kind (goes to Event.attach_type)
  *   text   = text; the game stores at most 63 characters
  *   target = target (-1 = everybody); goes to Event.attach_id
@@ -47,8 +45,7 @@ void __cdecl sr_createevent_message(int kind, const char *text, int target, int 
     sr_numofevents = (index + 1) & 0xffff;
 }
 
-/* Original: 024d RVA 0x6660 (createevent_updatedoor in the 0.24c ELF).
- * Event type 10: change the state of a door. */
+/* Event type 10: change the state of a door. */
 void __cdecl sr_createevent_updatedoor(int a, int b)
 {
     uint32_t index;
@@ -73,8 +70,7 @@ static int mission_field(int team, int mission, int offset)
     return *SR_AT(int, SR_RVA_GAME + 0xd0 + (uint32_t)team * 0x117c + (uint32_t)mission * 0x40 + (uint32_t)offset);
 }
 
-/* Original: 024d RVA 0x6760 (createevent_updatemission in the 0.24c ELF).
- * Event type 12: pack the state of one team mission into 4 integers. */
+/* Event type 12: pack the state of one team mission into 4 integers. */
 void __cdecl sr_createevent_updatemission(int team, int mission)
 {
     uint32_t index;
@@ -87,7 +83,7 @@ void __cdecl sr_createevent_updatemission(int team, int mission)
     ev = &sr_events[index];
     ev->type = 12;
     ev->tick = sr_game.ticks;
-    /* Unsigned math: the original multiplies and adds with 32-bit wrap-around. */
+    /* Unsigned math: the products and the sum wrap around at 32 bits. */
     ev->param = (int)((uint32_t)mission_field(team, mission, 0x20) * 0x10000u + (uint32_t)mission * 2u +
                       (uint32_t)mission_field(team, mission, 0x00) + (uint32_t)team * 0x10u +
                       (uint32_t)mission_field(team, mission, 0x08) * 0x100u);
