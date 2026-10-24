@@ -84,6 +84,35 @@ The first block at each destination wins.
 Textures and walls turn with the grid. Guard directions advance from 4 to 1.
 Area boxes exchange their horizontal dimensions and keep their height.
 
+## Placement in an area
+
+`building_buildfloorplan` removes occupied outer cells, creates the floor slab, and places the outer blocks and their colors.
+It then places the interior blocks. An inner word of `0xffff` builds or finds an interior from its wall code.
+The code keeps overlapping file bits. It also adds corners from adjacent walls and doors.
+Neighbor reads can cross the grid boundary into the preceding row, floor or bytes before the grid.
+An existing interior block prevents replacement by a generated block.
+
+Team types 0 through 4 set two door cells, base bounds and safe bounds.
+They append eight car spots after two orientation turns.
+The position rounds to float after each offset and each advance to the next spot.
+Guard spots stop at 64 entries. The last prize cell sets the prize position.
+The nearest intersection supplies two street road ids. The first equal distance wins.
+With no intersection, the function still reads road ids from entry 0.
+
+Types 10 through 15 add a city building record. Other types keep the current record count.
+
+| Type | Building kind | Extra state | Return value |
+| --- | --- | --- | --- |
+| 10 | 3 | None | z + size_z |
+| 11 | 2 | Car spawn and empty shop | build_size_z - 6 + z |
+| 12 | 5 | Empty shop | Record byte offset |
+| 13 | 4 | Two shop rows when the server is active | Shop count address when active, else record byte offset |
+| 14 | 7 | Empty shop | Record byte offset |
+| 15 | 6 | Bounds from area 0, shop count stays | Area 0 far z |
+
+Each building record has a stride of 0x9dc bytes.
+The return values preserve the bits that callers receive, including the address for type 13.
+
 ## Checks
 
 `tools/lift/synth_city_objects.py --run` tests allocation, elevator bounds, NaN coordinates,
@@ -92,3 +121,5 @@ a full object pool, appended meshes, fractional box dimensions and newspaper ove
 `tools/lift/synth_buildings.py --run` tests all five file versions, missing and bad files,
 header-only reads, name maps, doors, wide blocks, turns and guard directions.
 The save case compares both output files with the expected bytes.
+Placement cases cover every type with the server active and inactive, all four door turns,
+the guard limit, empty intersection lists, wall codes, corner neighbors and existing interior blocks.

@@ -57,6 +57,7 @@ A zero word does not allocate either record.
 `area_interior_createblock` stores only the low byte of each 16-bit texture value.
 Its links use the interior setter, which requires an existing sector.
 `area_deleteblock` exposes the matching faces of normal neighbors, then clears the outer and interior words.
+Each normal neighbor uses one sector lookup for its word update and dirty mark.
 It keeps the interior model indexes. This differs from the interior setters and is required for exact behavior.
 
 `area_breakblock` accepts a special word when the signed face index is below `num_hideable`.

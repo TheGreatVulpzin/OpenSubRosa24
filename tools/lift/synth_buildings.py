@@ -12,7 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from synth_bonds import Snapshot, PAGE
-from synth_area import run_files
+from synth_area import run_files, setup as setup_area, AREA, SECTORS, cell as area_cell
 
 BUILDING = 0x1d65b80
 CELLS = BUILDING + 0x4c
@@ -162,6 +162,150 @@ def cases():
         return ['R 4450'], {}, None
 
     result['rotate_wide_turns_guards'] = ('building_rotatefloorplan', rotate)
+
+    def world_state(s, sx=3, sz=2, floors=1):
+        setup_area(s)
+        clear(s, FLOORPLAN, 0x1200000)
+        for neighbour in (-64, -63, -1):
+            s.write(FLOORPLAN + neighbour * 0x48 + 8, '2i', 0, 0)
+        s.write(BUILDING + 0x12001cc, '3i', sx, sz, floors)
+        s.write(0xe299220 + 0x2f998, 'i', 2)
+        s.write(0xe299220, 'i', 3)
+        for i, (ix, iz) in enumerate(((1, 3), (5, 3), (3, 7))):
+            address = 0xe299220 + 8 + i * 0x68
+            s.write(address, '3i', ix, 0, iz)
+            s.write(address + 0x18, '4i', 10 + i, 20 + i, -1, -1)
+        for team in range(5):
+            address = 0x90dc540 + team * 0x117c
+            s.write(address + 0x88, 'f', 0.33333334 + team * 0.3125)
+            s.write(address + 0x4d0, 'i', 1)
+        s.write(BLOCKLIST + 0x1c4, 'i', 200)
+        s.write(BLOCKLIST + 0x1d0, 'i', 203)
+        for block in (7, 8, 123, 200, 201, 202, 203):
+            s.write(BLOCKS + block * 0x84 + 0x6c, '3i', 1, 1, 1)
+            s.write(BLOCKS + block * 0x84 + 0x78, 'i', 0)
+
+    def world_call(sx, sz, floors, kind):
+        return ['R 46c30 V:3 V:3 V:3 V:3 V:%x V:%x V:%x V:%x' % (sx, sz, floors, kind)]
+
+    def place_type(kind, active):
+        def build(s):
+            world_state(s)
+            s.write(0x761ea60, 'i', active)
+            for r in range(2):
+                for c in range(3):
+                    values = cell(0x40000000, 200 + c, 0, 0, 0, 0, 0x1234, c + 1, r == 1)
+                    s.write(FLOORPLAN + index(0, r, c) * 0x48, '7I16H3I',
+                            *values[:6], 1, *values[6:22], *values[23:26])
+            return world_call(3, 2, 1, kind), {}, None
+        return build
+
+    for kind in range(16):
+        for active in (0, 1):
+            result['place_type_%d_server_%d' % (kind, active)] = ('building_buildfloorplan', place_type(kind, active))
+
+    def door_turn(turn):
+        def build(s):
+            world_state(s, 1, 1)
+            s.write(FLOORPLAN, '2I', 0x40000000, 200 + turn)
+            return world_call(1, 1, 1, 0), {}, None
+        return build
+
+    for turn in range(4):
+        result['base_door_%d' % turn] = ('building_buildfloorplan', door_turn(turn))
+
+    def guards(s):
+        world_state(s, 7, 5, 2)
+        for f in range(2):
+            for r in range(5):
+                for c in range(7):
+                    address = FLOORPLAN + index(f, r, c) * 0x48
+                    s.write(address + 0x40, '2i', 1 + (c & 3), 1)
+        return world_call(7, 5, 2, 10), {}, None
+
+    result['guard_limit_and_empty_prize'] = ('building_buildfloorplan', guards)
+
+    def no_intersections(s):
+        world_state(s, 1, 1)
+        s.write(0xe299220, 'i', 0)
+        return world_call(1, 1, 1, 9), {}, None
+
+    result['no_intersections'] = ('building_buildfloorplan', no_intersections)
+
+    def interior(wall, neighbour, existing=False, overlap=False):
+        def build(s):
+            world_state(s, 1, 1)
+            p = FLOORPLAN
+            s.write(p, '7I', 0x40000000, 0xffff, 0, 0, 2 if overlap else 0, 3 if overlap else 0, 1)
+            offsets = ((-1, 8), (-64, 12), (1, 8), (-63, 12), (65, 8), (65, 12), (63, 8), (64, 12))
+            relative, offset = offsets[neighbour]
+            s.write(p + relative * 0x48 + offset, 'i', wall)
+            code = ((((2 if overlap else 0) * 2 | 1) * 2 | (3 if overlap else 0)) << 16)
+            if 1 <= wall <= 9:
+                code |= (0xb, 0xb, 0xb0, 0xb0, 0xb00, 0xb00, 0xb000, 0xb000)[neighbour]
+            s.write(0x80ceb20 + (code & 0x3fffff) * 4, 'i', 123)
+            if existing:
+                s.write(p, 'I', 0)
+                s.write(SECTORS + 0x3004 + area_cell(3, 3, 3) * 4, 'I', 0x80000007)
+            return world_call(1, 1, 1, 9), {}, None
+        return build
+
+    for wall in (*range(1, 10), 12):
+        for neighbour in range(8):
+            result['interior_wall_%d_neighbour_%d' % (wall, neighbour)] = (
+                'building_buildfloorplan', interior(wall, neighbour))
+    result['interior_existing'] = ('building_buildfloorplan', interior(1, 0, existing=True))
+    result['interior_overlapping_fields'] = ('building_buildfloorplan', interior(1, 0, overlap=True))
+
+    def direct_wall(wall, side):
+        def build(s):
+            world_state(s, 1, 1)
+            s.write(FLOORPLAN, '7I', 0x40000000, 0xffff, 0, 0, 0, 0, 1)
+            relative, offset = ((0, 8), (1, 12), (64, 8), (0, 12))[side]
+            s.write(FLOORPLAN + relative * 0x48 + offset, 'i', wall)
+            code = 0x20000 | (wall << (side * 4))
+            s.write(0x80ceb20 + code * 4, 'i', 123)
+            return world_call(1, 1, 1, 9), {}, None
+        return build
+
+    for wall in (*range(1, 10), 12):
+        for side in range(4):
+            result['interior_direct_wall_%d_side_%d' % (wall, side)] = (
+                'building_buildfloorplan', direct_wall(wall, side))
+
+    def uncached(s):
+        lines, files, expected = interior(1, 0)(s)
+        s.write(0x80ceb20 + 0x2000b * 4, 'i', -1)
+        return lines, files, expected
+
+    result['interior_uncached'] = ('building_buildfloorplan', uncached)
+
+    def delete_edge(center):
+        def build(s):
+            setup_area(s)
+            s.write(SECTORS + 0x5024, 'i', 0)
+            clear(s, SECTORS + 0x6068, 0x6068)
+            s.write(SECTORS + 0x6068, 'i', 1)
+            s.write(SECTORS + 0x6068 + 0x5014, 'i', 3)
+            x, y, z = center
+            points = [(x, y, z)] + [(x + dx, y + dy, z + dz) for dx, dy, dz in
+                      ((0, -1, 0), (0, 1, 0), (0, 0, 1), (0, 0, -1), (-1, 0, 0), (1, 0, 0))]
+            for xx, yy, zz in points:
+                if min(xx, yy, zz) < 0:
+                    continue
+                slot = area_cell(xx >> 3, yy >> 3, zz >> 3)
+                sector = 0 if slot == 0 else 1
+                s.write(AREA + 3 * 0x100d6c + 0x56c + slot * 4, 'i', sector)
+                s.write(SECTORS + sector * 0x6068 + 4 + area_cell(xx, yy, zz) * 4, 'I', 0x40000000)
+            s.write(SECTORS + 0x3004 + area_cell(x, y, z) * 4, 'I', 0x80000007)
+            return ['R 29970 V:3 V:%x V:%x V:%x' % center], {}, None
+        return build
+
+    for axis in range(3):
+        for edge in (0, 7):
+            center = [3, 3, 3]
+            center[axis] = edge
+            result['delete_edge_%d_%d' % (axis, edge)] = ('area_deleteblock', delete_edge(tuple(center)))
     return result
 
 
@@ -200,6 +344,8 @@ def main():
         (args.work / (name + '.log')).write_text(summary + '\n')
         if ok:
             shutil.rmtree(folder)
+        else:
+            break
     print('%d case(s) to check' % bad)
     return bool(bad)
 

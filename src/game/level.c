@@ -23,11 +23,6 @@
 #define g_building (*SR_AT(Building, SR_RVA_BUILDING))
 #define g_level_marks SR_AT(uint8_t, 0x12a80c44)
 
-/* Game functions of other files. */
-int *__cdecl lf_46c30(uint32_t area, int x, int y, int z,
-                     int size_x, int size_z, int floors, int kind);
-#define building_buildfloorplan lf_46c30
-
 static float track_span(const vec3 *a, const vec3 *b, int z_first)
 {
     float x = (float)(a->x - b->x);

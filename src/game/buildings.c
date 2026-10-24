@@ -4,7 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "area.h"
+#include "block_mesh.h"
+#include "logic.h"
+#include "sr_math.h"
 #include "sr_os.h"
+#include "vectors.h"
 
 #define g_building (*SR_AT(Building, SR_RVA_BUILDING))
 #define g_floorplan SR_AT(FloorplanCell, 0x2043a0)
@@ -326,4 +331,237 @@ void building_rotatefloorplan(void)
     }
     b->build_size_x = sz;
     b->build_size_z = sx;
+}
+
+static int has_door_wall(int wall)
+{
+    return wall > 0 && wall < 10;
+}
+
+static uint32_t interior_code(const FloorplanCell *p)
+{
+    uint32_t code = ((((((uint32_t)p->interior_bit18 * 2 | (uint32_t)p->interior_bit17) * 2 |
+        (uint32_t)p->interior_bit16) << 4 | (uint32_t)p->wall_col) << 4 |
+        (uint32_t)p[64].wall_row) << 4 | (uint32_t)p[1].wall_col) << 4 | (uint32_t)p->wall_row;
+    if (p->wall_row == 0 && p->wall_col == 0 &&
+        (has_door_wall(p[-1].wall_row) || has_door_wall(p[-64].wall_col)))
+        code |= 0xb;
+    if (p->wall_row == 0 && p[1].wall_col == 0 &&
+        (has_door_wall(p[1].wall_row) || has_door_wall(p[-63].wall_col)))
+        code |= 0xb0;
+    if (p[64].wall_row == 0) {
+        if (p[1].wall_col == 0 && (has_door_wall(p[65].wall_row) || has_door_wall(p[65].wall_col)))
+            code |= 0xb00;
+        if (p->wall_col == 0 && (has_door_wall(p[63].wall_row) || has_door_wall(p[64].wall_col)))
+            code |= 0xb000;
+    }
+    return code;
+}
+
+static void setup_team_base(int team, int x, int y, int z, int size_x, int size_z)
+{
+    const BuildingArea *a = &g_building.build_areas[0];
+    vec3 *base_min = (vec3 *)TEAM_FIELD(team0_base_min, team);
+    vec3 *base_max = (vec3 *)TEAM_FIELD(team0_base_max, team);
+    vec3 *safe_min = (vec3 *)TEAM_FIELD(team0_safe_min, team);
+    vec3 *safe_max = (vec3 *)TEAM_FIELD(team0_safe_max, team);
+    const float angle = *(float *)TEAM_FIELD(team0_angle, team);
+    int *num_spots = (int *)TEAM_FIELD(team0_num_car_spots, team);
+    TeamCarSpot *spots = (TeamCarSpot *)TEAM_FIELD(team0_car_spots, team);
+    vec3 p, d, rot[3];
+    int k;
+    *base_min = (vec3){(float)(x * 4.0), (float)(y * 4.0), (float)(z * 4.0)};
+    *base_max = (vec3){(float)((x + size_x) * 4.0), (float)((y + 1) * 4.0), (float)((z + size_z) * 4.0)};
+    *safe_min = (vec3){(float)((a->x + x) * 4.0), (float)(y * 4.0), (float)((a->z + z) * 4.0)};
+    *safe_max = (vec3){(float)((a->size_x + a->x + x) * 4.0), (float)((y + 1) * 4.0),
+                       (float)((a->size_z + a->z + z) * 4.0)};
+    p.x = (float)(((double)safe_max->x + safe_min->x) * 0.5);
+    p.y = (float)(((double)safe_max->y + safe_min->y) * 0.5);
+    p.z = (float)(((double)safe_max->z + safe_min->z) * 0.5);
+    resetorientation(rot);
+    rotateorientation(rot, &rot[1], (float)(angle - 1.570796326795));
+    p.x = (float)(p.x - rot[2].x * 44.0);
+    p.y = (float)(p.y - rot[2].y * 44.0);
+    p.z = (float)(p.z - rot[2].z * 44.0);
+    rotateorientation(rot, &rot[1], 3.1415927410125732f);
+    p.x = (float)(p.x - rot[0].x * 16.0);
+    p.y = (float)(p.y - rot[0].y * 16.0);
+    p.z = (float)(p.z - rot[0].z * 16.0);
+    d.x = (float)(rot[0].x * 4.0);
+    d.y = (float)(rot[0].y * 4.0);
+    d.z = (float)(rot[0].z * 4.0);
+    for (k = 0; k < 8; k++) {
+        TeamCarSpot *spot = &spots[*num_spots];
+        spot->used = 0;
+        spot->pos = p;
+        memcpy(spot->rot, rot, sizeof rot);
+        (*num_spots)++;
+        p.x = (float)(p.x + d.x);
+        p.y = (float)(p.y + d.y);
+        p.z = (float)(p.z + d.z);
+    }
+}
+
+static int finish_building(int b, int x, int y, int z, int size_x, int size_z, int type)
+{
+    static const int kinds[6] = {3, 2, 5, 4, 7, 6};
+    const BuildingArea *a = &g_building.build_areas[0];
+    vec3 *pos = BLD_PTR(vec3, building_pos, b);
+    vec3 *min = BLD_PTR(vec3, building_min, b);
+    vec3 *max = BLD_PTR(vec3, building_max, b);
+    int result = b * 0x9dc;
+    if (type < 10 || type > 15)
+        return type;
+    BLD_INT(building_type, b) = kinds[type - 10];
+    *pos = (vec3){(float)(x * 4.0), (float)(y * 4.0), (float)(z * 4.0)};
+    *min = *pos;
+    *max = (vec3){(float)((x + size_x) * 4.0), (float)((y + 1) * 4.0), (float)((z + size_z) * 4.0)};
+    switch (type) {
+    case 10:
+        result = z + size_z;
+        break;
+    case 11: {
+        vec3 *car = BLD_PTR(vec3, car_spawn_pos, b);
+        car->x = (float)((g_building.build_size_x + 2 + x) * 4.0);
+        car->y = (float)((double)pos->y + 2.0);
+        car->z = (float)((g_building.build_size_z - 6 + z) * 4.0);
+        BLD_INT(shop_count, b) = 0;
+        result = g_building.build_size_z - 6 + z;
+        break;
+    }
+    case 12:
+    case 14:
+        BLD_INT(shop_count, b) = 0;
+        break;
+    case 13:
+        BLD_INT(shop_count, b) = 0;
+        if (sr_server) {
+            int *rows = BLD_PTR(int, shop_rows, b);
+            rows[0] = 0;
+            rows[1] = 5000;
+            rows[3] = 1;
+            rows[4] = 1000;
+            BLD_INT(shop_count, b) = 2;
+            result = (int)(uintptr_t)BLD_PTR(int, shop_count, b);
+        }
+        break;
+    case 15:
+        min->x = (float)((a->x + x) * 4.0);
+        min->z = (float)((a->z + z) * 4.0);
+        max->x = (float)((a->size_x + a->x + x) * 4.0);
+        max->z = (float)((a->size_z + a->z + z) * 4.0);
+        result = a->size_z + a->z + z;
+        break;
+    }
+    g_city.num_buildings++;
+    return result;
+}
+
+int building_buildfloorplan(uint32_t area, int x, int y, int z,
+                           int size_x, int size_z, int floors, int type)
+{
+    static const uint16_t slab_tex[8] = {3, 3, 3, 3, 3, 3, 3, 3};
+    const FloorplanCell *const floorplan = g_floorplan;
+    City *const city = &g_city;
+    const BlockList *const blocks = &g_blocklist;
+    int *num_guards;
+    GuardSpot *guards;
+    vec3 *prize_pos;
+    int team = type >= 0 && type <= 4 ? type : -1;
+    int f, r, c, i, b, best_index = 0;
+    float best = 1024.0f;
+    for (f = 0; f < floors; f++)
+        for (r = 0; r < size_z; r++)
+            for (c = 0; c < size_x; c++)
+                if (floorplan[cell_index(f, r, c)].outer != 0)
+                    area_deleteblock(area, x + c, y + f, z + r);
+    for (r = 0; r < size_z; r++)
+        for (c = 0; c < size_x; c++)
+            area_createblock(area, x + c, y - 1, z + r, 0x40000000u, slab_tex);
+    for (f = 0; f < floors; f++) {
+        for (r = 0; r < size_z; r++) {
+            for (c = 0; c < size_x; c++) {
+                const FloorplanCell *p = &floorplan[cell_index(f, r, c)];
+                if (p->outer != 0) {
+                    uint16_t tex[8];
+                    memcpy(tex, p->tex_outer, sizeof tex);
+                    area_createblock(area, x + c, y + f, z + r, p->outer, tex);
+                    area_setblockcolor(area, x + c, y + f, z + r, (uint32_t)p->color);
+                }
+            }
+        }
+    }
+    for (f = 0; f < floors; f++) {
+        for (r = 0; r < size_z; r++) {
+            for (c = 1; c <= size_x; c++) {
+                const FloorplanCell *p = &floorplan[cell_index(f, r, c - 1)];
+                uint32_t inner = p->inner;
+                int xx = x + c - 1, yy = y + f, zz = z + r;
+                if (inner != 0) {
+                    uint16_t tex[8];
+                    memcpy(tex, p->tex_inner, sizeof tex);
+                    if (inner == 0xffff) {
+                        uint32_t id = (uint32_t)area_block_createbuildinginterior(0, interior_code(p));
+                        if (area_interior_getblock(area, xx, yy, zz) == 0)
+                            area_interior_createblock(area, xx, yy, zz, id | 0x80000000u, tex);
+                    } else {
+                        area_interior_createblock(area, xx, yy, zz, inner | 0x80000000u, tex);
+                    }
+                    if (team != -1 && blocks->base_door_first <= (int)(inner & 0xffff) &&
+                        (int)(inner & 0xffff) <= blocks->base_door_last) {
+                        DoorBlock *doors = (DoorBlock *)TEAM_FIELD(team0_doors, team);
+                        int turn = ((int)(inner & 0xffff) - blocks->base_door_first - 2) & 3;
+                        doors[0] = (DoorBlock){xx, yy, zz, turn};
+                        doors[1] = doors[0];
+                        if (turn == 0 || turn == 2)
+                            doors[1].x = xx + 1;
+                        else
+                            doors[1].z = zz + 1;
+                    }
+                    if (p->prize != 0)
+                        area_interior_setobject(area, xx, yy, zz, 0x401);
+                }
+            }
+        }
+    }
+    b = city->num_buildings;
+    num_guards = BLD_PTR(int, num_guard_spots, b);
+    guards = BLD_PTR(GuardSpot, guard_spots, b);
+    prize_pos = BLD_PTR(vec3, prize_pos, b);
+    *num_guards = 0;
+    for (f = 0; f < floors; f++) {
+        for (r = 0; r < size_z; r++) {
+            for (c = 0; c < size_x; c++) {
+                const FloorplanCell *p = &floorplan[cell_index(f, r, c)];
+                int xx = x + c, yy = y + f, zz = z + r;
+                if (p->prize != 0) {
+                    *prize_pos = (vec3){(float)(xx * 4.0 + 2.0), (float)(yy * 4.0 + 2.25),
+                                       (float)(zz * 4.0 + 2.0)};
+                }
+                if (p->guard_dir > 0 && *num_guards < 64) {
+                    GuardSpot *spot = &guards[*num_guards];
+                    spot->pos = (vec3){(float)(xx * 4.0 + 2.0), (float)(yy * 4.0 + 1.25),
+                                      (float)(zz * 4.0 + 2.0)};
+                    spot->dir = p->guard_dir - 1;
+                    (*num_guards)++;
+                }
+            }
+        }
+    }
+    if (team != -1)
+        setup_team_base(team, x, y, z, size_x, size_z);
+    for (i = 0; i < city->num_intersections; i++) {
+        const CityIntersection *intersection = &city->intersections[i];
+        float dx = (float)(x - intersection->x);
+        float dz = (float)(z - intersection->z);
+        float d2 = (float)((double)dx * dx + 0.0 + (double)dz * dz);
+        float distance = (float)x87_sqrt(d2);
+        if (distance < best) {
+            best = distance;
+            best_index = i;
+        }
+    }
+    BLD_PTR(int, street_roads, b)[0] = city->intersections[best_index].roads[0];
+    BLD_PTR(int, street_roads, b)[1] = city->intersections[best_index].roads[1];
+    return finish_building(b, x, y, z, size_x, size_z, type);
 }

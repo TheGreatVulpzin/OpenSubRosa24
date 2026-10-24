@@ -18,5 +18,7 @@ void building_save(const char *name);
 void building_setupbuild(void);
 void building_setupfloorplannewer(void);
 void building_rotatefloorplan(void);
+int building_buildfloorplan(uint32_t area, int x, int y, int z,
+                           int size_x, int size_z, int floors, int type);
 
 #endif

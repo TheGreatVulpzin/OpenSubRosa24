@@ -239,22 +239,36 @@ static const struct {
     {-1, 0, 0, 4, 0x10}, {1, 0, 0, 0x10, 4}
 };
 
-void area_deleteblock(uint32_t area, int x, int y, int z)
+static void area_exposeneighbour(uint32_t area, int x, int y, int z, uint32_t face)
 {
-    int s, cell, i;
-    if (area >= NUM_AREAS || (s = area_blocksector(area, x, y, z, &cell)) == -1)
-        return;
-    if (BLOCK_KIND(g_sectors[s].blocks[cell]) == BLOCK_NORMAL) {
-        for (i = 0; i < 6; i++) {
-            int nx = x + neighbours[i].dx, ny = y + neighbours[i].dy, nz = z + neighbours[i].dz;
-            uint32_t w = area_getblock(area, nx, ny, nz);
-            if (BLOCK_KIND(w) == BLOCK_NORMAL)
-                area_setblock(area, nx, ny, nz, w | neighbours[i].neighbour);
+    int cell, s = area_blocksector(area, x, y, z, &cell);
+    if (s != -1) {
+        BlockSector *sector = &g_sectors[s];
+        if (BLOCK_KIND(sector->blocks[cell]) == BLOCK_NORMAL) {
+            sector->blocks[cell] |= face;
+            sector->dirty = 1;
         }
     }
-    g_sectors[s].blocks[cell] = 0;
-    g_sectors[s].interior[cell] = 0;
-    area_marksector(area, x, y, z);
+}
+
+void area_deleteblock(uint32_t area, int x, int y, int z)
+{
+    int s, cell;
+    BlockSector *sector;
+    if (area >= NUM_AREAS || (s = area_blocksector(area, x, y, z, &cell)) == -1)
+        return;
+    sector = &g_sectors[s];
+    if (BLOCK_KIND(sector->blocks[cell]) == BLOCK_NORMAL) {
+        area_exposeneighbour(area, x, y - 1, z, 0x20);
+        area_exposeneighbour(area, x, y + 1, z, 1);
+        area_exposeneighbour(area, x, y, z + 1, 8);
+        area_exposeneighbour(area, x, y, z - 1, 2);
+        area_exposeneighbour(area, x - 1, y, z, 0x10);
+        area_exposeneighbour(area, x + 1, y, z, 4);
+    }
+    sector->blocks[cell] = 0;
+    sector->interior[cell] = 0;
+    sector->dirty = 1;
 }
 
 int area_breakblock(uint32_t area, int x, int y, int z, uint32_t word, int face,

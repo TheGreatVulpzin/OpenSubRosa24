@@ -280,7 +280,7 @@ void area_createsblocks(void);
 void sphereintersectarea(void);
 void circleintersectarea(void);
 void bondsimulation2(void);
-void lf_46c30(void);
+void building_buildfloorplan(void);
 void bulletsimulation(void);
 void server_playermessage(void);
 void human_calculatearmangles(void);
@@ -598,7 +598,7 @@ const LfEntry lf_table[] = {
     { "sphereintersectarea", 0x40aa0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "circleintersectarea", 0x41550, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },
     { "bondsimulation2", 0x41de0, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_buildfloorplan", 0x46c30, (void *)lf_46c30, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
+    { "building_buildfloorplan", 0x46c30, (void *)building_buildfloorplan, 8, LF_RET_INT, 4, "vvvvvvvp", 1 },
     { "bulletsimulation", 0x48ec0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "server_playermessage", 0x49940, (void *)server_playermessage, 2, LF_RET_INT, 4, "vp", 0 },
     { "human_calculatearmangles", 0x4a440, (void *)human_calculatearmangles, 1, LF_RET_VOID, 4, "v", 0 },
