@@ -6,6 +6,10 @@ case. With --run the script runs the harness on each case and deletes the case a
 snapshot is about 120 MB):
 
     python -I tools/lift/synth_net.py --run [--no-cover] <recording dir> <work dir> [case,...]
+    python -I tools/lift/synth_net.py --invalid --run [--timeout 15] <recording dir> <work dir> [case,...]
+
+The invalid mode checks the planned input policy. It can fail before the server fixes.
+Use step.sh --invalid --rec DIR --synth net FUNCTIONS for both gates.
 
 The functions: serverrecv (33650), server_playermessage (49940), calculateplayervoice (3cfe0),
 the codecs of the packets (pbitreadnego, packscalar, unpackangle, packunitvector,
@@ -758,7 +762,7 @@ def objectpacket_cases(c):
 FUNCS = {'serverrecv': recv_cases, 'server_playermessage': message_cases, 'calculateplayervoice': voice_cases,
          'codec': codec_cases, 'unpackevent': event_cases, 'unpackobjectpacket': object_cases,
          'clientrecv': client_cases, 'packevent': packevent_cases, 'packobjectpacket': objectpacket_cases}
-RVA_NAME = {'33650': 'serverrecv', '49940': 'server_playermessage', '3cfe0': 'calculateplayervoice',
+RVA_NAME = {'55700': 'logic_playeractions', '33650': 'serverrecv', '49940': 'server_playermessage', '3cfe0': 'calculateplayervoice',
             '16860': 'packscalar', 'ddd0': 'pbitreadnego', '16710': 'unpackangle', '5160': 'packunitvector',
             '2efd0': 'packpositiondelta', '2f090': 'unpackpositiondelta', '16320': 'unpackorientation', '17b60': 'unpackevent', '1dba0': 'unpackobjectpacket',
             '2e310': 'clientrecv', '16f10': 'packevent', '20680': 'packobjectpacket', '1f4a0': 'packobjectpacket2'}
@@ -801,6 +805,9 @@ def context(base):
 
 
 def main():
+    if '--invalid' in sys.argv:
+        from synth_security import main as security_main
+        return security_main([a for a in sys.argv[1:] if a != '--invalid'])
     run = '--run' in sys.argv
     if run:
         sys.argv.remove('--run')
@@ -820,6 +827,11 @@ def main():
                 continue
             if not want and name.startswith('garbage_'):
                 continue
+            if name in {'input_actions_high', 'input_voice_big', 'input_player_minus1', 'join_takeover',
+                        'phone_nohuman'}:
+                if want and name in want:
+                    raise SystemExit(name + ': use --invalid for the security expectation')
+                continue
             cc = Case(base, ctx)
             args = build(cc)
             rva = args[0].split()[1]
@@ -836,4 +848,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

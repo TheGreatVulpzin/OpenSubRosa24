@@ -67,6 +67,8 @@ typedef struct Call {
     char has_value[MAX_ARGS];     /* 'P': the value is known (recordings after the fix) */
     int npackets;                 /* packets that the call received (E recvfrom lines) */
     PlatPacket *packets;
+    int nreference;
+    PlatPacket *reference;       /* S lines: packets after the input policy */
 } Call;
 
 static HMODULE g_mod;
@@ -466,6 +468,15 @@ static int load_calls(const char *path)
             add_packet(&g_calls[last], line);
             continue;
         }
+        if (last >= 0 && !strncmp(line, "S recvfrom ", 11)) {
+            Call ref = {0};
+            ref.packets = g_calls[last].reference;
+            ref.npackets = g_calls[last].nreference;
+            add_packet(&ref, line);
+            g_calls[last].reference = ref.packets;
+            g_calls[last].nreference = ref.npackets;
+            continue;
+        }
         if (line[0] == 'Z')
             last = -1;
         if (line[0] != 'R')
@@ -743,6 +754,7 @@ static void set_probes(const char *spec)
  * one .data address and prints each instruction that writes it, with the new value. The
  * place is an RVA in the 024d, or an address in the harness (the lifted code). */
 static uint32_t g_watch;
+static int g_forbid_read, g_forbid_hits;
 
 static LONG CALLBACK watch_handler(EXCEPTION_POINTERS *ep)
 {
@@ -750,10 +762,19 @@ static LONG CALLBACK watch_handler(EXCEPTION_POINTERS *ep)
     DWORD code = ep->ExceptionRecord->ExceptionCode;
     if (code == 0xE0574348) {  /* raised by set_watch: load the debug registers */
         c->Dr0 = (uintptr_t)sr_base + g_watch;
-        c->Dr7 = 1 | (1u << 16) | (3u << 18);  /* L0, write, 4 bytes */
+        c->Dr7 = 1 | ((g_forbid_read ? 3u : 1u) << 16) | (3u << 18);
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    if (code == 0xE0574349) {
+        c->Dr7 = 0;
         return EXCEPTION_CONTINUE_EXECUTION;
     }
     if (code == EXCEPTION_SINGLE_STEP && (c->Dr6 & 1)) {
+        if (g_forbid_read) {
+            g_forbid_hits++;
+            c->Dr6 = c->Dr7 = 0;
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
         uintptr_t at = c->Eip;
         uint32_t v = *(uint32_t *)(sr_base + g_watch);
         float f;
@@ -984,6 +1005,70 @@ static LONG WINAPI unhandled(EXCEPTION_POINTERS *ep)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+/* A separate process supplies the timeout for these ordered calls. No reference code runs. */
+static int run_clean_checks(const char *path)
+{
+    FILE *f;
+    unsigned rva, size, k, checks = 0;
+    char hex[8193];
+    int i, j, failed = 0;
+    if (getenv("HARNESS_FORBID_READ")) {
+        g_forbid_read = 1;
+        set_watch(getenv("HARNESS_FORBID_READ"));
+    }
+    for (i = 0; i < g_ncalls; i++) {
+        const Call *c = &g_calls[i];
+        const LfEntry *e = NULL;
+        uint32_t a[MAX_ARGS], lo, hi;
+        double fp;
+        for (j = 0; j < lf_table_count + HAND_COUNT; j++)
+            if (table_entry(j)->rva == c->rva) {
+                e = table_entry(j);
+                break;
+            }
+        if (!e || c->n != e->dwords || !args_usable(c, e->args) || points_into_stack(c, e->args)) {
+            fprintf(stderr, "security: unusable call %d\n", i);
+            return 2;
+        }
+        build_args(c, e->args, a);
+        plat_test_set_packets(c->packets, c->npackets);
+        plat_test_begin(0);
+        j = safe_invoke(e->lifted, a, c->n, e->ret, &lo, &hi, &fp);
+        plat_test_end(0);
+        printf("security call %s: %s\n", e->name, j ? "returned" : "CRASH");
+        if (!j)
+            return 3;
+    }
+    if (g_forbid_read) {
+        RaiseException(0xE0574349, 0, 0, NULL);
+        printf("security forbidden row accesses: %d\n", g_forbid_hits);
+        failed = g_forbid_hits != 0;
+    }
+    f = fopen(path, "r");
+    if (!f)
+        return 2;
+    while (fscanf(f, "%x %x %8192s", &rva, &size, hex) == 3) {
+        if (!size || size > 4096 || strlen(hex) != size * 2 ||
+            rva < g_snap.data_rva || rva - g_snap.data_rva >= g_snap.size ||
+            size > g_snap.size - (rva - g_snap.data_rva)) {
+            fclose(f);
+            return 2;
+        }
+        for (k = 0; k < size; k++)
+            if (*(uint8_t *)(sr_base + rva + k) != (uint8_t)(hexval(hex[k * 2]) * 16 + hexval(hex[k * 2 + 1]))) {
+                printf("security check %x: FAIL at +%x\n", rva, k);
+                failed = 1;
+                break;
+            }
+        checks++;
+    }
+    if (!feof(f))
+        failed = 1;
+    fclose(f);
+    printf("security: %d calls, %u checks, %s\n", g_ncalls, checks, failed || !checks ? "FAIL" : "PASS");
+    return failed || !checks ? 3 : 0;
+}
+
 int main(int argc, char **argv)
 {
     int i, j, total_ok = 0, total_diff = 0, total_known = 0, total_skip = 0, total_crash = 0, tested = 0;
@@ -991,6 +1076,7 @@ int main(int argc, char **argv)
     const char *game_dir;
     int reset_each = getenv("HARNESS_RESET") && atoi(getenv("HARNESS_RESET")) != 0;
     int retry_crash = !getenv("HARNESS_RETRY") || atoi(getenv("HARNESS_RETRY")) != 0;
+    int invalid = getenv("HARNESS_INVALID") && atoi(getenv("HARNESS_INVALID")) != 0;
     SetUnhandledExceptionFilter(unhandled);
     int imports, index = 0, total_funcs = 0;
     LARGE_INTEGER t_start, t_end, freq;
@@ -1017,7 +1103,8 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot read the snapshot or the recorded calls\n");
         return 1;
     }
-    add_hand_calls();
+    if (!getenv("HARNESS_CLEAN_CHECKS"))
+        add_hand_calls();
     for (i = 0; i < MAX_ARGS; i++)
         g_buf[i] = VirtualAlloc(NULL, BUF, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     apply_snapshot();
@@ -1038,6 +1125,12 @@ int main(int argc, char **argv)
     plat_test_patch_globals();
     imports = resolve_imports();
     x87_init();
+    if (getenv("HARNESS_CLEAN_CHECKS"))
+        return run_clean_checks(getenv("HARNESS_CLEAN_CHECKS"));
+    if (invalid && (getenv("HARNESS_TIME") || getenv("HARNESS_COVER"))) {
+        fprintf(stderr, "security mode cannot run timing or coverage\n");
+        return 2;
+    }
     g_time = getenv("HARNESS_TIME") && atoi(getenv("HARNESS_TIME")) != 0;
     set_probes(getenv("HARNESS_PROBE"));
     set_watch(getenv("HARNESS_WATCH"));
@@ -1053,6 +1146,12 @@ int main(int argc, char **argv)
         return 1;
     }
     sv_verify_ignore(0x14043e0, 0x5800);  /* profiler timers (RDTSC), see hooks_024d.c */
+    if (invalid) {
+        /* The receive bytes and cursor differ when the input policy changes a packet. */
+        sv_verify_ignore(SR_RVA_BSDSOCKET + 0x10064, 0x1000c);
+        /* A discard can occur before or after the ingress counter advances. */
+        sv_verify_ignore(SR_RVA_SERVER + 0x78, 4);
+    }
     ui_info("recording", "%s (%d calls)", argv[3], g_ncalls);
     ui_info("snapshot", "%s (%u pages, %d of %d heap regions)", argv[2], g_snap.npages, g_mapped, g_nregions);
     ui_info("024d", "%p (snapshot base %08x), %d imports", (void *)g_mod, g_snap.base, imports);
@@ -1099,6 +1198,10 @@ int main(int argc, char **argv)
             uint32_t mask;
             if (c->rva != e->rva || c->n != e->dwords)
                 continue;
+            if (invalid && c->nreference != c->npackets) {
+                fprintf(stderr, "security: each raw datagram needs an S line\n");
+                return 2;
+            }
             if (!args_usable(c, e->args)) {
                 skip++;
                 continue;
@@ -1209,6 +1312,8 @@ int main(int argc, char **argv)
             build_args(c, e->args, a);
             if (g_nprobe)
                 printf(" call %d: original\n", j);
+            if (invalid)
+                plat_test_set_packets(c->reference, c->nreference);
             plat_test_begin(1);
             orig_ok = safe_invoke((void *)(sr_base + e->rva), a, c->n, e->ret, &no, &dorig, &fo);
             plat_test_end(1);
@@ -1253,6 +1358,14 @@ int main(int argc, char **argv)
                 goto again;
             }
             if (!orig_ok) {
+                if (invalid) {
+                    crash++;
+                    if (!first[0])
+                        snprintf(first, sizeof first, "call %d: reference crashed: %s", j, g_crash);
+                    apply_snapshot();
+                    resolve_imports();
+                    continue;
+                }
                 skip++;
                 if (!first[0])
                     snprintf(first, sizeof first, "call %d: original crashed: %s", j, g_crash);

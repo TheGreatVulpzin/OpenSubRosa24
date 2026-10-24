@@ -4,6 +4,8 @@
  * dropped. Its last 2 bytes are voice_flag and spectate (9 bits), after the frames. */
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
+#include <io.h>
 
 #include "netguard.h"
 
@@ -12,6 +14,20 @@ static const uint8_t bad[121] = {0x37,0x44,0x46,0x50,0x04,0x07,0x00,0x00,0x00,0x
 static const uint8_t fixed[121] = {0x37,0x44,0x46,0x50,0x04,0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x3f,0x00,0x00,0x00,0x40,0x00,0x00,0x40,0x40,0x03,0x00,0x06,0x03,0x00,0x00,0x00,0x51,0x00,0x68,0x65,0x6c,0x6c,0x6f,0x22,0x0a,0x00,0x14,0x00,0x00,0x00,0x01,0x08,0x03,0x01,0x00,0x01,0x02,0x3f,0x0a,0x01,0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x3f,0x00,0x01,0x02,0x07,0x01,0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x00,0x01,0x01,0x00,0xfe,0x01};
 
 static int g_fail;
+
+/* Test the proposed action index rule without changing the packet guard in the server. */
+static int security_input(uint8_t *buf, int len, int *masked)
+{
+    int result = sv_netguard_input(buf, len, masked);
+    if (result == SV_GUARD_PASS && len > 62 && memcmp(buf, "7DFP\x04", 5) == 0) {
+        /* action_start spans bits 4..7 of byte 61 and bits 0..3 of byte 62. */
+        if (buf[62] & 0x0c) {
+            buf[62] &= 0xf3;
+            (*masked)++;
+        }
+    }
+    return result;
+}
 
 static void check(int cond, const char *what)
 {
@@ -40,12 +56,12 @@ static int run_capture(const char *path)
         if (head[0] != 0 || n < 5 || buf[4] != 4)
             continue;
         inputs++;
-        if (sv_netguard_input(buf, (int)n, &masked) == SV_GUARD_DROP)
+        if (security_input(buf, (int)n, &masked) == SV_GUARD_DROP)
             dropped++;
         masked_total += (unsigned)masked;
     }
     fclose(f);
-    printf("%s: %u input packets, %u voice indexes masked, %u dropped\n", path, inputs, masked_total, dropped);
+    printf("%s: %u input packets, %u indexes masked, %u dropped\n", path, inputs, masked_total, dropped);
     return inputs == 0 || masked_total || dropped;
 }
 
@@ -54,6 +70,20 @@ int main(int argc, char **argv)
     uint8_t buf[256];
     int masked, n;
 
+    if (argc == 2 && strcmp(argv[1], "--sanitize") == 0) {
+        unsigned char raw[65536];
+        size_t size, i;
+        _setmode(_fileno(stdin), _O_BINARY);
+        size = fread(raw, 1, sizeof raw, stdin);
+        if (security_input(raw, (int)size, &masked) == SV_GUARD_DROP)
+            puts("DROP");
+        else {
+            for (i = 0; i < size; i++)
+                printf("%02x", raw[i]);
+            putchar('\n');
+        }
+        return 0;
+    }
     if (argc > 1)
         return run_capture(argv[1]);
 
@@ -74,6 +104,17 @@ int main(int argc, char **argv)
         }
     }
     check(n == (int)sizeof good - 2, "every copy of the good packet cut before its last voice byte is dropped");
+
+    for (n = 0; n < 256; n++) {
+        memcpy(buf, good, sizeof good);
+        buf[61] = (uint8_t)((buf[61] & 15) | ((n & 15) << 4));
+        buf[62] = (uint8_t)((buf[62] & 0xf0) | (n >> 4));
+        if (!(security_input(buf, sizeof good, &masked) == SV_GUARD_PASS &&
+              masked == (n >= 64) && (((buf[61] >> 4) | ((buf[62] & 15) << 4)) == (n & 63)) &&
+              (buf[61] & 15) == (good[61] & 15) && (buf[62] & 0xf0) == (good[62] & 0xf0)))
+            break;
+    }
+    check(n == 256, "all 256 action indexes stay below 64 and preserve adjacent fields");
 
     buf[0] = '7', buf[1] = 'D', buf[2] = 'F', buf[3] = 'P', buf[4] = 2;
     check(sv_netguard_input(buf, 5, &masked) == SV_GUARD_PASS, "other packet types pass");

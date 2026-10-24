@@ -2,30 +2,38 @@
 # One check of a rewrite step, with a short summary: lift and build (pipeline.sh), the gate on
 # every recorded call of the functions, and the synthetic tests. The full logs go to build/step/.
 #
-#   bash tools/lift/step.sh [--no-pipeline] [--rec <recording dir>] [--synth <name>,...] <function>,...
+#   bash tools/lift/step.sh [--no-pipeline] [--rec <recording dir>] [--synth <name>,...] [--invalid] <function>,...
 #
 # --synth takes the names of tools/lift/synth_<name>.py (items, vehicles, net, sys, types, area,
 # level, buildings, humans, bonds) and needs --rec. The exit status is 1 when a check fails.
+# --invalid also runs the security expectations. They fail before the server checks exist.
 set -u
 cd "$(dirname "$0")/../.."
 
 pipeline=1
 rec=""
 synth=""
+invalid=0
 while [ $# -gt 0 ]; do
     case "$1" in
     --no-pipeline) pipeline=0; shift ;;
     --rec) rec="$2"; shift 2 ;;
     --synth) synth="$2"; shift 2 ;;
+    --invalid) invalid=1; shift ;;
     -*) echo "unknown option: $1"; exit 2 ;;
     *) break ;;
     esac
 done
 funcs="${1:-}"
 if [ -z "$funcs" ]; then
-    echo "usage: bash tools/lift/step.sh [--no-pipeline] [--rec <dir>] [--synth <name>,...] <function>,..."
+    echo "usage: bash tools/lift/step.sh [--no-pipeline] [--rec <dir>] [--synth <name>,...] [--invalid] <function>,..."
     exit 2
 fi
+if [ $invalid -eq 1 ] && [ -z "$rec" ]; then
+    echo "--invalid needs --rec <recording dir>"
+    exit 2
+fi
+echo "functions: $funcs"
 if [ -n "$synth" ] && [ -z "$rec" ]; then
     echo "--synth needs --rec <recording dir>"
     exit 2
@@ -80,10 +88,11 @@ for name in "${names[@]}"; do
     [ -z "$name" ] && continue
     log="$out/synth_$name.log"
     work="$out/synth_$name"
+    synth_status=0
     case "$name" in
     humans|bonds)
         rm -rf "$work"
-        python -I "tools/lift/synth_$name.py" "$rec" "$work" > "$log" 2>&1
+        python -I "tools/lift/synth_$name.py" "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         target=humansimulation
         [ "$name" = bonds ] && target=bondsimulation2
         if [ "$name" = bonds ]; then
@@ -97,15 +106,18 @@ for name in "${names[@]}"; do
         rm -rf "$work"
         ;;
     sys|level|buildings|area)
-        python -I "tools/lift/synth_$name.py" --run "$rec" "$work" > "$log" 2>&1
+        python -I "tools/lift/synth_$name.py" --run "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         ;;
     *)
-        python -I "tools/lift/synth_$name.py" --run --no-cover "$rec" "$work" > "$log" 2>&1
+        python -I "tools/lift/synth_$name.py" --run --no-cover "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         ;;
     esac
     total=$(grep -c "functions tested" "$log")
     bad=$(bad_lines "$log")
-    if [ "$total" -eq 0 ]; then
+    if [ "$synth_status" -ne 0 ] || grep -q 'NO RESULT' "$log"; then
+        echo "synth $name: FAILED (exit $synth_status, log $log)"
+        fail=1
+    elif [ "$total" -eq 0 ]; then
         echo "synth $name: no result (log $log)"
         fail=1
     elif [ -n "$bad" ]; then
@@ -116,5 +128,18 @@ for name in "${names[@]}"; do
         echo "synth $name: ok ($total cases)"
     fi
 done
+
+if [ $invalid -eq 1 ]; then
+    log="$out/security.log"
+    python -I tools/lift/synth_net.py --invalid --run "$rec" "$out/security" > "$log" 2>&1
+    status=$?
+    grep -E '^security:|^[a-z0-9_]+: FAIL' "$log"
+    if [ $status -ne 0 ] || ! grep -q '^security: .* cases, 0 failed$' "$log"; then
+        echo "invalid input: FAILED (log $log)"
+        fail=1
+    else
+        echo "invalid input: ok"
+    fi
+fi
 
 exit $fail

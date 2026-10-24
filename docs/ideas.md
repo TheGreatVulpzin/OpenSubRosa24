@@ -69,3 +69,21 @@ Each one changes behavior only for invalid input from a client or an admin. The 
 - Check the name length and the list size in `listfiles`. A name of 64 bytes or more runs into the next name, and a list with 1024 names writes a 0 into the next list. (both)
 - Stop `getint` from returning a random value when the text has no number. The clean code returns 0. (both)
 - Fix the offset of `gettimeofday` (11644473600000000 in place of 116444736000000000). The function is not used now. (both)
+
+## Big ideas (dreams, not plans)
+
+All are for SubVulpes and need the plugin API first ([plugins.md](plugins.md)). All work with the original client unless a note says otherwise. Each part is useful alone.
+
+| Idea | What it needs | Notes |
+| --- | --- | --- |
+| Replay and rewind | A log of the inputs, the `os_rand()` seed and the tick clock. Snapshots | The server is deterministic. Replay, kill-cam, rewind by 30 s and proof against cheats. A snapshot is about 600 MB, so it needs incremental snapshots or smaller pools. A plugin that reads outside data must record it. |
+| Bots that talk | Plugin with a language model, chat and phone hooks | The original client sees only text messages. |
+| Persistent world | A plugin that saves buildings, territories, stocks and reputation between rounds | The game already has economy, stocks, accounts and missions. A government plugin can charge taxes and run elections by chat. |
+| Event director | Creation of items, objects and bots, and chat messages | A convoy, a police sweep or a truck strike. The difficulty follows the group. The cheapest big idea. |
+| Linked servers | A safe account identity, and a server to server API | A player moves between servers with money and items. The protocol sends `account_id` as plain text, so identity needs new work. |
+| Game modes as packages | Teleport, items, chat, rounds | Battle royale with a shrinking zone, capture the flag, races, a campaign with missions in a chain. |
+| Discord and Twitch bridge | Chat events and a network plugin | The in-game chat and a Discord channel are one. The audience votes for events or spends points on items. |
+| Live web map and analytics | A plugin that sends positions, deaths and stock prices over WebSocket | A top-down map of the city in a browser, heat maps of deaths, charts of the economy. Read only, so it is safe. |
+| Seasons, ladder and achievements | Accounts and a database | Rankings by season, rewards, titles. |
+| Mutators | State changes only | For example a random item for everyone each minute, or a bot swarm. Do not change physics: the client calculates it alone and would desync. |
+| Random cities | The level builder of `src/game/level.c` | Only if the client builds the same level from a shared seed. If the client reads its own map files, a changed map desyncs. Check this first. |
