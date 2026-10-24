@@ -12,6 +12,7 @@ int pbitwritenego(const uint32_t *value, uint32_t bits);
 int pbitreadnego(uint32_t *value, uint32_t bits);
 int cs_pwrite(const void *data, int size, int count);
 int cs_pread(void *dst, int size, int count);
+int packet_complete(uint8_t type);
 int recvpacket(void);
 void sendpacket(uint32_t ip, uint16_t port);
 void packangle(const float *angle, uint32_t bits);

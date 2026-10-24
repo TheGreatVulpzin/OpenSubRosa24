@@ -56,36 +56,38 @@ int pbitwrite(const uint32_t *value, uint32_t bits)
 int pbitread(uint32_t *value, uint32_t bits)
 {
     BsdSocket *bs = &sr_bsdsocket;
-    uint32_t v = 0, room;
-    int bit, shift = 0;
-    if (bs->recv_pos >= BUFFER_SIZE || ((int)bits >> 3) + bs->recv_pos > bs->recv_size)
+    uint32_t v = 0, end;
+    int bit, pos;
+    if (bs->recv_size < 0)
         return 0;
-    bit = bs->recv_bit;
-    if ((int)bits > 0) {
-        for (;;) {
-            v |= ((uint32_t)(bs->recv_buf[bs->recv_pos] >> (bit & 31)) & ~(0xffffffffu << (bits & 31)))
-                 << (shift & 31);
-            room = 8 - (uint32_t)bit;
-            if (bits < room) {
-                bs->recv_bit = bit + (int)bits;
-                *value = v;
-                return 1;
-            }
-            if (bits == room)
-                break;
-            bs->recv_pos++;
-            bits -= room;
-            shift += (int)room;
-            bs->recv_bit = 0;
-            bit = 0;
-            if ((int)bits < 1) {
-                *value = v;
-                return 1;
-            }
-        }
-        bs->recv_pos++;
+    if ((unsigned)bs->recv_pos >= BUFFER_SIZE || (unsigned)bs->recv_size > BUFFER_SIZE ||
+        (unsigned)bs->recv_bit > 7 || bits > 32 ||
+        (unsigned)bs->recv_pos * 8 + (unsigned)bs->recv_bit + bits > (unsigned)bs->recv_size * 8) {
+        bs->recv_pos = BUFFER_SIZE;
         bs->recv_bit = 0;
+        return 0;
     }
+    bit = bs->recv_bit;
+    pos = bs->recv_pos;
+    end = (uint32_t)bit + bits;
+    if (bits) {
+        v = (uint32_t)bs->recv_buf[pos] >> bit;
+        if (end > 8)
+            v |= (uint32_t)bs->recv_buf[pos + 1] << (8 - bit);
+        if (end > 16)
+            v |= (uint32_t)bs->recv_buf[pos + 2] << (16 - bit);
+        if (end > 24)
+            v |= (uint32_t)bs->recv_buf[pos + 3] << (24 - bit);
+        if (end > 32)
+            v |= (uint32_t)bs->recv_buf[pos + 4] << (32 - bit);
+        /* A 32-bit read clears the bits from its first byte. */
+        if (bits == 32)
+            v &= 0xffffffffu << (8 - bit);
+        else
+            v &= ~(0xffffffffu << bits);
+    }
+    bs->recv_pos = pos + (int)(end >> 3);
+    bs->recv_bit = (int)(end & 7);
     *value = v;
     return 1;
 }
@@ -96,12 +98,12 @@ int pbitwritenego(const uint32_t *value, uint32_t bits)
     return 1;
 }
 
-/* Read bits as a value where all bits set means -1 (0xffffffff). A failed read keeps the
- * bit count as the value. */
+/* Read bits as a value where all bits set means -1 (0xffffffff). */
 int pbitreadnego(uint32_t *value, uint32_t bits)
 {
     uint32_t v = bits;
-    pbitread(&v, bits);
+    if (!pbitread(&v, bits))
+        return 0;
     *value = v == (1u << (bits & 31)) - 1 ? 0xffffffffu : v;
     return 1;
 }
@@ -127,24 +129,105 @@ int cs_pwrite(const void *data, int size, int count)
     return 1;
 }
 
-/* Read size * count bytes at the next whole byte. Returns 0 when the packet has too few bytes.
- * The size test comes before the move to the next byte, so a read can pass the end by one. */
+/* Read size * count bytes at the next whole byte. A short read stops all later reads. */
 int cs_pread(void *dst, int size, int count)
 {
     BsdSocket *bs = &sr_bsdsocket;
-    size_t n;
-    if (bs->recv_pos > 0xffff)
+    uint64_t n = (uint64_t)(unsigned)size * (unsigned)count;
+    unsigned pos = (unsigned)bs->recv_pos + (bs->recv_bit > 0);
+    if (bs->recv_size < 0)
         return 0;
-    n = (size_t)(size * count);
-    if (bs->recv_size < (int)(n + (size_t)bs->recv_pos))
-        return 0;
-    if (bs->recv_bit > 0) {
-        bs->recv_pos++;
+    if ((unsigned)bs->recv_pos >= BUFFER_SIZE || (unsigned)bs->recv_size > BUFFER_SIZE ||
+        (unsigned)bs->recv_bit > 7 || size < 0 || count < 0 ||
+        pos > (unsigned)bs->recv_size || n > (unsigned)bs->recv_size - pos) {
+        bs->recv_pos = BUFFER_SIZE;
         bs->recv_bit = 0;
+        return 0;
     }
-    memcpy(dst, &bs->recv_buf[bs->recv_pos], n);
-    bs->recv_pos += (int)n;
+    bs->recv_bit = 0;
+    memcpy(dst, &bs->recv_buf[pos], (size_t)n);
+    bs->recv_pos = (int)(pos + (unsigned)n);
     return 1;
+}
+
+typedef struct PacketReader {
+    const uint8_t *buf;
+    unsigned at, end;
+    int bad;
+} PacketReader;
+
+static void check_bits(PacketReader *r, unsigned bits)
+{
+    if (r->bad || r->at > r->end || bits > r->end - r->at)
+        r->bad = 1;
+    else
+        r->at += bits;
+}
+
+/* Read a field of at most eight bits without a change to the receive cursor. */
+static unsigned check_field(PacketReader *r, unsigned bits)
+{
+    unsigned at = r->at, value;
+    check_bits(r, bits);
+    if (r->bad)
+        return 0;
+    value = r->buf[at >> 3] >> (at & 7);
+    if ((at & 7) + bits > 8)
+        value |= (unsigned)r->buf[(at >> 3) + 1] << (8 - (at & 7));
+    return value & ((1u << bits) - 1);
+}
+
+static void check_bytes(PacketReader *r, unsigned bytes)
+{
+    r->at = (r->at + 7) & ~7u;
+    check_bits(r, bytes * 8);
+}
+
+/* Check the full join or input packet before its handler changes game state. */
+int packet_complete(uint8_t type)
+{
+    const BsdSocket *bs = &sr_bsdsocket;
+    PacketReader r;
+    unsigned count, i;
+    if ((unsigned)bs->recv_size > BUFFER_SIZE || (unsigned)bs->recv_pos >= BUFFER_SIZE ||
+        (unsigned)bs->recv_bit > 7)
+        return 0;
+    r.buf = bs->recv_buf;
+    r.at = (unsigned)bs->recv_pos * 8 + (unsigned)bs->recv_bit;
+    r.end = (unsigned)bs->recv_size * 8;
+    r.bad = 0;
+    if (type == 2) {
+        check_bytes(&r, 41);
+    } else if (type == 4) {
+        check_bytes(&r, 40);
+        check_bits(&r, 28);
+        check_bytes(&r, 12);
+        count = check_field(&r, 4);
+        check_bits(&r, 8);
+        for (i = 0; i < count && !r.bad; i++) {
+            unsigned kind = check_field(&r, 4);
+            if (kind == 0) {
+                check_bits(&r, 8);
+                check_bytes(&r, 4);
+            } else if (kind == 1) {
+                unsigned length = check_field(&r, 6);
+                if (length)
+                    check_bytes(&r, length);
+                check_bits(&r, 4);
+            } else if (kind == 2) {
+                check_bits(&r, 32);
+            }
+        }
+        for (i = 0; i < 6 && !r.bad; i++) {
+            unsigned size;
+            check_bits(&r, 8);
+            size = check_field(&r, 8);
+            check_bits(&r, 2);
+            check_bytes(&r, size);
+        }
+        check_bits(&r, 9);
+    }
+    return !r.bad;
 }
 
 /* Receive one packet on the current socket. A packet that does not start with the socket id
@@ -160,7 +243,7 @@ int recvpacket(void)
     bs->recv_size = os_recvfrom((uintptr_t)bs->handle[bs->current], (char *)bs->recv_buf, BUFFER_SIZE, 0, bs->addr,
                                 &bs->addr_len);
     if (bs->recv_size > 0) {
-        if (bs->recv_buf[0] == (int)(signed char)id[0] && bs->recv_buf[1] == id[1] && bs->recv_buf[2] == id[2] &&
+        if (bs->recv_size >= 4 && bs->recv_buf[0] == (int)(signed char)id[0] && bs->recv_buf[1] == id[1] && bs->recv_buf[2] == id[2] &&
             bs->recv_buf[3] == id[3]) {
             bs->recv_pos = 4;
             bs->recv_bit = 0;

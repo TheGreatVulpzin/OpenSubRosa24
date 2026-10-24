@@ -118,6 +118,8 @@ Limits in the original (kept in `srpacket.py`):
 | `cs_pread` fails if `length < read_byte + size*count`, **checked before aligning**, so it may read 1 byte past the end | `cs_pread` |
 | `serverrecv` ignores the result of nearly every read, so a short packet is parsed as if the missing data were stale bytes | `serverrecv` |
 
+OpenSubRosa S1 checks the full join or input packet before either handler changes state. Readers include partial bits and byte alignment in their bounds checks. A short read stops all later reads until the next packet. Section 12, item 15 lists the checks.
+
 ### 3.3 Field types used in the tables
 
 | Type | Wire | Meaning |
@@ -541,17 +543,19 @@ Wire format that is certain but whose meaning is not, and parts not checked:
 13. **Types never produced**: `HumanBlock.kind == 1`, `ObjectBlock.mode == 3`, events 11 and 15 (not produced by the 024d), `packobjectpacket2` (dead code), `pbitwritescale`/`pbitwritesign` (unused). The parser handles them as the code does.
 14. **Voice codec**: the frames sit in an array called `speex`; the codec, frame duration and the meaning of `mode` (2 bits) were not checked.
 15. **Out-of-range inputs in the original**, relevant to anyone who writes a compatible server:
-    - the voice `index` of a type 4 packet is read as 8 bits and used to index a 64-entry ring before it is masked; a value >= 64 writes outside the ring in the original server; the hook DLL masks it to 6 bits before the game reads the packet, and drops a type 4 packet that ends before its last voice frame (`hook/netguard.c`, `net_guard=1` by default);
+    - **A1, fixed:** `handle_input` masks each voice frame index to six bits immediately after its read. Indices from 64 to 255 cannot write past the 64-entry ring. The proxy guard (`hook/netguard.c`, `net_guard=1`) stays unchanged. The server check also applies to the standalone server;
     - the item count of the object part is 8 bits but the item loop has no explicit cap (up to 1024 items), so a count above 255 would wrap;
     - the server name is copied with `strcpy` into `server+0x14`, but only 32 bytes are sent, so a long `servername=` (up to 49 characters) is cut in the packet and the unsent part is still written into memory after the name;
     - the human health is sent as `health + 10` in 7 bits and wraps above 117.
-    - the action start index of a type 4 packet (`num_actions`) is read as 8 bits, but the action ring has 64 records. A value of 64 or more makes `serverrecv` write the actions (up to 15 records of 0x54 bytes) past the ring, into the next players. `hook/netguard.c` does not check it. A fix is `num_actions &= 0x3f` after the read. A valid client sends 0 to 63;
-    - the voice frame index is also used in the standalone server, which does not link `netguard.c`: the 8-bit index writes up to 255 bytes past the 64-entry ring. A fix is `frame &= 0x3f` after the read;
-    - a type 4 packet from a connection whose `player_id` is -1 (the old connection after an account take-over, until the next tick) indexes `players[-1]` and `voice_ring[-1]`. A fix is to ignore the packet when `player_id` is -1;
+    - **A2, fixed:** `handle_input` masks the action start index (`Player.num_actions`) to six bits before the first action write. A valid client sends 0 to 63;
+    - **A3, fixed:** the same mask applies with zero actions. Without it, a start index of 64 or more makes `logic_playeractions` loop without an end;
+    - **A4, fixed:** input from a connection with a negative `player_id` is ignored. This includes the old connection after an account takeover;
+    - **A5, fixed:** the 256-connection limit is checked before a clear or append. At capacity, a new account cannot join. A connected account reuses its current slot. Below capacity, account takeover keeps the same connection sequence;
+    - **A6, fixed:** `packet_complete` checks the full join or input packet before either handler changes state. The check includes the voice flag and spectate field. Readers include partial bits and byte alignment in their bounds checks. A short read stops all later reads until the next packet. A negative receive size means no packet and keeps the cursor unchanged;
     - `/phone` (admin chat command) writes `phone_id` to `items[it]` before it checks `it < 0x400`. When `createitem` fails (-1) the write goes to `items[-1]`. A fix is to test first;
     - the kick list (`/kick`) has no bound: `kickedip[numofkicked++]` has room for 41368 entries, and `numofkicked` sits right after the array, so a long series of `/kick` overwrites the counter. A fix is to stop at 41368;
     - a message of a player who has a living human and is in a vehicle reads `humans[attach_id]` and `items[attach_id]` with an `attach_id` of 10 bits (up to 1023) while there are 512 humans. A message event only has such an id when the server made it, so this is not reachable from a client.
-    These fixes are not in the code yet. The harness has only valid input, so they do not change a result (`docs/plano.md`: security fixes may go in early). They are listed in `docs/ideas.md`.
+    S1 fixes change only invalid input. Valid packets keep the same results. The invalid input mode uses sanitized packets or state checks. Other items remain open in `docs/ideas.md`.
 16. **Names in `analysis/024d/functions.csv`** that look wrong after reading the code: `0x16bb0` is named `getrandomvector2d` but is `createevent_bullet`; `0x16db0` is named `scaleaddvectors` but is `createevent_sound`. This document does not edit that file.
 17. **Reconnect and account take-over**, bans and "server full" are described from `serverrecv`; the effect on a real client (what it shows when ignored) was not observed.
 18. **Re-encoding**: `srpacket.py` uses truncation like the original. A parsed angle encoded again can differ by one step. Bytes of a captured packet therefore may not be reproduced bit for bit by parse + build for the quantized fields (they are for all integer fields).

@@ -33,7 +33,12 @@ These change only what happens with invalid client input. The recordings have on
 
 | Fix | Where | State |
 | --- | --- | --- |
-| Voice frame index: mask or reject the index before the `memcpy` (an index from 64 to 255 writes up to 48 KB after the voice ring) | `serverrecv` (0x33650) | Done in `hook/netguard.c` (`net_guard=1`). Not tested live with players. |
+| A1: mask the voice frame index to six bits | `handle_input`, `src/net/server.c` | Done in the server, including standalone. The proxy guard stays unchanged. |
+| A2: mask the action start index before the first action write | `handle_input`, `src/net/server.c` | Done. The action ring has 64 entries. |
+| A3: mask the action start index with zero actions | `handle_input`, `src/net/server.c` | Done. Prevents an endless loop in `logic_playeractions`. |
+| A4: ignore input from a connection with a negative `player_id` | `handle_input`, `src/net/server.c` | Done. Covers the old connection after an account takeover. |
+| A5: cap the connection pool at 256 | `handle_join`, `add_connection`, `src/net/server.c` | Done. At capacity, a new account cannot join. A connected account reuses its current slot. |
+| A6: discard short joins and inputs before state changes | `serverrecv`, `src/net/packet.c` | Done. Includes input trailers. A short read stops all later reads until the next packet. |
 | Item count of the object part (8 bits, no cap) | `serverrecv` | Open |
 | Server name copy (`strcpy`, longer than the 32 bytes sent) | | Open |
 | Human health (`health + 10` in 7 bits, wraps above 117) | | Open |
@@ -55,11 +60,10 @@ These change only what happens with invalid client input. The recordings have on
 
 Each one changes behavior only for invalid input from a client or an admin. The list with the reason of each is in `docs/protocol.md`, section 12, item 15.
 
-- Mask `num_actions` and the voice frame index to 6 bits in `serverrecv` (`src/net/server.c`).
-- Ignore a type 4 packet from a connection with `player_id` -1.
+- S1 checks are complete. See A1 through A6 in the security table above.
 - Test `it < 0x400` before the write in `/phone` (`src/net/commands.c`).
 - Stop the kick list at 41368 entries.
-- Link `hook/netguard.c` into the standalone server, or move its checks into `serverrecv`.
+- The server checks also apply to the standalone server. `hook/netguard.c` stays unchanged.
 
 
 ## System code (found in group 7)

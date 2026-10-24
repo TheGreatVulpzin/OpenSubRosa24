@@ -23,10 +23,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import synth_net as net
 
 PACKET_CASES = ('input_actions_high', 'input_voice_big', 'input_player_minus1',
-                'input_actions_wrap', 'join_takeover', 'join_same_account_256',
+                'input_actions_wrap', 'join_takeover', 'join_short', 'input_cut_trailer', 'input_cut_all',
                 'garbage_input_cut_voice', 'garbage_input_cut_actions', 'garbage_input_cut_head')
 STATE_CASES = ('input_actions_zero_64', 'input_actions_zero_255', 'menu6_zero', 'menu6_minus1',
-               'menu6_minus100000', 'bank_items_full', 'phone_nohuman', 'kick_last', 'kick_full')
+               'menu6_minus100000', 'bank_items_full', 'phone_nohuman', 'kick_last', 'kick_full',
+               'join_same_account_256', 'join_full_new', 'read_short_bits', 'read_short_bytes')
 MARKET = 0x17179600
 KICK_CAPACITY = (net.NUMKICKED - net.KICKED) // 4
 
@@ -45,6 +46,8 @@ class StrictReader(net.sp.PacketReader):
 
 def sanitize_input(raw):
     """Apply the voice guard and the planned six-bit action index rule, in place."""
+    if len(raw) >= 5 and raw[:5] == b'7DFP\x02':
+        return raw if len(raw) >= 46 else None
     if len(raw) < 5 or raw[:5] != b'7DFP\x04':
         return raw
     data = bytearray(raw)
@@ -83,6 +86,8 @@ def sanitize_input(raw):
             size = r.read_bits(8)
             r.read_bits(2)
             r.read_bytes(size)
+        r.read_bits(1)
+        r.read_bits(8)
     except net.sp.PacketError:
         return None
     return bytes(data)
@@ -106,7 +111,7 @@ def reference_lines(args, discard=False):
 
 
 def packet_case(cc, name):
-    if name in {'join_same_account_256', 'join_takeover', 'input_player_minus1'}:
+    if name in {'join_takeover', 'input_player_minus1'}:
         p = cc.ctx['p']
         account = cc.rd(net.NUMACC)
         cc.account(account, (0x3333, 0x4444))
@@ -114,7 +119,7 @@ def packet_case(cc, name):
         cc.player(p, net.P_ACCOUNT_ID, 0x3333)
         cc.player(p, net.P_ACCOUNT_ID + 4, 0x4444)
         cc.wr(net.SERVER + 0x5c, 256)
-        count = 256 if name == 'join_same_account_256' else 1
+        count = 1
         args = ['R 33650']
         reference = []
         slots = cc.rd(net.NUMCONN)
@@ -123,12 +128,22 @@ def packet_case(cc, name):
             args.append(line)
             reference += reference_lines([line], discard=slots >= 256)
             slots += slots < 256
-        if name != 'join_same_account_256':
-            # The first join leaves the old connection at player_id -1 until the next tick.
-            line = net.recv_line(net.input_packet(cc.rd(net.GAME + 0x1c)), *cc.addr())
-            args.append(line)
-            reference += reference_lines([line], discard=True)
+        # The first join leaves the old connection at player_id -1 until the next tick.
+        line = net.recv_line(net.input_packet(cc.rd(net.GAME + 0x1c)), *cc.addr())
+        args.append(line)
+        reference += reference_lines([line], discard=True)
         return args + reference, []
+    elif name == 'input_cut_trailer':
+        raw = net.input_packet(cc.rd(net.GAME + 0x1c))
+        args = ['R 33650'] + [net.recv_line(raw[:-cut], *cc.addr()) for cut in (1, 2)]
+    elif name == 'input_cut_all':
+        actions = [net.sp.Action(0, 3, 5), net.sp.Action(1, 0, 0, b''),
+                   net.sp.Action(1, 0, 1, b'hello'), net.sp.Action(2, 4, 6)]
+        raw = net.input_packet(cc.rd(net.GAME + 0x1c), actions)
+        args = ['R 33650'] + [net.recv_line(raw[:size], *cc.addr()) for size in range(5, len(raw) + 1)]
+    elif name == 'join_short':
+        args = ['R 33650'] + [net.recv_line(net.join_packet((0x1111, 0x2222))[:size],
+                                          (10, 1, 2, 3), 10000 + size) for size in range(5, 46)]
     else:
         args = net.recv_cases(cc)[name](cc)
     return args + reference_lines(args), []
@@ -144,6 +159,44 @@ def state_case(cc, name):
             n = min(4096, size - start)
             data = cc.s.read(rva + start, '%ds' % n)[0]
             checks.append('%x %x %s' % (rva + start, n, data.hex()))
+
+    if name in {'join_same_account_256', 'join_full_new'}:
+        account = cc.rd(net.NUMACC)
+        cc.account(account, (0x3333, 0x4444))
+        cc.player(p, net.P_ACCOUNT, account)
+        cc.player(p, net.P_ACCOUNT_ID, 0x3333)
+        cc.player(p, net.P_ACCOUNT_ID + 4, 0x4444)
+        cc.wr(net.SERVER + 0x5c, 256)
+        unchanged(net.CONNS + 256 * net.CONN_SIZE, net.CONN_SIZE)
+        if name == 'join_same_account_256':
+            args = ['R 33650'] + [net.recv_line(net.join_packet((0x3333, 0x4444)),
+                                              (10, 1, 2, 3), 10000 + i) for i in range(256)]
+            slot = net.CONNS + 255 * net.CONN_SIZE
+            checks += ['%x 4 %s' % (slot + off, struct.pack('<I', value).hex())
+                       for off, value in ((net.C_IP, 0x0a010203), (net.C_PORT, 10255),
+                                          (net.C_PLAYER, p), (net.C_IDLE, 0))]
+        else:
+            cc.wr(net.NUMCONN, 256)
+            for i in range(256):
+                cc.conn(i, net.C_PLAYER, p)
+                cc.conn(i, net.C_IDLE, 0)
+            unchanged(net.PLAYERS, 256 * net.PLAYER_SIZE)
+            unchanged(net.ACCOUNTS + account * net.ACCOUNT_SIZE, net.ACCOUNT_SIZE)
+            unchanged(net.NUMACC, 4)
+            args = ['R 33650', net.recv_line(net.join_packet((0x5555, 0x6666)), (10, 1, 2, 3), 10000)]
+        checks.append('%x 4 %s' % (net.NUMCONN, struct.pack('<i', 256).hex()))
+        return args, checks
+    if name in {'read_short_bits', 'read_short_bytes'}:
+        net.load_recv(cc, b'7DFP\x55')
+        cc.wr(net.RECV_BIT, 7)
+        target = net.BUF
+        cc.wr(target, 0x12345678)
+        first = 'R db20 M:%x V:2' % target if name == 'read_short_bits' else 'R d9f0 M:%x V:1 V:1' % target
+        args = [first, 'R db20 M:%x V:1' % target, 'R d9f0 M:%x V:0 V:1' % target,
+                'R ddd0 M:%x V:1' % target]
+        unchanged(target, 4)
+        checks += ['%x 4 00000100' % net.RECV_POS, '%x 4 00000000' % net.RECV_BIT]
+        return args, checks
 
     if name.startswith('input_actions_zero_'):
         start = int(name.rsplit('_', 1)[1])

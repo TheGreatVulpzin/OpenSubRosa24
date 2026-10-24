@@ -2,14 +2,14 @@
  * the voice. See docs/game/network.md.
  *
  * The functions read the packet fields in the order of the wire format (docs/protocol.md). A
- * read that fails leaves its target as it was. Some locals keep an old value on purpose (the
- * type of the last packet, the voice frame, the number of actions), so a short packet reuses it.
+ * read that fails leaves its target as it was. Short joins and inputs do not reach a handler.
  *
  * The floats of a player input and the vectors of a camera are copied as raw bytes (cs_pread),
  * so no float load changes their bits.
  */
 #include "server.h"
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -322,14 +322,18 @@ static void adopt_humans(int player, int account)
 }
 
 /* Add the connection of the sender for a player. */
-static void add_connection(int player)
+static void add_connection(int player, int slot)
 {
-    Connection *c = &sr_connections[sr_numofconnections];
+    Connection *c;
+    if ((unsigned)slot >= SR_MAX_CONNECTION || (unsigned)sr_numofconnections > SR_MAX_CONNECTION)
+        return;
+    c = &sr_connections[slot];
     c->ip = sender_ip();
     *(uint16_t *)&c->port = sender_port();
     c->player_id = player;
     c->idle_ticks = 0;
-    sr_numofconnections++;
+    if (slot == sr_numofconnections)
+        sr_numofconnections++;
     c->event_ack = 0;
     c->game_id = -1;
     c->sequence = 0xffffffffu;
@@ -351,6 +355,29 @@ static void handle_join(uint32_t *ver)
     }
     if (sr_serverinfo.num_players >= sr_serverinfo.max_players)
         return;
+    if ((unsigned)sr_numofconnections >= SR_MAX_CONNECTION) {
+        uint8_t join[40];
+        uint32_t id[2];
+        if (sr_numofconnections != SR_MAX_CONNECTION || !cs_pread(join, sizeof(join), 1))
+            return;
+        memcpy(id, join + 32, sizeof(id));
+        for (a = 0; a < sr_numofaccounts; a++) {
+            if (sr_accounts[a].id[0] == id[0])
+                break;
+        }
+        if (a == sr_numofaccounts || sr_accounts[a].id[1] != id[1])
+            return;
+        /* At capacity, an account can replace only its own connection. */
+        for (i = 0; i < sr_numofconnections; i++) {
+            p = sr_connections[i].player_id;
+            if (p >= 0 && players[p].account == a) {
+                memset(&sr_connections[i], 0, sizeof(Connection));
+                add_connection(p, i);
+                return;
+            }
+        }
+        return;
+    }
     memset(&sr_connections[sr_numofconnections], 0, sizeof(Connection));
     p = createplayer();
     if (p == -1)
@@ -368,7 +395,7 @@ static void handle_join(uint32_t *ver)
             deleteplayer(p);
             p = other;
             sr_connections[i].player_id = -1;
-            add_connection(p);
+            add_connection(p, sr_numofconnections);
             return;
         }
     }
@@ -392,7 +419,7 @@ static void handle_join(uint32_t *ver)
     createevent_updateplayer(p);
     createevent_updateplayer_finance(p);
     announce(&players[p], " Joined");
-    add_connection(p);
+    add_connection(p, sr_numofconnections);
 }
 
 /* The state that one type 4 packet leaves in locals between reads. */
@@ -402,8 +429,7 @@ typedef struct InputState {
     uint32_t spec;  /* the spectated human */
 } InputState;
 
-/* Read the actions of a player: a menu choice, a chat text or an item action. The ring has 64
- * records but the first index is 8 bits, so a client can write up to 255 records. */
+/* Read the actions of a player: a menu choice, a chat text or an item action. */
 static void read_actions(Player *pl, InputState *st)
 {
     uint32_t left = st->count;
@@ -418,11 +444,9 @@ static void read_actions(Player *pl, InputState *st)
         }
         if (a->kind == 1) {
             pbitread((uint32_t *)&a->arg_a, 6);
-            st->frame = 0;
-            while ((int)st->frame < a->arg_a) {
-                cs_pread(&a->text[st->frame], 1, 1);
-                st->frame++;
-            }
+            if (a->arg_a > 0)
+                cs_pread(a->text, a->arg_a, 1);
+            st->frame = (uint32_t)a->arg_a;
             a->text[a->arg_a] = 0;
             pbitread((uint32_t *)&a->arg_b, 4);
         }
@@ -435,9 +459,7 @@ static void read_actions(Player *pl, InputState *st)
     } while (left != 0);
 }
 
-/* Type 4: the input of a player. The fields are in the order of the wire format. The voice
- * frames come last: 6 of them, each into the ring of the player. The index of a frame is 8
- * bits and is not masked (hook/netguard.c masks it before the game reads the packet). */
+/* Type 4: the input of a player. The six voice frames go into the ring of the player. */
 static void handle_input(InputState *st)
 {
     int i = find_connection(0), k;
@@ -447,28 +469,26 @@ static void handle_input(InputState *st)
     if (i == -1)
         return;
     c = &sr_connections[i];
+    if (c->player_id < 0)
+        return;
     pl = &sr_players[c->player_id];
     ring = &sr_speex.voice_ring[c->player_id];
     c->idle_ticks = 0;
     cs_pread(&c->game_id, 4, 1);
     if (c->game_id != sr_game.round_number)
         return;
-    for (k = 0; k < 4; k++)
-        cs_pread(&pl->input_axes[k], 4, 1);
-    cs_pread(&pl->yaw, 4, 1);
-    cs_pread(&pl->input_pitch, 4, 1);
-    cs_pread(&pl->input_extra[0], 4, 1);
-    cs_pread(&pl->input_extra[1], 4, 1);
-    cs_pread(&pl->input_buttons, 4, 1);
+    cs_pread((uint8_t *)pl + offsetof(Player, input_axes), 4, 9);
     pbitread((uint32_t *)&pl->input_mode, 8);
     pbitread((uint32_t *)&pl->move_mode, 4);
     pbitread((uint32_t *)&c->event_ack, 16);
     cs_pread(&c->camera_pos, 4, 3);
     pbitread(&st->count, 4);
     pbitread((uint32_t *)&pl->num_actions, 8);
+    pl->num_actions &= 0x3f;
     read_actions(pl, st);
     for (k = 0; k < 6; k++) {
         pbitread(&st->frame, 8);
+        st->frame &= 0x3f;
         pbitread((uint32_t *)&ring->size[st->frame], 8);
         pbitread((uint32_t *)&ring->mode[st->frame], 2);
         cs_pread(ring->data[st->frame], ring->size[st->frame], 1);
@@ -511,7 +531,7 @@ static void drop_connections(void)
 /* Each tick: count the players, drop the idle connections and handle each packet that came. */
 void serverrecv(void)
 {
-    uint8_t type = 0xff; /* the type byte of the last packet: a short packet keeps the old one */
+    uint8_t type = 0xff;
     uint32_t ver = 0, nonce = 0;
     InputState st = { 0, 0, 0 };
     int count = 0, n, i;
@@ -536,7 +556,8 @@ void serverrecv(void)
         }
         if (i < sr_numofkicked)
             continue;
-        cs_pread(&type, 1, 1);
+        if (!cs_pread(&type, 1, 1) || !packet_complete(type))
+            continue;
         if (type == 0) {
             pbitread(&ver, 8);
             cs_pread(&nonce, 4, 1);

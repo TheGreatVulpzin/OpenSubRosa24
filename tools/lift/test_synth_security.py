@@ -45,8 +45,12 @@ class SecurityTests(unittest.TestCase):
 
     def test_short_packets_drop(self):
         raw = net.input_packet(1, [net.sp.Action(1, 0, 0, b'hello')])
-        for size in range(5, len(raw) - 2):
+        for size in range(5, len(raw)):
             self.assertIsNone(security.sanitize_input(raw[:size]), size)
+        raw = net.join_packet((1, 2))
+        for size in range(5, len(raw)):
+            self.assertIsNone(security.sanitize_input(raw[:size]), size)
+        self.assertEqual(security.sanitize_input(raw), raw)
 
     def test_valid_wrap_unchanged(self):
         raw = net.input_packet(1, [net.sp.Action(0, 3, 7)] * 15, start=60)
@@ -62,13 +66,13 @@ class SecurityTests(unittest.TestCase):
 
     def test_join_capacity_and_stale_sender(self):
         cc = self.case()
-        args, checks = security.packet_case(cc, 'join_same_account_256')
+        args, checks = security.state_case(cc, 'join_same_account_256')
         raw = [s for s in args if s.startswith('E ')]
-        safe = [s for s in args if s.startswith('S ')]
-        self.assertFalse(checks)
+        self.assertTrue(checks)
         self.assertEqual(len(raw), 256)
         self.assertEqual(len({s.split()[-2] for s in raw}), 256)
-        self.assertEqual(sum('o:37444650ff' in s for s in safe), 1)
+        self.assertIn('%x 4 00010000' % net.NUMCONN, checks)
+        self.assertIn('%x 4 0f280000' % (net.CONNS + 255 * net.CONN_SIZE + net.C_PORT), checks)
         args, _ = security.packet_case(self.case(), 'input_player_minus1')
         self.assertEqual(sum(s.startswith('E ') for s in args), 2)
         self.assertIn('o:37444650ff', args[-1])
@@ -79,6 +83,9 @@ class SecurityTests(unittest.TestCase):
                 cc = self.case()
                 args, checks = security.state_case(cc, name)
                 self.assertTrue(checks, name)
+                for line in args:
+                    if line.startswith('R '):
+                        self.assertIn(line.split()[1], net.RVA_NAME, name)
                 if name.startswith('menu6_'):
                     self.assertEqual(cc.rd(net.PLAYERS + 0xd4), 6)
                     self.assertEqual(cc.rd(net.PLAYERS + 0x64), 0)

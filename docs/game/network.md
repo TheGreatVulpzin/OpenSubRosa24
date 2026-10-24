@@ -115,9 +115,11 @@ A join sends no reply. The client waits for the new game packet (type 6) that `s
 
 ### Input packet
 
-The floats and the camera are copied as raw bytes. The actions go into a ring of 64 records in the player (`PlayerAction`): a menu choice (kind 0), a chat text (kind 1) or an item action (kind 2). `num_actions` counts the next record. The client sends the start index in 8 bits, so a wrong client can start at 64 or more.
+The floats and the camera are copied as raw bytes. The actions go into a ring of 64 records in the player (`PlayerAction`): a menu choice (kind 0), a chat text (kind 1) or an item action (kind 2). `num_actions` counts the next record. The server masks the eight-bit start index to six bits, even with zero actions.
 
-The voice frames go into the ring of the player (`Speex.voice_ring[player]`). Each frame has an index (8 bits), a size (8 bits), a mode (2 bits) and the bytes. The ring has 64 frames, so an index of 64 or more writes past the ring. The proxy (`hook/netguard.c`) masks the index to 6 bits before the game reads the datagram.
+The voice frames go into the ring of the player (`Speex.voice_ring[player]`). Each frame has an index (8 bits), a size (8 bits), a mode (2 bits) and the bytes. The server masks the index to six bits immediately after its read. The proxy guard (`hook/netguard.c`) stays unchanged.
+
+Input with a negative connection `player_id` is ignored. At 256 connections, a new account cannot join. A connected account reuses its current slot. Below capacity, account takeover keeps the same connection sequence.
 
 ## Send
 
@@ -208,11 +210,13 @@ These functions read what the server writes. The dedicated server never calls th
 | `unpackangle` | The reverse of `packangle`. |
 | `unpackorientation` | The reverse of `packorientation`. |
 | `pbitreadnego` | Read bits where all bits set mean -1. |
-| `cs_pread` | Read whole bytes at the next byte. The size test comes before the move to the next byte. |
+| `cs_pread` | Read whole bytes at the next byte. The bounds check includes byte alignment. |
 
-## Garbage on short packets
+## Short packets
 
-Some locals keep an old value when a read fails. In `serverrecv`, the type byte of the last packet stays, and a 4-byte datagram reuses it (this code starts it at 0xff, which no handler uses). In a type 4 packet that ends early, the spectate value and the voice frame index stay as they were. The game reads whatever the stack held. These cases are named `garbage_*` in the test tool and are not compared.
+`serverrecv` checks the full join or input packet before either handler changes state. The check includes the voice flag and spectate field. A packet without a type byte is ignored. Readers include partial bits and byte alignment in their bounds checks. A short read stops all later reads until the next packet. A negative receive size means no packet and keeps the cursor unchanged.
+
+The invalid input mode uses sanitized packets or state checks. S1 cases cover both full-pool paths, short joins, input trailers, and failed reads.
 
 ## Functions
 

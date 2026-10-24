@@ -416,6 +416,12 @@ def codec_cases(c):
     case('packscalar_range', 'R 16860 P:0:%s V:%s V:8' % (struct.pack('<f', 7.0).hex(), f(4.0)))
     case('packscalar_bits1', 'R 16860 P:0:%s V:%s V:1' % (struct.pack('<f', 0.5).hex(), f(1.0)))
     case('packscalar_bits13', 'R 16860 P:0:%s V:%s V:d' % (struct.pack('<f', -0.5).hex(), f(1.0)))
+    def bit_widths(cc):
+        load_recv(cc, bytes((i * 73 + 11) & 255 for i in range(256)))
+        return ['R db20 M:%x V:%x' % (BUF, bits)
+                for _ in range(8) for bits in (0, 1, 2, 4, 6, 8, 12, 16, 21, 31, 32)]
+    out['pbitread_widths'] = bit_widths
+
     for i, bits in enumerate((8, 16, 6, 12)):
         case('pbitreadnego_%d' % i, 'R ddd0 P:0:00000000 V:%x' % bits)
     for i, bits in enumerate((8, 16, 31, 5)):
@@ -763,6 +769,7 @@ FUNCS = {'serverrecv': recv_cases, 'server_playermessage': message_cases, 'calcu
          'codec': codec_cases, 'unpackevent': event_cases, 'unpackobjectpacket': object_cases,
          'clientrecv': client_cases, 'packevent': packevent_cases, 'packobjectpacket': objectpacket_cases}
 RVA_NAME = {'55700': 'logic_playeractions', '33650': 'serverrecv', '49940': 'server_playermessage', '3cfe0': 'calculateplayervoice',
+            'db20': 'pbitread', 'd9f0': 'cs_pread',
             '16860': 'packscalar', 'ddd0': 'pbitreadnego', '16710': 'unpackangle', '5160': 'packunitvector',
             '2efd0': 'packpositiondelta', '2f090': 'unpackpositiondelta', '16320': 'unpackorientation', '17b60': 'unpackevent', '1dba0': 'unpackobjectpacket',
             '2e310': 'clientrecv', '16f10': 'packevent', '20680': 'packobjectpacket', '1f4a0': 'packobjectpacket2'}
@@ -825,9 +832,9 @@ def main():
         for name, build in cases.items():
             if want and name not in want and group not in want:
                 continue
-            if not want and name.startswith('garbage_'):
+            if name.startswith('garbage_') and (not want or name not in want):
                 continue
-            if name in {'input_actions_high', 'input_voice_big', 'input_player_minus1', 'join_takeover',
+            if name in {'input_actions_high', 'input_voice_big', 'input_player_minus1', 'join_takeover', 'join_short',
                         'phone_nohuman'}:
                 if want and name in want:
                     raise SystemExit(name + ': use --invalid for the security expectation')
