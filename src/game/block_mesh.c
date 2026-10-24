@@ -13,6 +13,9 @@
 #define g_tempmesh (*SR_AT(TempMesh, SR_RVA_TEMPMESH))
 #define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
 #define g_level_editor (*SR_AT(LevelEditor, SR_RVA_LEVEL_EDITOR))
+#define g_buildblocktype SR_AT(BuildBlockTypeRec, SR_RVA_BUILDBLOCKTYPE)
+#define g_buildingtype (*SR_AT(BuildingType, SR_RVA_BUILDINGTYPE))
+#define g_blocklist (*SR_AT(BlockList, SR_RVA_BLOCKLIST))
 #define g_surface SR_AT(vec3, SR_RVA_SURFACETEMP)
 #define g_surface_uv SR_AT(float, SR_RVA_SURFACETEMP + 0xc0)
 #define g_cubevertex SR_AT(vec3, SR_RVA_CUBEVERTEX)
@@ -141,11 +144,9 @@ static void replace_buffer(int *pointer, size_t size)
     *pointer = (int)(uintptr_t)os_malloc(size);
 }
 
-void area_setupsblock(int block)
+static void tempmesh_uvs(int clear_side)
 {
-    AreaBlock *b = &g_area_block[block];
-    int q, k, i, n = g_tempmesh.num_verts;
-    int nq = g_tempmesh.num_quads, nt = g_tempmesh.num_tris;
+    int q, k, nq = g_tempmesh.num_quads;
     for (q = 0; q < nq; q++) {
         int side = g_tempmesh.quad_slots[q] & 0xf0000;
         for (k = 0; k < 4; k++) {
@@ -161,7 +162,17 @@ void area_setupsblock(int block)
             case 0x60000: uv->x = p->x; uv->y = p->y; break;
             }
         }
+        if (clear_side && side != 0)
+            g_tempmesh.quad_slots[q] &= 0xffff;
     }
+}
+
+void area_setupsblock(int block)
+{
+    AreaBlock *b = &g_area_block[block];
+    int i, n = g_tempmesh.num_verts;
+    int nq = g_tempmesh.num_quads, nt = g_tempmesh.num_tris;
+    tempmesh_uvs(0);
     b->num_verts = n;
     replace_buffer(&b->verts, (size_t)n * 12);
     replace_buffer(&b->normals, (size_t)n * 12);
@@ -302,4 +313,225 @@ void area_block_addbeam(int turns, float px, float py, float pz, float sx, float
         slot = face == 0 ? 5 : face == 5 ? 0 : face;
         addbeziersurface((const float *)g_surface, g_surface_uv, 1, 1, 1, 1, tex[slot] | side);
     }
+}
+
+/* Inner control points keep their previous values. */
+#define surface_set(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz) do { \
+    vec3 *corners = g_surface; \
+    corners[0].x = (ax); corners[0].y = (ay); corners[0].z = (az); \
+    corners[3].x = (bx); corners[3].y = (by); corners[3].z = (bz); \
+    corners[15].x = (cx); corners[15].y = (cy); corners[15].z = (cz); \
+    corners[12].x = (dx); corners[12].y = (dy); corners[12].z = (dz); \
+} while (0)
+
+static __forceinline void surface_add(int turns, int side, uint32_t slot)
+{
+    int rotated = area_block_rotatesurface(turns, side);
+    addbeziersurface((const float *)g_surface, g_surface_uv, 1, 1, 1, 1, slot | rotated);
+}
+
+void area_block_addbasicsurface(uint32_t face, const vec3 *pos)
+{
+    vec3 *surface = g_surface;
+    int side, i;
+    surface[0].x = 0;
+    if (face == 0) {
+        surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 1, 0, .0625f, 1);
+        side = 0x40000;
+    } else if (face == 5) {
+        surface_set(0, .875f, 1, 1, .875f, 1, 1, .875f, 0, 0, .875f, 0);
+        side = 0x30000;
+    } else {
+        surface_set(0, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+        side = area_block_rotatesurface((int)(face - 1u), 0x60000);
+    }
+    for (i = 0; i < 4; i++) {
+        vec3 *p = &surface[surface_corners[i]];
+        p->x = (float)((double)pos->x + p->x);
+        p->y = (float)((double)pos->y + p->y);
+        p->z = (float)((double)pos->z + p->z);
+    }
+    addbeziersurface((const float *)surface, g_surface_uv, 1, 1, 1, 1, side | face);
+}
+
+int area_block_addwindow(int turns, float x, float width, float y, float height, int block, uint32_t slot)
+{
+    float x1 = (float)((double)x + width);
+    float y1 = (float)((double)y + height);
+    AreaBlock *b = &g_area_block[block];
+    surface_set(x1, y1, .03125f, x, y1, .03125f, x, y, .03125f, x1, y, .03125f);
+    surface_add(turns, 0x50000, slot);
+    surface_set(x, y1, .03125f, x1, y1, .03125f, x1, y, .03125f, x, y, .03125f);
+    surface_add(turns, 0x60000, slot);
+    b->num_hideable += 2;
+    /* The return value is the address of the counter. */
+    return (int)(uintptr_t)&b->num_hideable;
+}
+
+void area_block_adddoor(int turns, float width, float height)
+{
+    uint32_t slot = (uint32_t)turns + 1u;
+    float x2;
+    surface_set(0, 1, .0625f, width, 1, .0625f, width, 0, .0625f, 0, 0, .0625f);
+    surface_add(turns, 0x60000, slot);
+    surface_set(width, 1, .0625f, width, 1, 0, width, 0, 0, width, 0, .0625f);
+    surface_add(turns, 0x20000, (((uint32_t)turns - 1u) & 3u) + 1u);
+    x2 = (float)(1.0 - width);
+    surface_set(x2, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, x2, 0, .0625f);
+    surface_add(turns, 0x60000, slot);
+    surface_set(x2, 1, 0, x2, 1, .0625f, x2, 0, .0625f, x2, 0, 0);
+    surface_add(turns, 0x10000, (((uint32_t)turns + 1u) & 3u) + 1u);
+    surface_set(0, 1, .0625f, 1, 1, .0625f, 1, height, .0625f, 0, height, .0625f);
+    surface_add(turns, 0x60000, slot);
+    surface_set(0, height, .0625f, 1, height, .0625f, 1, height, 0, 0, height, 0);
+    surface_add(turns, 0x30000, slot);
+}
+
+void area_block_addoutdoor(int turns, float unused, float height)
+{
+    uint32_t tex[6] = {0, 1, 2, (((uint32_t)turns - 2u) & 3u) + 9u, 4, 5};
+    float top;
+    (void)unused;
+    area_block_addbeam(turns, 0, 0, 0, .3125f, 1, .0625f, 0x1a, tex);
+    area_block_addbeam(turns, .6875f, 0, 0, .3125f, 1, .0625f, 0xe, tex);
+    top = (float)(1.0 - height);
+    area_block_addbeam(turns, 0, height, 0, 1, top, .0625f, 0xb, tex);
+    area_block_addbeam(turns, 0, 0, 0, 1, .0625f, .0625f, 8, tex);
+}
+
+void area_block_addcorner(int turns, float x, float z)
+{
+    surface_set(0, 1, z, x, 1, z, x, 0, z, 0, 0, z);
+    surface_add(turns, 0x60000, (uint32_t)turns + 1u);
+    surface_set(x, 1, z, x, 1, 0, x, 0, 0, x, 0, z);
+    surface_add(turns, 0x20000, (((uint32_t)turns - 1u) & 3u) + 1u);
+}
+
+void area_block_addwindowvertical(int turns, int type, int row)
+{
+    const BuildPiece *piece = &g_buildblocktype[type].pieces[row];
+    float x = piece->x, width = piece->width;
+    int flags = piece->flags;
+    uint32_t a = (((uint32_t)turns - 2u) & 3u) + 9u;
+    uint32_t b = (uint32_t)turns + 1u;
+    if (flags & 1) {
+        surface_set(x, 1, 0, 0, 1, 0, 0, 0, 0, x, 0, 0);
+        surface_add(turns, 0x50000, a);
+        surface_set(x, 1, .0625f, x, 1, 0, x, 0, 0, x, 0, .0625f);
+        surface_add(turns, 0x20000, a);
+        surface_set(0, 1, .0625f, x, 1, .0625f, x, 0, .0625f, 0, 0, .0625f);
+        surface_add(turns, 0x60000, b);
+    }
+    if (flags & 2) {
+        float x2 = (float)((double)width + x);
+        surface_set(1, 1, 0, x2, 1, 0, x2, 0, 0, 1, 0, 0);
+        surface_add(turns, 0x50000, a);
+        surface_set(x2, 1, 0, x2, 1, .0625f, x2, 0, .0625f, x2, 0, 0);
+        surface_add(turns, 0x10000, a);
+        surface_set(x2, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, x2, 0, .0625f);
+        surface_add(turns, 0x60000, b);
+    }
+}
+
+void area_block_addwindowhorizontal(int turns, int type, int row, int has_floor, int has_ceiling)
+{
+    const BuildPiece *piece = &g_buildblocktype[type].pieces[row];
+    float y = piece->y, height = piece->height;
+    int flags = piece->flags;
+    uint32_t a = (((uint32_t)turns - 2u) & 3u) + 9u;
+    uint32_t b = (uint32_t)turns + 1u;
+    if (flags & 4) {
+        surface_set(1, y, 0, 0, y, 0, 0, 0, 0, 1, 0, 0);
+        surface_add(turns, 0x50000, a);
+        surface_set(0, y, 0, 1, y, 0, 1, y, .0625f, 0, y, .0625f);
+        surface_add(turns, 0x40000, a);
+        surface_set(0, y, .0625f, 1, y, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+        surface_add(turns, 0x60000, b);
+    } else if (has_floor) {
+        surface_set(1, .0625f, 0, 0, .0625f, 0, 0, 0, 0, 1, 0, 0);
+        surface_add(turns, 0x50000, a);
+    }
+    if (flags & 8) {
+        float y2 = (float)((double)height + y);
+        surface_set(1, 1, 0, 0, 1, 0, 0, y2, 0, 1, y2, 0);
+        surface_add(turns, 0x50000, a);
+        surface_set(0, y2, .0625f, 1, y2, .0625f, 1, y2, 0, 0, y2, 0);
+        surface_add(turns, 0x30000, a);
+        surface_set(0, 1, .0625f, 1, 1, .0625f, 1, y2, .0625f, 0, y2, .0625f);
+        surface_add(turns, 0x60000, b);
+    } else if (has_ceiling) {
+        surface_set(1, 1, 0, 0, 1, 0, 0, .875f, 0, 1, .875f, 0);
+        surface_add(turns, 0x50000, a);
+    }
+}
+
+int area_block_createbuildinginterior(int scratch, uint32_t code)
+{
+    uint32_t c = code & 0x3fffff;
+    int block, sides[4], k;
+    int type = c >> 18;
+    int has_floor = (code & 0x10000) != 0;
+    int has_ceiling = (code & 0x20000) != 0;
+    AreaBlock *b;
+    if (scratch == 0) {
+        int existing = g_buildingtype.interior_blocks[c];
+        if (existing != -1)
+            return existing;
+        if (g_blocklist.num_blocks > 0xffff)
+            return 0;
+        block = g_blocklist.num_blocks++;
+        g_buildingtype.interior_blocks[c] = block;
+    } else {
+        block = 0xffff;
+    }
+    g_tempmesh.num_verts = 0;
+    g_tempmesh.num_quads = 0;
+    g_tempmesh.num_tris = 0;
+    b = &g_area_block[block];
+    b->num_hideable = 0;
+    for (k = 0; k < 4; k++) {
+        int side = (c >> (4 * k)) & 15;
+        sides[k] = side;
+        if (side >= 1 && side <= 8) {
+            const BuildPiece *piece = &g_buildblocktype[type].pieces[side - 1];
+            if (piece->kind == 0)
+                area_block_addwindow(k, piece->x, piece->width, piece->y, piece->height, block, 6);
+        }
+    }
+    b->open_sides = 0;
+    if (has_floor) {
+        surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 1, 0, .0625f, 1);
+        addbeziersurface((const float *)g_surface, g_surface_uv, 1, 1, 1, 1, 0x40000);
+        b->open_sides |= 1;
+    }
+    if (has_ceiling) {
+        surface_set(0, .875f, 1, 1, .875f, 1, 1, .875f, 0, 0, .875f, 0);
+        addbeziersurface((const float *)g_surface, g_surface_uv, 1, 1, 1, 1, 0x30005);
+        b->open_sides |= 0x20;
+    }
+    for (k = 0; k < 4; k++) {
+        int side = sides[k];
+        if (side >= 1 && side <= 8) {
+            area_block_addwindowvertical(k, type, side - 1);
+            area_block_addwindowhorizontal(k, type, side - 1, has_floor, has_ceiling);
+        } else if (side == 9) {
+            surface_set(0, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+            surface_add(k, 0x60000, k + 1);
+            b->open_sides |= 2 << k;
+        } else if (side == 10) {
+            area_block_adddoor(k, .3125f, .625f);
+        } else if (side == 11) {
+            area_block_addcorner(k, .0625f, .0625f);
+        } else if (side == 12) {
+            area_block_addoutdoor(k, .25f, .625f);
+        }
+    }
+    b->size_x = 1;
+    b->size_y = 1;
+    b->size_z = 1;
+    if (scratch == 0)
+        area_setupsblock(block);
+    else
+        tempmesh_uvs(1);
+    return block;
 }

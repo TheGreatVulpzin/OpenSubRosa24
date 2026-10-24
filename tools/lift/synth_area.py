@@ -205,6 +205,75 @@ def cases():
 
     result['box_rounding'] = ('mesh', 'area_block_addbox', box)
     result['beam_rounding'] = ('mesh', 'area_block_addbeam', beam)
+
+    def interior_state(s, flags=15, kind=0):
+        for row in range(8):
+            s.write(0xb7a7200 + 0x40 + row * 0x1c, 'i4f2i',
+                    kind, .1875, .33333334, .25, .4375, flags, row)
+        for i in range(16):
+            s.write(0xb7e90a0 + i * 12, 'fff', i * .0625, -.125, 1.375 - i * .03125)
+            s.write(0xb7e9160 + i * 8, 'ff', i * .125, i * -.0625)
+        s.write(0x256ad760, 'i', 2)
+        s.write(0x256ad760 + 0x110004, 'i', 1)
+        s.write(0x256ad760 + 0x1a0008, 'i', 1)
+        s.write(0xb7a8ca0, 'i', 500)
+
+    def vertical(flags):
+        def build(s):
+            interior_state(s, flags)
+            return ['R 105c0 V:%x V:0 V:0' % turn for turn in range(4)]
+        return build
+
+    for flags in (0, 1, 2, 3):
+        result['vertical_%d' % flags] = ('interior', 'area_block_addwindowvertical', vertical(flags))
+
+    def horizontal(flags, floor, ceiling):
+        def build(s):
+            interior_state(s, flags)
+            return ['R 10140 V:%x V:0 V:0 V:%x V:%x' % (turn, floor, ceiling) for turn in range(4)]
+        return build
+
+    for flags in (0, 4, 8, 12):
+        for floor in (0, 1):
+            for ceiling in (0, 1):
+                name = 'horizontal_%d_%d_%d' % (flags, floor, ceiling)
+                result[name] = ('interior', 'area_block_addwindowhorizontal', horizontal(flags, floor, ceiling))
+
+    def build_interior(scratch, caps, kinds, flags=15, piece_kind=0):
+        def build(s):
+            interior_state(s, flags, piece_kind)
+            words = [caps | sum(kinds[(k + turn) % 4] << (k * 4) for k in range(4)) for turn in range(4)]
+            for code in words:
+                s.write(0x80ceb20 + (code & 0x3fffff) * 4, 'i', -1)
+            return ['R 29bf0 V:%x V:%x' % (scratch, code) for code in words]
+        return build
+
+    for scratch in (0, 1):
+        for caps in (0, 0x10000, 0x20000, 0x30000):
+            name = 'interior_walls_%d_%x' % (scratch, caps)
+            result[name] = ('interior', 'area_block_createbuildinginterior',
+                            build_interior(scratch, caps, (9, 10, 11, 12)))
+    result['interior_windows'] = ('interior', 'area_block_createbuildinginterior',
+                                  build_interior(0, 0x30000, (1, 1, 1, 1)))
+    result['interior_windows_scratch'] = ('interior', 'area_block_createbuildinginterior',
+                                          build_interior(1, 0x30000, (1, 1, 1, 1)))
+    result['interior_parking'] = ('interior', 'area_block_createbuildinginterior',
+                                  build_interior(0, 0x30000, (1, 1, 1, 1), piece_kind=1))
+
+    def cached(s):
+        interior_state(s)
+        s.write(0x80ceb20 + 0x1111 * 4, 'i', 123)
+        s.write(0xb7a8ca0, 'i', 0x10000)
+        return ['R 29bf0 V:0 V:1111']
+
+    def full(s):
+        interior_state(s)
+        s.write(0x80ceb20 + 0x1111 * 4, 'i', -1)
+        s.write(0xb7a8ca0, 'i', 0x10000)
+        return ['R 29bf0 V:0 V:1111']
+
+    result['interior_cached_full'] = ('interior', 'area_block_createbuildinginterior', cached)
+    result['interior_full'] = ('interior', 'area_block_createbuildinginterior', full)
     return result
 
 

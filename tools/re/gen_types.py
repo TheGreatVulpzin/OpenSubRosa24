@@ -62,7 +62,8 @@ STRUCTS = {
     'CityObjectType': ('cityobjecttype', 0x241800),
     'CityObject': ('cityobject', 0x15000),
     'MasterServer': ('masterserver', 0x208),
-    'BuildBlockType': ('buildblocktype', 0x1a80),
+    'BuildBlockTypeRec': ('buildblocktype', 0x1a8),
+    'BuildingType': ('buildingtype', 0x100d804),
     'Market': ('market', 0x204),
     'Scenario': ('scenario', 0x134),
     'Radix': ('radix', 0x400804),
@@ -85,12 +86,12 @@ STRUCTS = {
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
           'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 16384,
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
-          'area_block': 65536, 'area': 4, 'timer': 256}
+          'buildblocktype': 16, 'area_block': 65536, 'area': 4, 'timer': 256}
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
              'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
-             'BlockSurface': 0x15c, 'BlockBox': 0x7c,
+             'BlockSurface': 0x15c, 'BlockBox': 0x7c, 'BuildPiece': 0x1c,
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
@@ -412,6 +413,22 @@ typedef union CityObjectTypeRec { struct {
     CityFace faces[256]; /* +0xc0c */
     vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
+
+/* A byte view of the complete block-type table. */
+typedef union BuildBlockType { struct {
+    uint8_t pad_0000[0x1a80];
+}; uint8_t lf_raw[0x1a80]; } BuildBlockType;
+
+/* A window or parking opening within one block. */
+typedef union BuildPiece { struct {
+    int kind;
+    float x, width, y, height;
+    int flags;
+    int index;
+}; uint8_t lf_raw[0x1c]; } BuildPiece;
+SR_STATIC_ASSERT(sizeof(BuildPiece) == 0x1c, "BuildPiece");
+SR_STATIC_ASSERT(offsetof(BuildPiece, flags) == 0x14, "BuildPiece.flags");
+SR_STATIC_ASSERT(offsetof(BuildPiece, index) == 0x18, "BuildPiece.index");
 
 typedef struct BlockSurface {
     int unused_00;

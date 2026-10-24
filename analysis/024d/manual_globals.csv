@@ -22,7 +22,7 @@ rva,name,count,evidence
 0xf02e500,cityobjecttype,,"map_regions.py (score 0.57, 7 reference functions); the Linux 0.24c size 0x241800 ends exactly at materiallist (0xf26fd00)"
 0x15e24020,cityobject,,"map_regions.py (score 1.0, 10 reference functions); the Linux 0.24c size 0x15000 ends exactly at connection (0x15e39020)"
 0x17179820,masterserver,,"map_regions.py (score 0.5); the Linux 0.24c size 0x208 ends exactly at numofbonds (0x17179a28)"
-0xb7a7200,buildblocktype,,"map_regions.py (score 0.6, 5 reference functions); the busiest unnamed block (122 addresses) starts here; the Linux 0.24c size 0x1a80 ends 0x20 before blocklist"
+0xb7a7200,buildblocktype,16,"Sixteen records of 0x1a8 bytes, ending 0x20 bytes before blocklist"
 0x17179600,market,,"map_regions.py (score 0.67, 17 reference functions); the Linux 0.24c size 0x204 ends before masterserver"
 0xac51a80,scenario,,"map_regions.py (score 0.67, 6 reference functions); the Linux 0.24c size 0x134 fits the 0x140 gap to objecttype"
 0xff47c80,radix,,"map_regions.py (score 0.83, 6 reference functions); the Linux 0.24c size 0x400804 fits the gap to intersect"
@@ -44,3 +44,4 @@ rva,name,count,evidence
 0xb7e90a0,surfacetemp,,"A control grid of 16 vec3 and 16 UV pairs (0x140 bytes)"
 0xb7e91e0,area_interior,,"An int then model records of 0x2a30 bytes; sector at record +0"
 0x1d65a40,surfacetemp2,,"A control grid and UV pairs (0x140 bytes), ending at building"
+0x80ceb20,buildingtype,,"The interior block cache occupies the first 0x1000000 bytes of this record"

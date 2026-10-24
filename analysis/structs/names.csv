@@ -756,3 +756,6 @@ blocktemp,0x24,num_surfaces,int,,loadblock reads this field from the block file
 blocktemp,0x28,surfaces,BlockSurface,1024,loadblock reads this field from the block file
 blocktemp,0x57028,num_boxes,int,,loadblock reads this field from the block file
 blocktemp,0x5702c,boxes,BlockBox,1024,loadblock reads this field from the block file
+buildblocktype,0x0,name,char,64,The block type name occupies the first 64 bytes
+buildblocktype,0x40,pieces,BuildPiece,8,Window builders read each piece at a stride of 0x1c
+buildingtype,0x0,interior_blocks,int,4194304,area_block_createbuildinginterior caches one block id per code

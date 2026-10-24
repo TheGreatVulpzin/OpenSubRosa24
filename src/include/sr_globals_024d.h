@@ -21,6 +21,7 @@
 #define SR_RVA_BLOCKTEMP            0x537c520u  /* BlockTemp[] */
 #define SR_RVA_OBJECT               0x5592600u  /* Object[] */
 #define SR_RVA_SERVER               0x761ea60u  /* Server[] */
+#define SR_RVA_BUILDINGTYPE         0x80ceb20u  /* BuildingType[] */
 #define SR_RVA_OPTION               0x90dc340u  /* Option[] */
 #define SR_RVA_NUMOFTRACKS          0x90dc520u
 #define SR_RVA_GAME                 0x90dc540u  /* Game[] */
@@ -33,7 +34,7 @@
 #define SR_RVA_SCENARIO             0xac51a80u  /* Scenario[] */
 #define SR_RVA_OBJECTTYPE           0xac51bc0u  /* ObjectType[] */
 #define SR_RVA_PARTICLE             0xb3e7200u  /* Particle[] */
-#define SR_RVA_BUILDBLOCKTYPE       0xb7a7200u  /* BuildBlockType[] */
+#define SR_RVA_BUILDBLOCKTYPE       0xb7a7200u  /* BuildBlockTypeRec[] */
 #define SR_RVA_BLOCKLIST            0xb7a8ca0u  /* BlockList[] */
 #define SR_RVA_SURFACETEMP          0xb7e90a0u
 #define SR_RVA_AREA_INTERIOR        0xb7e91e0u
@@ -88,6 +89,7 @@
 #define SR_MAX_ITEMTYPE             64
 #define SR_MAX_BODY                 32
 #define SR_MAX_ACCOUNT              65536
+#define SR_MAX_BUILDBLOCKTYPE       16
 #define SR_MAX_AREA_BLOCK           65536
 #define SR_MAX_AREA                 4
 #define SR_MAX_TIMER                256

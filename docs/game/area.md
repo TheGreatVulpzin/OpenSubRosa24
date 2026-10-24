@@ -128,3 +128,48 @@ Normals and tangents come from the cube tables.
 It writes four surface corners, rotates the surface and adds a bilinear surface for each selected face.
 Its scaled coordinate and position sum stay in double until the final store to float.
 The bottom face uses texture entry 5. The top face uses entry 0.
+
+## Interior surfaces
+
+`BuildBlockTypeRec` holds a name and eight `BuildPiece` records, with a total size of 0x1a8 bytes.
+There are sixteen block types. Each piece stores kind, x, width, y, height, flags and index.
+Flag bits 1, 2, 4 and 8 select the left frame, right frame, sill and lintel.
+The complete table also has a byte view of 0x1a80 bytes.
+
+The surface builders set only the four corners of the control grid.
+Inner points keep their previous values and turn with each call to `area_block_rotatesurface`.
+Each face restores its corners before the turn. The order of these turns matters even for bilinear surfaces.
+
+Windows create two faces before any frame surfaces. Each window adds two to `num_hideable`.
+`area_block_addwindow` returns the address of that counter, encoded as an integer.
+Doors add six frame faces. Corners add two faces.
+`area_block_addoutdoor` uses fixed post widths and ignores its second parameter.
+
+Window endpoints round after x + width and y + height.
+Frame endpoints round after width + x and height + y.
+Door and outer-frame subtraction results round before they supply another builder.
+
+## Interior cache
+
+`BuildingType.interior_blocks` maps each low 22-bit code to a block id, with -1 for a missing entry.
+The four low nibbles select wall pieces. Bits 16 and 17 select floor and ceiling.
+Bits 18 through 21 select one of the sixteen block types.
+
+| Wall code | Geometry |
+| --- | --- |
+| 1 through 8 | A piece from the selected block type |
+| 9 | A plain wall face |
+| 10 | A door frame |
+| 11 | A corner |
+| 12 | An outer frame |
+| Other values | No wall geometry |
+
+`area_block_createbuildinginterior` returns an existing cache entry before it checks the block limit.
+A missing entry takes the next block id, unless the counter is above 65535. A full table returns zero.
+The builder adds glass first, then floor, ceiling and the four wall frames.
+`open_sides` records floor, ceiling and walls whose code is 9. Every generated interior has dimensions 1 by 1 by 1.
+
+A nonzero scratch parameter skips the cache and uses block id 65535.
+Its geometry stays in `TempMesh`. The block's mesh buffers keep their previous values.
+After UV projection, every quad with a nonzero side value keeps only its low sixteen slot bits.
+Quads without a side value keep their slot word.

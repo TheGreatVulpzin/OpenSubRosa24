@@ -137,15 +137,15 @@ void area_createsector(void);
 void area_createchunk(void);
 void addbeziersurface(void);
 void addbeziersurfacetexture(void);
-void lf_10140(void);
-void lf_105c0(void);
+void area_block_addwindowhorizontal(void);
+void area_block_addwindowvertical(void);
 void area_block_addbox(void);
-void lf_10da0(void);
-void lf_118f0(void);
-void lf_11a40(void);
+void area_block_addbasicsurface(void);
+void area_block_addwindow(void);
+void area_block_adddoor(void);
 void area_block_addbeam(void);
-void lf_11f70(void);
-void lf_120c0(void);
+void area_block_addoutdoor(void);
+void area_block_addcorner(void);
 void area_interior_createblock(void);
 void lineintersectnormalblock(void);
 void lineintersectspecblock(void);
@@ -239,7 +239,7 @@ void findstring(void);
 void area_setblock(void);
 void area_setblockcolor(void);
 void area_deleteblock(void);
-void lf_29bf0(void);
+void area_block_createbuildinginterior(void);
 void lf_2a510(void);
 void area_breakblock(void);
 void lineintersectarea(void);
@@ -455,15 +455,15 @@ const LfEntry lf_table[] = {
     { "area_createchunk", 0xf620, (void *)area_createchunk, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "addbeziersurface", 0xf6f0, (void *)addbeziersurface, 7, LF_RET_VOID, 4, "ppvvvvv", 0 },
     { "addbeziersurfacetexture", 0xfc40, (void *)addbeziersurfacetexture, 7, LF_RET_VOID, 4, "pvvvvvv", 0 },
-    { "area_block_addwindowhorizontal", 0x10140, (void *)lf_10140, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_block_addwindowvertical", 0x105c0, (void *)lf_105c0, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addwindowhorizontal", 0x10140, (void *)area_block_addwindowhorizontal, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_block_addwindowvertical", 0x105c0, (void *)area_block_addwindowvertical, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbox", 0x10950, (void *)area_block_addbox, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
-    { "area_block_addbasicsurface", 0x10da0, (void *)lf_10da0, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "area_block_addwindow", 0x118f0, (void *)lf_118f0, 7, LF_RET_INT, 4, "vvvvvvv", 0 },
-    { "area_block_adddoor", 0x11a40, (void *)lf_11a40, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addbasicsurface", 0x10da0, (void *)area_block_addbasicsurface, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "area_block_addwindow", 0x118f0, (void *)area_block_addwindow, 7, LF_RET_INT, 4, "vvvvvvv", 0 },
+    { "area_block_adddoor", 0x11a40, (void *)area_block_adddoor, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbeam", 0x11d70, (void *)area_block_addbeam, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
-    { "area_block_addoutdoor", 0x11f70, (void *)lf_11f70, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_addcorner", 0x120c0, (void *)lf_120c0, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addoutdoor", 0x11f70, (void *)area_block_addoutdoor, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addcorner", 0x120c0, (void *)area_block_addcorner, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_interior_createblock", 0x121d0, (void *)area_interior_createblock, 6, LF_RET_VOID, 4, "vvvvvp", 0 },
     { "lineintersectnormalblock", 0x12450, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "lineintersectspecblock", 0x126b0, (void *)lineintersectspecblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
@@ -557,7 +557,7 @@ const LfEntry lf_table[] = {
     { "area_setblock", 0x296f0, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_setblockcolor", 0x29830, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_deleteblock", 0x29970, (void *)area_deleteblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "area_block_createbuildinginterior", 0x29bf0, (void *)lf_29bf0, 2, LF_RET_INT, 4, "vv", 1 },
+    { "area_block_createbuildinginterior", 0x29bf0, (void *)area_block_createbuildinginterior, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_createinteriorblocks", 0x2a510, (void *)lf_2a510, 0, LF_RET_VOID, 4, "", 1 },
     { "area_breakblock", 0x2c020, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x2c0c0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },

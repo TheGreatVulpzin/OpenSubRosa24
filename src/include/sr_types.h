@@ -313,6 +313,22 @@ typedef union CityObjectTypeRec { struct {
     vec3 block_offset;  /* +0x240c the place of the mesh in a block of an area */
 }; uint8_t lf_raw[0x2418]; } CityObjectTypeRec;
 
+/* A byte view of the complete block-type table. */
+typedef union BuildBlockType { struct {
+    uint8_t pad_0000[0x1a80];
+}; uint8_t lf_raw[0x1a80]; } BuildBlockType;
+
+/* A window or parking opening within one block. */
+typedef union BuildPiece { struct {
+    int kind;
+    float x, width, y, height;
+    int flags;
+    int index;
+}; uint8_t lf_raw[0x1c]; } BuildPiece;
+SR_STATIC_ASSERT(sizeof(BuildPiece) == 0x1c, "BuildPiece");
+SR_STATIC_ASSERT(offsetof(BuildPiece, flags) == 0x14, "BuildPiece.flags");
+SR_STATIC_ASSERT(offsetof(BuildPiece, index) == 0x18, "BuildPiece.index");
+
 typedef struct BlockSurface {
     int unused_00;
     int nu, nv, tu, tv;
@@ -2481,171 +2497,23 @@ SR_STATIC_ASSERT(offsetof(MasterServer, ip) == 0x0, "MasterServer.ip");
 SR_STATIC_ASSERT(offsetof(MasterServer, port) == 0x4, "MasterServer.port");
 SR_STATIC_ASSERT(offsetof(MasterServer, info) == 0x6, "MasterServer.info");
 
-/* buildblocktype[]: record of 0x1a80 bytes. */
-typedef union BuildBlockType { struct {
-    int unk_0000;                        /* +0x0000 1 functions */
-    char unk_0004;                       /* +0x0004 1 functions */
-    uint8_t pad_0005[0x3b];
-    int unk_0040;                        /* +0x0040 2 functions */
-    float unk_0044;                      /* +0x0044 3 functions */
-    float unk_0048;                      /* +0x0048 3 functions */
-    float unk_004c;                      /* +0x004c 3 functions */
-    float unk_0050;                      /* +0x0050 3 functions */
-    int unk_0054;                        /* +0x0054 3 functions */
-    int unk_0058;                        /* +0x0058 1 functions */
-    int unk_005c;                        /* +0x005c 1 functions */
-    float unk_0060;                      /* +0x0060 1 functions */
-    float unk_0064;                      /* +0x0064 1 functions */
-    float unk_0068;                      /* +0x0068 1 functions */
-    float unk_006c;                      /* +0x006c 1 functions */
-    int unk_0070;                        /* +0x0070 1 functions */
-    int unk_0074;                        /* +0x0074 1 functions */
-    int unk_0078;                        /* +0x0078 1 functions */
-    float unk_007c;                      /* +0x007c 1 functions */
-    float unk_0080;                      /* +0x0080 1 functions */
-    float unk_0084;                      /* +0x0084 1 functions */
-    float unk_0088;                      /* +0x0088 1 functions */
-    int unk_008c;                        /* +0x008c 1 functions */
-    int unk_0090;                        /* +0x0090 1 functions */
-    int unk_0094;                        /* +0x0094 1 functions */
-    float unk_0098;                      /* +0x0098 1 functions */
-    float unk_009c;                      /* +0x009c 1 functions */
-    float unk_00a0;                      /* +0x00a0 1 functions */
-    float unk_00a4;                      /* +0x00a4 1 functions */
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    int unk_00ac;                        /* +0x00ac 1 functions */
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    float unk_00b4;                      /* +0x00b4 1 functions */
-    float unk_00b8;                      /* +0x00b8 1 functions */
-    float unk_00bc;                      /* +0x00bc 1 functions */
-    float unk_00c0;                      /* +0x00c0 1 functions */
-    int unk_00c4;                        /* +0x00c4 1 functions */
-    int unk_00c8;                        /* +0x00c8 1 functions */
-    int unk_00cc;                        /* +0x00cc 1 functions */
-    float unk_00d0;                      /* +0x00d0 1 functions */
-    float unk_00d4;                      /* +0x00d4 1 functions */
-    float unk_00d8;                      /* +0x00d8 1 functions */
-    float unk_00dc;                      /* +0x00dc 1 functions */
-    int unk_00e0;                        /* +0x00e0 1 functions */
-    int unk_00e4;                        /* +0x00e4 1 functions */
-    int unk_00e8;                        /* +0x00e8 1 functions */
-    float unk_00ec;                      /* +0x00ec 1 functions */
-    float unk_00f0;                      /* +0x00f0 1 functions */
-    float unk_00f4;                      /* +0x00f4 1 functions */
-    float unk_00f8;                      /* +0x00f8 1 functions */
-    int unk_00fc;                        /* +0x00fc 1 functions */
-    int unk_0100;                        /* +0x0100 1 functions */
-    int unk_0104;                        /* +0x0104 1 functions */
-    float unk_0108;                      /* +0x0108 1 functions */
-    float unk_010c;                      /* +0x010c 1 functions */
-    float unk_0110;                      /* +0x0110 1 functions */
-    float unk_0114;                      /* +0x0114 1 functions */
-    int unk_0118;                        /* +0x0118 1 functions */
-    int unk_011c;                        /* +0x011c 1 functions */
+/* buildblocktype[]: record of 0x1a8 bytes. */
+typedef union BuildBlockTypeRec { struct {
+    char name[64];                       /* +0x0000 The block type name occupies the first 64 bytes */
+    BuildPiece pieces[8];                /* +0x0040 Window builders read each piece at a stride of 0x1c */
     uint8_t pad_0120[0x88];
-    int unk_01a8;                        /* +0x01a8 1 functions */
-    int16_t unk_01ac;                    /* +0x01ac 1 functions */
-    uint8_t pad_01ae[0x3a];
-    int unk_01e8;                        /* +0x01e8 1 functions */
-    float unk_01ec;                      /* +0x01ec 1 functions */
-    float unk_01f0;                      /* +0x01f0 1 functions */
-    float unk_01f4;                      /* +0x01f4 1 functions */
-    float unk_01f8;                      /* +0x01f8 1 functions */
-    int unk_01fc;                        /* +0x01fc 1 functions */
-    uint8_t pad_0200[0x4];
-    int unk_0204;                        /* +0x0204 1 functions */
-    float unk_0208;                      /* +0x0208 1 functions */
-    float unk_020c;                      /* +0x020c 1 functions */
-    float unk_0210;                      /* +0x0210 1 functions */
-    float unk_0214;                      /* +0x0214 1 functions */
-    int unk_0218;                        /* +0x0218 1 functions */
-    uint8_t pad_021c[0x4];
-    int unk_0220;                        /* +0x0220 1 functions */
-    float unk_0224;                      /* +0x0224 1 functions */
-    float unk_0228;                      /* +0x0228 1 functions */
-    float unk_022c;                      /* +0x022c 1 functions */
-    float unk_0230;                      /* +0x0230 1 functions */
-    int unk_0234;                        /* +0x0234 1 functions */
-    uint8_t pad_0238[0x4];
-    int unk_023c;                        /* +0x023c 1 functions */
-    float unk_0240;                      /* +0x0240 1 functions */
-    float unk_0244;                      /* +0x0244 1 functions */
-    float unk_0248;                      /* +0x0248 1 functions */
-    float unk_024c;                      /* +0x024c 1 functions */
-    int unk_0250;                        /* +0x0250 1 functions */
-    uint8_t pad_0254[0xfc];
-    int unk_0350;                        /* +0x0350 1 functions */
-    int unk_0354;                        /* +0x0354 1 functions */
-    int16_t unk_0358;                    /* +0x0358 1 functions */
-    uint8_t pad_035a[0x36];
-    int unk_0390;                        /* +0x0390 1 functions */
-    float unk_0394;                      /* +0x0394 1 functions */
-    float unk_0398;                      /* +0x0398 1 functions */
-    float unk_039c;                      /* +0x039c 1 functions */
-    float unk_03a0;                      /* +0x03a0 1 functions */
-    int unk_03a4;                        /* +0x03a4 1 functions */
-    uint8_t pad_03a8[0x4];
-    int unk_03ac;                        /* +0x03ac 1 functions */
-    float unk_03b0;                      /* +0x03b0 1 functions */
-    float unk_03b4;                      /* +0x03b4 1 functions */
-    float unk_03b8;                      /* +0x03b8 1 functions */
-    float unk_03bc;                      /* +0x03bc 1 functions */
-    int unk_03c0;                        /* +0x03c0 1 functions */
-    uint8_t pad_03c4[0x4];
-    int unk_03c8;                        /* +0x03c8 1 functions */
-    float unk_03cc;                      /* +0x03cc 1 functions */
-    float unk_03d0;                      /* +0x03d0 1 functions */
-    float unk_03d4;                      /* +0x03d4 1 functions */
-    float unk_03d8;                      /* +0x03d8 1 functions */
-    int unk_03dc;                        /* +0x03dc 1 functions */
-    uint8_t pad_03e0[0x4];
-    int unk_03e4;                        /* +0x03e4 1 functions */
-    float unk_03e8;                      /* +0x03e8 1 functions */
-    float unk_03ec;                      /* +0x03ec 1 functions */
-    float unk_03f0;                      /* +0x03f0 1 functions */
-    float unk_03f4;                      /* +0x03f4 1 functions */
-    int unk_03f8;                        /* +0x03f8 1 functions */
-    uint8_t pad_03fc[0xfc];
-    int unk_04f8;                        /* +0x04f8 1 functions */
-    int unk_04fc;                        /* +0x04fc 1 functions */
-    uint8_t pad_0500[0x38];
-    int unk_0538;                        /* +0x0538 1 functions */
-    float unk_053c;                      /* +0x053c 1 functions */
-    float unk_0540;                      /* +0x0540 1 functions */
-    float unk_0544;                      /* +0x0544 1 functions */
-    float unk_0548;                      /* +0x0548 1 functions */
-    int unk_054c;                        /* +0x054c 1 functions */
-    uint8_t pad_0550[0x4];
-    int unk_0554;                        /* +0x0554 1 functions */
-    float unk_0558;                      /* +0x0558 1 functions */
-    float unk_055c;                      /* +0x055c 1 functions */
-    float unk_0560;                      /* +0x0560 1 functions */
-    float unk_0564;                      /* +0x0564 1 functions */
-    int unk_0568;                        /* +0x0568 1 functions */
-    uint8_t pad_056c[0x4];
-    int unk_0570;                        /* +0x0570 1 functions */
-    float unk_0574;                      /* +0x0574 1 functions */
-    float unk_0578;                      /* +0x0578 1 functions */
-    float unk_057c;                      /* +0x057c 1 functions */
-    float unk_0580;                      /* +0x0580 1 functions */
-    int unk_0584;                        /* +0x0584 1 functions */
-    uint8_t pad_0588[0x4];
-    int unk_058c;                        /* +0x058c 1 functions */
-    float unk_0590;                      /* +0x0590 1 functions */
-    float unk_0594;                      /* +0x0594 1 functions */
-    float unk_0598;                      /* +0x0598 1 functions */
-    float unk_059c;                      /* +0x059c 1 functions */
-    int unk_05a0;                        /* +0x05a0 1 functions */
-    uint8_t pad_05a4[0x4];
-    int unk_05a8;                        /* +0x05a8 1 functions */
-    float unk_05ac;                      /* +0x05ac 1 functions */
-    float unk_05b0;                      /* +0x05b0 1 functions */
-    float unk_05b4;                      /* +0x05b4 1 functions */
-    float unk_05b8;                      /* +0x05b8 1 functions */
-    int unk_05bc;                        /* +0x05bc 1 functions */
-    uint8_t pad_05c0[0x14c0];
-}; uint8_t lf_raw[0x1a80]; } BuildBlockType;
-SR_STATIC_ASSERT(sizeof(BuildBlockType) == 0x1a80, "BuildBlockType");
+}; uint8_t lf_raw[0x1a8]; } BuildBlockTypeRec;
+SR_STATIC_ASSERT(sizeof(BuildBlockTypeRec) == 0x1a8, "BuildBlockTypeRec");
+SR_STATIC_ASSERT(offsetof(BuildBlockTypeRec, name) == 0x0, "BuildBlockTypeRec.name");
+SR_STATIC_ASSERT(offsetof(BuildBlockTypeRec, pieces) == 0x40, "BuildBlockTypeRec.pieces");
+
+/* buildingtype[]: record of 0x100d804 bytes. */
+typedef union BuildingType { struct {
+    int interior_blocks[4194304];        /* +0x0000 area_block_createbuildinginterior caches one block id per code */
+    uint8_t pad_1000000[0xd804];
+}; uint8_t lf_raw[0x100d804]; } BuildingType;
+SR_STATIC_ASSERT(sizeof(BuildingType) == 0x100d804, "BuildingType");
+SR_STATIC_ASSERT(offsetof(BuildingType, interior_blocks) == 0x0, "BuildingType.interior_blocks");
 
 /* market[]: record of 0x204 bytes. */
 typedef union Market { struct {
