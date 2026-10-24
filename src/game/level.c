@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "area.h"
+#include "buildings.h"
 #include "city.h"
 #include "logic.h"
 #include "random.h"
@@ -23,16 +24,8 @@
 #define g_level_marks SR_AT(uint8_t, 0x12a80c44)
 
 /* Game functions of other files. */
-void __cdecl lf_13d80(const char *name, int flags);
-void __cdecl lf_03d70(void);
-void __cdecl lf_041c0(void);
-void __cdecl lf_04450(void);
 int *__cdecl lf_46c30(uint32_t area, int x, int y, int z,
                      int size_x, int size_z, int floors, int kind);
-#define building_load lf_13d80
-#define building_setupbuild lf_03d70
-#define building_setupfloorplannewer lf_041c0
-#define building_rotatefloorplan lf_04450
 #define building_buildfloorplan lf_46c30
 
 static float track_span(const vec3 *a, const vec3 *b, int z_first)

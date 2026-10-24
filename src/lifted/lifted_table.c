@@ -25,10 +25,10 @@ void area_interior_getblock(void);
 void area_interior_getblocklink(void);
 void area_interior_getblocktexture(void);
 void deletebond(void);
-void lf_03740(void);
-void lf_03d70(void);
-void lf_041c0(void);
-void lf_04450(void);
+void building_save(void);
+void building_setupbuild(void);
+void building_setupfloorplannewer(void);
+void building_rotatefloorplan(void);
 void setupbullettypes(void);
 void cityobject_addbox(void);
 void packunitvector(void);
@@ -154,7 +154,7 @@ void bondtimetolive(void);
 void bond_partpart(void);
 void bond_bodybody(void);
 void setupbuildingtypes(void);
-void lf_13d80(void);
+void building_load(void);
 void createbullet(void);
 void bullettimetolive(void);
 void createcityobject(void);
@@ -343,10 +343,10 @@ const LfEntry lf_table[] = {
     { "area_interior_getblocklink", 0x3130, (void *)area_interior_getblocklink, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocktexture", 0x3290, (void *)area_interior_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "deletebond", 0x33a0, (void *)deletebond, 1, LF_RET_VOID, 4, "v", 0 },
-    { "building_save", 0x3740, (void *)lf_03740, 1, LF_RET_VOID, 4, "v", 1 },
-    { "building_setupbuild", 0x3d70, (void *)lf_03d70, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_setupfloorplannewer", 0x41c0, (void *)lf_041c0, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_rotatefloorplan", 0x4450, (void *)lf_04450, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_save", 0x3740, (void *)building_save, 1, LF_RET_VOID, 4, "v", 1 },
+    { "building_setupbuild", 0x3d70, (void *)building_setupbuild, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_setupfloorplannewer", 0x41c0, (void *)building_setupfloorplannewer, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_rotatefloorplan", 0x4450, (void *)building_rotatefloorplan, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbullettypes", 0x4a10, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x4bb0, (void *)cityobject_addbox, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "packunitvector", 0x5160, (void *)packunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
@@ -472,7 +472,7 @@ const LfEntry lf_table[] = {
     { "bond_partpart", 0x12f80, (void *)bond_partpart, 1, LF_RET_VOID, 4, "v", 0 },
     { "bond_bodybody", 0x130d0, (void *)bond_bodybody, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbuildingtypes", 0x13450, (void *)setupbuildingtypes, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_load", 0x13d80, (void *)lf_13d80, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "building_load", 0x13d80, (void *)building_load, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbullet", 0x143b0, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
     { "bullettimetolive", 0x14590, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "createcityobject", 0x14600, (void *)createcityobject, 3, LF_RET_INT, 4, "vpv", 0 },

@@ -53,7 +53,42 @@ The text buffers are shared game state.
 A full input file lets the ranking extend beyond the 1024-line array.
 This behavior preserves the bytes that the game writes.
 
+## Building files
+
+`building_load` accepts `.sbb` versions 6 through 10.
+The file stores cells in floor, row and column order. Rows and columns include the boundary cells.
+Version 7 adds the interior bit 18. Version 8 keeps the cell color.
+Version 9 adds the 16 area boxes. Version 10 adds the guard direction and prize flag.
+A missing file still prepares the working floor plan. A bad version or a header-only read returns before that preparation.
+After a complete read, the last row and column lose their outer and inner blocks.
+
+`building_save` scans the whole cell grid. Occupied cells can increase the dimensions, which never decrease here.
+It writes version 10 and keeps every cell field, including `spare`.
+
+`building_setupbuild` maps file names to server material and block ids.
+The last matching name wins. Unknown names map to zero.
+Special block words add the turn to the mapped block id.
+Outer textures keep their high byte. Inner textures lose their high byte.
+The destination `spare` field keeps its value.
+
+`building_setupfloorplannewer` copies the working cells to `FloorplanCell` records.
+It sets the ceiling bit from the cell above or the top floor.
+For plain outer blocks with empty interiors or doors, adjacent walls flip texture bit 15.
+The wall test accepts values 1 through 8 and 12.
+Neighbor indices can cross a row or floor boundary.
+
+`building_rotatefloorplan` turns the working grid by 90 degrees.
+It copies the source cells, clears the destination grid and swaps the working dimensions.
+A special block moves by `1 - AreaBlock.size_z` cells and changes its turn within the configured id range.
+The first block at each destination wins.
+Textures and walls turn with the grid. Guard directions advance from 4 to 1.
+Area boxes exchange their horizontal dimensions and keep their height.
+
 ## Checks
 
 `tools/lift/synth_city_objects.py --run` tests allocation, elevator bounds, NaN coordinates,
 a full object pool, appended meshes, fractional box dimensions and newspaper overflow.
+
+`tools/lift/synth_buildings.py --run` tests all five file versions, missing and bad files,
+header-only reads, name maps, doors, wide blocks, turns and guard directions.
+The save case compares both output files with the expected bytes.

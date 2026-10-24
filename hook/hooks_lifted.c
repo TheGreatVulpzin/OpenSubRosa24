@@ -790,12 +790,12 @@ __declspec(naked) static void th_033a0(void)
 }
 static uint8_t expect_033a0[7] = { 0x8b, 0x54, 0x24, 0x04, 0x83, 0xec, 0x08 };
 
-void __cdecl lf_03d70(void);
+void __cdecl building_setupbuild(void);
 static void (__cdecl *orig_03d70)(void);
 static SvVerify v_03d70 = { "building_setupbuild", -1 };
 static void __cdecl hk_03d70(void)
 {
-    SV_HOOK_VOID(v_03d70, lf_03d70(), orig_03d70(), NULL);
+    SV_HOOK_VOID(v_03d70, building_setupbuild(), orig_03d70(), NULL);
 }
 __declspec(naked) static void th_03d70(void)
 {
@@ -829,12 +829,12 @@ __declspec(naked) static void th_03d70(void)
 }
 static uint8_t expect_03d70[6] = { 0x55, 0x8b, 0xec, 0x83, 0xe4, 0xf8 };
 
-void __cdecl lf_041c0(void);
+void __cdecl building_setupfloorplannewer(void);
 static void (__cdecl *orig_041c0)(void);
 static SvVerify v_041c0 = { "building_setupfloorplannewer", -1 };
 static void __cdecl hk_041c0(void)
 {
-    SV_HOOK_VOID(v_041c0, lf_041c0(), orig_041c0(), NULL);
+    SV_HOOK_VOID(v_041c0, building_setupfloorplannewer(), orig_041c0(), NULL);
 }
 __declspec(naked) static void th_041c0(void)
 {
@@ -868,12 +868,12 @@ __declspec(naked) static void th_041c0(void)
 }
 static uint8_t expect_041c0[5] = { 0x83, 0xec, 0x08, 0x53, 0x55 };
 
-void __cdecl lf_04450(void);
+void __cdecl building_rotatefloorplan(void);
 static void (__cdecl *orig_04450)(void);
 static SvVerify v_04450 = { "building_rotatefloorplan", -1 };
 static void __cdecl hk_04450(void)
 {
-    SV_HOOK_VOID(v_04450, lf_04450(), orig_04450(), NULL);
+    SV_HOOK_VOID(v_04450, building_rotatefloorplan(), orig_04450(), NULL);
 }
 __declspec(naked) static void th_04450(void)
 {

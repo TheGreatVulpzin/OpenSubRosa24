@@ -13,5 +13,10 @@ void cityobject_addbox(int type, float x, float y, float z, float sx, float sy, 
 void setupcityobjecttypes(void);
 void setupbuildingtypes(void);
 void newspaper_load(void);
+void building_load(const char *name, int header_only);
+void building_save(const char *name);
+void building_setupbuild(void);
+void building_setupfloorplannewer(void);
+void building_rotatefloorplan(void);
 
 #endif
