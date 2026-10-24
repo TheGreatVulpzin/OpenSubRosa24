@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "files.h"
 #include "mesh.h"
+#include "vectors.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 
@@ -16,6 +18,7 @@
 #define g_buildblocktype SR_AT(BuildBlockTypeRec, SR_RVA_BUILDBLOCKTYPE)
 #define g_buildingtype (*SR_AT(BuildingType, SR_RVA_BUILDINGTYPE))
 #define g_blocklist (*SR_AT(BlockList, SR_RVA_BLOCKLIST))
+#define g_filelist (*SR_AT(FileList, SR_RVA_FILELIST))
 #define g_surface SR_AT(vec3, SR_RVA_SURFACETEMP)
 #define g_surface_uv SR_AT(float, SR_RVA_SURFACETEMP + 0xc0)
 #define g_cubevertex SR_AT(vec3, SR_RVA_CUBEVERTEX)
@@ -534,4 +537,263 @@ int area_block_createbuildinginterior(int scratch, uint32_t code)
     else
         tempmesh_uvs(1);
     return block;
+}
+
+static void mesh_reset(void)
+{
+    g_tempmesh.num_verts = 0;
+    g_tempmesh.num_quads = 0;
+    g_tempmesh.num_tris = 0;
+}
+
+static int normal_side(const vec3 *n)
+{
+    if (n->y > .707f) return 0x40000;
+    if (n->y < -.707f) return 0x30000;
+    if (n->x > .707f) return 0x20000;
+    if (n->x < -.707f) return 0x10000;
+    if (n->z > .707f) return 0x60000;
+    return 0x50000;
+}
+
+static void block_finish(int block, int sx, int sy, int sz)
+{
+    int k;
+    g_area_block[block].size_x = sx;
+    g_area_block[block].size_y = sy;
+    g_area_block[block].size_z = sz;
+    area_setupsblock(block);
+    for (k = 1; k < 4; k++) {
+        area_copyrotateblock(block + k, &g_area_block[block + k - 1].size_x);
+        area_setupsblock(block + k);
+    }
+}
+
+static void surface_emit(uint32_t flags)
+{
+    addbeziersurface((const float *)g_surface, g_surface_uv, 1, 1, 1, 1, flags);
+}
+
+void area_createinteriorblocks(void)
+{
+    uint32_t tex[6] = {0, 1, 2, 3, 4, 5};
+    int i, j, k, face, block, result;
+    float y, z, t;
+    os_chdir("data");
+    result = os_chdir("block");
+    listfiles("*.sbl", 0, 0);
+    removeflieextentions(0);
+    if (result == 0) {
+        os_chdir("..");
+        os_chdir("..");
+    }
+    for (i = 0; i < g_filelist.list[0].count; i++) {
+        char name[64];
+        int garage, count;
+        block = g_blocklist.file_blocks[4 * i];
+        strcpy(name, g_filelist.list[0].name[i]);
+        garage = strcmp(name, "garagedoor") == 0;
+        strcpy(g_area_block[block].name, name);
+        mesh_reset();
+        loadblock(name);
+        count = g_blocktemp.num_boxes;
+        for (j = 0; j < count; j++) {
+            const BlockBox *box = &g_blocktemp.boxes[j];
+            for (face = 0; face < 6; face++) {
+                vec3 n;
+                int base, q;
+                if (!(box->faces & (1u << face)))
+                    continue;
+                generatetrinormal(&n, &box->verts[g_cubequad[face][0]],
+                                 &box->verts[g_cubequad[face][1]], &box->verts[g_cubequad[face][2]]);
+                base = g_tempmesh.num_verts;
+                q = g_tempmesh.num_quads;
+                for (k = 0; k < 4; k++) {
+                    int v = g_tempmesh.num_verts++;
+                    g_tempmesh.verts[v] = box->verts[g_cubequad[face][k]];
+                    g_tempmesh.normals[v] = n;
+                    /* Box vertices keep the previous tangents. */
+                    g_tempmesh.quads[q].verts[k] = base + k;
+                }
+                /* Each face uses the first slot of the box. */
+                g_tempmesh.quad_slots[q] = box->slots[0] | normal_side(&n);
+                g_tempmesh.num_quads++;
+            }
+        }
+        for (j = 0; j < g_blocktemp.num_surfaces; j++) {
+            const BlockSurface *s = &g_blocktemp.surfaces[j];
+            int slot = s->slot;
+            memcpy(g_surface, s->ctrl, sizeof(s->ctrl));
+            memcpy(g_surface_uv, s->uv, sizeof(s->uv));
+            if (s->auto_side != 0) {
+                vec3 n;
+                generatetrinormal(&n, &g_surface[0], &g_surface[3], &g_surface[15]);
+                slot |= normal_side(&n);
+            }
+            addbeziersurface((const float *)g_surface, g_surface_uv, s->nu, s->tu, s->nv, s->tv, slot);
+        }
+        if (g_blocktemp.floor > 0)
+            for (j = 0; j < g_blocktemp.size_z; j++)
+                for (k = 0; k < g_blocktemp.size_x; k++) {
+                    vec3 p = {(float)k, 0, (float)j};
+                    area_block_addbasicsurface(0, &p);
+                }
+        if (g_blocktemp.ceiling > 0)
+            for (j = 0; j < g_blocktemp.size_z; j++)
+                for (k = 0; k < g_blocktemp.size_x; k++) {
+                    vec3 p = {(float)k, (float)(g_blocktemp.size_y - 1), (float)j};
+                    area_block_addbasicsurface(5, &p);
+                }
+        if (g_blocktemp.wall_z1 > 0)
+            for (j = 0; j < g_blocktemp.size_y; j++)
+                for (k = 0; k < g_blocktemp.size_x; k++) {
+                    vec3 p = {(float)k, (float)j, (float)(g_blocktemp.size_z - 1)};
+                    area_block_addbasicsurface(3, &p);
+                }
+        if (g_blocktemp.wall_x0 > 0)
+            for (j = 0; j < g_blocktemp.size_y; j++)
+                for (k = 0; k < g_blocktemp.size_z; k++) {
+                    vec3 p = {0, (float)j, (float)k};
+                    area_block_addbasicsurface(4, &p);
+                }
+        if (g_blocktemp.wall_z0 > 0)
+            for (j = 0; j < g_blocktemp.size_y; j++)
+                for (k = 0; k < g_blocktemp.size_x; k++) {
+                    vec3 p = {(float)k, (float)j, 0};
+                    area_block_addbasicsurface(1, &p);
+                }
+        if (g_blocktemp.wall_x1 > 0)
+            for (j = 0; j < g_blocktemp.size_y; j++)
+                for (k = 0; k < g_blocktemp.size_z; k++) {
+                    vec3 p = {(float)(g_blocktemp.size_x - 1), (float)j, (float)k};
+                    area_block_addbasicsurface(2, &p);
+                }
+        g_area_block[block].size_x = g_blocktemp.size_x;
+        g_area_block[block].size_y = g_blocktemp.size_y;
+        g_area_block[block].size_z = g_blocktemp.size_z;
+        if (garage) {
+            g_blocklist.base_door_first = block;
+            g_blocklist.base_door_mid[0] = block + 1;
+            g_blocklist.base_door_mid[1] = block + 2;
+            g_blocklist.base_door_last = block + 3;
+        }
+        g_area_block[block].is_door = garage;
+        area_setupsblock(block);
+        for (k = 1; k < 4; k++) {
+            area_copyrotateblock(block + k, &g_area_block[block + k - 1].size_x);
+            g_area_block[block + k].is_door = garage;
+            area_setupsblock(block + k);
+        }
+    }
+    for (k = 0; k < 2; k++) {
+        block = k ? g_blocklist.ceiling_edge_right[0] : g_blocklist.ceiling_edge[0];
+        strcpy(g_area_block[block].name, k ? "ceilingedgerightwall" : "ceilingedge");
+        mesh_reset();
+        area_block_addbeam(0, 0, .875f, .9375f, 1, .125f, .0625f, 0x3f, tex);
+        surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 1, 0, .0625f, 1);
+        surface_emit(0x40000);
+        if (k) {
+            surface_set(0, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+            surface_add(1, 0x60000, 2);
+        }
+        block_finish(block, 1, 1, 1);
+    }
+    for (k = 0; k < 3; k++) {
+        block = k == 0 ? g_blocklist.railing[0] : k == 1 ? g_blocklist.railing_left[0] : g_blocklist.railing_right[0];
+        strcpy(g_area_block[block].name, k == 0 ? "railing" : k == 1 ? "railingleftwall" : "railingrightwall");
+        mesh_reset();
+        area_block_addbeam(0, 0, 0, .9375f, 1, .25f, .0625f, 0x3f, tex);
+        if (k) {
+            surface_set(0, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+            surface_add(k == 1 ? 3 : 1, 0x60000, k == 1 ? 4 : 2);
+        }
+        surface_set(0, .875f, 1, 1, .875f, 1, 1, .875f, 0, 0, .875f, 0);
+        surface_emit(0x30005);
+        block_finish(block, 1, 1, 1);
+    }
+    block = g_blocklist.stairs_balcony[0];
+    strcpy(g_area_block[block].name, "stairsbalcony");
+    mesh_reset();
+    for (k = 0; k < 6; k++) tex[k] = 6;
+    y = .0625f;
+    z = 0;
+    for (i = 0; i < 8; i++) {
+        area_block_addbeam(0, 0, y, z, .5f, .0625f, i == 7 ? .75f : .125f, 0x3f, tex);
+        y = (float)((double)y + .0625);
+        z = (float)((double)z + .125);
+    }
+    t = (float)((double)y - .0625);
+    area_block_addbeam(0, .5f, t, z, .5f, .0625f, .625f, 0x3f, tex);
+    for (i = 0; i < 8; i++) {
+        z = (float)((double)z - .125);
+        area_block_addbeam(0, .5f, y, z, .5f, .0625f, .125f, 0x3f, tex);
+        y = (float)((double)y + .0625);
+    }
+    surface_set(.9375f, 2, 0, .9375f, 2, 2, .9375f, 0, 2, .9375f, 0, 0);
+    surface_emit(0x10002);
+    surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 2, 0, .0625f, 2);
+    surface_emit(0x40000);
+    surface_set(0, 1.875f, 2, 1, 1.875f, 2, 1, 1.875f, 0, 0, 1.875f, 0);
+    surface_emit(0x30005);
+    for (k = 0; k < 6; k++) tex[k] = k;
+    area_block_addbeam(0, 0, .875f, 0, 1, .125f, .0625f, 0x3f, tex);
+    tex[0] = 1;
+    area_block_addbeam(0, 0, 1, 0, .5f, .25f, .0625f, 0x3f, tex);
+    block_finish(block, 1, 2, 2);
+    block = g_blocklist.trim[0];
+    mesh_reset();
+    surface_set(.9375f, 1, 0, .9375f, 1, 1, .9375f, 0, 1, .9375f, 0, 0);
+    surface_emit(0x10002);
+    surface_set(1, 1, .9375f, 0, 1, .9375f, 0, 0, .9375f, 1, 0, .9375f);
+    surface_emit(0x50002);
+    surface_set(.0625f, 1, 1, .0625f, 1, 0, .0625f, 0, 0, .0625f, 0, 1);
+    surface_emit(0x20002);
+    block_finish(block, 1, 1, 1);
+    for (k = 0; k < 3; k++) {
+        block = k == 0 ? g_blocklist.stairs[0] : k == 1 ? g_blocklist.stairs_floor[0] : g_blocklist.stairs_ceiling[0];
+        strcpy(g_area_block[block].name, k == 0 ? "stairs" : k == 1 ? "stairsfloor" : "stairsceiling");
+        mesh_reset();
+        y = .0625f;
+        z = 0;
+        if (k == 2) {
+            area_block_addbox(.5f, 0, 0, .5f, .0625f, .125f, 0);
+            area_block_addbox(0, 0, 0, .5f, 1, .0625f, 2);
+        } else {
+            for (i = 0; i < 8; i++) {
+                area_block_addbox(0, y, z, .5f, .0625f, i == 7 ? 1 : .125f, 0);
+                y = (float)((double)y + .0625);
+                z = (float)((double)z + .125);
+            }
+            t = (float)((double)y - .0625);
+            area_block_addbox(.5f, t, z, .5f, .0625f, 1, 0);
+            for (i = 0; i < 8; i++) {
+                z = (float)((double)z - .125);
+                t = i == 7 ? (float)((double)y - 1.0) : y;
+                area_block_addbox(.5f, t, z, .5f, .0625f, .125f, 0);
+                y = (float)((double)y + .0625);
+            }
+        }
+        surface_set(.0625f, 1, 2, .0625f, 1, 0, .0625f, 0, 0, .0625f, 0, 2);
+        surface_emit(0x20004);
+        surface_set(.9375f, 1, 0, .9375f, 1, 2, .9375f, 0, 2, .9375f, 0, 0);
+        surface_emit(0x10002);
+        if (k == 0) {
+            surface_set(0, .0625f, 0, 1, .0625f, 0, 1, 0, 0, 0, 0, 0);
+            surface_emit(0x50003);
+        }
+        if (k < 2) {
+            surface_set(0, 1, 0, 1, 1, 0, 1, .875f, 0, 0, .875f, 0);
+            surface_emit(0x50003);
+            if (k == 1) {
+                surface_set(0, .0625f, 0, 1, .0625f, 0, 1, .0625f, 2, 0, .0625f, 2);
+                surface_emit(0x40000);
+            }
+        } else {
+            surface_set(0, .875f, 2, 1, .875f, 2, 1, .875f, 0, 0, .875f, 0);
+            surface_emit(0x30001);
+        }
+        surface_set(1, 1, 1.5f, 0, 1, 1.5f, 0, 0, 1.5f, 1, 0, 1.5f);
+        surface_emit(0x60001);
+        block_finish(block, 1, 1, 2);
+    }
 }

@@ -240,7 +240,7 @@ void area_setblock(void);
 void area_setblockcolor(void);
 void area_deleteblock(void);
 void area_block_createbuildinginterior(void);
-void lf_2a510(void);
+void area_createinteriorblocks(void);
 void area_breakblock(void);
 void lineintersectarea(void);
 void sphereintersectnormalblock(void);
@@ -558,7 +558,7 @@ const LfEntry lf_table[] = {
     { "area_setblockcolor", 0x29830, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_deleteblock", 0x29970, (void *)area_deleteblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_block_createbuildinginterior", 0x29bf0, (void *)area_block_createbuildinginterior, 2, LF_RET_INT, 4, "vv", 1 },
-    { "area_createinteriorblocks", 0x2a510, (void *)lf_2a510, 0, LF_RET_VOID, 4, "", 1 },
+    { "area_createinteriorblocks", 0x2a510, (void *)area_createinteriorblocks, 0, LF_RET_VOID, 4, "", 1 },
     { "area_breakblock", 0x2c020, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x2c0c0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "sphereintersectnormalblock", 0x2cda0, (void *)sphereintersectnormalblock, 8, LF_RET_INT, 4, "ppppvpvv", 0 },

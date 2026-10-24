@@ -23,4 +23,6 @@ void area_block_addwindowvertical(int turns, int type, int row);
 void area_block_addwindowhorizontal(int turns, int type, int row, int has_floor, int has_ceiling);
 int area_block_createbuildinginterior(int scratch, uint32_t code);
 
+void area_createinteriorblocks(void);
+
 #endif

@@ -173,3 +173,20 @@ A nonzero scratch parameter skips the cache and uses block id 65535.
 Its geometry stays in `TempMesh`. The block's mesh buffers keep their previous values.
 After UV projection, every quad with a nonzero side value keeps only its low sixteen slot bits.
 Quads without a side value keep their slot word.
+
+## File blocks and fixed interiors
+
+`area_createinteriorblocks` reads the sorted `.sbl` name list and builds four turns of each file block.
+Only the first block receives the file name. The `garagedoor` file sets `is_door` on all four turns and supplies the door ids.
+Each selected box face uses `slots[0]`, even when the other five slot entries differ.
+Its vertices receive a face normal but keep their previous temporary tangents.
+
+Automatic side selection tests y, then x, then z against the float threshold 0.707.
+An unordered comparison continues to the next test. The final fallback is side 0x50000.
+File surfaces keep their control points, UV pairs and subdivision settings.
+Basic floor, ceiling and wall faces follow the dimensions and flags of `BlockTemp`.
+
+The same builder creates ceiling edges, railings, balcony stairs, trim and three stair forms.
+Each shape has four turns. Rotation also swaps its x and z dimensions.
+The fixed shapes keep their existing `is_door` fields. Trim also keeps its existing name.
+Stair height and depth updates round to float after each increment or decrement.
