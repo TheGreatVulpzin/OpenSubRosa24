@@ -216,7 +216,7 @@ namespace SubVulpes
             await Capture(form, "03-launcher-settings", "Launcher settings");
             mainTabs.SelectedTab = pages["Server"];
             Click(form, "startStop");
-            await Wait(() => Field<TextBox>(form, "console").Text.Contains("own main loop: running"), 90000, "Start reaches the live server loop through SV_LOG");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "Start reaches the live server loop through SV_LOG");
             var process = Field<Process>(form, "server");
             Check(process.StartInfo.EnvironmentVariables["SV_SAMPLE"] == null &&
                   process.StartInfo.EnvironmentVariables["SV_PACKETS"] == null &&
@@ -225,7 +225,7 @@ namespace SubVulpes
             await Capture(form, "04-server-running", "Server");
             Click(form, "stopButton");
             await Wait(() => Field<Process>(form, "server") == null, 20000, "Stop waits for cooperative server exit");
-            Check(File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("server stopped"), "Stop flushes the final server log line");
+            Check(File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("Server stopped."), "Stop flushes the final server log line");
             Check(!File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains(secret), "server.log excludes the admin password");
             await Capture(form, "05-server-stopped", "Server");
             LogTests(Path.Combine(root, "logs", "server.log"));
@@ -262,7 +262,7 @@ namespace SubVulpes
             tabs.SelectedIndex = 0;
             mainTabs.SelectedTab = pages["Server"];
             Click(form, "startStop");
-            await Wait(() => Field<TextBox>(form, "console").Text.Contains("own main loop: running"), 90000, "Debug Mode applies the preset when Start is on Server");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "Debug Mode applies the preset when Start is on Server");
             Check(Field<Process>(form, "server").StartInfo.EnvironmentVariables["SV_SAMPLE"] != null, "Normal Playtest retains its speed capture");
             Click(form, "stopButton");
             await Wait(() => Field<Process>(form, "server") == null, 20000, "Debug Stop flushes captures");
@@ -280,10 +280,10 @@ namespace SubVulpes
             Field<CheckBox>(form, "debugModeBox").Checked = false;
             mainTabs.SelectedTab = pages["Server"];
             Click(form, "startStop");
-            await Wait(() => Field<TextBox>(form, "console").Text.Contains("own main loop: running"), 90000, "server restarts before window-close test");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "server restarts before window-close test");
             form.Close();
             await Wait(() => form.IsDisposed, 20000, "window close waits for safe server stop");
-            Check(File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("server stopped"), "window close flushes the server log");
+            Check(File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("Server stopped."), "window close flushes the server log");
             Console.WriteLine("SUMMARY: " + passed + " checks passed");
         }
 
@@ -291,7 +291,7 @@ namespace SubVulpes
         {
             Field<CheckBox>(form, "debugModeBox").Checked = false;
             Click(form, "startStop");
-            await Wait(() => Field<TextBox>(form, "console").Text.Contains("own main loop: running"), 90000, "server runs for the live screenshot");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "server runs for the live screenshot");
             await Capture(form, "04-server-running", "Server");
             Click(form, "stopButton");
             await Wait(() => Field<Process>(form, "server") == null, 20000, "server stops after the live screenshot");

@@ -238,7 +238,7 @@ void __cdecl sr_dedicatedserverloop(void)
     next = fn.systemtimer();
     status_ms = next;
     status_ticks = sr_game.ticks;
-    sv_log("own main loop: running (game ticks %d)", sr_game.ticks);
+    sv_log("Server started on port %u.", (unsigned)(uint16_t)sr_bsdsocket.port);
     for (;;) {
 #ifdef SR_STANDALONE
         if (sv_stop_requested())
@@ -254,8 +254,8 @@ void __cdecl sr_dedicatedserverloop(void)
                 if (sr_players[p].active)
                     sr_players[p].is_bot ? bots++ : players++;
             }
-            sv_log("own main loop: %d ticks in %u ms (%.1f ticks/s), %d players, %d bots",
-                   sr_game.ticks - status_ticks, ms, (sr_game.ticks - status_ticks) * 1000.0 / ms, players, bots);
+            sv_log("Server status: %.1f ticks/s, %d players, %d bots",
+                   (sr_game.ticks - status_ticks) * 1000.0 / ms, players, bots);
             sv_hooks_lifted_profile();  /* profile=1 in subvulpes.ini */
             status_ms += ms;
             status_ticks = sr_game.ticks;
@@ -278,7 +278,6 @@ void __cdecl sr_dedicatedserverloop(void)
 /* The main function: folders, timers and settings, then the loop. */
 void __cdecl sr_getpaths(void)
 {
-    sv_log("own main: getpaths runs");
     if (!fn_ready)
         fn_init();
     load_imports();

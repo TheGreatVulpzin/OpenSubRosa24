@@ -85,8 +85,7 @@ void sv_log(const char *fmt, ...)
     char line[1024];
     va_list ap;
     va_start(ap, fmt);
-    memcpy(line, "[subvulpes] ", 12);
-    vsnprintf(line + 12, sizeof line - 13, fmt, ap);
+    vsnprintf(line, sizeof line - 1, fmt, ap);
     va_end(ap);
     strcat(line, "\n");
     sv_out(line);
@@ -402,7 +401,6 @@ int main(void)
     /* The CRT of the 024d sets 53-bit x87 precision at start-up (_setdefaultprecision). */
     _controlfp_s(&cw, _PC_53, _MCW_PC);
     x87_init();
-    sv_log("standalone server: image at %p", (void *)sr_base);
     open_packets();
     start_sampler();
 #ifdef SR_RECORD
@@ -418,7 +416,7 @@ int main(void)
     }
     if (g_main_thread)
         CloseHandle(g_main_thread);
-    sv_log("server stopped");
+    sv_log("Server stopped.");
     if (g_samples)
         fclose(g_samples);
     if (g_packets)

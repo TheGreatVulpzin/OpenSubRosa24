@@ -290,7 +290,7 @@ namespace SubVulpes
 
     class LauncherForm : Form
     {
-        static readonly Regex TicksLine = new Regex(@"\(([0-9.]+) ticks/s\)(?:, (\d+) players, (\d+) bots)?");
+        static readonly Regex TicksLine = new Regex(@"^Server status: ([0-9.]+) ticks/s, (\d+) players, (\d+) bots$");
         const int FreezeSeconds = 150;
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
@@ -993,7 +993,7 @@ namespace SubVulpes
                 }
                 if (serverState == "Running" || serverState == "Frozen?")
                     SetState("Running");
-            } else if (line.Contains("own main loop: running")) {
+            } else if (Regex.IsMatch(line, @"^Server started on port \d+\.$")) {
                 lastSpeedLine = DateTime.Now;
                 SetState("Running");
             } else if (line.Contains("snapshot saved")) {
