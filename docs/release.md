@@ -5,45 +5,6 @@ Each release contains a zip and its `.zip.sha256` file.
 Extract the zip, open `subvulpes-launcher.exe`, set the server name and admin password, then click **Start server**.
 The package includes `data/` and a default `config.txt`. No separate server installation is needed.
 
-## Publish the data once
-
-Vulpzin confirmed that the game data can be distributed in release assets.
-Game data stays outside Git. `tools/ci/check_repo.py` continues to reject game files and `config.txt` in Git.
-Read only from the local source. Never use the private configuration or accounts from a server installation.
-
-Run from the repository root:
-
-```powershell
-.\tools\release\make_data_zip.ps1 -Source original\blackhouser\data
-```
-
-The script writes these files under `build/package/data-release/`:
-
-- `server-data-0.24.zip`
-- `server-data-0.24.zip.sha256`
-
-The archive contains only `data/`. The script rejects `config.txt`, `.srk`, `.exe`, `user/`, links and unexpected paths.
-It requires the city, blocks, buildings, textures and weapon files.
-The source currently contains 79 files, with 10,843,637 bytes before compression.
-`city.sbc`, `block/` and `building/` supply the level geometry.
-`setupgame` lists `texture/*.png` to assign material names. Keep this directory even on a dedicated server.
-The current server does not load `weapon/ak47.csm` during startup. Keep it with the complete data set for compatibility.
-
-The server starts without `readme.txt`, but `newspaper_load` reads it for the newspaper in the game.
-The package supplies neutral text from `tools/release/newspaper.txt`. It does not copy the local server's newspaper text.
-The package creates `config.txt` from `tools/release/default-config.ini`, with keys and defaults from `loadsaveoptions` in `src/game/options.c`.
-The admin password starts empty. The user must replace it before starting the server.
-The package contains no accounts, saved server state or game executable.
-
-After review, the maintainer publishes the data with:
-
-```powershell
-gh release create server-data-0.24 --repo TheGreatVulpzin/OpenSubRosa24 --title "Server data 0.24" --notes "Server data for Sub Rosa 0.24." --latest=false build/package/data-release/server-data-0.24.zip build/package/data-release/server-data-0.24.zip.sha256
-```
-
-This command creates the data tag if it does not exist. It does not start the server release workflow.
-Publish the data before the first server release. Do not replace data assets that a server release already uses.
-
 ## Build a local package
 
 Use Windows, MSVC x86, CMake, Git and Windows PowerShell 5.1 or PowerShell 7.
