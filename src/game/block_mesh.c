@@ -35,98 +35,165 @@ static const int surface_corners[4] = {0, 3, 15, 12};
 
 void loadblock(const char *name)
 {
+    static BlockTemp pending;
     char path[64];
-    int version, i, k;
-    sprintf(path, "data/block/%s.sbl", name);
+    BlockTemp *block = &pending;
+    int version, i, k, length;
+    if (strnlen(name, 64) == 64 || strpbrk(name, "/\\") || strstr(name, ".."))
+        return;
+    length = snprintf(path, sizeof path, "data/block/%s.sbl", name);
+    if (length < 0 || length >= sizeof path)
+        return;
     g_parser.file = os_fopen(path, "rb");
     if (!g_parser.file)
         return;
-    game_fread(&version, 4, 1, g_parser.file);
-    if ((uint32_t)version - 1u >= 2) {
+    if (game_fread(&version, 4, 1, g_parser.file) != 1 || (uint32_t)version - 1u >= 2) {
         os_fclose(g_parser.file);
         return;
     }
-    game_fread(&g_blocktemp.size_x, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.size_y, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.size_z, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.floor, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.ceiling, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.wall_z1, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.wall_x0, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.wall_z0, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.wall_x1, 4, 1, g_parser.file);
-    game_fread(&g_blocktemp.num_surfaces, 4, 1, g_parser.file);
-    /* File counts can extend past the record arrays. */
-    for (i = 0; i < g_blocktemp.num_surfaces; i++) {
-        BlockSurface *surface = &g_blocktemp.surfaces[i];
-        game_fread(&surface->tu, 4, 1, g_parser.file);
-        game_fread(&surface->nu, 4, 1, g_parser.file);
-        game_fread(&surface->tv, 4, 1, g_parser.file);
-        game_fread(&surface->nv, 4, 1, g_parser.file);
-        game_fread(&surface->slot, 4, 1, g_parser.file);
-        game_fread(&surface->auto_side, 4, 1, g_parser.file);
+    /* Keep the current block until all file checks pass. */
+#define READ_BLOCK(pointer, size, count) \
+    do { if (game_fread(pointer, size, count, g_parser.file) != (size_t)(count)) goto reject; } while (0)
+    READ_BLOCK(&block->size_x, 4, 1);
+    READ_BLOCK(&block->size_y, 4, 1);
+    READ_BLOCK(&block->size_z, 4, 1);
+    READ_BLOCK(&block->floor, 4, 1);
+    READ_BLOCK(&block->ceiling, 4, 1);
+    READ_BLOCK(&block->wall_z1, 4, 1);
+    READ_BLOCK(&block->wall_x0, 4, 1);
+    READ_BLOCK(&block->wall_z0, 4, 1);
+    READ_BLOCK(&block->wall_x1, 4, 1);
+    READ_BLOCK(&block->num_surfaces, 4, 1);
+    if ((unsigned)block->num_surfaces > 1024)
+        goto reject;
+    for (i = 0; i < block->num_surfaces; i++) {
+        BlockSurface *surface = &block->surfaces[i];
+        READ_BLOCK(&surface->tu, 4, 1);
+        READ_BLOCK(&surface->nu, 4, 1);
+        READ_BLOCK(&surface->tv, 4, 1);
+        READ_BLOCK(&surface->nv, 4, 1);
+        READ_BLOCK(&surface->slot, 4, 1);
+        READ_BLOCK(&surface->auto_side, 4, 1);
         for (k = 0; k < 16; k++) {
-            game_fread(&surface->ctrl[k], 4, 3, g_parser.file);
-            game_fread(surface->uv[k], 4, 2, g_parser.file);
+            float point[5];
+            READ_BLOCK(point, 4, 5);
+            memcpy(&surface->ctrl[k], point, sizeof surface->ctrl[k]);
+            memcpy(surface->uv[k], point + 3, sizeof surface->uv[k]);
         }
     }
-    g_blocktemp.num_boxes = 0;
+    block->num_boxes = 0;
     if (version > 1) {
-        game_fread(&g_blocktemp.num_boxes, 4, 1, g_parser.file);
-        for (i = 0; i < g_blocktemp.num_boxes; i++) {
-            BlockBox *box = &g_blocktemp.boxes[i];
-            for (k = 0; k < 8; k++)
-                game_fread(&box->verts[k], 4, 3, g_parser.file);
-            for (k = 0; k < 6; k++)
-                game_fread(&box->slots[k], 4, 1, g_parser.file);
-            game_fread(&box->faces, 4, 1, g_parser.file);
+        READ_BLOCK(&block->num_boxes, 4, 1);
+        if ((unsigned)block->num_boxes > 1024)
+            goto reject;
+        for (i = 0; i < block->num_boxes; i++) {
+            BlockBox *box = &block->boxes[i];
+            READ_BLOCK(box->verts, 4, 24);
+            READ_BLOCK(box->slots, 4, 6);
+            READ_BLOCK(&box->faces, 4, 1);
         }
     }
+    /* Keep fields that the file does not contain. */
+    memcpy(&g_blocktemp, block, offsetof(BlockTemp, surfaces));
+    for (i = 0; i < block->num_surfaces; i++)
+        memcpy(&g_blocktemp.surfaces[i].nu, &block->surfaces[i].nu,
+               sizeof(BlockSurface) - offsetof(BlockSurface, nu));
+    g_blocktemp.num_boxes = block->num_boxes;
+    memcpy(g_blocktemp.boxes, block->boxes, block->num_boxes * sizeof *block->boxes);
+reject:
     os_fclose(g_parser.file);
+#undef READ_BLOCK
 }
 
-static void level_transfer(block_io_fn io)
+static int level_transfer(block_io_fn io, LevelEditor *level)
 {
     int i;
-    /* The file counts have no array limit. */
-    io(&g_level_editor.num_intersections, 4, 1, g_parser.file);
-    for (i = 0; i < g_level_editor.num_intersections; i++) {
-        LevelIntersection *intersection = &g_level_editor.intersections[i];
-        io(&intersection->x, 4, 1, g_parser.file);
-        io(&intersection->y, 4, 1, g_parser.file);
-        io(&intersection->z, 4, 1, g_parser.file);
+#define TRANSFER(pointer, size, count) \
+    do { if (io(pointer, size, count, g_parser.file) != (size_t)(count)) return 0; } while (0)
+    TRANSFER(&level->num_intersections, 4, 1);
+    if ((unsigned)level->num_intersections > 1024)
+        return 0;
+    if (level->num_intersections != 0)
+        TRANSFER(level->intersections, 4, level->num_intersections * 3);
+    TRANSFER(&level->num_streets, 4, 1);
+    if ((unsigned)level->num_streets > 512)
+        return 0;
+    for (i = 0; i < level->num_streets; i++) {
+        LevelStreet *street = &level->streets[i];
+        TRANSFER(&street->a, 4, 5);
+        TRANSFER(street->name, 1, 0x20);
     }
-    io(&g_level_editor.num_streets, 4, 1, g_parser.file);
-    for (i = 0; i < g_level_editor.num_streets; i++) {
-        LevelStreet *street = &g_level_editor.streets[i];
-        io(&street->a, 4, 1, g_parser.file);
-        io(&street->b, 4, 1, g_parser.file);
-        io(&street->axis, 4, 1, g_parser.file);
-        io(&street->lanes_a, 4, 1, g_parser.file);
-        io(&street->lanes_b, 4, 1, g_parser.file);
-        io(street->name, 1, 0x20, g_parser.file);
+    TRANSFER(level->tiles, 1, 0x100000);
+    TRANSFER(&level->num_buildings, 4, 1);
+    if ((unsigned)level->num_buildings > 1024)
+        return 0;
+    for (i = 0; i < level->num_buildings; i++) {
+        LevelBuilding *building = &level->buildings[i];
+        TRANSFER(building->name, 1, 0x40);
+        TRANSFER(&building->x, 4, 4);
     }
-    io(g_level_editor.tiles, 1, 0x100000, g_parser.file);
-    io(&g_level_editor.num_buildings, 4, 1, g_parser.file);
-    for (i = 0; i < g_level_editor.num_buildings; i++) {
-        LevelBuilding *building = &g_level_editor.buildings[i];
-        io(building->name, 1, 0x40, g_parser.file);
-        io(&building->x, 4, 1, g_parser.file);
-        io(&building->y, 4, 1, g_parser.file);
-        io(&building->z, 4, 1, g_parser.file);
-        io(&building->turns, 4, 1, g_parser.file);
-    }
+    return 1;
+#undef TRANSFER
+}
+
+static int level_read_count(const uint8_t *data, size_t size, size_t *position, int limit, int *value)
+{
+    if (*position > size || size - *position < sizeof *value)
+        return 0;
+    memcpy(value, data + *position, sizeof *value);
+    *position += sizeof *value;
+    return (unsigned)*value <= (unsigned)limit;
 }
 
 void leveleditor_load(void)
 {
-    int version;
+    static uint8_t pending[3 * sizeof(int) + 1024 * sizeof(LevelIntersection) +
+        512 * sizeof(LevelStreet) + 0x100000 + 1024 * offsetof(LevelBuilding, unsaved)];
+    int version, i, num_intersections, num_streets, num_buildings;
+    size_t size, position = 0, bytes, intersections, streets, tiles, buildings;
+    const size_t building_stride = offsetof(LevelBuilding, unsaved);
     g_parser.file = os_fopen("data/city.sbc", "rb");
     if (!g_parser.file)
         return;
-    game_fread(&version, 4, 1, g_parser.file);
-    if (version == 6)
-        level_transfer(game_fread);
+    if (game_fread(&version, 4, 1, g_parser.file) == 1 && version == 6) {
+        /* Read once. Check all byte ranges before the editor receives data. */
+        size = game_fread(pending, 1, sizeof pending, g_parser.file);
+        if (os_fgetc(g_parser.file) != EOF)
+            goto close;
+        if (!level_read_count(pending, size, &position, 1024, &num_intersections))
+            goto close;
+        intersections = position;
+        bytes = (size_t)num_intersections * sizeof(LevelIntersection);
+        if (bytes > size - position)
+            goto close;
+        position += bytes;
+        if (!level_read_count(pending, size, &position, 512, &num_streets))
+            goto close;
+        streets = position;
+        bytes = (size_t)num_streets * sizeof(LevelStreet);
+        if (bytes > size - position)
+            goto close;
+        position += bytes;
+        tiles = position;
+        if (sizeof g_level_editor.tiles > size - position)
+            goto close;
+        position += sizeof g_level_editor.tiles;
+        if (!level_read_count(pending, size, &position, 1024, &num_buildings))
+            goto close;
+        buildings = position;
+        if ((size_t)num_buildings * building_stride != size - position)
+            goto close;
+        g_level_editor.num_intersections = num_intersections;
+        memcpy(g_level_editor.intersections, pending + intersections,
+               num_intersections * sizeof(LevelIntersection));
+        g_level_editor.num_streets = num_streets;
+        memcpy(g_level_editor.streets, pending + streets, num_streets * sizeof(LevelStreet));
+        memcpy(g_level_editor.tiles, pending + tiles, sizeof g_level_editor.tiles);
+        g_level_editor.num_buildings = num_buildings;
+        for (i = 0; i < num_buildings; i++)
+            memcpy(&g_level_editor.buildings[i], pending + buildings + i * building_stride, building_stride);
+    }
+close:
     os_fclose(g_parser.file);
 }
 
@@ -137,7 +204,7 @@ void leveleditor_save(void)
     if (!g_parser.file)
         return;
     game_fwrite(&version, 4, 1, g_parser.file);
-    level_transfer(game_fwrite);
+    level_transfer(game_fwrite, &g_level_editor);
     os_fclose(g_parser.file);
 }
 

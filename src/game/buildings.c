@@ -32,33 +32,58 @@ void building_load(const char *name, int header_only)
 {
     Building *b = &g_building;
     char path[64];
+    char file_name[64], materials[16384], blocks[16384];
+    int size_x, size_z, floors, num_materials, num_blocks, length;
     int version, f, r, c, i, k;
     b->size_x = 24;
     b->size_z = 24;
     b->floors = 4;
     memset(b->cells, 0, sizeof b->cells);
-    sprintf(path, "data/building/%s.sbb", name);
+    if (strnlen(name, 64) == 64 || strpbrk(name, "/\\") || strstr(name, ".."))
+        goto missing;
+    length = snprintf(path, sizeof path, "data/building/%s.sbb", name);
+    if (length < 0 || length >= sizeof path)
+        goto missing;
     g_parser.file = os_fopen(path, "rb");
     if (g_parser.file != NULL) {
-        game_fread(&version, 4, 1, g_parser.file);
+        if (game_fread(&version, 4, 1, g_parser.file) != 1)
+            goto reject;
         if ((uint32_t)version - 6u > 4u) {
             os_fclose(g_parser.file);
             return;
         }
-        game_fread(b->name, 1, 64, g_parser.file);
-        game_fread(&b->size_x, 4, 1, g_parser.file);
-        game_fread(&b->size_z, 4, 1, g_parser.file);
-        game_fread(&b->floors, 4, 1, g_parser.file);
+        if (game_fread(file_name, 1, 64, g_parser.file) != 64 ||
+            game_fread(&size_x, 4, 1, g_parser.file) != 1 ||
+            game_fread(&size_z, 4, 1, g_parser.file) != 1 ||
+            game_fread(&floors, 4, 1, g_parser.file) != 1 ||
+            (unsigned)size_x > 63 || (unsigned)size_z > 63 || (unsigned)floors > 63)
+            goto reject;
         if (header_only != 0) {
+            memcpy(b->name, file_name, sizeof b->name);
+            b->size_x = size_x;
+            b->size_z = size_z;
+            b->floors = floors;
             os_fclose(g_parser.file);
             return;
         }
-        game_fread(&b->num_materials, 4, 1, g_parser.file);
-        for (i = 0; i < b->num_materials; i++)
-            game_fread(b->materials + i * 64, 1, 64, g_parser.file);
-        game_fread(&b->num_blocks, 4, 1, g_parser.file);
-        for (i = 0; i < b->num_blocks; i++)
-            game_fread(b->blocks + i * 64, 1, 64, g_parser.file);
+        if (game_fread(&num_materials, 4, 1, g_parser.file) != 1 || (unsigned)num_materials > 256)
+            goto reject;
+        for (i = 0; i < num_materials; i++)
+            if (game_fread(materials + i * 64, 1, 64, g_parser.file) != 64)
+                goto reject;
+        if (game_fread(&num_blocks, 4, 1, g_parser.file) != 1 || (unsigned)num_blocks > 256)
+            goto reject;
+        for (i = 0; i < num_blocks; i++)
+            if (game_fread(blocks + i * 64, 1, 64, g_parser.file) != 64)
+                goto reject;
+        memcpy(b->name, file_name, sizeof b->name);
+        b->size_x = size_x;
+        b->size_z = size_z;
+        b->floors = floors;
+        b->num_materials = num_materials;
+        b->num_blocks = num_blocks;
+        memcpy(b->materials, materials, num_materials * 64);
+        memcpy(b->blocks, blocks, num_blocks * 64);
         for (f = 0; f < b->floors; f++) {
             for (r = 0; r <= b->size_z; r++) {
                 for (c = 0; c <= b->size_x; c++) {
@@ -95,6 +120,7 @@ void building_load(const char *name, int header_only)
         }
         os_fclose(g_parser.file);
     }
+missing:
     building_setupfloorplannewer();
     for (f = 0; f < b->floors; f++) {
         for (c = 0; c <= b->size_x; c++) {
@@ -108,13 +134,22 @@ void building_load(const char *name, int header_only)
             cell->inner = 0;
         }
     }
+    return;
+reject:
+    os_fclose(g_parser.file);
+    goto missing;
 }
 
 void building_save(const char *name)
 {
     Building *b = &g_building;
     char path[64];
-    int version = 10, f, r, c, i, k;
+    int version = 10, f, r, c, i, k, length;
+    if (strnlen(name, 64) == 64 || strpbrk(name, "/\\") || strstr(name, ".."))
+        return;
+    length = snprintf(path, sizeof path, "data/building/%s.sbb", name);
+    if (length < 0 || length >= sizeof path)
+        return;
     for (f = 0; f < 64; f++) {
         for (r = 0; r < 64; r++) {
             for (c = 0; c < 64; c++) {
@@ -127,7 +162,6 @@ void building_save(const char *name)
             }
         }
     }
-    sprintf(path, "data/building/%s.sbb", name);
     g_parser.file = os_fopen(path, "wb");
     if (g_parser.file == NULL)
         return;

@@ -21,11 +21,9 @@ void newspaper_load(void)
     int i, n;
     loadtextfile("readme.txt");
     np->num_lines = 0;
-    while (g_parser.pos < g_parser.size) {
+    while (g_parser.pos < g_parser.size && np->num_lines < 1013) {
         cs_getline((char *)np->lines + np->num_lines * 256, 0x7c);
         np->num_lines++;
-        if (np->num_lines == 0x3fe)
-            break;
     }
     strcpy((char *)np->lines + np->num_lines * 256, "Top 10 list");
     np->num_lines++;
@@ -40,7 +38,6 @@ void newspaper_load(void)
             sprintf(g_newspaper_line, "%d. %s   $", i + 1, account->name);
             sprintf_comma(g_newspaper_money, account->money);
             strcat(g_newspaper_line, g_newspaper_money);
-            /* A full file lets the ranking extend past the line array. */
             strcpy((char *)np->lines + np->num_lines * 256, g_newspaper_line);
             np->num_lines++;
         }

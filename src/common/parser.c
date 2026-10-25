@@ -13,9 +13,8 @@
 
 #define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
 
-/* Reads the whole file into the buffer and puts a 0 after the last byte. The buffer has no
- * size check: a file over 1 MB writes past the end of the text. When the file does not open,
- * the buffer keeps its old bytes. */
+/* Reserves one byte for the final 0. A file that exceeds the buffer gives no text.
+ * When the file does not open, the buffer keeps its old bytes. */
 void loadtextfile(const char *path)
 {
     Parser *p = &g_parser;
@@ -24,8 +23,11 @@ void loadtextfile(const char *path)
     p->size = 0;
     p->file = os_fopen(path, "rb");
     if (p->file) {
-        for (c = os_fgetc(p->file); c != -1; c = os_fgetc(p->file))
+        for (c = os_fgetc(p->file); c != -1 && p->size < sizeof p->text - 1;
+             c = os_fgetc(p->file))
             p->text[p->size++] = (char)c;
+        if (c != -1)
+            p->size = 0;
         p->text[p->size] = 0;
         os_fclose(p->file);
     }

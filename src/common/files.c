@@ -31,28 +31,31 @@ int __cdecl comparestrings(const void *a, const void *b)
     }
 }
 
-/* A name that does not fit in 64 bytes runs into the next name. The list has room for 1024
- * names: the 0 after the last name of a full list goes to the low byte of the count of the
- * next list. */
+/* Reserves one name slot for the end marker. Each name has a final 0. */
 void listfiles(const char *pattern, int list, int dirs)
 {
     FileListSlot *l = &g_filelist.list[list];
     struct _finddata64i32_t fd;
     intptr_t handle, found;
+    size_t length;
 
     handle = os_findfirst64i32(pattern, &fd);
     l->count = 0;
     found = handle;
     for (;;) {
-        if (found == -1 || l->count > MAX_NAMES - 1)
+        if (found == -1 || l->count >= MAX_NAMES - 1)
             break;
         if (!dirs) {
             if (!(fd.attrib & _A_SUBDIR)) {
-                strcpy(l->name[l->count], fd.name);
+                length = strnlen(fd.name, NAME_SIZE - 1);
+                strncpy(l->name[l->count], fd.name, length);
+                l->name[l->count][length] = 0;
                 l->count++;
             }
         } else if ((fd.attrib & _A_SUBDIR) && fd.name[0] != '.') {
-            strcpy(l->name[l->count], fd.name);
+            length = strnlen(fd.name, NAME_SIZE - 1);
+            strncpy(l->name[l->count], fd.name, length);
+            l->name[l->count][length] = 0;
             l->count++;
         }
         found = os_findnext64i32(handle, &fd);

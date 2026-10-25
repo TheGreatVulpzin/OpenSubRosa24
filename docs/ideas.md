@@ -29,7 +29,7 @@ Columns: **Product** is OpenSubRosa, SubVulpes or both. **Where** is the functio
 
 ## Security fixes (allowed during the decomp)
 
-These change only what happens with invalid client input. The recordings have only valid input, so the harness does not change. Details: `docs/protocol.md`, section 12, item 15.
+These checks cover invalid client input and local data files. Valid inputs keep the same behavior. Network details: `docs/protocol.md`, section 12, item 15.
 
 | Fix | Where | State |
 | --- | --- | --- |
@@ -49,8 +49,20 @@ These change only what happens with invalid client input. The recordings have on
 | Item count of the object part (8 bits, no cap) | `serverrecv` | Open |
 | Server name copy (`strcpy`, longer than the 32 bytes sent) | | Open |
 | Human health (`health + 10` in 7 bits, wraps above 117) | | Open |
-| Line count of `readme.txt`: a full file writes past the line array (1033 lines of 256 bytes in an array of 1024) | `newspaper_load` | Open. The input is a server file, not client input. |
-| Material and block counts of a `.sbb` file have no limit. `building_load` writes past the name arrays (256 of 64 bytes). `building_setupbuild` indexes `mat_map[256]` and `block_map[1024]` on the stack | `building_load`, `building_setupbuild` | Open. The input is a data file. It matters when packages can bring buildings. |
+| D1: reserve space for the ranking in `readme.txt` | `newspaper_load` | Done. File text stops at 1013 lines. The title and ten accounts fit in 1024 lines. |
+| D2, D4: bound material and block counts in `.sbb` files | `building_load` | Done. Reject negative counts and counts above 256 before changes to the name tables. |
+| D3: bound each building dimension | `building_load` | Done. Accept 0 through 63, including header reads. Invalid dimensions use the missing-file path. |
+| D5: bound building and block paths | `building_load`, `building_save`, `loadblock` | Done. Use `snprintf`. Reject `/`, `\`, `..`, and names that do not fit. |
+| D6: bound surface and box counts in `.sbl` files | `loadblock` | Done. Accept 0 through 1024. Invalid counts and short reads keep the current block. |
+| D7: bound city counts | `leveleditor_load`, `src/game/block_mesh.c` | Done. Accept at most 1024 intersections, 512 streets, and 1024 buildings. Invalid counts and short reads keep the current city. |
+| D8: reserve the last parser byte | `loadtextfile` | Done. Read at most the buffer size minus one. Oversized files give no text. |
+| D9: bound file lists and name copies | `listfiles` | Done. Use `strncpy`. Lists hold at most 1023 names. Each name ends with a zero byte. |
+| D10: check account files | `sr_loadaccountsserver` | Done. Accept 0 through 65535 accounts. Check each read. Set `name[31]` to zero. Invalid files keep the new key and give no accounts. |
+
+S4 tests: `tools/formats/test_s4.py` covers bounds, short reads, path names, memory sentinels, and all supported data files.
+Run it with a recording directory and a work directory in `build/`.
+Use `--data` for the game data directory and `--image` for the game image of the harness.
+The building, level, area, and system tests also check valid inputs.
 
 ## Client
 
@@ -75,8 +87,7 @@ Each one changes behavior only for invalid input from a client or an admin. The 
 ## System code (found in group 7)
 
 - Call `timeBeginPeriod(1)` before the main loop. The loop sleeps 1 ms, and the system timer resolution sets how long the sleep lasts, so the ticks have jitter. Measure the tick time with and without it. (SubVulpes)
-- Check the size of the file in `loadtextfile`. A `config.txt` or `readme.txt` over 1 MB writes past the parser buffer. (both)
-- Check the name length and the list size in `listfiles`. A name of 64 bytes or more runs into the next name, and a list with 1024 names writes a 0 into the next list. (both)
+- The S4 checks bound file sizes in `loadtextfile` and name copies in `listfiles`. See D8 and D9 above. (both)
 - Stop `getint` from returning a random value when the text has no number. The clean code returns 0. (both)
 - Fix the offset of `gettimeofday` (11644473600000000 in place of 116444736000000000). The function is not used now. (both)
 

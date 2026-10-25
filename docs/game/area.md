@@ -83,12 +83,17 @@ Both versions store the dimensions, six side markers and surface records.
 Each surface stores its two subdivision counts, two curve degrees, slot, automatic-side flag and sixteen point/UV pairs.
 The first word of each `BlockSurface` stays unchanged.
 Version 2 also stores boxes. Version 1 sets `num_boxes` to zero.
+Surface and box counts must be from 0 through 1024. Invalid counts and short reads keep the current block.
+Block names cannot contain separators or two consecutive dots. The complete path must fit in 64 bytes.
 
 `leveleditor_load` and `leveleditor_save` use version 6 of `data/city.sbc`.
 The file holds intersections, streets, the 1024 by 1024 tile grid and building entries, in that order.
 Each building entry saves its name, position and turn count. Its `unsaved` field stays unchanged.
-The file counts have no bounds checks. A mismatched version closes the file without loading its records.
+City counts cannot be negative. The limits are 1024 intersections, 512 streets, and 1024 buildings.
+Invalid counts and short reads keep the current city. A mismatched version closes the file without record changes.
 Both loaders and the city writer store the file handle in `Parser.file` and keep its value after close.
+The block and city loaders reuse private buffers with fixed sizes.
+The two buffers use about 1.58 MiB.
 
 ## Mesh storage and turns
 

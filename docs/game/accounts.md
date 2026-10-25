@@ -33,6 +33,10 @@ Field notes:
 7. For version 2 and 3 it reads one unknown int and the three looks.
 8. It closes the file.
 
+The loader accepts counts from 0 through 65535 and checks each read. Each name ends with zero at index 31.
+The loader applies account records and the saved key only after all reads pass.
+Invalid files give no accounts and keep the new key.
+
 Version rules:
 
 - Version 1 has no looks. The game rolls the three looks with `rand()`.
@@ -64,6 +68,5 @@ Functions of the system that are not rewritten yet:
 
 ## Known odd behavior
 
-- The count comes from the file. The code does not check it against the table size of 65536 accounts.
 - The original reads an uninitialized version when the file is empty. The clean code reads 0 and ignores the file.
 - The game writes all 32 name bytes to the file. The bytes after the first 0 are not clean.

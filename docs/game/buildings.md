@@ -46,16 +46,17 @@ The 32 copied pieces receive consecutive indices.
 
 ## Newspaper
 
-`newspaper_load` reads at most 1022 lines from `readme.txt`.
+`newspaper_load` reads at most 1013 lines from `readme.txt`.
 It appends a title and the ten accounts with the most money.
 The ranking uses unsigned radix keys equal to `0x8fffffff - money` with integer wrap.
 The text buffers are shared game state.
-A full input file lets the ranking extend beyond the 1024-line array.
-This behavior preserves the bytes that the game writes.
+The title and ten accounts fit in the 1024-line array.
 
 ## Building files
 
 `building_load` accepts `.sbb` versions 6 through 10.
+The loader accepts dimensions from 0 through 63 and name counts from 0 through 256.
+Invalid dimensions and name counts use the missing-file path. Name tables keep their previous values on rejection.
 The file stores cells in floor, row and column order. Rows and columns include the boundary cells.
 Version 7 adds the interior bit 18. Version 8 keeps the cell color.
 Version 9 adds the 16 area boxes. Version 10 adds the guard direction and prize flag.
@@ -64,6 +65,8 @@ After a complete read, the last row and column lose their outer and inner blocks
 
 `building_save` scans the whole cell grid. Occupied cells can increase the dimensions, which never decrease here.
 It writes version 10 and keeps every cell field, including `spare`.
+Building and block paths use `snprintf`. Names cannot contain separators or two consecutive dots.
+The complete path must fit in 64 bytes.
 
 `building_setupbuild` maps file names to server material and block ids.
 The last matching name wins. Unknown names map to zero.

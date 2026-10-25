@@ -29,7 +29,7 @@ Functions:
 
 Odd behavior:
 
-- `loadtextfile` has no size check. A file over 1 MB writes past `text` into `number` and `file`.
+- `loadtextfile` reserves the last buffer byte for zero. Oversized files give no text.
 - When the file does not open, the buffer keeps its old text.
 - When `findstring` does not find the key, the cursor goes to `size` plus the length of the key. The callers set the cursor to 0 after each key.
 - `getint` returns 0 when the text has no number. The game code returns whatever was on the stack. The recorded calls are all of this kind, so the harness lists `getint` as a known difference.
@@ -67,8 +67,8 @@ The profiler has 256 `Timer` records (0x58 bytes). A timer has a name, the start
 
 Odd behavior:
 
-- A name of 64 bytes or more runs into the next name.
-- A full list (1024 names) writes its end 0 into the low byte of the count of the next list.
+- File lists hold at most 1023 names. Each name has at most 63 bytes before its final zero.
+- Short names keep the bytes after their final zero.
 - A name with no dot and no 0 in 64 bytes loses the first byte of the next name.
 
 ## Radix sort
