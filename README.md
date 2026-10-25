@@ -67,14 +67,21 @@ The build is x86 (32 bit). The result is in `build\hook\`:
 
 ## Run the server
 
-You need the server files from your own copy of Sub Rosa (the folder with `data/` and `config.txt`).
+Download the [server package](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases).
+The package includes `data/` and a default `config.txt`.
 
-1. Copy `build\hook\subvulpes-server.exe` into that server folder.
-2. Edit `config.txt` for the name, the player limit and the round time. Never share this file: it holds the admin password.
-3. Start `subvulpes-server.exe` from that folder.
-4. Open the game, and join the server with an original 0.24 client.
+1. Extract the zip into a new folder.
+2. Open `subvulpes-launcher.exe`. Set the server name and admin password. The default password is empty.
+3. Select **Normal Playtest** and click **Start server**.
+4. Join with your Sub Rosa 0.24 client.
 
-Optional: set the `SV_LOG` environment variable to copy the log to the console. `tools\launcher\build.bat` makes a small panel (`build\launcher\subvulpes-launcher.exe`). Put it next to the server to start it, pick a preset and pack the logs.
+Keep `config.txt` private after you save your settings. It holds the admin password.
+The launcher updates executables and package instructions. It keeps your configuration, data and accounts.
+
+For a local build, package the approved data with `tools/release/make_package.ps1 -DataDir original\blackhouser\data -Version v0.0.2-test`.
+See [Server releases](docs/release.md) for build and publication commands.
+Set `SV_LOG` to a file path if you need a server log.
+
 
 ## Verify
 

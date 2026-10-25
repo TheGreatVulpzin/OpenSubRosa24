@@ -1,9 +1,12 @@
 [CmdletBinding()]
-param([string]$Version)
+param([string]$Version, [string]$DataDir)
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
+. (Join-Path $PSScriptRoot 'server_data.ps1')
+if (-not $DataDir) { throw 'Pass -DataDir with the server data directory.' }
+$dataFiles = @(Get-ServerDataFiles $DataDir)
 
 function Read-Git([string[]]$Arguments) {
     $value = & git -C $repo @Arguments
@@ -35,27 +38,15 @@ $sources = [ordered]@{
     'subvulpes-launcher.exe' = 'build\launcher\subvulpes-launcher.exe'
     'LEIA-ME.txt' = 'tools\release\LEIA-ME.txt'
     'record_focus.txt' = 'instrumentation\recording\record_focus.txt'
+    'config.txt' = 'tools\release\default-config.ini'
+    'readme.txt' = 'tools\release\newspaper.txt'
 }
 $allowed = @($sources.Keys) + @('version.txt')
+$allowed += @($dataFiles | ForEach-Object { "data/$($_.Relative)" })
+$directories = @('data', 'data/block', 'data/building', 'data/texture', 'data/weapon')
+$defaultConfig = [IO.File]::ReadAllBytes((Join-Path $repo $sources['config.txt']))
 
-function Assert-PlainPath([string]$Path) {
-    $item = Get-Item -LiteralPath $Path -Force
-    if (-not $item.PSIsContainer) {
-        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
-            throw "Links are not allowed in package paths: $Path"
-        }
-        $item = $item.Directory
-    }
-    while ($null -ne $item) {
-        if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
-            throw "Links are not allowed in package paths: $Path"
-        }
-        $item = $item.Parent
-        if ($null -eq $item) { break }
-    }
-}
-
-# Copy only these sources. Never copy a server installation or a directory tree.
+# Copy build outputs, package defaults and checked data files.
 foreach ($source in $sources.Values) {
     $path = Join-Path $repo $source
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
@@ -69,14 +60,23 @@ Assert-PlainPath $package
 function Assert-Package {
     $items = @(Get-ChildItem -LiteralPath $package -Force -Recurse)
     foreach ($item in $items) {
-        if ($item.PSIsContainer -or $item.Name -cnotin $allowed -or
-            $item.DirectoryName -ne $package -or
-            ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        $relative = $item.FullName.Substring($package.Length + 1).Replace('\', '/')
+        Assert-PlainPath $item.FullName
+        if ($item.PSIsContainer) {
+            if ($relative -cnotin $directories) { throw "Forbidden package entry: $relative" }
+            continue
+        }
+        if ($relative -cnotin $allowed) {
             throw "Forbidden package entry: $($item.Name)"
+        }
+        if ($relative -ceq 'config.txt' -and
+            [Convert]::ToBase64String([IO.File]::ReadAllBytes($item.FullName)) -cne
+            [Convert]::ToBase64String($defaultConfig)) {
+            throw 'The package config.txt must match the public default.'
         }
         if ($item.Extension -eq '.txt') {
             $text = [IO.File]::ReadAllText($item.FullName)
-            if ($text -match '(?im)^\s*(?:serverpassword|password|passwd|token|secret|api_key)\s*[=:]\s*\S+' -or
+            if ($text -match '(?im)^[ \t]*(?:serverpassword|password|passwd|token|secret|api_key)[ \t]*[=:][ \t]*\S+' -or
                 $text -match '-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,}') {
                 throw "Private data detected in package text: $($item.Name)"
             }
@@ -89,14 +89,19 @@ Assert-Package
 foreach ($entry in $sources.GetEnumerator()) {
     Copy-Item -LiteralPath (Join-Path $repo $entry.Value) -Destination (Join-Path $package $entry.Key) -Force
 }
+foreach ($file in $dataFiles) {
+    $target = Join-Path $package "data/$($file.Relative)"
+    New-Item -ItemType Directory -Path ([IO.Path]::GetDirectoryName($target)) -Force | Out-Null
+    Copy-Item -LiteralPath $file.FullName -Destination $target -Force
+}
 [IO.File]::WriteAllText((Join-Path $package 'version.txt'),
     "$Version`ncommit $commit`nbuilt $date`n", [Text.UTF8Encoding]::new($false))
 Assert-Package
-if (@(Get-ChildItem -LiteralPath $package -Force).Count -ne $allowed.Count) {
+if (@(Get-ChildItem -LiteralPath $package -Force -Recurse -File).Count -ne $allowed.Count) {
     throw 'The package file count is incorrect.'
 }
 
-# Reject known game files even if someone renames them as a package executable.
+# Reject game binaries even if someone renames them as a package executable.
 $gameHashes = @(Get-Content -LiteralPath (Join-Path $repo 'original\MANIFEST.sha256') |
     ForEach-Object { if ($_ -match '^([0-9a-fA-F]{64})\s') { $Matches[1] } })
 foreach ($file in Get-ChildItem -LiteralPath $package -File) {

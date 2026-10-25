@@ -64,10 +64,29 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Verifier tests failed.' }
       - name: Test package rules and launcher zip names
         run: .\instrumentation\tests\test_package.ps1
+      - name: Download and check server data
+        id: data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          $download = Join-Path $env:RUNNER_TEMP 'server-data-download'
+          New-Item -ItemType Directory -Path $download | Out-Null
+          & gh release download server-data-0.24 --pattern server-data-0.24.zip --pattern server-data-0.24.zip.sha256 --dir $download
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Cannot download server-data-0.24. Publish server-data-0.24.zip and its .zip.sha256 in that data release first.'
+          }
+          $data = & .\tools\release\expand_data_zip.ps1 `
+            -Zip (Join-Path $download 'server-data-0.24.zip') `
+            -Checksum (Join-Path $download 'server-data-0.24.zip.sha256') `
+            -Destination (Join-Path $env:RUNNER_TEMP 'server-data-checked')
+          "directory=$data" >> $env:GITHUB_OUTPUT
       - name: Make the package
         id: package
+        env:
+          SERVER_DATA_DIR: ${{ steps.data.outputs.directory }}
         run: |
-          $package = & .\tools\release\make_package.ps1 -Version $env:RELEASE_TAG
+          $package = & .\tools\release\make_package.ps1 -Version $env:RELEASE_TAG -DataDir $env:SERVER_DATA_DIR
           "zip=$($package.Zip)" >> $env:GITHUB_OUTPUT
           "checksum=$($package.Checksum)" >> $env:GITHUB_OUTPUT
       - name: Publish the release
