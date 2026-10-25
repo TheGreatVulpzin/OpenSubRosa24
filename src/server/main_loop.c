@@ -1,7 +1,7 @@
 /* The main function and the main loop of the dedicated server.
  *
  * sr_getpaths sets up the folders, the timers and the settings, then calls
- * sr_dedicatedserverloop. The loop runs one tick every 16 ms and never returns. In the hook
+ * sr_dedicatedserverloop. The loop runs one tick every 16 ms. In the hook
  * build, own_main=1 in subvulpes.ini replaces the two game functions with these.
  */
 #define WIN32_LEAN_AND_MEAN
@@ -29,6 +29,7 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal);
  * standalone server. */
 #ifdef SR_STANDALONE
 void *sr_fn(uintptr_t va);
+int sv_stop_requested(void);
 #define CODE(rva) sr_fn(0x400000u + (rva))
 #else
 #define CODE(rva) ((void *)(sr_base + (rva)))
@@ -239,6 +240,10 @@ void __cdecl sr_dedicatedserverloop(void)
     status_ticks = sr_game.ticks;
     sv_log("own main loop: running (game ticks %d)", sr_game.ticks);
     for (;;) {
+#ifdef SR_STANDALONE
+        if (sv_stop_requested())
+            return;
+#endif
         os_sleep(1);
         now = fn.systemtimer();
         /* A status line every minute, so a log shows that this loop runs and how fast. */

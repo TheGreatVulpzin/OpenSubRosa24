@@ -63,6 +63,12 @@ void __cdecl sr_getpaths(void);
 /* SV_LOG=<file>: a copy of the console output. The console stays visible, as with the
  * original server. Each line goes to the disk at once, so a crash loses no line. */
 static FILE *g_log;
+static HANDLE g_stop_event;
+
+int sv_stop_requested(void)
+{
+    return g_stop_event && WaitForSingleObject(g_stop_event, 0) == WAIT_OBJECT_0;
+}
 
 static void sv_out(const char *s)
 {
@@ -143,8 +149,7 @@ static void capture(uint8_t dir, const void *data, int len, const void *addr)
     fwrite(&port, 2, 1, g_packets);
     fwrite(&n, 2, 1, g_packets);
     fwrite(data, 1, n, g_packets);
-    /* The launcher stops the server with TerminateProcess: flush each second, so that a stop
-     * loses at most one second of packets. */
+    /* Flush each second so a crash loses at most one second of packets. */
     if (t - g_packets_flush >= 1000) {
         fflush(g_packets);
         g_packets_flush = t;
@@ -251,6 +256,8 @@ void sv_hooks_lifted_profile(void)
 /* SV_SAMPLE=<file>: a thread reads the EIP of the main thread every millisecond and writes
  * one hex address per line. instrumentation/lift/samples.py maps them to functions with the .map file. */
 static HANDLE g_main_thread;
+static HANDLE g_sampler;
+static volatile LONG g_sampler_stop;
 static FILE *g_samples;
 
 static DWORD WINAPI sampler(void *arg)
@@ -258,7 +265,7 @@ static DWORD WINAPI sampler(void *arg)
     unsigned count = 0;
     (void)arg;
     timeBeginPeriod(1);
-    for (;;) {
+    while (!InterlockedCompareExchange(&g_sampler_stop, 0, 0)) {
         CONTEXT c;
         Sleep(1);
         if (SuspendThread(g_main_thread) == (DWORD)-1)
@@ -268,8 +275,9 @@ static DWORD WINAPI sampler(void *arg)
             fprintf(g_samples, "%08lx\n", c.Eip);
         ResumeThread(g_main_thread);
         if (++count % 1000 == 0)
-            fflush(g_samples);  /* a stop with TerminateProcess loses at most one second */
+            fflush(g_samples);
     }
+    return 0;
 }
 
 static void start_sampler(void)
@@ -280,7 +288,7 @@ static void start_sampler(void)
     DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(), &g_main_thread, 0, FALSE,
                     DUPLICATE_SAME_ACCESS);
     fprintf(g_samples, "base %08lx\n", (unsigned long)(uintptr_t)GetModuleHandleA(NULL));
-    CreateThread(NULL, 0, sampler, NULL, 0, NULL);
+    g_sampler = CreateThread(NULL, 0, sampler, NULL, 0, NULL);
     sv_log("sampling profiler: %s", path);
 }
 
@@ -378,6 +386,14 @@ static DWORD WINAPI test_crash(void *arg)
 int main(void)
 {
     unsigned cw;
+    const char *stop_name = getenv("SV_STOP_EVENT");
+    if (stop_name) {
+        g_stop_event = OpenEventA(SYNCHRONIZE, FALSE, stop_name);
+        if (!g_stop_event) {
+            fprintf(stderr, "cannot open the stop event\n");
+            return 1;
+        }
+    }
     open_log();
     SetUnhandledExceptionFilter(on_crash);
     if (!map_image())
@@ -394,6 +410,22 @@ int main(void)
 #endif
     if (getenv("SV_TEST_CRASH"))
         CreateThread(NULL, 0, test_crash, (void *)(uintptr_t)atoi(getenv("SV_TEST_CRASH")), 0, NULL);
-    sr_getpaths();  /* never returns: it runs the main loop */
+    sr_getpaths();
+    InterlockedExchange(&g_sampler_stop, 1);
+    if (g_sampler) {
+        WaitForSingleObject(g_sampler, INFINITE);
+        CloseHandle(g_sampler);
+    }
+    if (g_main_thread)
+        CloseHandle(g_main_thread);
+    sv_log("server stopped");
+    if (g_samples)
+        fclose(g_samples);
+    if (g_packets)
+        fclose(g_packets);
+    if (g_log)
+        fclose(g_log);
+    if (g_stop_event)
+        CloseHandle(g_stop_event);
     return 0;
 }
