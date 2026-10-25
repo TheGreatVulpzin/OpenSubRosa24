@@ -1,5 +1,13 @@
 # OpenSubRosa24
 
+[![CI](https://github.com/TheGreatVulpzin/OpenSubRosa24/actions/workflows/ci.yml/badge.svg)](https://github.com/TheGreatVulpzin/OpenSubRosa24/actions/workflows/ci.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+![Language: C](https://img.shields.io/badge/language-C-A8B9CC?logo=c&logoColor=white)
+![Platform: Windows x86](https://img.shields.io/badge/platform-Windows%20x86-lightgrey)
+![Decompiled with Ghidra](https://img.shields.io/badge/decompiled%20with-Ghidra-red)
+![Last commit](https://img.shields.io/github/last-commit/TheGreatVulpzin/OpenSubRosa24)
+![Version: 0.24 forever](https://img.shields.io/badge/version-0.24%20forever-ff69b4)
+
 **(EN-US)**
 The Sub Rosa 0.24 game (server and, in the future, client), decompiled with Ghidra and rewritten as readable C.
 It is bit-exact with the original and compatible with original clients and servers. It also adds security fixes and, in the future, QoL changes.
