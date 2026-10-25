@@ -201,7 +201,7 @@ namespace SubVulpes
             Check(Field<Process>(form, "server") == null, "Start refuses missing data");
             CopyDirectory(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "data"), Path.Combine(root, "data"));
             File.Copy(Path.Combine(repo, "build", "hook", "opensubrosa24_server.exe"), Path.Combine(root, "opensubrosa24_server.exe"));
-            File.Copy(Path.Combine(repo, "build", "hook", "subvulpes-server-record.exe"), Path.Combine(root, "subvulpes-server-record.exe"));
+            File.Copy(Path.Combine(repo, "build", "hook", "opensubrosa24_server_record.exe"), Path.Combine(root, "opensubrosa24_server_record.exe"));
             Field<CheckBox>(form, "recordBox").Enabled = true;
             Call(form, "ShowMissing", false);
             mainTabs.SelectedTab = pages["Server settings"];
@@ -317,6 +317,14 @@ namespace SubVulpes
             Check(standard.All(c => c.ForeColor == SystemColors.ControlText), "all non-log controls use system text color");
             Check(standard.All(c => c.Font.FontFamily.Name == SystemFonts.MessageBoxFont.FontFamily.Name &&
                   c.Font.Size == SystemFonts.MessageBoxFont.Size), "all non-log controls use one system font and size");
+            Field<ComboBox>(form, "presetBox").SelectedIndex = 1;
+            Click(form, "startStop");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "recording server reaches the live loop");
+            Check(Path.GetFileName(Field<Process>(form, "server").StartInfo.FileName) == "opensubrosa24_server_record.exe" &&
+                  Field<TextBox>(form, "console").Text.Contains("harness recording:"), "Harness Recording uses the renamed recording executable");
+            Click(form, "stopButton");
+            await Wait(() => Field<Process>(form, "server") == null, 20000, "recording server stops safely");
+            Check(File.ReadAllText(Field<string>(form, "logFile")).Contains("Server stopped."), "recording server flushes its final log line");
             Field<CheckBox>(form, "debugModeBox").Checked = false;
             mainTabs.SelectedTab = pages["Server"];
             Click(form, "startStop");

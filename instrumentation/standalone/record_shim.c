@@ -1,4 +1,4 @@
-/* The harness recording of the standalone server (subvulpes-server-record.exe).
+/* The harness recording of the standalone server (opensubrosa24_server_record.exe).
  *
  * The recording build compiles the lifted code (src/lifted/lifted_024d.c) with /Gh: each
  * function calls _penter at its start. _penter finds the function in lf_table and gives its

@@ -59,7 +59,7 @@ The build is x86 (32 bit). The result is in `build\hook\`:
 | File | What it is |
 | --- | --- |
 | `opensubrosa24_server.exe` | The standalone server. It runs with no `subrosadedicated024d.exe`. |
-| `subvulpes-server-record.exe` | The same server with a recorder, to make test recordings. |
+| `opensubrosa24_server_record.exe` | The same server with a recorder, to make test recordings. |
 | `wsock32.dll` | A hook DLL for the original server. Only for testing. |
 | `harness.exe` | Compares each function with the original on recorded calls. |
 
@@ -69,7 +69,7 @@ If you just want to run the server, download the [server package](https://github
 The package includes `data/` and a default `config.txt`.
 
 1. Extract the zip into a new folder.
-2. Open `subvulpes-launcher.exe`.
+2. Open `opensubrosa24_launcher.exe`.
 3. Open **Server settings**. Set the server name, player limit, round time, UDP port and admin password. Click **Save**.
 4. Open **Server** and click **Start**. The panel shows live `SV_LOG` output, players and tick speed.
 5. Join with your Sub Rosa 0.24 client. Use **Stop**, or close the launcher, to stop the server safely.

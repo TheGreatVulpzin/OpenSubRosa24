@@ -294,7 +294,7 @@ namespace SubVulpes
         const int FreezeSeconds = 150;
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
-            "opensubrosa24_server.exe", "subvulpes-server-record.exe", "subvulpes-launcher.exe", "LEIA-ME.txt", "version.txt",
+            "opensubrosa24_server.exe", "opensubrosa24_server_record.exe", "opensubrosa24_launcher.exe", "LEIA-ME.txt", "version.txt",
             "record_focus.txt"
         };
 
@@ -468,7 +468,7 @@ namespace SubVulpes
             settings.Set("server_folder", folder);
             settings.Save();
             LoadSettings();
-            recordBox.Enabled = File.Exists(Path.Combine(folder, "subvulpes-server-record.exe"));
+            recordBox.Enabled = File.Exists(Path.Combine(folder, "opensubrosa24_server_record.exe"));
             logOffset = 0;
             pendingLog = "";
             console.Clear();
@@ -723,7 +723,7 @@ namespace SubVulpes
             timersBox = Option("Game timers", "The time of each part of the game, in the log each minute.");
             packetsBox = Option("Packet capture", "Records network traffic, including player names and chat.");
             recordBox = Option("Harness recording", "Records function calls with a memory snapshot after 10 minutes.");
-            recordBox.Enabled = File.Exists(Path.Combine(folder, "subvulpes-server-record.exe"));
+            recordBox.Enabled = File.Exists(Path.Combine(folder, "opensubrosa24_server_record.exe"));
             freezeBox = Option("Freeze dump", "A dump when the server writes no speed line for " + FreezeSeconds + " s.");
             page.Controls.Add(Group("Speed", profileBox, timersBox));
             page.Controls.Add(Group("Session", packetsBox, recordBox));
@@ -833,7 +833,7 @@ namespace SubVulpes
             if (server != null) return;
             developerRun = debugModeBox.Checked;
             activeCaptures = developerRun ? captures.Copy() : new Captures { CrashDump = "none" };
-            string exe = Path.Combine(folder, activeCaptures.Record ? "subvulpes-server-record.exe" : "opensubrosa24_server.exe");
+            string exe = Path.Combine(folder, activeCaptures.Record ? "opensubrosa24_server_record.exe" : "opensubrosa24_server.exe");
             if (!Directory.Exists(Path.Combine(folder, "data"))) {
                 ShowMissing(false);
                 return;
@@ -1321,7 +1321,7 @@ namespace SubVulpes
         // Only the files of UpdateFiles come from the zip, from any folder inside it. The old
         // files go to backup\<time>. config.txt, data and user never change. The running
         // launcher cannot be overwritten, but Windows lets it be renamed: it becomes
-        // subvulpes-launcher.old, and the next start deletes it.
+        // opensubrosa24_launcher.old, and the next start deletes it.
         public async Task InstallUpdate(string zip, string releaseName = null)
         {
             if (updating) return;
@@ -1361,12 +1361,12 @@ namespace SubVulpes
                 bool newLauncher = false;
                 try {
                     foreach (var f in found) {
-                        string target = f.Key.Equals("subvulpes-launcher.exe", StringComparison.OrdinalIgnoreCase)
+                        string target = f.Key.Equals("opensubrosa24_launcher.exe", StringComparison.OrdinalIgnoreCase)
                             ? Application.ExecutablePath : Path.Combine(folder, f.Key);
                         if (File.Exists(target))
                             File.Copy(target, Path.Combine(backup, f.Key), true);
-                        if (f.Key.Equals("subvulpes-launcher.exe", StringComparison.OrdinalIgnoreCase)) {
-                            string old = Path.Combine(launcherFolder, "subvulpes-launcher.old");
+                        if (f.Key.Equals("opensubrosa24_launcher.exe", StringComparison.OrdinalIgnoreCase)) {
+                            string old = Path.Combine(launcherFolder, "opensubrosa24_launcher.old");
                             if (File.Exists(old))
                                 File.Delete(old);
                             File.Move(Application.ExecutablePath, old);
@@ -1394,7 +1394,7 @@ namespace SubVulpes
 
         void CleanOldLauncher()
         {
-            string old = Path.Combine(launcherFolder, "subvulpes-launcher.old");
+            string old = Path.Combine(launcherFolder, "opensubrosa24_launcher.old");
             try {
                 if (File.Exists(old))
                     File.Delete(old);

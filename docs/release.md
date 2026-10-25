@@ -2,7 +2,7 @@
 
 Download the server package from [Releases](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases).
 Each release contains a zip and its `.zip.sha256` file.
-Extract the zip, open `subvulpes-launcher.exe`, select the server folder, then save the server settings.
+Extract the zip, open `opensubrosa24_launcher.exe`, select the server folder, then save the server settings.
 Click **Start** on Server. **Stop** and window close request a safe stop between server ticks.
 The package includes `data/` and a default `config.txt`. No separate server installation is needed.
 
@@ -55,7 +55,7 @@ The launcher updates only the three executables, `LEIA-ME.txt`, `version.txt` an
 It saves old files under `backup/`. It keeps `config.txt`, `data/`, `readme.txt` and `user/`.
 For a first installation, extract the complete package into a new directory.
 Older launchers do not install the renamed server executable.
-Copy `opensubrosa24_server.exe` and the new launcher from the package before the first start.
+Copy the three `opensubrosa24` executables from the package before the first start.
 Keep `config.txt`, `data/` and `user/`.
 
 ## Launcher operation

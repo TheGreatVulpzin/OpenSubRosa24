@@ -122,4 +122,5 @@ target_include_directories(subvulpes-server-record PRIVATE src/include src/lifte
 target_compile_options(subvulpes-server-record PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server-record PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE SR_RECORD)
 target_link_options(subvulpes-server-record PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG /INCREMENTAL:NO)
+set_target_properties(subvulpes-server-record PROPERTIES OUTPUT_NAME opensubrosa24_server_record)
 set_property(TARGET subvulpes-server-record PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

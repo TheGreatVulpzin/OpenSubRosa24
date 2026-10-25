@@ -4,12 +4,12 @@ ENGLISH
 
 This package contains the Windows x86 server, its launcher, data/ and a default
 config.txt. readme.txt supplies neutral text for the newspaper in the game.
-opensubrosa24_server.exe runs normal sessions. subvulpes-server-record.exe records
+opensubrosa24_server.exe runs normal sessions. opensubrosa24_server_record.exe records
 calls for tests. record_focus.txt selects functions for the recorder.
 
 First use:
 1. Extract this zip. Keep all files inside its package folder together.
-2. Open subvulpes-launcher.exe. It uses its own folder by default.
+2. Open opensubrosa24_launcher.exe. It uses its own folder by default.
    To select another server folder, use Browse in Launcher settings. It creates the default config.txt if missing.
    One line lists missing data/ or config.txt.
 3. Open Server settings. Set the server name, player limit, round time, UDP port and admin
@@ -51,12 +51,12 @@ PORTUGUÊS (BR)
 
 Este pacote contém o servidor Windows x86, o launcher, data/ e um config.txt
 padrão. readme.txt fornece texto neutro para o jornal dentro do jogo.
-opensubrosa24_server.exe executa sessões normais. subvulpes-server-record.exe grava
+opensubrosa24_server.exe executa sessões normais. opensubrosa24_server_record.exe grava
 chamadas para testes. record_focus.txt seleciona funções para o recorder.
 
 Primeiro uso:
 1. Extraia este zip. Mantenha juntos todos os arquivos da pasta do pacote.
-2. Abra subvulpes-launcher.exe. Ele usa a própria pasta por padrão.
+2. Abra opensubrosa24_launcher.exe. Ele usa a própria pasta por padrão.
    Para escolher outra pasta, use Browse em Launcher settings. O launcher lembra a pasta. Se config.txt faltar, ele cria o padrão do pacote.
    Uma linha mostra se falta data/ ou config.txt.
 3. Abra Server settings. Defina nome do servidor, limite de jogadores, tempo de rodada,

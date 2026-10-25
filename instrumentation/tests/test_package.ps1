@@ -34,6 +34,9 @@ try {
     $list = [regex]::Match($launcher, '(?s)string\[\] UpdateFiles\s*=\s*\{(.*?)\}').Groups[1].Value
     $names = @([regex]::Matches($list, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
     Assert ($archive.Entries.Count -eq 13) 'Expected eight root files and five data files.'
+    $executables = @($archive.Entries | Where-Object { $_.Name.EndsWith('.exe') } | ForEach-Object Name | Sort-Object)
+    $expectedExecutables = @('opensubrosa24_server.exe', 'opensubrosa24_server_record.exe', 'opensubrosa24_launcher.exe') | Sort-Object
+    Assert (($executables -join ',') -ceq ($expectedExecutables -join ',')) 'The package executable names must use opensubrosa24.'
     foreach ($entry in $archive.Entries) {
         $relative = $entry.FullName.Substring("OpenSubRosa24-server-$version/".Length)
         Assert ($entry.Name -cin $names -or $relative -cin @('config.txt', 'readme.txt') -or
