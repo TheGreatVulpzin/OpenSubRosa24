@@ -17,6 +17,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Media;
+using System.Net;
+using System.Security.Cryptography;
+using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,6 +28,135 @@ using System.Windows.Forms;
 
 namespace SubVulpes
 {
+    class ReleaseAsset
+    {
+        public string name { get; set; }
+        public string browser_download_url { get; set; }
+    }
+
+    class ServerRelease
+    {
+        public string name { get; set; }
+        public string tag_name { get; set; }
+        public bool draft { get; set; }
+        public bool prerelease { get; set; }
+        public ReleaseAsset[] assets { get; set; }
+        public string DisplayName { get { return string.IsNullOrWhiteSpace(name) ? tag_name : name; } }
+    }
+
+    static class ReleaseUpdate
+    {
+        const string Endpoint = "https://api.github.com/repos/TheGreatVulpzin/OpenSubRosa24/releases";
+        static readonly Regex Tag = new Regex(@"^v?(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$");
+
+        public static int CompareVersions(string left, string right)
+        {
+            Match a = Tag.Match(left), b = Tag.Match(right);
+            if (!a.Success || !b.Success)
+                throw new InvalidDataException("Cannot read the version tag.");
+            for (int i = 1; i <= 3; i++) {
+                int c = long.Parse(a.Groups[i].Value).CompareTo(long.Parse(b.Groups[i].Value));
+                if (c != 0) return c;
+            }
+            string x = a.Groups[4].Value, y = b.Groups[4].Value;
+            if (x == y) return 0;
+            if (x == "") return 1;
+            if (y == "") return -1;
+            string[] xs = x.Split('.'), ys = y.Split('.');
+            for (int i = 0; i < Math.Min(xs.Length, ys.Length); i++) {
+                long xn, yn;
+                bool nx = long.TryParse(xs[i], out xn), ny = long.TryParse(ys[i], out yn);
+                int c = nx && ny ? xn.CompareTo(yn) : nx != ny ? (nx ? -1 : 1) : string.CompareOrdinal(xs[i], ys[i]);
+                if (c != 0) return c;
+            }
+            return xs.Length.CompareTo(ys.Length);
+        }
+
+        public static ServerRelease Select(IEnumerable<ServerRelease> releases, string current, bool previews)
+        {
+            ServerRelease best = null;
+            foreach (var release in releases) {
+                if (release.draft || (!previews && release.prerelease) || !Tag.IsMatch(release.tag_name ?? ""))
+                    continue;
+                if (!previews && Tag.Match(release.tag_name).Groups[4].Success)
+                    continue;
+                if (CompareVersions(release.tag_name, current) > 0 &&
+                    (best == null || CompareVersions(release.tag_name, best.tag_name) > 0))
+                    best = release;
+            }
+            return best;
+        }
+
+        static HttpWebRequest Request(string url)
+        {
+            if (new Uri(url).Scheme != Uri.UriSchemeHttps)
+                throw new InvalidDataException("The download URL must use HTTPS.");
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2.
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.UserAgent = "OpenSubRosa24-launcher";
+            request.Accept = "application/vnd.github+json";
+            request.Timeout = 15000;
+            request.ReadWriteTimeout = 15000;
+            return request;
+        }
+
+        static string Read(string url)
+        {
+            using (var response = Request(url).GetResponse())
+            using (var reader = new StreamReader(response.GetResponseStream()))
+                return reader.ReadToEnd();
+        }
+
+        public static ServerRelease Find(string current, bool previews)
+        {
+            var releases = new List<ServerRelease>();
+            var json = new JavaScriptSerializer { MaxJsonLength = 8 * 1024 * 1024 };
+            for (int page = 1; ; page++) {
+                var batch = json.Deserialize<ServerRelease[]>(Read(Endpoint + "?per_page=100&page=" + page));
+                releases.AddRange(batch);
+                if (batch.Length < 100) break;
+            }
+            return Select(releases, current, previews);
+        }
+
+        public static void Verify(string file, string checksum)
+        {
+            Match hash = Regex.Match(checksum.Trim(), @"\A([0-9a-fA-F]{64})(?:[ \t]+[^\r\n]+)?\s*\z");
+            if (!hash.Success)
+                throw new InvalidDataException("The release SHA-256 file is invalid.");
+            using (var algorithm = SHA256.Create())
+            using (var stream = File.OpenRead(file)) {
+                string actual = BitConverter.ToString(algorithm.ComputeHash(stream)).Replace("-", "");
+                if (!actual.Equals(hash.Groups[1].Value, StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException("SHA-256 mismatch. The update was not installed.");
+            }
+        }
+
+        public static string Download(ServerRelease release, string directory)
+        {
+            string name = "OpenSubRosa24-server-" + release.tag_name + ".zip";
+            var assets = release.assets ?? new ReleaseAsset[0];
+            var zip = assets.FirstOrDefault(a => a.name == name);
+            var hash = assets.FirstOrDefault(a => a.name == name + ".sha256");
+            if (zip == null || hash == null)
+                throw new InvalidDataException("The release has no server zip or SHA-256 file.");
+            string checksum = Read(hash.browser_download_url);
+            Directory.CreateDirectory(directory);
+            string path = Path.Combine(directory, name);
+            try {
+                using (var response = Request(zip.browser_download_url).GetResponse())
+                using (var source = response.GetResponseStream())
+                using (var destination = new FileStream(path, FileMode.CreateNew))
+                    source.CopyTo(destination);
+                Verify(path, checksum);
+                return path;
+            } catch {
+                if (File.Exists(path)) File.Delete(path);
+                throw;
+            }
+        }
+    }
+
     // A key=value file (config.txt, launcher.ini, session.ini). Save keeps the order of the
     // lines and the lines without a key. The server reads its files in the ANSI code page.
     class KeyFile
