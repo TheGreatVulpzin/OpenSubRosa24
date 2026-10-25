@@ -8,7 +8,7 @@
 # the real project, and a project has one lock). Changes made through the MCP server are
 # lost. Changes that must stay go into a script or a CSV, then into the real project.
 #
-# Usage: powershell -File tools\ghidra\mcp_server.ps1 start|stop|restart|refresh|status
+# Usage: powershell -File instrumentation\ghidra\mcp_server.ps1 start|stop|restart|refresh|status
 #   refresh: stop, copy the real project again (after ApplyTypes, ApplyNames...), start.
 param([Parameter(Mandatory = $true)][ValidateSet('start', 'stop', 'restart', 'refresh', 'status')][string]$Action)
 

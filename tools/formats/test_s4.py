@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'tools/lift'))
+sys.path.insert(0, str(ROOT / 'instrumentation/lift'))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import subrosa_formats as formats
 from synth_bonds import Snapshot, PAGE

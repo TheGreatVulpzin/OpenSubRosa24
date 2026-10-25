@@ -50,7 +50,7 @@ SV_FORWARDS(SV_DECLARE)
     __declspec(naked) void sv_##name(void) { __asm { jmp p_##name } }
 SV_FORWARDS(SV_STUB)
 
-/* The pointer that the stub of a WinSock function jumps through. hook/record_imports.c
+/* The pointer that the stub of a WinSock function jumps through. instrumentation/hook/record_imports.c
  * puts a recording wrapper there, which calls the real function. */
 FARPROC *sv_wsock_slot(const char *name)
 {
@@ -65,7 +65,7 @@ FARPROC *sv_wsock_slot(const char *name)
 typedef int(WINAPI *recvfrom_fn)(uintptr_t s, char *buf, int len, int flags, void *from, int *fromlen);
 typedef int(WINAPI *sendto_fn)(uintptr_t s, const char *buf, int len, int flags, const void *to, int tolen);
 
-/* subvulpes.ini net_guard=0 turns the input checks off (hook/netguard.c). */
+/* subvulpes.ini net_guard=0 turns the input checks off (instrumentation/hook/netguard.c). */
 static int g_guard = -1;
 static unsigned g_guard_masked, g_guard_dropped;
 

@@ -1,6 +1,6 @@
 """Print the object type records of a recording snapshot.
 
-    python -I tools/lift/dump_types.py <snapshot.bin> [type ...] [--full]
+    python -I instrumentation/lift/dump_types.py <snapshot.bin> [type ...] [--full]
 
 One block for each type: the scalars, the particles, the bonds, the faces, the quads, the wheels
 and the seats. Dump the snapshot before and after a rewrite and compare the two texts.

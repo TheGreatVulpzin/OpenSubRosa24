@@ -6,7 +6,7 @@
  *
  * Each record is a union of its fields and lf_raw, the raw bytes. Ghidra keeps the unknown
  * bytes (pad_ and byte arrays) without a field and prints "&x->field_0x28" for them. The
- * lifter prints lf_raw[0x28] (tools/ghidra/ApplyTypes.java, LiftExport.java).
+ * lifter prints lf_raw[0x28] (instrumentation/ghidra/ApplyTypes.java, LiftExport.java).
  */
 #ifndef SR_TYPES_H
 #define SR_TYPES_H

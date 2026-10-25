@@ -1,4 +1,4 @@
-/* Test of the generic verifier (hook/verify.c) without the game.
+/* Test of the generic verifier (instrumentation/hook/verify.c) without the game.
  * The "game globals" live in the .gdata section of this executable. */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

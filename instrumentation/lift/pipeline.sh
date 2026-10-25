@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # The whole lift pipeline in one command (Windows, Git Bash): Ghidra export, lift, build, gate.
 #
-# Usage: bash tools/lift/pipeline.sh [--export] [--params] [--no-gate] [--full] [gate.py options]
+# Usage: bash instrumentation/lift/pipeline.sh [--export] [--params] [--no-gate] [--full] [gate.py options]
 #   --export   run LiftExport.java in Ghidra first. Without it, lift.py reads the export that is
 #              already in build/lift/ded024d.jsonl. The lifted C has a frozen header
 #              (src/lifted/sr_types_lifted.h): a new export after an ApplyTypes run gives it new
@@ -11,7 +11,7 @@
 #   --no-gate  stop after the build.
 #   --full     full gate (all recordings, all functions, about 3 min). Use it before a push.
 #              Without it the gate is "--changed --quick" (about 1 min).
-# Other options go to tools/lift/gate.py (for example --update, --only murilo).
+# Other options go to instrumentation/lift/gate.py (for example --update, --only murilo).
 #
 # Steps: [ApplyParams.java] -> [LiftExport.java (5 min)] -> lift.py --compile (2-5 min)
 #        -> tools\build_hook.bat -> gate.py (about 1 min, --full about 3 min). Heavy: run nothing else meanwhile.
@@ -36,21 +36,21 @@ step() { echo; echo "== $(date +%H:%M:%S) $*"; }
 if [ $params = 1 ]; then
     step "ApplyParams.java"
     "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis \
-        -scriptPath "$ROOT/tools/ghidra" -postScript ApplyParams.java "$ROOT/analysis/024d/params.csv" 2>&1 |
+        -scriptPath "$ROOT/instrumentation/ghidra" -postScript ApplyParams.java "$ROOT/analysis/024d/params.csv" 2>&1 |
         grep -E "ApplyParams.java>|ERROR|Exception" || true
 fi
 
 if [ $do_export = 1 ] || [ $params = 1 ] || [ ! -f "$ROOT/build/lift/ded024d.jsonl" ]; then
 step "LiftExport.java"
 out=$("$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis -readOnly \
-    -scriptPath "$ROOT/tools/ghidra" -postScript LiftExport.java "$ROOT/build/lift/ded024d.jsonl" 2>&1)
+    -scriptPath "$ROOT/instrumentation/ghidra" -postScript LiftExport.java "$ROOT/build/lift/ded024d.jsonl" 2>&1)
 echo "$out" | grep -E "Exported|ERROR|Exception" || true
 echo "$out" | grep -q "Exported:" || { echo "LiftExport failed"; exit 1; }
 fi
 
 step "lift.py --compile"
-python -I tools/lift/lift.py --compile | grep -E "^result|^top reasons"
-git diff --stat -- src/lifted hook/hooks_lifted.c
+python -I instrumentation/lift/lift.py --compile | grep -E "^result|^top reasons"
+git diff --stat -- src/lifted instrumentation/hook/hooks_lifted.c
 
 step "build_hook.bat"
 build=$(cmd //c "tools\\build_hook.bat" 2>&1) || true
@@ -63,6 +63,6 @@ if [ $full = 0 ]; then
 fi
 if [ $gate = 1 ]; then
     step "gate.py ${gate_args[*]:-}"
-    python -I tools/lift/gate.py "${gate_args[@]}"
+    python -I instrumentation/lift/gate.py "${gate_args[@]}"
 fi
 step "done"

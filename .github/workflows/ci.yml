@@ -22,7 +22,7 @@ jobs:
       - name: Protocol tests
         run: python tools/net/test_srpacket.py
       - name: Python syntax of the tools
-        run: python -m compileall -q tools
+        run: python -m compileall -q tools instrumentation
 
   windows:
     runs-on: windows-latest
@@ -44,4 +44,4 @@ jobs:
         shell: cmd
         run: build\hook\test_verify.exe
       - name: Lint of the lifted C
-        run: python -I tools/lift/lint.py
+        run: python -I instrumentation/lift/lint.py

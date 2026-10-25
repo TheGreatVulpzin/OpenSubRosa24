@@ -16,6 +16,9 @@ extern "C" {
 /* Base of the game module. The hook DLL sets it at startup. */
 extern uintptr_t sr_base;
 
+/* Write a message to the server log. */
+void sv_log(const char *fmt, ...);
+
 #define SR_AT(type, rva) ((type *)(sr_base + (rva)))
 
 #define sr_server       (*SR_AT(int, SR_RVA_SERVER))

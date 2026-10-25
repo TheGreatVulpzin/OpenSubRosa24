@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Generate the function-name CSVs for the binaries without symbols.
-# Needs build/features/*.jsonl (tools/ghidra/export_all.sh).
+# Needs build/features/*.jsonl (instrumentation/ghidra/export_all.sh).
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 export PYTHONIOENCODING=utf-8

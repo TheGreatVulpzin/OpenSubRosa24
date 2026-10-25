@@ -1,5 +1,5 @@
-/* Table of the lifted functions, for the offline differential test (src/tests/harness.c).
- * tools/lift/lift.py generates lifted_table.c. */
+/* Table of the lifted functions, for the offline differential test (instrumentation/tests/harness.c).
+ * instrumentation/lift/lift.py generates lifted_table.c. */
 #ifndef LIFTED_TABLE_H
 #define LIFTED_TABLE_H
 

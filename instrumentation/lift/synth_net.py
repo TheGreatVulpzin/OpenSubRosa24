@@ -5,8 +5,8 @@ and writes a new snapshot and an args file with the calls of one function, in on
 case. With --run the script runs the harness on each case and deletes the case at once (a
 snapshot is about 120 MB):
 
-    python -I tools/lift/synth_net.py --run [--no-cover] <recording dir> <work dir> [case,...]
-    python -I tools/lift/synth_net.py --invalid --run [--timeout 15] <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_net.py --run [--no-cover] <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_net.py --invalid --run [--timeout 15] <recording dir> <work dir> [case,...]
 
 The invalid mode checks the planned input policy. It can fail before the server fixes.
 Use step.sh --invalid --rec DIR --synth net FUNCTIONS for both gates.
@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'net'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools/net'))
 from synth_bonds import Snapshot, find, HUMANS, HUMAN_SIZE, ITEMS, ITEM_SIZE
 import srpacket as sp
 

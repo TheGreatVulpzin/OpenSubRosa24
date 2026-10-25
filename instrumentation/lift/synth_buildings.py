@@ -1,6 +1,6 @@
 """Test building files, name maps and floor plan turns.
 
-Usage: python -I tools/lift/synth_buildings.py --run <recording> <work>
+Usage: python -I instrumentation/lift/synth_buildings.py --run <recording> <work>
 """
 import argparse
 import copy

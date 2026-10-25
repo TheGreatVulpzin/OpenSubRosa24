@@ -1,4 +1,4 @@
-/* Record real inputs for the offline differential test (src/tests/harness.c).
+/* Record real inputs for the offline differential test (instrumentation/tests/harness.c).
  *
  * subvulpes.ini:
  *   record_args=1          the thunks of the lifted hooks call sv_record_args
@@ -310,8 +310,8 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw)
 /* ------------------------------------------------------------ record and replay
  *
  * subvulpes.ini: record_imports=1. The record-only thunks of the side-effect functions
- * (hook/hooks_record.c) open a scope, call the original and close the scope. While a scope
- * is open, the import wrappers (hook/record_imports.c) add one "E" line per import call.
+ * (instrumentation/hook/hooks_record.c) open a scope, call the original and close the scope. While a scope
+ * is open, the import wrappers (instrumentation/hook/record_imports.c) add one "E" line per import call.
  * When the scope closes, the whole call goes to sv_args.txt at once:
  *   R <rva> <args>          the arguments, as for the lifted functions
  *   E <import> <fields>     each import call, in order

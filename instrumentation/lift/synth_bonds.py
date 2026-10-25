@@ -3,7 +3,7 @@
 Reads a recording snapshot, appends bonds of the given types after the last bond, and writes
 a new snapshot and an args file with one bondsimulation2 call. Run the harness on the output:
 
-    python -I tools/lift/synth_bonds.py <recording dir> <out dir> [types]
+    python -I instrumentation/lift/synth_bonds.py <recording dir> <out dir> [types]
     build/hook/harness.exe build/hook/024d_fixed.exe <out dir>/sv_snapshot.bin <out dir>/sv_args.txt bondsimulation2
 
 Each type gets two bonds: one that pushes (the stretch points along the normal) and one that

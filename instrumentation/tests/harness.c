@@ -2,7 +2,7 @@
  *
  * Usage: harness <subrosadedicated024d.exe> <sv_snapshot.bin> <sv_args.txt> [filter]
  *   filter: a part of a function name, or exact names separated by commas ("a,b,c"),
- *   or @file with one exact name per line (tools/lift/gate.py --changed).
+ *   or @file with one exact name per line (instrumentation/lift/gate.py --changed).
  *   HARNESS_ENV_DIR: the sandbox folder of the test environment (default build/harness_env),
  *   so that several harnesses can run at the same time.
  *   HARNESS_RESET=1: put the snapshot back before each function (results do not depend on
@@ -11,16 +11,16 @@
  *   or the two runs differ.
  *
  * 1. Load the 024d as a library (its code runs, its entry point does not).
- * 2. Fill its .data section from a snapshot of a running server (hook/record.c).
+ * 2. Fill its .data section from a snapshot of a running server (instrumentation/hook/record.c).
  * 3. For each recorded call (sv_args.txt): run the lifted version, undo its writes, run the
- *    original, and compare the .data writes (hook/verify.c), the return value and the
+ *    original, and compare the .data writes (instrumentation/hook/verify.c), the return value and the
  *    memory that pointer arguments point to.
  *
  * No server, no players, no hooks: the lifted code calls the original game functions.
  * A recorded call where the original itself crashes (for example a pointer into the heap
  * of the server process) is skipped.
  *
- * Both versions run in the test environment of src/platform/plat_test.c: a fixed clock, a
+ * Both versions run in the test environment of instrumentation/platform/plat_test.c: a fixed clock, a
  * heap pool, file writes in a sandbox and no network. The harness also compares what each
  * version does with the environment (packets sent, files written, heap blocks).
  * HARNESS_GAME_DIR is the server folder for file reads (default original/blackhouser).
@@ -395,7 +395,7 @@ static int hex_bytes(const char *hex, unsigned char *out, int max)
     return k;
 }
 
-/* "E recvfrom V:s V:len V:flags V:fromlen o:<data> o:<from> r:<ret>" (hook/record_imports.c),
+/* "E recvfrom V:s V:len V:flags V:fromlen o:<data> o:<from> r:<ret>" (instrumentation/hook/record_imports.c),
  * or "E recv V:s V:len V:flags o:<data> r:<ret>": add the packet to the call. */
 static void add_packet(Call *c, char *line)
 {
@@ -454,7 +454,7 @@ static void add_hand_calls(void)
 static int load_calls(const char *path)
 {
     FILE *f = fopen(path, "r");
-    /* An E line holds up to 64 KB of bytes as hex (hook/record.c). */
+    /* An E line holds up to 64 KB of bytes as hex (instrumentation/hook/record.c). */
     static char line[(64u << 10) * 2 + 4096];
     int cap = 1024;
     int last = -1;            /* the call that the E lines belong to */
@@ -798,10 +798,10 @@ static void set_watch(const char *spec)
     RaiseException(0xE0574348, 0, 0, NULL);
 }
 
-/* Coverage: HARNESS_COVER=<blocks file> (tools/ghidra/ExportBlocks.java). The harness runs
+/* Coverage: HARNESS_COVER=<blocks file> (instrumentation/ghidra/ExportBlocks.java). The harness runs
  * only the original of each call, with an INT3 on each basic block of the function, and
  * prints "cover <call> <rva> <path hash> <blocks hit>". Each INT3 fires once per call: the
- * handler puts the byte back and marks the block. tools/lift/min_calls.py keeps a few calls
+ * handler puts the byte back and marks the block. instrumentation/lift/min_calls.py keeps a few calls
  * for each path and writes a shorter sv_args file. */
 typedef struct CoverFunc {
     uint32_t rva;
@@ -910,7 +910,7 @@ static void cover_arm(CoverFunc *c, int on)
 /* HARNESS_TIME=1: no comparison. Each call runs the C version and the original once with the
  * verifier (a warm-up that also finds the pages they write), then once each from the same
  * state with no page protection, in turns (the first of the two changes with each call). The
- * cycles of the timed runs add up for each function. tools/lift/bench.py adds the results of
+ * cycles of the timed runs add up for each function. instrumentation/lift/bench.py adds the results of
  * all the recordings. */
 static int g_time;
 

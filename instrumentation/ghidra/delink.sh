@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Export a range of the 024d as a COFF object file with relocations (ghidra-delinker-extension).
-# Usage: tools/ghidra/delink.sh <first VA> <last VA> <output.obj>
-#   E.g.: tools/ghidra/delink.sh 0040ad30 0040ad6a build/delink/init_genrand.obj
+# Usage: instrumentation/ghidra/delink.sh <first VA> <last VA> <output.obj>
+#   E.g.: instrumentation/ghidra/delink.sh 0040ad30 0040ad6a build/delink/init_genrand.obj
 # The script runs the "Relocation table synthesizer" analyzer on the range itself. The project
 # opens read-only, so nothing is saved. Check the result with: dumpbin /symbols /relocations /disasm
 set -euo pipefail

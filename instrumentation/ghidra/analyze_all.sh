@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Import the binaries into the local Ghidra project (ghidra-project/) and export the features.
-# Usage: tools/ghidra/analyze_all.sh [short_name ...]   (paths in tools/ghidra/env.sh)
+# Usage: instrumentation/ghidra/analyze_all.sh [short_name ...]   (paths in instrumentation/ghidra/env.sh)
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 # With arguments, run only the requested short names. E.g.: analyze_all.sh ded024c_linux ded024c_win
@@ -11,7 +11,7 @@ run() {  # $1 = file in original/, $2 = short name, $3 = folder in the project (
     [ "$ONLY" = "  " ] || [[ "$ONLY" == *" $2 "* ]] || return 0
     "$HEADLESS" "$ROOT/ghidra-project" "subvulpes${3:+/$3}" \
         -import "$ROOT/original/$1" -overwrite \
-        -scriptPath "$ROOT/tools/ghidra" \
+        -scriptPath "$ROOT/instrumentation/ghidra" \
         -postScript ExportFunctionFeatures.java "$ROOT/build/features/$2.jsonl" \
         -log "$ROOT/build/features/$2.log"
 }

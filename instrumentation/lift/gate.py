@@ -1,23 +1,23 @@
 """Run the harness on every recording of a target and compare each function with a baseline.
 
 Usage:
-  python -I tools/lift/gate.py                      full run of the default target (ded024d)
-  python -I tools/lift/gate.py --changed            only the functions whose lifted C changed
-  python -I tools/lift/gate.py --quick              only the fewest recordings that test every function
-  python -I tools/lift/gate.py --all-calls          all recorded calls, not the short sv_args.min.txt
-  python -I tools/lift/gate.py --jobs 3             three harnesses at the same time
-  python -I tools/lift/gate.py --update             save the results as the new baseline
-  python -I tools/lift/gate.py --only murilo        only the recordings whose name has this text
-  python -I tools/lift/gate.py --funcs a,b          only these functions
-  python -I tools/lift/gate.py --from-files         compare the saved outputs again, no harness run
-  python -I tools/lift/gate.py --target client      another target (tools/lift/targets/<name>.json)
-  python -I tools/lift/gate.py --reset              each function starts from the snapshot
+  python -I instrumentation/lift/gate.py                      full run of the default target (ded024d)
+  python -I instrumentation/lift/gate.py --changed            only the functions whose lifted C changed
+  python -I instrumentation/lift/gate.py --quick              only the fewest recordings that test every function
+  python -I instrumentation/lift/gate.py --all-calls          all recorded calls, not the short sv_args.min.txt
+  python -I instrumentation/lift/gate.py --jobs 3             three harnesses at the same time
+  python -I instrumentation/lift/gate.py --update             save the results as the new baseline
+  python -I instrumentation/lift/gate.py --only murilo        only the recordings whose name has this text
+  python -I instrumentation/lift/gate.py --funcs a,b          only these functions
+  python -I instrumentation/lift/gate.py --from-files         compare the saved outputs again, no harness run
+  python -I instrumentation/lift/gate.py --target client      another target (instrumentation/lift/targets/<name>.json)
+  python -I instrumentation/lift/gate.py --reset              each function starts from the snapshot
 
 The rule of docs/lift.md: no "calls same" count may drop on any recording. A drop is a
 function with fewer same calls than in the baseline, or a function that has calls in the
 baseline and no line now. New differences and crashes are also errors.
 
-Target file (tools/lift/targets/<name>.json): the harness, the image it loads, the lifted C
+Target file (instrumentation/lift/targets/<name>.json): the harness, the image it loads, the lifted C
 and its table, the recordings (folders with sv_snapshot.bin and sv_args.txt; "synth": true
 also runs the recording with the hand-written calls appended), the output folder, and
 "full_run_paths": files that every function depends on. The client or another game version
@@ -35,7 +35,7 @@ The set follows the baseline, so a new recording joins it by itself when it test
 function. Without a baseline, the recordings with "quick" in the target are used. Use it
 with --changed while you work.
 
-Short calls: tools/lift/min_calls.py writes <recording>/sv_args.min.txt with a few calls
+Short calls: instrumentation/lift/min_calls.py writes <recording>/sv_args.min.txt with a few calls
 for each code path of each function. The gate uses it when it exists. --all-calls runs
 every recorded call. It has its own outputs and baseline in <out_dir>/all. Run it now and
 then (for example once a week), not for each change.
@@ -62,7 +62,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGETS = ROOT / 'tools' / 'lift' / 'targets'
+TARGETS = ROOT / 'instrumentation' / 'lift' / 'targets'
 
 LINE = re.compile(r'^\[ *\d+/\d+\] +(\w+) +(\d+) same +(\d+) different +(\d+) crashed +(\d+) skipped *(.*)$')
 TOTAL = re.compile(r'^(\d+) functions tested: (\d+) calls same')
@@ -181,7 +181,7 @@ def quick_runs(baseline, names):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--target', default='ded024d', help='tools/lift/targets/<name>.json')
+    ap.add_argument('--target', default='ded024d', help='instrumentation/lift/targets/<name>.json')
     ap.add_argument('--update', action='store_true', help='save the results as the new baseline')
     ap.add_argument('--rename-baseline', action='append', default=[], metavar='OLD:NEW',
                     help='rename a baseline function key before the count checks. Requires --update')

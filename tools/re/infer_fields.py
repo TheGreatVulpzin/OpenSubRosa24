@@ -1,4 +1,4 @@
-"""Turn the field accesses of tools/ghidra/InferFields.java into typed fields.
+"""Turn the field accesses of instrumentation/ghidra/InferFields.java into typed fields.
 
 For each (global, offset, size) the instructions vote: float, double, fint (FPU integer),
 signed, unsigned or int (no sign information). The rules:

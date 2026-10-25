@@ -4,14 +4,14 @@ Reads a recording snapshot, builds one situation (a flying helicopter, a car wit
 bodies, a deleted object, two touching cars...) and writes a new snapshot and an args file
 with the calls, in one folder per case:
 
-    python -I tools/lift/synth_vehicles.py <recording dir> <out dir> [case,...]
+    python -I instrumentation/lift/synth_vehicles.py <recording dir> <out dir> [case,...]
     build/hook/harness.exe build/hook/024d_fixed.exe <out dir>/<case>/sv_snapshot.bin <out dir>/<case>/sv_args.txt
 
 With --run the script runs the harness on each case and deletes the case at once (a snapshot
 is about 120 MB). Run it with the exact float compare too: put "verify_float_ulps=0" under
 [hooks] in build/hook/subvulpes.ini, and delete the file afterwards.
 
-    python -I tools/lift/synth_vehicles.py --run [--no-cover] <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_vehicles.py --run [--no-cover] <recording dir> <work dir> [case,...]
 
 The cases:
   heli_flight    object_rotorsimulation, objectsimulation_heli with a driver, objectsimulation

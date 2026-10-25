@@ -2,11 +2,11 @@
  *
  * The recording build compiles the lifted code (src/lifted/lifted_024d.c) with /Gh: each
  * function calls _penter at its start. _penter finds the function in lf_table and gives its
- * arguments to the recorder of the hook build (hook/record.c):
+ * arguments to the recorder of the hook build (instrumentation/hook/record.c):
  *   - a pure function: sv_record_args, one "R" line with the arguments;
  *   - a side-effect function (lf_table side=1): sv_rec_begin at the start, and sv_rec_end when
  *     it returns, with one "E" line for each import call (the wrappers of
- *     hook/record_imports.c, which sr_import gives to the game in this build). _penter puts
+ *     instrumentation/hook/record_imports.c, which sr_import gives to the game in this build). _penter puts
  *     rec_return in place of the return address of the function, to see its return.
  * src/game is not in the recording: its physics functions have many recorded calls, and the
  * hottest functions are there.
@@ -15,7 +15,7 @@
  *
  * The output goes to SV_RECORD_DIR: sv_args.txt and sv_snapshot.bin (SV_SNAPSHOT_AFTER
  * seconds after the start, default 600). record_focus.txt next to the exe chooses the
- * functions to record most (hook/record.c).
+ * functions to record most (instrumentation/hook/record.c).
  */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

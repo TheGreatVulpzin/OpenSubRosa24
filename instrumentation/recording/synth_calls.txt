@@ -1,9 +1,9 @@
-# Hand-written calls for the harness, in the sv_args.txt format (hook/record.c).
+# Hand-written calls for the harness, in the sv_args.txt format (instrumentation/hook/record.c).
 # They test functions that no recording reaches: the map has no elevator, and the
 # other functions need game situations that a short test session does not make.
 # The arguments are not real game calls. The object and item indices come from the
 # murilo-20261015 recording (object 0xb is a car with 4 wheels, items 0xd, 0x9, 0x2a, 0x27).
-# Use: cat <recording>/sv_args.txt tools/recording/synth_calls.txt > <tmp>/args.txt,
+# Use: cat <recording>/sv_args.txt instrumentation/recording/synth_calls.txt > <tmp>/args.txt,
 # then run build/hook/harness.exe with <tmp>/args.txt. Lines that do not start with R are skipped.
 #
 # getobjectrotation3(float *out, int object)

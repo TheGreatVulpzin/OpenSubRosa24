@@ -2,9 +2,9 @@
 # One check of a rewrite step, with a short summary: lift and build (pipeline.sh), the gate on
 # every recorded call of the functions, and the synthetic tests. The full logs go to build/step/.
 #
-#   bash tools/lift/step.sh [--no-pipeline] [--rec <recording dir>] [--synth <name>,...] [--invalid] <function>,...
+#   bash instrumentation/lift/step.sh [--no-pipeline] [--rec <recording dir>] [--synth <name>,...] [--invalid] <function>,...
 #
-# --synth takes the names of tools/lift/synth_<name>.py (items, vehicles, net, sys, types, area,
+# --synth takes the names of instrumentation/lift/synth_<name>.py (items, vehicles, net, sys, types, area,
 # level, buildings, humans, bonds) and needs --rec. The exit status is 1 when a check fails.
 # --invalid also runs the security expectations. They fail before the server checks exist.
 set -u
@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
 done
 funcs="${1:-}"
 if [ -z "$funcs" ]; then
-    echo "usage: bash tools/lift/step.sh [--no-pipeline] [--rec <dir>] [--synth <name>,...] [--invalid] <function>,..."
+    echo "usage: bash instrumentation/lift/step.sh [--no-pipeline] [--rec <dir>] [--synth <name>,...] [--invalid] <function>,..."
     exit 2
 fi
 if [ $invalid -eq 1 ] && [ -z "$rec" ]; then
@@ -49,7 +49,7 @@ bad_lines() {
 }
 
 if [ $pipeline -eq 1 ]; then
-    bash tools/lift/pipeline.sh > "$out/pipeline.log" 2>&1
+    bash instrumentation/lift/pipeline.sh > "$out/pipeline.log" 2>&1
     errors=$(grep -E "error C|build failed" "$out/pipeline.log" | head -10)
     if [ -n "$errors" ]; then
         echo "build: FAILED (log $out/pipeline.log)"
@@ -70,7 +70,7 @@ if [ $pipeline -eq 1 ]; then
     fi
 fi
 
-python -I tools/lift/gate.py --all-calls --funcs "$funcs" > "$out/gate_all.log" 2>&1
+python -I instrumentation/lift/gate.py --all-calls --funcs "$funcs" > "$out/gate_all.log" 2>&1
 drops=$(grep -E "^DROP" "$out/gate_all.log" | head -10)
 if [ -n "$drops" ]; then
     echo "all-calls gate: DROP"
@@ -92,7 +92,7 @@ for name in "${names[@]}"; do
     case "$name" in
     humans|bonds)
         rm -rf "$work"
-        python -I "tools/lift/synth_$name.py" "$rec" "$work" > "$log" 2>&1 || synth_status=$?
+        python -I "instrumentation/lift/synth_$name.py" "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         target=humansimulation
         [ "$name" = bonds ] && target=bondsimulation2
         if [ "$name" = bonds ]; then
@@ -106,10 +106,10 @@ for name in "${names[@]}"; do
         rm -rf "$work"
         ;;
     sys|level|buildings|area|logic)
-        python -I "tools/lift/synth_$name.py" --run "$rec" "$work" > "$log" 2>&1 || synth_status=$?
+        python -I "instrumentation/lift/synth_$name.py" --run "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         ;;
     *)
-        python -I "tools/lift/synth_$name.py" --run --no-cover "$rec" "$work" > "$log" 2>&1 || synth_status=$?
+        python -I "instrumentation/lift/synth_$name.py" --run --no-cover "$rec" "$work" > "$log" 2>&1 || synth_status=$?
         ;;
     esac
     total=$(grep -c "functions tested" "$log")
@@ -131,7 +131,7 @@ done
 
 if [ $invalid -eq 1 ]; then
     log="$out/security.log"
-    python -I tools/lift/synth_net.py --invalid --run "$rec" "$out/security" > "$log" 2>&1
+    python -I instrumentation/lift/synth_net.py --invalid --run "$rec" "$out/security" > "$log" 2>&1
     status=$?
     grep -E '^security:|^[a-z0-9_]+: FAIL' "$log"
     if [ $status -ne 0 ] || ! grep -q '^security: .* cases, 0 failed$' "$log"; then

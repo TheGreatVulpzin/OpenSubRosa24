@@ -9,7 +9,7 @@
 # can be assembled from the official packages.
 #
 # Usage: bash tools/cloud/setup.sh
-# Then: bash tools/ghidra/analyze_all.sh   (10 to 30 minutes)
+# Then: bash instrumentation/ghidra/analyze_all.sh   (10 to 30 minutes)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 TOOLS="${TOOLS:-$HOME/tools}"

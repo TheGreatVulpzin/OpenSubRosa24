@@ -1,6 +1,6 @@
 """Test area cells with small grids and boundary values.
 
-Usage: python -I tools/lift/synth_area.py --run <recording> <work> [cells]
+Usage: python -I instrumentation/lift/synth_area.py --run <recording> <work> [cells]
 """
 import argparse
 import copy

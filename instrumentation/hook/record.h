@@ -11,7 +11,7 @@ void sv_record_args(uint32_t rva, int index, const uint32_t *args, int ndw);
 void sv_snapshot_check(void);
 
 /* Record and replay of the side-effect functions (docs/side-effects.md).
- * The record-only thunks (hook/hooks_record.c) call these three around the original. */
+ * The record-only thunks (instrumentation/hook/hooks_record.c) call these three around the original. */
 void sv_rec_begin(uint32_t rva, const uint32_t *args, int ndw);
 void sv_rec_push_ret(uint32_t ret);
 uint32_t sv_rec_end(uint32_t eax);
@@ -30,10 +30,10 @@ void sv_ev_hash(char tag, const void *p, size_t n);  /* " o#len:hash", not the b
 void sv_ev_r(uint32_t r);
 void sv_ev_end(void);
 
-/* Install the import wrappers (hook/record_imports.c). */
+/* Install the import wrappers (instrumentation/hook/record_imports.c). */
 int sv_record_imports_install(void);
 
-/* The standalone recording build (src/standalone/record_shim.c): the wrapper of one
+/* The standalone recording build (instrumentation/standalone/record_shim.c): the wrapper of one
  * import, which calls real, and the CRT functions of the printf wrappers. */
 void *sv_record_wrap(const char *dll, const char *name, void *real);
 void sv_record_imports_printf(void *vfprintf_fn, void *vprintf_fn, void *vsnprintf_fn);

@@ -1,22 +1,23 @@
 {
-  "description": "Dedicated server 0.24d (subrosadedicated024d.exe), lifted by tools/lift/lift.py",
+  "description": "Dedicated server 0.24d (subrosadedicated024d.exe), lifted by instrumentation/lift/lift.py",
   "harness": "build/hook/harness.exe",
   "image": "build/hook/024d_fixed.exe",
   "lifted_c": "src/lifted/lifted_024d.c",
   "table": "src/lifted/lifted_table.c",
-  "hand_hooks": "hook/hooks_024d.c",
+  "hand_hooks": "instrumentation/hook/hooks_024d.c",
   "full_run_paths": [
     "src/lifted/lift_support.h",
     "src/lifted/x87_intrinsics.c",
     "src/lifted/lifted_table.c",
-    "src/tests",
+    "instrumentation/tests",
+    "instrumentation/platform",
     "src/platform",
     "src/server",
     "src/include",
-    "hook/verify.c",
-    "hook/verify.h",
-    "hook/hook.c",
-    "hook/imports.c",
+    "instrumentation/hook/verify.c",
+    "instrumentation/hook/verify.h",
+    "instrumentation/hook/hook.c",
+    "instrumentation/hook/imports.c",
     "CMakeLists.txt",
     "src/common",
     "src/net",
@@ -64,6 +65,6 @@
       "name": "vulpzin-20261017-194935-record"
     }
   ],
-  "synth": "tools/recording/synth_calls.txt",
+  "synth": "instrumentation/recording/synth_calls.txt",
   "out_dir": "build/gate/ded024d"
 }

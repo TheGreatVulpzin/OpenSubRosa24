@@ -1,4 +1,4 @@
-/* Support header for C code lifted from Ghidra pseudo-C (tools/lift/lift.py).
+/* Support header for C code lifted from Ghidra pseudo-C (instrumentation/lift/lift.py).
  *
  * It defines the Ghidra data types and helper macros (CONCAT, SUB, ZEXT...) so that
  * the decompiler output compiles with MSVC. Lifted code reaches the game memory with
@@ -79,7 +79,7 @@ typedef void *pointer32;
 #define LF_CHOP(x) trunc(x)
 
 /* RDTSC: CPU cycle counter. The game uses it only for its profiler (the timer table,
- * see sv_verify_ignore in hook/hooks_024d.c). */
+ * see sv_verify_ignore in instrumentation/hook/hooks_024d.c). */
 unsigned __int64 __rdtsc(void);
 #pragma intrinsic(__rdtsc)
 #define rdtsc() __rdtsc()
@@ -103,7 +103,7 @@ static __inline double lf_u2d(unsigned long long x) { union { unsigned long long
 static __inline unsigned long long lf_d2u(double d) { union { unsigned long long u; double d; } u; u.d = d; return u.u; }
 
 /* 16-byte SSE values. Ghidra declares them "undefined1 auVar1 [16]", and C cannot assign
- * an array: tools/lift/lift.py uses this struct. lf_dpps runs the same DPPS instruction as
+ * an array: instrumentation/lift/lift.py uses this struct. lf_dpps runs the same DPPS instruction as
  * the original (bondsimulation2), so the result is the same to the bit. */
 #include <smmintrin.h>
 typedef struct { __declspec(align(16)) unsigned char b[16]; } lf_m128;
@@ -139,7 +139,7 @@ static __inline void lf_strncpy(void *d, const void *s, unsigned int n)
 }
 #define builtin_strncpy(d, s, n) lf_strncpy((d), (s), (n))
 
-/* Bit casts that tools/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
+/* Bit casts that instrumentation/ghidra/LiftExport.java marks (p-code CAST, not INT2FLOAT/TRUNC). */
 #define LF_BITS_F(x) lf_u2f((unsigned int)(x))
 #define LF_BITS_U(x) lf_f2u((float)(x))
 #define LF_BITS_D(x) lf_u2d((unsigned long long)(x))
@@ -147,7 +147,7 @@ static __inline void lf_strncpy(void *d, const void *s, unsigned int n)
 
 /* The same bit casts on an lvalue, with integer loads and stores: no value passes the x87.
  * A small integer in a float is a denormal, and an x87 load of it takes about 100 cycles.
- * Hand-written code in src/game/ uses these (tools/lift/int_bits.py). */
+ * Hand-written code in src/game/ uses these (instrumentation/lift/int_bits.py). */
 #define LF_UINT(x) (*(unsigned int *)&(x))
 #define LF_SET_BITS(x, v) (*(unsigned int *)&(x) = (unsigned int)(v))
 #define LF_COPY(dst, src) (*(unsigned int *)&(dst) = *(const unsigned int *)&(src))

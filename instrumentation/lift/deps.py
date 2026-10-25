@@ -1,12 +1,12 @@
 """Phase 4 progress: how much the lifted C still depends on the original .exe.
 
-Usage: python -I tools/lift/deps.py [--top N] [--md] [--func NAME] [--target NAME]
+Usage: python -I instrumentation/lift/deps.py [--top N] [--md] [--func NAME] [--target NAME]
 
 The lifted C (src/lifted/lifted_024d.c) still uses the image of the 024d in three ways:
 - globals: "#define g_human (*(Human (*)[..])SR_VA(0x..))", the memory of .data in the image.
 - calls: "#define humansimulation ((void (__cdecl *)(void))SR_VA(0x451060))", a call through
   the address in the image. When the callee is lifted too (src/lifted/lifted_table.c) or
-  written by hand (hook/hooks_024d.c), the call can go to the C function directly. "to C"
+  written by hand (instrumentation/hook/hooks_024d.c), the call can go to the C function directly. "to C"
   counts those, "to exe" the others.
 - inline SR_VA(...) in the code: relocated constants (an address used as a number).
 Imports (LF_IMPORT) go to MSVCR100/KERNEL32/WSOCK32 and are counted apart: the platform
@@ -22,7 +22,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGETS = ROOT / 'tools' / 'lift' / 'targets'  # the same target files as gate.py
+TARGETS = ROOT / 'instrumentation' / 'lift' / 'targets'  # the same target files as gate.py
 
 BLOCK = re.compile(r'^/\* -+ 0x([0-9a-f]+) \*/$', re.M)
 FUNC_DEF = re.compile(r'^#define (\w+) \(\([^;\n]*\(__cdecl \*\)\([^\n]*\)\)SR_(?:VA|FN)\(0x([0-9a-f]+)\)\)$', re.M)
@@ -45,7 +45,7 @@ def main():
     ap.add_argument('--top', type=int, default=15, help='functions with the most dependencies')
     ap.add_argument('--md', action='store_true', help='Markdown table')
     ap.add_argument('--func', help='list the dependencies of one function')
-    ap.add_argument('--target', default='ded024d', help='tools/lift/targets/<name>.json')
+    ap.add_argument('--target', default='ded024d', help='instrumentation/lift/targets/<name>.json')
     a = ap.parse_args()
     t = json.loads((TARGETS / f'{a.target}.json').read_text(encoding='utf-8'))
     LIFTED, TABLE = ROOT / t['lifted_c'], ROOT / t['table']

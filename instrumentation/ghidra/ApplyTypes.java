@@ -1,6 +1,6 @@
 // Put the structs and the global arrays of src/include/sr_types.h into the Ghidra program.
 //
-// Input: build/ghidra/types.json (python -I tools/ghidra/types_json.py). The script:
+// Input: build/ghidra/types.json (python -I instrumentation/ghidra/types_json.py). The script:
 // 1. Creates each struct in the category /SubVulpes, field by field at its offset, with the
 //    field names of sr_types.h. A struct that exists is replaced.
 // 2. Creates the global arrays (Human[512] at human, Object[1024] at object...) and the

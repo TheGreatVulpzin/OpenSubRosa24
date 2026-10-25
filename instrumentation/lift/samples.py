@@ -4,7 +4,7 @@ The first line of the samples file is "base <module base>". The .map file of the
 gives the start of each function at the preferred base. A sample falls in the function with
 the highest start below it.
 
-Usage: python -I tools/lift/samples.py <samples.txt> [build/hook/subvulpes-server.map] [--top 30]
+Usage: python -I instrumentation/lift/samples.py <samples.txt> [build/hook/subvulpes-server.map] [--top 30]
 """
 import bisect
 import re

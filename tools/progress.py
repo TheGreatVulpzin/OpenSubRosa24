@@ -1,8 +1,8 @@
 """Phase 3 progress: how much of the 024d already runs in C.
 
-Read the g_hooks table in hook/hooks_024d.c, the lifted table in src/lifted/lifted_table.c and
+Read the g_hooks table in instrumentation/hook/hooks_024d.c, the lifted table in src/lifted/lifted_table.c and
 the sizes in analysis/024d/functions.csv. "Live" lifted functions replace the original in the
-server (hook/hooks_lifted.c). "Harness only" functions have side effects: the live server keeps
+server (instrumentation/hook/hooks_lifted.c). "Harness only" functions have side effects: the live server keeps
 the original, and only the offline harness runs the lifted body (docs/side-effects.md).
 A function counts as "verified in the game" when docs/hooks.md marks **Verified** on its line.
 When build/gate/ded024d/baseline.json exists, the harness lines come from the last gate.
@@ -21,10 +21,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     md = '--md' in sys.argv
-    hooks_src = (ROOT / 'hook/hooks_024d.c').read_text(encoding='utf-8')
+    hooks_src = (ROOT / 'instrumentation/hook/hooks_024d.c').read_text(encoding='utf-8')
     hooked = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),', hooks_src))
     live = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),',
-                           (ROOT / 'hook/hooks_lifted.c').read_text(encoding='utf-8')))
+                           (ROOT / 'instrumentation/hook/hooks_lifted.c').read_text(encoding='utf-8')))
     lifted = dict(re.findall(r'\{\s*"(\w+)",\s*(0x[0-9a-fA-F]+),',
                              (ROOT / 'src/lifted/lifted_table.c').read_text(encoding='utf-8')))
     side_only = {n: r for n, r in lifted.items() if n not in live}

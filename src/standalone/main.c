@@ -116,7 +116,7 @@ static void open_log(void)
 /* ------------------------------------------------------------ packet capture */
 
 /* SV_PACKETS=<file>: each UDP datagram that the server receives or sends, in the format of
- * hook/capture.c (tools/net/capture.py reads it). The file has player names and chat. */
+ * instrumentation/hook/capture.c (tools/net/capture.py reads it). The file has player names and chat. */
 #define RVA_GAME_TICKS (0x90dc540u + 0x38)
 
 static FILE *g_packets;
@@ -249,7 +249,7 @@ void sv_hooks_lifted_profile(void)
 /* ------------------------------------------------------------ sampling profiler */
 
 /* SV_SAMPLE=<file>: a thread reads the EIP of the main thread every millisecond and writes
- * one hex address per line. tools/lift/samples.py maps them to functions with the .map file. */
+ * one hex address per line. instrumentation/lift/samples.py maps them to functions with the .map file. */
 static HANDLE g_main_thread;
 static FILE *g_samples;
 

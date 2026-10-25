@@ -4,7 +4,7 @@ Reads a recording snapshot, puts the game into one situation, and writes a new s
 an args file with calls of one function, in one folder per case. With --run the script runs
 the harness on each case and deletes the case at once (a snapshot is about 120 MB):
 
-    python -I tools/lift/synth_sys.py --run <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_sys.py --run <recording dir> <work dir> [case,...]
 
 The functions: the dead code (systemtimer, testtimer, gettimeofday, setcpuaffinity,
 init_by_array), the parser (checkstring, findstring, getint, getstring, cs_getline,

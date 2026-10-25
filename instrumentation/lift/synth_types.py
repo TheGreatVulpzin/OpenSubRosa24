@@ -4,7 +4,7 @@ The recordings take the snapshot after setupgame, so the type setups always run 
 on full lists. The fresh_* cases clear the type records first: that is the first run of the
 real server. Run it like synth_vehicles.py:
 
-    python -I tools/lift/synth_types.py [--run] [--no-cover] <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_types.py [--run] [--no-cover] <recording dir> <work dir> [case,...]
 
 The cases:
   fresh_cars, fresh_heli, fresh_train   clear the types, then one setup

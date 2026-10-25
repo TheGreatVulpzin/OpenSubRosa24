@@ -11,7 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef SR_STANDALONE
 #include "hook.h"
+#endif
 #include "profiler.h"
 #include "server.h"
 #include "sr_os.h"

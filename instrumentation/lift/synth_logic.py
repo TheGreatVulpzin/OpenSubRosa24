@@ -1,7 +1,7 @@
 """Test economy, menus, scenarios, bot controls and game reset.
 
 Use --run to delete each snapshot after its test:
-    python -I tools/lift/synth_logic.py --run <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_logic.py --run <recording dir> <work dir> [case,...]
 The work directory must be inside build/. Each case keeps its result and log.
 """
 import argparse
@@ -15,7 +15,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'tools/lift'))
+sys.path.insert(0, str(ROOT / 'instrumentation/lift'))
 from synth_bonds import Snapshot
 
 RVAS = {name: int(value, 16) for name, value in re.findall(

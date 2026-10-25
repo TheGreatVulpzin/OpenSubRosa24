@@ -8,7 +8,7 @@ recording calls. This tool finds them without a recording: MSVC warns about an i
 conversion between a float and an int (C4244). An explicit cast, such as (int)x or
 (float)i, is a real conversion in the p-code (TRUNC, INT2FLOAT) and gives no warning.
 
-Usage: python -I tools/lift/lint.py [file.c]      (default: src/lifted/lifted_024d.c)
+Usage: python -I instrumentation/lift/lint.py [file.c]      (default: src/lifted/lifted_024d.c)
 Output: one line per warning, grouped by function, and a count per function.
 """
 import re
@@ -18,7 +18,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'tools/lift'))
+sys.path.insert(0, str(ROOT / 'instrumentation/lift'))
 from lift import load_names, vcvars_line  # noqa: E402
 
 FLOATS = ('float', 'double', 'float10', 'long double')

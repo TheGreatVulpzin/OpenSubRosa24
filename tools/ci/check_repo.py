@@ -16,6 +16,7 @@ import sys
 ALLOWED_ORIGINAL = {'original/README.md', 'original/MANIFEST.sha256'}
 BINARY = re.compile(r'\.(exe|dll|so|dylib|bin|srk|sbl|sbb|sbc|csm|pak|ogg|wav|gbf|gpr)$', re.I)
 ALLOWED_BINARY = re.compile(r'^third_party/server-manager/plugins/native/[^/]+\.dll$')
+LEGACY_INSTRUMENTATION = ('hook/', 'src/tests/', 'tools/ghidra/', 'tools/recording/')
 
 
 def main():
@@ -28,6 +29,11 @@ def main():
             bad.append((f, 'server config (passwords)'))
         elif f.startswith(('build/', 'ghidra-project/')) or '.rep/' in f:
             bad.append((f, 'local build or Ghidra project'))
+        elif (f.startswith(LEGACY_INSTRUMENTATION)
+              or (f.startswith('tools/lift/') and f != 'tools/lift/pipeline.sh')
+              or f in ('src/platform/plat_test.c', 'src/platform/plat_test.h',
+                       'src/standalone/record_shim.c')):
+            bad.append((f, 'verification source outside instrumentation/'))
         elif BINARY.search(f) and not ALLOWED_BINARY.match(f):
             bad.append((f, 'binary or game data'))
     for f, why in bad:

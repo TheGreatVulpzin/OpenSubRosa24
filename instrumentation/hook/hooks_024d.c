@@ -156,7 +156,7 @@ int sv_hooks_024d_install(void)
      * total times read from the CPU cycle counter (RDTSC). Each run writes other values. */
     sv_verify_ignore(0x14043e0, 0x5800);
     n = sv_install_hooks(g_hooks, (int)(sizeof g_hooks / sizeof g_hooks[0]));
-    /* Functions lifted automatically from Ghidra (tools/lift/lift.py). subvulpes.ini: lifted=0 disables all. */
+    /* Functions lifted automatically from Ghidra (instrumentation/lift/lift.py). subvulpes.ini: lifted=0 disables all. */
     if (sv_config_int("lifted", 1))
         n += sv_hooks_lifted_install();
     else

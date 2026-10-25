@@ -3,7 +3,7 @@
  * subvulpes.ini: record_imports=1. At startup each wrapper replaces one import of the 024d:
  * - MSVCR100 and KERNEL32: the slot in the import table (IAT) of the 024d. getpaths copies
  *   the fread and fwrite slots into two globals later, so these copies are wrappers too.
- * - WinSock: the pointer that the proxy stub jumps through (hook/proxy.c).
+ * - WinSock: the pointer that the proxy stub jumps through (instrumentation/hook/proxy.c).
  * A wrapper calls the real function. While a recorded call is open (sv_rec_active), it
  * also writes one event line with the arguments, the bytes in and out, and the return.
  * Outside a recorded call the wrapper only adds the check of sv_rec_active.

@@ -37,7 +37,7 @@ void sv_log(const char *fmt, ...)
 
     if (!f) {
         char path[MAX_PATH];
-        /* SV_LOG_FILE: another log (parallel harness runs, tools/lift/gate.py --jobs). */
+        /* SV_LOG_FILE: another log (parallel harness runs, instrumentation/lift/gate.py --jobs). */
         if (getenv("SV_LOG_FILE"))
             snprintf(path, sizeof path, "%s", getenv("SV_LOG_FILE"));
         else

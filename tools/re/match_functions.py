@@ -1,6 +1,6 @@
 """Match functions of a binary without symbols against reference binaries with symbols.
 
-Input: .jsonl files from tools/ghidra/ExportFunctionFeatures.java.
+Input: .jsonl files from instrumentation/ghidra/ExportFunctionFeatures.java.
 Output: CSV with rva, name, source, confidence and evidence.
 
 Method:

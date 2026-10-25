@@ -1,4 +1,4 @@
-/* Input checks on received datagrams (hook/netguard.c). */
+/* Input checks on received datagrams (instrumentation/hook/netguard.c). */
 #ifndef SV_NETGUARD_H
 #define SV_NETGUARD_H
 

@@ -1,5 +1,5 @@
 @echo off
-rem Build the hook DLL (wsock32.dll) for x86 with MSVC.
+rem Build the server, recording server, hook DLL, harness and tests with MSVC x86.
 rem Usage: tools\build_hook.bat   (output in build\hook\wsock32.dll)
 rem When cl is already in PATH (a "x86 Native Tools" prompt or CI), vcvars32.bat is not called.
 rem Set VCVARS to use another Visual Studio.
@@ -12,4 +12,5 @@ cd /d "%~dp0.."
 cmake -S . -B build\hook -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release || exit /b 1
 cmake --build build\hook || exit /b 1
 echo.
+echo OK: build\hook\subvulpes-server.exe
 echo OK: build\hook\wsock32.dll

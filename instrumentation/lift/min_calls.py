@@ -12,14 +12,14 @@ same level code (createlevel, resetgame: about 20 s each), so most of them drop 
 --per-recording counts each recording alone.
 
 Output: <recording>/sv_args.min.txt, next to sv_args.txt. gate.py uses it when it exists
-(--all-calls uses sv_args.txt). The hand-written calls (tools/recording/synth_calls.txt) are
+(--all-calls uses sv_args.txt). The hand-written calls (instrumentation/recording/synth_calls.txt) are
 not in it: gate.py appends them as before.
 
-The blocks file comes from tools/ghidra/ExportBlocks.java (build/lift/blocks.txt). Run this
+The blocks file comes from instrumentation/ghidra/ExportBlocks.java (build/lift/blocks.txt). Run this
 script again after a new recording, or after a change that adds lifted functions.
 
 Usage:
-  python -I tools/lift/min_calls.py [--keep 2] [--only NAME] [--target ded024d]
+  python -I instrumentation/lift/min_calls.py [--keep 2] [--only NAME] [--target ded024d]
 """
 import argparse
 import json
@@ -30,7 +30,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'tools' / 'lift'))
+sys.path.insert(0, str(ROOT / 'instrumentation' / 'lift'))
 from gate import load_target  # noqa: E402
 
 

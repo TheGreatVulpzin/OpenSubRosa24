@@ -1,6 +1,6 @@
 """Test city object allocation, type tables and newspaper boundaries.
 
-Usage: python -I tools/lift/synth_city_objects.py --run <recording> <work>
+Usage: python -I instrumentation/lift/synth_city_objects.py --run <recording> <work>
 """
 import argparse
 import copy

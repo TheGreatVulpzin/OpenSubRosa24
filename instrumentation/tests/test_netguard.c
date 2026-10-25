@@ -1,4 +1,4 @@
-/* Test of hook/netguard.c with input packets made by tools/net/srpacket.py.
+/* Test of instrumentation/hook/netguard.c with input packets made by tools/net/srpacket.py.
  * good: voice indexes 0..63. bad: indexes 200, 255 and 64. fixed: bad with the indexes masked
  * to 6 bits (what the guard must give). A copy of good cut inside its voice frames must be
  * dropped. Its last 2 bytes are voice_flag and spectate (9 bits), after the frames. */

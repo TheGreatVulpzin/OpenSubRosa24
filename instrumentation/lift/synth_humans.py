@@ -3,7 +3,7 @@
 Reads a recording snapshot, puts one human into a given situation, and writes a new snapshot
 and an args file with one humansimulation call, in one folder per case:
 
-    python -I tools/lift/synth_humans.py <recording dir> <out dir> [case,...]
+    python -I instrumentation/lift/synth_humans.py <recording dir> <out dir> [case,...]
     build/hook/harness.exe build/hook/024d_fixed.exe <out dir>/<case>/sv_snapshot.bin <out dir>/<case>/sv_args.txt humansimulation
 
 The output holds the game state of the recording: keep it in build/.

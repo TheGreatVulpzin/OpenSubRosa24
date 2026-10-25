@@ -1,4 +1,4 @@
-# Record a play session on the test server, for the offline test (src/tests/harness.c).
+# Record a play session on the test server, for the offline test (instrumentation/tests/harness.c).
 #
 # Usage: powershell -ExecutionPolicy Bypass -File tools\record_session.ps1 [-SnapshotAfter 600]
 #
@@ -32,8 +32,8 @@ record_imports=1
 snapshot_after=$SnapshotAfter
 capture_packets=0
 "@ | Set-Content (Join-Path $dir "subvulpes.ini") -Encoding ascii
-# The functions that keep their hook all the time (hook/record.c, "what to record").
-Copy-Item (Join-Path $root "tools\recording\record_focus.txt") (Join-Path $dir "record_focus.txt") -Force
+# The functions that keep their hook all the time (instrumentation/hook/record.c, "what to record").
+Copy-Item (Join-Path $root "instrumentation\recording\record_focus.txt") (Join-Path $dir "record_focus.txt") -Force
 
 # Keep the files of the previous recording: move them to build\recordings\<date-time>.
 $old = Join-Path $root ("build\recordings\" + (Get-Date -Format "yyyyMMdd-HHmmss"))

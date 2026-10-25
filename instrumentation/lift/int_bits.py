@@ -11,7 +11,7 @@ The script changes three forms where the operand is an lvalue (a variable, *p or
 The bits are the same in each case, so the code does the same. The macros are in
 src/lifted/lift_support.h.
 
-Usage: python -I tools/lift/int_bits.py src/game/objects.c [...]
+Usage: python -I instrumentation/lift/int_bits.py src/game/objects.c [...]
 """
 import re
 import sys

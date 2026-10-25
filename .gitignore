@@ -41,7 +41,7 @@ Thumbs.db
 # Projeto Ghidra local e dados gerados
 /ghidra-project/
 
-# Local MCP servers (machine paths). Template: tools/ghidra/mcp.json.example
+# Local MCP servers (machine paths). Template: instrumentation/ghidra/mcp.json.example
 /.mcp.json
 
 # Java crash reports

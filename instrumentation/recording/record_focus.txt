@@ -1,4 +1,4 @@
-# Functions that a recording session hooks all the time (hook/record.c).
+# Functions that a recording session hooks all the time (instrumentation/hook/record.c).
 # untested: no recording has a call yet. diff: the harness finds a difference.
 # All other lifted functions are hooked only in the rotation.
 # Format: rva class name

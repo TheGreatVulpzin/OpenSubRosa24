@@ -1,6 +1,6 @@
 """Copy a PE file, move it to a new image base and turn off ASLR (DYNAMICBASE) in the copy.
 
-The test server and the offline harness (src/tests/harness.c) both load the copy at the
+The test server and the offline harness (instrumentation/tests/harness.c) both load the copy at the
 same fixed base. A snapshot of .data from the server then fits the harness without any
 relocation. The default base 0x20000000 is free in both processes (the harness heap can
 take the area near 0x400000).

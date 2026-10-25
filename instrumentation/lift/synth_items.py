@@ -4,7 +4,7 @@ Reads a recording snapshot, builds one situation (a phone call, a door, a shot a
 and writes a new snapshot and an args file with the calls of one function, in one folder per
 case:
 
-    python -I tools/lift/synth_items.py <recording dir> <out dir> [case,...]
+    python -I instrumentation/lift/synth_items.py <recording dir> <out dir> [case,...]
     build/hook/harness.exe build/hook/024d_fixed.exe <out dir>/<case>/sv_snapshot.bin <out dir>/<case>/sv_args.txt <function>
 
 The functions: setupitemtypes, itemweaponsimulation (30ba0), itemlogic (4c8c0),
@@ -14,7 +14,7 @@ A snapshot is about 120 MB. With --run, the script runs the harness on each case
 the case at once. The cover count is the number of basic blocks of the function that the case
 reaches (HARNESS_COVER):
 
-    python -I tools/lift/synth_items.py --run [--no-cover] <recording dir> <work dir> [case,...]
+    python -I instrumentation/lift/synth_items.py --run [--no-cover] <recording dir> <work dir> [case,...]
 
 --no-cover skips the cover run. The base snapshot is read once and copied in memory for each case.
 """

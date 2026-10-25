@@ -4,11 +4,11 @@ The harness runs with HARNESS_TIME=1: each recorded call runs once in each versi
 comparison, and the harness prints the cycles of each function. This script adds the cycles
 of all the recordings, one run at a time (two runs at the same time disturb the times).
 
-  python -I tools/lift/bench.py              the rewritten functions (src/common, src/net, src/game)
-  python -I tools/lift/bench.py --all        every function in the table
-  python -I tools/lift/bench.py --all-calls  every recorded call, not the short files (much slower)
-  python -I tools/lift/bench.py --only NAME  only the recordings with NAME in their name
-  python -I tools/lift/bench.py --funcs a,b  only these functions (the harness runs only their calls)
+  python -I instrumentation/lift/bench.py              the rewritten functions (src/common, src/net, src/game)
+  python -I instrumentation/lift/bench.py --all        every function in the table
+  python -I instrumentation/lift/bench.py --all-calls  every recorded call, not the short files (much slower)
+  python -I instrumentation/lift/bench.py --only NAME  only the recordings with NAME in their name
+  python -I instrumentation/lift/bench.py --funcs a,b  only these functions (the harness runs only their calls)
 
 The short call files (sv_args.min.txt) have 2 calls for each code path of each function, so
 they cover the same functions as the full files in a small part of the time.

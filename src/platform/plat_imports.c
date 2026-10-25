@@ -5,7 +5,7 @@
  * is a function of the static CRT of this exe, of KERNEL32 or of WSOCK32, so the server
  * does not need MSVCR100.dll.
  *
- * src/tests/crt_diff.c shows that the static CRT gives the same bits as MSVCR100 for all of
+ * instrumentation/tests/crt_diff.c shows that the static CRT gives the same bits as MSVCR100 for all of
  * these functions, with the inputs of the game. sprintf differs only for %e and %f, which
  * the game does not use. WSOCK32.dll sends most socket functions on to ws2_32.dll: those
  * link to ws2_32 here, the same code. recv, recvfrom and getsockopt have their own code in

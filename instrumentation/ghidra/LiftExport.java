@@ -1,4 +1,4 @@
-// Export everything the automatic converter (tools/lift/lift.py) needs, in JSON Lines.
+// Export everything the automatic converter (instrumentation/lift/lift.py) needs, in JSON Lines.
 //
 // Per function: RVA, name, calling convention, return type, parameters (with the storage of each),
 // pseudo-C, typed globals, called functions with signature, and the prologue for the hook

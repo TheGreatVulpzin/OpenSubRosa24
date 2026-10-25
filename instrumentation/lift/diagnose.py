@@ -1,6 +1,6 @@
 """Compile each function that failed in the last lift alone and print its errors with the source line.
 
-Usage: python -I tools/lift/diagnose.py [rva ...]   (default: every compile_error in build/lift/report.csv)
+Usage: python -I instrumentation/lift/diagnose.py [rva ...]   (default: every compile_error in build/lift/report.csv)
 """
 import csv
 import json

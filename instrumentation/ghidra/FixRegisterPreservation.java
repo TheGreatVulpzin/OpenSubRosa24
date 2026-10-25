@@ -14,7 +14,7 @@
 //   4. Gives _ftol2 (float to 64-bit int, argument in ST0) its real signature and a call
 //      fixup with its exact effect on the x87 stack.
 //
-// The lifted hooks keep ECX, EDX and the x87 state (see the thunks in hook/hooks_lifted.c),
+// The lifted hooks keep ECX, EDX and the x87 state (see the thunks in instrumentation/hook/hooks_lifted.c),
 // so a lifted function also respects the variant.
 //
 // Usage (headless, -process <program> -noanalysis, WITHOUT -readOnly so the change is saved):

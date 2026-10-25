@@ -14,7 +14,7 @@
 // The script also applies the "security_check_cookie" call fixup of x86win.cspec to
 // __security_check_cookie (0x45ce18): the decompiler then ignores the call.
 //
-// The list comes from tools/lift (callers with "= FUN_x(" for a callee typed void, checked
+// The list comes from instrumentation/lift (callers with "= FUN_x(" for a callee typed void, checked
 // in the disassembly: every return path sets EAX).
 //
 // Usage (headless, -process <program> -noanalysis, WITHOUT -readOnly so the change is saved):

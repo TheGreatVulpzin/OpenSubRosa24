@@ -1,7 +1,7 @@
 """Test the level helpers with boundary values and small point sets.
 
 Run each case, then delete its snapshot when it passes. Keep failed cases for inspection.
-Usage: python -I tools/lift/synth_level.py --run <recording dir> <work dir> [case,...]
+Usage: python -I instrumentation/lift/synth_level.py --run <recording dir> <work dir> [case,...]
 """
 import argparse
 import copy
