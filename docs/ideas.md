@@ -46,9 +46,6 @@ These checks cover invalid client input and local data files. Valid inputs keep 
 | B6: convert each chat byte to `unsigned char` before `tolower` | `server_playermessage`, `src/net/commands.c` | Done. Bytes 128 through 255 stay within the input range of `tolower`. |
 | C1: check both bounds of menu 6 before the table access | `logic_playeractions`, `src/game/logic.c` | Done. Ignore values below 1 or with an index at or above `car_base`. The value 16 still closes the menu. |
 | C2: check item creation in the dealer, wallet, bank, and car market | `logic_cardealer_buy`, `item_action`, `bank_action`, `logic_playeractions`, `src/game/logic.c` | Done. If the item pool is full, cash transfers keep their balances and bills. Car purchases still complete but skip the key write and link when no item slot is free. |
-| Item count of the object part (8 bits, no cap) | `serverrecv` | Open |
-| Server name copy (`strcpy`, longer than the 32 bytes sent) | | Open |
-| Human health (`health + 10` in 7 bits, wraps above 117) | | Open |
 | D1: reserve space for the ranking in `readme.txt` | `newspaper_load` | Done. File text stops at 1013 lines. The title and ten accounts fit in 1024 lines. |
 | D2, D4: bound material and block counts in `.sbb` files | `building_load` | Done. Reject negative counts and counts above 256 before changes to the name tables. |
 | D3: bound each building dimension | `building_load` | Done. Accept 0 through 63, including header reads. Invalid dimensions use the missing-file path. |
@@ -63,6 +60,25 @@ S4 tests: `tools/formats/test_s4.py` covers bounds, short reads, path names, mem
 Run it with a recording directory and a work directory in `build/`.
 Use `--data` for the game data directory and `--image` for the game image of the harness.
 The building, level, area, and system tests also check valid inputs.
+
+## Security work reserved for SVS
+
+SubVulpes Server (SVS) inherits the completed OpenSubRosa checks above.
+The following items remain open in SVS because they change behavior for valid inputs or add server policy.
+They are not part of the completed S1 through S4 checks.
+
+| Item | Work reserved for SVS |
+| --- | --- |
+| A7 | Clamp float inputs. Define the accepted range for each field. |
+| A8 | Limit the rate of query replies. |
+| A9 | Define a window for action replay. |
+| A10 | Deferred. The security plan lists this identifier without a description. Define its scope before implementation. |
+| B5 | Count admin login attempts by IP address and require a strong default password. |
+| C3 | Handle object item lists above the 255 entries that the wire count can represent. |
+| C4 | Handle human health above 117 without a wrap in the 7-bit field. |
+| D11, D12 | Deferred. The security plan lists these identifiers without descriptions. Define their scope before implementation. |
+| Persistent `ban_time` | Save and load ban time. The account file does not store this field. |
+| Server name | Limit the server name to 31 characters and a null byte. The query reply sends 32 bytes. |
 
 ## Client
 

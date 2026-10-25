@@ -542,20 +542,37 @@ Wire format that is certain but whose meaning is not, and parts not checked:
 12. **Master server**: the UDP list reply layout comes from the client only; the HTTP answer fields 1 and 4..11 are read but their meaning is unknown; the server `crypticsea.com` may no longer exist. The heartbeat has no known acknowledgement.
 13. **Types never produced**: `HumanBlock.kind == 1`, `ObjectBlock.mode == 3`, events 11 and 15 (not produced by the 024d), `packobjectpacket2` (dead code), `pbitwritescale`/`pbitwritesign` (unused). The parser handles them as the code does.
 14. **Voice codec**: the frames sit in an array called `speex`; the codec, frame duration and the meaning of `mode` (2 bits) were not checked.
-15. **Out-of-range inputs in the original**, relevant to anyone who writes a compatible server:
-    - **A1, fixed:** `handle_input` masks each voice frame index to six bits immediately after its read. Indices from 64 to 255 cannot write past the 64-entry ring. The proxy guard (`hook/netguard.c`, `net_guard=1`) stays unchanged. The server check also applies to the standalone server;
-    - the item count of the object part is 8 bits but the item loop has no explicit cap (up to 1024 items), so a count above 255 would wrap;
-    - the server name is copied with `strcpy` into `server+0x14`, but only 32 bytes are sent, so a long `servername=` (up to 49 characters) is cut in the packet and the unsent part is still written into memory after the name;
-    - the human health is sent as `health + 10` in 7 bits and wraps above 117.
-    - **A2, fixed:** `handle_input` masks the action start index (`Player.num_actions`) to six bits before the first action write. A valid client sends 0 to 63;
-    - **A3, fixed:** the same mask applies with zero actions. Without it, a start index of 64 or more makes `logic_playeractions` loop without an end;
-    - **A4, fixed:** input from a connection with a negative `player_id` is ignored. This includes the old connection after an account takeover;
-    - **A5, fixed:** the 256-connection limit is checked before a clear or append. At capacity, a new account cannot join. A connected account reuses its current slot. Below capacity, account takeover keeps the same connection sequence;
-    - **A6, fixed:** `packet_complete` checks the full join or input packet before either handler changes state. The check includes the voice flag and spectate field. Readers include partial bits and byte alignment in their bounds checks. A short read stops all later reads until the next packet. A negative receive size means no packet and keeps the cursor unchanged;
-    - `/phone` (admin chat command) writes `phone_id` to `items[it]` before it checks `it < 0x400`. When `createitem` fails (-1) the write goes to `items[-1]`. A fix is to test first;
-    - the kick list (`/kick`) has no bound: `kickedip[numofkicked++]` has room for 41368 entries, and `numofkicked` sits right after the array, so a long series of `/kick` overwrites the counter. A fix is to stop at 41368;
-    - a message of a player who has a living human and is in a vehicle reads `humans[attach_id]` and `items[attach_id]` with an `attach_id` of 10 bits (up to 1023) while there are 512 humans. A message event only has such an id when the server made it, so this is not reachable from a client.
-    S1 fixes change only invalid input. Valid packets keep the same results. The invalid input mode uses sanitized packets or state checks. Other items remain open in `docs/ideas.md`.
+15. **Security checks and deferred changes.** OpenSubRosa checks invalid client input, admin commands, menu actions, and local data files.
+    Valid inputs keep the same results.
+    - **A1, fixed:** `handle_input` masks each voice frame index to six bits before access to the 64-entry ring.
+      The proxy guard (`hook/netguard.c`, `net_guard=1`) stays unchanged. The server check also applies to the standalone server.
+    - **A2, A3, fixed:** `handle_input` masks `Player.num_actions` to six bits before the first action write, including packets with zero actions.
+      This also prevents an endless loop in `logic_playeractions`.
+    - **A4, fixed:** the server ignores input from a connection with a negative `player_id`, including an old connection after account takeover.
+    - **A5, fixed:** the server checks the 256-connection limit before a clear or append.
+      At capacity, a new account cannot join. A connected account reuses its current slot.
+    - **A6, fixed:** `packet_complete` checks each full join or input packet before the handler changes state, including voice and spectate fields.
+      Readers check partial bits and byte alignment. A short read stops later reads until the next packet.
+      A negative receive size means no packet and keeps the cursor unchanged.
+    - **B1, B2, fixed:** `/phone` checks the item index before each write and returns when the admin has no human.
+    - **B3, fixed:** `/kick` stops at 41368 entries. A full list ignores the command.
+    - **B4, fixed:** `/message` reads at most the 55 remaining chat bytes with `strnlen` and adds a null byte.
+    - **B6, fixed:** the chat filter converts each byte to `unsigned char` before `tolower`.
+    - **C1, fixed:** menu 6 checks both table bounds before access. The value 16 still closes the menu.
+    - **C2, fixed:** the dealer, wallet, bank, and car market check item creation before access to the item pool.
+      A full pool preserves cash transfers. Car purchases still complete but skip the key write and link when no slot is free.
+    - **D1 through D10, fixed:** file loaders bound newspaper lines, building dimensions, material counts, block counts, paths, city counts, and file lists.
+      The parser reserves its last byte. The account loader checks counts and reads and sets `name[31]` to zero.
+      See `docs/ideas.md` for the per-loader limits and rejection behavior.
+    - **Reserved for SubVulpes Server (SVS):** A7 (float clamps), A8 (query reply rate), A9 (action replay window), and A10.
+      B5 covers admin login attempts by IP address and a strong default password.
+      C3 covers object item lists above 255. C4 covers human health above 117, which wraps in the 7-bit field.
+      D11 and D12 also remain open. The plan does not describe A10, D11, or D12. Define their scope in SVS.
+      Persistent `ban_time` and a server name limit of 31 characters plus a null byte also remain for SVS.
+      The account file does not store `ban_time`. The server copies up to 49 name characters, but the query reply sends only 32 bytes.
+    - A message event can use a 10-bit `attach_id` to read human and item arrays, while the human pool has 512 entries.
+      The server creates this event, so a client cannot supply this index directly.
+    The invalid input tests use sanitized packets or state checks. S4 tests also compare valid data files.
 16. **Names in `analysis/024d/functions.csv`** that look wrong after reading the code: `0x16bb0` is named `getrandomvector2d` but is `createevent_bullet`; `0x16db0` is named `scaleaddvectors` but is `createevent_sound`. This document does not edit that file.
 17. **Reconnect and account take-over**, bans and "server full" are described from `serverrecv`; the effect on a real client (what it shows when ignored) was not observed.
 18. **Re-encoding**: `srpacket.py` uses truncation like the original. A parsed angle encoded again can differ by one step. Bytes of a captured packet therefore may not be reproduced bit for bit by parse + build for the quantized fields (they are for all integer fields).
