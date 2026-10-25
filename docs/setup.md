@@ -11,7 +11,7 @@ Reference environment: Windows 10, Git Bash and PowerShell.
 | Ghidra | 12.1.4 | `E:\tools\ghidra_12.1.4_PUBLIC` | Decompiler. SHA-256 of the zip: `ddac49f9…d2d4db`. |
 | VS 2026 Build Tools | MSVC 14.50 | `C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools` | C compiler for x86 (hook DLL). |
 | Windows SDK | 10.0.26100.0 | `C:\Program Files (x86)\Windows Kits\10` | Windows headers and libs. |
-| CMake | — | `C:\Program Files\CMake` | Build of the code in `src/` and `hook/`. |
+| CMake | — | `C:\Program Files\CMake` | Build of the code in `src/` and `instrumentation/hook/`. |
 | GhidraMCP | 2.0 (LaurieWired) | Ghidra extension + `E:\tools\ghidramcp-venv` | MCP server: Claude uses Ghidra directly. |
 | Python 3.10 | 3.10 | Windows Store | Only for the GhidraMCP venv (PyGhidra needs 3.10 to 3.13). |
 | ghidra-delinker-extension | 0.9.2 (boricj) | Ghidra extension | Exports parts of the 024d as COFF object files. |
@@ -33,7 +33,7 @@ py -3.10 -m venv E:\tools\ghidramcp-venv
 E:\tools\ghidramcp-venv\Scripts\python.exe -m pip install "ghidra_mcp-2.0.0-py3-none-any.whl[headless]"
 ```
 
-Then copy `tools/ghidra/mcp.json.example` to `.mcp.json` at the repository root, fix the paths, and run `bash tools/ghidra/mcp_refresh.sh` to make the project copy that the server opens. Claude Code asks to approve the `ghidra` server at the start of the next session.
+Then copy `instrumentation/ghidra/mcp.json.example` to `.mcp.json` at the repository root, fix the paths, and run `bash instrumentation/ghidra/mcp_refresh.sh` to make the project copy that the server opens. Claude Code asks to approve the `ghidra` server at the start of the next session.
 
 ## Original files
 
@@ -49,7 +49,7 @@ python -I tools/re/manifest.py check
 The script imports the binaries into the local project `ghidra-project/` (outside git). It exports the function features to `build/features/*.jsonl`. The first run takes 10 to 30 minutes.
 
 ```bash
-JAVA_HOME="/c/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot" tools/ghidra/analyze_all.sh
+JAVA_HOME="/c/Program Files/Eclipse Adoptium/jdk-21.0.7.6-hotspot" instrumentation/ghidra/analyze_all.sh
 ```
 
 To open the project in the GUI, run `E:\tools\ghidra_12.1.4_PUBLIC\ghidraRun.bat` and open `ghidra-project/subvulpes.gpr`.
@@ -60,11 +60,11 @@ After the analysis, put the structs and the global arrays into the project (run 
 
 ```bash
 python -I tools/re/gen_types.py
-python -I tools/ghidra/types_json.py
-source tools/ghidra/env.sh
+python -I instrumentation/ghidra/types_json.py
+source instrumentation/ghidra/env.sh
 "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis \
-    -scriptPath "$ROOT/tools/ghidra" -postScript ApplyTypes.java "$(cygpath -w "$ROOT/build/ghidra/types.json")"
-bash tools/ghidra/mcp_refresh.sh
+    -scriptPath "$ROOT/instrumentation/ghidra" -postScript ApplyTypes.java "$(cygpath -w "$ROOT/build/ghidra/types.json")"
+bash instrumentation/ghidra/mcp_refresh.sh
 ```
 
 ## Function names

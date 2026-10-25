@@ -88,7 +88,7 @@ A particle that touches the level deep (its line from the center crosses the lev
 - The first loop sums the impact with the rounding of a float at each step. A change of the order changes the damage by a bit.
 - `objectwheelcollision` tests the circle with the axle `rot[0]`, not the steered axle. The steered axle only gives the rolling direction.
 - `travel` of a wheel body goes into `wheels[k]`, the wheel with the same index.
-- The wheel bodies exist only for type 1 cars. No recording has one. `tools/lift/synth_vehicles.py` builds the situation.
+- The wheel bodies exist only for type 1 cars. No recording has one. `instrumentation/lift/synth_vehicles.py` builds the situation.
 - `object_rotorsimulation` has no caller. It is dead code in the game too.
 - The helicopter forces need a driver and health above 0. A helicopter without them only turns its rotor.
 - `g_train_near` is set by a locomotive that moves toward the crossing within 160 units. `logicsimulation` reads it.
@@ -96,13 +96,13 @@ A particle that touches the level deep (its line from the center crosses the lev
 
 ## Speed
 
-`objectwheelsimulation2` and `objectenginesimulation2` run 32 times for each tick. The loops are flat: they use pointers to the object, the wheel and the particle. Bench (`tools/lift/bench.py`, 3 runs, 2026-10-21): `objectsimulation`, `objectwheelsimulation2` and `objectenginesimulation2` are within the noise of the old code (ratio 0.93 to 1.09). `objecttrainsimulation` is 1.07 to 1.19 slower on 7 calls (a train exists only in some recordings). `objectwheelcollision` moves between 1.04 and 1.38 on 4 calls.
+`objectwheelsimulation2` and `objectenginesimulation2` run 32 times for each tick. The loops are flat: they use pointers to the object, the wheel and the particle. Bench (`instrumentation/lift/bench.py`, 3 runs, 2026-10-21): `objectsimulation`, `objectwheelsimulation2` and `objectenginesimulation2` are within the noise of the old code (ratio 0.93 to 1.09). `objecttrainsimulation` is 1.07 to 1.19 slower on 7 calls (a train exists only in some recordings). `objectwheelcollision` moves between 1.04 and 1.38 on 4 calls.
 
 ## Object types and creation (group 4 part B)
 
 Files: `object_types.c` (the append helpers, `objecttype_calcquadweights`, `setupobjecttypeweight`), `vehicle_types.c` (the three setups), `object_create.c` (`createobject`, `createvehicle`), `ai_car.c` (the bot driver).
 
-**Types.** `ObjectType` (128 records of 0x828c bytes) holds the lists of a vehicle: `particles` (TypeParticle), `bonds` (TypeBond), `faces` (TypeFace), `quads` (TypeQuad, train only), `wheels` (TypeWheel), `seats`. Every `objecttype_add*` helper writes at the count and adds 1. No setup resets a count. A second run of a setup appends all records again, except the bonds (`objecttype_addbond` skips a pair that exists). The recordings take the snapshot after `setupgame`, so the gate always tests this second run. `tools/lift/synth_types.py` (`fresh_*` cases) clears the types and tests the first run.
+**Types.** `ObjectType` (128 records of 0x828c bytes) holds the lists of a vehicle: `particles` (TypeParticle), `bonds` (TypeBond), `faces` (TypeFace), `quads` (TypeQuad, train only), `wheels` (TypeWheel), `seats`. Every `objecttype_add*` helper writes at the count and adds 1. No setup resets a count. A second run of a setup appends all records again, except the bonds (`objecttype_addbond` skips a pair that exists). The recordings take the snapshot after `setupgame`, so the gate always tests this second run. `instrumentation/lift/synth_types.py` (`fresh_*` cases) clears the types and tests the first run.
 
 **Types in use.** 0 Town Car, 1 Town Car 2 (wheel bodies, a hitch particle 20), 2 Metro, 3 Limo, 4 Turbo, 5 Turbo S, 6 Beamer, 7 Van, 8 Minivan, 9 Truck (hitch particle 20), 10 Trailer (hitch particle 16, state 0, no engine), 11 Helicopter, 12 Train, 13 Bogie. A car is a grid of 16 points (vans, truck and trailer: 12) in 3 (2) box segments, a roof, a cabin box with window faces, and 4 wheels (the truck has 6). The setup order is 0, 1, 2, 3, 4, 5, 7, 8, 6, 9, 10. `setupobjecttypeweight` writes the global `pointtemp`, so the order is part of the result.
 

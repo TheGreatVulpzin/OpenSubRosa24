@@ -117,7 +117,7 @@ A join sends no reply. The client waits for the new game packet (type 6) that `s
 
 The floats and the camera are copied as raw bytes. The actions go into a ring of 64 records in the player (`PlayerAction`): a menu choice (kind 0), a chat text (kind 1) or an item action (kind 2). `num_actions` counts the next record. The server masks the eight-bit start index to six bits, even with zero actions.
 
-The voice frames go into the ring of the player (`Speex.voice_ring[player]`). Each frame has an index (8 bits), a size (8 bits), a mode (2 bits) and the bytes. The server masks the index to six bits immediately after its read. The proxy guard (`hook/netguard.c`) stays unchanged.
+The voice frames go into the ring of the player (`Speex.voice_ring[player]`). Each frame has an index (8 bits), a size (8 bits), a mode (2 bits) and the bytes. The server masks the index to six bits immediately after its read. The proxy guard (`instrumentation/hook/netguard.c`) stays unchanged.
 
 Input with a negative connection `player_id` is ignored. At 256 connections, a new account cannot join. A connected account reuses its current slot. Below capacity, account takeover keeps the same connection sequence.
 
@@ -193,7 +193,7 @@ The prefix tests are plain `strncmp`, so `/army` also runs `/arm`.
 
 ## The client side
 
-These functions read what the server writes. The dedicated server never calls them. They exist for the client and are tested with made-up packets (`tools/lift/synth_net.py`).
+These functions read what the server writes. The dedicated server never calls them. They exist for the client and are tested with made-up packets (`instrumentation/lift/synth_net.py`).
 
 - `clientrecv` handles type 6 (new game), type 5 (state) and type 8 (voice). A state packet is skipped when its tick is 1 to 99 behind the client tick. After 0x4b0 ticks without a packet it sets `game.link_state` to 3.
 - `unpackobjectpacket` reads the four lists. It keeps the last two states of each human and object (`net_tick`, `net_pos`, `net_tick_prev`, `net_pos_prev`) to move the thing smoothly. For a human it rebuilds the bones from the joint angles and the body table.

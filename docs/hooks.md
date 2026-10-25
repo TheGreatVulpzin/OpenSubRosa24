@@ -13,7 +13,7 @@ The mechanism is a proxy `wsock32.dll` in the server folder.
 4. It installs the hooks: a 5-byte `JMP` at the start of each original function, to the C version.
 5. A trampoline keeps the start of the original function. This lets us call the original.
 
-Code: [`hook/`](../hook/) (proxy, hooks, table) and [`src/server/`](../src/server/) (rewritten functions).
+Code: [`instrumentation/hook/`](../instrumentation/hook/) (proxy, hooks, table) and [`src/server/`](../src/server/) (rewritten functions).
 
 ## Replaced functions
 
@@ -29,12 +29,12 @@ Progress: `python -I tools/progress.py`.
 ## Before you rewrite a function
 
 1. **Check the name in the code.** Names from the matcher that came from the call graph are often wrong. In batch 1, 4 of 7 `createevent_*` names were wrong. Compare the 024d pseudo-C with the 0.24c one (`build/decomp/`).
-2. **Look at the prologue:** `tools/ghidra/PrintPrologue.java` shows the first instructions. The hook prologue must have whole instructions, at least 5 bytes and no relative jump.
+2. **Look at the prologue:** `instrumentation/ghidra/PrintPrologue.java` shows the first instructions. The hook prologue must have whole instructions, at least 5 bytes and no relative jump.
 3. **Avoid float math for now.** The 024d uses x87. Our compiler uses SSE, and the last bit can change.
 
 ## Verification mode
 
-With `verify=1` (default in this phase), each call runs both versions ([`hook/verify.c`](../hook/verify.c)):
+With `verify=1` (default in this phase), each call runs both versions ([`instrumentation/hook/verify.c`](../instrumentation/hook/verify.c)):
 
 1. The game `.data` section (all globals) becomes read-only.
 2. The C version runs. Each write raises an exception: the verifier keeps the 4 KB page and allows the write.
@@ -50,7 +50,7 @@ With `verify=1` (default in this phase), each call runs both versions ([`hook/ve
 
 A write outside the learned scope shows up only in the next full round.
 
-**Crash protection.** The new version runs inside `__try` ([`hook/hook_wrap.h`](../hook/hook_wrap.h)). If it crashes, the DLL logs the exception and the address, undoes its writes and runs the original. The hook is marked as broken and uses only the original from then on.
+**Crash protection.** The new version runs inside `__try` ([`instrumentation/hook/hook_wrap.h`](../instrumentation/hook/hook_wrap.h)). If it crashes, the DLL logs the exception and the address, undoes its writes and runs the original. The hook is marked as broken and uses only the original from then on.
 
 **Heap.** Page protection covers only `.data`. The verifier also copies the committed pages of the `MSVCR100.dll` heap (the `malloc` blocks of the game) before the C version runs. After the C version, it finds the changed pages by comparison and puts the copy back. After the original, it compares the content of the blocks in use. The allocator data (heap header, free lists) does not count: two runs can leave other free lists with the same effect. Without the heap copy, `area_createblock` wrote the new chunk into the chunk grid (a `malloc` block), the original found the chunk, did not create it, and the game kept a chunk count of 0. When the C version frees heap pages (a large block, a decommit), the copy cannot go back: the log shows `freed heap pages ... heap not undone`, and that call is not compared. The log shows the size of the copy (`heap copy of N KB`) each time it grows by a quarter.
 

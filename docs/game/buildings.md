@@ -118,10 +118,10 @@ The return values preserve the bits that callers receive, including the address 
 
 ## Checks
 
-`tools/lift/synth_city_objects.py --run` tests allocation, elevator bounds, NaN coordinates,
+`instrumentation/lift/synth_city_objects.py --run` tests allocation, elevator bounds, NaN coordinates,
 a full object pool, appended meshes, fractional box dimensions and newspaper overflow.
 
-`tools/lift/synth_buildings.py --run` tests all five file versions, missing and bad files,
+`instrumentation/lift/synth_buildings.py --run` tests all five file versions, missing and bad files,
 header-only reads, name maps, doors, wide blocks, turns and guard directions.
 The save case compares both output files with the expected bytes.
 Placement cases cover every type with the server active and inactive, all four door turns,

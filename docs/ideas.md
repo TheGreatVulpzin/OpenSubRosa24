@@ -16,7 +16,7 @@ Columns: **Product** is OpenSubRosa, SubVulpes or both. **Where** is the functio
 | Idea | Product | Where | Notes |
 | --- | --- | --- | --- |
 | Dynamic pools with configurable limits (players, objects, items) | OpenSubRosa | the global arrays of `.data` (606 MB) | Default limits = the original limits. Also necessary for WASM. |
-| Profile and optimize the tick (tick rate, packet sending, collisions) | OpenSubRosa | `servercycle`, `serversend`, `bondsimulation2` | `hook/` has a per-hook profiler (`subvulpes.ini profile=1`). |
+| Profile and optimize the tick (tick rate, packet sending, collisions) | OpenSubRosa | `servercycle`, `serversend`, `bondsimulation2` | `instrumentation/hook/` has a per-hook profiler (`subvulpes.ini profile=1`). |
 | Speed of the level build: `buildcityinterection` and `buildcitystreet` measured 1.06 to 1.07 against the original in three full runs, and `createlevel` 1.23 in two calls. They run at map load only | OpenSubRosa | `src/game/city.c`, `src/game/level.c` | Measure again with `bench.py --all-calls`. The cause is not known. |
 | Linux x64 and macOS servers | OpenSubRosa | `src/platform/` | SSE in place of x87 changes the float bits. Decide the accepted precision first. |
 | Own server list if the Cryptic Sea master does not answer | both | `getmasterserverip` | The master is `crypticsea.com/anewzero/serverinfo.php`. |
@@ -24,7 +24,7 @@ Columns: **Product** is OpenSubRosa, SubVulpes or both. **Where** is the functio
 | Plugin events: chat, death, connect, disconnect, tick | SubVulpes | `serverrecv` (chat), the death code of `humansimulation`, `servercycle` | |
 | Admin commands: `/heal`, `/tp`, `/npc`, `/imortal`... | SubVulpes | chat handling in `serverrecv`, `createevent_message` | Ported from `third_party/server-manager`. |
 | Server manager modules as plugins: black market, death messages, faster truck, starting money, punches, bots | SubVulpes | `logic_*`, `item_*`, `humansimulation` | See `third_party/server-manager/ANALISE-*.md`. |
-| Admin console / RCON, structured logs | SubVulpes | `hook/console.c` is a start | |
+| Admin console / RCON, structured logs | SubVulpes | `instrumentation/hook/console.c` is a start | |
 | Server-side anti-cheat checks | SubVulpes | `serverrecv` | |
 
 ## Security fixes (allowed during the decomp)
@@ -97,7 +97,7 @@ Each one changes behavior only for invalid input from a client or an admin. The 
 
 - S1 checks are complete. See A1 through A6 in the security table above.
 - S2 and S3 checks are complete. See B1 through B4, B6, C1, and C2 in the security table above.
-- The server checks also apply to the standalone server. `hook/netguard.c` stays unchanged.
+- The server checks also apply to the standalone server. `instrumentation/hook/netguard.c` stays unchanged.
 
 
 ## System code (found in group 7)

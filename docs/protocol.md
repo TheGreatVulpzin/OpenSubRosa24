@@ -545,7 +545,7 @@ Wire format that is certain but whose meaning is not, and parts not checked:
 15. **Security checks and deferred changes.** OpenSubRosa checks invalid client input, admin commands, menu actions, and local data files.
     Valid inputs keep the same results.
     - **A1, fixed:** `handle_input` masks each voice frame index to six bits before access to the 64-entry ring.
-      The proxy guard (`hook/netguard.c`, `net_guard=1`) stays unchanged. The server check also applies to the standalone server.
+      The proxy guard (`instrumentation/hook/netguard.c`, `net_guard=1`) stays unchanged. The server check also applies to the standalone server.
     - **A2, A3, fixed:** `handle_input` masks `Player.num_actions` to six bits before the first action write, including packets with zero actions.
       This also prevents an endless loop in `logic_playeractions`.
     - **A4, fixed:** the server ignores input from a connection with a negative `player_id`, including an old connection after account takeover.

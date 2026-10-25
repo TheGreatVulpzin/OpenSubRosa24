@@ -4,6 +4,13 @@ Instructions for agent that is not Claude Code (e.g. Codex) and writes code for 
 
 Read `CLAUDE.md` first. Its rules apply, with the changes below.
 
+## Instrumentation and runtime files
+
+Keep verification code and tools in `instrumentation/`. Run the pipeline at `instrumentation/lift/pipeline.sh`.
+The previous entry point, `tools/lift/pipeline.sh`, forwards to that script.
+Keep `src/lifted/`, `src/standalone/image_024d.*`, and `src/standalone/fn_table.c` in the server build.
+Only the separate recording target uses `instrumentation/standalone/record_shim.c` and `instrumentation/hook/record*.c`.
+
 ## What you do
 
 Write clean C for one step of a group plan. User gives plan file (`plans/group<N>.md` in the package) and step number. Each plan step lists functions, names to add, rounding points, NaN compare forms, dead code, quirks to keep.
@@ -16,8 +23,8 @@ Write clean C for one step of a group plan. User gives plan file (`plans/group<N
 
 ## What you do not do
 
-- Gate needs game binaries, MSVC build and recordings, not in repository. Machine has them: run `bash tools/lift/step.sh [--rec <recording dir>] [--synth <name>,...] <function>,...` before the commit, put summary in report. Machine lacks them: user runs `step.sh` on your commit. Float difference in last bits = most common failure: follow each rounding point of plan exactly.
-- Do not edit `src/lifted/`, `hook/hooks_lifted.c` or generated tables by hand. `tools/lift/pipeline.sh` regenerates them. Run it, commit result with the step (see checklist below).
+- Gate needs game binaries, MSVC build and recordings, not in repository. Machine has them: run `bash instrumentation/lift/step.sh [--rec <recording dir>] [--synth <name>,...] <function>,...` before the commit, put summary in report. Machine lacks them: user runs `step.sh` on your commit. Float difference in last bits = most common failure: follow each rounding point of plan exactly.
+- Do not edit `src/lifted/`, `instrumentation/hook/hooks_lifted.c` or generated tables by hand. `instrumentation/lift/pipeline.sh` regenerates them. Run it, commit result with the step (see checklist below).
 - Do not change lifted-style files (`src/game/objects.c`, `wheels.c`, `ai_car.c`) unless plan says so.
 - Ignore parts of `CLAUDE.md` about Claude sessions: caveman, cavecrew, subagents, model choice, plan sessions, review by another model.
 - Never commit anything in `original/` or `build/`, never a recording or a `config.txt`.
@@ -26,10 +33,10 @@ Write clean C for one step of a group plan. User gives plan file (`plans/group<N
 
 Do every item before reporting "done". Show proof of each item in report. Paste output of `git status` and `step.sh` summary.
 
-1. Run `bash tools/lift/pipeline.sh`. Search its log for `error C` and `build failed`. Script exits 0 when build fails.
-2. Run `git status`. After lift, `src/lifted/lifted_024d.c`, `src/lifted/lifted_table.c` and `hook/hooks_lifted.c` must show changes. Commit them with the step.
-3. Run `bash tools/lift/step.sh <functions>`. Summary must name each function of the step. Missing function = not tested.
-4. Run `python -I tools/lift/bench.py --funcs <functions of the step, plus the rewritten functions they call>`. Report the ratio and the calls of each. Above 1.05 with fewer than 20 calls = probably noise: run again with `--all-calls` (3 runs) before you change code. Above 1.05 with many calls in all runs = slower: fix it.
+1. Run `bash instrumentation/lift/pipeline.sh`. Search its log for `error C` and `build failed`. Script exits 0 when build fails.
+2. Run `git status`. After lift, `src/lifted/lifted_024d.c`, `src/lifted/lifted_table.c` and `instrumentation/hook/hooks_lifted.c` must show changes. Commit them with the step.
+3. Run `bash instrumentation/lift/step.sh <functions>`. Summary must name each function of the step. Missing function = not tested.
+4. Run `python -I instrumentation/lift/bench.py --funcs <functions of the step, plus the rewritten functions they call>`. Report the ratio and the calls of each. Above 1.05 with fewer than 20 calls = probably noise: run again with `--all-calls` (3 runs) before you change code. Above 1.05 with many calls in all runs = slower: fix it.
 5. Run `grep -n -i "original\|lifted\|rewritten\|024d" <files you wrote>`. Must find nothing.
 6. Docs and `names.csv` must agree. Field meaning changed: `grep` its name in `docs/`, fix each hit.
 7. Tell user step needs review by another model. Step with float math needs strong model.

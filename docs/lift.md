@@ -1,6 +1,6 @@
 # Automatic lifting (Phase 3)
 
-`tools/lift/lift.py` turns the Ghidra pseudo-C of the 024d into C that compiles with MSVC, and generates a hook with verification for each function.
+`instrumentation/lift/lift.py` turns the Ghidra pseudo-C of the 024d into C that compiles with MSVC, and generates a hook with verification for each function.
 
 ## Pipeline
 
@@ -8,15 +8,15 @@
 
    ```bash
    "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis \
-       -scriptPath "$ROOT/tools/ghidra" -postScript FixX87Intrinsics.java -postScript FixRegisterPreservation.java
+       -scriptPath "$ROOT/instrumentation/ghidra" -postScript FixX87Intrinsics.java -postScript FixRegisterPreservation.java
    ```
 
 1. Export from Ghidra (5 minutes):
 
    ```bash
-   source tools/ghidra/env.sh
+   source instrumentation/ghidra/env.sh
    "$HEADLESS" "$PROJECT" subvulpes -process subrosadedicated024d.exe -noanalysis -readOnly \
-       -scriptPath "$ROOT/tools/ghidra" -postScript LiftExport.java "$ROOT/build/lift/ded024d.jsonl"
+       -scriptPath "$ROOT/instrumentation/ghidra" -postScript LiftExport.java "$ROOT/build/lift/ded024d.jsonl"
    ```
 
    Per function: pseudo-C, globals with the type the decompiler used, callees with prototypes, the prologue for the hook, and the values at relocation sites.
@@ -24,10 +24,10 @@
 2. Lift and compile (2 to 5 minutes):
 
    ```bash
-   python -I tools/lift/lift.py --compile
+   python -I instrumentation/lift/lift.py --compile
    ```
 
-   Output: `src/lifted/lifted_024d.c`, `hook/hooks_lifted.c`, `build/lift/report.csv`. The compile loop removes functions that do not compile and tries again.
+   Output: `src/lifted/lifted_024d.c`, `instrumentation/hook/hooks_lifted.c`, `build/lift/report.csv`. The compile loop removes functions that do not compile and tries again.
 
 3. Build the DLL (`tools\build_hook.bat`) and run the automatic test:
 
@@ -35,7 +35,7 @@
    powershell -File tools\autotest.ps1 -Seconds 180
    ```
 
-4. Or all of it in one command: `bash tools/lift/pipeline.sh` (add `--params` after a change to `analysis/024d/params.csv`). The last step is `tools/lift/gate.py`: the harness on every recording of the target `tools/lift/targets/ded024d.json`, compared function by function with `build/gate/ded024d/baseline.json`. It fails when a "calls same" count drops or a new difference appears. After a good run, `python -I tools/lift/gate.py --from-files --update` saves the results as the new baseline.
+4. Or all of it in one command: `bash instrumentation/lift/pipeline.sh` (add `--params` after a change to `analysis/024d/params.csv`). The last step is `instrumentation/lift/gate.py`: the harness on every recording of the target `instrumentation/lift/targets/ded024d.json`, compared function by function with `build/gate/ded024d/baseline.json`. It fails when a "calls same" count drops or a new difference appears. After a good run, `python -I instrumentation/lift/gate.py --from-files --update` saves the results as the new baseline.
 
    Faster gates: `--changed` runs only the functions whose lifted C differs from git `HEAD` (`--ref` for another version). The harness calls the other game functions through the image, so an unchanged function gives the same results; the script keeps their baseline values. A change in a file of the target's `full_run_paths` (the harness, the verifier, `lift_support.h`...) runs everything. `--jobs N` runs N harnesses at the same time (default 2; each one needs about 1 GB of commit). Run a full gate before a push.
 
@@ -62,7 +62,7 @@ The 024d was built with whole-program optimization. Callers trust details of eac
 - **ECX and EDX survive calls** when the original callee does not touch them. A caller in `addbeziersurface` keeps a loop pointer in EDX across a call. Our C code changed EDX, and the server crashed later in original code.
 - **Live x87 values survive calls.** Callers keep values on the x87 stack across calls.
 
-Each lifted hook therefore goes through a naked thunk (generated in `hook/hooks_lifted.c`):
+Each lifted hook therefore goes through a naked thunk (generated in `instrumentation/hook/hooks_lifted.c`):
 
 1. `FXSAVE` the caller x87 state and save EAX, ECX and EDX.
 2. `FNINIT` and the same control word: the C code gets an empty x87 stack.
@@ -105,7 +105,7 @@ An idle server calls only a few functions. More coverage needs players: see the 
 
 The normal `__cdecl` model says that a call destroys ECX, EDX, ST0 and ST1. The 024d callers know better (see above). The decompiler then shows the kept values as `extraout_EDX` or `extraout_ST1`, and the pseudo-C cannot compile.
 
-`tools/ghidra/FixRegisterPreservation.java` finds the registers that each function writes, with its callees. It adds variants of `__cdecl` to the Ghidra program: `__cdecl_keepC`, `__cdecl_keepD`, `__cdecl_keepF` and their combinations (C = ECX, D = EDX, F = the x87 stack). Each function gets the variant that matches. For C, the variants are `__cdecl`: the lifted hooks keep ECX, EDX and the x87 state.
+`instrumentation/ghidra/FixRegisterPreservation.java` finds the registers that each function writes, with its callees. It adds variants of `__cdecl` to the Ghidra program: `__cdecl_keepC`, `__cdecl_keepD`, `__cdecl_keepF` and their combinations (C = ECX, D = EDX, F = the x87 stack). Each function gets the variant that matches. For C, the variants are `__cdecl`: the lifted hooks keep ECX, EDX and the x87 state.
 
 The same script gives `_ftol2` (`0x5ce90`) a call fixup with its exact effect: it pops ST0 and returns the truncated value in EDX:EAX. The lifter writes it as a C cast to `longlong` (`INLINE_CALLS`).
 
@@ -118,12 +118,12 @@ The Ghidra symbol map often keeps the listing type of a global (`undefined4`). T
 The lifter reads the types that the Ghidra project has. Better types give better pseudo-C for all functions, so the project holds them and `lift.py` has no text rule for them.
 
 1. `tools/re/gen_types.py` makes `src/include/sr_types.h` from `analysis/structs/names.csv`. Add a known field to the CSV, never to the header.
-2. `tools/ghidra/types_json.py` reads the header and writes a JSON file. `tools/ghidra/ApplyTypes.java` puts the structs and the global arrays (`g_human`, `g_object`, `g_objecttype`... with the `g_` prefix) into the project. Run both after each change to the structs or the globals.
+2. `instrumentation/ghidra/types_json.py` reads the header and writes a JSON file. `instrumentation/ghidra/ApplyTypes.java` puts the structs and the global arrays (`g_human`, `g_object`, `g_objecttype`... with the `g_` prefix) into the project. Run both after each change to the structs or the globals.
 3. In `sr_types.h` each struct is a union with `lf_raw[size]`. A byte array that has no field in Ghidra prints as `field_0x5350`. `LiftExport.java` prints it as `lf_raw[0x5350]`, so the C compiles with the same layout.
 
-4. `tools/ghidra/ApplyNames.java` gives the functions their names from `analysis/024d/functions.csv`. It changes only the default names (`FUN_...`) and skips the CRT names (a leading `_`). The names are cosmetic for the lifter, because `lift.py` calls each callee through its address. First run (2026-10-14): 322 functions renamed, and the lifted C has no `FUN_` name left. A `LIFT_PATCHES` text uses the callee name, so update it when a name changes.
+4. `instrumentation/ghidra/ApplyNames.java` gives the functions their names from `analysis/024d/functions.csv`. It changes only the default names (`FUN_...`) and skips the CRT names (a leading `_`). The names are cosmetic for the lifter, because `lift.py` calls each callee through its address. First run (2026-10-14): 322 functions renamed, and the lifted C has no `FUN_` name left. A `LIFT_PATCHES` text uses the callee name, so update it when a name changes.
 
-5. `tools/ghidra/ApplyParams.java` gives parameters their types from `analysis/024d/params.csv` (rva, name, index, type, evidence). Ghidra often types a pointer parameter as `int` or `undefined4`. The lifted table then marks the argument as a value, and the harness skips each recorded call where that value points into the caller stack. As a pointer, the harness copies the recorded memory and runs the call. First run (2026-10-15): `loadblock`, `createmission_acquisition`, `multiply3x3matrices` and `rotateorientation`. The harness found 189 more calls that are the same, on six recordings, and no count dropped. The script prints the old type of each parameter.
+5. `instrumentation/ghidra/ApplyParams.java` gives parameters their types from `analysis/024d/params.csv` (rva, name, index, type, evidence). Ghidra often types a pointer parameter as `int` or `undefined4`. The lifted table then marks the argument as a value, and the harness skips each recorded call where that value points into the caller stack. As a pointer, the harness copies the recorded memory and runs the call. First run (2026-10-15): `loadblock`, `createmission_acquisition`, `multiply3x3matrices` and `rotateorientation`. The harness found 189 more calls that are the same, on six recordings, and no count dropped. The script prints the old type of each parameter.
 
 The Ghidra project is not versioned. Make a backup before `ApplyTypes.java` or `ApplyNames.java`. The knowledge that must stay is in the CSV, the header and the scripts.
 
@@ -177,7 +177,7 @@ The rules run in this order: `floatStores`, `storeRounding`, `floatGrouping`, `c
 
 ## Lint
 
-`python -I tools/lift/lint.py` compiles the lifted C with `/W4` and lists two kinds of warnings by function:
+`python -I instrumentation/lift/lint.py` compiles the lifted C with `/W4` and lists two kinds of warnings by function:
 
 - **An implicit conversion between a float and an int (C4244).** The machine code converts only with explicit instructions (`fild`, `fistp`), and Ghidra prints them as explicit casts. So an implicit conversion is a candidate lifting bug. Check each one in the p-code before you change it.
 - **A local read before any write (C4700).** Check the original. `createvehicle` (0x3ccc0) is a bug of the game itself: for `param_1 != 0` it returns `[esp+4]`, a stack slot that it never writes. The lifted code returns another unwritten value. Callers must ignore this return.
@@ -197,7 +197,7 @@ Ghidra prints a call argument with the type that the caller uses. The callee can
 
 The argument type comes from the p-code input of the `CALL`. The parameter type comes from the decompiler prototype of the callee, the same one that `lift.py` reads from the callee header. The stored signature can have no parameters. The regex version did not know the type of an expression such as `pfVar11[1] * fVar1`.
 
-`tools/ghidra/DumpTokens.java` prints the tokens of some functions with their p-code op and types. Use it to check a rule.
+`instrumentation/ghidra/DumpTokens.java` prints the tokens of some functions with their p-code op and types. Use it to check a rule.
 
 ## Verifier: scope rounds
 
@@ -207,7 +207,7 @@ A scope round protects only the pages that the function wrote before, plus a mar
 
 `_CIsqrt`, `_CIsin`, `_CIcos`, `_CItan`, `_CIacos`, `_CIatan2` and `_CIpow` take their arguments on the x87 stack (ST0, or ST1 and ST0) and return in ST0. Two steps make them work:
 
-1. `tools/ghidra/FixX87Intrinsics.java` gives them their real signatures in the Ghidra project (run it once, without `-readOnly`). The pseudo-C then shows the arguments: `_CIsqrt((double)(x * x + y * y))`.
+1. `instrumentation/ghidra/FixX87Intrinsics.java` gives them their real signatures in the Ghidra project (run it once, without `-readOnly`). The pseudo-C then shows the arguments: `_CIsqrt((double)(x * x + y * y))`.
 2. `src/lifted/x87_intrinsics.c` has a naked thunk for each one. The thunk loads the arguments on the x87 stack and jumps to the routine of the game CRT. The result is bit-for-bit the same as in the original.
 
 ## Floats
@@ -216,7 +216,7 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
 
 ## Offline differential test (harness)
 
-`src/tests/harness.c` tests the lifted functions without a server and without players.
+`instrumentation/tests/harness.c` tests the lifted functions without a server and without players.
 
 1. Make a copy of the 024d at a fixed base, for the test server and for the harness:
 
@@ -227,7 +227,7 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
 
    Both copies load at 0x20000000 with ASLR off. A snapshot of `.data` from the server then fits the harness with no pointer fixes.
 
-2. Record real inputs. In `build/auto-server/subvulpes.ini`, set `record_args=1` and `snapshot_after=150`, then run the server (`tools\autotest.ps1 -Seconds 200`). The thunks of the lifted hooks write `sv_args.txt` (up to 24 different calls per function, `hook/record.c`). After 150 seconds the DLL writes `sv_snapshot.bin` (the non-zero pages of `.data`).
+2. Record real inputs. In `build/auto-server/subvulpes.ini`, set `record_args=1` and `snapshot_after=150`, then run the server (`tools\autotest.ps1 -Seconds 200`). The thunks of the lifted hooks write `sv_args.txt` (up to 24 different calls per function, `instrumentation/hook/record.c`). After 150 seconds the DLL writes `sv_snapshot.bin` (the non-zero pages of `.data`).
 
 3. Run the harness:
 
@@ -239,10 +239,10 @@ Lifted code compiles with `/arch:IA32` (x87, like the original). Float returns a
 
    The harness also tests the hand-written functions in its `hand_table` (`src/server/`). The recordings have no call of a function without a record hook. A hand-written function without arguments then runs once from the snapshot. Now: `loadaccountsserver`. `HARNESS_GAME_DIR` gives it another `user/server.srk`.
 
-   **Hand-written calls.** `tools/recording/synth_calls.txt` holds calls in the `sv_args.txt` format for functions that no recording reaches (the map has no elevator) or that need two players (team kill). Append it to a real recording and run the harness on the result:
+   **Hand-written calls.** `instrumentation/recording/synth_calls.txt` holds calls in the `sv_args.txt` format for functions that no recording reaches (the map has no elevator) or that need two players (team kill). Append it to a real recording and run the harness on the result:
 
    ```bash
-   cat build/recordings/<rec>/sv_args.txt tools/recording/synth_calls.txt > <tmp>/args.txt
+   cat build/recordings/<rec>/sv_args.txt instrumentation/recording/synth_calls.txt > <tmp>/args.txt
    build/hook/harness.exe build/hook/024d_fixed.exe build/recordings/<rec>/sv_snapshot.bin <tmp>/args.txt
    ```
 
@@ -278,7 +278,7 @@ To find where a lifted function starts to differ, compare its intermediate value
 HARNESS_PROBE=2fe39,2fd14:3c build/hook/harness.exe <exe> <snapshot> <args> human_calcarmtorque
 ```
 
-Each probe puts an `INT3` on an instruction of the original (RVA). It prints ST0, ST1, EAX, EBX, ESI, EDI and EBP. With `:off`, it also prints the float at `[esp+off]`. With `:off*`, `[esp+off]` is a pointer, and the probe prints the 3 floats there (a vector argument of a call). Put `printf()` calls at the same places in the lifted C (in `src/lifted/lifted_024d.c`, then lift again to remove them). `tools/ghidra/DumpTokens.java <out> <rva>` prints the decompiler tokens with the p-code op, its address and its input types. `insn:<rva>` prints the instructions as the Ghidra listing shows them.
+Each probe puts an `INT3` on an instruction of the original (RVA). It prints ST0, ST1, EAX, EBX, ESI, EDI and EBP. With `:off`, it also prints the float at `[esp+off]`. With `:off*`, `[esp+off]` is a pointer, and the probe prints the 3 floats there (a vector argument of a call). Put `printf()` calls at the same places in the lifted C (in `src/lifted/lifted_024d.c`, then lift again to remove them). `instrumentation/ghidra/DumpTokens.java <out> <rva>` prints the decompiler tokens with the p-code op, its address and its input types. `insn:<rva>` prints the instructions as the Ghidra listing shows them.
 
 ### Watchpoint
 
@@ -292,7 +292,7 @@ The harness puts a hardware data breakpoint (DR0, 4 bytes) on the address. It pr
 
 ## Side-effect functions
 
-The harness tests them in a test environment (`src/platform/plat_test.c`). See `docs/side-effects.md`.
+The harness tests them in a test environment (`instrumentation/platform/plat_test.c`). See `docs/side-effects.md`.
 
 The lifter also needs these rules for them:
 
@@ -304,6 +304,6 @@ The lifter also needs these rules for them:
 
 ## Delinker test (Phase 4)
 
-`tools/ghidra/delink.sh <first VA> <last VA> <output.obj>` exports a range of the 024d as a COFF object file with `ghidra-delinker-extension` (`DelinkProgram.java` runs the "Relocation table synthesizer" analyzer on the range). The exporter name is `COFF relocatable object`.
+`instrumentation/ghidra/delink.sh <first VA> <last VA> <output.obj>` exports a range of the 024d as a COFF object file with `ghidra-delinker-extension` (`DelinkProgram.java` runs the "Relocation table synthesizer" analyzer on the range). The exporter name is `COFF relocatable object`.
 
 Test on `init_genrand` (0x40ad30 to 0x40ad6a, 59 bytes): `dumpbin /symbols /relocations /disasm` shows one `.text` section of 0x3B bytes, four `DIR32` relocations and three undefined externals (`DAT_00460cd0`, `DAT_00460dc0`, `DAT_0046177c`). The symbols carry the Ghidra names (`FUN_0040ad30`, `DAT_...`), not the names of the CSV files. Rename them in the project before a real export.

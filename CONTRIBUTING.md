@@ -22,7 +22,7 @@ Fixes for invalid input are welcome.
 Run the gate before you open a pull request:
 
 ```bash
-bash tools/lift/pipeline.sh --full
+bash instrumentation/lift/pipeline.sh --full
 ```
 
 The gate takes about 3 minutes. It needs the original game files and test recordings that are not in this repository. If you cannot run it, say so in the pull request, and the maintainer will run it.

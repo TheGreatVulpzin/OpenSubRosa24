@@ -39,7 +39,7 @@ Technical facts that guide the plan:
 
 1. Install tools: Ghidra 11.x (uses the existing Java 21), VS 2022 Build Tools with MSVC x86. Document in `docs/setup.md`.
 2. Create a local Ghidra project (gitignored) with: `subrosa.x64`, i386 Mach-O, `subrosadedicated.exe` (Aug), `subrosadedicated024d.exe` (Sep).
-3. Headless script `tools/ghidra/import_symbols.py`: applies the ELF/Mach-O names and propagates them to the PE files via Version Tracking (Aug → Sep are almost equal).
+3. Headless script `instrumentation/ghidra/import_symbols.py`: applies the ELF/Mach-O names and propagates them to the PE files via Version Tracking (Aug → Sep are almost equal).
 4. **Confirm the protocol version:** compare `serverrecv`/`clientrecv` and the version constant between the client (Aug) and the 024d. This tells whether the group's client talks to the 024d. Record it in `docs/versoes.md`.
 5. Analyze the client's `wsock32.dll` (2024 mod): what it does and whether it is safe. Record it in `docs/mods-terceiros.md`.
 6. Document file formats: `.sbc`, `.sbb`, `.sbl`, `.csm`, `.srk`, `config.txt`. File `docs/formatos.md` + parsers in `tools/formats/`.
@@ -50,7 +50,7 @@ Technical facts that guide the plan:
 
 1. Build `src/include/sr_types.h` with the structs: `Player` (0x2408), `Human` (0x2B64), `Vehicle/Object` (0x8230), `Item`, `Connection` (0xF170), `Account`, `Event`. Use the i386 Mach-O as the layout reference.
 2. `static_assert` for size and offset of each known field.
-3. Script that exports the structs to Ghidra (`tools/ghidra/apply_types.py`), so the decompiler shows named fields.
+3. Script that exports the structs to Ghidra (`instrumentation/ghidra/apply_types.py`), so the decompiler shows named fields.
 
 ## Phase 2 — Hook infrastructure
 
@@ -64,7 +64,7 @@ src/
   net/          packets, events, servercycle/serverrecv/serversend
   server/       dedicatedserverloop, accounts, config
   platform/     sockets, timer, files (abstraction for Win/Linux/WASM)
-hook/
+instrumentation/hook/
   wsock32_proxy/  proxy DLL: forwards the 21 imports to the system wsock32
   hooks.c         HOOK(rva, function) table, install with a 5-byte JMP
 ```
@@ -97,7 +97,7 @@ Make the lifted C readable without hand work. All names go into the Ghidra proje
 What was done:
 
 1. Globals: about 50 globals with a name, a size and a type (`analysis/024d/data_globals.csv`, `manual_globals.csv`, `tools/re/gen_types.py`). The evidence: equal bytes in the initialized `.data`, or a Linux 0.24c size that fits the gap to the next known global (`tools/re/map_regions.py`).
-2. Field types: `tools/ghidra/InferFields.java` and `tools/re/infer_fields.py` read the type of each field from the instructions (`analysis/structs/024d/`).
+2. Field types: `instrumentation/ghidra/InferFields.java` and `tools/re/infer_fields.py` read the type of each field from the instructions (`analysis/structs/024d/`).
 3. Addresses inside a typed global print by name: `((int)&g_player[3].ai_waypoint)`, `((int)&g_human[512])` (`LiftExport.java`, `namedAddress`).
 4. Five pointer parameters with their pointer type (`params.csv`).
 
@@ -129,7 +129,7 @@ Relocations outside `.text`: 15 in the initial `.data` (all point to `.rdata` st
    - Write the `qsort` comparator (`0xd320`) in C.
 2. **5.2: platform layer** (1 to 2 days). Replace `sr_import` with direct links to the CRT and WinSock. Sockets, timer and files go to `src/platform/`. Keep the x87 precision at 53 bits.
    - Done 2026-10-17: `src/platform/plat_imports.c` links every import of the game at build time. The server does not load `MSVCR100.dll`, and its speed did not change (61 to 62 ticks/s).
-   - `src/tests/crt_diff.c` compared the two CRTs first: the x87 math intrinsics, `sscanf`, `rand`, `qsort`, `tolower` and `floor` give the same bits. `sprintf` differs only for `%e` and `%f`, and the game prints only `%d`, `%s` and `%03d`.
+   - `instrumentation/tests/crt_diff.c` compared the two CRTs first: the x87 math intrinsics, `sscanf`, `rand`, `qsort`, `tolower` and `floor` give the same bits. `sprintf` differs only for `%e` and `%f`, and the game prints only `%d`, `%s` and `%03d`.
    - WinSock: most `WSOCK32.dll` functions go on to `ws2_32.dll`, so they link to `ws2_32`. `recv`, `recvfrom` and `getsockopt` have their own code in `WSOCK32.dll` and come from it (System32 only).
 3. **In-game test** with players. The 39 harness-only functions (`serverrecv`, `serversend`, `servercycle`...) run live in C here for the first time. Look at them first when a network bug shows.
 
@@ -152,7 +152,7 @@ Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `
   4. `lift.py` stays, only to make `lifted_table.c` and `hooks_lifted.c` and to take each rewritten function out of the lifted C. It reads the export that exists, without Ghidra.
 
   Then a new name takes seconds. The lifted C keeps the old names, but it gets smaller with each rewritten function. Cost: 1 to 2 hours, once. Check it with the build, the full gate and the synthetic tests (`synth_bonds.py`, `synth_humans.py`).
-- Not tested by a recording: the `bondsimulation2` bond types 3 (a particle against a triangle of an object), 11 (an item that turns with the hand), 13 (bone against bone of two humans), 14 (bone against an item) and 15 (a wheel body on the ground). `tools/lift/synth_bonds.py` adds bonds of these types to a recording snapshot. The harness gives the same result for each type (2026-10-18). A broken copy of each helper gives a difference, so the test reaches them. The values are made up, so a Harness Recording with fights, held guns, loose items, car crashes and a train is still useful. No snapshot has an object with wheel bodies: type 15 uses the first record of object 0.
+- Not tested by a recording: the `bondsimulation2` bond types 3 (a particle against a triangle of an object), 11 (an item that turns with the hand), 13 (bone against bone of two humans), 14 (bone against an item) and 15 (a wheel body on the ground). `instrumentation/lift/synth_bonds.py` adds bonds of these types to a recording snapshot. The harness gives the same result for each type (2026-10-18). A broken copy of each helper gives a difference, so the test reaches them. The values are made up, so a Harness Recording with fights, held guns, loose items, car crashes and a train is still useful. No snapshot has an object with wheel bodies: type 15 uses the first record of object 0.
 - Waiting: `packevent` and `packobjectpacket` (the recordings run 21% and 47% of their blocks: they wait for a Harness Recording test), `createevent_updatestocks` and `createevent_updatecarmarket` (with the economy, when `Market` has field names), `eventsimulation` (with the doors of the buildings).
 
 - A rewritten function replaces the lifted one only when the harness shows 0 differences on all recordings.
@@ -167,7 +167,7 @@ How each finished system works: [docs/game/](game/README.md).
 
 Done: math (`vectors.c`, `random.c`, `intersect.c`), packets and events (`packet.c`, `events.c`), accounts (`accounts.c`), items and bullets in part (`items.c`, `bullets.c`), particles and bonds (`particles.c`, `solver.c`, `bonds.c`), `humansimulation` (`humans.c`), and the collision tests against the level, the landscape, the objects, the rails and the city objects (`collide.c`, `rigid.c`). Group 1 (2026-10-19): the block areas and the 2D tests (`area.c`, `collide_area.c`). Group 2 (2026-10-19): the rest of the humans (`human_body.c`, `human_pose.c`, `human_arms.c`). Group 3 (2026-10-20): the items, the guns and the bullets (`item_types.c`, `item_logic.c`, `item_physics.c`, `human_items.c`, `bullet_sim.c`). Group 7 (2026-10-20): the system and the main loop (`parser.c`, `options.c`, `files.c`, `util.c`, `system.c`, `main_loop.c`). Group 5 (2026-10-20): the server network (`server.c`, `netpack.c`, `commands.c`, `master.c`, `client.c`, the codecs in `packet.c`, the events in `events.c`). That is 184 of 316 functions.
 
-Group 4, part A (done 2026-10-21): `objectsimulation`, `objectsimulation_car`, `objectsimulation_heli`, `object_rotorsimulation`, `objecttrainsimulation`, `objectwheelsimulation2`, `objectenginesimulation2`, `objectwheelcollision`, `objectwheelcollision2`, `getenginetorque2`, `getobjectrotation3`, `addobjectrotation`, `applydamageobject`, `objecttimetolive` in `src/game/objects.c`, `vehicles.c` and `wheels.c`. How they work: [game/objects.md](game/objects.md). Test: `tools/lift/synth_vehicles.py`. Group 4, part B (done 2026-10-21): `objecttype_addparticle`, `objecttype_addbond`, `objecttype_addface`, `objecttype_addwheel`, `objecttype_calcquadweights`, `setupobjecttypeweight`, `setupobjecttypes_cars`, `setupobjecttypes_helicopters`, `setupobjectypes_train`, `createobject`, `createvehicle`, `ai_car_nextwaypoint`, `ai_playercar` in `object_types.c`, `vehicle_types.c`, `object_create.c` and `ai_car.c`. Test: `tools/lift/synth_types.py`. **Group 4 is done.**
+Group 4, part A (done 2026-10-21): `objectsimulation`, `objectsimulation_car`, `objectsimulation_heli`, `object_rotorsimulation`, `objecttrainsimulation`, `objectwheelsimulation2`, `objectenginesimulation2`, `objectwheelcollision`, `objectwheelcollision2`, `getenginetorque2`, `getobjectrotation3`, `addobjectrotation`, `applydamageobject`, `objecttimetolive` in `src/game/objects.c`, `vehicles.c` and `wheels.c`. How they work: [game/objects.md](game/objects.md). Test: `instrumentation/lift/synth_vehicles.py`. Group 4, part B (done 2026-10-21): `objecttype_addparticle`, `objecttype_addbond`, `objecttype_addface`, `objecttype_addwheel`, `objecttype_calcquadweights`, `setupobjecttypeweight`, `setupobjecttypes_cars`, `setupobjecttypes_helicopters`, `setupobjectypes_train`, `createobject`, `createvehicle`, `ai_car_nextwaypoint`, `ai_playercar` in `object_types.c`, `vehicle_types.c`, `object_create.c` and `ai_car.c`. Test: `instrumentation/lift/synth_types.py`. **Group 4 is done.**
 
 Next, in this order (sizes from `analysis/024d/functions.csv`):
 
@@ -201,7 +201,7 @@ Group 8 is complete: 57 functions across parts 8A, 8B and 8C.
 
 Groups 5 and 6 hold the slow lifted functions of the table below (`packobjectpacket`, `packevent`, `logicsimulation_world`, `logicsimulation`): they run each tick, some for each player.
 - `tools/progress.py` counts the hand-written functions.
-- Speed: `python -I tools/lift/bench.py --all` at the end of each lot (the harness times each function on the recorded calls, `HARNESS_TIME=1`). The times move by about 30% from one run to the next: only large ratios that repeat mean something.
+- Speed: `python -I instrumentation/lift/bench.py --all` at the end of each lot (the harness times each function on the recorded calls, `HARNESS_TIME=1`). The times move by about 30% from one run to the next: only large ratios that repeat mean something.
 - Slow lifted functions (bench.py, 2026-10-18, recording 20261013-195210, 3 runs). Fix each one when its lot comes. The likely cause is the old one: float locals that hold integers (denormals on the x87, `FixIntLocals.java`).
 
   | Function | C / original | When it runs |
@@ -216,7 +216,7 @@ Groups 5 and 6 hold the slow lifted functions of the table below (`packobjectpac
 
   The clean `humansimulation` (lot C4, 2026-10-19) gives 1.05 to 1.12 in 3 runs. The lifted version gave 1.17. The time includes its lifted callees (`lineintersectlevel`, `sphereintersectlevel`, `sphereintersectobject`), the likely cause. Measure it again after the lot of the collisions. `bondsimulation2` gives 0.97 to 1.05.
 
-Exception: security fixes for invalid client input (`docs/protocol.md`, section 12, item 15) may go in early. The recordings have only valid input, so the harness does not change. The voice index fix is already in `hook/netguard.c`.
+Exception: security fixes for invalid client input (`docs/protocol.md`, section 12, item 15) may go in early. The recordings have only valid input, so the harness does not change. The voice index fix is already in `instrumentation/hook/netguard.c`.
 
 ## Phase 7 — Client decomp
 

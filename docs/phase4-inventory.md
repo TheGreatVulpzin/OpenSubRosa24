@@ -8,11 +8,11 @@ Target: `original/blackhouser/subrosadedicated024d.exe` (PE32, SHA-256 `11e00678
 
 | Step | Tool | Result |
 | --- | --- | --- |
-| 1 | `bash tools/cloud/setup.sh`, `bash tools/ghidra/analyze_all.sh` | Ghidra 12.1.4 project and `build/features/*.jsonl`. Both scripts ended with exit code 0. |
+| 1 | `bash tools/cloud/setup.sh`, `bash instrumentation/ghidra/analyze_all.sh` | Ghidra 12.1.4 project and `build/features/*.jsonl`. Both scripts ended with exit code 0. |
 | 2 | A small PE parser (not committed) | The import table: 102 imports, with the IAT slot of each one. |
 | 3 | `objdump -d -M intel -j .text` of the `.exe` | 106,142 decoded instructions. Every `call [IAT]`, and every `call`/`jmp` to one of the 101 `jmp [IAT]` thunks, was attributed to a function. |
 | 4 | Static reachability from the entry point `0x5d316` | Direct calls, address immediates, and the CRT initialiser tables. It tells live code from code that nothing references. |
-| 5 | Ghidra headless decompile (`tools/ghidra/DecompileFunctions.java`) | Used to confirm `getmasterserverip`, `server_writelogfile`, `loadsaveoptions`, `saveaccountsserver`, `loadaccountsserver`, `leveleditor_load`, `newspaper_load`, `servercycle`, `sendpacket`, `recvpacket`. |
+| 5 | Ghidra headless decompile (`instrumentation/ghidra/DecompileFunctions.java`) | Used to confirm `getmasterserverip`, `server_writelogfile`, `loadsaveoptions`, `saveaccountsserver`, `loadaccountsserver`, `leveleditor_load`, `newspaper_load`, `servercycle`, `sendpacket`, `recvpacket`. |
 | 6 | Symbol sizes of the Linux 0.24c server and the i386 Mach-O (`analysis/structs`, `original/vanilla`) | Capacity and size of the global arrays, and which structs hold pointers. |
 
 Image layout (from the PE header):
@@ -78,7 +78,7 @@ There is no `strcpy`, `strlen` or `strcmp` import: the compiler inlined them (fo
 
 ### 2.3 Math (x87, `_CI*`) and random numbers
 
-`_CI*` are the "no-stack-frame" x87 intrinsics of `MSVCR100.dll`. The argument is in ST0 (or ST1 and ST0 for `_CIatan2`, `_CIpow`) and the result is in ST0. `tools/ghidra/FixX87Intrinsics.java` and `src/lifted/x87_intrinsics.c` already handle this convention for the hooks (`docs/lift.md`). `rand` and `srand` are the MSVC generator, one 32-bit state per thread, returning 15 bits.
+`_CI*` are the "no-stack-frame" x87 intrinsics of `MSVCR100.dll`. The argument is in ST0 (or ST1 and ST0 for `_CIatan2`, `_CIpow`) and the result is in ST0. `instrumentation/ghidra/FixX87Intrinsics.java` and `src/lifted/x87_intrinsics.c` already handle this convention for the hooks (`docs/lift.md`). `rand` and `srand` are the MSVC generator, one 32-bit state per thread, returning 15 bits.
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |
@@ -132,7 +132,7 @@ Only one clock is used for the simulation: `QueryPerformanceCounter` scaled to m
 
 ### 2.6 Network (WinSock 1.1, `WSOCK32.dll`)
 
-All 21 imports are by ordinal and are `stdcall`. `hook/wsock32.def` lists the names. The server uses **one UDP socket** (created in `0xd710`, port from `config.txt`, non-blocking) for all game traffic, and **one short-lived TCP socket** at start-up for the HTTP request to the master server. It has no `listen`/`accept`, no `WSAAsync*` and no `WSACleanup`. The wire format is in `docs/protocol.md`. In memory, the socket state is the global `bsdsocket` (`0x20080` bytes): socket handles as 32-bit ints at `+0x24`, flags at `+0x4`, a `sockaddr_in` at `+0x44`, the port at `+0x58`, the 64 KiB send buffer at `+0x64` (it starts with the 4-byte magic `7DFP`) and the 64 KiB receive buffer at `+0x10070`.
+All 21 imports are by ordinal and are `stdcall`. `instrumentation/hook/wsock32.def` lists the names. The server uses **one UDP socket** (created in `0xd710`, port from `config.txt`, non-blocking) for all game traffic, and **one short-lived TCP socket** at start-up for the HTTP request to the master server. It has no `listen`/`accept`, no `WSAAsync*` and no `WSACleanup`. The wire format is in `docs/protocol.md`. In memory, the socket state is the global `bsdsocket` (`0x20080` bytes): socket handles as 32-bit ints at `+0x24`, flags at `+0x4`, a `sockaddr_in` at `+0x44`, the port at `+0x58`, the 64 KiB send buffer at `+0x64` (it starts with the 4-byte magic `7DFP`) and the 64 KiB receive buffer at `+0x10070`.
 
 Dead code that also uses WinSock: `0xd7b0` (client socket, no bind), `0xd840` (the real `disablesocket`, closes the socket), `0x6a50` (lists the local IP addresses with `gethostname`/`gethostbyname`).
 
@@ -454,7 +454,7 @@ A standalone server should use the C cast `(int)(double)x`. It differs from a pl
 | **R4** | **Pool limits are inside the code.** Loops end at absolute addresses (`cmp eax, 0xf42e500` is `&player[256]`), masks are literal (`& 0x3fff`), and some limits are part of the protocol or the file format. | 21,925 absolute addresses in `.text`. `event` is 65536 because the client acknowledges with 16 bits. `account` is 65536 because the file count is `0xffff` at most. `player` is 256 but `maxnumofplayers` is clamped to 2…128. | Make each limit a named constant first (`SR_MAX_*` exist), keep the protocol-bound ones fixed, and only then switch the others to heap arrays. Check `docs/protocol.md` for the bit width of each index before raising a limit. |
 | **R5** | **Readers trust sizes from the file.** | `loadtextfile` copies the whole file into the 1 MiB `parser` buffer and the next global is the `FILE *`. `loadaccountsserver` reads the count and does not compare it with 65536. `leveleditor_load`, `building_load` and `loadblock` read counts the same way. `dedicatedserverloop` copies the server name with no limit. | Keep the behaviour for valid files first. Add the checks in Phase 5 (with the input checks of `docs/plano.md`, item 5.6) and fuzz the readers with `tools/formats`. |
 | **R6** | **Blocking network call at start-up.** `getmasterserverip` waits up to about 63 s (a 3 s `select` for the connect, then 30 s to send and 30 s to receive, in steps of 100 ms) and uses `gethostbyname`. The master server (`www.crypticsea.com`) may not answer any more. | `0x1ac40`: `select` timeout 3 s, then `_sleep(100)` loops of 300 passes. Fallback `216.55.186.104:27590`. | Run it with a time limit or in a thread, and make the master list optional (`docs/plano.md`, item 5.4). |
-| **R7** | **Loss of the test oracle.** The Phase 3 verifier runs the original function next to the rewrite inside the `.exe`. A standalone server has no original. The lifted C code is also tied to the image: it uses `SR_VA()` addresses, `sr_import` and naked thunks that save the x87 state. | `docs/lift.md`. `src/lifted/lifted_024d.c`, `hook/hooks_lifted.c`, `hook/imports.c`. | Before the `.exe` goes away, record golden traces: the harness inputs (`sv_args.txt`, `sv_snapshot.bin`) and a packet capture of a played session. Replace `SR_VA(...)` by real variables function by function. |
+| **R7** | **Loss of the test oracle.** The Phase 3 verifier runs the original function next to the rewrite inside the `.exe`. A standalone server has no original. The lifted C code is also tied to the image: it uses `SR_VA()` addresses, `sr_import` and naked thunks that save the x87 state. | `docs/lift.md`. `src/lifted/lifted_024d.c`, `instrumentation/hook/hooks_lifted.c`, `instrumentation/hook/imports.c`. | Before the `.exe` goes away, record golden traces: the harness inputs (`sv_args.txt`, `sv_snapshot.bin`) and a packet capture of a played session. Replace `SR_VA(...)` by real variables function by function. |
 | **R8** | **Coverage of `functions.csv` and wrong names.** 7 live functions are not in the CSV (6 CRT and the `qsort` comparator `0xd320`). 129 unlisted code blocks (found by the padding rule) and 32 listed functions have no reference. Three names mislead: `getpaths` is `main`, `disablesocket` (`0xd710`) opens the socket, `optionreadwriteint` (`0x29650`) is a key search. | Section 8. | Fix the CSV (`manual_names.csv`) before the Phase 4 port starts, and decide which dead functions to port. The client-only ones (`clientrecv`, `unpack*`, `saveaccountsclient`) are needed again in Phase 6. |
 | **R9** | **Time and profiler.** The tick is 16 ms with up to 5 catch-up ticks. `_sleep(1)` has a coarse step on Windows. The profiler uses `RDTSC` 24 times. | `0x5c8d0`, `0xb4a0`. | Use a monotonic clock and a precise sleep. Drop the profiler or move it to `clock_gettime`. No game rule depends on the TSC. |
 
@@ -510,7 +510,7 @@ In addition, 129 code blocks that the padding rule marks as separate functions a
 ### 8.5 How to repeat the main numbers
 
 ```bash
-bash tools/cloud/setup.sh && bash tools/ghidra/analyze_all.sh
+bash tools/cloud/setup.sh && bash instrumentation/ghidra/analyze_all.sh
 sha256sum original/blackhouser/subrosadedicated024d.exe  # must be 11e00678…, as in original/MANIFEST.sha256
 objdump -d -M intel -j .text original/blackhouser/subrosadedicated024d.exe > text.dis
 # imports: parse the PE import directory (RVA 0x5e000 area); IAT slots are 0x5e000-0x5e19c
@@ -518,7 +518,7 @@ objdump -d -M intel -j .text original/blackhouser/subrosadedicated024d.exe > tex
 python -I tools/re/map_globals.py --target build/features/ded024d.jsonl --names analysis/024d/functions.csv \
     --ref build/features/mac_i386.jsonl --ref build/features/linux_x64.jsonl --ref build/features/ded024c_linux.jsonl \
     --min-votes 2 --out /tmp/globals_try.csv           # adds option, area_block, blocklist
-tools/ghidra/decompile.sh subrosadedicated024d.exe /tmp/dec.c 0x1ac40 0x4e7a0   # as in lift.md, program name in the project
+instrumentation/ghidra/decompile.sh subrosadedicated024d.exe /tmp/dec.c 0x1ac40 0x4e7a0   # as in lift.md, program name in the project
 ```
 
 `python -I tools/re/manifest.py check` prints 385 `MISMATCH` lines in a cloud session. The manifest lists the whole `original/` folder of the PC (archives, configs, saves, old packages), and `check` counts a file that is missing here as a mismatch. The five binaries used in this document were compared with `original/MANIFEST.sha256` one by one and are equal: `blackhouser/subrosadedicated024d.exe`, `client/subrosa.x64`, `client/subrosa.exe`, `client/subrosadedicated.exe` and `client/subrosa.app/Contents/MacOS/subrosa`.

@@ -32,7 +32,8 @@ This repository was created with the help of OpenAI Codex and Claude Code for wr
 | Folder | Content |
 | --- | --- |
 | `src/` | The server in C: `common/` (math, files, parser), `game/` (humans, items, objects, level, economy), `net/` (packets, events, commands), `server/` (main loop, accounts), `platform/` (system calls), `include/` (generated types). |
-| `hook/`, `src/lifted/`, `src/tests/`, `tools/lift/` | Tools that check and prove that the rewritten code is equal to the original code: hooks, the lifter, the harness, the gate, and recording tools. (Not needed to run the server.) |
+| `src/lifted/`, `src/standalone/` | Runtime code shared by the server targets, including the image region and function tables. The server build needs these files. |
+| `instrumentation/` | Hooks, the recorder, the harness, the test platform, the lifter, the gate, Ghidra scripts, and recording tools. The separate recording target uses this folder. |
 | `docs/` | How each system works (`docs/game/`), the network protocol, file formats and the plan. |
 | `analysis/` | Data taken from the original game binaries: function names, struct fields, globals. |
 | `tools/` | Scripts for names, types and file formats. |
@@ -77,10 +78,11 @@ Optional: set the `SV_LOG` environment variable to copy the log to the console. 
 
 ```bash
 python -I tools/re/manifest.py check
-bash tools/lift/pipeline.sh
+bash instrumentation/lift/pipeline.sh
 ```
 
 The first command checks the hashes of your game files. The second builds and runs the quick gate.
+The previous command, `bash tools/lift/pipeline.sh`, forwards to the same pipeline.
 
 ## Related projects
 

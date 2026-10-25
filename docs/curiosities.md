@@ -72,11 +72,11 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 
 | Fact | Source | Where |
 | --- | --- | --- |
-| The decomp runs inside the original server: a fake `wsock32.dll` that the `.exe` loads by itself replaces the functions one by one while the server runs. | project | `hook/` |
-| Each replaced function runs twice (the C version and the original), and the verifier compares the memory that both wrote. | project | `hook/verify.c` |
+| The decomp runs inside the original server: a fake `wsock32.dll` that the `.exe` loads by itself replaces the functions one by one while the server runs. | project | `instrumentation/hook/` |
+| Each replaced function runs twice (the C version and the original), and the verifier compares the memory that both wrote. | project | `instrumentation/hook/verify.c` |
 | A float that was read as an int turned 894.0 into 1.3 billion in a building floor plan. A hardware breakpoint found the instruction. | project | `docs/lift.md`, "Watchpoint" |
 | The first standalone server (no original `.exe`) ran at 9 ticks/s in place of 62.5. Every function gave the same result as the original. | code | `docs/plano.md` Phase 5 |
 | The cause: the decompiler typed two loop counters (the object indexes i and j) as `float`, because the same stack slot holds a float in another part of the function. | code | `objectsimulation`, `analysis/024d/locals.csv` |
-| A small integer such as 5, read as a float, is a "denormal" number. On the x87 math unit, a load of a denormal takes about 100 cycles in place of 1. In a loop of a million passes each tick, that is the whole frame. | code | `tools/ghidra/FixIntLocals.java` |
-| A sampling profiler (read the instruction pointer every millisecond) found it: 75% of the time was inside two physics functions, not in the main loop. | code | `tools/lift/samples.py` |
+| A small integer such as 5, read as a float, is a "denormal" number. On the x87 math unit, a load of a denormal takes about 100 cycles in place of 1. In a loop of a million passes each tick, that is the whole frame. | code | `instrumentation/ghidra/FixIntLocals.java` |
+| A sampling profiler (read the instruction pointer every millisecond) found it: 75% of the time was inside two physics functions, not in the main loop. | code | `instrumentation/lift/samples.py` |
 | A second bug hid behind the first: the new server loaded our own test `wsock32.dll` (it sat next to the `.exe`) in place of the Windows one. | code | `src/standalone/main.c`, `load_dll` |

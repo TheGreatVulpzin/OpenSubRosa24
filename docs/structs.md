@@ -7,11 +7,11 @@ Generated headers:
 
 Do not edit the headers by hand. The flow is:
 
-1. Decompile the whole i386 Mach-O: `tools/ghidra/decompile.sh subrosa build/decomp/mac_i386_all.c`.
+1. Decompile the whole i386 Mach-O: `instrumentation/ghidra/decompile.sh subrosa build/decomp/mac_i386_all.c`.
 2. Collect the accessed offsets: `python -I tools/re/struct_fields.py build/decomp/mac_i386_all.c --out analysis/structs/mac --struct player=0x2408 ...`.
 3. Name the fields in [`analysis/structs/names.csv`](../analysis/structs/names.csv). Each name needs evidence.
 4. Generate the headers: `python -I tools/re/gen_types.py`.
-5. Compile `src/tests/check_types.c` with MSVC x86. The `static_assert`s check every size and every named offset.
+5. Compile `instrumentation/tests/check_types.c` with MSVC x86. The `static_assert`s check every size and every named offset.
 
 ## Why the Mach-O i386
 

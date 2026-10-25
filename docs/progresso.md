@@ -22,7 +22,7 @@ The function list and the sizes come from `analysis/024d/functions.csv` (340 fun
 
 How to read the table:
 
-- **Live:** the lifted function replaces the original in the running server (`hook/hooks_lifted.c`).
+- **Live:** the lifted function replaces the original in the running server (`instrumentation/hook/hooks_lifted.c`).
 - **Harness only:** the function has side effects (it sends packets or writes files). The live server keeps the original. The offline harness runs the lifted body in the test environment (`docs/side-effects.md`).
 - **Verified in the game:** a line marked **Verified** in `docs/hooks.md`. Only the first hand-written hooks have this mark. The in-game tests of 2026-10-15 (`own_main=1`, all lifted hooks, 15 min with players, no crash) are not in this count.
 - **No difference:** `building_buildfloorplan` is out of this line because of one harness-only difference (`docs/lift.md`). It is "same" in reset mode. `buildsomeshit` has no "same" call: its x87 difference is accepted (`docs/lift.md`).
@@ -34,7 +34,7 @@ The 19 functions that are not in C:
 - `getpaths` (the real `main`) and `dedicatedserverloop`. `src/server/main_loop.c` has a hand-written version of the loop (`own_main=1`). It is not a hook, so the table does not count it.
 - 17 functions of the MSVC CRT. Phase 4 links its own CRT and does not need them.
 
-32 of the 340 functions are not referenced by the live code (client or editor code, `docs/phase4-inventory.md`). 13 of them have hand-written harness calls (`tools/recording/synth_calls.txt`).
+32 of the 340 functions are not referenced by the live code (client or editor code, `docs/phase4-inventory.md`). 13 of them have hand-written harness calls (`instrumentation/recording/synth_calls.txt`).
 
 ## Functions without a harness call
 
@@ -50,7 +50,7 @@ The 19 functions that are not in C:
 
 ## Phase 4: what the lifted C still takes from the image
 
-`python -I tools/lift/deps.py` on 2026-10-16:
+`python -I instrumentation/lift/deps.py` on 2026-10-16:
 
 | Dependency | Count |
 | --- | ---: |

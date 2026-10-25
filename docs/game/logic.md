@@ -155,7 +155,7 @@ Undefined stack values use fixed defaults and can differ, as the entries below e
 - Reset test modes keep their item order, random call order, float stores and event order.
   Material name copies leave bytes after the terminating zero unchanged.
 
-`tools/lift/synth_logic.py` tests the edge cases and retains per-case logs under `build/`.
+`instrumentation/lift/synth_logic.py` tests the edge cases and retains per-case logs under `build/`.
 Run it with both a world recording and a round recording.
 
 ## Measured performance

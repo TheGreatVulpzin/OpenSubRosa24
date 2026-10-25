@@ -1,6 +1,6 @@
 # Recording on another PC
 
-A recording gives the offline test (src/tests/harness.c) real calls of the server. Any
+A recording gives the offline test (instrumentation/tests/harness.c) real calls of the server. Any
 Windows PC can make one.
 
 1. Copy the folder of the test server (`build/auto-server`). The harness needs the same
