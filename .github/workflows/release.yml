@@ -9,6 +9,10 @@ on:
         description: Existing version tag to release (for example v0.0.1-test)
         required: true
         type: string
+      summary:
+        description: Release summary (defaults to the annotated tag message)
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -63,7 +67,9 @@ jobs:
           & .\build\hook\test_verify.exe
           if ($LASTEXITCODE -ne 0) { throw 'Verifier tests failed.' }
       - name: Test package rules and launcher zip names
-        run: .\instrumentation\tests\test_package.ps1
+        run: |
+          .\instrumentation\tests\test_package.ps1
+          .\instrumentation\tests\test_release_notes.ps1
       - name: Download and check server data
         id: data
         env:
@@ -89,6 +95,30 @@ jobs:
           $package = & .\tools\release\make_package.ps1 -Version $env:RELEASE_TAG -DataDir $env:SERVER_DATA_DIR
           "zip=$($package.Zip)" >> $env:GITHUB_OUTPUT
           "checksum=$($package.Checksum)" >> $env:GITHUB_OUTPUT
+      - name: Make the release body
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_SUMMARY: ${{ inputs.summary }}
+          PACKAGE_CHECKSUM: ${{ steps.package.outputs.checksum }}
+        run: |
+          $arguments = @('api', '--method', 'POST', "repos/$env:GH_REPO/releases/generate-notes",
+            '-f', "tag_name=$env:RELEASE_TAG")
+          $previous = git describe --tags --abbrev=0 --match 'v[0-9]*' "$env:RELEASE_TAG^" 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            $arguments += @('-f', "previous_tag_name=$previous")
+            Write-Host "Changes since $previous"
+          } else {
+            $arguments += @('-f', 'previous_tag_name=')
+            Write-Host 'First version release: include all changes.'
+          }
+          $response = & gh @arguments
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub release note generation failed.' }
+          $changelog = Join-Path $env:RUNNER_TEMP 'changelog.md'
+          [IO.File]::WriteAllText($changelog, (($response -join "`n") | ConvertFrom-Json).body, [Text.UTF8Encoding]::new($false))
+          & .\tools\release\make_release_notes.ps1 -Version $env:RELEASE_TAG `
+            -Checksum $env:PACKAGE_CHECKSUM -ChangelogFile $changelog -Summary $env:RELEASE_SUMMARY
+          if (-not (Test-Path -LiteralPath 'build/package/release-notes.md')) { throw 'The release body is missing.' }
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -97,7 +127,7 @@ jobs:
           PACKAGE_CHECKSUM: ${{ steps.package.outputs.checksum }}
         run: |
           $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag',
-            '--title', "OpenSubRosa24 server $env:RELEASE_TAG", '--generate-notes',
+            '--title', "OpenSubRosa24 Server $env:RELEASE_TAG", '--notes-file', 'build/package/release-notes.md',
             $env:PACKAGE_ZIP, $env:PACKAGE_CHECKSUM)
           if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
           & gh @arguments
