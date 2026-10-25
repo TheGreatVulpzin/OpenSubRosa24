@@ -1,5 +1,3 @@
-## OpenSubRosa24 Server {version}
-
 {summary}
 
 **Download:** `OpenSubRosa24-server-{version}.zip`

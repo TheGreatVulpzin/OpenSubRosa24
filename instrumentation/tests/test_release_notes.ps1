@@ -20,11 +20,13 @@ foreach ($version in @('v0.0.0', 'v0.0.0-test')) {
     $body = [IO.File]::ReadAllText($output)
     Assert ($body.Contains('Ready for {changelog} testing.')) 'Summary placeholders must stay literal.'
     Assert ($body.Contains("SHA-256: ``$hash``")) 'Checksum is missing.'
-    Assert ($body.Contains("## OpenSubRosa24 Server $version")) 'Version is missing.'
+    Assert ($body.Contains("OpenSubRosa24-server-$version.zip")) 'Version is missing from the download name.'
     Assert ($body.Contains('* Include server data. by @tester in #1')) 'Generated change is missing.'
     Assert ($body.Contains('* @tester made their first contribution.')) 'Generated contributor is missing.'
-    Assert ([regex]::Matches($body, '(?m)^#{1,6} ').Count -eq 2) 'Unexpected release sections.'
-    Assert ($body.StartsWith('**Pre-release.** For testing.') -eq $version.Contains('-')) 'Pre-release marker is incorrect.'
+    Assert ($body.StartsWith('Ready for {changelog} testing.')) 'The release body must start with the summary.'
+    Assert (-not $body.Contains('## OpenSubRosa24 Server')) 'The release body repeats the title.'
+    Assert (-not $body.Contains('**Pre-release.** For testing.')) 'The release body contains a pre-release notice.'
+    Assert ([regex]::Matches($body, '(?m)^#{1,6} ').Count -eq 1) 'Unexpected release sections.'
 }
 
 # Read tag messages without creating tags in the repository.

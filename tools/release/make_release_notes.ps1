@@ -40,7 +40,6 @@ $body = [regex]::Replace($template, '\{(version|summary|sha256|changelog)\}', {
     param($match)
     $values[$match.Groups[1].Value]
 })
-if ($Version.Contains('-')) { $body = "**Pre-release.** For testing.`n`n$body" }
 if (-not $Output) { $Output = Join-Path $repo 'build\package\release-notes.md' }
 New-Item -ItemType Directory -Path ([IO.Path]::GetDirectoryName([IO.Path]::GetFullPath($Output))) -Force | Out-Null
 [IO.File]::WriteAllText([IO.Path]::GetFullPath($Output), $body, [Text.UTF8Encoding]::new($false))

@@ -112,7 +112,8 @@ GitHub's `generate-notes` API supplies changes since the nearest earlier version
 The data tag and development tags do not set that range. The first version release requests all changes.
 The formatter removes generated headings so all generated content stays inside **Changes**.
 The title is `OpenSubRosa24 Server {version}`.
-Tags that contain `-` create pre-releases, start with `**Pre-release.** For testing.`, and do not become the latest release.
+The release body starts with the summary.
+Tags that contain `-` create pre-releases and do not become the latest release.
 An existing release causes publication to fail. The workflow does not overwrite release assets.
 
 ## Preview the body locally
