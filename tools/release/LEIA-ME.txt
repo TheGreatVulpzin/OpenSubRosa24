@@ -18,6 +18,9 @@ First use:
    Server shows the live log, players and tick speed. Counts update each minute.
 5. Click Stop, or close the launcher, to stop the server safely.
 
+To let players outside your network join, allow the default port (UDP) 27584 in your router and in the Windows firewall. If you change the port in Server settings, allow the new port.
+If you cannot open the port, you can use a virtual network such as Radmin VPN: the host and the players join the same network, and the players connect to the IP of the host in that network.
+
 config.txt contains passwords after you save your settings. Never share it.
 Save Log saves only the current server.log as text. It creates no zip.
 It excludes configuration, packets, dumps, notes, recordings and version metadata.
@@ -65,6 +68,9 @@ Primeiro uso:
 4. Abra Server. Clique em Start. Entre com seu cliente Sub Rosa 0.24.
    Server mostra log ao vivo, jogadores e tick. Os valores mudam a cada minuto.
 5. Clique em Stop, ou feche o launcher, para parar o servidor com segurança.
+
+Para jogadores de fora da sua rede entrarem, libere a porta padrão (UDP) 27584 no roteador e no firewall do Windows. Se você mudar a porta em Server settings, libere a nova.
+Se você não consegue abrir a porta, pode usar uma rede virtual como o Radmin VPN: quem hospeda e os jogadores entram na mesma rede, e os jogadores se conectam ao IP de quem hospeda nessa rede.
 
 config.txt contém senhas depois que você salva as configurações. Nunca compartilhe
 esse arquivo. Save Log salva apenas o server.log atual como texto, sem zip.

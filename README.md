@@ -74,6 +74,9 @@ The package includes `data/` and a default `config.txt`.
 4. Open **Server** and click **Start**. The panel shows live `SV_LOG` output, players and tick speed.
 5. Join with your Sub Rosa 0.24 client. Use **Stop**, or close the launcher, to stop the server safely.
 
+To let players outside your network join, allow the default port (UDP) 27584 in your router and in the Windows firewall. If you change the port in Server settings, allow the new port.
+If you cannot open the port, you can use a virtual network such as Radmin VPN: the host and the players join the same network, and the players connect to the IP of the host in that network.
+
 The default admin password is empty. The launcher saves the password only in `config.txt`. Use **Show** to reveal or mask it.
 Keep that file private. If it is missing, the launcher creates the package default.
 The first-run message lists missing `data/` or `config.txt` on one line.
