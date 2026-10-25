@@ -48,6 +48,7 @@ It uses `build/package/OpenSubRosa24-server-v0.0.2-test/data/` as its local data
 It checks default configuration, saved server keys, masked passwords, Start, Stop, window close and Debug presets.
 It creates fake packet, configuration, dump, note and recording files, then checks that Save Log exports only the log.
 Screenshots go to `build/launcher-screens/`. Test network errors and checksum failures use local fixtures.
+The launcher test uses the real package version for its screenshots.
 A full automatic update needs a newer published release with its server zip and `.zip.sha256` asset.
 
 The launcher updates only the three executables, `LEIA-ME.txt`, `version.txt` and `record_focus.txt`.
@@ -79,11 +80,14 @@ The launcher executable updates at its own path if the selected server folder di
 For **Update from a zip**, check the downloaded `.sha256` yourself before selecting the zip.
 
 **Save Log** opens a file chooser and exports only the current session `server.log` as text.
+The saved log and live output mask the current admin password and all text after `/admin ` on each line.
+The saved log uses UTF-8. The source log stays unchanged.
 It creates no zip and never scans directories for other files.
 Configuration, packets, dumps, notes, recordings and version metadata stay outside the saved log.
 It refuses to overwrite the live source file.
 
 The top tabs are **Server**, **Server settings**, **Launcher settings** and **Debug**.
+The window title reads the first line of `version.txt` in the selected server folder.
 Server has Start, Stop, one state line, live output and Save Log. There is no second state in a status bar.
 Server settings has Server, Game and Network groups with Save and Undo.
 Launcher settings has the server folder, updates, Include pre-releases and Debug Mode.

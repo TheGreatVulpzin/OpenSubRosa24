@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -43,7 +44,7 @@ namespace SubVulpes
 
         static object Call(LauncherForm form, string name, params object[] arguments)
         {
-            return typeof(LauncherForm).GetMethod(name, Private).Invoke(form, arguments);
+            return typeof(LauncherForm).GetMethod(name, Private | BindingFlags.DeclaredOnly).Invoke(form, arguments);
         }
 
         static IEnumerable<Control> Controls(Control rootControl)
@@ -149,20 +150,33 @@ namespace SubVulpes
             } finally { WebRequest.DefaultWebProxy = previous; }
         }
 
-        static void LogTests(string log)
+        static void LogTests()
         {
-            string logs = Path.GetDirectoryName(log);
+            string logs = Path.Combine(root, "export-fixture");
+            Directory.CreateDirectory(logs);
+            string log = Path.Combine(logs, "server.log");
+            string password = "fixture-current-s\u00eanha";
+            string text = "Server started on port 27584.\r\nPassword: " + password +
+                          "\r\nPlayer: /admin senha123 with spaces\nUnchanged chat.\nPlayer: /admin another-secret";
+            File.WriteAllText(log, text, Encoding.Default);
+            string expected = "Server started on port 27584.\r\nPassword: [redacted]" +
+                              "\r\nPlayer: /admin [redacted]\nUnchanged chat.\nPlayer: /admin [redacted]";
             foreach (string name in new[] { "packets.bin", "config.txt", "crash.dmp", "notes.txt", "sv_snapshot.bin", "sv_args.txt", "recording.bin", "version.txt" })
                 File.WriteAllText(Path.Combine(logs, name), "excluded fixture");
             Directory.CreateDirectory(Path.Combine(logs, "recordings"));
             File.WriteAllText(Path.Combine(logs, "recordings", "server.log"), "excluded recording");
             string exported = Path.Combine(root, "exported-server.log");
-            LauncherForm.CopyLog(log, exported);
-            Check(File.ReadAllBytes(log).SequenceEqual(File.ReadAllBytes(exported)), "Save Log copies only the exact server.log content");
+            using (var live = new FileStream(log, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                LauncherForm.CopyLog(log, exported, password);
+            Check(File.ReadAllText(exported) == expected, "Save Log masks the current password and every admin argument, preserves other text and line endings");
+            Check(!File.ReadAllText(exported).Contains(password) && !File.ReadAllText(exported).Contains("senha123") &&
+                  !File.ReadAllText(exported).Contains("another-secret"), "Save Log excludes both current and unrelated admin passwords");
             Check(!File.ReadAllText(exported).Contains("excluded fixture"), "Save Log excludes packets, config, dumps, notes, recordings and version.txt");
             bool rejected = false;
-            try { LauncherForm.CopyLog(log, log); } catch (IOException) { rejected = true; }
-            Check(rejected && File.ReadAllBytes(log).SequenceEqual(File.ReadAllBytes(exported)), "Save Log refuses to overwrite its live source");
+            try { LauncherForm.CopyLog(log, log, password); } catch (IOException) { rejected = true; }
+            Check(rejected && File.ReadAllText(log, Encoding.Default) == text, "Save Log refuses to overwrite its live source");
+            Check(LauncherForm.RedactLog("Player: /admin senha123\nUnchanged chat.", "") ==
+                  "Player: /admin [redacted]\nUnchanged chat.", "an empty config password still masks admin arguments");
         }
 
         static async Task Run(LauncherForm form, string repo)
@@ -171,7 +185,8 @@ namespace SubVulpes
             var pages = Field<Dictionary<string, TabPage>>(form, "pages");
             Check(mainTabs.TabPages.Cast<TabPage>().Select(t => t.Text).SequenceEqual(new[] { "Server", "Server settings", "Launcher settings" }), "top tabs match the requested layout with Debug hidden");
             Check(!Controls(form).OfType<StatusStrip>().Any(), "server state has no duplicate status bar");
-            Check(form.Text == "OpenSubRosa24 Server - v99.0.0", "window title contains only product and version");
+            string packageVersion = File.ReadLines(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "version.txt")).First();
+            Check(form.Text == "OpenSubRosa24 Server - " + packageVersion, "window title uses the version from the real package");
             Check(Field<Label>(form, "missingText").Text == "Missing: data/, config.txt (created)", "first run names both missing files on one line");
             Check(File.ReadAllBytes(Path.Combine(root, "config.txt")).SequenceEqual(
                 File.ReadAllBytes(Path.Combine(repo, "tools", "release", "default-config.ini"))), "missing config uses the exact public package default");
@@ -216,23 +231,47 @@ namespace SubVulpes
             await Capture(form, "03-launcher-settings", "Launcher settings");
             mainTabs.SelectedTab = pages["Server"];
             Click(form, "startStop");
-            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port "), 90000, "Start reaches the live server loop through SV_LOG");
+            await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port " + port + "."), 90000, "Start reaches the live server loop through SV_LOG");
             var process = Field<Process>(form, "server");
             Check(process.StartInfo.EnvironmentVariables["SV_SAMPLE"] == null &&
                   process.StartInfo.EnvironmentVariables["SV_PACKETS"] == null &&
                   process.StartInfo.EnvironmentVariables["SV_RECORD_DIR"] == null, "normal sessions disable developer captures");
             await Wait(() => Field<TextBox>(form, "console").Text.Contains("ticks/s"), 75000, "live status receives real tick and player counts");
+            Check(Field<string>(form, "serverState") == "Running" && Field<string>(form, "playersStatus") == "0 players" &&
+                  Field<string>(form, "speedStatus") != "- ticks/s", "live status keeps Running, players and ticks/s");
             await Capture(form, "04-server-running", "Server");
             Click(form, "stopButton");
             await Wait(() => Field<Process>(form, "server") == null, 20000, "Stop waits for cooperative server exit");
             Check(File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("Server stopped."), "Stop flushes the final server log line");
+            Check(!File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains("[subvulpes]"), "server messages have no product prefix");
             Check(!File.ReadAllText(Path.Combine(root, "logs", "server.log")).Contains(secret), "server.log excludes the admin password");
             await Capture(form, "05-server-stopped", "Server");
-            LogTests(Path.Combine(root, "logs", "server.log"));
             Check(Controls(form).OfType<Button>().Any(b => b.Text == "Save Log") && !Controls(form).OfType<Button>().Any(b => b.Text == "Pack logs"), "Server offers Save Log without a support zip button");
             string savedLog = Path.Combine(root, "saved-from-panel.log");
             await (Task)Call(form, "SaveLogTo", savedLog);
             Check(File.ReadAllBytes(savedLog).SequenceEqual(File.ReadAllBytes(Path.Combine(root, "logs", "server.log"))), "Save Log handler writes the chosen destination");
+            string privateLine = "Player: /admin senha123 with spaces";
+            Call(form, "AddLine", privateLine);
+            Call(form, "AddLine", "Password: " + secret);
+            Check(!Field<TextBox>(form, "console").Text.Contains("senha123") &&
+                  !Field<TextBox>(form, "console").Text.Contains(secret), "live output uses the same password mask as Save Log");
+            string diskPassword = "updated-on-disk-" + Guid.NewGuid().ToString("N");
+            config.Set("serverpassword", diskPassword);
+            config.Save();
+            File.AppendAllText(Path.Combine(root, "logs", "server.log"), "Password: " + diskPassword + "\n" + privateLine + "\n");
+            await (Task)Call(form, "SaveLogTo", savedLog);
+            Check(!File.ReadAllText(savedLog).Contains(diskPassword) && !File.ReadAllText(savedLog).Contains("senha123") &&
+                  File.ReadAllText(savedLog).Contains("/admin [redacted]"), "Save Log handler reads the current config password from disk");
+            config.Set("serverpassword", secret);
+            config.Save();
+            var displayConfig = Field<KeyFile>(form, "config");
+            displayConfig.Set("serverpassword", "62");
+            Call(form, "AddLine", "Server started on port 62.");
+            Call(form, "AddLine", "Server status: 62.5 ticks/s, 3 players, 2 bots");
+            Check(Field<string>(form, "serverState") == "Running" && Field<string>(form, "speedStatus") == "62.5 ticks/s" &&
+                  Field<string>(form, "playersStatus") == "3 players, 2 bots", "password masking does not change status parsing");
+            displayConfig.Set("serverpassword", secret);
+            Call(form, "SetState", "Stopped");
             mainTabs.SelectedTab = pages["Launcher settings"];
             var previousProxy = WebRequest.DefaultWebProxy;
             WebRequest.DefaultWebProxy = new WebProxy("http://127.0.0.1:1");
@@ -319,10 +358,13 @@ namespace SubVulpes
             Directory.CreateDirectory(screens);
             if (!serverScreens) {
                 foreach (string screenshot in Directory.GetFiles(screens, "*.png")) File.Delete(screenshot);
-                File.WriteAllText(Path.Combine(root, "version.txt"), "v99.0.0\ncommit fixture\nbuilt fixture\n");
+                File.Copy(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "version.txt"), Path.Combine(root, "version.txt"));
             }
             Console.WriteLine("FIXTURE: " + root);
-            if (!serverScreens) UpdateTests();
+            if (!serverScreens) {
+                UpdateTests();
+                LogTests();
+            }
             SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

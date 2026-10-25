@@ -965,12 +965,10 @@ namespace SubVulpes
 
         void AddLine(string line)
         {
-            string password = config.Get("serverpassword", "");
-            if (password.Length > 0) line = line.Replace(password, "[redacted]");
             // A long test makes many lines. Keep the last part only: the log file has all.
             if (console.TextLength > 200000)
                 console.Text = console.Text.Substring(100000);
-            console.AppendText(line + "\r\n");
+            console.AppendText(RedactLog(line, config.Get("serverpassword", "")) + "\r\n");
 
             Match m = TicksLine.Match(line);
             if (m.Success) {
@@ -1237,20 +1235,29 @@ namespace SubVulpes
 
         // ------------------------------------------------------------ update
 
-        public static void CopyLog(string source, string destination)
+        public static string RedactLog(string text, string password)
+        {
+            text = Regex.Replace(text, @"/admin [^\r\n]*", "/admin [redacted]");
+            return password.Length > 0 ? text.Replace(password, "[redacted]") : text;
+        }
+
+        public static void CopyLog(string source, string destination, string password)
         {
             if (Path.GetFullPath(source).Equals(Path.GetFullPath(destination), StringComparison.OrdinalIgnoreCase))
                 throw new IOException("Choose another file for the saved log.");
             using (var input = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var reader = new StreamReader(input, Encoding.Default))
             using (var output = new FileStream(destination, FileMode.Create, FileAccess.Write))
-                input.CopyTo(output);
+            using (var writer = new StreamWriter(output, new UTF8Encoding(false)))
+                writer.Write(RedactLog(reader.ReadToEnd(), password));
         }
 
         async Task SaveLogTo(string destination)
         {
             string source = logFile;
             try {
-                await Task.Run(() => CopyLog(source, destination));
+                string password = new KeyFile(Path.Combine(folder, "config.txt")).Get("serverpassword", "");
+                await Task.Run(() => CopyLog(source, destination, password));
                 message.Text = "Saved: " + destination;
             } catch (Exception ex) {
                 message.Text = "Cannot save the log: " + ex.Message;
