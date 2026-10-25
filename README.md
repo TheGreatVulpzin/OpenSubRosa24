@@ -42,9 +42,7 @@ This repository was created with the help of OpenAI Codex and Claude Code for wr
 
 ## Build
 
-Download the server package from [Releases](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases). See [the release process](docs/release.md).
-
-You need Windows and these tools:
+If you want to build the repository, you will need Windows and these tools:
 
 - Microsoft C compiler for x86 (Visual Studio Build Tools). The project is built with MSVC 14.50 (VS 2026 Build Tools) and Windows SDK 10.0.26100.0.
 - CMake.
@@ -67,7 +65,7 @@ The build is x86 (32 bit). The result is in `build\hook\`:
 
 ## Run the server
 
-Download the [server package](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases).
+If you just want to run the server, download the [server package](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases).
 The package includes `data/` and a default `config.txt`.
 
 1. Extract the zip into a new folder.
@@ -95,7 +93,8 @@ The previous command, `bash tools/lift/pipeline.sh`, forwards to the same pipeli
 
 ## Related projects
 
-- **SubVulpes Server** (not published yet): a server base with plugins, admin tools and more.
+- **SubVulpes Server** (not published yet): a server base with plugins, admin tools and more!
+- **OverRosa** (not published yet): An modified client for enhanced features, custom assets and more!
 
 ## Contributing
 
