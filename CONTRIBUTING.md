@@ -2,6 +2,8 @@
 
 Bug reports and pull requests are welcome.
 
+Download the server package from [Releases](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases). See [the release process](docs/release.md).
+
 ## Bug reports
 
 Open an Issue. Say what you did, what you expected and what happened. Add the server log.

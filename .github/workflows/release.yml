@@ -1,0 +1,85 @@
+name: Release server package
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to release (for example v0.0.1-test)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check the version tag and compiler
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^v\d+\.\d+\.\d+(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?$') {
+            throw 'Use an existing tag such as v0.1.0 or v0.1.0-rc1.'
+          }
+          $tagCommit = git rev-parse --verify "refs/tags/$env:RELEASE_TAG^{commit}"
+          if ($LASTEXITCODE -ne 0) { throw 'The version tag does not exist.' }
+          $headCommit = git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0 -or $tagCommit -ne $headCommit) {
+            throw 'The checkout does not match the version tag.'
+          }
+          $compiler = "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\csc.exe"
+          if (-not (Test-Path -LiteralPath $compiler)) { throw 'The .NET Framework 4 compiler is missing.' }
+          Write-Host "C# compiler: $compiler"
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        with:
+          arch: x86
+      - name: Check repository rules
+        run: python -I tools/ci/check_repo.py
+      - name: Build server targets
+        shell: cmd
+        run: tools\build_hook.bat
+      - name: Build the launcher
+        shell: cmd
+        run: tools\launcher\build.bat
+      - name: Check struct sizes and verifier
+        run: |
+          & .\build\hook\check_types.exe
+          if ($LASTEXITCODE -ne 0) { throw 'Struct checks failed.' }
+          & .\build\hook\test_verify.exe
+          if ($LASTEXITCODE -ne 0) { throw 'Verifier tests failed.' }
+      - name: Test package rules and launcher zip names
+        run: .\instrumentation\tests\test_package.ps1
+      - name: Make the package
+        id: package
+        run: |
+          $package = & .\tools\release\make_package.ps1 -Version $env:RELEASE_TAG
+          "zip=$($package.Zip)" >> $env:GITHUB_OUTPUT
+          "checksum=$($package.Checksum)" >> $env:GITHUB_OUTPUT
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PACKAGE_ZIP: ${{ steps.package.outputs.zip }}
+          PACKAGE_CHECKSUM: ${{ steps.package.outputs.checksum }}
+        run: |
+          $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag',
+            '--title', "OpenSubRosa24 server $env:RELEASE_TAG", '--generate-notes',
+            $env:PACKAGE_ZIP, $env:PACKAGE_CHECKSUM)
+          if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
+          & gh @arguments
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }
