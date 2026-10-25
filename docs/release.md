@@ -54,6 +54,9 @@ A full automatic update needs a newer published release with its server zip and 
 The launcher updates only the three executables, `LEIA-ME.txt`, `version.txt` and `record_focus.txt`.
 It saves old files under `backup/`. It keeps `config.txt`, `data/`, `readme.txt` and `user/`.
 For a first installation, extract the complete package into a new directory.
+Older launchers do not install the renamed server executable.
+Copy `opensubrosa24_server.exe` and the new launcher from the package before the first start.
+Keep `config.txt`, `data/` and `user/`.
 
 ## Launcher operation
 

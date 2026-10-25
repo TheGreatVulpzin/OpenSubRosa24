@@ -3,7 +3,7 @@
 // Build: tools\launcher\build.bat. It uses the C# compiler of .NET Framework 4, which is
 // part of Windows, so the testers do not install anything. C# 5 only (no $"" strings).
 // The exe is 32-bit, so that its dumps of the 32-bit server have the x86 view.
-// Put the exe in the server folder, next to subvulpes-server.exe.
+// Put the exe in the server folder, next to opensubrosa24_server.exe.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -294,7 +294,7 @@ namespace SubVulpes
         const int FreezeSeconds = 150;
         const int HotkeyId = 1;
         static readonly string[] UpdateFiles = {
-            "subvulpes-server.exe", "subvulpes-server-record.exe", "subvulpes-launcher.exe", "LEIA-ME.txt", "version.txt",
+            "opensubrosa24_server.exe", "subvulpes-server-record.exe", "subvulpes-launcher.exe", "LEIA-ME.txt", "version.txt",
             "record_focus.txt"
         };
 
@@ -833,7 +833,7 @@ namespace SubVulpes
             if (server != null) return;
             developerRun = debugModeBox.Checked;
             activeCaptures = developerRun ? captures.Copy() : new Captures { CrashDump = "none" };
-            string exe = Path.Combine(folder, activeCaptures.Record ? "subvulpes-server-record.exe" : "subvulpes-server.exe");
+            string exe = Path.Combine(folder, activeCaptures.Record ? "subvulpes-server-record.exe" : "opensubrosa24_server.exe");
             if (!Directory.Exists(Path.Combine(folder, "data"))) {
                 ShowMissing(false);
                 return;
@@ -914,7 +914,7 @@ namespace SubVulpes
 
         string ServerVersion()
         {
-            var info = new FileInfo(Path.Combine(folder, "subvulpes-server.exe"));
+            var info = new FileInfo(Path.Combine(folder, "opensubrosa24_server.exe"));
             return info.Exists ? info.LastWriteTime.ToString("yyyy-MM-dd HH:mm") + ", " + info.Length + " bytes" : "?";
         }
 

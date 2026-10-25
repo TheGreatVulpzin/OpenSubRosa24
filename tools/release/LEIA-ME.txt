@@ -4,7 +4,7 @@ ENGLISH
 
 This package contains the Windows x86 server, its launcher, data/ and a default
 config.txt. readme.txt supplies neutral text for the newspaper in the game.
-subvulpes-server.exe runs normal sessions. subvulpes-server-record.exe records
+opensubrosa24_server.exe runs normal sessions. subvulpes-server-record.exe records
 calls for tests. record_focus.txt selects functions for the recorder.
 
 First use:
@@ -51,7 +51,7 @@ PORTUGUÊS (BR)
 
 Este pacote contém o servidor Windows x86, o launcher, data/ e um config.txt
 padrão. readme.txt fornece texto neutro para o jornal dentro do jogo.
-subvulpes-server.exe executa sessões normais. subvulpes-server-record.exe grava
+opensubrosa24_server.exe executa sessões normais. subvulpes-server-record.exe grava
 chamadas para testes. record_focus.txt seleciona funções para o recorder.
 
 Primeiro uso:

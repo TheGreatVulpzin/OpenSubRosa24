@@ -200,7 +200,7 @@ namespace SubVulpes
             Click(form, "startStop");
             Check(Field<Process>(form, "server") == null, "Start refuses missing data");
             CopyDirectory(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "data"), Path.Combine(root, "data"));
-            File.Copy(Path.Combine(repo, "build", "hook", "subvulpes-server.exe"), Path.Combine(root, "subvulpes-server.exe"));
+            File.Copy(Path.Combine(repo, "build", "hook", "opensubrosa24_server.exe"), Path.Combine(root, "opensubrosa24_server.exe"));
             File.Copy(Path.Combine(repo, "build", "hook", "subvulpes-server-record.exe"), Path.Combine(root, "subvulpes-server-record.exe"));
             Field<CheckBox>(form, "recordBox").Enabled = true;
             Call(form, "ShowMissing", false);
@@ -233,6 +233,7 @@ namespace SubVulpes
             Click(form, "startStop");
             await Wait(() => Field<TextBox>(form, "console").Text.Contains("Server started on port " + port + "."), 90000, "Start reaches the live server loop through SV_LOG");
             var process = Field<Process>(form, "server");
+            Check(Path.GetFileName(process.StartInfo.FileName) == "opensubrosa24_server.exe", "Start uses the renamed server executable");
             Check(process.StartInfo.EnvironmentVariables["SV_SAMPLE"] == null &&
                   process.StartInfo.EnvironmentVariables["SV_PACKETS"] == null &&
                   process.StartInfo.EnvironmentVariables["SV_RECORD_DIR"] == null, "normal sessions disable developer captures");

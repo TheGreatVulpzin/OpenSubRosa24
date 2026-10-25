@@ -58,7 +58,7 @@ The build is x86 (32 bit). The result is in `build\hook\`:
 
 | File | What it is |
 | --- | --- |
-| `subvulpes-server.exe` | The standalone server. It runs with no `subrosadedicated024d.exe`. |
+| `opensubrosa24_server.exe` | The standalone server. It runs with no `subrosadedicated024d.exe`. |
 | `subvulpes-server-record.exe` | The same server with a recorder, to make test recordings. |
 | `wsock32.dll` | A hook DLL for the original server. Only for testing. |
 | `harness.exe` | Compares each function with the original on recorded calls. |

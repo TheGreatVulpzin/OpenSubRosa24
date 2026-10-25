@@ -103,6 +103,7 @@ target_include_directories(subvulpes-server PRIVATE src/include src/lifted src/s
 target_compile_options(subvulpes-server PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(subvulpes-server PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
 target_link_options(subvulpes-server PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
+set_target_properties(subvulpes-server PROPERTIES OUTPUT_NAME opensubrosa24_server)
 set_property(TARGET subvulpes-server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # The harness recording build of the standalone server (instrumentation/standalone/record_shim.c). The lifted

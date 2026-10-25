@@ -1,4 +1,4 @@
-/* subvulpes-server: the dedicated server without subrosadedicated024d.exe.
+/* opensubrosa24_server: the dedicated server without subrosadedicated024d.exe.
  *
  * Phase 5.1 (docs/plano.md). The game code is the lifted C and the hand-written C. Its
  * memory is a region with the layout of the 024d image: SR_VA() and the g_ globals work as
@@ -348,7 +348,7 @@ static void write_dump(EXCEPTION_POINTERS *ep)
 }
 
 /* A crash: write where it happened, so that a test log is enough to find the line. The
- * address is given as module+offset (build/hook/subvulpes-server.map and .pdb), and as
+ * address is given as module+offset (build/hook/opensubrosa24_server.map and .pdb), and as
  * an image RVA when it is inside the 024d region (a game address used as code or data). */
 static LONG WINAPI on_crash(EXCEPTION_POINTERS *ep)
 {

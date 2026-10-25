@@ -4,7 +4,7 @@ The first line of the samples file is "base <module base>". The .map file of the
 gives the start of each function at the preferred base. A sample falls in the function with
 the highest start below it.
 
-Usage: python -I instrumentation/lift/samples.py <samples.txt> [build/hook/subvulpes-server.map] [--top 30]
+Usage: python -I instrumentation/lift/samples.py <samples.txt> [build/hook/opensubrosa24_server.map] [--top 30]
 """
 import bisect
 import re
@@ -33,7 +33,7 @@ def main():
     args = argv
     top = int(sys.argv[sys.argv.index('--top') + 1]) if '--top' in sys.argv else 30
     samples = Path(args[0]).read_text().split()
-    mapfile = args[1] if len(args) > 1 else ROOT / 'build/hook/subvulpes-server.map'
+    mapfile = args[1] if len(args) > 1 else ROOT / 'build/hook/opensubrosa24_server.map'
     pref, syms = load_map(mapfile)
     addrs = [s[0] for s in syms]
     base = int(samples[1], 16) if samples[0] == 'base' else pref

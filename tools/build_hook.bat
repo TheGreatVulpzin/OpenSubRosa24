@@ -12,5 +12,5 @@ cd /d "%~dp0.."
 cmake -S . -B build\hook -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release || exit /b 1
 cmake --build build\hook || exit /b 1
 echo.
-echo OK: build\hook\subvulpes-server.exe
+echo OK: build\hook\opensubrosa24_server.exe
 echo OK: build\hook\wsock32.dll
