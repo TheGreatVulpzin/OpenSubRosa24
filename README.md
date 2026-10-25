@@ -69,12 +69,25 @@ If you just want to run the server, download the [server package](https://github
 The package includes `data/` and a default `config.txt`.
 
 1. Extract the zip into a new folder.
-2. Open `subvulpes-launcher.exe`. Set the server name and admin password. The default password is empty.
-3. Select **Normal Playtest** and click **Start server**.
-4. Join with your Sub Rosa 0.24 client.
+2. Open `subvulpes-launcher.exe`.
+3. Open **Server settings**. Set the server name, player limit, round time, UDP port and admin password. Click **Save**.
+4. Open **Server** and click **Start**. The panel shows live `SV_LOG` output, players and tick speed.
+5. Join with your Sub Rosa 0.24 client. Use **Stop**, or close the launcher, to stop the server safely.
 
-Keep `config.txt` private after you save your settings. It holds the admin password.
-The launcher updates executables and package instructions. It keeps your configuration, data and accounts.
+The default admin password is empty. The launcher saves the password only in `config.txt`. Use **Show** to reveal or mask it.
+Keep that file private. If it is missing, the launcher creates the package default.
+The first-run message lists missing `data/` or `config.txt` on one line.
+
+Open **Launcher settings**. Use **Check for updates** to find a newer GitHub release. The launcher checks the zip SHA-256 before installation.
+Enable **Include pre-releases** in Launcher settings to include preview versions. Updates keep your configuration, data and accounts.
+**Save Log** exports only the current `server.log` as a text file. It creates no zip.
+It excludes configuration, packet captures, dumps, notes, recordings and version metadata.
+
+Launcher settings also holds **Server folder**, **Browse** and **Debug Mode**.
+The launcher starts with its own folder and remembers another folder if you select one.
+Debug Mode shows the **Debug** tab and uses its selected preset on the next server start.
+Debug keeps all five presets, capture controls, past tests and **Pack this test**.
+It is off by default. **Ctrl+Shift+D** toggles it. `developer=1` in `launcher.ini` also enables it.
 
 For a local build, package the approved data with `tools/release/make_package.ps1 -DataDir original\blackhouser\data -Version v0.0.2-test`.
 See [Server releases](docs/release.md) for build and publication commands.

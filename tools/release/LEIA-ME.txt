@@ -9,27 +9,43 @@ calls for tests. record_focus.txt selects functions for the recorder.
 
 First use:
 1. Extract this zip. Keep all files inside its package folder together.
-2. Open subvulpes-launcher.exe. Set the server name and the admin password.
-   The default admin password is empty. Replace it before you start the server.
-3. Select Normal Playtest. Click Start server.
-4. Join with your Sub Rosa 0.24 client.
+2. Open subvulpes-launcher.exe. It uses its own folder by default.
+   To select another server folder, use Browse in Launcher settings. It creates the default config.txt if missing.
+   One line lists missing data/ or config.txt.
+3. Open Server settings. Set the server name, player limit, round time, UDP port and admin
+   password. Click Save. The default admin password is empty. Show reveals or masks the field.
+4. Open Server. Click Start. Join with your Sub Rosa 0.24 client.
+   Server shows the live log, players and tick speed. Counts update each minute.
+5. Click Stop, or close the launcher, to stop the server safely.
 
 config.txt contains passwords after you save your settings. Never share it.
-Check recordings and logs for private data before you share them. Recordings
-can contain player names, IP addresses and server configuration.
+Save Log saves only the current server.log as text. It creates no zip.
+It excludes configuration, packets, dumps, notes, recordings and version metadata.
+Check logs before sharing them. Logs can contain player names and IP addresses.
 
 Update:
-1. Download the zip and its .sha256 file from the repository Releases tab.
-2. Compare the zip SHA-256 with the value in the .sha256 file:
-   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
-3. In the launcher, select "Update from a zip..." and choose the downloaded zip.
-4. Confirm the update. The launcher stops the server, saves the old files under
+1. Open Launcher settings. Click Check for updates. The launcher compares version.txt with GitHub releases.
+   Enable Include pre-releases in Launcher settings only if you want preview versions.
+2. The launcher downloads the new server zip and checks its SHA-256 against the
+   release .sha256 file. A network error or checksum error prevents installation.
+3. Confirm the version. The launcher stops the server, saves the old files under
    backup/ and restarts itself. It keeps data/, config.txt, readme.txt and user/.
+
+For Update from a zip, download the zip and .sha256 file yourself. Check first:
+   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
+Compare the hash with .sha256, then choose the zip in the launcher.
 
 For a manual update, close the launcher and server. Copy only the three
 subvulpes executables, LEIA-ME.txt, version.txt and record_focus.txt.
 Keep your data/, config.txt, readme.txt and user/.
 version.txt shows the version tag, commit and UTC package date.
+
+Debug tools:
+Enable Debug Mode in Launcher settings to show Debug and use test captures.
+Debug keeps the five presets, capture controls, past tests and Pack this test.
+Turn Debug Mode off to start without test captures. Ctrl+Shift+D toggles the same option.
+The option uses developer=1 in launcher.ini. Test archives can contain private data.
+Check them before sharing.
 
 PORTUGUÊS (BR)
 
@@ -40,24 +56,41 @@ chamadas para testes. record_focus.txt seleciona funções para o recorder.
 
 Primeiro uso:
 1. Extraia este zip. Mantenha juntos todos os arquivos da pasta do pacote.
-2. Abra subvulpes-launcher.exe. Defina o nome do servidor e a senha de admin.
-   A senha de admin padrão está vazia. Troque a senha antes de iniciar o servidor.
-3. Selecione Normal Playtest. Clique em Start server.
-4. Entre com seu cliente Sub Rosa 0.24.
+2. Abra subvulpes-launcher.exe. Ele usa a própria pasta por padrão.
+   Para escolher outra pasta, use Browse em Launcher settings. O launcher lembra a pasta. Se config.txt faltar, ele cria o padrão do pacote.
+   Uma linha mostra se falta data/ ou config.txt.
+3. Abra Server settings. Defina nome do servidor, limite de jogadores, tempo de rodada,
+   porta UDP e senha de admin. Clique em Save. A senha padrão está vazia.
+   Use Show para mostrar ou ocultar a senha.
+4. Abra Server. Clique em Start. Entre com seu cliente Sub Rosa 0.24.
+   Server mostra log ao vivo, jogadores e tick. Os valores mudam a cada minuto.
+5. Clique em Stop, ou feche o launcher, para parar o servidor com segurança.
 
 config.txt contém senhas depois que você salva as configurações. Nunca compartilhe
-esse arquivo. Confira os dados privados antes de compartilhar gravações ou logs.
-Gravações podem conter nomes de jogadores, endereços IP e configurações do servidor.
+esse arquivo. Save Log salva apenas o server.log atual como texto, sem zip.
+Ele não inclui configuração, pacotes, dumps, notas, gravações ou dados da versão.
+Confira o log antes de compartilhar. Ele pode conter nomes de jogadores e IPs.
 
 Atualização:
-1. Baixe o zip e seu arquivo .sha256 na aba Releases do repositório.
-2. Compare o SHA-256 do zip com o valor no arquivo .sha256:
-   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
-3. No launcher, selecione "Update from a zip..." e escolha o zip baixado.
-4. Confirme a atualização. O launcher para o servidor, salva os arquivos antigos
+1. Abra Launcher settings. Clique em Check for updates. O launcher compara version.txt com as releases.
+   Ative Include pre-releases em Launcher settings somente se quiser versões de teste.
+2. O launcher baixa o zip do servidor e confere o SHA-256 no arquivo .sha256 da
+   release. Erro de rede ou de checksum impede a instalação.
+3. Confirme a versão. O launcher para o servidor, salva os arquivos antigos
    em backup/ e reinicia. Ele preserva data/, config.txt, readme.txt e user/.
+
+Para Update from a zip, baixe o zip e o .sha256. Confira primeiro:
+   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
+Compare o hash com o .sha256. Depois escolha o zip no launcher.
 
 Para atualizar manualmente, feche o launcher e o servidor. Copie somente os três
 executáveis subvulpes, LEIA-ME.txt, version.txt e record_focus.txt.
 Preserve data/, config.txt, readme.txt e user/.
 version.txt mostra a tag da versão, o commit e a data UTC do pacote.
+
+Ferramentas de teste:
+Ative Debug Mode em Launcher settings para mostrar Debug e usar capturas de teste.
+Debug mantém os cinco presets, capturas, testes anteriores e Pack this test.
+Desative Debug Mode para iniciar sem capturas. Ctrl+Shift+D alterna a mesma opção.
+A opção usa developer=1 em launcher.ini. Arquivos de teste podem conter dados privados.
+Confira antes de compartilhar.
