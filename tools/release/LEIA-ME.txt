@@ -1,0 +1,63 @@
+OpenSubRosa24 server / Servidor OpenSubRosa24
+
+ENGLISH
+
+This package contains the Windows x86 server and its test launcher.
+subvulpes-server.exe runs normal sessions. subvulpes-server-record.exe records
+calls for tests. record_focus.txt selects functions for the recorder.
+The package contains no game assets or server configuration.
+
+First use:
+1. Find the server folder from your own copy of Sub Rosa 0.24.
+   The folder must contain data/ and config.txt.
+2. Extract this zip. Copy the six files from its package folder into that server
+   folder. Keep all six files together.
+3. Open subvulpes-launcher.exe. Select Normal Playtest. Click Start server.
+4. Connect with your Sub Rosa 0.24 client.
+
+config.txt contains passwords. Never share it. Do not publish recordings or logs
+without a check for private data. Recording sessions can contain player names,
+IP addresses and server configuration.
+
+Update:
+1. Download the zip and its .sha256 file from the repository Releases tab.
+2. Compare the zip SHA-256 with the value in the .sha256 file:
+   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
+3. In the launcher, select "Update from a zip..." and choose the downloaded zip.
+4. Confirm the update. The launcher stops a running server, saves the old files
+   under backup/ and restarts itself. It keeps data/ and config.txt.
+
+For a manual update, close the launcher and server. Copy the six package files
+into the server folder. Keep your data/ and config.txt.
+version.txt shows the version tag, commit and UTC package date.
+
+PORTUGUÊS (BR)
+
+Este pacote contém o servidor Windows x86 e seu launcher de testes.
+subvulpes-server.exe executa sessões normais. subvulpes-server-record.exe grava
+chamadas para testes. record_focus.txt seleciona funções para o recorder.
+O pacote não contém arquivos do jogo nem configuração do servidor.
+
+Primeiro uso:
+1. Localize a pasta do servidor da sua própria cópia do Sub Rosa 0.24.
+   A pasta precisa conter data/ e config.txt.
+2. Extraia este zip. Copie os seis arquivos da pasta do pacote para a pasta
+   do servidor. Mantenha os seis arquivos juntos.
+3. Abra subvulpes-launcher.exe. Selecione Normal Playtest. Clique em Start server.
+4. Conecte com seu client do Sub Rosa 0.24.
+
+config.txt contém senhas. Nunca compartilhe esse arquivo. Antes de publicar
+gravações ou logs, confira se existem dados privados. Gravações podem conter
+nomes de jogadores, endereços IP e configuração do servidor.
+
+Atualização:
+1. Baixe o zip e seu arquivo .sha256 na aba Releases do repositorio.
+2. Compare o SHA-256 do zip com o valor no arquivo .sha256:
+   Get-FileHash .\OpenSubRosa24-server-vVERSION.zip -Algorithm SHA256
+3. No launcher, selecione "Update from a zip..." e escolha o zip baixado.
+4. Confirme a atualização. O launcher para o servidor, salva os arquivos antigos
+   em backup/ e reinicia. Ele preserva data/ e config.txt.
+
+Para atualizar manualmente, feche o launcher e o servidor. Copie os seis arquivos
+do pacote para a pasta do servidor. Preserve data/ e config.txt.
+version.txt mostra a tag da versão, o commit e a data UTC do pacote.
