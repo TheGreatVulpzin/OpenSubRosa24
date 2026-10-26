@@ -21,22 +21,21 @@
 #include "sr_server.h"
 #include "vectors.h"
 
-#define g_materiallist (*SR_AT(MaterialList, SR_RVA_MATERIALLIST))
-#define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))
-#define g_filelist (*SR_AT(FileList, SR_RVA_FILELIST))
-#define g_area_sector (*SR_AT(AreaSector, SR_RVA_AREA_SECTOR))
-#define g_blocktemp (*SR_AT(BlockTemp, SR_RVA_BLOCKTEMP))
-#define g_camera SR_AT(float, 0xf437940)
-#define g_voice SR_AT(VoiceChannel, 0xeca4bc0)
-#define g_track SR_AT(TrackPiece, SR_RVA_TRACK)
-#define g_cityobjects SR_AT(CityObjectRec, SR_RVA_CITYOBJECT)
-#define g_yaxis SR_AT(vec3, 0x60ce0)
-#define g_numoftracks (*SR_AT(int, SR_RVA_NUMOFTRACKS))
-#define g_numofsprites (*SR_AT(int, 0x761e600))
-#define g_numofsprite_models (*SR_AT(int, 0x12a81c44))
-#define g_sprite_render SR_AT(uint8_t, 0x761eb00)
-#define g_tiremarkstart (*SR_AT(int, 0xb7e8ff4))
-#define g_tiremarkend (*SR_AT(int, 0xb7a8c80))
+#define g_materiallist sr_data_materiallist
+#define g_soundlist sr_data_soundlist
+#define g_filelist sr_data_filelist
+#define g_area_sector sr_data_area_sector
+#define g_blocktemp sr_data_blocktemp
+#define g_camera sr_data_camera
+#define g_voice sr_data_voice
+#define g_track sr_data_track
+#define g_cityobjects sr_data_cityobject
+#define g_yaxis (&sr_data_yaxis)
+#define g_numoftracks sr_data_numoftracks
+#define g_numofsprites sr_data_numofsprites
+#define g_numofsprite_models sr_data_numofsprite_models
+#define g_tiremarkstart sr_data_tiremarkstart
+#define g_tiremarkend sr_data_tiremarkend
 
 static void test_inventory(int player, vec3 *pos, vec3 *rot, int second_gun)
 {
@@ -179,7 +178,7 @@ void resetgame(void)
     round = sr_server ? sr_game.round_number + 1 : g_area_sector.client_game_id;
     sr_game.ticks = 0;
     g_area_sector.unused_0 = 0;
-    *SR_AT(int, 0x9c1d8a4) = 0;
+    *((int *)&sr_data_newspaper.unk_40004) = 0;
     sr_game.round_number = round;
     if (!sr_server)
         g_numofheadlines = 0;
@@ -228,10 +227,10 @@ void resetgame(void)
     sr_numofbullets = 0;
     g_numofsprites = 0;
     g_numofsprite_models = 0;
-    *(int *)(g_sprite_render + 0) = 0;
-    *(int *)(g_sprite_render + 0x50004) = 0;
-    *(int *)(g_sprite_render + 0xb0008) = 0;
-    *(int *)(g_sprite_render + 0x8b000c) = 0;
+    sr_data_sprite_points = 0;
+    sr_data_sprite_lines = 0;
+    sr_data_sprite_quads = 0;
+    sr_data_sprite_triangles = 0;
     g_tiremarkstart = 0;
     g_tiremarkend = 0;
     sr_numofevents = 0;

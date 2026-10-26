@@ -9,7 +9,7 @@
 
 #include <string.h>
 
-#define g_area_block SR_AT(AreaBlock, SR_RVA_AREA_BLOCK)
+#define g_area_block sr_data_area_block
 
 /* The index of a block in its sector, or of a sector in its chunk. */
 #define CELL(x, y, z) (((x) & 7) + (((z) & 7) + ((y) & 7) * 8) * 8)
@@ -188,7 +188,7 @@ static void interior_release(int sector, int y)
     int k = (y >> 1) & 3;
     int model = g_sectors[sector].interior_models[k];
     if (model >= 0) {
-        *SR_AT(int, SR_RVA_AREA_INTERIOR + 4 + model * 0x2a30) = -1;
+        sr_data_interior.records[model].sector = -1;
         g_sectors[sector].interior_models[k] = -1;
     }
 }

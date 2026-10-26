@@ -11,17 +11,17 @@
 #include "sr_os.h"
 #include "vectors.h"
 
-#define g_building (*SR_AT(Building, SR_RVA_BUILDING))
-#define g_floorplan SR_AT(FloorplanCell, 0x2043a0)
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
-#define g_materiallist (*SR_AT(MaterialList, SR_RVA_MATERIALLIST))
-#define g_materials SR_AT(MaterialRec, 0x16d50024)
-#define g_area_block SR_AT(AreaBlock, SR_RVA_AREA_BLOCK)
-#define g_blocklist (*SR_AT(BlockList, SR_RVA_BLOCKLIST))
+#define g_building sr_data_building
+#define g_floorplan sr_data_floorplan
+#define g_parser sr_data_parser
+#define g_materiallist sr_data_materiallist
+#define g_materials ((MaterialRec *)&sr_data_materials.records)
+#define g_area_block sr_data_area_block
+#define g_blocklist sr_data_blocklist
 
 typedef size_t(__cdecl *building_io_fn)(void *, size_t, size_t, void *);
-#define game_fread (*SR_AT(building_io_fn, 0x91022a4))
-#define game_fwrite (*SR_AT(building_io_fn, 0x13bf2d00))
+#define game_fread (*((building_io_fn *)&sr_data_file_read))
+#define game_fwrite (*((building_io_fn *)&sr_data_file_write))
 
 static int cell_index(int floor, int row, int column)
 {

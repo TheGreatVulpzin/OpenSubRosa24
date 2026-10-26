@@ -4,26 +4,26 @@
 
 #include "sr_runtime.h"
 
-#define g_market (*SR_AT(Market, SR_RVA_MARKET))
-#define g_city (*SR_AT(City, SR_RVA_CITY))
-#define g_scenario (*SR_AT(Scenario, SR_RVA_SCENARIO))
-#define g_game_world (*SR_AT(GameWorld, SR_RVA_GAME_WORLD))
-#define g_train_near (*SR_AT(int, 0x1952d668))
-#define g_teamname SR_AT(const char *, 0x60438)
-#define g_dollarbillvalue SR_AT(int, 0x60458)
-#define g_world_msg SR_AT(char, 0x617c0)
-#define g_world_digits SR_AT(char, 0x203ee0)
-#define g_manager_msg SR_AT(char, 0x61780)
-#define g_farbs_line SR_AT(char, 0x203fa0)
-#define g_farbs_digits SR_AT(char, 0x61d48)
-#define g_guard_used SR_AT(int, 0x203de0)
-#define g_numofclientaccounts (*SR_AT(int, 0x1b497a0))
-#define g_clientaccounts ((int (*)[4])SR_AT(int, 0x1b497a4))
-#define g_numofheadlines (*SR_AT(int, 0x9bdd8a0))
-#define g_headlines ((char (*)[0x100])SR_AT(char, 0x9bdd8a4))
-#define g_modellist SR_AT(int, 0x17529aa0)
-#define g_texturelist SR_AT(int, 0x13e22e80)
-#define g_materials SR_AT(MaterialRec, 0x16d50024)
+#define g_market sr_data_market
+#define g_city sr_data_city
+#define g_scenario sr_data_scenario
+#define g_game_world sr_data_game_world
+#define g_train_near sr_data_train_near
+#define g_teamname sr_data_teamname
+#define g_dollarbillvalue sr_data_dollarbillvalue
+#define g_world_msg sr_data_world_msg
+#define g_world_digits sr_data_world_digits
+#define g_manager_msg sr_data_manager_msg
+#define g_farbs_line sr_data_farbs_line
+#define g_farbs_digits sr_data_farbs_digits
+#define g_guard_used sr_data_guard_used
+#define g_numofclientaccounts (*((int *)&sr_data_clientaccounts.count))
+#define g_clientaccounts ((int (*)[4])((int *)&sr_data_clientaccounts.records))
+#define g_numofheadlines (*((int *)&sr_data_newspaper.num_lines))
+#define g_headlines ((char (*)[0x100])((char *)&sr_data_newspaper.lines))
+#define g_modellist sr_data_modellist
+#define g_texturelist sr_data_texturelist
+#define g_materials ((MaterialRec *)&sr_data_materials.records)
 
 void logic_player(int player);
 void logic_playeractions(int player);

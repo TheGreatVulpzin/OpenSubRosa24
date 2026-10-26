@@ -21,15 +21,15 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4)) /* (1 0 0) */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
-#define g_body SR_AT(Body, 0xf270280)    /* the bone tree: the parent and the offset of each bone */
-#define g_city (*SR_AT(City, 0xe299220))
-#define g_soundlist (*SR_AT(SoundList, 0x916d700))
-#define g_intersect (*SR_AT(Intersect, 0x103484a0))
-#define g_account SR_AT(Account, 0xf437b68)
-#define g_numofaccounts (*SR_AT(int, 0xf437b64))
+#define g_xaxis sr_data_xaxis /* (1 0 0) */
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_zaxis sr_data_zaxis /* (0 0 1) */
+#define g_body sr_data_body    /* the bone tree: the parent and the offset of each bone */
+#define g_city sr_data_city
+#define g_soundlist sr_data_soundlist
+#define g_intersect sr_data_intersect
+#define g_account ((Account *)&sr_data_accounts.records)
+#define g_numofaccounts (*((int *)&sr_data_accounts.count))
 
 /* The bond modes of the joints and the muscles. In a vehicle, the bonds of the bones that do
  * not hold an item leave the solver (mode 0x100). The joint list reads the bone of the muscle

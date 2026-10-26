@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-#define g_sysinfo (*SR_AT(SysInfo, 0x916d2e0))
+#define g_sysinfo sr_data_sysinfo
 
 void stoptimer(int timer)
 {

@@ -9,8 +9,8 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4)) /* (1 0 0) */
-#define g_body SR_AT(Body, 0xf270280)   /* the bone tree: the parent and the offset of each bone */
+#define g_xaxis sr_data_xaxis /* (1 0 0) */
+#define g_body sr_data_body   /* the bone tree: the parent and the offset of each bone */
 
 #define NUM_HUMANS 0x200
 #define NUM_BONES 15

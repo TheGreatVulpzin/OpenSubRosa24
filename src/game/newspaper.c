@@ -7,13 +7,13 @@
 #include "parser.h"
 #include "util.h"
 
-#define g_newspaper (*SR_AT(Newspaper, 0x9bdd8a0))
-#define g_newspaper_line SR_AT(char, 0x60d40)
-#define g_newspaper_money SR_AT(char, 0x203f20)
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
-#define g_radix (*SR_AT(Radix, SR_RVA_RADIX))
-#define g_numofaccounts (*SR_AT(int, SR_RVA_ACCOUNT + 4))
-#define g_accounts SR_AT(Account, SR_RVA_ACCOUNT + 8)
+#define g_newspaper sr_data_newspaper
+#define g_newspaper_line sr_data_newspaper_line
+#define g_newspaper_money sr_data_newspaper_money
+#define g_parser sr_data_parser
+#define g_radix sr_data_radix
+#define g_numofaccounts (*((int *)&sr_data_accounts.count))
+#define g_accounts ((Account *)&sr_data_accounts.records)
 
 void newspaper_load(void)
 {

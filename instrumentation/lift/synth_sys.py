@@ -242,9 +242,11 @@ def main():
         (d / 'sv_args.txt').write_text('\n'.join(lines) + '\n')
         if run:
             result = run_harness(d, func)
-            ok = ' 0 different' in result and ' 0 lifted crashed' in result and ' 0 skipped' in result
+            clean = result.startswith('1 functions tested:')
+            clean = clean and ' 0 lifted crashed' in result and ' 0 skipped' in result
+            ok = clean and ' 0 different' in result
             if name in EXPECTED_DIFFERENT:
-                ok = ' 1 different' in result
+                ok = clean and ' 1 different' in result
             bad += not ok
             print('%-30s %-22s %s%s' % (name, func, result, '' if ok else '   <-- CHECK'), flush=True)
             shutil.rmtree(d, ignore_errors=True)
@@ -252,7 +254,8 @@ def main():
             print('case', name, lines[0])
     if run:
         print('%d case(s) to check' % bad)
+    return int(bool(bad))
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

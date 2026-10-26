@@ -14,8 +14,8 @@
 #define MAX_BULLETS 0x4000
 
 /* Game globals. */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4))       /* (1 0 0) */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))       /* (0 1 0) */
+#define g_xaxis sr_data_xaxis       /* (1 0 0) */
+#define g_yaxis sr_data_yaxis       /* (0 1 0) */
 
 static const BulletType bullettypes[4] = {
     { 0.01f, 0.0045603672f, 0.00762f, 0.039f, 0.0f, 1.5f },   /* 7.62x39 (AK-47) */

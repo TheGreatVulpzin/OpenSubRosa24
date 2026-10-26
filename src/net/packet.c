@@ -307,7 +307,7 @@ static const int octahedron_faces[8][3] = {
 };
 
 /* packorientation keeps the triangle and the midpoints of its edges in a global. */
-#define g_tri SR_AT(vec3, 0xf437b00) /* 3 corners */
+#define g_tri ((vec3 *)&sr_data_camera[112]) /* 3 corners */
 #define g_mid (g_tri + 3)           /* corner 0 + 1, corner 2 + 1, corner 2 + 0 */
 
 /* Which side of the plane through the origin, a and b the point v is on. */

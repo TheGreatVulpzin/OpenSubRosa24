@@ -22,7 +22,7 @@ extern uintptr_t sr_base;
 
 /* Image address of a function -> the function to call. With the hooks, the code of the 024d
  * (its hook jumps to the C version). In the standalone server there is no 024d code:
- * sr_fn() finds the C version (src/standalone/fn_table.c). */
+ * sr_fn() finds the recording version (instrumentation/standalone/fn_table.c). */
 #ifdef SR_STANDALONE
 void *sr_fn(uintptr_t va);
 #define SR_FN(va) sr_fn((uintptr_t)(va))

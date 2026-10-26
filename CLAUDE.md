@@ -9,7 +9,10 @@ RE/decompilation project for Sub Rosa (2015).
 ## Rules
 
 - Verification tools live in `instrumentation/`: `hook/`, `tests/`, `platform/plat_test.*`, `standalone/record_shim.c`, `lift/`, `ghidra/`, and `recording/`.
-- Both server targets need `src/lifted/`, `src/standalone/image_024d.*`, and `src/standalone/fn_table.c`. Keep these runtime files in the server build.
+- The normal server uses direct C calls and separate typed objects in `src/server/storage.c`.
+  Do not add address dispatch, image storage or an instrumentation include path to that target.
+  `tools/re/gen_storage.py` generates the storage definitions and the separate test adapter.
+  The recording target alone uses `instrumentation/standalone/image_024d.*`.
 - Only the separate `subvulpes-server-record` target uses the recorder in `instrumentation/`. The normal server has no include path to that folder.
 - The lifter generates `src/lifted/lifted_table.c` and the hook tables in `instrumentation/hook/`. Never edit these outputs by hand.
 - `tools/build_hook.bat` still builds all targets into `build/hook/`. `tools/lift/pipeline.sh` forwards to `instrumentation/lift/pipeline.sh`.
@@ -48,13 +51,17 @@ Two session kinds do a group. Opus session writes group plan to `build/plans/gro
 End of a step (checklist). Do every item before reporting "done". Show proof of each item in report:
 
 1. Run `bash instrumentation/lift/pipeline.sh`. Search its log for `error C` and `build failed`.
-2. Run `git status`. After lift, `src/lifted/lifted_024d.c`, `src/lifted/lifted_table.c` and `instrumentation/hook/hooks_lifted.c` must show changes. Commit them with the step.
+2. Run `git status`. Commit generated outputs when their content changes. Empty lifted bodies and unchanged tables need no artificial changes.
 3. Run `bash instrumentation/lift/step.sh <functions>`. Summary must name each function of the step. Missing function = not tested.
 4. Run `python -I instrumentation/lift/bench.py --funcs <functions of the step, plus the rewritten functions they call>`. Report the ratio and the calls of each. Above 1.05 with fewer than 20 calls = probably noise: run again with `--all-calls` (3 runs) before you change code. Above 1.05 with many calls in all runs = slower: fix it.
 5. Run comment grep of step 3 on files you wrote.
 6. Docs and `names.csv` must agree. Field meaning changed: `grep` its name in `docs/`, fix each hit.
 7. Get review of step 5. Step with float math needs Opus.
 8. After commit, `git status` must be clean. No push.
+
+For storage or build changes, also run `python -I instrumentation/lift/verify_storage.py`.
+Build the normal target with `SV_BUILD_INSTRUMENTATION=OFF` to check its dependencies.
+Keep the full gate and the relevant synthetic suites. Do not change their references to accept a regression.
 
 Session rules (plan and execution sessions):
 
@@ -129,7 +136,7 @@ Download fails: session needs network access to `crypticsea.gart.sh` and `github
 - `build/hook/opensubrosa24_server.exe` — standalone server (Phase 5, `src/standalone/`). Run in a server folder. `SV_SAMPLE=<file>` writes samples of 1 ms sampling profiler. `python -I instrumentation/lift/samples.py <file>` counts them by function.
 - `tools/launcher/build.bat` — builds `build/launcher/opensubrosa24_launcher.exe`, server panel for testers (C#, .NET Framework 4 compiler that comes with Windows, 32-bit for dumps). Put next to `opensubrosa24_server.exe`. Preset (Normal Playtest, Harness Recording, Playtest (For Speed Issues), Crashhunt, Custom) chooses captures. Each test goes to `logs/<time>/` (`server.log`, `profile.txt`, `packets.bin`, dumps, `marks.txt`, `session.ini`, `notes.txt`), "Pack" makes `logs/test-<time>.zip`. Ctrl+F12 marks the moment. Update zip (dropped on window or exe) replaces only exe files, `LEIA-ME.txt`, `version.txt`, with backup. `launcher.ini test_crash=<s>` tests crash path.
 - `src/platform/plat_imports.c` — game imports for standalone server (static CRT, KERNEL32, ws2_32, three functions of `WSOCK32.dll`). Add new import here. `build/hook/crt_diff.exe` (`instrumentation/tests/crt_diff.c`) compares a CRT function of `MSVCR100.dll` with new CRT before it moves.
-- `build/hook/opensubrosa24_server_record.exe` — harness recording build of standalone server (`instrumentation/standalone/record_shim.c`). Lifted code has `/Gh`: `_penter` gives each call to recorder of hook build (`instrumentation/hook/record.c`, `instrumentation/hook/record_imports.c`), side-effect function (`lf_table` side=1) returns through `rec_return` to close its record. Image at `0x20000000`, as `024d_fixed.exe`, so `harness.exe build/hook/024d_fixed.exe <dir>/sv_snapshot.bin <dir>/sv_args.txt` reads output unchanged. `SV_RECORD_DIR` (output folder), `SV_SNAPSHOT_AFTER` (seconds, default 600). About 57 ticks/s. Launcher preset Harness Recording uses it.
+- `build/hook/opensubrosa24_server_record.exe` records harness inputs (`instrumentation/standalone/record_shim.c`). Its game C has `/Gh`. `_penter` gives calls to the recorder, and `rec_return` closes side-effect records. The recording image stays at `0x20000000`, as `024d_fixed.exe`. `SV_RECORD_DIR` selects the output folder. `SV_SNAPSHOT_AFTER` selects seconds before the snapshot (default 600). The normal server has no entry instrumentation. Launcher preset Harness Recording uses the recording target.
 - Server switches (environment): `SV_LOG` (console copy), `SV_SAMPLE` (profile), `SV_TIMERS`, `SV_PACKETS` (format of `instrumentation/hook/capture.c`, read by `tools/net/capture.py`), `SV_DUMP` and `SV_DUMP_TYPE=small|full` (minidump at crash), `SV_TEST_CRASH=<s>`.
 - `instrumentation/lift/lint.py` — float/int conversions and uninitialized variables in lifted C.
 - `bash instrumentation/lift/pipeline.sh [--export] [--params] [--no-gate] [--full] [gate options]` — lift, build, gate in one command. `--export` runs LiftExport in Ghidra first (without it, lift.py reads `build/lift/ded024d.jsonl`). Gate = `--changed --quick` unless `--full`. Script stops when build fails.

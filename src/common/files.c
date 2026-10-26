@@ -16,7 +16,7 @@
 #define NAME_SIZE 64
 #define MAX_NAMES 1024
 
-#define g_filelist (*SR_AT(FileList, SR_RVA_FILELIST))
+#define g_filelist sr_data_filelist
 
 int __cdecl comparestrings(const void *a, const void *b)
 {

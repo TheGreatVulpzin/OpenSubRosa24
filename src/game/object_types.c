@@ -13,9 +13,9 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_pointtemp SR_AT(vec3, 0x1c497c0) /* the points of the type that is being weighted */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4))    /* (1 0 0) */
-#define g_zaxis (*SR_AT(vec3, 0x60cec))    /* (0 0 1) */
+#define g_pointtemp sr_data_pointtemp /* the points of the type that is being weighted */
+#define g_xaxis sr_data_xaxis    /* (1 0 0) */
+#define g_zaxis sr_data_zaxis    /* (0 0 1) */
 
 static __forceinline vec3 point_delta(const vec3 *point, const vec3 *base)
 {

@@ -30,7 +30,9 @@ STATE_CASES = ('input_actions_zero_64', 'input_actions_zero_255', 'menu6_zero', 
                'bank_items_full', 'wallet_items_full', 'dealer_items_full', 'market_items_full',
                'phone_items_full', 'phone_nohuman', 'message_short', 'message_max', 'chat_high_bytes',
                'kick_last', 'kick_full',
-               'join_same_account_256', 'join_full_new', 'read_short_bits', 'read_short_bytes')
+               'join_same_account_256', 'join_full_new', 'read_short_bits', 'read_short_bytes',
+               'read_nego_disconnected_8', 'read_nego_disconnected_16',
+               'read_nego_disconnected_6', 'read_nego_disconnected_12')
 MARKET = 0x17179600
 KICK_CAPACITY = (net.NUMKICKED - net.KICKED) // 4
 MENU6_VALUES = {'menu6_zero': 0, 'menu6_minus1': -1, 'menu6_minus100000': -100000,
@@ -191,6 +193,15 @@ def state_case(cc, name):
             args = ['R 33650', net.recv_line(net.join_packet((0x5555, 0x6666)), (10, 1, 2, 3), 10000)]
         checks.append('%x 4 %s' % (net.NUMCONN, struct.pack('<i', 256).hex()))
         return args, checks
+    if name.startswith('read_nego_disconnected_'):
+        bits = int(name.rsplit('_', 1)[1])
+        cc.wr(net.RECV_SIZE, -1)
+        cc.wr(net.RECV_POS, 81)
+        cc.wr(net.RECV_BIT, 1)
+        cc.wr(net.BUF, 0x12345678)
+        unchanged(net.BUF, 4)
+        unchanged(net.RECV_SIZE, 12)
+        return ['R ddd0 M:%x V:%x' % (net.BUF, bits)], checks
     if name in {'read_short_bits', 'read_short_bytes'}:
         net.load_recv(cc, b'7DFP\x55')
         cc.wr(net.RECV_BIT, 7)

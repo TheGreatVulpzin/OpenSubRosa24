@@ -22,7 +22,7 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define sr_city (*SR_AT(City, SR_RVA_CITY))
+#define sr_city sr_data_city
 
 /* A value in the range -1 to 1 (steering or throttle). A value that is not a number stays as it is. */
 static float clamp_unit(float v)

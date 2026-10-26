@@ -11,7 +11,7 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
+#define g_parser sr_data_parser
 
 /* Reserves one byte for the final 0. A file that exceeds the buffer gives no text.
  * When the file does not open, the buffer keeps its old bytes. */

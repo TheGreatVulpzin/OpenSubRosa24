@@ -39,27 +39,25 @@
 #endif
 
 void *sr_import(const char *dll, const char *name);
-void sv_hooks_lifted_profile(void);
 void *sr_import_ordinal(const char *dll, unsigned ordinal);
 
-#define G(type, rva) (*(type *)(sr_base + (rva)))
 #ifdef SR_STANDALONE
 int sv_stop_requested(void);
 #endif
 
-/* ------------------------------------------------------------ globals (RVA) */
+/* ------------------------------------------------------------ globals */
 
-#define g_sysinfo (*SR_AT(SysInfo, SR_RVA_SYSINFO))
-#define g_debug (*SR_AT(Debug, SR_RVA_DEBUG))
-#define g_debugit G(int, 0x204020)
-#define g_dedicated G(int, 0x204380) /* 1 once the server is set up */
-#define g_numofstaticbonds G(int, SR_RVA_NUMOFSTATICBONDS)
+#define g_sysinfo sr_data_sysinfo
+#define g_debug sr_data_debug
+#define g_debugit sr_data_debugit
+#define g_dedicated sr_data_dedicated /* 1 once the server is set up */
+#define g_numofstaticbonds sr_data_numofstaticbonds
 
 /* The pointers that the game uses to read and write its files. */
-#define game_fread_ptr G(void *, 0x91022a4)
-#define game_fwrite_ptr G(void *, 0x13bf2d00)
+#define game_fread_ptr (*((void * *)&sr_data_file_read))
+#define game_fwrite_ptr (*((void * *)&sr_data_file_write))
 /* The WSADATA record that WSAStartup fills. */
-#define wsadata ((void *)(sr_base + 0xac218e0))
+#define wsadata ((void *)(uintptr_t)sr_data_wsadata)
 
 /* ------------------------------------------------------------ CRT and WinSock of the game */
 
@@ -209,7 +207,7 @@ void __cdecl sr_dedicatedserverloop(void)
             }
             sv_log("Server status: %.1f ticks/s, %d players, %d bots",
                    (sr_game.ticks - status_ticks) * 1000.0 / ms, players, bots);
-            sv_hooks_lifted_profile();  /* profile=1 in subvulpes.ini */
+            sv_profile_report();
             status_ms += ms;
             status_ticks = sr_game.ticks;
         }
@@ -235,7 +233,7 @@ void __cdecl sr_getpaths(void)
     debug_resetlogfile();
     getcpufrequency();
     setuptimers();
-    G(int, 0xb7a8c84) = 0; /* a game counter that starts at 0 */
+    sr_data_startup_counter = 0; /* a game counter that starts at 0 */
     /* The game reads files through these two pointers (loadblock and others). */
     game_fread_ptr = sr_import("MSVCR100.dll", "fread");
     game_fwrite_ptr = sr_import("MSVCR100.dll", "fwrite");

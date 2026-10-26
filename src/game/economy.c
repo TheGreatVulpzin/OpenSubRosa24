@@ -139,7 +139,7 @@ void economy_carmarket(void)
                     type = 5;
             }
             rows[*count][0] = type;
-            rows[*count][1] = SR_AT(ObjectType, SR_RVA_OBJECTTYPE)[type].price;
+            rows[*count][1] = sr_data_objecttype[type].price;
             rows[*count][2] = os_rand() % 6;
             /* New turbo rows do not change the flag during this refill. */
             ++*count;
@@ -231,7 +231,7 @@ void player_calcassets(int i)
             if (item->type == 24 && (uint32_t)item->vehicle_id < 1024) {
                 Object *object = &sr_objects[item->vehicle_id];
                 if (object->active && object->health > 0)
-                    player->money += SR_AT(ObjectType, SR_RVA_OBJECTTYPE)[object->type].price;
+                    player->money += sr_data_objecttype[object->type].price;
             }
         }
     }

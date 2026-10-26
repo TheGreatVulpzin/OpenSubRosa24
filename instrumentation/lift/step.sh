@@ -45,7 +45,7 @@ fail=0
 
 # A harness result line fails when it has a "different" or a "crashed" count above 0.
 bad_lines() {
-    grep -E "functions tested" "$1" | grep -E ", [1-9][0-9]* different|[1-9][0-9]* lifted crashed"
+    grep -E "functions tested" "$1" | grep -E ", [1-9][0-9]* different|[1-9][0-9]* known differences|[1-9][0-9]* lifted crashed|[1-9][0-9]* skipped"
 }
 
 if [ $pipeline -eq 1 ]; then
@@ -114,7 +114,16 @@ for name in "${names[@]}"; do
     esac
     total=$(grep -c "functions tested" "$log")
     bad=$(bad_lines "$log")
-    if [ "$synth_status" -ne 0 ] || grep -q 'NO RESULT' "$log"; then
+    expected=0
+    # These runners already check their established exceptions and every named call.
+    if [ "$name" = logic ] && [ "$synth_status" -eq 0 ] && grep -qx 'cases failed: 0' "$log"; then
+        expected=$(printf '%s\n' "$bad" | grep -c ' EXPECTED CASE')
+        bad=$(printf '%s\n' "$bad" | grep -v ' EXPECTED CASE' || true)
+    elif [ "$name" = sys ] && [ "$synth_status" -eq 0 ] && grep -qx '0 case(s) to check' "$log"; then
+        expected=$(printf '%s\n' "$bad" | grep -c 'functions tested')
+        bad=""
+    fi
+    if [ "$synth_status" -ne 0 ] || grep -qE 'NO RESULT|CHECK|^skip[[:space:]]|(^|[[:space:]])0 functions tested:' "$log"; then
         echo "synth $name: FAILED (exit $synth_status, log $log)"
         fail=1
     elif [ "$total" -eq 0 ]; then
@@ -125,7 +134,9 @@ for name in "${names[@]}"; do
         echo "$bad" | head -5
         fail=1
     else
-        echo "synth $name: ok ($total cases)"
+        note=""
+        [ "$expected" -gt 0 ] && note=", $expected existing expected cases"
+        echo "synth $name: ok ($total cases$note)"
     fi
 done
 

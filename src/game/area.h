@@ -20,8 +20,8 @@
 #define LINK_DY(w) ((uint32_t)(w) >> 16 & 0xff)
 #define LINK_DZ(w) ((uint32_t)(w) >> 8 & 0xff)
 
-#define g_areas SR_AT(Area, SR_RVA_AREA)
-#define g_sectors SR_AT(BlockSector, SR_RVA_AREA_SECTOR + 0x40)
+#define g_areas sr_data_area
+#define g_sectors ((BlockSector *)&sr_data_area_sector.records)
 
 int area_blocksector(uint32_t area, int x, int y, int z, int *cell);
 uint32_t area_getblock(uint32_t area, int x, int y, int z);

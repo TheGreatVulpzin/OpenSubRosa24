@@ -1,6 +1,6 @@
 /* The harness recording of the standalone server (opensubrosa24_server_record.exe).
  *
- * The recording build compiles the lifted code (src/lifted/lifted_024d.c) with /Gh: each
+ * The recording build compiles the game C with /Gh: each
  * function calls _penter at its start. _penter finds the function in lf_table and gives its
  * arguments to the recorder of the hook build (instrumentation/hook/record.c):
  *   - a pure function: sv_record_args, one "R" line with the arguments;
@@ -8,8 +8,7 @@
  *     it returns, with one "E" line for each import call (the wrappers of
  *     instrumentation/hook/record_imports.c, which sr_import gives to the game in this build). _penter puts
  *     rec_return in place of the return address of the function, to see its return.
- * src/game is not in the recording: its physics functions have many recorded calls, and the
- * hottest functions are there.
+ * The normal build has no entry instrumentation.
  * The image region is at 0x20000000, as the fixed-base 024d of the hook recordings
  * (tools/re/fixed_base.py), so the harness reads these recordings with no change.
  *

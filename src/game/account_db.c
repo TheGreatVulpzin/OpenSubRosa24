@@ -8,11 +8,11 @@
 #include "server.h"
 #include "sr_os.h"
 
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
-#define g_sysinfo (*SR_AT(SysInfo, SR_RVA_SYSINFO))
+#define g_parser sr_data_parser
+#define g_sysinfo sr_data_sysinfo
 typedef size_t (__cdecl *file_transfer)(void *, size_t, size_t, void *);
-#define game_fread (*SR_AT(file_transfer, 0x91022a4))
-#define game_fwrite (*SR_AT(file_transfer, 0x13bf2d00))
+#define game_fread (*((file_transfer *)&sr_data_file_read))
+#define game_fwrite (*((file_transfer *)&sr_data_file_write))
 
 int account_nameexists(const char *name)
 {

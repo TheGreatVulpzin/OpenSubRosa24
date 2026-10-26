@@ -6,12 +6,12 @@
 #include "logic.h"
 #include "vectors.h"
 
-#define g_cityobjects SR_AT(CityObjectRec, SR_RVA_CITYOBJECT)
-#define g_cityobjecttypes SR_AT(CityObjectTypeRec, SR_RVA_CITYOBJECTTYPE)
-#define g_debug (*SR_AT(Debug, SR_RVA_DEBUG))
-#define g_yaxis SR_AT(vec3, 0x60ce0)
-#define g_cubevertex SR_AT(float, 0x60018)
-#define g_cubequad SR_AT(int, 0x60170)
+#define g_cityobjects sr_data_cityobject
+#define g_cityobjecttypes sr_data_cityobjecttype
+#define g_debug sr_data_debug
+#define g_yaxis (&sr_data_yaxis)
+#define g_cubevertex ((float *)&sr_data_cubevertex[0])
+#define g_cubequad sr_data_cubequad
 
 int createcityobject(int type, const vec3 *pos, float angle)
 {

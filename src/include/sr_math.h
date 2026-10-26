@@ -1,4 +1,4 @@
-/* The x87 math functions of the game CRT, with normal cdecl arguments (x87_intrinsics.c).
+/* The x87 math functions with normal cdecl arguments (x87_math.c).
  *
  * They give the same bits as the CRT of the game: it computes sin, cos and the others with its
  * own code, and a different libm differs in the last bit. Call x87_init once at the start.

@@ -38,13 +38,13 @@
 #define BTN_HAND 0x10
 
 /* Game globals. */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
-#define g_blocklist (*SR_AT(BlockList, 0xb7a8ca0))
-#define g_soundlist (*SR_AT(SoundList, 0x916d700))
-#define g_cityobjects SR_AT(CityObjectRec, 0x15e24020)
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_intersect sr_data_intersect
+#define g_blocklist sr_data_blocklist
+#define g_soundlist sr_data_soundlist
+#define g_cityobjects sr_data_cityobject
 /* The y of the building b of the city (City + 0x2f9f0, 0x9dc bytes for each building). */
-#define g_building_y(b) (*SR_AT(float, 0xe2c8c10u + (uint32_t)(b) * 0x9dcu))
+#define g_building_y(b) (*(float *)((uint8_t *)&sr_data_city.building_type + 0x14 + (uint32_t)(b) * 0x9dcu))
 
 /* The state of the buttons for one human. */
 typedef struct Keys {

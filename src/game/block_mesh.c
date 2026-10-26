@@ -10,25 +10,25 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
-#define g_blocktemp (*SR_AT(BlockTemp, SR_RVA_BLOCKTEMP))
-#define g_area_block SR_AT(AreaBlock, SR_RVA_AREA_BLOCK)
-#define g_tempmesh (*SR_AT(TempMesh, SR_RVA_TEMPMESH))
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
-#define g_level_editor (*SR_AT(LevelEditor, SR_RVA_LEVEL_EDITOR))
-#define g_buildblocktype SR_AT(BuildBlockTypeRec, SR_RVA_BUILDBLOCKTYPE)
-#define g_buildingtype (*SR_AT(BuildingType, SR_RVA_BUILDINGTYPE))
-#define g_blocklist (*SR_AT(BlockList, SR_RVA_BLOCKLIST))
-#define g_filelist (*SR_AT(FileList, SR_RVA_FILELIST))
-#define g_surface SR_AT(vec3, SR_RVA_SURFACETEMP)
-#define g_surface_uv SR_AT(float, SR_RVA_SURFACETEMP + 0xc0)
-#define g_cubevertex SR_AT(vec3, SR_RVA_CUBEVERTEX)
-#define g_cubenormal SR_AT(vec3, 0x60078)
-#define g_cubetangent SR_AT(vec3, 0x600c0)
-#define g_cubequad ((const int (*)[4])SR_AT(int, SR_RVA_CUBEQUAD))
+#define g_blocktemp sr_data_blocktemp
+#define g_area_block sr_data_area_block
+#define g_tempmesh sr_data_tempmesh
+#define g_parser sr_data_parser
+#define g_level_editor sr_data_level_editor
+#define g_buildblocktype sr_data_buildblocktype
+#define g_buildingtype sr_data_buildingtype
+#define g_blocklist sr_data_blocklist
+#define g_filelist sr_data_filelist
+#define g_surface ((vec3 *)&sr_data_surface.points)
+#define g_surface_uv ((float *)&sr_data_surface.uv)
+#define g_cubevertex sr_data_cubevertex
+#define g_cubenormal sr_data_cubenormal
+#define g_cubetangent sr_data_cubetangent
+#define g_cubequad ((const int (*)[4])sr_data_cubequad)
 
 typedef size_t(__cdecl *block_io_fn)(void *, size_t, size_t, void *);
-#define game_fread (*SR_AT(block_io_fn, 0x91022a4))
-#define game_fwrite (*SR_AT(block_io_fn, 0x13bf2d00))
+#define game_fread (*((block_io_fn *)&sr_data_file_read))
+#define game_fwrite (*((block_io_fn *)&sr_data_file_write))
 
 static const int cube_sides[6] = {0x30000, 0x60000, 0x10000, 0x50000, 0x20000, 0x40000};
 static const int surface_corners[4] = {0, 3, 15, 12};
@@ -911,7 +911,7 @@ static void terrain_texture(const vec3 *points, int flags)
 static void terrain_shell(void)
 {
     vec3 *s = g_surface;
-    vec3 *t = SR_AT(vec3, SR_RVA_SURFACETEMP2);
+    vec3 *t = ((vec3 *)&sr_data_surface2.points);
     int row;
     for (row = 0; row < 4; row++) {
         int a = row * 4, b = a + 3;
@@ -965,7 +965,7 @@ void area_createsblocks(void)
     int i, j, row, block, result;
     float h;
     vec3 *s = g_surface;
-    vec3 *t = SR_AT(vec3, SR_RVA_SURFACETEMP2);
+    vec3 *t = ((vec3 *)&sr_data_surface2.points);
     g_blocklist.num_blocks = 0;
     block_ids(g_blocklist.edge, 16);
     block_ids(g_blocklist.slab, 4);

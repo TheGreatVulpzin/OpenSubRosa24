@@ -3,9 +3,9 @@
 
 #include <string.h>
 
-#define g_buildingtype (*SR_AT(BuildingType, SR_RVA_BUILDINGTYPE))
-#define g_buildblocktype SR_AT(BuildBlockTypeRec, SR_RVA_BUILDBLOCKTYPE)
-#define g_teamcolor SR_AT(float, 0x603d8)
+#define g_buildingtype sr_data_buildingtype
+#define g_buildblocktype sr_data_buildblocktype
+#define g_teamcolor sr_data_teamcolor
 
 void setupbuildingtypes(void)
 {

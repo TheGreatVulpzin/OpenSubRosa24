@@ -7,7 +7,9 @@
   "hand_hooks": "instrumentation/hook/hooks_024d.c",
   "full_run_paths": [
     "src/lifted/lift_support.h",
-    "src/lifted/x87_intrinsics.c",
+    "src/platform/x87_math.c",
+    "instrumentation/runtime",
+    "instrumentation/standalone",
     "src/lifted/lifted_table.c",
     "instrumentation/tests",
     "instrumentation/platform",

@@ -15,13 +15,13 @@
 #include "sr_types.h"
 #include "vectors.h"
 
-#define g_track SR_AT(TrackPiece, 0x2597efc0)
-#define g_numoftracks (*SR_AT(int, 0x90dc520))
-#define g_land_origin (*SR_AT(vec3, 0x9c1d8c0))
-#define g_land_height SR_AT(float, 0x9c1d8cc)
-#define g_level_editor (*SR_AT(LevelEditor, SR_RVA_LEVEL_EDITOR))
-#define g_building (*SR_AT(Building, SR_RVA_BUILDING))
-#define g_level_marks SR_AT(uint8_t, 0x12a80c44)
+#define g_track sr_data_track
+#define g_numoftracks sr_data_numoftracks
+#define g_land_origin (*((vec3 *)&sr_data_landscape.origin))
+#define g_land_height ((float *)&sr_data_landscape.heights)
+#define g_level_editor sr_data_level_editor
+#define g_building sr_data_building
+#define g_level_marks sr_data_level_marks
 
 static float track_span(const vec3 *a, const vec3 *b, int z_first)
 {

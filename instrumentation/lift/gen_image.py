@@ -1,13 +1,12 @@
-"""Write src/standalone/image_024d.c: the data of the 024d image that the standalone server
-needs, as C arrays.
+"""Write instrumentation/standalone/image_024d.c for differential recordings.
 
 - .rdata (strings, float constants, tables) and the initialized part of .data (0xe00 bytes).
   The rest of .data is zero memory.
 - The relocations outside .text: words of .rdata and .data that hold an image address. The
   server adds its own delta to each one, as the Windows loader does.
 
-The standalone server copies these to their RVAs in a region of SizeOfImage bytes and sets
-sr_base to it (src/standalone/main.c). The arrays are versioned (CLAUDE.md, "Rules").
+The recording runtime copies these to their RVAs in its test image and sets sr_base.
+The normal server uses independent definitions from tools/re/gen_storage.py.
 
 Usage: python -I instrumentation/lift/gen_image.py
 """
@@ -16,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EXE = ROOT / 'original/blackhouser/subrosadedicated024d.exe'
-OUT = ROOT / 'src/standalone/image_024d.c'
+OUT = ROOT / 'instrumentation/standalone/image_024d.c'
 
 
 def sections(d):

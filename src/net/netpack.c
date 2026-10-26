@@ -16,7 +16,7 @@
 #include "util.h"
 #include "vectors.h"
 
-#define sr_cityobjects SR_AT(CityObjectRec, SR_RVA_CITYOBJECT)
+#define sr_cityobjects sr_data_cityobject
 #define EVENT_FILLER 0x12 /* the type of a placeholder: the client skips it */
 #define EVENT_FRESH_TICKS 600
 #define MAX_SENT_BEHIND 0x17 /* a client further behind than this gets no objects */

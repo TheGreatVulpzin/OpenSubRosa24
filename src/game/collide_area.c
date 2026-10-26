@@ -14,13 +14,13 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_intersect (*SR_AT(Intersect, 0x103484a0))
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_blocktypes SR_AT(AreaBlock, SR_RVA_AREA_BLOCK)
-#define g_cityobjecttypes SR_AT(CityObjectTypeRec, 0xf02e500)
-#define g_cubevertex SR_AT(vec3, 0x60018)                       /* the 8 corners of a cube of side 1 */
-#define g_cubenormal SR_AT(vec3, 0x60078)                       /* the normal of each of the 6 faces */
-#define g_cubequad ((const int (*)[4])SR_AT(int, SR_RVA_CUBEQUAD)) /* the 4 corners of each face */
+#define g_intersect sr_data_intersect
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_blocktypes sr_data_area_block
+#define g_cityobjecttypes sr_data_cityobjecttype
+#define g_cubevertex sr_data_cubevertex                       /* the 8 corners of a cube of side 1 */
+#define g_cubenormal sr_data_cubenormal                       /* the normal of each of the 6 faces */
+#define g_cubequad ((const int (*)[4])sr_data_cubequad) /* the 4 corners of each face */
 
 /* The most cells that lineintersectarea walks. */
 #define MAX_LINE_CELLS 0x4000
@@ -47,11 +47,10 @@ static void block_base(vec3 *base, const int cell[3], float size)
 int lineintersectnormalblock(vec3 *hit, vec3 *normal, float *t, const vec3 *from, const vec3 *to, const int cell[3],
                              uint32_t word, float size)
 {
-    uintptr_t image_base = sr_base;
-    const vec3 *vertices = (const vec3 *)(image_base + 0x60018);
-    const vec3 *normals = (const vec3 *)(image_base + 0x60078);
-    const int (*quads)[4] = (const int (*)[4])(image_base + SR_RVA_CUBEQUAD);
-    Intersect *intersect = (Intersect *)(image_base + 0x103484a0);
+    const vec3 *vertices = sr_data_cubevertex;
+    const vec3 *normals = sr_data_cubenormal;
+    const int (*quads)[4] = (const int (*)[4])sr_data_cubequad;
+    Intersect *intersect = &sr_data_intersect;
     vec3 base, a, b, c;
     int f;
 

@@ -422,8 +422,14 @@ def codec_cases(c):
                 for _ in range(8) for bits in (0, 1, 2, 4, 6, 8, 12, 16, 21, 31, 32)]
     out['pbitread_widths'] = bit_widths
 
+    def negative_index(bits, sentinel):
+        def build(cc):
+            load_recv(cc, b'\xff' * 4 if sentinel else b'\x5a\xc3\x96\x1f', pos=0)
+            return ['R ddd0 P:0:00000000 V:%x' % bits]
+        return build
     for i, bits in enumerate((8, 16, 6, 12)):
-        case('pbitreadnego_%d' % i, 'R ddd0 P:0:00000000 V:%x' % bits)
+        out['pbitreadnego_%d' % i] = negative_index(bits, False)
+        out['pbitreadnego_sentinel_%d' % i] = negative_index(bits, True)
     for i, bits in enumerate((8, 16, 31, 5)):
         case('unpackangle_%d' % i, 'R 16710 P:0:00000000 V:%x' % bits)
     for i, v in enumerate(((0.1, 0.2, 0.9), (-0.9, 0.2, 0.1), (0.1, -0.8, 0.3), (0.0, 0.0, -1.0), (1.0, 1.0, 1.0),

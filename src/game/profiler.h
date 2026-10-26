@@ -7,8 +7,8 @@
 
 #include "sr_runtime.h"
 
-#define g_timer SR_AT(Timer, 0x14043a0)
-#define g_timerlist (*SR_AT(TimerList, 0x12a81c60))
+#define g_timer sr_data_timer
+#define g_timerlist sr_data_timerlist
 
 /* The end of a timer: adds the cycles since starttimer to the total, in cycles and in ms. */
 void stoptimer(int timer);

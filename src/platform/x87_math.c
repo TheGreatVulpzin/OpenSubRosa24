@@ -1,11 +1,11 @@
-/* Calls to the MSVC x87 intrinsics of the game CRT (MSVCR100.dll).
- *
- * _CIsqrt, _CIsin... take their arguments on the x87 stack (one in ST0, or two in ST1
- * and ST0) and return in ST0. Lifted code calls x87_*() with normal cdecl arguments.
- * Each thunk loads the arguments on the x87 stack and jumps to the game routine, which
- * returns straight to the caller. The result is bit-for-bit the same as in the original.
- */
-#include "lift_support.h"
+/* Math intrinsics take arguments on the x87 stack and return in ST0.
+ * Each thunk loads C arguments onto that stack and jumps to the selected CRT routine. */
+#include "sr_math.h"
+
+void *sr_import(const char *dll, const char *name);
+
+/* Inline assembly reads the arguments from the stack. */
+#pragma warning(disable : 4100)
 
 static void *p_sqrt, *p_sin, *p_cos, *p_tan, *p_acos, *p_atan2, *p_pow;
 

@@ -7,24 +7,24 @@
 #include "sr_runtime.h"
 
 /* Globals of the network code. */
-#define sr_serverinfo     (*SR_AT(Server, SR_RVA_SERVER))
-#define sr_option         (*SR_AT(Option, SR_RVA_OPTION))
-#define sr_masterserver   (*SR_AT(MasterServer, SR_RVA_MASTERSERVER))
-#define sr_connections    SR_AT(Connection, SR_RVA_CONNECTION)
-#define sr_speex          (*SR_AT(Speex, SR_RVA_SPEEX))
-#define sr_city           (*SR_AT(City, SR_RVA_CITY))
-#define sr_game_world     (*SR_AT(GameWorld, SR_RVA_GAME_WORLD))
-#define sr_market         (*SR_AT(Market, SR_RVA_MARKET))
-#define sr_objectpacket   (*SR_AT(ObjectPacket, SR_RVA_OBJECTPACKET))
-#define sr_radix          (*SR_AT(Radix, SR_RVA_RADIX))
-#define sr_numofconnections (*SR_AT(int, 0x1c4afc0))
-#define sr_kickedip       SR_AT(uint32_t, 0x103485a0)
-#define sr_numofkicked    (*SR_AT(int, 0x10370c00))
-#define sr_numofaccounts  (*SR_AT(int, SR_RVA_ACCOUNT + 4))
-#define sr_account_key    (*SR_AT(uint32_t, SR_RVA_ACCOUNT))
-#define sr_accounts       SR_AT(Account, SR_RVA_ACCOUNT + 8)
-#define sr_currentversion (*SR_AT(int, 0x603c8))
-#define sr_debugit        (*SR_AT(int, 0x204020))
+#define sr_serverinfo     sr_data_server
+#define sr_option         sr_data_option
+#define sr_masterserver   sr_data_masterserver
+#define sr_connections    sr_data_connection
+#define sr_speex          sr_data_speex
+#define sr_city           sr_data_city
+#define sr_game_world     sr_data_game_world
+#define sr_market         sr_data_market
+#define sr_objectpacket   sr_data_objectpacket
+#define sr_radix          sr_data_radix
+#define sr_numofconnections sr_data_numofconnections
+#define sr_kickedip       sr_data_kickedip
+#define sr_numofkicked    sr_data_numofkicked
+#define sr_numofaccounts  (*((int *)&sr_data_accounts.count))
+#define sr_account_key    (*((uint32_t *)&sr_data_accounts.key))
+#define sr_accounts       ((Account *)&sr_data_accounts.records)
+#define sr_currentversion sr_data_currentversion
+#define sr_debugit        sr_data_debugit
 
 void serverrecv(void);
 void servercycle(void);

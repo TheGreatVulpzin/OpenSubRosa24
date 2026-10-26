@@ -11,8 +11,8 @@
 #include "sr_os.h"
 #include "vectors.h"
 
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
+#define g_yaxis sr_data_yaxis
+#define g_intersect sr_data_intersect
 
 static float threat_distance(const vec3 *a, const vec3 *b)
 {

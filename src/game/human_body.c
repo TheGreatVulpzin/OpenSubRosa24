@@ -11,7 +11,7 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_body SR_AT(Body, 0xf270280) /* the bone tree: the parent and the offset of each bone */
+#define g_body sr_data_body /* the bone tree: the parent and the offset of each bone */
 
 #define NUM_HUMANS 0x200
 #define NUM_SLOTS 8
@@ -221,13 +221,12 @@ void setupbody(void)
  * no player, with random colors). It returns the human, or -1 when all 512 are in use. */
 int createhuman(float *posp, float *rot, int player)
 {
-    uintptr_t image_base = sr_base;
-    Human *humans = (Human *)(image_base + SR_RVA_HUMAN);
-    const Player *players = (const Player *)(image_base + SR_RVA_PLAYER);
-    const Body *body = (const Body *)(image_base + 0xf270280);
-    Event *events = (Event *)(image_base + SR_RVA_EVENT);
-    uint32_t *event_count = (uint32_t *)(image_base + SR_RVA_NUMOFEVENTS);
-    const Game *game = (const Game *)(image_base + SR_RVA_GAME);
+    Human *humans = sr_data_human;
+    const Player *players = sr_data_player;
+    const Body *body = sr_data_body;
+    Event *events = sr_data_event;
+    uint32_t *event_count = &sr_data_numofevents;
+    const Game *game = &sr_data_game;
     const vec3 *pos = (const vec3 *)posp;
     Human *hu;
     Event *ev;
@@ -322,7 +321,7 @@ int createhuman(float *posp, float *rot, int player)
         hu->look_b = pl->look_b;
         hu->look_c = pl->look_c;
     }
-    if (*(const int *)(image_base + SR_RVA_SERVER) != 0) {
+    if (sr_server != 0) {
         ev = &events[*event_count];
         ev->type = EVENT_HUMAN;
         ev->tick = game->ticks;

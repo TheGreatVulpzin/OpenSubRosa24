@@ -12,13 +12,12 @@ void *sr_import(const char *dll, const char *name);
 
 typedef size_t(__cdecl *fread_fn)(void *, size_t, size_t, void *);
 
-#define G(type, rva) (*(type *)(sr_base + (rva)))
 
-#define account_key         G(uint32_t, SR_RVA_ACCOUNT)      /* random key, saved in the file */
-#define numofaccounts       G(int, SR_RVA_ACCOUNT + 4)
-#define accounts            ((Account *)(sr_base + SR_RVA_ACCOUNT + 8))
-#define account_file        G(void *, 0x13e22e68)            /* FILE * of the save and load functions */
-#define game_fread          G(fread_fn, 0x91022a4)           /* fread pointer, set by getpaths */
+#define account_key         sr_data_accounts.key
+#define numofaccounts       sr_data_accounts.count
+#define accounts            sr_data_accounts.records
+#define account_file        sr_data_parser.file
+#define game_fread          sr_data_file_read
 
 
 /* Read account versions 1 to 3. A file with invalid counts or short reads gives no accounts.

@@ -93,5 +93,6 @@
 #define SR_MAX_AREA_BLOCK           65536
 #define SR_MAX_AREA                 4
 #define SR_MAX_TIMER                256
+#define SR_MAX_KICKEDIP             41368
 
 #endif

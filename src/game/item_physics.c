@@ -30,7 +30,7 @@
 #define TURN_MIN 1.52587890625E-5
 
 /* Game globals. */
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
+#define g_intersect sr_data_intersect
 
 /* angvel = the angular momentum along each axis of the item, times the inverse inertia. */
 static void item_angvel(Item *it, const vec3 *inv)

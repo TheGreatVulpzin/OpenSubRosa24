@@ -19,12 +19,12 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_bondpass (*SR_AT(int, 0x203dd0))        /* the number of the solver pass */
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
-#define g_track SR_AT(TrackPiece, 0x2597efc0)
-#define g_numoftracks (*SR_AT(int, 0x90dc520))
+#define g_bondpass sr_data_bondpass        /* the number of the solver pass */
+#define g_intersect sr_data_intersect
+#define g_track sr_data_track
+#define g_numoftracks sr_data_numoftracks
 /* The friction of a level material. The table has no name yet. */
-#define g_material_friction(m) (*SR_AT(float, 0x16d50030u + (unsigned)(m) * 0x58u))
+#define g_material_friction(m) sr_data_materials.records[(unsigned)(m)].parameters[3]
 
 /* dst = f * v + dst, each component rounded to a float. */
 static void add_scaled(vec3 *dst, float f, const vec3 *v)

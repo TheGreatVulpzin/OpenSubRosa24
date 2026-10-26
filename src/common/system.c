@@ -6,13 +6,13 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
-#define g_sysinfo (*SR_AT(SysInfo, SR_RVA_SYSINFO))
-#define g_debug (*SR_AT(Debug, SR_RVA_DEBUG))
-#define g_debugit (*SR_AT(int, 0x204020))
-#define g_slogfp (*SR_AT(void *, 0x10348524))
-#define g_tzset_done (*SR_AT(int, 0x61840))
-#define g_numofaccounts (*SR_AT(int, SR_RVA_ACCOUNT + 4))
-#define g_accounts ((Account *)(sr_base + SR_RVA_ACCOUNT + 8))
+#define g_sysinfo sr_data_sysinfo
+#define g_debug sr_data_debug
+#define g_debugit sr_data_debugit
+#define g_slogfp sr_data_slogfp
+#define g_tzset_done sr_data_tzset_done
+#define g_numofaccounts (*((int *)&sr_data_accounts.count))
+#define g_accounts ((Account *)(uintptr_t)((uint8_t *)&sr_data_accounts.records))
 
 /* The offset between the Windows file time and the Unix time, in microseconds. The code
  * subtracts it from a count of 100 ns steps, so the seconds that it gives are far too big. */

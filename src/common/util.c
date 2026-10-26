@@ -7,7 +7,7 @@
 
 #include "sr_runtime.h"
 
-#define g_radix (*SR_AT(Radix, SR_RVA_RADIX))
+#define g_radix sr_data_radix
 
 /* Four passes of one byte each, from the low byte up. Each pass is stable. The work arrays
  * keep the values of the last pass. The list ends with -1 after the last item. */

@@ -16,7 +16,7 @@
 #include "sr_os.h"
 #include "vectors.h"
 
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))
+#define g_yaxis sr_data_yaxis
 #define BUILDING_FIELD(field, building) \
     ((void *)((uint8_t *)&g_city.field + (building) * 0x9dc))
 

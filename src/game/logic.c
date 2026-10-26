@@ -17,8 +17,8 @@
 #include "util.h"
 #include "vectors.h"
 
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))
-#define g_soundlist (*SR_AT(SoundList, SR_RVA_SOUNDLIST))
+#define g_yaxis sr_data_yaxis
+#define g_soundlist sr_data_soundlist
 #define BUILDING_FIELD(field, building) \
     ((void *)((uint8_t *)&g_city.field + (building) * 0x9dc))
 
@@ -37,16 +37,15 @@ static void put_item(int item, int human, int first, int last)
 
 void logic_player(int player)
 {
-    uintptr_t image_base = sr_base;
-    Player *p = (Player *)(image_base + SR_RVA_PLAYER) + player;
-    const City *city = (const City *)(image_base + SR_RVA_CITY);
+    Player *p = sr_data_player + player;
+    const City *city = &sr_data_city;
     const uint8_t *types = (const uint8_t *)&city->building_type;
     int human = p->human_id;
     int count = city->num_buildings, building, bank = -1;
     Human *h;
     if ((uint32_t)human >= 512)
         return;
-    h = (Human *)(image_base + SR_RVA_HUMAN) + human;
+    h = sr_data_human + human;
     for (building = 0; building < count; ++building) {
         int type = *(const int *)(types + building * 0x9dc);
         if ((type == 2 || type == 4 || type == 7) &&
@@ -211,7 +210,7 @@ void logic_setteammanager(int team, int player)
         createevent_updateiteminfo(a);
     }
     /* The completed item scan selects the angle at team index 1024. */
-    angle = (float)((double)*SR_AT(float, 0x953b5c8) - 1.570796326795);
+    angle = (float)((double)*((float *)((uint8_t *)&sr_data_event[11194] + 0x48)) - 1.570796326795);
     rotateorientation(rot, &rot[1], angle);
     pos.x = (float)((double)pos.x + (double)rot[0].x * 0.5);
     pos.y = (float)((double)pos.y + (double)rot[0].y * 0.5);
@@ -229,7 +228,7 @@ void logic_setteammanager(int team, int player)
 
 void logic_farbslist(int rank)
 {
-    Radix *radix = SR_AT(Radix, SR_RVA_RADIX);
+    Radix *radix = (&sr_data_radix);
     int i, account;
     if (rank < 0) {
         sr_createevent_message(0, "Top 10 list", -1, 0);

@@ -7,10 +7,10 @@
 #include "sr_runtime.h"
 #include "sr_types.h"
 
-#define g_tempmesh (*SR_AT(TempMesh, 0x256ad760))
-#define g_bezier_curve SR_AT(float, 0x761ea20)
-#define g_bezier_curve_uv SR_AT(float, 0x13c22d40)
-#define g_bezier_curve_dv SR_AT(float, 0xb0661c0)
+#define g_tempmesh sr_data_tempmesh
+#define g_bezier_curve sr_data_bezier_curve
+#define g_bezier_curve_uv sr_data_bezier_curve_uv
+#define g_bezier_curve_dv sr_data_bezier_curve_dv
 
 float tesselatebezier(int degree, float t, float a, float b, float c, float d)
 {

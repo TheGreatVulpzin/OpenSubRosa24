@@ -18,11 +18,11 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
-#define g_bondpass (*SR_AT(int, 0x203dd0))          /* the number of the solver pass; the wheels read it */
-#define g_numofstaticbonds (*SR_AT(int, 0x13c22d24)) /* the bonds before the contacts of this tick */
-#define g_numofdynamicbonds (*SR_AT(int, 0x1ca5a30)) /* the bonds with the contacts of the last tick */
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_zaxis sr_data_zaxis /* (0 0 1) */
+#define g_bondpass sr_data_bondpass          /* the number of the solver pass; the wheels read it */
+#define g_numofstaticbonds sr_data_numofstaticbonds /* the bonds before the contacts of this tick */
+#define g_numofdynamicbonds sr_data_numofdynamicbonds /* the bonds with the contacts of the last tick */
 
 /* bondsetup, type 0: two particles. The direction from a to b, the stretch, and the share of
  * each side from the masses. */

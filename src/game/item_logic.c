@@ -30,8 +30,8 @@ enum {
 };
 
 /* Game globals. */
-#define g_object SR_AT(Object, SR_RVA_OBJECT)
-#define g_soundlist (*SR_AT(SoundList, 0x916d700))
+#define g_object sr_data_object
+#define g_soundlist sr_data_soundlist
 
 /* The press of the use key. */
 static int use_pressed(const Item *it)

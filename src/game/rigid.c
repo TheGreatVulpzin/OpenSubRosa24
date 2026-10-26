@@ -4,9 +4,9 @@
 #include "sr_runtime.h"
 
 /* Game globals. */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4)) /* (1 0 0) */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
+#define g_xaxis sr_data_xaxis /* (1 0 0) */
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_zaxis sr_data_zaxis /* (0 0 1) */
 
 /* The angular velocity of object obj around center: for each axis, the sum over the particles
  * of the velocity along (axis x r), where r is the particle position from the center, times

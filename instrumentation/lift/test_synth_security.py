@@ -43,6 +43,29 @@ class SecurityTests(unittest.TestCase):
                                                                for v in voice], start=start & 63)
                 self.assertEqual(security.sanitize_input(raw), expected)
 
+    def test_nego_codec_preconditions_and_invalid_controls(self):
+        builders = net.codec_cases(self.case())
+        for name, build in builders.items():
+            if not name.startswith('pbitreadnego_'):
+                continue
+            cc = self.case()
+            cc.wr(net.RECV_SIZE, -1)
+            cc.wr(net.RECV_POS, 81)
+            cc.wr(net.RECV_BIT, 1)
+            line = build(cc)[0]
+            bits = int(line.rsplit('V:', 1)[1], 16)
+            self.assertEqual(cc.rd(net.RECV_POS), 0)
+            self.assertEqual(cc.rd(net.RECV_BIT), 0)
+            self.assertGreaterEqual(cc.rd(net.RECV_SIZE) * 8, bits)
+        for bits in (8, 16, 6, 12):
+            cc = self.case()
+            args, checks = security.state_case(cc, 'read_nego_disconnected_%d' % bits)
+            self.assertEqual(cc.rd(net.RECV_SIZE), -1)
+            self.assertEqual(cc.rd(net.RECV_POS), 81)
+            self.assertEqual(cc.rd(net.RECV_BIT), 1)
+            self.assertEqual(len(args), 1)
+            self.assertEqual(len(checks), 2)
+
     def test_short_packets_drop(self):
         raw = net.input_packet(1, [net.sp.Action(1, 0, 0, b'hello')])
         for size in range(5, len(raw)):

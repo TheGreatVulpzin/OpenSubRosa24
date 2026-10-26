@@ -14,9 +14,9 @@
 #include "sr_runtime.h"
 
 #define MAX_ITEMS 0x400
-#define sr_market (*SR_AT(Market, SR_RVA_MARKET))
+#define sr_market sr_data_market
 /* The first event that eventsimulation did not handle yet (it lives in BlockTemp). */
-#define lastevent (*SR_AT(uint32_t, 0x53f254c))
+#define lastevent (*((uint32_t *)&sr_data_blocktemp.unused_7602c))
 
 /* The next free event, with its type and the tick of now. */
 static Event *new_event(int type)
@@ -58,8 +58,8 @@ void createevent_createobject(int object)
 /* Event 5: the place of an item (on a human, in an item, in a slot), its type and state. */
 void createevent_updateitem(uint32_t item)
 {
-    const Game *game = SR_AT(Game, SR_RVA_GAME);
-    uint32_t *count = SR_AT(uint32_t, SR_RVA_NUMOFEVENTS);
+    const Game *game = (&sr_data_game);
+    uint32_t *count = (&sr_data_numofevents);
     Event *events = sr_events;
     const Item *it = &sr_items[item];
     Event *ev;
@@ -114,14 +114,13 @@ void createevent_updateplayer(int player)
 /* Event 8: the money and the stocks of a player. */
 void createevent_updateplayer_finance(int player)
 {
-    uintptr_t image_base = sr_base;
-    const Player *p = (const Player *)(image_base + SR_RVA_PLAYER) + player;
-    const Game *game = (const Game *)(image_base + SR_RVA_GAME);
-    uint32_t *count = (uint32_t *)(image_base + SR_RVA_NUMOFEVENTS);
-    Event *events = (Event *)(image_base + SR_RVA_EVENT);
+    const Player *p = sr_data_player + player;
+    const Game *game = &sr_data_game;
+    uint32_t *count = &sr_data_numofevents;
+    Event *events = sr_data_event;
     Event *ev;
     uint32_t index;
-    if (*(const int *)(image_base + SR_RVA_SERVER) == 0)
+    if (sr_server == 0)
         return;
     index = *count;
     ev = &events[index];

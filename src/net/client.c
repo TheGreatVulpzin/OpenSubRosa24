@@ -12,12 +12,12 @@
 #include "sr_math.h"
 #include "vectors.h"
 
-#define sr_body SR_AT(Body, SR_RVA_BODY)
-#define sr_cityobjects SR_AT(CityObjectRec, SR_RVA_CITYOBJECT)
-#define sr_areasector (*SR_AT(AreaSector, SR_RVA_AREA_SECTOR))
-#define sr_debug (*SR_AT(Debug, SR_RVA_DEBUG))
-#define sr_voice_channels SR_AT(VoiceChannel, 0xeca4bc0)
-#define sr_view (*SR_AT(int, 0xff47be0)) /* the player whose state the packet carries */
+#define sr_body sr_data_body
+#define sr_cityobjects sr_data_cityobject
+#define sr_areasector sr_data_area_sector
+#define sr_debug sr_data_debug
+#define sr_voice_channels sr_data_voice
+#define sr_view sr_data_view /* the player whose state the packet carries */
 #define NUM_CHANNELS 8
 #define TIMEOUT_TICKS 0x4af
 #define MAX_RING_FRAME 64

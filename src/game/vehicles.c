@@ -21,7 +21,7 @@
 #define PI 3.14159265359
 
 /* Game globals. */
-#define sr_soundlist (*SR_AT(SoundList, 0x916d700))
+#define sr_soundlist sr_data_soundlist
 
 /* The torque of the engine for the rpm of the object. It is 0 above the rpm limit. */
 float getenginetorque2(int obj)

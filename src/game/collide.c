@@ -14,12 +14,12 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_intersect (*SR_AT(Intersect, 0x103484a0))
-#define g_cityobjects SR_AT(CityObjectRec, 0x15e24020)
-#define g_game (*SR_AT(Game, SR_RVA_GAME))
-#define g_city (*SR_AT(City, 0xe299220))
-#define g_cubevertex SR_AT(vec3, 0x60018)                       /* the 8 corners of a cube of side 1 */
-#define g_cubequad ((const int (*)[4])SR_AT(int, SR_RVA_CUBEQUAD)) /* the 4 corners of each face */
+#define g_intersect sr_data_intersect
+#define g_cityobjects sr_data_cityobject
+#define g_game sr_data_game
+#define g_city sr_data_city
+#define g_cubevertex sr_data_cubevertex                       /* the 8 corners of a cube of side 1 */
+#define g_cubequad ((const int (*)[4])sr_data_cubequad) /* the 4 corners of each face */
 #define NUM_CITYOBJECTS 1024
 
 /* Copies a hit point and its normal into the Intersect record, bit for bit. */
@@ -276,8 +276,8 @@ int lineintersectobject(int obj, float *from, float *to, int with_wheels)
 
 /* The landscape: an origin, then a grid of
  * 2049 x 2049 heights, 8 units apart. Each cell is two triangles. */
-#define g_land_origin (*SR_AT(vec3, 0x9c1d8c0))
-#define g_land_height SR_AT(float, 0x9c1d8cc)
+#define g_land_origin (*((vec3 *)&sr_data_landscape.origin))
+#define g_land_height ((float *)&sr_data_landscape.heights)
 #define LAND_CELLS 0x800
 #define LAND_ROW 0x801
 
@@ -534,7 +534,7 @@ int circleintersectlandscape(float *pos, float *rot, float radius)
     return best < 65536.0 ? 1 : 0;
 }
 
-#define g_track SR_AT(TrackPiece, 0x2597efc0)
+#define g_track sr_data_track
 
 /* The line s -> e against triangles first..last-1 of track piece tp, when s is within 64 of its
  * center on each axis. Intersect.fraction gets the part of the line before the nearest hit. */
@@ -579,7 +579,7 @@ int lineintersecttrack(float *from, float *to, int k)
     return track_line((const vec3 *)from, (const vec3 *)to, tp, 0, tp->type == 1 ? tp->num_tris : 14);
 }
 
-#define g_cityobjecttypes SR_AT(CityObjectTypeRec, 0xf02e500)
+#define g_cityobjecttypes sr_data_cityobjecttype
 
 /* A sphere (center, radius r) against the mesh of city object type `type`, turned by rot and
  * placed at pos. hit, normal and *dist get the nearest hit. A quad tests its second triangle

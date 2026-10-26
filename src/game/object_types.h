@@ -6,7 +6,7 @@
 #include "sr_runtime.h"
 #include "sr_types.h"
 
-#define sr_objecttypes SR_AT(ObjectType, SR_RVA_OBJECTTYPE)
+#define sr_objecttypes sr_data_objecttype
 
 void objecttype_addparticle(int type, float x, float y, float z, float mass);
 int objecttype_addbond(int type, int subtype, int particle_a, int particle_b);

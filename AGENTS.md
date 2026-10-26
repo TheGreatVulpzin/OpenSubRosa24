@@ -8,7 +8,10 @@ Read `CLAUDE.md` first. Its rules apply, with the changes below.
 
 Keep verification code and tools in `instrumentation/`. Run the pipeline at `instrumentation/lift/pipeline.sh`.
 The previous entry point, `tools/lift/pipeline.sh`, forwards to that script.
-Keep `src/lifted/`, `src/standalone/image_024d.*`, and `src/standalone/fn_table.c` in the server build.
+The normal server uses direct C calls and separate typed objects in `src/server/storage.c`.
+Keep address dispatch, image storage and instrumentation adapters out of that target.
+The recording target uses the image data in `instrumentation/standalone/`.
+The hook, recording and harness targets select `SR_TEST_MEMORY` and the adapter in `instrumentation/runtime/`.
 Only the separate recording target uses `instrumentation/standalone/record_shim.c` and `instrumentation/hook/record*.c`.
 
 ## What you do
@@ -34,7 +37,7 @@ Write clean C for one step of a group plan. User gives plan file (`plans/group<N
 Do every item before reporting "done". Show proof of each item in report. Paste output of `git status` and `step.sh` summary.
 
 1. Run `bash instrumentation/lift/pipeline.sh`. Search its log for `error C` and `build failed`. Script exits 0 when build fails.
-2. Run `git status`. After lift, `src/lifted/lifted_024d.c`, `src/lifted/lifted_table.c` and `instrumentation/hook/hooks_lifted.c` must show changes. Commit them with the step.
+2. Run `git status`. Commit generated outputs if their content changes. Do not make artificial changes to empty bodies or unchanged tables.
 3. Run `bash instrumentation/lift/step.sh <functions>`. Summary must name each function of the step. Missing function = not tested.
 4. Run `python -I instrumentation/lift/bench.py --funcs <functions of the step, plus the rewritten functions they call>`. Report the ratio and the calls of each. Above 1.05 with fewer than 20 calls = probably noise: run again with `--all-calls` (3 runs) before you change code. Above 1.05 with many calls in all runs = slower: fix it.
 5. Run `grep -n -i "original\|lifted\|rewritten\|024d" <files you wrote>`. Must find nothing.
@@ -43,6 +46,10 @@ Do every item before reporting "done". Show proof of each item in report. Paste 
 8. After commit, `git status` must be clean. No push.
 
 Machine lacks game binaries or recordings: do items 1 to 4 as far as possible, say in report which items you could not do.
+
+For structural storage changes, run `python -I instrumentation/lift/verify_storage.py`.
+Build the normal target with `SV_BUILD_INSTRUMENTATION=OFF` and run the full gate and relevant synthetic suites.
+Generate storage and adapter changes with `python -I tools/re/gen_storage.py`. Do not edit the outputs by hand.
 
 ## Which steps
 

@@ -67,7 +67,7 @@ void __cdecl sr_createevent_updatedoor(int a, int b)
  * The fields have no names yet. The offset is relative to the start of the mission. */
 static int mission_field(int team, int mission, int offset)
 {
-    return *SR_AT(int, SR_RVA_GAME + 0xd0 + (uint32_t)team * 0x117c + (uint32_t)mission * 0x40 + (uint32_t)offset);
+    return *(const int *)((const uint8_t *)&sr_data_game.team0_missions[mission] + (uint32_t)team * 0x117c + (uint32_t)offset);
 }
 
 /* Event type 12: pack the state of one team mission into 4 integers. */

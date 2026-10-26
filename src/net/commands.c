@@ -18,8 +18,8 @@
 #include "server.h"
 #include "sr_server.h"
 
-#define msgbuf SR_AT(char, 0x61848)                  /* the scratch text of the game, 64 bytes */
-#define filtered_word SR_AT(const char, 0x5efec)     /* the word that the chat filter replaces */
+#define msgbuf sr_data_message                  /* the scratch text of the game, 64 bytes */
+#define filtered_word ((const char *)&sr_data_filtered_word[0])     /* the word that the chat filter replaces */
 #define FILTER_LENGTH 6
 #define MAX_ADMIN_TRIES 5
 #define PHONE_ID 0x1a0a /* phone_id of the phones of an admin (/phone) */
@@ -142,7 +142,7 @@ static void kick_player(const char *name)
         if (pid != -1 && strcmp(name, sr_players[pid].name) == 0)
             found = i;
     }
-    if (found != -1 && sr_numofkicked < 41368) {
+    if (found != -1 && sr_numofkicked < SR_MAX_KICKEDIP) {
         sr_kickedip[sr_numofkicked] = sr_connections[found].ip;
         sr_numofkicked++;
         sr_connections[found].idle_ticks = 0x4b0;

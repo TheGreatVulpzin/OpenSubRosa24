@@ -10,11 +10,11 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4)) /* (1 0 0) */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0)) /* (0 1 0) */
-#define g_zaxis (*SR_AT(vec3, 0x60cec)) /* (0 0 1) */
-#define g_body SR_AT(Body, 0xf270280)   /* the bone tree: the parent and the offset of each bone */
-#define g_bondopt SR_AT(BondOpt, SR_RVA_BONDOPT)
+#define g_xaxis sr_data_xaxis /* (1 0 0) */
+#define g_yaxis sr_data_yaxis /* (0 1 0) */
+#define g_zaxis sr_data_zaxis /* (0 0 1) */
+#define g_body sr_data_body   /* the bone tree: the parent and the offset of each bone */
+#define g_bondopt sr_data_bondopt
 
 #define PI_2 1.5707963705062866f /* pi / 2 */
 #define PI_4 0.7853981852531433f /* pi / 4 */

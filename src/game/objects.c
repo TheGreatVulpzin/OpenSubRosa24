@@ -22,13 +22,13 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
-#define g_track SR_AT(TrackPiece, 0x2597efc0)
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))
-#define g_train_near (*SR_AT(int, 0x1952d668)) /* 1 when a locomotive moves toward the crossing */
-#define sr_objecttypes SR_AT(ObjectType, 0xac51bc0)
-#define sr_soundlist (*SR_AT(SoundList, 0x916d700))
-#define sr_city (*SR_AT(City, 0xe299220))
+#define g_intersect sr_data_intersect
+#define g_track sr_data_track
+#define g_yaxis sr_data_yaxis
+#define g_train_near sr_data_train_near /* 1 when a locomotive moves toward the crossing */
+#define sr_objecttypes sr_data_objecttype
+#define sr_soundlist sr_data_soundlist
+#define sr_city sr_data_city
 
 /* Game functions of other files. */
 int __cdecl area_breakblock(uint32_t area, uint32_t x, uint32_t y, uint32_t z, uint32_t word, int spec_face, vec3 *pos,

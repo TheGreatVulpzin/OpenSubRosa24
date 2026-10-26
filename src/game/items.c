@@ -18,9 +18,9 @@
 #define NO_LIMIT 0xffff /* time_to_live of an item that stays */
 
 /* Game globals. */
-#define g_bill_values SR_AT(int, 0x60458) /* the value of each bill type: 1 5 10 20 50 100 1000 0 */
-#define g_xaxis (*SR_AT(vec3, 0x60cd4))   /* (1 0 0) */
-#define g_yaxis (*SR_AT(vec3, 0x60ce0))   /* (0 1 0) */
+#define g_bill_values sr_data_dollarbillvalue /* the value of each bill type: 1 5 10 20 50 100 1000 0 */
+#define g_xaxis sr_data_xaxis   /* (1 0 0) */
+#define g_yaxis sr_data_yaxis   /* (0 1 0) */
 
 /* The shift of the bill at index i (3 bits each): (i * 3) & 31. */
 #define BILL_SHIFT(i) ((uint32_t)((i) * 3) & 31)
@@ -118,10 +118,9 @@ int item_addhumanlink(int item, int human, int slot)
  * place. */
 void item_removehumanlink(uint32_t item, int human, int slot)
 {
-    const uintptr_t base = sr_base;
-    Human *humans = (Human *)(base + SR_RVA_HUMAN);
+    Human *humans = sr_data_human;
     InventorySlot *s = &humans[human].inventory[slot];
-    Item *it = (Item *)(base + SR_RVA_ITEM) + item;
+    Item *it = sr_data_item + item;
     int i = 0;
     while (i < s->count) {
         if ((uint32_t)s->items[i] != item) {
@@ -130,11 +129,11 @@ void item_removehumanlink(uint32_t item, int human, int slot)
         }
         s->items[i] = s->items[--s->count];
         it->parent_human = -1;
-        if (*(const int *)(base + SR_RVA_SERVER) && item < MAX_ITEMS) {
-            uint32_t *count = (uint32_t *)(base + SR_RVA_NUMOFEVENTS);
+        if (sr_server && item < MAX_ITEMS) {
+            uint32_t *count = &sr_data_numofevents;
             uint32_t index = *count;
-            Event *ev = (Event *)(base + SR_RVA_EVENT) + index;
-            const Game *game = (const Game *)(base + SR_RVA_GAME);
+            Event *ev = sr_data_event + index;
+            const Game *game = &sr_data_game;
             ev->type = 5;
             ev->tick = game->ticks;
             ev->param = (it->active + it->type * 2) * 0x400 + (int)item;

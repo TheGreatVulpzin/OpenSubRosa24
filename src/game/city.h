@@ -4,8 +4,8 @@
 
 #include "sr_runtime.h"
 
-#define g_blocklist (*SR_AT(BlockList, SR_RVA_BLOCKLIST))
-#define g_materiallist (*SR_AT(MaterialList, SR_RVA_MATERIALLIST))
+#define g_blocklist sr_data_blocklist
+#define g_materiallist sr_data_materiallist
 
 void city_addintersection(int x, int y, int z);
 void addcitystreet(int a, int b, int width_a, int width_b, const char *name);

@@ -1,5 +1,17 @@
 # Automatic lifting (Phase 3)
 
+The normal server now uses direct C calls and independent typed storage.
+It does not use the image or lifted sources described in the historical sections below.
+`tools/build_server.bat` builds that target with verification tools disabled.
+The hook, harness and recording targets keep their memory adapter in `instrumentation/runtime/`.
+The recording image data lives in `instrumentation/standalone/`.
+
+Run `python -I instrumentation/lift/verify_storage.py` after storage changes.
+It compares every initial storage object with the recording image.
+It then runs table setup and entity creation in both memory modes and compares every storage digest.
+Run the full gate and the relevant synthetic suites too.
+The adapter does not replace those differential tests.
+
 `instrumentation/lift/lift.py` turns the Ghidra pseudo-C of the 024d into C that compiles with MSVC, and generates a hook with verification for each function.
 
 ## Pipeline
@@ -208,7 +220,7 @@ A scope round protects only the pages that the function wrote before, plus a mar
 `_CIsqrt`, `_CIsin`, `_CIcos`, `_CItan`, `_CIacos`, `_CIatan2` and `_CIpow` take their arguments on the x87 stack (ST0, or ST1 and ST0) and return in ST0. Two steps make them work:
 
 1. `instrumentation/ghidra/FixX87Intrinsics.java` gives them their real signatures in the Ghidra project (run it once, without `-readOnly`). The pseudo-C then shows the arguments: `_CIsqrt((double)(x * x + y * y))`.
-2. `src/lifted/x87_intrinsics.c` has a naked thunk for each one. The thunk loads the arguments on the x87 stack and jumps to the routine of the game CRT. The result is bit-for-bit the same as in the original.
+2. `src/platform/x87_math.c` has a naked thunk for each one. The thunk loads the arguments on the x87 stack and jumps to the selected CRT routine. The result is bit-for-bit the same as in the original.
 
 ## Floats
 

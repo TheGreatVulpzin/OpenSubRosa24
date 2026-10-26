@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "hook.h"
+
 #include "sr_runtime.h"
 
 uintptr_t sr_base;

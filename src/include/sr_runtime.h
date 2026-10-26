@@ -1,47 +1,45 @@
-/* Access to the game globals: the real address of each global is sr_base + RVA, where
- * sr_base is the base of the game image.
- */
+/* Shared game storage access. */
 #ifndef SR_RUNTIME_H
 #define SR_RUNTIME_H
 
 #include <stdint.h>
 
-#include "sr_globals_024d.h"
+#ifdef SR_TEST_MEMORY
+#include "storage_adapter.h"
+#else
+#include "sr_storage.h"
+#endif
+#include "sr_limits.h"
 #include "sr_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Base of the game module. The hook DLL sets it at startup. */
-extern uintptr_t sr_base;
-
-/* Write a message to the server log. */
 void sv_log(const char *fmt, ...);
+void sv_profile_report(void);
 
-#define SR_AT(type, rva) ((type *)(sr_base + (rva)))
-
-#define sr_server       (*SR_AT(int, SR_RVA_SERVER))
-#define sr_game         (*SR_AT(Game, SR_RVA_GAME))
-#define sr_events       SR_AT(Event, SR_RVA_EVENT)
-#define sr_numofevents  (*SR_AT(uint32_t, SR_RVA_NUMOFEVENTS))
-#define sr_players      SR_AT(Player, SR_RVA_PLAYER)
-#define sr_items        SR_AT(Item, SR_RVA_ITEM)
-#define sr_itemtypes    SR_AT(ItemType, SR_RVA_ITEMTYPE)
-#define sr_humans       SR_AT(Human, SR_RVA_HUMAN)
-#define sr_objects      SR_AT(Object, SR_RVA_OBJECT)
-#define sr_bullets      SR_AT(Bullet, SR_RVA_BULLET)
-#define sr_numofbullets (*SR_AT(int, SR_RVA_NUMOFBULLETS))
-#define sr_stats        (*SR_AT(Stats, SR_RVA_STATS))
-#define sr_particles    SR_AT(Particle, SR_RVA_PARTICLE)
-#define sr_numofparticles (SR_AT(AreaSector, SR_RVA_AREA_SECTOR)->num_particles)
-#define sr_bonds        SR_AT(Bond, SR_RVA_BOND)
-#define sr_numofbonds   (*SR_AT(int, SR_RVA_NUMOFBONDS))
-#define sr_bondopt      SR_AT(BondOpt, SR_RVA_BONDOPT)
-#define sr_bondparticles SR_AT(BondParticle, SR_RVA_BONDPARTICLE)
-#define sr_bondhumans   SR_AT(BondHuman, SR_RVA_BONDHUMAN)
-#define sr_bsdsocket    (*SR_AT(BsdSocket, SR_RVA_BSDSOCKET))
-#define sr_socketid     (*SR_AT(uint32_t, 0x60d08u)) /* "7DFP": the first 4 bytes of each packet */
+#define sr_server       sr_data_server.active
+#define sr_game         sr_data_game
+#define sr_events       sr_data_event
+#define sr_numofevents  sr_data_numofevents
+#define sr_players      sr_data_player
+#define sr_items        sr_data_item
+#define sr_itemtypes    sr_data_itemtype
+#define sr_humans       sr_data_human
+#define sr_objects      sr_data_object
+#define sr_bullets      sr_data_bullet
+#define sr_numofbullets sr_data_numofbullets
+#define sr_stats        sr_data_stats
+#define sr_particles    sr_data_particle
+#define sr_numofparticles sr_data_area_sector.num_particles
+#define sr_bonds        sr_data_bond
+#define sr_numofbonds   sr_data_numofbonds
+#define sr_bondopt      sr_data_bondopt
+#define sr_bondparticles sr_data_bondparticle
+#define sr_bondhumans   sr_data_bondhuman
+#define sr_bsdsocket    sr_data_bsdsocket
+#define sr_socketid     sr_data_socketid /* "7DFP": the first 4 bytes of each packet */
 
 #ifdef __cplusplus
 }

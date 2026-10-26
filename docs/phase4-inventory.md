@@ -78,7 +78,7 @@ There is no `strcpy`, `strlen` or `strcmp` import: the compiler inlined them (fo
 
 ### 2.3 Math (x87, `_CI*`) and random numbers
 
-`_CI*` are the "no-stack-frame" x87 intrinsics of `MSVCR100.dll`. The argument is in ST0 (or ST1 and ST0 for `_CIatan2`, `_CIpow`) and the result is in ST0. `instrumentation/ghidra/FixX87Intrinsics.java` and `src/lifted/x87_intrinsics.c` already handle this convention for the hooks (`docs/lift.md`). `rand` and `srand` are the MSVC generator, one 32-bit state per thread, returning 15 bits.
+`_CI*` are the "no-stack-frame" x87 intrinsics of `MSVCR100.dll`. The argument is in ST0 (or ST1 and ST0 for `_CIatan2`, `_CIpow`) and the result is in ST0. `instrumentation/ghidra/FixX87Intrinsics.java` and `src/platform/x87_math.c` handle this convention for the hooks (`docs/lift.md`). `rand` and `srand` are the MSVC generator, one 32-bit state per thread, returning 15 bits.
 
 | Import | DLL | Sites | Called from (RVA, name) | Use |
 | --- | --- | ---: | --- | --- |

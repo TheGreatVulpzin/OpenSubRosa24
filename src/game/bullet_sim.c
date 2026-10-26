@@ -19,8 +19,8 @@
 #include "vectors.h"
 
 /* Game globals. */
-#define g_intersect (*SR_AT(Intersect, SR_RVA_INTERSECT))
-#define g_object SR_AT(Object, SR_RVA_OBJECT)
+#define g_intersect sr_data_intersect
+#define g_object sr_data_object
 
 #define GAMETYPE_TEAMS 3
 #define GAMETYPE_BASES 4

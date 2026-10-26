@@ -45,7 +45,7 @@ The 19 functions that are not in C:
 | Dead (`†` in `docs/phase4-inventory.md`) | 17 | client accounts, `building_save`, `leveleditor_save`, `clientrecv`, `unpackobjectpacket`, `packobjectpacket2`, `object_rotorsimulation`, `logicsimulation_driving` and 8 small helpers |
 | Dead through a dead caller, or no caller in the C | 14 | `unpackevent`, `unpackorientation`, `unpackangle`, `pbitreadnego` (callers: `clientrecv`, `unpackobjectpacket`), `economysimulation`, `init_by_array`, `testtimer`, `packunitvector`, `packscalar`, `packpositiondelta`, `unpackpositiondelta`, `lerpnoise2d`, `lineintersectline2d`, `sphereintersectline2d` |
 | CRT and `main` (not in C) | 20 | `getpaths`, `dedicatedserverloop` and 18 CRT functions |
-| Hand-written in `src/standalone/fn_table.c` | 4 | `createevent_message`, `createevent_updatedoor`, `createevent_updatemission`, `fixplayername` |
+| Hand-written in `src/server/` | 4 | `createevent_message`, `createevent_updatedoor`, `createevent_updatemission`, `fixplayername` |
 | Accepted difference (`docs/lift.md`) | 1 | `buildsomeshit` |
 
 ## Phase 4: what the lifted C still takes from the image

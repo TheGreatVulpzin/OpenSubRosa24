@@ -12,10 +12,10 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 
-#define g_option (*SR_AT(Option, SR_RVA_OPTION))
-#define g_config (*SR_AT(Config, SR_RVA_CONFIG))
-#define g_sysinfo (*SR_AT(SysInfo, SR_RVA_SYSINFO))
-#define g_parser (*SR_AT(Parser, SR_RVA_PARSER))
+#define g_option sr_data_option
+#define g_config sr_data_config
+#define g_sysinfo sr_data_sysinfo
+#define g_parser sr_data_parser
 
 /* Sets the value from the number after the key. Every key search starts at the top of the text. */
 static void optionreadwriteint(int *value, const char *key)

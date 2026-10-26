@@ -11,9 +11,9 @@
 #include "vectors.h"
 
 /* Game globals: the state of the Mersenne Twister and the counter of the random vectors. */
-#define g_mt SR_AT(uint32_t, 0x60dc0) /* 624 words */
-#define g_mti (*SR_AT(int, 0x60cd0))  /* 625: no seed yet */
-#define g_random_counter (*SR_AT(uint32_t, 0x916d2c0))
+#define g_mt sr_data_mt /* 624 words */
+#define g_mti sr_data_mti  /* 625: no seed yet */
+#define g_random_counter sr_data_random_counter
 
 #define MT_N 624
 #define MT_M 397

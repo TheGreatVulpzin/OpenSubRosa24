@@ -54,7 +54,7 @@ PURE_IMPORTS = {
     '_CIsqrt', '_CIsin', '_CIcos', '_CItan', '_CIacos', '_CIatan2', '_CIpow',
 }
 
-# x87 intrinsics: arguments on the x87 stack. Lifted code calls the thunks in x87_intrinsics.c.
+# x87 intrinsics: arguments on the x87 stack. Call the thunks in src/platform/x87_math.c.
 X87_INTRINSICS = {'_CIsqrt', '_CIsin', '_CIcos', '_CItan', '_CIacos', '_CIatan2', '_CIpow'}
 
 # Byte swaps: inline (WinSock imports of the 024d are by ordinal).

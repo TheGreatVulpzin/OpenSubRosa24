@@ -137,7 +137,14 @@ The harness keeps testing the functions against the 024d. No packet replay test 
 
 ## Phase 6 — Readable server
 
-Rewrite every server function by hand into clean C (`src/common/`, `src/net/`, `src/game/`, `src/server/`), as `src/server/accounts.c` and `events.c` already do. The lifted version stays as the fallback until the rewrite is done.
+Structural migration, 2026-10-26: the normal server now calls C functions directly.
+It stores game state in separate typed objects, without a game image or address dispatcher.
+The recording target and differential tools retain their separate image adapter.
+See [Independent C server storage](server-c-migration.md) for the reference, steps and verification results.
+
+The normal server builds the C functions in `src/common/`, `src/net/`, `src/game/` and `src/server/`.
+Lifted metadata remains in verification targets. The normal target has no lifted fallback.
+The remaining work in this phase concerns readability and review.
 
 - A rewritten function has its real name (`analysis/024d/functions.csv`), real types and real variable names. `lift.py` finds it by that name and lifts it no more. The table of the harness and the hooks use the same name. The code does not depend on the transition tools: when the rewrite ends, the game compiles without `lift.py`.
 - The x87 math of the game CRT is `x87_sqrt`, `x87_sin` and the others (`src/include/sr_math.h`).
