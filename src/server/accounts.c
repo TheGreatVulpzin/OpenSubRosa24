@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "random.h"
 #include "sr_runtime.h"
 #include "sr_server.h"
 
@@ -18,12 +19,7 @@ typedef size_t(__cdecl *fread_fn)(void *, size_t, size_t, void *);
 #define accounts            ((Account *)(sr_base + SR_RVA_ACCOUNT + 8))
 #define account_file        G(void *, 0x13e22e68)            /* FILE * of the save and load functions */
 #define game_fread          G(fread_fn, 0x91022a4)           /* fread pointer, set by getpaths */
-#ifdef SR_STANDALONE
-void *sr_fn(uintptr_t va);
-#define genrand_int32       ((uint32_t(__cdecl *)(void))sr_fn(0x400000u + 0xae50))
-#else
-#define genrand_int32       ((uint32_t(__cdecl *)(void))(sr_base + 0xae50))
-#endif
+
 
 /* Read account versions 1 to 3. A file with invalid counts or short reads gives no accounts.
  * The key keeps its new random value when the file is absent or invalid.

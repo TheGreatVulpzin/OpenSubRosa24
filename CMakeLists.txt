@@ -46,7 +46,7 @@ add_library(sv_wsock32 SHARED
     ${SV_REWRITTEN_SOURCES}
 )
 set_target_properties(sv_wsock32 PROPERTIES OUTPUT_NAME wsock32)
-target_include_directories(sv_wsock32 PRIVATE src/include src/lifted instrumentation/hook ${SV_REWRITTEN_INCLUDES})
+target_include_directories(sv_wsock32 PRIVATE src/include src/lifted instrumentation/hook instrumentation/runtime ${SV_REWRITTEN_INCLUDES})
 # Lifted Ghidra code: x87 math like the original (/arch:IA32), no warnings (decompiler style).
 set_source_files_properties(src/lifted/lifted_024d.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
 # Code rewritten by hand from the lifted C (Phase 6): x87 math like the original. The warnings

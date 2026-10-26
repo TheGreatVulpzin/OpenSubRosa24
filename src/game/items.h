@@ -48,6 +48,7 @@ void item_removeitemlink(uint32_t child, uint32_t parent);
 uint32_t createitem(int type, const vec3 *pos, const vec3 *vel, const vec3 rot[3]);
 int linkitem(uint32_t item, uint32_t child, int human, int slot);
 void itemtimetolive(void);
+void itemsimulation(void);
 
 /* item_types.c */
 void setupitemtypes(void);
