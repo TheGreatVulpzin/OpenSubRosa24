@@ -66,7 +66,7 @@ The build is x86 (32 bit). The result is in `build\hook\`:
 ## Run the server
 
 If you just want to run the server, download the [server package](https://github.com/TheGreatVulpzin/OpenSubRosa24/releases).
-The package includes `data/` and a default `config.txt`.
+The package includes `data/`. The launcher creates `config.txt` on first use.
 
 1. Extract the zip into a new folder.
 2. Open `opensubrosa24_launcher.exe`.

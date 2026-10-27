@@ -33,13 +33,14 @@ try {
     $launcher = [IO.File]::ReadAllText((Join-Path $repo 'tools\launcher\Launcher.cs'))
     $list = [regex]::Match($launcher, '(?s)string\[\] UpdateFiles\s*=\s*\{(.*?)\}').Groups[1].Value
     $names = @([regex]::Matches($list, '"([^"]+)"') | ForEach-Object { $_.Groups[1].Value })
-    Assert ($archive.Entries.Count -eq 13) 'Expected eight root files and five data files.'
+    Assert ($archive.Entries.Count -eq 12) 'Expected seven root files and five data files.'
+    Assert ($null -eq $archive.GetEntry("OpenSubRosa24-server-$version/config.txt")) 'The package must not include config.txt.'
     $executables = @($archive.Entries | Where-Object { $_.Name.EndsWith('.exe') } | ForEach-Object Name | Sort-Object)
     $expectedExecutables = @('opensubrosa24_server.exe', 'opensubrosa24_server_record.exe', 'opensubrosa24_launcher.exe') | Sort-Object
     Assert (($executables -join ',') -ceq ($expectedExecutables -join ',')) 'The package executable names must use opensubrosa24.'
     foreach ($entry in $archive.Entries) {
         $relative = $entry.FullName.Substring("OpenSubRosa24-server-$version/".Length)
-        Assert ($entry.Name -cin $names -or $relative -cin @('config.txt', 'readme.txt') -or
+        Assert ($entry.Name -cin $names -or $relative -ceq 'readme.txt' -or
             $relative.StartsWith('data/')) "Unexpected zip entry: $relative"
         Write-Host "ZIP: $($entry.FullName) ($($entry.Length) bytes)"
     }
@@ -79,11 +80,10 @@ try {
     Expect-Rejection 'password assignment' { & $script -Version $version -DataDir $fixture } 'Private data detected*'
 } finally { [IO.File]::WriteAllBytes($readme, $saved) }
 $config = Join-Path $package.Package 'config.txt'
-$savedConfig = [IO.File]::ReadAllBytes($config)
 try {
     [IO.File]::WriteAllText($config, 'serverpassword=package-test-value')
-    Expect-Rejection 'private config' { & $script -Version $version -DataDir $fixture } 'The package config.txt must match*'
-} finally { [IO.File]::WriteAllBytes($config, $savedConfig) }
+    Expect-Rejection 'stray config' { & $script -Version $version -DataDir $fixture } 'Forbidden package entry*'
+} finally { Remove-Item -LiteralPath $config -ErrorAction SilentlyContinue }
 Expect-Rejection 'version path traversal' { & $script -Version '../invalid' -DataDir $fixture } 'Use a version*'
 Expect-Rejection 'missing data argument' { & $script -Version $version } 'Pass -DataDir*'
 

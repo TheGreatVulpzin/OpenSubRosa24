@@ -38,15 +38,14 @@ $sources = [ordered]@{
     'opensubrosa24_launcher.exe' = 'build\launcher\opensubrosa24_launcher.exe'
     'LEIA-ME.txt' = 'tools\release\LEIA-ME.txt'
     'record_focus.txt' = 'instrumentation\recording\record_focus.txt'
-    'config.txt' = 'tools\release\default-config.ini'
     'readme.txt' = 'tools\release\newspaper.txt'
 }
 $allowed = @($sources.Keys) + @('version.txt')
 $allowed += @($dataFiles | ForEach-Object { "data/$($_.Relative)" })
 $directories = @('data', 'data/block', 'data/building', 'data/texture', 'data/weapon')
-$defaultConfig = [IO.File]::ReadAllBytes((Join-Path $repo $sources['config.txt']))
 
 # Copy build outputs, package defaults and checked data files.
+# The package has no config.txt: the launcher creates it with a new admin password.
 foreach ($source in $sources.Values) {
     $path = Join-Path $repo $source
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
@@ -68,11 +67,6 @@ function Assert-Package {
         }
         if ($relative -cnotin $allowed) {
             throw "Forbidden package entry: $($item.Name)"
-        }
-        if ($relative -ceq 'config.txt' -and
-            [Convert]::ToBase64String([IO.File]::ReadAllBytes($item.FullName)) -cne
-            [Convert]::ToBase64String($defaultConfig)) {
-            throw 'The package config.txt must match the public default.'
         }
         if ($item.Extension -eq '.txt') {
             $text = [IO.File]::ReadAllText($item.FullName)

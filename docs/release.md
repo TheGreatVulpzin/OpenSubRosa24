@@ -4,7 +4,7 @@ Download the server package from [Releases](https://github.com/TheGreatVulpzin/O
 Each release contains a zip and its `.zip.sha256` file.
 Extract the zip, open `opensubrosa24_launcher.exe`, select the server folder, then save the server settings.
 Click **Start** on Server. **Stop** and window close request a safe stop between server ticks.
-The package includes `data/` and a default `config.txt`. No separate server installation is needed.
+The package includes `data/`. The launcher creates `config.txt` on first use, with a new admin password. No separate server installation is needed.
 
 ## Build a local package
 
@@ -36,7 +36,7 @@ build/package/OpenSubRosa24-server-v0.0.2-test.zip
 build/package/OpenSubRosa24-server-v0.0.2-test.zip.sha256
 ```
 
-The package contains three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt`, `config.txt`, `readme.txt` and `data/`.
+The package contains three executables, `LEIA-ME.txt`, `version.txt`, `record_focus.txt`, `readme.txt` and `data/`. It has no `config.txt`.
 `version.txt` contains the version tag, short commit hash and UTC package date.
 The script checks paths, executable formats, game binary hashes, public defaults and the final zip entries.
 It rejects private configuration and unexpected files left by an earlier run.
