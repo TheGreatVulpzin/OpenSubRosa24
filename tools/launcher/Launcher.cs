@@ -842,6 +842,14 @@ namespace SubVulpes
                 message.Text = Path.GetFileName(exe) + " is not in this folder.";
                 return;
             }
+            if (MissingAdminPassword(passwordBox.Text)) {
+                message.Text = "Set an admin password before you start the server.";
+                dirtyText.Text = message.Text;
+                dirtyText.ForeColor = Color.Red;
+                ShowPage("Server settings");
+                passwordBox.Focus();
+                return;
+            }
             try {
                 if (dirty) SaveSettings();
                 if (developerRun) SaveCaptureChoice();
@@ -1235,6 +1243,28 @@ namespace SubVulpes
 
         // ------------------------------------------------------------ update
 
+        // A password of 16 letters and digits. The set has no 0, O, 1, l or I.
+        public static string NewAdminPassword()
+        {
+            const string set = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+            var chars = new char[16];
+            var bytes = new byte[1];
+            using (var random = new RNGCryptoServiceProvider()) {
+                for (int i = 0; i < chars.Length; ) {
+                    random.GetBytes(bytes);
+                    // Skip the top bytes so that every character has the same chance.
+                    if (bytes[0] < 256 - 256 % set.Length)
+                        chars[i++] = set[bytes[0] % set.Length];
+                }
+            }
+            return new string(chars);
+        }
+
+        public static bool MissingAdminPassword(string password)
+        {
+            return string.IsNullOrWhiteSpace(password);
+        }
+
         public static string RedactLog(string text, string password)
         {
             text = Regex.Replace(text, @"/admin [^\r\n]*", "/admin [redacted]");
@@ -1508,6 +1538,11 @@ namespace SubVulpes
             loading = true;
             nameBox.Text = config.Get("servername", "");
             passwordBox.Text = config.Get("serverpassword", "");
+            if (MissingAdminPassword(passwordBox.Text)) {
+                passwordBox.Text = NewAdminPassword();
+                config.Set("serverpassword", passwordBox.Text);
+                config.Save();
+            }
             string readme = Path.Combine(folder, "readme.txt");
             welcomeBox.Text = File.Exists(readme) ? File.ReadAllText(readme, Encoding.Default).TrimEnd() : "";
 

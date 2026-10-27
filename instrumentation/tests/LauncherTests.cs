@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -188,8 +189,21 @@ namespace SubVulpes
             string packageVersion = File.ReadLines(Path.Combine(repo, "build", "package", "OpenSubRosa24-server-v0.0.2-test", "version.txt")).First();
             Check(form.Text == "OpenSubRosa24 Server - " + packageVersion, "window title uses the version from the real package");
             Check(Field<Label>(form, "missingText").Text == "Missing: data/, config.txt (created)", "first run names both missing files on one line");
-            Check(File.ReadAllBytes(Path.Combine(root, "config.txt")).SequenceEqual(
-                File.ReadAllBytes(Path.Combine(repo, "tools", "release", "default-config.ini"))), "missing config uses the exact public package default");
+            string firstConfig = File.ReadAllText(Path.Combine(root, "config.txt"), Encoding.Default);
+            Match generated = Regex.Match(firstConfig, @"^serverpassword=([A-Za-z0-9]{16})\r?$", RegexOptions.Multiline);
+            Check(generated.Success, "first run writes a generated 16 character admin password to config.txt");
+            Check(Field<TextBox>(form, "passwordBox").Text == generated.Groups[1].Value, "the generated password shows in Server settings");
+            Func<string, string[]> configLines = text => text.Replace("\r\n", "\n").Split('\n').Where(l => l.Length > 0).ToArray();
+            Check(configLines(firstConfig.Replace("serverpassword=" + generated.Groups[1].Value, "serverpassword=")).SequenceEqual(
+                configLines(File.ReadAllText(Path.Combine(repo, "tools", "release", "default-config.ini"), Encoding.Default))),
+                "missing config uses the public package default plus the generated password");
+            var seen = new HashSet<string>();
+            for (int i = 0; i < 50; i++) {
+                string candidate = LauncherForm.NewAdminPassword();
+                Check(Regex.IsMatch(candidate, "^[A-HJ-NP-Za-km-z2-9]{16}$") && seen.Add(candidate), "generated password uses the safe set and differs each time");
+            }
+            Check(LauncherForm.MissingAdminPassword("") && LauncherForm.MissingAdminPassword("   ") && !LauncherForm.MissingAdminPassword("abc"),
+                  "empty and blank passwords count as missing");
             await Capture(form, "01-first-run", "Server");
             string otherFolder = Path.Combine(root, "other-server");
             Directory.CreateDirectory(otherFolder);
@@ -204,6 +218,12 @@ namespace SubVulpes
             File.Copy(Path.Combine(repo, "build", "hook", "opensubrosa24_server_record.exe"), Path.Combine(root, "opensubrosa24_server_record.exe"));
             Field<CheckBox>(form, "recordBox").Enabled = true;
             Call(form, "ShowMissing", false);
+            mainTabs.SelectedTab = pages["Server"];
+            Field<TextBox>(form, "passwordBox").Text = "   ";
+            Click(form, "startStop");
+            Check(Field<Process>(form, "server") == null && mainTabs.SelectedTab == pages["Server settings"] &&
+                  Field<Label>(form, "dirtyText").Text == "Set an admin password before you start the server.",
+                  "Start refuses a blank admin password and opens Server settings");
             mainTabs.SelectedTab = pages["Server settings"];
             Field<TextBox>(form, "nameBox").Text = "Launcher test";
             string secret = "test-only-" + Guid.NewGuid().ToString("N");
