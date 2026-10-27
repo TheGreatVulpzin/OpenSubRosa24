@@ -13,7 +13,7 @@ First use:
    To select another server folder, use Browse in Launcher settings. It creates the default config.txt if missing.
    One line lists missing data/ or config.txt.
 3. Open Server settings. Set the server name, player limit, round time, UDP port and admin
-   password. Click Save. The default admin password is empty. Show reveals or masks the field.
+   password. Click Save. The launcher makes an admin password on first use. Show reveals or masks the field.
 4. Open Server. Click Start. Join with your Sub Rosa 0.24 client.
    Server shows the live log, players and tick speed. Counts update each minute.
 5. Click Stop, or close the launcher, to stop the server safely.
@@ -63,7 +63,7 @@ Primeiro uso:
    Para escolher outra pasta, use Browse em Launcher settings. O launcher lembra a pasta. Se config.txt faltar, ele cria o padrão do pacote.
    Uma linha mostra se falta data/ ou config.txt.
 3. Abra Server settings. Defina nome do servidor, limite de jogadores, tempo de rodada,
-   porta UDP e senha de admin. Clique em Save. A senha padrão está vazia.
+   porta UDP e senha de admin. Clique em Save. O launcher cria uma senha de admin no primeiro uso.
    Use Show para mostrar ou ocultar a senha.
 4. Abra Server. Clique em Start. Entre com seu cliente Sub Rosa 0.24.
    Server mostra log ao vivo, jogadores e tick. Os valores mudam a cada minuto.

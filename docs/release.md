@@ -62,7 +62,7 @@ Keep `config.txt`, `data/` and `user/`.
 
 The launcher stores the last server folder as `server_folder` in `launcher.ini` beside the launcher.
 Server options use `servername`, `maxnumofplayers`, `roundtime`, `port` and `serverpassword` from `src/game/options.c`.
-The password starts masked. **Show** reveals or masks it. It never enters `launcher.ini` or launcher log messages.
+The launcher makes a 16 character password when `config.txt` has none, and refuses to start the server with a blank password. The password starts masked. **Show** reveals or masks it. It never enters `launcher.ini` or launcher log messages.
 The player limit is 2 to 128. Round time is 1 to 30 minutes in Round mode.
 If `config.txt` is missing, the launcher creates the embedded package default and names the missing file on one line.
 It also names missing `data/`. Start needs that directory and the selected server executable.

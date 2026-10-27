@@ -77,7 +77,7 @@ The package includes `data/` and a default `config.txt`.
 To let players outside your network join, allow the default port (UDP) 27584 in your router and in the Windows firewall. If you change the port in Server settings, allow the new port.
 If you cannot open the port, you can use a virtual network such as Radmin VPN: the host and the players join the same network, and the players connect to the IP of the host in that network.
 
-The default admin password is empty. The launcher saves the password only in `config.txt`. Use **Show** to reveal or mask it.
+The launcher makes an admin password on first use and saves it only in `config.txt`. Use **Show** in Server settings to see it. The launcher does not start the server with an empty password.
 Keep that file private. If it is missing, the launcher creates the package default.
 The first-run message lists missing `data/` or `config.txt` on one line.
 
