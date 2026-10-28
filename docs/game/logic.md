@@ -90,12 +90,14 @@ The action ring advances with `(tail + 1) & 63`.
 | 4 | 1 to 4 buy item types 10, 6, 0 and 2. Value 16 returns to menu 3. |
 | 5 | 1 to 4 buy item types 11, 7, 1 and 3. Value 16 returns to menu 3. |
 | 6 | A row buys a team car and key. Value 16 returns to menu 3. |
-| 7 | 1 buys type 12. Value 2 buys type 13. |
-| 8 | Odd values 1, 3, 5 and 7 buy 1, 10, 100 and 5000 shares. The following even values sell them. |
+| 7 | 1 buys type 12. Value 2 buys type 13. Value 16 returns to menu 3. |
+| 8 | Odd values 1, 3, 5 and 7 buy 1, 10, 100 and 5000 shares. The following even values sell them. Value 16 returns to menu 3. |
 | 9 | 1 opens shop menu 10 |
 | 10 | A row buys a suit, car or gun from the selected building |
 | 11 | 1 to 6 withdraw bills from the team stake. Value 7 deposits money or completes a mission. Value 16 returns. |
 | 12 | 1 to 6 withdraw bills from player money. Value 7 deposits money. Value 16 returns. |
+
+The lifted `logic_playeractions` had no return for menus 7 and 8. A player who opened the equipment menu stayed in it until the player left the base, because leaving sets the menu to 0. The maintainer reports that the original game does not do this, so the lift lost the return. Both menus now return to menu 3 with value 16, as menus 4, 5 and 6 do. A play test with the original client on a server that had this change showed that the Back button of the equipment menu works. The gate has not checked this path.
 
 Weapon purchases stop at ten per player. Small bill withdrawals stop at forty.
 Car purchases stop at three per player. The periodic reset reduces this count by one when it is positive.

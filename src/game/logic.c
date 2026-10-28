@@ -507,6 +507,8 @@ void logic_playeractions(int player)
                             createevent_updateplayer_finance(player);
                         ++p->num_purchases;
                     }
+                    if (value == 16)
+                        p->menu = 3;
                 } else if (id == 8) {
                     static const int amount[4] = {1, 10, 100, 5000};
                     if (value >= 1 && value <= 8) {
@@ -516,6 +518,8 @@ void logic_playeractions(int player)
                             playersellstock(player, amount[(value - 1) / 2]);
                     }
                     createevent_updateplayer_finance(player);
+                    if (value == 16)
+                        p->menu = 3;
                 } else if (id == 11) {
                     if (p->team >= 0 && p->team < 5)
                         bank_action(player, value, 0);
