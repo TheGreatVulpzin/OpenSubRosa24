@@ -426,10 +426,37 @@ static void add_packet(Call *c, char *line)
 /* Hand-written functions (src/server/) that the lifter does not convert. The recordings have
  * no call of a function without a record hook. A function without arguments then runs once
  * from the snapshot. */
+#ifdef CL_HARNESS
+/* The client has no hand-written function. */
+static const LfEntry hand_table[1] = { { NULL } };
+#define HAND_COUNT 0
+#else
 static const LfEntry hand_table[] = {
     { "loadaccountsserver", 0xe2e0, (void *)(uintptr_t)sr_loadaccountsserver, 0, LF_RET_VOID, 4, "" },
 };
 #define HAND_COUNT ((int)(sizeof hand_table / sizeof hand_table[0]))
+#endif
+
+#ifdef CL_HARNESS
+/* A crash outside the guarded runs ends the harness without a word. Log the first ones. */
+static LONG CALLBACK crash_log(EXCEPTION_POINTERS *ep)
+{
+    static int n;
+    const EXCEPTION_RECORD *r = ep->ExceptionRecord;
+    uintptr_t at = (uintptr_t)r->ExceptionAddress;
+    if ((r->ExceptionCode == EXCEPTION_ACCESS_VIOLATION || r->ExceptionCode == EXCEPTION_ILLEGAL_INSTRUCTION ||
+         r->ExceptionCode == EXCEPTION_PRIV_INSTRUCTION || r->ExceptionCode == EXCEPTION_STACK_OVERFLOW) && n++ < 5) {
+        fprintf(stderr, "exception 0x%08lx at 0x%08x (image+0x%x)", (unsigned long)r->ExceptionCode, (unsigned)at,
+                (unsigned)(at - sr_base));
+        if (r->NumberParameters >= 2)
+            fprintf(stderr, ", %s of 0x%08x", r->ExceptionInformation[0] ? "write" : "read",
+                    (unsigned)r->ExceptionInformation[1]);
+        fprintf(stderr, " eax=%08x esp=%08x\n", (unsigned)ep->ContextRecord->Eax, (unsigned)ep->ContextRecord->Esp);
+        fflush(stderr);
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+#endif
 
 static const LfEntry *table_entry(int i)
 {
@@ -1125,6 +1152,9 @@ int main(int argc, char **argv)
     plat_test_patch_globals();
     imports = resolve_imports();
     x87_init();
+#ifdef CL_HARNESS
+    AddVectoredExceptionHandler(1, crash_log);
+#endif
     if (getenv("HARNESS_CLEAN_CHECKS"))
         return run_clean_checks(getenv("HARNESS_CLEAN_CHECKS"));
     if (invalid && (getenv("HARNESS_TIME") || getenv("HARNESS_COVER"))) {

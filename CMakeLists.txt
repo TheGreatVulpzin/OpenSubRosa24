@@ -98,6 +98,20 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
     set_source_files_properties(build/lift/client_win/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
     set_source_files_properties(build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+
+    # Offline harness for the client: the same program as the server harness, with the client sources.
+    add_executable(harness_client instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c
+        instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
+        instrumentation/platform/plat_test.c build/lift/client_win/lifted_client.c build/lift/client_win/lifted_table.c
+        src/platform/x87_math.c)
+    target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
+        instrumentation/hook instrumentation/runtime)
+    target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
+    target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152 SR_TEST_MEMORY CL_HARNESS)
+    target_link_options(harness_client PRIVATE /LARGEADDRESSAWARE /MAP /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
+    set_property(TARGET harness_client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set_source_files_properties(build/lift/client_win/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
+    set_source_files_properties(build/lift/client_win/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 endif()
 set_property(TARGET cl_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_link_options(cl_wsock32 PRIVATE /MAP)

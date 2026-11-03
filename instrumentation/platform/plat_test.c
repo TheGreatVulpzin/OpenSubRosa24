@@ -219,6 +219,34 @@ static void __cdecl st_free(void *p)
         ev("free %p (not from the pool)", p);
 }
 
+/* The pool keeps no block sizes: realloc copies the new size, cut at the end of the pool.
+ * A pointer from outside the pool (a block of the recorded process) is copied only while its
+ * memory is readable. Both runs of a call get the same bytes. */
+static void *__cdecl st_realloc(void *old, size_t n)
+{
+    void *p;
+    size_t keep = n;
+    if (!old)
+        return st_malloc(n);
+    p = st_malloc(n);
+    if (!p)
+        return NULL;
+    if ((uint8_t *)old >= g_pool && (uint8_t *)old < g_pool + POOL_SIZE) {
+        size_t room = (size_t)(g_pool + POOL_SIZE - (uint8_t *)old);
+        if (keep > room)
+            keep = room;
+    } else {
+        MEMORY_BASIC_INFORMATION mi;
+        if (!VirtualQuery(old, &mi, sizeof mi) || mi.State != MEM_COMMIT || (mi.Protect & PAGE_NOACCESS))
+            keep = 0;
+        else if (keep > (size_t)(mi.BaseAddress) + mi.RegionSize - (size_t)old)
+            keep = (size_t)(mi.BaseAddress) + mi.RegionSize - (size_t)old;
+    }
+    memmove(p, old, keep);
+    ev("realloc %u", (unsigned)n);
+    return p;
+}
+
 /* ------------------------------------------------------------------ files */
 
 static int is_file(const char *path)
@@ -594,6 +622,7 @@ static const Stub g_stubs[] = {
     { "MSVCR100.dll", "_sleep", 0, (void *)st_sleep },
     { "MSVCR100.dll", "malloc", 0, (void *)st_malloc },
     { "MSVCR100.dll", "free", 0, (void *)st_free },
+    { "MSVCR100.dll", "realloc", 0, (void *)st_realloc },
     { "MSVCR100.dll", "fopen", 0, (void *)st_fopen },
     { "MSVCR100.dll", "fclose", 0, (void *)st_fclose },
     { "MSVCR100.dll", "fread", 0, (void *)st_fread },

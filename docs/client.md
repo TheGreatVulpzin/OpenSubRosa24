@@ -170,6 +170,30 @@ Known gaps:
 - `record_imports.c` wraps the imports of the server. The log shows 7 errors for `_CIsqrt` and similar names that the client does not import. The imports of the client (OPENGL32, OpenAL32, SDL2, steam_api, speex) have no wrapper yet. A side-effect function replays with the events of the wrapped imports only.
 - `verify.c` names a `.data` address with the global table of the server. The names in the log are wrong for the client.
 
+### Harness for the client (step 7.4)
+
+`harness_client` is the harness of the server, built with the client sources (`CL_HARNESS`). It needs the fixed copy of the client and clean DLLs, so no proxy loads inside the harness:
+
+```bash
+python -I tools/re/fixed_base.py original/client/subrosa.exe build/hook/subrosa_fixed.exe
+# Record with the fixed copy: copy it next to the proxy as subrosa_fixed.exe and start that.
+# build/client_deps holds SDL2, OpenAL32, OpenAL32_real, wrap_oal, libspeex, libspeexdsp, steam_api, Steam (copies of original/client, no wsock32.dll).
+export PATH="$PWD/build/client_deps:$PATH" HARNESS_GAME_DIR=<client folder> HARNESS_ENV_DIR=build/harness_env_client
+build/hook/harness_client.exe build/hook/subrosa_fixed.exe sv_snapshot.bin sv_args.txt [filter]
+```
+
+The snapshot fits only when the recording process ran the fixed copy (base `0x20000000`). A recording of the normal exe has another base.
+
+First result (2026-11-03, recording of the main menu, 295 calls): 78 functions tested, 120 calls same, 0 different, 0 lifted crashed, 161 skipped. The run takes 52 seconds.
+
+Changes the client needed in shared code:
+
+- `plat_test.c` has a `realloc` stub. The server never imported `realloc`. Without it the call reached the real heap and the process died with `0xC0000374`.
+- `LiftExport.java` ignores relocations of type 0 (ABSOLUTE). They pad a relocation block. A function that starts at a page boundary got a relocation at offset 0, so its hook never matched.
+- `harness.c` has no hand-written function table for the client, and logs the first exceptions outside the guarded runs.
+
+Next: the gate target `instrumentation/lift/targets/client_win.json`, and a longer recording with a match, to reach more functions than the main menu.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
