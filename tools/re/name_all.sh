@@ -10,7 +10,12 @@ mkdir -p build/match analysis/client_win analysis/ded0802 analysis/024d
 
 # 1. Windows client, from the binaries with symbols.
 $M --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl \
-   --out analysis/client_win/functions.csv
+   --out build/match/client_win_matched.csv
+#    GLee stubs and link functions: names come from the machine code (tools/re/name_glee.py).
+python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/client_win.jsonl \
+   --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv
+python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
+   --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv
 
 # 2. 08/02 dedicated server: same build and compiler as the client (strict mode) + direct.
 $M --target $F/ded0802.jsonl --ref "$F/client_win.jsonl:analysis/client_win/functions.csv" --strict \
