@@ -27,12 +27,6 @@ extern const int cl_count_nstubs;
 
 extern uintptr_t sr_base;
 
-void sv_console_event(int error, const char *fmt, ...)
-{
-    (void)error;
-    (void)fmt;
-}
-
 static const char *g_name[CL_COUNT_MAX];
 static int g_first_stub, g_first_iat, g_total;
 

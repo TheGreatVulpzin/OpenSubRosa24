@@ -88,6 +88,17 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/cl_count_table.c)
     target_compile_definitions(cl_wsock32 PRIVATE CL_COUNT SR_TEST_MEMORY)
     set_source_files_properties(build/lift/client_win/cl_count_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 endif()
+# Lifted client code with the hook tables of the lifter, the verifier and the recorder.
+if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
+    target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
+        build/lift/client_win/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
+        instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
+        instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math.c)
+    target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
+    target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
+    set_source_files_properties(build/lift/client_win/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
+    set_source_files_properties(build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+endif()
 set_property(TARGET cl_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_link_options(cl_wsock32 PRIVATE /MAP)
 

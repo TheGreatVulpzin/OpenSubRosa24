@@ -13,10 +13,23 @@
 
 #include "wsock_forwards.h"
 
-#ifdef CL_COUNT
+#if defined(CL_COUNT) || defined(CL_HOOKS)
 extern uintptr_t sr_base;
 int sv_config_int(const char *key, int def);
+
+/* The client has no server console: hook.c and record.c report events here. */
+void sv_console_event(int error, const char *fmt, ...)
+{
+    (void)error;
+    (void)fmt;
+}
+#endif
+#ifdef CL_COUNT
 int cl_count_start(void);
+#endif
+#ifdef CL_HOOKS
+int cl_hooks_install(void);
+void cl_hooks_summary(void);
 #endif
 
 /* Identity of the client (PE header). SHA-256 of the file is in original/MANIFEST.sha256. */
@@ -56,6 +69,18 @@ SV_FORWARDS(SV_DECLARE)
 #define SV_STUB(ord, name) \
     __declspec(naked) void sv_##name(void) { __asm { jmp p_##name } }
 SV_FORWARDS(SV_STUB)
+
+#ifdef CL_HOOKS
+/* The pointer that the stub of a WinSock function jumps through: the recorder puts a
+ * wrapper there (instrumentation/hook/record_imports.c). */
+FARPROC *sv_wsock_slot(const char *name)
+{
+#define SV_SLOT(ord, nm) if (lstrcmpA(name, #nm) == 0) return &p_##nm;
+    SV_FORWARDS(SV_SLOT)
+#undef SV_SLOT
+    return NULL;
+}
+#endif
 
 static HMODULE g_real;
 
@@ -102,18 +127,32 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
         if (!is_client(base))
             cl_log("executable is not the expected subrosa.exe. Only forwarding the network.");
         else {
+            int handled = 0;
+#if defined(CL_COUNT) || defined(CL_HOOKS)
+            sr_base = (uintptr_t)base;
+#endif
 #ifdef CL_COUNT
             /* subvulpes.ini [hooks] count=1 counts calls (instrumentation/client/cl_count.c). */
-            sr_base = (uintptr_t)base;
             if (sv_config_int("count", 0)) {
                 cl_log("executable is subrosa.exe. Counting calls.");
                 cl_count_start();
-                return TRUE;
+                handled = 1;
             }
 #endif
-            cl_log("executable is subrosa.exe. Only forwarding the network.");
+#ifdef CL_HOOKS
+            /* subvulpes.ini [hooks] hooks=1 installs the lifter hooks and the recorder. */
+            if (!handled && sv_config_int("hooks", 0)) {
+                cl_log("executable is subrosa.exe. %d hook(s) installed.", cl_hooks_install());
+                handled = 1;
+            }
+#endif
+            if (!handled)
+                cl_log("executable is subrosa.exe. Only forwarding the network.");
         }
     } else if (reason == DLL_PROCESS_DETACH) {
+#ifdef CL_HOOKS
+        cl_hooks_summary();
+#endif
         cl_log("SubVulpes client proxy unloaded.");
         if (g_real && reserved == NULL)
             FreeLibrary(g_real);

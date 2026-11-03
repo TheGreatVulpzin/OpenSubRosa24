@@ -145,6 +145,31 @@ Measured on the main menu (2026-11-03, 25 seconds):
 
 Result for the recorder: never record OpenGL calls one by one. Record the game functions with a cap per function.
 
+### Recorder (step 7.4)
+
+`cl_wsock32` also holds the lifted client code, the hook tables of the lifter, the verifier and the recorder of the server (`verify.c`, `record.c`, `record_imports.c`). `instrumentation/client/cl_hooks.c` installs them. They need `build/lift/client_win/lifted_client.c`, so run `lift.py --target client_win` first.
+
+Switch it on with `subvulpes.ini`, section `[hooks]`:
+
+```
+hooks=1
+lifted=1
+original_only=1
+verify=0
+record_args=1
+record_imports=1
+snapshot_after=600
+```
+
+The files next to `subrosa.exe` have the same format as the server ones: `sv_args.txt` and `sv_snapshot.bin`. The harness port will read them.
+
+First test on the main menu (2026-11-03, 50 seconds, `snapshot_after=20`): 1031 hooks installed, 295 recorded calls with 8632 import events, `sv_args.txt` 0.3 MB, `sv_snapshot.bin` 125 MB. The rotation of `record.c` removes a hook after enough calls, so the file stays small.
+
+Known gaps:
+
+- `record_imports.c` wraps the imports of the server. The log shows 7 errors for `_CIsqrt` and similar names that the client does not import. The imports of the client (OPENGL32, OpenAL32, SDL2, steam_api, speex) have no wrapper yet. A side-effect function replays with the events of the wrapped imports only.
+- `verify.c` names a `.data` address with the global table of the server. The names in the log are wrong for the client.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
