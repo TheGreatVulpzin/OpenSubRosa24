@@ -611,6 +611,7 @@ static int WINAPI st_recvfrom(SOCK s, char *buf, int len, int flags, void *from,
 static unsigned g_ids;
 static uint32_t g_bulk_hash;
 static unsigned g_bulk_n;
+static int g_trace = -1;
 
 static void bulk_add(const void *p, size_t n)
 {
@@ -629,6 +630,11 @@ static void rec_bulk(const char *name, const void *args, size_t n)
     bulk_add(name, strlen(name));
     bulk_add(args, n);
     g_bulk_n++;
+    /* HARNESS_GLTRACE=1: every bulk call also goes into the log, to find the first one that differs. */
+    if (g_trace < 0)
+        g_trace = getenv("HARNESS_GLTRACE") != NULL;
+    if (g_trace)
+        ev("%s %s", name, hex(args, n));
 }
 
 static void rec_ev(const char *name, const void *args, size_t n)

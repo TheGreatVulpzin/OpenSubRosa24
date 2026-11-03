@@ -211,6 +211,18 @@ Result (2026-11-03, menu recording): 718 lifted, 471 harness only, 34 side effec
 
 Two name errors of the matcher showed in the CRT area (`0x10c000` and up): `0x10c650` is `_ftol2` (it takes ST0), and `0x10c6fb` is `__security_check_cookie`. The matcher names in that area are not reliable. `FixRegisterPreservation.java` and `FixCookieCheck.java` take the address as a script argument.
 
+### First recording of a play session (2026-11-03)
+
+Recording `client-play-20261103-1229` (14 minutes, snapshot at 180 s with `snapshot_after=180`, 1286 recorded calls of 254 functions). Run the harness with `HARNESS_RESET=1`: without it the harness dies in a later function after earlier functions left their state (the heap of the process). The reset run takes 30 minutes for this snapshot (355 MB).
+
+Result: 216 functions tested, 840 calls same, 91 different, 13 lifted crashed, 155 skipped.
+
+The differences are in the drawing functions (`drawdisplay`, `drawcircle`, `drawplayerindicator`, `drawplayerinfo`, `drawhud`, `drawhelp`, `drawmap`, `drawmenuitems`, the model and sector render functions). Most of them are float differences in the last bits. `drawdisplay` and `drawplayerinfo` also show another number of OpenGL calls in the lifted run.
+
+`HARNESS_GLTRACE=1` writes every OpenGL call into the environment log. With `HARNESS_DEBUG=1` the first differing call shows. In `drawcircle` (RVA `0x6d860`, call 1119) the first different call is `glVertex2fv`: x is equal, y is `0x3d9dc980` in the lifted run and `0x3d9dc971` in the original, 15 steps apart. y is `param_2 - (float)cos(a) * param_3`, a subtraction of two close numbers, so a small rounding difference shows large.
+
+Checked so far: the control word of the snapshot is `0x27f` (53 bit), as in the harness. The decompiler has a real `FLOAT2FLOAT` p-code op right after the call of `sin` (address `0x46d8d6`), so the `(float)` of the result is a real store in the original. The open question is where the original rounds the product `(float)cos * param_3` and what MSVC does for the same expression in the lifted C. Compare the instructions with `DumpTokens.java` (`insn:<rva>`) and probe with `HARNESS_PROBE`.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
