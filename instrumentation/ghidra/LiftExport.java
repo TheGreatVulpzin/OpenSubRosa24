@@ -1559,6 +1559,8 @@ public class LiftExport extends GhidraScript {
                 new ghidra.program.model.address.AddressSet(f.getEntryPoint(), f.getEntryPoint().add(len - 1)));
         while (it.hasNext()) {
             Relocation rel = it.next();
+            // Type 0 (ABSOLUTE) is the padding of a relocation block: it moves nothing.
+            if (rel.getType() == 0) continue;
             if (!first) sb.append(',');
             first = false;
             sb.append(rel.getAddress().subtract(f.getEntryPoint()));
@@ -1573,6 +1575,7 @@ public class LiftExport extends GhidraScript {
         Iterator<Relocation> it = currentProgram.getRelocationTable().getRelocations(f.getBody());
         while (it.hasNext()) {
             Relocation rel = it.next();
+            if (rel.getType() == 0) continue;
             vals.add(currentProgram.getMemory().getInt(rel.getAddress()) & 0xffffffffL);
         }
         sb.append("\"relocvals\":[");
