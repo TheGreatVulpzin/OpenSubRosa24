@@ -5,8 +5,8 @@
 // The callers then take a value from a "void" function, and the lifted C does not compile
 // (C2069, C2186).
 //
-// The CSV has one row per function: rva, name, type, evidence. Only the type "int" is
-// supported. The script stores the parameters that the decompiler finds, then sets the
+// The CSV has one row per function: rva, name, type, evidence. Only the types "int" and "float" are
+// supported, and "float" (a result in ST0). The script stores the parameters that the decompiler finds, then sets the
 // return type. A locked signature with no stored parameters makes every caller drop its
 // arguments, so the parameters come first.
 //
@@ -22,6 +22,7 @@ import ghidra.app.decompiler.DecompileOptions;
 import ghidra.app.decompiler.DecompileResults;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;
+import ghidra.program.model.data.FloatDataType;
 import ghidra.program.model.data.IntegerDataType;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.pcode.HighFunctionDBUtil;
@@ -40,7 +41,7 @@ public class ApplyReturns extends GhidraScript {
             String line;
             while ((line = in.readLine()) != null) {
                 String[] f = line.split(",", 4);
-                if (f.length < 3 || !f[2].equals("int")) {
+                if (f.length < 3 || !(f[2].equals("int") || f[2].equals("float"))) {
                     skipped++;
                     continue;
                 }
@@ -56,8 +57,9 @@ public class ApplyReturns extends GhidraScript {
                 if (r.decompileCompleted()) {
                     HighFunctionDBUtil.commitParamsToDatabase(r.getHighFunction(), true,
                             HighFunctionDBUtil.ReturnCommitOption.NO_COMMIT, SourceType.USER_DEFINED);
-                    fn.setReturnType(IntegerDataType.dataType, SourceType.USER_DEFINED);
-                    println(String.format("%s %s: int, %d parameters", f[0], fn.getName(), fn.getParameterCount()));
+                    fn.setReturnType(f[2].equals("float") ? FloatDataType.dataType : IntegerDataType.dataType,
+                            SourceType.USER_DEFINED);
+                    println(String.format("%s %s: %s, %d parameters", f[0], fn.getName(), f[2], fn.getParameterCount()));
                     done++;
                 }
             }

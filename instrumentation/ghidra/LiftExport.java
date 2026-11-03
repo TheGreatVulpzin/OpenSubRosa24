@@ -185,6 +185,17 @@ public class LiftExport extends GhidraScript {
                 if (close != null) for (int k = 0; k < close; k++) sb.append(')');
                 continue;
             }
+            // A label at the end of a block ("LAB_004fc317:" before the closing brace) has no
+            // statement. C allows that only from C23: MSVC reports C2143. Add an empty statement.
+            if (tok.getText().equals("}")) {
+                int e = sb.length();
+                while (e > 0 && Character.isWhitespace(sb.charAt(e - 1))) e--;
+                if (e > 0 && sb.charAt(e - 1) == ':') {
+                    int st = e - 1;
+                    while (st > 0 && (Character.isLetterOrDigit(sb.charAt(st - 1)) || sb.charAt(st - 1) == '_')) st--;
+                    if (sb.substring(st, e - 1).startsWith("LAB_")) sb.append(';');
+                }
+            }
             String exact = exactFloat(tok);
             if (tok instanceof ghidra.app.decompiler.ClangFieldToken && RAW_FIELD.matcher(tok.getText()).matches())
                 sb.append("lf_raw[").append(tok.getText().substring(6)).append(']');

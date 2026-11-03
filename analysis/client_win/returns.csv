@@ -23,3 +23,5 @@ rva,name,type,evidence
 0xab90,FUN_0040ab90,int,"2 callers read a value from this function, typed void: it returns EAX or ends with a call that does."
 0xb140,__GLeeGetProcAddress,int,"1598 callers read a value from this function, typed void: it returns EAX or ends with a call that does."
 0xdd100,scenario_createchase,int,"1 callers read a value from this function, typed void: it returns EAX or ends with a call that does."
+0xddaf0,scenario_armhuman,int,"1 callers read a value from this function, typed void: it returns EAX or ends with a call that does."
+0xfd150,pointdistanceline,float,"2 callers read a value from this function, typed void: it ends with a call to vectordistance, which returns a float in ST0."

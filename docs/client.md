@@ -231,6 +231,18 @@ After the rule, `drawcircle`, `drawplayerindicator`, `drawcircleindicator` and `
 
 Open differences on the play recording (8 functions): `drawdisplay`, `drawplayerinfo`, `drawhelp`, `drawhud`, `drawmap`, `drawmenuitems` (the first different call is a `glColor4f` with other arguments, so a color argument or a parameter type differs) and `setupmodel`, `copymodel` (the lifted run frees a block of the recorded heap where the original frees a pool block).
 
+### Compile errors of the client lift: 12 to 5 (2026-11-03)
+
+- `ApplyReturns.java` also sets a `float` return (the result in ST0), for a function that ends with a call that returns a float. `returns.csv` has `pointdistanceline` (float) and `scenario_armhuman` (int). Their callers read a value from a function typed `void`.
+- `LiftExport.java` adds `;` after a label at the end of a block (`LAB_xxx:` before `}`), which MSVC rejects (C2143). It does this when it writes the `}`, from the text already written.
+- After these two changes `humansimulation`, `area_buildsectormodel`, `soundsimulation`, `calculateplayervoice`, `human_itemsimulation`, `scenario_createchase` and `spritetimetolive` compile. The lift has 723 lifted and 473 harness only functions.
+
+The 5 left: `dedicatedserverloop` (a server function in the client binary), `launchwebpage` (the identifier `INT`), `landscape_buildsectorlods` (a dereference of `undefined4`) and two CRT functions that the standalone client replaces.
+
+The play recording was made before these functions had a hook, so it has no call of `humansimulation` and most of the others. A new recording with the current hook tables is needed to test them.
+
+`area_buildsectormodel` is the same as the original in 4 calls and differs in 20. The first difference is a `free` of another block (the lifted run frees a block of the recorded heap, the original frees a block of the pool), as in `setupmodel` and `copymodel`.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
