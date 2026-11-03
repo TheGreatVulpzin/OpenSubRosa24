@@ -11,12 +11,21 @@ mkdir -p build/match analysis/client_win analysis/ded0802 analysis/024d
 # 1. Windows client, from the binaries with symbols.
 $M --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl \
    --out build/match/client_win_matched.csv
+#    Same compiler as the 024d (strict). The names of the 024d come back here for functions the
+#    first pass left open. Low votes give low confidence: check them before a rewrite.
+$M --target $F/client_win.jsonl --ref "$F/ded024d.jsonl:analysis/024d/functions.csv" --strict \
+   --keep build/match/client_win_matched.csv --out build/match/client_win_via024d.csv
 #    GLee stubs and link functions: names come from the machine code (tools/re/name_glee.py).
 python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/client_win.jsonl \
    --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv \
    --globals analysis/client_win/manual_globals.csv
+python -I tools/re/merge_names.py --out build/match/client_win_merged.csv \
+   --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv build/match/client_win_via024d.csv
+#    Open functions that hold the same strings as a reference function (size changed a lot).
+python -I tools/re/match_strings.py --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl \
+   --names build/match/client_win_merged.csv --out build/match/client_win_strings.csv
 python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
-   --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv
+   build/match/client_win_merged.csv build/match/client_win_strings.csv
 #    Candidates only: check each global before it goes into manual_globals.csv.
 python -I tools/re/map_globals.py --target $F/client_win.jsonl --names analysis/client_win/functions.csv \
    --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl --out analysis/client_win/globals.csv

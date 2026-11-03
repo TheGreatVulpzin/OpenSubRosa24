@@ -98,7 +98,7 @@ rva,size,name,source,confidence,evidence
 0x8430,42,,,,
 0x8460,88,,,,
 0x84c0,54,,,,
-0x8500,3636,,,,
+0x8500,3636,bmp_load,strings,0.769,"11 strings, jaccard 0.77"
 0x9340,157,,,,
 0x93e0,104,,,,
 0x9450,95,,,,
@@ -116,13 +116,13 @@ rva,size,name,source,confidence,evidence
 0x9e20,42,,,,
 0x9e50,88,,,,
 0x9eb0,54,,,,
-0x9ef0,1082,,,,
+0x9ef0,1082,psd_load,strings,1.0,"7 strings, jaccard 1.00"
 0xa330,58,,,,
 0xa370,42,,,,
 0xa3a0,84,,,,
 0xa400,79,,,,
 0xa450,54,,,,
-0xa490,1297,,,,
+0xa490,1297,hdr_load,strings,1.0,"6 strings, jaccard 1.00"
 0xa9b0,162,,,,
 0xaa60,283,,,,
 0xab90,58,,,,
@@ -1737,7 +1737,7 @@ rva,size,name,source,confidence,evidence
 0x1f920,3391,__GLeeLink_GL_VERSION_2_0,manual,1.0,Loads the same 93 gl strings as __GLeeLink_GL_VERSION_2_0 in the Linux client.
 0x20660,259,__GLeeLink_GL_VERSION_2_1,manual,1.0,Loads the same 6 gl strings as __GLeeLink_GL_VERSION_2_1 in the Linux client.
 0x20770,2131,__GLeeLink_GL_VERSION_3_0,manual,1.0,Loads the same 58 gl strings as __GLeeLink_GL_VERSION_3_0 in the Linux client.
-0x20fd0,1267,,,,
+0x20fd0,1267,__GLeeLink_GL_ARB_multitexture,strings,1.0,"34 strings, jaccard 1.00"
 0x214d0,187,__GLeeLink_GL_ARB_transpose_matrix,manual,1.0,Loads the same 4 gl strings as __GLeeLink_GL_ARB_transpose_matrix in the Linux client.
 0x21590,79,__GLeeLink_GL_ARB_multisample,manual,1.0,Loads the same 1 gl strings as __GLeeLink_GL_ARB_multisample in the Linux client.
 0x215e0,10,,,,
@@ -2096,7 +2096,7 @@ rva,size,name,source,confidence,evidence
 0x30220,58,,,,
 0x30260,68,,,,
 0x302b0,44,,,,
-0x302e0,551,,,,
+0x302e0,551,__GLeeGetExtensions,strings,1.0,"3 strings, jaccard 1.00"
 0x30510,81,,,,
 0x30570,175,,,,
 0x30620,10,,,,
@@ -2104,7 +2104,7 @@ rva,size,name,source,confidence,evidence
 0x30640,10,,,,
 0x30650,199,,,,
 0x30720,26,,,,
-0x30740,12954,,,,
+0x30740,12954,GLeeInit,strings,0.895,"353 strings, jaccard 0.90"
 0x339e0,142,setupaudio,anchor,1.0,features
 0x33a70,113,shutdownaudio,anchor,1.0,features
 0x33af0,229,loadwav,callgraph,1.0,votes=72
@@ -2116,13 +2116,13 @@ rva,size,name,source,confidence,evidence
 0x34470,349,saveaccountsclient,callgraph,0.333,votes=2
 0x345d0,362,,,,
 0x34740,393,server_writelogfile,anchor,0.558,features
-0x348d0,3940,,,,
+0x348d0,3940,playerai,callgraph,0.333,votes=2
 0x35840,1784,ai_assessthreats,anchor,0.465,features
 0x35f40,82,angulardistance,anchor,1.0,features
 0x35fa0,149,,,,
 0x36040,4815,ai_playercar,anchor,0.497,features
-0x37310,1030,,,,
-0x37720,1036,createarea,callgraph,0.667,votes=4
+0x37310,1030,ai_car_nextwaypoint,anchor,0.712,features
+0x37720,1036,createarea,callgraph,0.667,votes=4; diverge: building_setupbuild
 0x37b30,1833,area_createblock,callgraph,1.0,votes=22
 0x38260,460,area_setblock,callgraph,1.0,votes=8
 0x38430,460,area_setblockcolor,callgraph,0.667,votes=4
@@ -2163,16 +2163,16 @@ rva,size,name,source,confidence,evidence
 0x42b00,423,area_block_addwindow,callgraph,0.333,votes=2
 0x42cb0,1075,area_block_adddoor,anchor,0.881,features
 0x430f0,649,area_block_addbeam,callgraph,1.0,votes=36
-0x43380,350,,,,
-0x434e0,354,,,,
+0x43380,350,area_block_addoutdoor,callgraph,0.333,votes=2
+0x434e0,354,area_block_addcorner,anchor,0.483,features
 0x43650,290,area_block_rotatesurface,callgraph,1.0,votes=80
 0x43780,766,building_iswindow,callgraph,1.0,votes=8
 0x43a80,466,,,,
-0x43c60,442,,,,
+0x43c60,442,area_interior_setobject,callgraph,1.0,votes=8
 0x43e20,352,,,,
 0x43f80,445,,,,
 0x44140,361,,,,
-0x442b0,9044,,,,
+0x442b0,9044,area_interior_buildsectormodel,strings,1.0,"6 strings, jaccard 1.00"
 0x46610,187,area_breakblock,callgraph,0.667,votes=4
 0x466d0,4594,lineintersectarea,callgraph,1.0,votes=8
 0x478d0,507,lineintersectnormalblock,callgraph,1.0,votes=8
@@ -2197,10 +2197,10 @@ rva,size,name,source,confidence,evidence
 0x4f450,706,createsound,callgraph,1.0,votes=34
 0x4f720,167,deletesound,anchor,0.706,features
 0x4f7d0,1252,createwav,anchor,0.802,features
-0x4fcc0,1264,,,,
+0x4fcc0,1264,createbond,anchor,0.498,features
 0x501b0,123,,,,
 0x50230,1229,,,,
-0x50700,21666,,,,
+0x50700,21666,bondsimulation2,strings,1.0,"5 strings, jaccard 1.00"
 0x55bb0,5,,,,
 0x55bc0,3856,setupbuildingtypes,anchor,0.464,features
 0x56ad0,7780,building_buildfloorplan,anchor,0.647,features
@@ -2269,7 +2269,7 @@ rva,size,name,source,confidence,evidence
 0x6ab70,192,debug_addatafloat,callgraph,1.0,votes=20
 0x6ac30,103,debug_resetlogfile,anchor,0.506,features
 0x6aca0,108,debug_writelogfile,anchor,1.0,features
-0x6ad10,71,,,,
+0x6ad10,71,systemtimer,anchor,0.479,features
 0x6ad60,992,dedicatedserverloop,anchor,0.457,features
 0x6b140,18,,,,
 0x6b160,2367,server_playermessage,anchor,0.747,features
@@ -2283,14 +2283,14 @@ rva,size,name,source,confidence,evidence
 0x6e3c0,745,drawcircleindicator,anchor,0.894,features
 0x6e6b0,1689,economysimulation,anchor,0.747,features
 0x6ed50,589,economy_carmarket,anchor,0.621,features
-0x6efa0,1576,,,,
+0x6efa0,1576,economy_gunmarket,anchor,0.652,features
 0x6f5d0,257,playerbuystock,anchor,0.521,features
 0x6f6e0,377,,,,
 0x6f860,293,playerdeathtax,anchor,0.774,features
 0x6f990,98,,,,
 0x6fa00,307,playerteamkilltax,anchor,0.813,features
 0x6fb40,55,playerdebt,callgraph,1.0,votes=10
-0x6fb80,384,,,,
+0x6fb80,384,player_calcassets,anchor,0.757,features
 0x6fd00,1154,player_saveinventory,callgraph,0.333,votes=2
 0x70190,791,player_loadinventory,callgraph,0.667,votes=4
 0x704b0,6563,eventsimulation,anchor,0.647,features
@@ -2301,9 +2301,9 @@ rva,size,name,source,confidence,evidence
 0x721a0,262,createevent_updateobject,callgraph,0.667,votes=4
 0x722b0,255,createevent_updateitem,callgraph,1.0,votes=8
 0x723b0,212,createevent_updateiteminfo,callgraph,1.0,votes=56
-0x72490,393,,,,
+0x72490,393,createevent_updateplayer,callgraph,0.333,votes=2
 0x72620,163,createevent_updatehuman,anchor,1.0,features
-0x726d0,163,,,,
+0x726d0,163,createevent_updateplayer_finance,callgraph,0.667,votes=4
 0x72780,168,,,,
 0x72830,123,createevent_updatedoor,callgraph,1.0,votes=13
 0x728b0,257,,,,
@@ -2373,7 +2373,7 @@ rva,size,name,source,confidence,evidence
 0x8a710,10467,human_calculatearmangles,anchor,0.466,features
 0x8d000,5391,human_calcarmtorque,anchor,0.482,features
 0x8e510,946,human_collisionhuman,callgraph,0.667,votes=4
-0x8e8d0,3673,,,,
+0x8e8d0,3673,setupbody,anchor,0.626,features
 0x8f730,3783,human_itemsimulation,anchor,0.479,features
 0x90600,552,human_buildmuscles,callgraph,0.667,votes=4
 0x90830,479,human_createmuscleball,callgraph,1.0,votes=14
@@ -2416,7 +2416,7 @@ rva,size,name,source,confidence,evidence
 0x9a410,1924,item_physicssimulation,callgraph,0.667,votes=4
 0x9aba0,1462,item_sphereintersect,callgraph,0.667,votes=4
 0x9b160,343,,,,
-0x9b2c0,770,city_addintersection,callgraph,0.333,votes=2
+0x9b2c0,770,city_addintersection,callgraph,0.333,votes=2; diverge: addcitystreet
 0x9b5d0,363,,,,
 0x9b740,3489,createlevel,anchor,0.745,features
 0x9c4f0,206,leveledit_setup,callgraph,0.333,votes=2
@@ -2428,7 +2428,7 @@ rva,size,name,source,confidence,evidence
 0xa04f0,502,,,,
 0xa06f0,77,,,,
 0xa0740,793,leveleditor_save,callgraph,0.667,votes=4
-0xa0a60,818,,,,
+0xa0a60,818,leveleditor_load,callgraph,0.333,votes=2
 0xa0da0,416,lineintersectall,callgraph,0.5,votes=3
 0xa0f40,441,lineintersectlevel,callgraph,1.0,votes=48
 0xa1100,274,,,,
@@ -2442,7 +2442,7 @@ rva,size,name,source,confidence,evidence
 0xa2cd0,703,buildcityinterection,callgraph,0.333,votes=2
 0xa2f90,2465,buildcitystreet,callgraph,0.333,votes=2
 0xa3940,1177,logicsimulation,anchor,0.495,features
-0xa3de0,245,,,,
+0xa3de0,245,logic_farbslist,strings,1.0,"2 strings, jaccard 1.00"
 0xa3ee0,249,sprintf_comma,anchor,0.601,features
 0xa3fe0,357,,,,
 0xa4150,41,,,,
@@ -2455,7 +2455,7 @@ rva,size,name,source,confidence,evidence
 0xa4980,209,,,,
 0xa4a60,536,,,,
 0xa4c80,1205,,,,
-0xa5140,369,,,,
+0xa5140,369,logic_suits_buy,anchor,0.821,features
 0xa52c0,875,logic_cardealer_buy,anchor,0.542,features
 0xa5630,408,,,,
 0xa57d0,514,logic_player,callgraph,0.333,votes=2
@@ -2556,10 +2556,10 @@ rva,size,name,source,confidence,evidence
 0xc73d0,444,,,,
 0xc7590,785,,,,
 0xc78b0,9278,,,,
-0xc9cf0,491,calculatebarycentric,callgraph,1.0,votes=8
+0xc9cf0,491,calculatebarycentric,callgraph,1.0,votes=8; diverge: lineintersectsphere
 0xc9ee0,478,applydamageobject,anchor,0.811,features
 0xca0c0,7851,,,,
-0xcbf70,3059,,,,
+0xcbf70,3059,objectenginesimulation2,anchor,0.484,features
 0xccb70,304,getenginetorque2,anchor,0.955,features
 0xccca0,163,engine_bezierinterpolation,callgraph,1.0,votes=12
 0xccd50,3034,object_rotorsimulation,anchor,0.538,features
@@ -2568,9 +2568,9 @@ rva,size,name,source,confidence,evidence
 0xced70,1381,,,,
 0xcf2e0,773,buildsomeshit,anchor,0.733,features
 0xcf5f0,4272,createtrack,callgraph,0.333,votes=2
-0xd06a0,611,,,,
-0xd0910,580,,,,
-0xd0b60,1200,,,,
+0xd06a0,611,lineintersecttrack,callgraph,0.333,votes=2
+0xd0910,580,lineintersecttrackrail,callgraph,0.333,votes=2
+0xd0b60,1200,objecttrainsimulation,anchor,0.614,features
 0xd1010,716,,,,
 0xd12e0,882,,,,
 0xd1660,2941,objectsimulation_car,anchor,0.703,features
@@ -2580,7 +2580,7 @@ rva,size,name,source,confidence,evidence
 0xd3810,80,optionreadwriteint,anchor,0.927,features
 0xd3860,84,optionreadwritestring,anchor,0.927,features
 0xd38c0,2313,voiceoptionsmenu,anchor,0.835,features
-0xd41d0,365,,,,
+0xd41d0,365,createparticle,anchor,0.713,features
 0xd4340,123,,,,
 0xd43c0,578,,,,
 0xd4610,227,,,,
@@ -2588,7 +2588,7 @@ rva,size,name,source,confidence,evidence
 0xd4750,654,createplayer,anchor,0.905,features
 0xd49e0,61,getnextplayer,callgraph,0.667,votes=4
 0xd4a20,342,deleteplayer,anchor,0.982,features
-0xd4b80,1659,,,,
+0xd4b80,1659,playersimulation,anchor,0.492,features
 0xd5200,375,fixplayername,anchor,0.658,features
 0xd5380,264,,,,
 0xd5490,183,,,,
@@ -2649,7 +2649,7 @@ rva,size,name,source,confidence,evidence
 0xde560,1471,,,,
 0xdeb20,2604,serversend,callgraph,1.0,votes=6
 0xdf550,327,servercycle,anchor,0.857,features
-0xdf6a0,4211,,,,
+0xdf6a0,4211,serverrecv,callgraph,0.333,votes=2
 0xe0720,987,getsuncolors,anchor,0.901,features
 0xe0b00,94,raydistancesphere,callgraph,1.0,votes=32
 0xe0b60,96,,,,
@@ -2697,22 +2697,22 @@ rva,size,name,source,confidence,evidence
 0xeb6e0,78,genrand_res53,anchor,1.0,features
 0xeb730,20,setupobjecttypes,callgraph,0.333,votes=2
 0xeb750,186,,,,
-0xeb810,313,,,,
-0xeb950,449,objecttype_addparticle,callgraph,1.0,votes=156
+0xeb810,313,objecttype_addbond,callgraph,1.0,votes=34
+0xeb950,449,objecttype_addparticle,callgraph,1.0,votes=156; diverge: objecttype_addface
 0xebb20,721,,,,
-0xebe00,1053,objecttype_addface,callgraph,1.0,votes=44
+0xebe00,1053,objecttype_addface,callgraph,1.0,votes=44; diverge: setupobjecttypeweight
 0xec220,1029,,,,
 0xec630,42228,setupobjecttypes_cars,anchor,0.587,features
 0xf6b30,3872,setupobjecttypes_helicopters,anchor,0.53,features
 0xf7a50,11648,setupobjectypes_train,anchor,0.597,features
 0xfa7d0,531,objecttype_calcquadweights,callgraph,1.0,votes=48
 0xfa9f0,1058,usermenu,anchor,0.956,features
-0xfae20,265,,,,
-0xfaf30,140,,,,
+0xfae20,265,gettimeofday,anchor,0.718,features
+0xfaf30,140,setcpuaffinity,anchor,0.954,features
 0xfafc0,17,,,,
 0xfafe0,56,resettimer,callgraph,1.0,votes=80
 0xfb020,25,starttimer,callgraph,1.0,votes=14
-0xfb040,200,,,,
+0xfb040,200,itemtimetolive,callgraph,0.333,votes=2
 0xfb110,156,getcpufrequency,callgraph,0.333,votes=2
 0xfb1b0,527,,,,
 0xfb3c0,15,cs_sleep,anchor,1.0,features
@@ -2737,18 +2737,18 @@ rva,size,name,source,confidence,evidence
 0xfd430,328,,,,
 0xfd580,312,,,,
 0xfd6c0,119,,,,
-0xfd740,164,,,,
+0xfd740,164,loadtextfile,anchor,0.894,features
 0xfd7f0,15,,,,
 0xfd800,97,findstring,callgraph,0.833,votes=5
 0xfd870,106,checkstring,callgraph,0.5,votes=3
 0xfd8e0,257,,,,
 0xfd9f0,300,getfloat,anchor,0.52,features
 0xfdb20,128,getstring,callgraph,0.5,votes=3
-0xfdba0,193,,,,
+0xfdba0,193,csradixsort,callgraph,0.333,votes=2
 0xfdc70,109,checkbigendian,callgraph,0.333,votes=2
 0xfdce0,21,,,,
 0xfdd00,211,checkfilespec,anchor,0.949,features
-0xfdde0,460,,,,
+0xfdde0,460,listfiles,callgraph,1.0,votes=6
 0xfdfb0,285,freadswap,anchor,0.79,features
 0xfe0d0,302,,,,
 0xfe200,164,removeflieextentions,callgraph,1.0,votes=12
@@ -2836,20 +2836,20 @@ rva,size,name,source,confidence,evidence
 0x10b7f0,52,dotproduct,callgraph,1.0,votes=374
 0x10b830,96,,,,
 0x10b890,50,vectorlength,callgraph,1.0,votes=132
-0x10b8d0,115,normalizevector,callgraph,1.0,votes=124
+0x10b8d0,115,normalizevector,callgraph,1.0,votes=124; diverge: normalizevector2d
 0x10b950,39,copyvector,callgraph,1.0,votes=854
 0x10b980,45,,,,
 0x10b9b0,28,zerovector,callgraph,1.0,votes=17
 0x10b9d0,56,addvectors,callgraph,1.0,votes=158
 0x10ba10,56,subtractvectors,callgraph,1.0,votes=220
 0x10ba50,48,scalevector,callgraph,1.0,votes=224
-0x10ba80,65,scaleaddvectors,callgraph,1.0,votes=1200
+0x10ba80,65,scaleaddvectors,callgraph,1.0,votes=1200; diverge: createevent_updateitem
 0x10bad0,68,vectordistance,callgraph,1.0,votes=68
 0x10bb20,50,vectorlength2d,callgraph,1.0,votes=32
 0x10bb60,38,dotproduct2d,callgraph,0.667,votes=4
 0x10bb90,92,,,,
 0x10bbf0,27,copyvector2d,callgraph,0.333,votes=2
-0x10bc10,38,,,,
+0x10bc10,38,createevent_sound,callgraph,0.667,votes=4
 0x10bc40,33,,,,
 0x10bc70,44,,,,
 0x10bca0,29,,,,
@@ -2881,7 +2881,7 @@ rva,size,name,source,confidence,evidence
 0x10c8d0,104,,,,
 0x10c940,31,,,,
 0x10c984,152,,,,
-0x10ca1c,9,,,,
+0x10ca1c,9,_unlockexit,anchor,1.0,features
 0x10ca25,23,,,,
 0x10ca47,76,,,,
 0x10caf0,425,,,,

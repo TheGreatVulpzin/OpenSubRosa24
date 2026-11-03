@@ -62,7 +62,14 @@ A cycle of matcher and globals, as for the 024d, gave 9 new names and 6 renames.
 
 ## Open work
 
-About 630 functions of the game code have no name. They sit in `0x0` to `0x10000` and from `0x30000` up. The server functions (`analysis/024d/functions.csv`) cannot name them without circular evidence, because the 0802 server names come from this client.
+About 590 functions of the game code have no name (87 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
+
+Two passes name functions that the first matcher pass left open. Both are in `name_all.sh`:
+
+- A strict pass against the 024d, which has the same compiler. Many of its names have low confidence (0.333 with 2 votes). Check them before a rewrite.
+- `tools/re/match_strings.py`, which compares only the strings of a function.
+
+The 0802 server names come from this client, so they cannot name the client without circular evidence.
 
 See `docs/plano.md`, Phase 7, for the steps.
 
