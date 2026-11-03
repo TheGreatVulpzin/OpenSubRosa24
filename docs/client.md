@@ -19,6 +19,7 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 | --- | --- |
 | `functions.csv` | All 2907 functions. Columns: `rva,size,name,source,confidence,evidence`. Generated. |
 | `glee_names.csv` | Names from `tools/re/name_glee.py`. Generated. Merged as manual names. |
+| `globals.csv` | 47 global candidates from `map_globals.py`. Generated. See Globals below. |
 | `manual_globals.csv` | The 1595 GLee function pointers, named `GLeeFuncPtr_<function>`. Generated. |
 | `manual_names.csv`, `data_globals.csv`, `params.csv`, `locals.csv` | Same format as the files in `analysis/024d/`. Empty for now. |
 
@@ -30,6 +31,23 @@ The client links GLee statically. About 1750 of the 2907 functions belong to it.
 - **Stub** (`GLee_Lazy_glXxx`). It calls a check function for the extension, then calls through the pointer global. The pointer name gives the stub name.
 
 Not named: 3 link functions with no Linux match (`0x1e370`, `0x1e910`, `0x20fd0`) and the wgl link functions, which exist only on Windows.
+
+## Globals
+
+`tools/re/map_globals.py` gives 47 candidates in `globals.csv`. They are big arrays such as `human`, `player`, `building`, `city` and `texture`. The ELF and the Mach-O have only function symbols in the features, so each vote comes from a named function that uses the global.
+
+34 candidates have at least 10 votes, twice the votes of the second name, and a reference size that fits before the next candidate. Check these first.
+
+Do not trust these 13 yet:
+
+- Weak votes: `bmask`, `socketid`, `lightwavelength`, `clientaccount`, `buttonmesh`, `model_human`, `texture_windowatlas`, `area_sectormodel`, `keyboardlabel`.
+- The reference size runs into the next candidate: `stats`, `sphere`, `area_block`, `area_sector`.
+
+No candidate is in `manual_globals.csv` yet. That file needs the element count, and the candidates give only the byte size.
+
+`tools/re/map_regions.py` works only for the 024d (fixed paths). A client version needs new paths first.
+
+A cycle of matcher and globals, as for the 024d, gave 9 new names and 6 renames. Three of the six renames lowered the confidence. The cycle is not in `name_all.sh`.
 
 ## Open work
 

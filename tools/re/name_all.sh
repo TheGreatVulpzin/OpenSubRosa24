@@ -17,6 +17,9 @@ python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/cl
    --globals analysis/client_win/manual_globals.csv
 python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
    --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv
+#    Candidates only: check each global before it goes into manual_globals.csv.
+python -I tools/re/map_globals.py --target $F/client_win.jsonl --names analysis/client_win/functions.csv \
+   --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl --out analysis/client_win/globals.csv
 
 # 2. 08/02 dedicated server: same build and compiler as the client (strict mode) + direct.
 $M --target $F/ded0802.jsonl --ref "$F/client_win.jsonl:analysis/client_win/functions.csv" --strict \
