@@ -24,8 +24,14 @@ python -I tools/re/merge_names.py --out build/match/client_win_merged.csv \
 #    Open functions that hold the same strings as a reference function (size changed a lot).
 python -I tools/re/match_strings.py --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl \
    --names build/match/client_win_merged.csv --out build/match/client_win_strings.csv
-python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
+python -I tools/re/merge_names.py --out build/match/client_win_merged2.csv \
    build/match/client_win_merged.csv build/match/client_win_strings.csv
+#    Open functions that call the same named functions as a reference function.
+python -I tools/re/match_callees.py --target $F/client_win.jsonl --names build/match/client_win_merged2.csv \
+   --ref $F/linux_x64.jsonl --ref "$F/ded024d.jsonl:analysis/024d/functions.csv" \
+   --out build/match/client_win_callees.csv
+python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
+   build/match/client_win_merged2.csv build/match/client_win_callees.csv
 #    Candidates only: check each global before it goes into manual_globals.csv.
 python -I tools/re/map_globals.py --target $F/client_win.jsonl --names analysis/client_win/functions.csv \
    --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl --out analysis/client_win/globals.csv

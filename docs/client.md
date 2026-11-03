@@ -19,7 +19,7 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 | --- | --- |
 | `functions.csv` | All 2907 functions. Columns: `rva,size,name,source,confidence,evidence`. Generated. |
 | `glee_names.csv` | Names from `tools/re/name_glee.py`. Generated. Merged as manual names. |
-| `globals.csv` | 47 global candidates from `map_globals.py`. Generated. See Globals below. |
+| `globals.csv` | 49 global candidates from `map_globals.py`. Generated. See Globals below. |
 | `globals_checked.csv` | Status of each candidate, from `tools/re/check_globals.py`. Generated. |
 | `globals_review.csv` | Candidates reviewed by hand in Ghidra, with evidence. Input of `check_globals.py`. |
 | `manual_globals.csv` | The 1595 GLee function pointers, named `GLeeFuncPtr_<function>`. Generated. |
@@ -36,7 +36,7 @@ Not named: 3 link functions with no Linux match (`0x1e370`, `0x1e910`, `0x20fd0`
 
 ## Globals
 
-`tools/re/map_globals.py` gives 47 candidates in `globals.csv`. They are big arrays such as `human`, `player`, `building`, `city` and `texture`. The ELF and the Mach-O have only function symbols in the features, so each vote comes from a named function that uses the global.
+`tools/re/map_globals.py` gives 49 candidates in `globals.csv`. They are big arrays such as `human`, `player`, `building`, `city` and `texture`. The ELF and the Mach-O have only function symbols in the features, so each vote comes from a named function that uses the global.
 
 `tools/re/check_globals.py` checks each candidate against the code of the exe and writes `globals_checked.csv`. Two kinds of evidence:
 
@@ -45,12 +45,13 @@ Not named: 3 link functions with no Linux match (`0x1e370`, `0x1e910`, `0x20fd0`
 
 | Status | Count | Meaning |
 | --- | --- | --- |
-| confirmed | 14 | Exact layout chain (`area_sectormodel`, `timerlist`, `speex`, `area_block`, `filelist`, `city`) or reviewed in Ghidra. |
+| confirmed | 14 | Exact layout chain (`area_sectormodel`, `timerlist`, `speex`, `area_block`, `hack_trainintersection`, `bsdsocket`) or reviewed in Ghidra. |
 | likely | 29 | Strong votes, the size fits, many accesses. Or reviewed in Ghidra with a weaker link to the name. |
-| doubtful | 3 | No reference to the base address in Ghidra: `buttonmesh`, `model_human`, `sphere`. |
+| unverified | 1 | Strong votes, the size fits, few accesses: `alcapturedevice`. |
+| doubtful | 4 | Weak votes, or no reference to the base address in Ghidra: `failure_reason`, `buttonmesh`, `model_human`, `sphere`. |
 | rejected | 1 | `lightwavelength` is the security cookie of the CRT. |
 
-`globals_review.csv` holds the rows reviewed by hand in Ghidra (xrefs to the global, then the names of the functions that use it). Each row has its evidence. `check_globals.py --review` merges it. The function names in that evidence come from the matcher, so they are evidence too, not proof. The 24 `likely` rows that no one reviewed in Ghidra stay `likely`.
+`globals_review.csv` holds the rows reviewed by hand in Ghidra (xrefs to the global, then the names of the functions that use it). Each row has its evidence. `check_globals.py --review` merges it by name. A reviewed row applies when the voted address moved by at most 16 bytes, which happens when new function names change the votes. The function names in that evidence come from the matcher, so they are evidence too, not proof. The 24 `likely` rows that no one reviewed in Ghidra stay `likely`.
 
 `area_block` and `area_sector` have the right start, but the size from the reference binary runs into the next candidate. The real size needs a check before a size goes into a CSV.
 
@@ -62,12 +63,13 @@ A cycle of matcher and globals, as for the 024d, gave 9 new names and 6 renames.
 
 ## Open work
 
-About 590 functions of the game code have no name (87 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
+About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
 
-Two passes name functions that the first matcher pass left open. Both are in `name_all.sh`:
+Three passes name functions that the first matcher pass left open. All are in `name_all.sh`:
 
 - A strict pass against the 024d, which has the same compiler. Many of its names have low confidence (0.333 with 2 votes). Check them before a rewrite.
 - `tools/re/match_strings.py`, which compares only the strings of a function.
+- `tools/re/match_callees.py`, which compares the sets of named functions that a function calls. It also needs a callee overlap of 4 names, a gap of 0.2 to the next name, and some shared constants. It named 21 functions, among them `objectsimulation`, `objectwheelsimulation2` and `area_buildsectormodel`.
 
 The 0802 server names come from this client, so they cannot name the client without circular evidence.
 

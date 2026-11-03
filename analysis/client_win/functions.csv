@@ -2183,7 +2183,7 @@ rva,size,name,source,confidence,evidence
 0x494a0,2650,,,,
 0x49f00,633,,,,
 0x4a180,1220,,,,
-0x4a650,7368,,,,
+0x4a650,7368,area_buildsectormodel,callees,0.727,"callee jaccard 0.73, constants 0.39, size 7368"
 0x4c320,2660,,,,
 0x4cd90,2948,,,,
 0x4d920,213,,,,
@@ -2224,7 +2224,7 @@ rva,size,name,source,confidence,evidence
 0x605a0,918,buildingeditor_renderblock2,anchor,0.891,features
 0x60940,509,,,,
 0x60b40,2455,building_save,callgraph,0.333,votes=2
-0x614e0,2790,,,,
+0x614e0,2790,building_load,callees,0.714,"callee jaccard 0.71, constants 0.50, size 2790"
 0x61fd0,2780,,,,
 0x62ab0,2482,building_setupfloorplannewer,anchor,0.549,features
 0x63470,3218,building_setupbuild,callgraph,0.333,votes=2
@@ -2277,7 +2277,7 @@ rva,size,name,source,confidence,evidence
 0x6d6f0,214,createmessage,anchor,0.825,features
 0x6d7d0,131,,,,
 0x6d860,300,drawcircle,anchor,0.894,features
-0x6d990,300,,,,
+0x6d990,300,drawcirclefill,callees,1.0,"callee jaccard 1.00, constants 0.25, size 300"
 0x6dac0,484,drawplayerindicator,anchor,0.91,features
 0x6dcb0,1806,drawplayerinfo,anchor,0.883,features
 0x6e3c0,745,drawcircleindicator,anchor,0.894,features
@@ -2386,7 +2386,7 @@ rva,size,name,source,confidence,evidence
 0x93a00,805,getinputs_phone,callgraph,1.0,votes=8
 0x93d30,150,getinputs_money,callgraph,1.0,votes=8
 0x93dd0,642,getinputs_door,anchor,0.548,features
-0x94060,1086,,,,
+0x94060,1086,circleintersecttriangle,callees,0.778,"callee jaccard 0.78, constants 0.26, size 1086"
 0x944a0,211,sphereintersecttriangle,callgraph,1.0,votes=8
 0x94580,618,sphereintersecttrianglefull,callgraph,1.0,votes=8
 0x947f0,261,sphereintersectline,callgraph,1.0,votes=12
@@ -2457,7 +2457,7 @@ rva,size,name,source,confidence,evidence
 0xa4c80,1205,,,,
 0xa5140,369,logic_suits_buy,anchor,0.821,features
 0xa52c0,875,logic_cardealer_buy,anchor,0.542,features
-0xa5630,408,,,,
+0xa5630,408,logic_gunstore_buy,callees,0.833,"callee jaccard 0.83, constants 0.30, size 408"
 0xa57d0,514,logic_player,callgraph,0.333,votes=2
 0xa59e0,6234,logic_playeractions,anchor,0.599,features
 0xa7240,2431,logicsimulation_round,anchor,0.624,features
@@ -2478,17 +2478,17 @@ rva,size,name,source,confidence,evidence
 0xad140,584,savemodelcsm,anchor,0.563,features
 0xad390,566,loadmodelcsm,anchor,0.823,features
 0xad5d0,4842,createbulletmodel,callgraph,0.667,votes=4
-0xae8c0,1257,,,,
+0xae8c0,1257,rendermodelnormals,callees,0.909,"callee jaccard 0.91, constants 0.33, size 1257"
 0xaedb0,381,model_settritexcoord,callgraph,1.0,votes=16
 0xaef30,524,,,,
-0xaf140,1649,,,,
+0xaf140,1649,addcylindertomodel,callees,0.8,"callee jaccard 0.80, constants 0.32, size 1649"
 0xaf7c0,2024,,,,
 0xaffb0,526,createsunglassmodel,anchor,0.712,features
 0xb01c0,51,createmodel_cityobject,callgraph,0.667,votes=4
 0xb0200,1212,createmodel_cityobject_type,callgraph,0.333,votes=2
 0xb06c0,444,,,,
 0xb0880,610,createmodel_cityobject_elevator,anchor,0.709,features
-0xb0af0,2184,,,,
+0xb0af0,2184,addcockpittomodel,callees,0.8,"callee jaccard 0.80, constants 0.28, size 2184"
 0xb1380,3221,,,,
 0xb2020,1548,,,,
 0xb2630,1176,model_extrudequad2,anchor,0.462,features
@@ -2530,7 +2530,7 @@ rva,size,name,source,confidence,evidence
 0xc1ac0,719,model_editor,anchor,0.854,features
 0xc1d90,44,fround,anchor,1.0,features
 0xc1dc0,3567,,,,
-0xc2bb0,1816,,,,
+0xc2bb0,1816,client_simulation,callees,0.833,"callee jaccard 0.83, constants 0.25, size 1816"
 0xc32d0,76,net_calcdistancefactor,anchor,0.908,features
 0xc3320,3736,,,,
 0xc41c0,4037,,,,
@@ -2555,10 +2555,10 @@ rva,size,name,source,confidence,evidence
 0xc71e0,493,,,,
 0xc73d0,444,,,,
 0xc7590,785,,,,
-0xc78b0,9278,,,,
+0xc78b0,9278,objectsimulation,callees,0.677,"callee jaccard 0.68, constants 0.45, size 9278"
 0xc9cf0,491,calculatebarycentric,callgraph,1.0,votes=8; diverge: lineintersectsphere
 0xc9ee0,478,applydamageobject,anchor,0.811,features
-0xca0c0,7851,,,,
+0xca0c0,7851,objectwheelsimulation2,callees,0.786,"callee jaccard 0.79, constants 0.22, size 7851"
 0xcbf70,3059,objectenginesimulation2,anchor,0.484,features
 0xccb70,304,getenginetorque2,anchor,0.955,features
 0xccca0,163,engine_bezierinterpolation,callgraph,1.0,votes=12
@@ -2571,7 +2571,7 @@ rva,size,name,source,confidence,evidence
 0xd06a0,611,lineintersecttrack,callgraph,0.333,votes=2
 0xd0910,580,lineintersecttrackrail,callgraph,0.333,votes=2
 0xd0b60,1200,objecttrainsimulation,anchor,0.614,features
-0xd1010,716,,,,
+0xd1010,716,objectwheelcollision2,callees,0.714,"callee jaccard 0.71, constants 0.23, size 716"
 0xd12e0,882,,,,
 0xd1660,2941,objectsimulation_car,anchor,0.703,features
 0xd21e0,171,getenginetorque,anchor,0.983,features
@@ -2622,13 +2622,13 @@ rva,size,name,source,confidence,evidence
 0xd9fa0,2789,,,,
 0xdaa90,340,,,,
 0xdabf0,503,render_sector_interior,callgraph,0.333,votes=2
-0xdadf0,499,,,,
+0xdadf0,499,render_sector_alpha,callees,0.8,"callee jaccard 0.80, constants 0.26, size 499"
 0xdaff0,1993,render_sector_interior_shadow2,callgraph,0.667,votes=4
 0xdb7c0,2228,rendermodelshadow,callgraph,0.667,votes=4
 0xdc080,324,glstateshadowtwoside,anchor,1.0,features
 0xdc1d0,137,,,,
 0xdc260,137,,,,
-0xdc2f0,104,,,,
+0xdc2f0,104,glstatenormal,callees,1.0,"callee jaccard 1.00, constants 1.00, size 104"
 0xdc360,1025,createscenario_world,anchor,0.713,features
 0xdc770,13,createscenario_mission,anchor,1.0,features
 0xdc780,5,,,,
@@ -2646,7 +2646,7 @@ rva,size,name,source,confidence,evidence
 0xddaf0,269,scenario_armhuman,callgraph,0.667,votes=4
 0xddc00,741,createmission_acquisition,anchor,0.898,features
 0xddef0,1634,createmission_transaction,callgraph,0.667,votes=4
-0xde560,1471,,,,
+0xde560,1471,createmission_threeway,callees,0.875,"callee jaccard 0.88, constants 0.37, size 1471"
 0xdeb20,2604,serversend,callgraph,1.0,votes=6
 0xdf550,327,servercycle,anchor,0.857,features
 0xdf6a0,4211,serverrecv,callgraph,0.333,votes=2
@@ -2671,7 +2671,7 @@ rva,size,name,source,confidence,evidence
 0xe3b10,4271,rendersprites,anchor,0.84,features
 0xe4bc0,837,rendermuzzleflashes,anchor,0.768,features
 0xe4f10,295,rotateorientationfast,callgraph,0.667,votes=4
-0xe5040,464,,,,
+0xe5040,464,createsprite_model,callees,1.0,"callee jaccard 1.00, constants 0.20, size 464"
 0xe5210,111,,,,
 0xe5280,91,,,,
 0xe52e0,2423,sprite_model_simulation,callgraph,0.667,votes=4
@@ -2717,7 +2717,7 @@ rva,size,name,source,confidence,evidence
 0xfb1b0,527,,,,
 0xfb3c0,15,cs_sleep,anchor,1.0,features
 0xfb3d0,789,createvehicle,callgraph,1.0,votes=12
-0xfb6f0,1284,,,,
+0xfb6f0,1284,getaudioinput,callees,0.833,"callee jaccard 0.83, constants 0.39, size 1284"
 0xfbc00,624,,,,
 0xfbe70,2034,calculateplayervoice,anchor,0.692,features
 0xfc670,164,addvoice,callgraph,1.0,votes=8
@@ -2820,7 +2820,7 @@ rva,size,name,source,confidence,evidence
 0x10a0f0,501,loadtexture,callgraph,1.0,votes=20
 0x10a2f0,755,loadtexturesetalpha,callgraph,1.0,votes=16
 0x10a5f0,452,,,,
-0x10a7c0,474,,,,
+0x10a7c0,474,loadtexturepartial,callees,1.0,"callee jaccard 1.00, constants 0.20, size 474"
 0x10a9a0,665,generatemipmap,anchor,0.742,features
 0x10ac40,291,setuptexture,anchor,0.89,features
 0x10ad70,58,,,,
@@ -2880,13 +2880,13 @@ rva,size,name,source,confidence,evidence
 0x10c850,117,,,,
 0x10c8d0,104,,,,
 0x10c940,31,,,,
-0x10c984,152,,,,
+0x10c984,152,__onexit,callees,0.75,"callee jaccard 0.75, constants 1.00, size 152"
 0x10ca1c,9,_unlockexit,anchor,1.0,features
 0x10ca25,23,,,,
 0x10ca47,76,,,,
 0x10caf0,425,,,,
 0x10cdca,10,,,,
-0x10cde4,262,,,,
+0x10cde4,262,__report_gsfailure,callees,1.0,"callee jaccard 1.00, constants 1.00, size 262"
 0x10cf00,69,,,,
 0x10cf45,20,,,,
 0x10cf59,37,,,,
@@ -2897,7 +2897,7 @@ rva,size,name,source,confidence,evidence
 0x10d120,53,,,,
 0x10d160,68,,,,
 0x10d1b0,166,,,,
-0x10d2da,155,,,,
+0x10d2da,155,__security_init_cookie,callees,1.0,"callee jaccard 1.00, constants 1.00, size 155"
 0x10d420,44,,,,
 0x10d450,186,,,,
 0x10d510,367,,,,

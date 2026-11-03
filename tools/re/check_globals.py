@@ -78,8 +78,14 @@ for k, r in enumerate(rows):
 
 if args.review:
     with open(args.review, encoding='utf-8') as fh:
-        review = {r['rva']: r for r in csv.DictReader(fh)}
-    out = [(rva, name, review[rva]['status'], review[rva]['evidence']) if rva in review else (rva, name, status, ev)
+        review = {r['name']: r for r in csv.DictReader(fh)}
+
+    def reviewed(rva, name):
+        # More names move the voted address by a few bytes. The array is the same.
+        r = review.get(name)
+        return r is not None and abs(int(r['rva'], 16) - int(rva, 16)) <= 0x10
+
+    out = [(rva, name, review[name]['status'], review[name]['evidence']) if reviewed(rva, name) else (rva, name, status, ev)
            for rva, name, status, ev in out]
 
 with open(args.out, 'w', newline='', encoding='utf-8') as fh:
