@@ -133,7 +133,7 @@ rva,size,name,source,confidence,evidence
 0xae90,505,write_pixels,anchor,0.766,features
 0xb0a0,41,writef,callgraph,1.0,votes=9
 0xb0d0,109,,,,
-0xb140,15,,,,
+0xb140,15,__GLeeGetProcAddress,manual,1.0,"Calls wglGetProcAddress and returns its result, as __GLeeGetProcAddress in the Linux client. 175 GLee link functions and stubs call it."
 0xb150,53,GLee_Lazy_glBlendColor,manual,1.0,"Calls through the pointer loaded with ""glBlendColor""."
 0xb190,29,GLee_Lazy_glBlendEquation,manual,1.0,"Calls through the pointer loaded with ""glBlendEquation""."
 0xb1b0,49,GLee_Lazy_glDrawRangeElements,manual,1.0,"Calls through the pointer loaded with ""glDrawRangeElements""."

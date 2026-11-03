@@ -23,7 +23,7 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 | `globals_checked.csv` | Status of each candidate, from `tools/re/check_globals.py`. Generated. |
 | `globals_review.csv` | Candidates reviewed by hand in Ghidra, with evidence. Input of `check_globals.py`. |
 | `manual_globals.csv` | The 1595 GLee function pointers, named `GLeeFuncPtr_<function>`. Generated. |
-| `manual_names.csv`, `data_globals.csv`, `params.csv`, `locals.csv` | Same format as the files in `analysis/024d/`. Empty for now. |
+| `manual_names.csv`, `data_globals.csv`, `params.csv`, `locals.csv` | Same format as the files in `analysis/024d/`. Only `manual_names.csv` has a row (`__GLeeGetProcAddress`). |
 
 ## GLee
 
@@ -60,6 +60,40 @@ No candidate is in `manual_globals.csv` yet. That file needs the element count, 
 `tools/re/map_regions.py` works only for the 024d (fixed paths). A client version needs new paths first.
 
 A cycle of matcher and globals, as for the 024d, gave 9 new names and 6 renames. Three of the six renames lowered the confidence. The cycle is not in `name_all.sh`.
+
+## Lift (step 7.3)
+
+The lifter runs on the client with `--target client_win`. Its output goes to `build/lift/client_win/` (not versioned), so a client run never changes a file of the server.
+
+Steps, once per Ghidra project. Make a backup of the project first. Run the scripts without `-readOnly`:
+
+1. `ApplyNames.java analysis/client_win/functions.csv`
+2. `FixX87Intrinsics.java`, `FixRegisterPreservation.java`
+3. `FixCookieCheck.java`, `CommitParams.java`, `FixKeepFReturns.java`
+
+Do not run `FixReturnTypes.java` on the client. It has fixed RVAs of the 024d.
+
+Then export and lift:
+
+```bash
+source instrumentation/ghidra/env.sh
+"$HEADLESS" "$PROJECT" subvulpes -process subrosa.exe -noanalysis -readOnly     -scriptPath "$ROOT/instrumentation/ghidra" -postScript LiftExport.java "$ROOT/build/lift/client_win.jsonl"
+python -I instrumentation/lift/lift.py --target client_win --compile
+```
+
+`FixCookieCheck.java` matters most. A function that ends with `__security_check_cookie` looks like a void function to the decompiler, so its callers read a value from a void function.
+
+First result (2026-11-03): 2907 functions. 822 lifted and compiled (102 of them only for the harness). 237 reach a side effect (OpenGL, heap, files, network). 214 do not compile. 1634 are blocked, and 1600 of those are GLee stubs that call through a pointer. The GLee code will get a platform layer, so it needs no lift.
+
+What the target changes in `lift.py` (`TARGETS`): the files, the `.text` range, the cookie function, the pure imports (the client calls `sqrt`, `sin`, `pow` and similar as plain imports), and the extra header `src/lifted/lift_os_client.h` (Win32 types).
+
+Open errors:
+
+- About 175 functions: GLee link functions that call `__GLeeGetProcAddress`. No lift is planned.
+- 19 functions: `C2186`, a value taken from a function that the decompiler types as void.
+- 13 functions: `C2197`, too many arguments in a call through a pointer.
+
+Next: look at the 19 and 13 functions, then the side-effect list, then the recorder for the client (step 7.4).
 
 ## Open work
 

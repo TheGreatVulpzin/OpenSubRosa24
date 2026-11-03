@@ -19,8 +19,10 @@ $M --target $F/client_win.jsonl --ref "$F/ded024d.jsonl:analysis/024d/functions.
 python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/client_win.jsonl \
    --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv \
    --globals analysis/client_win/manual_globals.csv
+(head -1 analysis/client_win/glee_names.csv; tail -qn +2 analysis/client_win/glee_names.csv analysis/client_win/manual_names.csv) \
+   > build/match/client_win_manual.csv
 python -I tools/re/merge_names.py --out build/match/client_win_merged.csv \
-   --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv build/match/client_win_via024d.csv
+   --manual build/match/client_win_manual.csv build/match/client_win_matched.csv build/match/client_win_via024d.csv
 #    Open functions that hold the same strings as a reference function (size changed a lot).
 python -I tools/re/match_strings.py --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl \
    --names build/match/client_win_merged.csv --out build/match/client_win_strings.csv

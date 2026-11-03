@@ -1,1 +1,2 @@
 rva,name,evidence
+0xb140,__GLeeGetProcAddress,"Calls wglGetProcAddress and returns its result, as __GLeeGetProcAddress in the Linux client. 175 GLee link functions and stubs call it."

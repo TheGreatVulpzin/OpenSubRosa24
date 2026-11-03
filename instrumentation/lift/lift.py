@@ -125,8 +125,8 @@ def proto_cast(ret, cc, params):
     return f'{ret} ({cc} *)({plist})'
 
 
-# The .text of the 024d (image addresses). An address there is code: SR_FN, not SR_VA.
-TEXT_START, TEXT_END = 0x401000, 0x45e000
+# The .text of the image (addresses of the target, see TARGETS['text']). An address there is
+# code: SR_FN, not SR_VA.
 
 
 def global_macro(g):
@@ -135,7 +135,10 @@ def global_macro(g):
         typ = 'undefined'
     m = re.match(r'(.+?)\s*\[(\d+)\]$', typ)
     # A label in the code (the qsort comparator LAB_0040d320): its address is a function.
-    sr = 'SR_FN' if TEXT_START <= va < TEXT_END else 'SR_VA'
+    sr = 'SR_FN' if TARGET['text'][0] <= va < TARGET['text'][1] else 'SR_VA'
+    if typ in ('string', 'unicode'):
+        # A string literal that Ghidra names as a global: the C value is the address of the text.
+        return f'#define {name} ((char *){sr}(0x{va:x}))'
     if m:
         return f'#define {name} (*({m.group(1)} (*)[{m.group(2)}]){sr}(0x{va:x}))'
     return f'#define {name} (*({typ} *){sr}(0x{va:x}))'
@@ -152,7 +155,7 @@ def partial_access(c):
 
 def load_names():
     names = {}
-    with open(ROOT / 'analysis/024d/functions.csv', encoding='utf-8') as fh:
+    with open(ROOT / TARGET['names'], encoding='utf-8') as fh:
         for r in csv.DictReader(fh):
             if r['name']:
                 names[r['rva']] = r['name']
@@ -163,6 +166,30 @@ def load_names():
 # of a function that is rewritten by hand in REWRITTEN_DIRS (rewritten_rvas).
 SYMBOLS = {}
 REWRITTEN_DIRS = ('src/common', 'src/net', 'src/game')
+
+# Inputs and outputs of each binary. The client writes under build/lift/client_win, so a
+# client run never changes a file of the server.
+TARGETS = {
+    'ded024d': dict(
+        export='build/lift/ded024d.jsonl', names='analysis/024d/functions.csv',
+        lifted='src/lifted/lifted_024d.c', hooks='instrumentation/hook/hooks_lifted.c',
+        record='instrumentation/hook/hooks_record.c', table='src/lifted/lifted_table.c',
+        report='build/lift/report.csv', hand='instrumentation/hook/hooks_024d.c',
+        rewritten=REWRITTEN_DIRS, extra_includes=(), text=(0x401000, 0x45e000),
+        skipped={0x5ce18: '__security_check_cookie'}, pure=frozenset(),
+        inline={0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'}),
+    'client_win': dict(
+        export='build/lift/client_win.jsonl', names='analysis/client_win/functions.csv',
+        lifted='build/lift/client_win/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
+        record='build/lift/client_win/hooks_record.c', table='build/lift/client_win/lifted_table.c',
+        report='build/lift/client_win/report.csv', hand=None, rewritten=(),
+        extra_includes=('lift_os_client.h',), text=(0x401000, 0x511000),
+        skipped={0x10c6fb: '__security_check_cookie'}, inline={},
+        # The client calls the CRT math functions of MSVCR100 as plain imports.
+        pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
+                        'log10', 'fmod'})),
+}
+TARGET = TARGETS['ded024d']
 
 
 def symbol(rva):
@@ -176,7 +203,7 @@ def rewritten_rvas(names):
     by_name = {n: int(r, 16) for r, n in names.items()}
     definition = re.compile(r'^\w[^;{}#\n]*?\b(\w+)\([^;{}]*\)\s*\{', re.M)
     out = set()
-    for f in sorted(f for d in REWRITTEN_DIRS for f in (ROOT / d).glob('*.c')):
+    for f in sorted(f for d in TARGET['rewritten'] for f in (ROOT / d).glob('*.c')):
         for name in definition.findall(f.read_text(encoding='utf-8')):
             m = re.fullmatch(r'lf_([0-9a-f]{5})', name)
             rva = int(m.group(1), 16) if m else by_name.get(name)
@@ -187,7 +214,9 @@ def rewritten_rvas(names):
 
 
 def handwritten_rvas():
-    src = (ROOT / 'instrumentation/hook/hooks_024d.c').read_text(encoding='utf-8')
+    if TARGET['hand'] is None:
+        return set()
+    src = (ROOT / TARGET['hand']).read_text(encoding='utf-8')
     return {int(x, 16) for x in re.findall(r'\{\s*"\w+",\s*(0x[0-9a-fA-F]+),', src)}
 
 
@@ -198,7 +227,7 @@ def side_effects(funcs):
     for rva, f in funcs.items():
         for c in f['calls']:
             if c['external']:
-                if c['target'] not in PURE_IMPORTS and rva not in direct:
+                if c['target'] not in PURE_IMPORTS | TARGET['pure'] and rva not in direct:
                     direct[rva] = c['target']
             elif 'rva' in c and int(c['rva'], 16) not in SKIPPED_CALLS.keys() | INLINE_CALLS.keys():
                 graph[rva].add(int(c['rva'], 16))
@@ -599,6 +628,11 @@ def lift_function(f, rva, headers, imports_used):
 
     pre, post = [], []
     for g in f['globals']:
+        # The name of a string literal can hold characters that a macro name cannot.
+        if not re.fullmatch(r'[A-Za-z_]\w*', g['name']):
+            safe = re.sub(r'\W', '_', g['name'])
+            c = c.replace(g['name'], safe)
+            g = dict(g, name=safe)
         # A global that holds a function address: the fread and fwrite pointers of getpaths.
         if g['type'].strip().endswith('*') and re.search(r'\(\*' + re.escape(g['name']) + r'\)\(', c):
             g = dict(g, type='code *')
@@ -946,7 +980,8 @@ def gen_table(lifted, headers, names, side):
 def gen_lifted(texts, imports_used):
     out = ['/* Generated by instrumentation/lift/lift.py from Ghidra pseudo-C of subrosadedicated024d.exe.',
            ' * Do not edit: improve the lifter or move the function to src/server/ by hand. */',
-           '#include "lift_support.h"', '#include "lift_os.h"', '',
+           '#include "lift_support.h"', '#include "lift_os.h"',
+           *(f'#include "{h}"' for h in TARGET['extra_includes']), '',
            f'static void *lf_imports[{max(1, len(imports_used))}];',
            '#define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))',
            '#define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))',
@@ -1028,10 +1063,17 @@ def main():
     ap.add_argument('--compile', action='store_true')
     ap.add_argument('--only')
     ap.add_argument('--max', type=int)
+    ap.add_argument('--target', choices=sorted(TARGETS), default='ded024d')
     args = ap.parse_args()
+    global TARGET
+    TARGET = TARGETS[args.target]
+    global SKIPPED_CALLS, INLINE_CALLS
+    SKIPPED_CALLS, INLINE_CALLS = TARGET['skipped'], TARGET['inline']
+    for key in ('lifted', 'hooks', 'record', 'table', 'report'):
+        (ROOT / TARGET[key]).parent.mkdir(parents=True, exist_ok=True)
 
     funcs = {}
-    with open(ROOT / 'build/lift/ded024d.jsonl', encoding='utf-8') as fh:
+    with open(ROOT / TARGET['export'], encoding='utf-8') as fh:
         for line in fh:
             f = json.loads(line)
             funcs[int(f['rva'], 16)] = f
@@ -1077,7 +1119,7 @@ def main():
         if args.max and len(texts) >= args.max:
             break
 
-    texts = compile_loop(texts, imports_used, status, ROOT / 'src/lifted/lifted_024d.c', args.compile)
+    texts = compile_loop(texts, imports_used, status, ROOT / TARGET['lifted'], args.compile)
 
     lifted = sorted([r for r, _ in texts] + [r for r in rewritten if only is None or r in only])
     for r in lifted:
@@ -1085,12 +1127,12 @@ def main():
     for r in rewritten:
         status[r] = ('rewritten', 'by hand')
     live = [r for r in lifted if r not in side]
-    (ROOT / 'instrumentation/hook/hooks_lifted.c').write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
-    (ROOT / 'instrumentation/hook/hooks_record.c').write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
-                                             newline='\n')
-    (ROOT / 'src/lifted/lifted_table.c').write_text(gen_table(lifted, headers, names, side), encoding='utf-8', newline='\n')
+    (ROOT / TARGET['hooks']).write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
+    (ROOT / TARGET['record']).write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
+                                         newline='\n')
+    (ROOT / TARGET['table']).write_text(gen_table(lifted, headers, names, side), encoding='utf-8', newline='\n')
 
-    with open(ROOT / 'build/lift/report.csv', 'w', newline='', encoding='utf-8') as fh:
+    with open(ROOT / TARGET['report'], 'w', newline='', encoding='utf-8') as fh:
         w = csv.writer(fh, lineterminator='\n')
         w.writerow(['rva', 'name', 'size', 'status', 'reason'])
         for rva in sorted(status):
