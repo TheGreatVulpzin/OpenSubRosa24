@@ -120,6 +120,7 @@ public class LiftExport extends GhidraScript {
         callArgBits(t, openBefore, closeAfter);
         pieceArgBits(t, openBefore, closeAfter);
         replaceSpans.clear();
+        dropCallNarrowing(t);
         floatBitCompares(t, openBefore, closeAfter);
         try {
             relocatedConstants(t, r.getFunction());
@@ -722,6 +723,37 @@ public class LiftExport extends GhidraScript {
             if (end < 0 || depth != 0 || start == i) continue;
             openBefore.merge(start, "(float)(", (a, b) -> b + a);
             closeAfter.merge(end, 1, Integer::sum);
+        }
+    }
+
+    /* The decompiler shortens the double result of a call (sin, cos, pow: the value in ST0) to
+     * float when the expression ends in a float store, and prints "(float)dVar1". The
+     * machine code has no store there: "call sin; fmul dword ptr [x]" multiplies the double.
+     * A real rounding is an FST or FSTP of a dword, and storeRounding prints it. So a
+     * FLOAT2FLOAT of a call result at the address of the call is dropped. drawcircle gave
+     * a y that was 15 float steps off, because cos(a) * r nearly cancelled param_2. */
+    private void dropCallNarrowing(List<ClangToken> t) {
+        for (int i = 0; i < t.size(); i++) {
+            ClangToken tok = t.get(i);
+            if (!(tok instanceof ClangVariableToken)) continue;
+            PcodeOp op = tok.getPcodeOp();
+            if (op == null || op.getOpcode() != PcodeOp.FLOAT_FLOAT2FLOAT || op.getOutput() == null
+                    || op.getOutput().getSize() != 4 || op.getInput(0).getSize() < 8) continue;
+            PcodeOp def = op.getInput(0).getDef();
+            if (def == null || def.getOpcode() != PcodeOp.CALL) continue;
+            Instruction in = currentProgram.getListing().getInstructionAt(op.getSeqnum().getTarget());
+            if (in == null || !in.getFlowType().isCall()) continue;
+            // The cast is "(float)" just before the variable.
+            int close = i - 1;
+            while (close >= 0 && t.get(close).getText().isBlank()) close--;
+            if (close < 2 || !t.get(close).getText().equals(")")) continue;
+            int type = close - 1;
+            while (type >= 0 && t.get(type).getText().isBlank()) type--;
+            if (type < 1 || !t.get(type).getText().equals("float")) continue;
+            int open = type - 1;
+            while (open >= 0 && t.get(open).getText().isBlank()) open--;
+            if (open < 0 || !t.get(open).getText().equals("(")) continue;
+            replaceSpans.put(open, new Object[] { close, "" });
         }
     }
 

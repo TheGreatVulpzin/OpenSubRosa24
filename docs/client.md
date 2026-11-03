@@ -223,6 +223,14 @@ The differences are in the drawing functions (`drawdisplay`, `drawcircle`, `draw
 
 Checked so far: the control word of the snapshot is `0x27f` (53 bit), as in the harness. The decompiler has a real `FLOAT2FLOAT` p-code op right after the call of `sin` (address `0x46d8d6`), so the `(float)` of the result is a real store in the original. The open question is where the original rounds the product `(float)cos * param_3` and what MSVC does for the same expression in the lifted C. Compare the instructions with `DumpTokens.java` (`insn:<rva>`) and probe with `HARNESS_PROBE`.
 
+### Float rule: call result narrowing (2026-11-03)
+
+The decompiler shortens the double result of a call (`sin`, `cos`) to float when the expression ends in a float store, and prints `(float)dVar1`. The machine code has no store there: `call sin; fmul dword ptr [x]` multiplies the double. `LiftExport.java` drops that cast (`dropCallNarrowing`) when the FLOAT2FLOAT has a call result as input and sits at the address of a call. A real rounding is an `FST` or `FSTP` of a dword, and `storeRounding` prints it.
+
+After the rule, `drawcircle`, `drawplayerindicator`, `drawcircleindicator` and `createcashmodel` are the same as the original. The re-export of the 024d gives the same lifted C and the same hook tables, so the rule changes nothing for the server.
+
+Open differences on the play recording (8 functions): `drawdisplay`, `drawplayerinfo`, `drawhelp`, `drawhud`, `drawmap`, `drawmenuitems` (the first different call is a `glColor4f` with other arguments, so a color argument or a parameter type differs) and `setupmodel`, `copymodel` (the lifted run frees a block of the recorded heap where the original frees a pool block).
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
