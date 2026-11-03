@@ -20,6 +20,7 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 | `functions.csv` | All 2907 functions. Columns: `rva,size,name,source,confidence,evidence`. Generated. |
 | `glee_names.csv` | Names from `tools/re/name_glee.py`. Generated. Merged as manual names. |
 | `globals.csv` | 47 global candidates from `map_globals.py`. Generated. See Globals below. |
+| `globals_checked.csv` | Status of each candidate, from `tools/re/check_globals.py`. Generated. |
 | `manual_globals.csv` | The 1595 GLee function pointers, named `GLeeFuncPtr_<function>`. Generated. |
 | `manual_names.csv`, `data_globals.csv`, `params.csv`, `locals.csv` | Same format as the files in `analysis/024d/`. Empty for now. |
 
@@ -36,12 +37,19 @@ Not named: 3 link functions with no Linux match (`0x1e370`, `0x1e910`, `0x20fd0`
 
 `tools/re/map_globals.py` gives 47 candidates in `globals.csv`. They are big arrays such as `human`, `player`, `building`, `city` and `texture`. The ELF and the Mach-O have only function symbols in the features, so each vote comes from a named function that uses the global.
 
-34 candidates have at least 10 votes, twice the votes of the second name, and a reference size that fits before the next candidate. Check these first.
+`tools/re/check_globals.py` checks each candidate against the code of the exe and writes `globals_checked.csv`. Two kinds of evidence:
 
-Do not trust these 13 yet:
+- **Layout:** the candidate ends exactly where the next one starts. The sizes come from the reference binary, so an exact chain is strong.
+- **Access:** the code has many 32-bit addresses inside the range of the candidate.
 
-- Weak votes: `bmask`, `socketid`, `lightwavelength`, `clientaccount`, `buttonmesh`, `model_human`, `texture_windowatlas`, `area_sectormodel`, `keyboardlabel`.
-- The reference size runs into the next candidate: `stats`, `sphere`, `area_block`, `area_sector`.
+| Status | Count | Meaning |
+| --- | --- | --- |
+| confirmed | 6 | Exact layout chain: `area_sectormodel`, `timerlist`, `speex`, `area_block` (start only, its size runs into `parser`), `filelist`, `city`. |
+| likely | 24 | Strong votes, the size fits, many accesses. |
+| unverified | 6 | Strong votes, the size fits, few accesses: `cs_steam`, `programobject`, `keyboard`, `buildblocktype`, `input`, `masterserver`. |
+| doubtful | 11 | Weak votes, or the size runs into the next candidate: `bmask`, `socketid`, `lightwavelength`, `stats`, `clientaccount`, `buttonmesh`, `model_human`, `sphere`, `texture_windowatlas`, `keyboardlabel`, `area_sector`. |
+
+The check is not a proof. A struct field access can look the same for two arrays. Only Ghidra on the real code can close the unverified and doubtful ones.
 
 No candidate is in `manual_globals.csv` yet. That file needs the element count, and the candidates give only the byte size.
 
