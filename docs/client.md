@@ -97,6 +97,30 @@ Open errors:
 
 Next: the side-effect list, then the recorder for the client (step 7.4).
 
+## Plan for 7.4 (hook DLL and recordings of the client)
+
+The server needs these parts. Each one has a client copy to make:
+
+| Part | Server file | Client work |
+| --- | --- | --- |
+| Proxy `wsock32.dll` | `instrumentation/hook/proxy.c` | Same forwards. Change the identity check: the PE time stamp and the image size of `subrosa.exe`. |
+| Hook table | `instrumentation/hook/hooks_lifted.c` | Made by `lift.py --target client_win` in `build/lift/client_win/`. Use it in a second CMake target. |
+| Lifted code | `src/lifted/lifted_024d.c` | Made by the same run (`lifted_client.c`). |
+| Recorder | `instrumentation/hook/record.c`, `hooks_record.c` | Records the arguments and the memory of the side-effect functions. |
+| Harness | `instrumentation/tests/harness.c` | Needs the fixed image of `subrosa.exe` and test stubs for OpenGL, OpenAL and SDL (`instrumentation/platform/plat_test.c` has the server ones). |
+
+The fan `wsock32.dll` in `original/client/` is a proxy of the same kind. Our DLL replaces it for the tests, so keep a copy of the fan DLL.
+
+Order of work:
+
+1. Second CMake target `cl_wsock32` with the client proxy and the client tables. It must build and load in the client without hooks first (forward only).
+2. Turn on the verify mode for a few small pure functions. Run the client to the main menu and check the log.
+3. Record a session: start the client, go to the menu and join a test server. The user plays this part.
+4. Port the harness: image loader for the client, the stubs, and a target file `instrumentation/lift/targets/client_win.json`.
+5. Run the gate. Every function that reaches a side effect stays on the original code until the harness can replay it.
+
+Risks: the client draws with OpenGL on every frame, so the recorder sees a lot of calls. The 237 side-effect functions (mostly OpenGL and heap) need a stub plan before step 4.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
