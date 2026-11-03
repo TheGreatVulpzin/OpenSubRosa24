@@ -21,6 +21,7 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 | `glee_names.csv` | Names from `tools/re/name_glee.py`. Generated. Merged as manual names. |
 | `globals.csv` | 47 global candidates from `map_globals.py`. Generated. See Globals below. |
 | `globals_checked.csv` | Status of each candidate, from `tools/re/check_globals.py`. Generated. |
+| `globals_review.csv` | Candidates reviewed by hand in Ghidra, with evidence. Input of `check_globals.py`. |
 | `manual_globals.csv` | The 1595 GLee function pointers, named `GLeeFuncPtr_<function>`. Generated. |
 | `manual_names.csv`, `data_globals.csv`, `params.csv`, `locals.csv` | Same format as the files in `analysis/024d/`. Empty for now. |
 
@@ -44,12 +45,14 @@ Not named: 3 link functions with no Linux match (`0x1e370`, `0x1e910`, `0x20fd0`
 
 | Status | Count | Meaning |
 | --- | --- | --- |
-| confirmed | 6 | Exact layout chain: `area_sectormodel`, `timerlist`, `speex`, `area_block` (start only, its size runs into `parser`), `filelist`, `city`. |
-| likely | 24 | Strong votes, the size fits, many accesses. |
-| unverified | 6 | Strong votes, the size fits, few accesses: `cs_steam`, `programobject`, `keyboard`, `buildblocktype`, `input`, `masterserver`. |
-| doubtful | 11 | Weak votes, or the size runs into the next candidate: `bmask`, `socketid`, `lightwavelength`, `stats`, `clientaccount`, `buttonmesh`, `model_human`, `sphere`, `texture_windowatlas`, `keyboardlabel`, `area_sector`. |
+| confirmed | 14 | Exact layout chain (`area_sectormodel`, `timerlist`, `speex`, `area_block`, `filelist`, `city`) or reviewed in Ghidra. |
+| likely | 29 | Strong votes, the size fits, many accesses. Or reviewed in Ghidra with a weaker link to the name. |
+| doubtful | 3 | No reference to the base address in Ghidra: `buttonmesh`, `model_human`, `sphere`. |
+| rejected | 1 | `lightwavelength` is the security cookie of the CRT. |
 
-The check is not a proof. A struct field access can look the same for two arrays. Only Ghidra on the real code can close the unverified and doubtful ones.
+`globals_review.csv` holds the rows reviewed by hand in Ghidra (xrefs to the global, then the names of the functions that use it). Each row has its evidence. `check_globals.py --review` merges it. The function names in that evidence come from the matcher, so they are evidence too, not proof. The 24 `likely` rows that no one reviewed in Ghidra stay `likely`.
+
+`area_block` and `area_sector` have the right start, but the size from the reference binary runs into the next candidate. The real size needs a check before a size goes into a CSV.
 
 No candidate is in `manual_globals.csv` yet. That file needs the element count, and the candidates give only the byte size.
 
@@ -62,3 +65,13 @@ A cycle of matcher and globals, as for the 024d, gave 9 new names and 6 renames.
 About 630 functions of the game code have no name. They sit in `0x0` to `0x10000` and from `0x30000` up. The server functions (`analysis/024d/functions.csv`) cannot name them without circular evidence, because the 0802 server names come from this client.
 
 See `docs/plano.md`, Phase 7, for the steps.
+
+## Ghidra MCP for the client
+
+The MCP server opens the 024d by default. For the client, start it with the program path in the environment:
+
+```bash
+GHIDRA_MCP_BINARY=original/client/subrosa.exe powershell -File instrumentation/ghidra/mcp_server.ps1 restart
+```
+
+The copy of the project has no function names of the client. Ghidra shows `FUN_` names. Look up each address in `analysis/client_win/functions.csv` (RVA = address minus `0x400000`).

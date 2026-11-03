@@ -20,6 +20,7 @@ import struct
 ap = argparse.ArgumentParser()
 ap.add_argument('--exe', required=True)
 ap.add_argument('--globals', required=True)
+ap.add_argument('--review', help='CSV rva,name,status,evidence: hand-reviewed rows replace the computed status')
 ap.add_argument('--out', required=True)
 args = ap.parse_args()
 
@@ -74,6 +75,12 @@ for k, r in enumerate(rows):
                 f'size {"fits" if fits else "runs into the next candidate"}; '
                 f'{len(inside)} code references, reach {hex(reach)} of {hex(size)}')
     out.append((r['rva'], r['name'], status, evidence))
+
+if args.review:
+    with open(args.review, encoding='utf-8') as fh:
+        review = {r['rva']: r for r in csv.DictReader(fh)}
+    out = [(rva, name, review[rva]['status'], review[rva]['evidence']) if rva in review else (rva, name, status, ev)
+           for rva, name, status, ev in out]
 
 with open(args.out, 'w', newline='', encoding='utf-8') as fh:
     w = csv.writer(fh, lineterminator='\n')

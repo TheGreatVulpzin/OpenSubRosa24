@@ -17,6 +17,8 @@ $Root = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 $Exe = if ($env:GHIDRA_MCP_EXE) { $env:GHIDRA_MCP_EXE } else { 'E:\tools\ghidramcp-venv\Scripts\ghidra-mcp.exe' }
 $Copy = if ($env:GHIDRA_MCP_HTTP_PROJECT) { $env:GHIDRA_MCP_HTTP_PROJECT } else { 'E:\subvulpes\ghidra-mcp-http' }
 $Port = if ($env:GHIDRA_MCP_PORT) { $env:GHIDRA_MCP_PORT } else { '8081' }
+# The program the server opens. For the client: GHIDRA_MCP_BINARY=original/client/subrosa.exe
+$Binary = if ($env:GHIDRA_MCP_BINARY) { $env:GHIDRA_MCP_BINARY } else { 'original/blackhouser/subrosadedicated024d.exe' }
 $Log = Join-Path $Root 'build\ghidra-mcp.log'
 if (-not $env:JAVA_HOME) { $env:JAVA_HOME = 'C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot' }
 if (-not $env:GHIDRA_INSTALL_DIR) { $env:GHIDRA_INSTALL_DIR = 'E:\tools\ghidra_12.1.4_PUBLIC' }
@@ -49,7 +51,7 @@ function Start-Server {
     if (Get-Server) { Write-Output 'already running'; return }
     if (-not (Test-Path $Copy)) { Copy-Project }
     $mcpArgs = @('--transport', 'streamable-http', '--mcp-port', $Port, '--headless',
-        '--binary', 'original/blackhouser/subrosadedicated024d.exe', '--project', $Copy,
+        '--binary', $Binary, '--project', $Copy,
         '--project-name', 'subvulpes', '--no-analyze', '--discard')
     $p = Start-Process -FilePath $Exe -ArgumentList $mcpArgs -WorkingDirectory $Root -WindowStyle Hidden `
         -RedirectStandardOutput $Log -RedirectStandardError "$Log.err" -PassThru

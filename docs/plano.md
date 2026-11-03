@@ -236,7 +236,7 @@ Phase 4 left about 200 addresses for this phase: globals that only the client us
 | Step | Work | Status |
 | --- | --- | --- |
 | 7.1 | Names: matcher from the ELF and the Mach-O, GLee names from machine code | in progress: 2278 of 2907 functions named |
-| 7.2 | Globals and types: `analysis/client_win/*.csv`, structs the client adds | in progress: 47 global candidates, 30 confirmed or likely |
+| 7.2 | Globals and types: `analysis/client_win/*.csv`, structs the client adds | in progress: 47 global candidates, 43 confirmed or likely |
 | 7.3 | Lift target `instrumentation/lift/targets/client_win.json` and hook DLL for the client | not started |
 | 7.4 | Recording of client sessions and harness | not started |
 | 7.5 | Standalone client (platform layer for render, input, audio) | not started |

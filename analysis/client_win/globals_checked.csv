@@ -1,18 +1,18 @@
 rva,name,status,evidence
-0x1111d8,bmask,doubtful,"votes 5 (second 0); layout none; size fits; 5 code references, reach 0x58 of 0x60"
-0x1235b8,socketid,doubtful,"votes 5 (second 2.5); layout none; size fits; 13 code references, reach 0x10 of 0x18"
-0x126650,lightwavelength,doubtful,"votes 3 (second 1.5); layout none; size fits; 294 code references, reach 0x4 of 0xc"
+0x1111d8,bmask,likely,Ghidra xrefs: used by decode and extend_receive.
+0x1235b8,socketid,likely,Ghidra xrefs: used by recvpacket and resetsendpacket.
+0x126650,lightwavelength,rejected,"Ghidra xrefs: 292 references, among them __SEH_prolog4 and ___security_init_cookie. It is the security cookie of the CRT."
 0x127eac,fontnum,likely,"votes 35 (second 12.5); layout none; size fits; 268 code references, reach 0x0 of 0x4"
-0x127ec0,cs_steam,unverified,"votes 15 (second 1.5); layout none; size fits; 7 code references, reach 0x0 of 0x8"
-0x128260,programobject,unverified,"votes 25 (second 12.5); layout none; size fits; 186 code references, reach 0x2e4 of 0x1400"
+0x127ec0,cs_steam,confirmed,"Ghidra xrefs: written by steam_init and steam_shutdown, read by steam_update, steam_getname, steam_getid, steam_requestticket."
+0x128260,programobject,confirmed,"Ghidra xrefs: used by compileprogramobject and setupprogramobjects, and by the render and menu functions."
 0x14a8680,debug,likely,"votes 40 (second 7.5); layout none; size fits; 313 code references, reach 0x523c4 of 0x523d0"
 0x14fc4a0,human,likely,"votes 120 (second 54); layout none; size fits; 10143 code references, reach 0x56bf6f of 0x56c800"
-0x1a79ca8,stats,doubtful,"votes 7.5 (second 2.5); layout none; size runs into the next candidate; 25 code references, reach 0x1c of 0x20"
-0x1a79cc4,clientaccount,doubtful,"votes 5 (second 2.5); layout none; size fits; 1243 code references, reach 0xff04b of 0x100004"
+0x1a79ca8,stats,likely,Ghidra xrefs: used by createbullet and server_writelogfile.
+0x1a79cc4,clientaccount,confirmed,Ghidra xrefs: used by createclientaccount and saveaccountsclient.
 0x1bbdf3c,buttonmesh,doubtful,"votes 5 (second 2.5); layout none; size fits; 124 code references, reach 0x154 of 0x260"
 0x1bbfdf0,model_human,doubtful,"votes 5 (second 2.5); layout none; size fits; 149 code references, reach 0x3801c of 0x38020"
 0x1cb8280,building,likely,"votes 40.5 (second 15); layout none; size fits; 24244 code references, reach 0x36158f8 of 0x3616900"
-0x75a5140,keyboard,unverified,"votes 65 (second 27.5); layout none; size fits; 331 code references, reach 0xe5 of 0x200"
+0x75a5140,keyboard,confirmed,Ghidra xrefs: used by checkkeyboard and checkmenuitems.
 0x75a5800,server,likely,"votes 72.5 (second 32.5); layout none; size fits; 114 code references, reach 0x80 of 0xa0"
 0x90630e0,option,likely,"votes 55 (second 15); layout none; size fits; 172 code references, reach 0x144 of 0x160"
 0x906525c,sphere,doubtful,"votes 5 (second 2.5); layout none; size runs into the next candidate; 675 code references, reach 0xfc of 0x100"
@@ -21,8 +21,8 @@ rva,name,status,evidence
 0x90f7540,soundlist,likely,"votes 28 (second 7.5); layout none; size fits; 114 code references, reach 0x138 of 0x140"
 0x9b676e0,newspaper,likely,"votes 10 (second 5); layout none; size fits; 36 code references, reach 0x40004 of 0x40020"
 0xaff05a4,model,likely,"votes 23 (second 10); layout none; size fits; 955 code references, reach 0x38a144 of 0x38c000"
-0xb731640,buildblocktype,unverified,"votes 13.5 (second 5); layout none; size fits; 134 code references, reach 0x58 of 0x1a80"
-0xb77c590,input,unverified,"votes 30 (second 15); layout none; size fits; 40 code references, reach 0xc of 0x20"
+0xb731640,buildblocktype,confirmed,Ghidra xrefs: used by setupbuildingtypes and building_editorloop.
+0xb77c590,input,confirmed,"No reference to the base address. The fields at +4 and +8 are used by gameloop, resetgame, drawhud and getinputs."
 0xe1ac780,filelist,confirmed,"votes 15 (second 7.5); layout exact; size fits; 37 code references, reach 0x6c58f of 0x80020"
 0xe22c7a0,city,confirmed,"votes 64 (second 18.5); layout exact; size fits; 4653 code references, reach 0xa08b16 of 0xa0b9a0"
 0xed813a0,player,likely,"votes 155 (second 56); layout none; size fits; 2265 code references, reach 0x236160 of 0x240800"
@@ -30,7 +30,7 @@ rva,name,status,evidence
 0xf3eb200,account,likely,"votes 27.5 (second 12.5); layout none; size fits; 456 code references, reach 0x4b8900 of 0x4c0020"
 0xfefe2a0,view,likely,"votes 65 (second 32.5); layout none; size fits; 339 code references, reach 0x38 of 0x44"
 0x1033fd20,vbolist,likely,"votes 20.5 (second 7.5); layout none; size fits; 35 code references, reach 0xcfa of 0x1040"
-0x103673a0,texture_windowatlas,doubtful,"votes 5 (second 2.5); layout none; size fits; 45 code references, reach 0x20c of 0x220"
+0x103673a0,texture_windowatlas,likely,Ghidra xrefs: used by createlevel and generatematerialwindowtexture.
 0x1047c600,area_sectormodel,confirmed,"votes 5 (second 2.5); layout exact; size fits; 5959 code references, reach 0x2601004 of 0x2601020"
 0x12a7d620,timerlist,confirmed,"votes 37.5 (second 7.5); layout exact; size fits; 146 code references, reach 0x50 of 0x60"
 0x12a7d680,speex,confirmed,"votes 17.5 (second 7.5); layout exact; size fits; 415 code references, reach 0x922f44 of 0x931000"
@@ -38,11 +38,11 @@ rva,name,status,evidence
 0x13d5e700,parser,likely,"votes 17.5 (second 5); layout none; size fits; 446 code references, reach 0x100008 of 0x100108"
 0x14311840,texturelist,likely,"votes 84 (second 18.5); layout none; size fits; 338 code references, reach 0x1140 of 0x1160"
 0x16338600,connection,likely,"votes 27.5 (second 13.5); layout none; size fits; 778 code references, reach 0xf0e212 of 0xf17000"
-0x17798e00,keyboardlabel,doubtful,"votes 5 (second 2.5); layout none; size fits; 59 code references, reach 0xe20 of 0x2000"
-0x1779b600,masterserver,unverified,"votes 10 (second 5); layout none; size fits; 19 code references, reach 0x6 of 0x208"
+0x17798e00,keyboardlabel,likely,Ghidra xrefs: used by setupmenuitems and voiceoptionsmenu.
+0x1779b600,masterserver,confirmed,"Ghidra xrefs: used by getmasterserverip, getonlineserverlist and joinmenu."
 0x17b4b840,texture,likely,"votes 93 (second 30); layout none; size fits; 665 code references, reach 0x7c541 of 0xb0000"
 0x19c07cc0,frame,likely,"votes 50 (second 22.5); layout none; size fits; 325 code references, reach 0x166b92 of 0x17d480"
 0x19d851a0,bsdsocket,likely,"votes 35 (second 12.5); layout none; size fits; 190 code references, reach 0x10073 of 0x20080"
-0x1dda5280,area_sector,doubtful,"votes 37.5 (second 18.5); layout none; size runs into the next candidate; 22883 code references, reach 0xc0fd512 of 0xc120000"
+0x1dda5280,area_sector,confirmed,"Ghidra xrefs: used by area_createsector, area_getnextsector, gameloop and render_buildareasectorshadow. The start is right. The size still runs into textinput."
 0x29e752a0,textinput,likely,"votes 47.5 (second 23.5); layout none; size fits; 205 code references, reach 0x4010 of 0x8010"
 0x29e7d2c0,glext,likely,"votes 32.5 (second 12.5); layout none; size fits; 33 code references, reach 0x40 of 0x44"
