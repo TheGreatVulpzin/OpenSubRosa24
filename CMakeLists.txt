@@ -72,6 +72,17 @@ set_property(TARGET sv_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<C
 # Map file (build/hook/wsock32.map): turns a crash offset "WSOCK32.dll+0x..." into a function name.
 target_link_options(sv_wsock32 PRIVATE /MAP)
 
+# Proxy wsock32.dll for subrosa.exe (client). Its own output folder: the file name is the same.
+add_library(cl_wsock32 SHARED instrumentation/client/cl_proxy.c instrumentation/client/wsock32.def)
+set_target_properties(cl_wsock32 PROPERTIES OUTPUT_NAME wsock32
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/client ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/client
+    PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/client)
+target_include_directories(cl_wsock32 PRIVATE instrumentation/hook)
+target_compile_options(cl_wsock32 PRIVATE /W4 /WX /utf-8)
+target_compile_definitions(cl_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
+set_property(TARGET cl_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+target_link_options(cl_wsock32 PRIVATE /MAP)
+
 add_executable(check_types instrumentation/tests/check_types.c)
 target_include_directories(check_types PRIVATE src/include)
 target_compile_options(check_types PRIVATE /W4 /WX /utf-8)

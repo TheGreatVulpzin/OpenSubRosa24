@@ -114,6 +114,7 @@ The fan `wsock32.dll` in `original/client/` is a proxy of the same kind. Our DLL
 Order of work:
 
 1. Second CMake target `cl_wsock32` with the client proxy and the client tables. It must build and load in the client without hooks first (forward only).
+   Done for the build: `instrumentation/client/cl_proxy.c` and `wsock32.def` give `build/hook/client/wsock32.dll` with the 47 exports. The forward list is in `instrumentation/hook/wsock_forwards.h`, shared with the server proxy. The DLL writes `subvulpes_client.log` next to the executable. A load test in the client is still open: copy the DLL next to `subrosa.exe` (keep the fan `wsock32.dll`) and start the game.
 2. Turn on the verify mode for a few small pure functions. Run the client to the main menu and check the log.
 3. Record a session: start the client, go to the menu and join a test server. The user plays this part.
 4. Port the harness: image loader for the client, the stubs, and a target file `instrumentation/lift/targets/client_win.json`.
