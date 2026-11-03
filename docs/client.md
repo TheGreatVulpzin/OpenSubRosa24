@@ -69,7 +69,7 @@ Steps, once per Ghidra project. Make a backup of the project first. Run the scri
 
 1. `ApplyNames.java analysis/client_win/functions.csv`
 2. `FixX87Intrinsics.java`, `FixRegisterPreservation.java`
-3. `FixCookieCheck.java`, `CommitParams.java`, `FixKeepFReturns.java`
+3. `FixCookieCheck.java`, `CommitParams.java`, `ApplyReturns.java analysis/client_win/returns.csv`, `FixKeepFReturns.java`
 
 Do not run `FixReturnTypes.java` on the client. It has fixed RVAs of the 024d.
 
@@ -81,19 +81,21 @@ source instrumentation/ghidra/env.sh
 python -I instrumentation/lift/lift.py --target client_win --compile
 ```
 
-`FixCookieCheck.java` matters most. A function that ends with `__security_check_cookie` looks like a void function to the decompiler, so its callers read a value from a void function.
+Two scripts matter most:
 
-First result (2026-11-03): 2907 functions. 822 lifted and compiled (102 of them only for the harness). 237 reach a side effect (OpenGL, heap, files, network). 214 do not compile. 1634 are blocked, and 1600 of those are GLee stubs that call through a pointer. The GLee code will get a platform layer, so it needs no lift.
+- `FixCookieCheck.java`. A function that ends with `__security_check_cookie` looks like a void function to the decompiler, so its callers read a value from a void function.
+- `ApplyReturns.java`. Functions that only pass on a call (`call X; ret`) are typed void when the decompiler does not know the return of `X`. `returns.csv` lists 24 of them with the evidence. The biggest is `__GLeeGetProcAddress` with 1598 callers.
+
+Result (2026-11-03): 2907 functions. 1015 lifted and compiled (295 of them only for the harness). 237 reach a side effect (OpenGL, heap, files, network). 21 do not compile. 1634 are blocked, and 1600 of those are GLee stubs that call through a pointer. The GLee code will get a platform layer, so it needs no lift.
 
 What the target changes in `lift.py` (`TARGETS`): the files, the `.text` range, the cookie function, the pure imports (the client calls `sqrt`, `sin`, `pow` and similar as plain imports), and the extra header `src/lifted/lift_os_client.h` (Win32 types).
 
 Open errors:
 
-- About 175 functions: GLee link functions that call `__GLeeGetProcAddress`. No lift is planned.
-- 19 functions: `C2186`, a value taken from a function that the decompiler types as void.
-- 13 functions: `C2197`, too many arguments in a call through a pointer.
+- 13 functions: `C2197`, too many arguments in a call through a pointer. Among them `GLeeInit`, `setupaudio`, `shutdownaudio` and `loadwav`.
+- 8 functions: syntax errors and void values.
 
-Next: look at the 19 and 13 functions, then the side-effect list, then the recorder for the client (step 7.4).
+Next: the side-effect list, then the recorder for the client (step 7.4).
 
 ## Open work
 
