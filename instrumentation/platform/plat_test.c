@@ -605,6 +605,46 @@ static int WINAPI st_recvfrom(SOCK s, char *buf, int len, int flags, void *from,
 
 /* ------------------------------------------------------------------ lookup */
 
+#ifdef CL_HARNESS
+/* Test stubs of the imports of the client (instrumentation/client/gen_plat_stubs.py). A stub gives a
+ * fixed result. OpenGL calls go into one hash per run: the log keeps only their count and the hash. */
+static unsigned g_ids;
+static uint32_t g_bulk_hash;
+static unsigned g_bulk_n;
+
+static void bulk_add(const void *p, size_t n)
+{
+    const uint8_t *b = (const uint8_t *)p;
+    size_t i;
+    for (i = 0; i < n; i++) {
+        g_bulk_hash ^= b[i];
+        g_bulk_hash *= 16777619u;
+    }
+}
+
+static void rec_bulk(const char *name, const void *args, size_t n)
+{
+    if (g_run < 0)
+        return;
+    bulk_add(name, strlen(name));
+    bulk_add(args, n);
+    g_bulk_n++;
+}
+
+static void rec_ev(const char *name, const void *args, size_t n)
+{
+    if (g_run < 0)
+        return;
+    ev("%s %s", name, hex(args, n));
+}
+
+#define REC_BULK rec_bulk
+#define REC_EV rec_ev
+#define PUT(x) (memcpy(rec_buf + rec_len, &(x), sizeof(x)), rec_len += sizeof(x))
+#define PUTBYTES(p, len) (memcpy(rec_buf + rec_len, (p), (len)), rec_len += (len))
+#include "plat_client_stubs.inc"
+#endif
+
 typedef struct Stub {
     const char *dll;
     const char *name;
@@ -613,6 +653,9 @@ typedef struct Stub {
 } Stub;
 
 static const Stub g_stubs[] = {
+#ifdef CL_HARNESS
+    CL_STUB_ENTRIES
+#endif
     { "KERNEL32.dll", "QueryPerformanceCounter", 0, (void *)st_QueryPerformanceCounter },
     { "KERNEL32.dll", "QueryPerformanceFrequency", 0, (void *)st_QueryPerformanceFrequency },
     { "KERNEL32.dll", "GetSystemTimeAsFileTime", 0, (void *)st_GetSystemTimeAsFileTime },
@@ -743,6 +786,11 @@ void plat_test_begin(int run)
     g_nsock = 0;
     g_read_bytes = 0;
     g_next_packet = 0;
+#ifdef CL_HARNESS
+    g_ids = 0;
+    g_bulk_hash = 2166136261u;
+    g_bulk_n = 0;
+#endif
     GetCurrentDirectoryA(MAX_PATH, g_saved_cwd);
     SetCurrentDirectoryA(g_root);
     g_run = run;
@@ -756,6 +804,10 @@ void plat_test_end(int run)
             close_file(&g_files[i], "not closed:");
     if (g_read_bytes)
         ev("read %llu bytes", g_read_bytes);
+#ifdef CL_HARNESS
+    if (g_bulk_n)
+        ev("bulk %u calls hash %08x", g_bulk_n, (unsigned)g_bulk_hash);
+#endif
     g_pool_len[run] = g_pool_used;
     if (run == 0) {
         if (g_pool_copy_len < g_pool_used) {

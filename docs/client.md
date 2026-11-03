@@ -194,6 +194,23 @@ Changes the client needed in shared code:
 
 Next: the gate target `instrumentation/lift/targets/client_win.json`, and a longer recording with a match, to reach more functions than the main menu.
 
+### Platform layer for the side-effect functions (step 7.4)
+
+The lifter lifts a side-effect function of the game as "harness only" when the harness can run it. The live client keeps the original code and records the call. The harness runs both versions in the test environment of `plat_test.c`, with stubs for the imports.
+
+Parts:
+
+- `analysis/client_win/imports.csv` has the prototype of 158 imports (OPENGL32, OpenAL32, SDL2, speex, steam_api). Ghidra does not know them. Without a prototype the decompiler drops the arguments of each call and the lift fails with `C2197`. Apply the file with `ApplyImports.java` (no `-readOnly`). The prototype is the last field and keeps its commas.
+- `instrumentation/client/gen_plat_stubs.py` makes `build/lift/client_win/plat_client_stubs.inc` from the same file. Each stub has the exact signature of the import and gives fixed results (ids from a counter, empty strings, no events, no joystick). `plat_test.c` includes the file only with `CL_HARNESS`.
+- A stub writes what the call did into the environment log. OpenGL calls and the vector calls of OpenAL go into one hash per run and the log keeps the count and the hash. Every other call writes one line with its scalar arguments. A pointer argument is not compared (the stack addresses differ between the two runs), except for the vector calls listed in `PTR_DWORDS`.
+- The lifter has two limits per target: `crt_start` (the first RVA of the CRT) and `record_skip` (functions that run a frame loop until the player leaves: `main`, the game loop, the menus, the editors). A caller of such a loop is also left out (`skip_callers`).
+
+Order after a change of names or types: `ApplyImports.java`, `LiftExport.java`, `lift.py --target client_win --compile`, `gen_count_table.py`, `gen_plat_stubs.py`, `toolsuild_hook.bat`.
+
+Result (2026-11-03, menu recording): 718 lifted, 471 harness only, 34 side effect (the loops and their callers), 12 compile errors. The harness tests 84 functions: 131 calls same, 0 different, 162 skipped.
+
+Two name errors of the matcher showed in the CRT area (`0x10c000` and up): `0x10c650` is `_ftol2` (it takes ST0), and `0x10c6fb` is `__security_check_cookie`. The matcher names in that area are not reliable. `FixRegisterPreservation.java` and `FixCookieCheck.java` take the address as a script argument.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

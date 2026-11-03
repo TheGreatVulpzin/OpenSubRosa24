@@ -105,7 +105,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
         instrumentation/platform/plat_test.c build/lift/client_win/lifted_client.c build/lift/client_win/lifted_table.c
         src/platform/x87_math.c)
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
-        instrumentation/hook instrumentation/runtime)
+        instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
     target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152 SR_TEST_MEMORY CL_HARNESS)
     target_link_options(harness_client PRIVATE /LARGEADDRESSAWARE /MAP /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)

@@ -2873,8 +2873,8 @@ rva,size,name,source,confidence,evidence
 0x10c170,19,,,,
 0x10c190,28,,,,
 0x10c1b0,74,,,,
-0x10c650,145,cerpnoise2d,callgraph,1.0,votes=88
-0x10c6fb,15,setmenuitem,callgraph,1.0,votes=6
+0x10c650,145,_ftol2,manual,1.0,
+0x10c6fb,15,__security_check_cookie,manual,1.0,
 0x10c710,43,addwindowatlas,callgraph,0.333,votes=2
 0x10c810,31,,,,
 0x10c850,117,,,,

@@ -99,7 +99,9 @@ public class FixRegisterPreservation extends GhidraScript {
             ext.addReplaceCompilerSpecExtension(prototypeXml(keep), monitor);
         }
 
-        Function ftol2 = fm.getFunctionAt(toAddr(FTOL2_VA));
+        // The address of _ftol2 is the first script argument (the client), or the 024d default.
+        long ftolVa = getScriptArgs().length > 0 ? Long.decode(getScriptArgs()[0]) : FTOL2_VA;
+        Function ftol2 = fm.getFunctionAt(toAddr(ftolVa));
         int[] count = new int[ALL + 1];
         for (Function f : fm.getFunctions(true)) {
             if (f == ftol2 || f.hasCustomVariableStorage()) continue;

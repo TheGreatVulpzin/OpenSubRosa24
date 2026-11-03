@@ -20,6 +20,11 @@ public class FixCookieCheck extends GhidraScript {
     @Override
     protected void run() throws Exception {
         int n = 0;
+        // The matcher can give the cookie function a wrong name. A script argument is its address.
+        if (getScriptArgs().length > 0) {
+            Function c = getFunctionAt(toAddr(Long.decode(getScriptArgs()[0])));
+            if (c != null) c.setName("__security_check_cookie", ghidra.program.model.symbol.SourceType.USER_DEFINED);
+        }
         FunctionIterator it = currentProgram.getFunctionManager().getFunctions(true);
         while (it.hasNext()) {
             Function f = it.next();

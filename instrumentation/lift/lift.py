@@ -177,17 +177,24 @@ TARGETS = {
         report='build/lift/report.csv', hand='instrumentation/hook/hooks_024d.c',
         rewritten=REWRITTEN_DIRS, extra_includes=(), text=(0x401000, 0x45e000),
         skipped={0x5ce18: '__security_check_cookie'}, pure=frozenset(),
-        inline={0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'}),
+        inline={0x5ce90: '#define {name}(x) ((ulonglong)(longlong)(x))'},
+        crt_start=0x5ce18, record_skip=frozenset({0x5c8d0, 0x5cd10}), skip_callers=False),
     'client_win': dict(
         export='build/lift/client_win.jsonl', names='analysis/client_win/functions.csv',
         lifted='build/lift/client_win/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
         record='build/lift/client_win/hooks_record.c', table='build/lift/client_win/lifted_table.c',
         report='build/lift/client_win/report.csv', hand=None, rewritten=(),
         extra_includes=('lift_os_client.h',), text=(0x401000, 0x511000),
-        skipped={0x10c6fb: '__security_check_cookie'}, inline={},
+        skipped={0x10c6fb: '__security_check_cookie'},
+        inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))'},
         # The client calls the CRT math functions of MSVCR100 as plain imports.
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
-                        'log10', 'fmod'})),
+                        'log10', 'fmod'}),
+        crt_start=0x10c6fb, skip_callers=True,
+        # Functions that run a frame loop until the player leaves (main, the game loop, the menus,
+        # the editors): the offline harness cannot run them, and neither can their callers.
+        record_skip=frozenset({0x58d20, 0x5d150, 0x5dbd0, 0x5e020, 0x7b100, 0x9c5c0, 0xa8e10, 0xa9310, 0xaa5a0,
+                               0xaa920, 0xabc00, 0xc14a0, 0xd2290, 0xd38c0, 0xfa9f0, 0x10ae00})),
 }
 TARGET = TARGETS['ded024d']
 
@@ -877,16 +884,36 @@ def gen_hooks(lifted, headers, funcs, names):
     return '\n'.join(out)
 
 
-# Side-effect functions that get no record-only hook: the whole server loop, its caller,
-# and the CRT (RVA 0x5ce18 and up).
-RECORD_SKIP = {0x5c8d0, 0x5cd10}
+# Side-effect functions that get no record-only hook: the loops that run until the player
+# leaves (TARGET['record_skip']) and the CRT (TARGET['crt_start'] and up).
+LOOP_CALLERS = set()
+
+
+def loop_callers(funcs):
+    """Functions that reach a loop of record_skip through calls (client only: the harness would
+    run the loop forever)."""
+    if not TARGET['skip_callers']:
+        return set()
+    callers = defaultdict(set)
+    for rva, f in funcs.items():
+        for c in f['calls']:
+            if not c['external'] and 'rva' in c:
+                callers[int(c['rva'], 16)].add(rva)
+    out, todo = set(), list(TARGET['record_skip'])
+    while todo:
+        for caller in callers[todo.pop()]:
+            if caller not in out:
+                out.add(caller)
+                todo.append(caller)
+    return out
 
 
 def harness_only(rva, side):
     """A side-effect function of the game that the lifter lifts anyway. The live server keeps
     the original (a second run would send a second packet). The offline harness tests it in
     the environment of instrumentation/platform/plat_test.c."""
-    return rva in side and rva not in RECORD_SKIP and rva < 0x5ce18
+    return (rva in side and rva not in TARGET['record_skip'] and rva not in LOOP_CALLERS
+            and rva < TARGET['crt_start'])
 
 
 def gen_record_hooks(side, headers, funcs, names):
@@ -899,7 +926,7 @@ def gen_record_hooks(side, headers, funcs, names):
            '#include "hook.h"', '#include "record.h"', '#include "sr_runtime.h"', '']
     table, inits = [], []
     for rva in sorted(side):
-        if rva in RECORD_SKIP or rva >= 0x5ce18 or rva not in headers:
+        if rva in TARGET['record_skip'] or rva >= TARGET['crt_start'] or rva not in headers:
             continue
         f = funcs[rva]
         pro = f['prologue']
@@ -1092,6 +1119,7 @@ def main():
     hand = handwritten_rvas()
     rewritten = rewritten_rvas(names)
     side = side_effects(funcs)
+    LOOP_CALLERS.update(loop_callers(funcs))
     only = {int(x, 16) for x in args.only.split(',')} if args.only else None
 
     status = {}

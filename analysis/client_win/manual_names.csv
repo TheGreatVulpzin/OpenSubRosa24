@@ -1,2 +1,4 @@
 rva,name,evidence
 0xb140,__GLeeGetProcAddress,"Calls wglGetProcAddress and returns its result, as __GLeeGetProcAddress in the Linux client. 175 GLee link functions and stubs call it."
+0x10c650,_ftol2,"MSVC CRT float to int64. Argument in ST0, result in EDX:EAX. The matcher name cerpnoise2d was wrong."
+0x10c6fb,__security_check_cookie,"MSVC /GS cookie check. The matcher name setmenuitem was wrong."
