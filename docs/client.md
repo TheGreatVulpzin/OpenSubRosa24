@@ -122,6 +122,29 @@ Order of work:
 
 Risks: the client draws with OpenGL on every frame, so the recorder sees a lot of calls. The 237 side-effect functions (mostly OpenGL and heap) need a stub plan before step 4.
 
+### Call counter (step 7.4)
+
+`instrumentation/client/cl_count.c` counts calls and writes no arguments. It is in `cl_wsock32` when `build/lift/client_win/cl_count_table.c` exists. Make that file with `python -I instrumentation/client/gen_count_table.py` after each lift.
+
+Switch it on with `subvulpes.ini`, section `[hooks]`, `count=1`. The keys `count_game`, `count_stub`, `count_gl` turn one group off. `game_from` and `game_to` limit the game hooks to a range, for a bisect. The files next to `subrosa.exe` are `subvulpes_counts.log` (one line per second) and `subvulpes_counts.csv` (totals per function, every 5 seconds). `subvulpes.log` has the first exceptions with the offset in the executable.
+
+Groups: the game hooks (the same functions as the lifter hook tables), the GLee stubs, and the OPENGL32.dll imports (through the import address table).
+
+The client loads at a moved base (`0x007f0000`). The counter adds the delta to the absolute addresses of each prologue.
+
+Rule found with the counter: a hook must not cover an instruction that another branch of the function targets. `findstring` has a loop that jumps back to its offset 3, inside the 8 bytes of the patch. The client crashed. `LiftExport.java` now marks such a prologue as not hookable (10 client functions, among them `findstring`). The 024d export has not run again with this rule.
+
+Measured on the main menu (2026-11-03, 25 seconds):
+
+| Group | Calls |
+| --- | --- |
+| Game functions, first 4 seconds (texture decode and noise: `noise2d`, `paeth`, `zhuffman_decode`) | about 14 million |
+| Game functions, after that | about 40 000 per second, 260 different functions |
+| OpenGL imports | about 550 000 per second (`glVertex2fv`, `glTexCoord2fv`, `glColor4f` in immediate mode) |
+| GLee stubs | 0 (the menu uses no extension function) |
+
+Result for the recorder: never record OpenGL calls one by one. Record the game functions with a cap per function.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

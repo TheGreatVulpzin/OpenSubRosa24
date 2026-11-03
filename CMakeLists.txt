@@ -80,6 +80,14 @@ set_target_properties(cl_wsock32 PROPERTIES OUTPUT_NAME wsock32
 target_include_directories(cl_wsock32 PRIVATE instrumentation/hook)
 target_compile_options(cl_wsock32 PRIVATE /W4 /WX /utf-8)
 target_compile_definitions(cl_wsock32 PRIVATE _CRT_SECURE_NO_WARNINGS)
+# The call counter needs the table of instrumentation/client/gen_count_table.py.
+if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/cl_count_table.c)
+    target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_count.c build/lift/client_win/cl_count_table.c
+        instrumentation/hook/hook.c)
+    target_include_directories(cl_wsock32 PRIVATE src/include instrumentation/runtime)
+    target_compile_definitions(cl_wsock32 PRIVATE CL_COUNT SR_TEST_MEMORY)
+    set_source_files_properties(build/lift/client_win/cl_count_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+endif()
 set_property(TARGET cl_wsock32 PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 target_link_options(cl_wsock32 PRIVATE /MAP)
 

@@ -13,6 +13,12 @@
 
 #include "wsock_forwards.h"
 
+#ifdef CL_COUNT
+extern uintptr_t sr_base;
+int sv_config_int(const char *key, int def);
+int cl_count_start(void);
+#endif
+
 /* Identity of the client (PE header). SHA-256 of the file is in original/MANIFEST.sha256. */
 #define SR_CLIENT_TIMESTAMP 0x55bdbd69u
 #define SR_CLIENT_SIZEOFIMAGE 0x2a7ff000u
@@ -95,8 +101,18 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
         }
         if (!is_client(base))
             cl_log("executable is not the expected subrosa.exe. Only forwarding the network.");
-        else
+        else {
+#ifdef CL_COUNT
+            /* subvulpes.ini [hooks] count=1 counts calls (instrumentation/client/cl_count.c). */
+            sr_base = (uintptr_t)base;
+            if (sv_config_int("count", 0)) {
+                cl_log("executable is subrosa.exe. Counting calls.");
+                cl_count_start();
+                return TRUE;
+            }
+#endif
             cl_log("executable is subrosa.exe. Only forwarding the network.");
+        }
     } else if (reason == DLL_PROCESS_DETACH) {
         cl_log("SubVulpes client proxy unloaded.");
         if (g_real && reserved == NULL)

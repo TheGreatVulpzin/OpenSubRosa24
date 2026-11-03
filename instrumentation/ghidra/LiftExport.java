@@ -1535,13 +1535,16 @@ public class LiftExport extends GhidraScript {
         }
     }
 
-    /* Prologue: whole instructions up to >= 5 bytes. Flags a relative jump and relocated positions. */
+    /* Prologue: whole instructions up to >= 5 bytes. Flags a relative jump and relocated positions.
+     * It also flags a branch that targets the inside of the prologue (a loop that starts there):
+     * the hook patch would sit in the path of that branch. */
     private void prologue(StringBuilder sb, Function f) throws Exception {
         Instruction ins = getInstructionAt(f.getEntryPoint());
         int len = 0;
         boolean relative = false;
         while (ins != null && len < 5) {
             if (ins.getFlowType().isJump() || ins.getFlowType().isCall()) relative = true;
+            if (len > 0 && currentProgram.getReferenceManager().hasReferencesTo(ins.getAddress())) relative = true;
             len += ins.getLength();
             ins = ins.getNext();
         }
