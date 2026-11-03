@@ -10,6 +10,7 @@ Usage: python -I tools/re/name_glee.py --exe original/client/subrosa.exe \
     --target build/features/client_win.jsonl --ref build/features/linux_x64.jsonl \
     --out analysis/client_win/glee_names.csv
 Output: CSV rva,name,evidence in the format of merge_names.py --manual.
+With --globals, also a CSV of the pointers, named GLeeFuncPtr_<function>.
 """
 import argparse
 import csv
@@ -21,6 +22,7 @@ ap.add_argument('--exe', required=True)
 ap.add_argument('--target', required=True)
 ap.add_argument('--ref', required=True)
 ap.add_argument('--out', required=True)
+ap.add_argument('--globals', help='CSV of the pointer globals (rva,name,count,evidence)')
 args = ap.parse_args()
 
 data = open(args.exe, 'rb').read()
@@ -134,4 +136,10 @@ with open(args.out, 'w', newline='', encoding='utf-8') as fh:
     w.writerow(['rva', 'name', 'evidence'])
     for rva, name, ev in rows:
         w.writerow([hex(rva), name, ev])
+if args.globals:
+    with open(args.globals, 'w', newline='', encoding='utf-8') as fh:
+        w = csv.writer(fh, lineterminator='\n')
+        w.writerow(['rva', 'name', 'count', 'evidence'])
+        for g, name in sorted(global_name.items()):
+            w.writerow([hex(g), 'GLeeFuncPtr_' + name, 1, f'Pointer stored from GetProcAddress("{name}").'])
 print(f'{len(stub_rows)} stubs, {len(link_rows)} link functions, {len(link_strings)} link candidates, {len(global_name)} pointers')

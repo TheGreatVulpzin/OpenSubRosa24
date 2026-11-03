@@ -13,7 +13,8 @@ $M --target $F/client_win.jsonl --ref $F/linux_x64.jsonl --ref $F/mac_i386.jsonl
    --out build/match/client_win_matched.csv
 #    GLee stubs and link functions: names come from the machine code (tools/re/name_glee.py).
 python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/client_win.jsonl \
-   --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv
+   --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv \
+   --globals analysis/client_win/manual_globals.csv
 python -I tools/re/merge_names.py --out analysis/client_win/functions.csv \
    --manual analysis/client_win/glee_names.csv build/match/client_win_matched.csv
 

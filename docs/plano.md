@@ -229,6 +229,21 @@ Exception: security fixes for invalid client input (`docs/protocol.md`, section 
 
 Apply the same method to `subrosa.exe` (it also imports `WSOCK32.dll`): hooks, lift, harness, names, standalone, readable rewrite. The client shares `common/`, `game/` and `net/` with the server. New parts: render, input, audio, voice, menus, editors.
 
+Target: `original/client/subrosa.exe` (0.24b, 2015-08-02, MSVC 2010, same protocol as the 024d). Notes and file list: [`docs/client.md`](client.md).
+
+Phase 4 left about 200 addresses for this phase: globals that only the client uses (`texturelist`, `modellist`).
+
+| Step | Work | Status |
+| --- | --- | --- |
+| 7.1 | Names: matcher from the ELF and the Mach-O, GLee names from machine code | in progress: 2278 of 2907 functions named |
+| 7.2 | Globals and types: `analysis/client_win/*.csv`, structs the client adds | not started |
+| 7.3 | Lift target `instrumentation/lift/targets/client_win.json` and hook DLL for the client | not started |
+| 7.4 | Recording of client sessions and harness | not started |
+| 7.5 | Standalone client (platform layer for render, input, audio) | not started |
+| 7.6 | Readable rewrite, group by group, as in Phase 6 | not started |
+
+The server phases give the order. Steps 7.3 and 7.4 need tests on the Windows PC with the game running.
+
 ## After the decomp: OpenSubRosa and SubVulpes
 
 The ideas for both products are in `docs/ideas.md`, with the product each one belongs to. The main groups:
