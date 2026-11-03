@@ -205,7 +205,7 @@ Parts:
 - A stub writes what the call did into the environment log. OpenGL calls and the vector calls of OpenAL go into one hash per run and the log keeps the count and the hash. Every other call writes one line with its scalar arguments. A pointer argument is not compared (the stack addresses differ between the two runs), except for the vector calls listed in `PTR_DWORDS`.
 - The lifter has two limits per target: `crt_start` (the first RVA of the CRT) and `record_skip` (functions that run a frame loop until the player leaves: `main`, the game loop, the menus, the editors). A caller of such a loop is also left out (`skip_callers`).
 
-Order after a change of names or types: `ApplyImports.java`, `LiftExport.java`, `lift.py --target client_win --compile`, `gen_count_table.py`, `gen_plat_stubs.py`, `toolsuild_hook.bat`.
+Order after a change of names or types: `ApplyImports.java`, `LiftExport.java`, `lift.py --target client_win --compile`, `gen_count_table.py`, `gen_plat_stubs.py`, `tools\build_hook.bat`.
 
 Result (2026-11-03, menu recording): 718 lifted, 471 harness only, 34 side effect (the loops and their callers), 12 compile errors. The harness tests 84 functions: 131 calls same, 0 different, 162 skipped.
 
