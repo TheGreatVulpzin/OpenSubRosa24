@@ -243,6 +243,14 @@ The play recording was made before these functions had a hook, so it has no call
 
 `area_buildsectormodel` is the same as the original in 4 calls and differs in 20. The first difference is a `free` of another block (the lifted run frees a block of the recorded heap, the original frees a block of the pool), as in `setupmodel` and `copymodel`.
 
+### Wrong parameter count: drawtext (2026-11-03)
+
+The harness showed `glColor4f` calls with garbage arguments in `drawdisplay`, `drawhelp`, `drawhud`, `drawmap` and `drawmenuitems`. All of them call `drawtext` (RVA `0x106b30`). Ghidra gave it one parameter. The code reads `[ebp+0xc]` to `[ebp+0x28]` and starts a variable list at `[ebp+0x2c]`, and the callers push 9 words (138 calls), 10 words (72 calls) and more. The lifted caller passed one argument, so the original function read the rest from the stack.
+
+How to find such a function: count the words that the callers push (`add esp, N` after each call) and compare with the parameters of the prototype. `analysis/client_win/signatures.csv` gives the full prototype of a function, with `...` for a variable list, and `ApplySignatures.java` applies it (no `-readOnly`). `lift.py` keeps the `...` last in the cast and adds no extra parameters after it.
+
+Result: `drawhelp`, `drawhud`, `drawmap`, `drawmenuitems`, `generatetexture_billboard` and `generatetexture_newspaper` are the same as the original (43 calls). Other functions can have a wrong parameter count: a check of all functions against their callers is a good next step.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

@@ -697,7 +697,8 @@ def lift_function(f, rva, headers, imports_used):
             # A call can push more arguments than the callee prototype shows (Ghidra kept
             # only the ones that the callee reads). Push them all, as the original does.
             most = max((len(a) for a in call_args(c, cname)), default=0)
-            if most > len(cparams) and ccc == '__cdecl':
+            # A callee with a variable list ("...") takes the extra arguments in the list.
+            if most > len(cparams) and ccc == '__cdecl' and not any(t == '...' for t, _ in cparams):
                 extra = call_args(c, cname)
                 extra = next(a for a in extra if len(a) == most)[len(cparams):]
                 cparams = list(cparams) + [('float' if FLOATISH_RE.search(a) else 'undefined4', f'extra_{i}')

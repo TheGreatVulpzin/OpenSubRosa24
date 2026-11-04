@@ -1,0 +1,2 @@
+rva,name,cc,prototype
+0x106b30,drawtext,__cdecl,void drawtext(char *text, float x, float y, float size, unsigned int flags, float r, float g, float b, float a, ...)
