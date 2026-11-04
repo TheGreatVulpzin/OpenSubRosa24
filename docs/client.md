@@ -251,6 +251,22 @@ How to find such a function: count the words that the callers push (`add esp, N`
 
 Result: `drawhelp`, `drawhud`, `drawmap`, `drawmenuitems`, `generatetexture_billboard` and `generatetexture_newspaper` are the same as the original (43 calls). Other functions can have a wrong parameter count: a check of all functions against their callers is a good next step.
 
+### State of the harness on the second play recording (2026-11-03)
+
+Recording `client-play2-20261103-2019` (25 minutes, snapshot at 240 s, 1422 calls of 268 functions). Run with `HARNESS_RESET=1` (about 30 minutes).
+
+| Step | Different | Same | Crashed |
+| --- | --- | --- | --- |
+| First run, before the fixes | 91 | 840 | 13 |
+| After the float rule and the compile fixes | 81 | 1035 | 12 |
+| After the `drawtext` signature | 31 | 1085 | 12 |
+
+232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording: the client joined a remote server, which simulates humans and items. A hosted game (menu "Host") would call them.
+
+Open differences (31): all are the same kind. The first different event is a `free`: the lifted run frees a block of the recorded heap and the original frees a block of the pool (`area_buildsectormodel`, `area_interior_buildsectormodel`, `setupmodel`, `copymodel`, `render_sector_interior`, `render_sector_alpha`, `render_sector_interior_shadow2`, `rendermodelshadow`, `lf_d7850`). The original seems to start from the state that the lifted run left in `.data`. Check with `HARNESS_WATCH` whether the undo of the writes of the lifted run misses the field.
+
+Crashes (12 calls): `building_buildfloorplan`, `checksimulation`, `getlanipaddress`, `steam_getid`, `lf_10c170`.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
