@@ -267,7 +267,13 @@ The 31 open differences of that run were mostly an artifact of the verifier. A s
 
 With full rounds: 232 functions, 998 calls same, 116 different, 11 crashed. `area_buildsectormodel`, `setupmodel`, `copymodel` and `checksimulation` are the same as the original. The open difference is `area_interior_buildsectormodel` (4 of 24 calls, 12 bytes of `.data` differ) and the functions that call it: `lf_d7850`, `render_sector_interior`, `render_sector_alpha`, `render_sector_interior_shadow2` and `rendermodelshadow` (24 calls each). In `render_sector_interior` the bytes that differ are in a global at RVA `0x13346d0`.
 
-Crashes: `building_buildfloorplan`, `getlanipaddress`, `steam_getid`, `lf_10c170`.
+Crashes: `building_buildfloorplan`, `getlanipaddress`, `steam_getid`, `lf_10c170`. All four are fixed (2026-11-05):
+
+- `building_buildfloorplan` had a raw address in its lifted C. `LiftExport.java` now matches a constant of `0x400000` or more to a relocation up to `0x100` bytes away.
+- `steam_getid` and `lf_10c170` call methods of the Steam class block (`0x10be80` to `0x10c1b0`). Ghidra had dropped the `this` pointer, so the lifted C called them with a garbage ECX. `signatures.csv` gives the 12 methods the `__thiscall` prototype. `lift.py` does not lift a `__thiscall` definition, so these methods stay original code (`lf_10c170` is now blocked). A call to a method with stack arguments passes the unused EDX slot in the `#define` of the callee. A call to a method with no stack argument needs no slot.
+- `getlanipaddress` calls `gethostname`, which the client imports by ordinal 57. `WSOCK_ORDINALS` in `lift.py` and the stub table (`BY_ORDINAL` in `gen_plat_stubs.py`) know it. The stub returns -1, as the real call does when Winsock is not started.
+
+The difference of `area_interior_buildsectormodel` was the profiler of the game, not the lifter. The function stores the CPU cycle counter (`RDTSC`, the function at `0xfafc0`) in a record of the array `timer`: records of `0x58` bytes from RVA `0x1332e80`, the time at `+0x40`. Each run writes another value. The harness of the client ignores `0x1332ec0` for `0x5800` bytes. Before, it ignored the range of the server (`0x14043e0`), which is other memory in the client.
 
 ### Gate of the client (2026-11-05)
 
@@ -279,7 +285,9 @@ python -I instrumentation/lift/gate.py --target client_win --jobs 2             
 python -I instrumentation/lift/gate.py --target client_win --jobs 2 --update    # write the baseline
 ```
 
-The target sets `HARNESS_GAME_DIR` and puts `build/client_deps` first on the `PATH` (`env` and `path_prepend`, which `gate.py` reads), and runs in reset mode. The recordings are folders of `build/recordings` (not versioned). The first baseline (3 recordings, 33 minutes with 2 jobs): the menu recording 85 functions and 85 calls same, play 1 218 functions and 265 calls same, play 2 217 functions and 260 calls same. The gate fails when a count of "calls same" drops.
+The target sets `HARNESS_GAME_DIR` and puts `build/client_deps` first on the `PATH` (`env` and `path_prepend`, which `gate.py` reads), and runs in reset mode. The recordings are folders of `build/recordings` (not versioned). The first baseline (3 recordings, 33 minutes with 2 jobs): the menu recording 85 functions and 85 calls same, play 1 218 functions and 265 calls same, play 2 217 functions and 260 calls same. The gate fails when a count of "calls same" drops. Baseline of 2026-11-05 after the fixes above: menu 85 functions and 85 calls same, play 1 217 functions and 279 calls same, play 2 216 functions and 275 calls same. No function has a difference or a lifted crash in the two play recordings.
+
+`instrumentation/client/pipeline.sh` runs the whole cycle: `--export` (Ghidra), lift, tables, build, gate (`--full`, `--update`, `--no-gate`). `--changed` uses `lifted_prev`, the copy of the lifted C that `--update` writes.
 
 `instrumentation/client/cap_calls.py` keeps the first N calls of each function. `min_calls.py` of the server picks calls by code path, and it needs the block file of the binary: the client has none yet.
 

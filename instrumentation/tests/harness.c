@@ -1175,7 +1175,11 @@ int main(int argc, char **argv)
         fprintf(stderr, "verifier: no .data section\n");
         return 1;
     }
+#ifdef CL_HARNESS
+    sv_verify_ignore(0x1332ec0, 0x5800);  /* profiler timers (RDTSC): 0x58 bytes each from 0x1332e80, time at +0x40 */
+#else
     sv_verify_ignore(0x14043e0, 0x5800);  /* profiler timers (RDTSC), see hooks_024d.c */
+#endif
     if (invalid) {
         /* The receive bytes and cursor differ when the input policy changes a packet. */
         sv_verify_ignore(SR_RVA_BSDSOCKET + 0x10064, 0x1000c);
