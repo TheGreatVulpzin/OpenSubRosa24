@@ -72,6 +72,11 @@ EXTRA = [
      'int SHGetSpecialFolderPathA(void *hwnd, char *path, int csidl, int create)'),
 ]
 CUSTOM['ShellExecuteA'] = 'return (void *)33;'
+# Winsock is not started in the harness: the real call fails, so the stub fails the same way.
+EXTRA.append(('WSOCK32.DLL', 'gethostname', '__stdcall', 'int gethostname(char *name, int namelen)'))
+CUSTOM['gethostname'] = 'return -1;'
+# The client imports these by ordinal. The stub table needs the ordinal, not the name.
+BY_ORDINAL = {'gethostname': 57}
 
 BULK_RE = re.compile(r'^(gl(?!GetString|GenTextures)|alSource[fi]|alSource3f|alListener)')
 
@@ -128,7 +133,10 @@ def main():
         o.append(stub(*r))
     o.append('#define CL_STUB_ENTRIES \\')
     for dll, name, _, _ in rows:
-        o.append('    { "%s", "%s", 0, (void *)cs_%s }, \\' % (dll, name, name))
+        if name in BY_ORDINAL:
+            o.append('    { "%s", NULL, %d, (void *)cs_%s }, \\' % (dll, BY_ORDINAL[name], name))
+        else:
+            o.append('    { "%s", "%s", 0, (void *)cs_%s }, \\' % (dll, name, name))
     o.append('')
     open(OUT, 'w', newline='\n').write('\n'.join(o) + '\n')
     print('%d stubs -> %s' % (len(rows), OUT))

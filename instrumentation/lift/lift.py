@@ -69,7 +69,7 @@ INLINE_IMPORTS = {
 WSOCK_ORDINALS = {
     'bind': 2, 'closesocket': 3, 'connect': 4, 'getsockopt': 7, 'inet_addr': 10, 'ioctlsocket': 12,
     'recv': 16, 'recvfrom': 17, 'select': 18, 'send': 19, 'sendto': 20, 'socket': 23,
-    'gethostbyname': 52, 'getservbyname': 55, 'WSAStartup': 115, '__WSAFDIsSet': 151,
+    'gethostbyname': 52, 'getservbyname': 55, 'gethostname': 57, 'WSAStartup': 115, '__WSAFDIsSet': 151,
 }
 
 # Game functions that lifted code does not call. __security_check_cookie (MSVC /GS) only
@@ -120,7 +120,9 @@ def proto_cast(ret, cc, params):
     """Function pointer type for a cast: RET (CC *)(T1, T2)."""
     if cc == '__thiscall':
         cc = '__fastcall'  # thiscall = fastcall with an unused EDX in C
-        params = [params[0], ('int', 'edx_unused')] + list(params[1:]) if params else params
+        # Only a callee with stack arguments needs the EDX slot: it keeps them off ECX and EDX.
+        if len(params) > 1:
+            params = [params[0], ('int', 'edx_unused')] + list(params[1:])
     plist = ', '.join(t if t == '...' else t for t, _ in params) or 'void'
     return f'{ret} ({cc} *)({plist})'
 
@@ -703,7 +705,12 @@ def lift_function(f, rva, headers, imports_used):
                 extra = next(a for a in extra if len(a) == most)[len(cparams):]
                 cparams = list(cparams) + [('float' if FLOATISH_RE.search(a) else 'undefined4', f'extra_{i}')
                                            for i, a in enumerate(extra)]
-            pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_FN(0x{callee + BASE:x}))')
+            if ccc == '__thiscall' and len(cparams) > 1:
+                # The decompiled call has the arguments "this, a, b". The cast has an EDX slot after this.
+                pre.append(f'#define {cname}(this_, ...) (({proto_cast(cret, ccc, cparams)})'
+                           f'SR_FN(0x{callee + BASE:x}))((this_), 0, __VA_ARGS__)')
+            else:
+                pre.append(f'#define {cname} (({proto_cast(cret, ccc, cparams)})SR_FN(0x{callee + BASE:x}))')
             post.append(f'#undef {cname}')
 
     body = partial_access(strip_comments(c)).strip()
