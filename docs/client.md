@@ -269,6 +269,20 @@ With full rounds: 232 functions, 998 calls same, 116 different, 11 crashed. `are
 
 Crashes: `building_buildfloorplan`, `getlanipaddress`, `steam_getid`, `lf_10c170`.
 
+### Gate of the client (2026-11-05)
+
+`instrumentation/lift/targets/client_win.json` is the gate target of the client. Run it with:
+
+```bash
+python -I instrumentation/client/cap_calls.py build/recordings/<recording>      # sv_args.min.txt, 2 calls per function
+python -I instrumentation/lift/gate.py --target client_win --jobs 2             # compare with the baseline
+python -I instrumentation/lift/gate.py --target client_win --jobs 2 --update    # write the baseline
+```
+
+The target sets `HARNESS_GAME_DIR` and puts `build/client_deps` first on the `PATH` (`env` and `path_prepend`, which `gate.py` reads), and runs in reset mode. The recordings are folders of `build/recordings` (not versioned). The first baseline (3 recordings, 33 minutes with 2 jobs): the menu recording 85 functions and 85 calls same, play 1 218 functions and 265 calls same, play 2 217 functions and 260 calls same. The gate fails when a count of "calls same" drops.
+
+`instrumentation/client/cap_calls.py` keeps the first N calls of each function. `min_calls.py` of the server picks calls by code path, and it needs the block file of the binary: the client has none yet.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

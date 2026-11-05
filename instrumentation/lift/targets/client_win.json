@@ -1,0 +1,43 @@
+{
+  "description": "Windows client 0.24b (subrosa.exe), lifted by instrumentation/lift/lift.py --target client_win",
+  "harness": "build/hook/harness_client.exe",
+  "image": "build/hook/subrosa_fixed.exe",
+  "lifted_c": "build/lift/client_win/lifted_client.c",
+  "table": "build/lift/client_win/lifted_table.c",
+  "full_run_paths": [
+    "src/lifted/lift_support.h",
+    "src/platform/x87_math.c",
+    "instrumentation/runtime",
+    "instrumentation/tests",
+    "instrumentation/platform",
+    "instrumentation/client",
+    "instrumentation/hook/verify.c",
+    "instrumentation/hook/verify.h",
+    "instrumentation/hook/hook.c",
+    "instrumentation/hook/imports.c",
+    "analysis/client_win/imports.csv",
+    "CMakeLists.txt"
+  ],
+  "env": {
+    "HARNESS_GAME_DIR": "build/client_test"
+  },
+  "path_prepend": [
+    "build/client_deps"
+  ],
+  "reset": true,
+  "recordings_dir": "build/recordings",
+  "recordings": [
+    {
+      "name": "client-menu-20261103",
+      "quick": true
+    },
+    {
+      "name": "client-play-20261103-1229"
+    },
+    {
+      "name": "client-play2-20261103-2019",
+      "quick": true
+    }
+  ],
+  "out_dir": "build/gate/client_win"
+}

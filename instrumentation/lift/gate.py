@@ -274,6 +274,11 @@ def main():
         k = slots.get()
         env = dict(os.environ, SV_UI_WIDTH='220', HARNESS_ENV_DIR=str(out / f'env{k}'),
                    SV_LOG_FILE=str(out / f'{name}.log'), HARNESS_RESET='1' if reset else '0')
+        # The client harness needs its DLLs on the path and a game folder for file reads.
+        for key, value in t.get('env', {}).items():
+            env[key] = str(ROOT / value) if (ROOT / value).exists() else value
+        if t.get('path_prepend'):
+            env['PATH'] = os.pathsep.join(str(ROOT / p) for p in t['path_prepend']) + os.pathsep + env.get('PATH', '')
         (out / f'{name}.log').unlink(missing_ok=True)
         t0 = time.time()
         try:
