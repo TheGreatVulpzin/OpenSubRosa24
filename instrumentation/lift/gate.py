@@ -54,6 +54,7 @@ import json
 import os
 import queue
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -72,7 +73,7 @@ NAME = re.compile(r'^\s*\{ "(\w+)", 0x([0-9a-f]+),', re.M)
 
 def load_target(name):
     t = json.loads((TARGETS / f'{name}.json').read_text(encoding='utf-8'))
-    for k in ('harness', 'image', 'lifted_c', 'table', 'recordings_dir', 'synth', 'out_dir'):
+    for k in ('harness', 'image', 'lifted_c', 'lifted_prev', 'table', 'recordings_dir', 'synth', 'out_dir'):
         if t.get(k):
             t[k] = ROOT / t[k]
     return t
@@ -101,7 +102,10 @@ def changed_functions(t, ref):
         return None, f'git diff failed: {p.stderr.strip()}'
     if p.stdout.strip():
         return None, 'changed: ' + ', '.join(p.stdout.split())
-    old = git_show(ref, t['lifted_c'])
+    # A target whose lifted C is not in git (the client) names a copy of the file from the last
+    # baseline: "lifted_prev".
+    prev = t.get('lifted_prev')
+    old = prev.read_text(encoding='utf-8') if prev and prev.exists() else git_show(ref, t['lifted_c'])
     if old is None:
         return None, f'{t["lifted_c"].name} is not in {ref}'
     names = {int(r, 16): n for n, r in NAME.findall(t['table'].read_text(encoding='utf-8'))}
@@ -326,6 +330,9 @@ def main():
         baseline.update(results)
         baseline_file.write_text(json.dumps(baseline, indent=1, sort_keys=True))
         print(f'baseline updated: {len(results)} run(s)')
+        if t.get('lifted_prev'):
+            t['lifted_prev'].parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(t['lifted_c'], t['lifted_prev'])
     print('OK: no count dropped')
     return 0
 

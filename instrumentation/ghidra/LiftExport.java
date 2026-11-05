@@ -1127,7 +1127,7 @@ public class LiftExport extends GhidraScript {
         if (local.isEmpty()) {
             long best = -1;
             for (long r : all)
-                if (val > r && val - r <= 0x40 && (best < 0 || val - r < val - best)) best = r;
+                if (val > r && val - r <= (val >= 0x400000L ? 0x100 : 0x40) && (best < 0 || val - r < val - best)) best = r;
             if (best >= 0)
                 return String.format("((int)SR_VA(0x%x) + %d)", best, val - best);
         }
