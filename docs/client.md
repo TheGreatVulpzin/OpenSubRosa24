@@ -261,7 +261,7 @@ Recording `client-play2-20261103-2019` (25 minutes, snapshot at 240 s, 1422 call
 | After the float rule and the compile fixes | 81 | 1035 | 12 |
 | After the `drawtext` signature | 31 | 1085 | 12 |
 
-232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording: the client joined a remote server, which simulates humans and items. A hosted game (menu "Host") would call them.
+232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording, and none in the later recordings, which include a hosted game and the two demos. Their callers (`lf_85b70`, `lf_d4700`, `lf_ddc00`, `lf_deb20`) never ran. They are paths of a local server that the client does not use.
 
 The 31 open differences of that run were mostly an artifact of the verifier. A scope round protects only the pages that earlier calls wrote. A page that only the lifted run writes is not undone, so the original run starts from the state that the lifted run left (the first different event was a `free` of another block). The harness of the client now sets `verify_full_every=1` (`SV_FULL_EVERY_DEFAULT` in `CMakeLists.txt`): every round is a full round. A full round is slower (about 150 ms per call instead of 12 ms) and finds differences that a scope round missed.
 
