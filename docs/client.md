@@ -263,9 +263,11 @@ Recording `client-play2-20261103-2019` (25 minutes, snapshot at 240 s, 1422 call
 
 232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording: the client joined a remote server, which simulates humans and items. A hosted game (menu "Host") would call them.
 
-Open differences (31): all are the same kind. The first different event is a `free`: the lifted run frees a block of the recorded heap and the original frees a block of the pool (`area_buildsectormodel`, `area_interior_buildsectormodel`, `setupmodel`, `copymodel`, `render_sector_interior`, `render_sector_alpha`, `render_sector_interior_shadow2`, `rendermodelshadow`, `lf_d7850`). The original seems to start from the state that the lifted run left in `.data`. Check with `HARNESS_WATCH` whether the undo of the writes of the lifted run misses the field.
+The 31 open differences of that run were mostly an artifact of the verifier. A scope round protects only the pages that earlier calls wrote. A page that only the lifted run writes is not undone, so the original run starts from the state that the lifted run left (the first different event was a `free` of another block). The harness of the client now sets `verify_full_every=1` (`SV_FULL_EVERY_DEFAULT` in `CMakeLists.txt`): every round is a full round. A full round is slower (about 150 ms per call instead of 12 ms) and finds differences that a scope round missed.
 
-Crashes (12 calls): `building_buildfloorplan`, `checksimulation`, `getlanipaddress`, `steam_getid`, `lf_10c170`.
+With full rounds: 232 functions, 998 calls same, 116 different, 11 crashed. `area_buildsectormodel`, `setupmodel`, `copymodel` and `checksimulation` are the same as the original. The open difference is `area_interior_buildsectormodel` (4 of 24 calls, 12 bytes of `.data` differ) and the functions that call it: `lf_d7850`, `render_sector_interior`, `render_sector_alpha`, `render_sector_interior_shadow2` and `rendermodelshadow` (24 calls each). In `render_sector_interior` the bytes that differ are in a global at RVA `0x13346d0`.
+
+Crashes: `building_buildfloorplan`, `getlanipaddress`, `steam_getid`, `lf_10c170`.
 
 ## Open work
 

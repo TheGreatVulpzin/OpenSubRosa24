@@ -11,6 +11,10 @@
 #include "sr_global_table.h"
 #include "sr_runtime.h"
 #include "verify.h"
+
+#ifndef SV_FULL_EVERY_DEFAULT
+#define SV_FULL_EVERY_DEFAULT 50
+#endif
 #include "record.h"
 
 #define PAGE 4096u
@@ -447,7 +451,10 @@ int sv_verify_init(void)
     g_enabled = sv_config_int("verify", 1);
     sv_prof_on = sv_config_int("profile", 0);
     g_log_calls = sv_config_int("log_calls", 1);
-    g_full_every = sv_config_int("verify_full_every", 50);
+    /* A scope round protects only the pages that earlier calls wrote. A page that only this call writes
+     * is not undone, and the second run starts from the state of the first. The client harness
+     * sets 1: every round is a full round. */
+    g_full_every = sv_config_int("verify_full_every", SV_FULL_EVERY_DEFAULT);
     g_relax = sv_config_int("verify_relax", 200);
     if (g_full_every < 1)
         g_full_every = 1;
