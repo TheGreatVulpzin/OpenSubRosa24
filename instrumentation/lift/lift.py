@@ -138,6 +138,10 @@ def global_macro(g):
     m = re.match(r'(.+?)\s*\[(\d+)\]$', typ)
     # A label in the code (the qsort comparator LAB_0040d320): its address is a function.
     sr = 'SR_FN' if TARGET['text'][0] <= va < TARGET['text'][1] else 'SR_VA'
+    # A function used as a value (a callback stored in a table, the qsort comparator): the C value is
+    # the address of the function, not the first byte of its code.
+    if sr == 'SR_FN' and typ == 'undefined' and name.startswith(('FUN_', 'LAB_')) and TARGET.get('lift_loops'):
+        return f'#define {name} ((void *){sr}(0x{va:x}))'
     if typ in ('string', 'unicode'):
         # A string literal that Ghidra names as a global: the C value is the address of the text.
         return f'#define {name} ((char *){sr}(0x{va:x}))'
@@ -642,6 +646,19 @@ LIFT_PATCHES = {
     # Client, drawtext and FUN_0040ac50: "&stack0x.." is the first argument of the variable list,
     # the word after the last named parameter.
     0x106b30: [('local_34 = (uint *)&stack0x00000028;', 'local_34 = (uint *)(&a + 1);')],
+    # Client, createmenubutton(type, ...): "stack0x8" is the first argument of the list, the word after
+    # "type". The decompiler also shows that first argument as an input of the function.
+    0x102b70: [('undefined4 in_stack_00000008;', ''),
+               ('= in_stack_00000008;', '= *(undefined4 *)(&type + 1);'),
+               ('local_10 = (double *)&stack0x00000008;', 'local_10 = (double *)(&type + 1);'),
+               ('local_10 = (double *)&stack0x0000000c;', 'local_10 = (double *)(&type + 2);')],
+    # Client, tesselatebezierderivative: the result lives in ECX, which the decompiler shows as an input.
+    # Every caller passes param_1 in 1..3, so each case sets it.
+    0x3dac0: [('float unaff_ECX;', 'float bezier = 0;'),
+              ('unaff_ECX = (float)(-param_3', 'bezier = (float)(-param_3'),
+              ('unaff_ECX = (float)(param_4 * 2.0', 'bezier = (float)(param_4 * 2.0'),
+              ('unaff_ECX = (float)(param_4 * 3.0', 'bezier = (float)(param_4 * 3.0'),
+              ('return (float10)unaff_ECX;', 'return (float10)bezier;')],
     0xac50: [('writefv(_File,param_10,(int *)&stack0x0000002c);', 'writefv(_File,param_10,(int *)(&param_10 + 1));')],
 }
 
@@ -673,7 +690,7 @@ def lift_function(f, rva, headers, imports_used):
         if not TARGET.get('lift_loops'):
             return None, 'prologue not hookable'
         UNHOOKABLE.add(rva)
-    if cc != '__cdecl':
+    if cc != '__cdecl' and not (cc == '__thiscall' and TARGET.get('lift_loops')):
         return None, f'calling convention {cc}'
     if any(t == '...' for t, _ in params):
         # The standalone build lifts a variable list when a patch gives the address of its first
@@ -809,7 +826,16 @@ def lift_function(f, rva, headers, imports_used):
     lf = f'lf_{rva:05x}'
     head = re.sub(r'\b(__cdecl|__stdcall|__fastcall|__thiscall)\s+', '', head)
     if cc == '__thiscall':
-        return None, 'thiscall definition'
+        # The standalone build lifts a method as a fastcall with an unused EDX slot, as the callers
+        # of a method call it. The hook table skips it: a hook cannot keep ECX.
+        if not TARGET.get('lift_loops'):
+            return None, 'thiscall definition'
+        UNHOOKABLE.add(rva)
+        cc = '__fastcall'
+        head = re.sub(r'\b' + re.escape(name) + r'\s*\(', f'{cc} {lf}(', head, count=1)
+        if len(params) > 1:
+            head = re.sub(re.escape(lf) + r'\(([^,]+),', lf + r'(\1, int edx_unused,', head, count=1)
+        return '\n'.join(pre) + '\n' + head + body[head_end:] + '\n' + '\n'.join(post) + '\n', None
     head = re.sub(r'\b' + re.escape(name) + r'\s*\(', f'{cc} {lf}(', head, count=1)
     text = '\n'.join(pre) + '\n' + head + body[head_end:] + '\n' + '\n'.join(post) + '\n'
     return text, None
@@ -1063,7 +1089,12 @@ def gen_table(lifted, headers, names, side):
         used[nice] += 1
         if used[nice] > 1:
             nice = f'{nice}_{rva:05x}'
-        out.append(f'void {symbol(rva)}(void);')
+        if _cc == '__thiscall' and rva in UNHOOKABLE:
+            # Lifted as a fastcall with an unused EDX slot: the symbol name holds the argument size.
+            n = len(params) + (1 if len(params) > 1 else 0)
+            out.append(f'void __fastcall {symbol(rva)}({", ".join(["int"] * n)});')
+        else:
+            out.append(f'void {symbol(rva)}(void);')
         size = 1 if ret in BYTE_TYPES else 2 if ret in WORD_TYPES else 4
         # One letter per argument dword: p = pointer, v = value.
         kinds = ''.join(('vv' if t in WIDE_TYPES else 'p' if t.strip().endswith('*') else 'v') for t, _ in params)

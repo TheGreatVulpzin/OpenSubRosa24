@@ -49,6 +49,9 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
 
 /* ------------------------------------------------------------ functions */
 
+/* SR_TRACE=1 prints each call that goes through sr_fn. */
+static int g_trace;
+
 /* lf_table is sorted by address. */
 void *sr_fn(uintptr_t va)
 {
@@ -56,8 +59,11 @@ void *sr_fn(uintptr_t va)
     int lo = 0, hi = lf_table_count - 1;
     while (lo <= hi) {
         int mid = (lo + hi) / 2;
-        if (lf_table[mid].rva == rva)
+        if (lf_table[mid].rva == rva) {
+            if (g_trace)
+                fprintf(stderr, "call %s (0x%x)\n", lf_table[mid].name, (unsigned)rva);
             return lf_table[mid].lifted;
+        }
         if (lf_table[mid].rva < rva)
             lo = mid + 1;
         else
@@ -87,10 +93,50 @@ static int image_init(void)
     return 1;
 }
 
+/* A crash prints where it happened. The map file of the exe turns the offset into a function. */
+static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
+{
+    EXCEPTION_RECORD *r = info->ExceptionRecord;
+    uintptr_t at = (uintptr_t)r->ExceptionAddress;
+    HMODULE self = GetModuleHandleA(NULL);
+    fprintf(stderr, "exception 0x%08lx at %p (exe+0x%x)", r->ExceptionCode, r->ExceptionAddress,
+            (unsigned)(at - (uintptr_t)self));
+    if (r->NumberParameters >= 2)
+        fprintf(stderr, ", %s %p", r->ExceptionInformation[0] ? "write of" : "read of",
+                (void *)r->ExceptionInformation[1]);
+    if (at >= sr_base && at < sr_base + sr_image_size)
+        fprintf(stderr, ", code in the image region, RVA 0x%x", (unsigned)(at - sr_base));
+    fprintf(stderr, "\n");
+    /* The stack words that point into the exe are return addresses. Map them with the .map file. */
+    {
+        uintptr_t *sp = (uintptr_t *)info->ContextRecord->Esp;
+        int shown = 0, i;
+        fprintf(stderr, "eip 0x%08lx ebp 0x%08lx, return addresses (exe+offset):", info->ContextRecord->Eip,
+                info->ContextRecord->Ebp);
+        for (i = 0; i < 400 && shown < 24; ++i) {
+            uintptr_t w;
+            if (IsBadReadPtr(sp + i, sizeof w))
+                break;
+            w = sp[i];
+            if (w > (uintptr_t)self && w < (uintptr_t)self + 0x400000) {
+                fprintf(stderr, " %x", (unsigned)(w - (uintptr_t)self));
+                ++shown;
+            }
+        }
+        fprintf(stderr, "\n");
+    }
+    fflush(stderr);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 int main(int argc, char **argv)
 {
     unsigned cw;
     int run = argc > 1 && !strcmp(argv[1], "--run");
+
+    setvbuf(stdout, NULL, _IONBF, 0);
+    g_trace = getenv("SR_TRACE") != NULL;
+    SetUnhandledExceptionFilter(crash_filter);
 
     /* The game uses 53 bit x87 math. */
     _controlfp_s(&cw, _PC_53, _MCW_PC);

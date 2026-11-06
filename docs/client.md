@@ -323,19 +323,17 @@ Changes to the lifter, all only for the target `client_win` (`lift_loops`):
 - The 15 frame loops (`main`, `gameloop`, the menus, the editors) are lifted. They get no hook and no harness call (status `loop`).
 - Functions with a prologue that a hook cannot patch are lifted. They get no hook (status `unhookable`).
 - `checkbigendian` stores the addresses of `fread` and `fwrite`. The lifter resolves them as imports (`EXREF_IMPORTS`).
+- A method with `__thiscall` is lifted as a `__fastcall` with an unused EDX slot, as its callers call it. The table declares it with the same argument size, so the symbol name matches.
+- A function with a variable list (`drawtext`, `createmenubutton`, `FUN_0040ac50`) is lifted when `LIFT_PATCHES` gives the address of the first list argument (`&last_named_parameter + 1`). The signature comes from `signatures.csv`.
+- A function used as a value (the `qsort` comparator, the callbacks of a table) is the address of the function. The old macro read the first byte of its code.
+- The exporter relocates a constant that is far from the table base (up to 128 KB), only for the client.
+- `lift_gl_client.h` and table flag 2 (`standalone_only`): functions that call OpenGL through the slots. The harness skips them, the client runs them.
 
 OpenGL: the game calls 32 extension functions through pointer slots (`PTR_GLee_Lazy_glXxx`). Without a type, the decompiler drops the arguments. `analysis/client_win/gl_slots.csv` gives the prototype of each slot. `ApplyGlSlots.java` types the slots in Ghidra (no `-readOnly`), then `LiftExport.java` runs again. `gen_gl_slots.py` writes the function types for the lifted C (`src/lifted/lift_gl_client.h`) and the fallback functions that fill the slots (`client_gl.c`). `GLeeInit` is lifted, so it fills the slots with the real functions at run time.
 
-Result on 2026-11-06: the process starts, enters `main` and runs until the first function without C. The gate stays green (menu 86, play 283, play2 278 calls same). 25 functions that lifted code calls still have no C:
+Result on 2026-11-06: **the client starts and stays in its main loop.** The process opens the window "Sub Rosa", answers messages and uses about 800 MB. Nobody checked the picture, the mouse, the keyboard or the sound yet. The gate stays green (menu 85, play 285, play2 280 calls same). Debug aids of `client_main.c`: a crash prints the exception, the address and the return addresses (resolve them with `build/hook/opensubrosa24_client.map`), and `SR_TRACE=1` prints every call that goes through `sr_fn`.
 
-| Kind | Functions | Next step |
-| --- | --- | --- |
-| Variable argument list (`&stack0x..`) | `drawtext`, `createmenubutton`, `FUN_0040ac50` | `va_start` in the lifted C. `createmenubutton` needs its real prototype first |
-| Compiler helpers | `__alloca_probe`, `__aullshr`, `__allshl` | inline versions, like `__allmul` |
-| Register input | `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rendercylinder`, `tesselatebezierderivative`, `pbitreadnego` | find the register in the disassembly, then a signature |
-| Call through a table of functions | `checkmenuitems`, `FUN_00401300`, `load_jpeg_image` | the table holds image addresses: call through `sr_fn` |
-| `__thiscall` | `CSteamID`, `ConvertToUint64` | hand-written C, or a Steam stub |
-| Other | `clamp` (odd concat), `launchwebpage`, `landscape_buildsectorlods` (compile errors) | one by one |
+Still without C: `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rendercylinder`, `pbitreadnego` (register input), `load_jpeg_image` (stack array), `clamp` (odd concat), `launchwebpage` and `landscape_buildsectorlods` (compile errors), and the C++ glue of the Steam SDK (`Set`, `CCallResult`, `CCallbackBase`). The client calls them only in menus that the first start does not open, so each one shows up as "no C function for RVA" when a test reaches it.
 
 ## Open work
 

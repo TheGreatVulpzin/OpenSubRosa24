@@ -957,6 +957,7 @@ public class LiftExport extends GhidraScript {
      * its instruction). A RAM address without a symbol ("ram0x1992d6ed") becomes a pointer
      * access to SR_VA(). Each token is changed once, so no address gets two relocations. */
     private void relocatedConstants(List<ClangToken> t, Function f) throws Exception {
+        wideRelocs = currentProgram.getName().equalsIgnoreCase("subrosa.exe");
         Map<Address, Set<Long>> byIns = new HashMap<>();
         Set<Long> all = new HashSet<>();
         Iterator<Relocation> it = currentProgram.getRelocationTable().getRelocations(f.getBody());
@@ -1112,13 +1113,18 @@ public class LiftExport extends GhidraScript {
     }
 
     /* "((int)SR_VA(0xV))" or "((int)SR_VA(0xV) + d)" for a value V that the loader relocates. */
+    /* The client folds a larger offset into a constant (a table base plus an index times a stride
+     * that the compiler merged). Only the client uses the wide limit: the 024d export stays as it was. */
+    private static boolean wideRelocs;
+
     private static String relocText(long val, Set<Long> local, Set<Long> all) {
         if (local.contains(val) || all.contains(val))
             return String.format("((int)SR_VA(0x%x))", val);
         // A field offset inside the same instruction, or "END - 1" in a compare.
         for (long r : local) {
             long d = val - r;
-            if (d >= -0x10000 && d <= 0x10000 && d != 0)
+            long limit = wideRelocs ? 0x40000L : 0x10000L;
+            if (d >= -limit && d <= limit && d != 0)
                 return String.format("((int)SR_VA(0x%x) %s %d)", r, d < 0 ? "-" : "+", Math.abs(d));
         }
         // Ghidra folded the field offset into a constant and moved it to another instruction:
@@ -1127,7 +1133,7 @@ public class LiftExport extends GhidraScript {
         if (local.isEmpty()) {
             long best = -1;
             for (long r : all)
-                if (val > r && val - r <= (val >= 0x400000L ? 0x100 : 0x40) && (best < 0 || val - r < val - best)) best = r;
+                if (val > r && val - r <= (val >= 0x400000L ? (wideRelocs ? 0x20000L : 0x100L) : 0x40L) && (best < 0 || val - r < val - best)) best = r;
             if (best >= 0)
                 return String.format("((int)SR_VA(0x%x) + %d)", best, val - best);
         }
