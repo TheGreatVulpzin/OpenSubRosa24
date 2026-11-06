@@ -333,7 +333,9 @@ OpenGL: the game calls 32 extension functions through pointer slots (`PTR_GLee_L
 
 Result on 2026-11-06: **the client starts and stays in its main loop.** The process opens the window "Sub Rosa", answers messages and uses about 800 MB. Nobody checked the picture, the mouse, the keyboard or the sound yet. The gate stays green (menu 85, play 285, play2 280 calls same). Debug aids of `client_main.c`: a crash prints the exception, the address and the return addresses (resolve them with `build/hook/opensubrosa24_client.map`), and `SR_TRACE=1` prints every call that goes through `sr_fn`.
 
-Still without C: `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rendercylinder`, `pbitreadnego` (register input), `load_jpeg_image` (stack array), `clamp` (odd concat), `launchwebpage` and `landscape_buildsectorlods` (compile errors), and the C++ glue of the Steam SDK (`Set`, `CCallResult`, `CCallbackBase`). The client calls them only in menus that the first start does not open, so each one shows up as "no C function for RVA" when a test reaches it.
+Still without C: `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rendercylinder`, `pbitreadnego` (register input), `load_jpeg_image` (stack array), `clamp` (odd concat), `launchwebpage` and `landscape_buildsectorlods` (compile errors). The client calls them only in menus that the first start does not open, so each one shows up as "no C function for RVA" when a test reaches it.
+
+The C++ glue of the Steam SDK (`Set`, `CCallResult`, `CCallbackBase`, `0x10c190`, `0x10c1b0`) is ignored: the `ignored` set of the `client_win` target in `lift.py` turns each call into `0` and lifts none of them. The standalone client has no Steam.
 
 ## Open work
 

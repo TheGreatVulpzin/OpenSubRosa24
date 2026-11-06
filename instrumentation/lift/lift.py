@@ -219,6 +219,9 @@ TARGETS = {
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
                         'log10', 'fmod'}),
         crt_start=0x10c6fb, skip_callers=True,
+        # C++ glue of the Steam callbacks (Set, CCallResult, CCallbackBase and the unregister pair).
+        # The standalone client has no Steam: a call to one of them does nothing and returns 0.
+        ignored=frozenset({0x10bfa0, 0x10c040, 0x10c090, 0x10c190, 0x10c1b0}),
         # The standalone client needs the loops in C. They get no hook and no harness call.
         lift_loops=True,
         # checkmenuitems and FUN_00401300 call the callback of a menu item (cdecl, integer arguments).
@@ -1196,7 +1199,9 @@ def main():
     global TARGET
     TARGET = TARGETS[args.target]
     global SKIPPED_CALLS, INLINE_CALLS
-    SKIPPED_CALLS, INLINE_CALLS = TARGET['skipped'], TARGET['inline']
+    SKIPPED_CALLS, INLINE_CALLS = TARGET['skipped'], dict(TARGET['inline'])
+    for rva in TARGET.get('ignored', ()):
+        INLINE_CALLS[rva] = '#define {name}(...) 0'
     for key in ('lifted', 'hooks', 'record', 'table', 'report'):
         (ROOT / TARGET[key]).parent.mkdir(parents=True, exist_ok=True)
 
@@ -1228,6 +1233,9 @@ def main():
     imports_used = {}
     for rva in sorted(funcs):
         if only is not None and rva not in only:
+            continue
+        if rva in TARGET.get('ignored', ()):
+            status[rva] = ('ignored', 'Steam C++ glue')
             continue
         if rva in hand:
             status[rva] = ('handwritten', '')
