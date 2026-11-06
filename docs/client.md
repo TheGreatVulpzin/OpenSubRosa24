@@ -303,6 +303,40 @@ The target sets `HARNESS_GAME_DIR` and puts `build/client_deps` first on the `PA
 
 `instrumentation/client/cap_calls.py` keeps the first N calls of each function. `min_calls.py` of the server picks calls by code path, and it needs the block file of the binary: the client has none yet.
 
+## Standalone client, level 1 (step 7.5)
+
+Level 1 runs the lifted C in an own process, without `subrosa.exe`. It needs no rewrite. The lifted C is the game code.
+
+Build and run:
+
+```bash
+cmd //c "tools\\build_client.bat"
+cd build/client_test && PATH="$PWD/../client_deps:$PATH" ../hook/opensubrosa24_client.exe --run
+```
+
+`build_client.bat` makes `build/client_image/image_client.c` (`gen_image.py --client`: `.rdata`, the initial `.data` and the relocations, not versioned) and `client_gl.c`. It builds `build/hook/opensubrosa24_client.exe`. Run `instrumentation/client/pipeline.sh --no-gate` first: it makes the lifted C.
+
+`src/standalone/client_main.c` reserves the image region (`0x2a7ff000` bytes), copies the tables, sets the x87 precision to 53 bits and calls `main` (RVA `0x10ae00`) through `sr_fn`. `sr_fn` finds the C function of an image address in `lf_table`. `sr_import` loads the DLL of the game with `LoadLibrary`. The CRT of the game (`MSVCR100.dll`) still comes from the DLL. A later step links it statically, as the server does.
+
+Changes to the lifter, all only for the target `client_win` (`lift_loops`):
+
+- The 15 frame loops (`main`, `gameloop`, the menus, the editors) are lifted. They get no hook and no harness call (status `loop`).
+- Functions with a prologue that a hook cannot patch are lifted. They get no hook (status `unhookable`).
+- `checkbigendian` stores the addresses of `fread` and `fwrite`. The lifter resolves them as imports (`EXREF_IMPORTS`).
+
+OpenGL: the game calls 32 extension functions through pointer slots (`PTR_GLee_Lazy_glXxx`). Without a type, the decompiler drops the arguments. `analysis/client_win/gl_slots.csv` gives the prototype of each slot. `ApplyGlSlots.java` types the slots in Ghidra (no `-readOnly`), then `LiftExport.java` runs again. `gen_gl_slots.py` writes the function types for the lifted C (`src/lifted/lift_gl_client.h`) and the fallback functions that fill the slots (`client_gl.c`). `GLeeInit` is lifted, so it fills the slots with the real functions at run time.
+
+Result on 2026-11-06: the process starts, enters `main` and runs until the first function without C. The gate stays green (menu 86, play 283, play2 278 calls same). 25 functions that lifted code calls still have no C:
+
+| Kind | Functions | Next step |
+| --- | --- | --- |
+| Variable argument list (`&stack0x..`) | `drawtext`, `createmenubutton`, `FUN_0040ac50` | `va_start` in the lifted C. `createmenubutton` needs its real prototype first |
+| Compiler helpers | `__alloca_probe`, `__aullshr`, `__allshl` | inline versions, like `__allmul` |
+| Register input | `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rendercylinder`, `tesselatebezierderivative`, `pbitreadnego` | find the register in the disassembly, then a signature |
+| Call through a table of functions | `checkmenuitems`, `FUN_00401300`, `load_jpeg_image` | the table holds image addresses: call through `sr_fn` |
+| `__thiscall` | `CSteamID`, `ConvertToUint64` | hand-written C, or a Steam stub |
+| Other | `clamp` (odd concat), `launchwebpage`, `landscape_buildsectorlods` (compile errors) | one by one |
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

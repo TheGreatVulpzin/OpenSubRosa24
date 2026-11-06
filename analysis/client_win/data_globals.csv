@@ -1,1 +1,3 @@
 rva,name,type,count,evidence
+0x9065264,DAT_09465264,uint *,1,"landscape_buildsectorlods: result of malloc, a table of 6 vectors"
+0x906526c,DAT_0946526c,uint *,1,"landscape_buildsectorlods: result of malloc, a table of 8 vectors"

@@ -1197,7 +1197,7 @@ int main(int argc, char **argv)
         ui_warning("the 024d did not load at the snapshot base. Pointers in the snapshot are guessed. "
                    "Use the same copy from tools/re/fixed_base.py for the server and the harness.");
     for (i = 0; i < lf_table_count + HAND_COUNT; i++)
-        if (filter_match(table_entry(i)->name))
+        if (filter_match(table_entry(i)->name) && table_entry(i)->side != 2)
             total_funcs++;
 
     for (i = 0; i < lf_table_count + HAND_COUNT; i++) {
@@ -1207,7 +1207,7 @@ int main(int argc, char **argv)
         unsigned __int64 time_new = 0, time_orig = 0;
         int time_n = 0;
         char first[320] = "";
-        if (!filter_match(e->name))
+        if (!filter_match(e->name) || e->side == 2)
             continue;
         /* HARNESS_RESET=1: every function starts from the snapshot. Without it, the writes of
          * the original runs stay, and a later function can see a heap that the earlier calls

@@ -209,13 +209,19 @@ TARGETS = {
         report='build/lift/client_win/report.csv', hand=None, rewritten=(),
         extra_includes=('lift_os_client.h', 'lift_gl_client.h'), text=(0x401000, 0x511000),
         skipped={0x10c6fb: '__security_check_cookie'},
-        inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))'},
+        # __alloca_probe only touches the stack pages for a local array: the C compiler does that itself.
+        inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))', 0x10c710: '#define {name}() ((void)0)'},
         # The client calls the CRT math functions of MSVCR100 as plain imports.
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
                         'log10', 'fmod'}),
         crt_start=0x10c6fb, skip_callers=True,
         # The standalone client needs the loops in C. They get no hook and no harness call.
         lift_loops=True,
+        # checkmenuitems and FUN_00401300 call the callback of a menu item (cdecl, integer arguments).
+        code_call_ok=frozenset({0x101be0, 0x1300}),
+        # Functions that call OpenGL through the pointer slots. The harness has no OpenGL driver:
+        # the table flag 2 makes it skip them. The standalone client calls them.
+        standalone_only=frozenset({0x7d060, 0x742f0, 0xd5690}),
         # Functions that run a frame loop until the player leaves (main, the game loop, the menus,
         # the editors): the offline harness cannot run them, and neither can their callers.
         record_skip=frozenset({0x58d20, 0x5d150, 0x5dbd0, 0x5e020, 0x7b100, 0x9c5c0, 0xa8e10, 0xa9310, 0xaa5a0,
@@ -626,6 +632,17 @@ LIFT_PATCHES = {
     # servercycle: Ghidra drops "mov byte ptr [esp+0Fh],20h", a store into local_1 after
     # its address goes to the call. The master server packet then has 0x00, not 0x20.
     0x33570: [('cs_pwrite(&local_1,1,1);', 'local_1 = 0x20;\n      cs_pwrite(&local_1,1,1);')],
+    # Client, gettimeofday: __allshl takes edx:eax and cl in registers. The call shifts the high
+    # word of the file time left by 32 bits.
+    0xfae20: [('uVar3 = __allshl(local_c.dwHighDateTime | uVar4,uVar5);',
+               'uVar3 = (ulonglong)(local_c.dwHighDateTime | uVar4) << 32;')],
+    # Client, mainmenu: the debug line "STEAM %u %u" calls __aullshr with its inputs in registers.
+    # The line only runs when the debug flag is set, so the value is zero here.
+    0xaa920: [('local_7c = __aullshr();', 'local_7c = 0;')],
+    # Client, drawtext and FUN_0040ac50: "&stack0x.." is the first argument of the variable list,
+    # the word after the last named parameter.
+    0x106b30: [('local_34 = (uint *)&stack0x00000028;', 'local_34 = (uint *)(&a + 1);')],
+    0xac50: [('writefv(_File,param_10,(int *)&stack0x0000002c);', 'writefv(_File,param_10,(int *)(&param_10 + 1));')],
 }
 
 
@@ -637,6 +654,10 @@ def lift_function(f, rva, headers, imports_used):
             return None, f'lift patch text not found: {old}'
         c = c.replace(old, new, 1)
     for tok, why in BLOCKERS.items():
+        # A call through a table of game callbacks. The table holds the addresses that lifted code
+        # stored, so the call reaches the C function (or the original, in the hook build).
+        if tok == '(code *)' and rva in TARGET.get('code_call_ok', ()):
+            continue
         # At the start of a word: "builtin_strncpy" is not a register input "in_".
         if re.search(r'(?<![A-Za-z0-9_])' + re.escape(tok), c):
             return None, why
@@ -655,7 +676,11 @@ def lift_function(f, rva, headers, imports_used):
     if cc != '__cdecl':
         return None, f'calling convention {cc}'
     if any(t == '...' for t, _ in params):
-        return None, 'variadic'
+        # The standalone build lifts a variable list when a patch gives the address of its first
+        # argument. The hook table skips the function: a hook cannot forward a list.
+        if not (TARGET.get('lift_loops') and rva in LIFT_PATCHES):
+            return None, 'variadic'
+        UNHOOKABLE.add(rva)
 
     # A LARGE_INTEGER read as one 64-bit value: "(longlong)local_8".
     for v in re.findall(r'\bLARGE_INTEGER\s+(\w+);', c):
@@ -1043,7 +1068,7 @@ def gen_table(lifted, headers, names, side):
         # One letter per argument dword: p = pointer, v = value.
         kinds = ''.join(('vv' if t in WIDE_TYPES else 'p' if t.strip().endswith('*') else 'v') for t, _ in params)
         rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *){symbol(rva)}, {dwords}, {kind}, {size}, "{kinds}", '
-                    f'{int(rva in side)} }},')
+                    f'{2 if rva in TARGET.get("standalone_only", ()) else int(rva in side)} }},')
     out += ['', 'const LfEntry lf_table[] = {'] + (rows or ['    { 0 },']) + ['};',
             f'const int lf_table_count = {len(lifted)};', '']
     return chr(10).join(out)
