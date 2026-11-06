@@ -39,6 +39,7 @@ if [ "$export_step" = 1 ]; then
 fi
 
 step "lift"
+python -I instrumentation/client/gen_gl_slots.py
 python -I instrumentation/lift/lift.py --target client_win --compile > "$LOG/lift.log" 2>&1
 grep "^result:" "$LOG/lift.log"
 

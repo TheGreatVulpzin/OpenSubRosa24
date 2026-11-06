@@ -167,6 +167,27 @@ def load_names():
 # The C symbol of each function in the generated table and hooks: lf_<rva>, or the real name
 # of a function that is rewritten by hand in REWRITTEN_DIRS (rewritten_rvas).
 SYMBOLS = {}
+UNHOOKABLE = set()
+
+# Function types of the OpenGL slots (analysis/client_win/gl_slots.csv).
+def gl_slot_types():
+    path = ROOT / 'analysis/client_win/gl_slots.csv'
+    if not path.exists():
+        return set()
+    return {line.split(',', 2)[1] for line in path.read_text(encoding='utf-8').splitlines()[1:] if line.strip()}
+
+
+GL_SLOT_TYPES = gl_slot_types()
+
+# Imports that a function stores without a call (checkbigendian): the library of each one.
+EXREF_IMPORTS = {'fread': 'MSVCR100.DLL', 'fwrite': 'MSVCR100.DLL'}
+
+
+def is_loop(rva):
+    """A frame loop (main, the game loop, a menu, an editor) that the standalone build lifts."""
+    return bool(TARGET.get('lift_loops')) and rva in TARGET['record_skip']
+
+
 REWRITTEN_DIRS = ('src/common', 'src/net', 'src/game')
 
 # Inputs and outputs of each binary. The client writes under build/lift/client_win, so a
@@ -186,13 +207,15 @@ TARGETS = {
         lifted='build/lift/client_win/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
         record='build/lift/client_win/hooks_record.c', table='build/lift/client_win/lifted_table.c',
         report='build/lift/client_win/report.csv', hand=None, rewritten=(),
-        extra_includes=('lift_os_client.h',), text=(0x401000, 0x511000),
+        extra_includes=('lift_os_client.h', 'lift_gl_client.h'), text=(0x401000, 0x511000),
         skipped={0x10c6fb: '__security_check_cookie'},
         inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))'},
         # The client calls the CRT math functions of MSVCR100 as plain imports.
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
                         'log10', 'fmod'}),
         crt_start=0x10c6fb, skip_callers=True,
+        # The standalone client needs the loops in C. They get no hook and no harness call.
+        lift_loops=True,
         # Functions that run a frame loop until the player leaves (main, the game loop, the menus,
         # the editors): the offline harness cannot run them, and neither can their callers.
         record_skip=frozenset({0x58d20, 0x5d150, 0x5dbd0, 0x5e020, 0x7b100, 0x9c5c0, 0xa8e10, 0xa9310, 0xaa5a0,
@@ -625,7 +648,10 @@ def lift_function(f, rva, headers, imports_used):
         return None, 'header not parsed'
     ret, cc, name, params = hdr
     if f['prologue']['relative'] or f['prologue']['len'] < 5:
-        return None, 'prologue not hookable'
+        # The standalone build needs no hook, so it lifts the function. The hook table skips it.
+        if not TARGET.get('lift_loops'):
+            return None, 'prologue not hookable'
+        UNHOOKABLE.add(rva)
     if cc != '__cdecl':
         return None, f'calling convention {cc}'
     if any(t == '...' for t, _ in params):
@@ -637,13 +663,18 @@ def lift_function(f, rva, headers, imports_used):
 
     pre, post = [], []
     for g in f['globals']:
+        # The slot of an import: the _exref macro below gives the address instead.
+        if g['name'].endswith('_exref') and g['name'][:-6] in EXREF_IMPORTS and TARGET.get('lift_loops'):
+            continue
         # The name of a string literal can hold characters that a macro name cannot.
         if not re.fullmatch(r'[A-Za-z_]\w*', g['name']):
             safe = re.sub(r'\W', '_', g['name'])
             c = c.replace(g['name'], safe)
             g = dict(g, name=safe)
         # A global that holds a function address: the fread and fwrite pointers of getpaths.
-        if g['type'].strip().endswith('*') and re.search(r'\(\*' + re.escape(g['name']) + r'\)\(', c):
+        # A slot with a function type from gl_slots.csv (lift_gl_client.h) keeps that type.
+        if (g['type'].strip().endswith('*') and not g['type'].strip()[:-1].strip() in GL_SLOT_TYPES
+                and re.search(r'\(\*' + re.escape(g['name']) + r'\)\(', c)):
             g = dict(g, type='code *')
         pre.append(global_macro(g))
         post.append(f'#undef {g["name"]}')
@@ -652,7 +683,13 @@ def lift_function(f, rva, headers, imports_used):
     external = {c['name'] for c in f['calls'] if c['external']}
     for x in sorted(set(re.findall(r'\b([A-Za-z_]\w*)_exref\b', c))):
         if x not in external:
-            return None, f'import reference without a call: {x}_exref'
+            # An import that the function stores and never calls: the macro gets its address.
+            if x not in EXREF_IMPORTS or not TARGET.get('lift_loops'):
+                return None, f'import reference without a call: {x}_exref'
+            idx = imports_used.setdefault((EXREF_IMPORTS[x], x), len(imports_used))
+            pre.append(f'#define {x}_exref ((code *)LF_IMPORT({idx}, "{EXREF_IMPORTS[x]}", "{x}"))')
+            post.append(f'#undef {x}_exref')
+            continue
         pre.append(f'#define {x}_exref ((code *){x})')
         post.append(f'#undef {x}_exref')
     for call in f['calls']:
@@ -1141,7 +1178,7 @@ def main():
             continue
         if rva in rewritten:
             continue
-        if rva in side and not harness_only(rva, side):
+        if rva in side and not harness_only(rva, side) and not is_loop(rva):
             status[rva] = ('side_effect', side[rva])
             continue
         if rva in eax_only:
@@ -1159,10 +1196,13 @@ def main():
 
     lifted = sorted([r for r, _ in texts] + [r for r in rewritten if only is None or r in only])
     for r in lifted:
-        status[r] = ('harness_only', side[r]) if r in side else ('lifted', '')
+        status[r] = (('loop' if is_loop(r) else 'harness_only'), side[r]) if r in side else ('lifted', '')
     for r in rewritten:
         status[r] = ('rewritten', 'by hand')
-    live = [r for r in lifted if r not in side]
+    for r in lifted:
+        if r in UNHOOKABLE and r not in side:
+            status[r] = ('unhookable', '')
+    live = [r for r in lifted if r not in side and r not in UNHOOKABLE]
     (ROOT / TARGET['hooks']).write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
     (ROOT / TARGET['record']).write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
                                          newline='\n')
