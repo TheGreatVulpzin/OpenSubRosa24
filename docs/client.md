@@ -261,7 +261,19 @@ Recording `client-play2-20261103-2019` (25 minutes, snapshot at 240 s, 1422 call
 | After the float rule and the compile fixes | 81 | 1035 | 12 |
 | After the `drawtext` signature | 31 | 1085 | 12 |
 
-232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording, and none in the later recordings, which include a hosted game and the two demos. Their callers (`lf_85b70`, `lf_d4700`, `lf_ddc00`, `lf_deb20`) never ran. They are paths of a local server that the client does not use.
+232 functions tested, 126 calls skipped. `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` have no call in this recording, and none in the later recordings, which include a hosted game and the two demos. Their callers (`lf_85b70`, `lf_d4700`, `lf_ddc00`, `lf_deb20`) never ran. They are paths of a local server that the client does not use. Synthetic calls test them (2026-11-06, next section).
+
+### Synthetic calls (2026-11-06)
+
+Three scripts in `instrumentation/client/` write calls and states for the functions that no recording reaches. They use the snapshot of `client-play2-20261103-2019`. The record layout of humans and objects is the same as in the server (`synth_humans.py` of the server), with other base addresses. A case snapshot is about 350 MB: the scripts delete it after each run, and the work folder can be on another drive (`E:/sv_synth_tmp` here, because the C drive was full). Use the environment of the gate.
+
+- `synth_calls.py`: calls with plain integer arguments on the state of the snapshot.
+- `synth_humans.py`: one live human at a time (the snapshot holds humans that the client never simulates, and the original crashes on two of them). `situations:<human>` sets on foot, walk modes, crouch, jump, health 20, health 5, dead and despawn. `cars:<human>` sets drive, exit, die in a car and enter.
+- `synth_voice.py`: states for `calculateplayervoice` (voice off, a human slot, an item slot, a muted player) and `scenario_createchase` (limit 0, 1, 5).
+
+Results: `humansimulation` is the same in 4 of the 6 live humans (the original crashes on the other 2) and in all cases of `situations` (9) and 4 of 5 cars. `human_itemsimulation` is the same in all of them. `calculateplayervoice` is the same in all 4 states and in 8 calls with the state of the snapshot. `scenario_createchase` is the same with limit 1 and 5. With limit 0 the memory is the same and the return value is different: the original returns the leftover EAX (`cookie xor ebp`) when the function does nothing. This is not a lifter difference, and it is not in the table of known differences, because that table would hide a real difference of the main path.
+
+Not covered: the case "enter a vehicle" (the original crashes in that state) and the paths that need a state that no case builds (items in hands, phones, fights).
 
 The 31 open differences of that run were mostly an artifact of the verifier. A scope round protects only the pages that earlier calls wrote. A page that only the lifted run writes is not undone, so the original run starts from the state that the lifted run left (the first different event was a `free` of another block). The harness of the client now sets `verify_full_every=1` (`SV_FULL_EVERY_DEFAULT` in `CMakeLists.txt`): every round is a full round. A full round is slower (about 150 ms per call instead of 12 ms) and finds differences that a scope round missed.
 
