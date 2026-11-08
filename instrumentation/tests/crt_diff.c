@@ -117,6 +117,56 @@ static void math_two(const char *name, double lo1, double hi1, double lo2, doubl
     printf("%-9s [%g, %g) x [%g, %g): %d of %d differ\n", name, lo1, hi1, lo2, hi2, diff, count);
 }
 
+/* ------------------------------------------------------------ plain math calls */
+
+/* The client calls the math functions as plain cdecl imports (double arguments on the stack),
+ * not as x87 intrinsics. */
+typedef double(__cdecl *plain_one_t)(double);
+typedef double(__cdecl *plain_two_t)(double, double);
+
+static void plain_one(const char *name, plain_one_t b, double lo, double hi, int count)
+{
+    plain_one_t a = (plain_one_t)fn(g_old, name);
+    int i, diff = 0;
+    for (i = 0; i < count; i++) {
+        double x = in_range(lo, hi), ra = a(x), rb = b(x);
+        if (!same_bits(ra, rb) && !(ra != ra && rb != rb)) {
+            if (diff < 3)
+                printf("    %s(%.17g): %.17g and %.17g\n", name, x, ra, rb);
+            diff++;
+        }
+    }
+    printf("plain %-6s [%g, %g): %d of %d differ\n", name, lo, hi, diff, count);
+}
+
+static void plain_two(const char *name, plain_two_t b, double lo1, double hi1, double lo2, double hi2, int count)
+{
+    plain_two_t a = (plain_two_t)fn(g_old, name);
+    int i, diff = 0;
+    for (i = 0; i < count; i++) {
+        double x = in_range(lo1, hi1), y = in_range(lo2, hi2), ra = a(x, y), rb = b(x, y);
+        if (!same_bits(ra, rb) && !(ra != ra && rb != rb)) {
+            if (diff < 3)
+                printf("    %s(%.17g, %.17g): %.17g and %.17g\n", name, x, y, ra, rb);
+            diff++;
+        }
+    }
+    printf("plain %-6s [%g, %g) x [%g, %g): %d of %d differ\n", name, lo1, hi1, lo2, hi2, diff, count);
+}
+
+static void plain_ldexp(int count)
+{
+    double(__cdecl * a)(double, int) = (double(__cdecl *)(double, int))fn(g_old, "ldexp");
+    double(__cdecl * b)(double, int) = ldexp;
+    int i, diff = 0;
+    for (i = 0; i < count; i++) {
+        double x = in_range(-1000, 1000);
+        int e = (int)(next() % 60) - 30;
+        diff += !same_bits(a(x, e), b(x, e));
+    }
+    printf("plain ldexp: %d of %d differ\n", diff, count);
+}
+
 /* ------------------------------------------------------------ text and other functions */
 
 typedef int(__cdecl *sscanf_t)(const char *, const char *, ...);
@@ -261,6 +311,22 @@ int main(int argc, char **argv)
     math_two("_CIatan2", -100, 100, -100, 100, n);
     math_two("_CIpow", 0, 100, -4, 4, n);
     math_two("_CIpow", -10, 10, 0, 3, n / 4);
+
+    plain_one("sqrt", sqrt, 0, 1e6, n);
+    plain_one("sin", sin, -7, 7, n);
+    plain_one("sin", sin, -1000, 1000, n);
+    plain_one("cos", cos, -7, 7, n);
+    plain_one("cos", cos, -1000, 1000, n);
+    plain_one("tan", tan, -1.6, 1.6, n);
+    plain_one("asin", asin, -1, 1, n);
+    plain_one("acos", acos, -1, 1, n);
+    plain_one("atan", atan, -100, 100, n);
+    plain_one("exp", exp, -20, 20, n);
+    plain_one("fabs", fabs, -1e6, 1e6, n);
+    plain_two("atan2", atan2, -100, 100, -100, 100, n);
+    plain_two("pow", pow, 0, 100, -4, 4, n);
+    plain_two("pow", pow, -10, 10, 0, 3, n / 4);
+    plain_ldexp(n);
 
     scan_floats(n / 4);
     print_formats(n / 4);

@@ -21,14 +21,25 @@ uintptr_t sr_base;
 /* The OpenGL slots of the game (build/client_image/client_gl.c). */
 void client_gl_init(void);
 
+/* The static C runtime (client_crt.c). */
+void *client_crt_lookup(const char *name);
+
 #define IMAGE_BASE 0x400000u
 
 /* ------------------------------------------------------------ imports */
 
 void *sr_import(const char *dll, const char *name)
 {
-    HMODULE module = LoadLibraryA(dll);
-    void *fn = module ? (void *)GetProcAddress(module, name) : NULL;
+    HMODULE module;
+    void *fn = NULL;
+    if (!_stricmp(dll, "MSVCR100.DLL"))
+        fn = client_crt_lookup(name);
+    if (fn)
+        return fn;
+    if (!_stricmp(dll, "MSVCR100.DLL"))
+        fprintf(stderr, "import %s!%s is not linked, using the DLL\n", dll, name);
+    module = LoadLibraryA(dll);
+    fn = module ? (void *)GetProcAddress(module, name) : NULL;
     if (!fn) {
         fprintf(stderr, "import %s!%s not found\n", dll, name);
         exit(1);
@@ -49,8 +60,9 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
 
 /* ------------------------------------------------------------ functions */
 
-/* SR_TRACE=1 prints each call that goes through sr_fn. */
+/* SR_TRACE=1 prints each call that goes through sr_fn. SR_TRACE=2 prints the first call of each function. */
 static int g_trace;
+static unsigned char g_seen[8192];
 
 /* lf_table is sorted by address. */
 void *sr_fn(uintptr_t va)
@@ -60,8 +72,10 @@ void *sr_fn(uintptr_t va)
     while (lo <= hi) {
         int mid = (lo + hi) / 2;
         if (lf_table[mid].rva == rva) {
-            if (g_trace)
+            if (g_trace == 1 || (g_trace == 2 && !g_seen[mid])) {
+                g_seen[mid] = 1;
                 fprintf(stderr, "call %s (0x%x)\n", lf_table[mid].name, (unsigned)rva);
+            }
             return lf_table[mid].lifted;
         }
         if (lf_table[mid].rva < rva)
@@ -135,7 +149,7 @@ int main(int argc, char **argv)
     int run = argc > 1 && !strcmp(argv[1], "--run");
 
     setvbuf(stdout, NULL, _IONBF, 0);
-    g_trace = getenv("SR_TRACE") != NULL;
+    g_trace = getenv("SR_TRACE") ? atoi(getenv("SR_TRACE")) : 0;
     SetUnhandledExceptionFilter(crash_filter);
 
     /* The game uses 53 bit x87 math. */

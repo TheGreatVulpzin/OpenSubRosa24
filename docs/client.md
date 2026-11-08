@@ -337,6 +337,10 @@ Still without C: `joinmenu`, `getinputs`, `playermenu_building_buy`, `debug_rend
 
 The C++ glue of the Steam SDK (`Set`, `CCallResult`, `CCallbackBase`, `0x10c190`, `0x10c1b0`) is ignored: the `ignored` set of the `client_win` target in `lift.py` turns each call into `0` and lifts none of them. The standalone client has no Steam.
 
+Menu check on 2026-11-08: the main menu draws (title, seven buttons, logo) and the mouse cursor moves. `SR_TRACE=2` prints the first call of each function only: the client reaches `drawmenuitems` and `checkmenuitems` within 2 minutes with no missing function. The image loader (`paeth`, `zhuffman_decode`) takes most of the start time.
+
+C runtime: the client links the runtime statically (`/MT`). `src/standalone/client_crt.c` holds the 51 functions that the game imports from MSVCR100.dll, and `sr_import` takes them from there. MSVCR100.dll is no longer loaded. `instrumentation/tests/crt_diff.c` shows the same bits as MSVCR100 for `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `pow`, `atan2`, `ldexp` and `fabs` (500000 inputs each), plus the checks of the server for `sscanf`, `sprintf`, `rand` and `qsort`. A name that is not in the table loads from the DLL and prints a line.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

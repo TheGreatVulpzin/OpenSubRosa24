@@ -121,7 +121,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
         target_compile_options(client_lifted PRIVATE /arch:IA32 /W0 /utf-8)
         target_compile_definitions(client_lifted PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         set_property(TARGET client_lifted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-        add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c build/client_image/image_client.c build/client_image/client_gl.c
+        add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/standalone/client_crt.c build/client_image/image_client.c build/client_image/client_gl.c
             $<TARGET_OBJECTS:client_lifted> build/lift/client_win/lifted_table.c src/platform/x87_math.c)
         target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform)
         target_compile_options(subvulpes-client PRIVATE /W4 /utf-8)
