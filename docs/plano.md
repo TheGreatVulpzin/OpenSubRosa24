@@ -240,9 +240,38 @@ Phase 4 left about 200 addresses for this phase: globals that only the client us
 | 7.3 | Lift target (`lift.py --target client_win`, done) and hook DLL for the client | done: 723 functions lifted, 473 more for the harness only, 5 compile errors left (2026-11-05) |
 | 7.4 | Recording of client sessions and harness | done for the first milestone (2026-11-05): proxy with recorder, `harness_client`, platform stubs, gate target `client_win`. no difference and no lifted crash in the two play recordings (279 and 275 calls same). No recording reaches `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` (their callers never ran in 3 sessions: paths of a local server). Synthetic calls and states (`instrumentation/client/synth_*.py`, see `docs/client.md`) give the same result as the original, except the junk return value of `scenario_createchase` when it does nothing. Not covered: enter a vehicle, items in hands, phones, fights |
 | 7.5 | Standalone client (platform layer for render, input, audio) | in progress (2026-11-06): level 1 runs. `opensubrosa24_client.exe` opens the window and stays in the main loop without `subrosa.exe`. The main menu draws and the CRT is linked statically. 2026-11-09: Start, Host and the game world run, a friend played with no lag (zip in `build/package`). Variable-argument calls fixed with `ApplyCallOverrides.java`. Open: the company money text (fix in the lift, test pending), sound and voice tests, the functions that have no C (see `docs/client.md`, "Standalone client") |
-| 7.6 | Readable rewrite, group by group, as in Phase 6 | not started |
+| 7.6 | Readable rewrite, group by group, as in Phase 6 | planned (2026-11-09): freeze the lifted header, name globals and types, then groups C0 to C11 (see below) |
 
 The server phases give the order. Steps 7.3 and 7.4 need tests on the Windows PC with the game running.
+
+### The groups of the client rewrite (7.6, planned 2026-11-09)
+
+The client binary holds the same game code as the server, so the work is smaller than it looks. The table has 1298 C functions. 236 of them (390 KB) have a clean version from Phase 6 already. The rest is client code: images, models, rendering, input, menus, sound.
+
+Before the first group, two steps keep the rewrite from stalling. The server phase lost a day when a new name changed the lifted C:
+
+1. **Freeze.** The lifted C of the client gets its own frozen header, as in the server (`src/lifted/sr_types_lifted.h` and the rule in CLAUDE.md). A new name or type then never changes the lifted C. Lifted C stays a fallback and a reference.
+2. **Names and types (7.2).** Name the globals and the structs that the client adds. Names go into `analysis/structs/names.csv`, never into the lifted C. Then the groups can use them.
+
+The groups, in order (function counts and sizes from `lifted_table.c` and `functions.csv`):
+
+| # | Group | Functions | Size |
+| --- | --- | ---: | ---: |
+| C0 | Adopt the clean server code: link the client to the clean functions of Phase 6 (physics, humans, items, collision, level, network helpers). The client gate tests each one. | 236 | 390 KB |
+| C1 | Image and font loaders (`png`, `bmp`, `idct`, fonts) | 20 | 22 KB |
+| C2 | Procedural textures and models (`generate*`, `createhumanmodel`, `model_*`, `landscape_*`) | 50 | 92 KB |
+| C3 | Rendering (`renderframe`, `drawdisplay`, `drawhud`, sprites, shaders, frame list) | 51 | 81 KB |
+| C4 | Input (`getinputs_*`, keyboard, mouse) | 16 | 16 KB |
+| C5 | Menus (`mainmenu`, `joinmenu`, `optionsmenu`, `playermenu_*`, `drawmenuitems`) | 26 | 35 KB |
+| C6 | Sound and voice (OpenAL, Speex) | 9 | 9 KB |
+| C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug) | 13 | 21 KB |
+| C8 | Editors (`leveleditor`, `buildingedit*`): tools for developers, last | 1 and more | 12 KB and more |
+| C9 | GLee library: a third-party OpenGL loader. Replace it with a small table-driven loader, or keep it as it is. | 183 | 70 KB |
+| C10 | Other named functions | 153 | 70 KB |
+| C11 | Unnamed functions (540, 149 KB). 280 of them have less than 64 bytes. Each group names the ones it calls, while it is rewritten. | 540 | 149 KB |
+
+C0 comes first: it is the largest part and the test is ready (the gate compares each function with the original). Names for C11 come during the groups, because a name needs the context that the rewrite gives.
+
 
 ## After the decomp: OpenSubRosa and SubVulpes
 
