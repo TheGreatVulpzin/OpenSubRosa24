@@ -46,15 +46,11 @@ The client table (`src/lifted/client/lifted_table.c`) holds one C function for e
 
 ## Parallel work
 
-At most two groups at the same time. Each group has its own branch (`client/c1`, `client/c2`, ...) and its own git worktree, because the build folders must not share files:
+One group at a time works in the main folder, on its own branch (`git switch -c client/c1`). The build folder (`build/`) holds files that are not in git: the recordings, the Ghidra export (`build/lift/client_win.jsonl`), the game folder for the tests (`build/client_test`, `build/client_deps`) and the compiled tools. Two sessions that build in the same folder break each other.
 
-```powershell
-git worktree add ..\SubVulpes-c1 -b client/c1
-New-Item -ItemType Junction -Path ..\SubVulpes-c1\original -Target (Resolve-Path original)
-New-Item -ItemType Junction -Path ..\SubVulpes-c1\build\recordings -Target (Resolve-Path build\recordings)
-```
+Two groups at the same time need two full copies of the project folder, each with its own `build/` (copy it, do not link it). The copy is large (several GB with the recordings). Use it only when the time saved is worth that.
 
-Two groups must not write the same file. `docs/client.md` and `docs/plano.md` take one section for each group, so a merge conflict is small. `analysis/client_win/functions.csv` and `manual_names.csv` take only added lines.
+Two groups must not write the same file. `docs/client.md` and `docs/plano.md` take one section for each group, so a merge conflict is small. `analysis/client_win/functions.csv` and `manual_names.csv` take only added lines. After a group ends, the integrator merges the branch into `main`, runs `bash instrumentation/client/pipeline.sh --no-gate` and commits the two generated files in `src/lifted/client/`.
 
 ## Commands
 
