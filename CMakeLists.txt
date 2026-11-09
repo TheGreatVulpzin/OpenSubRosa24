@@ -88,12 +88,24 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/cl_count_table.c)
     target_compile_definitions(cl_wsock32 PRIVATE CL_COUNT SR_TEST_MEMORY)
     set_source_files_properties(build/lift/client_win/cl_count_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 endif()
+# Clean files of the server that the client uses in place of lifted C (analysis/client_win/adopted.txt).
+# The storage adapter of the client puts each sr_data_<name> at its address in the client image.
+set(CL_ADOPTED_OBJECTS)
+file(STRINGS ${CMAKE_SOURCE_DIR}/analysis/client_win/adopted.txt CL_ADOPTED REGEX "^src/")
+if(CL_ADOPTED)
+    add_library(client_adopted OBJECT ${CL_ADOPTED})
+    target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform ${SV_REWRITTEN_INCLUDES})
+    target_compile_options(client_adopted PRIVATE /arch:IA32 /W3 /utf-8)
+    target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
+    set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(CL_ADOPTED_OBJECTS $<TARGET_OBJECTS:client_adopted>)
+endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder.
 if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
         src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
         instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
-        instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math.c)
+        instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
@@ -103,7 +115,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     add_executable(harness_client instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c
         instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
         instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
-        src/platform/x87_math.c)
+        src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
@@ -122,7 +134,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
         target_compile_definitions(client_lifted PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         set_property(TARGET client_lifted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
         add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/standalone/client_crt.c build/client_image/image_client.c build/client_image/client_gl.c
-            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c src/platform/x87_math.c)
+            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
         target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform)
         target_compile_options(subvulpes-client PRIVATE /W4 /utf-8)
         target_compile_definitions(subvulpes-client PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)

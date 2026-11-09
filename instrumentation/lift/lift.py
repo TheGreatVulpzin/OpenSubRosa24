@@ -211,6 +211,7 @@ TARGETS = {
         lifted='src/lifted/client/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
         record='build/lift/client_win/hooks_record.c', table='src/lifted/client/lifted_table.c',
         report='build/lift/client_win/report.csv', hand=None, rewritten=(),
+        adopted='analysis/client_win/adopted.txt',
         extra_includes=('lift_os_client.h', 'lift_gl_client.h'), text=(0x401000, 0x511000),
         skipped={0x10c6fb: '__security_check_cookie'},
         # __alloca_probe only touches the stack pages for a local array: the C compiler does that itself.
@@ -250,7 +251,13 @@ def rewritten_rvas(names):
     by_name = {n: int(r, 16) for r, n in names.items()}
     definition = re.compile(r'^\w[^;{}#\n]*?\b(\w+)\([^;{}]*\)\s*\{', re.M)
     out = set()
-    for f in sorted(f for d in TARGET['rewritten'] for f in (ROOT / d).glob('*.c')):
+    files = [f for d in TARGET['rewritten'] for f in (ROOT / d).glob('*.c')]
+    # The client adopts the clean files of the server one file at a time (analysis/client_win/adopted.txt).
+    if TARGET.get('adopted') and (ROOT / TARGET['adopted']).exists():
+        for line in (ROOT / TARGET['adopted']).read_text(encoding='utf-8').splitlines():
+            if line.strip() and not line.startswith('#'):
+                files.append(ROOT / line.strip())
+    for f in sorted(files):
         for name in definition.findall(f.read_text(encoding='utf-8')):
             m = re.fullmatch(r'lf_([0-9a-f]{5})', name)
             rva = int(m.group(1), 16) if m else by_name.get(name)

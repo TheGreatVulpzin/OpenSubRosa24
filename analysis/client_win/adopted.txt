@@ -1,0 +1,2 @@
+# Clean source files of the server that the client uses in place of lifted C (one path each).
+src/common/vectors.c
