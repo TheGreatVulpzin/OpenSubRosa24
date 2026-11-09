@@ -19,7 +19,9 @@ $M --target $F/client_win.jsonl --ref "$F/ded024d.jsonl:analysis/024d/functions.
 python -I tools/re/name_glee.py --exe original/client/subrosa.exe --target $F/client_win.jsonl \
    --ref $F/linux_x64.jsonl --out analysis/client_win/glee_names.csv \
    --globals analysis/client_win/manual_globals.csv
-(head -1 analysis/client_win/glee_names.csv; tail -qn +2 analysis/client_win/glee_names.csv analysis/client_win/manual_names.csv) \
+#    glee_order_names.csv holds the link functions of the extensions with no entry point (10 bytes each). It comes from
+#    tools/re/name_glee_order.py (the order of the Linux client) and is checked in, because it needs the names above.
+(head -1 analysis/client_win/glee_names.csv; tail -qn +2 analysis/client_win/glee_names.csv analysis/client_win/glee_order_names.csv analysis/client_win/manual_names.csv) \
    > build/match/client_win_manual.csv
 python -I tools/re/merge_names.py --out build/match/client_win_merged.csv \
    --manual build/match/client_win_manual.csv build/match/client_win_matched.csv build/match/client_win_via024d.csv

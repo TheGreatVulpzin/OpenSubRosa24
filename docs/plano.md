@@ -235,7 +235,7 @@ Phase 4 left about 200 addresses for this phase: globals that only the client us
 
 | Step | Work | Status |
 | --- | --- | --- |
-| 7.1 | Names: matcher from the ELF and the Mach-O, GLee names from machine code, strict pass against the 024d, string pass, callee pass | in progress: 2338 of 2907 functions named |
+| 7.1 | Names: matcher from the ELF and the Mach-O, GLee names from machine code, strict pass against the 024d, string pass, callee pass | in progress: 2510 of 2907 functions named (2026-11-09) |
 | 7.2 | Globals and types: `analysis/client_win/*.csv`, structs the client adds | in progress: 49 global candidates, 43 confirmed or likely |
 | 7.3 | Lift target (`lift.py --target client_win`, done) and hook DLL for the client | done: 723 functions lifted, 473 more for the harness only, 5 compile errors left (2026-11-05) |
 | 7.4 | Recording of client sessions and harness | done for the first milestone (2026-11-05): proxy with recorder, `harness_client`, platform stubs, gate target `client_win`. no difference and no lifted crash in the two play recordings (279 and 275 calls same). No recording reaches `humansimulation`, `human_itemsimulation`, `calculateplayervoice` and `scenario_createchase` (their callers never ran in 3 sessions: paths of a local server). Synthetic calls and states (`instrumentation/client/synth_*.py`, see `docs/client.md`) give the same result as the original, except the junk return value of `scenario_createchase` when it does nothing. Not covered: enter a vehicle, items in hands, phones, fights |

@@ -351,7 +351,7 @@ Check for lost arguments: `python -I instrumentation/client/check_variadic.py [l
 
 ## Open work
 
-About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.
+About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).
 
 Three passes name functions that the first matcher pass left open. All are in `name_all.sh`:
 
