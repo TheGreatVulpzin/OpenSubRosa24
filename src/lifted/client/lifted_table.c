@@ -1145,7 +1145,7 @@ void lf_fb020(void);
 void lf_fb040(void);
 void getcpufrequency(void);
 void lf_fb1b0(void);
-void lf_fb3c0(void);
+void cs_sleep(void);
 void lf_fb3d0(void);
 void lf_fb6f0(void);
 void lf_fbc00(void);
@@ -2445,7 +2445,7 @@ const LfEntry lf_table[] = {
     { "itemtimetolive", 0xfb040, (void *)lf_fb040, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_fb1b0", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
-    { "cs_sleep", 0xfb3c0, (void *)lf_fb3c0, 0, LF_RET_VOID, 4, "", 1 },
+    { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },
     { "createvehicle", 0xfb3d0, (void *)lf_fb3d0, 3, LF_RET_INT, 4, "vpv", 0 },
     { "getaudioinput", 0xfb6f0, (void *)lf_fb6f0, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_fbc00", 0xfbc00, (void *)lf_fbc00, 2, LF_RET_VOID, 4, "vv", 1 },

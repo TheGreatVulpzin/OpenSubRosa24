@@ -270,6 +270,10 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | C10 | Other named functions | 153 | 70 KB |
 | C11 | Unnamed functions (540, 149 KB). 280 of them have less than 64 bytes. Each group names the ones it calls, while it is rewritten. | 540 | 149 KB |
 
+How a group works (files, steps, tests, parallel branches): [`docs/client_rewrite.md`](client_rewrite.md). The list of every function with its group: `analysis/client_win/groups.csv` (`tools/re/client_groups.py`).
+
+Result of C0 (2026-11-09): the server (0.24d) and the client (0.24b) are not the same build, so only 19 of 236 clean functions are adopted (the others have no test yet). See `docs/client.md`, "Clean server code in the client".
+
 C0 comes first: it is the largest part and the test is ready (the gate compares each function with the original). Names for C11 come during the groups, because a name needs the context that the rewrite gives.
 
 

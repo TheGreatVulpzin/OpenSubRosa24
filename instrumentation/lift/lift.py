@@ -253,12 +253,14 @@ def rewritten_rvas(names):
     out = set()
     files = [f for d in TARGET['rewritten'] for f in (ROOT / d).glob('*.c')]
     allowed = None
-    # The client adopts clean functions of the server one by one (analysis/client_win/adopted.txt,
+    # The client adopts clean functions one by one (analysis/client_win/adopted*.txt, one file for each group,
     # lines "name path"). Only the listed names get the clean version.
     if TARGET.get('adopted'):
         allowed = set()
-        path = ROOT / TARGET['adopted']
-        if path.exists():
+        base = ROOT / TARGET['adopted']
+        for path in sorted(base.parent.glob(base.stem + '*.txt')):
+            if path.name.endswith('_pending.txt'):
+                continue
             for line in path.read_text(encoding='utf-8').splitlines():
                 if line.strip() and not line.startswith('#'):
                     name, src = line.split()

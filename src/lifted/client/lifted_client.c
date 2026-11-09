@@ -126322,16 +126322,6 @@ void __cdecl lf_fb1b0(void)
 #undef DAT_12e7d66c
 #undef DAT_12e7d670
 
-/* ---------------------------------------------------------------- 0xfb3c0 */
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(113, "SDL2.DLL", "SDL_Delay"))
-void __cdecl lf_fb3c0(void)
-
-{
-  SDL_Delay(100);
-  return;
-}
-#undef SDL_Delay
-
 /* ---------------------------------------------------------------- 0xfb3d0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define DAT_05919144 (*(undefined *)SR_VA(0x5919144))

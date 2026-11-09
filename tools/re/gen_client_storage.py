@@ -49,6 +49,17 @@ def main():
             dummies.append(f'{typ} sr_unplaced_{name}{arr};')
         names.add(name)
         unplaced.append(name)
+    # Globals that only the client has: analysis/client_win/group_globals_C<n>.csv, one file for each group.
+    # Columns: name, type, count, client_rva, evidence. The clean client code uses cl_data_<name>.
+    client_only = []
+    for f in sorted((ROOT / 'analysis/client_win').glob('group_globals_C*.csv')):
+        for r in csv.DictReader(f.open(encoding='utf-8')):
+            count, rva = int(r['count'] or 1), int(r['client_rva'], 16)
+            expr = f'(({r["type"]} *)(sr_base + 0x{rva:x}u))'
+            client_only.append(f'#define cl_data_{r["name"]} ' + (expr if count > 1 else f'(*{expr})'))
+    if client_only:
+        lines.append('')
+        lines.extend(client_only)
     # Fields that the server keeps in the packet workspace object.
     if 'packet_workspace' in names:
         lines.append('')

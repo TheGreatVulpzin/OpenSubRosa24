@@ -54,9 +54,10 @@ def server_functions():
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--file', default='analysis/client_win/adopted.txt', help='list of one group (adopted_C1.txt)')
     ap.add_argument('--remove', action='store_true')
     args = ap.parse_args()
-    path = ROOT / 'analysis/client_win/adopted.txt'
+    path = ROOT / args.file
     lines = path.read_text(encoding='utf-8').splitlines()
     unplaced = set((ROOT / 'instrumentation/client/runtime/unplaced.txt').read_text(encoding='utf-8').split())
     funcs = clean_functions()

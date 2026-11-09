@@ -92,10 +92,12 @@ endif()
 # The storage adapter of the client puts each sr_data_<name> at its address in the client image.
 set(CL_ADOPTED_OBJECTS)
 # All clean files are compiled. analysis/client_win/adopted.txt decides which functions the table uses.
-set(CL_ADOPTED ${SV_REWRITTEN_SOURCES})
+# src/client holds the clean code that only the client has (render, input, menus, images).
+file(GLOB CL_CLIENT_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/client/*.c)
+set(CL_ADOPTED ${SV_REWRITTEN_SOURCES} ${CL_CLIENT_SOURCES})
 if(CL_ADOPTED)
-    add_library(client_adopted OBJECT ${SV_REWRITTEN_SOURCES} instrumentation/client/runtime/storage_unplaced.c instrumentation/client/runtime/server_stubs.c)
-    target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform ${SV_REWRITTEN_INCLUDES})
+    add_library(client_adopted OBJECT ${CL_ADOPTED} instrumentation/client/runtime/storage_unplaced.c instrumentation/client/runtime/server_stubs.c instrumentation/client/runtime/cl_fn.c)
+    target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform src/client ${SV_REWRITTEN_INCLUDES})
     target_compile_options(client_adopted PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
     set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

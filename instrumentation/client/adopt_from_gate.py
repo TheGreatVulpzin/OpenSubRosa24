@@ -37,10 +37,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--dir', default='build/gate/client_win/reset/all',
                     help='result files of the gate (all calls: reset/all, short calls: reset)')
+    ap.add_argument('--file', default='analysis/client_win/adopted.txt', help='list of one group (adopted_C1.txt)')
     ap.add_argument('--keep-tested', action='store_true')
     ap.add_argument('--drop-failed', action='store_true')
     args = ap.parse_args()
-    path = ROOT / 'analysis/client_win/adopted.txt'
+    path = ROOT / args.file
     lines = path.read_text(encoding='utf-8').splitlines()
     res = results(args.dir)
     kinds = {'tested': [], 'untested': [], 'failed': []}
@@ -64,7 +65,7 @@ def main():
         # The functions without a test wait here until a recording or a synthetic call reaches them.
         pending = [line for line in lines if line.split()[0] in kinds['untested']] if lines else []
         header = '# Candidates that no recorded call reached. They stay lifted until a test covers them.'
-        (ROOT / 'analysis/client_win/adopted_pending.txt').write_text(
+        path.with_name(path.stem + '_pending.txt').write_text(
             '\n'.join([header] + pending) + '\n', encoding='utf-8', newline='\n')
     if args.keep_tested or args.drop_failed:
         path.write_text('\n'.join(keep) + '\n', encoding='utf-8', newline='\n')

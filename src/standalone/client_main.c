@@ -412,6 +412,13 @@ static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+/* CL_FN of the clean client code (src/client/client.h). */
+extern void *(*cl_fn_hook)(unsigned va);
+static void *cl_fn_lookup(unsigned va)
+{
+    return sr_fn((uintptr_t)va);
+}
+
 int main(int argc, char **argv)
 {
     unsigned cw;
@@ -427,6 +434,7 @@ int main(int argc, char **argv)
         return 1;
     fn_hash_init();
     x87_init();
+    cl_fn_hook = cl_fn_lookup;
     client_gl_init();
     printf("image at %p, %d C functions\n", (void *)sr_base, lf_table_count);
     if (run) {

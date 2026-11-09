@@ -1,0 +1,2 @@
+# Functions of group C1 (image and font loaders) that are written but that no test reaches. They stay lifted.
+get_chunk_header src/client/png.c
