@@ -258,7 +258,7 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | # | Group | Functions | Size |
 | --- | --- | ---: | ---: |
 | C0 | Adopt the clean server code: link the client to the clean functions of Phase 6 (physics, humans, items, collision, level, network helpers). The client gate tests each one. | 236 | 390 KB |
-| C1 | Image and font loaders (`png`, `bmp`, `idct`, fonts) | 20 | 22 KB |
+| C1 | Image and font loaders. Complete. See `docs/client/README.md`. | 48 | 35 KB |
 | C2 | Procedural textures and models (`generate*`, `createhumanmodel`, `model_*`, `landscape_*`) | 50 | 92 KB |
 | C3 | Rendering (`renderframe`, `drawdisplay`, `drawhud`, sprites, shaders, frame list) | 51 | 81 KB |
 | C4 | Input (`getinputs_*`, keyboard, mouse) | 16 | 16 KB |

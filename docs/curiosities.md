@@ -85,6 +85,7 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 
 | Fact | Source | Where |
 | --- | --- | --- |
+| The PSD reader consumes the plane at the declared channel count for raw data. Compressed planes stop before that index. | code | `src/client/image/psd.c`, `docs/client/psd.md` |
 | The server (0.24d) and the client (0.24b) share the same game code, but they are not the same build. Of 250 functions with one name in both, only 6 have the same bytes. | code | `tools/re/compare_shared.py`, `analysis/client_win/shared_code.csv` |
 | The server has a function that makes a random direction from noise (a hash with the numbers 15731 and 789221). The client has the same hash, but nothing calls it: dead code. | code | server `getrandomvector2d`, client 0x5c5240 |
 | The server calls the math routines of the C library in the "intrinsic" form (the number goes in the x87 register). The client calls the plain form (the number goes on the stack). The two give the same bits for the same input, but the code is not the same. | code | `src/platform/x87_math.c`, `instrumentation/client/runtime/x87_math_client.c` |

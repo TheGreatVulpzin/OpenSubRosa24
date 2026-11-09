@@ -381,6 +381,14 @@ The client table can point to a clean function of Phase 6 in place of the lifted
 
 Finding (2026-11-09): the server (024d) and the client (0.24b) are not the same build. Of 250 shared names, 6 have the same bytes and 27 have a size so different that the client name is probably wrong (the client `getrandomvector2d` at 0x71e60 is another function). So a clean function is adopted only when the gate shows the same result as the original client. The gate must use every recorded call (`gate.py --all-calls --funcs <names>`): the short call files lost the calls of the vector functions. Result: of 168 candidates, 19 passed (the vector functions, the network functions, `servercycle`, `listfiles` and others), 5 failed (file functions: `building_buildfloorplan`, `loadsaveoptions`, `loadtextfile`, `newspaper_load`, `saveaccountsclient`) and 144 had no recorded call. The clean code calls math through `x87_sqrt` and similar. The client imports the plain `sqrt`, not `_CIsqrt`, so it links `instrumentation/client/runtime/x87_math_client.c` in place of `src/platform/x87_math.c`. Next: synthetic calls or a recording of a hosted game for the 144.
 
+## Image and font loaders (C1)
+
+`src/client/image/` contains PNG, zlib, baseline JPEG, BMP, PSD and HDR decoders, bitmap fonts and byte operations. Each topic has a source file and a public header. The [image documentation](client/README.md) describes the records, supported formats, row filters, channel conversion and font metrics.
+
+All 48 functions are active in `analysis/client_win/adopted_C1.txt`. The pending list has no functions. The fields of nine image and font records are in `analysis/structs/names.csv`. `tools/re/gen_types.py` supplies `sr_image_types.h`. Client data addresses are in `analysis/client_win/group_globals_C1.csv`.
+
+The loaders run on demand. PNG accepts eight-bit samples, five row filters, palette transparency and Adam7. JPEG accepts baseline frames. PSD accepts raw and PackBits planes. HDR supplies float samples. Font atlases retain their glyph widths and float coordinate stores.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).
