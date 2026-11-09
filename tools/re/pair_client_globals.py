@@ -10,13 +10,14 @@ Usage: python -I tools/re/pair_client_globals.py [--server-rev 551941a] [--out a
 The server C is an old version from git history (the file in src/lifted is empty now).
 Output: one row for each storage object of the server (tools/re/gen_storage.py) that the votes
 place in the client: name, type, count, size, client RVA, votes, total, status.
-Status: ok (3 votes or more, twice the next address), weak (fewer votes), checked (an independent
+Status: bytes (the table has the same bytes once in the client), ok (3 votes or more, twice the next address), weak (fewer votes), checked (an independent
 CSV agrees), conflict (another CSV names another address, the votes win), other (the other CSV wins, the votes are weak), dropped (overlaps an object with more votes).
 """
 import argparse
 import csv
 import re
 import runpy
+import struct
 import subprocess
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
@@ -104,7 +105,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--server-rev', default='551941a', help='git revision with the full lifted C of the server')
     ap.add_argument('--server-c', help='file instead of the git revision')
-    ap.add_argument('--client-c', default=str(ROOT / 'src/lifted/client/lifted_client.c'))
+    ap.add_argument('--client-rev', default='73f63c4', help='git revision of the client lifted C before any function was adopted')
+    ap.add_argument('--client-c', help='file instead of the git revision')
     ap.add_argument('--out', default=str(ROOT / 'analysis/client_win/storage.csv'))
     ap.add_argument('--votes', help='also write the raw pair votes here')
     args = ap.parse_args()
@@ -115,9 +117,14 @@ def main():
         server_c.parent.mkdir(exist_ok=True)
         server_c.write_bytes(subprocess.check_output(
             ['git', 'show', f'{args.server_rev}:src/lifted/lifted_024d.c'], cwd=ROOT))
+    client_c = args.client_c
+    if not client_c:
+        client_c = ROOT / 'build/g72_client_lifted.c'
+        client_c.write_bytes(subprocess.check_output(
+            ['git', 'show', f'{args.client_rev}:src/lifted/client/lifted_client.c'], cwd=ROOT))
     sn = names(ROOT / 'analysis/024d/functions.csv')
     cn = names(ROOT / 'analysis/client_win/functions.csv')
-    sb, cb = blocks(server_c), blocks(args.client_c)
+    sb, cb = blocks(server_c), blocks(client_c)
     votes = defaultdict(Counter)
     where = defaultdict(set)
     used = same = 0
@@ -174,6 +181,26 @@ def main():
             else:
                 status = 'conflict'
         result.append([name, typ, count, size, top - 0x400000, n, total, status])
+    # Tables with initial data: find the same bytes in the client image.
+    placed = {r[0] for r in result}
+    sread = runpy.run_path(str(ROOT / 'tools/re/gen_storage.py'))['image']()
+    client = (ROOT / 'original/client/subrosa.exe').read_bytes()
+    for a, name, typ, count, size in rows:
+        if name in placed or a >= 0x60e00 or count * size < 16:
+            continue
+        raw = sread(a, count * size)
+        if not any(raw) or client.count(raw) != 1:
+            continue
+        off = client.index(raw)
+        pe = struct.unpack_from('<I', client, 0x3c)[0]
+        nsec = struct.unpack_from('<H', client, pe + 6)[0]
+        opt = struct.unpack_from('<H', client, pe + 20)[0]
+        for i in range(nsec):
+            o = pe + 24 + opt + 40 * i
+            vs, va, rs, ro = struct.unpack_from('<IIII', client, o + 8)
+            if ro <= off < ro + rs:
+                result.append([name, typ, count, size, va + off - ro, 1, 1, 'bytes'])
+                break
     # Two objects that overlap cannot both be right. The one with fewer votes is dropped.
     result.sort(key=lambda r: r[4])
     changed = True

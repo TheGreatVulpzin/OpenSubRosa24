@@ -1,8 +1,20 @@
 name,type,count,size,client_rva,votes,total,status
 cubevertex,vec3,8,12,0x1226e0,8,26,ok
+cubenormal,vec3,6,12,0x122740,1,1,bytes
+cubetangent,vec3,6,12,0x122788,1,1,bytes
+cubebinormal,vec3,6,12,0x1227d0,1,1,bytes
+cubequad,int,24,4,0x122838,1,1,bytes
+cubetri,int,36,4,0x122898,1,1,bytes
+cubeline,int,24,4,0x122928,1,1,bytes
+octahedron,float,18,4,0x122988,1,1,bytes
+octahedronindex,int,24,4,0x1229d0,1,1,bytes
+debug_cubevertex,float,24,4,0x122a30,1,1,bytes
 currentversion,int,1,4,0x122bcc,1,1,weak
+teamcolor,float,24,4,0x122bd0,1,1,bytes
 teamname,const char *,8,4,0x122c88,1,1,weak
 dollarbillvalue,int,8,4,0x122ca8,1,1,weak
+cslogo,uint8_t,2048,1,0x122cc8,1,1,bytes
+tracktrailmodelquad,int,12,4,0x1234e0,1,1,bytes
 mti,int,1,4,0x123580,2,2,weak
 xaxis,vec3,1,12,0x123584,1,1,weak
 yaxis,vec3,1,12,0x123590,1,2,weak

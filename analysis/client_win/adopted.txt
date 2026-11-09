@@ -1,2 +1,11 @@
-# Clean source files of the server that the client uses in place of lifted C (one path each).
-src/common/vectors.c
+# Functions of the client that use the clean code of the server. One line each: name, source file.
+area_block_createbuildinginterior src/game/block_mesh.c
+area_setupsblock src/game/block_mesh.c
+debug_resetlogfile src/common/system.c
+getcpufrequency src/common/system.c
+getmasterserverip src/net/master.c
+listfiles src/common/files.c
+recvpacket src/net/packet.c
+sendpacket src/net/packet.c
+servercycle src/net/server.c
+setcpuaffinity src/common/system.c

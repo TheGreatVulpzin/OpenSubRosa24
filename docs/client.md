@@ -368,6 +368,19 @@ Result: `analysis/client_win/storage.csv` (name, type, count, size, client RVA, 
 
 56 server objects have no vote. Their functions are not in the shared set, or the client does not have them. The gate finds a wrong address: a function that reads the wrong object gives a difference in group C0.
 
+## Clean server code in the client (group C0)
+
+The client table can point to a clean function of Phase 6 in place of the lifted C. The pieces:
+
+- `analysis/client_win/adopted.txt`: one line for each adopted function (name, source file). `instrumentation/lift/lift.py` reads it. An adopted function has no lifted body. Its table entry has the clean name.
+- `analysis/client_win/adopted_pending.txt`: candidates that no recorded call reached. They stay lifted.
+- All clean files are compiled into the client (`client_adopted` in `CMakeLists.txt`, with `SR_TEST_MEMORY`). The adapter `instrumentation/client/runtime/storage_adapter.h` (from `tools/re/gen_client_storage.py` and `analysis/client_win/storage.csv`) puts each `sr_data_<name>` at its client address. An object with no client address gets a private dummy (`storage_unplaced.c`). `server_stubs.c` has empty versions of four functions of the server only.
+- `tools/re/check_adopted.py --remove` drops the adopted functions that reach a dummy or a server only function.
+- `instrumentation/client/adopt_from_gate.py --keep-tested` keeps the functions with a recorded call that was the same and none that differed.
+- `tools/re/compare_shared.py` compares the machine code of the functions that have one name in both executables (`analysis/client_win/shared_code.csv`).
+
+Finding (2026-11-09): the server (024d) and the client (0.24b) are not the same build. Of 250 shared names, 6 have the same bytes and 27 have a size so different that the client name is probably wrong (the client `getrandomvector2d` at 0x71e60 is another function). So a clean function is adopted only when the gate shows the same result as the original client. The recordings of the client reach few of them: of 168 candidates, 10 passed, 5 failed (file functions: `building_buildfloorplan`, `loadsaveoptions`, `loadtextfile`, `newspaper_load`, `saveaccountsclient`) and 153 had no recorded call. Next: synthetic calls or a recording of a hosted game for the 153.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).

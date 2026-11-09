@@ -6,9 +6,21 @@ extern uintptr_t sr_base;
 #define SR_AT(type, rva) ((type *)(sr_base + (rva)))
 
 #define sr_data_cubevertex ((vec3 *)(sr_base + 0x1226e0u))
+#define sr_data_cubenormal ((vec3 *)(sr_base + 0x122740u))
+#define sr_data_cubetangent ((vec3 *)(sr_base + 0x122788u))
+#define sr_data_cubebinormal ((vec3 *)(sr_base + 0x1227d0u))
+#define sr_data_cubequad ((int *)(sr_base + 0x122838u))
+#define sr_data_cubetri ((int *)(sr_base + 0x122898u))
+#define sr_data_cubeline ((int *)(sr_base + 0x122928u))
+#define sr_data_octahedron ((float *)(sr_base + 0x122988u))
+#define sr_data_octahedronindex ((int *)(sr_base + 0x1229d0u))
+#define sr_data_debug_cubevertex ((float *)(sr_base + 0x122a30u))
 #define sr_data_currentversion (*((int *)(sr_base + 0x122bccu)))
+#define sr_data_teamcolor ((float *)(sr_base + 0x122bd0u))
 #define sr_data_teamname ((const char * *)(sr_base + 0x122c88u))
 #define sr_data_dollarbillvalue ((int *)(sr_base + 0x122ca8u))
+#define sr_data_cslogo ((uint8_t *)(sr_base + 0x122cc8u))
+#define sr_data_tracktrailmodelquad ((int *)(sr_base + 0x1234e0u))
 #define sr_data_mti (*((int *)(sr_base + 0x123580u)))
 #define sr_data_xaxis (*((vec3 *)(sr_base + 0x123584u)))
 #define sr_data_yaxis (*((vec3 *)(sr_base + 0x123590u)))
@@ -80,6 +92,109 @@ extern uintptr_t sr_base;
 #define sr_data_game_world (*((GameWorld *)(sr_base + 0x29e7d320u)))
 #define sr_data_tempmesh (*((TempMesh *)(sr_base + 0x29f0d360u)))
 #define sr_data_track ((TrackPiece *)(sr_base + 0x2a1debc0u))
+
+extern char sr_unplaced_filtered_word[7];
+#define sr_data_filtered_word sr_unplaced_filtered_word
+extern char sr_unplaced_gamedir[9];
+#define sr_data_gamedir sr_unplaced_gamedir
+extern int sr_unplaced_hack_modulusopt[3];
+#define sr_data_hack_modulusopt sr_unplaced_hack_modulusopt
+extern float sr_unplaced_cubetexcoord[8];
+#define sr_data_cubetexcoord sr_unplaced_cubetexcoord
+extern float sr_unplaced_menucolor[3];
+#define sr_data_menucolor sr_unplaced_menucolor
+extern const char * sr_unplaced_csmstr;
+#define sr_data_csmstr sr_unplaced_csmstr
+extern float sr_unplaced_lightwavelength[3];
+#define sr_data_lightwavelength sr_unplaced_lightwavelength
+extern const char * sr_unplaced_carcolorname[6];
+#define sr_data_carcolorname sr_unplaced_carcolorname
+extern vec3 sr_unplaced_zaxis;
+#define sr_data_zaxis sr_unplaced_zaxis
+extern float sr_unplaced_xaxis2d[2];
+#define sr_data_xaxis2d sr_unplaced_xaxis2d
+extern float sr_unplaced_yaxis2d[2];
+#define sr_data_yaxis2d sr_unplaced_yaxis2d
+extern uint32_t sr_unplaced_mag01[2];
+#define sr_data_mag01 sr_unplaced_mag01
+extern char sr_unplaced_newspaper_line[128];
+#define sr_data_newspaper_line sr_unplaced_newspaper_line
+extern char sr_unplaced_world_msg[128];
+#define sr_data_world_msg sr_unplaced_world_msg
+extern char sr_unplaced_farbs_digits[128];
+#define sr_data_farbs_digits sr_unplaced_farbs_digits
+extern BondHuman sr_unplaced_bondhuman[512];
+#define sr_data_bondhuman sr_unplaced_bondhuman
+extern BondParticle sr_unplaced_bondparticle[16384];
+#define sr_data_bondparticle sr_unplaced_bondparticle
+extern int sr_unplaced_guard_used[64];
+#define sr_data_guard_used sr_unplaced_guard_used
+extern char sr_unplaced_world_digits[64];
+#define sr_data_world_digits sr_unplaced_world_digits
+extern char sr_unplaced_newspaper_money[128];
+#define sr_data_newspaper_money sr_unplaced_newspaper_money
+extern char sr_unplaced_farbs_line[128];
+#define sr_data_farbs_line sr_unplaced_farbs_line
+extern int sr_unplaced_dedicated;
+#define sr_data_dedicated sr_unplaced_dedicated
+extern FloorplanCell sr_unplaced_floorplan[262144];
+#define sr_data_floorplan sr_unplaced_floorplan
+extern Timer sr_unplaced_timer[256];
+#define sr_data_timer sr_unplaced_timer
+extern vec3 sr_unplaced_pointtemp[512];
+#define sr_data_pointtemp sr_unplaced_pointtemp
+extern int sr_unplaced_numofdynamicbonds;
+#define sr_data_numofdynamicbonds sr_unplaced_numofdynamicbonds
+extern SrSurface sr_unplaced_surface2;
+#define sr_data_surface2 sr_unplaced_surface2
+extern int sr_unplaced_numofsprites;
+#define sr_data_numofsprites sr_unplaced_numofsprites
+extern float sr_unplaced_bezier_curve[12];
+#define sr_data_bezier_curve sr_unplaced_bezier_curve
+extern int sr_unplaced_sprite_points;
+#define sr_data_sprite_points sr_unplaced_sprite_points
+extern int sr_unplaced_sprite_lines;
+#define sr_data_sprite_lines sr_unplaced_sprite_lines
+extern int sr_unplaced_sprite_quads;
+#define sr_data_sprite_quads sr_unplaced_sprite_quads
+extern int sr_unplaced_sprite_triangles;
+#define sr_data_sprite_triangles sr_unplaced_sprite_triangles
+extern uint32_t sr_unplaced_random_counter;
+#define sr_data_random_counter sr_unplaced_random_counter
+extern uint8_t sr_unplaced_wsadata[400];
+#define sr_data_wsadata sr_unplaced_wsadata
+extern float sr_unplaced_bezier_curve_dv[12];
+#define sr_data_bezier_curve_dv sr_unplaced_bezier_curve_dv
+extern int sr_unplaced_tiremarkend;
+#define sr_data_tiremarkend sr_unplaced_tiremarkend
+extern int sr_unplaced_startup_counter;
+#define sr_data_startup_counter sr_unplaced_startup_counter
+extern int sr_unplaced_tiremarkstart;
+#define sr_data_tiremarkstart sr_unplaced_tiremarkstart
+extern VoiceChannel sr_unplaced_voice[8];
+#define sr_data_voice sr_unplaced_voice
+extern float sr_unplaced_camera[136];
+#define sr_data_camera sr_unplaced_camera
+extern BondOpt sr_unplaced_bondopt[16384];
+#define sr_data_bondopt sr_unplaced_bondopt
+extern Radix sr_unplaced_radix;
+#define sr_data_radix sr_unplaced_radix
+extern void * sr_unplaced_slogfp;
+#define sr_data_slogfp sr_unplaced_slogfp
+extern int sr_unplaced_numofsprite_models;
+#define sr_data_numofsprite_models sr_unplaced_numofsprite_models
+extern TimerList sr_unplaced_timerlist;
+#define sr_data_timerlist sr_unplaced_timerlist
+extern int sr_unplaced_numofstaticbonds;
+#define sr_data_numofstaticbonds sr_unplaced_numofstaticbonds
+extern float sr_unplaced_bezier_curve_uv[8];
+#define sr_data_bezier_curve_uv sr_unplaced_bezier_curve_uv
+extern SrMaterialStore sr_unplaced_materials;
+#define sr_data_materials sr_unplaced_materials
+extern Bond sr_unplaced_bond[16384];
+#define sr_data_bond sr_unplaced_bond
+extern int sr_unplaced_train_near;
+#define sr_data_train_near sr_unplaced_train_near
 
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket

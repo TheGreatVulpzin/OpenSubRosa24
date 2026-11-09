@@ -91,9 +91,10 @@ endif()
 # Clean files of the server that the client uses in place of lifted C (analysis/client_win/adopted.txt).
 # The storage adapter of the client puts each sr_data_<name> at its address in the client image.
 set(CL_ADOPTED_OBJECTS)
-file(STRINGS ${CMAKE_SOURCE_DIR}/analysis/client_win/adopted.txt CL_ADOPTED REGEX "^src/")
+# All clean files are compiled. analysis/client_win/adopted.txt decides which functions the table uses.
+set(CL_ADOPTED ${SV_REWRITTEN_SOURCES})
 if(CL_ADOPTED)
-    add_library(client_adopted OBJECT ${CL_ADOPTED})
+    add_library(client_adopted OBJECT ${SV_REWRITTEN_SOURCES} instrumentation/client/runtime/storage_unplaced.c instrumentation/client/runtime/server_stubs.c)
     target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform ${SV_REWRITTEN_INCLUDES})
     target_compile_options(client_adopted PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
