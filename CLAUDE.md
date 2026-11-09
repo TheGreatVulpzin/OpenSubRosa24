@@ -115,6 +115,7 @@ Download fails: session needs network access to `crypticsea.gart.sh` and `github
 - `instrumentation/ghidra/decompile.sh <program> <output.c> [rva ...]` — pseudo-C. Program in project folder: `mac025/subrosa`.
 - `tools/re/name_all.sh` — generates function-name CSVs.
 - `tools/re/map_globals.py` — maps global variables by votes.
+- `tools/re/pair_client_globals.py` — pairs the globals of the server and the client through the 236 shared functions. Writes `analysis/client_win/storage.csv` (client address of each server storage object). Needs the old full server lifted C from git.
 - `tools/re/map_regions.py` — maps unnamed globals to symbols by functions that use them (`--test` checks on known globals). Output = candidate list: check each before it goes into CSV.
 - `tools/re/struct_fields.py` — collects struct fields from pseudo-C.
 - `tools/formats/subrosa_formats.py` — readers for `.srk`, `.sbl`, `.sbb`, `.sbc`, `.csm`.

@@ -349,6 +349,25 @@ Check for lost arguments: `python -I instrumentation/client/check_variadic.py [l
 
 `SR_TRACE` and the crash dump: `menu_dump` in `client_main.c` prints the menu items (name, kind, text pointer and the words at offsets 0x200 and 0x204) when the client crashes.
 
+## Storage of the client (step 7.2)
+
+The clean server code (group C0) reads its data through storage objects (`src/include/sr_storage.h`, from `tools/re/gen_storage.py`). A mixed client build needs the client address of each object.
+
+`tools/re/pair_client_globals.py` finds them. The server and the client share 236 named functions. For each pair, the script compares the lifted C of both. It cuts the text into tokens, aligns the equal parts with `difflib` and pairs the globals at the same place. Each pair is a vote for "this server global is that client global". The script then turns the votes into the client address of the base of each storage object (the field offsets cancel out). The old full lifted C of the server comes from git (`--server-rev`, default `551941a`).
+
+Result: `analysis/client_win/storage.csv` (name, type, count, size, client RVA, votes, total, status). 82 of 138 server objects have a client address (2026-11-09).
+
+| Status | Count | Meaning |
+| --- | ---: | --- |
+| checked | 18 | The votes and the older candidates (`globals.csv`) agree. Examples: `human`, `player`, `game`, `item`, `city`, `building`, `server`, `option`. |
+| ok | 31 | 3 votes or more, and twice the votes of the next address. |
+| weak | 20 | Fewer votes. Check by hand before use (small scalars with one vote, `bullet`, `buildingtype`, `connection`). |
+| conflict | 3 | The older candidate names another address. The votes win. The difference is the header of the object: `area_sector` +0x40, `masterserver` +4. |
+| other | 3 | The votes are weak, so the older candidate wins (`socketid`, `texturelist`, `speex`). |
+| dropped | 7 | The object overlaps one with more votes. Look at it with Ghidra when a function needs it (`materials` has 9 of 10 votes but overlaps `area` by 4 bytes). |
+
+56 server objects have no vote. Their functions are not in the shared set, or the client does not have them. The gate finds a wrong address: a function that reads the wrong object gives a difference in group C0.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).
