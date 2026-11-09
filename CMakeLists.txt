@@ -92,8 +92,8 @@ endif()
 # The storage adapter of the client puts each sr_data_<name> at its address in the client image.
 set(CL_ADOPTED_OBJECTS)
 # All clean files are compiled. analysis/client_win/adopted.txt decides which functions the table uses.
-# src/client holds the clean code that only the client has (render, input, menus, images).
-file(GLOB CL_CLIENT_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/client/*.c)
+# src/client holds the clean code that only the client has, in one folder for each system (image, render, input, menus).
+file(GLOB_RECURSE CL_CLIENT_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/client/*.c)
 set(CL_ADOPTED ${SV_REWRITTEN_SOURCES} ${CL_CLIENT_SOURCES})
 if(CL_ADOPTED)
     add_library(client_adopted OBJECT ${CL_ADOPTED} instrumentation/client/runtime/storage_unplaced.c instrumentation/client/runtime/server_stubs.c instrumentation/client/runtime/cl_fn.c)

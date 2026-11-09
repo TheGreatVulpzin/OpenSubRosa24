@@ -17,7 +17,7 @@ The client table (`src/lifted/client/lifted_table.c`) holds one C function for e
 | `analysis/structs/names.csv`, `tools/re/gen_types.py` | Names of fields and types. Run `gen_types.py` after a change. |
 | `analysis/client_win/manual_names.csv` | Names of functions (`rva,name,evidence`). |
 | `src/client/client.h` | `CL_FN(va, type)` calls a function that is still lifted. |
-| `src/client/*.c` | Clean code that only the client has. One file for each topic (`png.c`, `jpeg.c`, `fonts.c`). |
+| `src/client/<system>/*.c` | Clean code that only the client has, in one folder for each system (see "Folders"). One file for each topic (`image/png.c`, `image/jpeg.c`, `image/fonts.c`). |
 
 ## Steps of a group
 
@@ -33,11 +33,29 @@ The client table (`src/lifted/client/lifted_table.c`) holds one C function for e
 
 `instrumentation/client/synth_calls.py`, `synth_humans.py` and `synth_voice.py` write call files for the harness. For a new group, add a script `synth_<group>.py` in the same style. A good test calls the original and the clean function with the same input and compares the result and the memory. Examples: decode the same image file with both versions, call a texture generator with several seeds, call an input function with a made keyboard state. State the cases and the result in `docs/client.md`.
 
+## Folders
+
+`src/game` has 60 files in one folder. Do not copy that. The client code goes into one folder for each system, with the group in the name of the folder:
+
+| Folder | Group | Content |
+| --- | --- | --- |
+| `src/client/image/` | C1 | PNG, zlib, JPEG, BMP, PSD, HDR, fonts |
+| `src/client/textures/` | C2 | Generated textures, models, landscape, noise |
+| `src/client/render/` | C3 | Frame, sprites, shaders, HUD drawing |
+| `src/client/input/` | C4 | Keyboard, mouse, controls |
+| `src/client/menus/` | C5 | Menus and their items |
+| `src/client/audio/` | C6 | Sound and voice |
+| `src/client/setup/` | C7 | Start, loop, timing, debug |
+| `src/client/editors/` | C8 | Level, building and model editors |
+| `src/client/gl/` | C9 | OpenGL loader |
+
+Groups C10 and C11 put each function in the folder of its topic, and make a new folder when none fits. `src/client/client.h` stays at the top. A file includes another with its folder: `#include "image/png.h"`. Each folder has a `README.md` of two or three lines that says what it holds.
+
 ## Shape of the code
 
 The clean client code must be as tidy as the clean server code. Models: `src/game/items.c`, `src/game/items.h`, `docs/game/items.md`.
 
-- One `.c` and one `.h` for each topic in `src/client/`. The header has a one line comment, the include guard and only the functions that other files use, grouped by source file. What only the `.c` uses is `static`.
+- One `.c` and one `.h` for each topic, in the folder of its system. The header has a one line comment, the include guard and only the functions that other files use, grouped by source file. What only the `.c` uses is `static`.
 - The `.c` starts with a comment of 3 to 8 lines about the system (what it does, the format, who calls it). Each function has a short comment: what it does and when it fails.
 - No `unk_`, `local_`, `iVar`, `param_` names and no loose magic numbers. Structs have named fields (`analysis/structs/names.csv`, `tools/re/gen_types.py`). Constants have names.
 - A function keeps the name it has in the Linux client (`original/client/subrosa.x64`). New helpers get short, clear English names.

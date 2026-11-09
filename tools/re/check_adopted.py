@@ -22,8 +22,8 @@ CALL = re.compile(r'\b([A-Za-z_]\w*)\s*\(')
 def clean_functions():
     """name -> body text, for every function of the clean sources."""
     out = {}
-    for d in ('src/common', 'src/net', 'src/game'):
-        for f in sorted(glob.glob(str(ROOT / d / '*.c'))):
+    for d in ('src/common', 'src/net', 'src/game', 'src/client'):
+        for f in sorted(glob.glob(str(ROOT / d / '**/*.c'), recursive=True)):
             text = Path(f).read_text(encoding='utf-8')
             marks = list(DEF.finditer(text))
             for i, m in enumerate(marks):
