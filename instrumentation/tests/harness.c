@@ -45,6 +45,10 @@
 #include "sr_server.h"
 #include "verify.h"
 
+#ifdef CL_HARNESS
+int check_image_files(const char *input);
+#endif
+
 
 #define MAX_ARGS 64
 #define BLOB 256
@@ -1172,6 +1176,9 @@ int main(int argc, char **argv)
     x87_init();
 #ifdef CL_HARNESS
     AddVectoredExceptionHandler(1, crash_log);
+    if (getenv("HARNESS_IMAGE_IO")) {
+        return check_image_files(getenv("HARNESS_IMAGE_IO"));
+    }
 #endif
     if (getenv("HARNESS_CLEAN_CHECKS"))
         return run_clean_checks(getenv("HARNESS_CLEAN_CHECKS"));

@@ -42,6 +42,9 @@ public class LiftExport extends GhidraScript {
     @Override
     protected void run() throws Exception {
         String out = getScriptArgs()[0];
+        Set<Long> wanted = new HashSet<>();
+        for (int i = 1; i < getScriptArgs().length; i++)
+            wanted.add(Long.decode(getScriptArgs()[i]));
         base = currentProgram.getImageBase().getOffset();
 
         DecompInterface di = new DecompInterface();
@@ -53,6 +56,7 @@ public class LiftExport extends GhidraScript {
             for (Function f : currentProgram.getListing().getFunctions(true)) {
                 if (monitor.isCancelled()) break;
                 if (f.isThunk() || f.isExternal()) continue;
+                if (!wanted.isEmpty() && !wanted.contains(f.getEntryPoint().getOffset() - base)) continue;
                 DecompileResults r = di.decompileFunction(f, 120, monitor);
                 StringBuilder sb = new StringBuilder("{");
                 field(sb, "rva", hex(f.getEntryPoint())).append(',');

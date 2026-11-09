@@ -1,4 +1,5 @@
 rva,name,cc,prototype
+0xae60,write8,__cdecl,void write8(void *file, unsigned char value)
 0x106b30,drawtext,__cdecl,void drawtext(char *text, float x, float y, float size, unsigned int flags, float r, float g, float b, float a, ...)
 0x10be80,CSteamID,__thiscall,void *CSteamID(void *this)
 0x10bee0,ConvertToUint64,__thiscall,unsigned long long ConvertToUint64(void *this)

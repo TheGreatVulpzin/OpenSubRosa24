@@ -115,11 +115,11 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     set_source_files_properties(build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 
     # Offline harness for the client: the same program as the server harness, with the client sources.
-    add_executable(harness_client instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c
+    add_executable(harness_client instrumentation/tests/harness.c instrumentation/client/check_image_io.c instrumentation/hook/verify.c instrumentation/hook/hook.c
         instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
         instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
         instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
-    target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
+    target_include_directories(harness_client PRIVATE src/include src/lifted src/platform src/client instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
     target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152 SR_TEST_MEMORY CL_HARNESS SV_FULL_EVERY_DEFAULT=1)
