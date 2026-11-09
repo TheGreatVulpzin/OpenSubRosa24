@@ -345,6 +345,8 @@ Variable-argument calls (found on 2026-11-08 with the Join and Start buttons): `
 Performance and tests (2026-11-09): the lag of the first play tests came from other work on the same PC (gate, bench, builds). A friend ran the zip with no lag. Do not run the gate, the bench or a build while someone plays. `sr_fn` now uses a table with one pointer per code byte (the binary search was 49 percent of the samples). `SR_SAMPLE=<file>` writes the sampler and prints the frame time each 2 s (frames, swap, glFinish, delay). `SR_DENORM=1` counts x87 denormal operands with the exception unmasked.
 Company money bug: the list of companies (press C) printed `$536870912` for each company. The call `sprintf(buffer, "%s: $%d", name, money)` has four pushed words, but the compiler cleans only three after the call and reuses the fourth, so the old count lost the money. The new count fixes it (check on the Windows PC).
 
+Check for lost arguments: `python -I instrumentation/client/check_variadic.py [lifted_client.c]` reads the format string of each `sprintf`, `fprintf`, `sscanf` and `drawtext` call from the exe and compares the number of conversions with the arguments in the lifted C. On 2026-11-09 it finds 0 problems in 89 calls. On the lifted C of 2026-11-05 it finds 7. Run it after each export.
+
 `SR_TRACE` and the crash dump: `menu_dump` in `client_main.c` prints the menu items (name, kind, text pointer and the words at offsets 0x200 and 0x204) when the client crashes.
 
 ## Open work
