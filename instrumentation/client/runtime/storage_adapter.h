@@ -196,6 +196,22 @@ extern Bond sr_unplaced_bond[16384];
 extern int sr_unplaced_train_near;
 #define sr_data_train_near sr_unplaced_train_near
 
+#include "sr_image_types.h"
+#define cl_data_image_partial (*((int *)(sr_base + 0x1bf7e10u)))
+#define cl_data_zlib_defaults_ready (*((uint8_t *)(sr_base + 0x1272cfu)))
+#define cl_data_zlib_default_length ((uint8_t *)(sr_base + 0x1279d8u))
+#define cl_data_zlib_default_distance ((uint8_t *)(sr_base + 0x1272b0u))
+#define cl_data_image_error (*((char* *)(sr_base + 0x126720u)))
+#define cl_data_fontnum (*((int *)(sr_base + 0x127eacu)))
+#define cl_data_fonts ((Font *)(sr_base + 0xb773540u))
+#define cl_data_image_textures ((ImageTexture *)(sr_base + 0x17b4b840u))
+#define cl_data_image_width (*((uint32_t *)(sr_base + 0x19da5220u)))
+#define cl_data_image_height (*((uint32_t *)(sr_base + 0x19da5224u)))
+#define cl_data_image_pixels ((uint32_t *)(sr_base + 0x19da5228u))
+#define cl_data_font_bits ((uint8_t *)(sr_base + 0x1235f0u))
+#define cl_data_cursor_bits ((uint8_t *)(sr_base + 0x1235e3u))
+#define cl_data_font_alpha_low (*((int *)(sr_base + 0xb7331c0u)))
+
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype

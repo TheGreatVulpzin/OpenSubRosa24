@@ -1,0 +1,15 @@
+name,type,count,client_rva,evidence
+image_partial,int,1,0x1bf7e10,PNG row limit and zlib early exit
+zlib_defaults_ready,uint8_t,1,0x1272cf,Fixed Huffman initialization test
+zlib_default_length,uint8_t,288,0x1279d8,Fixed length code sizes
+zlib_default_distance,uint8_t,32,0x1272b0,Fixed distance code sizes
+image_error,char*,1,0x126720,Image failure message
+fontnum,int,1,0x127eac,Selected font index
+fonts,Font,16,0xb773540,Font records have stride 0x2410
+image_textures,ImageTexture,4096,0x17b4b840,Texture records have stride 0x70
+image_width,uint32_t,1,0x19da5220,Loaded image width
+image_height,uint32_t,1,0x19da5224,Loaded image height
+image_pixels,uint32_t,16777216,0x19da5228,Loaded image pixels
+font_bits,uint8_t,1024,0x1235f0,Built in eight pixel glyphs
+cursor_bits,uint8_t,9,0x1235e3,Cursor bitmap and outline
+font_alpha_low,int,1,0xb7331c0,Select low byte alpha mask

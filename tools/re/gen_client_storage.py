@@ -59,6 +59,7 @@ def main():
             client_only.append(f'#define cl_data_{r["name"]} ' + (expr if count > 1 else f'(*{expr})'))
     if client_only:
         lines.append('')
+        lines.append('#include "sr_image_types.h"')
         lines.extend(client_only)
     # Fields that the server keeps in the packet workspace object.
     if 'packet_workspace' in names:
