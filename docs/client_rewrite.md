@@ -33,6 +33,18 @@ The client table (`src/lifted/client/lifted_table.c`) holds one C function for e
 
 `instrumentation/client/synth_calls.py`, `synth_humans.py` and `synth_voice.py` write call files for the harness. For a new group, add a script `synth_<group>.py` in the same style. A good test calls the original and the clean function with the same input and compares the result and the memory. Examples: decode the same image file with both versions, call a texture generator with several seeds, call an input function with a made keyboard state. State the cases and the result in `docs/client.md`.
 
+## Shape of the code
+
+The clean client code must be as tidy as the clean server code. Models: `src/game/items.c`, `src/game/items.h`, `docs/game/items.md`.
+
+- One `.c` and one `.h` for each topic in `src/client/`. The header has a one line comment, the include guard and only the functions that other files use, grouped by source file. What only the `.c` uses is `static`.
+- The `.c` starts with a comment of 3 to 8 lines about the system (what it does, the format, who calls it). Each function has a short comment: what it does and when it fails.
+- No `unk_`, `local_`, `iVar`, `param_` names and no loose magic numbers. Structs have named fields (`analysis/structs/names.csv`, `tools/re/gen_types.py`). Constants have names.
+- A function keeps the name it has in the Linux client (`original/client/subrosa.x64`). New helpers get short, clear English names.
+- A big function may split into small `static` helpers. The function of the table keeps its name, arguments and result.
+- No dead code, no commented code, no repeated blocks.
+- One doc for each system in `docs/client/<system>.md` (the folder has a `README.md` with the list), in the style of `docs/game/*.md`.
+
 ## Rules
 
 - A clean function is adopted only when a test shows the same result as the original client. No test means no adoption.
