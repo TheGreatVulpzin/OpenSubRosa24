@@ -1,3 +1,2 @@
-# image
-
-Image and font loaders of the client: PNG, zlib, JPEG, BMP, PSD, HDR and the font builder.
+Image decoders and bitmap font atlases.
+Each topic has a source file and a public header.
