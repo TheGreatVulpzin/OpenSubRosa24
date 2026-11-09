@@ -60,7 +60,8 @@ The clean client code must be as tidy as the clean server code. Models: `src/gam
 - No `unk_`, `local_`, `iVar`, `param_` names and no loose magic numbers. Structs have named fields (`analysis/structs/names.csv`, `tools/re/gen_types.py`). Constants have names.
 - A function keeps the name it has in the Linux client (`original/client/subrosa.x64`). New helpers get short, clear English names.
 - A big function may split into small `static` helpers. The function of the table keeps its name, arguments and result.
-- No dead code, no commented code, no repeated blocks.
+- No dead code, no commented code, no repeated blocks. Exception: keep a line that looks dead when it changes memory that the game reads later or decides a result. Say in plain words what it does. The technical reason goes to the page in `docs/client/`.
+- Comments and the pages of `docs/client/` describe the code only. They never name the original, the lifted C, the rewrite, the gate, a phase, a step or a group.
 - One doc for each system in `docs/client/<system>.md` (the folder has a `README.md` with the list), in the style of `docs/game/*.md`.
 
 ## Rules
