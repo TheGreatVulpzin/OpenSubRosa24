@@ -341,6 +341,9 @@ Menu check on 2026-11-08: the main menu draws (title, seven buttons, logo) and t
 
 C runtime: the client links the runtime statically (`/MT`). `src/standalone/client_crt.c` holds the 51 functions that the game imports from MSVCR100.dll, and `sr_import` takes them from there. MSVCR100.dll is no longer loaded. `instrumentation/tests/crt_diff.c` shows the same bits as MSVCR100 for `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `pow`, `atan2`, `ldexp` and `fabs` (500000 inputs each), plus the checks of the server for `sscanf`, `sprintf`, `rand` and `qsort`. A name that is not in the table loads from the DLL and prints a line.
 
+Variable-argument calls (found on 2026-11-08 with the Join and Start buttons): `createmenubutton(int type, ...)` reads its extra arguments by `type`. The decompiler guessed them per call and dropped them at some calls (a pointer to a local, or a constant when the compiler left the stack cleanup to the next call). The lifted C then passed too few arguments and the function read stack garbage. `ApplyCallOverrides.java` fixes this for the functions in `analysis/client_win/call_overrides.csv`: for each call it counts the pushed words (the larger of the `add esp` after the call and the `PUSH` run before it) and writes a call signature override with that many `int` parameters. Run it without `-readOnly`, then `pipeline.sh --export`. The 214 calls of `createmenubutton` now have 2 words for type 1, 3 for types 4, 5, 6, 10, 11 and 13, 5 for type 19 and 8 for type 21 (a double pair and the rest).
+`SR_TRACE` and the crash dump: `menu_dump` in `client_main.c` prints the menu items (name, kind, text pointer and the words at offsets 0x200 and 0x204) when the client crashes.
+
 ## Open work
 
 About 570 functions of the game code have no name (about 80 of them have 512 bytes or more). They sit in `0x0` to `0x10000` and from `0x30000` up.

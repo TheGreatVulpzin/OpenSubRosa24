@@ -39,6 +39,16 @@ def main():
     base = int(samples[1], 16) if samples[0] == 'base' else pref
     counts = Counter()
     for s in samples[2:] if samples[0] == 'base' else samples:
+        if s.startswith('dll:'):
+            # "dll:<name>@<caller>": the first exe return address on the stack, 0 when none.
+            dll, _, caller = s.partition('@')
+            if caller and int(caller, 16):
+                va = int(caller, 16) - base + pref
+                i = bisect.bisect_right(addrs, va) - 1
+                if i >= 0 and va - addrs[i] < 0x100000:
+                    dll += ' <- ' + syms[i][1]
+            counts[dll] += 1
+            continue
         va = int(s, 16) - base + pref
         i = bisect.bisect_right(addrs, va) - 1
         counts[syms[i][1] if i >= 0 and va - addrs[i] < 0x100000 else f'outside {int(s, 16):08x}'] += 1

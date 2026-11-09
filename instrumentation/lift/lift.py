@@ -140,7 +140,7 @@ def global_macro(g):
     sr = 'SR_FN' if TARGET['text'][0] <= va < TARGET['text'][1] else 'SR_VA'
     # A function used as a value (a callback stored in a table, the qsort comparator): the C value is
     # the address of the function, not the first byte of its code.
-    if sr == 'SR_FN' and typ == 'undefined' and name.startswith(('FUN_', 'LAB_')) and TARGET.get('lift_loops'):
+    if sr == 'SR_FN' and typ == 'undefined' and TARGET.get('lift_loops'):
         return f'#define {name} ((void *){sr}(0x{va:x}))'
     if typ in ('string', 'unicode'):
         # A string literal that Ghidra names as a global: the C value is the address of the text.
