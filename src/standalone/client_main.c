@@ -17,6 +17,7 @@
 
 #include "image_client.h"
 #include "lifted_table.h"
+#include "sr_math.h"
 
 uintptr_t sr_base;
 
@@ -425,6 +426,7 @@ int main(int argc, char **argv)
     if (!image_init())
         return 1;
     fn_hash_init();
+    x87_init();
     client_gl_init();
     printf("image at %p, %d C functions\n", (void *)sr_base, lf_table_count);
     if (run) {

@@ -19,9 +19,9 @@ ROOT = Path(__file__).resolve().parents[2]
 LINE = re.compile(r'^\[\s*\d+/\d+\]\s+(\S+)\s+(\d+) same\s+(\d+) different\s+(\d+) crashed')
 
 
-def results():
+def results(folder):
     out = {}
-    for f in sorted((ROOT / 'build/gate/client_win/reset').glob('*.txt')):
+    for f in sorted((ROOT / folder).glob('*.txt')):
         for line in f.read_text(encoding='utf-8', errors='replace').splitlines():
             m = LINE.match(line)
             if m:
@@ -35,12 +35,14 @@ def results():
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--dir', default='build/gate/client_win/reset/all',
+                    help='result files of the gate (all calls: reset/all, short calls: reset)')
     ap.add_argument('--keep-tested', action='store_true')
     ap.add_argument('--drop-failed', action='store_true')
     args = ap.parse_args()
     path = ROOT / 'analysis/client_win/adopted.txt'
     lines = path.read_text(encoding='utf-8').splitlines()
-    res = results()
+    res = results(args.dir)
     kinds = {'tested': [], 'untested': [], 'failed': []}
     keep = []
     for line in lines:

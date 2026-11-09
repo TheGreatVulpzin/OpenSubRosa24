@@ -127015,42 +127015,6 @@ void __cdecl lf_fc7f0(float *param_1,undefined4 *param_2,float *param_3)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xfc890 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_20 (*(float (*)[3])(lf_frame + 0x10))
-#define local_14 (*(float (*)[3])(lf_frame + 0x1c))
-#define local_8 (*(uint *)(lf_frame + 0x28))
-void __cdecl lf_fc890(float *param_1,float *param_2,float *param_3,float *param_4)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  subtractvectors(local_14,param_3,param_2);
-  subtractvectors(local_20,param_4,param_2);
-  FUN_0050b830(param_1,local_14,local_20);
-  normalizevector(param_1,param_1);
-  return;
-}
-#undef DAT_00526650
-#undef FUN_0050b830
-#undef normalizevector
-#undef subtractvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_20
-#undef local_14
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xfc900 */
 
 void __cdecl lf_fc900(undefined4 *param_1)
@@ -135424,15 +135388,6 @@ float10 __cdecl lf_10b7d0(float param_1)
 }
 
 
-/* ---------------------------------------------------------------- 0x10b7f0 */
-
-float10 __cdecl lf_10b7f0(float *param_1,float *param_2)
-
-{
-  return (float10)((float)(param_1[2] * param_2[2] + (param_1[1] * param_2[1] + *param_1 * *param_2)));
-}
-
-
 /* ---------------------------------------------------------------- 0x10b830 */
 
 void __cdecl lf_10b830(float *param_1,float *param_2,float *param_3)
@@ -135444,46 +135399,6 @@ void __cdecl lf_10b830(float *param_1,float *param_2,float *param_3)
   return;
 }
 
-
-/* ---------------------------------------------------------------- 0x10b890 */
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(45, "MSVCR100.DLL", "sqrt"))
-float10 __cdecl lf_10b890(float *param_1)
-
-{
-  float10 fVar1;
-  double dVar2;
-  
-  fVar1 = (float10)dotproduct(param_1,param_1);
-  dVar2 = sqrt((double)(float)fVar1);
-  return (float10)dVar2;
-}
-#undef dotproduct
-#undef sqrt
-
-/* ---------------------------------------------------------------- 0x10b8d0 */
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
-void __cdecl lf_10b8d0(float *param_1,float *param_2)
-
-{
-  float fVar1;
-  float10 fVar2;
-  
-  fVar2 = (float10)vectorlength(param_2);
-  if ((float)fVar2 == 0.0) {
-    *param_1 = 0.0;
-    param_1[1] = 0.0;
-    param_1[2] = 0.0;
-  }
-  else {
-    fVar1 = (float)(1.0 / (float)fVar2);
-    *param_1 = (float)(*param_2 * fVar1);
-    param_1[1] = (float)(param_2[1] * fVar1);
-    param_1[2] = (float)(param_2[2] * fVar1);
-  }
-  return;
-}
-#undef vectorlength
 
 /* ---------------------------------------------------------------- 0x10b950 */
 
@@ -135520,84 +135435,6 @@ void __cdecl lf_10b9b0(undefined4 *param_1)
   return;
 }
 
-
-/* ---------------------------------------------------------------- 0x10b9d0 */
-
-void __cdecl lf_10b9d0(float *param_1,float *param_2,float *param_3)
-
-{
-  *param_1 = (float)(*param_2 + *param_3);
-  param_1[1] = (float)(param_2[1] + param_3[1]);
-  param_1[2] = (float)(param_2[2] + param_3[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0x10ba10 */
-
-void __cdecl lf_10ba10(float *param_1,float *param_2,float *param_3)
-
-{
-  *param_1 = (float)(*param_2 - *param_3);
-  param_1[1] = (float)(param_2[1] - param_3[1]);
-  param_1[2] = (float)(param_2[2] - param_3[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0x10ba50 */
-
-void __cdecl lf_10ba50(float *param_1,float *param_2,float param_3)
-
-{
-  *param_1 = (float)(*param_2 * param_3);
-  param_1[1] = (float)(param_2[1] * param_3);
-  param_1[2] = (float)(param_2[2] * param_3);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0x10ba80 */
-
-void __cdecl lf_10ba80(float *param_1,float *param_2,float *param_3,float param_4)
-
-{
-  *param_1 = (float)(*param_3 * param_4 + *param_2);
-  param_1[1] = (float)(param_3[1] * param_4 + param_2[1]);
-  param_1[2] = (float)(param_3[2] * param_4 + param_2[2]);
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0x10bad0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_14 (*(float (*)[3])(lf_frame + 0x1c))
-#define local_8 (*(uint *)(lf_frame + 0x28))
-float10 __cdecl lf_10bad0(float *param_1,float *param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-  float10 fVar1;
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  subtractvectors(local_14,param_2,param_1);
-  fVar1 = (float10)vectorlength(local_14);
-  return (float10)(float)fVar1;
-}
-#undef DAT_00526650
-#undef vectorlength
-#undef subtractvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_14
-#undef local_8
 
 /* ---------------------------------------------------------------- 0x10bb20 */
 #define dotproduct2d ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bb60))

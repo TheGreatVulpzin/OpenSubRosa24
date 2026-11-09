@@ -1,11 +1,20 @@
 # Functions of the client that use the clean code of the server. One line each: name, source file.
+addvectors src/common/vectors.c
 area_block_createbuildinginterior src/game/block_mesh.c
 area_setupsblock src/game/block_mesh.c
 debug_resetlogfile src/common/system.c
+dotproduct src/common/vectors.c
+generatetrinormal src/common/vectors.c
 getcpufrequency src/common/system.c
 getmasterserverip src/net/master.c
 listfiles src/common/files.c
+normalizevector src/common/vectors.c
 recvpacket src/net/packet.c
+scaleaddvectors src/common/vectors.c
+scalevector src/common/vectors.c
 sendpacket src/net/packet.c
 servercycle src/net/server.c
 setcpuaffinity src/common/system.c
+subtractvectors src/common/vectors.c
+vectordistance src/common/vectors.c
+vectorlength src/common/vectors.c

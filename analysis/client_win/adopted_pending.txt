@@ -1,7 +1,6 @@
 # Candidates that no recorded call reached. They stay lifted until a test covers them.
 account_nameexists src/game/account_db.c
 addbeziersurface src/game/mesh.c
-addvectors src/common/vectors.c
 ai_assessthreats src/game/player_ai.c
 ai_car_nextwaypoint src/game/ai_car.c
 ai_playercar src/game/ai_car.c
@@ -61,11 +60,9 @@ createtrack src/game/level.c
 cs_pwrite src/net/packet.c
 csradixsort src/common/util.c
 deleteplayer src/game/player.c
-dotproduct src/common/vectors.c
 economy_carmarket src/game/economy.c
 economysimulation src/game/economy.c
 findstring src/common/parser.c
-generatetrinormal src/common/vectors.c
 genrand_int32 src/common/random.c
 getenginetorque2 src/game/vehicles.c
 geteulerangles2 src/common/vectors.c
@@ -103,7 +100,6 @@ logic_gunstore_buy src/game/logic.c
 logic_player src/game/logic.c
 multiply3x3matrices src/common/vectors.c
 multiplyquaternion src/common/vectors.c
-normalizevector src/common/vectors.c
 objectenginesimulation2 src/game/vehicles.c
 objectsimulation_car src/game/vehicles.c
 objectsimulation_heli src/game/vehicles.c
@@ -126,8 +122,6 @@ projectvector src/common/vectors.c
 removeflieextentions src/common/files.c
 rotateorientation src/common/vectors.c
 rotatevector src/common/vectors.c
-scaleaddvectors src/common/vectors.c
-scalevector src/common/vectors.c
 scenario_armhuman src/game/scenario.c
 scenario_getnumofmissions src/game/economy.c
 serpnoise2d src/common/random.c
@@ -145,10 +139,7 @@ sphereintersectline src/common/intersect.c
 sphereintersecttriangle src/common/intersect.c
 sphereintersecttrianglefull src/common/intersect.c
 sprintf_comma src/common/util.c
-subtractvectors src/common/vectors.c
 systemtimer src/common/system.c
 tesselatebezier src/game/mesh.c
 tesselatebezierderivative src/game/mesh.c
 unpackevent src/net/client.c
-vectordistance src/common/vectors.c
-vectorlength src/common/vectors.c

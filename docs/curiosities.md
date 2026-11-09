@@ -80,3 +80,19 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | A small integer such as 5, read as a float, is a "denormal" number. On the x87 math unit, a load of a denormal takes about 100 cycles in place of 1. In a loop of a million passes each tick, that is the whole frame. | code | `instrumentation/ghidra/FixIntLocals.java` |
 | A sampling profiler (read the instruction pointer every millisecond) found it: 75% of the time was inside two physics functions, not in the main loop. | code | `instrumentation/lift/samples.py` |
 | A second bug hid behind the first: the new server loaded our own test `wsock32.dll` (it sat next to the `.exe`) in place of the Windows one. | code | `src/standalone/main.c`, `load_dll` |
+
+### 7. The client
+
+| Fact | Source | Where |
+| --- | --- | --- |
+| The server (0.24d) and the client (0.24b) share the same game code, but they are not the same build. Of 250 functions with one name in both, only 6 have the same bytes. | code | `tools/re/compare_shared.py`, `analysis/client_win/shared_code.csv` |
+| The server has a function that makes a random direction from noise (a hash with the numbers 15731 and 789221). The client has the same hash, but nothing calls it: dead code. | code | server `getrandomvector2d`, client 0x5c5240 |
+| The server calls the math routines of the C library in the "intrinsic" form (the number goes in the x87 register). The client calls the plain form (the number goes on the stack). The two give the same bits for the same input, but the code is not the same. | code | `src/platform/x87_math.c`, `instrumentation/client/runtime/x87_math_client.c` |
+| The server and the client keep their data in different places. A script found where, by lining up the two versions of 236 shared functions and pairing the globals at the same spot. It put `human`, `player`, `game` and `item` at the same addresses that an older, independent method gave. | code | `tools/re/pair_client_globals.py` |
+| The recordings of the client reach few of the game rules (physics, humans, collision). Hosting a game seems to start a separate server process, so the client itself does not run them. | check | to confirm with a recording of a hosted game |
+| The wrong money of every company in the stocks list was always $536870912. That is 0x20000000, the address where the standalone client loads its copy of the game. The lifter had lost the money argument of the text function, so it printed what lay on the stack. | code | `ApplyCallOverrides.java`, `docs/client.md` |
+| The client lag that a tester saw was not a bug of the client. The PC was busy with builds and tests at the same time. A friend ran the same files with no lag. | project | `docs/client.md`, "Performance" |
+| 181 of the OpenGL loader functions of the client are 10 bytes long and do nothing but return 2. They have no name inside. We named them by their order, using the Linux client as a list. | code | `tools/re/name_glee_order.py` |
+| The client has its own timing code inside the game: the area builder stores the CPU cycle counter (RDTSC) in a table. The test harness had to ignore that table, or it saw a false difference. | code | `docs/client.md`, "Harness for the client" |
+| A button of the main menu opens a web page. The C code calls `ShellExecuteA` for it, so the standalone client needed a small hook in the platform layer. | code | `launchwebpage`, `sr_open_url` |
+| The decompiler can lose the extra arguments of a call such as `sprintf`, because it cannot see how many the format string needs. 386 calls needed a fix. A script now reads each format string and counts the arguments. | code | `instrumentation/client/check_variadic.py` |

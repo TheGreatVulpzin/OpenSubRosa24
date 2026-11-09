@@ -106,7 +106,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
         src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
         instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
-        instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
+        instrumentation/hook/imports.c instrumentation/runtime/profile.c instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
@@ -116,7 +116,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     add_executable(harness_client instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c
         instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
         instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
-        src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
+        instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
@@ -135,7 +135,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
         target_compile_definitions(client_lifted PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         set_property(TARGET client_lifted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
         add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/standalone/client_crt.c build/client_image/image_client.c build/client_image/client_gl.c
-            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c src/platform/x87_math.c ${CL_ADOPTED_OBJECTS})
+            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
         target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform)
         target_compile_options(subvulpes-client PRIVATE /W4 /utf-8)
         target_compile_definitions(subvulpes-client PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)

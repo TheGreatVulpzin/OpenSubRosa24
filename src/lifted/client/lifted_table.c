@@ -1153,7 +1153,7 @@ void lf_fbe70(void);
 void lf_fc670(void);
 void lf_fc720(void);
 void lf_fc7f0(void);
-void lf_fc890(void);
+void generatetrinormal(void);
 void lf_fc900(void);
 void lf_fc950(void);
 void lf_fca30(void);
@@ -1261,18 +1261,18 @@ void lf_10b4d0(void);
 void lf_10b590(void);
 void lf_10b6b0(void);
 void lf_10b7d0(void);
-void lf_10b7f0(void);
+void dotproduct(void);
 void lf_10b830(void);
-void lf_10b890(void);
-void lf_10b8d0(void);
+void vectorlength(void);
+void normalizevector(void);
 void lf_10b950(void);
 void lf_10b980(void);
 void lf_10b9b0(void);
-void lf_10b9d0(void);
-void lf_10ba10(void);
-void lf_10ba50(void);
-void lf_10ba80(void);
-void lf_10bad0(void);
+void addvectors(void);
+void subtractvectors(void);
+void scalevector(void);
+void scaleaddvectors(void);
+void vectordistance(void);
 void lf_10bb20(void);
 void lf_10bb60(void);
 void lf_10bb90(void);
@@ -2453,7 +2453,7 @@ const LfEntry lf_table[] = {
     { "addvoice", 0xfc670, (void *)lf_fc670, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "getnextvoice", 0xfc720, (void *)lf_fc720, 2, LF_RET_INT, 4, "vv", 0 },
     { "projectvector", 0xfc7f0, (void *)lf_fc7f0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "generatetrinormal", 0xfc890, (void *)lf_fc890, 4, LF_RET_VOID, 4, "pppp", 0 },
+    { "generatetrinormal", 0xfc890, (void *)generatetrinormal, 4, LF_RET_VOID, 4, "pppp", 0 },
     { "resetorientation", 0xfc900, (void *)lf_fc900, 1, LF_RET_VOID, 4, "p", 0 },
     { "rotatevector", 0xfc950, (void *)lf_fc950, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "rotateorientation", 0xfca30, (void *)lf_fca30, 3, LF_RET_VOID, 4, "vpv", 0 },
@@ -2561,18 +2561,18 @@ const LfEntry lf_table[] = {
     { "lf_10b590", 0x10b590, (void *)lf_10b590, 3, LF_RET_INT, 4, "vvv", 0 },
     { "calculatefriction", 0x10b6b0, (void *)lf_10b6b0, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "flabs", 0x10b7d0, (void *)lf_10b7d0, 1, LF_RET_FLOAT, 4, "v", 0 },
-    { "dotproduct", 0x10b7f0, (void *)lf_10b7f0, 2, LF_RET_FLOAT, 4, "pp", 0 },
+    { "dotproduct", 0x10b7f0, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "lf_10b830", 0x10b830, (void *)lf_10b830, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "vectorlength", 0x10b890, (void *)lf_10b890, 1, LF_RET_FLOAT, 4, "p", 0 },
-    { "normalizevector", 0x10b8d0, (void *)lf_10b8d0, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "vectorlength", 0x10b890, (void *)vectorlength, 1, LF_RET_FLOAT, 4, "p", 0 },
+    { "normalizevector", 0x10b8d0, (void *)normalizevector, 2, LF_RET_VOID, 4, "pp", 0 },
     { "copyvector", 0x10b950, (void *)lf_10b950, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_10b980", 0x10b980, (void *)lf_10b980, 2, LF_RET_VOID, 4, "pp", 0 },
     { "zerovector", 0x10b9b0, (void *)lf_10b9b0, 1, LF_RET_VOID, 4, "p", 0 },
-    { "addvectors", 0x10b9d0, (void *)lf_10b9d0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "subtractvectors", 0x10ba10, (void *)lf_10ba10, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "scalevector", 0x10ba50, (void *)lf_10ba50, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "scaleaddvectors", 0x10ba80, (void *)lf_10ba80, 4, LF_RET_VOID, 4, "pppv", 0 },
-    { "vectordistance", 0x10bad0, (void *)lf_10bad0, 2, LF_RET_FLOAT, 4, "pp", 0 },
+    { "addvectors", 0x10b9d0, (void *)addvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "subtractvectors", 0x10ba10, (void *)subtractvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "scalevector", 0x10ba50, (void *)scalevector, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "scaleaddvectors", 0x10ba80, (void *)scaleaddvectors, 4, LF_RET_VOID, 4, "pppv", 0 },
+    { "vectordistance", 0x10bad0, (void *)vectordistance, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "vectorlength2d", 0x10bb20, (void *)lf_10bb20, 1, LF_RET_FLOAT, 4, "p", 0 },
     { "dotproduct2d", 0x10bb60, (void *)lf_10bb60, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "lf_10bb90", 0x10bb90, (void *)lf_10bb90, 2, LF_RET_VOID, 4, "pp", 0 },
