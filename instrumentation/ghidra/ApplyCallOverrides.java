@@ -38,13 +38,33 @@ import ghidra.program.model.scalar.Scalar;
 import ghidra.program.model.symbol.Reference;
 
 public class ApplyCallOverrides extends GhidraScript {
-    /** The PUSH instructions right before the call. The compiler may leave part of the cleanup to a later call. */
+    /**
+     * The words pushed in the straight code right before the call. The compiler puts other
+     * instructions between the pushes and may clean only part of them after the call, so the
+     * scan walks back over the whole block. It stops at a jump, a call, a return or a stack cleanup.
+     * A "sub esp, N" of 16 bytes or less is an argument slot (a double is stored with "fstp [esp]").
+     */
     private int pushesBefore(Instruction call) {
         int n = 0;
         Instruction prev = call.getPrevious();
-        while (prev != null && prev.getMnemonicString().equals("PUSH")) {
-            n++;
-            prev = prev.getPrevious();
+        for (int guard = 0; prev != null && guard < 80; guard++, prev = prev.getPrevious()) {
+            String m = prev.getMnemonicString();
+            if (prev.getFlowType().isJump() || prev.getFlowType().isCall() || prev.getFlowType().isTerminal())
+                break;
+            if (m.equals("POP") || m.equals("LEAVE"))
+                break;
+            if ((m.equals("ADD") || m.equals("SUB")) && prev.getNumOperands() == 2 && prev.getRegister(0) != null
+                    && prev.getRegister(0).getName().equals("ESP")) {
+                Object[] op = prev.getOpObjects(1);
+                if (m.equals("SUB") && op.length == 1 && op[0] instanceof Scalar
+                        && ((Scalar) op[0]).getUnsignedValue() <= 16)
+                    n += (int) (((Scalar) op[0]).getUnsignedValue() / 4);
+                else
+                    break;
+                continue;
+            }
+            if (m.equals("PUSH"))
+                n++;
         }
         return n;
     }

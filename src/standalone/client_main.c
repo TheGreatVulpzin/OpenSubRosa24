@@ -219,14 +219,42 @@ static void menu_dump(void)
 static int g_denorm;
 static struct { uintptr_t eip; unsigned n; } g_dn[512];
 static volatile LONG g_dn_total;
+static uintptr_t g_dn_last;
+static int g_dn_repeat;
+
+/* Only bit 1 of the x87 control word (the denormal mask). The CRT call changes the other masks too. */
+static void x87_denormal_mask(int masked)
+{
+    unsigned short w;
+    __asm { fnstcw w }
+    w = masked ? (unsigned short)(w | 2) : (unsigned short)(w & ~2);
+    __asm { fldcw w }
+}
 
 static LONG CALLBACK denorm_handler(EXCEPTION_POINTERS *info)
 {
-    unsigned cw, s;
+    unsigned s;
     uintptr_t at;
-    if (info->ExceptionRecord->ExceptionCode != EXCEPTION_FLT_DENORMAL_OPERAND)
+    /* The step after the masked instruction: turn the exception on again. */
+    if (info->ExceptionRecord->ExceptionCode == EXCEPTION_SINGLE_STEP) {
+        x87_denormal_mask(0);
+        g_dn_repeat = 0;
+        info->ContextRecord->EFlags &= ~0x100u;
+        if (info->ContextRecord->ContextFlags & CONTEXT_FLOATING_POINT)
+            info->ContextRecord->FloatSave.ControlWord &= ~2u;
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    /* Windows reports some denormal operands as "invalid operation". A real invalid operation
+     * repeats at the same address after the retry: it goes to the next handler. */
+    if (info->ExceptionRecord->ExceptionCode != EXCEPTION_FLT_DENORMAL_OPERAND &&
+        info->ExceptionRecord->ExceptionCode != EXCEPTION_FLT_INVALID_OPERATION)
         return EXCEPTION_CONTINUE_SEARCH;
     at = (uintptr_t)info->ExceptionRecord->ExceptionAddress;
+    if (at == g_dn_last && ++g_dn_repeat > 3)
+        return EXCEPTION_CONTINUE_SEARCH;
+    if (at != g_dn_last)
+        g_dn_repeat = 0;
+    g_dn_last = at;
     s = (unsigned)((at >> 1) * 2654435761u) >> 23;
     while (g_dn[s].eip && g_dn[s].eip != at)
         s = (s + 1) & 511;
@@ -234,11 +262,12 @@ static LONG CALLBACK denorm_handler(EXCEPTION_POINTERS *info)
     g_dn[s].n++;
     InterlockedIncrement(&g_dn_total);
     _clearfp();
-    _controlfp_s(&cw, _EM_DENORMAL, _MCW_EM);
+    x87_denormal_mask(1);
     if (info->ContextRecord->ContextFlags & CONTEXT_FLOATING_POINT) {
         info->ContextRecord->FloatSave.ControlWord |= 2;
         info->ContextRecord->FloatSave.StatusWord &= ~0x80ffu;
     }
+    info->ContextRecord->EFlags |= 0x100u;
     return EXCEPTION_CONTINUE_EXECUTION;
 }
 
@@ -281,12 +310,8 @@ static DWORD WINAPI sampler(void *arg)
         Sleep(1);
         if (SuspendThread(g_main_thread) == (DWORD)-1)
             continue;
-        c.ContextFlags = CONTEXT_CONTROL | (g_denorm ? CONTEXT_FLOATING_POINT : 0);
+        c.ContextFlags = CONTEXT_CONTROL;
         got = GetThreadContext(g_main_thread, &c);
-        if (got && g_denorm) {
-            c.FloatSave.ControlWord &= ~2u;
-            SetThreadContext(g_main_thread, &c);
-        }
         if (got) {
             /* The first stack word that points into the exe is the caller of a DLL function. */
             __try {
@@ -398,7 +423,7 @@ int main(int argc, char **argv)
         if (getenv("SR_DENORM") && getenv("SR_SAMPLE")) {
             g_denorm = 1;
             AddVectoredExceptionHandler(1, denorm_handler);
-            _controlfp_s(&cw, 0, _EM_DENORMAL);
+            x87_denormal_mask(0);
             atexit(denorm_report);
         }
         start_sampler();
