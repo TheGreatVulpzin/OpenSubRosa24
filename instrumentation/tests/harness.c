@@ -314,14 +314,27 @@ static int heap_after_original(char *why, size_t n)
 /* Put the snapshot into .data. Pointers into the image move with the load address: each
  * dword in the old image range gets the relocation delta (a small risk for an int that
  * looks like an address). */
+static double now_ms(void)
+{
+    LARGE_INTEGER t, f;
+    QueryPerformanceCounter(&t);
+    QueryPerformanceFrequency(&f);
+    return (double)t.QuadPart * 1000.0 / (double)f.QuadPart;
+}
+
 static void apply_snapshot(void)
 {
     uint8_t *data = (uint8_t *)(sr_base + g_snap.data_rva);
     uint32_t delta = (uint32_t)sr_base - g_snap.base;
     uint32_t i;
     DWORD old;
+    double t0 = now_ms(), t1, t2;
     VirtualProtect(data, g_snap.size, PAGE_READWRITE, &old);
+    t1 = now_ms();
     memset(data, 0, g_snap.size);
+    t2 = now_ms();
+    if (getenv("HARNESS_TIMING"))
+        fprintf(stderr, "apply_snapshot: protect %.0f ms, memset %.0f ms\n", t1 - t0, t2 - t1);
     for (i = 0; i < g_snap.npages; i++) {
         uint32_t *w = (uint32_t *)(data + (size_t)g_snap.index[i] * 4096);
         int k;
@@ -331,8 +344,13 @@ static void apply_snapshot(void)
                 if (w[k] >= g_snap.base && w[k] < g_snap.base + g_image_size)
                     w[k] += delta;
     }
+    t1 = now_ms();
     apply_regions();
+    t2 = now_ms();
     plat_test_patch_globals();
+    if (getenv("HARNESS_TIMING"))
+        fprintf(stderr, "apply_snapshot: copy %.0f ms, regions %.0f ms, patch %.0f ms, %u pages\n", t1 - t0,
+                t2 - t1, now_ms() - t2, (unsigned)g_snap.npages);
 }
 
 /* The loader does not resolve the imports of an .exe that LoadLibrary loads. Fill the
@@ -1105,7 +1123,7 @@ int main(int argc, char **argv)
     int retry_crash = !getenv("HARNESS_RETRY") || atoi(getenv("HARNESS_RETRY")) != 0;
     int invalid = getenv("HARNESS_INVALID") && atoi(getenv("HARNESS_INVALID")) != 0;
     SetUnhandledExceptionFilter(unhandled);
-    int imports, index = 0, total_funcs = 0;
+    int imports, index = 0, total_funcs = 0, ran_any = 0;
     LARGE_INTEGER t_start, t_end, freq;
     IMAGE_NT_HEADERS32 *nt;
 
@@ -1213,10 +1231,22 @@ int main(int argc, char **argv)
          * the original runs stay, and a later function can see a heap that the earlier calls
          * changed (humansimulation call 1223 of 20261013-195210 crashes in the original after
          * 1222 other calls). With it, a result does not depend on the other functions, so
-         * gate.py --changed gives the same counts as a full gate. */
-        if (reset_each && index > 0) {
-            apply_snapshot();
-            resolve_imports();
+         * gate.py --changed gives the same counts as a full gate.
+         * A function with no recorded call changes nothing, so it needs no reset (a reset takes
+         * about 0.5 s and the table has more than 1000 functions). */
+        {
+            int has_calls = 0;
+            for (j = 0; j < g_ncalls; j++)
+                if (g_calls[j].rva == e->rva && g_calls[j].n == e->dwords) {
+                    has_calls = 1;
+                    break;
+                }
+            if (reset_each && has_calls && ran_any) {
+                apply_snapshot();
+                resolve_imports();
+            }
+            if (has_calls)
+                ran_any = 1;
         }
         index++;
         memset(&v, 0, sizeof v);
