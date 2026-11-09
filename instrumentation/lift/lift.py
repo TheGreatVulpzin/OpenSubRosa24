@@ -214,7 +214,9 @@ TARGETS = {
         extra_includes=('lift_os_client.h', 'lift_gl_client.h'), text=(0x401000, 0x511000),
         skipped={0x10c6fb: '__security_check_cookie'},
         # __alloca_probe only touches the stack pages for a local array: the C compiler does that itself.
-        inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))', 0x10c710: '#define {name}() ((void)0)'},
+        inline={0x10c650: '#define {name}(x) ((ulonglong)(longlong)(x))', 0x10c710: '#define {name}() ((void)0)',
+                # launchwebpage opens a URL with ShellExecuteA: the platform layer does it.
+                0xac0a0: '#define {name}(url) sr_open_url((char *)(url))'},
         # The client calls the CRT math functions of MSVCR100 as plain imports.
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
                         'log10', 'fmod'}),

@@ -25,4 +25,14 @@ typedef void *HCURSOR;
 typedef void *HMENU;
 typedef int(__stdcall *PROC)(void);
 
+/* Open a web page in the default browser. The standalone client does it. The harness opens nothing. */
+#ifdef SR_STANDALONE
+void sr_open_url(const char *url);
+#else
+static void sr_open_url(const char *url)
+{
+    (void)url;
+}
+#endif
+
 #endif

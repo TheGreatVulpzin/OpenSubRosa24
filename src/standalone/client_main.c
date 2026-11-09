@@ -7,6 +7,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <mmsystem.h>
+#include <shellapi.h>
 
 #include <float.h>
 #include <stdint.h>
@@ -112,6 +113,13 @@ void *sr_import_ordinal(const char *dll, unsigned ordinal)
         exit(1);
     }
     return fn;
+}
+
+/* The menu buttons that open a web page (Twitter, CrypticSea, the driver sites). */
+#pragma comment(lib, "shell32.lib")
+void sr_open_url(const char *url)
+{
+    ShellExecuteA(NULL, "open", url, "", "", SW_SHOWNORMAL);
 }
 
 /* ------------------------------------------------------------ functions */
