@@ -89,20 +89,20 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/cl_count_table.c)
     set_source_files_properties(build/lift/client_win/cl_count_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder.
-if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
+if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
-        build/lift/client_win/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
+        src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
         instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
         instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math.c)
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
-    set_source_files_properties(build/lift/client_win/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
+    set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
     set_source_files_properties(build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 
     # Offline harness for the client: the same program as the server harness, with the client sources.
     add_executable(harness_client instrumentation/tests/harness.c instrumentation/hook/verify.c instrumentation/hook/hook.c
         instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
-        instrumentation/platform/plat_test.c build/lift/client_win/lifted_client.c build/lift/client_win/lifted_table.c
+        instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
         src/platform/x87_math.c)
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
@@ -110,26 +110,26 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/lifted_client.c)
     target_compile_definitions(harness_client PRIVATE _CRT_SECURE_NO_WARNINGS SV_MAX_PAGES=49152 SR_TEST_MEMORY CL_HARNESS SV_FULL_EVERY_DEFAULT=1)
     target_link_options(harness_client PRIVATE /LARGEADDRESSAWARE /MAP /BASE:0x50000000 /DYNAMICBASE:NO /FIXED:NO)
     set_property(TARGET harness_client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-    set_source_files_properties(build/lift/client_win/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
-    set_source_files_properties(build/lift/client_win/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
+    set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
+    set_source_files_properties(src/lifted/client/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0;/WX-")
 
     # Standalone client, level 1: lifted C in its own image region (Phase 7.5). The image tables come
     # from instrumentation/lift/gen_image.py --client.
     if(EXISTS ${CMAKE_SOURCE_DIR}/build/client_image/image_client.c)
-        add_library(client_lifted OBJECT EXCLUDE_FROM_ALL build/lift/client_win/lifted_client.c)
+        add_library(client_lifted OBJECT EXCLUDE_FROM_ALL src/lifted/client/lifted_client.c)
         target_include_directories(client_lifted PRIVATE src/include src/lifted src/platform build/lift/client_win)
         target_compile_options(client_lifted PRIVATE /arch:IA32 /W0 /utf-8)
         target_compile_definitions(client_lifted PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         set_property(TARGET client_lifted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
         add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/standalone/client_crt.c build/client_image/image_client.c build/client_image/client_gl.c
-            $<TARGET_OBJECTS:client_lifted> build/lift/client_win/lifted_table.c src/platform/x87_math.c)
+            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c src/platform/x87_math.c)
         target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform)
         target_compile_options(subvulpes-client PRIVATE /W4 /utf-8)
         target_compile_definitions(subvulpes-client PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         target_link_options(subvulpes-client PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
         set_target_properties(subvulpes-client PROPERTIES OUTPUT_NAME opensubrosa24_client)
         set_property(TARGET subvulpes-client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-        set_source_files_properties(build/lift/client_win/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0")
+        set_source_files_properties(src/lifted/client/lifted_table.c PROPERTIES COMPILE_OPTIONS "/W0")
         set_source_files_properties(build/client_image/image_client.c build/client_image/client_gl.c PROPERTIES COMPILE_OPTIONS "/W0")
     endif()
 endif()

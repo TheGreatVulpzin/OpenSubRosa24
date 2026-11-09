@@ -2,9 +2,9 @@
   "description": "Windows client 0.24b (subrosa.exe), lifted by instrumentation/lift/lift.py --target client_win",
   "harness": "build/hook/harness_client.exe",
   "image": "build/hook/subrosa_fixed.exe",
-  "lifted_c": "build/lift/client_win/lifted_client.c",
+  "lifted_c": "src/lifted/client/lifted_client.c",
   "lifted_prev": "build/gate/client_win/lifted_client.prev.c",
-  "table": "build/lift/client_win/lifted_table.c",
+  "table": "src/lifted/client/lifted_table.c",
   "full_run_paths": [
     "src/lifted/lift_support.h",
     "src/platform/x87_math.c",

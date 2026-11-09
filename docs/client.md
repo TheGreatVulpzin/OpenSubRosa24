@@ -147,7 +147,7 @@ Result for the recorder: never record OpenGL calls one by one. Record the game f
 
 ### Recorder (step 7.4)
 
-`cl_wsock32` also holds the lifted client code, the hook tables of the lifter, the verifier and the recorder of the server (`verify.c`, `record.c`, `record_imports.c`). `instrumentation/client/cl_hooks.c` installs them. They need `build/lift/client_win/lifted_client.c`, so run `lift.py --target client_win` first.
+`cl_wsock32` also holds the lifted client code, the hook tables of the lifter, the verifier and the recorder of the server (`verify.c`, `record.c`, `record_imports.c`). `instrumentation/client/cl_hooks.c` installs them. They need `src/lifted/client/lifted_client.c` (versioned and frozen, see CLAUDE.md), so run `lift.py --target client_win` only when the lifted C is missing.
 
 Switch it on with `subvulpes.ini`, section `[hooks]`:
 

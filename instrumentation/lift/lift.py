@@ -208,8 +208,8 @@ TARGETS = {
         crt_start=0x5ce18, record_skip=frozenset({0x5c8d0, 0x5cd10}), skip_callers=False),
     'client_win': dict(
         export='build/lift/client_win.jsonl', names='analysis/client_win/functions.csv',
-        lifted='build/lift/client_win/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
-        record='build/lift/client_win/hooks_record.c', table='build/lift/client_win/lifted_table.c',
+        lifted='src/lifted/client/lifted_client.c', hooks='build/lift/client_win/hooks_lifted.c',
+        record='build/lift/client_win/hooks_record.c', table='src/lifted/client/lifted_table.c',
         report='build/lift/client_win/report.csv', hand=None, rewritten=(),
         extra_includes=('lift_os_client.h', 'lift_gl_client.h'), text=(0x401000, 0x511000),
         skipped={0x10c6fb: '__security_check_cookie'},

@@ -71,7 +71,7 @@ def conversions(fmt):
 
 
 def main():
-    path = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'build/lift/client_win/lifted_client.c'
+    path = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'src/lifted/client/lifted_client.c'
     text = path.read_text(errors='replace')
     read = load_exe()
     bad = 0
