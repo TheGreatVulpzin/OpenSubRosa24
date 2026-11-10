@@ -1,0 +1,14 @@
+enablespeex src/client/audio/speex.c
+disablespeex src/client/audio/speex.c
+preprocessspeex src/client/audio/speex.c
+encodespeex src/client/audio/speex.c
+getaudioinput src/client/audio/voice.c
+enablesocketserver src/client/audio/sockets.c
+enablesocketclient src/client/audio/sockets.c
+setupaudio src/client/audio/setup.c
+shutdownaudio src/client/audio/setup.c
+soundsimulation src/client/audio/sound.c
+deletesound src/client/audio/sound.c
+frame_drawvoiceicons src/client/audio/voice_ui.c
+getnextvoice src/client/audio/voice.c
+addvoice src/client/audio/voice.c

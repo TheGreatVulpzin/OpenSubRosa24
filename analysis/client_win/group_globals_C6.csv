@@ -1,0 +1,40 @@
+name,type,count,client_rva,evidence
+audio_device,void*,1,0x908b060,setupaudio stores alcOpenDevice
+audio_context,void*,1,0xfbfe270,setupaudio stores alcCreateContext
+audio_capture,void*,1,0x163231e4,setupaudio stores alcCaptureOpenDevice
+audio_enabled,int,1,0x29e7d304,setupaudio and shutdownaudio
+audio_encoder,AudioEncoder,1,0x1033eb60,enablespeex encoder and preprocess state
+audio_decoders,AudioDecoder,8,0x1bf7e20,enablespeex decoder stride 0x28
+audio_samples,float,160,0x12a7d680,encodespeex converts 160 signed samples
+audio_channels,AudioChannel,8,0xec38140,soundsimulation channel stride 0x2924c
+audio_camera,AudioCamera,1,0xfefe2a0,soundsimulation camera vectors
+audio_sounds,AudioSound,256,0x17c028a0,deletesound stride 0x18 and Linux sound size 0x1800
+audio_sound_count,int,1,0x90652e4,deletesound packed list count
+audio_objects,int,8,0x90f60a4,soundsimulation vehicle indices
+audio_object_count,int,1,0x90f60a0,soundsimulation vehicle list count
+audio_play_buffer,int16_t,640,0x102feb60,soundsimulation combines four voice frames
+audio_capture_backup,int16_t,10240,0x1339c260,getaudioinput saves muted samples
+audio_voice_enabled,int,1,0x9063208,getaudioinput voice switch
+audio_threshold,int,1,0x9063204,getaudioinput sample threshold
+audio_push_to_talk,int,1,0x906320c,getaudioinput capture mode
+audio_voice_key,int,1,0x9063210,getaudioinput key index
+audio_voice_mouse,uint32_t,1,0x9063214,getaudioinput mouse mask
+audio_voice_gain,float,1,0x9063224,getaudioinput input gain
+audio_keys,uint8_t,512,0x75a5140,getaudioinput key state
+audio_mouse_buttons,uint32_t,1,0x19c07ca8,getaudioinput mouse state
+audio_input_blocked,int,1,0x29e752a0,getaudioinput talk suppression
+audio_voice_mode,int,1,0x52daba4,Whisper and Yell labels and keyboard voice mode selection
+audio_mode,int,1,0x9065320,soundsimulation fade mode
+audio_fade_ticks,int,1,0x9065324,soundsimulation fade timer
+audio_voice_icon,int,1,0x14312940,frame_drawvoiceicons texture
+audio_menu_exit,int,1,0x5350f20,voiceoptionsmenu exit condition
+audio_menu_back,int,1,0xb7330ec,voiceoptionsmenu back condition
+audio_menu_selection,int,1,0x9065240,voiceoptionsmenu clears selection
+audio_bind_key,int,1,0x53511a4,voiceoptionsmenu input binding
+audio_debug,int,1,0x127ea8,voiceoptionsmenu frame sizes display
+audio_mouse_x,int,1,0x19c07c80,voiceoptionsmenu cursor x
+audio_mouse_y,int,1,0x19c07c84,voiceoptionsmenu cursor y
+audio_window,void*,1,0x103675a8,voiceoptionsmenu SDL window
+audio_simulation,int,1,0x9065300,voiceoptionsmenu simulation switch
+audio_keys_previous,uint8_t,512,0x1bbe1a0,voiceoptionsmenu key transitions
+audio_key_names,char,8192,0x17798e00,voiceoptionsmenu key labels stride 16

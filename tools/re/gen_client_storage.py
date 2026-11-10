@@ -60,6 +60,7 @@ def main():
     if client_only:
         lines.append('')
         lines.append('#include "sr_image_types.h"')
+        lines.append('#include "sr_audio_types.h"')
         lines.extend(client_only)
     # Fields that the server keeps in the packet workspace object.
     if 'packet_workspace' in names:

@@ -410,6 +410,29 @@ Facts:
 
 Result: the gate counts are menu 86, play 311, play2 305 (before C2: 85, 285, 280).
 
+## Sound and voice
+
+`src/client/audio/` supplies device setup, spatial sound, Speex codecs, microphone input, speaker selection, datagram sockets and voice controls. The client resolves OpenAL and Speex calls through `sr_import`. The [audio page](client/audio.md) describes the records and behavior.
+
+Fourteen functions are in `analysis/client_win/adopted_C6.txt`. `voiceoptionsmenu` is in `analysis/client_win/adopted_C6_pending.txt` because no recorded call reaches it. Its window, controls and waveform need an interactive check.
+
+The three client recordings supply 183 matching calls across twelve functions:
+
+- Devices: `setupaudio` 3 and `shutdownaudio` 2.
+- Sound: `soundsimulation` 3 and `deletesound` 48. Comparisons include memory changes and the OpenAL call log. OpenAL vector calls contribute to a hash.
+- Codecs: `enablespeex` 2, `disablespeex` 2, `preprocessspeex` 48 and `encodespeex` 48. The fixed Speex imports do not test real compression quality or encoded bitstreams.
+- Capture: `getaudioinput` 20. Voice is enabled and a capture device is present in all three snapshots. The sample-count import returns zero. These calls test the capture query and its empty result. Sample scaling, clipping, silence detection and microphone hardware need further checks.
+- Sockets: `enablesocketserver` 2 and `enablesocketclient` 3. The comparisons test address writes, enable flags and socket calls.
+- Icons: `frame_drawvoiceicons` 2. Both snapshots have no active voice channel. Projection, icon appearance and active voice playback need a window check. The processed-buffer import also returns zero, so these recordings do not test voice buffer refills.
+
+`instrumentation/client/synth_audio.py` supplies nineteen cases for each of `getnextvoice` and `addvoice`. Cases cover listeners 0, 1 and 255, free slots 0, 3 and 7, full lists, equal distances, nearer and farther speakers, a blocked comparison key and NaN values. Each call compares its result and memory changes. All 38 calls match. The final distance comparison requires ordered operands and rejects NaN values with a full list.
+
+Timing with every recorded call gives these ratios to the client executable: `soundsimulation` 0.86 across 3 calls, `encodespeex` 0.92 across 48, `preprocessspeex` 1.02 across 48 and `getaudioinput` 0.98 across 20. The same run includes `deletesound`, `scalevector`, `scaleaddvectors` and `vectordistance`. All eight functions stay below 1.05. The combined cycle ratio is 0.920. These measurements use the fixed audio imports and do not measure audio hardware or codec quality.
+
+A separate measurement of `frame_drawvoiceicons` gives 0.97 across two calls with inactive channels.
+
+Whole-client comparisons retain 85, 285 and 280 matching calls for the menu and two play recordings. The server target builds with `SV_BUILD_INSTRUMENTATION=OFF`. Storage checks match 138 initial objects and 276 table and entity digests in both memory modes.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).

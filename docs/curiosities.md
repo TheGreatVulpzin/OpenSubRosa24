@@ -98,3 +98,4 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | The client has its own timing code inside the game: the area builder stores the CPU cycle counter (RDTSC) in a table. The test harness had to ignore that table, or it saw a false difference. | code | `docs/client.md`, "Harness for the client" |
 | A button of the main menu opens a web page. The C code calls `ShellExecuteA` for it, so the standalone client needed a small hook in the platform layer. | code | `launchwebpage`, `sr_open_url` |
 | The decompiler can lose the extra arguments of a call such as `sprintf`, because it cannot see how many the format string needs. 386 calls needed a fix. A script now reads each format string and counts the arguments. | code | `instrumentation/client/check_variadic.py` |
+| The voice settings waveform ends with the low 16 bits of the sample ring head, after 10240 samples. | code | `src/client/audio/voice_ui.c`, `docs/client/audio.md` |

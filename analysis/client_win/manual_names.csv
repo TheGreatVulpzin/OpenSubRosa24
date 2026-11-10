@@ -15,3 +15,18 @@ rva,name,evidence
 0xc5300,noise3d,"The hash of noise2d with a third coordinate times 54323. It sits after noise2d, as in the Linux client."
 0xc5370,lerpnoise2d,"The first of the three grid noise functions (x, y, mask), in the order of the Linux client."
 0xc5570,cerpnoise2d,"The third of the three grid noise functions (x, y, mask), in the order of the Linux client. It blends with a cosine."
+0x339e0,setupaudio,Linux client symbol and matching calls
+0x33a70,shutdownaudio,Linux client symbol and matching calls
+0x4e190,soundsimulation,Linux client symbol and matching calls
+0x4f720,deletesound,Linux client symbol and matching calls
+0xe1130,enablespeex,Linux client symbol and matching calls
+0xe1240,disablespeex,Linux client symbol and matching calls
+0xe12c0,preprocessspeex,Linux client symbol and matching calls
+0xe1300,encodespeex,Linux client symbol and matching calls
+0xfb6f0,getaudioinput,Linux client symbol and matching calls
+0xfc670,addvoice,Linux client symbol and matching calls
+0xfc720,getnextvoice,Linux client symbol and matching calls
+0xfe2b0,enablesocketserver,Linux client symbol and matching calls
+0xfe360,enablesocketclient,Linux client symbol and matching calls
+0x79330,frame_drawvoiceicons,Linux client symbol and matching calls
+0xd38c0,voiceoptionsmenu,Linux client symbol and matching calls
