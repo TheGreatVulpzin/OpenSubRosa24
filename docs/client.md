@@ -443,6 +443,8 @@ Tests: the four Steam functions with a recorded call have 1 call each, the same.
 
 `reset` was in the list of C7 only because of its generic name. It belongs to the JPEG decoder, and the image code calls it directly now.
 
+Part B also has `clientsend`, `humansimulationclient`, `itemsimulationclient` and `client_simulation` (pages `docs/client/network.md`, `src/client/setup/send.c` and `interpolation.c`). `client_simulation`, `humansimulationclient` and `itemsimulationclient` pass 4 synthetic states each (`world` to `world4`: humans on foot and in vehicles, objects, items with every holder). `clientsend` passes 4 synthetic calls (`send1` to `sendnone`): three players with different action rings and voice rings, and one with no player in view. The synthetic test caught a wrong address of `last_event` (the 16 bit field in the packet): check the addresses of new globals as image address minus 0x400000.
+
 `checksimulation` is written (`src/client/setup/simulation.c`, page `docs/client/simulation.md`) but not adopted. Its 10 recorded calls are all skipped: the original crashes in functions that `checksimulation` calls (`lineintersectspecblock` and one at 0x4a180), because the snapshot does not hold the heap that they read. The synthetic cases `tickhost`, `tickkeys`, `tickkeys2`, `tickdebug` and `tickshift` (a host with state 3, with and without keys and the debug flag) give 6 calls, all the same. The cases `tickclient` (the client branch, which is the branch of every online game) are skipped: the original crashes at an address inside a DLL, in the network calls. The function stays in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows the client branch.
 
 The gate counts do not change: menu 86, play 311, play2 305.

@@ -31,3 +31,4 @@ Sound and voice use `src/client/audio/`.
 
 - [runtime.md](runtime.md): the debug display, the profiler timers, the Steam interface and the JPEG restart.
 - [simulation.md](simulation.md): the tick of the client, the keys of the display and the traffic lights.
+- [network.md](network.md): the input packet that the client sends, and the smoothing of humans, objects and items.
