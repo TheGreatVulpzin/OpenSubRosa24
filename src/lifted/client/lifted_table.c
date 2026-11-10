@@ -32,7 +32,7 @@ void decode_block(void);
 void decode(void);
 void extend_receive(void);
 void idct_block(void);
-void lf_036f0(void);
+void reset(void);
 void process_marker(void);
 void lf_03b10(void);
 void lf_03b50(void);
@@ -677,7 +677,7 @@ void lf_66600(void);
 void lf_66810(void);
 void lf_67490(void);
 void lf_676d0(void);
-void lf_68030(void);
+void clientsend(void);
 void lf_685a0(void);
 void lf_68740(void);
 void lf_68830(void);
@@ -693,14 +693,14 @@ void lf_69110(void);
 void lf_69190(void);
 void lf_69440(void);
 void lf_6a1d0(void);
-void lf_6a230(void);
+void debug_addcross(void);
 void lf_6a400(void);
 void lf_6a4d0(void);
 void lf_6a860(void);
-void lf_6aaa0(void);
-void lf_6ab70(void);
+void debug_addataint(void);
+void debug_addatafloat(void);
 void debug_resetlogfile(void);
-void lf_6aca0(void);
+void debug_writelogfile(void);
 void lf_6ad10(void);
 void lf_6b140(void);
 void lf_6b160(void);
@@ -795,7 +795,7 @@ void lf_850b0(void);
 void lf_85940(void);
 void lf_85980(void);
 void lf_85b70(void);
-void lf_896d0(void);
+void humansimulationclient(void);
 void lf_89de0(void);
 void lf_89e10(void);
 void lf_89f50(void);
@@ -834,7 +834,7 @@ void lf_971c0(void);
 void lf_97350(void);
 void lf_98290(void);
 void lf_98f40(void);
-void lf_99500(void);
+void itemsimulationclient(void);
 void lf_99890(void);
 void lf_99a60(void);
 void lf_99ad0(void);
@@ -960,7 +960,7 @@ void lf_c14a0(void);
 void lf_c1ac0(void);
 void lf_c1d90(void);
 void lf_c1dc0(void);
-void lf_c2bb0(void);
+void client_simulation(void);
 void lf_c32d0(void);
 void lf_c3320(void);
 void lf_c41c0(void);
@@ -1024,7 +1024,7 @@ void lf_d5380(void);
 void lf_d5490(void);
 void lf_d5550(void);
 void lf_d5610(void);
-void lf_d5650(void);
+void updateplayticket(void);
 void lf_d5660(void);
 void lf_d5690(void);
 void lf_d6570(void);
@@ -1140,8 +1140,8 @@ void lf_fa9f0(void);
 void lf_fae20(void);
 void setcpuaffinity(void);
 void lf_fafc0(void);
-void lf_fafe0(void);
-void lf_fb020(void);
+void resettimer(void);
+void starttimer(void);
 void lf_fb040(void);
 void getcpufrequency(void);
 void lf_fb1b0(void);
@@ -1282,11 +1282,11 @@ void lf_10bc40(void);
 void lf_10bc70(void);
 void lf_10bca0(void);
 void lf_10bcc0(void);
-void lf_10bcf0(void);
-void lf_10bd40(void);
-void lf_10bd60(void);
-void lf_10bd80(void);
-void lf_10bdc0(void);
+void steam_init(void);
+void steam_shutdown(void);
+void steam_update(void);
+void steam_getname(void);
+void steam_getid(void);
 void lf_10be20(void);
 void __fastcall lf_10be80(int);
 void __fastcall lf_10bee0(int);
@@ -1332,7 +1332,7 @@ const LfEntry lf_table[] = {
     { "decode", 0x2aa0, (void *)decode, 2, LF_RET_INT, 4, "vv", 1 },
     { "extend_receive", 0x2cb0, (void *)extend_receive, 2, LF_RET_INT, 4, "vv", 1 },
     { "idct_block", 0x2d40, (void *)idct_block, 4, LF_RET_VOID, 4, "pvpp", 0 },
-    { "reset", 0x36f0, (void *)lf_036f0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "reset", 0x36f0, (void *)reset, 1, LF_RET_VOID, 4, "v", 0 },
     { "process_marker", 0x3780, (void *)process_marker, 2, LF_RET_INT, 4, "vv", 1 },
     { "lf_03b10", 0x3b10, (void *)lf_03b10, 2, LF_RET_VOID, 4, "vv", 1 },
     { "get16", 0x3b50, (void *)lf_03b50, 1, LF_RET_INT, 4, "v", 1 },
@@ -1977,7 +1977,7 @@ const LfEntry lf_table[] = {
     { "setupcityobjecttypes", 0x66810, (void *)lf_66810, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x67490, (void *)lf_67490, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "clientrecv", 0x676d0, (void *)lf_676d0, 0, LF_RET_VOID, 4, "", 1 },
-    { "clientsend", 0x68030, (void *)lf_68030, 0, LF_RET_VOID, 4, "", 1 },
+    { "clientsend", 0x68030, (void *)clientsend, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_685a0", 0x685a0, (void *)lf_685a0, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "lf_68740", 0x68740, (void *)lf_68740, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "lf_68830", 0x68830, (void *)lf_68830, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -1993,14 +1993,14 @@ const LfEntry lf_table[] = {
     { "debug_getinputs", 0x69190, (void *)lf_69190, 0, LF_RET_VOID, 4, "", 0 },
     { "displaydebuginfo", 0x69440, (void *)lf_69440, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_6a1d0", 0x6a1d0, (void *)lf_6a1d0, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "debug_addcross", 0x6a230, (void *)lf_6a230, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "debug_addcross", 0x6a230, (void *)debug_addcross, 2, LF_RET_VOID, 4, "pv", 0 },
     { "addmenuinputchar", 0x6a400, (void *)lf_6a400, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "debug_renderboundingbox", 0x6a4d0, (void *)lf_6a4d0, 2, LF_RET_VOID, 4, "pp", 1 },
     { "debug_renderbox", 0x6a860, (void *)lf_6a860, 5, LF_RET_VOID, 4, "ppvvv", 1 },
-    { "debug_addataint", 0x6aaa0, (void *)lf_6aaa0, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "debug_addatafloat", 0x6ab70, (void *)lf_6ab70, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "debug_addataint", 0x6aaa0, (void *)debug_addataint, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "debug_addatafloat", 0x6ab70, (void *)debug_addatafloat, 2, LF_RET_VOID, 4, "pv", 0 },
     { "debug_resetlogfile", 0x6ac30, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
-    { "debug_writelogfile", 0x6aca0, (void *)lf_6aca0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "debug_writelogfile", 0x6aca0, (void *)debug_writelogfile, 1, LF_RET_VOID, 4, "v", 1 },
     { "systemtimer", 0x6ad10, (void *)lf_6ad10, 0, LF_RET_INT, 4, "", 1 },
     { "lf_6b140", 0x6b140, (void *)lf_6b140, 1, LF_RET_INT, 4, "p", 1 },
     { "server_playermessage", 0x6b160, (void *)lf_6b160, 2, LF_RET_INT, 4, "vp", 0 },
@@ -2095,7 +2095,7 @@ const LfEntry lf_table[] = {
     { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },
     { "pointinsidebuilding", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
     { "humansimulation", 0x85b70, (void *)lf_85b70, 0, LF_RET_VOID, 4, "", 0 },
-    { "humansimulationclient", 0x896d0, (void *)lf_896d0, 0, LF_RET_VOID, 4, "", 0 },
+    { "humansimulationclient", 0x896d0, (void *)humansimulationclient, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_89de0", 0x89de0, (void *)lf_89de0, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersecthuman", 0x89e10, (void *)lf_89e10, 4, LF_RET_INT, 1, "vvvv", 0 },
     { "lf_89f50", 0x89f50, (void *)lf_89f50, 4, LF_RET_VOID, 4, "vvvv", 0 },
@@ -2134,7 +2134,7 @@ const LfEntry lf_table[] = {
     { "itemsimulation", 0x97350, (void *)lf_97350, 0, LF_RET_VOID, 4, "", 0 },
     { "itemlogic", 0x98290, (void *)lf_98290, 0, LF_RET_VOID, 4, "", 0 },
     { "itemweaponsimulation", 0x98f40, (void *)lf_98f40, 1, LF_RET_VOID, 4, "v", 0 },
-    { "itemsimulationclient", 0x99500, (void *)lf_99500, 0, LF_RET_VOID, 4, "", 0 },
+    { "itemsimulationclient", 0x99500, (void *)itemsimulationclient, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_99890", 0x99890, (void *)lf_99890, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_99a60", 0x99a60, (void *)lf_99a60, 1, LF_RET_INT, 4, "v", 0 },
     { "lf_99ad0", 0x99ad0, (void *)lf_99ad0, 3, LF_RET_INT, 4, "vvv", 0 },
@@ -2260,7 +2260,7 @@ const LfEntry lf_table[] = {
     { "model_editor", 0xc1ac0, (void *)lf_c1ac0, 0, LF_RET_VOID, 4, "", 0 },
     { "fround", 0xc1d90, (void *)lf_c1d90, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "lf_c1dc0", 0xc1dc0, (void *)lf_c1dc0, 0, LF_RET_VOID, 4, "", 0 },
-    { "client_simulation", 0xc2bb0, (void *)lf_c2bb0, 0, LF_RET_VOID, 4, "", 0 },
+    { "client_simulation", 0xc2bb0, (void *)client_simulation, 0, LF_RET_VOID, 4, "", 0 },
     { "net_calcdistancefactor", 0xc32d0, (void *)lf_c32d0, 1, LF_RET_INT64, 4, "v", 0 },
     { "lf_c3320", 0xc3320, (void *)lf_c3320, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_c41c0", 0xc41c0, (void *)lf_c41c0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2324,7 +2324,7 @@ const LfEntry lf_table[] = {
     { "lf_d5490", 0xd5490, (void *)lf_d5490, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "player_addaction_item", 0xd5550, (void *)lf_d5550, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "lf_d5610", 0xd5610, (void *)lf_d5610, 0, LF_RET_VOID, 4, "", 0 },
-    { "updateplayticket", 0xd5650, (void *)lf_d5650, 0, LF_RET_VOID, 4, "", 0 },
+    { "updateplayticket", 0xd5650, (void *)updateplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_d5660", 0xd5660, (void *)lf_d5660, 0, LF_RET_INT64, 4, "", 0 },
     { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
     { "compileprogramobject", 0xd6570, (void *)lf_d6570, 3, LF_RET_INT, 4, "vvv", 1 },
@@ -2440,8 +2440,8 @@ const LfEntry lf_table[] = {
     { "gettimeofday", 0xfae20, (void *)lf_fae20, 2, LF_RET_INT, 4, "pp", 1 },
     { "setcpuaffinity", 0xfaf30, (void *)setcpuaffinity, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_fafc0", 0xfafc0, (void *)lf_fafc0, 1, LF_RET_VOID, 4, "p", 0 },
-    { "resettimer", 0xfafe0, (void *)lf_fafe0, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "starttimer", 0xfb020, (void *)lf_fb020, 1, LF_RET_VOID, 4, "v", 0 },
+    { "resettimer", 0xfafe0, (void *)resettimer, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "starttimer", 0xfb020, (void *)starttimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemtimetolive", 0xfb040, (void *)lf_fb040, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_fb1b0", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
@@ -2582,11 +2582,11 @@ const LfEntry lf_table[] = {
     { "lf_10bc70", 0x10bc70, (void *)lf_10bc70, 4, LF_RET_VOID, 4, "pppv", 0 },
     { "lf_10bca0", 0x10bca0, (void *)lf_10bca0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_10bcc0", 0x10bcc0, (void *)lf_10bcc0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "steam_init", 0x10bcf0, (void *)lf_10bcf0, 0, LF_RET_INT, 4, "", 1 },
-    { "steam_shutdown", 0x10bd40, (void *)lf_10bd40, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_update", 0x10bd60, (void *)lf_10bd60, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_getname", 0x10bd80, (void *)lf_10bd80, 1, LF_RET_INT, 1, "p", 1 },
-    { "steam_getid", 0x10bdc0, (void *)lf_10bdc0, 1, LF_RET_VOID, 4, "p", 1 },
+    { "steam_init", 0x10bcf0, (void *)steam_init, 0, LF_RET_INT, 4, "", 1 },
+    { "steam_shutdown", 0x10bd40, (void *)steam_shutdown, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_update", 0x10bd60, (void *)steam_update, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_getname", 0x10bd80, (void *)steam_getname, 1, LF_RET_INT, 1, "p", 1 },
+    { "steam_getid", 0x10bdc0, (void *)steam_getid, 1, LF_RET_VOID, 4, "p", 1 },
     { "steam_requestticket", 0x10be20, (void *)lf_10be20, 1, LF_RET_VOID, 4, "v", 1 },
     { "CSteamID", 0x10be80, (void *)lf_10be80, 1, LF_RET_INT, 4, "p", 0 },
     { "ConvertToUint64", 0x10bee0, (void *)lf_10bee0, 1, LF_RET_INT64, 4, "p", 0 },
