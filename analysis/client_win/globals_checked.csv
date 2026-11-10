@@ -49,3 +49,4 @@ rva,name,status,evidence
 0x29e7d2c0,glext,likely,"votes 32.5 (second 12.5); layout none; size fits; 33 code references, reach 0x40 of 0x44"
 0x12359c,zaxis,likely,Ghidra xrefs: the unit vector (0 0 1) that setupobjecttypeweight adds to the center. It follows xaxis at 0x123584.
 0x1b79ce0,pointtemp,likely,Ghidra xrefs: 512 points that setupobjecttypeweight copies and passes to calculatepointscale.
+0x1332e80,timer,likely,Ghidra xrefs: starttimer and resettimer index it with a stride of 0x58 bytes.

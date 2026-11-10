@@ -964,3 +964,7 @@ soundlist,0x24,engine,int,,Audio source and voice frame access
 soundlist,0x34,tire,int,,Audio source and voice frame access
 soundlist,0x134,engine_large,int,,Audio source and voice frame access
 soundlist,0x138,engine_train,int,,Audio source and voice frame access
+debug,0xc,num_lines,int,,debug_addcross adds 3 for each cross
+debug,0x10,lines,DebugLine,4096,debug_addcross: the lines of the crosses
+debug,0x50c80,num_values,int,,debug_addataint and debug_addatafloat add 1 for each new name
+debug,0x50c84,values,DebugValue,128,debug_addataint and debug_addatafloat: the named values of the debug display

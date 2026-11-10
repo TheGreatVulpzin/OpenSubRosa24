@@ -1,0 +1,3 @@
+name,type,count,client_rva,evidence
+steam_on,int,1,0x127ec0,"steam_init writes 1, steam_shutdown writes 0, the other Steam functions read it. The Linux client names the symbol cs_steam"
+relative_mouse,int,1,0x9065350,"reactivategame turns on the relative mouse mode of SDL when it is not zero"

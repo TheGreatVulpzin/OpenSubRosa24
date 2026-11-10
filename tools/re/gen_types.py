@@ -109,7 +109,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -362,6 +362,10 @@ typedef struct LevelBuilding {
 /* Vertex indices of the temporary mesh. */
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
 typedef struct MeshTri { int verts[3]; } MeshTri;
+
+/* Parts of the debug record (Debug): a line of a debug cross, and a named value of the debug display. */
+typedef struct DebugLine { vec3 from, to; } DebugLine;
+typedef struct DebugValue { int is_float; int int_value; float float_value; char name[32]; } DebugValue;
 
 /* Parts of a client model (ModelTemp, Model). */
 typedef struct TexCoord { float u, v; } TexCoord;

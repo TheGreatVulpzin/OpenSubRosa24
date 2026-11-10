@@ -23,7 +23,6 @@ char sr_unplaced_newspaper_money[128];
 char sr_unplaced_farbs_line[128];
 int sr_unplaced_dedicated;
 FloorplanCell sr_unplaced_floorplan[262144];
-Timer sr_unplaced_timer[256];
 int sr_unplaced_numofdynamicbonds;
 SrSurface sr_unplaced_surface2;
 int sr_unplaced_numofsprites;

@@ -31,6 +31,7 @@ extern uintptr_t sr_base;
 #define sr_data_manager_msg ((char *)(sr_base + 0x127230u))
 #define sr_data_message ((char *)(sr_base + 0x127310u))
 #define sr_data_debugit (*((int *)(sr_base + 0x127ea8u)))
+#define sr_data_timer ((Timer *)(sr_base + 0x1332e80u))
 #define sr_data_bullet ((Bullet *)(sr_base + 0x1338680u))
 #define sr_data_debug (*((Debug *)(sr_base + 0x14a8680u)))
 #define sr_data_human ((Human *)(sr_base + 0x14fc4a0u))
@@ -139,8 +140,6 @@ extern int sr_unplaced_dedicated;
 #define sr_data_dedicated sr_unplaced_dedicated
 extern FloorplanCell sr_unplaced_floorplan[262144];
 #define sr_data_floorplan sr_unplaced_floorplan
-extern Timer sr_unplaced_timer[256];
-#define sr_data_timer sr_unplaced_timer
 extern int sr_unplaced_numofdynamicbonds;
 #define sr_data_numofdynamicbonds sr_unplaced_numofdynamicbonds
 extern SrSurface sr_unplaced_surface2;
@@ -270,6 +269,8 @@ extern int sr_unplaced_train_near;
 #define cl_data_audio_simulation (*((int *)(sr_base + 0x9065300u)))
 #define cl_data_audio_keys_previous ((uint8_t *)(sr_base + 0x1bbe1a0u))
 #define cl_data_audio_key_names ((char *)(sr_base + 0x17798e00u))
+#define cl_data_steam_on (*((int *)(sr_base + 0x127ec0u)))
+#define cl_data_relative_mouse (*((int *)(sr_base + 0x9065350u)))
 
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket

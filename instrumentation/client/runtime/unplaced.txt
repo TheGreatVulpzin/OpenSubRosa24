@@ -20,7 +20,6 @@ newspaper_money
 farbs_line
 dedicated
 floorplan
-timer
 numofdynamicbonds
 surface2
 numofsprites

@@ -225,6 +225,10 @@ typedef struct LevelBuilding {
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
 typedef struct MeshTri { int verts[3]; } MeshTri;
 
+/* Parts of the debug record (Debug): a line of a debug cross, and a named value of the debug display. */
+typedef struct DebugLine { vec3 from, to; } DebugLine;
+typedef struct DebugValue { int is_float; int int_value; float float_value; char name[32]; } DebugValue;
+
 /* Parts of a client model (ModelTemp, Model). */
 typedef struct TexCoord { float u, v; } TexCoord;
 typedef struct TriTexCoords { TexCoord corners[3]; } TriTexCoords;
@@ -2390,7 +2394,10 @@ SR_STATIC_ASSERT(offsetof(BsdSocket, recv_buf) == 0x10070, "BsdSocket.recv_buf")
 
 /* debug[]: record of 0x523c8 bytes. */
 typedef union Debug { struct {
-    uint8_t pad_0000[0x4f884];
+    uint8_t pad_0000[0xc];
+    int num_lines;                       /* +0x000c debug_addcross adds 3 for each cross */
+    DebugLine lines[4096];               /* +0x0010 debug_addcross: the lines of the crosses */
+    uint8_t pad_18010[0x37874];
     int unk_4f884;                       /* +0x4f884 1 functions */
     uint8_t pad_4f888[0x1c];
     int unk_4f8a4;                       /* +0x4f8a4 1 functions */
@@ -2420,16 +2427,22 @@ typedef union Debug { struct {
     int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
     uint8_t pad_50254[0xf0];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
-    uint8_t pad_50348[0x1f3c];
+    uint8_t pad_50348[0x938];
+    int num_values;                      /* +0x50c80 debug_addataint and debug_addatafloat add 1 for each new name */
+    DebugValue values[128];              /* +0x50c84 debug_addataint and debug_addatafloat: the named values of the debug display */
     char log_text[256];                  /* +0x52284 dedicatedserverloop writes the physics line with sprintf */
     char log_path[64];                   /* +0x52384 debug_resetlogfile writes the file name dedlog.txt */
     void* log_file;                      /* +0x523c4 debug_resetlogfile and dedicatedserverloop: FILE * of the log */
 }; uint8_t lf_raw[0x523c8]; } Debug;
 SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+SR_STATIC_ASSERT(offsetof(Debug, num_lines) == 0xc, "Debug.num_lines");
+SR_STATIC_ASSERT(offsetof(Debug, lines) == 0x10, "Debug.lines");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
+SR_STATIC_ASSERT(offsetof(Debug, num_values) == 0x50c80, "Debug.num_values");
+SR_STATIC_ASSERT(offsetof(Debug, values) == 0x50c84, "Debug.values");
 SR_STATIC_ASSERT(offsetof(Debug, log_text) == 0x52284, "Debug.log_text");
 SR_STATIC_ASSERT(offsetof(Debug, log_path) == 0x52384, "Debug.log_path");
 SR_STATIC_ASSERT(offsetof(Debug, log_file) == 0x523c4, "Debug.log_file");
