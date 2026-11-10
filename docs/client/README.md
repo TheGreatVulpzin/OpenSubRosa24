@@ -1,6 +1,8 @@
-# Image decoders and fonts
+# Client systems
 
 The image loaders supply texture pixels and font atlases. Each format uses a separate source file and header in `src/client/image/`.
+
+Sound and voice use `src/client/audio/`.
 
 - [PNG](png.md): chunks, row filters, palettes and transparency.
 - [zlib](zlib.md): DEFLATE blocks and Huffman codes.
@@ -10,3 +12,4 @@ The image loaders supply texture pixels and font atlases. Each format uses a sep
 - [HDR](hdr.md): Radiance RGBE samples.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
+- [Sound and voice](audio.md): devices, spatial sources, microphone frames and voice controls.
