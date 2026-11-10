@@ -296,6 +296,10 @@ extern int sr_unplaced_train_near;
 #define cl_data_frame_time_average (*((float *)(sr_base + 0x14f88acu)))
 #define cl_data_debug_extra_count (*((int *)(sr_base + 0x14c0690u)))
 #define cl_data_chatmessage ((ChatMessage *)(sr_base + 0x129660u))
+#define cl_data_last_event (*((uint32_t *)(sr_base + 0x5350c6cu)))
+#define cl_data_input_wheel (*((int *)(sr_base + 0x908aad8u)))
+#define cl_data_server_address (*((uint32_t *)(sr_base + 0x75a5854u)))
+#define cl_data_server_port (*((uint16_t *)(sr_base + 0x75a5858u)))
 
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
