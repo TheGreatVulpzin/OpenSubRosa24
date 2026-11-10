@@ -1,2 +1,3 @@
 # Written, but no test reaches them: the offline test skips functions that call OpenGL. They stay lifted.
 reactivategame src/client/setup/game.c
+checksimulation src/client/setup/simulation.c

@@ -5,7 +5,8 @@ calls each function with arguments that reach every branch. The case snapshot is
 so the script deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_setup.py <recording dir> <work dir> [case,...]
-Cases: jpeg, timers, debug, debugoff, log, ticket, mouseon, mouseoff. The script sets the environment of the gate itself.
+Cases: jpeg, timers, debug, debugoff, log, ticket, mouseon, mouseoff, tickclient, tickhost,
+tickkeys, tickkeys2, tickdebug, tickshift. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -22,6 +23,16 @@ from synth_bonds import Snapshot  # noqa: E402
 RESET, UPDATEPLAYTICKET = 0x36f0, 0xd5650
 RESETTIMER, STARTTIMER = 0xfafe0, 0xfb020
 REACTIVATEGAME, RELATIVE_MOUSE = 0x7d060, 0x9065350
+CHECKSIMULATION = 0x7d900
+
+# State of the client tick (RVA).
+SERVER_ACTIVE, GAME_STATE, GAMETYPE = 0x75a5800, 0x9065320, 0x9065308
+PAUSED, STEP_ONCE, SLOW_TICK, LAST_TICK_MS = 0x906533c, 0x9065340, 0x9065344, 0x9065338
+VIEW_PLAYER = 0xfefe2a0
+KEYBOARD, PREVKEYBOARD = 0x75a5140, 0x1bbe1a0
+VOICE_ON, MIC_GAIN, HIDE_HUD, LIGHT_ANGLES = 0x9063218, 0x9063220, 0x908b054, 0x9065348
+KEY_V, KEY_EQUALS, KEY_F1, KEY_F4, KEY_F5, KEY_PAGE_UP, KEY_PAGE_DOWN = 25, 46, 58, 61, 62, 75, 78
+KEY_LBRACKET, KEY_RBRACKET, KEY_LSHIFT = 47, 48, 225
 ADDCROSS, ADDATAINT, ADDATAFLOAT, WRITELOGFILE = 0x6a230, 0x6aaa0, 0x6ab70, 0x6aca0
 
 # Records (RVA).
@@ -111,6 +122,27 @@ def reactivate_case(mouse):
     return [(RELATIVE_MOUSE, 'i', [mouse])], {'reactivategame': [call(REACTIVATEGAME)]}
 
 
+def tick_edits(active, state, view=-1, debug=0):
+    """A client or host that is ready for a tick, with no player in view."""
+    return [(SERVER_ACTIVE, 'i', [active]), (GAME_STATE, 'i', [state]), (VIEW_PLAYER, 'i', [view]),
+            (DEBUGIT, 'i', [debug]), (LAST_TICK_MS, 'I', [0]), (PAUSED, 'i', [0]), (STEP_ONCE, 'i', [0]),
+            (SLOW_TICK, 'i', [0]), (MIC_GAIN, 'i', [100])]
+
+
+def key_edits(*pressed, held=()):
+    """Keys that went down in this tick (pressed) and keys that are down (held)."""
+    edits = [(KEYBOARD, '512B', [0] * 512), (PREVKEYBOARD, '512B', [0] * 512)]
+    edits += [(KEYBOARD + k, 'B', [1]) for k in tuple(pressed) + tuple(held)]
+    return edits
+
+
+def tick_case(active, state, input_calls, keys=(), held=(), debug=0, gametype=None):
+    edits = tick_edits(active, state, debug=debug) + key_edits(*keys, held=held)
+    if gametype is not None:
+        edits.append((GAMETYPE, 'i', [gametype]))
+    return edits, {'checksimulation': [call(CHECKSIMULATION, a) for a in input_calls]}
+
+
 def main():
     rec, work = Path(sys.argv[1]), Path(sys.argv[2])
     work.mkdir(parents=True, exist_ok=True)
@@ -119,7 +151,13 @@ def main():
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
     allc = {'jpeg': jpeg_case, 'timers': timers_case, 'debug': debug_case,
             'debugoff': lambda: debug_case(False), 'log': log_case, 'ticket': ticket_case,
-            'mouseon': lambda: reactivate_case(1), 'mouseoff': lambda: reactivate_case(0)}
+            'mouseon': lambda: reactivate_case(1), 'mouseoff': lambda: reactivate_case(0),
+            'tickclient': lambda: tick_case(0, 3, (0, 1)),
+            'tickhost': lambda: tick_case(1, 3, (0, 1)),
+            'tickkeys': lambda: tick_case(1, 3, (1,), keys=(KEY_F1, KEY_F4, KEY_PAGE_UP)),
+            'tickkeys2': lambda: tick_case(1, 3, (1,), keys=(KEY_PAGE_DOWN, KEY_EQUALS), debug=1),
+            'tickdebug': lambda: tick_case(1, 3, (1,), keys=(KEY_V, KEY_F5), held=(KEY_LBRACKET,), debug=1, gametype=4),
+            'tickshift': lambda: tick_case(1, 3, (1,), keys=(KEY_F5,), held=(KEY_LSHIFT, KEY_RBRACKET), debug=1)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     for name in want:
         edits, functions = allc[name]()
