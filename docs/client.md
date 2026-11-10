@@ -443,6 +443,8 @@ Tests: the four Steam functions with a recorded call have 1 call each, the same.
 
 `reset` was in the list of C7 only because of its generic name. It belongs to the JPEG decoder, and the image code calls it directly now.
 
+`checksimulation` is written (`src/client/setup/simulation.c`, page `docs/client/simulation.md`) but not adopted. Its 10 recorded calls are all skipped: the original crashes in functions that `checksimulation` calls (`lineintersectspecblock` and one at 0x4a180), because the snapshot does not hold the heap that they read. The synthetic cases `tickhost`, `tickkeys`, `tickkeys2`, `tickdebug` and `tickshift` (a host with state 3, with and without keys and the debug flag) give 6 calls, all the same. The cases `tickclient` (the client branch, which is the branch of every online game) are skipped: the original crashes at an address inside a DLL, in the network calls. The function stays in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows the client branch.
+
 The gate counts do not change: menu 86, play 311, play2 305.
 
 ## Open work

@@ -30,3 +30,4 @@ Sound and voice use `src/client/audio/`.
 ## Debug, timers and Steam
 
 - [runtime.md](runtime.md): the debug display, the profiler timers, the Steam interface and the JPEG restart.
+- [simulation.md](simulation.md): the tick of the client, the keys of the display and the traffic lights.
