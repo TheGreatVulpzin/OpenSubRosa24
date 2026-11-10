@@ -73,10 +73,19 @@ static unsigned jpeg_marker(JpegImage *image)
     return (uint8_t)CL_FN(0x402280, char(__cdecl *)(JpegImage *))(image);
 }
 
-/* Reset the entropy buffer and component predictors at a restart boundary. */
-static void jpeg_reset(JpegImage *image)
+/* Empty the entropy buffer and clear the DC predictors of the first three components. The
+ * pending marker is cleared and the restart counter starts again. With no restart interval
+ * the counter never reaches zero. */
+void __cdecl reset(JpegImage *image)
 {
-    CL_FN(0x4036f0, void(__cdecl *)(JpegImage *))(image);
+    image->num_bits = 0;
+    image->bits = 0;
+    image->no_more = 0;
+    image->component[0].dc_prediction = 0;
+    image->component[1].dc_prediction = 0;
+    image->component[2].dc_prediction = 0;
+    image->marker = JPEG_NO_MARKER;
+    image->restart_left = image->restart_interval ? image->restart_interval : 0x7fffffff;
 }
 
 /* Fill the entropy buffer. A marker ends input and leaves its byte pending. */
@@ -474,7 +483,7 @@ static int jpeg_restart(JpegImage *image)
         grow_buffer_unsafe(image);
     if (image->marker < JPEG_RESTART0 || image->marker > JPEG_RESTART7)
         return 0;
-    jpeg_reset(image);
+    reset(image);
     return 1;
 }
 
@@ -482,7 +491,7 @@ static int jpeg_restart(JpegImage *image)
 int parse_entropy_coded_data(JpegImage *image)
 {
     int row, column, scan, component, x, y, columns, rows;
-    jpeg_reset(image);
+    reset(image);
     if (image->scan_components == 1) {
         component = image->order[0];
         columns = (image->component[component].width + 7) >> 3;

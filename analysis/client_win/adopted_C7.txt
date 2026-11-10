@@ -1,0 +1,13 @@
+reset src/client/image/jpeg.c
+updateplayticket src/client/setup/game.c
+resettimer src/client/setup/timers.c
+starttimer src/client/setup/timers.c
+debug_addcross src/client/debug/debug.c
+debug_addataint src/client/debug/debug.c
+debug_addatafloat src/client/debug/debug.c
+debug_writelogfile src/client/debug/debug.c
+steam_init src/client/steam/steam.c
+steam_shutdown src/client/steam/steam.c
+steam_update src/client/steam/steam.c
+steam_getname src/client/steam/steam.c
+steam_getid src/client/steam/steam.c

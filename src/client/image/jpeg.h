@@ -20,5 +20,6 @@ int process_frame_header(JpegImage *image, int scan);
 void YCbCr_to_RGB_row(uint8_t *output, const uint8_t *y, const uint8_t *cb, const uint8_t *cr,
                       int count, int stride);
 void cleanup_jpeg(JpegImage *image);
+void __cdecl reset(JpegImage *image);
 
 #endif
