@@ -433,6 +433,18 @@ A separate measurement of `frame_drawvoiceicons` gives 0.97 across two calls wit
 
 Whole-client comparisons retain 85, 285 and 280 matching calls for the menu and two play recordings. The server target builds with `SV_BUILD_INSTRUMENTATION=OFF`. Storage checks match 138 initial objects and 276 table and entity digests in both memory modes.
 
+## Setup and main loop, first part (group C7)
+
+Branch `client/c7`. The plan of the group is `build/plans/c7-plan.md` (not versioned). Part A has 13 functions that pass their tests (`analysis/client_win/adopted_C7.txt`): `reset` (the JPEG restart, in `src/client/image/jpeg.c`), `updateplayticket`, `resettimer`, `starttimer`, `debug_addcross`, `debug_addataint`, `debug_addatafloat`, `debug_writelogfile`, `steam_init`, `steam_shutdown`, `steam_update`, `steam_getname` and `steam_getid`. The page is `docs/client/runtime.md`.
+
+Tests: the four Steam functions with a recorded call have 1 call each, the same. The synthetic cases are in `instrumentation/client/synth_setup.py` (`jpeg`, `timers`, `debug`, `debugoff`, `log`, `ticket`, `mouseon`, `mouseoff`): `reset` 3 calls, `resettimer` 20, `starttimer` 5, `debug_addcross` 4, `debug_addatafloat` 14, `debug_addataint` 116 (one call skipped), `debug_writelogfile` 2 and `updateplayticket` 1, all the same. The test ignores the processor cycle count that `starttimer` stores.
+
+`reactivategame` is written (`src/client/setup/game.c`) but not adopted. It calls functions that use OpenGL, and the offline test skips them. It is in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows it works. `steam_requestticket` and `steam_requestauthticket` are not written: they use a Steam callback object.
+
+`reset` was in the list of C7 only because of its generic name. It belongs to the JPEG decoder, and the image code calls it directly now.
+
+The gate counts do not change: menu 86, play 311, play2 305.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).

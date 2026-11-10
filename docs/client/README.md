@@ -26,3 +26,7 @@ The image loaders supply texture pixels and font atlases. Each format uses a sep
 Sound and voice use `src/client/audio/`.
 
 - [Sound and voice](audio.md): devices, spatial sources, microphone frames and voice controls.
+
+## Debug, timers and Steam
+
+- [runtime.md](runtime.md): the debug display, the profiler timers, the Steam interface and the JPEG restart.

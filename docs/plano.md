@@ -264,7 +264,7 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | C4 | Input (`getinputs_*`, keyboard, mouse) | 16 | 16 KB |
 | C5 | Menus (`mainmenu`, `joinmenu`, `optionsmenu`, `playermenu_*`, `drawmenuitems`) | 26 | 35 KB |
 | C6 | Sound and voice (OpenAL, Speex). 14 tested functions. Voice menu awaits a window check. See [audio](client/audio.md). | 15 | 10 KB |
-| C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug) | 13 | 21 KB |
+| C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug). Part A done 2026-11-10 (13 functions): see `docs/client.md`. | 24 | 33 KB |
 | C8 | Editors (`leveleditor`, `buildingedit*`): tools for developers, last | 1 and more | 12 KB and more |
 | C9 | GLee library: a third-party OpenGL loader. Replace it with a small table-driven loader, or keep it as it is. | 183 | 70 KB |
 | C10 | Other named functions | 153 | 70 KB |
