@@ -228,6 +228,8 @@ typedef struct MeshTri { int verts[3]; } MeshTri;
 /* Parts of the debug record (Debug): a line of a debug cross, and a named value of the debug display. */
 typedef struct DebugLine { vec3 from, to; } DebugLine;
 typedef struct DebugValue { int is_float; int int_value; float float_value; char name[32]; } DebugValue;
+/* A message of the chat display. Only the time to live is known. */
+typedef struct ChatMessage { uint8_t pad_00[8]; int timer; uint8_t pad_0c[0x8c]; } ChatMessage;
 
 /* Parts of a client model (ModelTemp, Model). */
 typedef struct TexCoord { float u, v; } TexCoord;

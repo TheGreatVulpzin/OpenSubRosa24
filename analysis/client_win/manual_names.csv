@@ -30,3 +30,5 @@ rva,name,evidence
 0xfe360,enablesocketclient,Linux client symbol and matching calls
 0x79330,frame_drawvoiceicons,Linux client symbol and matching calls
 0xd38c0,voiceoptionsmenu,Linux client symbol and matching calls
+0xd4700,physicssimulation,"Runs the particle, object, human, item and bond simulations and the time to live functions in the order of the server tick."
+0x645e0,timetolive_records,"Counts down the time to live of each 0x5c byte record of a table and removes the ones that reach 0, as checksimulation calls it after the sprite simulations."
