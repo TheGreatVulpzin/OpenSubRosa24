@@ -131,13 +131,73 @@ void *convert_format(void *data, int channels, int requested, int width, int hei
     return output;
 }
 
+/* Add the prediction of one filter to every byte of a row. The row has n bytes for each pixel
+ * and step bytes between pixels. A row without a row above predicts from zeros. */
+static void unfilter_row(uint8_t *line, const uint8_t *above, const uint8_t *raw,
+                         int width, int n, int step, int filter)
+{
+    uint8_t *dst;
+    const uint8_t *up;
+    int pixel, c;
+    if (width <= 0)
+        return;
+    /* The first pixel has no left neighbour. */
+    for (c = 0; c < n; c++) {
+        int prediction = 0;
+        if (above && filter == PNG_UP)
+            prediction = above[c];
+        else if (above && filter == PNG_AVERAGE)
+            prediction = above[c] >> 1;
+        else if (above && filter == PNG_PAETH)
+            prediction = paeth(0, above[c], 0);
+        line[c] = (uint8_t)(raw[c] + prediction);
+    }
+    if (!above && filter == PNG_UP)
+        filter = PNG_NONE;
+    else if (!above && filter == PNG_PAETH)
+        filter = PNG_SUB;
+    dst = line + step;
+    up = above ? above + step : NULL;
+    raw += n;
+    for (pixel = 1; pixel < width; pixel++, dst += step, raw += n) {
+        switch (filter) {
+        case PNG_NONE:
+            for (c = 0; c < n; c++)
+                dst[c] = raw[c];
+            break;
+        case PNG_SUB:
+            for (c = 0; c < n; c++)
+                dst[c] = (uint8_t)(raw[c] + dst[c - step]);
+            break;
+        case PNG_UP:
+            for (c = 0; c < n; c++)
+                dst[c] = (uint8_t)(raw[c] + up[c]);
+            break;
+        case PNG_AVERAGE:
+            if (up)
+                for (c = 0; c < n; c++)
+                    dst[c] = (uint8_t)(raw[c] + ((dst[c - step] + up[c]) >> 1));
+            else
+                for (c = 0; c < n; c++)
+                    dst[c] = (uint8_t)(raw[c] + (dst[c - step] >> 1));
+            break;
+        case PNG_PAETH:
+            for (c = 0; c < n; c++)
+                dst[c] = (uint8_t)(raw[c] + paeth(dst[c - step], up[c], up[c - step]));
+            break;
+        }
+        if (up)
+            up += step;
+    }
+}
+
 /* Restore filtered samples. Return zero for a bad filter, length or allocation. */
 int create_png_image_raw(PngImage *image, const uint8_t *raw, unsigned size,
                          int channels, int width, unsigned height)
 {
     int source_channels = image->reader.channels;
     unsigned row;
-    int pixel, channel, filter;
+    int pixel, filter;
     image_check(channels == source_channels || channels == source_channels + 1, PNG_ASSERT_PIXEL_CHANNELS, PNG_PIXEL_SOURCE, 0x93b);
     if (cl_data_image_partial)
         height = 1;
@@ -154,24 +214,11 @@ int create_png_image_raw(PngImage *image, const uint8_t *raw, unsigned size,
         filter = *raw++;
         if (filter > PNG_PAETH)
             return image_fail(PNG_ERROR_FILTER);
-        for (pixel = 0; pixel < width; pixel++) {
-            uint8_t *dst = line + pixel * channels;
-            for (channel = 0; channel < source_channels; channel++) {
-                int left = pixel ? dst[channel - channels] : 0;
-                int up = above ? above[pixel * channels + channel] : 0;
-                int corner = pixel && above ? above[(pixel - 1) * channels + channel] : 0;
-                int prediction = 0;
-                switch (filter) {
-                case PNG_SUB: prediction = left; break;
-                case PNG_UP: prediction = up; break;
-                case PNG_AVERAGE: prediction = (left + up) >> 1; break;
-                case PNG_PAETH: prediction = paeth(left, up, corner); break;
-                }
-                dst[channel] = (uint8_t)(*raw++ + prediction);
-            }
-            if (channels != source_channels)
-                dst[source_channels] = PNG_ALPHA;
-        }
+        unfilter_row(line, above, raw, width, source_channels, channels, filter);
+        raw += source_channels * width;
+        if (channels != source_channels)
+            for (pixel = 0; pixel < width; pixel++)
+                line[pixel * channels + source_channels] = PNG_ALPHA;
     }
     return 1;
 }
