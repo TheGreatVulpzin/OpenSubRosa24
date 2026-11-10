@@ -28,7 +28,7 @@ A client sends its input and receives the state of the server (`clientsend`, `cl
 
 A host runs the server tick: the bots (only in state 2), `servercycle`, `serverrecv`, `playersimulation`, the physics pass, `logicsimulation` and `serversend`. With the debug flag on, the V key sets the health of human 1 to 100.
 
-Both then count the tick, and in the states 0, 1 and 2 they run the bullets, the events, the sprites, the tire marks and the time to live of bullets and sprites. A client also sets the traffic lights: every intersection has two sides that take turns by the low 11 bits of `host_ticks`.
+Both then count the tick, and in the states 0, 1 and 2 they run the bullets, the events, the sprites, the tire marks and the time to live of bullets and sprites. A client also sets the traffic lights: every intersection has two sides that take turns by the low 11 bits of `game_tick`.
 
 | Ticks in the cycle | Sides 0 and 2 | Sides 1 and 3 |
 | --- | --- | --- |

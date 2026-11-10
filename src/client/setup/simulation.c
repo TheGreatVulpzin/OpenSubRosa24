@@ -193,13 +193,13 @@ static void host_tick(void)
         physicssimulation();
     logicsimulation();
     serversend();
-    cl_data_host_ticks++;
+    cl_data_game_tick++;
 }
 
 /* The lights of every intersection by the tick of the host: the sides take turns. */
 static void set_traffic_lights(void)
 {
-    unsigned phase = cl_data_host_ticks & LIGHT_CYCLE_MASK;
+    unsigned phase = cl_data_game_tick & LIGHT_CYCLE_MASK;
     int a, b, i;
 
     if (phase < LIGHT_PHASE_ENDS_A) {

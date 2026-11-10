@@ -12,7 +12,7 @@ mic_text_timer,float,1,0x908b050,"checksimulation sets it to 4.0 when the gain c
 paused,int,1,0x906533c,"checksimulation: the simulation does not run while it is not zero"
 step_once,int,1,0x9065340,"checksimulation: runs one tick while paused, then clears. debug_getinputs sets it"
 game_state,int,1,0x9065320,"checksimulation: the simulation functions run in the states 0, 1 and 2. Same place as Game.state"
-host_ticks,uint32_t,1,0x9065334,"checksimulation: counts the ticks of a hosted game. The traffic lights use its low 11 bits"
+game_tick,uint32_t,1,0x9065334,"checksimulation counts it in a hosted game; a client reads it as the tick of the server. The traffic lights use its low 11 bits, and the smoothing of humans and objects reads it"
 sim_ticks,int,1,0x1dda5240,"checksimulation: counts every simulated tick. First word of the area sector record"
 last_health,int,1,0x908aae4,"checksimulation: the health of the viewed human in the last tick"
 damage_flash,float,1,0x908aae8,"checksimulation: set to 1.0 when the health drops, then it fades by 1/16 for each tick"

@@ -6,7 +6,7 @@ so the script deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_setup.py <recording dir> <work dir> [case,...]
 Cases: jpeg, timers, debug, debugoff, log, ticket, mouseon, mouseoff, tickclient, tickhost,
-tickkeys, tickkeys2, tickdebug, tickshift. The script sets the environment of the gate itself.
+tickkeys, tickkeys2, tickdebug, tickshift, world, world2, world3, world4. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -24,7 +24,14 @@ RESET, UPDATEPLAYTICKET = 0x36f0, 0xd5650
 RESETTIMER, STARTTIMER = 0xfafe0, 0xfb020
 REACTIVATEGAME, RELATIVE_MOUSE = 0x7d060, 0x9065350
 CHECKSIMULATION = 0x7d900
+HUMANSIMULATIONCLIENT, ITEMSIMULATIONCLIENT, CLIENT_SIMULATION = 0x896d0, 0x99500, 0xc2bb0
 
+# Records of the world (RVA, size of a record).
+HUMAN, HUMAN_SIZE = 0x14fc4a0, 0x2b64
+OBJECT, OBJECT_SIZE = 0x5519120, 0x8230
+ITEM, ITEM_SIZE = 0x908b080, 0x1ac
+PLAYER, PLAYER_SIZE = 0xed813a0, 0x2408
+GAME_TICK = 0x9065334
 # State of the client tick (RVA).
 SERVER_ACTIVE, GAME_STATE, GAMETYPE = 0x75a5800, 0x9065320, 0x9065308
 PAUSED, STEP_ONCE, SLOW_TICK, LAST_TICK_MS = 0x906533c, 0x9065340, 0x9065344, 0x9065338
@@ -143,6 +150,61 @@ def tick_case(active, state, input_calls, keys=(), held=(), debug=0, gametype=No
     return edits, {'checksimulation': [call(CHECKSIMULATION, a) for a in input_calls]}
 
 
+def floats_edit(rva, count, rng, low=-2.0, high=2.0):
+    return (rva, f'{count}f', [rng.uniform(low, high) for _ in range(count)])
+
+
+def world_case(seed=11):
+    """Humans on foot and in vehicles, objects and items with all kinds of holders. The function
+    that a case calls runs on the same records, so the three smoothing functions share it."""
+    rng = random.Random(seed)
+    edits = [(GAME_TICK, 'I', [1000])]
+    buttons = [0, 0x800, 0x800, 0]
+    for p, b in enumerate(buttons):
+        edits.append((PLAYER + p * PLAYER_SIZE + 0x9c, 'I', [b]))
+    # (vehicle, seat, player, exit_timer, net_tick, net_tick_prev)
+    humans = [(-1, 0, -1, 0, 990, 980), (-1, 0, 1, 5, 1000, 990), (0, 0, 0, 0, 995, 990), (1, 1, 1, 10, 900, 900),
+              (2, 2, 2, 30, 990, 990), (3, 0, 3, 0, 1500, 1400), (0, 3, 1, 2, 999, 1)]
+    for h, (vehicle, seat, player, exit_timer, net_tick, net_tick_prev) in enumerate(humans):
+        base = HUMAN + h * HUMAN_SIZE
+        edits.append(noise(base, HUMAN_SIZE, rng))
+        edits.append((base, 'i', [1]))
+        edits.append((base + 8, 'i', [player]))
+        edits.append((base + 0x14, '3i', [vehicle, seat, 0]))
+        edits.append((base + 0x30, 'i', [exit_timer]))
+        edits.append(floats_edit(base + 0xc8, 15 * 0xe0 // 4, rng))
+        edits.append((base + 0x2b44, 'i', [net_tick]))
+        edits.append(floats_edit(base + 0x2b48, 3, rng, -50, 50))
+        edits.append((base + 0x2b54, 'i', [net_tick_prev]))
+        edits.append(floats_edit(base + 0x2b58, 3, rng, -50, 50))
+    for o in range(4):
+        base = OBJECT + o * OBJECT_SIZE
+        edits.append(noise(base, 0x100, rng))
+        edits.append((base, 'i', [1]))
+        edits.append((base + 4, 'i', [o]))
+        edits.append(floats_edit(base + 0x24, 3 + 9, rng, -9, 9))
+        edits.append((base + 0x8210, 'i', [990 + o * 3]))
+        edits.append(floats_edit(base + 0x8214, 3, rng, -50, 50))
+        edits.append((base + 0x8220, 'i', [980]))
+        edits.append(floats_edit(base + 0x8224, 3, rng, -50, 50))
+    # (type, countdown, parent_item, parent_human, parent_slot)
+    items = [(1, 5, -1, -1, 0), (0xf, 0, 2, -1, 3), (0xd, 0, -1, -1, 0), (0x10, 0, 2, -1, 4), (0xe, 3, -1, -1, 0),
+             (0xf, 0, 4, 1, 1), (0x3, 0, 0, 3, 2), (0x10, 0, 1, 4, 5), (0xf, 0, 6, -1, 2)]
+    for n, (kind, countdown, parent_item, parent_human, slot) in enumerate(items):
+        base = ITEM + n * ITEM_SIZE
+        edits.append(noise(base, ITEM_SIZE, rng))
+        edits.append((base, 'i', [1]))
+        edits.append((base + 0xc, 'i', [kind]))
+        edits.append((base + 0x18, '3i', [parent_human, parent_item, slot]))
+        edits.append((base + 0xf4, 'i', [countdown]))
+        edits.append(floats_edit(base + 0x48, 3, rng, -9, 9))
+        edits.append(floats_edit(base + 0x84, 9, rng))
+    functions = {'humansimulationclient': [call(HUMANSIMULATIONCLIENT)],
+                 'itemsimulationclient': [call(ITEMSIMULATIONCLIENT)],
+                 'client_simulation': [call(CLIENT_SIMULATION)]}
+    return edits, functions
+
+
 def main():
     rec, work = Path(sys.argv[1]), Path(sys.argv[2])
     work.mkdir(parents=True, exist_ok=True)
@@ -152,6 +214,8 @@ def main():
     allc = {'jpeg': jpeg_case, 'timers': timers_case, 'debug': debug_case,
             'debugoff': lambda: debug_case(False), 'log': log_case, 'ticket': ticket_case,
             'mouseon': lambda: reactivate_case(1), 'mouseoff': lambda: reactivate_case(0),
+            'world': world_case, 'world2': lambda: world_case(12), 'world3': lambda: world_case(13),
+            'world4': lambda: world_case(14),
             'tickclient': lambda: tick_case(0, 3, (0, 1)),
             'tickhost': lambda: tick_case(1, 3, (0, 1)),
             'tickkeys': lambda: tick_case(1, 3, (1,), keys=(KEY_F1, KEY_F4, KEY_PAGE_UP)),

@@ -282,7 +282,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_paused (*((int *)(sr_base + 0x906533cu)))
 #define cl_data_step_once (*((int *)(sr_base + 0x9065340u)))
 #define cl_data_game_state (*((int *)(sr_base + 0x9065320u)))
-#define cl_data_host_ticks (*((uint32_t *)(sr_base + 0x9065334u)))
+#define cl_data_game_tick (*((uint32_t *)(sr_base + 0x9065334u)))
 #define cl_data_sim_ticks (*((int *)(sr_base + 0x1dda5240u)))
 #define cl_data_last_health (*((int *)(sr_base + 0x908aae4u)))
 #define cl_data_damage_flash (*((float *)(sr_base + 0x908aae8u)))
