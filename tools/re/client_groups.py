@@ -30,7 +30,7 @@ RULES = [
            r'^listvideomodes|^displaydebuginfo|^hudsimulation|^raycast_|^cityobject_simulation'),
     ('C2', r'^generate|^createmodel|^model_|^landscape_|^tempmesh|^modeltemp|^createhumanmodel|^createhairmodel|'
            r'noise|^lerp|^serp|^cerp|^engine_bezier|^hermite|^copymodel|^calculatepointscale|^deletesprite_model|'
-           r'^objecttype_|^createmodel_'),
+           r'^objecttype_|^createmodel_|^addboxtomodel|^setupobjecttypeweight|^setupspheremodel'),
     ('C7', r'^setupclient|^gameloop|^checksimulation|^main$|^mainCRTStartup|^reset$|^reactivategame|^client_simulation|'
            r'^dedicatedserverloop|^initplayticket|^updateplayticket|^ticketreturned|^steam_|^debug_|^displaydebug|'
            r'^humansimulationclient|^itemsimulationclient|^clientsend|^clientrecv|^starttimer|^stoptimer|^resettimer'),
