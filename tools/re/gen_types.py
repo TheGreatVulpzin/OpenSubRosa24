@@ -355,6 +355,16 @@ typedef struct VboRec { uint32_t gl_name; uint8_t pad_04[4]; } VboRec;
 typedef struct LandSectorLod { int level; int edge_level[4]; } LandSectorLod;
 /* One level of the sphere mesh. */
 typedef struct SphereLevel { int num_verts; vec3 *verts; int num_tris; MeshTri *tris; } SphereLevel;
+/* A window of a building type: the lit rectangle inside one tile of 64 x 64 texels. The
+ * four numbers are fractions of the tile. A clear window is drawn as grey glass. */
+typedef struct WindowRect { int clear; float left, width, top, height; uint8_t pad_14[4]; } WindowRect;
+/* The windows that the window texture holds: each cell is a tile of 128 x 128 pixels. */
+typedef struct WindowCell { int material; int window; } WindowCell;
+typedef struct WindowAtlas { int num_cells; WindowCell cells[64]; } WindowAtlas;
+/* The look values of the last texture that was made for a human. */
+typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook;
+/* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
+typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
 /* A vertex as the renderer reads it: 8 floats. */
 typedef struct ModelVertex { vec3 pos; TexCoord texcoord; vec3 normal; } ModelVertex;
 

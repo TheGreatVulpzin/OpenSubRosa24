@@ -240,6 +240,16 @@ typedef struct VboRec { uint32_t gl_name; uint8_t pad_04[4]; } VboRec;
 typedef struct LandSectorLod { int level; int edge_level[4]; } LandSectorLod;
 /* One level of the sphere mesh. */
 typedef struct SphereLevel { int num_verts; vec3 *verts; int num_tris; MeshTri *tris; } SphereLevel;
+/* A window of a building type: the lit rectangle inside one tile of 64 x 64 texels. The
+ * four numbers are fractions of the tile. A clear window is drawn as grey glass. */
+typedef struct WindowRect { int clear; float left, width, top, height; uint8_t pad_14[4]; } WindowRect;
+/* The windows that the window texture holds: each cell is a tile of 128 x 128 pixels. */
+typedef struct WindowCell { int material; int window; } WindowCell;
+typedef struct WindowAtlas { int num_cells; WindowCell cells[64]; } WindowAtlas;
+/* The look values of the last texture that was made for a human. */
+typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook;
+/* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
+typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
 /* A vertex as the renderer reads it: 8 floats. */
 typedef struct ModelVertex { vec3 pos; TexCoord texcoord; vec3 normal; } ModelVertex;
 
@@ -3135,7 +3145,8 @@ typedef union TextureList { struct {
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
     int human[4];                        /* +0x0424 generatetexture: suit and tie and skin and hair and eye of a human. The first three use the team colors */
-    uint8_t pad_0434[0xc00];
+    uint8_t pad_0434[0x400];
+    int human_textures[512];             /* +0x0834 generatehumantexture: the texture of each human */
     int paint[8];                        /* +0x1034 generatetexture: a color on the left half and dark grey on the right half */
     int street[10];                      /* +0x1054 generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps */
     uint8_t pad_107c[0x58];
@@ -3158,6 +3169,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");
 SR_STATIC_ASSERT(offsetof(TextureList, human) == 0x424, "TextureList.human");
+SR_STATIC_ASSERT(offsetof(TextureList, human_textures) == 0x834, "TextureList.human_textures");
 SR_STATIC_ASSERT(offsetof(TextureList, paint) == 0x1034, "TextureList.paint");
 SR_STATIC_ASSERT(offsetof(TextureList, street) == 0x1054, "TextureList.street");
 SR_STATIC_ASSERT(offsetof(TextureList, grey_disc) == 0x10d4, "TextureList.grey_disc");

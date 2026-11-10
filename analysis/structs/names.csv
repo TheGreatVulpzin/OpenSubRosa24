@@ -848,3 +848,4 @@ texturelist,0x1110,random_vectors,int,,the start code passes it to generatetextu
 texturelist,0x1134,landscape_normal,int,,landscape_generatenormaltexture fills this texture
 texturelist,0x1138,landscape_detail,int,,landscape_generatedetail fills this texture
 texturelist,0x1140,newspaper,int,,generatetexture_newspaper fills this texture
+texturelist,0x834,human_textures,int,512,generatehumantexture: the texture of each human

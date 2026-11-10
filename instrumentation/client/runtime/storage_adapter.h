@@ -24,6 +24,7 @@ extern uintptr_t sr_base;
 #define sr_data_mti (*((int *)(sr_base + 0x123580u)))
 #define sr_data_xaxis (*((vec3 *)(sr_base + 0x123584u)))
 #define sr_data_yaxis (*((vec3 *)(sr_base + 0x123590u)))
+#define sr_data_zaxis (*((vec3 *)(sr_base + 0x12359cu)))
 #define sr_data_socketid (*((uint32_t *)(sr_base + 0x1235b8u)))
 #define sr_data_tzset_done (*((int *)(sr_base + 0x126724u)))
 #define sr_data_mt ((uint32_t *)(sr_base + 0x126828u))
@@ -35,6 +36,7 @@ extern uintptr_t sr_base;
 #define sr_data_human ((Human *)(sr_base + 0x14fc4a0u))
 #define sr_data_stats (*((Stats *)(sr_base + 0x1a79ca8u)))
 #define sr_data_clientaccounts (*((SrClientAccountStore *)(sr_base + 0x1a79cc0u)))
+#define sr_data_pointtemp ((vec3 *)(sr_base + 0x1b79ce0u))
 #define sr_data_numofconnections (*((int *)(sr_base + 0x1b9b4e0u)))
 #define sr_data_building (*((Building *)(sr_base + 0x1cb8280u)))
 #define sr_data_blocktemp (*((BlockTemp *)(sr_base + 0x52dac40u)))
@@ -109,8 +111,6 @@ extern float sr_unplaced_lightwavelength[3];
 #define sr_data_lightwavelength sr_unplaced_lightwavelength
 extern const char * sr_unplaced_carcolorname[6];
 #define sr_data_carcolorname sr_unplaced_carcolorname
-extern vec3 sr_unplaced_zaxis;
-#define sr_data_zaxis sr_unplaced_zaxis
 extern float sr_unplaced_xaxis2d[2];
 #define sr_data_xaxis2d sr_unplaced_xaxis2d
 extern float sr_unplaced_yaxis2d[2];
@@ -141,8 +141,6 @@ extern FloorplanCell sr_unplaced_floorplan[262144];
 #define sr_data_floorplan sr_unplaced_floorplan
 extern Timer sr_unplaced_timer[256];
 #define sr_data_timer sr_unplaced_timer
-extern vec3 sr_unplaced_pointtemp[512];
-#define sr_data_pointtemp sr_unplaced_pointtemp
 extern int sr_unplaced_numofdynamicbonds;
 #define sr_data_numofdynamicbonds sr_unplaced_numofdynamicbonds
 extern SrSurface sr_unplaced_surface2;
@@ -212,6 +210,11 @@ extern int sr_unplaced_train_near;
 #define cl_data_fontnum (*((int *)(sr_base + 0x127eacu)))
 #define cl_data_fontlist ((int *)(sr_base + 0x29e7d340u))
 #define cl_data_sphere ((SphereLevel *)(sr_base + 0x9065260u))
+#define cl_data_texture_windowatlas (*((WindowAtlas *)(sr_base + 0x103673a0u)))
+#define cl_data_windowrect ((WindowRect *)(sr_base + 0x90558c4u))
+#define cl_data_texture_human ((HumanLook *)(sr_base + 0x2a756bc0u))
+#define cl_data_bonevert ((BoneVert *)(sr_base + 0x1bbfe04u))
+#define cl_data_cornervert ((BoneVert *)(sr_base + 0x1bdbe04u))
 
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket

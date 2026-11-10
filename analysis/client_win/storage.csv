@@ -93,3 +93,5 @@ area_sector,SrSectorStore,1,202178624,0x1dda5240,19,22,conflict
 game_world,GameWorld,1,28,0x29e7d320,15,15,ok
 tempmesh,TempMesh,1,2955344,0x29f0d360,36,65,ok
 track,TrackPiece,4096,1400,0x2a1debc0,20,38,ok
+zaxis,vec3,1,12,0x12359c,1,1,checked
+pointtemp,vec3,512,12,0x1b79ce0,1,1,checked

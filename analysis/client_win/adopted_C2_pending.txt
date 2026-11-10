@@ -1,4 +1,0 @@
-# Functions of group C2 that are written but that no test proves yet. They stay lifted.
-lerpnoise2d src/common/random.c
-serpnoise2d src/common/random.c
-cerpnoise2d src/common/random.c

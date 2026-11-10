@@ -15,3 +15,8 @@ gl_buffer_data,void *,1,0x115ab8,"pointer to glBufferDataARB that the extension 
 fontnum,int,1,0x127eac,"drawtext reads the font from it. The Linux client names the symbol fontnum"
 fontlist,int,2,0x29e7d340,"generatetexture_billboard and generatetexture_newspaper: entry 1 is the font of the printed textures. The Linux client names the symbol fontlist"
 sphere,SphereLevel,8,0x9065260,"setupspheremodel: 8 levels of 16 bytes. The Linux client names the symbol sphere"
+texture_windowatlas,WindowAtlas,1,0x103673a0,"generatematerialwindowtexture: the cells of the window texture. The Linux client names the symbol texture_windowatlas, 516 bytes"
+windowrect,WindowRect,32,0x90558c4,"generatematerialwindowtexture: records of 24 bytes that setupbuildingtypes fills, 32 of them"
+texture_human,HumanLook,512,0x2a756bc0,"generatehumantexture: the look values of the last texture of each human. The Linux client names the symbol texture_human, 10240 bytes"
+bonevert,BoneVert,4096,0x1bbfe04,"createhumanmodel: the bone and the place of each vertex of the human model. Records of 28 bytes"
+cornervert,BoneVert,9216,0x1bdbe04,"createhumanmodel: the same for each corner of each triangle of the human model"
