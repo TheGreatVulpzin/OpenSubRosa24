@@ -538,8 +538,8 @@ void lf_30640(void);
 void lf_30650(void);
 void lf_30720(void);
 void lf_30740(void);
-void lf_339e0(void);
-void lf_33a70(void);
+void setupaudio(void);
+void shutdownaudio(void);
 void lf_33af0(void);
 void lf_33be0(void);
 void lf_33eb0(void);
@@ -625,10 +625,10 @@ void lf_4da70(void);
 void lf_4daf0(void);
 void lf_4db70(void);
 void lf_4e030(void);
-void lf_4e190(void);
+void soundsimulation(void);
 void lf_4f150(void);
 void lf_4f450(void);
-void lf_4f720(void);
+void deletesound(void);
 void lf_4f7d0(void);
 void lf_4fcc0(void);
 void lf_501b0(void);
@@ -753,7 +753,7 @@ void lf_77c70(void);
 void lf_78810(void);
 void lf_78c30(void);
 void lf_78c70(void);
-void lf_79330(void);
+void frame_drawvoiceicons(void);
 void lf_796f0(void);
 void lf_79890(void);
 void lf_79a90(void);
@@ -1086,10 +1086,10 @@ void lf_e0b60(void);
 void lf_e0bc0(void);
 void lf_e0ea0(void);
 void lf_e0f80(void);
-void lf_e1130(void);
-void lf_e1240(void);
-void lf_e12c0(void);
-void lf_e1300(void);
+void enablespeex(void);
+void disablespeex(void);
+void preprocessspeex(void);
+void encodespeex(void);
 void lf_e13c0(void);
 void lf_e1550(void);
 void lf_e16b0(void);
@@ -1147,11 +1147,11 @@ void getcpufrequency(void);
 void lf_fb1b0(void);
 void cs_sleep(void);
 void lf_fb3d0(void);
-void lf_fb6f0(void);
+void getaudioinput(void);
 void lf_fbc00(void);
 void lf_fbe70(void);
-void lf_fc670(void);
-void lf_fc720(void);
+void addvoice(void);
+void getnextvoice(void);
 void lf_fc7f0(void);
 void generatetrinormal(void);
 void lf_fc900(void);
@@ -1182,8 +1182,8 @@ void listfiles(void);
 void freadswap(void);
 void lf_fe0d0(void);
 void lf_fe200(void);
-void lf_fe2b0(void);
-void lf_fe360(void);
+void enablesocketserver(void);
+void enablesocketclient(void);
 void lf_fe3f0(void);
 void recvpacket(void);
 void lf_fe4f0(void);
@@ -1838,8 +1838,8 @@ const LfEntry lf_table[] = {
     { "lf_30650", 0x30650, (void *)lf_30650, 1, LF_RET_INT, 4, "p", 1 },
     { "lf_30720", 0x30720, (void *)lf_30720, 1, LF_RET_INT, 1, "p", 1 },
     { "GLeeInit", 0x30740, (void *)lf_30740, 0, LF_RET_INT, 4, "", 1 },
-    { "setupaudio", 0x339e0, (void *)lf_339e0, 0, LF_RET_VOID, 4, "", 1 },
-    { "shutdownaudio", 0x33a70, (void *)lf_33a70, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupaudio", 0x339e0, (void *)setupaudio, 0, LF_RET_VOID, 4, "", 1 },
+    { "shutdownaudio", 0x33a70, (void *)shutdownaudio, 0, LF_RET_VOID, 4, "", 1 },
     { "loadwav", 0x33af0, (void *)lf_33af0, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createaccount", 0x33be0, (void *)lf_33be0, 1, LF_RET_INT, 4, "v", 0 },
     { "account_nameexists", 0x33eb0, (void *)lf_33eb0, 1, LF_RET_INT, 4, "p", 0 },
@@ -1925,10 +1925,10 @@ const LfEntry lf_table[] = {
     { "lf_4daf0", 0x4daf0, (void *)lf_4daf0, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_4db70", 0x4db70, (void *)lf_4db70, 1, LF_RET_VOID, 4, "v", 1 },
     { "setupsounds", 0x4e030, (void *)lf_4e030, 0, LF_RET_VOID, 4, "", 1 },
-    { "soundsimulation", 0x4e190, (void *)lf_4e190, 3, LF_RET_VOID, 4, "pvv", 1 },
+    { "soundsimulation", 0x4e190, (void *)soundsimulation, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "createsoundobject", 0x4f150, (void *)lf_4f150, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
     { "createsound", 0x4f450, (void *)lf_4f450, 5, LF_RET_INT, 4, "vpvvv", 1 },
-    { "deletesound", 0x4f720, (void *)lf_4f720, 1, LF_RET_VOID, 4, "v", 1 },
+    { "deletesound", 0x4f720, (void *)deletesound, 1, LF_RET_VOID, 4, "v", 1 },
     { "createwav", 0x4f7d0, (void *)lf_4f7d0, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbond", 0x4fcc0, (void *)lf_4fcc0, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_501b0", 0x501b0, (void *)lf_501b0, 0, LF_RET_VOID, 4, "", 0 },
@@ -2053,7 +2053,7 @@ const LfEntry lf_table[] = {
     { "renderframeatmosphere", 0x78810, (void *)lf_78810, 1, LF_RET_VOID, 4, "v", 1 },
     { "frame_rendermessages", 0x78c30, (void *)lf_78c30, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawmessages", 0x78c70, (void *)lf_78c70, 0, LF_RET_VOID, 4, "", 1 },
-    { "frame_drawvoiceicons", 0x79330, (void *)lf_79330, 0, LF_RET_VOID, 4, "", 1 },
+    { "frame_drawvoiceicons", 0x79330, (void *)frame_drawvoiceicons, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_796f0", 0x796f0, (void *)lf_796f0, 1, LF_RET_INT, 4, "p", 0 },
     { "boxinsidefrustum", 0x79890, (void *)lf_79890, 2, LF_RET_INT, 4, "pp", 0 },
     { "lf_79a90", 0x79a90, (void *)lf_79a90, 0, LF_RET_INT64, 4, "", 1 },
@@ -2386,10 +2386,10 @@ const LfEntry lf_table[] = {
     { "getskycolor", 0xe0bc0, (void *)lf_e0bc0, 1, LF_RET_VOID, 4, "p", 0 },
     { "getsuncolor", 0xe0ea0, (void *)lf_e0ea0, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "lf_e0f80", 0xe0f80, (void *)lf_e0f80, 0, LF_RET_VOID, 4, "", 0 },
-    { "enablespeex", 0xe1130, (void *)lf_e1130, 0, LF_RET_VOID, 4, "", 1 },
-    { "disablespeex", 0xe1240, (void *)lf_e1240, 0, LF_RET_VOID, 4, "", 1 },
-    { "preprocessspeex", 0xe12c0, (void *)lf_e12c0, 3, LF_RET_VOID, 4, "vvv", 1 },
-    { "encodespeex", 0xe1300, (void *)lf_e1300, 3, LF_RET_VOID, 4, "vvv", 1 },
+    { "enablespeex", 0xe1130, (void *)enablespeex, 0, LF_RET_VOID, 4, "", 1 },
+    { "disablespeex", 0xe1240, (void *)disablespeex, 0, LF_RET_VOID, 4, "", 1 },
+    { "preprocessspeex", 0xe12c0, (void *)preprocessspeex, 3, LF_RET_VOID, 4, "vvv", 1 },
+    { "encodespeex", 0xe1300, (void *)encodespeex, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "lf_e13c0", 0xe13c0, (void *)lf_e13c0, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "lf_e1550", 0xe1550, (void *)lf_e1550, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "lf_e16b0", 0xe16b0, (void *)lf_e16b0, 4, LF_RET_INT, 4, "vpvv", 0 },
@@ -2447,11 +2447,11 @@ const LfEntry lf_table[] = {
     { "lf_fb1b0", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
     { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },
     { "createvehicle", 0xfb3d0, (void *)lf_fb3d0, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "getaudioinput", 0xfb6f0, (void *)lf_fb6f0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "getaudioinput", 0xfb6f0, (void *)getaudioinput, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_fbc00", 0xfbc00, (void *)lf_fbc00, 2, LF_RET_VOID, 4, "vv", 1 },
     { "calculateplayervoice", 0xfbe70, (void *)lf_fbe70, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "addvoice", 0xfc670, (void *)lf_fc670, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "getnextvoice", 0xfc720, (void *)lf_fc720, 2, LF_RET_INT, 4, "vv", 0 },
+    { "addvoice", 0xfc670, (void *)addvoice, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "getnextvoice", 0xfc720, (void *)getnextvoice, 2, LF_RET_INT, 4, "vv", 0 },
     { "projectvector", 0xfc7f0, (void *)lf_fc7f0, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "generatetrinormal", 0xfc890, (void *)generatetrinormal, 4, LF_RET_VOID, 4, "pppp", 0 },
     { "resetorientation", 0xfc900, (void *)lf_fc900, 1, LF_RET_VOID, 4, "p", 0 },
@@ -2482,8 +2482,8 @@ const LfEntry lf_table[] = {
     { "freadswap", 0xfdfb0, (void *)freadswap, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "lf_fe0d0", 0xfe0d0, (void *)lf_fe0d0, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "removeflieextentions", 0xfe200, (void *)lf_fe200, 1, LF_RET_VOID, 4, "v", 0 },
-    { "enablesocketserver", 0xfe2b0, (void *)lf_fe2b0, 1, LF_RET_VOID, 4, "v", 1 },
-    { "enablesocketclient", 0xfe360, (void *)lf_fe360, 1, LF_RET_VOID, 4, "v", 1 },
+    { "enablesocketserver", 0xfe2b0, (void *)enablesocketserver, 1, LF_RET_VOID, 4, "v", 1 },
+    { "enablesocketclient", 0xfe360, (void *)enablesocketclient, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_fe3f0", 0xfe3f0, (void *)lf_fe3f0, 1, LF_RET_VOID, 4, "v", 1 },
     { "recvpacket", 0xfe420, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
     { "resetsendpacket", 0xfe4f0, (void *)lf_fe4f0, 0, LF_RET_VOID, 4, "", 0 },
