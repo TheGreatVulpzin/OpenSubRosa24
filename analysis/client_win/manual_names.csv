@@ -2,3 +2,18 @@ rva,name,evidence
 0xb140,__GLeeGetProcAddress,"Calls wglGetProcAddress and returns its result, as __GLeeGetProcAddress in the Linux client. 175 GLee link functions and stubs call it."
 0x10c650,_ftol2,"MSVC CRT float to int64. Argument in ST0, result in EDX:EAX. The matcher name cerpnoise2d was wrong."
 0x10c6fb,__security_check_cookie,"MSVC /GS cookie check. The matcher name setmenuitem was wrong."
+0x339e0,setupaudio,Linux client symbol and matching calls
+0x33a70,shutdownaudio,Linux client symbol and matching calls
+0x4e190,soundsimulation,Linux client symbol and matching calls
+0x4f720,deletesound,Linux client symbol and matching calls
+0xe1130,enablespeex,Linux client symbol and matching calls
+0xe1240,disablespeex,Linux client symbol and matching calls
+0xe12c0,preprocessspeex,Linux client symbol and matching calls
+0xe1300,encodespeex,Linux client symbol and matching calls
+0xfb6f0,getaudioinput,Linux client symbol and matching calls
+0xfc670,addvoice,Linux client symbol and matching calls
+0xfc720,getnextvoice,Linux client symbol and matching calls
+0xfe2b0,enablesocketserver,Linux client symbol and matching calls
+0xfe360,enablesocketclient,Linux client symbol and matching calls
+0x79330,frame_drawvoiceicons,Linux client symbol and matching calls
+0xd38c0,voiceoptionsmenu,Linux client symbol and matching calls

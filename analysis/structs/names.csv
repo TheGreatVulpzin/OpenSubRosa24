@@ -864,3 +864,35 @@ city,0x2fa10,elevator,int,,city_createelevator keeps the city object id or -1
 city,0x2fa14,elevator_block,int,3,The cell coordinates of the elevator
 city,0x2fa20,num_floors,int,,city_createelevator copies the floor count to the city object
 city,0x2fb90,street_roads,int,2,building_buildfloorplan reads the roads of the nearest intersection
+audio_sound,0x0,buffer,int,,Audio source and voice frame access
+audio_sound,0x4,object,int,,Audio source and voice frame access
+audio_sound,0x8,kind,int,,Audio source and voice frame access
+audio_sound,0xc,keep_alive,int,,Audio source and voice frame access
+audio_sound,0x14,source,uint32_t,,Audio source and voice frame access
+audio_decoder,0x0,state,void*,,Audio source and voice frame access
+audio_decoder,0x4,bits,uint8_t,36,Audio source and voice frame access
+audio_encoder,0x0,state,void*,,Audio source and voice frame access
+audio_encoder,0x4,bits,uint8_t,36,Audio source and voice frame access
+audio_encoder,0x28,preprocess,void*,,Audio source and voice frame access
+audio_channel,0x0,active,int,,Audio source and voice frame access
+audio_channel,0x4,player,int,,Audio source and voice frame access
+audio_channel,0x8,human,int,,Audio source and voice frame access
+audio_channel,0xc,item,int,,Audio source and voice frame access
+audio_channel,0x10,mode,int,,Audio source and voice frame access
+audio_channel,0x14,pos,vec3,,Audio source and voice frame access
+audio_channel,0x20,samples,int16_t,10240,Audio source and voice frame access
+audio_channel,0x5020,head,int,,Audio source and voice frame access
+audio_channel,0x5024,tail,int,,Audio source and voice frame access
+audio_channel,0x5028,size,int,64,Audio source and voice frame access
+audio_channel,0x5128,frame_mode,int,64,Audio source and voice frame access
+audio_channel,0x5228,data,uint8_t,16384,Audio source and voice frame access
+audio_channel,0x9248,source,uint32_t,,Audio source and voice frame access
+audio_camera,0x0,player,int,,Audio source and voice frame access
+audio_camera,0x4,pos,vec3,,Audio source and voice frame access
+audio_camera,0x10,rot,vec3,3,Audio source and voice frame access
+audio_camera,0x34,projection,float,,Audio source and voice frame access
+audio_camera,0x38,vel,vec3,,Audio source and voice frame access
+soundlist,0x24,engine,int,,Audio source and voice frame access
+soundlist,0x34,tire,int,,Audio source and voice frame access
+soundlist,0x134,engine_large,int,,Audio source and voice frame access
+soundlist,0x138,engine_train,int,,Audio source and voice frame access

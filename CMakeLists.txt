@@ -100,6 +100,8 @@ if(CL_ADOPTED)
     target_include_directories(client_adopted PRIVATE instrumentation/client/runtime src/include src/lifted src/platform src/client ${SV_REWRITTEN_INCLUDES})
     target_compile_options(client_adopted PRIVATE /arch:IA32 /W3 /utf-8)
     target_compile_definitions(client_adopted PRIVATE _CRT_SECURE_NO_WARNINGS SR_TEST_MEMORY)
+    set_property(SOURCE src/net/server.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:addvoice=server_voice_slot>")
     set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set(CL_ADOPTED_OBJECTS $<TARGET_OBJECTS:client_adopted>)
 endif()

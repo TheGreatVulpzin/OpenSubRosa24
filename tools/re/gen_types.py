@@ -112,6 +112,14 @@ IMAGE_STRUCTS = {
     'Font': ('client_font', 0x2410),
     'ImageTexture': ('image_texture', 0x70),
 }
+AUDIO_STRUCTS = {
+    'AudioSound': ('audio_sound', 0x18),
+    'AudioDecoder': ('audio_decoder', 0x28),
+    'AudioEncoder': ('audio_encoder', 0x2c),
+    'AudioChannel': ('audio_channel', 0x2924c),
+    'AudioCamera': ('audio_camera', 0x44),
+}
+TYPE_SIZE.update({'AudioDecoder': 0x28})
 TYPE_SIZE.update({'uint16_t': 2, 'uint8_t*': 4, 'uint32_t*': 4,
                   'ImageReader': 0x1c, 'ZlibHuffman': 0x7e4,
                   'JpegHuffman': 0x690, 'JpegComponent': 0x38})
@@ -701,13 +709,13 @@ typedef union FileListSlot { struct {
 
 /* The voice frames of one player (Speex.voice_ring): a ring of 64 frames that the client sends. */
 typedef union VoiceRing { struct {
-    uint8_t unk_0000[0x5000];
+    int16_t samples[64][160]; /* +0x0000 */
     int head;           /* +0x5000 the next frame index */
     int unk_5004;
     int size[64];       /* +0x5008 */
     int mode[64];       /* +0x5108 */
     uint8_t data[64][256]; /* +0x5208 */
-    int unk_9208;
+    int silence_ticks;  /* +0x9208 */
     int voice_off;      /* +0x920c 1 bit from the client: a speaker with it set is not heard */
 }; uint8_t lf_raw[0x9210]; } VoiceRing;
 
@@ -963,6 +971,13 @@ def main():
         images.append(gen_struct(cname, glob, size, names.get(glob, {}), {}))
     images.extend(['#pragma pack(pop)', '#endif', ''])
     (out / 'sr_image_types.h').write_text('\n\n'.join(images).rstrip() + '\n', encoding='utf-8', newline='\n')
+    audio = ['/* Sound sources, voice codecs and camera data. */',
+             '#ifndef SR_AUDIO_TYPES_H', '#define SR_AUDIO_TYPES_H',
+             '#include "sr_types.h"', '#pragma pack(push, 1)']
+    for cname, (glob, size) in AUDIO_STRUCTS.items():
+        audio.append(gen_struct(cname, glob, size, names.get(glob, {}), {}))
+    audio.extend(['#pragma pack(pop)', '#endif', ''])
+    (out / 'sr_audio_types.h').write_text('\n\n'.join(audio).rstrip() + '\n', encoding='utf-8', newline='\n')
     print('generated: types, address metadata, diagnostic table and capacity limits')
 
 

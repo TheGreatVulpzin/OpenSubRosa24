@@ -583,13 +583,13 @@ typedef union FileListSlot { struct {
 
 /* The voice frames of one player (Speex.voice_ring): a ring of 64 frames that the client sends. */
 typedef union VoiceRing { struct {
-    uint8_t unk_0000[0x5000];
+    int16_t samples[64][160]; /* +0x0000 */
     int head;           /* +0x5000 the next frame index */
     int unk_5004;
     int size[64];       /* +0x5008 */
     int mode[64];       /* +0x5108 */
     uint8_t data[64][256]; /* +0x5208 */
-    int unk_9208;
+    int silence_ticks;  /* +0x9208 */
     int voice_off;      /* +0x920c 1 bit from the client: a speaker with it set is not heard */
 }; uint8_t lf_raw[0x9210]; } VoiceRing;
 
@@ -1926,10 +1926,10 @@ typedef union SoundList { struct {
     int unk_0018;                        /* +0x0018 1 functions */
     int unk_001c;                        /* +0x001c 1 functions */
     int unk_0020;                        /* +0x0020 1 functions */
-    int unk_0024;                        /* +0x0024 1 functions */
+    int engine;                          /* +0x0024 Audio source and voice frame access */
     int unk_0028;                        /* +0x0028 1 functions */
     uint8_t pad_002c[0x8];
-    int unk_0034;                        /* +0x0034 1 functions */
+    int tire;                            /* +0x0034 Audio source and voice frame access */
     int unk_0038;                        /* +0x0038 1 functions */
     int unk_003c;                        /* +0x003c 1 functions */
     int unk_0040;                        /* +0x0040 1 functions */
@@ -1962,17 +1962,21 @@ typedef union SoundList { struct {
     uint8_t pad_0110[0x1c];
     int unk_012c;                        /* +0x012c 1 functions */
     int gear;                            /* +0x0130 objectsimulation_car: a gear change */
-    int unk_0134;                        /* +0x0134 1 functions */
-    int unk_0138;                        /* +0x0138 1 functions */
+    int engine_large;                    /* +0x0134 Audio source and voice frame access */
+    int engine_train;                    /* +0x0138 Audio source and voice frame access */
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
 SR_STATIC_ASSERT(offsetof(SoundList, num_sounds) == 0x0, "SoundList.num_sounds");
+SR_STATIC_ASSERT(offsetof(SoundList, engine) == 0x24, "SoundList.engine");
+SR_STATIC_ASSERT(offsetof(SoundList, tire) == 0x34, "SoundList.tire");
 SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
 SR_STATIC_ASSERT(offsetof(SoundList, digit) == 0xcc, "SoundList.digit");
 SR_STATIC_ASSERT(offsetof(SoundList, magazine) == 0x10c, "SoundList.magazine");
 SR_STATIC_ASSERT(offsetof(SoundList, gear) == 0x130, "SoundList.gear");
+SR_STATIC_ASSERT(offsetof(SoundList, engine_large) == 0x134, "SoundList.engine_large");
+SR_STATIC_ASSERT(offsetof(SoundList, engine_train) == 0x138, "SoundList.engine_train");
 
 /* blocklist[]: record of 0x40354 bytes. */
 typedef union BlockList { struct {
