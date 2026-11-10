@@ -14,3 +14,4 @@ steam_getid src/client/steam/steam.c
 humansimulationclient src/client/setup/interpolation.c
 itemsimulationclient src/client/setup/interpolation.c
 client_simulation src/client/setup/interpolation.c
+clientsend src/client/setup/send.c

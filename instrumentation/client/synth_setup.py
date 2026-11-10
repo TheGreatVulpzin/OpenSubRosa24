@@ -6,7 +6,7 @@ so the script deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_setup.py <recording dir> <work dir> [case,...]
 Cases: jpeg, timers, debug, debugoff, log, ticket, mouseon, mouseoff, tickclient, tickhost,
-tickkeys, tickkeys2, tickdebug, tickshift, world, world2, world3, world4. The script sets the environment of the gate itself.
+tickkeys, tickkeys2, tickdebug, tickshift, world, world2, world3, world4, send1, send2, send3, sendnone. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -25,6 +25,9 @@ RESETTIMER, STARTTIMER = 0xfafe0, 0xfb020
 REACTIVATEGAME, RELATIVE_MOUSE = 0x7d060, 0x9065350
 CHECKSIMULATION = 0x7d900
 HUMANSIMULATIONCLIENT, ITEMSIMULATIONCLIENT, CLIENT_SIMULATION = 0x896d0, 0x99500, 0xc2bb0
+CLIENTSEND = 0x68030
+SPEEX, VOICE_RING, VOICE_RING_SIZE = 0x12a7d680, 0x10000, 0x9210
+LAST_EVENT, INPUT_WHEEL, SERVER_ADDRESS = 0x5350c6c, 0x908aad8, 0x75a5854
 
 # Records of the world (RVA, size of a record).
 HUMAN, HUMAN_SIZE = 0x14fc4a0, 0x2b64
@@ -205,6 +208,29 @@ def world_case(seed=11):
     return edits, functions
 
 
+def send_case(seed, view, actions, tail, head):
+    """A client with a player in view, a ring of queued actions and a ring of voice frames."""
+    rng = random.Random(seed)
+    base = PLAYER + max(view, 0) * PLAYER_SIZE
+    edits = [(VIEW_PLAYER, 'i', [view]), (SERVER_ADDRESS, 'IH', [0x0100007f, 27020]),
+             (LAST_EVENT, 'I', [rng.getrandbits(32)]), (INPUT_WHEEL, 'i', [rng.randint(-100, 100)])]
+    edits.append(noise(base, PLAYER_SIZE, rng))
+    edits.append((base + 0xe4, '2i', [actions, tail]))
+    edits.append((base + 0xc8, 'i', [rng.randint(0, 3)]))
+    # The actions: menu, chat and item, then noise kinds.
+    for n in range(64):
+        kind = n % 4
+        record = base + 0xec + n * 0x54
+        edits.append((record, '3i', [kind, rng.randint(0, 60) if kind == 1 else rng.randint(0, 255), rng.randint(0, 255)]))
+    ring = SPEEX + VOICE_RING + max(view, 0) * VOICE_RING_SIZE
+    edits.append((ring + 0x5000, 'i', [head]))
+    edits.append((ring + 0x5008, '64i', [rng.randint(0, 255) for _ in range(64)]))
+    edits.append((ring + 0x5108, '64i', [rng.randint(0, 3) for _ in range(64)]))
+    edits.append(noise(ring + 0x5208, 64 * 256, rng))
+    edits.append((ring + 0x920c, 'i', [rng.randint(0, 1)]))
+    return edits, {'clientsend': [call(CLIENTSEND)]}
+
+
 def main():
     rec, work = Path(sys.argv[1]), Path(sys.argv[2])
     work.mkdir(parents=True, exist_ok=True)
@@ -214,6 +240,8 @@ def main():
     allc = {'jpeg': jpeg_case, 'timers': timers_case, 'debug': debug_case,
             'debugoff': lambda: debug_case(False), 'log': log_case, 'ticket': ticket_case,
             'mouseon': lambda: reactivate_case(1), 'mouseoff': lambda: reactivate_case(0),
+            'send1': lambda: send_case(1, 0, 10, 4, 20), 'send2': lambda: send_case(2, 1, 3, 60, 3),
+            'send3': lambda: send_case(3, 2, 40, 10, 0), 'sendnone': lambda: send_case(4, -1, 5, 1, 7),
             'world': world_case, 'world2': lambda: world_case(12), 'world3': lambda: world_case(13),
             'world4': lambda: world_case(14),
             'tickclient': lambda: tick_case(0, 3, (0, 1)),
