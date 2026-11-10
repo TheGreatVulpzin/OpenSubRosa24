@@ -37,3 +37,12 @@ landscape_buildsectormesh src/client/textures/landscape.c
 landscape_buildmesh src/client/textures/landscape.c
 landscape_setheightf src/client/textures/landscape.c
 landscape_rendersector src/client/textures/landscape.c
+generatematerialwindowtexture src/client/textures/textures.c
+generatehumantexture src/client/textures/textures.c
+generatematerialtexture src/client/textures/textures.c
+createhairmodel src/client/textures/models.c
+createhumanmodel src/client/textures/models.c
+setupobjecttypeweight src/game/object_types.c
+lerpnoise2d src/common/random.c
+serpnoise2d src/common/random.c
+cerpnoise2d src/common/random.c

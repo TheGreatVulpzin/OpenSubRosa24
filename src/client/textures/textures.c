@@ -15,6 +15,7 @@
 #include "sr_math.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
+#include "textures/noise.h"
 #include "textures/opengl.h"
 
 #define g_textures cl_data_texture
@@ -24,6 +25,10 @@
 #define g_fontnum cl_data_fontnum
 #define g_fontlist cl_data_fontlist
 #define g_newspaper sr_data_newspaper
+#define g_windowatlas cl_data_texture_windowatlas
+#define g_windowrect cl_data_windowrect
+#define g_humanlook cl_data_texture_human
+#define g_materiallist sr_data_materiallist
 
 #define PI 3.14159265359
 
@@ -36,6 +41,10 @@
 #define DARK 0x20
 #define FAINT 0x20
 #define MAX_ANISOTROPY 16.0f
+
+/* The window texture: a square image of cells. */
+#define WINDOW_IMAGE_SIZE 0x800
+#define CELL_SIZE 0x80
 
 /* The font of the printed textures (an entry of fontlist) and the font of the menus. */
 #define PRINT_FONT 1
@@ -557,4 +566,462 @@ void __cdecl generatetexture_newspaper(void)
     g_fontnum = MENU_FONT;
     end_page();
     g_newspaper.texture_done = 1;
+}
+
+/* The texel of a tile of 64 x 64 that gives the pixel p (0 to 127) of a window cell. Pixels 24
+ * to 31 use texel 0 and pixels 96 to 103 use texel 63. The other pixels wrap around the tile. */
+static int window_texel(int p)
+{
+    if (p < 0x18)
+        return (p + 0x28) & 0x3f;
+    if (p < 0x20)
+        return 0;
+    if (p < 0x60)
+        return (p + 0x20) & 0x3f;
+    if (p < 0x68)
+        return 0x3f;
+    return (p + 0x18) & 0x3f;
+}
+
+/* Make the window texture of a material: 2048 x 2048 pixels, 16 x 4 cells of 128 x 128. A cell
+ * is the second level of the texture of a material, with the lit rectangle of a window drawn
+ * over it. Clear windows get grey glass, the others get alpha 255. A source texture with no
+ * second level leaves the color of the pixel before. */
+void __cdecl generatematerialwindowtexture(int material, int mipmap, int wrap_s, int wrap_t, int mag_filter,
+                                           int min_filter)
+{
+    int texture = g_texturelist.material[material];
+    uint32_t red = 0, green = 0, blue = 0, alpha = 0;
+    int cell, x, y;
+
+    g_image.width = WINDOW_IMAGE_SIZE;
+    g_image.height = WINDOW_IMAGE_SIZE;
+    memset(g_image.pixels, 0, (size_t)WINDOW_IMAGE_SIZE * WINDOW_IMAGE_SIZE * 4);
+    for (cell = 0; cell < g_windowatlas.num_cells; cell++) {
+        const Texture *source = &g_textures[g_texturelist.material[g_windowatlas.cells[cell].material]];
+        const WindowRect *window = &g_windowrect[g_windowatlas.cells[cell].window];
+        const uint32_t *pixels = source->levels[1];
+        int left = cl_ftoi(window->left * 64.0);
+        int top = cl_ftoi(window->top * 64.0);
+        int right = left + cl_ftoi(window->width * 64.0);
+        int bottom = top + cl_ftoi(window->height * 64.0);
+
+        for (y = 0; y < CELL_SIZE; y++) {
+            int v = window_texel(y);
+            for (x = 0; x < CELL_SIZE; x++) {
+                int u = window_texel(x);
+                if (pixels != 0) {
+                    uint32_t word = pixels[(source->width >> 1) * v + u];
+                    red = word & 0xff;
+                    green = (word >> 8) & 0xff;
+                    blue = (word >> 16) & 0xff;
+                    alpha = word >> 24;
+                }
+                if (v >= top && v < bottom && 0x3f - u >= left && 0x3f - u < right) {
+                    if (window->clear == 0) {
+                        alpha = OPAQUE;
+                    } else {
+                        red = green = blue = 0x60;
+                        alpha = 0x20;
+                    }
+                }
+                g_image.pixels[(y + (cell >> 4) * CELL_SIZE) * WINDOW_IMAGE_SIZE + x + (cell & 0xf) * CELL_SIZE] =
+                    green * 0x100u + alpha * 0x1000000u + blue * 0x10000u + red;
+            }
+        }
+    }
+    texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
+    if (mipmap != 0)
+        generatemipmap(texture);
+    setuptexture(texture);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, MAX_ANISOTROPY);
+}
+
+/* The pixels of the suit half of a human texture (the left half): a grey suit with a light
+ * shirt. The grey depends on the team. Teams 0 and 1 have a badge, a bow tie and a tie in the
+ * tint color. Team 2 has a straight tie, teams 3 and 4 a wide tie. Team 7 has a light lower half. */
+static void player_suit_pixel(Pixel *p, const Human *human, const float *tint, int x, int y)
+{
+    static const uint8_t SUIT_GREY[4] = {0x60, 0x40, 0x20, 0x80};
+    int team = human->team;
+    int grey = DARK;
+
+    if (team >= 0 && team < 4)
+        grey = SUIT_GREY[team];
+    if (team < 5 && human->look_d == 1)
+        grey = 0xc0;
+    set_pixel(p, grey, grey, grey, FAINT);
+    if (team >= 0 && team <= 1 && y > 0x5f && y < 100 && x > 0x29 && x < 0x30)
+        tint_pixel(p, tint);
+    if (near_suit_center(x, (y - 0x50) >> 2)) {
+        grey = team == 4 ? 0x80 : 0xd0;
+        set_pixel(p, grey, grey, grey, 0);
+        if (team == 2) {
+            if ((y < 0x7e && x == 0x1f) || (y < 0x7c && x > 0x1d && x < 0x22))
+                tint_pixel(p, tint);
+        }
+        if (team >= 0 && team <= 1) {
+            if (y < 0x7e && (near_suit_center(x, (y - 0x70) >> 1) || near_suit_center(x, (0x78 - y) >> 2)))
+                tint_pixel(p, tint);
+        }
+        if (team == 3 || team == 4) {
+            if (y < 0x7e && (near_suit_center(x, (y - 0x70) >> 1) || near_suit_center(x, ((0x78 - y) >> 3) + 2)))
+                tint_pixel(p, tint);
+        }
+    }
+    if (y > 0x3f && team == 7)
+        set_pixel(p, 0xd0, 0xd0, 0xd0, 0);
+}
+
+/* The pixels of the right half of a human texture: skin, then hair, then an eye. */
+static void player_face_pixel(Pixel *p, const Human *human, const uint8_t *skin, const uint8_t *hair, int x, int y)
+{
+    static const uint8_t IRIS[3][3] = {{0x5e, 0x9b, 0x94}, {0x4a, 0x69, 0x1b}, {0x68, 0x47, 0x34}};
+    float v[2];
+    double distance;
+
+    if (y < 0x40) {
+        set_pixel(p, skin[0], skin[1], skin[2], FAINT);
+    } else if (y < 0x60) {
+        set_pixel(p, hair[0], hair[1], hair[2], FAINT);
+    } else {
+        set_pixel(p, 0xfd, 0xfd, 0xfd, FAINT);
+        v[0] = (float)(79.5 - (float)x);
+        v[1] = (float)(111.5 - (float)y);
+        distance = vectorlength2d(v);
+        if (distance < 6.0 && human->look_a >= 0 && human->look_a < 3)
+            set_color(p, IRIS[human->look_a][0], IRIS[human->look_a][1], IRIS[human->look_a][2]);
+        if (distance < 3.0)
+            set_color(p, 0x40, 0x40, 0x40);
+    }
+}
+
+/* Make the texture of a human from its team, skin, hair, eye and suit values. The texture is
+ * 128 x 128 and the game keeps the values of the last picture: the texture stays as it is
+ * when none of them changed. The pixel memory of the texture is made once and then reused.
+ * A skin or hair value outside its table gives black. */
+void __cdecl generatehumantexture(int human)
+{
+    static const uint8_t SKIN[8][3] = {{0xf8, 0xd5, 0xc2}, {0xef, 0xbb, 0xa6}, {0xe6, 0xaa, 0x86}, {0xd2, 0x94, 0x6b},
+                                       {0xc5, 0x8f, 99},   {0xae, 0x71, 0x42}, {0x84, 0x57, 0x36}, {0x71, 0x50, 0x31}};
+    static const uint8_t HAIR[4][3] = {{0xa0, 0x80, 0x20}, {0x50, 0x40, 0x10}, {0x20, 0x18, 0x10}, {0xa0, 0x40, 0x20}};
+    static const float WHITE[3] = {1.0f, 1.0f, 1.0f};
+    static const uint8_t NONE[3] = {0, 0, 0};
+    const Human *h = &sr_data_human[human];
+    HumanLook *last = &g_humanlook[human];
+    Texture *t = &g_textures[g_texturelist.human_textures[human]];
+    const float *tint = h->team == -1 ? WHITE : &sr_data_teamcolor[h->team * 3];
+    const uint8_t *skin = h->look_b >= 0 && h->look_b < 8 ? SKIN[h->look_b] : NONE;
+    const uint8_t *hair = h->look_c >= 0 && h->look_c < 4 ? HAIR[h->look_c] : NONE;
+    size_t bytes;
+    int x, y;
+
+    if (last->team == h->team && last->look_b == h->look_b && last->look_c == h->look_c && last->look_a == h->look_a &&
+        last->look_d == h->look_d)
+        return;
+    last->team = h->team;
+    last->look_b = h->look_b;
+    last->look_c = h->look_c;
+    last->look_a = h->look_a;
+    last->look_d = h->look_d;
+    g_image.width = SMALL_SIZE;
+    g_image.height = SMALL_SIZE;
+    for (y = 0; y < g_image.height; y++) {
+        for (x = 0; x < g_image.width; x++) {
+            Pixel p;
+            if (x < SMALL_SIZE / 2)
+                player_suit_pixel(&p, h, tint, x, y);
+            else
+                player_face_pixel(&p, h, skin, hair, x, y);
+            g_image.pixels[y * g_image.width + x] = pack_pixel(p.red, p.green, p.blue, p.alpha);
+        }
+    }
+    t->width = g_image.width;
+    t->height = g_image.height;
+    t->num_levels = 1;
+    t->format = GL_RGBA;
+    t->internal_format = GL_RGBA;
+    t->spare = 0;
+    t->wrap_s = GL_CLAMP_TO_EDGE;
+    t->wrap_t = GL_CLAMP_TO_EDGE;
+    t->mag_filter = GL_NEAREST;
+    t->min_filter = GL_NEAREST;
+    bytes = (size_t)(t->width * t->height * 4);
+    if (t->levels[0] == 0)
+        t->levels[0] = os_malloc(bytes);
+    memcpy(t->levels[0], g_image.pixels, bytes);
+    setuptexture(g_texturelist.human_textures[human]);
+}
+
+/* Four layers of smooth noise at the point (x, y), each layer finer than the one before. Each
+ * layer adds its noise plus 1, twice. The result is a float from 0 to 8. */
+static float layered_noise(int x, int y)
+{
+    float broad = cerpnoise2d((float)(x * 0.25), (float)(y * 0.125), 0xf);
+    float middle = cerpnoise2d((float)(x * 0.5), (float)(y * 0.25), 0x1f);
+    float fine = cerpnoise2d((float)(x * 1.0), (float)(y * 0.5), 0x3f);
+    float finest = cerpnoise2d((float)(x + x + 1235.0), (float)(y * 1.0 + 123.0), 0x7f);
+    float sum = (float)((broad + 1.0) + (broad + 1.0));
+
+    sum = (float)((middle + 1.0) + (middle + 1.0) + sum);
+    sum = (float)((fine + 1.0) + (fine + 1.0) + sum);
+    return (float)((finest + 1.0) + (finest + 1.0) + sum);
+}
+
+static void grey(Pixel *p, int level)
+{
+    set_color(p, level, level, level);
+}
+
+/* Make the color darker for each of the three kinds of joint of a floor that the point is on.
+ * Each kind halves the color, so a point on two kinds gets a quarter. The kinds are the first
+ * 2 rows of every 16, the first 2 columns of the top half of every 32 rows, and the 2 middle
+ * columns of the bottom half. */
+static void halve_on_joints(Pixel *p, int x, int y)
+{
+    unsigned row = (unsigned)y, column = (unsigned)x;
+    int halvings = ((row & 0xf) < 2) + ((row & 0x1f) < 0x10 && (column & 0x3f) < 2) +
+                   ((row & 0x1f) > 0xf && (column & 0x3f) > 0x1f && (column & 0x3f) < 0x22);
+
+    p->red >>= halvings;
+    p->green >>= halvings;
+    p->blue >>= halvings;
+}
+
+/* The same for the mortar of a brick wall: every eighth row, one column of 32 in the top
+ * half of every 16 rows, and one column in the middle of the bottom half. */
+static void halve_on_mortar(Pixel *p, int x, int y)
+{
+    unsigned row = (unsigned)y, column = (unsigned)x;
+    int halvings = ((row & 7) == 0) + ((row & 0xf) < 8 && (column & 0x1f) == 0) +
+                   ((row & 0xf) > 7 && (column & 0x1f) == 0x10);
+
+    p->red >>= halvings;
+    p->green >>= halvings;
+    p->blue >>= halvings;
+}
+
+/* A color from the noise of the point (x, y): each channel adds its base to 8 noise units,
+ * alpha is 32 plus 4 noise units. */
+static void noise_color(Pixel *p, int x, int y, int red_base, int green_base, int blue_base)
+{
+    float noise = noise2d(x, y);
+
+    p->red = cl_ftoi(noise * 8.0 + red_base);
+    p->green = cl_ftoi(noise * 8.0 + green_base);
+    p->blue = cl_ftoi(noise * 8.0 + blue_base);
+    p->alpha = cl_ftoi(noise * 4.0 + 32.0);
+}
+
+/* Not zero when the number is in the closed range. */
+static int between(int value, int low, int high)
+{
+    return low <= value && value <= high;
+}
+
+/* The pixel of a plain wall with a ground made of the layered noise. */
+static void grouped_pixel(Pixel *p, int group, int x, int y)
+{
+    int level = cl_ftoi(layered_noise(x, y) + 192.0);
+
+    set_pixel(p, level, level, level, FAINT);
+    if (group == 2)
+        halve_on_joints(p, x, y);
+    if (group == 1)
+        halve_on_mortar(p, x, y);
+}
+
+/* A texture with a street marking: noise, and a grey line along one edge of the road. */
+static void street_pixel(Pixel *p, const MaterialList *list, int material, int x, int y)
+{
+    noise_color(p, x, y, 48, 48, 48);
+    if (material == list->street_x_right && between(y, 5, 0xa) && between(x, 0x20, 0x5f))
+        grey(p, 0xa0);
+    if (material == list->street_x_left && between(y, 0x75, 0x7a) && between(x, 0x20, 0x5f))
+        grey(p, 0xa0);
+    if (material == list->street_z_right && between(x, 5, 0xa) && between(y, 0x20, 0x5f))
+        grey(p, 0xa0);
+    if (material == list->street_z_left && between(x, 0x75, 0x7a) && between(y, 0x20, 0x5f))
+        grey(p, 0xa0);
+}
+
+/* Materials 3 to 9: noise, with a yellow line near one edge (4, 5, 7, 8) or two grey bands (6, 9). */
+static void lined_pixel(Pixel *p, int material, int x, int y)
+{
+    noise_color(p, x, y, 48, 48, 48);
+    if (material == 4 && between(y, 5, 0xa))
+        set_color(p, 0xa0, 0xa0, 0x10);
+    if (material == 5 && between(y, 0x75, 0x7a))
+        set_color(p, 0xa0, 0xa0, 0x10);
+    if (material == 6 && (between(y, 0x10, 0x1f) || between(y, 0x60, 0x6f)))
+        grey(p, 0xa0);
+    if (material == 7 && between(x, 5, 0xa))
+        set_color(p, 0xa0, 0xa0, 0x10);
+    if (material == 8 && between(x, 0x75, 0x7a))
+        set_color(p, 0xa0, 0xa0, 0x10);
+    if (material == 9 && (between(x, 0x10, 0x1f) || between(x, 0x60, 0x6f)))
+        grey(p, 0xa0);
+}
+
+/* Materials 12 and 17: a brown wall with joints. Material 17 has a dark window with a frame. */
+static void window_wall_pixel(Pixel *p, int material, int x, int y)
+{
+    noise_color(p, x, y, 160, 140, 100);
+    halve_on_joints(p, x, y);
+    if (material != 0x11)
+        return;
+    if (between(y, 0x14, 0x6b) && between(x, 0xc, 0x73))
+        set_color(p, 0x40, 0x20, 0x20);
+    p->alpha = OPAQUE;
+    if (between(y, 0x18, 0x67) && between(x, 0x10, 0x6f)) {
+        set_color(p, 0x10, 0x10, 0x20);
+        p->alpha = 0x40;
+        if (between(y & 0x1f, 0xe, 0x11)) {
+            set_color(p, 0x40, 0x20, 0x20);
+            p->alpha = OPAQUE;
+        }
+        if (between(x & 0x1f, 0xe, 0x11)) {
+            set_color(p, 0x40, 0x20, 0x20);
+            p->alpha = OPAQUE;
+        }
+    }
+}
+
+/* The pixel of a material texture. The checks run in this order, and a later check replaces
+ * what an earlier one made. The first color is magenta. */
+static void material_pixel(Pixel *p, const MaterialList *list, int material, int group, int x, int y)
+{
+    set_pixel(p, 0xff, 0, 0xff, FAINT);
+    if (group != -1)
+        grouped_pixel(p, group, x, y);
+    if (material == list->tile_material) {
+        float shade = (float)((cerpnoise2d((float)(x * 0.25), (float)(y * 0.25), 0x1f) + 1.0) * 0.125 + 0.875);
+        set_pixel(p, cl_ftoi(shade * 12.0 * 0.5), cl_ftoi(shade * 72.0 * 0.5), cl_ftoi(shade * 16.0 * 0.5), 0);
+    }
+    if (material == 0xd)
+        set_pixel(p, 0x10, 0x10, 0x10, FAINT);
+    if (material == 0x12)
+        set_pixel(p, 8, 0x10, 0x80, FAINT);
+    if (material == 0x13) {
+        set_pixel(p, 0xc0, 0xc0, 0x10, FAINT);
+        if (((unsigned)(x + y) & 0x3f) < 0x1f)
+            set_pixel(p, 0x20, 0x20, 0x20, FAINT);
+    }
+    if (material == list->misc_2a0)
+        set_pixel(p, 0xe1, 0xe1, 0xd5, FAINT);
+    if (material == list->misc_2a4)
+        set_pixel(p, 0x41, 0x41, 0x41, FAINT);
+    if (material == list->misc_2b0) {
+        float broad = cerpnoise2d((float)(x * 0.25), (float)(y * 0.25), 0xf);
+        float middle = cerpnoise2d((float)(x * 0.5), (float)(y * 0.5), 0x1f);
+        float fine = cerpnoise2d((float)(x * 1.0), (float)(y * 1.0), 0x3f);
+        float finest = cerpnoise2d((float)(x + x + 1235.0), (float)(y + y + 123.0), 0x7f);
+        float sum = (float)((broad + 1.0) + (broad + 1.0));
+        int level;
+
+        sum = (float)((middle + 1.0) + (middle + 1.0) + sum);
+        sum = (float)((fine + 1.0) * 8.0 + sum);
+        sum = (float)((finest + 1.0) + (finest + 1.0) + sum);
+        level = cl_ftoi(sum + 72.0);
+        set_pixel(p, level, level, level, 0x10);
+    }
+    if (material == list->ceiling) {
+        grey(p, 0x80);
+        if ((y & 0x1f) == 0 || (x & 0x1f) == 0)
+            grey(p, 0x60);
+        if (y < 0x20 && x < 0x20)
+            grey(p, 0xff);
+        p->alpha = FAINT;
+    }
+    if (material == list->misc_2c4) {
+        grey(p, 0xff);
+        if (y < 8 || x < 8 || y > 0x77 || x > 0x77)
+            grey(p, 0xe0);
+        p->alpha = FAINT;
+    }
+    if (material == list->flagged_material) {
+        float noise = cerpnoise2d((float)(x * 0.25), (float)(y * 0.25), 0x7f);
+        set_pixel(p, 0x30, 0x30, 0x48, 0x60);
+        if ((float)(noise - 0.75) > 0.0)
+            p->alpha = cl_ftoi((noise - 0.75) * 64.0 + 96.0);
+    }
+    if (material == 0x14) {
+        float sum = layered_noise(x, y);
+        set_pixel(p, cl_ftoi(sum + 160.0), cl_ftoi(sum + 160.0), cl_ftoi(sum * 0.875 + 160.0), OPAQUE);
+        if (between(y, 4, 0x6f) && between(x, 0x10, 0x6f))
+            set_pixel(p, 0x10, 0x10, 0x20, 0x40);
+    }
+    if (material == 0 || material == 1 || material == 2) {
+        float sum = layered_noise(x, y);
+        set_color(p, cl_ftoi(sum + 192.0), cl_ftoi(sum + 192.0), cl_ftoi(sum * 0.875 + 192.0));
+        if (material == 1) {
+            p->alpha = OPAQUE;
+            if (between(y, 0x20, 0x5f) && between(x, 4, 0x7b)) {
+                float distance = (float)((float)(abs(x - 0x40) + abs(y - 0x40)) / 64.0);
+                set_pixel(p, cl_ftoi(distance * 32.0 + 16.0), cl_ftoi(distance * 32.0 + 16.0),
+                          cl_ftoi(distance * 64.0 + 32.0), 0x80);
+            }
+        }
+        if (material == 2)
+            set_pixel(p, 0x10, 0x10, 0x20, OPAQUE);
+    }
+    if (list->street_x_left <= material && material <= list->street_z_right)
+        street_pixel(p, list, material, x, y);
+    if (between(material, 3, 9))
+        lined_pixel(p, material, x, y);
+    if (material == 0xc || material == 0x11)
+        window_wall_pixel(p, material, x, y);
+    if (material == 0xf) {
+        noise_color(p, x, y, 80, 71, 64);
+        p->alpha = cl_ftoi(noise2d(x + 0x80, y + 0x80) * 16.0 + 32.0);
+    }
+    if (material == 0x10) {
+        noise_color(p, x, y, 32, 32, 32);
+        p->alpha = cl_ftoi(noise2d(x + 0x80, y + 0x80) * 16.0 + 32.0);
+    }
+    if (material == 10)
+        set_pixel(p, 0xc0, 0x60, 0x30, FAINT);
+    if (material == 0xb || material == list->marble) {
+        float grain = carpet_grain(x, y);
+        float wave = (float)(x87_sin((grain + grain) * PI) * 32.0);
+        set_pixel(p, cl_ftoi(wave + 176.0), cl_ftoi(wave + 184.0), cl_ftoi(wave + 192.0), FAINT);
+    }
+}
+
+/* Make the texture of a material: 128 x 128 pixels. The sign and the carpet have their own
+ * generators. Every other material is drawn from its number, or magenta when no picture is
+ * defined for it. */
+void __cdecl generatematerialtexture(int material, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter)
+{
+    const MaterialList *list = &g_materiallist;
+    int group = -1;
+    int texture, x, y, i;
+
+    if (material == list->sign) {
+        generatetexture_billboard(material);
+        return;
+    }
+    if (material == list->carpet) {
+        generatetexture_carpet(material);
+        return;
+    }
+    texture = g_texturelist.material[material];
+    for (i = 0; i < 4; i++) {
+        if (list->presets[i * 10] <= material && material <= list->presets[i * 10 + 2])
+            group = i;
+    }
+    g_image.width = SMALL_SIZE;
+    g_image.height = SMALL_SIZE;
+    for (y = 0; y < g_image.height; y++) {
+        for (x = 0; x < g_image.width; x++) {
+            Pixel p;
+            material_pixel(&p, list, material, group, x, y);
+            g_image.pixels[y * g_image.width + x] = pack_pixel(p.red, p.green, p.blue, p.alpha);
+        }
+    }
+    texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
+    if (mipmap != 0)
+        generatemipmap(texture);
+    setuptexture(texture);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, MAX_ANISOTROPY);
 }

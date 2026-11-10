@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, hermite, models, objecttypes, textures, landscape. The script sets the environment of the gate itself.
+Cases: noise, noiseedge, hermite, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -31,6 +31,7 @@ EXTRUDE, EXTRUDE2, EXTRUDESCALE = 0xb2c90, 0xb2630, 0xb2e30
 SETTRITEXCOORD, SETQUADTEXCOORD = 0xb3150, 0xb31c0
 GENERATETEXTURE, SETHEIGHTF = 0xe7ff0, 0xa1aa0
 ADDPARTICLE, ADDBOND, ADDFACE, ADDWHEEL, POINTSCALE = 0xeb750, 0xeb810, 0xeb950, 0xebb20, 0xec220
+OBJECTTYPEWEIGHT = 0xebe00
 
 # The model in work (RVA): the counts and the arrays that the cases fill.
 MODELTEMP = 0x90f7680
@@ -41,6 +42,13 @@ SCRATCH = MODELTEMP + VERTS + 7000 * 12
 # The list of texture numbers (RVA) and the entries that generatetexture draws: (offset, count).
 TEXTURELIST = 0x14311840
 SMALL_TEXTURES = [(0x418, 3), (0x424, 4), (0x1034, 8), (0x1054, 10), (0x10d4, 1), (0x10d8, 6), (0x10f0, 3)]
+
+# The texture records (RVA, 0x70 bytes each), the window texture tables and a free area of the image for pixels.
+BASE = 0x20000000  # the image address of RVA 0 in the harness
+TEXTURES, TEXTURE_SIZE = 0x17b4b840, 0x70
+WINDOWTEXTURE, MATERIALTEXTURE, MATERIALLIST = 0xe9df0, 0xe6630, 0xf2033a0
+WINDOW_ATLAS, WINDOW_RECTS = 0x103673a0, 0x90558c4
+SOURCE_PIXELS = MODELTEMP + 0x240000
 
 # The landscape (RVA): the origin, then 2049 x 2049 heights.
 LANDSCAPE = 0x9ba7c20
@@ -85,6 +93,7 @@ def floats(rng):
 
 
 def noise_calls():
+    """The calls of the noise case, and the edge points (NaN, infinite, outside an int) that only noise_edge_case uses."""
     rng = random.Random(1)
     ends = [0.0, 1.0, -3.5, 1e-41, 3.4028235e38, NAN]
     blend = [(a, b, t) for a in ends for b in ends[:3] for t in EDGES]
@@ -102,7 +111,7 @@ def noise_calls():
     grid = [(rng.uniform(0.0, 1024.0), rng.uniform(0.0, 1024.0), rng.choice(masks)) for _ in range(120)]
     grid += [(float(x), y * 0.25, m) for x in (0, 1, 31, 32, 1023) for y in (0, 3, 127, 4092) for m in (0x1f, 0x3ff)]
     grid += [(rng.uniform(-70.0, 70.0), rng.uniform(-70.0, 70.0), rng.choice(masks)) for _ in range(40)]
-    grid += [(floats(rng), floats(rng), rng.choice(masks)) for _ in range(40)]
+    edge = [(floats(rng), floats(rng), rng.choice(masks)) for _ in range(120)]
     return {
         'serp': [call(SERP, *c) for c in blend],
         'cerp': [call(CERP, *c) for c in blend],
@@ -113,7 +122,15 @@ def noise_calls():
         'lerpnoise2d': [call(LERPNOISE2D, *c) for c in grid],
         'serpnoise2d': [call(SERPNOISE2D, *c) for c in grid],
         'cerpnoise2d': [call(CERPNOISE2D, *c) for c in grid],
-    }
+    }, edge
+
+
+def noise_edge_case():
+    """The three grid noise functions at edge points. A point that is NaN, infinite or outside the range of an int
+    gives another value than the game (the shared code converts with 64 bits). The case shows how many."""
+    edge = noise_calls()[1]
+    return [], {'lerpnoise2d': [call(LERPNOISE2D, *c) for c in edge], 'serpnoise2d': [call(SERPNOISE2D, *c) for c in edge],
+                'cerpnoise2d': [call(CERPNOISE2D, *c) for c in edge]}
 
 
 def hermite_case():
@@ -182,6 +199,7 @@ def objecttypes_case():
         'objecttype_addface': [call(ADDFACE, *f) for f in faces],
         'objecttype_addwheel': [call(ADDWHEEL, *w) for w in wheels],
         'calculatepointscale': scale,
+        'setupobjecttypeweight': [call(OBJECTTYPEWEIGHT, t) for t in range(24)],
     }
 
 
@@ -207,9 +225,46 @@ def landscape_case(rec):
     return [], {'landscape_setheightf': [call(SETHEIGHTF, p, floats(rng)) for p in points]}
 
 
+def materials_case(rec):
+    """Make the texture of every material of the list once, so each picture of the generator runs."""
+    snap = Snapshot(rec / 'sv_snapshot.bin')
+    count = min(snap.read(MATERIALLIST, 'i')[0], 256)
+    return [], {'generatematerialtexture': [
+        call(MATERIALTEXTURE, m, m & 1, 0x2901, 0x2901, 0x2601, 0x2703) for m in range(count)]}
+
+
+def windows_case(rec):
+    """Make the window texture from made sources: the snapshot holds no pixels for the textures
+    of the recording, so the case puts the second level of 4 material textures in the image."""
+    rng = random.Random(5)
+    snap = Snapshot(rec / 'sv_snapshot.bin')
+    material = lambda m: snap.read(TEXTURELIST + 4 + 4 * m, 'i')[0]  # noqa: E731
+    sources = [1, 2, 3, 4]
+    edits = []
+    for i, m in enumerate(sources):
+        pixels = SOURCE_PIXELS + i * 0x4000
+        words = [rng.getrandbits(32) for _ in range(64 * 64)]
+        edits.append((pixels, f'{len(words)}I', words))
+        record = TEXTURES + material(m) * TEXTURE_SIZE
+        edits.append((record, 'i', [128]))
+        edits.append((record + 0x34, 'I', [pixels + BASE]))
+    rects = []
+    for i in range(8):
+        left, width, top, height = (rng.choice([0.0, 0.125, 0.25, 0.5, 0.0625]) for _ in range(4)) if i else (0.25, 0.5, 0.25, 0.5)
+        rects += [i % 2, bits(left), bits(width), bits(top), bits(height), 0]
+    edits.append((WINDOW_RECTS, '48I', rects))
+    cells = [(sources[i % 4], i % 8) for i in range(40)]
+    edits.append((WINDOW_ATLAS, 'i', [len(cells)]))
+    edits.append((WINDOW_ATLAS + 4, f'{2 * len(cells)}i', [v for c in cells for v in c]))
+    return edits, {'generatematerialwindowtexture': [
+        call(WINDOWTEXTURE, m, mip, 0x812f, 0x812f, 0x2601, 0x2703) for m in (5, 6) for mip in (1, 0)]}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
+    if os.environ.get('HARNESS_DEBUG'):
+        print(p.stdout[-3000:])
     for line in p.stdout.splitlines()[::-1]:
         if 'functions tested' in line:
             return line.split(':', 1)[1].strip()
@@ -222,9 +277,10 @@ def main():
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
-    allc = {'noise': lambda: ([], noise_calls()), 'hermite': hermite_case, 'models': models_case,
+    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'models': models_case,
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
-            'landscape': lambda: landscape_case(rec)}
+            'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
+            'materials': lambda: materials_case(rec)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     for name in want:
         edits, functions = allc[name]()

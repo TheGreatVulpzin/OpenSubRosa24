@@ -12,5 +12,10 @@ void __cdecl generatetexture_randomvec(int texture);
 void __cdecl generatetexture_carpet(int material);
 void __cdecl generatetexture_billboard(int material);
 void __cdecl generatetexture_newspaper(void);
+void __cdecl generatematerialwindowtexture(int material, int mipmap, int wrap_s, int wrap_t, int mag_filter,
+                                           int min_filter);
+void __cdecl generatehumantexture(int human);
+void __cdecl generatematerialtexture(int material, int mipmap, int wrap_s, int wrap_t, int mag_filter,
+                                     int min_filter);
 
 #endif /* CL_TEXTURES_TEXTURES_H */

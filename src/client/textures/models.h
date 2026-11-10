@@ -16,5 +16,7 @@ void __cdecl model_extrudequadscale(int quad, const vec3 *offset, float scale_x,
 void __cdecl createmodel_cityobject_type(int model, int type);
 void __cdecl createmodel_cityobject_elevator(int model, int type);
 void __cdecl createmodel_cityobject(int model, int type);
+void __cdecl createhairmodel(int model);
+void __cdecl createhumanmodel(int model);
 
 #endif /* CL_TEXTURES_MODELS_H */
