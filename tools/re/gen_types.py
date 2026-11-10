@@ -82,6 +82,15 @@ STRUCTS = {
     # Phase 4, batch 6.
     'ObjectPacket': ('objectpacket', 0xce14),
 }
+# Records that only the client has. They get a type in the header and no storage object of the server.
+CLIENT_STRUCTS = {
+    'ModelTemp': ('modeltemp', 0x270014),
+    'Model': ('model', 0xe04),
+    'Texture': ('texture', 0x70),
+    'Image': ('image', 0x4000008),
+    'LandRender': ('landrender', 0x47000),
+    'TextureList': ('texturelist', 0x1144),
+}
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,
           'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 16384,
@@ -97,7 +106,10 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceSlot': 0x20, 'NetPriority': 0x1c, 'PlayerAction': 0x54, 'NetEntry': 8, 'NetCandidate': 0xc, 'DoorBlock': 0x10,
              'Stock': 0x14, 'Mission': 0x40, 'TeamCarSpot': 0x34, 'SavedItem': 0xc,
              'SavedSlot': 0x64, 'Threat': 0x18, 'GuardSpot': 0x10,
-             'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4}
+             'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
+             'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
+             'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -343,6 +355,34 @@ typedef struct LevelBuilding {
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
 typedef struct MeshTri { int verts[3]; } MeshTri;
 
+/* Parts of a client model (ModelTemp, Model). */
+typedef struct TexCoord { float u, v; } TexCoord;
+typedef struct TriTexCoords { TexCoord corners[3]; } TriTexCoords;
+typedef struct QuadTexCoords { TexCoord corners[4]; } QuadTexCoords;
+typedef struct MeshLine { int verts[2]; } MeshLine;
+/* The vertices of one landscape sector and its place in the grid of sectors. */
+typedef struct LandSector { vec3 *verts; int x, y, z; uint8_t pad_10[4]; } LandSector;
+/* A list of triangles of a landscape sector: indexes into the 65 x 65 vertices. */
+typedef struct LandIndexList { int num_tris; MeshTri *tris; } LandIndexList;
+/* An OpenGL buffer of the client. */
+typedef struct VboRec { uint32_t gl_name; uint8_t pad_04[4]; } VboRec;
+/* The detail of a landscape sector in a frame: its level and the level at each of its 4 sides. */
+typedef struct LandSectorLod { int level; int edge_level[4]; } LandSectorLod;
+/* One level of the sphere mesh. */
+typedef struct SphereLevel { int num_verts; vec3 *verts; int num_tris; MeshTri *tris; } SphereLevel;
+/* A window of a building type: the lit rectangle inside one tile of 64 x 64 texels. The
+ * four numbers are fractions of the tile. A clear window is drawn as grey glass. */
+typedef struct WindowRect { int clear; float left, width, top, height; uint8_t pad_14[4]; } WindowRect;
+/* The windows that the window texture holds: each cell is a tile of 128 x 128 pixels. */
+typedef struct WindowCell { int material; int window; } WindowCell;
+typedef struct WindowAtlas { int num_cells; WindowCell cells[64]; } WindowAtlas;
+/* The look values of the last texture that was made for a human. */
+typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook;
+/* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
+typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
+/* A vertex as the renderer reads it: 8 floats. */
+typedef struct ModelVertex { vec3 pos; TexCoord texcoord; vec3 normal; } ModelVertex;
+
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
@@ -485,7 +525,7 @@ typedef union BuildingPart { struct {
 typedef union Newspaper { struct {
     int num_lines;
     char lines[1024][256];
-    int unk_40004;
+    int texture_done;   /* +0x40004 the client writes 1 after it draws the texture. A new text writes 0 */
 }; uint8_t lf_raw[0x40008]; } Newspaper;
 
 SR_STATIC_ASSERT(sizeof(BuildingCell) == 0x48, "BuildingCell");
@@ -750,6 +790,11 @@ SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
 SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
 SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
 SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
+SR_STATIC_ASSERT(sizeof(TriTexCoords) == 0x18, "TriTexCoords");
+SR_STATIC_ASSERT(sizeof(QuadTexCoords) == 0x20, "QuadTexCoords");
+SR_STATIC_ASSERT(sizeof(ModelVertex) == 0x20, "ModelVertex");
+SR_STATIC_ASSERT(sizeof(LandSector) == 0x14, "LandSector");
+SR_STATIC_ASSERT(sizeof(LandIndexList) == 8, "LandIndexList");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
 SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
@@ -944,7 +989,7 @@ def check_frozen(header):
 def main():
     names = load_names()
     parts = [HEADER]
-    for cname, (glob, size) in STRUCTS.items():
+    for cname, (glob, size) in {**STRUCTS, **CLIENT_STRUCTS}.items():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'

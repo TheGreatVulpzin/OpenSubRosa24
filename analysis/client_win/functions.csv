@@ -2479,7 +2479,7 @@ rva,size,name,source,confidence,evidence
 0xad390,566,loadmodelcsm,anchor,0.823,features
 0xad5d0,4842,createbulletmodel,callgraph,0.667,votes=4
 0xae8c0,1257,rendermodelnormals,callees,0.909,"callee jaccard 0.91, constants 0.33, size 1257"
-0xaedb0,381,model_settritexcoord,callgraph,1.0,votes=16
+0xaedb0,381,addboxtomodel,manual,1.0,"Adds 8 vertices and 12 triangles around a center with three half sizes, as addboxtomodel in the Linux client. The matcher name model_settritexcoord was wrong."
 0xaef30,524,,,,
 0xaf140,1649,addcylindertomodel,callees,0.8,"callee jaccard 0.80, constants 0.32, size 1649"
 0xaf7c0,2024,,,,
@@ -2494,9 +2494,9 @@ rva,size,name,source,confidence,evidence
 0xb2630,1176,model_extrudequad2,anchor,0.462,features
 0xb2ad0,433,,,,
 0xb2c90,412,model_extrudequad,callgraph,1.0,votes=8
-0xb2e30,592,addboxtomodel,callgraph,1.0,votes=8
+0xb2e30,592,model_extrudequadscale,manual,1.0,"Extrudes a quad: scales its corners around their center by three factors and adds an offset, as model_extrudequadscale in the Linux client. The matcher name addboxtomodel was wrong."
 0xb3080,199,,,,
-0xb3150,101,,,,
+0xb3150,101,model_settritexcoord,manual,1.0,"Writes one texture coordinate to the three corners of a triangle of modeltemp, as model_settritexcoord in the Linux client."
 0xb31c0,133,model_setquadtexcoord,callgraph,0.333,votes=2
 0xb3250,1697,creategunmodel2,callgraph,1.0,votes=12
 0xb3900,1715,createcashmodel,callgraph,1.0,votes=10
@@ -2523,7 +2523,7 @@ rva,size,name,source,confidence,evidence
 0xbf260,1460,,,,
 0xbf820,962,,,,
 0xbfbf0,665,,,,
-0xbfe90,3012,landscape_buildsectorlods,callgraph,0.667,votes=4
+0xbfe90,3012,setupspheremodel,manual,1.0,"Fills 8 levels of a sphere mesh: an octahedron, then each level splits each triangle into 4 and puts the new points on the unit sphere, as setupspheremodel in the Linux client. The matcher name landscape_buildsectorlods was wrong."
 0xc0a60,2333,buildtrackmodel,anchor,0.625,features
 0xc1380,286,rendertrackmodel,callgraph,1.0,votes=8
 0xc14a0,1553,model_viewer,anchor,0.855,features
@@ -2539,10 +2539,10 @@ rva,size,name,source,confidence,evidence
 0xc51f0,68,cerp,anchor,1.0,features
 0xc5240,89,noise1d,callgraph,0.667,votes=4
 0xc52a0,95,noise2d,callgraph,1.0,votes=100
-0xc5300,107,,,,
-0xc5370,255,,,,
+0xc5300,107,noise3d,manual,1.0,"The hash of noise2d with a third coordinate times 54323. It sits after noise2d, as in the Linux client."
+0xc5370,255,lerpnoise2d,manual,1.0,"The first of the three grid noise functions (x, y, mask), in the order of the Linux client."
 0xc5470,255,serpnoise2d,callgraph,1.0,votes=20
-0xc5570,255,,,,
+0xc5570,255,cerpnoise2d,manual,1.0,"The third of the three grid noise functions (x, y, mask), in the order of the Linux client. It blends with a cosine."
 0xc5670,43,getrandomfloat,callgraph,1.0,votes=16
 0xc56a0,94,,,,
 0xc5700,105,getrandomvector3d,callgraph,1.0,votes=12
@@ -2612,7 +2612,7 @@ rva,size,name,source,confidence,evidence
 0xd7ed0,947,render_sectorlist,anchor,0.877,features
 0xd8290,2115,render_buildareasectorshadow,anchor,0.544,features
 0xd8ae0,187,render_areasectorshadow,anchor,1.0,features
-0xd8ba0,1374,,,,
+0xd8ba0,1374,landscape_buildsectorlods,manual,1.0,"Fills the index lists of the landscape sectors that landscape_rendersector draws. It sits before landscape_buildsectormesh, as in the Linux client."
 0xd9100,410,landscape_buildsectormesh,anchor,0.946,features
 0xd92a0,1229,setupframelandscapelod,anchor,0.882,features
 0xd9770,359,renderlandscape,callgraph,0.833,votes=5
@@ -2696,12 +2696,12 @@ rva,size,name,source,confidence,evidence
 0xeb6b0,40,,,,
 0xeb6e0,78,genrand_res53,anchor,1.0,features
 0xeb730,20,setupobjecttypes,callgraph,0.333,votes=2
-0xeb750,186,,,,
+0xeb750,186,objecttype_addparticle,manual,1.0,"Appends a particle (x, y, z, mass) to an object type, as objecttype_addparticle of the server."
 0xeb810,313,objecttype_addbond,callgraph,1.0,votes=34
-0xeb950,449,objecttype_addparticle,callgraph,1.0,votes=156; diverge: objecttype_addface
-0xebb20,721,,,,
-0xebe00,1053,objecttype_addface,callgraph,1.0,votes=44; diverge: setupobjecttypeweight
-0xec220,1029,,,,
+0xeb950,449,objecttype_addface,manual,1.0,"Appends a face (corners, 4 vertices, links of -1, extra, armor) to an object type, as objecttype_addface of the server. The matcher name objecttype_addparticle was wrong."
+0xebb20,721,objecttype_addwheel,manual,1.0,"Appends a wheel (12 arguments) to an object type, as objecttype_addwheel of the server."
+0xebe00,1053,setupobjecttypeweight,manual,1.0,"Makes the masses a share of 1, centers the wheels and fills the frame weight tables, as setupobjecttypeweight of the server. The matcher name objecttype_addface was wrong."
+0xec220,1029,calculatepointscale,manual,1.0,"Fills a weight table for a set of points and a target point. setupobjecttypeweight calls it twice, as calculatepointscale of the server."
 0xec630,42228,setupobjecttypes_cars,anchor,0.587,features
 0xf6b30,3872,setupobjecttypes_helicopters,anchor,0.53,features
 0xf7a50,11648,setupobjectypes_train,anchor,0.597,features

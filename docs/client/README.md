@@ -1,4 +1,8 @@
-# Image decoders and fonts
+# Clean client code
+
+One page for each system of `src/client/`.
+
+## Images and fonts
 
 The image loaders supply texture pixels and font atlases. Each format uses a separate source file and header in `src/client/image/`.
 
@@ -10,3 +14,9 @@ The image loaders supply texture pixels and font atlases. Each format uses a sep
 - [HDR](hdr.md): Radiance RGBE samples.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
+
+## Textures, models and landscape
+
+- [textures.md](textures.md): the textures that the game makes at the start, and the noise functions.
+- [models.md](models.md): the model in work, the model builders, the sphere, the hair and the human.
+- [landscape.md](landscape.md): the landscape mesh.

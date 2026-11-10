@@ -6,6 +6,7 @@
 #ifndef CL_CLIENT_H
 #define CL_CLIENT_H
 
+#include <emmintrin.h>
 #include <stdint.h>
 
 extern uintptr_t sr_base;
@@ -17,5 +18,12 @@ static __inline void *cl_fn(unsigned va)
 }
 
 #define CL_FN(va, type) ((type)cl_fn(va))
+
+/* Convert a float value to an int. The value rounds to a double, then loses its fraction. A
+ * value that is not a number, or that does not fit in an int, gives 0x80000000. */
+static __inline int cl_ftoi(double value)
+{
+    return _mm_cvttsd_si32(_mm_set_sd(value));
+}
 
 #endif

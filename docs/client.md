@@ -389,6 +389,27 @@ All 48 functions are active in `analysis/client_win/adopted_C1.txt`. The pending
 
 The loaders run on demand. PNG accepts eight-bit samples, five row filters, palette transparency and Adam7. JPEG accepts baseline frames. PSD accepts raw and PackBits planes. HDR supplies float samples. Font atlases retain their glyph widths and float coordinate stores.
 
+## Textures, models and landscape (group C2)
+
+The 46 functions of C2 are clean C in `src/client/textures/` (pages in `docs/client/`). Three more are shared code: `lerpnoise2d`, `serpnoise2d` and `cerpnoise2d` (`src/common/random.c`) and `setupobjecttypeweight` (`src/game/object_types.c`). The list is `analysis/client_win/adopted_C2.txt`. Every function was the same as the client on its tests.
+
+Tests:
+
+- Recorded calls (`gate.py --all-calls --funcs`): `generatetexture`, `generatemipmap`, `generatematerialtexture` (10 calls), `generatehumantexture` (48), `createhumanmodel`, `createhairmodel`, `copymodel`, `createmodel_cityobject*`, `landscape_buildmesh`, `landscape_buildsectormesh` and `landscape_rendersector`.
+- Synthetic cases (`instrumentation/client/synth_textures.py <recording> <work dir> [case,...]`): `noise`, `noiseedge`, `hermite`, `models`, `objecttypes` (includes `setupobjecttypeweight`, 24 types), `textures`, `landscape`, `windows` and `materials` (all 62 materials).
+- The recordings of `generatematerialwindowtexture` read texture memory that the snapshot does not hold, so the original crashes in the test. The case `windows` writes the second level of four textures into the image and runs the function on it (4 calls, all the same). A pointer written into the snapshot must be a real address: the image starts at `0x20000000` in the test, not at `0x400000`.
+- `landscape_buildsectormesh` (14 calls) and `generatemipmap` (6 calls) have skipped calls: the snapshot holds 140 of 178 heap regions.
+
+Facts:
+
+- The client converts a float to an int with `_ftol2_sse` (RVA `0x10c650`): a 32 bit `cvttsd2si`. NaN, infinity and a value outside the range of an int give `0x80000000`. Clean client code calls `cl_ftoi` (`src/client/client.h`). `lift.py` still models the routine as a 64 bit conversion: this changes nothing for the lifted functions that the tests already pass, and a change there touches every lifted function, so it is left for a decision.
+- The three grid noise functions keep the shared code, which converts with 64 bits. On 200 calls with normal points they are the same. On the case `noiseedge` (120 calls with NaN, infinity and huge values) 5 or 6 calls of each differ. The texture generators never pass such points.
+- The test tools give a stub to each OpenGL pointer slot of `gl_slots.csv` (`instrumentation/client/gen_plat_stubs.py`, `plat_test_patch_globals()`). Functions that call extension functions now run in the test. `__GLeeGetExtensions` (not rewritten) used to skip with "original crashed". It now runs and shows one difference of its return value (a leftover register in the original).
+- `zaxis` and `pointtemp` have a client address in `analysis/client_win/storage.csv` (and `globals_checked.csv`), so the server function `setupobjecttypeweight` reads the right memory.
+- New client only records are in `analysis/client_win/group_globals_C2.csv`: the model in work, the model and texture lists, the landscape render data, `texture_windowatlas`, `windowrect`, `texture_human`, `bonevert` and `cornervert`.
+
+Result: the gate counts are menu 86, play 311, play2 305 (before C2: 85, 285, 280).
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).

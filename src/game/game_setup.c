@@ -178,7 +178,7 @@ void resetgame(void)
     round = sr_server ? sr_game.round_number + 1 : g_area_sector.client_game_id;
     sr_game.ticks = 0;
     g_area_sector.unused_0 = 0;
-    *((int *)&sr_data_newspaper.unk_40004) = 0;
+    *((int *)&sr_data_newspaper.texture_done) = 0;
     sr_game.round_number = round;
     if (!sr_server)
         g_numofheadlines = 0;

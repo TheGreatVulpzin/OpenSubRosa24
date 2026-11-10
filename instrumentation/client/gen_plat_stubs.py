@@ -11,6 +11,10 @@ environment log, so the harness can compare the lifted run with the original run
 
 Return values are fixed: the same in both runs and in every test.
 
+The OpenGL extension functions have no import. The game calls them through pointer slots
+(analysis/client_win/gl_slots.csv). A snapshot holds the pointers of the recorded process, so
+CL_SLOT_PATCHES puts a stub into each slot.
+
 Usage: python -I instrumentation/client/gen_plat_stubs.py
 """
 import re
@@ -61,6 +65,15 @@ CUSTOM = {
     'speex_preprocess_state_init': 'return (void *)0x4000;',
     'speex_lib_get_mode': 'return (void *)0x5000;',
 }
+
+# The OpenGL extension functions of the pointer slots.
+CUSTOM.update({
+    'glGenBuffersARB': 'int i; for (i = 0; i < n; i++) buffers[i] = ++g_ids;',
+    'glGenFramebuffers': 'int i; for (i = 0; i < n; i++) framebuffers[i] = ++g_ids;',
+    'glGenRenderbuffers': 'int i; for (i = 0; i < n; i++) renderbuffers[i] = ++g_ids;',
+    'glGetInfoLogARB': 'if (length) *length = 0; if (maxLength > 0) infoLog[0] = 0;',
+    'wglGetExtensionsStringARB': 'return "";',
+})
 
 # Imports that the CSV does not list because Ghidra knows their prototype.
 EXTRA = [
@@ -138,8 +151,21 @@ def main():
         else:
             o.append('    { "%s", "%s", 0, (void *)cs_%s }, \\' % (dll, name, name))
     o.append('')
+    slots = []
+    with open('analysis/client_win/gl_slots.csv') as f:
+        next(f)
+        for line in f:
+            if line.strip():
+                rva, name, cc, proto = line.strip().split(',', 3)
+                assert all(name != r[1] for r in rows), name
+                slots.append((rva, name))
+                o.append(stub('', name, cc, re.sub(r'\buint\b', 'unsigned int', proto)))
+    o.append('#define CL_SLOT_PATCHES \\')
+    for rva, name in slots:
+        o.append('    *(void **)(sr_base + %su) = (void *)cs_%s; \\' % (rva, name))
+    o.append('')
     open(OUT, 'w', newline='\n').write('\n'.join(o) + '\n')
-    print('%d stubs -> %s' % (len(rows), OUT))
+    print('%d stubs, %d slots -> %s' % (len(rows), len(slots), OUT))
 
 
 if __name__ == '__main__':

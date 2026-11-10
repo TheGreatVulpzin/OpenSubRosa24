@@ -6,7 +6,6 @@ menucolor
 csmstr
 lightwavelength
 carcolorname
-zaxis
 xaxis2d
 yaxis2d
 mag01
@@ -22,7 +21,6 @@ farbs_line
 dedicated
 floorplan
 timer
-pointtemp
 numofdynamicbonds
 surface2
 numofsprites

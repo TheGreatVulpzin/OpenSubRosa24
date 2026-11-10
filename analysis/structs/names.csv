@@ -864,3 +864,71 @@ city,0x2fa10,elevator,int,,city_createelevator keeps the city object id or -1
 city,0x2fa14,elevator_block,int,3,The cell coordinates of the elevator
 city,0x2fa20,num_floors,int,,city_createelevator copies the floor count to the city object
 city,0x2fb90,street_roads,int,2,building_buildfloorplan reads the roads of the nearest intersection
+modeltemp,0x0,num_verts,int,,modeltemp_addvertex and addboxtomodel add 1 for each vertex
+modeltemp,0x4,vertex_floats,int,,setupmodel writes 8: the floats of one render vertex
+modeltemp,0x8,verts,vec3,8192,0x8 + 8192 * 12 = 0x18008
+modeltemp,0x18008,vert_texcoords,TexCoord,8192,copymodel copies num_verts * 8 bytes
+modeltemp,0x28008,vert_normals,vec3,8192,setupmodel: the normal of a corner of a smooth triangle
+modeltemp,0x40008,vert_tangents,vec3,8192,the model loader: the unit cross of the normal and an axis
+modeltemp,0x58008,render_verts,ModelVertex,9216,setupmodel: 3 for each triangle. The array has room for 3072 triangles
+modeltemp,0xa0008,num_tris,int,,addboxtomodel adds 12
+modeltemp,0xa000c,tris,MeshTri,8192,setupmodel: indexes into verts
+modeltemp,0x15000c,tri_normals,vec3,8192,setupmodel: generatetrinormal of the three corners
+modeltemp,0x16800c,corner_normals,vec3,24576,the model loader: one normal for each corner of a triangle
+modeltemp,0x1b000c,tri_texcoords,TriTexCoords,8192,model_settritexcoord writes the three corners
+modeltemp,0x1e000c,tri_neighbors,MeshTri,8192,setupmodel: the triangle across each edge. -1 none
+modeltemp,0x1f800c,tri_shading,int,8192,setupmodel: -2 the triangle normal. -1 the normal of each vertex. 0 to 2 the vertex normal of that corner
+modeltemp,0x20000c,num_quads,int,,model_extrudequad adds 4
+modeltemp,0x200010,quads,MeshQuad,8192,model_extrudequad: indexes into verts
+modeltemp,0x220010,quad_texcoords,QuadTexCoords,8192,model_setquadtexcoord writes the four corners
+modeltemp,0x260010,num_lines,int,,copymodel copies num_lines * 8 bytes
+modeltemp,0x260014,lines,MeshLine,8192,0x260014 + 8192 * 8 = 0x270014
+model,0x0,num_verts,int,,copymodel copies ModelTemp.num_verts
+model,0x4,vertex_floats,int,,copymodel copies ModelTemp.vertex_floats
+model,0x8,verts,vec3*,,copymodel: malloc of num_verts * 12
+model,0xc,vert_texcoords,TexCoord*,,copymodel: malloc of num_verts * 8
+model,0x10,vert_normals,vec3*,,copymodel: malloc of num_verts * 12
+model,0x14,vert_tangents,vec3*,,copymodel: malloc of num_verts * 12
+model,0x18,render_verts,ModelVertex*,,copymodel: malloc of num_tris * 3 * vertex_floats * 4
+model,0x1c,num_tris,int,,copymodel copies ModelTemp.num_tris
+model,0x20,tris,MeshTri*,,copymodel: malloc of num_tris * 12
+model,0x24,tri_normals,vec3*,,copymodel: malloc of num_tris * 12
+model,0x28,tri_neighbors,MeshTri*,,copymodel: malloc of num_tris * 12
+model,0x2c,num_lines,int,,copymodel copies ModelTemp.num_lines
+model,0x30,lines,MeshLine*,,copymodel: malloc of num_lines * 8
+texture,0x0,width,int,,the texture generators write the size of level 0
+texture,0x4,height,int,,the texture generators write the size of level 0
+texture,0x8,num_levels,int,,generatemipmap writes the number of levels. setuptexture uploads that many
+texture,0xc,format,int,,setuptexture: the format of the pixels (GL_RGBA or GL_RGB)
+texture,0x10,internal_format,int,,setuptexture: the format that OpenGL keeps
+texture,0x14,wrap_s,int,,setuptexture: GL_TEXTURE_WRAP_S
+texture,0x18,wrap_t,int,,setuptexture: GL_TEXTURE_WRAP_T
+texture,0x1c,mag_filter,int,,setuptexture: GL_TEXTURE_MAG_FILTER
+texture,0x20,min_filter,int,,setuptexture: GL_TEXTURE_MIN_FILTER
+texture,0x28,spare,int,,the texture generators write 0. No function reads it
+texture,0x2c,gl_name,uint32_t,,setuptexture binds it
+texture,0x30,levels,uint32_t*,16,generatemipmap: the pixels of each level. Level 0 is the full size
+image,0x0,width,int,,the texture generators write the size before they fill the pixels
+image,0x4,height,int,,the texture generators write the size before they fill the pixels
+image,0x8,pixels,uint32_t,16777216,one word for each pixel. Room for 4096 x 4096
+landrender,0x0,sectors,LandSector,1024,landscape_buildmesh: 32 x 32 sectors
+landrender,0x5000,lists,LandIndexList,1024,landscape_buildsectorlods: 16 levels x 16 edge levels x 4 sides
+landrender,0x7000,num_temp_tris,int,,landscape_buildsectorlods counts the triangles of the list in work
+landrender,0x7004,temp_tris,MeshTri,21845,landscape_buildsectorlods: the list in work
+texturelist,0x4,material,int,256,generatetexture_carpet and generatetexture_billboard: the texture of each material
+texturelist,0x418,plain_green,int,,generatetexture: a texture of one dark green color
+texturelist,0x41c,disc,int,,generatetexture: a white disc with a clear ground
+texturelist,0x420,rough_disc,int,,generatetexture: a white disc with an edge that the noise moves
+texturelist,0x424,human,int,4,generatetexture: suit and tie and skin and hair and eye of a human. The first three use the team colors
+texturelist,0x1034,paint,int,8,generatetexture: a color on the left half and dark grey on the right half
+texturelist,0x1054,street,int,10,generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps
+texturelist,0x10d4,grey_disc,int,,generatetexture: a grey disc on a dark ground with a small dark mark
+texturelist,0x10d8,panel,int,6,generatetexture: six colors with a grey frame at the top
+texturelist,0x10f0,half_grey,int,,generatetexture: a grey left half and a dark right half
+texturelist,0x10f4,half_brown,int,,generatetexture: a dark left half and a brown right half
+texturelist,0x10f8,plain_orange,int,,generatetexture: a texture of one orange color
+texturelist,0x1110,random_vectors,int,,the start code passes it to generatetexture_randomvec
+texturelist,0x1134,landscape_normal,int,,landscape_generatenormaltexture fills this texture
+texturelist,0x1138,landscape_detail,int,,landscape_generatedetail fills this texture
+texturelist,0x1140,newspaper,int,,generatetexture_newspaper fills this texture
+texturelist,0x834,human_textures,int,512,generatehumantexture: the texture of each human

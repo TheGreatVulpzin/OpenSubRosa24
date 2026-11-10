@@ -150,10 +150,10 @@ static int boundaries(void)
         sprintf(sr_data_accounts.records[i].name, "User%d", i);
         sr_data_accounts.records[i].money = i;
     }
-    sr_data_newspaper.unk_40004 = 0x12345678;
+    sr_data_newspaper.texture_done = 0x12345678;
     newspaper_load();
     remove("readme.txt");
-    if (sr_data_newspaper.num_lines != 1024 || sr_data_newspaper.unk_40004 != 0x12345678)
+    if (sr_data_newspaper.num_lines != 1024 || sr_data_newspaper.texture_done != 0x12345678)
         return 0;
     puts("boundaries: 9 cases passed");
     return 1;
