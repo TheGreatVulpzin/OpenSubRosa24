@@ -211,8 +211,8 @@ void __cdecl landscape_buildmesh(void)
  * column, changes nothing. */
 void __cdecl landscape_setheightf(const vec3 *pos, float height)
 {
-    int x = (int)(long long)((pos->x - g_landscape.origin.x) / CELL_SIZE);
-    int z = (int)(long long)((pos->z - g_landscape.origin.z) / CELL_SIZE);
+    int x = cl_ftoi((pos->x - g_landscape.origin.x) / CELL_SIZE);
+    int z = cl_ftoi((pos->z - g_landscape.origin.z) / CELL_SIZE);
     if (x >= 0 && x < GRID_CELLS && z >= 0 && z < GRID_CELLS)
         g_landscape.heights[z * GRID_ROW + x] = height;
 }
@@ -264,9 +264,9 @@ void __cdecl landscape_generatenormaltexture(void)
             if (z > 0 && z < GRID_CELLS)
                 normal.z = (float)((heights[(z + 1) * GRID_ROW + x] - heights[(z - 1) * GRID_ROW + x]) * 0.5);
             normalizevector(&normal, &normal);
-            red = (int)(long long)(normal.x * 127.0 + 128.0);
-            green = (int)(long long)(normal.y * 127.0 + 128.0);
-            blue = (int)(long long)(128.0 - normal.z * 127.0);
+            red = cl_ftoi(normal.x * 127.0 + 128.0);
+            green = cl_ftoi(normal.y * 127.0 + 128.0);
+            blue = cl_ftoi(128.0 - normal.z * 127.0);
             out[x] = (uint32_t)green * 0x100u + (uint32_t)blue * 0x10000u + 0xff000000u + (uint32_t)red;
         }
     }
@@ -285,11 +285,11 @@ void __cdecl landscape_generatedetail(int mipmap, int wrap_s, int wrap_t, int ma
     g_image.height = DETAIL_TEXTURE_SIZE;
     for (y = 0; y < g_image.height; y++) {
         for (x = 0; x < g_image.width; x++) {
-            int gray = (int)(long long)(noise2d(x, y) * 16.0 + 192.0);
+            int gray = cl_ftoi(noise2d(x, y) * 16.0 + 192.0);
             float patch = cerpnoise2d((float)x, (float)y, DETAIL_TEXTURE_SIZE - 1);
             int alpha = 0;
             if (patch > 0.25)
-                alpha = (int)(long long)((patch - 0.25) * 128.0);
+                alpha = cl_ftoi((patch - 0.25) * 128.0);
             g_image.pixels[y * g_image.width + x] = pack_pixel(gray, gray, gray, alpha);
         }
     }

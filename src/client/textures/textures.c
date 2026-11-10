@@ -152,9 +152,9 @@ void __cdecl generatetexture_randomvec(int texture)
             vec3 v;
             int red, green, blue;
             getrandomvector3d(&v, 0.0f, 1.0f);
-            red = (int)(long long)(v.x * 127.0 + 128.0);
-            green = (int)(long long)(v.y * 127.0 + 128.0);
-            blue = (int)(long long)(v.z * 127.0 + 128.0);
+            red = cl_ftoi(v.x * 127.0 + 128.0);
+            green = cl_ftoi(v.y * 127.0 + 128.0);
+            blue = cl_ftoi(v.z * 127.0 + 128.0);
             g_image.pixels[y * g_image.width + x] = pack_pixel(red, green, blue, OPAQUE);
         }
     }
@@ -286,9 +286,9 @@ static int near_suit_center(int x, int width)
 
 static void tint_pixel(Pixel *p, const float *tint)
 {
-    p->blue = (int)(long long)(tint[2] * 255.0);
-    p->green = (int)(long long)(tint[1] * 255.0);
-    p->red = (int)(long long)(tint[0] * 255.0);
+    p->blue = cl_ftoi(tint[2] * 255.0);
+    p->green = cl_ftoi(tint[1] * 255.0);
+    p->red = cl_ftoi(tint[0] * 255.0);
     p->alpha = OPAQUE;
 }
 
@@ -428,11 +428,11 @@ void __cdecl generatetexture_carpet(int material)
             float wave = (float)(x87_sin((grain + grain) * PI) * 32.0);
             int red, green, blue;
             if (from_center < 0x20) {
-                red = green = blue = (int)(long long)(wave + 112.0);
+                red = green = blue = cl_ftoi(wave + 112.0);
             } else {
-                red = (int)(long long)(wave * 0.25 + 64.0);
-                green = (int)(long long)(wave * 0.125 + 56.0);
-                blue = (int)(long long)(wave * 0.25 + 48.0);
+                red = cl_ftoi(wave * 0.25 + 64.0);
+                green = cl_ftoi(wave * 0.125 + 56.0);
+                blue = cl_ftoi(wave * 0.25 + 48.0);
             }
             g_image.pixels[y * g_image.width + x] = pack_pixel(red, green, blue, 0x20);
         }

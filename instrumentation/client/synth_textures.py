@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, hermite, models, objecttypes, textures. The script sets the environment of the gate itself.
+Cases: noise, hermite, models, objecttypes, textures, landscape. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -29,7 +29,7 @@ NOISE3D, LERPNOISE2D, SERPNOISE2D, CERPNOISE2D = 0xc5300, 0xc5370, 0xc5470, 0xc5
 VERTSEQUAL, ADDVERTEX, ADDBOX = 0xac0d0, 0xb7980, 0xaedb0
 EXTRUDE, EXTRUDE2, EXTRUDESCALE = 0xb2c90, 0xb2630, 0xb2e30
 SETTRITEXCOORD, SETQUADTEXCOORD = 0xb3150, 0xb31c0
-GENERATETEXTURE = 0xe7ff0
+GENERATETEXTURE, SETHEIGHTF = 0xe7ff0, 0xa1aa0
 ADDPARTICLE, ADDBOND, ADDFACE, ADDWHEEL, POINTSCALE = 0xeb750, 0xeb810, 0xeb950, 0xebb20, 0xec220
 
 # The model in work (RVA): the counts and the arrays that the cases fill.
@@ -41,6 +41,9 @@ SCRATCH = MODELTEMP + VERTS + 7000 * 12
 # The list of texture numbers (RVA) and the entries that generatetexture draws: (offset, count).
 TEXTURELIST = 0x14311840
 SMALL_TEXTURES = [(0x418, 3), (0x424, 4), (0x1034, 8), (0x1054, 10), (0x10d4, 1), (0x10d8, 6), (0x10f0, 3)]
+
+# The landscape (RVA): the origin, then 2049 x 2049 heights.
+LANDSCAPE = 0x9ba7c20
 
 NAN, INF = float('nan'), float('inf')
 EDGES = [0.0, -0.0, 1.0, -1.0, 0.5, 0.25, 0.75, 2.0, 0.001, 0.1, 0.3333333, 0.999999, 123.456, -77.7, 1e10,
@@ -191,6 +194,19 @@ def textures_case(rec):
     return [], {'generatetexture': [call(GENERATETEXTURE, n, 1, 0x812f, 0x812f, 0x2600, 0x2600) for n in numbers]}
 
 
+def landscape_case(rec):
+    """Set heights at grid points inside the grid, on its borders, outside it and at edge values."""
+    rng = random.Random(3)
+    ox, _, oz = Snapshot(rec / 'sv_snapshot.bin').read(LANDSCAPE, '3f')
+    cells = [(0, 0), (5, 7), (2047, 2047), (2048, 10), (10, 2048), (-1, 3), (3, -1), (2047, 0), (0, 2047),
+             (0.999, 0.001), (-0.5, -0.5), (2047.99, 2047.99), (1e6, 3), (3, -1e6)]
+    cells += [(rng.uniform(-100.0, 2150.0), rng.uniform(-100.0, 2150.0)) for _ in range(60)]
+    points = [(ox + x * 8.0, rng.uniform(-50.0, 50.0), oz + z * 8.0) for x, z in cells]
+    points += [(a, 0.0, b) for a in (NAN, INF, -INF, 3e9, -3e9, 1e30) for b in (oz + 80.0, NAN)]
+    points += [(ox + 80.0, 0.0, b) for b in (NAN, INF, -INF, 3e9, -3e9, 1e30)]
+    return [], {'landscape_setheightf': [call(SETHEIGHTF, p, floats(rng)) for p in points]}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -207,7 +223,8 @@ def main():
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
     allc = {'noise': lambda: ([], noise_calls()), 'hermite': hermite_case, 'models': models_case,
-            'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec)}
+            'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
+            'landscape': lambda: landscape_case(rec)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     for name in want:
         edits, functions = allc[name]()

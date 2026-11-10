@@ -33,3 +33,7 @@ generatetexture_randomvec src/client/textures/textures.c
 generatetexture_carpet src/client/textures/textures.c
 generatetexture_billboard src/client/textures/textures.c
 generatetexture_newspaper src/client/textures/textures.c
+landscape_buildsectormesh src/client/textures/landscape.c
+landscape_buildmesh src/client/textures/landscape.c
+landscape_setheightf src/client/textures/landscape.c
+landscape_rendersector src/client/textures/landscape.c
