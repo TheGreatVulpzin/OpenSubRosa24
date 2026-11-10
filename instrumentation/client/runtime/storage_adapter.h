@@ -196,6 +196,23 @@ extern Bond sr_unplaced_bond[16384];
 extern int sr_unplaced_train_near;
 #define sr_data_train_near sr_unplaced_train_near
 
+#define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
+#define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
+#define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))
+#define cl_data_image (*((Image *)(sr_base + 0x19da5220u)))
+#define cl_data_landrender (*((LandRender *)(sr_base + 0x17bbb880u)))
+#define cl_data_bigendian (*((int *)(sr_base + 0xb7331c0u)))
+#define cl_data_random_counter (*((uint32_t *)(sr_base + 0x90f6080u)))
+#define cl_data_texturelist (*((TextureList *)(sr_base + 0x14311840u)))
+#define cl_data_landsector_vbo ((int *)(sr_base + 0x1033fd4cu))
+#define cl_data_vbo ((VboRec *)(sr_base + 0x1b7b4e0u))
+#define cl_data_landsector_lod ((LandSectorLod *)(sr_base + 0x19c07d74u))
+#define cl_data_gl_bind_buffer (*((void * *)(sr_base + 0x115aa8u)))
+#define cl_data_gl_buffer_data (*((void * *)(sr_base + 0x115ab8u)))
+#define cl_data_fontnum (*((int *)(sr_base + 0x127eacu)))
+#define cl_data_fontlist ((int *)(sr_base + 0x29e7d340u))
+#define cl_data_sphere ((SphereLevel *)(sr_base + 0x9065260u))
+
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype

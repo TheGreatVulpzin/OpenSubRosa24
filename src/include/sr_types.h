@@ -225,6 +225,24 @@ typedef struct LevelBuilding {
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
 typedef struct MeshTri { int verts[3]; } MeshTri;
 
+/* Parts of a client model (ModelTemp, Model). */
+typedef struct TexCoord { float u, v; } TexCoord;
+typedef struct TriTexCoords { TexCoord corners[3]; } TriTexCoords;
+typedef struct QuadTexCoords { TexCoord corners[4]; } QuadTexCoords;
+typedef struct MeshLine { int verts[2]; } MeshLine;
+/* The vertices of one landscape sector and its place in the grid of sectors. */
+typedef struct LandSector { vec3 *verts; int x, y, z; uint8_t pad_10[4]; } LandSector;
+/* A list of triangles of a landscape sector: indexes into the 65 x 65 vertices. */
+typedef struct LandIndexList { int num_tris; MeshTri *tris; } LandIndexList;
+/* An OpenGL buffer of the client. */
+typedef struct VboRec { uint32_t gl_name; uint8_t pad_04[4]; } VboRec;
+/* The detail of a landscape sector in a frame: its level and the level at each of its 4 sides. */
+typedef struct LandSectorLod { int level; int edge_level[4]; } LandSectorLod;
+/* One level of the sphere mesh. */
+typedef struct SphereLevel { int num_verts; vec3 *verts; int num_tris; MeshTri *tris; } SphereLevel;
+/* A vertex as the renderer reads it: 8 floats. */
+typedef struct ModelVertex { vec3 pos; TexCoord texcoord; vec3 normal; } ModelVertex;
+
 /* A wheel of an object (Object.wheels). Two particles of the object hold the hub. */
 typedef union Wheel { struct {
     int popped;         /* +0x00 bulletsimulation writes 1 when health is gone; objectwheelcollision then uses friction 0.3 */
@@ -367,7 +385,7 @@ typedef union BuildingPart { struct {
 typedef union Newspaper { struct {
     int num_lines;
     char lines[1024][256];
-    int unk_40004;
+    int texture_done;   /* +0x40004 the client writes 1 after it draws the texture. A new text writes 0 */
 }; uint8_t lf_raw[0x40008]; } Newspaper;
 
 SR_STATIC_ASSERT(sizeof(BuildingCell) == 0x48, "BuildingCell");
@@ -632,6 +650,11 @@ SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
 SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
 SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
 SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
+SR_STATIC_ASSERT(sizeof(TriTexCoords) == 0x18, "TriTexCoords");
+SR_STATIC_ASSERT(sizeof(QuadTexCoords) == 0x20, "QuadTexCoords");
+SR_STATIC_ASSERT(sizeof(ModelVertex) == 0x20, "ModelVertex");
+SR_STATIC_ASSERT(sizeof(LandSector) == 0x14, "LandSector");
+SR_STATIC_ASSERT(sizeof(LandIndexList) == 8, "LandIndexList");
 SR_STATIC_ASSERT(sizeof(CityFace) == 0x18, "CityFace");
 SR_STATIC_ASSERT(sizeof(CityObjectTypeRec) == 0x2418, "CityObjectTypeRec");
 SR_STATIC_ASSERT(sizeof(AreaChunk) == 0x804, "AreaChunk");
@@ -2972,6 +2995,155 @@ SR_STATIC_ASSERT(offsetof(ObjectPacket, num_cityobjects) == 0xc0c, "ObjectPacket
 SR_STATIC_ASSERT(offsetof(ObjectPacket, cityobjects) == 0xc10, "ObjectPacket.cityobjects");
 SR_STATIC_ASSERT(offsetof(ObjectPacket, num_candidates) == 0xe10, "ObjectPacket.num_candidates");
 SR_STATIC_ASSERT(offsetof(ObjectPacket, candidates) == 0xe14, "ObjectPacket.candidates");
+
+/* modeltemp[]: record of 0x270014 bytes. */
+typedef union ModelTemp { struct {
+    int num_verts;                       /* +0x0000 modeltemp_addvertex and addboxtomodel add 1 for each vertex */
+    int vertex_floats;                   /* +0x0004 setupmodel writes 8: the floats of one render vertex */
+    vec3 verts[8192];                    /* +0x0008 0x8 + 8192 * 12 = 0x18008 */
+    TexCoord vert_texcoords[8192];       /* +0x18008 copymodel copies num_verts * 8 bytes */
+    vec3 vert_normals[8192];             /* +0x28008 setupmodel: the normal of a corner of a smooth triangle */
+    vec3 vert_tangents[8192];            /* +0x40008 the model loader: the unit cross of the normal and an axis */
+    ModelVertex render_verts[9216];      /* +0x58008 setupmodel: 3 for each triangle. The array has room for 3072 triangles */
+    int num_tris;                        /* +0xa0008 addboxtomodel adds 12 */
+    MeshTri tris[8192];                  /* +0xa000c setupmodel: indexes into verts */
+    uint8_t pad_b800c[0x98000];
+    vec3 tri_normals[8192];              /* +0x15000c setupmodel: generatetrinormal of the three corners */
+    vec3 corner_normals[24576];          /* +0x16800c the model loader: one normal for each corner of a triangle */
+    TriTexCoords tri_texcoords[8192];    /* +0x1b000c model_settritexcoord writes the three corners */
+    MeshTri tri_neighbors[8192];         /* +0x1e000c setupmodel: the triangle across each edge. -1 none */
+    int tri_shading[8192];               /* +0x1f800c setupmodel: -2 the triangle normal. -1 the normal of each vertex. 0 to 2 the vertex normal of that corner */
+    int num_quads;                       /* +0x20000c model_extrudequad adds 4 */
+    MeshQuad quads[8192];                /* +0x200010 model_extrudequad: indexes into verts */
+    QuadTexCoords quad_texcoords[8192];  /* +0x220010 model_setquadtexcoord writes the four corners */
+    int num_lines;                       /* +0x260010 copymodel copies num_lines * 8 bytes */
+    MeshLine lines[8192];                /* +0x260014 0x260014 + 8192 * 8 = 0x270014 */
+}; uint8_t lf_raw[0x270014]; } ModelTemp;
+SR_STATIC_ASSERT(sizeof(ModelTemp) == 0x270014, "ModelTemp");
+SR_STATIC_ASSERT(offsetof(ModelTemp, num_verts) == 0x0, "ModelTemp.num_verts");
+SR_STATIC_ASSERT(offsetof(ModelTemp, vertex_floats) == 0x4, "ModelTemp.vertex_floats");
+SR_STATIC_ASSERT(offsetof(ModelTemp, verts) == 0x8, "ModelTemp.verts");
+SR_STATIC_ASSERT(offsetof(ModelTemp, vert_texcoords) == 0x18008, "ModelTemp.vert_texcoords");
+SR_STATIC_ASSERT(offsetof(ModelTemp, vert_normals) == 0x28008, "ModelTemp.vert_normals");
+SR_STATIC_ASSERT(offsetof(ModelTemp, vert_tangents) == 0x40008, "ModelTemp.vert_tangents");
+SR_STATIC_ASSERT(offsetof(ModelTemp, render_verts) == 0x58008, "ModelTemp.render_verts");
+SR_STATIC_ASSERT(offsetof(ModelTemp, num_tris) == 0xa0008, "ModelTemp.num_tris");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tris) == 0xa000c, "ModelTemp.tris");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_normals) == 0x15000c, "ModelTemp.tri_normals");
+SR_STATIC_ASSERT(offsetof(ModelTemp, corner_normals) == 0x16800c, "ModelTemp.corner_normals");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_texcoords) == 0x1b000c, "ModelTemp.tri_texcoords");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_neighbors) == 0x1e000c, "ModelTemp.tri_neighbors");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_shading) == 0x1f800c, "ModelTemp.tri_shading");
+SR_STATIC_ASSERT(offsetof(ModelTemp, num_quads) == 0x20000c, "ModelTemp.num_quads");
+SR_STATIC_ASSERT(offsetof(ModelTemp, quads) == 0x200010, "ModelTemp.quads");
+SR_STATIC_ASSERT(offsetof(ModelTemp, quad_texcoords) == 0x220010, "ModelTemp.quad_texcoords");
+SR_STATIC_ASSERT(offsetof(ModelTemp, num_lines) == 0x260010, "ModelTemp.num_lines");
+SR_STATIC_ASSERT(offsetof(ModelTemp, lines) == 0x260014, "ModelTemp.lines");
+
+/* model[]: record of 0xe04 bytes. */
+typedef union Model { struct {
+    int num_verts;                       /* +0x0000 copymodel copies ModelTemp.num_verts */
+    int vertex_floats;                   /* +0x0004 copymodel copies ModelTemp.vertex_floats */
+    vec3* verts;                         /* +0x0008 copymodel: malloc of num_verts * 12 */
+    TexCoord* vert_texcoords;            /* +0x000c copymodel: malloc of num_verts * 8 */
+    vec3* vert_normals;                  /* +0x0010 copymodel: malloc of num_verts * 12 */
+    vec3* vert_tangents;                 /* +0x0014 copymodel: malloc of num_verts * 12 */
+    ModelVertex* render_verts;           /* +0x0018 copymodel: malloc of num_tris * 3 * vertex_floats * 4 */
+    int num_tris;                        /* +0x001c copymodel copies ModelTemp.num_tris */
+    MeshTri* tris;                       /* +0x0020 copymodel: malloc of num_tris * 12 */
+    vec3* tri_normals;                   /* +0x0024 copymodel: malloc of num_tris * 12 */
+    MeshTri* tri_neighbors;              /* +0x0028 copymodel: malloc of num_tris * 12 */
+    int num_lines;                       /* +0x002c copymodel copies ModelTemp.num_lines */
+    MeshLine* lines;                     /* +0x0030 copymodel: malloc of num_lines * 8 */
+    uint8_t pad_0034[0xdd0];
+}; uint8_t lf_raw[0xe04]; } Model;
+SR_STATIC_ASSERT(sizeof(Model) == 0xe04, "Model");
+SR_STATIC_ASSERT(offsetof(Model, num_verts) == 0x0, "Model.num_verts");
+SR_STATIC_ASSERT(offsetof(Model, vertex_floats) == 0x4, "Model.vertex_floats");
+SR_STATIC_ASSERT(offsetof(Model, verts) == 0x8, "Model.verts");
+SR_STATIC_ASSERT(offsetof(Model, vert_texcoords) == 0xc, "Model.vert_texcoords");
+SR_STATIC_ASSERT(offsetof(Model, vert_normals) == 0x10, "Model.vert_normals");
+SR_STATIC_ASSERT(offsetof(Model, vert_tangents) == 0x14, "Model.vert_tangents");
+SR_STATIC_ASSERT(offsetof(Model, render_verts) == 0x18, "Model.render_verts");
+SR_STATIC_ASSERT(offsetof(Model, num_tris) == 0x1c, "Model.num_tris");
+SR_STATIC_ASSERT(offsetof(Model, tris) == 0x20, "Model.tris");
+SR_STATIC_ASSERT(offsetof(Model, tri_normals) == 0x24, "Model.tri_normals");
+SR_STATIC_ASSERT(offsetof(Model, tri_neighbors) == 0x28, "Model.tri_neighbors");
+SR_STATIC_ASSERT(offsetof(Model, num_lines) == 0x2c, "Model.num_lines");
+SR_STATIC_ASSERT(offsetof(Model, lines) == 0x30, "Model.lines");
+
+/* texture[]: record of 0x70 bytes. */
+typedef union Texture { struct {
+    int width;                           /* +0x0000 the texture generators write the size of level 0 */
+    int height;                          /* +0x0004 the texture generators write the size of level 0 */
+    int num_levels;                      /* +0x0008 generatemipmap writes the number of levels. setuptexture uploads that many */
+    int format;                          /* +0x000c setuptexture: the format of the pixels (GL_RGBA or GL_RGB) */
+    int internal_format;                 /* +0x0010 setuptexture: the format that OpenGL keeps */
+    int wrap_s;                          /* +0x0014 setuptexture: GL_TEXTURE_WRAP_S */
+    int wrap_t;                          /* +0x0018 setuptexture: GL_TEXTURE_WRAP_T */
+    int mag_filter;                      /* +0x001c setuptexture: GL_TEXTURE_MAG_FILTER */
+    int min_filter;                      /* +0x0020 setuptexture: GL_TEXTURE_MIN_FILTER */
+    uint8_t pad_0024[0x4];
+    int spare;                           /* +0x0028 the texture generators write 0. No function reads it */
+    uint32_t gl_name;                    /* +0x002c setuptexture binds it */
+    uint32_t* levels[16];                /* +0x0030 generatemipmap: the pixels of each level. Level 0 is the full size */
+}; uint8_t lf_raw[0x70]; } Texture;
+SR_STATIC_ASSERT(sizeof(Texture) == 0x70, "Texture");
+SR_STATIC_ASSERT(offsetof(Texture, width) == 0x0, "Texture.width");
+SR_STATIC_ASSERT(offsetof(Texture, height) == 0x4, "Texture.height");
+SR_STATIC_ASSERT(offsetof(Texture, num_levels) == 0x8, "Texture.num_levels");
+SR_STATIC_ASSERT(offsetof(Texture, format) == 0xc, "Texture.format");
+SR_STATIC_ASSERT(offsetof(Texture, internal_format) == 0x10, "Texture.internal_format");
+SR_STATIC_ASSERT(offsetof(Texture, wrap_s) == 0x14, "Texture.wrap_s");
+SR_STATIC_ASSERT(offsetof(Texture, wrap_t) == 0x18, "Texture.wrap_t");
+SR_STATIC_ASSERT(offsetof(Texture, mag_filter) == 0x1c, "Texture.mag_filter");
+SR_STATIC_ASSERT(offsetof(Texture, min_filter) == 0x20, "Texture.min_filter");
+SR_STATIC_ASSERT(offsetof(Texture, spare) == 0x28, "Texture.spare");
+SR_STATIC_ASSERT(offsetof(Texture, gl_name) == 0x2c, "Texture.gl_name");
+SR_STATIC_ASSERT(offsetof(Texture, levels) == 0x30, "Texture.levels");
+
+/* image[]: record of 0x4000008 bytes. */
+typedef union Image { struct {
+    int width;                           /* +0x0000 the texture generators write the size before they fill the pixels */
+    int height;                          /* +0x0004 the texture generators write the size before they fill the pixels */
+    uint32_t pixels[16777216];           /* +0x0008 one word for each pixel. Room for 4096 x 4096 */
+}; uint8_t lf_raw[0x4000008]; } Image;
+SR_STATIC_ASSERT(sizeof(Image) == 0x4000008, "Image");
+SR_STATIC_ASSERT(offsetof(Image, width) == 0x0, "Image.width");
+SR_STATIC_ASSERT(offsetof(Image, height) == 0x4, "Image.height");
+SR_STATIC_ASSERT(offsetof(Image, pixels) == 0x8, "Image.pixels");
+
+/* landrender[]: record of 0x47000 bytes. */
+typedef union LandRender { struct {
+    LandSector sectors[1024];            /* +0x0000 landscape_buildmesh: 32 x 32 sectors */
+    LandIndexList lists[1024];           /* +0x5000 landscape_buildsectorlods: 16 levels x 16 edge levels x 4 sides */
+    int num_temp_tris;                   /* +0x7000 landscape_buildsectorlods counts the triangles of the list in work */
+    MeshTri temp_tris[21845];            /* +0x7004 landscape_buildsectorlods: the list in work */
+}; uint8_t lf_raw[0x47000]; } LandRender;
+SR_STATIC_ASSERT(sizeof(LandRender) == 0x47000, "LandRender");
+SR_STATIC_ASSERT(offsetof(LandRender, sectors) == 0x0, "LandRender.sectors");
+SR_STATIC_ASSERT(offsetof(LandRender, lists) == 0x5000, "LandRender.lists");
+SR_STATIC_ASSERT(offsetof(LandRender, num_temp_tris) == 0x7000, "LandRender.num_temp_tris");
+SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tris");
+
+/* texturelist[]: record of 0x1144 bytes. */
+typedef union TextureList { struct {
+    uint8_t pad_0000[0x4];
+    int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
+    uint8_t pad_0404[0xd0c];
+    int random_vectors;                  /* +0x1110 the start code passes it to generatetexture_randomvec */
+    uint8_t pad_1114[0x20];
+    int landscape_normal;                /* +0x1134 landscape_generatenormaltexture fills this texture */
+    int landscape_detail;                /* +0x1138 landscape_generatedetail fills this texture */
+    uint8_t pad_113c[0x4];
+    int newspaper;                       /* +0x1140 generatetexture_newspaper fills this texture */
+}; uint8_t lf_raw[0x1144]; } TextureList;
+SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
+SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
+SR_STATIC_ASSERT(offsetof(TextureList, random_vectors) == 0x1110, "TextureList.random_vectors");
+SR_STATIC_ASSERT(offsetof(TextureList, landscape_normal) == 0x1134, "TextureList.landscape_normal");
+SR_STATIC_ASSERT(offsetof(TextureList, landscape_detail) == 0x1138, "TextureList.landscape_detail");
+SR_STATIC_ASSERT(offsetof(TextureList, newspaper) == 0x1140, "TextureList.newspaper");
 
 #pragma pack(pop)
 
