@@ -775,6 +775,9 @@ void plat_test_patch_globals(void)
         return;  /* before plat_test_init */
     *(void **)(sr_base + 0x91022a4) = (void *)st_fread;
     *(void **)(sr_base + 0x13bf2d00) = r_fwrite;
+#ifdef CL_HARNESS
+    CL_SLOT_PATCHES
+#endif
 }
 
 void plat_test_begin(int run)
