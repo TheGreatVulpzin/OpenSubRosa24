@@ -3130,7 +3130,21 @@ SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tri
 typedef union TextureList { struct {
     uint8_t pad_0000[0x4];
     int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
-    uint8_t pad_0404[0xd0c];
+    uint8_t pad_0404[0x14];
+    int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
+    int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
+    int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
+    int human[4];                        /* +0x0424 generatetexture: suit and tie and skin and hair and eye of a human. The first three use the team colors */
+    uint8_t pad_0434[0xc00];
+    int paint[8];                        /* +0x1034 generatetexture: a color on the left half and dark grey on the right half */
+    int street[10];                      /* +0x1054 generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps */
+    uint8_t pad_107c[0x58];
+    int grey_disc;                       /* +0x10d4 generatetexture: a grey disc on a dark ground with a small dark mark */
+    int panel[6];                        /* +0x10d8 generatetexture: six colors with a grey frame at the top */
+    int half_grey;                       /* +0x10f0 generatetexture: a grey left half and a dark right half */
+    int half_brown;                      /* +0x10f4 generatetexture: a dark left half and a brown right half */
+    int plain_orange;                    /* +0x10f8 generatetexture: a texture of one orange color */
+    uint8_t pad_10fc[0x14];
     int random_vectors;                  /* +0x1110 the start code passes it to generatetexture_randomvec */
     uint8_t pad_1114[0x20];
     int landscape_normal;                /* +0x1134 landscape_generatenormaltexture fills this texture */
@@ -3140,6 +3154,17 @@ typedef union TextureList { struct {
 }; uint8_t lf_raw[0x1144]; } TextureList;
 SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
 SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
+SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
+SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
+SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");
+SR_STATIC_ASSERT(offsetof(TextureList, human) == 0x424, "TextureList.human");
+SR_STATIC_ASSERT(offsetof(TextureList, paint) == 0x1034, "TextureList.paint");
+SR_STATIC_ASSERT(offsetof(TextureList, street) == 0x1054, "TextureList.street");
+SR_STATIC_ASSERT(offsetof(TextureList, grey_disc) == 0x10d4, "TextureList.grey_disc");
+SR_STATIC_ASSERT(offsetof(TextureList, panel) == 0x10d8, "TextureList.panel");
+SR_STATIC_ASSERT(offsetof(TextureList, half_grey) == 0x10f0, "TextureList.half_grey");
+SR_STATIC_ASSERT(offsetof(TextureList, half_brown) == 0x10f4, "TextureList.half_brown");
+SR_STATIC_ASSERT(offsetof(TextureList, plain_orange) == 0x10f8, "TextureList.plain_orange");
 SR_STATIC_ASSERT(offsetof(TextureList, random_vectors) == 0x1110, "TextureList.random_vectors");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_normal) == 0x1134, "TextureList.landscape_normal");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_detail) == 0x1138, "TextureList.landscape_detail");

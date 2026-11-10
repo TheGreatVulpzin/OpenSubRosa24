@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, hermite, models, objecttypes. The script sets the environment of the gate itself.
+Cases: noise, hermite, models, objecttypes, textures. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -29,6 +29,7 @@ NOISE3D, LERPNOISE2D, SERPNOISE2D, CERPNOISE2D = 0xc5300, 0xc5370, 0xc5470, 0xc5
 VERTSEQUAL, ADDVERTEX, ADDBOX = 0xac0d0, 0xb7980, 0xaedb0
 EXTRUDE, EXTRUDE2, EXTRUDESCALE = 0xb2c90, 0xb2630, 0xb2e30
 SETTRITEXCOORD, SETQUADTEXCOORD = 0xb3150, 0xb31c0
+GENERATETEXTURE = 0xe7ff0
 ADDPARTICLE, ADDBOND, ADDFACE, ADDWHEEL, POINTSCALE = 0xeb750, 0xeb810, 0xeb950, 0xebb20, 0xec220
 
 # The model in work (RVA): the counts and the arrays that the cases fill.
@@ -36,6 +37,10 @@ MODELTEMP = 0x90f7680
 NUM_VERTS, VERTS, NUM_TRIS, NUM_QUADS, QUADS = 0x0, 0x8, 0xa0008, 0x20000c, 0x200010
 # Free vertices of the model in work, far above the ones a case uses: room for the curve inputs.
 SCRATCH = MODELTEMP + VERTS + 7000 * 12
+
+# The list of texture numbers (RVA) and the entries that generatetexture draws: (offset, count).
+TEXTURELIST = 0x14311840
+SMALL_TEXTURES = [(0x418, 3), (0x424, 4), (0x1034, 8), (0x1054, 10), (0x10d4, 1), (0x10d8, 6), (0x10f0, 3)]
 
 NAN, INF = float('nan'), float('inf')
 EDGES = [0.0, -0.0, 1.0, -1.0, 0.5, 0.25, 0.75, 2.0, 0.001, 0.1, 0.3333333, 0.999999, 123.456, -77.7, 1e10,
@@ -177,6 +182,15 @@ def objecttypes_case():
     }
 
 
+def textures_case(rec):
+    """Draw each small texture of the recording once, with the arguments of the start code."""
+    snap = Snapshot(rec / 'sv_snapshot.bin')
+    numbers = []
+    for offset, count in SMALL_TEXTURES:
+        numbers += snap.read(TEXTURELIST + offset, f'{count}i')
+    return [], {'generatetexture': [call(GENERATETEXTURE, n, 1, 0x812f, 0x812f, 0x2600, 0x2600) for n in numbers]}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -193,7 +207,7 @@ def main():
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
     allc = {'noise': lambda: ([], noise_calls()), 'hermite': hermite_case, 'models': models_case,
-            'objecttypes': objecttypes_case}
+            'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     for name in want:
         edits, functions = allc[name]()

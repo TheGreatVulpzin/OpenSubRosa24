@@ -28,6 +28,13 @@
 #define PI 3.14159265359
 
 #define OPAQUE 0xff
+
+/* The small plain textures: the size of a side, the radius of a disc, the dark grey level and
+ * the alpha of most pixels. */
+#define SMALL_SIZE 0x80
+#define DISC_RADIUS 48.0
+#define DARK 0x20
+#define FAINT 0x20
 #define MAX_ANISOTROPY 16.0f
 
 /* The font of the printed textures (an entry of fontlist) and the font of the menus. */
@@ -47,6 +54,7 @@
 
 /* Game functions of other files. */
 #define setuptexture CL_FN(0x50ac40, void(__cdecl *)(int texture))
+#define vectorlength2d CL_FN(0x50bb20, double(__cdecl *)(const float *v))
 #define getrandomvector3d CL_FN(0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
@@ -151,6 +159,242 @@ void __cdecl generatetexture_randomvec(int texture)
         }
     }
     texture_from_image(texture, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+    setuptexture(texture);
+}
+
+typedef struct Pixel {
+    int red, green, blue, alpha;
+} Pixel;
+
+static void set_pixel(Pixel *p, int red, int green, int blue, int alpha)
+{
+    p->red = red;
+    p->green = green;
+    p->blue = blue;
+    p->alpha = alpha;
+}
+
+static void set_color(Pixel *p, int red, int green, int blue)
+{
+    p->red = red;
+    p->green = green;
+    p->blue = blue;
+}
+
+/* The distance from the point (x, y) to the center of the disc textures. */
+static double from_disc_center(int x, int y)
+{
+    float v[2];
+    v[0] = (float)(SMALL_SIZE / 2 - x);
+    v[1] = (float)(SMALL_SIZE / 2 - y);
+    return vectorlength2d(v);
+}
+
+/* A blue sign with a light grey panel. */
+static void sign_pixel(Pixel *p, int x, int y)
+{
+    set_color(p, DARK, DARK, 0xc0);
+    if (x > 0x17 && x < 0x68 && y > 0x37 && y < 0x68)
+        set_color(p, 0xc0, 0xc0, 0xc0);
+}
+
+/* A traffic lamp: one bright rectangle on a dark ground. Red is at the bottom rows, then
+ * yellow, then green. */
+static void lamp_pixel(Pixel *p, const int *lamps, int texture, int x, int y)
+{
+    static const struct {
+        int first_row, red, green;
+    } LAMPS[3] = {{0x54, 0xff, DARK}, {0x34, 0xff, 0xff}, {0x14, DARK, 0xff}};
+    int i;
+
+    set_color(p, DARK, DARK, DARK);
+    if (x < 0x28 || x > 0x57)
+        return;
+    for (i = 0; i < 3; i++) {
+        if (texture == lamps[i] && y >= LAMPS[i].first_row && y <= LAMPS[i].first_row + 0x17) {
+            set_color(p, LAMPS[i].red, LAMPS[i].green, DARK);
+            return;
+        }
+    }
+}
+
+/* One of six colors, with a grey frame around a hole at the top of the image. */
+static void panel_pixel(Pixel *p, const int *panels, int texture, int x, int y)
+{
+    static const uint8_t COLORS[6][3] = {{0x20, 0x20, 0x20}, {0x20, 0x50, 0x20}, {0x20, 0x20, 0x80},
+                                         {0xc0, 0xc0, 0xc0}, {0xf7, 0xb5, 0x19}, {0x40, 0x10, 0x10}};
+    int i;
+
+    for (i = 0; i < 6; i++) {
+        if (texture == panels[i])
+            set_color(p, COLORS[i][0], COLORS[i][1], COLORS[i][2]);
+    }
+    p->alpha = FAINT;
+    if (y < 0x28 && x > 0x1f && x < 0x60 && (y < 8 || y > 0x23 || x < 0x28 || x > 0x37))
+        set_pixel(p, 0x60, 0x60, 0x60, OPAQUE);
+}
+
+/* A grey disc on a dark ground, with a small dark mark near the last rows. */
+static void grey_disc_pixel(Pixel *p, int x, int y)
+{
+    float v[2];
+
+    v[0] = (float)((float)x - 64.0);
+    v[1] = (float)((float)y - 64.0);
+    if (DISC_RADIUS <= vectorlength2d(v))
+        set_pixel(p, DARK, DARK, DARK, 4);
+    else
+        set_pixel(p, 0x6e, 0x6e, 0x70, FAINT);
+    if (y > 0x77 && y < 0x7c && x > 0x37 && x < 0x48)
+        set_pixel(p, 0x40, 0x40, 0x40, 4);
+}
+
+/* A white disc. The noise moves the edge of the disc by up to 6 pixels. */
+static void rough_disc_pixel(Pixel *p, int x, int y)
+{
+    double distance = from_disc_center(x, y);
+    float noise = cerpnoise2d((float)((float)x * 0.125 * 0.5), (float)((float)y * 0.125 * 0.5), 0xffffffff);
+
+    set_color(p, 0xff, 0xff, 0xff);
+    p->alpha = noise * 6.0 + DISC_RADIUS <= distance ? 0 : OPAQUE;
+}
+
+/* A color on the left half and dark grey on the right half. */
+static void paint_pixel(Pixel *p, const int *paints, int texture, int x)
+{
+    set_color(p, DARK, DARK, DARK);
+    if (texture == paints[1])
+        set_color(p, 0x80, 0x10, 0x10);
+    if (texture == paints[2])
+        set_color(p, 0x20, 0x20, 0x60);
+    if (texture == paints[3])
+        set_color(p, 0x80, 0x80, 0x80);
+    if (texture == paints[4])
+        set_color(p, 0xe0, 0xe0, 0xe0);
+    if (texture == paints[5])
+        set_color(p, 0xdb, 0xc0, 0x59);
+    if (x > 0x3f)
+        set_color(p, 0x40, 0x40, 0x40);
+    p->alpha = 0x80;
+}
+
+/* Not zero when column x is nearer to the center line of the suit than width. */
+static int near_suit_center(int x, int width)
+{
+    return abs(x - 0x20) < width || abs(x - 0x1f) < width;
+}
+
+static void tint_pixel(Pixel *p, const float *tint)
+{
+    p->blue = (int)(long long)(tint[2] * 255.0);
+    p->green = (int)(long long)(tint[1] * 255.0);
+    p->red = (int)(long long)(tint[0] * 255.0);
+    p->alpha = OPAQUE;
+}
+
+/* The left half of a human texture: a grey suit with a white shirt. The first two textures
+ * have a badge and a bow tie in the tint color. The third has a straight tie. */
+static void suit_pixel(Pixel *p, const int *humans, int texture, const float *tint, int x, int y)
+{
+    int with_bow_tie = humans[0] <= texture && texture <= humans[1];
+
+    set_pixel(p, 0x60, 0x60, 0x60, FAINT);
+    if (with_bow_tie && y > 0x5f && y < 100 && x > 0x29 && x < 0x30)
+        tint_pixel(p, tint);
+    if (!near_suit_center(x, (y - 0x50) >> 2))
+        return;
+    set_pixel(p, 0xc0, 0xc0, 0xc0, 0);
+    if (texture == humans[2]) {
+        if ((y < 0x7e && x > 0x1e && x < 0x21) || (y < 0x7c && x > 0x1d && x < 0x22))
+            tint_pixel(p, tint);
+    }
+    if (with_bow_tie && y < 0x7e) {
+        if (near_suit_center(x, (y - 0x70) >> 1) || near_suit_center(x, (0x78 - y) >> 2))
+            tint_pixel(p, tint);
+    }
+}
+
+/* A human texture. The right half has the skin color, then the hair color, then an eye: a
+ * white ground, a blue iris and a grey pupil. */
+static void human_pixel(Pixel *p, const int *humans, int texture, const float *tint, int x, int y)
+{
+    float v[2];
+
+    if (x < 0x40) {
+        suit_pixel(p, humans, texture, tint, x, y);
+    } else if (y < 0x40) {
+        set_pixel(p, 0xfd, 0xb4, 0x9f, FAINT);
+    } else if (y < 0x60) {
+        set_pixel(p, 0xa0, 0x80, 0x20, FAINT);
+    } else {
+        set_pixel(p, 0xfd, 0xfd, 0xfd, FAINT);
+        v[0] = (float)(79.5 - (float)x);
+        v[1] = (float)(111.5 - (float)y);
+        if (vectorlength2d(v) < 6.0)
+            set_color(p, 0x38, 0x40, 0xfd);
+        if (vectorlength2d(v) < 3.5)
+            set_color(p, 0x40, 0x40, 0x40);
+    }
+}
+
+/* Make one of the small plain textures of 128 x 128. The texture number selects the picture.
+ * A number that is in no list gives a faint magenta image. */
+void __cdecl generatetexture(int texture, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter)
+{
+    const TextureList *list = &g_texturelist;
+    const float *tint = sr_data_teamcolor;
+    int x, y, i;
+
+    for (i = 0; i < 3; i++) {
+        if (texture == list->human[i]) {
+            tint = &sr_data_teamcolor[i * 3];
+            break;
+        }
+    }
+    g_image.width = SMALL_SIZE;
+    g_image.height = SMALL_SIZE;
+    for (y = 0; y < g_image.height; y++) {
+        for (x = 0; x < g_image.width; x++) {
+            Pixel p;
+            set_pixel(&p, 0xff, 0, 0xff, FAINT);
+            if (texture == list->street[4])
+                sign_pixel(&p, x, y);
+            if (list->street[5] <= texture && texture <= list->street[7])
+                lamp_pixel(&p, &list->street[5], texture, x, y);
+            if (list->panel[0] <= texture && texture <= list->panel[5])
+                panel_pixel(&p, list->panel, texture, x, y);
+            if (texture == list->plain_green)
+                set_pixel(&p, 0x10, 0x40, 0x10, FAINT);
+            if (texture == list->half_grey) {
+                if (x < 0x40)
+                    set_pixel(&p, 0x80, 0x78, 0x70, 1);
+                else
+                    set_pixel(&p, DARK, DARK, DARK, FAINT);
+            }
+            if (texture == list->half_brown) {
+                if (x < 0x40)
+                    set_pixel(&p, 0x10, 0x10, 0x10, OPAQUE);
+                else
+                    set_pixel(&p, 0x40, 0x18, 0xc, FAINT);
+            }
+            if (texture == list->plain_orange)
+                set_pixel(&p, 0xa0, 0x60, 0x20, OPAQUE);
+            if (texture == list->grey_disc)
+                grey_disc_pixel(&p, x, y);
+            if (texture == list->disc)
+                set_pixel(&p, 0xff, 0xff, 0xff, DISC_RADIUS <= from_disc_center(x, y) ? 0 : OPAQUE);
+            if (texture == list->rough_disc)
+                rough_disc_pixel(&p, x, y);
+            if (list->paint[0] <= texture && texture <= list->paint[7])
+                paint_pixel(&p, list->paint, texture, x);
+            if (list->human[0] <= texture && texture <= list->human[3])
+                human_pixel(&p, list->human, texture, tint, x, y);
+            g_image.pixels[y * g_image.width + x] = pack_pixel(p.red, p.green, p.blue, p.alpha);
+        }
+    }
+    texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
+    if (mipmap != 0)
+        generatemipmap(texture);
     setuptexture(texture);
 }
 

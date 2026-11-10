@@ -28,6 +28,7 @@ landscape_buildsectorlods src/client/textures/landscape.c
 landscape_generatenormaltexture src/client/textures/landscape.c
 landscape_generatedetail src/client/textures/landscape.c
 generatemipmap src/client/textures/textures.c
+generatetexture src/client/textures/textures.c
 generatetexture_randomvec src/client/textures/textures.c
 generatetexture_carpet src/client/textures/textures.c
 generatetexture_billboard src/client/textures/textures.c

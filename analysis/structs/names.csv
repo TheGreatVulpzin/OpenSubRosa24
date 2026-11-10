@@ -833,6 +833,17 @@ landrender,0x5000,lists,LandIndexList,1024,landscape_buildsectorlods: 16 levels 
 landrender,0x7000,num_temp_tris,int,,landscape_buildsectorlods counts the triangles of the list in work
 landrender,0x7004,temp_tris,MeshTri,21845,landscape_buildsectorlods: the list in work
 texturelist,0x4,material,int,256,generatetexture_carpet and generatetexture_billboard: the texture of each material
+texturelist,0x418,plain_green,int,,generatetexture: a texture of one dark green color
+texturelist,0x41c,disc,int,,generatetexture: a white disc with a clear ground
+texturelist,0x420,rough_disc,int,,generatetexture: a white disc with an edge that the noise moves
+texturelist,0x424,human,int,4,generatetexture: suit and tie and skin and hair and eye of a human. The first three use the team colors
+texturelist,0x1034,paint,int,8,generatetexture: a color on the left half and dark grey on the right half
+texturelist,0x1054,street,int,10,generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps
+texturelist,0x10d4,grey_disc,int,,generatetexture: a grey disc on a dark ground with a small dark mark
+texturelist,0x10d8,panel,int,6,generatetexture: six colors with a grey frame at the top
+texturelist,0x10f0,half_grey,int,,generatetexture: a grey left half and a dark right half
+texturelist,0x10f4,half_brown,int,,generatetexture: a dark left half and a brown right half
+texturelist,0x10f8,plain_orange,int,,generatetexture: a texture of one orange color
 texturelist,0x1110,random_vectors,int,,the start code passes it to generatetexture_randomvec
 texturelist,0x1134,landscape_normal,int,,landscape_generatenormaltexture fills this texture
 texturelist,0x1138,landscape_detail,int,,landscape_generatedetail fills this texture
