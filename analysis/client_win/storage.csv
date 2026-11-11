@@ -76,8 +76,8 @@ area_block,AreaBlock,65536,132,0x133ae680,30,31,checked
 file_write,SrFileTransfer,1,4,0x13bee680,3,3,ok
 parser,Parser,1,1048844,0x13d5e700,8,29,checked
 radix,Radix,1,4196356,0x13d5e704,1,4,dropped
-modellist,int,489,4,0x14311548,3,11,weak
-texturelist,int,1105,4,0x14312518,8,37,conflict
+modellist,ModelList,1,1956,0x17c040a0,1,1,checked
+texturelist,TextureList,1,4420,0x14311840,1,1,checked
 cityobject,CityObjectRec,1024,84,0x16323600,10,11,ok
 connection,Connection,256,61808,0x16338600,3,14,weak
 materials,SrMaterialStore,1,90116,0x1724f600,9,10,dropped

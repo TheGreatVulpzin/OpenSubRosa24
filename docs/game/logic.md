@@ -25,6 +25,7 @@ It clears bot players, creates the level and sets the random seed.
 A server reset also places two trains.
 Server test modes 0, 1 and 2 also create test players and equipment.
 `setupgame` assigns 485 model identifiers, 848 texture identifiers and 47 sound identifiers.
+`assign_asset_ids` (`asset_ids.c`) does this. The records `ModelList`, `TextureList` and `SoundList` name each identifier. The client calls the same function.
 It initializes 256 material records, even when the material count has another value.
 
 ## Players and accounts

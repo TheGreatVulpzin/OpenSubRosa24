@@ -264,7 +264,7 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | C4 | Input (`getinputs_*`, keyboard, mouse) | 16 | 16 KB |
 | C5 | Menus (`mainmenu`, `joinmenu`, `optionsmenu`, `playermenu_*`, `drawmenuitems`) | 26 | 35 KB |
 | C6 | Sound and voice (OpenAL, Speex). 14 tested functions. Voice menu awaits a window check. See [audio](client/audio.md). | 15 | 10 KB |
-| C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug). Done 2026-11-10 (18 of 24 functions): the debug, timer, Steam and JPEG restart functions, `clientsend` and the smoothing of humans, objects and items. Written but not adopted: `checksimulation` and `reactivategame`. Left: `setupclient`, `gameloop`, `main` and two Steam ticket functions. See `docs/client.md`. | 24 | 33 KB |
+| C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug). 20 of 24 functions done (2026-11-11): the debug, timer, Steam and JPEG restart functions, `clientsend`, the smoothing of humans, objects and items, `checksimulation` and `setupclient`. `setupgame` also has a client version, and its model, texture and sound numbers come from the code that the server shares (`src/game/asset_ids.c`). Written but not adopted: `reactivategame`. Left: `gameloop`, `main` and two Steam ticket functions. See `docs/client.md`. | 24 | 33 KB |
 | C8 | Editors (`leveleditor`, `buildingedit*`): tools for developers, last | 1 and more | 12 KB and more |
 | C9 | GLee library: a third-party OpenGL loader. The client has GLee 5.4 (source in `third_party/glee/`). The standalone client builds that source and fills the pointer slots with its lazy functions. No rewrite needed. See `docs/glee.md`. | 183 | 70 KB |
 | C10 | Other named functions | 153 | 70 KB |

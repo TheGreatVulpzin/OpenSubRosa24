@@ -4,6 +4,7 @@
 
 #include <string.h>
 
+#include "asset_ids.h"
 #include "block_mesh.h"
 #include "buildings.h"
 #include "bullets.h"
@@ -303,49 +304,10 @@ void resetgame(void)
         }
 }
 
-static void asset_list(int *ids, int offset, int count, int *next)
-{
-    int i;
-    for (i = 0; i < count; ++i)
-        ids[offset / 4 + i] = (*next)++;
-}
-
 void setupgame(void)
 {
-    static const int texture_first[] = {0x404,0x408,0x40c,0x410,0x414,0x41c,0x420,0x418,0x424,0x428,0x42c,0x430,
-        0x1034,0x1038,0x103c,0x1040,0x1044,0x1048,0x104c,0x1050};
-    static const int texture_mid[] = {0x10d4,0x1114,0x1118,0x111c,0x1120,0x1124,0x1128,0x112c,0x1130};
-    static const int texture_last[] = {0x10d8,0x10dc,0x10e0,0x10e4,0x10e8,0x10ec,0x10f0,0x10f4,0x10f8,
-        0x10fc,0x1100,0x1104,0x1108,0x110c,0x1110,0x1134,0x1138,0x113c,0x1140};
-    static const int sound_offset[] = {4,8,12,16,20,24,28,32,36,40,0x34,0x38,0x3c,0x40,0x44,0x48,0x4c,0x50,0x54,
-        0x78,0x7c,0x88,0x8c,0x98,0x9c,0xb8,0xbc,0xc8,0xcc,0xd0,0xd4,0xd8,0xdc,0xe0,0xe4,0xe8,0xec,0xf0,
-        0x10c,0x12c,0x130,0x134,0x138,0xa8,0xac,0xb0,0xb4};
-    int i, next = 0, result;
-    asset_list(g_modellist, 4, 32, &next);
-    asset_list(g_modellist, 0x84, 32, &next);
-    asset_list(g_modellist, 0x104, 32, &next);
-    asset_list(g_modellist, 0x184, 256, &next);
-    for (i = 0; i < 32; ++i) {
-        g_modellist[0x584 / 4 + i] = next++;
-        g_modellist[0x604 / 4 + i] = next++;
-    }
-    asset_list(g_modellist, 0x684, 32, &next);
-    g_modellist[0x790 / 4] = next++;
-    asset_list(g_modellist, 0x704, 3, &next);
-    asset_list(g_modellist, 0x710, 32, &next);
-    g_modellist[0x7a0 / 4] = next++;
-    g_modellist[0] = next;
-    next = 0;
-    asset_list(g_texturelist, 4, 256, &next);
-    for (i = 0; i < (int)(sizeof(texture_first) / sizeof(texture_first[0])); ++i)
-        g_texturelist[texture_first[i] / 4] = next++;
-    asset_list(g_texturelist, 0x834, 512, &next);
-    for (i = 0; i < (int)(sizeof(texture_mid) / sizeof(texture_mid[0])); ++i)
-        g_texturelist[texture_mid[i] / 4] = next++;
-    asset_list(g_texturelist, 0x1054, 32, &next);
-    for (i = 0; i < (int)(sizeof(texture_last) / sizeof(texture_last[0])); ++i)
-        g_texturelist[texture_last[i] / 4] = next++;
-    g_texturelist[0] = next;
+    int i, next, result;
+    assign_asset_ids();
     strcpy(g_materials[0].name, "concrete");
     g_materiallist.preset_end = 21;
     g_materiallist.num_materials = 21;
@@ -396,16 +358,6 @@ void setupgame(void)
         g_materiallist.file_materials[i] = id;
         ++g_materiallist.num_materials;
     }
-    for (i = 0; i < 47; ++i)
-        ((int *)&g_soundlist)[sound_offset[i] / 4] = i;
-    g_soundlist.crash = 20;
-    g_soundlist.humanhit = 22;
-    g_soundlist.phone_ring = 27;
-    for (i = 0; i < 10; ++i)
-        g_soundlist.digit[i] = i + 28;
-    g_soundlist.magazine = 38;
-    g_soundlist.gear = 40;
-    g_soundlist.num_sounds = 47;
     setupbuildingtypes();
     area_createsblocks();
     setupbody();

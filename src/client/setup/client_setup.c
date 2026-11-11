@@ -18,8 +18,8 @@
 #include "textures/sphere.h"
 #include "textures/textures.h"
 
-#define g_modellist cl_data_modellist
-#define g_texturelist cl_data_texturelist
+#define g_modellist sr_data_modellist
+#define g_texturelist sr_data_texturelist
 #define g_textures cl_data_texture
 #define g_soundlist sr_data_soundlist
 #define g_materiallist sr_data_materiallist

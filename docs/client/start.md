@@ -11,7 +11,7 @@ Each list is a record with named fields. A field holds the number of one thing, 
 - `SoundList` (47 numbers): the gun shots, the engines, the tires, eight ricochets, the crashes, the bullet hits, the glass, the phone, ten digit tones and the gear. Ten slots have no name yet.
 - The material list holds 44 numbers for the preset materials, then one for each picture of the folder `data/texture`.
 
-The numbers go out in a fixed order, so a number always means the same thing.
+The numbers go out in a fixed order, so a number always means the same thing. `assign_asset_ids` (`src/game/asset_ids.c`) hands out the model, texture and sound numbers, and the server calls the same function. The client then numbers the materials.
 
 ## Setup of the client
 
