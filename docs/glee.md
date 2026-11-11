@@ -1,6 +1,6 @@
 # GLee in the client
 
-GLee is the OpenGL extension loader that the client links in. It has 354 functions in the group C9. They are not game code, so the plan is to build the library from its source and drop the lifted copy.
+GLee is the OpenGL extension loader that the client links in. It has 354 functions in the group C9. They are not game code, so the standalone client builds the library from its source and the lifted copy has no job.
 
 ## Which version
 
@@ -12,19 +12,24 @@ The client has GLee 5.4 (2009, by Ben Woodhouse, modified BSD license).
 
 The source is in `third_party/glee/` (see `third_party/glee/README.md` for where it came from and its hash).
 
-## What the client does with it
+## How it works
 
-- The game calls OpenGL extension functions through pointer variables (`GLeeFuncPtr_gl...`). Before `GLeeInit` runs, a pointer points to its lazy function, which links the extension and then calls it. `analysis/client_win/gl_slots.csv` lists the 32 pointers that the game code uses.
-- `GLeeInit` and the `__GLeeLink_...` functions read the extension string of the driver and fill the pointers and the flags (`_GLEE_...`).
+- The game calls OpenGL extension functions through pointer variables (`GLeeFuncPtr_gl...`). `analysis/client_win/gl_slots.csv` lists the 32 pointers that the game code uses.
+- At start, each pointer holds the address of its lazy function (`GLee_Lazy_gl...`).
+- The first call of a lazy function runs `GLeeInit`. `GLeeInit` reads the extension string of the driver and calls the `__GLeeLink_...` functions. Each link function asks the driver for the real functions of one extension and writes them in the pointers. It also sets the flags (`_GLEE_...`).
+- The lazy function then calls the real function through its pointer. Next calls go straight to the driver.
+- `GLeeInit` needs an open OpenGL context. This is why the first call must come after the window opens.
 
-## What the standalone client needs
+## The standalone client
 
-The standalone client does not run GLee. `instrumentation/client/gen_gl_slots.py` writes `build/client_image/client_gl.c`, which puts a small function in each of the 32 pointer slots of `gl_slots.csv`. The function finds the real OpenGL function on its first call. So the 1750 GLee functions of the original client (about 60 percent of its 2907 functions) have no job in the standalone client, and the group C9 needs no rewrite for it.
+`instrumentation/client/gen_gl_slots.py` writes two files in `build/client_image/`.
 
-The extension flags (`_GLEE_...`) are the one thing that GLee gives and the slots do not. If the renderer reads one that nothing sets, the standalone client treats the extension as missing. The source in `third_party/glee/` is there for that case: compile it and call `GLeeInit` to get the flags and the pointers with the same names and values as the original client.
+- `client_gl_glee.c` puts `GLeeFuncPtr_<name>` of `third_party/glee/GLee.c` in each of the 32 slots. This is the default. The slots, the lazy functions and the flags behave as in the original client.
+- `client_gl.c` also has a small function for each slot. The function finds the real OpenGL function on its first call. The environment variable `SV_GL_WRAPPERS=1` selects them. They need no GLee, so they help to find out if a problem comes from GLee.
+
+The game never reads the `_GLEE_` flags itself. The flags matter only to the GLee code.
 
 ## Plan
 
-1. Keep the slot functions of `gen_gl_slots.py` for the standalone client. No work for C9.
-2. If a flag turns out to matter (for example `GLEE_ARB_framebuffer_object` in the renderer), compile `third_party/glee/GLee.c` into the standalone client, call `GLeeInit` after the window opens, and put the flags it needs in the client storage adapter.
-3. When the renderer moves to OpenGL 3.3 or GLES (the OpenSubRosa plan), replace GLee with a modern loader.
+1. Keep GLee for the standalone client. No rewrite for C9.
+2. When the renderer moves to OpenGL 3.3 or GLES (the OpenSubRosa plan), replace GLee with a modern loader.
