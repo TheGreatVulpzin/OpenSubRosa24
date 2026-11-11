@@ -90,6 +90,7 @@ CLIENT_STRUCTS = {
     'Image': ('image', 0x4000008),
     'LandRender': ('landrender', 0x47000),
     'TextureList': ('texturelist', 0x1144),
+    'ModelList': ('modellist', 0x7a4),
 }
 # Capacity of each array (size of the global in the 0.24c ELF / record size).
 COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection': 256,

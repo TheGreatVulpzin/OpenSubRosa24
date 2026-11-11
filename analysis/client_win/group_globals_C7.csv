@@ -30,3 +30,5 @@ last_event,uint32_t,1,0x5350c6c,"clientsend sends its low 16 bits to the server.
 input_wheel,int,1,0x908aad8,"clientsend sends it as a signed 8 bit value. getinputs writes it and drawhud reads it"
 server_address,uint32_t,1,0x75a5854,"clientsend: the address of the server that the packets go to. joinmenu and connectmenu write it"
 server_port,uint16_t,1,0x75a5858,"clientsend: the port of the server that the packets go to. joinmenu and connectmenu write it"
+modellist,ModelList,1,0x17c040a0,"setupgame assigns the model identifiers from this record. The Linux client names the symbol modellist"
+material_records,MaterialRec,1024,0x1724f604,"setupgame and setupclient: records of 0x58 bytes. A record holds four floats, the flags and the name. The Linux client names the symbol materials"

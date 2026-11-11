@@ -300,6 +300,8 @@ extern int sr_unplaced_train_near;
 #define cl_data_input_wheel (*((int *)(sr_base + 0x908aad8u)))
 #define cl_data_server_address (*((uint32_t *)(sr_base + 0x75a5854u)))
 #define cl_data_server_port (*((uint16_t *)(sr_base + 0x75a5858u)))
+#define cl_data_modellist (*((ModelList *)(sr_base + 0x17c040a0u)))
+#define cl_data_material_records ((MaterialRec *)(sr_base + 0x1724f604u))
 
 #define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket

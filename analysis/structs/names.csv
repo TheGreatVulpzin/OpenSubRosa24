@@ -921,7 +921,7 @@ texturelist,0x41c,disc,int,,generatetexture: a white disc with a clear ground
 texturelist,0x420,rough_disc,int,,generatetexture: a white disc with an edge that the noise moves
 texturelist,0x424,human,int,4,generatetexture: suit and tie and skin and hair and eye of a human. The first three use the team colors
 texturelist,0x1034,paint,int,8,generatetexture: a color on the left half and dark grey on the right half
-texturelist,0x1054,street,int,10,generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps
+texturelist,0x1054,street,int,32,generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps
 texturelist,0x10d4,grey_disc,int,,generatetexture: a grey disc on a dark ground with a small dark mark
 texturelist,0x10d8,panel,int,6,generatetexture: six colors with a grey frame at the top
 texturelist,0x10f0,half_grey,int,,generatetexture: a grey left half and a dark right half
@@ -968,3 +968,32 @@ debug,0xc,num_lines,int,,debug_addcross adds 3 for each cross
 debug,0x10,lines,DebugLine,4096,debug_addcross: the lines of the crosses
 debug,0x50c80,num_values,int,,debug_addataint and debug_addatafloat add 1 for each new name
 debug,0x50c84,values,DebugValue,128,debug_addataint and debug_addatafloat: the named values of the debug display
+modellist,0x0,count,int,,"setupgame: the next free model identifier. 485 after the identifiers are assigned"
+modellist,0x4,bullet,int,32,"setupclient: createbulletmodel builds the first 16"
+modellist,0x84,item,int,32,"the model of each item type. The renderer indexes it with the item type"
+modellist,0x104,wheel,int,32,"the model of each wheel type. The renderer indexes it with the wheel type of an object"
+modellist,0x184,human,int,256,"one model for each human. frame_addmodel and the renderer index it with the human"
+modellist,0x584,ammo,int,32,"setupclient: four shapes from the builder at 0x4af7c0 (second argument 0 to 3, third argument 0)"
+modellist,0x604,ammo_b,int,32,"setupclient: the same four shapes with third argument 1. Entry 0 is a flat model that the effect renderer draws"
+modellist,0x684,city_object,int,32,"setupclient: createmodel_cityobject builds the first 10"
+modellist,0x704,head,int,,"setupclient: createheadmodel"
+modellist,0x708,foot,int,,"setupclient: createfootmodel"
+modellist,0x70c,hair,int,,"setupclient: createhairmodel"
+modellist,0x710,sprite,int,32,"setupclient: createspritemodel builds entry 1. The effect renderer reads entry 1"
+modellist,0x790,sunglasses,int,,"setupclient: createsunglassmodel"
+modellist,0x7a0,rotor,int,,"setupclient: createrotormodel"
+soundlist,0x4,shot_magnum,int,,"setupclient loads 44magnum.wav"
+soundlist,0x8,shot_smg,int,,"setupclient loads submachinegun01.wav"
+soundlist,0xc,shot_rifle,int,,"setupclient loads rifle01.wav"
+soundlist,0x38,ricochet,int,8,"setupclient loads ricochet_02d.wav for 1 to 8"
+soundlist,0x78,crash_small,int,,"setupclient loads carcrash01.wav. crash at 0x7c is carcrash02.wav"
+soundlist,0x88,hit_body,int,,"setupclient loads bullethitbody01.wav. humanhit at 0x8c is bullethitbody02.wav"
+soundlist,0x98,hit_metal,int,2,"setupclient loads bullethitmetal01.wav and 02"
+soundlist,0xb8,glass_break,int,,"setupclient loads glassbreak01.wav"
+soundlist,0x12c,shell_hit,int,,"setupclient loads shell_hit_cement.wav"
+texturelist,0x1100,mic,int,,"setupclient loads mic.png"
+texturelist,0x1104,twitter,int,,"setupclient loads twitter01.png"
+texturelist,0x1108,logo,int,,"setupclient draws a 32 by 16 pixel logo into it"
+texturelist,0x1114,cash,int,8,"setupclient loads cash_dollar.png and the five, ten, twenty, fifty, hundred and thousand bills into the first seven"
+texturelist,0x113c,desert,int,,"setupclient loads desert01.png"
+texturelist,0x0,count,int,,"setupgame: the next free texture identifier. 848 after the identifiers are assigned"

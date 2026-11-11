@@ -780,8 +780,8 @@ void lf_7fb70(void);
 void lf_80020(void);
 void lf_80140(void);
 void lf_80770(void);
-void lf_80c10(void);
-void lf_81a80(void);
+void setupgame(void);
+void setupclient(void);
 void lf_82910(void);
 void lf_82a00(void);
 void lf_82a20(void);
@@ -2080,8 +2080,8 @@ const LfEntry lf_table[] = {
     { "playermenu_building_main", 0x80020, (void *)lf_80020, 1, LF_RET_VOID, 4, "v", 0 },
     { "playermenu_building_buy", 0x80140, (void *)lf_80140, 1, LF_RET_VOID, 4, "v", 0 },
     { "playermenu_banking", 0x80770, (void *)lf_80770, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupgame", 0x80c10, (void *)lf_80c10, 0, LF_RET_VOID, 4, "", 1 },
-    { "setupclient", 0x81a80, (void *)lf_81a80, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupgame", 0x80c10, (void *)setupgame, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupclient", 0x81a80, (void *)setupclient, 0, LF_RET_VOID, 4, "", 1 },
     { "setupglextentions", 0x82910, (void *)lf_82910, 0, LF_RET_VOID, 4, "", 1 },
     { "enabletwosidedstencil", 0x82a00, (void *)lf_82a00, 0, LF_RET_VOID, 4, "", 1 },
     { "disabletwosidedstencil", 0x82a20, (void *)lf_82a20, 0, LF_RET_VOID, 4, "", 1 },

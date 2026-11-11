@@ -1957,9 +1957,9 @@ SR_STATIC_ASSERT(offsetof(SysInfo, ms_per_tick) == 0x410, "SysInfo.ms_per_tick")
 /* soundlist[]: record of 0x13c bytes. */
 typedef union SoundList { struct {
     int num_sounds;                      /* +0x0000 setupgame: count 47 after sound identifiers 0 through 46 */
-    int unk_0004;                        /* +0x0004 1 functions */
-    int unk_0008;                        /* +0x0008 1 functions */
-    int unk_000c;                        /* +0x000c 1 functions */
+    int shot_magnum;                     /* +0x0004 setupclient loads 44magnum.wav */
+    int shot_smg;                        /* +0x0008 setupclient loads submachinegun01.wav */
+    int shot_rifle;                      /* +0x000c setupclient loads rifle01.wav */
     int unk_0010;                        /* +0x0010 1 functions */
     int unk_0014;                        /* +0x0014 1 functions */
     int unk_0018;                        /* +0x0018 1 functions */
@@ -1969,29 +1969,21 @@ typedef union SoundList { struct {
     int unk_0028;                        /* +0x0028 1 functions */
     uint8_t pad_002c[0x8];
     int tire;                            /* +0x0034 Audio source and voice frame access */
-    int unk_0038;                        /* +0x0038 1 functions */
-    int unk_003c;                        /* +0x003c 1 functions */
-    int unk_0040;                        /* +0x0040 1 functions */
-    int unk_0044;                        /* +0x0044 1 functions */
-    int unk_0048;                        /* +0x0048 1 functions */
-    int unk_004c;                        /* +0x004c 1 functions */
-    int unk_0050;                        /* +0x0050 1 functions */
-    int unk_0054;                        /* +0x0054 1 functions */
+    int ricochet[8];                     /* +0x0038 setupclient loads ricochet_02d.wav for 1 to 8 */
     uint8_t pad_0058[0x20];
-    int unk_0078;                        /* +0x0078 1 functions */
+    int crash_small;                     /* +0x0078 setupclient loads carcrash01.wav. crash at 0x7c is carcrash02.wav */
     int crash;                           /* +0x007c objectsimulation: an object impact */
     uint8_t pad_0080[0x8];
-    int unk_0088;                        /* +0x0088 1 functions */
+    int hit_body;                        /* +0x0088 setupclient loads bullethitbody01.wav. humanhit at 0x8c is bullethitbody02.wav */
     int humanhit;                        /* +0x008c setupgame writes 0x16; humansimulation plays it when an object hits a human hard */
     uint8_t pad_0090[0x8];
-    int unk_0098;                        /* +0x0098 1 functions */
-    int unk_009c;                        /* +0x009c 1 functions */
+    int hit_metal[2];                    /* +0x0098 setupclient loads bullethitmetal01.wav and 02 */
     uint8_t pad_00a0[0x8];
     int unk_00a8;                        /* +0x00a8 1 functions */
     int unk_00ac;                        /* +0x00ac 1 functions */
     int unk_00b0;                        /* +0x00b0 1 functions */
     int unk_00b4;                        /* +0x00b4 1 functions */
-    int unk_00b8;                        /* +0x00b8 1 functions */
+    int glass_break;                     /* +0x00b8 setupclient loads glassbreak01.wav */
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x8];
     int phone_ring;                      /* +0x00c8 itemlogic plays it every 128 ticks while a phone rings */
@@ -1999,20 +1991,29 @@ typedef union SoundList { struct {
     uint8_t pad_00f4[0x18];
     int magazine;                        /* +0x010c human_itemsimulation plays it when a magazine goes in or out of a gun */
     uint8_t pad_0110[0x1c];
-    int unk_012c;                        /* +0x012c 1 functions */
+    int shell_hit;                       /* +0x012c setupclient loads shell_hit_cement.wav */
     int gear;                            /* +0x0130 objectsimulation_car: a gear change */
     int engine_large;                    /* +0x0134 Audio source and voice frame access */
     int engine_train;                    /* +0x0138 Audio source and voice frame access */
 }; uint8_t lf_raw[0x13c]; } SoundList;
 SR_STATIC_ASSERT(sizeof(SoundList) == 0x13c, "SoundList");
 SR_STATIC_ASSERT(offsetof(SoundList, num_sounds) == 0x0, "SoundList.num_sounds");
+SR_STATIC_ASSERT(offsetof(SoundList, shot_magnum) == 0x4, "SoundList.shot_magnum");
+SR_STATIC_ASSERT(offsetof(SoundList, shot_smg) == 0x8, "SoundList.shot_smg");
+SR_STATIC_ASSERT(offsetof(SoundList, shot_rifle) == 0xc, "SoundList.shot_rifle");
 SR_STATIC_ASSERT(offsetof(SoundList, engine) == 0x24, "SoundList.engine");
 SR_STATIC_ASSERT(offsetof(SoundList, tire) == 0x34, "SoundList.tire");
+SR_STATIC_ASSERT(offsetof(SoundList, ricochet) == 0x38, "SoundList.ricochet");
+SR_STATIC_ASSERT(offsetof(SoundList, crash_small) == 0x78, "SoundList.crash_small");
 SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
+SR_STATIC_ASSERT(offsetof(SoundList, hit_body) == 0x88, "SoundList.hit_body");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
+SR_STATIC_ASSERT(offsetof(SoundList, hit_metal) == 0x98, "SoundList.hit_metal");
+SR_STATIC_ASSERT(offsetof(SoundList, glass_break) == 0xb8, "SoundList.glass_break");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
 SR_STATIC_ASSERT(offsetof(SoundList, digit) == 0xcc, "SoundList.digit");
 SR_STATIC_ASSERT(offsetof(SoundList, magazine) == 0x10c, "SoundList.magazine");
+SR_STATIC_ASSERT(offsetof(SoundList, shell_hit) == 0x12c, "SoundList.shell_hit");
 SR_STATIC_ASSERT(offsetof(SoundList, gear) == 0x130, "SoundList.gear");
 SR_STATIC_ASSERT(offsetof(SoundList, engine_large) == 0x134, "SoundList.engine_large");
 SR_STATIC_ASSERT(offsetof(SoundList, engine_train) == 0x138, "SoundList.engine_train");
@@ -3157,7 +3158,7 @@ SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tri
 
 /* texturelist[]: record of 0x1144 bytes. */
 typedef union TextureList { struct {
-    uint8_t pad_0000[0x4];
+    int count;                           /* +0x0000 setupgame: the next free texture identifier. 848 after the identifiers are assigned */
     int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
     uint8_t pad_0404[0x14];
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
@@ -3167,22 +3168,26 @@ typedef union TextureList { struct {
     uint8_t pad_0434[0x400];
     int human_textures[512];             /* +0x0834 generatehumantexture: the texture of each human */
     int paint[8];                        /* +0x1034 generatetexture: a color on the left half and dark grey on the right half */
-    int street[10];                      /* +0x1054 generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps */
-    uint8_t pad_107c[0x58];
+    int street[32];                      /* +0x1054 generatetexture: entry 4 is a blue sign with a grey panel. Entries 5 to 7 are the red and yellow and green traffic lamps */
     int grey_disc;                       /* +0x10d4 generatetexture: a grey disc on a dark ground with a small dark mark */
     int panel[6];                        /* +0x10d8 generatetexture: six colors with a grey frame at the top */
     int half_grey;                       /* +0x10f0 generatetexture: a grey left half and a dark right half */
     int half_brown;                      /* +0x10f4 generatetexture: a dark left half and a brown right half */
     int plain_orange;                    /* +0x10f8 generatetexture: a texture of one orange color */
-    uint8_t pad_10fc[0x14];
+    uint8_t pad_10fc[0x4];
+    int mic;                             /* +0x1100 setupclient loads mic.png */
+    int twitter;                         /* +0x1104 setupclient loads twitter01.png */
+    int logo;                            /* +0x1108 setupclient draws a 32 by 16 pixel logo into it */
+    uint8_t pad_110c[0x4];
     int random_vectors;                  /* +0x1110 the start code passes it to generatetexture_randomvec */
-    uint8_t pad_1114[0x20];
+    int cash[8];                         /* +0x1114 setupclient loads cash_dollar.png and the five, ten, twenty, fifty, hundred and thousand bills into the first seven */
     int landscape_normal;                /* +0x1134 landscape_generatenormaltexture fills this texture */
     int landscape_detail;                /* +0x1138 landscape_generatedetail fills this texture */
-    uint8_t pad_113c[0x4];
+    int desert;                          /* +0x113c setupclient loads desert01.png */
     int newspaper;                       /* +0x1140 generatetexture_newspaper fills this texture */
 }; uint8_t lf_raw[0x1144]; } TextureList;
 SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
+SR_STATIC_ASSERT(offsetof(TextureList, count) == 0x0, "TextureList.count");
 SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
@@ -3196,10 +3201,49 @@ SR_STATIC_ASSERT(offsetof(TextureList, panel) == 0x10d8, "TextureList.panel");
 SR_STATIC_ASSERT(offsetof(TextureList, half_grey) == 0x10f0, "TextureList.half_grey");
 SR_STATIC_ASSERT(offsetof(TextureList, half_brown) == 0x10f4, "TextureList.half_brown");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_orange) == 0x10f8, "TextureList.plain_orange");
+SR_STATIC_ASSERT(offsetof(TextureList, mic) == 0x1100, "TextureList.mic");
+SR_STATIC_ASSERT(offsetof(TextureList, twitter) == 0x1104, "TextureList.twitter");
+SR_STATIC_ASSERT(offsetof(TextureList, logo) == 0x1108, "TextureList.logo");
 SR_STATIC_ASSERT(offsetof(TextureList, random_vectors) == 0x1110, "TextureList.random_vectors");
+SR_STATIC_ASSERT(offsetof(TextureList, cash) == 0x1114, "TextureList.cash");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_normal) == 0x1134, "TextureList.landscape_normal");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_detail) == 0x1138, "TextureList.landscape_detail");
+SR_STATIC_ASSERT(offsetof(TextureList, desert) == 0x113c, "TextureList.desert");
 SR_STATIC_ASSERT(offsetof(TextureList, newspaper) == 0x1140, "TextureList.newspaper");
+
+/* modellist[]: record of 0x7a4 bytes. */
+typedef union ModelList { struct {
+    int count;                           /* +0x0000 setupgame: the next free model identifier. 485 after the identifiers are assigned */
+    int bullet[32];                      /* +0x0004 setupclient: createbulletmodel builds the first 16 */
+    int item[32];                        /* +0x0084 the model of each item type. The renderer indexes it with the item type */
+    int wheel[32];                       /* +0x0104 the model of each wheel type. The renderer indexes it with the wheel type of an object */
+    int human[256];                      /* +0x0184 one model for each human. frame_addmodel and the renderer index it with the human */
+    int ammo[32];                        /* +0x0584 setupclient: four shapes from the builder at 0x4af7c0 (second argument 0 to 3, third argument 0) */
+    int ammo_b[32];                      /* +0x0604 setupclient: the same four shapes with third argument 1. Entry 0 is a flat model that the effect renderer draws */
+    int city_object[32];                 /* +0x0684 setupclient: createmodel_cityobject builds the first 10 */
+    int head;                            /* +0x0704 setupclient: createheadmodel */
+    int foot;                            /* +0x0708 setupclient: createfootmodel */
+    int hair;                            /* +0x070c setupclient: createhairmodel */
+    int sprite[32];                      /* +0x0710 setupclient: createspritemodel builds entry 1. The effect renderer reads entry 1 */
+    int sunglasses;                      /* +0x0790 setupclient: createsunglassmodel */
+    uint8_t pad_0794[0xc];
+    int rotor;                           /* +0x07a0 setupclient: createrotormodel */
+}; uint8_t lf_raw[0x7a4]; } ModelList;
+SR_STATIC_ASSERT(sizeof(ModelList) == 0x7a4, "ModelList");
+SR_STATIC_ASSERT(offsetof(ModelList, count) == 0x0, "ModelList.count");
+SR_STATIC_ASSERT(offsetof(ModelList, bullet) == 0x4, "ModelList.bullet");
+SR_STATIC_ASSERT(offsetof(ModelList, item) == 0x84, "ModelList.item");
+SR_STATIC_ASSERT(offsetof(ModelList, wheel) == 0x104, "ModelList.wheel");
+SR_STATIC_ASSERT(offsetof(ModelList, human) == 0x184, "ModelList.human");
+SR_STATIC_ASSERT(offsetof(ModelList, ammo) == 0x584, "ModelList.ammo");
+SR_STATIC_ASSERT(offsetof(ModelList, ammo_b) == 0x604, "ModelList.ammo_b");
+SR_STATIC_ASSERT(offsetof(ModelList, city_object) == 0x684, "ModelList.city_object");
+SR_STATIC_ASSERT(offsetof(ModelList, head) == 0x704, "ModelList.head");
+SR_STATIC_ASSERT(offsetof(ModelList, foot) == 0x708, "ModelList.foot");
+SR_STATIC_ASSERT(offsetof(ModelList, hair) == 0x70c, "ModelList.hair");
+SR_STATIC_ASSERT(offsetof(ModelList, sprite) == 0x710, "ModelList.sprite");
+SR_STATIC_ASSERT(offsetof(ModelList, sunglasses) == 0x790, "ModelList.sunglasses");
+SR_STATIC_ASSERT(offsetof(ModelList, rotor) == 0x7a0, "ModelList.rotor");
 
 #pragma pack(pop)
 
