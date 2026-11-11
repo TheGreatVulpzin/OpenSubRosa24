@@ -499,7 +499,7 @@ static LONG CALLBACK crash_log(EXCEPTION_POINTERS *ep)
                     (unsigned)ep->ContextRecord->Edx, (unsigned)ep->ContextRecord->Ebx,
                     (unsigned)ep->ContextRecord->Esi, (unsigned)ep->ContextRecord->Edi,
                     (unsigned)ep->ContextRecord->Ebp);
-            for (k = 0; k < 24 && !IsBadReadPtr(stack + k, 4); k++) {
+            for (k = 0; k < 160 && !IsBadReadPtr(stack + k, 4); k++) {
                 if (stack[k] >= sr_base && stack[k] < sr_base + 0x1400000)
                     fprintf(stderr, "  stack[%d] = image+0x%x\n", k, (unsigned)(stack[k] - sr_base));
             }

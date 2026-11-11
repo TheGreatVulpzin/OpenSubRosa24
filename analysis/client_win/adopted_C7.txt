@@ -15,3 +15,4 @@ humansimulationclient src/client/setup/interpolation.c
 itemsimulationclient src/client/setup/interpolation.c
 client_simulation src/client/setup/interpolation.c
 clientsend src/client/setup/send.c
+checksimulation src/client/setup/simulation.c

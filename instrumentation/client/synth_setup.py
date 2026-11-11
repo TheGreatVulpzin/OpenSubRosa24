@@ -6,7 +6,7 @@ so the script deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_setup.py <recording dir> <work dir> [case,...]
 Cases: jpeg, timers, debug, debugoff, log, ticket, mouseon, mouseoff, tickclient, tickhost,
-tickkeys, tickkeys2, tickdebug, tickshift, world, world2, world3, world4, send1, send2, send3, sendnone. The script sets the environment of the gate itself.
+tickkeys, tickkeys2, tickdebug, tickshift, world, world2, world3, world4, send1, send2, send3, sendnone, viewfoot, viewcar, viewheli, viewdead, viewlights. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -39,6 +39,8 @@ GAME_TICK = 0x9065334
 SERVER_ACTIVE, GAME_STATE, GAMETYPE = 0x75a5800, 0x9065320, 0x9065308
 PAUSED, STEP_ONCE, SLOW_TICK, LAST_TICK_MS = 0x906533c, 0x9065340, 0x9065344, 0x9065338
 VIEW_PLAYER = 0xfefe2a0
+ROUND_NUMBER, CLIENT_GAME_ID = 0x906531c, 0x1dda5244
+BULLETS, BULLET_BYTES = 0x1338680, 16384 * 92
 KEYBOARD, PREVKEYBOARD = 0x75a5140, 0x1bbe1a0
 VOICE_ON, MIC_GAIN, HIDE_HUD, LIGHT_ANGLES = 0x9063218, 0x9063220, 0x908b054, 0x9065348
 KEY_V, KEY_EQUALS, KEY_F1, KEY_F4, KEY_F5, KEY_PAGE_UP, KEY_PAGE_DOWN = 25, 46, 58, 61, 62, 75, 78
@@ -136,7 +138,7 @@ def tick_edits(active, state, view=-1, debug=0):
     """A client or host that is ready for a tick, with no player in view."""
     return [(SERVER_ACTIVE, 'i', [active]), (GAME_STATE, 'i', [state]), (VIEW_PLAYER, 'i', [view]),
             (DEBUGIT, 'i', [debug]), (LAST_TICK_MS, 'I', [0]), (PAUSED, 'i', [0]), (STEP_ONCE, 'i', [0]),
-            (SLOW_TICK, 'i', [0]), (MIC_GAIN, 'i', [100])]
+            (SLOW_TICK, 'i', [0]), (MIC_GAIN, 'i', [100]), (ROUND_NUMBER, 'i', [7]), (CLIENT_GAME_ID, 'i', [7])]
 
 
 def key_edits(*pressed, held=()):
@@ -231,6 +233,24 @@ def send_case(seed, view, actions, tail, head):
     return edits, {'clientsend': [call(CLIENTSEND)]}
 
 
+def tick_view_case(state, input_mode, vehicle, health, seed=21, clear_bullets=False):
+    """A client with player 0 in view and a human to move: the aim of the player goes to the human."""
+    rng = random.Random(seed)
+    edits = tick_edits(0, state, view=0) + key_edits()
+    player = PLAYER
+    human = HUMAN
+    edits.append((player + 0x78, 'i', [0]))
+    edits.append(floats_edit(player + 0x8c, 4, rng, -3, 3))
+    edits.append((player + 0xc8, 'i', [input_mode]))
+    edits.append((human, 'i', [1]))
+    edits.append((human + 0x14, 'i', [vehicle]))
+    edits.append((human + 0x28, 'i', [health]))
+    edits.append((0x908aae4, 'i', [50]))
+    if clear_bullets:
+        edits.append((BULLETS, f'{BULLET_BYTES}B', [0] * BULLET_BYTES))
+    return edits, {'checksimulation': [call(CHECKSIMULATION, a) for a in (0, 1)]}
+
+
 def main():
     rec, work = Path(sys.argv[1]), Path(sys.argv[2])
     work.mkdir(parents=True, exist_ok=True)
@@ -242,6 +262,9 @@ def main():
             'mouseon': lambda: reactivate_case(1), 'mouseoff': lambda: reactivate_case(0),
             'send1': lambda: send_case(1, 0, 10, 4, 20), 'send2': lambda: send_case(2, 1, 3, 60, 3),
             'send3': lambda: send_case(3, 2, 40, 10, 0), 'sendnone': lambda: send_case(4, -1, 5, 1, 7),
+            'viewfoot': lambda: tick_view_case(3, 1, -1, 80), 'viewcar': lambda: tick_view_case(3, 2, 0, 80),
+            'viewheli': lambda: tick_view_case(3, 3, 0, -10), 'viewdead': lambda: tick_view_case(2, 1, -1, -8, clear_bullets=True),
+            'viewlights': lambda: tick_view_case(1, 1, -1, 30, clear_bullets=True),
             'world': world_case, 'world2': lambda: world_case(12), 'world3': lambda: world_case(13),
             'world4': lambda: world_case(14),
             'tickclient': lambda: tick_case(0, 3, (0, 1)),

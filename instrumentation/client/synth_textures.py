@@ -265,6 +265,7 @@ def run(snapshot, args, name, env):
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
     if os.environ.get('HARNESS_DEBUG'):
         print(p.stdout[-3000:])
+        print(p.stderr[-3000:])
     for line in p.stdout.splitlines()[::-1]:
         if 'functions tested' in line:
             return line.split(':', 1)[1].strip()
