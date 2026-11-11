@@ -449,6 +449,10 @@ Part B also has `clientsend`, `humansimulationclient`, `itemsimulationclient` an
 
 The gate counts do not change: menu 86, play 311, play2 305.
 
+### Functions whose original crashes in the test (2026-11-11)
+
+Every function that opens a file or changes the directory is skipped in the test with "original crashed": `lf_34010`, `lf_345d0`, `area_createsblocks`, `area_createinteriorblocks`, `building_load`, `leveleditor_load`, `createlevel`, `resetgame`, `setupgame`, `setupclient`, and the client branch of `checksimulation`. The crash is an exception 0xc0000005 at an address of a CRT DLL (0x6f04e470, 0x6ef37b40, 0x6ef37c10 or 0x6f04e540; `eax` is in the same range). The lifted code of the same functions runs, so the cause is in the original path: the imports `fopen`, `fclose` and `_chdir` that the harness puts in the import table of the image (`resolve_imports` in `instrumentation/tests/harness.c`, with the stubs of `instrumentation/platform/plat_test.c`). The server image does not show it. Fixing it gives a test to all these functions, among them `setupgame`, `setupclient` and the network branch of `checksimulation`.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).
