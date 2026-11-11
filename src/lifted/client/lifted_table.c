@@ -707,11 +707,11 @@ void lf_6b160(void);
 void lf_6baa0(void);
 void lf_6d6f0(void);
 void lf_6d7d0(void);
-void lf_6d860(void);
+void drawcircle(void);
 void lf_6d990(void);
-void lf_6dac0(void);
+void drawplayerindicator(void);
 void lf_6dcb0(void);
-void lf_6e3c0(void);
+void drawcircleindicator(void);
 void lf_6e6b0(void);
 void lf_6ed50(void);
 void lf_6efa0(void);
@@ -750,7 +750,7 @@ void lf_74890(void);
 void lf_75d90(void);
 void lf_75f10(void);
 void lf_77c70(void);
-void lf_78810(void);
+void renderframeatmosphere(void);
 void lf_78c30(void);
 void lf_78c70(void);
 void frame_drawvoiceicons(void);
@@ -784,11 +784,11 @@ void setupgame(void);
 void setupclient(void);
 void lf_82910(void);
 void lf_82a00(void);
-void lf_82a20(void);
+void disabletwosidedstencil(void);
 void lf_82a40(void);
 void lf_82b20(void);
 void lf_830f0(void);
-void lf_844d0(void);
+void rendermap(void);
 void lf_84700(void);
 void lf_84f00(void);
 void lf_850b0(void);
@@ -955,7 +955,7 @@ void lf_bf820(void);
 void lf_bfbf0(void);
 void setupspheremodel(void);
 void lf_c0a60(void);
-void lf_c1380(void);
+void rendertrackmodel(void);
 void lf_c14a0(void);
 void lf_c1ac0(void);
 void lf_c1d90(void);
@@ -1027,7 +1027,7 @@ void lf_d5610(void);
 void updateplayticket(void);
 void lf_d5660(void);
 void lf_d5690(void);
-void lf_d6570(void);
+void compileprogramobject(void);
 void lf_d6860(void);
 void lf_d6970(void);
 void lf_d6a30(void);
@@ -1035,7 +1035,7 @@ void lf_d6b50(void);
 void lf_d6c70(void);
 void lf_d6cb0(void);
 void lf_d6e40(void);
-void lf_d7150(void);
+void rendermodel(void);
 void lf_d7380(void);
 void lf_d7470(void);
 void lf_d7850(void);
@@ -1045,7 +1045,7 @@ void lf_d8ae0(void);
 void landscape_buildsectorlods(void);
 void landscape_buildsectormesh(void);
 void lf_d92a0(void);
-void lf_d9770(void);
+void renderlandscape(void);
 void landscape_rendersector(void);
 void landscape_generatenormaltexture(void);
 void landscape_generatedetail(void);
@@ -1054,8 +1054,8 @@ void lf_daa90(void);
 void lf_dabf0(void);
 void lf_dadf0(void);
 void lf_daff0(void);
-void lf_db7c0(void);
-void lf_dc080(void);
+void rendermodelshadow(void);
+void glstateshadowtwoside(void);
 void lf_dc1d0(void);
 void lf_dc260(void);
 void lf_dc2f0(void);
@@ -1233,13 +1233,13 @@ void lf_106480(void);
 void lf_1065d0(void);
 void lf_1066b0(void);
 void lf_106790(void);
-void lf_106b30(void);
+void drawtext(void);
 void lf_107970(void);
 void lf_1079d0(void);
-void lf_107ac0(void);
+void drawbitmap(void);
 void lf_107c40(void);
 void lf_107d80(void);
-void lf_107ee0(void);
+void drawmousecursor(void);
 void createfont(void);
 void lf_109540(void);
 void loadfont(void);
@@ -1282,11 +1282,11 @@ void lf_10bc40(void);
 void lf_10bc70(void);
 void lf_10bca0(void);
 void lf_10bcc0(void);
-void steam_init(void);
-void steam_shutdown(void);
-void steam_update(void);
-void steam_getname(void);
-void steam_getid(void);
+void lf_10bcf0(void);
+void lf_10bd40(void);
+void lf_10bd60(void);
+void lf_10bd80(void);
+void lf_10bdc0(void);
 void lf_10be20(void);
 void __fastcall lf_10be80(int);
 void __fastcall lf_10bee0(int);
@@ -2007,11 +2007,11 @@ const LfEntry lf_table[] = {
     { "drawdisplay", 0x6baa0, (void *)lf_6baa0, 0, LF_RET_VOID, 4, "", 1 },
     { "createmessage", 0x6d6f0, (void *)lf_6d6f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lf_6d7d0", 0x6d7d0, (void *)lf_6d7d0, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "drawcircle", 0x6d860, (void *)lf_6d860, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
+    { "drawcircle", 0x6d860, (void *)drawcircle, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "drawcirclefill", 0x6d990, (void *)lf_6d990, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
-    { "drawplayerindicator", 0x6dac0, (void *)lf_6dac0, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
+    { "drawplayerindicator", 0x6dac0, (void *)drawplayerindicator, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "drawplayerinfo", 0x6dcb0, (void *)lf_6dcb0, 0, LF_RET_VOID, 4, "", 1 },
-    { "drawcircleindicator", 0x6e3c0, (void *)lf_6e3c0, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "drawcircleindicator", 0x6e3c0, (void *)drawcircleindicator, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "economysimulation", 0x6e6b0, (void *)lf_6e6b0, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_carmarket", 0x6ed50, (void *)lf_6ed50, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_gunmarket", 0x6efa0, (void *)lf_6efa0, 0, LF_RET_VOID, 4, "", 0 },
@@ -2050,7 +2050,7 @@ const LfEntry lf_table[] = {
     { "lf_75d90", 0x75d90, (void *)lf_75d90, 5, LF_RET_VOID, 4, "vpvpv", 0 },
     { "renderframe", 0x75f10, (void *)lf_75f10, 0, LF_RET_VOID, 4, "", 1 },
     { "renderframedepth", 0x77c70, (void *)lf_77c70, 0, LF_RET_VOID, 4, "", 1 },
-    { "renderframeatmosphere", 0x78810, (void *)lf_78810, 1, LF_RET_VOID, 4, "v", 1 },
+    { "renderframeatmosphere", 0x78810, (void *)renderframeatmosphere, 1, LF_RET_VOID, 4, "v", 1 },
     { "frame_rendermessages", 0x78c30, (void *)lf_78c30, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawmessages", 0x78c70, (void *)lf_78c70, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawvoiceicons", 0x79330, (void *)frame_drawvoiceicons, 0, LF_RET_VOID, 4, "", 1 },
@@ -2084,11 +2084,11 @@ const LfEntry lf_table[] = {
     { "setupclient", 0x81a80, (void *)setupclient, 0, LF_RET_VOID, 4, "", 1 },
     { "setupglextentions", 0x82910, (void *)lf_82910, 0, LF_RET_VOID, 4, "", 1 },
     { "enabletwosidedstencil", 0x82a00, (void *)lf_82a00, 0, LF_RET_VOID, 4, "", 1 },
-    { "disabletwosidedstencil", 0x82a20, (void *)lf_82a20, 0, LF_RET_VOID, 4, "", 1 },
+    { "disabletwosidedstencil", 0x82a20, (void *)disabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "settwosidedstencil", 0x82a40, (void *)lf_82a40, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "drawhelp", 0x82b20, (void *)lf_82b20, 0, LF_RET_VOID, 4, "", 1 },
     { "drawhud", 0x830f0, (void *)lf_830f0, 1, LF_RET_VOID, 4, "v", 1 },
-    { "rendermap", 0x844d0, (void *)lf_844d0, 0, LF_RET_VOID, 4, "", 1 },
+    { "rendermap", 0x844d0, (void *)rendermap, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmap", 0x84700, (void *)lf_84700, 1, LF_RET_VOID, 4, "v", 1 },
     { "spritetimetolive", 0x84f00, (void *)lf_84f00, 0, LF_RET_VOID, 4, "", 0 },
     { "createhuman", 0x850b0, (void *)lf_850b0, 3, LF_RET_INT, 4, "pvv", 0 },
@@ -2255,7 +2255,7 @@ const LfEntry lf_table[] = {
     { "lf_bfbf0", 0xbfbf0, (void *)lf_bfbf0, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "setupspheremodel", 0xbfe90, (void *)setupspheremodel, 0, LF_RET_VOID, 4, "", 1 },
     { "buildtrackmodel", 0xc0a60, (void *)lf_c0a60, 0, LF_RET_VOID, 4, "", 1 },
-    { "rendertrackmodel", 0xc1380, (void *)lf_c1380, 1, LF_RET_VOID, 4, "v", 1 },
+    { "rendertrackmodel", 0xc1380, (void *)rendertrackmodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_viewer", 0xc14a0, (void *)lf_c14a0, 0, LF_RET_VOID, 4, "", 1 },
     { "model_editor", 0xc1ac0, (void *)lf_c1ac0, 0, LF_RET_VOID, 4, "", 0 },
     { "fround", 0xc1d90, (void *)lf_c1d90, 2, LF_RET_FLOAT, 4, "vv", 0 },
@@ -2327,7 +2327,7 @@ const LfEntry lf_table[] = {
     { "updateplayticket", 0xd5650, (void *)updateplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_d5660", 0xd5660, (void *)lf_d5660, 0, LF_RET_INT64, 4, "", 0 },
     { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
-    { "compileprogramobject", 0xd6570, (void *)lf_d6570, 3, LF_RET_INT, 4, "vvv", 1 },
+    { "compileprogramobject", 0xd6570, (void *)compileprogramobject, 3, LF_RET_INT, 4, "vvv", 1 },
     { "loadsource", 0xd6860, (void *)lf_d6860, 1, LF_RET_INT, 4, "p", 1 },
     { "orientationtoquaternion", 0xd6970, (void *)lf_d6970, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_d6a30", 0xd6a30, (void *)lf_d6a30, 2, LF_RET_VOID, 4, "pp", 0 },
@@ -2335,7 +2335,7 @@ const LfEntry lf_table[] = {
     { "copyquaternion", 0xd6c70, (void *)lf_d6c70, 2, LF_RET_VOID, 4, "pp", 0 },
     { "rendersphere", 0xd6cb0, (void *)lf_d6cb0, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "rendermodellist", 0xd6e40, (void *)lf_d6e40, 1, LF_RET_VOID, 4, "v", 1 },
-    { "rendermodel", 0xd7150, (void *)lf_d7150, 6, LF_RET_VOID, 4, "vppvpp", 1 },
+    { "rendermodel", 0xd7150, (void *)rendermodel, 6, LF_RET_VOID, 4, "vppvpp", 1 },
     { "rendermodelwire", 0xd7380, (void *)lf_d7380, 5, LF_RET_VOID, 4, "vpppv", 1 },
     { "rendercheckpoints", 0xd7470, (void *)lf_d7470, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_d7850", 0xd7850, (void *)lf_d7850, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2345,7 +2345,7 @@ const LfEntry lf_table[] = {
     { "landscape_buildsectorlods", 0xd8ba0, (void *)landscape_buildsectorlods, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_buildsectormesh", 0xd9100, (void *)landscape_buildsectormesh, 1, LF_RET_VOID, 4, "v", 1 },
     { "setupframelandscapelod", 0xd92a0, (void *)lf_d92a0, 0, LF_RET_VOID, 4, "", 0 },
-    { "renderlandscape", 0xd9770, (void *)lf_d9770, 1, LF_RET_VOID, 4, "v", 1 },
+    { "renderlandscape", 0xd9770, (void *)renderlandscape, 1, LF_RET_VOID, 4, "v", 1 },
     { "landscape_rendersector", 0xd98e0, (void *)landscape_rendersector, 1, LF_RET_VOID, 4, "v", 1 },
     { "landscape_generatenormaltexture", 0xd99a0, (void *)landscape_generatenormaltexture, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_generatedetail", 0xd9c70, (void *)landscape_generatedetail, 5, LF_RET_VOID, 4, "vvvvv", 1 },
@@ -2354,8 +2354,8 @@ const LfEntry lf_table[] = {
     { "render_sector_interior", 0xdabf0, (void *)lf_dabf0, 2, LF_RET_VOID, 4, "vv", 1 },
     { "render_sector_alpha", 0xdadf0, (void *)lf_dadf0, 2, LF_RET_VOID, 4, "vv", 1 },
     { "render_sector_interior_shadow2", 0xdaff0, (void *)lf_daff0, 1, LF_RET_VOID, 4, "v", 1 },
-    { "rendermodelshadow", 0xdb7c0, (void *)lf_db7c0, 3, LF_RET_VOID, 4, "vpv", 1 },
-    { "glstateshadowtwoside", 0xdc080, (void *)lf_dc080, 0, LF_RET_VOID, 4, "", 1 },
+    { "rendermodelshadow", 0xdb7c0, (void *)rendermodelshadow, 3, LF_RET_VOID, 4, "vpv", 1 },
+    { "glstateshadowtwoside", 0xdc080, (void *)glstateshadowtwoside, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_dc1d0", 0xdc1d0, (void *)lf_dc1d0, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_dc260", 0xdc260, (void *)lf_dc260, 0, LF_RET_VOID, 4, "", 1 },
     { "glstatenormal", 0xdc2f0, (void *)lf_dc2f0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2533,13 +2533,13 @@ const LfEntry lf_table[] = {
     { "setupviewpoint", 0x1065d0, (void *)lf_1065d0, 2, LF_RET_VOID, 4, "pp", 1 },
     { "setupobjectrender", 0x1066b0, (void *)lf_1066b0, 2, LF_RET_VOID, 4, "pp", 1 },
     { "screenshot", 0x106790, (void *)lf_106790, 0, LF_RET_VOID, 4, "", 1 },
-    { "drawtext", 0x106b30, (void *)lf_106b30, 10, LF_RET_VOID, 4, "pvvvvvvvvv", 1 },
+    { "drawtext", 0x106b30, (void *)drawtext, 10, LF_RET_VOID, 4, "pvvvvvvvvv", 1 },
     { "lf_107970", 0x107970, (void *)lf_107970, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "setuptextdisplay", 0x1079d0, (void *)lf_1079d0, 0, LF_RET_VOID, 4, "", 1 },
-    { "drawbitmap", 0x107ac0, (void *)lf_107ac0, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
+    { "drawbitmap", 0x107ac0, (void *)drawbitmap, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "lf_107c40", 0x107c40, (void *)lf_107c40, 11, LF_RET_VOID, 4, "vvvvvvvvvvv", 1 },
     { "lf_107d80", 0x107d80, (void *)lf_107d80, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
-    { "drawmousecursor", 0x107ee0, (void *)lf_107ee0, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
+    { "drawmousecursor", 0x107ee0, (void *)drawmousecursor, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "createfont", 0x108060, (void *)createfont, 0, LF_RET_VOID, 4, "", 1 },
     { "text_getlength", 0x109540, (void *)lf_109540, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "loadfont", 0x1095a0, (void *)loadfont, 3, LF_RET_VOID, 4, "vpv", 1 },
@@ -2582,11 +2582,11 @@ const LfEntry lf_table[] = {
     { "lf_10bc70", 0x10bc70, (void *)lf_10bc70, 4, LF_RET_VOID, 4, "pppv", 0 },
     { "lf_10bca0", 0x10bca0, (void *)lf_10bca0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_10bcc0", 0x10bcc0, (void *)lf_10bcc0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "steam_init", 0x10bcf0, (void *)steam_init, 0, LF_RET_INT, 4, "", 1 },
-    { "steam_shutdown", 0x10bd40, (void *)steam_shutdown, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_update", 0x10bd60, (void *)steam_update, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_getname", 0x10bd80, (void *)steam_getname, 1, LF_RET_INT, 1, "p", 1 },
-    { "steam_getid", 0x10bdc0, (void *)steam_getid, 1, LF_RET_VOID, 4, "p", 1 },
+    { "steam_init", 0x10bcf0, (void *)lf_10bcf0, 0, LF_RET_INT, 4, "", 1 },
+    { "steam_shutdown", 0x10bd40, (void *)lf_10bd40, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_update", 0x10bd60, (void *)lf_10bd60, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_getname", 0x10bd80, (void *)lf_10bd80, 1, LF_RET_INT, 1, "p", 1 },
+    { "steam_getid", 0x10bdc0, (void *)lf_10bdc0, 1, LF_RET_VOID, 4, "p", 1 },
     { "steam_requestticket", 0x10be20, (void *)lf_10be20, 1, LF_RET_VOID, 4, "v", 1 },
     { "CSteamID", 0x10be80, (void *)lf_10be80, 1, LF_RET_INT, 4, "p", 0 },
     { "ConvertToUint64", 0x10bee0, (void *)lf_10bee0, 1, LF_RET_INT64, 4, "p", 0 },

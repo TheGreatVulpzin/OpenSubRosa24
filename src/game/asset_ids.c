@@ -67,14 +67,17 @@ static void assign_model_ids(void)
 
 static void assign_texture_ids(void)
 {
-    static const int first_slots[] = {0x404, 0x408, 0x40c, 0x410, 0x414};
+    static const int first_slots[] = {0x404, 0x410, 0x414};
     int next = 0;
     int i;
 
     for (i = 0; i < NUM_MATERIAL_TEXTURES; ++i)
         g_texturelist.material[i] = next++;
-    for (i = 0; i < 5; ++i)
-        *texture_slot(first_slots[i]) = next++;
+    *texture_slot(first_slots[0]) = next++;
+    g_texturelist.shadow_map = next++;
+    g_texturelist.sky = next++;
+    *texture_slot(first_slots[1]) = next++;
+    *texture_slot(first_slots[2]) = next++;
     g_texturelist.disc = next++;
     g_texturelist.rough_disc = next++;
     g_texturelist.plain_green = next++;
@@ -94,7 +97,7 @@ static void assign_texture_ids(void)
     g_texturelist.half_grey = next++;
     g_texturelist.half_brown = next++;
     g_texturelist.plain_orange = next++;
-    *texture_slot(0x10fc) = next++;
+    g_texturelist.map = next++;
     g_texturelist.mic = next++;
     g_texturelist.twitter = next++;
     g_texturelist.logo = next++;

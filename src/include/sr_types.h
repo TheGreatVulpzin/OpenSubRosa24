@@ -254,6 +254,8 @@ typedef struct WindowCell { int material; int window; } WindowCell;
 typedef struct WindowAtlas { int num_cells; WindowCell cells[64]; } WindowAtlas;
 /* The look values of the last texture that was made for a human. */
 typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook;
+/* A shader program: the OpenGL objects, the flag set once it linked, and the places of its uniform variables. */
+typedef struct ProgramObject { uint32_t program; uint32_t vertex_shader; uint32_t fragment_shader; int linked; int uniforms[16]; } ProgramObject;
 /* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
 typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
 /* A vertex as the renderer reads it: 8 floats. */
@@ -3160,7 +3162,10 @@ SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tri
 typedef union TextureList { struct {
     int count;                           /* +0x0000 setupgame: the next free texture identifier. 848 after the identifiers are assigned */
     int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
-    uint8_t pad_0404[0x14];
+    uint8_t pad_0404[0x4];
+    int shadow_map;                      /* +0x0408 rendermodel binds it on texture unit 2 for the lit models */
+    int sky;                             /* +0x040c renderframeatmosphere binds it as the texture of the sky quad */
+    uint8_t pad_0410[0x8];
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
@@ -3174,7 +3179,7 @@ typedef union TextureList { struct {
     int half_grey;                       /* +0x10f0 generatetexture: a grey left half and a dark right half */
     int half_brown;                      /* +0x10f4 generatetexture: a dark left half and a brown right half */
     int plain_orange;                    /* +0x10f8 generatetexture: a texture of one orange color */
-    uint8_t pad_10fc[0x4];
+    int map;                             /* +0x10fc rendermap draws the city from above into this texture */
     int mic;                             /* +0x1100 setupclient loads mic.png */
     int twitter;                         /* +0x1104 setupclient loads twitter01.png */
     int logo;                            /* +0x1108 setupclient draws a 32 by 16 pixel logo into it */
@@ -3189,6 +3194,8 @@ typedef union TextureList { struct {
 SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
 SR_STATIC_ASSERT(offsetof(TextureList, count) == 0x0, "TextureList.count");
 SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
+SR_STATIC_ASSERT(offsetof(TextureList, shadow_map) == 0x408, "TextureList.shadow_map");
+SR_STATIC_ASSERT(offsetof(TextureList, sky) == 0x40c, "TextureList.sky");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");
@@ -3201,6 +3208,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, panel) == 0x10d8, "TextureList.panel");
 SR_STATIC_ASSERT(offsetof(TextureList, half_grey) == 0x10f0, "TextureList.half_grey");
 SR_STATIC_ASSERT(offsetof(TextureList, half_brown) == 0x10f4, "TextureList.half_brown");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_orange) == 0x10f8, "TextureList.plain_orange");
+SR_STATIC_ASSERT(offsetof(TextureList, map) == 0x10fc, "TextureList.map");
 SR_STATIC_ASSERT(offsetof(TextureList, mic) == 0x1100, "TextureList.mic");
 SR_STATIC_ASSERT(offsetof(TextureList, twitter) == 0x1104, "TextureList.twitter");
 SR_STATIC_ASSERT(offsetof(TextureList, logo) == 0x1108, "TextureList.logo");

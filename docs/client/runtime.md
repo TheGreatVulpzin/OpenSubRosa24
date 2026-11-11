@@ -1,6 +1,6 @@
-# Debug, timers and Steam
+# Debug and timers
 
-Files: `src/client/debug/debug.c`, `src/client/setup/timers.c`, `src/client/setup/game.c`, `src/client/steam/steam.c`.
+Files: `src/client/debug/debug.c`, `src/client/setup/timers.c`, `src/client/setup/game.c`.
 
 ## Debug display
 
@@ -17,17 +17,6 @@ A timer (`sr_data_timer[256]`, 0x58 bytes each) has a name of up to 63 character
 
 - `resettimer(index, name)` copies the name and clears the total of cycles. The milliseconds keep their value. A name of 64 characters or more runs into the start of the cycle count.
 - `starttimer(index)` stores the processor cycle count as the start.
-
-## Steam
-
-`steam_on` (`cl_data_steam_on`) is 1 after `steam_init` succeeds.
-
-- `steam_init` asks Steam to restart the game through the Steam client. If Steam does not restart it, `steam_init` starts the Steam interface. The result is 1 when Steam restarts the game or starts, and 0 when the interface does not start.
-- `steam_shutdown` stops the interface and clears the flag. `steam_update` runs the callbacks when the flag is set.
-- `steam_getname(buffer)` copies the Steam name of the player and returns 1. With the flag clear it returns 0 and does not write.
-- `steam_getid(id)` writes the 64 bit Steam id of the player. With the flag clear it does not write.
-
-`steam_requestticket` and `steam_requestauthticket` request a ticket from Steam.
 
 ## Small hooks
 

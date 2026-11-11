@@ -32,3 +32,5 @@ rva,name,evidence
 0xd38c0,voiceoptionsmenu,Linux client symbol and matching calls
 0xd4700,physicssimulation,"Runs the particle, object, human, item and bond simulations and the time to live functions in the order of the server tick."
 0x645e0,timetolive_records,"Counts down the time to live of each 0x5c byte record of a table and removes the ones that reach 0, as checksimulation calls it after the sprite simulations."
+0x107c40,drawbitmaptexcoord,"Draws a textured rectangle with a texture coordinate pair for each corner. Same shape as drawbitmap. The Linux client has drawbitmaptexcoord next to drawbitmap."
+0x107d80,drawlinebox,"Draws the outline of a rectangle with four smooth lines. The Linux client has drawlinebox after drawbitmaptexcoord."

@@ -435,11 +435,11 @@ Whole-client comparisons retain 85, 285 and 280 matching calls for the menu and 
 
 ## Setup and main loop, first part (group C7)
 
-Branch `client/c7`. The plan of the group is `build/plans/c7-plan.md` (not versioned). Part A has 13 functions that pass their tests (`analysis/client_win/adopted_C7.txt`): `reset` (the JPEG restart, in `src/client/image/jpeg.c`), `updateplayticket`, `resettimer`, `starttimer`, `debug_addcross`, `debug_addataint`, `debug_addatafloat`, `debug_writelogfile`, `steam_init`, `steam_shutdown`, `steam_update`, `steam_getname` and `steam_getid`. The page is `docs/client/runtime.md`.
+Branch `client/c7`. The plan of the group is `build/plans/c7-plan.md` (not versioned). Part A has 13 functions that pass their tests (`analysis/client_win/adopted_C7.txt`): `reset` (the JPEG restart, in `src/client/image/jpeg.c`), `updateplayticket`, `resettimer`, `starttimer`, `debug_addcross`, `debug_addataint`, `debug_addatafloat`, and `debug_writelogfile`. The page is `docs/client/runtime.md`.
 
-Tests: the four Steam functions with a recorded call have 1 call each, the same. The synthetic cases are in `instrumentation/client/synth_setup.py` (`jpeg`, `timers`, `debug`, `debugoff`, `log`, `ticket`, `mouseon`, `mouseoff`): `reset` 3 calls, `resettimer` 20, `starttimer` 5, `debug_addcross` 4, `debug_addatafloat` 14, `debug_addataint` 116 (one call skipped), `debug_writelogfile` 2 and `updateplayticket` 1, all the same. The test ignores the processor cycle count that `starttimer` stores.
+Tests: the synthetic cases are in `instrumentation/client/synth_setup.py` (`jpeg`, `timers`, `debug`, `debugoff`, `log`, `ticket`, `mouseon`, `mouseoff`): `reset` 3 calls, `resettimer` 20, `starttimer` 5, `debug_addcross` 4, `debug_addatafloat` 14, `debug_addataint` 116 (one call skipped), `debug_writelogfile` 2 and `updateplayticket` 1, all the same. The test ignores the processor cycle count that `starttimer` stores.
 
-`reactivategame` is written (`src/client/setup/game.c`) but not adopted. It calls functions that use OpenGL, and the offline test skips them. It is in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows it works. `steam_requestticket` and `steam_requestauthticket` are not written: they use a Steam callback object.
+`reactivategame` is written (`src/client/setup/game.c`) but not adopted. It calls functions that use OpenGL, and the offline test skips them. It is in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows it works. The Steam functions (`steam_*`) have no clean code. They are glue for the Steam SDK, and the client keeps them as they are.
 
 `reset` was in the list of C7 only because of its generic name. It belongs to the JPEG decoder, and the image code calls it directly now.
 
@@ -476,3 +476,15 @@ GHIDRA_MCP_BINARY=original/client/subrosa.exe powershell -File instrumentation/g
 ```
 
 The copy of the project has no function names of the client. Ghidra shows `FUN_` names. Look up each address in `analysis/client_win/functions.csv` (RVA = address minus `0x400000`).
+
+## Rendering, first part (group C3)
+
+The page is `docs/client/render.md`. The code is in `src/client/render/`.
+
+Adopted (`analysis/client_win/adopted_C3.txt`): the 2D shapes (`drawbitmap`, `drawmousecursor`, `drawcircle`), `drawtext`, the round indicators (`drawplayerindicator`, `drawcircleindicator`), two OpenGL states (`disabletwosidedstencil`, `glstateshadowtwoside`), `compileprogramobject`, and the drawing of models, landscape, sky and shadow (`rendermodel`, `rendertrackmodel`, `renderlandscape`, `renderframeatmosphere`, `rendermodelshadow`).
+
+Written but not adopted (`adopted_C3_pending.txt`): no recorded call reaches them, or the test skips them because they call OpenGL extensions through the slots. They have no clean code in the game until a test with the game window shows that they work: `drawbitmaptexcoord`, `drawlinebox`, `drawcirclefill`, `enabletwosidedstencil`, `glstatenormal`, `setupprogramobjects`, `rendersphere`, `rendermodelwire`, `rendermodelnormals`, `boxinsidefrustum`.
+
+Tests: `drawtext` has a variable argument list, so the harness cannot call it. Its callers `drawdisplay`, `drawhud`, `drawhelp`, `drawplayerinfo` and `frame_drawmessages` call the clean `drawtext` in the test. Their OpenGL hash and memory are the same as the original on every recorded call. The harness hashes every OpenGL call, so a wrong vertex shows as a difference.
+
+The model, landscape, sky and shadow functions use the slots of the extensions (multitexture, buffers, programs). The harness treats a function with extension calls as one that only the client runs when it cannot compare it. See the results in the gate summary.

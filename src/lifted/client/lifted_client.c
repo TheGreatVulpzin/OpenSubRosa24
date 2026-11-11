@@ -5,7 +5,7 @@
 #include "lift_os_client.h"
 #include "lift_gl_client.h"
 
-static void *lf_imports[172];
+static void *lf_imports[177];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -54322,66 +54322,6 @@ void __cdecl lf_6d7d0(void *param_1,int param_2,int param_3)
 #undef DAT_09f67760
 #undef memcpy
 
-/* ---------------------------------------------------------------- 0x6d860 */
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(61, "OPENGL32.DLL", "glVertex2fv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(70, "MSVCR100.DLL", "cos"))
-#define local_14 (*(float *)(lf_frame + 0x1c))
-#define local_10 (*(int *)(lf_frame + 0x20))
-#define local_c (*(float *)(lf_frame + 0x24))
-#define local_8 (*(float *)(lf_frame + 0x28))
-void __cdecl lf_6d860(float param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
-          float param_7)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-  double dVar1;
-
-
-
-
-  
-  glEnable(0xb20);
-  glDisable(0xde1);
-  glBegin(1);
-  glColor4f(param_4,param_5,param_6,param_7);
-  local_14 = 0.0;
-  for (local_10 = 0; local_10 < 0x40; local_10 = local_10 + 1) {
-    dVar1 = sin((double)local_14);
-    local_c = (float)(dVar1 * param_3 + param_1);
-    dVar1 = cos((double)local_14);
-    local_8 = (float)(param_2 - dVar1 * param_3);
-    glVertex2fv(&local_c);
-    local_14 = (float)(local_14 + 0.0981747704246875);
-    dVar1 = sin((double)local_14);
-    local_c = (float)(dVar1 * param_3 + param_1);
-    dVar1 = cos((double)local_14);
-    local_8 = (float)(param_2 - dVar1 * param_3);
-    glVertex2fv(&local_c);
-  }
-  glEnd();
-  glEnable(0xde1);
-  glDisable(0xb20);
-  return;
-}
-#undef glEnable
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glVertex2fv
-#undef glDisable
-#undef sin
-#undef cos
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x6d990 */
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
@@ -54438,89 +54378,6 @@ void __cdecl lf_6d990(float param_1,float param_2,float param_3,float param_4,fl
 #undef glDisable
 #undef sin
 #undef cos
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x6dac0 */
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(61, "OPENGL32.DLL", "glVertex2fv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(70, "MSVCR100.DLL", "cos"))
-#define local_18 (*(float *)(lf_frame + 0x18))
-#define local_14 (*(float *)(lf_frame + 0x1c))
-#define local_10 (*(int *)(lf_frame + 0x20))
-#define local_c (*(float *)(lf_frame + 0x24))
-#define local_8 (*(float *)(lf_frame + 0x28))
-void __cdecl lf_6dac0(float param_1,float param_2,float param_3,float param_4,float param_5,
-                   float param_6,float param_7,float param_8)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-  int iVar1;
-  double dVar2;
-
-
-
-
-
-  
-  glDisable(0xde1);
-  glBegin(4);
-  glColor4f(param_4,param_5,param_6,param_7);
-  local_18 = param_8;
-  for (local_10 = 0; local_10 < 0x40; local_10 = local_10 + 1) {
-    iVar1 = local_10;
-    if (0x1f < local_10) {
-      iVar1 = 0x40 - local_10;
-    }
-    local_14 = (float)(1.75 - (float)iVar1 * 0.25);
-    if (local_14 < 1.0) {
-      local_14 = 1.0;
-    }
-    local_c = param_1;
-    local_8 = param_2;
-    glVertex2fv(&local_c);
-    dVar2 = sin((double)local_18);
-    local_c = (float)(dVar2 * param_3 * local_14 + param_1);
-    dVar2 = cos((double)local_18);
-    local_8 = (float)(param_2 - dVar2 * param_3 * local_14);
-    glVertex2fv(&local_c);
-    local_18 = (float)(local_18 + 0.0981747704246875);
-    if (local_10 + 1 < 0x20) {
-      iVar1 = local_10 + 1;
-    }
-    else {
-      iVar1 = 0x40 - (local_10 + 1);
-    }
-    local_14 = (float)(1.75 - (float)iVar1 * 0.25);
-    if (local_14 < 1.0) {
-      local_14 = 1.0;
-    }
-    dVar2 = sin((double)local_18);
-    local_c = (float)(dVar2 * param_3 * local_14 + param_1);
-    dVar2 = cos((double)local_18);
-    local_8 = (float)(param_2 - dVar2 * param_3 * local_14);
-    glVertex2fv(&local_c);
-  }
-  glEnd();
-  glEnable(0xde1);
-  return;
-}
-#undef glEnable
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glVertex2fv
-#undef glDisable
-#undef sin
-#undef cos
-#undef local_18
 #undef local_14
 #undef local_10
 #undef local_c
@@ -54732,84 +54589,6 @@ void __cdecl lf_6dcb0(void)
 #undef local_18
 #undef local_14
 #undef local_10
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x6e3c0 */
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(71, "OPENGL32.DLL", "glLineWidth"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(72, "OPENGL32.DLL", "glVertex2f"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(70, "MSVCR100.DLL", "cos"))
-#define local_c (*(undefined4 *)(lf_frame + 0x14))
-#define local_8 (*(undefined4 *)(lf_frame + 0x18))
-void __cdecl lf_6e3c0(float param_1,float param_2,float param_3,float param_4)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  double dVar1;
-  float fVar2;
-
-
-  
-  glDisable(0xde1);
-  glColor4f(0.0,0.0,0.0,0.25);
-  glBegin(4);
-  *(float *)&((*(float *)((uchar *)&local_c + 0))) = 0.0;
-  for (local_8 = 0; local_8 < 0x40; local_8 = local_8 + 1) {
-    glVertex2f(param_1,param_2);
-    dVar1 = cos((double)(*(float *)((uchar *)&local_c + 0)));
-    fVar2 = (float)(param_2 - dVar1 * param_3);
-    dVar1 = sin((double)(*(float *)((uchar *)&local_c + 0)));
-    glVertex2f((float)(dVar1 * param_3 + param_1),fVar2);
-    *(float *)&((*(float *)((uchar *)&local_c + 0))) = (float)((*(float *)((uchar *)&local_c + 0)) + 0.0981747704246875);
-    dVar1 = cos((double)(*(float *)((uchar *)&local_c + 0)));
-    fVar2 = (float)(param_2 - dVar1 * param_3);
-    dVar1 = sin((double)(*(float *)((uchar *)&local_c + 0)));
-    glVertex2f((float)(dVar1 * param_3 + param_1),fVar2);
-  }
-  glEnd();
-  glLineWidth(2.0);
-  glBegin(1);
-  glColor3f(0.0,0.0,0.0);
-  *(float *)&((*(float *)((uchar *)&local_c + 0))) = 0.0;
-  for (local_8 = 0; local_8 < 0x40; local_8 = local_8 + 1) {
-    dVar1 = cos((double)(*(float *)((uchar *)&local_c + 0)));
-    fVar2 = (float)(param_2 - dVar1 * param_3);
-    dVar1 = sin((double)(*(float *)((uchar *)&local_c + 0)));
-    glVertex2f((float)(dVar1 * param_3 + param_1),fVar2);
-    *(float *)&((*(float *)((uchar *)&local_c + 0))) = (float)((*(float *)((uchar *)&local_c + 0)) + 0.0981747704246875);
-    dVar1 = cos((double)(*(float *)((uchar *)&local_c + 0)));
-    fVar2 = (float)(param_2 - dVar1 * param_3);
-    dVar1 = sin((double)(*(float *)((uchar *)&local_c + 0)));
-    glVertex2f((float)(dVar1 * param_3 + param_1),fVar2);
-  }
-  glColor3f(0.75,0.75,0.75);
-  glVertex2f(param_1,param_2);
-  dVar1 = cos((double)param_4);
-  fVar2 = (float)(param_2 - dVar1 * param_3);
-  dVar1 = sin((double)param_4);
-  glVertex2f((float)(dVar1 * param_3 + param_1),fVar2);
-  glEnd();
-  glEnable(0xde1);
-  glLineWidth(1.0);
-  return;
-}
-#undef glEnable
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glColor3f
-#undef glLineWidth
-#undef glVertex2f
-#undef glDisable
-#undef sin
-#undef cos
-#undef local_c
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x6e6b0 */
@@ -58765,7 +58544,7 @@ void __cdecl lf_75d90(undefined4 param_1,undefined4 *param_2,undefined4 param_3,
 #define _DAT_1a007d00 (*(float *)SR_VA(0x1a007d00))
 #define _DAT_1a007d04 (*(float *)SR_VA(0x1a007d04))
 #define _DAT_1a007d08 (*(float *)SR_VA(0x1a007d08))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
@@ -58777,14 +58556,14 @@ void __cdecl lf_75d90(undefined4 param_1,undefined4 *param_2,undefined4 param_3,
 #define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
 #define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(74, "OPENGL32.DLL", "glNormal3fv"))
-#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(75, "OPENGL32.DLL", "glColor3fv"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
-#define glClearStencil ((void (__stdcall *)(int))LF_IMPORT(80, "OPENGL32.DLL", "glClearStencil"))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
+#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(72, "OPENGL32.DLL", "glNormal3fv"))
+#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(73, "OPENGL32.DLL", "glColor3fv"))
+#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(74, "OPENGL32.DLL", "glBlendFunc"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
+#define glClearStencil ((void (__stdcall *)(int))LF_IMPORT(78, "OPENGL32.DLL", "glClearStencil"))
+#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(79, "OPENGL32.DLL", "glStencilMask"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
@@ -59717,7 +59496,7 @@ void __cdecl lf_75f10(void)
 #define DAT_0bb330c4 (*(int *)SR_VA(0xbb330c4))
 #define _DAT_1a007cc8 (*(float *)SR_VA(0x1a007cc8))
 #define _DAT_1a007ccc (*(float *)SR_VA(0x1a007ccc))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
@@ -59725,23 +59504,23 @@ void __cdecl lf_75f10(void)
 #define glTexCoord2f ((void (__stdcall *)(float, float))LF_IMPORT(56, "OPENGL32.DLL", "glTexCoord2f"))
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(72, "OPENGL32.DLL", "glVertex2f"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glClearStencil ((void (__stdcall *)(int))LF_IMPORT(80, "OPENGL32.DLL", "glClearStencil"))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
-#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(82, "OPENGL32.DLL", "glOrtho"))
-#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(83, "OPENGL32.DLL", "glLoadIdentity"))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
-#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(86, "OPENGL32.DLL", "glStencilFunc"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(80, "OPENGL32.DLL", "glVertex2f"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glClearStencil ((void (__stdcall *)(int))LF_IMPORT(78, "OPENGL32.DLL", "glClearStencil"))
+#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(79, "OPENGL32.DLL", "glStencilMask"))
+#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(81, "OPENGL32.DLL", "glOrtho"))
+#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
+#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
+#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(85, "OPENGL32.DLL", "glStencilFunc"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glCopyTexSubImage2D ((void (__stdcall *)(uint, int, int, int, int, int, int, int))LF_IMPORT(87, "OPENGL32.DLL", "glCopyTexSubImage2D"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
-#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(89, "OPENGL32.DLL", "glStencilOp"))
+#define glCopyTexSubImage2D ((void (__stdcall *)(uint, int, int, int, int, int, int, int))LF_IMPORT(86, "OPENGL32.DLL", "glCopyTexSubImage2D"))
+#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(87, "OPENGL32.DLL", "glColorMask"))
+#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(88, "OPENGL32.DLL", "glStencilOp"))
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 #define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
 #define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
@@ -60089,166 +59868,6 @@ void __cdecl lf_77c70(void)
 #undef local_18
 #undef local_14
 #undef local_10
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x78810 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_102fe2b0 (*(undefined *)SR_VA(0x102fe2b0))
-#define DAT_12e7d654 (*(int *)SR_VA(0x12e7d654))
-#define DAT_102fe2bc (*(undefined *)SR_VA(0x102fe2bc))
-#define DAT_102fe2c8 (*(undefined *)SR_VA(0x102fe2c8))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
-#define DAT_1a0750c4 (*(undefined *)SR_VA(0x1a0750c4))
-#define DAT_1a007ccc (*(undefined *)SR_VA(0x1a007ccc))
-#define DAT_1a007cc8 (*(undefined *)SR_VA(0x1a007cc8))
-#define DAT_00528490 (*(uint *)SR_VA(0x528490))
-#define PTR_GLee_Lazy_glUseProgramObjectARB_00515b18 (*(glUseProgramObjectARB * *)SR_VA(0x515b18))
-#define DAT_005284a8 (*(int *)SR_VA(0x5284a8))
-#define PTR_GLee_Lazy_glUniform3fvARB_00515b48 (*(glUniform3fvARB * *)SR_VA(0x515b48))
-#define DAT_005284b0 (*(int *)SR_VA(0x5284b0))
-#define DAT_14711c4c (*(int *)SR_VA(0x14711c4c))
-#define DAT_102fe2d4 (*(undefined *)SR_VA(0x102fe2d4))
-#define PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8 (*(glMultiTexCoord3fvARB * *)SR_VA(0x5158c8))
-#define _DAT_1a007cc8 (*(float *)SR_VA(0x1a007cc8))
-#define _DAT_1a007ccc (*(float *)SR_VA(0x1a007ccc))
-#define _DAT_102fe2d4 (*(float *)SR_VA(0x102fe2d4))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(53, "OPENGL32.DLL", "glVertex3f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
-#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(82, "OPENGL32.DLL", "glOrtho"))
-#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(83, "OPENGL32.DLL", "glLoadIdentity"))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
-#define GLee_Lazy_glMultiTexCoord3fvARB ((void (__cdecl *)(uint, float *))SR_FN(0x40ee80))
-#define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
-#define GLee_Lazy_glUniform3fvARB ((void (__cdecl *)(int, int, float *))SR_FN(0x410cd0))
-#define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
-#define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
-#define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_14 (*(float (*)[3])(lf_frame + 0x1c))
-#define local_8 (*(uint *)(lf_frame + 0x28))
-void __cdecl lf_78810(float param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  starttimer(DAT_12e7d654);
-  glColorMask('\x01','\x01','\x01','\0');
-  glDepthMask('\0');
-  glDisable(0xb71);
-  glDisable(0xb44);
-  glEnable(0xbe2);
-  glBlendFunc(1,0x302);
-  glViewport(0,0,(int)(longlong)_DAT_1a007cc8,(int)(longlong)_DAT_1a007ccc);
-  glMatrixMode(0x1701);
-  glLoadIdentity();
-  glOrtho(0.0,1.0,0.0,1.0,0.25,16384.0);
-  glMatrixMode(0x1700);
-  glLoadIdentity();
-  glMatrixMode(0x1702);
-  glLoadIdentity();
-  glLightfv(0x4000,0x1203,(float *)&DAT_1a00cd78);
-  (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(DAT_00528490);
-  (*PTR_GLee_Lazy_glUniform3fvARB_00515b48)(DAT_005284a8,1,(float *)&DAT_1a0750c4);
-  (*PTR_GLee_Lazy_glUniform3fvARB_00515b48)(DAT_005284b0,1,(float *)&DAT_1a00cd78);
-  glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_14711c4c * 0x70));
-  glBegin(7);
-  scalevector(local_14,(float *)&DAT_102fe2b0,(float)(_DAT_102fe2d4 * -1.0));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2bc,(float)(param_1 * _DAT_102fe2d4));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2c8,-1.0);
-  (*PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8)(0x84c1,local_14);
-  glVertex3f(0.0,1.0,-16383.9375);
-  scalevector(local_14,(float *)&DAT_102fe2b0,(float)(_DAT_102fe2d4 * 1.0));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2bc,(float)(param_1 * _DAT_102fe2d4));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2c8,-1.0);
-  (*PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8)(0x84c1,local_14);
-  glVertex3f(1.0,1.0,-16383.9375);
-  scalevector(local_14,(float *)&DAT_102fe2b0,(float)(_DAT_102fe2d4 * 1.0));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2bc,(float)(-param_1 * _DAT_102fe2d4));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2c8,-1.0);
-  (*PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8)(0x84c1,local_14);
-  glVertex3f(1.0,0.0,-16383.9375);
-  scalevector(local_14,(float *)&DAT_102fe2b0,(float)(_DAT_102fe2d4 * -1.0));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2bc,(float)(-param_1 * _DAT_102fe2d4));
-  scaleaddvectors(local_14,local_14,(float *)&DAT_102fe2c8,-1.0);
-  (*PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8)(0x84c1,local_14);
-  glVertex3f(0.0,0.0,-16383.9375);
-  glEnd();
-  (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(0);
-  glEnable(0xb71);
-  glDepthFunc(0x203);
-  glDepthMask('\x01');
-  glEnable(0xb44);
-  glFrontFace(0x900);
-  itemtimetolive(DAT_12e7d654);
-  return;
-}
-#undef DAT_00526650
-#undef DAT_102fe2b0
-#undef DAT_12e7d654
-#undef DAT_102fe2bc
-#undef DAT_102fe2c8
-#undef DAT_17f4b86c
-#undef DAT_1a00cd78
-#undef DAT_1a0750c4
-#undef DAT_1a007ccc
-#undef DAT_1a007cc8
-#undef DAT_00528490
-#undef PTR_GLee_Lazy_glUseProgramObjectARB_00515b18
-#undef DAT_005284a8
-#undef PTR_GLee_Lazy_glUniform3fvARB_00515b48
-#undef DAT_005284b0
-#undef DAT_14711c4c
-#undef DAT_102fe2d4
-#undef PTR_GLee_Lazy_glMultiTexCoord3fvARB_005158c8
-#undef _DAT_1a007cc8
-#undef _DAT_1a007ccc
-#undef _DAT_102fe2d4
-#undef glFrontFace
-#undef glEnable
-#undef glEnd
-#undef glVertex3f
-#undef glBegin
-#undef glBindTexture
-#undef glBlendFunc
-#undef glLightfv
-#undef glOrtho
-#undef glLoadIdentity
-#undef glMatrixMode
-#undef glViewport
-#undef glDisable
-#undef glDepthMask
-#undef glColorMask
-#undef glDepthFunc
-#undef GLee_Lazy_glMultiTexCoord3fvARB
-#undef GLee_Lazy_glUseProgramObjectARB
-#undef GLee_Lazy_glUniform3fvARB
-#undef starttimer
-#undef itemtimetolive
-#undef scalevector
-#undef scaleaddvectors
-#undef _ftol2
-#undef __security_check_cookie
-#undef local_4
-#undef local_14
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x78c30 */
@@ -60928,7 +60547,7 @@ longlong __cdecl lf_79a90(void)
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(25, "MSVCR100.DLL", "rand"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(90, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(89, "MSVCR100.DLL", "srand"))
 #define FUN_00434010 ((void (__cdecl *)(void))SR_FN(0x434010))
 #define deletesound ((void (__cdecl *)(int))SR_FN(0x44f720))
 #define FUN_0046b140 ((__time64_t (__cdecl *)(__time64_t *))SR_FN(0x46b140))
@@ -61776,16 +61395,16 @@ void __cdecl lf_79ad0(void)
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(72, "OPENGL32.DLL", "glVertex2f"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(80, "OPENGL32.DLL", "glVertex2f"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
-#define glFlush ((void (__stdcall *)(void))LF_IMPORT(91, "OPENGL32.DLL", "glFlush"))
-#define glFinish ((void (__stdcall *)(void))LF_IMPORT(92, "OPENGL32.DLL", "glFinish"))
-#define alSourceStop ((void (__cdecl *)(uint))LF_IMPORT(93, "OPENAL32.DLL", "alSourceStop"))
-#define alGetSourcei ((void (__cdecl *)(uint, int, int *))LF_IMPORT(94, "OPENAL32.DLL", "alGetSourcei"))
-#define alSourceUnqueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(95, "OPENAL32.DLL", "alSourceUnqueueBuffers"))
-#define alSourceQueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(96, "OPENAL32.DLL", "alSourceQueueBuffers"))
+#define glFlush ((void (__stdcall *)(void))LF_IMPORT(90, "OPENGL32.DLL", "glFlush"))
+#define glFinish ((void (__stdcall *)(void))LF_IMPORT(91, "OPENGL32.DLL", "glFinish"))
+#define alSourceStop ((void (__cdecl *)(uint))LF_IMPORT(92, "OPENAL32.DLL", "alSourceStop"))
+#define alGetSourcei ((void (__cdecl *)(uint, int, int *))LF_IMPORT(93, "OPENAL32.DLL", "alGetSourcei"))
+#define alSourceUnqueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(94, "OPENAL32.DLL", "alSourceUnqueueBuffers"))
+#define alSourceQueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(95, "OPENAL32.DLL", "alSourceQueueBuffers"))
 #define alBufferData ((void (__cdecl *)(uint, int, void *, int, int))LF_IMPORT(20, "OPENAL32.DLL", "alBufferData"))
 #define alSourcef ((void (__cdecl *)(uint, int, float))LF_IMPORT(41, "OPENAL32.DLL", "alSourcef"))
 #define createaccount ((int (__cdecl *)(int))SR_FN(0x433be0))
@@ -61841,8 +61460,8 @@ void __cdecl lf_79ad0(void)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(50, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(51, "SDL2.DLL", "SDL_GetTicks"))
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(97, "SDL2.DLL", "SDL_Delay"))
-#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(98, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
+#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(96, "SDL2.DLL", "SDL_Delay"))
+#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(97, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
 #define __security_check_cookie(x) ((void)0)
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(26, "MSVCR100.DLL", "memset"))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
@@ -62702,7 +62321,7 @@ void __cdecl lf_7b100(void)
 #define DAT_09465350 (*(int *)SR_VA(0x9465350))
 #define setupframetextures ((void (__cdecl *)(void))SR_FN(0x4742f0))
 #define setupprogramobjects ((void (__cdecl *)(void))SR_FN(0x4d5690))
-#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(98, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
+#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(97, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
 void __cdecl lf_7d060(void)
 
 {
@@ -64156,29 +63775,15 @@ void __cdecl lf_82a00(void)
 #undef DAT_2a27d2e0
 #undef glEnable
 
-/* ---------------------------------------------------------------- 0x82a20 */
-#define DAT_2a27d2e0 (*(int *)SR_VA(0x2a27d2e0))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-void __cdecl lf_82a20(void)
-
-{
-  if (DAT_2a27d2e0 != 0) {
-    glDisable(0x8910);
-  }
-  return;
-}
-#undef DAT_2a27d2e0
-#undef glDisable
-
 /* ---------------------------------------------------------------- 0x82a40 */
 #define DAT_2a27d2e0 (*(int *)SR_VA(0x2a27d2e0))
 #define PTR_GLee_Lazy_glActiveStencilFaceEXT_00516450 (*(glActiveStencilFaceEXT * *)SR_VA(0x516450))
 #define DAT_2a27d2e4 (*(int *)SR_VA(0x2a27d2e4))
 #define PTR_GLee_Lazy_glStencilFuncSeparateATI_00516594 (*(glStencilFuncSeparateATI * *)SR_VA(0x516594))
 #define PTR_GLee_Lazy_glStencilOpSeparateATI_00516590 (*(glStencilOpSeparateATI * *)SR_VA(0x516590))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
-#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(86, "OPENGL32.DLL", "glStencilFunc"))
-#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(89, "OPENGL32.DLL", "glStencilOp"))
+#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(79, "OPENGL32.DLL", "glStencilMask"))
+#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(85, "OPENGL32.DLL", "glStencilFunc"))
+#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(88, "OPENGL32.DLL", "glStencilOp"))
 #define GLee_Lazy_glActiveStencilFaceEXT ((void (__cdecl *)(uint))SR_FN(0x417bb0))
 #define GLee_Lazy_glStencilOpSeparateATI ((void (__cdecl *)(uint, uint, uint, uint))SR_FN(0x4189a0))
 #define GLee_Lazy_glStencilFuncSeparateATI ((void (__cdecl *)(uint, uint, int, uint))SR_FN(0x4189d0))
@@ -64424,7 +64029,7 @@ void __cdecl lf_82b20(void)
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(72, "OPENGL32.DLL", "glVertex2f"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(80, "OPENGL32.DLL", "glVertex2f"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define drawcircleindicator ((void (__cdecl *)(float, float, float, float))SR_FN(0x46e3c0))
 #define drawmap ((void (__cdecl *)(int))SR_FN(0x484700))
@@ -64724,123 +64329,6 @@ void __cdecl lf_830f0(int param_1)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x844d0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_1471293c (*(int *)SR_VA(0x1471293c))
-#define DAT_17f4b840 (*(undefined *)SR_VA(0x17f4b840))
-#define DAT_17f4b844 (*(undefined *)SR_VA(0x17f4b844))
-#define DAT_17f4b848 (*(undefined *)SR_VA(0x17f4b848))
-#define DAT_17f4b84c (*(undefined *)SR_VA(0x17f4b84c))
-#define DAT_17f4b850 (*(undefined *)SR_VA(0x17f4b850))
-#define DAT_17f4b854 (*(undefined *)SR_VA(0x17f4b854))
-#define DAT_17f4b858 (*(undefined *)SR_VA(0x17f4b858))
-#define DAT_17f4b85c (*(undefined *)SR_VA(0x17f4b85c))
-#define DAT_17f4b860 (*(undefined *)SR_VA(0x17f4b860))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define DAT_17f4b870 (*(undefined *)SR_VA(0x17f4b870))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glCopyTexSubImage2D ((void (__stdcall *)(uint, int, int, int, int, int, int, int))LF_IMPORT(87, "OPENGL32.DLL", "glCopyTexSubImage2D"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
-#define free ((void (__cdecl *)(void *))LF_IMPORT(0, "MSVCR100.DLL", "free"))
-#define FUN_004d7850 ((void (__cdecl *)(int))SR_FN(0x4d7850))
-#define render_sectorlist ((void (__cdecl *)(int))SR_FN(0x4d7ed0))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
-#define setuporthoviewport ((void (__cdecl *)(int, int, int, int, float, float, float))SR_FN(0x506480))
-#define setupviewpoint ((void (__cdecl *)(float *, undefined4 *))SR_FN(0x5065d0))
-#define setuptexture ((void (__cdecl *)(int))SR_FN(0x50ac40))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x4c))
-#define local_38 (*(float (*)[12])(lf_frame + 0x18))
-#define local_8 (*(uint *)(lf_frame + 0x48))
-void __cdecl lf_844d0(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-
-  int iVar1;
-
-
-  
-  iVar1 = DAT_1471293c;
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  *(undefined4 *)(&DAT_17f4b840 + DAT_1471293c * 0x70) = 0x200;
-  *(undefined4 *)(&DAT_17f4b844 + iVar1 * 0x70) = 0x200;
-  *(undefined4 *)(&DAT_17f4b848 + iVar1 * 0x70) = 1;
-  *(undefined4 *)(&DAT_17f4b84c + iVar1 * 0x70) = 0x1907;
-  *(undefined4 *)(&DAT_17f4b850 + iVar1 * 0x70) = 0x8051;
-  *(undefined4 *)(&DAT_17f4b854 + iVar1 * 0x70) = 0x812f;
-  *(undefined4 *)(&DAT_17f4b858 + iVar1 * 0x70) = 0x812f;
-  *(undefined4 *)(&DAT_17f4b85c + iVar1 * 0x70) = 0x2601;
-  *(undefined4 *)(&DAT_17f4b860 + iVar1 * 0x70) = 0x2601;
-  free(*(void **)(&DAT_17f4b870 + iVar1 * 0x70));
-  *(undefined4 *)(&DAT_17f4b870 + iVar1 * 0x70) = 0;
-  setuptexture(iVar1);
-  glEnable(0xb71);
-  glDepthFunc(0x203);
-  glDepthMask('\x01');
-  glEnable(0xb44);
-  glFrontFace(0x900);
-  glDisable(0xbe2);
-  glClearColor(0.0,0.0,0.0,0.0);
-  glClear(0x4100);
-  local_38[0] = 1152.0;
-  local_38[1] = 0.0;
-  local_38[2] = 1152.0;
-  resetorientation(local_38 + 3);
-  rotateorientation((int)(local_38 + 3),local_38 + 3,1.5707963705062866);
-  setuporthoviewport(0,0,0x400,0x280,1024.0,1024.0,1024.0);
-  setupviewpoint(local_38,local_38 + 3);
-  glViewport(0,0,0x200,0x200);
-  FUN_004d7850(0);
-  render_sectorlist(2);
-  glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_1471293c * 0x70));
-  glCopyTexSubImage2D(0xde1,0,0,0,0,0,0x200,0x200);
-  return;
-}
-#undef DAT_00526650
-#undef DAT_1471293c
-#undef DAT_17f4b840
-#undef DAT_17f4b844
-#undef DAT_17f4b848
-#undef DAT_17f4b84c
-#undef DAT_17f4b850
-#undef DAT_17f4b854
-#undef DAT_17f4b858
-#undef DAT_17f4b85c
-#undef DAT_17f4b860
-#undef DAT_17f4b86c
-#undef DAT_17f4b870
-#undef glFrontFace
-#undef glEnable
-#undef glBindTexture
-#undef glViewport
-#undef glDisable
-#undef glClear
-#undef glClearColor
-#undef glDepthMask
-#undef glCopyTexSubImage2D
-#undef glDepthFunc
-#undef free
-#undef FUN_004d7850
-#undef render_sectorlist
-#undef resetorientation
-#undef rotateorientation
-#undef setuporthoviewport
-#undef setupviewpoint
-#undef setuptexture
-#undef __security_check_cookie
-#undef local_4
-#undef local_38
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x84700 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define DAT_079a514b (*(char *)SR_VA(0x79a514b))
@@ -64871,7 +64359,7 @@ void __cdecl lf_844d0(void)
 #define DAT_0f1813a0 (*(undefined *)SR_VA(0xf1813a0))
 #define DAT_0f1813fc (*(undefined *)SR_VA(0xf1813fc))
 #define DAT_0f181404 (*(undefined4 *)SR_VA(0xf181404))
-#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(71, "OPENGL32.DLL", "glLineWidth"))
+#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(98, "OPENGL32.DLL", "glLineWidth"))
 #define drawcircle ((void (__cdecl *)(float, float, float, float, float, float, float))SR_FN(0x46d860))
 #define drawplayerindicator ((void (__cdecl *)(float, float, float, float, float, float, float, float))SR_FN(0x46dac0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
@@ -75592,7 +75080,7 @@ void __cdecl lf_9b5d0(int param_1,int param_2,undefined4 param_3,undefined4 para
 #define _DAT_0e655fb0 (*(undefined4 *)SR_VA(0xe655fb0))
 #define _DAT_0e65bfb4 (*(undefined4 *)SR_VA(0xe65bfb4))
 #define _DAT_0e62c7a4 (*(undefined4 *)SR_VA(0xe62c7a4))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(90, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(89, "MSVCR100.DLL", "srand"))
 #define GLee_Lazy_glBindBufferARB ((void (__cdecl *)(uint, uint))SR_FN(0x4105a0))
 #define GLee_Lazy_glBufferDataARB ((void (__cdecl *)(uint, int, void *, uint))SR_FN(0x410660))
 #define createarea ((void (__cdecl *)(int, float *, int, int, int, float))SR_FN(0x437720))
@@ -76205,7 +75693,7 @@ void __cdecl lf_9c4f0(void)
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(71, "OPENGL32.DLL", "glLineWidth"))
+#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(98, "OPENGL32.DLL", "glLineWidth"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
@@ -83526,11 +83014,11 @@ void __cdecl lf_aa5a0(void)
 #define _DAT_1a007d10 (*(undefined4 *)SR_VA(0x1a007d10))
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(60, "OPENGL32.DLL", "glPolygonMode"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
@@ -83538,7 +83026,7 @@ void __cdecl lf_aa5a0(void)
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 #define alcCaptureStart ((void (__cdecl *)(void *))LF_IMPORT(103, "OPENAL32.DLL", "alcCaptureStart"))
 #define alcCaptureStop ((void (__cdecl *)(void *))LF_IMPORT(104, "OPENAL32.DLL", "alcCaptureStop"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(90, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(89, "MSVCR100.DLL", "srand"))
 #define GLee_Lazy_glGenBuffersARB ((void (__cdecl *)(int, uint *))SR_FN(0x410600))
 #define GLee_Lazy_glCreateShaderObjectARB ((uint (__cdecl *)(uint))SR_FN(0x4109a0))
 #define GLee_Lazy_glCreateProgramObjectARB ((uint (__cdecl *)(void))SR_FN(0x410a20))
@@ -83596,7 +83084,7 @@ void __cdecl lf_aa5a0(void)
 #define steam_getname ((bool (__cdecl *)(char *))SR_FN(0x50bd80))
 #define steam_getid ((void (__cdecl *)(undefined8 *))SR_FN(0x50bdc0))
 #define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(50, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(97, "SDL2.DLL", "SDL_Delay"))
+#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(96, "SDL2.DLL", "SDL_Delay"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define __aullshr ((ulonglong (__cdecl *)(void))SR_FN(0x50c810))
@@ -90687,73 +90175,6 @@ void __cdecl lf_c0a60(void)
 #undef local_20
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xc1380 */
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define DAT_1073fd30 (*(int *)SR_VA(0x1073fd30))
-#define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
-#define PTR_GLee_Lazy_glBindBufferARB_00515aa8 (*(glBindBufferARB * *)SR_VA(0x515aa8))
-#define DAT_14b129a8 (*(int *)SR_VA(0x14b129a8))
-#define DAT_00528350 (*(uint *)SR_VA(0x528350))
-#define PTR_GLee_Lazy_glUseProgramObjectARB_00515b18 (*(glUseProgramObjectARB * *)SR_VA(0x515b18))
-#define DAT_14712918 (*(int *)SR_VA(0x14712918))
-#define DAT_14b129ac (*(int *)SR_VA(0x14b129ac))
-#define DAT_01f7b4e0 (*(undefined *)SR_VA(0x1f7b4e0))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
-#define GLee_Lazy_glBindBufferARB ((void (__cdecl *)(uint, uint))SR_FN(0x4105a0))
-#define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
-void __cdecl lf_c1380(int param_1)
-
-{
-  (*PTR_GLee_Lazy_glBindBufferARB_00515aa8)(0x8892,*(uint *)(&DAT_01f7b4e0 + DAT_1073fd30 * 8));
-  glEnableClientState(0x8074);
-  glVertexPointer(3,0x1406,DAT_14b129a8 << 2,(void *)0x0);
-  if (param_1 == 0) {
-    (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(DAT_00528350);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_14712918 * 0x70));
-    glEnableClientState(0x8078);
-    glTexCoordPointer(2,0x1406,DAT_14b129a8 << 2,(void *)0xc);
-    glEnableClientState(0x8075);
-    glNormalPointer(0x1406,DAT_14b129a8 << 2,(void *)0x14);
-    glLightfv(0x4000,0x1203,(float *)&DAT_1a00cd78);
-  }
-  glDrawArrays(7,0,DAT_14b129ac);
-  glDisableClientState(0x8074);
-  if (param_1 == 0) {
-    glDisableClientState(0x8075);
-    glDisableClientState(0x8078);
-    (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(0);
-  }
-  (*PTR_GLee_Lazy_glBindBufferARB_00515aa8)(0x8892,0);
-  return;
-}
-#undef DAT_17f4b86c
-#undef DAT_1073fd30
-#undef DAT_1a00cd78
-#undef PTR_GLee_Lazy_glBindBufferARB_00515aa8
-#undef DAT_14b129a8
-#undef DAT_00528350
-#undef PTR_GLee_Lazy_glUseProgramObjectARB_00515b18
-#undef DAT_14712918
-#undef DAT_14b129ac
-#undef DAT_01f7b4e0
-#undef glBindTexture
-#undef glDisableClientState
-#undef glEnableClientState
-#undef glLightfv
-#undef glVertexPointer
-#undef glTexCoordPointer
-#undef glNormalPointer
-#undef glDrawArrays
-#undef GLee_Lazy_glBindBufferARB
-#undef GLee_Lazy_glUseProgramObjectARB
-
 /* ---------------------------------------------------------------- 0xc14a0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define DAT_180047a4 (*(int *)SR_VA(0x180047a4))
@@ -90804,11 +90225,11 @@ void __cdecl lf_c1380(int param_1)
 #define _DAT_1a007d10 (*(undefined4 *)SR_VA(0x1a007d10))
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(60, "OPENGL32.DLL", "glPolygonMode"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
@@ -97959,7 +97380,7 @@ void __cdecl lf_d12e0(int param_1,int param_2)
 #define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(32, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(70, "MSVCR100.DLL", "cos"))
-#define tan ((double (__cdecl *)(double))LF_IMPORT(111, "MSVCR100.DLL", "tan"))
+#define tan ((double (__cdecl *)(double))LF_IMPORT(107, "MSVCR100.DLL", "tan"))
 #define local_28 (*(float *)(lf_frame + 0x18))
 #define local_1c (*(float *)(lf_frame + 0x24))
 #define local_18 (*(float *)(lf_frame + 0x28))
@@ -98332,7 +97753,7 @@ float10 __cdecl lf_d21e0(float param_1)
 #define glGetString ((uchar * (__stdcall *)(uint))LF_IMPORT(17, "OPENGL32.DLL", "glGetString"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
-#define alGetString ((char * (__cdecl *)(int))LF_IMPORT(112, "OPENAL32.DLL", "alGetString"))
+#define alGetString ((char * (__cdecl *)(int))LF_IMPORT(108, "OPENAL32.DLL", "alGetString"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
 #define reactivategame ((void (__cdecl *)(void))SR_FN(0x47d060))
 #define checksimulation ((undefined4 (__cdecl *)(int))SR_FN(0x47d900))
@@ -98349,10 +97770,10 @@ float10 __cdecl lf_d21e0(float param_1)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
 #define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(50, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GL_GetAttribute ((int (__cdecl *)(int, int *))LF_IMPORT(113, "SDL2.DLL", "SDL_GL_GetAttribute"))
-#define SDL_SetWindowFullscreen ((int (__cdecl *)(void *, uint))LF_IMPORT(114, "SDL2.DLL", "SDL_SetWindowFullscreen"))
-#define SDL_SetWindowSize ((void (__cdecl *)(void *, int, int))LF_IMPORT(115, "SDL2.DLL", "SDL_SetWindowSize"))
-#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(116, "SDL2.DLL", "SDL_GL_SetAttribute"))
+#define SDL_GL_GetAttribute ((int (__cdecl *)(int, int *))LF_IMPORT(109, "SDL2.DLL", "SDL_GL_GetAttribute"))
+#define SDL_SetWindowFullscreen ((int (__cdecl *)(void *, uint))LF_IMPORT(110, "SDL2.DLL", "SDL_SetWindowFullscreen"))
+#define SDL_SetWindowSize ((void (__cdecl *)(void *, int, int))LF_IMPORT(111, "SDL2.DLL", "SDL_SetWindowSize"))
+#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(112, "SDL2.DLL", "SDL_GL_SetAttribute"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_4 (*(undefined4 *)(lf_frame + 0xac))
@@ -98815,7 +98236,7 @@ void __cdecl lf_d2290(void)
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(90, "MSVCR100.DLL", "srand"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(89, "MSVCR100.DLL", "srand"))
 #define FUN_0046b140 ((__time64_t (__cdecl *)(__time64_t *))SR_FN(0x46b140))
 #define optionreadwriteint ((void (__cdecl *)(undefined4 *, char *, int))SR_FN(0x4d3810))
 #define optionreadwritestring ((void (__cdecl *)(int, char *, int, int))SR_FN(0x4d3860))
@@ -99109,7 +98530,7 @@ void __cdecl lf_d3860(int param_1,char *param_2,int param_3,int param_4)
 #define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(72, "OPENGL32.DLL", "glVertex2f"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(80, "OPENGL32.DLL", "glVertex2f"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glClear ((void (__stdcall *)(uint))LF_IMPORT(46, "OPENGL32.DLL", "glClear"))
 #define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(47, "OPENGL32.DLL", "glClearColor"))
@@ -100703,129 +100124,6 @@ void __cdecl lf_d5690(void)
 #undef local_14
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xd6570 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_2a27d2c8 (*(int *)SR_VA(0x2a27d2c8))
-#define PTR_GLee_Lazy_glShaderSourceARB_00515b04 (*(glShaderSourceARB * *)SR_VA(0x515b04))
-#define PTR_GLee_Lazy_glGetInfoLogARB_00515b74 (*(glGetInfoLogARB * *)SR_VA(0x515b74))
-#define PTR_GLee_Lazy_glCompileShaderARB_00515b08 (*(glCompileShaderARB * *)SR_VA(0x515b08))
-#define PTR_GLee_Lazy_glAttachObjectARB_00515b10 (*(glAttachObjectARB * *)SR_VA(0x515b10))
-#define DAT_2a27d2cc (*(int *)SR_VA(0x2a27d2cc))
-#define PTR_GLee_Lazy_glLinkProgramARB_00515b14 (*(glLinkProgramARB * *)SR_VA(0x515b14))
-#define DAT_0052623c (*(undefined *)SR_VA(0x52623c))
-#define DAT_00528260 (*(undefined4 *)SR_VA(0x528260))
-#define DAT_00528264 (*(undefined *)SR_VA(0x528264))
-#define DAT_00528268 (*(undefined *)SR_VA(0x528268))
-#define DAT_0052826c (*(undefined *)SR_VA(0x52826c))
-#define DAT_1401e6c0 (*(undefined *)SR_VA(0x1401e6c0))
-#define DAT_167129e0 (*(undefined *)SR_VA(0x167129e0))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
-#define GLee_Lazy_glShaderSourceARB ((void (__cdecl *)(uint, int, char **, int *))SR_FN(0x4109d0))
-#define GLee_Lazy_glCompileShaderARB ((void (__cdecl *)(uint))SR_FN(0x410a00))
-#define GLee_Lazy_glAttachObjectARB ((void (__cdecl *)(uint, uint))SR_FN(0x410a40))
-#define GLee_Lazy_glLinkProgramARB ((void (__cdecl *)(uint))SR_FN(0x410a70))
-#define GLee_Lazy_glGetInfoLogARB ((void (__cdecl *)(uint, int, int *, char *))SR_FN(0x410ee0))
-#define __security_check_cookie(x) ((void)0)
-#define strcat ((char * (__cdecl *)(char *, char *))LF_IMPORT(27, "MSVCR100.DLL", "strcat"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x9c))
-#define local_8c (*(char (*)[128])(lf_frame + 0x14))
-#define local_c (*(uint *)(lf_frame + 0x94))
-#define local_8 (*(int *)(lf_frame + 0x98))
-undefined4 __cdecl lf_d6570(int param_1,int param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0xa0];
-
-
-
-
-  
-  local_c = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  if ((param_2 != 0) || (param_3 != 0)) {
-    if ((param_2 != 0) && (DAT_2a27d2c8 != 0)) {
-      (*PTR_GLee_Lazy_glShaderSourceARB_00515b04)
-                (*(uint *)(&DAT_00528264 + param_1 * 0x50),1,(char **)&param_2,(int *)0x0);
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528264 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-      (*PTR_GLee_Lazy_glCompileShaderARB_00515b08)(*(uint *)(&DAT_00528264 + param_1 * 0x50));
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528264 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-      (*PTR_GLee_Lazy_glAttachObjectARB_00515b10)
-                ((&DAT_00528260)[param_1 * 0x14],*(uint *)(&DAT_00528264 + param_1 * 0x50));
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528264 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-    }
-    if ((param_3 != 0) && (DAT_2a27d2cc != 0)) {
-      (*PTR_GLee_Lazy_glShaderSourceARB_00515b04)
-                (*(uint *)(&DAT_00528268 + param_1 * 0x50),1,(char **)&param_3,(int *)0x0);
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528268 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-      (*PTR_GLee_Lazy_glCompileShaderARB_00515b08)(*(uint *)(&DAT_00528268 + param_1 * 0x50));
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528268 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-      (*PTR_GLee_Lazy_glAttachObjectARB_00515b10)
-                ((&DAT_00528260)[param_1 * 0x14],*(uint *)(&DAT_00528268 + param_1 * 0x50));
-      (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-                (*(uint *)(&DAT_00528268 + param_1 * 0x50),0x10000,&local_8,&DAT_167129e0);
-      if (0 < local_8) {
-        strcat(&DAT_1401e6c0,&DAT_167129e0);
-      }
-    }
-    (*PTR_GLee_Lazy_glLinkProgramARB_00515b14)((&DAT_00528260)[param_1 * 0x14]);
-    (*PTR_GLee_Lazy_glGetInfoLogARB_00515b74)
-              ((&DAT_00528260)[param_1 * 0x14],0x10000,&local_8,&DAT_167129e0);
-    if (0 < local_8) {
-      strcat(&DAT_1401e6c0,&DAT_167129e0);
-    }
-    *(undefined4 *)(&DAT_0052826c + param_1 * 0x50) = 1;
-    sprintf(local_8c,&DAT_0052623c);
-    strcat(&DAT_1401e6c0,local_8c);
-  }
-  return *(undefined4 *)(&DAT_0052826c + param_1 * 0x50);
-}
-#undef DAT_00526650
-#undef DAT_2a27d2c8
-#undef PTR_GLee_Lazy_glShaderSourceARB_00515b04
-#undef PTR_GLee_Lazy_glGetInfoLogARB_00515b74
-#undef PTR_GLee_Lazy_glCompileShaderARB_00515b08
-#undef PTR_GLee_Lazy_glAttachObjectARB_00515b10
-#undef DAT_2a27d2cc
-#undef PTR_GLee_Lazy_glLinkProgramARB_00515b14
-#undef DAT_0052623c
-#undef DAT_00528260
-#undef DAT_00528264
-#undef DAT_00528268
-#undef DAT_0052826c
-#undef DAT_1401e6c0
-#undef DAT_167129e0
-#undef sprintf
-#undef GLee_Lazy_glShaderSourceARB
-#undef GLee_Lazy_glCompileShaderARB
-#undef GLee_Lazy_glAttachObjectARB
-#undef GLee_Lazy_glLinkProgramARB
-#undef GLee_Lazy_glGetInfoLogARB
-#undef __security_check_cookie
-#undef strcat
-#undef local_4
-#undef local_8c
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xd6860 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define DAT_14261828 (*(int *)SR_VA(0x14261828))
@@ -101059,8 +100357,8 @@ void __cdecl lf_d6c70(undefined4 *param_1,undefined4 *param_2)
 #define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(58, "OPENGL32.DLL", "glVertex3fv"))
 #define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
 #define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(74, "OPENGL32.DLL", "glNormal3fv"))
-#define glScalef ((void (__stdcall *)(float, float, float))LF_IMPORT(117, "OPENGL32.DLL", "glScalef"))
+#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(72, "OPENGL32.DLL", "glNormal3fv"))
+#define glScalef ((void (__stdcall *)(float, float, float))LF_IMPORT(113, "OPENGL32.DLL", "glScalef"))
 #define setupobjectrender ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x5066b0))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_d6cb0(undefined4 *param_1,float param_2,int param_3)
@@ -101127,15 +100425,15 @@ void __cdecl lf_d6cb0(undefined4 *param_1,float param_2,int param_3)
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
 #define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(75, "OPENGL32.DLL", "glColor3fv"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
+#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(73, "OPENGL32.DLL", "glColor3fv"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
@@ -101253,100 +100551,6 @@ LAB_004d712f:
 #undef local_14
 #undef local_c
 
-/* ---------------------------------------------------------------- 0xd7150 */
-#define DAT_0b3f05b8 (*(undefined *)SR_VA(0xb3f05b8))
-#define DAT_0b3f05bc (*(undefined *)SR_VA(0xb3f05bc))
-#define PTR_GLee_Lazy_glActiveTextureARB_00515874 (*(glActiveTextureARB * *)SR_VA(0x515874))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
-#define DAT_14711c48 (*(int *)SR_VA(0x14711c48))
-#define DAT_0b3f05a4 (*(undefined *)SR_VA(0xb3f05a4))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
-#define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(75, "OPENGL32.DLL", "glColor3fv"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
-#define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
-#define setupobjectrender ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x5066b0))
-void __cdecl lf_d7150(int param_1,undefined4 *param_2,undefined4 *param_3,int param_4,int *param_5,
-           float *param_6)
-
-{
-  if (param_4 == 0) {
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + *param_5 * 0x70));
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c1);
-    glEnable(0xde1);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + param_5[1] * 0x70));
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c2);
-    glEnable(0xde1);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_14711c48 * 0x70));
-    glLightfv(0x4000,0x1203,(float *)&DAT_1a00cd78);
-  }
-  if (param_4 == 2) {
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + *param_5 * 0x70));
-  }
-  glPushMatrix();
-  setupobjectrender(param_2,param_3);
-  glColor3fv(param_6);
-  glEnableClientState(0x8074);
-  if ((param_4 == 0) || (param_4 == 2)) {
-    glEnableClientState(0x8078);
-    glEnableClientState(0x8075);
-  }
-  glVertexPointer(3,0x1406,*(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) << 2,
-                  *(void **)(&DAT_0b3f05b8 + param_1 * 0xe04));
-  if ((param_4 == 0) || (param_4 == 2)) {
-    glTexCoordPointer(2,0x1406,*(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) << 2,
-                      (void *)(*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) + 0xc));
-    glNormalPointer(0x1406,*(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) << 2,
-                    (void *)(*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) + 0x14));
-  }
-  glDrawArrays(4,0,*(int *)(&DAT_0b3f05bc + param_1 * 0xe04) * 3);
-  if ((param_4 == 0) || (param_4 == 2)) {
-    glDisableClientState(0x8078);
-    glDisableClientState(0x8075);
-  }
-  glDisableClientState(0x8074);
-  glPopMatrix();
-  if (param_4 == 0) {
-    glDisable(0xde1);
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c1);
-    glDisable(0xde1);
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c0);
-  }
-  return;
-}
-#undef DAT_0b3f05b8
-#undef DAT_0b3f05bc
-#undef PTR_GLee_Lazy_glActiveTextureARB_00515874
-#undef DAT_17f4b86c
-#undef DAT_1a00cd78
-#undef DAT_14711c48
-#undef DAT_0b3f05a4
-#undef glEnable
-#undef glBindTexture
-#undef glPopMatrix
-#undef glPushMatrix
-#undef glColor3fv
-#undef glDisableClientState
-#undef glEnableClientState
-#undef glLightfv
-#undef glDisable
-#undef glVertexPointer
-#undef glTexCoordPointer
-#undef glNormalPointer
-#undef glDrawArrays
-#undef GLee_Lazy_glActiveTextureARB
-#undef setupobjectrender
-
 /* ---------------------------------------------------------------- 0xd7380 */
 #define DAT_0b3f05a4 (*(undefined *)SR_VA(0xb3f05a4))
 #define DAT_0b3f05b8 (*(undefined *)SR_VA(0xb3f05b8))
@@ -101355,11 +100559,11 @@ void __cdecl lf_d7150(int param_1,undefined4 *param_2,undefined4 *param_3,int pa
 #define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(60, "OPENGL32.DLL", "glPolygonMode"))
 #define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
 #define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glScalef ((void (__stdcall *)(float, float, float))LF_IMPORT(117, "OPENGL32.DLL", "glScalef"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glScalef ((void (__stdcall *)(float, float, float))LF_IMPORT(113, "OPENGL32.DLL", "glScalef"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define setupobjectrender ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x5066b0))
 void __cdecl lf_d7380(int param_1,undefined4 *param_2,undefined4 *param_3,undefined4 *param_4,
                float param_5)
@@ -101826,15 +101030,15 @@ LAB_004d7b65:
 #define DAT_1a0750c4 (*(undefined *)SR_VA(0x1a0750c4))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glColorPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(118, "OPENGL32.DLL", "glColorPointer"))
 #define glDrawElements ((void (__stdcall *)(uint, int, uint, void *))LF_IMPORT(119, "OPENGL32.DLL", "glDrawElements"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
 #define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
 #define GLee_Lazy_glBindBufferARB ((void (__cdecl *)(uint, uint))SR_FN(0x4105a0))
 #define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
@@ -102248,10 +101452,10 @@ void __cdecl lf_d8290(void)
 #define s_shadowverts_00526264 ((char *)SR_VA(0x526264))
 #define DAT_01f7b4e0 (*(undefined *)SR_VA(0x1f7b4e0))
 #define DAT_0fffe284 (*(undefined *)SR_VA(0xfffe284))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define GLee_Lazy_glBindBufferARB ((void (__cdecl *)(uint, uint))SR_FN(0x4105a0))
 #define debug_addataint ((void (__cdecl *)(char *, undefined4))SR_FN(0x46aaa0))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
@@ -102449,96 +101653,6 @@ void __cdecl lf_d92a0(void)
 #undef local_24
 #undef local_20
 #undef local_14
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xd9770 */
-#define DAT_12e7d650 (*(int *)SR_VA(0x12e7d650))
-#define DAT_00528530 (*(uint *)SR_VA(0x528530))
-#define PTR_GLee_Lazy_glUseProgramObjectARB_00515b18 (*(glUseProgramObjectARB * *)SR_VA(0x515b18))
-#define DAT_00528544 (*(int *)SR_VA(0x528544))
-#define PTR_GLee_Lazy_glUniform3fvARB_00515b48 (*(glUniform3fvARB * *)SR_VA(0x515b48))
-#define DAT_14712974 (*(int *)SR_VA(0x14712974))
-#define PTR_GLee_Lazy_glActiveTextureARB_00515874 (*(glActiveTextureARB * *)SR_VA(0x515874))
-#define DAT_14712978 (*(int *)SR_VA(0x14712978))
-#define DAT_1471297c (*(int *)SR_VA(0x1471297c))
-#define PTR_GLee_Lazy_glBindBufferARB_00515aa8 (*(glBindBufferARB * *)SR_VA(0x515aa8))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define DAT_1a007d74 (*(undefined *)SR_VA(0x1a007d74))
-#define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
-#define GLee_Lazy_glBindBufferARB ((void (__cdecl *)(uint, uint))SR_FN(0x4105a0))
-#define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
-#define GLee_Lazy_glUniform3fvARB ((void (__cdecl *)(int, int, float *))SR_FN(0x410cd0))
-#define landscape_rendersector ((void (__cdecl *)(int))SR_FN(0x4d98e0))
-#define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
-#define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_d9770(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-  
-  starttimer(DAT_12e7d650);
-  if (param_1 == 0) {
-    (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(DAT_00528530);
-    (*PTR_GLee_Lazy_glUniform3fvARB_00515b48)(DAT_00528544,1,(float *)&DAT_1a00cd78);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_14712974 * 0x70));
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c1);
-    glEnable(0xde1);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_14712978 * 0x70));
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c2);
-    glEnable(0xde1);
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + DAT_1471297c * 0x70));
-  }
-  glEnableClientState(0x8074);
-  for (local_8 = 0; local_8 < 0x400; local_8 = local_8 + 1) {
-    if (*(int *)(&DAT_1a007d74 + local_8 * 0x14) != 10) {
-      landscape_rendersector(local_8);
-    }
-  }
-  (*PTR_GLee_Lazy_glBindBufferARB_00515aa8)(0x8892,0);
-  glDisableClientState(0x8074);
-  if (param_1 == 0) {
-    glDisable(0xde1);
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c1);
-    glDisable(0xde1);
-    (*PTR_GLee_Lazy_glActiveTextureARB_00515874)(0x84c0);
-    (*PTR_GLee_Lazy_glUseProgramObjectARB_00515b18)(0);
-  }
-  itemtimetolive(DAT_12e7d650);
-  return;
-}
-#undef DAT_12e7d650
-#undef DAT_00528530
-#undef PTR_GLee_Lazy_glUseProgramObjectARB_00515b18
-#undef DAT_00528544
-#undef PTR_GLee_Lazy_glUniform3fvARB_00515b48
-#undef DAT_14712974
-#undef PTR_GLee_Lazy_glActiveTextureARB_00515874
-#undef DAT_14712978
-#undef DAT_1471297c
-#undef PTR_GLee_Lazy_glBindBufferARB_00515aa8
-#undef DAT_17f4b86c
-#undef DAT_1a007d74
-#undef DAT_1a00cd78
-#undef glEnable
-#undef glBindTexture
-#undef glDisableClientState
-#undef glEnableClientState
-#undef glDisable
-#undef GLee_Lazy_glActiveTextureARB
-#undef GLee_Lazy_glBindBufferARB
-#undef GLee_Lazy_glUseProgramObjectARB
-#undef GLee_Lazy_glUniform3fvARB
-#undef landscape_rendersector
-#undef starttimer
-#undef itemtimetolive
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xd9fa0 */
@@ -102823,9 +101937,9 @@ void __cdecl lf_daa90(int param_1,int param_2,uint param_3,int param_4)
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glColorPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(118, "OPENGL32.DLL", "glColorPointer"))
 #define glDrawElements ((void (__stdcall *)(uint, int, uint, void *))LF_IMPORT(119, "OPENGL32.DLL", "glDrawElements"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
 #define local_c (*(int *)(lf_frame + 0x14))
@@ -102905,11 +102019,11 @@ void __cdecl lf_dabf0(int param_1,int param_2)
 #define DAT_1e1ab2d8 (*(undefined *)SR_VA(0x1e1ab2d8))
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(75, "OPENGL32.DLL", "glColor3fv"))
+#define glColor3fv ((void (__stdcall *)(float *))LF_IMPORT(73, "OPENGL32.DLL", "glColor3fv"))
 #define glDrawElements ((void (__stdcall *)(uint, int, uint, void *))LF_IMPORT(119, "OPENGL32.DLL", "glDrawElements"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
 #define local_c (*(int *)(lf_frame + 0x14))
@@ -102996,8 +102110,8 @@ void __cdecl lf_dadf0(int param_1,int param_2)
 #define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
 #define DAT_1e1aa284 (*(undefined *)SR_VA(0x1e1aa284))
 #define DAT_1e1ab2d8 (*(undefined *)SR_VA(0x1e1ab2d8))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
@@ -103175,287 +102289,14 @@ void __cdecl lf_daff0(int param_1)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xdb7c0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_12e7d64c (*(int *)SR_VA(0x12e7d64c))
-#define DAT_13fee6a0 (*(int *)SR_VA(0x13fee6a0))
-#define DAT_0b3f05a4 (*(undefined *)SR_VA(0xb3f05a4))
-#define DAT_0b3f05b8 (*(undefined *)SR_VA(0xb3f05b8))
-#define DAT_0b3f05bc (*(undefined *)SR_VA(0xb3f05bc))
-#define DAT_0b3f05c0 (*(undefined *)SR_VA(0xb3f05c0))
-#define DAT_0b3f05c4 (*(undefined *)SR_VA(0xb3f05c4))
-#define DAT_0b3f05c8 (*(undefined *)SR_VA(0xb3f05c8))
-#define DAT_1073ecc0 (*(undefined *)SR_VA(0x1073ecc0))
-#define DAT_1073eccc (*(undefined *)SR_VA(0x1073eccc))
-#define DAT_1073ecd8 (*(undefined *)SR_VA(0x1073ecd8))
-#define DAT_1073ece4 (*(undefined *)SR_VA(0x1073ece4))
-#define DAT_1073ecf0 (*(undefined *)SR_VA(0x1073ecf0))
-#define DAT_1073ecfc (*(undefined *)SR_VA(0x1073ecfc))
-#define DAT_13fee6a4 (*(undefined *)SR_VA(0x13fee6a4))
-#define DAT_1a00cd78 (*(undefined *)SR_VA(0x1a00cd78))
-#define glPopMatrix ((void (__stdcall *)(void))LF_IMPORT(63, "OPENGL32.DLL", "glPopMatrix"))
-#define glPushMatrix ((void (__stdcall *)(void))LF_IMPORT(64, "OPENGL32.DLL", "glPushMatrix"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
-#define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
-#define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
-#define setupobjectrender ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x5066b0))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_1c (*(float *)(lf_frame + 0x14))
-#define local_18 (*(float *)(lf_frame + 0x18))
-#define local_14 (*(float *)(lf_frame + 0x1c))
-#define local_10 (*(uint *)(lf_frame + 0x20))
-#define local_c (*(float *)(lf_frame + 0x24))
-#define local_8 (*(int *)(lf_frame + 0x28))
-void __cdecl lf_db7c0(int param_1,undefined4 *param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-  float10 fVar1;
-
-
-
-
-
-
-  
-  local_10 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  starttimer(DAT_12e7d64c);
-  local_c = -512.0;
-  fVar1 = (float10)dotproduct((float *)&DAT_1a00cd78,(float *)param_3);
-  local_1c = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)&DAT_1a00cd78,(float *)(param_3 + 0xc));
-  local_18 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)&DAT_1a00cd78,(float *)(param_3 + 0x18));
-  local_14 = (float)fVar1;
-  DAT_13fee6a0 = 0;
-  for (local_8 = 0; local_8 < *(int *)(&DAT_0b3f05bc + param_1 * 0xe04); local_8 = local_8 + 1) {
-    fVar1 = (float10)dotproduct(&local_1c,
-                                (float *)(*(int *)(&DAT_0b3f05c4 + param_1 * 0xe04) + local_8 * 0xc)
-                               );
-    if (fVar1 < (float10)0.0 != (fVar1 == (float10)0.0)) {
-      scaleaddvectors((float *)&DAT_1073ecc0,
-                      (float *)(*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                               *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + local_8 * 0xc) *
-                               *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) * 4),&local_1c,local_c);
-      scaleaddvectors((float *)&DAT_1073eccc,
-                      (float *)(*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                               *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + 4 +
-                                       local_8 * 0xc) * *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) *
-                               4),&local_1c,local_c);
-      scaleaddvectors((float *)&DAT_1073ecd8,
-                      (float *)(*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                               *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + 8 +
-                                       local_8 * 0xc) * *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) *
-                               4),&local_1c,local_c);
-      copyvector((undefined4 *)&DAT_1073ece4,
-                 (undefined4 *)
-                 (*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                 *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + local_8 * 0xc) *
-                 *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) * 4));
-      copyvector((undefined4 *)&DAT_1073ecf0,
-                 (undefined4 *)
-                 (*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                 *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + 4 + local_8 * 0xc) *
-                 *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) * 4));
-      copyvector((undefined4 *)&DAT_1073ecfc,
-                 (undefined4 *)
-                 (*(int *)(&DAT_0b3f05b8 + param_1 * 0xe04) +
-                 *(int *)(*(int *)(&DAT_0b3f05c0 + param_1 * 0xe04) + 8 + local_8 * 0xc) *
-                 *(int *)(&DAT_0b3f05a4 + param_1 * 0xe04) * 4));
-      scaleaddvectors((float *)&DAT_1073ece4,(float *)&DAT_1073ece4,&local_1c,0.0);
-      scaleaddvectors((float *)&DAT_1073ecf0,(float *)&DAT_1073ecf0,&local_1c,0.0);
-      scaleaddvectors((float *)&DAT_1073ecfc,(float *)&DAT_1073ecfc,&local_1c,0.0);
-      if ((*(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) + local_8 * 0xc) == -1) ||
-         (fVar1 = (float10)dotproduct((float *)(*(int *)(&DAT_0b3f05c4 + param_1 * 0xe04) +
-                                               *(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) +
-                                                       local_8 * 0xc) * 0xc),&local_1c),
-         fVar1 < (float10)0.0 == (fVar1 == (float10)0.0))) {
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ece4);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecc0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073eccc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ece4);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073eccc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecf0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      }
-      if ((*(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) + 4 + local_8 * 0xc) == -1) ||
-         (fVar1 = (float10)dotproduct((float *)(*(int *)(&DAT_0b3f05c4 + param_1 * 0xe04) +
-                                               *(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) +
-                                                        4 + local_8 * 0xc) * 0xc),&local_1c),
-         fVar1 < (float10)0.0 == (fVar1 == (float10)0.0))) {
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecf0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073eccc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecd8);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecf0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecd8);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecfc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      }
-      if ((*(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) + 8 + local_8 * 0xc) == -1) ||
-         (fVar1 = (float10)dotproduct((float *)(*(int *)(&DAT_0b3f05c4 + param_1 * 0xe04) +
-                                               *(int *)(*(int *)(&DAT_0b3f05c8 + param_1 * 0xe04) +
-                                                        8 + local_8 * 0xc) * 0xc),&local_1c),
-         fVar1 < (float10)0.0 == (fVar1 == (float10)0.0))) {
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecfc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecd8);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecc0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecfc);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecc0);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-        copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ece4);
-        DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      }
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ece4);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecf0);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecfc);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecc0);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073ecd8);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-      copyvector((undefined4 *)(&DAT_13fee6a4 + DAT_13fee6a0 * 0xc),(undefined4 *)&DAT_1073eccc);
-      DAT_13fee6a0 = DAT_13fee6a0 + 1;
-    }
-  }
-  glPushMatrix();
-  setupobjectrender(param_2,(undefined4 *)param_3);
-  glVertexPointer(3,0x1406,0xc,&DAT_13fee6a4);
-  glDrawArrays(4,0,DAT_13fee6a0);
-  glPopMatrix();
-  itemtimetolive(DAT_12e7d64c);
-  return;
-}
-#undef DAT_00526650
-#undef DAT_12e7d64c
-#undef DAT_13fee6a0
-#undef DAT_0b3f05a4
-#undef DAT_0b3f05b8
-#undef DAT_0b3f05bc
-#undef DAT_0b3f05c0
-#undef DAT_0b3f05c4
-#undef DAT_0b3f05c8
-#undef DAT_1073ecc0
-#undef DAT_1073eccc
-#undef DAT_1073ecd8
-#undef DAT_1073ece4
-#undef DAT_1073ecf0
-#undef DAT_1073ecfc
-#undef DAT_13fee6a4
-#undef DAT_1a00cd78
-#undef glPopMatrix
-#undef glPushMatrix
-#undef glVertexPointer
-#undef glDrawArrays
-#undef starttimer
-#undef itemtimetolive
-#undef setupobjectrender
-#undef dotproduct
-#undef copyvector
-#undef scaleaddvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xdc080 */
-#define DAT_2a27d2e0 (*(int *)SR_VA(0x2a27d2e0))
-#define PTR_GLee_Lazy_glActiveStencilFaceEXT_00516450 (*(glActiveStencilFaceEXT * *)SR_VA(0x516450))
-#define DAT_2a27d2e4 (*(int *)SR_VA(0x2a27d2e4))
-#define PTR_GLee_Lazy_glStencilOpSeparateATI_00516590 (*(glStencilOpSeparateATI * *)SR_VA(0x516590))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
-#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(86, "OPENGL32.DLL", "glStencilFunc"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
-#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(89, "OPENGL32.DLL", "glStencilOp"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
-#define GLee_Lazy_glActiveStencilFaceEXT ((void (__cdecl *)(uint))SR_FN(0x417bb0))
-#define GLee_Lazy_glStencilOpSeparateATI ((void (__cdecl *)(uint, uint, uint, uint))SR_FN(0x4189a0))
-void __cdecl lf_dc080(void)
-
-{
-  glDisable(0xde1);
-  glColorMask('\0','\0','\0','\0');
-  glDepthMask('\0');
-  glEnable(0xb71);
-  glDepthFunc(0x206);
-  glDisable(0xb44);
-  glFrontFace(0x900);
-  if (DAT_2a27d2e0 == 0) {
-    if (DAT_2a27d2e4 != 0) {
-      glEnable(0xb90);
-      glStencilMask(0xffffffff);
-      glStencilFunc(0x207,0,0xffffffff);
-      (*PTR_GLee_Lazy_glStencilOpSeparateATI_00516590)(0x405,0x1e00,0x1e00,0x8508);
-      (*PTR_GLee_Lazy_glStencilOpSeparateATI_00516590)(0x404,0x1e00,0x1e00,0x8507);
-    }
-  }
-  else {
-    glEnable(0xb90);
-    glEnable(0x8910);
-    (*PTR_GLee_Lazy_glActiveStencilFaceEXT_00516450)(0x405);
-    glStencilMask(0xffffffff);
-    glStencilFunc(0x207,0,0xffffffff);
-    glStencilOp(0x1e00,0x1e00,0x8508);
-    (*PTR_GLee_Lazy_glActiveStencilFaceEXT_00516450)(0x404);
-    glStencilMask(0xffffffff);
-    glStencilFunc(0x207,0,0xffffffff);
-    glStencilOp(0x1e00,0x1e00,0x8507);
-  }
-  return;
-}
-#undef DAT_2a27d2e0
-#undef PTR_GLee_Lazy_glActiveStencilFaceEXT_00516450
-#undef DAT_2a27d2e4
-#undef PTR_GLee_Lazy_glStencilOpSeparateATI_00516590
-#undef glFrontFace
-#undef glEnable
-#undef glStencilMask
-#undef glStencilFunc
-#undef glDisable
-#undef glDepthMask
-#undef glColorMask
-#undef glStencilOp
-#undef glDepthFunc
-#undef GLee_Lazy_glActiveStencilFaceEXT
-#undef GLee_Lazy_glStencilOpSeparateATI
-
 /* ---------------------------------------------------------------- 0xdc1d0 */
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
-#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(86, "OPENGL32.DLL", "glStencilFunc"))
+#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(79, "OPENGL32.DLL", "glStencilMask"))
+#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(85, "OPENGL32.DLL", "glStencilFunc"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
-#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(89, "OPENGL32.DLL", "glStencilOp"))
+#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(87, "OPENGL32.DLL", "glColorMask"))
+#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(88, "OPENGL32.DLL", "glStencilOp"))
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 void __cdecl lf_dc1d0(void)
 
@@ -103483,13 +102324,13 @@ void __cdecl lf_dc1d0(void)
 #undef glDepthFunc
 
 /* ---------------------------------------------------------------- 0xdc260 */
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(81, "OPENGL32.DLL", "glStencilMask"))
-#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(86, "OPENGL32.DLL", "glStencilFunc"))
+#define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(79, "OPENGL32.DLL", "glStencilMask"))
+#define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(85, "OPENGL32.DLL", "glStencilFunc"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
-#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(89, "OPENGL32.DLL", "glStencilOp"))
+#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(87, "OPENGL32.DLL", "glColorMask"))
+#define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(88, "OPENGL32.DLL", "glStencilOp"))
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 void __cdecl lf_dc260(void)
 
@@ -103517,11 +102358,11 @@ void __cdecl lf_dc260(void)
 #undef glDepthFunc
 
 /* ---------------------------------------------------------------- 0xdc2f0 */
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(73, "OPENGL32.DLL", "glFrontFace"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(71, "OPENGL32.DLL", "glFrontFace"))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(88, "OPENGL32.DLL", "glColorMask"))
+#define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(87, "OPENGL32.DLL", "glColorMask"))
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 void __cdecl lf_dc2f0(void)
 
@@ -107569,16 +106410,16 @@ void __cdecl lf_e2790(void)
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(58, "OPENGL32.DLL", "glVertex3fv"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(74, "OPENGL32.DLL", "glNormal3fv"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
+#define glNormal3fv ((void (__stdcall *)(float *))LF_IMPORT(72, "OPENGL32.DLL", "glNormal3fv"))
+#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(74, "OPENGL32.DLL", "glBlendFunc"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
 #define GLee_Lazy_glUniform3fvARB ((void (__cdecl *)(int, int, float *))SR_FN(0x410cd0))
 #define FUN_004e0f80 ((void (__cdecl *)(void))SR_FN(0x4e0f80))
@@ -107939,7 +106780,7 @@ void __cdecl lf_e3b10(void)
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
 #define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(58, "OPENGL32.DLL", "glVertex3fv"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
+#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(74, "OPENGL32.DLL", "glBlendFunc"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
@@ -108519,14 +107360,14 @@ void __cdecl lf_e52e0(void)
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(62, "OPENGL32.DLL", "glColor3f"))
-#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glDisableClientState"))
-#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(78, "OPENGL32.DLL", "glEnableClientState"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(79, "OPENGL32.DLL", "glLightfv"))
+#define glDisableClientState ((void (__stdcall *)(uint))LF_IMPORT(75, "OPENGL32.DLL", "glDisableClientState"))
+#define glEnableClientState ((void (__stdcall *)(uint))LF_IMPORT(76, "OPENGL32.DLL", "glEnableClientState"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(77, "OPENGL32.DLL", "glLightfv"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(107, "OPENGL32.DLL", "glVertexPointer"))
-#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(108, "OPENGL32.DLL", "glTexCoordPointer"))
-#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(109, "OPENGL32.DLL", "glNormalPointer"))
-#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(110, "OPENGL32.DLL", "glDrawArrays"))
+#define glVertexPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(114, "OPENGL32.DLL", "glVertexPointer"))
+#define glTexCoordPointer ((void (__stdcall *)(int, uint, int, void *))LF_IMPORT(115, "OPENGL32.DLL", "glTexCoordPointer"))
+#define glNormalPointer ((void (__stdcall *)(uint, int, void *))LF_IMPORT(116, "OPENGL32.DLL", "glNormalPointer"))
+#define glDrawArrays ((void (__stdcall *)(uint, int, int))LF_IMPORT(117, "OPENGL32.DLL", "glDrawArrays"))
 #define GLee_Lazy_glActiveTextureARB ((void (__cdecl *)(uint))SR_FN(0x40ea90))
 #define debug_addataint ((void (__cdecl *)(char *, undefined4))SR_FN(0x46aaa0))
 void __cdecl lf_e5c60(int param_1)
@@ -108811,7 +107652,7 @@ void __cdecl lf_e5f80(void)
 #define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
 #define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
 #define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(58, "OPENGL32.DLL", "glVertex3fv"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
+#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(74, "OPENGL32.DLL", "glBlendFunc"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(49, "OPENGL32.DLL", "glDepthFunc"))
 #define local_8 (*(uint *)(lf_frame + 0x18))
@@ -118850,7 +117691,7 @@ void __cdecl lf_105dc0(int param_1,float param_2,float param_3,float param_4,flo
 #define DAT_1425e830 (*(undefined4 *)SR_VA(0x1425e830))
 #define updateplayticket ((void (__cdecl *)(void))SR_FN(0x4d5650))
 #define steam_update ((void (__cdecl *)(void))SR_FN(0x50bd60))
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(97, "SDL2.DLL", "SDL_Delay"))
+#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(96, "SDL2.DLL", "SDL_Delay"))
 #define SDL_PollEvent ((int (__cdecl *)(void *))LF_IMPORT(148, "SDL2.DLL", "SDL_PollEvent"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
@@ -118997,9 +117838,9 @@ void __cdecl lf_106310(void)
 #define DAT_0bb330c4 (*(int *)SR_VA(0xbb330c4))
 #define DAT_0bb73540 (*(undefined4 *)SR_VA(0xbb73540))
 #define DAT_0bb73544 (*(undefined4 *)SR_VA(0xbb73544))
-#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(83, "OPENGL32.DLL", "glLoadIdentity"))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
+#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
+#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
 #define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(151, "OPENGL32.DLL", "glScissor"))
 #define glFrustum ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(152, "OPENGL32.DLL", "glFrustum"))
 void __cdecl lf_106320(int param_1,int param_2,int param_3,int param_4,float param_5,float param_6,float param_7
@@ -119047,10 +117888,10 @@ void __cdecl lf_106320(int param_1,int param_2,int param_3,int param_4,float par
 #define DAT_0bb330c4 (*(int *)SR_VA(0xbb330c4))
 #define DAT_0bb73540 (*(undefined4 *)SR_VA(0xbb73540))
 #define DAT_0bb73544 (*(undefined4 *)SR_VA(0xbb73544))
-#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(82, "OPENGL32.DLL", "glOrtho"))
-#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(83, "OPENGL32.DLL", "glLoadIdentity"))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
+#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(81, "OPENGL32.DLL", "glOrtho"))
+#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
+#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
 #define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(151, "OPENGL32.DLL", "glScissor"))
 void __cdecl lf_106480(int param_1,int param_2,int param_3,int param_4,float param_5,float param_6,
                   float param_7)
@@ -119091,7 +117932,7 @@ void __cdecl lf_106480(int param_1,int param_2,int param_3,int param_4,float par
 
 /* ---------------------------------------------------------------- 0x1065d0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
 #define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(153, "OPENGL32.DLL", "glMultMatrixf"))
 #define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(154, "OPENGL32.DLL", "glTranslatef"))
 #define __security_check_cookie(x) ((void)0)
@@ -119188,7 +118029,7 @@ void __cdecl lf_1065d0(float *param_1,undefined4 *param_2)
 
 /* ---------------------------------------------------------------- 0x1066b0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
 #define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(153, "OPENGL32.DLL", "glMultMatrixf"))
 #define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(154, "OPENGL32.DLL", "glTranslatef"))
 #define __security_check_cookie(x) ((void)0)
@@ -119432,497 +118273,6 @@ void __cdecl lf_106790(void)
 #undef local_c
 #undef local_5
 
-/* ---------------------------------------------------------------- 0x106b30 */
-#define DAT_00527eac (*(int *)SR_VA(0x527eac))
-#define DAT_00526534 (*(undefined *)SR_VA(0x526534))
-#define DAT_00526538 (*(undefined *)SR_VA(0x526538))
-#define DAT_0052653c (*(undefined *)SR_VA(0x52653c))
-#define DAT_00526544 (*(undefined *)SR_VA(0x526544))
-#define DAT_00526548 (*(undefined *)SR_VA(0x526548))
-#define DAT_00526550 (*(undefined *)SR_VA(0x526550))
-#define DAT_00526554 (*(undefined *)SR_VA(0x526554))
-#define DAT_00526558 (*(undefined *)SR_VA(0x526558))
-#define DAT_00526560 (*(undefined *)SR_VA(0x526560))
-#define DAT_00526564 (*(undefined *)SR_VA(0x526564))
-#define DAT_0bb73548 (*(undefined *)SR_VA(0xbb73548))
-#define DAT_0bb73550 (*(undefined *)SR_VA(0xbb73550))
-#define DAT_0bb73950 (*(undefined *)SR_VA(0xbb73950))
-#define DAT_0bb73958 (*(undefined *)SR_VA(0xbb73958))
-#define DAT_0bb73960 (*(undefined *)SR_VA(0xbb73960))
-#define DAT_0bb73968 (*(undefined *)SR_VA(0xbb73968))
-#define DAT_0bb74930 (*(undefined *)SR_VA(0xbb74930))
-#define DAT_0bb74938 (*(undefined *)SR_VA(0xbb74938))
-#define DAT_0bb74940 (*(undefined *)SR_VA(0xbb74940))
-#define DAT_0bb74948 (*(undefined *)SR_VA(0xbb74948))
-#define DAT_17b9ae00 (*(undefined *)SR_VA(0x17b9ae00))
-#define DAT_17b9ae01 (*(undefined *)SR_VA(0x17b9ae01))
-#define DAT_17b9b200 (*(undefined *)SR_VA(0x17b9b200))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(59, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(61, "OPENGL32.DLL", "glVertex2fv"))
-#define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-#define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define strlen ((size_t (__cdecl *)(char *))LF_IMPORT(15, "MSVCR100.DLL", "strlen"))
-#define local_34 (*(uint * *)(lf_frame + 0x1c))
-#define local_30 (*(uint *)(lf_frame + 0x20))
-#define local_28 (*(undefined1 *)(lf_frame + 0x28))
-#define local_1c (*(int *)(lf_frame + 0x34))
-#define local_18 (*(float *)(lf_frame + 0x38))
-#define local_14 (*(int *)(lf_frame + 0x3c))
-#define local_10 (*(float *)(lf_frame + 0x40))
-#define local_c (*(float *)(lf_frame + 0x44))
-#define local_8 (*(uint *)(lf_frame + 0x48))
-void __cdecl lf_106b30(char *text,float x,float y,float size,uint flags,float r,float g,float b,float a,...)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-  uint uVar1;
-  int iVar2;
-  uint *puVar3;
-  size_t sVar4;
-  bool bVar5;
-
-
-
-
-
-
-
-
-
-  
-  local_14 = 0;
-  local_1c = 0;
-  local_34 = (uint *)(&a + 1);
-  if ((flags & 0x40) == 0) {
-    while ((text[local_14] != '\0' && (local_1c < 1000))) {
-      if (text[local_14] == '/') {
-        switch(text[local_14 + 1]) {
-        case '/':
-          local_14 = local_14 + 1;
-          (&DAT_17b9ae00)[local_1c] = 0x2f;
-          local_1c = local_1c + 1;
-          break;
-        case 'I':
-          local_14 = local_14 + 1;
-          uVar1 = *local_34;
-          if (999999 < (int)uVar1) {
-            sprintf(&DAT_17b9b200,&DAT_00526538,(int)uVar1 / 1000000);
-            sVar4 = strlen(&DAT_17b9b200);
-            memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-            sVar4 = strlen(&DAT_17b9b200);
-            (&DAT_17b9ae00)[sVar4 + local_1c] = 0x2c;
-            local_1c = sVar4 + local_1c + 1;
-          }
-          if (999 < (int)uVar1) {
-            if ((int)uVar1 < 1000000) {
-              sprintf(&DAT_17b9b200,&DAT_00526544,((int)uVar1 / 1000) % 1000);
-            }
-            else {
-              sprintf(&DAT_17b9b200,&DAT_0052653c,((int)uVar1 / 1000) % 1000);
-            }
-            sVar4 = strlen(&DAT_17b9b200);
-            memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-            sVar4 = strlen(&DAT_17b9b200);
-            (&DAT_17b9ae00)[sVar4 + local_1c] = 0x2c;
-            local_1c = sVar4 + local_1c + 1;
-          }
-          if ((int)uVar1 < 1000) {
-            sprintf(&DAT_17b9b200,&DAT_00526550,uVar1);
-          }
-          else {
-            sprintf(&DAT_17b9b200,&DAT_00526548,(int)uVar1 % 1000);
-          }
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 1;
-          break;
-        case 'b':
-          local_14 = local_14 + 1;
-          puVar3 = local_34 + 1;
-          local_8 = *local_34;
-          for (local_30 = 0; local_34 = puVar3, (int)local_30 < 0x20; local_30 = local_30 + 1) {
-            if ((local_8 & 0x80000000) == 0) {
-              (&DAT_17b9ae00)[local_1c] = 0x30;
-            }
-            else {
-              (&DAT_17b9ae00)[local_1c] = 0x31;
-            }
-            iVar2 = local_1c + 1;
-            if (((int)local_30 < 0x1f) && ((local_30 & 7) == 7)) {
-              (&DAT_17b9ae01)[local_1c] = 0x2c;
-              iVar2 = local_1c + 2;
-            }
-            local_1c = iVar2;
-            local_8 = local_8 << 1;
-          }
-          break;
-        case 'c':
-          local_14 = local_14 + 1;
-          puVar3 = local_34 + 1;
-          uVar1 = *local_34;
-          local_34 = puVar3;
-          if (uVar1 != 0) {
-            local_28 = (undefined1)uVar1;
-            (&DAT_17b9ae00)[local_1c] = local_28;
-            local_1c = local_1c + 1;
-          }
-          break;
-        case 'f':
-          local_14 = local_14 + 1;
-          sprintf(&DAT_17b9b200,&DAT_00526558,(int)*(undefined8 *)local_34,
-                  (int)((ulonglong)*(undefined8 *)local_34 >> 0x20));
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 2;
-          break;
-        case 'i':
-          local_14 = local_14 + 1;
-          sprintf(&DAT_17b9b200,&DAT_00526534,*local_34);
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 1;
-          break;
-        case 's':
-          local_14 = local_14 + 1;
-          sprintf(&DAT_17b9b200,&DAT_00526560,*local_34);
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 1;
-          break;
-        case 'u':
-          local_14 = local_14 + 1;
-          sprintf(&DAT_17b9b200,&DAT_00526554,*local_34);
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 1;
-          break;
-        case 'x':
-          local_14 = local_14 + 1;
-          sprintf(&DAT_17b9b200,&DAT_00526564,*local_34);
-          sVar4 = strlen(&DAT_17b9b200);
-          memcpy(&DAT_17b9ae00 + local_1c,&DAT_17b9b200,sVar4);
-          sVar4 = strlen(&DAT_17b9b200);
-          local_1c = sVar4 + local_1c;
-          local_34 = local_34 + 1;
-        }
-      }
-      else {
-        (&DAT_17b9ae00)[local_1c] = text[local_14];
-        local_1c = local_1c + 1;
-      }
-      local_14 = local_14 + 1;
-    }
-    (&DAT_17b9ae00)[local_1c] = 0;
-  }
-  else {
-    strcpy(&DAT_17b9ae00,text);
-  }
-  local_18 = 0.0;
-  for (local_14 = 0; ((&DAT_17b9ae00)[local_14] != '\0' && (local_14 < 1000));
-      local_14 = local_14 + 1) {
-    local_18 = (float)(*(float *)(&DAT_0bb73550 +
-                         (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size +
-               local_18);
-  }
-  if ((flags & 0x100) == 0) {
-    if ((flags & 1) == 0) {
-      if ((flags & 2) != 0) {
-        x = (float)(x - local_18);
-      }
-    }
-    else {
-      x = (float)(x - local_18 * 0.5);
-    }
-    if ((flags & 4) == 0) {
-      if ((flags & 8) != 0) {
-        y = (float)(y - size);
-      }
-    }
-    else {
-      y = (float)(y - size * 0.5);
-    }
-  }
-  else {
-    if ((flags & 1) == 0) {
-      if ((flags & 2) != 0) {
-        y = (float)(y - local_18);
-      }
-    }
-    else {
-      y = (float)(y - local_18 * 0.5);
-    }
-    if ((flags & 4) == 0) {
-      if ((flags & 8) != 0) {
-        x = (float)(x - size);
-      }
-    }
-    else {
-      x = (float)(x - size * 0.5);
-    }
-  }
-  bVar5 = (flags & 0x10) != 0;
-  glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c +
-                               *(int *)(&DAT_0bb73548 + DAT_00527eac * 0x2410) * 0x70));
-  if ((flags & 0x20) != 0) {
-    glBegin(7);
-    glColor4f(0.0,0.0,0.0,a);
-    local_18 = 0.0;
-    for (local_14 = 0; ((&DAT_17b9ae00)[local_14] != '\0' && (local_14 < 1000));
-        local_14 = local_14 + 1) {
-      local_10 = (float)(x + local_18 + 1.0);
-      if ((flags & 0x80) == 0) {
-        local_c = (float)(y + 1.0);
-      }
-      else {
-        local_c = (float)(y + 1.0 + size);
-      }
-      if ((flags & 0x100) != 0) {
-        local_10 = (float)(x + 1.0 + size);
-        local_c = (float)(y + local_18 + 1.0);
-      }
-      if (bVar5) {
-        glTexCoord2fv((float *)(&DAT_0bb74930 + DAT_00527eac * 0x2410));
-      }
-      else {
-        glTexCoord2fv((float *)(&DAT_0bb73950 +
-                               (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410)
-                     );
-      }
-      glVertex2fv(&local_10);
-      local_10 = (float)(*(float *)(&DAT_0bb73550 +
-                           (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size
-                 + (x + local_18) + 1.0);
-      if ((flags & 0x80) == 0) {
-        local_c = (float)(y + 1.0);
-      }
-      else {
-        local_c = (float)(y + 1.0 + size);
-      }
-      if ((flags & 0x100) != 0) {
-        local_10 = (float)(x + 1.0 + size);
-        local_c = (float)(*(float *)(&DAT_0bb73550 +
-                            (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) *
-                  size + (y + local_18) + 1.0);
-      }
-      if (bVar5) {
-        glTexCoord2fv((float *)(&DAT_0bb74938 + DAT_00527eac * 0x2410));
-      }
-      else {
-        glTexCoord2fv((float *)(&DAT_0bb73958 +
-                               (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410)
-                     );
-      }
-      glVertex2fv(&local_10);
-      if ((flags & 0x80) == 0) {
-        local_c = (float)(y + 1.0 + size);
-      }
-      else {
-        local_c = (float)(y + 1.0);
-      }
-      local_10 = *(float *)(&DAT_0bb73550 +
-                           (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size
-                 + (x + local_18);
-      if ((flags & 0x100) != 0) {
-        local_c = (float)(*(float *)(&DAT_0bb73550 +
-                            (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) *
-                  size + (y + local_18) + 1.0);
-        local_10 = x;
-      }
-      local_10 = (float)(local_10 + 1.0);
-      if (bVar5) {
-        glTexCoord2fv((float *)(&DAT_0bb74940 + DAT_00527eac * 0x2410));
-      }
-      else {
-        glTexCoord2fv((float *)(&DAT_0bb73960 +
-                               (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410)
-                     );
-      }
-      glVertex2fv(&local_10);
-      if ((flags & 0x80) == 0) {
-        local_c = (float)(y + 1.0 + size);
-      }
-      else {
-        local_c = (float)(y + 1.0);
-      }
-      local_10 = x + local_18;
-      if ((flags & 0x100) != 0) {
-        local_c = (float)(y + local_18 + 1.0);
-        local_10 = x;
-      }
-      local_10 = (float)(local_10 + 1.0);
-      if (bVar5) {
-        glTexCoord2fv((float *)(&DAT_0bb74948 + DAT_00527eac * 0x2410));
-      }
-      else {
-        glTexCoord2fv((float *)(&DAT_0bb73968 +
-                               (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410)
-                     );
-      }
-      glVertex2fv(&local_10);
-      local_18 = (float)(*(float *)(&DAT_0bb73550 +
-                           (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size
-                 + local_18);
-    }
-    glEnd();
-  }
-  glBegin(7);
-  glColor4f(r,g,b,a);
-  local_18 = 0.0;
-  for (local_14 = 0; ((&DAT_17b9ae00)[local_14] != '\0' && (local_14 < 1000));
-      local_14 = local_14 + 1) {
-    if ((flags & 0x80) == 0) {
-      local_c = y;
-    }
-    else {
-      local_c = (float)(y + size);
-    }
-    local_10 = local_18;
-    if ((flags & 0x100) != 0) {
-      local_c = (float)(y + local_18);
-      local_10 = size;
-    }
-    local_10 = (float)(x + local_10);
-    if (bVar5) {
-      glTexCoord2fv((float *)(&DAT_0bb73950 + DAT_00527eac * 0x2410));
-    }
-    else {
-      glTexCoord2fv((float *)(&DAT_0bb73950 +
-                             (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410));
-    }
-    glVertex2fv(&local_10);
-    local_10 = (float)(*(float *)(&DAT_0bb73550 +
-                         (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size +
-               (x + local_18));
-    if ((flags & 0x80) == 0) {
-      local_c = y;
-    }
-    else {
-      local_c = (float)(y + size);
-    }
-    if ((flags & 0x100) != 0) {
-      local_10 = (float)(x + size);
-      local_c = (float)(*(float *)(&DAT_0bb73550 +
-                          (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size
-                + (y + local_18));
-    }
-    if (bVar5) {
-      glTexCoord2fv((float *)(&DAT_0bb73958 + DAT_00527eac * 0x2410));
-    }
-    else {
-      glTexCoord2fv((float *)(&DAT_0bb73958 +
-                             (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410));
-    }
-    glVertex2fv(&local_10);
-    local_10 = (float)(*(float *)(&DAT_0bb73550 +
-                         (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size +
-               (x + local_18));
-    if ((flags & 0x80) == 0) {
-      local_c = (float)(y + size);
-    }
-    else {
-      local_c = y;
-    }
-    if ((flags & 0x100) != 0) {
-      local_10 = x;
-      local_c = (float)(*(float *)(&DAT_0bb73550 +
-                          (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size
-                + (y + local_18));
-    }
-    if (bVar5) {
-      glTexCoord2fv((float *)(&DAT_0bb73960 + DAT_00527eac * 0x2410));
-    }
-    else {
-      glTexCoord2fv((float *)(&DAT_0bb73960 +
-                             (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410));
-    }
-    glVertex2fv(&local_10);
-    local_10 = (float)(x + local_18);
-    if ((flags & 0x80) == 0) {
-      local_c = (float)(y + size);
-    }
-    else {
-      local_c = y;
-    }
-    if ((flags & 0x100) != 0) {
-      local_10 = x;
-      local_c = (float)(y + local_18);
-    }
-    if (bVar5) {
-      glTexCoord2fv((float *)(&DAT_0bb73968 + DAT_00527eac * 0x2410));
-    }
-    else {
-      glTexCoord2fv((float *)(&DAT_0bb73968 +
-                             (uint)(byte)(&DAT_17b9ae00)[local_14] * 0x20 + DAT_00527eac * 0x2410));
-    }
-    glVertex2fv(&local_10);
-    local_18 = (float)(*(float *)(&DAT_0bb73550 +
-                         (uint)(byte)(&DAT_17b9ae00)[local_14] * 4 + DAT_00527eac * 0x2410) * size +
-               local_18);
-  }
-  glEnd();
-  return;
-}
-#undef DAT_00527eac
-#undef DAT_00526534
-#undef DAT_00526538
-#undef DAT_0052653c
-#undef DAT_00526544
-#undef DAT_00526548
-#undef DAT_00526550
-#undef DAT_00526554
-#undef DAT_00526558
-#undef DAT_00526560
-#undef DAT_00526564
-#undef DAT_0bb73548
-#undef DAT_0bb73550
-#undef DAT_0bb73950
-#undef DAT_0bb73958
-#undef DAT_0bb73960
-#undef DAT_0bb73968
-#undef DAT_0bb74930
-#undef DAT_0bb74938
-#undef DAT_0bb74940
-#undef DAT_0bb74948
-#undef DAT_17b9ae00
-#undef DAT_17b9ae01
-#undef DAT_17b9b200
-#undef DAT_17f4b86c
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glBindTexture
-#undef glTexCoord2fv
-#undef glVertex2fv
-#undef sprintf
-#undef memcpy
-#undef strcpy
-#undef strlen
-#undef local_34
-#undef local_30
-#undef local_28
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x107970 */
 #define DAT_00527eac (*(int *)SR_VA(0x527eac))
 #define DAT_0bb73550 (*(undefined *)SR_VA(0xbb73550))
@@ -119955,11 +118305,11 @@ float10 __cdecl lf_107970(int param_1,float param_2)
 #define DAT_0bb73540 (*(undefined4 *)SR_VA(0xbb73540))
 #define DAT_0bb73544 (*(undefined4 *)SR_VA(0xbb73544))
 #define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(76, "OPENGL32.DLL", "glBlendFunc"))
-#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(82, "OPENGL32.DLL", "glOrtho"))
-#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(83, "OPENGL32.DLL", "glLoadIdentity"))
-#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(84, "OPENGL32.DLL", "glMatrixMode"))
-#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(85, "OPENGL32.DLL", "glViewport"))
+#define glBlendFunc ((void (__stdcall *)(uint, uint))LF_IMPORT(74, "OPENGL32.DLL", "glBlendFunc"))
+#define glOrtho ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(81, "OPENGL32.DLL", "glOrtho"))
+#define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
+#define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
+#define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
 #define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
 #define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(48, "OPENGL32.DLL", "glDepthMask"))
 void __cdecl lf_1079d0(void)
@@ -119994,84 +118344,6 @@ void __cdecl lf_1079d0(void)
 #undef glViewport
 #undef glDisable
 #undef glDepthMask
-
-/* ---------------------------------------------------------------- 0x107ac0 */
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(44, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glTexCoord2f ((void (__stdcall *)(float, float))LF_IMPORT(56, "OPENGL32.DLL", "glTexCoord2f"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(61, "OPENGL32.DLL", "glVertex2fv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(45, "OPENGL32.DLL", "glDisable"))
-#define local_c (*(float *)(lf_frame + 0x14))
-#define local_8 (*(float *)(lf_frame + 0x18))
-void __cdecl lf_107ac0(int param_1,float param_2,float param_3,float param_4,float param_5,uint param_6,
-          float param_7,float param_8,float param_9,float param_10)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-
-  
-  if ((param_6 & 1) == 0) {
-    if ((param_6 & 2) != 0) {
-      param_2 = (float)(param_2 - param_4);
-    }
-  }
-  else {
-    param_2 = (float)(param_2 - param_4 * 0.5);
-  }
-  if ((param_6 & 4) == 0) {
-    if ((param_6 & 8) != 0) {
-      param_3 = (float)(param_3 - param_5);
-    }
-  }
-  else {
-    param_3 = (float)(param_3 - param_5 * 0.5);
-  }
-  if (param_1 == -1) {
-    glDisable(0xde1);
-  }
-  else {
-    glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c + param_1 * 0x70));
-  }
-  glBegin(7);
-  glColor4f(param_7,param_8,param_9,param_10);
-  local_c = param_2;
-  local_8 = param_3;
-  glTexCoord2f(0.0,1.0);
-  glVertex2fv(&local_c);
-  local_c = (float)(param_2 + param_4);
-  local_8 = param_3;
-  glTexCoord2f(1.0,1.0);
-  glVertex2fv(&local_c);
-  local_c = (float)(param_2 + param_4);
-  local_8 = (float)(param_3 + param_5);
-  glTexCoord2f(1.0,0.0);
-  glVertex2fv(&local_c);
-  local_c = param_2;
-  local_8 = (float)(param_3 + param_5);
-  glTexCoord2f(0.0,0.0);
-  glVertex2fv(&local_c);
-  glEnd();
-  if (param_1 == -1) {
-    glEnable(0xde1);
-  }
-  return;
-}
-#undef DAT_17f4b86c
-#undef glEnable
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glTexCoord2f
-#undef glBindTexture
-#undef glVertex2fv
-#undef glDisable
-#undef local_c
-#undef local_8
 
 /* ---------------------------------------------------------------- 0x107c40 */
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
@@ -120206,72 +118478,6 @@ void __cdecl lf_107d80(float param_1,float param_2,float param_3,float param_4,u
 #undef glVertex2fv
 #undef glDisable
 #undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x107ee0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_00527eac (*(int *)SR_VA(0x527eac))
-#define DAT_0bb7354c (*(undefined4 *)SR_VA(0xbb7354c))
-#define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(52, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(54, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glBegin"))
-#define glTexCoord2f ((void (__stdcall *)(float, float))LF_IMPORT(56, "OPENGL32.DLL", "glTexCoord2f"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(61, "OPENGL32.DLL", "glVertex2fv"))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x2c))
-#define local_14 (*(float *)(lf_frame + 0x1c))
-#define local_10 (*(float *)(lf_frame + 0x20))
-#define local_8 (*(uint *)(lf_frame + 0x28))
-void __cdecl lf_107ee0(int param_1,int param_2,int param_3,float param_4,float param_5,float param_6,
-               float param_7)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  glBindTexture(0xde1,*(uint *)(&DAT_17f4b86c +
-                               ((&DAT_0bb7354c)[DAT_00527eac * 0x904] + 0x3f0) * 0x70));
-  glBegin(7);
-  local_14 = (float)((float)param_1 - (float)param_3 * 1.5);
-  local_10 = (float)((float)param_2 - (float)param_3 * 1.5);
-  glColor4f(param_4,param_5,param_6,param_7);
-  glTexCoord2f(0.0,1.0);
-  glVertex2fv(&local_14);
-  local_14 = (float)((float)param_3 * 1.5 + (float)param_1);
-  local_10 = (float)((float)param_2 - (float)param_3 * 1.5);
-  glTexCoord2f(1.0,1.0);
-  glVertex2fv(&local_14);
-  local_14 = (float)((float)param_3 * 1.5 + (float)param_1);
-  local_10 = (float)((float)param_3 * 1.5 + (float)param_2);
-  glTexCoord2f(1.0,0.0);
-  glVertex2fv(&local_14);
-  local_14 = (float)((float)param_1 - (float)param_3 * 1.5);
-  local_10 = (float)((float)param_3 * 1.5 + (float)param_2);
-  glTexCoord2f(0.0,0.0);
-  glVertex2fv(&local_14);
-  glEnd();
-  return;
-}
-#undef DAT_00526650
-#undef DAT_00527eac
-#undef DAT_0bb7354c
-#undef DAT_17f4b86c
-#undef glEnd
-#undef glColor4f
-#undef glBegin
-#undef glTexCoord2f
-#undef glBindTexture
-#undef glVertex2fv
-#undef __security_check_cookie
-#undef local_4
-#undef local_14
-#undef local_10
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x109540 */
@@ -120964,7 +119170,7 @@ int __cdecl lf_10add0(undefined4 *param_1)
 #define getpaths ((void (__cdecl *)(void))SR_FN(0x50b1f0))
 #define steam_init ((undefined4 (__cdecl *)(void))SR_FN(0x50bcf0))
 #define steam_shutdown ((void (__cdecl *)(void))SR_FN(0x50bd40))
-#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(116, "SDL2.DLL", "SDL_GL_SetAttribute"))
+#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(112, "SDL2.DLL", "SDL_GL_SetAttribute"))
 #define SDL_Quit ((void (__cdecl *)(void))LF_IMPORT(160, "SDL2.DLL", "SDL_Quit"))
 #define SDL_GL_SetSwapInterval ((int (__cdecl *)(int))LF_IMPORT(161, "SDL2.DLL", "SDL_GL_SetSwapInterval"))
 #define SDL_GL_CreateContext ((void * (__cdecl *)(void *))LF_IMPORT(162, "SDL2.DLL", "SDL_GL_CreateContext"))
@@ -121513,12 +119719,140 @@ void __cdecl lf_10bcc0(float *param_1,float *param_2,float *param_3)
 }
 
 
+/* ---------------------------------------------------------------- 0x10bcf0 */
+#define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
+#define SteamAPI_Init ((char (__cdecl *)(void))LF_IMPORT(171, "STEAM_API.DLL", "SteamAPI_Init"))
+#define SteamAPI_RestartAppIfNecessary ((char (__cdecl *)(uint))LF_IMPORT(172, "STEAM_API.DLL", "SteamAPI_RestartAppIfNecessary"))
+undefined4 __cdecl lf_10bcf0(void)
+
+{
+  char cVar1;
+  undefined4 uVar2;
+  
+  cVar1 = SteamAPI_RestartAppIfNecessary(0);
+  if (cVar1 == '\0') {
+    cVar1 = SteamAPI_Init();
+    if (cVar1 == '\0') {
+      uVar2 = 0;
+    }
+    else {
+      DAT_00527ec0 = 1;
+      uVar2 = 1;
+    }
+  }
+  else {
+    DAT_00527ec0 = 1;
+    uVar2 = 1;
+  }
+  return uVar2;
+}
+#undef DAT_00527ec0
+#undef SteamAPI_Init
+#undef SteamAPI_RestartAppIfNecessary
+
+/* ---------------------------------------------------------------- 0x10bd40 */
+#define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
+#define SteamAPI_Shutdown ((void (__cdecl *)(void))LF_IMPORT(173, "STEAM_API.DLL", "SteamAPI_Shutdown"))
+void __cdecl lf_10bd40(void)
+
+{
+  SteamAPI_Shutdown();
+  DAT_00527ec0 = 0;
+  return;
+}
+#undef DAT_00527ec0
+#undef SteamAPI_Shutdown
+
+/* ---------------------------------------------------------------- 0x10bd60 */
+#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
+#define SteamAPI_RunCallbacks ((void (__cdecl *)(void))LF_IMPORT(174, "STEAM_API.DLL", "SteamAPI_RunCallbacks"))
+void __cdecl lf_10bd60(void)
+
+{
+  if (DAT_00527ec0 != 0) {
+    SteamAPI_RunCallbacks();
+  }
+  return;
+}
+#undef DAT_00527ec0
+#undef SteamAPI_RunCallbacks
+
+/* ---------------------------------------------------------------- 0x10bd80 */
+#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
+#define SteamFriends ((void * (__cdecl *)(void))LF_IMPORT(175, "STEAM_API.DLL", "SteamFriends"))
+#define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
+bool __cdecl lf_10bd80(char *param_1)
+
+{
+  undefined4 *puVar1;
+  char *_Source;
+  bool bVar2;
+  
+  bVar2 = DAT_00527ec0 != 0;
+  if (bVar2) {
+    puVar1 = SteamFriends();
+    _Source = (char *)(**(code **)*puVar1)();
+    strcpy(param_1,_Source);
+  }
+  return bVar2;
+}
+#undef DAT_00527ec0
+#undef SteamFriends
+#undef strcpy
+
+/* ---------------------------------------------------------------- 0x10bdc0 */
+#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
+#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(176, "STEAM_API.DLL", "SteamUser"))
+#define CSteamID ((void * (__fastcall *)(void *))SR_FN(0x50be80))
+#define ConvertToUint64 ((ulonglong (__fastcall *)(void *))SR_FN(0x50bee0))
+#define local_1c (*(undefined1 (*)[8])(lf_frame + 0x14))
+#define local_14 (*(undefined4 *)(lf_frame + 0x1c))
+#define local_10 (*(undefined4 *)(lf_frame + 0x20))
+#define local_c (*(undefined4 *)(lf_frame + 0x24))
+#define local_8 (*(undefined4 *)(lf_frame + 0x28))
+void __cdecl lf_10bdc0(undefined8 *param_1)
+
+{
+  __declspec(align(16)) uchar lf_frame[0x30];
+  int *piVar1;
+  undefined4 *puVar2;
+  ulonglong uVar3;
+
+
+
+
+
+  
+  CSteamID(&local_14);
+  if (DAT_00527ec0 != 0) {
+    piVar1 = SteamUser();
+    puVar2 = (undefined4 *)(**(code **)(*piVar1 + 8))(local_1c);
+    local_14 = *puVar2;
+    local_10 = puVar2[1];
+    uVar3 = ConvertToUint64(&local_14);
+    local_c = (undefined4)uVar3;
+    *(undefined4 *)param_1 = local_c;
+    local_8 = (undefined4)(uVar3 >> 0x20);
+    *(undefined4 *)((int)param_1 + 4) = local_8;
+  }
+  return;
+}
+#undef DAT_00527ec0
+#undef SteamUser
+#undef CSteamID
+#undef ConvertToUint64
+#undef local_1c
+#undef local_14
+#undef local_10
+#undef local_c
+#undef local_8
+
 /* ---------------------------------------------------------------- 0x10be20 */
 #define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
 #define DAT_00527ee8 (*(undefined *)SR_VA(0x527ee8))
 #define DAT_00527ec8 (*(undefined *)SR_VA(0x527ec8))
 #define _DAT_00527ee8 (*(undefined4 *)SR_VA(0x527ee8))
-#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(171, "STEAM_API.DLL", "SteamUser"))
+#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(176, "STEAM_API.DLL", "SteamUser"))
 #define Set(...) 0
 void __cdecl lf_10be20(undefined4 param_1)
 

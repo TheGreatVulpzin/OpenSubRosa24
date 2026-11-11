@@ -1,5 +1,4 @@
 name,type,count,client_rva,evidence
-steam_on,int,1,0x127ec0,"steam_init writes 1, steam_shutdown writes 0, the other Steam functions read it. The Linux client names the symbol cs_steam"
 relative_mouse,int,1,0x9065350,"reactivategame turns on the relative mouse mode of SDL when it is not zero"
 slow_tick,int,1,0x9065344,"checksimulation: the tick interval is 100 ms when it is not zero, 16 ms otherwise. debug_getinputs sets it"
 last_tick_ms,uint32_t,1,0x9065338,"checksimulation: the SDL time of the last tick"

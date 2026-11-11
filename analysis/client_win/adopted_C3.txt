@@ -1,0 +1,15 @@
+drawbitmap src/client/render/draw2d.c
+drawmousecursor src/client/render/draw2d.c
+drawcircle src/client/render/draw2d.c
+drawtext src/client/render/text.c
+drawplayerindicator src/client/render/indicators.c
+drawcircleindicator src/client/render/indicators.c
+disabletwosidedstencil src/client/render/gl_state.c
+glstateshadowtwoside src/client/render/gl_state.c
+compileprogramobject src/client/render/programs.c
+rendermodel src/client/render/models_draw.c
+rendertrackmodel src/client/render/models_draw.c
+renderlandscape src/client/render/landscape_draw.c
+renderframeatmosphere src/client/render/atmosphere.c
+rendermodelshadow src/client/render/shadow.c
+rendermap src/client/render/map.c

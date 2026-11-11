@@ -1,0 +1,12 @@
+drawbitmaptexcoord src/client/render/draw2d.c
+drawlinebox src/client/render/draw2d.c
+drawcirclefill src/client/render/draw2d.c
+enabletwosidedstencil src/client/render/gl_state.c
+glstatenormal src/client/render/gl_state.c
+setupprogramobjects src/client/render/programs.c
+rendersphere src/client/render/models_draw.c
+rendermodelwire src/client/render/models_draw.c
+rendermodelnormals src/client/render/models_draw.c
+boxinsidefrustum src/client/render/frustum.c
+debug_renderboundingbox src/client/render/debug_draw.c
+debug_renderbox src/client/render/debug_draw.c
