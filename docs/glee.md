@@ -17,11 +17,14 @@ The source is in `third_party/glee/` (see `third_party/glee/README.md` for where
 - The game calls OpenGL extension functions through pointer variables (`GLeeFuncPtr_gl...`). Before `GLeeInit` runs, a pointer points to its lazy function, which links the extension and then calls it. `analysis/client_win/gl_slots.csv` lists the 32 pointers that the game code uses.
 - `GLeeInit` and the `__GLeeLink_...` functions read the extension string of the driver and fill the pointers and the flags (`_GLEE_...`).
 
+## What the standalone client needs
+
+The standalone client does not run GLee. `instrumentation/client/gen_gl_slots.py` writes `build/client_image/client_gl.c`, which puts a small function in each of the 32 pointer slots of `gl_slots.csv`. The function finds the real OpenGL function on its first call. So the 1750 GLee functions of the original client (about 60 percent of its 2907 functions) have no job in the standalone client, and the group C9 needs no rewrite for it.
+
+The extension flags (`_GLEE_...`) are the one thing that GLee gives and the slots do not. If the renderer reads one that nothing sets, the standalone client treats the extension as missing. The source in `third_party/glee/` is there for that case: compile it and call `GLeeInit` to get the flags and the pointers with the same names and values as the original client.
+
 ## Plan
 
-1. Compile `third_party/glee/GLee.c` into the standalone client, with the lifted GLee functions removed.
-2. Point the game to the pointers and the flags of the compiled library. The lifted code reaches them by their address in the image, so the adapter of the client storage (`instrumentation/client/runtime/storage_adapter.h`) needs a row for each one that the game reads: the 32 pointers of `gl_slots.csv` and the flags `_GLEE_...` that `GLeeInit` sets.
-3. Compare the result: the flags and the pointers after `GLeeInit` must be the same as the lifted code gives with the same extension string.
-4. When the renderer moves to OpenGL 3.3 or GLES (the OpenSubRosa plan), replace GLee with a modern loader.
-
-The group C9 then has no function to rewrite.
+1. Keep the slot functions of `gen_gl_slots.py` for the standalone client. No work for C9.
+2. If a flag turns out to matter (for example `GLEE_ARB_framebuffer_object` in the renderer), compile `third_party/glee/GLee.c` into the standalone client, call `GLeeInit` after the window opens, and put the flags it needs in the client storage adapter.
+3. When the renderer moves to OpenGL 3.3 or GLES (the OpenSubRosa plan), replace GLee with a modern loader.
