@@ -763,7 +763,7 @@ void lf_7d060(void);
 void lf_7d090(void);
 void lf_7d0e0(void);
 void lf_7d4c0(void);
-void lf_7d900(void);
+void checksimulation(void);
 void lf_7e350(void);
 void lf_7e4f0(void);
 void lf_7e500(void);
@@ -2063,7 +2063,7 @@ const LfEntry lf_table[] = {
     { "lf_7d090", 0x7d090, (void *)lf_7d090, 0, LF_RET_VOID, 4, "", 1 },
     { "movecamera", 0x7d0e0, (void *)lf_7d0e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "movecamera2", 0x7d4c0, (void *)lf_7d4c0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "checksimulation", 0x7d900, (void *)lf_7d900, 1, LF_RET_INT, 4, "v", 1 },
+    { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
     { "newspaper_load", 0x7e350, (void *)lf_7e350, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_7e4f0", 0x7e4f0, (void *)lf_7e4f0, 0, LF_RET_VOID, 4, "", 0 },
     { "playermenu", 0x7e500, (void *)lf_7e500, 1, LF_RET_VOID, 4, "v", 0 },
