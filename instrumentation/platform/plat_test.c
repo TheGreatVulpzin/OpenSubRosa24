@@ -773,10 +773,15 @@ void plat_test_patch_globals(void)
 {
     if (!r_fwrite)
         return;  /* before plat_test_init */
+#ifdef CL_HARNESS
+    /* The slots where checkbigendian stores fread and fwrite hold addresses of the recorded
+     * process: a call through them runs in memory that does not exist here. */
+    *(void **)(sr_base + 0x908b064) = (void *)st_fread;
+    *(void **)(sr_base + 0x13bee680) = r_fwrite;
+    CL_SLOT_PATCHES
+#else
     *(void **)(sr_base + 0x91022a4) = (void *)st_fread;
     *(void **)(sr_base + 0x13bf2d00) = r_fwrite;
-#ifdef CL_HARNESS
-    CL_SLOT_PATCHES
 #endif
 }
 

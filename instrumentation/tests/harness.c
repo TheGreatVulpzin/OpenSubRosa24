@@ -389,6 +389,11 @@ static int resolve_imports(void)
             }
             if (stub)
                 fn = (FARPROC)stub;
+            if (getenv("HARNESS_CRASH_STACK") && !IMAGE_SNAP_BY_ORDINAL32(names->u1.Ordinal)) {
+                const char *shown = (const char *)((IMAGE_IMPORT_BY_NAME *)(sr_base + names->u1.AddressOfData))->Name;
+                if (!strcmp(shown, "fopen") || !strcmp(shown, "fclose") || !strcmp(shown, "_chdir"))
+                    fprintf(stderr, "import %s %s -> %p (stub %p, module %p)\n", dll, shown, (void *)fn, stub, (void *)m);
+            }
             VirtualProtect(&iat->u1.Function, 4, PAGE_READWRITE, &old);
             iat->u1.Function = (DWORD)(uintptr_t)fn;
             VirtualProtect(&iat->u1.Function, 4, old, &old);
@@ -474,6 +479,31 @@ static LONG CALLBACK crash_log(EXCEPTION_POINTERS *ep)
             fprintf(stderr, ", %s of 0x%08x", r->ExceptionInformation[0] ? "write" : "read",
                     (unsigned)r->ExceptionInformation[1]);
         fprintf(stderr, " eax=%08x esp=%08x\n", (unsigned)ep->ContextRecord->Eax, (unsigned)ep->ContextRecord->Esp);
+        if (getenv("HARNESS_CRASH_STACK")) {
+            /* The words on the stack that point into the image are return addresses: they show the
+             * chain of calls that led to the crash. */
+            const uint32_t *stack = (const uint32_t *)(uintptr_t)ep->ContextRecord->Esp;
+            MEMORY_BASIC_INFORMATION mbi;
+            int k;
+            if (VirtualQuery((const void *)at, &mbi, sizeof mbi)) {
+                fprintf(stderr, "  page of the address: base %p, allocation %p, state 0x%lx, protect 0x%lx, type 0x%lx",
+                        mbi.BaseAddress, mbi.AllocationBase, (unsigned long)mbi.State, (unsigned long)mbi.Protect,
+                        (unsigned long)mbi.Type);
+                if (!IsBadReadPtr((const void *)at, 8))
+                    fprintf(stderr, ", bytes %02x %02x %02x %02x", ((const unsigned char *)at)[0],
+                            ((const unsigned char *)at)[1], ((const unsigned char *)at)[2],
+                            ((const unsigned char *)at)[3]);
+                fprintf(stderr, "\n");
+            }
+            fprintf(stderr, "  ecx=%08x edx=%08x ebx=%08x esi=%08x edi=%08x ebp=%08x\n", (unsigned)ep->ContextRecord->Ecx,
+                    (unsigned)ep->ContextRecord->Edx, (unsigned)ep->ContextRecord->Ebx,
+                    (unsigned)ep->ContextRecord->Esi, (unsigned)ep->ContextRecord->Edi,
+                    (unsigned)ep->ContextRecord->Ebp);
+            for (k = 0; k < 24 && !IsBadReadPtr(stack + k, 4); k++) {
+                if (stack[k] >= sr_base && stack[k] < sr_base + 0x1400000)
+                    fprintf(stderr, "  stack[%d] = image+0x%x\n", k, (unsigned)(stack[k] - sr_base));
+            }
+        }
         fflush(stderr);
     }
     return EXCEPTION_CONTINUE_SEARCH;
