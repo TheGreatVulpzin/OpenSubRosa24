@@ -122,6 +122,6 @@ void __cdecl clientsend(void)
     write_actions(player);
     write_voice(&g_speex.voice_ring[g_view]);
     pbitwrite((const uint32_t *)&g_speex.voice_ring[g_view].voice_off, 1);
-    pbitwritenego((const uint32_t *)&cl_data_input_wheel, 8);
+    pbitwritenego((const uint32_t *)&cl_data_spectated_human, 8);
     sendpacket(cl_data_server_address, cl_data_server_port);
 }

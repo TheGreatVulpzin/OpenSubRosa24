@@ -211,7 +211,7 @@ void resetgame(void)
         p->ready = 0;
         p->checkpoints = 0;
         p->checkpoint_mask = 0;
-        p->unused_60 = 0;
+        p->round_points = 0;
         p->wait_isec = -1;
         sr_speex.voice_ring[i].voice_off = 1;
         p->menu = sr_game.gametype == 3 ? 2 : 0;

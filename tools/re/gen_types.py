@@ -110,7 +110,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -400,6 +400,7 @@ typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel;
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
 /* Where a line hit the level: the point and the normal of the surface. */
 typedef struct LevelHit { vec3 pos; vec3 normal; } LevelHit;
+typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 typedef struct ProgramObject { uint32_t program; uint32_t vertex_shader; uint32_t fragment_shader; int linked; int uniforms[16]; } ProgramObject;
 /* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
 typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;

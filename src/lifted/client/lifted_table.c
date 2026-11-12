@@ -704,13 +704,13 @@ void debug_writelogfile(void);
 void lf_6ad10(void);
 void lf_6b140(void);
 void lf_6b160(void);
-void lf_6baa0(void);
+void drawdisplay(void);
 void lf_6d6f0(void);
 void lf_6d7d0(void);
 void drawcircle(void);
 void drawcirclefill(void);
 void drawplayerindicator(void);
-void lf_6dcb0(void);
+void drawplayerinfo(void);
 void drawcircleindicator(void);
 void lf_6e6b0(void);
 void lf_6ed50(void);
@@ -787,9 +787,9 @@ void enabletwosidedstencil(void);
 void disabletwosidedstencil(void);
 void lf_82a40(void);
 void drawhelp(void);
-void lf_830f0(void);
+void drawhud(void);
 void rendermap(void);
-void lf_84700(void);
+void drawmap(void);
 void lf_84f00(void);
 void lf_850b0(void);
 void lf_85940(void);
@@ -2004,13 +2004,13 @@ const LfEntry lf_table[] = {
     { "systemtimer", 0x6ad10, (void *)lf_6ad10, 0, LF_RET_INT, 4, "", 1 },
     { "lf_6b140", 0x6b140, (void *)lf_6b140, 1, LF_RET_INT, 4, "p", 1 },
     { "server_playermessage", 0x6b160, (void *)lf_6b160, 2, LF_RET_INT, 4, "vp", 0 },
-    { "drawdisplay", 0x6baa0, (void *)lf_6baa0, 0, LF_RET_VOID, 4, "", 1 },
+    { "drawdisplay", 0x6baa0, (void *)drawdisplay, 0, LF_RET_VOID, 4, "", 1 },
     { "createmessage", 0x6d6f0, (void *)lf_6d6f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lf_6d7d0", 0x6d7d0, (void *)lf_6d7d0, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "drawcircle", 0x6d860, (void *)drawcircle, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "drawcirclefill", 0x6d990, (void *)drawcirclefill, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "drawplayerindicator", 0x6dac0, (void *)drawplayerindicator, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
-    { "drawplayerinfo", 0x6dcb0, (void *)lf_6dcb0, 0, LF_RET_VOID, 4, "", 1 },
+    { "drawplayerinfo", 0x6dcb0, (void *)drawplayerinfo, 0, LF_RET_VOID, 4, "", 1 },
     { "drawcircleindicator", 0x6e3c0, (void *)drawcircleindicator, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "economysimulation", 0x6e6b0, (void *)lf_6e6b0, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_carmarket", 0x6ed50, (void *)lf_6ed50, 0, LF_RET_VOID, 4, "", 0 },
@@ -2087,9 +2087,9 @@ const LfEntry lf_table[] = {
     { "disabletwosidedstencil", 0x82a20, (void *)disabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "settwosidedstencil", 0x82a40, (void *)lf_82a40, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "drawhelp", 0x82b20, (void *)drawhelp, 0, LF_RET_VOID, 4, "", 1 },
-    { "drawhud", 0x830f0, (void *)lf_830f0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "drawhud", 0x830f0, (void *)drawhud, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermap", 0x844d0, (void *)rendermap, 0, LF_RET_VOID, 4, "", 1 },
-    { "drawmap", 0x84700, (void *)lf_84700, 1, LF_RET_VOID, 4, "v", 1 },
+    { "drawmap", 0x84700, (void *)drawmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "spritetimetolive", 0x84f00, (void *)lf_84f00, 0, LF_RET_VOID, 4, "", 0 },
     { "createhuman", 0x850b0, (void *)lf_850b0, 3, LF_RET_INT, 4, "pvv", 0 },
     { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },

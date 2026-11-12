@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, sprites, simsprites, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
+Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, sprites, simsprites, map, map2, hud, hud2, pi, pi2, pi3, dd3a..dd3e, dd4, dd2, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -244,6 +244,134 @@ def simsprites_case():
     return edits, {'sprite_model_simulation': [call(0xe52e0)] * 4}
 
 
+def map_case(wireframe):
+    """Draw the map for humans at the middle, at both clamps and without a human, in a driving game
+    with checkpoints, with and without the wide view."""
+    game, count, checkpoints, wire, view = 0x9065308, 0x908aaec, 0x908aaf0, 0x75a5140 + 11, 0xfefe2a0
+    players, humans = 0xed813a0, 0x14fc4a0
+    rng = random.Random(5)
+    edits = [(game, 'i', [2]), (count, 'i', [6]), (wire, 'B', [wireframe]), (view, 'i', [3])]
+    for k in range(6):
+        edits.append((checkpoints + k * 12, '3f', [rng.uniform(0.0, 2000.0), 0.0, rng.uniform(0.0, 2000.0)]))
+    teams = [0, 1, 2, 3, 4, 5, -1, 7, 2, 2]
+    for k, team in enumerate(teams):
+        edits.append((players + k * 0x2408, 'i', [1]))
+        edits.append((players + k * 0x2408 + 0x64, 'i', [team]))
+        edits.append((players + k * 0x2408 + 0x5c, 'I', [rng.randrange(64)]))
+    spots = [(400.0, 20.0, 600.0), (-900.0, 20.0, -900.0), (5000.0, 20.0, 5000.0), (300.0, 20.0, 1100.0)]
+    for k, (x, y, z) in enumerate(spots):
+        edits.append((humans + k * 0x2b64 + 0x48, '3f', [x, y, z]))
+        edits.append((humans + k * 0x2b64 + 0x60, 'f', [rng.uniform(0.0, 6.28)]))
+    return edits, {'drawmap': [call(0x84700, who) for who in (0, 1, 2, 3, -1, 0)]}
+
+
+def hud_case(shift):
+    """Draw the display for players with a phone in each call state, a car, a helicopter, no human,
+    items in the hands and in the pack, with and without the hand key and the map."""
+    players, humans, items, objects = 0xed813a0, 0x14fc4a0, 0x908b080, 0x5519120
+    rng = random.Random(9)
+    edits = [(0x75a5140 + 0xe1, 'B', [shift]), (0xfefe2d4, 'f', [2.5]), (0x908aae0, 'i', [shift]),
+             (0xb77c594, 'i', [0]), (0x908aad8, 'i', [1]), (0x9065320, 'i', [1])]
+    # (human, phone state, info, move mode, input mode, bleeding, vehicle, seat)
+    setups = [(0, 0, 0, 0, 2, 0, 0, 0), (1, 1, 0, 1, 3, 1, 0, 0), (2, 2, 0, 2, 0, 0, -1, 0),
+              (3, 2, 1234, 1, 2, 1, 1, 1), (4, 3, 555, 0, 3, 0, 1, 0), (5, 1, 77, 2, 2, 0, 1, 0)]
+    for k, (human, state, info, move, mode, bleeding, vehicle, seat) in enumerate(setups):
+        item = 3 + k
+        edits.append((items + item * 0x1ac + 0xc, 'i', [0x17]))
+        edits.append((items + item * 0x1ac + 0x104, 'i', [info]))
+        edits.append((items + item * 0x1ac + 0x110, 'i', [state]))
+        base = humans + human * 0x2b64
+        edits.append((base + 0x14, 'i', [vehicle]))
+        edits.append((base + 0x18, 'i', [seat]))
+        edits.append((base + 0x291c, '2i', [1, item]))
+        edits.append((base + 0x2b1c, 'i', [bleeding]))
+        player = players + k * 0x2408
+        edits.append((player, 'i', [1]))
+        edits.append((player + 0x78, 'i', [human]))
+        edits.append((player + 0xac, 'i', [move]))
+        edits.append((player + 0xc4, 'i', [k % 2]))
+        edits.append((player + 0xc8, 'i', [mode]))
+        edits.append((player + 0xd4, 'i', [k % 3]))
+        edits.append((player + 0x7c, '4f', [rng.uniform(-1.0, 1.0) for _ in range(4)]))
+        edits.append((player + 0x9c, 'I', [0x10 if k == 2 else 0]))
+        edits.append((player + 0x15ec, 'i', [rng.randrange(0, 200)]))
+        for slot in range(7):
+            count = rng.randrange(0, 4)
+            codes = [rng.choice([0, 1, 2, 12, 13, 20]) | (rng.randrange(-1, 31) << 8) & 0xffffff00 for _ in range(8)]
+            edits.append((player + 0x15f8 + slot * 0x24, '9i', [count] + [c - (1 << 32) if c >= 1 << 31 else c for c in codes[:8]]))
+    for vehicle in (0, 1):
+        edits.append((objects + vehicle * 0x8230 + 0x60, '3f', [rng.uniform(-2.0, 2.0), 0.0, rng.uniform(-2.0, 2.0)]))
+        edits.append((objects + vehicle * 0x8230 + 0x5ee0, 'i', [rng.randrange(0, 5000)]))
+    # a player with no human
+    edits.append((players + 6 * 0x2408, 'i', [1]))
+    edits.append((players + 6 * 0x2408 + 0x78, 'i', [-1]))
+    return edits, {'drawhud': [call(0x830f0, who) for who in (0, 1, 2, 3, 4, 5, 6, -1)]}
+
+
+def playerinfo_case(state):
+    """List 24 players in every column, with bots, players that are not ready, stocks that rose, fell
+    and split, in a game state."""
+    players, market, game_state = 0xed813a0, 0x17678bc0, 0x9065320
+    rng = random.Random(14)
+    edits = [(game_state, 'i', [state])]
+    for team in range(8):
+        price = [100, 250, 40, 0, 1, 500, 7, 3][team]
+        opened = [100.0, 100.0, 100.0, 0.0, 50.0, 500.0, 7.0, 3.0][team]
+        edits.append((market + team * 0x14 + 4, '2f', [float(price), opened]))
+        edits.append((market + team * 0x14 + 0xc, 'i', [price]))
+    for k in range(24):
+        base = players + k * 0x2408
+        team = [0, 1, 2, 3, 7, -1][k % 6]
+        name = ('Player%02d' % k).encode().ljust(32, b'\0')
+        edits.append((base, 'i', [1]))
+        edits.append((base + 4, '32s', [name]))
+        edits.append((base + 0x3c, 'i', [k % 3]))
+        edits.append((base + 0x40, 'i', [rng.randrange(0, 200000)]))
+        edits.append((base + 0x64, 'i', [team]))
+        edits.append((base + 0x6c, 'i', [rng.randrange(0, 2000)]))
+        edits.append((base + 0x1a38, 'i', [1 if k % 11 == 10 else 0]))
+    return edits, {'drawplayerinfo': [call(0x6dcb0)] * 2}
+
+
+def display_case(gametype, state, round_mode, debugit=0):
+    """Draw the display of the game with the stock page, a mission of every kind, the timers of the
+    game types, the player list and the chat lines."""
+    game, view, players, humans, market = 0x9065300, 0xfefe2a0, 0xed813a0, 0x14fc4a0, 0x17678bc0
+    rng = random.Random(gametype * 10 + state)
+    edits = [(game + 8, 'i', [gametype]), (game + 0xc, 'i', [round_mode]), (game + 0x20, 'i', [state]),
+             (game + 0x24, 'i', [rng.randrange(0, 200000)]), (0x908aae0, 'i', [1]), (0x908ac70, 'i', [rng.randrange(0, 90000)]),
+             (0x908ac74, 'i', [rng.randrange(0, 50)]), (view, 'i', [0]), (0x127ea8, 'i', [debugit]),
+             (0x102feb48, 'i', [debugit]), (0x29e7d320, 'i', [rng.randrange(0, 5000000)])]
+    for team in range(8):
+        edits.append((market + team * 0x14 + 0xc, 'i', [rng.randrange(1, 900)]))
+    edits.append((players, 'i', [1]))
+    edits.append((players + 0x64, 'i', [state % 4]))
+    edits.append((players + 0x40, 'i', [rng.randrange(0, 90000)]))
+    edits.append((players + 0x6c, 'i', [rng.randrange(0, 900)]))
+    edits.append((players + 0x78, 'i', [0]))
+    edits.append((players + 0xd4, 'i', [2]))
+    edits.append((humans + 0x28, 'i', [100]))
+    team_base = game + 0xcc + (state % 4) * 0x117c
+    for k in range(16):
+        base = team_base + k * 0x40
+        edits.append((base, 'i', [1 if k < 9 else 0]))
+        edits.append((base + 8, 'i', [k % 7]))
+        edits.append((base + 0x10, 'i', [(k + 1) % 5]))
+        edits.append((base + 0x20, 'i', [k % 10]))
+        edits.append((base + 0x24, 'i', [rng.randrange(1000, 90000)]))
+        edits.append((base + 0x28, 'i', [rng.randrange(0, 4000000)]))
+        edits.append((base + 0x2c, 'i', [-1 if k % 4 == 0 else rng.randrange(0, 50)]))
+        edits.append((base + 0x30, 'i', [rng.randrange(0, 50000)]))
+    chat = 0x129660
+    edits.append((0xf3eafc0, 'I', [40]))
+    for k in range(16):
+        base = chat + (30 + k) * 0x98
+        text = ('Line %d of the chat' % k).encode().ljust(128, b'\0')
+        edits.append((base, '6i', [k % 5, 0, rng.randrange(-5, 300), rng.randrange(-5, 300), rng.choice([-1, 0]), 0]))
+        edits.append((base + 0x18, '128s', [text]))
+    return edits, {'drawdisplay': [call(0x6baa0)] * 2}
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -373,7 +501,7 @@ def main():
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
-    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'sprites': sprites_case, 'simsprites': simsprites_case, 'models': models_case,
+    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'sprites': sprites_case, 'simsprites': simsprites_case, 'map': lambda: map_case(0), 'map2': lambda: map_case(1), 'hud': lambda: hud_case(0), 'hud2': lambda: hud_case(1), 'pi': lambda: playerinfo_case(3), 'pi2': lambda: playerinfo_case(0), 'pi3': lambda: playerinfo_case(1), 'dd3a': lambda: display_case(3, 0, 0), 'dd3b': lambda: display_case(3, 1, 3), 'dd3c': lambda: display_case(3, 2, 3), 'dd3d': lambda: display_case(3, 2, 0), 'dd3e': lambda: display_case(3, 3, 3, 1), 'dd4': lambda: display_case(4, 1, 0, 1), 'dd2': lambda: display_case(2, 2, 0), 'models': models_case,
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}

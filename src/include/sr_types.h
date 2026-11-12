@@ -261,6 +261,7 @@ typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel;
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
 /* Where a line hit the level: the point and the normal of the surface. */
 typedef struct LevelHit { vec3 pos; vec3 normal; } LevelHit;
+typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 typedef struct ProgramObject { uint32_t program; uint32_t vertex_shader; uint32_t fragment_shader; int linked; int uniforms[16]; } ProgramObject;
 /* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
 typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
@@ -735,13 +736,13 @@ typedef union Player { struct {
     int ready;                           /* +0x003c economysimulation pays it when above 0; menu 2 value 5 writes 1; resetgame writes 0; logicsimulation_round starts the round when all humans have it */
     int money;                           /* +0x0040 createplayer writes 50000; manager (black_market.c) uses it as the balance; logic_gunstore_buy */
     int godmode;                         /* +0x0044 server_playermessage /godmode xors it; bulletsimulation: no hit on the human of a player with it */
-    float unk_0048;                      /* +0x0048 1 functions */
+    int net_worth;                       /* +0x0048 drawplayerinfo writes the money plus the value of the stocks; the player list shows it */
     int num_purchases;                   /* +0x004c logic_gunstore_buy and logic_playeractions: limit < 10 */
     int num_cars;                        /* +0x0050 logic_cardealer_buy: limit < 3, adds 1; the day reset subtracts 1 */
     int small_bills;                     /* +0x0054 logic_playeractions menus 11 and 12: bills 1 and 2 add 1, limit < 40; the day reset writes 0 */
     int checkpoints;                     /* +0x0058 logicsimulation_driving: the number of checkpoints reached; resetgame writes 0 */
     uint32_t checkpoint_mask;            /* +0x005c logicsimulation_driving: bit i = checkpoint i reached */
-    int unused_60;                       /* +0x0060 resetgame writes 0 (grep for a reader first; rename if you find one) */
+    int round_points;                    /* +0x0060 resetgame writes 0; drawdisplay shows it as the left number of the round score line */
     int team;                            /* +0x0064 createplayer writes 7; createhuman copies it to human.team; logic_addteamcash */
     int countdown;                       /* +0x0068 logicsimulation_round subtracts 1 while above 0 (no group 6 code writes it) */
     int stocks;                          /* +0x006c playerbuystock/playersellstock; economysimulation */
@@ -762,7 +763,7 @@ typedef union Player { struct {
     float body_param;                    /* +0x00b8 createplayer writes 1.0; createhuman copies it to Human.body_param */
     int leave_ticks;                     /* +0x00bc logicsimulation_world: ticks outside the base with button 0x40000 down; at 180 the player leaves the team */
     uint8_t pad_00c0[0x4];
-    int unk_00c4;                        /* +0x00c4 2 functions */
+    int crouching;                       /* +0x00c4 drawhud writes the Crouch label when it is not 0 */
     int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
     int unused_cc;                       /* +0x00cc resetgame writes 0 for the test player next to input_mode. No reader in the server */
     int unk_00d0;                        /* +0x00d0 1 functions */
@@ -816,12 +817,13 @@ SR_STATIC_ASSERT(offsetof(Player, chat_block) == 0x38, "Player.chat_block");
 SR_STATIC_ASSERT(offsetof(Player, ready) == 0x3c, "Player.ready");
 SR_STATIC_ASSERT(offsetof(Player, money) == 0x40, "Player.money");
 SR_STATIC_ASSERT(offsetof(Player, godmode) == 0x44, "Player.godmode");
+SR_STATIC_ASSERT(offsetof(Player, net_worth) == 0x48, "Player.net_worth");
 SR_STATIC_ASSERT(offsetof(Player, num_purchases) == 0x4c, "Player.num_purchases");
 SR_STATIC_ASSERT(offsetof(Player, num_cars) == 0x50, "Player.num_cars");
 SR_STATIC_ASSERT(offsetof(Player, small_bills) == 0x54, "Player.small_bills");
 SR_STATIC_ASSERT(offsetof(Player, checkpoints) == 0x58, "Player.checkpoints");
 SR_STATIC_ASSERT(offsetof(Player, checkpoint_mask) == 0x5c, "Player.checkpoint_mask");
-SR_STATIC_ASSERT(offsetof(Player, unused_60) == 0x60, "Player.unused_60");
+SR_STATIC_ASSERT(offsetof(Player, round_points) == 0x60, "Player.round_points");
 SR_STATIC_ASSERT(offsetof(Player, team) == 0x64, "Player.team");
 SR_STATIC_ASSERT(offsetof(Player, countdown) == 0x68, "Player.countdown");
 SR_STATIC_ASSERT(offsetof(Player, stocks) == 0x6c, "Player.stocks");
@@ -839,6 +841,7 @@ SR_STATIC_ASSERT(offsetof(Player, look_pitch) == 0xa8, "Player.look_pitch");
 SR_STATIC_ASSERT(offsetof(Player, move_mode) == 0xac, "Player.move_mode");
 SR_STATIC_ASSERT(offsetof(Player, body_param) == 0xb8, "Player.body_param");
 SR_STATIC_ASSERT(offsetof(Player, leave_ticks) == 0xbc, "Player.leave_ticks");
+SR_STATIC_ASSERT(offsetof(Player, crouching) == 0xc4, "Player.crouching");
 SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
 SR_STATIC_ASSERT(offsetof(Player, unused_cc) == 0xcc, "Player.unused_cc");
 SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");

@@ -13,6 +13,7 @@ renderlandscape src/client/render/landscape_draw.c
 renderframeatmosphere src/client/render/atmosphere.c
 rendermodelshadow src/client/render/shadow.c
 rendermap src/client/render/map.c
+drawmap src/client/render/map.c
 drawhelp src/client/render/help.c
 boxinsidefrustum src/client/render/frustum.c
 pointinsidefrustum src/client/render/frustum.c
@@ -32,3 +33,6 @@ deletesprite_model src/client/render/sprite_models.c
 sprite_modeltimetolive src/client/render/sprite_models.c
 sprite_model_simulation src/client/render/sprite_models.c
 renderspritemodels src/client/render/sprite_models.c
+drawplayerinfo src/client/render/player_info.c
+drawhud src/client/render/hud.c
+drawdisplay src/client/render/display.c

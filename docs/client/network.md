@@ -18,7 +18,7 @@ Files: `src/client/setup/send.c`, `src/client/setup/interpolation.c`.
 | Actions | 4 and 8 bits, then the actions | The number of queued actions, at most 15, and the index of the first one. |
 | Voice | 6 frames | For each frame: its index, size, mode and bytes. |
 | Voice off | 1 bit | The flag of a muted speaker. |
-| Wheel | 8 bits, signed | `input_wheel`. |
+| Watched human | 8 bits, signed | `spectated_human`. |
 
 The packet goes to `server_address` and `server_port`.
 
