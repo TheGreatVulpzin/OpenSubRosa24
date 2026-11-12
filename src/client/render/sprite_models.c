@@ -2,7 +2,7 @@
  *
  * A piece has a place, a speed, an orientation and a spin. Each tick it falls, spins and
  * moves. When it hits the level it bounces and loses speed. A piece that lies still on flat
- * ground stops: its corners go into a list that stays on the screen, and the piece is free.
+ * ground stops: its corners go into a list that the renderer draws, and the piece is free.
  */
 #include "render/sprite_models.h"
 
