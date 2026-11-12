@@ -710,19 +710,19 @@ typedef union Player { struct {
     float look_yaw;                      /* +0x00a4 serversend: Human.axis copied, packangle 16 */
     float look_pitch;                    /* +0x00a8 serversend: Human.pitch copied, packangle 16 */
     int move_mode;                       /* +0x00ac rename hud_mode: playersimulation copies it to Human.move_mode; resetgame writes 1. Users: src/net/server.c:471 */
-    float unk_00b0;                      /* +0x00b0 4 functions */
-    float unk_00b4;                      /* +0x00b4 4 functions */
+    float zoom_target;                   /* +0x00b0 getinputs wheel selects zoom */
+    float zoom;                          /* +0x00b4 getinputs smooths zoom and scales mouse motion */
     float body_param;                    /* +0x00b8 createplayer writes 1.0; createhuman copies it to Human.body_param */
     int leave_ticks;                     /* +0x00bc logicsimulation_world: ticks outside the base with button 0x40000 down; at 180 the player leaves the team */
     uint8_t pad_00c0[0x4];
-    int unk_00c4;                        /* +0x00c4 2 functions */
+    int crouch_toggle;                   /* +0x00c4 getinputs_human control key toggles crouch */
     int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
     int unused_cc;                       /* +0x00cc resetgame writes 0 for the test player next to input_mode. No reader in the server */
-    int unk_00d0;                        /* +0x00d0 1 functions */
+    int held_item_previous;              /* +0x00d0 getinputs_human detects a door in the selected hand */
     int menu;                            /* +0x00d4 playermenu compares with 1 and 2; logic_player writes 9 */
     int menu_building;                   /* +0x00d8 logic_cardealer_buy uses it as an index (stride 0x9dc); serversend sends 16 bits */
-    int unk_00dc;                        /* +0x00dc 1 functions */
-    int unk_00e0;                        /* +0x00e0 12 functions */
+    int menu_previous;                   /* +0x00dc getinputs detects menu transitions */
+    int menu_action;                     /* +0x00e0 getinputs queues a menu action and clears it */
     int num_actions;                     /* +0x00e4 player_addaction_chat/menu: action index (stride 0x54) */
     int action_tail;                     /* +0x00e8 clientrecv */
     PlayerAction actions[64];            /* +0x00ec serverrecv type 4 writes the ring; player_addaction_chat/menu */
@@ -790,12 +790,18 @@ SR_STATIC_ASSERT(offsetof(Player, input_buttons_prev) == 0xa0, "Player.input_but
 SR_STATIC_ASSERT(offsetof(Player, look_yaw) == 0xa4, "Player.look_yaw");
 SR_STATIC_ASSERT(offsetof(Player, look_pitch) == 0xa8, "Player.look_pitch");
 SR_STATIC_ASSERT(offsetof(Player, move_mode) == 0xac, "Player.move_mode");
+SR_STATIC_ASSERT(offsetof(Player, zoom_target) == 0xb0, "Player.zoom_target");
+SR_STATIC_ASSERT(offsetof(Player, zoom) == 0xb4, "Player.zoom");
 SR_STATIC_ASSERT(offsetof(Player, body_param) == 0xb8, "Player.body_param");
 SR_STATIC_ASSERT(offsetof(Player, leave_ticks) == 0xbc, "Player.leave_ticks");
+SR_STATIC_ASSERT(offsetof(Player, crouch_toggle) == 0xc4, "Player.crouch_toggle");
 SR_STATIC_ASSERT(offsetof(Player, input_mode) == 0xc8, "Player.input_mode");
 SR_STATIC_ASSERT(offsetof(Player, unused_cc) == 0xcc, "Player.unused_cc");
+SR_STATIC_ASSERT(offsetof(Player, held_item_previous) == 0xd0, "Player.held_item_previous");
 SR_STATIC_ASSERT(offsetof(Player, menu) == 0xd4, "Player.menu");
 SR_STATIC_ASSERT(offsetof(Player, menu_building) == 0xd8, "Player.menu_building");
+SR_STATIC_ASSERT(offsetof(Player, menu_previous) == 0xdc, "Player.menu_previous");
+SR_STATIC_ASSERT(offsetof(Player, menu_action) == 0xe0, "Player.menu_action");
 SR_STATIC_ASSERT(offsetof(Player, num_actions) == 0xe4, "Player.num_actions");
 SR_STATIC_ASSERT(offsetof(Player, action_tail) == 0xe8, "Player.action_tail");
 SR_STATIC_ASSERT(offsetof(Player, actions) == 0xec, "Player.actions");

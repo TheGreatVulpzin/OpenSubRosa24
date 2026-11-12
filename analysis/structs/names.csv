@@ -892,6 +892,28 @@ audio_camera,0x4,pos,vec3,,Audio source and voice frame access
 audio_camera,0x10,rot,vec3,3,Audio source and voice frame access
 audio_camera,0x34,projection,float,,Audio source and voice frame access
 audio_camera,0x38,vel,vec3,,Audio source and voice frame access
+input_mouse,0x0,x,int,,Absolute horizontal coordinate on a 1024 pixel canvas
+input_mouse,0x4,y,int,,Absolute vertical coordinate on a 640 pixel canvas
+input_mouse,0x8,dx,int,,Relative horizontal movement
+input_mouse,0xc,dy,int,,Relative vertical movement
+input_mouse,0x10,left,int,,Left button state
+input_mouse,0x14,right,int,,Right button state
+input_mouse,0x18,left_released,int,,Left button release transition
+input_mouse,0x1c,right_released,int,,Right button release transition
+input_mouse,0x20,wheel_up,int,,Positive upward wheel events
+input_mouse,0x24,wheel_down,int,,Positive downward wheel events
+input_mouse,0x28,buttons,uint32_t,,Low eight mouse button bits
+input_camera,0x0,pos,vec3,,Camera translation
+input_camera,0xc,yaw,float,,Horizontal camera angle
+input_camera,0x10,pitch,float,,Vertical camera angle
+input_camera,0x14,zoom,float,,Smoothed camera zoom or distance
+input_camera,0x18,zoom_target,float,,Requested camera zoom or distance
+player,0xb0,zoom_target,float,,getinputs wheel selects zoom
+player,0xb4,zoom,float,,getinputs smooths zoom and scales mouse motion
+player,0xc4,crouch_toggle,int,,getinputs_human control key toggles crouch
+player,0xd0,held_item_previous,int,,getinputs_human detects a door in the selected hand
+player,0xdc,menu_previous,int,,getinputs detects menu transitions
+player,0xe0,menu_action,int,,getinputs queues a menu action and clears it
 soundlist,0x24,engine,int,,Audio source and voice frame access
 soundlist,0x34,tire,int,,Audio source and voice frame access
 soundlist,0x134,engine_large,int,,Audio source and voice frame access

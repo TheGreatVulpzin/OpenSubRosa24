@@ -119,6 +119,10 @@ AUDIO_STRUCTS = {
     'AudioChannel': ('audio_channel', 0x2924c),
     'AudioCamera': ('audio_camera', 0x44),
 }
+INPUT_STRUCTS = {
+    'InputMouse': ('input_mouse', 0x2c),
+    'InputCamera': ('input_camera', 0x1c),
+}
 TYPE_SIZE.update({'AudioDecoder': 0x28})
 TYPE_SIZE.update({'uint16_t': 2, 'uint8_t*': 4, 'uint32_t*': 4,
                   'ImageReader': 0x1c, 'ZlibHuffman': 0x7e4,
@@ -978,6 +982,13 @@ def main():
         audio.append(gen_struct(cname, glob, size, names.get(glob, {}), {}))
     audio.extend(['#pragma pack(pop)', '#endif', ''])
     (out / 'sr_audio_types.h').write_text('\n\n'.join(audio).rstrip() + '\n', encoding='utf-8', newline='\n')
+    inputs = ['/* Mouse state and camera controls. */',
+              '#ifndef SR_INPUT_TYPES_H', '#define SR_INPUT_TYPES_H',
+              '#include "sr_types.h"', '#pragma pack(push, 1)']
+    for cname, (glob, size) in INPUT_STRUCTS.items():
+        inputs.append(gen_struct(cname, glob, size, names.get(glob, {}), {}))
+    inputs.extend(['#pragma pack(pop)', '#endif', ''])
+    (out / 'sr_input_types.h').write_text('\n\n'.join(inputs).rstrip() + '\n', encoding='utf-8', newline='\n')
     print('generated: types, address metadata, diagnostic table and capacity limits')
 
 

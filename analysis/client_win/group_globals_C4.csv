@@ -1,0 +1,52 @@
+name,type,count,client_rva,evidence
+input_mouse,InputMouse,1,0x19c07c80,checkmouse and checkmouserelative copy 0x2c bytes
+input_mouse_previous,InputMouse,1,0xb733100,checkmouse preserves the complete mouse record
+input_screen_width,int,1,0xb7330c0,checkmouse horizontal scale
+input_screen_height,int,1,0xb7330c4,checkmouse vertical scale
+input_invert_pitch,int,1,0x90631ec,getinputs_human and movecamera2 pitch sign
+input_cursor,int,1,0xb77c594,getinputs mouse capture and player menu
+input_cursor_previous,int,1,0xb77c598,getinputs mouse capture transition
+input_fire_blocked,int,1,0xb77c59c,getinputs waits for left button release
+input_cameras,InputCamera,2,0xf3eafe0,movecamera and movecamera2 stride 0x1c and camera index 1
+input_heli_mouse,float,2,0x1dda5248,getinputs_heli mouse control decay
+input_server,int,1,0x75a5800,debug_getinputs server controls
+input_viewed_player,int,1,0xfefe2a0,getinputs chat recipient and debug camera selection
+input_observed_human,int,1,0x908aad8,getinputs spectator selection
+input_follow_camera,int,1,0x908aadc,debug_getinputs free camera switch
+input_map,uint32_t,1,0x908aae0,getinputs C key toggle
+input_chat,int,1,0x52daba0,getinputs chat visibility
+input_chat_head,uint32_t,1,0x52daba8,getinputs chat ring wraps at eight
+input_chat_length,uint32_t,1,0x52dabac,getinputs chat length
+input_chat_text,char,60,0x52dabb0,getinputs chat entry capacity
+input_pause,int,1,0x9065304,getinputs pause menu mode
+input_game_type,int,1,0x9065308,getinputs player menu rules
+input_options,int,1,0x9065310,getinputs options menu button
+input_voice_options,int,1,0x9065314,getinputs voice menu button
+input_connections_menu,int,1,0x9065318,getinputs connection menu
+input_game_running,uint32_t,1,0x9065350,getinputs pause state
+input_pending_ips,uint32_t,256,0x1033ed20,getinputs selected connection addresses
+input_pending_count,int,1,0x103675a4,getinputs pending connection count
+input_connection_count,int,1,0x1b9b4e0,getinputs connection menu bound
+input_debug_toggle,uint32_t,1,0x102feb48,debug_getinputs keypad divide toggle
+input_debug_humans,uint32_t,1,0x14f92e0,debug_getinputs F2 toggle
+input_debug_client_a,uint32_t,1,0x9065344,debug_getinputs server I key toggle
+input_debug_client_b,uint32_t,1,0x906533c,debug_getinputs server P key toggle
+input_debug_client_c,int,1,0x9065340,debug_getinputs server O key switch
+input_debug_display,uint32_t,1,0x14a8680,debug_getinputs F6 toggle
+input_debug_display_mode,int,1,0x14a8684,debug_getinputs F11 cycles zero through five
+input_debug_world,uint32_t,1,0x14a8688,debug_getinputs B key toggle
+input_interior_timers,int,5,0x12a7d660,debug_getinputs resets five interior timers
+input_label_chat,char,2,0x127eb1,getinputs chat label
+input_label_pause,char,5,0x125224,getinputs pause label
+input_label_return,char,15,0x12522c,getinputs return menu label
+input_label_options,char,8,0x12523c,getinputs options label
+input_label_voice,char,14,0x125244,getinputs voice label
+input_label_exit,char,16,0x125254,getinputs exit label
+input_label_return_connections,char,15,0x125264,getinputs connection return label
+input_label_empty_connection,char,5,0x125274,getinputs empty connection label
+input_label_human_axis,char,10,0x12527c,getinputs_human angle label
+input_label_timer_build,char,14,0x123e18,debug_getinputs interior build label
+input_label_timer_optimize,char,17,0x123e28,debug_getinputs interior optimization label
+input_label_timer_setup,char,14,0x123e3c,debug_getinputs interior setup label
+input_label_timer_alloc,char,14,0x123e4c,debug_getinputs interior allocation label
+input_label_timer_shadow,char,15,0x123e5c,debug_getinputs interior shadow label
