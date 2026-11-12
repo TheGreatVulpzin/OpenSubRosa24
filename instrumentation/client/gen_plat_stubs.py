@@ -53,9 +53,20 @@ CUSTOM = {
     'SDL_GetNumDisplayModes': 'return 1;',
     'SDL_GetDisplayMode': 'unsigned int *m = (unsigned int *)mode; m[0] = 0x16161804u; m[1] = 1600; m[2] = 900; '
                           'm[3] = 60; m[4] = 0; return 0;',
-    'SDL_GetKeyboardState': 'static unsigned char keys[512]; if (numkeys) *numkeys = 512; return keys;',
-    'SDL_GetMouseState': 'if (x) *x = 0; if (y) *y = 0; return 0;',
-    'SDL_GetRelativeMouseState': 'if (x) *x = 0; if (y) *y = 0; return 0;',
+    'SDL_GetKeyboardState': 'static unsigned char keys[512]; const char *input = getenv("SV_INPUT_KEYS"); '
+                            'memset(keys, 0, sizeof(keys)); '
+                            'while (input && *input) { char *end; long key = strtol(input, &end, 10); '
+                            'if (end == input) break; if (key >= 0 && key < 512) keys[key] = 1; '
+                            'input = *end == 44 ? end + 1 : end; } '
+                            'if (numkeys) *numkeys = 512; return keys;',
+    'SDL_GetMouseState': 'const char *input = getenv("SV_INPUT_MOUSE"); '
+                         'int mx = 0, my = 0, dx = 0, dy = 0; unsigned buttons = 0; '
+                         'if (input) sscanf(input, "%d,%d,%d,%d,%u", &mx, &my, &dx, &dy, &buttons); '
+                         'if (x) *x = mx; if (y) *y = my; return buttons;',
+    'SDL_GetRelativeMouseState': 'const char *input = getenv("SV_INPUT_MOUSE"); '
+                                 'int mx = 0, my = 0, dx = 0, dy = 0; unsigned buttons = 0; '
+                                 'if (input) sscanf(input, "%d,%d,%d,%d,%u", &mx, &my, &dx, &dy, &buttons); '
+                                 'if (x) *x = dx; if (y) *y = dy; return buttons;',
     'speex_decoder_init': 'return (void *)0x4000;',
     'speex_encoder_init': 'return (void *)0x4000;',
     'speex_preprocess_state_init': 'return (void *)0x4000;',

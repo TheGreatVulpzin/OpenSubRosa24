@@ -716,7 +716,7 @@ typedef union Player { struct {
     int leave_ticks;                     /* +0x00bc logicsimulation_world: ticks outside the base with button 0x40000 down; at 180 the player leaves the team */
     uint8_t pad_00c0[0x4];
     int crouch_toggle;                   /* +0x00c4 getinputs_human control key toggles crouch */
-    int input_mode;                      /* +0x00c8 serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely) */
+    int input_mode;                      /* +0x00c8 getinputs selects 0 for no body and 1 for human and 2 for car and 3 for helicopter; serverrecv reads eight bits */
     int unused_cc;                       /* +0x00cc resetgame writes 0 for the test player next to input_mode. No reader in the server */
     int held_item_previous;              /* +0x00d0 getinputs_human detects a door in the selected hand */
     int menu;                            /* +0x00d4 playermenu compares with 1 and 2; logic_player writes 9 */
@@ -1493,7 +1493,9 @@ typedef union Game { struct {
     int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
     int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
-    uint8_t pad_0010[0xc];
+    int option_menu;                     /* +0x0010 Client options menu switch */
+    int voice_menu;                      /* +0x0014 Client voice menu switch */
+    int connections_menu;                /* +0x0018 Client connection menu switch */
     int round_number;                    /* +0x001c resetgame adds 1 (likely); serversend sends it */
     int state;                           /* +0x0020 1 and 2; manager: 2 = match running */
     int timer;                           /* +0x0024 decreases by 1 each tick; 0 changes the state */
@@ -1502,7 +1504,10 @@ typedef union Game { struct {
     float teamkill_rate;                 /* +0x0030 playerteamkilltax writes 0.05f (no reader in the server) */
     int end_time;                        /* +0x0034 dedicatedserverloop writes 0x4ec (1260 ticks); logicsimulation copies it to timer when the state changes to 3 */
     int ticks;                           /* +0x0038 adds 1 each tick; createevent_message copies it to Event.tick */
-    uint8_t pad_003c[0x10];
+    uint32_t debug_p;                    /* +0x003c Client P key diagnostic switch */
+    int debug_o;                         /* +0x0040 Client O key diagnostic switch */
+    uint32_t debug_i;                    /* +0x0044 Client I key diagnostic switch */
+    uint8_t pad_0048[0x4];
     float start_angle_a;                 /* +0x004c serversend: packangle 16 in the new game packet */
     float start_angle_b;                 /* +0x0050 serversend: packangle 16 in the new game packet */
     uint8_t pad_0054[0x4];
@@ -1604,7 +1609,8 @@ typedef union Game { struct {
     int unk_7f34;                        /* +0x7f34 1 functions */
     uint8_t pad_7f38[0x1b0a0];
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
-    uint8_t pad_22fdc[0x2800];
+    uint8_t pad_22fdc[0x27fc];
+    int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
     int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     uint8_t pad_257e4[0x4];
@@ -1621,6 +1627,9 @@ SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
 SR_STATIC_ASSERT(offsetof(Game, link_state) == 0x4, "Game.link_state");
 SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
 SR_STATIC_ASSERT(offsetof(Game, round_mode) == 0xc, "Game.round_mode");
+SR_STATIC_ASSERT(offsetof(Game, option_menu) == 0x10, "Game.option_menu");
+SR_STATIC_ASSERT(offsetof(Game, voice_menu) == 0x14, "Game.voice_menu");
+SR_STATIC_ASSERT(offsetof(Game, connections_menu) == 0x18, "Game.connections_menu");
 SR_STATIC_ASSERT(offsetof(Game, round_number) == 0x1c, "Game.round_number");
 SR_STATIC_ASSERT(offsetof(Game, state) == 0x20, "Game.state");
 SR_STATIC_ASSERT(offsetof(Game, timer) == 0x24, "Game.timer");
@@ -1629,6 +1638,9 @@ SR_STATIC_ASSERT(offsetof(Game, round_time) == 0x2c, "Game.round_time");
 SR_STATIC_ASSERT(offsetof(Game, teamkill_rate) == 0x30, "Game.teamkill_rate");
 SR_STATIC_ASSERT(offsetof(Game, end_time) == 0x34, "Game.end_time");
 SR_STATIC_ASSERT(offsetof(Game, ticks) == 0x38, "Game.ticks");
+SR_STATIC_ASSERT(offsetof(Game, debug_p) == 0x3c, "Game.debug_p");
+SR_STATIC_ASSERT(offsetof(Game, debug_o) == 0x40, "Game.debug_o");
+SR_STATIC_ASSERT(offsetof(Game, debug_i) == 0x44, "Game.debug_i");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_a) == 0x4c, "Game.start_angle_a");
 SR_STATIC_ASSERT(offsetof(Game, start_angle_b) == 0x50, "Game.start_angle_b");
 SR_STATIC_ASSERT(offsetof(Game, team0_base_min) == 0x58, "Game.team0_base_min");
@@ -1651,6 +1663,7 @@ SR_STATIC_ASSERT(offsetof(Game, team2_manager) == 0x2394, "Game.team2_manager");
 SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
 SR_STATIC_ASSERT(offsetof(Game, unused_22fd8) == 0x22fd8, "Game.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(Game, spectator_human) == 0x257d8, "Game.spectator_human");
 SR_STATIC_ASSERT(offsetof(Game, unused_257dc) == 0x257dc, "Game.unused_257dc");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e0) == 0x257e0, "Game.unused_257e0");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e8) == 0x257e8, "Game.unused_257e8");
@@ -2363,7 +2376,10 @@ SR_STATIC_ASSERT(offsetof(BsdSocket, recv_buf) == 0x10070, "BsdSocket.recv_buf")
 
 /* debug[]: record of 0x523c8 bytes. */
 typedef union Debug { struct {
-    uint8_t pad_0000[0x4f884];
+    uint32_t display;                    /* +0x0000 F6 toggles the diagnostic display */
+    int display_mode;                    /* +0x0004 F11 cycles six diagnostic display modes */
+    uint32_t world_view;                 /* +0x0008 B toggles the world diagnostic view */
+    uint8_t pad_000c[0x4f878];
     int unk_4f884;                       /* +0x4f884 1 functions */
     uint8_t pad_4f888[0x1c];
     int unk_4f8a4;                       /* +0x4f8a4 1 functions */
@@ -2393,16 +2409,22 @@ typedef union Debug { struct {
     int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
     uint8_t pad_50254[0xf0];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
-    uint8_t pad_50348[0x1f3c];
+    uint8_t pad_50348[0x918];
+    uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
+    uint8_t pad_50c64[0x1620];
     char log_text[256];                  /* +0x52284 dedicatedserverloop writes the physics line with sprintf */
     char log_path[64];                   /* +0x52384 debug_resetlogfile writes the file name dedlog.txt */
     void* log_file;                      /* +0x523c4 debug_resetlogfile and dedicatedserverloop: FILE * of the log */
 }; uint8_t lf_raw[0x523c8]; } Debug;
 SR_STATIC_ASSERT(sizeof(Debug) == 0x523c8, "Debug");
+SR_STATIC_ASSERT(offsetof(Debug, display) == 0x0, "Debug.display");
+SR_STATIC_ASSERT(offsetof(Debug, display_mode) == 0x4, "Debug.display_mode");
+SR_STATIC_ASSERT(offsetof(Debug, world_view) == 0x8, "Debug.world_view");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
+SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
 SR_STATIC_ASSERT(offsetof(Debug, log_text) == 0x52284, "Debug.log_text");
 SR_STATIC_ASSERT(offsetof(Debug, log_path) == 0x52384, "Debug.log_path");
 SR_STATIC_ASSERT(offsetof(Debug, log_file) == 0x523c4, "Debug.log_file");

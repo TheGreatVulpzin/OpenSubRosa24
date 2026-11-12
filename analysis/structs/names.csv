@@ -242,7 +242,7 @@ object,0x5e58,engine_power,float,,createobject: objecttype+0x7758 * constant; ma
 object,0x5e78,gear_ratio,float,,objectenginesimulation2: if != 0 it couples engine and wheels; objectsimulation_car writes it per gear (likely)
 objecttype,0x7758,engine_power,float,,createobject copies it (× constant) to object.engine_power
 player,0x94,input_extra,float,2,serverrecv reads it from the network together with the axes (2 floats after input_pitch)
-player,0xc8,input_mode,int,,serverrecv: 8 bits; getinputs writes 0/1; playersimulation compares 1 and 2 (likely)
+player,0xc8,input_mode,int,,getinputs selects 0 for no body and 1 for human and 2 for car and 3 for helicopter; serverrecv reads eight bits
 connection,0x44,event_ack,int,,"serverrecv reads 16 bits from the client; serversend sends events from event_ack to numofevents (max. 31 per packet, circular buffer of 0x10000)"
 event,0x40,message,char,64,createevent_message: memcpy of the text (max. 63 characters)
 sysinfo,0x0,start_dir,char,512,"getpaths: _getcwd into it (docs/phase4-inventory.md 4.1)"
@@ -914,6 +914,17 @@ player,0xc4,crouch_toggle,int,,getinputs_human control key toggles crouch
 player,0xd0,held_item_previous,int,,getinputs_human detects a door in the selected hand
 player,0xdc,menu_previous,int,,getinputs detects menu transitions
 player,0xe0,menu_action,int,,getinputs queues a menu action and clears it
+game,0x10,option_menu,int,,Client options menu switch
+game,0x14,voice_menu,int,,Client voice menu switch
+game,0x18,connections_menu,int,,Client connection menu switch
+game,0x3c,debug_p,uint32_t,,Client P key diagnostic switch
+game,0x40,debug_o,int,,Client O key diagnostic switch
+game,0x44,debug_i,uint32_t,,Client I key diagnostic switch
+game,0x257d8,spectator_human,int,,Client spectator target or minus one
+debug,0x0,display,uint32_t,,F6 toggles the diagnostic display
+debug,0x4,display_mode,int,,F11 cycles six diagnostic display modes
+debug,0x8,world_view,uint32_t,,B toggles the world diagnostic view
+debug,0x50c60,human_view,uint32_t,,F2 toggles the human diagnostic view
 soundlist,0x24,engine,int,,Audio source and voice frame access
 soundlist,0x34,tire,int,,Audio source and voice frame access
 soundlist,0x134,engine_large,int,,Audio source and voice frame access

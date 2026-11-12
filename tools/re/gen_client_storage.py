@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SKIP = {'dropped'}
+PACKET_FIELDS = ('kickedip', 'objectpacket', 'itemtype', 'numofkicked')
 
 
 def main():
@@ -49,14 +50,20 @@ def main():
             dummies.append(f'{typ} sr_unplaced_{name}{arr};')
         names.add(name)
         unplaced.append(name)
-    # Globals that only the client has: analysis/client_win/group_globals_C<n>.csv, one file for each group.
-    # Columns: name, type, count, client_rva, evidence. The clean client code uses cl_data_<name>.
+    # Per-system addresses include client data and shared packet fields.
+    # Packet fields use an explicit client address when the address table supplies one.
     client_only = []
+    shared_fields = set()
     for f in sorted((ROOT / 'analysis/client_win').glob('group_globals_C*.csv')):
         for r in csv.DictReader(f.open(encoding='utf-8')):
             count, rva = int(r['count'] or 1), int(r['client_rva'], 16)
             expr = f'(({r["type"]} *)(sr_base + 0x{rva:x}u))'
-            client_only.append(f'#define cl_data_{r["name"]} ' + (expr if count > 1 else f'(*{expr})'))
+            prefix = 'cl_data_'
+            if r['name'] in PACKET_FIELDS:
+                prefix = 'sr_data_'
+                shared_fields.add(r['name'])
+                client_only.append(f'#undef {prefix}{r["name"]}')
+            client_only.append(f'#define {prefix}{r["name"]} ' + (expr if count > 1 else f'(*{expr})'))
     if client_only:
         lines.append('')
         lines.append('#include "sr_image_types.h"')
@@ -66,8 +73,9 @@ def main():
     # Fields that the server keeps in the packet workspace object.
     if 'packet_workspace' in names:
         lines.append('')
-        for name in ('kickedip', 'objectpacket', 'itemtype', 'numofkicked'):
-            lines.append(f'#define sr_data_{name} sr_data_packet_workspace.{name}')
+        for name in PACKET_FIELDS:
+            if name not in shared_fields:
+                lines.append(f'#define sr_data_{name} sr_data_packet_workspace.{name}')
     lines.extend(['', '#endif'])
     out = ROOT / 'instrumentation/client/runtime/storage_adapter.h'
     out.parent.mkdir(parents=True, exist_ok=True)

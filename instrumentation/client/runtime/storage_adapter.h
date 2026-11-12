@@ -217,38 +217,21 @@ extern int sr_unplaced_train_near;
 #define cl_data_input_mouse_previous (*((InputMouse *)(sr_base + 0xb733100u)))
 #define cl_data_input_screen_width (*((int *)(sr_base + 0xb7330c0u)))
 #define cl_data_input_screen_height (*((int *)(sr_base + 0xb7330c4u)))
-#define cl_data_input_invert_pitch (*((int *)(sr_base + 0x90631ecu)))
 #define cl_data_input_cursor (*((int *)(sr_base + 0xb77c594u)))
 #define cl_data_input_cursor_previous (*((int *)(sr_base + 0xb77c598u)))
 #define cl_data_input_fire_blocked (*((int *)(sr_base + 0xb77c59cu)))
 #define cl_data_input_cameras ((InputCamera *)(sr_base + 0xf3eafe0u))
 #define cl_data_input_heli_mouse ((float *)(sr_base + 0x1dda5248u))
-#define cl_data_input_server (*((int *)(sr_base + 0x75a5800u)))
-#define cl_data_input_viewed_player (*((int *)(sr_base + 0xfefe2a0u)))
-#define cl_data_input_observed_human (*((int *)(sr_base + 0x908aad8u)))
-#define cl_data_input_follow_camera (*((int *)(sr_base + 0x908aadcu)))
-#define cl_data_input_map (*((uint32_t *)(sr_base + 0x908aae0u)))
 #define cl_data_input_chat (*((int *)(sr_base + 0x52daba0u)))
 #define cl_data_input_chat_head (*((uint32_t *)(sr_base + 0x52daba8u)))
 #define cl_data_input_chat_length (*((uint32_t *)(sr_base + 0x52dabacu)))
 #define cl_data_input_chat_text ((char *)(sr_base + 0x52dabb0u))
-#define cl_data_input_pause (*((int *)(sr_base + 0x9065304u)))
-#define cl_data_input_game_type (*((int *)(sr_base + 0x9065308u)))
-#define cl_data_input_options (*((int *)(sr_base + 0x9065310u)))
-#define cl_data_input_voice_options (*((int *)(sr_base + 0x9065314u)))
-#define cl_data_input_connections_menu (*((int *)(sr_base + 0x9065318u)))
 #define cl_data_input_game_running (*((uint32_t *)(sr_base + 0x9065350u)))
-#define cl_data_input_pending_ips ((uint32_t *)(sr_base + 0x1033ed20u))
-#define cl_data_input_pending_count (*((int *)(sr_base + 0x103675a4u)))
-#define cl_data_input_connection_count (*((int *)(sr_base + 0x1b9b4e0u)))
+#undef sr_data_kickedip
+#define sr_data_kickedip ((uint32_t *)(sr_base + 0x1033ed20u))
+#undef sr_data_numofkicked
+#define sr_data_numofkicked (*((int *)(sr_base + 0x103675a4u)))
 #define cl_data_input_debug_toggle (*((uint32_t *)(sr_base + 0x102feb48u)))
-#define cl_data_input_debug_humans (*((uint32_t *)(sr_base + 0x14f92e0u)))
-#define cl_data_input_debug_client_a (*((uint32_t *)(sr_base + 0x9065344u)))
-#define cl_data_input_debug_client_b (*((uint32_t *)(sr_base + 0x906533cu)))
-#define cl_data_input_debug_client_c (*((int *)(sr_base + 0x9065340u)))
-#define cl_data_input_debug_display (*((uint32_t *)(sr_base + 0x14a8680u)))
-#define cl_data_input_debug_display_mode (*((int *)(sr_base + 0x14a8684u)))
-#define cl_data_input_debug_world (*((uint32_t *)(sr_base + 0x14a8688u)))
 #define cl_data_input_interior_timers ((int *)(sr_base + 0x12a7d660u))
 #define cl_data_input_label_chat ((char *)(sr_base + 0x127eb1u))
 #define cl_data_input_label_pause ((char *)(sr_base + 0x125224u))
@@ -304,9 +287,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_audio_keys_previous ((uint8_t *)(sr_base + 0x1bbe1a0u))
 #define cl_data_audio_key_names ((char *)(sr_base + 0x17798e00u))
 
-#define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype
-#define sr_data_numofkicked sr_data_packet_workspace.numofkicked
 
 #endif
