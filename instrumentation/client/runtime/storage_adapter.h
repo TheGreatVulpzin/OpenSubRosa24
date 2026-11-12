@@ -250,6 +250,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_shadow_corners ((vec3 *)(sr_base + 0x1033ecc0u))
 #define cl_data_shadow_count (*((int *)(sr_base + 0x13bee6a0u)))
 #define cl_data_shadow_list ((vec3 *)(sr_base + 0x13bee6a4u))
+#define cl_data_chat_head (*((uint32_t *)(sr_base + 0xf3eafc0u)))
 #define cl_data_audio_device (*((void* *)(sr_base + 0x908b060u)))
 #define cl_data_audio_context (*((void* *)(sr_base + 0xfbfe270u)))
 #define cl_data_audio_capture (*((void* *)(sr_base + 0x163231e4u)))
