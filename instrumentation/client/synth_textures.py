@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, noiseedge, hermite, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
+Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -149,6 +149,56 @@ def hermite_case():
     return edits, {'hermiteinterpolation': calls}
 
 
+def frustum_case(camera_turn=(0.7, 0.3), seed=7):
+    """Boxes and points around a camera. The camera sits at the audio camera record: its place and the three rows of its
+    rotation. Each slot holds a box (smallest and largest corner) or a point."""
+    import math
+    rng = random.Random(seed)
+    camera = 0xfefe2a0
+    yaw, pitch = camera_turn
+    cy, sy, cp, sp = math.cos(yaw), math.sin(yaw), math.cos(pitch), math.sin(pitch)
+    rows = [(cy, 0.0, -sy), (sy * sp, cp, cy * sp), (sy * cp, -sp, cy * cp)]
+    edits = [(camera + 4, '3f', [rng.uniform(-50.0, 50.0) for _ in range(3)]),
+             (camera + 0x10, '9f', [v for row in rows for v in row])]
+    box_calls, point_calls = [], []
+    for slot in range(160):
+        base = SCRATCH + slot * 60
+        near = rng.choice([5.0, 40.0, 400.0])
+        low = [rng.uniform(-near, near) for _ in range(3)]
+        high = [low[k] + rng.uniform(0.0, near) for k in range(3)]
+        point = [rng.uniform(-near, near) for _ in range(3)]
+        edits.append((base, '9f', low + high + point))
+        box_calls.append(call(0x79890, image(base), image(base + 12)))
+        point_calls.append(call(0x796f0, image(base + 24)))
+    return edits, {'boxinsidefrustum': box_calls, 'pointinsidefrustum': point_calls}
+
+
+def draw2d_case():
+    """The 2D shapes, the OpenGL states, the debug boxes and the model passes that no recording reaches."""
+    rng = random.Random(11)
+    edits, calls = [], {name: [] for name in (
+        'drawbitmaptexcoord', 'drawlinebox', 'drawcirclefill', 'enabletwosidedstencil', 'glstatenormal',
+        'debug_renderboundingbox', 'debug_renderbox', 'rendersphere', 'rendermodelwire', 'rendermodelnormals')}
+    for slot in range(60):
+        base = SCRATCH + slot * 120
+        edits.append((base, '24f', [floats(rng) if slot > 5 else rng.uniform(-2.0, 2.0) for _ in range(24)]))
+        x, y, w, h = (rng.uniform(-100.0, 1100.0) for _ in range(4))
+        flags = rng.randrange(16)
+        color = [rng.uniform(0.0, 1.0) for _ in range(4)]
+        calls['drawbitmaptexcoord'].append(call(0x107c40, rng.randrange(1, 8), x, y, w, h, flags, *color, image(base)))
+        calls['drawlinebox'].append(call(0x107d80, x, y, w, h, flags, *color))
+        calls['drawcirclefill'].append(call(0x6d990, x, y, abs(w) * 0.1, *color))
+        calls['debug_renderboundingbox'].append(call(0x6a4d0, image(base), image(base + 12)))
+        calls['debug_renderbox'].append(call(0x6a860, image(base), image(base + 12), w, h, x))
+        calls['rendersphere'].append(call(0xd6cb0, image(base), abs(w) * 0.01, rng.randrange(8)))
+        model = rng.choice([0, 1, 2, 3, 32, 33, 96])
+        calls['rendermodelwire'].append(call(0xd7380, model, image(base), image(base + 48), image(base + 96 - 12), x))
+        calls['rendermodelnormals'].append(call(0xae8c0, model, image(base), image(base + 48)))
+    calls['enabletwosidedstencil'] = [call(0x82a00)] * 3
+    calls['glstatenormal'] = [call(0xdc2f0)] * 3
+    return edits, calls
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -278,7 +328,7 @@ def main():
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
-    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'models': models_case,
+    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'models': models_case,
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}

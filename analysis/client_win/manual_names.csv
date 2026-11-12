@@ -34,3 +34,4 @@ rva,name,evidence
 0x645e0,timetolive_records,"Counts down the time to live of each 0x5c byte record of a table and removes the ones that reach 0, as checksimulation calls it after the sprite simulations."
 0x107c40,drawbitmaptexcoord,"Draws a textured rectangle with a texture coordinate pair for each corner. Same shape as drawbitmap. The Linux client has drawbitmaptexcoord next to drawbitmap."
 0x107d80,drawlinebox,"Draws the outline of a rectangle with four smooth lines. The Linux client has drawlinebox after drawbitmaptexcoord."
+0x796f0,pointinsidefrustum,"Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes)."

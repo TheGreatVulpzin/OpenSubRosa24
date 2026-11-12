@@ -2323,7 +2323,7 @@ rva,size,name,source,confidence,evidence
 0x78c30,54,frame_rendermessages,anchor,0.9,features
 0x78c70,1723,frame_drawmessages,anchor,0.774,features
 0x79330,952,frame_drawvoiceicons,anchor,0.787,features
-0x796f0,407,,,,
+0x796f0,407,pointinsidefrustum,manual,1.0,Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes).
 0x79890,503,boxinsidefrustum,callgraph,0.5,votes=3
 0x79a90,49,,,,
 0x79ad0,5666,resetgame,anchor,0.818,features
@@ -2809,8 +2809,8 @@ rva,size,name,source,confidence,evidence
 0x107970,95,,,,
 0x1079d0,229,setuptextdisplay,callgraph,1.0,votes=32
 0x107ac0,374,drawbitmap,anchor,0.929,features
-0x107c40,315,,,,
-0x107d80,338,,,,
+0x107c40,315,drawbitmaptexcoord,manual,1.0,Draws a textured rectangle with a texture coordinate pair for each corner. Same shape as drawbitmap. The Linux client has drawbitmaptexcoord next to drawbitmap.
+0x107d80,338,drawlinebox,manual,1.0,Draws the outline of a rectangle with four smooth lines. The Linux client has drawlinebox after drawbitmaptexcoord.
 0x107ee0,376,drawmousecursor,anchor,0.949,features
 0x108060,5330,createfont,anchor,0.758,features
 0x109540,95,text_getlength,callgraph,0.667,votes=4

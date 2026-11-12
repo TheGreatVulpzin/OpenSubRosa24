@@ -79,3 +79,10 @@ The renderer has ten programs, each with a vertex file and a fragment file in `s
 - `renderframeatmosphere(scale)` draws one quad over the whole screen with the atmosphere program. The program turns each corner into a direction with the rotation of the camera. Depth test and culling are off while it runs.
 - `rendermodelshadow(model, placement, rotation)` builds the shadow volume of a model. It turns the light into the axes of the model, pushes the corners of each triangle that faces away from the light 512 units along the light and closes the shape with a side quad on each open edge and a cap at each end. The triangles go to one list that the stencil pass draws.
 - `boxinsidefrustum(smallest, largest)` tells if a box is at least partly in the view cone. It tests the eight corners against five planes.
+
+## Map, help and debug shapes
+
+- `rendermap` draws the city from above into the map texture of 512 by 512 pixels. The camera hangs at (1152, 0, 1152) and looks straight down. The map uses a depth only pass of the sector list and copies the picture into the texture.
+- `drawhelp` writes the help lines at the left of the screen for the viewed player. The first line always shows. A gun in the right hand and a magazine in the left hand give the lines about loading and unloading. A briefcase gives the lines about opening it and moving items in or out.
+- `debug_renderboundingbox(low, high)` draws the twelve edges of a box between two corners in white. `debug_renderbox(placement, rotation, x, y, z)` draws the edges of a box at an object in red.
+- `pointinsidefrustum(point)` tells if a point is in the view cone. It is 1 when the point is on the near side of the plane across the view and on the inner side of the four side planes.

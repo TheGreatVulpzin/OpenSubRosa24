@@ -54,3 +54,26 @@ int __cdecl boxinsidefrustum(const vec3 *smallest, const vec3 *largest)
     }
     return 1;
 }
+
+/* Tell if a point is in the view cone. The point passes when it is on the near side of the
+ * plane across the view and on the inner side of the four side planes. The result is 1 for a
+ * point that passes all five tests, and 0 otherwise. */
+int __cdecl pointinsidefrustum(const vec3 *point)
+{
+    static const float sides[4][3] = {
+        {-0.7071f, 0.0f, 0.7071f}, {0.7071f, 0.0f, 0.7071f}, {0.0f, -0.7071f, 0.7071f}, {0.0f, 0.7071f, 0.7071f}};
+    vec3 offset;
+    vec3 normal;
+    int side;
+
+    subtractvectors(&offset, point, &g_camera.pos);
+    if (!(dotproduct(&offset, &g_camera.rot[2]) <= 0.0f))
+        return 0;
+    for (side = 0; side < 4; ++side) {
+        normal = *(const vec3 *)sides[side];
+        projectvector(&normal, &normal, g_camera.rot);
+        if (!(dotproduct(&offset, &normal) <= 0.0f))
+            return 0;
+    }
+    return 1;
+}

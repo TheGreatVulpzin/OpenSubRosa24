@@ -14,3 +14,15 @@ renderframeatmosphere src/client/render/atmosphere.c
 rendermodelshadow src/client/render/shadow.c
 rendermap src/client/render/map.c
 drawhelp src/client/render/help.c
+boxinsidefrustum src/client/render/frustum.c
+pointinsidefrustum src/client/render/frustum.c
+drawbitmaptexcoord src/client/render/draw2d.c
+drawlinebox src/client/render/draw2d.c
+drawcirclefill src/client/render/draw2d.c
+enabletwosidedstencil src/client/render/gl_state.c
+glstatenormal src/client/render/gl_state.c
+rendersphere src/client/render/models_draw.c
+rendermodelwire src/client/render/models_draw.c
+rendermodelnormals src/client/render/models_draw.c
+debug_renderboundingbox src/client/render/debug_draw.c
+debug_renderbox src/client/render/debug_draw.c

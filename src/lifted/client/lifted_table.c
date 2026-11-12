@@ -695,8 +695,8 @@ void lf_69440(void);
 void lf_6a1d0(void);
 void debug_addcross(void);
 void lf_6a400(void);
-void lf_6a4d0(void);
-void lf_6a860(void);
+void debug_renderboundingbox(void);
+void debug_renderbox(void);
 void debug_addataint(void);
 void debug_addatafloat(void);
 void debug_resetlogfile(void);
@@ -708,7 +708,7 @@ void lf_6baa0(void);
 void lf_6d6f0(void);
 void lf_6d7d0(void);
 void drawcircle(void);
-void lf_6d990(void);
+void drawcirclefill(void);
 void drawplayerindicator(void);
 void lf_6dcb0(void);
 void drawcircleindicator(void);
@@ -754,8 +754,8 @@ void renderframeatmosphere(void);
 void lf_78c30(void);
 void lf_78c70(void);
 void frame_drawvoiceicons(void);
-void lf_796f0(void);
-void lf_79890(void);
+void pointinsidefrustum(void);
+void boxinsidefrustum(void);
 void lf_79a90(void);
 void lf_79ad0(void);
 void lf_7b100(void);
@@ -783,7 +783,7 @@ void lf_80770(void);
 void setupgame(void);
 void setupclient(void);
 void lf_82910(void);
-void lf_82a00(void);
+void enabletwosidedstencil(void);
 void disabletwosidedstencil(void);
 void lf_82a40(void);
 void drawhelp(void);
@@ -908,7 +908,7 @@ void copymodel(void);
 void lf_ad140(void);
 void lf_ad390(void);
 void lf_ad5d0(void);
-void lf_ae8c0(void);
+void rendermodelnormals(void);
 void addboxtomodel(void);
 void lf_aef30(void);
 void lf_af140(void);
@@ -1033,10 +1033,10 @@ void lf_d6970(void);
 void lf_d6a30(void);
 void lf_d6b50(void);
 void lf_d6c70(void);
-void lf_d6cb0(void);
+void rendersphere(void);
 void lf_d6e40(void);
 void rendermodel(void);
-void lf_d7380(void);
+void rendermodelwire(void);
 void lf_d7470(void);
 void lf_d7850(void);
 void lf_d7ed0(void);
@@ -1058,7 +1058,7 @@ void rendermodelshadow(void);
 void glstateshadowtwoside(void);
 void lf_dc1d0(void);
 void lf_dc260(void);
-void lf_dc2f0(void);
+void glstatenormal(void);
 void lf_dc360(void);
 void lf_dc770(void);
 void lf_dc780(void);
@@ -1237,8 +1237,8 @@ void drawtext(void);
 void lf_107970(void);
 void lf_1079d0(void);
 void drawbitmap(void);
-void lf_107c40(void);
-void lf_107d80(void);
+void drawbitmaptexcoord(void);
+void drawlinebox(void);
 void drawmousecursor(void);
 void createfont(void);
 void lf_109540(void);
@@ -1995,8 +1995,8 @@ const LfEntry lf_table[] = {
     { "lf_6a1d0", 0x6a1d0, (void *)lf_6a1d0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "debug_addcross", 0x6a230, (void *)debug_addcross, 2, LF_RET_VOID, 4, "pv", 0 },
     { "addmenuinputchar", 0x6a400, (void *)lf_6a400, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "debug_renderboundingbox", 0x6a4d0, (void *)lf_6a4d0, 2, LF_RET_VOID, 4, "pp", 1 },
-    { "debug_renderbox", 0x6a860, (void *)lf_6a860, 5, LF_RET_VOID, 4, "ppvvv", 1 },
+    { "debug_renderboundingbox", 0x6a4d0, (void *)debug_renderboundingbox, 2, LF_RET_VOID, 4, "pp", 1 },
+    { "debug_renderbox", 0x6a860, (void *)debug_renderbox, 5, LF_RET_VOID, 4, "ppvvv", 1 },
     { "debug_addataint", 0x6aaa0, (void *)debug_addataint, 2, LF_RET_VOID, 4, "pv", 0 },
     { "debug_addatafloat", 0x6ab70, (void *)debug_addatafloat, 2, LF_RET_VOID, 4, "pv", 0 },
     { "debug_resetlogfile", 0x6ac30, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
@@ -2008,7 +2008,7 @@ const LfEntry lf_table[] = {
     { "createmessage", 0x6d6f0, (void *)lf_6d6f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lf_6d7d0", 0x6d7d0, (void *)lf_6d7d0, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "drawcircle", 0x6d860, (void *)drawcircle, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
-    { "drawcirclefill", 0x6d990, (void *)lf_6d990, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
+    { "drawcirclefill", 0x6d990, (void *)drawcirclefill, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "drawplayerindicator", 0x6dac0, (void *)drawplayerindicator, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "drawplayerinfo", 0x6dcb0, (void *)lf_6dcb0, 0, LF_RET_VOID, 4, "", 1 },
     { "drawcircleindicator", 0x6e3c0, (void *)drawcircleindicator, 4, LF_RET_VOID, 4, "vvvv", 1 },
@@ -2054,8 +2054,8 @@ const LfEntry lf_table[] = {
     { "frame_rendermessages", 0x78c30, (void *)lf_78c30, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawmessages", 0x78c70, (void *)lf_78c70, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawvoiceicons", 0x79330, (void *)frame_drawvoiceicons, 0, LF_RET_VOID, 4, "", 1 },
-    { "lf_796f0", 0x796f0, (void *)lf_796f0, 1, LF_RET_INT, 4, "p", 0 },
-    { "boxinsidefrustum", 0x79890, (void *)lf_79890, 2, LF_RET_INT, 4, "pp", 0 },
+    { "pointinsidefrustum", 0x796f0, (void *)pointinsidefrustum, 1, LF_RET_INT, 4, "p", 0 },
+    { "boxinsidefrustum", 0x79890, (void *)boxinsidefrustum, 2, LF_RET_INT, 4, "pp", 0 },
     { "lf_79a90", 0x79a90, (void *)lf_79a90, 0, LF_RET_INT64, 4, "", 1 },
     { "resetgame", 0x79ad0, (void *)lf_79ad0, 0, LF_RET_VOID, 4, "", 1 },
     { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
@@ -2083,7 +2083,7 @@ const LfEntry lf_table[] = {
     { "setupgame", 0x80c10, (void *)setupgame, 0, LF_RET_VOID, 4, "", 1 },
     { "setupclient", 0x81a80, (void *)setupclient, 0, LF_RET_VOID, 4, "", 1 },
     { "setupglextentions", 0x82910, (void *)lf_82910, 0, LF_RET_VOID, 4, "", 1 },
-    { "enabletwosidedstencil", 0x82a00, (void *)lf_82a00, 0, LF_RET_VOID, 4, "", 1 },
+    { "enabletwosidedstencil", 0x82a00, (void *)enabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "disabletwosidedstencil", 0x82a20, (void *)disabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "settwosidedstencil", 0x82a40, (void *)lf_82a40, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "drawhelp", 0x82b20, (void *)drawhelp, 0, LF_RET_VOID, 4, "", 1 },
@@ -2208,7 +2208,7 @@ const LfEntry lf_table[] = {
     { "savemodelcsm", 0xad140, (void *)lf_ad140, 2, LF_RET_VOID, 4, "vp", 1 },
     { "loadmodelcsm", 0xad390, (void *)lf_ad390, 2, LF_RET_INT, 4, "vp", 1 },
     { "createbulletmodel", 0xad5d0, (void *)lf_ad5d0, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "rendermodelnormals", 0xae8c0, (void *)lf_ae8c0, 3, LF_RET_VOID, 4, "vpp", 1 },
+    { "rendermodelnormals", 0xae8c0, (void *)rendermodelnormals, 3, LF_RET_VOID, 4, "vpp", 1 },
     { "addboxtomodel", 0xaedb0, (void *)addboxtomodel, 4, LF_RET_VOID, 4, "pvvv", 0 },
     { "lf_aef30", 0xaef30, (void *)lf_aef30, 6, LF_RET_VOID, 4, "ppvvvv", 0 },
     { "addcylindertomodel", 0xaf140, (void *)lf_af140, 4, LF_RET_VOID, 4, "ppvv", 0 },
@@ -2333,10 +2333,10 @@ const LfEntry lf_table[] = {
     { "lf_d6a30", 0xd6a30, (void *)lf_d6a30, 2, LF_RET_VOID, 4, "pp", 0 },
     { "multiplyquaternion", 0xd6b50, (void *)lf_d6b50, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "copyquaternion", 0xd6c70, (void *)lf_d6c70, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "rendersphere", 0xd6cb0, (void *)lf_d6cb0, 3, LF_RET_VOID, 4, "pvv", 1 },
+    { "rendersphere", 0xd6cb0, (void *)rendersphere, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "rendermodellist", 0xd6e40, (void *)lf_d6e40, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermodel", 0xd7150, (void *)rendermodel, 6, LF_RET_VOID, 4, "vppvpp", 1 },
-    { "rendermodelwire", 0xd7380, (void *)lf_d7380, 5, LF_RET_VOID, 4, "vpppv", 1 },
+    { "rendermodelwire", 0xd7380, (void *)rendermodelwire, 5, LF_RET_VOID, 4, "vpppv", 1 },
     { "rendercheckpoints", 0xd7470, (void *)lf_d7470, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_d7850", 0xd7850, (void *)lf_d7850, 1, LF_RET_VOID, 4, "v", 1 },
     { "render_sectorlist", 0xd7ed0, (void *)lf_d7ed0, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2358,7 +2358,7 @@ const LfEntry lf_table[] = {
     { "glstateshadowtwoside", 0xdc080, (void *)glstateshadowtwoside, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_dc1d0", 0xdc1d0, (void *)lf_dc1d0, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_dc260", 0xdc260, (void *)lf_dc260, 0, LF_RET_VOID, 4, "", 1 },
-    { "glstatenormal", 0xdc2f0, (void *)lf_dc2f0, 0, LF_RET_VOID, 4, "", 1 },
+    { "glstatenormal", 0xdc2f0, (void *)glstatenormal, 0, LF_RET_VOID, 4, "", 1 },
     { "createscenario_world", 0xdc360, (void *)lf_dc360, 0, LF_RET_VOID, 4, "", 0 },
     { "createscenario_mission", 0xdc770, (void *)lf_dc770, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_dc780", 0xdc780, (void *)lf_dc780, 0, LF_RET_VOID, 4, "", 0 },
@@ -2537,8 +2537,8 @@ const LfEntry lf_table[] = {
     { "lf_107970", 0x107970, (void *)lf_107970, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "setuptextdisplay", 0x1079d0, (void *)lf_1079d0, 0, LF_RET_VOID, 4, "", 1 },
     { "drawbitmap", 0x107ac0, (void *)drawbitmap, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
-    { "lf_107c40", 0x107c40, (void *)lf_107c40, 11, LF_RET_VOID, 4, "vvvvvvvvvvv", 1 },
-    { "lf_107d80", 0x107d80, (void *)lf_107d80, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
+    { "drawbitmaptexcoord", 0x107c40, (void *)drawbitmaptexcoord, 11, LF_RET_VOID, 4, "vvvvvvvvvvv", 1 },
+    { "drawlinebox", 0x107d80, (void *)drawlinebox, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
     { "drawmousecursor", 0x107ee0, (void *)drawmousecursor, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },
     { "createfont", 0x108060, (void *)createfont, 0, LF_RET_VOID, 4, "", 1 },
     { "text_getlength", 0x109540, (void *)lf_109540, 2, LF_RET_FLOAT, 4, "vv", 0 },
