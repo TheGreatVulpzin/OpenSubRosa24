@@ -86,3 +86,13 @@ The renderer has ten programs, each with a vertex file and a fragment file in `s
 - `drawhelp` writes the help lines at the left of the screen for the viewed player. The first line always shows. A gun in the right hand and a magazine in the left hand give the lines about loading and unloading. A briefcase gives the lines about opening it and moving items in or out.
 - `debug_renderboundingbox(low, high)` draws the twelve edges of a box between two corners in white. `debug_renderbox(placement, rotation, x, y, z)` draws the edges of a box at an object in red.
 - `pointinsidefrustum(point)` tells if a point is in the view cone. It is 1 when the point is on the near side of the plane across the view and on the inner side of the four side planes.
+
+## Flying pieces
+
+`src/client/render/sprite_models.c` holds the pieces that fly and land: shell casings (kind 0) and bits of debris (kind 1). A piece has a place, a speed, an orientation of three rows, a spin, a gravity and a drag. The pool has 16384 places.
+
+- `createsprite_model(kind, place, speed, orientation)` starts a piece and gives it a random spin about a mix of two rows of the orientation. The speed may be 0. The result is the number of the piece, or -1 when the pool is full.
+- `sprite_modeltimetolive` counts down the life of each piece and frees the ones with no life left. `deletesprite_model(index)` frees a piece: the last piece takes its place.
+- `sprite_model_simulation` moves every active piece for one tick. The piece falls, loses speed to drag and turns with its spin. A move that crosses the level makes the piece bounce: the sound of a shell plays when the hit is strong, the speed along the surface falls, and a shell turns flat on the ground. A piece on flat ground that moves slower than 1 in 120 stops. Its corners go into a list of vertices (up to 261632 for shells and 65000 for debris) and the piece is no longer active.
+- `renderspritemodels(mode)` draws the two lists. Mode 0 uses the light and the color, light map and shadow map textures.
+

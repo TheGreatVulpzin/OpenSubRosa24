@@ -6,7 +6,7 @@ with the original: the result and the memory. A case snapshot is about 350 MB, s
 deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
-Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
+Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, sprites, simsprites, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
 """
 import os
 import random
@@ -199,6 +199,51 @@ def draw2d_case():
     return edits, calls
 
 
+def sprites_case():
+    """Start, free and age the flying pieces. The place, the speed and the three rows of the
+    orientation sit in the scratch area of the snapshot."""
+    rng = random.Random(21)
+    edits, calls = [], {'createsprite_model': [], 'deletesprite_model': [], 'sprite_modeltimetolive': []}
+    for slot in range(60):
+        base = SCRATCH + slot * 160
+        edits.append((base, '15f', [rng.uniform(-300.0, 300.0) for _ in range(6)] + [rng.uniform(-1.0, 1.0) for _ in range(9)]))
+        vel = image(base + 12) if slot % 4 else 0
+        calls['createsprite_model'].append(call(0xe5040, rng.randrange(2), image(base), vel, image(base + 24)))
+    for index in [-1, 0, 1, 2, 5, 50, 1000, 20000, 0x7fffffff] * 3:
+        calls['deletesprite_model'].append(call(0xe5280, index))
+    calls['sprite_modeltimetolive'] = [call(0xe5210)] * 3
+    return edits, calls
+
+
+def simsprites_case():
+    """Run the simulation of the flying pieces on 120 pieces: shells and debris, high and low, fast and slow."""
+    rng = random.Random(33)
+    pieces = 120
+    pool = 0x5379100
+    count = 0x12a7d604
+    edits = [(count, 'i', [pieces])]
+    for k in range(pieces):
+        kind = k % 2
+        low = k % 3 == 0
+        # Near the two places where the recorded game left pieces on the ground, so that the level data is in the snapshot.
+        cx, cz = (641.7, 1084.5) if k % 4 < 2 else (653.5, 1066.0)
+        pos = [cx + rng.uniform(-2.0, 2.0), 24.5 + (rng.uniform(0.0, 0.4) if low else rng.uniform(0.5, 4.0)), cz + rng.uniform(-2.0, 2.0)]
+        speed = 0.1 if low else 0.3
+        vel = [rng.uniform(-speed, speed), -rng.uniform(0.05, speed * 2), rng.uniform(-speed, speed)]
+        yaw = rng.uniform(0.0, 6.2831)
+        c, s = float(__import__('math').cos(yaw)), float(__import__('math').sin(yaw))
+        rot = [c, 0.0, -s, 0.0, 1.0, 0.0, s, 0.0, c]
+        spin = [rng.uniform(-0.3, 0.3) for _ in range(3)]
+        base = pool + k * 0x68
+        edits.append((base, '3i', [kind, 0xffff if k % 5 else 100, 1]))
+        edits.append((base + 0xc, '3f', pos))
+        edits.append((base + 0x18, '3f', vel))
+        edits.append((base + 0x24, '9f', rot))
+        edits.append((base + 0x48, '3f', spin))
+        edits.append((base + 0x58, '2f', [0.0027777778, 0.9975]))
+    return edits, {'sprite_model_simulation': [call(0xe52e0)] * 4}
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -328,7 +373,7 @@ def main():
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
-    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'models': models_case,
+    allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'sprites': sprites_case, 'simsprites': simsprites_case, 'models': models_case,
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}

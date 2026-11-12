@@ -27,3 +27,8 @@ rendermodelnormals src/client/render/models_draw.c
 debug_renderboundingbox src/client/render/debug_draw.c
 debug_renderbox src/client/render/debug_draw.c
 frame_drawmessages src/client/render/messages.c
+createsprite_model src/client/render/sprite_models.c
+deletesprite_model src/client/render/sprite_models.c
+sprite_modeltimetolive src/client/render/sprite_models.c
+sprite_model_simulation src/client/render/sprite_models.c
+renderspritemodels src/client/render/sprite_models.c

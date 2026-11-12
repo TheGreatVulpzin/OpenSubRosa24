@@ -2672,8 +2672,8 @@ rva,size,name,source,confidence,evidence
 0xe4bc0,837,rendermuzzleflashes,anchor,0.768,features
 0xe4f10,295,rotateorientationfast,callgraph,0.667,votes=4
 0xe5040,464,createsprite_model,callees,1.0,"callee jaccard 1.00, constants 0.20, size 464"
-0xe5210,111,,,,
-0xe5280,91,,,,
+0xe5210,111,sprite_modeltimetolive,manual,1.0,Counts down the life of each flying piece and frees the ones with no life left. The Linux client has sprite_modeltimetolive.
+0xe5280,91,deletesprite_model,manual,1.0,Frees a flying piece: the last piece takes its place. The Linux client has deletesprite_model.
 0xe52e0,2423,sprite_model_simulation,callgraph,0.667,votes=4
 0xe5c60,795,renderspritemodels,anchor,0.931,features
 0xe5f80,1303,tiremark_simulation,anchor,0.478,features

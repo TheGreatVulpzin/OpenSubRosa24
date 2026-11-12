@@ -1101,11 +1101,11 @@ void lf_e2790(void);
 void lf_e3b10(void);
 void lf_e4bc0(void);
 void lf_e4f10(void);
-void lf_e5040(void);
-void lf_e5210(void);
-void lf_e5280(void);
-void lf_e52e0(void);
-void lf_e5c60(void);
+void createsprite_model(void);
+void sprite_modeltimetolive(void);
+void deletesprite_model(void);
+void sprite_model_simulation(void);
+void renderspritemodels(void);
 void lf_e5f80(void);
 void lf_e64a0(void);
 void generatematerialtexture(void);
@@ -2401,11 +2401,11 @@ const LfEntry lf_table[] = {
     { "rendersprites", 0xe3b10, (void *)lf_e3b10, 0, LF_RET_VOID, 4, "", 1 },
     { "rendermuzzleflashes", 0xe4bc0, (void *)lf_e4bc0, 0, LF_RET_VOID, 4, "", 1 },
     { "rotateorientationfast", 0xe4f10, (void *)lf_e4f10, 3, LF_RET_VOID, 4, "vpv", 0 },
-    { "createsprite_model", 0xe5040, (void *)lf_e5040, 4, LF_RET_INT, 4, "vpvv", 0 },
-    { "lf_e5210", 0xe5210, (void *)lf_e5210, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_e5280", 0xe5280, (void *)lf_e5280, 1, LF_RET_VOID, 4, "v", 0 },
-    { "sprite_model_simulation", 0xe52e0, (void *)lf_e52e0, 0, LF_RET_VOID, 4, "", 1 },
-    { "renderspritemodels", 0xe5c60, (void *)lf_e5c60, 1, LF_RET_VOID, 4, "v", 1 },
+    { "createsprite_model", 0xe5040, (void *)createsprite_model, 4, LF_RET_INT, 4, "vpvv", 0 },
+    { "sprite_modeltimetolive", 0xe5210, (void *)sprite_modeltimetolive, 0, LF_RET_VOID, 4, "", 0 },
+    { "deletesprite_model", 0xe5280, (void *)deletesprite_model, 1, LF_RET_VOID, 4, "v", 0 },
+    { "sprite_model_simulation", 0xe52e0, (void *)sprite_model_simulation, 0, LF_RET_VOID, 4, "", 1 },
+    { "renderspritemodels", 0xe5c60, (void *)renderspritemodels, 1, LF_RET_VOID, 4, "v", 1 },
     { "tiremark_simulation", 0xe5f80, (void *)lf_e5f80, 0, LF_RET_VOID, 4, "", 0 },
     { "tiremark_render", 0xe64a0, (void *)lf_e64a0, 0, LF_RET_VOID, 4, "", 1 },
     { "generatematerialtexture", 0xe6630, (void *)generatematerialtexture, 6, LF_RET_VOID, 4, "vvvvvv", 1 },
