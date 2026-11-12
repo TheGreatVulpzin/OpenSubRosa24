@@ -98,3 +98,6 @@ Do not show the game assets, the `.exe`, `config.txt` or the recordings in a vid
 | A button of the main menu opens a web page. The C code calls `ShellExecuteA` for it, so the standalone client needed a small hook in the platform layer. | code | `launchwebpage`, `sr_open_url` |
 | The decompiler can lose the extra arguments of a call such as `sprintf`, because it cannot see how many the format string needs. 386 calls needed a fix. A script now reads each format string and counts the arguments. | code | `instrumentation/client/check_variadic.py` |
 | The voice settings waveform ends with the low 16 bits of the sample ring head, after 10240 samples. | code | `src/client/audio/voice_ui.c`, `docs/client/audio.md` |
+| Phone input queues keypad digits before number-row digits. Two keys for the same digit queue two actions. | code | `src/client/input/items.c` |
+| Control toggles the crouch latch after the input packet reads the latch. | code | `src/client/input/player_inputs.c` |
+| Car controls select gear two and shift zero for unordered input without right drag. Helicopter mouse decay maps unordered values to zero. | code | `src/client/input/player_inputs.c` |

@@ -261,7 +261,7 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | C1 | Image and font loaders. Complete. See `docs/client/README.md`. | 48 | 35 KB |
 | C2 | Procedural textures and models (`generate*`, `createhumanmodel`, `model_*`, `landscape_*`) | 50 | 92 KB |
 | C3 | Rendering (`renderframe`, `drawdisplay`, `drawhud`, sprites, shaders, frame list) | 51 | 81 KB |
-| C4 | Input (`getinputs_*`, keyboard, mouse) | 16 | 16 KB |
+| C4 | Keyboard, mouse, player controls and cameras. 12 active entry points. Connection controls use a stack-local selection pointer. See [input](client/input.md). | 13 | 16 KB |
 | C5 | Menus (`mainmenu`, `joinmenu`, `optionsmenu`, `playermenu_*`, `drawmenuitems`) | 26 | 35 KB |
 | C6 | Sound and voice (OpenAL, Speex). 14 tested functions. Voice menu awaits a window check. See [audio](client/audio.md). | 15 | 10 KB |
 | C7 | Client setup and loop (`setupclient`, `gameloop`, `checksimulation`, debug) | 13 | 21 KB |
