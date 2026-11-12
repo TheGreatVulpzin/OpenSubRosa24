@@ -786,7 +786,7 @@ void lf_82910(void);
 void lf_82a00(void);
 void disabletwosidedstencil(void);
 void lf_82a40(void);
-void lf_82b20(void);
+void drawhelp(void);
 void lf_830f0(void);
 void rendermap(void);
 void lf_84700(void);
@@ -2086,7 +2086,7 @@ const LfEntry lf_table[] = {
     { "enabletwosidedstencil", 0x82a00, (void *)lf_82a00, 0, LF_RET_VOID, 4, "", 1 },
     { "disabletwosidedstencil", 0x82a20, (void *)disabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "settwosidedstencil", 0x82a40, (void *)lf_82a40, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
-    { "drawhelp", 0x82b20, (void *)lf_82b20, 0, LF_RET_VOID, 4, "", 1 },
+    { "drawhelp", 0x82b20, (void *)drawhelp, 0, LF_RET_VOID, 4, "", 1 },
     { "drawhud", 0x830f0, (void *)lf_830f0, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermap", 0x844d0, (void *)rendermap, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmap", 0x84700, (void *)lf_84700, 1, LF_RET_VOID, 4, "v", 1 },

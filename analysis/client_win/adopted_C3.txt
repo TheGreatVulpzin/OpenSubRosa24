@@ -13,3 +13,4 @@ renderlandscape src/client/render/landscape_draw.c
 renderframeatmosphere src/client/render/atmosphere.c
 rendermodelshadow src/client/render/shadow.c
 rendermap src/client/render/map.c
+drawhelp src/client/render/help.c
