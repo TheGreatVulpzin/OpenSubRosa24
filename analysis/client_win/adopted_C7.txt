@@ -13,3 +13,4 @@ clientsend src/client/setup/send.c
 checksimulation src/client/setup/simulation.c
 setupclient src/client/setup/client_setup.c
 setupgame src/client/setup/identifiers.c
+stoptimer src/game/profiler.c

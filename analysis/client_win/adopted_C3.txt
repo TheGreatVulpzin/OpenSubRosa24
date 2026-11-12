@@ -36,3 +36,8 @@ renderspritemodels src/client/render/sprite_models.c
 drawplayerinfo src/client/render/player_info.c
 drawhud src/client/render/hud.c
 drawdisplay src/client/render/display.c
+render_sector_interior src/client/render/sectors.c
+render_sector_alpha src/client/render/sectors.c
+render_sector_interior_shadow2 src/client/render/sectors.c
+clearsectorlist src/client/render/sectorlist.c
+render_sectorlist src/client/render/sectorlist.c

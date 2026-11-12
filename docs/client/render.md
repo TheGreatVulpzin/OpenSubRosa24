@@ -103,3 +103,22 @@ The renderer has ten programs, each with a vertex file and a fragment file in `s
 - `drawhud(player)` in `src/client/render/hud.c` draws the display of the viewed player: the map, the help for a phone in the right hand, the labels for the stance, the health, the walk mode and the voice, the items of the two hands (the hand that the left shift key selects is white and larger), the items of the five slots of the pack, the meters of a vehicle and the four aim marks of a gun. A player with no human sees only the map.
 - `drawdisplay` in `src/client/render/display.c` draws the rest of the display. With the map page open it draws the stock price of the five teams, and in a game of type 3 or 4 the missions of the team of the viewed player: a text for each kind of mission, the value, the expected rise of the stocks and the time when the mission ends. It also draws the clock of a game of type 4, the timers of a game of type 3, the player list (at the end of a round, in the menu 2 of the wait state, or while the list key is down), the money and the stocks of the viewed player and the chat lines. A chat line fades with its time.
 
+## Interior passes
+
+`src/client/render/sectors.c` draws the interiors of the buildings of one block sector. A sector has four slots. A slot that is in use names an interior mesh. A mesh has vertices of 64 bytes (position, normal, texture coordinates and color), triangles as three indices and parts: each part is a run of triangles with one material.
+
+- `render_sector_interior(sector, mode)` draws the parts whose material has no flag, with the texture of the material. The mode 0 also sets the normal, texture coordinate and color arrays.
+- `render_sector_alpha(sector, mode)` draws the parts whose material has the flag (the windows) in the ambient color of the light.
+- `render_sector_interior_shadow2(sector)` builds the shadow volume of the triangles that face away from the light: the triangle, the same triangle pushed 16 units away from the light, and a wall for each edge that the light faces. It draws the list as triangles.
+
+A sector is a `BlockSector` record. Its `interior_models` field names the mesh of each slot and `interior_used` tells if the slot is in use. The `block_sectors` array holds the 8192 records.
+
+## Sector list
+
+`src/client/render/sectorlist.c` chooses the sectors of the city to draw and draws their outer blocks.
+
+- `clearsectorlist(mode)` clears the runs of the last frame. A sector within 32 units of the camera is near. A game function marks the interiors in use for the near sectors, and `area_interior_buildsectormodel` builds their meshes. The near sectors with an interior go into a list that is sorted from the nearest. With a mode other than 0, a sector that is outside the view cone and not near is left out. Each remaining sector adds its runs of triangles to the list of its material. A near sector leaves out the materials with windows.
+- `render_sectorlist(mode)` draws the runs of each material. The mode 0 draws lit with the shadow map on texture unit 1, the mode 1 draws only the shape for the depth pass and the mode 2 binds the texture of the material only. The vertices are in a buffer when the buffer extension is on. The runs of a material go out in one call when the multi draw extension is on.
+
+A sector is a `BlockSector` record. `sector_entries` holds the sector and the distance of each sector with an interior before the sort, and `sector_list` holds the sectors after it.
+

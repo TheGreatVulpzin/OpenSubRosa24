@@ -9,13 +9,10 @@
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
-#define g_timerlist sr_data_timerlist
+#define g_timerlist cl_data_timerlist
 #define g_programs cl_data_programs
 #define g_sector_lod cl_data_landsector_lod
 #define g_light_position cl_data_light_position
-
-/* Game functions of other files. */
-#define stoptimer CL_FN(0x4fb040, void(__cdecl *)(int timer))
 
 enum {
     NUM_SECTORS = 1024,

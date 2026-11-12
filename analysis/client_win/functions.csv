@@ -2608,7 +2608,7 @@ rva,size,name,source,confidence,evidence
 0xd7150,558,rendermodel,callgraph,1.0,votes=22
 0xd7380,235,rendermodelwire,anchor,0.784,features
 0xd7470,992,rendercheckpoints,anchor,0.875,features
-0xd7850,1660,,,,
+0xd7850,1660,clearsectorlist,manual,1.0,Chooses the sectors to draw and collects their runs of triangles for each material. render_sectorlist draws the runs.
 0xd7ed0,947,render_sectorlist,anchor,0.877,features
 0xd8290,2115,render_buildareasectorshadow,anchor,0.544,features
 0xd8ae0,187,render_areasectorshadow,anchor,1.0,features
@@ -2712,7 +2712,7 @@ rva,size,name,source,confidence,evidence
 0xfafc0,17,,,,
 0xfafe0,56,resettimer,callgraph,1.0,votes=80
 0xfb020,25,starttimer,callgraph,1.0,votes=14
-0xfb040,200,itemtimetolive,callgraph,0.333,votes=2
+0xfb040,200,stoptimer,manual,1.0,Adds the cycles since starttimer to the total of the timer and stores the total in milliseconds. The matcher name itemtimetolive was wrong.
 0xfb110,156,getcpufrequency,callgraph,0.333,votes=2
 0xfb1b0,527,,,,
 0xfb3c0,15,cs_sleep,anchor,1.0,features

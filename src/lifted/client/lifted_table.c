@@ -1038,8 +1038,8 @@ void lf_d6e40(void);
 void rendermodel(void);
 void rendermodelwire(void);
 void lf_d7470(void);
-void lf_d7850(void);
-void lf_d7ed0(void);
+void clearsectorlist(void);
+void render_sectorlist(void);
 void lf_d8290(void);
 void lf_d8ae0(void);
 void landscape_buildsectorlods(void);
@@ -1051,9 +1051,9 @@ void landscape_generatenormaltexture(void);
 void landscape_generatedetail(void);
 void lf_d9fa0(void);
 void lf_daa90(void);
-void lf_dabf0(void);
-void lf_dadf0(void);
-void lf_daff0(void);
+void render_sector_interior(void);
+void render_sector_alpha(void);
+void render_sector_interior_shadow2(void);
 void rendermodelshadow(void);
 void glstateshadowtwoside(void);
 void lf_dc1d0(void);
@@ -1142,7 +1142,7 @@ void setcpuaffinity(void);
 void lf_fafc0(void);
 void resettimer(void);
 void starttimer(void);
-void lf_fb040(void);
+void stoptimer(void);
 void getcpufrequency(void);
 void lf_fb1b0(void);
 void cs_sleep(void);
@@ -2338,8 +2338,8 @@ const LfEntry lf_table[] = {
     { "rendermodel", 0xd7150, (void *)rendermodel, 6, LF_RET_VOID, 4, "vppvpp", 1 },
     { "rendermodelwire", 0xd7380, (void *)rendermodelwire, 5, LF_RET_VOID, 4, "vpppv", 1 },
     { "rendercheckpoints", 0xd7470, (void *)lf_d7470, 0, LF_RET_VOID, 4, "", 1 },
-    { "lf_d7850", 0xd7850, (void *)lf_d7850, 1, LF_RET_VOID, 4, "v", 1 },
-    { "render_sectorlist", 0xd7ed0, (void *)lf_d7ed0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "clearsectorlist", 0xd7850, (void *)clearsectorlist, 1, LF_RET_VOID, 4, "v", 1 },
+    { "render_sectorlist", 0xd7ed0, (void *)render_sectorlist, 1, LF_RET_VOID, 4, "v", 1 },
     { "render_buildareasectorshadow", 0xd8290, (void *)lf_d8290, 0, LF_RET_VOID, 4, "", 1 },
     { "render_areasectorshadow", 0xd8ae0, (void *)lf_d8ae0, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_buildsectorlods", 0xd8ba0, (void *)landscape_buildsectorlods, 0, LF_RET_VOID, 4, "", 1 },
@@ -2351,9 +2351,9 @@ const LfEntry lf_table[] = {
     { "landscape_generatedetail", 0xd9c70, (void *)landscape_generatedetail, 5, LF_RET_VOID, 4, "vvvvv", 1 },
     { "lf_d9fa0", 0xd9fa0, (void *)lf_d9fa0, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_daa90", 0xdaa90, (void *)lf_daa90, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "render_sector_interior", 0xdabf0, (void *)lf_dabf0, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "render_sector_alpha", 0xdadf0, (void *)lf_dadf0, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "render_sector_interior_shadow2", 0xdaff0, (void *)lf_daff0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "render_sector_interior", 0xdabf0, (void *)render_sector_interior, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "render_sector_alpha", 0xdadf0, (void *)render_sector_alpha, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "render_sector_interior_shadow2", 0xdaff0, (void *)render_sector_interior_shadow2, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermodelshadow", 0xdb7c0, (void *)rendermodelshadow, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "glstateshadowtwoside", 0xdc080, (void *)glstateshadowtwoside, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_dc1d0", 0xdc1d0, (void *)lf_dc1d0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2442,7 +2442,7 @@ const LfEntry lf_table[] = {
     { "lf_fafc0", 0xfafc0, (void *)lf_fafc0, 1, LF_RET_VOID, 4, "p", 0 },
     { "resettimer", 0xfafe0, (void *)resettimer, 2, LF_RET_VOID, 4, "vp", 0 },
     { "starttimer", 0xfb020, (void *)starttimer, 1, LF_RET_VOID, 4, "v", 0 },
-    { "itemtimetolive", 0xfb040, (void *)lf_fb040, 1, LF_RET_VOID, 4, "v", 0 },
+    { "stoptimer", 0xfb040, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_fb1b0", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
     { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },

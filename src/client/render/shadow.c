@@ -14,7 +14,7 @@
 #include "vectors.h"
 
 #define g_models cl_data_model
-#define g_timerlist sr_data_timerlist
+#define g_timerlist cl_data_timerlist
 #define g_light_position cl_data_light_position
 #define g_corners cl_data_shadow_corners
 #define g_count cl_data_shadow_count
@@ -22,7 +22,6 @@
 
 /* Game functions of other files. */
 #define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const void *placement, const void *rotation))
-#define stoptimer CL_FN(0x4fb040, void(__cdecl *)(int timer))
 
 GL_IMPORT(glPushMatrix, (void), ())
 GL_IMPORT(glPopMatrix, (void), ())

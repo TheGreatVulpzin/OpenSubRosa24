@@ -37,3 +37,5 @@ rva,name,evidence
 0x796f0,pointinsidefrustum,"Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes)."
 0xe5210,sprite_modeltimetolive,"Counts down the life of each flying piece and frees the ones with no life left. The Linux client has sprite_modeltimetolive."
 0xe5280,deletesprite_model,"Frees a flying piece: the last piece takes its place. The Linux client has deletesprite_model."
+0xd7850,clearsectorlist,"Chooses the sectors to draw and collects their runs of triangles for each material. render_sectorlist draws the runs."
+0xfb040,stoptimer,"Adds the cycles since starttimer to the total of the timer and stores the total in milliseconds. The matcher name itemtimetolive was wrong."

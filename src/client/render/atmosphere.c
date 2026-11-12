@@ -9,16 +9,13 @@
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
-#define g_timerlist sr_data_timerlist
+#define g_timerlist cl_data_timerlist
 #define g_programs cl_data_programs
 #define g_camera cl_data_audio_camera
 #define g_light_position cl_data_light_position
 #define g_world_position cl_data_world_position
 #define g_viewport_width cl_data_viewport_width
 #define g_viewport_height cl_data_viewport_height
-
-/* Game functions of other files. */
-#define stoptimer CL_FN(0x4fb040, void(__cdecl *)(int timer))
 
 enum {
     PROGRAM_ATMOSPHERE = 7,
