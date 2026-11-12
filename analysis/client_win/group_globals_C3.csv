@@ -19,3 +19,4 @@ frustum_planes,vec3,5,0x122b90,"boxinsidefrustum writes the five plane normals i
 shadow_corners,vec3,6,0x1033ecc0,"rendermodelshadow: the three pushed corners and the three corners of the triangle in work"
 shadow_count,int,1,0x13bee6a0,"rendermodelshadow: the points in the list of the shadow"
 shadow_list,vec3,36864,0x13bee6a4,"rendermodelshadow: the triangles of the shadow volume, as points"
+chat_head,uint32_t,1,0xf3eafc0,"frame_drawmessages walks the ring of messages from this index back. createmessage moves it"

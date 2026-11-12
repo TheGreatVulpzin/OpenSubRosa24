@@ -229,7 +229,7 @@ typedef struct MeshTri { int verts[3]; } MeshTri;
 typedef struct DebugLine { vec3 from, to; } DebugLine;
 typedef struct DebugValue { int is_float; int int_value; float float_value; char name[32]; } DebugValue;
 /* A message of the chat display. Only the time to live is known. */
-typedef struct ChatMessage { uint8_t pad_00[8]; int timer; uint8_t pad_0c[0x8c]; } ChatMessage;
+typedef struct ChatMessage { int kind; uint8_t pad_04[4]; int timer; int delay; int target; int style; char text[128]; } ChatMessage;
 
 /* Parts of a client model (ModelTemp, Model). */
 typedef struct TexCoord { float u, v; } TexCoord;
@@ -929,7 +929,7 @@ typedef union Human { struct {
     int bleeding;                        /* +0x2b1c manager: knife writes 1 (likely: bleeding) */
     float body_strength;                 /* +0x2b20 humansimulation: 1.0, lower below 25 health with a wobble; the muscle stiffness and the balance limit use it */
     int reload_timer;                    /* +0x2b24 human_itemsimulation writes 60 after a magazine moves and counts it down */
-    int unk_2b28;                        /* +0x2b28 1 functions */
+    int bubbles;                         /* +0x2b28 frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the human */
     int team;                            /* +0x2b2c createhuman copies from player.team */
     int look_b;                          /* +0x2b30 createhuman copies from player.look_b */
     int look_c;                          /* +0x2b34 createhuman copies from player.look_c */
@@ -987,6 +987,7 @@ SR_STATIC_ASSERT(offsetof(Human, colors) == 0x2a5c, "Human.colors");
 SR_STATIC_ASSERT(offsetof(Human, bleeding) == 0x2b1c, "Human.bleeding");
 SR_STATIC_ASSERT(offsetof(Human, body_strength) == 0x2b20, "Human.body_strength");
 SR_STATIC_ASSERT(offsetof(Human, reload_timer) == 0x2b24, "Human.reload_timer");
+SR_STATIC_ASSERT(offsetof(Human, bubbles) == 0x2b28, "Human.bubbles");
 SR_STATIC_ASSERT(offsetof(Human, team) == 0x2b2c, "Human.team");
 SR_STATIC_ASSERT(offsetof(Human, look_b) == 0x2b30, "Human.look_b");
 SR_STATIC_ASSERT(offsetof(Human, look_c) == 0x2b34, "Human.look_c");
@@ -1039,7 +1040,7 @@ typedef union Item { struct {
     int vehicle_id;                      /* +0x0114 player_calcassets: < 0x400; economysimulation: index * 0x8230 (likely: key) */
     vec3 inertia;                        /* +0x0118 createitem: 1 / inv_inertia */
     vec3 inv_inertia;                    /* +0x0124 createitem: copy of itemtype.inv_inertia */
-    int unk_0130;                        /* +0x0130 1 functions */
+    int bubbles;                         /* +0x0130 frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the item */
     int num_bills;                       /* +0x0134 item_addbill and logic_playeractions add 1 */
     int last_bill;                       /* +0x0138 item_billvalue adds the bills 0 to last_bill (-1: no bill); item_addbill allows 9 bills (last_bill <= 8) */
     uint32_t bills_mask;                 /* +0x013c item_addbill/resetgame change bits */
@@ -1086,6 +1087,7 @@ SR_STATIC_ASSERT(offsetof(Item, call_state) == 0x110, "Item.call_state");
 SR_STATIC_ASSERT(offsetof(Item, vehicle_id) == 0x114, "Item.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Item, inertia) == 0x118, "Item.inertia");
 SR_STATIC_ASSERT(offsetof(Item, inv_inertia) == 0x124, "Item.inv_inertia");
+SR_STATIC_ASSERT(offsetof(Item, bubbles) == 0x130, "Item.bubbles");
 SR_STATIC_ASSERT(offsetof(Item, num_bills) == 0x134, "Item.num_bills");
 SR_STATIC_ASSERT(offsetof(Item, last_bill) == 0x138, "Item.last_bill");
 SR_STATIC_ASSERT(offsetof(Item, bills_mask) == 0x13c, "Item.bills_mask");

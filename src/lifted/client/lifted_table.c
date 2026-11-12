@@ -752,7 +752,7 @@ void lf_75f10(void);
 void lf_77c70(void);
 void renderframeatmosphere(void);
 void lf_78c30(void);
-void lf_78c70(void);
+void frame_drawmessages(void);
 void frame_drawvoiceicons(void);
 void pointinsidefrustum(void);
 void boxinsidefrustum(void);
@@ -2052,7 +2052,7 @@ const LfEntry lf_table[] = {
     { "renderframedepth", 0x77c70, (void *)lf_77c70, 0, LF_RET_VOID, 4, "", 1 },
     { "renderframeatmosphere", 0x78810, (void *)renderframeatmosphere, 1, LF_RET_VOID, 4, "v", 1 },
     { "frame_rendermessages", 0x78c30, (void *)lf_78c30, 0, LF_RET_VOID, 4, "", 1 },
-    { "frame_drawmessages", 0x78c70, (void *)lf_78c70, 0, LF_RET_VOID, 4, "", 1 },
+    { "frame_drawmessages", 0x78c70, (void *)frame_drawmessages, 0, LF_RET_VOID, 4, "", 1 },
     { "frame_drawvoiceicons", 0x79330, (void *)frame_drawvoiceicons, 0, LF_RET_VOID, 4, "", 1 },
     { "pointinsidefrustum", 0x796f0, (void *)pointinsidefrustum, 1, LF_RET_INT, 4, "p", 0 },
     { "boxinsidefrustum", 0x79890, (void *)boxinsidefrustum, 2, LF_RET_INT, 4, "pp", 0 },

@@ -1000,3 +1000,5 @@ texturelist,0x0,count,int,,"setupgame: the next free texture identifier. 848 aft
 texturelist,0x408,shadow_map,int,,"rendermodel binds it on texture unit 2 for the lit models"
 texturelist,0x40c,sky,int,,"renderframeatmosphere binds it as the texture of the sky quad"
 texturelist,0x10fc,map,int,,"rendermap draws the city from above into this texture"
+human,0x2b28,bubbles,int,,"frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the human"
+item,0x130,bubbles,int,,"frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the item"

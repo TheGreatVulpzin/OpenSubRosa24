@@ -368,7 +368,7 @@ typedef struct MeshTri { int verts[3]; } MeshTri;
 typedef struct DebugLine { vec3 from, to; } DebugLine;
 typedef struct DebugValue { int is_float; int int_value; float float_value; char name[32]; } DebugValue;
 /* A message of the chat display. Only the time to live is known. */
-typedef struct ChatMessage { uint8_t pad_00[8]; int timer; uint8_t pad_0c[0x8c]; } ChatMessage;
+typedef struct ChatMessage { int kind; uint8_t pad_04[4]; int timer; int delay; int target; int style; char text[128]; } ChatMessage;
 
 /* Parts of a client model (ModelTemp, Model). */
 typedef struct TexCoord { float u, v; } TexCoord;
