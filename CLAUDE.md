@@ -118,6 +118,8 @@ Download fails: session needs network access to `crypticsea.gart.sh` and `github
 - `tools/re/map_globals.py` — maps global variables by votes.
 - `tools/re/pair_client_globals.py` — pairs the globals of the server and the client through the 236 shared functions. Writes `analysis/client_win/storage.csv` (client address of each server storage object). Needs the old full server lifted C from git.
 - `tools/re/map_regions.py` — maps unnamed globals to symbols by functions that use them (`--test` checks on known globals). Output = candidate list: check each before it goes into CSV.
+- `tools/re/client_resolve.py <rva> [old lifted file]` — for one client function, maps each `DAT_` address of its lifted C to the storage object, the index and the struct field. Use it before you name globals. A function already adopted is not in the lifted file: give an older copy (`git show <commit>:src/lifted/client/lifted_client.c`).
+- `tools/re/client_overlap.py [group_globals_Cn.csv]` — lists client storage objects that overlap. Run it after you add globals and after a merge: an overlap between two group files is one address with two names.
 - `tools/re/struct_fields.py` — collects struct fields from pseudo-C.
 - `tools/formats/subrosa_formats.py` — readers for `.srk`, `.sbl`, `.sbb`, `.sbc`, `.csm`.
 
