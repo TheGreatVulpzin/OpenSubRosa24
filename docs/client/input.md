@@ -74,7 +74,7 @@ Coordinate writes, angle writes and smoothing results round to float. Sensitivit
 
 Connection controls store the address of a local selection value. Menu processing writes the selected connection index through this pointer during input dispatch. The address depends on the call frame and can differ between executions. Its target is valid only during input dispatch.
 
-Runtime dispatch uses generated C for `getinputs`. The implementation in `dispatch.c` has no active table entry because byte comparison includes this variable stack address. Adoption requires a focused test that excludes only this pointer and compares every other effect, including connection selection and removal.
+`dispatch.c` holds `getinputs`, but no table entry calls it. The connection menu stores the address of a local variable, and that address differs on each call.
 
 Return opens chat. Return release sends a nonempty message unless Escape cancels it. T, Y and U select talk, yell and whisper. Player menu actions enter the action ring and clear `menu_action`.
 
