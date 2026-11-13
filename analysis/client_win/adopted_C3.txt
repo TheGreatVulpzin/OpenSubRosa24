@@ -50,3 +50,10 @@ rendermuzzleflashes src/client/render/effects.c
 rendercheckpoints src/client/render/effects.c
 createspritemodel src/client/render/sprites.c
 selectnearitem src/client/render/sprites.c
+render_buildareasectorshadow src/client/render/sector_shadow.c
+render_areasectorshadow src/client/render/sector_shadow.c
+buildhumanmodel src/client/render/frame_models.c
+rendermodellist src/client/render/frame_models.c
+frame_rendermessages src/client/render/frame_models.c
+screenshot src/client/render/screen.c
+listvideomodes src/client/render/screen.c

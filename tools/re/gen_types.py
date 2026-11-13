@@ -110,7 +110,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'VideoMode': 12}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -402,6 +402,14 @@ typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook
 typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel; vec3 rot[3]; vec3 spin; uint8_t pad_54[4]; float gravity; float drag; uint8_t pad_60[8]; } SpriteModel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
+
+/* A model entry in the sorted frame list. */
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct VideoMode { int width; int height; int bits; } VideoMode;
+SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
+SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
+SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
 /* A particle, a glass shard or a three corner piece with springs. */
 typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
 typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
@@ -629,6 +637,22 @@ typedef union BlockSector { struct {
     int near_camera;                /* +0x6054 not 0 when the sector is within 32 units of the camera */
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
+
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    uint8_t pad_5038[4];
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+
 
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {

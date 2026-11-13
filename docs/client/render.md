@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`.
 
 ## The 2D layer
 
@@ -142,3 +142,23 @@ A sector is a `BlockSector` record. `sector_entries` holds the sector and the di
 `rendercheckpoints` draws both faces of a strip along one side of each checkpoint box. The strip is 1.5 units high. A checkpoint with an invalid side uses the preceding checkpoint's corners. The client reads the strips at byte 0x25978 of the game record. In this pass, `round_goal` gives the strip count. A nonpositive `round_ticks` draws only the first strip, in red. A positive value draws all strips.
 
 `selectnearitem` selects a free item near the viewed human. It uses a reach segment of 1.5 units from the head. The nearest item within half a unit of the segment becomes `selected_item`. The selected hand must be empty. Without a player or human in view, the selection does not change.
+
+## Frame models
+
+`src/client/render/frame_models.c` draws the sorted frame list. Each `FrameEntry` has a model, flags, two texture indices, a position, three orientation rows and a color. `frame_model_order` selects the entries to draw. Flag 2 hides an entry. Mode 0 binds its color and lightmap textures, mode 1 draws depth, and mode 2 supplies texture coordinates and normals without texture binds. A new lightmap texture binds only when the color texture changes. The world debug view suppresses this pass.
+
+`buildhumanmodel` transforms human model corners through the bones. References below 16 use the corner position. Other references select paired part offsets and scales from the human color vectors. The scale changes local x and y only. The function fills face normals and all three vertex normals after the positions.
+
+`frame_rendermessages` disables culling and depth testing, then enables both states.
+
+## Sector shadow volumes
+
+`src/client/render/sector_shadow.c` builds closed shadow volumes from the sector triangles that face away from the light. Each volume has two caps and up to three sides. The six current corners also occupy a separate array. The extrusion reaches the base of the sector's vertical block range. A light y component from zero through 0.125 gives zero extrusion. A negative y component leaves the vertex list unchanged and leaves the build timer active. A NaN y component clears the list and completes the pass without faces.
+
+The mesh view names the client pointers within `BlockSector` without changing its fields or size. The shadow list has room for 262144 positions. The buffer extension uses a three megabyte allocation and uploads the active part of the list. Without that extension, the draw pass reads the list directly. `render_areasectorshadow` draws triangles and reports the vertex count as `shadowverts`.
+
+## Display modes and screenshots
+
+`src/client/render/screen.c` collects display modes and saves the back buffer. `listvideomodes` appends width, height and pixel depth records. It reads only the first 512 SDL modes. A matching width replaces the stored height. A nonzero new height makes that entry a match and preserves its pixel depth. Every call also appends 1024 by 640 by 32, even when that mode is already present.
+
+`screenshot` accepts dimensions up to 1280 by 960. It reads RGBA pixels, writes an 18 byte TGA header, then writes BGR pixels. The filename starts at `scsht000.tga`. Existing files advance the three digits through 999. At index 1000, the first digit becomes a colon. The file handle uses `shader_file`, including the value after close.

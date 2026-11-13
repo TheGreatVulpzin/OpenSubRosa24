@@ -28,7 +28,7 @@ RULES = [
     ('C3', r'^render|^draw|^frame_|sprite|^tiremark|^glstate|^compileprogram|^setupprogram|shader|^reloadopengl|'
            r'^enabletwosided|^disabletwosided|^debug_render|^screenshot|^boxinsidefrustum|^pointinsidefrustum|^model_render|'
            r'^listvideomodes|^displaydebuginfo|^hudsimulation|^raycast_|^cityobject_simulation|'
-           r'^selectnearitem$|^clearsectorlist$'),
+           r'^selectnearitem$|^clearsectorlist$|^buildhumanmodel$'),
     ('C2', r'^generate|^createmodel|^model_|^landscape_|^tempmesh|^modeltemp|^createhumanmodel|^createhairmodel|'
            r'noise|^lerp|^serp|^cerp|^engine_bezier|^hermite|^copymodel|^calculatepointscale|^deletesprite_model|'
            r'^objecttype_|^createmodel_|^addboxtomodel|^setupobjecttypeweight|^setupspheremodel'),

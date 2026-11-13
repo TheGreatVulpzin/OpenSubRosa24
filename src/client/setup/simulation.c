@@ -12,6 +12,7 @@
 
 #include "client.h"
 #include "render/sprites.h"
+#include "render/lists.h"
 #include "render/sprite_models.h"
 #include "sr_runtime.h"
 
@@ -51,7 +52,6 @@ void *sr_import(const char *dll, const char *name);
 #define eventsimulation CL_FN(0x4704b0, void(__cdecl *)(void))
 #define timetolive_records CL_FN(0x4645e0, void(__cdecl *)(void))
 #define bullettimetolive CL_FN(0x4e26a0, void(__cdecl *)(void))
-#define render_buildareasectorshadow CL_FN(0x4d8290, void(__cdecl *)(void))
 
 /* SDL scancodes of the keys. */
 enum {

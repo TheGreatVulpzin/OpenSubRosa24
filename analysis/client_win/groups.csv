@@ -943,7 +943,7 @@ rva,name,size,group,recorded_calls
 0xbaed0,,533,C11,0
 0xbb0f0,negvector,5071,C10,3
 0xbc4c0,hermiteinterpolation,247,C2,0
-0xbc5c0,frame_addmodel,1290,C3,0
+0xbc5c0,buildhumanmodel,1290,C3,0
 0xbcad0,createhumanmodel,8702,C2,3
 0xbecd0,sethumanmodelvert,65,C10,0
 0xbed20,,84,C11,0

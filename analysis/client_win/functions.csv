@@ -2320,7 +2320,7 @@ rva,size,name,source,confidence,evidence
 0x75f10,7511,renderframe,anchor,0.816,features
 0x77c70,2973,renderframedepth,anchor,0.915,features
 0x78810,1055,renderframeatmosphere,anchor,0.845,features
-0x78c30,54,frame_rendermessages,anchor,0.9,features
+0x78c30,54,frame_rendermessages,manual,1.0,Toggles culling and depth testing for the message pass
 0x78c70,1723,frame_drawmessages,anchor,0.774,features
 0x79330,952,frame_drawvoiceicons,anchor,0.787,features
 0x796f0,407,pointinsidefrustum,manual,1.0,Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes).
@@ -2515,7 +2515,7 @@ rva,size,name,source,confidence,evidence
 0xbaed0,533,,,,
 0xbb0f0,5071,negvector,anchor,0.745,features
 0xbc4c0,247,hermiteinterpolation,anchor,1.0,features
-0xbc5c0,1290,frame_addmodel,callgraph,0.667,votes=4
+0xbc5c0,1290,buildhumanmodel,manual,1.0,Linux buildhumanmodel has nine scaleaddvectors calls five copyvector calls and one generatetrinormal call matching the human vertex transform
 0xbcad0,8702,createhumanmodel,anchor,0.633,features
 0xbecd0,65,sethumanmodelvert,callgraph,1.0,votes=48
 0xbed20,84,,,,
@@ -2604,14 +2604,14 @@ rva,size,name,source,confidence,evidence
 0xd6b50,285,multiplyquaternion,callgraph,1.0,votes=7
 0xd6c70,51,copyquaternion,callgraph,0.667,votes=4
 0xd6cb0,398,rendersphere,anchor,0.965,features
-0xd6e40,781,rendermodellist,callgraph,1.0,votes=8
+0xd6e40,781,rendermodellist,manual,1.0,Draws the sorted frame model entries with optional textures
 0xd7150,558,rendermodel,callgraph,1.0,votes=22
 0xd7380,235,rendermodelwire,anchor,0.784,features
 0xd7470,992,rendercheckpoints,anchor,0.875,features
 0xd7850,1660,clearsectorlist,manual,1.0,Chooses the sectors to draw and collects their runs of triangles for each material. render_sectorlist draws the runs.
 0xd7ed0,947,render_sectorlist,anchor,0.877,features
-0xd8290,2115,render_buildareasectorshadow,anchor,0.544,features
-0xd8ae0,187,render_areasectorshadow,anchor,1.0,features
+0xd8290,2115,render_buildareasectorshadow,manual,1.0,Builds closed sector shadow volumes and uploads their vertices
+0xd8ae0,187,render_areasectorshadow,manual,1.0,Draws the sector shadow vertices and reports their count
 0xd8ba0,1374,landscape_buildsectorlods,manual,1.0,"Fills the index lists of the landscape sectors that landscape_rendersector draws. It sits before landscape_buildsectormesh, as in the Linux client."
 0xd9100,410,landscape_buildsectormesh,anchor,0.946,features
 0xd92a0,1229,setupframelandscapelod,anchor,0.882,features
@@ -2798,13 +2798,13 @@ rva,size,name,source,confidence,evidence
 0x105b80,561,,,,
 0x105dc0,774,,,,
 0x1060d0,262,checksystemmessages,anchor,0.647,features
-0x1061e0,292,listvideomodes,anchor,0.768,features
+0x1061e0,292,listvideomodes,manual,1.0,Collects SDL display modes and appends the fixed 1024 by 640 mode
 0x106310,5,,,,
 0x106320,350,setupperspectiveviewport,callgraph,1.0,votes=10
 0x106480,322,setuporthoviewport,callgraph,1.0,votes=6
 0x1065d0,219,setupviewpoint,callgraph,1.0,votes=20
 0x1066b0,213,setupobjectrender,callgraph,1.0,votes=18
-0x106790,918,screenshot,anchor,0.822,features
+0x106790,918,screenshot,manual,1.0,Saves a numbered TGA from the back buffer
 0x106b30,3530,drawtext,anchor,0.56,features
 0x107970,95,,,,
 0x1079d0,229,setuptextdisplay,callgraph,1.0,votes=32

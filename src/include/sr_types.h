@@ -259,6 +259,14 @@ typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook
 typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel; vec3 rot[3]; vec3 spin; uint8_t pad_54[4]; float gravity; float drag; uint8_t pad_60[8]; } SpriteModel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
+
+/* A model entry in the sorted frame list. */
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct VideoMode { int width; int height; int bits; } VideoMode;
+SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
+SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
+SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
 /* A particle, a glass shard or a three corner piece with springs. */
 typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
 typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
@@ -486,6 +494,22 @@ typedef union BlockSector { struct {
     int near_camera;                /* +0x6054 not 0 when the sector is within 32 units of the camera */
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
+
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    uint8_t pad_5038[4];
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+
 
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {

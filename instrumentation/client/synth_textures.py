@@ -480,6 +480,100 @@ def display_case(gametype, state, round_mode, debugit=0):
     return edits, {'drawdisplay': [call(0x6baa0)] * 2}
 
 
+def sector_shadow_case(light_y=0.75, buffers=0, ready=0):
+    """Build side faces and caps, with both buffer paths and ordered light tests."""
+    sectors, scratch = 0x1dda5280, MODELTEMP + 0x240000
+    edits = [(sectors + i * 0x6068, 'i', [0]) for i in range(8192)]
+    edits += [(0x19c0cd78, '3f', [0.25, light_y, -0.5]),
+              (0x29e7d2d8, 'i', [buffers]), (0xfefe284, 'i', [ready]),
+              (0x1033fd28, 'i', [0]), (0x1b7b4e0, 'I', [237]),
+              (0xfbfe280, 'i', [6]), (0x17265640, 'f', [0.75])]
+    vertices, triangles, normals, edges = scratch, scratch + 0x200, scratch + 0x300, scratch + 0x400
+    for i, point in enumerate(((0.1, 1.7, -2.1), (3.3, 1.25, 0.4), (-1.2, 1.5, 2.7), (4.0, -0.0, 0.25))):
+        edits.append((vertices + 64 * i, '3f', point))
+    edits += [(triangles, '9i', [0, 1, 2, 1, 2, 3, 3, 0, 1]),
+              (normals, '9f', [0.0, -1.0, 0.0, 0.0, 1.0, 0.0, NAN, 0.0, 0.0]),
+              (edges, '27f', [0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0] * 3)]
+    for index, height in ((0, 0), (3, 7)):
+        sector = sectors + index * 0x6068
+        edits += [(sector, 'i', [1]), (sector + 0x5014, '4i', [0, 2, height, 4]),
+                  (sector + 0x502c, 'I', [BASE + vertices]), (sector + 0x5030, 'i', [3]),
+                  (sector + 0x5034, 'I', [BASE + triangles]), (sector + 0x503c, 'I', [BASE + normals]),
+                  (sector + 0x5044, 'I', [BASE + edges])]
+    return edits, {'render_buildareasectorshadow': [call(0xd8290)] * 3,
+                   'render_areasectorshadow': [call(0xd8ae0)] * 3}
+
+
+def frame_models_case(debug=0):
+    """Draw sorted entries with two strides, shared color textures and all render modes."""
+    entries, models, scratch = 0x19c110b8, 0xaff05a0, MODELTEMP + 0x240000
+    edits = [(0x14a8688, 'i', [debug]), (0x19c0d0b4, 'i', [4]),
+             (0x19c0d0b8, '4i', [2, 0, 3, 1]), (0x19c0cd78, '4f', [0.2, 0.75, -0.5, 1.0])]
+    for index, stride in ((0, 8), (1, 12)):
+        model = models + index * 0xe04
+        edits += [(model + 4, 'i', [stride]), (model + 0x18, 'I', [BASE + scratch + index * 0x1000]),
+                  (model + 0x1c, 'i', [2])]
+        data = [float((i * 7) % 17) / 13.0 for i in range(stride * 6)]
+        edits.append((scratch + index * 0x1000, f'{len(data)}f', data))
+    for i in range(4):
+        entry = entries + i * 100
+        edits += [(entry, 'i', [i % 2]), (entry + 8, '3i', [2 if i == 1 else 0, 1 if i < 3 else 2, 3 + i]),
+                  (entry + 0x1c, '3f', [float(i), 2.5, -3.75]),
+                  (entry + 0x28, '9f', [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]),
+                  (entry + 0x58, '3f', [0.1 * i, 0.5, 0.75])]
+    return edits, {'rendermodellist': [call(0xd6e40, mode) for mode in (0, 1, 2, -1)],
+                   'frame_rendermessages': [call(0x78c30)] * 3}
+
+
+def human_model_case():
+    """Skin six corners through bones and paired part offsets and scales."""
+    human, model, refs = 0x14fc4a0, 0xaff05a0, 0x1bdbe04
+    scratch = MODELTEMP + 0x240000
+    rng = random.Random(31)
+    edits = [(model + 4, 'i', [12]), (model + 0x18, 'I', [BASE + scratch]),
+             (model + 0x1c, 'i', [2]), (model + 0x24, 'I', [BASE + scratch + 0x1000])]
+    for i in range(16):
+        bone = human + 0xc8 + i * 0xe0
+        edits += [(bone, '3f', [rng.uniform(-5, 5) for _ in range(3)]),
+                  (bone + 0x30, '9f', [rng.uniform(-1, 1) for _ in range(9)])]
+    edits.append((human + 0x2a5c, '12f', [0.125, -0.375, 0.3, 1.5, 0.25, 100.0, -2.0, 0.75, 1.25, 0.5, -1.25, 0.0]))
+    for i, bone in enumerate((0, 3, 15, 16, 17, 16)):
+        edits += [(refs + i * 28, '2i', [bone, i % 4]),
+                  (refs + i * 28 + 0x10, '3f', [rng.uniform(-2, 2) for _ in range(3)])]
+    alternate = []
+    for address, fmt, values in edits:
+        if human <= address < human + 0x2b64:
+            copied = list(values)
+            if fmt == '3f':
+                copied[0] += 2.75
+                copied[1] -= 1.5
+            alternate.append((address + 3 * 0x2b64, fmt, copied))
+    edits += alternate
+    alternate_model = model + 17 * 0xe04
+    edits += [(alternate_model + 4, 'i', [8]),
+              (alternate_model + 0x18, 'I', [BASE + scratch + 0x2000]),
+              (alternate_model + 0x1c, 'i', [2]),
+              (alternate_model + 0x24, 'I', [BASE + scratch + 0x3000])]
+    return edits, {'buildhumanmodel': [call(0xbc5c0, human_index, model_index)
+                                      for human_index, model_index in ((0, 0), (3, 17), (3, 0))]}
+
+
+def video_modes_case(duplicate=False):
+    """Append a display mode, or replace a stored height without replacing its depth."""
+    edits = [(0x102feb44, 'i', [2 if duplicate else 0])]
+    if duplicate:
+        edits.append((0x52ceb80, '6i', [800, 600, 16, 1600, 720, 24]))
+    return edits, {'listvideomodes': [call(0x1061e0)] * 3}
+
+
+def screenshot_case(width=3, height=2):
+    """Write a small TGA, an empty TGA, or reject a size above the pixel buffer limit."""
+    pixels = [0xff102030, 0x80405060, 0x00708090, 0xffabcdef, 0x00112233, 0x44556677]
+    edits = [(0xb7330c0, '2i', [width, height]), (0x13e61840, '6I', pixels)]
+    return edits, {'screenshot': [call(0x106790)] * 3}
+
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -626,6 +720,17 @@ def main():
             'glass': glass_case, 'glass_full': lambda: glass_case(True),
             'muzzle': muzzle_case, 'pickup': pickup_case,
             'pickup_held': lambda: pickup_case(1), 'pickup_no_view': lambda: pickup_case(2),
+            'shadow': sector_shadow_case, 'shadow_buffer': lambda: sector_shadow_case(0.75, 1),
+            'shadow_ready': lambda: sector_shadow_case(0.75, 1, 1),
+            'shadow_flat': lambda: sector_shadow_case(0.125), 'shadow_negative': lambda: sector_shadow_case(-1.0),
+            'shadow_nan': lambda: sector_shadow_case(NAN),
+            'frame_models': frame_models_case, 'frame_models_debug': lambda: frame_models_case(1),
+            'human_model': human_model_case, 'video_modes': video_modes_case,
+            'video_duplicate': lambda: video_modes_case(True),
+            'screenshot': screenshot_case, 'screenshot_empty': lambda: screenshot_case(0, 0),
+            'screenshot_large': lambda: screenshot_case(1281, 960),
+            'screenshot_tall': lambda: screenshot_case(1280, 961),
+            'screenshot_collision': screenshot_case,
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}
@@ -642,11 +747,19 @@ def main():
                 snap.write(rva, fmt, *values)
             snapshot = case / 'sv_snapshot.bin'
             snap.save(snapshot)
+        case_env = dict(env)
+        if name.startswith('screenshot'):
+            game = case / 'game'
+            game.mkdir(exist_ok=True)
+            case_env['HARNESS_GAME_DIR'] = str(game)
+            if name == 'screenshot_collision':
+                for number in range(3):
+                    (game / f'scsht{number:03d}.tga').write_bytes(b'existing screenshot')
         for function, calls in functions.items():
             calls = calls * repeat
             args = case / f'{function}.txt'
             args.write_text(''.join(calls), encoding='utf-8', newline='\n')
-            print(f'{name}: {function}: {len(calls)} calls:', run(snapshot, args, function, env), flush=True)
+            print(f'{name}: {function}: {len(calls)} calls:', run(snapshot, args, function, case_env), flush=True)
         if edits:
             snapshot.unlink()
 

@@ -63,3 +63,14 @@ tiremark_head,uint32_t,1,0xb73312c,"tiremark_simulation advances the head with a
 tiremark_tail,uint32_t,1,0xb77c580,"the oldest tire strip in the ring"
 tiremarks,Tiremark,16384,0x1036c5e0,"tiremark_simulation writes four position and opacity pairs in each strip"
 selected_item,int,1,0x2a7593c0,"the free item nearest to the viewed human within the 1.5 unit reach segment"
+sector_shadow_corners,vec3,6,0x127890,Six corners of the current sector shadow volume
+sector_shadow_count,int,1,0xfbfe280,Number of vertices in the sector shadow list
+sector_shadow_vertices,vec3,262144,0xfbfe284,Sector shadow side faces and caps
+sector_shadow_buffer_ready,int,1,0xfefe284,The shadow buffer has its three megabyte allocation
+sector_shadow_vbo,int,1,0x1033fd28,Index of the sector shadow vertex buffer
+frame_model_count,int,1,0x19c0d0b4,Number of models in the frame list
+frame_model_order,int,4096,0x19c0d0b8,Sorted frame model indices
+frame_models,FrameEntry,4096,0x19c110b8,Frame model transforms and draw parameters with a stride of 100
+video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height and pixel depth
+video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
+screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
