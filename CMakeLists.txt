@@ -107,8 +107,12 @@ if(CL_ADOPTED)
     set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set(CL_ADOPTED_OBJECTS $<TARGET_OBJECTS:client_adopted>)
 endif()
-# Lifted client code with the hook tables of the lifter, the verifier and the recorder.
-if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c)
+# Lifted client code with the hook tables of the lifter, the verifier and the recorder. The hook
+# tables are generated under build/ by instrumentation/client/pipeline.sh and are not in the
+# repository, so a fresh checkout skips the client targets.
+if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
+   AND EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/hooks_lifted.c
+   AND EXISTS ${CMAKE_SOURCE_DIR}/build/lift/client_win/hooks_record.c)
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
         src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
         instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
