@@ -52,3 +52,12 @@ rva,name,evidence
 0x93dd0,getinputs_door,Linux client symbol and door hand target
 0x7d0e0,movecamera,Linux client symbol and free camera controls
 0x7d4c0,movecamera2,Linux client symbol and spectator camera controls
+0xb4820,createspritemodel,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xd7470,rendercheckpoints,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe1ac0,createwindowsprites,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe2790,spritesimulation,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe3b10,rendersprites,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe4bc0,rendermuzzleflashes,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe5f80,tiremark_simulation,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe64a0,tiremark_render,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0x84f00,selectnearitem,"Selects the nearest unheld item within 0.5 of a 1.5 unit segment from the viewed human's head. The sprite lifetime function is at 0xe26a0."

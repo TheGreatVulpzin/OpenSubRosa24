@@ -2359,7 +2359,7 @@ rva,size,name,source,confidence,evidence
 0x830f0,5082,drawhud,anchor,0.911,features
 0x844d0,558,rendermap,anchor,0.954,features
 0x84700,2034,drawmap,anchor,0.903,features
-0x84f00,424,spritetimetolive,callgraph,0.333,votes=2
+0x84f00,424,selectnearitem,manual,1.0,Selects the nearest free item within the reach segment of the viewed human
 0x850b0,2187,createhuman,callgraph,1.0,votes=10
 0x85940,61,getnexthuman,callgraph,0.667,votes=4
 0x85980,491,pointinsidebuilding,callgraph,0.333,votes=2

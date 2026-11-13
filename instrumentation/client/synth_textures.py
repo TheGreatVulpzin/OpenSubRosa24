@@ -7,6 +7,7 @@ deletes it after the run.
 
 Usage: python -I instrumentation/client/synth_textures.py <recording dir> <work dir> [case,...]
 Cases: noise, noiseedge, hermite, frustum, frustum2, draw2d, sprites, simsprites, map, map2, hud, hud2, pi, pi2, pi3, dd3a..dd3e, dd4, dd2, models, objecttypes, textures, landscape, windows, materials. The script sets the environment of the gate itself.
+Set SV_SYNTH_REPEAT to repeat each call list for timing samples.
 """
 import os
 import random
@@ -242,6 +243,113 @@ def simsprites_case():
         edits.append((base + 0x48, '3f', spin))
         edits.append((base + 0x58, '2f', [0.0027777778, 0.9975]))
     return edits, {'sprite_model_simulation': [call(0xe52e0)] * 4}
+
+
+def effects_case(mode=0):
+    """Exercise particles, shards, tire strips and all four checkpoint sides."""
+    rng = random.Random(91)
+    identity = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+    edits = [(0x75a5120, 'i', [36]), (0x75a58a0, 'i', [16000 if mode == 4 else 0]),
+             (0x75f58a4, 'i', [16000 if mode == 4 else 0]),
+             (0xb73312c, 'I', [0x3fff if mode else 0]),
+             (0xb77c580, 'I', [0x3fff if mode else 0]),
+             (0xfefe2a0, 'i', [0]), (0xfefe2b0, '9f', identity),
+             (0x908ac70, 'ii', [mode, 4]), (0xed81400, 'i', [2])]
+    for index in range(36):
+        base = 0xf9ae260 + index * 0x94
+        height = 25.0 if mode >= 3 else 24.5 if mode else 30.0
+        velocity = [1.0, -0.75, 0.5] if mode >= 3 else [0.5 if mode == 2 else 0.03, -0.1, 0.25 if mode == 2 else 0.01]
+        rotation = identity
+        corner_velocity = [0.01, -0.02, 0.03] * 3
+        spin = [0.0, 1.0, 0.0]
+        if mode >= 3 and index % 6 == 4:
+            rotation = [641.7, 25.0, 1084.5, 642.7, 25.0, 1084.5, 641.7, 25.0, 1085.5]
+            corner_velocity = [1.0, -0.75, 0.5, 0.5, -0.75, 0.25, 0.25, -0.75, 0.5]
+            spin = [1.0, 1.4142135623730951, 1.0]
+        edits += [(base, '148s', [bytes(148)]),
+                  (base, 'iif', [index % 6, 60000 if index % 6 == 4 else 10 + index, 0.0027222223579883575]),
+                  (base + 0xc, '3f', [641.7 + rng.uniform(-1, 1), height, 1084.5]),
+                  (base + 0x18, '3f', velocity),
+                  (base + 0x30, '9f', rotation), (base + 0x54, '9f', corner_velocity),
+                  (base + 0x78, '6f', spin + [0.1, 0.9975, 0.0625])]
+    for index in range(4):
+        edits.append((0x908ac78 + index * 0x1c, '6fi', [640.0 + index, 24.0, 1080.0, 642.0 + index, 26.0, 1082.0, index]))
+    for index in range(1024):
+        edits.append((0x5519120 + index * 0x8230, 'i', [int(index == 0)]))
+        edits.append((0x908b080 + index * 0x1ac, 'i', [0]))
+    edits += [(0x551f008, 'i', [2])]
+    for index in range(2):
+        wheel = 0x551f00c + index * 0x98
+        edits += [(wheel + 0x38, '3f', [641.7 + index, 24.5, 1084.5]),
+                  (wheel + 0x70, 'f3ff', [0.125 if mode else 0.03125, 641.6 + index, 24.5, 1084.4, 0.0625])]
+    return edits, {
+        'spritesimulation': [call(0xe2790)] * 3,
+        'rendersprites': [call(0xe3b10)] * 3,
+        'tiremark_simulation': [call(0xe5f80)] * 3,
+        'tiremark_render': [call(0xe64a0)] * 3,
+        'rendercheckpoints': [call(0xd7470)] * 3,
+    }
+
+
+def glass_case(full=False):
+    """Break two window faces with an empty or nearly full particle pool."""
+    edits = [(0x75a5120, 'i', [16380 if full else 0]),
+             (0x5519124, 'i', [0]), (0x17c040a4, 'i', [0]),
+             (0x5519144, '3f', [641.7, 28.0, 1084.5]),
+             (0x551915c, '9f', [1, 0, 0, 0, 1, 0, 0, 0, 1]),
+             (0x5519180, '3f', [0.01, 0.02, 0.03]),
+             (0xaff06a0, 'i', [2]),
+             (0xaff06a4, '12fi', [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 7]),
+             (0xaff06d8, '12fi', [0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 8]),
+             (SCRATCH, '6f', [642.0, 28.25, 1084.5, 0.1, -0.2, 0.3])]
+    return edits, {'createwindowsprites': [call(0xe1ac0, 0, face, image(SCRATCH), image(SCRATCH + 12)) for face in (7, 8, -1)]}
+
+
+def muzzle_case():
+    """Draw flashes with both axial scale factors and several countdown values."""
+    vertices = SCRATCH + 512
+    triangles = vertices + 128
+    edits = [(0x9065260, 'iIiI', [4, BASE + vertices, 2, BASE + triangles]),
+             (vertices, '12f', [0, 0, 0, 0.125, 0, 1, 0, 0.125, -0.5, -0.125, 0, -1]),
+             (triangles, '6i', [0, 1, 2, 1, 2, 3])]
+    for index in range(1024):
+        edits.append((0x908b080 + index * 0x1ac, 'i', [int(index < 4)]))
+    for index, life in enumerate((0, 1, 4, 16)):
+        base = 0x908b080 + index * 0x1ac
+        edits += [(base + 0xc, 'i', [index]),
+                  (base + 0x48, '3f', [10.0 + index, 2.0, -3.0]),
+                  (base + 0x84, '9f', [1, 0, 0, 0, 1, 0, 0, 0, 1]),
+                  (base + 0xf4, 'i', [life]),
+                  (0x1034dbd0 + index * 0x198, 'f', [-0.625])]
+    return edits, {'rendermuzzleflashes': [call(0xe4bc0)] * 3}
+
+
+def pickup_case(mode=0):
+    """Select the nearest free item, or leave the selection when no player is in view."""
+    edits = [(0xfefe2a0, 'i', [-1 if mode == 2 else 0]),
+             (0xed81418, 'i', [0]), (0xed8143c, 'I', [0x10 if mode else 0]),
+             (0x14fedbc, 'i', [0]), (0x14fede0, 'i', [1 if mode else 0]),
+             (0x14fc728, '3f', [10.0, 2.0, 3.0]),
+             (0x14fc770, '3f', [0.0, 0.0, 1.0])]
+    for index in range(1024):
+        base = 0x908b080 + index * 0x1ac
+        edits.append((base, 'i', [int(index < 4)]))
+        if index < 4:
+            edits += [(base + 0x18, 'ii', [-1, index - 1 if index == 3 else -1]),
+                      (base + 0x48, '3f', [10.2 - index * 0.05, 2.0, 2.0])]
+    return edits, {'selectnearitem': [call(0x84f00)] * 3}
+
+
+def landed_case():
+    """Draw two tire strips across the ring boundary and four vertices in each landed list."""
+    edits = [(0x75a5120, 'i', [0]), (0x75a58a0, 'i', [4]), (0x75f58a4, 'i', [4]),
+             (0xb73312c, 'I', [1]), (0xb77c580, 'I', [0x3fff])]
+    for corner, (x, z) in enumerate(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0))):
+        edits += [(0x75a58a4 + corner * 20, '5f', [x, 24.0, z, x, z]),
+                  (0x75f58a8 + corner * 24, '6f', [x, 24.0, z, 0.0, 1.0, 0.0])]
+        for strip in (0x3fff, 0):
+            edits.append((0x1036c5e4 + strip * 68 + corner * 16, '4f', [x + strip, 24.0, z, (corner + 1) * 0.25]))
+    return edits, {'tiremark_render': [call(0xe64a0)] * 3, 'rendersprites': [call(0xe3b10)] * 3}
 
 
 def map_case(wireframe):
@@ -489,6 +597,15 @@ def run(snapshot, args, name, env):
     if os.environ.get('HARNESS_DEBUG'):
         print(p.stdout[-3000:])
         print(p.stderr[-3000:])
+    suffix = '.bench.txt' if env.get('HARNESS_TIME') else '.result.txt'
+    Path(args).with_suffix(suffix).write_text(p.stdout + p.stderr, encoding='utf-8')
+    if env.get('HARNESS_TIME'):
+        for line in p.stdout.splitlines():
+            parts = line.split()
+            if len(parts) == 5 and parts[:2] == ['time', name]:
+                count, elapsed, reference = map(int, parts[2:])
+                ratio = elapsed / reference if reference else float('nan')
+                return f'{count} calls; ratio {ratio:.3f}'
     for line in p.stdout.splitlines()[::-1]:
         if 'functions tested' in line:
             return line.split(':', 1)[1].strip()
@@ -502,10 +619,18 @@ def main():
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
     allc = {'noise': lambda: ([], noise_calls()[0]), 'noiseedge': noise_edge_case, 'hermite': hermite_case, 'frustum': frustum_case, 'frustum2': lambda: frustum_case((0.0, 0.0), 8), 'draw2d': draw2d_case, 'sprites': sprites_case, 'simsprites': simsprites_case, 'map': lambda: map_case(0), 'map2': lambda: map_case(1), 'hud': lambda: hud_case(0), 'hud2': lambda: hud_case(1), 'pi': lambda: playerinfo_case(3), 'pi2': lambda: playerinfo_case(0), 'pi3': lambda: playerinfo_case(1), 'dd3a': lambda: display_case(3, 0, 0), 'dd3b': lambda: display_case(3, 1, 3), 'dd3c': lambda: display_case(3, 2, 3), 'dd3d': lambda: display_case(3, 2, 0), 'dd3e': lambda: display_case(3, 3, 3, 1), 'dd4': lambda: display_case(4, 1, 0, 1), 'dd2': lambda: display_case(2, 2, 0), 'models': models_case,
+            'effects': effects_case, 'effects_ground': lambda: effects_case(1),
+            'effects_slide': lambda: effects_case(2),
+            'effects_land': lambda: effects_case(3), 'effects_land_full': lambda: effects_case(4),
+            'landed': landed_case,
+            'glass': glass_case, 'glass_full': lambda: glass_case(True),
+            'muzzle': muzzle_case, 'pickup': pickup_case,
+            'pickup_held': lambda: pickup_case(1), 'pickup_no_view': lambda: pickup_case(2),
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
+    repeat = max(1, int(os.environ.get('SV_SYNTH_REPEAT', '1')))
     for name in want:
         edits, functions = allc[name]()
         case = work / name
@@ -518,6 +643,7 @@ def main():
             snapshot = case / 'sv_snapshot.bin'
             snap.save(snapshot)
         for function, calls in functions.items():
+            calls = calls * repeat
             args = case / f'{function}.txt'
             args.write_text(''.join(calls), encoding='utf-8', newline='\n')
             print(f'{name}: {function}: {len(calls)} calls:', run(snapshot, args, function, env), flush=True)

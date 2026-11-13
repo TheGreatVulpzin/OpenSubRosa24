@@ -825,8 +825,10 @@ void plat_test_end(int run)
     g_pool_len[run] = g_pool_used;
     if (run == 0) {
         if (g_pool_copy_len < g_pool_used) {
-            free(g_pool_copy);
-            g_pool_copy = malloc(g_pool_used);
+            if (g_pool_copy)
+                VirtualFree(g_pool_copy, 0, MEM_RELEASE);
+            /* Keep large copies outside the CRT heap. */
+            g_pool_copy = VirtualAlloc(NULL, g_pool_used, MEM_RESERVE | MEM_COMMIT | MEM_TOP_DOWN, PAGE_READWRITE);
             g_pool_copy_len = g_pool_copy ? g_pool_used : 0;
         }
         if (g_pool_copy)
@@ -889,6 +891,10 @@ int plat_test_same(char *why, size_t n)
     }
     if (g_pool_len[0] != g_pool_len[1]) {
         snprintf(why, n, "heap: lifted used %u bytes, original %u", (unsigned)g_pool_len[0], (unsigned)g_pool_len[1]);
+        return 0;
+    }
+    if (g_pool_len[0] && !g_pool_copy) {
+        snprintf(why, n, "heap: cannot preserve %u bytes", (unsigned)g_pool_len[0]);
         return 0;
     }
     for (k = 0; k < g_pool_len[1]; k++) {

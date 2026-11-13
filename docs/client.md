@@ -235,7 +235,7 @@ Open differences on the play recording (8 functions): `drawdisplay`, `drawplayer
 
 - `ApplyReturns.java` also sets a `float` return (the result in ST0), for a function that ends with a call that returns a float. `returns.csv` has `pointdistanceline` (float) and `scenario_armhuman` (int). Their callers read a value from a function typed `void`.
 - `LiftExport.java` adds `;` after a label at the end of a block (`LAB_xxx:` before `}`), which MSVC rejects (C2143). It does this when it writes the `}`, from the text already written.
-- After these two changes `humansimulation`, `area_buildsectormodel`, `soundsimulation`, `calculateplayervoice`, `human_itemsimulation`, `scenario_createchase` and `spritetimetolive` compile. The lift has 723 lifted and 473 harness only functions.
+- After these two changes `humansimulation`, `area_buildsectormodel`, `soundsimulation`, `calculateplayervoice`, `human_itemsimulation`, `scenario_createchase` and `selectnearitem` compile. The lift has 723 lifted and 473 harness only functions.
 
 The 5 left: `dedicatedserverloop` (a server function in the client binary), `launchwebpage` (the identifier `INT`), `landscape_buildsectorlods` (a dereference of `undefined4`) and two CRT functions that the standalone client replaces.
 

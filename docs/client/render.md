@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`.
 
 ## The 2D layer
 
@@ -122,3 +122,23 @@ A sector is a `BlockSector` record. Its `interior_models` field names the mesh o
 
 A sector is a `BlockSector` record. `sector_entries` holds the sector and the distance of each sector with an interior before the sort, and `sector_list` holds the sectors after it.
 
+## Particles and glass
+
+`src/client/render/sprites.c` moves particles and glass under gravity. The pool holds 16384 records of 148 bytes. Each record has a kind, a life, a position, a velocity and three orientation rows. A glass triangle uses those rows as corners and has one velocity for each corner. Three springs hold its edges near their rest lengths.
+
+- `spritesimulation` moves sparks, stains and glass. Sparks bounce at the level. Stains stop at a hit. A glass shard bounces on a wall and stops on an upward facing surface. A shard that stops clears its life even when the list of landed vertices is full.
+- `createwindowsprites` finds the last window with a matching face and projects its four corners through the object's orientation. It starts 81 shards on a nine by nine grid, with random spin and speed from the hit and the object.
+- `rendersprites` sorts the particles by depth and draws particles, glass faces, glass edges and short light traces. It also draws the separate lists of landed particles and landed glass.
+- `createspritemodel` builds a small box for kind 1 and an empty model for other kinds. Every triangle gets zero texture coordinates.
+
+## Tire strips and muzzle flashes
+
+`src/client/render/effects.c` adds a tire strip when wheel slip exceeds 1/32. Each strip has four positions and four opacity values. The ring has 16384 slots and holds at most 16383 strips. It replaces its oldest strip when full. The wheel saves its position and slip each tick, including ticks with no new strip. The downward level tests adjust each corner's height.
+
+`tiremark_render` draws the ring from its oldest strip. `rendermuzzleflashes` draws sphere level 0 at each active gun with a positive countdown. It stretches vertex 1 less than the other vertices along the barrel.
+
+## Checkpoint strips and item selection
+
+`rendercheckpoints` draws both faces of a strip along one side of each checkpoint box. The strip is 1.5 units high. A checkpoint with an invalid side uses the preceding checkpoint's corners. The client reads the strips at byte 0x25978 of the game record. In this pass, `round_goal` gives the strip count. A nonpositive `round_ticks` draws only the first strip, in red. A positive value draws all strips.
+
+`selectnearitem` selects a free item near the viewed human. It uses a reach segment of 1.5 units from the head. The nearest item within half a unit of the segment becomes `selected_item`. The selected hand must be empty. Without a player or human in view, the selection does not change.

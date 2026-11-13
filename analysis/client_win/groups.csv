@@ -752,7 +752,7 @@ rva,name,size,group,recorded_calls
 0x78c30,frame_rendermessages,54,C3,0
 0x78c70,frame_drawmessages,1723,C3,10
 0x79330,frame_drawvoiceicons,952,C6,2
-0x796f0,,407,C11,0
+0x796f0,pointinsidefrustum,407,C3,0
 0x79890,boxinsidefrustum,503,C3,0
 0x79a90,,49,C11,0
 0x79ad0,resetgame,5666,C0x,8
@@ -788,7 +788,7 @@ rva,name,size,group,recorded_calls
 0x830f0,drawhud,5082,C3,20
 0x844d0,rendermap,558,C3,8
 0x84700,drawmap,2034,C3,2
-0x84f00,spritetimetolive,424,C3,0
+0x84f00,selectnearitem,424,C3,0
 0x850b0,createhuman,2187,C0x,0
 0x85940,getnexthuman,61,C10,0
 0x85980,pointinsidebuilding,491,C0x,0
@@ -1036,7 +1036,7 @@ rva,name,size,group,recorded_calls
 0xd7150,rendermodel,558,C3,48
 0xd7380,rendermodelwire,235,C3,0
 0xd7470,rendercheckpoints,992,C3,2
-0xd7850,,1660,C11,48
+0xd7850,clearsectorlist,1660,C3,48
 0xd7ed0,render_sectorlist,947,C3,6
 0xd8290,render_buildareasectorshadow,2115,C3,2
 0xd8ae0,render_areasectorshadow,187,C3,2
@@ -1100,8 +1100,8 @@ rva,name,size,group,recorded_calls
 0xe4bc0,rendermuzzleflashes,837,C3,2
 0xe4f10,rotateorientationfast,295,C10,0
 0xe5040,createsprite_model,464,C3,0
-0xe5210,,111,C11,0
-0xe5280,,91,C11,0
+0xe5210,sprite_modeltimetolive,111,C3,0
+0xe5280,deletesprite_model,91,C3,0
 0xe52e0,sprite_model_simulation,2423,C3,48
 0xe5c60,renderspritemodels,795,C3,4
 0xe5f80,tiremark_simulation,1303,C3,0
@@ -1140,7 +1140,7 @@ rva,name,size,group,recorded_calls
 0xfafc0,,17,C11,0
 0xfafe0,resettimer,56,C7,0
 0xfb020,starttimer,25,C7,0
-0xfb040,itemtimetolive,200,C0,0
+0xfb040,stoptimer,200,C7,0
 0xfb110,getcpufrequency,156,C0,3
 0xfb1b0,,527,C11,0
 0xfb3c0,cs_sleep,15,C10,3
@@ -1235,8 +1235,8 @@ rva,name,size,group,recorded_calls
 0x107970,,95,C11,0
 0x1079d0,setuptextdisplay,229,C10,11
 0x107ac0,drawbitmap,374,C3,72
-0x107c40,,315,C11,0
-0x107d80,,338,C11,13
+0x107c40,drawbitmaptexcoord,315,C3,0
+0x107d80,drawlinebox,338,C3,13
 0x107ee0,drawmousecursor,376,C3,72
 0x108060,createfont,5330,C1,0
 0x109540,text_getlength,95,C5,0

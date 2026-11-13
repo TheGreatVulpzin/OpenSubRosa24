@@ -41,3 +41,12 @@ render_sector_alpha src/client/render/sectors.c
 render_sector_interior_shadow2 src/client/render/sectors.c
 clearsectorlist src/client/render/sectorlist.c
 render_sectorlist src/client/render/sectorlist.c
+spritesimulation src/client/render/sprites.c
+rendersprites src/client/render/sprites_draw.c
+createwindowsprites src/client/render/sprites.c
+tiremark_simulation src/client/render/effects.c
+tiremark_render src/client/render/effects.c
+rendermuzzleflashes src/client/render/effects.c
+rendercheckpoints src/client/render/effects.c
+createspritemodel src/client/render/sprites.c
+selectnearitem src/client/render/sprites.c

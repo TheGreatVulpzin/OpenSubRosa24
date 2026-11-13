@@ -1016,6 +1016,8 @@ modellist,0x70c,hair,int,,"setupclient: createhairmodel"
 modellist,0x710,sprite,int,32,"setupclient: createspritemodel builds entry 1. The effect renderer reads entry 1"
 modellist,0x790,sunglasses,int,,"setupclient: createsunglassmodel"
 modellist,0x7a0,rotor,int,,"setupclient: createrotormodel"
+model,0x100,num_windows,int,,createwindowsprites searches this many window records
+model,0x104,windows,ModelWindow,64,createwindowsprites projects four corners and matches the face number
 soundlist,0x4,shot_magnum,int,,"setupclient loads 44magnum.wav"
 soundlist,0x8,shot_smg,int,,"setupclient loads submachinegun01.wav"
 soundlist,0xc,shot_rifle,int,,"setupclient loads rifle01.wav"

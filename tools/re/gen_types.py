@@ -110,7 +110,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -402,6 +402,20 @@ typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook
 typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel; vec3 rot[3]; vec3 spin; uint8_t pad_54[4]; float gravity; float drag; uint8_t pad_60[8]; } SpriteModel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
+/* A particle, a glass shard or a three corner piece with springs. */
+typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
+typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
+typedef struct GlassVertex { vec3 pos; vec3 normal; } GlassVertex;
+typedef struct TiremarkVertex { vec3 pos; float alpha; } TiremarkVertex;
+typedef struct Tiremark { uint8_t pad_00[4]; TiremarkVertex corners[4]; } Tiremark;
+typedef struct ModelWindow { vec3 corners[4]; int face; } ModelWindow;
+typedef struct RenderCheckpoint { vec3 low; vec3 high; int side; } RenderCheckpoint;
+SR_STATIC_ASSERT(sizeof(ClientSprite) == 0x94, "ClientSprite");
+SR_STATIC_ASSERT(sizeof(SpriteDecalVertex) == 0x14, "SpriteDecalVertex");
+SR_STATIC_ASSERT(sizeof(GlassVertex) == 0x18, "GlassVertex");
+SR_STATIC_ASSERT(sizeof(Tiremark) == 0x44, "Tiremark");
+SR_STATIC_ASSERT(sizeof(ModelWindow) == 0x34, "ModelWindow");
+SR_STATIC_ASSERT(sizeof(RenderCheckpoint) == 0x1c, "RenderCheckpoint");
 /* Where a line hit the level: the point and the normal of the surface. */
 typedef struct LevelHit { vec3 pos; vec3 normal; } LevelHit;
 typedef struct SectorEntry { int sector; float distance; } SectorEntry;
@@ -441,7 +455,8 @@ typedef union Wheel { struct {
     float damper;       /* +0x68 objectwheelsimulation2: the damping force of the wheel */
     float vertical;     /* +0x6c objectwheelsimulation2: the gain of the spring and the damper along rot[1] */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
-    uint8_t unk_74[0x10];
+    vec3 mark_pos;      /* +0x74 the position of the preceding tire strip */
+    float mark_slip;    /* +0x80 the opacity of the preceding tire strip */
     float share_wheel;  /* +0x84 objectwheelsimulation2: the share of the wheel in the push (pass 0 writes it) */
     float share_body;   /* +0x88 objectwheelsimulation2: the share of the particles in the push (pass 0 writes it) */
     vec3 spring_offset; /* +0x8c objectwheelsimulation2: the spring offset of the hub (pass 0 writes it) */
