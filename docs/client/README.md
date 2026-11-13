@@ -6,6 +6,8 @@ One page for each system of `src/client/`.
 
 The image loaders supply texture pixels and font atlases. Each format uses a separate source file and header in `src/client/image/`.
 
+Keyboard, mouse, player controls and cameras use `src/client/input/`.
+
 - [PNG](png.md): chunks, row filters, palettes and transparency.
 - [zlib](zlib.md): DEFLATE blocks and Huffman codes.
 - [JPEG](jpeg.md): baseline frames, component blocks and color conversion.
@@ -34,3 +36,4 @@ Sound and voice use `src/client/audio/`.
 - [start.md](start.md): the identifiers of models, textures and sounds, and the start of the client.
 - [simulation.md](simulation.md): the tick of the client, the keys of the display and the traffic lights.
 - [network.md](network.md): the input packet that the client sends, and the smoothing of humans, objects and items.
+- [Keyboard, mouse and controls](input.md) describe input polling, item actions, movement and cameras.

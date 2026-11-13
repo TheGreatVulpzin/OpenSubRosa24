@@ -453,6 +453,16 @@ The gate counts do not change: menu 86, play 311, play2 305.
 
 Every function that opens a file used to be skipped with "original crashed". Cause: `checkbigendian` stores the addresses of `fread` and `fwrite` in two globals (`0x908b064` and `0x13bee680`). The snapshot holds the addresses of the recorded process, and a call through them ran in memory that does not exist in the test. `plat_test_patch_globals()` patched two server addresses, not these two. It now patches the right ones for the client. After the change `lf_34010`, `lf_345d0`, `area_createsblocks`, `area_createinteriorblocks`, `building_load`, `leveleditor_load`, `setupgame` and `setupclient` run and give the same result in the lifted and the original code. `resetgame` and `createlevel` still skip: they call `generatematerialwindowtexture`, which reads texture memory that the snapshot does not hold. `HARNESS_CRASH_STACK=1` makes the harness print the registers, the page of the crash address and the return addresses of the stack.
 
+## Keyboard, mouse and controls
+
+`src/client/input/` supplies keyboard and mouse polling, human controls, car and helicopter controls, phone digits, cash actions, door motion and cameras. The [input page](client/input.md) describes the records, input bits, view limits, menu dispatch and diagnostic keys.
+
+`InputMouse` holds cursor coordinates, relative motion, button transitions and wheel counts. Sixteen `InputCamera` records hold position, viewing angles and zoom or distance. Controls also use `Player`, `Human`, `Item`, `Object`, `ObjectType`, `Game`, `Debug`, `Option` and `Server`. Control mode uses `Player.input_mode`, and `Player.unused_cc` supplies mode transition detection.
+
+The SDL stubs accept fixed key and mouse values through `SV_INPUT_KEYS` and `SV_INPUT_MOUSE`.
+
+The active entry points are listed in `analysis/client_win/adopted_C4.txt`. The pending list uses `analysis/client_win/adopted_C4_pending.txt`. Connection controls store a pointer to a local selection value in a menu record. Its address depends on the stack layout.
+
 ## Open work
 
 About 400 functions have no name (2510 of 2907 are named). 39 of them are the `__GLeeLink_WGL_*` functions at `0x2df70` and up: the Linux client has GLX links in their place, so no reference gives their names. About 70 of the rest have 512 bytes or more. They sit in `0x0` to `0x10000` and from `0x30000` up. `tools/re/name_glee_order.py` named 171 GLee link functions by their order in the Linux client (`analysis/client_win/glee_order_names.csv`).

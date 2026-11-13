@@ -535,7 +535,7 @@ Wire format that is certain but whose meaning is not, and parts not checked:
 5. **`player+0x15f0` (6 bits) and `+0x15f4` (8 bits)** in type 5: no code writes them, so they are probably always zero. Meaning unknown.
 6. **Inventory entries**: the high bits (`0x100`, `0x200`, bits 8+ shifted ammo) come from `playersimulation`; their exact meaning (ammo, loaded, magazine) was not traced.
 7. **`world`** (30 bits, first dword of `game_world`): meaning unknown (maybe a clock).
-8. **`input` fields**: `axes[0..3]`, `extra[0..1]`, `buttons` bit meanings, `input_mode`, `hud_mode` are only known by offset. `buttons` bits 0, 3, 4 are tested by `humansimulation`.
+8. **`input` fields**: `hud_mode` has no named values. Mode zero selects no body, one selects human controls, two selects car controls, and three selects helicopter controls. The [client input page](client/input.md) describes movement axes, view angles and action bits.
 9. **Item action** (`kind 2`, two u16): the meaning of `a` and `b` was not traced.
 10. **Event meanings** with generic names in the table: `bullet.weapon/shooter`, `bullethit.kind/target`, `updateobject.arg_*`, `createobject.variant`, `updateiteminfo.info*`, `sound.volume/pitch` (the two floats), `updateplayer.look` upper bits, `updatecarmarket`, `updatescenario`, `updatemission` and `updateblock_*` payloads.
 11. **Object block**: the 6 angles and 8 scalars are per-wheel values at stride `0x98`; which wheel and which role (steer, spin, suspension) was not traced. `flags` (13 bits) is `object+0x5ee0`.

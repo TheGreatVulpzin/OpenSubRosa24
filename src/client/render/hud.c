@@ -17,7 +17,7 @@
 #define g_voice_mode cl_data_audio_voice_mode
 #define g_map_shown cl_data_map_shown
 #define g_spectated_human cl_data_spectated_human
-#define g_free_for_all cl_data_free_for_all
+#define g_cursor cl_data_input_cursor
 #define g_view_zoom cl_data_view_zoom
 
 /* Game functions of other files. */
@@ -93,7 +93,7 @@ static void draw_labels(int player, const Human *human)
 {
     const Player *entry = &sr_data_player[player];
 
-    if (entry->crouching != 0)
+    if (entry->crouch_toggle != 0)
         drawtext("Crouch", 4.0f, 612.0f, 24.0f, LABEL_FLAGS, 1.0f, 1.0f, 1.0f, 1.0f);
     if (human->bleeding == 0)
         drawtext("/i", 4.0f, 636.0f, 24.0f, LABEL_FLAGS, 1.0f, 1.0f, 1.0f, 1.0f, entry->hud_health);
@@ -258,11 +258,11 @@ void __cdecl drawhud(int player)
     if (g_game_state == STATE_ROUND_END)
         return;
     if (index == NO_HUMAN) {
-        if (g_map_shown != 0 && g_free_for_all == 0)
+        if (g_map_shown != 0 && g_cursor == 0)
             drawmap(g_spectated_human);
         return;
     }
-    if (g_map_shown != 0 && g_free_for_all == 0)
+    if (g_map_shown != 0 && g_cursor == 0)
         drawmap(index);
     human = &sr_data_human[index];
     phone = &sr_data_item[human->inventory[0].items[0]];

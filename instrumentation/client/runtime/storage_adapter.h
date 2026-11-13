@@ -195,6 +195,7 @@ extern int sr_unplaced_train_near;
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
+#include "sr_input_types.h"
 #define cl_data_image_partial (*((int *)(sr_base + 0x1bf7e10u)))
 #define cl_data_zlib_defaults_ready (*((uint8_t *)(sr_base + 0x1272cfu)))
 #define cl_data_zlib_default_length ((uint8_t *)(sr_base + 0x1279d8u))
@@ -264,9 +265,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_sort_order ((int *)(sr_base + 0xfefe344u))
 #define cl_data_sort_keys ((int *)(sr_base + 0x100fe344u))
 #define cl_data_map_shown (*((int *)(sr_base + 0x908aae0u)))
-#define cl_data_free_for_all (*((int *)(sr_base + 0xb77c594u)))
 #define cl_data_view_zoom (*((float *)(sr_base + 0xfefe2d4u)))
-#define cl_data_cheat (*((int *)(sr_base + 0x102feb48u)))
 #define cl_data_display_text ((char *)(sr_base + 0x126728u))
 #define cl_data_round_ticks (*((int *)(sr_base + 0x908ac70u)))
 #define cl_data_round_goal (*((int *)(sr_base + 0x908ac74u)))
@@ -285,6 +284,38 @@ extern int sr_unplaced_train_near;
 #define cl_data_sector_indices (*((uint8_t *)(sr_base + 0x1247c604u)))
 #define cl_data_sector_vbo (*((int *)(sr_base + 0x1033fd24u)))
 #define cl_data_camera_position (*((vec3 *)(sr_base + 0xfefe2a4u)))
+#define cl_data_input_mouse (*((InputMouse *)(sr_base + 0x19c07c80u)))
+#define cl_data_input_mouse_previous (*((InputMouse *)(sr_base + 0xb733100u)))
+#define cl_data_input_cursor (*((int *)(sr_base + 0xb77c594u)))
+#define cl_data_input_cursor_previous (*((int *)(sr_base + 0xb77c598u)))
+#define cl_data_input_fire_blocked (*((int *)(sr_base + 0xb77c59cu)))
+#define cl_data_input_cameras ((InputCamera *)(sr_base + 0xf3eafe0u))
+#define cl_data_input_heli_mouse ((float *)(sr_base + 0x1dda5248u))
+#define cl_data_input_chat (*((int *)(sr_base + 0x52daba0u)))
+#define cl_data_input_chat_head (*((uint32_t *)(sr_base + 0x52daba8u)))
+#define cl_data_input_chat_length (*((uint32_t *)(sr_base + 0x52dabacu)))
+#define cl_data_input_chat_text ((char *)(sr_base + 0x52dabb0u))
+#define cl_data_input_game_running (*((uint32_t *)(sr_base + 0x9065350u)))
+#undef sr_data_kickedip
+#define sr_data_kickedip ((uint32_t *)(sr_base + 0x1033ed20u))
+#undef sr_data_numofkicked
+#define sr_data_numofkicked (*((int *)(sr_base + 0x103675a4u)))
+#define cl_data_input_debug_toggle (*((uint32_t *)(sr_base + 0x102feb48u)))
+#define cl_data_input_interior_timers ((int *)(sr_base + 0x12a7d660u))
+#define cl_data_input_label_chat ((char *)(sr_base + 0x127eb1u))
+#define cl_data_input_label_pause ((char *)(sr_base + 0x125224u))
+#define cl_data_input_label_return ((char *)(sr_base + 0x12522cu))
+#define cl_data_input_label_options ((char *)(sr_base + 0x12523cu))
+#define cl_data_input_label_voice ((char *)(sr_base + 0x125244u))
+#define cl_data_input_label_exit ((char *)(sr_base + 0x125254u))
+#define cl_data_input_label_return_connections ((char *)(sr_base + 0x125264u))
+#define cl_data_input_label_empty_connection ((char *)(sr_base + 0x125274u))
+#define cl_data_input_label_human_axis ((char *)(sr_base + 0x12527cu))
+#define cl_data_input_label_timer_build ((char *)(sr_base + 0x123e18u))
+#define cl_data_input_label_timer_optimize ((char *)(sr_base + 0x123e28u))
+#define cl_data_input_label_timer_setup ((char *)(sr_base + 0x123e3cu))
+#define cl_data_input_label_timer_alloc ((char *)(sr_base + 0x123e4cu))
+#define cl_data_input_label_timer_shadow ((char *)(sr_base + 0x123e5cu))
 #define cl_data_audio_device (*((void* *)(sr_base + 0x908b060u)))
 #define cl_data_audio_context (*((void* *)(sr_base + 0xfbfe270u)))
 #define cl_data_audio_capture (*((void* *)(sr_base + 0x163231e4u)))
@@ -356,9 +387,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_server_port (*((uint16_t *)(sr_base + 0x75a5858u)))
 #define cl_data_material_records ((MaterialRec *)(sr_base + 0x1724f604u))
 
-#define sr_data_kickedip sr_data_packet_workspace.kickedip
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype
-#define sr_data_numofkicked sr_data_packet_workspace.numofkicked
 
 #endif

@@ -1,0 +1,31 @@
+name,type,count,client_rva,evidence
+input_mouse,InputMouse,1,0x19c07c80,checkmouse and checkmouserelative copy 0x2c bytes
+input_mouse_previous,InputMouse,1,0xb733100,checkmouse preserves the complete mouse record
+input_cursor,int,1,0xb77c594,getinputs mouse capture and player menu
+input_cursor_previous,int,1,0xb77c598,getinputs mouse capture transition
+input_fire_blocked,int,1,0xb77c59c,getinputs waits for left button release
+input_cameras,InputCamera,16,0xf3eafe0,Linux camera size 0x1c0 and movement stride 0x1c
+input_heli_mouse,float,2,0x1dda5248,getinputs_heli mouse control decay
+input_chat,int,1,0x52daba0,getinputs chat visibility
+input_chat_head,uint32_t,1,0x52daba8,getinputs chat ring wraps at eight
+input_chat_length,uint32_t,1,0x52dabac,getinputs chat length
+input_chat_text,char,64,0x52dabb0,Linux chat size 0x50 and text offset 0x10
+input_game_running,uint32_t,1,0x9065350,Client input flag at the byte position of Game.start_angle_b
+kickedip,uint32_t,1024,0x1033ed20,Linux kickedip size 0x1000 and getinputs selected connection addresses
+numofkicked,int,1,0x103675a4,Client count is at packet workspace plus 0x28884 instead of the server offset 0x28660
+input_debug_toggle,uint32_t,1,0x102feb48,debug_getinputs F10 toggle
+input_interior_timers,int,5,0x12a7d660,debug_getinputs resets five interior timers
+input_label_chat,char,2,0x127eb1,getinputs chat label
+input_label_pause,char,5,0x125224,getinputs pause label
+input_label_return,char,15,0x12522c,getinputs return menu label
+input_label_options,char,8,0x12523c,getinputs options label
+input_label_voice,char,14,0x125244,getinputs voice label
+input_label_exit,char,16,0x125254,getinputs exit label
+input_label_return_connections,char,15,0x125264,getinputs connection return label
+input_label_empty_connection,char,5,0x125274,getinputs empty connection label
+input_label_human_axis,char,10,0x12527c,getinputs_human angle label
+input_label_timer_build,char,14,0x123e18,debug_getinputs interior build label
+input_label_timer_optimize,char,17,0x123e28,debug_getinputs interior optimization label
+input_label_timer_setup,char,14,0x123e3c,debug_getinputs interior setup label
+input_label_timer_alloc,char,14,0x123e4c,debug_getinputs interior allocation label
+input_label_timer_shadow,char,15,0x123e5c,debug_getinputs interior shadow label

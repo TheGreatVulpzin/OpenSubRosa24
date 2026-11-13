@@ -690,7 +690,7 @@ void lf_68fc0(void);
 void lf_69010(void);
 void lf_69060(void);
 void lf_69110(void);
-void lf_69190(void);
+void debug_getinputs(void);
 void lf_69440(void);
 void lf_6a1d0(void);
 void debug_addcross(void);
@@ -761,8 +761,8 @@ void lf_79ad0(void);
 void lf_7b100(void);
 void lf_7d060(void);
 void lf_7d090(void);
-void lf_7d0e0(void);
-void lf_7d4c0(void);
+void movecamera(void);
+void movecamera2(void);
 void checksimulation(void);
 void lf_7e350(void);
 void lf_7e4f0(void);
@@ -811,12 +811,12 @@ void lf_90830(void);
 void lf_90a10(void);
 void lf_90be0(void);
 void lf_90bf0(void);
-void lf_91920(void);
-void lf_924f0(void);
-void lf_93130(void);
-void lf_93a00(void);
-void lf_93d30(void);
-void lf_93dd0(void);
+void getinputs_human(void);
+void getinputs_car(void);
+void getinputs_heli(void);
+void getinputs_phone(void);
+void getinputs_money(void);
+void getinputs_door(void);
 void lf_94060(void);
 void lf_944a0(void);
 void lf_94580(void);
@@ -1196,9 +1196,9 @@ void lf_fe920(void);
 void lf_fea40(void);
 void lf_feb60(void);
 void lf_febd0(void);
-void lf_fec50(void);
-void lf_feca0(void);
-void lf_fedb0(void);
+void checkkeyboard(void);
+void checkmouse(void);
+void checkmouserelative(void);
 void lf_feea0(void);
 void lf_ff020(void);
 void lf_ff2e0(void);
@@ -1990,7 +1990,7 @@ const LfEntry lf_table[] = {
     { "lf_69010", 0x69010, (void *)lf_69010, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "lf_69060", 0x69060, (void *)lf_69060, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "lf_69110", 0x69110, (void *)lf_69110, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "debug_getinputs", 0x69190, (void *)lf_69190, 0, LF_RET_VOID, 4, "", 0 },
+    { "debug_getinputs", 0x69190, (void *)debug_getinputs, 0, LF_RET_VOID, 4, "", 0 },
     { "displaydebuginfo", 0x69440, (void *)lf_69440, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_6a1d0", 0x6a1d0, (void *)lf_6a1d0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "debug_addcross", 0x6a230, (void *)debug_addcross, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -2061,8 +2061,8 @@ const LfEntry lf_table[] = {
     { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
     { "reactivategame", 0x7d060, (void *)lf_7d060, 0, LF_RET_VOID, 4, "", 2 },
     { "lf_7d090", 0x7d090, (void *)lf_7d090, 0, LF_RET_VOID, 4, "", 1 },
-    { "movecamera", 0x7d0e0, (void *)lf_7d0e0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "movecamera2", 0x7d4c0, (void *)lf_7d4c0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "movecamera", 0x7d0e0, (void *)movecamera, 1, LF_RET_VOID, 4, "v", 0 },
+    { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
     { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
     { "newspaper_load", 0x7e350, (void *)lf_7e350, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_7e4f0", 0x7e4f0, (void *)lf_7e4f0, 0, LF_RET_VOID, 4, "", 0 },
@@ -2111,12 +2111,12 @@ const LfEntry lf_table[] = {
     { "createjointbond", 0x90a10, (void *)lf_90a10, 4, LF_RET_INT, 4, "vvvp", 0 },
     { "lf_90be0", 0x90be0, (void *)lf_90be0, 0, LF_RET_VOID, 4, "", 0 },
     { "getinputs", 0x90bf0, (void *)lf_90bf0, 1, LF_RET_VOID, 4, "v", 1 },
-    { "getinputs_human", 0x91920, (void *)lf_91920, 1, LF_RET_VOID, 4, "v", 0 },
-    { "getinputs_car", 0x924f0, (void *)lf_924f0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "getinputs_heli", 0x93130, (void *)lf_93130, 1, LF_RET_VOID, 4, "v", 0 },
-    { "getinputs_phone", 0x93a00, (void *)lf_93a00, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "getinputs_money", 0x93d30, (void *)lf_93d30, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "getinputs_door", 0x93dd0, (void *)lf_93dd0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "getinputs_human", 0x91920, (void *)getinputs_human, 1, LF_RET_VOID, 4, "v", 0 },
+    { "getinputs_car", 0x924f0, (void *)getinputs_car, 1, LF_RET_VOID, 4, "v", 0 },
+    { "getinputs_heli", 0x93130, (void *)getinputs_heli, 1, LF_RET_VOID, 4, "v", 0 },
+    { "getinputs_phone", 0x93a00, (void *)getinputs_phone, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "getinputs_money", 0x93d30, (void *)getinputs_money, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "getinputs_door", 0x93dd0, (void *)getinputs_door, 1, LF_RET_VOID, 4, "v", 0 },
     { "circleintersecttriangle", 0x94060, (void *)lf_94060, 9, LF_RET_INT, 1, "pppppvppp", 0 },
     { "sphereintersecttriangle", 0x944a0, (void *)lf_944a0, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "sphereintersecttrianglefull", 0x94580, (void *)lf_94580, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
@@ -2496,9 +2496,9 @@ const LfEntry lf_table[] = {
     { "lf_fea40", 0xfea40, (void *)lf_fea40, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwritenego", 0xfeb60, (void *)lf_feb60, 2, LF_RET_INT, 4, "pv", 0 },
     { "lf_febd0", 0xfebd0, (void *)lf_febd0, 2, LF_RET_INT, 4, "pv", 0 },
-    { "checkkeyboard", 0xfec50, (void *)lf_fec50, 0, LF_RET_VOID, 4, "", 1 },
-    { "checkmouse", 0xfeca0, (void *)lf_feca0, 0, LF_RET_VOID, 4, "", 1 },
-    { "checkmouserelative", 0xfedb0, (void *)lf_fedb0, 0, LF_RET_VOID, 4, "", 1 },
+    { "checkkeyboard", 0xfec50, (void *)checkkeyboard, 0, LF_RET_VOID, 4, "", 1 },
+    { "checkmouse", 0xfeca0, (void *)checkmouse, 0, LF_RET_VOID, 4, "", 1 },
+    { "checkmouserelative", 0xfedb0, (void *)checkmouserelative, 0, LF_RET_VOID, 4, "", 1 },
     { "setupjoysticks", 0xfeea0, (void *)lf_feea0, 0, LF_RET_VOID, 4, "", 1 },
     { "checkjoystick", 0xff020, (void *)lf_ff020, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmenuitems", 0xff2e0, (void *)lf_ff2e0, 0, LF_RET_VOID, 4, "", 1 },

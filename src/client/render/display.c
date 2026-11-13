@@ -16,7 +16,7 @@
 #define g_keyboard cl_data_keyboard
 #define g_map_shown cl_data_map_shown
 #define g_fontnum cl_data_fontnum
-#define g_cheat cl_data_cheat
+#define g_debug_toggle cl_data_input_debug_toggle
 #define g_chat_head cl_data_chat_head
 #define g_chatmessage cl_data_chatmessage
 #define g_display_text cl_data_display_text
@@ -303,13 +303,13 @@ static void draw_chat(int view)
         int speaker;
 
         if (!((message->kind == CHAT_PLAYER_KIND || message->kind == CHAT_SYSTEM_KIND ||
-               (sr_data_debugit != 0 && g_cheat != 0)) &&
+               (sr_data_debugit != 0 && g_debug_toggle != 0)) &&
               message->timer > 0 && message->delay > 0))
             continue;
         timer = message->timer;
         if (!(g_game_state == STATE_RESTART || view == NO_PLAYER || sr_data_player[view].human_id == -1 ||
               sr_data_human[sr_data_player[view].human_id].health < 1 || message->target == -1 ||
-              (sr_data_debugit != 0 && g_cheat != 0)))
+              (sr_data_debugit != 0 && g_debug_toggle != 0)))
             continue;
         speaker = -1;
         if (message->kind == CHAT_HUMAN_KIND && message->target != -1)

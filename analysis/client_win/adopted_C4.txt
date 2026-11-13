@@ -1,0 +1,12 @@
+checkkeyboard src/client/input/keyboard.c
+checkmouse src/client/input/mouse.c
+checkmouserelative src/client/input/mouse.c
+getinputs_phone src/client/input/items.c
+getinputs_money src/client/input/items.c
+getinputs_door src/client/input/items.c
+movecamera src/client/input/camera.c
+movecamera2 src/client/input/camera.c
+debug_getinputs src/client/input/debug.c
+getinputs_human src/client/input/player_inputs.c
+getinputs_car src/client/input/player_inputs.c
+getinputs_heli src/client/input/player_inputs.c

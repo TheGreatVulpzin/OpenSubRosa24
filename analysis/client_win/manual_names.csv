@@ -39,3 +39,16 @@ rva,name,evidence
 0xe5280,deletesprite_model,"Frees a flying piece: the last piece takes its place. The Linux client has deletesprite_model."
 0xd7850,clearsectorlist,"Chooses the sectors to draw and collects their runs of triangles for each material. render_sectorlist draws the runs."
 0xfb040,stoptimer,"Adds the cycles since starttimer to the total of the timer and stores the total in milliseconds. The matcher name itemtimetolive was wrong."
+0xfec50,checkkeyboard,Linux client symbol and keyboard copy
+0xfeca0,checkmouse,Linux client symbol and absolute mouse coordinates
+0xfedb0,checkmouserelative,Linux client symbol and relative mouse coordinates
+0x69190,debug_getinputs,Linux client symbol and debug key controls
+0x90bf0,getinputs,Linux client symbol and input dispatch
+0x91920,getinputs_human,Linux client symbol and human controls
+0x924f0,getinputs_car,Linux client symbol and car controls
+0x93130,getinputs_heli,Linux client symbol and helicopter controls
+0x93a00,getinputs_phone,Linux client symbol and digit actions
+0x93d30,getinputs_money,Linux client symbol and bill actions
+0x93dd0,getinputs_door,Linux client symbol and door hand target
+0x7d0e0,movecamera,Linux client symbol and free camera controls
+0x7d4c0,movecamera2,Linux client symbol and spectator camera controls

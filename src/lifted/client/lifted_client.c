@@ -5,7 +5,7 @@
 #include "lift_os_client.h"
 #include "lift_gl_client.h"
 
-static void *lf_imports[174];
+static void *lf_imports[170];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -52682,175 +52682,6 @@ void __cdecl lf_69110(float *param_1,float param_2,uint param_3)
 #undef pbitread
 #undef local_c
 
-/* ---------------------------------------------------------------- 0x69190 */
-#define DAT_2a2752a0 (*(int *)SR_VA(0x2a2752a0))
-#define DAT_079a5163 (*(char *)SR_VA(0x79a5163))
-#define DAT_0948aadc (*(undefined4 *)SR_VA(0x948aadc))
-#define DAT_102fe2a0 (*(undefined4 *)SR_VA(0x102fe2a0))
-#define DAT_079a5164 (*(char *)SR_VA(0x79a5164))
-#define DAT_079a5165 (*(char *)SR_VA(0x79a5165))
-#define DAT_079a5166 (*(char *)SR_VA(0x79a5166))
-#define DAT_079a5167 (*(char *)SR_VA(0x79a5167))
-#define DAT_079a5183 (*(char *)SR_VA(0x79a5183))
-#define DAT_01fbe1e3 (*(char *)SR_VA(0x1fbe1e3))
-#define DAT_106feb48 (*(uint *)SR_VA(0x106feb48))
-#define DAT_079a5158 (*(char *)SR_VA(0x79a5158))
-#define DAT_01fbe1b8 (*(char *)SR_VA(0x1fbe1b8))
-#define DAT_12e7d660 (*(int *)SR_VA(0x12e7d660))
-#define DAT_12e7d664 (*(int *)SR_VA(0x12e7d664))
-#define DAT_12e7d668 (*(int *)SR_VA(0x12e7d668))
-#define DAT_12e7d66c (*(int *)SR_VA(0x12e7d66c))
-#define DAT_12e7d670 (*(int *)SR_VA(0x12e7d670))
-#define DAT_079a5189 (*(char *)SR_VA(0x79a5189))
-#define DAT_0f181418 (*(int *)SR_VA(0xf181418))
-#define DAT_079a517b (*(char *)SR_VA(0x79a517b))
-#define DAT_01fbe1db (*(char *)SR_VA(0x1fbe1db))
-#define DAT_018f92e0 (*(uint *)SR_VA(0x18f92e0))
-#define DAT_01fbe1e9 (*(char *)SR_VA(0x1fbe1e9))
-#define DAT_0f1813e0 (*(int *)SR_VA(0xf1813e0))
-#define DAT_079a5800 (*(int *)SR_VA(0x79a5800))
-#define DAT_079a514c (*(char *)SR_VA(0x79a514c))
-#define DAT_01fbe1ac (*(char *)SR_VA(0x1fbe1ac))
-#define DAT_09465344 (*(uint *)SR_VA(0x9465344))
-#define DAT_079a5153 (*(char *)SR_VA(0x79a5153))
-#define DAT_01fbe1b3 (*(char *)SR_VA(0x1fbe1b3))
-#define DAT_0946533c (*(uint *)SR_VA(0x946533c))
-#define DAT_079a5152 (*(char *)SR_VA(0x79a5152))
-#define DAT_01fbe1b2 (*(char *)SR_VA(0x1fbe1b2))
-#define DAT_09465340 (*(undefined4 *)SR_VA(0x9465340))
-#define DAT_079a5145 (*(char *)SR_VA(0x79a5145))
-#define DAT_01fbe1a5 (*(char *)SR_VA(0x1fbe1a5))
-#define DAT_018a8688 (*(uint *)SR_VA(0x18a8688))
-#define DAT_079a517f (*(char *)SR_VA(0x79a517f))
-#define DAT_01fbe1df (*(char *)SR_VA(0x1fbe1df))
-#define DAT_018a8680 (*(uint *)SR_VA(0x18a8680))
-#define DAT_079a5184 (*(char *)SR_VA(0x79a5184))
-#define DAT_01fbe1e4 (*(char *)SR_VA(0x1fbe1e4))
-#define DAT_018a8684 (*(int *)SR_VA(0x18a8684))
-#define s_buildinterior_00523e18 ((char *)SR_VA(0x523e18))
-#define s_optimizeinterior_00523e28 ((char *)SR_VA(0x523e28))
-#define s_setupinterior_00523e3c ((char *)SR_VA(0x523e3c))
-#define s_allocinterior_00523e4c ((char *)SR_VA(0x523e4c))
-#define s_shadowinterior_00523e5c ((char *)SR_VA(0x523e5c))
-#define DAT_018fc728 (*(undefined *)SR_VA(0x18fc728))
-#define DAT_0f7eafe0 (*(undefined *)SR_VA(0xf7eafe0))
-#define resettimer ((void (__cdecl *)(int, char *))SR_FN(0x4fafe0))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-void __cdecl lf_69190(void)
-
-{
-  if (DAT_2a2752a0 == 0) {
-    if (DAT_079a5163 != '\0') {
-      DAT_0948aadc = 0;
-      DAT_102fe2a0 = 0xffffffff;
-    }
-    if (DAT_079a5164 != '\0') {
-      DAT_102fe2a0 = 0;
-    }
-    if (DAT_079a5165 != '\0') {
-      DAT_102fe2a0 = 1;
-    }
-    if (DAT_079a5166 != '\0') {
-      DAT_102fe2a0 = 2;
-    }
-    if (DAT_079a5167 != '\0') {
-      DAT_102fe2a0 = 3;
-    }
-    if ((DAT_079a5183 != '\0') && (DAT_01fbe1e3 == '\0')) {
-      DAT_106feb48 = DAT_106feb48 ^ 1;
-    }
-    if ((DAT_079a5158 != '\0') && (DAT_01fbe1b8 == '\0')) {
-      resettimer(DAT_12e7d660,s_buildinterior_00523e18);
-      resettimer(DAT_12e7d664,s_optimizeinterior_00523e28);
-      resettimer(DAT_12e7d668,s_setupinterior_00523e3c);
-      resettimer(DAT_12e7d66c,s_allocinterior_00523e4c);
-      resettimer(DAT_12e7d670,s_shadowinterior_00523e5c);
-    }
-    if ((DAT_079a5189 != '\0') && (DAT_0f181418 != -1)) {
-      copyvector((undefined4 *)&DAT_0f7eafe0,(undefined4 *)(&DAT_018fc728 + DAT_0f181418 * 0x2b64));
-    }
-    if ((DAT_079a517b != '\0') && (DAT_01fbe1db == '\0')) {
-      DAT_018f92e0 = DAT_018f92e0 ^ 1;
-    }
-    if ((DAT_079a5189 != '\0') && (DAT_01fbe1e9 == '\0')) {
-      DAT_0f1813e0 = DAT_0f1813e0 + 10000;
-    }
-    if (((DAT_079a5800 != 0) && (DAT_079a514c != '\0')) && (DAT_01fbe1ac == '\0')) {
-      DAT_09465344 = DAT_09465344 ^ 1;
-    }
-    if (((DAT_079a5800 != 0) && (DAT_079a5153 != '\0')) && (DAT_01fbe1b3 == '\0')) {
-      DAT_0946533c = DAT_0946533c ^ 1;
-    }
-    if (((DAT_079a5800 != 0) && (DAT_079a5152 != '\0')) && (DAT_01fbe1b2 == '\0')) {
-      DAT_09465340 = 1;
-    }
-    if ((DAT_079a5145 != '\0') && (DAT_01fbe1a5 == '\0')) {
-      DAT_018a8688 = DAT_018a8688 ^ 1;
-    }
-  }
-  if ((DAT_079a517f != '\0') && (DAT_01fbe1df == '\0')) {
-    DAT_018a8680 = DAT_018a8680 ^ 1;
-  }
-  if (((DAT_079a5184 != '\0') && (DAT_01fbe1e4 == '\0')) &&
-     (DAT_018a8684 = DAT_018a8684 + 1, 5 < DAT_018a8684)) {
-    DAT_018a8684 = 0;
-  }
-  return;
-}
-#undef DAT_2a2752a0
-#undef DAT_079a5163
-#undef DAT_0948aadc
-#undef DAT_102fe2a0
-#undef DAT_079a5164
-#undef DAT_079a5165
-#undef DAT_079a5166
-#undef DAT_079a5167
-#undef DAT_079a5183
-#undef DAT_01fbe1e3
-#undef DAT_106feb48
-#undef DAT_079a5158
-#undef DAT_01fbe1b8
-#undef DAT_12e7d660
-#undef DAT_12e7d664
-#undef DAT_12e7d668
-#undef DAT_12e7d66c
-#undef DAT_12e7d670
-#undef DAT_079a5189
-#undef DAT_0f181418
-#undef DAT_079a517b
-#undef DAT_01fbe1db
-#undef DAT_018f92e0
-#undef DAT_01fbe1e9
-#undef DAT_0f1813e0
-#undef DAT_079a5800
-#undef DAT_079a514c
-#undef DAT_01fbe1ac
-#undef DAT_09465344
-#undef DAT_079a5153
-#undef DAT_01fbe1b3
-#undef DAT_0946533c
-#undef DAT_079a5152
-#undef DAT_01fbe1b2
-#undef DAT_09465340
-#undef DAT_079a5145
-#undef DAT_01fbe1a5
-#undef DAT_018a8688
-#undef DAT_079a517f
-#undef DAT_01fbe1df
-#undef DAT_018a8680
-#undef DAT_079a5184
-#undef DAT_01fbe1e4
-#undef DAT_018a8684
-#undef s_buildinterior_00523e18
-#undef s_optimizeinterior_00523e28
-#undef s_setupinterior_00523e3c
-#undef s_allocinterior_00523e4c
-#undef s_shadowinterior_00523e5c
-#undef DAT_018fc728
-#undef DAT_0f7eafe0
-#undef resettimer
-#undef copyvector
-
 /* ---------------------------------------------------------------- 0x69440 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define DAT_018f88b0 (*(int *)SR_VA(0x18f88b0))
@@ -60916,276 +60747,6 @@ void __cdecl lf_7d090(void)
 #undef setuptexture
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x7d0e0 */
-#define DAT_079a5221 (*(char *)SR_VA(0x79a5221))
-#define DAT_079a5220 (*(char *)SR_VA(0x79a5220))
-#define DAT_079a515a (*(char *)SR_VA(0x79a515a))
-#define DAT_079a5156 (*(char *)SR_VA(0x79a5156))
-#define DAT_079a5144 (*(char *)SR_VA(0x79a5144))
-#define DAT_079a5147 (*(char *)SR_VA(0x79a5147))
-#define DAT_079a5154 (*(char *)SR_VA(0x79a5154))
-#define DAT_079a515d (*(char *)SR_VA(0x79a515d))
-#define DAT_1a007c94 (*(int *)SR_VA(0x1a007c94))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define DAT_0f7eafe0 (*(undefined *)SR_VA(0xf7eafe0))
-#define DAT_0f7eafe4 (*(undefined *)SR_VA(0xf7eafe4))
-#define DAT_0f7eafe8 (*(undefined *)SR_VA(0xf7eafe8))
-#define DAT_0f7eafec (*(undefined *)SR_VA(0xf7eafec))
-#define DAT_0f7eaff0 (*(undefined *)SR_VA(0xf7eaff0))
-#define DAT_0f7eaff4 (*(undefined *)SR_VA(0xf7eaff4))
-#define DAT_0f7eaff8 (*(undefined *)SR_VA(0xf7eaff8))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(67, "MSVCR100.DLL", "cos"))
-#define local_c (*(float *)(lf_frame + 0x14))
-void __cdecl lf_7d0e0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  float fVar1;
-  double dVar2;
-
-  
-  local_c = 0.5;
-  if (DAT_079a5221 != '\0') {
-    local_c = 2.0;
-  }
-  if (DAT_079a5220 != '\0') {
-    local_c = (float)(local_c * 0.125);
-  }
-  if (DAT_079a515a != '\0') {
-    dVar2 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(dVar2 * local_c + *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c));
-    dVar2 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) - dVar2 * local_c);
-  }
-  if (DAT_079a5156 != '\0') {
-    dVar2 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) - dVar2 * local_c);
-    dVar2 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(dVar2 * local_c + *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c));
-  }
-  if (DAT_079a5144 != '\0') {
-    dVar2 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) - dVar2 * local_c);
-    dVar2 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) - dVar2 * local_c);
-  }
-  if (DAT_079a5147 != '\0') {
-    dVar2 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(dVar2 * local_c + *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c));
-    dVar2 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(dVar2 * local_c + *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c));
-  }
-  if (DAT_079a5154 != '\0') {
-    *(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) + local_c);
-  }
-  if (DAT_079a515d != '\0') {
-    *(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) - local_c);
-  }
-  fVar1 = (float)((1.0 - *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c)) * 1.0);
-  if (DAT_1a007c94 != 0) {
-    *(float *)(&DAT_0f7eafec + param_1 * 0x1c) =
-         (float)(((float)_DAT_1a007c88 * fVar1) / 320.0 + *(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c) =
-         (float)(((float)_DAT_1a007c8c * fVar1) / 320.0 + *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c));
-  }
-  for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-    *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) = (float)(*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) + 0.125);
-  }
-  for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-    *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) = (float)(*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) - 0.125);
-  }
-  if (*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) < 0.0) {
-    *(undefined4 *)(&DAT_0f7eaff8 + param_1 * 0x1c) = 0;
-  }
-  if (0.875 < *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c)) {
-    *(undefined4 *)(&DAT_0f7eaff8 + param_1 * 0x1c) = 0x3f600000;
-  }
-  *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c) =
-       (float)((*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) - *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c)) *
-       0.125 * 0.5 + *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c));
-  return;
-}
-#undef DAT_079a5221
-#undef DAT_079a5220
-#undef DAT_079a515a
-#undef DAT_079a5156
-#undef DAT_079a5144
-#undef DAT_079a5147
-#undef DAT_079a5154
-#undef DAT_079a515d
-#undef DAT_1a007c94
-#undef DAT_1a007c88
-#undef DAT_1a007c8c
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef DAT_0f7eafe0
-#undef DAT_0f7eafe4
-#undef DAT_0f7eafe8
-#undef DAT_0f7eafec
-#undef DAT_0f7eaff0
-#undef DAT_0f7eaff4
-#undef DAT_0f7eaff8
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef sin
-#undef cos
-#undef local_c
-
-/* ---------------------------------------------------------------- 0x7d4c0 */
-#define DAT_0f7eaff0 (*(undefined *)SR_VA(0xf7eaff0))
-#define DAT_0f7eaff4 (*(undefined *)SR_VA(0xf7eaff4))
-#define DAT_079a5221 (*(char *)SR_VA(0x79a5221))
-#define DAT_0f7eaff8 (*(undefined *)SR_VA(0xf7eaff8))
-#define DAT_079a5220 (*(char *)SR_VA(0x79a5220))
-#define DAT_079a515a (*(char *)SR_VA(0x79a515a))
-#define DAT_079a5156 (*(char *)SR_VA(0x79a5156))
-#define DAT_079a5144 (*(char *)SR_VA(0x79a5144))
-#define DAT_079a5147 (*(char *)SR_VA(0x79a5147))
-#define DAT_079a5154 (*(char *)SR_VA(0x79a5154))
-#define DAT_079a515d (*(char *)SR_VA(0x79a515d))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_094631ec (*(int *)SR_VA(0x94631ec))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define DAT_0f7eafe0 (*(undefined *)SR_VA(0xf7eafe0))
-#define DAT_0f7eafe4 (*(undefined *)SR_VA(0xf7eafe4))
-#define DAT_0f7eafe8 (*(undefined *)SR_VA(0xf7eafe8))
-#define DAT_0f7eafec (*(undefined *)SR_VA(0xf7eafec))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(67, "MSVCR100.DLL", "cos"))
-#define local_c (*(float *)(lf_frame + 0x14))
-void __cdecl lf_7d4c0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  double dVar1;
-
-  
-  local_c = 0.25;
-  if (DAT_079a5221 != '\0') {
-    local_c = 1.0;
-  }
-  if (DAT_079a5220 != '\0') {
-    local_c = (float)(local_c * 0.25);
-  }
-  if (DAT_079a515a != '\0') {
-    dVar1 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(dVar1 * local_c + *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c));
-    dVar1 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) - dVar1 * local_c);
-  }
-  if (DAT_079a5156 != '\0') {
-    dVar1 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) - dVar1 * local_c);
-    dVar1 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(dVar1 * local_c + *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c));
-  }
-  if (DAT_079a5144 != '\0') {
-    dVar1 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) - dVar1 * local_c);
-    dVar1 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) - dVar1 * local_c);
-  }
-  if (DAT_079a5147 != '\0') {
-    dVar1 = cos((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c) =
-         (float)(dVar1 * local_c + *(float *)(&DAT_0f7eafe0 + param_1 * 0x1c));
-    dVar1 = sin((double)*(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-    *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c) =
-         (float)(dVar1 * local_c + *(float *)(&DAT_0f7eafe8 + param_1 * 0x1c));
-  }
-  if (DAT_079a5154 != '\0') {
-    *(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) + local_c);
-  }
-  if (DAT_079a515d != '\0') {
-    *(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eafe4 + param_1 * 0x1c) - local_c);
-  }
-  *(float *)(&DAT_0f7eafec + param_1 * 0x1c) =
-       (float)(((float)_DAT_1a007c88 * 1.0) / 320.0 + *(float *)(&DAT_0f7eafec + param_1 * 0x1c));
-  if (DAT_094631ec == 0) {
-    *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c) =
-         (float)(((float)_DAT_1a007c8c * 1.0) / 320.0 + *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c));
-  }
-  else {
-    *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c) =
-         (float)(*(float *)(&DAT_0f7eaff0 + param_1 * 0x1c) - ((float)_DAT_1a007c8c * 1.0) / 320.0);
-  }
-  if (*(float *)(&DAT_0f7eaff0 + param_1 * 0x1c) < -1.5707963705062866) {
-    *(undefined4 *)(&DAT_0f7eaff0 + param_1 * 0x1c) = 0xbfc90fdb;
-  }
-  if (1.5707963705062866 < *(float *)(&DAT_0f7eaff0 + param_1 * 0x1c)) {
-    *(undefined4 *)(&DAT_0f7eaff0 + param_1 * 0x1c) = 0x3fc90fdb;
-  }
-  for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-    *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) = (float)(*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) - 1.0);
-  }
-  for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-    *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) = (float)(*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) + 1.0);
-  }
-  if (*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) < 2.0) {
-    *(undefined4 *)(&DAT_0f7eaff8 + param_1 * 0x1c) = 0x40000000;
-  }
-  if (32.0 < *(float *)(&DAT_0f7eaff8 + param_1 * 0x1c)) {
-    *(undefined4 *)(&DAT_0f7eaff8 + param_1 * 0x1c) = 0x42000000;
-  }
-  *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c) =
-       (float)((*(float *)(&DAT_0f7eaff8 + param_1 * 0x1c) - *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c)) *
-       0.125 * 0.5 + *(float *)(&DAT_0f7eaff4 + param_1 * 0x1c));
-  return;
-}
-#undef DAT_0f7eaff0
-#undef DAT_0f7eaff4
-#undef DAT_079a5221
-#undef DAT_0f7eaff8
-#undef DAT_079a5220
-#undef DAT_079a515a
-#undef DAT_079a5156
-#undef DAT_079a5144
-#undef DAT_079a5147
-#undef DAT_079a5154
-#undef DAT_079a515d
-#undef DAT_1a007c88
-#undef DAT_094631ec
-#undef DAT_1a007c8c
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef DAT_0f7eafe0
-#undef DAT_0f7eafe4
-#undef DAT_0f7eafe8
-#undef DAT_0f7eafec
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef sin
-#undef cos
-#undef local_c
-
 /* ---------------------------------------------------------------- 0x7e350 */
 #define DAT_09f676e0 (*(int *)SR_VA(0x9f676e0))
 #define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
@@ -67690,1310 +67251,6 @@ void __cdecl lf_90bf0(int param_1)
 #undef local_20
 #undef local_1c
 #undef local_18
-
-/* ---------------------------------------------------------------- 0x91920 */
-#define DAT_0bb7c594 (*(int *)SR_VA(0xbb7c594))
-#define DAT_079a5221 (*(char *)SR_VA(0x79a5221))
-#define DAT_1a007c94 (*(int *)SR_VA(0x1a007c94))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_094631ec (*(int *)SR_VA(0x94631ec))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_2a2752a0 (*(int *)SR_VA(0x2a2752a0))
-#define DAT_079a515a (*(char *)SR_VA(0x79a515a))
-#define DAT_079a5156 (*(char *)SR_VA(0x79a5156))
-#define DAT_079a5144 (*(char *)SR_VA(0x79a5144))
-#define DAT_079a5147 (*(char *)SR_VA(0x79a5147))
-#define DAT_1a007c90 (*(int *)SR_VA(0x1a007c90))
-#define DAT_0bb7c59c (*(int *)SR_VA(0xbb7c59c))
-#define DAT_079a516c (*(char *)SR_VA(0x79a516c))
-#define DAT_079a5175 (*(char *)SR_VA(0x79a5175))
-#define DAT_079a518c (*(char *)SR_VA(0x79a518c))
-#define DAT_079a5220 (*(char *)SR_VA(0x79a5220))
-#define DAT_01fbe280 (*(char *)SR_VA(0x1fbe280))
-#define DAT_079a515e (*(char *)SR_VA(0x79a515e))
-#define DAT_079a515f (*(char *)SR_VA(0x79a515f))
-#define DAT_079a5160 (*(char *)SR_VA(0x79a5160))
-#define DAT_079a5161 (*(char *)SR_VA(0x79a5161))
-#define DAT_079a5162 (*(char *)SR_VA(0x79a5162))
-#define DAT_079a5148 (*(char *)SR_VA(0x79a5148))
-#define DAT_079a5155 (*(char *)SR_VA(0x79a5155))
-#define DAT_079a5149 (*(char *)SR_VA(0x79a5149))
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define s_humanaxis_0052527c ((char *)SR_VA(0x52527c))
-#define DAT_018fc500 (*(undefined *)SR_VA(0x18fc500))
-#define DAT_018fc504 (*(undefined *)SR_VA(0x18fc504))
-#define DAT_018fedbc (*(undefined *)SR_VA(0x18fedbc))
-#define DAT_018fedc0 (*(undefined *)SR_VA(0x18fedc0))
-#define DAT_0948b08c (*(undefined *)SR_VA(0x948b08c))
-#define DAT_0948b104 (*(undefined *)SR_VA(0x948b104))
-#define DAT_0948b10c (*(undefined *)SR_VA(0x948b10c))
-#define DAT_0948b190 (*(undefined *)SR_VA(0x948b190))
-#define DAT_0f181418 (*(undefined4 *)SR_VA(0xf181418))
-#define DAT_0f18141c (*(undefined *)SR_VA(0xf18141c))
-#define DAT_0f181420 (*(undefined *)SR_VA(0xf181420))
-#define DAT_0f181424 (*(undefined *)SR_VA(0xf181424))
-#define DAT_0f181428 (*(undefined *)SR_VA(0xf181428))
-#define DAT_0f18142c (*(undefined *)SR_VA(0xf18142c))
-#define DAT_0f181430 (*(undefined *)SR_VA(0xf181430))
-#define DAT_0f181434 (*(undefined *)SR_VA(0xf181434))
-#define DAT_0f181438 (*(undefined *)SR_VA(0xf181438))
-#define DAT_0f18143c (*(undefined *)SR_VA(0xf18143c))
-#define DAT_0f18144c (*(undefined *)SR_VA(0xf18144c))
-#define DAT_0f181450 (*(undefined *)SR_VA(0xf181450))
-#define DAT_0f181454 (*(undefined *)SR_VA(0xf181454))
-#define DAT_0f181464 (*(undefined *)SR_VA(0xf181464))
-#define DAT_0f18146c (*(undefined *)SR_VA(0xf18146c))
-#define DAT_0f181470 (*(undefined *)SR_VA(0xf181470))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define debug_addatafloat ((void (__cdecl *)(char *, undefined4))SR_FN(0x46ab70))
-#define getinputs_phone ((void (__cdecl *)(int, undefined4))SR_FN(0x493a00))
-#define getinputs_money ((void (__cdecl *)(int, int))SR_FN(0x493d30))
-#define getinputs_door ((void (__cdecl *)(int))SR_FN(0x493dd0))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(32, "MSVCR100.DLL", "atan2"))
-#define local_38 (*(uint *)(lf_frame + 0x18))
-#define local_1c (*(int *)(lf_frame + 0x34))
-void __cdecl lf_91920(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-  int iVar1;
-  float fVar2;
-  double dVar3;
-
-
-  
-  *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f181428 + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f18143c + param_1 * 0x2408) = 0;
-  iVar1 = (&DAT_0f181418)[param_1 * 0x902];
-  if (iVar1 != -1) {
-    if (*(int *)(&DAT_0f18146c + param_1 * 0x2408) != 1) {
-      *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0;
-      *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) =
-           *(undefined4 *)(&DAT_018fc500 + iVar1 * 0x2b64);
-      *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) =
-           *(undefined4 *)(&DAT_018fc504 + iVar1 * 0x2b64);
-      *(undefined4 *)(&DAT_0f181464 + param_1 * 0x2408) = 0;
-      debug_addatafloat(s_humanaxis_0052527c,*(undefined4 *)(&DAT_018fc500 + iVar1 * 0x2b64));
-    }
-    if (DAT_0bb7c594 == 0) {
-      local_38 = (uint)(DAT_079a5221 != '\0');
-      local_1c = -1;
-      if (0 < *(int *)(&DAT_018fedbc + local_38 * 0x24 + iVar1 * 0x2b64)) {
-        local_1c = *(int *)(&DAT_018fedc0 + local_38 * 0x24 + iVar1 * 0x2b64);
-      }
-      if ((*(int *)(&DAT_0f181470 + param_1 * 0x2408) != local_1c) &&
-         (*(int *)(&DAT_0948b08c + local_1c * 0x1ac) == 0x19)) {
-        dVar3 = atan2((double)*(float *)(&DAT_0948b10c + local_1c * 0x1ac),
-                      (double)*(float *)(&DAT_0948b104 + local_1c * 0x1ac));
-        *(float *)(&DAT_0f18141c + param_1 * 0x2408) = dVar3;
-      }
-      *(int *)(&DAT_0f181470 + param_1 * 0x2408) = local_1c;
-      if ((local_1c == -1) || (*(int *)(&DAT_0948b08c + local_1c * 0x1ac) != 0x10)) {
-        for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-          *(int *)(&DAT_0f18144c + param_1 * 0x2408) =
-               *(int *)(&DAT_0f18144c + param_1 * 0x2408) + 1;
-        }
-        for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-          *(int *)(&DAT_0f18144c + param_1 * 0x2408) =
-               *(int *)(&DAT_0f18144c + param_1 * 0x2408) + -1;
-        }
-      }
-      else {
-        getinputs_money(param_1,local_1c);
-      }
-      if (*(int *)(&DAT_0f18144c + param_1 * 0x2408) < 0) {
-        *(undefined4 *)(&DAT_0f18144c + param_1 * 0x2408) = 0;
-      }
-      if (2 < *(int *)(&DAT_0f18144c + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f18144c + param_1 * 0x2408) = 2;
-      }
-      if (*(int *)(&DAT_0f18144c + param_1 * 0x2408) == 0) {
-        *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0;
-      }
-      if (*(int *)(&DAT_0f18144c + param_1 * 0x2408) == 1) {
-        *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0x3d800000;
-      }
-      if (*(int *)(&DAT_0f18144c + param_1 * 0x2408) == 2) {
-        *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0x3f000000;
-      }
-      if (*(float *)(&DAT_0f181450 + param_1 * 0x2408) < -0.25) {
-        *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0xbe800000;
-      }
-      if (0.75 < *(float *)(&DAT_0f181450 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0x3f400000;
-      }
-      *(float *)(&DAT_0f181454 + param_1 * 0x2408) =
-           (float)((*(float *)(&DAT_0f181450 + param_1 * 0x2408) -
-           *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 0.125 * 0.5 +
-           *(float *)(&DAT_0f181454 + param_1 * 0x2408));
-      fVar2 = (float)((1.0 - *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 1.0);
-      if (DAT_1a007c94 == 0) {
-        if ((local_1c == -1) || (*(int *)(&DAT_0948b08c + local_1c * 0x1ac) != 0x19)) {
-          *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-               (float)(((float)_DAT_1a007c88 * fVar2) / 512.0 + *(float *)(&DAT_0f18142c + param_1 * 0x2408))
-          ;
-          if (DAT_094631ec == 0) {
-            *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-                 (float)(((float)_DAT_1a007c8c * fVar2) / 512.0 +
-                 *(float *)(&DAT_0f181430 + param_1 * 0x2408));
-          }
-          else {
-            *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-                 (float)(*(float *)(&DAT_0f181430 + param_1 * 0x2408) -
-                 ((float)_DAT_1a007c8c * fVar2) / 512.0);
-          }
-        }
-        else {
-          getinputs_door(param_1);
-        }
-        *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181434 + param_1 * 0x2408) * 0.125 +
-             *(float *)(&DAT_0f18142c + param_1 * 0x2408));
-        *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181438 + param_1 * 0x2408) * 0.125 +
-             *(float *)(&DAT_0f181430 + param_1 * 0x2408));
-        *(float *)(&DAT_0f181434 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181434 + param_1 * 0x2408) * 0.875);
-        *(float *)(&DAT_0f181438 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181438 + param_1 * 0x2408) * 0.875);
-      }
-      else {
-        *(float *)(&DAT_0f181434 + param_1 * 0x2408) =
-             (float)(((float)_DAT_1a007c88 * fVar2) / 512.0 + *(float *)(&DAT_0f181434 + param_1 * 0x2408));
-        if (DAT_094631ec == 0) {
-          *(float *)(&DAT_0f181438 + param_1 * 0x2408) =
-               (float)(((float)_DAT_1a007c8c * fVar2) / 512.0 + *(float *)(&DAT_0f181438 + param_1 * 0x2408))
-          ;
-        }
-        else {
-          *(float *)(&DAT_0f181438 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181438 + param_1 * 0x2408) - ((float)_DAT_1a007c8c * fVar2) / 512.0)
-          ;
-        }
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 2;
-      }
-      if (*(float *)(&DAT_0f18142c + param_1 * 0x2408) < -3.14159265359) {
-        *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f18142c + param_1 * 0x2408) + 6.28318530718);
-      }
-      if (3.14159265359 < *(float *)(&DAT_0f18142c + param_1 * 0x2408)) {
-        *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f18142c + param_1 * 0x2408) - 6.28318530718);
-      }
-      if (*(float *)(&DAT_0f181430 + param_1 * 0x2408) < -1.5707963705062866) {
-        *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0xbfc90fdb;
-      }
-      if (1.5707963705062866 < *(float *)(&DAT_0f181430 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0x3fc90fdb;
-      }
-      if (*(float *)(&DAT_0f181434 + param_1 * 0x2408) < -2.7488934993743896) {
-        *(undefined4 *)(&DAT_0f181434 + param_1 * 0x2408) = 0xc02feddf;
-      }
-      if (2.7488934993743896 < *(float *)(&DAT_0f181434 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181434 + param_1 * 0x2408) = 0x402feddf;
-      }
-      if (*(float *)(&DAT_0f181438 + param_1 * 0x2408) < -1.5707963705062866) {
-        *(undefined4 *)(&DAT_0f181438 + param_1 * 0x2408) = 0xbfc90fdb;
-      }
-      if (1.5707963705062866 < *(float *)(&DAT_0f181438 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181438 + param_1 * 0x2408) = 0x3fc90fdb;
-      }
-      if (*(int *)(&DAT_0f181464 + param_1 * 0x2408) != 0) {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 8;
-      }
-      if (DAT_2a2752a0 == 0) {
-        if (DAT_079a515a != '\0') {
-          *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) + 1.0);
-        }
-        if (DAT_079a5156 != '\0') {
-          *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) - 1.0);
-        }
-        if (DAT_079a5144 != '\0') {
-          *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) - 1.0);
-        }
-        if (DAT_079a5147 != '\0') {
-          *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) + 1.0);
-        }
-        if ((DAT_1a007c90 != 0) && (DAT_0bb7c59c == 0)) {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 1;
-        }
-        if (DAT_079a516c != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 4;
-        }
-        if (DAT_079a5221 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x10;
-        }
-        if (DAT_079a5175 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x20;
-        }
-        if (DAT_079a518c != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x40000;
-        }
-        if ((DAT_079a5220 != '\0') && (DAT_01fbe280 == '\0')) {
-          *(uint *)(&DAT_0f181464 + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f181464 + param_1 * 0x2408) ^ 1;
-        }
-        if (((local_1c == -1) || (*(int *)(&DAT_0948b08c + local_1c * 0x1ac) != 0x17)) ||
-           (*(int *)(&DAT_0948b190 + local_1c * 0x1ac) != 1)) {
-          if (DAT_079a515e != '\0') {
-            *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-                 *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x40;
-          }
-          if (DAT_079a515f != '\0') {
-            *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-                 *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x80;
-          }
-          if (DAT_079a5160 != '\0') {
-            *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-                 *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x100;
-          }
-          if (DAT_079a5161 != '\0') {
-            *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-                 *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x200;
-          }
-          if (DAT_079a5162 != '\0') {
-            *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-                 *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x400;
-          }
-        }
-        if (((local_1c != -1) && (*(int *)(&DAT_0948b08c + local_1c * 0x1ac) == 0x17)) &&
-           (*(int *)(&DAT_0948b190 + local_1c * 0x1ac) == 1)) {
-          getinputs_phone(param_1,local_1c);
-        }
-        if (DAT_079a5148 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x800;
-        }
-        if (DAT_079a5155 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x1000;
-        }
-        if (DAT_079a5149 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x2000;
-        }
-      }
-    }
-  }
-  return;
-}
-#undef DAT_0bb7c594
-#undef DAT_079a5221
-#undef DAT_1a007c94
-#undef DAT_1a007c88
-#undef DAT_094631ec
-#undef DAT_1a007c8c
-#undef DAT_2a2752a0
-#undef DAT_079a515a
-#undef DAT_079a5156
-#undef DAT_079a5144
-#undef DAT_079a5147
-#undef DAT_1a007c90
-#undef DAT_0bb7c59c
-#undef DAT_079a516c
-#undef DAT_079a5175
-#undef DAT_079a518c
-#undef DAT_079a5220
-#undef DAT_01fbe280
-#undef DAT_079a515e
-#undef DAT_079a515f
-#undef DAT_079a5160
-#undef DAT_079a5161
-#undef DAT_079a5162
-#undef DAT_079a5148
-#undef DAT_079a5155
-#undef DAT_079a5149
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef s_humanaxis_0052527c
-#undef DAT_018fc500
-#undef DAT_018fc504
-#undef DAT_018fedbc
-#undef DAT_018fedc0
-#undef DAT_0948b08c
-#undef DAT_0948b104
-#undef DAT_0948b10c
-#undef DAT_0948b190
-#undef DAT_0f181418
-#undef DAT_0f18141c
-#undef DAT_0f181420
-#undef DAT_0f181424
-#undef DAT_0f181428
-#undef DAT_0f18142c
-#undef DAT_0f181430
-#undef DAT_0f181434
-#undef DAT_0f181438
-#undef DAT_0f18143c
-#undef DAT_0f18144c
-#undef DAT_0f181450
-#undef DAT_0f181454
-#undef DAT_0f181464
-#undef DAT_0f18146c
-#undef DAT_0f181470
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef debug_addatafloat
-#undef getinputs_phone
-#undef getinputs_money
-#undef getinputs_door
-#undef atan2
-#undef local_38
-#undef local_1c
-
-/* ---------------------------------------------------------------- 0x924f0 */
-#define DAT_0948b190 (*(undefined *)SR_VA(0x948b190))
-#define DAT_0bb7c594 (*(int *)SR_VA(0xbb7c594))
-#define DAT_0f181418 (*(undefined4 *)SR_VA(0xf181418))
-#define DAT_079a5221 (*(char *)SR_VA(0x79a5221))
-#define DAT_0f18141c (*(undefined *)SR_VA(0xf18141c))
-#define DAT_0f181420 (*(undefined *)SR_VA(0xf181420))
-#define DAT_0f181424 (*(undefined *)SR_VA(0xf181424))
-#define DAT_0f181428 (*(undefined *)SR_VA(0xf181428))
-#define DAT_0f18142c (*(undefined *)SR_VA(0xf18142c))
-#define DAT_0f181430 (*(undefined *)SR_VA(0xf181430))
-#define DAT_0f18143c (*(undefined *)SR_VA(0xf18143c))
-#define DAT_0f18144c (*(undefined *)SR_VA(0xf18144c))
-#define DAT_1a007c94 (*(int *)SR_VA(0x1a007c94))
-#define DAT_0f181450 (*(undefined *)SR_VA(0xf181450))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_0f181454 (*(undefined *)SR_VA(0xf181454))
-#define DAT_0f18146c (*(undefined *)SR_VA(0xf18146c))
-#define DAT_094631ec (*(int *)SR_VA(0x94631ec))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_2a2752a0 (*(int *)SR_VA(0x2a2752a0))
-#define DAT_079a515a (*(char *)SR_VA(0x79a515a))
-#define DAT_079a5144 (*(char *)SR_VA(0x79a5144))
-#define DAT_079a5147 (*(char *)SR_VA(0x79a5147))
-#define DAT_1a007c90 (*(int *)SR_VA(0x1a007c90))
-#define DAT_0bb7c59c (*(int *)SR_VA(0xbb7c59c))
-#define DAT_079a516c (*(char *)SR_VA(0x79a516c))
-#define DAT_079a5220 (*(char *)SR_VA(0x79a5220))
-#define DAT_079a5175 (*(char *)SR_VA(0x79a5175))
-#define DAT_079a515e (*(char *)SR_VA(0x79a515e))
-#define DAT_079a515f (*(char *)SR_VA(0x79a515f))
-#define DAT_079a5160 (*(char *)SR_VA(0x79a5160))
-#define DAT_079a5161 (*(char *)SR_VA(0x79a5161))
-#define DAT_079a5162 (*(char *)SR_VA(0x79a5162))
-#define DAT_079a5148 (*(char *)SR_VA(0x79a5148))
-#define DAT_079a5155 (*(char *)SR_VA(0x79a5155))
-#define DAT_079a5149 (*(char *)SR_VA(0x79a5149))
-#define DAT_079a518c (*(char *)SR_VA(0x79a518c))
-#define DAT_079a5156 (*(char *)SR_VA(0x79a5156))
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define DAT_018fc4b4 (*(undefined *)SR_VA(0x18fc4b4))
-#define DAT_018fedbc (*(undefined *)SR_VA(0x18fedbc))
-#define DAT_018fedc0 (*(undefined *)SR_VA(0x18fedc0))
-#define DAT_0948b08c (*(undefined *)SR_VA(0x948b08c))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define getinputs_phone ((void (__cdecl *)(int, undefined4))SR_FN(0x493a00))
-#define getinputs_money ((void (__cdecl *)(int, int))SR_FN(0x493d30))
-#define local_3c (*(uint *)(lf_frame + 0x14))
-#define local_24 (*(int *)(lf_frame + 0x2c))
-void __cdecl lf_924f0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-  int iVar1;
-  float fVar2;
-
-
-  
-  *(undefined4 *)(&DAT_0f18143c + param_1 * 0x2408) = 0;
-  if (((DAT_0bb7c594 == 0) && (iVar1 = (&DAT_0f181418)[param_1 * 0x902], iVar1 != -1)) &&
-     (*(int *)(&DAT_018fc4b4 + iVar1 * 0x2b64) != -1)) {
-    local_3c = (uint)(DAT_079a5221 != '\0');
-    local_24 = -1;
-    if (0 < *(int *)(&DAT_018fedbc + local_3c * 0x24 + iVar1 * 0x2b64)) {
-      local_24 = *(int *)(&DAT_018fedc0 + local_3c * 0x24 + iVar1 * 0x2b64);
-    }
-    *(undefined4 *)(&DAT_0f18144c + param_1 * 0x2408) = 1;
-    if (*(int *)(&DAT_0f18146c + param_1 * 0x2408) != 2) {
-      *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0;
-      *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0;
-      *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0x40000000;
-      *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0xbf800000;
-    }
-    if ((local_24 == -1) || (*(int *)(&DAT_0948b08c + local_24 * 0x1ac) != 0x10)) {
-      for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-        *(float *)(&DAT_0f181450 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181450 + param_1 * 0x2408) + 0.125);
-      }
-      for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-        *(float *)(&DAT_0f181450 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181450 + param_1 * 0x2408) - 0.125);
-      }
-    }
-    else {
-      getinputs_money(param_1,local_24);
-    }
-    if (*(float *)(&DAT_0f181450 + param_1 * 0x2408) < 0.0) {
-      *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0;
-    }
-    if (0.625 < *(float *)(&DAT_0f181450 + param_1 * 0x2408)) {
-      *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0x3f200000;
-    }
-    *(float *)(&DAT_0f181454 + param_1 * 0x2408) =
-         (float)((*(float *)(&DAT_0f181450 + param_1 * 0x2408) -
-         *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 0.125 * 0.5 +
-         *(float *)(&DAT_0f181454 + param_1 * 0x2408));
-    fVar2 = (float)((1.0 - *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 1.0);
-    if (DAT_1a007c94 == 0) {
-      *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-           (float)(((float)_DAT_1a007c88 * fVar2) / 512.0 + *(float *)(&DAT_0f18142c + param_1 * 0x2408));
-      if (DAT_094631ec == 0) {
-        *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-             (float)(((float)_DAT_1a007c8c * fVar2) / 512.0 + *(float *)(&DAT_0f181430 + param_1 * 0x2408));
-      }
-      else {
-        *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181430 + param_1 * 0x2408) - ((float)_DAT_1a007c8c * fVar2) / 512.0);
-      }
-      if (0.5 <= *(float *)(&DAT_0f18141c + param_1 * 0x2408)) {
-        if (1.5 <= *(float *)(&DAT_0f18141c + param_1 * 0x2408)) {
-          *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0x40000000;
-        }
-        else {
-          *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0x3f800000;
-        }
-      }
-      else {
-        *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0;
-      }
-      if (-0.375 <= *(float *)(&DAT_0f181424 + param_1 * 0x2408)) {
-        if (*(float *)(&DAT_0f181424 + param_1 * 0x2408) <= 0.375) {
-          *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0;
-        }
-        else {
-          *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0x3f800000;
-        }
-      }
-      else {
-        *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0xbf800000;
-      }
-    }
-    else {
-      *(float *)(&DAT_0f18141c + param_1 * 0x2408) =
-           (float)((float)_DAT_1a007c88 / 150.0 + *(float *)(&DAT_0f18141c + param_1 * 0x2408));
-      *(float *)(&DAT_0f181424 + param_1 * 0x2408) =
-           (float)((float)_DAT_1a007c8c / 150.0 + *(float *)(&DAT_0f181424 + param_1 * 0x2408));
-      if (-0.125 <= *(float *)(&DAT_0f18141c + param_1 * 0x2408)) {
-        if (2.125 < *(float *)(&DAT_0f18141c + param_1 * 0x2408)) {
-          *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0x40080000;
-        }
-      }
-      else {
-        *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0xbe000000;
-      }
-      if (-1.0 <= *(float *)(&DAT_0f181424 + param_1 * 0x2408)) {
-        if (1.0 < *(float *)(&DAT_0f181424 + param_1 * 0x2408)) {
-          *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0x3f800000;
-        }
-      }
-      else {
-        *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0xbf800000;
-      }
-    }
-    if (*(float *)(&DAT_0f18142c + param_1 * 0x2408) < -3.1415927410125732) {
-      *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0xc0490fdb;
-    }
-    if (3.1415927410125732 < *(float *)(&DAT_0f18142c + param_1 * 0x2408)) {
-      *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0x40490fdb;
-    }
-    if (*(float *)(&DAT_0f181430 + param_1 * 0x2408) < -1.5707963705062866) {
-      *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0xbfc90fdb;
-    }
-    if (1.5707963705062866 < *(float *)(&DAT_0f181430 + param_1 * 0x2408)) {
-      *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0x3fc90fdb;
-    }
-    if (DAT_1a007c94 != 0) {
-      *(uint *)(&DAT_0f18143c + param_1 * 0x2408) = *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 2;
-    }
-    if (DAT_2a2752a0 == 0) {
-      if (DAT_079a515a == '\0') {
-        if (DAT_079a5156 == '\0') {
-          if (0.125 < *(float *)(&DAT_0f181428 + param_1 * 0x2408) ==
-              (*(float *)(&DAT_0f181428 + param_1 * 0x2408) == 0.125)) {
-            if (*(float *)(&DAT_0f181428 + param_1 * 0x2408) < -0.125 ==
-                (*(float *)(&DAT_0f181428 + param_1 * 0x2408) == -0.125)) {
-              *(undefined4 *)(&DAT_0f181428 + param_1 * 0x2408) = 0;
-            }
-            else {
-              *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-                   (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) + 0.125);
-            }
-          }
-          else {
-            *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-                 (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) - 0.125);
-          }
-        }
-        else {
-          *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) - 0.03125);
-        }
-      }
-      else {
-        *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) + 0.03125);
-      }
-      if (DAT_079a5144 == '\0') {
-        if (-0.03750000149011612 <= *(float *)(&DAT_0f181420 + param_1 * 0x2408)) {
-          if (*(float *)(&DAT_0f181420 + param_1 * 0x2408) < 0.0) {
-            *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0;
-          }
-        }
-        else {
-          *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) + 0.03750000149011612);
-        }
-      }
-      else if (*(float *)(&DAT_0f181420 + param_1 * 0x2408) <= -0.7124999761581421) {
-        *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0xbf400000;
-      }
-      else {
-        *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) - 0.03750000149011612);
-      }
-      if (DAT_079a5147 == '\0') {
-        if (*(float *)(&DAT_0f181420 + param_1 * 0x2408) <= 0.03750000149011612) {
-          if (0.0 < *(float *)(&DAT_0f181420 + param_1 * 0x2408)) {
-            *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0;
-          }
-        }
-        else {
-          *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-               (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) - 0.03750000149011612);
-        }
-      }
-      else if (0.7124999761581421 <= *(float *)(&DAT_0f181420 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0x3f400000;
-      }
-      else {
-        *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) + 0.03750000149011612);
-      }
-      if ((DAT_1a007c90 != 0) && (DAT_0bb7c59c == 0)) {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 1;
-      }
-      if (DAT_079a516c != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 4;
-      }
-      if (DAT_079a5220 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 8;
-      }
-      if (DAT_079a5221 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x10;
-      }
-      if (DAT_079a5175 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x20;
-      }
-      if (((local_24 == -1) || (*(int *)(&DAT_0948b08c + local_24 * 0x1ac) != 0x17)) ||
-         (*(int *)(&DAT_0948b190 + local_24 * 0x1ac) != 1)) {
-        if (DAT_079a515e != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x40;
-        }
-        if (DAT_079a515f != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x80;
-        }
-        if (DAT_079a5160 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x100;
-        }
-        if (DAT_079a5161 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x200;
-        }
-        if (DAT_079a5162 != '\0') {
-          *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-               *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x400;
-        }
-      }
-      if (((local_24 != -1) && (*(int *)(&DAT_0948b08c + local_24 * 0x1ac) == 0x17)) &&
-         (*(int *)(&DAT_0948b190 + local_24 * 0x1ac) == 1)) {
-        getinputs_phone(param_1,local_24);
-      }
-      if (DAT_079a5148 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x800;
-      }
-      if (DAT_079a5155 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x1000;
-      }
-      if (DAT_079a5149 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x2000;
-      }
-      if (DAT_079a518c != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x40000;
-      }
-    }
-    if (*(float *)(&DAT_0f181428 + param_1 * 0x2408) < -1.0) {
-      *(undefined4 *)(&DAT_0f181428 + param_1 * 0x2408) = 0xbf800000;
-    }
-    if (1.0 < *(float *)(&DAT_0f181428 + param_1 * 0x2408)) {
-      *(undefined4 *)(&DAT_0f181428 + param_1 * 0x2408) = 0x3f800000;
-    }
-  }
-  return;
-}
-#undef DAT_0948b190
-#undef DAT_0bb7c594
-#undef DAT_0f181418
-#undef DAT_079a5221
-#undef DAT_0f18141c
-#undef DAT_0f181420
-#undef DAT_0f181424
-#undef DAT_0f181428
-#undef DAT_0f18142c
-#undef DAT_0f181430
-#undef DAT_0f18143c
-#undef DAT_0f18144c
-#undef DAT_1a007c94
-#undef DAT_0f181450
-#undef DAT_1a007c88
-#undef DAT_0f181454
-#undef DAT_0f18146c
-#undef DAT_094631ec
-#undef DAT_1a007c8c
-#undef DAT_2a2752a0
-#undef DAT_079a515a
-#undef DAT_079a5144
-#undef DAT_079a5147
-#undef DAT_1a007c90
-#undef DAT_0bb7c59c
-#undef DAT_079a516c
-#undef DAT_079a5220
-#undef DAT_079a5175
-#undef DAT_079a515e
-#undef DAT_079a515f
-#undef DAT_079a5160
-#undef DAT_079a5161
-#undef DAT_079a5162
-#undef DAT_079a5148
-#undef DAT_079a5155
-#undef DAT_079a5149
-#undef DAT_079a518c
-#undef DAT_079a5156
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef DAT_018fc4b4
-#undef DAT_018fedbc
-#undef DAT_018fedc0
-#undef DAT_0948b08c
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef getinputs_phone
-#undef getinputs_money
-#undef local_3c
-#undef local_24
-
-/* ---------------------------------------------------------------- 0x93130 */
-#define DAT_0bb7c594 (*(int *)SR_VA(0xbb7c594))
-#define DAT_1a007c94 (*(int *)SR_VA(0x1a007c94))
-#define DAT_1a007c90 (*(int *)SR_VA(0x1a007c90))
-#define DAT_1e1a5248 (*(undefined *)SR_VA(0x1e1a5248))
-#define DAT_1e1a524c (*(undefined *)SR_VA(0x1e1a524c))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define DAT_2a2752a0 (*(int *)SR_VA(0x2a2752a0))
-#define DAT_079a515a (*(char *)SR_VA(0x79a515a))
-#define DAT_079a5156 (*(char *)SR_VA(0x79a5156))
-#define DAT_079a5144 (*(char *)SR_VA(0x79a5144))
-#define DAT_079a5147 (*(char *)SR_VA(0x79a5147))
-#define DAT_0bb7c59c (*(int *)SR_VA(0xbb7c59c))
-#define DAT_079a516c (*(char *)SR_VA(0x79a516c))
-#define DAT_079a5220 (*(char *)SR_VA(0x79a5220))
-#define DAT_079a5221 (*(char *)SR_VA(0x79a5221))
-#define DAT_079a515e (*(char *)SR_VA(0x79a515e))
-#define DAT_079a515f (*(char *)SR_VA(0x79a515f))
-#define DAT_079a5160 (*(char *)SR_VA(0x79a5160))
-#define DAT_079a5161 (*(char *)SR_VA(0x79a5161))
-#define DAT_079a5162 (*(char *)SR_VA(0x79a5162))
-#define DAT_079a5148 (*(char *)SR_VA(0x79a5148))
-#define DAT_079a5155 (*(char *)SR_VA(0x79a5155))
-#define DAT_079a51a2 (*(char *)SR_VA(0x79a51a2))
-#define DAT_079a5199 (*(char *)SR_VA(0x79a5199))
-#define DAT_079a519a (*(char *)SR_VA(0x79a519a))
-#define DAT_079a519b (*(char *)SR_VA(0x79a519b))
-#define DAT_0f18141c (*(undefined *)SR_VA(0xf18141c))
-#define DAT_0f181420 (*(undefined *)SR_VA(0xf181420))
-#define DAT_0f181424 (*(undefined *)SR_VA(0xf181424))
-#define DAT_0f181428 (*(undefined *)SR_VA(0xf181428))
-#define DAT_0f18142c (*(undefined *)SR_VA(0xf18142c))
-#define DAT_0f181430 (*(undefined *)SR_VA(0xf181430))
-#define DAT_0f18143c (*(undefined *)SR_VA(0xf18143c))
-#define DAT_0f18144c (*(undefined *)SR_VA(0xf18144c))
-#define DAT_0f181450 (*(undefined *)SR_VA(0xf181450))
-#define DAT_0f181454 (*(undefined *)SR_VA(0xf181454))
-#define DAT_0f18146c (*(undefined *)SR_VA(0xf18146c))
-#define _DAT_1e1a5248 (*(float *)SR_VA(0x1e1a5248))
-#define _DAT_1e1a524c (*(float *)SR_VA(0x1e1a524c))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_93130(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  float fVar1;
-
-  
-  if (*(int *)(&DAT_0f18146c + param_1 * 0x2408) != 3) {
-    *(undefined4 *)(&DAT_0f181428 + param_1 * 0x2408) = 0;
-    *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0;
-    *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0;
-  }
-  *(undefined4 *)(&DAT_0f18144c + param_1 * 0x2408) = 1;
-  *(undefined4 *)(&DAT_0f18141c + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f181420 + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f181424 + param_1 * 0x2408) = 0;
-  *(undefined4 *)(&DAT_0f18143c + param_1 * 0x2408) = 0;
-  if (DAT_0bb7c594 == 0) {
-    fVar1 = (float)((1.0 - *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 1.0);
-    if ((DAT_1a007c94 == 0) || (DAT_1a007c90 != 0)) {
-      if (-1.0 <= _DAT_1e1a5248) {
-        if (_DAT_1e1a5248 <= 1.0) {
-          _DAT_1e1a5248 = 0.0;
-        }
-        else {
-          _DAT_1e1a5248 = (float)(_DAT_1e1a5248 - 1.0);
-        }
-      }
-      else {
-        _DAT_1e1a5248 = (float)(_DAT_1e1a5248 + 1.0);
-      }
-      if (-1.0 <= _DAT_1e1a524c) {
-        if (_DAT_1e1a524c <= 1.0) {
-          _DAT_1e1a524c = 0.0;
-        }
-        else {
-          _DAT_1e1a524c = (float)(_DAT_1e1a524c - 1.0);
-        }
-      }
-      else {
-        _DAT_1e1a524c = (float)(_DAT_1e1a524c + 1.0);
-      }
-      _DAT_1e1a5248 = (float)((float)_DAT_1a007c88 * 0.125 * 0.5 * 1.0 + _DAT_1e1a5248);
-      _DAT_1e1a524c = (float)((float)_DAT_1a007c8c * 0.125 * 0.5 * 1.0 + _DAT_1e1a524c);
-      *(float *)(&DAT_0f181424 + param_1 * 0x2408) =
-           (float)(*(float *)(&DAT_0f181424 + param_1 * 0x2408) + _DAT_1e1a5248);
-      *(float *)(&DAT_0f18141c + param_1 * 0x2408) =
-           (float)(*(float *)(&DAT_0f18141c + param_1 * 0x2408) - _DAT_1e1a524c);
-      if (DAT_1a007c90 == 0) {
-        *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f18142c + param_1 * 0x2408) * 0.875);
-        *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181430 + param_1 * 0x2408) * 0.875);
-      }
-    }
-    else {
-      *(float *)(&DAT_0f18142c + param_1 * 0x2408) =
-           (float)(((float)_DAT_1a007c88 * fVar1) / 650.0 + *(float *)(&DAT_0f18142c + param_1 * 0x2408));
-      *(float *)(&DAT_0f181430 + param_1 * 0x2408) =
-           (float)(((float)_DAT_1a007c8c * fVar1) / 650.0 + *(float *)(&DAT_0f181430 + param_1 * 0x2408));
-      if (*(float *)(&DAT_0f18142c + param_1 * 0x2408) < -2.7488934993743896) {
-        *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0xc02feddf;
-      }
-      if (2.7488934993743896 < *(float *)(&DAT_0f18142c + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f18142c + param_1 * 0x2408) = 0x402feddf;
-      }
-      if (*(float *)(&DAT_0f181430 + param_1 * 0x2408) < -1.5707963705062866) {
-        *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0xbfc90fdb;
-      }
-      if (1.5707963705062866 < *(float *)(&DAT_0f181430 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f181430 + param_1 * 0x2408) = 0x3fc90fdb;
-      }
-    }
-    for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-      *(float *)(&DAT_0f181450 + param_1 * 0x2408) =
-           (float)(*(float *)(&DAT_0f181450 + param_1 * 0x2408) + 0.125);
-    }
-    for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-      *(float *)(&DAT_0f181450 + param_1 * 0x2408) =
-           (float)(*(float *)(&DAT_0f181450 + param_1 * 0x2408) - 0.125);
-    }
-    if (*(float *)(&DAT_0f181450 + param_1 * 0x2408) < 0.0) {
-      *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0;
-    }
-    if (0.875 < *(float *)(&DAT_0f181450 + param_1 * 0x2408)) {
-      *(undefined4 *)(&DAT_0f181450 + param_1 * 0x2408) = 0x3f600000;
-    }
-    *(float *)(&DAT_0f181454 + param_1 * 0x2408) =
-         (float)((*(float *)(&DAT_0f181450 + param_1 * 0x2408) -
-         *(float *)(&DAT_0f181454 + param_1 * 0x2408)) * 0.125 * 0.5 +
-         *(float *)(&DAT_0f181454 + param_1 * 0x2408));
-    if (DAT_2a2752a0 == 0) {
-      if (DAT_079a515a != '\0') {
-        *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) + 0.03125);
-      }
-      if (DAT_079a5156 != '\0') {
-        *(float *)(&DAT_0f181428 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181428 + param_1 * 0x2408) - 0.03125);
-      }
-      if (DAT_079a5144 != '\0') {
-        *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) - 1.0);
-      }
-      if (DAT_079a5147 != '\0') {
-        *(float *)(&DAT_0f181420 + param_1 * 0x2408) =
-             (float)(*(float *)(&DAT_0f181420 + param_1 * 0x2408) + 1.0);
-      }
-      if ((DAT_1a007c90 != 0) && (DAT_0bb7c59c == 0)) {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 1;
-      }
-      if (DAT_079a516c != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 4;
-      }
-      if (DAT_079a5220 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 8;
-      }
-      if (DAT_079a5221 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x10;
-      }
-      if (DAT_079a515e != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x40;
-      }
-      if (DAT_079a515f != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x80;
-      }
-      if (DAT_079a5160 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x100;
-      }
-      if (DAT_079a5161 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x200;
-      }
-      if (DAT_079a5162 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x400;
-      }
-      if (DAT_079a5148 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x800;
-      }
-      if (DAT_079a5155 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x1000;
-      }
-      if (DAT_079a51a2 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x4000;
-      }
-      if (DAT_079a5199 != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x8000;
-      }
-      if (DAT_079a519a != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x10000;
-      }
-      if (DAT_079a519b != '\0') {
-        *(uint *)(&DAT_0f18143c + param_1 * 0x2408) =
-             *(uint *)(&DAT_0f18143c + param_1 * 0x2408) | 0x20000;
-      }
-    }
-    for (local_8 = 0; local_8 < 4; local_8 = local_8 + 1) {
-      if (*(float *)(&DAT_0f18141c + local_8 * 4 + param_1 * 0x2408) < -1.0) {
-        *(undefined4 *)(&DAT_0f18141c + local_8 * 4 + param_1 * 0x2408) = 0xbf800000;
-      }
-      if (1.0 < *(float *)(&DAT_0f18141c + local_8 * 4 + param_1 * 0x2408)) {
-        *(undefined4 *)(&DAT_0f18141c + local_8 * 4 + param_1 * 0x2408) = 0x3f800000;
-      }
-    }
-  }
-  return;
-}
-#undef DAT_0bb7c594
-#undef DAT_1a007c94
-#undef DAT_1a007c90
-#undef DAT_1e1a5248
-#undef DAT_1e1a524c
-#undef DAT_1a007c88
-#undef DAT_1a007c8c
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef DAT_2a2752a0
-#undef DAT_079a515a
-#undef DAT_079a5156
-#undef DAT_079a5144
-#undef DAT_079a5147
-#undef DAT_0bb7c59c
-#undef DAT_079a516c
-#undef DAT_079a5220
-#undef DAT_079a5221
-#undef DAT_079a515e
-#undef DAT_079a515f
-#undef DAT_079a5160
-#undef DAT_079a5161
-#undef DAT_079a5162
-#undef DAT_079a5148
-#undef DAT_079a5155
-#undef DAT_079a51a2
-#undef DAT_079a5199
-#undef DAT_079a519a
-#undef DAT_079a519b
-#undef DAT_0f18141c
-#undef DAT_0f181420
-#undef DAT_0f181424
-#undef DAT_0f181428
-#undef DAT_0f18142c
-#undef DAT_0f181430
-#undef DAT_0f18143c
-#undef DAT_0f18144c
-#undef DAT_0f181450
-#undef DAT_0f181454
-#undef DAT_0f18146c
-#undef _DAT_1e1a5248
-#undef _DAT_1e1a524c
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x93a00 */
-#define DAT_079a51a2 (*(char *)SR_VA(0x79a51a2))
-#define DAT_01fbe202 (*(char *)SR_VA(0x1fbe202))
-#define DAT_079a5199 (*(char *)SR_VA(0x79a5199))
-#define DAT_01fbe1f9 (*(char *)SR_VA(0x1fbe1f9))
-#define DAT_079a519a (*(char *)SR_VA(0x79a519a))
-#define DAT_01fbe1fa (*(char *)SR_VA(0x1fbe1fa))
-#define DAT_079a519b (*(char *)SR_VA(0x79a519b))
-#define DAT_01fbe1fb (*(char *)SR_VA(0x1fbe1fb))
-#define DAT_079a519c (*(char *)SR_VA(0x79a519c))
-#define DAT_01fbe1fc (*(char *)SR_VA(0x1fbe1fc))
-#define DAT_079a519d (*(char *)SR_VA(0x79a519d))
-#define DAT_01fbe1fd (*(char *)SR_VA(0x1fbe1fd))
-#define DAT_079a519e (*(char *)SR_VA(0x79a519e))
-#define DAT_01fbe1fe (*(char *)SR_VA(0x1fbe1fe))
-#define DAT_079a519f (*(char *)SR_VA(0x79a519f))
-#define DAT_01fbe1ff (*(char *)SR_VA(0x1fbe1ff))
-#define DAT_079a51a0 (*(char *)SR_VA(0x79a51a0))
-#define DAT_01fbe200 (*(char *)SR_VA(0x1fbe200))
-#define DAT_079a51a1 (*(char *)SR_VA(0x79a51a1))
-#define DAT_01fbe201 (*(char *)SR_VA(0x1fbe201))
-#define DAT_079a5167 (*(char *)SR_VA(0x79a5167))
-#define DAT_01fbe1c7 (*(char *)SR_VA(0x1fbe1c7))
-#define DAT_079a515e (*(char *)SR_VA(0x79a515e))
-#define DAT_01fbe1be (*(char *)SR_VA(0x1fbe1be))
-#define DAT_079a515f (*(char *)SR_VA(0x79a515f))
-#define DAT_01fbe1bf (*(char *)SR_VA(0x1fbe1bf))
-#define DAT_079a5160 (*(char *)SR_VA(0x79a5160))
-#define DAT_01fbe1c0 (*(char *)SR_VA(0x1fbe1c0))
-#define DAT_079a5161 (*(char *)SR_VA(0x79a5161))
-#define DAT_01fbe1c1 (*(char *)SR_VA(0x1fbe1c1))
-#define DAT_079a5162 (*(char *)SR_VA(0x79a5162))
-#define DAT_01fbe1c2 (*(char *)SR_VA(0x1fbe1c2))
-#define DAT_079a5163 (*(char *)SR_VA(0x79a5163))
-#define DAT_01fbe1c3 (*(char *)SR_VA(0x1fbe1c3))
-#define DAT_079a5164 (*(char *)SR_VA(0x79a5164))
-#define DAT_01fbe1c4 (*(char *)SR_VA(0x1fbe1c4))
-#define DAT_079a5165 (*(char *)SR_VA(0x79a5165))
-#define DAT_01fbe1c5 (*(char *)SR_VA(0x1fbe1c5))
-#define DAT_079a5166 (*(char *)SR_VA(0x79a5166))
-#define DAT_01fbe1c6 (*(char *)SR_VA(0x1fbe1c6))
-#define player_addaction_item ((void (__cdecl *)(int, undefined4, undefined4))SR_FN(0x4d5550))
-void __cdecl lf_93a00(int param_1,undefined4 param_2)
-
-{
-  if ((DAT_079a51a2 != '\0') && (DAT_01fbe202 == '\0')) {
-    player_addaction_item(param_1,param_2,0);
-  }
-  if ((DAT_079a5199 != '\0') && (DAT_01fbe1f9 == '\0')) {
-    player_addaction_item(param_1,param_2,1);
-  }
-  if ((DAT_079a519a != '\0') && (DAT_01fbe1fa == '\0')) {
-    player_addaction_item(param_1,param_2,2);
-  }
-  if ((DAT_079a519b != '\0') && (DAT_01fbe1fb == '\0')) {
-    player_addaction_item(param_1,param_2,3);
-  }
-  if ((DAT_079a519c != '\0') && (DAT_01fbe1fc == '\0')) {
-    player_addaction_item(param_1,param_2,4);
-  }
-  if ((DAT_079a519d != '\0') && (DAT_01fbe1fd == '\0')) {
-    player_addaction_item(param_1,param_2,5);
-  }
-  if ((DAT_079a519e != '\0') && (DAT_01fbe1fe == '\0')) {
-    player_addaction_item(param_1,param_2,6);
-  }
-  if ((DAT_079a519f != '\0') && (DAT_01fbe1ff == '\0')) {
-    player_addaction_item(param_1,param_2,7);
-  }
-  if ((DAT_079a51a0 != '\0') && (DAT_01fbe200 == '\0')) {
-    player_addaction_item(param_1,param_2,8);
-  }
-  if ((DAT_079a51a1 != '\0') && (DAT_01fbe201 == '\0')) {
-    player_addaction_item(param_1,param_2,9);
-  }
-  if ((DAT_079a5167 != '\0') && (DAT_01fbe1c7 == '\0')) {
-    player_addaction_item(param_1,param_2,0);
-  }
-  if ((DAT_079a515e != '\0') && (DAT_01fbe1be == '\0')) {
-    player_addaction_item(param_1,param_2,1);
-  }
-  if ((DAT_079a515f != '\0') && (DAT_01fbe1bf == '\0')) {
-    player_addaction_item(param_1,param_2,2);
-  }
-  if ((DAT_079a5160 != '\0') && (DAT_01fbe1c0 == '\0')) {
-    player_addaction_item(param_1,param_2,3);
-  }
-  if ((DAT_079a5161 != '\0') && (DAT_01fbe1c1 == '\0')) {
-    player_addaction_item(param_1,param_2,4);
-  }
-  if ((DAT_079a5162 != '\0') && (DAT_01fbe1c2 == '\0')) {
-    player_addaction_item(param_1,param_2,5);
-  }
-  if ((DAT_079a5163 != '\0') && (DAT_01fbe1c3 == '\0')) {
-    player_addaction_item(param_1,param_2,6);
-  }
-  if ((DAT_079a5164 != '\0') && (DAT_01fbe1c4 == '\0')) {
-    player_addaction_item(param_1,param_2,7);
-  }
-  if ((DAT_079a5165 != '\0') && (DAT_01fbe1c5 == '\0')) {
-    player_addaction_item(param_1,param_2,8);
-  }
-  if ((DAT_079a5166 != '\0') && (DAT_01fbe1c6 == '\0')) {
-    player_addaction_item(param_1,param_2,9);
-  }
-  return;
-}
-#undef DAT_079a51a2
-#undef DAT_01fbe202
-#undef DAT_079a5199
-#undef DAT_01fbe1f9
-#undef DAT_079a519a
-#undef DAT_01fbe1fa
-#undef DAT_079a519b
-#undef DAT_01fbe1fb
-#undef DAT_079a519c
-#undef DAT_01fbe1fc
-#undef DAT_079a519d
-#undef DAT_01fbe1fd
-#undef DAT_079a519e
-#undef DAT_01fbe1fe
-#undef DAT_079a519f
-#undef DAT_01fbe1ff
-#undef DAT_079a51a0
-#undef DAT_01fbe200
-#undef DAT_079a51a1
-#undef DAT_01fbe201
-#undef DAT_079a5167
-#undef DAT_01fbe1c7
-#undef DAT_079a515e
-#undef DAT_01fbe1be
-#undef DAT_079a515f
-#undef DAT_01fbe1bf
-#undef DAT_079a5160
-#undef DAT_01fbe1c0
-#undef DAT_079a5161
-#undef DAT_01fbe1c1
-#undef DAT_079a5162
-#undef DAT_01fbe1c2
-#undef DAT_079a5163
-#undef DAT_01fbe1c3
-#undef DAT_079a5164
-#undef DAT_01fbe1c4
-#undef DAT_079a5165
-#undef DAT_01fbe1c5
-#undef DAT_079a5166
-#undef DAT_01fbe1c6
-#undef player_addaction_item
-
-/* ---------------------------------------------------------------- 0x93d30 */
-#define DAT_1a007ca0 (*(int *)SR_VA(0x1a007ca0))
-#define DAT_1a007ca4 (*(int *)SR_VA(0x1a007ca4))
-#define DAT_079a5155 (*(char *)SR_VA(0x79a5155))
-#define DAT_01fbe1b5 (*(char *)SR_VA(0x1fbe1b5))
-#define DAT_0948b1b4 (*(undefined *)SR_VA(0x948b1b4))
-#define player_addaction_item ((void (__cdecl *)(int, undefined4, undefined4))SR_FN(0x4d5550))
-void __cdecl lf_93d30(int param_1,int param_2)
-
-{
-  for (; 0 < DAT_1a007ca0; DAT_1a007ca0 = DAT_1a007ca0 + -1) {
-    player_addaction_item(param_1,param_2,0);
-  }
-  for (; 0 < DAT_1a007ca4; DAT_1a007ca4 = DAT_1a007ca4 + -1) {
-    player_addaction_item(param_1,param_2,1);
-  }
-  if ((DAT_079a5155 != '\0') && (DAT_01fbe1b5 == '\0')) {
-    player_addaction_item(param_1,param_2,*(int *)(&DAT_0948b1b4 + param_2 * 0x1ac) + 2);
-  }
-  return;
-}
-#undef DAT_1a007ca0
-#undef DAT_1a007ca4
-#undef DAT_079a5155
-#undef DAT_01fbe1b5
-#undef DAT_0948b1b4
-#undef player_addaction_item
-
-/* ---------------------------------------------------------------- 0x93dd0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define DAT_00523584 (*(undefined *)SR_VA(0x523584))
-#define DAT_00523590 (*(undefined *)SR_VA(0x523590))
-#define DAT_018fc568 (*(undefined *)SR_VA(0x18fc568))
-#define DAT_018fc758 (*(undefined *)SR_VA(0x18fc758))
-#define DAT_018fc770 (*(undefined *)SR_VA(0x18fc770))
-#define DAT_018fedbc (*(undefined *)SR_VA(0x18fedbc))
-#define DAT_018fedc0 (*(undefined *)SR_VA(0x18fedc0))
-#define DAT_018feedc (*(undefined *)SR_VA(0x18feedc))
-#define DAT_0948b0c8 (*(undefined *)SR_VA(0x948b0c8))
-#define DAT_0948b104 (*(undefined *)SR_VA(0x948b104))
-#define DAT_0f181418 (*(undefined4 *)SR_VA(0xf181418))
-#define DAT_0f18141c (*(undefined *)SR_VA(0xf18141c))
-#define _DAT_1a007c88 (*(int *)SR_VA(0x1a007c88))
-#define _DAT_1a007c8c (*(int *)SR_VA(0x1a007c8c))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define __security_check_cookie(x) ((void)0)
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(32, "MSVCR100.DLL", "atan2"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x7c))
-#define local_64 (*(float (*)[4])(lf_frame + 0x1c))
-#define local_54 (*(float *)(lf_frame + 0x2c))
-#define local_50 (*(float (*)[3])(lf_frame + 0x30))
-#define local_44 (*(float *)(lf_frame + 0x3c))
-#define local_40 (*(int *)(lf_frame + 0x40))
-#define local_3c (*(float *)(lf_frame + 0x44))
-#define local_38 (*(float (*)[2])(lf_frame + 0x48))
-#define local_30 (*(float *)(lf_frame + 0x50))
-#define local_2c (*(float (*)[9])(lf_frame + 0x54))
-#define local_8 (*(uint *)(lf_frame + 0x78))
-void __cdecl lf_93dd0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x80];
-
-  int iVar1;
-  float10 fVar2;
-  double dVar3;
-
-
-
-
-
-
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  iVar1 = (&DAT_0f181418)[param_1 * 0x902];
-  if (iVar1 != -1) {
-    local_40 = -1;
-    if (0 < *(int *)(&DAT_018fedbc + iVar1 * 0x2b64)) {
-      local_40 = *(int *)(&DAT_018fedc0 + iVar1 * 0x2b64);
-    }
-    if (local_40 != -1) {
-      scaleaddvectors(local_64,(float *)(&DAT_0948b0c8 + local_40 * 0x1ac),
-                      (float *)(&DAT_0948b104 + local_40 * 0x1ac),-0.5);
-      subtractvectors(local_38,(float *)(&DAT_018feedc + iVar1 * 0x2b64),local_64);
-      dVar3 = atan2((double)local_38[0],(double)-local_30);
-      local_54 = dVar3;
-      local_44 = 1.0;
-      copyvector(local_50,(undefined4 *)&DAT_00523584);
-      resetorientation(local_2c);
-      rotateorientation((int)local_2c,&DAT_00523590,*(float *)(&DAT_0f18141c + param_1 * 0x2408));
-      scaleaddvectors(local_38,local_64,local_2c,1.0);
-      scaleaddvectors(local_38,local_38,(float *)(&DAT_018fc758 + iVar1 * 0x2b64),
-                      (float)(((float)_DAT_1a007c88 * local_44) / 1024.0));
-      scaleaddvectors(local_38,local_38,(float *)(&DAT_018fc770 + iVar1 * 0x2b64),
-                      (float)(((float)_DAT_1a007c8c * local_44) / 1024.0));
-      local_3c = 0.875;
-      subtractvectors(local_50,local_38,(float *)(&DAT_018fc568 + iVar1 * 0x2b64));
-      local_50[1] = 0.0;
-      fVar2 = (float10)vectorlength(local_50);
-      local_44 = (float)fVar2;
-      if (local_3c < local_44) {
-        scalevector(local_50,local_50,(float)(1.0 / local_44));
-        scaleaddvectors(local_38,(float *)(&DAT_018fc568 + iVar1 * 0x2b64),local_50,local_3c);
-      }
-      subtractvectors(local_38,local_38,local_64);
-      dVar3 = atan2((double)local_30,(double)local_38[0]);
-      *(float *)(&DAT_0f18141c + param_1 * 0x2408) = dVar3;
-    }
-  }
-  return;
-}
-#undef DAT_00526650
-#undef DAT_1a007c88
-#undef DAT_1a007c8c
-#undef DAT_00523584
-#undef DAT_00523590
-#undef DAT_018fc568
-#undef DAT_018fc758
-#undef DAT_018fc770
-#undef DAT_018fedbc
-#undef DAT_018fedc0
-#undef DAT_018feedc
-#undef DAT_0948b0c8
-#undef DAT_0948b104
-#undef DAT_0f181418
-#undef DAT_0f18141c
-#undef _DAT_1a007c88
-#undef _DAT_1a007c8c
-#undef resetorientation
-#undef rotateorientation
-#undef vectorlength
-#undef copyvector
-#undef subtractvectors
-#undef scalevector
-#undef scaleaddvectors
-#undef __security_check_cookie
-#undef atan2
-#undef local_4
-#undef local_64
-#undef local_54
-#undef local_50
-#undef local_44
-#undef local_40
-#undef local_3c
-#undef local_38
-#undef local_30
-#undef local_2c
-#undef local_8
 
 /* ---------------------------------------------------------------- 0x94060 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
@@ -110385,163 +108642,6 @@ int __cdecl lf_febd0(uint *param_1,uint param_2)
 }
 #undef pbitwrite
 
-/* ---------------------------------------------------------------- 0xfec50 */
-#define DAT_079a5225 (*(char *)SR_VA(0x79a5225))
-#define DAT_079a5221 (*(undefined1 *)SR_VA(0x79a5221))
-#define DAT_01fbe1a0 (*(undefined *)SR_VA(0x1fbe1a0))
-#define DAT_079a5140 (*(undefined *)SR_VA(0x79a5140))
-#define SDL_GetKeyboardState ((uchar * (__cdecl *)(int *))LF_IMPORT(126, "SDL2.DLL", "SDL_GetKeyboardState"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-void __cdecl lf_fec50(void)
-
-{
-  uchar *_Src;
-  size_t _Size;
-  
-  memcpy(&DAT_01fbe1a0,&DAT_079a5140,0x143);
-  _Size = 0x143;
-  _Src = SDL_GetKeyboardState((int *)0x0);
-  memcpy(&DAT_079a5140,_Src,_Size);
-  if (DAT_079a5225 != '\0') {
-    DAT_079a5221 = 1;
-  }
-  return;
-}
-#undef DAT_079a5225
-#undef DAT_079a5221
-#undef DAT_01fbe1a0
-#undef DAT_079a5140
-#undef SDL_GetKeyboardState
-#undef memcpy
-
-/* ---------------------------------------------------------------- 0xfeca0 */
-#define DAT_1a007c80 (*(int *)SR_VA(0x1a007c80))
-#define DAT_0bb330c0 (*(int *)SR_VA(0xbb330c0))
-#define DAT_1a007c84 (*(int *)SR_VA(0x1a007c84))
-#define DAT_0bb330c4 (*(int *)SR_VA(0xbb330c4))
-#define DAT_1a007ca8 (*(uint *)SR_VA(0x1a007ca8))
-#define DAT_1a007c90 (*(uint *)SR_VA(0x1a007c90))
-#define DAT_1a007c94 (*(uint *)SR_VA(0x1a007c94))
-#define DAT_0bb33110 (*(int *)SR_VA(0xbb33110))
-#define DAT_1a007c98 (*(undefined *)SR_VA(0x1a007c98))
-#define DAT_0bb33114 (*(int *)SR_VA(0xbb33114))
-#define DAT_1a007c9c (*(undefined *)SR_VA(0x1a007c9c))
-#define DAT_0bb33100 (*(undefined *)SR_VA(0xbb33100))
-#define _DAT_1a007c98 (*(undefined4 *)SR_VA(0x1a007c98))
-#define _DAT_1a007c9c (*(undefined4 *)SR_VA(0x1a007c9c))
-#define SDL_GetMouseState ((uint (__cdecl *)(int *, int *))LF_IMPORT(127, "SDL2.DLL", "SDL_GetMouseState"))
-#define SDL_PumpEvents ((void (__cdecl *)(void))LF_IMPORT(128, "SDL2.DLL", "SDL_PumpEvents"))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-void __cdecl lf_feca0(void)
-
-{
-  uint uVar1;
-  
-  SDL_PumpEvents();
-  memcpy(&DAT_0bb33100,&DAT_1a007c80,0x2c);
-  uVar1 = SDL_GetMouseState(&DAT_1a007c80,&DAT_1a007c84);
-  DAT_1a007c80 = (int)(longlong)(((double)DAT_1a007c80 * 1024.0) / (double)DAT_0bb330c0);
-  DAT_1a007c84 = (int)(longlong)(((double)DAT_1a007c84 * 640.0) / (double)DAT_0bb330c4);
-  DAT_1a007ca8 = uVar1 & 0xff;
-  DAT_1a007c90 = (uint)((uVar1 & 1) != 0);
-  DAT_1a007c94 = (uint)((uVar1 & 4) != 0);
-  if ((DAT_1a007c90 == 0) && (DAT_0bb33110 == 1)) {
-    _DAT_1a007c98 = 1;
-  }
-  else {
-    _DAT_1a007c98 = 0;
-  }
-  if ((DAT_1a007c94 == 0) && (DAT_0bb33114 == 1)) {
-    _DAT_1a007c9c = 1;
-  }
-  else {
-    _DAT_1a007c9c = 0;
-  }
-  return;
-}
-#undef DAT_1a007c80
-#undef DAT_0bb330c0
-#undef DAT_1a007c84
-#undef DAT_0bb330c4
-#undef DAT_1a007ca8
-#undef DAT_1a007c90
-#undef DAT_1a007c94
-#undef DAT_0bb33110
-#undef DAT_1a007c98
-#undef DAT_0bb33114
-#undef DAT_1a007c9c
-#undef DAT_0bb33100
-#undef _DAT_1a007c98
-#undef _DAT_1a007c9c
-#undef SDL_GetMouseState
-#undef SDL_PumpEvents
-#undef _ftol2
-#undef memcpy
-
-/* ---------------------------------------------------------------- 0xfedb0 */
-#define DAT_1a007c80 (*(undefined4 *)SR_VA(0x1a007c80))
-#define DAT_1a007c84 (*(undefined4 *)SR_VA(0x1a007c84))
-#define DAT_1a007ca8 (*(uint *)SR_VA(0x1a007ca8))
-#define DAT_1a007c90 (*(uint *)SR_VA(0x1a007c90))
-#define DAT_1a007c94 (*(uint *)SR_VA(0x1a007c94))
-#define DAT_0bb33110 (*(int *)SR_VA(0xbb33110))
-#define DAT_1a007c98 (*(undefined *)SR_VA(0x1a007c98))
-#define DAT_0bb33114 (*(int *)SR_VA(0xbb33114))
-#define DAT_1a007c9c (*(undefined *)SR_VA(0x1a007c9c))
-#define DAT_0bb33100 (*(undefined *)SR_VA(0xbb33100))
-#define DAT_1a007c88 (*(undefined *)SR_VA(0x1a007c88))
-#define DAT_1a007c8c (*(undefined *)SR_VA(0x1a007c8c))
-#define _DAT_1a007c98 (*(undefined4 *)SR_VA(0x1a007c98))
-#define _DAT_1a007c9c (*(undefined4 *)SR_VA(0x1a007c9c))
-#define SDL_PumpEvents ((void (__cdecl *)(void))LF_IMPORT(128, "SDL2.DLL", "SDL_PumpEvents"))
-#define SDL_GetRelativeMouseState ((uint (__cdecl *)(int *, int *))LF_IMPORT(129, "SDL2.DLL", "SDL_GetRelativeMouseState"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-void __cdecl lf_fedb0(void)
-
-{
-  uint uVar1;
-  
-  SDL_PumpEvents();
-  memcpy(&DAT_0bb33100,&DAT_1a007c80,0x2c);
-  uVar1 = SDL_GetRelativeMouseState((int *)&DAT_1a007c88,(int *)&DAT_1a007c8c);
-  DAT_1a007c80 = 0x200;
-  DAT_1a007c84 = 0x140;
-  DAT_1a007ca8 = uVar1 & 0xff;
-  DAT_1a007c90 = (uint)((uVar1 & 1) != 0);
-  DAT_1a007c94 = (uint)((uVar1 & 4) != 0);
-  if ((DAT_1a007c90 == 0) && (DAT_0bb33110 == 1)) {
-    _DAT_1a007c98 = 1;
-  }
-  else {
-    _DAT_1a007c98 = 0;
-  }
-  if ((DAT_1a007c94 == 0) && (DAT_0bb33114 == 1)) {
-    _DAT_1a007c9c = 1;
-  }
-  else {
-    _DAT_1a007c9c = 0;
-  }
-  return;
-}
-#undef DAT_1a007c80
-#undef DAT_1a007c84
-#undef DAT_1a007ca8
-#undef DAT_1a007c90
-#undef DAT_1a007c94
-#undef DAT_0bb33110
-#undef DAT_1a007c98
-#undef DAT_0bb33114
-#undef DAT_1a007c9c
-#undef DAT_0bb33100
-#undef DAT_1a007c88
-#undef DAT_1a007c8c
-#undef _DAT_1a007c98
-#undef _DAT_1a007c9c
-#undef SDL_PumpEvents
-#undef SDL_GetRelativeMouseState
-#undef memcpy
-
 /* ---------------------------------------------------------------- 0xfeea0 */
 #define DAT_0fffe274 (*(int *)SR_VA(0xfffe274))
 #define DAT_01fbe3c0 (*(undefined *)SR_VA(0x1fbe3c0))
@@ -110555,16 +108655,16 @@ void __cdecl lf_fedb0(void)
 #define DAT_01fbe520 (*(undefined *)SR_VA(0x1fbe520))
 #define DAT_01fbe560 (*(undefined *)SR_VA(0x1fbe560))
 #define DAT_1a185140 (*(undefined *)SR_VA(0x1a185140))
-#define SDL_JoystickEventState ((int (__cdecl *)(int))LF_IMPORT(130, "SDL2.DLL", "SDL_JoystickEventState"))
-#define SDL_HapticOpenFromJoystick ((void * (__cdecl *)(void *))LF_IMPORT(131, "SDL2.DLL", "SDL_HapticOpenFromJoystick"))
-#define SDL_JoystickNumHats ((int (__cdecl *)(void *))LF_IMPORT(132, "SDL2.DLL", "SDL_JoystickNumHats"))
-#define SDL_JoystickNumButtons ((int (__cdecl *)(void *))LF_IMPORT(133, "SDL2.DLL", "SDL_JoystickNumButtons"))
-#define SDL_JoystickNumAxes ((int (__cdecl *)(void *))LF_IMPORT(134, "SDL2.DLL", "SDL_JoystickNumAxes"))
-#define SDL_JoystickNameForIndex ((char * (__cdecl *)(int))LF_IMPORT(135, "SDL2.DLL", "SDL_JoystickNameForIndex"))
-#define SDL_JoystickGetGUID ((void * (__cdecl *)(void *, void *))LF_IMPORT(136, "SDL2.DLL", "SDL_JoystickGetGUID"))
-#define SDL_JoystickInstanceID ((int (__cdecl *)(void *))LF_IMPORT(137, "SDL2.DLL", "SDL_JoystickInstanceID"))
-#define SDL_JoystickOpen ((void * (__cdecl *)(int))LF_IMPORT(138, "SDL2.DLL", "SDL_JoystickOpen"))
-#define SDL_NumJoysticks ((int (__cdecl *)(void))LF_IMPORT(139, "SDL2.DLL", "SDL_NumJoysticks"))
+#define SDL_JoystickEventState ((int (__cdecl *)(int))LF_IMPORT(126, "SDL2.DLL", "SDL_JoystickEventState"))
+#define SDL_HapticOpenFromJoystick ((void * (__cdecl *)(void *))LF_IMPORT(127, "SDL2.DLL", "SDL_HapticOpenFromJoystick"))
+#define SDL_JoystickNumHats ((int (__cdecl *)(void *))LF_IMPORT(128, "SDL2.DLL", "SDL_JoystickNumHats"))
+#define SDL_JoystickNumButtons ((int (__cdecl *)(void *))LF_IMPORT(129, "SDL2.DLL", "SDL_JoystickNumButtons"))
+#define SDL_JoystickNumAxes ((int (__cdecl *)(void *))LF_IMPORT(130, "SDL2.DLL", "SDL_JoystickNumAxes"))
+#define SDL_JoystickNameForIndex ((char * (__cdecl *)(int))LF_IMPORT(131, "SDL2.DLL", "SDL_JoystickNameForIndex"))
+#define SDL_JoystickGetGUID ((void * (__cdecl *)(void *, void *))LF_IMPORT(132, "SDL2.DLL", "SDL_JoystickGetGUID"))
+#define SDL_JoystickInstanceID ((int (__cdecl *)(void *))LF_IMPORT(133, "SDL2.DLL", "SDL_JoystickInstanceID"))
+#define SDL_JoystickOpen ((void * (__cdecl *)(int))LF_IMPORT(134, "SDL2.DLL", "SDL_JoystickOpen"))
+#define SDL_NumJoysticks ((int (__cdecl *)(void))LF_IMPORT(135, "SDL2.DLL", "SDL_NumJoysticks"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_1c (*(undefined1 (*)[16])(lf_frame + 0x14))
 #define local_c (*(char * *)(lf_frame + 0x24))
@@ -110650,10 +108750,10 @@ void __cdecl lf_feea0(void)
 #define DAT_01fbe4a8 (*(undefined *)SR_VA(0x1fbe4a8))
 #define DAT_01fbe4ac (*(undefined *)SR_VA(0x1fbe4ac))
 #define DAT_1a185140 (*(undefined *)SR_VA(0x1a185140))
-#define SDL_JoystickGetHat ((uchar (__cdecl *)(void *, int))LF_IMPORT(140, "SDL2.DLL", "SDL_JoystickGetHat"))
-#define SDL_JoystickGetButton ((uchar (__cdecl *)(void *, int))LF_IMPORT(141, "SDL2.DLL", "SDL_JoystickGetButton"))
-#define SDL_JoystickGetAxis ((short (__cdecl *)(void *, int))LF_IMPORT(142, "SDL2.DLL", "SDL_JoystickGetAxis"))
-#define SDL_JoystickUpdate ((void (__cdecl *)(void))LF_IMPORT(143, "SDL2.DLL", "SDL_JoystickUpdate"))
+#define SDL_JoystickGetHat ((uchar (__cdecl *)(void *, int))LF_IMPORT(136, "SDL2.DLL", "SDL_JoystickGetHat"))
+#define SDL_JoystickGetButton ((uchar (__cdecl *)(void *, int))LF_IMPORT(137, "SDL2.DLL", "SDL_JoystickGetButton"))
+#define SDL_JoystickGetAxis ((short (__cdecl *)(void *, int))LF_IMPORT(138, "SDL2.DLL", "SDL_JoystickGetAxis"))
+#define SDL_JoystickUpdate ((void (__cdecl *)(void))LF_IMPORT(139, "SDL2.DLL", "SDL_JoystickUpdate"))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
@@ -113331,7 +111431,7 @@ void __cdecl lf_104490(int param_1)
 #define DAT_1425e82c (*(undefined4 *)SR_VA(0x1425e82c))
 #define DAT_1425e830 (*(undefined4 *)SR_VA(0x1425e830))
 #define DAT_2a2752b0 (*(undefined *)SR_VA(0x2a2752b0))
-#define toupper ((int (__cdecl *)(int))LF_IMPORT(144, "MSVCR100.DLL", "toupper"))
+#define toupper ((int (__cdecl *)(int))LF_IMPORT(140, "MSVCR100.DLL", "toupper"))
 #define strlen ((size_t (__cdecl *)(char *))LF_IMPORT(15, "MSVCR100.DLL", "strlen"))
 #define local_c (*(int *)(lf_frame + 0x14))
 int __cdecl lf_1046c0(void)
@@ -113891,7 +111991,7 @@ void __cdecl lf_105dc0(int param_1,float param_2,float param_3,float param_4,flo
 #define updateplayticket ((void (__cdecl *)(void))SR_FN(0x4d5650))
 #define steam_update ((void (__cdecl *)(void))SR_FN(0x50bd60))
 #define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(96, "SDL2.DLL", "SDL_Delay"))
-#define SDL_PollEvent ((int (__cdecl *)(void *))LF_IMPORT(145, "SDL2.DLL", "SDL_PollEvent"))
+#define SDL_PollEvent ((int (__cdecl *)(void *))LF_IMPORT(141, "SDL2.DLL", "SDL_PollEvent"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
 #define local_44 (*(int (*)[4])(lf_frame + 0x1c))
@@ -113967,8 +112067,8 @@ void __cdecl lf_1060d0(void)
 #define DAT_056ceb80 (*(undefined *)SR_VA(0x56ceb80))
 #define DAT_056ceb84 (*(undefined *)SR_VA(0x56ceb84))
 #define DAT_056ceb88 (*(undefined *)SR_VA(0x56ceb88))
-#define SDL_GetDisplayMode ((int (__cdecl *)(int, int, void *))LF_IMPORT(146, "SDL2.DLL", "SDL_GetDisplayMode"))
-#define SDL_GetNumDisplayModes ((int (__cdecl *)(int))LF_IMPORT(147, "SDL2.DLL", "SDL_GetNumDisplayModes"))
+#define SDL_GetDisplayMode ((int (__cdecl *)(int, int, void *))LF_IMPORT(142, "SDL2.DLL", "SDL_GetDisplayMode"))
+#define SDL_GetNumDisplayModes ((int (__cdecl *)(int))LF_IMPORT(143, "SDL2.DLL", "SDL_GetNumDisplayModes"))
 #define local_20 (*(undefined1 (*)[4])(lf_frame + 0x10))
 #define local_1c (*(int *)(lf_frame + 0x14))
 #define local_18 (*(int *)(lf_frame + 0x18))
@@ -114040,8 +112140,8 @@ void __cdecl lf_106310(void)
 #define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
 #define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
 #define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
-#define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(148, "OPENGL32.DLL", "glScissor"))
-#define glFrustum ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(149, "OPENGL32.DLL", "glFrustum"))
+#define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(144, "OPENGL32.DLL", "glScissor"))
+#define glFrustum ((void (__stdcall *)(double, double, double, double, double, double))LF_IMPORT(145, "OPENGL32.DLL", "glFrustum"))
 void __cdecl lf_106320(int param_1,int param_2,int param_3,int param_4,float param_5,float param_6,float param_7
           )
 
@@ -114091,7 +112191,7 @@ void __cdecl lf_106320(int param_1,int param_2,int param_3,int param_4,float par
 #define glLoadIdentity ((void (__stdcall *)(void))LF_IMPORT(82, "OPENGL32.DLL", "glLoadIdentity"))
 #define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
 #define glViewport ((void (__stdcall *)(int, int, int, int))LF_IMPORT(84, "OPENGL32.DLL", "glViewport"))
-#define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(148, "OPENGL32.DLL", "glScissor"))
+#define glScissor ((void (__stdcall *)(int, int, int, int))LF_IMPORT(144, "OPENGL32.DLL", "glScissor"))
 void __cdecl lf_106480(int param_1,int param_2,int param_3,int param_4,float param_5,float param_6,
                   float param_7)
 
@@ -114132,8 +112232,8 @@ void __cdecl lf_106480(int param_1,int param_2,int param_3,int param_4,float par
 /* ---------------------------------------------------------------- 0x1065d0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
-#define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(150, "OPENGL32.DLL", "glMultMatrixf"))
-#define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(151, "OPENGL32.DLL", "glTranslatef"))
+#define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(146, "OPENGL32.DLL", "glMultMatrixf"))
+#define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(147, "OPENGL32.DLL", "glTranslatef"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
 #define local_4c (*(float *)(lf_frame + 0x14))
@@ -114229,8 +112329,8 @@ void __cdecl lf_1065d0(float *param_1,undefined4 *param_2)
 /* ---------------------------------------------------------------- 0x1066b0 */
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
 #define glMatrixMode ((void (__stdcall *)(uint))LF_IMPORT(83, "OPENGL32.DLL", "glMatrixMode"))
-#define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(150, "OPENGL32.DLL", "glMultMatrixf"))
-#define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(151, "OPENGL32.DLL", "glTranslatef"))
+#define glMultMatrixf ((void (__stdcall *)(float *))LF_IMPORT(146, "OPENGL32.DLL", "glMultMatrixf"))
+#define glTranslatef ((void (__stdcall *)(float, float, float))LF_IMPORT(147, "OPENGL32.DLL", "glTranslatef"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
 #define local_4c (*(float *)(lf_frame + 0x14))
@@ -114335,8 +112435,8 @@ void __cdecl lf_1066b0(undefined4 *param_1,undefined4 *param_2)
 #define DAT_14261828 (*(int *)SR_VA(0x14261828))
 #define DAT_0052652c (*(undefined *)SR_VA(0x52652c))
 #define DAT_00526530 (*(undefined *)SR_VA(0x526530))
-#define glReadBuffer ((void (__stdcall *)(uint))LF_IMPORT(152, "OPENGL32.DLL", "glReadBuffer"))
-#define glReadPixels ((void (__stdcall *)(int, int, int, int, uint, uint, void *))LF_IMPORT(153, "OPENGL32.DLL", "glReadPixels"))
+#define glReadBuffer ((void (__stdcall *)(uint))LF_IMPORT(148, "OPENGL32.DLL", "glReadBuffer"))
+#define glReadPixels ((void (__stdcall *)(int, int, int, int, uint, uint, void *))LF_IMPORT(149, "OPENGL32.DLL", "glReadPixels"))
 #define fwrite ((size_t (__cdecl *)(void *, size_t, size_t, FILE *))LF_IMPORT(106, "MSVCR100.DLL", "fwrite"))
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
@@ -115082,8 +113182,8 @@ void __cdecl lf_10a7c0(int param_1,char *param_2,int param_3,int param_4,undefin
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
 #define DAT_17f4b870 (*(undefined *)SR_VA(0x17f4b870))
 #define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(57, "OPENGL32.DLL", "glBindTexture"))
-#define glTexParameteri ((void (__stdcall *)(uint, uint, int))LF_IMPORT(154, "OPENGL32.DLL", "glTexParameteri"))
-#define glTexImage2D ((void (__stdcall *)(uint, int, int, int, int, int, uint, uint, void *))LF_IMPORT(155, "OPENGL32.DLL", "glTexImage2D"))
+#define glTexParameteri ((void (__stdcall *)(uint, uint, int))LF_IMPORT(150, "OPENGL32.DLL", "glTexParameteri"))
+#define glTexImage2D ((void (__stdcall *)(uint, int, int, int, int, int, uint, uint, void *))LF_IMPORT(151, "OPENGL32.DLL", "glTexImage2D"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_10ac40(int param_1)
 
@@ -115217,7 +113317,7 @@ int __cdecl lf_10add0(undefined4 *param_1)
 #define _DAT_10767380 (*(undefined4 *)SR_VA(0x10767380))
 #define _DAT_0bb330c8 (*(float *)SR_VA(0xbb330c8))
 #define _DAT_107675ac (*(void * *)SR_VA(0x107675ac))
-#define glGenTextures ((void (__stdcall *)(int, uint *))LF_IMPORT(156, "OPENGL32.DLL", "glGenTextures"))
+#define glGenTextures ((void (__stdcall *)(int, uint *))LF_IMPORT(152, "OPENGL32.DLL", "glGenTextures"))
 #define setupaudio ((void (__cdecl *)(void))SR_FN(0x4339e0))
 #define shutdownaudio ((void (__cdecl *)(void))SR_FN(0x433a70))
 #define debug_resetlogfile ((void (__cdecl *)(void))SR_FN(0x46ac30))
@@ -115235,14 +113335,14 @@ int __cdecl lf_10add0(undefined4 *param_1)
 #define steam_init ((undefined4 (__cdecl *)(void))SR_FN(0x50bcf0))
 #define steam_shutdown ((void (__cdecl *)(void))SR_FN(0x50bd40))
 #define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(112, "SDL2.DLL", "SDL_GL_SetAttribute"))
-#define SDL_Quit ((void (__cdecl *)(void))LF_IMPORT(157, "SDL2.DLL", "SDL_Quit"))
-#define SDL_GL_SetSwapInterval ((int (__cdecl *)(int))LF_IMPORT(158, "SDL2.DLL", "SDL_GL_SetSwapInterval"))
-#define SDL_GL_CreateContext ((void * (__cdecl *)(void *))LF_IMPORT(159, "SDL2.DLL", "SDL_GL_CreateContext"))
-#define SDL_CreateWindow ((void * (__cdecl *)(char *, int, int, int, int, uint))LF_IMPORT(160, "SDL2.DLL", "SDL_CreateWindow"))
-#define SDL_ShowCursor ((int (__cdecl *)(int))LF_IMPORT(161, "SDL2.DLL", "SDL_ShowCursor"))
-#define SDL_Init ((int (__cdecl *)(uint))LF_IMPORT(162, "SDL2.DLL", "SDL_Init"))
-#define WSACleanup ((int (__stdcall *)(void))LF_IMPORT(163, "WSOCK32.DLL", "WSACleanup"))
-#define WSAStartup ((int (__stdcall *)(WORD, LPWSADATA))LF_IMPORT_ORD(164, "WSOCK32.DLL", 115))
+#define SDL_Quit ((void (__cdecl *)(void))LF_IMPORT(153, "SDL2.DLL", "SDL_Quit"))
+#define SDL_GL_SetSwapInterval ((int (__cdecl *)(int))LF_IMPORT(154, "SDL2.DLL", "SDL_GL_SetSwapInterval"))
+#define SDL_GL_CreateContext ((void * (__cdecl *)(void *))LF_IMPORT(155, "SDL2.DLL", "SDL_GL_CreateContext"))
+#define SDL_CreateWindow ((void * (__cdecl *)(char *, int, int, int, int, uint))LF_IMPORT(156, "SDL2.DLL", "SDL_CreateWindow"))
+#define SDL_ShowCursor ((int (__cdecl *)(int))LF_IMPORT(157, "SDL2.DLL", "SDL_ShowCursor"))
+#define SDL_Init ((int (__cdecl *)(uint))LF_IMPORT(158, "SDL2.DLL", "SDL_Init"))
+#define WSACleanup ((int (__stdcall *)(void))LF_IMPORT(159, "WSOCK32.DLL", "WSACleanup"))
+#define WSAStartup ((int (__stdcall *)(WORD, LPWSADATA))LF_IMPORT_ORD(160, "WSOCK32.DLL", 115))
 #define local_c (*(uint *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
 undefined4 __cdecl lf_10ae00(void)
@@ -115402,11 +113502,11 @@ undefined4 __cdecl lf_10ae00(void)
 #define DAT_005265d8 (*(undefined *)SR_VA(0x5265d8))
 #define DAT_094f6100 (*(undefined *)SR_VA(0x94f6100))
 #define DAT_094f6300 (*(undefined *)SR_VA(0x94f6300))
-#define SHGetSpecialFolderPathA ((BOOL (__stdcall *)(HWND, LPSTR, int, BOOL))LF_IMPORT(165, "SHELL32.DLL", "SHGetSpecialFolderPathA"))
+#define SHGetSpecialFolderPathA ((BOOL (__stdcall *)(HWND, LPSTR, int, BOOL))LF_IMPORT(161, "SHELL32.DLL", "SHGetSpecialFolderPathA"))
 #define strcat ((char * (__cdecl *)(char *, char *))LF_IMPORT(27, "MSVCR100.DLL", "strcat"))
 #define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
-#define _mkdir ((int (__cdecl *)(char *))LF_IMPORT(166, "MSVCR100.DLL", "_mkdir"))
-#define _getcwd ((char * (__cdecl *)(char *, int))LF_IMPORT(167, "MSVCR100.DLL", "_getcwd"))
+#define _mkdir ((int (__cdecl *)(char *))LF_IMPORT(162, "MSVCR100.DLL", "_mkdir"))
+#define _getcwd ((char * (__cdecl *)(char *, int))LF_IMPORT(163, "MSVCR100.DLL", "_getcwd"))
 void __cdecl lf_10b1f0(void)
 
 {
@@ -115785,8 +113885,8 @@ void __cdecl lf_10bcc0(float *param_1,float *param_2,float *param_3)
 
 /* ---------------------------------------------------------------- 0x10bcf0 */
 #define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
-#define SteamAPI_Init ((char (__cdecl *)(void))LF_IMPORT(168, "STEAM_API.DLL", "SteamAPI_Init"))
-#define SteamAPI_RestartAppIfNecessary ((char (__cdecl *)(uint))LF_IMPORT(169, "STEAM_API.DLL", "SteamAPI_RestartAppIfNecessary"))
+#define SteamAPI_Init ((char (__cdecl *)(void))LF_IMPORT(164, "STEAM_API.DLL", "SteamAPI_Init"))
+#define SteamAPI_RestartAppIfNecessary ((char (__cdecl *)(uint))LF_IMPORT(165, "STEAM_API.DLL", "SteamAPI_RestartAppIfNecessary"))
 undefined4 __cdecl lf_10bcf0(void)
 
 {
@@ -115816,7 +113916,7 @@ undefined4 __cdecl lf_10bcf0(void)
 
 /* ---------------------------------------------------------------- 0x10bd40 */
 #define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
-#define SteamAPI_Shutdown ((void (__cdecl *)(void))LF_IMPORT(170, "STEAM_API.DLL", "SteamAPI_Shutdown"))
+#define SteamAPI_Shutdown ((void (__cdecl *)(void))LF_IMPORT(166, "STEAM_API.DLL", "SteamAPI_Shutdown"))
 void __cdecl lf_10bd40(void)
 
 {
@@ -115829,7 +113929,7 @@ void __cdecl lf_10bd40(void)
 
 /* ---------------------------------------------------------------- 0x10bd60 */
 #define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamAPI_RunCallbacks ((void (__cdecl *)(void))LF_IMPORT(171, "STEAM_API.DLL", "SteamAPI_RunCallbacks"))
+#define SteamAPI_RunCallbacks ((void (__cdecl *)(void))LF_IMPORT(167, "STEAM_API.DLL", "SteamAPI_RunCallbacks"))
 void __cdecl lf_10bd60(void)
 
 {
@@ -115843,7 +113943,7 @@ void __cdecl lf_10bd60(void)
 
 /* ---------------------------------------------------------------- 0x10bd80 */
 #define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamFriends ((void * (__cdecl *)(void))LF_IMPORT(172, "STEAM_API.DLL", "SteamFriends"))
+#define SteamFriends ((void * (__cdecl *)(void))LF_IMPORT(168, "STEAM_API.DLL", "SteamFriends"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 bool __cdecl lf_10bd80(char *param_1)
 
@@ -115866,7 +113966,7 @@ bool __cdecl lf_10bd80(char *param_1)
 
 /* ---------------------------------------------------------------- 0x10bdc0 */
 #define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(173, "STEAM_API.DLL", "SteamUser"))
+#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(169, "STEAM_API.DLL", "SteamUser"))
 #define CSteamID ((void * (__fastcall *)(void *))SR_FN(0x50be80))
 #define ConvertToUint64 ((ulonglong (__fastcall *)(void *))SR_FN(0x50bee0))
 #define local_1c (*(undefined1 (*)[8])(lf_frame + 0x14))
@@ -115916,7 +114016,7 @@ void __cdecl lf_10bdc0(undefined8 *param_1)
 #define DAT_00527ee8 (*(undefined *)SR_VA(0x527ee8))
 #define DAT_00527ec8 (*(undefined *)SR_VA(0x527ec8))
 #define _DAT_00527ee8 (*(undefined4 *)SR_VA(0x527ee8))
-#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(173, "STEAM_API.DLL", "SteamUser"))
+#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(169, "STEAM_API.DLL", "SteamUser"))
 #define Set(...) 0
 void __cdecl lf_10be20(undefined4 param_1)
 
