@@ -72,7 +72,9 @@ Coordinate writes, angle writes and smoothing results round to float. Sensitivit
 
 `getinputs` creates chat, pause and connection controls before polling. Map and player-menu switches read that key state. It polls system messages, keys, the mouse and menu controls in that order. A change into relative capture performs two extra relative reads. Firing waits for release of the left button after menu use.
 
-Connection controls store the address of a local selection value. This address is valid during input dispatch.
+Connection controls store the address of a local selection value. Menu processing writes the selected connection index through this pointer during input dispatch. The address depends on the call frame and can differ between executions. Its target is valid only during input dispatch.
+
+Runtime dispatch uses generated C for `getinputs`. The implementation in `dispatch.c` has no active table entry because byte comparison includes this variable stack address. Adoption requires a focused test that excludes only this pointer and compares every other effect, including connection selection and removal.
 
 Return opens chat. Return release sends a nonempty message unless Escape cancels it. T, Y and U select talk, yell and whisper. Player menu actions enter the action ring and clear `menu_action`.
 
