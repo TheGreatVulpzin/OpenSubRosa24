@@ -122,3 +122,17 @@ A sector is a `BlockSector` record. Its `interior_models` field names the mesh o
 
 A sector is a `BlockSector` record. `sector_entries` holds the sector and the distance of each sector with an interior before the sort, and `sector_list` holds the sectors after it.
 
+## View, texture upload and small vectors
+
+`src/client/render/view.c` sets the view of a pass. Each function ends with the model view matrix active. The three that set a projection also clear the projection, texture and model view matrices.
+
+- `setuptextdisplay` prepares the 2D layer: texture and blending on, depth test and depth writes off, a viewport of the whole window and an orthographic projection with the coordinates of the font (the size in `Font.resolution_x` and `resolution_y`, from the top left corner).
+- `setupperspectiveviewport(x, y, width, height, near, far, scale)` sets a viewport and a scissor box for a rectangle in the units of the font, and a perspective projection. The window size scales the rectangle. The scale multiplies the width of the near plane. The height follows the ratio of the rectangle.
+- `setuporthoviewport` does the same with an orthographic box of half width, half height and half depth.
+- `setupviewpoint(position, rotation)` multiplies the model view matrix by the rotation of the camera (three rows) and moves it by the opposite of the position. A null pointer leaves that part out.
+- `setupobjectrender(position, rotation)` moves to the position, then multiplies by the rotation of the object. A null pointer leaves that part out.
+
+`src/client/textures/upload.c` has `setuptexture(texture)`: it binds the texture and gives OpenGL the wrap and filter parameters and the pixels of each level. Each level is half the size of the level before it.
+
+`src/client/math/small_vectors.c` has `copyvector` and `copyvector2d` (copy the 32 bit words, so a value that is not a number keeps its bits), `zerovector` and `flabs` (the absolute value of a float).
+

@@ -18,6 +18,7 @@
 #include "textures/opengl.h"
 #include "textures/textures.h"
 #include "vectors.h"
+#include "textures/upload.h"
 
 #define g_landscape sr_data_landscape
 #define g_render cl_data_landrender
@@ -47,9 +48,6 @@
 
 #define NORMAL_TEXTURE_SIZE 0x800
 #define DETAIL_TEXTURE_SIZE 0x400
-
-/* Game functions of other files. */
-#define setuptexture CL_FN(0x50ac40, void(__cdecl *)(int texture))
 
 /* The index list of a level, an edge level and a side. */
 static LandIndexList *index_list(int level, int edge_level, int side)

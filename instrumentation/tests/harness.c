@@ -1031,6 +1031,19 @@ static const char *known_difference(const char *name)
         { "testtimer", "EDX is not set by the original" },
         /* x87 precision: the error grows through the computation (docs/lift.md, "Float precision"). */
         { "buildsomeshit", "x87 precision" },
+        /* The client calls the vector helpers and keeps their result in an x87 register. The clean code of the
+         * server has the helpers inline. The two differ in the last bit, on a miss and for values that are not
+         * finite. The client follows the server code. */
+        { "lineintersectplane", "client follows the server code" },
+        { "lineintersectsphere", "client follows the server code" },
+        { "calculatebarycentric", "client follows the server code" },
+        { "rotatevector", "client follows the server code" },
+        /* A degree outside 1 to 3: the client returns an uninitialized value (curve) or 0.0 (derivative).
+         * The server code returns 1 - t and the bits of the degree. No caller passes such a degree. */
+        { "tesselatebezier", "degree outside 1 to 3" },
+        { "tesselatebezierderivative", "degree outside 1 to 3" },
+        /* Tangent length near 1.5e-5, and NaN: the sum of squares rounds in another order. */
+        { "calculatefriction", "client follows the server code" },
     };
     size_t k;
     for (k = 0; k < sizeof known / sizeof known[0]; k++)

@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+BASE_SIZES = {"int": 4, "float": 4, "uint32_t": 4, "uint8_t": 1, "char": 1, "int16_t": 2, "uint16_t": 2, "vec3": 12,
+              "void*": 4, "void *": 4, "uint32_t*": 4, "char*": 4, "double": 8, "int8_t": 1}
 
 
 def load_objects():
@@ -77,7 +79,7 @@ def main():
         rva = va_to_rva(va)
         hit = None
         for name, typ, count, size, base in objects:
-            size = size or sizes.get(typ, 4)
+            size = size or sizes.get(typ) or BASE_SIZES.get(typ, 4)
             if base <= rva < base + max(count, 1) * size:
                 index, inner = divmod(rva - base, size)
                 hit = (name, typ, index, inner)

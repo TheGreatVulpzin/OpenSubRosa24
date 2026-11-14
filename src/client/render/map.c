@@ -5,10 +5,12 @@
 #include "render/draw2d.h"
 #include "render/indicators.h"
 #include "render/text.h"
+#include "render/view.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "vectors.h"
+#include "textures/upload.h"
 
 #define g_textures cl_data_texture
 #define g_texturelist sr_data_texturelist
@@ -16,12 +18,8 @@
 #define g_keyboard cl_data_keyboard
 
 /* Game functions of other files. */
-#define setuptexture CL_FN(0x50ac40, void(__cdecl *)(int texture))
-#define setuporthoviewport CL_FN(0x506480, void(__cdecl *)(int x, int y, int width, int height, float half_width, float half_height, float depth))
-#define setupviewpoint CL_FN(0x5065d0, void(__cdecl *)(const vec3 *position, const vec3 *rotation))
 #define render_sectorlist CL_FN(0x4d7ed0, void(__cdecl *)(int mode))
 #define clearsectorlist CL_FN(0x4d7850, void(__cdecl *)(int mode))
-#define setuptextdisplay CL_FN(0x5079d0, void(__cdecl *)(void))
 
 enum {
     MAP_SIZE = 512,

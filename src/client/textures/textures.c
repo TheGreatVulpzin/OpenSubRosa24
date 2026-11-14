@@ -5,6 +5,8 @@
  * then green, blue and alpha. The billboard and the newspaper are drawn with the text and
  * bitmap functions and then copied from the screen into the texture.
  */
+#include <math.h>
+
 #include "textures/textures.h"
 
 #include <stdlib.h>
@@ -17,6 +19,7 @@
 #include "sr_runtime.h"
 #include "textures/noise.h"
 #include "textures/opengl.h"
+#include "textures/upload.h"
 
 #define g_textures cl_data_texture
 #define g_texturelist cl_data_texturelist
@@ -62,7 +65,6 @@
 #define NO_BITMAP (-1) /* drawbitmap draws a plain rectangle */
 
 /* Game functions of other files. */
-#define setuptexture CL_FN(0x50ac40, void(__cdecl *)(int texture))
 #define vectorlength2d CL_FN(0x50bb20, double(__cdecl *)(const float *v))
 #define getrandomvector3d CL_FN(0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \

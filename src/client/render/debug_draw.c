@@ -1,5 +1,6 @@
 /* The debug shapes of the 3D view: a bounding box between two corners and a box at an object. */
 #include "render/debug_draw.h"
+#include "render/view.h"
 
 #include "client.h"
 #include "sr_runtime.h"
@@ -16,7 +17,6 @@ GL_IMPORT(glVertex3fv, (const float *vertex), (vertex))
 GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
 
 /* Game functions of other files. */
-#define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const void *placement, const void *rotation))
 
 /* Add the line between two corners of the box given by its smallest and largest corner. */
 static void box_line(const float *low, const float *high, int ax, int ay, int az, int bx, int by, int bz)

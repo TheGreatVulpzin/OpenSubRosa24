@@ -5,6 +5,7 @@
  * bytes. The transform of an object comes from setupobjectrender.
  */
 #include "render/models_draw.h"
+#include "render/view.h"
 
 #include <string.h>
 
@@ -25,7 +26,6 @@
 #define g_track_vertex_count cl_data_track_vertex_count
 
 /* Game functions of other files. */
-#define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const void *placement, const void *scale))
 
 enum {
     GL_VERTEX_ARRAY = 0x8074,

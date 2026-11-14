@@ -76,7 +76,7 @@ rva,size,name,source,confidence,evidence
 0xa2a0,726,playersimulation,review,0.95,"Copies per-player state to the human (menu/equipment slots, health at +0x28, the 7 inventory slots with item types and weapon flags 0x100/0x300), same logic as the ELF playersimulation; called by dedicatedserverloop right before the physics block."
 0xa580,197,fixplayername,manual,1.0,"Troca '/' por espaço, tira espaços e usa ""Noname"", igual ao 0.24c. O casador dizia createevent_updatehuman. (casador dizia createevent_updatehuman)"
 0xa7a0,143,orientationtoquaternion,anchor,1.0,features
-0xa930,172,projectorientation,callgraph,1.0,votes=6
+0xa930,172,multiplyquaternion,callgraph,1.0,votes=6
 0xaa80,103,scenario_getnumofmissions,callgraph,1.0,votes=12
 0xab20,174,scenario_setmissioninactive,review,0.97,"Loops 5 teams x 0x10 missions, clears the mission item time-to-live, returns its stock share to the market, zeroes the mission and calls createevent_updatemission, line-for-line the ELF scenario_setmissioninactive; currently named logic_farbslist (the real logic_farbslist is 0x1d2c0)."
 0xac00,301,csradixsort,review,0.93,"Radix-sort helper (memset of 1024-int bucket tables) called twice by packobjectpacket and once by packobjectpacket2 in the same places where the ELF calls csradixsort, plus by newspaper_load and the top-10 list code."
@@ -205,7 +205,7 @@ rva,size,name,source,confidence,evidence
 0x1d3b0,278,logicsimulation_driving,review,0.93,"Checkpoint logic: for each player with a human it tests the remaining checkpoints against a distance threshold (sqrt, inlined vectordistance), sets the checkpoint bitmask and count and bumps a game counter when all are reached, same logic as the ELF logicsimulation_driving."
 0x1d4d0,711,logic_setteammanager,review,0.95,"String '%s is now manager of %s' plus updateiteminfo x4, createitem x2, rotateorientation and createevent_message, same call profile as the ELF logic_setteammanager."
 0x1d7a0,249,logic_gunstore_buy,manual,1.0,Checa num_purchases < 10 e usa menu_building * 0x9dc. O casador dizia createevent_updateplayer_finance. (casador dizia createevent_updateplayer_finance)
-0x1d8a0,307,multiplyquaternion,review,0.9,"307-byte leaf with 9 pointer-indexed floats and no calls, called three times by human_calcarmtorque, which calls multiplyquaternion seven times in the ELF (the rest inlined); the Mac version is 246 bytes."
+0x1d8a0,307,projectorientation,review,0.9,"307-byte leaf with 9 pointer-indexed floats and no calls, called three times by human_calcarmtorque, which calls projectorientation seven times in the ELF (the rest inlined); the Mac version is 246 bytes."
 0x1d9e0,287,multiply3x3matrices,review,0.93,"Called in bondsimulation2 between resetorientation and geteulerangles2 where the ELF calls multiply3x3matrices; 287 bytes with a /GS cookie, matching the 286-byte Mac multiply3x3matrices; also used by human_calculatearmangles."
 0x1dba0,4599,unpackobjectpacket,review,0.93,"Reads object state with ~42 pbitread calls, rebuilds orientations through the unpackorientation helper (0x16320) and rotateorientation, same profile as the ELF unpackobjectpacket; called only by clientrecv."
 0x1f4a0,4550,packobjectpacket2,review,0.93,"Packs object state with pbitwrite/packposition/packorientation, one csradixsort call and a pow-based distance factor (net_calcdistancefactor inlined), same call profile as the ELF packobjectpacket2."
@@ -255,7 +255,7 @@ rva,size,name,source,confidence,evidence
 0x2efd0,184,packpositiondelta,review,0.95,"Loops 3 components writing (a[i]-b[i]) through the packscalar logic with pbitwrite, same as the ELF packpositiondelta."
 0x2f090,148,unpackpositiondelta,review,0.95,"Loops 3 components reading a scalar with pbitread and adding the reference vector, same as the ELF unpackpositiondelta."
 0x2f130,741,lineintersecthuman,anchor,0.733,features
-0x2f420,4778,human_calcarmtorque,review,0.95,"Calls orientationtoquaternion x6, normalizevector x7, rotatevector x2, projectorientation and multiplyquaternion (0x1d8a0), the same counts as the ELF human_calcarmtorque; called by human_calculatearmangles."
+0x2f420,4778,human_calcarmtorque,review,0.95,"Calls orientationtoquaternion x6, normalizevector x7, rotatevector x2, multiplyquaternion and projectorientation (0x1d8a0), the same counts as the ELF human_calcarmtorque; called by human_calculatearmangles."
 0x306d0,278,human_createmuscleball,review,0.93,"Calls the joint-bond creator (0x19ee0) once and memsets the muscle record, same shape as the ELF human_createmuscleball; called 8 times by human_buildmuscles."
 0x307f0,695,sphereintersecttrianglefull,anchor,0.792,features
 0x30ab0,237,itemtimetolive,review,0.93,"Loops the 0x400 items, decrements the time-to-live field and deletes expired items with deleteitem inlined, called in the physics block slot of the ELF itemtimetolive; currently named deleteitem."

@@ -74,7 +74,7 @@ void cerpnoise2d(void);
 void deleteplayer(void);
 void playersimulation(void);
 void orientationtoquaternion(void);
-void projectorientation(void);
+void multiplyquaternion(void);
 void scenario_getnumofmissions(void);
 void scenario_setmissioninactive(void);
 void csradixsort(void);
@@ -202,7 +202,7 @@ void logic_farbslist(void);
 void logicsimulation_driving(void);
 void logic_setteammanager(void);
 void logic_gunstore_buy(void);
-void multiplyquaternion(void);
+void projectorientation(void);
 void multiply3x3matrices(void);
 void unpackobjectpacket(void);
 void packobjectpacket2(void);
@@ -392,7 +392,7 @@ const LfEntry lf_table[] = {
     { "deleteplayer", 0xa1b0, (void *)deleteplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "playersimulation", 0xa2a0, (void *)playersimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "orientationtoquaternion", 0xa7a0, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "projectorientation", 0xa930, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "multiplyquaternion", 0xa930, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "scenario_getnumofmissions", 0xaa80, (void *)scenario_getnumofmissions, 1, LF_RET_INT, 4, "v", 0 },
     { "scenario_setmissioninactive", 0xab20, (void *)scenario_setmissioninactive, 1, LF_RET_VOID, 4, "v", 0 },
     { "csradixsort", 0xac00, (void *)csradixsort, 0, LF_RET_VOID, 4, "", 0 },
@@ -520,7 +520,7 @@ const LfEntry lf_table[] = {
     { "logicsimulation_driving", 0x1d3b0, (void *)logicsimulation_driving, 0, LF_RET_VOID, 4, "", 0 },
     { "logic_setteammanager", 0x1d4d0, (void *)logic_setteammanager, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_gunstore_buy", 0x1d7a0, (void *)logic_gunstore_buy, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "multiplyquaternion", 0x1d8a0, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "projectorientation", 0x1d8a0, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "multiply3x3matrices", 0x1d9e0, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "unpackobjectpacket", 0x1dba0, (void *)unpackobjectpacket, 0, LF_RET_VOID, 4, "", 0 },
     { "packobjectpacket2", 0x1f4a0, (void *)packobjectpacket2, 2, LF_RET_VOID, 4, "vv", 0 },

@@ -6,6 +6,7 @@
  * the back. The triangles go into one list that the stencil pass draws.
  */
 #include "render/shadow.h"
+#include "render/view.h"
 
 #include "client.h"
 #include "setup/timers.h"
@@ -21,7 +22,6 @@
 #define g_list cl_data_shadow_list
 
 /* Game functions of other files. */
-#define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const void *placement, const void *rotation))
 
 GL_IMPORT(glPushMatrix, (void), ())
 GL_IMPORT(glPopMatrix, (void), ())

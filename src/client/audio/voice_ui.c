@@ -10,6 +10,7 @@
 #include "sr_runtime.h"
 #include "vectors.h"
 #include "sr_math.h"
+#include "render/view.h"
 #include <stdlib.h>
 
 enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
@@ -50,7 +51,6 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
 #define checkmenuitems CL_FN(0x501be0, void (__cdecl *)(void))
-#define setuptextdisplay CL_FN(0x5079d0, void (__cdecl *)(void))
 #define drawmenuitems CL_FN(0x4ff2e0, void (__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))
 #define drawmousecursor CL_FN(0x507ee0, void (__cdecl *)(int, int, int, float, float, float, float))

@@ -381,6 +381,18 @@ The client table can point to a clean function of Phase 6 in place of the lifted
 
 Finding (2026-11-09): the server (024d) and the client (0.24b) are not the same build. Of 250 shared names, 6 have the same bytes and 27 have a size so different that the client name is probably wrong (the client `getrandomvector2d` at 0x71e60 is another function). So a clean function is adopted only when the gate shows the same result as the original client. The gate must use every recorded call (`gate.py --all-calls --funcs <names>`): the short call files lost the calls of the vector functions. Result: of 168 candidates, 19 passed (the vector functions, the network functions, `servercycle`, `listfiles` and others), 5 failed (file functions: `building_buildfloorplan`, `loadsaveoptions`, `loadtextfile`, `newspaper_load`, `saveaccountsclient`) and 144 had no recorded call. The clean code calls math through `x87_sqrt` and similar. The client imports the plain `sqrt`, not `_CIsqrt`, so it links `instrumentation/client/runtime/x87_math_client.c` in place of `src/platform/x87_math.c`. Next: synthetic calls or a recording of a hosted game for the 144.
 
+Pure functions (2026-11-14): `instrumentation/client/synth_pure.py <recording dir> <work dir> [func,...]` builds 90 calls for each pure function (random and edge floats, vectors that hit) and runs the harness on them. Result for 24 functions:
+
+- Same on all calls (adopted): `angulardistance`, `circleintersecttriangle`, `geteulerangles2`, `lineintersectplanetwosided`, `orientationtoquaternion`, `pointdistanceline`, `projectvector`, `sphereintersectline`, `sphereintersecttriangle`, `sphereintersecttrianglefull`, `genrand_int32`, `sprintf_comma`, `multiplyquaternion`.
+- Known differences (adopted): `lineintersectplane`, `lineintersectsphere`, `calculatebarycentric`, `rotatevector`, `calculatefriction`, `tesselatebezier`, `tesselatebezierderivative`. The client follows the server code. `known_difference()` in `instrumentation/tests/harness.c` lists them.
+  - The vector functions differ in edge cases (NaN, the last bit).
+  - `calculatefriction` differs when the tangent length is near 1.5e-5 and for NaN.
+  - The two bezier functions differ only for a degree outside 1 to 3. They are the same for degrees 1 to 3, and every call in the client uses 1 or 3.
+- No call that the harness runs (pending): `init_by_array`, `getrandomvector2d`, `objecttype_calcquadweights`. The cause is not found yet.
+- Skipped by the harness (pending): `lineintersecttriangle`, `lineintersecttriangletwosided`, `multiply3x3matrices`, `projectorientation`, `rotateorientation`. Some pointer parameters of the client function have the type `int` or an unknown type.
+
+The names `multiplyquaternion` and `projectorientation` were swapped in the server: `multiplyquaternion` is the quaternion product and `projectorientation` is the row dot product. After the swap, the client `multiplyquaternion` is the same as the server code on 90 calls.
+
 ## Image and font loaders (C1)
 
 `src/client/image/` contains PNG, zlib, baseline JPEG, BMP, PSD and HDR decoders, bitmap fonts and byte operations. Each topic has a source file and a public header. The [image documentation](client/README.md) describes the records, supported formats, row filters, channel conversion and font metrics.

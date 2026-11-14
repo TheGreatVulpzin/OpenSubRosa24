@@ -2616,12 +2616,12 @@ __declspec(naked) static void th_0a7a0(void)
 }
 static uint8_t expect_0a7a0[5] = { 0x56, 0x8b, 0x74, 0x24, 0x0c };
 
-void __cdecl projectorientation(float * param_1, float * param_2, float * param_3);
+void __cdecl multiplyquaternion(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_0a930)(float *, float *, float *);
-static SvVerify v_0a930 = { "projectorientation", -1 };
+static SvVerify v_0a930 = { "multiplyquaternion", -1 };
 static void __cdecl hk_0a930(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_0a930, projectorientation(param_1, param_2, param_3), orig_0a930(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_0a930, multiplyquaternion(param_1, param_2, param_3), orig_0a930(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_0a930(void)
 {
@@ -7554,12 +7554,12 @@ __declspec(naked) static void th_1d7a0(void)
 }
 static uint8_t expect_1d7a0[8] = { 0x83, 0xec, 0x34, 0x56, 0x8b, 0x74, 0x24, 0x3c };
 
-void __cdecl multiplyquaternion(float * param_1, float * param_2, float * param_3);
+void __cdecl projectorientation(float * param_1, float * param_2, float * param_3);
 static void (__cdecl *orig_1d8a0)(float *, float *, float *);
-static SvVerify v_1d8a0 = { "multiplyquaternion", -1 };
+static SvVerify v_1d8a0 = { "projectorientation", -1 };
 static void __cdecl hk_1d8a0(float * param_1, float * param_2, float * param_3)
 {
-    SV_HOOK_VOID(v_1d8a0, multiplyquaternion(param_1, param_2, param_3), orig_1d8a0(param_1, param_2, param_3), NULL);
+    SV_HOOK_VOID(v_1d8a0, projectorientation(param_1, param_2, param_3), orig_1d8a0(param_1, param_2, param_3), NULL);
 }
 __declspec(naked) static void th_1d8a0(void)
 {
@@ -11853,7 +11853,7 @@ static SvHook g_lifted[] = {
     { "deleteplayer", 0xa1b0, (void *)th_0a1b0, 6, expect_0a1b0, mask_all, (void **)&orig_0a1b0, 0, 0 },
     { "playersimulation", 0xa2a0, (void *)th_0a2a0, 9, expect_0a2a0, mask_all, (void **)&orig_0a2a0, 0, 0 },
     { "orientationtoquaternion", 0xa7a0, (void *)th_0a7a0, 5, expect_0a7a0, mask_all, (void **)&orig_0a7a0, 0, 0 },
-    { "projectorientation", 0xa930, (void *)th_0a930, 7, expect_0a930, mask_all, (void **)&orig_0a930, 0, 0 },
+    { "multiplyquaternion", 0xa930, (void *)th_0a930, 7, expect_0a930, mask_all, (void **)&orig_0a930, 0, 0 },
     { "scenario_getnumofmissions", 0xaa80, (void *)th_0aa80, 10, expect_0aa80, mask_all, (void **)&orig_0aa80, 0, 0 },
     { "scenario_setmissioninactive", 0xab20, (void *)th_0ab20, 5, expect_0ab20, mask_all, (void **)&orig_0ab20, 0, 0 },
     { "csradixsort", 0xac00, (void *)th_0ac00, 5, expect_0ac00, mask_all, (void **)&orig_0ac00, 0, 0 },
@@ -11968,7 +11968,7 @@ static SvHook g_lifted[] = {
     { "logicsimulation_driving", 0x1d3b0, (void *)th_1d3b0, 5, expect_1d3b0, mask_all, (void **)&orig_1d3b0, 0, 0 },
     { "logic_setteammanager", 0x1d4d0, (void *)th_1d4d0, 8, expect_1d4d0, mask_all, (void **)&orig_1d4d0, 0, 0 },
     { "logic_gunstore_buy", 0x1d7a0, (void *)th_1d7a0, 8, expect_1d7a0, mask_all, (void **)&orig_1d7a0, 0, 0 },
-    { "multiplyquaternion", 0x1d8a0, (void *)th_1d8a0, 7, expect_1d8a0, mask_all, (void **)&orig_1d8a0, 0, 0 },
+    { "projectorientation", 0x1d8a0, (void *)th_1d8a0, 7, expect_1d8a0, mask_all, (void **)&orig_1d8a0, 0, 0 },
     { "multiply3x3matrices", 0x1d9e0, (void *)th_1d9e0, 8, expect_1d9e0, mask_all, (void **)&orig_1d9e0, 0, 0 },
     { "unpackobjectpacket", 0x1dba0, (void *)th_1dba0, 5, expect_1dba0, mask_all, (void **)&orig_1dba0, 0, 0 },
     { "packobjectpacket2", 0x1f4a0, (void *)th_1f4a0, 6, expect_1f4a0, mask_all, (void **)&orig_1f4a0, 0, 0 },

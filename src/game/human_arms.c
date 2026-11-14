@@ -349,7 +349,7 @@ static void turn_toward(vec3 *out, const vec3 rot[3], quat *qa, quat *rel)
     rel->x = -rel->x;
     rel->y = -rel->y;
     rel->z = -rel->z;
-    projectorientation(qa, rel, qa);
+    multiplyquaternion(qa, rel, qa);
     normalizevector((vec3 *)qa, (const vec3 *)qa);
     clamp_w(qa);
     ang = quat_angle(qa);
@@ -588,7 +588,7 @@ void human_calcarmtorque(int human)
 
         /* The shoulder points the upper arm at the target. The columns of f are x, y and z: y
          * points from the target to the shoulder, z = y x (the x axis), x = y x z. */
-        multiplyquaternion(f, sh->rot, chest->rot);
+        projectorientation(f, sh->rot, chest->rot);
         orientationtoquaternion(&rel, f);
         e.x = -t.x;
         e.y = -t.y;
@@ -622,7 +622,7 @@ void human_calcarmtorque(int human)
         turn_toward(&g_bondopt[sh->bond].dir, sh->rot, &qa, &rel);
 
         /* The elbow bends by bend. */
-        multiplyquaternion(f, el->rot, sh->rot);
+        projectorientation(f, el->rot, sh->rot);
         orientationtoquaternion(&rel, f);
         resetorientation(f);
         rotateorientation(f, &g_xaxis, bend);
@@ -631,7 +631,7 @@ void human_calcarmtorque(int human)
         turn_toward(&g_bondopt[el->bond].dir, el->rot, &qa, &rel);
 
         /* The wrist turns the hand with the pitch and the swing, at most pi / 16. */
-        multiplyquaternion(f, hd->rot, el->rot);
+        projectorientation(f, hd->rot, el->rot);
         orientationtoquaternion(&rel, f);
         resetorientation(f);
         rotateorientation(f, &g_xaxis, (float)(-hu->pitch * 0.5));
@@ -639,23 +639,23 @@ void human_calcarmtorque(int human)
         qe.x = -qe.x;
         qe.y = -qe.y;
         qe.z = -qe.z;
-        projectorientation(&qa, &qa, &qe);
+        multiplyquaternion(&qa, &qa, &qe);
         qs.x = -qs.x;
         qs.y = -qs.y;
         qs.z = -qs.z;
-        projectorientation(&qa, &qa, &qs);
-        projectorientation(&qa, &qa, &lean);
+        multiplyquaternion(&qa, &qa, &qs);
+        multiplyquaternion(&qa, &qa, &lean);
         if (side == 1 || (type != ITEM_BRIEFCASE && type != ITEM_OPEN_BRIEFCASE)) {
             fix.x = -(float)x87_sin(-0.7853981633975);
             fix.y = 0.0f;
             fix.z = 0.0f;
             fix.w = (float)x87_cos(-0.7853981633975);
-            projectorientation(&qa, &qa, &fix);
+            multiplyquaternion(&qa, &qa, &fix);
         }
         rel.x = -rel.x;
         rel.y = -rel.y;
         rel.z = -rel.z;
-        projectorientation(&qa, &rel, &qa);
+        multiplyquaternion(&qa, &rel, &qa);
         normalizevector((vec3 *)&qa, (const vec3 *)&qa);
         clamp_w(&qa);
         bend = quat_angle(&qa);

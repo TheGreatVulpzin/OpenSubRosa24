@@ -17,6 +17,7 @@
 #include "textures/opengl.h"
 #include "textures/sphere.h"
 #include "textures/textures.h"
+#include "textures/upload.h"
 
 #define g_modellist sr_data_modellist
 #define g_texturelist sr_data_texturelist
@@ -28,7 +29,6 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define setuptexture CL_FN(0x50ac40, void(__cdecl *)(int texture))
 #define loadtexture CL_FN(0x50a0f0, int(__cdecl *)(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter))
 #define loadtexturesetalpha CL_FN(0x50a2f0, int(__cdecl *)(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter, unsigned alpha))
 #define loadwav CL_FN(0x433af0, void(__cdecl *)(int sound, const char *path, float volume))

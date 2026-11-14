@@ -167,7 +167,7 @@ void orientationtoquaternion(quat *q, const vec3 rot[3])
 
 /* out = p * q (the product of two quaternions). The inputs are read before the first write,
  * so out can be p or q. */
-void projectorientation(quat *out, const quat *p, const quat *q)
+void multiplyquaternion(quat *out, const quat *p, const quat *q)
 {
     float px = p->x, py = p->y, pz = p->z, pw = p->w;
     float qx = q->x, qy = q->y, qz = q->z, qw = q->w;
@@ -220,7 +220,7 @@ void rotateorientation(vec3 rot[3], const vec3 *axis, float angle)
 /* out[j] = (p[0] . q[j], p[1] . q[j], p[2] . q[j]): the product of two orientations. The
  * name comes from the game, but the inputs are orientations, not quaternions. The inputs are
  * read before the first write, so out can be p or q. */
-void multiplyquaternion(vec3 out[3], const vec3 p[3], const vec3 q[3])
+void projectorientation(vec3 out[3], const vec3 p[3], const vec3 q[3])
 {
     vec3 r[3];
     int j;

@@ -1,2 +1,12 @@
 # Functions of group C10 (other named functions) that use the clean client code. One line each: name, source file.
 cs_sleep src/client/setup/timing.c
+setupperspectiveviewport src/client/render/view.c
+setuporthoviewport src/client/render/view.c
+setupviewpoint src/client/render/view.c
+setupobjectrender src/client/render/view.c
+setuptextdisplay src/client/render/view.c
+setuptexture src/client/textures/upload.c
+copyvector src/client/math/small_vectors.c
+copyvector2d src/client/math/small_vectors.c
+zerovector src/client/math/small_vectors.c
+flabs src/client/math/small_vectors.c
