@@ -110,7 +110,8 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'VideoMode': 12,
+             'WindowQuad': 0x44, 'ClientFramebuffer': 8, 'DebugSphere': 0x1c}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -402,6 +403,49 @@ typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook
 typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel; vec3 rot[3]; vec3 spin; uint8_t pad_54[4]; float gravity; float drag; uint8_t pad_60[8]; } SpriteModel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
+
+
+/* The render options in the client option record. */
+typedef struct ClientRenderOptions { uint8_t pad_00[0x108]; int framebuffer; uint8_t pad_10c[0x14]; int ambient_occlusion; } ClientRenderOptions;
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, framebuffer) == 0x108, "ClientRenderOptions.framebuffer");
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, ambient_occlusion) == 0x120, "ClientRenderOptions.ambient_occlusion");
+/* A car window of the frame list. The facing flag is 1 when the camera sees the front side. */
+typedef struct WindowQuad { vec3 corners[4]; vec3 normal; float distance; int facing; } WindowQuad;
+SR_STATIC_ASSERT(sizeof(WindowQuad) == 0x44, "WindowQuad");
+/* A framebuffer and its depth renderbuffer. */
+typedef struct ClientFramebuffer { uint32_t framebuffer; uint32_t renderbuffer; } ClientFramebuffer;
+SR_STATIC_ASSERT(sizeof(ClientFramebuffer) == 8, "ClientFramebuffer");
+/* A sphere of the world debug view. */
+typedef struct DebugSphere { vec3 pos; vec3 color; float radius; } DebugSphere;
+SR_STATIC_ASSERT(sizeof(DebugSphere) == 0x1c, "DebugSphere");
+/* The areas of one team in the client game record. */
+typedef union ClientTeamArea { struct { vec3 base_min, base_max, safe_min, safe_max; }; uint8_t raw[0x117c]; } ClientTeamArea;
+/* The client game record. From 0x48 on, its fields sit 4 bytes before the server fields. */
+typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_heading; uint8_t pad_50[4];
+    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257ec - 0x57c0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
+SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
+SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
+/* A model entry in the sorted frame list. */
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct VideoMode { int width; int height; int bits; } VideoMode;
+SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
+SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
+SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
+/* A particle, a glass shard or a three corner piece with springs. */
+typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
+typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
+typedef struct GlassVertex { vec3 pos; vec3 normal; } GlassVertex;
+typedef struct TiremarkVertex { vec3 pos; float alpha; } TiremarkVertex;
+typedef struct Tiremark { uint8_t pad_00[4]; TiremarkVertex corners[4]; } Tiremark;
+typedef struct ModelWindow { vec3 corners[4]; int face; } ModelWindow;
+typedef struct RenderCheckpoint { vec3 low; vec3 high; int side; } RenderCheckpoint;
+SR_STATIC_ASSERT(sizeof(ClientSprite) == 0x94, "ClientSprite");
+SR_STATIC_ASSERT(sizeof(SpriteDecalVertex) == 0x14, "SpriteDecalVertex");
+SR_STATIC_ASSERT(sizeof(GlassVertex) == 0x18, "GlassVertex");
+SR_STATIC_ASSERT(sizeof(Tiremark) == 0x44, "Tiremark");
+SR_STATIC_ASSERT(sizeof(ModelWindow) == 0x34, "ModelWindow");
+SR_STATIC_ASSERT(sizeof(RenderCheckpoint) == 0x1c, "RenderCheckpoint");
 /* Where a line hit the level: the point and the normal of the surface. */
 typedef struct LevelHit { vec3 pos; vec3 normal; } LevelHit;
 typedef struct SectorEntry { int sector; float distance; } SectorEntry;
@@ -441,7 +485,8 @@ typedef union Wheel { struct {
     float damper;       /* +0x68 objectwheelsimulation2: the damping force of the wheel */
     float vertical;     /* +0x6c objectwheelsimulation2: the gain of the spring and the damper along rot[1] */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
-    uint8_t unk_74[0x10];
+    vec3 mark_pos;      /* +0x74 the position of the preceding tire strip */
+    float mark_slip;    /* +0x80 the opacity of the preceding tire strip */
     float share_wheel;  /* +0x84 objectwheelsimulation2: the share of the wheel in the push (pass 0 writes it) */
     float share_body;   /* +0x88 objectwheelsimulation2: the share of the particles in the push (pass 0 writes it) */
     vec3 spring_offset; /* +0x8c objectwheelsimulation2: the spring offset of the hub (pass 0 writes it) */
@@ -614,6 +659,22 @@ typedef union BlockSector { struct {
     int near_camera;                /* +0x6054 not 0 when the sector is within 32 units of the camera */
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
+
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    uint8_t pad_5038[4];
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+
 
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {

@@ -11,6 +11,9 @@
 #include <stdint.h>
 
 #include "client.h"
+#include "render/sprites.h"
+#include "render/lists.h"
+#include "render/sprite_models.h"
 #include "sr_runtime.h"
 
 void *sr_import(const char *dll, const char *name);
@@ -47,13 +50,8 @@ void *sr_import(const char *dll, const char *name);
 #define serversend CL_FN(0x4deb20, void(__cdecl *)(void))
 #define bulletsimulation CL_FN(0x4646b0, void(__cdecl *)(void))
 #define eventsimulation CL_FN(0x4704b0, void(__cdecl *)(void))
-#define spritesimulation CL_FN(0x4e2790, void(__cdecl *)(void))
-#define sprite_model_simulation CL_FN(0x4e52e0, void(__cdecl *)(void))
-#define tiremark_simulation CL_FN(0x4e5f80, void(__cdecl *)(void))
 #define timetolive_records CL_FN(0x4645e0, void(__cdecl *)(void))
 #define bullettimetolive CL_FN(0x4e26a0, void(__cdecl *)(void))
-#define spritetimetolive CL_FN(0x484f00, void(__cdecl *)(void))
-#define render_buildareasectorshadow CL_FN(0x4d8290, void(__cdecl *)(void))
 
 /* SDL scancodes of the keys. */
 enum {
@@ -306,7 +304,7 @@ static void simulate(void)
         bullettimetolive();
         if (g_server.active == 0)
             set_traffic_lights();
-        spritetimetolive();
+        selectnearitem();
     }
     update_effects();
 }

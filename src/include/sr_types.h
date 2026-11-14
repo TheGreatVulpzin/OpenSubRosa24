@@ -259,6 +259,49 @@ typedef struct HumanLook { int team, look_b, look_c, look_a, look_d; } HumanLook
 typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel; vec3 rot[3]; vec3 spin; uint8_t pad_54[4]; float gravity; float drag; uint8_t pad_60[8]; } SpriteModel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
+
+
+/* The render options in the client option record. */
+typedef struct ClientRenderOptions { uint8_t pad_00[0x108]; int framebuffer; uint8_t pad_10c[0x14]; int ambient_occlusion; } ClientRenderOptions;
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, framebuffer) == 0x108, "ClientRenderOptions.framebuffer");
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, ambient_occlusion) == 0x120, "ClientRenderOptions.ambient_occlusion");
+/* A car window of the frame list. The facing flag is 1 when the camera sees the front side. */
+typedef struct WindowQuad { vec3 corners[4]; vec3 normal; float distance; int facing; } WindowQuad;
+SR_STATIC_ASSERT(sizeof(WindowQuad) == 0x44, "WindowQuad");
+/* A framebuffer and its depth renderbuffer. */
+typedef struct ClientFramebuffer { uint32_t framebuffer; uint32_t renderbuffer; } ClientFramebuffer;
+SR_STATIC_ASSERT(sizeof(ClientFramebuffer) == 8, "ClientFramebuffer");
+/* A sphere of the world debug view. */
+typedef struct DebugSphere { vec3 pos; vec3 color; float radius; } DebugSphere;
+SR_STATIC_ASSERT(sizeof(DebugSphere) == 0x1c, "DebugSphere");
+/* The areas of one team in the client game record. */
+typedef union ClientTeamArea { struct { vec3 base_min, base_max, safe_min, safe_max; }; uint8_t raw[0x117c]; } ClientTeamArea;
+/* The client game record. From 0x48 on, its fields sit 4 bytes before the server fields. */
+typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_heading; uint8_t pad_50[4];
+    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257ec - 0x57c0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
+SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
+SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
+/* A model entry in the sorted frame list. */
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct VideoMode { int width; int height; int bits; } VideoMode;
+SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
+SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
+SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
+/* A particle, a glass shard or a three corner piece with springs. */
+typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
+typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
+typedef struct GlassVertex { vec3 pos; vec3 normal; } GlassVertex;
+typedef struct TiremarkVertex { vec3 pos; float alpha; } TiremarkVertex;
+typedef struct Tiremark { uint8_t pad_00[4]; TiremarkVertex corners[4]; } Tiremark;
+typedef struct ModelWindow { vec3 corners[4]; int face; } ModelWindow;
+typedef struct RenderCheckpoint { vec3 low; vec3 high; int side; } RenderCheckpoint;
+SR_STATIC_ASSERT(sizeof(ClientSprite) == 0x94, "ClientSprite");
+SR_STATIC_ASSERT(sizeof(SpriteDecalVertex) == 0x14, "SpriteDecalVertex");
+SR_STATIC_ASSERT(sizeof(GlassVertex) == 0x18, "GlassVertex");
+SR_STATIC_ASSERT(sizeof(Tiremark) == 0x44, "Tiremark");
+SR_STATIC_ASSERT(sizeof(ModelWindow) == 0x34, "ModelWindow");
+SR_STATIC_ASSERT(sizeof(RenderCheckpoint) == 0x1c, "RenderCheckpoint");
 /* Where a line hit the level: the point and the normal of the surface. */
 typedef struct LevelHit { vec3 pos; vec3 normal; } LevelHit;
 typedef struct SectorEntry { int sector; float distance; } SectorEntry;
@@ -298,7 +341,8 @@ typedef union Wheel { struct {
     float damper;       /* +0x68 objectwheelsimulation2: the damping force of the wheel */
     float vertical;     /* +0x6c objectwheelsimulation2: the gain of the spring and the damper along rot[1] */
     float slip;         /* +0x70 bondsimulation2 type 5 adds the return of calculatefriction; the packets send it */
-    uint8_t unk_74[0x10];
+    vec3 mark_pos;      /* +0x74 the position of the preceding tire strip */
+    float mark_slip;    /* +0x80 the opacity of the preceding tire strip */
     float share_wheel;  /* +0x84 objectwheelsimulation2: the share of the wheel in the push (pass 0 writes it) */
     float share_body;   /* +0x88 objectwheelsimulation2: the share of the particles in the push (pass 0 writes it) */
     vec3 spring_offset; /* +0x8c objectwheelsimulation2: the spring offset of the hub (pass 0 writes it) */
@@ -471,6 +515,22 @@ typedef union BlockSector { struct {
     int near_camera;                /* +0x6054 not 0 when the sector is within 32 units of the camera */
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
+
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    uint8_t pad_5038[4];
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+
 
 /* A corner of the mesh of an object (Object.verts). */
 typedef union ObjectVertex { struct {
@@ -2472,7 +2532,9 @@ typedef union Debug { struct {
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x918];
     uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
-    uint8_t pad_50c64[0x1c];
+    int toggle_two;                      /* +0x50c64 displaydebuginfo shows the second diagnostic switch */
+    int toggle_three;                    /* +0x50c68 displaydebuginfo shows the third diagnostic switch */
+    uint8_t pad_50c6c[0x14];
     int num_values;                      /* +0x50c80 debug_addataint and debug_addatafloat add 1 for each new name */
     DebugValue values[128];              /* +0x50c84 debug_addataint and debug_addatafloat: the named values of the debug display */
     char log_text[256];                  /* +0x52284 dedicatedserverloop writes the physics line with sprintf */
@@ -2490,6 +2552,8 @@ SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_be
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
+SR_STATIC_ASSERT(offsetof(Debug, toggle_two) == 0x50c64, "Debug.toggle_two");
+SR_STATIC_ASSERT(offsetof(Debug, toggle_three) == 0x50c68, "Debug.toggle_three");
 SR_STATIC_ASSERT(offsetof(Debug, num_values) == 0x50c80, "Debug.num_values");
 SR_STATIC_ASSERT(offsetof(Debug, values) == 0x50c84, "Debug.values");
 SR_STATIC_ASSERT(offsetof(Debug, log_text) == 0x52284, "Debug.log_text");
@@ -3131,7 +3195,9 @@ typedef union Model { struct {
     MeshTri* tri_neighbors;              /* +0x0028 copymodel: malloc of num_tris * 12 */
     int num_lines;                       /* +0x002c copymodel copies ModelTemp.num_lines */
     MeshLine* lines;                     /* +0x0030 copymodel: malloc of num_lines * 8 */
-    uint8_t pad_0034[0xdd0];
+    uint8_t pad_0034[0xcc];
+    int num_windows;                     /* +0x0100 createwindowsprites searches this many window records */
+    ModelWindow windows[64];             /* +0x0104 createwindowsprites projects four corners and matches the face number */
 }; uint8_t lf_raw[0xe04]; } Model;
 SR_STATIC_ASSERT(sizeof(Model) == 0xe04, "Model");
 SR_STATIC_ASSERT(offsetof(Model, num_verts) == 0x0, "Model.num_verts");
@@ -3147,6 +3213,8 @@ SR_STATIC_ASSERT(offsetof(Model, tri_normals) == 0x24, "Model.tri_normals");
 SR_STATIC_ASSERT(offsetof(Model, tri_neighbors) == 0x28, "Model.tri_neighbors");
 SR_STATIC_ASSERT(offsetof(Model, num_lines) == 0x2c, "Model.num_lines");
 SR_STATIC_ASSERT(offsetof(Model, lines) == 0x30, "Model.lines");
+SR_STATIC_ASSERT(offsetof(Model, num_windows) == 0x100, "Model.num_windows");
+SR_STATIC_ASSERT(offsetof(Model, windows) == 0x104, "Model.windows");
 
 /* texture[]: record of 0x70 bytes. */
 typedef union Texture { struct {
@@ -3206,10 +3274,11 @@ SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tri
 typedef union TextureList { struct {
     int count;                           /* +0x0000 setupgame: the next free texture identifier. 848 after the identifiers are assigned */
     int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
-    uint8_t pad_0404[0x4];
+    int frame_color;                     /* +0x0404 renderframe attaches this texture for the color pass */
     int shadow_map;                      /* +0x0408 rendermodel binds it on texture unit 2 for the lit models */
     int sky;                             /* +0x040c renderframeatmosphere binds it as the texture of the sky quad */
-    uint8_t pad_0410[0x8];
+    int frame_aux;                       /* +0x0410 renderframedepth attaches this texture before the blur passes */
+    uint8_t pad_0414[0x4];
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
@@ -3238,8 +3307,10 @@ typedef union TextureList { struct {
 SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
 SR_STATIC_ASSERT(offsetof(TextureList, count) == 0x0, "TextureList.count");
 SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_color) == 0x404, "TextureList.frame_color");
 SR_STATIC_ASSERT(offsetof(TextureList, shadow_map) == 0x408, "TextureList.shadow_map");
 SR_STATIC_ASSERT(offsetof(TextureList, sky) == 0x40c, "TextureList.sky");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_aux) == 0x410, "TextureList.frame_aux");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");

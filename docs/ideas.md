@@ -90,6 +90,7 @@ They are not part of the completed S1 through S4 checks.
 | Browser (Emscripten / WASM) | both | | WebGL2 render. The browser cannot use UDP: the server needs a WebSocket or WebRTC DataChannel transport next to UDP. The player loads their own copy of the game files (file picker + IndexedDB), no hosted assets. |
 | Light QOL behind options (option off = original) | OpenSubRosa | | |
 | Client features that need a new protocol | SubVulpes | | The SubVulpes server keeps the original protocol for original clients. |
+| Render demo: a separate program that shows how a frame is drawn | demo | `demo/render/` | First version done (2026-11-14): Win32 and OpenGL, a city of boxes, the nine passes and five buffer thumbnails. Next: a scene from the game files. Keys step through the passes: depth, stencil shadow volumes, shadow mask, occlusion, blur, opaque, sky, alpha. A side panel shows each buffer and the OpenGL calls of the current pass. It ships with the game files. About one day of work. |
 
 ## Security fixes for the network code (found in group 5)
 

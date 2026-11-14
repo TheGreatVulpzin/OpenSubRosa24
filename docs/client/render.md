@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`, `frame.c`.
 
 ## The 2D layer
 
@@ -136,3 +136,85 @@ A sector is a `BlockSector` record. `sector_entries` holds the sector and the di
 
 `src/client/math/small_vectors.c` has `copyvector` and `copyvector2d` (copy the 32 bit words, so a value that is not a number keeps its bits), `zerovector` and `flabs` (the absolute value of a float).
 
+
+## Particles and glass
+
+`src/client/render/sprites.c` moves particles and glass under gravity. The pool holds 16384 records of 148 bytes. Each record has a kind, a life, a position, a velocity and three orientation rows. A glass triangle uses those rows as corners and has one velocity for each corner. Three springs hold its edges near their rest lengths.
+
+- `spritesimulation` moves sparks, stains and glass. Sparks bounce at the level. Stains stop at a hit. A glass shard bounces on a wall and stops on an upward facing surface. A shard that stops clears its life even when the list of landed vertices is full.
+- `createwindowsprites` finds the last window with a matching face and projects its four corners through the object's orientation. It starts 81 shards on a nine by nine grid, with random spin and speed from the hit and the object.
+- `rendersprites` sorts the particles by depth and draws particles, glass faces, glass edges and short light traces. It also draws the separate lists of landed particles and landed glass.
+- `createspritemodel` builds a small box for kind 1 and an empty model for other kinds. Every triangle gets zero texture coordinates.
+
+## Tire strips and muzzle flashes
+
+`src/client/render/effects.c` adds a tire strip when wheel slip exceeds 1/32. Each strip has four positions and four opacity values. The ring has 16384 slots and holds at most 16383 strips. It replaces its oldest strip when full. The wheel saves its position and slip each tick, including ticks with no new strip. The downward level tests adjust each corner's height.
+
+`tiremark_render` draws the ring from its oldest strip. `rendermuzzleflashes` draws sphere level 0 at each active gun with a positive countdown. It stretches vertex 1 less than the other vertices along the barrel.
+
+## Checkpoint strips and item selection
+
+`rendercheckpoints` draws both faces of a strip along one side of each checkpoint box. The strip is 1.5 units high. A checkpoint with an invalid side uses the preceding checkpoint's corners. The client reads the strips at byte 0x25978 of the game record. In this pass, `round_goal` gives the strip count. A nonpositive `round_ticks` draws only the first strip, in red. A positive value draws all strips.
+
+`selectnearitem` selects a free item near the viewed human. It uses a reach segment of 1.5 units from the head. The nearest item within half a unit of the segment becomes `selected_item`. The selected hand must be empty. Without a player or human in view, the selection does not change.
+
+## Frame models
+
+`src/client/render/frame_models.c` draws the sorted frame list. Each `FrameEntry` has a model, flags, two texture indices, a position, three orientation rows and a color. `frame_model_order` selects the entries to draw. Flag 2 hides an entry. Mode 0 binds its color and lightmap textures, mode 1 draws depth, and mode 2 supplies texture coordinates and normals without texture binds. A new lightmap texture binds only when the color texture changes. The world debug view suppresses this pass.
+
+`buildhumanmodel` transforms human model corners through the bones. References below 16 use the corner position. Other references select paired part offsets and scales from the human color vectors. The scale changes local x and y only. The function fills face normals and all three vertex normals after the positions.
+
+`frame_rendermessages` disables culling and depth testing, then enables both states.
+
+## Sector shadow volumes
+
+`src/client/render/sector_shadow.c` builds closed shadow volumes from the sector triangles that face away from the light. Each volume has two caps and up to three sides. The six current corners also occupy a separate array. The extrusion reaches the base of the sector's vertical block range. A light y component from zero through 0.125 gives zero extrusion. A negative y component leaves the vertex list unchanged and leaves the build timer active. A NaN y component clears the list and completes the pass without faces.
+
+The mesh view names the client pointers within `BlockSector` without changing its fields or size. The shadow list has room for 262144 positions. The buffer extension uses a three megabyte allocation and uploads the active part of the list. Without that extension, the draw pass reads the list directly. `render_areasectorshadow` draws triangles and reports the vertex count as `shadowverts`.
+
+## Display modes and screenshots
+
+`src/client/render/screen.c` collects display modes and saves the back buffer. `listvideomodes` appends width, height and pixel depth records. It reads only the first 512 SDL modes. A matching width replaces the stored height. A nonzero new height makes that entry a match and preserves its pixel depth. Every call also appends 1024 by 640 by 32, even when that mode is already present.
+
+`screenshot` accepts dimensions up to 1280 by 960. It reads RGBA pixels, writes an 18 byte TGA header, then writes BGR pixels. The filename starts at `scsht000.tga`. Existing files advance the three digits through 999. At index 1000, the first digit becomes a colon. The file handle uses `shader_file`, including the value after close.
+
+## Depth and occlusion
+
+`src/client/render/depth.c` draws the opaque depth pass, then the sector and model shadow volumes. Frame entry flag 1 selects a model shadow, including an entry hidden by flag 2. The world debug view suppresses frame models and their shadows. Active shell and debris models also contribute depth.
+
+The stencil mask produces the red channel of the shadow map. Ambient occlusion produces its green channel. Two blur passes use separate horizontal and vertical offsets. Each offset is 1.125 divided by the corresponding render dimension. The shader also receives two sets of four projection parameters.
+
+Framebuffer support selects color attachments. Without that support, the pass copies the viewport to its image textures. The shadow debug key selects a colored volume view and returns before the occlusion and blur passes.
+
+## Diagnostic pages
+
+`src/client/render/debug_display.c` counts active nonbot players even when the diagnostic display is off. A positive display mode draws frame rate, frame time, four switches and voice channel states.
+
+- Mode 1 shows named integer and float values.
+- Mode 2 shows sixteen counters and active player names.
+- Mode 3 shows the render timers from index 64.
+- Mode 4 shows the first sixteen timer totals.
+- Mode 5 shows round or connection state, packet sizes, event counts and player count.
+
+The first two numbers use two decimal places. Text rows use fixed advances of 16 or 20 units.
+
+## Frame pass
+
+`src/client/render/frame.c` draws one frame. The order of the passes:
+
+1. Reset the thirteen pass timers. Set the viewport size from the render size, the near plane (0.0625), the far plane (16384) and the view angle (`view_zoom`).
+2. Turn the two side directions of the view cone with the camera. Set `world_position` to the camera position times 0.0001 plus 637.1 on y.
+3. Choose the sectors (`clearsectorlist`), build the frame list (`buildframelist`) and set the landscape detail (`setupframelandscapelod`).
+4. Bind the frame framebuffer when the option allows it. Draw the depth pass (`renderframedepth`). The polygon debug view clears the buffers in place of the depth pass.
+5. The shadow debug key stops the frame here. The shadow volumes stay on the screen.
+6. Clear the color, point light 0 at the sun and get the sun and sky colors. The two sun angles of the game record give the light direction.
+7. Draw the opaque geometry: sectors, landscape, interiors with the shadow map on unit 1, frame models, shells and debris pieces, sprite models and tracks. The polygon debug view draws them as lines and stops after them.
+8. Draw the sky (`renderframeatmosphere`), then the alpha pass under the `renderalpha` timer: the sun sphere, tire marks, sector reflections, checkpoint strips, particles, car windows, muzzle flashes and the wire model of the selected item.
+9. In a race, draw a sphere at each checkpoint. A checkpoint that the viewed player has passed is grey.
+10. Draw the floor buttons of each elevator panel. The current floor is white.
+11. The world debug view adds bone boxes, team area boxes, item corners, track triangles, bond lines, debug lines and spheres, wheel cylinders and bullet paths.
+12. A name key draws the name of each player within 32 units above the head.
+
+Car windows sort from far to near. The sort key is 16777216 minus 256 times the distance. Each window has a normal, a color of half the ambient light and an alpha of 0.25 for a window that faces the camera, 0.1875 for the other side.
+
+From 0x48 on, the client game record has its fields 4 bytes before the server fields. `ClientGameView` gives the client offsets of the sun angles, the team areas and the race checkpoints.

@@ -52,3 +52,45 @@ sector_vertices,uint8_t,33554432,0x1047c604,"render_sectorlist: the vertices of 
 sector_indices,uint8_t,1,0x1247c604,"clearsectorlist: the triangle indices of the sectors, 12 bytes for each triangle"
 sector_vbo,int,1,0x1033fd24,"render_sectorlist: the number of the buffer of the sector vertices"
 camera_position,vec3,1,0xfefe2a4,"the place of the camera"
+camera_rotation,vec3,3,0xfefe2b0,"spritesimulation copies the camera rows to a particle in flight"
+sprites,ClientSprite,16384,0xf9ae260,"spritesimulation and rendersprites: particles and glass with a stride of 0x94"
+sprite_count,int,1,0x75a5120,"createwindowsprites adds a particle and spritesimulation reads the count"
+sprite_decal_count,int,1,0x75a58a0,"spritesimulation adds four decal vertices when a particle lands"
+sprite_decals,SpriteDecalVertex,16384,0x75a58a4,"rendersprites draws the landed particles as textured quads"
+glass_vertex_count,int,1,0x75f58a4,"spritesimulation adds four vertices when a glass shard lands"
+glass_vertices,GlassVertex,16384,0x75f58a8,"rendersprites draws the landed glass with a normal at each vertex"
+tiremark_head,uint32_t,1,0xb73312c,"tiremark_simulation advances the head with a mask of 0x3fff"
+tiremark_tail,uint32_t,1,0xb77c580,"the oldest tire strip in the ring"
+tiremarks,Tiremark,16384,0x1036c5e0,"tiremark_simulation writes four position and opacity pairs in each strip"
+selected_item,int,1,0x2a7593c0,"the free item nearest to the viewed human within the 1.5 unit reach segment"
+sector_shadow_corners,vec3,6,0x127890,Six corners of the current sector shadow volume
+sector_shadow_count,int,1,0xfbfe280,Number of vertices in the sector shadow list
+sector_shadow_vertices,vec3,262144,0xfbfe284,Sector shadow side faces and caps
+sector_shadow_buffer_ready,int,1,0xfefe284,The shadow buffer has its three megabyte allocation
+sector_shadow_vbo,int,1,0x1033fd28,Index of the sector shadow vertex buffer
+frame_model_count,int,1,0x19c0d0b4,Number of models in the frame list
+frame_model_order,int,4096,0x19c0d0b8,Sorted frame model indices
+frame_models,FrameEntry,4096,0x19c110b8,Frame model transforms and draw parameters with a stride of 100
+video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height and pixel depth
+video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
+screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
+blur_params_near,float,4,0x19c750dc,The first four parameters of the depth blur shader
+blur_params_far,float,4,0x19c750ec,The second four parameters of the depth blur shader
+frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
+debug_player_count,int,1,0x14f88b0,The active player count without bots
+debug_counters,int,16,0x14f88b4,The integer rows of diagnostic page two
+viewport_x,float,1,0x19c07cc0,renderframe clears the left edge of the frame viewport
+viewport_y,float,1,0x19c07cc4,renderframe clears the bottom edge of the frame viewport
+light_diffuse,float,4,0x19c07d10,getsuncolors writes the diffuse color of light 0. renderframe colors the sun with it
+sky_color,float,3,0x19c07d20,getskycolor writes the sky color of the frame
+view_near,float,1,0x19c07d2c,renderframe sets the near plane of the perspective view to 0.0625
+view_far,float,1,0x19c07d30,renderframe sets the far plane of the perspective view to 16384
+view_fov,float,1,0x19c07d34,renderframe copies view_zoom to the angle of the perspective view
+view_side_right,vec3,1,0x19c07d38,renderframe turns the right edge direction of the view cone with the camera
+view_side_left,vec3,1,0x19c07d44,renderframe turns the left edge direction of the view cone with the camera
+window_quad_count,int,1,0x19c75120,buildframelist adds one for each car window. renderframe sorts the windows by distance
+window_quads,WindowQuad,16384,0x19c75124,buildframelist writes four corners a normal a distance and a facing flag with a stride of 0x44
+framebuffers,ClientFramebuffer,2,0x9063240,mainmenu creates two framebuffers with their depth renderbuffers
+framebuffer_index,int,1,0xfefe294,mainmenu writes 0. renderframe and setupframetextures bind this framebuffer
+bonds,Bond,16384,0x1779b820,renderframe draws the bone joints and particle pairs of the bonds in the world debug view
+debug_spheres,DebugSphere,8191,0x14c0694,renderframe draws each sphere with its color and radius in the world debug view

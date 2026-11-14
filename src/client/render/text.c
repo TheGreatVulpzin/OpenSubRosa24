@@ -119,11 +119,17 @@ static void build_text(const char *format, va_list args)
                     g_text[length++] = (char)letter;
                 break;
             }
-            case 'f':
+            case 'f': {
+                static int(__cdecl *format_float)(char *, const char *, ...);
+
                 ++i;
-                sprintf(g_number, "%.3f", va_arg(args, double));
+                /* The game CRT formats the number, so the digits match the game text. */
+                if (!format_float)
+                    *(void **)&format_float = sr_import("MSVCR100.DLL", "sprintf");
+                format_float(g_number, "%.3f", va_arg(args, double));
                 length = append_number(length);
                 break;
+            }
             case 'i':
                 ++i;
                 sprintf(g_number, "%d", va_arg(args, int));

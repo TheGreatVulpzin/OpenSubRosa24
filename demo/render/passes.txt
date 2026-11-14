@@ -1,0 +1,71 @@
+# The texts of the side panel. One section for each pass, in order.
+# A line that starts with "## " opens a section and gives its title.
+# A line that starts with "calls: " lists the client functions of the pass.
+# An empty line starts a new paragraph. Lines that start with "#" are comments.
+# The demo reads this file at start, so a change needs no new build.
+
+## Depth
+calls: renderframedepth, render_sectorlist(1), renderlandscape(1), rendermodellist(1)
+The frame starts with a pass that writes only depth. Each pixel keeps the distance to the nearest surface, and the color stays empty.
+
+The later passes need this depth. The shadow volumes test against it, the ambient occlusion reads it, and the color pass draws each surface only where its depth matches.
+
+In the view, near surfaces are dark and far surfaces are light.
+
+## Shadow volumes
+calls: glstateshadowtwoside, render_areasectorshadow, render_sector_interior_shadow2, rendermodelshadow
+Each object that blocks the sun gets a shadow volume. The edges between its lit faces and its dark faces move away from the sun to a far distance. The result is a closed shape that holds all the space in the shadow of the object.
+
+The volumes write nothing to the screen. They only change the stencil buffer: a front face adds 1 to the count of each pixel it covers, a back face subtracts 1. A face that is behind the depth of pass 1 changes nothing.
+
+The game shows these volumes in green when the shadow debug key is on.
+
+## Stencil count
+calls: (the state after the volumes)
+After the volumes, the stencil count of each pixel tells if the visible surface is in a shadow.
+
+A ray from the camera to a lit surface enters and leaves each volume before it reaches the surface, so the count goes back to 0. A ray to a surface in a shadow enters a volume and stops before it leaves, so the count stays above 0.
+
+Black is 0 (sunlight). Red is 1, yellow is 2, white is 3 or more.
+
+## Shadow mask
+calls: glColorMask(1, 0, 0, 0), glStencilFunc(GL_EQUAL, 0), glCopyTexSubImage2D
+One quad covers the screen. The stencil test lets it draw only where the count is 0, and the color mask lets it write only the red channel.
+
+The red channel now holds the sunlight: 1 in the sun, 0 in a shadow. The screen goes into the shadow map texture. The map has the same size as the screen, so the color pass reads it at the pixel position.
+
+## Ambient occlusion
+calls: program 6, glColorMask(0, 1, 0, 0), random vector texture on unit 1
+Corners and narrow places get less light from the sky. This pass estimates that from the depth of pass 1.
+
+For each pixel, the shader compares its depth with 8 samples around it. A small random rotation changes the sample pattern from pixel to pixel. Each sample that is a little nearer to the camera blocks a part of the sky light.
+
+The result goes into the green channel of the shadow map. Green is open sky, dark is a corner.
+
+## Blur
+calls: program 8, two passes: step 1.125 / width, then 1.125 / height
+The shadow mask has hard steps at each pixel, and the occlusion has noise from the random pattern. Two blur passes make both soft.
+
+The first pass mixes each pixel with its neighbors across, the second pass mixes it with its neighbors up and down. Each pass draws the map to the screen with the blur shader and copies the result back into the map.
+
+## Opaque geometry
+calls: render_sectorlist(0), renderlandscape(0), render_sector_interior(0), rendermodellist(0), renderspritemodels(0)
+Now the scene gets its color. Each surface reads the shadow map at its screen position.
+
+The light of a pixel is the sky light times the green channel, plus the sun light times the red channel and the angle to the sun. A surface that faces away from the sun gets no sun light, a surface in a shadow gets no sun light, and a corner gets less sky light.
+
+The depth test uses the depth of pass 1, so each pixel gets its color only one time.
+
+## Sky and sun
+calls: renderframeatmosphere(0.625), rendersphere
+The sky fills the pixels with no geometry: the depth there is still the far value.
+
+The sun is a large sphere far away in the direction of the light. It draws with an additive blend, so it adds light to the sky behind it. Its color is the color of the sun light.
+
+## Transparent surfaces
+calls: tiremark_render, render_sector_alpha, rendercheckpoints, rendersprites, rendermuzzleflashes
+Glass, particles and other transparent surfaces come last, after all opaque geometry.
+
+A transparent surface mixes with the color behind it, so the order matters. The game sorts the car windows by distance with a key of 16777216 minus 256 times the distance, and draws the far ones first.
+
+A window that faces the camera has an alpha of 0.25. A window seen from the back has 0.1875.

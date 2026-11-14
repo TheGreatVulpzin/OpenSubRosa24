@@ -52,3 +52,22 @@ rva,name,evidence
 0x93dd0,getinputs_door,Linux client symbol and door hand target
 0x7d0e0,movecamera,Linux client symbol and free camera controls
 0x7d4c0,movecamera2,Linux client symbol and spectator camera controls
+0xb4820,createspritemodel,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xd7470,rendercheckpoints,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe1ac0,createwindowsprites,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe2790,spritesimulation,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe3b10,rendersprites,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe4bc0,rendermuzzleflashes,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe5f80,tiremark_simulation,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0xe64a0,tiremark_render,"C3 render function: particle, glass, tire strip, checkpoint or model operations"
+0x84f00,selectnearitem,"Selects the nearest unheld item within 0.5 of a 1.5 unit segment from the viewed human's head. The sprite lifetime function is at 0xe26a0."
+0xd8290,render_buildareasectorshadow,Builds closed sector shadow volumes and uploads their vertices
+0xd8ae0,render_areasectorshadow,Draws the sector shadow vertices and reports their count
+0xbc5c0,buildhumanmodel,"Linux buildhumanmodel: nine scaleaddvectors calls, five copyvector calls and one generatetrinormal call match the human vertex transform"
+0xd6e40,rendermodellist,Draws the sorted frame model entries with optional textures
+0x78c30,frame_rendermessages,Toggles culling and depth testing for the message pass
+0x106790,screenshot,Saves a numbered TGA from the back buffer
+0x1061e0,listvideomodes,Collects SDL display modes and appends the fixed 1024 by 640 mode
+0x77c70,renderframedepth,Draws depth and stencil shadows with optional ambient occlusion and blur
+0x69440,displaydebuginfo,Counts nonbot players and draws the selected diagnostic display
+0x75f10,renderframe,Draws one frame: depth and shadows then the opaque pass the alpha pass the elevator panels and the debug views

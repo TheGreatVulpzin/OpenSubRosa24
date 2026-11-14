@@ -75,6 +75,44 @@ static uint8_t *g_pool;
 static size_t g_pool_used, g_pool_dirty;
 static uint8_t *g_pool_copy;      /* the pool after run 0 */
 static size_t g_pool_copy_len, g_pool_len[2];
+static HANDLE g_pool_copy_file = INVALID_HANDLE_VALUE;
+static HANDLE g_pool_copy_mapping;
+
+/* Map large copies through a temporary file instead of private committed memory. */
+static void resize_pool_copy(size_t size)
+{
+    LARGE_INTEGER length;
+    if (g_pool_copy) {
+        UnmapViewOfFile(g_pool_copy);
+        g_pool_copy = NULL;
+    }
+    if (g_pool_copy_mapping) {
+        CloseHandle(g_pool_copy_mapping);
+        g_pool_copy_mapping = NULL;
+    }
+    g_pool_copy_len = 0;
+    if (g_pool_copy_file == INVALID_HANDLE_VALUE) {
+        char folder[MAX_PATH], path[MAX_PATH];
+        DWORD count = GetTempPathA(sizeof folder, folder);
+        if (!count || count >= sizeof folder || !GetTempFileNameA(folder, "svp", 0, path))
+            return;
+        g_pool_copy_file = CreateFileA(path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_DELETE,
+            NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE, NULL);
+        if (g_pool_copy_file == INVALID_HANDLE_VALUE) {
+            DeleteFileA(path);
+            return;
+        }
+    }
+    length.QuadPart = (LONGLONG)size;
+    if (!SetFilePointerEx(g_pool_copy_file, length, NULL, FILE_BEGIN) || !SetEndOfFile(g_pool_copy_file))
+        return;
+    g_pool_copy_mapping = CreateFileMappingA(g_pool_copy_file, NULL, PAGE_READWRITE, 0, (DWORD)size, NULL);
+    if (!g_pool_copy_mapping)
+        return;
+    g_pool_copy = MapViewOfFile(g_pool_copy_mapping, FILE_MAP_WRITE, 0, 0, size);
+    if (g_pool_copy)
+        g_pool_copy_len = size;
+}
 
 static void ev(const char *fmt, ...)
 {
@@ -824,11 +862,8 @@ void plat_test_end(int run)
 #endif
     g_pool_len[run] = g_pool_used;
     if (run == 0) {
-        if (g_pool_copy_len < g_pool_used) {
-            free(g_pool_copy);
-            g_pool_copy = malloc(g_pool_used);
-            g_pool_copy_len = g_pool_copy ? g_pool_used : 0;
-        }
+        if (g_pool_copy_len < g_pool_used)
+            resize_pool_copy(g_pool_used);
         if (g_pool_copy)
             memcpy(g_pool_copy, g_pool, g_pool_used);
     }
@@ -889,6 +924,10 @@ int plat_test_same(char *why, size_t n)
     }
     if (g_pool_len[0] != g_pool_len[1]) {
         snprintf(why, n, "heap: lifted used %u bytes, original %u", (unsigned)g_pool_len[0], (unsigned)g_pool_len[1]);
+        return 0;
+    }
+    if (g_pool_len[0] && !g_pool_copy) {
+        snprintf(why, n, "heap: cannot preserve %u bytes", (unsigned)g_pool_len[0]);
         return 0;
     }
     for (k = 0; k < g_pool_len[1]; k++) {
