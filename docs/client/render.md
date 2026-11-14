@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`, `frame.c`.
 
 ## The 2D layer
 
@@ -182,3 +182,24 @@ Framebuffer support selects color attachments. Without that support, the pass co
 - Mode 5 shows round or connection state, packet sizes, event counts and player count.
 
 The first two numbers use two decimal places. Text rows use fixed advances of 16 or 20 units.
+
+## Frame pass
+
+`src/client/render/frame.c` draws one frame. The order of the passes:
+
+1. Reset the thirteen pass timers. Set the viewport size from the render size, the near plane (0.0625), the far plane (16384) and the view angle (`view_zoom`).
+2. Turn the two side directions of the view cone with the camera. Set `world_position` to the camera position times 0.0001 plus 637.1 on y.
+3. Choose the sectors (`clearsectorlist`), build the frame list (`buildframelist`) and set the landscape detail (`setupframelandscapelod`).
+4. Bind the frame framebuffer when the option allows it. Draw the depth pass (`renderframedepth`). The polygon debug view clears the buffers in place of the depth pass.
+5. The shadow debug key stops the frame here. The shadow volumes stay on the screen.
+6. Clear the color, point light 0 at the sun and get the sun and sky colors. The two sun angles of the game record give the light direction.
+7. Draw the opaque geometry: sectors, landscape, interiors with the shadow map on unit 1, frame models, shells and debris pieces, sprite models and tracks. The polygon debug view draws them as lines and stops after them.
+8. Draw the sky (`renderframeatmosphere`), then the alpha pass under the `renderalpha` timer: the sun sphere, tire marks, sector reflections, checkpoint strips, particles, car windows, muzzle flashes and the wire model of the selected item.
+9. In a race, draw a sphere at each checkpoint. A checkpoint that the viewed player has passed is grey.
+10. Draw the floor buttons of each elevator panel. The current floor is white.
+11. The world debug view adds bone boxes, team area boxes, item corners, track triangles, bond lines, debug lines and spheres, wheel cylinders and bullet paths.
+12. A name key draws the name of each player within 32 units above the head.
+
+Car windows sort from far to near. The sort key is 16777216 minus 256 times the distance. Each window has a normal, a color of half the ambient light and an alpha of 0.25 for a window that faces the camera, 0.1875 for the other side.
+
+From 0x48 on, the client game record has its fields 4 bytes before the server fields. `ClientGameView` gives the client offsets of the sun angles, the team areas and the race checkpoints.

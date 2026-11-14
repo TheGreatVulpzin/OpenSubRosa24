@@ -660,6 +660,55 @@ def debug_float_case(negative=False):
     return edits, functions
 
 
+def frame_case(framebuffer=0, occlusion=0, display=0, world=0, shadow_key=0, features=()):
+    """Draw a whole frame with an empty scene, then turn on single features of the passes.
+
+    The camera moves far from the city, so the sector list stays empty. Humans, objects and
+    items are off, so the frame list holds no model."""
+    edits, _ = depth_case(framebuffer, occlusion, shadow_key)
+    humans, objects, items, cityobjects = 0x14fc4a0, 0x5519120, 0x908b080, 0x16323600
+    for i in range(512):
+        edits.append((humans + i * 0x2b64, 'i', [0]))
+    for i in range(1024):
+        edits += [(objects + i * 0x8230, 'i', [0]), (items + i * 0x1ac, 'i', [0]),
+                  (cityobjects + i * 0x54, 'i', [0])]
+    edits += [(0xfefe2a4, '3f', [100000.0, 5000.0, -100000.0]), (0x14a8680, 'i', [display]),
+              (0x14a8688, 'i', [world]), (0x17b4b820, 'i', [0]), (0x1779b808, 'i', [0]),
+              (0x14c0690, 'i', [0]), (0x14a868c, 'i', [0]), (0x2a7593c0, 'i', [-1]),
+              (0x9065308, 'i', [0]), (0x75a5154, 'B', [0]), (0x90652e0, 'i', [0])]
+    if 'race' in features:
+        edits += [(0x9065308, 'i', [2]), (0x908aaec, 'i', [3]),
+                  (0x908aaf0, '9f', [100010.0, 5000.0, -100000.0, 99990.0, 5001.0, -100004.0,
+                                     100000.0, 4990.0, -99980.0]),
+                  (0xfefe2a0, 'i', [1]), (0xed813a0 + 0x2408 + 0x5c, 'I', [0b101])]
+    if 'race_no_view' in features:
+        edits += [(0x9065308, 'i', [2]), (0x908aaec, 'i', [2]), (0xfefe2a0, 'i', [-1]),
+                  (0x908aaf0, '6f', [100002.0, 5000.0, -100000.0, 100004.0, 5000.0, -100000.0])]
+    if 'lines' in features:
+        lines = [float((i * 37) % 23) - 11.0 for i in range(6 * 5)]
+        edits += [(0x14a868c, 'i', [5]), (0x14a8690, f'{len(lines)}f', lines)]
+        spheres = []
+        for i in range(3):
+            spheres += [100000.0 + i, 5000.0, -100000.0 - i, 0.25 * i, 0.5, 1.0, 0.5 + i]
+        edits += [(0x14c0690, 'i', [3]), (0x14c0694, f'{len(spheres)}f', spheres)]
+    if 'bullets' in features:
+        edits.append((0x17b4b820, 'i', [2]))
+        for i in range(2):
+            edits.append((0x1338680 + i * 0x5c + 0x14, '6f', [100000.0 + i, 5000.0, -100000.0,
+                                                            100001.0 + i, 5001.0, -100002.0]))
+    if 'bonds' in features:
+        bonds = 0x1779b820
+        edits += [(0x1779b808, 'i', [3]),
+                  (bonds, 'i', [0]), (bonds + 0x14, '2i', [3, 7]),
+                  (bonds + 0xec, 'i', [9]), (bonds + 0xec + 0x90, '3i', [2, 4, 5]),
+                  (bonds + 0x1d8, 'i', [5])]
+    if 'names' in features:
+        edits += [(0x75a5154, 'B', [1]), (0x29e752a0, 'i', [0])]
+    if 'shadow_key' in features:
+        edits += [(0x75a514e, 'B', [1]), (0x127ea8, 'i', [1]), (0x29e752a0, 'i', [0])]
+    return edits, {'renderframe': [call(0x75f10)] * 3}
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -826,6 +875,14 @@ def main():
             'debug4': lambda: debug_display_case(4), 'debug5': lambda: debug_display_case(5),
             'debug5_server': lambda: debug_display_case(5, 1),
             'debug_float': debug_float_case, 'debug_float_negative': lambda: debug_float_case(True),
+            'frame': frame_case, 'frame_fbo': lambda: frame_case(1), 'frame_ao': lambda: frame_case(1, 1),
+            'frame_display': lambda: frame_case(display=1), 'frame_shadow_key': lambda: frame_case(shadow_key=1),
+            'frame_shadow_key_fbo': lambda: frame_case(1, 0, 0, 0, 1),
+            'frame_world': lambda: frame_case(world=1, features=('lines', 'bonds')),
+            'frame_world_off': lambda: frame_case(features=('lines', 'bonds')),
+            'frame_race': lambda: frame_case(features=('race',)),
+            'frame_race_no_view': lambda: frame_case(features=('race_no_view',)),
+            'frame_names': lambda: frame_case(features=('names',)),
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}

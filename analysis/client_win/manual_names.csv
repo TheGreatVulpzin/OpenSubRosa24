@@ -70,3 +70,4 @@ rva,name,evidence
 0x1061e0,listvideomodes,Collects SDL display modes and appends the fixed 1024 by 640 mode
 0x77c70,renderframedepth,Draws depth and stencil shadows with optional ambient occlusion and blur
 0x69440,displaydebuginfo,Counts nonbot players and draws the selected diagnostic display
+0x75f10,renderframe,Draws one frame: depth and shadows then the opaque pass the alpha pass the elevator panels and the debug views

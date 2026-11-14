@@ -79,3 +79,18 @@ blur_params_far,float,4,0x19c750ec,The second four parameters of the depth blur 
 frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
 debug_player_count,int,1,0x14f88b0,The active player count without bots
 debug_counters,int,16,0x14f88b4,The integer rows of diagnostic page two
+viewport_x,float,1,0x19c07cc0,renderframe clears the left edge of the frame viewport
+viewport_y,float,1,0x19c07cc4,renderframe clears the bottom edge of the frame viewport
+light_diffuse,float,4,0x19c07d10,getsuncolors writes the diffuse color of light 0. renderframe colors the sun with it
+sky_color,float,3,0x19c07d20,getskycolor writes the sky color of the frame
+view_near,float,1,0x19c07d2c,renderframe sets the near plane of the perspective view to 0.0625
+view_far,float,1,0x19c07d30,renderframe sets the far plane of the perspective view to 16384
+view_fov,float,1,0x19c07d34,renderframe copies view_zoom to the angle of the perspective view
+view_side_right,vec3,1,0x19c07d38,renderframe turns the right edge direction of the view cone with the camera
+view_side_left,vec3,1,0x19c07d44,renderframe turns the left edge direction of the view cone with the camera
+window_quad_count,int,1,0x19c75120,buildframelist adds one for each car window. renderframe sorts the windows by distance
+window_quads,WindowQuad,16384,0x19c75124,buildframelist writes four corners a normal a distance and a facing flag with a stride of 0x44
+framebuffers,ClientFramebuffer,2,0x9063240,mainmenu creates two framebuffers with their depth renderbuffers
+framebuffer_index,int,1,0xfefe294,mainmenu writes 0. renderframe and setupframetextures bind this framebuffer
+bonds,Bond,16384,0x1779b820,renderframe draws the bone joints and particle pairs of the bonds in the world debug view
+debug_spheres,DebugSphere,8191,0x14c0694,renderframe draws each sphere with its color and radius in the world debug view

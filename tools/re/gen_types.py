@@ -110,7 +110,8 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'VideoMode': 12}
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'VideoMode': 12,
+             'WindowQuad': 0x44, 'ClientFramebuffer': 8, 'DebugSphere': 0x1c}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
 
@@ -408,6 +409,22 @@ typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } Sprite
 typedef struct ClientRenderOptions { uint8_t pad_00[0x108]; int framebuffer; uint8_t pad_10c[0x14]; int ambient_occlusion; } ClientRenderOptions;
 SR_STATIC_ASSERT(offsetof(ClientRenderOptions, framebuffer) == 0x108, "ClientRenderOptions.framebuffer");
 SR_STATIC_ASSERT(offsetof(ClientRenderOptions, ambient_occlusion) == 0x120, "ClientRenderOptions.ambient_occlusion");
+/* A car window of the frame list. The facing flag is 1 when the camera sees the front side. */
+typedef struct WindowQuad { vec3 corners[4]; vec3 normal; float distance; int facing; } WindowQuad;
+SR_STATIC_ASSERT(sizeof(WindowQuad) == 0x44, "WindowQuad");
+/* A framebuffer and its depth renderbuffer. */
+typedef struct ClientFramebuffer { uint32_t framebuffer; uint32_t renderbuffer; } ClientFramebuffer;
+SR_STATIC_ASSERT(sizeof(ClientFramebuffer) == 8, "ClientFramebuffer");
+/* A sphere of the world debug view. */
+typedef struct DebugSphere { vec3 pos; vec3 color; float radius; } DebugSphere;
+SR_STATIC_ASSERT(sizeof(DebugSphere) == 0x1c, "DebugSphere");
+/* The areas of one team in the client game record. */
+typedef union ClientTeamArea { struct { vec3 base_min, base_max, safe_min, safe_max; }; uint8_t raw[0x117c]; } ClientTeamArea;
+/* The client game record. From 0x48 on, its fields sit 4 bytes before the server fields. */
+typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_heading; uint8_t pad_50[4];
+    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257ec - 0x57c0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
+SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
+SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
 /* A model entry in the sorted frame list. */
 typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
 typedef struct VideoMode { int width; int height; int bits; } VideoMode;
