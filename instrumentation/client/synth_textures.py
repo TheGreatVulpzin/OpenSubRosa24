@@ -574,6 +574,92 @@ def screenshot_case(width=3, height=2):
 
 
 
+def depth_case(framebuffer=0, occlusion=0, debug=0):
+    """Select depth attachments, stencil shadows and both blur directions."""
+    edits = [(0x90631e8, 'i', [framebuffer]), (0x9063200, 'i', [occlusion]),
+             (0x127ea8, 'i', [debug]), (0x29e752a0, 'i', [0]), (0x75a514e, 'B', [debug]),
+             (0x14a8688, 'i', [0]), (0x19c04c60, 'i', [0]), (0x19c0d0b4, 'i', [0]),
+             (0x12a7d604, 'i', [0]), (0x76558a8, 'i', [0]), (0x7e558ac, 'i', [0]),
+             (0xfbfe280, 'i', [0]), (0x147129ac, 'i', [0]), (0x1033fd30, 'i', [0]),
+             (0x1033fd28, 'i', [0]), (0x1033fd24, 'i', [0]), (0x29e7d2d8, 'i', [0]),
+             (0x17c04860, '128i', [0] * 128), (0xb7330c0, '2i', [1024, 640]),
+             (0x19c07cc8, '2f', [1024.0, 640.0]),
+             (0x19c750dc, '8f', [0.125, -0.375, 0.75, 2.25, -1.25, 0.3, 100.0, 0.0]),
+             (TEXTURELIST + 0x404, '4i', [0, 1, 2, 3]), (TEXTURELIST + 0x1110, 'i', [4])]
+    for i in range(1024):
+        edits.append((0x19c07d74 + i * 20, 'i', [10]))
+    for i in range(5):
+        edits.append((TEXTURES + i * TEXTURE_SIZE + 0x2c, 'I', [500 + i]))
+    return edits, {'renderframedepth': [call(0x77c70)] * 3}
+
+
+def depth_scene_case(world_view=0):
+    """Draw frame entries and flying pieces, including hidden shadow casters."""
+    edits, _ = depth_case(1, 1)
+    entries, _ = frame_models_case()
+    edits += entries
+    edits += [(0x14a8688, 'i', [world_view]), (0xb7330c0, '2i', [1600, 900]),
+              (0x19c07cc8, '2f', [800.75, 450.25]),
+              (0x19c110b8 + 100, 'i', [2]), (0x19c110b8 + 108, 'I', [3]),
+              (0x19c110b8 + 200, 'i', [3]), (0x19c110b8 + 208, 'I', [1]),
+              (0x12a7d604, 'i', [2]), (0x17c046a4, 'i', [2]), (0x17c047b4, 'i', [3])]
+    empty = MODELTEMP + 0x248000
+    edits.append((empty, '512s', [bytes(512)]))
+    for index in (2, 3):
+        model = 0xaff05a0 + index * 0xe04
+        edits += [(model, '52s', [bytes(52)]), (model + 4, 'i', [8])]
+        for offset in (8, 12, 16, 20, 24, 32, 36, 40, 48):
+            edits.append((model + offset, 'I', [BASE + empty]))
+    for index in range(2):
+        piece = 0x5379100 + index * 0x68
+        edits += [(piece, '3i', [index, 80, 1]),
+                  (piece + 12, '3f', [float(index), 1.25, -3.75]),
+                  (piece + 0x24, '9f', [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0])]
+    return edits, {'renderframedepth': [call(0x77c70)] * 3}
+
+
+def debug_display_case(mode=0, server=0):
+    """Draw every debug page with named values, timers, players and network counters."""
+    players, debug, timers = 0xed813a0, 0x14a8680, 0x1332e80
+    edits = [(debug + 4, 'i', [mode]), (0x14f87a4, 'f', [59.875]),
+             (0x14f88ac, 'f', [16.625]), (0x14f88b0, 'i', [999]),
+             (0x14f88b4, '16i', [i * 271 - 17 for i in range(16)]),
+             (debug + 0x50c60, '3i', [1, -1, 2]), (0x102feb48, 'i', [1]),
+             (0x12a7d620, 'i', [68]), (0x75a5800, 'i', [server]),
+             (0x75a580c, '2i', [347, 2047]), (0x1b9b4e0, 'i', [3]),
+             (0x906531c, 'i', [23]), (0x1dda5244, 'i', [22]),
+             (0xf3ca9b8, 'I', [1234567]), (debug + 0x50344, 'i', [317]),
+             (0x16338614, 'i', [-430])]
+    for i in range(256):
+        edits += [(players + i * 0x2408, 'i', [1 if i < 6 else 0]),
+                  (players + i * 0x2408 + 0x1a38, 'i', [i % 3 == 0])]
+        if i < 6:
+            edits.append((players + i * 0x2408 + 4, '32s', [f'Debug player {i}'.encode().ljust(32, b'\0')]))
+    edits.append((debug + 0x50c80, 'i', [4]))
+    for i, (kind, integer, value) in enumerate(((0, -123, 0.0), (1, 0, 0.1234567),
+                                              (1, 0, -17.375), (2, 99, 0.5))):
+        record = debug + 0x50c84 + i * 44
+        edits += [(record, '2if', [kind, integer, value]),
+                  (record + 12, '32s', [f'Debug value {i}'.encode().ljust(32, b'\0')])]
+    for i in list(range(16)) + list(range(64, 68)):
+        timer = timers + i * 88
+        edits += [(timer, '64s', [f'Debug timer {i}'.encode().ljust(64, b'\0')]),
+                  (timer + 0x48, '3I', [12345 * (i + 1), i % 3, i * 17])]
+    for i in range(8):
+        edits.append((0xec38140 + i * 0x2924c, 'i', [i * 19]))
+    return edits, {'displaydebuginfo': [call(0x69440)] * 3}
+
+
+def debug_float_case(negative=False):
+    """Draw fractional values with zero, infinity and NaN inputs."""
+    edits, functions = debug_display_case(1)
+    values = (-INF, -0.0) if negative else (NAN, INF)
+    edits += [(0x14f87a4, 'f', [values[0]]), (0x14f88ac, 'f', [values[1]])]
+    for index, value in enumerate(values, 1):
+        edits.append((0x14a8680 + 0x50c84 + index * 44 + 8, 'f', [value]))
+    return edits, functions
+
+
 def models_case():
     tiny = 0.0001
     verts = [(0, 0, 0), (1, 0, 0), (1, 1, 0), (0, 1, 0),
@@ -731,6 +817,15 @@ def main():
             'screenshot_large': lambda: screenshot_case(1281, 960),
             'screenshot_tall': lambda: screenshot_case(1280, 961),
             'screenshot_collision': screenshot_case,
+            'depth': depth_case, 'depth_fbo': lambda: depth_case(1),
+            'depth_ao': lambda: depth_case(0, 1), 'depth_fbo_ao': lambda: depth_case(1, 1),
+            'depth_debug': lambda: depth_case(0, 0, 1), 'depth_fbo_debug': lambda: depth_case(1, 1, 1),
+            'depth_scene': depth_scene_case, 'depth_scene_world': lambda: depth_scene_case(1),
+            'debug0': debug_display_case, 'debug1': lambda: debug_display_case(1),
+            'debug2': lambda: debug_display_case(2), 'debug3': lambda: debug_display_case(3),
+            'debug4': lambda: debug_display_case(4), 'debug5': lambda: debug_display_case(5),
+            'debug5_server': lambda: debug_display_case(5, 1),
+            'debug_float': debug_float_case, 'debug_float_negative': lambda: debug_float_case(True),
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}

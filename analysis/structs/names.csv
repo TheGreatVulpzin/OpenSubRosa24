@@ -1038,3 +1038,7 @@ texturelist,0x40c,sky,int,,"renderframeatmosphere binds it as the texture of the
 texturelist,0x10fc,map,int,,"rendermap draws the city from above into this texture"
 human,0x2b28,bubbles,int,,"frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the human"
 item,0x130,bubbles,int,,"frame_drawmessages sets it to 0 each frame and adds 1 for each chat bubble over the item"
+texturelist,0x404,frame_color,int,,renderframe attaches this texture for the color pass
+texturelist,0x410,frame_aux,int,,renderframedepth attaches this texture before the blur passes
+debug,0x50c64,toggle_two,int,,displaydebuginfo shows the second diagnostic switch
+debug,0x50c68,toggle_three,int,,displaydebuginfo shows the third diagnostic switch

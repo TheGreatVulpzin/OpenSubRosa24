@@ -2258,7 +2258,7 @@ rva,size,name,source,confidence,evidence
 0x69060,164,,,,
 0x69110,118,,,,
 0x69190,682,debug_getinputs,anchor,0.959,features
-0x69440,2642,displaydebuginfo,anchor,0.901,features
+0x69440,2642,displaydebuginfo,manual,1.0,Counts nonbot players and draws the selected diagnostic display
 0x69ea0,804,debug_rendercylinder,anchor,0.777,features
 0x6a1d0,88,,,,
 0x6a230,455,debug_addcross,callgraph,0.333,votes=2
@@ -2318,7 +2318,7 @@ rva,size,name,source,confidence,evidence
 0x74890,5374,buildframelist,callgraph,0.333,votes=2
 0x75d90,369,,,,
 0x75f10,7511,renderframe,anchor,0.816,features
-0x77c70,2973,renderframedepth,anchor,0.915,features
+0x77c70,2973,renderframedepth,manual,1.0,Draws depth and stencil shadows with optional ambient occlusion and blur
 0x78810,1055,renderframeatmosphere,anchor,0.845,features
 0x78c30,54,frame_rendermessages,manual,1.0,Toggles culling and depth testing for the message pass
 0x78c70,1723,frame_drawmessages,anchor,0.774,features

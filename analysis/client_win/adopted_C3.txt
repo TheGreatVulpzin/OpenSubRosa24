@@ -57,3 +57,5 @@ rendermodellist src/client/render/frame_models.c
 frame_rendermessages src/client/render/frame_models.c
 screenshot src/client/render/screen.c
 listvideomodes src/client/render/screen.c
+renderframedepth src/client/render/depth.c
+displaydebuginfo src/client/render/debug_display.c

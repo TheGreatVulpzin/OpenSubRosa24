@@ -260,6 +260,11 @@ typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
 
+
+/* The render options in the client option record. */
+typedef struct ClientRenderOptions { uint8_t pad_00[0x108]; int framebuffer; uint8_t pad_10c[0x14]; int ambient_occlusion; } ClientRenderOptions;
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, framebuffer) == 0x108, "ClientRenderOptions.framebuffer");
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, ambient_occlusion) == 0x120, "ClientRenderOptions.ambient_occlusion");
 /* A model entry in the sorted frame list. */
 typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
 typedef struct VideoMode { int width; int height; int bits; } VideoMode;
@@ -2511,7 +2516,9 @@ typedef union Debug { struct {
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x918];
     uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
-    uint8_t pad_50c64[0x1c];
+    int toggle_two;                      /* +0x50c64 displaydebuginfo shows the second diagnostic switch */
+    int toggle_three;                    /* +0x50c68 displaydebuginfo shows the third diagnostic switch */
+    uint8_t pad_50c6c[0x14];
     int num_values;                      /* +0x50c80 debug_addataint and debug_addatafloat add 1 for each new name */
     DebugValue values[128];              /* +0x50c84 debug_addataint and debug_addatafloat: the named values of the debug display */
     char log_text[256];                  /* +0x52284 dedicatedserverloop writes the physics line with sprintf */
@@ -2529,6 +2536,8 @@ SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_be
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
+SR_STATIC_ASSERT(offsetof(Debug, toggle_two) == 0x50c64, "Debug.toggle_two");
+SR_STATIC_ASSERT(offsetof(Debug, toggle_three) == 0x50c68, "Debug.toggle_three");
 SR_STATIC_ASSERT(offsetof(Debug, num_values) == 0x50c80, "Debug.num_values");
 SR_STATIC_ASSERT(offsetof(Debug, values) == 0x50c84, "Debug.values");
 SR_STATIC_ASSERT(offsetof(Debug, log_text) == 0x52284, "Debug.log_text");
@@ -3249,10 +3258,11 @@ SR_STATIC_ASSERT(offsetof(LandRender, temp_tris) == 0x7004, "LandRender.temp_tri
 typedef union TextureList { struct {
     int count;                           /* +0x0000 setupgame: the next free texture identifier. 848 after the identifiers are assigned */
     int material[256];                   /* +0x0004 generatetexture_carpet and generatetexture_billboard: the texture of each material */
-    uint8_t pad_0404[0x4];
+    int frame_color;                     /* +0x0404 renderframe attaches this texture for the color pass */
     int shadow_map;                      /* +0x0408 rendermodel binds it on texture unit 2 for the lit models */
     int sky;                             /* +0x040c renderframeatmosphere binds it as the texture of the sky quad */
-    uint8_t pad_0410[0x8];
+    int frame_aux;                       /* +0x0410 renderframedepth attaches this texture before the blur passes */
+    uint8_t pad_0414[0x4];
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
@@ -3281,8 +3291,10 @@ typedef union TextureList { struct {
 SR_STATIC_ASSERT(sizeof(TextureList) == 0x1144, "TextureList");
 SR_STATIC_ASSERT(offsetof(TextureList, count) == 0x0, "TextureList.count");
 SR_STATIC_ASSERT(offsetof(TextureList, material) == 0x4, "TextureList.material");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_color) == 0x404, "TextureList.frame_color");
 SR_STATIC_ASSERT(offsetof(TextureList, shadow_map) == 0x408, "TextureList.shadow_map");
 SR_STATIC_ASSERT(offsetof(TextureList, sky) == 0x40c, "TextureList.sky");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_aux) == 0x410, "TextureList.frame_aux");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");

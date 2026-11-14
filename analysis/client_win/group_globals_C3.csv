@@ -74,3 +74,8 @@ frame_models,FrameEntry,4096,0x19c110b8,Frame model transforms and draw paramete
 video_modes,VideoMode,4096,0x52ceb80,SDL display modes stored as width height and pixel depth
 video_mode_count,int,1,0x102feb44,Number of stored SDL display modes
 screenshot_pixels,uint32_t,1228800,0x13e61840,RGBA screenshot pixels with a limit of 1280 by 960
+blur_params_near,float,4,0x19c750dc,The first four parameters of the depth blur shader
+blur_params_far,float,4,0x19c750ec,The second four parameters of the depth blur shader
+frame_rate,float,1,0x14f87a4,The frame rate displayed above the debug pages
+debug_player_count,int,1,0x14f88b0,The active player count without bots
+debug_counters,int,16,0x14f88b4,The integer rows of diagnostic page two

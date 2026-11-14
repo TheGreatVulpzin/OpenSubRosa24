@@ -68,3 +68,5 @@ rva,name,evidence
 0x78c30,frame_rendermessages,Toggles culling and depth testing for the message pass
 0x106790,screenshot,Saves a numbered TGA from the back buffer
 0x1061e0,listvideomodes,Collects SDL display modes and appends the fixed 1024 by 640 mode
+0x77c70,renderframedepth,Draws depth and stencil shadows with optional ambient occlusion and blur
+0x69440,displaydebuginfo,Counts nonbot players and draws the selected diagnostic display

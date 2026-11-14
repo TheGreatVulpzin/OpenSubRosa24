@@ -403,6 +403,11 @@ typedef struct SpriteModel { int kind; int life; int active; vec3 pos; vec3 vel;
 /* A vertex of the lists that the sprite models draw. */
 typedef struct SpriteVertex { vec3 pos; float texcoord[2]; vec3 normal; } SpriteVertex;
 
+
+/* The render options in the client option record. */
+typedef struct ClientRenderOptions { uint8_t pad_00[0x108]; int framebuffer; uint8_t pad_10c[0x14]; int ambient_occlusion; } ClientRenderOptions;
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, framebuffer) == 0x108, "ClientRenderOptions.framebuffer");
+SR_STATIC_ASSERT(offsetof(ClientRenderOptions, ambient_occlusion) == 0x120, "ClientRenderOptions.ambient_occlusion");
 /* A model entry in the sorted frame list. */
 typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
 typedef struct VideoMode { int width; int height; int bits; } VideoMode;

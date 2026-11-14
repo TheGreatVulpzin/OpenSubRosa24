@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`.
 
 ## The 2D layer
 
@@ -162,3 +162,23 @@ The mesh view names the client pointers within `BlockSector` without changing it
 `src/client/render/screen.c` collects display modes and saves the back buffer. `listvideomodes` appends width, height and pixel depth records. It reads only the first 512 SDL modes. A matching width replaces the stored height. A nonzero new height makes that entry a match and preserves its pixel depth. Every call also appends 1024 by 640 by 32, even when that mode is already present.
 
 `screenshot` accepts dimensions up to 1280 by 960. It reads RGBA pixels, writes an 18 byte TGA header, then writes BGR pixels. The filename starts at `scsht000.tga`. Existing files advance the three digits through 999. At index 1000, the first digit becomes a colon. The file handle uses `shader_file`, including the value after close.
+
+## Depth and occlusion
+
+`src/client/render/depth.c` draws the opaque depth pass, then the sector and model shadow volumes. Frame entry flag 1 selects a model shadow, including an entry hidden by flag 2. The world debug view suppresses frame models and their shadows. Active shell and debris models also contribute depth.
+
+The stencil mask produces the red channel of the shadow map. Ambient occlusion produces its green channel. Two blur passes use separate horizontal and vertical offsets. Each offset is 1.125 divided by the corresponding render dimension. The shader also receives two sets of four projection parameters.
+
+Framebuffer support selects color attachments. Without that support, the pass copies the viewport to its image textures. The shadow debug key selects a colored volume view and returns before the occlusion and blur passes.
+
+## Diagnostic pages
+
+`src/client/render/debug_display.c` counts active nonbot players even when the diagnostic display is off. A positive display mode draws frame rate, frame time, four switches and voice channel states.
+
+- Mode 1 shows named integer and float values.
+- Mode 2 shows sixteen counters and active player names.
+- Mode 3 shows the render timers from index 64.
+- Mode 4 shows the first sixteen timer totals.
+- Mode 5 shows round or connection state, packet sizes, event counts and player count.
+
+The first two numbers use two decimal places. Text rows use fixed advances of 16 or 20 units.
