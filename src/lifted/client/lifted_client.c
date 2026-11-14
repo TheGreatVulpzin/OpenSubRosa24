@@ -29807,7 +29807,7 @@ void __cdecl lf_34740(void)
 #define lineintersecthuman ((bool (__cdecl *)(int, undefined4, undefined4, float))SR_FN(0x489e10))
 #define lineintersectobject ((undefined4 (__cdecl *)(int, float *, float *, int))SR_FN(0x4ce570))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
@@ -29830,7 +29830,7 @@ void __cdecl lf_34740(void)
 #define local_38 (*(float *)(lf_frame + 0x58))
 #define local_34 (*(float *)(lf_frame + 0x5c))
 #define local_30 (*(float *)(lf_frame + 0x60))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x64))
+#define local_2c (*(float (*)[9])(lf_frame + 0x64))
 #define local_8 (*(uint *)(lf_frame + 0x88))
 void __cdecl lf_348d0(int param_1)
 
@@ -29930,7 +29930,7 @@ void __cdecl lf_348d0(int param_1)
         ai_assessthreats(param_1,iVar3);
         *(undefined4 *)(&DAT_0f181468 + param_1 * 0x2408) = 1;
         resetorientation(local_2c);
-        rotateorientation((int)local_2c,&DAT_00523590,*(float *)(&DAT_018fc500 + iVar3 * 0x2b64));
+        rotateorientation(local_2c,&DAT_00523590,*(float *)(&DAT_018fc500 + iVar3 * 0x2b64));
         local_74 = *(float *)(&DAT_0f18142c + param_1 * 0x2408);
         if (0.8999999761581421 <= *(float *)(&DAT_018fc5a8 + iVar3 * 0x2b64)) {
           if (*(int *)(&DAT_0f182de4 + param_1 * 0x2408) <
@@ -37549,7 +37549,7 @@ int __cdecl lf_44140(int param_1,uint param_2,uint param_3,uint param_4,int para
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define FUN_0050b290 ((undefined4 (__cdecl *)(int, int))SR_FN(0x50b290))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
@@ -37876,19 +37876,19 @@ uint __cdecl lf_442b0(int param_1,int param_2)
                              *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c + local_9c * 0x2a30)
                             );
             if ((local_54 & 3) == 1) {
-              rotateorientation((int)(&DAT_0bb7c7a8 +
-                                     *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
-                                     local_9c * 0x2a30),&DAT_00523590,1.5707963705062866);
+              rotateorientation((float *)(&DAT_0bb7c7a8 +
+                                         *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
+                                         local_9c * 0x2a30),&DAT_00523590,1.5707963705062866);
             }
             else if ((local_54 & 3) == 2) {
-              rotateorientation((int)(&DAT_0bb7c7a8 +
-                                     *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
-                                     local_9c * 0x2a30),&DAT_00523590,3.1415927410125732);
+              rotateorientation((float *)(&DAT_0bb7c7a8 +
+                                         *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
+                                         local_9c * 0x2a30),&DAT_00523590,3.1415927410125732);
             }
             else if ((local_54 & 3) == 3) {
-              rotateorientation((int)(&DAT_0bb7c7a8 +
-                                     *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
-                                     local_9c * 0x2a30),&DAT_00523590,4.71238899230957);
+              rotateorientation((float *)(&DAT_0bb7c7a8 +
+                                         *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c +
+                                         local_9c * 0x2a30),&DAT_00523590,4.71238899230957);
             }
             *(uint *)(&DAT_0bb7c794 +
                      *(int *)(&DAT_0bb7c78c + local_9c * 0x2a30) * 0x3c + local_9c * 0x2a30) =
@@ -38383,13 +38383,13 @@ undefined4 __cdecl lf_46610(int param_1,uint param_2,uint param_3,uint param_4,u
 #define floor ((double (__cdecl *)(double))LF_IMPORT(33, "MSVCR100.DLL", "floor"))
 #define area_getblock ((int (__cdecl *)(int, uint, uint, uint))SR_FN(0x438600))
 #define FUN_00443e20 ((int (__cdecl *)(int, uint, uint, uint))SR_FN(0x443e20))
-#define lineintersectnormalblock ((undefined4 (__cdecl *)(undefined4, undefined4 *, float *, undefined4, undefined4, int *, uint, float))SR_FN(0x4478d0))
-#define lineintersectspecblock ((bool (__cdecl *)(undefined4 *, undefined4 *, float *, undefined4, undefined4, int *, uint, float))SR_FN(0x447ad0))
+#define lineintersectnormalblock ((undefined4 (__cdecl *)(undefined4, undefined4 *, float *, float *, float *, int *, uint, float))SR_FN(0x4478d0))
+#define lineintersectspecblock ((bool (__cdecl *)(undefined4 *, undefined4 *, float *, float *, float *, int *, uint, float))SR_FN(0x447ad0))
 #define lineintersectcityobjecttype ((undefined4 (__cdecl *)(float *, undefined4 *, float *, int, float *, float *, float *, float *))SR_FN(0x465b80))
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define flabs ((float10 (__cdecl *)(float))SR_FN(0x50b7d0))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
@@ -38428,7 +38428,7 @@ undefined4 __cdecl lf_46610(int param_1,uint param_2,uint param_3,uint param_4,u
 #define local_38 (*(float *)(lf_frame + 0xa8))
 #define local_34 (*(float *)(lf_frame + 0xac))
 #define local_30 (*(int *)(lf_frame + 0xb0))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0xb4))
+#define local_2c (*(float (*)[9])(lf_frame + 0xb4))
 #define local_8 (*(uint *)(lf_frame + 0xd8))
 undefined4 __cdecl lf_466d0(float *param_1,float *param_2,float *param_3,int param_4,float *param_5,
                  float *param_6)
@@ -38599,13 +38599,13 @@ undefined4 __cdecl lf_466d0(float *param_1,float *param_2,float *param_3,int par
                          local_34);
               resetorientation(local_2c);
               if ((local_6c & 3) == 1) {
-                rotateorientation((int)local_2c,&DAT_00523590,1.5707963705062866);
+                rotateorientation(local_2c,&DAT_00523590,1.5707963705062866);
               }
               else if ((local_6c & 3) == 2) {
-                rotateorientation((int)local_2c,&DAT_00523590,3.1415927410125732);
+                rotateorientation(local_2c,&DAT_00523590,3.1415927410125732);
               }
               else if ((local_6c & 3) == 3) {
-                rotateorientation((int)local_2c,&DAT_00523590,4.71238899230957);
+                rotateorientation(local_2c,&DAT_00523590,4.71238899230957);
               }
               iVar3 = lineintersectcityobjecttype
                                 (param_1,param_2,param_3,local_7c,&local_3c,local_2c,local_68 + 3,
@@ -38873,7 +38873,7 @@ undefined4 __cdecl lf_466d0(float *param_1,float *param_2,float *param_3,int par
 #define DAT_0052283c (*(undefined *)SR_VA(0x52283c))
 #define DAT_00522840 (*(undefined *)SR_VA(0x522840))
 #define DAT_00522844 (*(undefined *)SR_VA(0x522844))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
@@ -38886,8 +38886,8 @@ undefined4 __cdecl lf_466d0(float *param_1,float *param_2,float *param_3,int par
 #define local_18 (*(int *)(lf_frame + 0x38))
 #define local_14 (*(float (*)[3])(lf_frame + 0x3c))
 #define local_8 (*(uint *)(lf_frame + 0x48))
-undefined4 __cdecl lf_478d0(undefined4 param_1,undefined4 *param_2,float *param_3,undefined4 param_4,
-          undefined4 param_5,int *param_6,uint param_7,float param_8)
+undefined4 __cdecl lf_478d0(undefined4 param_1,undefined4 *param_2,float *param_3,float *param_4,float *param_5,
+          int *param_6,uint param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x50];
@@ -38977,7 +38977,7 @@ undefined4 __cdecl lf_478d0(undefined4 param_1,undefined4 *param_2,float *param_
 #define DAT_137ae6dc (*(undefined *)SR_VA(0x137ae6dc))
 #define DAT_137ae6f8 (*(undefined *)SR_VA(0x137ae6f8))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
@@ -38995,8 +38995,8 @@ undefined4 __cdecl lf_478d0(undefined4 param_1,undefined4 *param_2,float *param_
 #define local_18 (*(float (*)[3])(lf_frame + 0x68))
 #define local_c (*(uint *)(lf_frame + 0x74))
 #define local_8 (*(float *)(lf_frame + 0x78))
-bool __cdecl lf_47ad0(undefined4 *param_1,undefined4 *param_2,float *param_3,undefined4 param_4,
-          undefined4 param_5,int *param_6,uint param_7,float param_8)
+bool __cdecl lf_47ad0(undefined4 *param_1,undefined4 *param_2,float *param_3,float *param_4,float *param_5,
+          int *param_6,uint param_7,float param_8)
 
 {
   __declspec(align(16)) uchar lf_frame[0x80];
@@ -39126,7 +39126,7 @@ bool __cdecl lf_47ad0(undefined4 *param_1,undefined4 *param_2,float *param_3,und
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
@@ -39153,7 +39153,7 @@ bool __cdecl lf_47ad0(undefined4 *param_1,undefined4 *param_2,float *param_3,und
 #define local_38 (*(float *)(lf_frame + 0x88))
 #define local_34 (*(float *)(lf_frame + 0x8c))
 #define local_30 (*(float *)(lf_frame + 0x90))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x94))
+#define local_2c (*(float (*)[9])(lf_frame + 0x94))
 #define local_8 (*(uint *)(lf_frame + 0xb8))
 undefined4 __cdecl lf_47de0(float *param_1,float *param_2,float *param_3,int param_4,float *param_5,float param_6)
 
@@ -39259,13 +39259,13 @@ undefined4 __cdecl lf_47de0(float *param_1,float *param_2,float *param_3,int par
                                    *(float *)(&DAT_17665640 + param_4 * 0x100d6c) + local_30);
                         resetorientation(local_2c);
                         if ((local_60 & 3) == 1) {
-                          rotateorientation((int)local_2c,&DAT_00523590,1.5707963705062866);
+                          rotateorientation(local_2c,&DAT_00523590,1.5707963705062866);
                         }
                         else if ((local_60 & 3) == 2) {
-                          rotateorientation((int)local_2c,&DAT_00523590,3.1415927410125732);
+                          rotateorientation(local_2c,&DAT_00523590,3.1415927410125732);
                         }
                         else if ((local_60 & 3) == 3) {
-                          rotateorientation((int)local_2c,&DAT_00523590,4.71238899230957);
+                          rotateorientation(local_2c,&DAT_00523590,4.71238899230957);
                         }
                         iVar2 = FUN_00466210(local_80,local_8c,&local_40,local_74,&local_38,local_2c
                                              ,local_5c,param_6);
@@ -42727,8 +42727,8 @@ void __cdecl lf_50230(int param_1)
 #define DAT_17b9b8dc (*(undefined *)SR_VA(0x17b9b8dc))
 #define _DAT_01ff7e14 (*(int *)SR_VA(0x1ff7e14))
 #define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_FN(0x4a8a30))
-#define projectorientation ((void (__cdecl *)(int, int, int))SR_FN(0x4a8b30))
-#define multiply3x3matrices ((void (__cdecl *)(int, int, int))SR_FN(0x4a8c60))
+#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8b30))
+#define multiply3x3matrices ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8c60))
 #define objectwheelsimulation2 ((void (__cdecl *)(void))SR_FN(0x4ca0c0))
 #define objectenginesimulation2 ((void (__cdecl *)(void))SR_FN(0x4cbf70))
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_FN(0x4d6970))
@@ -42738,7 +42738,7 @@ void __cdecl lf_50230(int param_1)
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_FN(0x50b6b0))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
@@ -43024,8 +43024,8 @@ void __cdecl lf_50700(void)
         if (*(int *)(&DAT_018fc4c8 + local_11c * 0x2b64) < 1) {
           resetorientation((undefined4 *)(&DAT_018fc610 + local_c8 * 0xe0 + local_11c * 0x2b64));
         }
-        multiply3x3matrices((int)&local_c4,(int)&local_c4,
-                            (int)(&DAT_018fc610 + local_c8 * 0xe0 + local_11c * 0x2b64));
+        multiply3x3matrices(&local_c4,&local_c4,
+                            (float *)(&DAT_018fc610 + local_c8 * 0xe0 + local_11c * 0x2b64));
         *(undefined4 *)(&DAT_0fcae27c + local_5c * 0x40) =
              *(undefined4 *)(&DAT_17b9b890 + local_5c * 0xec);
         if ((((int)local_c8 < 3) || (8 < (int)local_c8)) ||
@@ -43119,10 +43119,10 @@ void __cdecl lf_50700(void)
             copyvector(local_20,(undefined4 *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
             copyvector(local_14,(undefined4 *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
             scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),local_14,local_d4);
-            rotateorientation((int)local_2c,local_14,local_104);
+            rotateorientation(local_2c,local_14,local_104);
             scaleaddvectors((float *)(&DAT_0fcae248 + local_5c * 0x40),
                             (float *)(&DAT_0fcae248 + local_5c * 0x40),local_2c,local_d0);
-            rotateorientation((int)local_2c,local_2c,local_100);
+            rotateorientation(local_2c,local_2c,local_100);
             scaleaddvectors((float *)(&DAT_0fcae248 + local_5c * 0x40),
                             (float *)(&DAT_0fcae248 + local_5c * 0x40),local_20,local_cc);
             scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),
@@ -43133,17 +43133,17 @@ void __cdecl lf_50700(void)
             copyvector(&local_c4,(undefined4 *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
             copyvector(&local_b8,(undefined4 *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
             copyvector(&local_ac,(undefined4 *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            projectorientation((int)&local_c4,(int)&local_c4,
-                               (int)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64));
+            projectorientation(&local_c4,&local_c4,
+                               (float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64));
             if (local_c8 == 6) {
-              rotateorientation((int)&local_c4,&local_c4,1.5707963705062866);
-              rotateorientation((int)&local_c4,&local_b8,0.39269909262657166);
+              rotateorientation(&local_c4,&local_c4,1.5707963705062866);
+              rotateorientation(&local_c4,&local_b8,0.39269909262657166);
             }
             if (local_c8 == 7) {
-              rotateorientation((int)&local_c4,&local_c4,0.19634954631328583);
+              rotateorientation(&local_c4,&local_c4,0.19634954631328583);
             }
             if (local_c8 == 8) {
-              rotateorientation((int)&local_c4,&local_c4,0.04908738657832146);
+              rotateorientation(&local_c4,&local_c4,0.04908738657832146);
             }
             orientationtoquaternion(&local_e4,&local_c4);
             local_e4 = -local_e4;
@@ -44794,7 +44794,7 @@ void __cdecl lf_55bc0(void)
 #define FUN_00443e20 ((int (__cdecl *)(int, uint, uint, uint))SR_FN(0x443e20))
 #define FUN_00458940 ((int (__cdecl *)(int, int, int, int, int))SR_FN(0x458940))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
@@ -45102,9 +45102,9 @@ void __cdecl lf_56ad0(int param_1,int param_2,int param_3,int param_4,int param_
     scalevector(local_38,local_38,0.5);
     resetorientation(local_2c);
     local_50 = (float)(*(float *)(&DAT_09465384 + local_40 * 0x117c) - 1.570796326795);
-    rotateorientation((int)local_2c,local_20,local_50);
+    rotateorientation(local_2c,local_20,local_50);
     scaleaddvectors(local_38,local_38,local_14,-44.0);
-    rotateorientation((int)local_2c,local_20,3.1415927410125732);
+    rotateorientation(local_2c,local_20,3.1415927410125732);
     scaleaddvectors(local_38,local_38,local_2c,-16.0);
     for (local_3c = 0; local_3c < 8; local_3c = local_3c + 1) {
       *(undefined4 *)
@@ -45492,7 +45492,7 @@ void __cdecl lf_58a70(int param_1,int param_2)
 #define _DAT_01f9b5b0 (*(undefined4 *)SR_VA(0x1f9b5b0))
 #define _DAT_01f9b5b4 (*(undefined4 *)SR_VA(0x1f9b5b4))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 void __cdecl lf_58b60(void)
 
 {
@@ -45506,7 +45506,7 @@ void __cdecl lf_58b60(void)
   _DAT_01f9b600 = 0;
   _DAT_01f9b604 = 0x41100000;
   resetorientation((undefined4 *)&DAT_01f9b608);
-  rotateorientation(((int)SR_VA(0x1f9b608)),&DAT_01f9b608,1.5707963705062866);
+  rotateorientation((float *)&DAT_01f9b608,&DAT_01f9b608,1.5707963705062866);
   DAT_01f9b54c = 9;
   DAT_01f9b574 = 0;
   DAT_01f9b564 = 0;
@@ -50736,7 +50736,7 @@ void __cdecl lf_646b0(void)
 #define DAT_16723620 (*(undefined *)SR_VA(0x16723620))
 #define FUN_004653c0 ((int (__cdecl *)(void))SR_FN(0x4653c0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 int __cdecl lf_65330(undefined4 param_1,undefined4 *param_2,float param_3)
 
@@ -50752,7 +50752,7 @@ int __cdecl lf_65330(undefined4 param_1,undefined4 *param_2,float param_3)
     *(undefined4 *)(&DAT_16723604 + iVar1 * 0x54) = param_1;
     copyvector((undefined4 *)(&DAT_16723608 + iVar1 * 0x54),param_2);
     resetorientation((undefined4 *)(&DAT_16723620 + iVar1 * 0x54));
-    rotateorientation((int)(&DAT_16723620 + iVar1 * 0x54),&DAT_00523590,param_3);
+    rotateorientation((float *)(&DAT_16723620 + iVar1 * 0x54),&DAT_00523590,param_3);
   }
   return iVar1;
 }
@@ -50823,7 +50823,7 @@ void __cdecl lf_65400(int param_1)
 #define _DAT_1073eca0 (*(undefined4 *)SR_VA(0x1073eca0))
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
@@ -51090,7 +51090,7 @@ undefined4 __cdecl lf_65430(float *param_1,undefined4 *param_2,float *param_3,in
 #define _DAT_1073eca0 (*(undefined4 *)SR_VA(0x1073eca0))
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
@@ -56539,7 +56539,7 @@ void __cdecl lf_742f0(void)
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
@@ -56787,9 +56787,9 @@ void __cdecl lf_74890(void)
             else {
               local_4c = 0.0;
             }
-            rotateorientation((int)(local_38 + 3),local_20,(float)(local_4c * 3.1415927410125732 * 0.5));
+            rotateorientation(local_38 + 3,local_20,(float)(local_4c * 3.1415927410125732 * 0.5));
             if (local_5c == *(int *)(&DAT_0948b1b4 + local_3c * 0x1ac) + -1) {
-              rotateorientation((int)(local_38 + 3),local_20,(float)(local_4c * 3.1415927410125732 * 0.5));
+              rotateorientation(local_38 + 3,local_20,(float)(local_4c * 3.1415927410125732 * 0.5));
               scaleaddvectors(local_38,local_38,local_38 + 3,local_4c);
             }
           }
@@ -57403,7 +57403,7 @@ void __cdecl lf_75d90(undefined4 param_1,undefined4 *param_2,undefined4 param_3,
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define setupperspectiveviewport ((void (__cdecl *)(int, int, int, int, float, float, float))SR_FN(0x506320))
 #define setupviewpoint ((void (__cdecl *)(float *, undefined4 *))SR_FN(0x5065d0))
 #define setupobjectrender ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x5066b0))
@@ -57430,7 +57430,7 @@ void __cdecl lf_75d90(undefined4 param_1,undefined4 *param_2,undefined4 param_3,
 #define local_40 (*(int *)(lf_frame + 0x90))
 #define local_3c (*(float *)(lf_frame + 0x94))
 #define local_38 (*(float *)(lf_frame + 0x98))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0xa4))
+#define local_2c (*(float (*)[3])(lf_frame + 0xa4))
 #define local_20 (*(undefined4 (*)[3])(lf_frame + 0xb0))
 #define local_14 (*(undefined4 (*)[3])(lf_frame + 0xbc))
 #define local_8 (*(uint *)(lf_frame + 0xc8))
@@ -57873,9 +57873,9 @@ void __cdecl lf_75f10(void)
               copyvector(local_2c,(undefined4 *)(&DAT_0591915c + local_40 * 0x8230));
               copyvector(local_20,(undefined4 *)(&DAT_05919168 + local_40 * 0x8230));
               copyvector(local_14,(undefined4 *)(&DAT_05919174 + local_40 * 0x8230));
-              rotateorientation((int)local_2c,local_20,
+              rotateorientation(local_2c,local_20,
                                 *(float *)(&DAT_0591f040 + local_60 * 0x98 + local_40 * 0x8230));
-              rotateorientation((int)local_2c,local_2c,
+              rotateorientation(local_2c,local_2c,
                                 *(float *)(&DAT_0591f03c + local_60 * 0x98 + local_40 * 0x8230));
               debug_rendercylinder(&local_3c,local_2c);
             }
@@ -58888,7 +58888,7 @@ longlong __cdecl lf_79a90(void)
 #define scenario_createcar ((undefined4 (__cdecl *)(int, undefined4, int, int, int, float))SR_FN(0x4dd870))
 #define createvehicle ((int (__cdecl *)(int, undefined4 *, int))SR_FN(0x4fb3d0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
@@ -58903,7 +58903,7 @@ longlong __cdecl lf_79a90(void)
 #define local_38 (*(float *)(lf_frame + 0x28))
 #define local_34 (*(float *)(lf_frame + 0x2c))
 #define local_30 (*(float *)(lf_frame + 0x30))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x34))
+#define local_2c (*(float (*)[3])(lf_frame + 0x34))
 #define local_20 (*(undefined1 (*)[24])(lf_frame + 0x40))
 #define local_8 (*(uint *)(lf_frame + 0x58))
 void __cdecl lf_79ad0(void)
@@ -59110,7 +59110,7 @@ void __cdecl lf_79ad0(void)
     _DAT_0f1813a0 = 1;
     DAT_0f181404 = 0;
     resetorientation(local_2c);
-    rotateorientation((int)local_2c,local_20,3.1415927410125732);
+    rotateorientation(local_2c,local_20,3.1415927410125732);
     DAT_0f181418 = createhuman(&local_38,(int)local_2c,0);
     *(undefined4 *)(&DAT_018fc500 + DAT_0f181418 * 0x2b64) = 0x40490fdb;
     _DAT_0f181468 = 0;
@@ -59129,12 +59129,12 @@ void __cdecl lf_79ad0(void)
   }
   if (DAT_079a5800 != 0) {
     resetorientation(local_2c);
-    rotateorientation((int)local_2c,&DAT_00523590,-1.5707963705062866);
+    rotateorientation(local_2c,&DAT_00523590,-1.5707963705062866);
     copyvector(&local_38,(undefined4 *)&DAT_2a5f8074);
     local_34 = (float)(local_34 + 1.625);
     createvehicle(0,&local_38,(int)local_2c);
     copyvector(&local_38,(undefined4 *)&DAT_2a5df6b4);
-    rotateorientation((int)local_2c,&DAT_00523590,3.1415927410125732);
+    rotateorientation(local_2c,&DAT_00523590,3.1415927410125732);
     local_34 = (float)(local_34 + 1.625);
     iVar2 = createvehicle(0,&local_38,(int)local_2c);
     *(undefined4 *)(&DAT_059212b4 + iVar2 * 0x8230) = 0x4a;
@@ -59287,7 +59287,7 @@ void __cdecl lf_79ad0(void)
       local_30 = 616.0;
       local_34 = (float)(((float)(local_34 - 1.625)) - 0.25);
       resetorientation(local_2c);
-      rotateorientation((int)local_2c,&DAT_00523590,-1.5707963705062866);
+      rotateorientation(local_2c,&DAT_00523590,-1.5707963705062866);
     }
     if (DAT_00527ea8 != 0) {
       scenario_createcar(1,1,0,0,1,lf_u2f(0x42800000));
@@ -59755,7 +59755,7 @@ void __cdecl lf_79ad0(void)
 #define getaudioinput ((void (__cdecl *)(int))SR_FN(0x4fb6f0))
 #define calculateplayervoice ((void (__cdecl *)(int, int))SR_FN(0x4fbe70))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define resetsendpacket ((void (__cdecl *)(void))SR_FN(0x4fe4f0))
 #define sendpacket ((void (__cdecl *)(u_long, u_short))SR_FN(0x4fe520))
 #define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_FN(0x4fe5b0))
@@ -59955,8 +59955,8 @@ void __cdecl lf_7b100(void)
         if (DAT_102fe2a0 == -1) {
           copyvector((undefined4 *)&DAT_102fe2a4,(undefined4 *)&DAT_0f7eafe0);
           resetorientation((undefined4 *)&DAT_102fe2b0);
-          rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,_DAT_0f7eafec);
-          rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,_DAT_0f7eaff0);
+          rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,_DAT_0f7eafec);
+          rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,_DAT_0f7eaff0);
           _DAT_102fe2d4 = 1.0;
           zerovector((undefined4 *)&DAT_102fe2d8);
         }
@@ -59964,8 +59964,8 @@ void __cdecl lf_7b100(void)
           copyvector((undefined4 *)&DAT_102fe2a4,(undefined4 *)&DAT_0f7eaffc);
           _DAT_102fe2d4 = 1.0;
           resetorientation((undefined4 *)&DAT_102fe2b0);
-          rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,_DAT_0f7eb008);
-          rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,_DAT_0f7eb00c);
+          rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,_DAT_0f7eb008);
+          rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,_DAT_0f7eb00c);
           scaleaddvectors((float *)&DAT_102fe2a4,(float *)&DAT_102fe2a4,(float *)&DAT_102fe2c8,
                           _DAT_0f7eb010);
           zerovector((undefined4 *)&DAT_102fe2d8);
@@ -59978,8 +59978,8 @@ void __cdecl lf_7b100(void)
             copyvector((undefined4 *)&DAT_102fe2a4,(undefined4 *)&DAT_0f7eaffc);
             _DAT_102fe2d4 = 1.0;
             resetorientation((undefined4 *)&DAT_102fe2b0);
-            rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,_DAT_0f7eb008);
-            rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,_DAT_0f7eb00c);
+            rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,_DAT_0f7eb008);
+            rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,_DAT_0f7eb00c);
             scaleaddvectors((float *)&DAT_102fe2a4,(float *)&DAT_102fe2a4,(float *)&DAT_102fe2c8,
                             _DAT_0f7eb010);
             if (DAT_0948aad8 == -1) {
@@ -60005,12 +60005,12 @@ void __cdecl lf_7b100(void)
       resetorientation((undefined4 *)&DAT_102fe2b0);
       copyvector((undefined4 *)&DAT_102fe2a4,
                  (undefined4 *)(&DAT_018fc728 + (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64));
-      rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,
+      rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,
                         *(float *)(&DAT_018fc500 + (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64));
-      rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,
+      rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,
                         (float)(*(float *)(&DAT_018fc504 + (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64) *
                         0.5));
-      rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,
+      rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,
                         (float)(*(float *)(&DAT_018fc504 + (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64) *
                         0.5));
       _DAT_102fe2d4 = (float)(1.0 - *(float *)(&DAT_0f181454 + DAT_102fe2a0 * 0x2408));
@@ -60037,7 +60037,7 @@ void __cdecl lf_7b100(void)
                                                    (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64)),
                                          local_40);
         local_40 = (float)fVar4;
-        rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,(float)(local_40 * 0.75 * local_28));
+        rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,(float)(local_40 * 0.75 * local_28));
         dVar5 = sqrt((double)(_DAT_102fe2d0 * _DAT_102fe2d0 + _DAT_102fe2c8 * _DAT_102fe2c8));
         dVar5 = atan2((double)_DAT_102fe2cc,dVar5);
         local_40 = dVar5;
@@ -60047,7 +60047,7 @@ void __cdecl lf_7b100(void)
                                                    (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64)),
                                          local_40);
         local_40 = (float)fVar4;
-        rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,(float)(local_40 * 0.75 * local_28));
+        rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,(float)(local_40 * 0.75 * local_28));
       }
       else {
         local_24 = *(int *)(&DAT_018fc4b4 + iVar3 * 0x2b64);
@@ -60067,7 +60067,7 @@ void __cdecl lf_7b100(void)
                                                    (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64),
                                          local_40);
         local_40 = (float)fVar4;
-        rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2bc,(float)(local_40 * 0.75 * local_28));
+        rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2bc,(float)(local_40 * 0.75 * local_28));
         dVar5 = sqrt((double)(local_c * local_c + local_14 * local_14));
         dVar5 = atan2((double)local_10,dVar5);
         local_40 = dVar5;
@@ -60075,7 +60075,7 @@ void __cdecl lf_7b100(void)
                                                    (&DAT_0f181418)[DAT_102fe2a0 * 0x902] * 0x2b64),
                                          local_40);
         local_40 = (float)fVar4;
-        rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_102fe2b0,(float)(local_40 * 0.75 * local_28));
+        rotateorientation((float *)&DAT_102fe2b0,&DAT_102fe2b0,(float)(local_40 * 0.75 * local_28));
       }
       if (((DAT_00527ea8 != 0) && (DAT_2a2752a0 == 0)) && (DAT_079a515b != '\0')) {
         resetorientation((undefined4 *)&DAT_102fe2b0);
@@ -62481,7 +62481,7 @@ void __cdecl lf_85980(int param_1)
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
@@ -62684,8 +62684,8 @@ void __cdecl lf_85b70(void)
         if (1.52587890625E-5 < local_58) {
           scalevector(&local_38,(float *)(&DAT_018fc5c8 + local_70 * 0xe0 + local_3c * 0x2b64),
                       (float)(1.0 / local_58));
-          rotateorientation((int)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),&local_38,
-                            local_58);
+          rotateorientation((float *)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),&local_38
+                            ,local_58);
         }
         if ((local_70 == 0) &&
            (iVar2 = lineintersectlevel((float *)(&DAT_018fc574 + local_3c * 0x2b64),
@@ -62881,8 +62881,7 @@ LAB_0048693f:
         if (local_68 != 0) {
           local_70 = 0;
           resetorientation(local_2c);
-          rotateorientation((int)local_2c,&DAT_00523590,
-                            *(float *)(&DAT_018fc500 + local_3c * 0x2b64));
+          rotateorientation(local_2c,&DAT_00523590,*(float *)(&DAT_018fc500 + local_3c * 0x2b64));
           zerovector(&local_38);
           scaleaddvectors(&local_38,&local_38,local_14,
                           -*(float *)(&DAT_018fc548 + local_3c * 0x2b64));
@@ -63168,22 +63167,22 @@ LAB_00487966:
                        (undefined4 *)(&DAT_018fc5b0 + local_d0 * 0xe0 + local_3c * 0x2b64));
             if ((*(int *)(&DAT_018fc4d0 + local_3c * 0x2b64) == 0) &&
                ((local_70 == 9 || (local_70 == 0xc)))) {
-              rotateorientation((int)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
+              rotateorientation((float *)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
                                 &DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64,-1.5707963705062866);
             }
             if (local_70 == 1) {
-              rotateorientation((int)(&DAT_018fc678 + local_3c * 0x2b64),
+              rotateorientation((float *)(&DAT_018fc678 + local_3c * 0x2b64),
                                 &DAT_018fc684 + local_3c * 0x2b64,
                                 (float)(*(float *)(&DAT_018fc54c + local_3c * 0x2b64) * 0.5));
-              rotateorientation((int)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
+              rotateorientation((float *)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
                                 &DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64,
                                 (float)(*(float *)(&DAT_018fc550 + local_3c * 0x2b64) * 0.5));
             }
             if (local_70 == 2) {
-              rotateorientation((int)(&DAT_018fc758 + local_3c * 0x2b64),
+              rotateorientation((float *)(&DAT_018fc758 + local_3c * 0x2b64),
                                 &DAT_018fc764 + local_3c * 0x2b64,
                                 (float)(*(float *)(&DAT_018fc54c + local_3c * 0x2b64) * 0.5));
-              rotateorientation((int)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
+              rotateorientation((float *)(&DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64),
                                 &DAT_018fc598 + local_70 * 0xe0 + local_3c * 0x2b64,
                                 (float)(*(float *)(&DAT_018fc550 + local_3c * 0x2b64) * 0.5));
             }
@@ -63836,7 +63835,7 @@ void __cdecl lf_8a010(void)
 #define DAT_018fc610 (*(undefined *)SR_VA(0x18fc610))
 #define DAT_018fedb8 (*(undefined *)SR_VA(0x18fedb8))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define __security_check_cookie(x) ((void)0)
 #define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(32, "MSVCR100.DLL", "atan2"))
@@ -63891,33 +63890,35 @@ void __cdecl lf_8a020(int param_1)
         local_40 = 0.0;
       }
       resetorientation((undefined4 *)(&DAT_018fc610 + local_44 * 0xe0 + param_1 * 0x2b64));
-      rotateorientation((int)(&DAT_018fc610 + local_44 * 0xe0 + param_1 * 0x2b64),
+      rotateorientation((float *)(&DAT_018fc610 + local_44 * 0xe0 + param_1 * 0x2b64),
                         &DAT_018fc610 + local_44 * 0xe0 + param_1 * 0x2b64,local_40);
     }
   }
   else {
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2016)));
     dVar5 = sin((double)*(float *)(&DAT_018fedb8 + param_1 * 0x2b64));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2016),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2016),
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2016)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2016),
                       (float)((float10)dVar5 * (float10)3.14159265359 * (float10)0.125 -
                              (float10)fVar2));
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2240)));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2240),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2240),(float)(fVar2 + fVar2));
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2240)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2240),
+                      (float)(fVar2 + fVar2));
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2464)));
     dVar5 = sin((double)*(float *)(&DAT_018fedb8 + param_1 * 0x2b64));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2464),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2464),
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2464)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2464),
                       (float)(-(float10)dVar5 * (float10)3.14159265359 * (float10)0.125 -
                              (float10)fVar2));
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2688)));
     dVar5 = sin((double)*(float *)(&DAT_018fedb8 + param_1 * 0x2b64));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2688),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2688),
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2688)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2688),
                       (float)(-(float10)dVar5 * (float10)3.14159265359 * (float10)0.125 -
                              (float10)fVar2));
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2912)));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2912),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2912),(float)(fVar2 + fVar2));
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2912)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 2912),
+                      (float)(fVar2 + fVar2));
     resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 3136)));
     dVar5 = sin((double)*(float *)(&DAT_018fedb8 + param_1 * 0x2b64));
-    rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 3136),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 3136),
+    rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 3136)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 3136),
                       (float)((float10)dVar5 * (float10)3.14159265359 * (float10)0.125 -
                              (float10)fVar2));
   }
@@ -64030,12 +64031,12 @@ void __cdecl lf_8a020(int param_1)
 #define DAT_17b9b8b4 (*(undefined *)SR_VA(0x17b9b8b4))
 #define DAT_17b9b8b8 (*(undefined *)SR_VA(0x17b9b8b8))
 #define human_calcarmtorque ((void (__cdecl *)(int))SR_FN(0x48d000))
-#define multiply3x3matrices ((void (__cdecl *)(int, int, int))SR_FN(0x4a8c60))
+#define multiply3x3matrices ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8c60))
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_FN(0x4d6970))
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
@@ -64212,7 +64213,7 @@ void __cdecl lf_8a710(int param_1)
         local_11c = 0.0;
       }
       resetorientation((undefined4 *)(&DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64));
-      rotateorientation((int)(&DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64),
+      rotateorientation((float *)(&DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64),
                         &DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64,local_11c);
       if ((local_164 == 3) || (local_164 == 6)) {
         if ((local_164 == 3) && (local_114 < 0.0)) {
@@ -64221,7 +64222,7 @@ void __cdecl lf_8a710(int param_1)
         if ((local_164 == 6) && (0.0 < local_114)) {
           local_114 = 0.0;
         }
-        rotateorientation((int)(&DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64),
+        rotateorientation((float *)(&DAT_018fc610 + local_164 * 0xe0 + param_1 * 0x2b64),
                           &DAT_018fc628 + local_164 * 0xe0 + param_1 * 0x2b64,local_114);
       }
     }
@@ -64251,30 +64252,34 @@ void __cdecl lf_8a710(int param_1)
     }
     if (*(int *)(&DAT_018fc4b4 + param_1 * 0x2b64) == -1) {
       resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),
                         (float)(*(float *)(&DAT_018fc554 + param_1 * 0x2b64) * 0.5 + local_d8));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),
                         (float)(*(float *)(&DAT_018fc558 + param_1 * 0x2b64) * 0.75 +
                         *(float *)(&DAT_018fc504 + param_1 * 0x2b64) * 0.5));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),local_110);
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),
+                        local_110);
       resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),&DAT_00523590,
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)),&DAT_00523590,
                         (float)((*(float *)(&DAT_018fc554 + param_1 * 0x2b64) * 0.5 - local_110) +
                         0.04908738521234375));
       if ((*(int *)(&DAT_018fc4dc + param_1 * 0x2b64) == 2) && (local_98 != 0)) {
-        rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),param_1 * 0x2b64 + ((int)SR_VA(0x18fc628) + 448),0.19634954631328583);
+        rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc628) + 448),
+                          0.19634954631328583);
       }
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),
                         (float)(*(float *)(&DAT_018fc558 + param_1 * 0x2b64) * 0.25 +
                         *(float *)(&DAT_018fc504 + param_1 * 0x2b64) * 0.5));
     }
     else {
       resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 224),
                         (float)(local_110 + local_d8));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),local_d4);
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),
+                        local_d4);
       resetorientation((undefined4 *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)));
-      rotateorientation(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 448),-local_110);
+      rotateorientation((float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 448)),param_1 * 0x2b64 + ((int)SR_VA(0x18fc61c) + 448),
+                        -local_110);
     }
     local_9c = -0.07363107800483704;
     local_70 = 0xbc16cbe4;
@@ -64284,7 +64289,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603970);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603974);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603978);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603964,&DAT_0f603970);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64292,7 +64297,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603ab0);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603ab4);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603ab8);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1344),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1344)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603aa4,&DAT_0f603ab0);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64300,7 +64305,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603af0);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603af4);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603af8);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1568),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1568)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603ae4,&DAT_0f603af0);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64308,7 +64313,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603b30);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603b34);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603b38);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1792),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1792)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603b24,&DAT_0f603b30);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64326,12 +64331,12 @@ void __cdecl lf_8a710(int param_1)
         local_c4 = 0.0;
       }
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0x10) {
-        rotateorientation((int)local_2c,local_2c,0.9817476868629456);
+        rotateorientation(local_2c,local_2c,0.9817476868629456);
         local_c8 = 0.0;
         local_c4 = 0.125;
       }
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0x1a) {
-        rotateorientation((int)local_2c,local_2c,1.3744467496871948);
+        rotateorientation(local_2c,local_2c,1.3744467496871948);
         local_cc = 0.16249999403953552;
         local_c8 = 0.0;
         local_c4 = 0.1875;
@@ -64403,12 +64408,12 @@ void __cdecl lf_8a710(int param_1)
       fVar1 = (float10)dotproduct((float *)(&DAT_0948b11c + local_54 * 0x1ac),
                                   (float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc5b0) + 1792)));
       local_a0 = (float)fVar1;
-      rotateorientation((int)&local_c0,&DAT_00523584,1.5707963705062866);
+      rotateorientation(&local_c0,&DAT_00523584,1.5707963705062866);
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0x10) {
-        rotateorientation((int)&local_c0,&DAT_00523584,-1.1780972480773926);
+        rotateorientation(&local_c0,&DAT_00523584,-1.1780972480773926);
       }
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0x1a) {
-        rotateorientation((int)&local_c0,&DAT_00523584,-1.3744467496871948);
+        rotateorientation(&local_c0,&DAT_00523584,-1.3744467496871948);
       }
       local_9c = -0.09817477315664291;
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 10) {
@@ -64417,7 +64422,7 @@ void __cdecl lf_8a710(int param_1)
       if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 8) {
         local_9c = -0.1227184608578682;
       }
-      rotateorientation((int)&local_c0,&DAT_00523584,local_9c);
+      rotateorientation(&local_c0,&DAT_00523584,local_9c);
       orientationtoquaternion(&local_12c,&local_c0);
       local_12c = -local_12c;
       local_128 = -local_128;
@@ -64465,7 +64470,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603970);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603974);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603978);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 224)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603964,&DAT_0f603970);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64473,7 +64478,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f6039f0);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f6039f4);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f6039f8);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 672),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 672)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f6039e4,&DAT_0f6039f0);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64481,7 +64486,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603a30);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603a34);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603a38);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 896),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 896)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603a24,&DAT_0f603a30);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64489,7 +64494,7 @@ void __cdecl lf_8a710(int param_1)
       scaleaddvectors(local_50,local_50,local_2c,DAT_0f603a70);
       scaleaddvectors(local_50,local_50,local_20,DAT_0f603a74);
       scaleaddvectors(local_50,local_50,local_14,DAT_0f603a78);
-      multiply3x3matrices((int)local_2c,param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1120),(int)local_2c);
+      multiply3x3matrices(local_2c,(float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc610) + 1120)),local_2c);
       subtractvectors(&local_38,(float *)&DAT_0f603a64,&DAT_0f603a70);
       scaleaddvectors(local_50,local_50,local_2c,local_38);
       scaleaddvectors(local_50,local_50,local_20,local_34);
@@ -64581,12 +64586,12 @@ void __cdecl lf_8a710(int param_1)
           fVar1 = (float10)dotproduct((float *)(&DAT_0948b11c + local_54 * 0x1ac),
                                       (float *)(param_1 * 0x2b64 + ((int)SR_VA(0x18fc5b0) + 1120)));
           local_a0 = (float)fVar1;
-          rotateorientation((int)&local_c0,&DAT_00523584,1.5707963705062866);
+          rotateorientation(&local_c0,&DAT_00523584,1.5707963705062866);
           if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0xd) {
-            rotateorientation((int)&local_c0,&DAT_00523590,1.5707963705062866);
+            rotateorientation(&local_c0,&DAT_00523590,1.5707963705062866);
           }
           if (*(int *)(&DAT_0948b08c + local_54 * 0x1ac) == 0x10) {
-            rotateorientation((int)&local_c0,&DAT_00523584,-1.1780972480773926);
+            rotateorientation(&local_c0,&DAT_00523584,-1.1780972480773926);
           }
           dVar2 = atan2((double)local_ac,(double)local_a0);
           local_11c = dVar2;
@@ -64830,7 +64835,7 @@ void __cdecl lf_8a710(int param_1)
 #define DAT_0f603934 (*(undefined *)SR_VA(0xf603934))
 #define DAT_0f603938 (*(undefined *)SR_VA(0xf603938))
 #define debug_addcross ((void (__cdecl *)(float *, float))SR_FN(0x46a230))
-#define projectorientation ((void (__cdecl *)(int, int, int))SR_FN(0x4a8b30))
+#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8b30))
 #define transposematrix ((void (__cdecl *)(undefined4 *, int))SR_FN(0x4a8d60))
 #define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_FN(0x4d6970))
 #define multiplyquaternion ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4d6b50))
@@ -64838,7 +64843,7 @@ void __cdecl lf_8a710(int param_1)
 #define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
 #define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
@@ -65206,8 +65211,8 @@ void __cdecl lf_8d000(int param_1)
     local_44 = (float)((float10)dVar2 + (float10)dVar2);
     local_128 = local_3c * 3 + 3;
     local_104 = *(int *)(&DAT_018fc644 + local_128 * 0xe0 + param_1 * 0x2b64);
-    projectorientation((int)local_100,(int)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
-                       (int)(&DAT_018fc678 + param_1 * 0x2b64));
+    projectorientation(local_100,(float *)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
+                       (float *)(&DAT_018fc678 + param_1 * 0x2b64));
     orientationtoquaternion(&local_c0,local_100);
     resetorientation(local_100);
     FUN_0050b980(&local_38,&local_164);
@@ -65219,7 +65224,7 @@ void __cdecl lf_8d000(int param_1)
     normalizevector(local_e8,local_e8);
     FUN_0050b830(local_100,local_e8,local_f4);
     transposematrix(local_100,(int)local_100);
-    rotateorientation((int)local_100,&DAT_00523584,(float)(-local_44 * 0.5));
+    rotateorientation(local_100,&DAT_00523584,(float)(-local_44 * 0.5));
     copyvector(local_b0,local_100);
     copyvector(local_a4,local_f4);
     copyvector(local_98,local_e8);
@@ -65243,11 +65248,11 @@ void __cdecl lf_8d000(int param_1)
                   (float *)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64));
     local_128 = local_3c * 3 + 4;
     local_104 = *(int *)(&DAT_018fc644 + local_128 * 0xe0 + param_1 * 0x2b64);
-    projectorientation((int)local_100,(int)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
-                       (int)(&DAT_018fc598 + (local_3c * 3 + 3) * 0xe0 + param_1 * 0x2b64));
+    projectorientation(local_100,(float *)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
+                       (float *)(&DAT_018fc598 + (local_3c * 3 + 3) * 0xe0 + param_1 * 0x2b64));
     orientationtoquaternion(&local_c0,local_100);
     resetorientation(local_100);
-    rotateorientation((int)local_100,local_100,local_44);
+    rotateorientation(local_100,local_100,local_44);
     copyvector(local_8c,local_100);
     copyvector(local_80,local_f4);
     copyvector(local_74,local_e8);
@@ -65271,12 +65276,11 @@ void __cdecl lf_8d000(int param_1)
                   (float *)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64));
     local_128 = local_3c * 3 + 5;
     local_104 = *(int *)(&DAT_018fc644 + local_128 * 0xe0 + param_1 * 0x2b64);
-    projectorientation((int)local_100,(int)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
-                       (int)(&DAT_018fc598 + (local_3c * 3 + 4) * 0xe0 + param_1 * 0x2b64));
+    projectorientation(local_100,(float *)(&DAT_018fc598 + local_128 * 0xe0 + param_1 * 0x2b64),
+                       (float *)(&DAT_018fc598 + (local_3c * 3 + 4) * 0xe0 + param_1 * 0x2b64));
     orientationtoquaternion(&local_c0,local_100);
     resetorientation(local_100);
-    rotateorientation((int)local_100,&DAT_00523584,
-                      (float)(-*(float *)(&DAT_018fc504 + param_1 * 0x2b64) * 0.5));
+    rotateorientation(local_100,&DAT_00523584,(float)(-*(float *)(&DAT_018fc504 + param_1 * 0x2b64) * 0.5));
     orientationtoquaternion(local_154,local_100);
     local_184 = -local_184;
     local_180 = -local_180;
@@ -66172,7 +66176,7 @@ void __cdecl lf_8e8d0(void)
 #define lineintersectall ((bool (__cdecl *)(float *, float *))SR_FN(0x4a0da0))
 #define pointinsidebase ((undefined4 (__cdecl *)(float *, int, float))SR_FN(0x4a4180))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define pointdistanceline ((float (__cdecl *)(float *, float *, float *))SR_FN(0x4fd150))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
@@ -66339,7 +66343,7 @@ void __cdecl lf_8f730(int param_1)
     if (*(int *)(&DAT_0948b08c + iVar3 * 0x1ac) == 0x19) {
       fVar5 = *(float *)(&DAT_018fc53c + param_1 * 0x2b64);
       resetorientation(local_2c);
-      rotateorientation((int)local_2c,&DAT_00523590,fVar5);
+      rotateorientation(local_2c,&DAT_00523590,fVar5);
       scaleaddvectors((float *)(&DAT_018feedc + local_70 * 0x10 + param_1 * 0x2b64),
                       (float *)(&DAT_0948b214 + iVar3 * 0x1ac),local_2c,1.0);
       scaleaddvectors((float *)(&DAT_018feedc + local_70 * 0x10 + param_1 * 0x2b64),
@@ -68652,7 +68656,7 @@ void __cdecl lf_971c0(int param_1)
 #define _DAT_1073ec38 (*(float *)SR_VA(0x1073ec38))
 #define item_physicssimulation ((void (__cdecl *)(int))SR_FN(0x49a410))
 #define lineintersectlevel ((bool (__cdecl *)(float *, float *, int))SR_FN(0x4a0f40))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_FN(0x50b6b0))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
@@ -68751,7 +68755,7 @@ void __cdecl lf_97350(void)
           local_1c = (float)fVar2;
           if (1.52587890625E-5 < local_1c) {
             scalevector(local_14,(float *)(&DAT_0948b134 + local_18 * 0x1ac),(float)(1.0 / local_1c));
-            rotateorientation((int)(&DAT_0948b104 + local_18 * 0x1ac),local_14,local_1c);
+            rotateorientation((float *)(&DAT_0948b104 + local_18 * 0x1ac),local_14,local_1c);
           }
           *(float *)(&DAT_0948b0f0 + local_18 * 0x1ac) =
                (float)(*(float *)(&DAT_0948b0f0 + local_18 * 0x1ac) - 0.0027222223579883575);
@@ -69966,7 +69970,7 @@ void __cdecl lf_9a330(int param_1,int param_2)
 #define DAT_17b9b8b8 (*(undefined *)SR_VA(0x17b9b8b8))
 #define _DAT_1073ec3c (*(float *)SR_VA(0x1073ec3c))
 #define item_sphereintersect ((bool (__cdecl *)(int, undefined4, float))SR_FN(0x49aba0))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
@@ -70035,7 +70039,7 @@ void __cdecl lf_9a410(int param_1)
   local_1c = (float)fVar2;
   if (1.52587890625E-5 < local_1c) {
     scalevector(local_14,(float *)(&DAT_0948b134 + param_1 * 0x1ac),(float)(1.0 / local_1c));
-    rotateorientation((int)(&DAT_0948b104 + param_1 * 0x1ac),local_14,local_1c);
+    rotateorientation((float *)(&DAT_0948b104 + param_1 * 0x1ac),local_14,local_1c);
   }
   *(float *)(&DAT_0948b0f0 + param_1 * 0x1ac) =
        (float)(*(float *)(&DAT_0948b0f0 + param_1 * 0x1ac) - 0.0027222223579883575);
@@ -71094,7 +71098,7 @@ void __cdecl lf_9b740(void)
 #define _DAT_0f7ca984 (*(undefined4 *)SR_VA(0xf7ca984))
 #define _DAT_0f7ca988 (*(undefined4 *)SR_VA(0xf7ca988))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 void __cdecl lf_9c4f0(void)
 
 {
@@ -71108,7 +71112,7 @@ void __cdecl lf_9c4f0(void)
   _DAT_0f7ca984 = 0;
   _DAT_0f7ca988 = 0x43200000;
   resetorientation((undefined4 *)&DAT_0f7ca98c);
-  rotateorientation(((int)SR_VA(0xf7ca98c)),&DAT_0f7ca98c,1.5707963705062866);
+  rotateorientation((float *)&DAT_0f7ca98c,&DAT_0f7ca98c,1.5707963705062866);
   DAT_0f604148 = 3;
   DAT_0f60414c = 3;
   DAT_0f604150 = 0;
@@ -71250,7 +71254,7 @@ void __cdecl lf_9c4f0(void)
 #define leveleditor_save ((void (__cdecl *)(void))SR_FN(0x4a0740))
 #define render_buildareasectorshadow ((void (__cdecl *)(void))SR_FN(0x4d8290))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define listfiles ((void (__cdecl *)(char *, int, int))SR_FN(0x4fdde0))
 #define removeflieextentions ((void (__cdecl *)(int))SR_FN(0x4fe200))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
@@ -71285,7 +71289,7 @@ void __cdecl lf_9c4f0(void)
 #define local_38 (*(float *)(lf_frame + 0x48))
 #define local_34 (*(float *)(lf_frame + 0x4c))
 #define local_30 (*(undefined4 *)(lf_frame + 0x50))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x54))
+#define local_2c (*(float (*)[9])(lf_frame + 0x54))
 #define local_8 (*(uint *)(lf_frame + 0x78))
 void __cdecl lf_9c5c0(void)
 
@@ -71699,7 +71703,7 @@ void __cdecl lf_9c5c0(void)
     local_34 = _DAT_0f7ca988;
     local_30 = 0;
     resetorientation(local_2c);
-    rotateorientation((int)local_2c,local_2c,3.1415927410125732);
+    rotateorientation(local_2c,local_2c,3.1415927410125732);
     setupviewpoint(&local_38,local_2c);
     for (local_3c = 0; (int)local_3c < DAT_0f60715c; local_3c = local_3c + 1) {
       local_38 = (float)((float)(*(int *)(&DAT_0f60415c + *(int *)(&DAT_0f607160 + local_3c * 0x34) * 0xc) +
@@ -73406,7 +73410,7 @@ void __cdecl lf_a1320(void)
 #define _DAT_1073ec38 (*(float *)SR_VA(0x1073ec38))
 #define floor ((double (__cdecl *)(double))LF_IMPORT(33, "MSVCR100.DLL", "floor"))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
@@ -73550,8 +73554,8 @@ bool __cdecl lf_a1b40(int param_1,int param_2)
       addvectors(&local_a8,&local_a8,(float *)&DAT_09fa7c20);
       generatetrinormal(local_7c + 6,&local_18,&local_2c,&local_a8);
       iVar2 = lineintersecttriangle
-                        (local_4c,local_7c + 6,&local_20,param_1,param_2,&local_18,&local_2c,
-                         &local_a8);
+                        (local_4c,local_7c + 6,&local_20,(float *)param_1,(float *)param_2,&local_18
+                         ,&local_2c,&local_a8);
       if ((iVar2 != 0) && (local_20 < _DAT_1073ec38)) {
         copyvector((undefined4 *)&DAT_1073ec20,local_4c);
         copyvector((undefined4 *)&DAT_1073ec2c,local_7c + 6);
@@ -73572,8 +73576,8 @@ bool __cdecl lf_a1b40(int param_1,int param_2)
       addvectors(&local_a8,&local_a8,(float *)&DAT_09fa7c20);
       generatetrinormal(local_7c + 6,&local_18,&local_2c,&local_a8);
       iVar2 = lineintersecttriangle
-                        (local_4c,local_7c + 6,&local_20,param_1,param_2,&local_18,&local_2c,
-                         &local_a8);
+                        (local_4c,local_7c + 6,&local_20,(float *)param_1,(float *)param_2,&local_18
+                         ,&local_2c,&local_a8);
       if ((iVar2 != 0) && (local_20 < _DAT_1073ec38)) {
         copyvector((undefined4 *)&DAT_1073ec20,local_4c);
         copyvector((undefined4 *)&DAT_1073ec2c,local_7c + 6);
@@ -75010,7 +75014,7 @@ undefined4 __cdecl lf_a44a0(int param_1,int param_2,undefined4 param_3)
 #define createevent_updateiteminfo ((void (__cdecl *)(int))SR_FN(0x4723b0))
 #define createitem ((int (__cdecl *)(int, float *, int, int))SR_FN(0x496cf0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
@@ -75070,8 +75074,7 @@ void __cdecl lf_a4570(int param_1,int param_2)
       *(int *)(&DAT_0948b17c + iVar1 * 0x1ac) = param_1 * 0x457 + 0x457;
       createevent_updateiteminfo(iVar1);
     }
-    rotateorientation((int)local_2c,local_20,
-                      (float)(*(float *)(&DAT_09465384 + local_3c * 0x117c) - 1.570796326795));
+    rotateorientation(local_2c,local_20,(float)(*(float *)(&DAT_09465384 + local_3c * 0x117c) - 1.570796326795));
     scaleaddvectors(local_38,local_38,local_2c,0.5);
     iVar1 = createitem(0x17,local_38,0,(int)local_2c);
     if (iVar1 != -1) {
@@ -75441,7 +75444,7 @@ void __cdecl lf_a5140(int param_1,int param_2)
 #define linkitem ((int (__cdecl *)(int, int, int, int))SR_FN(0x499d50))
 #define createobject ((int (__cdecl *)(int, float *, int, int, undefined4))SR_FN(0x4c5780))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
@@ -75449,7 +75452,7 @@ void __cdecl lf_a5140(int param_1,int param_2)
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(undefined4 (*)[2])(lf_frame + 0x18))
 #define local_30 (*(float *)(lf_frame + 0x20))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x24))
+#define local_2c (*(float (*)[9])(lf_frame + 0x24))
 #define local_8 (*(uint *)(lf_frame + 0x48))
 void __cdecl lf_a52c0(int param_1,int param_2)
 
@@ -75482,7 +75485,7 @@ void __cdecl lf_a52c0(int param_1,int param_2)
     *(uint *)(&DAT_0e65cb08 + *(int *)(&DAT_0f181478 + param_1 * 0x2408) * 0x9dc) =
          *(uint *)(&DAT_0e65cb08 + *(int *)(&DAT_0f181478 + param_1 * 0x2408) * 0x9dc) & 7;
     resetorientation(local_2c);
-    rotateorientation((int)local_2c,&DAT_00523590,1.5707963705062866);
+    rotateorientation(local_2c,&DAT_00523590,1.5707963705062866);
     uVar2 = createobject(*(int *)(&DAT_0e65ca48 +
                                  (param_2 + -1) * 0xc +
                                  *(int *)(&DAT_0f181478 + param_1 * 0x2408) * 0x9dc),local_38,0,
@@ -75802,7 +75805,7 @@ void __cdecl lf_a57d0(int param_1)
 #define logic_cardealer_buy ((void (__cdecl *)(int, int))SR_FN(0x4a52c0))
 #define logic_gunstore_buy ((void (__cdecl *)(int, int))SR_FN(0x4a5630))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
@@ -75815,7 +75818,7 @@ void __cdecl lf_a57d0(int param_1)
 #define local_3c (*(float (*)[2])(lf_frame + 0x54))
 #define local_34 (*(float *)(lf_frame + 0x5c))
 #define local_30 (*(int *)(lf_frame + 0x60))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x64))
+#define local_2c (*(float (*)[3])(lf_frame + 0x64))
 #define local_20 (*(undefined4 (*)[3])(lf_frame + 0x70))
 #define local_14 (*(undefined4 (*)[3])(lf_frame + 0x7c))
 #define local_8 (*(uint *)(lf_frame + 0x88))
@@ -75979,7 +75982,7 @@ void __cdecl lf_a59e0(int param_1)
           uVar3 = rand();
           local_34 = (float)(((_DAT_2a27d338 - 2.0) * (float)(uVar3 & 0xff) * 0.5) / 256.0 + local_34);
           resetorientation(local_2c);
-          rotateorientation((int)local_2c,local_20,-1.5707963705062866);
+          rotateorientation(local_2c,local_20,-1.5707963705062866);
           uVar4 = createhuman(local_3c,(int)local_2c,param_1);
           (&DAT_0f181418)[param_1 * 0x902] = uVar4;
           if ((&DAT_0f181418)[param_1 * 0x902] != -1) {
@@ -76453,7 +76456,7 @@ void __cdecl lf_a59e0(int param_1)
 #define scenario_isseekmission ((int (__cdecl *)(int))SR_FN(0x4dc860))
 #define scenario_createtraffic2 ((void (__cdecl *)(int))SR_FN(0x4dcde0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
@@ -76522,7 +76525,7 @@ void __cdecl lf_a7240(void)
           local_30 = (float)(((float)(int)((uVar3 & 0xff) - 0x7f) * 4.0) / 128.0 + local_30);
           resetorientation(local_2c);
           fVar1 = *(float *)(&DAT_09465384 + (&DAT_0f181404)[local_3c * 0x902] * 0x117c);
-          rotateorientation((int)local_2c,local_20,(float)(fVar1 - 1.570796326795));
+          rotateorientation(local_2c,local_20,(float)(fVar1 - 1.570796326795));
           uVar4 = createhuman(&local_38,(int)local_2c,local_3c);
           (&DAT_0f181418)[local_3c * 0x902] = uVar4;
           *(float *)(&DAT_018fc500 + (&DAT_0f181418)[local_3c * 0x902] * 0x2b64) = fVar1 - 1.570796326795
@@ -76572,7 +76575,7 @@ void __cdecl lf_a7240(void)
                    (float *)(&DAT_09465378 + local_3c * 0x117c));
         scalevector(&local_38,&local_38,0.5);
         resetorientation(local_2c);
-        rotateorientation((int)local_2c,local_20,
+        rotateorientation(local_2c,local_20,
                           (float)(*(float *)(&DAT_09465384 + local_3c * 0x117c) - 1.570796326795));
         iVar5 = createitem(0x17,&local_38,0,(int)local_2c);
         if (iVar5 != -1) {
@@ -77185,129 +77188,6 @@ void __cdecl lf_a7bc0(void)
 #undef local_38
 #undef local_30
 #undef local_2c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xa8b30 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x3c))
-#define local_2c (*(float *)(lf_frame + 0x14))
-#define local_28 (*(float *)(lf_frame + 0x18))
-#define local_24 (*(float *)(lf_frame + 0x1c))
-#define local_20 (*(float *)(lf_frame + 0x20))
-#define local_1c (*(float *)(lf_frame + 0x24))
-#define local_18 (*(float *)(lf_frame + 0x28))
-#define local_14 (*(float *)(lf_frame + 0x2c))
-#define local_10 (*(float *)(lf_frame + 0x30))
-#define local_c (*(float *)(lf_frame + 0x34))
-#define local_8 (*(uint *)(lf_frame + 0x38))
-void __cdecl lf_a8b30(int param_1,int param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-
-  float10 fVar1;
-
-
-
-
-
-
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  fVar1 = (float10)dotproduct((float *)param_2,(float *)param_3);
-  local_2c = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0xc),(float *)param_3);
-  local_28 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0x18),(float *)param_3);
-  local_24 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)param_2,(float *)(param_3 + 0xc));
-  local_20 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0xc),(float *)(param_3 + 0xc));
-  local_1c = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0x18),(float *)(param_3 + 0xc));
-  local_18 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)param_2,(float *)(param_3 + 0x18));
-  local_14 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0xc),(float *)(param_3 + 0x18));
-  local_10 = (float)fVar1;
-  fVar1 = (float10)dotproduct((float *)(param_2 + 0x18),(float *)(param_3 + 0x18));
-  local_c = (float)fVar1;
-  copyvector((undefined4 *)param_1,&local_2c);
-  copyvector((undefined4 *)(param_1 + 0xc),&local_20);
-  copyvector((undefined4 *)(param_1 + 0x18),&local_14);
-  return;
-}
-#undef DAT_00526650
-#undef dotproduct
-#undef copyvector
-#undef __security_check_cookie
-#undef local_4
-#undef local_2c
-#undef local_28
-#undef local_24
-#undef local_20
-#undef local_1c
-#undef local_18
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xa8c60 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x4c))
-#define local_38 (*(int *)(lf_frame + 0x18))
-#define local_34 (*(int *)(lf_frame + 0x1c))
-#define local_30 (*(float (*)[6])(lf_frame + 0x20))
-#define local_18 (*(undefined4 (*)[3])(lf_frame + 0x38))
-#define local_c (*(uint *)(lf_frame + 0x44))
-#define local_8 (*(int *)(lf_frame + 0x48))
-void __cdecl lf_a8c60(int param_1,int param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-
-
-
-
-
-
-
-  
-  local_c = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  for (local_8 = 0; local_8 < 3; local_8 = local_8 + 1) {
-    for (local_38 = 0; local_38 < 3; local_38 = local_38 + 1) {
-      local_30[local_8 * 3 + local_38] = 0.0;
-      for (local_34 = 0; local_34 < 3; local_34 = local_34 + 1) {
-        local_30[local_8 * 3 + local_38] =
-             (float)(*(float *)(local_8 * 0xc + param_2 + local_34 * 4) *
-             *(float *)(local_34 * 0xc + param_3 + local_38 * 4) + local_30[local_8 * 3 + local_38]);
-      }
-    }
-  }
-  copyvector((undefined4 *)param_1,local_30);
-  copyvector((undefined4 *)(param_1 + 0xc),local_30 + 3);
-  copyvector((undefined4 *)(param_1 + 0x18),local_18);
-  return;
-}
-#undef DAT_00526650
-#undef copyvector
-#undef __security_check_cookie
-#undef local_4
-#undef local_38
-#undef local_34
-#undef local_30
-#undef local_18
-#undef local_c
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xa8d60 */
@@ -78539,7 +78419,7 @@ void __cdecl lf_aa5a0(void)
 #define usermenu ((void (__cdecl *)(void))SR_FN(0x4fa9f0))
 #define getaudioinput ((void (__cdecl *)(int))SR_FN(0x4fb6f0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define FUN_004fe3f0 ((void (__cdecl *)(int))SR_FN(0x4fe3f0))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
@@ -78582,7 +78462,7 @@ void __cdecl lf_aa5a0(void)
 #define local_3c (*(undefined4 *)(lf_frame + 0x174))
 #define local_38 (*(undefined4 *)(lf_frame + 0x178))
 #define local_34 (*(undefined4 *)(lf_frame + 0x17c))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x184))
+#define local_2c (*(float (*)[9])(lf_frame + 0x184))
 #define local_8 (*(uint *)(lf_frame + 0x1a8))
 void __cdecl lf_aa920(void)
 
@@ -78815,7 +78695,7 @@ void __cdecl lf_aa920(void)
         local_38 = 0xbf600000;
         local_34 = 0xbf800000;
         resetorientation(local_2c);
-        rotateorientation((int)local_2c,&DAT_00523590,3.5342917442321777);
+        rotateorientation(local_2c,&DAT_00523590,3.5342917442321777);
         local_90 = DAT_14711c64;
         local_8c = DAT_14711c64;
         local_74 = 0x3f800000;
@@ -82206,7 +82086,7 @@ void __cdecl lf_b3900(int param_1,int param_2)
 #define model_settritexcoord ((void (__cdecl *)(float *, float, float, float))SR_FN(0x4aedb0))
 #define FUN_004aef30 ((void (__cdecl *)(float *, float *, float, float, float, int))SR_FN(0x4aef30))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x4c))
@@ -82214,7 +82094,7 @@ void __cdecl lf_b3900(int param_1,int param_2)
 #define local_38 (*(float *)(lf_frame + 0x18))
 #define local_34 (*(float *)(lf_frame + 0x1c))
 #define local_30 (*(undefined4 *)(lf_frame + 0x20))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x24))
+#define local_2c (*(float (*)[3])(lf_frame + 0x24))
 #define local_20 (*(float (*)[3])(lf_frame + 0x30))
 #define local_14 (*(float (*)[3])(lf_frame + 0x3c))
 #define local_8 (*(uint *)(lf_frame + 0x48))
@@ -82253,7 +82133,7 @@ void __cdecl lf_b3fc0(int param_1,float param_2,float param_3,float param_4)
     local_34 = 0.0;
     local_30 = 0;
     resetorientation(local_2c);
-    rotateorientation((int)local_2c,local_2c,0.7853981852531433);
+    rotateorientation(local_2c,local_2c,0.7853981852531433);
     scaleaddvectors(&local_38,&local_38,local_20,(float)(param_3 * 0.5));
     scaleaddvectors(&local_38,&local_38,local_14,param_4);
     FUN_004aef30(&local_38,local_2c,param_2,(float)(param_3 * 0.5),param_4,0);
@@ -82487,14 +82367,14 @@ void __cdecl lf_b41d0(int param_1,float param_2,float param_3,float param_4)
 #define setupmodel ((void (__cdecl *)(int, int))SR_FN(0x4ac190))
 #define addcylindertomodel ((void (__cdecl *)(float *, float *, float, float))SR_FN(0x4af140))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x4c))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(undefined4 *)(lf_frame + 0x18))
 #define local_34 (*(undefined4 *)(lf_frame + 0x1c))
 #define local_30 (*(float *)(lf_frame + 0x20))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x24))
+#define local_2c (*(float (*)[3])(lf_frame + 0x24))
 #define local_20 (*(undefined1 (*)[24])(lf_frame + 0x30))
 #define local_8 (*(uint *)(lf_frame + 0x48))
 void __cdecl lf_b4520(int param_1,float param_2,float param_3)
@@ -82519,7 +82399,7 @@ void __cdecl lf_b4520(int param_1,float param_2,float param_3)
   local_34 = 0;
   local_30 = (float)(param_2 * 0.5);
   resetorientation(local_2c);
-  rotateorientation((int)local_2c,local_20,1.5707963705062866);
+  rotateorientation(local_2c,local_20,1.5707963705062866);
   addcylindertomodel(&local_38,local_2c,param_3,param_2);
   for (local_3c = 0; local_3c < DAT_09597688; local_3c = local_3c + 1) {
     *(float *)&((&DAT_096a768c)[local_3c * 6]) =
@@ -85051,14 +84931,14 @@ void __cdecl lf_bf260(int param_1,float param_2,float param_3,float param_4)
 #define FUN_004b3150 ((void (__cdecl *)(int, undefined4, undefined4))SR_FN(0x4b3150))
 #define model_setquadtexcoord ((void (__cdecl *)(int, undefined4, undefined4))SR_FN(0x4b31c0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x4c))
 #define local_3c (*(int *)(lf_frame + 0x14))
 #define local_38 (*(undefined4 *)(lf_frame + 0x18))
 #define local_34 (*(undefined4 *)(lf_frame + 0x1c))
 #define local_30 (*(undefined4 *)(lf_frame + 0x20))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x24))
+#define local_2c (*(float (*)[3])(lf_frame + 0x24))
 #define local_20 (*(undefined1 (*)[24])(lf_frame + 0x30))
 #define local_8 (*(uint *)(lf_frame + 0x48))
 void __cdecl lf_bf820(int param_1)
@@ -85090,7 +84970,7 @@ void __cdecl lf_bf820(int param_1)
   local_34 = 0;
   local_30 = 0x3c800000;
   resetorientation(local_2c);
-  rotateorientation((int)local_2c,local_20,1.5707963705062866);
+  rotateorientation(local_2c,local_20,1.5707963705062866);
   addcylindertomodel(&local_38,local_2c,0.03125,0.03125);
   for (local_3c = 0; local_3c < DAT_09597688; local_3c = local_3c + 1) {
     FUN_004b3150(local_3c,0,0);
@@ -85591,7 +85471,7 @@ void __cdecl lf_c0a60(void)
 #define rendersphere ((void (__cdecl *)(undefined4 *, float, int))SR_FN(0x4d6cb0))
 #define rendermodel ((void (__cdecl *)(int, undefined4 *, undefined4 *, int, int *, float *))SR_FN(0x4d7150))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
 #define drawmenuitems ((void (__cdecl *)(void))SR_FN(0x4ff2e0))
@@ -85677,9 +85557,9 @@ void __cdecl lf_c14a0(void)
     glClear(0x4100);
     zerovector((undefined4 *)&DAT_102fe2a4);
     resetorientation((undefined4 *)&DAT_102fe2b0);
-    rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_00523590,3.1415927410125732);
+    rotateorientation((float *)&DAT_102fe2b0,&DAT_00523590,3.1415927410125732);
     if (DAT_079a5221 != '\0') {
-      rotateorientation(((int)SR_VA(0x102fe2b0)),&DAT_00523590,-1.5707963705062866);
+      rotateorientation((float *)&DAT_102fe2b0,&DAT_00523590,-1.5707963705062866);
     }
     scaleaddvectors((float *)&DAT_102fe2a4,(float *)&DAT_102fe2a4,(float *)&DAT_102fe2c8,0.5);
     setupperspectiveviewport(0,0,0x400,0x280,0.125,1024.0,1.0);
@@ -86060,7 +85940,7 @@ float10 __cdecl lf_c1d90(float param_1,float param_2)
 #define FUN_00468f80 ((void (__cdecl *)(int))SR_FN(0x468f80))
 #define FUN_00469110 ((void (__cdecl *)(float *, float, uint))SR_FN(0x469110))
 #define client_simulation ((void (__cdecl *)(void))SR_FN(0x4c2bb0))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define pbitread ((int (__cdecl *)(uint *, uint))SR_FN(0x4fe800))
 #define pbitreadnego ((int (__cdecl *)(uint *, uint))SR_FN(0x4feb80))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
@@ -86154,13 +86034,13 @@ void __cdecl lf_c1dc0(void)
                        (undefined4 *)(&DAT_018fc5a4 + local_34 * 0xe0 + local_38 * 0x2b64));
             copyvector((undefined4 *)(&DAT_018fc5b0 + local_2c * 0xe0 + local_38 * 0x2b64),
                        (undefined4 *)(&DAT_018fc5b0 + local_34 * 0xe0 + local_38 * 0x2b64));
-            rotateorientation((int)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
+            rotateorientation((float *)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
                               &DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64,
                               *(float *)(&DAT_018fc638 + local_2c * 0xe0 + local_38 * 0x2b64));
-            rotateorientation((int)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
+            rotateorientation((float *)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
                               &DAT_018fc5a4 + local_2c * 0xe0 + local_38 * 0x2b64,
                               *(float *)(&DAT_018fc63c + local_2c * 0xe0 + local_38 * 0x2b64));
-            rotateorientation((int)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
+            rotateorientation((float *)(&DAT_018fc598 + local_2c * 0xe0 + local_38 * 0x2b64),
                               &DAT_018fc5b0 + local_2c * 0xe0 + local_38 * 0x2b64,
                               *(float *)(&DAT_018fc640 + local_2c * 0xe0 + local_38 * 0x2b64));
             subtractvectors(&local_14,(float *)(&DAT_0f603924 + local_2c * 0x40),
@@ -88543,7 +88423,7 @@ void __cdecl lf_c7590(int param_1,int param_2)
 #define resettimer ((void (__cdecl *)(int, char *))SR_FN(0x4fafe0))
 #define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
 #define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
@@ -88948,7 +88828,7 @@ void __cdecl lf_c78b0(void)
         if (1.52587890625E-5 < local_2c) {
           scalevector(local_18,(float *)(&DAT_05920364 + local_34 * 0xe8 + local_1c * 0x8230),
                       (float)(1.0 / local_2c));
-          rotateorientation((int)(&DAT_05920334 + local_34 * 0xe8 + local_1c * 0x8230),local_18,
+          rotateorientation((float *)(&DAT_05920334 + local_34 * 0xe8 + local_1c * 0x8230),local_18,
                             local_2c);
         }
         objectwheelcollision2(local_1c,local_34);
@@ -90930,7 +90810,7 @@ void __cdecl lf_cd930(int param_1)
 #define lineintersectsphere ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float))SR_FN(0x494990))
 #define calculatebarycentric ((void (__cdecl *)(float *, float *, float *, float *, float *))SR_FN(0x4c9cf0))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *, int))SR_FN(0x4fcfb0))
+#define lineintersecttriangletwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *, int))SR_FN(0x4fcfb0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
@@ -91946,7 +91826,7 @@ void __cdecl lf_cf5f0(int param_1,float *param_2,float param_3,float param_4)
 #define DAT_2a5dee20 (*(undefined *)SR_VA(0x2a5dee20))
 #define _DAT_1073ec38 (*(float *)SR_VA(0x1073ec38))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define flabs ((float10 (__cdecl *)(float))SR_FN(0x50b7d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
@@ -91960,7 +91840,7 @@ void __cdecl lf_cf5f0(int param_1,float *param_2,float param_3,float param_4)
 #define local_18 (*(int *)(lf_frame + 0x48))
 #define local_14 (*(undefined4 (*)[3])(lf_frame + 0x4c))
 #define local_8 (*(uint *)(lf_frame + 0x58))
-undefined4 __cdecl lf_d06a0(float *param_1,undefined4 param_2,int param_3)
+undefined4 __cdecl lf_d06a0(float *param_1,float *param_2,int param_3)
 
 {
   __declspec(align(16)) uchar lf_frame[0x60];
@@ -92078,7 +91958,7 @@ undefined4 __cdecl lf_d06a0(float *param_1,undefined4 param_2,int param_3)
 #define DAT_2a5dee20 (*(undefined *)SR_VA(0x2a5dee20))
 #define _DAT_1073ec38 (*(float *)SR_VA(0x1073ec38))
 #define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, undefined4, undefined4, float *, float *, float *))SR_FN(0x4fce40))
+#define lineintersecttriangle ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *, float *, float *))SR_FN(0x4fce40))
 #define flabs ((float10 (__cdecl *)(float))SR_FN(0x50b7d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
@@ -92091,7 +91971,7 @@ undefined4 __cdecl lf_d06a0(float *param_1,undefined4 param_2,int param_3)
 #define local_18 (*(int *)(lf_frame + 0x48))
 #define local_14 (*(undefined4 (*)[3])(lf_frame + 0x4c))
 #define local_8 (*(uint *)(lf_frame + 0x58))
-undefined4 __cdecl lf_d0910(float *param_1,undefined4 param_2,int param_3)
+undefined4 __cdecl lf_d0910(float *param_1,float *param_2,int param_3)
 
 {
   __declspec(align(16)) uchar lf_frame[0x60];
@@ -92216,8 +92096,8 @@ undefined4 __cdecl lf_d0910(float *param_1,undefined4 param_2,int param_3)
 #define DAT_2a5df128 (*(undefined *)SR_VA(0x2a5df128))
 #define DAT_2a5df12c (*(undefined *)SR_VA(0x2a5df12c))
 #define DAT_2a5df134 (*(undefined *)SR_VA(0x2a5df134))
-#define lineintersecttrack ((undefined4 (__cdecl *)(float *, undefined4, int))SR_FN(0x4d06a0))
-#define lineintersecttrackrail ((undefined4 (__cdecl *)(float *, undefined4, int))SR_FN(0x4d0910))
+#define lineintersecttrack ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x4d06a0))
+#define lineintersecttrackrail ((undefined4 (__cdecl *)(float *, float *, int))SR_FN(0x4d0910))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
@@ -96991,7 +96871,7 @@ void __cdecl lf_dc8d0(int param_1)
 #define createplayer ((int (__cdecl *)(void))SR_FN(0x4d4750))
 #define scenario_armhuman ((int (__cdecl *)(int, int, int))SR_FN(0x4ddaf0))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
@@ -97001,7 +96881,7 @@ void __cdecl lf_dc8d0(int param_1)
 #define local_44 (*(int *)(lf_frame + 0x2c))
 #define local_3c (*(int *)(lf_frame + 0x34))
 #define local_38 (*(undefined4 (*)[3])(lf_frame + 0x38))
-#define local_2c (*(undefined4 (*)[9])(lf_frame + 0x44))
+#define local_2c (*(float (*)[9])(lf_frame + 0x44))
 #define local_8 (*(uint *)(lf_frame + 0x68))
 void __cdecl lf_dca90(int param_1,int param_2,undefined4 param_3)
 
@@ -97066,7 +96946,7 @@ void __cdecl lf_dca90(int param_1,int param_2,undefined4 param_3)
         local_58 = -1.5707963705062866;
       }
       resetorientation(local_2c);
-      rotateorientation((int)local_2c,&DAT_00523590,local_58);
+      rotateorientation(local_2c,&DAT_00523590,local_58);
       uVar5 = createhuman(local_38,(int)local_2c,iVar4);
       (&DAT_0f181418)[iVar4 * 0x902] = uVar5;
       *(float *)(&DAT_0f18142c + iVar4 * 0x2408) = local_58;
@@ -97520,7 +97400,7 @@ int __cdecl lf_dd100(int param_1,undefined4 param_2)
 #define DAT_0e6467cc (*(undefined *)SR_VA(0xe6467cc))
 #define createobject ((int (__cdecl *)(int, float *, int, int, undefined4))SR_FN(0x4c5780))
 #define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define FUN_0050b980 ((void (__cdecl *)(float *, float *))SR_FN(0x50b980))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
@@ -97531,7 +97411,7 @@ int __cdecl lf_dd100(int param_1,undefined4 param_2)
 #define local_4c (*(float (*)[4])(lf_frame + 0x34))
 #define local_3c (*(float *)(lf_frame + 0x44))
 #define local_38 (*(float *)(lf_frame + 0x48))
-#define local_2c (*(undefined4 (*)[3])(lf_frame + 0x54))
+#define local_2c (*(float (*)[3])(lf_frame + 0x54))
 #define local_20 (*(undefined1 (*)[24])(lf_frame + 0x60))
 #define local_8 (*(uint *)(lf_frame + 0x78))
 undefined4 __cdecl lf_dd870(int param_1,undefined4 param_2,int param_3,int param_4,int param_5,float param_6)
@@ -97572,10 +97452,10 @@ undefined4 __cdecl lf_dd870(int param_1,undefined4 param_2,int param_3,int param
   }
   resetorientation(local_2c);
   if (*(int *)(&DAT_0e6467b4 + param_3 * 0x4c) == 0) {
-    rotateorientation((int)local_2c,local_20,-1.5707963705062866);
+    rotateorientation(local_2c,local_20,-1.5707963705062866);
   }
   if (param_4 == 0) {
-    rotateorientation((int)local_2c,local_20,3.1415927410125732);
+    rotateorientation(local_2c,local_20,3.1415927410125732);
   }
   scaleaddvectors(&local_3c,local_58,local_64,param_6);
   local_38 = (float)(local_38 + 1.5);
@@ -100252,7 +100132,7 @@ void __cdecl lf_e2720(int param_1)
 #define debug_addataint ((void (__cdecl *)(char *, undefined4))SR_FN(0x46aaa0))
 #define lineintersectlevel ((bool (__cdecl *)(float *, float *, int))SR_FN(0x4a0f40))
 #define rotateorientationfast ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4e4f10))
-#define rotateorientation ((void (__cdecl *)(int, undefined4 *, float))SR_FN(0x4fca30))
+#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
 #define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
@@ -100454,7 +100334,8 @@ void __cdecl lf_e2790(void)
         if ((*(int *)(&DAT_0fdae260 + local_18 * 0x94) == 3) &&
            (*(undefined4 *)(&DAT_0fdae264 + local_18 * 0x94) = 0, DAT_079f58a4 < 16000)) {
           uVar2 = rand();
-          rotateorientation((int)(&DAT_0fdae290 + local_18 * 0x94),&DAT_0fdae2a8 + local_18 * 0x94,
+          rotateorientation((float *)(&DAT_0fdae290 + local_18 * 0x94),
+                            &DAT_0fdae2a8 + local_18 * 0x94,
                             (float)(((float)(uVar2 & 0xff) * 3.14159265359) / 256.0));
           local_1c = *(float *)(&DAT_0fdae2ec + local_18 * 0x94);
           scaleaddvectors(local_14,(float *)(&DAT_0fdae26c + local_18 * 0x94),
@@ -101484,69 +101365,6 @@ void __cdecl lf_eb290(undefined4 param_1)
 }
 #undef DAT_00526828
 #undef DAT_00523580
-
-/* ---------------------------------------------------------------- 0xeb320 */
-#define DAT_005271e4 (*(undefined4 *)SR_VA(0x5271e4))
-#define DAT_00526828 (*(undefined4 *)SR_VA(0x526828))
-#define DAT_012bd6aa (*(undefined *)SR_VA(0x12bd6aa))
-#define init_genrand ((void (__cdecl *)(undefined4))SR_FN(0x4eb290))
-#define local_14 (*(int *)(lf_frame + 0x1c))
-#define local_10 (*(int *)(lf_frame + 0x20))
-#define local_c (*(int *)(lf_frame + 0x24))
-#define local_8 (*(int *)(lf_frame + 0x28))
-void __cdecl lf_eb320(int param_1,int param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-
-
-
-
-  
-  init_genrand(&DAT_012bd6aa);
-  local_8 = 1;
-  local_10 = 0;
-  if (param_2 < 0x270) {
-    local_14 = 0x270;
-  }
-  else {
-    local_14 = param_2;
-  }
-  for (local_c = local_14; local_c != 0; local_c = local_c + -1) {
-    (&DAT_00526828)[local_8] =
-         ((*(uint *)(local_8 * 4 + ((int)SR_VA(0x526824))) >> 0x1e ^ *(uint *)(local_8 * 4 + ((int)SR_VA(0x526824)))) * 0x19660d
-         ^ (&DAT_00526828)[local_8]) + *(int *)(param_1 + local_10 * 4) + local_10;
-    (&DAT_00526828)[local_8] = (&DAT_00526828)[local_8];
-    local_8 = local_8 + 1;
-    local_10 = local_10 + 1;
-    if (0x26f < local_8) {
-      local_8 = 1;
-    }
-    if (param_2 <= local_10) {
-      local_10 = 0;
-    }
-  }
-  for (local_c = 0x26f; local_c != 0; local_c = local_c + -1) {
-    (&DAT_00526828)[local_8] =
-         ((*(uint *)(local_8 * 4 + ((int)SR_VA(0x526824))) >> 0x1e ^ *(uint *)(local_8 * 4 + ((int)SR_VA(0x526824)))) *
-          0x5d588b65 ^ (&DAT_00526828)[local_8]) - local_8;
-    (&DAT_00526828)[local_8] = (&DAT_00526828)[local_8];
-    local_8 = local_8 + 1;
-    if (0x26f < local_8) {
-      local_8 = 1;
-    }
-  }
-  DAT_00526828 = 0x80000000;
-  return;
-}
-#undef DAT_005271e4
-#undef DAT_00526828
-#undef DAT_012bd6aa
-#undef init_genrand
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
 
 /* ---------------------------------------------------------------- 0xeb640 */
 #define genrand_int32 ((int (__cdecl *)(void))SR_FN(0x4eb4a0))
@@ -104815,7 +104633,7 @@ void __cdecl lf_f6b30(void)
 #define objecttype_addbond ((void (__cdecl *)(int, undefined4, int, int))SR_FN(0x4eb810))
 #define objecttype_addparticle ((void (__cdecl *)(int, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4, undefined4))SR_FN(0x4eb950))
 #define objecttype_addface ((void (__cdecl *)(int))SR_FN(0x4ebe00))
-#define objecttype_calcquadweights ((void (__cdecl *)(undefined4 *, float *, int))SR_FN(0x4fa7d0))
+#define objecttype_calcquadweights ((void (__cdecl *)(undefined4 *, float *, float *))SR_FN(0x4fa7d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
@@ -104845,7 +104663,7 @@ void __cdecl lf_f6b30(void)
 #define local_64 (*(int *)(lf_frame + 0xec))
 #define local_60 (*(int *)(lf_frame + 0xf0))
 #define local_5c (*(int *)(lf_frame + 0xf4))
-#define local_58 (*(undefined4 (*)[3])(lf_frame + 0xf8))
+#define local_58 (*(float (*)[3])(lf_frame + 0xf8))
 #define local_4c (*(undefined4 (*)[3])(lf_frame + 0x104))
 #define local_40 (*(undefined4 (*)[3])(lf_frame + 0x110))
 #define local_34 (*(undefined4 (*)[3])(lf_frame + 0x11c))
@@ -104965,7 +104783,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -104991,7 +104809,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 3.5);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105017,7 +104835,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 0.125);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 3.5);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105043,7 +104861,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 0.125);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105082,7 +104900,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[2] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[2] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[2] * 0x14 + local_a0 * 0x828c) - 1.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[6];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105108,7 +104926,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[2] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[2] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[2] * 0x14 + local_a0 * 0x828c) - 7.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[6];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105134,7 +104952,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[2] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[2] * 0x14 + local_a0 * 0x828c) + 1.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[2] * 0x14 + local_a0 * 0x828c) - 7.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[6];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105160,7 +104978,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[2] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[2] * 0x14 + local_a0 * 0x828c) + 1.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[2] * 0x14 + local_a0 * 0x828c) - 1.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[6];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105206,7 +105024,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 1.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105232,7 +105050,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 2.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 7.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105258,7 +105076,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 1.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 7.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105284,7 +105102,7 @@ void __cdecl lf_f7a50(void)
   local_14 = *(float *)(&DAT_0afdbf60 + local_134[local_5c] * 0x14 + local_a0 * 0x828c);
   local_10 = (float)(*(float *)(&DAT_0afdbf64 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 1.5);
   local_c = (float)(*(float *)(&DAT_0afdbf68 + local_134[local_5c] * 0x14 + local_a0 * 0x828c) + 1.0);
-  objecttype_calcquadweights(&local_9c,&local_14,(int)local_58);
+  objecttype_calcquadweights(&local_9c,&local_14,local_58);
   *(int *)(&DAT_0afe126c + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
        local_134[local_68];
   *(int *)(&DAT_0afe1270 + *(int *)(&DAT_0afe1268 + local_a0 * 0x828c) * 0x20 + local_a0 * 0x828c) =
@@ -105556,97 +105374,6 @@ void __cdecl lf_f7a50(void)
 #undef local_14
 #undef local_10
 #undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xfa7d0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define generatetrinormal ((void (__cdecl *)(float *, float *, float *, float *))SR_FN(0x4fc890))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
-#define FUN_0050b980 ((void (__cdecl *)(float *, float *))SR_FN(0x50b980))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x4c))
-#define local_3c (*(int *)(lf_frame + 0x14))
-#define local_38 (*(float (*)[3])(lf_frame + 0x18))
-#define local_2c (*(int *)(lf_frame + 0x24))
-#define local_28 (*(float (*)[3])(lf_frame + 0x28))
-#define local_1c (*(float *)(lf_frame + 0x34))
-#define local_18 (*(int *)(lf_frame + 0x38))
-#define local_14 (*(float (*)[3])(lf_frame + 0x3c))
-#define local_8 (*(uint *)(lf_frame + 0x48))
-void __cdecl lf_fa7d0(undefined4 *param_1,float *param_2,int param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-
-  float10 fVar1;
-
-
-
-
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  *param_1 = 0;
-  param_1[1] = 0;
-  param_1[2] = 0;
-  param_1[3] = 0;
-  generatetrinormal(local_38,param_3,param_3 + 0xc,param_3 + 0x18);
-  for (local_18 = 0; local_18 < 4; local_18 = local_18 + 1) {
-    for (local_2c = 0; local_2c < 4; local_2c = local_2c + 1) {
-      local_3c = local_2c;
-      if (local_2c != local_18) {
-        while (local_3c = local_3c + 1, local_3c < 4) {
-          if (local_3c != local_18) {
-            subtractvectors(local_14,(float *)(local_3c * 0xc + param_3),
-                            (float *)(local_2c * 0xc + param_3));
-            FUN_0050b830(local_28,local_38,local_14);
-            normalizevector(local_28,local_28);
-            subtractvectors(local_14,(float *)(local_18 * 0xc + param_3),
-                            (float *)(local_2c * 0xc + param_3));
-            fVar1 = (float10)dotproduct(local_14,local_28);
-            if (fVar1 < (float10)0.0) {
-              FUN_0050b980(local_28,local_28);
-            }
-            subtractvectors(local_14,param_2,(float *)(local_2c * 0xc + param_3));
-            fVar1 = (float10)dotproduct(local_14,local_28);
-            local_1c = (float)fVar1;
-            subtractvectors(local_14,(float *)(local_18 * 0xc + param_3),
-                            (float *)(local_2c * 0xc + param_3));
-            fVar1 = (float10)dotproduct(local_14,local_28);
-            local_1c = (float)((float10)local_1c / fVar1);
-            *(float *)&(param_1[local_18]) = (float)(LF_BITS_F(param_1[local_18]) + local_1c);
-          }
-        }
-      }
-    }
-  }
-  for (local_18 = 0; local_18 < 4; local_18 = local_18 + 1) {
-    *(float *)&(param_1[local_18]) = (float)(LF_BITS_F(param_1[local_18]) / 4.0);
-  }
-  return;
-}
-#undef DAT_00526650
-#undef generatetrinormal
-#undef dotproduct
-#undef FUN_0050b830
-#undef normalizevector
-#undef FUN_0050b980
-#undef subtractvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_3c
-#undef local_38
-#undef local_2c
-#undef local_28
-#undef local_1c
-#undef local_18
-#undef local_14
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xfa9f0 */
@@ -106332,82 +106059,6 @@ void __cdecl lf_fc900(undefined4 *param_1)
 }
 
 
-/* ---------------------------------------------------------------- 0xfca30 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define __security_check_cookie(x) ((void)0)
-#define sin ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "sin"))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(67, "MSVCR100.DLL", "cos"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x4c))
-#define local_3c (*(float (*)[3])(lf_frame + 0x14))
-#define local_30 (*(float *)(lf_frame + 0x20))
-#define local_2c (*(float *)(lf_frame + 0x24))
-#define local_28 (*(float (*)[3])(lf_frame + 0x28))
-#define local_1c (*(float (*)[3])(lf_frame + 0x34))
-#define local_10 (*(uint *)(lf_frame + 0x40))
-#define local_c (*(int *)(lf_frame + 0x44))
-#define local_8 (*(float *)(lf_frame + 0x48))
-void __cdecl lf_fca30(int param_1,undefined4 *param_2,float param_3)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x50];
-
-  float10 fVar1;
-  double dVar2;
-
-
-
-
-
-
-
-
-  
-  local_10 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  copyvector(local_3c,param_2);
-  dVar2 = cos((double)param_3);
-  local_30 = dVar2;
-  dVar2 = sin((double)param_3);
-  local_2c = dVar2;
-  for (local_c = 0; local_c < 3; local_c = local_c + 1) {
-    FUN_0050b830(local_1c,local_3c,(float *)(local_c * 0xc + param_1));
-    FUN_0050b830(local_28,local_1c,local_3c);
-    fVar1 = (float10)dotproduct(local_3c,(float *)(local_c * 0xc + param_1));
-    local_8 = (float)fVar1;
-    scalevector((float *)(local_c * 0xc + param_1),local_3c,local_8);
-    scaleaddvectors((float *)(local_c * 0xc + param_1),(float *)(local_c * 0xc + param_1),local_28,
-                    local_30);
-    scaleaddvectors((float *)(local_c * 0xc + param_1),(float *)(local_c * 0xc + param_1),local_1c,
-                    local_2c);
-    normalizevector((float *)(local_c * 0xc + param_1),(float *)(local_c * 0xc + param_1));
-  }
-  return;
-}
-#undef DAT_00526650
-#undef dotproduct
-#undef FUN_0050b830
-#undef normalizevector
-#undef copyvector
-#undef scalevector
-#undef scaleaddvectors
-#undef __security_check_cookie
-#undef sin
-#undef cos
-#undef local_4
-#undef local_3c
-#undef local_30
-#undef local_2c
-#undef local_28
-#undef local_1c
-#undef local_10
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xfcb80 */
 #define FUN_0050bc40 ((void (__cdecl *)(float *, float *, float))SR_FN(0x50bc40))
 #define FUN_0050bc70 ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50bc70))
@@ -106436,165 +106087,6 @@ void __cdecl lf_fcb80(float *param_1,float param_2)
 #undef sin
 #undef cos
 #undef local_10
-
-/* ---------------------------------------------------------------- 0xfce40 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define lineintersectplane ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_FN(0x4fcc00))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x3c))
-#define local_2c (*(float (*)[3])(lf_frame + 0x14))
-#define local_20 (*(float (*)[3])(lf_frame + 0x20))
-#define local_14 (*(float (*)[3])(lf_frame + 0x2c))
-#define local_8 (*(uint *)(lf_frame + 0x38))
-undefined4 __cdecl lf_fce40(float *param_1,float *param_2,float *param_3,undefined4 param_4,undefined4 param_5,
-          float *param_6,float *param_7,float *param_8)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-
-  int iVar1;
-  undefined4 uVar2;
-  float10 fVar3;
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  iVar1 = lineintersectplane(param_1,param_2,param_3,param_4,param_5,param_6);
-  if (iVar1 == 0) {
-    uVar2 = 0;
-  }
-  else {
-    subtractvectors(local_14,param_7,param_6);
-    subtractvectors(local_20,param_1,param_6);
-    FUN_0050b830(local_2c,local_14,local_20);
-    fVar3 = (float10)dotproduct(local_2c,param_2);
-    if ((float10)0.0 <= fVar3) {
-      subtractvectors(local_14,param_8,param_7);
-      subtractvectors(local_20,param_1,param_7);
-      FUN_0050b830(local_2c,local_14,local_20);
-      fVar3 = (float10)dotproduct(local_2c,param_2);
-      if ((float10)0.0 <= fVar3) {
-        subtractvectors(local_14,param_6,param_8);
-        subtractvectors(local_20,param_1,param_8);
-        FUN_0050b830(local_2c,local_14,local_20);
-        fVar3 = (float10)dotproduct(local_2c,param_2);
-        if ((float10)0.0 <= fVar3) {
-          uVar2 = 1;
-        }
-        else {
-          uVar2 = 0;
-        }
-      }
-      else {
-        uVar2 = 0;
-      }
-    }
-    else {
-      uVar2 = 0;
-    }
-  }
-  return uVar2;
-}
-#undef DAT_00526650
-#undef lineintersectplane
-#undef dotproduct
-#undef FUN_0050b830
-#undef subtractvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_2c
-#undef local_20
-#undef local_14
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xfcfb0 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define lineintersectplane ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_FN(0x4fcc00))
-#define lineintersectplanetwosided ((undefined4 (__cdecl *)(float *, float *, float *, float *, float *, float *))SR_FN(0x4fcd10))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define __security_check_cookie(x) ((void)0)
-#define local_4 (*(undefined4 *)(lf_frame + 0x3c))
-#define local_2c (*(float (*)[3])(lf_frame + 0x14))
-#define local_20 (*(float (*)[3])(lf_frame + 0x20))
-#define local_14 (*(float (*)[3])(lf_frame + 0x2c))
-#define local_8 (*(uint *)(lf_frame + 0x38))
-undefined4 __cdecl lf_fcfb0(float *param_1,float *param_2,float *param_3,undefined4 param_4,undefined4 param_5,
-          float *param_6,float *param_7,float *param_8,int param_9)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x40];
-
-  int iVar1;
-  undefined4 uVar2;
-  float10 fVar3;
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  if (param_9 == 0) {
-    iVar1 = lineintersectplane(param_1,param_2,param_3,param_4,param_5,param_6);
-    if (iVar1 == 0) goto LAB_004fcfea;
-LAB_004fd01c:
-    subtractvectors(local_14,param_7,param_6);
-    subtractvectors(local_20,param_1,param_6);
-    FUN_0050b830(local_2c,local_14,local_20);
-    fVar3 = (float10)dotproduct(local_2c,param_2);
-    if ((float10)0.0 <= fVar3) {
-      subtractvectors(local_14,param_8,param_7);
-      subtractvectors(local_20,param_1,param_7);
-      FUN_0050b830(local_2c,local_14,local_20);
-      fVar3 = (float10)dotproduct(local_2c,param_2);
-      if ((float10)0.0 <= fVar3) {
-        subtractvectors(local_14,param_6,param_8);
-        subtractvectors(local_20,param_1,param_8);
-        FUN_0050b830(local_2c,local_14,local_20);
-        fVar3 = (float10)dotproduct(local_2c,param_2);
-        if ((float10)0.0 <= fVar3) {
-          uVar2 = 1;
-        }
-        else {
-          uVar2 = 0;
-        }
-      }
-      else {
-        uVar2 = 0;
-      }
-    }
-    else {
-      uVar2 = 0;
-    }
-  }
-  else {
-LAB_004fcfea:
-    if (param_9 != 0) {
-      iVar1 = lineintersectplanetwosided(param_1,param_2,param_3,param_4,param_5,param_6);
-      if (iVar1 != 0) goto LAB_004fd01c;
-    }
-    uVar2 = 0;
-  }
-  return uVar2;
-}
-#undef DAT_00526650
-#undef lineintersectplane
-#undef lineintersectplanetwosided
-#undef dotproduct
-#undef FUN_0050b830
-#undef subtractvectors
-#undef __security_check_cookie
-#undef local_4
-#undef local_2c
-#undef local_20
-#undef local_14
-#undef local_8
 
 /* ---------------------------------------------------------------- 0xfd260 */
 #define dotproduct2d ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bb60))

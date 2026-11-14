@@ -1044,6 +1044,13 @@ static const char *known_difference(const char *name)
         { "tesselatebezierderivative", "degree outside 1 to 3" },
         /* Tangent length near 1.5e-5, and NaN: the sum of squares rounds in another order. */
         { "calculatefriction", "client follows the server code" },
+        /* The triangle tests call lineintersectplane: they differ only for NaN and infinite points.
+         * With finite points all 90 test calls are the same. */
+        { "lineintersecttriangle", "client follows the server code" },
+        { "lineintersecttriangletwosided", "client follows the server code" },
+        /* The client divides in x87 precision by a distance that it does not round to a float. The sum of
+         * terms of both signs shows the rounding: 1 call in 90 differs by 1e-5 of a weight. */
+        { "objecttype_calcquadweights", "client follows the server code" },
     };
     size_t k;
     for (k = 0; k < sizeof known / sizeof known[0]; k++)

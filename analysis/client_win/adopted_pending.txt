@@ -1,7 +1,4 @@
 # Candidates that no recorded call reached. They stay lifted until a test covers them.
-# Pure functions tested with instrumentation/client/synth_pure.py that stay lifted:
-# - lineintersecttriangle, lineintersecttriangletwosided, multiply3x3matrices, projectorientation, rotateorientation:
-#   the harness skips every call: some pointer parameters of the client function have the type int or an unknown 4 byte type.
 account_nameexists src/game/account_db.c
 addbeziersurface src/game/mesh.c
 ai_assessthreats src/game/player_ai.c
@@ -117,12 +114,5 @@ sphereintersectlandscape src/game/collide.c
 sphereintersectlevel src/game/collide.c
 systemtimer src/common/system.c
 unpackevent src/net/client.c
-lineintersecttriangle src/common/intersect.c
-lineintersecttriangletwosided src/common/intersect.c
-multiply3x3matrices src/common/vectors.c
-projectorientation src/common/vectors.c
-rotateorientation src/common/vectors.c
-init_by_array src/common/random.c
 getrandomvector2d src/common/random.c
-objecttype_calcquadweights src/game/object_types.c
-# init_by_array, getrandomvector2d and objecttype_calcquadweights: no call that the harness runs.
+# getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.

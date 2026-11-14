@@ -38,3 +38,10 @@ tesselatebezier src/game/mesh.c
 tesselatebezierderivative src/game/mesh.c
 calculatefriction src/game/solver.c
 multiplyquaternion src/common/vectors.c
+lineintersecttriangle src/common/intersect.c
+lineintersecttriangletwosided src/common/intersect.c
+multiply3x3matrices src/common/vectors.c
+projectorientation src/common/vectors.c
+rotateorientation src/common/vectors.c
+init_by_array src/common/random.c
+objecttype_calcquadweights src/game/object_types.c

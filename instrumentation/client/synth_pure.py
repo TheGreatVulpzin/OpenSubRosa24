@@ -66,6 +66,9 @@ def number(rng, kind):
     """One float: mostly small random values, sometimes an edge value."""
     pick = rng.random()
     if pick < 0.12:
+        # SYNTH_FINITE=1 keeps NaN, infinity and huge values out of the arguments.
+        if os.environ.get('SYNTH_FINITE'):
+            return rng.uniform(-6.0, 6.0)
         return rng.choice(st.EDGES)
     if pick < 0.2:
         return rng.choice([0.0, 1.0, -1.0, 0.5])

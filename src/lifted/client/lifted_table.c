@@ -894,8 +894,8 @@ void lf_a59e0(void);
 void lf_a7240(void);
 void lf_a7bc0(void);
 void geteulerangles2(void);
-void lf_a8b30(void);
-void lf_a8c60(void);
+void projectorientation(void);
+void multiply3x3matrices(void);
 void lf_a8d60(void);
 void lf_a8e10(void);
 void lf_a9310(void);
@@ -1118,7 +1118,7 @@ void generatetexture_billboard(void);
 void generatetexture_newspaper(void);
 void generatetexture_carpet(void);
 void lf_eb290(void);
-void lf_eb320(void);
+void init_by_array(void);
 void genrand_int32(void);
 void lf_eb640(void);
 void lf_eb650(void);
@@ -1135,7 +1135,7 @@ void calculatepointscale(void);
 void lf_ec630(void);
 void lf_f6b30(void);
 void lf_f7a50(void);
-void lf_fa7d0(void);
+void objecttype_calcquadweights(void);
 void lf_fa9f0(void);
 void lf_fae20(void);
 void setcpuaffinity(void);
@@ -1156,12 +1156,12 @@ void projectvector(void);
 void generatetrinormal(void);
 void lf_fc900(void);
 void rotatevector(void);
-void lf_fca30(void);
+void rotateorientation(void);
 void lf_fcb80(void);
 void lineintersectplane(void);
 void lineintersectplanetwosided(void);
-void lf_fce40(void);
-void lf_fcfb0(void);
+void lineintersecttriangle(void);
+void lineintersecttriangletwosided(void);
 void pointdistanceline(void);
 void lf_fd260(void);
 void lf_fd430(void);
@@ -1908,8 +1908,8 @@ const LfEntry lf_table[] = {
     { "area_interior_buildsectormodel", 0x442b0, (void *)lf_442b0, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_breakblock", 0x46610, (void *)lf_46610, 8, LF_RET_INT, 4, "vvvvvvvv", 0 },
     { "lineintersectarea", 0x466d0, (void *)lf_466d0, 6, LF_RET_INT, 4, "pppvpp", 0 },
-    { "lineintersectnormalblock", 0x478d0, (void *)lf_478d0, 8, LF_RET_INT, 4, "vppvvpvv", 0 },
-    { "lineintersectspecblock", 0x47ad0, (void *)lf_47ad0, 8, LF_RET_INT, 1, "pppvvpvv", 0 },
+    { "lineintersectnormalblock", 0x478d0, (void *)lf_478d0, 8, LF_RET_INT, 4, "vpppppvv", 0 },
+    { "lineintersectspecblock", 0x47ad0, (void *)lf_47ad0, 8, LF_RET_INT, 1, "ppppppvv", 0 },
     { "lf_47de0", 0x47de0, (void *)lf_47de0, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "lf_48bf0", 0x48bf0, (void *)lf_48bf0, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
     { "lf_49000", 0x49000, (void *)lf_49000, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
@@ -2194,8 +2194,8 @@ const LfEntry lf_table[] = {
     { "logicsimulation_round", 0xa7240, (void *)lf_a7240, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation_world", 0xa7bc0, (void *)lf_a7bc0, 0, LF_RET_VOID, 4, "", 1 },
     { "geteulerangles2", 0xa8a30, (void *)geteulerangles2, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "projectorientation", 0xa8b30, (void *)lf_a8b30, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "multiply3x3matrices", 0xa8c60, (void *)lf_a8c60, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "projectorientation", 0xa8b30, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "multiply3x3matrices", 0xa8c60, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "transposematrix", 0xa8d60, (void *)lf_a8d60, 2, LF_RET_VOID, 4, "pv", 0 },
     { "hostmenu", 0xa8e10, (void *)lf_a8e10, 0, LF_RET_VOID, 4, "", 1 },
     { "joinmenu", 0xa9310, (void *)lf_a9310, 0, LF_RET_VOID, 4, "", 1 },
@@ -2298,8 +2298,8 @@ const LfEntry lf_table[] = {
     { "lf_ced70", 0xced70, (void *)lf_ced70, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0xcf2e0, (void *)lf_cf2e0, 1, LF_RET_VOID, 4, "p", 0 },
     { "createtrack", 0xcf5f0, (void *)lf_cf5f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "lineintersecttrack", 0xd06a0, (void *)lf_d06a0, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "lineintersecttrackrail", 0xd0910, (void *)lf_d0910, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "lineintersecttrack", 0xd06a0, (void *)lf_d06a0, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersecttrackrail", 0xd0910, (void *)lf_d0910, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0xd0b60, (void *)lf_d0b60, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectwheelcollision2", 0xd1010, (void *)lf_d1010, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_d12e0", 0xd12e0, (void *)lf_d12e0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2418,7 +2418,7 @@ const LfEntry lf_table[] = {
     { "generatetexture_newspaper", 0xea880, (void *)generatetexture_newspaper, 0, LF_RET_VOID, 4, "", 1 },
     { "generatetexture_carpet", 0xeade0, (void *)generatetexture_carpet, 1, LF_RET_VOID, 4, "v", 1 },
     { "init_genrand", 0xeb290, (void *)lf_eb290, 1, LF_RET_VOID, 4, "v", 0 },
-    { "init_by_array", 0xeb320, (void *)lf_eb320, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "init_by_array", 0xeb320, (void *)init_by_array, 2, LF_RET_VOID, 4, "pv", 0 },
     { "genrand_int32", 0xeb4a0, (void *)genrand_int32, 0, LF_RET_INT, 4, "", 0 },
     { "lf_eb640", 0xeb640, (void *)lf_eb640, 0, LF_RET_INT, 4, "", 0 },
     { "genrand_real1", 0xeb650, (void *)lf_eb650, 0, LF_RET_FLOAT, 4, "", 0 },
@@ -2435,7 +2435,7 @@ const LfEntry lf_table[] = {
     { "setupobjecttypes_cars", 0xec630, (void *)lf_ec630, 0, LF_RET_VOID, 4, "", 0 },
     { "setupobjecttypes_helicopters", 0xf6b30, (void *)lf_f6b30, 0, LF_RET_VOID, 4, "", 0 },
     { "setupobjectypes_train", 0xf7a50, (void *)lf_f7a50, 0, LF_RET_VOID, 4, "", 0 },
-    { "objecttype_calcquadweights", 0xfa7d0, (void *)lf_fa7d0, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "objecttype_calcquadweights", 0xfa7d0, (void *)objecttype_calcquadweights, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "usermenu", 0xfa9f0, (void *)lf_fa9f0, 0, LF_RET_VOID, 4, "", 1 },
     { "gettimeofday", 0xfae20, (void *)lf_fae20, 2, LF_RET_INT, 4, "pp", 1 },
     { "setcpuaffinity", 0xfaf30, (void *)setcpuaffinity, 0, LF_RET_VOID, 4, "", 1 },
@@ -2456,12 +2456,12 @@ const LfEntry lf_table[] = {
     { "generatetrinormal", 0xfc890, (void *)generatetrinormal, 4, LF_RET_VOID, 4, "pppp", 0 },
     { "resetorientation", 0xfc900, (void *)lf_fc900, 1, LF_RET_VOID, 4, "p", 0 },
     { "rotatevector", 0xfc950, (void *)rotatevector, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "rotateorientation", 0xfca30, (void *)lf_fca30, 3, LF_RET_VOID, 4, "vpv", 0 },
+    { "rotateorientation", 0xfca30, (void *)rotateorientation, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "lf_fcb80", 0xfcb80, (void *)lf_fcb80, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectplane", 0xfcc00, (void *)lineintersectplane, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersectplanetwosided", 0xfcd10, (void *)lineintersectplanetwosided, 6, LF_RET_INT, 4, "pppppp", 0 },
-    { "lineintersecttriangle", 0xfce40, (void *)lf_fce40, 8, LF_RET_INT, 4, "pppvvppp", 0 },
-    { "lineintersecttriangletwosided", 0xfcfb0, (void *)lf_fcfb0, 9, LF_RET_INT, 4, "pppvvpppv", 0 },
+    { "lineintersecttriangle", 0xfce40, (void *)lineintersecttriangle, 8, LF_RET_INT, 4, "pppppppp", 0 },
+    { "lineintersecttriangletwosided", 0xfcfb0, (void *)lineintersecttriangletwosided, 9, LF_RET_INT, 4, "ppppppppv", 0 },
     { "pointdistanceline", 0xfd150, (void *)pointdistanceline, 3, LF_RET_FLOAT, 4, "ppp", 0 },
     { "lf_fd260", 0xfd260, (void *)lf_fd260, 7, LF_RET_INT, 4, "ppppppp", 0 },
     { "lf_fd430", 0xfd430, (void *)lf_fd430, 7, LF_RET_INT, 4, "ppppppv", 0 },
