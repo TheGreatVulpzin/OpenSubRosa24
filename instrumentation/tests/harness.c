@@ -515,6 +515,27 @@ static const LfEntry *table_entry(int i)
     return i < lf_table_count ? &lf_table[i] : &hand_table[i - lf_table_count];
 }
 
+/* A function with a variable list has extra words of kind 'x' at the end of its row. A call
+ * that leaves out some of them gets value words of 0, so its word count fits the row. */
+static void fill_variable_words(void)
+{
+    int i, j, k;
+    for (i = 0; i < g_ncalls; i++) {
+        Call *c = &g_calls[i];
+        for (j = 0; j < lf_table_count + HAND_COUNT; j++) {
+            const LfEntry *e = table_entry(j);
+            if (e->rva != c->rva || c->n >= e->dwords || e->args[c->n] != 'x')
+                continue;
+            for (k = c->n; k < e->dwords; k++) {
+                c->kind[k] = 'V';
+                c->value[k] = 0;
+            }
+            c->n = e->dwords;
+            break;
+        }
+    }
+}
+
 static void add_hand_calls(void)
 {
     int i, j;
@@ -1202,6 +1223,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "cannot read the snapshot or the recorded calls\n");
         return 1;
     }
+    fill_variable_words();
     if (!getenv("HARNESS_CLEAN_CHECKS"))
         add_hand_calls();
     for (i = 0; i < MAX_ARGS; i++)

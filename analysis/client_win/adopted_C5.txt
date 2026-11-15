@@ -7,3 +7,6 @@ checkmenuitems src/client/menu/items.c
 menutoggle src/client/menu/items.c
 menuset src/client/menu/items.c
 text_getlength src/client/menu/items.c
+setmenuitem src/client/menu/items.c
+menuslider src/client/menu/items.c
+setupmenuitems src/client/menu/items.c

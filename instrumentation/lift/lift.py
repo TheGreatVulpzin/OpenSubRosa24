@@ -867,6 +867,18 @@ def lift_function(f, rva, headers, imports_used):
 WIDE_TYPES = {'float10', 'double', 'longlong', 'ulonglong', 'undefined8', 'qword', 'undefined5', 'undefined6',
               'undefined7'}
 FLOAT_RETURNS = {'float10', 'double', 'float'}
+# The extra words that the hook of a clean function with a variable list passes on.
+VARIADIC_WORDS = 8
+
+
+def fixed_params(rva, params):
+    """The parameters of a hook and a table row. In a clean function, a variable list ("...")
+    becomes VARIADIC_WORDS words. The caller removes its arguments (__cdecl), so the callee reads
+    only the words it uses. A lifted function keeps its list."""
+    if rva not in SYMBOLS or not any(t == '...' for t, _ in params):
+        return params
+    return [p for p in params if p[0] != '...'] + [('uint32_t', f'va_{i}') for i in range(VARIADIC_WORDS)]
+
 BYTE_TYPES = {'bool', 'char', 'uchar', 'byte', 'undefined1', 'sbyte'}
 WORD_TYPES = {'short', 'ushort', 'word', 'undefined2', 'wchar16'}
 
@@ -932,6 +944,7 @@ def gen_hooks(lifted, headers, funcs, names):
     used_names = Counter()
     for rva in lifted:
         ret, cc, _name, params = headers[rva]
+        params = fixed_params(rva, params)
         f = funcs[rva]
         nice = names.get(f'0x{rva:x}', f'lf_{rva:05x}')
         used_names[nice] += 1
@@ -1105,6 +1118,7 @@ def gen_table(lifted, headers, names, side):
     used = Counter()
     for rva in lifted:
         ret, _cc, _n, params = headers[rva]
+        params = fixed_params(rva, params)
         dwords = sum(2 if t in WIDE_TYPES else 1 for t, _ in params)
         kind = ('LF_RET_VOID' if ret == 'void' else 'LF_RET_FLOAT' if ret in FLOAT_RETURNS
                 else 'LF_RET_INT64' if ret in WIDE_TYPES else 'LF_RET_INT')
@@ -1120,7 +1134,9 @@ def gen_table(lifted, headers, names, side):
             out.append(f'void {symbol(rva)}(void);')
         size = 1 if ret in BYTE_TYPES else 2 if ret in WORD_TYPES else 4
         # One letter per argument dword: p = pointer, v = value.
-        kinds = ''.join(('vv' if t in WIDE_TYPES else 'p' if t.strip().endswith('*') else 'v') for t, _ in params)
+        # x = an extra word of a variable list: a call may leave it out (the test fills 0).
+        kinds = ''.join(('x' if n.startswith('va_') and t == 'uint32_t' else 'vv' if t in WIDE_TYPES
+                         else 'p' if t.strip().endswith('*') else 'v') for t, n in params)
         rows.append(f'    {{ "{nice}", 0x{rva:x}, (void *){symbol(rva)}, {dwords}, {kind}, {size}, "{kinds}", '
                     f'{2 if rva in TARGET.get("standalone_only", ()) else int(rva in side)} }},')
     out += ['', 'const LfEntry lf_table[] = {'] + (rows or ['    { 0 },']) + ['};',

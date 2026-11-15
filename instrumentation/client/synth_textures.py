@@ -986,6 +986,68 @@ def menu_build_case():
     return edits, {'createmenuitem': item, 'createmenubutton': button, 'setmenuiteminfo': info}
 
 
+def double_words(value):
+    """A double argument of a variable-argument call, as its two 32-bit words."""
+    low, high = struct.unpack('<II', struct.pack('<d', value))
+    return [low, high]
+
+
+def option_call(*args):
+    """A setmenuitem call with nine words: the test table gives a variable list eight words."""
+    return call(0x102b70, *args, *([0] * (9 - len(args))))
+
+
+def menu_option_case(empty=False):
+    """setmenuitem: each option on the last of five items. empty: the list has no items."""
+    rng = random.Random(29)
+    values = SCRATCH + 0x800
+    base = MENU_ITEMS + 4 * 0x284
+    edits = [(MENU_COUNT, 'i', [0 if empty else 5]), (values, '8i', [3] * 8), (values + 0x40, '8f', [floats(rng) for _ in range(8)]),
+             (base + 0x1d8, '3f', [floats(rng), 200.0, floats(rng)]), (base + 0x1e8, '4f', [floats(rng), 0.5, NAN, 1.0])]
+    calls = []
+    for _ in range(3):
+        value = image(values + 4 * rng.randint(0, 7))
+        calls += [option_call(1, 41), option_call(2, 81), option_call(3, 1)]
+        calls += [option_call(option, value, rng.choice([0, 12, 60])) for option in (4, 5, 6, 7, 8)]
+        calls += [option_call(9, 0x20000000 + 0x103dd0), option_call(10, value, 4),
+                  option_call(11, value, 2), option_call(12), option_call(14, 7)]
+        calls += [option_call(13, index, rng.randint(-1, 9)) for index in (0, 1, 3)]
+        calls += [option_call(15, 2), option_call(16, 9), option_call(17),
+                  option_call(18, image(values + 0x40)),
+                  option_call(19, value, rng.randint(-5, 0), rng.randint(1, 100), rng.randint(0, 9)),
+                  option_call(20), option_call(22), option_call(23)]
+        calls.append(option_call(21, *double_words(floats(rng)), *double_words(1e300),
+                          *double_words(floats(rng))))
+    return edits, {'setmenuitem': calls}
+
+
+def menu_names_case():
+    """setupmenuitems on a key name table full of 0x55 bytes."""
+    return [(0x17798e00, '8192s', [b'\x55' * 8192])], {'setupmenuitems': [call(0x1039c0)]}
+
+
+def menu_slider_case(ctrl=False, left=True):
+    """menuslider on twelve pressed sliders: checkmenuitems calls it for each one, and three direct
+    calls use item 2. ctrl holds left Ctrl. left keeps the left button down."""
+    rng = random.Random(31 + ctrl + 2 * left)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [12]), (MENU_INDEX, 'i', [2]), (MOUSE, '2i', [rng.choice([300, -40, 2000]), 200]),
+             (MOUSE + 0x10, 'i', [int(left)]), (MOUSE_PREVIOUS + 0x10, 'i', [int(left)]),
+             (KEYS_BLOCKED, 'i', [0]), (KEYS + 0xe0, 'B', [int(ctrl)]),
+             (values, '12i', [rng.randint(-50, 150) for _ in range(12)])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        box = [rng.choice([250.0, 280.0, 296.0, NAN, floats(rng)]), 190.0,
+               rng.choice([100.0, 8.0, 7.0, INF, floats(rng)]), 20.0]
+        low = rng.choice([0, -20, 5, -0x7fffffff])
+        high = rng.choice([100, 10, low, 0x7fffffff])
+        edits += [(base, 'i', [5]), (base + 0x1d8, '2f', box[:2]), (base + 0x1f8, '2f', box[2:]),
+                  (base + 0x200, '6i', [0, 0, 0, 0, 0, 0]), (base + 0x220, '2i', [1, 0]),
+                  (base + 0x238, '3i', [low, high, rng.choice([0, 1, 5, 10, 3, -4])]),
+                  (base + 0x27c, 'I', [0x20000000 + values + 4 * i]), (base + 0x280, 'I', [0x20000000 + 0x103e70])]
+    return edits, {'checkmenuitems': [call(0x101be0)], 'menuslider': [call(0x103e70) for _ in range(3)]}
+
+
 def framelist_case(extra=()):
     """buildframelist on the scene of the recording: its humans, vehicles, items and street
     objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
@@ -1139,6 +1201,9 @@ def main():
             'rotate': rotate_case,
             'menu': menu_case, 'menu_keys': lambda: menu_case(False), 'menu_blocked': lambda: menu_case(True, 1),
             'menu_build': menu_build_case,
+            'menu_option': menu_option_case, 'menu_option_empty': lambda: menu_option_case(True),
+            'menu_slider': menu_slider_case, 'menu_slider_ctrl': lambda: menu_slider_case(True),
+            'menu_slider_up': lambda: menu_slider_case(True, False), 'menu_names': menu_names_case,
             'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
             'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
             'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}

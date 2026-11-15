@@ -8,12 +8,13 @@
 #include "input/camera.h"
 #include "input/debug.h"
 #include "input/player_inputs.h"
+#include "menu/items.h"
 #include "client.h"
 #include "sr_runtime.h"
 #include <string.h>
 
 enum {
-    MENU_KEY = 1, MENU_TEXT = 5, MENU_SET = 11, MENU_HOVER = 23,
+    MENU_KEY = 1, MENU_TEXT = 5, MENU_SET = 11, MENU_HIDDEN = 23,
     CONTROL_NONE = 0, CONTROL_HUMAN = 1, CONTROL_CAR = 2, CONTROL_HELI = 3,
     GAME_ROUND = 3, GAME_WORLD = 4, ROUND_START = 1, ROUND_END = 3,
     HUMAN_MASK = 511, TEAM_COUNT = 3, CONNECTION_COLUMNS = 4,
@@ -25,16 +26,15 @@ enum {
 /* Define a menu rectangle and its text. */
 static void menu_label(const char *text, float x, float y, float width, float height, float size, int align)
 {
-    CL_FN(0x5024e0, void (__cdecl *)(const char *, float, float, float, float, float, int, float, float, float, float))(
-        text, x, y, width, height, size, align, 1.0f, 1.0f, 1.0f, 1.0f);
+    createmenubutton(text, x, y, width, height, size, align, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* Set a menu target and attach its keyboard shortcut. */
 static void menu_value(int *target, int value, int key)
 {
-    CL_FN(0x502b70, void (__cdecl *)(int, ...))(MENU_SET, target, value);
+    setmenuitem(MENU_SET, target, value);
     if (key)
-        CL_FN(0x502b70, void (__cdecl *)(int, ...))(MENU_KEY, key);
+        setmenuitem(MENU_KEY, key);
 }
 
 /* Add the chat control and pause or connection menu. */
@@ -43,16 +43,16 @@ static void input_menu(int *connection)
     int index;
     float x, y;
     if (!cl_data_input_chat) {
-        CL_FN(0x5036d0, void (__cdecl *)(void))();
+        createmenuitemempty();
     } else {
         menu_label(cl_data_input_label_chat, 60.0f, 580.0f, 512.0f, 20.0f, 16.0f, 0);
-        CL_FN(0x502b70, void (__cdecl *)(int, ...))(MENU_TEXT, cl_data_input_chat_text, CHAT_CAPACITY);
+        setmenuitem(MENU_TEXT, cl_data_input_chat_text, CHAT_CAPACITY);
     }
     if (!sr_game.link_state) {
         menu_label(cl_data_input_label_pause, 0.0f, 0.0f, 96.0f, 24.0f, 16.0f, 0);
         menu_value(&sr_game.link_state, 1, 0);
-        CL_FN(0x502b70, void (__cdecl *)(int, ...))(MENU_HOVER);
-        CL_FN(0x502b70, void (__cdecl *)(int, ...))(MENU_KEY, KEY_ESCAPE);
+        setmenuitem(MENU_HIDDEN);
+        setmenuitem(MENU_KEY, KEY_ESCAPE);
     } else if (!sr_game.connections_menu) {
         menu_label(cl_data_input_label_return, 512.0f, 200.0f, 192.0f, 32.0f, 12.0f, 1);
         menu_value(&sr_game.link_state, 0, KEY_ESCAPE);

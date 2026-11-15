@@ -45,7 +45,6 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 
 /* Game functions of other files. */
 #define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
-#define setmenuitem CL_FN(0x502b70, void (__cdecl *)(int, ...))
 #define checksystemmessages CL_FN(0x5060d0, void (__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
