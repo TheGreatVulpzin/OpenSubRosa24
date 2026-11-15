@@ -40,6 +40,7 @@ typedef GLint(APIENTRY *GetUniformLocationFn)(GLuint, const GLchar *);
 typedef void(APIENTRY *Uniform1iFn)(GLint, GLint);
 typedef void(APIENTRY *Uniform2fFn)(GLint, GLfloat, GLfloat);
 typedef void(APIENTRY *Uniform3fFn)(GLint, GLfloat, GLfloat, GLfloat);
+typedef void(APIENTRY *Uniform1fFn)(GLint, GLfloat);
 typedef void(APIENTRY *ActiveTextureFn)(GLenum);
 
 static CreateShaderFn glCreateShader;
@@ -57,6 +58,7 @@ static GetUniformLocationFn glGetUniformLocation;
 static Uniform1iFn glUniform1i;
 static Uniform2fFn glUniform2f;
 static Uniform3fFn glUniform3f;
+static Uniform1fFn glUniform1f;
 static ActiveTextureFn glActiveTexture;
 
 typedef struct { float x, y, z; } vec3;
@@ -107,7 +109,8 @@ static float g_volume_tilt = -1.0f, g_volume_heading;
 static GLuint g_depth_tex, g_part_depth_tex, g_map_tex, g_random_tex, g_view_tex;
 static GLuint g_stage_tex[NUM_PASSES];
 static GLuint g_material_tex[64], g_white_tex;
-static GLuint g_prog_depth_view, g_prog_occlusion, g_prog_blur, g_prog_lit, g_prog_sky;
+static GLuint g_prog_depth_view, g_prog_occlusion, g_prog_blur, g_prog_lit, g_prog_sky, g_prog_volume;
+static int g_dirty = 1;
 
 static vec3 v3(float x, float y, float z) { vec3 v; v.x = x; v.y = y; v.z = z; return v; }
 static vec3 add(vec3 a, vec3 b) { return v3(a.x + b.x, a.y + b.y, a.z + b.z); }
@@ -147,6 +150,7 @@ static void load_gl(void)
     glUniform1i = (Uniform1iFn)gl_proc("glUniform1i");
     glUniform2f = (Uniform2fFn)gl_proc("glUniform2f");
     glUniform3f = (Uniform3fFn)gl_proc("glUniform3f");
+    glUniform1f = (Uniform1fFn)gl_proc("glUniform1f");
     glActiveTexture = (ActiveTextureFn)gl_proc("glActiveTexture");
 }
 
@@ -248,6 +252,18 @@ static const char *const FS_LIT =
     "  vec3 c = albedo * (vec3(0.40, 0.44, 0.52) * (0.35 + 0.65 * m.g) + vec3(1.0, 0.93, 0.80) * sun * 0.95);\n"
     "  gl_FragColor = vec4(c, 1.0);\n"
     "}";
+
+static const char *const VS_VOLUME =
+    "uniform vec3 away;\n"
+    "uniform float len;\n"
+    "void main() {\n"
+    "  vec4 p = gl_Vertex;\n"
+    "  p.xyz += away * len * gl_MultiTexCoord0.x;\n"
+    "  gl_FrontColor = gl_Color;\n"
+    "  gl_Position = gl_ModelViewProjectionMatrix * p;\n"
+    "}";
+
+static const char *const FS_VOLUME = "void main() { gl_FragColor = gl_Color; }";
 
 static const char *const FS_SKY =
     "uniform vec3 light;\n"
@@ -621,9 +637,9 @@ static const float BOX_NORMALS[6][3] = {{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1
 /* Extrude each silhouette edge away from the sun by a length. The quad turns outward from the
  * volume, so its front face adds to the stencil count and its back face takes away. The volume has
  * no caps: the count is right while the camera is outside every volume. */
-static void emit_volumes(float length)
+static void emit_volumes(void)
 {
-    vec3 away = scale(g_light, -length);
+    vec3 away = scale(g_light, -1.0f);
     int i, f, k, g, m;
     glBegin(GL_QUADS);
     for (i = 0; i < g_caster_count; ++i) {
@@ -658,33 +674,37 @@ static void emit_volumes(float length)
                     pa = pb;
                     pb = t;
                 }
+                glTexCoord1f(0);
                 glVertex3f(pa.x, pa.y, pa.z);
                 glVertex3f(pb.x, pb.y, pb.z);
-                glVertex3f(pb.x + away.x, pb.y + away.y, pb.z + away.z);
-                glVertex3f(pa.x + away.x, pa.y + away.y, pa.z + away.z);
+                glTexCoord1f(1);
+                glVertex3f(pb.x, pb.y, pb.z);
+                glVertex3f(pa.x, pa.y, pa.z);
             }
         }
     }
     glEnd();
 }
 
+/* Draw the volumes. The list holds each quad once for a sun direction. The vertex shader moves
+ * the far edge away from the sun by the length, so the animation needs no new geometry. */
 static void draw_volumes(float progress)
 {
-    const float length = 1200.0f;
-    if (progress < 1.0f) {
-        emit_volumes(length * progress * progress);
-        return;
-    }
+    const float length = 800.0f;
     if (g_volume_tilt != g_sun_tilt || g_volume_heading != g_sun_heading) {
         if (!g_volume_list)
             g_volume_list = glGenLists(1);
         glNewList(g_volume_list, GL_COMPILE);
-        emit_volumes(length);
+        emit_volumes();
         glEndList();
         g_volume_tilt = g_sun_tilt;
         g_volume_heading = g_sun_heading;
     }
+    glUseProgram(g_prog_volume);
+    glUniform3f(glGetUniformLocation(g_prog_volume, "away"), -g_light.x, -g_light.y, -g_light.z);
+    glUniform1f(glGetUniformLocation(g_prog_volume, "len"), length * progress * progress);
     glCallList(g_volume_list);
+    glUseProgram(0);
 }
 
 static void draw_scene(float progress)
@@ -1089,6 +1109,15 @@ static void draw_stage(int stage, float x0, float y0, float x1, float y1, float 
 static void draw_main_view(void)
 {
     float t = clamp01(g_progress);
+    glViewport(0, 0, g_view_w, g_view_h);
+    if (t >= 1.0f) {
+        /* No animation: the image of the last full frame. */
+        screen_space();
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_STENCIL_TEST);
+        draw_stage(g_pass, -1, -1, 1, 1, 1);
+        return;
+    }
     switch (g_pass) {
     case P_DEPTH:
         /* The city grows from the middle into the depth buffer. */
@@ -1274,7 +1303,17 @@ static void render(float dt)
             g_pass = (g_pass + 1) % NUM_PASSES;
         }
     }
-    run_frame();
+    {
+        /* The volume animation writes its own image: make the full frame again at its end. */
+        static float previous;
+        if (previous < 1.0f && g_progress >= 1.0f)
+            g_dirty = 1;
+        previous = g_progress;
+    }
+    if (g_dirty) {
+        run_frame();
+        g_dirty = 0;
+    }
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     draw_main_view();
@@ -1320,6 +1359,7 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             g_width = LOWORD(lp);
             g_height = HIWORD(lp);
             make_textures();
+            g_dirty = 1;
         }
         return 0;
     case WM_KEYDOWN:
@@ -1364,12 +1404,14 @@ static LRESULT CALLBACK window_proc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             if (g_pitch > 1.5f) g_pitch = 1.5f;
             g_drag_x = x;
             g_drag_y = y;
+            g_dirty = 1;
         }
         return 0;
     case WM_MOUSEWHEEL:
         g_distance *= (short)HIWORD(wp) > 0 ? 0.9f : 1.1f;
         if (g_distance < 20.0f) g_distance = 20.0f;
         if (g_distance > 900.0f) g_distance = 900.0f;
+        g_dirty = 1;
         return 0;
     }
     return DefWindowProcA(hwnd, msg, wp, lp);
@@ -1419,9 +1461,11 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command, int sh
     HFONT font;
     MSG msg;
     RECT r = {0, 0, 0, 0};
-    DWORD last = GetTickCount();
+    LARGE_INTEGER frequency, last, now;
     (void)previous;
     (void)command;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&last);
     r.right = g_width;
     r.bottom = g_height;
     AdjustWindowRect(&r, WS_OVERLAPPEDWINDOW, FALSE);
@@ -1448,6 +1492,12 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command, int sh
     rc = wglCreateContext(g_dc);
     wglMakeCurrent(g_dc, rc);
     load_gl();
+    {
+        typedef BOOL(APIENTRY * SwapIntervalFn)(int);
+        SwapIntervalFn swap_interval = (SwapIntervalFn)wglGetProcAddress("wglSwapIntervalEXT");
+        if (swap_interval)
+            swap_interval(1);
+    }
     font = CreateFontA(-14, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET, 0, 0, ANTIALIASED_QUALITY, FIXED_PITCH,
                        "Consolas");
     SelectObject(g_dc, font);
@@ -1457,6 +1507,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command, int sh
     g_prog_blur = program(VS_QUAD, FS_BLUR);
     g_prog_lit = program(VS_LIT, FS_LIT);
     g_prog_sky = program(VS_QUAD, FS_SKY);
+    g_prog_volume = program(VS_VOLUME, FS_VOLUME);
     load_texts();
     {
         static const unsigned char white[4] = {255, 255, 255, 255};
@@ -1471,25 +1522,29 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command, int sh
     make_textures();
     ShowWindow(g_window, show);
     for (;;) {
-        DWORD now;
         float dt;
+        float tilt, heading;
         while (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE)) {
             if (msg.message == WM_QUIT)
                 return 0;
             TranslateMessage(&msg);
             DispatchMessageA(&msg);
         }
-        now = GetTickCount();
-        dt = (now - last) / 1000.0f;
+        QueryPerformanceCounter(&now);
+        dt = (float)(now.QuadPart - last.QuadPart) / (float)frequency.QuadPart;
         last = now;
-        if (dt > 0.1f)
-            dt = 0.1f;
+        if (dt > 0.5f)
+            dt = 0.5f;
+        tilt = g_sun_tilt;
+        heading = g_sun_heading;
         if (GetKeyState('Q') & 0x8000) g_sun_heading -= dt;
         if (GetKeyState('E') & 0x8000) g_sun_heading += dt;
         if (GetKeyState('R') & 0x8000) g_sun_tilt -= dt * 0.5f;
         if (GetKeyState('F') & 0x8000) g_sun_tilt += dt * 0.5f;
         if (g_sun_tilt < 0.1f) g_sun_tilt = 0.1f;
         if (g_sun_tilt > 1.45f) g_sun_tilt = 1.45f;
+        if (tilt != g_sun_tilt || heading != g_sun_heading)
+            g_dirty = 1;
         if (!g_playing && g_progress < 1.0f)
             g_progress = clamp01(g_progress + dt / 3.0f);
         render(dt);
