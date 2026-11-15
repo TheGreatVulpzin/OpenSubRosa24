@@ -858,6 +858,24 @@ def lod_case(rec, place=(0.5, 0.5), turn=(0.7, 0.3), height=40.0):
     return edits, {'setupframelandscapelod': [call(0xd92a0)]}
 
 
+FRAME_MODEL_COUNT = 0x19c0d0b4
+
+
+def addmodel_case(full=False):
+    """Models added to the frame list: four texture numbers, a flag word, a place and a rotation.
+    With full, the list holds 4096 models and each call does nothing."""
+    rng = random.Random(13)
+    edits = [(FRAME_MODEL_COUNT, 'i', [4096 if full else 0])]
+    calls = []
+    for slot in range(24):
+        base = SCRATCH + slot * 64
+        edits.append((base, '4i', [rng.randint(-5, 400) for _ in range(4)]))
+        edits.append((base + 16, '12f', [floats(rng) for _ in range(12)]))
+        calls.append(call(0x75d90, rng.randint(0, 600), image(base), rng.choice([0, 1, 3]),
+                          image(base + 16), image(base + 28)))
+    return edits, {'frame_addmodel': calls}
+
+
 
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
@@ -931,7 +949,8 @@ def main():
             'lod': lambda: lod_case(rec), 'lod_corner': lambda: lod_case(rec, (0.02, 0.98), (2.4, 0.1)),
             'lod_outside': lambda: lod_case(rec, (-0.3, 1.4), (0.0, 0.0)),
             'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
-            'lod_nan': lambda: lod_case(rec, (NAN, 0.5))}
+            'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
+            'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     repeat = max(1, int(os.environ.get('SV_SYNTH_REPEAT', '1')))
     for name in want:

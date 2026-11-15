@@ -745,7 +745,7 @@ rva,name,size,group,recorded_calls
 0x73aa0,unpackevent,2128,C0,0
 0x742f0,setupframetextures,1439,C10,3
 0x74890,buildframelist,5374,C10,0
-0x75d90,,369,C11,0
+0x75d90,frame_addmodel,369,C3,0
 0x75f10,renderframe,7511,C3,22
 0x77c70,renderframedepth,2973,C3,2
 0x78810,renderframeatmosphere,1055,C3,2
@@ -941,7 +941,7 @@ rva,name,size,group,recorded_calls
 0xb80b0,,11537,C11,0
 0xbadd0,,250,C11,0
 0xbaed0,,533,C11,0
-0xbb0f0,negvector,5071,C10,3
+0xbb0f0,,5071,C11,3
 0xbc4c0,hermiteinterpolation,247,C2,0
 0xbc5c0,buildhumanmodel,1290,C3,0
 0xbcad0,createhumanmodel,8702,C2,3
@@ -1174,7 +1174,7 @@ rva,name,size,group,recorded_calls
 0xfdb20,getstring,128,C0,0
 0xfdba0,cs_getline,193,C0x,0
 0xfdc70,checkbigendian,109,C10,0
-0xfdce0,,21,C11,0
+0xfdce0,comparestrings,21,C10,0
 0xfdd00,checkfilespec,211,C10,0
 0xfdde0,listfiles,460,C0,9
 0xfdfb0,freadswap,285,C1,0
@@ -1264,7 +1264,7 @@ rva,name,size,group,recorded_calls
 0x10b890,vectorlength,50,C0,8
 0x10b8d0,normalizevector,115,C0,8
 0x10b950,copyvector,39,C10,8
-0x10b980,,45,C11,8
+0x10b980,negvector,45,C10,8
 0x10b9b0,zerovector,28,C10,8
 0x10b9d0,addvectors,56,C0,8
 0x10ba10,subtractvectors,56,C0,8

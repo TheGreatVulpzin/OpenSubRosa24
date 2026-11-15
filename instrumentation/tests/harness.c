@@ -1252,6 +1252,10 @@ int main(int argc, char **argv)
     }
 #ifdef CL_HARNESS
     sv_verify_ignore(0x1332ec0, 0x5800);  /* profiler timers (RDTSC): 0x58 bytes each from 0x1332e80, time at +0x40 */
+    /* frame_models: 4096 records of 100 bytes. buildframelist gives frame_addmodel a list of two
+     * texture numbers, and frame_addmodel copies four. textures[2] and textures[3] (+0x14, 8 bytes)
+     * get stack bytes of the caller. No code reads them. See docs/client/render.md. */
+    sv_verify_ignore_field(0x19c110b8 + 0x14, 8, 100, 4096);
 #else
     sv_verify_ignore(0x14043e0, 0x5800);  /* profiler timers (RDTSC), see hooks_024d.c */
 #endif

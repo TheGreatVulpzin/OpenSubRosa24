@@ -698,12 +698,31 @@ void sv_verify_ignore(uint32_t rva, uint32_t size)
     }
 }
 
+static uint32_t g_ignore_field[4][4];  /* rva, size, stride, count */
+static int g_nignore_field;
+
+void sv_verify_ignore_field(uint32_t rva, uint32_t size, uint32_t stride, uint32_t count)
+{
+    if (g_nignore_field < 4 && size < stride) {
+        g_ignore_field[g_nignore_field][0] = rva;
+        g_ignore_field[g_nignore_field][1] = size;
+        g_ignore_field[g_nignore_field][2] = stride;
+        g_ignore_field[g_nignore_field][3] = count;
+        g_nignore_field++;
+    }
+}
+
 static int ignored(uint32_t rva)
 {
     int k;
     for (k = 0; k < g_nignore; k++)
         if (rva >= g_ignore[k][0] && rva < g_ignore[k][1])
             return 1;
+    for (k = 0; k < g_nignore_field; k++) {
+        const uint32_t *f = g_ignore_field[k];
+        if (rva >= f[0] && rva - f[0] < f[2] * f[3] && (rva - f[0]) % f[2] < f[1])
+            return 1;
+    }
     return 0;
 }
 

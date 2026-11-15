@@ -282,10 +282,11 @@ typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_
 SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
 SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
 /* A model entry in the sorted frame list. */
-typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[4]; vec3 pos; vec3 rot[3]; vec3 scale; vec3 color; } FrameEntry;
 typedef struct VideoMode { int width; int height; int bits; } VideoMode;
 SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
 SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, scale) == 0x4c, "FrameEntry.scale");
 SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
 SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
 /* A particle, a glass shard or a three corner piece with springs. */

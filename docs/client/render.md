@@ -160,7 +160,7 @@ A sector is a `BlockSector` record. `sector_entries` holds the sector and the di
 
 ## Frame models
 
-`src/client/render/frame_models.c` draws the sorted frame list. Each `FrameEntry` has a model, flags, two texture indices, a position, three orientation rows and a color. `frame_model_order` selects the entries to draw. Flag 2 hides an entry. Mode 0 binds its color and lightmap textures, mode 1 draws depth, and mode 2 supplies texture coordinates and normals without texture binds. A new lightmap texture binds only when the color texture changes. The world debug view suppresses this pass.
+`src/client/render/frame_models.c` draws the sorted frame list. Each `FrameEntry` has a model, flags, four texture indices (the draw uses the first two), a position, three orientation rows, a scale and a color. `frame_addmodel` adds an entry with a scale and a color of 1. A full list (4096 entries) ignores the model. `frame_model_order` selects the entries to draw. Flag 2 hides an entry. Mode 0 binds its color and lightmap textures, mode 1 draws depth, and mode 2 supplies texture coordinates and normals without texture binds. A new lightmap texture binds only when the color texture changes. The world debug view suppresses this pass.
 
 `buildhumanmodel` transforms human model corners through the bones. References below 16 use the corner position. Other references select paired part offsets and scales from the human color vectors. The scale changes local x and y only. The function fills face normals and all three vertex normals after the positions.
 
