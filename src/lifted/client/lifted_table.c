@@ -607,9 +607,9 @@ void lf_43f80(void);
 void lf_44140(void);
 void lf_442b0(void);
 void lf_46610(void);
-void lf_466d0(void);
-void lf_478d0(void);
-void lf_47ad0(void);
+void lineintersectarea(void);
+void lineintersectnormalblock(void);
+void lineintersectspecblock(void);
 void lf_47de0(void);
 void lf_48bf0(void);
 void lf_49000(void);
@@ -635,8 +635,8 @@ void lf_501b0(void);
 void lf_50230(void);
 void lf_50700(void);
 void lf_55bb0(void);
-void lf_55bc0(void);
-void building_buildfloorplan(void);
+void setupbuildingtypes(void);
+void lf_56ad0(void);
 void lf_58940(void);
 void lf_58a70(void);
 void lf_58b60(void);
@@ -669,12 +669,12 @@ void lf_646b0(void);
 void lf_65330(void);
 void lf_653c0(void);
 void lf_65400(void);
-void lf_65430(void);
-void lf_65b80(void);
+void lineintersectcityobject(void);
+void lineintersectcityobjecttype(void);
 void lf_66210(void);
 void lf_665f0(void);
 void lf_66600(void);
-void lf_66810(void);
+void setupcityobjecttypes(void);
 void lf_67490(void);
 void lf_676d0(void);
 void clientsend(void);
@@ -764,7 +764,7 @@ void lf_7d090(void);
 void movecamera(void);
 void movecamera2(void);
 void checksimulation(void);
-void newspaper_load(void);
+void lf_7e350(void);
 void lf_7e4f0(void);
 void lf_7e500(void);
 void lf_7e730(void);
@@ -804,7 +804,7 @@ void lf_8a020(void);
 void lf_8a710(void);
 void lf_8d000(void);
 void lf_8e510(void);
-void lf_8e8d0(void);
+void setupbody(void);
 void lf_8f730(void);
 void lf_90600(void);
 void lf_90830(void);
@@ -826,7 +826,7 @@ void lineintersectsphere(void);
 void lf_94b20(void);
 void getonlineserverlist(void);
 void getmasterserverip(void);
-void lf_951c0(void);
+void setupitemtypes(void);
 void lf_96cf0(void);
 void lf_970f0(void);
 void lf_97130(void);
@@ -845,7 +845,7 @@ void lf_9a190(void);
 void lf_9a220(void);
 void lf_9a330(void);
 void lf_9a410(void);
-void lf_9aba0(void);
+void item_sphereintersect(void);
 void lf_9b160(void);
 void lf_9b2c0(void);
 void lf_9b5d0(void);
@@ -994,12 +994,12 @@ void lf_ccb70(void);
 void engine_bezierinterpolation(void);
 void lf_ccd50(void);
 void lf_cd930(void);
-void lf_ce570(void);
+void lineintersectobject(void);
 void lf_ced70(void);
 void lf_cf2e0(void);
 void lf_cf5f0(void);
-void lf_d06a0(void);
-void lf_d0910(void);
+void lineintersecttrack(void);
+void lineintersecttrackrail(void);
 void lf_d0b60(void);
 void lf_d1010(void);
 void lf_d12e0(void);
@@ -1132,9 +1132,9 @@ void objecttype_addface(void);
 void objecttype_addwheel(void);
 void setupobjecttypeweight(void);
 void calculatepointscale(void);
-void lf_ec630(void);
-void lf_f6b30(void);
-void lf_f7a50(void);
+void setupobjecttypes_cars(void);
+void setupobjecttypes_helicopters(void);
+void setupobjectypes_train(void);
 void objecttype_calcquadweights(void);
 void lf_fa9f0(void);
 void lf_fae20(void);
@@ -1907,9 +1907,9 @@ const LfEntry lf_table[] = {
     { "lf_44140", 0x44140, (void *)lf_44140, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_interior_buildsectormodel", 0x442b0, (void *)lf_442b0, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_breakblock", 0x46610, (void *)lf_46610, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
-    { "lineintersectarea", 0x466d0, (void *)lf_466d0, 6, LF_RET_INT, 4, "pppvpp", 0 },
-    { "lineintersectnormalblock", 0x478d0, (void *)lf_478d0, 8, LF_RET_INT, 4, "vpppppvv", 0 },
-    { "lineintersectspecblock", 0x47ad0, (void *)lf_47ad0, 8, LF_RET_INT, 1, "ppppppvv", 0 },
+    { "lineintersectarea", 0x466d0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
+    { "lineintersectnormalblock", 0x478d0, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
+    { "lineintersectspecblock", 0x47ad0, (void *)lineintersectspecblock, 8, LF_RET_INT, 1, "ppppppvv", 0 },
     { "lf_47de0", 0x47de0, (void *)lf_47de0, 6, LF_RET_INT, 4, "pppvpv", 0 },
     { "lf_48bf0", 0x48bf0, (void *)lf_48bf0, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
     { "lf_49000", 0x49000, (void *)lf_49000, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
@@ -1935,8 +1935,8 @@ const LfEntry lf_table[] = {
     { "lf_50230", 0x50230, (void *)lf_50230, 1, LF_RET_VOID, 4, "v", 0 },
     { "bondsimulation2", 0x50700, (void *)lf_50700, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_55bb0", 0x55bb0, (void *)lf_55bb0, 0, LF_RET_VOID, 4, "", 0 },
-    { "setupbuildingtypes", 0x55bc0, (void *)lf_55bc0, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_buildfloorplan", 0x56ad0, (void *)building_buildfloorplan, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
+    { "setupbuildingtypes", 0x55bc0, (void *)setupbuildingtypes, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_buildfloorplan", 0x56ad0, (void *)lf_56ad0, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "lf_58940", 0x58940, (void *)lf_58940, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "lf_58a70", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)lf_58b60, 0, LF_RET_VOID, 4, "", 0 },
@@ -1969,12 +1969,12 @@ const LfEntry lf_table[] = {
     { "lf_65330", 0x65330, (void *)lf_65330, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lf_653c0", 0x653c0, (void *)lf_653c0, 0, LF_RET_INT, 4, "", 0 },
     { "lf_65400", 0x65400, (void *)lf_65400, 1, LF_RET_VOID, 4, "v", 0 },
-    { "lineintersectcityobject", 0x65430, (void *)lf_65430, 6, LF_RET_INT, 4, "pppvpp", 0 },
-    { "lineintersectcityobjecttype", 0x65b80, (void *)lf_65b80, 8, LF_RET_INT, 4, "pppvpppp", 0 },
+    { "lineintersectcityobject", 0x65430, (void *)lineintersectcityobject, 6, LF_RET_INT, 4, "pppvpp", 0 },
+    { "lineintersectcityobjecttype", 0x65b80, (void *)lineintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppp", 0 },
     { "lf_66210", 0x66210, (void *)lf_66210, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "lf_665f0", 0x665f0, (void *)lf_665f0, 0, LF_RET_VOID, 4, "", 0 },
     { "city_createelevator", 0x66600, (void *)lf_66600, 1, LF_RET_INT, 4, "p", 0 },
-    { "setupcityobjecttypes", 0x66810, (void *)lf_66810, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupcityobjecttypes", 0x66810, (void *)setupcityobjecttypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x67490, (void *)lf_67490, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "clientrecv", 0x676d0, (void *)lf_676d0, 0, LF_RET_VOID, 4, "", 1 },
     { "clientsend", 0x68030, (void *)clientsend, 0, LF_RET_VOID, 4, "", 1 },
@@ -2064,7 +2064,7 @@ const LfEntry lf_table[] = {
     { "movecamera", 0x7d0e0, (void *)movecamera, 1, LF_RET_VOID, 4, "v", 0 },
     { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
     { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
-    { "newspaper_load", 0x7e350, (void *)newspaper_load, 0, LF_RET_VOID, 4, "", 1 },
+    { "newspaper_load", 0x7e350, (void *)lf_7e350, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_7e4f0", 0x7e4f0, (void *)lf_7e4f0, 0, LF_RET_VOID, 4, "", 0 },
     { "playermenu", 0x7e500, (void *)lf_7e500, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_7e730", 0x7e730, (void *)lf_7e730, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2104,7 +2104,7 @@ const LfEntry lf_table[] = {
     { "human_calculatearmangles", 0x8a710, (void *)lf_8a710, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_calcarmtorque", 0x8d000, (void *)lf_8d000, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_collisionhuman", 0x8e510, (void *)lf_8e510, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupbody", 0x8e8d0, (void *)lf_8e8d0, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupbody", 0x8e8d0, (void *)setupbody, 0, LF_RET_VOID, 4, "", 0 },
     { "human_itemsimulation", 0x8f730, (void *)lf_8f730, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_buildmuscles", 0x90600, (void *)lf_90600, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x90830, (void *)lf_90830, 4, LF_RET_VOID, 4, "vvvp", 0 },
@@ -2126,7 +2126,7 @@ const LfEntry lf_table[] = {
     { "getlanipaddress", 0x94b20, (void *)lf_94b20, 0, LF_RET_VOID, 4, "", 1 },
     { "getonlineserverlist", 0x94c00, (void *)getonlineserverlist, 0, LF_RET_VOID, 4, "", 1 },
     { "getmasterserverip", 0x94c50, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
-    { "setupitemtypes", 0x951c0, (void *)lf_951c0, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupitemtypes", 0x951c0, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "createitem", 0x96cf0, (void *)lf_96cf0, 4, LF_RET_INT, 4, "vpvv", 0 },
     { "getnextitem", 0x970f0, (void *)lf_970f0, 0, LF_RET_INT, 4, "", 0 },
     { "lf_97130", 0x97130, (void *)lf_97130, 0, LF_RET_VOID, 4, "", 0 },
@@ -2145,7 +2145,7 @@ const LfEntry lf_table[] = {
     { "item_removehumanlink", 0x9a220, (void *)lf_9a220, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "item_removeitemlink", 0x9a330, (void *)lf_9a330, 2, LF_RET_VOID, 4, "vv", 0 },
     { "item_physicssimulation", 0x9a410, (void *)lf_9a410, 1, LF_RET_VOID, 4, "v", 0 },
-    { "item_sphereintersect", 0x9aba0, (void *)lf_9aba0, 3, LF_RET_INT, 1, "vvv", 0 },
+    { "item_sphereintersect", 0x9aba0, (void *)item_sphereintersect, 3, LF_RET_INT, 1, "vpv", 0 },
     { "lf_9b160", 0x9b160, (void *)lf_9b160, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "city_addintersection", 0x9b2c0, (void *)lf_9b2c0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "lf_9b5d0", 0x9b5d0, (void *)lf_9b5d0, 4, LF_RET_VOID, 4, "vvvv", 0 },
@@ -2294,12 +2294,12 @@ const LfEntry lf_table[] = {
     { "engine_bezierinterpolation", 0xccca0, (void *)engine_bezierinterpolation, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "object_rotorsimulation", 0xccd50, (void *)lf_ccd50, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0xcd930, (void *)lf_cd930, 1, LF_RET_VOID, 4, "v", 0 },
-    { "lineintersectobject", 0xce570, (void *)lf_ce570, 4, LF_RET_INT, 4, "vppv", 0 },
+    { "lineintersectobject", 0xce570, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "lf_ced70", 0xced70, (void *)lf_ced70, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0xcf2e0, (void *)lf_cf2e0, 1, LF_RET_VOID, 4, "p", 0 },
     { "createtrack", 0xcf5f0, (void *)lf_cf5f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "lineintersecttrack", 0xd06a0, (void *)lf_d06a0, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "lineintersecttrackrail", 0xd0910, (void *)lf_d0910, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersecttrack", 0xd06a0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "lineintersecttrackrail", 0xd0910, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0xd0b60, (void *)lf_d0b60, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectwheelcollision2", 0xd1010, (void *)lf_d1010, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_d12e0", 0xd12e0, (void *)lf_d12e0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2432,9 +2432,9 @@ const LfEntry lf_table[] = {
     { "objecttype_addwheel", 0xebb20, (void *)objecttype_addwheel, 12, LF_RET_VOID, 4, "vvvvpvvvvvvv", 0 },
     { "setupobjecttypeweight", 0xebe00, (void *)setupobjecttypeweight, 1, LF_RET_VOID, 4, "v", 0 },
     { "calculatepointscale", 0xec220, (void *)calculatepointscale, 4, LF_RET_VOID, 4, "vvvp", 0 },
-    { "setupobjecttypes_cars", 0xec630, (void *)lf_ec630, 0, LF_RET_VOID, 4, "", 0 },
-    { "setupobjecttypes_helicopters", 0xf6b30, (void *)lf_f6b30, 0, LF_RET_VOID, 4, "", 0 },
-    { "setupobjectypes_train", 0xf7a50, (void *)lf_f7a50, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupobjecttypes_cars", 0xec630, (void *)setupobjecttypes_cars, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupobjecttypes_helicopters", 0xf6b30, (void *)setupobjecttypes_helicopters, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupobjectypes_train", 0xf7a50, (void *)setupobjectypes_train, 0, LF_RET_VOID, 4, "", 0 },
     { "objecttype_calcquadweights", 0xfa7d0, (void *)objecttype_calcquadweights, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "usermenu", 0xfa9f0, (void *)lf_fa9f0, 0, LF_RET_VOID, 4, "", 1 },
     { "gettimeofday", 0xfae20, (void *)lf_fae20, 2, LF_RET_INT, 4, "pp", 1 },

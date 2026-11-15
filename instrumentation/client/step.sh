@@ -51,7 +51,13 @@ echo "build: ok"
 if [ -n "$funcs" ]; then
     echo "== gate with every recorded call: $funcs"
     python -I instrumentation/lift/gate.py --target client_win --all-calls --funcs "$funcs" --jobs 2 > "$logs/gate_funcs.log" 2>&1
-    tail -6 "$logs/gate_funcs.log"
+    tail -3 "$logs/gate_funcs.log"
+    # The gate prints only the calls that are the same. The lines of each function show the differences.
+    pattern="$(echo "$funcs" | sed 's/,/|/g')"
+    for result in build/gate/client_win/reset/all/client-*.txt; do
+        echo "-- $(basename "$result" .txt)"
+        grep -E "^\[ *[0-9]+/[0-9]+\] ($pattern) " "$result" | cut -c1-180
+    done
 fi
 
 if [ -n "$synth" ]; then
