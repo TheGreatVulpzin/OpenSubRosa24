@@ -690,7 +690,7 @@ static void emit_volumes(void)
  * the far edge away from the sun by the length, so the animation needs no new geometry. */
 static void draw_volumes(float progress)
 {
-    const float length = 1200.0f;
+    const float length = 800.0f;
     if (g_volume_tilt != g_sun_tilt || g_volume_heading != g_sun_heading) {
         if (!g_volume_list)
             g_volume_list = glGenLists(1);
@@ -1109,6 +1109,15 @@ static void draw_stage(int stage, float x0, float y0, float x1, float y1, float 
 static void draw_main_view(void)
 {
     float t = clamp01(g_progress);
+    glViewport(0, 0, g_view_w, g_view_h);
+    if (t >= 1.0f) {
+        /* No animation: the image of the last full frame. */
+        screen_space();
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_STENCIL_TEST);
+        draw_stage(g_pass, -1, -1, 1, 1, 1);
+        return;
+    }
     switch (g_pass) {
     case P_DEPTH:
         /* The city grows from the middle into the depth buffer. */
@@ -1294,6 +1303,13 @@ static void render(float dt)
             g_pass = (g_pass + 1) % NUM_PASSES;
         }
     }
+    {
+        /* The volume animation writes its own image: make the full frame again at its end. */
+        static float previous;
+        if (previous < 1.0f && g_progress >= 1.0f)
+            g_dirty = 1;
+        previous = g_progress;
+    }
     if (g_dirty) {
         run_frame();
         g_dirty = 0;
@@ -1476,6 +1492,12 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous, LPSTR command, int sh
     rc = wglCreateContext(g_dc);
     wglMakeCurrent(g_dc, rc);
     load_gl();
+    {
+        typedef BOOL(APIENTRY * SwapIntervalFn)(int);
+        SwapIntervalFn swap_interval = (SwapIntervalFn)wglGetProcAddress("wglSwapIntervalEXT");
+        if (swap_interval)
+            swap_interval(1);
+    }
     font = CreateFontA(-14, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET, 0, 0, ANTIALIASED_QUALITY, FIXED_PITCH,
                        "Consolas");
     SelectObject(g_dc, font);
