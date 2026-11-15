@@ -22,3 +22,5 @@ rva,name,index,type,evidence
 0x721a0,createevent_updateobject,4,float *,"the velocity: the function copies it into the event, or writes zero when it is null"
 0x72db0,createevent_updateblock_quad,6,float *,"the place of the quad: the function copies it into the event, or writes zero when it is null"
 0x72db0,createevent_updateblock_quad,7,float *,"the normal of the quad: the function copies it into the event, or writes zero when it is null"
+0x9aba0,item_sphereintersect,1,float *,"the center of the sphere: the function reads three floats from it"
+0x478d0,lineintersectnormalblock,0,float *,"the hit point: the function writes three floats to it"
