@@ -1169,12 +1169,12 @@ void lf_fd580(void);
 void lf_fd6c0(void);
 void lf_fd740(void);
 void lf_fd7f0(void);
-void lf_fd800(void);
-void lf_fd870(void);
+void findstring(void);
+void checkstring(void);
 void lf_fd8e0(void);
 void lf_fd9f0(void);
-void lf_fdb20(void);
-void lf_fdba0(void);
+void getstring(void);
+void cs_getline(void);
 void lf_fdc70(void);
 void lf_fdce0(void);
 void lf_fdd00(void);
@@ -2308,7 +2308,7 @@ const LfEntry lf_table[] = {
     { "optionsmenu", 0xd2290, (void *)lf_d2290, 0, LF_RET_VOID, 4, "", 1 },
     { "loadsaveoptions", 0xd3350, (void *)lf_d3350, 1, LF_RET_VOID, 4, "v", 1 },
     { "optionreadwriteint", 0xd3810, (void *)optionreadwriteint, 3, LF_RET_VOID, 4, "ppv", 1 },
-    { "optionreadwritestring", 0xd3860, (void *)optionreadwritestring, 4, LF_RET_VOID, 4, "vpvv", 1 },
+    { "optionreadwritestring", 0xd3860, (void *)optionreadwritestring, 4, LF_RET_VOID, 4, "ppvv", 1 },
     { "voiceoptionsmenu", 0xd38c0, (void *)lf_d38c0, 0, LF_RET_VOID, 4, "", 1 },
     { "createparticle", 0xd41d0, (void *)lf_d41d0, 5, LF_RET_INT, 4, "vpvvv", 0 },
     { "lf_d4340", 0xd4340, (void *)lf_d4340, 0, LF_RET_VOID, 4, "", 0 },
@@ -2469,12 +2469,12 @@ const LfEntry lf_table[] = {
     { "lf_fd6c0", 0xfd6c0, (void *)lf_fd6c0, 5, LF_RET_INT, 1, "ppppv", 0 },
     { "loadtextfile", 0xfd740, (void *)lf_fd740, 1, LF_RET_VOID, 4, "p", 1 },
     { "lf_fd7f0", 0xfd7f0, (void *)lf_fd7f0, 0, LF_RET_VOID, 4, "", 0 },
-    { "findstring", 0xfd800, (void *)lf_fd800, 1, LF_RET_INT, 1, "p", 0 },
-    { "checkstring", 0xfd870, (void *)lf_fd870, 1, LF_RET_INT, 1, "v", 0 },
+    { "findstring", 0xfd800, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
+    { "checkstring", 0xfd870, (void *)checkstring, 1, LF_RET_INT, 1, "p", 0 },
     { "lf_fd8e0", 0xfd8e0, (void *)lf_fd8e0, 0, LF_RET_INT, 4, "", 0 },
     { "getfloat", 0xfd9f0, (void *)lf_fd9f0, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "getstring", 0xfdb20, (void *)lf_fdb20, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "cs_getline", 0xfdba0, (void *)lf_fdba0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "getstring", 0xfdb20, (void *)getstring, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "cs_getline", 0xfdba0, (void *)cs_getline, 2, LF_RET_VOID, 4, "pv", 0 },
     { "checkbigendian", 0xfdc70, (void *)lf_fdc70, 0, LF_RET_VOID, 4, "", 0 },
     { "comparestrings", 0xfdce0, (void *)lf_fdce0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "checkfilespec", 0xfdd00, (void *)lf_fdd00, 2, LF_RET_INT, 4, "vp", 0 },

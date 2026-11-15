@@ -36,7 +36,6 @@ buildsomeshit src/game/level.c
 bulletsimulation src/game/bullet_sim.c
 bullettimetolive src/game/bullets.c
 calculateplayervoice src/net/server.c
-checkstring src/common/parser.c
 city_createelevator src/game/city_objects.c
 clientrecv src/net/client.c
 createaccount src/game/account_db.c
@@ -57,9 +56,7 @@ cs_pwrite src/net/packet.c
 deleteplayer src/game/player.c
 economy_carmarket src/game/economy.c
 economysimulation src/game/economy.c
-findstring src/common/parser.c
 getenginetorque2 src/game/vehicles.c
-getstring src/common/parser.c
 gettimeofday src/common/system.c
 human_calcarmtorque src/game/human_arms.c
 item_removehumanlink src/game/items.c

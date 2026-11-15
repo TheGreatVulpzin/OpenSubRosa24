@@ -12,3 +12,6 @@ rva,name,index,type,evidence
 0xfca30,rotateorientation,0,float *,"(float *)(local_c * 0xc + param_1): the rows of the matrix that the function turns"
 0xeb320,init_by_array,0,uint *,"*(int *)(param_1 + local_10 * 4): the key array of param_2 words"
 0xfa7d0,objecttype_calcquadweights,2,float *,"(float *)(local_3c * 0xc + param_3): the four corners of the quad, three floats each"
+0xfd870,checkstring,0,char *,"the key text: findstring and checkstring compare its bytes with the text of the parser"
+0xfdb20,getstring,0,char *,"the output text: getstring copies the string that follows the cursor into it"
+0xfdba0,cs_getline,0,char *,"the output text: cs_getline copies one line of the text buffer into it"

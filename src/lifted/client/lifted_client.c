@@ -57626,7 +57626,7 @@ void __cdecl lf_7d090(void)
 #define sprintf_comma ((void (__cdecl *)(char *, int))SR_FN(0x4a3ee0))
 #define FUN_004e0f80 ((void (__cdecl *)(void))SR_FN(0x4e0f80))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x4fd740))
-#define csradixsort ((void (__cdecl *)(int, int))SR_FN(0x4fdba0))
+#define csradixsort ((void (__cdecl *)(char *, int))SR_FN(0x4fdba0))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define strcat ((char * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "strcat"))
 #define local_8 (*(int *)(lf_frame + 0x18))
@@ -57639,7 +57639,7 @@ void __cdecl lf_7e350(void)
   loadtextfile(s_readme_txt_005249b8);
   DAT_09f676e0 = 0;
   while ((DAT_09f676e0 < 0x3fe && (DAT_1415e700 < DAT_1415e704))) {
-    csradixsort((int)(&DAT_09f676e4 + DAT_09f676e0 * 0x100),0x7c);
+    csradixsort(&DAT_09f676e4 + DAT_09f676e0 * 0x100,0x7c);
     DAT_09f676e0 = DAT_09f676e0 + 1;
   }
   strcpy(&DAT_09f676e4 + DAT_09f676e0 * 0x100,s_Top_10_list_005249c4);
@@ -89997,7 +89997,7 @@ void __cdecl lf_d2290(void)
 #define srand ((void (__cdecl *)(uint))LF_IMPORT(56, "MSVCR100.DLL", "srand"))
 #define FUN_0046b140 ((__time64_t (__cdecl *)(__time64_t *))SR_FN(0x46b140))
 #define optionreadwriteint ((void (__cdecl *)(undefined4 *, char *, int))SR_FN(0x4d3810))
-#define optionreadwritestring ((void (__cdecl *)(int, char *, int, int))SR_FN(0x4d3860))
+#define optionreadwritestring ((void (__cdecl *)(char *, char *, int, int))SR_FN(0x4d3860))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x4fd740))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
@@ -100286,52 +100286,6 @@ void __cdecl lf_fd7f0(void)
 }
 #undef DAT_1415e700
 
-/* ---------------------------------------------------------------- 0xfd800 */
-#define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
-#define DAT_1415e704 (*(int *)SR_VA(0x1415e704))
-#define checkstring ((bool (__cdecl *)(int))SR_FN(0x4fd870))
-#define strlen ((size_t (__cdecl *)(char *))LF_IMPORT(15, "MSVCR100.DLL", "strlen"))
-bool __cdecl lf_fd800(char *param_1)
-
-{
-  int iVar1;
-  size_t sVar2;
-  
-  while ((DAT_1415e700 < DAT_1415e704 && (iVar1 = checkstring((int)param_1), iVar1 == 0))) {
-    DAT_1415e700 = DAT_1415e700 + 1;
-  }
-  sVar2 = strlen(param_1);
-  DAT_1415e700 = sVar2 + DAT_1415e700;
-  return DAT_1415e700 < DAT_1415e704;
-}
-#undef DAT_1415e700
-#undef DAT_1415e704
-#undef checkstring
-#undef strlen
-
-/* ---------------------------------------------------------------- 0xfd870 */
-#define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
-#define DAT_1415e704 (*(int *)SR_VA(0x1415e704))
-#define DAT_1415e708 (*(undefined1 *)SR_VA(0x1415e708))
-#define local_8 (*(int *)(lf_frame + 0x18))
-bool __cdecl lf_fd870(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-  
-  for (local_8 = 0;
-      ((DAT_1415e700 + local_8 < DAT_1415e704 && (*(char *)(param_1 + local_8) != '\0')) &&
-      (*(char *)(param_1 + local_8) == (&DAT_1415e708)[DAT_1415e700 + local_8]));
-      local_8 = local_8 + 1) {
-  }
-  return *(char *)(param_1 + local_8) == '\0';
-}
-#undef DAT_1415e700
-#undef DAT_1415e704
-#undef DAT_1415e708
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xfd8e0 */
 #define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
 #define DAT_1415e704 (*(int *)SR_VA(0x1415e704))
@@ -100412,62 +100366,6 @@ float10 __cdecl lf_fd9f0(void)
 #undef DAT_1425e708
 #undef sscanf
 #undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xfdb20 */
-#define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
-#define DAT_1415e704 (*(int *)SR_VA(0x1415e704))
-#define DAT_1415e708 (*(undefined1 *)SR_VA(0x1415e708))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_fdb20(int param_1,int param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-  
-  local_8 = 0;
-  for (; (((DAT_1415e700 < DAT_1415e704 && (local_8 < param_2 + -1)) &&
-          ((&DAT_1415e708)[DAT_1415e700] != '\r')) && ((&DAT_1415e708)[DAT_1415e700] != '\n'));
-      DAT_1415e700 = DAT_1415e700 + 1) {
-    *(undefined1 *)(param_1 + local_8) = (&DAT_1415e708)[DAT_1415e700];
-    local_8 = local_8 + 1;
-  }
-  *(undefined1 *)(param_1 + local_8) = 0;
-  return;
-}
-#undef DAT_1415e700
-#undef DAT_1415e704
-#undef DAT_1415e708
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xfdba0 */
-#define DAT_1415e700 (*(int *)SR_VA(0x1415e700))
-#define DAT_1415e704 (*(int *)SR_VA(0x1415e704))
-#define DAT_1415e708 (*(undefined1 *)SR_VA(0x1415e708))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_fdba0(int param_1,int param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-  
-  local_8 = 0;
-  for (; (((DAT_1415e700 < DAT_1415e704 && (local_8 < param_2 + -1)) &&
-          ((&DAT_1415e708)[DAT_1415e700] != '\r')) && ((&DAT_1415e708)[DAT_1415e700] != '\n'));
-      DAT_1415e700 = DAT_1415e700 + 1) {
-    *(undefined1 *)(param_1 + local_8) = (&DAT_1415e708)[DAT_1415e700];
-    local_8 = local_8 + 1;
-  }
-  *(undefined1 *)(param_1 + local_8) = 0;
-  for (; (DAT_1415e700 < DAT_1415e704 &&
-         (((&DAT_1415e708)[DAT_1415e700] == '\r' || ((&DAT_1415e708)[DAT_1415e700] == '\n'))));
-      DAT_1415e700 = DAT_1415e700 + 1) {
-  }
-  return;
-}
-#undef DAT_1415e700
-#undef DAT_1415e704
-#undef DAT_1415e708
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xfdc70 */

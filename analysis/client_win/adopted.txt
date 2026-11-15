@@ -45,3 +45,7 @@ projectorientation src/common/vectors.c
 rotateorientation src/common/vectors.c
 init_by_array src/common/random.c
 objecttype_calcquadweights src/game/object_types.c
+checkstring src/common/parser.c
+findstring src/common/parser.c
+getstring src/common/parser.c
+cs_getline src/common/parser.c

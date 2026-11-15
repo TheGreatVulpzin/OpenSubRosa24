@@ -945,6 +945,38 @@ def framelist_case(extra=()):
     return edits, {'buildframelist': [call(0x74890)] * 2}
 
 
+FINDSTRING, CHECKSTRING, GETSTRING, CS_GETLINE = 0xfd800, 0xfd870, 0xfdb20, 0xfdba0
+PARSER = 0x13d5e700
+
+
+def parser_case(which):
+    """The text parser on a made text: the keys of a settings file. The cursor is an edit for each function,
+    and the calls of one function follow each other. A key that is not in the text moves the cursor past
+    the end. A key with no letters, and a line longer than the buffer of the call, are in the lists."""
+    text = (b'screenwidth=1024\r\nname=Agent 7\r\nfullscreen=1\r\nnotanumber=abc\r\nneg=-42\r\n'
+            b'long=' + b'x' * 70 + b'\r\nlast=9')
+    base = [(PARSER + 8, f'{len(text) + 1}B', list(text) + [0]), (PARSER + 4, 'i', [len(text)])]
+
+    def key(text_key):
+        return 'P:0:' + (text_key + b'\0').hex()
+
+    def out():
+        return 'P:0:' + (b'\xaa' * 64).hex()
+
+    if which == 'findstring':
+        keys = [b'screenwidth=', b'name=', b'fullscreen=', b'neg=', b'last=', b'missing=', b'', b'x']
+        return base + [(PARSER, 'i', [0])], {'findstring': [call(FINDSTRING, key(k)) for k in keys]}
+    if which == 'checkstring':
+        keys = [b'screenwidth=', b'screenwidt', b'name=', b'', b'screenwidth=1024\r\nname=Agent 7\r\nfullscreen=1\r\nzzz']
+        return base + [(PARSER, 'i', [0])], {'checkstring': [call(CHECKSTRING, key(k)) for k in keys]}
+    if which == 'getstring':
+        start = text.index(b'name=') + 5
+        calls = [call(GETSTRING, out(), 30), call(GETSTRING, out(), 3), call(GETSTRING, out(), 0), call(GETSTRING, out(), 64)]
+        return base + [(PARSER, 'i', [start])], {'getstring': calls}
+    calls = [call(CS_GETLINE, out(), 64), call(CS_GETLINE, out(), 8), call(CS_GETLINE, out(), 64), call(CS_GETLINE, out(), 64)]
+    return base + [(PARSER, 'i', [0])], {'cs_getline': calls}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -1008,6 +1040,8 @@ def main():
             'frame_race': lambda: frame_case(features=('race',)),
             'frame_race_no_view': lambda: frame_case(features=('race_no_view',)),
             'frame_names': lambda: frame_case(features=('names',)),
+            'parser_find': lambda: parser_case('findstring'), 'parser_check': lambda: parser_case('checkstring'),
+            'parser_get': lambda: parser_case('getstring'), 'parser_line': lambda: parser_case('cs_getline'),
             'objecttypes': objecttypes_case, 'loaders': loaders_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec),
