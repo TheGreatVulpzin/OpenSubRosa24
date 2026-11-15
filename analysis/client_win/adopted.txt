@@ -49,3 +49,10 @@ checkstring src/common/parser.c
 findstring src/common/parser.c
 getstring src/common/parser.c
 cs_getline src/common/parser.c
+lineintersectall src/game/collide.c
+lineintersectlandscape src/game/collide.c
+lineintersectlevel src/game/collide.c
+pointinsidebase src/game/collide.c
+pointinsidebasesafe src/game/collide.c
+sphereintersectlandscape src/game/collide.c
+sphereintersectlevel src/game/collide.c

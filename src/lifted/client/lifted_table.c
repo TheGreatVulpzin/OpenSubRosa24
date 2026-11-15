@@ -860,16 +860,16 @@ void lf_a04f0(void);
 void lf_a06f0(void);
 void lf_a0740(void);
 void lf_a0a60(void);
-void lf_a0da0(void);
-void lf_a0f40(void);
+void lineintersectall(void);
+void lineintersectlevel(void);
 void lf_a1100(void);
-void lf_a1220(void);
+void sphereintersectlevel(void);
 void lf_a1320(void);
 void landscape_buildmesh(void);
 void landscape_setheightf(void);
-void lf_a1b40(void);
+void lineintersectlandscape(void);
 void lf_a22a0(void);
-void lf_a27b0(void);
+void sphereintersectlandscape(void);
 void lf_a2cd0(void);
 void lf_a2f90(void);
 void lf_a3940(void);
@@ -877,9 +877,9 @@ void lf_a3de0(void);
 void sprintf_comma(void);
 void lf_a3fe0(void);
 void lf_a4150(void);
-void lf_a4180(void);
+void pointinsidebase(void);
 void lf_a4260(void);
-void lf_a4340(void);
+void pointinsidebasesafe(void);
 void lf_a4420(void);
 void lf_a44a0(void);
 void lf_a4570(void);
@@ -2160,16 +2160,16 @@ const LfEntry lf_table[] = {
     { "lf_a06f0", 0xa06f0, (void *)lf_a06f0, 1, LF_RET_VOID, 4, "v", 0 },
     { "leveleditor_save", 0xa0740, (void *)lf_a0740, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0xa0a60, (void *)lf_a0a60, 0, LF_RET_VOID, 4, "", 1 },
-    { "lineintersectall", 0xa0da0, (void *)lf_a0da0, 2, LF_RET_INT, 1, "pp", 0 },
-    { "lineintersectlevel", 0xa0f40, (void *)lf_a0f40, 3, LF_RET_INT, 1, "ppv", 0 },
+    { "lineintersectall", 0xa0da0, (void *)lineintersectall, 2, LF_RET_INT, 1, "pp", 0 },
+    { "lineintersectlevel", 0xa0f40, (void *)lineintersectlevel, 3, LF_RET_INT, 1, "ppv", 0 },
     { "lf_a1100", 0xa1100, (void *)lf_a1100, 3, LF_RET_INT, 1, "ppv", 0 },
-    { "sphereintersectlevel", 0xa1220, (void *)lf_a1220, 2, LF_RET_INT, 1, "pv", 0 },
+    { "sphereintersectlevel", 0xa1220, (void *)sphereintersectlevel, 2, LF_RET_INT, 1, "pv", 0 },
     { "createlandscape", 0xa1320, (void *)lf_a1320, 0, LF_RET_VOID, 4, "", 0 },
     { "landscape_buildmesh", 0xa19c0, (void *)landscape_buildmesh, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_setheightf", 0xa1aa0, (void *)landscape_setheightf, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "lineintersectlandscape", 0xa1b40, (void *)lf_a1b40, 2, LF_RET_INT, 1, "vv", 0 },
+    { "lineintersectlandscape", 0xa1b40, (void *)lineintersectlandscape, 2, LF_RET_INT, 1, "pp", 0 },
     { "lf_a22a0", 0xa22a0, (void *)lf_a22a0, 3, LF_RET_INT64, 4, "ppv", 0 },
-    { "sphereintersectlandscape", 0xa27b0, (void *)lf_a27b0, 2, LF_RET_INT, 1, "pv", 0 },
+    { "sphereintersectlandscape", 0xa27b0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 1, "pv", 0 },
     { "buildcityinterection", 0xa2cd0, (void *)lf_a2cd0, 1, LF_RET_VOID, 4, "v", 0 },
     { "buildcitystreet", 0xa2f90, (void *)lf_a2f90, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation", 0xa3940, (void *)lf_a3940, 0, LF_RET_VOID, 4, "", 1 },
@@ -2177,9 +2177,9 @@ const LfEntry lf_table[] = {
     { "sprintf_comma", 0xa3ee0, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lf_a3fe0", 0xa3fe0, (void *)lf_a3fe0, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_a4150", 0xa4150, (void *)lf_a4150, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "pointinsidebase", 0xa4180, (void *)lf_a4180, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pointinsidebase", 0xa4180, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "accountdeathtax", 0xa4260, (void *)lf_a4260, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "pointinsidebasesafe", 0xa4340, (void *)lf_a4340, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pointinsidebasesafe", 0xa4340, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
     { "lf_a4420", 0xa4420, (void *)lf_a4420, 2, LF_RET_INT, 4, "pv", 0 },
     { "logic_createcar", 0xa44a0, (void *)lf_a44a0, 3, LF_RET_INT, 4, "vvv", 0 },
     { "logic_setteammanager", 0xa4570, (void *)lf_a4570, 2, LF_RET_VOID, 4, "vv", 0 },

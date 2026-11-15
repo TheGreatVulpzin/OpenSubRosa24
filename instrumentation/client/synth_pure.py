@@ -22,7 +22,17 @@ import synth_textures as st  # noqa: E402
 # Parameter kinds: v vector in, o vector out, m 3 by 3 matrix, q quaternion, f float, F float out,
 # i small int, I int of any size, u mask of 32 bits, s text buffer out, k list of 8 words of 32 bits,
 # l count of words (1 to 8), D degree of a curve (0 to 4), w four floats out, P four vectors.
+# World kinds, for the collision functions: W a point of the world (x and z from 0 to 2048, y from 0 to 80;
+# every fifth call uses the street grid), X a second point within 40 units of the last W (the end of a line),
+# r a radius, t a team (-1 to 3), n an object, human or item index (live indices, -1 or 4095).
 PROTOTYPES = {
+    'sphereintersectlandscape': 'Wr',
+    'lineintersectlandscape': 'WX',
+    'sphereintersectlevel': 'Wr',
+    'lineintersectlevel': 'WXi',
+    'lineintersectall': 'WX',
+    'pointinsidebase': 'Wtf',
+    'pointinsidebasesafe': 'Wtf',
     'angulardistance': 'ff',
     'calculatebarycentric': 'ovvvv',
     'circleintersecttriangle': 'ooFvvfvvv',
@@ -99,8 +109,23 @@ def make_args(rng, kinds, index):
     args = []
     hit = index % 3 == 0
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
+    last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'o':
+        if kind == 'W':
+            x, z = rng.uniform(0, 2048), rng.uniform(0, 2048)
+            if index % 5 == 0:
+                x, z = round(x / 8) * 8.0, round(z / 8) * 8.0
+            last_world = (x, rng.uniform(0, 80), z)
+            args.append(last_world)
+        elif kind == 'X':
+            args.append(tuple(last_world[k] + rng.uniform(-40, 40) for k in range(3)))
+        elif kind == 'r':
+            args.append(rng.choice([0.0, 0.05, 0.25, 0.5, 1.0, 2.0, 4.0]))
+        elif kind == 't':
+            args.append(rng.choice([-1, 0, 1, 2, 3]))
+        elif kind == 'n':
+            args.append(rng.choice([-1, 0, 1, 2, 3, 5, 9, 4095]))
+        elif kind == 'o':
             args.append(tuple([123.5] * 3))
         elif kind == 'F':
             args.append(tuple([77.25]))

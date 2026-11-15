@@ -15,3 +15,5 @@ rva,name,index,type,evidence
 0xfd870,checkstring,0,char *,"the key text: findstring and checkstring compare its bytes with the text of the parser"
 0xfdb20,getstring,0,char *,"the output text: getstring copies the string that follows the cursor into it"
 0xfdba0,cs_getline,0,char *,"the output text: cs_getline copies one line of the text buffer into it"
+0xa1b40,lineintersectlandscape,0,float *,"the start of the line: the function reads three floats from it, like lineintersectlevel"
+0xa1b40,lineintersectlandscape,1,float *,"the end of the line: the function reads three floats from it, like lineintersectlevel"

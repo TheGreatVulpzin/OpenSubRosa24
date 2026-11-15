@@ -66,12 +66,9 @@ itemtimetolive src/game/items.c
 itemweaponsimulation src/game/item_logic.c
 leveleditor_load src/game/block_mesh.c
 leveleditor_save src/game/block_mesh.c
-lineintersectall src/game/collide.c
 lineintersectarea src/game/collide_area.c
 lineintersectcityobject src/game/collide.c
 lineintersectcityobjecttype src/game/collide.c
-lineintersectlandscape src/game/collide.c
-lineintersectlevel src/game/collide.c
 lineintersectnormalblock src/game/collide_area.c
 lineintersectobject src/game/collide.c
 lineintersectspecblock src/game/collide_area.c
@@ -93,8 +90,6 @@ playerai src/game/player_ai.c
 playerbuystock src/game/economy.c
 playerdeathtax src/game/economy.c
 playerteamkilltax src/game/economy.c
-pointinsidebase src/game/collide.c
-pointinsidebasesafe src/game/collide.c
 removeflieextentions src/common/files.c
 scenario_armhuman src/game/scenario.c
 scenario_getnumofmissions src/game/economy.c
@@ -106,8 +101,6 @@ setupitemtypes src/game/item_types.c
 setupobjecttypes_cars src/game/vehicle_types.c
 setupobjecttypes_helicopters src/game/vehicle_types.c
 setupobjectypes_train src/game/vehicle_types.c
-sphereintersectlandscape src/game/collide.c
-sphereintersectlevel src/game/collide.c
 systemtimer src/common/system.c
 unpackevent src/net/client.c
 getrandomvector2d src/common/random.c
