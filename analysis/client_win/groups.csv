@@ -969,7 +969,7 @@ rva,name,size,group,recorded_calls
 0xc52a0,noise2d,95,C2,0
 0xc5300,noise3d,107,C2,0
 0xc5370,lerpnoise2d,255,C2,0
-0xc5470,serpnoise2d,255,C0,0
+0xc5470,serpnoise2d,255,C2,0
 0xc5570,cerpnoise2d,255,C2,0
 0xc5670,getrandomfloat,43,C10,0
 0xc56a0,,94,C11,0
@@ -1083,7 +1083,7 @@ rva,name,size,group,recorded_calls
 0xe0b60,,96,C11,0
 0xe0bc0,getskycolor,729,C10,0
 0xe0ea0,getsuncolor,211,C10,0
-0xe0f80,,420,C11,0
+0xe0f80,csradixsort,420,C0,0
 0xe1130,enablespeex,261,C6,3
 0xe1240,disablespeex,120,C6,3
 0xe12c0,preprocessspeex,55,C6,72
@@ -1172,7 +1172,7 @@ rva,name,size,group,recorded_calls
 0xfd8e0,,257,C11,0
 0xfd9f0,getfloat,300,C10,0
 0xfdb20,getstring,128,C0,0
-0xfdba0,csradixsort,193,C0,0
+0xfdba0,cs_getline,193,C0x,0
 0xfdc70,checkbigendian,109,C10,0
 0xfdce0,,21,C11,0
 0xfdd00,checkfilespec,211,C10,0

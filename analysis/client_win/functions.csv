@@ -2655,7 +2655,7 @@ rva,size,name,source,confidence,evidence
 0xe0b60,96,,,,
 0xe0bc0,729,getskycolor,anchor,0.753,features
 0xe0ea0,211,getsuncolor,callgraph,1.0,votes=24
-0xe0f80,420,,,,
+0xe0f80,420,csradixsort,manual,1.0,Radix sort of the sort list. Comes after getsuncolor and before the speex functions as csradixsort in the Linux client
 0xe1130,261,enablespeex,anchor,0.958,features
 0xe1240,120,disablespeex,anchor,0.982,features
 0xe12c0,55,preprocessspeex,anchor,0.734,features
@@ -2744,7 +2744,7 @@ rva,size,name,source,confidence,evidence
 0xfd8e0,257,,,,
 0xfd9f0,300,getfloat,anchor,0.52,features
 0xfdb20,128,getstring,callgraph,0.5,votes=3
-0xfdba0,193,csradixsort,callgraph,0.333,votes=2
+0xfdba0,193,cs_getline,manual,1.0,Copies one line of the text buffer and skips the line ends. Comes after getstring and before checkbigendian as cs_getline in the Linux client
 0xfdc70,109,checkbigendian,callgraph,0.333,votes=2
 0xfdce0,21,,,,
 0xfdd00,211,checkfilespec,anchor,0.949,features
