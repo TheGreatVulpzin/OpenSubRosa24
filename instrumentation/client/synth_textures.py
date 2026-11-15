@@ -902,6 +902,27 @@ def addmodel_case(full=False):
 
 
 
+def rotate_case():
+    """Turns of random matrices: the axis is a unit vector, a row of the matrix or a random
+    vector, and the angle is random or an edge value."""
+    import math
+    rng = random.Random(17)
+    angles = [0.0, math.pi, -math.pi, 1e10, NAN, 1e-30, 6.0]
+    edits, calls = [], []
+    for slot in range(48):
+        base = SCRATCH + slot * 64
+        rows = [rng.uniform(-1.0, 1.0) for _ in range(9)] if slot % 4 else [floats(rng) for _ in range(9)]
+        axis = [rng.uniform(-1.0, 1.0) for _ in range(3)]
+        if slot % 3 == 0:
+            length = sum(v * v for v in axis) ** 0.5 or 1.0
+            axis = [v / length for v in axis]
+        edits += [(base, '9f', rows), (base + 36, '3f', axis)]
+        target = image(base + 12 * (slot % 3)) if slot % 5 == 0 else image(base + 36)
+        angle = angles[slot % len(angles)] if slot % 2 else rng.uniform(-7.0, 7.0)
+        calls.append(call(0xe4f10, image(base), target, angle))
+    return edits, {'rotateorientationfast': calls}
+
+
 def framelist_case(extra=()):
     """buildframelist on the scene of the recording: its humans, vehicles, items and street
     objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
@@ -1052,6 +1073,7 @@ def main():
             'lod_outside': lambda: lod_case(rec, (-0.3, 1.4), (0.0, 0.0)),
             'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
             'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
+            'rotate': rotate_case,
             'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
             'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
             'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}

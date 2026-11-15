@@ -7,6 +7,7 @@
 #include "client.h"
 #include "debug/debug.h"
 #include "items.h"
+#include "math/rotate.h"
 #include "math/small_vectors.h"
 #include "render/lists.h"
 #include "setup/timers.h"
@@ -18,9 +19,6 @@
 #define g_textures sr_data_texturelist
 #define g_interiors ((const InteriorMesh *)&sr_data_interior)
 #define g_client_game (*(const ClientGameView *)&sr_data_game)
-
-/* Game functions of other files. */
-#define rotateorientationfast CL_FN(0x4e4f10, void(__cdecl *)(vec3 *rot, const vec3 *axis, float angle))
 
 enum {
     HUMANS = 256, OBJECTS = 1024, ITEMS = 1024, CITY_OBJECTS = 1024,
