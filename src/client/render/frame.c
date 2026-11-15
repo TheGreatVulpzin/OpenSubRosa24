@@ -11,6 +11,7 @@
 #include "render/models_draw.h"
 #include "render/sectorlist.h"
 #include "render/sectors.h"
+#include "render/sky_light.h"
 #include "render/sprite_models.h"
 #include "render/sprites.h"
 #include "render/text.h"
@@ -23,9 +24,6 @@
 
 /* Game functions of other files. */
 #define buildframelist() CL_FN(0x474890, void(__cdecl *)(void))()
-#define setupframelandscapelod CL_FN(0x4d92a0, void(__cdecl *)(void))
-#define getsuncolors CL_FN(0x4e0720, void(__cdecl *)(void))
-#define getskycolor CL_FN(0x4e0bc0, void(__cdecl *)(float *color))
 #define setupperspectiveviewport CL_FN(0x506320, void(__cdecl *)(int, int, int, int, float, float, float))
 #define setupviewpoint CL_FN(0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
 #define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))

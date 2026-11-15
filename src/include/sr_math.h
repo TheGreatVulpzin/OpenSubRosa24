@@ -19,5 +19,7 @@ double __cdecl x87_tan(double x);
 double __cdecl x87_acos(double x);
 double __cdecl x87_atan2(double y, double x);
 double __cdecl x87_pow(double base, double exponent);
+/* Only the client build has x87_exp: no server code calls exp. */
+double __cdecl x87_exp(double x);
 
 #endif /* SR_MATH_H */

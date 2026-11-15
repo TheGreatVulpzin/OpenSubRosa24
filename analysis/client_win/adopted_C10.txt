@@ -11,3 +11,8 @@ copyvector2d src/client/math/small_vectors.c
 zerovector src/client/math/small_vectors.c
 flabs src/client/math/small_vectors.c
 csradixsort src/common/util.c
+raydistancesphere src/client/render/sky_light.c
+getsuncolor src/client/render/sky_light.c
+getsuncolors src/client/render/sky_light.c
+getskycolor src/client/render/sky_light.c
+setupframelandscapelod src/client/render/landscape_draw.c

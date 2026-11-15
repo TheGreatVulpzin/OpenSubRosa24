@@ -3,5 +3,6 @@
 #define CL_RENDER_LANDSCAPE_DRAW_H
 
 void __cdecl renderlandscape(int mode);
+void __cdecl setupframelandscapelod(void);
 
 #endif /* CL_RENDER_LANDSCAPE_DRAW_H */

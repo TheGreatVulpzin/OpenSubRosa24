@@ -820,6 +820,45 @@ def windows_case(rec):
         call(WINDOWTEXTURE, m, mip, 0x812f, 0x812f, 0x2601, 0x2703) for m in (5, 6) for mip in (1, 0)]}
 
 
+LIGHT_POSITION = 0x19c0cd78
+CAMERA = 0xfefe2a0  # the audio camera record: +4 place, +0x10 three rotation rows
+
+
+def sky_case(sun=(0.3, 0.8, 0.52)):
+    """The sun and sky colors for one sun direction, plus direct calls of the two helpers."""
+    rng = random.Random(11)
+    edits = [(LIGHT_POSITION, '3f', list(sun))]
+    ray, sun_color = [], []
+    for slot in range(40):
+        base = SCRATCH + slot * 48
+        start = [rng.uniform(-300.0, 300.0), rng.uniform(0.0, 500.0), rng.uniform(-300.0, 300.0)]
+        direction = [rng.uniform(-1.0, 1.0) for _ in range(3)]
+        length = sum(v * v for v in direction) ** 0.5 or 1.0
+        direction = [v / length for v in direction]
+        end = [rng.uniform(-900.0, 900.0) for _ in range(3)]
+        edits.append((base, '9f', start + direction + end))
+        ray.append(call(0xe0b00, image(base), image(base + 12), rng.choice([512.0, 100.0, 0.5, 1e4])))
+        sun_color.append(call(0xe0ea0, image(base + 36), image(base), image(base + 24)))
+    sky_out = SCRATCH + 40 * 48
+    return edits, {'raydistancesphere': ray, 'getsuncolor': sun_color,
+                   'getsuncolors': [call(0xe0720)], 'getskycolor': [call(0xe0bc0, image(sky_out))]}
+
+
+def lod_case(rec, place=(0.5, 0.5), turn=(0.7, 0.3), height=40.0):
+    """The landscape detail levels for one camera. place is the camera place in landscape
+    widths (32 sectors of 512 units) from the landscape origin. A NaN place is a NaN distance."""
+    import math
+    ox, oy, oz = Snapshot(rec / 'sv_snapshot.bin').read(LANDSCAPE, '3f')
+    yaw, pitch = turn
+    cy, sy, cp, sp = math.cos(yaw), math.sin(yaw), math.cos(pitch), math.sin(pitch)
+    rows = [(cy, 0.0, -sy), (sy * sp, cp, cy * sp), (sy * cp, -sp, cy * cp)]
+    x, z = place
+    edits = [(CAMERA + 4, '3f', [ox + x * 16384.0, oy + height, oz + z * 16384.0]),
+             (CAMERA + 0x10, '9f', [v for row in rows for v in row])]
+    return edits, {'setupframelandscapelod': [call(0xd92a0)]}
+
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -885,7 +924,14 @@ def main():
             'frame_names': lambda: frame_case(features=('names',)),
             'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
-            'materials': lambda: materials_case(rec)}
+            'materials': lambda: materials_case(rec),
+            'sky': sky_case, 'sky_low': lambda: sky_case((0.97, 0.05, 0.2)),
+            'sky_below': lambda: sky_case((0.6, -0.3, 0.74)), 'sky_up': lambda: sky_case((0.0, 1.0, 0.0)),
+            'sky_nan': lambda: sky_case((NAN, 0.5, 0.5)),
+            'lod': lambda: lod_case(rec), 'lod_corner': lambda: lod_case(rec, (0.02, 0.98), (2.4, 0.1)),
+            'lod_outside': lambda: lod_case(rec, (-0.3, 1.4), (0.0, 0.0)),
+            'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
+            'lod_nan': lambda: lod_case(rec, (NAN, 0.5))}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     repeat = max(1, int(os.environ.get('SV_SYNTH_REPEAT', '1')))
     for name in want:
