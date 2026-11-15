@@ -37719,9 +37719,9 @@ uint __cdecl lf_442b0(int param_1,int param_2)
 /* ---------------------------------------------------------------- 0x46610 */
 #define DAT_137ae6f8 (*(undefined *)SR_VA(0x137ae6f8))
 #define FUN_00443a80 ((void (__cdecl *)(int, uint, uint, uint, undefined4))SR_FN(0x443a80))
-#define createevent_updateblock_quad ((void (__cdecl *)(int, int, int, int, undefined4, undefined4, int, int))SR_FN(0x472db0))
+#define createevent_updateblock_quad ((void (__cdecl *)(int, int, int, int, undefined4, undefined4, float *, float *))SR_FN(0x472db0))
 undefined4 __cdecl lf_46610(int param_1,uint param_2,uint param_3,uint param_4,uint param_5,int param_6,
-               int param_7,int param_8)
+               float *param_7,float *param_8)
 
 {
   undefined4 uVar1;
@@ -49286,11 +49286,11 @@ void __cdecl lf_64650(int param_1)
 #define DAT_1073ec64 (*(undefined *)SR_VA(0x1073ec64))
 #define _DAT_1073ec38 (*(float *)SR_VA(0x1073ec38))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(20, "MSVCR100.DLL", "rand"))
-#define area_breakblock ((undefined4 (__cdecl *)(int, uint, uint, uint, uint, int, int, int))SR_FN(0x446610))
+#define area_breakblock ((undefined4 (__cdecl *)(int, uint, uint, uint, uint, int, float *, float *))SR_FN(0x446610))
 #define debug_addataint ((void (__cdecl *)(char *, undefined4))SR_FN(0x46aaa0))
 #define playerteamkilltax ((void (__cdecl *)(int, int))SR_FN(0x46fa00))
-#define createevent_bullethit ((void (__cdecl *)(undefined4, undefined4, undefined4 *, int))SR_FN(0x471f20))
-#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, int, int))SR_FN(0x4721a0))
+#define createevent_bullethit ((void (__cdecl *)(undefined4, undefined4, undefined4 *, float *))SR_FN(0x471f20))
+#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, float *, float *))SR_FN(0x4721a0))
 #define lineintersecthuman ((bool (__cdecl *)(int, undefined4, undefined4, float))SR_FN(0x489e10))
 #define lineintersectlevel ((bool (__cdecl *)(float *, float *, int))SR_FN(0x4a0f40))
 #define applydamageobject ((void (__cdecl *)(int, int))SR_FN(0x4c9ee0))
@@ -49421,7 +49421,7 @@ void __cdecl lf_646b0(void)
          (iVar1 = area_breakblock(DAT_1073ec74,DAT_1073ec78,DAT_1073ec7c,DAT_1073ec80,DAT_1073ec90,
                                   DAT_1073ec94,local_68,&DAT_017386ac + local_1c * 0x5c), iVar1 == 0
          )) {
-        createevent_bullethit(0,0,local_68,(int)local_74);
+        createevent_bullethit(0,0,local_68,local_74);
       }
       copyvector((undefined4 *)(&DAT_01738694 + local_1c * 0x5c),local_68);
       *(undefined4 *)(&DAT_01738684 + local_1c * 0x5c) = 0;
@@ -49436,7 +49436,7 @@ void __cdecl lf_646b0(void)
           local_7c = 0;
         }
         else {
-          createevent_bullethit(0,1,local_68,(int)local_74);
+          createevent_bullethit(0,1,local_68,local_74);
         }
         if (local_40 == 2) {
           if (local_7c < 0x19) {
@@ -49519,7 +49519,7 @@ void __cdecl lf_646b0(void)
               *(undefined4 *)(&DAT_0591f010 + local_40 * 0x98 + local_20 * 0x8230) = 1;
               *(undefined4 *)(&DAT_0591f02c + local_40 * 0x98 + local_20 * 0x8230) = 0x3e800000;
               createevent_updateobject
-                        (local_20,1,local_40,(int)local_68,(int)(&DAT_017386ac + local_1c * 0x5c));
+                        (local_20,1,local_40,local_68,(float *)(&DAT_017386ac + local_1c * 0x5c));
             }
           }
         }
@@ -49541,12 +49541,12 @@ void __cdecl lf_646b0(void)
             }
             if (*(int *)(&DAT_05919914 + local_8 * 0x40 + local_20 * 0x8230) < 1) {
               createevent_updateobject
-                        (local_20,0,local_8,(int)local_68,(int)(&DAT_017386ac + local_1c * 0x5c));
+                        (local_20,0,local_8,local_68,(float *)(&DAT_017386ac + local_1c * 0x5c));
               *(undefined4 *)(&DAT_05919914 + local_8 * 0x40 + local_20 * 0x8230) = 0;
             }
           }
           else {
-            createevent_bullethit(0,2,local_68,(int)local_74);
+            createevent_bullethit(0,2,local_68,local_74);
             applydamageobject(local_20,local_7c);
           }
           local_5c = *(float *)(&DAT_0173868c + local_1c * 0x5c);
@@ -53699,18 +53699,18 @@ void __cdecl lf_71e60(undefined4 param_1,undefined4 *param_2,undefined4 *param_3
 #define DAT_097676e4 (*(undefined *)SR_VA(0x97676e4))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
-void __cdecl lf_71f20(undefined4 param_1,undefined4 param_2,undefined4 *param_3,int param_4)
+void __cdecl lf_71f20(undefined4 param_1,undefined4 param_2,undefined4 *param_3,float *param_4)
 
 {
   if (DAT_079a5800 != 0) {
     *(undefined4 *)(&DAT_097676c0 + DAT_0f7ca9b8 * 0x80) = 1;
     *(undefined4 *)(&DAT_097676c4 + DAT_0f7ca9b8 * 0x80) = DAT_09465334;
     copyvector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80),param_3);
-    if (param_4 == 0) {
+    if (param_4 == (float *)0x0) {
       zerovector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80));
     }
     else {
-      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),(undefined4 *)param_4);
+      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),param_4);
     }
     *(undefined4 *)(&DAT_097676e0 + DAT_0f7ca9b8 * 0x80) = param_1;
     *(undefined4 *)(&DAT_097676e4 + DAT_0f7ca9b8 * 0x80) = param_2;
@@ -53831,7 +53831,7 @@ void __cdecl lf_720f0(int param_1)
 #define DAT_097676e8 (*(undefined *)SR_VA(0x97676e8))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
-void __cdecl lf_721a0(undefined4 param_1,undefined4 param_2,undefined4 param_3,int param_4,int param_5)
+void __cdecl lf_721a0(undefined4 param_1,undefined4 param_2,undefined4 param_3,float *param_4,float *param_5)
 
 {
   if (DAT_079a5800 != 0) {
@@ -53840,17 +53840,17 @@ void __cdecl lf_721a0(undefined4 param_1,undefined4 param_2,undefined4 param_3,i
     *(undefined4 *)(&DAT_097676e0 + DAT_0f7ca9b8 * 0x80) = param_1;
     *(undefined4 *)(&DAT_097676e4 + DAT_0f7ca9b8 * 0x80) = param_2;
     *(undefined4 *)(&DAT_097676e8 + DAT_0f7ca9b8 * 0x80) = param_3;
-    if (param_4 == 0) {
+    if (param_4 == (float *)0x0) {
       zerovector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80));
     }
     else {
-      copyvector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80),(undefined4 *)param_4);
+      copyvector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80),param_4);
     }
-    if (param_5 == 0) {
+    if (param_5 == (float *)0x0) {
       zerovector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80));
     }
     else {
-      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),(undefined4 *)param_5);
+      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),param_5);
     }
     DAT_0f7ca9b8 = DAT_0f7ca9b8 + 1 & 0xffff;
   }
@@ -54438,7 +54438,7 @@ void __cdecl lf_72d10(int param_1,int param_2,int param_3,int param_4,undefined4
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 void __cdecl lf_72db0(int param_1,int param_2,int param_3,int param_4,undefined4 param_5,undefined4 param_6,
-          int param_7,int param_8)
+          float *param_7,float *param_8)
 
 {
   if (DAT_079a5800 != 0) {
@@ -54448,17 +54448,17 @@ void __cdecl lf_72db0(int param_1,int param_2,int param_3,int param_4,undefined4
     *(int *)(&DAT_097676e4 + DAT_0f7ca9b8 * 0x80) = param_4 * 0x10000 + param_3;
     *(undefined4 *)(&DAT_097676e8 + DAT_0f7ca9b8 * 0x80) = param_5;
     *(undefined4 *)(&DAT_097676ec + DAT_0f7ca9b8 * 0x80) = param_6;
-    if (param_7 == 0) {
+    if (param_7 == (float *)0x0) {
       zerovector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80));
     }
     else {
-      copyvector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80),(undefined4 *)param_7);
+      copyvector((undefined4 *)(&DAT_097676c8 + DAT_0f7ca9b8 * 0x80),param_7);
     }
-    if (param_8 == 0) {
+    if (param_8 == (float *)0x0) {
       zerovector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80));
     }
     else {
-      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),(undefined4 *)param_8);
+      copyvector((undefined4 *)(&DAT_097676d4 + DAT_0f7ca9b8 * 0x80),param_8);
     }
     DAT_0f7ca9b8 = DAT_0f7ca9b8 + 1 & 0xffff;
   }
@@ -58787,7 +58787,7 @@ void __cdecl lf_85980(int param_1)
 #define FUN_0046f990 ((void (__cdecl *)(int))SR_FN(0x46f990))
 #define playerteamkilltax ((void (__cdecl *)(int, int))SR_FN(0x46fa00))
 #define playerdebt ((void (__cdecl *)(int))SR_FN(0x46fb40))
-#define createevent_bullethit ((void (__cdecl *)(undefined4, undefined4, undefined4 *, int))SR_FN(0x471f20))
+#define createevent_bullethit ((void (__cdecl *)(undefined4, undefined4, undefined4 *, float *))SR_FN(0x471f20))
 #define createevent_updateplayer ((void (__cdecl *)(int))SR_FN(0x472490))
 #define FUN_00472780 ((void (__cdecl *)(undefined4, undefined4 *, undefined4, undefined4))SR_FN(0x472780))
 #define pointinsidebuilding ((void (__cdecl *)(int))SR_FN(0x485980))
@@ -59654,7 +59654,7 @@ LAB_00487966:
         if (0 < *(int *)(&DAT_018fc4c8 + local_3c * 0x2b64)) {
           scaleaddvectors(&local_38,(float *)(&DAT_018fc4e8 + local_3c * 0x2b64),
                           (float *)&DAT_00523590,0.5);
-          createevent_bullethit(0,3,&local_38,(int)&local_38);
+          createevent_bullethit(0,3,&local_38,&local_38);
         }
       }
       if (*(int *)(&DAT_018fc4b4 + local_3c * 0x2b64) == -1) {
@@ -83210,7 +83210,7 @@ void __cdecl lf_c6f60(void)
 #define DAT_059191c8 (*(undefined *)SR_VA(0x59191c8))
 #define DAT_059191cc (*(undefined *)SR_VA(0x59191cc))
 #define DAT_0b7715a4 (*(undefined *)SR_VA(0xb7715a4))
-#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, int, int))SR_FN(0x4721a0))
+#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, float *, float *))SR_FN(0x4721a0))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_c6ff0(int param_1)
 
@@ -83230,7 +83230,7 @@ void __cdecl lf_c6ff0(int param_1)
       }
     }
     *(undefined4 *)(&DAT_05919120 + param_1 * 0x8230) = 0;
-    createevent_updateobject(param_1,3,0,(int)(&DAT_05919144 + param_1 * 0x8230),0);
+    createevent_updateobject(param_1,3,0,(float *)(&DAT_05919144 + param_1 * 0x8230),(float *)0x0);
   }
   return;
 }
@@ -83722,8 +83722,8 @@ void __cdecl lf_c7590(int param_1,int param_2)
 #define _DAT_1073ec64 (*(undefined4 *)SR_VA(0x1073ec64))
 #define _DAT_1073ec68 (*(undefined4 *)SR_VA(0x1073ec68))
 #define _DAT_1073ec6c (*(undefined4 *)SR_VA(0x1073ec6c))
-#define area_breakblock ((undefined4 (__cdecl *)(int, uint, uint, uint, uint, int, int, int))SR_FN(0x446610))
-#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, int, int))SR_FN(0x4721a0))
+#define area_breakblock ((undefined4 (__cdecl *)(int, uint, uint, uint, uint, int, float *, float *))SR_FN(0x446610))
+#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, float *, float *))SR_FN(0x4721a0))
 #define FUN_00472780 ((void (__cdecl *)(undefined4, undefined4 *, undefined4, undefined4))SR_FN(0x472780))
 #define lineintersectlevel ((bool (__cdecl *)(float *, float *, int))SR_FN(0x4a0f40))
 #define applydamageobject ((void (__cdecl *)(int, int))SR_FN(0x4c9ee0))
@@ -84044,8 +84044,8 @@ void __cdecl lf_c78b0(void)
                       (local_1c,5,
                        *(undefined4 *)
                         (&DAT_0afe41a8 + *(int *)(&DAT_05919124 + local_1c * 0x8230) * 0x828c),
-                       (int)(&DAT_05919144 + local_1c * 0x8230),
-                       (int)(&DAT_05919180 + local_1c * 0x8230));
+                       (float *)(&DAT_05919144 + local_1c * 0x8230),
+                       (float *)(&DAT_05919180 + local_1c * 0x8230));
           }
         }
         else if (0 < *(int *)(&DAT_05919914 +
@@ -84060,8 +84060,8 @@ void __cdecl lf_c78b0(void)
                     (local_1c,4,
                      *(undefined4 *)
                       (&DAT_0afe41a8 + *(int *)(&DAT_05919124 + local_1c * 0x8230) * 0x828c),
-                     (int)(&DAT_05919144 + local_1c * 0x8230),
-                     (int)(&DAT_05919180 + local_1c * 0x8230));
+                     (float *)(&DAT_05919144 + local_1c * 0x8230),
+                     (float *)(&DAT_05919180 + local_1c * 0x8230));
         }
         fVar3 = (float10)vectordistance((float *)(&DAT_05919144 + local_1c * 0x8230),
                                         (float *)(&DAT_2a5debc4 +
@@ -84513,7 +84513,7 @@ void __cdecl lf_c78b0(void)
 #define DAT_059191e8 (*(undefined *)SR_VA(0x59191e8))
 #define DAT_0b7715cc (*(undefined *)SR_VA(0xb7715cc))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(20, "MSVCR100.DLL", "rand"))
-#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, int, int))SR_FN(0x4721a0))
+#define createevent_updateobject ((void (__cdecl *)(undefined4, undefined4, undefined4, float *, float *))SR_FN(0x4721a0))
 #define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define __security_check_cookie(x) ((void)0)
@@ -84548,8 +84548,8 @@ void __cdecl lf_c9ee0(int param_1,int param_2)
                (float *)(&DAT_0b7715cc + *(int *)(&DAT_059191e8 + param_1 * 0x8230) * 0xf0),local_14
               );
     createevent_updateobject
-              (param_1,2,0,(int)(&DAT_05919144 + param_1 * 0x8230),
-               (int)(&DAT_05919180 + param_1 * 0x8230));
+              (param_1,2,0,(float *)(&DAT_05919144 + param_1 * 0x8230),
+               (float *)(&DAT_05919180 + param_1 * 0x8230));
   }
   return;
 }
