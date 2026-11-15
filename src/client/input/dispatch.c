@@ -108,13 +108,13 @@ static void chat_input(void)
     if (!cl_data_input_chat) {
         if (input_pressed(KEY_RETURN)) {
             cl_data_input_chat_text[0] = '\0';
-            cl_data_audio_menu_exit = 1;
+            cl_data_menu_items[0].pressed = 1;
         }
         if (cl_data_audio_keys[KEY_T]) cl_data_audio_voice_mode = 1;
         if (cl_data_audio_keys[KEY_Y]) cl_data_audio_voice_mode = 2;
         if (cl_data_audio_keys[KEY_U]) cl_data_audio_voice_mode = 0;
     }
-    if (!cl_data_audio_menu_exit) {
+    if (!cl_data_menu_items[0].pressed) {
         if (!cl_data_audio_keys[KEY_RETURN]) {
             if (cl_data_input_chat && cl_data_input_chat_text[0] && !cl_data_audio_keys[KEY_ESCAPE]) {
                 cl_data_input_chat_length = (uint32_t)strlen(cl_data_input_chat_text);
@@ -178,7 +178,7 @@ void getinputs(int player_index)
     int connection = -1;
     int running;
     Player *player = player_index == -1 ? NULL : &sr_players[player_index];
-    cl_data_audio_menu_selection = 0;
+    cl_data_menu_item_count = 0;
     input_menu(&connection);
     if (player) player_menu_state(player);
     running = sr_game.link_state != 1;

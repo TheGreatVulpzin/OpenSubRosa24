@@ -27,13 +27,8 @@ audio_voice_mode,int,1,0x52daba4,Whisper and Yell labels and keyboard voice mode
 audio_mode,int,1,0x9065320,soundsimulation fade mode
 audio_fade_ticks,int,1,0x9065324,soundsimulation fade timer
 audio_voice_icon,int,1,0x14312940,frame_drawvoiceicons texture
-audio_menu_exit,int,1,0x5350f20,voiceoptionsmenu exit condition
 audio_menu_back,int,1,0xb7330ec,voiceoptionsmenu back condition
-audio_menu_selection,int,1,0x9065240,voiceoptionsmenu clears selection
-audio_bind_key,int,1,0x53511a4,voiceoptionsmenu input binding
 audio_debug,int,1,0x127ea8,voiceoptionsmenu frame sizes display
-audio_mouse_x,int,1,0x19c07c80,voiceoptionsmenu cursor x
-audio_mouse_y,int,1,0x19c07c84,voiceoptionsmenu cursor y
 audio_window,void*,1,0x103675a8,voiceoptionsmenu SDL window
 audio_simulation,int,1,0x9065300,voiceoptionsmenu simulation switch
 audio_keys_previous,uint8_t,512,0x1bbe1a0,voiceoptionsmenu key transitions

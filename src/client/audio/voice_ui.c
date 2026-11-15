@@ -163,18 +163,18 @@ static void voice_bind_key(void)
         if (cl_data_audio_key_names[key * MENU_KEY_NAME_BYTES] &&
             cl_data_audio_keys[key] && !cl_data_audio_keys_previous[key]) {
             cl_data_audio_voice_key = key;
-            cl_data_audio_bind_key = 0;
+            cl_data_menu_items[1].pressed = 0;
         }
     }
     for (key = MENU_MOUSE_FIRST; key < MENU_MOUSE_END; key++) {
         unsigned mask = 1u << key;
         if ((cl_data_audio_mouse_buttons & mask) == mask) {
             cl_data_audio_voice_mouse = mask;
-            cl_data_audio_bind_key = 0;
+            cl_data_menu_items[1].pressed = 0;
         }
     }
     if (cl_data_audio_keys[MENU_ESCAPE] && !cl_data_audio_keys_previous[MENU_ESCAPE])
-        cl_data_audio_bind_key = 0;
+        cl_data_menu_items[1].pressed = 0;
 }
 
 /* Show voice controls until the window closes or the menu returns. */
@@ -182,8 +182,8 @@ void voiceoptionsmenu(void)
 {
     int binding = 0, frame;
     resetmenuitems();
-    while (!cl_data_audio_menu_exit && !cl_data_audio_menu_back) {
-        cl_data_audio_menu_selection = 0;
+    while (!cl_data_menu_items[0].pressed && !cl_data_audio_menu_back) {
+        cl_data_menu_item_count = 0;
         voice_label(TEXT_BACK, MENU_MARGIN, MENU_MARGIN, MENU_BACK_WIDTH, MENU_BACK_HEIGHT);
         if (!binding) setmenuitem(MENU_BUTTON, MENU_ESCAPE);
         if (!cl_data_audio_voice_enabled) {
@@ -233,14 +233,14 @@ void voiceoptionsmenu(void)
                 drawtext(
                     (char *)(sr_base + TEXT_SIZE), MENU_MARGIN, (float)frame * MENU_DEBUG_FONT, MENU_DEBUG_FONT, 0,
                     1.0f, 1.0f, 1.0f, 1.0f, sr_data_speex.voice_ring[0].size[frame]);
-        if (cl_data_audio_bind_key)
+        if (cl_data_menu_items[1].pressed)
             drawtext(
                 (char *)(sr_base + TEXT_BIND), MENU_LEFT, MENU_BIND_HINT_Y, MENU_HEIGHT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         drawmousecursor(
-            cl_data_audio_mouse_x, cl_data_audio_mouse_y, MENU_CURSOR_SIZE, 1.0f, 1.0f, 1.0f, 1.0f);
+            cl_data_input_mouse.x, cl_data_input_mouse.y, MENU_CURSOR_SIZE, 1.0f, 1.0f, 1.0f, 1.0f);
         audio_SDL_GL_SwapWindow()(cl_data_audio_window);
         if (cl_data_audio_simulation) checksimulation(0);
-        binding = cl_data_audio_bind_key != 0;
+        binding = cl_data_menu_items[1].pressed != 0;
         if (binding) voice_bind_key();
         soundsimulation(&cl_data_audio_camera.pos, cl_data_audio_camera.rot, &cl_data_audio_camera.vel);
         getaudioinput(0);

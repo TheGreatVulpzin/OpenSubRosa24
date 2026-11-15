@@ -137,8 +137,10 @@ AUDIO_STRUCTS = {
 INPUT_STRUCTS = {
     'InputMouse': ('input_mouse', 0x2c),
     'InputCamera': ('input_camera', 0x1c),
+    'MenuInfo': ('menu_info', 0x60),
+    'MenuItem': ('menu_item', 0x284),
 }
-TYPE_SIZE.update({'AudioDecoder': 0x28})
+TYPE_SIZE.update({'AudioDecoder': 0x28, 'MenuInfo': 0x60, 'int*': 4})
 TYPE_SIZE.update({'uint16_t': 2, 'uint8_t*': 4, 'uint32_t*': 4,
                   'ImageReader': 0x1c, 'ZlibHuffman': 0x7e4,
                   'JpegHuffman': 0x690, 'JpegComponent': 0x38})

@@ -1047,3 +1047,47 @@ texturelist,0x410,frame_aux,int,,renderframedepth attaches this texture before t
 texturelist,0x414,frame_spare,int,,setupframetextures sizes it with the other frame textures. No other code reads it
 debug,0x50c64,toggle_two,int,,displaydebuginfo shows the second diagnostic switch
 debug,0x50c68,toggle_three,int,,displaydebuginfo shows the third diagnostic switch
+menu_info,0x0,text,char,64,setmenuiteminfo copies the text of an info line of a menu item
+menu_info,0x40,x,float,,drawmenuitems draws the info text at x and y
+menu_info,0x44,y,float,,drawmenuitems draws the info text at x and y
+menu_info,0x48,size,float,,drawmenuitems text size
+menu_info,0x4c,flags,uint32_t,,drawmenuitems passes the flags with 0x60 to drawtext
+menu_info,0x50,color,float,4,drawmenuitems red green blue alpha of the text
+menu_item,0x0,kind,int,,checkmenuitems and drawmenuitems: 0 button; 1 and 2 text field; 3 bit toggle; 4 choice; 5 slider
+menu_item,0x4,text,char,64,createmenuitem copies the label; createmenuitemempty clears 0x40 bytes
+menu_item,0x44,label_x,float,,createmenuitem and createmenubutton: x of the label
+menu_item,0x48,label_y,float,,createmenuitem and createmenubutton: y of the label
+menu_item,0x4c,label_size,float,,createmenuitem and createmenubutton: text size of the label
+menu_item,0x50,label_flags,uint32_t,,drawmenuitems passes it with 0x60 to drawtext; createmenubutton writes 5
+menu_item,0x54,num_info,int,,setmenuiteminfo adds up to four info lines
+menu_item,0x58,info,MenuInfo,4,setmenuiteminfo fills info[num_info]
+menu_item,0x1d8,x,float,,checkmenuitems tests the mouse from x to x + width
+menu_item,0x1dc,y,float,,checkmenuitems tests the mouse from y to y + height
+menu_item,0x1e0,text_size,float,,drawmenuitems text size of a field
+menu_item,0x1e4,text_flags,uint32_t,,createmenubutton align flags; drawmenuitems passes them to drawbitmap and drawtext
+menu_item,0x1e8,color,float,4,createmenuitem and createmenubutton red green blue alpha; setmenuitem option 20 halves red green blue
+menu_item,0x1f8,width,float,,checkmenuitems hit box width
+menu_item,0x1fc,height,float,,checkmenuitems hit box height
+menu_item,0x200,key,int,,checkmenuitems fires the item when this key goes down
+menu_item,0x204,key2,int,,checkmenuitems: when not 0 this key must be down too
+menu_item,0x208,repeat,int,,checkmenuitems fires while the key stays down and clears pressed first
+menu_item,0x20c,disabled,int,,checkmenuitems: no hover and no key
+menu_item,0x210,hover,int,,checkmenuitems: the mouse is over the item
+menu_item,0x214,hidden,int,,drawmenuitems skips the item; setmenuitem option 23 sets it
+menu_item,0x218,lit,int,,checkmenuitems: hover with a press or a set toggle or the chosen choice
+menu_item,0x21c,fade,float,,checkmenuitems moves it 1/8 of the way to -1 when lit and to 1 when not
+menu_item,0x220,pressed,int,,checkmenuitems sets it on a click or a key; the callback runs while it is set
+menu_item,0x224,pressed_previous,int,,checkmenuitems copies pressed at the end
+menu_item,0x228,mask,uint32_t,,the bit of a toggle or the value of a choice
+menu_item,0x22c,field_type,int,,drawmenuitems prints the value: 1 and 2 int; 3 float; other a string
+menu_item,0x230,length,int,,createmenuitem writes strlen of the label; setmenuitem writes the size of a text field
+menu_item,0x234,password,int,,drawmenuitems shows a star for each character; setmenuitem option 17 sets it
+menu_item,0x238,slider_min,int,,drawmenuitems and menuslider
+menu_item,0x23c,slider_max,int,,drawmenuitems and menuslider
+menu_item,0x240,slider_step,int,,menuslider
+menu_item,0x244,links,int,4,-1 at creation; setmenuitem option 13; drawmenuitems draws the item alone when links[0] is -1
+menu_item,0x254,spare,float,8,createmenuitem writes 0 1 1 1 1 0 0 0 and setmenuitem option 18 copies 0x20 bytes; no function reads it
+menu_item,0x274,cursor,int,,checkmenuitems copies it to the cursor of the font when the mouse is over the item
+menu_item,0x278,spare_278,int,,setmenuitem option 16 writes it; no function reads it
+menu_item,0x27c,value,int*,,the int of a toggle or a choice or a slider; the buffer of a text field
+menu_item,0x280,callback,void*,,checkmenuitems calls it while the item is pressed

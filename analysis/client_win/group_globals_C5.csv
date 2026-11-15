@@ -1,0 +1,4 @@
+name,type,count,client_rva,evidence
+menu_items,MenuItem,256,0x5350d00,"checkmenuitems, drawmenuitems and createmenuitemempty: 256 records of 0x284 bytes. Item 0 is the back button of each menu: the menu loops end when it is pressed"
+menu_item_count,int,1,0x9065240,"createmenuitemempty adds 1; the menu loops set it to 0 each frame"
+menu_item_index,int,1,0xfefe288,"checkmenuitems uses it as the loop index; the callbacks menutoggle, menuset and menuslider read it"
