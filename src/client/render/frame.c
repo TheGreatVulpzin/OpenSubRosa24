@@ -18,6 +18,7 @@
 #include "sr_math.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
+#include "util.h"
 #include "vectors.h"
 
 /* Game functions of other files. */
@@ -29,7 +30,6 @@
 #define setupviewpoint CL_FN(0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
 #define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))
 #define debug_rendercylinder CL_FN(0x469ea0, void(__cdecl *)(const vec3 *, const vec3 *))
-#define sortlist CL_FN(0x4e0f80, void(__cdecl *)(void))
 
 enum { CULL_FACE = 0xb44, DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, LIGHT0 = 0x4000,
        LIGHT_AMBIENT = 0x1200, LIGHT_DIFFUSE = 0x1201, LIGHT_POSITION = 0x1203,
@@ -206,12 +206,12 @@ static void draw_windows(void)
 {
     int i;
     for (i = 0; i < cl_data_window_quad_count; ++i)
-        cl_data_sort_keys[i] = cl_ftoi(16777216.0 - cl_data_window_quads[i].distance * 256.0);
-    cl_data_sort_count = cl_data_window_quad_count;
-    sortlist();
+        sr_data_radix.keys[i] = cl_ftoi(16777216.0 - cl_data_window_quads[i].distance * 256.0);
+    sr_data_radix.count = cl_data_window_quad_count;
+    csradixsort();
     glBegin(QUADS);
     for (i = 0; i < cl_data_window_quad_count; ++i) {
-        const WindowQuad *quad = &cl_data_window_quads[cl_data_sort_order[i]];
+        const WindowQuad *quad = &cl_data_window_quads[sr_data_radix.order[i]];
         const float *ambient = cl_data_light_ambient;
         glNormal3fv(&quad->normal.x);
         glColor4f((float)(ambient[0] * 0.5), (float)(ambient[1] * 0.5), (float)(ambient[2] * 0.5),

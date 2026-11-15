@@ -7,10 +7,8 @@
 #include "client.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
+#include "util.h"
 #include "vectors.h"
-
-/* Game functions of other files. */
-#define sortlist CL_FN(0x4e0f80, void(__cdecl *)(void))
 
 enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        CULL_FACE = 0xb44, LINE_SMOOTH = 0xb20, LINES = 1,
@@ -81,9 +79,9 @@ void __cdecl rendersprites(void)
     const ProgramObject *program = &cl_data_programs[PROGRAM_REFLECT];
 
     for (index = 0; index < cl_data_sprite_count; ++index)
-        cl_data_sort_keys[index] = cl_ftoi((double)dotproduct(&cl_data_sprites[index].pos, &cl_data_camera_rotation[2]) * 1024.0 + 16777216.0);
-    cl_data_sort_count = cl_data_sprite_count;
-    sortlist();
+        sr_data_radix.keys[index] = cl_ftoi((double)dotproduct(&cl_data_sprites[index].pos, &cl_data_camera_rotation[2]) * 1024.0 + 16777216.0);
+    sr_data_radix.count = cl_data_sprite_count;
+    csradixsort();
     glDepthMask(0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -100,7 +98,7 @@ void __cdecl rendersprites(void)
     glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.rough_disc].gl_name);
     glBegin(GL_QUADS);
     for (index = 0; index < cl_data_sprite_count; ++index) {
-        const ClientSprite *sprite = &cl_data_sprites[cl_data_sort_order[index]];
+        const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         float alpha = sprite_alpha(sprite->life);
 
         if (sprite->kind == SPRITE_SPARK) {
@@ -133,7 +131,7 @@ void __cdecl rendersprites(void)
     glDisableClientState(ARRAY_POSITION);
     glBegin(GL_TRIANGLES);
     for (index = 0; index < cl_data_sprite_count; ++index) {
-        const ClientSprite *sprite = &cl_data_sprites[cl_data_sort_order[index]];
+        const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         vec3 normal;
         int corner;
 
@@ -159,7 +157,7 @@ void __cdecl rendersprites(void)
     glDisable(GL_TEXTURE_2D);
     glBegin(LINES);
     for (index = 0; index < cl_data_sprite_count; ++index) {
-        const ClientSprite *sprite = &cl_data_sprites[cl_data_sort_order[index]];
+        const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         int corner;
 
         if (sprite->kind != SPRITE_TRIANGLE)
@@ -176,7 +174,7 @@ void __cdecl rendersprites(void)
     glEnable(LINE_SMOOTH);
     glBegin(LINES);
     for (index = 0; index < cl_data_sprite_count; ++index) {
-        const ClientSprite *sprite = &cl_data_sprites[cl_data_sort_order[index]];
+        const ClientSprite *sprite = &cl_data_sprites[sr_data_radix.order[index]];
         float alpha;
 
         if (sprite->kind != SPRITE_TRACE)

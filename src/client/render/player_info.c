@@ -6,16 +6,14 @@
 #include "render/draw2d.h"
 #include "render/text.h"
 #include "sr_runtime.h"
+#include "util.h"
 
 #define g_game_state cl_data_game_state
 #define g_score_count cl_data_score_count
 #define g_score_entries cl_data_score_entries
-#define g_sort_count cl_data_sort_count
-#define g_sort_order cl_data_sort_order
-#define g_sort_keys cl_data_sort_keys
-
-/* Game functions of other files. */
-#define sortlist CL_FN(0x4e0f80, void(__cdecl *)(void))
+#define g_sort_count sr_data_radix.count
+#define g_sort_order sr_data_radix.order
+#define g_sort_keys sr_data_radix.keys
 
 enum {
     COLUMNS = 4,
@@ -94,7 +92,7 @@ static void draw_column_players(int column, const float *color)
     g_sort_count = g_score_count;
     for (row = 0; row < g_score_count; ++row)
         g_sort_keys[row] = (int)((unsigned)KEY_BASE - (unsigned)g_score_entries[row].worth);
-    sortlist();
+    csradixsort();
     for (row = 0; row < g_score_count; ++row) {
         float shade = 1.0f;
 

@@ -10,3 +10,4 @@ copyvector src/client/math/small_vectors.c
 copyvector2d src/client/math/small_vectors.c
 zerovector src/client/math/small_vectors.c
 flabs src/client/math/small_vectors.c
+csradixsort src/common/util.c

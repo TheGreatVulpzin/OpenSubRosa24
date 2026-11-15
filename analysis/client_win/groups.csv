@@ -1083,7 +1083,7 @@ rva,name,size,group,recorded_calls
 0xe0b60,,96,C11,0
 0xe0bc0,getskycolor,729,C10,0
 0xe0ea0,getsuncolor,211,C10,0
-0xe0f80,csradixsort,420,C0,0
+0xe0f80,csradixsort,420,C0x,0
 0xe1130,enablespeex,261,C6,3
 0xe1240,disablespeex,120,C6,3
 0xe12c0,preprocessspeex,55,C6,72

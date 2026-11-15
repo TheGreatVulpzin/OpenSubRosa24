@@ -37,7 +37,6 @@ tiremarkstart
 voice
 camera
 bondopt
-radix
 slogfp
 numofsprite_models
 timerlist
