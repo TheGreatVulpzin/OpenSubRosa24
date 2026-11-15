@@ -3287,7 +3287,7 @@ typedef union TextureList { struct {
     int shadow_map;                      /* +0x0408 rendermodel binds it on texture unit 2 for the lit models */
     int sky;                             /* +0x040c renderframeatmosphere binds it as the texture of the sky quad */
     int frame_aux;                       /* +0x0410 renderframedepth attaches this texture before the blur passes */
-    uint8_t pad_0414[0x4];
+    int frame_spare;                     /* +0x0414 setupframetextures sizes it with the other frame textures. No other code reads it */
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
@@ -3320,6 +3320,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, frame_color) == 0x404, "TextureList.frame
 SR_STATIC_ASSERT(offsetof(TextureList, shadow_map) == 0x408, "TextureList.shadow_map");
 SR_STATIC_ASSERT(offsetof(TextureList, sky) == 0x40c, "TextureList.sky");
 SR_STATIC_ASSERT(offsetof(TextureList, frame_aux) == 0x410, "TextureList.frame_aux");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_spare) == 0x414, "TextureList.frame_spare");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");
