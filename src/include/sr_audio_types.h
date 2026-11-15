@@ -58,7 +58,8 @@ typedef union AudioChannel { struct {
     int size[64];                        /* +0x5028 Audio source and voice frame access */
     int frame_mode[64];                  /* +0x5128 Audio source and voice frame access */
     uint8_t data[16384];                 /* +0x5228 Audio source and voice frame access */
-    uint8_t pad_9228[0x20];
+    uint32_t buffers[4];                 /* +0x9228 setupsounds makes the four OpenAL buffers of the channel */
+    uint8_t pad_9238[0x10];
     uint32_t source;                     /* +0x9248 Audio source and voice frame access */
     uint8_t pad_924c[0x20000];
 }; uint8_t lf_raw[0x2924c]; } AudioChannel;
@@ -75,6 +76,7 @@ SR_STATIC_ASSERT(offsetof(AudioChannel, tail) == 0x5024, "AudioChannel.tail");
 SR_STATIC_ASSERT(offsetof(AudioChannel, size) == 0x5028, "AudioChannel.size");
 SR_STATIC_ASSERT(offsetof(AudioChannel, frame_mode) == 0x5128, "AudioChannel.frame_mode");
 SR_STATIC_ASSERT(offsetof(AudioChannel, data) == 0x5228, "AudioChannel.data");
+SR_STATIC_ASSERT(offsetof(AudioChannel, buffers) == 0x9228, "AudioChannel.buffers");
 SR_STATIC_ASSERT(offsetof(AudioChannel, source) == 0x9248, "AudioChannel.source");
 
 /* audio_camera[]: record of 0x44 bytes. */
@@ -91,6 +93,17 @@ SR_STATIC_ASSERT(offsetof(AudioCamera, pos) == 0x4, "AudioCamera.pos");
 SR_STATIC_ASSERT(offsetof(AudioCamera, rot) == 0x10, "AudioCamera.rot");
 SR_STATIC_ASSERT(offsetof(AudioCamera, projection) == 0x34, "AudioCamera.projection");
 SR_STATIC_ASSERT(offsetof(AudioCamera, vel) == 0x38, "AudioCamera.vel");
+
+/* sound_buffer[]: record of 0xc bytes. */
+typedef union SoundBuffer { struct {
+    uint32_t buffer;                     /* +0x0000 setupsounds makes the OpenAL buffer */
+    int loaded;                          /* +0x0004 loadwav and createwav set it to 1 when the buffer holds sound */
+    float reference;                     /* +0x0008 reference distance of the sources that play the buffer */
+}; uint8_t lf_raw[0xc]; } SoundBuffer;
+SR_STATIC_ASSERT(sizeof(SoundBuffer) == 0xc, "SoundBuffer");
+SR_STATIC_ASSERT(offsetof(SoundBuffer, buffer) == 0x0, "SoundBuffer.buffer");
+SR_STATIC_ASSERT(offsetof(SoundBuffer, loaded) == 0x4, "SoundBuffer.loaded");
+SR_STATIC_ASSERT(offsetof(SoundBuffer, reference) == 0x8, "SoundBuffer.reference");
 
 #pragma pack(pop)
 

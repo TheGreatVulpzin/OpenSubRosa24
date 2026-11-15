@@ -540,7 +540,7 @@ void lf_30720(void);
 void lf_30740(void);
 void setupaudio(void);
 void shutdownaudio(void);
-void lf_33af0(void);
+void loadwav(void);
 void lf_33be0(void);
 void lf_33eb0(void);
 void lf_33f20(void);
@@ -624,10 +624,10 @@ void lf_4da00(void);
 void lf_4da70(void);
 void lf_4daf0(void);
 void lf_4db70(void);
-void lf_4e030(void);
+void setupsounds(void);
 void soundsimulation(void);
-void lf_4f150(void);
-void lf_4f450(void);
+void createsoundobject(void);
+void createsound(void);
 void deletesound(void);
 void lf_4f7d0(void);
 void lf_4fcc0(void);
@@ -1840,7 +1840,7 @@ const LfEntry lf_table[] = {
     { "GLeeInit", 0x30740, (void *)lf_30740, 0, LF_RET_INT, 4, "", 1 },
     { "setupaudio", 0x339e0, (void *)setupaudio, 0, LF_RET_VOID, 4, "", 1 },
     { "shutdownaudio", 0x33a70, (void *)shutdownaudio, 0, LF_RET_VOID, 4, "", 1 },
-    { "loadwav", 0x33af0, (void *)lf_33af0, 3, LF_RET_VOID, 4, "vpv", 1 },
+    { "loadwav", 0x33af0, (void *)loadwav, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createaccount", 0x33be0, (void *)lf_33be0, 1, LF_RET_INT, 4, "v", 0 },
     { "account_nameexists", 0x33eb0, (void *)lf_33eb0, 1, LF_RET_INT, 4, "p", 0 },
     { "createclientaccount", 0x33f20, (void *)lf_33f20, 3, LF_RET_INT, 4, "ppv", 0 },
@@ -1924,10 +1924,10 @@ const LfEntry lf_table[] = {
     { "lf_4da70", 0x4da70, (void *)lf_4da70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_4daf0", 0x4daf0, (void *)lf_4daf0, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_4db70", 0x4db70, (void *)lf_4db70, 1, LF_RET_VOID, 4, "v", 1 },
-    { "setupsounds", 0x4e030, (void *)lf_4e030, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupsounds", 0x4e030, (void *)setupsounds, 0, LF_RET_VOID, 4, "", 1 },
     { "soundsimulation", 0x4e190, (void *)soundsimulation, 3, LF_RET_VOID, 4, "pvv", 1 },
-    { "createsoundobject", 0x4f150, (void *)lf_4f150, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
-    { "createsound", 0x4f450, (void *)lf_4f450, 5, LF_RET_INT, 4, "vpvvv", 1 },
+    { "createsoundobject", 0x4f150, (void *)createsoundobject, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
+    { "createsound", 0x4f450, (void *)createsound, 5, LF_RET_INT, 4, "vpvvv", 1 },
     { "deletesound", 0x4f720, (void *)deletesound, 1, LF_RET_VOID, 4, "v", 1 },
     { "createwav", 0x4f7d0, (void *)lf_4f7d0, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbond", 0x4fcc0, (void *)lf_4fcc0, 4, LF_RET_INT, 4, "vvvv", 0 },

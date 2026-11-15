@@ -52,6 +52,17 @@ Float stores retain the fade, gain, engine pitch, tire sums and vector results. 
 
 Vector length rounds its squared sum and square root result to float. Vehicle distances return a float before sound selection compares them.
 
+## Sound buffers and sources
+
+`src/client/audio/sound_create.c` makes the OpenAL objects and starts sounds. `src/client/audio/wav.c` loads sound files.
+
+- `sound_buffers` has one record for each sound number (256 records of 12 bytes): the OpenAL buffer, a loaded flag and a reference distance. `setupsounds` makes the 256 buffers, four buffers for each of the 8 voice channels, and one source for each channel. A channel source that OpenAL cannot make gets the id -1.
+- `setupsounds` then makes sound sources one at a time. It stops at the first OpenAL error, or after 33 sources. `audio_source_limit` counts the sources after the first one.
+- `loadwav(sound, path, reference)` loads a WAV file of the folder `sound`. Only a mono file loads. A file of 8 bit samples uses the 8 bit format. Every other file uses the 16 bit format. The record keeps the reference distance and its loaded flag becomes 1. The folder changes back only when it changed.
+- `createsoundobject` starts a sound on the next free source and returns its index. It returns -1 when audio is off, when the buffer has no sound, or when the live list is full. A call with an object and a kind that already plays returns the index of that sound. A call with object -1 refuses a ninth sound of the same buffer. The gain goes from 0 to 1 and the pitch from 0 to 2. The velocity is the given vector times 60, or zero.
+- `createsound` is the same with no object and no looping. The sound must start within 512 units of the listener, and a ninth sound of the same buffer is refused. It does not change the kind of the record.
+- The list of live sounds is packed: a new sound goes at the end, and `deletesound` moves the last sound into the freed place.
+
 ## Sockets and controls
 
 `enablesocketserver` creates a UDP socket and binds the configured port. It enables the slot only after a successful bind. `enablesocketclient` creates an unbound UDP socket. Both request nonblocking I/O. A failed nonblocking request still leaves the slot enabled.

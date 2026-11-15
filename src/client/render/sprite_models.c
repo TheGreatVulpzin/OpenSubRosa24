@@ -9,6 +9,7 @@
 #include <math.h>
 #include <string.h>
 
+#include "audio/sound_create.h"
 #include "client.h"
 #include "debug/debug.h"
 #include "sr_math.h"
@@ -33,7 +34,6 @@
 /* Game functions of other files. */
 #define getrandomfloat CL_FN(0x4c5670, double(__cdecl *)(void))
 #define lineintersectlevel CL_FN(0x4a0f40, int(__cdecl *)(float *from, float *to, int with_objects))
-#define createsound CL_FN(0x44f450, int(__cdecl *)(int sound, const vec3 *pos, const vec3 *vel, float volume, float pitch))
 
 enum {
     MAX_PIECES = 0x4000,

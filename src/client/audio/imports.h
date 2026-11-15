@@ -53,5 +53,11 @@ AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alSourcei, (unsigned, int, int))
 AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alSourcef, (unsigned, int, float))
 AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alSourcePlay, (unsigned))
 AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alBufferData, (unsigned, int, void *, int, int))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alGenBuffers, (int, unsigned *))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alGenSources, (int, unsigned *))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, int, alGetError, (void))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, void *, SDL_RWFromFile, (const char *, const char *))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, void *, SDL_LoadWAV_RW, (void *, int, void *, unsigned char **, unsigned *))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_FreeWAV, (unsigned char *))
 
 #endif

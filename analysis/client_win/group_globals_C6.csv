@@ -12,7 +12,7 @@ audio_sounds,AudioSound,256,0x17c028a0,deletesound stride 0x18 and Linux sound s
 audio_sound_count,int,1,0x90652e4,deletesound packed list count
 audio_objects,int,8,0x90f60a4,soundsimulation vehicle indices
 audio_object_count,int,1,0x90f60a0,soundsimulation vehicle list count
-audio_play_buffer,int16_t,640,0x102feb60,soundsimulation combines four voice frames
+audio_play_buffer,int16_t,65536,0x102feb60,soundsimulation combines four voice frames. createwav makes its waves in it
 audio_capture_backup,int16_t,10240,0x1339c260,getaudioinput saves muted samples
 audio_voice_enabled,int,1,0x9063208,getaudioinput voice switch
 audio_threshold,int,1,0x9063204,getaudioinput sample threshold

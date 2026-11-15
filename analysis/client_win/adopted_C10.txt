@@ -16,3 +16,7 @@ loadimage src/client/textures/loaders.c
 loadtexture src/client/textures/loaders.c
 loadtexturesetalpha src/client/textures/loaders.c
 loadtexturepartial src/client/textures/loaders.c
+setupsounds src/client/audio/sound_create.c
+createsoundobject src/client/audio/sound_create.c
+createsound src/client/audio/sound_create.c
+loadwav src/client/audio/wav.c

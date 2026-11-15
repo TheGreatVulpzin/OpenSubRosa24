@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "audio/wav.h"
 #include "client.h"
 #include "render/sprites.h"
 #include "items.h"
@@ -31,7 +32,6 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define loadwav CL_FN(0x433af0, void(__cdecl *)(int sound, const char *path, float volume))
 #define createwav CL_FN(0x44f7d0, void(__cdecl *)(int sound, float volume))
 #define createbulletmodel CL_FN(0x4ad5d0, void(__cdecl *)(int model, int type))
 #define createammoshapemodel CL_FN(0x4af7c0, void(__cdecl *)(int model, int shape, int variant))

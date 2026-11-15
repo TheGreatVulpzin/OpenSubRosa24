@@ -4,6 +4,7 @@
  */
 #include "audio/sound.h"
 #include "audio/imports.h"
+#include "audio/sound_create.h"
 #include "client.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -40,9 +41,6 @@ enum { AUDIO_VOICES = 8, AUDIO_OBJECTS = 8, AUDIO_FRAMES = 64,
 #define AUDIO_WHISPER_DISTANCE 2.0f
 #define AUDIO_TALK_DISTANCE 5.0f
 #define AUDIO_YELL_DISTANCE 10.0f
-
-/* Game functions of other files. */
-#define createsoundobject CL_FN(0x44f150, int (__cdecl *)(int, const vec3 *, const vec3 *, float, float, int, int, int))
 
 /* Remove a source when its index is valid and audio is enabled. */
 void deletesound(int index)

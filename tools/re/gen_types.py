@@ -132,6 +132,7 @@ AUDIO_STRUCTS = {
     'AudioEncoder': ('audio_encoder', 0x2c),
     'AudioChannel': ('audio_channel', 0x2924c),
     'AudioCamera': ('audio_camera', 0x44),
+    'SoundBuffer': ('sound_buffer', 0xc),
 }
 INPUT_STRUCTS = {
     'InputMouse': ('input_mouse', 0x2c),

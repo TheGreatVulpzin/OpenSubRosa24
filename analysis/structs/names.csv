@@ -955,7 +955,11 @@ audio_channel,0x5024,tail,int,,Audio source and voice frame access
 audio_channel,0x5028,size,int,64,Audio source and voice frame access
 audio_channel,0x5128,frame_mode,int,64,Audio source and voice frame access
 audio_channel,0x5228,data,uint8_t,16384,Audio source and voice frame access
+audio_channel,0x9228,buffers,uint32_t,4,setupsounds makes the four OpenAL buffers of the channel
 audio_channel,0x9248,source,uint32_t,,Audio source and voice frame access
+sound_buffer,0x0,buffer,uint32_t,,setupsounds makes the OpenAL buffer
+sound_buffer,0x4,loaded,int,,loadwav and createwav set it to 1 when the buffer holds sound
+sound_buffer,0x8,reference,float,,reference distance of the sources that play the buffer
 audio_camera,0x0,player,int,,Audio source and voice frame access
 audio_camera,0x4,pos,vec3,,Audio source and voice frame access
 audio_camera,0x10,rot,vec3,3,Audio source and voice frame access
