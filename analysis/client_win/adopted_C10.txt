@@ -31,3 +31,4 @@ getskycolor src/client/render/sky_light.c
 setupframelandscapelod src/client/render/landscape_draw.c
 frame_addmodel src/client/render/frame_models.c
 buildframelist src/client/render/frame_list.c
+rotateorientationfast src/client/math/rotate.c

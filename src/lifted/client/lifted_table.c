@@ -1100,7 +1100,7 @@ void lf_e2720(void);
 void spritesimulation(void);
 void rendersprites(void);
 void rendermuzzleflashes(void);
-void lf_e4f10(void);
+void rotateorientationfast(void);
 void createsprite_model(void);
 void sprite_modeltimetolive(void);
 void deletesprite_model(void);
@@ -2400,7 +2400,7 @@ const LfEntry lf_table[] = {
     { "spritesimulation", 0xe2790, (void *)spritesimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "rendersprites", 0xe3b10, (void *)rendersprites, 0, LF_RET_VOID, 4, "", 1 },
     { "rendermuzzleflashes", 0xe4bc0, (void *)rendermuzzleflashes, 0, LF_RET_VOID, 4, "", 1 },
-    { "rotateorientationfast", 0xe4f10, (void *)lf_e4f10, 3, LF_RET_VOID, 4, "vpv", 0 },
+    { "rotateorientationfast", 0xe4f10, (void *)rotateorientationfast, 3, LF_RET_VOID, 4, "vpv", 0 },
     { "createsprite_model", 0xe5040, (void *)createsprite_model, 4, LF_RET_INT, 4, "vpvv", 0 },
     { "sprite_modeltimetolive", 0xe5210, (void *)sprite_modeltimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deletesprite_model", 0xe5280, (void *)deletesprite_model, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2505,18 +2505,18 @@ const LfEntry lf_table[] = {
     { "generatemenutextures", 0x100660, (void *)lf_100660, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmenubutton2", 0x100930, (void *)lf_100930, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "drawmenubutton", 0x1010f0, (void *)lf_1010f0, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
-    { "lf_1014f0", 0x1014f0, (void *)lf_1014f0, 12, LF_RET_VOID, 4, "vvvvvvvvvvvv", 1 },
+    { "drawmenutextfield", 0x1014f0, (void *)lf_1014f0, 12, LF_RET_VOID, 4, "vvvvvvvvvvvv", 1 },
     { "checkmenuitems", 0x101be0, (void *)lf_101be0, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_102080", 0x102080, (void *)lf_102080, 9, LF_RET_VOID, 4, "pvvvvvvvv", 0 },
-    { "lf_1024e0", 0x1024e0, (void *)lf_1024e0, 11, LF_RET_VOID, 4, "pvvvvvvvvvv", 0 },
-    { "lf_102960", 0x102960, (void *)lf_102960, 9, LF_RET_VOID, 4, "pvvvvvvvv", 0 },
-    { "createmenubutton", 0x102b70, (void *)lf_102b70, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "createmenuitem", 0x102080, (void *)lf_102080, 9, LF_RET_VOID, 4, "pvvvvvvvv", 0 },
+    { "createmenubutton", 0x1024e0, (void *)lf_1024e0, 11, LF_RET_VOID, 4, "pvvvvvvvvvv", 0 },
+    { "setmenuiteminfo", 0x102960, (void *)lf_102960, 9, LF_RET_VOID, 4, "pvvvvvvvv", 0 },
+    { "setmenuitem", 0x102b70, (void *)lf_102b70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createmenuitemempty", 0x1036d0, (void *)lf_1036d0, 0, LF_RET_VOID, 4, "", 0 },
     { "resetmenuitems", 0x103970, (void *)lf_103970, 0, LF_RET_VOID, 4, "", 0 },
     { "setupmenuitems", 0x1039c0, (void *)lf_1039c0, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_103dd0", 0x103dd0, (void *)lf_103dd0, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_103e30", 0x103e30, (void *)lf_103e30, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_103e70", 0x103e70, (void *)lf_103e70, 0, LF_RET_VOID, 4, "", 0 },
+    { "menutoggle", 0x103dd0, (void *)lf_103dd0, 0, LF_RET_VOID, 4, "", 0 },
+    { "menuset", 0x103e30, (void *)lf_103e30, 0, LF_RET_VOID, 4, "", 0 },
+    { "menuslider", 0x103e70, (void *)lf_103e70, 0, LF_RET_VOID, 4, "", 0 },
     { "menutextbox", 0x1040c0, (void *)lf_1040c0, 0, LF_RET_VOID, 4, "", 0 },
     { "gettextinputposition", 0x104490, (void *)lf_104490, 1, LF_RET_VOID, 4, "v", 0 },
     { "getinputletter", 0x1046c0, (void *)lf_1046c0, 0, LF_RET_INT, 4, "", 0 },

@@ -669,7 +669,7 @@ LIFT_PATCHES = {
     # Client, drawtext and FUN_0040ac50: "&stack0x.." is the first argument of the variable list,
     # the word after the last named parameter.
     0x106b30: [('local_34 = (uint *)&stack0x00000028;', 'local_34 = (uint *)(&a + 1);')],
-    # Client, createmenubutton(type, ...): "stack0x8" is the first argument of the list, the word after
+    # Client, setmenuitem(type, ...): "stack0x8" is the first argument of the list, the word after
     # "type". The decompiler also shows that first argument as an input of the function.
     0x102b70: [('undefined4 in_stack_00000008;', ''),
                ('= in_stack_00000008;', '= *(undefined4 *)(&type + 1);'),
