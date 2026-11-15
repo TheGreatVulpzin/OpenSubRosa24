@@ -18,7 +18,7 @@ track_vertex_count,int,1,0x147129ac,"rendertrackmodel: the vertices of the track
 frustum_planes,vec3,5,0x122b90,"boxinsidefrustum writes the five plane normals into it each time it runs"
 shadow_corners,vec3,6,0x1033ecc0,"rendermodelshadow: the three pushed corners and the three corners of the triangle in work"
 shadow_count,int,1,0x13bee6a0,"rendermodelshadow: the points in the list of the shadow"
-shadow_list,vec3,36864,0x13bee6a4,"rendermodelshadow: the triangles of the shadow volume, as points"
+shadow_list,vec3,16384,0x13bee6a4,"rendermodelshadow: the triangles of the shadow volume, as points. The next object starts 0x2fffc bytes after it"
 chat_head,uint32_t,1,0xf3eafc0,"frame_drawmessages walks the ring of messages from this index back. createmessage moves it"
 sprite_models,SpriteModel,16384,0x5379100,"createsprite_model and sprite_model_simulation: the flying pieces. A record has 0x68 bytes"
 sprite_model_count,int,1,0x12a7d604,"createsprite_model adds 1. deletesprite_model moves the last piece into the freed place"

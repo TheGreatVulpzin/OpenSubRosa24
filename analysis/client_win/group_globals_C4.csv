@@ -14,7 +14,6 @@ input_game_running,uint32_t,1,0x9065350,Client input flag at the byte position o
 kickedip,uint32_t,1024,0x1033ed20,Linux kickedip size 0x1000 and getinputs selected connection addresses
 numofkicked,int,1,0x103675a4,Client count is at packet workspace plus 0x28884 instead of the server offset 0x28660
 input_debug_toggle,uint32_t,1,0x102feb48,debug_getinputs F10 toggle
-input_interior_timers,int,5,0x12a7d660,debug_getinputs resets five interior timers
 input_label_chat,char,2,0x127eb1,getinputs chat label
 input_label_pause,char,5,0x125224,getinputs pause label
 input_label_return,char,15,0x12522c,getinputs return menu label

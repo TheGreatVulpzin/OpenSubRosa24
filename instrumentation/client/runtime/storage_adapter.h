@@ -343,7 +343,6 @@ extern int sr_unplaced_train_near;
 #undef sr_data_numofkicked
 #define sr_data_numofkicked (*((int *)(sr_base + 0x103675a4u)))
 #define cl_data_input_debug_toggle (*((uint32_t *)(sr_base + 0x102feb48u)))
-#define cl_data_input_interior_timers ((int *)(sr_base + 0x12a7d660u))
 #define cl_data_input_label_chat ((char *)(sr_base + 0x127eb1u))
 #define cl_data_input_label_pause ((char *)(sr_base + 0x125224u))
 #define cl_data_input_label_return ((char *)(sr_base + 0x12522cu))

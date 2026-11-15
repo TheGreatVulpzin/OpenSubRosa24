@@ -17,6 +17,10 @@ BASE_SIZES = {"int": 4, "float": 4, "uint32_t": 4, "uint8_t": 1, "char": 1, "int
               "void*": 4, "void *": 4, "uint32_t*": 4, "char*": 4, "double": 8, "int8_t": 1}
 
 
+# The client uses only the first 0x54 bytes of a TimerList. The server timers follow the client ones.
+CLIENT_SIZES = {"timerlist": 0x54}
+
+
 def main():
     header = (ROOT / "src/include/sr_types.h").read_text(encoding="utf-8")
     sizes = {m.group(1): int(m.group(2), 16)
@@ -30,7 +34,8 @@ def main():
             if size is None:
                 print("unknown size", path.name, row["name"], row["type"])
                 continue
-            objects.append((path.name, row["name"], int(row["client_rva"], 16), int(row["count"] or 1) * size))
+            total = CLIENT_SIZES.get(row["name"]) or int(row["count"] or 1) * size
+            objects.append((path.name, row["name"], int(row["client_rva"], 16), total))
     only = sys.argv[1] if len(sys.argv) > 1 else None
     for a in objects:
         if only and a[0] != only:

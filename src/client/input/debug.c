@@ -17,6 +17,11 @@ void debug_getinputs(void)
         cl_data_input_label_timer_setup, cl_data_input_label_timer_alloc,
         cl_data_input_label_timer_shadow
     };
+    const int timers[INTERIOR_TIMERS] = {
+        cl_data_timerlist.buildinterior, cl_data_timerlist.optimizeinterior,
+        cl_data_timerlist.setupinterior, cl_data_timerlist.allocinterior,
+        cl_data_timerlist.shadowinterior
+    };
     int timer;
     if (!cl_data_audio_input_blocked) {
         if (cl_data_audio_keys[KEY_6]) {
@@ -31,7 +36,7 @@ void debug_getinputs(void)
         if (input_pressed(KEY_U))
             for (timer = 0; timer < INTERIOR_TIMERS; timer++)
                 CL_FN(0x4fafe0, void (__cdecl *)(int, const char *))(
-                    cl_data_input_interior_timers[timer], labels[timer]);
+                    timers[timer], labels[timer]);
         if (cl_data_audio_keys[KEY_INSERT] && sr_players[0].human_id != -1)
             CL_FN(0x50b950, void (__cdecl *)(vec3 *, const vec3 *))(
                 &cl_data_input_cameras[0].pos, &sr_humans[sr_players[0].human_id].bones[2].pos);
