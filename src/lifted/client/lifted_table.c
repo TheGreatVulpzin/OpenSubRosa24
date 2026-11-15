@@ -542,7 +542,7 @@ void setupaudio(void);
 void shutdownaudio(void);
 void loadwav(void);
 void lf_33be0(void);
-void lf_33eb0(void);
+void account_nameexists(void);
 void lf_33f20(void);
 void lf_34010(void);
 void lf_341d0(void);
@@ -715,9 +715,9 @@ void drawcircleindicator(void);
 void lf_6e6b0(void);
 void lf_6ed50(void);
 void lf_6efa0(void);
-void lf_6f5d0(void);
+void playerbuystock(void);
 void lf_6f6e0(void);
-void lf_6f860(void);
+void playerdeathtax(void);
 void lf_6f990(void);
 void lf_6fa00(void);
 void lf_6fb40(void);
@@ -990,7 +990,7 @@ void calculatebarycentric(void);
 void lf_c9ee0(void);
 void lf_ca0c0(void);
 void lf_cbf70(void);
-void lf_ccb70(void);
+void getenginetorque2(void);
 void engine_bezierinterpolation(void);
 void lf_ccd50(void);
 void lf_cd930(void);
@@ -1064,7 +1064,7 @@ void lf_dc770(void);
 void lf_dc780(void);
 void lf_dc790(void);
 void lf_dc7a0(void);
-void lf_dc7e0(void);
+void scenario_getnumofmissions(void);
 void lf_dc860(void);
 void lf_dc8d0(void);
 void lf_dca90(void);
@@ -1181,20 +1181,20 @@ void lf_fdd00(void);
 void listfiles(void);
 void freadswap(void);
 void lf_fe0d0(void);
-void lf_fe200(void);
+void removeflieextentions(void);
 void enablesocketserver(void);
 void enablesocketclient(void);
 void lf_fe3f0(void);
 void recvpacket(void);
 void lf_fe4f0(void);
 void sendpacket(void);
-void lf_fe5b0(void);
+void cs_pwrite(void);
 void lf_fe630(void);
-void lf_fe6c0(void);
+void pbitwrite(void);
 void lf_fe800(void);
 void lf_fe920(void);
 void lf_fea40(void);
-void lf_feb60(void);
+void pbitwritenego(void);
 void lf_febd0(void);
 void checkkeyboard(void);
 void checkmouse(void);
@@ -1842,7 +1842,7 @@ const LfEntry lf_table[] = {
     { "shutdownaudio", 0x33a70, (void *)shutdownaudio, 0, LF_RET_VOID, 4, "", 1 },
     { "loadwav", 0x33af0, (void *)loadwav, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createaccount", 0x33be0, (void *)lf_33be0, 1, LF_RET_INT, 4, "v", 0 },
-    { "account_nameexists", 0x33eb0, (void *)lf_33eb0, 1, LF_RET_INT, 4, "p", 0 },
+    { "account_nameexists", 0x33eb0, (void *)account_nameexists, 1, LF_RET_INT, 4, "p", 0 },
     { "createclientaccount", 0x33f20, (void *)lf_33f20, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lf_34010", 0x34010, (void *)lf_34010, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsserver", 0x341d0, (void *)lf_341d0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2015,9 +2015,9 @@ const LfEntry lf_table[] = {
     { "economysimulation", 0x6e6b0, (void *)lf_6e6b0, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_carmarket", 0x6ed50, (void *)lf_6ed50, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_gunmarket", 0x6efa0, (void *)lf_6efa0, 0, LF_RET_VOID, 4, "", 0 },
-    { "playerbuystock", 0x6f5d0, (void *)lf_6f5d0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "playerbuystock", 0x6f5d0, (void *)playerbuystock, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_6f6e0", 0x6f6e0, (void *)lf_6f6e0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "playerdeathtax", 0x6f860, (void *)lf_6f860, 1, LF_RET_VOID, 4, "v", 0 },
+    { "playerdeathtax", 0x6f860, (void *)playerdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_6f990", 0x6f990, (void *)lf_6f990, 1, LF_RET_VOID, 4, "v", 0 },
     { "playerteamkilltax", 0x6fa00, (void *)lf_6fa00, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdebt", 0x6fb40, (void *)lf_6fb40, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2290,7 +2290,7 @@ const LfEntry lf_table[] = {
     { "applydamageobject", 0xc9ee0, (void *)lf_c9ee0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelsimulation2", 0xca0c0, (void *)lf_ca0c0, 0, LF_RET_VOID, 4, "", 0 },
     { "objectenginesimulation2", 0xcbf70, (void *)lf_cbf70, 0, LF_RET_VOID, 4, "", 0 },
-    { "getenginetorque2", 0xccb70, (void *)lf_ccb70, 1, LF_RET_FLOAT, 4, "v", 0 },
+    { "getenginetorque2", 0xccb70, (void *)getenginetorque2, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "engine_bezierinterpolation", 0xccca0, (void *)engine_bezierinterpolation, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "object_rotorsimulation", 0xccd50, (void *)lf_ccd50, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0xcd930, (void *)lf_cd930, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2364,7 +2364,7 @@ const LfEntry lf_table[] = {
     { "lf_dc780", 0xdc780, (void *)lf_dc780, 0, LF_RET_VOID, 4, "", 0 },
     { "createscenario_driving", 0xdc790, (void *)lf_dc790, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_getnextmission", 0xdc7a0, (void *)lf_dc7a0, 1, LF_RET_INT, 4, "v", 0 },
-    { "scenario_getnumofmissions", 0xdc7e0, (void *)lf_dc7e0, 1, LF_RET_INT, 4, "v", 0 },
+    { "scenario_getnumofmissions", 0xdc7e0, (void *)scenario_getnumofmissions, 1, LF_RET_INT, 4, "v", 0 },
     { "scenario_isseekmission", 0xdc860, (void *)lf_dc860, 1, LF_RET_INT, 4, "v", 0 },
     { "lf_dc8d0", 0xdc8d0, (void *)lf_dc8d0, 1, LF_RET_VOID, 4, "v", 0 },
     { "scenario_createguards", 0xdca90, (void *)lf_dca90, 3, LF_RET_VOID, 4, "vvv", 0 },
@@ -2481,20 +2481,20 @@ const LfEntry lf_table[] = {
     { "listfiles", 0xfdde0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "freadswap", 0xfdfb0, (void *)freadswap, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "lf_fe0d0", 0xfe0d0, (void *)lf_fe0d0, 4, LF_RET_INT, 4, "vvvp", 1 },
-    { "removeflieextentions", 0xfe200, (void *)lf_fe200, 1, LF_RET_VOID, 4, "v", 0 },
+    { "removeflieextentions", 0xfe200, (void *)removeflieextentions, 1, LF_RET_VOID, 4, "v", 0 },
     { "enablesocketserver", 0xfe2b0, (void *)enablesocketserver, 1, LF_RET_VOID, 4, "v", 1 },
     { "enablesocketclient", 0xfe360, (void *)enablesocketclient, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_fe3f0", 0xfe3f0, (void *)lf_fe3f0, 1, LF_RET_VOID, 4, "v", 1 },
     { "recvpacket", 0xfe420, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
     { "resetsendpacket", 0xfe4f0, (void *)lf_fe4f0, 0, LF_RET_VOID, 4, "", 0 },
     { "sendpacket", 0xfe520, (void *)sendpacket, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "cs_pwrite", 0xfe5b0, (void *)lf_fe5b0, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "cs_pwrite", 0xfe5b0, (void *)cs_pwrite, 3, LF_RET_INT, 4, "pvv", 0 },
     { "lf_fe630", 0xfe630, (void *)lf_fe630, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pbitwrite", 0xfe6c0, (void *)lf_fe6c0, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitwrite", 0xfe6c0, (void *)pbitwrite, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitread", 0xfe800, (void *)lf_fe800, 2, LF_RET_INT, 4, "pv", 0 },
     { "lf_fe920", 0xfe920, (void *)lf_fe920, 3, LF_RET_INT, 4, "pvv", 0 },
     { "lf_fea40", 0xfea40, (void *)lf_fea40, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pbitwritenego", 0xfeb60, (void *)lf_feb60, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitwritenego", 0xfeb60, (void *)pbitwritenego, 2, LF_RET_INT, 4, "pv", 0 },
     { "lf_febd0", 0xfebd0, (void *)lf_febd0, 2, LF_RET_INT, 4, "pv", 0 },
     { "checkkeyboard", 0xfec50, (void *)checkkeyboard, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouse", 0xfeca0, (void *)checkmouse, 0, LF_RET_VOID, 4, "", 1 },

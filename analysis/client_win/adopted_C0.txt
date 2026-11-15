@@ -1,0 +1,9 @@
+pbitwrite src/net/packet.c
+pbitwritenego src/net/packet.c
+cs_pwrite src/net/packet.c
+playerdeathtax src/game/economy.c
+playerbuystock src/game/economy.c
+scenario_getnumofmissions src/game/economy.c
+removeflieextentions src/common/files.c
+getenginetorque2 src/game/vehicles.c
+account_nameexists src/game/account_db.c

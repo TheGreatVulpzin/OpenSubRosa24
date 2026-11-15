@@ -29198,43 +29198,6 @@ int __cdecl lf_33be0(int param_1)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x33eb0 */
-#define DAT_0f7eb204 (*(int *)SR_VA(0xf7eb204))
-#define DAT_0f7eb210 (*(undefined *)SR_VA(0xf7eb210))
-#define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(23, "MSVCR100.DLL", "strncmp"))
-#define strlen ((size_t (__cdecl *)(char *))LF_IMPORT(15, "MSVCR100.DLL", "strlen"))
-#define local_c (*(size_t *)(lf_frame + 0x14))
-#define local_8 (*(int *)(lf_frame + 0x18))
-undefined4 __cdecl lf_33eb0(char *param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int iVar1;
-
-
-  
-  local_c = strlen(param_1);
-  if (0x18 < (int)local_c) {
-    local_c = 0x18;
-  }
-  local_8 = 0;
-  while( true ) {
-    if (DAT_0f7eb204 <= local_8) {
-      return 0;
-    }
-    iVar1 = strncmp(param_1,&DAT_0f7eb210 + local_8 * 0x4c,local_c);
-    if (iVar1 == 0) break;
-    local_8 = local_8 + 1;
-  }
-  return 1;
-}
-#undef DAT_0f7eb204
-#undef DAT_0f7eb210
-#undef strncmp
-#undef strlen
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x33f20 */
 #define DAT_01e79cc0 (*(int *)SR_VA(0x1e79cc0))
 #define DAT_01e79cc4 (*(undefined *)SR_VA(0x1e79cc4))
@@ -29458,7 +29421,7 @@ void __cdecl lf_341d0(void)
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_54 (*(char (*)[64])(lf_frame + 0x1c))
 #define local_14 (*(uint *)(lf_frame + 0x5c))
@@ -29533,7 +29496,7 @@ void __cdecl lf_34470(void)
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_54 (*(char (*)[68])(lf_frame + 0x1c))
 #define local_10 (*(uint *)(lf_frame + 0x60))
@@ -29609,7 +29572,7 @@ void __cdecl lf_345d0(void)
 #define s__d__s__d_00523ab8 ((char *)SR_VA(0x523ab8))
 #define DAT_0f7eb210 (*(undefined *)SR_VA(0xf7eb210))
 #define DAT_0f7eb238 (*(undefined *)SR_VA(0xf7eb238))
-#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(25, "MSVCR100.DLL", "fprintf"))
+#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(24, "MSVCR100.DLL", "fprintf"))
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define local_10 (*(uint *)(lf_frame + 0x10))
@@ -29735,9 +29698,9 @@ void __cdecl lf_34740(void)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bad0))
 #define __security_check_cookie(x) ((void)0)
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x8c))
 #define local_74 (*(float *)(lf_frame + 0x1c))
 #define local_70 (*(float *)(lf_frame + 0x20))
@@ -30419,7 +30382,7 @@ void __cdecl lf_35fa0(int param_1,undefined4 param_2,undefined4 param_3,undefine
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bad0))
 #define __security_check_cookie(x) ((void)0)
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x9c))
 #define local_90 (*(float (*)[4])(lf_frame + 0x10))
 #define local_80 (*(float (*)[3])(lf_frame + 0x20))
@@ -31659,7 +31622,7 @@ void __cdecl lf_39370(int param_1)
 #define listfiles ((void (__cdecl *)(char *, int, int))SR_FN(0x4fdde0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_54 (*(uint (*)[7])(lf_frame + 0x1c))
 #define local_38 (*(float *)(lf_frame + 0x38))
@@ -38783,7 +38746,7 @@ void __cdecl lf_50230(int param_1)
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
-#define acos ((double (__cdecl *)(double))LF_IMPORT(29, "MSVCR100.DLL", "acos"))
+#define acos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "acos"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x14c))
 #define local_138 (*(undefined2 *)(lf_frame + 0x18))
 #define local_134 (*(float (*)[3])(lf_frame + 0x1c))
@@ -41280,12 +41243,12 @@ void __cdecl lf_58b60(void)
 #define _DAT_01f9b5ac (*(uint *)SR_VA(0x1f9b5ac))
 #define _DAT_01f9b5b0 (*(uint *)SR_VA(0x1f9b5b0))
 #define _DAT_01f9b5b4 (*(uint *)SR_VA(0x1f9b5b4))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(35, "OPENGL32.DLL", "glDepthFunc"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(34, "OPENGL32.DLL", "glDepthFunc"))
 #define area_deleteblock ((void (__cdecl *)(int, uint, uint, uint))SR_FN(0x438c00))
 #define building_buildfloorplan ((void (__cdecl *)(int, int, int, int, int, int, int, int))SR_FN(0x456ad0))
 #define FUN_0045c040 ((void (__cdecl *)(void))SR_FN(0x45c040))
@@ -41314,12 +41277,12 @@ void __cdecl lf_58b60(void)
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(37, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(36, "SDL2.DLL", "SDL_GetTicks"))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(19, "MSVCR100.DLL", "strcmp"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x8c))
 #define local_74 (*(int *)(lf_frame + 0x1c))
@@ -42856,10 +42819,10 @@ void __cdecl lf_5cef0(int param_1,int param_2,int param_3)
 #define DAT_056cdb78 (*(undefined *)SR_VA(0x56cdb78))
 #define DAT_0bb33534 (*(undefined *)SR_VA(0xbb33534))
 #define DAT_137ae680 (*(undefined *)SR_VA(0x137ae680))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
 #define drawmenuitems ((void (__cdecl *)(void))SR_FN(0x4ff2e0))
@@ -42872,7 +42835,7 @@ void __cdecl lf_5cef0(int param_1,int param_2,int param_3)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(19, "MSVCR100.DLL", "strcmp"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_24 (*(int (*)[4])(lf_frame + 0x1c))
@@ -43130,8 +43093,8 @@ void __cdecl lf_5d150(void)
 #define DAT_079a5814 (*(undefined *)SR_VA(0x79a5814))
 #define DAT_09463128 (*(undefined *)SR_VA(0x9463128))
 #define DAT_0e5ac784 (*(undefined *)SR_VA(0xe5ac784))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define building_load ((void (__cdecl *)(int, int))SR_FN(0x4614e0))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x462ab0))
 #define gameloop ((void (__cdecl *)(void))SR_FN(0x47b100))
@@ -43147,7 +43110,7 @@ void __cdecl lf_5d150(void)
 #define checksystemmessages ((void (__cdecl *)(void))SR_FN(0x5060d0))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(21, "MSVCR100.DLL", "memset"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_20 (*(int *)(lf_frame + 0x10))
@@ -43337,10 +43300,10 @@ void __cdecl lf_5dbd0(void)
 #define DAT_056cd778 (*(undefined *)SR_VA(0x56cd778))
 #define DAT_14711844 (*(undefined4 *)SR_VA(0x14711844))
 #define DAT_1764f618 (*(undefined *)SR_VA(0x1764f618))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define FUN_0045eb40 ((void (__cdecl *)(uint))SR_FN(0x45eb40))
 #define FUN_0045ef80 ((void (__cdecl *)(char *, int))SR_FN(0x45ef80))
 #define building_reloadtextures ((void (__cdecl *)(void))SR_FN(0x45f310))
@@ -43356,7 +43319,7 @@ void __cdecl lf_5dbd0(void)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_20 (*(uint (*)[4])(lf_frame + 0x20))
@@ -43852,16 +43815,16 @@ void __cdecl lf_5f310(void)
 #define DAT_032b82cc (*(undefined *)SR_VA(0x32b82cc))
 #define DAT_032b82d4 (*(undefined *)SR_VA(0x32b82d4))
 #define DAT_032b82d8 (*(undefined *)SR_VA(0x32b82d8))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glVertex3f"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(39, "OPENGL32.DLL", "glVertex3f"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
 #define buildingeditor_drawquad ((void (__cdecl *)(int, float, float, float, float, float, float, float, float))SR_FN(0x45fca0))
 #define buildingeditor_drawblock ((void (__cdecl *)(int, int, int))SR_FN(0x45fdf0))
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
 #define local_30 (*(int *)(lf_frame + 0x10))
 #define local_2c (*(int *)(lf_frame + 0x14))
 #define local_20 (*(int *)(lf_frame + 0x20))
@@ -44042,14 +44005,14 @@ void __cdecl lf_5f3c0(void)
 
 /* ---------------------------------------------------------------- 0x5fca0 */
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glVertex3f"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glTexCoord2f ((void (__stdcall *)(float, float))LF_IMPORT(43, "OPENGL32.DLL", "glTexCoord2f"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(39, "OPENGL32.DLL", "glVertex3f"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glTexCoord2f ((void (__stdcall *)(float, float))LF_IMPORT(42, "OPENGL32.DLL", "glTexCoord2f"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
 void __cdecl lf_5fca0(int param_1,float param_2,float param_3,float param_4,float param_5,float param_6,
           float param_7,float param_8,float param_9)
 
@@ -44154,14 +44117,14 @@ void __cdecl lf_5fdf0(int param_1,int param_2,int param_3)
 #define DAT_2a39d364 (*(undefined4 *)SR_VA(0x2a39d364))
 #define DAT_2a41d368 (*(undefined4 *)SR_VA(0x2a41d368))
 #define DAT_2a45d368 (*(undefined4 *)SR_VA(0x2a45d368))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glVertex3fv"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(44, "OPENGL32.DLL", "glVertex3fv"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x2c))
@@ -44315,16 +44278,16 @@ void __cdecl lf_600d0(uint param_1,int param_2,int param_3,int param_4,int param
 #define DAT_14711844 (*(undefined4 *)SR_VA(0x14711844))
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
 #define DAT_01f9b578 (*(undefined2 *)SR_VA(0x1f9b578))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glVertex3f"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glVertex3fv"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(47, "OPENGL32.DLL", "glPolygonMode"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(39, "OPENGL32.DLL", "glVertex3f"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glVertex3fv ((void (__stdcall *)(float *))LF_IMPORT(44, "OPENGL32.DLL", "glVertex3fv"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(46, "OPENGL32.DLL", "glPolygonMode"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x2c))
@@ -44442,12 +44405,12 @@ void __cdecl lf_605a0(uint param_1,int param_2,float param_3,float param_4,float
 #define DAT_137ae6d8 (*(undefined *)SR_VA(0x137ae6d8))
 #define DAT_137ae6dc (*(undefined *)SR_VA(0x137ae6dc))
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(48, "OPENGL32.DLL", "glVertex2fv"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(47, "OPENGL32.DLL", "glVertex2fv"))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x3c))
@@ -45664,7 +45627,7 @@ void __cdecl lf_64110(void)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define FUN_0050b980 ((void (__cdecl *)(float *, float *))SR_FN(0x50b980))
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(21, "MSVCR100.DLL", "memset"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 int __cdecl lf_64380(int param_1,undefined4 *param_2,int param_3,undefined4 param_4)
 
 {
@@ -46977,7 +46940,7 @@ LAB_00467ea3:
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x685a0 */
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_4c (*(uint *)(lf_frame + 0x14))
 #define local_28 (*(uint *)(lf_frame + 0x38))
 #define local_18 (*(int *)(lf_frame + 0x48))
@@ -47274,7 +47237,7 @@ void __cdecl lf_68bd0(float *param_1,int param_2)
 
 /* ---------------------------------------------------------------- 0x68e20 */
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x4fe6c0))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_24 (*(uint *)(lf_frame + 0x1c))
 #define local_c (*(uint *)(lf_frame + 0x34))
 #define local_8 (*(uint *)(lf_frame + 0x38))
@@ -47392,7 +47355,7 @@ void __cdecl lf_69010(int param_1,int param_2,float param_3,undefined4 param_4)
 
 /* ---------------------------------------------------------------- 0x69060 */
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x4fe6c0))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_24 (*(uint *)(lf_frame + 0x1c))
 #define local_c (*(uint *)(lf_frame + 0x34))
 #define local_8 (*(uint *)(lf_frame + 0x38))
@@ -47517,7 +47480,7 @@ undefined4 __cdecl lf_6ad10(void)
 #undef local_8
 
 /* ---------------------------------------------------------------- 0x6b140 */
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(51, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(50, "MSVCR100.DLL", "_time64"))
 __time64_t __cdecl lf_6b140(__time64_t *param_1)
 
 {
@@ -47586,7 +47549,7 @@ __time64_t __cdecl lf_6b140(__time64_t *param_1)
 #define DAT_16738610 (*(undefined *)SR_VA(0x16738610))
 #define DAT_1673861c (*(undefined *)SR_VA(0x1673861c))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
-#define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(23, "MSVCR100.DLL", "strncmp"))
+#define strncmp ((int (__cdecl *)(char *, char *, size_t))LF_IMPORT(51, "MSVCR100.DLL", "strncmp"))
 #define sscanf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(52, "MSVCR100.DLL", "sscanf"))
 #define tolower ((int (__cdecl *)(int))LF_IMPORT(53, "MSVCR100.DLL", "tolower"))
 #define createevent_message ((void (__cdecl *)(undefined4, char *, undefined4, undefined4))SR_FN(0x472000))
@@ -48362,48 +48325,6 @@ void __cdecl lf_6efa0(void)
 #undef DAT_0e65ca50
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x6f5d0 */
-#define DAT_0f1813e0 (*(undefined4 *)SR_VA(0xf1813e0))
-#define DAT_0f181404 (*(undefined4 *)SR_VA(0xf181404))
-#define DAT_0f18140c (*(undefined *)SR_VA(0xf18140c))
-#define DAT_17a78bc0 (*(undefined *)SR_VA(0x17a78bc0))
-#define DAT_17a78bc4 (*(undefined *)SR_VA(0x17a78bc4))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-void __cdecl lf_6f5d0(int param_1,int param_2)
-
-{
-  int iVar1;
-  
-  iVar1 = (&DAT_0f181404)[param_1 * 0x902];
-  if (iVar1 != -1) {
-    if (*(int *)(&DAT_17a78bc0 + iVar1 * 0x14) < 100000) {
-      if (99999 < *(int *)(&DAT_17a78bc0 + iVar1 * 0x14) + param_2) {
-        param_2 = 100000 - *(int *)(&DAT_17a78bc0 + iVar1 * 0x14);
-      }
-    }
-    else {
-      param_2 = 0;
-    }
-    if ((float)param_2 * *(float *)(&DAT_17a78bc4 + iVar1 * 0x14) <
-        (float)(int)(&DAT_0f1813e0)[param_1 * 0x902]) {
-      (&DAT_0f1813e0)[param_1 * 0x902] =
-           (int)(longlong)
-                ((float)(int)(&DAT_0f1813e0)[param_1 * 0x902] -
-                (float)param_2 * *(float *)(&DAT_17a78bc4 + iVar1 * 0x14));
-      *(int *)(&DAT_0f18140c + param_1 * 0x2408) =
-           *(int *)(&DAT_0f18140c + param_1 * 0x2408) + param_2;
-      *(int *)(&DAT_17a78bc0 + iVar1 * 0x14) = *(int *)(&DAT_17a78bc0 + iVar1 * 0x14) + param_2;
-    }
-  }
-  return;
-}
-#undef DAT_0f1813e0
-#undef DAT_0f181404
-#undef DAT_0f18140c
-#undef DAT_17a78bc0
-#undef DAT_17a78bc4
-#undef _ftol2
-
 /* ---------------------------------------------------------------- 0x6f6e0 */
 #define DAT_09465308 (*(int *)SR_VA(0x9465308))
 #define DAT_094653cc (*(undefined *)SR_VA(0x94653cc))
@@ -48472,50 +48393,6 @@ void __cdecl lf_6f6e0(int param_1,int param_2)
 #undef local_14
 #undef local_10
 #undef local_8
-
-/* ---------------------------------------------------------------- 0x6f860 */
-#define DAT_0f1813e0 (*(undefined4 *)SR_VA(0xf1813e0))
-#define DAT_0f181404 (*(undefined4 *)SR_VA(0xf181404))
-#define DAT_0f18140c (*(undefined *)SR_VA(0xf18140c))
-#define DAT_17a78bc0 (*(undefined *)SR_VA(0x17a78bc0))
-#define DAT_17a78bc4 (*(undefined *)SR_VA(0x17a78bc4))
-#define createevent_updateplayer_finance ((void (__cdecl *)(int))SR_FN(0x4726d0))
-#define _ftol2(x) ((ulonglong)(longlong)(x))
-void __cdecl lf_6f860(int param_1)
-
-{
-  int iVar1;
-  int iVar2;
-  
-  if ((-1 < param_1) && (param_1 < 0x100)) {
-    if (0 < (&DAT_0f1813e0)[param_1 * 0x902] + -10000) {
-      (&DAT_0f1813e0)[param_1 * 0x902] =
-           (&DAT_0f1813e0)[param_1 * 0x902] -
-           (int)(longlong)
-                ((double)((&DAT_0f1813e0)[param_1 * 0x902] + -10000) * 0.05000000074505806);
-    }
-    iVar1 = (&DAT_0f181404)[param_1 * 0x902];
-    if (((iVar1 != -1) && (iVar1 < 5)) &&
-       (iVar2 = (int)(longlong)
-                     (((float)*(int *)(&DAT_0f18140c + param_1 * 0x2408) *
-                       *(float *)(&DAT_17a78bc4 + iVar1 * 0x14) - 0.0) /
-                     *(float *)(&DAT_17a78bc4 + iVar1 * 0x14)), 0 < iVar2)) {
-      iVar2 = iVar2 / 10;
-      *(int *)(&DAT_0f18140c + param_1 * 0x2408) =
-           *(int *)(&DAT_0f18140c + param_1 * 0x2408) - iVar2;
-      *(int *)(&DAT_17a78bc0 + iVar1 * 0x14) = *(int *)(&DAT_17a78bc0 + iVar1 * 0x14) - iVar2;
-    }
-    createevent_updateplayer_finance(param_1);
-  }
-  return;
-}
-#undef DAT_0f1813e0
-#undef DAT_0f181404
-#undef DAT_0f18140c
-#undef DAT_17a78bc0
-#undef DAT_17a78bc4
-#undef createevent_updateplayer_finance
-#undef _ftol2
 
 /* ---------------------------------------------------------------- 0x6f990 */
 #define DAT_0f7eb204 (*(int *)SR_VA(0xf7eb204))
@@ -50812,8 +50689,8 @@ longlong __cdecl lf_79a90(void)
 #define uRam0f1851f8 (*(undefined4 *)SR_VA(0xf1851f8))
 #define uRam0f1851fc (*(undefined4 *)SR_VA(0xf1851fc))
 #define uRam0f1851f0 (*(undefined4 *)SR_VA(0xf1851f0))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define rand ((int (__cdecl *)(void))LF_IMPORT(20, "MSVCR100.DLL", "rand"))
 #define srand ((void (__cdecl *)(uint))LF_IMPORT(55, "MSVCR100.DLL", "srand"))
 #define FUN_00434010 ((void (__cdecl *)(void))SR_FN(0x434010))
@@ -50842,7 +50719,7 @@ longlong __cdecl lf_79a90(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
@@ -51659,14 +51536,14 @@ void __cdecl lf_79ad0(void)
 #define _DAT_018fd368 (*(int *)SR_VA(0x18fd368))
 #define _DAT_018f88e4 (*(int *)SR_VA(0x18f88e4))
 #define _DAT_018f87a4 (*(float *)SR_VA(0x18f87a4))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(57, "OPENGL32.DLL", "glColor3f"))
 #define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(58, "OPENGL32.DLL", "glVertex2f"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define glFlush ((void (__stdcall *)(void))LF_IMPORT(59, "OPENGL32.DLL", "glFlush"))
 #define glFinish ((void (__stdcall *)(void))LF_IMPORT(60, "OPENGL32.DLL", "glFinish"))
 #define alSourceStop ((void (__cdecl *)(uint))LF_IMPORT(61, "OPENAL32.DLL", "alSourceStop"))
@@ -51726,17 +51603,17 @@ void __cdecl lf_79ad0(void)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(37, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(36, "SDL2.DLL", "SDL_GetTicks"))
 #define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(67, "SDL2.DLL", "SDL_Delay"))
 #define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(68, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
 #define __security_check_cookie(x) ((void)0)
 #define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(21, "MSVCR100.DLL", "memset"))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_41 (*(undefined1 *)(lf_frame + 0x1f))
@@ -54364,11 +54241,11 @@ void __cdecl lf_85980(int param_1)
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bad0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
-#define acos ((double (__cdecl *)(double))LF_IMPORT(29, "MSVCR100.DLL", "acos"))
+#define acos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "acos"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(54, "MSVCR100.DLL", "cos"))
 #define local_4 (*(undefined4 *)(lf_frame + 0xec))
 #define local_dc (*(float (*)[3])(lf_frame + 0x14))
@@ -55707,9 +55584,9 @@ void __cdecl lf_8a010(void)
 #define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define __security_check_cookie(x) ((void)0)
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
-#define acos ((double (__cdecl *)(double))LF_IMPORT(29, "MSVCR100.DLL", "acos"))
+#define acos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "acos"))
 #define local_44 (*(int *)(lf_frame + 0x1c))
 #define local_40 (*(float *)(lf_frame + 0x20))
 void __cdecl lf_8a020(int param_1)
@@ -55915,10 +55792,10 @@ void __cdecl lf_8a020(int param_1)
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
-#define acos ((double (__cdecl *)(double))LF_IMPORT(29, "MSVCR100.DLL", "acos"))
+#define acos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "acos"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(54, "MSVCR100.DLL", "cos"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x17c))
 #define local_164 (*(int *)(lf_frame + 0x1c))
@@ -56724,10 +56601,10 @@ void __cdecl lf_8a710(int param_1)
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
-#define acos ((double (__cdecl *)(double))LF_IMPORT(29, "MSVCR100.DLL", "acos"))
+#define acos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "acos"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(54, "MSVCR100.DLL", "cos"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x19c))
 #define local_190 (*(float *)(lf_frame + 0x10))
@@ -58927,7 +58804,7 @@ void __cdecl lf_971c0(int param_1)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bad0))
 #define __security_check_cookie(x) ((void)0)
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_5c (*(float (*)[3])(lf_frame + 0x14))
 #define local_50 (*(float (*)[3])(lf_frame + 0x20))
@@ -61314,16 +61191,16 @@ void __cdecl lf_9c4f0(void)
 #define _DAT_0f7ca9b4 (*(float *)SR_VA(0xf7ca9b4))
 #define _DAT_0f7ca980 (*(float *)SR_VA(0xf7ca980))
 #define _DAT_0f7ca988 (*(float *)SR_VA(0xf7ca988))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glVertex3f"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(39, "OPENGL32.DLL", "glVertex3f"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(57, "OPENGL32.DLL", "glColor3f"))
 #define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(74, "OPENGL32.DLL", "glLineWidth"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define glPointSize ((void (__stdcall *)(float))LF_IMPORT(75, "OPENGL32.DLL", "glPointSize"))
 #define building_load ((void (__cdecl *)(int, int))SR_FN(0x4614e0))
 #define rendermap ((void (__cdecl *)(void))SR_FN(0x4844d0))
@@ -61348,11 +61225,11 @@ void __cdecl lf_9c4f0(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(37, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(36, "SDL2.DLL", "SDL_GetTicks"))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(19, "MSVCR100.DLL", "strcmp"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
@@ -62115,9 +61992,9 @@ void __cdecl lf_9c5c0(void)
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_50 (*(int *)(lf_frame + 0x10))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char *)(lf_frame + 0x1c))
@@ -63613,7 +63490,7 @@ void __cdecl lf_a2cd0(int param_1)
 #define DAT_0e6467bc (*(undefined *)SR_VA(0xe6467bc))
 #define area_createblock ((void (__cdecl *)(int, uint, uint, uint, uint, int))SR_FN(0x437b30))
 #define __security_check_cookie(x) ((void)0)
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x4c))
 #define local_40 (*(int *)(lf_frame + 0x10))
 #define local_3c (*(uint *)(lf_frame + 0x14))
@@ -66592,8 +66469,8 @@ void __cdecl lf_a8d60(undefined4 *param_1,int param_2)
 #define _DAT_005234c8 (*(float *)SR_VA(0x5234c8))
 #define _DAT_005234cc (*(float *)SR_VA(0x5234cc))
 #define _DAT_005234d0 (*(float *)SR_VA(0x5234d0))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define FUN_00434010 ((void (__cdecl *)(void))SR_FN(0x434010))
 #define loadaccountsserver ((void (__cdecl *)(void))SR_FN(0x4341d0))
 #define saveaccountsclient ((void (__cdecl *)(void))SR_FN(0x434470))
@@ -66611,7 +66488,7 @@ void __cdecl lf_a8d60(undefined4 *param_1,int param_2)
 #define checksystemmessages ((void (__cdecl *)(float, float))SR_FN(0x5060d0))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
 void __cdecl lf_a8e10(void)
 
@@ -66849,8 +66726,8 @@ void __cdecl lf_a8e10(void)
 #define _DAT_05750c80 (*(undefined4 *)SR_VA(0x5750c80))
 #define _DAT_05750c84 (*(undefined4 *)SR_VA(0x5750c84))
 #define _DAT_05750c88 (*(int *)SR_VA(0x5750c88))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define createclientaccount ((int (__cdecl *)(undefined4 *, undefined4 *, int))SR_FN(0x433f20))
 #define saveaccountsclient ((void (__cdecl *)(void))SR_FN(0x434470))
 #define FUN_004345d0 ((void (__cdecl *)(void))SR_FN(0x4345d0))
@@ -66879,8 +66756,8 @@ void __cdecl lf_a8e10(void)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(37, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(36, "SDL2.DLL", "SDL_GetTicks"))
 #define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
 #define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(76, "WSOCK32.DLL", 10))
 #define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
@@ -67381,8 +67258,8 @@ LAB_004aa466:
 #define _DAT_005234c8 (*(float *)SR_VA(0x5234c8))
 #define _DAT_005234cc (*(float *)SR_VA(0x5234cc))
 #define _DAT_005234d0 (*(float *)SR_VA(0x5234d0))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define FUN_00468ec0 ((void (__cdecl *)(float *, uint))SR_FN(0x468ec0))
 #define gameloop ((void (__cdecl *)(void))SR_FN(0x47b100))
 #define recvpacket ((int (__cdecl *)(void))SR_FN(0x4fe420))
@@ -67403,8 +67280,8 @@ LAB_004aa466:
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(37, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(36, "SDL2.DLL", "SDL_GetTicks"))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_20 (*(uint *)(lf_frame + 0x20))
 #define local_15 (*(char (*)[13])(lf_frame + 0x2b))
@@ -67681,15 +67558,15 @@ void __cdecl lf_aa5a0(void)
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
 #define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(47, "OPENGL32.DLL", "glPolygonMode"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(46, "OPENGL32.DLL", "glPolygonMode"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(57, "OPENGL32.DLL", "glColor3f"))
 #define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(78, "OPENGL32.DLL", "glLightfv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(35, "OPENGL32.DLL", "glDepthFunc"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(34, "OPENGL32.DLL", "glDepthFunc"))
 #define alcCaptureStart ((void (__cdecl *)(void *))LF_IMPORT(79, "OPENAL32.DLL", "alcCaptureStart"))
 #define alcCaptureStop ((void (__cdecl *)(void *))LF_IMPORT(80, "OPENAL32.DLL", "alcCaptureStop"))
 #define srand ((void (__cdecl *)(uint))LF_IMPORT(55, "MSVCR100.DLL", "srand"))
@@ -67749,7 +67626,7 @@ void __cdecl lf_aa5a0(void)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define steam_getname ((bool (__cdecl *)(char *))SR_FN(0x50bd80))
 #define steam_getid ((void (__cdecl *)(undefined8 *))SR_FN(0x50bdc0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(67, "SDL2.DLL", "SDL_Delay"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
@@ -68376,8 +68253,8 @@ void __cdecl lf_aa920(void)
 #define s_GL_VENDOR___s_005258d4 ((char *)SR_VA(0x5258d4))
 #define s_GL_RENDERER___s_005258e4 ((char *)SR_VA(0x5258e4))
 #define glGetString ((uchar * (__stdcall *)(uint))LF_IMPORT(17, "OPENGL32.DLL", "glGetString"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define launchwebpage(url) sr_open_url((char *)(url))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
@@ -68390,7 +68267,7 @@ void __cdecl lf_aa920(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 void __cdecl lf_abc00(void)
 
 {
@@ -68784,7 +68661,7 @@ void __cdecl lf_ac190(int param_1,int param_2)
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_4 (*(undefined4 *)(lf_frame + 0xac))
 #define local_94 (*(char (*)[128])(lf_frame + 0x1c))
 #define local_14 (*(uint *)(lf_frame + 0x9c))
@@ -68884,7 +68761,7 @@ void __cdecl lf_ad140(int param_1,char *param_2)
 #define __security_check_cookie(x) ((void)0)
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(19, "MSVCR100.DLL", "strcmp"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
 #define local_64 (*(char (*)[4])(lf_frame + 0x1c))
 #define local_60 (*(undefined1 *)(lf_frame + 0x20))
@@ -69059,7 +68936,7 @@ undefined4 __cdecl lf_ad390(int param_1,char *param_2)
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_4 (*(undefined4 *)(lf_frame + 0xbc))
 #define local_ac (*(undefined4 (*)[3])(lf_frame + 0x14))
 #define local_a0 (*(int *)(lf_frame + 0x20))
@@ -74550,15 +74427,15 @@ void __cdecl lf_c0a60(void)
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
 #define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(47, "OPENGL32.DLL", "glPolygonMode"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(46, "OPENGL32.DLL", "glPolygonMode"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(57, "OPENGL32.DLL", "glColor3f"))
 #define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(78, "OPENGL32.DLL", "glLightfv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(35, "OPENGL32.DLL", "glDepthFunc"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(34, "OPENGL32.DLL", "glDepthFunc"))
 #define setupmodel ((void (__cdecl *)(int, int))SR_FN(0x4ac190))
 #define negvector ((void (__cdecl *)(int))SR_FN(0x4bb0f0))
 #define model_editor ((void (__cdecl *)(void))SR_FN(0x4c1ac0))
@@ -74583,7 +74460,7 @@ void __cdecl lf_c0a60(void)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
 #define local_68 (*(int *)(lf_frame + 0x18))
@@ -77531,8 +77408,8 @@ void __cdecl lf_c7590(int param_1,int param_2)
 #define vectordistance ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bad0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
-#define abs ((int (__cdecl *)(int))LF_IMPORT(38, "MSVCR100.DLL", "abs"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(37, "MSVCR100.DLL", "abs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
 #define local_64 (*(float *)(lf_frame + 0x1c))
 #define local_5c (*(int *)(lf_frame + 0x24))
@@ -78920,7 +78797,7 @@ void __cdecl lf_ca0c0(void)
 #define getenginetorque2 ((float10 (__cdecl *)(int))SR_FN(0x4ccb70))
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_20 (*(float *)(lf_frame + 0x10))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_c (*(float *)(lf_frame + 0x24))
@@ -79165,49 +79042,6 @@ void __cdecl lf_cbf70(void)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xccb70 */
-#define DAT_05919124 (*(undefined *)SR_VA(0x5919124))
-#define DAT_0591ef70 (*(undefined *)SR_VA(0x591ef70))
-#define engine_bezierinterpolation ((float10 (__cdecl *)(int, float, float, float, float, float))SR_FN(0x4ccca0))
-#define local_c (*(float *)(lf_frame + 0x14))
-#define local_8 (*(float *)(lf_frame + 0x18))
-float10 __cdecl lf_ccb70(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  float10 fVar1;
-
-
-  
-  local_8 = (float)(((*(float *)(&DAT_0591ef70 + param_1 * 0x8230) * 60.0 * 60.0) / 6.28318530718) / 7000.0);
-  if (local_8 <= 1.0) {
-    if (local_8 < 0.0) {
-      local_8 = 0.0;
-    }
-    if (1.0 < local_8) {
-      local_8 = 1.0;
-    }
-    fVar1 = (float10)engine_bezierinterpolation(3,local_8,0.0,0.25,0.75,1.0);
-    if (*(int *)(&DAT_05919124 + param_1 * 0x8230) == 7) {
-      fVar1 = (float10)engine_bezierinterpolation(2,(float)fVar1,1.0,1.25,0.875,0.625);
-    }
-    else {
-      fVar1 = (float10)engine_bezierinterpolation(2,(float)fVar1,0.75,1.0,0.875,0.625);
-    }
-    local_c = (float)fVar1;
-    fVar1 = (float10)local_c;
-  }
-  else {
-    fVar1 = (float10)0;
-  }
-  return fVar1;
-}
-#undef DAT_05919124
-#undef DAT_0591ef70
-#undef engine_bezierinterpolation
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xccd50 */
 #define DAT_0591ece4 (*(undefined *)SR_VA(0x591ece4))
 #define DAT_00526650 (*(uint *)SR_VA(0x526650))
@@ -79244,8 +79078,8 @@ float10 __cdecl lf_ccb70(int param_1)
 #define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define __security_check_cookie(x) ((void)0)
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(54, "MSVCR100.DLL", "cos"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x9c))
@@ -81086,8 +80920,8 @@ void __cdecl lf_d12e0(int param_1,int param_2)
 #define FUN_00472780 ((void (__cdecl *)(undefined4, undefined4 *, undefined4, undefined4))SR_FN(0x472780))
 #define createevent_sound ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50bc10))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(28, "MSVCR100.DLL", "atan2"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(27, "MSVCR100.DLL", "atan2"))
 #define sin ((double (__cdecl *)(double))LF_IMPORT(56, "MSVCR100.DLL", "sin"))
 #define cos ((double (__cdecl *)(double))LF_IMPORT(54, "MSVCR100.DLL", "cos"))
 #define tan ((double (__cdecl *)(double))LF_IMPORT(84, "MSVCR100.DLL", "tan"))
@@ -81461,8 +81295,8 @@ float10 __cdecl lf_d21e0(float param_1)
 #define DAT_056ceb84 (*(undefined *)SR_VA(0x56ceb84))
 #define DAT_056ceb88 (*(undefined *)SR_VA(0x56ceb88))
 #define glGetString ((uchar * (__stdcall *)(uint))LF_IMPORT(17, "OPENGL32.DLL", "glGetString"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define alGetString ((char * (__cdecl *)(int))LF_IMPORT(85, "OPENAL32.DLL", "alGetString"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(18, "MSVCR100.DLL", "sprintf"))
 #define reactivategame ((void (__cdecl *)(void))SR_FN(0x47d060))
@@ -81479,7 +81313,7 @@ float10 __cdecl lf_d21e0(float param_1)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define SDL_GL_GetAttribute ((int (__cdecl *)(int, int *))LF_IMPORT(86, "SDL2.DLL", "SDL_GL_GetAttribute"))
 #define SDL_SetWindowFullscreen ((int (__cdecl *)(void *, uint))LF_IMPORT(87, "SDL2.DLL", "SDL_SetWindowFullscreen"))
 #define SDL_SetWindowSize ((void (__cdecl *)(void *, int, int))LF_IMPORT(88, "SDL2.DLL", "SDL_SetWindowSize"))
@@ -81952,7 +81786,7 @@ void __cdecl lf_d2290(void)
 #define optionreadwritestring ((void (__cdecl *)(char *, char *, int, int))SR_FN(0x4d3860))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x4fd740))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 void __cdecl lf_d3350(int param_1)
 
 {
@@ -82172,14 +82006,14 @@ void __cdecl lf_d3350(int param_1)
 #define DAT_12e92688 (*(undefined *)SR_VA(0x12e92688))
 #define DAT_17b98e00 (*(undefined *)SR_VA(0x17b98e00))
 #define _DAT_09463214 (*(int *)SR_VA(0x9463214))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
 #define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(57, "OPENGL32.DLL", "glColor3f"))
 #define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(58, "OPENGL32.DLL", "glVertex2f"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define soundsimulation ((void (__cdecl *)(float *, int, int))SR_FN(0x44e190))
 #define checksimulation ((undefined4 (__cdecl *)(int))SR_FN(0x47d900))
 #define getaudioinput ((void (__cdecl *)(int))SR_FN(0x4fb6f0))
@@ -82196,7 +82030,7 @@ void __cdecl lf_d3350(int param_1)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_8 (*(int *)(lf_frame + 0x28))
 void __cdecl lf_d38c0(void)
@@ -83342,7 +83176,7 @@ undefined8 __cdecl lf_d5660(void)
 #define _DAT_0052827c (*(int *)SR_VA(0x52827c))
 #define _DAT_00528290 (*(int *)SR_VA(0x528290))
 #define _DAT_00528294 (*(int *)SR_VA(0x528294))
-#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(25, "MSVCR100.DLL", "fprintf"))
+#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(24, "MSVCR100.DLL", "fprintf"))
 #define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(1, "MSVCR100.DLL", "fopen"))
 #define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(2, "MSVCR100.DLL", "fclose"))
 #define free ((void (__cdecl *)(void *))LF_IMPORT(0, "MSVCR100.DLL", "free"))
@@ -84088,13 +83922,13 @@ void __cdecl lf_daa90(int param_1,int param_2,uint param_3,int param_4)
 
 /* ---------------------------------------------------------------- 0xdc1d0 */
 #define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
 #define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(69, "OPENGL32.DLL", "glStencilMask"))
 #define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(70, "OPENGL32.DLL", "glStencilFunc"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
 #define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(90, "OPENGL32.DLL", "glColorMask"))
 #define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(71, "OPENGL32.DLL", "glStencilOp"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(35, "OPENGL32.DLL", "glDepthFunc"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(34, "OPENGL32.DLL", "glDepthFunc"))
 void __cdecl lf_dc1d0(void)
 
 {
@@ -84122,13 +83956,13 @@ void __cdecl lf_dc1d0(void)
 
 /* ---------------------------------------------------------------- 0xdc260 */
 #define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(77, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
 #define glStencilMask ((void (__stdcall *)(uint))LF_IMPORT(69, "OPENGL32.DLL", "glStencilMask"))
 #define glStencilFunc ((void (__stdcall *)(uint, int, uint))LF_IMPORT(70, "OPENGL32.DLL", "glStencilFunc"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(34, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(33, "OPENGL32.DLL", "glDepthMask"))
 #define glColorMask ((void (__stdcall *)(uchar, uchar, uchar, uchar))LF_IMPORT(90, "OPENGL32.DLL", "glColorMask"))
 #define glStencilOp ((void (__stdcall *)(uint, uint, uint))LF_IMPORT(71, "OPENGL32.DLL", "glStencilOp"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(35, "OPENGL32.DLL", "glDepthFunc"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(34, "OPENGL32.DLL", "glDepthFunc"))
 void __cdecl lf_dc260(void)
 
 {
@@ -84367,35 +84201,6 @@ int __cdecl lf_dc7a0(int param_1)
   return local_8;
 }
 #undef DAT_094653cc
-#undef local_8
-
-/* ---------------------------------------------------------------- 0xdc7e0 */
-#define DAT_094653cc (*(undefined *)SR_VA(0x94653cc))
-#define DAT_094653d4 (*(undefined *)SR_VA(0x94653d4))
-#define local_c (*(int *)(lf_frame + 0x14))
-#define local_8 (*(int *)(lf_frame + 0x18))
-int __cdecl lf_dc7e0(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int iVar1;
-
-
-  
-  local_c = 0;
-  for (local_8 = 0; local_8 < 0x10; local_8 = local_8 + 1) {
-    iVar1 = local_c;
-    if ((*(int *)(&DAT_094653cc + local_8 * 0x40 + param_1 * 0x117c) != 0) &&
-       (iVar1 = local_c + 1, 1 < *(int *)(&DAT_094653d4 + local_8 * 0x40 + param_1 * 0x117c))) {
-      iVar1 = local_c + 2;
-    }
-    local_c = iVar1;
-  }
-  return local_c;
-}
-#undef DAT_094653cc
-#undef DAT_094653d4
-#undef local_c
 #undef local_8
 
 /* ---------------------------------------------------------------- 0xdc860 */
@@ -86633,7 +86438,7 @@ LAB_004e06f8:
 
 /* ---------------------------------------------------------------- 0xe0b60 */
 #define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
 float10 __cdecl lf_e0b60(float *param_1,float *param_2,float param_3)
 
 {
@@ -86718,7 +86523,7 @@ void __cdecl lf_e13c0(int param_1,int param_2,int param_3)
 #define SDL_LoadWAV_RW ((void * (__cdecl *)(void *, int, void *, uchar * *, uint *))LF_IMPORT(94, "SDL2.DLL", "SDL_LoadWAV_RW"))
 #define SDL_RWFromFile ((void * (__cdecl *)(char *, char *))LF_IMPORT(95, "SDL2.DLL", "SDL_RWFromFile"))
 #define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define local_38 (*(int *)(lf_frame + 0x18))
 #define local_30 (*(uchar * *)(lf_frame + 0x20))
 #define local_2c (*(uint *)(lf_frame + 0x24))
@@ -86825,7 +86630,7 @@ void __cdecl lf_e1550(int param_1,char *param_2,int param_3)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 int __cdecl lf_e16b0(int param_1,undefined4 *param_2,int param_3,float param_4)
 
 {
@@ -87266,8 +87071,8 @@ void __cdecl lf_eb730(void)
 #define s_Clients__i_005263a4 ((char *)SR_VA(0x5263a4))
 #define DAT_0f7eb210 (*(undefined *)SR_VA(0xf7eb210))
 #define DAT_0f7eb234 (*(undefined *)SR_VA(0xf7eb234))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(32, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(33, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(32, "OPENGL32.DLL", "glClearColor"))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
 #define drawmenuitems ((void (__cdecl *)(void))SR_FN(0x4ff2e0))
@@ -87280,7 +87085,7 @@ void __cdecl lf_eb730(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(36, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(35, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define local_10 (*(float *)(lf_frame + 0x10))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
@@ -88038,7 +87843,7 @@ undefined4 __cdecl lf_fd260(float *param_1,float *param_2,float *param_3,float *
 #define FUN_0050bb90 ((void (__cdecl *)(float *, float *))SR_FN(0x50bb90))
 #define FUN_0050bc70 ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50bc70))
 #define FUN_0050bcc0 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50bcc0))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(25, "MSVCR100.DLL", "fabs"))
 #define local_18 (*(float (*)[2])(lf_frame + 0x18))
 #define local_10 (*(float (*)[2])(lf_frame + 0x20))
 #define local_8 (*(float *)(lf_frame + 0x28))
@@ -88102,7 +87907,7 @@ undefined4 __cdecl lf_fd430(float *param_1,float *param_2,float *param_3,float *
 #define FUN_0050bc40 ((void (__cdecl *)(float *, float *, float))SR_FN(0x50bc40))
 #define FUN_0050bc70 ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50bc70))
 #define FUN_0050bcc0 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50bcc0))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
 #define local_1c (*(float (*)[2])(lf_frame + 0x14))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(float (*)[2])(lf_frame + 0x20))
@@ -88377,34 +88182,6 @@ uint __cdecl lf_fe0d0(int param_1,int param_2,uint param_3,FILE *param_4)
 #undef fputc
 #undef local_8
 
-/* ---------------------------------------------------------------- 0xfe200 */
-#define DAT_0e5ac780 (*(undefined4 *)SR_VA(0xe5ac780))
-#define DAT_0e5ac784 (*(undefined *)SR_VA(0xe5ac784))
-#define local_c (*(int *)(lf_frame + 0x14))
-#define local_8 (*(int *)(lf_frame + 0x18))
-void __cdecl lf_fe200(int param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-
-  
-  for (local_8 = 0; local_8 < (int)(&DAT_0e5ac780)[param_1 * 0x4001]; local_8 = local_8 + 1) {
-    local_c = 0;
-    while (((local_c < 0x40 &&
-            ((&DAT_0e5ac784)[param_1 * 0x10004 + local_c + local_8 * 0x40] != '\0')) &&
-           ((&DAT_0e5ac784)[param_1 * 0x10004 + local_c + local_8 * 0x40] != '.'))) {
-      local_c = local_c + 1;
-    }
-    (&DAT_0e5ac784)[param_1 * 0x10004 + local_c + local_8 * 0x40] = 0;
-  }
-  return;
-}
-#undef DAT_0e5ac780
-#undef DAT_0e5ac784
-#undef local_c
-#undef local_8
-
 /* ---------------------------------------------------------------- 0xfe3f0 */
 #define DAT_1a1851a4 (*(undefined4 *)SR_VA(0x1a1851a4))
 #define DAT_1a1851c4 (*(undefined *)SR_VA(0x1a1851c4))
@@ -88437,35 +88214,6 @@ void __cdecl lf_fe4f0(void)
 #undef DAT_1a185200
 #undef DAT_005235b8
 #undef cs_pwrite
-
-/* ---------------------------------------------------------------- 0xfe5b0 */
-#define DAT_1a1851fc (*(int *)SR_VA(0x1a1851fc))
-#define DAT_1a185200 (*(int *)SR_VA(0x1a185200))
-#define DAT_1a185204 (*(undefined *)SR_VA(0x1a185204))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(10, "MSVCR100.DLL", "memcpy"))
-undefined4 __cdecl lf_fe5b0(void *param_1,int param_2,int param_3)
-
-{
-  undefined4 uVar1;
-  
-  if (DAT_1a1851fc < 0x10000) {
-    if (0 < DAT_1a185200) {
-      DAT_1a1851fc = DAT_1a1851fc + 1;
-      DAT_1a185200 = 0;
-    }
-    memcpy(&DAT_1a185204 + DAT_1a1851fc,param_1,param_2 * param_3);
-    DAT_1a1851fc = param_2 * param_3 + DAT_1a1851fc;
-    uVar1 = 1;
-  }
-  else {
-    uVar1 = 0;
-  }
-  return uVar1;
-}
-#undef DAT_1a1851fc
-#undef DAT_1a185200
-#undef DAT_1a185204
-#undef memcpy
 
 /* ---------------------------------------------------------------- 0xfe630 */
 #define DAT_1a195208 (*(int *)SR_VA(0x1a195208))
@@ -88502,56 +88250,6 @@ undefined4 __cdecl lf_fe630(void *param_1,int param_2,int param_3)
 #undef DAT_1a19520c
 #undef DAT_1a195210
 #undef memcpy
-
-/* ---------------------------------------------------------------- 0xfe6c0 */
-#define DAT_1a1851fc (*(int *)SR_VA(0x1a1851fc))
-#define DAT_1a185200 (*(int *)SR_VA(0x1a185200))
-#define DAT_1a185204 (*(undefined *)SR_VA(0x1a185204))
-#define local_c (*(uint *)(lf_frame + 0x14))
-int __cdecl lf_fe6c0(uint *param_1,uint param_2)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-  int iVar1;
-  uint uVar2;
-
-  
-  if (DAT_1a1851fc < 0x10000) {
-    local_c = ~(-1 << ((byte)param_2 & 0x1f)) & *param_1;
-    while (0 < (int)param_2) {
-      (&DAT_1a185204)[DAT_1a1851fc] =
-           (&DAT_1a185204)[DAT_1a1851fc] &
-           ~(byte)((1 << ((byte)param_2 & 0x1f)) + -1 << ((byte)DAT_1a185200 & 0x1f));
-      (&DAT_1a185204)[DAT_1a1851fc] =
-           (&DAT_1a185204)[DAT_1a1851fc] | (byte)(local_c << ((byte)DAT_1a185200 & 0x1f));
-      uVar2 = 8 - DAT_1a185200;
-      if (param_2 < uVar2) {
-        DAT_1a185200 = DAT_1a185200 + param_2;
-        param_2 = 0;
-      }
-      else if (param_2 == uVar2) {
-        DAT_1a1851fc = DAT_1a1851fc + 1;
-        DAT_1a185200 = 0;
-        param_2 = 0;
-      }
-      else {
-        DAT_1a1851fc = DAT_1a1851fc + 1;
-        DAT_1a185200 = 0;
-        param_2 = param_2 - uVar2;
-        local_c = local_c >> ((byte)uVar2 & 0x1f);
-      }
-    }
-    iVar1 = 1;
-  }
-  else {
-    iVar1 = 0;
-  }
-  return iVar1;
-}
-#undef DAT_1a1851fc
-#undef DAT_1a185200
-#undef DAT_1a185204
-#undef local_c
 
 /* ---------------------------------------------------------------- 0xfe800 */
 #define DAT_1a195208 (*(int *)SR_VA(0x1a195208))
@@ -88724,16 +88422,6 @@ int __cdecl lf_fea40(int *param_1,uint param_2,int param_3)
 #undef DAT_1a195210
 #undef local_10
 #undef local_8
-
-/* ---------------------------------------------------------------- 0xfeb60 */
-#define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x4fe6c0))
-int __cdecl lf_feb60(uint *param_1,uint param_2)
-
-{
-  pbitwrite(param_1,param_2);
-  return 1;
-}
-#undef pbitwrite
 
 /* ---------------------------------------------------------------- 0xfebd0 */
 #define pbitwrite ((int (__cdecl *)(uint *, uint))SR_FN(0x4fe6c0))
@@ -89428,12 +89116,12 @@ void __cdecl lf_100660(void)
 #define DAT_01fbe088 (*(undefined4 *)SR_VA(0x1fbe088))
 #define DAT_01fbe08c (*(undefined4 *)SR_VA(0x1fbe08c))
 #define DAT_01fbe090 (*(undefined4 *)SR_VA(0x1fbe090))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(48, "OPENGL32.DLL", "glVertex2fv"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(47, "OPENGL32.DLL", "glVertex2fv"))
 #define copyvector2d ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50bbf0))
 #define local_18 (*(int *)(lf_frame + 0x18))
 #define local_10 (*(int *)(lf_frame + 0x20))
@@ -89617,14 +89305,14 @@ void __cdecl lf_100930(float param_1,float param_2,float param_3,float param_4,i
 #define DAT_01fbdf70 (*(undefined *)SR_VA(0x1fbdf70))
 #define DAT_01fbdf78 (*(undefined *)SR_VA(0x1fbdf78))
 #define DAT_01fbdf40 (*(undefined *)SR_VA(0x1fbdf40))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(48, "OPENGL32.DLL", "glVertex2fv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(31, "OPENGL32.DLL", "glDisable"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(29, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(47, "OPENGL32.DLL", "glVertex2fv"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(30, "OPENGL32.DLL", "glDisable"))
 #define __security_check_cookie(x) ((void)0)
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
 #define local_14 (*(float *)(lf_frame + 0x1c))
 #define local_10 (*(int *)(lf_frame + 0x20))
 void __cdecl lf_1010f0(float param_1,float param_2,float param_3,float param_4,float param_5,uint param_6,
@@ -89747,12 +89435,12 @@ void __cdecl lf_1010f0(float param_1,float param_2,float param_3,float param_4,f
 #define DAT_0bb74540 (*(undefined *)SR_VA(0xbb74540))
 #define DAT_0bb74548 (*(undefined *)SR_VA(0xbb74548))
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(48, "OPENGL32.DLL", "glVertex2fv"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(47, "OPENGL32.DLL", "glVertex2fv"))
 #define FUN_00505b80 ((void (__cdecl *)(int, float, undefined4, float))SR_FN(0x505b80))
 #define local_1c (*(int *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
@@ -91984,12 +91672,12 @@ void __cdecl lf_105b80(int param_1,float param_2,undefined4 param_3,float param_
 #define DAT_0bb73960 (*(undefined *)SR_VA(0xbb73960))
 #define DAT_0bb73968 (*(undefined *)SR_VA(0xbb73968))
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(39, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(41, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(42, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(44, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(46, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(48, "OPENGL32.DLL", "glVertex2fv"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(38, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(40, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(41, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(43, "OPENGL32.DLL", "glBindTexture"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(45, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(47, "OPENGL32.DLL", "glVertex2fv"))
 #define FUN_00505b80 ((void (__cdecl *)(int, float, undefined4, float))SR_FN(0x505b80))
 #define local_1c (*(int *)(lf_frame + 0x14))
 #define local_18 (*(float *)(lf_frame + 0x18))
@@ -92604,7 +92292,7 @@ undefined4 __cdecl lf_10ae00(void)
 #define DAT_094f6300 (*(undefined *)SR_VA(0x94f6300))
 #define SHGetSpecialFolderPathA ((BOOL (__stdcall *)(HWND, LPSTR, int, BOOL))LF_IMPORT(127, "SHELL32.DLL", "SHGetSpecialFolderPathA"))
 #define strcat ((char * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "strcat"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(24, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(23, "MSVCR100.DLL", "_chdir"))
 #define _mkdir ((int (__cdecl *)(char *))LF_IMPORT(128, "MSVCR100.DLL", "_mkdir"))
 #define _getcwd ((char * (__cdecl *)(char *, int))LF_IMPORT(129, "MSVCR100.DLL", "_getcwd"))
 void __cdecl lf_10b1f0(void)
@@ -92778,7 +92466,7 @@ void __cdecl lf_10b980(float *param_1,float *param_2)
 
 /* ---------------------------------------------------------------- 0x10bb20 */
 #define dotproduct2d ((float10 (__cdecl *)(float *, float *))SR_FN(0x50bb60))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "sqrt"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(26, "MSVCR100.DLL", "sqrt"))
 float10 __cdecl lf_10bb20(float *param_1)
 
 {
