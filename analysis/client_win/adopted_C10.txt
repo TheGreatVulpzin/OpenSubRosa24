@@ -12,3 +12,7 @@ zerovector src/client/math/small_vectors.c
 flabs src/client/math/small_vectors.c
 optionreadwriteint src/client/setup/option_keys.c
 optionreadwritestring src/client/setup/option_keys.c
+loadimage src/client/textures/loaders.c
+loadtexture src/client/textures/loaders.c
+loadtexturesetalpha src/client/textures/loaders.c
+loadtexturepartial src/client/textures/loaders.c

@@ -14,6 +14,7 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "textures/landscape.h"
+#include "textures/loaders.h"
 #include "textures/models.h"
 #include "textures/opengl.h"
 #include "textures/sphere.h"
@@ -30,8 +31,6 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define loadtexture CL_FN(0x50a0f0, int(__cdecl *)(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter))
-#define loadtexturesetalpha CL_FN(0x50a2f0, int(__cdecl *)(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter, unsigned alpha))
 #define loadwav CL_FN(0x433af0, void(__cdecl *)(int sound, const char *path, float volume))
 #define createwav CL_FN(0x44f7d0, void(__cdecl *)(int sound, float volume))
 #define createbulletmodel CL_FN(0x4ad5d0, void(__cdecl *)(int model, int type))

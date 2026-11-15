@@ -48,6 +48,7 @@ SMALL_TEXTURES = [(0x418, 3), (0x424, 4), (0x1034, 8), (0x1054, 10), (0x10d4, 1)
 BASE = 0x20000000  # the image address of RVA 0 in the harness
 TEXTURES, TEXTURE_SIZE = 0x17b4b840, 0x70
 WINDOWTEXTURE, MATERIALTEXTURE, MATERIALLIST = 0xe9df0, 0xe6630, 0xf2033a0
+LOADTEXTUREPARTIAL, LOADED_IMAGE, IMAGE_NAME = 0x10a7c0, 0x19da5220, 0xb733140
 WINDOW_ATLAS, WINDOW_RECTS = 0x103673a0, 0x90558c4
 SOURCE_PIXELS = MODELTEMP + 0x240000
 
@@ -820,6 +821,30 @@ def windows_case(rec):
         call(WINDOWTEXTURE, m, mip, 0x812f, 0x812f, 0x2601, 0x2703) for m in (5, 6) for mip in (1, 0)]}
 
 
+def loaders_case():
+    """Copy parts of a small image into a texture. The image and its path are in memory, so no file
+    loads. Every part stays inside the image: a part outside it keeps the memory of the new buffer,
+    and that memory differs between two runs. One call has a path with no file."""
+    rng = random.Random(11)
+    width, height = 6, 4
+    pixels = [rng.getrandbits(32) for _ in range(width * height)]
+    name = b'a.png\0'
+    texture = 4000
+    record = TEXTURES + texture * TEXTURE_SIZE
+    edits = [
+        (LOADED_IMAGE, '2i', [width, height]),
+        (LOADED_IMAGE + 8, f'{len(pixels)}I', pixels),
+        (IMAGE_NAME, f'{len(name)}B', list(name)),
+        (record + 0x30, 'I', [0]),
+    ]
+    path = 'P:0:' + name.hex()
+    other = 'P:0:' + b'no_such_file.png\0'.hex()
+    parts = [(0, 0, 6, 4), (0, 0, 4, 4), (1, 1, 4, 2), (2, 0, 3, 3), (5, 3, 1, 1), (0, 0, 1, 1)]
+    calls = [call(LOADTEXTUREPARTIAL, texture, path, x, y, w, h) for (x, y, w, h) in parts]
+    calls.append(call(LOADTEXTUREPARTIAL, texture, other, 0, 0, 2, 2))
+    return edits, {'loadtexturepartial': calls}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -883,7 +908,7 @@ def main():
             'frame_race': lambda: frame_case(features=('race',)),
             'frame_race_no_view': lambda: frame_case(features=('race_no_view',)),
             'frame_names': lambda: frame_case(features=('names',)),
-            'objecttypes': objecttypes_case, 'textures': lambda: textures_case(rec),
+            'objecttypes': objecttypes_case, 'loaders': loaders_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
             'materials': lambda: materials_case(rec)}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)

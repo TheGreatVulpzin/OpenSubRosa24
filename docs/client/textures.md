@@ -42,6 +42,15 @@ The game keeps the five look values of the last picture of each human (`cl_data_
 
 The left half is the suit, with a badge and ties in the team color. The right half is skin (top), hair (middle) and an eye (bottom).
 
+## Image loaders
+
+`src/client/textures/loaders.c` reads an image file into the shared image and into texture records.
+
+- `loadimage(path)` decodes the file. The rows go upside down. A pixel is one word: alpha, blue, green, red from the top, or red, green, blue, alpha when the byte order flag (`bigendian`) is set. A file with fewer than 4 channels has alpha 255. A file with fewer than 3 channels reads the bytes after its pixel. It returns 1 when the file loads.
+- `loadtexture` loads an image and makes a texture of it. Both sizes must be powers of two, or it returns 0. The path goes to `image_name`. The mipmap argument builds the smaller levels.
+- `loadtexturesetalpha` does the same and sets the alpha of every pixel to its last argument. The shared image changes too. With the byte order flag set, the alpha is the low byte and is not limited to a byte.
+- `loadtexturepartial` copies a part of the image, from (x, y), into a texture of the given size. It loads the image again only when the path is not `image_name`. The texture has one level, clamps at the edges and filters with the linear filter. A part outside the image keeps the memory of the new buffer. The start is not tested against the image size.
+
 ## Float to int conversion
 
 `cl_ftoi` (`src/client/client.h`) converts a float to an int with a 32 bit result. A value that is NaN, infinite, or outside the range of an int gives 0x80000000. The texture generators use it for every pixel value and index.

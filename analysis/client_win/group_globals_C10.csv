@@ -1,0 +1,2 @@
+name,type,count,client_rva,evidence
+image_name,char,128,0xb733140,"loadtexture and loadtexturesetalpha copy the path of the image into it. loadtexturepartial compares it with its path"

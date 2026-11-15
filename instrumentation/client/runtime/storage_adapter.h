@@ -210,6 +210,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_font_bits ((uint8_t *)(sr_base + 0x1235f0u))
 #define cl_data_cursor_bits ((uint8_t *)(sr_base + 0x1235e3u))
 #define cl_data_font_alpha_low (*((int *)(sr_base + 0xb7331c0u)))
+#define cl_data_image_name ((char *)(sr_base + 0xb733140u))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))

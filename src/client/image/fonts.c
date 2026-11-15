@@ -8,6 +8,8 @@
 #include "client.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
+#include "textures/loaders.h"
+#include "textures/upload.h"
 
 enum { FONT_GLYPHS = 256, FONT_COLUMNS = 16, FONT_CELL = 8, FONT_ATLAS = 128,
        FONT_LARGE_ATLAS = 1024, FONT_TEXTURE_BASE = 1000, FONT_SMALL = 2,
@@ -18,7 +20,7 @@ enum { FONT_GLYPHS = 256, FONT_COLUMNS = 16, FONT_CELL = 8, FONT_ATLAS = 128,
 /* Game functions of other files. */
 static void font_upload(int texture)
 {
-    CL_FN(0x50ac40, void(__cdecl *)(int))(texture);
+    setuptexture(texture);
 }
 
 /* Set texture storage and sampling. Return the pixel buffer. */
@@ -173,7 +175,7 @@ void loadfont(int texture_index, char *path, float size)
     int cell, glyph, coordinate, x, y;
     uint32_t *pixels, alpha;
     font->texture = texture_index;
-    if (!CL_FN(0x509f60, int(__cdecl *)(char *))(path) ||
+    if (!loadimage(path) ||
         ((cl_data_image_width - 1) & cl_data_image_width) ||
         ((cl_data_image_height - 1) & cl_data_image_height))
         return;

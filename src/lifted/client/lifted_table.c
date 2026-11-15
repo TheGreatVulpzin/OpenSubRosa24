@@ -1244,11 +1244,11 @@ void createfont(void);
 void lf_109540(void);
 void loadfont(void);
 void setfontresolution(void);
-void lf_109f60(void);
-void lf_10a0f0(void);
-void lf_10a2f0(void);
+void loadimage(void);
+void loadtexture(void);
+void loadtexturesetalpha(void);
 void lf_10a5f0(void);
-void lf_10a7c0(void);
+void loadtexturepartial(void);
 void generatemipmap(void);
 void setuptexture(void);
 void lf_10ad70(void);
@@ -2544,11 +2544,11 @@ const LfEntry lf_table[] = {
     { "text_getlength", 0x109540, (void *)lf_109540, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "loadfont", 0x1095a0, (void *)loadfont, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "setfontresolution", 0x109f30, (void *)setfontresolution, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "loadimage", 0x109f60, (void *)lf_109f60, 1, LF_RET_INT, 4, "p", 1 },
-    { "loadtexture", 0x10a0f0, (void *)lf_10a0f0, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
-    { "loadtexturesetalpha", 0x10a2f0, (void *)lf_10a2f0, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
+    { "loadimage", 0x109f60, (void *)loadimage, 1, LF_RET_INT, 4, "p", 1 },
+    { "loadtexture", 0x10a0f0, (void *)loadtexture, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
+    { "loadtexturesetalpha", 0x10a2f0, (void *)loadtexturesetalpha, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
     { "lf_10a5f0", 0x10a5f0, (void *)lf_10a5f0, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
-    { "loadtexturepartial", 0x10a7c0, (void *)lf_10a7c0, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
+    { "loadtexturepartial", 0x10a7c0, (void *)loadtexturepartial, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "generatemipmap", 0x10a9a0, (void *)generatemipmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "setuptexture", 0x10ac40, (void *)setuptexture, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_10ad70", 0x10ad70, (void *)lf_10ad70, 2, LF_RET_VOID, 4, "pv", 0 },
