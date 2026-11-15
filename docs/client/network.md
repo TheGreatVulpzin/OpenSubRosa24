@@ -1,6 +1,8 @@
 # What the client sends and how it smooths the world
 
-Files: `src/client/setup/send.c`, `src/client/setup/interpolation.c`.
+Files: `src/client/setup/send.c`, `src/client/setup/interpolation.c`, `src/client/setup/server_list.c`.
+
+`getonlineserverlist` asks the master server for the list of online servers. It sends one packet of type 0x21 with no other data to the address and port of the master server. It sends nothing while the address is zero.
 
 ## The input packet
 
