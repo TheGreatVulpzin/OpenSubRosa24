@@ -629,7 +629,7 @@ void soundsimulation(void);
 void createsoundobject(void);
 void createsound(void);
 void deletesound(void);
-void lf_4f7d0(void);
+void createwav(void);
 void lf_4fcc0(void);
 void lf_501b0(void);
 void lf_50230(void);
@@ -1929,7 +1929,7 @@ const LfEntry lf_table[] = {
     { "createsoundobject", 0x4f150, (void *)createsoundobject, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
     { "createsound", 0x4f450, (void *)createsound, 5, LF_RET_INT, 4, "vpvvv", 1 },
     { "deletesound", 0x4f720, (void *)deletesound, 1, LF_RET_VOID, 4, "v", 1 },
-    { "createwav", 0x4f7d0, (void *)lf_4f7d0, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "createwav", 0x4f7d0, (void *)createwav, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbond", 0x4fcc0, (void *)lf_4fcc0, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_501b0", 0x501b0, (void *)lf_501b0, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_50230", 0x50230, (void *)lf_50230, 1, LF_RET_VOID, 4, "v", 0 },

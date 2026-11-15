@@ -3,5 +3,6 @@
 #define CL_AUDIO_WAV_H
 
 void __cdecl loadwav(int sound, const char *path, float reference);
+void __cdecl createwav(int sound, float reference);
 
 #endif /* CL_AUDIO_WAV_H */

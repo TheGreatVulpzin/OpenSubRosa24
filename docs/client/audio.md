@@ -63,6 +63,14 @@ Vector length rounds its squared sum and square root result to float. Vehicle di
 - `createsound` is the same with no object and no looping. The sound must start within 512 units of the listener, and a ninth sound of the same buffer is refused. It does not change the kind of the record.
 - The list of live sounds is packed: a new sound goes at the end, and `deletesound` moves the last sound into the freed place.
 
+## Made sounds
+
+`createwav(sound, reference)` (`src/client/audio/wav.c`) fills the buffer of a made sound and sets its reference distance. The waves go through `audio_play_buffer`, which holds 65536 samples.
+
+- A dial pad key (the ten `soundlist.digit` numbers) is two sine waves of its tone pair, at 44100 Hz, 0x4000 bytes. The columns are 1209, 1336 and 1477 Hz. The rows are 697, 770, 852 and, for key 0, 941 Hz. Each sine has an amplitude of 8192. The two phases are floats that grow by a rounded step.
+- The `engine_train` number gets a filtered noise in 0x20000 bytes. A saw wave of 0x10000 samples goes through four chained one pole filters (factor 0.025) and a cubic limit (`x - x^3 / 6`) on the last stage. The first 0x4000 samples of the result are made again by a second pass of the filter, and every sample is then multiplied by 3. The name `engine_train` comes from the position of the number in the sound list.
+- Any other number only gets the reference distance, also a number outside the table.
+
 ## Sockets and controls
 
 `enablesocketserver` creates a UDP socket and binds the configured port. It enables the slot only after a successful bind. `enablesocketclient` creates an unbound UDP socket. Both request nonblocking I/O. A failed nonblocking request still leaves the slot enabled.
