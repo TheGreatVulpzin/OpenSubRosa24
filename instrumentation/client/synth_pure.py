@@ -38,6 +38,17 @@ PROTOTYPES = {
     'area_getnextsector': '',
     'area_createchunk': 'Accc',
     'area_createsector': 'Acccc',
+    'area_block_rotatesurface': 'Te',
+    'area_copyrotateblock': 'cz',
+    'area_block_addbasicsurface': 'cv',
+    'area_block_addbeam': 'Tffffffck',
+    'area_block_addwindow': 'Tffffcc',
+    'area_block_adddoor': 'Tff',
+    'area_block_addoutdoor': 'Tff',
+    'area_block_addcorner': 'Tff',
+    'area_block_addwindowvertical': 'Tii',
+    'area_block_addwindowhorizontal': 'Tiiii',
+    'area_createinteriorblocks': '',
     'createevent_bullethit': 'iivv',
     'createevent_updateobject': 'niIvv',
     'createevent_updateitem': 'n',
@@ -130,7 +141,11 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'a':
+        if kind == 'T':
+            args.append(rng.choice([0, 1, 2, 3, 0, 1, 2, 3, 4, -1]))
+        elif kind == 'z':
+            args.append('P:0:' + struct.pack('<3i', *[rng.choice([1, 2, 4, 8, 3, 0]) for _ in range(3)]).hex())
+        elif kind == 'a':
             args.append(rng.choice([0, 1, 2, 3]))
         elif kind == 'A':
             args.append(rng.choice([0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 0xffffffff]))

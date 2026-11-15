@@ -66,3 +66,5 @@ area_interior_setobject src/game/area.c
 area_marksector src/game/area.c
 area_setblock src/game/area.c
 area_setblockcolor src/game/area.c
+area_block_rotatesurface src/game/block_mesh.c
+area_copyrotateblock src/game/block_mesh.c

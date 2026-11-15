@@ -576,7 +576,7 @@ void lf_3cf60(void);
 void lf_3d510(void);
 void tesselatebezier(void);
 void tesselatebezierderivative(void);
-void lf_3db90(void);
+void area_copyrotateblock(void);
 void lf_3e020(void);
 void area_block_createbuildinginterior(void);
 void lf_3e920(void);
@@ -598,7 +598,7 @@ void lf_42cb0(void);
 void lf_430f0(void);
 void lf_43380(void);
 void lf_434e0(void);
-void lf_43650(void);
+void area_block_rotatesurface(void);
 void lf_43780(void);
 void lf_43a80(void);
 void area_interior_setobject(void);
@@ -1876,7 +1876,7 @@ const LfEntry lf_table[] = {
     { "lf_3d510", 0x3d510, (void *)lf_3d510, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "tesselatebezier", 0x3da10, (void *)tesselatebezier, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "tesselatebezierderivative", 0x3dac0, (void *)tesselatebezierderivative, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
-    { "area_copyrotateblock", 0x3db90, (void *)lf_3db90, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "area_copyrotateblock", 0x3db90, (void *)area_copyrotateblock, 2, LF_RET_VOID, 4, "vp", 0 },
     { "lf_3e020", 0x3e020, (void *)lf_3e020, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_block_createbuildinginterior", 0x3e0e0, (void *)area_block_createbuildinginterior, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_block_addwindowhorizontal", 0x3e920, (void *)lf_3e920, 5, LF_RET_VOID, 4, "vvvvv", 0 },
@@ -1898,7 +1898,7 @@ const LfEntry lf_table[] = {
     { "area_block_addbeam", 0x430f0, (void *)lf_430f0, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
     { "area_block_addoutdoor", 0x43380, (void *)lf_43380, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addcorner", 0x434e0, (void *)lf_434e0, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_rotatesurface", 0x43650, (void *)lf_43650, 2, LF_RET_INT, 4, "vv", 0 },
+    { "area_block_rotatesurface", 0x43650, (void *)area_block_rotatesurface, 2, LF_RET_INT, 4, "vv", 0 },
     { "building_iswindow", 0x43780, (void *)lf_43780, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "lf_43a80", 0x43a80, (void *)lf_43a80, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_setobject", 0x43c60, (void *)area_interior_setobject, 5, LF_RET_VOID, 4, "vvvvv", 0 },
