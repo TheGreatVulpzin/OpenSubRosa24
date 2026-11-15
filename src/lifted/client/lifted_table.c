@@ -579,10 +579,10 @@ void tesselatebezierderivative(void);
 void area_copyrotateblock(void);
 void lf_3e020(void);
 void area_block_createbuildinginterior(void);
-void lf_3e920(void);
-void lf_3ef70(void);
+void area_block_addwindowhorizontal(void);
+void area_block_addwindowvertical(void);
 void lf_3f440(void);
-void lf_3f660(void);
+void area_block_addbasicsurface(void);
 void lf_3f880(void);
 void lf_3fcb0(void);
 void lf_41f30(void);
@@ -593,11 +593,11 @@ void lf_42220(void);
 void lf_423a0(void);
 void lf_42690(void);
 void lf_42800(void);
-void lf_42b00(void);
-void lf_42cb0(void);
-void lf_430f0(void);
-void lf_43380(void);
-void lf_434e0(void);
+void area_block_addwindow(void);
+void area_block_adddoor(void);
+void area_block_addbeam(void);
+void area_block_addoutdoor(void);
+void area_block_addcorner(void);
 void area_block_rotatesurface(void);
 void lf_43780(void);
 void lf_43a80(void);
@@ -1879,10 +1879,10 @@ const LfEntry lf_table[] = {
     { "area_copyrotateblock", 0x3db90, (void *)area_copyrotateblock, 2, LF_RET_VOID, 4, "vp", 0 },
     { "lf_3e020", 0x3e020, (void *)lf_3e020, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_block_createbuildinginterior", 0x3e0e0, (void *)area_block_createbuildinginterior, 2, LF_RET_INT, 4, "vv", 1 },
-    { "area_block_addwindowhorizontal", 0x3e920, (void *)lf_3e920, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_block_addwindowvertical", 0x3ef70, (void *)lf_3ef70, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addwindowhorizontal", 0x3e920, (void *)area_block_addwindowhorizontal, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_block_addwindowvertical", 0x3ef70, (void *)area_block_addwindowvertical, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbox", 0x3f440, (void *)lf_3f440, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
-    { "area_block_addbasicsurface", 0x3f660, (void *)lf_3f660, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "area_block_addbasicsurface", 0x3f660, (void *)area_block_addbasicsurface, 2, LF_RET_VOID, 4, "vp", 0 },
     { "loadblock", 0x3f880, (void *)lf_3f880, 1, LF_RET_VOID, 4, "v", 1 },
     { "area_createinteriorblocks", 0x3fcb0, (void *)lf_3fcb0, 0, LF_RET_VOID, 4, "", 1 },
     { "area_block_addfloorceil", 0x41f30, (void *)lf_41f30, 0, LF_RET_VOID, 4, "", 0 },
@@ -1893,11 +1893,11 @@ const LfEntry lf_table[] = {
     { "lf_423a0", 0x423a0, (void *)lf_423a0, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "lf_42690", 0x42690, (void *)lf_42690, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "lf_42800", 0x42800, (void *)lf_42800, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_block_addwindow", 0x42b00, (void *)lf_42b00, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
-    { "area_block_adddoor", 0x42cb0, (void *)lf_42cb0, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_addbeam", 0x430f0, (void *)lf_430f0, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
-    { "area_block_addoutdoor", 0x43380, (void *)lf_43380, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "area_block_addcorner", 0x434e0, (void *)lf_434e0, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addwindow", 0x42b00, (void *)area_block_addwindow, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
+    { "area_block_adddoor", 0x42cb0, (void *)area_block_adddoor, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addbeam", 0x430f0, (void *)area_block_addbeam, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
+    { "area_block_addoutdoor", 0x43380, (void *)area_block_addoutdoor, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "area_block_addcorner", 0x434e0, (void *)area_block_addcorner, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_rotatesurface", 0x43650, (void *)area_block_rotatesurface, 2, LF_RET_INT, 4, "vv", 0 },
     { "building_iswindow", 0x43780, (void *)lf_43780, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "lf_43a80", 0x43a80, (void *)lf_43a80, 5, LF_RET_VOID, 4, "vvvvv", 0 },

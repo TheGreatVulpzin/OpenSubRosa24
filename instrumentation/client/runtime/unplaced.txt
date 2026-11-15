@@ -23,14 +23,12 @@ floorplan
 numofdynamicbonds
 surface2
 numofsprites
-bezier_curve
 sprite_points
 sprite_lines
 sprite_quads
 sprite_triangles
 random_counter
 wsadata
-bezier_curve_dv
 tiremarkend
 startup_counter
 tiremarkstart
@@ -41,7 +39,6 @@ slogfp
 numofsprite_models
 timerlist
 numofstaticbonds
-bezier_curve_uv
 materials
 bond
 train_near

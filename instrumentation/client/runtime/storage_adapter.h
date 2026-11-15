@@ -42,6 +42,7 @@ extern uintptr_t sr_base;
 #define sr_data_building (*((Building *)(sr_base + 0x1cb8280u)))
 #define sr_data_blocktemp (*((BlockTemp *)(sr_base + 0x52dac40u)))
 #define sr_data_object ((Object *)(sr_base + 0x5519120u))
+#define sr_data_bezier_curve ((float *)(sr_base + 0x75a57c0u))
 #define sr_data_server (*((Server *)(sr_base + 0x75a5800u)))
 #define sr_data_buildingtype (*((BuildingType *)(sr_base + 0x80558c0u)))
 #define sr_data_option (*((Option *)(sr_base + 0x90630e0u)))
@@ -56,6 +57,7 @@ extern uintptr_t sr_base;
 #define sr_data_landscape (*((SrLandscape *)(sr_base + 0x9ba7c20u)))
 #define sr_data_scenario (*((Scenario *)(sr_base + 0xabdbde0u)))
 #define sr_data_objecttype ((ObjectType *)(sr_base + 0xabdbf20u))
+#define sr_data_bezier_curve_dv ((float *)(sr_base + 0xaff0520u))
 #define sr_data_particle ((Particle *)(sr_base + 0xb3715a0u))
 #define sr_data_buildblocktype ((BuildBlockTypeRec *)(sr_base + 0xb731640u))
 #define sr_data_blocklist (*((BlockList *)(sr_base + 0xb7331e0u)))
@@ -79,6 +81,7 @@ extern uintptr_t sr_base;
 #define sr_data_speex (*((Speex *)(sr_base + 0x12a7d680u)))
 #define sr_data_area_block ((AreaBlock *)(sr_base + 0x133ae680u))
 #define sr_data_file_write (*((SrFileTransfer *)(sr_base + 0x13bee680u)))
+#define sr_data_bezier_curve_uv ((float *)(sr_base + 0x13c5e6e0u))
 #define sr_data_parser (*((Parser *)(sr_base + 0x13d5e700u)))
 #define sr_data_texturelist (*((TextureList *)(sr_base + 0x14311840u)))
 #define sr_data_cityobject ((CityObjectRec *)(sr_base + 0x16323600u))
@@ -147,8 +150,6 @@ extern SrSurface sr_unplaced_surface2;
 #define sr_data_surface2 sr_unplaced_surface2
 extern int sr_unplaced_numofsprites;
 #define sr_data_numofsprites sr_unplaced_numofsprites
-extern float sr_unplaced_bezier_curve[12];
-#define sr_data_bezier_curve sr_unplaced_bezier_curve
 extern int sr_unplaced_sprite_points;
 #define sr_data_sprite_points sr_unplaced_sprite_points
 extern int sr_unplaced_sprite_lines;
@@ -161,8 +162,6 @@ extern uint32_t sr_unplaced_random_counter;
 #define sr_data_random_counter sr_unplaced_random_counter
 extern uint8_t sr_unplaced_wsadata[400];
 #define sr_data_wsadata sr_unplaced_wsadata
-extern float sr_unplaced_bezier_curve_dv[12];
-#define sr_data_bezier_curve_dv sr_unplaced_bezier_curve_dv
 extern int sr_unplaced_tiremarkend;
 #define sr_data_tiremarkend sr_unplaced_tiremarkend
 extern int sr_unplaced_startup_counter;
@@ -183,8 +182,6 @@ extern TimerList sr_unplaced_timerlist;
 #define sr_data_timerlist sr_unplaced_timerlist
 extern int sr_unplaced_numofstaticbonds;
 #define sr_data_numofstaticbonds sr_unplaced_numofstaticbonds
-extern float sr_unplaced_bezier_curve_uv[8];
-#define sr_data_bezier_curve_uv sr_unplaced_bezier_curve_uv
 extern SrMaterialStore sr_unplaced_materials;
 #define sr_data_materials sr_unplaced_materials
 extern Bond sr_unplaced_bond[16384];

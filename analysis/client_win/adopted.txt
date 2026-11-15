@@ -68,3 +68,11 @@ area_setblock src/game/area.c
 area_setblockcolor src/game/area.c
 area_block_rotatesurface src/game/block_mesh.c
 area_copyrotateblock src/game/block_mesh.c
+area_block_addbasicsurface src/game/block_mesh.c
+area_block_addbeam src/game/block_mesh.c
+area_block_addcorner src/game/block_mesh.c
+area_block_adddoor src/game/block_mesh.c
+area_block_addoutdoor src/game/block_mesh.c
+area_block_addwindow src/game/block_mesh.c
+area_block_addwindowhorizontal src/game/block_mesh.c
+area_block_addwindowvertical src/game/block_mesh.c

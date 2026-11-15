@@ -84,12 +84,4 @@ createevent_updateiteminfo src/net/events.c
 createevent_updateobject src/net/events.c
 createevent_updateplayer src/net/events.c
 createevent_updateplayer_finance src/net/events.c
-area_block_addbasicsurface src/game/block_mesh.c
-area_block_addbeam src/game/block_mesh.c
-area_block_addcorner src/game/block_mesh.c
-area_block_adddoor src/game/block_mesh.c
-area_block_addoutdoor src/game/block_mesh.c
-area_block_addwindow src/game/block_mesh.c
-area_block_addwindowhorizontal src/game/block_mesh.c
-area_block_addwindowvertical src/game/block_mesh.c
 area_createinteriorblocks src/game/block_mesh.c

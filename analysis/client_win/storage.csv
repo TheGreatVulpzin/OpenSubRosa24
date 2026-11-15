@@ -96,3 +96,6 @@ track,TrackPiece,4096,1400,0x2a1debc0,20,38,ok
 zaxis,vec3,1,12,0x12359c,1,1,checked
 pointtemp,vec3,512,12,0x1b79ce0,1,1,checked
 timer,Timer,256,88,0x1332e80,1,1,checked
+bezier_curve,float,12,4,0x75a57c0,1,1,checked
+bezier_curve_uv,float,8,4,0x13c5e6e0,1,1,checked
+bezier_curve_dv,float,12,4,0xaff0520,1,1,checked
