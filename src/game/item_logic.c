@@ -200,7 +200,7 @@ static void phone_ring(Item *it, int item)
         it->ring_ticks = 0;
         return;
     }
-    if ((sr_game.ticks & 0x7f) == 0) {
+    if ((sr_game_ticks & 0x7f) == 0) {
         createevent_sound(g_soundlist.phone_ring, &sr_items[other].pos, 1.0f, 1.0f);
         createevent_sound(g_soundlist.phone_ring, &it->pos, 0.5f, 1.0f);
     }

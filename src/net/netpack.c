@@ -211,7 +211,7 @@ void packevent(int index, int conn)
     const Event *ev = &sr_events[index];
     const Connection *c = &sr_connections[conn];
     int type = ev->type;
-    if ((uint32_t)(sr_game.ticks - ev->tick) > EVENT_FRESH_TICKS &&
+    if ((uint32_t)(sr_game_ticks - ev->tick) > EVENT_FRESH_TICKS &&
         ((type == 2 && ev->attach_type != 3) || type == 9)) {
         filler();
         return;

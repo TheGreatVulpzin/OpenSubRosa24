@@ -194,7 +194,7 @@ void servercycle(void)
     int n = sr_numofconnections, i;
     if (!sr_option.net_on)
         return;
-    if (sr_option.master_on && (sr_game.ticks & 0x3ff) == 0) {
+    if (sr_option.master_on && (sr_game_ticks & 0x3ff) == 0) {
         uint8_t kind = 0x20;
         bs->send_bit = 0;
         memcpy(bs->send_buf, &sr_socketid, 4);
@@ -635,7 +635,7 @@ static void send_state(Connection *c, int conn)
     bs->send_buf[4] = 5;
     memcpy(&bs->send_buf[5], &sr_game.round_number, 4);
     bs->send_bit = 0;
-    memcpy(&bs->send_buf[9], &sr_game.ticks, 4);
+    memcpy(&bs->send_buf[9], &sr_game_ticks, 4);
     bs->send_size = 13;
     pbitwrite((const uint32_t *)&sr_game.state, 4);
     if (sr_game.state == 1) {

@@ -23,7 +23,7 @@ static Event *new_event(int type)
 {
     Event *ev = &sr_events[sr_numofevents];
     ev->type = type;
-    ev->tick = sr_game.ticks;
+    ev->tick = sr_game_ticks;
     return ev;
 }
 
@@ -58,7 +58,6 @@ void createevent_createobject(int object)
 /* Event 5: the place of an item (on a human, in an item, in a slot), its type and state. */
 void createevent_updateitem(uint32_t item)
 {
-    const Game *game = (&sr_data_game);
     uint32_t *count = (&sr_data_numofevents);
     Event *events = sr_events;
     const Item *it = &sr_items[item];
@@ -71,7 +70,7 @@ void createevent_updateitem(uint32_t item)
     index = *count;
     ev = &events[index];
     ev->type = 5;
-    ev->tick = game->ticks;
+    ev->tick = sr_game_ticks;
     ev->param = param;
     ev->attach_type = it->parent_human;
     ev->attach_id = it->parent_item;
@@ -115,7 +114,6 @@ void createevent_updateplayer(int player)
 void createevent_updateplayer_finance(int player)
 {
     const Player *p = sr_data_player + player;
-    const Game *game = &sr_data_game;
     uint32_t *count = &sr_data_numofevents;
     Event *events = sr_data_event;
     Event *ev;
@@ -125,7 +123,7 @@ void createevent_updateplayer_finance(int player)
     index = *count;
     ev = &events[index];
     ev->type = 8;
-    ev->tick = game->ticks;
+    ev->tick = sr_game_ticks;
     ev->param = player;
     {
         int money = p->money, stocks = p->stocks;

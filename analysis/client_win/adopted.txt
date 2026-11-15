@@ -66,3 +66,10 @@ area_interior_setobject src/game/area.c
 area_marksector src/game/area.c
 area_setblock src/game/area.c
 area_setblockcolor src/game/area.c
+createevent_bullethit src/net/events.c
+createevent_updateblock_quad src/net/events.c
+createevent_updateitem src/net/events.c
+createevent_updateiteminfo src/net/events.c
+createevent_updateobject src/net/events.c
+createevent_updateplayer src/net/events.c
+createevent_updateplayer_finance src/net/events.c

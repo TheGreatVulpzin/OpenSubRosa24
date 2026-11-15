@@ -47,7 +47,7 @@ void deletehuman(uint32_t human)
     if (sr_server != 0) {
         ev = &sr_events[sr_numofevents];
         ev->type = EVENT_HUMAN;
-        ev->tick = sr_game.ticks;
+        ev->tick = sr_game_ticks;
         ev->param = human;
         ev->attach_type = 0;
         ev->attach_id = hu->player_id;
@@ -226,7 +226,6 @@ int createhuman(float *posp, float *rot, int player)
     const Body *body = sr_data_body;
     Event *events = sr_data_event;
     uint32_t *event_count = &sr_data_numofevents;
-    const Game *game = &sr_data_game;
     const vec3 *pos = (const vec3 *)posp;
     Human *hu;
     Event *ev;
@@ -324,7 +323,7 @@ int createhuman(float *posp, float *rot, int player)
     if (sr_server != 0) {
         ev = &events[*event_count];
         ev->type = EVENT_HUMAN;
-        ev->tick = game->ticks;
+        ev->tick = sr_game_ticks;
         ev->param = h;
         ev->attach_type = hu->active;
         ev->attach_id = hu->player_id;
