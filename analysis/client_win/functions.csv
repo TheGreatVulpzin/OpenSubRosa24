@@ -2316,7 +2316,7 @@ rva,size,name,source,confidence,evidence
 0x73aa0,2128,unpackevent,callgraph,0.667,votes=4
 0x742f0,1439,setupframetextures,anchor,0.95,features
 0x74890,5374,buildframelist,callgraph,0.333,votes=2
-0x75d90,369,,,,
+0x75d90,369,frame_addmodel,manual,1.0,Adds one model to the frame list. Comes after buildframelist as frame_addmodel in the Linux client
 0x75f10,7511,renderframe,manual,1.0,Draws one frame: depth and shadows then the opaque pass the alpha pass the elevator panels and the debug views
 0x77c70,2973,renderframedepth,manual,1.0,Draws depth and stencil shadows with optional ambient occlusion and blur
 0x78810,1055,renderframeatmosphere,anchor,0.845,features
@@ -2513,7 +2513,7 @@ rva,size,name,source,confidence,evidence
 0xb80b0,11537,,,,
 0xbadd0,250,,,,
 0xbaed0,533,,,,
-0xbb0f0,5071,negvector,anchor,0.745,features
+0xbb0f0,5071,,,,
 0xbc4c0,247,hermiteinterpolation,anchor,1.0,features
 0xbc5c0,1290,buildhumanmodel,manual,1.0,Linux buildhumanmodel has nine scaleaddvectors calls five copyvector calls and one generatetrinormal call matching the human vertex transform
 0xbcad0,8702,createhumanmodel,anchor,0.633,features
@@ -2655,7 +2655,7 @@ rva,size,name,source,confidence,evidence
 0xe0b60,96,,,,
 0xe0bc0,729,getskycolor,anchor,0.753,features
 0xe0ea0,211,getsuncolor,callgraph,1.0,votes=24
-0xe0f80,420,,,,
+0xe0f80,420,csradixsort,manual,1.0,Radix sort of the sort list. Comes after getsuncolor and before the speex functions as csradixsort in the Linux client
 0xe1130,261,enablespeex,anchor,0.958,features
 0xe1240,120,disablespeex,anchor,0.982,features
 0xe12c0,55,preprocessspeex,anchor,0.734,features
@@ -2744,9 +2744,9 @@ rva,size,name,source,confidence,evidence
 0xfd8e0,257,,,,
 0xfd9f0,300,getfloat,anchor,0.52,features
 0xfdb20,128,getstring,callgraph,0.5,votes=3
-0xfdba0,193,csradixsort,callgraph,0.333,votes=2
+0xfdba0,193,cs_getline,manual,1.0,Copies one line of the text buffer and skips the line ends. Comes after getstring and before checkbigendian as cs_getline in the Linux client
 0xfdc70,109,checkbigendian,callgraph,0.333,votes=2
-0xfdce0,21,,,,
+0xfdce0,21,comparestrings,manual,1.0,Calls strcmp and drops the result. Comes after checkbigendian as comparestrings in the Linux client
 0xfdd00,211,checkfilespec,anchor,0.949,features
 0xfdde0,460,listfiles,callgraph,1.0,votes=6
 0xfdfb0,285,freadswap,anchor,0.79,features
@@ -2838,7 +2838,7 @@ rva,size,name,source,confidence,evidence
 0x10b890,50,vectorlength,callgraph,1.0,votes=132
 0x10b8d0,115,normalizevector,callgraph,1.0,votes=124; diverge: normalizevector2d
 0x10b950,39,copyvector,callgraph,1.0,votes=854
-0x10b980,45,,,,
+0x10b980,45,negvector,manual,1.0,Writes the negative of a vector. Comes between copyvector and zerovector as negvector in the Linux client
 0x10b9b0,28,zerovector,callgraph,1.0,votes=17
 0x10b9d0,56,addvectors,callgraph,1.0,votes=158
 0x10ba10,56,subtractvectors,callgraph,1.0,votes=220

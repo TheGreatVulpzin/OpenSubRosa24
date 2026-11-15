@@ -40,7 +40,6 @@ int sr_unplaced_tiremarkstart;
 VoiceChannel sr_unplaced_voice[8];
 float sr_unplaced_camera[136];
 BondOpt sr_unplaced_bondopt[16384];
-Radix sr_unplaced_radix;
 void * sr_unplaced_slogfp;
 int sr_unplaced_numofsprite_models;
 TimerList sr_unplaced_timerlist;

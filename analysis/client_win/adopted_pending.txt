@@ -54,7 +54,6 @@ createparticle src/game/particles.c
 createplayer src/game/player.c
 createtrack src/game/level.c
 cs_pwrite src/net/packet.c
-csradixsort src/common/util.c
 deleteplayer src/game/player.c
 economy_carmarket src/game/economy.c
 economysimulation src/game/economy.c

@@ -63,6 +63,10 @@ int sv_verify_watch_heap(void);
  * result stays in memory as usual. */
 void sv_verify_ignore(uint32_t rva, uint32_t size);
 
+/* Do not compare one field of each record of an array: size bytes at rva, rva + stride, and
+ * so on, count times. For a field that holds stack bytes that no code reads. */
+void sv_verify_ignore_field(uint32_t rva, uint32_t size, uint32_t stride, uint32_t count);
+
 /* The .data section that the verifier watches. Returns 0 before sv_verify_init. */
 int sv_verify_data(const uint8_t **data, size_t *size);
 

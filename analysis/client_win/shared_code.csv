@@ -67,7 +67,8 @@ createparticle,0x278c0,0xd41d0,240,365,0.041,different
 createplayer,0x28020,0xd4750,365,654,0.023,different
 createtrack,0x25e70,0xcf5f0,3402,4272,0.014,different
 cs_pwrite,0xd990,0xfe5b0,84,113,0.018,different
-csradixsort,0xac00,0xfdba0,301,193,0.013,different
+cs_getline,0xd2a0,0xfdba0,123,193,0.01,different
+csradixsort,0xac00,0xe0f80,301,420,0.029,different
 deleteplayer,0xa1b0,0xd4a20,231,342,0.009,different
 dotproduct,0xb850,0x10b7f0,37,52,0.077,different
 economy_carmarket,0x5700,0x6ed50,364,589,0.008,different

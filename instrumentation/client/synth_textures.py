@@ -845,6 +845,106 @@ def loaders_case():
     return edits, {'loadtexturepartial': calls}
 
 
+LIGHT_POSITION = 0x19c0cd78
+CAMERA = 0xfefe2a0  # the audio camera record: +4 place, +0x10 three rotation rows
+
+
+def sky_case(sun=(0.3, 0.8, 0.52)):
+    """The sun and sky colors for one sun direction, plus direct calls of the two helpers."""
+    rng = random.Random(11)
+    edits = [(LIGHT_POSITION, '3f', list(sun))]
+    ray, sun_color = [], []
+    for slot in range(40):
+        base = SCRATCH + slot * 48
+        start = [rng.uniform(-300.0, 300.0), rng.uniform(0.0, 500.0), rng.uniform(-300.0, 300.0)]
+        direction = [rng.uniform(-1.0, 1.0) for _ in range(3)]
+        length = sum(v * v for v in direction) ** 0.5 or 1.0
+        direction = [v / length for v in direction]
+        end = [rng.uniform(-900.0, 900.0) for _ in range(3)]
+        edits.append((base, '9f', start + direction + end))
+        ray.append(call(0xe0b00, image(base), image(base + 12), rng.choice([512.0, 100.0, 0.5, 1e4])))
+        sun_color.append(call(0xe0ea0, image(base + 36), image(base), image(base + 24)))
+    sky_out = SCRATCH + 40 * 48
+    return edits, {'raydistancesphere': ray, 'getsuncolor': sun_color,
+                   'getsuncolors': [call(0xe0720)], 'getskycolor': [call(0xe0bc0, image(sky_out))]}
+
+
+def lod_case(rec, place=(0.5, 0.5), turn=(0.7, 0.3), height=40.0):
+    """The landscape detail levels for one camera. place is the camera place in landscape
+    widths (32 sectors of 512 units) from the landscape origin. A NaN place is a NaN distance."""
+    import math
+    ox, oy, oz = Snapshot(rec / 'sv_snapshot.bin').read(LANDSCAPE, '3f')
+    yaw, pitch = turn
+    cy, sy, cp, sp = math.cos(yaw), math.sin(yaw), math.cos(pitch), math.sin(pitch)
+    rows = [(cy, 0.0, -sy), (sy * sp, cp, cy * sp), (sy * cp, -sp, cy * cp)]
+    x, z = place
+    edits = [(CAMERA + 4, '3f', [ox + x * 16384.0, oy + height, oz + z * 16384.0]),
+             (CAMERA + 0x10, '9f', [v for row in rows for v in row])]
+    return edits, {'setupframelandscapelod': [call(0xd92a0)]}
+
+
+FRAME_MODEL_COUNT = 0x19c0d0b4
+
+
+def addmodel_case(full=False):
+    """Models added to the frame list: four texture numbers, a flag word, a place and a rotation.
+    With full, the list holds 4096 models and each call does nothing."""
+    rng = random.Random(13)
+    edits = [(FRAME_MODEL_COUNT, 'i', [4096 if full else 0])]
+    calls = []
+    for slot in range(24):
+        base = SCRATCH + slot * 64
+        edits.append((base, '4i', [rng.randint(-5, 400) for _ in range(4)]))
+        edits.append((base + 16, '12f', [floats(rng) for _ in range(12)]))
+        calls.append(call(0x75d90, rng.randint(0, 600), image(base), rng.choice([0, 1, 3]),
+                          image(base + 16), image(base + 28)))
+    return edits, {'frame_addmodel': calls}
+
+
+
+def framelist_case(extra=()):
+    """buildframelist on the scene of the recording: its humans, vehicles, items and street
+    objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
+    'elevator' (a street elevator with its doors), 'types' (one free item of each type), 'view' (the local player views human 0),
+    'bullets' (two bullets), 'wreck' (vehicle 0 has no health), 'heli' (a helicopter)."""
+    items, cityobjects, objects = 0x908b080, 0x16323600, 0x5519120
+    ident = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+    edits = []
+    if 'bills' in extra:
+        for slot, (human, hand, count) in enumerate([(-1, 0, 4), (0, 1, 3), (0, 0, 2)]):
+            base = items + (1000 + slot) * 0x1ac
+            edits += [(base, 'i', [1]), (base + 0xc, 'i', [16]), (base + 0x18, '3i', [human, -1, hand]),
+                      (base + 0x48, '3f', [10.0 + slot, 30.0, 12.0]), (base + 0x84, '9f', ident),
+                      (base + 0x134, '3I', [count, count - 1, 0o5321 >> slot])]
+    if 'types' in extra:
+        for t in range(27):
+            base = items + (900 + t) * 0x1ac
+            edits += [(base, 'i', [1]), (base + 0xc, 'i', [t]), (base + 0x18, '3i', [-1, -1, 0]),
+                      (base + 0x48, '3f', [float(t), 30.0, 14.0]), (base + 0x84, '9f', ident),
+                      (base + 0x10c, 'i', [t & 1])]
+    if 'elevator' in extra:
+        base = cityobjects + 1000 * 0x54
+        edits += [(base, '2i', [1, 2]), (base + 8, '3f', [20.0, 30.0, 20.0]), (base + 0x20, '9f', ident),
+                  (base + 0x50, 'f', [1.25])]
+    if 'view' in extra:
+        edits += [(0xfefe2a0, 'i', [0]), (0xed813a0 + 0x78, 'i', [0]), (0x14fc4a0, 'i', [1]),
+                  (0x14fc4a0 + 0x28, 'i', [50]), (0x127ea8, 'i', [0])]
+    if 'bullets' in extra:
+        edits.append((0x17b4b820, 'i', [2]))
+        for i in range(2):
+            edits.append((0x1338680 + i * 0x5c, 'i', [i]))
+            edits.append((0x1338680 + i * 0x5c + 0x14, '3f', [5.0 + i, 31.0, 7.0]))
+            edits.append((0x1338680 + i * 0x5c + 0x38, '9f', ident))
+    if 'wreck' in extra:
+        edits.append((objects + 0xc, 'i', [0]))
+    if 'heli' in extra:
+        edits += [(objects + 1000 * 0x8230, '3i', [1, 11, 1]), (objects + 1000 * 0x8230 + 0xc, 'i', [100]),
+                  (objects + 1000 * 0x8230 + 0x24, '3f', [15.0, 35.0, 15.0]),
+                  (objects + 1000 * 0x8230 + 0x3c, '9f', ident),
+                  (objects + 1000 * 0x8230 + 0x5eec + 0x30, 'f', [0.7])]
+    return edits, {'buildframelist': [call(0x74890)] * 2}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -910,7 +1010,17 @@ def main():
             'frame_names': lambda: frame_case(features=('names',)),
             'objecttypes': objecttypes_case, 'loaders': loaders_case, 'textures': lambda: textures_case(rec),
             'landscape': lambda: landscape_case(rec), 'windows': lambda: windows_case(rec),
-            'materials': lambda: materials_case(rec)}
+            'materials': lambda: materials_case(rec),
+            'sky': sky_case, 'sky_low': lambda: sky_case((0.97, 0.05, 0.2)),
+            'sky_below': lambda: sky_case((0.6, -0.3, 0.74)), 'sky_up': lambda: sky_case((0.0, 1.0, 0.0)),
+            'sky_nan': lambda: sky_case((NAN, 0.5, 0.5)),
+            'lod': lambda: lod_case(rec), 'lod_corner': lambda: lod_case(rec, (0.02, 0.98), (2.4, 0.1)),
+            'lod_outside': lambda: lod_case(rec, (-0.3, 1.4), (0.0, 0.0)),
+            'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
+            'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
+            'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
+            'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
+            'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     repeat = max(1, int(os.environ.get('SV_SYNTH_REPEAT', '1')))
     for name in want:

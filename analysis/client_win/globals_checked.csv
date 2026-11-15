@@ -50,3 +50,4 @@ rva,name,status,evidence
 0x12359c,zaxis,likely,Ghidra xrefs: the unit vector (0 0 1) that setupobjecttypeweight adds to the center. It follows xaxis at 0x123584.
 0x1b79ce0,pointtemp,likely,Ghidra xrefs: 512 points that setupobjecttypeweight copies and passes to calculatepointscale.
 0x1332e80,timer,likely,Ghidra xrefs: starttimer and resettimer index it with a stride of 0x58 bytes.
+0xfefe340,radix,likely,Body of csradixsort (0xe0f80): count at +0 and the order list at +4. The key list at +0x200004 and the buckets at +0x400004 match the Radix record.

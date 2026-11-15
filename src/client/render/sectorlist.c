@@ -7,6 +7,7 @@
 #include "render/frustum.h"
 #include "setup/timers.h"
 #include "sr_runtime.h"
+#include "util.h"
 #include "textures/opengl.h"
 #include "vectors.h"
 
@@ -29,12 +30,11 @@
 #define g_sector_list cl_data_sector_list
 #define g_sector_entries cl_data_sector_entries
 #define g_interior_model_count cl_data_interior_model_count
-#define g_sort_count cl_data_sort_count
-#define g_sort_order cl_data_sort_order
-#define g_sort_keys cl_data_sort_keys
+#define g_sort_count sr_data_radix.count
+#define g_sort_order sr_data_radix.order
+#define g_sort_keys sr_data_radix.keys
 
 /* Game functions of other files. */
-#define sortlist CL_FN(0x4e0f80, void(__cdecl *)(void))
 #define markinteriors CL_FN(0x4d9fa0, void(__cdecl *)(void))
 #define area_interior_buildsectormodel CL_FN(0x4442b0, int(__cdecl *)(int sector, int slot))
 
@@ -206,7 +206,7 @@ void __cdecl clearsectorlist(int mode)
     for (slot = 0; slot < g_sector_count; ++slot)
         g_sort_keys[slot] = cl_ftoi(16777216.0 - g_sector_entries[slot].distance * 256.0);
     g_sort_count = g_sector_count;
-    sortlist();
+    csradixsort();
     for (slot = 0; slot < g_sector_count; ++slot)
         g_sector_list[slot] = g_sector_entries[g_sort_order[slot]].sector;
 }

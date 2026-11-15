@@ -278,14 +278,18 @@ SR_STATIC_ASSERT(sizeof(DebugSphere) == 0x1c, "DebugSphere");
 typedef union ClientTeamArea { struct { vec3 base_min, base_max, safe_min, safe_max; }; uint8_t raw[0x117c]; } ClientTeamArea;
 /* The client game record. From 0x48 on, its fields sit 4 bytes before the server fields. */
 typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_heading; uint8_t pad_50[4];
-    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257ec - 0x57c0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
+    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257dc - 0x57c0];
+    int death_view_timer; /* the camera stays on the dead human while it counts down */
+    uint8_t pad_257e0[0x257ec - 0x257e0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
 SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
+SR_STATIC_ASSERT(offsetof(ClientGameView, death_view_timer) == 0x257dc, "ClientGameView.death_view_timer");
 SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
 /* A model entry in the sorted frame list. */
-typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[2]; uint8_t pad_14[8]; vec3 pos; vec3 rot[3]; uint8_t pad_4c[12]; vec3 color; } FrameEntry;
+typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[4]; vec3 pos; vec3 rot[3]; vec3 scale; vec3 color; } FrameEntry;
 typedef struct VideoMode { int width; int height; int bits; } VideoMode;
 SR_STATIC_ASSERT(sizeof(FrameEntry) == 0x64, "FrameEntry");
 SR_STATIC_ASSERT(offsetof(FrameEntry, pos) == 0x1c, "FrameEntry.pos");
+SR_STATIC_ASSERT(offsetof(FrameEntry, scale) == 0x4c, "FrameEntry.scale");
 SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
 SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
 /* A particle, a glass shard or a three corner piece with springs. */
@@ -309,7 +313,12 @@ typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 /* A run of triangles of a sector interior with one material. */
 typedef struct SectorPart { uint8_t material; uint8_t num_triangles; uint8_t pad_02[2]; int first_index; } SectorPart;
 typedef struct InteriorPart { uint8_t material; uint8_t pad_01[3]; int num_triangles; int first_triangle; } InteriorPart;
-typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; uint8_t pad_2c[0x1e30 - 0x2c]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+/* A lamp (type 4) or a traffic light (type 5) of an interior. A traffic light shows the state of one side of an intersection. */
+typedef struct InteriorFixture { int type; int intersection; int side; vec3 pos; vec3 rot[3]; } InteriorFixture;
+typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+SR_STATIC_ASSERT(sizeof(InteriorFixture) == 0x3c, "InteriorFixture");
+SR_STATIC_ASSERT(offsetof(InteriorMesh, fixtures) == 0x30, "InteriorMesh.fixtures");
+SR_STATIC_ASSERT(offsetof(InteriorMesh, num_parts) == 0x1e30, "InteriorMesh.num_parts");
 typedef struct ProgramObject { uint32_t program; uint32_t vertex_shader; uint32_t fragment_shader; int linked; int uniforms[16]; } ProgramObject;
 /* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
 typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;
@@ -3278,7 +3287,7 @@ typedef union TextureList { struct {
     int shadow_map;                      /* +0x0408 rendermodel binds it on texture unit 2 for the lit models */
     int sky;                             /* +0x040c renderframeatmosphere binds it as the texture of the sky quad */
     int frame_aux;                       /* +0x0410 renderframedepth attaches this texture before the blur passes */
-    uint8_t pad_0414[0x4];
+    int frame_spare;                     /* +0x0414 setupframetextures sizes it with the other frame textures. No other code reads it */
     int plain_green;                     /* +0x0418 generatetexture: a texture of one dark green color */
     int disc;                            /* +0x041c generatetexture: a white disc with a clear ground */
     int rough_disc;                      /* +0x0420 generatetexture: a white disc with an edge that the noise moves */
@@ -3311,6 +3320,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, frame_color) == 0x404, "TextureList.frame
 SR_STATIC_ASSERT(offsetof(TextureList, shadow_map) == 0x408, "TextureList.shadow_map");
 SR_STATIC_ASSERT(offsetof(TextureList, sky) == 0x40c, "TextureList.sky");
 SR_STATIC_ASSERT(offsetof(TextureList, frame_aux) == 0x410, "TextureList.frame_aux");
+SR_STATIC_ASSERT(offsetof(TextureList, frame_spare) == 0x414, "TextureList.frame_spare");
 SR_STATIC_ASSERT(offsetof(TextureList, plain_green) == 0x418, "TextureList.plain_green");
 SR_STATIC_ASSERT(offsetof(TextureList, disc) == 0x41c, "TextureList.disc");
 SR_STATIC_ASSERT(offsetof(TextureList, rough_disc) == 0x420, "TextureList.rough_disc");

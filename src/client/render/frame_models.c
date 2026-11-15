@@ -1,9 +1,11 @@
-/* The frame list holds model transforms, colors and two texture indices.
+/* The frame list holds model transforms, scales, colors and four texture indices. The draw uses
+ * the first two.
  * A sorted index list controls the drawing order.
  * Human models get their positions and normals from the bone transforms.
  */
 #include "render/lists.h"
 #include "client.h"
+#include "math/small_vectors.h"
 #include "sr_runtime.h"
 #include "setup/timers.h"
 #include "textures/opengl.h"
@@ -13,7 +15,7 @@ enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        TEXTURE0 = 0x84c0, TEXTURE1 = 0x84c1, TEXTURE2 = 0x84c2,
        LIGHT0 = 0x4000, LIGHT_POSITION = 0x1203, CULL_FACE = 0xb44,
        SLOT_ACTIVE_TEXTURE = 0x115874, NORMAL_OFFSET = 0x14, TEXCOORD_OFFSET = 0xc,
-       FIRST_PART_REFERENCE = 16, ENTRY_HIDDEN = 2 };
+       FIRST_PART_REFERENCE = 16, ENTRY_HIDDEN = 2, FRAME_MODELS = 4096 };
 
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
 GL_IMPORT(glDisableClientState, (uint32_t array), (array))
@@ -146,4 +148,33 @@ void __cdecl frame_rendermessages(void)
     glDisable(GL_DEPTH_TEST);
     glEnable(CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+}
+
+/* Add one model to the frame list with a scale and a color of 1. A full list ignores the model.
+ * The word at +4 of the entry keeps its value. */
+void __cdecl frame_addmodel(int model, const int textures[4], uint32_t flags, const vec3 *pos, const vec3 rot[3])
+{
+    FrameEntry *entry;
+
+    if (cl_data_frame_model_count >= FRAME_MODELS)
+        return;
+    entry = &cl_data_frame_models[cl_data_frame_model_count];
+    entry->model = model;
+    entry->textures[0] = textures[0];
+    entry->textures[1] = textures[1];
+    entry->textures[2] = textures[2];
+    entry->textures[3] = textures[3];
+    entry->flags = flags;
+    /* copyvector moves the bits, so a NaN keeps its bits. */
+    copyvector((unsigned int *)&entry->pos, (const unsigned int *)pos);
+    copyvector((unsigned int *)&entry->rot[0], (const unsigned int *)&rot[0]);
+    copyvector((unsigned int *)&entry->rot[1], (const unsigned int *)&rot[1]);
+    copyvector((unsigned int *)&entry->rot[2], (const unsigned int *)&rot[2]);
+    entry->scale.x = 1.0f;
+    entry->scale.y = 1.0f;
+    entry->scale.z = 1.0f;
+    entry->color.x = 1.0f;
+    entry->color.y = 1.0f;
+    entry->color.z = 1.0f;
+    ++cl_data_frame_model_count;
 }

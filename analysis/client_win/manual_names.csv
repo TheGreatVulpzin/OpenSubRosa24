@@ -71,3 +71,8 @@ rva,name,evidence
 0x77c70,renderframedepth,Draws depth and stencil shadows with optional ambient occlusion and blur
 0x69440,displaydebuginfo,Counts nonbot players and draws the selected diagnostic display
 0x75f10,renderframe,Draws one frame: depth and shadows then the opaque pass the alpha pass the elevator panels and the debug views
+0xe0f80,csradixsort,"Radix sort of the sort list at 0xfefe340. Comes after getsuncolor and before the speex functions, as csradixsort in the Linux client."
+0xfdba0,cs_getline,"Copies one line of the text buffer and skips the line ends. Comes after getstring and before checkbigendian, as cs_getline in the Linux client. The callgraph name csradixsort was wrong."
+0x10b980,negvector,"Writes the negative of a vector. Comes between copyvector and zerovector as negvector in the Linux client."
+0xfdce0,comparestrings,"Calls strcmp and drops the result. Comes after checkbigendian as comparestrings in the Linux client."
+0x75d90,frame_addmodel,"Adds one model to the frame list. Comes after buildframelist as frame_addmodel in the Linux client."

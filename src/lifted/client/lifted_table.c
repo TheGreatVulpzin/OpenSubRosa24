@@ -746,8 +746,8 @@ void lf_72db0(void);
 void lf_72ed0(void);
 void lf_73aa0(void);
 void lf_742f0(void);
-void lf_74890(void);
-void lf_75d90(void);
+void buildframelist(void);
+void frame_addmodel(void);
 void renderframe(void);
 void renderframedepth(void);
 void renderframeatmosphere(void);
@@ -1044,7 +1044,7 @@ void render_buildareasectorshadow(void);
 void render_areasectorshadow(void);
 void landscape_buildsectorlods(void);
 void landscape_buildsectormesh(void);
-void lf_d92a0(void);
+void setupframelandscapelod(void);
 void renderlandscape(void);
 void landscape_rendersector(void);
 void landscape_generatenormaltexture(void);
@@ -1080,12 +1080,12 @@ void lf_de560(void);
 void lf_deb20(void);
 void servercycle(void);
 void lf_df6a0(void);
-void lf_e0720(void);
-void lf_e0b00(void);
+void getsuncolors(void);
+void raydistancesphere(void);
 void lf_e0b60(void);
-void lf_e0bc0(void);
-void lf_e0ea0(void);
-void lf_e0f80(void);
+void getskycolor(void);
+void getsuncolor(void);
+void csradixsort(void);
 void enablespeex(void);
 void disablespeex(void);
 void preprocessspeex(void);
@@ -2046,8 +2046,8 @@ const LfEntry lf_table[] = {
     { "packevent", 0x72ed0, (void *)lf_72ed0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x73aa0, (void *)lf_73aa0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupframetextures", 0x742f0, (void *)lf_742f0, 0, LF_RET_VOID, 4, "", 2 },
-    { "buildframelist", 0x74890, (void *)lf_74890, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_75d90", 0x75d90, (void *)lf_75d90, 5, LF_RET_VOID, 4, "vpvpv", 0 },
+    { "buildframelist", 0x74890, (void *)buildframelist, 0, LF_RET_VOID, 4, "", 0 },
+    { "frame_addmodel", 0x75d90, (void *)frame_addmodel, 5, LF_RET_VOID, 4, "vpvpv", 0 },
     { "renderframe", 0x75f10, (void *)renderframe, 0, LF_RET_VOID, 4, "", 1 },
     { "renderframedepth", 0x77c70, (void *)renderframedepth, 0, LF_RET_VOID, 4, "", 1 },
     { "renderframeatmosphere", 0x78810, (void *)renderframeatmosphere, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2243,7 +2243,7 @@ const LfEntry lf_table[] = {
     { "lf_b80b0", 0xb80b0, (void *)lf_b80b0, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_badd0", 0xbadd0, (void *)lf_badd0, 2, LF_RET_INT, 4, "pv", 0 },
     { "lf_baed0", 0xbaed0, (void *)lf_baed0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
-    { "negvector", 0xbb0f0, (void *)lf_bb0f0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "lf_bb0f0", 0xbb0f0, (void *)lf_bb0f0, 1, LF_RET_VOID, 4, "v", 1 },
     { "hermiteinterpolation", 0xbc4c0, (void *)hermiteinterpolation, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "buildhumanmodel", 0xbc5c0, (void *)buildhumanmodel, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createhumanmodel", 0xbcad0, (void *)createhumanmodel, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2344,7 +2344,7 @@ const LfEntry lf_table[] = {
     { "render_areasectorshadow", 0xd8ae0, (void *)render_areasectorshadow, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_buildsectorlods", 0xd8ba0, (void *)landscape_buildsectorlods, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_buildsectormesh", 0xd9100, (void *)landscape_buildsectormesh, 1, LF_RET_VOID, 4, "v", 1 },
-    { "setupframelandscapelod", 0xd92a0, (void *)lf_d92a0, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupframelandscapelod", 0xd92a0, (void *)setupframelandscapelod, 0, LF_RET_VOID, 4, "", 0 },
     { "renderlandscape", 0xd9770, (void *)renderlandscape, 1, LF_RET_VOID, 4, "v", 1 },
     { "landscape_rendersector", 0xd98e0, (void *)landscape_rendersector, 1, LF_RET_VOID, 4, "v", 1 },
     { "landscape_generatenormaltexture", 0xd99a0, (void *)landscape_generatenormaltexture, 0, LF_RET_VOID, 4, "", 1 },
@@ -2380,12 +2380,12 @@ const LfEntry lf_table[] = {
     { "serversend", 0xdeb20, (void *)lf_deb20, 0, LF_RET_VOID, 4, "", 1 },
     { "servercycle", 0xdf550, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
     { "serverrecv", 0xdf6a0, (void *)lf_df6a0, 0, LF_RET_VOID, 4, "", 1 },
-    { "getsuncolors", 0xe0720, (void *)lf_e0720, 0, LF_RET_VOID, 4, "", 0 },
-    { "raydistancesphere", 0xe0b00, (void *)lf_e0b00, 3, LF_RET_FLOAT, 4, "ppv", 0 },
+    { "getsuncolors", 0xe0720, (void *)getsuncolors, 0, LF_RET_VOID, 4, "", 0 },
+    { "raydistancesphere", 0xe0b00, (void *)raydistancesphere, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "lf_e0b60", 0xe0b60, (void *)lf_e0b60, 3, LF_RET_FLOAT, 4, "ppv", 0 },
-    { "getskycolor", 0xe0bc0, (void *)lf_e0bc0, 1, LF_RET_VOID, 4, "p", 0 },
-    { "getsuncolor", 0xe0ea0, (void *)lf_e0ea0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "lf_e0f80", 0xe0f80, (void *)lf_e0f80, 0, LF_RET_VOID, 4, "", 0 },
+    { "getskycolor", 0xe0bc0, (void *)getskycolor, 1, LF_RET_VOID, 4, "p", 0 },
+    { "getsuncolor", 0xe0ea0, (void *)getsuncolor, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "csradixsort", 0xe0f80, (void *)csradixsort, 0, LF_RET_VOID, 4, "", 0 },
     { "enablespeex", 0xe1130, (void *)enablespeex, 0, LF_RET_VOID, 4, "", 1 },
     { "disablespeex", 0xe1240, (void *)disablespeex, 0, LF_RET_VOID, 4, "", 1 },
     { "preprocessspeex", 0xe12c0, (void *)preprocessspeex, 3, LF_RET_VOID, 4, "vvv", 1 },
@@ -2474,9 +2474,9 @@ const LfEntry lf_table[] = {
     { "lf_fd8e0", 0xfd8e0, (void *)lf_fd8e0, 0, LF_RET_INT, 4, "", 0 },
     { "getfloat", 0xfd9f0, (void *)lf_fd9f0, 0, LF_RET_FLOAT, 4, "", 0 },
     { "getstring", 0xfdb20, (void *)lf_fdb20, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "csradixsort", 0xfdba0, (void *)lf_fdba0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "cs_getline", 0xfdba0, (void *)lf_fdba0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "checkbigendian", 0xfdc70, (void *)lf_fdc70, 0, LF_RET_VOID, 4, "", 0 },
-    { "lf_fdce0", 0xfdce0, (void *)lf_fdce0, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "comparestrings", 0xfdce0, (void *)lf_fdce0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "checkfilespec", 0xfdd00, (void *)lf_fdd00, 2, LF_RET_INT, 4, "vp", 0 },
     { "listfiles", 0xfdde0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "freadswap", 0xfdfb0, (void *)freadswap, 4, LF_RET_INT, 4, "vvvp", 1 },
@@ -2566,7 +2566,7 @@ const LfEntry lf_table[] = {
     { "vectorlength", 0x10b890, (void *)vectorlength, 1, LF_RET_FLOAT, 4, "p", 0 },
     { "normalizevector", 0x10b8d0, (void *)normalizevector, 2, LF_RET_VOID, 4, "pp", 0 },
     { "copyvector", 0x10b950, (void *)copyvector, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "lf_10b980", 0x10b980, (void *)lf_10b980, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "negvector", 0x10b980, (void *)lf_10b980, 2, LF_RET_VOID, 4, "pp", 0 },
     { "zerovector", 0x10b9b0, (void *)zerovector, 1, LF_RET_VOID, 4, "p", 0 },
     { "addvectors", 0x10b9d0, (void *)addvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "subtractvectors", 0x10ba10, (void *)subtractvectors, 3, LF_RET_VOID, 4, "ppp", 0 },

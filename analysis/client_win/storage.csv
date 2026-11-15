@@ -75,7 +75,7 @@ speex,Speex,1,9637888,0x12a7d680,1,9,other
 area_block,AreaBlock,65536,132,0x133ae680,30,31,checked
 file_write,SrFileTransfer,1,4,0x13bee680,3,3,ok
 parser,Parser,1,1048844,0x13d5e700,8,29,checked
-radix,Radix,1,4196356,0x13d5e704,1,4,dropped
+radix,Radix,1,4196356,0xfefe340,1,4,checked
 modellist,ModelList,1,1956,0x17c040a0,1,1,checked
 texturelist,TextureList,1,4420,0x14311840,1,1,checked
 cityobject,CityObjectRec,1024,84,0x16323600,10,11,ok

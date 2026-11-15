@@ -72,6 +72,7 @@ extern uintptr_t sr_base;
 #define sr_data_bullettypes ((BulletType *)(sr_base + 0xf3ea9c0u))
 #define sr_data_accounts (*((SrAccountStore *)(sr_base + 0xf3eb200u)))
 #define sr_data_view (*((int *)(sr_base + 0xfefe2a0u)))
+#define sr_data_radix (*((Radix *)(sr_base + 0xfefe340u)))
 #define sr_data_intersect (*((Intersect *)(sr_base + 0x1033ec20u)))
 #define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
@@ -174,8 +175,6 @@ extern float sr_unplaced_camera[136];
 #define sr_data_camera sr_unplaced_camera
 extern BondOpt sr_unplaced_bondopt[16384];
 #define sr_data_bondopt sr_unplaced_bondopt
-extern Radix sr_unplaced_radix;
-#define sr_data_radix sr_unplaced_radix
 extern void * sr_unplaced_slogfp;
 #define sr_data_slogfp sr_unplaced_slogfp
 extern int sr_unplaced_numofsprite_models;
@@ -265,9 +264,6 @@ extern int sr_unplaced_train_near;
 #define cl_data_level_hit (*((LevelHit *)(sr_base + 0x1033ec20u)))
 #define cl_data_score_count (*((int *)(sr_base + 0x163229e0u)))
 #define cl_data_score_entries ((ScoreEntry *)(sr_base + 0x163229e4u))
-#define cl_data_sort_count (*((int *)(sr_base + 0xfefe340u)))
-#define cl_data_sort_order ((int *)(sr_base + 0xfefe344u))
-#define cl_data_sort_keys ((int *)(sr_base + 0x100fe344u))
 #define cl_data_map_shown (*((int *)(sr_base + 0x908aae0u)))
 #define cl_data_view_zoom (*((float *)(sr_base + 0xfefe2d4u)))
 #define cl_data_display_text ((char *)(sr_base + 0x126728u))
