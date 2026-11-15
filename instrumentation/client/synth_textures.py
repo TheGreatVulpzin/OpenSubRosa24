@@ -877,6 +877,49 @@ def addmodel_case(full=False):
 
 
 
+def framelist_case(extra=()):
+    """buildframelist on the scene of the recording: its humans, vehicles, items and street
+    objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
+    'elevator' (a street elevator with its doors), 'types' (one free item of each type), 'view' (the local player views human 0),
+    'bullets' (two bullets), 'wreck' (vehicle 0 has no health), 'heli' (a helicopter)."""
+    items, cityobjects, objects = 0x908b080, 0x16323600, 0x5519120
+    ident = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+    edits = []
+    if 'bills' in extra:
+        for slot, (human, hand, count) in enumerate([(-1, 0, 4), (0, 1, 3), (0, 0, 2)]):
+            base = items + (1000 + slot) * 0x1ac
+            edits += [(base, 'i', [1]), (base + 0xc, 'i', [16]), (base + 0x18, '3i', [human, -1, hand]),
+                      (base + 0x48, '3f', [10.0 + slot, 30.0, 12.0]), (base + 0x84, '9f', ident),
+                      (base + 0x134, '3I', [count, count - 1, 0o5321 >> slot])]
+    if 'types' in extra:
+        for t in range(27):
+            base = items + (900 + t) * 0x1ac
+            edits += [(base, 'i', [1]), (base + 0xc, 'i', [t]), (base + 0x18, '3i', [-1, -1, 0]),
+                      (base + 0x48, '3f', [float(t), 30.0, 14.0]), (base + 0x84, '9f', ident),
+                      (base + 0x10c, 'i', [t & 1])]
+    if 'elevator' in extra:
+        base = cityobjects + 1000 * 0x54
+        edits += [(base, '2i', [1, 2]), (base + 8, '3f', [20.0, 30.0, 20.0]), (base + 0x20, '9f', ident),
+                  (base + 0x50, 'f', [1.25])]
+    if 'view' in extra:
+        edits += [(0xfefe2a0, 'i', [0]), (0xed813a0 + 0x78, 'i', [0]), (0x14fc4a0, 'i', [1]),
+                  (0x14fc4a0 + 0x28, 'i', [50]), (0x127ea8, 'i', [0])]
+    if 'bullets' in extra:
+        edits.append((0x17b4b820, 'i', [2]))
+        for i in range(2):
+            edits.append((0x1338680 + i * 0x5c, 'i', [i]))
+            edits.append((0x1338680 + i * 0x5c + 0x14, '3f', [5.0 + i, 31.0, 7.0]))
+            edits.append((0x1338680 + i * 0x5c + 0x38, '9f', ident))
+    if 'wreck' in extra:
+        edits.append((objects + 0xc, 'i', [0]))
+    if 'heli' in extra:
+        edits += [(objects + 1000 * 0x8230, '3i', [1, 11, 1]), (objects + 1000 * 0x8230 + 0xc, 'i', [100]),
+                  (objects + 1000 * 0x8230 + 0x24, '3f', [15.0, 35.0, 15.0]),
+                  (objects + 1000 * 0x8230 + 0x3c, '9f', ident),
+                  (objects + 1000 * 0x8230 + 0x5eec + 0x30, 'f', [0.7])]
+    return edits, {'buildframelist': [call(0x74890)] * 2}
+
+
 def run(snapshot, args, name, env):
     p = subprocess.run([HARNESS, IMAGE, str(snapshot), str(args), name], capture_output=True, text=True,
                        errors='replace', timeout=3600, env=env, cwd=ROOT)
@@ -950,7 +993,9 @@ def main():
             'lod_outside': lambda: lod_case(rec, (-0.3, 1.4), (0.0, 0.0)),
             'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
             'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
-            'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True)}
+            'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
+            'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
+            'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(allc)
     repeat = max(1, int(os.environ.get('SV_SYNTH_REPEAT', '1')))
     for name in want:

@@ -110,7 +110,7 @@ TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3
              'VoiceRing': 0x9210, 'FileListSlot': 0x10004, 'void*': 4,
              'TexCoord': 8, 'TriTexCoords': 0x18, 'QuadTexCoords': 0x20, 'MeshLine': 8, 'ModelVertex': 0x20,
              'vec3*': 4, 'TexCoord*': 4, 'ModelVertex*': 4, 'MeshTri*': 4, 'MeshLine*': 4,
-             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'VideoMode': 12,
+             'uint32_t*': 4, 'LandSector': 0x14, 'LandIndexList': 8, 'DebugLine': 0x18, 'DebugValue': 0x2c, 'ChatMessage': 0x98, 'ProgramObject': 0x50, 'SpriteModel': 0x68, 'SpriteVertex': 0x20, 'LevelHit': 0x18, 'ScoreEntry': 8, 'InteriorMesh': 0x2a30, 'SectorPart': 8, 'SectorEntry': 8, 'ClientSprite': 0x94, 'SpriteDecalVertex': 0x14, 'GlassVertex': 0x18, 'Tiremark': 0x44, 'ModelWindow': 0x34, 'FrameEntry': 0x64, 'InteriorFixture': 0x3c, 'VideoMode': 12,
              'WindowQuad': 0x44, 'ClientFramebuffer': 8, 'DebugSphere': 0x1c}
 CSV_TYPE = {'float': 'float', 'char': 'char', 'short': 'int16_t', 'undefined1': 'char',
             'byte': 'char', 'undefined2': 'int16_t', 'ushort': 'int16_t'}
@@ -422,8 +422,11 @@ SR_STATIC_ASSERT(sizeof(DebugSphere) == 0x1c, "DebugSphere");
 typedef union ClientTeamArea { struct { vec3 base_min, base_max, safe_min, safe_max; }; uint8_t raw[0x117c]; } ClientTeamArea;
 /* The client game record. From 0x48 on, its fields sit 4 bytes before the server fields. */
 typedef struct ClientGameView { uint8_t pad_00[0x48]; float sun_tilt; float sun_heading; uint8_t pad_50[4];
-    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257ec - 0x57c0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
+    ClientTeamArea teams[5]; uint8_t pad_57c0[0x257dc - 0x57c0];
+    int death_view_timer; /* the camera stays on the dead human while it counts down */
+    uint8_t pad_257e0[0x257ec - 0x257e0]; int num_checkpoints; vec3 checkpoints[32]; } ClientGameView;
 SR_STATIC_ASSERT(offsetof(ClientGameView, teams) == 0x54, "ClientGameView.teams");
+SR_STATIC_ASSERT(offsetof(ClientGameView, death_view_timer) == 0x257dc, "ClientGameView.death_view_timer");
 SR_STATIC_ASSERT(offsetof(ClientGameView, num_checkpoints) == 0x257ec, "ClientGameView.num_checkpoints");
 /* A model entry in the sorted frame list. */
 typedef struct FrameEntry { int model; uint8_t pad_04[4]; uint32_t flags; int textures[4]; vec3 pos; vec3 rot[3]; vec3 scale; vec3 color; } FrameEntry;
@@ -454,7 +457,12 @@ typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 /* A run of triangles of a sector interior with one material. */
 typedef struct SectorPart { uint8_t material; uint8_t num_triangles; uint8_t pad_02[2]; int first_index; } SectorPart;
 typedef struct InteriorPart { uint8_t material; uint8_t pad_01[3]; int num_triangles; int first_triangle; } InteriorPart;
-typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; uint8_t pad_2c[0x1e30 - 0x2c]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+/* A lamp (type 4) or a traffic light (type 5) of an interior. A traffic light shows the state of one side of an intersection. */
+typedef struct InteriorFixture { int type; int intersection; int side; vec3 pos; vec3 rot[3]; } InteriorFixture;
+typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+SR_STATIC_ASSERT(sizeof(InteriorFixture) == 0x3c, "InteriorFixture");
+SR_STATIC_ASSERT(offsetof(InteriorMesh, fixtures) == 0x30, "InteriorMesh.fixtures");
+SR_STATIC_ASSERT(offsetof(InteriorMesh, num_parts) == 0x1e30, "InteriorMesh.num_parts");
 typedef struct ProgramObject { uint32_t program; uint32_t vertex_shader; uint32_t fragment_shader; int linked; int uniforms[16]; } ProgramObject;
 /* A vertex of the human model with the bone that moves it. A vertex with bone 0 follows no bone. */
 typedef struct BoneVert { int bone; int mode; uint8_t pad_08[8]; vec3 pos; } BoneVert;

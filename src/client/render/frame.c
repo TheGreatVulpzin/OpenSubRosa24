@@ -6,6 +6,7 @@
 #include "client.h"
 #include "render/atmosphere.h"
 #include "render/debug_draw.h"
+#include "render/frame_list.h"
 #include "render/landscape_draw.h"
 #include "render/lists.h"
 #include "render/models_draw.h"
@@ -23,7 +24,6 @@
 #include "vectors.h"
 
 /* Game functions of other files. */
-#define buildframelist() CL_FN(0x474890, void(__cdecl *)(void))()
 #define setupperspectiveviewport CL_FN(0x506320, void(__cdecl *)(int, int, int, int, float, float, float))
 #define setupviewpoint CL_FN(0x5065d0, void(__cdecl *)(const vec3 *, const vec3 *))
 #define setupobjectrender CL_FN(0x5066b0, void(__cdecl *)(const vec3 *, const vec3 *))
