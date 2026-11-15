@@ -557,19 +557,19 @@ void lf_36040(void);
 void lf_37310(void);
 void lf_37720(void);
 void lf_37b30(void);
-void lf_38260(void);
-void lf_38430(void);
-void lf_38600(void);
+void area_setblock(void);
+void area_setblockcolor(void);
+void area_getblock(void);
 void lf_38760(void);
 void lf_38920(void);
 void lf_38a90(void);
-void lf_38c00(void);
-void lf_38fd0(void);
-void lf_391f0(void);
-void lf_39230(void);
+void area_deleteblock(void);
+void area_createsector(void);
+void area_getnextsector(void);
+void area_marksector(void);
 void lf_39370(void);
-void lf_39400(void);
-void lf_39550(void);
+void area_createchunk(void);
+void area_getnextchunk(void);
 void lf_395a0(void);
 void area_setupsblock(void);
 void lf_3cf60(void);
@@ -601,7 +601,7 @@ void lf_434e0(void);
 void lf_43650(void);
 void lf_43780(void);
 void lf_43a80(void);
-void lf_43c60(void);
+void area_interior_setobject(void);
 void lf_43e20(void);
 void lf_43f80(void);
 void lf_44140(void);
@@ -1857,19 +1857,19 @@ const LfEntry lf_table[] = {
     { "ai_car_nextwaypoint", 0x37310, (void *)lf_37310, 1, LF_RET_VOID, 4, "v", 0 },
     { "createarea", 0x37720, (void *)lf_37720, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "area_createblock", 0x37b30, (void *)lf_37b30, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
-    { "area_setblock", 0x38260, (void *)lf_38260, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_setblockcolor", 0x38430, (void *)lf_38430, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_getblock", 0x38600, (void *)lf_38600, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_setblock", 0x38260, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_setblockcolor", 0x38430, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_getblock", 0x38600, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_38760", 0x38760, (void *)lf_38760, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_38920", 0x38920, (void *)lf_38920, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_38a90", 0x38a90, (void *)lf_38a90, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "area_deleteblock", 0x38c00, (void *)lf_38c00, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "area_createsector", 0x38fd0, (void *)lf_38fd0, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "area_getnextsector", 0x391f0, (void *)lf_391f0, 0, LF_RET_INT, 4, "", 0 },
-    { "area_marksector", 0x39230, (void *)lf_39230, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_deleteblock", 0x38c00, (void *)area_deleteblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_createsector", 0x38fd0, (void *)area_createsector, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_getnextsector", 0x391f0, (void *)area_getnextsector, 0, LF_RET_INT, 4, "", 0 },
+    { "area_marksector", 0x39230, (void *)area_marksector, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "lf_39370", 0x39370, (void *)lf_39370, 1, LF_RET_VOID, 4, "v", 1 },
-    { "area_createchunk", 0x39400, (void *)lf_39400, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_getnextchunk", 0x39550, (void *)lf_39550, 1, LF_RET_INT, 4, "v", 0 },
+    { "area_createchunk", 0x39400, (void *)area_createchunk, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_getnextchunk", 0x39550, (void *)area_getnextchunk, 1, LF_RET_INT, 4, "v", 0 },
     { "area_createsblocks", 0x395a0, (void *)lf_395a0, 0, LF_RET_VOID, 4, "", 1 },
     { "area_setupsblock", 0x3c750, (void *)area_setupsblock, 1, LF_RET_VOID, 4, "v", 1 },
     { "addbeziersurface", 0x3cf60, (void *)lf_3cf60, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
@@ -1901,7 +1901,7 @@ const LfEntry lf_table[] = {
     { "area_block_rotatesurface", 0x43650, (void *)lf_43650, 2, LF_RET_INT, 4, "vv", 0 },
     { "building_iswindow", 0x43780, (void *)lf_43780, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "lf_43a80", 0x43a80, (void *)lf_43a80, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_interior_setobject", 0x43c60, (void *)lf_43c60, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_interior_setobject", 0x43c60, (void *)area_interior_setobject, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "lf_43e20", 0x43e20, (void *)lf_43e20, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_43f80", 0x43f80, (void *)lf_43f80, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "lf_44140", 0x44140, (void *)lf_44140, 5, LF_RET_INT, 4, "vvvvv", 0 },

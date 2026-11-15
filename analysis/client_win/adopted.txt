@@ -56,3 +56,13 @@ pointinsidebase src/game/collide.c
 pointinsidebasesafe src/game/collide.c
 sphereintersectlandscape src/game/collide.c
 sphereintersectlevel src/game/collide.c
+area_createchunk src/game/area.c
+area_createsector src/game/area.c
+area_deleteblock src/game/area.c
+area_getblock src/game/area.c
+area_getnextchunk src/game/area.c
+area_getnextsector src/game/area.c
+area_interior_setobject src/game/area.c
+area_marksector src/game/area.c
+area_setblock src/game/area.c
+area_setblockcolor src/game/area.c

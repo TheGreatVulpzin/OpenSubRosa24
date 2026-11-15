@@ -25,7 +25,19 @@ import synth_textures as st  # noqa: E402
 # World kinds, for the collision functions: W a point of the world (x and z from 0 to 2048, y from 0 to 80;
 # every fifth call uses the street grid), X a second point within 40 units of the last W (the end of a line),
 # r a radius, t a team (-1 to 3), n an object, human or item index (live indices, -1 or 4095).
+# Area kinds: a an area (0 to 3), A an area that can be out of range (0 to 3, 4, 5, 0xffffffff), c a block
+# coordinate (edges of sectors and chunks, a random one, or -1), B a block word, e a face (-1 to 7).
 PROTOTYPES = {
+    'area_getblock': 'Accc',
+    'area_marksector': 'Accc',
+    'area_setblock': 'AcccB',
+    'area_setblockcolor': 'AcccB',
+    'area_deleteblock': 'Accc',
+    'area_interior_setobject': 'AcccB',
+    'area_getnextchunk': 'a',
+    'area_getnextsector': '',
+    'area_createchunk': 'Accc',
+    'area_createsector': 'Acccc',
     'sphereintersectlandscape': 'Wr',
     'lineintersectlandscape': 'WX',
     'sphereintersectlevel': 'Wr',
@@ -111,7 +123,18 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'W':
+        if kind == 'a':
+            args.append(rng.choice([0, 1, 2, 3]))
+        elif kind == 'A':
+            args.append(rng.choice([0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 0xffffffff]))
+        elif kind == 'c':
+            args.append(rng.choice([0, 1, 7, 8, 63, 64, 65, 127, 128, 255, 256, 511, -1, rng.randrange(0, 600),
+                                    rng.randrange(0, 600), rng.randrange(0, 70)]))
+        elif kind == 'B':
+            args.append(rng.choice([0, 1, 2, 0xff, 0xffff, 0xffffffff, rng.randrange(0, 2**32), rng.randrange(0, 2**16)]))
+        elif kind == 'e':
+            args.append(rng.choice([-1, 0, 1, 2, 3, 4, 5, 6, 7]))
+        elif kind == 'W':
             x, z = rng.uniform(0, 2048), rng.uniform(0, 2048)
             if index % 5 == 0:
                 x, z = round(x / 8) * 8.0, round(z / 8) * 8.0
