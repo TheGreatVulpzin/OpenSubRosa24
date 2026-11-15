@@ -7,3 +7,15 @@ scenario_getnumofmissions src/game/economy.c
 removeflieextentions src/common/files.c
 getenginetorque2 src/game/vehicles.c
 account_nameexists src/game/account_db.c
+createparticle src/game/particles.c
+createplayer src/game/player.c
+item_removehumanlink src/game/items.c
+item_removeitemlink src/game/items.c
+linkitem src/game/items.c
+calculateplayervoice src/net/server.c
+gettimeofday src/common/system.c
+applydamageobject src/game/objects.c
+scenario_armhuman src/game/scenario.c
+logic_gunstore_buy src/game/logic.c
+createaccount src/game/account_db.c
+economy_carmarket src/game/economy.c
