@@ -21,6 +21,10 @@ void sv_profile_report(void);
 
 #define sr_server       sr_data_server.active
 #define sr_game         sr_data_game
+/* The game tick. A storage adapter can place it outside Game. */
+#ifndef sr_game_ticks
+#define sr_game_ticks   sr_game.ticks
+#endif
 #define sr_events       sr_data_event
 #define sr_numofevents  sr_data_numofevents
 #define sr_players      sr_data_player

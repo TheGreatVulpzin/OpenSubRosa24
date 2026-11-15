@@ -534,7 +534,7 @@ void logic_playeractions(int player)
 
 void logicsimulation(void)
 {
-    int i, k, t = sr_game.ticks & 0x7ff;
+    int i, k, t = sr_game_ticks & 0x7ff;
     int gametype, state;
     for (k = 0; k < g_city.num_intersections; ++k) {
         CityIntersection *isec = &g_city.intersections[k];

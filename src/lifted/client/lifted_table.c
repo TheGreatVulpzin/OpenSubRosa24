@@ -726,15 +726,15 @@ void lf_6fd00(void);
 void lf_70190(void);
 void lf_704b0(void);
 void lf_71e60(void);
-void lf_71f20(void);
+void createevent_bullethit(void);
 void lf_72000(void);
 void lf_720f0(void);
-void lf_721a0(void);
-void lf_722b0(void);
-void lf_723b0(void);
-void lf_72490(void);
+void createevent_updateobject(void);
+void createevent_updateitem(void);
+void createevent_updateiteminfo(void);
+void createevent_updateplayer(void);
 void lf_72620(void);
-void lf_726d0(void);
+void createevent_updateplayer_finance(void);
 void lf_72780(void);
 void lf_72830(void);
 void lf_728b0(void);
@@ -742,7 +742,7 @@ void lf_729c0(void);
 void lf_72b50(void);
 void lf_72c40(void);
 void lf_72d10(void);
-void lf_72db0(void);
+void createevent_updateblock_quad(void);
 void lf_72ed0(void);
 void lf_73aa0(void);
 void lf_742f0(void);
@@ -2026,15 +2026,15 @@ const LfEntry lf_table[] = {
     { "player_loadinventory", 0x70190, (void *)lf_70190, 1, LF_RET_VOID, 4, "v", 0 },
     { "eventsimulation", 0x704b0, (void *)lf_704b0, 0, LF_RET_VOID, 4, "", 1 },
     { "getrandomvector2d", 0x71e60, (void *)lf_71e60, 4, LF_RET_VOID, 4, "vppv", 0 },
-    { "createevent_bullethit", 0x71f20, (void *)lf_71f20, 4, LF_RET_VOID, 4, "vvpp", 0 },
+    { "createevent_bullethit", 0x71f20, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createevent_message", 0x72000, (void *)lf_72000, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lf_720f0", 0x720f0, (void *)lf_720f0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateobject", 0x721a0, (void *)lf_721a0, 5, LF_RET_VOID, 4, "vvvpp", 0 },
-    { "createevent_updateitem", 0x722b0, (void *)lf_722b0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateiteminfo", 0x723b0, (void *)lf_723b0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateplayer", 0x72490, (void *)lf_72490, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateobject", 0x721a0, (void *)createevent_updateobject, 5, LF_RET_VOID, 4, "vvvpp", 0 },
+    { "createevent_updateitem", 0x722b0, (void *)createevent_updateitem, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateiteminfo", 0x723b0, (void *)createevent_updateiteminfo, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateplayer", 0x72490, (void *)createevent_updateplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatehuman", 0x72620, (void *)lf_72620, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateplayer_finance", 0x726d0, (void *)lf_726d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateplayer_finance", 0x726d0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_72780", 0x72780, (void *)lf_72780, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "createevent_updatedoor", 0x72830, (void *)lf_72830, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_728b0", 0x728b0, (void *)lf_728b0, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2042,7 +2042,7 @@ const LfEntry lf_table[] = {
     { "lf_72b50", 0x72b50, (void *)lf_72b50, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_72c40", 0x72c40, (void *)lf_72c40, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_72d10", 0x72d10, (void *)lf_72d10, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "createevent_updateblock_quad", 0x72db0, (void *)lf_72db0, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
+    { "createevent_updateblock_quad", 0x72db0, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x72ed0, (void *)lf_72ed0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x73aa0, (void *)lf_73aa0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupframetextures", 0x742f0, (void *)lf_742f0, 0, LF_RET_VOID, 4, "", 2 },

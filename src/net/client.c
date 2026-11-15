@@ -241,7 +241,7 @@ static void read_humans(ObjectPacket *op, uint32_t *id, uint32_t *kind)
         pbitread((uint32_t *)&hm->bleeding, 1);
         hm->net_tick_prev = hm->net_tick;
         hm->net_pos_prev = hm->net_pos;
-        hm->net_tick = sr_game.ticks;
+        hm->net_tick = sr_game_ticks;
         for (b = 0; b < 15; b++) {
             Bone *bone = &hm->bones[b];
             if (hm->vehicle_id != -1 && b >= 9)
@@ -271,7 +271,7 @@ static void read_objects(ObjectPacket *op, uint32_t *id, uint32_t *mode)
         ob = &sr_objects[*id];
         ob->net_tick_prev = ob->net_tick;
         ob->net_pos_prev = ob->net_pos;
-        ob->net_tick = sr_game.ticks;
+        ob->net_tick = sr_game_ticks;
         cs_pread(&ob->pos.x, 4, 1);
         cs_pread(&ob->pos.y, 4, 1);
         cs_pread(&ob->pos.z, 4, 1);
@@ -504,8 +504,8 @@ void clientrecv(void)
             cs_pread(&gid, 4, 1);
             if ((int)gid == sr_game.round_number) {
                 cs_pread(&gid, 4, 1);
-                if (sr_game.ticks <= (int)gid || sr_game.ticks - (int)gid > 99) {
-                    sr_game.ticks = (int)gid;
+                if (sr_game_ticks <= (int)gid || sr_game_ticks - (int)gid > 99) {
+                    sr_game_ticks = (int)gid;
                     read_state(n);
                 }
             }

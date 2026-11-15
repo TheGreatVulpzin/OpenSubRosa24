@@ -64,6 +64,10 @@ def main():
                 shared_fields.add(r['name'])
                 client_only.append(f'#undef {prefix}{r["name"]}')
             client_only.append(f'#define {prefix}{r["name"]} ' + (expr if count > 1 else f'(*{expr})'))
+            if r['name'] == 'game_tick':
+                # The client keeps the tick before the place of Game.ticks. The shared code
+                # reads it as Game.ticks, a signed int.
+                client_only.append(f'#define sr_game_ticks (*((int *)(sr_base + 0x{rva:x}u)))')
     if client_only:
         lines.append('')
         lines.append('#include "sr_image_types.h"')

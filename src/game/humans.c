@@ -103,7 +103,7 @@ static void human_bleed(Human *hu, int h)
   int health = hu->health;
   vec3 p;
 
-  if (health <= -5 || (hu->bleeding == 0 && 0 < health) || (char)(h * h * h) != (char)sr_game.ticks)
+  if (health <= -5 || (hu->bleeding == 0 && 0 < health) || (char)(h * h * h) != (char)sr_game_ticks)
     return;
   health = health < 11 ? health - 1 : health - 2;
   hu->health = health;
@@ -189,7 +189,7 @@ static void human_heal(Human *hu)
     if (hu->player_id == -1) {
       if (sr_game.gametype == 4)
         hu->despawn_timer = 0;
-    } else if ((sr_game.ticks & 0x1f) == 0 && -5 < hu->health && hu->health < 100) {
+    } else if ((sr_game_ticks & 0x1f) == 0 && -5 < hu->health && hu->health < 100) {
       hu->health = hu->health + 1;
       hu->bleeding = 0;
     }
@@ -263,7 +263,7 @@ static float human_strength(int h, int health)
 {
   float hp = (float)health, q = (float)(hp / 25.0), phase, s;
 
-  phase = (float)((float)((float)((h * h * h + sr_game.ticks) & 0x1ff) * 0.001953125) * 6.28318530718);
+  phase = (float)((float)((float)((h * h * h + sr_game_ticks) & 0x1ff) * 0.001953125) * 6.28318530718);
   s = (float)((double)q * 0.5 + 0.375 + (1.0 - (double)q) * (x87_sin((double)phase) * 0.25));
   if (health < 10)
     s = (float)(((double)(float)(hp / 10.0) * 0.5 + 0.5) * (double)s);

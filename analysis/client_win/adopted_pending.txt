@@ -77,11 +77,4 @@ systemtimer src/common/system.c
 unpackevent src/net/client.c
 getrandomvector2d src/common/random.c
 # getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.
-createevent_bullethit src/net/events.c
-createevent_updateblock_quad src/net/events.c
-createevent_updateitem src/net/events.c
-createevent_updateiteminfo src/net/events.c
-createevent_updateobject src/net/events.c
-createevent_updateplayer src/net/events.c
-createevent_updateplayer_finance src/net/events.c
 area_createinteriorblocks src/game/block_mesh.c

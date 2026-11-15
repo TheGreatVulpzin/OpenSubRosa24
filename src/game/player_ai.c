@@ -48,7 +48,7 @@ void ai_assessthreats(int player, int human)
         for (j = 0; j < p->num_threats; ++j)
             if (p->threats[j].human == k)
                 index = j;
-        bone = sr_game.ticks & 15;
+        bone = sr_game_ticks & 15;
         if (bone > 14)
             bone = 2;
         target = &enemy->bones[bone].pos;

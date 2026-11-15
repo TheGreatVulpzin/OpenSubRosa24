@@ -133,9 +133,8 @@ void item_removehumanlink(uint32_t item, int human, int slot)
             uint32_t *count = &sr_data_numofevents;
             uint32_t index = *count;
             Event *ev = sr_data_event + index;
-            const Game *game = &sr_data_game;
             ev->type = 5;
-            ev->tick = game->ticks;
+            ev->tick = sr_game_ticks;
             ev->param = (it->active + it->type * 2) * 0x400 + (int)item;
             ev->attach_type = -1;
             ev->attach_id = it->parent_item;

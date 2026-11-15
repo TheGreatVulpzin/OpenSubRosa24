@@ -76,3 +76,10 @@ area_block_addoutdoor src/game/block_mesh.c
 area_block_addwindow src/game/block_mesh.c
 area_block_addwindowhorizontal src/game/block_mesh.c
 area_block_addwindowvertical src/game/block_mesh.c
+createevent_bullethit src/net/events.c
+createevent_updateblock_quad src/net/events.c
+createevent_updateitem src/net/events.c
+createevent_updateiteminfo src/net/events.c
+createevent_updateobject src/net/events.c
+createevent_updateplayer src/net/events.c
+createevent_updateplayer_finance src/net/events.c
