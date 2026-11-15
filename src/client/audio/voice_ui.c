@@ -7,6 +7,7 @@
 #include "audio/sound.h"
 #include "audio/imports.h"
 #include "client.h"
+#include "menu/items.h"
 #include "sr_runtime.h"
 #include "vectors.h"
 #include "sr_math.h"
@@ -44,13 +45,10 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 
 /* Game functions of other files. */
 #define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
-#define resetmenuitems CL_FN(0x503970, void (__cdecl *)(void))
 #define setmenuitem CL_FN(0x502b70, void (__cdecl *)(int, ...))
-#define createmenuitemempty CL_FN(0x5036d0, void (__cdecl *)(void))
 #define checksystemmessages CL_FN(0x5060d0, void (__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
-#define checkmenuitems CL_FN(0x501be0, void (__cdecl *)(void))
 #define drawmenuitems CL_FN(0x4ff2e0, void (__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))
 #define drawmousecursor CL_FN(0x507ee0, void (__cdecl *)(int, int, int, float, float, float, float))
@@ -117,9 +115,7 @@ enum { TEXT_BACK = 0x125d40, TEXT_THRESHOLD = 0x125d48,
 /* Place a menu label in the fixed canvas. */
 static void voice_label(unsigned text, float x, float y, float width, float height)
 {
-    CL_FN(0x5024e0, void (__cdecl *)(char *, float, float, float, float, float, unsigned,
-                                  float, float, float, float))(
-        (char *)(sr_base + text), x, y, width, height, MENU_FONT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    createmenubutton((char *)(sr_base + text), x, y, width, height, MENU_FONT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* Draw the waveform and the two threshold lines. */

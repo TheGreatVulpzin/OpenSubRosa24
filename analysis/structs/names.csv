@@ -1091,3 +1091,4 @@ menu_item,0x274,cursor,int,,checkmenuitems copies it to the cursor of the font w
 menu_item,0x278,spare_278,int,,setmenuitem option 16 writes it; no function reads it
 menu_item,0x27c,value,int*,,the int of a toggle or a choice or a slider; the buffer of a text field
 menu_item,0x280,callback,void*,,checkmenuitems calls it while the item is pressed
+client_font,0xc,cursor,int,,checkmenuitems copies the cursor of the item under the mouse; setupgraphics clears it

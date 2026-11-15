@@ -1,0 +1,9 @@
+resetmenuitems src/client/menu/items.c
+createmenuitemempty src/client/menu/items.c
+createmenuitem src/client/menu/items.c
+createmenubutton src/client/menu/items.c
+setmenuiteminfo src/client/menu/items.c
+checkmenuitems src/client/menu/items.c
+menutoggle src/client/menu/items.c
+menuset src/client/menu/items.c
+text_getlength src/client/menu/items.c

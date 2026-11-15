@@ -923,6 +923,69 @@ def rotate_case():
     return edits, {'rotateorientationfast': calls}
 
 
+MENU_ITEMS, MENU_COUNT, MENU_INDEX = 0x5350d00, 0x9065240, 0xfefe288
+MOUSE, MOUSE_PREVIOUS, KEYS, KEYS_PREVIOUS, KEYS_BLOCKED, FONTNUM = (
+    0x19c07c80, 0xb733100, 0x75a5140, 0x1bbe1a0, 0x29e752a0, 0x127eac)
+
+
+def menu_case(click=True, blocked=0):
+    """The menu items: twelve random items of each kind under a mouse and keys, three ticks of
+    checkmenuitems, an empty item, a reset, the two callbacks and text widths."""
+    rng = random.Random(19 + click + 2 * blocked)
+    values = SCRATCH + 0x800
+    texts = SCRATCH + 0x900
+    words = [b'Back', b'Join game', b'', b'A' * 70, bytes(range(0x80, 0xc0)), b'Options\x01\xff']
+    edits = [(MENU_COUNT, 'i', [12]), (MOUSE, '2i', [300, 200]), (MOUSE + 0x10, 'i', [1 if click else 0]),
+             (MOUSE_PREVIOUS + 0x10, 'i', [0]), (KEYS_BLOCKED, 'i', [blocked]), (FONTNUM, 'i', [rng.choice([0, 1])]),
+             (values, '8i', [rng.randint(-3, 7) for _ in range(8)])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    for key in (30, 40, 41, 44, 81, 82):
+        edits += [(KEYS + key, 'B', [rng.randint(0, 1)]), (KEYS_PREVIOUS + key, 'B', [rng.randint(0, 1)])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        kind = [0, 0, 3, 4, 1, 5][i % 6]
+        box = [rng.choice([250.0, 300.0, 290.0, NAN, 310.0]), rng.choice([150.0, 200.0, 199.5, 220.0]),
+               rng.choice([10.0, 50.0, 0.0, -5.0, INF]), rng.choice([10.0, 60.0, 1.0])]
+        edits += [(base, 'i', [kind]), (base + 0x1d8, '2f', box[:2]), (base + 0x1f8, '2f', box[2:]),
+                  (base + 0x200, '6i', [rng.choice([0, 30, 40, 41, 44]), rng.choice([0, 0, 81, 82]),
+                                        rng.randint(0, 1), int(rng.random() < 0.2), 0, 0]),
+                  (base + 0x21c, 'f', [floats(rng)]), (base + 0x220, '2i', [rng.randint(0, 1), 0]),
+                  (base + 0x228, 'I', [rng.choice([1, 2, 4, 3])]), (base + 0x274, 'i', [i + 1]),
+                  (base + 0x27c, 'I', [0x20000000 + values + 4 * (i % 8)]),
+                  (base + 0x280, 'I', [0x20000000 + rng.choice([0x103dd0, 0x103e30]) if kind in (3, 4) else 0])]
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    check = [call(0x101be0) for _ in range(3)]
+    made = [call(0x1036d0), call(0x103970)]
+    callbacks = []
+    for i in (2, 3, 8, 9):
+        callbacks += [(call(0x103dd0) if i % 6 == 2 else call(0x103e30))]
+    widths = [call(0x109540, t, rng.choice([1.0, 0.5, 24.0, floats(rng)])) for t in text]
+    edits.append((MENU_INDEX, 'i', [2]))
+    return edits, {'checkmenuitems': check, 'resetmenuitems': [made[1]], 'createmenuitemempty': [made[0]],
+                   'menutoggle': [callbacks[0]], 'menuset': [callbacks[1]], 'text_getlength': widths}
+
+
+def menu_build_case():
+    """createmenuitem, createmenubutton and setmenuiteminfo, each in its own list."""
+    rng = random.Random(23)
+    texts = SCRATCH + 0x900
+    words = [b'Back', b'Join game', b'', b'A' * 70, bytes(range(0x80, 0xc0))]
+    edits = [(MENU_COUNT, 'i', [5])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    item, button, info = [], [], []
+    for i in range(24):
+        item.append(call(0x102080, text[i % 5], floats(rng), floats(rng), rng.choice([16.0, 24.0, floats(rng)]),
+                         rng.choice([0, 1, 2, 4, 8, 5, 10, 15]), floats(rng), 1.0, 0.5, floats(rng)))
+        button.append(call(0x1024e0, text[i % 5], floats(rng), floats(rng), rng.choice([100.0, floats(rng)]),
+                           rng.choice([32.0, floats(rng)]), floats(rng), rng.choice([0, 1, 2, 4, 8, 9, 6]),
+                           1.0, floats(rng), 1.0, floats(rng)))
+        info.append(call(0x102960, text[i % 5], floats(rng), floats(rng), 12.0, i, 1.0, floats(rng), 0.0, 1.0))
+    return edits, {'createmenuitem': item, 'createmenubutton': button, 'setmenuiteminfo': info}
+
+
 def framelist_case(extra=()):
     """buildframelist on the scene of the recording: its humans, vehicles, items and street
     objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
@@ -1074,6 +1137,8 @@ def main():
             'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
             'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
             'rotate': rotate_case,
+            'menu': menu_case, 'menu_keys': lambda: menu_case(False), 'menu_blocked': lambda: menu_case(True, 1),
+            'menu_build': menu_build_case,
             'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
             'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
             'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}
