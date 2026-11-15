@@ -26,6 +26,10 @@ The calls run in a fixed order.
 7. The frame textures.
 8. The sounds: 30 files and 11 generated tones.
 
+## Settings keys
+
+`src/client/setup/option_keys.c` reads and writes one key of the settings file. A read searches the key in the text and sets the value. A write puts the key and the value on one line, with a carriage return and a line feed. The file is the shared file handle `open_file`. The server uses the same worker (`option_int` and `option_string` in `src/game/options.c`) and only reads.
+
 ## Quirks
 
 - A model that a builder makes from an item gets the item type as the second argument. The cash builder makes the Magnum, the Uzi and the 9mm, and the bill builder makes the two cash items.

@@ -71,19 +71,19 @@ void __cdecl screenshot(void)
     glReadPixels(0, 0, cl_data_render_width, cl_data_render_height, GL_RGBA, PIXEL_BYTE, cl_data_screenshot_pixels);
     index = 0;
     for (;;) {
-        cl_data_shader_file = (int)(uintptr_t)os_fopen(filename, "rb");
-        if (!cl_data_shader_file || index >= SHOT_LIMIT)
+        cl_data_open_file = (int)(uintptr_t)os_fopen(filename, "rb");
+        if (!cl_data_open_file || index >= SHOT_LIMIT)
             break;
         ++index;
         filename[5] = (char)('0' + index / 100);
         filename[6] = (char)('0' + (index / 10) % 10);
         filename[7] = (char)('0' + index % 10);
-        os_fclose((void *)(uintptr_t)cl_data_shader_file);
+        os_fclose((void *)(uintptr_t)cl_data_open_file);
     }
-    cl_data_shader_file = (int)(uintptr_t)os_fopen(filename, "wb");
-    if (!cl_data_shader_file)
+    cl_data_open_file = (int)(uintptr_t)os_fopen(filename, "wb");
+    if (!cl_data_open_file)
         return;
-#define WRITE_HEADER(value, object) do { object = (value); write_file(&object, sizeof(object), 1, (void *)(uintptr_t)cl_data_shader_file); } while (0)
+#define WRITE_HEADER(value, object) do { object = (value); write_file(&object, sizeof(object), 1, (void *)(uintptr_t)cl_data_open_file); } while (0)
     WRITE_HEADER(0, byte);
     WRITE_HEADER(0, byte);
     WRITE_HEADER(TGA_TRUE_COLOR, byte);
@@ -100,10 +100,10 @@ void __cdecl screenshot(void)
     for (y = 0; y < cl_data_render_height; ++y) {
         for (x = 0; x < cl_data_render_width; ++x) {
             uint32_t pixel = cl_data_screenshot_pixels[y * cl_data_render_width + x];
-            put_byte((pixel >> 16) & 255, (void *)(uintptr_t)cl_data_shader_file);
-            put_byte((pixel >> 8) & 255, (void *)(uintptr_t)cl_data_shader_file);
-            put_byte(pixel & 255, (void *)(uintptr_t)cl_data_shader_file);
+            put_byte((pixel >> 16) & 255, (void *)(uintptr_t)cl_data_open_file);
+            put_byte((pixel >> 8) & 255, (void *)(uintptr_t)cl_data_open_file);
+            put_byte(pixel & 255, (void *)(uintptr_t)cl_data_open_file);
         }
     }
-    os_fclose((void *)(uintptr_t)cl_data_shader_file);
+    os_fclose((void *)(uintptr_t)cl_data_open_file);
 }

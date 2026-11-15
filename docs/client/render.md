@@ -176,7 +176,7 @@ The mesh view names the client pointers within `BlockSector` without changing it
 
 `src/client/render/screen.c` collects display modes and saves the back buffer. `listvideomodes` appends width, height and pixel depth records. It reads only the first 512 SDL modes. A matching width replaces the stored height. A nonzero new height makes that entry a match and preserves its pixel depth. Every call also appends 1024 by 640 by 32, even when that mode is already present.
 
-`screenshot` accepts dimensions up to 1280 by 960. It reads RGBA pixels, writes an 18 byte TGA header, then writes BGR pixels. The filename starts at `scsht000.tga`. Existing files advance the three digits through 999. At index 1000, the first digit becomes a colon. The file handle uses `shader_file`, including the value after close.
+`screenshot` accepts dimensions up to 1280 by 960. It reads RGBA pixels, writes an 18 byte TGA header, then writes BGR pixels. The filename starts at `scsht000.tga`. Existing files advance the three digits through 999. At index 1000, the first digit becomes a colon. The file handle uses `open_file`, including the value after close.
 
 ## Depth and occlusion
 

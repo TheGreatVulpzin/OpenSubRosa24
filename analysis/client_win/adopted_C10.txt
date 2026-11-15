@@ -10,3 +10,5 @@ copyvector src/client/math/small_vectors.c
 copyvector2d src/client/math/small_vectors.c
 zerovector src/client/math/small_vectors.c
 flabs src/client/math/small_vectors.c
+optionreadwriteint src/client/setup/option_keys.c
+optionreadwritestring src/client/setup/option_keys.c

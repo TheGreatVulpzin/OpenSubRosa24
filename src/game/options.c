@@ -17,20 +17,40 @@
 #define g_sysinfo sr_data_sysinfo
 #define g_parser sr_data_parser
 
-/* Sets the value from the number after the key. Every key search starts at the top of the text. */
-static void optionreadwriteint(int *value, const char *key)
+/* Read: set the value from the number after the key. Write: put the key and the value on one
+ * line of the file. Every key search starts at the top of the text. */
+void option_int(int *value, const char *key, int write, void *file)
 {
-    if (findstring(key))
-        *value = getint();
-    g_parser.pos = 0;
+    if (!write) {
+        if (findstring(key))
+            *value = getint();
+        g_parser.pos = 0;
+    } else {
+        os_fprintf(file, "%s%d\r\n", key, *value);
+    }
 }
 
-/* Sets the string from the rest of the line after the key. */
+/* Read: set the string from the rest of the line after the key. Write: put the key and the
+ * string on one line of the file. */
+void option_string(char *value, const char *key, int max, int write, void *file)
+{
+    if (!write) {
+        if (findstring(key))
+            getstring(value, max);
+        g_parser.pos = 0;
+    } else {
+        os_fprintf(file, "%s%s\r\n", key, value);
+    }
+}
+
+static void optionreadwriteint(int *value, const char *key)
+{
+    option_int(value, key, 0, NULL);
+}
+
 static void optionreadwritestring(char *value, const char *key, int max)
 {
-    if (findstring(key))
-        getstring(value, max);
-    g_parser.pos = 0;
+    option_string(value, key, max, 0, NULL);
 }
 
 /* Sets the defaults and reads config.txt from the settings folder. A non-zero save only

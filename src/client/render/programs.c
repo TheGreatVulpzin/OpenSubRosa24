@@ -19,7 +19,7 @@
 #define g_info_log cl_data_info_log
 #define g_width cl_data_render_width
 #define g_height cl_data_render_height
-#define g_shader_file cl_data_shader_file
+#define g_open_file cl_data_open_file
 
 #define loadsource CL_FN(0x4d6860, char *(__cdecl *)(const char *path))
 
@@ -321,7 +321,7 @@ void __cdecl setupprogramobjects(void)
         setup_landscape(&g_programs[PROGRAM_LANDSCAPE]);
     if (strlen(g_shader_log) != 0) {
         file = os_fopen("shaderoutput.txt", "wb");
-        g_shader_file = (int)file;
+        g_open_file = (int)file;
         if (file != 0) {
             os_fprintf(file, g_shader_log);
             os_fclose(file);

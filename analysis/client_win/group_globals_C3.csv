@@ -7,7 +7,7 @@ shader_log,char,65536,0x13c1e6c0,"compileprogramobject adds the info logs to it.
 info_log,char,65536,0x163129e0,"compileprogramobject reads the info log of an object into it"
 render_width,int,1,0xb7330c0,"setupprogramobjects gives the shaders the size of one pixel: 1 over this width"
 render_height,int,1,0xb7330c4,"setupprogramobjects gives the shaders the size of one pixel: 1 over this height"
-shader_file,int,1,0x13e61828,"setupprogramobjects keeps the handle of shaderoutput.txt in it"
+open_file,int,1,0x13e61828,"the handle of the open text or image file: shaderoutput.txt, a screenshot and the settings file"
 light_position,float,4,0x19c0cd78,"the direction of the light, in world space. The model, landscape, sector and sky passes pass it to OpenGL and to the shaders"
 world_position,vec3,1,0x19c750c4,"renderframeatmosphere and render_sectorlist pass it to the shaders as the world position"
 viewport_width,float,1,0x19c07cc8,"renderframeatmosphere sets the viewport from it"

@@ -1007,8 +1007,8 @@ void lf_d1660(void);
 void lf_d21e0(void);
 void lf_d2290(void);
 void lf_d3350(void);
-void lf_d3810(void);
-void lf_d3860(void);
+void optionreadwriteint(void);
+void optionreadwritestring(void);
 void lf_d38c0(void);
 void lf_d41d0(void);
 void lf_d4340(void);
@@ -2307,8 +2307,8 @@ const LfEntry lf_table[] = {
     { "getenginetorque", 0xd21e0, (void *)lf_d21e0, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "optionsmenu", 0xd2290, (void *)lf_d2290, 0, LF_RET_VOID, 4, "", 1 },
     { "loadsaveoptions", 0xd3350, (void *)lf_d3350, 1, LF_RET_VOID, 4, "v", 1 },
-    { "optionreadwriteint", 0xd3810, (void *)lf_d3810, 3, LF_RET_VOID, 4, "ppv", 1 },
-    { "optionreadwritestring", 0xd3860, (void *)lf_d3860, 4, LF_RET_VOID, 4, "vpvv", 1 },
+    { "optionreadwriteint", 0xd3810, (void *)optionreadwriteint, 3, LF_RET_VOID, 4, "ppv", 1 },
+    { "optionreadwritestring", 0xd3860, (void *)optionreadwritestring, 4, LF_RET_VOID, 4, "vpvv", 1 },
     { "voiceoptionsmenu", 0xd38c0, (void *)lf_d38c0, 0, LF_RET_VOID, 4, "", 1 },
     { "createparticle", 0xd41d0, (void *)lf_d41d0, 5, LF_RET_INT, 4, "vpvvv", 0 },
     { "lf_d4340", 0xd4340, (void *)lf_d4340, 0, LF_RET_VOID, 4, "", 0 },
