@@ -1,5 +1,5 @@
 rva,name
-0x102b70,createmenubutton
+0x102b70,setmenuitem
 0x106b30,drawtext
 0xac50,FUN_0040ac50
 ,sprintf

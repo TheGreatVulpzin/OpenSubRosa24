@@ -45,7 +45,7 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 /* Game functions of other files. */
 #define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
 #define resetmenuitems CL_FN(0x503970, void (__cdecl *)(void))
-#define createmenubutton CL_FN(0x502b70, void (__cdecl *)(int, ...))
+#define setmenuitem CL_FN(0x502b70, void (__cdecl *)(int, ...))
 #define createmenuitemempty CL_FN(0x5036d0, void (__cdecl *)(void))
 #define checksystemmessages CL_FN(0x5060d0, void (__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
@@ -185,22 +185,22 @@ void voiceoptionsmenu(void)
     while (!cl_data_audio_menu_exit && !cl_data_audio_menu_back) {
         cl_data_audio_menu_selection = 0;
         voice_label(TEXT_BACK, MENU_MARGIN, MENU_MARGIN, MENU_BACK_WIDTH, MENU_BACK_HEIGHT);
-        if (!binding) createmenubutton(MENU_BUTTON, MENU_ESCAPE);
+        if (!binding) setmenuitem(MENU_BUTTON, MENU_ESCAPE);
         if (!cl_data_audio_voice_enabled) {
             createmenuitemempty();
         } else if (!cl_data_audio_push_to_talk) {
             createmenuitemempty();
             voice_label(TEXT_THRESHOLD, MENU_LEFT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            createmenubutton(MENU_SLIDER, &cl_data_audio_threshold, 0, MENU_THRESHOLD_MAX, MENU_THRESHOLD_QUANTUM);
+            setmenuitem(MENU_SLIDER, &cl_data_audio_threshold, 0, MENU_THRESHOLD_MAX, MENU_THRESHOLD_QUANTUM);
             voice_label(TEXT_PUSH_LABEL, MENU_RIGHT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            createmenubutton(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
+            setmenuitem(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
         } else {
             voice_label(TEXT_EMPTY, MENU_LEFT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
             voice_label(TEXT_PUSH_KEY, MENU_RIGHT, MENU_CONTROLS_Y, MENU_WIDTH, MENU_HEIGHT);
-            createmenubutton(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
+            setmenuitem(MENU_TOGGLE, &cl_data_audio_push_to_talk, 1);
         }
         voice_label(TEXT_VOICE, MENU_LEFT, MENU_VOICE_Y, MENU_WIDTH, MENU_HEIGHT);
-        createmenubutton(MENU_TOGGLE, &cl_data_audio_voice_enabled, 1);
+        setmenuitem(MENU_TOGGLE, &cl_data_audio_voice_enabled, 1);
         checksystemmessages();
         checkkeyboard();
         checkmouse();
