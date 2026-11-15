@@ -824,7 +824,7 @@ void sphereintersectline(void);
 void lf_94900(void);
 void lineintersectsphere(void);
 void lf_94b20(void);
-void lf_94c00(void);
+void getonlineserverlist(void);
 void getmasterserverip(void);
 void lf_951c0(void);
 void lf_96cf0(void);
@@ -2124,7 +2124,7 @@ const LfEntry lf_table[] = {
     { "lf_94900", 0x94900, (void *)lf_94900, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x94990, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "getlanipaddress", 0x94b20, (void *)lf_94b20, 0, LF_RET_VOID, 4, "", 1 },
-    { "getonlineserverlist", 0x94c00, (void *)lf_94c00, 0, LF_RET_VOID, 4, "", 1 },
+    { "getonlineserverlist", 0x94c00, (void *)getonlineserverlist, 0, LF_RET_VOID, 4, "", 1 },
     { "getmasterserverip", 0x94c50, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
     { "setupitemtypes", 0x951c0, (void *)lf_951c0, 0, LF_RET_VOID, 4, "", 0 },
     { "createitem", 0x96cf0, (void *)lf_96cf0, 4, LF_RET_INT, 4, "vpvv", 0 },

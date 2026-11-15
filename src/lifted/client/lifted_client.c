@@ -64999,34 +64999,6 @@ void __cdecl lf_94b20(void)
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x94c00 */
-#define DAT_17b9b600 (*(u_long *)SR_VA(0x17b9b600))
-#define DAT_17b9b604 (*(u_short *)SR_VA(0x17b9b604))
-#define resetsendpacket ((void (__cdecl *)(void))SR_FN(0x4fe4f0))
-#define sendpacket ((void (__cdecl *)(u_long, u_short))SR_FN(0x4fe520))
-#define cs_pwrite ((undefined4 (__cdecl *)(void *, int, int))SR_FN(0x4fe5b0))
-#define local_d (*(undefined1 (*)[9])(lf_frame + 0x13))
-void __cdecl lf_94c00(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x20];
-
-  
-  if (DAT_17b9b600 != 0) {
-    resetsendpacket();
-    local_d[0] = 0x21;
-    cs_pwrite(local_d,1,1);
-    sendpacket(DAT_17b9b600,DAT_17b9b604);
-  }
-  return;
-}
-#undef DAT_17b9b600
-#undef DAT_17b9b604
-#undef resetsendpacket
-#undef sendpacket
-#undef cs_pwrite
-#undef local_d
-
 /* ---------------------------------------------------------------- 0x951c0 */
 #define DAT_1074db80 (*(undefined4 *)SR_VA(0x1074db80))
 #define DAT_1074db88 (*(undefined *)SR_VA(0x1074db88))

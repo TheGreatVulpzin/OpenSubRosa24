@@ -21,3 +21,4 @@ createsoundobject src/client/audio/sound_create.c
 createsound src/client/audio/sound_create.c
 loadwav src/client/audio/wav.c
 loadsource src/client/render/source.c
+getonlineserverlist src/client/setup/server_list.c
