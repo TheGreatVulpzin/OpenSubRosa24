@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "client.h"
+#include "render/source.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
@@ -20,8 +21,6 @@
 #define g_width cl_data_render_width
 #define g_height cl_data_render_height
 #define g_open_file cl_data_open_file
-
-#define loadsource CL_FN(0x4d6860, char *(__cdecl *)(const char *path))
 
 enum {
     GLEXT_SHADER_OBJECTS = 1,

@@ -213,6 +213,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_image_name ((char *)(sr_base + 0xb733140u))
 #define cl_data_sound_buffers ((SoundBuffer *)(sr_base + 0xf8ab240u))
 #define cl_data_audio_source_limit (*((int *)(sr_base + 0x1bbe3a0u)))
+#define cl_data_source_buffer ((char *)(sr_base + 0xf3ca9c0u))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))

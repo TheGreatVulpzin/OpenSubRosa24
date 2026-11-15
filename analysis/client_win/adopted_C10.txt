@@ -20,3 +20,4 @@ setupsounds src/client/audio/sound_create.c
 createsoundobject src/client/audio/sound_create.c
 createsound src/client/audio/sound_create.c
 loadwav src/client/audio/wav.c
+loadsource src/client/render/source.c

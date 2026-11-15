@@ -60,6 +60,7 @@ Any other letter after a slash is dropped with the slash. A text holds at most 1
 The renderer has ten programs, each with a vertex file and a fragment file in `shader/`: sector, sector window, reflect, model, shadow, depth, occlusion, atmosphere, blur and landscape.
 
 - `compileprogramobject(index, vertex source, fragment source)` compiles each shader, attaches it and links the program. Each step adds its info log to one text. The result is 1 once the program was linked.
+- `loadsource(path)` (`src/client/render/source.c`) reads a text file into a new block with a zero at its end. The caller frees the block. It adds the path and a line break to the shader log before it opens the file, so the log also lists a file that is missing. The bytes go through `source_buffer` (0x20000 bytes) first: a longer file writes past it. It returns NULL when the file does not open.
 - `setupprogramobjects` reads the files, builds the ten programs and sets their uniform variables: the size of one pixel of the screen, the atmosphere constants and the numbers of the texture units. It writes the text of the logs to `shaderoutput.txt` when the text is not empty.
 - The program record holds the places of the uniform variables. The place of a variable that the setup does not look up is 0.
 

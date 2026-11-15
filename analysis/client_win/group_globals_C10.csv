@@ -2,3 +2,4 @@ name,type,count,client_rva,evidence
 image_name,char,128,0xb733140,"loadtexture and loadtexturesetalpha copy the path of the image into it. loadtexturepartial compares it with its path"
 sound_buffers,SoundBuffer,256,0xf8ab240,"setupsounds makes one OpenAL buffer for each. loadwav and createwav fill them"
 audio_source_limit,int,1,0x1bbe3a0,"setupsounds counts the OpenAL sources it could make. createsound and createsoundobject stop at this number"
+source_buffer,char,131072,0xf3ca9c0,"loadsource reads the whole file into it before it copies it. The next object starts 0x20000 bytes after it"

@@ -1028,7 +1028,7 @@ void updateplayticket(void);
 void lf_d5660(void);
 void lf_d5690(void);
 void compileprogramobject(void);
-void lf_d6860(void);
+void loadsource(void);
 void orientationtoquaternion(void);
 void lf_d6a30(void);
 void multiplyquaternion(void);
@@ -2328,7 +2328,7 @@ const LfEntry lf_table[] = {
     { "lf_d5660", 0xd5660, (void *)lf_d5660, 0, LF_RET_INT64, 4, "", 0 },
     { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
     { "compileprogramobject", 0xd6570, (void *)compileprogramobject, 3, LF_RET_INT, 4, "vvv", 1 },
-    { "loadsource", 0xd6860, (void *)lf_d6860, 1, LF_RET_INT, 4, "p", 1 },
+    { "loadsource", 0xd6860, (void *)loadsource, 1, LF_RET_INT, 4, "p", 1 },
     { "orientationtoquaternion", 0xd6970, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_d6a30", 0xd6a30, (void *)lf_d6a30, 2, LF_RET_VOID, 4, "pp", 0 },
     { "multiplyquaternion", 0xd6b50, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
