@@ -77,4 +77,3 @@ systemtimer src/common/system.c
 unpackevent src/net/client.c
 getrandomvector2d src/common/random.c
 # getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.
-area_createinteriorblocks src/game/block_mesh.c

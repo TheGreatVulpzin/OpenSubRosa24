@@ -68,6 +68,10 @@ def main():
                 # The client keeps the tick before the place of Game.ticks. The shared code
                 # reads it as Game.ticks, a signed int.
                 client_only.append(f'#define sr_game_ticks (*((int *)(sr_base + 0x{rva:x}u)))')
+            if r['name'] == 'open_file':
+                # The client keeps the handle of the open file in one global. The text parser
+                # stores its handle there, not in a field of Parser.
+                client_only.append(f'#define sr_parser_file (*((void **)(sr_base + 0x{rva:x}u)))')
     if client_only:
         lines.append('')
         lines.append('#include "sr_image_types.h"')

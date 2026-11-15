@@ -44,18 +44,18 @@ void building_load(const char *name, int header_only)
     length = snprintf(path, sizeof path, "data/building/%s.sbb", name);
     if (length < 0 || length >= sizeof path)
         goto missing;
-    g_parser.file = os_fopen(path, "rb");
-    if (g_parser.file != NULL) {
-        if (game_fread(&version, 4, 1, g_parser.file) != 1)
+    sr_parser_file = os_fopen(path, "rb");
+    if (sr_parser_file != NULL) {
+        if (game_fread(&version, 4, 1, sr_parser_file) != 1)
             goto reject;
         if ((uint32_t)version - 6u > 4u) {
-            os_fclose(g_parser.file);
+            os_fclose(sr_parser_file);
             return;
         }
-        if (game_fread(file_name, 1, 64, g_parser.file) != 64 ||
-            game_fread(&size_x, 4, 1, g_parser.file) != 1 ||
-            game_fread(&size_z, 4, 1, g_parser.file) != 1 ||
-            game_fread(&floors, 4, 1, g_parser.file) != 1 ||
+        if (game_fread(file_name, 1, 64, sr_parser_file) != 64 ||
+            game_fread(&size_x, 4, 1, sr_parser_file) != 1 ||
+            game_fread(&size_z, 4, 1, sr_parser_file) != 1 ||
+            game_fread(&floors, 4, 1, sr_parser_file) != 1 ||
             (unsigned)size_x > 63 || (unsigned)size_z > 63 || (unsigned)floors > 63)
             goto reject;
         if (header_only != 0) {
@@ -63,18 +63,18 @@ void building_load(const char *name, int header_only)
             b->size_x = size_x;
             b->size_z = size_z;
             b->floors = floors;
-            os_fclose(g_parser.file);
+            os_fclose(sr_parser_file);
             return;
         }
-        if (game_fread(&num_materials, 4, 1, g_parser.file) != 1 || (unsigned)num_materials > 256)
+        if (game_fread(&num_materials, 4, 1, sr_parser_file) != 1 || (unsigned)num_materials > 256)
             goto reject;
         for (i = 0; i < num_materials; i++)
-            if (game_fread(materials + i * 64, 1, 64, g_parser.file) != 64)
+            if (game_fread(materials + i * 64, 1, 64, sr_parser_file) != 64)
                 goto reject;
-        if (game_fread(&num_blocks, 4, 1, g_parser.file) != 1 || (unsigned)num_blocks > 256)
+        if (game_fread(&num_blocks, 4, 1, sr_parser_file) != 1 || (unsigned)num_blocks > 256)
             goto reject;
         for (i = 0; i < num_blocks; i++)
-            if (game_fread(blocks + i * 64, 1, 64, g_parser.file) != 64)
+            if (game_fread(blocks + i * 64, 1, 64, sr_parser_file) != 64)
                 goto reject;
         memcpy(b->name, file_name, sizeof b->name);
         b->size_x = size_x;
@@ -88,25 +88,25 @@ void building_load(const char *name, int header_only)
             for (r = 0; r <= b->size_z; r++) {
                 for (c = 0; c <= b->size_x; c++) {
                     BuildingCell *cell = &b->cells[cell_index(f, r, c)];
-                    game_fread(&cell->outer, 4, 1, g_parser.file);
-                    game_fread(&cell->inner, 4, 1, g_parser.file);
+                    game_fread(&cell->outer, 4, 1, sr_parser_file);
+                    game_fread(&cell->inner, 4, 1, sr_parser_file);
                     cell->interior_bit18 = 0;
                     if (version > 6)
-                        game_fread(&cell->interior_bit18, 4, 1, g_parser.file);
-                    game_fread(&cell->wall_row, 4, 1, g_parser.file);
-                    game_fread(&cell->wall_col, 4, 1, g_parser.file);
-                    game_fread(&cell->interior_bit16, 4, 1, g_parser.file);
+                        game_fread(&cell->interior_bit18, 4, 1, sr_parser_file);
+                    game_fread(&cell->wall_row, 4, 1, sr_parser_file);
+                    game_fread(&cell->wall_col, 4, 1, sr_parser_file);
+                    game_fread(&cell->interior_bit16, 4, 1, sr_parser_file);
                     for (k = 0; k < 8; k++)
-                        game_fread(&cell->tex_outer[k], 2, 1, g_parser.file);
+                        game_fread(&cell->tex_outer[k], 2, 1, sr_parser_file);
                     for (k = 0; k < 8; k++)
-                        game_fread(&cell->tex_inner[k], 2, 1, g_parser.file);
-                    game_fread(&cell->spare, 4, 1, g_parser.file);
-                    game_fread(&cell->color, 4, 1, g_parser.file);
+                        game_fread(&cell->tex_inner[k], 2, 1, sr_parser_file);
+                    game_fread(&cell->spare, 4, 1, sr_parser_file);
+                    game_fread(&cell->color, 4, 1, sr_parser_file);
                     if (version < 8)
                         cell->color = 0;
                     if (version > 9) {
-                        game_fread(&cell->guard_dir, 4, 1, g_parser.file);
-                        game_fread(&cell->prize, 4, 1, g_parser.file);
+                        game_fread(&cell->guard_dir, 4, 1, sr_parser_file);
+                        game_fread(&cell->prize, 4, 1, sr_parser_file);
                     }
                 }
             }
@@ -115,10 +115,10 @@ void building_load(const char *name, int header_only)
             for (i = 0; i < 16; i++) {
                 int *area = (int *)&b->areas[i];
                 for (k = 0; k < 6; k++)
-                    game_fread(&area[k], 4, 1, g_parser.file);
+                    game_fread(&area[k], 4, 1, sr_parser_file);
             }
         }
-        os_fclose(g_parser.file);
+        os_fclose(sr_parser_file);
     }
 missing:
     building_setupfloorplannewer();
@@ -136,7 +136,7 @@ missing:
     }
     return;
 reject:
-    os_fclose(g_parser.file);
+    os_fclose(sr_parser_file);
     goto missing;
 }
 
@@ -162,47 +162,47 @@ void building_save(const char *name)
             }
         }
     }
-    g_parser.file = os_fopen(path, "wb");
-    if (g_parser.file == NULL)
+    sr_parser_file = os_fopen(path, "wb");
+    if (sr_parser_file == NULL)
         return;
-    game_fwrite(&version, 4, 1, g_parser.file);
-    game_fwrite(b->name, 1, 64, g_parser.file);
-    game_fwrite(&b->size_x, 4, 1, g_parser.file);
-    game_fwrite(&b->size_z, 4, 1, g_parser.file);
-    game_fwrite(&b->floors, 4, 1, g_parser.file);
-    game_fwrite(&b->num_materials, 4, 1, g_parser.file);
+    game_fwrite(&version, 4, 1, sr_parser_file);
+    game_fwrite(b->name, 1, 64, sr_parser_file);
+    game_fwrite(&b->size_x, 4, 1, sr_parser_file);
+    game_fwrite(&b->size_z, 4, 1, sr_parser_file);
+    game_fwrite(&b->floors, 4, 1, sr_parser_file);
+    game_fwrite(&b->num_materials, 4, 1, sr_parser_file);
     for (i = 0; i < b->num_materials; i++)
-        game_fwrite(b->materials + i * 64, 1, 64, g_parser.file);
-    game_fwrite(&b->num_blocks, 4, 1, g_parser.file);
+        game_fwrite(b->materials + i * 64, 1, 64, sr_parser_file);
+    game_fwrite(&b->num_blocks, 4, 1, sr_parser_file);
     for (i = 0; i < b->num_blocks; i++)
-        game_fwrite(b->blocks + i * 64, 1, 64, g_parser.file);
+        game_fwrite(b->blocks + i * 64, 1, 64, sr_parser_file);
     for (f = 0; f < b->floors; f++) {
         for (r = 0; r <= b->size_z; r++) {
             for (c = 0; c <= b->size_x; c++) {
                 BuildingCell *cell = &b->cells[cell_index(f, r, c)];
-                game_fwrite(&cell->outer, 4, 1, g_parser.file);
-                game_fwrite(&cell->inner, 4, 1, g_parser.file);
-                game_fwrite(&cell->interior_bit18, 4, 1, g_parser.file);
-                game_fwrite(&cell->wall_row, 4, 1, g_parser.file);
-                game_fwrite(&cell->wall_col, 4, 1, g_parser.file);
-                game_fwrite(&cell->interior_bit16, 4, 1, g_parser.file);
+                game_fwrite(&cell->outer, 4, 1, sr_parser_file);
+                game_fwrite(&cell->inner, 4, 1, sr_parser_file);
+                game_fwrite(&cell->interior_bit18, 4, 1, sr_parser_file);
+                game_fwrite(&cell->wall_row, 4, 1, sr_parser_file);
+                game_fwrite(&cell->wall_col, 4, 1, sr_parser_file);
+                game_fwrite(&cell->interior_bit16, 4, 1, sr_parser_file);
                 for (k = 0; k < 8; k++)
-                    game_fwrite(&cell->tex_outer[k], 2, 1, g_parser.file);
+                    game_fwrite(&cell->tex_outer[k], 2, 1, sr_parser_file);
                 for (k = 0; k < 8; k++)
-                    game_fwrite(&cell->tex_inner[k], 2, 1, g_parser.file);
-                game_fwrite(&cell->spare, 4, 1, g_parser.file);
-                game_fwrite(&cell->color, 4, 1, g_parser.file);
-                game_fwrite(&cell->guard_dir, 4, 1, g_parser.file);
-                game_fwrite(&cell->prize, 4, 1, g_parser.file);
+                    game_fwrite(&cell->tex_inner[k], 2, 1, sr_parser_file);
+                game_fwrite(&cell->spare, 4, 1, sr_parser_file);
+                game_fwrite(&cell->color, 4, 1, sr_parser_file);
+                game_fwrite(&cell->guard_dir, 4, 1, sr_parser_file);
+                game_fwrite(&cell->prize, 4, 1, sr_parser_file);
             }
         }
     }
     for (i = 0; i < 16; i++) {
         int *area = (int *)&b->areas[i];
         for (k = 0; k < 6; k++)
-            game_fwrite(&area[k], 4, 1, g_parser.file);
+            game_fwrite(&area[k], 4, 1, sr_parser_file);
     }
-    os_fclose(g_parser.file);
+    os_fclose(sr_parser_file);
 }
 
 void building_setupbuild(void)

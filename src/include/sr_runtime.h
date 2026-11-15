@@ -25,6 +25,10 @@ void sv_profile_report(void);
 #ifndef sr_game_ticks
 #define sr_game_ticks   sr_game.ticks
 #endif
+/* The handle of the file that the text parser reads. A storage adapter can place it outside Parser. */
+#ifndef sr_parser_file
+#define sr_parser_file  sr_data_parser.file
+#endif
 #define sr_events       sr_data_event
 #define sr_numofevents  sr_data_numofevents
 #define sr_players      sr_data_player

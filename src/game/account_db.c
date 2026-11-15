@@ -75,24 +75,24 @@ int createaccount(int player)
 void saveaccountsserver(void)
 {
     int version = 3, i;
-    g_parser.file = os_fopen("user/server.srk", "wb");
-    if (!g_parser.file)
+    sr_parser_file = os_fopen("user/server.srk", "wb");
+    if (!sr_parser_file)
         return;
-    game_fwrite(&version, 4, 1, g_parser.file);
-    game_fwrite(&sr_account_key, 4, 1, g_parser.file);
-    game_fwrite(&sr_numofaccounts, 4, 1, g_parser.file);
+    game_fwrite(&version, 4, 1, sr_parser_file);
+    game_fwrite(&sr_account_key, 4, 1, sr_parser_file);
+    game_fwrite(&sr_numofaccounts, 4, 1, sr_parser_file);
     for (i = 0; i < sr_numofaccounts; ++i) {
         Account *a = &sr_accounts[i];
-        game_fwrite(&a->id[0], 4, 1, g_parser.file);
-        game_fwrite(&a->id[1], 4, 1, g_parser.file);
-        game_fwrite(a->name, 1, 32, g_parser.file);
-        game_fwrite(&a->money, 4, 1, g_parser.file);
-        game_fwrite(&a->playtime, 4, 1, g_parser.file);
-        game_fwrite(&a->look_a, 4, 1, g_parser.file);
-        game_fwrite(&a->look_b, 4, 1, g_parser.file);
-        game_fwrite(&a->look_c, 4, 1, g_parser.file);
+        game_fwrite(&a->id[0], 4, 1, sr_parser_file);
+        game_fwrite(&a->id[1], 4, 1, sr_parser_file);
+        game_fwrite(a->name, 1, 32, sr_parser_file);
+        game_fwrite(&a->money, 4, 1, sr_parser_file);
+        game_fwrite(&a->playtime, 4, 1, sr_parser_file);
+        game_fwrite(&a->look_a, 4, 1, sr_parser_file);
+        game_fwrite(&a->look_b, 4, 1, sr_parser_file);
+        game_fwrite(&a->look_c, 4, 1, sr_parser_file);
     }
-    os_fclose(g_parser.file);
+    os_fclose(sr_parser_file);
 }
 
 void saveaccountsclient(void)
@@ -101,14 +101,14 @@ void saveaccountsclient(void)
     char name[64];
     os_chdir(g_sysinfo.config_dir);
     sprintf(name, "client.srk");
-    g_parser.file = os_fopen(name, "wb");
-    if (g_parser.file) {
-        game_fwrite(&version, 4, 1, g_parser.file);
-        game_fwrite(&g_numofclientaccounts, 4, 1, g_parser.file);
+    sr_parser_file = os_fopen(name, "wb");
+    if (sr_parser_file) {
+        game_fwrite(&version, 4, 1, sr_parser_file);
+        game_fwrite(&g_numofclientaccounts, 4, 1, sr_parser_file);
         for (i = 0; i < g_numofclientaccounts; ++i)
             for (j = 0; j < 4; ++j)
-                game_fwrite(&g_clientaccounts[i][j], 4, 1, g_parser.file);
-        os_fclose(g_parser.file);
+                game_fwrite(&g_clientaccounts[i][j], 4, 1, sr_parser_file);
+        os_fclose(sr_parser_file);
     }
     os_chdir(g_sysinfo.start_dir);
 }
@@ -120,16 +120,16 @@ void loadaccountsclient(void)
     g_numofclientaccounts = 0;
     os_chdir(g_sysinfo.config_dir);
     sprintf(name, "client.srk");
-    g_parser.file = os_fopen(name, "rb");
-    if (g_parser.file) {
-        game_fread(&version, 4, 1, g_parser.file);
+    sr_parser_file = os_fopen(name, "rb");
+    if (sr_parser_file) {
+        game_fread(&version, 4, 1, sr_parser_file);
         if (version == 1) {
-            game_fread(&g_numofclientaccounts, 4, 1, g_parser.file);
+            game_fread(&g_numofclientaccounts, 4, 1, sr_parser_file);
             for (i = 0; i < g_numofclientaccounts; ++i)
                 for (j = 0; j < 4; ++j)
-                    game_fread(&g_clientaccounts[i][j], 4, 1, g_parser.file);
+                    game_fread(&g_clientaccounts[i][j], 4, 1, sr_parser_file);
         }
-        os_fclose(g_parser.file);
+        os_fclose(sr_parser_file);
     }
     os_chdir(g_sysinfo.start_dir);
 }

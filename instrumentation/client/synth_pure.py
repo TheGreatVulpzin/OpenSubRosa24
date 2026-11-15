@@ -216,18 +216,33 @@ def main():
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
-    for item in want:
+    # SYNTH_CALLS: the number of calls for each function (90 by default, 30 to look around fast).
+    # SYNTH_JOBS: the number of functions that run at the same time (1 by default, 2 is safe).
+    count = int(os.environ.get('SYNTH_CALLS', '90'))
+    jobs = max(1, int(os.environ.get('SYNTH_JOBS', '1')))
+
+    def run_one(item):
         # "name=kinds" replaces the prototype of that function for this run.
         name, _, kinds = item.partition('=')
         proto = kinds if kinds else PROTOTYPES[name]
         rng = random.Random(sum(map(ord, name)))
         calls = []
-        for index in range(90):
+        for index in range(count):
             args = make_args(rng, proto, index)
             calls.append(st.call(addresses[name], *args))
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
-        print(f'{name}: {len(calls)} calls:', st.run(rec / 'sv_snapshot.bin', path, name, env), flush=True)
+        own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
+        return f'{name}: {len(calls)} calls: ' + st.run(rec / 'sv_snapshot.bin', path, name, own)
+
+    if jobs == 1:
+        for item in want:
+            print(run_one(item), flush=True)
+    else:
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=jobs) as pool:
+            for line in pool.map(run_one, want):
+                print(line, flush=True)
 
 
 if __name__ == '__main__':

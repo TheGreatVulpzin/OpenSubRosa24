@@ -240,6 +240,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_render_width (*((int *)(sr_base + 0xb7330c0u)))
 #define cl_data_render_height (*((int *)(sr_base + 0xb7330c4u)))
 #define cl_data_open_file (*((int *)(sr_base + 0x13e61828u)))
+#define sr_parser_file (*((void **)(sr_base + 0x13e61828u)))
 #define cl_data_light_position ((float *)(sr_base + 0x19c0cd78u))
 #define cl_data_world_position (*((vec3 *)(sr_base + 0x19c750c4u)))
 #define cl_data_viewport_width (*((float *)(sr_base + 0x19c07cc8u)))

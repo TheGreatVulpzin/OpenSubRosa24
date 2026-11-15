@@ -21,15 +21,15 @@ void loadtextfile(const char *path)
     int c;
 
     p->size = 0;
-    p->file = os_fopen(path, "rb");
-    if (p->file) {
-        for (c = os_fgetc(p->file); c != -1 && p->size < sizeof p->text - 1;
-             c = os_fgetc(p->file))
+    sr_parser_file = os_fopen(path, "rb");
+    if (sr_parser_file) {
+        for (c = os_fgetc(sr_parser_file); c != -1 && p->size < sizeof p->text - 1;
+             c = os_fgetc(sr_parser_file))
             p->text[p->size++] = (char)c;
         if (c != -1)
             p->size = 0;
         p->text[p->size] = 0;
-        os_fclose(p->file);
+        os_fclose(sr_parser_file);
     }
     p->pos = 0;
 }

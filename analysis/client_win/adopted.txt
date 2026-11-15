@@ -83,3 +83,7 @@ createevent_updateiteminfo src/net/events.c
 createevent_updateobject src/net/events.c
 createevent_updateplayer src/net/events.c
 createevent_updateplayer_finance src/net/events.c
+area_createinteriorblocks src/game/block_mesh.c
+loadtextfile src/common/parser.c
+newspaper_load src/game/newspaper.c
+building_buildfloorplan src/game/buildings.c

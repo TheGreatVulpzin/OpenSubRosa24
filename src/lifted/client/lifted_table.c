@@ -584,7 +584,7 @@ void area_block_addwindowvertical(void);
 void lf_3f440(void);
 void area_block_addbasicsurface(void);
 void lf_3f880(void);
-void lf_3fcb0(void);
+void area_createinteriorblocks(void);
 void lf_41f30(void);
 void lf_42050(void);
 void lf_420e0(void);
@@ -636,7 +636,7 @@ void lf_50230(void);
 void lf_50700(void);
 void lf_55bb0(void);
 void lf_55bc0(void);
-void lf_56ad0(void);
+void building_buildfloorplan(void);
 void lf_58940(void);
 void lf_58a70(void);
 void lf_58b60(void);
@@ -764,7 +764,7 @@ void lf_7d090(void);
 void movecamera(void);
 void movecamera2(void);
 void checksimulation(void);
-void lf_7e350(void);
+void newspaper_load(void);
 void lf_7e4f0(void);
 void lf_7e500(void);
 void lf_7e730(void);
@@ -1167,7 +1167,7 @@ void lf_fd260(void);
 void lf_fd430(void);
 void lf_fd580(void);
 void lf_fd6c0(void);
-void lf_fd740(void);
+void loadtextfile(void);
 void lf_fd7f0(void);
 void findstring(void);
 void checkstring(void);
@@ -1884,7 +1884,7 @@ const LfEntry lf_table[] = {
     { "area_block_addbox", 0x3f440, (void *)lf_3f440, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "area_block_addbasicsurface", 0x3f660, (void *)area_block_addbasicsurface, 2, LF_RET_VOID, 4, "vp", 0 },
     { "loadblock", 0x3f880, (void *)lf_3f880, 1, LF_RET_VOID, 4, "v", 1 },
-    { "area_createinteriorblocks", 0x3fcb0, (void *)lf_3fcb0, 0, LF_RET_VOID, 4, "", 1 },
+    { "area_createinteriorblocks", 0x3fcb0, (void *)area_createinteriorblocks, 0, LF_RET_VOID, 4, "", 1 },
     { "area_block_addfloorceil", 0x41f30, (void *)lf_41f30, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_42050", 0x42050, (void *)lf_42050, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_420e0", 0x420e0, (void *)lf_420e0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -1936,7 +1936,7 @@ const LfEntry lf_table[] = {
     { "bondsimulation2", 0x50700, (void *)lf_50700, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_55bb0", 0x55bb0, (void *)lf_55bb0, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbuildingtypes", 0x55bc0, (void *)lf_55bc0, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_buildfloorplan", 0x56ad0, (void *)lf_56ad0, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
+    { "building_buildfloorplan", 0x56ad0, (void *)building_buildfloorplan, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "lf_58940", 0x58940, (void *)lf_58940, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "lf_58a70", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)lf_58b60, 0, LF_RET_VOID, 4, "", 0 },
@@ -2064,7 +2064,7 @@ const LfEntry lf_table[] = {
     { "movecamera", 0x7d0e0, (void *)movecamera, 1, LF_RET_VOID, 4, "v", 0 },
     { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
     { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
-    { "newspaper_load", 0x7e350, (void *)lf_7e350, 0, LF_RET_VOID, 4, "", 1 },
+    { "newspaper_load", 0x7e350, (void *)newspaper_load, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_7e4f0", 0x7e4f0, (void *)lf_7e4f0, 0, LF_RET_VOID, 4, "", 0 },
     { "playermenu", 0x7e500, (void *)lf_7e500, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_7e730", 0x7e730, (void *)lf_7e730, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2467,7 +2467,7 @@ const LfEntry lf_table[] = {
     { "lf_fd430", 0xfd430, (void *)lf_fd430, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "lf_fd580", 0xfd580, (void *)lf_fd580, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "lf_fd6c0", 0xfd6c0, (void *)lf_fd6c0, 5, LF_RET_INT, 1, "ppppv", 0 },
-    { "loadtextfile", 0xfd740, (void *)lf_fd740, 1, LF_RET_VOID, 4, "p", 1 },
+    { "loadtextfile", 0xfd740, (void *)loadtextfile, 1, LF_RET_VOID, 4, "p", 1 },
     { "lf_fd7f0", 0xfd7f0, (void *)lf_fd7f0, 0, LF_RET_VOID, 4, "", 0 },
     { "findstring", 0xfd800, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
     { "checkstring", 0xfd870, (void *)checkstring, 1, LF_RET_INT, 1, "p", 0 },
