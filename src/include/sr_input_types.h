@@ -148,6 +148,97 @@ SR_STATIC_ASSERT(offsetof(MenuItem, spare_278) == 0x278, "MenuItem.spare_278");
 SR_STATIC_ASSERT(offsetof(MenuItem, value) == 0x27c, "MenuItem.value");
 SR_STATIC_ASSERT(offsetof(MenuItem, callback) == 0x280, "MenuItem.callback");
 
+/* editor_view[]: record of 0x48 bytes. */
+typedef union EditorView { struct {
+    float x;                             /* +0x0000 buildingedit_setup and leveledit_setup: the viewport of the editor, 32 */
+    float y;                             /* +0x0004 the viewport: 32 */
+    float width;                         /* +0x0008 the viewport: 768 */
+    float height;                        /* +0x000c the viewport: 576 */
+    vec3 camera;                         /* +0x0010 the camera place: 12 0 9 for the building editor, 160 0 160 for the level editor */
+    float orientation[9];                /* +0x001c the camera turns by pi/2 about its first row: it looks down */
+    float zoom;                          /* +0x0040 12 for the building editor, 64 for the level editor */
+    float scale;                         /* +0x0044 0.75 */
+}; uint8_t lf_raw[0x48]; } EditorView;
+SR_STATIC_ASSERT(sizeof(EditorView) == 0x48, "EditorView");
+SR_STATIC_ASSERT(offsetof(EditorView, x) == 0x0, "EditorView.x");
+SR_STATIC_ASSERT(offsetof(EditorView, y) == 0x4, "EditorView.y");
+SR_STATIC_ASSERT(offsetof(EditorView, width) == 0x8, "EditorView.width");
+SR_STATIC_ASSERT(offsetof(EditorView, height) == 0xc, "EditorView.height");
+SR_STATIC_ASSERT(offsetof(EditorView, camera) == 0x10, "EditorView.camera");
+SR_STATIC_ASSERT(offsetof(EditorView, orientation) == 0x1c, "EditorView.orientation");
+SR_STATIC_ASSERT(offsetof(EditorView, zoom) == 0x40, "EditorView.zoom");
+SR_STATIC_ASSERT(offsetof(EditorView, scale) == 0x44, "EditorView.scale");
+
+/* editor_tile[]: record of 0x24 bytes. */
+typedef union EditorTile { struct {
+    int kind;                            /* +0x0000 the picker tiles: 0 building texture, 2 building block, 3 game texture, 4 game block */
+    float x;                             /* +0x0004  */
+    float y;                             /* +0x0008  */
+    float width;                         /* +0x000c 64 */
+    float height;                        /* +0x0010 64 */
+    int* target;                         /* +0x0014 a click on the tile writes its index here */
+    uint8_t pad_0018[0x8];
+    int index;                           /* +0x0020 the index of the tile in its list */
+}; uint8_t lf_raw[0x24]; } EditorTile;
+SR_STATIC_ASSERT(sizeof(EditorTile) == 0x24, "EditorTile");
+SR_STATIC_ASSERT(offsetof(EditorTile, kind) == 0x0, "EditorTile.kind");
+SR_STATIC_ASSERT(offsetof(EditorTile, x) == 0x4, "EditorTile.x");
+SR_STATIC_ASSERT(offsetof(EditorTile, y) == 0x8, "EditorTile.y");
+SR_STATIC_ASSERT(offsetof(EditorTile, width) == 0xc, "EditorTile.width");
+SR_STATIC_ASSERT(offsetof(EditorTile, height) == 0x10, "EditorTile.height");
+SR_STATIC_ASSERT(offsetof(EditorTile, target) == 0x14, "EditorTile.target");
+SR_STATIC_ASSERT(offsetof(EditorTile, index) == 0x20, "EditorTile.index");
+
+/* building_editor[]: record of 0xec bytes. */
+typedef union BuildingEditor { struct {
+    int mode;                            /* +0x0000 buildingedit_render: 0 blocks, 1 walls, 2 areas, 3 markers */
+    int unused_04;                       /* +0x0004 buildingedit_setup writes 0 */
+    char file[64];                       /* +0x0008 buildingedit_menu copies the name of the building file here */
+    int wall_direction;                  /* +0x0048 buildingedit_render: 0 a wall along x, else along z */
+    int tool;                            /* +0x004c buildingedit_setup writes 9 */
+    int setting_50[3];                   /* +0x0050 buildingedit_setup writes 0 */
+    uint8_t pad_005c[0x4];
+    int cell_field_10;                   /* +0x0060 buildingedit_addblock copies it to the cell */
+    int packed_parts[5];                 /* +0x0064 buildingedit_addblock packs them into the cell */
+    int outer_slots[8];                  /* +0x0078 the texture slots of the outer layer; buildingedit_addblock copies the first six */
+    int inner_slots[8];                  /* +0x0098 the texture slots of the inner layer */
+    int extra_low;                       /* +0x00b8 the low 4 bits of the cell outer_extra */
+    int extra_high;                      /* +0x00bc outer_extra = (extra_high << 4) + extra_low */
+    int cell_field_14;                   /* +0x00c0 buildingedit_setup writes 1; buildingedit_addblock copies it to the cell */
+    uint8_t pad_00c4[0x4];
+    int drag;                            /* +0x00c8 buildingedit_render mode 0: a drag box shows while it is not 0 */
+    int drag_start_x;                    /* +0x00cc  */
+    int drag_start_z;                    /* +0x00d0  */
+    int drag_end_x;                      /* +0x00d4  */
+    int drag_end_z;                      /* +0x00d8  */
+    int cursor_x;                        /* +0x00dc  */
+    int floor;                           /* +0x00e0 buildingedit_render draws the blocks of this floor */
+    int cursor_z;                        /* +0x00e4  */
+    uint8_t pad_00e8[0x4];
+}; uint8_t lf_raw[0xec]; } BuildingEditor;
+SR_STATIC_ASSERT(sizeof(BuildingEditor) == 0xec, "BuildingEditor");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, mode) == 0x0, "BuildingEditor.mode");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, unused_04) == 0x4, "BuildingEditor.unused_04");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, file) == 0x8, "BuildingEditor.file");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, wall_direction) == 0x48, "BuildingEditor.wall_direction");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, tool) == 0x4c, "BuildingEditor.tool");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, setting_50) == 0x50, "BuildingEditor.setting_50");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, cell_field_10) == 0x60, "BuildingEditor.cell_field_10");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, packed_parts) == 0x64, "BuildingEditor.packed_parts");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, outer_slots) == 0x78, "BuildingEditor.outer_slots");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, inner_slots) == 0x98, "BuildingEditor.inner_slots");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, extra_low) == 0xb8, "BuildingEditor.extra_low");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, extra_high) == 0xbc, "BuildingEditor.extra_high");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, cell_field_14) == 0xc0, "BuildingEditor.cell_field_14");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, drag) == 0xc8, "BuildingEditor.drag");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, drag_start_x) == 0xcc, "BuildingEditor.drag_start_x");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, drag_start_z) == 0xd0, "BuildingEditor.drag_start_z");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, drag_end_x) == 0xd4, "BuildingEditor.drag_end_x");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, drag_end_z) == 0xd8, "BuildingEditor.drag_end_z");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_x) == 0xdc, "BuildingEditor.cursor_x");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, floor) == 0xe0, "BuildingEditor.floor");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_z) == 0xe4, "BuildingEditor.cursor_z");
+
 #pragma pack(pop)
 
 #endif

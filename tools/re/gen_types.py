@@ -139,6 +139,9 @@ INPUT_STRUCTS = {
     'InputCamera': ('input_camera', 0x1c),
     'MenuInfo': ('menu_info', 0x60),
     'MenuItem': ('menu_item', 0x284),
+    'EditorView': ('editor_view', 0x48),
+    'EditorTile': ('editor_tile', 0x24),
+    'BuildingEditor': ('building_editor', 0xec),
 }
 TYPE_SIZE.update({'AudioDecoder': 0x28, 'MenuInfo': 0x60, 'int*': 4})
 TYPE_SIZE.update({'uint16_t': 2, 'uint8_t*': 4, 'uint32_t*': 4,

@@ -2810,7 +2810,16 @@ SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_z) == 0x18, "GameWorld.spawn_siz
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {
-    uint8_t pad_0000[0x38];
+    int mode;                            /* +0x0000 leveleditor_loop: 0 place buildings, 1 streets, 2 areas (the items and the texts of each mode) */
+    uint8_t pad_0004[0x4];
+    int chosen_a;                        /* +0x0008 leveledit_setup and leveleditor_loop write -1: no chosen street end */
+    int chosen_b;                        /* +0x000c leveledit_setup and leveleditor_loop write -1: no second street end */
+    uint8_t pad_0010[0x14];
+    int chosen_building;                 /* +0x0024 leveledit_setup writes -1: no chosen building */
+    int brush_x;                         /* +0x0028 leveledit_setup writes 3 */
+    int brush_z;                         /* +0x002c leveledit_setup writes 3 */
+    int brush_turn;                      /* +0x0030 leveledit_setup writes 0 */
+    uint8_t pad_0034[0x4];
     int num_intersections;               /* +0x0038 createlevel: one city_addintersection for each record */
     LevelIntersection intersections[1024]; /* +0x003c 0x3c + 1024 * 0xc = 0x303c (the next count) */
     int num_streets;                     /* +0x303c createlevel: one addcitystreet for each record */
@@ -2823,6 +2832,13 @@ typedef union LevelEditor { struct {
     uint8_t pad_12084c[0xa604c];
 }; uint8_t lf_raw[0x1c6898]; } LevelEditor;
 SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
+SR_STATIC_ASSERT(offsetof(LevelEditor, mode) == 0x0, "LevelEditor.mode");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_a) == 0x8, "LevelEditor.chosen_a");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_b) == 0xc, "LevelEditor.chosen_b");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_building) == 0x24, "LevelEditor.chosen_building");
+SR_STATIC_ASSERT(offsetof(LevelEditor, brush_x) == 0x28, "LevelEditor.brush_x");
+SR_STATIC_ASSERT(offsetof(LevelEditor, brush_z) == 0x2c, "LevelEditor.brush_z");
+SR_STATIC_ASSERT(offsetof(LevelEditor, brush_turn) == 0x30, "LevelEditor.brush_turn");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_intersections) == 0x38, "LevelEditor.num_intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, intersections) == 0x3c, "LevelEditor.intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_streets) == 0x303c, "LevelEditor.num_streets");
@@ -3033,7 +3049,9 @@ typedef union Building { struct {
     char materials[16384];               /* +0x36004e8 256 material names of 64 bytes each */
     int num_blocks;                      /* +0x36044e8 The number of block names in the file */
     char blocks[16384];                  /* +0x36044ec 256 block names of 64 bytes each */
-    uint8_t pad_36084ec[0xe40c];
+    uint8_t pad_36084ec[0xd00c];
+    int material_textures[256];          /* +0x36154f8 the building editor pickers and buildingeditor_renderblock: the texture list index of each material name */
+    int block_types[1024];               /* +0x36158f8 buildingedit_blockmenu fills it: the block type of each block name (the last game type with the same name); buildingeditor_drawblock adds the turn of a group block */
 }; uint8_t lf_raw[0x36168f8]; } Building;
 SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
 SR_STATIC_ASSERT(offsetof(Building, name) == 0x0, "Building.name");
@@ -3053,6 +3071,8 @@ SR_STATIC_ASSERT(offsetof(Building, num_materials) == 0x36004e4, "Building.num_m
 SR_STATIC_ASSERT(offsetof(Building, materials) == 0x36004e8, "Building.materials");
 SR_STATIC_ASSERT(offsetof(Building, num_blocks) == 0x36044e8, "Building.num_blocks");
 SR_STATIC_ASSERT(offsetof(Building, blocks) == 0x36044ec, "Building.blocks");
+SR_STATIC_ASSERT(offsetof(Building, material_textures) == 0x36154f8, "Building.material_textures");
+SR_STATIC_ASSERT(offsetof(Building, block_types) == 0x36158f8, "Building.block_types");
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {

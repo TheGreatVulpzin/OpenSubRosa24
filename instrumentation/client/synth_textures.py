@@ -1104,6 +1104,51 @@ CITY = 0xe22c7a0          # City: building_type +0x2f9dc, shop_count +0x302a4, s
 MARKET = 0x17678bc0       # Market: car_base +0x140 (the car count), car_rows +0x144
 
 
+BUILDING = 0x1cb8280       # Building: size_x +0x40, size_z +0x44, cells +0x4c (0x48 bytes)
+BUILDING_EDITOR = 0x1b9b500
+TEMPMESH = 0x29f0d360      # TempMesh: num_quads +0x110004, quads +0x110008, quad_slots +0x150008
+
+
+def building_cell(x, floor, z):
+    return BUILDING + 0x4c + ((floor * 64 + z) * 64 + x) * 0x48
+
+
+def building_edit_case(seed=0):
+    """The building editor: both setups, quads, the add of blocks near the borders (walls),
+    the block of a cell (plain, group, interior) and both block renders."""
+    rng = random.Random(61 + seed)
+    edits = [(BUILDING + 0x40, '3i', [24, 24, 32]),
+             (BUILDING_EDITOR + 0x60, '6i', [rng.randint(0, 3) for _ in range(6)]),
+             (BUILDING_EDITOR + 0x78, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING_EDITOR + 0x98, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING_EDITOR + 0xb8, '3i', [rng.randint(0, 15), rng.randint(0, 15), rng.randint(0, 1)]),
+             (BUILDING + 0x36154f8, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING + 0x36158f8, '8i', [rng.randint(1, 20) for _ in range(8)]),
+             (TEMPMESH + 0x110004, 'i', [4]),
+             (TEMPMESH + 0x110008, '16i', [rng.randint(0, 15) for _ in range(16)]),
+             (TEMPMESH + 0x150008, '4i', [rng.choice([0, 3, 6, 7, 9]) for _ in range(4)])]
+    places = [(0, 0, 0), (1, 0, 1), (22, 0, 5), (23, 0, 22), (5, 1, 23), (12, 2, 12), (0, 0, 22), (22, 1, 0)]
+    for x, floor, z in places:
+        for dx, dz in ((0, 0), (1, 0), (0, 1), (-1, 0), (0, -1)):
+            if x + dx >= 0 and z + dz >= 0:
+                edits.append((building_cell(x + dx, floor, z + dz), '4I',
+                              [rng.choice([0, 0, 3, 0x80000002]), rng.choice([0, 0, 0xffff, 0x80000001]),
+                               rng.choice([0, 1, 9, 12]), rng.choice([0, 1, 9])]))
+    add = [call(0x5c760, x, floor, z, rng.choice([0, 3, 0x80000002]), rng.choice([0, 0xffff]))
+           for x, floor, z in places for _ in range(3)]
+    draw = [call(0x5fdf0, x, floor, z) for x, floor, z in places]
+    quad = [call(0x5fca0, rng.choice([-1, 0, 1, 5]), floats(rng), floats(rng), rng.choice([1.0, 0.125]),
+                 rng.choice([1.0, 0.5]), 1.0, floats(rng), 0.0, 0.25) for _ in range(12)]
+    render = [call(0x600d0, rng.choice([1, 3, 7, 0xffff]), rng.randint(0, 1), x, floor, z, 1.0, 1.0, 1.0,
+                   rng.choice([1.0, 0.5])) for x, floor, z in places]
+    render2 = [call(0x605a0, rng.choice([1, 3, 7, 0xffff]), rng.randint(0, 1), floats(rng), floats(rng), 1.0,
+                    0.5, 1.0, 1.0) for _ in range(8)]
+    return edits, {'buildingedit_setup': [call(0x58b60)], 'leveledit_setup': [call(0x9c4f0)],
+                   'buildingeditor_drawquad': quad, 'buildingedit_addblock': add,
+                   'buildingeditor_drawblock': draw, 'buildingeditor_renderblock': render,
+                   'buildingeditor_renderblock2': render2}
+
+
 def player_menu_case(menu, team=7, money=50000, building=0, building_type=2, looks=(0, 0)):
     """playermenu of player 1 with one menu number. building_type: 2 car market, 4 clothes, 7
     guns. looks: the suit and the sunglasses of the player."""
@@ -1311,6 +1356,7 @@ def main():
             'pmenu_shop_guns': lambda: player_menu_case(10, building_type=7),
             'pmenu_shop_poor': lambda: player_menu_case(10, money=50),
             'pmenu_no_building': lambda: player_menu_case(10, building=-1),
+            'bedit': building_edit_case, 'bedit_2': lambda: building_edit_case(1),
             'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
             'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
             **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))

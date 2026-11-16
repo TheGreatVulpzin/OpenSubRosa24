@@ -1092,3 +1092,48 @@ menu_item,0x278,spare_278,int,,setmenuitem option 16 writes it; no function read
 menu_item,0x27c,value,int*,,the int of a toggle or a choice or a slider; the buffer of a text field
 menu_item,0x280,callback,void*,,checkmenuitems calls it while the item is pressed
 client_font,0xc,cursor,int,,checkmenuitems copies the cursor of the item under the mouse; setupgraphics clears it
+editor_view,0x0,x,float,,"buildingedit_setup and leveledit_setup: the viewport of the editor, 32"
+editor_view,0x4,y,float,,"the viewport: 32"
+editor_view,0x8,width,float,,"the viewport: 768"
+editor_view,0xc,height,float,,"the viewport: 576"
+editor_view,0x10,camera,vec3,,"the camera place: 12 0 9 for the building editor, 160 0 160 for the level editor"
+editor_view,0x1c,orientation,float,9,"the camera turns by pi/2 about its first row: it looks down"
+editor_view,0x40,zoom,float,,"12 for the building editor, 64 for the level editor"
+editor_view,0x44,scale,float,,"0.75"
+editor_tile,0x0,kind,int,,"the picker tiles: 0 building texture, 2 building block, 3 game texture, 4 game block"
+editor_tile,0x4,x,float,,
+editor_tile,0x8,y,float,,
+editor_tile,0xc,width,float,,"64"
+editor_tile,0x10,height,float,,"64"
+editor_tile,0x14,target,int*,,"a click on the tile writes its index here"
+editor_tile,0x20,index,int,,"the index of the tile in its list"
+building_editor,0x0,mode,int,,"buildingedit_render: 0 blocks, 1 walls, 2 areas, 3 markers"
+building_editor,0x4,unused_04,int,,"buildingedit_setup writes 0"
+building_editor,0x8,file,char,64,"buildingedit_menu copies the name of the building file here"
+building_editor,0x48,wall_direction,int,,"buildingedit_render: 0 a wall along x, else along z"
+building_editor,0x4c,tool,int,,"buildingedit_setup writes 9"
+building_editor,0x50,setting_50,int,3,"buildingedit_setup writes 0"
+building_editor,0x60,cell_field_10,int,,"buildingedit_addblock copies it to the cell"
+building_editor,0x64,packed_parts,int,5,"buildingedit_addblock packs them into the cell"
+building_editor,0x78,outer_slots,int,8,"the texture slots of the outer layer; buildingedit_addblock copies the first six"
+building_editor,0x98,inner_slots,int,8,"the texture slots of the inner layer"
+building_editor,0xb8,extra_low,int,,"the low 4 bits of the cell outer_extra"
+building_editor,0xbc,extra_high,int,,"outer_extra = (extra_high << 4) + extra_low"
+building_editor,0xc0,cell_field_14,int,,"buildingedit_setup writes 1; buildingedit_addblock copies it to the cell"
+building_editor,0xc8,drag,int,,"buildingedit_render mode 0: a drag box shows while it is not 0"
+building_editor,0xcc,drag_start_x,int,,
+building_editor,0xd0,drag_start_z,int,,
+building_editor,0xd4,drag_end_x,int,,
+building_editor,0xd8,drag_end_z,int,,
+building_editor,0xdc,cursor_x,int,,
+building_editor,0xe0,floor,int,,"buildingedit_render draws the blocks of this floor"
+building_editor,0xe4,cursor_z,int,,
+building,0x36154f8,material_textures,int,256,"the building editor pickers and buildingeditor_renderblock: the texture list index of each material name"
+building,0x36158f8,block_types,int,1024,"buildingedit_blockmenu fills it: the block type of each block name (the last game type with the same name); buildingeditor_drawblock adds the turn of a group block"
+level_editor,0x0,mode,int,,"leveleditor_loop: 0 place buildings, 1 streets, 2 areas (the items and the texts of each mode)"
+level_editor,0x8,chosen_a,int,,"leveledit_setup and leveleditor_loop write -1: no chosen street end"
+level_editor,0xc,chosen_b,int,,"leveledit_setup and leveleditor_loop write -1: no second street end"
+level_editor,0x24,chosen_building,int,,"leveledit_setup writes -1: no chosen building"
+level_editor,0x28,brush_x,int,,"leveledit_setup writes 3"
+level_editor,0x2c,brush_z,int,,"leveledit_setup writes 3"
+level_editor,0x30,brush_turn,int,,"leveledit_setup writes 0"

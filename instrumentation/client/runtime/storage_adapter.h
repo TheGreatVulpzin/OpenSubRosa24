@@ -437,6 +437,15 @@ extern int sr_unplaced_train_near;
 #define cl_data_server_address (*((uint32_t *)(sr_base + 0x75a5854u)))
 #define cl_data_server_port (*((uint16_t *)(sr_base + 0x75a5858u)))
 #define cl_data_material_records ((MaterialRec *)(sr_base + 0x1724f604u))
+#define cl_data_building_editor (*((BuildingEditor *)(sr_base + 0x1b9b500u)))
+#define cl_data_building_view (*((EditorView *)(sr_base + 0x1b9b5ecu)))
+#define cl_data_editor_tile_count (*((int *)(sr_base + 0x1b9b634u)))
+#define cl_data_editor_tiles ((EditorTile *)(sr_base + 0x1b9b638u))
+#define cl_data_level_view (*((EditorView *)(sr_base + 0xf3ca970u)))
+#define cl_data_edit_vertices ((vec3 *)(sr_base + 0x1bf7f60u))
+#define cl_data_edit_grabbed ((int *)(sr_base + 0x103675c0u))
+#define cl_data_edit_offsets ((vec3 *)(sr_base + 0x103679c0u))
+#define cl_data_edit_mouse_before ((float *)(sr_base + 0x103685c0u))
 
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype
