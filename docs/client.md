@@ -407,6 +407,19 @@ The client name `getrandomvector2d` (RVA `0x71e60`) is wrong. That function stor
 
 The names `multiplyquaternion` and `projectorientation` were swapped in the server: `multiplyquaternion` is the quaternion product and `projectorientation` is the row dot product. After the swap, the client `multiplyquaternion` is the same as the server code on 90 calls.
 
+### The game record of the client
+
+The client keeps the game record (`game`, RVA 0x9065300) in the type `GameClient`. The server uses `Game`. Both types have the same field names, so shared code reads `sr_game.<field>` in both builds. The offsets differ:
+
+- The client record has no `end_time`. From +0x38 to +0x57c3 (the tick, the debug switches, the sun angles and the five team records), each field sits 4 bytes before the server field. A team record has 0x117c bytes in both.
+- From +0x57c4 to +0x257e3 the offsets are the same. The client has 4 more bytes in this area.
+- From +0x257e4 on (the count of checkpoints, the checkpoints and the count of newspapers) each field sits 4 bytes before the server field. The record has 0x25d60 bytes. The server record has 0x25d64.
+- Shared code that needs `end_time` reads `sr_game_end_time`. In the server it is the field. In the client it is a private variable, because the client never reads it.
+- `tools/re/gen_types.py` makes `GameClient` from the names of `Game` (`game_client_offset`). A new field of `Game` gets its client offset from that function.
+- Test: `deleteplayer` wrote the team manager 4 bytes away with `Game`. With `GameClient` it gives the same result on 60 calls. `playerteamkilltax` went from 31 to 1 different call of 60 for the same reason.
+- `playerteamkilltax` takes a larger share of the money in the server code. The client does not write the team kill rate. The server never sends this result to a player, so the client follows the server code. The harness lists it as a known difference.
+- `human_calcarmtorque` draws a debug cross at the hand target in the client. Shared code calls `sr_debug_cross(center, size)` there. The server defines nothing, so the call does not exist in the server build. The client defines it as `debug_addcross`.
+
 ## A step of the client rewrite
 
 `bash instrumentation/client/step.sh [--export] [--funcs f1,f2] [--synth f1,f2] [--calls N] [--jobs N] [--finite]` runs one step and prints a short summary: the build, the gate with every recorded call for the functions of the step (15 to 30 seconds), and the synthetic calls of `synth_pure.py`. The logs are in `build/step_client/`. Rules that keep the steps short:

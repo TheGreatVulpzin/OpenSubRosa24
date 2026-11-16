@@ -3378,6 +3378,190 @@ SR_STATIC_ASSERT(offsetof(ModelList, sprite) == 0x710, "ModelList.sprite");
 SR_STATIC_ASSERT(offsetof(ModelList, sunglasses) == 0x790, "ModelList.sunglasses");
 SR_STATIC_ASSERT(offsetof(ModelList, rotor) == 0x7a0, "ModelList.rotor");
 
+/* game (client)[]: record of 0x25d60 bytes. */
+typedef union GameClient { struct {
+    uint8_t pad_0000[0x4];
+    int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
+    int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
+    int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
+    int option_menu;                     /* +0x0010 Client options menu switch */
+    int voice_menu;                      /* +0x0014 Client voice menu switch */
+    int connections_menu;                /* +0x0018 Client connection menu switch */
+    int round_number;                    /* +0x001c resetgame adds 1 (likely); serversend sends it */
+    int state;                           /* +0x0020 1 and 2; manager: 2 = match running */
+    int timer;                           /* +0x0024 decreases by 1 each tick; 0 changes the state */
+    int wait_time;                       /* +0x0028 dedicatedserverloop writes 0xe10 (3600 ticks) */
+    int round_time;                      /* +0x002c config.txt roundtime= * 3600 */
+    float teamkill_rate;                 /* +0x0030 playerteamkilltax writes 0.05f (no reader in the server) */
+    int ticks;                           /* +0x0034 adds 1 each tick; createevent_message copies it to Event.tick */
+    uint32_t debug_p;                    /* +0x0038 Client P key diagnostic switch */
+    int debug_o;                         /* +0x003c Client O key diagnostic switch */
+    uint32_t debug_i;                    /* +0x0040 Client I key diagnostic switch */
+    uint8_t pad_0044[0x4];
+    float start_angle_a;                 /* +0x0048 serversend: packangle 16 in the new game packet */
+    float start_angle_b;                 /* +0x004c serversend: packangle 16 in the new game packet */
+    uint8_t pad_0050[0x4];
+    vec3 team0_base_min;                 /* +0x0054 pointinsidebase: the box of the base of team 0; team records are 0x117c bytes */
+    vec3 team0_base_max;                 /* +0x0060 pointinsidebase */
+    vec3 team0_safe_min;                 /* +0x006c pointinsidebasesafe: the box of the safe zone of team 0 */
+    vec3 team0_safe_max;                 /* +0x0078 pointinsidebasesafe */
+    float team0_angle;                   /* +0x0084 the facing of the base of team 0: setteammanager and logicsimulation_round turn the phones and the spawned humans by angle - pi/2 */
+    int team0_unused_8c;                 /* +0x0088 resetgame writes 0 */
+    int team0_members;                   /* +0x008c serversend: 6 bits in the state packet; the team records are 0x117c bytes */
+    uint8_t pad_0090[0x4];
+    int team0_cash;                      /* +0x0094 economysimulation: salary bonus cash / 2 and price growth cash / 100 - 0.5; resetgame writes 0 */
+    int team0_manager;                   /* +0x0098 logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
+    uint8_t pad_009c[0x10];
+    DoorBlock team0_doors[2];            /* +0x00ac eventsimulation: the doors of the team record 0; the next record is 0x117c later */
+    Mission team0_missions[16];          /* +0x00cc createmission_*, scenario_*, logic_teammissioncomplete; createevent_updatemission packs it */
+    int team0_num_car_spots;             /* +0x04cc logic_createcar and logicsimulation_round: the number of car places of the base */
+    TeamCarSpot team0_car_spots[16];     /* +0x04d0 logic_createcar: the first spot with used 0 (stride 0x34). Check that 16 does not overlap a named field */
+    uint8_t pad_0810[0x9d8];
+    float unk_11e8;                      /* +0x11e8 1 functions */
+    float unk_11ec;                      /* +0x11ec 1 functions */
+    float unk_11f0;                      /* +0x11f0 1 functions */
+    float unk_11f4;                      /* +0x11f4 1 functions */
+    float unk_11f8;                      /* +0x11f8 1 functions */
+    float unk_11fc;                      /* +0x11fc 1 functions */
+    uint8_t pad_1200[0x4];
+    int unk_1204;                        /* +0x1204 1 functions */
+    int team1_members;                   /* +0x1208 serversend: 6 bits in the state packet */
+    uint8_t pad_120c[0x4];
+    int unk_1210;                        /* +0x1210 2 functions */
+    int team1_manager;                   /* +0x1214 as team0_manager, team record 1 */
+    uint8_t pad_1218[0x30];
+    int unk_1248;                        /* +0x1248 5 functions */
+    int unk_124c;                        /* +0x124c 2 functions */
+    int unk_1250;                        /* +0x1250 1 functions */
+    int unk_1254;                        /* +0x1254 4 functions */
+    uint8_t pad_1258[0x20];
+    int unk_1278;                        /* +0x1278 2 functions */
+    int unk_127c;                        /* +0x127c 1 functions */
+    float unk_1280;                      /* +0x1280 1 functions */
+    float unk_1284;                      /* +0x1284 1 functions */
+    int unk_1288;                        /* +0x1288 3 functions */
+    int unk_128c;                        /* +0x128c 1 functions */
+    uint8_t pad_1290[0x4];
+    int unk_1294;                        /* +0x1294 2 functions */
+    uint8_t pad_1298[0x30];
+    int unk_12c8;                        /* +0x12c8 1 functions */
+    uint8_t pad_12cc[0x8];
+    int unk_12d4;                        /* +0x12d4 1 functions */
+    uint8_t pad_12d8[0x30];
+    int unk_1308;                        /* +0x1308 1 functions */
+    uint8_t pad_130c[0x33c];
+    int unk_1648;                        /* +0x1648 2 functions */
+    int unk_164c;                        /* +0x164c 1 functions */
+    float unk_1650;                      /* +0x1650 1 functions */
+    float unk_1654;                      /* +0x1654 1 functions */
+    float unk_1658;                      /* +0x1658 1 functions */
+    int unk_165c;                        /* +0x165c 1 functions */
+    uint8_t pad_1660[0x14];
+    float unk_1674;                      /* +0x1674 1 functions */
+    float unk_1678;                      /* +0x1678 1 functions */
+    float unk_167c;                      /* +0x167c 1 functions */
+    int unk_1680;                        /* +0x1680 1 functions */
+    uint8_t pad_1684[0xd00];
+    int team2_members;                   /* +0x2384 serversend: 6 bits in the state packet */
+    uint8_t pad_2388[0x8];
+    int team2_manager;                   /* +0x2390 as team0_manager, team record 2 */
+    uint8_t pad_2394[0x430];
+    int unk_27c4;                        /* +0x27c4 1 functions */
+    uint8_t pad_27c8[0xd30];
+    float unk_34f8;                      /* +0x34f8 1 functions */
+    uint8_t pad_34fc[0x4];
+    int unk_3500;                        /* +0x3500 2 functions */
+    uint8_t pad_3504[0x8];
+    int team3_manager;                   /* +0x350c as team0_manager, team record 3 */
+    uint8_t pad_3510[0x430];
+    int unk_3940;                        /* +0x3940 1 functions */
+    uint8_t pad_3944[0xd30];
+    float unk_4674;                      /* +0x4674 1 functions */
+    uint8_t pad_4678[0x4];
+    int unk_467c;                        /* +0x467c 2 functions */
+    uint8_t pad_4680[0x8];
+    int team4_manager;                   /* +0x4688 as team0_manager, team record 4 */
+    uint8_t pad_468c[0x430];
+    int unk_4abc;                        /* +0x4abc 1 functions */
+    uint8_t pad_4ac0[0xd3c];
+    int unk_57fc;                        /* +0x57fc 1 functions */
+    uint8_t pad_5800[0x43c];
+    int unk_5c3c;                        /* +0x5c3c 1 functions */
+    uint8_t pad_5c40[0xd38];
+    int unk_6978;                        /* +0x6978 1 functions */
+    uint8_t pad_697c[0x43c];
+    int unk_6db8;                        /* +0x6db8 1 functions */
+    uint8_t pad_6dbc[0xd38];
+    int unk_7af4;                        /* +0x7af4 1 functions */
+    uint8_t pad_7af8[0x8];
+    int unk_7b00;                        /* +0x7b00 1 functions */
+    uint8_t pad_7b04[0x430];
+    int unk_7f34;                        /* +0x7f34 1 functions */
+    uint8_t pad_7f38[0x1b0a0];
+    int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
+    uint8_t pad_22fdc[0x27fc];
+    int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
+    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
+    int unused_257e8;                    /* +0x257e4 resetgame clears this field. No reader in the server */
+    float unused_257ec;                  /* +0x257e8 resetgame clears this field. No reader in the server */
+    int num_checkpoints;                 /* +0x257ec logicsimulation_driving loop limit */
+    vec3 checkpoints[32];                /* +0x257f0 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
+    int unused_25974;                    /* +0x25970 resetgame clears this field. No reader in the server */
+    int unused_25978;                    /* +0x25974 resetgame clears this field. No reader in the server */
+    uint8_t pad_25978[0x3e4];
+    int num_newspapers;                  /* +0x25d5c itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
+}; uint8_t lf_raw[0x25d60]; } GameClient;
+SR_STATIC_ASSERT(sizeof(GameClient) == 0x25d60, "GameClient");
+SR_STATIC_ASSERT(offsetof(GameClient, link_state) == 0x4, "GameClient.link_state");
+SR_STATIC_ASSERT(offsetof(GameClient, gametype) == 0x8, "GameClient.gametype");
+SR_STATIC_ASSERT(offsetof(GameClient, round_mode) == 0xc, "GameClient.round_mode");
+SR_STATIC_ASSERT(offsetof(GameClient, option_menu) == 0x10, "GameClient.option_menu");
+SR_STATIC_ASSERT(offsetof(GameClient, voice_menu) == 0x14, "GameClient.voice_menu");
+SR_STATIC_ASSERT(offsetof(GameClient, connections_menu) == 0x18, "GameClient.connections_menu");
+SR_STATIC_ASSERT(offsetof(GameClient, round_number) == 0x1c, "GameClient.round_number");
+SR_STATIC_ASSERT(offsetof(GameClient, state) == 0x20, "GameClient.state");
+SR_STATIC_ASSERT(offsetof(GameClient, timer) == 0x24, "GameClient.timer");
+SR_STATIC_ASSERT(offsetof(GameClient, wait_time) == 0x28, "GameClient.wait_time");
+SR_STATIC_ASSERT(offsetof(GameClient, round_time) == 0x2c, "GameClient.round_time");
+SR_STATIC_ASSERT(offsetof(GameClient, teamkill_rate) == 0x30, "GameClient.teamkill_rate");
+SR_STATIC_ASSERT(offsetof(GameClient, ticks) == 0x34, "GameClient.ticks");
+SR_STATIC_ASSERT(offsetof(GameClient, debug_p) == 0x38, "GameClient.debug_p");
+SR_STATIC_ASSERT(offsetof(GameClient, debug_o) == 0x3c, "GameClient.debug_o");
+SR_STATIC_ASSERT(offsetof(GameClient, debug_i) == 0x40, "GameClient.debug_i");
+SR_STATIC_ASSERT(offsetof(GameClient, start_angle_a) == 0x48, "GameClient.start_angle_a");
+SR_STATIC_ASSERT(offsetof(GameClient, start_angle_b) == 0x4c, "GameClient.start_angle_b");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_base_min) == 0x54, "GameClient.team0_base_min");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_base_max) == 0x60, "GameClient.team0_base_max");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_safe_min) == 0x6c, "GameClient.team0_safe_min");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_safe_max) == 0x78, "GameClient.team0_safe_max");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_angle) == 0x84, "GameClient.team0_angle");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_unused_8c) == 0x88, "GameClient.team0_unused_8c");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_members) == 0x8c, "GameClient.team0_members");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_cash) == 0x94, "GameClient.team0_cash");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_manager) == 0x98, "GameClient.team0_manager");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_doors) == 0xac, "GameClient.team0_doors");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_missions) == 0xcc, "GameClient.team0_missions");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_num_car_spots) == 0x4cc, "GameClient.team0_num_car_spots");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_car_spots) == 0x4d0, "GameClient.team0_car_spots");
+SR_STATIC_ASSERT(offsetof(GameClient, team1_members) == 0x1208, "GameClient.team1_members");
+SR_STATIC_ASSERT(offsetof(GameClient, team1_manager) == 0x1214, "GameClient.team1_manager");
+SR_STATIC_ASSERT(offsetof(GameClient, team2_members) == 0x2384, "GameClient.team2_members");
+SR_STATIC_ASSERT(offsetof(GameClient, team2_manager) == 0x2390, "GameClient.team2_manager");
+SR_STATIC_ASSERT(offsetof(GameClient, team3_manager) == 0x350c, "GameClient.team3_manager");
+SR_STATIC_ASSERT(offsetof(GameClient, team4_manager) == 0x4688, "GameClient.team4_manager");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd8, "GameClient.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(GameClient, spectator_human) == 0x257d8, "GameClient.spectator_human");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_257dc) == 0x257dc, "GameClient.unused_257dc");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_257e0) == 0x257e0, "GameClient.unused_257e0");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_257e8) == 0x257e4, "GameClient.unused_257e8");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_257ec) == 0x257e8, "GameClient.unused_257ec");
+SR_STATIC_ASSERT(offsetof(GameClient, num_checkpoints) == 0x257ec, "GameClient.num_checkpoints");
+SR_STATIC_ASSERT(offsetof(GameClient, checkpoints) == 0x257f0, "GameClient.checkpoints");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_25974) == 0x25970, "GameClient.unused_25974");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_25978) == 0x25974, "GameClient.unused_25978");
+SR_STATIC_ASSERT(offsetof(GameClient, num_newspapers) == 0x25d5c, "GameClient.num_newspapers");
+
 #pragma pack(pop)
 
 #endif /* SR_TYPES_H */

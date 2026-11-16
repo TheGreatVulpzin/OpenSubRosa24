@@ -40,7 +40,7 @@ server,Server,1,132,0x75a5800,17,18,checked
 buildingtype,BuildingType,1,16832516,0x80558c0,6,11,weak
 option,Option,1,336,0x90630e0,11,22,checked
 numoftracks,int,1,4,0x90652e0,3,3,ok
-game,Game,1,154980,0x9065300,32,72,checked
+game,GameClient,1,154976,0x9065300,32,72,checked
 file_read,SrFileTransfer,1,4,0x908b064,3,3,ok
 item,Item,1024,428,0x908b080,23,60,checked
 sysinfo,SysInfo,1,1048,0x90f6100,7,7,ok
@@ -63,7 +63,7 @@ cityobjecttype,CityObjectTypeRec,256,9240,0xefc1ba0,38,57,ok
 materiallist,MaterialList,1,1408,0xf2033a0,1,2,other
 body,Body,32,64,0xf203920,50,102,ok
 level_editor,LevelEditor,1,1861784,0xf204120,11,17,ok
-random_counter,uint32_t,1,4,0xf3ca9b8,1,1,dropped
+random_counter,uint32_t,1,4,0x90f6080,1,1,ok
 numofevents,uint32_t,1,4,0xf3ca9b8,10,10,ok
 bullettypes,BulletType,4,24,0xf3ea9c0,27,31,ok
 accounts,SrAccountStore,1,4980744,0xf3eb200,9,18,ok
@@ -99,3 +99,5 @@ timer,Timer,256,88,0x1332e80,1,1,checked
 bezier_curve,float,12,4,0x75a57c0,1,1,checked
 bezier_curve_uv,float,8,4,0x13c5e6e0,1,1,checked
 bezier_curve_dv,float,12,4,0xaff0520,1,1,checked
+bond,Bond,16384,236,0x1779b820,1,1,checked
+bondopt,BondOpt,16384,64,0xf8ae240,1,1,checked

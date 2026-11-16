@@ -17,7 +17,6 @@ createitem src/game/items.c
 createlandscape src/game/level.c
 createtrack src/game/level.c
 economysimulation src/game/economy.c
-itemweaponsimulation src/game/item_logic.c
 leveleditor_load src/game/block_mesh.c
 leveleditor_save src/game/block_mesh.c
 loadblock src/game/block_mesh.c
@@ -26,17 +25,13 @@ objectenginesimulation2 src/game/vehicles.c
 objectsimulation_car src/game/vehicles.c
 objectsimulation_heli src/game/vehicles.c
 packevent src/net/netpack.c
-playerai src/game/player_ai.c
 server_writelogfile src/common/system.c
 systemtimer src/common/system.c
 unpackevent src/net/client.c
-getrandomvector2d src/common/random.c
 # getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.
 pbitread src/net/packet.c
 pbitreadnego src/net/packet.c
-playerteamkilltax src/game/economy.c
 bullettimetolive src/game/bullets.c
 itemtimetolive src/game/items.c
 createbullet src/game/bullets.c
-deleteplayer src/game/player.c
-human_calcarmtorque src/game/human_arms.c
+getrandomvector2d src/common/random.c

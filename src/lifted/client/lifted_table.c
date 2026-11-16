@@ -549,7 +549,7 @@ void lf_341d0(void);
 void lf_34470(void);
 void lf_345d0(void);
 void lf_34740(void);
-void lf_348d0(void);
+void playerai(void);
 void lf_35840(void);
 void angulardistance(void);
 void lf_35fa0(void);
@@ -719,7 +719,7 @@ void playerbuystock(void);
 void lf_6f6e0(void);
 void playerdeathtax(void);
 void lf_6f990(void);
-void lf_6fa00(void);
+void playerteamkilltax(void);
 void lf_6fb40(void);
 void lf_6fb80(void);
 void lf_6fd00(void);
@@ -802,7 +802,7 @@ void lf_89f50(void);
 void lf_8a010(void);
 void lf_8a020(void);
 void lf_8a710(void);
-void lf_8d000(void);
+void human_calcarmtorque(void);
 void lf_8e510(void);
 void setupbody(void);
 void lf_8f730(void);
@@ -833,7 +833,7 @@ void lf_97130(void);
 void lf_971c0(void);
 void lf_97350(void);
 void lf_98290(void);
-void lf_98f40(void);
+void itemweaponsimulation(void);
 void itemsimulationclient(void);
 void lf_99890(void);
 void lf_99a60(void);
@@ -1017,7 +1017,7 @@ void lf_d4610(void);
 void lf_d4700(void);
 void createplayer(void);
 void lf_d49e0(void);
-void lf_d4a20(void);
+void deleteplayer(void);
 void lf_d4b80(void);
 void lf_d5200(void);
 void lf_d5380(void);
@@ -1849,7 +1849,7 @@ const LfEntry lf_table[] = {
     { "saveaccountsclient", 0x34470, (void *)lf_34470, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_345d0", 0x345d0, (void *)lf_345d0, 0, LF_RET_VOID, 4, "", 1 },
     { "server_writelogfile", 0x34740, (void *)lf_34740, 0, LF_RET_VOID, 4, "", 1 },
-    { "playerai", 0x348d0, (void *)lf_348d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "playerai", 0x348d0, (void *)playerai, 1, LF_RET_VOID, 4, "v", 0 },
     { "ai_assessthreats", 0x35840, (void *)lf_35840, 2, LF_RET_VOID, 4, "vv", 0 },
     { "angulardistance", 0x35f40, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "lf_35fa0", 0x35fa0, (void *)lf_35fa0, 4, LF_RET_VOID, 4, "vvvv", 0 },
@@ -2019,7 +2019,7 @@ const LfEntry lf_table[] = {
     { "lf_6f6e0", 0x6f6e0, (void *)lf_6f6e0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdeathtax", 0x6f860, (void *)playerdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_6f990", 0x6f990, (void *)lf_6f990, 1, LF_RET_VOID, 4, "v", 0 },
-    { "playerteamkilltax", 0x6fa00, (void *)lf_6fa00, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "playerteamkilltax", 0x6fa00, (void *)playerteamkilltax, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdebt", 0x6fb40, (void *)lf_6fb40, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_calcassets", 0x6fb80, (void *)lf_6fb80, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x6fd00, (void *)lf_6fd00, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2102,7 +2102,7 @@ const LfEntry lf_table[] = {
     { "lf_8a010", 0x8a010, (void *)lf_8a010, 0, LF_RET_VOID, 4, "", 0 },
     { "human_calculatelegangles", 0x8a020, (void *)lf_8a020, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_calculatearmangles", 0x8a710, (void *)lf_8a710, 1, LF_RET_VOID, 4, "v", 0 },
-    { "human_calcarmtorque", 0x8d000, (void *)lf_8d000, 1, LF_RET_VOID, 4, "v", 0 },
+    { "human_calcarmtorque", 0x8d000, (void *)human_calcarmtorque, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_collisionhuman", 0x8e510, (void *)lf_8e510, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupbody", 0x8e8d0, (void *)setupbody, 0, LF_RET_VOID, 4, "", 0 },
     { "human_itemsimulation", 0x8f730, (void *)lf_8f730, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2133,7 +2133,7 @@ const LfEntry lf_table[] = {
     { "lf_971c0", 0x971c0, (void *)lf_971c0, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulation", 0x97350, (void *)lf_97350, 0, LF_RET_VOID, 4, "", 0 },
     { "itemlogic", 0x98290, (void *)lf_98290, 0, LF_RET_VOID, 4, "", 0 },
-    { "itemweaponsimulation", 0x98f40, (void *)lf_98f40, 1, LF_RET_VOID, 4, "v", 0 },
+    { "itemweaponsimulation", 0x98f40, (void *)itemweaponsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulationclient", 0x99500, (void *)itemsimulationclient, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_99890", 0x99890, (void *)lf_99890, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_99a60", 0x99a60, (void *)lf_99a60, 1, LF_RET_INT, 4, "v", 0 },
@@ -2317,7 +2317,7 @@ const LfEntry lf_table[] = {
     { "lf_d4700", 0xd4700, (void *)lf_d4700, 0, LF_RET_VOID, 4, "", 0 },
     { "createplayer", 0xd4750, (void *)createplayer, 0, LF_RET_INT, 4, "", 0 },
     { "getnextplayer", 0xd49e0, (void *)lf_d49e0, 0, LF_RET_INT, 4, "", 0 },
-    { "deleteplayer", 0xd4a20, (void *)lf_d4a20, 1, LF_RET_VOID, 4, "v", 0 },
+    { "deleteplayer", 0xd4a20, (void *)deleteplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "playersimulation", 0xd4b80, (void *)lf_d4b80, 0, LF_RET_VOID, 4, "", 0 },
     { "fixplayername", 0xd5200, (void *)lf_d5200, 1, LF_RET_VOID, 4, "v", 0 },
     { "lf_d5380", 0xd5380, (void *)lf_d5380, 2, LF_RET_VOID, 4, "vp", 0 },

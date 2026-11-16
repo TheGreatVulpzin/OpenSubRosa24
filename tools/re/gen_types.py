@@ -1092,11 +1092,33 @@ def check_frozen(header):
                          '\n  '.join(bad + [f'{n}: not in sr_types.h' for n in gone]))
 
 
+def game_client_offset(off):
+    """Place of a Game field in the client record. The client record has no end_time, so its fields
+    sit 4 bytes before the server fields. It has 4 more bytes in the unused area between the
+    areas of the teams and the end of the record, so the shift stops there and starts again at
+    0x257e4."""
+    if 0x38 <= off < 0x57c4 or off >= 0x257e4:
+        return off - 4
+    return off
+
+
+def gen_game_client(names):
+    """The client view of the Game record: the same field names at the client places."""
+    named = {}
+    for off, (name, typ, count, ev) in names.get('game', {}).items():
+        if name == 'end_time':
+            continue
+        named[game_client_offset(off)] = (name, typ, count, ev)
+    accessed = {game_client_offset(o): v for o, v in load_accessed('game').items() if o != 0x34}
+    return gen_struct('GameClient', 'game (client)', 0x25d60, named, accessed)
+
+
 def main():
     names = load_names()
     parts = [HEADER]
     for cname, (glob, size) in {**STRUCTS, **CLIENT_STRUCTS}.items():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
+    parts.append(gen_game_client(names))
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'
     out.mkdir(parents=True, exist_ok=True)

@@ -46,13 +46,15 @@ PROTOTYPES = {
     'logic_gunstore_buy': 'pi',
     'createaccount': 'p',
     'economy_carmarket': '',
+    'itemweaponsimulation': 'n',
+    'playerai': 'p',
     'pbitwrite': 'Ub',
     'pbitwritenego': 'Ub',
     'pbitread': 'Ub',
     'pbitreadnego': 'Ub',
     'cs_pwrite': 'SJK',
     'playerdeathtax': 'p',
-    'playerteamkilltax': 'px',
+    'playerteamkilltax': 'pd',
     'playerbuystock': 'px',
     'scenario_getnumofmissions': 't',
     'bullettimetolive': '',
@@ -206,6 +208,8 @@ def make_args(rng, kinds, index):
             args.append('P:0:' + (name + b'\0').hex())
         elif kind == 'L':
             args.append(rng.choice([0, 1, 2, 3]))
+        elif kind == 'd':
+            args.append(rng.choice([0, 1, 5, 10, 50, 100, 500, 1000, 5000, 20000]))
         elif kind == 'x':
             args.append(rng.choice([0, 1, -1, 10, 100, 99999, 100000, 1000000, 2147483647, -2147483648, rng.randrange(-1000, 100000)]))
         elif kind == 'T':

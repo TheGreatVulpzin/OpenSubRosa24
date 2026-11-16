@@ -530,6 +530,17 @@ void human_calcarmtorque(int human)
         hand_vel.z = (float)(chest->rot[2].x * rv.x + chest->rot[2].y * rv.y + chest->rot[2].z * rv.z);
 
         hand_target(&t, hu, side, type, swing);
+#ifdef sr_debug_cross
+        {
+            /* The client marks the target of the hand in the world. */
+            vec3 cross, mark = t;
+            projectvector(&cross, &mark, chest->rot);
+            cross.x = (float)(cross.x + shoulder.x);
+            cross.y = (float)(cross.y + shoulder.y);
+            cross.z = (float)(cross.z + shoulder.z);
+            sr_debug_cross(&cross, 0.25f);
+        }
+#endif
 
         /* A step toward the target: at most 0.125 across, 0.0625 up or down. */
         step = 0.125f;

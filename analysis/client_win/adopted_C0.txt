@@ -19,3 +19,8 @@ scenario_armhuman src/game/scenario.c
 logic_gunstore_buy src/game/logic.c
 createaccount src/game/account_db.c
 economy_carmarket src/game/economy.c
+deleteplayer src/game/player.c
+playerteamkilltax src/game/economy.c
+human_calcarmtorque src/game/human_arms.c
+itemweaponsimulation src/game/item_logic.c
+playerai src/game/player_ai.c
