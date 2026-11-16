@@ -556,7 +556,7 @@ void lf_35fa0(void);
 void ai_playercar(void);
 void ai_car_nextwaypoint(void);
 void lf_37720(void);
-void lf_37b30(void);
+void area_createblock(void);
 void area_setblock(void);
 void area_setblockcolor(void);
 void area_getblock(void);
@@ -583,7 +583,7 @@ void area_block_addwindowhorizontal(void);
 void area_block_addwindowvertical(void);
 void lf_3f440(void);
 void area_block_addbasicsurface(void);
-void lf_3f880(void);
+void loadblock(void);
 void area_createinteriorblocks(void);
 void lf_41f30(void);
 void lf_42050(void);
@@ -864,14 +864,14 @@ void lineintersectall(void);
 void lineintersectlevel(void);
 void lf_a1100(void);
 void sphereintersectlevel(void);
-void lf_a1320(void);
+void createlandscape(void);
 void landscape_buildmesh(void);
 void landscape_setheightf(void);
 void lineintersectlandscape(void);
 void lf_a22a0(void);
 void sphereintersectlandscape(void);
-void lf_a2cd0(void);
-void lf_a2f90(void);
+void buildcityinterection(void);
+void buildcitystreet(void);
 void lf_a3940(void);
 void lf_a3de0(void);
 void sprintf_comma(void);
@@ -996,8 +996,8 @@ void lf_ccd50(void);
 void objectsimulation_heli(void);
 void lineintersectobject(void);
 void lf_ced70(void);
-void lf_cf2e0(void);
-void lf_cf5f0(void);
+void buildsomeshit(void);
+void createtrack(void);
 void lineintersecttrack(void);
 void lineintersecttrackrail(void);
 void lf_d0b60(void);
@@ -1856,7 +1856,7 @@ const LfEntry lf_table[] = {
     { "ai_playercar", 0x36040, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_car_nextwaypoint", 0x37310, (void *)ai_car_nextwaypoint, 1, LF_RET_VOID, 4, "v", 0 },
     { "createarea", 0x37720, (void *)lf_37720, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
-    { "area_createblock", 0x37b30, (void *)lf_37b30, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
+    { "area_createblock", 0x37b30, (void *)area_createblock, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "area_setblock", 0x38260, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_setblockcolor", 0x38430, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_getblock", 0x38600, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
@@ -1883,7 +1883,7 @@ const LfEntry lf_table[] = {
     { "area_block_addwindowvertical", 0x3ef70, (void *)area_block_addwindowvertical, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbox", 0x3f440, (void *)lf_3f440, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "area_block_addbasicsurface", 0x3f660, (void *)area_block_addbasicsurface, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "loadblock", 0x3f880, (void *)lf_3f880, 1, LF_RET_VOID, 4, "v", 1 },
+    { "loadblock", 0x3f880, (void *)loadblock, 1, LF_RET_VOID, 4, "p", 1 },
     { "area_createinteriorblocks", 0x3fcb0, (void *)area_createinteriorblocks, 0, LF_RET_VOID, 4, "", 1 },
     { "area_block_addfloorceil", 0x41f30, (void *)lf_41f30, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_42050", 0x42050, (void *)lf_42050, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2164,14 +2164,14 @@ const LfEntry lf_table[] = {
     { "lineintersectlevel", 0xa0f40, (void *)lineintersectlevel, 3, LF_RET_INT, 1, "ppv", 0 },
     { "lf_a1100", 0xa1100, (void *)lf_a1100, 3, LF_RET_INT, 1, "ppv", 0 },
     { "sphereintersectlevel", 0xa1220, (void *)sphereintersectlevel, 2, LF_RET_INT, 1, "pv", 0 },
-    { "createlandscape", 0xa1320, (void *)lf_a1320, 0, LF_RET_VOID, 4, "", 0 },
+    { "createlandscape", 0xa1320, (void *)createlandscape, 0, LF_RET_VOID, 4, "", 0 },
     { "landscape_buildmesh", 0xa19c0, (void *)landscape_buildmesh, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_setheightf", 0xa1aa0, (void *)landscape_setheightf, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectlandscape", 0xa1b40, (void *)lineintersectlandscape, 2, LF_RET_INT, 1, "pp", 0 },
     { "lf_a22a0", 0xa22a0, (void *)lf_a22a0, 3, LF_RET_INT64, 4, "ppv", 0 },
     { "sphereintersectlandscape", 0xa27b0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 1, "pv", 0 },
-    { "buildcityinterection", 0xa2cd0, (void *)lf_a2cd0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "buildcitystreet", 0xa2f90, (void *)lf_a2f90, 1, LF_RET_VOID, 4, "v", 0 },
+    { "buildcityinterection", 0xa2cd0, (void *)buildcityinterection, 1, LF_RET_VOID, 4, "v", 0 },
+    { "buildcitystreet", 0xa2f90, (void *)buildcitystreet, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation", 0xa3940, (void *)lf_a3940, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_farbslist", 0xa3de0, (void *)lf_a3de0, 1, LF_RET_VOID, 4, "v", 0 },
     { "sprintf_comma", 0xa3ee0, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
@@ -2296,8 +2296,8 @@ const LfEntry lf_table[] = {
     { "objectsimulation_heli", 0xcd930, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0xce570, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "lf_ced70", 0xced70, (void *)lf_ced70, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "buildsomeshit", 0xcf2e0, (void *)lf_cf2e0, 1, LF_RET_VOID, 4, "p", 0 },
-    { "createtrack", 0xcf5f0, (void *)lf_cf5f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
+    { "buildsomeshit", 0xcf2e0, (void *)buildsomeshit, 1, LF_RET_VOID, 4, "p", 0 },
+    { "createtrack", 0xcf5f0, (void *)createtrack, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0xd06a0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0xd0910, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0xd0b60, (void *)lf_d0b60, 1, LF_RET_VOID, 4, "v", 0 },

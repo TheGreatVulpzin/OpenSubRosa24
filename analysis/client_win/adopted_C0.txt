@@ -35,3 +35,10 @@ objectsimulation_heli src/game/vehicles.c
 ai_playercar src/game/ai_car.c
 ai_car_nextwaypoint src/game/ai_car.c
 city_createelevator src/game/city_objects.c
+createlandscape src/game/level.c
+createtrack src/game/level.c
+buildsomeshit src/game/level.c
+buildcitystreet src/game/city.c
+buildcityinterection src/game/city.c
+area_createblock src/game/area.c
+loadblock src/game/block_mesh.c

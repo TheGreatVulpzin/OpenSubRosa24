@@ -27,3 +27,4 @@ rva,name,index,type,evidence
 0x96cf0,createitem,2,float *,"the velocity: the function copies it into the item"
 0x96cf0,createitem,3,float *,"the three rows of the orientation: the function copies them into the item"
 0x64380,createbullet,2,float *,"the velocity: the function copies it into the bullet"
+0x3f880,loadblock,0,char *,"the name of the block file: the function builds the path data/block/<name>.sbl"
