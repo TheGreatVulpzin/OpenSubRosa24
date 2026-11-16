@@ -43,13 +43,17 @@ int os_fclose(void *file);
 int os_fgetc(void *file);
 int os_chdir(const char *path);
 
-/* fprintf and sscanf take a list of arguments, so a wrapper cannot pass them on. The
- * function returns the import and the macro calls it: os_fprintf(file, "%d", value). */
+/* fprintf, sprintf and sscanf take a list of arguments, so a wrapper cannot pass them on.
+ * The function returns the import and the macro calls it: os_fprintf(file, "%d", value).
+ * Use os_sprintf for %e, %f and %g: the static CRT writes another number of exponent digits. */
 typedef int(__cdecl *os_fprintf_fn)(void *file, const char *format, ...);
+typedef int(__cdecl *os_sprintf_fn)(char *text, const char *format, ...);
 typedef int(__cdecl *os_sscanf_fn)(const char *text, const char *format, ...);
 os_fprintf_fn os_fprintf_import(void);
+os_sprintf_fn os_sprintf_import(void);
 os_sscanf_fn os_sscanf_import(void);
 #define os_fprintf (os_fprintf_import())
+#define os_sprintf (os_sprintf_import())
 #define os_sscanf (os_sscanf_import())
 
 /* File search of the CRT. data is a _finddata64i32_t. */

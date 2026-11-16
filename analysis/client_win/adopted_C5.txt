@@ -10,3 +10,9 @@ text_getlength src/client/menu/items.c
 setmenuitem src/client/menu/items.c
 menuslider src/client/menu/items.c
 setupmenuitems src/client/menu/items.c
+generatemenutextures src/client/menu/draw.c
+drawmenubutton src/client/menu/draw.c
+drawmenubutton2 src/client/menu/draw.c
+menutextbox src/client/menu/draw.c
+drawmenutextfield src/client/menu/draw.c
+drawmenuitems src/client/menu/draw.c

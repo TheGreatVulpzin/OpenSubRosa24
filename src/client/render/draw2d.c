@@ -33,8 +33,8 @@ GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2f, (float s, float t), (s, t))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
-/* Move the place of a shape by the flags. */
-static void align_shape(float *x, float *y, float width, float height, unsigned flags)
+/* Move the place of a shape by the flags. The menu buttons use it too. */
+void align_shape(float *x, float *y, float width, float height, unsigned flags)
 {
     if ((flags & FLAG_CENTER_X) == 0) {
         if ((flags & FLAG_RIGHT) != 0)

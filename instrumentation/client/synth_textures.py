@@ -1026,6 +1026,79 @@ def menu_names_case():
     return [(0x17798e00, '8192s', [b'\x55' * 8192])], {'setupmenuitems': [call(0x1039c0)]}
 
 
+TEXTINPUT = 0x29e752a0  # active, start, end, a spare word, the text and the shown text
+
+
+def menu_draw_case(start=1, end=3):
+    """The menu drawing: the round texture, both buttons with each place flag, and text fields of
+    kind 1 and 2. start and end: the selection of the text input."""
+    rng = random.Random(37 + start + 7 * end)
+    texts = SCRATCH + 0x900
+    words = [b'Name', b'A long line of text that must wrap in the field box', b'', b'x' * 70]
+    edits = [(MENU_COUNT, 'i', [4]), (FONTNUM, 'i', [0]), (TEXTINPUT, '3i', [1, start, end])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    for i in range(4):
+        edits.append((MENU_ITEMS + i * 0x284, 'i', [[1, 2, 1, 2][i]]))
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    flags = [0, 1, 2, 4, 8, 5, 10, 15]
+    button = [call(0x1010f0, floats(rng), floats(rng), rng.choice([100.0, floats(rng)]), rng.choice([32.0, 0.0]),
+                   rng.choice([0.0, 1.0, -1.0, NAN, -INF, floats(rng)]), rng.choice(flags), 1.0, floats(rng), 0.5, 1.0)
+              for _ in range(24)]
+    button2 = [call(0x100930, floats(rng), floats(rng), rng.choice([100.0, floats(rng)]),
+                    rng.choice([32.0, 0.0, floats(rng)]), rng.randint(0, 1), rng.choice(flags), 1.0, 0.5,
+                    floats(rng), floats(rng)) for _ in range(24)]
+    field = [call(0x1014f0, i % 4, text[i % 4], rng.choice([100.0, floats(rng)]), rng.choice([50.0, floats(rng)]),
+                  rng.choice([100.0, 40.0]), rng.choice([16.0, 64.0, 8.0]), rng.choice([8.0, 16.0, floats(rng)]), 0,
+                  1.0, 1.0, floats(rng), 1.0) for i in range(24)]
+    return edits, {'generatemenutextures': [call(0x100660)], 'drawmenubutton': button,
+                   'drawmenubutton2': button2, 'drawmenutextfield': field}
+
+
+def menu_textbox_case(index, first, click, pressed=1):
+    """menutextbox on item index of four text fields, one of each value type. first: the first
+    frame of the press. click: the left button goes down in this frame. pressed 0: the press
+    ends in this frame, so the text input is cleared."""
+    rng = random.Random(41 + index + 4 * first + 8 * click + 16 * pressed)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [4]), (MENU_INDEX, 'i', [index]), (MOUSE, '2i', [300, 200]),
+             (MOUSE + 0x10, 'i', [int(click)]), (MOUSE_PREVIOUS + 0x10, 'i', [0]),
+             (TEXTINPUT, '3i', [0, rng.randint(-2, 9), rng.randint(-2, 9)]),
+             (TEXTINPUT + 0x10, '12s', [b'1234.5abc\0\0\0']),
+             (values, 'i', [rng.randint(-99999, 99999)]), (values + 4, 'I', [0xfffffff0]),
+             (values + 8, 'f', [floats(rng)]), (values + 12, '16s', [b'player name\0\0\0\0\0'])]
+    for i in range(4):
+        base = MENU_ITEMS + i * 0x284
+        edits += [(base, 'i', [1]), (base + 0x22c, 'i', [[1, 2, 3, 0][i]]),
+                  (base + 0x220, '2i', [pressed, 0 if first else 1]), (base + 0x27c, 'I', [0x20000000 + values + 4 * i])]
+    return edits, {'menutextbox': [call(0x1040c0)]}
+
+
+def menu_items_case():
+    """drawmenuitems on twelve items: fields, sliders, toggles, choices, bitmaps and hidden ones."""
+    rng = random.Random(43)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [12]), (FONTNUM, 'i', [0]), (TEXTINPUT, '3i', [1, 0, 2]),
+             (TEXTINPUT + 0x10, '6s', [b'hello\0']), (values, '8i', [5, -3, 1, 0, 70, 2, 0, 9]),
+             (values + 0x20, '16s', [b'some text\0\0\0\0\0\0\0'])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        kind = [1, 2, 5, 3, 4, 0, 1, 5, 3, 0, 2, 4][i]
+        edits += [(base, 'i', [kind]), (base + 4, '8s', [b'Item %d\0' % i]),
+                  (base + 0x44, '4f', [floats(rng), floats(rng), 16.0, 0.0]), (base + 0x50, 'i', [rng.choice([0, 4, 5])]),
+                  (base + 0x54, 'i', [rng.choice([0, 1, 2])]),
+                  (base + 0x1d8, '4f', [floats(rng), floats(rng), 16.0, 0.0]), (base + 0x1e4, 'i', [rng.choice([0, 1, 5])]),
+                  (base + 0x1e8, '6f', [1.0, floats(rng), 0.5, 1.0, 100.0, 24.0]),
+                  (base + 0x20c, '4i', [int(i == 9), rng.randint(0, 1), int(i == 11), rng.randint(0, 1)]),
+                  (base + 0x21c, 'f', [floats(rng)]), (base + 0x220, 'i', [int(i == 6)]),
+                  (base + 0x22c, 'i', [rng.choice([0, 1, 2, 3]) if kind in (1, 2) else 1]),
+                  (base + 0x234, 'i', [int(i == 10)]), (base + 0x238, '3i', [0, rng.choice([100, 0, 10]), 1]),
+                  (base + 0x244, 'i', [-1 if i not in (5, 9) else 3]),
+                  (base + 0x27c, 'I', [0x20000000 + (values + 0x20 if kind in (1, 2) and i % 2 else values + 4 * (i % 8))])]
+        edits.append((base + 0x58, '8s', [b'info\0\0\0\0']))
+    return edits, {'drawmenuitems': [call(0xff2e0)]}
+
+
 def menu_slider_case(ctrl=False, left=True):
     """menuslider on twelve pressed sliders: checkmenuitems calls it for each one, and three direct
     calls use item 2. ctrl holds left Ctrl. left keeps the left button down."""
@@ -1204,6 +1277,12 @@ def main():
             'menu_option': menu_option_case, 'menu_option_empty': lambda: menu_option_case(True),
             'menu_slider': menu_slider_case, 'menu_slider_ctrl': lambda: menu_slider_case(True),
             'menu_slider_up': lambda: menu_slider_case(True, False), 'menu_names': menu_names_case,
+            'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
+            'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
+            **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))
+               for i in range(4) for f in (0, 1) for c in (0, 1)},
+            **{f'menu_textbox_end_{i}{f}': (lambda i=i, f=f: menu_textbox_case(i, f, 0, 0))
+               for i in range(4) for f in (0, 1)},
             'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
             'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
             'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}
