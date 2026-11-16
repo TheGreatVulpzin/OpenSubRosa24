@@ -24,6 +24,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -238,6 +239,19 @@ TARGETS = {
                                0xaa920, 0xabc00, 0xc14a0, 0xd2290, 0xd38c0, 0xfa9f0, 0x10ae00})),
 }
 TARGET = TARGETS['ded024d']
+
+
+def write_output(path, text):
+    """Write a generated file. On Windows another process (an editor, a virus scan) can hold
+    the file for a moment: then the open fails with EINVAL or EACCES. Try again a few times."""
+    for attempt in range(5):
+        try:
+            Path(path).write_text(text, encoding='utf-8', newline='\n')
+            return
+        except OSError:
+            if attempt == 4:
+                raise
+            time.sleep(1)
 
 
 def symbol(rva):
@@ -1182,7 +1196,7 @@ def compile_loop(texts, imports_used, status, out_c, compile_=True, verbose=True
     still fail (status[rva] = compile_error). Returns the remaining texts."""
     for attempt in range(60):
         code, lines = gen_lifted(texts, imports_used)
-        out_c.write_text(code, encoding='utf-8', newline='\n')
+        write_output(out_c, code)
         if not compile_:
             break
         errs = compile_errors(out_c)
@@ -1303,10 +1317,9 @@ def main():
         if r in UNHOOKABLE and r not in side:
             status[r] = ('unhookable', '')
     live = [r for r in lifted if r not in side and r not in UNHOOKABLE]
-    (ROOT / TARGET['hooks']).write_text(gen_hooks(live, headers, funcs, names), encoding='utf-8', newline='\n')
-    (ROOT / TARGET['record']).write_text(gen_record_hooks(side, headers, funcs, names), encoding='utf-8',
-                                         newline='\n')
-    (ROOT / TARGET['table']).write_text(gen_table(lifted, headers, names, side), encoding='utf-8', newline='\n')
+    write_output(ROOT / TARGET['hooks'], gen_hooks(live, headers, funcs, names))
+    write_output(ROOT / TARGET['record'], gen_record_hooks(side, headers, funcs, names))
+    write_output(ROOT / TARGET['table'], gen_table(lifted, headers, names, side))
 
     with open(ROOT / TARGET['report'], 'w', newline='', encoding='utf-8') as fh:
         w = csv.writer(fh, lineterminator='\n')
