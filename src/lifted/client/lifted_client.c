@@ -5,7 +5,7 @@
 #include "lift_os_client.h"
 #include "lift_gl_client.h"
 
-static void *lf_imports[131];
+static void *lf_imports[125];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -80328,21 +80328,6 @@ void __cdecl lf_10ad70(void *param_1,byte param_2)
 #undef DAT_16723200
 #undef memcpy
 
-/* ---------------------------------------------------------------- 0x10adb0 */
-#define DAT_0f7eb1e8 (*(undefined4 *)SR_VA(0xf7eb1e8))
-#define FUN_0050ad70 ((void *)SR_FN(0x50ad70))
-#define steam_requestticket ((void (__cdecl *)(undefined4))SR_FN(0x50be20))
-void __cdecl lf_10adb0(void)
-
-{
-  DAT_0f7eb1e8 = 0;
-  steam_requestticket(FUN_0050ad70);
-  return;
-}
-#undef DAT_0f7eb1e8
-#undef FUN_0050ad70
-#undef steam_requestticket
-
 /* ---------------------------------------------------------------- 0x10add0 */
 #define DAT_0f7eb1e8 (*(int *)SR_VA(0xf7eb1e8))
 #define DAT_17a78dc4 (*(undefined4 *)SR_VA(0x17a78dc4))
@@ -80864,162 +80849,6 @@ void __cdecl lf_10bcc0(float *param_1,float *param_2,float *param_3)
   return;
 }
 
-
-/* ---------------------------------------------------------------- 0x10bcf0 */
-#define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
-#define SteamAPI_Init ((char (__cdecl *)(void))LF_IMPORT(125, "STEAM_API.DLL", "SteamAPI_Init"))
-#define SteamAPI_RestartAppIfNecessary ((char (__cdecl *)(uint))LF_IMPORT(126, "STEAM_API.DLL", "SteamAPI_RestartAppIfNecessary"))
-undefined4 __cdecl lf_10bcf0(void)
-
-{
-  char cVar1;
-  undefined4 uVar2;
-  
-  cVar1 = SteamAPI_RestartAppIfNecessary(0);
-  if (cVar1 == '\0') {
-    cVar1 = SteamAPI_Init();
-    if (cVar1 == '\0') {
-      uVar2 = 0;
-    }
-    else {
-      DAT_00527ec0 = 1;
-      uVar2 = 1;
-    }
-  }
-  else {
-    DAT_00527ec0 = 1;
-    uVar2 = 1;
-  }
-  return uVar2;
-}
-#undef DAT_00527ec0
-#undef SteamAPI_Init
-#undef SteamAPI_RestartAppIfNecessary
-
-/* ---------------------------------------------------------------- 0x10bd40 */
-#define DAT_00527ec0 (*(undefined4 *)SR_VA(0x527ec0))
-#define SteamAPI_Shutdown ((void (__cdecl *)(void))LF_IMPORT(127, "STEAM_API.DLL", "SteamAPI_Shutdown"))
-void __cdecl lf_10bd40(void)
-
-{
-  SteamAPI_Shutdown();
-  DAT_00527ec0 = 0;
-  return;
-}
-#undef DAT_00527ec0
-#undef SteamAPI_Shutdown
-
-/* ---------------------------------------------------------------- 0x10bd60 */
-#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamAPI_RunCallbacks ((void (__cdecl *)(void))LF_IMPORT(128, "STEAM_API.DLL", "SteamAPI_RunCallbacks"))
-void __cdecl lf_10bd60(void)
-
-{
-  if (DAT_00527ec0 != 0) {
-    SteamAPI_RunCallbacks();
-  }
-  return;
-}
-#undef DAT_00527ec0
-#undef SteamAPI_RunCallbacks
-
-/* ---------------------------------------------------------------- 0x10bd80 */
-#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamFriends ((void * (__cdecl *)(void))LF_IMPORT(129, "STEAM_API.DLL", "SteamFriends"))
-#define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(14, "MSVCR100.DLL", "strcpy"))
-bool __cdecl lf_10bd80(char *param_1)
-
-{
-  undefined4 *puVar1;
-  char *_Source;
-  bool bVar2;
-  
-  bVar2 = DAT_00527ec0 != 0;
-  if (bVar2) {
-    puVar1 = SteamFriends();
-    _Source = (char *)(**(code **)*puVar1)();
-    strcpy(param_1,_Source);
-  }
-  return bVar2;
-}
-#undef DAT_00527ec0
-#undef SteamFriends
-#undef strcpy
-
-/* ---------------------------------------------------------------- 0x10bdc0 */
-#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(130, "STEAM_API.DLL", "SteamUser"))
-#define CSteamID ((void * (__fastcall *)(void *))SR_FN(0x50be80))
-#define ConvertToUint64 ((ulonglong (__fastcall *)(void *))SR_FN(0x50bee0))
-#define local_1c (*(undefined1 (*)[8])(lf_frame + 0x14))
-#define local_14 (*(undefined4 *)(lf_frame + 0x1c))
-#define local_10 (*(undefined4 *)(lf_frame + 0x20))
-#define local_c (*(undefined4 *)(lf_frame + 0x24))
-#define local_8 (*(undefined4 *)(lf_frame + 0x28))
-void __cdecl lf_10bdc0(undefined8 *param_1)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x30];
-  int *piVar1;
-  undefined4 *puVar2;
-  ulonglong uVar3;
-
-
-
-
-
-  
-  CSteamID(&local_14);
-  if (DAT_00527ec0 != 0) {
-    piVar1 = SteamUser();
-    puVar2 = (undefined4 *)(**(code **)(*piVar1 + 8))(local_1c);
-    local_14 = *puVar2;
-    local_10 = puVar2[1];
-    uVar3 = ConvertToUint64(&local_14);
-    local_c = (undefined4)uVar3;
-    *(undefined4 *)param_1 = local_c;
-    local_8 = (undefined4)(uVar3 >> 0x20);
-    *(undefined4 *)((int)param_1 + 4) = local_8;
-  }
-  return;
-}
-#undef DAT_00527ec0
-#undef SteamUser
-#undef CSteamID
-#undef ConvertToUint64
-#undef local_1c
-#undef local_14
-#undef local_10
-#undef local_c
-#undef local_8
-
-/* ---------------------------------------------------------------- 0x10be20 */
-#define DAT_00527ec0 (*(int *)SR_VA(0x527ec0))
-#define DAT_00527ee8 (*(undefined *)SR_VA(0x527ee8))
-#define DAT_00527ec8 (*(undefined *)SR_VA(0x527ec8))
-#define _DAT_00527ee8 (*(undefined4 *)SR_VA(0x527ee8))
-#define SteamUser ((void * (__cdecl *)(void))LF_IMPORT(130, "STEAM_API.DLL", "SteamUser"))
-#define Set(...) 0
-void __cdecl lf_10be20(undefined4 param_1)
-
-{
-  int *piVar1;
-  undefined8 uVar2;
-  
-  if (DAT_00527ec0 != 0) {
-    piVar1 = SteamUser();
-    uVar2 = (**(code **)(*piVar1 + 0x50))(0,0);
-    Set(&DAT_00527ec8,(uint)uVar2,(uint)((ulonglong)uVar2 >> 0x20),((int)SR_VA(0x527ec8)),((int)SR_VA(0x50bf00)));
-    _DAT_00527ee8 = param_1;
-  }
-  return;
-}
-#undef DAT_00527ec0
-#undef DAT_00527ee8
-#undef DAT_00527ec8
-#undef _DAT_00527ee8
-#undef SteamUser
-#undef Set
 
 /* ---------------------------------------------------------------- 0x10be80 */
 

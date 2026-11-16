@@ -1055,6 +1055,15 @@ static const char *known_difference(const char *name)
          * write the team kill rate. The server never sends this result to a player, so the client follows the
          * server code (docs/client.md, "Clean server code in the client"). */
         { "playerteamkilltax", "client follows the server code" },
+        /* The client runs without Steam: these functions do nothing. The ticket never goes to the server, so
+         * the protocol does not change. */
+        { "steam_init", "no Steam in the client" },
+        { "steam_shutdown", "no Steam in the client" },
+        { "steam_update", "no Steam in the client" },
+        { "steam_getname", "no Steam in the client" },
+        { "steam_getid", "no Steam in the client" },
+        { "steam_requestticket", "no Steam in the client" },
+        { "steam_requestauthticket", "no Steam in the client" },
     };
     size_t k;
     for (k = 0; k < sizeof known / sizeof known[0]; k++)
