@@ -152,7 +152,8 @@ void __cdecl buildingeditor_drawblock(int x, int floor, int z)
 /* The texture of a slot of a cell: the outer layer or the inner layer. */
 static int cell_texture(const BuildingCell *cell, int layer, int slot)
 {
-    int material = layer == 0 ? cell->tex_outer[slot] : cell->tex_inner[slot];
+    /* The slots hold unsigned 16-bit material numbers. */
+    int material = layer == 0 ? (uint16_t)cell->tex_outer[slot] : (uint16_t)cell->tex_inner[slot];
 
     return cl_data_texturelist.material[sr_data_building.material_textures[material]];
 }
