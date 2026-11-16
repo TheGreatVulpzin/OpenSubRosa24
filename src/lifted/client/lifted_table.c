@@ -791,7 +791,7 @@ void drawhud(void);
 void rendermap(void);
 void drawmap(void);
 void selectnearitem(void);
-void lf_850b0(void);
+void createhuman(void);
 void lf_85940(void);
 void lf_85980(void);
 void lf_85b70(void);
@@ -2091,7 +2091,7 @@ const LfEntry lf_table[] = {
     { "rendermap", 0x844d0, (void *)rendermap, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmap", 0x84700, (void *)drawmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "selectnearitem", 0x84f00, (void *)selectnearitem, 0, LF_RET_VOID, 4, "", 0 },
-    { "createhuman", 0x850b0, (void *)lf_850b0, 3, LF_RET_INT, 4, "ppp", 0 },
+    { "createhuman", 0x850b0, (void *)createhuman, 3, LF_RET_INT, 4, "ppp", 0 },
     { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },
     { "pointinsidebuilding", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
     { "humansimulation", 0x85b70, (void *)lf_85b70, 0, LF_RET_VOID, 4, "", 0 },
