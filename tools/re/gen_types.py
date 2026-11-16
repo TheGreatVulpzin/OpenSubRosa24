@@ -1102,15 +1102,31 @@ def game_client_offset(off):
     return off
 
 
-def gen_game_client(names):
-    """The client view of the Game record: the same field names at the client places."""
+def option_client_offset(off):
+    """Place of an Option field in the client record. The client record has no gametype (+0x118),
+    so every field after it sits 4 bytes before the server field."""
+    return off - 4 if off > 0x118 else off
+
+
+def gen_client_view(names, cname, glob, size, offset, dropped):
+    """The client view of a record: the same field names at the client places. The fields in
+    "dropped" do not exist in the client record."""
     named = {}
-    for off, (name, typ, count, ev) in names.get('game', {}).items():
-        if name == 'end_time':
+    for off, (name, typ, count, ev) in names.get(glob, {}).items():
+        if name in dropped:
             continue
-        named[game_client_offset(off)] = (name, typ, count, ev)
-    accessed = {game_client_offset(o): v for o, v in load_accessed('game').items() if o != 0x34}
-    return gen_struct('GameClient', 'game (client)', 0x25d60, named, accessed)
+        named[offset(off)] = (name, typ, count, ev)
+    drop_offsets = {o for o, v in names.get(glob, {}).items() if v[0] in dropped}
+    accessed = {offset(o): v for o, v in load_accessed(glob).items() if o not in drop_offsets}
+    return gen_struct(cname, f'{glob} (client)', size, named, accessed)
+
+
+def gen_game_client(names):
+    return gen_client_view(names, 'GameClient', 'game', 0x25d60, game_client_offset, {'end_time'})
+
+
+def gen_option_client(names):
+    return gen_client_view(names, 'OptionClient', 'option', 0x150, option_client_offset, {'gametype'})
 
 
 def main():
@@ -1119,6 +1135,7 @@ def main():
     for cname, (glob, size) in {**STRUCTS, **CLIENT_STRUCTS}.items():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
     parts.append(gen_game_client(names))
+    parts.append(gen_option_client(names))
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'
     out.mkdir(parents=True, exist_ok=True)

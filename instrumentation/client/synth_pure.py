@@ -8,15 +8,23 @@ Usage: python -I instrumentation/client/synth_pure.py <recording dir> <work dir>
 The recording gives the memory image. The functions must be in a list of adopted functions.
 """
 import csv
+import hashlib
+import importlib.util
+import inspect
+import json
 import math
 import os
 import random
+import re
 import struct
 import sys
+import threading
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'instrumentation' / 'client'))
+sys.path.insert(0, str(ROOT / 'instrumentation' / 'lift'))
+from memory import safe_jobs  # noqa: E402
 import synth_textures as st  # noqa: E402
 
 # Parameter kinds: v vector in, o vector out, m 3 by 3 matrix, q quaternion, f float, F float out,
@@ -66,6 +74,40 @@ PROTOTYPES = {
     'buildcityinterection': 'i',
     'area_createblock': 'AcccBk',
     'loadblock': 'N',
+    'human_calculatearmangles': 'n',
+    'human_calculatelegangles': 'n',
+    'human_collisionhuman': 'n',
+    'human_buildmuscles': 'n',
+    'eventsimulation': '',
+    'itemsimulation': '',
+    'itemlogic': '',
+    'createarea': 'AvEEEr',
+    'playersimulation': '',
+    'economy_gunmarket': '',
+    'setupbullettypes': '',
+    'createhuman': 'vmp',
+    'item_physicssimulation': 'n',
+    'createbond': 'iinn',
+    'loadsaveoptions': 'i',
+    'objecttrainsimulation': 'n',
+    'player_saveinventory': 'p',
+    'city_addintersection': 'ccc',
+    'cityobject_addbox': 'iffffff',
+    'area_block_addbox': 'ffffffu',
+    'pointinsidebuilding': 'nvf',
+    'human_createmuscleball': 'nnnv',
+    'createjointbond': 'nnnv',
+    'player_calcassets': 'p',
+    'logic_suits_buy': 'pi',
+    'saveaccountsclient': '',
+    'lineintersecthuman': 'nWXr',
+    'addobjectrotation': 'nvvf',
+    'init_genrand': 'u',
+    'getrandomvector3d': 'off',
+    'resetorientation': 'm',
+    'createevent_sound': 'ivff',
+    'objectwheelsimulation2': '',
+    'object_rotorsimulation': 'n',
     'pbitwrite': 'Ub',
     'pbitwritenego': 'Ub',
     'pbitread': 'Ub',
@@ -160,6 +202,38 @@ PROTOTYPES = {
     'objecttype_calcquadweights': 'wvP',
     'calculatefriction': 'vvf',
 }
+
+
+CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
+TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py')
+RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
+
+
+def closure_hashes(names):
+    """Hash of the clean code of each function (tools/re/clean_closure.py)."""
+    spec = importlib.util.spec_from_file_location('clean_closure', ROOT / 'tools' / 're' / 'clean_closure.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.hashes(names)
+
+
+def case_hash(name, kinds, count):
+    """What a result depends on besides the clean code: the kinds of arguments, their generator,
+    the number of calls, the finite switch and the sources of the test tools."""
+    h = hashlib.sha256()
+    h.update(f'{name}|{kinds}|{count}|{os.environ.get("SYNTH_FINITE", "")}'.encode())
+    h.update(inspect.getsource(make_args).encode())
+    h.update(inspect.getsource(number).encode())
+    for item in TEST_SOURCES:
+        h.update((ROOT / item).read_bytes().replace(b'\r\n', b'\n'))
+    return h.hexdigest()
+
+
+def load_cache():
+    try:
+        return json.loads(CACHE_FILE.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
 
 
 def rvas():
@@ -308,12 +382,23 @@ def main():
     # SYNTH_CALLS: the number of calls for each function (90 by default, 30 to look around fast).
     # SYNTH_JOBS: the number of functions that run at the same time (1 by default, 2 is safe).
     count = int(os.environ.get('SYNTH_CALLS', '90'))
-    jobs = max(1, int(os.environ.get('SYNTH_JOBS', '1')))
+    jobs = safe_jobs(max(1, int(os.environ.get('SYNTH_JOBS', '1'))))
+
+    # The result of a function that passed is kept with the hash of its clean code. The same hash
+    # means the same result, so the case is skipped. SYNTH_FORCE=1 runs every case again.
+    cache = load_cache()
+    lock = threading.Lock()
+    force = bool(os.environ.get('SYNTH_FORCE'))
+    names = [item.partition('=')[0] for item in want]
+    code = closure_hashes(names)
 
     def run_one(item):
         # "name=kinds" replaces the prototype of that function for this run.
         name, _, kinds = item.partition('=')
         proto = kinds if kinds else PROTOTYPES[name]
+        key = hashlib.sha256((code[name] + case_hash(name, proto, count)).encode()).hexdigest()
+        if not force and cache.get(name, {}).get('key') == key:
+            return f'{name}: {count} calls: cached, {cache[name]["result"]}'
         rng = random.Random(sum(map(ord, name)))
         calls = []
         for index in range(count):
@@ -322,7 +407,14 @@ def main():
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
-        return f'{name}: {len(calls)} calls: ' + st.run(rec / 'sv_snapshot.bin', path, name, own)
+        result = st.run(rec / 'sv_snapshot.bin', path, name, own)
+        m = RESULT.search(result)
+        if m and int(m.group(1)) > 0 and int(m.group(2)) == 0 and int(m.group(4)) == 0:
+            with lock:
+                cache[name] = {'key': key, 'result': result}
+                CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+                CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
+        return f'{name}: {len(calls)} calls: ' + result
 
     if jobs == 1:
         for item in want:
@@ -332,6 +424,8 @@ def main():
         with ThreadPoolExecutor(max_workers=jobs) as pool:
             for line in pool.map(run_one, want):
                 print(line, flush=True)
+    CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
 
 
 if __name__ == '__main__':

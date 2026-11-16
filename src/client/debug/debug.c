@@ -16,12 +16,26 @@ void *sr_import(const char *dll, const char *name);
 
 /* A cross makes 3 lines. The array has room for 4096 lines. */
 #define MAX_CROSS_COUNT 0xffd
+#define MAX_LINE_COUNT 0x1000
 
 /* The list of named values. Integer and float values share it. */
 #define MAX_INT_VALUES 0x80
 #define MAX_FLOAT_VALUES 0x20
 
 #define SEEK_END_OF_FILE 2
+
+/* Add one line from one point to another. Nothing is added when the array is full. */
+void __cdecl debug_addline(const vec3 *from, const vec3 *to)
+{
+    Debug *d = &g_debug;
+    DebugLine *line;
+
+    if (d->num_lines >= MAX_LINE_COUNT)
+        return;
+    line = &d->lines[d->num_lines++];
+    line->from = *from;
+    line->to = *to;
+}
 
 /* Add a cross at center: one line along each axis, each size long on both sides. Nothing is
  * added when the array is nearly full. */

@@ -4,6 +4,7 @@
 
 #include "sr_types.h"
 
+void __cdecl debug_addline(const vec3 *from, const vec3 *to);
 void __cdecl debug_addcross(const vec3 *center, float size);
 void __cdecl debug_addataint(const char *name, int value);
 void __cdecl debug_addatafloat(const char *name, float value);

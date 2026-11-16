@@ -28,3 +28,7 @@ rva,name,index,type,evidence
 0x96cf0,createitem,3,float *,"the three rows of the orientation: the function copies them into the item"
 0x64380,createbullet,2,float *,"the velocity: the function copies it into the bullet"
 0x3f880,loadblock,0,char *,"the name of the block file: the function builds the path data/block/<name>.sbl"
+0x850b0,createhuman,1,float *,"the position: the function copies it into the bones"
+0x850b0,createhuman,2,float *,"the three rows of the orientation: the function copies them into the bones"
+0x89e10,lineintersecthuman,1,float *,"the start of the line"
+0x89e10,lineintersecthuman,2,float *,"the end of the line"

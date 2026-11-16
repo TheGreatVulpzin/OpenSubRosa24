@@ -18,3 +18,9 @@ getrandomvector2d src/common/random.c
 systemtimer src/common/system.c
 building_load src/game/buildings.c
 building_buildfloorplan src/game/buildings.c
+pointinsidebuilding src/game/collide.c
+city_addintersection src/game/city.c
+createevent_sound src/net/events.c
+loadsaveoptions src/game/options.c
+createhuman src/game/human_body.c
+createarea src/game/area.c

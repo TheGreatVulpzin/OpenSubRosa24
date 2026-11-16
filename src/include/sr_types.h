@@ -1747,7 +1747,9 @@ typedef union Game { struct {
     vec3 checkpoints[32];                /* +0x257f4 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
     int unused_25974;                    /* +0x25974 resetgame clears this field. No reader in the server */
     int unused_25978;                    /* +0x25978 resetgame clears this field. No reader in the server */
-    uint8_t pad_2597c[0x3e4];
+    uint8_t pad_2597c[0x3d0];
+    uint32_t client_account_key;         /* +0x25d4c hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48) */
+    uint8_t pad_25d50[0x10];
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
@@ -1799,6 +1801,7 @@ SR_STATIC_ASSERT(offsetof(Game, num_checkpoints) == 0x257f0, "Game.num_checkpoin
 SR_STATIC_ASSERT(offsetof(Game, checkpoints) == 0x257f4, "Game.checkpoints");
 SR_STATIC_ASSERT(offsetof(Game, unused_25974) == 0x25974, "Game.unused_25974");
 SR_STATIC_ASSERT(offsetof(Game, unused_25978) == 0x25978, "Game.unused_25978");
+SR_STATIC_ASSERT(offsetof(Game, client_account_key) == 0x25d4c, "Game.client_account_key");
 SR_STATIC_ASSERT(offsetof(Game, num_newspapers) == 0x25d60, "Game.num_newspapers");
 
 /* particle[]: record of 0xf0 bytes. */
@@ -3509,7 +3512,9 @@ typedef union GameClient { struct {
     vec3 checkpoints[32];                /* +0x257f0 logicsimulation_driving: a checkpoint is reached within 4 units (32: the bit mask) */
     int unused_25974;                    /* +0x25970 resetgame clears this field. No reader in the server */
     int unused_25978;                    /* +0x25974 resetgame clears this field. No reader in the server */
-    uint8_t pad_25978[0x3e4];
+    uint8_t pad_25978[0x3d0];
+    uint32_t client_account_key;         /* +0x25d48 hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48) */
+    uint8_t pad_25d4c[0x10];
     int num_newspapers;                  /* +0x25d5c itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d60]; } GameClient;
 SR_STATIC_ASSERT(sizeof(GameClient) == 0x25d60, "GameClient");
@@ -3560,7 +3565,66 @@ SR_STATIC_ASSERT(offsetof(GameClient, num_checkpoints) == 0x257ec, "GameClient.n
 SR_STATIC_ASSERT(offsetof(GameClient, checkpoints) == 0x257f0, "GameClient.checkpoints");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_25974) == 0x25970, "GameClient.unused_25974");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_25978) == 0x25974, "GameClient.unused_25978");
+SR_STATIC_ASSERT(offsetof(GameClient, client_account_key) == 0x25d48, "GameClient.client_account_key");
 SR_STATIC_ASSERT(offsetof(GameClient, num_newspapers) == 0x25d5c, "GameClient.num_newspapers");
+
+/* option (client)[]: record of 0x150 bytes. */
+typedef union OptionClient { struct {
+    int port;                            /* +0x0000 disablesocket: read as 16 bits */
+    int bandwidth;                       /* +0x0004 servercycle: servermaxbytespersecond= */
+    char name[64];                       /* +0x0008 loadsaveoptions: key name=, default Agent and a random number */
+    char servername[64];                 /* +0x0048 loadsaveoptions: key servername=; dedicatedserverloop copies it to the server name */
+    char password[50];                   /* +0x0088 server_playermessage /admin: serverpassword= */
+    uint8_t pad_00ba[0xe];
+    int net_on;                          /* +0x00c8 servercycle; main_loop writes 1 */
+    int master_on;                       /* +0x00cc servercycle; main_loop writes 1 */
+    int unused_d0;                       /* +0x00d0 loadsaveoptions writes 2; no reader */
+    int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
+    int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
+    int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
+    uint8_t pad_00e0[0x2c];
+    int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
+    uint8_t pad_0110[0x4];
+    int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
+    int roundtime;                       /* +0x0118 loadsaveoptions: key roundtime=, default 7; dedicatedserverloop clamps it to 1 to 30 */
+    int setcpuaffinity;                  /* +0x011c loadsaveoptions: key setcpuaffinity=; no reader */
+    int occlusion;                       /* +0x0120 loadsaveoptions: key occlusion=, default 1 */
+    int voicemin;                        /* +0x0124 loadsaveoptions: key voicemin=, default 0x800 */
+    int voicechat;                       /* +0x0128 calculateplayervoice */
+    int voiceholdtotalk;                 /* +0x012c loadsaveoptions: key voiceholdtotalk=, default 1 */
+    int voicekey;                        /* +0x0130 loadsaveoptions: key voicekey= */
+    int voicemb;                         /* +0x0134 loadsaveoptions: key voicemb= */
+    int help;                            /* +0x0138 loadsaveoptions: key help=, default 1 */
+    uint8_t pad_013c[0x4];
+    int voiceboost;                      /* +0x0140 loadsaveoptions: key voiceboost=, default 100 */
+    float voiceboost_scale;              /* +0x0144 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
+    uint8_t pad_0148[0x8];
+}; uint8_t lf_raw[0x150]; } OptionClient;
+SR_STATIC_ASSERT(sizeof(OptionClient) == 0x150, "OptionClient");
+SR_STATIC_ASSERT(offsetof(OptionClient, port) == 0x0, "OptionClient.port");
+SR_STATIC_ASSERT(offsetof(OptionClient, bandwidth) == 0x4, "OptionClient.bandwidth");
+SR_STATIC_ASSERT(offsetof(OptionClient, name) == 0x8, "OptionClient.name");
+SR_STATIC_ASSERT(offsetof(OptionClient, servername) == 0x48, "OptionClient.servername");
+SR_STATIC_ASSERT(offsetof(OptionClient, password) == 0x88, "OptionClient.password");
+SR_STATIC_ASSERT(offsetof(OptionClient, net_on) == 0xc8, "OptionClient.net_on");
+SR_STATIC_ASSERT(offsetof(OptionClient, master_on) == 0xcc, "OptionClient.master_on");
+SR_STATIC_ASSERT(offsetof(OptionClient, unused_d0) == 0xd0, "OptionClient.unused_d0");
+SR_STATIC_ASSERT(offsetof(OptionClient, unused_d4) == 0xd4, "OptionClient.unused_d4");
+SR_STATIC_ASSERT(offsetof(OptionClient, soundvolume) == 0xd8, "OptionClient.soundvolume");
+SR_STATIC_ASSERT(offsetof(OptionClient, musicvolume) == 0xdc, "OptionClient.musicvolume");
+SR_STATIC_ASSERT(offsetof(OptionClient, invertmouse) == 0x10c, "OptionClient.invertmouse");
+SR_STATIC_ASSERT(offsetof(OptionClient, maxnumofplayers) == 0x114, "OptionClient.maxnumofplayers");
+SR_STATIC_ASSERT(offsetof(OptionClient, roundtime) == 0x118, "OptionClient.roundtime");
+SR_STATIC_ASSERT(offsetof(OptionClient, setcpuaffinity) == 0x11c, "OptionClient.setcpuaffinity");
+SR_STATIC_ASSERT(offsetof(OptionClient, occlusion) == 0x120, "OptionClient.occlusion");
+SR_STATIC_ASSERT(offsetof(OptionClient, voicemin) == 0x124, "OptionClient.voicemin");
+SR_STATIC_ASSERT(offsetof(OptionClient, voicechat) == 0x128, "OptionClient.voicechat");
+SR_STATIC_ASSERT(offsetof(OptionClient, voiceholdtotalk) == 0x12c, "OptionClient.voiceholdtotalk");
+SR_STATIC_ASSERT(offsetof(OptionClient, voicekey) == 0x130, "OptionClient.voicekey");
+SR_STATIC_ASSERT(offsetof(OptionClient, voicemb) == 0x134, "OptionClient.voicemb");
+SR_STATIC_ASSERT(offsetof(OptionClient, help) == 0x138, "OptionClient.help");
+SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost) == 0x140, "OptionClient.voiceboost");
+SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost_scale) == 0x144, "OptionClient.voiceboost_scale");
 
 #pragma pack(pop)
 

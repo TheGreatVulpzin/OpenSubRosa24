@@ -2260,7 +2260,7 @@ rva,size,name,source,confidence,evidence
 0x69190,682,debug_getinputs,anchor,0.959,features
 0x69440,2642,displaydebuginfo,manual,1.0,Counts nonbot players and draws the selected diagnostic display
 0x69ea0,804,debug_rendercylinder,anchor,0.777,features
-0x6a1d0,88,,,,
+0x6a1d0,88,debug_addline,manual,1.0,"Adds one line from a point to a point to the debug line list; object_rotorsimulation calls it for the blade."
 0x6a230,455,debug_addcross,callgraph,0.333,votes=2
 0x6a400,198,addmenuinputchar,anchor,0.701,features
 0x6a4d0,905,debug_renderboundingbox,callgraph,1.0,votes=8

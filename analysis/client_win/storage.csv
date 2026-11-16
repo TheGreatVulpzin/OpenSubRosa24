@@ -38,7 +38,7 @@ blocktemp,BlockTemp,1,483436,0x52dac40,12,13,ok
 object,Object,1024,33328,0x5519120,53,136,ok
 server,Server,1,132,0x75a5800,17,18,checked
 buildingtype,BuildingType,1,16832516,0x80558c0,6,11,weak
-option,Option,1,336,0x90630e0,11,22,checked
+option,OptionClient,1,336,0x90630e0,11,22,checked
 numoftracks,int,1,4,0x90652e0,3,3,ok
 game,GameClient,1,154976,0x9065300,32,72,checked
 file_read,SrFileTransfer,1,4,0x908b064,3,3,ok
@@ -101,3 +101,5 @@ bezier_curve_uv,float,8,4,0x13c5e6e0,1,1,checked
 bezier_curve_dv,float,12,4,0xaff0520,1,1,checked
 bond,Bond,16384,236,0x1779b820,1,1,checked
 bondopt,BondOpt,16384,64,0xf8ae240,1,1,checked
+bondparticle,BondParticle,16384,32,0x17718de0,1,1,ok
+carcolorname,const char *,6,4,0x123568,1,1,ok

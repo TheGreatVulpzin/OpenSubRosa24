@@ -1047,3 +1047,4 @@ texturelist,0x410,frame_aux,int,,renderframedepth attaches this texture before t
 texturelist,0x414,frame_spare,int,,setupframetextures sizes it with the other frame textures. No other code reads it
 debug,0x50c64,toggle_two,int,,displaydebuginfo shows the second diagnostic switch
 debug,0x50c68,toggle_three,int,,displaydebuginfo shows the third diagnostic switch
+game,0x25d4c,client_account_key,uint32_t,,"hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48)"

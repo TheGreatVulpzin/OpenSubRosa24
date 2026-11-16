@@ -11,7 +11,8 @@
     "instrumentation/runtime",
     "instrumentation/tests",
     "instrumentation/platform",
-    "instrumentation/client",
+    "instrumentation/client/runtime",
+    "instrumentation/client/pipeline.sh",
     "instrumentation/hook/verify.c",
     "instrumentation/hook/verify.h",
     "instrumentation/hook/hook.c",
@@ -26,6 +27,8 @@
     "build/client_deps"
   ],
   "reset": true,
+  "clean_closure": true,
+  "job_memory_mb": 2300,
   "recordings_dir": "build/recordings",
   "recordings": [
     {
