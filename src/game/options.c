@@ -83,7 +83,7 @@ void loadsaveoptions(int save)
     os_srand((uint32_t)os_time64(NULL));
     sprintf(o->name, "Agent %d", os_rand() & 0x1ff);
     memcpy(o->servername, "Sub Rosa Server", 16);
-    o->gametype = 3;
+    sr_option_gametype(o) = 3;
     os_srand((uint32_t)os_time64(NULL));
     sprintf(o->password, "%d", os_rand());
     o->unused_d0 = 2;
@@ -111,7 +111,7 @@ void loadsaveoptions(int save)
     optionreadwritestring(o->name, "name=", 0x1e);
     optionreadwritestring(o->servername, "servername=", 0x32);
     optionreadwritestring(o->password, "serverpassword=", 0x32);
-    optionreadwriteint(&o->gametype, "gametype=");
+    optionreadwriteint(&sr_option_gametype(o), "gametype=");
     optionreadwriteint(&o->invertmouse, "invertmouse=");
     optionreadwriteint(&o->maxnumofplayers, "maxnumofplayers=");
     optionreadwriteint(&o->roundtime, "roundtime=");

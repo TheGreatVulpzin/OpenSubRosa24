@@ -1097,11 +1097,50 @@ def check_frozen(header):
                          '\n  '.join(bad + [f'{n}: not in sr_types.h' for n in gone]))
 
 
+def game_client_offset(off):
+    """Place of a Game field in the client record. The client record has no end_time, so its fields
+    sit 4 bytes before the server fields. It has 4 more bytes in the unused area between the
+    areas of the teams and the end of the record, so the shift stops there and starts again at
+    0x257e4."""
+    if 0x38 <= off < 0x57c4 or off >= 0x257e4:
+        return off - 4
+    return off
+
+
+def option_client_offset(off):
+    """Place of an Option field in the client record. The client record has no gametype (+0x118),
+    so every field after it sits 4 bytes before the server field."""
+    return off - 4 if off > 0x118 else off
+
+
+def gen_client_view(names, cname, glob, size, offset, dropped):
+    """The client view of a record: the same field names at the client places. The fields in
+    "dropped" do not exist in the client record."""
+    named = {}
+    for off, (name, typ, count, ev) in names.get(glob, {}).items():
+        if name in dropped:
+            continue
+        named[offset(off)] = (name, typ, count, ev)
+    drop_offsets = {o for o, v in names.get(glob, {}).items() if v[0] in dropped}
+    accessed = {offset(o): v for o, v in load_accessed(glob).items() if o not in drop_offsets}
+    return gen_struct(cname, f'{glob} (client)', size, named, accessed)
+
+
+def gen_game_client(names):
+    return gen_client_view(names, 'GameClient', 'game', 0x25d60, game_client_offset, {'end_time'})
+
+
+def gen_option_client(names):
+    return gen_client_view(names, 'OptionClient', 'option', 0x150, option_client_offset, {'gametype'})
+
+
 def main():
     names = load_names()
     parts = [HEADER]
     for cname, (glob, size) in {**STRUCTS, **CLIENT_STRUCTS}.items():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
+    parts.append(gen_game_client(names))
+    parts.append(gen_option_client(names))
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'
     out.mkdir(parents=True, exist_ok=True)

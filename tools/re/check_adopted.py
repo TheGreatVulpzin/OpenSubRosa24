@@ -33,9 +33,9 @@ def clean_functions():
 
 
 def aliases():
-    """Macro name -> the sr_data names its definition uses (sr_bonds is sr_data_bond)."""
+    """Macro name -> the sr_data names its definition uses (sr_bonds is sr_data_bond). A macro of a .c file counts too (g_bondopt)."""
     out = {}
-    for f in glob.glob(str(ROOT / 'src/**/*.h'), recursive=True):
+    for f in glob.glob(str(ROOT / 'src/**/*.h'), recursive=True) + glob.glob(str(ROOT / 'src/**/*.c'), recursive=True):
         for m in re.finditer(r'^#define\s+(\w+)(?:\([^)]*\))?\s+(.*)$', Path(f).read_text(encoding='utf-8'), re.M):
             used = set(re.findall(r'sr_data_(\w+)', m.group(2)))
             if used and not m.group(1).startswith('sr_data_'):

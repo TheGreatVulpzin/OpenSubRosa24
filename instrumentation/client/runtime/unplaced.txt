@@ -5,7 +5,6 @@ cubetexcoord
 menucolor
 csmstr
 lightwavelength
-carcolorname
 xaxis2d
 yaxis2d
 mag01
@@ -13,7 +12,6 @@ newspaper_line
 world_msg
 farbs_digits
 bondhuman
-bondparticle
 guard_used
 world_digits
 newspaper_money
@@ -27,18 +25,15 @@ sprite_points
 sprite_lines
 sprite_quads
 sprite_triangles
-random_counter
 wsadata
 tiremarkend
 startup_counter
 tiremarkstart
 voice
 camera
-bondopt
 slogfp
 numofsprite_models
 timerlist
 numofstaticbonds
 materials
-bond
 train_near

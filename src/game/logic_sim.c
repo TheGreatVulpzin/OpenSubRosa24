@@ -361,7 +361,7 @@ void logicsimulation_round(void)
         }
         if (t < 1) {
             sr_game.state = 3;
-            sr_game.timer = sr_game.end_time;
+            sr_game.timer = sr_game_end_time;
             return;
         }
     } else if (sr_game.state == 3 && --sr_game.timer < 1) {

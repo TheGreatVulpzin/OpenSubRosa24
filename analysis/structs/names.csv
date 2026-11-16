@@ -1137,3 +1137,4 @@ level_editor,0x24,chosen_building,int,,"leveledit_setup writes -1: no chosen bui
 level_editor,0x28,brush_x,int,,"leveledit_setup writes 3"
 level_editor,0x2c,brush_z,int,,"leveledit_setup writes 3"
 level_editor,0x30,brush_turn,int,,"leveledit_setup writes 0"
+game,0x25d4c,client_account_key,uint32_t,,"hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48)"

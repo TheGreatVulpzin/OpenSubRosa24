@@ -21,6 +21,7 @@ extern uintptr_t sr_base;
 #define sr_data_dollarbillvalue ((int *)(sr_base + 0x122ca8u))
 #define sr_data_cslogo ((uint8_t *)(sr_base + 0x122cc8u))
 #define sr_data_tracktrailmodelquad ((int *)(sr_base + 0x1234e0u))
+#define sr_data_carcolorname ((const char * *)(sr_base + 0x123568u))
 #define sr_data_mti (*((int *)(sr_base + 0x123580u)))
 #define sr_data_xaxis (*((vec3 *)(sr_base + 0x123584u)))
 #define sr_data_yaxis (*((vec3 *)(sr_base + 0x123590u)))
@@ -45,11 +46,12 @@ extern uintptr_t sr_base;
 #define sr_data_bezier_curve ((float *)(sr_base + 0x75a57c0u))
 #define sr_data_server (*((Server *)(sr_base + 0x75a5800u)))
 #define sr_data_buildingtype (*((BuildingType *)(sr_base + 0x80558c0u)))
-#define sr_data_option (*((Option *)(sr_base + 0x90630e0u)))
+#define sr_data_option (*((OptionClient *)(sr_base + 0x90630e0u)))
 #define sr_data_numoftracks (*((int *)(sr_base + 0x90652e0u)))
-#define sr_data_game (*((Game *)(sr_base + 0x9065300u)))
+#define sr_data_game (*((GameClient *)(sr_base + 0x9065300u)))
 #define sr_data_file_read (*((SrFileTransfer *)(sr_base + 0x908b064u)))
 #define sr_data_item ((Item *)(sr_base + 0x908b080u))
+#define sr_data_random_counter (*((uint32_t *)(sr_base + 0x90f6080u)))
 #define sr_data_sysinfo (*((SysInfo *)(sr_base + 0x90f6100u)))
 #define sr_data_soundlist (*((SoundList *)(sr_base + 0x90f7540u)))
 #define sr_data_event ((Event *)(sr_base + 0x93676c0u))
@@ -73,6 +75,7 @@ extern uintptr_t sr_base;
 #define sr_data_numofevents (*((uint32_t *)(sr_base + 0xf3ca9b8u)))
 #define sr_data_bullettypes ((BulletType *)(sr_base + 0xf3ea9c0u))
 #define sr_data_accounts (*((SrAccountStore *)(sr_base + 0xf3eb200u)))
+#define sr_data_bondopt ((BondOpt *)(sr_base + 0xf8ae240u))
 #define sr_data_view (*((int *)(sr_base + 0xfefe2a0u)))
 #define sr_data_radix (*((Radix *)(sr_base + 0xfefe340u)))
 #define sr_data_intersect (*((Intersect *)(sr_base + 0x1033ec20u)))
@@ -88,9 +91,11 @@ extern uintptr_t sr_base;
 #define sr_data_connection ((Connection *)(sr_base + 0x16338600u))
 #define sr_data_area ((Area *)(sr_base + 0x17265600u))
 #define sr_data_market (*((Market *)(sr_base + 0x17678bc0u)))
+#define sr_data_bondparticle ((BondParticle *)(sr_base + 0x17718de0u))
 #define sr_data_bondpass (*((int *)(sr_base + 0x17798de0u)))
 #define sr_data_masterserver (*((MasterServer *)(sr_base + 0x1779b600u)))
 #define sr_data_numofbonds (*((int *)(sr_base + 0x1779b808u)))
+#define sr_data_bond ((Bond *)(sr_base + 0x1779b820u))
 #define sr_data_numofbullets (*((int *)(sr_base + 0x17b4b820u)))
 #define sr_data_config (*((Config *)(sr_base + 0x17bbb840u)))
 #define sr_data_modellist (*((ModelList *)(sr_base + 0x17c040a0u)))
@@ -114,8 +119,6 @@ extern const char * sr_unplaced_csmstr;
 #define sr_data_csmstr sr_unplaced_csmstr
 extern float sr_unplaced_lightwavelength[3];
 #define sr_data_lightwavelength sr_unplaced_lightwavelength
-extern const char * sr_unplaced_carcolorname[6];
-#define sr_data_carcolorname sr_unplaced_carcolorname
 extern float sr_unplaced_xaxis2d[2];
 #define sr_data_xaxis2d sr_unplaced_xaxis2d
 extern float sr_unplaced_yaxis2d[2];
@@ -130,8 +133,6 @@ extern char sr_unplaced_farbs_digits[128];
 #define sr_data_farbs_digits sr_unplaced_farbs_digits
 extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
-extern BondParticle sr_unplaced_bondparticle[16384];
-#define sr_data_bondparticle sr_unplaced_bondparticle
 extern int sr_unplaced_guard_used[64];
 #define sr_data_guard_used sr_unplaced_guard_used
 extern char sr_unplaced_world_digits[64];
@@ -158,8 +159,6 @@ extern int sr_unplaced_sprite_quads;
 #define sr_data_sprite_quads sr_unplaced_sprite_quads
 extern int sr_unplaced_sprite_triangles;
 #define sr_data_sprite_triangles sr_unplaced_sprite_triangles
-extern uint32_t sr_unplaced_random_counter;
-#define sr_data_random_counter sr_unplaced_random_counter
 extern uint8_t sr_unplaced_wsadata[400];
 #define sr_data_wsadata sr_unplaced_wsadata
 extern int sr_unplaced_tiremarkend;
@@ -172,8 +171,6 @@ extern VoiceChannel sr_unplaced_voice[8];
 #define sr_data_voice sr_unplaced_voice
 extern float sr_unplaced_camera[136];
 #define sr_data_camera sr_unplaced_camera
-extern BondOpt sr_unplaced_bondopt[16384];
-#define sr_data_bondopt sr_unplaced_bondopt
 extern void * sr_unplaced_slogfp;
 #define sr_data_slogfp sr_unplaced_slogfp
 extern int sr_unplaced_numofsprite_models;
@@ -184,8 +181,6 @@ extern int sr_unplaced_numofstaticbonds;
 #define sr_data_numofstaticbonds sr_unplaced_numofstaticbonds
 extern SrMaterialStore sr_unplaced_materials;
 #define sr_data_materials sr_unplaced_materials
-extern Bond sr_unplaced_bond[16384];
-#define sr_data_bond sr_unplaced_bond
 extern int sr_unplaced_train_near;
 #define sr_data_train_near sr_unplaced_train_near
 
@@ -419,6 +414,16 @@ extern int sr_unplaced_train_near;
 #define cl_data_game_state (*((int *)(sr_base + 0x9065320u)))
 #define cl_data_game_tick (*((uint32_t *)(sr_base + 0x9065334u)))
 #define sr_game_ticks (*((int *)(sr_base + 0x9065334u)))
+void __cdecl debug_addcross(const vec3 *center, float size);
+#define sr_debug_cross(center, size) debug_addcross((center), (size))
+void __cdecl debug_addatafloat(const char *name, float value);
+#define sr_debug_float(name, value) debug_addatafloat((name), (value))
+void __cdecl debug_addline(const vec3 *from, const vec3 *to);
+#define sr_debug_line(from, to) debug_addline((from), (to))
+extern int sr_client_gametype;
+#define sr_option_gametype(o) (*((void)(o), &sr_client_gametype))
+extern int sr_client_end_time;
+#define sr_game_end_time sr_client_end_time
 #define cl_data_sim_ticks (*((int *)(sr_base + 0x1dda5240u)))
 #define cl_data_last_health (*((int *)(sr_base + 0x908aae4u)))
 #define cl_data_damage_flash (*((float *)(sr_base + 0x908aae8u)))

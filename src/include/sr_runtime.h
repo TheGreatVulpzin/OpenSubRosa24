@@ -25,6 +25,15 @@ void sv_profile_report(void);
 #ifndef sr_game_ticks
 #define sr_game_ticks   sr_game.ticks
 #endif
+/* The time of the end phase. The client record has no such field: a storage adapter places it. */
+#ifndef sr_game_end_time
+#define sr_game_end_time sr_game.end_time
+#endif
+/* The client can mark a point in the world with a debug cross: define sr_debug_cross(center, size). */
+/* The game type of an option record. The client record has no such field: a storage adapter places it. */
+#ifndef sr_option_gametype
+#define sr_option_gametype(o) ((o)->gametype)
+#endif
 /* The handle of the file that the text parser reads. A storage adapter can place it outside Parser. */
 #ifndef sr_parser_file
 #define sr_parser_file  sr_data_parser.file

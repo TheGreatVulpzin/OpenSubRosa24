@@ -27,6 +27,8 @@ gets its own target file; this script does not change.
 so a function whose lifted C did not change gives the same results. The script compares the
 lifted C with the version in git (--ref, default HEAD), runs only the changed functions and
 keeps the baseline values of the others. A change in a "full_run_paths" file runs everything.
+A target with "clean_closure": true also runs each adopted function whose clean code changed:
+--update saves a hash of that code (tools/re/clean_closure.py) next to the baseline.
 Run a full gate before a push and after a change of many functions.
 
 --quick: the fewest runs that together test every function of the baseline (a greedy set
@@ -62,6 +64,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from memory import safe_jobs  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 TARGETS = ROOT / 'instrumentation' / 'lift' / 'targets'
 
@@ -94,7 +99,14 @@ def blocks(text):
     return out
 
 
-def changed_functions(t, ref):
+def clean_closure_hashes():
+    """name -> hash of the clean code of each adopted function (tools/re/clean_closure.py)."""
+    sys.path.insert(0, str(ROOT / 'tools' / 're'))
+    import clean_closure
+    return clean_closure.hashes()
+
+
+def changed_functions(t, ref, hashes_file=None):
     """(names, reason): the functions to run, or (None, reason) for a full run."""
     p = subprocess.run(['git', 'diff', '--name-only', ref, '--'] + t['full_run_paths'], cwd=ROOT,
                        capture_output=True, text=True)
@@ -111,7 +123,13 @@ def changed_functions(t, ref):
     names = {int(r, 16): n for n, r in NAME.findall(t['table'].read_text(encoding='utf-8'))}
     a, b = blocks(old), blocks(t['lifted_c'].read_text(encoding='utf-8'))
     rvas = {r for r in set(a) | set(b) if a.get(r) != b.get(r)}
-    return sorted(names.get(r, f'0x{r:x}') for r in rvas), f'{len(rvas)} function(s) changed since {ref}'
+    found = {names.get(r, f'0x{r:x}') for r in rvas}
+    clean = set()
+    # An adopted function has no lifted body. Its clean code has a hash: a new hash (or none) runs it.
+    if t.get('clean_closure') and hashes_file is not None:
+        old_hashes = json.loads(hashes_file.read_text()) if hashes_file.exists() else {}
+        clean = {n for n, h in clean_closure_hashes().items() if old_hashes.get(n) != h}
+    return sorted(found | clean), f'{len(rvas)} lifted and {len(clean)} clean function(s) changed since {ref}'
 
 
 def parse(text):
@@ -221,7 +239,7 @@ def main():
     if a.funcs:
         only = a.funcs.split(',')
     elif a.changed:
-        only, why = changed_functions(t, a.ref)
+        only, why = changed_functions(t, a.ref, baseline_file.parent / 'clean_hashes.json')
         print(f'--changed: {why}' + ('' if only is None else f': {", ".join(only) or "nothing to run"}'))
         if only is not None and not baseline:
             print('--changed needs a baseline: run a full gate first')
@@ -262,7 +280,9 @@ def main():
         lst.write_text('\n'.join(only) + '\n')
         filter_arg = ['@' + str(lst)]
 
-    jobs = max(1, a.jobs)
+    jobs = safe_jobs(max(1, a.jobs), per_job_mb=t.get('job_memory_mb', 2300))
+    if jobs < a.jobs:
+        print(f'--jobs {a.jobs}: only {jobs} run(s) fit in the free memory (instrumentation/lift/memory.py)')
     # Free sandbox folders (env0, env1...). A run takes one and gives it back, so two runs
     # at the same time never share a folder: the lifted run of one would see the files of the
     # other (saveaccountsserver got "fopen user\server.srk -> null").
@@ -329,6 +349,8 @@ def main():
     if a.update:
         baseline.update(results)
         baseline_file.write_text(json.dumps(baseline, indent=1, sort_keys=True))
+        if t.get('clean_closure'):
+            (baseline_file.parent / 'clean_hashes.json').write_text(json.dumps(clean_closure_hashes(), indent=1, sort_keys=True))
         print(f'baseline updated: {len(results)} run(s)')
         if t.get('lifted_prev'):
             t['lifted_prev'].parent.mkdir(parents=True, exist_ok=True)

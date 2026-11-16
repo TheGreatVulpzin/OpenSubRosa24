@@ -536,11 +536,23 @@ static void rotor_blade(Object *o, int blade)
   bl->vel.x = (float)(bl->vel.x + n.x * 0.0011111111380159855);
   bl->vel.y = (float)(bl->vel.y + n.y * 0.0011111111380159855);
   bl->vel.z = (float)(bl->vel.z + n.z * 0.0011111111380159855);
+#ifdef sr_debug_float
+  if (blade == 0) {
+    /* The client shows the speed of the first blade in the debug display. */
+    float len = vectorlength(&bl->vel_prev);
+    sr_debug_float("rotorrpm", (float)((len * 60.0 * 60.0) / 25.13274122872));
+    sr_debug_float("rotorspeed", (float)(len * 60.0));
+  }
+#endif
   sub3(&r, &bl->pos, &hub->pos);
   object_normalize(&r, &r);
   c2 = (float)(r.z * o->rot[2].z + (r.x * o->rot[2].x + r.y * o->rot[2].y));
   c0 = (float)((r.x * o->rot[0].x + r.y * o->rot[0].y) + r.z * o->rot[0].z);
   ang = (float)x87_atan2(-c0, c2);
+#ifdef sr_debug_float
+  if (blade == 0)
+    sr_debug_float("rotorangle", ang);
+#endif
   sub3(&e, &hub->pos, &tail->pos);
   q.x = (float)(e.y * r.z - e.z * r.y);
   q.y = (float)(r.x * e.z - e.x * r.z);
@@ -575,6 +587,16 @@ static void rotor_blade(Object *o, int blade)
                   (float)((float)((in[3] * 0.0625) * 3.14159265359 + 0.04908738521234375) -
                           x87_atan2(in[0] * sa, 1.0) * 0.25));
       rotatevector(&a, &r, w);
+#ifdef sr_debug_line
+      if (blade == 0 && j == 7 && i == 1) {
+        /* The client draws the direction of the last point of the blade, and the up vector. */
+        vec3 tip;
+        scaleaddvectors(&tip, &o->rotor[0].pos, &a, 0.125f);
+        sr_debug_line(&bl->pos, &tip);
+        scaleaddvectors(&tip, &bl->pos, &u, 0.125f);
+        sr_debug_line(&bl->pos, &tip);
+      }
+#endif
       k = i == 0 ? 0.015625 : 0.15625;
       X = (-k * (float)((mh.x * a.x + mh.y * a.y) + a.z * mh.z)) * s2;
       L = (float)(X + X);

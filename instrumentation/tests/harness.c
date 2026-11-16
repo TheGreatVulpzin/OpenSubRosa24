@@ -1072,6 +1072,10 @@ static const char *known_difference(const char *name)
         /* The client divides in x87 precision by a distance that it does not round to a float. The sum of
          * terms of both signs shows the rounding: 1 call in 90 differs by 1e-5 of a weight. */
         { "objecttype_calcquadweights", "client follows the server code" },
+        /* The tax of a team kill takes a smaller share of the money in the client, and the client does not
+         * write the team kill rate. The server never sends this result to a player, so the client follows the
+         * server code (docs/client.md, "Clean server code in the client"). */
+        { "playerteamkilltax", "client follows the server code" },
     };
     size_t k;
     for (k = 0; k < sizeof known / sizeof known[0]; k++)

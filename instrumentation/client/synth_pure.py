@@ -8,15 +8,23 @@ Usage: python -I instrumentation/client/synth_pure.py <recording dir> <work dir>
 The recording gives the memory image. The functions must be in a list of adopted functions.
 """
 import csv
+import hashlib
+import importlib.util
+import inspect
+import json
 import math
 import os
 import random
+import re
 import struct
 import sys
+import threading
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'instrumentation' / 'client'))
+sys.path.insert(0, str(ROOT / 'instrumentation' / 'lift'))
+from memory import safe_jobs  # noqa: E402
 import synth_textures as st  # noqa: E402
 
 # Parameter kinds: v vector in, o vector out, m 3 by 3 matrix, q quaternion, f float, F float out,
@@ -27,7 +35,93 @@ import synth_textures as st  # noqa: E402
 # r a radius, t a team (-1 to 3), n an object, human or item index (live indices, -1 or 4095).
 # Area kinds: a an area (0 to 3), A an area that can be out of range (0 to 3, 4, 5, 0xffffffff), c a block
 # coordinate (edges of sectors and chunks, a random one, or -1), B a block word, e a face (-1 to 7).
+# Packet kinds: U a pointer to one 32-bit word, b a bit count (0 to 32, sometimes outside), S a pointer to
+# 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
+# N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'createbullet': 'ivvn',
+    'createparticle': 'ivvfn',
+    'createplayer': '',
+    'deleteplayer': 'p',
+    'item_removehumanlink': 'nni',
+    'item_removeitemlink': 'nn',
+    'linkitem': 'nnni',
+    'human_calcarmtorque': 'n',
+    'calculateplayervoice': 'ip',
+    'gettimeofday': 'ss',
+    'applydamageobject': 'nI',
+    'scenario_armhuman': 'pii',
+    'logic_gunstore_buy': 'pi',
+    'createaccount': 'p',
+    'economy_carmarket': '',
+    'itemweaponsimulation': 'n',
+    'playerai': 'p',
+    'createitem': 'ivvm',
+    'economysimulation': '',
+    'bulletsimulation': '',
+    'objectenginesimulation2': '',
+    'systemtimer': '',
+    'logic_player': 'p',
+    'objectsimulation_car': 'n',
+    'objectsimulation_heli': 'n',
+    'ai_playercar': 'pn',
+    'ai_car_nextwaypoint': 'p',
+    'city_createelevator': 'v',
+    'createlandscape': '',
+    'createtrack': 'ivff',
+    'buildsomeshit': 'v',
+    'buildcitystreet': 'i',
+    'buildcityinterection': 'i',
+    'area_createblock': 'AcccBk',
+    'loadblock': 'N',
+    'human_calculatearmangles': 'n',
+    'human_calculatelegangles': 'n',
+    'human_collisionhuman': 'n',
+    'human_buildmuscles': 'n',
+    'eventsimulation': '',
+    'itemsimulation': '',
+    'itemlogic': '',
+    'createarea': 'AvEEEr',
+    'playersimulation': '',
+    'economy_gunmarket': '',
+    'setupbullettypes': '',
+    'createhuman': 'vmp',
+    'item_physicssimulation': 'n',
+    'createbond': 'iinn',
+    'loadsaveoptions': 'i',
+    'objecttrainsimulation': 'n',
+    'player_saveinventory': 'p',
+    'city_addintersection': 'ccc',
+    'cityobject_addbox': 'iffffff',
+    'area_block_addbox': 'ffffffu',
+    'pointinsidebuilding': 'nvf',
+    'human_createmuscleball': 'nnnv',
+    'createjointbond': 'nnnv',
+    'player_calcassets': 'p',
+    'logic_suits_buy': 'pi',
+    'saveaccountsclient': '',
+    'lineintersecthuman': 'nWXr',
+    'addobjectrotation': 'nvvf',
+    'init_genrand': 'u',
+    'getrandomvector3d': 'off',
+    'resetorientation': 'm',
+    'createevent_sound': 'ivff',
+    'objectwheelsimulation2': '',
+    'object_rotorsimulation': 'n',
+    'pbitwrite': 'Ub',
+    'pbitwritenego': 'Ub',
+    'pbitread': 'Ub',
+    'pbitreadnego': 'Ub',
+    'cs_pwrite': 'SJK',
+    'playerdeathtax': 'p',
+    'playerteamkilltax': 'pd',
+    'playerbuystock': 'px',
+    'scenario_getnumofmissions': 't',
+    'bullettimetolive': '',
+    'itemtimetolive': '',
+    'removeflieextentions': 'L',
+    'getenginetorque2': 'n',
+    'account_nameexists': 'N',
     'area_getblock': 'Accc',
     'area_marksector': 'Accc',
     'area_setblock': 'AcccB',
@@ -110,6 +204,38 @@ PROTOTYPES = {
 }
 
 
+CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
+TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py')
+RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
+
+
+def closure_hashes(names):
+    """Hash of the clean code of each function (tools/re/clean_closure.py)."""
+    spec = importlib.util.spec_from_file_location('clean_closure', ROOT / 'tools' / 're' / 'clean_closure.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.hashes(names)
+
+
+def case_hash(name, kinds, count):
+    """What a result depends on besides the clean code: the kinds of arguments, their generator,
+    the number of calls, the finite switch and the sources of the test tools."""
+    h = hashlib.sha256()
+    h.update(f'{name}|{kinds}|{count}|{os.environ.get("SYNTH_FINITE", "")}'.encode())
+    h.update(inspect.getsource(make_args).encode())
+    h.update(inspect.getsource(number).encode())
+    for item in TEST_SOURCES:
+        h.update((ROOT / item).read_bytes().replace(b'\r\n', b'\n'))
+    return h.hexdigest()
+
+
+def load_cache():
+    try:
+        return json.loads(CACHE_FILE.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
 def rvas():
     out = {}
     for row in csv.DictReader((ROOT / 'analysis/client_win/functions.csv').open(encoding='utf-8')):
@@ -157,7 +283,28 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'T':
+        if kind == 'U':
+            args.append('P:0:' + struct.pack('<I', rng.choice([0, 1, 0xff, 0xffff, 0xffffffff, rng.randrange(0, 2**32)])).hex())
+        elif kind == 'b':
+            args.append(rng.choice([0, 1, 2, 3, 7, 8, 9, 15, 16, 17, 24, 31, 32, 32, rng.randrange(1, 33), rng.randrange(1, 33), 33, -1]))
+        elif kind == 'S':
+            args.append('P:0:' + bytes(rng.randrange(0, 256) for _ in range(64)).hex())
+        elif kind == 'J':
+            args.append(rng.choice([0, 1, 2, 4, 4, 3]))
+        elif kind == 'K':
+            args.append(rng.choice([0, 1, 2, 3, 5, 8, 8]))
+        elif kind == 'p':
+            args.append(rng.choice([0, 1, 2, 3, 5, 9, 15, 31, rng.randrange(0, 32)]))
+        elif kind == 'N':
+            name = rng.choice([b'', b'a', b'Vulpzin', b'Player 1', b'x' * 24, b'x' * 40, bytes(rng.randrange(97, 123) for _ in range(rng.randrange(1, 30)))])
+            args.append('P:0:' + (name + b'\0').hex())
+        elif kind == 'L':
+            args.append(rng.choice([0, 1, 2, 3]))
+        elif kind == 'd':
+            args.append(rng.choice([0, 1, 5, 10, 50, 100, 500, 1000, 5000, 20000]))
+        elif kind == 'x':
+            args.append(rng.choice([0, 1, -1, 10, 100, 99999, 100000, 1000000, 2147483647, -2147483648, rng.randrange(-1000, 100000)]))
+        elif kind == 'T':
             args.append(rng.choice([0, 1, 2, 3, 0, 1, 2, 3, 4, -1]))
         elif kind == 'z':
             args.append('P:0:' + struct.pack('<3i', *[rng.choice([1, 2, 4, 8, 3, 0]) for _ in range(3)]).hex())
@@ -235,12 +382,23 @@ def main():
     # SYNTH_CALLS: the number of calls for each function (90 by default, 30 to look around fast).
     # SYNTH_JOBS: the number of functions that run at the same time (1 by default, 2 is safe).
     count = int(os.environ.get('SYNTH_CALLS', '90'))
-    jobs = max(1, int(os.environ.get('SYNTH_JOBS', '1')))
+    jobs = safe_jobs(max(1, int(os.environ.get('SYNTH_JOBS', '1'))))
+
+    # The result of a function that passed is kept with the hash of its clean code. The same hash
+    # means the same result, so the case is skipped. SYNTH_FORCE=1 runs every case again.
+    cache = load_cache()
+    lock = threading.Lock()
+    force = bool(os.environ.get('SYNTH_FORCE'))
+    names = [item.partition('=')[0] for item in want]
+    code = closure_hashes(names)
 
     def run_one(item):
         # "name=kinds" replaces the prototype of that function for this run.
         name, _, kinds = item.partition('=')
         proto = kinds if kinds else PROTOTYPES[name]
+        key = hashlib.sha256((code[name] + case_hash(name, proto, count)).encode()).hexdigest()
+        if not force and cache.get(name, {}).get('key') == key:
+            return f'{name}: {count} calls: cached, {cache[name]["result"]}'
         rng = random.Random(sum(map(ord, name)))
         calls = []
         for index in range(count):
@@ -249,7 +407,14 @@ def main():
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
-        return f'{name}: {len(calls)} calls: ' + st.run(rec / 'sv_snapshot.bin', path, name, own)
+        result = st.run(rec / 'sv_snapshot.bin', path, name, own)
+        m = RESULT.search(result)
+        if m and int(m.group(1)) > 0 and int(m.group(2)) == 0 and int(m.group(4)) == 0:
+            with lock:
+                cache[name] = {'key': key, 'result': result}
+                CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+                CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
+        return f'{name}: {len(calls)} calls: ' + result
 
     if jobs == 1:
         for item in want:
@@ -259,6 +424,8 @@ def main():
         with ThreadPoolExecutor(max_workers=jobs) as pool:
             for line in pool.map(run_one, want):
                 print(line, flush=True)
+    CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
 
 
 if __name__ == '__main__':
