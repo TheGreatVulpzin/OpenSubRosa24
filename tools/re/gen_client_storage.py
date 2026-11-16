@@ -75,6 +75,8 @@ def main():
                 client_only.append('#define sr_debug_float(name, value) debug_addatafloat((name), (value))')
                 client_only.append('void __cdecl debug_addline(const vec3 *from, const vec3 *to);')
                 client_only.append('#define sr_debug_line(from, to) debug_addline((from), (to))')
+                client_only.append('void area_reset_interiors(void);')
+                client_only.append('#define sr_area_reset_interiors() area_reset_interiors()')
                 client_only.append('extern int sr_client_gametype;')
                 client_only.append('#define sr_option_gametype(o) (*((void)(o), &sr_client_gametype))')
                 client_only.append('extern int sr_client_end_time;')

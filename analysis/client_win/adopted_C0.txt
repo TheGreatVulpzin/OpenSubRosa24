@@ -72,3 +72,4 @@ getrandomvector3d src/common/random.c
 resetorientation src/common/vectors.c
 debug_addline src/client/debug/debug.c
 createhuman src/game/human_body.c
+createarea src/game/area.c

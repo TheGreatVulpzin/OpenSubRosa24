@@ -555,7 +555,7 @@ void angulardistance(void);
 void lf_35fa0(void);
 void ai_playercar(void);
 void ai_car_nextwaypoint(void);
-void lf_37720(void);
+void createarea(void);
 void area_createblock(void);
 void area_setblock(void);
 void area_setblockcolor(void);
@@ -1855,7 +1855,7 @@ const LfEntry lf_table[] = {
     { "lf_35fa0", 0x35fa0, (void *)lf_35fa0, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "ai_playercar", 0x36040, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_car_nextwaypoint", 0x37310, (void *)ai_car_nextwaypoint, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createarea", 0x37720, (void *)lf_37720, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
+    { "createarea", 0x37720, (void *)createarea, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "area_createblock", 0x37b30, (void *)area_createblock, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "area_setblock", 0x38260, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_setblockcolor", 0x38430, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
