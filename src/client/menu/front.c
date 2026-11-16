@@ -279,12 +279,6 @@ void __cdecl usermenu(void)
 
 #define TICKS_PER_MINUTE 3600
 
-/* The round length in minutes: the client Option has no game type field, so it sits at +0x118. */
-#define g_round_minutes (*(int *)((uint8_t *)&sr_data_option + 0x118))
-
-/* The account key of the server that the client joins or hosts. createclientaccount makes
- * the account id of the client from it. */
-#define g_server_account_key (*(uint32_t *)((uint8_t *)&sr_data_game + 0x25d48))
 
 /* Build the items of the host screen. The broadcast toggle and the server name show only for
  * a server on the network. */
@@ -310,16 +304,16 @@ static void host_items(void)
     createmenubutton("Max Players", 4.0f, 128.0f, 128.0f, 22.0f, 20.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
     setmenuitem(OPTION_INT, &sr_data_option.maxnumofplayers, 3);
     createmenubutton("Round Length", 4.0f, 164.0f, 128.0f, 22.0f, 20.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
-    setmenuitem(OPTION_INT, &g_round_minutes, 3);
+    setmenuitem(OPTION_INT, &sr_data_option.roundtime, 3);
 }
 
 /* Keep the round length in 1 to 30 minutes and the players in 2 to 32. */
 static void host_limits(void)
 {
-    if (g_round_minutes < 1)
-        g_round_minutes = 1;
-    if (g_round_minutes > 30)
-        g_round_minutes = 30;
+    if (sr_data_option.roundtime < 1)
+        sr_data_option.roundtime = 1;
+    if (sr_data_option.roundtime > 30)
+        sr_data_option.roundtime = 30;
     if (sr_data_option.maxnumofplayers < 2)
         sr_data_option.maxnumofplayers = 2;
     if (sr_data_option.maxnumofplayers > 32)
@@ -333,14 +327,14 @@ static void host_start(void)
     strcpy(sr_data_server.name, sr_data_option.servername);
     sr_data_server.max_players = sr_data_option.maxnumofplayers;
     sr_data_game.wait_time = TICKS_PER_MINUTE;
-    sr_data_game.round_time = g_round_minutes * TICKS_PER_MINUTE;
+    sr_data_game.round_time = sr_data_option.roundtime * TICKS_PER_MINUTE;
     sr_data_game.teamkill_rate = 0x4ec;
     if (sr_data_option.net_on != 0)
         enablesocketserver(0);
     loadaccountsserver();
     setupserver();
     sr_data_server.active = 1;
-    g_server_account_key = sr_data_accounts.key;
+    sr_data_game.client_account_key = sr_data_accounts.key;
     gameloop();
     endserver();
     saveaccountsclient();

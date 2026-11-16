@@ -82,7 +82,7 @@ static void buy_button(char *text, float y, int *action, int value, int price)
 static void car_name(char *text, int color, int type)
 {
     if (color < CAR_COLORS)
-        strcpy(text, cl_data_car_color_names[color]);
+        strcpy(text, sr_data_carcolorname[color]);
     else
         text[0] = '\0';
     strcat(text, " ");

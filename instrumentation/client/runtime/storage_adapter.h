@@ -365,7 +365,6 @@ extern int sr_unplaced_train_near;
 #define cl_data_wrap_line_ends ((int *)(sr_base + 0x90f6524u))
 #define cl_data_menu_clear_color ((float *)(sr_base + 0x1234c8u))
 #define cl_data_client_account_id ((int *)(sr_base + 0xf3eafc8u))
-#define cl_data_car_color_names ((char* *)(sr_base + 0x123568u))
 #define cl_data_audio_device (*((void* *)(sr_base + 0x908b060u)))
 #define cl_data_audio_context (*((void* *)(sr_base + 0xfbfe270u)))
 #define cl_data_audio_capture (*((void* *)(sr_base + 0x163231e4u)))
