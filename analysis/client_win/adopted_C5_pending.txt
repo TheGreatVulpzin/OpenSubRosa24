@@ -1,0 +1,5 @@
+# Front menus: each runs a frame loop. They wait for a test in the game window.
+connectmenu src/client/menu/front.c
+notsupportedmenu src/client/menu/front.c
+usermenu src/client/menu/front.c
+hostmenu src/client/menu/front.c
