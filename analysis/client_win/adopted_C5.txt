@@ -16,3 +16,15 @@ drawmenubutton2 src/client/menu/draw.c
 menutextbox src/client/menu/draw.c
 drawmenutextfield src/client/menu/draw.c
 drawmenuitems src/client/menu/draw.c
+playermenu src/client/menu/player.c
+playermenu_team src/client/menu/player.c
+playermenu_spawn src/client/menu/player.c
+playermenu_buy src/client/menu/player.c
+playermenu_buy_weapons src/client/menu/player.c
+playermenu_buy_ammo src/client/menu/player.c
+playermenu_buy_vehicles src/client/menu/player.c
+playermenu_buy_equipment src/client/menu/player.c
+playermenu_buy_stocks src/client/menu/player.c
+playermenu_building_main src/client/menu/player.c
+playermenu_building_buy src/client/menu/player.c
+playermenu_banking src/client/menu/player.c

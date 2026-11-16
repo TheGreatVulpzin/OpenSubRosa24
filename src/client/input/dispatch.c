@@ -9,6 +9,7 @@
 #include "input/debug.h"
 #include "input/player_inputs.h"
 #include "menu/items.h"
+#include "menu/player.h"
 #include "client.h"
 #include "sr_runtime.h"
 #include <string.h>
@@ -185,7 +186,7 @@ void getinputs(int player_index)
     if (!running) cl_data_input_cursor = 1;
     cl_data_input_game_running = running;
     if (!sr_game.link_state && player && cl_data_input_cursor)
-        CL_FN(0x47e500, void (__cdecl *)(int))(player_index);
+        playermenu(player_index);
     CL_FN(0x5060d0, void (__cdecl *)(void))();
     checkkeyboard();
     if (!cl_data_input_cursor) checkmouserelative();

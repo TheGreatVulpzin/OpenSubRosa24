@@ -12,3 +12,6 @@ menu_alpha,float,16,0x1bbe040,"drawmenubutton2: the alpha of each vertex, from 1
 menu_quad_count,int,1,0x1bbe080,"drawmenubutton2: the number of quads in menu_quads"
 menu_quads,int,64,0x1bbe084,"drawmenubutton2: four vertex numbers for each quad, 9 quads used"
 wrap_line_ends,int,64,0x90f6524,"0x105b80 writes the index of the last character of each line of a wrapped text; drawmenutextfield reads it"
+menu_clear_color,float,3,0x1234c8,"connectmenu, hostmenu, joinmenu and mainmenu clear the screen to this color"
+client_account_id,int,2,0xf3eafc8,"connectmenu sends both ints after the name; joinmenu creates them with createclientaccount; the server finds the account by them"
+car_color_names,char*,6,0x123568,"playermenu_buy_vehicles and playermenu_building_buy: the names of the six car colors (Black ...)"

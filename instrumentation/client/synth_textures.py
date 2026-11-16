@@ -1099,6 +1099,32 @@ def menu_items_case():
     return edits, {'drawmenuitems': [call(0xff2e0)]}
 
 
+PLAYERS = 0xed813a0       # Player records of 0x2408 bytes
+CITY = 0xe22c7a0          # City: building_type +0x2f9dc, shop_count +0x302a4, shop_rows +0x302a8
+MARKET = 0x17678bc0       # Market: car_base +0x140 (the car count), car_rows +0x144
+
+
+def player_menu_case(menu, team=7, money=50000, building=0, building_type=2, looks=(0, 0)):
+    """playermenu of player 1 with one menu number. building_type: 2 car market, 4 clothes, 7
+    guns. looks: the suit and the sunglasses of the player."""
+    rng = random.Random(47 + menu + building_type)
+    base = PLAYERS + 1 * 0x2408
+    edits = [(MENU_COUNT, 'i', [0]), (base + 0x40, 'i', [money]), (base + 0x64, 'i', [team]),
+             (base + 0xd4, 'i', [menu]), (base + 0xd8, 'i', [building]), (base + 0x23c0, '2i', list(looks)),
+             (MARKET + 0x140, 'i', [5])]
+    for row in range(8):
+        edits.append((MARKET + 0x144 + row * 12, '3i',
+                       [rng.randint(0, 20), rng.choice([0, 3, 5, 6, 9]), rng.choice([0, 100, 60000, 2000])]))
+    if building >= 0:
+        shop = CITY + building * 0x9dc
+        rows = 2 if building_type == 4 else 3
+        edits += [(shop + 0x2f9dc, 'i', [building_type]), (shop + 0x302a4, 'i', [rows])]
+        for row in range(8):
+            edits.append((shop + 0x302a8 + row * 12, '3i',
+                           [rng.randint(0, 20), rng.choice([0, 100, 60000]), rng.choice([0, 4, 6, 7])]))
+    return edits, {'playermenu': [call(0x7e500, 1)]}
+
+
 def menu_slider_case(ctrl=False, left=True):
     """menuslider on twelve pressed sliders: checkmenuitems calls it for each one, and three direct
     calls use item 2. ctrl holds left Ctrl. left keeps the left button down."""
@@ -1277,6 +1303,14 @@ def main():
             'menu_option': menu_option_case, 'menu_option_empty': lambda: menu_option_case(True),
             'menu_slider': menu_slider_case, 'menu_slider_ctrl': lambda: menu_slider_case(True),
             'menu_slider_up': lambda: menu_slider_case(True, False), 'menu_names': menu_names_case,
+            **{f'pmenu_{m}': (lambda m=m: player_menu_case(m)) for m in range(14)},
+            'pmenu_team_in': lambda: player_menu_case(2, team=1),
+            'pmenu_cars_poor': lambda: player_menu_case(6, money=50),
+            'pmenu_shop_clothes': lambda: player_menu_case(10, building_type=4, looks=(1, 0)),
+            'pmenu_shop_clothes_2': lambda: player_menu_case(10, building_type=4, looks=(0, 1)),
+            'pmenu_shop_guns': lambda: player_menu_case(10, building_type=7),
+            'pmenu_shop_poor': lambda: player_menu_case(10, money=50),
+            'pmenu_no_building': lambda: player_menu_case(10, building=-1),
             'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
             'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
             **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))
