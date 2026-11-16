@@ -553,8 +553,8 @@ void playerai(void);
 void lf_35840(void);
 void angulardistance(void);
 void lf_35fa0(void);
-void lf_36040(void);
-void lf_37310(void);
+void ai_playercar(void);
+void ai_car_nextwaypoint(void);
 void lf_37720(void);
 void lf_37b30(void);
 void area_setblock(void);
@@ -662,10 +662,10 @@ void lf_61fd0(void);
 void lf_62ab0(void);
 void lf_63470(void);
 void lf_64110(void);
-void lf_64380(void);
+void createbullet(void);
 void lf_645e0(void);
 void lf_64650(void);
-void lf_646b0(void);
+void bulletsimulation(void);
 void lf_65330(void);
 void lf_653c0(void);
 void lf_65400(void);
@@ -673,7 +673,7 @@ void lineintersectcityobject(void);
 void lineintersectcityobjecttype(void);
 void lf_66210(void);
 void lf_665f0(void);
-void lf_66600(void);
+void city_createelevator(void);
 void setupcityobjecttypes(void);
 void lf_67490(void);
 void lf_676d0(void);
@@ -712,7 +712,7 @@ void drawcirclefill(void);
 void drawplayerindicator(void);
 void drawplayerinfo(void);
 void drawcircleindicator(void);
-void lf_6e6b0(void);
+void economysimulation(void);
 void economy_carmarket(void);
 void lf_6efa0(void);
 void playerbuystock(void);
@@ -827,7 +827,7 @@ void lf_94b20(void);
 void getonlineserverlist(void);
 void getmasterserverip(void);
 void setupitemtypes(void);
-void lf_96cf0(void);
+void createitem(void);
 void lf_970f0(void);
 void lf_97130(void);
 void lf_971c0(void);
@@ -889,7 +889,7 @@ void lf_a4c80(void);
 void lf_a5140(void);
 void lf_a52c0(void);
 void logic_gunstore_buy(void);
-void lf_a57d0(void);
+void logic_player(void);
 void lf_a59e0(void);
 void lf_a7240(void);
 void lf_a7bc0(void);
@@ -989,11 +989,11 @@ void lf_c78b0(void);
 void calculatebarycentric(void);
 void applydamageobject(void);
 void lf_ca0c0(void);
-void lf_cbf70(void);
+void objectenginesimulation2(void);
 void getenginetorque2(void);
 void engine_bezierinterpolation(void);
 void lf_ccd50(void);
-void lf_cd930(void);
+void objectsimulation_heli(void);
 void lineintersectobject(void);
 void lf_ced70(void);
 void lf_cf2e0(void);
@@ -1003,7 +1003,7 @@ void lineintersecttrackrail(void);
 void lf_d0b60(void);
 void lf_d1010(void);
 void lf_d12e0(void);
-void lf_d1660(void);
+void objectsimulation_car(void);
 void lf_d21e0(void);
 void lf_d2290(void);
 void lf_d3350(void);
@@ -1853,8 +1853,8 @@ const LfEntry lf_table[] = {
     { "ai_assessthreats", 0x35840, (void *)lf_35840, 2, LF_RET_VOID, 4, "vv", 0 },
     { "angulardistance", 0x35f40, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "lf_35fa0", 0x35fa0, (void *)lf_35fa0, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "ai_playercar", 0x36040, (void *)lf_36040, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "ai_car_nextwaypoint", 0x37310, (void *)lf_37310, 1, LF_RET_VOID, 4, "v", 0 },
+    { "ai_playercar", 0x36040, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "ai_car_nextwaypoint", 0x37310, (void *)ai_car_nextwaypoint, 1, LF_RET_VOID, 4, "v", 0 },
     { "createarea", 0x37720, (void *)lf_37720, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "area_createblock", 0x37b30, (void *)lf_37b30, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "area_setblock", 0x38260, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
@@ -1962,10 +1962,10 @@ const LfEntry lf_table[] = {
     { "building_setupfloorplannewer", 0x62ab0, (void *)lf_62ab0, 0, LF_RET_VOID, 4, "", 0 },
     { "building_setupbuild", 0x63470, (void *)lf_63470, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbullettypes", 0x64110, (void *)lf_64110, 0, LF_RET_VOID, 4, "", 0 },
-    { "createbullet", 0x64380, (void *)lf_64380, 4, LF_RET_INT, 4, "vpvv", 0 },
+    { "createbullet", 0x64380, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
     { "lf_645e0", 0x645e0, (void *)lf_645e0, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_64650", 0x64650, (void *)lf_64650, 1, LF_RET_VOID, 4, "v", 0 },
-    { "bulletsimulation", 0x646b0, (void *)lf_646b0, 0, LF_RET_VOID, 4, "", 0 },
+    { "bulletsimulation", 0x646b0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_65330", 0x65330, (void *)lf_65330, 3, LF_RET_INT, 4, "vpv", 0 },
     { "lf_653c0", 0x653c0, (void *)lf_653c0, 0, LF_RET_INT, 4, "", 0 },
     { "lf_65400", 0x65400, (void *)lf_65400, 1, LF_RET_VOID, 4, "v", 0 },
@@ -1973,7 +1973,7 @@ const LfEntry lf_table[] = {
     { "lineintersectcityobjecttype", 0x65b80, (void *)lineintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppp", 0 },
     { "lf_66210", 0x66210, (void *)lf_66210, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "lf_665f0", 0x665f0, (void *)lf_665f0, 0, LF_RET_VOID, 4, "", 0 },
-    { "city_createelevator", 0x66600, (void *)lf_66600, 1, LF_RET_INT, 4, "p", 0 },
+    { "city_createelevator", 0x66600, (void *)city_createelevator, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x66810, (void *)setupcityobjecttypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x67490, (void *)lf_67490, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "clientrecv", 0x676d0, (void *)lf_676d0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2012,7 +2012,7 @@ const LfEntry lf_table[] = {
     { "drawplayerindicator", 0x6dac0, (void *)drawplayerindicator, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "drawplayerinfo", 0x6dcb0, (void *)drawplayerinfo, 0, LF_RET_VOID, 4, "", 1 },
     { "drawcircleindicator", 0x6e3c0, (void *)drawcircleindicator, 4, LF_RET_VOID, 4, "vvvv", 1 },
-    { "economysimulation", 0x6e6b0, (void *)lf_6e6b0, 0, LF_RET_VOID, 4, "", 0 },
+    { "economysimulation", 0x6e6b0, (void *)economysimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_carmarket", 0x6ed50, (void *)economy_carmarket, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_gunmarket", 0x6efa0, (void *)lf_6efa0, 0, LF_RET_VOID, 4, "", 0 },
     { "playerbuystock", 0x6f5d0, (void *)playerbuystock, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2127,7 +2127,7 @@ const LfEntry lf_table[] = {
     { "getonlineserverlist", 0x94c00, (void *)getonlineserverlist, 0, LF_RET_VOID, 4, "", 1 },
     { "getmasterserverip", 0x94c50, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
     { "setupitemtypes", 0x951c0, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
-    { "createitem", 0x96cf0, (void *)lf_96cf0, 4, LF_RET_INT, 4, "vpvv", 0 },
+    { "createitem", 0x96cf0, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "getnextitem", 0x970f0, (void *)lf_970f0, 0, LF_RET_INT, 4, "", 0 },
     { "lf_97130", 0x97130, (void *)lf_97130, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_971c0", 0x971c0, (void *)lf_971c0, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2189,7 +2189,7 @@ const LfEntry lf_table[] = {
     { "logic_suits_buy", 0xa5140, (void *)lf_a5140, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_cardealer_buy", 0xa52c0, (void *)lf_a52c0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_gunstore_buy", 0xa5630, (void *)logic_gunstore_buy, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_player", 0xa57d0, (void *)lf_a57d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "logic_player", 0xa57d0, (void *)logic_player, 1, LF_RET_VOID, 4, "v", 0 },
     { "logic_playeractions", 0xa59e0, (void *)lf_a59e0, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation_round", 0xa7240, (void *)lf_a7240, 0, LF_RET_VOID, 4, "", 1 },
     { "logicsimulation_world", 0xa7bc0, (void *)lf_a7bc0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2289,11 +2289,11 @@ const LfEntry lf_table[] = {
     { "calculatebarycentric", 0xc9cf0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
     { "applydamageobject", 0xc9ee0, (void *)applydamageobject, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelsimulation2", 0xca0c0, (void *)lf_ca0c0, 0, LF_RET_VOID, 4, "", 0 },
-    { "objectenginesimulation2", 0xcbf70, (void *)lf_cbf70, 0, LF_RET_VOID, 4, "", 0 },
+    { "objectenginesimulation2", 0xcbf70, (void *)objectenginesimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "getenginetorque2", 0xccb70, (void *)getenginetorque2, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "engine_bezierinterpolation", 0xccca0, (void *)engine_bezierinterpolation, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "object_rotorsimulation", 0xccd50, (void *)lf_ccd50, 1, LF_RET_VOID, 4, "v", 0 },
-    { "objectsimulation_heli", 0xcd930, (void *)lf_cd930, 1, LF_RET_VOID, 4, "v", 0 },
+    { "objectsimulation_heli", 0xcd930, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0xce570, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
     { "lf_ced70", 0xced70, (void *)lf_ced70, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0xcf2e0, (void *)lf_cf2e0, 1, LF_RET_VOID, 4, "p", 0 },
@@ -2303,7 +2303,7 @@ const LfEntry lf_table[] = {
     { "objecttrainsimulation", 0xd0b60, (void *)lf_d0b60, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectwheelcollision2", 0xd1010, (void *)lf_d1010, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lf_d12e0", 0xd12e0, (void *)lf_d12e0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectsimulation_car", 0xd1660, (void *)lf_d1660, 1, LF_RET_VOID, 4, "v", 0 },
+    { "objectsimulation_car", 0xd1660, (void *)objectsimulation_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "getenginetorque", 0xd21e0, (void *)lf_d21e0, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "optionsmenu", 0xd2290, (void *)lf_d2290, 0, LF_RET_VOID, 4, "", 1 },
     { "loadsaveoptions", 0xd3350, (void *)lf_d3350, 1, LF_RET_VOID, 4, "v", 1 },

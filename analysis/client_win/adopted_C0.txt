@@ -24,3 +24,14 @@ playerteamkilltax src/game/economy.c
 human_calcarmtorque src/game/human_arms.c
 itemweaponsimulation src/game/item_logic.c
 playerai src/game/player_ai.c
+createitem src/game/items.c
+createbullet src/game/bullets.c
+economysimulation src/game/economy.c
+bulletsimulation src/game/bullet_sim.c
+objectenginesimulation2 src/game/vehicles.c
+logic_player src/game/logic.c
+objectsimulation_car src/game/vehicles.c
+objectsimulation_heli src/game/vehicles.c
+ai_playercar src/game/ai_car.c
+ai_car_nextwaypoint src/game/ai_car.c
+city_createelevator src/game/city_objects.c
