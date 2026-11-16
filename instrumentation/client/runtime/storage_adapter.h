@@ -446,6 +446,13 @@ extern int sr_unplaced_train_near;
 #define cl_data_edit_grabbed ((int *)(sr_base + 0x103675c0u))
 #define cl_data_edit_offsets ((vec3 *)(sr_base + 0x103679c0u))
 #define cl_data_edit_mouse_before ((float *)(sr_base + 0x103685c0u))
+#define cl_data_glee_arb_multitexture (*((uint8_t *)(sr_base + 0x127c45u)))
+#define cl_data_glee_arb_vertex_buffer_object (*((uint8_t *)(sr_base + 0x127c59u)))
+#define cl_data_glee_arb_shader_objects (*((uint8_t *)(sr_base + 0x127c5bu)))
+#define cl_data_glee_arb_framebuffer_object (*((uint8_t *)(sr_base + 0x127c6au)))
+#define cl_data_glee_ext_multi_draw_arrays (*((uint8_t *)(sr_base + 0x127cd3u)))
+#define cl_data_glee_ext_stencil_two_side (*((uint8_t *)(sr_base + 0x127d28u)))
+#define cl_data_glee_ati_separate_stencil (*((uint8_t *)(sr_base + 0x127d3du)))
 
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype
