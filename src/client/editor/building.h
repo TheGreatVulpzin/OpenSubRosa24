@@ -14,5 +14,6 @@ void __cdecl buildingeditor_renderblock(uint32_t block, int layer, int x, int fl
 void __cdecl buildingeditor_renderblock2(uint32_t block, int layer, float x, float z, float red, float green,
                                          float blue, float alpha);
 void __cdecl buildingedit_addblock(int x, int floor, int z, uint32_t block, uint32_t interior);
+void __cdecl buildingedit_render(void);
 
 #endif /* CL_EDITOR_BUILDING_H */

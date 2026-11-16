@@ -313,3 +313,102 @@ void __cdecl buildingedit_addblock(int x, int floor, int z, uint32_t block, uint
     cell->color = editor->packed_parts[0] * 0x40 + editor->packed_parts[4] + editor->packed_parts[1] * 0x400 +
                   editor->packed_parts[2] * 0x4000 + editor->packed_parts[3] * 0x40000;
 }
+
+/* The floor grid: a line for each cell, brighter each fourth line, and the building border in
+ * red. */
+static void editor_grid(void)
+{
+    int i;
+
+    glDisable(GL_TEXTURE_2D);
+    glBegin(GL_LINES);
+    for (i = 0; i < GRID_SIZE; i++) {
+        glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
+        if ((i & 3) == 0)
+            glColor4f(0.75f, 0.75f, 0.75f, 0.5f);
+        glVertex3f((float)i, 0.0f, 0.0f);
+        glVertex3f((float)i, 0.0f, 64.0f);
+        glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
+        if ((i & 3) == 0)
+            glColor4f(0.75f, 0.75f, 0.75f, 0.5f);
+        glVertex3f(0.0f, 0.0f, (float)i);
+        glVertex3f(64.0f, 0.0f, (float)i);
+    }
+    glColor4f(1.0f, 0.0f, 0.0f, 0.75f);
+    glVertex3f((float)((double)sr_data_building.size_x + BORDER_GAP), 0.0f, 0.0f);
+    glVertex3f((float)((double)sr_data_building.size_x + BORDER_GAP), 0.0f,
+               (float)((double)sr_data_building.size_z + BORDER_GAP));
+    glColor4f(1.0f, 0.0f, 0.0f, 0.75f);
+    glVertex3f(0.0f, 0.0f, (float)((double)sr_data_building.size_z + BORDER_GAP));
+    glVertex3f((float)((double)sr_data_building.size_x + BORDER_GAP), 0.0f,
+               (float)((double)sr_data_building.size_z + BORDER_GAP));
+    glEnd();
+    glEnable(GL_TEXTURE_2D);
+}
+
+/* The marker of a cell in mode 3: a cell quad, a half quad on the side of the direction, and a
+ * small purple quad for the prize. */
+static void editor_marker(const BuildingCell *cell, int x, int z)
+{
+    if (cell->guard_dir != 0) {
+        buildingeditor_drawquad(-1, (float)x, (float)z, CELL_FILL, CELL_FILL, 1.0f, 1.0f, 0.0f, 0.25f);
+        if (cell->guard_dir == 1)
+            buildingeditor_drawquad(-1, (float)x, (float)z, 1.0f, 0.5f, 1.0f, 1.0f, 1.0f, 0.25f);
+        if (cell->guard_dir == 2)
+            buildingeditor_drawquad(-1, (float)((double)x + 0.5), (float)z, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.25f);
+        if (cell->guard_dir == 3)
+            buildingeditor_drawquad(-1, (float)x, (float)((double)z + 0.5), 1.0f, 0.5f, 1.0f, 1.0f, 1.0f, 0.25f);
+        if (cell->guard_dir == 4)
+            buildingeditor_drawquad(-1, (float)x, (float)z, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.25f);
+    }
+    if (cell->prize != 0)
+        buildingeditor_drawquad(-1, (float)((double)x + 0.25), (float)((double)z + 0.25), 0.5f, 0.5f, 1.0f, 0.0f,
+                                1.0f, 0.5f);
+}
+
+/* Draw the building editor view: the grid, the blocks of the floor and the overlay of the
+ * mode: the wall cursor, the drag box, the areas or the guard markers. */
+void __cdecl buildingedit_render(void)
+{
+    const BuildingEditor *editor = &cl_data_building_editor;
+    int x, z, i;
+
+    editor_grid();
+    glDisable(GL_BLEND);
+    for (z = 0; z < GRID_SIZE; z++)
+        for (x = GRID_SIZE - 1; x >= 0; x--)
+            buildingeditor_drawblock(x, editor->floor, z);
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(0);
+    glEnable(GL_BLEND);
+    if (editor->mode == 1) {
+        if (editor->wall_direction == 0)
+            buildingeditor_drawquad(-1, (float)editor->cursor_x, (float)((double)editor->cursor_z - 0.0625), 1.0f,
+                                    0.125f, 1.0f, 1.0f, 1.0f, 0.5f);
+        else
+            buildingeditor_drawquad(-1, (float)((double)editor->cursor_x - 0.0625), (float)editor->cursor_z, 0.125f,
+                                    1.0f, 1.0f, 1.0f, 1.0f, 0.5f);
+    }
+    if (editor->mode == 0 && editor->drag != 0) {
+        int left = editor->drag_end_x < editor->drag_start_x ? editor->drag_end_x : editor->drag_start_x;
+        int top = editor->drag_end_z < editor->drag_start_z ? editor->drag_end_z : editor->drag_start_z;
+        int wide = abs(editor->drag_start_x - editor->drag_end_x);
+        int deep = abs(editor->drag_start_z - editor->drag_end_z);
+
+        for (z = top; z <= top + deep; z++)
+            for (x = left; x <= left + wide; x++)
+                buildingeditor_drawquad(-1, (float)x, (float)z, CELL_FILL, CELL_FILL, 1.0f, 1.0f, 1.0f, 0.25f);
+    }
+    if (editor->mode == 2)
+        for (i = 0; i < 16; i++) {
+            const BuildingArea *area = &sr_data_building.areas[i];
+
+            for (z = area->z; z < area->z + area->size_z; z++)
+                for (x = area->x; x < area->x + area->size_x; x++)
+                    buildingeditor_drawquad(-1, (float)x, (float)z, CELL_FILL, CELL_FILL, 1.0f, 1.0f, 0.0f, 0.25f);
+        }
+    if (editor->mode == 3)
+        for (z = 0; z < GRID_SIZE; z++)
+            for (x = GRID_SIZE - 1; x >= 0; x--)
+                editor_marker(CELL(x, editor->floor, z), x, z);
+}

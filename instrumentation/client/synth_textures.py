@@ -1149,6 +1149,46 @@ def building_edit_case(seed=0):
                    'buildingeditor_renderblock2': render2}
 
 
+def building_render_case(mode):
+    """buildingedit_render in one editor mode: 0 with a drag box, 1 with the wall cursor, 2 with
+    areas, 3 with guard markers and prizes."""
+    rng = random.Random(71 + mode)
+    edits = [(BUILDING + 0x40, '3i', [24, 24, 32]),
+             (BUILDING_EDITOR, 'i', [mode]), (BUILDING_EDITOR + 0x48, 'i', [rng.randint(0, 1)]),
+             (BUILDING_EDITOR + 0xc8, '7i', [1, rng.randint(0, 10), rng.randint(0, 10), rng.randint(0, 10),
+                                             rng.randint(0, 10), rng.randint(0, 20), 0]),
+             (BUILDING_EDITOR + 0xe4, 'i', [rng.randint(0, 20)])]
+    for i in range(16):
+        edits.append((BUILDING + 0x120004c + i * 0x18, '6i',
+                      [rng.randint(0, 30), 0, rng.randint(0, 30), rng.randint(0, 3) if i < 3 else 0, 1,
+                       rng.randint(0, 3) if i < 3 else 0]))
+    for _ in range(20):
+        edits.append((building_cell(rng.randint(0, 63), 0, rng.randint(0, 63)) + 0x40, '2i',
+                      [rng.choice([0, 1, 2, 3, 4, 7]), rng.randint(0, 1)]))
+    return edits, {'buildingedit_render': [call(0x5f3c0)]}
+
+
+MODELTEMP = 0x90f7680      # ModelTemp: num_verts +0, verts +8 (vec3)
+CAMERA = 0xfefe2a4         # camera_position, then camera_rotation (3 rows) at +0xc
+
+
+def model_editor_case(click=1, held=1):
+    """model_editor on 8 vertices in front of a camera at the origin that looks along -z.
+    click: the button goes down in this frame. held: the button is down."""
+    rng = random.Random(67 + click + 2 * held)
+    verts = []
+    for _ in range(8):
+        verts += [rng.choice([0.0, 0.01, -0.02, floats(rng)]), rng.choice([0.0, 0.015, floats(rng)]),
+                  rng.choice([-1.0, -5.0, -100.0])]
+    edits = [(MODELTEMP, 'i', [8]), (MODELTEMP + 8, '24f', verts),
+             (CAMERA, '12f', [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]),
+             (MOUSE, '2i', [rng.choice([512, 513, 600]), rng.choice([320, 321, 200])]),
+             (MOUSE + 0x10, 'i', [held]), (MOUSE_PREVIOUS + 0x10, 'i', [0 if click else held]),
+             (0x103675c0, '8i', [rng.randint(0, 1) for _ in range(8)]),
+             (0x103685c0, '2f', [floats(rng), floats(rng)])]
+    return edits, {'model_editor': [call(0xc1ac0)]}
+
+
 def player_menu_case(menu, team=7, money=50000, building=0, building_type=2, looks=(0, 0)):
     """playermenu of player 1 with one menu number. building_type: 2 car market, 4 clothes, 7
     guns. looks: the suit and the sunglasses of the player."""
@@ -1357,6 +1397,9 @@ def main():
             'pmenu_shop_poor': lambda: player_menu_case(10, money=50),
             'pmenu_no_building': lambda: player_menu_case(10, building=-1),
             'bedit': building_edit_case, 'bedit_2': lambda: building_edit_case(1),
+            'medit_click': model_editor_case, 'medit_held': lambda: model_editor_case(0, 1),
+            'medit_up': lambda: model_editor_case(0, 0),
+            **{f'brender_{m}': (lambda m=m: building_render_case(m)) for m in range(4)},
             'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
             'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
             **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))
