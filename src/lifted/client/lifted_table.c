@@ -703,7 +703,7 @@ void debug_resetlogfile(void);
 void debug_writelogfile(void);
 void lf_6ad10(void);
 void lf_6b140(void);
-void lf_6b160(void);
+void server_playermessage(void);
 void drawdisplay(void);
 void lf_6d6f0(void);
 void lf_6d7d0(void);
@@ -977,7 +977,7 @@ void lf_c5670(void);
 void lf_c56a0(void);
 void getrandomvector3d(void);
 void lf_c5770(void);
-void lf_c5780(void);
+void createobject(void);
 void lf_c6f20(void);
 void lf_c6f60(void);
 void lf_c6ff0(void);
@@ -2003,7 +2003,7 @@ const LfEntry lf_table[] = {
     { "debug_writelogfile", 0x6aca0, (void *)debug_writelogfile, 1, LF_RET_VOID, 4, "v", 1 },
     { "systemtimer", 0x6ad10, (void *)lf_6ad10, 0, LF_RET_INT, 4, "", 1 },
     { "lf_6b140", 0x6b140, (void *)lf_6b140, 1, LF_RET_INT, 4, "p", 1 },
-    { "server_playermessage", 0x6b160, (void *)lf_6b160, 2, LF_RET_INT, 4, "vp", 0 },
+    { "server_playermessage", 0x6b160, (void *)server_playermessage, 2, LF_RET_INT, 4, "vp", 0 },
     { "drawdisplay", 0x6baa0, (void *)drawdisplay, 0, LF_RET_VOID, 4, "", 1 },
     { "createmessage", 0x6d6f0, (void *)lf_6d6f0, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lf_6d7d0", 0x6d7d0, (void *)lf_6d7d0, 3, LF_RET_VOID, 4, "pvv", 0 },
@@ -2277,7 +2277,7 @@ const LfEntry lf_table[] = {
     { "lf_c56a0", 0xc56a0, (void *)lf_c56a0, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomvector3d", 0xc5700, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "lf_c5770", 0xc5770, (void *)lf_c5770, 0, LF_RET_INT, 4, "", 0 },
-    { "createobject", 0xc5780, (void *)lf_c5780, 5, LF_RET_INT, 4, "vpvvv", 0 },
+    { "createobject", 0xc5780, (void *)createobject, 5, LF_RET_INT, 4, "vpppv", 0 },
     { "getnextobject", 0xc6f20, (void *)lf_c6f20, 0, LF_RET_INT, 4, "", 0 },
     { "lf_c6f60", 0xc6f60, (void *)lf_c6f60, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_c6ff0", 0xc6ff0, (void *)lf_c6ff0, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2374,9 +2374,9 @@ const LfEntry lf_table[] = {
     { "lf_ddad0", 0xddad0, (void *)lf_ddad0, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_ddae0", 0xddae0, (void *)lf_ddae0, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_armhuman", 0xddaf0, (void *)scenario_armhuman, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "createmission_acquisition", 0xddc00, (void *)lf_ddc00, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "createmission_acquisition", 0xddc00, (void *)lf_ddc00, 3, LF_RET_INT, 4, "vvp", 0 },
     { "createmission_transaction", 0xddef0, (void *)lf_ddef0, 3, LF_RET_VOID, 4, "vvp", 0 },
-    { "createmission_threeway", 0xde560, (void *)lf_de560, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "createmission_threeway", 0xde560, (void *)lf_de560, 3, LF_RET_VOID, 4, "vvp", 0 },
     { "serversend", 0xdeb20, (void *)lf_deb20, 0, LF_RET_VOID, 4, "", 1 },
     { "servercycle", 0xdf550, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
     { "serverrecv", 0xdf6a0, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },
@@ -2446,7 +2446,7 @@ const LfEntry lf_table[] = {
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_fb1b0", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
     { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },
-    { "createvehicle", 0xfb3d0, (void *)lf_fb3d0, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "createvehicle", 0xfb3d0, (void *)lf_fb3d0, 3, LF_RET_INT, 4, "vpp", 0 },
     { "getaudioinput", 0xfb6f0, (void *)getaudioinput, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_fbc00", 0xfbc00, (void *)lf_fbc00, 2, LF_RET_VOID, 4, "vv", 1 },
     { "calculateplayervoice", 0xfbe70, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },

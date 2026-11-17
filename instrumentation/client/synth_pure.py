@@ -130,6 +130,13 @@ PROTOTYPES = {
     'scenario_createchase': 'ii',
     'scenario_createcar': 'iiiiif',
     'serverrecv': '',
+    'createlevel': '',
+    'createobject': 'ivvmi',
+    'createvehicle': 'ivm',
+    'createmission_acquisition': 'iEQ',
+    'createmission_transaction': 'iEQ',
+    'createmission_threeway': 'iEQ',
+    'server_playermessage': 'pN',
     'pbitwrite': 'Ub',
     'pbitwritenego': 'Ub',
     'pbitread': 'Ub',
@@ -323,6 +330,8 @@ def make_args(rng, kinds, index):
         elif kind == 'N':
             name = rng.choice([b'', b'a', b'Vulpzin', b'Player 1', b'x' * 24, b'x' * 40, bytes(rng.randrange(97, 123) for _ in range(rng.randrange(1, 30)))])
             args.append('P:0:' + (name + b'\0').hex())
+        elif kind == 'Q':
+            args.append('P:0:' + b''.join(struct.pack('<i', rng.choice([0, 1, 2, 0, 1, 2, -1])) for _ in range(8)).hex())
         elif kind == 'L':
             args.append(rng.choice([0, 1, 2, 3]))
         elif kind == 'd':
