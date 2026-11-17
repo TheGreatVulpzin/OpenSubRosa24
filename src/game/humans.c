@@ -950,8 +950,8 @@ void humansimulation(void)
   Human *hu;
   int h, o, vehicle, seat, has_item;
 
-  nametimer(g_timerlist.humansim, "humansim");
-  starttimer(g_timerlist.humansim);
+  sr_timer_name(humansim, "humansim");
+  sr_timer_start(humansim);
   for (o = 0; o < 1024; o++)
     sr_objects[o].drive_buttons = 4;
   for (h = 0; h < 512; h++) {
@@ -969,5 +969,5 @@ void humansimulation(void)
     human_calculatearmangles(h);
     human_finish(h, vehicle, has_item);
   }
-  stoptimer(g_timerlist.humansim);
+  sr_timer_stop(humansim);
 }

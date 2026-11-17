@@ -128,6 +128,32 @@ static Region *g_regions;
 static int g_nregions, g_mapped;
 static char g_snap_path[MAX_PATH];
 
+/* The system reserves memory in blocks of 64 KB. Two regions in one block need one reservation
+ * for the block and one commit for each region. The table tells which blocks this program
+ * reserved, so a region never commits memory that belongs to another owner. */
+#define BLOCK 0x10000u
+static uint8_t g_own_block[65536];
+
+static int map_region(uint32_t base, uint32_t size)
+{
+    uint64_t end = (uint64_t)base + size;
+    uint64_t block;
+
+    for (block = base & ~(BLOCK - 1); block < end; block += BLOCK) {
+        if (VirtualAlloc((void *)(uintptr_t)block, BLOCK, MEM_RESERVE | MEM_WRITE_WATCH, PAGE_READWRITE))
+            g_own_block[block / BLOCK] = 1;
+        else if (!g_own_block[block / BLOCK])
+            return 0;
+    }
+    for (block = base & ~(BLOCK - 1); block < end; block += BLOCK) {
+        uint64_t from = block > base ? block : base;
+        uint64_t to = block + BLOCK < end ? block + BLOCK : end;
+        if (!VirtualAlloc((void *)(uintptr_t)from, (SIZE_T)(to - from), MEM_COMMIT, PAGE_READWRITE))
+            return 0;
+    }
+    return 1;
+}
+
 static void map_regions(const char *path)
 {
     FILE *f = fopen(path, "rb");
@@ -154,9 +180,18 @@ static void map_regions(const char *path)
          * and copied the region to that address: a crash or a silent overwrite, depending on
          * the heap content (gate.py --changed, 2026-10-15). */
         r->shadow = NULL;
-        r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH,
-                                 PAGE_READWRITE) != NULL;
+        r->mapped = map_region(r->base, r->size);
         g_mapped += r->mapped;
+        if (!r->mapped && getenv("HARNESS_REGIONS")) {
+            MEMORY_BASIC_INFORMATION mbi;
+            char module[MAX_PATH] = "";
+            if (VirtualQuery((void *)(uintptr_t)r->base, &mbi, sizeof mbi)) {
+                if (mbi.Type == MEM_IMAGE)
+                    GetModuleFileNameA((HMODULE)mbi.AllocationBase, module, MAX_PATH);
+                fprintf(stderr, "region not mapped: %08x size %x: owner base %p size %lx type %lx %s\n", r->base,
+                        r->size, mbi.AllocationBase, (unsigned long)mbi.RegionSize, (unsigned long)mbi.Type, module);
+            }
+        }
         fseek(f, (long)r->size, SEEK_CUR);
     }
     fclose(f);

@@ -1077,7 +1077,7 @@ void scenario_armhuman(void);
 void lf_ddc00(void);
 void lf_ddef0(void);
 void lf_de560(void);
-void lf_deb20(void);
+void serversend(void);
 void servercycle(void);
 void serverrecv(void);
 void getsuncolors(void);
@@ -2377,7 +2377,7 @@ const LfEntry lf_table[] = {
     { "createmission_acquisition", 0xddc00, (void *)lf_ddc00, 3, LF_RET_INT, 4, "vvp", 0 },
     { "createmission_transaction", 0xddef0, (void *)lf_ddef0, 3, LF_RET_VOID, 4, "vvp", 0 },
     { "createmission_threeway", 0xde560, (void *)lf_de560, 3, LF_RET_VOID, 4, "vvp", 0 },
-    { "serversend", 0xdeb20, (void *)lf_deb20, 0, LF_RET_VOID, 4, "", 1 },
+    { "serversend", 0xdeb20, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "servercycle", 0xdf550, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
     { "serverrecv", 0xdf6a0, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },
     { "getsuncolors", 0xe0720, (void *)getsuncolors, 0, LF_RET_VOID, 4, "", 0 },

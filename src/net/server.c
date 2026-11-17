@@ -734,8 +734,8 @@ static void send_voice(Connection *c, int conn)
 void serversend(void)
 {
     int n = sr_numofconnections, i;
-    nametimer(g_timerlist.packetbuild, "packetbuild");
-    starttimer(g_timerlist.packetbuild);
+    sr_timer_name(packetbuild, "packetbuild");
+    sr_timer_start(packetbuild);
     for (i = 0; i < n; i++) {
         Connection *c = &sr_connections[i];
         if (c->credit >= 1)
@@ -747,5 +747,5 @@ void serversend(void)
             send_voice(c, i);
         }
     }
-    stoptimer(g_timerlist.packetbuild);
+    sr_timer_stop(packetbuild);
 }

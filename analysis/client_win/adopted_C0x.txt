@@ -20,3 +20,4 @@ scenario_createcar src/game/scenario.c
 serverrecv src/net/server.c
 createobject src/game/object_create.c
 server_playermessage src/net/commands.c
+serversend src/net/server.c

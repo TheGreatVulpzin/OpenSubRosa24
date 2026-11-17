@@ -617,8 +617,8 @@ void objectsimulation(void)
 {
   int i;
 
-  nametimer(g_timerlist.objectsim, "objectsim");
-  starttimer(g_timerlist.objectsim);
+  sr_timer_name(objectsim, "objectsim");
+  sr_timer_start(objectsim);
   g_train_near = 0;
   for (i = 0; i < 1024; i++) {
     if (sr_objects[i].active)
@@ -632,5 +632,5 @@ void objectsimulation(void)
     if (sr_objects[i].active && sr_objects[i].state != 3)
       object_contacts(&sr_objects[i], i);
   }
-  stoptimer(g_timerlist.objectsim);
+  sr_timer_stop(objectsim);
 }
