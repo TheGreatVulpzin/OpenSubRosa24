@@ -100,7 +100,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
 TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
-             'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
+             'LevelBuilding': 0x54, 'LevelBuildingType': 0x4c, 'MeshQuad': 0x10, 'MeshTri': 0xc,
              'BlockSurface': 0x15c, 'BlockBox': 0x7c, 'BuildPiece': 0x1c,
              'BuildingCell': 0x48, 'FloorplanCell': 0x48, 'BuildingArea': 0x18,
              'BuildPieceCopy': 0x18, 'BuildingPart': 0x300,
@@ -371,8 +371,14 @@ typedef struct LevelBuilding {
     char name[64];
     int x, y, z;
     int turns;
-    uint8_t unsaved[4];
+    uint8_t unsaved[4]; /* the client keeps the type index of the next building here */
 } LevelBuilding;
+
+/* The name and the size of a building file, for the level editor. */
+typedef struct LevelBuildingType {
+    char name[64];
+    int size_x, size_z, floors;
+} LevelBuildingType;
 
 /* Vertex indices of the temporary mesh. */
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
@@ -901,6 +907,7 @@ SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
 SR_STATIC_ASSERT(sizeof(CityBlock) == 0x30, "CityBlock");
 SR_STATIC_ASSERT(sizeof(LevelIntersection) == 0xc, "LevelIntersection");
 SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
+SR_STATIC_ASSERT(sizeof(LevelBuildingType) == 0x4c, "LevelBuildingType");
 SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
 SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
 SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");

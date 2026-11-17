@@ -86,10 +86,10 @@ void __cdecl leveledit_setup(void)
     editor_view_setup(&cl_data_level_view, 64.0f, 160.0f, 160.0f);
     sr_data_level_editor.brush_x = 3;
     sr_data_level_editor.brush_z = 3;
-    sr_data_level_editor.brush_turn = 0;
+    sr_data_level_editor.place_type = 0;
     sr_data_level_editor.chosen_a = -1;
     sr_data_level_editor.chosen_b = -1;
-    sr_data_level_editor.chosen_building = -1;
+    sr_data_level_editor.chosen_street = -1;
 }
 
 /* Draw a flat quad on the ground (y = 0) from x, z with a size and a color. Texture -1 draws

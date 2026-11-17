@@ -3,3 +3,4 @@ model_viewer src/client/editor/model.c
 buildingedit_menu src/client/editor/menus.c
 buildingedit_blockmenu src/client/editor/menus.c
 buildingedit_texturemenu src/client/editor/menus.c
+leveleditor_loop src/client/editor/level.c

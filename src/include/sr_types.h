@@ -218,8 +218,14 @@ typedef struct LevelBuilding {
     char name[64];
     int x, y, z;
     int turns;
-    uint8_t unsaved[4];
+    uint8_t unsaved[4]; /* the client keeps the type index of the next building here */
 } LevelBuilding;
+
+/* The name and the size of a building file, for the level editor. */
+typedef struct LevelBuildingType {
+    char name[64];
+    int size_x, size_z, floors;
+} LevelBuildingType;
 
 /* Vertex indices of the temporary mesh. */
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
@@ -748,6 +754,7 @@ SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
 SR_STATIC_ASSERT(sizeof(CityBlock) == 0x30, "CityBlock");
 SR_STATIC_ASSERT(sizeof(LevelIntersection) == 0xc, "LevelIntersection");
 SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
+SR_STATIC_ASSERT(sizeof(LevelBuildingType) == 0x4c, "LevelBuildingType");
 SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
 SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
 SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
@@ -2813,16 +2820,20 @@ SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_z) == 0x18, "GameWorld.spawn_siz
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {
-    int mode;                            /* +0x0000 leveleditor_loop: 0 place buildings, 1 streets, 2 areas (the items and the texts of each mode) */
-    uint8_t pad_0004[0x4];
+    int mode;                            /* +0x0000 leveleditor_loop: 0 streets, 1 sidewalk tiles, 2 buildings (the items and the title of each mode) */
+    int tile_kind;                       /* +0x0004 leveleditor_loop: the Sidewalk buttons choose the tile kind, 0 to 8 */
     int chosen_a;                        /* +0x0008 leveledit_setup and leveleditor_loop write -1: no chosen street end */
     int chosen_b;                        /* +0x000c leveledit_setup and leveleditor_loop write -1: no second street end */
-    uint8_t pad_0010[0x14];
-    int chosen_building;                 /* +0x0024 leveledit_setup writes -1: no chosen building */
+    int dragging;                        /* +0x0010 leveleditor_loop draws the drag box of the sidewalk mode while it is not 0 */
+    int drag_x0;                         /* +0x0014 leveleditor_loop: the first corner of the drag box */
+    int drag_z0;                         /* +0x0018  */
+    int drag_x1;                         /* +0x001c leveleditor_loop: the second corner of the drag box */
+    int drag_z1;                         /* +0x0020  */
+    int chosen_street;                   /* +0x0024 leveledit_setup writes -1. leveleditor_loop shows a name field for the chosen street */
     int brush_x;                         /* +0x0028 leveledit_setup writes 3 */
     int brush_z;                         /* +0x002c leveledit_setup writes 3 */
-    int brush_turn;                      /* +0x0030 leveledit_setup writes 0 */
-    uint8_t pad_0034[0x4];
+    int place_type;                      /* +0x0030 leveledit_setup writes 0. The building buttons choose the building type to place (B on the screen) */
+    int place_turns;                     /* +0x0034 leveleditor_loop shows it as R: the turns of the building to place */
     int num_intersections;               /* +0x0038 createlevel: one city_addintersection for each record */
     LevelIntersection intersections[1024]; /* +0x003c 0x3c + 1024 * 0xc = 0x303c (the next count) */
     int num_streets;                     /* +0x303c createlevel: one addcitystreet for each record */
@@ -2832,16 +2843,25 @@ typedef union LevelEditor { struct {
     int num_buildings;                   /* +0x10b844 createlevel: building_load and building_buildfloorplan for each record */
     uint8_t pad_10b848[0x4];
     LevelBuilding buildings[1024];       /* +0x10b84c stride 0x54, the name is at +0 (the x of record 0 is read at 0x10b88c); the count is likely */
-    uint8_t pad_12084c[0xa604c];
+    uint8_t pad_12084c[0x93004];
+    LevelBuildingType types[1024];       /* +0x1b3850 leveleditor_loop: the name and the size of each building file */
+    uint8_t pad_1c6850[0x48];
 }; uint8_t lf_raw[0x1c6898]; } LevelEditor;
 SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
 SR_STATIC_ASSERT(offsetof(LevelEditor, mode) == 0x0, "LevelEditor.mode");
+SR_STATIC_ASSERT(offsetof(LevelEditor, tile_kind) == 0x4, "LevelEditor.tile_kind");
 SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_a) == 0x8, "LevelEditor.chosen_a");
 SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_b) == 0xc, "LevelEditor.chosen_b");
-SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_building) == 0x24, "LevelEditor.chosen_building");
+SR_STATIC_ASSERT(offsetof(LevelEditor, dragging) == 0x10, "LevelEditor.dragging");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_x0) == 0x14, "LevelEditor.drag_x0");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z0) == 0x18, "LevelEditor.drag_z0");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_x1) == 0x1c, "LevelEditor.drag_x1");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z1) == 0x20, "LevelEditor.drag_z1");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_street) == 0x24, "LevelEditor.chosen_street");
 SR_STATIC_ASSERT(offsetof(LevelEditor, brush_x) == 0x28, "LevelEditor.brush_x");
 SR_STATIC_ASSERT(offsetof(LevelEditor, brush_z) == 0x2c, "LevelEditor.brush_z");
-SR_STATIC_ASSERT(offsetof(LevelEditor, brush_turn) == 0x30, "LevelEditor.brush_turn");
+SR_STATIC_ASSERT(offsetof(LevelEditor, place_type) == 0x30, "LevelEditor.place_type");
+SR_STATIC_ASSERT(offsetof(LevelEditor, place_turns) == 0x34, "LevelEditor.place_turns");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_intersections) == 0x38, "LevelEditor.num_intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, intersections) == 0x3c, "LevelEditor.intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_streets) == 0x303c, "LevelEditor.num_streets");
@@ -2849,6 +2869,7 @@ SR_STATIC_ASSERT(offsetof(LevelEditor, streets) == 0x3040, "LevelEditor.streets"
 SR_STATIC_ASSERT(offsetof(LevelEditor, tiles) == 0xb844, "LevelEditor.tiles");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_buildings) == 0x10b844, "LevelEditor.num_buildings");
 SR_STATIC_ASSERT(offsetof(LevelEditor, buildings) == 0x10b84c, "LevelEditor.buildings");
+SR_STATIC_ASSERT(offsetof(LevelEditor, types) == 0x1b3850, "LevelEditor.types");
 
 /* blocktemp[]: record of 0x7606c bytes. */
 typedef union BlockTemp { struct {
