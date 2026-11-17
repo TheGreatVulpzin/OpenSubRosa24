@@ -108,6 +108,28 @@ PROTOTYPES = {
     'createevent_sound': 'ivff',
     'objectwheelsimulation2': '',
     'object_rotorsimulation': 'n',
+    'area_createsblocks': '',
+    'building_setupfloorplannewer': '',
+    'building_setupbuild': '',
+    'player_loadinventory': 'p',
+    'resetgame': '',
+    'newspaper_load': '',
+    'human_itemsimulation': 'n',
+    'logicsimulation': '',
+    'logic_farbslist': 'i',
+    'logic_createcar': 'iti',
+    'logic_setteammanager': 'tp',
+    'logic_cardealer_buy': 'pi',
+    'logic_playeractions': 'p',
+    'logicsimulation_round': '',
+    'logicsimulation_world': '',
+    'objectwheelcollision2': 'nn',
+    'createscenario_world': '',
+    'scenario_createguards': 'nii',
+    'scenario_createtraffic2': 'i',
+    'scenario_createchase': 'ii',
+    'scenario_createcar': 'iiiiif',
+    'serverrecv': '',
     'pbitwrite': 'Ub',
     'pbitwritenego': 'Ub',
     'pbitread': 'Ub',
@@ -205,6 +227,9 @@ PROTOTYPES = {
 
 
 CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
+# SYNTH_SERVER=1 runs the calls on a copy of the snapshot of a game that hosts a server: server.active is 1
+# and the game type is 3. Without it the client snapshot has no server, and the server functions return at once.
+SERVER_EDITS = [(0x75a5800, 'I', (1,)), (0x9065308, 'I', (3,))]
 TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py')
 RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
 
@@ -221,7 +246,7 @@ def case_hash(name, kinds, count):
     """What a result depends on besides the clean code: the kinds of arguments, their generator,
     the number of calls, the finite switch and the sources of the test tools."""
     h = hashlib.sha256()
-    h.update(f'{name}|{kinds}|{count}|{os.environ.get("SYNTH_FINITE", "")}'.encode())
+    h.update(f'{name}|{kinds}|{count}|{os.environ.get("SYNTH_FINITE", "")}|{os.environ.get("SYNTH_SERVER", "")}'.encode())
     h.update(inspect.getsource(make_args).encode())
     h.update(inspect.getsource(number).encode())
     for item in TEST_SOURCES:
@@ -407,7 +432,16 @@ def main():
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
-        result = st.run(rec / 'sv_snapshot.bin', path, name, own)
+        snapshot = rec / 'sv_snapshot.bin'
+        if os.environ.get('SYNTH_SERVER'):
+            snap = st.Snapshot(snapshot)
+            for rva, fmt, values in SERVER_EDITS:
+                snap.write(rva, fmt, *values)
+            snapshot = work / f'snapshot_{name}.bin'
+            snap.save(snapshot)
+        result = st.run(snapshot, path, name, own)
+        if snapshot != rec / 'sv_snapshot.bin':
+            snapshot.unlink()
         m = RESULT.search(result)
         if m and int(m.group(1)) > 0 and int(m.group(2)) == 0 and int(m.group(4)) == 0:
             with lock:

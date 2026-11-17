@@ -1060,6 +1060,11 @@ static const char *known_difference(const char *name)
         /* A new human is protected for 3 to 6 units of 3600 ticks in the server code and for 2 to 5 units in the client.
          * All other fields are the same. The client follows the server code. */
         { "createhuman", "client follows the server code" },
+        /* These functions create humans: the same protection time difference as createhuman. */
+        { "createscenario_world", "client follows the server code (createhuman)" },
+        { "scenario_createguards", "client follows the server code (createhuman)" },
+        { "scenario_createtraffic2", "client follows the server code (createhuman)" },
+        { "scenario_createchase", "client follows the server code (createhuman)" },
         { "steam_init", "no Steam in the client" },
         { "steam_shutdown", "no Steam in the client" },
         { "steam_update", "no Steam in the client" },
