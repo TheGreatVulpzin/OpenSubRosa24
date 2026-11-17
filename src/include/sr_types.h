@@ -2830,8 +2830,8 @@ typedef union LevelEditor { struct {
     int drag_x1;                         /* +0x001c leveleditor_loop: the second corner of the drag box */
     int drag_z1;                         /* +0x0020  */
     int chosen_street;                   /* +0x0024 leveledit_setup writes -1. leveleditor_loop shows a name field for the chosen street */
-    int brush_x;                         /* +0x0028 leveledit_setup writes 3 */
-    int brush_z;                         /* +0x002c leveledit_setup writes 3 */
+    int street_lanes_a;                  /* +0x0028 leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_a of a new street */
+    int street_lanes_b;                  /* +0x002c leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_b of a new street */
     int place_type;                      /* +0x0030 leveledit_setup writes 0. The building buttons choose the building type to place (B on the screen) */
     int place_turns;                     /* +0x0034 leveleditor_loop shows it as R: the turns of the building to place */
     int num_intersections;               /* +0x0038 createlevel: one city_addintersection for each record */
@@ -2858,8 +2858,8 @@ SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z0) == 0x18, "LevelEditor.drag_z0");
 SR_STATIC_ASSERT(offsetof(LevelEditor, drag_x1) == 0x1c, "LevelEditor.drag_x1");
 SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z1) == 0x20, "LevelEditor.drag_z1");
 SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_street) == 0x24, "LevelEditor.chosen_street");
-SR_STATIC_ASSERT(offsetof(LevelEditor, brush_x) == 0x28, "LevelEditor.brush_x");
-SR_STATIC_ASSERT(offsetof(LevelEditor, brush_z) == 0x2c, "LevelEditor.brush_z");
+SR_STATIC_ASSERT(offsetof(LevelEditor, street_lanes_a) == 0x28, "LevelEditor.street_lanes_a");
+SR_STATIC_ASSERT(offsetof(LevelEditor, street_lanes_b) == 0x2c, "LevelEditor.street_lanes_b");
 SR_STATIC_ASSERT(offsetof(LevelEditor, place_type) == 0x30, "LevelEditor.place_type");
 SR_STATIC_ASSERT(offsetof(LevelEditor, place_turns) == 0x34, "LevelEditor.place_turns");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_intersections) == 0x38, "LevelEditor.num_intersections");

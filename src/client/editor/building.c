@@ -4,6 +4,7 @@
 #include "editor/building.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "client.h"
 #include "math/small_vectors.h"
@@ -34,8 +35,14 @@ GL_IMPORT(glTexCoord2f, (float s, float t), (s, t))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 GL_IMPORT(glPolygonMode, (uint32_t face, uint32_t mode), (face, mode))
 
+GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
+
 /* Game functions of other files. */
 #define area_block_createbuildinginterior CL_FN(0x43e0e0, uint32_t(__cdecl *)(int layer, uint32_t key))
+#define building_reloadtextures CL_FN(0x45f310, void(__cdecl *)(void))
+
+#define MATERIAL_NAME 64
+#define DELETE_LIMIT 31
 
 /* The cell of the building at x, floor, z: cells[floor][z][x]. */
 #define CELL(x, floor, z) (&sr_data_building.cells[(floor) * 0x1000 + (z) * 0x40 + (x)])
@@ -84,8 +91,8 @@ void __cdecl buildingedit_setup(void)
 void __cdecl leveledit_setup(void)
 {
     editor_view_setup(&cl_data_level_view, 64.0f, 160.0f, 160.0f);
-    sr_data_level_editor.brush_x = 3;
-    sr_data_level_editor.brush_z = 3;
+    sr_data_level_editor.street_lanes_a = 3;
+    sr_data_level_editor.street_lanes_b = 3;
     sr_data_level_editor.place_type = 0;
     sr_data_level_editor.chosen_a = -1;
     sr_data_level_editor.chosen_b = -1;
@@ -312,6 +319,132 @@ void __cdecl buildingedit_addblock(int x, int floor, int z, uint32_t block, uint
     cell->interior_bit16 = editor->cell_field_14;
     cell->color = editor->packed_parts[0] * 0x40 + editor->packed_parts[4] + editor->packed_parts[1] * 0x400 +
                   editor->packed_parts[2] * 0x4000 + editor->packed_parts[3] * 0x40000;
+}
+
+/* Remove the block of a cell. Then set the walls of the four edges of the cell: a wall is 1
+ * where the cell meets a cell with a block, else 0. The block and the interior are cleared on
+ * the floor of the editor, not on the floor parameter. The far neighbors count only below
+ * 31, also on a larger building. */
+void __cdecl buildingedit_deleteblock(int x, int floor, int z)
+{
+    BuildingCell *cell = CELL(x, floor, z), *next_z = CELL(x, floor, z + 1), *next_x = CELL(x + 1, floor, z);
+    BuildingCell *shown = CELL(x, cl_data_building_editor.floor, z);
+
+    shown->outer = 0;
+    shown->inner = 0;
+    cell->wall_row = 0;
+    next_z->wall_row = 0;
+    cell->wall_col = 0;
+    next_x->wall_col = 0;
+    if (z > 0 && CELL(x, floor, z - 1)->outer != 0)
+        cell->wall_row = 1;
+    if (z < DELETE_LIMIT && next_z->outer != 0)
+        next_z->wall_row = 1;
+    if (x > 0 && CELL(x - 1, floor, z)->outer != 0)
+        cell->wall_col = 1;
+    if (x < DELETE_LIMIT && next_x->outer != 0)
+        next_x->wall_col = 1;
+}
+
+/* Change the material number in the low byte of each texture slot of the cells: 0 clears a
+ * slot of the removed material, -1 moves each higher number down by one. The loops also visit
+ * the row and the column past the size of the building. */
+static void texture_slots_shift(int material, int step)
+{
+    const Building *b = &sr_data_building;
+    int floor, z, x, i;
+
+    for (floor = 0; floor < b->floors; floor++)
+        for (z = 0; z <= b->size_z; z++)
+            for (x = 0; x <= b->size_x; x++) {
+                BuildingCell *cell = CELL(x, floor, z);
+                int16_t *slots[2] = {cell->tex_outer, cell->tex_inner};
+                int layer;
+
+                for (layer = 0; layer < 2; layer++)
+                    for (i = 0; i < 8; i++) {
+                        uint16_t value = (uint16_t)slots[layer][i];
+                        int low = value & 0xff;
+
+                        if (step < 0 && low == material)
+                            slots[layer][i] = 0;
+                        else if (step < 0 ? material < low : material <= low)
+                            slots[layer][i] = (int16_t)((value & 0xff00) | (low + step));
+                    }
+            }
+}
+
+/* Remove a material from the building: clear the slots that use it, move the higher numbers
+ * down, close the gap in the name list and load the textures again. */
+void __cdecl buildingedit_removetexture(int material)
+{
+    Building *b = &sr_data_building;
+    int i;
+
+    if (b->num_materials <= 0 || material >= b->num_materials)
+        return;
+    texture_slots_shift(material, -1);
+    b->num_materials--;
+    for (i = material; i < b->num_materials; i++)
+        strcpy(b->materials + i * MATERIAL_NAME, b->materials + (i + 1) * MATERIAL_NAME);
+    building_reloadtextures();
+}
+
+/* Insert a material name at a place in the list: move the slot numbers from that place up by
+ * one, open a gap in the name list and load the textures again. A low byte of 255 becomes 256:
+ * it sets bit 8 of the slot. */
+void __cdecl buildingedit_inserttexture(const char *name, int place)
+{
+    Building *b = &sr_data_building;
+    int i;
+
+    if (place < 0 || place > b->num_materials)
+        return;
+    texture_slots_shift(place, 1);
+    for (i = b->num_materials; i > place; i--)
+        strcpy(b->materials + i * MATERIAL_NAME, b->materials + (i - 1) * MATERIAL_NAME);
+    b->num_materials++;
+    strcpy(b->materials + place * MATERIAL_NAME, name);
+    building_reloadtextures();
+}
+
+/* Draw a block type flat on the screen at x, y with a scale, for a picker. The textures come
+ * from the inner slots of the editor, as texture numbers. The y of each corner tilts it and
+ * darkens it, as in the editor view. */
+void __cdecl buildingeditor_draw_sblock(uint32_t block, float x, float y, float scale_x, float scale_y, float red,
+                                        float green, float blue, float alpha)
+{
+    const AreaBlock *type;
+    int quad, k;
+
+    if (block >= INTERIOR_BLOCK)
+        return;
+    type = &sr_data_area_block[block];
+    for (quad = 0; quad < type->num_faces; quad++) {
+        int slot = ((const int *)(uintptr_t)type->face_slots)[quad];
+
+        if (slot > LAST_SLOT)
+            slot = LAST_SLOT;
+        glBindTexture(GL_TEXTURE_2D, cl_data_texture[cl_data_building_editor.inner_slots[slot]].gl_name);
+        glBegin(GL_QUADS);
+        glColor4f(red, green, blue, alpha);
+        for (k = 0; k < 4; k++) {
+            int corner = ((const int *)(uintptr_t)type->faces)[quad * 4 + k];
+            vec3 v;
+            float shade, screen[2];
+
+            copyvector((unsigned int *)&v, (const unsigned int *)((const vec3 *)(uintptr_t)type->verts + corner));
+            shade = (float)((float)(1.0 - v.y) * 0.5 + 0.5);
+            glColor4f((float)(red * shade), (float)(green * shade), (float)(blue * shade), alpha);
+            v.x = (float)(v.y * 0.25 + v.x);
+            v.z = (float)(v.z - v.y * 0.25);
+            screen[0] = (float)(v.x * scale_x + x);
+            screen[1] = (float)(v.z * scale_y + y);
+            glTexCoord2fv((const float *)(uintptr_t)type->uvs + corner * 2);
+            glVertex2fv(screen);
+        }
+        glEnd();
+    }
 }
 
 /* The floor grid: a line for each cell, brighter each fourth line, and the building border in

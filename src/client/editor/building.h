@@ -15,5 +15,10 @@ void __cdecl buildingeditor_renderblock2(uint32_t block, int layer, float x, flo
                                          float blue, float alpha);
 void __cdecl buildingedit_addblock(int x, int floor, int z, uint32_t block, uint32_t interior);
 void __cdecl buildingedit_render(void);
+void __cdecl buildingedit_deleteblock(int x, int floor, int z);
+void __cdecl buildingedit_removetexture(int material);
+void __cdecl buildingedit_inserttexture(const char *name, int place);
+void __cdecl buildingeditor_draw_sblock(uint32_t block, float x, float y, float scale_x, float scale_y, float red,
+                                        float green, float blue, float alpha);
 
 #endif /* CL_EDITOR_BUILDING_H */

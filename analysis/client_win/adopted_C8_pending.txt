@@ -4,3 +4,13 @@ buildingedit_menu src/client/editor/menus.c
 buildingedit_blockmenu src/client/editor/menus.c
 buildingedit_texturemenu src/client/editor/menus.c
 leveleditor_loop src/client/editor/level.c
+buildingedit_deleteblock src/client/editor/building.c
+buildingedit_removetexture src/client/editor/building.c
+buildingedit_inserttexture src/client/editor/building.c
+buildingeditor_draw_sblock src/client/editor/building.c
+level_checkeditor src/client/editor/level.c
+leveleditor_addintersection src/client/editor/level.c
+leveleditor_getintersection src/client/editor/level.c
+leveleditor_deleteintersection src/client/editor/level.c
+leveleditor_addstreet src/client/editor/level.c
+leveleditor_deletestreet src/client/editor/level.c

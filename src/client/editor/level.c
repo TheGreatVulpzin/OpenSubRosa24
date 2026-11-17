@@ -2,11 +2,13 @@
  * city on a map of 512 by 512 cells. */
 #include "editor/level.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "audio/imports.h"
 #include "client.h"
+#include "input/keyboard.h"
 #include "menu/draw.h"
 #include "menu/items.h"
 #include "render/draw2d.h"
@@ -17,17 +19,13 @@
 #include "textures/opengl.h"
 #include "vectors.h"
 
+#define KEY_G 10
+#define KEY_PERIOD 55
+#define KEY_F1 58
+#define KEY_F3 60
 #define PI_F 3.1415927410125732f
 #define MAP_SIZE 512
 #define TILE_ROW 1024
-#define KEY_A 0x04
-#define KEY_D 0x07
-#define KEY_E 0x08
-#define KEY_S 0x16
-#define KEY_W 0x1a
-#define KEY_RETURN 0x28
-#define KEY_ESCAPE 0x29
-#define KEY_LEFT_SHIFT 0xe1
 #define OPTION_KEY 1
 #define OPTION_TEXT 4
 #define OPTION_CHOICE 11
@@ -63,7 +61,6 @@ GL_IMPORT(glPointSize, (float size), (size))
 #define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
-#define level_checkeditor CL_FN(0x49f400, void(__cdecl *)(void))
 #define leveleditor_save CL_FN(0x4a0740, void(__cdecl *)(void))
 #define createlevel CL_FN(0x49b740, void(__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
@@ -419,7 +416,7 @@ static void level_move_camera(uint32_t *last)
         else
             *last = audio_SDL_GetTicks()();
         step = CAMERA_STEP;
-        if (cl_data_audio_keys[KEY_LEFT_SHIFT] != 0)
+        if (cl_data_audio_keys[KEY_SHIFT] != 0)
             step = CAMERA_FAST_STEP;
         if (cl_data_audio_input_blocked != 0)
             continue;
@@ -432,6 +429,415 @@ static void level_move_camera(uint32_t *last)
         if (cl_data_audio_keys[KEY_S] != 0)
             camera->z = (float)(camera->z + step);
     }
+}
+
+/* Add an intersection at x, z, or find one there. Only x and z count. The list has no size
+ * limit. */
+int __cdecl leveleditor_addintersection(int x, int y, int z)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    LevelIntersection *point;
+    int i;
+
+    for (i = 0; i < level->num_intersections; i++) {
+        if (level->intersections[i].x == x && level->intersections[i].z == z)
+            return i;
+    }
+    point = &level->intersections[level->num_intersections];
+    point->x = x;
+    point->y = y;
+    point->z = z;
+    return level->num_intersections++;
+}
+
+/* The first intersection with a distance in x and z of at most radius, or -1. */
+int __cdecl leveleditor_getintersection(float x, float y, float z, float radius)
+{
+    const LevelEditor *level = &sr_data_level_editor;
+    vec3 offset;
+    int i;
+
+    (void)y;
+    for (i = 0; i < level->num_intersections; i++) {
+        offset.x = (float)((float)level->intersections[i].x - x);
+        offset.y = 0.0f;
+        offset.z = (float)((float)level->intersections[i].z - z);
+        if (vectorlength(&offset) <= radius)
+            return i;
+    }
+    return -1;
+}
+
+/* Remove a street: the last street moves into its place. */
+void __cdecl leveleditor_deletestreet(int index)
+{
+    LevelEditor *level = &sr_data_level_editor;
+
+    if (index < 0 || index >= level->num_streets)
+        return;
+    level->num_streets--;
+    memcpy(&level->streets[index], &level->streets[level->num_streets], sizeof(LevelStreet));
+}
+
+/* Remove an intersection and each street that uses it. The last intersection moves into its
+ * place, and the streets of the last one get the new index. */
+void __cdecl leveleditor_deleteintersection(int index)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    int i = 0;
+
+    if (index < 0 || index >= level->num_intersections)
+        return;
+    while (i < level->num_streets) {
+        if (level->streets[i].a == index || level->streets[i].b == index)
+            leveleditor_deletestreet(i);
+        else
+            i++;
+    }
+    level->num_intersections--;
+    memcpy(&level->intersections[index], &level->intersections[level->num_intersections], sizeof(LevelIntersection));
+    for (i = 0; i < level->num_streets; i++) {
+        if (level->streets[i].a == level->num_intersections)
+            level->streets[i].a = index;
+        if (level->streets[i].b == level->num_intersections)
+            level->streets[i].b = index;
+    }
+}
+
+/* Add a street from intersection a to b, or find the street between them. A street must be
+ * straight: the two points must have the same x (axis 1) or the same z (axis 0), else the
+ * result is -1. The first point of a new street is the one with the lower z or x. Points with
+ * the same x and z give axis 0. */
+int __cdecl leveleditor_addstreet(int a, int b)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    LevelStreet *street;
+    int i, swap;
+
+    if (a == b)
+        return -1;
+    for (i = 0; i < level->num_streets; i++) {
+        if (level->streets[i].a == a && level->streets[i].b == b)
+            return i;
+        if (level->streets[i].a == b && level->streets[i].b == a)
+            return i;
+    }
+    if (level->intersections[a].x != level->intersections[b].x &&
+        level->intersections[a].z != level->intersections[b].z)
+        return -1;
+    street = &level->streets[level->num_streets];
+    if (level->intersections[a].x == level->intersections[b].x) {
+        street->axis = 1;
+        if (level->intersections[b].z < level->intersections[a].z) {
+            swap = a;
+            a = b;
+            b = swap;
+        }
+    }
+    if (level->intersections[a].z == level->intersections[b].z) {
+        street->axis = 0;
+        if (level->intersections[b].x < level->intersections[a].x) {
+            swap = a;
+            a = b;
+            b = swap;
+        }
+    }
+    street->a = a;
+    street->b = b;
+    street->lanes_a = level->street_lanes_a;
+    street->lanes_b = level->street_lanes_b;
+    strcpy(street->name, "Street");
+    return level->num_streets++;
+}
+
+/* The point under the mouse in map units, from the middle of the view. Both axes divide by
+ * the half width. */
+static void level_mouse_point(float *x, float *z)
+{
+    const EditorView *view = &cl_data_level_view;
+    const InputMouse *mouse = &cl_data_input_mouse;
+
+    *x = (float)((float)((float)((double)mouse->x - (view->width * 0.5 + view->x)) * view->zoom) /
+                 (view->width * 0.5));
+    *z = (float)((float)((float)((double)mouse->y - (view->height * 0.5 + view->y)) * view->zoom) /
+                 (view->width * 0.5));
+}
+
+/* Return the last street whose middle is less than 2 from x, z in both axes, else current. */
+static int level_street_at(float x, float z, int current)
+{
+    const LevelEditor *level = &sr_data_level_editor;
+    int i;
+
+    for (i = 0; i < level->num_streets; i++) {
+        const LevelIntersection *a = &level->intersections[level->streets[i].a];
+        const LevelIntersection *b = &level->intersections[level->streets[i].b];
+
+        if (fabs((double)x - (float)((float)(a->x + b->x) * 0.5)) < 2.0 &&
+            fabs((double)z - (float)((float)(a->z + b->z) * 0.5)) < 2.0)
+            current = i;
+    }
+    return current;
+}
+
+/* A new street takes the name of a street that joins it in a straight line. */
+static void level_street_name(int added)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    LevelStreet *street = &level->streets[added];
+    int i;
+
+    for (i = 0; i < level->num_streets; i++) {
+        const LevelStreet *other = &level->streets[i];
+
+        if (i == added)
+            continue;
+        if (other->a == street->b) {
+            if (level->intersections[other->b].x == level->intersections[street->a].x)
+                strcpy(street->name, other->name);
+            if (level->intersections[other->b].z == level->intersections[street->a].z)
+                strcpy(street->name, other->name);
+        } else if (other->b == street->a) {
+            if (level->intersections[other->a].x == level->intersections[street->b].x)
+                strcpy(street->name, other->name);
+            if (level->intersections[other->a].z == level->intersections[street->b].z)
+                strcpy(street->name, other->name);
+        }
+    }
+}
+
+/* Street mode. A left click chooses the intersection under the mouse, or adds one when an
+ * intersection is chosen or the period key is down. Two chosen intersections make a street.
+ * A left click away from the intersections chooses a street. A right click removes the
+ * intersection under the mouse, or the chosen street. */
+static void level_edit_streets(float x, float z)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
+    const EditorView *view = &cl_data_level_view;
+    int added;
+
+    x = (float)(view->camera.x + 0.5 + x);
+    z = (float)(view->camera.z + 0.5 + z);
+    level->chosen_b = leveleditor_getintersection(x, 0.0f, z, 2.0f);
+    if (mouse->left != 0 && previous->left == 0) {
+        level->chosen_street = -1;
+        if (level->chosen_b == -1 && (level->chosen_a != -1 || cl_data_audio_keys[KEY_PERIOD] != 0))
+            level->chosen_b = leveleditor_addintersection(cl_ftoi(x), 0, cl_ftoi(z));
+        if (level->chosen_a != -1 && level->chosen_b != -1) {
+            added = leveleditor_addstreet(level->chosen_a, level->chosen_b);
+            if (added != -1)
+                level_street_name(added);
+        }
+        level->chosen_a = level->chosen_b;
+        if (level->chosen_b == -1)
+            level->chosen_street = level_street_at(x, z, level->chosen_street);
+    }
+    if (mouse->right != 0 && previous->right == 0) {
+        if (level->chosen_b == -1) {
+            level->chosen_street = level_street_at(x, z, level->chosen_street);
+            if (level->chosen_street != -1)
+                leveleditor_deletestreet(level->chosen_street);
+        } else {
+            leveleditor_deleteintersection(level->chosen_b);
+        }
+        level->chosen_a = -1;
+        level->chosen_b = -1;
+        level->chosen_street = -1;
+    }
+}
+
+/* The material of a new tile: 2 with key 5, 1 with key 6, else 0. */
+static int level_tile_material(void)
+{
+    if (cl_data_audio_keys[KEY_5] != 0)
+        return 2;
+    if (cl_data_audio_keys[KEY_6] != 0)
+        return 1;
+    return 0;
+}
+
+/* The kind bits of a chosen tile kind above 0. */
+static int level_tile_kind(int kind)
+{
+    return (kind + 7) * 16;
+}
+
+/* Tile mode. A left click sets the tile under the mouse: keys 1 to 4 and 7 choose the kind,
+ * or the chosen kind of the list. A right click clears it. Shift and the left button drag a
+ * box. E fills the box and Delete clears it. */
+static void level_edit_tiles(float x, float z)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
+    const EditorView *view = &cl_data_level_view;
+    uint8_t *tile;
+    int tx, tz, i, j;
+
+    x = (float)(x + view->camera.x);
+    z = (float)(z + view->camera.z);
+    tx = cl_ftoi(x);
+    tz = cl_ftoi(z);
+    if (tz < 0 || tz >= TILE_ROW || tx < 0 || tx >= TILE_ROW)
+        return;
+    tile = &level->tiles[tx + tz * TILE_ROW];
+    if (level->dragging != 0) {
+        int left = level->drag_x1 < level->drag_x0 ? level->drag_x1 : level->drag_x0;
+        int top = level->drag_z1 < level->drag_z0 ? level->drag_z1 : level->drag_z0;
+        int width = abs(level->drag_x0 - level->drag_x1), depth = abs(level->drag_z0 - level->drag_z1);
+
+        if (cl_data_audio_keys[KEY_E] != 0) {
+            int material = level_tile_material();
+
+            for (j = top; j < top + depth; j++)
+                for (i = left; i < left + width; i++) {
+                    level->tiles[i + j * TILE_ROW] = (uint8_t)(material + 0x10);
+                    if (level->tile_kind > 0)
+                        level->tiles[i + j * TILE_ROW] = (uint8_t)(level_tile_kind(level->tile_kind) + material);
+                }
+        }
+        if (cl_data_audio_keys[KEY_DELETE] != 0) {
+            for (j = top; j < top + depth; j++)
+                for (i = left; i < left + width; i++)
+                    level->tiles[i + j * TILE_ROW] = 0;
+        }
+    }
+    if (mouse->left != 0) {
+        if (cl_data_audio_keys[KEY_SHIFT] == 0) {
+            if (level->dragging == 0) {
+                int material = level_tile_material();
+
+                *tile = 0x10;
+                if (cl_data_audio_keys[KEY_1] != 0)
+                    *tile = 0x20;
+                else if (cl_data_audio_keys[KEY_2] != 0)
+                    *tile = 0x30;
+                else if (cl_data_audio_keys[KEY_3] != 0)
+                    *tile = 0x40;
+                else if (cl_data_audio_keys[KEY_4] != 0)
+                    *tile = 0x50;
+                else if (cl_data_audio_keys[KEY_7] != 0)
+                    *tile = 0x60;
+                if (level->tile_kind > 0)
+                    *tile = (uint8_t)level_tile_kind(level->tile_kind);
+                *tile = (uint8_t)(*tile + material);
+            }
+        } else {
+            level->dragging = 1;
+            level->drag_x1 = tx;
+            level->drag_z1 = tz;
+            if (previous->left == 0) {
+                level->drag_x0 = tx;
+                level->drag_z0 = tz;
+            }
+        }
+    }
+    if (mouse->right != 0 && level->dragging == 0)
+        *tile = 0;
+    if (mouse->right == 0 && previous->right != 0)
+        level->dragging = 0;
+}
+
+/* Building mode. The record after the last building shows the building to place under the
+ * mouse. E and a left click place it when its type has a size. A right click removes each
+ * building under the mouse: the last building moves into its place. */
+static void level_edit_buildings(float x, float z)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    const InputMouse *mouse = &cl_data_input_mouse, *previous = &cl_data_input_mouse_previous;
+    const EditorView *view = &cl_data_level_view;
+    const FileListSlot *files = &sr_data_filelist.list[FILE_LIST];
+    LevelBuilding *next = &level->buildings[level->num_buildings];
+    const LevelBuildingType *type;
+    int i, width, depth;
+
+    x = (float)(x + view->camera.x);
+    z = (float)(z + view->camera.z);
+    *placed_type(level->num_buildings) = level->place_type;
+    if (level->place_type >= 0 && level->place_type < files->count)
+        strcpy(next->name, files->name[level->place_type]);
+    next->x = cl_ftoi(x);
+    next->y = 6;
+    next->z = cl_ftoi(z);
+    next->turns = level->place_turns;
+    type = &level->types[*placed_type(level->num_buildings)];
+    if (cl_data_audio_input_blocked == 0 && cl_data_audio_keys[KEY_E] != 0 && mouse->left != 0 &&
+        previous->left == 0 && type->size_x > 0 && type->size_z > 0)
+        level->num_buildings++;
+    if (mouse->right == 0 || previous->right != 0)
+        return;
+    for (i = 0; i < level->num_buildings; i++) {
+        const LevelBuilding *building = &level->buildings[i];
+
+        placed_size(i, &width, &depth);
+        if ((float)building->x <= x && x < (float)(building->x + width) && (float)building->z <= z &&
+            z < (float)(building->z + depth)) {
+            level->num_buildings--;
+            memcpy(placed_type(i), placed_type(level->num_buildings), sizeof(LevelBuilding));
+        }
+    }
+}
+
+/* Read the keys and the mouse of the level editor. F1, F2 and F3 choose the mode. In building
+ * mode, R and F choose the type, and T and G turn it. The mouse works only in the view, where
+ * the wheel also changes the zoom from 2 to 256. Wheel steps out of the view are lost. */
+void __cdecl level_checkeditor(void)
+{
+    LevelEditor *level = &sr_data_level_editor;
+    InputMouse *mouse = &cl_data_input_mouse;
+    EditorView *view = &cl_data_level_view;
+    float x, z;
+
+    if (cl_data_audio_input_blocked == 0) {
+        if (input_pressed(KEY_F1))
+            level->mode = MODE_STREETS;
+        if (input_pressed(KEY_F2))
+            level->mode = MODE_TILES;
+        if (input_pressed(KEY_F3))
+            level->mode = MODE_BUILDINGS;
+    }
+    if (level->mode == MODE_BUILDINGS) {
+        if (cl_data_audio_input_blocked == 0) {
+            if (input_pressed(KEY_R))
+                level->place_type++;
+            if (input_pressed(KEY_F))
+                level->place_type--;
+            if (level->place_type > sr_data_filelist.list[FILE_LIST].count - 1)
+                level->place_type = sr_data_filelist.list[FILE_LIST].count - 1;
+            if (level->place_type < 0)
+                level->place_type = 0;
+            if (input_pressed(KEY_T))
+                level->place_turns++;
+            if (input_pressed(KEY_G))
+                level->place_turns--;
+        }
+        if (level->place_turns < 0)
+            level->place_turns = 3;
+        if (level->place_turns > 3)
+            level->place_turns = 0;
+    }
+    if (view->x < (float)mouse->x && (double)(float)mouse->x < (double)view->x + view->width &&
+        view->y < (float)mouse->y && (double)(float)mouse->y < (double)view->y + view->height) {
+        level_mouse_point(&x, &z);
+        if (level->mode == MODE_STREETS)
+            level_edit_streets(x, z);
+        if (level->mode == MODE_TILES)
+            level_edit_tiles(x, z);
+        if (level->mode == MODE_BUILDINGS)
+            level_edit_buildings(x, z);
+        for (; mouse->wheel_up > 0; mouse->wheel_up--)
+            view->zoom = (float)(view->zoom - 1.0);
+        for (; mouse->wheel_down > 0; mouse->wheel_down--)
+            view->zoom = (float)(view->zoom + 1.0);
+        if (view->zoom < 2.0f)
+            view->zoom = 2.0f;
+        if (view->zoom > 256.0f)
+            view->zoom = 256.0f;
+    }
+    if (mouse->wheel_up > 0)
+        mouse->wheel_up = 0;
+    if (mouse->wheel_down > 0)
+        mouse->wheel_down = 0;
 }
 
 /* Run the level editor until Exit or Escape. At the end, save the level and build the city of

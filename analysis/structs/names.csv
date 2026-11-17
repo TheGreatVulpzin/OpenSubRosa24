@@ -1140,8 +1140,8 @@ level_editor,0x18,drag_z0,int,,
 level_editor,0x1c,drag_x1,int,,"leveleditor_loop: the second corner of the drag box"
 level_editor,0x20,drag_z1,int,,
 level_editor,0x24,chosen_street,int,,"leveledit_setup writes -1. leveleditor_loop shows a name field for the chosen street"
-level_editor,0x28,brush_x,int,,"leveledit_setup writes 3"
-level_editor,0x2c,brush_z,int,,"leveledit_setup writes 3"
+level_editor,0x28,street_lanes_a,int,,"leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_a of a new street"
+level_editor,0x2c,street_lanes_b,int,,"leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_b of a new street"
 level_editor,0x30,place_type,int,,"leveledit_setup writes 0. The building buttons choose the building type to place (B on the screen)"
 level_editor,0x34,place_turns,int,,"leveleditor_loop shows it as R: the turns of the building to place"
 level_editor,0x1b3850,types,LevelBuildingType,1024,"leveleditor_loop: the name and the size of each building file"

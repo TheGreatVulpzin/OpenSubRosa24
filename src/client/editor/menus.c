@@ -6,6 +6,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "editor/building.h"
 #include "menu/draw.h"
 #include "menu/items.h"
 #include "render/draw2d.h"
@@ -275,8 +276,6 @@ void __cdecl buildingedit_blockmenu(void)
 }
 
 /* Game functions of other files. */
-#define building_removetexture CL_FN(0x45eb40, void(__cdecl *)(int material))
-#define building_inserttexture CL_FN(0x45ef80, void(__cdecl *)(const char *name, int place))
 #define building_reloadtextures CL_FN(0x45f310, void(__cdecl *)(void))
 
 enum { TEXTURE_REMOVE = 0, TEXTURE_INSERT = 1, TEXTURE_REPLACE = 2 };
@@ -322,9 +321,9 @@ static void texturemenu_action(int action, int building_texture, int game_textur
     Building *b = &sr_data_building;
 
     if (action == TEXTURE_REMOVE)
-        building_removetexture(building_texture);
+        buildingedit_removetexture(building_texture);
     if (action == TEXTURE_INSERT)
-        building_inserttexture(cl_data_game_textures[game_texture].name,
+        buildingedit_inserttexture(cl_data_game_textures[game_texture].name,
                                building_texture == -1 ? b->num_materials : building_texture);
     if (action == TEXTURE_REPLACE && building_texture != -1 && game_texture != -1) {
         strcpy(b->materials + building_texture * NAME_SIZE, cl_data_game_textures[game_texture].name);
