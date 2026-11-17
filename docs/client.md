@@ -13,6 +13,27 @@ Target: `original/client/subrosa.exe`. It is the 0.24b client of 2015-08-02, bui
 
 `tools/re/name_all.sh` runs the matcher and the GLee step. The output is `analysis/client_win/functions.csv`.
 
+### Link order (group C11)
+
+The exe keeps most functions in the link order of the Linux build. A run of unnamed functions
+between two named ones gets the Linux names between them when the two counts are the same. The
+sizes must agree too: the x64 code is 1 to 2.5 times larger. These rows have the source `order`
+and the confidence 0.8. The same check found 12 call graph names on the wrong function (for
+example `accountdeathtax` on a box test, `createevent_sound` on `addvectors2d`). The stb_image,
+GLee and CRT code does not follow the Linux order: these names come from the function bodies and
+the GLee source. `analysis/client_win/manual_names.csv` keeps all these names, so a new run of
+`name_all.sh` does not lose them.
+
+### Unnamed functions
+
+| rva | Size | What it is |
+| --- | --- | --- |
+| 0x6b140 | 18 | Calls `_time64`. A CRT inline copy. |
+| 0xb3fc0, 0xb41d0, 0xb4520 | 521, 835, 495 | Model builders between `createcashmodel` and `createfootmodel`. The Linux build has only `createwheelmodel` there. 0xb4520 adds cylinders. |
+| 0xfafc0 | 17 | Between `setcpuaffinity` and `resettimer`. No Linux symbol. |
+| 0x10b4d0 | 184 | Compares one vertex array of the temporary mesh. `tempmesh_vertequal` or `tempmesh_normalequal`. |
+| 0x10c020 to 0x10d7b0 | 15 to 127 | CRT code (8 functions). |
+
 ## Files in `analysis/client_win/`
 
 | File | Content |

@@ -1,24 +1,24 @@
 rva,size,name,source,confidence,evidence
-0x1000,10,,,,
-0x1010,18,,,,
-0x1030,102,,,,
-0x10a0,106,,,,
+0x1000,10,stbi_failure_reason,manual,1.0,stb_image: returns the failure text that e() keeps. First function of the stb_image block.
+0x1010,18,stbi_image_free,manual,1.0,stb_image: frees an image. ELF order: after stbi_failure_reason.
+0x1030,102,stbi_register_loader,manual,1.0,"stb_image: adds a loader to the first free slot of the loader list, at most once."
+0x10a0,106,stbi_load,manual,1.0,"stb_image: fopen, stbi_load_from_file, fclose."
 0x1110,15,e,callgraph,1.0,votes=248
-0x1120,471,,,,
-0x1300,526,,,,
-0x1510,106,,,,
-0x1580,165,,,,
-0x1630,177,,,,
-0x16f0,21,,,,
-0x1710,75,,,,
-0x1760,17,,,,
-0x1780,18,,,,
-0x17a0,18,,,,
-0x17c0,14,,,,
-0x17d0,14,,,,
-0x17e0,325,,,,
-0x1930,441,,,,
-0x1af0,87,,,,
+0x1120,471,stbi_load_from_file,manual,1.0,"stb_image: tries the test and load function of each format on a file (png, bmp, psd, tga, hdr)."
+0x1300,526,stbi_load_from_memory,manual,1.0,stb_image: tries the test and load function of each format on a memory buffer.
+0x1510,106,stbi_loadf,manual,1.0,"stb_image: fopen, stbi_loadf_from_file, fclose."
+0x1580,165,stbi_loadf_from_file,manual,1.0,"stb_image: hdr_load, or stbi_load_from_file and ldr_to_hdr."
+0x1630,177,stbi_loadf_from_memory,manual,1.0,"stb_image: hdr_load from memory, or stbi_load_from_memory and ldr_to_hdr."
+0x16f0,21,stbi_is_hdr_from_memory,manual,1.0,stb_image: the hdr test on a memory buffer.
+0x1710,75,stbi_is_hdr,manual,1.0,"stb_image: fopen, stbi_is_hdr_from_file, fclose."
+0x1760,17,stbi_is_hdr_from_file,manual,1.0,stb_image: the hdr test on a file.
+0x1780,18,stbi_hdr_to_ldr_gamma,manual,1.0,stb_image: writes 1 / gamma into the value that hdr_to_ldr uses as the pow exponent.
+0x17a0,18,stbi_hdr_to_ldr_scale,manual,1.0,stb_image: writes the scale that hdr_to_ldr uses. ELF order: after stbi_hdr_to_ldr_gamma.
+0x17c0,14,stbi_ldr_to_hdr_gamma,manual,1.0,stb_image: writes the gamma that ldr_to_hdr uses as the pow exponent.
+0x17d0,14,stbi_ldr_to_hdr_scale,manual,1.0,stb_image: writes the scale that ldr_to_hdr multiplies by.
+0x17e0,325,ldr_to_hdr,manual,1.0,"stb_image: bytes to floats with pow(x / 255, gamma) * scale."
+0x1930,441,hdr_to_ldr,manual,1.0,"stb_image: floats to bytes with pow(x * scale, 1 / gamma) * 255 + 0.5, clamped to 255."
+0x1af0,87,stbi_jpeg_load_from_file,manual,1.0,stb_image: load_jpeg_image on a file context. stbi_jpeg_load calls it.
 0x1b50,14,start_file,manual,1.0,stb_image: sets the file of the context. ELF start_file.
 0x1b60,1635,load_jpeg_image,anchor,0.622,features
 0x21d0,170,decode_jpeg_image,anchor,0.842,features
@@ -34,30 +34,30 @@ rva,size,name,source,confidence,evidence
 0x36b0,51,clamp,callgraph,1.0,votes=32
 0x36f0,141,reset,anchor,0.816,features
 0x3780,818,process_marker,anchor,0.634,features
-0x3b10,53,,,,
+0x3b10,53,stbi_skip,manual,1.0,stb_image: moves the read place of a context by n bytes.
 0x3b50,45,get16,callgraph,1.0,votes=24
 0x3b80,514,build_huffman,anchor,0.664,features
 0x3d90,494,process_scan_header,anchor,0.659,features
 0x3f80,248,decode_jpeg_header,anchor,0.867,features
 0x4080,49,at_eof,anchor,0.771,features
 0x40c0,1486,process_frame_header,anchor,0.823,features
-0x4690,8,,,,
-0x46a0,75,,,,
-0x46f0,252,,,,
-0x47f0,233,,,,
-0x48e0,93,,,,
+0x4690,8,resample_row_1,manual,1.0,"stb_image: the first of the five jpeg resample functions, same order as the ELF."
+0x46a0,75,resample_row_v_2,manual,1.0,stb_image: jpeg vertical resample by 2. ELF order: after resample_row_1.
+0x46f0,252,resample_row_h_2,manual,1.0,stb_image: jpeg horizontal resample by 2. ELF order: after resample_row_v_2.
+0x47f0,233,resample_row_hv_2,manual,1.0,stb_image: jpeg resample by 2 on both axes. ELF order: after resample_row_h_2.
+0x48e0,93,resample_row_generic,manual,1.0,stb_image: jpeg resample by any factor. ELF order: before YCbCr_to_RGB_row.
 0x4940,321,YCbCr_to_RGB_row,anchor,0.923,features
 0x4a90,176,cleanup_jpeg,anchor,0.915,features
-0x4b40,88,,,,
-0x4ba0,91,,,,
+0x4b40,88,stbi_jpeg_load,manual,1.0,"stb_image: fopen, stbi_jpeg_load_from_file, fclose."
+0x4ba0,91,stbi_jpeg_load_from_memory,manual,1.0,stb_image: load_jpeg_image on a memory context.
 0x4c00,36,start_mem,manual,1.0,"stb_image: no file, the buffer start and end. ELF start_mem."
-0x4c30,114,,,,
-0x4cb0,77,,,,
-0x4d00,160,,,,
-0x4db0,60,,,,
+0x4c30,114,stbi_jpeg_test_file,manual,1.0,"stb_image: decode_jpeg_header on a file, then fseek back."
+0x4cb0,77,stbi_jpeg_test_memory,manual,1.0,stb_image: decode_jpeg_header on a memory context.
+0x4d00,160,stbi_zlib_decode_malloc_guesssize,manual,1.0,"stb_image: allocates the first output size, runs do_zlib, frees the buffer on failure."
+0x4db0,60,do_zlib,manual,1.0,stb_image: sets the zlib buffers and runs parse_zlib. ELF order: next to parse_zlib.
 0x4df0,316,parse_zlib,anchor,0.525,features
 0x4f40,720,zbuild_huffman,callgraph,1.0,votes=8
-0x5210,57,,,,
+0x5210,57,stbi_bit_reverse,manual,1.0,stb_image: bitreverse16 shifted to the bit count. ELF order: after bitreverse16.
 0x5250,119,bitreverse16,anchor,0.991,features
 0x52d0,88,zreceive,callgraph,1.0,votes=20
 0x5330,106,fill_bits,callgraph,0.333,votes=2
@@ -69,16 +69,16 @@ rva,size,name,source,confidence,evidence
 0x5b00,382,parse_uncompressed_block,anchor,0.524,features
 0x5c80,134,parse_zlib_header,anchor,1.0,features
 0x5d10,179,init_defaults,anchor,1.0,features
-0x5dd0,30,,,,
-0x5df0,102,,,,
-0x5e60,162,,,,
-0x5f10,102,,,,
-0x5f80,54,,,,
+0x5dd0,30,stbi_zlib_decode_malloc,manual,1.0,stb_image: the zlib decode with an output size guess.
+0x5df0,102,stbi_zlib_decode_buffer,manual,1.0,stb_image: the zlib decode into a buffer of the caller.
+0x5e60,162,stbi_zlib_decode_noheader_malloc,manual,1.0,"stb_image: the zlib decode without a header, into a new buffer."
+0x5f10,102,stbi_zlib_decode_noheader_buffer,manual,1.0,"stb_image: the zlib decode without a header, into a buffer of the caller."
+0x5f80,54,stbi_png_load_from_file,manual,1.0,stb_image: do_png on a file context. stbi_png_load calls it.
 0x5fc0,322,do_png,anchor,0.57,features
 0x6110,1317,convert_format,callgraph,0.333,votes=2
 0x6690,33,compute_y,anchor,1.0,features
 0x66c0,2359,parse_png_file,anchor,0.934,features
-0x7000,45,,,,
+0x7000,45,stbi_get32,manual,1.0,"stb_image: two get16, high half first."
 0x7030,46,get_chunk_header,callgraph,0.667,votes=4
 0x7060,80,check_png_header,callgraph,0.667,votes=4
 0x70b0,774,create_png_image,callgraph,0.667,votes=4
@@ -86,48 +86,48 @@ rva,size,name,source,confidence,evidence
 0x7e40,113,paeth,callgraph,1.0,votes=10
 0x7ec0,252,compute_transparency,callgraph,0.667,votes=4
 0x7fc0,327,expand_palette,callgraph,0.667,votes=4
-0x8110,88,,,,
-0x8170,58,,,,
-0x81b0,83,,,,
-0x8210,46,,,,
-0x8240,154,,,,
-0x82e0,79,,,,
-0x8330,146,,,,
+0x8110,88,stbi_png_load,manual,1.0,"stb_image: fopen, stbi_png_load_from_file, fclose."
+0x8170,58,stbi_png_load_from_memory,manual,1.0,stb_image: do_png on a memory context.
+0x81b0,83,stbi_png_test_file,manual,1.0,"stb_image: parse_png_file in test mode on a file, then fseek back."
+0x8210,46,stbi_png_test_memory,manual,1.0,stb_image: parse_png_file in test mode on a memory context.
+0x8240,154,stbi_png_info,manual,1.0,"stb_image: parse_png_file in header mode, then writes x, y and the component count."
+0x82e0,79,stbi_bmp_test_file,manual,1.0,"stb_image: bmp_test on a file, then fseek back."
+0x8330,146,bmp_test,manual,1.0,"stb_image: tests the BM mark and a header size of 12, 40, 56 or 108."
 0x83d0,41,get16le,manual,1.0,"stb_image: two stbi_get8, low byte first. ELF get16le."
-0x8400,41,,,,
-0x8430,42,,,,
-0x8460,88,,,,
-0x84c0,54,,,,
+0x8400,41,stbi_get32le,manual,1.0,"stb_image: two get16le, low half first."
+0x8430,42,stbi_bmp_test_memory,manual,1.0,stb_image: bmp_test on a memory context.
+0x8460,88,stbi_bmp_load,manual,1.0,"stb_image: fopen, stbi_bmp_load_from_file, fclose."
+0x84c0,54,stbi_bmp_load_from_file,manual,1.0,stb_image: bmp_load on a file context.
 0x8500,3636,bmp_load,strings,0.769,"11 strings, jaccard 0.77"
-0x9340,157,,,,
-0x93e0,104,,,,
-0x9450,95,,,,
-0x94b0,58,,,,
-0x94f0,79,,,,
-0x9540,262,,,,
-0x9650,42,,,,
-0x9680,88,,,,
-0x96e0,54,,,,
-0x9720,1453,,,,
-0x9d10,80,,,,
-0x9d60,58,,,,
-0x9da0,79,,,,
-0x9df0,33,,,,
-0x9e20,42,,,,
-0x9e50,88,,,,
-0x9eb0,54,,,,
+0x9340,157,high_bit,manual,1.0,stb_image: the index of the highest set bit. bmp_load uses it.
+0x93e0,104,bitcount,manual,1.0,stb_image: the count of set bits. ELF order: after high_bit.
+0x9450,95,shiftsigned,manual,1.0,stb_image: shifts and scales a color field. ELF order: after bitcount.
+0x94b0,58,stbi_bmp_load_from_memory,manual,1.0,stb_image: bmp_load on a memory context.
+0x94f0,79,stbi_tga_test_file,manual,1.0,"stb_image: tga_test on a file, then fseek back."
+0x9540,262,tga_test,manual,1.0,"stb_image: tests the tga header (color map, image type 1, 2, 3, 9, 10, 11)."
+0x9650,42,stbi_tga_test_memory,manual,1.0,stb_image: tga_test on a memory context.
+0x9680,88,stbi_tga_load,manual,1.0,"stb_image: fopen, stbi_tga_load_from_file, fclose."
+0x96e0,54,stbi_tga_load_from_file,manual,1.0,stb_image: tga_load on a file context.
+0x9720,1453,tga_load,manual,1.0,stb_image: the tga loader. The tga load functions call it.
+0x9d10,80,stbi_getn,manual,1.0,"stb_image: fread from the file, or a copy from the memory buffer."
+0x9d60,58,stbi_tga_load_from_memory,manual,1.0,stb_image: tga_load on a memory context.
+0x9da0,79,stbi_psd_test_file,manual,1.0,"stb_image: psd_test on a file, then fseek back."
+0x9df0,33,psd_test,manual,1.0,stb_image: tests the 8BPS mark.
+0x9e20,42,stbi_psd_test_memory,manual,1.0,stb_image: psd_test on a memory context.
+0x9e50,88,stbi_psd_load,manual,1.0,"stb_image: fopen, stbi_psd_load_from_file, fclose."
+0x9eb0,54,stbi_psd_load_from_file,manual,1.0,stb_image: psd_load on a file context.
 0x9ef0,1082,psd_load,strings,1.0,"7 strings, jaccard 1.00"
-0xa330,58,,,,
-0xa370,42,,,,
-0xa3a0,84,,,,
-0xa400,79,,,,
-0xa450,54,,,,
+0xa330,58,stbi_psd_load_from_memory,manual,1.0,stb_image: psd_load on a memory context.
+0xa370,42,stbi_hdr_test_memory,manual,1.0,stb_image: hdr_test on a memory context.
+0xa3a0,84,hdr_test,manual,1.0,stb_image: tests the hdr mark.
+0xa400,79,stbi_hdr_test_file,manual,1.0,"stb_image: hdr_test on a file, then fseek back."
+0xa450,54,stbi_hdr_load_from_file,manual,1.0,stb_image: hdr_load on a file context.
 0xa490,1297,hdr_load,strings,1.0,"6 strings, jaccard 1.00"
-0xa9b0,162,,,,
-0xaa60,283,,,,
-0xab90,58,,,,
+0xa9b0,162,hdr_gettoken,manual,1.0,stb_image: reads one header line of at most 1023 bytes up to the end of the file.
+0xaa60,283,hdr_convert,manual,1.0,stb_image: an RGBE pixel to floats with ldexp.
+0xab90,58,stbi_hdr_load_from_memory,manual,1.0,stb_image: hdr_load on a memory context.
 0xabd0,118,,,,
-0xac50,136,,,,
+0xac50,136,outfile,manual,1.0,"stb_image_write: fopen, writefv of the header, write_pixels, fclose."
 0xace0,326,writefv,callgraph,0.5,votes=3
 0xae60,35,write8,callgraph,1.0,votes=21
 0xae90,505,write_pixels,anchor,0.766,features
@@ -1729,9 +1729,9 @@ rva,size,name,source,confidence,evidence
 0x1e2e0,37,GLee_Lazy_wglReleaseVideoImageNV,manual,1.0,"Calls through the pointer loaded with ""wglReleaseVideoImageNV""."
 0x1e310,45,GLee_Lazy_wglSendPbufferToVideoNV,manual,1.0,"Calls through the pointer loaded with ""wglSendPbufferToVideoNV""."
 0x1e340,41,GLee_Lazy_wglGetVideoInfoNV,manual,1.0,"Calls through the pointer loaded with ""wglGetVideoInfoNV""."
-0x1e370,1411,,,,
-0x1e900,10,,,,
-0x1e910,1699,,,,
+0x1e370,1411,__GLeeLink_GL_VERSION_1_2,manual,1.0,"GLee 5.4 source: the first GL link function, before __GLeeLink_GL_ARB_imaging and __GLeeLink_GL_VERSION_1_3."
+0x1e900,10,__GLeeLink_GL_ARB_imaging,manual,1.0,GLee 5.4 source: the empty link function between __GLeeLink_GL_VERSION_1_2 and __GLeeLink_GL_VERSION_1_3. Size 10 bytes.
+0x1e910,1699,__GLeeLink_GL_VERSION_1_3,manual,1.0,GLee 5.4 source: the link function before __GLeeLink_GL_VERSION_1_4.
 0x1efc0,1663,__GLeeLink_GL_VERSION_1_4,manual,1.0,Loads the same 45 gl strings as __GLeeLink_GL_VERSION_1_4 in the Linux client.
 0x1f640,727,__GLeeLink_GL_VERSION_1_5,manual,1.0,Loads the same 19 gl strings as __GLeeLink_GL_VERSION_1_5 in the Linux client.
 0x1f920,3391,__GLeeLink_GL_VERSION_2_0,manual,1.0,Loads the same 93 gl strings as __GLeeLink_GL_VERSION_2_0 in the Linux client.
@@ -2051,51 +2051,51 @@ rva,size,name,source,confidence,evidence
 0x2de40,259,__GLeeLink_GL_OES_single_precision,manual,1.0,Loads the same 6 gl strings as __GLeeLink_GL_OES_single_precision in the Linux client.
 0x2df50,10,__GLeeLink_GL_SGIX_pixel_texture_bits,manual,1.0,Order of the GLee link functions: between __GLeeLink_GL_OES_single_precision and the end in the Linux client.
 0x2df60,10,__GLeeLink_GL_SGIX_texture_range,manual,1.0,Order of the GLee link functions: between __GLeeLink_GL_OES_single_precision and the end in the Linux client.
-0x2df70,3225,,,,
-0x2ec10,187,,,,
-0x2ecd0,10,,,,
-0x2ece0,79,,,,
-0x2ed30,151,,,,
-0x2edd0,115,,,,
-0x2ee50,223,,,,
-0x2ef30,151,,,,
-0x2efd0,10,,,,
-0x2efe0,79,,,,
-0x2f030,115,,,,
-0x2f0b0,151,,,,
-0x2f150,223,,,,
-0x2f230,10,,,,
-0x2f240,10,,,,
-0x2f250,10,,,,
-0x2f260,115,,,,
-0x2f2e0,187,,,,
-0x2f3a0,475,,,,
-0x2f580,187,,,,
-0x2f640,187,,,,
-0x2f700,10,,,,
-0x2f710,10,,,,
-0x2f720,10,,,,
-0x2f730,10,,,,
-0x2f740,10,,,,
-0x2f750,10,,,,
-0x2f760,10,,,,
-0x2f770,151,,,,
-0x2f810,259,,,,
-0x2f920,223,,,,
-0x2fa00,187,,,,
-0x2fac0,79,,,,
-0x2fb10,115,,,,
-0x2fb90,115,,,,
-0x2fc10,259,,,,
-0x2fd20,187,,,,
-0x2fde0,259,,,,
-0x2fef0,375,,,,
-0x30070,34,,,,
-0x300a0,151,,,,
-0x30140,221,,,,
-0x30220,58,,,,
-0x30260,68,,,,
-0x302b0,44,,,,
+0x2df70,3225,initGLLoadFunctions,manual,1.0,GLee 5.4 source: fills the GL link function table. Before the WGL link functions.
+0x2ec10,187,__GLeeLink_WGL_ARB_buffer_region,manual,1.0,GLee 5.4 source order: WGL link function 1 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ecd0,10,__GLeeLink_WGL_ARB_multisample,manual,1.0,GLee 5.4 source order: WGL link function 2 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ece0,79,__GLeeLink_WGL_ARB_extensions_string,manual,1.0,GLee 5.4 source order: WGL link function 3 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ed30,151,__GLeeLink_WGL_ARB_pixel_format,manual,1.0,GLee 5.4 source order: WGL link function 4 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2edd0,115,__GLeeLink_WGL_ARB_make_current_read,manual,1.0,GLee 5.4 source order: WGL link function 5 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ee50,223,__GLeeLink_WGL_ARB_pbuffer,manual,1.0,GLee 5.4 source order: WGL link function 6 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ef30,151,__GLeeLink_WGL_ARB_render_texture,manual,1.0,GLee 5.4 source order: WGL link function 7 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2efd0,10,__GLeeLink_WGL_ARB_pixel_format_float,manual,1.0,GLee 5.4 source order: WGL link function 8 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2efe0,79,__GLeeLink_WGL_ARB_create_context,manual,1.0,GLee 5.4 source order: WGL link function 9 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f030,115,__GLeeLink_WGL_EXT_make_current_read,manual,1.0,GLee 5.4 source order: WGL link function 10 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f0b0,151,__GLeeLink_WGL_EXT_pixel_format,manual,1.0,GLee 5.4 source order: WGL link function 11 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f150,223,__GLeeLink_WGL_EXT_pbuffer,manual,1.0,GLee 5.4 source order: WGL link function 12 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f230,10,__GLeeLink_WGL_EXT_depth_float,manual,1.0,GLee 5.4 source order: WGL link function 13 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f240,10,__GLeeLink_WGL_3DFX_multisample,manual,1.0,GLee 5.4 source order: WGL link function 14 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f250,10,__GLeeLink_WGL_EXT_multisample,manual,1.0,GLee 5.4 source order: WGL link function 15 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f260,115,__GLeeLink_WGL_I3D_digital_video_control,manual,1.0,GLee 5.4 source order: WGL link function 16 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f2e0,187,__GLeeLink_WGL_I3D_gamma,manual,1.0,GLee 5.4 source order: WGL link function 17 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f3a0,475,__GLeeLink_WGL_I3D_genlock,manual,1.0,GLee 5.4 source order: WGL link function 18 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f580,187,__GLeeLink_WGL_I3D_image_buffer,manual,1.0,GLee 5.4 source order: WGL link function 19 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f640,187,__GLeeLink_WGL_I3D_swap_frame_lock,manual,1.0,GLee 5.4 source order: WGL link function 20 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f700,10,__GLeeLink_WGL_NV_render_depth_texture,manual,1.0,GLee 5.4 source order: WGL link function 21 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f710,10,__GLeeLink_WGL_NV_render_texture_rectangle,manual,1.0,GLee 5.4 source order: WGL link function 22 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f720,10,__GLeeLink_WGL_ATI_pixel_format_float,manual,1.0,GLee 5.4 source order: WGL link function 23 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f730,10,__GLeeLink_WGL_NV_float_buffer,manual,1.0,GLee 5.4 source order: WGL link function 24 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f740,10,__GLeeLink_WGL_3DL_stereo_control,manual,1.0,GLee 5.4 source order: WGL link function 25 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f750,10,__GLeeLink_WGL_EXT_pixel_format_packed_float,manual,1.0,GLee 5.4 source order: WGL link function 26 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f760,10,__GLeeLink_WGL_EXT_framebuffer_sRGB,manual,1.0,GLee 5.4 source order: WGL link function 27 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f770,151,__GLeeLink_WGL_NV_present_video,manual,1.0,GLee 5.4 source order: WGL link function 28 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f810,259,__GLeeLink_WGL_NV_swap_group,manual,1.0,GLee 5.4 source order: WGL link function 29 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f920,223,__GLeeLink_WGL_NV_gpu_affinity,manual,1.0,GLee 5.4 source order: WGL link function 30 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fa00,187,__GLeeLink_WGL_EXT_display_color_table,manual,1.0,GLee 5.4 source order: WGL link function 31 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fac0,79,__GLeeLink_WGL_EXT_extensions_string,manual,1.0,GLee 5.4 source order: WGL link function 32 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fb10,115,__GLeeLink_WGL_EXT_swap_control,manual,1.0,GLee 5.4 source order: WGL link function 33 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fb90,115,__GLeeLink_WGL_NV_vertex_array_range,manual,1.0,GLee 5.4 source order: WGL link function 34 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fc10,259,__GLeeLink_WGL_OML_sync_control,manual,1.0,GLee 5.4 source order: WGL link function 35 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fd20,187,__GLeeLink_WGL_I3D_swap_frame_usage,manual,1.0,GLee 5.4 source order: WGL link function 36 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fde0,259,__GLeeLink_WGL_NV_video_output,manual,1.0,GLee 5.4 source order: WGL link function 37 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fef0,375,initWGLLoadFunctions,manual,1.0,GLee 5.4 source: fills the WGL link function table. After the WGL link functions.
+0x30070,34,__GLeeExtList_init,manual,1.0,GLee 5.4 source: sets the list fields to 0. After initWGLLoadFunctions.
+0x300a0,151,__GLeeExtList_clean,manual,1.0,GLee 5.4 source: frees each name and the list.
+0x30140,221,__GLeeExtList_add,manual,1.0,"GLee 5.4 source: malloc, realloc and strcpy of one extension name."
+0x30220,58,__GLeeGetExtStrPlat,manual,1.0,GLee 5.4 source: the WGL extension string of the current DC.
+0x30260,68,__GLeeWriteError,manual,1.0,GLee 5.4 source: copies the error text. After __GLeeGetExtStrPlat.
+0x302b0,44,__GLeeGetVersionNumber,manual,1.0,GLee 5.4 source: reads the version digits of a string. Before __GLeeGetExtensions.
 0x302e0,551,__GLeeGetExtensions,strings,1.0,"3 strings, jaccard 1.00"
 0x30510,81,__GLeeCheckExtension,manual,1.0,GLee 5.4 source: strcmp over the ExtensionList names up to its count. GLee init calls it 353 times.
 0x30570,175,__GLeeGetExtensionNumber,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 175 bytes, ELF 210 bytes."
@@ -2184,13 +2184,13 @@ rva,size,name,source,confidence,evidence
 0x49f00,633,circleintersectnormalblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 633 bytes, ELF 988 bytes."
 0x4a180,1220,circleintersectspecblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1220 bytes, ELF 2078 bytes."
 0x4a650,7368,area_buildsectormodel,callees,0.727,"callee jaccard 0.73, constants 0.39, size 7368"
-0x4c320,2660,,,,
-0x4cd90,2948,,,,
-0x4d920,213,,,,
-0x4da00,106,,,,
-0x4da70,117,,,,
-0x4daf0,114,,,,
-0x4db70,1209,,,,
+0x4c320,2660,tempmesh_optimize,manual,1.0,area_buildsectormodel calls it. It calls tempmesh_vertnormalequal and tempmesh_deletequad. ELF order: tempmesh_optimize comes before tempmesh_optimize2 and tempmesh_deletequad.
+0x4cd90,2948,tempmesh_optimize2,manual,1.0,area_interior_buildsectormodel calls it. It calls tempmesh_vertnormalequal and tempmesh_deletequad. ELF order: after tempmesh_optimize.
+0x4d920,213,tempmesh_deletequad,manual,1.0,Both tempmesh optimize functions call it. ELF order: after tempmesh_optimize2.
+0x4da00,106,area_getnextsectormesh,manual,1.0,Returns a free sector mesh slot. area_submitsectormodel calls it. ELF order: after area_sectorvertequal.
+0x4da70,117,area_setsectormesh,manual,1.0,ELF order: after area_getnextsectormesh.
+0x4daf0,114,area_removesectormodel,manual,1.0,Calls area_setsectormesh. ELF order: after area_setsectormesh.
+0x4db70,1209,area_submitsectormodel,manual,1.0,"Calls area_getnextsectormesh, area_setsectormesh and memcpy. area_resetsector calls it. ELF order: after area_removesectormodel."
 0x4e030,347,setupsounds,anchor,0.781,features
 0x4e190,4032,soundsimulation,anchor,0.882,features
 0x4f150,765,createsoundobject,callgraph,1.0,votes=16
@@ -2415,9 +2415,9 @@ rva,size,name,source,confidence,evidence
 0x9a330,211,item_removeitemlink,callgraph,0.667,votes=4
 0x9a410,1924,item_physicssimulation,callgraph,0.667,votes=4
 0x9aba0,1462,item_sphereintersect,callgraph,0.667,votes=4
-0x9b160,343,,,,
+0x9b160,343,addcityblock,manual,1.0,ELF order: addcitystreet and addcityblock lie between city_addintersection and createlevel. This one has 3 arguments.
 0x9b2c0,770,city_addintersection,callgraph,0.333,votes=2; diverge: addcitystreet
-0x9b5d0,363,,,,
+0x9b5d0,363,addcitystreet,manual,1.0,"Has the 5 arguments of the server addcitystreet (a, b, two widths, name). ELF order: between city_addintersection and createlevel."
 0x9b740,3489,createlevel,anchor,0.745,features
 0x9c4f0,206,leveledit_setup,callgraph,0.333,votes=2
 0x9c5c0,11835,leveleditor_loop,anchor,0.889,features
@@ -2581,10 +2581,10 @@ rva,size,name,source,confidence,evidence
 0xd3860,84,optionreadwritestring,anchor,0.927,features
 0xd38c0,2313,voiceoptionsmenu,anchor,0.835,features
 0xd41d0,365,createparticle,anchor,0.713,features
-0xd4340,123,,,,
-0xd43c0,578,,,,
-0xd4610,227,,,,
-0xd4700,70,,,,
+0xd4340,123,particletimetolive,manual,1.0,physicssimulation calls it. ELF order: after createparticle.
+0xd43c0,578,deleteparticle,manual,1.0,Moves the last particle into the free slot with memcpy. ELF order: after particletimetolive.
+0xd4610,227,particlesimulation,manual,1.0,Moves each particle by its speed. ELF order: after deleteparticle.
+0xd4700,70,physicssimulation,manual,1.0,"Calls objectsimulation, humansimulation, itemsimulation, bondsimulation2 and itemlogic. ELF order: after particlesimulation."
 0xd4750,654,createplayer,anchor,0.905,features
 0xd49e0,61,getnextplayer,callgraph,0.667,votes=4
 0xd4a20,342,deleteplayer,anchor,0.982,features
@@ -2727,7 +2727,7 @@ rva,size,name,source,confidence,evidence
 0xfc900,76,resetorientation,callgraph,1.0,votes=90
 0xfc950,220,rotatevector,callgraph,1.0,votes=30
 0xfca30,323,rotateorientation,callgraph,1.0,votes=202
-0xfcb80,115,,,,
+0xfcb80,115,rotatevector2d,manual,1.0,"cos and sin of the angle, then scalevector2d and scaleaddvectors2d. ELF order: the last 2D vector function before lineintersectplane."
 0xfcc00,265,lineintersectplane,callgraph,0.667,votes=4
 0xfcd10,297,lineintersectplanetwosided,callgraph,0.667,votes=4
 0xfce40,361,lineintersecttriangle,callgraph,0.333,votes=2
@@ -2828,9 +2828,9 @@ rva,size,name,source,confidence,evidence
 0x10add0,34,steam_getauthticket,order,0.8,"ELF link order: between steam_requestauthticket and main. Size 34 bytes, ELF 45 bytes."
 0x10ae00,1002,main,anchor,0.951,features
 0x10b1f0,146,getpaths,anchor,0.829,features
-0x10b290,575,,,,
+0x10b290,575,tempmesh_vertnormalequal,manual,1.0,"Compares several vertex arrays of the temporary mesh with a limit of 0.0001. Both tempmesh optimize functions call it. Size 575 bytes, ELF 913 bytes, the largest of the tempmesh compare functions."
 0x10b4d0,184,,,,
-0x10b590,288,,,,
+0x10b590,288,area_sectorvertequal,manual,1.0,Compares two vertices of a sector mesh with a limit of 0.0001. area_buildsectormodel calls it.
 0x10b6b0,282,calculatefriction,anchor,0.77,features
 0x10b7d0,29,flabs,callgraph,1.0,votes=6
 0x10b7f0,52,dotproduct,callgraph,1.0,votes=374

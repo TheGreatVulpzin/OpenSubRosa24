@@ -268,7 +268,7 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 | C8 | Editors (`leveleditor`, `buildingedit*`): tools for developers, last | 1 and more | 12 KB and more |
 | C9 | GLee library: a third-party OpenGL loader. The client has GLee 5.4 (source in `third_party/glee/`). The standalone client builds that source and fills the pointer slots with its lazy functions. No rewrite needed. See `docs/glee.md`. | 183 | 70 KB |
 | C10 | Other named functions. In progress (2026-11-15): block A (view, texture upload, small vectors), the image loaders, the sound buffers and starts, `loadsource`, `createwav`, `getonlineserverlist`, the settings keys, the sky colors, `buildframelist` and `frame_addmodel` are adopted. Left in block B: `checksystemmessages` and `getlanipaddress`. See [render](client/render.md), [textures](client/textures.md) and [audio](client/audio.md). | 153 | 70 KB |
-| C11 | Unnamed functions (540, 149 KB). 280 of them have less than 64 bytes. Each group names the ones it calls, while it is rewritten. | 540 | 149 KB |
+| C11 | Unnamed functions. Done 2026-11-17: 334 names from the Linux symbols in link order, the function bodies, the server names, the GLee source and stb_image. 12 wrong call graph names fixed. The named functions moved to the group of their topic. 15 functions (3 KB) stay unnamed, see `docs/client.md` ("Unnamed functions"). | 15 | 3 KB |
 
 How a group works (files, steps, tests, parallel branches): [`docs/client_rewrite.md`](client_rewrite.md). The list of every function with its group: `analysis/client_win/groups.csv` (`tools/re/client_groups.py`).
 

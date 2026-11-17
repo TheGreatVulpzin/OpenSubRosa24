@@ -30,8 +30,8 @@ rva,name,evidence
 0xfe360,enablesocketclient,Linux client symbol and matching calls
 0x79330,frame_drawvoiceicons,Linux client symbol and matching calls
 0xd38c0,voiceoptionsmenu,Linux client symbol and matching calls
-0xd4700,physicssimulation,"Runs the particle, object, human, item and bond simulations and the time to live functions in the order of the server tick."
-0x645e0,timetolive_records,"Counts down the time to live of each 0x5c byte record of a table and removes the ones that reach 0, as checksimulation calls it after the sprite simulations."
+0xd4700,physicssimulation,"Calls objectsimulation, humansimulation, itemsimulation, bondsimulation2 and itemlogic. ELF order: after particlesimulation."
+0x645e0,bullettimetolive,"ELF link order: between createbullet and bulletsimulation, two unnamed functions for two ELF symbols. checksimulation and dedicatedserverloop call it. The old row at 0xe26a0 had this name by a weak vote."
 0x107c40,drawbitmaptexcoord,"Draws a textured rectangle with a texture coordinate pair for each corner. Same shape as drawbitmap. The Linux client has drawbitmaptexcoord next to drawbitmap."
 0x107d80,drawlinebox,"Draws the outline of a rectangle with four smooth lines. The Linux client has drawlinebox after drawbitmaptexcoord."
 0x796f0,pointinsidefrustum,"Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes)."
@@ -90,3 +90,335 @@ rva,name,evidence
 0x105b80,formattextbox,"Wraps a text into lines that fit a width and writes the line ends, as formattextbox in the Linux client."
 0x105dc0,drawtextbox,"Draws a wrapped text in a box with formattextbox, as drawtextbox in the Linux client."
 0x104490,menu_textbox_putchar,"menutextbox calls it with each typed letter. Comes after menutextbox and before getinputletter, as menu_textbox_putchar in the Linux client (793 bytes there, 553 here). The name gettextinputposition belongs to 0x1059a0."
+0x1000,stbi_failure_reason,stb_image: returns the failure text that e() keeps. First function of the stb_image block.
+0x1010,stbi_image_free,stb_image: frees an image. ELF order: after stbi_failure_reason.
+0x1030,stbi_register_loader,"stb_image: adds a loader to the first free slot of the loader list, at most once."
+0x10a0,stbi_load,"stb_image: fopen, stbi_load_from_file, fclose."
+0x1120,stbi_load_from_file,"stb_image: tries the test and load function of each format on a file (png, bmp, psd, tga, hdr)."
+0x1300,stbi_load_from_memory,stb_image: tries the test and load function of each format on a memory buffer.
+0x1510,stbi_loadf,"stb_image: fopen, stbi_loadf_from_file, fclose."
+0x1580,stbi_loadf_from_file,"stb_image: hdr_load, or stbi_load_from_file and ldr_to_hdr."
+0x1630,stbi_loadf_from_memory,"stb_image: hdr_load from memory, or stbi_load_from_memory and ldr_to_hdr."
+0x16f0,stbi_is_hdr_from_memory,stb_image: the hdr test on a memory buffer.
+0x1710,stbi_is_hdr,"stb_image: fopen, stbi_is_hdr_from_file, fclose."
+0x1760,stbi_is_hdr_from_file,stb_image: the hdr test on a file.
+0x1780,stbi_hdr_to_ldr_gamma,stb_image: writes 1 / gamma into the value that hdr_to_ldr uses as the pow exponent.
+0x17a0,stbi_hdr_to_ldr_scale,stb_image: writes the scale that hdr_to_ldr uses. ELF order: after stbi_hdr_to_ldr_gamma.
+0x17c0,stbi_ldr_to_hdr_gamma,stb_image: writes the gamma that ldr_to_hdr uses as the pow exponent.
+0x17d0,stbi_ldr_to_hdr_scale,stb_image: writes the scale that ldr_to_hdr multiplies by.
+0x17e0,ldr_to_hdr,"stb_image: bytes to floats with pow(x / 255, gamma) * scale."
+0x1930,hdr_to_ldr,"stb_image: floats to bytes with pow(x * scale, 1 / gamma) * 255 + 0.5, clamped to 255."
+0x1af0,stbi_jpeg_load_from_file,stb_image: load_jpeg_image on a file context. stbi_jpeg_load calls it.
+0x1b50,start_file,stb_image: sets the file of the context. ELF start_file.
+0x2300,stbi_get8u,stb_image: returns stbi_get8. ELF stbi_get8u.
+0x2320,stbi_get8,"stb_image: fgetc from the file, or the next byte of the memory buffer. ELF stbi_get8."
+0x3b10,stbi_skip,stb_image: moves the read place of a context by n bytes.
+0x4690,resample_row_1,"stb_image: the first of the five jpeg resample functions, same order as the ELF."
+0x46a0,resample_row_v_2,stb_image: jpeg vertical resample by 2. ELF order: after resample_row_1.
+0x46f0,resample_row_h_2,stb_image: jpeg horizontal resample by 2. ELF order: after resample_row_v_2.
+0x47f0,resample_row_hv_2,stb_image: jpeg resample by 2 on both axes. ELF order: after resample_row_h_2.
+0x48e0,resample_row_generic,stb_image: jpeg resample by any factor. ELF order: before YCbCr_to_RGB_row.
+0x4b40,stbi_jpeg_load,"stb_image: fopen, stbi_jpeg_load_from_file, fclose."
+0x4ba0,stbi_jpeg_load_from_memory,stb_image: load_jpeg_image on a memory context.
+0x4c00,start_mem,"stb_image: no file, the buffer start and end. ELF start_mem."
+0x4c30,stbi_jpeg_test_file,"stb_image: decode_jpeg_header on a file, then fseek back."
+0x4cb0,stbi_jpeg_test_memory,stb_image: decode_jpeg_header on a memory context.
+0x4d00,stbi_zlib_decode_malloc_guesssize,"stb_image: allocates the first output size, runs do_zlib, frees the buffer on failure."
+0x4db0,do_zlib,stb_image: sets the zlib buffers and runs parse_zlib. ELF order: next to parse_zlib.
+0x5210,stbi_bit_reverse,stb_image: bitreverse16 shifted to the bit count. ELF order: after bitreverse16.
+0x5dd0,stbi_zlib_decode_malloc,stb_image: the zlib decode with an output size guess.
+0x5df0,stbi_zlib_decode_buffer,stb_image: the zlib decode into a buffer of the caller.
+0x5e60,stbi_zlib_decode_noheader_malloc,"stb_image: the zlib decode without a header, into a new buffer."
+0x5f10,stbi_zlib_decode_noheader_buffer,"stb_image: the zlib decode without a header, into a buffer of the caller."
+0x5f80,stbi_png_load_from_file,stb_image: do_png on a file context. stbi_png_load calls it.
+0x7000,stbi_get32,"stb_image: two get16, high half first."
+0x8110,stbi_png_load,"stb_image: fopen, stbi_png_load_from_file, fclose."
+0x8170,stbi_png_load_from_memory,stb_image: do_png on a memory context.
+0x81b0,stbi_png_test_file,"stb_image: parse_png_file in test mode on a file, then fseek back."
+0x8210,stbi_png_test_memory,stb_image: parse_png_file in test mode on a memory context.
+0x8240,stbi_png_info,"stb_image: parse_png_file in header mode, then writes x, y and the component count."
+0x82e0,stbi_bmp_test_file,"stb_image: bmp_test on a file, then fseek back."
+0x8330,bmp_test,"stb_image: tests the BM mark and a header size of 12, 40, 56 or 108."
+0x83d0,get16le,"stb_image: two stbi_get8, low byte first. ELF get16le."
+0x8400,stbi_get32le,"stb_image: two get16le, low half first."
+0x8430,stbi_bmp_test_memory,stb_image: bmp_test on a memory context.
+0x8460,stbi_bmp_load,"stb_image: fopen, stbi_bmp_load_from_file, fclose."
+0x84c0,stbi_bmp_load_from_file,stb_image: bmp_load on a file context.
+0x9340,high_bit,stb_image: the index of the highest set bit. bmp_load uses it.
+0x93e0,bitcount,stb_image: the count of set bits. ELF order: after high_bit.
+0x9450,shiftsigned,stb_image: shifts and scales a color field. ELF order: after bitcount.
+0x94b0,stbi_bmp_load_from_memory,stb_image: bmp_load on a memory context.
+0x94f0,stbi_tga_test_file,"stb_image: tga_test on a file, then fseek back."
+0x9540,tga_test,"stb_image: tests the tga header (color map, image type 1, 2, 3, 9, 10, 11)."
+0x9650,stbi_tga_test_memory,stb_image: tga_test on a memory context.
+0x9680,stbi_tga_load,"stb_image: fopen, stbi_tga_load_from_file, fclose."
+0x96e0,stbi_tga_load_from_file,stb_image: tga_load on a file context.
+0x9720,tga_load,stb_image: the tga loader. The tga load functions call it.
+0x9d10,stbi_getn,"stb_image: fread from the file, or a copy from the memory buffer."
+0x9d60,stbi_tga_load_from_memory,stb_image: tga_load on a memory context.
+0x9da0,stbi_psd_test_file,"stb_image: psd_test on a file, then fseek back."
+0x9df0,psd_test,stb_image: tests the 8BPS mark.
+0x9e20,stbi_psd_test_memory,stb_image: psd_test on a memory context.
+0x9e50,stbi_psd_load,"stb_image: fopen, stbi_psd_load_from_file, fclose."
+0x9eb0,stbi_psd_load_from_file,stb_image: psd_load on a file context.
+0xa330,stbi_psd_load_from_memory,stb_image: psd_load on a memory context.
+0xa370,stbi_hdr_test_memory,stb_image: hdr_test on a memory context.
+0xa3a0,hdr_test,stb_image: tests the hdr mark.
+0xa400,stbi_hdr_test_file,"stb_image: hdr_test on a file, then fseek back."
+0xa450,stbi_hdr_load_from_file,stb_image: hdr_load on a file context.
+0xa9b0,hdr_gettoken,stb_image: reads one header line of at most 1023 bytes up to the end of the file.
+0xaa60,hdr_convert,stb_image: an RGBE pixel to floats with ldexp.
+0xab90,stbi_hdr_load_from_memory,stb_image: hdr_load on a memory context.
+0xac50,outfile,"stb_image_write: fopen, writefv of the header, write_pixels, fclose."
+0x1e370,__GLeeLink_GL_VERSION_1_2,"GLee 5.4 source: the first GL link function, before __GLeeLink_GL_ARB_imaging and __GLeeLink_GL_VERSION_1_3."
+0x1e900,__GLeeLink_GL_ARB_imaging,GLee 5.4 source: the empty link function between __GLeeLink_GL_VERSION_1_2 and __GLeeLink_GL_VERSION_1_3. Size 10 bytes.
+0x1e910,__GLeeLink_GL_VERSION_1_3,GLee 5.4 source: the link function before __GLeeLink_GL_VERSION_1_4.
+0x2df70,initGLLoadFunctions,GLee 5.4 source: fills the GL link function table. Before the WGL link functions.
+0x2ec10,__GLeeLink_WGL_ARB_buffer_region,GLee 5.4 source order: WGL link function 1 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ecd0,__GLeeLink_WGL_ARB_multisample,GLee 5.4 source order: WGL link function 2 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ece0,__GLeeLink_WGL_ARB_extensions_string,GLee 5.4 source order: WGL link function 3 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ed30,__GLeeLink_WGL_ARB_pixel_format,GLee 5.4 source order: WGL link function 4 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2edd0,__GLeeLink_WGL_ARB_make_current_read,GLee 5.4 source order: WGL link function 5 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ee50,__GLeeLink_WGL_ARB_pbuffer,GLee 5.4 source order: WGL link function 6 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2ef30,__GLeeLink_WGL_ARB_render_texture,GLee 5.4 source order: WGL link function 7 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2efd0,__GLeeLink_WGL_ARB_pixel_format_float,GLee 5.4 source order: WGL link function 8 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2efe0,__GLeeLink_WGL_ARB_create_context,GLee 5.4 source order: WGL link function 9 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f030,__GLeeLink_WGL_EXT_make_current_read,GLee 5.4 source order: WGL link function 10 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f0b0,__GLeeLink_WGL_EXT_pixel_format,GLee 5.4 source order: WGL link function 11 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f150,__GLeeLink_WGL_EXT_pbuffer,GLee 5.4 source order: WGL link function 12 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f230,__GLeeLink_WGL_EXT_depth_float,GLee 5.4 source order: WGL link function 13 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f240,__GLeeLink_WGL_3DFX_multisample,GLee 5.4 source order: WGL link function 14 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f250,__GLeeLink_WGL_EXT_multisample,GLee 5.4 source order: WGL link function 15 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f260,__GLeeLink_WGL_I3D_digital_video_control,GLee 5.4 source order: WGL link function 16 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f2e0,__GLeeLink_WGL_I3D_gamma,GLee 5.4 source order: WGL link function 17 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f3a0,__GLeeLink_WGL_I3D_genlock,GLee 5.4 source order: WGL link function 18 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f580,__GLeeLink_WGL_I3D_image_buffer,GLee 5.4 source order: WGL link function 19 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f640,__GLeeLink_WGL_I3D_swap_frame_lock,GLee 5.4 source order: WGL link function 20 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f700,__GLeeLink_WGL_NV_render_depth_texture,GLee 5.4 source order: WGL link function 21 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f710,__GLeeLink_WGL_NV_render_texture_rectangle,GLee 5.4 source order: WGL link function 22 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f720,__GLeeLink_WGL_ATI_pixel_format_float,GLee 5.4 source order: WGL link function 23 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f730,__GLeeLink_WGL_NV_float_buffer,GLee 5.4 source order: WGL link function 24 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f740,__GLeeLink_WGL_3DL_stereo_control,GLee 5.4 source order: WGL link function 25 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f750,__GLeeLink_WGL_EXT_pixel_format_packed_float,GLee 5.4 source order: WGL link function 26 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f760,__GLeeLink_WGL_EXT_framebuffer_sRGB,GLee 5.4 source order: WGL link function 27 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f770,__GLeeLink_WGL_NV_present_video,GLee 5.4 source order: WGL link function 28 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f810,__GLeeLink_WGL_NV_swap_group,GLee 5.4 source order: WGL link function 29 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2f920,__GLeeLink_WGL_NV_gpu_affinity,GLee 5.4 source order: WGL link function 30 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fa00,__GLeeLink_WGL_EXT_display_color_table,GLee 5.4 source order: WGL link function 31 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fac0,__GLeeLink_WGL_EXT_extensions_string,GLee 5.4 source order: WGL link function 32 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fb10,__GLeeLink_WGL_EXT_swap_control,GLee 5.4 source order: WGL link function 33 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fb90,__GLeeLink_WGL_NV_vertex_array_range,GLee 5.4 source order: WGL link function 34 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fc10,__GLeeLink_WGL_OML_sync_control,GLee 5.4 source order: WGL link function 35 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fd20,__GLeeLink_WGL_I3D_swap_frame_usage,GLee 5.4 source order: WGL link function 36 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fde0,__GLeeLink_WGL_NV_video_output,GLee 5.4 source order: WGL link function 37 of 37 between initGLLoadFunctions and initWGLLoadFunctions. The empty source functions match the 10 byte ones.
+0x2fef0,initWGLLoadFunctions,GLee 5.4 source: fills the WGL link function table. After the WGL link functions.
+0x30070,__GLeeExtList_init,GLee 5.4 source: sets the list fields to 0. After initWGLLoadFunctions.
+0x300a0,__GLeeExtList_clean,GLee 5.4 source: frees each name and the list.
+0x30140,__GLeeExtList_add,"GLee 5.4 source: malloc, realloc and strcpy of one extension name."
+0x30220,__GLeeGetExtStrPlat,GLee 5.4 source: the WGL extension string of the current DC.
+0x30260,__GLeeWriteError,GLee 5.4 source: copies the error text. After __GLeeGetExtStrPlat.
+0x302b0,__GLeeGetVersionNumber,GLee 5.4 source: reads the version digits of a string. Before __GLeeGetExtensions.
+0x30510,__GLeeCheckExtension,GLee 5.4 source: strcmp over the ExtensionList names up to its count. GLee init calls it 353 times.
+0x30570,__GLeeGetExtensionNumber,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 175 bytes, ELF 210 bytes."
+0x30620,GLeeGetExtStrGLX,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 10 bytes, ELF 11 bytes."
+0x30630,GLeeGetExtStrGL,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 16 bytes, ELF 16 bytes."
+0x30640,GLeeGetErrorString,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 10 bytes, ELF 11 bytes."
+0x30650,GLeeForceLink,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 199 bytes, ELF 249 bytes."
+0x30720,GLeeEnabled,"GLee 5.4 source: calls GLeeInit when GLee is not ready, then returns the flag."
+0x34010,saveaccountsserver,"ELF link order: between createclientaccount and loadaccountsserver. Size 438 bytes, ELF 797 bytes."
+0x345d0,loadaccountsclient,"ELF link order: between saveaccountsclient and server_writelogfile. Size 362 bytes, ELF 492 bytes."
+0x35fa0,addplayerwaypoint,"ELF link order: between angulardistance and ai_playercar. Size 149 bytes, ELF 270 bytes."
+0x38760,area_getblocklink,"ELF link order: between area_getblock and area_deleteblock. Size 445 bytes, ELF 569 bytes."
+0x38920,area_getblockmaterial,"ELF link order: between area_getblock and area_deleteblock. Size 361 bytes, ELF 489 bytes."
+0x38a90,area_getblocktexture,"ELF link order: between area_getblock and area_deleteblock. Size 364 bytes, ELF 493 bytes."
+0x39370,area_resetsector,"ELF link order: between area_marksector and area_createchunk. Size 137 bytes, ELF 168 bytes."
+0x3d510,addbeziersurfacetexture,"ELF link order: between addbeziersurface and tesselatebezier. Size 1280 bytes, ELF 1638 bytes."
+0x3e020,area_block_insertquad,"ELF link order: between area_copyrotateblock and area_block_createbuildinginterior. Size 191 bytes, ELF 281 bytes."
+0x42050,area_block_addfloor,"ELF link order: between area_block_addfloorceil and area_block_addwall. Size 140 bytes, ELF 190 bytes."
+0x420e0,area_block_addceil,"ELF link order: between area_block_addfloorceil and area_block_addwall. Size 140 bytes, ELF 190 bytes."
+0x42220,area_block_addwindowvertical_exterior,"ELF link order: between area_block_addwall and area_block_addwindow. Size 375 bytes, ELF 495 bytes."
+0x423a0,area_block_addwindowvertical_interior,"ELF link order: between area_block_addwall and area_block_addwindow. Size 739 bytes, ELF 931 bytes."
+0x42690,area_block_addwindowhorizontal_exterior,"ELF link order: between area_block_addwall and area_block_addwindow. Size 367 bytes, ELF 476 bytes."
+0x42800,area_block_addwindowhorizontal_interior,"ELF link order: between area_block_addwall and area_block_addwindow. Size 755 bytes, ELF 910 bytes."
+0x43780,area_interior_createblock,ELF order: the first area_interior function after area_block_rotatesurface. The old name building_iswindow was a weak vote.
+0x43a80,area_interior_setblock,ELF order: after area_interior_createblock. The server call list of area_interior_setblock aligns with it.
+0x43e20,area_interior_getblock,"Reads the block at x, y, z of an area, 0 outside it. ELF order: after area_interior_setobject."
+0x43f80,area_interior_getblocklink,ELF order: after area_interior_getblock. The server call list aligns with it.
+0x44140,area_interior_getblocktexture,"ELF order: after area_interior_getblocklink, before area_interior_buildsectormodel."
+0x47de0,sphereintersectarea,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 3599 bytes, ELF 4643 bytes."
+0x48bf0,sphereintersectnormalblock,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1036 bytes, ELF 1513 bytes."
+0x49000,sphereintersectspecblock,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1176 bytes, ELF 1838 bytes."
+0x494a0,circleintersectarea,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 2650 bytes, ELF 3656 bytes."
+0x49f00,circleintersectnormalblock,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 633 bytes, ELF 988 bytes."
+0x4a180,circleintersectspecblock,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1220 bytes, ELF 2078 bytes."
+0x4c320,tempmesh_optimize,area_buildsectormodel calls it. It calls tempmesh_vertnormalequal and tempmesh_deletequad. ELF order: tempmesh_optimize comes before tempmesh_optimize2 and tempmesh_deletequad.
+0x4cd90,tempmesh_optimize2,area_interior_buildsectormodel calls it. It calls tempmesh_vertnormalequal and tempmesh_deletequad. ELF order: after tempmesh_optimize.
+0x4d920,tempmesh_deletequad,Both tempmesh optimize functions call it. ELF order: after tempmesh_optimize2.
+0x4da00,area_getnextsectormesh,Returns a free sector mesh slot. area_submitsectormodel calls it. ELF order: after area_sectorvertequal.
+0x4da70,area_setsectormesh,ELF order: after area_getnextsectormesh.
+0x4daf0,area_removesectormodel,Calls area_setsectormesh. ELF order: after area_setsectormesh.
+0x4db70,area_submitsectormodel,"Calls area_getnextsectormesh, area_setsectormesh and memcpy. area_resetsector calls it. ELF order: after area_removesectormodel."
+0x501b0,bondtimetolive,"ELF link order: between createbond and bondsimulation2. Size 123 bytes, ELF 144 bytes."
+0x50230,deletebond,"ELF link order: between createbond and bondsimulation2. Size 1229 bytes, ELF 2002 bytes."
+0x55bb0,checkbonds,"ELF link order: between bondsimulation2 and setupbuildingtypes. Size 5 bytes, ELF 6 bytes."
+0x58940,building_iswindow,Tests a wall kind 1 to 8 (and 9 with the last flag) of a floor plan cell. building_buildfloorplan calls it. ELF order: after building_buildfloorplan.
+0x58a70,building_addgaragedoor,Sets or clears the two garage door objects of a building and marks their sectors. eventsimulation calls it. ELF order: after building_iswindow.
+0x5c040,building_checkeditor,"ELF link order: between building_editorloop and buildingedit_addblock. Size 1813 bytes, ELF 2718 bytes."
+0x5cef0,buildingedit_deleteblock,"ELF link order: between buildingedit_addblock and buildingedit_blockmenu. Size 595 bytes, ELF 1275 bytes."
+0x5eb40,buildingedit_removetexture,"ELF link order: between buildingedit_texturemenu and building_reloadtextures. Size 1076 bytes, ELF 1927 bytes."
+0x5ef80,buildingedit_inserttexture,"ELF link order: between buildingedit_texturemenu and building_reloadtextures. Size 903 bytes, ELF 1560 bytes."
+0x60940,buildingeditor_draw_sblock,"ELF link order: between buildingeditor_renderblock2 and building_save. Size 509 bytes, ELF 758 bytes."
+0x61fd0,building_setupbuild,ELF link order: between building_load and building_setupfloorplannewer. building_editorloop and createlevel call it. The old row at 0x63470 had this name by a weak vote.
+0x63470,building_rotatefloorplan,"ELF link order: after building_setupfloorplannewer, before setupbullettypes. Size 3218 bytes, ELF 6362 bytes."
+0x64650,deletebullet,"ELF link order: after bullettimetolive, before bulletsimulation. The old row at 0xe2720 had this name by a weak vote."
+0x65330,createcityobject,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 135 bytes, ELF 280 bytes."
+0x653c0,getnextcityobject,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 58 bytes, ELF 77 bytes."
+0x65400,deletecityobject,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 41 bytes, ELF 66 bytes."
+0x66210,sphereintersectcityobjecttype,"ELF link order: between lineintersectcityobjecttype and city_createelevator. Size 984 bytes, ELF 1672 bytes."
+0x665f0,cityobject_simulation,"ELF link order: between lineintersectcityobjecttype and city_createelevator. Size 10 bytes, ELF 6 bytes."
+0x685a0,packunitvector,"ELF link order: between clientsend and unpackunitvector. Size 409 bytes, ELF 482 bytes."
+0x68740,unpackunitvector,"Inverse of the server packunitvector: axis index and sign in word 0, two ratios with a sign bit, then normalizevector."
+0x68830,packorientation,"ELF link order: between unpackunitvector and packangle. Size 918 bytes, ELF 1004 bytes."
+0x68bd0,unpackorientation,"ELF link order: between unpackunitvector and packangle. Size 579 bytes, ELF 652 bytes."
+0x68e20,packangle,"Same body as the server packangle: 2*pi constant, sign bit, pbitwrite."
+0x68ec0,unpackangle,"Same body as the server unpackangle: pbitread, 2*pi constant."
+0x68f40,packposition,"Three cs_pwrite calls of 4 bytes, as the server packposition (cs_pwrite inline there)."
+0x68f80,unpackposition,Three cs_pread calls of 4 bytes: the inverse of packposition. ELF unpackposition.
+0x68fc0,packpositiondelta,"packscalar of a[i] - b[i] for 3 axes, as the server packpositiondelta."
+0x69010,unpackpositiondelta,"unpackscalar for 3 axes, then out[i] = base[i] + value, as the server unpackpositiondelta."
+0x69060,packscalar,"Same body as the server packscalar: |x| scaled by half range over the limit, sign bit, pbitwrite."
+0x69110,unpackscalar,"pbitread, then the inverse scale of packscalar. ELF unpackscalar."
+0x6d7d0,newspaper_addline,"ELF link order: between createmessage and drawcircle. Size 131 bytes, ELF 279 bytes."
+0x6f6e0,playersellstock,Sells the shares of a player at 0.95 of the price (0.98 in game type 3). ELF order: after playerbuystock.
+0x6f990,accountdeathtax,Takes 5 percent of the account cash above 10000. humansimulation calls it. ELF order: between playerdeathtax and playerteamkilltax. The old row at 0xa4260 had this name by a weak vote.
+0x71e60,createevent_bullet,Writes an event record. ELF link order: before createevent_bullethit. The old name getrandomvector2d was a weak vote.
+0x720f0,createevent_createobject,Event type 3 with the object index and two object fields. ELF order: between createevent_message and createevent_updateobject.
+0x72780,createevent_sound,"Event type 9 with a sound, a place and two values. ELF order: between createevent_updateplayer_finance and createevent_updatedoor."
+0x728b0,createevent_updatescenario,Event type 11 with the round state. ELF order: between createevent_updatedoor and createevent_updatemission.
+0x72b50,createevent_updatestocks,Event type 13 with the 5 stock prices. ELF order: after createevent_updatemission.
+0x72c40,createevent_updatecarmarket,Event type 14 with a car market slot. ELF order: after createevent_updatestocks.
+0x72d10,createevent_updateblock_interior,Event type 15 with the block place and a value. ELF order: before createevent_updateblock_quad.
+0x79a90,testtimer,"ELF link order: between boxinsidefrustum and resetgame. Size 49 bytes, ELF 77 bytes."
+0x7d090,reloadopengl,"ELF link order: between reactivategame and movecamera. Size 74 bytes, ELF 90 bytes."
+0x7e4f0,setupplayermenus,"ELF link order: between newspaper_load and playermenu. Size 5 bytes, ELF 6 bytes."
+0x7e730,drawplayermenu,"ELF link order: between playermenu and playermenu_team. Size 46 bytes, ELF 62 bytes."
+0x7e970,drawplayermenu_team,"ELF link order: between playermenu_team and playermenu_spawn. Size 28 bytes, ELF 25 bytes."
+0x85980,deletehuman,Frees a human: unlinks it from its player and removes its item links. ELF order: after getnexthuman.
+0x89de0,setuphumanangles,"ELF link order: between humansimulationclient and lineintersecthuman. Size 40 bytes, ELF 53 bytes."
+0x89f50,human_applydamage,"ELF link order: between lineintersecthuman and human_calculatelegangles. Size 184 bytes, ELF 211 bytes."
+0x8a010,human_calculateanglesobject,"ELF link order: between lineintersecthuman and human_calculatelegangles. Size 8 bytes, ELF 9 bytes."
+0x90be0,human_walksimulation2,"ELF link order: between createjointbond and getinputs. Size 5 bytes, ELF 9 bytes."
+0x94900,sphereintersectpoint,"ELF link order: between sphereintersectline and lineintersectsphere. Size 142 bytes, ELF 165 bytes."
+0x97130,itemtimetolive,"ELF link order: between getnextitem and itemsimulation. Size 139 bytes, ELF 171 bytes."
+0x971c0,deleteitem,"ELF link order: between getnextitem and itemsimulation. Size 396 bytes, ELF 519 bytes."
+0x99890,setitempositionhuman,"ELF link order: between itemsimulationclient and linkitem. Size 461 bytes, ELF 679 bytes."
+0x99a60,item_billvalue,"ELF link order: between itemsimulationclient and linkitem. Size 105 bytes, ELF 117 bytes."
+0x99ad0,item_addbill,"ELF link order: between itemsimulationclient and linkitem. Size 356 bytes, ELF 512 bytes."
+0x99c40,item_removebill,"ELF link order: between itemsimulationclient and linkitem. Size 272 bytes, ELF 374 bytes."
+0x9a030,linkitemtoitem,"ELF link order: between linkitem and item_removehumanlink. Size 342 bytes, ELF 483 bytes."
+0x9a190,item_addhumanlink,"ELF link order: between linkitem and item_removehumanlink. Size 137 bytes, ELF 274 bytes."
+0x9b160,addcityblock,ELF order: addcitystreet and addcityblock lie between city_addintersection and createlevel. This one has 3 arguments.
+0x9b5d0,addcitystreet,"Has the 5 arguments of the server addcitystreet (a, b, two widths, name). ELF order: between city_addintersection and createlevel."
+0x9f400,level_checkeditor,"ELF link order: between leveleditor_loop and leveleditor_save. Size 3746 bytes, ELF 5838 bytes."
+0xa02b0,leveleditor_addintersection,"ELF link order: between leveleditor_loop and leveleditor_save. Size 152 bytes, ELF 242 bytes."
+0xa0350,leveleditor_getintersection,"ELF link order: between leveleditor_loop and leveleditor_save. Size 134 bytes, ELF 190 bytes."
+0xa03e0,leveleditor_deleteintersection,"ELF link order: between leveleditor_loop and leveleditor_save. Size 260 bytes, ELF 435 bytes."
+0xa04f0,leveleditor_addstreet,"ELF link order: between leveleditor_loop and leveleditor_save. Size 502 bytes, ELF 985 bytes."
+0xa06f0,leveleditor_deletestreet,"ELF link order: between leveleditor_loop and leveleditor_save. Size 77 bytes, ELF 176 bytes."
+0xa1100,circleintersectlevel,"ELF link order: between lineintersectlevel and sphereintersectlevel. Size 274 bytes, ELF 296 bytes."
+0xa22a0,circleintersectlandscape,"ELF link order: between lineintersectlandscape and sphereintersectlandscape. Size 1294 bytes, ELF 1528 bytes."
+0xa3fe0,logicsimulation_driving,"ELF link order: between sprintf_comma and pointinsidebase. Size 357 bytes, ELF 457 bytes."
+0xa4150,addpointstoteam,"ELF link order: between sprintf_comma and pointinsidebase. Size 41 bytes, ELF 59 bytes."
+0xa4260,pointinsidebuilding,"Tests a point against the box of a building with a margin, as the server pointinsidebuilding. ELF order: between pointinsidebase and pointinsidebasesafe, same size as both."
+0xa4420,pointinsidecheckpoint,Tests a point against the x and z box of a checkpoint. ELF order: after pointinsidebasesafe.
+0xa4980,logic_splitteamcash,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 209 bytes, ELF 236 bytes."
+0xa4a60,logic_addteamcash,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 536 bytes, ELF 849 bytes."
+0xa4c80,logic_teammissioncomplete,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 1205 bytes, ELF 1918 bytes."
+0xad5d0,createtypemodel,Builds the model of an object type (records of 0x828c bytes). ELF link order: between loadmodelcsm and rendermodelnormals. The old name createbulletmodel was a weak vote.
+0xaef30,addhalfboxtomodel,"ELF link order: between addboxtomodel and addcylindertomodel. Size 524 bytes, ELF 780 bytes."
+0xaf7c0,createbulletmodel,Reads the bullet type record (0x18 bytes) of its second argument. ELF link order: between addcylindertomodel and createsunglassmodel.
+0xb06c0,createmodel_cityobject_desk,"ELF link order: between createmodel_cityobject_type and createmodel_cityobject_elevator. Size 444 bytes, ELF 499 bytes."
+0xb1380,model_extrudequadface,"ELF link order: between addcockpittomodel and model_extrudequad2. Size 3221 bytes, ELF 4402 bytes."
+0xb2020,model_extrudeeye,"ELF link order: between addcockpittomodel and model_extrudequad2. Size 1548 bytes, ELF 2346 bytes."
+0xb2ad0,addboxtomodelquad,"ELF link order: between model_extrudequad2 and model_extrudequad. Size 433 bytes, ELF 603 bytes."
+0xb3080,model_deletequad,"ELF link order: between model_extrudequadscale and model_settritexcoord. Size 199 bytes, ELF 331 bytes."
+0xb7aa0,model_extrudeeye2,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 1543 bytes, ELF 2372 bytes."
+0xb80b0,createheadmodel2,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 11537 bytes, ELF 17422 bytes."
+0xbadd0,model_addvertex,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 250 bytes, ELF 293 bytes."
+0xbaed0,tesselatebeziertriangle,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 533 bytes, ELF 1114 bytes."
+0xbb0f0,createheadmodel3,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 5071 bytes, ELF 7467 bytes."
+0xbed20,sethumanmodelvertface,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 84 bytes, ELF 196 bytes."
+0xbed80,addwaisttomodel,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 1238 bytes, ELF 1815 bytes."
+0xbf260,createcellphonemodel,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 1460 bytes, ELF 2129 bytes."
+0xbf820,createkeymodel,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 962 bytes, ELF 1438 bytes."
+0xbfbf0,model_createcash,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 665 bytes, ELF 1228 bytes."
+0xc1dc0,unpackobjectpacket,"ELF link order: between fround and client_simulation. Size 3567 bytes, ELF 5935 bytes."
+0xc3320,packobjectpacket2,"ELF link order: between net_calcdistancefactor and serp. Size 3736 bytes, ELF 5366 bytes."
+0xc41c0,packobjectpacket,"ELF link order: between net_calcdistancefactor and serp. Size 4037 bytes, ELF 5653 bytes."
+0xc5190,lerp,"ELF link order: between net_calcdistancefactor and serp. Size 32 bytes, ELF 56 bytes."
+0xc56a0,getrandomvector2d,ELF link order: between getrandomfloat and getrandomvector3d.
+0xc5770,getrandomint,"ELF link order: between getrandomvector3d and createobject. Size 15 bytes, ELF 16 bytes."
+0xc6f60,objecttimetolive,"ELF link order: between getnextobject and addobjectrotation. Size 139 bytes, ELF 171 bytes."
+0xc6ff0,deleteobject,"ELF link order: between getnextobject and addobjectrotation. Size 241 bytes, ELF 316 bytes."
+0xc71e0,getobjectrotation,"ELF link order: between addobjectrotation and objectsimulation. Size 493 bytes, ELF 759 bytes."
+0xc73d0,getobjectrotation2,"ELF link order: between addobjectrotation and objectsimulation. Size 444 bytes, ELF 708 bytes."
+0xc7590,getobjectrotation3,"ELF link order: between addobjectrotation and objectsimulation. Size 785 bytes, ELF 1173 bytes."
+0xced70,sphereintersectobject,"ELF link order: between lineintersectobject and buildsomeshit. Size 1381 bytes, ELF 1948 bytes."
+0xd12e0,objectwheelcollision,"ELF link order: between objectwheelcollision2 and objectsimulation_car. Size 882 bytes, ELF 1356 bytes."
+0xd4340,particletimetolive,physicssimulation calls it. ELF order: after createparticle.
+0xd43c0,deleteparticle,Moves the last particle into the free slot with memcpy. ELF order: after particletimetolive.
+0xd4610,particlesimulation,Moves each particle by its speed. ELF order: after deleteparticle.
+0xd5380,player_addaction_chat,"ELF link order: between fixplayername and player_addaction_item. Size 264 bytes, ELF 480 bytes."
+0xd5490,player_addaction_menu,"ELF link order: between fixplayername and player_addaction_item. Size 183 bytes, ELF 329 bytes."
+0xd5610,initplayticket,"ELF link order: between player_addaction_item and updateplayticket. Size 55 bytes, ELF 56 bytes."
+0xd5660,getplayticket,"ELF link order: between updateplayticket and setupprogramobjects. Size 33 bytes, ELF 28 bytes."
+0xd6a30,quaterniontoorientation,"ELF link order: between orientationtoquaternion and multiplyquaternion. Size 277 bytes, ELF 573 bytes."
+0xd9fa0,render_raycast2,Calls raycast_addsector. ELF order: after landscape_generatedetail.
+0xdaa90,raycast_addsector,Marks the sector of a block of an area as seen. ELF order: after render_raycast2.
+0xdc1d0,glstatediffuse,"ELF link order: between glstateshadowtwoside and glstatenormal. Size 137 bytes, ELF 151 bytes."
+0xdc260,glstateambient,"ELF link order: between glstateshadowtwoside and glstatenormal. Size 137 bytes, ELF 151 bytes."
+0xdc780,createscenario_coop,"ELF link order: between createscenario_mission and createscenario_driving. Size 5 bytes, ELF 9 bytes."
+0xdc8d0,scenario_setmissioninactive,"ELF link order: between scenario_isseekmission and scenario_createguards. Size 437 bytes, ELF 674 bytes."
+0xddad0,scenario_createaicar,"ELF link order: between scenario_createcar and scenario_armhuman. Size 5 bytes, ELF 15 bytes."
+0xddae0,scenario_addcheckpoint,"ELF link order: between scenario_createcar and scenario_armhuman. Size 5 bytes, ELF 12 bytes."
+0xe0b60,raydistancesphere2,"ELF link order: between raydistancesphere and getskycolor. Size 96 bytes, ELF 161 bytes."
+0xe13c0,decodespeex,"ELF link order: between encodespeex and createwindowsprites. Size 386 bytes, ELF 556 bytes."
+0xe1550,testspeex,"ELF link order: between encodespeex and createwindowsprites. Size 351 bytes, ELF 435 bytes."
+0xe16b0,createsprite,"ELF link order: between encodespeex and createwindowsprites. Size 1035 bytes, ELF 2016 bytes."
+0xe2130,createwindowsprites_block,"ELF link order: between createwindowsprites and spritetimetolive. Size 1390 bytes, ELF 2356 bytes."
+0xe26a0,spritetimetolive,"ELF link order: after createwindowsprites_block (0xe2130), before deletesprite and spritesimulation."
+0xe2720,deletesprite,ELF link order: between spritetimetolive and spritesimulation.
+0xe9d70,addwindowatlas,ELF link order: between generatetexture_randomvec and generatematerialwindowtexture. The old row at 0x10c710 (in the C runtime code) had this name by a weak vote.
+0xeb640,genrand_int31,"ELF link order: between genrand_int32 and genrand_real1. Size 12 bytes, ELF 14 bytes."
+0xeb680,genrand_real2,"ELF link order: between genrand_real1 and genrand_res53. Size 34 bytes, ELF 56 bytes."
+0xeb6b0,genrand_real3,"ELF link order: between genrand_real1 and genrand_res53. Size 40 bytes, ELF 68 bytes."
+0xfb1b0,setuptimers,"ELF link order: between getcpufrequency and cs_sleep. Size 527 bytes, ELF 436 bytes."
+0xfbc00,testvoice,"ELF link order: between getaudioinput and calculateplayervoice. Size 624 bytes, ELF 836 bytes."
+0xfcb80,rotatevector2d,"cos and sin of the angle, then scalevector2d and scaleaddvectors2d. ELF order: the last 2D vector function before lineintersectplane."
+0xfd260,lineintersectline2d,"ELF link order: between pointdistanceline and loadtextfile. Size 450 bytes, ELF 595 bytes."
+0xfd430,sphereintersectline2d,"ELF link order: between pointdistanceline and loadtextfile. Size 328 bytes, ELF 445 bytes."
+0xfd580,lineintersectcircle2d,"ELF link order: between pointdistanceline and loadtextfile. Size 312 bytes, ELF 399 bytes."
+0xfd6c0,pointintersectcircle,"ELF link order: between pointdistanceline and loadtextfile. Size 119 bytes, ELF 169 bytes."
+0xfd7f0,resetparser,"ELF link order: between loadtextfile and findstring. Size 15 bytes, ELF 16 bytes."
+0xfd8e0,getint,"ELF link order: between checkstring and getfloat. Size 257 bytes, ELF 281 bytes."
+0xfe0d0,fwriteswap,"ELF link order: between freadswap and removeflieextentions. Size 302 bytes, ELF 387 bytes."
+0xfe3f0,disablesocket,"ELF link order: between enablesocketclient and recvpacket. Size 35 bytes, ELF 57 bytes."
+0xfe630,cs_pread,"memcpy from the packet buffer at the read place, inverse of cs_pwrite next to it. ELF cs_pread follows cs_pwrite."
+0xfe920,pbitwritescale,"ELF link order: between pbitread and pbitwritenego. Size 273 bytes, ELF 319 bytes."
+0xfea40,pbitreadscale,"ELF link order: between pbitread and pbitwritenego. Size 287 bytes, ELF 331 bytes."
+0xfebd0,pbitwritesign,"ELF link order: between pbitreadnego and checkkeyboard. Size 26 bytes, ELF 39 bytes."
+0xfebf0,pbitreadsign,"ELF link order: between pbitreadnego and checkkeyboard. Size 88 bytes, ELF 134 bytes."
+0x106310,movewindow,"ELF link order: between listvideomodes and setupperspectiveviewport. Size 5 bytes, ELF 12 bytes."
+0x107970,gettextlength,"ELF link order: between drawtext and setuptextdisplay. Size 95 bytes, ELF 140 bytes."
+0x10a5f0,loadtexture2,"ELF link order: between loadtexturesetalpha and loadtexturepartial. Size 452 bytes, ELF 918 bytes."
+0x10ad70,ticketreturned,"ELF link order: between setuptexture and steam_requestauthticket. Size 58 bytes, ELF 63 bytes."
+0x10add0,steam_getauthticket,"ELF link order: between steam_requestauthticket and main. Size 34 bytes, ELF 45 bytes."
+0x10b290,tempmesh_vertnormalequal,"Compares several vertex arrays of the temporary mesh with a limit of 0.0001. Both tempmesh optimize functions call it. Size 575 bytes, ELF 913 bytes, the largest of the tempmesh compare functions."
+0x10b590,area_sectorvertequal,Compares two vertices of a sector mesh with a limit of 0.0001. area_buildsectormodel calls it.
+0x10b830,crossproduct,"Writes b x a into out, as the ELF crossproduct. 49 callers."
+0x10bb90,normalizevector2d,"vectorlength2d, then 1/length times x and y, or 0 for length 0. ELF normalizevector2d."
+0x10bc10,addvectors2d,out = a + b on x and y. The ELF 2D vector set (addvectors2d). The old name createevent_sound was a wrong call graph vote.
+0x10bc40,scalevector2d,out = a * s on x and y. ELF scalevector2d.
+0x10bc70,scaleaddvectors2d,out = a + b * s on x and y. ELF scaleaddvectors2d.
+0x10bca0,tangentvector2d,"out = (-y, x). ELF tangentvector2d."
+0x10bcc0,subtractvectors2d,out = a - b on x and y. ELF subtractvectors2d.
