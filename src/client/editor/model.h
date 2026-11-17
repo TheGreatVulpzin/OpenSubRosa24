@@ -3,5 +3,6 @@
 #define CL_EDITOR_MODEL_H
 
 void __cdecl model_editor(void);
+void __cdecl model_viewer(void);
 
 #endif /* CL_EDITOR_MODEL_H */

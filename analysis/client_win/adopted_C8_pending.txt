@@ -1,0 +1,2 @@
+# Editor menus: each runs a frame loop. They wait for a test in the game window.
+model_viewer src/client/editor/model.c

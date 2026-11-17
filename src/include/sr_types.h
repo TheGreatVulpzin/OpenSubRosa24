@@ -3179,7 +3179,8 @@ typedef union ModelTemp { struct {
     ModelVertex render_verts[9216];      /* +0x58008 setupmodel: 3 for each triangle. The array has room for 3072 triangles */
     int num_tris;                        /* +0xa0008 addboxtomodel adds 12 */
     MeshTri tris[8192];                  /* +0xa000c setupmodel: indexes into verts */
-    uint8_t pad_b800c[0x98000];
+    MeshTri tri_backup[8192];            /* +0xb800c model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back */
+    uint8_t pad_d000c[0x80000];
     vec3 tri_normals[8192];              /* +0x15000c setupmodel: generatetrinormal of the three corners */
     vec3 corner_normals[24576];          /* +0x16800c the model loader: one normal for each corner of a triangle */
     TriTexCoords tri_texcoords[8192];    /* +0x1b000c model_settritexcoord writes the three corners */
@@ -3201,6 +3202,7 @@ SR_STATIC_ASSERT(offsetof(ModelTemp, vert_tangents) == 0x40008, "ModelTemp.vert_
 SR_STATIC_ASSERT(offsetof(ModelTemp, render_verts) == 0x58008, "ModelTemp.render_verts");
 SR_STATIC_ASSERT(offsetof(ModelTemp, num_tris) == 0xa0008, "ModelTemp.num_tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tris) == 0xa000c, "ModelTemp.tris");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_backup) == 0xb800c, "ModelTemp.tri_backup");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_normals) == 0x15000c, "ModelTemp.tri_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, corner_normals) == 0x16800c, "ModelTemp.corner_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_texcoords) == 0x1b000c, "ModelTemp.tri_texcoords");
@@ -3328,7 +3330,7 @@ typedef union TextureList { struct {
     int mic;                             /* +0x1100 setupclient loads mic.png */
     int twitter;                         /* +0x1104 setupclient loads twitter01.png */
     int logo;                            /* +0x1108 setupclient draws a 32 by 16 pixel logo into it */
-    uint8_t pad_110c[0x4];
+    int test_m16;                        /* +0x110c model_viewer loads test_m16.png into it */
     int random_vectors;                  /* +0x1110 the start code passes it to generatetexture_randomvec */
     int cash[8];                         /* +0x1114 setupclient loads cash_dollar.png and the five, ten, twenty, fifty, hundred and thousand bills into the first seven */
     int landscape_normal;                /* +0x1134 landscape_generatenormaltexture fills this texture */
@@ -3360,6 +3362,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, map) == 0x10fc, "TextureList.map");
 SR_STATIC_ASSERT(offsetof(TextureList, mic) == 0x1100, "TextureList.mic");
 SR_STATIC_ASSERT(offsetof(TextureList, twitter) == 0x1104, "TextureList.twitter");
 SR_STATIC_ASSERT(offsetof(TextureList, logo) == 0x1108, "TextureList.logo");
+SR_STATIC_ASSERT(offsetof(TextureList, test_m16) == 0x110c, "TextureList.test_m16");
 SR_STATIC_ASSERT(offsetof(TextureList, random_vectors) == 0x1110, "TextureList.random_vectors");
 SR_STATIC_ASSERT(offsetof(TextureList, cash) == 0x1114, "TextureList.cash");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_normal) == 0x1134, "TextureList.landscape_normal");
