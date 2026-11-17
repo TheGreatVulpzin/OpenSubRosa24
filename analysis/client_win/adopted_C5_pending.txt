@@ -3,3 +3,4 @@ connectmenu src/client/menu/front.c
 notsupportedmenu src/client/menu/front.c
 usermenu src/client/menu/front.c
 hostmenu src/client/menu/front.c
+optionsmenu src/client/menu/front.c

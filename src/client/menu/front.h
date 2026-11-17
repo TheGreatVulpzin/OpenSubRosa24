@@ -6,5 +6,6 @@ void __cdecl connectmenu(void);
 void __cdecl notsupportedmenu(void);
 void __cdecl usermenu(void);
 void __cdecl hostmenu(void);
+void __cdecl optionsmenu(void);
 
 #endif /* CL_MENU_FRONT_H */

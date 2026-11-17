@@ -3,6 +3,7 @@
  * the items, reads the input, draws and shows the frame. */
 #include "menu/front.h"
 
+#include <stdio.h>
 #include <string.h>
 
 #include "audio/imports.h"
@@ -24,13 +25,19 @@
 #define GL_VERSION 0x1f02
 #define GL_EXTENSIONS 0x1f03
 
-enum { OPTION_KEY = 1, OPTION_TEXT = 4, OPTION_INT = 6, OPTION_TOGGLE = 10, OPTION_CHOICE = 11 };
+enum { OPTION_KEY = 1, OPTION_TEXT = 4, OPTION_INT = 6, OPTION_TOGGLE = 10, OPTION_CHOICE = 11,
+       OPTION_SLIDER = 19 };
 
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClear, (unsigned))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glClearColor, (float, float, float, float))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, const unsigned char *, glGetString, (unsigned))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_SetAttribute, (int, int))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_GetAttribute, (int, int *))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_SetWindowSize, (void *, int, int))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_SetWindowFullscreen, (void *, uint32_t))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, const char *, alGetString, (int))
 
 /* Game functions of other files. */
 #define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
@@ -55,6 +62,9 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
 #define saveaccountsclient CL_FN(0x434470, void(__cdecl *)(void))
 #define setupserver CL_FN(0x4345d0, void(__cdecl *)(void))
 #define endserver CL_FN(0x434010, void(__cdecl *)(void))
+#define reactivategame CL_FN(0x47d060, void(__cdecl *)(void))
+#define checksimulation CL_FN(0x47d900, int(__cdecl *)(int))
+#define set_cpu_affinity CL_FN(0x4faf30, void(__cdecl *)(void)) /* setcpuaffinity */
 
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
@@ -360,5 +370,197 @@ void __cdecl hostmenu(void)
             cl_data_menu_items[0].pressed = 1;
         }
     }
+    resetmenuitems();
+}
+
+/* --- optionsmenu --- */
+
+#define MODE_PAGE 8
+#define KEY_A 4
+#define AL_VENDOR 0xb001
+#define AL_VERSION 0xb002
+#define AL_RENDERER 0xb003
+#define SDL_GL_RED_SIZE 0
+#define SDL_GL_GREEN_SIZE 1
+#define SDL_GL_BLUE_SIZE 2
+#define SDL_GL_ALPHA_SIZE 3
+
+/* The name of input i of joystick device d: 0x200 bytes for each device, 16 for each name. */
+#define joystick_name(d, i) (&cl_data_joystick_names[(d) * 0x200 + (i) * 0x10])
+
+/* The names of the joystick inputs: the four axes in plus and minus, 16 buttons and the hat
+ * directions. */
+static void options_input_names(void)
+{
+    static const char *const plus[4] = {"+X Axis", "+Y Axis", "+Z Axis", "+W Axis"};
+    static const char *const minus[4] = {"-X Axis", "-Y Axis", "-Z Axis", "-W Axis"};
+    static const char *const hats[8] = {"Hat 1 Up", "Hat 1 Down", "Hat 1 Left", "Hat 1 Right",
+                                        "Hat 2 Up", "Hat 2 Down", "Hat 2 Left", "Hat 2 Right"};
+    int i;
+
+    for (i = 0; i < 4; i++)
+        strcpy(joystick_name(1, i), plus[i]);
+    for (i = 0; i < 4; i++)
+        strcpy(joystick_name(2, i), minus[i]);
+    for (i = 0; i < 16; i++)
+        sprintf(joystick_name(3, i), "Button %d", i + 1);
+    for (i = 0; i < 8; i++)
+        strcpy(joystick_name(4, i), hats[i]);
+}
+
+/* The screen mode that matches the window now, or -1. The last match wins. */
+static int options_current_mode(void)
+{
+    int i, mode = -1;
+
+    for (i = 0; i < cl_data_video_mode_count; i++)
+        if (cl_data_render_width == cl_data_video_modes[i].width &&
+            cl_data_render_height == cl_data_video_modes[i].height &&
+            cl_data_screen_bits == cl_data_video_modes[i].bits)
+            mode = i;
+    return mode;
+}
+
+/* Make the items of one frame. The mode list shows a page of eight modes. Only modes of 640
+ * pixels or more and 32 bits show. The test of a mode reads the record before the test of the
+ * count, so the last page reads records past the list. */
+static void options_items(int *fullscreen, int *page, int *mode)
+{
+    float y = 124.0f;
+    int i;
+
+    cl_data_menu_item_count = 0;
+    createmenubutton("Back", 4.0f, 4.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_KEY, KEY_ESCAPE);
+    createmenubutton("Apply", 640.0f, 4.0f, 160.0f, 20.0f, 16.0f, 2, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_KEY, KEY_A);
+    createmenubutton("Fullscreen", 4.0f, 64.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TOGGLE, fullscreen, 1);
+    if (*page > 0) {
+        createmenubutton("Up", 164.0f, y, 80.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_CHOICE, page, *page - 1);
+    }
+    if (*page * MODE_PAGE + MODE_PAGE < cl_data_video_mode_count) {
+        createmenubutton("Down", 164.0f, 264.0f, 80.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_CHOICE, page, *page + 1);
+    }
+    for (i = *page * MODE_PAGE; i < *page * MODE_PAGE + MODE_PAGE; i++) {
+        const VideoMode *m = &cl_data_video_modes[i];
+
+        if (m->width > 0x27f && m->bits == 32 && i < cl_data_video_mode_count) {
+            char text[64];
+
+            sprintf(text, "%dx%d", m->width, m->height);
+            createmenubutton(text, 4.0f, y, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+            setmenuitem(OPTION_CHOICE, mode, i);
+            y = (float)(y + 20.0);
+        }
+    }
+    createmenubutton("Port", 512.0f, 240.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_INT, &sr_data_option.port, 8);
+    createmenubutton("Bandwidth", 512.0f, 280.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_INT, &sr_data_option.bandwidth, 8);
+    createmenubutton("Server Name", 512.0f, 320.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TEXT, sr_data_option.servername, 0x28);
+    createmenubutton("Invert Mouse", 512.0f, 360.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TOGGLE, &sr_data_option.invertmouse, 1);
+    createmenubutton("Sound Volume", 320.0f, 240.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_SLIDER, &sr_data_option.soundvolume, 0, 100, 10);
+    createmenubutton("Music Volume", 320.0f, 280.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_SLIDER, &sr_data_option.musicvolume, 0, 100, 10);
+    createmenubutton("Set CPU affinity", 320.0f, 340.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TOGGLE, &sr_data_option.setcpuaffinity, 1);
+    createmenubutton("Ambient Occlusion", 320.0f, 360.0f, 160.0f, 20.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TOGGLE, &sr_data_option.occlusion, 1);
+}
+
+/* The resolution header and the driver texts of OpenGL and OpenAL. */
+static void options_texts(const char *const gl[3], const char *const al[3])
+{
+    drawtext("Resolution", 16.0f, 96.0f, 12.0f, 0x20, 0.75f, 0.75f, 0.75f, 1.0f);
+    drawtext("GL_VERSION: /s", 320.0f, 32.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, gl[2]);
+    drawtext("GL_VENDOR: /s", 320.0f, 48.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, gl[0]);
+    drawtext("GL_RENDERER: /s", 320.0f, 64.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, gl[1]);
+    drawtext("AL_VERSION: /s", 320.0f, 96.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, al[1]);
+    drawtext("AL_VENDOR: /s", 320.0f, 112.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, al[0]);
+    drawtext("AL_RENDERER: /s", 320.0f, 128.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, al[2]);
+    drawtext("OpenAL sources: /i", 320.0f, 144.0f, 16.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, cl_data_audio_source_limit);
+}
+
+/* Keep the chosen mode in the settings. The window changes now only for a new mode while the
+ * fullscreen state stays off: the start mode, a change of the fullscreen state or a fullscreen
+ * window only go to the settings. 16 bits use 5 6 5 bits of color and 1 of alpha, 32 bits use 8
+ * of each. When the window gets other than 8 red bits, the depth is 16. */
+static void options_apply(int mode, int start_mode, int fullscreen)
+{
+    int red;
+
+    sr_data_config.fullscreen = fullscreen;
+    if (mode == -1)
+        return;
+    sr_data_config.screenwidth = cl_data_video_modes[mode].width;
+    sr_data_config.screenheight = cl_data_video_modes[mode].height;
+    if (start_mode == mode || cl_data_screen_fullscreen != fullscreen || fullscreen == 1)
+        return;
+    cl_data_render_width = cl_data_video_modes[mode].width;
+    cl_data_render_height = cl_data_video_modes[mode].height;
+    cl_data_screen_fullscreen = fullscreen;
+    cl_data_screen_bits = cl_data_video_modes[mode].bits;
+    if (cl_data_screen_bits == 16) {
+        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 5);
+        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 6);
+        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 5);
+        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 1);
+    }
+    if (cl_data_screen_bits == 32) {
+        audio_SDL_GL_SetAttribute()(SDL_GL_RED_SIZE, 8);
+        audio_SDL_GL_SetAttribute()(SDL_GL_GREEN_SIZE, 8);
+        audio_SDL_GL_SetAttribute()(SDL_GL_BLUE_SIZE, 8);
+        audio_SDL_GL_SetAttribute()(SDL_GL_ALPHA_SIZE, 8);
+    }
+    audio_SDL_SetWindowSize()(cl_data_audio_window, cl_data_render_width, cl_data_render_height);
+    audio_SDL_SetWindowFullscreen()(cl_data_audio_window, cl_data_screen_fullscreen == 0 ? 0 : 1);
+    audio_SDL_GL_GetAttribute()(SDL_GL_RED_SIZE, &red);
+    if (red != 8)
+        cl_data_screen_bits = 16;
+    reactivategame();
+}
+
+/* The options menu: the screen mode, the fullscreen option, the network and sound options and
+ * the driver texts. Back leaves it. Apply also keeps the options and changes the window. */
+void __cdecl optionsmenu(void)
+{
+    const char *gl[3], *al[3];
+    int mode, start_mode, fullscreen, page = 0;
+
+    gl[0] = (const char *)audio_glGetString()(GL_VENDOR);
+    gl[1] = (const char *)audio_glGetString()(GL_RENDERER);
+    gl[2] = (const char *)audio_glGetString()(GL_VERSION);
+    audio_glGetString()(GL_EXTENSIONS);
+    al[0] = audio_alGetString()(AL_VENDOR);
+    al[2] = audio_alGetString()(AL_RENDERER);
+    al[1] = audio_alGetString()(AL_VERSION);
+    mode = options_current_mode();
+    start_mode = mode;
+    fullscreen = sr_data_config.fullscreen;
+    options_input_names();
+    resetmenuitems();
+    while (cl_data_menu_items[0].pressed == 0 && cl_data_menu_items[1].pressed == 0 && cl_data_audio_menu_back == 0) {
+        options_items(&fullscreen, &page, &mode);
+        menu_input();
+        audio_glClearColor()(0.0f, 0.0f, 0.0f, 0.0f);
+        audio_glClear()(GL_CLEAR_BITS);
+        setuptextdisplay();
+        drawmenuitems();
+        options_texts(gl, al);
+        drawmousecursor(cl_data_input_mouse.x, cl_data_input_mouse.y, 16, 1.0f, 1.0f, 1.0f, 1.0f);
+        audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+        if (cl_data_audio_simulation != 0)
+            checksimulation(0);
+    }
+    if (sr_data_option.setcpuaffinity != 0)
+        set_cpu_affinity();
+    if (cl_data_menu_items[1].pressed != 0)
+        options_apply(mode, start_mode, fullscreen);
     resetmenuitems();
 }
