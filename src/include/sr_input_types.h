@@ -239,6 +239,42 @@ SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_x) == 0xdc, "BuildingEditor.cur
 SR_STATIC_ASSERT(offsetof(BuildingEditor, floor) == 0xe0, "BuildingEditor.floor");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_z) == 0xe4, "BuildingEditor.cursor_z");
 
+/* join_server[]: record of 0x48 bytes. */
+typedef union JoinServer { struct {
+    int version;                         /* +0x0000 joinmenu: the version of the server, 8 bits in the pong */
+    char name[32];                       /* +0x0004 joinmenu: the name of a new server, 0x20 bytes of the pong */
+    int account_key;                     /* +0x0024 joinmenu: the key in the pong; the join copies it to the game and createclientaccount */
+    uint32_t address;                    /* +0x0028 joinmenu: the sender address in host order */
+    uint16_t port;                       /* +0x002c joinmenu: the sender port in host order */
+    uint8_t pad_002e[0x2];
+    int players;                         /* +0x0030 joinmenu: the player count, 8 bits in the pong */
+    uint8_t pad_0034[0x4];
+    int max_players;                     /* +0x0038 joinmenu: the player limit, 8 bits in the pong */
+    int ping;                            /* +0x003c joinmenu: the pong gives back the send time; the record keeps the round trip in ms */
+    int game_type;                       /* +0x0040 joinmenu: 4 bits in the pong; 3 round, 4 world */
+    uint8_t pad_0044[0x4];
+}; uint8_t lf_raw[0x48]; } JoinServer;
+SR_STATIC_ASSERT(sizeof(JoinServer) == 0x48, "JoinServer");
+SR_STATIC_ASSERT(offsetof(JoinServer, version) == 0x0, "JoinServer.version");
+SR_STATIC_ASSERT(offsetof(JoinServer, name) == 0x4, "JoinServer.name");
+SR_STATIC_ASSERT(offsetof(JoinServer, account_key) == 0x24, "JoinServer.account_key");
+SR_STATIC_ASSERT(offsetof(JoinServer, address) == 0x28, "JoinServer.address");
+SR_STATIC_ASSERT(offsetof(JoinServer, port) == 0x2c, "JoinServer.port");
+SR_STATIC_ASSERT(offsetof(JoinServer, players) == 0x30, "JoinServer.players");
+SR_STATIC_ASSERT(offsetof(JoinServer, max_players) == 0x38, "JoinServer.max_players");
+SR_STATIC_ASSERT(offsetof(JoinServer, ping) == 0x3c, "JoinServer.ping");
+SR_STATIC_ASSERT(offsetof(JoinServer, game_type) == 0x40, "JoinServer.game_type");
+
+/* join_address[]: record of 0x8 bytes. */
+typedef union JoinAddress { struct {
+    uint32_t address;                    /* +0x0000 joinmenu: an address to ping, host order */
+    uint16_t port;                       /* +0x0004 joinmenu: the port of the address */
+    uint8_t pad_0006[0x2];
+}; uint8_t lf_raw[0x8]; } JoinAddress;
+SR_STATIC_ASSERT(sizeof(JoinAddress) == 0x8, "JoinAddress");
+SR_STATIC_ASSERT(offsetof(JoinAddress, address) == 0x0, "JoinAddress.address");
+SR_STATIC_ASSERT(offsetof(JoinAddress, port) == 0x4, "JoinAddress.port");
+
 #pragma pack(pop)
 
 #endif

@@ -142,6 +142,8 @@ INPUT_STRUCTS = {
     'EditorView': ('editor_view', 0x48),
     'EditorTile': ('editor_tile', 0x24),
     'BuildingEditor': ('building_editor', 0xec),
+    'JoinServer': ('join_server', 0x48),
+    'JoinAddress': ('join_address', 0x8),
 }
 TYPE_SIZE.update({'AudioDecoder': 0x28, 'MenuInfo': 0x60, 'int*': 4})
 TYPE_SIZE.update({'uint16_t': 2, 'uint8_t*': 4, 'uint32_t*': 4,

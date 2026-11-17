@@ -4,3 +4,4 @@ notsupportedmenu src/client/menu/front.c
 usermenu src/client/menu/front.c
 hostmenu src/client/menu/front.c
 optionsmenu src/client/menu/front.c
+joinmenu src/client/menu/front.c

@@ -65,6 +65,10 @@ AUDIO_IMPORT("OPENAL32.DLL", __cdecl, const char *, alGetString, (int))
 #define reactivategame CL_FN(0x47d060, void(__cdecl *)(void))
 #define checksimulation CL_FN(0x47d900, int(__cdecl *)(int))
 #define set_cpu_affinity CL_FN(0x4faf30, void(__cdecl *)(void)) /* setcpuaffinity */
+#define enablesocketclient CL_FN(0x4fe360, void(__cdecl *)(int lan))
+#define getlanipaddress CL_FN(0x494b20, void(__cdecl *)(void))
+#define getonlineserverlist CL_FN(0x494c00, void(__cdecl *)(void))
+#define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
 
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
@@ -563,4 +567,333 @@ void __cdecl optionsmenu(void)
     if (cl_data_menu_items[1].pressed != 0)
         options_apply(mode, start_mode, fullscreen);
     resetmenuitems();
+}
+
+/* --- joinmenu --- */
+
+#define JOIN_ROWS 16
+#define PING_MS 10
+#define PING_PAUSE 10 /* steps of PING_MS after the end of the address list */
+#define PACKET_PING 0
+#define PACKET_PONG 1
+#define PACKET_MASTER_LIST '!'
+#define MASTER_LIMIT 0x2000
+#define DIRECT_IP_SIZE 0x18
+#define KEY_J 0x0d
+#define WSOCK_INET_ADDR 10
+#define OPTION_DISABLED 20
+#define OPTION_LABEL 21
+#define VERSION_SHORT 0x50
+
+/* The two marks of the version column. They are empty texts at fixed addresses. */
+#define VERSION_MARK_OLD ((const char *)(sr_base + 0x127eb3u))
+#define VERSION_MARK_NEW ((const char *)(sr_base + 0x127eb2u))
+
+/* Swap the bytes between network order and host order. */
+static uint32_t swap32(uint32_t value)
+{
+    return value >> 24 | (value >> 8 & 0xff00u) | (value << 8 & 0xff0000u) | value << 24;
+}
+
+static uint16_t swap16(uint16_t value)
+{
+    return (uint16_t)(value >> 8 | value << 8);
+}
+
+/* The sender of the last packet: its address and port in network order. */
+#define recv_address (*(const uint32_t *)&sr_data_bsdsocket.addr[4])
+#define recv_port (*(const uint16_t *)&sr_data_bsdsocket.addr[2])
+
+/* The y of row i of a list column. */
+static float row_y(int i, float column_y)
+{
+    return (float)((float)i * 32.0 + ((double)column_y + 28.0));
+}
+
+/* Build the items: back, join (empty when no server is chosen), the page buttons, one row for
+ * each server of the page and the Direct IP field. A row of another version is disabled. */
+static void join_items(int *page, int *chosen, char *direct_ip)
+{
+    const float *col = cl_data_join_columns;
+    int i;
+
+    cl_data_menu_item_count = 0;
+    createmenubutton("Back", 4.0f, 636.0f, 192.0f, 24.0f, 12.0f, 8, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_KEY, KEY_ESCAPE);
+    if (*chosen == -1) {
+        createmenuitemempty();
+    } else {
+        createmenubutton("Join", 1020.0f, 636.0f, 192.0f, 24.0f, 12.0f, 10, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_KEY, KEY_J);
+    }
+    if (*page == 0) {
+        createmenuitemempty();
+    } else {
+        createmenubutton("Page Up", 664.0f, 576.0f, 160.0f, 24.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_CHOICE, page, *page - 1);
+    }
+    if ((*page + 1) * JOIN_ROWS < cl_data_join_server_count) {
+        createmenubutton("Page Down", 664.0f, 600.0f, 160.0f, 24.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_CHOICE, page, *page + 1);
+    } else {
+        createmenuitemempty();
+    }
+    for (i = 0; i < JOIN_ROWS; i++) {
+        int server = *page * JOIN_ROWS + i;
+
+        if (server >= cl_data_join_server_count)
+            continue;
+        createmenubutton(cl_data_join_servers[server].name, (float)(col[0] - 4.0),
+                         (float)((float)i * 32.0 + ((double)col[1] + 24.0)), 960.0f, 32.0f, 20.0f, 0, 1.0f, 1.0f,
+                         1.0f, 1.0f);
+        /* The label takes x, y and the size as doubles. The last word is not read. */
+        setmenuitem(OPTION_LABEL, (double)col[0], (double)i * 32.0 + ((double)col[1] + 28.0), 12.0, 0x40);
+        setmenuitem(OPTION_CHOICE, chosen, server);
+        if (cl_data_join_servers[server].version != sr_data_currentversion)
+            setmenuitem(OPTION_DISABLED);
+    }
+    createmenubutton("Direct IP", 4.0f, 512.0f, 192.0f, 16.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_TEXT, direct_ip, DIRECT_IP_SIZE);
+    setmenuitem(OPTION_KEY, KEY_ENTER);
+}
+
+/* Add the typed address to the address list with the port of the options, when the player
+ * does not type. */
+static void join_add_direct_ip(char *direct_ip)
+{
+    static uint32_t(__stdcall * inet_address)(const char *);
+    JoinAddress *a;
+
+    if (cl_data_audio_input_blocked != 0 || direct_ip[0] == '\0')
+        return;
+    if (!inet_address)
+        *(void **)&inet_address = sr_import_ordinal("WSOCK32.DLL", WSOCK_INET_ADDR);
+    a = &cl_data_join_addresses[cl_data_join_address_count];
+    a->address = swap32(inet_address(direct_ip));
+    a->port = (uint16_t)sr_data_option.port;
+    cl_data_join_address_count++;
+    direct_ip[0] = '\0';
+}
+
+/* Draw one row of the server list: the ping, the players, the game type of a server of this
+ * version, the version mark and the version. The version is white for this version and red
+ * for another one. With debugit, the row also shows the address of server i + page * 8. */
+static void join_row(int page, int i)
+{
+    const float *col = cl_data_join_columns;
+    const JoinServer *s = &cl_data_join_servers[page * JOIN_ROWS + i];
+    float size = 20.0f, green_blue;
+    char mark[64];
+
+    drawtext("/i", col[4], row_y(i, col[5]), size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f, s->ping);
+    drawtext("/i///i", col[2], row_y(i, col[3]), size, 2, 1.0f, 1.0f, 1.0f, 1.0f, s->players, s->max_players);
+    if (cl_data_audio_debug != 0) {
+        const JoinServer *d = &cl_data_join_servers[i + page * 8];
+        uint32_t a = d->address;
+
+        drawtext("/i./i./i./i:/i", 320.0f, (float)((float)i * 32.0 + 52.0), 12.0f, 2, 1.0f, 1.0f, 1.0f, 1.0f,
+                 a >> 24, a >> 16 & 0xff, a >> 8 & 0xff, a & 0xff, (uint32_t)d->port);
+    }
+    if (s->version == sr_data_currentversion) {
+        if (s->game_type == 3)
+            drawtext("Round", col[8], row_y(i, col[9]), size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+        if (s->game_type == 4)
+            drawtext("World", col[8], row_y(i, col[9]), size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    strcpy(mark, s->version < VERSION_SHORT ? VERSION_MARK_OLD : VERSION_MARK_NEW);
+    drawtext(mark, col[8], row_y(i, col[9]), size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    green_blue = s->version == sr_data_currentversion ? 1.0f : 0.0f;
+    drawtext("Alpha /i", col[6], row_y(i, col[7]), size, 0x22, 1.0f, green_blue, green_blue, 1.0f, s->version);
+}
+
+/* Draw the server list: the frame, the headers, the rows of the page and the state of the
+ * search. */
+static void join_texts(int page, int master_done)
+{
+    const float *col = cl_data_join_columns;
+    float size = 20.0f;
+    uint32_t master = sr_data_masterserver.ip;
+    int i;
+
+    setuptextdisplay();
+    drawbitmap(-1, (float)(col[0] - 4.0), (float)(col[1] + 24.0), 960.0f, 512.0f, 0, 0.0f, 0.0f, 0.0f, 0.75f);
+    drawtext("Server Name", col[0], col[1], 20.0f, 0x20, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawtext("Ping", col[4], col[5], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawtext("Players", col[2], col[3], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawtext("Game Type", col[8], col[9], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    drawtext("Version", col[6], col[7], size, 0x22, 1.0f, 1.0f, 1.0f, 1.0f);
+    if (cl_data_audio_debug != 0) {
+        cl_data_join_debug[0] = (int)cl_data_join_addresses[0].address;
+        cl_data_join_debug[1] = (int)cl_data_join_addresses[1].address;
+        cl_data_join_debug[2] = cl_data_join_address_count;
+    }
+    for (i = 0; i < JOIN_ROWS; i++)
+        if (page * JOIN_ROWS + i < cl_data_join_server_count)
+            join_row(page, i);
+    if (cl_data_audio_debug != 0)
+        drawtext("/i", 16.0f, 400.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f, cl_data_debug_counters[0]);
+    if (cl_data_audio_debug != 0)
+        drawtext("/i./i./i./i:/i", 320.0f, 560.0f, 12.0f, 2, 1.0f, 1.0f, 1.0f, 1.0f, master >> 24, master >> 16 & 0xff,
+                 master >> 8 & 0xff, master & 0xff, (uint32_t)(uint16_t)sr_data_masterserver.port);
+    if (!master_done) {
+        if (sr_data_masterserver.ip == 0)
+            drawtext("Unable to connect", 16.0f, 560.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+        else
+            drawtext("Connecting...", 16.0f, 560.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    } else {
+        drawtext("Connected: /i servers found", 16.0f, 560.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f,
+                 cl_data_join_server_count);
+        drawtext("/i", 16.0f, 576.0f, 12.0f, 0, 1.0f, 1.0f, 1.0f, 1.0f,
+                 cl_data_join_address_count - cl_data_join_master_first);
+    }
+}
+
+/* Send one ping each 10 ms to the next address of the list. The counter runs 10 steps past the
+ * end of the list before it starts again. While the master list has not come, ask for it
+ * again. The ping holds the send time. */
+static void join_send_ping(uint32_t *last, int *next, int master_done)
+{
+    if (audio_SDL_GetTicks()() - *last <= PING_MS)
+        return;
+    *last = audio_SDL_GetTicks()();
+    if (cl_data_join_address_count > 0) {
+        if (*next < cl_data_join_address_count) {
+            char kind = PACKET_PING;
+
+            resetsendpacket();
+            cs_pwrite(&kind, 1, 1);
+            pbitwrite((const uint32_t *)&sr_data_currentversion, 8);
+            cs_pwrite(last, 4, 1);
+            sendpacket(cl_data_join_addresses[*next].address, cl_data_join_addresses[*next].port);
+        }
+        (*next)++;
+        if (*next >= cl_data_join_address_count + PING_PAUSE)
+            *next = 0;
+    }
+    if (!master_done)
+        getonlineserverlist();
+}
+
+/* Read the state of a server from a pong: version, ping, game type, players and max players.
+ * The pong gives back the send time, so the ping is now minus that time. */
+static void read_server_state(JoinServer *s)
+{
+    pbitread((uint32_t *)&s->version, 8);
+    cs_pread(&s->ping, 4, 1);
+    s->ping = (int)(audio_SDL_GetTicks()() - (uint32_t)s->ping);
+    pbitread((uint32_t *)&s->game_type, 4);
+    pbitread((uint32_t *)&s->players, 8);
+    pbitread((uint32_t *)&s->max_players, 8);
+}
+
+/* A pong updates the server of the sender address. A pong from a new sender adds a server
+ * with its name and account key. The list has no size limit. */
+static void join_read_pong(void)
+{
+    JoinServer *s;
+    int i;
+
+    for (i = 0; i < cl_data_join_server_count; i++) {
+        if (cl_data_join_servers[i].address == swap32(recv_address) &&
+            cl_data_join_servers[i].port == swap16(recv_port)) {
+            read_server_state(&cl_data_join_servers[i]);
+            return;
+        }
+    }
+    s = &cl_data_join_servers[cl_data_join_server_count];
+    s->address = swap32(recv_address);
+    s->port = swap16(recv_port);
+    read_server_state(s);
+    cs_pread(s->name, 1, 0x20);
+    cs_pread(&s->account_key, 4, 1);
+    cl_data_join_server_count++;
+}
+
+/* Read the packets that came. The master list replaces the addresses from the first master
+ * address. A list of 0x2000 addresses or more adds nothing. Return 1 when the master list
+ * came. */
+static int join_read_packets(void)
+{
+    int master = 0;
+    char kind;
+
+    while (recvpacket() > 0) {
+        cs_pread(&kind, 1, 1);
+        if (kind == PACKET_PONG)
+            join_read_pong();
+        if (kind == PACKET_MASTER_LIST) {
+            int count, i;
+
+            cl_data_join_address_count = cl_data_join_master_first;
+            master = 1;
+            cs_pread(&count, 4, 1);
+            if (count < MASTER_LIMIT)
+                for (i = 0; i < count; i++) {
+                    cs_pread(&cl_data_join_addresses[cl_data_join_address_count].address, 4, 1);
+                    cs_pread(&cl_data_join_addresses[cl_data_join_address_count].port, 2, 1);
+                    cl_data_join_address_count++;
+                }
+            cl_data_debug_counters[0] = count;
+        }
+    }
+    return master;
+}
+
+/* The server list: ask the master server and the known addresses, show the answers and join
+ * the server that the player chooses. */
+void __cdecl joinmenu(void)
+{
+    int master_done = 0, next = 0, chosen = -1, page = 0;
+    char direct_ip[DIRECT_IP_SIZE + 8];
+    uint32_t last;
+
+    enablesocketclient(0);
+    sr_data_server.active = 0;
+    setupserver();
+    memset(&sr_data_area_sector, 0, 0x30);
+    sr_data_numofconnections = 0;
+    cl_data_join_server_count = 0;
+    cl_data_join_address_count = 0;
+    cl_data_join_master_first = 0;
+    getlanipaddress();
+    getonlineserverlist();
+    direct_ip[0] = '\0';
+    cl_data_join_columns[0] = 24.0f;
+    cl_data_join_columns[1] = 24.0f;
+    cl_data_join_columns[4] = 480.0f;
+    cl_data_join_columns[5] = 24.0f;
+    cl_data_join_columns[2] = 560.0f;
+    cl_data_join_columns[3] = 24.0f;
+    cl_data_join_columns[8] = 672.0f;
+    cl_data_join_columns[9] = 24.0f;
+    cl_data_join_columns[6] = 784.0f;
+    cl_data_join_columns[7] = 24.0f;
+    last = audio_SDL_GetTicks()();
+    resetmenuitems();
+    for (;;) {
+        if (!menu_open()) {
+            closesocketserver(0);
+            saveaccountsclient();
+            resetmenuitems();
+            return;
+        }
+        clear_menu_screen(GL_COLOR_BUFFER_BIT);
+        join_items(&page, &chosen, direct_ip);
+        menu_input();
+        join_add_direct_ip(direct_ip);
+        join_texts(page, master_done);
+        menu_show(24);
+        join_send_ping(&last, &next, master_done);
+        if (join_read_packets())
+            master_done = 1;
+        if (chosen != -1) {
+            cl_data_server_address = cl_data_join_servers[chosen].address;
+            cl_data_server_port = cl_data_join_servers[chosen].port;
+            sr_data_game.client_account_key = cl_data_join_servers[chosen].account_key;
+            createclientaccount(&cl_data_client_account_id[0], &cl_data_client_account_id[1],
+                                sr_data_game.client_account_key);
+            connectmenu();
+            cl_data_menu_items[0].pressed = 1;
+        }
+    }
 }
