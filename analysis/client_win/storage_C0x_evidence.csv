@@ -1,0 +1,36 @@
+name,client_rva,primary,secondary,limits
+bondhuman,0x17678de0,"bondsimulation2 0x50700: five arrays at +0,+0x100,+0x200,+0x300,+0x400; human stride 0x500",512 records end at bondparticle 0x17718de0; each vector has stride 0x10,"The solver expects active, mask and interleaved bones with stride 0x810. It needs client accessors."
+numofdynamicbonds,0x1bf7e14,bondsimulation2 0x50700: final store copies numofbonds,Linux numofdynamicbonds symbol and matching final counter assignment,
+numofstaticbonds,0x13c5e6c0,bondsimulation2 0x50700: final load replaces numofbonds,Linux numofstaticbonds symbol and matching counter lifetime,
+timerlist,0x12a7d620,renderframe and displaydebuginfo: timer indices occupy +0 through +0x50,Linux timerlist has size 0x54; group C3 and globals_checked.csv agree,Simulation timer fields at +0x54 through +0x94 do not exist. Shared profiler access needs a separate mapping.
+surface2,0x1cb8140,area_createsblocks 0x395a0: position triplets at +0 and +0x24,Linux surfacetemp2 symbol has size 0x140; same surface access pattern,
+materials,0x1724f600,setupgame 0x80c10: first name at +0x18; record stride 0x58,"setupclient reads the same names. Linux material has size 0x16000. Records contain a prefix, four parameters, flags and a 64-byte name.",The client has no separate count word. Its final record ends exactly at area 0x17265600.
+train_near,0x19d85180,objectsimulation 0xc78b0 clears the crossing flag and sets it near a train,logicsimulation 0xa3940 reads it; Linux hack_trainintersection has the same two users,
+filtered_word,0x123fe8,server_playermessage 0x6b160 passes this seven-byte string to strncmp,The seven bytes match the server filter string exactly,
+guard_used,0x1278d8,scenario_createguards 0xdca90 clears 64 words and marks chosen spawn indices,Linux guardused.52205 has size 0x100; Mac guardused.213135 has the same user,
+camera,0xf3eafe0,"resetgame 0x79ad0 writes position at +0,+4,+8 and target at +0x1c",Functions 0x68830 and 0x68bd0 use the same six packet vectors at +0x1c0 through +0x1fc.,The camera occupies 0x1c0 bytes. Six vectors follow it. The 130-float view stops before the Steam context at +0x208.
+floorplan,0x132e80,"building_buildfloorplan 0x56ad0: x stride 0x48, z stride 0x1200, y stride 0x48000",Linux floorplan2 has size 0x1200000; the client range ends exactly at timer 0x1332e80,
+newspaper_line,0x1266a0,"newspaper_load 0x7e350 formats the rank, name and currency prefix here",Linux str.47200 has size 0x80; the final concatenation is copied to the newspaper,
+newspaper_money,0x127b38,newspaper_load 0x7e350 passes this buffer to sprintf_comma,Linux str2.47201 has size 0x80; strcat appends it to newspaper_line,
+farbs_digits,0x127810,logic_farbslist 0xa3de0 passes this buffer to sprintf_comma,Linux str2.48990 has size 0x80; strcat appends it to farbs_line,
+farbs_line,0x127bb8,logic_farbslist 0xa3de0 formats the rank and name here,Linux str.48989 has size 0x80; createevent_message receives the completed buffer,
+numofsprite_models,0x12a7d604,resetgame 0x79ad0 clears the model count,createsprite_model increments it; group C3 sprite_model_count agrees,
+numofsprites,0x75a5120,resetgame 0x79ad0 clears the particle count,createwindowsprites increments it; spritesimulation and group C3 sprite_count agree,
+sprite_points,0x75a58a0,resetgame 0x79ad0 clears the first sprite render count,spritesimulation increments the decal count; group C3 sprite_decal_count agrees,
+sprite_lines,0x75f58a4,resetgame 0x79ad0 clears the second sprite render count,spritesimulation increments the glass count; group C3 glass_vertex_count agrees,
+sprite_quads,0x76558a8,resetgame 0x79ad0 clears the third sprite render count,sprite_model_simulation increments it; group C3 shell_count agrees,
+sprite_triangles,0x7e558ac,resetgame 0x79ad0 clears the fourth sprite render count,sprite_model_simulation increments it; group C3 debris_count agrees,
+slogfp,0x1033eca4,server_writelogfile 0x34740 stores the fopen result here,The same function passes this slot to fprintf and fclose; Linux slogfp agrees,
+voice,0xec38140,soundsimulation 0x4e190 reads active at +0 and head at +0x5020 with stride 0x2924c,clientrecv and resetgame use that stride; group C6 audio_channels agrees,
+mag01,0x1262f8,genrand_int32 0xeb4a0 indexes two words with the low bit,PE bytes are 0 and 0x9908b0df; Linux mag01.53108 has the same role,
+world_msg,0x127270,logicsimulation_world 0xa7bc0 formats manager and market messages here,Linux str.49247 has size 0x40; createevent_message receives the completed buffer,
+world_digits,0x127af8,logicsimulation_world 0xa7bc0 passes this buffer to sprintf_comma,Linux str2.49248 has size 0x40; strcat appends it to world_msg,
+wsadata,0xababc40,main 0x10ae00 passes this buffer to WSAStartup with version 0x101,Win32 WSADATA occupies 0x190 bytes; the next known object does not overlap,
+tiremarkstart,0xb77c580,resetgame 0x79ad0 clears the oldest tire strip index,tiremark_simulation and group C3 tiremark_tail use the same slot,
+tiremarkend,0xb73312c,resetgame 0x79ad0 clears the next tire strip index,tiremark_simulation and group C3 tiremark_head use the same slot,
+dedicated,0x132e60,dedicatedserverloop 0x6ad60 writes 1 after resetgame,Linux dedicated symbol serves the same loop; the slot precedes floorplan2 by 0x20,
+csmstr,0x1234dc,savemodelcsm 0xad140 writes four bytes from the pointed string,loadmodelcsm 0xad390 compares that string; the PE pointer targets CSMo,
+hack_modulusopt,0x1226d4,area_interior_buildsectormodel 0x442b0 uses this three-word table,"The bytes 1,2,0 have one match in the client PE",
+cubetexcoord,0x122818,area_buildsectormodel 0x4a650 uses four pairs of texture coordinates,Eight floats match the server table; the other match belongs to drawmenubutton2,
+menucolor,0x1234c8,mainmenu and resetgame read the three menu color floats,All twelve bytes have one match in the client PE,
+startup_counter,,The server path setup clears this counter.,Client getpaths 0x10b1f0 only sets path buffers. No matching counter access was proved.,No client address is assigned. The object remains private.

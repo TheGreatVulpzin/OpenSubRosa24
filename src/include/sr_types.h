@@ -3148,6 +3148,42 @@ SR_STATIC_ASSERT(offsetof(ObjectPacket, cityobjects) == 0xc10, "ObjectPacket.cit
 SR_STATIC_ASSERT(offsetof(ObjectPacket, num_candidates) == 0xe10, "ObjectPacket.num_candidates");
 SR_STATIC_ASSERT(offsetof(ObjectPacket, candidates) == 0xe14, "ObjectPacket.candidates");
 
+/* material_client[]: record of 0x58 bytes. */
+typedef union MaterialRecClient { struct {
+    uint32_t prefix;                     /* +0x0000 Four-byte prefix before the surface parameters. */
+    float parameters[4];                 /* +0x0004 Four surface parameters before the flags. */
+    int flags;                           /* +0x0014 Surface flags before the material name. */
+    char name[64];                       /* +0x0018 Material name. Records have a stride of 0x58. */
+}; uint8_t lf_raw[0x58]; } MaterialRecClient;
+SR_STATIC_ASSERT(sizeof(MaterialRecClient) == 0x58, "MaterialRecClient");
+SR_STATIC_ASSERT(offsetof(MaterialRecClient, prefix) == 0x0, "MaterialRecClient.prefix");
+SR_STATIC_ASSERT(offsetof(MaterialRecClient, parameters) == 0x4, "MaterialRecClient.parameters");
+SR_STATIC_ASSERT(offsetof(MaterialRecClient, flags) == 0x14, "MaterialRecClient.flags");
+SR_STATIC_ASSERT(offsetof(MaterialRecClient, name) == 0x18, "MaterialRecClient.name");
+
+/* bondvector_client[]: record of 0x10 bytes. */
+typedef union BondVectorClient { struct {
+    vec3 value;                          /* +0x0000 A solver vector occupies three floats in a sixteen-byte slot. */
+    uint8_t pad_000c[0x4];
+}; uint8_t lf_raw[0x10]; } BondVectorClient;
+SR_STATIC_ASSERT(sizeof(BondVectorClient) == 0x10, "BondVectorClient");
+SR_STATIC_ASSERT(offsetof(BondVectorClient, value) == 0x0, "BondVectorClient.value");
+
+/* bondhuman_client[]: record of 0x500 bytes. */
+typedef union BondHumanClient { struct {
+    BondVectorClient vel[16];            /* +0x0000 Sixteen bone slots. Human records have a stride of 0x500. */
+    BondVectorClient dv[16];             /* +0x0100 Sixteen bone slots. Human records have a stride of 0x500. */
+    BondVectorClient ang_momentum[16];   /* +0x0200 Sixteen bone slots. Human records have a stride of 0x500. */
+    BondVectorClient w[16];              /* +0x0300 Sixteen bone slots. Human records have a stride of 0x500. */
+    BondVectorClient dw[16];             /* +0x0400 Sixteen bone slots. Human records have a stride of 0x500. */
+}; uint8_t lf_raw[0x500]; } BondHumanClient;
+SR_STATIC_ASSERT(sizeof(BondHumanClient) == 0x500, "BondHumanClient");
+SR_STATIC_ASSERT(offsetof(BondHumanClient, vel) == 0x0, "BondHumanClient.vel");
+SR_STATIC_ASSERT(offsetof(BondHumanClient, dv) == 0x100, "BondHumanClient.dv");
+SR_STATIC_ASSERT(offsetof(BondHumanClient, ang_momentum) == 0x200, "BondHumanClient.ang_momentum");
+SR_STATIC_ASSERT(offsetof(BondHumanClient, w) == 0x300, "BondHumanClient.w");
+SR_STATIC_ASSERT(offsetof(BondHumanClient, dw) == 0x400, "BondHumanClient.dw");
+
 /* modeltemp[]: record of 0x270014 bytes. */
 typedef union ModelTemp { struct {
     int num_verts;                       /* +0x0000 modeltemp_addvertex and addboxtomodel add 1 for each vertex */
@@ -3625,6 +3661,72 @@ SR_STATIC_ASSERT(offsetof(OptionClient, voicemb) == 0x134, "OptionClient.voicemb
 SR_STATIC_ASSERT(offsetof(OptionClient, help) == 0x138, "OptionClient.help");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost) == 0x140, "OptionClient.voiceboost");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost_scale) == 0x144, "OptionClient.voiceboost_scale");
+
+/* timerlist_client[]: record of 0x54 bytes. */
+typedef union TimerListClient { struct {
+    int numoftimers;                     /* +0x0000 The next free render timer index. */
+    int raycast;                         /* +0x0004 timer index; the code names the timer "raycast" */
+    int buildframelist;                  /* +0x0008 timer index; the code names the timer "buildframelist" */
+    int renderdepth;                     /* +0x000c timer index; the code names the timer "renderdepth" */
+    int rendersectors;                   /* +0x0010 timer index; the code names the timer "rendersectors" */
+    int rendersectorshadow;              /* +0x0014 timer index; the code names the timer "rendersectorshadow" */
+    int buildsectorshadow;               /* +0x0018 timer index; the code names the timer "buildsectorshadow" */
+    int rendermodels;                    /* +0x001c timer index; the code names the timer "rendermodels" */
+    int renderinterior;                  /* +0x0020 timer index; the code names the timer "renderinterior" */
+    int renderinteriorwindows;           /* +0x0024 timer index; the code names the timer "renderinteriorwindows" */
+    int renderinteriorshadow;            /* +0x0028 timer index; the code names the timer "renderinteriorshadow" */
+    int rendermodelshadow;               /* +0x002c timer index; the code names the timer "rendermodelshadow" */
+    int renderlandscape;                 /* +0x0030 timer index; the code names the timer "renderlandscape" */
+    int renderatmosphere;                /* +0x0034 timer index; the code names the timer "renderatmosphere" */
+    int renderalpha;                     /* +0x0038 timer index; the code names the timer "renderalpha" */
+    int physicssim;                      /* +0x003c timer index; the code names the timer "physicssim" */
+    int buildinterior;                   /* +0x0040 timer index; the code names the timer "buildinterior" */
+    int optimizeinterior;                /* +0x0044 timer index; the code names the timer "optimizeinterior" */
+    int setupinterior;                   /* +0x0048 timer index; the code names the timer "setupinterior" */
+    int allocinterior;                   /* +0x004c timer index; the code names the timer "allocinterior" */
+    int shadowinterior;                  /* +0x0050 timer index; the code names the timer "shadowinterior" */
+}; uint8_t lf_raw[0x54]; } TimerListClient;
+SR_STATIC_ASSERT(sizeof(TimerListClient) == 0x54, "TimerListClient");
+SR_STATIC_ASSERT(offsetof(TimerListClient, numoftimers) == 0x0, "TimerListClient.numoftimers");
+SR_STATIC_ASSERT(offsetof(TimerListClient, raycast) == 0x4, "TimerListClient.raycast");
+SR_STATIC_ASSERT(offsetof(TimerListClient, buildframelist) == 0x8, "TimerListClient.buildframelist");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderdepth) == 0xc, "TimerListClient.renderdepth");
+SR_STATIC_ASSERT(offsetof(TimerListClient, rendersectors) == 0x10, "TimerListClient.rendersectors");
+SR_STATIC_ASSERT(offsetof(TimerListClient, rendersectorshadow) == 0x14, "TimerListClient.rendersectorshadow");
+SR_STATIC_ASSERT(offsetof(TimerListClient, buildsectorshadow) == 0x18, "TimerListClient.buildsectorshadow");
+SR_STATIC_ASSERT(offsetof(TimerListClient, rendermodels) == 0x1c, "TimerListClient.rendermodels");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderinterior) == 0x20, "TimerListClient.renderinterior");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderinteriorwindows) == 0x24, "TimerListClient.renderinteriorwindows");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderinteriorshadow) == 0x28, "TimerListClient.renderinteriorshadow");
+SR_STATIC_ASSERT(offsetof(TimerListClient, rendermodelshadow) == 0x2c, "TimerListClient.rendermodelshadow");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderlandscape) == 0x30, "TimerListClient.renderlandscape");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderatmosphere) == 0x34, "TimerListClient.renderatmosphere");
+SR_STATIC_ASSERT(offsetof(TimerListClient, renderalpha) == 0x38, "TimerListClient.renderalpha");
+SR_STATIC_ASSERT(offsetof(TimerListClient, physicssim) == 0x3c, "TimerListClient.physicssim");
+SR_STATIC_ASSERT(offsetof(TimerListClient, buildinterior) == 0x40, "TimerListClient.buildinterior");
+SR_STATIC_ASSERT(offsetof(TimerListClient, optimizeinterior) == 0x44, "TimerListClient.optimizeinterior");
+SR_STATIC_ASSERT(offsetof(TimerListClient, setupinterior) == 0x48, "TimerListClient.setupinterior");
+SR_STATIC_ASSERT(offsetof(TimerListClient, allocinterior) == 0x4c, "TimerListClient.allocinterior");
+SR_STATIC_ASSERT(offsetof(TimerListClient, shadowinterior) == 0x50, "TimerListClient.shadowinterior");
+
+typedef union VoiceChannelClient { struct {
+    int active;         /* +0x00 */
+    int unk_04;
+    int human;          /* +0x08 the body of the speaker, -1 for a radio */
+    int item;           /* +0x0c the radio item, -1 for a direct voice */
+    uint8_t unk_10[0x5010];
+    int head;           /* +0x5020 the next frame index */
+    int unk_5024;
+    int size[64];       /* +0x5028 */
+    int mode[64];       /* +0x5128 */
+    uint8_t data[64][256]; /* +0x5228 */
+    uint8_t unk_9228[0x20024];
+}; uint8_t lf_raw[0x2924c]; } VoiceChannelClient;
+SR_STATIC_ASSERT(sizeof(VoiceChannelClient) == 0x2924c, "VoiceChannelClient");
+
+typedef struct SrMaterialStoreClient { MaterialRecClient records[1024]; } SrMaterialStoreClient;
+
+SR_STATIC_ASSERT(sizeof(SrMaterialStoreClient) == 0x16000, "SrMaterialStoreClient");
 
 #pragma pack(pop)
 

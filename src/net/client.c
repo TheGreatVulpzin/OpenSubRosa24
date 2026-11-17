@@ -469,7 +469,7 @@ static void read_voice(void)
     uint32_t tmp = 0, frame = 0;
     int c, k;
     for (c = 0; c < NUM_CHANNELS; c++) {
-        VoiceChannel *ch = &sr_voice_channels[c];
+        sr_voice_channel_type *ch = &sr_voice_channels[c];
         pbitread((uint32_t *)&ch->active, 1);
         if (ch->active == 0)
             continue;

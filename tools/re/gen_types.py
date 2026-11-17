@@ -84,6 +84,9 @@ STRUCTS = {
 }
 # Records that only the client has. They get a type in the header and no storage object of the server.
 CLIENT_STRUCTS = {
+    'MaterialRecClient': ('material_client', 0x58),
+    'BondVectorClient': ('bondvector_client', 0x10),
+    'BondHumanClient': ('bondhuman_client', 0x500),
     'ModelTemp': ('modeltemp', 0x270014),
     'Model': ('model', 0xe04),
     'Texture': ('texture', 0x70),
@@ -97,7 +100,7 @@ COUNTS = {'player': 256, 'human': 512, 'item': 1024, 'object': 1024, 'connection
           'bond': 16384, 'bullet': 16384, 'event': 65536, 'particle': 16384,
           'objecttype': 128, 'bondopt': 16384, 'bondparticle': 16384, 'bondhuman': 512, 'itemtype': 64, 'body': 32, 'account': 65536,
           'buildblocktype': 16, 'area_block': 65536, 'area': 4, 'timer': 256, 'kickedip': 41368}
-TYPE_SIZE = {'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
+TYPE_SIZE = {'BondVectorClient': 0x10, 'int': 4, 'uint32_t': 4, 'float': 4, 'char': 1, 'int16_t': 2, 'vec3': 12, 'double': 8, 'uint8_t': 1,
              'Bone': 0xe0, 'InventorySlot': 0x24, 'HumanJoint': 0xc, 'HumanMuscle': 0x30, 'BondBone': 0x80, 'BondAxis': 0x10, 'WheelBody': 0xe8, 'HandGrip': 0x10, 'RotorPoint': 0x24, 'TypeQuad': 0x20, 'TypeParticle': 0x14, 'TypeBond': 0xc, 'TypeFace': 0x40, 'TypeWheel': 0x44, 'MaterialRec': 0x58, 'AiWaypoint': 0x1c, 'CityIntersection': 0x68, 'CityRoad': 0x4c, 'Wheel': 0x98, 'CityObjectRec': 0x54, 'ObjectFace': 0x40, 'ObjectVertex': 0x10, 'TrackPiece': 0x578, 'CityFace': 0x18, 'CityObjectTypeRec': 0x2418, 'AreaChunk': 0x804, 'BlockSector': 0x6068,
              'CityBlock': 0x30, 'LevelIntersection': 0xc, 'LevelStreet': 0x34,
              'LevelBuilding': 0x54, 'MeshQuad': 0x10, 'MeshTri': 0xc,
@@ -1129,6 +1132,23 @@ def gen_option_client(names):
     return gen_client_view(names, 'OptionClient', 'option', 0x150, option_client_offset, {'gametype'})
 
 
+
+def gen_timerlist_client(names):
+    """The render timer indices end at shadowinterior."""
+    fields = {off: value for off, value in names.get('timerlist', {}).items() if off < 0x54}
+    fields[0] = ('numoftimers', 'int', 0, 'The next free render timer index.')
+    return gen_struct('TimerListClient', 'timerlist_client', 0x54, fields, {})
+
+
+def gen_voice_client():
+    """The playback channel has 0x24 extra bytes after the frame ring."""
+    start = HEADER.index('typedef union VoiceChannel {')
+    end = HEADER.index('} VoiceChannel;', start) + len('} VoiceChannel;')
+    text = HEADER[start:end].replace('VoiceChannel', 'VoiceChannelClient')
+    text = text.replace('unk_9228[0x20000]', 'unk_9228[0x20024]').replace('lf_raw[0x29228]', 'lf_raw[0x2924c]')
+    return text + '\nSR_STATIC_ASSERT(sizeof(VoiceChannelClient) == 0x2924c, "VoiceChannelClient");'
+
+
 def main():
     names = load_names()
     parts = [HEADER]
@@ -1136,6 +1156,10 @@ def main():
         parts.append(gen_struct(cname, glob, size, names.get(glob, {}), load_accessed(glob)))
     parts.append(gen_game_client(names))
     parts.append(gen_option_client(names))
+    parts.append(gen_timerlist_client(names))
+    parts.append(gen_voice_client())
+    parts.append('typedef struct SrMaterialStoreClient { MaterialRecClient records[1024]; } SrMaterialStoreClient;')
+    parts.append('SR_STATIC_ASSERT(sizeof(SrMaterialStoreClient) == 0x16000, "SrMaterialStoreClient");')
     parts.append('#pragma pack(pop)\n\n#endif /* SR_TYPES_H */\n')
     out = ROOT / 'src/include'
     out.mkdir(parents=True, exist_ok=True)

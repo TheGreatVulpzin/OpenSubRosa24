@@ -2,13 +2,16 @@
 #ifndef SR_STORAGE_ADAPTER_H
 #define SR_STORAGE_ADAPTER_H
 #include "sr_storage_types.h"
+#define sr_voice_channel_type VoiceChannelClient
 extern uintptr_t sr_base;
 #define SR_AT(type, rva) ((type *)(sr_base + (rva)))
 
+#define sr_data_hack_modulusopt ((int *)(sr_base + 0x1226d4u))
 #define sr_data_cubevertex ((vec3 *)(sr_base + 0x1226e0u))
 #define sr_data_cubenormal ((vec3 *)(sr_base + 0x122740u))
 #define sr_data_cubetangent ((vec3 *)(sr_base + 0x122788u))
 #define sr_data_cubebinormal ((vec3 *)(sr_base + 0x1227d0u))
+#define sr_data_cubetexcoord ((float *)(sr_base + 0x122818u))
 #define sr_data_cubequad ((int *)(sr_base + 0x122838u))
 #define sr_data_cubetri ((int *)(sr_base + 0x122898u))
 #define sr_data_cubeline ((int *)(sr_base + 0x122928u))
@@ -20,6 +23,8 @@ extern uintptr_t sr_base;
 #define sr_data_teamname ((const char * *)(sr_base + 0x122c88u))
 #define sr_data_dollarbillvalue ((int *)(sr_base + 0x122ca8u))
 #define sr_data_cslogo ((uint8_t *)(sr_base + 0x122cc8u))
+#define sr_data_menucolor ((float *)(sr_base + 0x1234c8u))
+#define sr_data_csmstr (*((const char * *)(sr_base + 0x1234dcu)))
 #define sr_data_tracktrailmodelquad ((int *)(sr_base + 0x1234e0u))
 #define sr_data_carcolorname ((const char * *)(sr_base + 0x123568u))
 #define sr_data_mti (*((int *)(sr_base + 0x123580u)))
@@ -27,11 +32,22 @@ extern uintptr_t sr_base;
 #define sr_data_yaxis (*((vec3 *)(sr_base + 0x123590u)))
 #define sr_data_zaxis (*((vec3 *)(sr_base + 0x12359cu)))
 #define sr_data_socketid (*((uint32_t *)(sr_base + 0x1235b8u)))
+#define sr_data_filtered_word ((char *)(sr_base + 0x123fe8u))
+#define sr_data_mag01 ((uint32_t *)(sr_base + 0x1262f8u))
+#define sr_data_newspaper_line ((char *)(sr_base + 0x1266a0u))
 #define sr_data_tzset_done (*((int *)(sr_base + 0x126724u)))
 #define sr_data_mt ((uint32_t *)(sr_base + 0x126828u))
 #define sr_data_manager_msg ((char *)(sr_base + 0x127230u))
+#define sr_data_world_msg ((char *)(sr_base + 0x127270u))
 #define sr_data_message ((char *)(sr_base + 0x127310u))
+#define sr_data_farbs_digits ((char *)(sr_base + 0x127810u))
+#define sr_data_guard_used ((int *)(sr_base + 0x1278d8u))
+#define sr_data_world_digits ((char *)(sr_base + 0x127af8u))
+#define sr_data_newspaper_money ((char *)(sr_base + 0x127b38u))
+#define sr_data_farbs_line ((char *)(sr_base + 0x127bb8u))
 #define sr_data_debugit (*((int *)(sr_base + 0x127ea8u)))
+#define sr_data_dedicated (*((int *)(sr_base + 0x132e60u)))
+#define sr_data_floorplan ((FloorplanCell *)(sr_base + 0x132e80u))
 #define sr_data_timer ((Timer *)(sr_base + 0x1332e80u))
 #define sr_data_bullet ((Bullet *)(sr_base + 0x1338680u))
 #define sr_data_debug (*((Debug *)(sr_base + 0x14a8680u)))
@@ -40,11 +56,18 @@ extern uintptr_t sr_base;
 #define sr_data_clientaccounts (*((SrClientAccountStore *)(sr_base + 0x1a79cc0u)))
 #define sr_data_pointtemp ((vec3 *)(sr_base + 0x1b79ce0u))
 #define sr_data_numofconnections (*((int *)(sr_base + 0x1b9b4e0u)))
+#define sr_data_numofdynamicbonds (*((int *)(sr_base + 0x1bf7e14u)))
+#define sr_data_surface2 (*((SrSurface *)(sr_base + 0x1cb8140u)))
 #define sr_data_building (*((Building *)(sr_base + 0x1cb8280u)))
 #define sr_data_blocktemp (*((BlockTemp *)(sr_base + 0x52dac40u)))
 #define sr_data_object ((Object *)(sr_base + 0x5519120u))
+#define sr_data_numofsprites (*((int *)(sr_base + 0x75a5120u)))
 #define sr_data_bezier_curve ((float *)(sr_base + 0x75a57c0u))
 #define sr_data_server (*((Server *)(sr_base + 0x75a5800u)))
+#define sr_data_sprite_points (*((int *)(sr_base + 0x75a58a0u)))
+#define sr_data_sprite_lines (*((int *)(sr_base + 0x75f58a4u)))
+#define sr_data_sprite_quads (*((int *)(sr_base + 0x76558a8u)))
+#define sr_data_sprite_triangles (*((int *)(sr_base + 0x7e558acu)))
 #define sr_data_buildingtype (*((BuildingType *)(sr_base + 0x80558c0u)))
 #define sr_data_option (*((OptionClient *)(sr_base + 0x90630e0u)))
 #define sr_data_numoftracks (*((int *)(sr_base + 0x90652e0u)))
@@ -57,16 +80,20 @@ extern uintptr_t sr_base;
 #define sr_data_event ((Event *)(sr_base + 0x93676c0u))
 #define sr_data_newspaper (*((Newspaper *)(sr_base + 0x9b676e0u)))
 #define sr_data_landscape (*((SrLandscape *)(sr_base + 0x9ba7c20u)))
+#define sr_data_wsadata ((uint8_t *)(sr_base + 0xababc40u))
 #define sr_data_scenario (*((Scenario *)(sr_base + 0xabdbde0u)))
 #define sr_data_objecttype ((ObjectType *)(sr_base + 0xabdbf20u))
 #define sr_data_bezier_curve_dv ((float *)(sr_base + 0xaff0520u))
 #define sr_data_particle ((Particle *)(sr_base + 0xb3715a0u))
 #define sr_data_buildblocktype ((BuildBlockTypeRec *)(sr_base + 0xb731640u))
+#define sr_data_tiremarkend (*((int *)(sr_base + 0xb73312cu)))
 #define sr_data_blocklist (*((BlockList *)(sr_base + 0xb7331e0u)))
+#define sr_data_tiremarkstart (*((int *)(sr_base + 0xb77c580u)))
 #define sr_data_surface (*((SrSurface *)(sr_base + 0xb77c620u)))
 #define sr_data_interior (*((SrInteriorStore *)(sr_base + 0xb77c760u)))
 #define sr_data_filelist (*((FileList *)(sr_base + 0xe1ac780u)))
 #define sr_data_city (*((City *)(sr_base + 0xe22c7a0u)))
+#define sr_data_voice ((VoiceChannelClient *)(sr_base + 0xec38140u))
 #define sr_data_player ((Player *)(sr_base + 0xed813a0u))
 #define sr_data_cityobjecttype ((CityObjectTypeRec *)(sr_base + 0xefc1ba0u))
 #define sr_data_materiallist (*((MaterialList *)(sr_base + 0xf2033a0u)))
@@ -74,21 +101,26 @@ extern uintptr_t sr_base;
 #define sr_data_level_editor (*((LevelEditor *)(sr_base + 0xf204120u)))
 #define sr_data_numofevents (*((uint32_t *)(sr_base + 0xf3ca9b8u)))
 #define sr_data_bullettypes ((BulletType *)(sr_base + 0xf3ea9c0u))
+#define sr_data_camera ((float *)(sr_base + 0xf3eafe0u))
 #define sr_data_accounts (*((SrAccountStore *)(sr_base + 0xf3eb200u)))
 #define sr_data_bondopt ((BondOpt *)(sr_base + 0xf8ae240u))
 #define sr_data_view (*((int *)(sr_base + 0xfefe2a0u)))
 #define sr_data_radix (*((Radix *)(sr_base + 0xfefe340u)))
 #define sr_data_intersect (*((Intersect *)(sr_base + 0x1033ec20u)))
+#define sr_data_slogfp (*((void * *)(sr_base + 0x1033eca4u)))
 #define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
+#define sr_data_numofsprite_models (*((int *)(sr_base + 0x12a7d604u)))
 #define sr_data_speex (*((Speex *)(sr_base + 0x12a7d680u)))
 #define sr_data_area_block ((AreaBlock *)(sr_base + 0x133ae680u))
 #define sr_data_file_write (*((SrFileTransfer *)(sr_base + 0x13bee680u)))
+#define sr_data_numofstaticbonds (*((int *)(sr_base + 0x13c5e6c0u)))
 #define sr_data_bezier_curve_uv ((float *)(sr_base + 0x13c5e6e0u))
 #define sr_data_parser (*((Parser *)(sr_base + 0x13d5e700u)))
 #define sr_data_texturelist (*((TextureList *)(sr_base + 0x14311840u)))
 #define sr_data_cityobject ((CityObjectRec *)(sr_base + 0x16323600u))
 #define sr_data_connection ((Connection *)(sr_base + 0x16338600u))
+#define sr_data_materials (*((SrMaterialStoreClient *)(sr_base + 0x1724f600u)))
 #define sr_data_area ((Area *)(sr_base + 0x17265600u))
 #define sr_data_market (*((Market *)(sr_base + 0x17678bc0u)))
 #define sr_data_bondparticle ((BondParticle *)(sr_base + 0x17718de0u))
@@ -99,90 +131,27 @@ extern uintptr_t sr_base;
 #define sr_data_numofbullets (*((int *)(sr_base + 0x17b4b820u)))
 #define sr_data_config (*((Config *)(sr_base + 0x17bbb840u)))
 #define sr_data_modellist (*((ModelList *)(sr_base + 0x17c040a0u)))
+#define sr_data_train_near (*((int *)(sr_base + 0x19d85180u)))
 #define sr_data_bsdsocket (*((BsdSocket *)(sr_base + 0x19d851a0u)))
 #define sr_data_area_sector (*((SrSectorStore *)(sr_base + 0x1dda5240u)))
 #define sr_data_game_world (*((GameWorld *)(sr_base + 0x29e7d320u)))
 #define sr_data_tempmesh (*((TempMesh *)(sr_base + 0x29f0d360u)))
 #define sr_data_track ((TrackPiece *)(sr_base + 0x2a1debc0u))
 
-extern char sr_unplaced_filtered_word[7];
-#define sr_data_filtered_word sr_unplaced_filtered_word
 extern char sr_unplaced_gamedir[9];
 #define sr_data_gamedir sr_unplaced_gamedir
-extern int sr_unplaced_hack_modulusopt[3];
-#define sr_data_hack_modulusopt sr_unplaced_hack_modulusopt
-extern float sr_unplaced_cubetexcoord[8];
-#define sr_data_cubetexcoord sr_unplaced_cubetexcoord
-extern float sr_unplaced_menucolor[3];
-#define sr_data_menucolor sr_unplaced_menucolor
-extern const char * sr_unplaced_csmstr;
-#define sr_data_csmstr sr_unplaced_csmstr
 extern float sr_unplaced_lightwavelength[3];
 #define sr_data_lightwavelength sr_unplaced_lightwavelength
 extern float sr_unplaced_xaxis2d[2];
 #define sr_data_xaxis2d sr_unplaced_xaxis2d
 extern float sr_unplaced_yaxis2d[2];
 #define sr_data_yaxis2d sr_unplaced_yaxis2d
-extern uint32_t sr_unplaced_mag01[2];
-#define sr_data_mag01 sr_unplaced_mag01
-extern char sr_unplaced_newspaper_line[128];
-#define sr_data_newspaper_line sr_unplaced_newspaper_line
-extern char sr_unplaced_world_msg[128];
-#define sr_data_world_msg sr_unplaced_world_msg
-extern char sr_unplaced_farbs_digits[128];
-#define sr_data_farbs_digits sr_unplaced_farbs_digits
 extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
-extern int sr_unplaced_guard_used[64];
-#define sr_data_guard_used sr_unplaced_guard_used
-extern char sr_unplaced_world_digits[64];
-#define sr_data_world_digits sr_unplaced_world_digits
-extern char sr_unplaced_newspaper_money[128];
-#define sr_data_newspaper_money sr_unplaced_newspaper_money
-extern char sr_unplaced_farbs_line[128];
-#define sr_data_farbs_line sr_unplaced_farbs_line
-extern int sr_unplaced_dedicated;
-#define sr_data_dedicated sr_unplaced_dedicated
-extern FloorplanCell sr_unplaced_floorplan[262144];
-#define sr_data_floorplan sr_unplaced_floorplan
-extern int sr_unplaced_numofdynamicbonds;
-#define sr_data_numofdynamicbonds sr_unplaced_numofdynamicbonds
-extern SrSurface sr_unplaced_surface2;
-#define sr_data_surface2 sr_unplaced_surface2
-extern int sr_unplaced_numofsprites;
-#define sr_data_numofsprites sr_unplaced_numofsprites
-extern int sr_unplaced_sprite_points;
-#define sr_data_sprite_points sr_unplaced_sprite_points
-extern int sr_unplaced_sprite_lines;
-#define sr_data_sprite_lines sr_unplaced_sprite_lines
-extern int sr_unplaced_sprite_quads;
-#define sr_data_sprite_quads sr_unplaced_sprite_quads
-extern int sr_unplaced_sprite_triangles;
-#define sr_data_sprite_triangles sr_unplaced_sprite_triangles
-extern uint8_t sr_unplaced_wsadata[400];
-#define sr_data_wsadata sr_unplaced_wsadata
-extern int sr_unplaced_tiremarkend;
-#define sr_data_tiremarkend sr_unplaced_tiremarkend
 extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
-extern int sr_unplaced_tiremarkstart;
-#define sr_data_tiremarkstart sr_unplaced_tiremarkstart
-extern VoiceChannel sr_unplaced_voice[8];
-#define sr_data_voice sr_unplaced_voice
-extern float sr_unplaced_camera[136];
-#define sr_data_camera sr_unplaced_camera
-extern void * sr_unplaced_slogfp;
-#define sr_data_slogfp sr_unplaced_slogfp
-extern int sr_unplaced_numofsprite_models;
-#define sr_data_numofsprite_models sr_unplaced_numofsprite_models
 extern TimerList sr_unplaced_timerlist;
 #define sr_data_timerlist sr_unplaced_timerlist
-extern int sr_unplaced_numofstaticbonds;
-#define sr_data_numofstaticbonds sr_unplaced_numofstaticbonds
-extern SrMaterialStore sr_unplaced_materials;
-#define sr_data_materials sr_unplaced_materials
-extern int sr_unplaced_train_near;
-#define sr_data_train_near sr_unplaced_train_near
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
@@ -262,7 +231,7 @@ extern int sr_unplaced_train_near;
 #define cl_data_display_text ((char *)(sr_base + 0x126728u))
 #define cl_data_round_ticks (*((int *)(sr_base + 0x908ac70u)))
 #define cl_data_round_goal (*((int *)(sr_base + 0x908ac74u)))
-#define cl_data_timerlist (*((TimerList *)(sr_base + 0x12a7d620u)))
+#define cl_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
 #define cl_data_light_ambient ((float *)(sr_base + 0x19c07d00u))
 #define cl_data_interior_corners ((vec3 *)(sr_base + 0x1271e8u))
 #define cl_data_block_sectors ((BlockSector *)(sr_base + 0x1dda5280u))
@@ -430,7 +399,7 @@ extern int sr_client_end_time;
 #define cl_data_spectated_human (*((int *)(sr_base + 0x908aad8u)))
 #define cl_data_server_address (*((uint32_t *)(sr_base + 0x75a5854u)))
 #define cl_data_server_port (*((uint16_t *)(sr_base + 0x75a5858u)))
-#define cl_data_material_records ((MaterialRec *)(sr_base + 0x1724f604u))
+#define cl_data_material_records ((MaterialRecClient *)(sr_base + 0x1724f600u))
 
 #define sr_data_objectpacket sr_data_packet_workspace.objectpacket
 #define sr_data_itemtype sr_data_packet_workspace.itemtype

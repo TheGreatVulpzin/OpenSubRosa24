@@ -1048,3 +1048,13 @@ texturelist,0x414,frame_spare,int,,setupframetextures sizes it with the other fr
 debug,0x50c64,toggle_two,int,,displaydebuginfo shows the second diagnostic switch
 debug,0x50c68,toggle_three,int,,displaydebuginfo shows the third diagnostic switch
 game,0x25d4c,client_account_key,uint32_t,,"hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48)"
+bondvector_client,0x0,value,vec3,,"A solver vector occupies three floats in a sixteen-byte slot."
+bondhuman_client,0x0,vel,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
+bondhuman_client,0x100,dv,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
+bondhuman_client,0x200,ang_momentum,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
+bondhuman_client,0x300,w,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
+bondhuman_client,0x400,dw,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
+material_client,0x0,prefix,uint32_t,,"Four-byte prefix before the surface parameters."
+material_client,0x4,parameters,float,4,"Four surface parameters before the flags."
+material_client,0x14,flags,int,,"Surface flags before the material name."
+material_client,0x18,name,char,64,"Material name. Records have a stride of 0x58."

@@ -38,6 +38,10 @@ void sv_profile_report(void);
 #ifndef sr_parser_file
 #define sr_parser_file  sr_data_parser.file
 #endif
+/* A storage adapter selects the playback channel layout. */
+#ifndef sr_voice_channel_type
+#define sr_voice_channel_type VoiceChannel
+#endif
 #define sr_events       sr_data_event
 #define sr_numofevents  sr_data_numofevents
 #define sr_players      sr_data_player
