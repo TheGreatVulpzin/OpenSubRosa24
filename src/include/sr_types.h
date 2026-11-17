@@ -1944,7 +1944,8 @@ typedef union Option { struct {
     int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
-    uint8_t pad_00e0[0x2c];
+    uint8_t pad_00e0[0x28];
+    int unused_108;                      /* +0x0108 the client mainmenu writes 0 at the start; no reader */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -1975,6 +1976,7 @@ SR_STATIC_ASSERT(offsetof(Option, unused_d0) == 0xd0, "Option.unused_d0");
 SR_STATIC_ASSERT(offsetof(Option, unused_d4) == 0xd4, "Option.unused_d4");
 SR_STATIC_ASSERT(offsetof(Option, soundvolume) == 0xd8, "Option.soundvolume");
 SR_STATIC_ASSERT(offsetof(Option, musicvolume) == 0xdc, "Option.musicvolume");
+SR_STATIC_ASSERT(offsetof(Option, unused_108) == 0x108, "Option.unused_108");
 SR_STATIC_ASSERT(offsetof(Option, invertmouse) == 0x10c, "Option.invertmouse");
 SR_STATIC_ASSERT(offsetof(Option, maxnumofplayers) == 0x114, "Option.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(Option, gametype) == 0x118, "Option.gametype");
@@ -2089,10 +2091,7 @@ typedef union SoundList { struct {
     uint8_t pad_0090[0x8];
     int hit_metal[2];                    /* +0x0098 setupclient loads bullethitmetal01.wav and 02 */
     uint8_t pad_00a0[0x8];
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    int unk_00ac;                        /* +0x00ac 1 functions */
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    int unk_00b4;                        /* +0x00b4 1 functions */
+    int menu_test[4];                    /* +0x00a8 the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down */
     int glass_break;                     /* +0x00b8 setupclient loads glassbreak01.wav */
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x8];
@@ -2119,6 +2118,7 @@ SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
 SR_STATIC_ASSERT(offsetof(SoundList, hit_body) == 0x88, "SoundList.hit_body");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 SR_STATIC_ASSERT(offsetof(SoundList, hit_metal) == 0x98, "SoundList.hit_metal");
+SR_STATIC_ASSERT(offsetof(SoundList, menu_test) == 0xa8, "SoundList.menu_test");
 SR_STATIC_ASSERT(offsetof(SoundList, glass_break) == 0xb8, "SoundList.glass_break");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
 SR_STATIC_ASSERT(offsetof(SoundList, digit) == 0xcc, "SoundList.digit");
@@ -3602,7 +3602,8 @@ typedef union OptionClient { struct {
     int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
-    uint8_t pad_00e0[0x2c];
+    uint8_t pad_00e0[0x28];
+    int unused_108;                      /* +0x0108 the client mainmenu writes 0 at the start; no reader */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -3632,6 +3633,7 @@ SR_STATIC_ASSERT(offsetof(OptionClient, unused_d0) == 0xd0, "OptionClient.unused
 SR_STATIC_ASSERT(offsetof(OptionClient, unused_d4) == 0xd4, "OptionClient.unused_d4");
 SR_STATIC_ASSERT(offsetof(OptionClient, soundvolume) == 0xd8, "OptionClient.soundvolume");
 SR_STATIC_ASSERT(offsetof(OptionClient, musicvolume) == 0xdc, "OptionClient.musicvolume");
+SR_STATIC_ASSERT(offsetof(OptionClient, unused_108) == 0x108, "OptionClient.unused_108");
 SR_STATIC_ASSERT(offsetof(OptionClient, invertmouse) == 0x10c, "OptionClient.invertmouse");
 SR_STATIC_ASSERT(offsetof(OptionClient, maxnumofplayers) == 0x114, "OptionClient.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(OptionClient, roundtime) == 0x118, "OptionClient.roundtime");

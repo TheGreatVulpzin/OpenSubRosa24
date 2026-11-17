@@ -1149,3 +1149,5 @@ join_server,0x3c,ping,int,,"joinmenu: the pong gives back the send time; the rec
 join_server,0x40,game_type,int,,"joinmenu: 4 bits in the pong; 3 round, 4 world"
 join_address,0x0,address,uint32_t,,"joinmenu: an address to ping, host order"
 join_address,0x4,port,uint16_t,,"joinmenu: the port of the address"
+option,0x108,unused_108,int,,"the client mainmenu writes 0 at the start; no reader"
+soundlist,0xa8,menu_test,int,4,"the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down"

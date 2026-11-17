@@ -7,11 +7,27 @@
 #include <string.h>
 
 #include "audio/imports.h"
+#include "audio/sound.h"
+#include "audio/sound_create.h"
+#include "audio/speex.h"
+#include "audio/voice.h"
+#include "audio/voice_ui.h"
 #include "client.h"
+#include "editor/building.h"
+#include "math/small_vectors.h"
 #include "menu/draw.h"
 #include "menu/items.h"
 #include "render/draw2d.h"
+#include "render/glext.h"
+#include "render/lists.h"
+#include "render/models_draw.h"
+#include "render/programs.h"
+#include "render/view.h"
+#include "sr_os.h"
 #include "sr_runtime.h"
+#include "../../common/random.h"
+#include "../../common/vectors.h"
+#include "../../game/block_mesh.h"
 
 #define KEY_ESCAPE 0x29
 #define KEY_ENTER 0x28
@@ -38,6 +54,17 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_GL_GetAttribute, (int, int *))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_SetWindowSize, (void *, int, int))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, int, SDL_SetWindowFullscreen, (void *, uint32_t))
 AUDIO_IMPORT("OPENAL32.DLL", __cdecl, const char *, alGetString, (int))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alcCaptureStart, (void *))
+AUDIO_IMPORT("OPENAL32.DLL", __cdecl, void, alcCaptureStop, (void *))
+AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_Delay, (uint32_t))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glEnable, (unsigned))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDisable, (unsigned))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthFunc, (unsigned))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glDepthMask, (unsigned char))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFrontFace, (unsigned))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glLightfv, (unsigned, unsigned, const float *))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned))
+AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 
 /* Game functions of other files. */
 #define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
@@ -69,6 +96,10 @@ AUDIO_IMPORT("OPENAL32.DLL", __cdecl, const char *, alGetString, (int))
 #define getlanipaddress CL_FN(0x494b20, void(__cdecl *)(void))
 #define getonlineserverlist CL_FN(0x494c00, void(__cdecl *)(void))
 #define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
+#define getmasterserverip CL_FN(0x494c50, int(__cdecl *)(void))
+#define buildingedit_menu CL_FN(0x45dbd0, void(__cdecl *)(void))
+#define model_viewer CL_FN(0x4c14a0, void(__cdecl *)(void))
+#define setupclient CL_FN(0x481a80, void(__cdecl *)(void))
 
 /* Clear the screen to the menu color with the given bits. */
 static void clear_menu_screen(unsigned bits)
@@ -896,4 +927,343 @@ void __cdecl joinmenu(void)
             cl_data_menu_items[0].pressed = 1;
         }
     }
+}
+
+/* --- mainmenu --- */
+
+enum {
+    MAIN_EXIT, MAIN_OPTIONS, MAIN_VOICE, MAIN_JOIN, MAIN_START, MAIN_DEMO_2, MAIN_DEMO, MAIN_EDITOR,
+    MAIN_TWITTER, MAIN_WEBSITE
+};
+
+#define KEY_O 0x12
+#define KEY_V 0x19
+#define KEY_R 0x15
+#define KEY_D 7
+#define KEY_E 8
+#define KEY_H 0x0b /* wireframe of the menu model */
+#define KEY_U 0x18 /* user list */
+#define KEY_1 0x1e /* the four test sounds: keys 1 to 4 */
+#define KEY_LEFT_SHIFT 0xe1
+#define OPTION_LINK 13
+#define PROGRAM_COUNT 32
+#define VBO_COUNT 0x1000
+#define LANDSECTOR_COUNT 0x400
+#define FRAMEBUFFER_COUNT 2
+#define GL_VERTEX_SHADER 0x8b31
+#define GL_FRAGMENT_SHADER 0x8b30
+#define GL_LIGHT0 0x4000
+#define GL_AMBIENT 0x1200
+#define GL_DIFFUSE 0x1201
+#define GL_POSITION 0x1203
+#define GL_FRONT 0x404
+#define GL_BACK 0x405
+#define GL_LINE 0x1b01
+#define GL_FILL 0x1b02
+#define ROUND_TIME 0x6270 /* 7 minutes of 3600 ticks */
+#define MODEL_TURN 3.5342917442321777 /* 1.125 pi */
+
+typedef uint32_t(__stdcall *GlCreateProgramFn)(void);
+typedef uint32_t(__stdcall *GlCreateShaderFn)(uint32_t kind);
+typedef void(__stdcall *GlGenFn)(int count, uint32_t *names);
+
+/* Clear the screen to the menu color, draw one status line and show it. */
+static void main_status(const char *text)
+{
+    clear_menu_screen(GL_CLEAR_BITS);
+    setuptextdisplay();
+    drawtext(text, 512.0f, 160.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
+    audio_SDL_GL_SwapWindow()(cl_data_audio_window);
+}
+
+/* Make the OpenGL objects: 32 shader programs, 0x1000 buffer pairs and two framebuffers, each
+ * only when its extension is there. */
+static void main_gl_objects(void)
+{
+    int i;
+
+    if (cl_data_glext[1] != 0)
+        for (i = 0; i < PROGRAM_COUNT; i++) {
+            cl_data_programs[i].program = ((GlCreateProgramFn)cl_data_gl_create_program)();
+            cl_data_programs[i].vertex_shader = ((GlCreateShaderFn)cl_data_gl_create_shader)(GL_VERTEX_SHADER);
+            cl_data_programs[i].fragment_shader = ((GlCreateShaderFn)cl_data_gl_create_shader)(GL_FRAGMENT_SHADER);
+        }
+    if (cl_data_glext[6] != 0)
+        for (i = 0; i < VBO_COUNT; i++) {
+            ((GlGenFn)cl_data_gl_gen_buffers)(1, &cl_data_vbo[i].gl_name);
+            ((GlGenFn)cl_data_gl_gen_buffers)(1, (uint32_t *)cl_data_vbo[i].pad_04);
+        }
+    if (cl_data_glext[16] != 0)
+        for (i = 0; i < FRAMEBUFFER_COUNT; i++) {
+            ((GlGenFn)cl_data_gl_gen_framebuffers)(1, &cl_data_framebuffers[i].framebuffer);
+            ((GlGenFn)cl_data_gl_gen_renderbuffers)(1, &cl_data_framebuffers[i].renderbuffer);
+        }
+}
+
+/* Give the buffer numbers: 0 to the sectors, 1 to their shadows, 2 to 5 to four single
+ * buffers and the rest to the landscape sectors. */
+static void main_vbo_numbers(void)
+{
+    int i;
+
+    cl_data_sector_vbo = 0;
+    cl_data_sector_shadow_vbo = 1;
+    cl_data_vbo_next = 2;
+    cl_data_vbo_spare_a = cl_data_vbo_next++;
+    cl_data_track_vbo = cl_data_vbo_next++;
+    cl_data_vbo_spare_b = cl_data_vbo_next++;
+    cl_data_vbo_spare_c = cl_data_vbo_next++;
+    for (i = 0; i < LANDSECTOR_COUNT; i++)
+        cl_data_landsector_vbo[i] = cl_data_vbo_next++;
+}
+
+/* The first setup of the game: the OpenGL objects, the sounds, the client and the editors.
+ * Return 0 when the machine has no OpenGL 2.0: then the not supported screen ran. */
+static int main_setup(void)
+{
+    os_srand((unsigned)os_time64(0));
+    sr_data_option.unused_108 = 0;
+    setupglextentions();
+    if (cl_data_glext[0] == 0 || cl_data_glext[6] == 0 || cl_data_glext[3] == 0) {
+        notsupportedmenu();
+        return 0;
+    }
+    main_gl_objects();
+    setupsounds();
+    enablespeex();
+    init_genrand((uint32_t)os_time64(0));
+    main_status("generating");
+    setupprogramobjects();
+    main_vbo_numbers();
+    cl_data_framebuffer_index = 0;
+    cl_data_framebuffer_ready = 1;
+    setupclient();
+    buildingedit_setup();
+    leveledit_setup();
+    leveleditor_load();
+    main_status("connecting");
+    getmasterserverip();
+    loadaccountsserver();
+    if (cl_data_audio_capture != 0)
+        audio_alcCaptureStart()(cl_data_audio_capture);
+    return 1;
+}
+
+/* Make the items of one frame: a column of buttons from Exit up to Editor, then the two links.
+ * Without debugit the Editor item is empty, so the item numbers stay the same. */
+static void main_items(void)
+{
+    static const struct {
+        const char *text;
+        int key;
+    } buttons[7] = {{"Exit", KEY_ESCAPE}, {"Options", KEY_O},  {"Voice Options", KEY_V}, {"Join", KEY_J},
+                    {"Start", KEY_S},     {"Demo 2", KEY_R},   {"Demo", KEY_D}};
+    float y = 480.0f;
+    int i;
+
+    cl_data_menu_item_count = 0;
+    for (i = 0; i < 7; i++) {
+        createmenubutton(buttons[i].text, 512.0f, y, 192.0f, 32.0f, 16.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_KEY, buttons[i].key);
+        y = (float)(y - 32.0);
+    }
+    if (sr_data_debugit == 0) {
+        createmenuitemempty();
+    } else {
+        createmenubutton("Editor", 512.0f, y, 192.0f, 32.0f, 16.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
+        setmenuitem(OPTION_KEY, KEY_E);
+    }
+    createmenubutton("Twitter", 1020.0f, 636.0f, 96.0f, 96.0f, 16.0f, 10, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_LINK, 0, sr_data_texturelist.twitter);
+    createmenubutton("CrypticSea", 4.0f, 636.0f, 192.0f, 96.0f, 16.0f, 8, 1.0f, 1.0f, 1.0f, 1.0f);
+    setmenuitem(OPTION_LINK, 0, sr_data_texturelist.logo);
+}
+
+/* Pose human 0 for the menu model: bone 0 at the human place with no turn, and each other
+ * bone at the place of its parent plus its offset in the frame of the parent. */
+static void main_pose_human(Human *h)
+{
+    int k;
+
+    copyvector((unsigned *)&h->bones[0].pos, (const unsigned *)&h->pos);
+    resetorientation(h->bones[0].rot);
+    h->colors[0].x = 0.0625f;
+    h->colors[0].y = 0.03125f;
+    h->colors[0].z = -0.125f;
+    h->colors[2].x = -0.0625f;
+    h->colors[2].y = 0.03125f;
+    h->colors[2].z = -0.125f;
+    h->colors[1].x = 1.0f;
+    h->colors[1].y = 1.0f;
+    h->colors[1].z = 1.0f;
+    h->colors[3].x = 1.0f;
+    h->colors[3].y = 1.0f;
+    h->colors[3].z = 1.0f;
+    for (k = 1; k < 15; k++) {
+        Bone *b = &h->bones[k];
+        const Bone *parent = &h->bones[sr_data_body[k].parent];
+
+        copyvector((unsigned *)&b->rot[0], (const unsigned *)&parent->rot[0]);
+        copyvector((unsigned *)&b->rot[1], (const unsigned *)&parent->rot[1]);
+        copyvector((unsigned *)&b->rot[2], (const unsigned *)&parent->rot[2]);
+        scaleaddvectors(&b->pos, &parent->pos, &b->rot[0], sr_data_body[k].pos.x);
+        scaleaddvectors(&b->pos, &b->pos, &b->rot[1], sr_data_body[k].pos.y);
+        scaleaddvectors(&b->pos, &b->pos, &b->rot[2], sr_data_body[k].pos.z);
+    }
+}
+
+/* With debugit, draw a 3D scene behind the menu: the model of human 0 and the head model, lit
+ * from the front. Key H draws the head as lines. */
+static void main_scene(void)
+{
+    static const float white[3] = {1.0f, 1.0f, 1.0f};
+    vec3 place, rot[3];
+    int textures[2];
+
+    zerovector((unsigned *)&cl_data_camera_position);
+    resetorientation(cl_data_camera_rotation);
+    setupperspectiveviewport(0, 0, 0x400, 0x280, 0.125f, 1024.0f, 1.0f);
+    setupviewpoint(&cl_data_camera_position, cl_data_camera_rotation);
+    main_pose_human(&sr_data_human[0]);
+    buildhumanmodel(0, sr_data_modellist.human[0]);
+    cl_data_light_position[0] = 0.0f;
+    cl_data_light_position[1] = 0.0f;
+    cl_data_light_position[2] = 1.0f;
+    cl_data_light_position[3] = 0.0f;
+    audio_glLightfv()(GL_LIGHT0, GL_POSITION, cl_data_light_position);
+    cl_data_light_ambient[0] = 1.0f;
+    cl_data_light_ambient[1] = 1.0f;
+    cl_data_light_ambient[2] = 1.0f;
+    cl_data_light_diffuse[0] = 0.0f;
+    cl_data_light_diffuse[1] = 0.0f;
+    cl_data_light_diffuse[2] = 0.0f;
+    audio_glLightfv()(GL_LIGHT0, GL_AMBIENT, cl_data_light_ambient);
+    audio_glLightfv()(GL_LIGHT0, GL_DIFFUSE, cl_data_light_diffuse);
+    place.x = 0.0f;
+    place.y = 0.0f;
+    place.z = -1.0f;
+    resetorientation(rot);
+    rotateorientation(rot, &sr_data_yaxis, (float)MODEL_TURN);
+    textures[0] = sr_data_texturelist.human[0];
+    textures[1] = sr_data_texturelist.human[0];
+    if (cl_data_audio_keys[KEY_H] != 0) {
+        audio_glPolygonMode()(GL_FRONT, GL_LINE);
+        audio_glPolygonMode()(GL_BACK, GL_LINE);
+    }
+    audio_glColor3f()(1.0f, 1.0f, 1.0f);
+    rendermodel(sr_data_modellist.head, &place, rot, 2, textures, white);
+    audio_glPolygonMode()(GL_FRONT, GL_FILL);
+    audio_glPolygonMode()(GL_BACK, GL_FILL);
+}
+
+/* Run the item that the player pressed. Start (and the demos) begin a game on this machine:
+ * Demo is game type 0, Demo 2 game type 2, Start opens the host screen with game type 3. A
+ * link opens its web page and also leaves the menu. */
+static void main_actions(void)
+{
+    const MenuItem *items = cl_data_menu_items;
+
+    if (sr_data_debugit != 0 && items[MAIN_EDITOR].pressed != 0) {
+        sr_data_game.gametype = 1;
+        buildingedit_menu();
+    }
+    if (items[MAIN_DEMO_2].pressed != 0 || items[MAIN_DEMO].pressed != 0) {
+        if (items[MAIN_DEMO].pressed != 0)
+            sr_data_game.gametype = 0;
+        else
+            sr_data_game.gametype = 2;
+        sr_data_game.round_time = ROUND_TIME;
+        strcpy(sr_data_server.name, sr_data_option.servername);
+        sr_data_server.max_players = 1;
+        sr_data_server.active = 1;
+        sr_data_option.net_on = 0;
+        sr_data_option.master_on = 0;
+        gameloop();
+    }
+    if (items[MAIN_START].pressed != 0) {
+        sr_data_game.gametype = 3;
+        sr_data_option.net_on = 1;
+        sr_data_option.master_on = 1;
+        hostmenu();
+    }
+    if (items[MAIN_JOIN].pressed != 0)
+        joinmenu();
+    if (items[MAIN_VOICE].pressed != 0)
+        voiceoptionsmenu();
+    if (items[MAIN_OPTIONS].pressed != 0)
+        optionsmenu();
+    if (items[MAIN_TWITTER].pressed != 0) {
+        launchwebpage("www.twitter.com/crypticsea");
+        cl_data_menu_items[MAIN_EDITOR].pressed = 0;
+        cl_data_menu_items[MAIN_EXIT].pressed = 1;
+    }
+    if (items[MAIN_WEBSITE].pressed != 0) {
+        launchwebpage("www.crypticsea.com");
+        cl_data_menu_items[MAIN_TWITTER].pressed = 0;
+        cl_data_menu_items[MAIN_EXIT].pressed = 1;
+    }
+    if (sr_data_debugit != 0 && cl_data_audio_input_blocked == 0) {
+        if (cl_data_audio_keys[KEY_A] != 0)
+            model_viewer();
+        if (cl_data_audio_keys[KEY_U] != 0)
+            usermenu();
+    }
+}
+
+/* With debugit, keys 1 to 4 play the four test sounds at the camera. Left shift plays them at a
+ * quarter of the pitch. */
+static void main_test_sounds(void)
+{
+    vec3 place;
+    int i;
+
+    for (i = 0; i < 4; i++)
+        if (cl_data_audio_keys[KEY_1 + i] != 0 && cl_data_prevkeyboard[KEY_1 + i] == 0) {
+            copyvector((unsigned *)&place, (const unsigned *)&cl_data_camera_position);
+            createsound(sr_data_soundlist.menu_test[i], &place, 0, 1.0f,
+                        cl_data_audio_keys[KEY_LEFT_SHIFT] == 0 ? 1.0f : 0.25f);
+        }
+}
+
+/* The main menu: the first setup, then the menu loop until Exit. With debugit the menu also
+ * shows a 3D scene, the editor item and the test keys. */
+void __cdecl mainmenu(void)
+{
+    if (!main_setup())
+        return;
+    resetmenuitems();
+    while (menu_open()) {
+        main_items();
+        menu_input();
+        audio_glEnable()(0xb71);    /* depth test */
+        audio_glDepthFunc()(0x203); /* less or equal */
+        audio_glDepthMask()(1);
+        audio_glDisable()(0xbe2); /* blend */
+        audio_glEnable()(0xb44);  /* cull face */
+        audio_glFrontFace()(0x900);
+        clear_menu_screen(GL_CLEAR_BITS);
+        if (sr_data_debugit != 0)
+            main_scene();
+        soundsimulation(&cl_data_camera_position, cl_data_camera_rotation, &cl_data_camera_velocity);
+        getaudioinput(0);
+        setuptextdisplay();
+        drawtext("Sub Rosa", 512.0f, 160.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
+        drawtext("ALPHA /i", 512.0f, 184.0f, 12.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f, sr_data_currentversion);
+        if (sr_data_debugit != 0)
+            drawtext("DEBUG", 512.0f, 196.0f, 20.0f, 1, 1.0f, 1.0f, 1.0f, 1.0f);
+        menu_show(24);
+        if (cl_data_audio_threshold < 0)
+            cl_data_audio_threshold = 0;
+        if (cl_data_audio_threshold > 0x8000)
+            cl_data_audio_threshold = 0x8000;
+        main_actions();
+        audio_SDL_Delay()(1);
+        if (sr_data_debugit != 0)
+            main_test_sounds();
+    }
+    closesocketserver(1);
+    resetmenuitems();
+    if (cl_data_audio_capture != 0)
+        audio_alcCaptureStop()(cl_data_audio_capture);
+    disablespeex();
 }

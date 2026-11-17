@@ -8,5 +8,6 @@ void __cdecl usermenu(void);
 void __cdecl hostmenu(void);
 void __cdecl optionsmenu(void);
 void __cdecl joinmenu(void);
+void __cdecl mainmenu(void);
 
 #endif /* CL_MENU_FRONT_H */
