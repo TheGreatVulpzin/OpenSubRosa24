@@ -275,6 +275,15 @@ SR_STATIC_ASSERT(sizeof(JoinAddress) == 0x8, "JoinAddress");
 SR_STATIC_ASSERT(offsetof(JoinAddress, address) == 0x0, "JoinAddress.address");
 SR_STATIC_ASSERT(offsetof(JoinAddress, port) == 0x4, "JoinAddress.port");
 
+/* editor_entry[]: record of 0x44 bytes. */
+typedef union EditorEntry { struct {
+    int index;                           /* +0x0000 buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list */
+    char name[64];                       /* +0x0004 buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture */
+}; uint8_t lf_raw[0x44]; } EditorEntry;
+SR_STATIC_ASSERT(sizeof(EditorEntry) == 0x44, "EditorEntry");
+SR_STATIC_ASSERT(offsetof(EditorEntry, index) == 0x0, "EditorEntry.index");
+SR_STATIC_ASSERT(offsetof(EditorEntry, name) == 0x4, "EditorEntry.name");
+
 #pragma pack(pop)
 
 #endif

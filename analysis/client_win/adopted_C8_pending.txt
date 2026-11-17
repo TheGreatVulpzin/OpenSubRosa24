@@ -1,3 +1,5 @@
 # Editor menus: each runs a frame loop. They wait for a test in the game window.
 model_viewer src/client/editor/model.c
 buildingedit_menu src/client/editor/menus.c
+buildingedit_blockmenu src/client/editor/menus.c
+buildingedit_texturemenu src/client/editor/menus.c
