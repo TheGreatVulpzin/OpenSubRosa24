@@ -19,12 +19,12 @@ rva,size,name,source,confidence,evidence
 0x17e0,325,,,,
 0x1930,441,,,,
 0x1af0,87,,,,
-0x1b50,14,,,,
+0x1b50,14,start_file,manual,1.0,stb_image: sets the file of the context. ELF start_file.
 0x1b60,1635,load_jpeg_image,anchor,0.622,features
 0x21d0,170,decode_jpeg_image,anchor,0.842,features
 0x2280,115,get_marker,anchor,0.842,features
-0x2300,17,,,,
-0x2320,101,,,,
+0x2300,17,stbi_get8u,manual,1.0,stb_image: returns stbi_get8. ELF stbi_get8u.
+0x2320,101,stbi_get8,manual,1.0,"stb_image: fgetc from the file, or the next byte of the memory buffer. ELF stbi_get8."
 0x2390,1285,parse_entropy_coded_data,anchor,0.944,features
 0x28a0,170,grow_buffer_unsafe,anchor,0.93,features
 0x2950,322,decode_block,callgraph,1.0,votes=6
@@ -50,7 +50,7 @@ rva,size,name,source,confidence,evidence
 0x4a90,176,cleanup_jpeg,anchor,0.915,features
 0x4b40,88,,,,
 0x4ba0,91,,,,
-0x4c00,36,,,,
+0x4c00,36,start_mem,manual,1.0,"stb_image: no file, the buffer start and end. ELF start_mem."
 0x4c30,114,,,,
 0x4cb0,77,,,,
 0x4d00,160,,,,
@@ -93,7 +93,7 @@ rva,size,name,source,confidence,evidence
 0x8240,154,,,,
 0x82e0,79,,,,
 0x8330,146,,,,
-0x83d0,41,,,,
+0x83d0,41,get16le,manual,1.0,"stb_image: two stbi_get8, low byte first. ELF get16le."
 0x8400,41,,,,
 0x8430,42,,,,
 0x8460,88,,,,
@@ -2097,13 +2097,13 @@ rva,size,name,source,confidence,evidence
 0x30260,68,,,,
 0x302b0,44,,,,
 0x302e0,551,__GLeeGetExtensions,strings,1.0,"3 strings, jaccard 1.00"
-0x30510,81,,,,
-0x30570,175,,,,
-0x30620,10,,,,
-0x30630,16,,,,
-0x30640,10,,,,
-0x30650,199,,,,
-0x30720,26,,,,
+0x30510,81,__GLeeCheckExtension,manual,1.0,GLee 5.4 source: strcmp over the ExtensionList names up to its count. GLee init calls it 353 times.
+0x30570,175,__GLeeGetExtensionNumber,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 175 bytes, ELF 210 bytes."
+0x30620,10,GLeeGetExtStrGLX,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 10 bytes, ELF 11 bytes."
+0x30630,16,GLeeGetExtStrGL,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 16 bytes, ELF 16 bytes."
+0x30640,10,GLeeGetErrorString,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 10 bytes, ELF 11 bytes."
+0x30650,199,GLeeForceLink,order,0.8,"ELF link order: between __GLeeCheckExtension and GLeeEnabled. Size 199 bytes, ELF 249 bytes."
+0x30720,26,GLeeEnabled,manual,1.0,"GLee 5.4 source: calls GLeeInit when GLee is not ready, then returns the flag."
 0x30740,12954,GLeeInit,strings,0.895,"353 strings, jaccard 0.90"
 0x339e0,142,setupaudio,anchor,1.0,features
 0x33a70,113,shutdownaudio,anchor,1.0,features
@@ -2111,15 +2111,15 @@ rva,size,name,source,confidence,evidence
 0x33be0,707,createaccount,anchor,0.534,features
 0x33eb0,112,account_nameexists,anchor,0.665,features
 0x33f20,232,createclientaccount,callgraph,1.0,votes=8
-0x34010,438,,,,
+0x34010,438,saveaccountsserver,order,0.8,"ELF link order: between createclientaccount and loadaccountsserver. Size 438 bytes, ELF 797 bytes."
 0x341d0,669,loadaccountsserver,anchor,0.458,features
 0x34470,349,saveaccountsclient,callgraph,0.333,votes=2
-0x345d0,362,,,,
+0x345d0,362,loadaccountsclient,order,0.8,"ELF link order: between saveaccountsclient and server_writelogfile. Size 362 bytes, ELF 492 bytes."
 0x34740,393,server_writelogfile,anchor,0.558,features
 0x348d0,3940,playerai,callgraph,0.333,votes=2
 0x35840,1784,ai_assessthreats,anchor,0.465,features
 0x35f40,82,angulardistance,anchor,1.0,features
-0x35fa0,149,,,,
+0x35fa0,149,addplayerwaypoint,order,0.8,"ELF link order: between angulardistance and ai_playercar. Size 149 bytes, ELF 270 bytes."
 0x36040,4815,ai_playercar,anchor,0.497,features
 0x37310,1030,ai_car_nextwaypoint,anchor,0.712,features
 0x37720,1036,createarea,callgraph,0.667,votes=4; diverge: building_setupbuild
@@ -2127,24 +2127,24 @@ rva,size,name,source,confidence,evidence
 0x38260,460,area_setblock,callgraph,1.0,votes=8
 0x38430,460,area_setblockcolor,callgraph,0.667,votes=4
 0x38600,352,area_getblock,callgraph,0.667,votes=4
-0x38760,445,,,,
-0x38920,361,,,,
-0x38a90,364,,,,
+0x38760,445,area_getblocklink,order,0.8,"ELF link order: between area_getblock and area_deleteblock. Size 445 bytes, ELF 569 bytes."
+0x38920,361,area_getblockmaterial,order,0.8,"ELF link order: between area_getblock and area_deleteblock. Size 361 bytes, ELF 489 bytes."
+0x38a90,364,area_getblocktexture,order,0.8,"ELF link order: between area_getblock and area_deleteblock. Size 364 bytes, ELF 493 bytes."
 0x38c00,967,area_deleteblock,callgraph,1.0,votes=6
 0x38fd0,542,area_createsector,callgraph,1.0,votes=12
 0x391f0,61,area_getnextsector,callgraph,0.667,votes=4
 0x39230,315,area_marksector,callgraph,1.0,votes=12
-0x39370,137,,,,
+0x39370,137,area_resetsector,order,0.8,"ELF link order: between area_marksector and area_createchunk. Size 137 bytes, ELF 168 bytes."
 0x39400,332,area_createchunk,callgraph,1.0,votes=12
 0x39550,71,area_getnextchunk,callgraph,0.667,votes=4
 0x395a0,12709,area_createsblocks,anchor,0.473,features
 0x3c750,2054,area_setupsblock,anchor,0.642,features
 0x3cf60,1455,addbeziersurface,callgraph,1.0,votes=164
-0x3d510,1280,,,,
+0x3d510,1280,addbeziersurfacetexture,order,0.8,"ELF link order: between addbeziersurface and tesselatebezier. Size 1280 bytes, ELF 1638 bytes."
 0x3da10,163,tesselatebezier,callgraph,1.0,votes=8
 0x3dac0,204,tesselatebezierderivative,callgraph,1.0,votes=8
 0x3db90,1168,area_copyrotateblock,anchor,0.557,features
-0x3e020,191,,,,
+0x3e020,191,area_block_insertquad,order,0.8,"ELF link order: between area_copyrotateblock and area_block_createbuildinginterior. Size 191 bytes, ELF 281 bytes."
 0x3e0e0,2103,area_block_createbuildinginterior,anchor,0.665,features
 0x3e920,1607,area_block_addwindowhorizontal,anchor,0.881,features
 0x3ef70,1223,area_block_addwindowvertical,anchor,0.917,features
@@ -2153,36 +2153,36 @@ rva,size,name,source,confidence,evidence
 0x3f880,1059,loadblock,callgraph,0.333,votes=2
 0x3fcb0,8821,area_createinteriorblocks,anchor,0.638,features
 0x41f30,288,area_block_addfloorceil,anchor,0.787,features
-0x42050,140,,,,
-0x420e0,140,,,,
+0x42050,140,area_block_addfloor,order,0.8,"ELF link order: between area_block_addfloorceil and area_block_addwall. Size 140 bytes, ELF 190 bytes."
+0x420e0,140,area_block_addceil,order,0.8,"ELF link order: between area_block_addfloorceil and area_block_addwall. Size 140 bytes, ELF 190 bytes."
 0x42170,176,area_block_addwall,callgraph,1.0,votes=8
-0x42220,375,,,,
-0x423a0,739,,,,
-0x42690,367,,,,
-0x42800,755,,,,
+0x42220,375,area_block_addwindowvertical_exterior,order,0.8,"ELF link order: between area_block_addwall and area_block_addwindow. Size 375 bytes, ELF 495 bytes."
+0x423a0,739,area_block_addwindowvertical_interior,order,0.8,"ELF link order: between area_block_addwall and area_block_addwindow. Size 739 bytes, ELF 931 bytes."
+0x42690,367,area_block_addwindowhorizontal_exterior,order,0.8,"ELF link order: between area_block_addwall and area_block_addwindow. Size 367 bytes, ELF 476 bytes."
+0x42800,755,area_block_addwindowhorizontal_interior,order,0.8,"ELF link order: between area_block_addwall and area_block_addwindow. Size 755 bytes, ELF 910 bytes."
 0x42b00,423,area_block_addwindow,callgraph,0.333,votes=2
 0x42cb0,1075,area_block_adddoor,anchor,0.881,features
 0x430f0,649,area_block_addbeam,callgraph,1.0,votes=36
 0x43380,350,area_block_addoutdoor,callgraph,0.333,votes=2
 0x434e0,354,area_block_addcorner,anchor,0.483,features
 0x43650,290,area_block_rotatesurface,callgraph,1.0,votes=80
-0x43780,766,building_iswindow,callgraph,1.0,votes=8
-0x43a80,466,,,,
+0x43780,766,area_interior_createblock,manual,1.0,ELF order: the first area_interior function after area_block_rotatesurface. The old name building_iswindow was a weak vote.
+0x43a80,466,area_interior_setblock,manual,1.0,ELF order: after area_interior_createblock. The server call list of area_interior_setblock aligns with it.
 0x43c60,442,area_interior_setobject,callgraph,1.0,votes=8
-0x43e20,352,,,,
-0x43f80,445,,,,
-0x44140,361,,,,
+0x43e20,352,area_interior_getblock,manual,1.0,"Reads the block at x, y, z of an area, 0 outside it. ELF order: after area_interior_setobject."
+0x43f80,445,area_interior_getblocklink,manual,1.0,ELF order: after area_interior_getblock. The server call list aligns with it.
+0x44140,361,area_interior_getblocktexture,manual,1.0,"ELF order: after area_interior_getblocklink, before area_interior_buildsectormodel."
 0x442b0,9044,area_interior_buildsectormodel,strings,1.0,"6 strings, jaccard 1.00"
 0x46610,187,area_breakblock,callgraph,0.667,votes=4
 0x466d0,4594,lineintersectarea,callgraph,1.0,votes=8
 0x478d0,507,lineintersectnormalblock,callgraph,1.0,votes=8
 0x47ad0,784,lineintersectspecblock,callgraph,1.0,votes=16
-0x47de0,3599,,,,
-0x48bf0,1036,,,,
-0x49000,1176,,,,
-0x494a0,2650,,,,
-0x49f00,633,,,,
-0x4a180,1220,,,,
+0x47de0,3599,sphereintersectarea,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 3599 bytes, ELF 4643 bytes."
+0x48bf0,1036,sphereintersectnormalblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1036 bytes, ELF 1513 bytes."
+0x49000,1176,sphereintersectspecblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1176 bytes, ELF 1838 bytes."
+0x494a0,2650,circleintersectarea,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 2650 bytes, ELF 3656 bytes."
+0x49f00,633,circleintersectnormalblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 633 bytes, ELF 988 bytes."
+0x4a180,1220,circleintersectspecblock,order,0.8,"ELF link order: between lineintersectspecblock and area_buildsectormodel. Size 1220 bytes, ELF 2078 bytes."
 0x4a650,7368,area_buildsectormodel,callees,0.727,"callee jaccard 0.73, constants 0.39, size 7368"
 0x4c320,2660,,,,
 0x4cd90,2948,,,,
@@ -2198,65 +2198,65 @@ rva,size,name,source,confidence,evidence
 0x4f720,167,deletesound,anchor,0.706,features
 0x4f7d0,1252,createwav,anchor,0.802,features
 0x4fcc0,1264,createbond,anchor,0.498,features
-0x501b0,123,,,,
-0x50230,1229,,,,
+0x501b0,123,bondtimetolive,order,0.8,"ELF link order: between createbond and bondsimulation2. Size 123 bytes, ELF 144 bytes."
+0x50230,1229,deletebond,order,0.8,"ELF link order: between createbond and bondsimulation2. Size 1229 bytes, ELF 2002 bytes."
 0x50700,21666,bondsimulation2,strings,1.0,"5 strings, jaccard 1.00"
-0x55bb0,5,,,,
+0x55bb0,5,checkbonds,order,0.8,"ELF link order: between bondsimulation2 and setupbuildingtypes. Size 5 bytes, ELF 6 bytes."
 0x55bc0,3856,setupbuildingtypes,anchor,0.464,features
 0x56ad0,7780,building_buildfloorplan,anchor,0.647,features
-0x58940,296,,,,
-0x58a70,229,,,,
+0x58940,296,building_iswindow,manual,1.0,Tests a wall kind 1 to 8 (and 9 with the last flag) of a floor plan cell. building_buildfloorplan calls it. ELF order: after building_buildfloorplan.
+0x58a70,229,building_addgaragedoor,manual,1.0,Sets or clears the two garage door objects of a building and marks their sectors. eventsimulation calls it. ELF order: after building_iswindow.
 0x58b60,442,buildingedit_setup,anchor,0.704,features
 0x58d20,13082,building_editorloop,anchor,0.873,features
-0x5c040,1813,,,,
+0x5c040,1813,building_checkeditor,order,0.8,"ELF link order: between building_editorloop and buildingedit_addblock. Size 1813 bytes, ELF 2718 bytes."
 0x5c760,1929,buildingedit_addblock,callgraph,0.667,votes=4
-0x5cef0,595,,,,
+0x5cef0,595,buildingedit_deleteblock,order,0.8,"ELF link order: between buildingedit_addblock and buildingedit_blockmenu. Size 595 bytes, ELF 1275 bytes."
 0x5d150,2686,buildingedit_blockmenu,callgraph,0.333,votes=2
 0x5dbd0,1101,buildingedit_menu,anchor,0.785,features
 0x5e020,2842,buildingedit_texturemenu,anchor,0.846,features
-0x5eb40,1076,,,,
-0x5ef80,903,,,,
+0x5eb40,1076,buildingedit_removetexture,order,0.8,"ELF link order: between buildingedit_texturemenu and building_reloadtextures. Size 1076 bytes, ELF 1927 bytes."
+0x5ef80,903,buildingedit_inserttexture,order,0.8,"ELF link order: between buildingedit_texturemenu and building_reloadtextures. Size 903 bytes, ELF 1560 bytes."
 0x5f310,165,building_reloadtextures,callgraph,0.667,votes=4
 0x5f3c0,2259,buildingedit_render,anchor,0.902,features
 0x5fca0,330,buildingeditor_drawquad,anchor,0.936,features
 0x5fdf0,734,buildingeditor_drawblock,callgraph,0.667,votes=4
 0x600d0,1227,buildingeditor_renderblock,anchor,0.663,features
 0x605a0,918,buildingeditor_renderblock2,anchor,0.891,features
-0x60940,509,,,,
+0x60940,509,buildingeditor_draw_sblock,order,0.8,"ELF link order: between buildingeditor_renderblock2 and building_save. Size 509 bytes, ELF 758 bytes."
 0x60b40,2455,building_save,callgraph,0.333,votes=2
 0x614e0,2790,building_load,callees,0.714,"callee jaccard 0.71, constants 0.50, size 2790"
-0x61fd0,2780,,,,
+0x61fd0,2780,building_setupbuild,order,0.8,ELF link order: between building_load and building_setupfloorplannewer. building_editorloop and createlevel call it. The old row at 0x63470 had this name by a weak vote.
 0x62ab0,2482,building_setupfloorplannewer,anchor,0.549,features
-0x63470,3218,building_setupbuild,callgraph,0.333,votes=2
+0x63470,3218,building_rotatefloorplan,order,0.8,"ELF link order: after building_setupfloorplannewer, before setupbullettypes. Size 3218 bytes, ELF 6362 bytes."
 0x64110,620,setupbullettypes,callgraph,0.333,votes=2
 0x64380,607,createbullet,callgraph,0.667,votes=4
-0x645e0,111,,,,
-0x64650,96,,,,
+0x645e0,111,bullettimetolive,order,0.8,"ELF link order: between createbullet and bulletsimulation, two unnamed functions for two ELF symbols. checksimulation and dedicatedserverloop call it. The old row at 0xe26a0 had this name by a weak vote."
+0x64650,96,deletebullet,order,0.8,"ELF link order: after bullettimetolive, before bulletsimulation. The old row at 0xe2720 had this name by a weak vote."
 0x646b0,3196,bulletsimulation,anchor,0.663,features
-0x65330,135,,,,
-0x653c0,58,,,,
-0x65400,41,,,,
+0x65330,135,createcityobject,order,0.8,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 135 bytes, ELF 280 bytes."
+0x653c0,58,getnextcityobject,order,0.8,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 58 bytes, ELF 77 bytes."
+0x65400,41,deletecityobject,order,0.8,"ELF link order: between bulletsimulation and lineintersectcityobject. Size 41 bytes, ELF 66 bytes."
 0x65430,1858,lineintersectcityobject,callgraph,1.0,votes=8
 0x65b80,1667,lineintersectcityobjecttype,callgraph,0.667,votes=4
-0x66210,984,,,,
-0x665f0,10,,,,
+0x66210,984,sphereintersectcityobjecttype,order,0.8,"ELF link order: between lineintersectcityobjecttype and city_createelevator. Size 984 bytes, ELF 1672 bytes."
+0x665f0,10,cityobject_simulation,order,0.8,"ELF link order: between lineintersectcityobjecttype and city_createelevator. Size 10 bytes, ELF 6 bytes."
 0x66600,522,city_createelevator,anchor,0.87,features
 0x66810,3197,setupcityobjecttypes,anchor,0.807,features
 0x67490,568,cityobject_addbox,callgraph,1.0,votes=24
 0x676d0,2389,clientrecv,callgraph,0.667,votes=4
 0x68030,1391,clientsend,callgraph,0.333,votes=2
-0x685a0,409,,,,
-0x68740,226,,,,
-0x68830,918,,,,
-0x68bd0,579,,,,
-0x68e20,159,,,,
-0x68ec0,121,,,,
-0x68f40,64,,,,
-0x68f80,64,,,,
-0x68fc0,80,,,,
-0x69010,80,,,,
-0x69060,164,,,,
-0x69110,118,,,,
+0x685a0,409,packunitvector,order,0.8,"ELF link order: between clientsend and unpackunitvector. Size 409 bytes, ELF 482 bytes."
+0x68740,226,unpackunitvector,manual,1.0,"Inverse of the server packunitvector: axis index and sign in word 0, two ratios with a sign bit, then normalizevector."
+0x68830,918,packorientation,order,0.8,"ELF link order: between unpackunitvector and packangle. Size 918 bytes, ELF 1004 bytes."
+0x68bd0,579,unpackorientation,order,0.8,"ELF link order: between unpackunitvector and packangle. Size 579 bytes, ELF 652 bytes."
+0x68e20,159,packangle,manual,1.0,"Same body as the server packangle: 2*pi constant, sign bit, pbitwrite."
+0x68ec0,121,unpackangle,manual,1.0,"Same body as the server unpackangle: pbitread, 2*pi constant."
+0x68f40,64,packposition,manual,1.0,"Three cs_pwrite calls of 4 bytes, as the server packposition (cs_pwrite inline there)."
+0x68f80,64,unpackposition,manual,1.0,Three cs_pread calls of 4 bytes: the inverse of packposition. ELF unpackposition.
+0x68fc0,80,packpositiondelta,manual,1.0,"packscalar of a[i] - b[i] for 3 axes, as the server packpositiondelta."
+0x69010,80,unpackpositiondelta,manual,1.0,"unpackscalar for 3 axes, then out[i] = base[i] + value, as the server unpackpositiondelta."
+0x69060,164,packscalar,manual,1.0,"Same body as the server packscalar: |x| scaled by half range over the limit, sign bit, pbitwrite."
+0x69110,118,unpackscalar,manual,1.0,"pbitread, then the inverse scale of packscalar. ELF unpackscalar."
 0x69190,682,debug_getinputs,anchor,0.959,features
 0x69440,2642,displaydebuginfo,manual,1.0,Counts nonbot players and draws the selected diagnostic display
 0x69ea0,804,debug_rendercylinder,anchor,0.777,features
@@ -2275,7 +2275,7 @@ rva,size,name,source,confidence,evidence
 0x6b160,2367,server_playermessage,anchor,0.747,features
 0x6baa0,7233,drawdisplay,anchor,0.933,features
 0x6d6f0,214,createmessage,anchor,0.825,features
-0x6d7d0,131,,,,
+0x6d7d0,131,newspaper_addline,order,0.8,"ELF link order: between createmessage and drawcircle. Size 131 bytes, ELF 279 bytes."
 0x6d860,300,drawcircle,anchor,0.894,features
 0x6d990,300,drawcirclefill,callees,1.0,"callee jaccard 1.00, constants 0.25, size 300"
 0x6dac0,484,drawplayerindicator,anchor,0.91,features
@@ -2285,32 +2285,32 @@ rva,size,name,source,confidence,evidence
 0x6ed50,589,economy_carmarket,anchor,0.621,features
 0x6efa0,1576,economy_gunmarket,anchor,0.652,features
 0x6f5d0,257,playerbuystock,anchor,0.521,features
-0x6f6e0,377,,,,
+0x6f6e0,377,playersellstock,manual,1.0,Sells the shares of a player at 0.95 of the price (0.98 in game type 3). ELF order: after playerbuystock.
 0x6f860,293,playerdeathtax,anchor,0.774,features
-0x6f990,98,,,,
+0x6f990,98,accountdeathtax,manual,1.0,Takes 5 percent of the account cash above 10000. humansimulation calls it. ELF order: between playerdeathtax and playerteamkilltax. The old row at 0xa4260 had this name by a weak vote.
 0x6fa00,307,playerteamkilltax,anchor,0.813,features
 0x6fb40,55,playerdebt,callgraph,1.0,votes=10
 0x6fb80,384,player_calcassets,anchor,0.757,features
 0x6fd00,1154,player_saveinventory,callgraph,0.333,votes=2
 0x70190,791,player_loadinventory,callgraph,0.667,votes=4
 0x704b0,6563,eventsimulation,anchor,0.647,features
-0x71e60,177,getrandomvector2d,callgraph,0.667,votes=4
+0x71e60,177,createevent_bullet,manual,1.0,Writes an event record. ELF link order: before createevent_bullethit. The old name getrandomvector2d was a weak vote.
 0x71f20,211,createevent_bullethit,callgraph,1.0,votes=8
 0x72000,239,createevent_message,anchor,0.682,features
-0x720f0,163,,,,
+0x720f0,163,createevent_createobject,manual,1.0,Event type 3 with the object index and two object fields. ELF order: between createevent_message and createevent_updateobject.
 0x721a0,262,createevent_updateobject,callgraph,0.667,votes=4
 0x722b0,255,createevent_updateitem,callgraph,1.0,votes=8
 0x723b0,212,createevent_updateiteminfo,callgraph,1.0,votes=56
 0x72490,393,createevent_updateplayer,callgraph,0.333,votes=2
 0x72620,163,createevent_updatehuman,anchor,1.0,features
 0x726d0,163,createevent_updateplayer_finance,callgraph,0.667,votes=4
-0x72780,168,,,,
+0x72780,168,createevent_sound,manual,1.0,"Event type 9 with a sound, a place and two values. ELF order: between createevent_updateplayer_finance and createevent_updatedoor."
 0x72830,123,createevent_updatedoor,callgraph,1.0,votes=13
-0x728b0,257,,,,
+0x728b0,257,createevent_updatescenario,manual,1.0,Event type 11 with the round state. ELF order: between createevent_updatedoor and createevent_updatemission.
 0x729c0,397,createevent_updatemission,callgraph,0.333,votes=2
-0x72b50,227,,,,
-0x72c40,193,,,,
-0x72d10,154,,,,
+0x72b50,227,createevent_updatestocks,manual,1.0,Event type 13 with the 5 stock prices. ELF order: after createevent_updatemission.
+0x72c40,193,createevent_updatecarmarket,manual,1.0,Event type 14 with a car market slot. ELF order: after createevent_updatestocks.
+0x72d10,154,createevent_updateblock_interior,manual,1.0,Event type 15 with the block place and a value. ELF order: before createevent_updateblock_quad.
 0x72db0,286,createevent_updateblock_quad,callgraph,0.5,votes=3
 0x72ed0,3012,packevent,anchor,0.562,features
 0x73aa0,2128,unpackevent,callgraph,0.667,votes=4
@@ -2325,20 +2325,20 @@ rva,size,name,source,confidence,evidence
 0x79330,952,frame_drawvoiceicons,anchor,0.787,features
 0x796f0,407,pointinsidefrustum,manual,1.0,Tells if a point is in the view cone: one plane across the view and four side planes. The Linux client has pointinsidefrustum (437 bytes).
 0x79890,503,boxinsidefrustum,callgraph,0.5,votes=3
-0x79a90,49,,,,
+0x79a90,49,testtimer,order,0.8,"ELF link order: between boxinsidefrustum and resetgame. Size 49 bytes, ELF 77 bytes."
 0x79ad0,5666,resetgame,anchor,0.818,features
 0x7b100,8022,gameloop,anchor,0.743,features
 0x7d060,37,reactivategame,anchor,1.0,features
-0x7d090,74,,,,
+0x7d090,74,reloadopengl,order,0.8,"ELF link order: between reactivategame and movecamera. Size 74 bytes, ELF 90 bytes."
 0x7d0e0,979,movecamera,anchor,0.913,features
 0x7d4c0,1088,movecamera2,anchor,0.908,features
 0x7d900,2640,checksimulation,anchor,0.703,features
 0x7e350,407,newspaper_load,anchor,0.584,features
-0x7e4f0,5,,,,
+0x7e4f0,5,setupplayermenus,order,0.8,"ELF link order: between newspaper_load and playermenu. Size 5 bytes, ELF 6 bytes."
 0x7e500,552,playermenu,callgraph,0.667,votes=4
-0x7e730,46,,,,
+0x7e730,46,drawplayermenu,order,0.8,"ELF link order: between playermenu and playermenu_team. Size 46 bytes, ELF 62 bytes."
 0x7e760,519,playermenu_team,anchor,0.761,features
-0x7e970,28,,,,
+0x7e970,28,drawplayermenu_team,order,0.8,"ELF link order: between playermenu_team and playermenu_spawn. Size 28 bytes, ELF 25 bytes."
 0x7e990,162,playermenu_spawn,anchor,0.742,features
 0x7ea40,786,playermenu_buy,anchor,0.86,features
 0x7ed60,1135,playermenu_buy_weapons,callgraph,0.5,votes=3
@@ -2362,13 +2362,13 @@ rva,size,name,source,confidence,evidence
 0x84f00,424,selectnearitem,manual,1.0,Selects the nearest free item within the reach segment of the viewed human
 0x850b0,2187,createhuman,callgraph,1.0,votes=10
 0x85940,61,getnexthuman,callgraph,0.667,votes=4
-0x85980,491,pointinsidebuilding,callgraph,0.333,votes=2
+0x85980,491,deletehuman,manual,1.0,Frees a human: unlinks it from its player and removes its item links. ELF order: after getnexthuman.
 0x85b70,15195,humansimulation,anchor,0.622,features
 0x896d0,1798,humansimulationclient,callgraph,0.667,votes=4
-0x89de0,40,,,,
+0x89de0,40,setuphumanangles,order,0.8,"ELF link order: between humansimulationclient and lineintersecthuman. Size 40 bytes, ELF 53 bytes."
 0x89e10,318,lineintersecthuman,callgraph,0.667,votes=4
-0x89f50,184,,,,
-0x8a010,8,,,,
+0x89f50,184,human_applydamage,order,0.8,"ELF link order: between lineintersecthuman and human_calculatelegangles. Size 184 bytes, ELF 211 bytes."
+0x8a010,8,human_calculateanglesobject,order,0.8,"ELF link order: between lineintersecthuman and human_calculatelegangles. Size 8 bytes, ELF 9 bytes."
 0x8a020,1775,human_calculatelegangles,callgraph,0.667,votes=4
 0x8a710,10467,human_calculatearmangles,anchor,0.466,features
 0x8d000,5391,human_calcarmtorque,anchor,0.482,features
@@ -2378,7 +2378,7 @@ rva,size,name,source,confidence,evidence
 0x90600,552,human_buildmuscles,callgraph,0.667,votes=4
 0x90830,479,human_createmuscleball,callgraph,1.0,votes=14
 0x90a10,457,createjointbond,callgraph,0.333,votes=2
-0x90be0,5,,,,
+0x90be0,5,human_walksimulation2,order,0.8,"ELF link order: between createjointbond and getinputs. Size 5 bytes, ELF 9 bytes."
 0x90bf0,3367,getinputs,anchor,0.962,features
 0x91920,3016,getinputs_human,anchor,0.913,features
 0x924f0,3123,getinputs_car,anchor,0.812,features
@@ -2390,7 +2390,7 @@ rva,size,name,source,confidence,evidence
 0x944a0,211,sphereintersecttriangle,callgraph,1.0,votes=8
 0x94580,618,sphereintersecttrianglefull,callgraph,1.0,votes=8
 0x947f0,261,sphereintersectline,callgraph,1.0,votes=12
-0x94900,142,,,,
+0x94900,142,sphereintersectpoint,order,0.8,"ELF link order: between sphereintersectline and lineintersectsphere. Size 142 bytes, ELF 165 bytes."
 0x94990,395,lineintersectsphere,callgraph,0.5,votes=3
 0x94b20,223,getlanipaddress,anchor,0.565,features
 0x94c00,69,getonlineserverlist,callgraph,1.0,votes=6
@@ -2398,19 +2398,19 @@ rva,size,name,source,confidence,evidence
 0x951c0,6957,setupitemtypes,anchor,0.538,features
 0x96cf0,1019,createitem,callgraph,1.0,votes=81
 0x970f0,61,getnextitem,callgraph,0.667,votes=4
-0x97130,139,,,,
-0x971c0,396,,,,
+0x97130,139,itemtimetolive,order,0.8,"ELF link order: between getnextitem and itemsimulation. Size 139 bytes, ELF 171 bytes."
+0x971c0,396,deleteitem,order,0.8,"ELF link order: between getnextitem and itemsimulation. Size 396 bytes, ELF 519 bytes."
 0x97350,3900,itemsimulation,anchor,0.464,features
 0x98290,3240,itemlogic,anchor,0.591,features
 0x98f40,1463,itemweaponsimulation,callgraph,0.333,votes=2
 0x99500,905,itemsimulationclient,callgraph,0.667,votes=4
-0x99890,461,,,,
-0x99a60,105,,,,
-0x99ad0,356,,,,
-0x99c40,272,,,,
+0x99890,461,setitempositionhuman,order,0.8,"ELF link order: between itemsimulationclient and linkitem. Size 461 bytes, ELF 679 bytes."
+0x99a60,105,item_billvalue,order,0.8,"ELF link order: between itemsimulationclient and linkitem. Size 105 bytes, ELF 117 bytes."
+0x99ad0,356,item_addbill,order,0.8,"ELF link order: between itemsimulationclient and linkitem. Size 356 bytes, ELF 512 bytes."
+0x99c40,272,item_removebill,order,0.8,"ELF link order: between itemsimulationclient and linkitem. Size 272 bytes, ELF 374 bytes."
 0x99d50,724,linkitem,callgraph,1.0,votes=82
-0x9a030,342,,,,
-0x9a190,137,,,,
+0x9a030,342,linkitemtoitem,order,0.8,"ELF link order: between linkitem and item_removehumanlink. Size 342 bytes, ELF 483 bytes."
+0x9a190,137,item_addhumanlink,order,0.8,"ELF link order: between linkitem and item_removehumanlink. Size 137 bytes, ELF 274 bytes."
 0x9a220,257,item_removehumanlink,callgraph,1.0,votes=6
 0x9a330,211,item_removeitemlink,callgraph,0.667,votes=4
 0x9a410,1924,item_physicssimulation,callgraph,0.667,votes=4
@@ -2421,40 +2421,40 @@ rva,size,name,source,confidence,evidence
 0x9b740,3489,createlevel,anchor,0.745,features
 0x9c4f0,206,leveledit_setup,callgraph,0.333,votes=2
 0x9c5c0,11835,leveleditor_loop,anchor,0.889,features
-0x9f400,3746,,,,
-0xa02b0,152,,,,
-0xa0350,134,,,,
-0xa03e0,260,,,,
-0xa04f0,502,,,,
-0xa06f0,77,,,,
+0x9f400,3746,level_checkeditor,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 3746 bytes, ELF 5838 bytes."
+0xa02b0,152,leveleditor_addintersection,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 152 bytes, ELF 242 bytes."
+0xa0350,134,leveleditor_getintersection,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 134 bytes, ELF 190 bytes."
+0xa03e0,260,leveleditor_deleteintersection,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 260 bytes, ELF 435 bytes."
+0xa04f0,502,leveleditor_addstreet,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 502 bytes, ELF 985 bytes."
+0xa06f0,77,leveleditor_deletestreet,order,0.8,"ELF link order: between leveleditor_loop and leveleditor_save. Size 77 bytes, ELF 176 bytes."
 0xa0740,793,leveleditor_save,callgraph,0.667,votes=4
 0xa0a60,818,leveleditor_load,callgraph,0.333,votes=2
 0xa0da0,416,lineintersectall,callgraph,0.5,votes=3
 0xa0f40,441,lineintersectlevel,callgraph,1.0,votes=48
-0xa1100,274,,,,
+0xa1100,274,circleintersectlevel,order,0.8,"ELF link order: between lineintersectlevel and sphereintersectlevel. Size 274 bytes, ELF 296 bytes."
 0xa1220,244,sphereintersectlevel,callgraph,0.667,votes=4
 0xa1320,1691,createlandscape,anchor,0.787,features
 0xa19c0,221,landscape_buildmesh,anchor,0.716,features
 0xa1aa0,145,landscape_setheightf,callgraph,0.5,votes=3
 0xa1b40,1884,lineintersectlandscape,callgraph,0.667,votes=4
-0xa22a0,1294,,,,
+0xa22a0,1294,circleintersectlandscape,order,0.8,"ELF link order: between lineintersectlandscape and sphereintersectlandscape. Size 1294 bytes, ELF 1528 bytes."
 0xa27b0,1304,sphereintersectlandscape,callgraph,0.333,votes=2
 0xa2cd0,703,buildcityinterection,callgraph,0.333,votes=2
 0xa2f90,2465,buildcitystreet,callgraph,0.333,votes=2
 0xa3940,1177,logicsimulation,anchor,0.495,features
 0xa3de0,245,logic_farbslist,strings,1.0,"2 strings, jaccard 1.00"
 0xa3ee0,249,sprintf_comma,anchor,0.601,features
-0xa3fe0,357,,,,
-0xa4150,41,,,,
+0xa3fe0,357,logicsimulation_driving,order,0.8,"ELF link order: between sprintf_comma and pointinsidebase. Size 357 bytes, ELF 457 bytes."
+0xa4150,41,addpointstoteam,order,0.8,"ELF link order: between sprintf_comma and pointinsidebase. Size 41 bytes, ELF 59 bytes."
 0xa4180,218,pointinsidebase,callgraph,1.0,votes=12
-0xa4260,218,accountdeathtax,callgraph,0.333,votes=2
+0xa4260,218,pointinsidebuilding,manual,1.0,"Tests a point against the box of a building with a margin, as the server pointinsidebuilding. ELF order: between pointinsidebase and pointinsidebasesafe, same size as both."
 0xa4340,218,pointinsidebasesafe,callgraph,1.0,votes=8
-0xa4420,120,,,,
+0xa4420,120,pointinsidecheckpoint,manual,1.0,Tests a point against the x and z box of a checkpoint. ELF order: after pointinsidebasesafe.
 0xa44a0,200,logic_createcar,callgraph,1.0,votes=8
 0xa4570,1036,logic_setteammanager,callgraph,0.667,votes=4
-0xa4980,209,,,,
-0xa4a60,536,,,,
-0xa4c80,1205,,,,
+0xa4980,209,logic_splitteamcash,order,0.8,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 209 bytes, ELF 236 bytes."
+0xa4a60,536,logic_addteamcash,order,0.8,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 536 bytes, ELF 849 bytes."
+0xa4c80,1205,logic_teammissioncomplete,order,0.8,"ELF link order: between logic_setteammanager and logic_suits_buy. Size 1205 bytes, ELF 1918 bytes."
 0xa5140,369,logic_suits_buy,anchor,0.821,features
 0xa52c0,875,logic_cardealer_buy,anchor,0.542,features
 0xa5630,408,logic_gunstore_buy,callees,0.833,"callee jaccard 0.83, constants 0.30, size 408"
@@ -2477,25 +2477,25 @@ rva,size,name,source,confidence,evidence
 0xacd30,1026,copymodel,callgraph,0.333,votes=2
 0xad140,584,savemodelcsm,anchor,0.563,features
 0xad390,566,loadmodelcsm,anchor,0.823,features
-0xad5d0,4842,createbulletmodel,callgraph,0.667,votes=4
+0xad5d0,4842,createtypemodel,manual,1.0,Builds the model of an object type (records of 0x828c bytes). ELF link order: between loadmodelcsm and rendermodelnormals. The old name createbulletmodel was a weak vote.
 0xae8c0,1257,rendermodelnormals,callees,0.909,"callee jaccard 0.91, constants 0.33, size 1257"
 0xaedb0,381,addboxtomodel,manual,1.0,"Adds 8 vertices and 12 triangles around a center with three half sizes, as addboxtomodel in the Linux client. The matcher name model_settritexcoord was wrong."
-0xaef30,524,,,,
+0xaef30,524,addhalfboxtomodel,order,0.8,"ELF link order: between addboxtomodel and addcylindertomodel. Size 524 bytes, ELF 780 bytes."
 0xaf140,1649,addcylindertomodel,callees,0.8,"callee jaccard 0.80, constants 0.32, size 1649"
-0xaf7c0,2024,,,,
+0xaf7c0,2024,createbulletmodel,manual,1.0,Reads the bullet type record (0x18 bytes) of its second argument. ELF link order: between addcylindertomodel and createsunglassmodel.
 0xaffb0,526,createsunglassmodel,anchor,0.712,features
 0xb01c0,51,createmodel_cityobject,callgraph,0.667,votes=4
 0xb0200,1212,createmodel_cityobject_type,callgraph,0.333,votes=2
-0xb06c0,444,,,,
+0xb06c0,444,createmodel_cityobject_desk,order,0.8,"ELF link order: between createmodel_cityobject_type and createmodel_cityobject_elevator. Size 444 bytes, ELF 499 bytes."
 0xb0880,610,createmodel_cityobject_elevator,anchor,0.709,features
 0xb0af0,2184,addcockpittomodel,callees,0.8,"callee jaccard 0.80, constants 0.28, size 2184"
-0xb1380,3221,,,,
-0xb2020,1548,,,,
+0xb1380,3221,model_extrudequadface,order,0.8,"ELF link order: between addcockpittomodel and model_extrudequad2. Size 3221 bytes, ELF 4402 bytes."
+0xb2020,1548,model_extrudeeye,order,0.8,"ELF link order: between addcockpittomodel and model_extrudequad2. Size 1548 bytes, ELF 2346 bytes."
 0xb2630,1176,model_extrudequad2,anchor,0.462,features
-0xb2ad0,433,,,,
+0xb2ad0,433,addboxtomodelquad,order,0.8,"ELF link order: between model_extrudequad2 and model_extrudequad. Size 433 bytes, ELF 603 bytes."
 0xb2c90,412,model_extrudequad,callgraph,1.0,votes=8
 0xb2e30,592,model_extrudequadscale,manual,1.0,"Extrudes a quad: scales its corners around their center by three factors and adds an offset, as model_extrudequadscale in the Linux client. The matcher name addboxtomodel was wrong."
-0xb3080,199,,,,
+0xb3080,199,model_deletequad,order,0.8,"ELF link order: between model_extrudequadscale and model_settritexcoord. Size 199 bytes, ELF 331 bytes."
 0xb3150,101,model_settritexcoord,manual,1.0,"Writes one texture coordinate to the three corners of a triangle of modeltemp, as model_settritexcoord in the Linux client."
 0xb31c0,133,model_setquadtexcoord,callgraph,0.333,votes=2
 0xb3250,1697,creategunmodel2,callgraph,1.0,votes=12
@@ -2509,32 +2509,32 @@ rva,size,name,source,confidence,evidence
 0xb4a30,2689,createhairmodel,anchor,0.472,features
 0xb54c0,1302,createheadmodel,anchor,0.561,features
 0xb7980,286,modeltemp_addvertex,callgraph,1.0,votes=12
-0xb7aa0,1543,,,,
-0xb80b0,11537,,,,
-0xbadd0,250,,,,
-0xbaed0,533,,,,
-0xbb0f0,5071,,,,
+0xb7aa0,1543,model_extrudeeye2,order,0.8,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 1543 bytes, ELF 2372 bytes."
+0xb80b0,11537,createheadmodel2,order,0.8,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 11537 bytes, ELF 17422 bytes."
+0xbadd0,250,model_addvertex,order,0.8,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 250 bytes, ELF 293 bytes."
+0xbaed0,533,tesselatebeziertriangle,order,0.8,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 533 bytes, ELF 1114 bytes."
+0xbb0f0,5071,createheadmodel3,order,0.8,"ELF link order: between modeltemp_addvertex and hermiteinterpolation. Size 5071 bytes, ELF 7467 bytes."
 0xbc4c0,247,hermiteinterpolation,anchor,1.0,features
 0xbc5c0,1290,buildhumanmodel,manual,1.0,Linux buildhumanmodel has nine scaleaddvectors calls five copyvector calls and one generatetrinormal call matching the human vertex transform
 0xbcad0,8702,createhumanmodel,anchor,0.633,features
 0xbecd0,65,sethumanmodelvert,callgraph,1.0,votes=48
-0xbed20,84,,,,
-0xbed80,1238,,,,
-0xbf260,1460,,,,
-0xbf820,962,,,,
-0xbfbf0,665,,,,
+0xbed20,84,sethumanmodelvertface,order,0.8,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 84 bytes, ELF 196 bytes."
+0xbed80,1238,addwaisttomodel,order,0.8,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 1238 bytes, ELF 1815 bytes."
+0xbf260,1460,createcellphonemodel,order,0.8,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 1460 bytes, ELF 2129 bytes."
+0xbf820,962,createkeymodel,order,0.8,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 962 bytes, ELF 1438 bytes."
+0xbfbf0,665,model_createcash,order,0.8,"ELF link order: between sethumanmodelvert and setupspheremodel. Size 665 bytes, ELF 1228 bytes."
 0xbfe90,3012,setupspheremodel,manual,1.0,"Fills 8 levels of a sphere mesh: an octahedron, then each level splits each triangle into 4 and puts the new points on the unit sphere, as setupspheremodel in the Linux client. The matcher name landscape_buildsectorlods was wrong."
 0xc0a60,2333,buildtrackmodel,anchor,0.625,features
 0xc1380,286,rendertrackmodel,callgraph,1.0,votes=8
 0xc14a0,1553,model_viewer,anchor,0.855,features
 0xc1ac0,719,model_editor,anchor,0.854,features
 0xc1d90,44,fround,anchor,1.0,features
-0xc1dc0,3567,,,,
+0xc1dc0,3567,unpackobjectpacket,order,0.8,"ELF link order: between fround and client_simulation. Size 3567 bytes, ELF 5935 bytes."
 0xc2bb0,1816,client_simulation,callees,0.833,"callee jaccard 0.83, constants 0.25, size 1816"
 0xc32d0,76,net_calcdistancefactor,anchor,0.908,features
-0xc3320,3736,,,,
-0xc41c0,4037,,,,
-0xc5190,32,,,,
+0xc3320,3736,packobjectpacket2,order,0.8,"ELF link order: between net_calcdistancefactor and serp. Size 3736 bytes, ELF 5366 bytes."
+0xc41c0,4037,packobjectpacket,order,0.8,"ELF link order: between net_calcdistancefactor and serp. Size 4037 bytes, ELF 5653 bytes."
+0xc5190,32,lerp,order,0.8,"ELF link order: between net_calcdistancefactor and serp. Size 32 bytes, ELF 56 bytes."
 0xc51b0,58,serp,callgraph,1.0,votes=12
 0xc51f0,68,cerp,anchor,1.0,features
 0xc5240,89,noise1d,callgraph,0.667,votes=4
@@ -2544,17 +2544,17 @@ rva,size,name,source,confidence,evidence
 0xc5470,255,serpnoise2d,callgraph,1.0,votes=20
 0xc5570,255,cerpnoise2d,manual,1.0,"The third of the three grid noise functions (x, y, mask), in the order of the Linux client. It blends with a cosine."
 0xc5670,43,getrandomfloat,callgraph,1.0,votes=16
-0xc56a0,94,,,,
+0xc56a0,94,getrandomvector2d,order,0.8,ELF link order: between getrandomfloat and getrandomvector3d.
 0xc5700,105,getrandomvector3d,callgraph,1.0,votes=12
-0xc5770,15,,,,
+0xc5770,15,getrandomint,order,0.8,"ELF link order: between getrandomvector3d and createobject. Size 15 bytes, ELF 16 bytes."
 0xc5780,6036,createobject,callgraph,1.0,votes=16
 0xc6f20,61,getnextobject,callgraph,0.667,votes=4
-0xc6f60,139,,,,
-0xc6ff0,241,,,,
+0xc6f60,139,objecttimetolive,order,0.8,"ELF link order: between getnextobject and addobjectrotation. Size 139 bytes, ELF 171 bytes."
+0xc6ff0,241,deleteobject,order,0.8,"ELF link order: between getnextobject and addobjectrotation. Size 241 bytes, ELF 316 bytes."
 0xc70f0,226,addobjectrotation,callgraph,0.667,votes=4
-0xc71e0,493,,,,
-0xc73d0,444,,,,
-0xc7590,785,,,,
+0xc71e0,493,getobjectrotation,order,0.8,"ELF link order: between addobjectrotation and objectsimulation. Size 493 bytes, ELF 759 bytes."
+0xc73d0,444,getobjectrotation2,order,0.8,"ELF link order: between addobjectrotation and objectsimulation. Size 444 bytes, ELF 708 bytes."
+0xc7590,785,getobjectrotation3,order,0.8,"ELF link order: between addobjectrotation and objectsimulation. Size 785 bytes, ELF 1173 bytes."
 0xc78b0,9278,objectsimulation,callees,0.677,"callee jaccard 0.68, constants 0.45, size 9278"
 0xc9cf0,491,calculatebarycentric,callgraph,1.0,votes=8; diverge: lineintersectsphere
 0xc9ee0,478,applydamageobject,anchor,0.811,features
@@ -2565,14 +2565,14 @@ rva,size,name,source,confidence,evidence
 0xccd50,3034,object_rotorsimulation,anchor,0.538,features
 0xcd930,3127,objectsimulation_heli,anchor,0.657,features
 0xce570,2033,lineintersectobject,callgraph,1.0,votes=8
-0xced70,1381,,,,
+0xced70,1381,sphereintersectobject,order,0.8,"ELF link order: between lineintersectobject and buildsomeshit. Size 1381 bytes, ELF 1948 bytes."
 0xcf2e0,773,buildsomeshit,anchor,0.733,features
 0xcf5f0,4272,createtrack,callgraph,0.333,votes=2
 0xd06a0,611,lineintersecttrack,callgraph,0.333,votes=2
 0xd0910,580,lineintersecttrackrail,callgraph,0.333,votes=2
 0xd0b60,1200,objecttrainsimulation,anchor,0.614,features
 0xd1010,716,objectwheelcollision2,callees,0.714,"callee jaccard 0.71, constants 0.23, size 716"
-0xd12e0,882,,,,
+0xd12e0,882,objectwheelcollision,order,0.8,"ELF link order: between objectwheelcollision2 and objectsimulation_car. Size 882 bytes, ELF 1356 bytes."
 0xd1660,2941,objectsimulation_car,anchor,0.703,features
 0xd21e0,171,getenginetorque,anchor,0.983,features
 0xd2290,4283,optionsmenu,anchor,0.698,features
@@ -2590,17 +2590,17 @@ rva,size,name,source,confidence,evidence
 0xd4a20,342,deleteplayer,anchor,0.982,features
 0xd4b80,1659,playersimulation,anchor,0.492,features
 0xd5200,375,fixplayername,anchor,0.658,features
-0xd5380,264,,,,
-0xd5490,183,,,,
+0xd5380,264,player_addaction_chat,order,0.8,"ELF link order: between fixplayername and player_addaction_item. Size 264 bytes, ELF 480 bytes."
+0xd5490,183,player_addaction_menu,order,0.8,"ELF link order: between fixplayername and player_addaction_item. Size 183 bytes, ELF 329 bytes."
 0xd5550,183,player_addaction_item,callgraph,1.0,votes=46
-0xd5610,55,,,,
+0xd5610,55,initplayticket,order,0.8,"ELF link order: between player_addaction_item and updateplayticket. Size 55 bytes, ELF 56 bytes."
 0xd5650,5,updateplayticket,callgraph,0.333,votes=2
-0xd5660,33,,,,
+0xd5660,33,getplayticket,order,0.8,"ELF link order: between updateplayticket and setupprogramobjects. Size 33 bytes, ELF 28 bytes."
 0xd5690,3803,setupprogramobjects,anchor,0.978,features
 0xd6570,738,compileprogramobject,anchor,0.567,features
 0xd6860,265,loadsource,anchor,0.654,features
 0xd6970,191,orientationtoquaternion,anchor,0.976,features
-0xd6a30,277,,,,
+0xd6a30,277,quaterniontoorientation,order,0.8,"ELF link order: between orientationtoquaternion and multiplyquaternion. Size 277 bytes, ELF 573 bytes."
 0xd6b50,285,multiplyquaternion,callgraph,1.0,votes=7
 0xd6c70,51,copyquaternion,callgraph,0.667,votes=4
 0xd6cb0,398,rendersphere,anchor,0.965,features
@@ -2619,30 +2619,30 @@ rva,size,name,source,confidence,evidence
 0xd98e0,185,landscape_rendersector,callgraph,0.667,votes=4
 0xd99a0,718,landscape_generatenormaltexture,anchor,0.797,features
 0xd9c70,809,landscape_generatedetail,anchor,0.915,features
-0xd9fa0,2789,,,,
-0xdaa90,340,,,,
+0xd9fa0,2789,render_raycast2,manual,1.0,Calls raycast_addsector. ELF order: after landscape_generatedetail.
+0xdaa90,340,raycast_addsector,manual,1.0,Marks the sector of a block of an area as seen. ELF order: after render_raycast2.
 0xdabf0,503,render_sector_interior,callgraph,0.333,votes=2
 0xdadf0,499,render_sector_alpha,callees,0.8,"callee jaccard 0.80, constants 0.26, size 499"
 0xdaff0,1993,render_sector_interior_shadow2,callgraph,0.667,votes=4
 0xdb7c0,2228,rendermodelshadow,callgraph,0.667,votes=4
 0xdc080,324,glstateshadowtwoside,anchor,1.0,features
-0xdc1d0,137,,,,
-0xdc260,137,,,,
+0xdc1d0,137,glstatediffuse,order,0.8,"ELF link order: between glstateshadowtwoside and glstatenormal. Size 137 bytes, ELF 151 bytes."
+0xdc260,137,glstateambient,order,0.8,"ELF link order: between glstateshadowtwoside and glstatenormal. Size 137 bytes, ELF 151 bytes."
 0xdc2f0,104,glstatenormal,callees,1.0,"callee jaccard 1.00, constants 1.00, size 104"
 0xdc360,1025,createscenario_world,anchor,0.713,features
 0xdc770,13,createscenario_mission,anchor,1.0,features
-0xdc780,5,,,,
+0xdc780,5,createscenario_coop,order,0.8,"ELF link order: between createscenario_mission and createscenario_driving. Size 5 bytes, ELF 9 bytes."
 0xdc790,5,createscenario_driving,callgraph,0.333,votes=2
 0xdc7a0,60,scenario_getnextmission,callgraph,0.667,votes=4
 0xdc7e0,114,scenario_getnumofmissions,callgraph,1.0,votes=6
 0xdc860,102,scenario_isseekmission,callgraph,0.5,votes=3
-0xdc8d0,437,,,,
+0xdc8d0,437,scenario_setmissioninactive,order,0.8,"ELF link order: between scenario_isseekmission and scenario_createguards. Size 437 bytes, ELF 674 bytes."
 0xdca90,842,scenario_createguards,callgraph,1.0,votes=6
 0xdcde0,792,scenario_createtraffic2,callgraph,1.0,votes=8
 0xdd100,1902,scenario_createchase,callgraph,0.667,votes=4
 0xdd870,608,scenario_createcar,callgraph,1.0,votes=8
-0xddad0,5,,,,
-0xddae0,5,,,,
+0xddad0,5,scenario_createaicar,order,0.8,"ELF link order: between scenario_createcar and scenario_armhuman. Size 5 bytes, ELF 15 bytes."
+0xddae0,5,scenario_addcheckpoint,order,0.8,"ELF link order: between scenario_createcar and scenario_armhuman. Size 5 bytes, ELF 12 bytes."
 0xddaf0,269,scenario_armhuman,callgraph,0.667,votes=4
 0xddc00,741,createmission_acquisition,anchor,0.898,features
 0xddef0,1634,createmission_transaction,callgraph,0.667,votes=4
@@ -2652,7 +2652,7 @@ rva,size,name,source,confidence,evidence
 0xdf6a0,4211,serverrecv,callgraph,0.333,votes=2
 0xe0720,987,getsuncolors,anchor,0.901,features
 0xe0b00,94,raydistancesphere,callgraph,1.0,votes=32
-0xe0b60,96,,,,
+0xe0b60,96,raydistancesphere2,order,0.8,"ELF link order: between raydistancesphere and getskycolor. Size 96 bytes, ELF 161 bytes."
 0xe0bc0,729,getskycolor,anchor,0.753,features
 0xe0ea0,211,getsuncolor,callgraph,1.0,votes=24
 0xe0f80,420,csradixsort,manual,1.0,Radix sort of the sort list. Comes after getsuncolor and before the speex functions as csradixsort in the Linux client
@@ -2660,13 +2660,13 @@ rva,size,name,source,confidence,evidence
 0xe1240,120,disablespeex,anchor,0.982,features
 0xe12c0,55,preprocessspeex,anchor,0.734,features
 0xe1300,185,encodespeex,anchor,0.509,features
-0xe13c0,386,,,,
-0xe1550,351,,,,
-0xe16b0,1035,,,,
+0xe13c0,386,decodespeex,order,0.8,"ELF link order: between encodespeex and createwindowsprites. Size 386 bytes, ELF 556 bytes."
+0xe1550,351,testspeex,order,0.8,"ELF link order: between encodespeex and createwindowsprites. Size 351 bytes, ELF 435 bytes."
+0xe16b0,1035,createsprite,order,0.8,"ELF link order: between encodespeex and createwindowsprites. Size 1035 bytes, ELF 2016 bytes."
 0xe1ac0,1643,createwindowsprites,anchor,0.519,features
-0xe2130,1390,,,,
-0xe26a0,123,bullettimetolive,callgraph,0.333,votes=2
-0xe2720,100,deletebullet,callgraph,0.333,votes=2
+0xe2130,1390,createwindowsprites_block,order,0.8,"ELF link order: between createwindowsprites and spritetimetolive. Size 1390 bytes, ELF 2356 bytes."
+0xe26a0,123,spritetimetolive,order,0.8,"ELF link order: after createwindowsprites_block (0xe2130), before deletesprite and spritesimulation."
+0xe2720,100,deletesprite,order,0.8,ELF link order: between spritetimetolive and spritesimulation.
 0xe2790,4980,spritesimulation,anchor,0.551,features
 0xe3b10,4271,rendersprites,anchor,0.84,features
 0xe4bc0,837,rendermuzzleflashes,anchor,0.768,features
@@ -2682,7 +2682,7 @@ rva,size,name,source,confidence,evidence
 0xe7ff0,3387,generatetexture,anchor,0.573,features
 0xe8d30,3438,generatehumantexture,anchor,0.835,features
 0xe9aa0,705,generatetexture_randomvec,anchor,0.94,features
-0xe9d70,119,,,,
+0xe9d70,119,addwindowatlas,order,0.8,ELF link order: between generatetexture_randomvec and generatematerialwindowtexture. The old row at 0x10c710 (in the C runtime code) had this name by a weak vote.
 0xe9df0,1488,generatematerialwindowtexture,anchor,0.783,features
 0xea3c0,1206,generatetexture_billboard,anchor,0.986,features
 0xea880,1376,generatetexture_newspaper,callgraph,0.333,votes=2
@@ -2690,10 +2690,10 @@ rva,size,name,source,confidence,evidence
 0xeb290,133,init_genrand,callgraph,1.0,votes=10
 0xeb320,378,init_by_array,anchor,0.631,features
 0xeb4a0,411,genrand_int32,anchor,0.532,features
-0xeb640,12,,,,
+0xeb640,12,genrand_int31,order,0.8,"ELF link order: between genrand_int32 and genrand_real1. Size 12 bytes, ELF 14 bytes."
 0xeb650,34,genrand_real1,anchor,1.0,features
-0xeb680,34,,,,
-0xeb6b0,40,,,,
+0xeb680,34,genrand_real2,order,0.8,"ELF link order: between genrand_real1 and genrand_res53. Size 34 bytes, ELF 56 bytes."
+0xeb6b0,40,genrand_real3,order,0.8,"ELF link order: between genrand_real1 and genrand_res53. Size 40 bytes, ELF 68 bytes."
 0xeb6e0,78,genrand_res53,anchor,1.0,features
 0xeb730,20,setupobjecttypes,callgraph,0.333,votes=2
 0xeb750,186,objecttype_addparticle,manual,1.0,"Appends a particle (x, y, z, mass) to an object type, as objecttype_addparticle of the server."
@@ -2714,11 +2714,11 @@ rva,size,name,source,confidence,evidence
 0xfb020,25,starttimer,callgraph,1.0,votes=14
 0xfb040,200,stoptimer,manual,1.0,Adds the cycles since starttimer to the total of the timer and stores the total in milliseconds. The matcher name itemtimetolive was wrong.
 0xfb110,156,getcpufrequency,callgraph,0.333,votes=2
-0xfb1b0,527,,,,
+0xfb1b0,527,setuptimers,order,0.8,"ELF link order: between getcpufrequency and cs_sleep. Size 527 bytes, ELF 436 bytes."
 0xfb3c0,15,cs_sleep,anchor,1.0,features
 0xfb3d0,789,createvehicle,callgraph,1.0,votes=12
 0xfb6f0,1284,getaudioinput,callees,0.833,"callee jaccard 0.83, constants 0.39, size 1284"
-0xfbc00,624,,,,
+0xfbc00,624,testvoice,order,0.8,"ELF link order: between getaudioinput and calculateplayervoice. Size 624 bytes, ELF 836 bytes."
 0xfbe70,2034,calculateplayervoice,anchor,0.692,features
 0xfc670,164,addvoice,callgraph,1.0,votes=8
 0xfc720,203,getnextvoice,callgraph,0.667,votes=4
@@ -2733,15 +2733,15 @@ rva,size,name,source,confidence,evidence
 0xfce40,361,lineintersecttriangle,callgraph,0.333,votes=2
 0xfcfb0,413,lineintersecttriangletwosided,callgraph,1.0,votes=6
 0xfd150,261,pointdistanceline,callgraph,1.0,votes=8
-0xfd260,450,,,,
-0xfd430,328,,,,
-0xfd580,312,,,,
-0xfd6c0,119,,,,
+0xfd260,450,lineintersectline2d,order,0.8,"ELF link order: between pointdistanceline and loadtextfile. Size 450 bytes, ELF 595 bytes."
+0xfd430,328,sphereintersectline2d,order,0.8,"ELF link order: between pointdistanceline and loadtextfile. Size 328 bytes, ELF 445 bytes."
+0xfd580,312,lineintersectcircle2d,order,0.8,"ELF link order: between pointdistanceline and loadtextfile. Size 312 bytes, ELF 399 bytes."
+0xfd6c0,119,pointintersectcircle,order,0.8,"ELF link order: between pointdistanceline and loadtextfile. Size 119 bytes, ELF 169 bytes."
 0xfd740,164,loadtextfile,anchor,0.894,features
-0xfd7f0,15,,,,
+0xfd7f0,15,resetparser,order,0.8,"ELF link order: between loadtextfile and findstring. Size 15 bytes, ELF 16 bytes."
 0xfd800,97,findstring,callgraph,0.833,votes=5
 0xfd870,106,checkstring,callgraph,0.5,votes=3
-0xfd8e0,257,,,,
+0xfd8e0,257,getint,order,0.8,"ELF link order: between checkstring and getfloat. Size 257 bytes, ELF 281 bytes."
 0xfd9f0,300,getfloat,anchor,0.52,features
 0xfdb20,128,getstring,callgraph,0.5,votes=3
 0xfdba0,193,cs_getline,manual,1.0,Copies one line of the text buffer and skips the line ends. Comes after getstring and before checkbigendian as cs_getline in the Linux client
@@ -2750,24 +2750,24 @@ rva,size,name,source,confidence,evidence
 0xfdd00,211,checkfilespec,anchor,0.949,features
 0xfdde0,460,listfiles,callgraph,1.0,votes=6
 0xfdfb0,285,freadswap,anchor,0.79,features
-0xfe0d0,302,,,,
+0xfe0d0,302,fwriteswap,order,0.8,"ELF link order: between freadswap and removeflieextentions. Size 302 bytes, ELF 387 bytes."
 0xfe200,164,removeflieextentions,callgraph,1.0,votes=12
 0xfe2b0,172,enablesocketserver,anchor,0.604,features
 0xfe360,138,enablesocketclient,callgraph,0.333,votes=2
-0xfe3f0,35,,,,
+0xfe3f0,35,disablesocket,order,0.8,"ELF link order: between enablesocketclient and recvpacket. Size 35 bytes, ELF 57 bytes."
 0xfe420,203,recvpacket,anchor,1.0,features
 0xfe4f0,42,resetsendpacket,callgraph,1.0,votes=8
 0xfe520,130,sendpacket,anchor,1.0,features
 0xfe5b0,113,cs_pwrite,callgraph,1.0,votes=81
-0xfe630,140,,,,
+0xfe630,140,cs_pread,manual,1.0,"memcpy from the packet buffer at the read place, inverse of cs_pwrite next to it. ELF cs_pread follows cs_pwrite."
 0xfe6c0,308,pbitwrite,callgraph,1.0,votes=160
 0xfe800,283,pbitread,callgraph,1.0,votes=76
-0xfe920,273,,,,
-0xfea40,287,,,,
+0xfe920,273,pbitwritescale,order,0.8,"ELF link order: between pbitread and pbitwritenego. Size 273 bytes, ELF 319 bytes."
+0xfea40,287,pbitreadscale,order,0.8,"ELF link order: between pbitread and pbitwritenego. Size 287 bytes, ELF 331 bytes."
 0xfeb60,26,pbitwritenego,callgraph,1.0,votes=32
 0xfeb80,66,pbitreadnego,callgraph,1.0,votes=8
-0xfebd0,26,,,,
-0xfebf0,88,,,,
+0xfebd0,26,pbitwritesign,order,0.8,"ELF link order: between pbitreadnego and checkkeyboard. Size 26 bytes, ELF 39 bytes."
+0xfebf0,88,pbitreadsign,order,0.8,"ELF link order: between pbitreadnego and checkkeyboard. Size 88 bytes, ELF 134 bytes."
 0xfec50,78,checkkeyboard,anchor,0.957,features
 0xfeca0,261,checkmouse,anchor,0.967,features
 0xfedb0,225,checkmouserelative,anchor,0.966,features
@@ -2799,14 +2799,14 @@ rva,size,name,source,confidence,evidence
 0x105dc0,774,drawtextbox,manual,1.0,Draws a wrapped text in a box with formattextbox as drawtextbox in the Linux client.
 0x1060d0,262,checksystemmessages,anchor,0.647,features
 0x1061e0,292,listvideomodes,manual,1.0,Collects SDL display modes and appends the fixed 1024 by 640 mode
-0x106310,5,,,,
+0x106310,5,movewindow,order,0.8,"ELF link order: between listvideomodes and setupperspectiveviewport. Size 5 bytes, ELF 12 bytes."
 0x106320,350,setupperspectiveviewport,callgraph,1.0,votes=10
 0x106480,322,setuporthoviewport,callgraph,1.0,votes=6
 0x1065d0,219,setupviewpoint,callgraph,1.0,votes=20
 0x1066b0,213,setupobjectrender,callgraph,1.0,votes=18
 0x106790,918,screenshot,manual,1.0,Saves a numbered TGA from the back buffer
 0x106b30,3530,drawtext,anchor,0.56,features
-0x107970,95,,,,
+0x107970,95,gettextlength,order,0.8,"ELF link order: between drawtext and setuptextdisplay. Size 95 bytes, ELF 140 bytes."
 0x1079d0,229,setuptextdisplay,callgraph,1.0,votes=32
 0x107ac0,374,drawbitmap,anchor,0.929,features
 0x107c40,315,drawbitmaptexcoord,manual,1.0,Draws a textured rectangle with a texture coordinate pair for each corner. Same shape as drawbitmap. The Linux client has drawbitmaptexcoord next to drawbitmap.
@@ -2819,13 +2819,13 @@ rva,size,name,source,confidence,evidence
 0x109f60,393,loadimage,callgraph,0.5,votes=3
 0x10a0f0,501,loadtexture,callgraph,1.0,votes=20
 0x10a2f0,755,loadtexturesetalpha,callgraph,1.0,votes=16
-0x10a5f0,452,,,,
+0x10a5f0,452,loadtexture2,order,0.8,"ELF link order: between loadtexturesetalpha and loadtexturepartial. Size 452 bytes, ELF 918 bytes."
 0x10a7c0,474,loadtexturepartial,callees,1.0,"callee jaccard 1.00, constants 0.20, size 474"
 0x10a9a0,665,generatemipmap,anchor,0.742,features
 0x10ac40,291,setuptexture,anchor,0.89,features
-0x10ad70,58,,,,
+0x10ad70,58,ticketreturned,order,0.8,"ELF link order: between setuptexture and steam_requestauthticket. Size 58 bytes, ELF 63 bytes."
 0x10adb0,28,steam_requestauthticket,callgraph,0.333,votes=2
-0x10add0,34,,,,
+0x10add0,34,steam_getauthticket,order,0.8,"ELF link order: between steam_requestauthticket and main. Size 34 bytes, ELF 45 bytes."
 0x10ae00,1002,main,anchor,0.951,features
 0x10b1f0,146,getpaths,anchor,0.829,features
 0x10b290,575,,,,
@@ -2834,7 +2834,7 @@ rva,size,name,source,confidence,evidence
 0x10b6b0,282,calculatefriction,anchor,0.77,features
 0x10b7d0,29,flabs,callgraph,1.0,votes=6
 0x10b7f0,52,dotproduct,callgraph,1.0,votes=374
-0x10b830,96,,,,
+0x10b830,96,crossproduct,manual,1.0,"Writes b x a into out, as the ELF crossproduct. 49 callers."
 0x10b890,50,vectorlength,callgraph,1.0,votes=132
 0x10b8d0,115,normalizevector,callgraph,1.0,votes=124; diverge: normalizevector2d
 0x10b950,39,copyvector,callgraph,1.0,votes=854
@@ -2847,13 +2847,13 @@ rva,size,name,source,confidence,evidence
 0x10bad0,68,vectordistance,callgraph,1.0,votes=68
 0x10bb20,50,vectorlength2d,callgraph,1.0,votes=32
 0x10bb60,38,dotproduct2d,callgraph,0.667,votes=4
-0x10bb90,92,,,,
+0x10bb90,92,normalizevector2d,manual,1.0,"vectorlength2d, then 1/length times x and y, or 0 for length 0. ELF normalizevector2d."
 0x10bbf0,27,copyvector2d,callgraph,0.333,votes=2
-0x10bc10,38,createevent_sound,callgraph,0.667,votes=4
-0x10bc40,33,,,,
-0x10bc70,44,,,,
-0x10bca0,29,,,,
-0x10bcc0,38,,,,
+0x10bc10,38,addvectors2d,manual,1.0,out = a + b on x and y. The ELF 2D vector set (addvectors2d). The old name createevent_sound was a wrong call graph vote.
+0x10bc40,33,scalevector2d,manual,1.0,out = a * s on x and y. ELF scalevector2d.
+0x10bc70,44,scaleaddvectors2d,manual,1.0,out = a + b * s on x and y. ELF scaleaddvectors2d.
+0x10bca0,29,tangentvector2d,manual,1.0,"out = (-y, x). ELF tangentvector2d."
+0x10bcc0,38,subtractvectors2d,manual,1.0,out = a - b on x and y. ELF subtractvectors2d.
 0x10bcf0,72,steam_init,anchor,1.0,features
 0x10bd40,21,steam_shutdown,anchor,1.0,features
 0x10bd60,20,steam_update,anchor,1.0,features
@@ -2875,7 +2875,7 @@ rva,size,name,source,confidence,evidence
 0x10c1b0,74,,,,
 0x10c650,145,_ftol2,manual,1.0,
 0x10c6fb,15,__security_check_cookie,manual,1.0,
-0x10c710,43,addwindowatlas,callgraph,0.333,votes=2
+0x10c710,43,,,,
 0x10c810,31,,,,
 0x10c850,117,,,,
 0x10c8d0,104,,,,
