@@ -14,3 +14,5 @@ menu_quads,int,64,0x1bbe084,"drawmenubutton2: four vertex numbers for each quad,
 wrap_line_ends,int,64,0x90f6524,"0x105b80 writes the index of the last character of each line of a wrapped text; drawmenutextfield reads it"
 menu_clear_color,float,3,0x1234c8,"connectmenu, hostmenu, joinmenu and mainmenu clear the screen to this color"
 client_account_id,int,2,0xf3eafc8,"connectmenu sends both ints after the name; joinmenu creates them with createclientaccount; the server finds the account by them"
+textinput_overwrite,int,1,0x29e752ac,"addmenuinputchar: 0 inserts the letter, else the letter writes over the one at the cursor"
+wrap_line_count,int,1,0x90f6520,"formattextbox: the number of lines in wrap_line_ends"

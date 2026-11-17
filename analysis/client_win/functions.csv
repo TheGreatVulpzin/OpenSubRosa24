@@ -2790,13 +2790,13 @@ rva,size,name,source,confidence,evidence
 0x103e30,64,menuset,manual,1.0,Callback of a choice item: writes the mask to the value. Comes after menutoggle as menuset in the Linux client.
 0x103e70,591,menuslider,manual,1.0,Callback of a slider item. Comes after menuset as menuslider in the Linux client.
 0x1040c0,964,menutextbox,anchor,0.541,features
-0x104490,553,gettextinputposition,callgraph,0.667,votes=4
+0x104490,553,menu_textbox_putchar,manual,1.0,menutextbox calls it with each typed letter as menu_textbox_putchar in the Linux client
 0x1046c0,1039,getinputletter,anchor,0.974,features
-0x105810,132,,,,
-0x1058a0,255,,,,
-0x1059a0,477,,,,
-0x105b80,561,,,,
-0x105dc0,774,,,,
+0x105810,132,addmenuinputchar,manual,1.0,Puts one letter at the text input cursor. Comes after getinputletter and before deleteselectedtext as addmenuinputchar in the Linux client (172 bytes there 132 here).
+0x1058a0,255,deleteselectedtext,manual,1.0,Deletes the selected letters of the text input and returns 1 when the selection held a letter as deleteselectedtext in the Linux client.
+0x1059a0,477,gettextinputposition,manual,1.0,Returns the index of the letter under the mouse in the pressed text field as gettextinputposition in the Linux client (after deleteselectedtext).
+0x105b80,561,formattextbox,manual,1.0,Wraps a text into lines that fit a width and writes the line ends as formattextbox in the Linux client.
+0x105dc0,774,drawtextbox,manual,1.0,Draws a wrapped text in a box with formattextbox as drawtextbox in the Linux client.
 0x1060d0,262,checksystemmessages,anchor,0.647,features
 0x1061e0,292,listvideomodes,manual,1.0,Collects SDL display modes and appends the fixed 1024 by 640 mode
 0x106310,5,,,,

@@ -1168,6 +1168,45 @@ def building_render_case(mode):
     return edits, {'buildingedit_render': [call(0x5f3c0)]}
 
 
+def text_input_case(overwrite=0, start=2, end=5):
+    """The text input: letters at the cursor, the delete of a selection, the wrap of texts at
+    some widths, the letter under the mouse in a plain and a wrapped field, and drawtextbox."""
+    rng = random.Random(73 + overwrite + 3 * start + 7 * end)
+    texts = SCRATCH + 0x900
+    words = [b'hello world this is a long line of text', b'short', b'', b'a\nb\nc d e f', b'x' * 90,
+             b'one two  three   four']
+    edits = [(FONTNUM, 'i', [0]), (TEXTINPUT, '4i', [1, start, end, overwrite]),
+             (TEXTINPUT + 0x10, '24s', [b'hello brave new world\0\0\0']),
+             (MENU_INDEX, 'i', [0]), (MOUSE, '2i', [rng.choice([300, 310, 350, 100]), rng.choice([200, 210, 260])])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x60, f'{len(word) + 1}s', [word + b'\0']))
+    base = MENU_ITEMS
+    edits += [(base, 'i', [rng.choice([1, 2])]), (base + 0x1d8, '4f', [290.0, 190.0, 16.0, 0.0]),
+              (base + 0x1f8, '2f', [rng.choice([60.0, 120.0, 30.0]), 64.0]), (base + 0x230, 'i', [rng.choice([5, 30, 100])])]
+    text = [image(texts + slot * 0x60) for slot in range(len(words))]
+    letters = [call(0x105810, rng.choice([0x41, 0x7a, 0x20, 0xe9])) for _ in range(6)]
+    # A width below one letter never ends the wrap, so each width holds the widest letter.
+    wrap = [call(0x105b80, text[i % len(text)], rng.choice([40.0, 100.0, 300.0, rng.uniform(20.0, 400.0)]), 64.0,
+                 rng.choice([8.0, 16.0, rng.uniform(1.0, 16.0)])) for i in range(18)]
+    draw = [call(0x105dc0, text[i % len(text)], floats(rng), floats(rng), rng.choice([40.0, 100.0]),
+                 rng.choice([16.0, 64.0]), rng.choice([8.0, 16.0]), 0, 1.0, 1.0, floats(rng), 1.0)
+            for i in range(12)]
+    return edits, {'addmenuinputchar': letters, 'deleteselectedtext': [call(0x1058a0)],
+                   'formattextbox': wrap, 'gettextinputposition': [call(0x1059a0)], 'drawtextbox': draw}
+
+
+def putchar_case(letter, start=3, end=3, length=30, index=1):
+    """menu_textbox_putchar with one letter code on item index of five items (kinds 1, 1, 0, 2,
+    1). start and end: the selection. length: the field length (a full field takes no letter)."""
+    edits = [(MENU_COUNT, 'i', [5]), (MENU_INDEX, 'i', [index]),
+             (TEXTINPUT, '4i', [1, start, end, 0]),
+             (TEXTINPUT + 0x10, '16s', [b'hello world\0\0\0\0\0'])]
+    for i, kind in enumerate((1, 1, 0, 2, 1)):
+        base = MENU_ITEMS + i * 0x284
+        edits += [(base, 'i', [kind]), (base + 0x220, 'i', [int(i == index)]), (base + 0x230, 'i', [length])]
+    return edits, {'menu_textbox_putchar': [call(0x104490, letter)]}
+
+
 MODELTEMP = 0x90f7680      # ModelTemp: num_verts +0, verts +8 (vec3)
 CAMERA = 0xfefe2a4         # camera_position, then camera_rotation (3 rows) at +0xc
 
@@ -1400,6 +1439,12 @@ def main():
             'medit_click': model_editor_case, 'medit_held': lambda: model_editor_case(0, 1),
             'medit_up': lambda: model_editor_case(0, 0),
             **{f'brender_{m}': (lambda m=m: building_render_case(m)) for m in range(4)},
+            'textin': text_input_case, 'textin_over': lambda: text_input_case(1, 0, 0),
+            'textin_back': lambda: text_input_case(0, 9, 3), 'textin_end': lambda: text_input_case(0, 0, 21),
+            **{f'putchar_{c}': (lambda c=c: putchar_case(c)) for c in (9, 10, 11, 12, 13, 0x41)},
+            'putchar_sel_9': lambda: putchar_case(9, 2, 6), 'putchar_sel_10': lambda: putchar_case(10, 6, 2),
+            'putchar_start_10': lambda: putchar_case(10, 0, 0), 'putchar_full': lambda: putchar_case(0x41, 3, 3, 5),
+            'putchar_back_13': lambda: putchar_case(13, 1, 1, 30, 0), 'putchar_end_12': lambda: putchar_case(12, 1, 1, 30, 3),
             'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
             'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
             **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))

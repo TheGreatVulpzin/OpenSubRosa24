@@ -12,6 +12,8 @@ void __cdecl drawmenubutton2(float x, float y, float width, float height, int li
 void __cdecl menutextbox(void);
 void __cdecl drawmenutextfield(int index, const char *text, float x, float y, float width, float height,
                                float size, uint32_t flags, float red, float green, float blue, float alpha);
+void __cdecl drawtextbox(const char *text, float x, float y, float width, float height, float size,
+                         uint32_t flags, float red, float green, float blue, float alpha);
 void __cdecl drawmenuitems(void);
 
 #endif /* CL_MENU_DRAW_H */

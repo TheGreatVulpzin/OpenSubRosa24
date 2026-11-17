@@ -28,3 +28,9 @@ playermenu_buy_stocks src/client/menu/player.c
 playermenu_building_main src/client/menu/player.c
 playermenu_building_buy src/client/menu/player.c
 playermenu_banking src/client/menu/player.c
+addmenuinputchar src/client/menu/textinput.c
+deleteselectedtext src/client/menu/textinput.c
+formattextbox src/client/menu/textinput.c
+gettextinputposition src/client/menu/textinput.c
+drawtextbox src/client/menu/draw.c
+menu_textbox_putchar src/client/menu/textinput.c

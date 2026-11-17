@@ -9,6 +9,7 @@
 
 #include "client.h"
 #include "menu/items.h"
+#include "menu/textinput.h"
 #include "render/draw2d.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
@@ -36,13 +37,7 @@ GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Game functions of other files. */
 #define vectorlength2d CL_FN(0x50bb20, double(__cdecl *)(const float *v))
-#define gettextinputposition CL_FN(0x504490, void(__cdecl *)(int letter))
 #define getinputletter CL_FN(0x5046c0, int(__cdecl *)(int wait))
-#define textinput_mouseindex CL_FN(0x5059a0, int(__cdecl *)(void))
-#define wraptext CL_FN(0x505b80, void(__cdecl *)(const char *text, float width, float height, float size))
-#define drawwrappedtext CL_FN(0x505dc0, void(__cdecl *)(const char *text, float x, float y, float width, \
-                                                        float height, float size, uint32_t flags, float red, \
-                                                        float green, float blue, float alpha))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 
@@ -245,7 +240,7 @@ void __cdecl menutextbox(void)
             cl_data_textinput_start = 0;
             cl_data_textinput_end = (int)strlen(cl_data_textinput_text);
         } else {
-            cl_data_textinput_start = textinput_mouseindex();
+            cl_data_textinput_start = gettextinputposition();
             cl_data_textinput_end = cl_data_textinput_start;
         }
         clamp_selection();
@@ -254,13 +249,13 @@ void __cdecl menutextbox(void)
 
         if (cl_data_input_mouse.left != 0) {
             if (cl_data_input_mouse_previous.left == 0)
-                cl_data_textinput_start = textinput_mouseindex();
-            cl_data_textinput_end = textinput_mouseindex();
+                cl_data_textinput_start = gettextinputposition();
+            cl_data_textinput_end = gettextinputposition();
         }
         clamp_selection();
         /* When a letter ends the press, the loop stops. */
         for (letter = getinputletter(0); letter != -1; letter = current_item.pressed == 0 ? -1 : getinputletter(0))
-            gettextinputposition(letter);
+            menu_textbox_putchar(letter);
     }
     if (current_item.field_type == 1)
         os_sscanf(cl_data_textinput_text, "%d", current_item.value);
@@ -295,6 +290,36 @@ static void glyph_quad(const Font *font, int glyph, float x, double right, float
     glVertex2fv(corner);
 }
 
+/* Draw a text in a box: the text wraps into lines that fit the width, and the drawing stops at
+ * the last line that fits the height. The flags are not used. */
+void __cdecl drawtextbox(const char *text, float x, float y, float width, float height, float size,
+                         uint32_t flags, float red, float green, float blue, float alpha)
+{
+    const Font *font = &cl_data_fonts[cl_data_fontnum];
+    int i = 0, line = 0;
+    float advance = 0.0f, line_y = 0.0f;
+
+    (void)flags;
+    formattextbox(text, width, height, size);
+    glBindTexture(GL_TEXTURE_2D, cl_data_texture[font->texture].gl_name);
+    glBegin(GL_QUADS);
+    glColor4f(red, green, blue, alpha);
+    while (text[i] != '\0' && i < DRAW_LIMIT && (double)line_y + size <= height) {
+        unsigned char c = (unsigned char)text[i];
+
+        glyph_quad(font, c, (float)(x + advance), font->width[c] * size + ((double)x + advance),
+                   (float)(y + line_y), (double)y + line_y + size);
+        advance = (float)(font->width[c] * size + advance);
+        if (i == cl_data_wrap_line_ends[line]) {
+            advance = 0.0f;
+            line_y = (float)(line_y + size);
+            line++;
+        }
+        i++;
+    }
+    glEnd();
+}
+
 /* Draw the text of a text field with the cursor and the selection of the text input. A field
  * of kind 2 wraps its text in lines that fit the width, and stops at the last line that fits
  * the height. The cursor is the glyph '_' at the end of the selection. The selection is glyph 0
@@ -309,7 +334,7 @@ void __cdecl drawmenutextfield(int index, const char *text, float x, float y, fl
 
     (void)flags;
     if (wrap)
-        wraptext(text, width, height, size);
+        formattextbox(text, width, height, size);
     glBindTexture(GL_TEXTURE_2D, cl_data_texture[font->texture].gl_name);
     glBegin(GL_QUADS);
     while (text[i] != '\0' && i < DRAW_LIMIT && (double)line_y + size <= height) {
@@ -391,7 +416,7 @@ static void draw_field(int index, const MenuItem *item)
             drawtext(cl_data_textinput_shown, item->x, item->y, item->text_size, item->text_flags | TEXT_SHADOW,
                      item->color[0], item->color[1], item->color[2], item->color[3]);
         if (item->kind == KIND_TEXT_2)
-            drawwrappedtext(cl_data_textinput_shown, item->x, item->y, item->width, item->height, item->text_size,
+            drawtextbox(cl_data_textinput_shown, item->x, item->y, item->width, item->height, item->text_size,
                             item->text_flags, item->color[0], item->color[1], item->color[2], item->color[3]);
     } else {
         size_t i;

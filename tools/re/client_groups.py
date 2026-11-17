@@ -23,7 +23,8 @@ RULES = [
            r'^compute_(y|transparency|huffman)|^expand|^paeth|^start_(file|mem)|^fill_bits|^write_pixels|^create_png|'
            r'^get_chunk|^check_png|^load_jpeg|^cleanup_jpeg|^init_defaults|^bitcount|^bitreverse|^high_bit|^shiftsigned|'
            r'^zstbi|^stbi|^freadswap|^fwriteswap|^at_eof|^write8|^writef|^outfile|^decode$|^parse_(entropy|huffman|uncompressed)|font'),
-    ('C5', r'menu|^drawmenu|^createmenubutton|^checkmenuitems|^formattextbox|^deleteselectedtext|^text_getlength'),
+    ('C5', r'menu|^drawmenu|^createmenubutton|^checkmenuitems|^formattextbox|^deleteselectedtext|^text_getlength|'
+           r'^gettextinputposition$|^drawtextbox$'),
     ('C4', r'^getinputs|^checkkeyboard|^checkmouse|keyboard|^movecamera|^movewindow|^debug_getinputs|^mouse'),
     ('C3', r'^render|^draw|^frame_|sprite|^tiremark|^glstate|^compileprogram|^setupprogram|shader|^reloadopengl|'
            r'^enabletwosided|^disabletwosided|^debug_render|^screenshot|^boxinsidefrustum|^pointinsidefrustum|^model_render|'
