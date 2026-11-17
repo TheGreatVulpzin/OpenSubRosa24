@@ -170,6 +170,12 @@ static float object_gather(Object *o)
   return (float)(imp / o->num_particles);
 }
 
+/* The last step of object_frame turns rot[0] square to rot[1] and rot[2]. A build can set this
+ * macro to 0 before this file to skip the step. */
+#ifndef sr_object_frame_orthogonal
+#define sr_object_frame_orthogonal 1
+#endif
+
 /* The orientation of the object (rot) from the first particles and their weights. */
 static void object_frame(Object *o)
 {
@@ -210,10 +216,12 @@ static void object_frame(Object *o)
   o->rot[1].y = (float)(o->rot[2].z * o->rot[0].x - o->rot[2].x * o->rot[0].z);
   o->rot[1].z = (float)(o->rot[0].y * o->rot[2].x - o->rot[0].x * o->rot[2].y);
   object_normalize(&o->rot[1], &o->rot[1]);
+#if sr_object_frame_orthogonal
   o->rot[0].x = (float)(o->rot[2].z * o->rot[1].y - o->rot[1].z * o->rot[2].y);
   o->rot[0].y = (float)(o->rot[1].z * o->rot[2].x - o->rot[2].z * o->rot[1].x);
   o->rot[0].z = (float)(o->rot[2].y * o->rot[1].x - o->rot[2].x * o->rot[1].y);
   object_normalize(&o->rot[0], &o->rot[0]);
+#endif
 }
 
 /* The vertices of the mesh: the particles, then the points that are sums of four particles. */

@@ -21,3 +21,5 @@ serverrecv src/net/server.c
 createobject src/game/object_create.c
 server_playermessage src/net/commands.c
 serversend src/net/server.c
+objectsimulation src/game/objects.c
+humansimulation src/game/humans.c

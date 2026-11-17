@@ -60,6 +60,8 @@ The bone tree (`body_table` in `human_body.c`) gives the parent of each bone. Th
 
 The floor search uses rays. First it looks at the objects (a ray along the up axis). Then it looks at the level: one ray down from bone 0, else 4 rays around it, else one short ray down. A ray finds a floor when the normal points up more than 0.7.
 
+The client build sets `sr_human_floor_all_rays` to 1. It then tries every ray in a fixed order (down along the up axis, down along bone 0, 4 rays around it) and counts all the hits. It skips no object. The mean uses every hit.
+
 ### Step 2: in a vehicle
 
 1. Bone 0 sits at the seat of the vehicle and turns with it.

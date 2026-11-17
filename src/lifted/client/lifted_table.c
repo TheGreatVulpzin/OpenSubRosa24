@@ -794,7 +794,7 @@ void selectnearitem(void);
 void createhuman(void);
 void lf_85940(void);
 void lf_85980(void);
-void lf_85b70(void);
+void humansimulation(void);
 void humansimulationclient(void);
 void lf_89de0(void);
 void lineintersecthuman(void);
@@ -985,7 +985,7 @@ void addobjectrotation(void);
 void lf_c71e0(void);
 void lf_c73d0(void);
 void lf_c7590(void);
-void lf_c78b0(void);
+void objectsimulation(void);
 void calculatebarycentric(void);
 void applydamageobject(void);
 void objectwheelsimulation2(void);
@@ -2094,7 +2094,7 @@ const LfEntry lf_table[] = {
     { "createhuman", 0x850b0, (void *)createhuman, 3, LF_RET_INT, 4, "ppp", 0 },
     { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },
     { "pointinsidebuilding", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
-    { "humansimulation", 0x85b70, (void *)lf_85b70, 0, LF_RET_VOID, 4, "", 0 },
+    { "humansimulation", 0x85b70, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "humansimulationclient", 0x896d0, (void *)humansimulationclient, 0, LF_RET_VOID, 4, "", 0 },
     { "lf_89de0", 0x89de0, (void *)lf_89de0, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersecthuman", 0x89e10, (void *)lineintersecthuman, 4, LF_RET_INT, 1, "vppv", 0 },
@@ -2285,7 +2285,7 @@ const LfEntry lf_table[] = {
     { "lf_c71e0", 0xc71e0, (void *)lf_c71e0, 2, LF_RET_VOID, 4, "vp", 0 },
     { "lf_c73d0", 0xc73d0, (void *)lf_c73d0, 3, LF_RET_VOID, 4, "pvp", 0 },
     { "lf_c7590", 0xc7590, (void *)lf_c7590, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectsimulation", 0xc78b0, (void *)lf_c78b0, 0, LF_RET_VOID, 4, "", 0 },
+    { "objectsimulation", 0xc78b0, (void *)objectsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "calculatebarycentric", 0xc9cf0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
     { "applydamageobject", 0xc9ee0, (void *)applydamageobject, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectwheelsimulation2", 0xca0c0, (void *)objectwheelsimulation2, 0, LF_RET_VOID, 4, "", 0 },
