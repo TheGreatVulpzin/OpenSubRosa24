@@ -555,7 +555,7 @@ void angulardistance(void);
 void lf_35fa0(void);
 void ai_playercar(void);
 void ai_car_nextwaypoint(void);
-void lf_37720(void);
+void createarea(void);
 void area_createblock(void);
 void area_setblock(void);
 void area_setblockcolor(void);
@@ -791,7 +791,7 @@ void drawhud(void);
 void rendermap(void);
 void drawmap(void);
 void selectnearitem(void);
-void lf_850b0(void);
+void createhuman(void);
 void lf_85940(void);
 void lf_85980(void);
 void lf_85b70(void);
@@ -1252,7 +1252,7 @@ void loadtexturepartial(void);
 void generatemipmap(void);
 void setuptexture(void);
 void lf_10ad70(void);
-void lf_10adb0(void);
+void steam_requestauthticket(void);
 void lf_10add0(void);
 void lf_10ae00(void);
 void lf_10b1f0(void);
@@ -1282,12 +1282,12 @@ void lf_10bc40(void);
 void lf_10bc70(void);
 void lf_10bca0(void);
 void lf_10bcc0(void);
-void lf_10bcf0(void);
-void lf_10bd40(void);
-void lf_10bd60(void);
-void lf_10bd80(void);
-void lf_10bdc0(void);
-void lf_10be20(void);
+void steam_init(void);
+void steam_shutdown(void);
+void steam_update(void);
+void steam_getname(void);
+void steam_getid(void);
+void steam_requestticket(void);
 void __fastcall lf_10be80(int);
 void __fastcall lf_10bee0(int);
 void __fastcall lf_10c020(int);
@@ -1855,7 +1855,7 @@ const LfEntry lf_table[] = {
     { "lf_35fa0", 0x35fa0, (void *)lf_35fa0, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "ai_playercar", 0x36040, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
     { "ai_car_nextwaypoint", 0x37310, (void *)ai_car_nextwaypoint, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createarea", 0x37720, (void *)lf_37720, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
+    { "createarea", 0x37720, (void *)createarea, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "area_createblock", 0x37b30, (void *)area_createblock, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "area_setblock", 0x38260, (void *)area_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_setblockcolor", 0x38430, (void *)area_setblockcolor, 5, LF_RET_VOID, 4, "vvvvv", 0 },
@@ -2091,7 +2091,7 @@ const LfEntry lf_table[] = {
     { "rendermap", 0x844d0, (void *)rendermap, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmap", 0x84700, (void *)drawmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "selectnearitem", 0x84f00, (void *)selectnearitem, 0, LF_RET_VOID, 4, "", 0 },
-    { "createhuman", 0x850b0, (void *)lf_850b0, 3, LF_RET_INT, 4, "ppp", 0 },
+    { "createhuman", 0x850b0, (void *)createhuman, 3, LF_RET_INT, 4, "ppp", 0 },
     { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },
     { "pointinsidebuilding", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
     { "humansimulation", 0x85b70, (void *)lf_85b70, 0, LF_RET_VOID, 4, "", 0 },
@@ -2552,7 +2552,7 @@ const LfEntry lf_table[] = {
     { "generatemipmap", 0x10a9a0, (void *)generatemipmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "setuptexture", 0x10ac40, (void *)setuptexture, 1, LF_RET_VOID, 4, "v", 1 },
     { "lf_10ad70", 0x10ad70, (void *)lf_10ad70, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "steam_requestauthticket", 0x10adb0, (void *)lf_10adb0, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_requestauthticket", 0x10adb0, (void *)steam_requestauthticket, 0, LF_RET_VOID, 4, "", 1 },
     { "lf_10add0", 0x10add0, (void *)lf_10add0, 1, LF_RET_INT, 4, "p", 0 },
     { "main", 0x10ae00, (void *)lf_10ae00, 0, LF_RET_INT, 4, "", 1 },
     { "getpaths", 0x10b1f0, (void *)lf_10b1f0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2582,12 +2582,12 @@ const LfEntry lf_table[] = {
     { "lf_10bc70", 0x10bc70, (void *)lf_10bc70, 4, LF_RET_VOID, 4, "pppv", 0 },
     { "lf_10bca0", 0x10bca0, (void *)lf_10bca0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "lf_10bcc0", 0x10bcc0, (void *)lf_10bcc0, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "steam_init", 0x10bcf0, (void *)lf_10bcf0, 0, LF_RET_INT, 4, "", 1 },
-    { "steam_shutdown", 0x10bd40, (void *)lf_10bd40, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_update", 0x10bd60, (void *)lf_10bd60, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_getname", 0x10bd80, (void *)lf_10bd80, 1, LF_RET_INT, 1, "p", 1 },
-    { "steam_getid", 0x10bdc0, (void *)lf_10bdc0, 1, LF_RET_VOID, 4, "p", 1 },
-    { "steam_requestticket", 0x10be20, (void *)lf_10be20, 1, LF_RET_VOID, 4, "v", 1 },
+    { "steam_init", 0x10bcf0, (void *)steam_init, 0, LF_RET_INT, 4, "", 1 },
+    { "steam_shutdown", 0x10bd40, (void *)steam_shutdown, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_update", 0x10bd60, (void *)steam_update, 0, LF_RET_VOID, 4, "", 1 },
+    { "steam_getname", 0x10bd80, (void *)steam_getname, 1, LF_RET_INT, 1, "p", 1 },
+    { "steam_getid", 0x10bdc0, (void *)steam_getid, 1, LF_RET_VOID, 4, "p", 1 },
+    { "steam_requestticket", 0x10be20, (void *)steam_requestticket, 1, LF_RET_VOID, 4, "v", 1 },
     { "CSteamID", 0x10be80, (void *)lf_10be80, 1, LF_RET_INT, 4, "p", 0 },
     { "ConvertToUint64", 0x10bee0, (void *)lf_10bee0, 1, LF_RET_INT64, 4, "p", 0 },
     { "lf_10c020", 0x10c020, (void *)lf_10c020, 1, LF_RET_INT, 4, "p", 0 },

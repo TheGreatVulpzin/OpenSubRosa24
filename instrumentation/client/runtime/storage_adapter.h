@@ -378,6 +378,8 @@ void __cdecl debug_addatafloat(const char *name, float value);
 #define sr_debug_float(name, value) debug_addatafloat((name), (value))
 void __cdecl debug_addline(const vec3 *from, const vec3 *to);
 #define sr_debug_line(from, to) debug_addline((from), (to))
+void area_reset_interiors(void);
+#define sr_area_reset_interiors() area_reset_interiors()
 extern int sr_client_gametype;
 #define sr_option_gametype(o) (*((void)(o), &sr_client_gametype))
 extern int sr_client_end_time;

@@ -14,3 +14,10 @@ checksimulation src/client/setup/simulation.c
 setupclient src/client/setup/client_setup.c
 setupgame src/client/setup/identifiers.c
 stoptimer src/game/profiler.c
+steam_init src/client/setup/steam.c
+steam_shutdown src/client/setup/steam.c
+steam_update src/client/setup/steam.c
+steam_getname src/client/setup/steam.c
+steam_getid src/client/setup/steam.c
+steam_requestticket src/client/setup/steam.c
+steam_requestauthticket src/client/setup/steam.c
