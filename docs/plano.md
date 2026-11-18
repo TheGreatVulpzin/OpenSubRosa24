@@ -272,6 +272,22 @@ The groups, in order (function counts and sizes from `lifted_table.c` and `funct
 
 How a group works (files, steps, tests, parallel branches): [`docs/client_rewrite.md`](client_rewrite.md). The list of every function with its group: `analysis/client_win/groups.csv` (`tools/re/client_groups.py`).
 
+Progress on 2026-11-16 (functions with a test and a name in an `adopted*.txt` list):
+
+| Group | Adopted | Bytes |
+| --- | ---: | ---: |
+| C0 (shared server code) | 146 of 161 | 91 percent |
+| C0x (large simulation, shared) | 30 of 76 | 29 percent |
+| C1, C2 | all | 100 percent |
+| C3 (render) | 63 of 64 | 96 percent |
+| C4, C6 | 12 of 13, 14 of 15 | 80 and 78 percent |
+| C7 (setup and loop) | 15 of 25 | 59 percent |
+| C10 (other named) | 31 of 98 | 22 percent |
+| C5, C8 | 0 | 0 percent (in work) |
+| C9, C11 | 0 | no rewrite, and unnamed |
+
+Without C9 and C11: 406 of 599 functions (68 percent) and 60 percent of the bytes. 36 functions of C0x wait for client addresses of data objects. See [shared code](client/shared.md), [records](client/records.md), [collision](client/collision.md) and [events](client/events.md).
+
 Result of C0 (2026-11-09): the server (0.24d) and the client (0.24b) are not the same build, so only 19 of 236 clean functions are adopted (the others have no test yet). On 2026-11-14 synthetic calls (`instrumentation/client/synth_pure.py`) added 27 pure functions, 10 of them with known differences. On 2026-11-15 the same method adopted the text parser (4), seven collision functions, ten area functions, seven network events, ten block mesh functions and `loadtextfile` and `area_createinteriorblocks`. Three causes explained most of the differences: the tick of the game (`sr_game_ticks`), the handle of an open file (`sr_parser_file`) and three scratch arrays without a client address. About 70 clean functions are still pending. A step of the work runs with `instrumentation/client/step.sh`. See `docs/client.md`, "Clean server code in the client" and "A step of the client rewrite".
 
 C0 comes first: it is the largest part and the test is ready (the gate compares each function with the original). Names for C11 come during the groups, because a name needs the context that the rewrite gives.

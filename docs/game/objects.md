@@ -38,7 +38,7 @@ An object is a vehicle: a car, a helicopter, a locomotive or a train car. It is 
 Loop 1, for each active object (`object_update`):
 
 1. `object_gather`: sums the particles into `pos` and `vel`, makes the box (the wheels widen it by their radius) and the impact. The impact is the mean of the change of the particle speed since the last tick.
-2. `object_frame`: makes `rot[0]` and `rot[2]` from the weighted offsets of the first particles to their center. Then it makes `rot[1]` by a cross product and orthogonalizes `rot[0]`.
+2. `object_frame`: makes `rot[0]` and `rot[2]` from the weighted offsets of the first particles to their center. Then it makes `rot[1]` by a cross product and orthogonalizes `rot[0]`. The client build sets `sr_object_frame_orthogonal` to 0 and skips the last step.
 3. An object that falls below y = -32 loses all health.
 4. `object_vertices`: copies the particles to `verts` and builds the extra points of the type (`ObjectType.quads`).
 5. `object_impact` (not for type 13): an impact above 0.0833 calls `applydamageobject`. The impact noise adds up in `crash_noise` and plays the crash sound above 2.

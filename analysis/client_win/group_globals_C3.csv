@@ -34,7 +34,7 @@ view_zoom,float,1,0xfefe2d4,"the zoom of the view: 1 normally, larger while a gu
 display_text,char,256,0x126728,"drawdisplay builds a stock price or a chat line in it before drawtext"
 round_ticks,int,1,0x908ac70,"drawdisplay: the ticks of the timed round, shown as minutes, seconds and tenths"
 round_goal,int,1,0x908ac74,"drawdisplay: the right number of the round score line"
-timerlist,TimerList,1,0x12a7d620,"the numbers of the timers of the render passes. The Linux client names the symbol timerlist"
+timerlist,TimerListClient,1,0x12a7d620,"the numbers of the timers of the render passes. The Linux client names the symbol timerlist"
 light_ambient,float,4,0x19c07d00,"renderframe sets it as the ambient color of the light 0 and the interior window pass draws with it"
 interior_corners,vec3,6,0x1271e8,"render_sector_interior_shadow2: the three corners of a triangle and the same corners pushed away from the light"
 block_sectors,BlockSector,8192,0x1dda5280,"the sectors of the city: renderframe lists the ones near the camera. The record starts 0x40 bytes after the start of the area block"

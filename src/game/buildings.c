@@ -15,7 +15,7 @@
 #define g_floorplan sr_data_floorplan
 #define g_parser sr_data_parser
 #define g_materiallist sr_data_materiallist
-#define g_materials ((MaterialRec *)&sr_data_materials.records)
+#define g_materials (sr_data_materials.records)
 #define g_area_block sr_data_area_block
 #define g_blocklist sr_data_blocklist
 

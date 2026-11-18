@@ -23,7 +23,7 @@
 #define g_headlines ((char (*)[0x100])((char *)&sr_data_newspaper.lines))
 #define g_modellist sr_data_modellist
 #define g_texturelist sr_data_texturelist
-#define g_materials ((MaterialRec *)&sr_data_materials.records)
+#define g_materials (sr_data_materials.records)
 
 void logic_player(int player);
 void logic_playeractions(int player);

@@ -21,16 +21,16 @@ yaxis,vec3,1,12,0x123590,1,2,weak
 socketid,uint32_t,1,4,0x1235b8,1,4,other
 tzset_done,int,1,4,0x126724,1,1,weak
 mt,uint32_t,624,4,0x126828,5,6,ok
-mag01,uint32_t,2,4,0x126e5c,1,2,dropped
+mag01,uint32_t,2,4,0x1262f8,0,0,ok
 manager_msg,char,64,1,0x127230,1,1,weak
 message,char,64,1,0x127310,1,1,weak
 debugit,int,1,4,0x127ea8,3,3,ok
-floorplan,FloorplanCell,262144,72,0x2043a0,1,2,dropped
+floorplan,FloorplanCell,262144,72,0x132e80,0,0,ok
 bullet,Bullet,16384,92,0x1338680,2,12,weak
 debug,Debug,1,336840,0x14a8680,8,8,checked
 human,Human,512,11108,0x14fc4a0,37,114,checked
 stats,Stats,1,8,0x1a79ca8,1,1,checked
-slogfp,void *,1,4,0x1a79cac,1,2,dropped
+slogfp,void *,1,4,0x1033eca4,0,0,ok
 clientaccounts,SrClientAccountStore,1,1048580,0x1a79cc0,1,2,weak
 numofconnections,int,1,4,0x1b9b4e0,4,4,ok
 building,Building,1,56715512,0x1cb8280,17,29,checked
@@ -57,7 +57,7 @@ surface,SrSurface,1,320,0xb77c620,50,106,ok
 interior,SrInteriorStore,1,44236804,0xb77c760,1,1,weak
 filelist,FileList,1,524320,0xe1ac780,2,3,weak
 city,City,1,10533276,0xe22c7a0,53,101,checked
-voice,VoiceChannel,8,168488,0xec33024,1,4,dropped
+voice,VoiceChannelClient,8,168524,0xec38140,0,0,ok
 player,Player,256,9224,0xed813a0,120,219,checked
 cityobjecttype,CityObjectTypeRec,256,9240,0xefc1ba0,38,57,ok
 materiallist,MaterialList,1,1408,0xf2033a0,1,2,other
@@ -80,7 +80,7 @@ modellist,ModelList,1,1956,0x17c040a0,1,1,checked
 texturelist,TextureList,1,4420,0x14311840,1,1,checked
 cityobject,CityObjectRec,1024,84,0x16323600,10,11,ok
 connection,Connection,256,61808,0x16338600,3,14,weak
-materials,SrMaterialStore,1,90116,0x1724f600,9,10,dropped
+materials,SrMaterialStoreClient,1,90112,0x1724f600,0,0,ok
 area,Area,4,1052012,0x17265600,44,64,ok
 market,Market,1,516,0x17678bc0,4,7,ok
 bondpass,int,1,4,0x17798de0,1,1,weak
@@ -103,3 +103,32 @@ bond,Bond,16384,236,0x1779b820,1,1,checked
 bondopt,BondOpt,16384,64,0xf8ae240,1,1,checked
 bondparticle,BondParticle,16384,32,0x17718de0,1,1,ok
 carcolorname,const char *,6,4,0x123568,1,1,ok
+bondhuman,BondHumanClient,512,1280,0x17678de0,0,0,dropped
+numofdynamicbonds,int,1,4,0x1bf7e14,0,0,ok
+numofstaticbonds,int,1,4,0x13c5e6c0,0,0,ok
+timerlist,TimerListClient,1,84,0x12a7d620,0,0,dropped
+surface2,SrSurface,1,320,0x1cb8140,0,0,ok
+train_near,int,1,4,0x19d85180,0,0,ok
+filtered_word,char,7,1,0x123fe8,0,0,ok
+guard_used,int,64,4,0x1278d8,0,0,ok
+camera,float,130,4,0xf3eafe0,0,0,ok
+newspaper_line,char,128,1,0x1266a0,0,0,ok
+newspaper_money,char,128,1,0x127b38,0,0,ok
+farbs_digits,char,128,1,0x127810,0,0,ok
+farbs_line,char,128,1,0x127bb8,0,0,ok
+numofsprite_models,int,1,4,0x12a7d604,0,0,ok
+numofsprites,int,1,4,0x75a5120,0,0,ok
+sprite_points,int,1,4,0x75a58a0,0,0,ok
+sprite_lines,int,1,4,0x75f58a4,0,0,ok
+sprite_quads,int,1,4,0x76558a8,0,0,ok
+sprite_triangles,int,1,4,0x7e558ac,0,0,ok
+world_msg,char,64,1,0x127270,0,0,ok
+world_digits,char,64,1,0x127af8,0,0,ok
+wsadata,uint8_t,400,1,0xababc40,0,0,ok
+tiremarkstart,int,1,4,0xb77c580,0,0,ok
+tiremarkend,int,1,4,0xb73312c,0,0,ok
+dedicated,int,1,4,0x132e60,0,0,ok
+csmstr,const char *,1,4,0x1234dc,0,0,ok
+hack_modulusopt,int,3,4,0x1226d4,0,0,ok
+cubetexcoord,float,8,4,0x122818,0,0,ok
+menucolor,float,3,4,0x1234c8,0,0,ok

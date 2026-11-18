@@ -32,3 +32,8 @@ rva,name,index,type,evidence
 0x850b0,createhuman,2,float *,"the three rows of the orientation: the function copies them into the bones"
 0x89e10,lineintersecthuman,1,float *,"the start of the line"
 0x89e10,lineintersecthuman,2,float *,"the end of the line"
+0xc5780,createobject,2,float *,"the velocity: the function copies it into the object"
+0xc5780,createobject,3,float *,"the three rows of the orientation: the function copies them into the object"
+0xfb3d0,createvehicle,2,float *,"the three rows of the orientation of the vehicle"
+0xddc00,createmission_acquisition,2,int *,"the list of teams that the mission uses"
+0xde560,createmission_threeway,2,int *,"the list of teams that the mission uses"

@@ -102,7 +102,7 @@ static void frame_view(void)
 /* Reset the profiler timers of the frame passes. */
 static void reset_timers(void)
 {
-    const TimerList *timers = &cl_data_timerlist;
+    const TimerListClient *timers = &cl_data_timerlist;
     resettimer(timers->raycast, "raycast");
     resettimer(timers->buildframelist, "framesetup");
     resettimer(timers->renderdepth, "renderdepth");

@@ -72,7 +72,7 @@ def main():
         if name in seen or name not in funcs:
             return set()
         seen.add(name)
-        body = funcs[name]
+        body = re.sub('/\\*.*?\\*/|//[^\\n]*|"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'', "", funcs[name], flags=re.S)
         found = {x for x in re.findall(r'\bsr_data_(\w+)', body) if x in unplaced}
         for word in set(re.findall(r'\b[A-Za-z_]\w*\b', body)):
             found |= alias.get(word, set()) & unplaced

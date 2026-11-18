@@ -128,6 +128,32 @@ static Region *g_regions;
 static int g_nregions, g_mapped;
 static char g_snap_path[MAX_PATH];
 
+/* The system reserves memory in blocks of 64 KB. Two regions in one block need one reservation
+ * for the block and one commit for each region. The table tells which blocks this program
+ * reserved, so a region never commits memory that belongs to another owner. */
+#define BLOCK 0x10000u
+static uint8_t g_own_block[65536];
+
+static int map_region(uint32_t base, uint32_t size)
+{
+    uint64_t end = (uint64_t)base + size;
+    uint64_t block;
+
+    for (block = base & ~(BLOCK - 1); block < end; block += BLOCK) {
+        if (VirtualAlloc((void *)(uintptr_t)block, BLOCK, MEM_RESERVE | MEM_WRITE_WATCH, PAGE_READWRITE))
+            g_own_block[block / BLOCK] = 1;
+        else if (!g_own_block[block / BLOCK])
+            return 0;
+    }
+    for (block = base & ~(BLOCK - 1); block < end; block += BLOCK) {
+        uint64_t from = block > base ? block : base;
+        uint64_t to = block + BLOCK < end ? block + BLOCK : end;
+        if (!VirtualAlloc((void *)(uintptr_t)from, (SIZE_T)(to - from), MEM_COMMIT, PAGE_READWRITE))
+            return 0;
+    }
+    return 1;
+}
+
 static void map_regions(const char *path)
 {
     FILE *f = fopen(path, "rb");
@@ -154,9 +180,18 @@ static void map_regions(const char *path)
          * and copied the region to that address: a crash or a silent overwrite, depending on
          * the heap content (gate.py --changed, 2026-10-15). */
         r->shadow = NULL;
-        r->mapped = VirtualAlloc((void *)(uintptr_t)r->base, r->size, MEM_RESERVE | MEM_COMMIT | MEM_WRITE_WATCH,
-                                 PAGE_READWRITE) != NULL;
+        r->mapped = map_region(r->base, r->size);
         g_mapped += r->mapped;
+        if (!r->mapped && getenv("HARNESS_REGIONS")) {
+            MEMORY_BASIC_INFORMATION mbi;
+            char module[MAX_PATH] = "";
+            if (VirtualQuery((void *)(uintptr_t)r->base, &mbi, sizeof mbi)) {
+                if (mbi.Type == MEM_IMAGE)
+                    GetModuleFileNameA((HMODULE)mbi.AllocationBase, module, MAX_PATH);
+                fprintf(stderr, "region not mapped: %08x size %x: owner base %p size %lx type %lx %s\n", r->base,
+                        r->size, mbi.AllocationBase, (unsigned long)mbi.RegionSize, (unsigned long)mbi.Type, module);
+            }
+        }
         fseek(f, (long)r->size, SEEK_CUR);
     }
     fclose(f);
@@ -1076,6 +1111,23 @@ static const char *known_difference(const char *name)
          * write the team kill rate. The server never sends this result to a player, so the client follows the
          * server code (docs/client.md, "Clean server code in the client"). */
         { "playerteamkilltax", "client follows the server code" },
+        /* The client runs without Steam: these functions do nothing. The ticket never goes to the server, so
+         * the protocol does not change. */
+        /* A new human is protected for 3 to 6 units of 3600 ticks in the server code and for 2 to 5 units in the client.
+         * All other fields are the same. The client follows the server code. */
+        { "createhuman", "client follows the server code" },
+        /* These functions create humans: the same protection time difference as createhuman. */
+        { "createscenario_world", "client follows the server code (createhuman)" },
+        { "scenario_createguards", "client follows the server code (createhuman)" },
+        { "scenario_createtraffic2", "client follows the server code (createhuman)" },
+        { "scenario_createchase", "client follows the server code (createhuman)" },
+        { "steam_init", "no Steam in the client" },
+        { "steam_shutdown", "no Steam in the client" },
+        { "steam_update", "no Steam in the client" },
+        { "steam_getname", "no Steam in the client" },
+        { "steam_getid", "no Steam in the client" },
+        { "steam_requestticket", "no Steam in the client" },
+        { "steam_requestauthticket", "no Steam in the client" },
     };
     size_t k;
     for (k = 0; k < sizeof known / sizeof known[0]; k++)

@@ -685,6 +685,10 @@ LIFT_PATCHES = {
     # Client, mainmenu: the debug line "STEAM %u %u" calls __aullshr with its inputs in registers.
     # The line only runs when the debug flag is set, so the value is zero here.
     0xaa920: [('local_7c = __aullshr();', 'local_7c = 0;')],
+    # Client, resetgame: the guards expire time is the number 10000000. The decompiler shows it as the
+    # address of data (0x989680 is inside the image), so the lift adds the image base to it.
+    0x79ad0: [('scenario_createguards((int)local_3c,0x16,&DAT_00989680);',
+               'scenario_createguards((int)local_3c,0x16,10000000);')],
     # Client, drawtext and FUN_0040ac50: "&stack0x.." is the first argument of the variable list,
     # the word after the last named parameter.
     0x106b30: [('local_34 = (uint *)&stack0x00000028;', 'local_34 = (uint *)(&a + 1);')],

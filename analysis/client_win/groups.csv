@@ -789,7 +789,7 @@ rva,name,size,group,recorded_calls
 0x844d0,rendermap,558,C3,8
 0x84700,drawmap,2034,C3,2
 0x84f00,selectnearitem,424,C3,0
-0x850b0,createhuman,2187,C0,0
+0x850b0,createhuman,2187,C0x,0
 0x85940,getnexthuman,61,C10,0
 0x85980,deletehuman,491,C10,0
 0x85b70,humansimulation,15195,C0x,0

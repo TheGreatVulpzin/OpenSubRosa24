@@ -1,6 +1,4 @@
-/* Server functions rewritten in C.
- * Each function has the same signature and calling convention as the original in the 024d.
- */
+/* Shared game services and server entry points. */
 #ifndef SR_SERVER_H
 #define SR_SERVER_H
 
@@ -11,12 +9,12 @@ extern "C" {
 /* accounts.c */
 void __cdecl sr_loadaccountsserver(void);
 
-/* events.c */
+/* src/net/message_events.c */
 void __cdecl sr_createevent_message(int kind, const char *text, int target, int extra);
 void __cdecl sr_createevent_updatedoor(int a, int b);
 void __cdecl sr_createevent_updatemission(int team, int mission);
 
-/* players.c */
+/* src/game/player_names.c */
 void __cdecl sr_fixplayername(int id);
 
 /* main_loop.c (subvulpes.ini own_main=1) */

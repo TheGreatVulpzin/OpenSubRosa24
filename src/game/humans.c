@@ -351,6 +351,12 @@ static int human_begin(int h, int vehicle)
   return 0 < hu->inventory[0].count || 0 < hu->inventory[1].count;
 }
 
+/* The floor search stops at the first hit. A build can set this macro to 1 before this file:
+ * the search then tries every ray, counts all the hits and skips no object. */
+#ifndef sr_human_floor_all_rays
+#define sr_human_floor_all_rays 0
+#endif
+
 /* A ray against the level that finds a floor (the normal points up more than 0.7). */
 static int human_floorray(vec3 *from, vec3 *to)
 {
@@ -400,7 +406,7 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
   pos->x = pos->y = pos->z = 0.0f;
   vel->x = vel->y = vel->z = 0.0f;
   for (o = 0; o < 1024; o++) {
-    if (sr_objects[o].active == 0 || sr_objects[o].state == 3)
+    if (sr_objects[o].active == 0 || (!sr_human_floor_all_rays && sr_objects[o].state == 3))
       continue;
     d = (float)(-hu->stance * 1.125);
     to.x = (float)(b0->pos.x + d * g_yaxis.x);
@@ -414,6 +420,25 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
       return 1;
     }
   }
+#if sr_human_floor_all_rays
+  to.x = (float)(b0->pos.x - g_yaxis.x * 0.5);
+  to.y = (float)(b0->pos.y - g_yaxis.y * 0.5);
+  to.z = (float)(b0->pos.z - g_yaxis.z * 0.5);
+  from = b0->pos;
+  if (human_floorray(&from, &to)) {
+    n++;
+    human_addfloor(pos, vel);
+  }
+  d = (float)(-hu->stance * 1.125);
+  to.x = (float)(b0->pos.x + d * b0->rot[1].x);
+  to.y = (float)(d * b0->rot[1].y + b0->pos.y);
+  to.z = (float)(d * b0->rot[1].z + b0->pos.z);
+  from = b0->pos;
+  if (human_floorray(&from, &to)) {
+    n++;
+    human_addfloor(pos, vel);
+  }
+#else
   d = (float)(-hu->stance * 1.125);
   to.x = (float)(b0->pos.x + d * b0->rot[1].x);
   to.y = (float)(d * b0->rot[1].y + b0->pos.y);
@@ -423,12 +448,13 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
     human_addfloor(pos, vel);
     return 1;
   }
+#endif
   human_feet(b0, hu->stance, &g_xaxis, -0.1875f, &to);
   from.x = (float)((float)(b0->pos.x - g_xaxis.x * 0.1875) - g_yaxis.x * 0.375);
   from.y = (float)((float)(b0->pos.y - g_xaxis.y * 0.1875) - g_yaxis.y * 0.375);
   from.z = (float)((float)(b0->pos.z - g_xaxis.z * 0.1875) - g_yaxis.z * 0.375);
   if (human_floorray(&from, &to)) {
-    n = 1;
+    n++;
     human_addfloor(pos, vel);
   }
   human_feet(b0, hu->stance, &g_xaxis, 0.1875f, &to);
@@ -451,6 +477,7 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
     n++;
     human_addfloor(pos, vel);
   }
+#if !sr_human_floor_all_rays
   if (n != 0)
     return n;
   to.x = (float)(b0->pos.x - g_yaxis.x * 0.5);
@@ -461,7 +488,8 @@ static int human_findfloor(const Human *hu, vec3 *pos, vec3 *vel)
     human_addfloor(pos, vel);
     return 1;
   }
-  return 0;
+#endif
+  return n;
 }
 
 /* A human on the floor stands: bone 0 gets a push along rot[1] that holds it at the stance
@@ -950,8 +978,8 @@ void humansimulation(void)
   Human *hu;
   int h, o, vehicle, seat, has_item;
 
-  nametimer(g_timerlist.humansim, "humansim");
-  starttimer(g_timerlist.humansim);
+  sr_timer_name(humansim, "humansim");
+  sr_timer_start(humansim);
   for (o = 0; o < 1024; o++)
     sr_objects[o].drive_buttons = 4;
   for (h = 0; h < 512; h++) {
@@ -969,5 +997,5 @@ void humansimulation(void)
     human_calculatearmangles(h);
     human_finish(h, vehicle, has_item);
   }
-  stoptimer(g_timerlist.humansim);
+  sr_timer_stop(humansim);
 }
