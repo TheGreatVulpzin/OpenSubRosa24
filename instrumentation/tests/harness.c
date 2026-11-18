@@ -1083,6 +1083,8 @@ static const char *known_difference(const char *name)
     static const char *const known[][2] = {
         /* sscanf("%d") finds no number: the original returns an uninitialized stack value. */
         { "getint", "returns an uninitialized local when there is no number" },
+        /* The original returns a byte in AL and leaves the other bytes of EAX as they were. */
+        { "stbi_get8u", "the high bytes of EAX are not set by the original" },
         /* The game ends with _ftol2, which returns a 32-bit value in EAX on a CPU with SSE2 and leaves EDX unset. */
         { "testtimer", "EDX is not set by the original" },
         /* x87 precision: the error grows through the computation (docs/lift.md, "Float precision"). */

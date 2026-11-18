@@ -13,3 +13,9 @@ image_pixels,uint32_t,16777216,0x19da5228,Loaded image pixels
 font_bits,uint8_t,1024,0x1235f0,Built in eight pixel glyphs
 cursor_bits,uint8_t,9,0x1235e3,Cursor bitmap and outline
 font_alpha_low,int,1,0xb7331c0,Select low byte alpha mask
+image_loaders,void*,32,0x75a5340,The loader records that stbi_register_loader keeps
+image_loader_count,int,1,0x127c38,The number of loaders in the list
+image_hdr_gamma_inverse,float,1,0x111074,One over the gamma of the HDR to 8 bit conversion
+image_hdr_scale_inverse,float,1,0x111078,One over the scale of the HDR to 8 bit conversion
+image_ldr_gamma,float,1,0x11107c,The gamma of the 8 bit to HDR conversion
+image_ldr_scale,float,1,0x111080,The scale of the 8 bit to HDR conversion

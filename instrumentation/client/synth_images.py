@@ -1,5 +1,6 @@
 """Compare image decoding, byte operations and font records on memory inputs."""
 import argparse
+import csv
 import json
 import os
 from pathlib import Path
@@ -42,6 +43,8 @@ FUNCTIONS = {
     'stbi_zlib_decode_buffer': 0x5df0, 'stbi_zlib_decode_noheader_malloc': 0x5e60,
     'stbi_zlib_decode_noheader_buffer': 0x5f10,
 }
+for _row in csv.DictReader((ROOT / 'analysis/client_win/functions.csv').open(encoding='utf-8')):
+    FUNCTIONS.setdefault(_row['name'], int(_row['rva'], 16))
 RESULT = re.compile(r'^\[\s*\d+/\d+\]\s+(\S+)\s+(\d+) same\s+(\d+) different\s+(\d+) crashed', re.M)
 
 
@@ -519,6 +522,90 @@ def reader_cases(cases):
                        v(4096), v(expandable), v(header))
 
 
+def float_bits(value):
+    return struct.unpack('<I', struct.pack('<f', value))[0]
+
+
+def sample_files():
+    """Small files of every format, and files that are not images."""
+    bmp_rows = b''.join(bytes((column * 37 + row * 11) & 255 for column in range(9)) + bytes(-9 & 3) for row in range(3))
+    bmp = struct.pack('<2sIHHI', b'BM', 54 + len(bmp_rows), 0, 0, 54)
+    bmp += struct.pack('<IiiHH6I', 40, 3, 3, 1, 24, 0, len(bmp_rows), 0, 0, 0, 0) + bmp_rows
+    psd = b'8BPS' + struct.pack('>H6sHIIHH', 1, bytes(6), 3, 2, 3, 8, 3) + struct.pack('>IIIH', 0, 0, 0, 0)
+    psd += bytes((channel * 31 + i * 17) & 255 for channel in range(3) for i in range(6))
+    hdr = b'#?RADIANCE\nFORMAT=32-bit_rle_rgbe\n\n-Y 2 +X 3\n' + bytes([33, 75, 143, 130, 0, 0, 0, 0, 255, 128, 3, 140]) * 2
+    tga_rgb = struct.pack('<BBBHHBHHHHBB', 0, 0, 2, 0, 0, 0, 0, 0, 3, 2, 24, 32) + bytes((i * 31) & 255 for i in range(18))
+    tga_flat = struct.pack('<BBBHHBHHHHBB', 0, 0, 3, 0, 0, 0, 0, 0, 3, 2, 8, 0) + bytes(range(10, 16))
+    tga_rle = struct.pack('<BBBHHBHHHHBB', 0, 0, 10, 0, 0, 0, 0, 0, 3, 2, 32, 32) + bytes([129, 1, 2, 3, 4, 1, 9, 8, 7, 6, 5, 4, 3, 2])
+    tga_pal = (struct.pack('<BBBHHBHHHHBB', 0, 1, 1, 0, 4, 24, 0, 0, 3, 2, 8, 32) +
+               bytes(range(12)) + bytes([0, 1, 2, 3, 9, 1]))
+    files = {'png_rgb': png(2, 0), 'png_gray': png(0, 1), 'png_rgba': png(6, 4), 'png_palette': png(3, 0, True),
+             'bmp': bmp, 'psd': psd, 'hdr': hdr, 'tga_rgb': tga_rgb, 'tga_gray': tga_flat, 'tga_rle': tga_rle,
+             'tga_palette': tga_pal, 'junk': b'junk' * 8, 'empty': b''}
+    for file in sorted((ROOT / 'build/client_c1/jpeg').glob('*.jpg')):
+        files['jpeg_' + file.stem] = file.read_bytes()
+    return files
+
+
+def loader_cases(cases):
+    files = sample_files()
+    for name, data in files.items():
+        for test in ('jpeg', 'png', 'bmp', 'psd', 'hdr', 'tga'):
+            cases.call(f'stbi_{test}_test_memory', f'{test}_{name}', m(cases.alloc(data or b'\0')), v(len(data)))
+        cases.call('stbi_is_hdr_from_memory', name, m(cases.alloc(data or b'\0')), v(len(data)))
+        for requested in range(5):
+            out = cases.alloc(12)
+            cases.call('stbi_load_from_memory', f'{name}_{requested}', m(cases.alloc(data or b'\0')), v(len(data)),
+                       m(out), m(out + 4), m(out + 8), v(requested))
+        for requested in (0, 1, 3, 4):
+            out = cases.alloc(12)
+            cases.call('stbi_loadf_from_memory', f'{name}_{requested}', m(cases.alloc(data or b'\0')), v(len(data)),
+                       m(out), m(out + 4), m(out + 8), v(requested))
+        kind = name.split('_')[0]
+        if kind in ('png', 'jpeg', 'bmp', 'psd', 'tga', 'hdr'):
+            for requested in (0, 3, 4):
+                out = cases.alloc(12)
+                cases.call(f'stbi_{kind}_load_from_memory', f'{name}_{requested}', m(cases.alloc(data)), v(len(data)),
+                           m(out), m(out + 4), m(out + 8), v(requested))
+        if kind == 'jpeg':
+            for requested in range(6):
+                out = cases.alloc(12)
+                cases.call('load_jpeg_image', f'{name}_{requested}', m(cases.reader(data, size=0x36c0)),
+                           m(out), m(out + 4), m(out + 8), v(requested))
+        if kind == 'tga':
+            for requested in range(6):
+                out = cases.alloc(12)
+                cases.call('tga_load', f'{name}_{requested}', m(cases.reader(data)), m(out), m(out + 4), m(out + 8), v(requested))
+            cases.call('tga_test', name, m(cases.reader(data)))
+        cases.call('bmp_test', name, m(cases.reader(data)))
+        cases.call('psd_test', name, m(cases.reader(data)))
+        cases.call('hdr_test', name, m(cases.reader(data)))
+    cases.call('tga_test', 'junk', m(cases.reader(b'junk' * 8)))
+    cases.call('tga_test', 'empty', m(cases.reader(b'')))
+    for data in (b'', b'\x12', b'\x12\x34'):
+        cases.call('stbi_get8u', data.hex(), m(cases.reader(data)))
+    cases.call('start_mem', 'buffer', m(cases.alloc(28)), m(cases.alloc(b'abcdef')), v(6))
+    cases.call('start_file', 'handle', m(cases.alloc(28)), v(0x1234))
+    cases.call('stbi_failure_reason', 'none')
+    cases.call('stbi_register_loader', 'first', v(0x1234))
+    cases.call('stbi_register_loader', 'second', v(0x77777))
+    for gamma in (0.5, 1.0, 2.2, 3.0, -1.0):
+        for name in ('stbi_hdr_to_ldr_gamma', 'stbi_hdr_to_ldr_scale', 'stbi_ldr_to_hdr_gamma', 'stbi_ldr_to_hdr_scale'):
+            cases.call(name, str(gamma), v(float_bits(gamma)))
+    values = [0.0, 0.5, 1.0, 3.7, -2.0, 1e-3, 1e6, 0.18, 0.999, 254.5, 0.004, 12.25]
+    for comp in (1, 2, 3, 4):
+        floats = struct.pack(f'<{len(values) * comp}f', *[values[i % len(values)] * (1 + i % 3) for i in range(len(values) * comp)])
+        cases.call('hdr_to_ldr', f'comp_{comp}', m(cases.alloc(floats)), v(len(values)), v(1), v(comp))
+        pixels = bytes((i * 29 + 3) & 255 for i in range(len(values) * comp))
+        cases.call('ldr_to_hdr', f'comp_{comp}', m(cases.alloc(pixels)), v(len(values)), v(1), v(comp))
+    for width in (1, 2, 3, 5, 8):
+        near = bytes((i * 53 + 7) & 255 for i in range(width + 4))
+        far = bytes((i * 91 + 29) & 255 for i in range(width + 4))
+        for name, step in (('resample_row_1', 1), ('resample_row_v_2', 1), ('resample_row_h_2', 2),
+                           ('resample_row_hv_2', 2), ('resample_row_generic', 3)):
+            cases.call(name, f'w{width}', m(cases.alloc(64)), m(cases.alloc(near)), m(cases.alloc(far)), v(width), v(step))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('recording', type=Path)
@@ -535,6 +622,7 @@ def main():
     jpeg_cases(cases, ROOT / 'build/client_c1/jpeg')
     other_cases(cases)
     reader_cases(cases)
+    loader_cases(cases)
     cases.save(args.work)
     print(f'{len(cases.calls)} calls, {len(cases.pages)} pages', flush=True)
     if not args.run:

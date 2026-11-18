@@ -47,6 +47,44 @@ unsigned stbi_get8(ImageReader *reader)
     return 0;
 }
 
+/* Read one byte as an unsigned 8 bit value. */
+uint8_t stbi_get8u(ImageReader *reader)
+{
+    return (uint8_t)stbi_get8(reader);
+}
+
+/* Make the reader read from a file. */
+void start_file(ImageReader *reader, void *file)
+{
+    reader->file = file;
+}
+
+/* Make the reader read from a memory buffer. */
+void start_mem(ImageReader *reader, const uint8_t *buffer, int length)
+{
+    reader->file = NULL;
+    reader->cursor = (uint8_t *)buffer;
+    reader->end = (uint8_t *)buffer + length;
+}
+
+/* The position of a file. */
+long image_tell(void *file)
+{
+    static long(__cdecl *call)(void *);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "ftell");
+    return call(file);
+}
+
+/* Move a file to a position from its start. */
+void image_seek_set(void *file, long position)
+{
+    static int(__cdecl *call)(void *, long, int);
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "fseek");
+    call(file, position, 0);
+}
+
 /* Read a big endian word. Missing bytes give zero. */
 unsigned stbi_get16(ImageReader *reader)
 {

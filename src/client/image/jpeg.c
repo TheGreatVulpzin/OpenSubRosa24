@@ -586,3 +586,197 @@ void cleanup_jpeg(JpegImage *image)
         }
     }
 }
+
+enum { JPEG_ERROR_REQUEST = 0x111500, JPEG_ERROR_LINE_MEMORY = 0x111510, JPEG_ERROR_OUTPUT_MEMORY = 0x11151c, JPEG_MAX_PARTS = 4 };
+
+/* Return the line the next row is made of: no change. */
+uint8_t *resample_row_1(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step)
+{
+    (void)output;
+    (void)far_row;
+    (void)width;
+    (void)step;
+    return near_row;
+}
+
+/* Make two rows from one by weights of 3 and 1 between the near and the far row. */
+uint8_t *resample_row_v_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step)
+{
+    int index;
+
+    (void)step;
+    for (index = 0; index < width; ++index)
+        output[index] = (uint8_t)((3 * near_row[index] + far_row[index] + 2) >> 2);
+    return output;
+}
+
+/* Make two samples from one along the row. A row of one sample gives the sample twice. */
+uint8_t *resample_row_h_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step)
+{
+    int index;
+    uint8_t *input = near_row;
+
+    (void)far_row;
+    (void)step;
+    if (width == 1) {
+        output[0] = output[1] = input[0];
+        return output;
+    }
+    output[0] = input[0];
+    output[1] = (uint8_t)((input[0] * 3 + input[1] + 2) >> 2);
+    for (index = 1; index < width - 1; ++index) {
+        int base = 3 * input[index] + 2;
+        output[index * 2 + 0] = (uint8_t)((base + input[index - 1]) >> 2);
+        output[index * 2 + 1] = (uint8_t)((base + input[index + 1]) >> 2);
+    }
+    output[index * 2 + 0] = (uint8_t)((input[width - 2] * 3 + input[width - 1] + 2) >> 2);
+    output[index * 2 + 1] = input[width - 1];
+    return output;
+}
+
+/* Make 2 by 2 samples from one, with weights from the near row, the far row and the neighbors. */
+uint8_t *resample_row_hv_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step)
+{
+    int index, previous, current;
+
+    (void)step;
+    if (width == 1) {
+        output[0] = output[1] = (uint8_t)((3 * near_row[0] + far_row[0] + 2) >> 2);
+        return output;
+    }
+    current = 3 * near_row[0] + far_row[0];
+    output[0] = (uint8_t)((current + 2) >> 2);
+    for (index = 1; index < width; ++index) {
+        previous = current;
+        current = 3 * near_row[index] + far_row[index];
+        output[index * 2 - 1] = (uint8_t)((3 * previous + current + 8) >> 4);
+        output[index * 2] = (uint8_t)((3 * current + previous + 8) >> 4);
+    }
+    output[width * 2 - 1] = (uint8_t)((current + 2) >> 2);
+    return output;
+}
+
+/* Repeat each sample step times. */
+uint8_t *resample_row_generic(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step)
+{
+    int index, repeat;
+
+    (void)far_row;
+    for (index = 0; index < width; ++index)
+        for (repeat = 0; repeat < step; ++repeat)
+            output[index * step + repeat] = near_row[index];
+    return output;
+}
+
+typedef struct JpegResample {
+    uint8_t *(*resample)(uint8_t *, uint8_t *, uint8_t *, int, int);
+    uint8_t *line0;
+    uint8_t *line1;
+    int hs, vs;
+    int w_lores;
+    int ystep;
+    int ypos;
+} JpegResample;
+
+/* Decode the frame, then upsample each component and convert the colors. The result has the
+ * requested channels, or the channels of the file for 0. Return null with a message when the
+ * request is above 4, the decoder fails or memory is full. */
+uint8_t *load_jpeg_image(JpegImage *image, int *out_x, int *out_y, int *comp, int requested)
+{
+    int n, decode_n;
+    int k;
+    unsigned i, j;
+    uint8_t *output;
+    uint8_t *coutput[JPEG_MAX_PARTS];
+    JpegResample res_comp[JPEG_MAX_PARTS];
+
+    if (requested < 0 || requested > 4) {
+        image_fail(JPEG_ERROR_REQUEST);
+        return NULL;
+    }
+    image->reader.channels = 0;
+    if (!decode_jpeg_image(image)) {
+        cleanup_jpeg(image);
+        return NULL;
+    }
+    n = requested ? requested : image->reader.channels;
+    if (image->reader.channels == 3 && n < 3)
+        decode_n = 1;
+    else
+        decode_n = image->reader.channels;
+    for (k = 0; k < decode_n; ++k) {
+        JpegResample *r = &res_comp[k];
+        image->component[k].line = os_malloc(image->reader.width + 3);
+        if (!image->component[k].line) {
+            cleanup_jpeg(image);
+            image_fail(JPEG_ERROR_LINE_MEMORY);
+            return NULL;
+        }
+        r->hs = image->h_max / image->component[k].h;
+        r->vs = image->v_max / image->component[k].v;
+        r->ystep = r->vs >> 1;
+        r->w_lores = (int)((image->reader.width + r->hs - 1) / r->hs);
+        r->ypos = 0;
+        r->line0 = r->line1 = image->component[k].data;
+        if (r->hs == 1 && r->vs == 1)
+            r->resample = resample_row_1;
+        else if (r->hs == 1 && r->vs == 2)
+            r->resample = resample_row_v_2;
+        else if (r->hs == 2 && r->vs == 1)
+            r->resample = resample_row_h_2;
+        else if (r->hs == 2 && r->vs == 2)
+            r->resample = resample_row_hv_2;
+        else
+            r->resample = resample_row_generic;
+    }
+    output = os_malloc((size_t)n * image->reader.width * image->reader.height + 1);
+    if (!output) {
+        cleanup_jpeg(image);
+        image_fail(JPEG_ERROR_OUTPUT_MEMORY);
+        return NULL;
+    }
+    for (j = 0; j < image->reader.height; ++j) {
+        uint8_t *out = output + n * image->reader.width * j;
+        for (k = 0; k < decode_n; ++k) {
+            JpegResample *r = &res_comp[k];
+            int y_bottom = r->ystep >= (r->vs >> 1);
+            coutput[k] = r->resample(image->component[k].line, y_bottom ? r->line1 : r->line0,
+                                     y_bottom ? r->line0 : r->line1, r->w_lores, r->hs);
+            if (++r->ystep >= r->vs) {
+                r->ystep = 0;
+                r->line0 = r->line1;
+                if (++r->ypos < image->component[k].height)
+                    r->line1 += image->component[k].stride;
+            }
+        }
+        if (n >= 3) {
+            uint8_t *luma = coutput[0];
+            if (image->reader.channels == 3) {
+                YCbCr_to_RGB_row(out, luma, coutput[1], coutput[2], (int)image->reader.width, n);
+            } else {
+                for (i = 0; i < image->reader.width; ++i) {
+                    out[0] = out[1] = out[2] = luma[i];
+                    out[3] = 255;
+                    out += n;
+                }
+            }
+        } else {
+            uint8_t *luma = coutput[0];
+            if (n == 1) {
+                for (i = 0; i < image->reader.width; ++i)
+                    out[i] = luma[i];
+            } else {
+                for (i = 0; i < image->reader.width; ++i) {
+                    *out++ = luma[i];
+                    *out++ = 255;
+                }
+            }
+        }
+    }
+    cleanup_jpeg(image);
+    *out_x = (int)image->reader.width;
+    *out_y = (int)image->reader.height;
+    if (comp)
+        *comp = image->reader.channels;
+    return output;
+}

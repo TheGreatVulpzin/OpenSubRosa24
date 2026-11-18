@@ -21,6 +21,12 @@ int process_frame_header(JpegImage *image, int scan);
 void YCbCr_to_RGB_row(uint8_t *output, const uint8_t *y, const uint8_t *cb, const uint8_t *cr,
                       int count, int stride);
 void cleanup_jpeg(JpegImage *image);
+uint8_t *resample_row_1(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step);
+uint8_t *resample_row_v_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step);
+uint8_t *resample_row_h_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step);
+uint8_t *resample_row_hv_2(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step);
+uint8_t *resample_row_generic(uint8_t *output, uint8_t *near_row, uint8_t *far_row, int width, int step);
+uint8_t *load_jpeg_image(JpegImage *image, int *out_x, int *out_y, int *comp, int requested);
 void __cdecl reset(JpegImage *image);
 
 #endif
