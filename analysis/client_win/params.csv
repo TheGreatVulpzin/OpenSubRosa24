@@ -1,4 +1,8 @@
 rva,name,index,type,evidence
+0xbaed0,tesselatebeziertriangle,0,float *,"The function stores three cubic coordinates through its first argument."
+0x83d0,get16le,0,void *,"The first argument is the ImageReader passed to the byte reader."
+0x68740,unpackunitvector,1,float *,"The second argument receives three normalized vector components."
+0x68f80,unpackposition,0,float *,"The first argument receives three separate four-byte reads."
 0xfdd00,checkfilespec,0,char *,"The function reads pattern bytes at argument + index. Controlled pointer calls must retain their buffer."
 0x107970,gettextlength,0,char *,"The function reads the text at argument + character index. The second argument is the glyph scale."
 0x2280,get_marker,0,void *,"The argument points to a JPEG context. The marker byte is at context + 0x369c. Recorded calls copy the context from the caller stack."

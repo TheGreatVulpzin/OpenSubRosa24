@@ -39,6 +39,19 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'savemodelcsm': 'pN',
+    'loadmodelcsm': 'pN',
+    'addhalfboxtomodel': 'vmrrre',
+    'createsunglassmodel': 'p',
+    'createfootmodel': 'prrr',
+    'createrotormodel': 'prrr',
+    'createheadmodel': 'p',
+    'tesselatebeziertriangle': 'offfH',
+    'sethumanmodelvert': 'ppfff',
+    'sethumanmodelvertface': 'ppfff',
+    'addwaisttomodel': 'vrrr',
+    'createcellphonemodel': 'prrr',
+    'createkeymodel': 'p',
     'e': 'N',
     'get_marker': '',
     'get16': '',
@@ -463,7 +476,9 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'h':
+        if kind == 'H':
+            args.append('P:0:' + struct.pack('<10i', *(rng.randrange(38) for _ in range(10))).hex())
+        elif kind == 'h':
             args.append(rng.randrange(3))
         elif kind == 'g':
             args.append(rng.choice([1, 2, 3, 4, 6, 8, 9, 12, 15, 16, 20, 24, 31]))
@@ -645,6 +660,48 @@ def main():
             snap.write(socket + 0x64, '256s', bytes(256))
             snap.write(socket + 0x10064, 'iii', 256, 0, 0)
             snap.write(socket + 0x10070, '256s', bytes((index * 37 + 23) & 255 for index in range(256)))
+        constructors = ('createsunglassmodel', 'createfootmodel', 'createrotormodel',
+                        'createheadmodel', 'createcellphonemodel', 'createkeymodel')
+        if name in constructors or name in ('savemodelcsm', 'loadmodelcsm'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for model in range(32):
+                record = 0xaff05a0 + model * 0xe04
+                for offset in (8, 12, 16, 20, 24, 32, 36, 40, 48):
+                    snap.write(record + offset, 'I', 0)
+            if name in ('savemodelcsm', 'loadmodelcsm'):
+                game = work / f'game_{name}'
+                (game / 'model').mkdir(parents=True, exist_ok=True)
+                own['HARNESS_GAME_DIR'] = str(game)
+            if name == 'savemodelcsm':
+                base = 0x19e80000
+                arrays = [(8, '9f', [0,0,0, 1,0,0, 0,1,0]),
+                          (16, '9f', [0,0,1] * 3), (20, '9f', [1,0,0] * 3),
+                          (32, '3i', [0,1,2]), (36, '3f', [0,0,1]), (40, '3i', [-1,-1,-1])]
+                for index, (offset, fmt, values) in enumerate(arrays):
+                    snap.write(base + index * 256, fmt, *values)
+                for model in range(32):
+                    record = 0xaff05a0 + model * 0xe04
+                    snap.write(record, 'ii', 3, 8)
+                    snap.write(record + 0x1c, 'i', 1)
+                    for index, (offset, _, _) in enumerate(arrays):
+                        snap.write(record + offset, 'I', st.BASE + base + index * 256)
+        if name in ('addhalfboxtomodel', 'addwaisttomodel'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for offset in (0, 0xa0008, 0x20000c, 0x260010):
+                snap.write(0x90f7680 + offset, 'i', 0)
+        if name == 'tesselatebeziertriangle':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            control = random.Random(420)
+            for index in range(38):
+                snap.write(0x1bf7f60 + index * 12, '3f', *(control.uniform(-2, 2) for _ in range(3)))
+        if name in ('sethumanmodelvert', 'sethumanmodelvertface'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for vertex in range(32):
+                snap.write(0x1bbfe04 + vertex * 28 + 4, 'i8s', vertex + 7, b'abcdefgh')
         if os.environ.get('SYNTH_SERVER'):
             if snap is None:
                 snap = st.Snapshot(snapshot)

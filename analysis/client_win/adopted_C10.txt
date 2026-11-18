@@ -170,3 +170,16 @@ checkbigendian src/client/textures/loaders.c
 initWGLLoadFunctions src/client/gl/loaders.c
 getplayticket src/client/setup/steam.c
 settwosidedstencil src/client/render/gl_state.c
+savemodelcsm src/client/textures/models.c
+loadmodelcsm src/client/textures/models.c
+addhalfboxtomodel src/client/textures/models.c
+createsunglassmodel src/client/textures/models.c
+createfootmodel src/client/textures/models.c
+createrotormodel src/client/textures/models.c
+createheadmodel src/client/textures/models.c
+tesselatebeziertriangle src/client/textures/models.c
+sethumanmodelvert src/client/textures/models.c
+sethumanmodelvertface src/client/textures/models.c
+addwaisttomodel src/client/textures/models.c
+createcellphonemodel src/client/textures/models.c
+createkeymodel src/client/textures/models.c
