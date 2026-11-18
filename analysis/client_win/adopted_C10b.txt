@@ -5,3 +5,6 @@ creategunmodel2 src/client/textures/item_models.c
 createcashmodel src/client/textures/item_models.c
 createheadmodel3 src/client/textures/head_models.c
 buildtrackmodel src/client/render/track_model.c
+addcylindertomodel src/client/textures/model_parts.c
+addcockpittomodel src/client/textures/model_parts.c
+model_extrudeeye src/client/textures/model_parts.c

@@ -10,6 +10,7 @@
 
 #include "client.h"
 #include "sr_runtime.h"
+#include "textures/model_parts.h"
 #include "textures/models.h"
 #include "textures/noise.h"
 #include "vectors.h"
@@ -22,9 +23,6 @@
 #define TANGENT_SCALE 1.25
 #define MERGE_TOLERANCE 6.103515625E-5f /* 1 / 16384 */
 #define EYE_QUADS 2
-
-/* Game functions of other files. */
-#define model_extrudeeye CL_FN(0x4b2020, void(__cdecl *)(int quad, int mode))
 
 /* The 8 points of the head before the scale: the top, four around the middle and three below
  * for the jaw. */

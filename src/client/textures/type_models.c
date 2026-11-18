@@ -15,6 +15,7 @@
 #include "math/small_vectors.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
+#include "textures/model_parts.h"
 #include "textures/models.h"
 #include "vectors.h"
 
@@ -37,9 +38,6 @@
 #define BULLET_SIDES 8
 #define BULLET_SIDE_MASK 7
 #define FULL_TURN 6.28318530718
-
-/* Game functions of other files. */
-#define addcockpittomodel CL_FN(0x4b0af0, void(__cdecl *)(int *corners))
 
 /* The eight vertices of the cabin of each kind of type. The helicopter uses the car cabin. */
 static const int g_cabin_car[8] = {10, 11, 13, 12, 16, 17, 19, 18};
@@ -92,26 +90,17 @@ static void type_tris(const ObjectType *type, int type_index)
     }
 }
 
-/* Add the cabin from a copy of the corner list. */
-static void type_cabin(const int *vertices)
-{
-    int corners[8];
-
-    memcpy(corners, vertices, sizeof(corners));
-    addcockpittomodel(corners);
-}
-
 /* The cabin of a car, a van, the truck or the helicopter. */
 static void type_cockpit(int type_index)
 {
     if (type_index >= 0 && type_index <= TYPE_LAST_CAR)
-        type_cabin(g_cabin_car);
+        addcockpittomodel(g_cabin_car);
     if (type_index > TYPE_LAST_CAR && type_index <= TYPE_MINIVAN)
-        type_cabin(g_cabin_van);
+        addcockpittomodel(g_cabin_van);
     if (type_index == TYPE_TRUCK)
-        type_cabin(g_cabin_truck);
+        addcockpittomodel(g_cabin_truck);
     if (type_index == TYPE_HELICOPTER)
-        type_cabin(g_cabin_car);
+        addcockpittomodel(g_cabin_car);
 }
 
 /* The normal of each corner: the sum of the normals of the triangles that share its edge

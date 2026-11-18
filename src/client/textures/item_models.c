@@ -11,6 +11,7 @@
 #include "client.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
+#include "textures/model_parts.h"
 #include "textures/models.h"
 #include "vectors.h"
 #include "items.h"
@@ -27,8 +28,6 @@
 /* Game functions of other files. */
 #define addboxtomodelquad CL_FN(0x4b2ad0, void(__cdecl *)(const vec3 *center, float half_x, float half_y, \
                                                           float half_z))
-#define addcylindertomodel CL_FN(0x4af140, void(__cdecl *)(const vec3 *center, vec3 *rot, float radius, \
-                                                           float length))
 
 /* Give the quads from first to the last quad one texture coordinate. */
 static void quads_texcoord(int first, float u, float v)
