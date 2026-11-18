@@ -108,13 +108,77 @@ static int check_swap_writes(void)
     return same;
 }
 
+/* Compare the rows that write_pixels writes: every channel count, direction, alpha mode and padding. */
+static int check_pixel_writes(void)
+{
+    uint8_t data[6 * 4];
+    int rgb_dir, vdir, comp, alpha, pad, side, index, same = 0;
+
+    for (index = 0; index < (int)sizeof data; index++)
+        data[index] = (uint8_t)(index * 37 + 11);
+    for (rgb_dir = -1; rgb_dir <= 1; rgb_dir += 2)
+        for (vdir = -1; vdir <= 1; vdir += 2)
+            for (comp = 1; comp <= 4; comp++)
+                for (alpha = -1; alpha <= 1; alpha++)
+                    for (pad = 0; pad <= 3; pad += 3) {
+                        char reason[256];
+                        for (side = 0; side < 2; side++) {
+                            void *file;
+                            plat_test_begin(side);
+                            file = os_fopen("c1-image-output.bin", "wb");
+                            if (!file)
+                                return -1;
+                            if (side)
+                                CL_FN(0x40ae90, void(__cdecl *)(void *, int, int, int, int, int, const uint8_t *, int, size_t))
+                                    (file, rgb_dir, vdir, 3, 2, comp, data, alpha, (size_t)pad);
+                            else
+                                write_pixels(file, rgb_dir, vdir, 3, 2, comp, data, alpha, (size_t)pad);
+                            os_fclose(file);
+                            plat_test_end(side);
+                        }
+                        if (!plat_test_same(reason, sizeof reason))
+                            return -1;
+                        same++;
+                    }
+    return same;
+}
+
+/* Compare the file that outfile writes: the header fields after the format, then the rows. */
+static int check_outfile(void)
+{
+    static const uint8_t data[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int side, comp, same = 0;
+
+    for (comp = 1; comp <= 4; comp++) {
+        char reason[256];
+        int result[2];
+        for (side = 0; side < 2; side++) {
+            plat_test_begin(side);
+            if (side)
+                result[side] = CL_FN(0x40ac50, int(__cdecl *)(const char *, int, int, int, int, int, const uint8_t *, int,
+                                                               unsigned, const char *, ...))
+                    ("c1-image-output.bin", 1, 1, 2, 1, comp, data, 0, 2u, "1 2 4", 7, 0x1234, 0x56789abc);
+            else
+                result[side] = outfile("c1-image-output.bin", 1, 1, 2, 1, comp, data, 0, 2u, "1 2 4", 7, 0x1234, 0x56789abc);
+            plat_test_end(side);
+        }
+        if (result[0] != result[1] || !plat_test_same(reason, sizeof reason))
+            return -1;
+        same++;
+    }
+    return same;
+}
+
 /* Report each file operation and return zero when all comparisons pass. */
 int check_image_files(const char *input)
 {
-    int reads = check_reads(input), bytes = check_writes(0), fields = check_writes(1), swaps = check_swap_writes();
-    printf("[ 1/4] freadswap %d same %d different 0 crashed\n", reads < 0 ? 0 : reads, reads < 0);
-    printf("[ 2/4] write8 %d same %d different 0 crashed\n", bytes < 0 ? 0 : bytes, bytes < 0);
-    printf("[ 3/4] writefv %d same %d different 0 crashed\n", fields < 0 ? 0 : fields, fields < 0);
-    printf("[ 4/4] fwriteswap %d same %d different 0 crashed\n", swaps < 0 ? 0 : swaps, swaps < 0);
-    return reads < 0 || bytes < 0 || fields < 0 || swaps < 0;
+    int reads = check_reads(input), bytes = check_writes(0), fields = check_writes(1);
+    int swaps = check_swap_writes(), pixels = check_pixel_writes(), outs = check_outfile();
+    printf("[ 1/6] freadswap %d same %d different 0 crashed\n", reads < 0 ? 0 : reads, reads < 0);
+    printf("[ 2/6] write8 %d same %d different 0 crashed\n", bytes < 0 ? 0 : bytes, bytes < 0);
+    printf("[ 3/6] writefv %d same %d different 0 crashed\n", fields < 0 ? 0 : fields, fields < 0);
+    printf("[ 4/6] fwriteswap %d same %d different 0 crashed\n", swaps < 0 ? 0 : swaps, swaps < 0);
+    printf("[ 5/6] write_pixels %d same %d different 0 crashed\n", pixels < 0 ? 0 : pixels, pixels < 0);
+    printf("[ 6/6] outfile %d same %d different 0 crashed\n", outs < 0 ? 0 : outs, outs < 0);
+    return reads < 0 || bytes < 0 || fields < 0 || swaps < 0 || pixels < 0 || outs < 0;
 }

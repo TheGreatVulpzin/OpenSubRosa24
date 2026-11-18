@@ -126,7 +126,7 @@ rva,size,name,source,confidence,evidence
 0xa9b0,162,hdr_gettoken,manual,1.0,stb_image: reads one header line of at most 1023 bytes up to the end of the file.
 0xaa60,283,hdr_convert,manual,1.0,stb_image: an RGBE pixel to floats with ldexp.
 0xab90,58,stbi_hdr_load_from_memory,manual,1.0,stb_image: hdr_load on a memory context.
-0xabd0,118,,,,
+0xabd0,118,stbi_write_bmp,manual,1.0,"stb_image_write: outfile with the 54 byte BMP header of 24 bit rows."
 0xac50,136,outfile,manual,1.0,"stb_image_write: fopen, writefv of the header, write_pixels, fclose."
 0xace0,326,writefv,callgraph,0.5,votes=3
 0xae60,35,write8,callgraph,1.0,votes=21

@@ -82,3 +82,6 @@ stbi_tga_test_file src/client/image/load.c
 stbi_tga_test_memory src/client/image/load.c
 fwriteswap src/client/image/io.c
 stbi_bit_reverse src/client/image/zlib.c
+write_pixels src/client/image/write.c
+outfile src/client/image/write.c
+stbi_write_bmp src/client/image/write.c

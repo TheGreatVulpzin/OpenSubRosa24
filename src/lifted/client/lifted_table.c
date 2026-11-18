@@ -127,9 +127,11 @@ void hdr_load(void);
 void hdr_gettoken(void);
 void hdr_convert(void);
 void stbi_hdr_load_from_memory(void);
-void lf_0ac50(void);
+void stbi_write_bmp(void);
+void outfile(void);
 void writefv(void);
 void write8(void);
+void write_pixels(void);
 void lf_0b140(void);
 void lf_0ea90(void);
 void lf_0ee80(void);
@@ -1428,9 +1430,11 @@ const LfEntry lf_table[] = {
     { "hdr_gettoken", 0xa9b0, (void *)hdr_gettoken, 2, LF_RET_INT, 4, "vv", 1 },
     { "hdr_convert", 0xaa60, (void *)hdr_convert, 3, LF_RET_VOID, 4, "ppv", 1 },
     { "stbi_hdr_load_from_memory", 0xab90, (void *)stbi_hdr_load_from_memory, 6, LF_RET_INT, 4, "vvpppv", 1 },
-    { "outfile", 0xac50, (void *)lf_0ac50, 11, LF_RET_INT, 1, "pvvvvvvvvpv", 1 },
+    { "stbi_write_bmp", 0xabd0, (void *)stbi_write_bmp, 5, LF_RET_VOID, 4, "pvvvv", 1 },
+    { "outfile", 0xac50, (void *)outfile, 18, LF_RET_INT, 1, "pvvvvvvvvpxxxxxxxx", 1 },
     { "writefv", 0xace0, (void *)writefv, 3, LF_RET_VOID, 4, "ppp", 1 },
     { "write8", 0xae60, (void *)write8, 2, LF_RET_VOID, 4, "pv", 1 },
+    { "write_pixels", 0xae90, (void *)write_pixels, 9, LF_RET_VOID, 4, "pvvvvvvvv", 1 },
     { "__GLeeGetProcAddress", 0xb140, (void *)lf_0b140, 1, LF_RET_INT, 4, "v", 1 },
     { "GLee_Lazy_glActiveTextureARB", 0xea90, (void *)lf_0ea90, 1, LF_RET_VOID, 4, "v", 1 },
     { "GLee_Lazy_glMultiTexCoord3fvARB", 0xee80, (void *)lf_0ee80, 2, LF_RET_VOID, 4, "vp", 1 },
@@ -2602,4 +2606,4 @@ const LfEntry lf_table[] = {
     { "lf_10d680", 0x10d680, (void *)lf_10d680, 1, LF_RET_VOID, 4, "p", 0 },
     { "lf_10d7b0", 0x10d7b0, (void *)lf_10d7b0, 0, LF_RET_VOID, 4, "", 0 },
 };
-const int lf_table_count = 1299;
+const int lf_table_count = 1301;

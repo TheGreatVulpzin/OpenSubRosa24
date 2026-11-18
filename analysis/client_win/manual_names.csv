@@ -424,3 +424,5 @@ rva,name,evidence
 0x10bcc0,subtractvectors2d,out = a - b on x and y. ELF subtractvectors2d.
 0x1110,stbi_set_error,"stb_image: keeps the failure text and returns 0. Every decoder calls it."
 0x3b50,stbi_get16,"stb_image: two stbi_get8, high byte first."
+0xabd0,stbi_write_bmp,"stb_image_write: outfile with the 54 byte BMP header of 24 bit rows."
+0xae90,write_pixels,"stb_image_write: writes the rows of pixels of an image file."
