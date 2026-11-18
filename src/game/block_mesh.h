@@ -27,4 +27,14 @@ void area_createinteriorblocks(void);
 
 void area_createsblocks(void);
 
+void area_block_insertquad(int unused, int position);
+void area_block_addfloorceil(void);
+void area_block_addfloor(float height, uint32_t slot);
+void area_block_addceil(float height, uint32_t slot);
+void area_block_addwall(int turns, float depth);
+void area_block_addwindowvertical_exterior(int turns, float width, int left, int right);
+void area_block_addwindowvertical_interior(int turns, float width, int left, int right);
+void area_block_addwindowhorizontal_exterior(int turns, float lower, float upper, int bottom, int top);
+void area_block_addwindowhorizontal_interior(int turns, float lower, float upper, int bottom, int top);
+
 #endif

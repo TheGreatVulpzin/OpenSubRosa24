@@ -55,6 +55,21 @@ int area_getblocktexture(uint32_t area, int x, int y, int z, int face)
     return g_sectors[s].textures[cell][face];
 }
 
+/* Follow one outer block link. Empty and invalid cells return zero. */
+uint32_t area_getblocklink(uint32_t area, int x, int y, int z)
+{
+    uint32_t word = area_getblock(area, x, y, z);
+    if (BLOCK_KIND(word) == BLOCK_LINK)
+        word = area_getblock(area, x - LINK_DX(word), y - LINK_DY(word), z - LINK_DZ(word));
+    return word;
+}
+
+/* The material is the eighth texture slot. Invalid cells return minus one. */
+int area_getblockmaterial(uint32_t area, int x, int y, int z)
+{
+    return area_getblocktexture(area, x, y, z, 7);
+}
+
 /* The interior block word at (x, y, z), or 0. */
 uint32_t area_interior_getblock(uint32_t area, int x, int y, int z)
 {

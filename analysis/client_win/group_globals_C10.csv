@@ -5,3 +5,7 @@ image_name,char,128,0xb733140,"loadtexture and loadtexturesetalpha copy the path
 sound_buffers,SoundBuffer,256,0xf8ab240,"setupsounds makes one OpenAL buffer for each. loadwav and createwav fill them"
 audio_source_limit,int,1,0x1bbe3a0,"setupsounds counts the OpenAL sources it could make. createsound and createsoundobject stop at this number"
 source_buffer,char,131072,0xf3ca9c0,"loadsource reads the whole file into it before it copies it. The next object starts 0x20000 bytes after it"
+sector_mesh_bitmap,uint32_t,1024,0x12a7c604,area_getnextsectormesh scans 1024 words; one bit selects sixteen vertices and triangles.
+sector_mesh_next,int,1,0x1047c600,area_submitsectormodel keeps the next free mesh offset before the vertex array.
+sector_mesh_remap,int,16,0x2a1dd36c,area_submitsectormodel maps up to fifteen source vertices in one mesh block.
+gl_buffer_sub_data,void *,1,0x115abc,area_submitsectormodel calls the glBufferSubDataARB extension slot.

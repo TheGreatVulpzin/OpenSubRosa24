@@ -694,7 +694,7 @@ typedef struct SectorShadowMesh {
     uint8_t *vertices;
     int num_triangles;
     int (*triangles)[3];
-    uint8_t pad_5038[4];
+    int *triangle_material;
     vec3 *normals;
     uint8_t pad_5040[4];
     vec3 (*edge_normals)[3];

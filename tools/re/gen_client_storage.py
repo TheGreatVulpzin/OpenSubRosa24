@@ -92,6 +92,7 @@ def main():
                 client_only.append('#define sr_orientation_nonpositive(value) (!(0.0 < (value)))')
                 client_only.append('#define sr_collision_ge(a, b) (!((a) < (b)))')
                 client_only.append('#define sr_collision_le(a, b) (!((a) > (b)))')
+                client_only.append('#define sr_linear_curve_negate_first 1')
                 client_only.append('#define sr_timer_name(field, name) ((void)0)')
                 client_only.append('#define sr_timer_start(field) ((void)0)')
                 client_only.append('#define sr_timer_stop(field) ((void)0)')

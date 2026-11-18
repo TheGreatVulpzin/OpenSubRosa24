@@ -39,6 +39,22 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'area_getblocklink': 'Accc',
+    'area_getblockmaterial': 'Accc',
+    'area_block_insertquad': 'hp',
+    'area_block_addfloorceil': '',
+    'area_block_addfloor': 'rh',
+    'area_block_addceil': 'rh',
+    'area_block_addwall': 'Tr',
+    'area_block_addwindowvertical_exterior': 'Trii',
+    'area_block_addwindowvertical_interior': 'Trii',
+    'area_block_addwindowhorizontal_exterior': 'Trrii',
+    'area_block_addwindowhorizontal_interior': 'Trrii',
+    'area_getnextsectormesh': '',
+    'area_setsectormesh': 'ph',
+    'area_removesectormodel': 'p',
+    'area_submitsectormodel': 'p',
+    'area_sectorvertequal': 'ppp',
     'savemodelcsm': 'pN',
     'loadmodelcsm': 'pN',
     'addhalfboxtomodel': 'vmrrre',
@@ -660,6 +676,36 @@ def main():
             snap.write(socket + 0x64, '256s', bytes(256))
             snap.write(socket + 0x10064, 'iii', 256, 0, 0)
             snap.write(socket + 0x10070, '256s', bytes((index * 37 + 23) & 255 for index in range(256)))
+        block_parts = ('area_block_insertquad', 'area_block_addfloorceil', 'area_block_addfloor',
+                       'area_block_addceil', 'area_block_addwall',
+                       'area_block_addwindowvertical_exterior', 'area_block_addwindowvertical_interior',
+                       'area_block_addwindowhorizontal_exterior', 'area_block_addwindowhorizontal_interior')
+        if name in block_parts:
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for offset in (0, 0x110004, 0x1a0008):
+                snap.write(0x29f0d360 + offset, 'i', 0)
+            if name == 'area_block_insertquad':
+                snap.write(0x29f0d360 + 0x110004, 'i', 4)
+                for quad in range(6):
+                    snap.write(0x29f0d360 + 0x110008 + quad * 16, '4i', *(quad * 4 + k for k in range(4)))
+                    snap.write(0x29f0d360 + 0x150008 + quad * 4, 'i', 100 + quad)
+        if name in ('area_getnextsectormesh', 'area_setsectormesh', 'area_removesectormodel',
+                    'area_submitsectormodel', 'area_sectorvertequal'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            snap.write(0x12a7c604, '1024I', *([0] * 1024))
+            for sector in range(32):
+                record = 0x1dda5280 + sector * 0x6068
+                snap.write(record, 'i', int(sector == 0))
+                snap.write(record + 0x5048, 'i', 0)
+                snap.write(record + 0x502c, '4I', st.BASE + 0x19e00000, 2,
+                           st.BASE + 0x19e10000, st.BASE + 0x19e20000)
+            for vertex in range(32):
+                snap.write(0x19e00000 + vertex * 64, '16f', vertex * 0.125, 0.0, vertex * 0.25, *([0.0] * 13))
+            snap.write(0x19e10000, '6i', 0, 1, 2, 2, 1, 3)
+            snap.write(0x19e20000, '2i', 0, 255)
+            snap.write(0x29e7d2c0 + 24, 'i', 0)
         constructors = ('createsunglassmodel', 'createfootmodel', 'createrotormodel',
                         'createheadmodel', 'createcellphonemodel', 'createkeymodel')
         if name in constructors or name in ('savemodelcsm', 'loadmodelcsm'):

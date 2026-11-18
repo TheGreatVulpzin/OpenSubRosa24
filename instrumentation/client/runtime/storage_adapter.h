@@ -175,6 +175,10 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_sound_buffers ((SoundBuffer *)(sr_base + 0xf8ab240u))
 #define cl_data_audio_source_limit (*((int *)(sr_base + 0x1bbe3a0u)))
 #define cl_data_source_buffer ((char *)(sr_base + 0xf3ca9c0u))
+#define cl_data_sector_mesh_bitmap ((uint32_t *)(sr_base + 0x12a7c604u))
+#define cl_data_sector_mesh_next (*((int *)(sr_base + 0x1047c600u)))
+#define cl_data_sector_mesh_remap ((int *)(sr_base + 0x2a1dd36cu))
+#define cl_data_gl_buffer_sub_data (*((void * *)(sr_base + 0x115abcu)))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))
@@ -428,6 +432,7 @@ int __cdecl addwindowatlas(int texture, int type);
 #define sr_orientation_nonpositive(value) (!(0.0 < (value)))
 #define sr_collision_ge(a, b) (!((a) < (b)))
 #define sr_collision_le(a, b) (!((a) > (b)))
+#define sr_linear_curve_negate_first 1
 #define sr_timer_name(field, name) ((void)0)
 #define sr_timer_start(field) ((void)0)
 #define sr_timer_stop(field) ((void)0)

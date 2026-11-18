@@ -10,6 +10,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "render/sector_models.h"
 #include "account_actions.h"
 #include "debug/debug.h"
 #include "editor/level.h"
@@ -103,7 +104,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define checkmouserelative CL_FN(0x4fedb0, void(__cdecl *)(void))
 #define debug_getinputs CL_FN(0x469190, void(__cdecl *)(void))
-#define area_resetsector CL_FN(0x439370, void(__cdecl *)(int sector))
 #define calculateplayervoice CL_FN(0x4fbe70, void(__cdecl *)(int connection, int player))
 #define soundsimulation CL_FN(0x44e190, void(__cdecl *)(const vec3 *position, const vec3 *rotation, \
                                                          const vec3 *velocity))
