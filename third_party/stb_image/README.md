@@ -13,4 +13,4 @@ The image loader that the game client links in. Author: Sean Barrett and contrib
 - The zlib code builds the length table in a local variable of the function (`z_codelength`). Version 1.17 keeps it in a static variable. The stack frame of `compute_huffman_codes` in the client is 0xa00 bytes, which fits a local table.
 - The versions 1.33 and 1.35 of the GitHub repository `nothings/stb` do not have 20 of the 80 names of group C1, for example `stbi_register_loader`.
 
-The client does not use this file yet. The functions of group C1 come from `src/lifted/client` and from `src/client/image`.
+The build does not compile this file. The clean code of the client in `src/client/image` follows its functions, with the changes of the client (the failure text in the executable, a limit for partial PNG files). The file is the reference for that code.

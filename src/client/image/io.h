@@ -24,5 +24,6 @@ size_t image_read(void *data, size_t count, void *file);
 void *image_realloc(void *data, size_t size);
 int image_eof(ImageReader *reader);
 uint32_t freadswap(void *data, int size, uint32_t count, void *file);
+uint32_t fwriteswap(const void *data, int size, uint32_t count, void *file);
 
 #endif

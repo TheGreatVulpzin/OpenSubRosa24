@@ -177,3 +177,22 @@ uint32_t freadswap(void *data, int size, uint32_t count, void *file)
             bytes[item * size + byte] = (uint8_t)os_fgetc(file);
     return count;
 }
+
+/* Write big endian items from little endian storage. Item sizes other than 1, 2 and 4 write nothing.
+ * Return the item count. */
+uint32_t fwriteswap(const void *data, int size, uint32_t count, void *file)
+{
+    static int(__cdecl *put)(int, void *);
+    const uint8_t *bytes = data;
+    uint32_t item;
+    int byte;
+
+    if (!put)
+        *(void **)&put = sr_import("MSVCR100.DLL", "fputc");
+    if (size != 1 && size != 2 && size != 4)
+        return count;
+    for (item = 0; item < count; item++)
+        for (byte = size - 1; byte >= 0; byte--)
+            put(bytes[item * size + byte], file);
+    return count;
+}

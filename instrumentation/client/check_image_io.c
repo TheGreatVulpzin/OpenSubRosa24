@@ -77,12 +77,44 @@ static int check_writes(int fields)
     return same;
 }
 
+/* Compare big endian writes of items of one, two, four and three bytes. */
+static int check_swap_writes(void)
+{
+    static const int sizes[] = {1, 2, 4, 3};
+    static const uint8_t data[32] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee,
+                                     0xff, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d,
+                                     0x0e, 0x0f, 0x10, 0x20};
+    int index, count, side, same = 0;
+    for (index = 0; index < 4; index++)
+        for (count = 0; count <= 5; count++) {
+            uint32_t result[2];
+            char reason[256];
+            for (side = 0; side < 2; side++) {
+                void *file;
+                plat_test_begin(side);
+                file = os_fopen("c1-image-output.bin", "wb");
+                if (!file)
+                    return -1;
+                result[side] = side ? CL_FN(0x4fe0d0, uint32_t(__cdecl *)(const void *, int, uint32_t, void *))
+                                          (data, sizes[index], (uint32_t)count, file)
+                                    : fwriteswap(data, sizes[index], (uint32_t)count, file);
+                os_fclose(file);
+                plat_test_end(side);
+            }
+            if (result[0] != result[1] || !plat_test_same(reason, sizeof reason))
+                return -1;
+            same++;
+        }
+    return same;
+}
+
 /* Report each file operation and return zero when all comparisons pass. */
 int check_image_files(const char *input)
 {
-    int reads = check_reads(input), bytes = check_writes(0), fields = check_writes(1);
-    printf("[ 1/3] freadswap %d same %d different 0 crashed\n", reads < 0 ? 0 : reads, reads < 0);
-    printf("[ 2/3] write8 %d same %d different 0 crashed\n", bytes < 0 ? 0 : bytes, bytes < 0);
-    printf("[ 3/3] writefv %d same %d different 0 crashed\n", fields < 0 ? 0 : fields, fields < 0);
-    return reads < 0 || bytes < 0 || fields < 0;
+    int reads = check_reads(input), bytes = check_writes(0), fields = check_writes(1), swaps = check_swap_writes();
+    printf("[ 1/4] freadswap %d same %d different 0 crashed\n", reads < 0 ? 0 : reads, reads < 0);
+    printf("[ 2/4] write8 %d same %d different 0 crashed\n", bytes < 0 ? 0 : bytes, bytes < 0);
+    printf("[ 3/4] writefv %d same %d different 0 crashed\n", fields < 0 ? 0 : fields, fields < 0);
+    printf("[ 4/4] fwriteswap %d same %d different 0 crashed\n", swaps < 0 ? 0 : swaps, swaps < 0);
+    return reads < 0 || bytes < 0 || fields < 0 || swaps < 0;
 }

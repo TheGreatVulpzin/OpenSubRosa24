@@ -58,7 +58,7 @@ void stbi_zlib_decode_malloc_guesssize(void);
 void do_zlib(void);
 void parse_zlib(void);
 void zbuild_huffman(void);
-void lf_05210(void);
+void stbi_bit_reverse(void);
 void bitreverse16(void);
 void zreceive(void);
 void fill_bits(void);
@@ -1181,7 +1181,7 @@ void lf_fdce0(void);
 void lf_fdd00(void);
 void listfiles(void);
 void freadswap(void);
-void lf_fe0d0(void);
+void fwriteswap(void);
 void removeflieextentions(void);
 void enablesocketserver(void);
 void enablesocketclient(void);
@@ -1359,7 +1359,7 @@ const LfEntry lf_table[] = {
     { "do_zlib", 0x4db0, (void *)do_zlib, 5, LF_RET_INT, 4, "vvvvv", 1 },
     { "parse_zlib", 0x4df0, (void *)parse_zlib, 2, LF_RET_INT, 4, "vv", 1 },
     { "zbuild_huffman", 0x4f40, (void *)zbuild_huffman, 3, LF_RET_INT, 4, "pvv", 1 },
-    { "stbi_bit_reverse", 0x5210, (void *)lf_05210, 2, LF_RET_INT, 4, "vv", 1 },
+    { "stbi_bit_reverse", 0x5210, (void *)stbi_bit_reverse, 2, LF_RET_INT, 4, "vv", 1 },
     { "bitreverse16", 0x5250, (void *)bitreverse16, 1, LF_RET_INT, 4, "v", 0 },
     { "zreceive", 0x52d0, (void *)zreceive, 2, LF_RET_INT, 4, "vv", 1 },
     { "fill_bits", 0x5330, (void *)fill_bits, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2482,7 +2482,7 @@ const LfEntry lf_table[] = {
     { "checkfilespec", 0xfdd00, (void *)lf_fdd00, 2, LF_RET_INT, 4, "vp", 0 },
     { "listfiles", 0xfdde0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "freadswap", 0xfdfb0, (void *)freadswap, 4, LF_RET_INT, 4, "vvvp", 1 },
-    { "fwriteswap", 0xfe0d0, (void *)lf_fe0d0, 4, LF_RET_INT, 4, "vvvp", 1 },
+    { "fwriteswap", 0xfe0d0, (void *)fwriteswap, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "removeflieextentions", 0xfe200, (void *)removeflieextentions, 1, LF_RET_VOID, 4, "v", 0 },
     { "enablesocketserver", 0xfe2b0, (void *)enablesocketserver, 1, LF_RET_VOID, 4, "v", 1 },
     { "enablesocketclient", 0xfe360, (void *)enablesocketclient, 1, LF_RET_VOID, 4, "v", 1 },

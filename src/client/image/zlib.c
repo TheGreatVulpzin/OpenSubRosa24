@@ -406,3 +406,10 @@ int stbi_zlib_decode_noheader_buffer(uint8_t *output, int output_length, const u
         return (int)(buffer.output - buffer.start);
     return -1;
 }
+
+/* Reverse the low bits of a value. The count of bits must not be above 16. */
+int stbi_bit_reverse(int value, int bits)
+{
+    image_check(bits <= 16, 0x1115c4, 0x111558, 0x774);
+    return bitreverse16((uint32_t)value) >> (16 - bits);
+}

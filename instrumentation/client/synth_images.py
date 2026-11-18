@@ -589,6 +589,9 @@ def loader_cases(cases):
     cases.call('stbi_failure_reason', 'none')
     cases.call('stbi_register_loader', 'first', v(0x1234))
     cases.call('stbi_register_loader', 'second', v(0x77777))
+    for value in (0, 1, 0x1234, 0xffff, 0x8000, 0xabcd):
+        for bits in range(1, 17):
+            cases.call('stbi_bit_reverse', f'{value:x}_{bits}', v(value), v(bits))
     for gamma in (0.5, 1.0, 2.2, 3.0, -1.0):
         for name in ('stbi_hdr_to_ldr_gamma', 'stbi_hdr_to_ldr_scale', 'stbi_ldr_to_hdr_gamma', 'stbi_ldr_to_hdr_scale'):
             cases.call(name, str(gamma), v(float_bits(gamma)))
@@ -650,7 +653,7 @@ def main():
     text = (args.work / 'results.txt').read_text(encoding='utf-8', errors='replace')
     rows = {name: dict(same=int(same), different=int(different), crashed=int(crashed))
             for name, same, different, crashed in RESULT.findall(text)}
-    expected = {'freadswap', 'write8', 'writefv'} if args.file_io else set(selected.split(','))
+    expected = {'freadswap', 'write8', 'writefv', 'fwriteswap'} if args.file_io else set(selected.split(','))
     if set(rows) != expected:
         raise SystemExit(f'Missing results: {sorted(expected - set(rows))}')
     (args.work / 'results.json').write_text(json.dumps(rows, indent=2), encoding='utf-8')

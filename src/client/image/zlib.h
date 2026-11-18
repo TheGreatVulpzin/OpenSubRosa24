@@ -5,6 +5,7 @@
 #include "sr_image_types.h"
 
 int bitreverse16(uint32_t value);
+int stbi_bit_reverse(int value, int bits);
 int zbuild_huffman(ZlibHuffman *table, const uint8_t *sizes, int count);
 unsigned zreceive(ZlibBuffer *buffer, int count);
 void fill_bits(ZlibBuffer *buffer);

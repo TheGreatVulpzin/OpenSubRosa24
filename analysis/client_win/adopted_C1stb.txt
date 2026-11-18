@@ -80,3 +80,5 @@ stbi_tga_load_from_file src/client/image/load.c
 stbi_tga_load_from_memory src/client/image/load.c
 stbi_tga_test_file src/client/image/load.c
 stbi_tga_test_memory src/client/image/load.c
+fwriteswap src/client/image/io.c
+stbi_bit_reverse src/client/image/zlib.c
