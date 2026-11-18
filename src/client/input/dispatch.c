@@ -134,7 +134,7 @@ static void chat_input(void)
 static void spectator_input(void)
 {
     unsigned index, stop;
-    if (sr_game.gametype != GAME_ROUND || sr_game.unused_257dc || cl_data_audio_input_blocked)
+    if (sr_game.gametype != GAME_ROUND || sr_game.death_camera_ticks || cl_data_audio_input_blocked)
         return;
     if (cl_data_audio_keys[KEY_1]) sr_game.spectator_human = -1;
     if (!input_pressed(KEY_SPACE))

@@ -16,7 +16,7 @@ When `allow_input` is not 0 the function reads the input first.
 
 - `getinputs` for the viewed player (`view_player`, -1 for none). With no player in view, `movecamera(0)` moves the free camera.
 - A key counts when it is down in `keyboard` and was not down in `prevkeyboard`.
-- F1 toggles `voice_on`. With the debug flag on, the = key does it. F4 toggles `hide_hud`.
+- F1 toggles `show_help` (the help display). With the debug flag on, the = key does it. F4 toggles `hide_hud`.
 - Page Up and Page Down change `mic_gain_percent` by 10, from 30 to 250, and set `mic_text_timer` to 4 seconds. The gain `audio_voice_gain` is the percent divided by 100, from 0.125 to 4.
 - A host restarts the game with F5.
 

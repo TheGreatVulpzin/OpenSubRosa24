@@ -1623,7 +1623,7 @@ SR_STATIC_ASSERT(offsetof(Body, unread_3c) == 0x3c, "Body.unread_3c");
 
 /* game[]: record of 0x25d64 bytes. */
 typedef union Game { struct {
-    uint8_t pad_0000[0x4];
+    int running;                         /* +0x0000 the client gameloop writes 1 at the start and 0 at the end */
     int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
     int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
@@ -1745,7 +1745,7 @@ typedef union Game { struct {
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
     uint8_t pad_22fdc[0x27fc];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
-    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     uint8_t pad_257e4[0x4];
     int unused_257e8;                    /* +0x257e8 resetgame clears this field. No reader in the server */
@@ -1760,6 +1760,7 @@ typedef union Game { struct {
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, running) == 0x0, "Game.running");
 SR_STATIC_ASSERT(offsetof(Game, link_state) == 0x4, "Game.link_state");
 SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
 SR_STATIC_ASSERT(offsetof(Game, round_mode) == 0xc, "Game.round_mode");
@@ -1800,7 +1801,7 @@ SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
 SR_STATIC_ASSERT(offsetof(Game, unused_22fd8) == 0x22fd8, "Game.unused_22fd8");
 SR_STATIC_ASSERT(offsetof(Game, spectator_human) == 0x257d8, "Game.spectator_human");
-SR_STATIC_ASSERT(offsetof(Game, unused_257dc) == 0x257dc, "Game.unused_257dc");
+SR_STATIC_ASSERT(offsetof(Game, death_camera_ticks) == 0x257dc, "Game.death_camera_ticks");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e0) == 0x257e0, "Game.unused_257e0");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e8) == 0x257e8, "Game.unused_257e8");
 SR_STATIC_ASSERT(offsetof(Game, unused_257ec) == 0x257ec, "Game.unused_257ec");
@@ -1952,7 +1953,7 @@ typedef union Option { struct {
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
     uint8_t pad_00e0[0x28];
-    int unused_108;                      /* +0x0108 the client mainmenu writes 0 at the start; no reader */
+    int frame_overlay;                   /* +0x0108 the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -1983,7 +1984,7 @@ SR_STATIC_ASSERT(offsetof(Option, unused_d0) == 0xd0, "Option.unused_d0");
 SR_STATIC_ASSERT(offsetof(Option, unused_d4) == 0xd4, "Option.unused_d4");
 SR_STATIC_ASSERT(offsetof(Option, soundvolume) == 0xd8, "Option.soundvolume");
 SR_STATIC_ASSERT(offsetof(Option, musicvolume) == 0xdc, "Option.musicvolume");
-SR_STATIC_ASSERT(offsetof(Option, unused_108) == 0x108, "Option.unused_108");
+SR_STATIC_ASSERT(offsetof(Option, frame_overlay) == 0x108, "Option.frame_overlay");
 SR_STATIC_ASSERT(offsetof(Option, invertmouse) == 0x10c, "Option.invertmouse");
 SR_STATIC_ASSERT(offsetof(Option, maxnumofplayers) == 0x114, "Option.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(Option, gametype) == 0x118, "Option.gametype");
@@ -2544,11 +2545,25 @@ typedef union Debug { struct {
     float unk_4f9d0;                     /* +0x4f9d0 1 functions */
     uint8_t pad_4f9d4[0x6c];
     float unk_4fa40;                     /* +0x4fa40 1 functions */
-    uint8_t pad_4fa44[0x804];
+    uint8_t pad_4fa44[0x5d0];
+    uint32_t frame_start;                /* +0x50014 gameloop: the SDL time when the frame started */
+    uint8_t pad_50018[0x4];
+    int frame_ms_index;                  /* +0x5001c gameloop: the next entry of frame_ms, 0 to 31 */
+    int frame_ms[32];                    /* +0x50020 gameloop: the milliseconds that each of the last 32 frames took */
+    uint8_t pad_500a0[0x80];
+    int frame_ms_max;                    /* +0x50120 gameloop: the longest frame. F3 clears it when the debug flag is on */
+    float frame_ms_average;              /* +0x50124 gameloop: the mean of frame_ms */
+    uint8_t pad_50128[0x11c];
+    int shown_team;                      /* +0x50244 gameloop with the debug flag: the team of player 0, for displaydebuginfo */
     int affinity_set;                    /* +0x50248 setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds */
     int affinity_before;                 /* +0x5024c setcpuaffinity writes the process mask plus 10000 */
     int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
-    uint8_t pad_50254[0xf0];
+    int shown_bonds;                     /* +0x50254 gameloop with the debug flag: numofbonds, for displaydebuginfo */
+    int shown_humans;                    /* +0x50258 gameloop with the debug flag: the count of active humans, for displaydebuginfo */
+    int shown_parts;                     /* +0x5025c gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo */
+    uint8_t pad_50260[0x4];
+    int shown_mouse;                     /* +0x50264 gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo */
+    uint8_t pad_50268[0xdc];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x918];
     uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
@@ -2567,9 +2582,19 @@ SR_STATIC_ASSERT(offsetof(Debug, display_mode) == 0x4, "Debug.display_mode");
 SR_STATIC_ASSERT(offsetof(Debug, world_view) == 0x8, "Debug.world_view");
 SR_STATIC_ASSERT(offsetof(Debug, num_lines) == 0xc, "Debug.num_lines");
 SR_STATIC_ASSERT(offsetof(Debug, lines) == 0x10, "Debug.lines");
+SR_STATIC_ASSERT(offsetof(Debug, frame_start) == 0x50014, "Debug.frame_start");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_index) == 0x5001c, "Debug.frame_ms_index");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms) == 0x50020, "Debug.frame_ms");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_max) == 0x50120, "Debug.frame_ms_max");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_average) == 0x50124, "Debug.frame_ms_average");
+SR_STATIC_ASSERT(offsetof(Debug, shown_team) == 0x50244, "Debug.shown_team");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
+SR_STATIC_ASSERT(offsetof(Debug, shown_bonds) == 0x50254, "Debug.shown_bonds");
+SR_STATIC_ASSERT(offsetof(Debug, shown_humans) == 0x50258, "Debug.shown_humans");
+SR_STATIC_ASSERT(offsetof(Debug, shown_parts) == 0x5025c, "Debug.shown_parts");
+SR_STATIC_ASSERT(offsetof(Debug, shown_mouse) == 0x50264, "Debug.shown_mouse");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
 SR_STATIC_ASSERT(offsetof(Debug, toggle_two) == 0x50c64, "Debug.toggle_two");
@@ -3428,7 +3453,7 @@ SR_STATIC_ASSERT(offsetof(ModelList, rotor) == 0x7a0, "ModelList.rotor");
 
 /* game (client)[]: record of 0x25d60 bytes. */
 typedef union GameClient { struct {
-    uint8_t pad_0000[0x4];
+    int running;                         /* +0x0000 the client gameloop writes 1 at the start and 0 at the end */
     int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
     int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
@@ -3549,7 +3574,7 @@ typedef union GameClient { struct {
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
     uint8_t pad_22fdc[0x27fc];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
-    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     int unused_257e8;                    /* +0x257e4 resetgame clears this field. No reader in the server */
     float unused_257ec;                  /* +0x257e8 resetgame clears this field. No reader in the server */
@@ -3563,6 +3588,7 @@ typedef union GameClient { struct {
     int num_newspapers;                  /* +0x25d5c itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d60]; } GameClient;
 SR_STATIC_ASSERT(sizeof(GameClient) == 0x25d60, "GameClient");
+SR_STATIC_ASSERT(offsetof(GameClient, running) == 0x0, "GameClient.running");
 SR_STATIC_ASSERT(offsetof(GameClient, link_state) == 0x4, "GameClient.link_state");
 SR_STATIC_ASSERT(offsetof(GameClient, gametype) == 0x8, "GameClient.gametype");
 SR_STATIC_ASSERT(offsetof(GameClient, round_mode) == 0xc, "GameClient.round_mode");
@@ -3602,7 +3628,7 @@ SR_STATIC_ASSERT(offsetof(GameClient, team3_manager) == 0x350c, "GameClient.team
 SR_STATIC_ASSERT(offsetof(GameClient, team4_manager) == 0x4688, "GameClient.team4_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd8, "GameClient.unused_22fd8");
 SR_STATIC_ASSERT(offsetof(GameClient, spectator_human) == 0x257d8, "GameClient.spectator_human");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_257dc) == 0x257dc, "GameClient.unused_257dc");
+SR_STATIC_ASSERT(offsetof(GameClient, death_camera_ticks) == 0x257dc, "GameClient.death_camera_ticks");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257e0) == 0x257e0, "GameClient.unused_257e0");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257e8) == 0x257e4, "GameClient.unused_257e8");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257ec) == 0x257e8, "GameClient.unused_257ec");
@@ -3628,7 +3654,7 @@ typedef union OptionClient { struct {
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
     uint8_t pad_00e0[0x28];
-    int unused_108;                      /* +0x0108 the client mainmenu writes 0 at the start; no reader */
+    int frame_overlay;                   /* +0x0108 the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -3658,7 +3684,7 @@ SR_STATIC_ASSERT(offsetof(OptionClient, unused_d0) == 0xd0, "OptionClient.unused
 SR_STATIC_ASSERT(offsetof(OptionClient, unused_d4) == 0xd4, "OptionClient.unused_d4");
 SR_STATIC_ASSERT(offsetof(OptionClient, soundvolume) == 0xd8, "OptionClient.soundvolume");
 SR_STATIC_ASSERT(offsetof(OptionClient, musicvolume) == 0xdc, "OptionClient.musicvolume");
-SR_STATIC_ASSERT(offsetof(OptionClient, unused_108) == 0x108, "OptionClient.unused_108");
+SR_STATIC_ASSERT(offsetof(OptionClient, frame_overlay) == 0x108, "OptionClient.frame_overlay");
 SR_STATIC_ASSERT(offsetof(OptionClient, invertmouse) == 0x10c, "OptionClient.invertmouse");
 SR_STATIC_ASSERT(offsetof(OptionClient, maxnumofplayers) == 0x114, "OptionClient.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(OptionClient, roundtime) == 0x118, "OptionClient.roundtime");

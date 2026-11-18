@@ -125,7 +125,7 @@ static unsigned ticks_now(void)
 static void read_display_keys(void)
 {
     if (g_debugit == 0 ? key_pressed(KEY_F1) : key_pressed(KEY_EQUALS))
-        cl_data_voice_on ^= 1;
+        cl_data_show_help ^= 1;
     if (key_pressed(KEY_F4))
         cl_data_hide_hud ^= 1;
     if (key_pressed(KEY_PAGE_UP)) {

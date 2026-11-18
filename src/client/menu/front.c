@@ -1022,7 +1022,7 @@ static void main_vbo_numbers(void)
 static int main_setup(void)
 {
     os_srand((unsigned)os_time64(0));
-    sr_data_option.unused_108 = 0;
+    sr_data_option.frame_overlay = 0;
     setupglextentions();
     if (cl_data_glext[0] == 0 || cl_data_glext[6] == 0 || cl_data_glext[3] == 0) {
         notsupportedmenu();

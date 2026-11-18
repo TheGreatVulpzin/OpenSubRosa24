@@ -550,6 +550,7 @@ area_sector,0x24,client_connected,int,,"clientrecv writes 1 after a state packet
 area_sector,0x28,client_timeout,int,,"clientrecv: ticks without a packet; above 0x4af the client leaves the game"
 area_sector,0x2c,client_event_total,int,,"clientrecv: 16 bits in the state packet"
 debug,0x50344,net_flag,int,,"clientrecv clears it after the object packet"
+game,0x0,running,int,,"the client gameloop writes 1 at the start and 0 at the end"
 game,0x4,link_state,int,,"clientrecv writes 3 when the server sends nothing for 0x4b0 ticks"
 human,0x2b44,net_tick,int,,"unpackobjectpacket: the tick of the last state of the human"
 human,0x2b48,net_pos,vec3,,"unpackobjectpacket: the place at net_tick"
@@ -562,6 +563,16 @@ object,0x8224,net_pos_prev,vec3,,"unpackobjectpacket: the place at net_tick_prev
 debug,0x50248,affinity_set,int,,setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds
 debug,0x5024c,affinity_before,int,,setcpuaffinity writes the process mask plus 10000
 debug,0x50250,affinity_after,int,,setcpuaffinity writes the process mask plus 10000 after the change
+debug,0x50014,frame_start,uint32_t,,"gameloop: the SDL time when the frame started"
+debug,0x5001c,frame_ms_index,int,,"gameloop: the next entry of frame_ms, 0 to 31"
+debug,0x50020,frame_ms,int,32,"gameloop: the milliseconds that each of the last 32 frames took"
+debug,0x50120,frame_ms_max,int,,"gameloop: the longest frame. F3 clears it when the debug flag is on"
+debug,0x50124,frame_ms_average,float,,"gameloop: the mean of frame_ms"
+debug,0x50244,shown_team,int,,"gameloop with the debug flag: the team of player 0, for displaydebuginfo"
+debug,0x50254,shown_bonds,int,,"gameloop with the debug flag: numofbonds, for displaydebuginfo"
+debug,0x50258,shown_humans,int,,"gameloop with the debug flag: the count of active humans, for displaydebuginfo"
+debug,0x5025c,shown_parts,int,,"gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo"
+debug,0x50264,shown_mouse,int,,"gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo"
 debug,0x52284,log_text,char,256,dedicatedserverloop writes the physics line with sprintf
 debug,0x52384,log_path,char,64,debug_resetlogfile writes the file name dedlog.txt
 debug,0x523c4,log_file,void*,,debug_resetlogfile and dedicatedserverloop: FILE * of the log
@@ -725,7 +736,7 @@ city,0x2fba4,guard_spots,GuardSpot,64,scenario_createguards: pos and dir 0..3 (0
 city,0x2ffa4,prize_pos,vec3,,scenario_createguards: the place of the prize item
 city,0x30368,car_spawn_next,int,,"logic_cardealer_buy: the next car place, (n + 1) & 7"
 city,0x3036c,car_spawn_pos,vec3,,logic_cardealer_buy: car place n is at z - 4 n
-game,0x257dc,unused_257dc,int,,resetgame clears this field. No reader in the server
+game,0x257dc,death_camera_ticks,int,,"resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server"
 game,0x257e0,unused_257e0,int,,resetgame clears this field. No reader in the server
 game,0x257e8,unused_257e8,int,,resetgame clears this field. No reader in the server
 game,0x257ec,unused_257ec,float,,resetgame clears this field. No reader in the server
@@ -1158,7 +1169,7 @@ join_server,0x3c,ping,int,,"joinmenu: the pong gives back the send time; the rec
 join_server,0x40,game_type,int,,"joinmenu: 4 bits in the pong; 3 round, 4 world"
 join_address,0x0,address,uint32_t,,"joinmenu: an address to ping, host order"
 join_address,0x4,port,uint16_t,,"joinmenu: the port of the address"
-option,0x108,unused_108,int,,"the client mainmenu writes 0 at the start; no reader"
+option,0x108,frame_overlay,int,,"the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen"
 soundlist,0xa8,menu_test,int,4,"the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down"
 texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
 modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"

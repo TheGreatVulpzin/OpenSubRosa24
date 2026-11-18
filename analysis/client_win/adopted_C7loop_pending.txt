@@ -1,0 +1,2 @@
+# The game loop runs a frame loop. It waits for a test in the game window.
+gameloop src/client/setup/loop.c
