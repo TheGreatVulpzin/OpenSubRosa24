@@ -1093,7 +1093,7 @@ void enablespeex(void);
 void disablespeex(void);
 void preprocessspeex(void);
 void encodespeex(void);
-void lf_e13c0(void);
+void decodespeex(void);
 void lf_e1550(void);
 void lf_e16b0(void);
 void createwindowsprites(void);
@@ -2396,7 +2396,7 @@ const LfEntry lf_table[] = {
     { "disablespeex", 0xe1240, (void *)disablespeex, 0, LF_RET_VOID, 4, "", 1 },
     { "preprocessspeex", 0xe12c0, (void *)preprocessspeex, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "encodespeex", 0xe1300, (void *)encodespeex, 3, LF_RET_VOID, 4, "vvv", 1 },
-    { "decodespeex", 0xe13c0, (void *)lf_e13c0, 3, LF_RET_VOID, 4, "vvv", 1 },
+    { "decodespeex", 0xe13c0, (void *)decodespeex, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "testspeex", 0xe1550, (void *)lf_e1550, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createsprite", 0xe16b0, (void *)lf_e16b0, 4, LF_RET_INT, 4, "vpvv", 0 },
     { "createwindowsprites", 0xe1ac0, (void *)createwindowsprites, 4, LF_RET_VOID, 4, "vvpp", 0 },

@@ -3788,13 +3788,16 @@ typedef union VoiceChannelClient { struct {
     int unk_04;
     int human;          /* +0x08 the body of the speaker, -1 for a radio */
     int item;           /* +0x0c the radio item, -1 for a direct voice */
-    uint8_t unk_10[0x5010];
+    uint8_t pad_10[0x10];
+    int16_t samples[64][160];           /* +0x0020 the decoded frames of the ring */
     int head;           /* +0x5020 the next frame index */
     int unk_5024;
     int size[64];       /* +0x5028 */
     int mode[64];       /* +0x5128 */
     uint8_t data[64][256]; /* +0x5228 */
-    uint8_t unk_9228[0x20024];
+    uint8_t pad_9228[0x24];
+    int16_t level[64][5];               /* +0x924c every 32nd sample of each frame */
+    uint8_t pad_94cc[0x1fd80];
 }; uint8_t lf_raw[0x2924c]; } VoiceChannelClient;
 SR_STATIC_ASSERT(sizeof(VoiceChannelClient) == 0x2924c, "VoiceChannelClient");
 

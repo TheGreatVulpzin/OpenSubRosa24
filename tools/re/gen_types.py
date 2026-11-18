@@ -1161,6 +1161,11 @@ def gen_voice_client():
     end = HEADER.index('} VoiceChannel;', start) + len('} VoiceChannel;')
     text = HEADER[start:end].replace('VoiceChannel', 'VoiceChannelClient')
     text = text.replace('unk_9228[0x20000]', 'unk_9228[0x20024]').replace('lf_raw[0x29228]', 'lf_raw[0x2924c]')
+    # The decoded samples start at +0x20. The levels start 0x24 bytes after the end of the data.
+    samples = 'uint8_t pad_10[0x10];\n    int16_t samples[64][160];           /* +0x0020 the decoded frames of the ring */'
+    levels = ('uint8_t pad_9228[0x24];\n    int16_t level[64][5];               /* +0x924c every 32nd sample of each frame */\n'
+              '    uint8_t pad_94cc[0x1fd80];')
+    text = text.replace('uint8_t unk_10[0x5010];', samples).replace('uint8_t unk_9228[0x20024];', levels)
     return text + '\nSR_STATIC_ASSERT(sizeof(VoiceChannelClient) == 0x2924c, "VoiceChannelClient");'
 
 

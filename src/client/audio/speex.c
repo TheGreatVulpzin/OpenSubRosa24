@@ -69,3 +69,25 @@ void encodespeex(int channel, int player, int frame)
     audio_speex_encode()(encoder->state, cl_data_audio_samples, encoder->bits);
     ring->size[frame] = audio_speex_bits_write()(encoder->bits, (char *)ring->data[frame], SPEEX_BYTES);
 }
+
+/* Decode one frame of a speaker. A frame with no bytes gives silence. A decoded frame clears its byte
+ * count. Every 32nd sample of the frame goes to the level table of the speaker. */
+void decodespeex(int decoder_index, int channel_index, int frame)
+{
+    AudioDecoder *decoder = &cl_data_audio_decoders[decoder_index];
+    VoiceChannelClient *channel = &sr_data_voice[channel_index];
+    int sample;
+
+    if (channel->size[frame] == 0) {
+        for (sample = 0; sample < SPEEX_SAMPLES; sample++)
+            channel->samples[frame][sample] = 0;
+    } else {
+        audio_speex_bits_read_from()(decoder->bits, (char *)channel->data[frame], channel->size[frame]);
+        audio_speex_decode()(decoder->state, decoder->bits, cl_data_audio_samples);
+        for (sample = 0; sample < SPEEX_SAMPLES; sample++)
+            channel->samples[frame][sample] = (int16_t)(long long)cl_data_audio_samples[sample];
+        channel->size[frame] = 0;
+    }
+    for (sample = 0; sample < SPEEX_SAMPLES; sample += 32)
+        channel->level[frame][sample / 32] = channel->samples[frame][sample];
+}
