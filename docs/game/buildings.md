@@ -78,6 +78,7 @@ The destination `spare` field keeps its value.
 It sets the ceiling bit from the cell above or the top floor.
 For plain outer blocks with empty interiors or doors, adjacent walls flip texture bit 15.
 The wall test accepts values 1 through 8 and 12.
+The high byte of the same texture holds a window atlas number. The macro `sr_window_atlas(texture, type)` gives it. The server build uses 0. The client build calls `addwindowatlas`, with the piece index of the wall (walls 1 through 8) or 0 (wall 12) as the type.
 Neighbor indices can cross a row or floor boundary.
 
 `building_rotatefloorplan` turns the working grid by 90 degrees.

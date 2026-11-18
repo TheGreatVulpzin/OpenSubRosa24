@@ -78,6 +78,8 @@ def main():
                 client_only.append('#define sr_debug_line(from, to) debug_addline((from), (to))')
                 client_only.append('void area_reset_interiors(void);')
                 client_only.append('#define sr_area_reset_interiors() area_reset_interiors()')
+                client_only.append('int __cdecl lf_e9d70(int texture, int type);')
+                client_only.append('#define sr_window_atlas(texture, type) lf_e9d70((texture), (type))')
                 client_only.append('#define sr_object_frame_orthogonal 0')
                 client_only.append('#define sr_human_floor_all_rays 1')
                 client_only.append('#define sr_timer_name(field, name) ((void)0)')

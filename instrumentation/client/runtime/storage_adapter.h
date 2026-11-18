@@ -413,6 +413,8 @@ void __cdecl debug_addline(const vec3 *from, const vec3 *to);
 #define sr_debug_line(from, to) debug_addline((from), (to))
 void area_reset_interiors(void);
 #define sr_area_reset_interiors() area_reset_interiors()
+int __cdecl lf_e9d70(int texture, int type);
+#define sr_window_atlas(texture, type) lf_e9d70((texture), (type))
 #define sr_object_frame_orthogonal 0
 #define sr_human_floor_all_rays 1
 #define sr_timer_name(field, name) ((void)0)

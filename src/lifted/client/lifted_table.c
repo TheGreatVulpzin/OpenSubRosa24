@@ -636,7 +636,7 @@ void lf_50230(void);
 void lf_50700(void);
 void lf_55bb0(void);
 void setupbuildingtypes(void);
-void lf_56ad0(void);
+void building_buildfloorplan(void);
 void lf_58940(void);
 void lf_58a70(void);
 void buildingedit_setup(void);
@@ -657,13 +657,13 @@ void buildingeditor_renderblock(void);
 void buildingeditor_renderblock2(void);
 void lf_60940(void);
 void lf_60b40(void);
-void lf_614e0(void);
-void lf_61fd0(void);
+void building_load(void);
+void building_setupbuild(void);
 void building_setupfloorplannewer(void);
 void lf_63470(void);
 void setupbullettypes(void);
 void createbullet(void);
-void lf_645e0(void);
+void bullettimetolive(void);
 void lf_64650(void);
 void bulletsimulation(void);
 void lf_65330(void);
@@ -735,7 +735,7 @@ void createevent_updateiteminfo(void);
 void createevent_updateplayer(void);
 void lf_72620(void);
 void createevent_updateplayer_finance(void);
-void lf_72780(void);
+void createevent_sound(void);
 void lf_72830(void);
 void lf_728b0(void);
 void lf_729c0(void);
@@ -878,7 +878,7 @@ void sprintf_comma(void);
 void lf_a3fe0(void);
 void lf_a4150(void);
 void pointinsidebase(void);
-void lf_a4260(void);
+void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
 void lf_a4420(void);
 void logic_createcar(void);
@@ -974,7 +974,7 @@ void lerpnoise2d(void);
 void serpnoise2d(void);
 void cerpnoise2d(void);
 void lf_c5670(void);
-void lf_c56a0(void);
+void getrandomvector2d(void);
 void getrandomvector3d(void);
 void lf_c5770(void);
 void createobject(void);
@@ -1936,7 +1936,7 @@ const LfEntry lf_table[] = {
     { "bondsimulation2", 0x50700, (void *)lf_50700, 0, LF_RET_VOID, 4, "", 0 },
     { "checkbonds", 0x55bb0, (void *)lf_55bb0, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbuildingtypes", 0x55bc0, (void *)setupbuildingtypes, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_buildfloorplan", 0x56ad0, (void *)lf_56ad0, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
+    { "building_buildfloorplan", 0x56ad0, (void *)building_buildfloorplan, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "building_iswindow", 0x58940, (void *)lf_58940, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "building_addgaragedoor", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)buildingedit_setup, 0, LF_RET_VOID, 4, "", 0 },
@@ -1957,13 +1957,13 @@ const LfEntry lf_table[] = {
     { "buildingeditor_renderblock2", 0x605a0, (void *)buildingeditor_renderblock2, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "buildingeditor_draw_sblock", 0x60940, (void *)lf_60940, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
     { "building_save", 0x60b40, (void *)lf_60b40, 1, LF_RET_VOID, 4, "v", 1 },
-    { "building_load", 0x614e0, (void *)lf_614e0, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "building_setupbuild", 0x61fd0, (void *)lf_61fd0, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_load", 0x614e0, (void *)building_load, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "building_setupbuild", 0x61fd0, (void *)building_setupbuild, 0, LF_RET_VOID, 4, "", 0 },
     { "building_setupfloorplannewer", 0x62ab0, (void *)building_setupfloorplannewer, 0, LF_RET_VOID, 4, "", 0 },
     { "building_rotatefloorplan", 0x63470, (void *)lf_63470, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbullettypes", 0x64110, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "createbullet", 0x64380, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
-    { "bullettimetolive", 0x645e0, (void *)lf_645e0, 0, LF_RET_VOID, 4, "", 0 },
+    { "bullettimetolive", 0x645e0, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deletebullet", 0x64650, (void *)lf_64650, 1, LF_RET_VOID, 4, "v", 0 },
     { "bulletsimulation", 0x646b0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createcityobject", 0x65330, (void *)lf_65330, 3, LF_RET_INT, 4, "vpv", 0 },
@@ -2035,7 +2035,7 @@ const LfEntry lf_table[] = {
     { "createevent_updateplayer", 0x72490, (void *)createevent_updateplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatehuman", 0x72620, (void *)lf_72620, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateplayer_finance", 0x726d0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_sound", 0x72780, (void *)lf_72780, 4, LF_RET_VOID, 4, "vpvv", 0 },
+    { "createevent_sound", 0x72780, (void *)createevent_sound, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "createevent_updatedoor", 0x72830, (void *)lf_72830, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createevent_updatescenario", 0x728b0, (void *)lf_728b0, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatemission", 0x729c0, (void *)lf_729c0, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2178,7 +2178,7 @@ const LfEntry lf_table[] = {
     { "logicsimulation_driving", 0xa3fe0, (void *)lf_a3fe0, 0, LF_RET_VOID, 4, "", 0 },
     { "addpointstoteam", 0xa4150, (void *)lf_a4150, 2, LF_RET_VOID, 4, "vv", 0 },
     { "pointinsidebase", 0xa4180, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pointinsidebuilding", 0xa4260, (void *)lf_a4260, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "pointinsidebuilding", 0xa4260, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
     { "pointinsidebasesafe", 0xa4340, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidecheckpoint", 0xa4420, (void *)lf_a4420, 2, LF_RET_INT, 4, "pv", 0 },
     { "logic_createcar", 0xa44a0, (void *)logic_createcar, 3, LF_RET_INT, 4, "vvv", 0 },
@@ -2274,7 +2274,7 @@ const LfEntry lf_table[] = {
     { "serpnoise2d", 0xc5470, (void *)serpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "cerpnoise2d", 0xc5570, (void *)cerpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "getrandomfloat", 0xc5670, (void *)lf_c5670, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "getrandomvector2d", 0xc56a0, (void *)lf_c56a0, 3, LF_RET_VOID, 4, "pvv", 0 },
+    { "getrandomvector2d", 0xc56a0, (void *)getrandomvector2d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomvector3d", 0xc5700, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomint", 0xc5770, (void *)lf_c5770, 0, LF_RET_INT, 4, "", 0 },
     { "createobject", 0xc5780, (void *)createobject, 5, LF_RET_INT, 4, "vpppv", 0 },

@@ -23,3 +23,10 @@ server_playermessage src/net/commands.c
 serversend src/net/server.c
 objectsimulation src/game/objects.c
 humansimulation src/game/humans.c
+bullettimetolive src/game/bullets.c
+getrandomvector2d src/common/random.c
+building_load src/game/buildings.c
+building_buildfloorplan src/game/buildings.c
+pointinsidebuilding src/game/collide.c
+createevent_sound src/net/events.c
+building_setupbuild src/game/buildings.c

@@ -18,6 +18,13 @@
 #define g_materials (sr_data_materials.records)
 #define g_area_block sr_data_area_block
 #define g_blocklist sr_data_blocklist
+#define g_buildblocktype sr_data_buildblocktype
+
+/* The window atlas of a wall texture: a build can define this macro as a call that returns the
+ * atlas number. The texture then gets that number in its high byte. Without it, the number is 0. */
+#ifndef sr_window_atlas
+#define sr_window_atlas(texture, type) 0
+#endif
 
 typedef size_t(__cdecl *building_io_fn)(void *, size_t, size_t, void *);
 #define game_fread (*((building_io_fn *)&sr_data_file_read))
@@ -257,6 +264,22 @@ static int has_wall(int wall)
     return (wall > 0 && wall < 9) || wall == 12;
 }
 
+/* Marks the texture of side k of a cell when the wall next to it exists: the texture gets bit
+ * 0x8000 flipped, and the window atlas number goes in the high byte. The atlas number comes
+ * from the index of the piece of the wall (walls 1 to 8) or is 0 (wall 12). */
+static void floorplan_wall_texture(FloorplanCell *p, int k, int wall)
+{
+    uint16_t texture;
+    int type = 0;
+
+    if (!has_wall(wall))
+        return;
+    texture = (uint16_t)p->tex_outer[k];
+    if (wall < 9)
+        type = g_buildblocktype[p->interior_bit18].pieces[wall - 1].index;
+    p->tex_outer[k] = (int16_t)((sr_window_atlas(texture, type) << 8) + texture + 0x8000);
+}
+
 void building_setupfloorplannewer(void)
 {
     Building *b = &g_building;
@@ -290,14 +313,10 @@ void building_setupfloorplannewer(void)
                 FloorplanCell *p = &g_floorplan[i];
                 if (p->outer == 0x40000000u && (p->inner == 0xffff || p->inner == 0 ||
                     g_area_block[p->inner & 0xffff].is_door != 0)) {
-                    if (has_wall(g_floorplan[i + 64].wall_row))
-                        p->tex_outer[1] = (int16_t)(p->tex_outer[1] ^ 0x8000);
-                    if (has_wall(p->wall_col))
-                        p->tex_outer[2] = (int16_t)(p->tex_outer[2] ^ 0x8000);
-                    if (has_wall(p->wall_row))
-                        p->tex_outer[3] = (int16_t)(p->tex_outer[3] ^ 0x8000);
-                    if (has_wall(g_floorplan[i + 1].wall_col))
-                        p->tex_outer[4] = (int16_t)(p->tex_outer[4] ^ 0x8000);
+                    floorplan_wall_texture(p, 1, g_floorplan[i + 64].wall_row);
+                    floorplan_wall_texture(p, 2, p->wall_col);
+                    floorplan_wall_texture(p, 3, p->wall_row);
+                    floorplan_wall_texture(p, 4, g_floorplan[i + 1].wall_col);
                 }
             }
         }
