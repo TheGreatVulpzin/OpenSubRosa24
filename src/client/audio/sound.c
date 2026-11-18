@@ -216,7 +216,7 @@ void soundsimulation(const vec3 *position, const vec3 rotation[3], const vec3 *v
         } else voice->pos = sr_humans[voice->human].bones[AUDIO_HEAD_BONE].pos;
     }
     audio_alListenerfv()(AL_POSITION, (float *)position);
-    CL_FN(0x50b980, void (__cdecl *)(vec3 *, const vec3 *))(&orientation[0], &rotation[2]);
+    negvector(&orientation[0], &rotation[2]);
     orientation[1] = rotation[1];
     audio_alListenerfv()(AL_ORIENTATION, &orientation[0].x);
     if (!velocity) speed.x = speed.y = speed.z = 0.0f;

@@ -2,6 +2,8 @@
 
 One page for each system of `src/client/`.
 
+- [Vectors and random numbers](math.md): shared vector operations, matrices and generators.
+
 ## Images and fonts
 
 The image loaders supply texture pixels and font atlases. Each format uses a separate source file and header in `src/client/image/`.

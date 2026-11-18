@@ -31,5 +31,16 @@ void rotatevector(vec3 *v, const vec3 *axis, float angle);
 void rotateorientation(vec3 rot[3], const vec3 *axis, float angle);
 void projectorientation(vec3 out[3], const vec3 p[3], const vec3 q[3]);
 void multiply3x3matrices(vec3 out[3], const vec3 a[3], const vec3 b[3]);
+void negvector(vec3 *out, const vec3 *v);
+void transposematrix(vec3 out[3], const vec3 in[3]);
+void copyquaternion(quat *out, const quat *in);
+void quaterniontoorientation(vec3 out[3], const quat *q);
+float dotproduct2d(const float a[2], const float b[2]);
+double vectorlength2d(const float v[2]);
+void addvectors2d(float out[2], const float a[2], const float b[2]);
+void subtractvectors2d(float out[2], const float a[2], const float b[2]);
+void scalevector2d(float out[2], const float v[2], float scale);
+void scaleaddvectors2d(float out[2], const float a[2], const float b[2], float scale);
+void tangentvector2d(float out[2], const float v[2]);
 
 #endif /* SR_VECTORS_H */

@@ -65,7 +65,6 @@
 #define NO_BITMAP (-1) /* drawbitmap draws a plain rectangle */
 
 /* Game functions of other files. */
-#define vectorlength2d CL_FN(0x50bb20, double(__cdecl *)(const float *v))
 #define getrandomvector3d CL_FN(0x4c5700, void(__cdecl *)(vec3 *out, float range, float min))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))

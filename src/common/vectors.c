@@ -8,6 +8,111 @@
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
 
+/* Negate each component in order. */
+void negvector(vec3 *out, const vec3 *v)
+{
+    out->x = -v->x;
+    out->y = -v->y;
+    out->z = -v->z;
+}
+
+/* Transpose a matrix. The input can also hold the result. */
+void transposematrix(vec3 out[3], const vec3 in[3])
+{
+    vec3 rows[3];
+    rows[0] = in[0];
+    rows[1] = in[1];
+    rows[2] = in[2];
+    out[0].x = rows[0].x;
+    out[0].y = rows[1].x;
+    out[0].z = rows[2].x;
+    out[1].x = rows[0].y;
+    out[1].y = rows[1].y;
+    out[1].z = rows[2].y;
+    out[2].x = rows[0].z;
+    out[2].y = rows[1].z;
+    out[2].z = rows[2].z;
+}
+
+/* Copy quaternion components in order. */
+void copyquaternion(quat *out, const quat *in)
+{
+    out->x = in->x;
+    out->y = in->y;
+    out->z = in->z;
+    out->w = in->w;
+}
+
+/* Form an orientation from the rounded quaternion products. */
+void quaterniontoorientation(vec3 out[3], const quat *q)
+{
+    float wx = (float)(q->w * q->x + q->w * q->x);
+    float wy = (float)(q->w * q->y + q->w * q->y);
+    float wz = (float)(q->w * q->z + q->w * q->z);
+    float xx = (float)(q->x * q->x + q->x * q->x);
+    float xy = (float)(q->x * q->y + q->x * q->y);
+    float xz = (float)(q->x * q->z + q->x * q->z);
+    float yy = (float)(q->y * q->y + q->y * q->y);
+    float yz = (float)(q->y * q->z + q->y * q->z);
+    float zz = (float)(q->z * q->z + q->z * q->z);
+    out[0].x = (float)(1.0 - ((double)yy + zz));
+    out[0].y = xy - wz;
+    out[0].z = xz + wy;
+    out[1].x = xy + wz;
+    out[1].y = (float)(1.0 - ((double)xx + zz));
+    out[1].z = yz - wx;
+    out[2].x = xz - wy;
+    out[2].y = yz + wx;
+    out[2].z = (float)(1.0 - ((double)xx + yy));
+}
+
+/* Return the rounded two component dot product. */
+float dotproduct2d(const float a[2], const float b[2])
+{
+    return (float)((double)a[1] * b[1] + (double)a[0] * b[0]);
+}
+
+/* Keep the square root in double precision. */
+double vectorlength2d(const float v[2])
+{
+    return x87_sqrt(dotproduct2d(v, v));
+}
+
+/* Add two vectors in component order. */
+void addvectors2d(float out[2], const float a[2], const float b[2])
+{
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+}
+
+/* Subtract two vectors in component order. */
+void subtractvectors2d(float out[2], const float a[2], const float b[2])
+{
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+}
+
+/* Scale two components in order. */
+void scalevector2d(float out[2], const float v[2], float scale)
+{
+    out[0] = v[0] * scale;
+    out[1] = v[1] * scale;
+}
+
+/* Add a scaled vector in component order. */
+void scaleaddvectors2d(float out[2], const float a[2], const float b[2], float scale)
+{
+    out[0] = (float)((double)b[0] * scale + a[0]);
+    out[1] = (float)((double)b[1] * scale + a[1]);
+}
+
+/* Turn a vector one quarter turn in component order. */
+void tangentvector2d(float out[2], const float v[2])
+{
+    out[0] = -v[1];
+    out[1] = v[0];
+}
+
 /* a . b: x and y first, then z. */
 float dotproduct(const vec3 *a, const vec3 *b)
 {

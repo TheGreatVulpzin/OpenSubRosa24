@@ -39,6 +39,27 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'negvector': 'ov',
+    'crossproduct': 'ovv',
+    'transposematrix': 'mm',
+    'copyquaternion': 'qq',
+    'quaterniontoorientation': 'mq',
+    'dotproduct2d': 'vv',
+    'vectorlength2d': 'v',
+    'normalizevector2d': 'ov',
+    'rotatevector2d': 'vf',
+    'addvectors2d': 'ovv',
+    'subtractvectors2d': 'ovv',
+    'scalevector2d': 'ovf',
+    'scaleaddvectors2d': 'ovvf',
+    'tangentvector2d': 'ov',
+    'genrand_int31': '',
+    'genrand_real1': '',
+    'genrand_real2': '',
+    'genrand_real3': '',
+    'genrand_res53': '',
+    'getrandomint': '',
+    'getrandomfloat': '',
     'createbullet': 'ivvn',
     'createparticle': 'ivvfn',
     'createplayer': '',
@@ -240,7 +261,8 @@ CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
 # SYNTH_SERVER=1 runs the calls on a copy of the snapshot of a game that hosts a server: server.active is 1
 # and the game type is 3. Without it the client snapshot has no server, and the server functions return at once.
 SERVER_EDITS = [(0x75a5800, 'I', (1,)), (0x9065308, 'I', (3,))]
-TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py')
+TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py',
+                'instrumentation/client/synth_pure.py')
 RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
 
 
@@ -277,6 +299,12 @@ def rvas():
         if row['name']:
             out[row['name']] = int(row['rva'], 16)
     return out
+
+
+def parameter_kinds():
+    """Read the argument descriptors of the compiled dispatch table."""
+    table = (ROOT / 'src/lifted/client/lifted_table.c').read_text(encoding='utf-8')
+    return dict(re.findall(r'\{ "(\w+)", 0x[0-9a-f]+, .*?, \d+, LF_RET_\w+, \d+, "([pv]*)",', table))
 
 
 def number(rng, kind):
@@ -413,6 +441,7 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(PROTOTYPES)
     addresses = rvas()
+    descriptors = parameter_kinds()
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
@@ -425,6 +454,7 @@ def main():
     # means the same result, so the case is skipped. SYNTH_FORCE=1 runs every case again.
     cache = load_cache()
     lock = threading.Lock()
+    passed = {}
     force = bool(os.environ.get('SYNTH_FORCE'))
     names = [item.partition('=')[0] for item in want]
     code = closure_hashes(names)
@@ -435,27 +465,49 @@ def main():
         proto = kinds if kinds else PROTOTYPES[name]
         key = hashlib.sha256((code[name] + case_hash(name, proto, count)).encode()).hexdigest()
         if not force and cache.get(name, {}).get('key') == key:
+            passed[name] = True
             return f'{name}: {count} calls: cached, {cache[name]["result"]}'
         rng = random.Random(sum(map(ord, name)))
         calls = []
+        snap = None
+        scratch = 0x19e00000
+        descriptor = descriptors[name]
         for index in range(count):
             args = make_args(rng, proto, index)
+            for position, value in enumerate(args):
+                if position >= len(descriptor) or descriptor[position] == 'p':
+                    continue
+                if isinstance(value, tuple):
+                    raw = struct.pack(f'<{len(value)}f', *value).ljust(256, b'\0')
+                elif isinstance(value, str) and value.startswith('P:'):
+                    raw = bytes.fromhex(value.split(':', 2)[2])
+                else:
+                    continue
+                if snap is None:
+                    snap = st.Snapshot(rec / 'sv_snapshot.bin')
+                snap.write(scratch, f'{len(raw)}s', raw)
+                args[position] = st.image(scratch)
+                scratch += (len(raw) + 31) & ~15
             calls.append(st.call(addresses[name], *args))
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
         snapshot = rec / 'sv_snapshot.bin'
         if os.environ.get('SYNTH_SERVER'):
-            snap = st.Snapshot(snapshot)
+            if snap is None:
+                snap = st.Snapshot(snapshot)
             for rva, fmt, values in SERVER_EDITS:
                 snap.write(rva, fmt, *values)
+        if snap is not None:
             snapshot = work / f'snapshot_{name}.bin'
             snap.save(snapshot)
         result = st.run(snapshot, path, name, own)
         if snapshot != rec / 'sv_snapshot.bin':
             snapshot.unlink()
         m = RESULT.search(result)
-        if m and int(m.group(1)) > 0 and int(m.group(2)) == 0 and int(m.group(4)) == 0:
+        passed[name] = bool(m and int(m.group(1)) + int(m.group(3)) > 0
+                            and int(m.group(2)) == 0 and int(m.group(4)) == 0)
+        if passed[name]:
             with lock:
                 cache[name] = {'key': key, 'result': result}
                 CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -472,6 +524,8 @@ def main():
                 print(line, flush=True)
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
     CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
+    if not all(passed.get(name, False) for name in names):
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':
