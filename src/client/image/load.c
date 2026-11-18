@@ -69,13 +69,13 @@ int stbi_register_loader(void *loader)
     return 0;
 }
 
-/* Set the gamma of the conversion from HDR floats to 8 bit pixels. The value kept is its inverse. */
+/* Set the gamma of the conversion from HDR floats to 8 bit pixels. The value stored is its inverse. */
 void stbi_hdr_to_ldr_gamma(float gamma)
 {
     cl_data_image_hdr_gamma_inverse = (float)(1.0 / gamma);
 }
 
-/* Set the scale of the conversion from HDR floats to 8 bit pixels. The value kept is its inverse. */
+/* Set the scale of the conversion from HDR floats to 8 bit pixels. The value stored is its inverse. */
 void stbi_hdr_to_ldr_scale(float scale)
 {
     cl_data_image_hdr_scale_inverse = (float)(1.0 / scale);
@@ -163,7 +163,7 @@ static void *open_image_file(const char *filename)
     return os_fopen(filename, "rb");
 }
 
-/* Test a JPEG file. The file position stays where it was. */
+/* Test a JPEG file. The file goes back to its position before the test. */
 int stbi_jpeg_test_file(void *file)
 {
     JpegImage image;
@@ -216,7 +216,7 @@ uint8_t *stbi_jpeg_load_from_memory(const uint8_t *buffer, int length, int *x, i
     return load_jpeg_image(&image, x, y, comp, requested);
 }
 
-/* Test a PNG file. The file position stays where it was. */
+/* Test a PNG file. The file goes back to its position before the test. */
 int stbi_png_test_file(void *file)
 {
     PngImage image;
@@ -309,7 +309,7 @@ int bmp_test(ImageReader *reader)
     return size == 12 || size == 40 || size == 56 || size == 108;
 }
 
-/* Test a BMP file. The file position stays where it was. */
+/* Test a BMP file. The file goes back to its position before the test. */
 int stbi_bmp_test_file(void *file)
 {
     ImageReader reader;
@@ -368,7 +368,7 @@ int psd_test(ImageReader *reader)
     return stbi_get32(reader) == 0x38425053;
 }
 
-/* Test a PSD file. The file position stays where it was. */
+/* Test a PSD file. The file goes back to its position before the test. */
 int stbi_psd_test_file(void *file)
 {
     ImageReader reader;
@@ -433,7 +433,7 @@ int hdr_test(ImageReader *reader)
     return 1;
 }
 
-/* Test an HDR file. The file position stays where it was. */
+/* Test an HDR file. The file goes back to its position before the test. */
 int stbi_hdr_test_file(void *file)
 {
     ImageReader reader;
@@ -473,7 +473,7 @@ float *stbi_hdr_load_from_memory(const uint8_t *buffer, int length, int *x, int 
     return hdr_load(&reader, (unsigned *)x, y, comp, requested);
 }
 
-/* Test a TGA file. The file position stays where it was. */
+/* Test a TGA file. The file goes back to its position before the test. */
 int stbi_tga_test_file(void *file)
 {
     ImageReader reader;
