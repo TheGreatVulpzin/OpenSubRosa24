@@ -1,5 +1,9 @@
-/* News text and the account money ranking. */
+/* News text and the account money ranking.
+ * File lines and account balances fill the newspaper page.
+ * Column updates clear the texture completion flag.
+ */
 #include "buildings.h"
+#include "newspaper.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -42,4 +46,21 @@ void newspaper_load(void)
             np->num_lines++;
         }
     }
+}
+
+/* Copy 64 bytes into a valid row. The second region starts at byte 63. */
+void newspaper_addline(const void *text, int line, int column)
+{
+    Newspaper *paper = &sr_data_newspaper;
+    if ((unsigned)line >= 1024)
+        return;
+    if (column == 0)
+        memcpy(paper->lines[line], text, 64);
+    else {
+        memcpy(paper->lines[line] + 63, text, 64);
+        paper->lines[line][124] = 0;
+    }
+    if (paper->num_lines < line + 1)
+        paper->num_lines = line + 1;
+    paper->texture_done = 0;
 }

@@ -5,6 +5,7 @@
 #include "sr_image_types.h"
 
 int at_eof(ImageReader *reader);
+char get_marker(JpegImage *image);
 int decode_jpeg_image(JpegImage *image);
 int parse_entropy_coded_data(JpegImage *image);
 void grow_buffer_unsafe(JpegImage *image);

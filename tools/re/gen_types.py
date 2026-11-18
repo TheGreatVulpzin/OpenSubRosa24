@@ -355,7 +355,8 @@ typedef struct CityBlock {
     int x, z;
     int size_x, height, size_z;
     int inner_x, inner_z;
-    uint8_t pad_1c[0x14];
+    int reserved;
+    uint8_t pad_20[0x10];
 } CityBlock;
 
 /* Records of the level editor. */

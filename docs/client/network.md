@@ -24,6 +24,9 @@ Files: `src/client/setup/send.c`, `src/client/setup/interpolation.c`, `src/clien
 
 The packet goes to `server_address` and `server_port`.
 
+`unpackposition` reads three separate float words. `unpackunitvector` restores the axis with greatest magnitude and two signed ratios, then normalizes the result.
+`unpackscalar` reads a signed magnitude and scales it to the supplied range. The separate `decode_unit_scalar` helper accepts bits that a caller has already read.
+
 An action is one of three kinds. A menu action has a menu id (8 bits) and a value (4 bytes). A chat action has a length (6 bits), the text bytes and a mode (4 bits). An item action has two 16 bit numbers. The actions are in a ring of 64 in the player record. The count is the distance from the tail to the head of the ring.
 
 The 6 voice frames are the 6 frames before `head` in the ring of the viewed player. Their indexes wrap around 64.

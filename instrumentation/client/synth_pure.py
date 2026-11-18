@@ -39,6 +39,46 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'e': 'N',
+    'get_marker': '',
+    'get16': '',
+    'get16le': '',
+    'initWGLLoadFunctions': '',
+    'fround': 'ff',
+    'net_calcdistancefactor': 'f',
+    'getenginetorque': 'f',
+    'raydistancesphere2': 'vvr',
+    'pointintersectcircle': 'oFvvr',
+    'checkbonds': '',
+    'human_calculateanglesobject': '',
+    'human_walksimulation2': '',
+    'createscenario_mission': '',
+    'createscenario_coop': '',
+    'createscenario_driving': '',
+    'scenario_createaicar': '',
+    'scenario_addcheckpoint': '',
+    'resetparser': '',
+    'getfloat': '',
+    'checkfilespec': 'NN',
+    'unpackunitvector': 'kog',
+    'unpackposition': 'o',
+    'unpackscalar': 'org',
+    'setuphumanangles': 'p',
+    'setupobjecttypes': '',
+    'createmessage': 'hNpp',
+    'newspaper_addline': 'Sph',
+    'scenario_getnextmission': 'h',
+    'scenario_isseekmission': 'h',
+    'addwindowatlas': 'ph',
+    'building_iswindow': 'hhhhh',
+    'building_reloadtextures': '',
+    'loadtexture2': 'pNhhhhh',
+    'gettextlength': 'Nf',
+    'checkbigendian': '',
+    'addcitystreet': 'hhhhN',
+    'addcityblock': 'hhhh',
+    'getplayticket': '',
+    'settwosidedstencil': 'uuiuuuuuuu',
     'saveaccountsserver': '',
     'loadaccountsclient': '',
     'area_getblocktexture': 'Accce',
@@ -80,7 +120,6 @@ PROTOTYPES = {
     'item_removebill': 'ph',
     'linkitemtoitem': 'pp',
     'item_addhumanlink': 'pph',
-    'addcitystreet': 'hhhhN',
     'circleintersectlevel': 'vvr',
     'circleintersectlandscape': 'vvr',
     'logicsimulation_driving': '',
@@ -561,6 +600,8 @@ def main():
         descriptor = descriptors[name]
         for index in range(count):
             args = make_args(rng, proto, index)
+            if name in ('get_marker', 'get16', 'get16le'):
+                args = [st.image(0x19e20000)]
             for position, value in enumerate(args):
                 if position >= len(descriptor) or descriptor[position] == 'p':
                     continue
@@ -580,12 +621,22 @@ def main():
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
         snapshot = rec / 'sv_snapshot.bin'
-        if name == 'getint':
+        if name in ('getint', 'getfloat'):
             if snap is None:
                 snap = st.Snapshot(snapshot)
-            text = b'prefix -2147483648 end\0'
+            text = b'prefix -2147483648 end\0' if name == 'getint' else b'prefix -123.125 end\0'
             snap.write(0x13d5e700, 'ii', 0, len(text) - 1)
             snap.write(0x13d5e708, f'{len(text)}s', text)
+        if name in ('get_marker', 'get16', 'get16le'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            data = 0x19e21000
+            snap.write(0x19e20000, '7I', 0, 0, 0, 0, 0, st.BASE + data, st.BASE + data + 4)
+            if name == 'get_marker':
+                snap.write(0x19e20000 + 0x369c, 'B', 255)
+                snap.write(data, '4B', 255, 255, 0xd8, 0)
+            else:
+                snap.write(data, '4B', 0x12, 0x34, 0x56, 0x78)
         if name.startswith(('pack', 'unpack')) or name == 'cs_pread':
             if snap is None:
                 snap = st.Snapshot(snapshot)

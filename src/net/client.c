@@ -287,18 +287,18 @@ static void read_objects(ObjectPacket *op, uint32_t *id, uint32_t *mode)
         unpackangle(&ob->wheels[1].steer, 8);
         for (k = 0; k < 4; k++) {
             pbitread(&raw, 6);
-            ob->wheels[k].travel = unpackscalar(raw, 6);
+            ob->wheels[k].travel = decode_unit_scalar(raw, 6);
         }
         for (k = 0; k < 4; k++) {
             pbitread(&raw, 6);
-            ob->wheels[k].slip = unpackscalar(raw, 6);
+            ob->wheels[k].slip = decode_unit_scalar(raw, 6);
         }
         pbitread(&raw, 8);
-        ob->vel.x = unpackscalar(raw, 8);
+        ob->vel.x = decode_unit_scalar(raw, 8);
         pbitread(&raw, 8);
-        ob->vel.y = unpackscalar(raw, 8);
+        ob->vel.y = decode_unit_scalar(raw, 8);
         pbitread(&raw, 8);
-        ob->vel.z = unpackscalar(raw, 8);
+        ob->vel.z = decode_unit_scalar(raw, 8);
         pbitread((uint32_t *)&ob->rpm_net, 13);
     }
 }
@@ -337,7 +337,7 @@ static void read_cityobjects(ObjectPacket *op)
         pbitread((uint32_t *)&rec->num_floors, 7);
         pbitread((uint32_t *)&rec->floor, 7);
         pbitread(&raw, 6);
-        rec->net_scalar = unpackscalar(raw, 6);
+        rec->net_scalar = decode_unit_scalar(raw, 6);
     }
 }
 

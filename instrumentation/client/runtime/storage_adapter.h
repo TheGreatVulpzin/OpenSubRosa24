@@ -169,6 +169,8 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_font_bits ((uint8_t *)(sr_base + 0x1235f0u))
 #define cl_data_cursor_bits ((uint8_t *)(sr_base + 0x1235e3u))
 #define cl_data_font_alpha_low (*((int *)(sr_base + 0xb7331c0u)))
+#define cl_data_wgl_loaders ((void * *)(sr_base + 0xb7315a0u))
+#define cl_data_play_ticket (*((uint64_t *)(sr_base + 0xf9ae248u)))
 #define cl_data_image_name ((char *)(sr_base + 0xb733140u))
 #define cl_data_sound_buffers ((SoundBuffer *)(sr_base + 0xf8ab240u))
 #define cl_data_audio_source_limit (*((int *)(sr_base + 0x1bbe3a0u)))
@@ -412,8 +414,8 @@ void __cdecl debug_addline(const vec3 *from, const vec3 *to);
 #define sr_debug_line(from, to) debug_addline((from), (to))
 void area_reset_interiors(void);
 #define sr_area_reset_interiors() area_reset_interiors()
-int __cdecl lf_e9d70(int texture, int type);
-#define sr_window_atlas(texture, type) lf_e9d70((texture), (type))
+int __cdecl addwindowatlas(int texture, int type);
+#define sr_window_atlas(texture, type) addwindowatlas((texture), (type))
 #define sr_object_frame_orthogonal 0
 #define sr_human_floor_all_rays 1
 #define sr_updatehuman_params int human

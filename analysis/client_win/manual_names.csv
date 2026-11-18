@@ -317,8 +317,9 @@ rva,name,evidence
 0x99c40,item_removebill,"ELF link order: between itemsimulationclient and linkitem. Size 272 bytes, ELF 374 bytes."
 0x9a030,linkitemtoitem,"ELF link order: between linkitem and item_removehumanlink. Size 342 bytes, ELF 483 bytes."
 0x9a190,item_addhumanlink,"ELF link order: between linkitem and item_removehumanlink. Size 137 bytes, ELF 274 bytes."
-0x9b160,addcityblock,ELF order: addcitystreet and addcityblock lie between city_addintersection and createlevel. This one has 3 arguments.
-0x9b5d0,addcitystreet,"Has the 5 arguments of the server addcitystreet (a, b, two widths, name). ELF order: between city_addintersection and createlevel."
+0x9b160,city_addintersection,"Three coordinates fill a CityIntersection of 0x68 bytes and clear its road slots and extents."
+0x9b2c0,addcitystreet,"Five arguments link two intersections and append a named CityRoad of 0x4c bytes."
+0x9b5d0,addcityblock,"Four arguments append a CityBlock of 0x30 bytes from two intersection extents."
 0x9f400,level_checkeditor,"ELF link order: between leveleditor_loop and leveleditor_save. Size 3746 bytes, ELF 5838 bytes."
 0xa02b0,leveleditor_addintersection,"ELF link order: between leveleditor_loop and leveleditor_save. Size 152 bytes, ELF 242 bytes."
 0xa0350,leveleditor_getintersection,"ELF link order: between leveleditor_loop and leveleditor_save. Size 134 bytes, ELF 190 bytes."

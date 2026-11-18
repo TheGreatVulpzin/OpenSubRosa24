@@ -11,3 +11,5 @@ Each `Font` stores a resolution, a texture index, 256 widths and eight coordinat
 Coordinates first store pixel values as floats, then divide by the atlas dimensions. Widths first divide by the cell width, then multiply by the ratio of cell width to font size. The ratio retains register precision until multiplication. Failed image loads leave metrics unchanged and retain the assigned texture index.
 
 `setfontresolution` stores the resolution of the selected font.
+
+`gettextlength` sums scaled glyph widths and stores each partial sum as a float. It reads at most 1000 letters. Character indices use signed bytes, including bytes above 127.

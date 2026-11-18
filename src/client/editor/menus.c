@@ -1,6 +1,7 @@
 /* The menus of the building editor: the list of building files and the two pickers of blocks
  * and textures. */
 #include "editor/menus.h"
+#include "editor/building.h"
 
 #include <string.h>
 
@@ -276,7 +277,6 @@ void __cdecl buildingedit_blockmenu(void)
 }
 
 /* Game functions of other files. */
-#define building_reloadtextures CL_FN(0x45f310, void(__cdecl *)(void))
 
 enum { TEXTURE_REMOVE = 0, TEXTURE_INSERT = 1, TEXTURE_REPLACE = 2 };
 

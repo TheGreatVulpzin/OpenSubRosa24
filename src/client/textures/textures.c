@@ -20,6 +20,7 @@
 #include "textures/noise.h"
 #include "textures/opengl.h"
 #include "textures/upload.h"
+#include "vectors.h"
 
 #define g_textures cl_data_texture
 #define g_texturelist cl_data_texturelist
@@ -73,6 +74,22 @@
 #define setfontresolution CL_FN(0x509f30, void(__cdecl *)(int width, int height))
 
 /* The word of a pixel. On a big endian machine the bytes have the other order. */
+/* Reuse an atlas cell or append one. A full atlas replaces its last cell. */
+int addwindowatlas(int texture, int type)
+{
+    WindowAtlas *atlas = &cl_data_texture_windowatlas;
+    int cell = 0;
+    while (cell < 63 && cell < atlas->num_cells) {
+        if (atlas->cells[cell].material == texture && atlas->cells[cell].window == type)
+            return cell;
+        ++cell;
+    }
+    atlas->cells[cell].material = texture;
+    atlas->cells[cell].window = type;
+    atlas->num_cells = cell + 1;
+    return cell;
+}
+
 uint32_t pack_pixel(int red, int green, int blue, int alpha)
 {
     uint32_t r = (uint32_t)red, g = (uint32_t)green, b = (uint32_t)blue, a = (uint32_t)alpha;

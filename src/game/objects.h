@@ -19,6 +19,7 @@ void objecttrainsimulation(int obj);
 void object_rotorsimulation(int obj);
 void objectenginesimulation2(void);
 float getenginetorque2(int obj);
+float getenginetorque(float rpm);
 void addobjectrotation(int obj, const vec3 *center, const vec3 *axis, float k);
 
 void objectwheelsimulation2(void);

@@ -52,15 +52,8 @@ static __inline Mission *team_missions(int team)
 }
 
 /* A full list uses slot 16, directly after the mission array. */
-static __inline int scenario_getnextmission(int team)
-{
-    int slot;
-    Mission *missions = team_missions(team);
-    for (slot = 0; slot < 16; ++slot)
-        if (!missions[slot].active)
-            break;
-    return slot;
-}
+int scenario_getnextmission(int team);
+int scenario_isseekmission(int team);
 
 static __inline void safe_center(int team, vec3 *out)
 {

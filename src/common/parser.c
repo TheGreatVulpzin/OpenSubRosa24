@@ -74,6 +74,28 @@ static int is_number_char(char c)
     return (c >= '0' && c <= '9') || c == '-';
 }
 
+/* Move the cursor to the start of the loaded text. */
+void resetparser(void)
+{
+    g_parser.pos = 0;
+}
+
+/* Read a decimal token of at most 255 bytes. The caller supplies a number. */
+float getfloat(void)
+{
+    Parser *p = &g_parser;
+    int n = 0;
+    float value;
+    while (p->pos < p->size && !is_number_char(p->text[p->pos]) && p->text[p->pos] != '.')
+        ++p->pos;
+    while (p->pos < p->size && n < 255 &&
+           (is_number_char(p->text[p->pos]) || p->text[p->pos] == '.'))
+        p->number[n++] = p->text[p->pos++];
+    p->number[n] = 0;
+    os_sscanf(p->number, "%f", &value);
+    return value;
+}
+
 /* Skips to the next digit or minus sign, then reads up to 255 of them as a number. A text with
  * no number gives 0. */
 int getint(void)

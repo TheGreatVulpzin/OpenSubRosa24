@@ -1,4 +1,6 @@
 name,type,count,client_rva,evidence
+wgl_loaders,void *,37,0xb7315a0,"initWGLLoadFunctions fills 37 function pointers from 0xb7315a0 through 0xb731630."
+play_ticket,uint64_t,1,0xf9ae248,"getplayticket returns the two adjacent words at 0xf9ae248 and 0xf9ae24c."
 image_name,char,128,0xb733140,"loadtexture and loadtexturesetalpha copy the path of the image into it. loadtexturepartial compares it with its path"
 sound_buffers,SoundBuffer,256,0xf8ab240,"setupsounds makes one OpenAL buffer for each. loadwav and createwav fill them"
 audio_source_limit,int,1,0x1bbe3a0,"setupsounds counts the OpenAL sources it could make. createsound and createsoundobject stop at this number"

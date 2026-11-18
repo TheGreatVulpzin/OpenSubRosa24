@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 void __cdecl buildingedit_setup(void);
+int building_iswindow(int x, int floor, int z, int direction, int fixed);
+void building_reloadtextures(void);
 void __cdecl leveledit_setup(void);
 void __cdecl buildingeditor_drawquad(int texture, float x, float z, float width, float depth, float red,
                                      float green, float blue, float alpha);

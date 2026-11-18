@@ -1278,14 +1278,24 @@ def main():
     names = load_names()
     hand = handwritten_rvas()
     rewritten = rewritten_rvas(names)
-    # Apply checked return types to C functions without another database export.
+    # Use checked signatures for the C dispatch entries.
     parameter_file = (ROOT / TARGET['names']).with_name('params.csv')
     if parameter_file.exists():
         with parameter_file.open(encoding='utf-8') as fh:
             for row in csv.DictReader(fh):
                 rva = int(row['rva'], 16)
-                if row['index'] == 'ret' and rva in rewritten and rva in headers:
-                    headers[rva] = (row['type'],) + tuple(headers[rva][1:])
+                if rva not in rewritten or rva not in headers:
+                    continue
+                ret, cc, name, params = headers[rva]
+                if row['index'] == 'ret':
+                    ret = row['type']
+                else:
+                    index = int(row['index'])
+                    if index >= len(params):
+                        raise ValueError(f"parameter {index} does not exist at {row['rva']}")
+                    params = list(params)
+                    params[index] = (row['type'], params[index][1])
+                headers[rva] = (ret, cc, name, params)
     side = side_effects(funcs)
     LOOP_CALLERS.update(loop_callers(funcs))
     only = {int(x, 16) for x in args.only.split(',')} if args.only else None

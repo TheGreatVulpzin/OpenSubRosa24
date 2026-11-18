@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 uint32_t pack_pixel(int red, int green, int blue, int alpha);
+int addwindowatlas(int texture, int type);
 void texture_from_image(int texture, int wrap_s, int wrap_t, int mag_filter, int min_filter);
 void __cdecl generatemipmap(int texture);
 void __cdecl generatetexture(int texture, int mipmap, int wrap_s, int wrap_t, int mag_filter, int min_filter);

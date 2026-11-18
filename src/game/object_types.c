@@ -113,6 +113,14 @@ void calculatepointscale(float *out, int n, const vec3 *points, const vec3 *ligh
 }
 
 /* Append a particle. The first 4 bytes of the record stay as they are. */
+/* Set up all vehicle type tables. */
+void setupobjecttypes(void)
+{
+    setupobjecttypes_cars();
+    setupobjecttypes_helicopters();
+    setupobjectypes_train();
+}
+
 void objecttype_addparticle(int type, float x, float y, float z, float mass)
 {
   ObjectType *t = &sr_objecttypes[type];

@@ -13,12 +13,22 @@
 #include "textures/textures.h"
 #include "textures/upload.h"
 
+void *sr_import(const char *dll, const char *name);
+
 #define g_image cl_data_image
 #define g_bigendian cl_data_bigendian
 #define g_image_name cl_data_image_name
 #define g_textures cl_data_texture
 
 enum { GL_RGBA = 0x1908, GL_CLAMP_TO_EDGE = 0x812f, GL_LINEAR = 0x2601 };
+
+/* Select the file transfers for a machine with the low byte first. */
+void checkbigendian(void)
+{
+    cl_data_bigendian = 0;
+    sr_data_file_write = (SrFileTransfer)sr_import("MSVCR100.DLL", "fwrite");
+    sr_data_file_read = (SrFileTransfer)sr_import("MSVCR100.DLL", "fread");
+}
 
 /* Game functions of other files. */
 #define image_file_load \
@@ -77,6 +87,20 @@ int __cdecl loadtexture(int texture, const char *path, int mipmap, int wrap_s, i
     strcpy(g_image_name, path);
     texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
     if (mipmap != 0)
+        generatemipmap(texture);
+    setuptexture(texture);
+    return 1;
+}
+
+/* Load and upload a texture without a restriction on its dimensions. */
+int loadtexture2(int texture, const char *path, int mipmap, int wrap_s, int wrap_t,
+                 int mag_filter, int min_filter)
+{
+    if (!loadimage(path))
+        return 0;
+    strcpy(g_image_name, path);
+    texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
+    if (mipmap)
         generatemipmap(texture);
     setuptexture(texture);
     return 1;

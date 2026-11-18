@@ -18,6 +18,7 @@ Keyboard, mouse, player controls and cameras use `src/client/input/`.
 - [HDR](hdr.md): Radiance RGBE samples.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
+- [OpenGL loaders and stencil](gl.md): WGL entry points and the front and back stencil tests.
 
 ## Textures, models and landscape
 

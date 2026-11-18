@@ -2415,9 +2415,9 @@ rva,size,name,source,confidence,evidence
 0x9a330,211,item_removeitemlink,callgraph,0.667,votes=4
 0x9a410,1924,item_physicssimulation,callgraph,0.667,votes=4
 0x9aba0,1462,item_sphereintersect,callgraph,0.667,votes=4
-0x9b160,343,addcityblock,manual,1.0,ELF order: addcitystreet and addcityblock lie between city_addintersection and createlevel. This one has 3 arguments.
-0x9b2c0,770,city_addintersection,callgraph,0.333,votes=2; diverge: addcitystreet
-0x9b5d0,363,addcitystreet,manual,1.0,"Has the 5 arguments of the server addcitystreet (a, b, two widths, name). ELF order: between city_addintersection and createlevel."
+0x9b160,343,city_addintersection,manual,1.0,"Three coordinates fill a CityIntersection of 0x68 bytes. Four road slots become minus one and the extents become zero."
+0x9b2c0,770,addcitystreet,manual,1.0,"Five arguments link two intersection road slots and append a named CityRoad of 0x4c bytes."
+0x9b5d0,363,addcityblock,manual,1.0,"Four arguments append a CityBlock of 0x30 bytes from the extents of two intersections."
 0x9b740,3489,createlevel,anchor,0.745,features
 0x9c4f0,206,leveledit_setup,callgraph,0.333,votes=2
 0x9c5c0,11835,leveleditor_loop,anchor,0.889,features

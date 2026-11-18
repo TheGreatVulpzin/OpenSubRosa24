@@ -1,7 +1,16 @@
-/* Steam of the client. The client runs without Steam: every function does nothing, and
- * steam_init tells the caller that Steam is not there. Callers still call these functions.
- * When the callers do not call them, this file goes away. */
+/* Steam availability and the cached play ticket.
+ * Steam entry points return without calling the service APIs.
+ * Player names and identifiers stay in local game state.
+ */
 #include "client.h"
+#include "setup/steam.h"
+#include "sr_runtime.h"
+
+/* Return the cached play ticket identifier. */
+uint64_t getplayticket(void)
+{
+    return cl_data_play_ticket;
+}
 
 /* Steam is not supported: the client always runs without it. */
 int __cdecl steam_init(void)

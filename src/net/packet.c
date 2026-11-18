@@ -352,7 +352,7 @@ void packorientation(const vec3 *dir, uint32_t bits)
         midpoint(&mid[0], &tri[0], &tri[1]);
         midpoint(&mid[1], &tri[2], &tri[1]);
         midpoint(&mid[2], &tri[2], &tri[0]);
-        /* Each test is false for a NaN, so the form of each test matters. */
+        /* The branch forms select the triangle for an unordered value. */
         if (sr_orientation_nonpositive(side(dir, &mid[0], &mid[2]))) {
             if (0.0 < side(dir, &mid[1], &mid[0])) {
                 tri[0] = mid[0];
@@ -392,11 +392,47 @@ void packscalar(const float *x, float range, uint32_t bits)
 }
 
 /* The reverse of packscalar with the range 1.0. */
-float unpackscalar(uint32_t raw, uint32_t bits)
+float decode_unit_scalar(uint32_t raw, uint32_t bits)
 {
     uint32_t half = (1u << (bits & 31)) >> 1;
     float v = (float)((raw & (half - 1)) * (1.0 / half));
     return (raw & half) == half ? -v : v;
+}
+
+/* Read a signed magnitude from the bit stream and scale it to the supplied range. */
+void unpackscalar(float *out, float range, uint32_t bits)
+{
+    uint32_t raw, half = (1u << (bits & 31)) >> 1;
+    pbitread(&raw, bits);
+    *out = (float)((float)(raw & (half - 1)) / ((float)half / range));
+    if ((raw & half) == half)
+        *out = -*out;
+}
+
+/* Decode two ratios and the axis of greatest magnitude, then normalize the vector. */
+void unpackunitvector(const uint32_t *packed, float *out, uint8_t bits)
+{
+    uint32_t axis = packed[0] & 3, mask = (1u << (bits & 31)) - 1;
+    int component, word = 1;
+    out[axis] = packed[0] & 4 ? -1.0f : 1.0f;
+    for (component = 0; component < 3; ++component) {
+        if ((uint32_t)component != axis) {
+            float ratio = (float)((packed[word] >> 1) & mask) / (float)mask;
+            if (packed[word] & 1)
+                ratio = -ratio;
+            out[component] = ratio;
+            ++word;
+        }
+    }
+    normalizevector((vec3 *)out, (const vec3 *)out);
+}
+
+/* Read each position component as a separate word. */
+void unpackposition(vec3 *out)
+{
+    cs_pread(&out->x, 4, 1);
+    cs_pread(&out->y, 4, 1);
+    cs_pread(&out->z, 4, 1);
 }
 
 /* An angle in radians from bits - 1 bits of size and a sign bit. A failed read keeps the bit

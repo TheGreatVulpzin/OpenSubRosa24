@@ -11,7 +11,7 @@ void *sr_import(const char *dll, const char *name);
 /* Store the failure message and return zero. */
 int image_fail(unsigned message_rva)
 {
-    return CL_FN(0x401110, int(__cdecl *)(const char *))((const char *)(sr_base + message_rva));
+    return e((const char *)(sr_base + message_rva));
 }
 
 /* Stop when a required decoder invariant fails. */
@@ -34,7 +34,7 @@ unsigned image_get8(ImageReader *reader)
 /* Read a big endian word. Missing bytes give zero. */
 unsigned image_get16(ImageReader *reader)
 {
-    return CL_FN(0x403b50, unsigned(__cdecl *)(ImageReader *))(reader);
+    return get16(reader);
 }
 
 /* Read a big endian double word. Missing bytes give zero. */
@@ -46,7 +46,7 @@ unsigned image_get32(ImageReader *reader)
 /* Read a little endian word. Missing bytes give zero. */
 unsigned image_get16le(ImageReader *reader)
 {
-    return CL_FN(0x4083d0, unsigned(__cdecl *)(ImageReader *))(reader);
+    return get16le(reader);
 }
 
 /* Read a little endian double word. Missing bytes give zero. */

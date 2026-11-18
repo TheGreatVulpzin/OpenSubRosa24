@@ -6,6 +6,9 @@
 #include "sr_image_types.h"
 
 int image_fail(unsigned message_rva);
+int e(const char *message);
+unsigned get16(ImageReader *reader);
+unsigned get16le(ImageReader *reader);
 void image_check(int condition, unsigned expression_rva, unsigned source_rva, unsigned line);
 unsigned image_get8(ImageReader *reader);
 unsigned image_get16(ImageReader *reader);

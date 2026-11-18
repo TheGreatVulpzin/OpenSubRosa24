@@ -13,6 +13,10 @@ The game makes most of its textures when it starts. A generator fills the shared
 
 A pixel is one 32 bit word: red in the low byte, then green, blue and alpha. On a big endian machine (`cl_data_bigendian` not zero) the bytes have the other order. `pack_pixel` makes the word.
 
+`checkbigendian` selects the low byte first and the runtime file transfer functions.
+`loadtexture2` reads and uploads a texture without restricting its dimensions to powers of two.
+`addwindowatlas` reuses a cell with the same material and window. A full atlas replaces cell 63, including when that cell already has the requested values.
+
 ## Generators
 
 | Function | Texture |

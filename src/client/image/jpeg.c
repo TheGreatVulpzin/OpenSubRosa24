@@ -70,7 +70,7 @@ int at_eof(ImageReader *reader)
 /* Read the pending marker or the next marker byte. */
 static unsigned jpeg_marker(JpegImage *image)
 {
-    return (uint8_t)CL_FN(0x402280, char(__cdecl *)(JpegImage *))(image);
+    return (uint8_t)get_marker(image);
 }
 
 /* Empty the entropy buffer and clear the DC predictors of the first three components. The

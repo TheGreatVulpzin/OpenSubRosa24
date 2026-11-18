@@ -65,6 +65,25 @@ void addcitystreet(int a, int b, int width_a, int width_b, const char *name)
     g_city.num_roads++;
 }
 
+/* Append the block between two intersections. The caller reserves a block slot. */
+void addcityblock(int first, int second, int x, int z)
+{
+    const CityIntersection *a = &g_city.intersections[first];
+    const CityIntersection *b = &g_city.intersections[second];
+    CityBlock *block = &g_city.blocks[g_city.num_blocks];
+    block->x = x;
+    block->z = z;
+    block->size_x = a->x + a->extent[0];
+    block->size_z = a->z + a->extent[1];
+    block->height = a->y;
+    if (b->y < block->height)
+        block->height = b->y;
+    block->inner_x = b->x - b->extent[2] - (a->x + a->extent[0]);
+    block->inner_z = b->z - b->extent[3] - (a->z + a->extent[1]);
+    block->reserved = 0;
+    ++g_city.num_blocks;
+}
+
 void buildcityinterection(int n)
 {
     const CityIntersection *intersection = &g_city.intersections[n];
