@@ -209,7 +209,7 @@ void createevent_updateblock_quad(int area, int x, int y, int z, int block, int 
 }
 
 /* Event 17: a human of a player (the player takes it over at a join). */
-void createevent_updatehuman(int human, int player)
+void createevent_updatehuman(sr_updatehuman_params)
 {
     const Human *h = &sr_humans[human];
     Event *ev;
@@ -218,7 +218,7 @@ void createevent_updatehuman(int human, int player)
     ev = new_event(17);
     ev->param = human;
     ev->attach_type = h->active;
-    ev->attach_id = player;
+    ev->attach_id = sr_updatehuman_recipient(h, player);
     next_event();
 }
 

@@ -217,10 +217,18 @@ void servercycle(void)
     }
 }
 
-/* Open the UDP socket with the number index, on the port of the options, without blocking. */
+#ifndef sr_socket_disable_closes
+#define sr_socket_disable_closes 0
+#endif
+
+/* Set the state of the UDP socket. */
 void disablesocket(int index)
 {
     BsdSocket *bs = &sr_bsdsocket;
+#if sr_socket_disable_closes
+    os_closesocket((uintptr_t)(unsigned)bs->handle[index]);
+    bs->enabled[index] = 0;
+#else
     uint16_t family = 2, port;
     uint32_t any = 0;
     bs->port = (int16_t)sr_option.port;
@@ -235,6 +243,7 @@ void disablesocket(int index)
         os_ioctlsocket((uintptr_t)(unsigned)bs->handle[index], (long)0x8004667e, &one);
         bs->enabled[index] = 1;
     }
+#endif
 }
 
 /* The address of the last datagram: the ip and the port in host order. */
@@ -316,7 +325,7 @@ static void adopt_humans(int player, int account)
                 pl->team = hm->team;
                 pl->menu = 0;
             }
-            createevent_updatehuman(h, player);
+            sr_emit_updatehuman(h, player);
         }
     }
 }

@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "sr_math.h"
+#include "sr_runtime.h"
 #include "vectors.h"
 
 /* The line from -> to against the plane of p with the normal n, from the front only: from must
@@ -439,19 +440,24 @@ int lineintersectline2d(float hit[2], float n[2], float *t, const float a[2], co
 
 /* The 2D circle (p, r) against the segment a -> b. n gets the unit normal of the segment, hit
  * the nearest point of the segment and *t the signed distance over r. */
+#ifndef sr_collision_ge
+#define sr_collision_ge(a, b) ((a) >= (b))
+#define sr_collision_le(a, b) ((a) <= (b))
+#endif
+
 int sphereintersectline2d(float hit[2], float n[2], float *t, const float p[2], const float a[2], const float b[2],
                           float r)
 {
     float d;
 
-    if (!(0.0 <= (float)((float)(b[1] - a[1]) * (float)(p[1] - a[1]) + (float)(b[0] - a[0]) * (float)(p[0] - a[0])) &&
-          0.0 <= (float)((float)(a[1] - b[1]) * (float)(p[1] - b[1]) + (float)(a[0] - b[0]) * (float)(p[0] - b[0]))))
+    if (!(sr_collision_ge((float)((float)(b[1] - a[1]) * (float)(p[1] - a[1]) + (float)(b[0] - a[0]) * (float)(p[0] - a[0])), 0.0) &&
+          sr_collision_ge((float)((float)(a[1] - b[1]) * (float)(p[1] - b[1]) + (float)(a[0] - b[0]) * (float)(p[0] - b[0])), 0.0)))
         return 0;
     n[0] = (float)(a[1] - b[1]);
     n[1] = (float)(b[0] - a[0]);
     normalizevector2d(n, n);
     d = (float)((float)(p[1] - a[1]) * n[1] + n[0] * (float)(p[0] - a[0]));
-    if (!(fabs(d) <= r))
+    if (!sr_collision_le(fabs(d), r))
         return 0;
     hit[0] = (float)(p[0] + -d * n[0]);
     hit[1] = (float)(-d * n[1] + p[1]);
@@ -479,14 +485,14 @@ int lineintersectcircle2d(float hit[2], float n[2], float *t, const float a[2], 
     along = (float)(ux * (float)(c[0] - a[0]) + uy * (float)(c[1] - a[1]));
     if (along < 0.0)
         return 0;
-    if (!(along <= (float)len))
+    if (!sr_collision_le(along, (float)len))
         return 0;
     px = (float)(a[0] + along * ux);
     py = (float)(uy * along + a[1]);
     ex = (float)(px - c[0]);
     ey = (float)(py - c[1]);
     dd = (float)x87_sqrt((double)(float)(ex * ex + ey * ey));
-    if (!(dd <= r))
+    if (!sr_collision_le(dd, r))
         return 0;
     back = x87_sqrt((double)(r * r - dd * dd));
     k = -(float)back;

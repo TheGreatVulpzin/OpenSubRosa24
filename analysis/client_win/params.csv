@@ -1,4 +1,6 @@
 rva,name,index,type,evidence
+0xa22a0,circleintersectlandscape,ret,int,"The result is the EAX Boolean. EDX holds the last loop index; callers test EAX only."
+0x79a90,testtimer,ret,int,"The SSE2 conversion at 0x10c650 uses cvttsd2si EAX and leaves EDX untouched. Milliseconds return as a 32-bit int."
 0xfce40,lineintersecttriangle,3,float *,"passed to lineintersectplane as the start of the line; the recorded argument is a vector on the caller stack"
 0xfce40,lineintersecttriangle,4,float *,"passed to lineintersectplane as the end of the line; the recorded argument is a vector on the caller stack"
 0xfcfb0,lineintersecttriangletwosided,3,float *,"passed to lineintersectplane as the start of the line; the recorded argument is a vector on the caller stack"

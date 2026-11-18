@@ -10,6 +10,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "account_actions.h"
 #include "debug/debug.h"
 #include "editor/level.h"
 #include "math/small_vectors.h"
@@ -92,7 +93,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFlush, (void))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 
 /* Game functions of other files. */
-#define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
 #define createaccount CL_FN(0x433be0, int(__cdecl *)(int player))
 #define createplayer CL_FN(0x4d4750, int(__cdecl *)(void))
 #define fixplayername CL_FN(0x4d5200, void(__cdecl *)(int player))

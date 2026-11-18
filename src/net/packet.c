@@ -333,6 +333,10 @@ static __forceinline void midpoint(vec3 *m, const vec3 *a, const vec3 *b)
 /* A unit vector as a path in the octahedron: 3 bits for the octant (face), then 2 bits for
  * each split of the face into 4 triangles (0: at corner 0, 1: at corner 1, 2: at corner 2,
  * 3: the middle one). */
+#ifndef sr_orientation_nonpositive
+#define sr_orientation_nonpositive(value) ((value) <= 0.0)
+#endif
+
 void packorientation(const vec3 *dir, uint32_t bits)
 {
     vec3 *tri = g_tri, *mid = g_mid;
@@ -349,12 +353,12 @@ void packorientation(const vec3 *dir, uint32_t bits)
         midpoint(&mid[1], &tri[2], &tri[1]);
         midpoint(&mid[2], &tri[2], &tri[0]);
         /* Each test is false for a NaN, so the form of each test matters. */
-        if (side(dir, &mid[0], &mid[2]) <= 0.0) {
+        if (sr_orientation_nonpositive(side(dir, &mid[0], &mid[2]))) {
             if (0.0 < side(dir, &mid[1], &mid[0])) {
                 tri[0] = mid[0];
                 tri[2] = mid[1];
                 sub = one;
-            } else if (side(dir, &mid[2], &mid[1]) <= 0.0) {
+            } else if (sr_orientation_nonpositive(side(dir, &mid[2], &mid[1]))) {
                 tri[0] = mid[0];
                 tri[1] = mid[1];
                 tri[2] = mid[2];

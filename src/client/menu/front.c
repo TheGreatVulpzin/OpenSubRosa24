@@ -13,6 +13,10 @@
 #include "audio/voice.h"
 #include "audio/voice_ui.h"
 #include "client.h"
+#include "account_actions.h"
+#include "packet.h"
+#include "player.h"
+#include "server.h"
 #include "editor/building.h"
 #include "math/small_vectors.h"
 #include "menu/draw.h"
@@ -74,28 +78,22 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 #define launchwebpage CL_FN(0x4ac0a0, void(__cdecl *)(const char *url))
-#define unpackangle CL_FN(0x468ec0, void(__cdecl *)(float *angle, uint32_t bits))
 #define gameloop CL_FN(0x47b100, void(__cdecl *)(void))
 #define recvpacket CL_FN(0x4fe420, int(__cdecl *)(void))
 #define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
-#define cs_pread CL_FN(0x4fe630, int(__cdecl *)(void *data, int size, int count))
 #define pbitwrite CL_FN(0x4fe6c0, int(__cdecl *)(const uint32_t *value, uint32_t bits))
 #define pbitread CL_FN(0x4fe800, int(__cdecl *)(uint32_t *value, uint32_t bits))
 #define enablesocketserver CL_FN(0x4fe2b0, void(__cdecl *)(int lan))
-#define closesocketserver CL_FN(0x4fe3f0, void(__cdecl *)(int lan))
 #define loadaccountsserver CL_FN(0x4341d0, void(__cdecl *)(void))
 #define saveaccountsclient CL_FN(0x434470, void(__cdecl *)(void))
-#define setupserver CL_FN(0x4345d0, void(__cdecl *)(void))
-#define endserver CL_FN(0x434010, void(__cdecl *)(void))
 #define reactivategame CL_FN(0x47d060, void(__cdecl *)(void))
 #define checksimulation CL_FN(0x47d900, int(__cdecl *)(int))
 #define set_cpu_affinity CL_FN(0x4faf30, void(__cdecl *)(void)) /* setcpuaffinity */
 #define enablesocketclient CL_FN(0x4fe360, void(__cdecl *)(int lan))
 #define getlanipaddress CL_FN(0x494b20, void(__cdecl *)(void))
 #define getonlineserverlist CL_FN(0x494c00, void(__cdecl *)(void))
-#define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
 #define getmasterserverip CL_FN(0x494c50, int(__cdecl *)(void))
 #define buildingedit_menu CL_FN(0x45dbd0, void(__cdecl *)(void))
 #define model_viewer CL_FN(0x4c14a0, void(__cdecl *)(void))
@@ -377,14 +375,14 @@ static void host_start(void)
     if (sr_data_option.net_on != 0)
         enablesocketserver(0);
     loadaccountsserver();
-    setupserver();
+    loadaccountsclient();
     sr_data_server.active = 1;
     sr_data_game.client_account_key = sr_data_accounts.key;
     gameloop();
-    endserver();
+    saveaccountsserver();
     saveaccountsclient();
     if (sr_data_option.net_on != 0)
-        closesocketserver(0);
+        disablesocket(0);
 }
 
 /* The host screen: the server settings and Start. Start runs a game with this client as the
@@ -880,7 +878,7 @@ void __cdecl joinmenu(void)
 
     enablesocketclient(0);
     sr_data_server.active = 0;
-    setupserver();
+    loadaccountsclient();
     memset(&sr_data_area_sector, 0, 0x30);
     sr_data_numofconnections = 0;
     cl_data_join_server_count = 0;
@@ -903,7 +901,7 @@ void __cdecl joinmenu(void)
     resetmenuitems();
     for (;;) {
         if (!menu_open()) {
-            closesocketserver(0);
+            disablesocket(0);
             saveaccountsclient();
             resetmenuitems();
             return;
@@ -1261,7 +1259,7 @@ void __cdecl mainmenu(void)
         if (sr_data_debugit != 0)
             main_test_sounds();
     }
-    closesocketserver(1);
+    disablesocket(1);
     resetmenuitems();
     if (cl_data_audio_capture != 0)
         audio_alcCaptureStop()(cl_data_audio_capture);

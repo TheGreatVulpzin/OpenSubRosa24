@@ -150,7 +150,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   float k, e0, e1, lo, hi, inv, sa, sb;
   int row, col;
 
-  starttimer(g_timerlist.bondsetuphuman);
+  sr_timer_start(bondsetuphuman);
   o->b = (short)ka;
   o->a = (short)b->owner;
   o->c = (short)kb;
@@ -278,7 +278,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
     o->arm_a.x = bb->inertia.z;
   o->share_a = o->arm_a.x * sa;
   o->share_b = (float)(sb * o->arm_a.x);
-  stoptimer(g_timerlist.bondsetuphuman);
+  sr_timer_stop(bondsetuphuman);
 }
 
 
@@ -289,7 +289,7 @@ static void setup_copy(void)
 {
   int h, k, i, n;
 
-  starttimer(g_timerlist.bondsetupcopy);
+  sr_timer_start(bondsetupcopy);
   for (h = 0; h < 512; h++) {
     const Human *hu = &sr_humans[h];
     BondHuman *bh = &sr_bondhumans[h];
@@ -320,7 +320,7 @@ static void setup_copy(void)
   n = sr_numofbonds;
   for (i = 0; i < n; i++)
     sr_bondopt[i].mode = (short)sr_bonds[i].mode;
-  stoptimer(g_timerlist.bondsetupcopy);
+  sr_timer_stop(bondsetupcopy);
 }
 
 
@@ -331,7 +331,7 @@ static void loop_clear(int pass)
 {
   int i, k, n;
 
-  starttimer(g_timerlist.bondloopcopy);
+  sr_timer_start(bondloopcopy);
   g_bondpass = pass;
   n = sr_numofparticles;
   for (i = 0; i < n; i++) {
@@ -380,7 +380,7 @@ static void loop_clear(int pass)
       b->dw.z = 0.0f;
     }
   }
-  stoptimer(g_timerlist.bondloopcopy);
+  sr_timer_stop(bondloopcopy);
 }
 
 /* A vector longer than limit gets the length limit. */
@@ -412,7 +412,7 @@ static void loop_balance(void)
   const vec3 up = g_yaxis;
   int h;
 
-  starttimer(g_timerlist.bondhuman);
+  sr_timer_start(bondhuman);
   for (h = 0; h < 512; h++) {
     const Human *hu = &sr_humans[h];
     const vec3 *r1 = &hu->bones[0].rot[1], *r2 = &hu->bones[0].rot[2];
@@ -469,7 +469,7 @@ static void loop_balance(void)
     w->ang_momentum.y = (float)(a.y + w->ang_momentum.y);
     w->ang_momentum.z = (float)(a.z + w->ang_momentum.z);
   }
-  stoptimer(g_timerlist.bondhuman);
+  sr_timer_stop(bondhuman);
 }
 
 /* The contact bonds hold a point against a hit surface. The velocity change pushes the point
@@ -1067,22 +1067,22 @@ void bondsimulation2(void)
   int i, pass, type;
   unsigned mode;
 
-  nametimer(g_timerlist.bondsim, "bondsim");
-  nametimer(g_timerlist.bondtest, "bondtest");
-  nametimer(g_timerlist.bondsetup, "bondsetup");
-  nametimer(g_timerlist.bondsetupcopy, "bondsetupcopy");
-  nametimer(g_timerlist.bondsetuphuman, "bondsetuphuman");
-  nametimer(g_timerlist.bondloopcopy, "bondloopcopy");
-  nametimer(g_timerlist.bondhuman, "bondhuman");
-  nametimer(g_timerlist.bondwheelsim, "bondwheelsim");
-  nametimer(g_timerlist.bondpartpart, "bondpartpart");
-  nametimer(g_timerlist.bondbodybody, "bondbodybody");
-  nametimer(g_timerlist.bondbodyrotbody, "bondbodyrotbody");
-  nametimer(g_timerlist.bondwheelcollevel, "bondwheelcollevel");
-  nametimer(g_timerlist.bondbodyitem, "bondbodyitem");
-  nametimer(g_timerlist.bondbodylevel, "bondbodylevel");
-  starttimer(g_timerlist.bondsim);
-  starttimer(g_timerlist.bondsetup);
+  sr_timer_name(bondsim, "bondsim");
+  sr_timer_name(bondtest, "bondtest");
+  sr_timer_name(bondsetup, "bondsetup");
+  sr_timer_name(bondsetupcopy, "bondsetupcopy");
+  sr_timer_name(bondsetuphuman, "bondsetuphuman");
+  sr_timer_name(bondloopcopy, "bondloopcopy");
+  sr_timer_name(bondhuman, "bondhuman");
+  sr_timer_name(bondwheelsim, "bondwheelsim");
+  sr_timer_name(bondpartpart, "bondpartpart");
+  sr_timer_name(bondbodybody, "bondbodybody");
+  sr_timer_name(bondbodyrotbody, "bondbodyrotbody");
+  sr_timer_name(bondwheelcollevel, "bondwheelcollevel");
+  sr_timer_name(bondbodyitem, "bondbodyitem");
+  sr_timer_name(bondbodylevel, "bondbodylevel");
+  sr_timer_start(bondsim);
+  sr_timer_start(bondsetup);
   for (i = 0; i < sr_numofbonds; i++) {
     Bond *b = &sr_bonds[i];
     BondOpt *o = &sr_bondopt[i];
@@ -1097,14 +1097,14 @@ void bondsimulation2(void)
     if (b->type == 9)
       setup_bodyrotbody(b, o);
   }
-  stoptimer(g_timerlist.bondsetup);
+  sr_timer_stop(bondsetup);
   setup_copy();
   for (pass = 0; pass < 32; pass++) {
     loop_clear(pass);
     loop_balance();
-    starttimer(g_timerlist.bondwheelsim);
+    sr_timer_start(bondwheelsim);
     objectwheelsimulation2();
-    stoptimer(g_timerlist.bondwheelsim);
+    sr_timer_stop(bondwheelsim);
     for (i = 0; i < sr_numofbonds; i++) {
       Bond *b = &sr_bonds[i];
       BondOpt *o = &sr_bondopt[i];
@@ -1114,9 +1114,9 @@ void bondsimulation2(void)
         continue;
       type = b->type;
       if (type == 0) {
-        starttimer(g_timerlist.bondpartpart);
+        sr_timer_start(bondpartpart);
         bond_partpart(i);
-        stoptimer(g_timerlist.bondpartpart);
+        sr_timer_stop(bondpartpart);
       }
       if (type == 1)
         contact_level(b);
@@ -1127,29 +1127,29 @@ void bondsimulation2(void)
       if (type == 4)
         contact_bone_triangle(b);
       if (type == 5) {
-        starttimer(g_timerlist.bondwheelcollevel);
+        sr_timer_start(bondwheelcollevel);
         contact_wheel(b);
-        stoptimer(g_timerlist.bondwheelcollevel);
+        sr_timer_stop(bondwheelcollevel);
       }
       if (type == 7) {
-        starttimer(g_timerlist.bondbodylevel);
+        sr_timer_start(bondbodylevel);
         contact_bone_level(b);
-        stoptimer(g_timerlist.bondbodylevel);
+        sr_timer_stop(bondbodylevel);
       }
       if (type == 8) {
-        starttimer(g_timerlist.bondbodybody);
+        sr_timer_start(bondbodybody);
         bond_bodybody(i);
-        stoptimer(g_timerlist.bondbodybody);
+        sr_timer_stop(bondbodybody);
       }
       if (type == 9) {
-        starttimer(g_timerlist.bondbodyrotbody);
+        sr_timer_start(bondbodyrotbody);
         bond_bodyrotbody(o);
-        stoptimer(g_timerlist.bondbodyrotbody);
+        sr_timer_stop(bondbodyrotbody);
       }
       if (type == 10) {
-        starttimer(g_timerlist.bondbodyitem);
+        sr_timer_start(bondbodyitem);
         bond_bodyitem(b, o);
-        stoptimer(g_timerlist.bondbodyitem);
+        sr_timer_stop(bondbodyitem);
       }
       if (type == 11)
         bond_itemrot(b, o);
@@ -1160,22 +1160,22 @@ void bondsimulation2(void)
       if (type == 15)
         contact_wheelbody(b);
     }
-    starttimer(g_timerlist.bondwheelsim);
+    sr_timer_start(bondwheelsim);
     objectenginesimulation2();
-    stoptimer(g_timerlist.bondwheelsim);
-    starttimer(g_timerlist.bondloopcopy);
+    sr_timer_stop(bondwheelsim);
+    sr_timer_start(bondloopcopy);
     apply_particles();
-    starttimer(g_timerlist.bondtest);
+    sr_timer_start(bondtest);
     apply_bones();
-    stoptimer(g_timerlist.bondtest);
+    sr_timer_stop(bondtest);
     apply_items();
     apply_wheelbodies();
-    stoptimer(g_timerlist.bondloopcopy);
+    sr_timer_stop(bondloopcopy);
   }
-  starttimer(g_timerlist.bondsetupcopy);
+  sr_timer_start(bondsetupcopy);
   copy_back();
-  stoptimer(g_timerlist.bondsetupcopy);
-  stoptimer(g_timerlist.bondsim);
+  sr_timer_stop(bondsetupcopy);
+  sr_timer_stop(bondsim);
   /* The contact bonds of this tick end here: the list goes back to the static bonds. */
   g_numofdynamicbonds = sr_numofbonds;
   sr_numofbonds = g_numofstaticbonds;

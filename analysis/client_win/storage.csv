@@ -106,7 +106,7 @@ carcolorname,const char *,6,4,0x123568,1,1,ok
 bondhuman,BondHumanClient,512,1280,0x17678de0,0,0,dropped
 numofdynamicbonds,int,1,4,0x1bf7e14,0,0,ok
 numofstaticbonds,int,1,4,0x13c5e6c0,0,0,ok
-timerlist,TimerListClient,1,84,0x12a7d620,0,0,dropped
+timerlist,TimerListClient,1,84,0x12a7d620,1,1,checked
 surface2,SrSurface,1,320,0x1cb8140,0,0,ok
 train_near,int,1,4,0x19d85180,0,0,ok
 filtered_word,char,7,1,0x123fe8,0,0,ok

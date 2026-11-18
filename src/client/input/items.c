@@ -6,6 +6,7 @@
 #include "input/keyboard.h"
 #include "input/mouse.h"
 #include "client.h"
+#include "player_actions.h"
 #include "sr_runtime.h"
 #include "vectors.h"
 #include "sr_math.h"
@@ -17,7 +18,7 @@ enum { CASH_BILL_ACTION = 2 };
 static INPUT_INLINE void phone_digit(int player, int item, int key, int digit)
 {
     if (input_pressed(key))
-        CL_FN(0x4d5550, void (__cdecl *)(int, int, int))(player, item, digit);
+        player_addaction_item(player, item, digit);
 }
 
 /* Queue a digit for each keypad or number-row press, in keypad order. */
@@ -50,11 +51,11 @@ void getinputs_money(int player, int item)
 {
     InputMouse *mouse = &cl_data_input_mouse;
     for (; mouse->wheel_up > 0; mouse->wheel_up--)
-        CL_FN(0x4d5550, void (__cdecl *)(int, int, int))(player, item, 0);
+        player_addaction_item(player, item, 0);
     for (; mouse->wheel_down > 0; mouse->wheel_down--)
-        CL_FN(0x4d5550, void (__cdecl *)(int, int, int))(player, item, 1);
+        player_addaction_item(player, item, 1);
     if (input_pressed(KEY_R))
-        CL_FN(0x4d5550, void (__cdecl *)(int, int, int))(
+        player_addaction_item(
             player, item, sr_items[item].num_bills + CASH_BILL_ACTION);
 }
 

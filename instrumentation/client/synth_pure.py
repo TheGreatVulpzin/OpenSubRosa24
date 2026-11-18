@@ -39,6 +39,84 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'saveaccountsserver': '',
+    'loadaccountsclient': '',
+    'area_getblocktexture': 'Accce',
+    'addbeziersurfacetexture': 'PPEEEEh',
+    'area_interior_createblock': 'AcccBk',
+    'area_interior_setblock': 'AcccB',
+    'area_interior_getblock': 'Accc',
+    'area_interior_getblocklink': 'Accc',
+    'area_interior_getblocktexture': 'Accce',
+    'sphereintersectnormalblock': 'ooFvrzBr',
+    'sphereintersectspecblock': 'ooFvrzBr',
+    'circleintersectnormalblock': 'ooFvvrzBr',
+    'circleintersectspecblock': 'ooFvvrzBr',
+    'bondtimetolive': '',
+    'deletebond': 'p',
+    'createcityobject': 'hWr',
+    'sphereintersectcityobjecttype': 'ooFhWmWr',
+    'packunitvector': 'kvg',
+    'packorientation': 'vg',
+    'unpackorientation': 'og',
+    'packangle': 'yg',
+    'unpackangle': 'og',
+    'packposition': 'v',
+    'packpositiondelta': 'vvrg',
+    'unpackpositiondelta': 'ovrg',
+    'packscalar': 'yrg',
+    'playersellstock': 'px',
+    'createevent_bullet': 'hvvh',
+    'createevent_createobject': 'p',
+    'createevent_updatehuman': 'p',
+    'createevent_updatestocks': '',
+    'createevent_updatecarmarket': 'h',
+    'testtimer': '',
+    'deletehuman': 'p',
+    'sphereintersectpoint': 'ooFvrv',
+    'setitempositionhuman': 'pp',
+    'item_billvalue': 'p',
+    'item_addbill': 'phh',
+    'item_removebill': 'ph',
+    'linkitemtoitem': 'pp',
+    'item_addhumanlink': 'pph',
+    'addcitystreet': 'hhhhN',
+    'circleintersectlevel': 'vvr',
+    'circleintersectlandscape': 'vvr',
+    'logicsimulation_driving': '',
+    'logic_addteamcash': 'hx',
+    'logic_teammissioncomplete': 'hh',
+    'objecttimetolive': '',
+    'getobjectrotation2': 'opv',
+    'getobjectrotation3': 'op',
+    'sphereintersectobject': 'pWr',
+    'objectwheelcollision': 'ph',
+    'particletimetolive': '',
+    'particlesimulation': '',
+    'scenario_setmissioninactive': 'p',
+    'setuptimers': '',
+    'lineintersectline2d': 'ooFvvvv',
+    'sphereintersectline2d': 'ooFvvvr',
+    'lineintersectcircle2d': 'ooFvvvr',
+    'getint': '',
+    'comparestrings': 'NN',
+    'disablesocket': 'h',
+    'cs_pread': 'SJK',
+    'getnextcityobject': '',
+    'getnexthuman': '',
+    'getnextitem': '',
+    'getnextobject': '',
+    'getnextplayer': '',
+    'deletecityobject': 'n',
+    'deletebullet': 'n',
+    'player_addaction_item': 'pxx',
+    'player_addaction_chat': 'pC',
+    'addplayerwaypoint': 'pfff',
+    'createclientaccount': 'UUx',
+    'accountdeathtax': 'n',
+    'playerdebt': 'p',
+    'addpointstoteam': 'hx',
+    'logic_splitteamcash': 'hx',
     'negvector': 'ov',
     'crossproduct': 'ovv',
     'transposematrix': 'mm',
@@ -262,7 +340,7 @@ CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
 # and the game type is 3. Without it the client snapshot has no server, and the server functions return at once.
 SERVER_EDITS = [(0x75a5800, 'I', (1,)), (0x9065308, 'I', (3,))]
 TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py',
-                'instrumentation/client/synth_pure.py')
+                'instrumentation/client/synth_pure.py', 'analysis/client_win/params.csv')
 RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
 
 
@@ -346,7 +424,16 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'U':
+        if kind == 'h':
+            args.append(rng.randrange(3))
+        elif kind == 'g':
+            args.append(rng.choice([1, 2, 3, 4, 6, 8, 9, 12, 15, 16, 20, 24, 31]))
+        elif kind == 'y':
+            args.append((number(rng, 'f'),))
+        elif kind == 'C':
+            length = rng.choice([0, 1, 2, 62, 63, 64, 65, 127])
+            args.append('P:0:' + (b'x' * length + b'\0').hex())
+        elif kind == 'U':
             args.append('P:0:' + struct.pack('<I', rng.choice([0, 1, 0xff, 0xffff, 0xffffffff, rng.randrange(0, 2**32)])).hex())
         elif kind == 'b':
             args.append(rng.choice([0, 1, 2, 3, 7, 8, 9, 15, 16, 17, 24, 31, 32, 32, rng.randrange(1, 33), rng.randrange(1, 33), 33, -1]))
@@ -493,6 +580,20 @@ def main():
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
         snapshot = rec / 'sv_snapshot.bin'
+        if name == 'getint':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            text = b'prefix -2147483648 end\0'
+            snap.write(0x13d5e700, 'ii', 0, len(text) - 1)
+            snap.write(0x13d5e708, f'{len(text)}s', text)
+        if name.startswith(('pack', 'unpack')) or name == 'cs_pread':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            socket = 0x19d851a0
+            snap.write(socket + 0x5c, 'ii', 0, 0)
+            snap.write(socket + 0x64, '256s', bytes(256))
+            snap.write(socket + 0x10064, 'iii', 256, 0, 0)
+            snap.write(socket + 0x10070, '256s', bytes((index * 37 + 23) & 255 for index in range(256)))
         if os.environ.get('SYNTH_SERVER'):
             if snap is None:
                 snap = st.Snapshot(snapshot)

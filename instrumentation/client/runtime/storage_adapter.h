@@ -111,6 +111,7 @@ extern uintptr_t sr_base;
 #define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
 #define sr_data_numofsprite_models (*((int *)(sr_base + 0x12a7d604u)))
+#define sr_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
 #define sr_data_speex (*((Speex *)(sr_base + 0x12a7d680u)))
 #define sr_data_area_block ((AreaBlock *)(sr_base + 0x133ae680u))
 #define sr_data_file_write (*((SrFileTransfer *)(sr_base + 0x13bee680u)))
@@ -150,8 +151,6 @@ extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
 extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
-extern TimerList sr_unplaced_timerlist;
-#define sr_data_timerlist sr_unplaced_timerlist
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
@@ -417,6 +416,16 @@ int __cdecl lf_e9d70(int texture, int type);
 #define sr_window_atlas(texture, type) lf_e9d70((texture), (type))
 #define sr_object_frame_orthogonal 0
 #define sr_human_floor_all_rays 1
+#define sr_updatehuman_params int human
+#define sr_updatehuman_recipient(record, supplied) ((record)->player_id)
+#define sr_emit_updatehuman(human, player) createevent_updatehuman((human))
+#define sr_chat_mode cl_data_audio_voice_mode
+#define sr_timer_list_type TimerListClient
+#define sr_physics_timers 0
+#define sr_socket_disable_closes 1
+#define sr_orientation_nonpositive(value) (!(0.0 < (value)))
+#define sr_collision_ge(a, b) (!((a) < (b)))
+#define sr_collision_le(a, b) (!((a) > (b)))
 #define sr_timer_name(field, name) ((void)0)
 #define sr_timer_start(field) ((void)0)
 #define sr_timer_stop(field) ((void)0)

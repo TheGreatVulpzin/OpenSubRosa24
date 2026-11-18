@@ -47,6 +47,7 @@ if grep -q -i -E "error C|erro C|build failed|error LNK|fatal error|FAILED" "$lo
     exit 1
 fi
 echo "build: ok"
+status=0
 
 if [ -n "$funcs" ]; then
     echo "== gate with every recorded call: $funcs"
@@ -58,9 +59,12 @@ if [ -n "$funcs" ]; then
     for result in build/gate/client_win/reset/all/client-*.txt; do
         echo "-- $(basename "$result" .txt)"
         grep -E "^\[ *[0-9]+/[0-9]+\] ($pattern) " "$result" | cut -c1-180
+        if grep -E "^\[ *[0-9]+/[0-9]+\] ($pattern) " "$result" | grep -Eq '[1-9][0-9]* (different|crashed)'; then
+            status=1
+        fi
     done
     if [ "$gate_status" != 0 ]; then
-        exit "$gate_status"
+        status=1
     fi
 fi
 
@@ -72,7 +76,8 @@ if [ -n "$synth" ]; then
     synth_status=$?
     grep -E "calls same|Traceback|Error" "$logs/synth.log"
     if [ "$synth_status" != 0 ]; then
-        exit "$synth_status"
+        status=1
     fi
 fi
 echo "== done"
+exit "$status"

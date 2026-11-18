@@ -7,6 +7,5 @@ float sr_unplaced_xaxis2d[2];
 float sr_unplaced_yaxis2d[2];
 BondHuman sr_unplaced_bondhuman[512];
 int sr_unplaced_startup_counter;
-TimerList sr_unplaced_timerlist;
 int sr_client_end_time;
 int sr_client_gametype;
