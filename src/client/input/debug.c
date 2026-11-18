@@ -25,7 +25,7 @@ void debug_getinputs(void)
     int timer;
     if (!cl_data_audio_input_blocked) {
         if (cl_data_audio_keys[KEY_6]) {
-            sr_game.unused_257dc = 0;
+            sr_game.death_camera_ticks = 0;
             sr_data_view = -1;
         }
         if (cl_data_audio_keys[KEY_7]) sr_data_view = 0;

@@ -923,6 +923,354 @@ def rotate_case():
     return edits, {'rotateorientationfast': calls}
 
 
+MENU_ITEMS, MENU_COUNT, MENU_INDEX = 0x5350d00, 0x9065240, 0xfefe288
+MOUSE, MOUSE_PREVIOUS, KEYS, KEYS_PREVIOUS, KEYS_BLOCKED, FONTNUM = (
+    0x19c07c80, 0xb733100, 0x75a5140, 0x1bbe1a0, 0x29e752a0, 0x127eac)
+
+
+def menu_case(click=True, blocked=0):
+    """The menu items: twelve random items of each kind under a mouse and keys, three ticks of
+    checkmenuitems, an empty item, a reset, the two callbacks and text widths."""
+    rng = random.Random(19 + click + 2 * blocked)
+    values = SCRATCH + 0x800
+    texts = SCRATCH + 0x900
+    words = [b'Back', b'Join game', b'', b'A' * 70, bytes(range(0x80, 0xc0)), b'Options\x01\xff']
+    edits = [(MENU_COUNT, 'i', [12]), (MOUSE, '2i', [300, 200]), (MOUSE + 0x10, 'i', [1 if click else 0]),
+             (MOUSE_PREVIOUS + 0x10, 'i', [0]), (KEYS_BLOCKED, 'i', [blocked]), (FONTNUM, 'i', [rng.choice([0, 1])]),
+             (values, '8i', [rng.randint(-3, 7) for _ in range(8)])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    for key in (30, 40, 41, 44, 81, 82):
+        edits += [(KEYS + key, 'B', [rng.randint(0, 1)]), (KEYS_PREVIOUS + key, 'B', [rng.randint(0, 1)])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        kind = [0, 0, 3, 4, 1, 5][i % 6]
+        box = [rng.choice([250.0, 300.0, 290.0, NAN, 310.0]), rng.choice([150.0, 200.0, 199.5, 220.0]),
+               rng.choice([10.0, 50.0, 0.0, -5.0, INF]), rng.choice([10.0, 60.0, 1.0])]
+        edits += [(base, 'i', [kind]), (base + 0x1d8, '2f', box[:2]), (base + 0x1f8, '2f', box[2:]),
+                  (base + 0x200, '6i', [rng.choice([0, 30, 40, 41, 44]), rng.choice([0, 0, 81, 82]),
+                                        rng.randint(0, 1), int(rng.random() < 0.2), 0, 0]),
+                  (base + 0x21c, 'f', [floats(rng)]), (base + 0x220, '2i', [rng.randint(0, 1), 0]),
+                  (base + 0x228, 'I', [rng.choice([1, 2, 4, 3])]), (base + 0x274, 'i', [i + 1]),
+                  (base + 0x27c, 'I', [0x20000000 + values + 4 * (i % 8)]),
+                  (base + 0x280, 'I', [0x20000000 + rng.choice([0x103dd0, 0x103e30]) if kind in (3, 4) else 0])]
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    check = [call(0x101be0) for _ in range(3)]
+    made = [call(0x1036d0), call(0x103970)]
+    callbacks = []
+    for i in (2, 3, 8, 9):
+        callbacks += [(call(0x103dd0) if i % 6 == 2 else call(0x103e30))]
+    widths = [call(0x109540, t, rng.choice([1.0, 0.5, 24.0, floats(rng)])) for t in text]
+    edits.append((MENU_INDEX, 'i', [2]))
+    return edits, {'checkmenuitems': check, 'resetmenuitems': [made[1]], 'createmenuitemempty': [made[0]],
+                   'menutoggle': [callbacks[0]], 'menuset': [callbacks[1]], 'text_getlength': widths}
+
+
+def menu_build_case():
+    """createmenuitem, createmenubutton and setmenuiteminfo, each in its own list."""
+    rng = random.Random(23)
+    texts = SCRATCH + 0x900
+    words = [b'Back', b'Join game', b'', b'A' * 70, bytes(range(0x80, 0xc0))]
+    edits = [(MENU_COUNT, 'i', [5])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    item, button, info = [], [], []
+    for i in range(24):
+        item.append(call(0x102080, text[i % 5], floats(rng), floats(rng), rng.choice([16.0, 24.0, floats(rng)]),
+                         rng.choice([0, 1, 2, 4, 8, 5, 10, 15]), floats(rng), 1.0, 0.5, floats(rng)))
+        button.append(call(0x1024e0, text[i % 5], floats(rng), floats(rng), rng.choice([100.0, floats(rng)]),
+                           rng.choice([32.0, floats(rng)]), floats(rng), rng.choice([0, 1, 2, 4, 8, 9, 6]),
+                           1.0, floats(rng), 1.0, floats(rng)))
+        info.append(call(0x102960, text[i % 5], floats(rng), floats(rng), 12.0, i, 1.0, floats(rng), 0.0, 1.0))
+    return edits, {'createmenuitem': item, 'createmenubutton': button, 'setmenuiteminfo': info}
+
+
+def double_words(value):
+    """A double argument of a variable-argument call, as its two 32-bit words."""
+    low, high = struct.unpack('<II', struct.pack('<d', value))
+    return [low, high]
+
+
+def option_call(*args):
+    """A setmenuitem call with nine words: the test table gives a variable list eight words."""
+    return call(0x102b70, *args, *([0] * (9 - len(args))))
+
+
+def menu_option_case(empty=False):
+    """setmenuitem: each option on the last of five items. empty: the list has no items."""
+    rng = random.Random(29)
+    values = SCRATCH + 0x800
+    base = MENU_ITEMS + 4 * 0x284
+    edits = [(MENU_COUNT, 'i', [0 if empty else 5]), (values, '8i', [3] * 8), (values + 0x40, '8f', [floats(rng) for _ in range(8)]),
+             (base + 0x1d8, '3f', [floats(rng), 200.0, floats(rng)]), (base + 0x1e8, '4f', [floats(rng), 0.5, NAN, 1.0])]
+    calls = []
+    for _ in range(3):
+        value = image(values + 4 * rng.randint(0, 7))
+        calls += [option_call(1, 41), option_call(2, 81), option_call(3, 1)]
+        calls += [option_call(option, value, rng.choice([0, 12, 60])) for option in (4, 5, 6, 7, 8)]
+        calls += [option_call(9, 0x20000000 + 0x103dd0), option_call(10, value, 4),
+                  option_call(11, value, 2), option_call(12), option_call(14, 7)]
+        calls += [option_call(13, index, rng.randint(-1, 9)) for index in (0, 1, 3)]
+        calls += [option_call(15, 2), option_call(16, 9), option_call(17),
+                  option_call(18, image(values + 0x40)),
+                  option_call(19, value, rng.randint(-5, 0), rng.randint(1, 100), rng.randint(0, 9)),
+                  option_call(20), option_call(22), option_call(23)]
+        calls.append(option_call(21, *double_words(floats(rng)), *double_words(1e300),
+                          *double_words(floats(rng))))
+    return edits, {'setmenuitem': calls}
+
+
+def menu_names_case():
+    """setupmenuitems on a key name table full of 0x55 bytes."""
+    return [(0x17798e00, '8192s', [b'\x55' * 8192])], {'setupmenuitems': [call(0x1039c0)]}
+
+
+TEXTINPUT = 0x29e752a0  # active, start, end, a spare word, the text and the shown text
+
+
+def menu_draw_case(start=1, end=3):
+    """The menu drawing: the round texture, both buttons with each place flag, and text fields of
+    kind 1 and 2. start and end: the selection of the text input."""
+    rng = random.Random(37 + start + 7 * end)
+    texts = SCRATCH + 0x900
+    words = [b'Name', b'A long line of text that must wrap in the field box', b'', b'x' * 70]
+    edits = [(MENU_COUNT, 'i', [4]), (FONTNUM, 'i', [0]), (TEXTINPUT, '3i', [1, start, end])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x50, f'{len(word) + 1}s', [word + b'\0']))
+    for i in range(4):
+        edits.append((MENU_ITEMS + i * 0x284, 'i', [[1, 2, 1, 2][i]]))
+    text = [image(texts + slot * 0x50) for slot in range(len(words))]
+    flags = [0, 1, 2, 4, 8, 5, 10, 15]
+    button = [call(0x1010f0, floats(rng), floats(rng), rng.choice([100.0, floats(rng)]), rng.choice([32.0, 0.0]),
+                   rng.choice([0.0, 1.0, -1.0, NAN, -INF, floats(rng)]), rng.choice(flags), 1.0, floats(rng), 0.5, 1.0)
+              for _ in range(24)]
+    button2 = [call(0x100930, floats(rng), floats(rng), rng.choice([100.0, floats(rng)]),
+                    rng.choice([32.0, 0.0, floats(rng)]), rng.randint(0, 1), rng.choice(flags), 1.0, 0.5,
+                    floats(rng), floats(rng)) for _ in range(24)]
+    field = [call(0x1014f0, i % 4, text[i % 4], rng.choice([100.0, floats(rng)]), rng.choice([50.0, floats(rng)]),
+                  rng.choice([100.0, 40.0]), rng.choice([16.0, 64.0, 8.0]), rng.choice([8.0, 16.0, floats(rng)]), 0,
+                  1.0, 1.0, floats(rng), 1.0) for i in range(24)]
+    return edits, {'generatemenutextures': [call(0x100660)], 'drawmenubutton': button,
+                   'drawmenubutton2': button2, 'drawmenutextfield': field}
+
+
+def menu_textbox_case(index, first, click, pressed=1):
+    """menutextbox on item index of four text fields, one of each value type. first: the first
+    frame of the press. click: the left button goes down in this frame. pressed 0: the press
+    ends in this frame, so the text input is cleared."""
+    rng = random.Random(41 + index + 4 * first + 8 * click + 16 * pressed)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [4]), (MENU_INDEX, 'i', [index]), (MOUSE, '2i', [300, 200]),
+             (MOUSE + 0x10, 'i', [int(click)]), (MOUSE_PREVIOUS + 0x10, 'i', [0]),
+             (TEXTINPUT, '3i', [0, rng.randint(-2, 9), rng.randint(-2, 9)]),
+             (TEXTINPUT + 0x10, '12s', [b'1234.5abc\0\0\0']),
+             (values, 'i', [rng.randint(-99999, 99999)]), (values + 4, 'I', [0xfffffff0]),
+             (values + 8, 'f', [floats(rng)]), (values + 12, '16s', [b'player name\0\0\0\0\0'])]
+    for i in range(4):
+        base = MENU_ITEMS + i * 0x284
+        edits += [(base, 'i', [1]), (base + 0x22c, 'i', [[1, 2, 3, 0][i]]),
+                  (base + 0x220, '2i', [pressed, 0 if first else 1]), (base + 0x27c, 'I', [0x20000000 + values + 4 * i])]
+    return edits, {'menutextbox': [call(0x1040c0)]}
+
+
+def menu_items_case():
+    """drawmenuitems on twelve items: fields, sliders, toggles, choices, bitmaps and hidden ones."""
+    rng = random.Random(43)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [12]), (FONTNUM, 'i', [0]), (TEXTINPUT, '3i', [1, 0, 2]),
+             (TEXTINPUT + 0x10, '6s', [b'hello\0']), (values, '8i', [5, -3, 1, 0, 70, 2, 0, 9]),
+             (values + 0x20, '16s', [b'some text\0\0\0\0\0\0\0'])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        kind = [1, 2, 5, 3, 4, 0, 1, 5, 3, 0, 2, 4][i]
+        edits += [(base, 'i', [kind]), (base + 4, '8s', [b'Item %d\0' % i]),
+                  (base + 0x44, '4f', [floats(rng), floats(rng), 16.0, 0.0]), (base + 0x50, 'i', [rng.choice([0, 4, 5])]),
+                  (base + 0x54, 'i', [rng.choice([0, 1, 2])]),
+                  (base + 0x1d8, '4f', [floats(rng), floats(rng), 16.0, 0.0]), (base + 0x1e4, 'i', [rng.choice([0, 1, 5])]),
+                  (base + 0x1e8, '6f', [1.0, floats(rng), 0.5, 1.0, 100.0, 24.0]),
+                  (base + 0x20c, '4i', [int(i == 9), rng.randint(0, 1), int(i == 11), rng.randint(0, 1)]),
+                  (base + 0x21c, 'f', [floats(rng)]), (base + 0x220, 'i', [int(i == 6)]),
+                  (base + 0x22c, 'i', [rng.choice([0, 1, 2, 3]) if kind in (1, 2) else 1]),
+                  (base + 0x234, 'i', [int(i == 10)]), (base + 0x238, '3i', [0, rng.choice([100, 0, 10]), 1]),
+                  (base + 0x244, 'i', [-1 if i not in (5, 9) else 3]),
+                  (base + 0x27c, 'I', [0x20000000 + (values + 0x20 if kind in (1, 2) and i % 2 else values + 4 * (i % 8))])]
+        edits.append((base + 0x58, '8s', [b'info\0\0\0\0']))
+    return edits, {'drawmenuitems': [call(0xff2e0)]}
+
+
+PLAYERS = 0xed813a0       # Player records of 0x2408 bytes
+CITY = 0xe22c7a0          # City: building_type +0x2f9dc, shop_count +0x302a4, shop_rows +0x302a8
+MARKET = 0x17678bc0       # Market: car_base +0x140 (the car count), car_rows +0x144
+
+
+BUILDING = 0x1cb8280       # Building: size_x +0x40, size_z +0x44, cells +0x4c (0x48 bytes)
+BUILDING_EDITOR = 0x1b9b500
+TEMPMESH = 0x29f0d360      # TempMesh: num_quads +0x110004, quads +0x110008, quad_slots +0x150008
+
+
+def building_cell(x, floor, z):
+    return BUILDING + 0x4c + ((floor * 64 + z) * 64 + x) * 0x48
+
+
+def building_edit_case(seed=0):
+    """The building editor: both setups, quads, the add of blocks near the borders (walls),
+    the block of a cell (plain, group, interior) and both block renders."""
+    rng = random.Random(61 + seed)
+    edits = [(BUILDING + 0x40, '3i', [24, 24, 32]),
+             (BUILDING_EDITOR + 0x60, '6i', [rng.randint(0, 3) for _ in range(6)]),
+             (BUILDING_EDITOR + 0x78, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING_EDITOR + 0x98, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING_EDITOR + 0xb8, '3i', [rng.randint(0, 15), rng.randint(0, 15), rng.randint(0, 1)]),
+             (BUILDING + 0x36154f8, '8i', [rng.randint(0, 7) for _ in range(8)]),
+             (BUILDING + 0x36158f8, '8i', [rng.randint(1, 20) for _ in range(8)]),
+             (TEMPMESH + 0x110004, 'i', [4]),
+             (TEMPMESH + 0x110008, '16i', [rng.randint(0, 15) for _ in range(16)]),
+             (TEMPMESH + 0x150008, '4i', [rng.choice([0, 3, 6, 7, 9]) for _ in range(4)])]
+    places = [(0, 0, 0), (1, 0, 1), (22, 0, 5), (23, 0, 22), (5, 1, 23), (12, 2, 12), (0, 0, 22), (22, 1, 0)]
+    for x, floor, z in places:
+        for dx, dz in ((0, 0), (1, 0), (0, 1), (-1, 0), (0, -1)):
+            if x + dx >= 0 and z + dz >= 0:
+                edits.append((building_cell(x + dx, floor, z + dz), '4I',
+                              [rng.choice([0, 0, 3, 0x80000002]), rng.choice([0, 0, 0xffff, 0x80000001]),
+                               rng.choice([0, 1, 9, 12]), rng.choice([0, 1, 9])]))
+    add = [call(0x5c760, x, floor, z, rng.choice([0, 3, 0x80000002]), rng.choice([0, 0xffff]))
+           for x, floor, z in places for _ in range(3)]
+    draw = [call(0x5fdf0, x, floor, z) for x, floor, z in places]
+    quad = [call(0x5fca0, rng.choice([-1, 0, 1, 5]), floats(rng), floats(rng), rng.choice([1.0, 0.125]),
+                 rng.choice([1.0, 0.5]), 1.0, floats(rng), 0.0, 0.25) for _ in range(12)]
+    render = [call(0x600d0, rng.choice([1, 3, 7, 0xffff]), rng.randint(0, 1), x, floor, z, 1.0, 1.0, 1.0,
+                   rng.choice([1.0, 0.5])) for x, floor, z in places]
+    render2 = [call(0x605a0, rng.choice([1, 3, 7, 0xffff]), rng.randint(0, 1), floats(rng), floats(rng), 1.0,
+                    0.5, 1.0, 1.0) for _ in range(8)]
+    return edits, {'buildingedit_setup': [call(0x58b60)], 'leveledit_setup': [call(0x9c4f0)],
+                   'buildingeditor_drawquad': quad, 'buildingedit_addblock': add,
+                   'buildingeditor_drawblock': draw, 'buildingeditor_renderblock': render,
+                   'buildingeditor_renderblock2': render2}
+
+
+def building_render_case(mode):
+    """buildingedit_render in one editor mode: 0 with a drag box, 1 with the wall cursor, 2 with
+    areas, 3 with guard markers and prizes."""
+    rng = random.Random(71 + mode)
+    edits = [(BUILDING + 0x40, '3i', [24, 24, 32]),
+             (BUILDING_EDITOR, 'i', [mode]), (BUILDING_EDITOR + 0x48, 'i', [rng.randint(0, 1)]),
+             (BUILDING_EDITOR + 0xc8, '7i', [1, rng.randint(0, 10), rng.randint(0, 10), rng.randint(0, 10),
+                                             rng.randint(0, 10), rng.randint(0, 20), 0]),
+             (BUILDING_EDITOR + 0xe4, 'i', [rng.randint(0, 20)])]
+    for i in range(16):
+        edits.append((BUILDING + 0x120004c + i * 0x18, '6i',
+                      [rng.randint(0, 30), 0, rng.randint(0, 30), rng.randint(0, 3) if i < 3 else 0, 1,
+                       rng.randint(0, 3) if i < 3 else 0]))
+    for _ in range(20):
+        edits.append((building_cell(rng.randint(0, 63), 0, rng.randint(0, 63)) + 0x40, '2i',
+                      [rng.choice([0, 1, 2, 3, 4, 7]), rng.randint(0, 1)]))
+    return edits, {'buildingedit_render': [call(0x5f3c0)]}
+
+
+def text_input_case(overwrite=0, start=2, end=5):
+    """The text input: letters at the cursor, the delete of a selection, the wrap of texts at
+    some widths, the letter under the mouse in a plain and a wrapped field, and drawtextbox."""
+    rng = random.Random(73 + overwrite + 3 * start + 7 * end)
+    texts = SCRATCH + 0x900
+    words = [b'hello world this is a long line of text', b'short', b'', b'a\nb\nc d e f', b'x' * 90,
+             b'one two  three   four']
+    edits = [(FONTNUM, 'i', [0]), (TEXTINPUT, '4i', [1, start, end, overwrite]),
+             (TEXTINPUT + 0x10, '24s', [b'hello brave new world\0\0\0']),
+             (MENU_INDEX, 'i', [0]), (MOUSE, '2i', [rng.choice([300, 310, 350, 100]), rng.choice([200, 210, 260])])]
+    for slot, word in enumerate(words):
+        edits.append((texts + slot * 0x60, f'{len(word) + 1}s', [word + b'\0']))
+    base = MENU_ITEMS
+    edits += [(base, 'i', [rng.choice([1, 2])]), (base + 0x1d8, '4f', [290.0, 190.0, 16.0, 0.0]),
+              (base + 0x1f8, '2f', [rng.choice([60.0, 120.0, 30.0]), 64.0]), (base + 0x230, 'i', [rng.choice([5, 30, 100])])]
+    text = [image(texts + slot * 0x60) for slot in range(len(words))]
+    letters = [call(0x105810, rng.choice([0x41, 0x7a, 0x20, 0xe9])) for _ in range(6)]
+    # A width below one letter never ends the wrap, so each width holds the widest letter.
+    wrap = [call(0x105b80, text[i % len(text)], rng.choice([40.0, 100.0, 300.0, rng.uniform(20.0, 400.0)]), 64.0,
+                 rng.choice([8.0, 16.0, rng.uniform(1.0, 16.0)])) for i in range(18)]
+    draw = [call(0x105dc0, text[i % len(text)], floats(rng), floats(rng), rng.choice([40.0, 100.0]),
+                 rng.choice([16.0, 64.0]), rng.choice([8.0, 16.0]), 0, 1.0, 1.0, floats(rng), 1.0)
+            for i in range(12)]
+    return edits, {'addmenuinputchar': letters, 'deleteselectedtext': [call(0x1058a0)],
+                   'formattextbox': wrap, 'gettextinputposition': [call(0x1059a0)], 'drawtextbox': draw}
+
+
+def putchar_case(letter, start=3, end=3, length=30, index=1):
+    """menu_textbox_putchar with one letter code on item index of five items (kinds 1, 1, 0, 2,
+    1). start and end: the selection. length: the field length (a full field takes no letter)."""
+    edits = [(MENU_COUNT, 'i', [5]), (MENU_INDEX, 'i', [index]),
+             (TEXTINPUT, '4i', [1, start, end, 0]),
+             (TEXTINPUT + 0x10, '16s', [b'hello world\0\0\0\0\0'])]
+    for i, kind in enumerate((1, 1, 0, 2, 1)):
+        base = MENU_ITEMS + i * 0x284
+        edits += [(base, 'i', [kind]), (base + 0x220, 'i', [int(i == index)]), (base + 0x230, 'i', [length])]
+    return edits, {'menu_textbox_putchar': [call(0x104490, letter)]}
+
+
+MODELTEMP = 0x90f7680      # ModelTemp: num_verts +0, verts +8 (vec3)
+CAMERA = 0xfefe2a4         # camera_position, then camera_rotation (3 rows) at +0xc
+
+
+def model_editor_case(click=1, held=1):
+    """model_editor on 8 vertices in front of a camera at the origin that looks along -z.
+    click: the button goes down in this frame. held: the button is down."""
+    rng = random.Random(67 + click + 2 * held)
+    verts = []
+    for _ in range(8):
+        verts += [rng.choice([0.0, 0.01, -0.02, floats(rng)]), rng.choice([0.0, 0.015, floats(rng)]),
+                  rng.choice([-1.0, -5.0, -100.0])]
+    edits = [(MODELTEMP, 'i', [8]), (MODELTEMP + 8, '24f', verts),
+             (CAMERA, '12f', [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]),
+             (MOUSE, '2i', [rng.choice([512, 513, 600]), rng.choice([320, 321, 200])]),
+             (MOUSE + 0x10, 'i', [held]), (MOUSE_PREVIOUS + 0x10, 'i', [0 if click else held]),
+             (0x103675c0, '8i', [rng.randint(0, 1) for _ in range(8)]),
+             (0x103685c0, '2f', [floats(rng), floats(rng)])]
+    return edits, {'model_editor': [call(0xc1ac0)]}
+
+
+def player_menu_case(menu, team=7, money=50000, building=0, building_type=2, looks=(0, 0)):
+    """playermenu of player 1 with one menu number. building_type: 2 car market, 4 clothes, 7
+    guns. looks: the suit and the sunglasses of the player."""
+    rng = random.Random(47 + menu + building_type)
+    base = PLAYERS + 1 * 0x2408
+    edits = [(MENU_COUNT, 'i', [0]), (base + 0x40, 'i', [money]), (base + 0x64, 'i', [team]),
+             (base + 0xd4, 'i', [menu]), (base + 0xd8, 'i', [building]), (base + 0x23c0, '2i', list(looks)),
+             (MARKET + 0x140, 'i', [5])]
+    for row in range(8):
+        edits.append((MARKET + 0x144 + row * 12, '3i',
+                       [rng.randint(0, 20), rng.choice([0, 3, 5, 6, 9]), rng.choice([0, 100, 60000, 2000])]))
+    if building >= 0:
+        shop = CITY + building * 0x9dc
+        rows = 2 if building_type == 4 else 3
+        edits += [(shop + 0x2f9dc, 'i', [building_type]), (shop + 0x302a4, 'i', [rows])]
+        for row in range(8):
+            edits.append((shop + 0x302a8 + row * 12, '3i',
+                           [rng.randint(0, 20), rng.choice([0, 100, 60000]), rng.choice([0, 4, 6, 7])]))
+    return edits, {'playermenu': [call(0x7e500, 1)]}
+
+
+def menu_slider_case(ctrl=False, left=True):
+    """menuslider on twelve pressed sliders: checkmenuitems calls it for each one, and three direct
+    calls use item 2. ctrl holds left Ctrl. left keeps the left button down."""
+    rng = random.Random(31 + ctrl + 2 * left)
+    values = SCRATCH + 0x800
+    edits = [(MENU_COUNT, 'i', [12]), (MENU_INDEX, 'i', [2]), (MOUSE, '2i', [rng.choice([300, -40, 2000]), 200]),
+             (MOUSE + 0x10, 'i', [int(left)]), (MOUSE_PREVIOUS + 0x10, 'i', [int(left)]),
+             (KEYS_BLOCKED, 'i', [0]), (KEYS + 0xe0, 'B', [int(ctrl)]),
+             (values, '12i', [rng.randint(-50, 150) for _ in range(12)])]
+    for i in range(12):
+        base = MENU_ITEMS + i * 0x284
+        box = [rng.choice([250.0, 280.0, 296.0, NAN, floats(rng)]), 190.0,
+               rng.choice([100.0, 8.0, 7.0, INF, floats(rng)]), 20.0]
+        low = rng.choice([0, -20, 5, -0x7fffffff])
+        high = rng.choice([100, 10, low, 0x7fffffff])
+        edits += [(base, 'i', [5]), (base + 0x1d8, '2f', box[:2]), (base + 0x1f8, '2f', box[2:]),
+                  (base + 0x200, '6i', [0, 0, 0, 0, 0, 0]), (base + 0x220, '2i', [1, 0]),
+                  (base + 0x238, '3i', [low, high, rng.choice([0, 1, 5, 10, 3, -4])]),
+                  (base + 0x27c, 'I', [0x20000000 + values + 4 * i]), (base + 0x280, 'I', [0x20000000 + 0x103e70])]
+    return edits, {'checkmenuitems': [call(0x101be0)], 'menuslider': [call(0x103e70) for _ in range(3)]}
+
+
 def framelist_case(extra=()):
     """buildframelist on the scene of the recording: its humans, vehicles, items and street
     objects. extra adds synthetic records: 'bills' (a free stack and a stack in a hand),
@@ -1074,6 +1422,35 @@ def main():
             'lod_down': lambda: lod_case(rec, (0.5, 0.5), (1.0, 1.5), 3000.0),
             'lod_nan': lambda: lod_case(rec, (NAN, 0.5)),
             'rotate': rotate_case,
+            'menu': menu_case, 'menu_keys': lambda: menu_case(False), 'menu_blocked': lambda: menu_case(True, 1),
+            'menu_build': menu_build_case,
+            'menu_option': menu_option_case, 'menu_option_empty': lambda: menu_option_case(True),
+            'menu_slider': menu_slider_case, 'menu_slider_ctrl': lambda: menu_slider_case(True),
+            'menu_slider_up': lambda: menu_slider_case(True, False), 'menu_names': menu_names_case,
+            **{f'pmenu_{m}': (lambda m=m: player_menu_case(m)) for m in range(14)},
+            'pmenu_team_in': lambda: player_menu_case(2, team=1),
+            'pmenu_cars_poor': lambda: player_menu_case(6, money=50),
+            'pmenu_shop_clothes': lambda: player_menu_case(10, building_type=4, looks=(1, 0)),
+            'pmenu_shop_clothes_2': lambda: player_menu_case(10, building_type=4, looks=(0, 1)),
+            'pmenu_shop_guns': lambda: player_menu_case(10, building_type=7),
+            'pmenu_shop_poor': lambda: player_menu_case(10, money=50),
+            'pmenu_no_building': lambda: player_menu_case(10, building=-1),
+            'bedit': building_edit_case, 'bedit_2': lambda: building_edit_case(1),
+            'medit_click': model_editor_case, 'medit_held': lambda: model_editor_case(0, 1),
+            'medit_up': lambda: model_editor_case(0, 0),
+            **{f'brender_{m}': (lambda m=m: building_render_case(m)) for m in range(4)},
+            'textin': text_input_case, 'textin_over': lambda: text_input_case(1, 0, 0),
+            'textin_back': lambda: text_input_case(0, 9, 3), 'textin_end': lambda: text_input_case(0, 0, 21),
+            **{f'putchar_{c}': (lambda c=c: putchar_case(c)) for c in (9, 10, 11, 12, 13, 0x41)},
+            'putchar_sel_9': lambda: putchar_case(9, 2, 6), 'putchar_sel_10': lambda: putchar_case(10, 6, 2),
+            'putchar_start_10': lambda: putchar_case(10, 0, 0), 'putchar_full': lambda: putchar_case(0x41, 3, 3, 5),
+            'putchar_back_13': lambda: putchar_case(13, 1, 1, 30, 0), 'putchar_end_12': lambda: putchar_case(12, 1, 1, 30, 3),
+            'menu_draw': menu_draw_case, 'menu_draw_back': lambda: menu_draw_case(5, 2),
+            'menu_draw_end': lambda: menu_draw_case(0, 4), 'menu_items': menu_items_case,
+            **{f'menu_textbox_{i}{f}{c}': (lambda i=i, f=f, c=c: menu_textbox_case(i, f, c))
+               for i in range(4) for f in (0, 1) for c in (0, 1)},
+            **{f'menu_textbox_end_{i}{f}': (lambda i=i, f=f: menu_textbox_case(i, f, 0, 0))
+               for i in range(4) for f in (0, 1)},
             'addmodel': addmodel_case, 'addmodel_full': lambda: addmodel_case(True),
             'framelist': framelist_case, 'framelist_bills': lambda: framelist_case(('bills', 'elevator', 'types')),
             'framelist_view': lambda: framelist_case(('view', 'bullets', 'wreck', 'heli'))}

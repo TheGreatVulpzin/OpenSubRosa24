@@ -1,0 +1,13 @@
+/* The front menus. See front.c. */
+#ifndef CL_MENU_FRONT_H
+#define CL_MENU_FRONT_H
+
+void __cdecl connectmenu(void);
+void __cdecl notsupportedmenu(void);
+void __cdecl usermenu(void);
+void __cdecl hostmenu(void);
+void __cdecl optionsmenu(void);
+void __cdecl joinmenu(void);
+void __cdecl mainmenu(void);
+
+#endif /* CL_MENU_FRONT_H */

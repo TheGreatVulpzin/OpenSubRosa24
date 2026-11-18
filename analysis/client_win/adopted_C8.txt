@@ -1,0 +1,9 @@
+buildingedit_setup src/client/editor/building.c
+leveledit_setup src/client/editor/building.c
+buildingeditor_drawquad src/client/editor/building.c
+buildingeditor_drawblock src/client/editor/building.c
+buildingeditor_renderblock src/client/editor/building.c
+buildingeditor_renderblock2 src/client/editor/building.c
+buildingedit_addblock src/client/editor/building.c
+model_editor src/client/editor/model.c
+buildingedit_render src/client/editor/building.c

@@ -550,6 +550,7 @@ area_sector,0x24,client_connected,int,,"clientrecv writes 1 after a state packet
 area_sector,0x28,client_timeout,int,,"clientrecv: ticks without a packet; above 0x4af the client leaves the game"
 area_sector,0x2c,client_event_total,int,,"clientrecv: 16 bits in the state packet"
 debug,0x50344,net_flag,int,,"clientrecv clears it after the object packet"
+game,0x0,running,int,,"the client gameloop writes 1 at the start and 0 at the end"
 game,0x4,link_state,int,,"clientrecv writes 3 when the server sends nothing for 0x4b0 ticks"
 human,0x2b44,net_tick,int,,"unpackobjectpacket: the tick of the last state of the human"
 human,0x2b48,net_pos,vec3,,"unpackobjectpacket: the place at net_tick"
@@ -562,6 +563,16 @@ object,0x8224,net_pos_prev,vec3,,"unpackobjectpacket: the place at net_tick_prev
 debug,0x50248,affinity_set,int,,setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds
 debug,0x5024c,affinity_before,int,,setcpuaffinity writes the process mask plus 10000
 debug,0x50250,affinity_after,int,,setcpuaffinity writes the process mask plus 10000 after the change
+debug,0x50014,frame_start,uint32_t,,"gameloop: the SDL time when the frame started"
+debug,0x5001c,frame_ms_index,int,,"gameloop: the next entry of frame_ms, 0 to 31"
+debug,0x50020,frame_ms,int,32,"gameloop: the milliseconds that each of the last 32 frames took"
+debug,0x50120,frame_ms_max,int,,"gameloop: the longest frame. F3 clears it when the debug flag is on"
+debug,0x50124,frame_ms_average,float,,"gameloop: the mean of frame_ms"
+debug,0x50244,shown_team,int,,"gameloop with the debug flag: the team of player 0, for displaydebuginfo"
+debug,0x50254,shown_bonds,int,,"gameloop with the debug flag: numofbonds, for displaydebuginfo"
+debug,0x50258,shown_humans,int,,"gameloop with the debug flag: the count of active humans, for displaydebuginfo"
+debug,0x5025c,shown_parts,int,,"gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo"
+debug,0x50264,shown_mouse,int,,"gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo"
 debug,0x52284,log_text,char,256,dedicatedserverloop writes the physics line with sprintf
 debug,0x52384,log_path,char,64,debug_resetlogfile writes the file name dedlog.txt
 debug,0x523c4,log_file,void*,,debug_resetlogfile and dedicatedserverloop: FILE * of the log
@@ -600,6 +611,7 @@ option,0x130,voiceholdtotalk,int,,"loadsaveoptions: key voiceholdtotalk=, defaul
 option,0x134,voicekey,int,,loadsaveoptions: key voicekey=
 option,0x138,voicemb,int,,loadsaveoptions: key voicemb=
 option,0x13c,help,int,,"loadsaveoptions: key help=, default 1"
+option,0x140,swap_interval,int,,"the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0"
 option,0x144,voiceboost,int,,"loadsaveoptions: key voiceboost=, default 100"
 option,0x148,voiceboost_scale,float,,"loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0"
 timerlist,0x0,numoftimers,int,,"setuptimers: the next free timer index, 0x40 at the start and 0x65 at the end"
@@ -724,7 +736,7 @@ city,0x2fba4,guard_spots,GuardSpot,64,scenario_createguards: pos and dir 0..3 (0
 city,0x2ffa4,prize_pos,vec3,,scenario_createguards: the place of the prize item
 city,0x30368,car_spawn_next,int,,"logic_cardealer_buy: the next car place, (n + 1) & 7"
 city,0x3036c,car_spawn_pos,vec3,,logic_cardealer_buy: car place n is at z - 4 n
-game,0x257dc,unused_257dc,int,,resetgame clears this field. No reader in the server
+game,0x257dc,death_camera_ticks,int,,"resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server"
 game,0x257e0,unused_257e0,int,,resetgame clears this field. No reader in the server
 game,0x257e8,unused_257e8,int,,resetgame clears this field. No reader in the server
 game,0x257ec,unused_257ec,float,,resetgame clears this field. No reader in the server
@@ -1047,6 +1059,104 @@ texturelist,0x410,frame_aux,int,,renderframedepth attaches this texture before t
 texturelist,0x414,frame_spare,int,,setupframetextures sizes it with the other frame textures. No other code reads it
 debug,0x50c64,toggle_two,int,,displaydebuginfo shows the second diagnostic switch
 debug,0x50c68,toggle_three,int,,displaydebuginfo shows the third diagnostic switch
+menu_info,0x0,text,char,64,setmenuiteminfo copies the text of an info line of a menu item
+menu_info,0x40,x,float,,drawmenuitems draws the info text at x and y
+menu_info,0x44,y,float,,drawmenuitems draws the info text at x and y
+menu_info,0x48,size,float,,drawmenuitems text size
+menu_info,0x4c,flags,uint32_t,,drawmenuitems passes the flags with 0x60 to drawtext
+menu_info,0x50,color,float,4,drawmenuitems red green blue alpha of the text
+menu_item,0x0,kind,int,,checkmenuitems and drawmenuitems: 0 button; 1 and 2 text field; 3 bit toggle; 4 choice; 5 slider
+menu_item,0x4,text,char,64,createmenuitem copies the label; createmenuitemempty clears 0x40 bytes
+menu_item,0x44,label_x,float,,createmenuitem and createmenubutton: x of the label
+menu_item,0x48,label_y,float,,createmenuitem and createmenubutton: y of the label
+menu_item,0x4c,label_size,float,,createmenuitem and createmenubutton: text size of the label
+menu_item,0x50,label_flags,uint32_t,,drawmenuitems passes it with 0x60 to drawtext; createmenubutton writes 5
+menu_item,0x54,num_info,int,,setmenuiteminfo adds up to four info lines
+menu_item,0x58,info,MenuInfo,4,setmenuiteminfo fills info[num_info]
+menu_item,0x1d8,x,float,,checkmenuitems tests the mouse from x to x + width
+menu_item,0x1dc,y,float,,checkmenuitems tests the mouse from y to y + height
+menu_item,0x1e0,text_size,float,,drawmenuitems text size of a field
+menu_item,0x1e4,text_flags,uint32_t,,createmenubutton align flags; drawmenuitems passes them to drawbitmap and drawtext
+menu_item,0x1e8,color,float,4,createmenuitem and createmenubutton red green blue alpha; setmenuitem option 20 halves red green blue
+menu_item,0x1f8,width,float,,checkmenuitems hit box width
+menu_item,0x1fc,height,float,,checkmenuitems hit box height
+menu_item,0x200,key,int,,checkmenuitems fires the item when this key goes down
+menu_item,0x204,key2,int,,checkmenuitems: when not 0 this key must be down too
+menu_item,0x208,repeat,int,,checkmenuitems fires while the key stays down and clears pressed first
+menu_item,0x20c,disabled,int,,checkmenuitems: no hover and no key
+menu_item,0x210,hover,int,,checkmenuitems: the mouse is over the item
+menu_item,0x214,hidden,int,,drawmenuitems skips the item; setmenuitem option 23 sets it
+menu_item,0x218,lit,int,,checkmenuitems: hover with a press or a set toggle or the chosen choice
+menu_item,0x21c,fade,float,,checkmenuitems moves it 1/8 of the way to -1 when lit and to 1 when not
+menu_item,0x220,pressed,int,,checkmenuitems sets it on a click or a key; the callback runs while it is set
+menu_item,0x224,pressed_previous,int,,checkmenuitems copies pressed at the end
+menu_item,0x228,mask,uint32_t,,the bit of a toggle or the value of a choice
+menu_item,0x22c,field_type,int,,drawmenuitems prints the value: 1 and 2 int; 3 float; other a string
+menu_item,0x230,length,int,,createmenuitem writes strlen of the label; setmenuitem writes the size of a text field
+menu_item,0x234,password,int,,drawmenuitems shows a star for each character; setmenuitem option 17 sets it
+menu_item,0x238,slider_min,int,,drawmenuitems and menuslider
+menu_item,0x23c,slider_max,int,,drawmenuitems and menuslider
+menu_item,0x240,slider_step,int,,menuslider
+menu_item,0x244,links,int,4,-1 at creation; setmenuitem option 13; drawmenuitems draws the item alone when links[0] is -1
+menu_item,0x254,spare,float,8,createmenuitem writes 0 1 1 1 1 0 0 0 and setmenuitem option 18 copies 0x20 bytes; no function reads it
+menu_item,0x274,cursor,int,,checkmenuitems copies it to the cursor of the font when the mouse is over the item
+menu_item,0x278,spare_278,int,,setmenuitem option 16 writes it; no function reads it
+menu_item,0x27c,value,int*,,the int of a toggle or a choice or a slider; the buffer of a text field
+menu_item,0x280,callback,void*,,checkmenuitems calls it while the item is pressed
+client_font,0xc,cursor,int,,checkmenuitems copies the cursor of the item under the mouse; setupgraphics clears it
+editor_view,0x0,x,float,,"buildingedit_setup and leveledit_setup: the viewport of the editor, 32"
+editor_view,0x4,y,float,,"the viewport: 32"
+editor_view,0x8,width,float,,"the viewport: 768"
+editor_view,0xc,height,float,,"the viewport: 576"
+editor_view,0x10,camera,vec3,,"the camera place: 12 0 9 for the building editor, 160 0 160 for the level editor"
+editor_view,0x1c,orientation,float,9,"the camera turns by pi/2 about its first row: it looks down"
+editor_view,0x40,zoom,float,,"12 for the building editor, 64 for the level editor"
+editor_view,0x44,scale,float,,"0.75"
+editor_tile,0x0,kind,int,,"the picker tiles: 0 building texture, 2 building block, 3 game texture, 4 game block"
+editor_tile,0x4,x,float,,
+editor_tile,0x8,y,float,,
+editor_tile,0xc,width,float,,"64"
+editor_tile,0x10,height,float,,"64"
+editor_tile,0x14,target,int*,,"a click on the tile writes its index here"
+editor_tile,0x20,index,int,,"the index of the tile in its list"
+building_editor,0x0,mode,int,,"buildingedit_render: 0 blocks, 1 walls, 2 areas, 3 markers"
+building_editor,0x4,unused_04,int,,"buildingedit_setup writes 0"
+building_editor,0x8,file,char,64,"buildingedit_menu copies the name of the building file here"
+building_editor,0x48,wall_direction,int,,"buildingedit_render: 0 a wall along x, else along z"
+building_editor,0x4c,tool,int,,"buildingedit_setup writes 9"
+building_editor,0x50,setting_50,int,3,"buildingedit_setup writes 0"
+building_editor,0x60,cell_field_10,int,,"buildingedit_addblock copies it to the cell"
+building_editor,0x64,packed_parts,int,5,"buildingedit_addblock packs them into the cell"
+building_editor,0x78,outer_slots,int,8,"the texture slots of the outer layer; buildingedit_addblock copies the first six"
+building_editor,0x98,inner_slots,int,8,"the texture slots of the inner layer"
+building_editor,0xb8,extra_low,int,,"the low 4 bits of the cell outer_extra"
+building_editor,0xbc,extra_high,int,,"outer_extra = (extra_high << 4) + extra_low"
+building_editor,0xc0,cell_field_14,int,,"buildingedit_setup writes 1; buildingedit_addblock copies it to the cell"
+building_editor,0xc8,drag,int,,"buildingedit_render mode 0: a drag box shows while it is not 0"
+building_editor,0xcc,drag_start_x,int,,
+building_editor,0xd0,drag_start_z,int,,
+building_editor,0xd4,drag_end_x,int,,
+building_editor,0xd8,drag_end_z,int,,
+building_editor,0xdc,cursor_x,int,,
+building_editor,0xe0,floor,int,,"buildingedit_render draws the blocks of this floor"
+building_editor,0xe4,cursor_z,int,,
+building,0x36154f8,material_textures,int,256,"the building editor pickers and buildingeditor_renderblock: the texture list index of each material name"
+building,0x36158f8,block_types,int,1024,"buildingedit_blockmenu fills it: the block type of each block name (the last game type with the same name); buildingeditor_drawblock adds the turn of a group block"
+level_editor,0x0,mode,int,,"leveleditor_loop: 0 streets, 1 sidewalk tiles, 2 buildings (the items and the title of each mode)"
+level_editor,0x4,tile_kind,int,,"leveleditor_loop: the Sidewalk buttons choose the tile kind, 0 to 8"
+level_editor,0x8,chosen_a,int,,"leveledit_setup and leveleditor_loop write -1: no chosen street end"
+level_editor,0xc,chosen_b,int,,"leveledit_setup and leveleditor_loop write -1: no second street end"
+level_editor,0x10,dragging,int,,"leveleditor_loop draws the drag box of the sidewalk mode while it is not 0"
+level_editor,0x14,drag_x0,int,,"leveleditor_loop: the first corner of the drag box"
+level_editor,0x18,drag_z0,int,,
+level_editor,0x1c,drag_x1,int,,"leveleditor_loop: the second corner of the drag box"
+level_editor,0x20,drag_z1,int,,
+level_editor,0x24,chosen_street,int,,"leveledit_setup writes -1. leveleditor_loop shows a name field for the chosen street"
+level_editor,0x28,street_lanes_a,int,,"leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_a of a new street"
+level_editor,0x2c,street_lanes_b,int,,"leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_b of a new street"
+level_editor,0x30,place_type,int,,"leveledit_setup writes 0. The building buttons choose the building type to place (B on the screen)"
+level_editor,0x34,place_turns,int,,"leveleditor_loop shows it as R: the turns of the building to place"
+level_editor,0x1b3850,types,LevelBuildingType,1024,"leveleditor_loop: the name and the size of each building file"
 game,0x25d4c,client_account_key,uint32_t,,"hostmenu copies the key of the account store here; joinmenu copies the key of the chosen server (the client place is +0x25d48)"
 bondvector_client,0x0,value,vec3,,"A solver vector occupies three floats in a sixteen-byte slot."
 bondhuman_client,0x0,vel,BondVectorClient,16,"Sixteen bone slots. Human records have a stride of 0x500."
@@ -1058,3 +1168,20 @@ material_client,0x0,prefix,uint32_t,,"Four-byte prefix before the surface parame
 material_client,0x4,parameters,float,4,"Four surface parameters before the flags."
 material_client,0x14,flags,int,,"Surface flags before the material name."
 material_client,0x18,name,char,64,"Material name. Records have a stride of 0x58."
+join_server,0x0,version,int,,"joinmenu: the version of the server, 8 bits in the pong"
+join_server,0x4,name,char,32,"joinmenu: the name of a new server, 0x20 bytes of the pong"
+join_server,0x24,account_key,int,,"joinmenu: the key in the pong; the join copies it to the game and createclientaccount"
+join_server,0x28,address,uint32_t,,"joinmenu: the sender address in host order"
+join_server,0x2c,port,uint16_t,,"joinmenu: the sender port in host order"
+join_server,0x30,players,int,,"joinmenu: the player count, 8 bits in the pong"
+join_server,0x38,max_players,int,,"joinmenu: the player limit, 8 bits in the pong"
+join_server,0x3c,ping,int,,"joinmenu: the pong gives back the send time; the record keeps the round trip in ms"
+join_server,0x40,game_type,int,,"joinmenu: 4 bits in the pong; 3 round, 4 world"
+join_address,0x0,address,uint32_t,,"joinmenu: an address to ping, host order"
+join_address,0x4,port,uint16_t,,"joinmenu: the port of the address"
+option,0x108,frame_overlay,int,,"the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen"
+soundlist,0xa8,menu_test,int,4,"the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down"
+texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
+modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"
+editor_entry,0x0,index,int,,"buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list"
+editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture"

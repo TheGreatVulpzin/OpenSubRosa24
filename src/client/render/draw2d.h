@@ -2,6 +2,7 @@
 #ifndef CL_RENDER_DRAW2D_H
 #define CL_RENDER_DRAW2D_H
 
+void align_shape(float *x, float *y, float width, float height, unsigned flags);
 void __cdecl drawbitmap(int texture, float x, float y, float width, float height, unsigned flags, float red,
                         float green, float blue, float alpha);
 void __cdecl drawbitmaptexcoord(int texture, float x, float y, float width, float height, unsigned flags,

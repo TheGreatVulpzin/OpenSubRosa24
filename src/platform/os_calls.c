@@ -210,6 +210,14 @@ os_fprintf_fn os_fprintf_import(void)
     return call;
 }
 
+os_sprintf_fn os_sprintf_import(void)
+{
+    static os_sprintf_fn call;
+    if (!call)
+        *(void **)&call = sr_import("MSVCR100.DLL", "sprintf");
+    return call;
+}
+
 os_sscanf_fn os_sscanf_import(void)
 {
     static os_sscanf_fn call;

@@ -1,0 +1,8 @@
+name,type,count,client_rva,evidence
+glee_arb_multitexture,uint8_t,1,0x127c45,"setupglextentions: the GLee flag of GL_ARB_multitexture (GLee.c declaration order, index 8)"
+glee_arb_vertex_buffer_object,uint8_t,1,0x127c59,"setupglextentions: the GLee flag of GL_ARB_vertex_buffer_object (index 28)"
+glee_arb_shader_objects,uint8_t,1,0x127c5b,"setupglextentions: the GLee flag of GL_ARB_shader_objects (index 30)"
+glee_arb_framebuffer_object,uint8_t,1,0x127c6a,"setupglextentions: the GLee flag of GL_ARB_framebuffer_object (index 45)"
+glee_ext_multi_draw_arrays,uint8_t,1,0x127cd3,"setupglextentions: the GLee flag of GL_EXT_multi_draw_arrays (index 150)"
+glee_ext_stencil_two_side,uint8_t,1,0x127d28,"setupglextentions: the GLee flag of GL_EXT_stencil_two_side (index 235)"
+glee_ati_separate_stencil,uint8_t,1,0x127d3d,"setupglextentions: the GLee flag of GL_ATI_separate_stencil (index 256)"

@@ -40,7 +40,12 @@ fi
 
 step "lift"
 python -I instrumentation/client/gen_gl_slots.py
-python -I instrumentation/lift/lift.py --target client_win --compile > "$LOG/lift.log" 2>&1
+if ! python -I instrumentation/lift/lift.py --target client_win --compile > "$LOG/lift.log" 2>&1; then
+    # Without this stop, the build uses the old outputs and the tests look good.
+    echo "FAILED: lift, see $LOG/lift.log"
+    tail -3 "$LOG/lift.log"
+    exit 1
+fi
 grep "^result:" "$LOG/lift.log"
 
 step "tables"

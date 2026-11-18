@@ -151,7 +151,7 @@ void resetgame(void)
     g_camera[0] = 160.0f;
     g_camera[1] = 32.0f;
     g_camera[2] = 128.0f;
-    sr_game.unused_257dc = -1;
+    sr_game.death_camera_ticks = -1;
     sr_game.unused_257e0 = 0;
     sr_game.unused_257ec = 0;
     for (i = 0; i < 5; ++i) {

@@ -7,6 +7,7 @@
 #include "render/messages.h"
 
 #include "client.h"
+#include "menu/items.h"
 #include "render/draw2d.h"
 #include "render/text.h"
 #include "sr_math.h"
@@ -18,7 +19,6 @@
 #define g_camera cl_data_audio_camera
 
 /* Game functions of other files. */
-#define text_getlength CL_FN(0x509540, double(__cdecl *)(const char *text, float size))
 
 enum {
     NUM_RING = 256,

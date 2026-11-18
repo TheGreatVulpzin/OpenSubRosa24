@@ -218,8 +218,14 @@ typedef struct LevelBuilding {
     char name[64];
     int x, y, z;
     int turns;
-    uint8_t unsaved[4];
+    uint8_t unsaved[4]; /* the client keeps the type index of the next building here */
 } LevelBuilding;
+
+/* The name and the size of a building file, for the level editor. */
+typedef struct LevelBuildingType {
+    char name[64];
+    int size_x, size_z, floors;
+} LevelBuildingType;
 
 /* Vertex indices of the temporary mesh. */
 typedef struct MeshQuad { int verts[4]; } MeshQuad;
@@ -748,6 +754,7 @@ SR_STATIC_ASSERT(sizeof(TrackPiece) == 0x578, "TrackPiece");
 SR_STATIC_ASSERT(sizeof(CityBlock) == 0x30, "CityBlock");
 SR_STATIC_ASSERT(sizeof(LevelIntersection) == 0xc, "LevelIntersection");
 SR_STATIC_ASSERT(sizeof(LevelStreet) == 0x34, "LevelStreet");
+SR_STATIC_ASSERT(sizeof(LevelBuildingType) == 0x4c, "LevelBuildingType");
 SR_STATIC_ASSERT(sizeof(LevelBuilding) == 0x54, "LevelBuilding");
 SR_STATIC_ASSERT(sizeof(MeshQuad) == 0x10, "MeshQuad");
 SR_STATIC_ASSERT(sizeof(MeshTri) == 0xc, "MeshTri");
@@ -1616,7 +1623,7 @@ SR_STATIC_ASSERT(offsetof(Body, unread_3c) == 0x3c, "Body.unread_3c");
 
 /* game[]: record of 0x25d64 bytes. */
 typedef union Game { struct {
-    uint8_t pad_0000[0x4];
+    int running;                         /* +0x0000 the client gameloop writes 1 at the start and 0 at the end */
     int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
     int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
@@ -1738,7 +1745,7 @@ typedef union Game { struct {
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
     uint8_t pad_22fdc[0x27fc];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
-    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     uint8_t pad_257e4[0x4];
     int unused_257e8;                    /* +0x257e8 resetgame clears this field. No reader in the server */
@@ -1753,6 +1760,7 @@ typedef union Game { struct {
     int num_newspapers;                  /* +0x25d60 itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d64]; } Game;
 SR_STATIC_ASSERT(sizeof(Game) == 0x25d64, "Game");
+SR_STATIC_ASSERT(offsetof(Game, running) == 0x0, "Game.running");
 SR_STATIC_ASSERT(offsetof(Game, link_state) == 0x4, "Game.link_state");
 SR_STATIC_ASSERT(offsetof(Game, gametype) == 0x8, "Game.gametype");
 SR_STATIC_ASSERT(offsetof(Game, round_mode) == 0xc, "Game.round_mode");
@@ -1793,7 +1801,7 @@ SR_STATIC_ASSERT(offsetof(Game, team3_manager) == 0x3510, "Game.team3_manager");
 SR_STATIC_ASSERT(offsetof(Game, team4_manager) == 0x468c, "Game.team4_manager");
 SR_STATIC_ASSERT(offsetof(Game, unused_22fd8) == 0x22fd8, "Game.unused_22fd8");
 SR_STATIC_ASSERT(offsetof(Game, spectator_human) == 0x257d8, "Game.spectator_human");
-SR_STATIC_ASSERT(offsetof(Game, unused_257dc) == 0x257dc, "Game.unused_257dc");
+SR_STATIC_ASSERT(offsetof(Game, death_camera_ticks) == 0x257dc, "Game.death_camera_ticks");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e0) == 0x257e0, "Game.unused_257e0");
 SR_STATIC_ASSERT(offsetof(Game, unused_257e8) == 0x257e8, "Game.unused_257e8");
 SR_STATIC_ASSERT(offsetof(Game, unused_257ec) == 0x257ec, "Game.unused_257ec");
@@ -1944,7 +1952,8 @@ typedef union Option { struct {
     int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
-    uint8_t pad_00e0[0x2c];
+    uint8_t pad_00e0[0x28];
+    int frame_overlay;                   /* +0x0108 the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -1958,7 +1967,7 @@ typedef union Option { struct {
     int voicekey;                        /* +0x0134 loadsaveoptions: key voicekey= */
     int voicemb;                         /* +0x0138 loadsaveoptions: key voicemb= */
     int help;                            /* +0x013c loadsaveoptions: key help=, default 1 */
-    uint8_t pad_0140[0x4];
+    int swap_interval;                   /* +0x0140 the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0 */
     int voiceboost;                      /* +0x0144 loadsaveoptions: key voiceboost=, default 100 */
     float voiceboost_scale;              /* +0x0148 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
     uint8_t pad_014c[0x4];
@@ -1975,6 +1984,7 @@ SR_STATIC_ASSERT(offsetof(Option, unused_d0) == 0xd0, "Option.unused_d0");
 SR_STATIC_ASSERT(offsetof(Option, unused_d4) == 0xd4, "Option.unused_d4");
 SR_STATIC_ASSERT(offsetof(Option, soundvolume) == 0xd8, "Option.soundvolume");
 SR_STATIC_ASSERT(offsetof(Option, musicvolume) == 0xdc, "Option.musicvolume");
+SR_STATIC_ASSERT(offsetof(Option, frame_overlay) == 0x108, "Option.frame_overlay");
 SR_STATIC_ASSERT(offsetof(Option, invertmouse) == 0x10c, "Option.invertmouse");
 SR_STATIC_ASSERT(offsetof(Option, maxnumofplayers) == 0x114, "Option.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(Option, gametype) == 0x118, "Option.gametype");
@@ -1987,6 +1997,7 @@ SR_STATIC_ASSERT(offsetof(Option, voiceholdtotalk) == 0x130, "Option.voiceholdto
 SR_STATIC_ASSERT(offsetof(Option, voicekey) == 0x134, "Option.voicekey");
 SR_STATIC_ASSERT(offsetof(Option, voicemb) == 0x138, "Option.voicemb");
 SR_STATIC_ASSERT(offsetof(Option, help) == 0x13c, "Option.help");
+SR_STATIC_ASSERT(offsetof(Option, swap_interval) == 0x140, "Option.swap_interval");
 SR_STATIC_ASSERT(offsetof(Option, voiceboost) == 0x144, "Option.voiceboost");
 SR_STATIC_ASSERT(offsetof(Option, voiceboost_scale) == 0x148, "Option.voiceboost_scale");
 
@@ -2089,10 +2100,7 @@ typedef union SoundList { struct {
     uint8_t pad_0090[0x8];
     int hit_metal[2];                    /* +0x0098 setupclient loads bullethitmetal01.wav and 02 */
     uint8_t pad_00a0[0x8];
-    int unk_00a8;                        /* +0x00a8 1 functions */
-    int unk_00ac;                        /* +0x00ac 1 functions */
-    int unk_00b0;                        /* +0x00b0 1 functions */
-    int unk_00b4;                        /* +0x00b4 1 functions */
+    int menu_test[4];                    /* +0x00a8 the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down */
     int glass_break;                     /* +0x00b8 setupclient loads glassbreak01.wav */
     int unk_00bc;                        /* +0x00bc 1 functions */
     uint8_t pad_00c0[0x8];
@@ -2119,6 +2127,7 @@ SR_STATIC_ASSERT(offsetof(SoundList, crash) == 0x7c, "SoundList.crash");
 SR_STATIC_ASSERT(offsetof(SoundList, hit_body) == 0x88, "SoundList.hit_body");
 SR_STATIC_ASSERT(offsetof(SoundList, humanhit) == 0x8c, "SoundList.humanhit");
 SR_STATIC_ASSERT(offsetof(SoundList, hit_metal) == 0x98, "SoundList.hit_metal");
+SR_STATIC_ASSERT(offsetof(SoundList, menu_test) == 0xa8, "SoundList.menu_test");
 SR_STATIC_ASSERT(offsetof(SoundList, glass_break) == 0xb8, "SoundList.glass_break");
 SR_STATIC_ASSERT(offsetof(SoundList, phone_ring) == 0xc8, "SoundList.phone_ring");
 SR_STATIC_ASSERT(offsetof(SoundList, digit) == 0xcc, "SoundList.digit");
@@ -2536,11 +2545,25 @@ typedef union Debug { struct {
     float unk_4f9d0;                     /* +0x4f9d0 1 functions */
     uint8_t pad_4f9d4[0x6c];
     float unk_4fa40;                     /* +0x4fa40 1 functions */
-    uint8_t pad_4fa44[0x804];
+    uint8_t pad_4fa44[0x5d0];
+    uint32_t frame_start;                /* +0x50014 gameloop: the SDL time when the frame started */
+    uint8_t pad_50018[0x4];
+    int frame_ms_index;                  /* +0x5001c gameloop: the next entry of frame_ms, 0 to 31 */
+    int frame_ms[32];                    /* +0x50020 gameloop: the milliseconds that each of the last 32 frames took */
+    uint8_t pad_500a0[0x80];
+    int frame_ms_max;                    /* +0x50120 gameloop: the longest frame. F3 clears it when the debug flag is on */
+    float frame_ms_average;              /* +0x50124 gameloop: the mean of frame_ms */
+    uint8_t pad_50128[0x11c];
+    int shown_team;                      /* +0x50244 gameloop with the debug flag: the team of player 0, for displaydebuginfo */
     int affinity_set;                    /* +0x50248 setcpuaffinity writes 1234 when SetProcessAffinityMask succeeds */
     int affinity_before;                 /* +0x5024c setcpuaffinity writes the process mask plus 10000 */
     int affinity_after;                  /* +0x50250 setcpuaffinity writes the process mask plus 10000 after the change */
-    uint8_t pad_50254[0xf0];
+    int shown_bonds;                     /* +0x50254 gameloop with the debug flag: numofbonds, for displaydebuginfo */
+    int shown_humans;                    /* +0x50258 gameloop with the debug flag: the count of active humans, for displaydebuginfo */
+    int shown_parts;                     /* +0x5025c gameloop with the debug flag: the joints and the muscles of human 0, for displaydebuginfo */
+    uint8_t pad_50260[0x4];
+    int shown_mouse;                     /* +0x50264 gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo */
+    uint8_t pad_50268[0xdc];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
     uint8_t pad_50348[0x918];
     uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
@@ -2559,9 +2582,19 @@ SR_STATIC_ASSERT(offsetof(Debug, display_mode) == 0x4, "Debug.display_mode");
 SR_STATIC_ASSERT(offsetof(Debug, world_view) == 0x8, "Debug.world_view");
 SR_STATIC_ASSERT(offsetof(Debug, num_lines) == 0xc, "Debug.num_lines");
 SR_STATIC_ASSERT(offsetof(Debug, lines) == 0x10, "Debug.lines");
+SR_STATIC_ASSERT(offsetof(Debug, frame_start) == 0x50014, "Debug.frame_start");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_index) == 0x5001c, "Debug.frame_ms_index");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms) == 0x50020, "Debug.frame_ms");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_max) == 0x50120, "Debug.frame_ms_max");
+SR_STATIC_ASSERT(offsetof(Debug, frame_ms_average) == 0x50124, "Debug.frame_ms_average");
+SR_STATIC_ASSERT(offsetof(Debug, shown_team) == 0x50244, "Debug.shown_team");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_set) == 0x50248, "Debug.affinity_set");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_before) == 0x5024c, "Debug.affinity_before");
 SR_STATIC_ASSERT(offsetof(Debug, affinity_after) == 0x50250, "Debug.affinity_after");
+SR_STATIC_ASSERT(offsetof(Debug, shown_bonds) == 0x50254, "Debug.shown_bonds");
+SR_STATIC_ASSERT(offsetof(Debug, shown_humans) == 0x50258, "Debug.shown_humans");
+SR_STATIC_ASSERT(offsetof(Debug, shown_parts) == 0x5025c, "Debug.shown_parts");
+SR_STATIC_ASSERT(offsetof(Debug, shown_mouse) == 0x50264, "Debug.shown_mouse");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
 SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
 SR_STATIC_ASSERT(offsetof(Debug, toggle_two) == 0x50c64, "Debug.toggle_two");
@@ -2813,7 +2846,20 @@ SR_STATIC_ASSERT(offsetof(GameWorld, spawn_size_z) == 0x18, "GameWorld.spawn_siz
 
 /* level_editor[]: record of 0x1c6898 bytes. */
 typedef union LevelEditor { struct {
-    uint8_t pad_0000[0x38];
+    int mode;                            /* +0x0000 leveleditor_loop: 0 streets, 1 sidewalk tiles, 2 buildings (the items and the title of each mode) */
+    int tile_kind;                       /* +0x0004 leveleditor_loop: the Sidewalk buttons choose the tile kind, 0 to 8 */
+    int chosen_a;                        /* +0x0008 leveledit_setup and leveleditor_loop write -1: no chosen street end */
+    int chosen_b;                        /* +0x000c leveledit_setup and leveleditor_loop write -1: no second street end */
+    int dragging;                        /* +0x0010 leveleditor_loop draws the drag box of the sidewalk mode while it is not 0 */
+    int drag_x0;                         /* +0x0014 leveleditor_loop: the first corner of the drag box */
+    int drag_z0;                         /* +0x0018  */
+    int drag_x1;                         /* +0x001c leveleditor_loop: the second corner of the drag box */
+    int drag_z1;                         /* +0x0020  */
+    int chosen_street;                   /* +0x0024 leveledit_setup writes -1. leveleditor_loop shows a name field for the chosen street */
+    int street_lanes_a;                  /* +0x0028 leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_a of a new street */
+    int street_lanes_b;                  /* +0x002c leveledit_setup writes 3. leveleditor_addstreet copies it to lanes_b of a new street */
+    int place_type;                      /* +0x0030 leveledit_setup writes 0. The building buttons choose the building type to place (B on the screen) */
+    int place_turns;                     /* +0x0034 leveleditor_loop shows it as R: the turns of the building to place */
     int num_intersections;               /* +0x0038 createlevel: one city_addintersection for each record */
     LevelIntersection intersections[1024]; /* +0x003c 0x3c + 1024 * 0xc = 0x303c (the next count) */
     int num_streets;                     /* +0x303c createlevel: one addcitystreet for each record */
@@ -2823,9 +2869,25 @@ typedef union LevelEditor { struct {
     int num_buildings;                   /* +0x10b844 createlevel: building_load and building_buildfloorplan for each record */
     uint8_t pad_10b848[0x4];
     LevelBuilding buildings[1024];       /* +0x10b84c stride 0x54, the name is at +0 (the x of record 0 is read at 0x10b88c); the count is likely */
-    uint8_t pad_12084c[0xa604c];
+    uint8_t pad_12084c[0x93004];
+    LevelBuildingType types[1024];       /* +0x1b3850 leveleditor_loop: the name and the size of each building file */
+    uint8_t pad_1c6850[0x48];
 }; uint8_t lf_raw[0x1c6898]; } LevelEditor;
 SR_STATIC_ASSERT(sizeof(LevelEditor) == 0x1c6898, "LevelEditor");
+SR_STATIC_ASSERT(offsetof(LevelEditor, mode) == 0x0, "LevelEditor.mode");
+SR_STATIC_ASSERT(offsetof(LevelEditor, tile_kind) == 0x4, "LevelEditor.tile_kind");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_a) == 0x8, "LevelEditor.chosen_a");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_b) == 0xc, "LevelEditor.chosen_b");
+SR_STATIC_ASSERT(offsetof(LevelEditor, dragging) == 0x10, "LevelEditor.dragging");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_x0) == 0x14, "LevelEditor.drag_x0");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z0) == 0x18, "LevelEditor.drag_z0");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_x1) == 0x1c, "LevelEditor.drag_x1");
+SR_STATIC_ASSERT(offsetof(LevelEditor, drag_z1) == 0x20, "LevelEditor.drag_z1");
+SR_STATIC_ASSERT(offsetof(LevelEditor, chosen_street) == 0x24, "LevelEditor.chosen_street");
+SR_STATIC_ASSERT(offsetof(LevelEditor, street_lanes_a) == 0x28, "LevelEditor.street_lanes_a");
+SR_STATIC_ASSERT(offsetof(LevelEditor, street_lanes_b) == 0x2c, "LevelEditor.street_lanes_b");
+SR_STATIC_ASSERT(offsetof(LevelEditor, place_type) == 0x30, "LevelEditor.place_type");
+SR_STATIC_ASSERT(offsetof(LevelEditor, place_turns) == 0x34, "LevelEditor.place_turns");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_intersections) == 0x38, "LevelEditor.num_intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, intersections) == 0x3c, "LevelEditor.intersections");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_streets) == 0x303c, "LevelEditor.num_streets");
@@ -2833,6 +2895,7 @@ SR_STATIC_ASSERT(offsetof(LevelEditor, streets) == 0x3040, "LevelEditor.streets"
 SR_STATIC_ASSERT(offsetof(LevelEditor, tiles) == 0xb844, "LevelEditor.tiles");
 SR_STATIC_ASSERT(offsetof(LevelEditor, num_buildings) == 0x10b844, "LevelEditor.num_buildings");
 SR_STATIC_ASSERT(offsetof(LevelEditor, buildings) == 0x10b84c, "LevelEditor.buildings");
+SR_STATIC_ASSERT(offsetof(LevelEditor, types) == 0x1b3850, "LevelEditor.types");
 
 /* blocktemp[]: record of 0x7606c bytes. */
 typedef union BlockTemp { struct {
@@ -3036,7 +3099,9 @@ typedef union Building { struct {
     char materials[16384];               /* +0x36004e8 256 material names of 64 bytes each */
     int num_blocks;                      /* +0x36044e8 The number of block names in the file */
     char blocks[16384];                  /* +0x36044ec 256 block names of 64 bytes each */
-    uint8_t pad_36084ec[0xe40c];
+    uint8_t pad_36084ec[0xd00c];
+    int material_textures[256];          /* +0x36154f8 the building editor pickers and buildingeditor_renderblock: the texture list index of each material name */
+    int block_types[1024];               /* +0x36158f8 buildingedit_blockmenu fills it: the block type of each block name (the last game type with the same name); buildingeditor_drawblock adds the turn of a group block */
 }; uint8_t lf_raw[0x36168f8]; } Building;
 SR_STATIC_ASSERT(sizeof(Building) == 0x36168f8, "Building");
 SR_STATIC_ASSERT(offsetof(Building, name) == 0x0, "Building.name");
@@ -3056,6 +3121,8 @@ SR_STATIC_ASSERT(offsetof(Building, num_materials) == 0x36004e4, "Building.num_m
 SR_STATIC_ASSERT(offsetof(Building, materials) == 0x36004e8, "Building.materials");
 SR_STATIC_ASSERT(offsetof(Building, num_blocks) == 0x36044e8, "Building.num_blocks");
 SR_STATIC_ASSERT(offsetof(Building, blocks) == 0x36044ec, "Building.blocks");
+SR_STATIC_ASSERT(offsetof(Building, material_textures) == 0x36154f8, "Building.material_textures");
+SR_STATIC_ASSERT(offsetof(Building, block_types) == 0x36158f8, "Building.block_types");
 
 /* area_sector[]: record of 0xc0d0000 bytes. */
 typedef union AreaSector { struct {
@@ -3195,7 +3262,8 @@ typedef union ModelTemp { struct {
     ModelVertex render_verts[9216];      /* +0x58008 setupmodel: 3 for each triangle. The array has room for 3072 triangles */
     int num_tris;                        /* +0xa0008 addboxtomodel adds 12 */
     MeshTri tris[8192];                  /* +0xa000c setupmodel: indexes into verts */
-    uint8_t pad_b800c[0x98000];
+    MeshTri tri_backup[8192];            /* +0xb800c model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back */
+    uint8_t pad_d000c[0x80000];
     vec3 tri_normals[8192];              /* +0x15000c setupmodel: generatetrinormal of the three corners */
     vec3 corner_normals[24576];          /* +0x16800c the model loader: one normal for each corner of a triangle */
     TriTexCoords tri_texcoords[8192];    /* +0x1b000c model_settritexcoord writes the three corners */
@@ -3217,6 +3285,7 @@ SR_STATIC_ASSERT(offsetof(ModelTemp, vert_tangents) == 0x40008, "ModelTemp.vert_
 SR_STATIC_ASSERT(offsetof(ModelTemp, render_verts) == 0x58008, "ModelTemp.render_verts");
 SR_STATIC_ASSERT(offsetof(ModelTemp, num_tris) == 0xa0008, "ModelTemp.num_tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tris) == 0xa000c, "ModelTemp.tris");
+SR_STATIC_ASSERT(offsetof(ModelTemp, tri_backup) == 0xb800c, "ModelTemp.tri_backup");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_normals) == 0x15000c, "ModelTemp.tri_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, corner_normals) == 0x16800c, "ModelTemp.corner_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_texcoords) == 0x1b000c, "ModelTemp.tri_texcoords");
@@ -3344,7 +3413,7 @@ typedef union TextureList { struct {
     int mic;                             /* +0x1100 setupclient loads mic.png */
     int twitter;                         /* +0x1104 setupclient loads twitter01.png */
     int logo;                            /* +0x1108 setupclient draws a 32 by 16 pixel logo into it */
-    uint8_t pad_110c[0x4];
+    int test_m16;                        /* +0x110c model_viewer loads test_m16.png into it */
     int random_vectors;                  /* +0x1110 the start code passes it to generatetexture_randomvec */
     int cash[8];                         /* +0x1114 setupclient loads cash_dollar.png and the five, ten, twenty, fifty, hundred and thousand bills into the first seven */
     int landscape_normal;                /* +0x1134 landscape_generatenormaltexture fills this texture */
@@ -3376,6 +3445,7 @@ SR_STATIC_ASSERT(offsetof(TextureList, map) == 0x10fc, "TextureList.map");
 SR_STATIC_ASSERT(offsetof(TextureList, mic) == 0x1100, "TextureList.mic");
 SR_STATIC_ASSERT(offsetof(TextureList, twitter) == 0x1104, "TextureList.twitter");
 SR_STATIC_ASSERT(offsetof(TextureList, logo) == 0x1108, "TextureList.logo");
+SR_STATIC_ASSERT(offsetof(TextureList, test_m16) == 0x110c, "TextureList.test_m16");
 SR_STATIC_ASSERT(offsetof(TextureList, random_vectors) == 0x1110, "TextureList.random_vectors");
 SR_STATIC_ASSERT(offsetof(TextureList, cash) == 0x1114, "TextureList.cash");
 SR_STATIC_ASSERT(offsetof(TextureList, landscape_normal) == 0x1134, "TextureList.landscape_normal");
@@ -3419,7 +3489,7 @@ SR_STATIC_ASSERT(offsetof(ModelList, rotor) == 0x7a0, "ModelList.rotor");
 
 /* game (client)[]: record of 0x25d60 bytes. */
 typedef union GameClient { struct {
-    uint8_t pad_0000[0x4];
+    int running;                         /* +0x0000 the client gameloop writes 1 at the start and 0 at the end */
     int link_state;                      /* +0x0004 clientrecv writes 3 when the server sends nothing for 0x4b0 ticks */
     int gametype;                        /* +0x0008 config.txt gametype= (0 to 4); logicsimulation compares it with 3 and 4 */
     int round_mode;                      /* +0x000c serversend: 4 bits in the new game packet */
@@ -3540,7 +3610,7 @@ typedef union GameClient { struct {
     int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
     uint8_t pad_22fdc[0x27fc];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
-    int unused_257dc;                    /* +0x257dc resetgame clears this field. No reader in the server */
+    int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
     int unused_257e8;                    /* +0x257e4 resetgame clears this field. No reader in the server */
     float unused_257ec;                  /* +0x257e8 resetgame clears this field. No reader in the server */
@@ -3554,6 +3624,7 @@ typedef union GameClient { struct {
     int num_newspapers;                  /* +0x25d5c itemtimetolive subtracts 1 when a Newspaper (item type 26) goes (likely: the count of newspapers) */
 }; uint8_t lf_raw[0x25d60]; } GameClient;
 SR_STATIC_ASSERT(sizeof(GameClient) == 0x25d60, "GameClient");
+SR_STATIC_ASSERT(offsetof(GameClient, running) == 0x0, "GameClient.running");
 SR_STATIC_ASSERT(offsetof(GameClient, link_state) == 0x4, "GameClient.link_state");
 SR_STATIC_ASSERT(offsetof(GameClient, gametype) == 0x8, "GameClient.gametype");
 SR_STATIC_ASSERT(offsetof(GameClient, round_mode) == 0xc, "GameClient.round_mode");
@@ -3593,7 +3664,7 @@ SR_STATIC_ASSERT(offsetof(GameClient, team3_manager) == 0x350c, "GameClient.team
 SR_STATIC_ASSERT(offsetof(GameClient, team4_manager) == 0x4688, "GameClient.team4_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd8, "GameClient.unused_22fd8");
 SR_STATIC_ASSERT(offsetof(GameClient, spectator_human) == 0x257d8, "GameClient.spectator_human");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_257dc) == 0x257dc, "GameClient.unused_257dc");
+SR_STATIC_ASSERT(offsetof(GameClient, death_camera_ticks) == 0x257dc, "GameClient.death_camera_ticks");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257e0) == 0x257e0, "GameClient.unused_257e0");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257e8) == 0x257e4, "GameClient.unused_257e8");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257ec) == 0x257e8, "GameClient.unused_257ec");
@@ -3618,7 +3689,8 @@ typedef union OptionClient { struct {
     int unused_d4;                       /* +0x00d4 loadsaveoptions writes 2; no reader */
     int soundvolume;                     /* +0x00d8 loadsaveoptions: key soundvolume=, default 0x50 */
     int musicvolume;                     /* +0x00dc loadsaveoptions: key musicvolume=, default 0x50 */
-    uint8_t pad_00e0[0x2c];
+    uint8_t pad_00e0[0x28];
+    int frame_overlay;                   /* +0x0108 the client mainmenu writes 0 at the start. While it is not 0, gameloop draws the frame color texture (the shadow map with L and the debug flag) over the screen */
     int invertmouse;                     /* +0x010c loadsaveoptions: key invertmouse= */
     uint8_t pad_0110[0x4];
     int maxnumofplayers;                 /* +0x0114 loadsaveoptions: key maxnumofplayers=, default 16; dedicatedserverloop clamps it to 2 to 128 */
@@ -3631,7 +3703,7 @@ typedef union OptionClient { struct {
     int voicekey;                        /* +0x0130 loadsaveoptions: key voicekey= */
     int voicemb;                         /* +0x0134 loadsaveoptions: key voicemb= */
     int help;                            /* +0x0138 loadsaveoptions: key help=, default 1 */
-    uint8_t pad_013c[0x4];
+    int swap_interval;                   /* +0x013c the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0 */
     int voiceboost;                      /* +0x0140 loadsaveoptions: key voiceboost=, default 100 */
     float voiceboost_scale;              /* +0x0144 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
     uint8_t pad_0148[0x8];
@@ -3648,6 +3720,7 @@ SR_STATIC_ASSERT(offsetof(OptionClient, unused_d0) == 0xd0, "OptionClient.unused
 SR_STATIC_ASSERT(offsetof(OptionClient, unused_d4) == 0xd4, "OptionClient.unused_d4");
 SR_STATIC_ASSERT(offsetof(OptionClient, soundvolume) == 0xd8, "OptionClient.soundvolume");
 SR_STATIC_ASSERT(offsetof(OptionClient, musicvolume) == 0xdc, "OptionClient.musicvolume");
+SR_STATIC_ASSERT(offsetof(OptionClient, frame_overlay) == 0x108, "OptionClient.frame_overlay");
 SR_STATIC_ASSERT(offsetof(OptionClient, invertmouse) == 0x10c, "OptionClient.invertmouse");
 SR_STATIC_ASSERT(offsetof(OptionClient, maxnumofplayers) == 0x114, "OptionClient.maxnumofplayers");
 SR_STATIC_ASSERT(offsetof(OptionClient, roundtime) == 0x118, "OptionClient.roundtime");
@@ -3659,6 +3732,7 @@ SR_STATIC_ASSERT(offsetof(OptionClient, voiceholdtotalk) == 0x12c, "OptionClient
 SR_STATIC_ASSERT(offsetof(OptionClient, voicekey) == 0x130, "OptionClient.voicekey");
 SR_STATIC_ASSERT(offsetof(OptionClient, voicemb) == 0x134, "OptionClient.voicemb");
 SR_STATIC_ASSERT(offsetof(OptionClient, help) == 0x138, "OptionClient.help");
+SR_STATIC_ASSERT(offsetof(OptionClient, swap_interval) == 0x13c, "OptionClient.swap_interval");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost) == 0x140, "OptionClient.voiceboost");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost_scale) == 0x144, "OptionClient.voiceboost_scale");
 

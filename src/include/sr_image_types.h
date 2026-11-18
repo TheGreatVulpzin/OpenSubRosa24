@@ -186,7 +186,7 @@ typedef union Font { struct {
     uint32_t resolution_x;               /* +0x0000 Image decoder and font record accesses */
     uint32_t resolution_y;               /* +0x0004 Image decoder and font record accesses */
     int texture;                         /* +0x0008 Image decoder and font record accesses */
-    uint8_t pad_000c[0x4];
+    int cursor;                          /* +0x000c checkmenuitems copies the cursor of the item under the mouse; setupgraphics clears it */
     float width[256];                    /* +0x0010 Image decoder and font record accesses */
     float coordinates[2048];             /* +0x0410 Image decoder and font record accesses */
 }; uint8_t lf_raw[0x2410]; } Font;
@@ -194,6 +194,7 @@ SR_STATIC_ASSERT(sizeof(Font) == 0x2410, "Font");
 SR_STATIC_ASSERT(offsetof(Font, resolution_x) == 0x0, "Font.resolution_x");
 SR_STATIC_ASSERT(offsetof(Font, resolution_y) == 0x4, "Font.resolution_y");
 SR_STATIC_ASSERT(offsetof(Font, texture) == 0x8, "Font.texture");
+SR_STATIC_ASSERT(offsetof(Font, cursor) == 0xc, "Font.cursor");
 SR_STATIC_ASSERT(offsetof(Font, width) == 0x10, "Font.width");
 SR_STATIC_ASSERT(offsetof(Font, coordinates) == 0x410, "Font.coordinates");
 
