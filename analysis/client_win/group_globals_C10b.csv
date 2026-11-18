@@ -1,0 +1,2 @@
+name,type,count,client_rva,evidence
+track_verts,ModelVertex,917504,0x147129b0,"buildtrackmodel: the vertices of the track buffer (place, texture coordinate, normal). The Linux client names the record trackmodel. The array ends before info_log"

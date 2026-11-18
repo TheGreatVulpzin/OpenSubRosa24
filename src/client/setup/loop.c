@@ -26,6 +26,7 @@
 #include "render/text.h"
 #include "render/view.h"
 #include "setup/simulation.h"
+#include "sr_math.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "textures/textures.h"
@@ -301,10 +302,10 @@ static void frame_camera_look(const Human *human, int index)
 
     if (human->vehicle_id == -1) {
         weight = rot[1].y <= 0.0f ? 0.0f : (float)fabs((double)rot[1].y * rot[1].y * rot[1].y);
-        angle = (float)atan2((double)-rot[2].x, (double)rot[2].z);
+        angle = (float)x87_atan2((double)-rot[2].x, (double)rot[2].z);
         angle = angulardistance((float)(human->axis + human->arm_axis), angle);
         rotateorientation(rot, &rot[1], (float)(angle * 0.75 * weight));
-        angle = (float)atan2((double)rot[2].y, sqrt((double)rot[2].z * rot[2].z + (double)rot[2].x * rot[2].x));
+        angle = (float)x87_atan2((double)rot[2].y, x87_sqrt((double)rot[2].z * rot[2].z + (double)rot[2].x * rot[2].x));
         angle = angulardistance((float)(human->pitch + human->arm_pitch), angle);
         rotateorientation(rot, rot, (float)(angle * 0.75 * weight));
     } else {
@@ -314,10 +315,10 @@ static void frame_camera_look(const Human *human, int index)
         float ahead = dotproduct(&rot[2], &vehicle[2]);
 
         weight = 1.0f;
-        angle = (float)atan2((double)-side, (double)ahead);
+        angle = (float)x87_atan2((double)-side, (double)ahead);
         angle = angulardistance(g_human[index].vehicle_axis, angle);
         rotateorientation(rot, &rot[1], (float)(angle * 0.75 * weight));
-        angle = (float)atan2((double)up, sqrt((double)ahead * ahead + (double)side * side));
+        angle = (float)x87_atan2((double)up, x87_sqrt((double)ahead * ahead + (double)side * side));
         angle = angulardistance(g_human[index].vehicle_pitch, angle);
         rotateorientation(rot, rot, (float)(angle * 0.75 * weight));
     }

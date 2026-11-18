@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "client.h"
+#include "math/small_vectors.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "vectors.h"
@@ -20,7 +21,6 @@
 #define g_models cl_data_model
 #define g_cubequad sr_data_cubequad /* the 4 corners of each of the 6 faces of a cube */
 #define g_cubetri sr_data_cubetri   /* the 3 corners of each of the 12 triangles of a cube */
-
 /* Two vertices of the model in work are one point when each axis is closer than this. */
 #define SAME_POINT 0.0001f
 
@@ -41,7 +41,6 @@ enum {
 #define FACE_TRIS 2
 
 /* Game functions of other files. */
-#define setupmodel CL_FN(0x4ac190, void(__cdecl *)(int model, int flat))
 #define sethumanmodelvert CL_FN(0x4becd0, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
 #define addhumantorso CL_FN(0x4bed80, void(__cdecl *)(const vec3 *center, float half_x, float half_y, float half_z))
 
@@ -136,6 +135,121 @@ void __cdecl copymodel(int model)
     m->tri_neighbors = replace_copy(m->tri_neighbors, g_temp.tri_neighbors, tris * (int)sizeof(MeshTri));
     m->num_lines = lines;
     m->lines = replace_copy(m->lines, g_temp.lines, lines * (int)sizeof(MeshLine));
+}
+
+/* Add a triangle to the model in work, for the builders of other files. */
+int modeltemp_addtri(int a, int b, int c, int shading)
+{
+    return append_tri(a, b, c, shading);
+}
+
+/* Add two flat triangles for a quad of the model in work, with the texture coordinates of its
+ * corners: corners 0 1 2 and 0 2 3. */
+void modeltemp_quadtotris(int quad)
+{
+    static const int corners[2][3] = {{0, 1, 2}, {0, 2, 3}};
+    int half, k;
+
+    for (half = 0; half < 2; half++) {
+        int t = append_tri(g_temp.quads[quad].verts[corners[half][0]], g_temp.quads[quad].verts[corners[half][1]],
+                           g_temp.quads[quad].verts[corners[half][2]], SHADE_FLAT);
+
+        for (k = 0; k < 3; k++)
+            g_temp.tri_texcoords[t].corners[k] = g_temp.quad_texcoords[quad].corners[corners[half][k]];
+    }
+}
+
+/* The normal of each triangle, and the normal of each vertex: the sum of the normals of its
+ * triangles, made unit length. */
+void modeltemp_smoothnormals(void)
+{
+    int i, k;
+
+    for (i = 0; i < g_temp.num_verts; i++)
+        zerovector((unsigned int *)&g_temp.vert_normals[i]);
+    for (i = 0; i < g_temp.num_tris; i++) {
+        const MeshTri *tri = &g_temp.tris[i];
+        vec3 normal;
+
+        generatetrinormal(&normal, &g_temp.verts[tri->verts[0]], &g_temp.verts[tri->verts[1]],
+                          &g_temp.verts[tri->verts[2]]);
+        g_temp.tri_normals[i] = normal;
+        for (k = 0; k < 3; k++)
+            addvectors(&g_temp.vert_normals[tri->verts[k]], &g_temp.vert_normals[tri->verts[k]], &normal);
+    }
+    for (i = 0; i < g_temp.num_verts; i++)
+        normalizevector(&g_temp.vert_normals[i], &g_temp.vert_normals[i]);
+}
+
+/* The triangle across each edge of each triangle: edge e of triangle a (corners e and e + 1)
+ * meets edge f of triangle b when the corners are the same points in the other order. An edge
+ * takes only the first match. -1 is no neighbor. */
+static void find_tri_neighbors(void)
+{
+    int n = g_temp.num_tris, a, b, e, f;
+
+    for (a = 0; a < n; a++) {
+        g_temp.tri_neighbors[a].verts[0] = -1;
+        g_temp.tri_neighbors[a].verts[1] = -1;
+        g_temp.tri_neighbors[a].verts[2] = -1;
+    }
+    for (a = 0; a < n; a++)
+        for (b = a + 1; b < n; b++)
+            for (e = 0; e < 3; e++)
+                for (f = 0; f < 3; f++) {
+                    int *side_a = &g_temp.tri_neighbors[a].verts[e];
+                    int *side_b = &g_temp.tri_neighbors[b].verts[f];
+
+                    if (*side_a == -1 && *side_b == -1 &&
+                        modeltempvertsequal(g_temp.tris[a].verts[e], g_temp.tris[b].verts[(f + 1) % 3]) &&
+                        modeltempvertsequal(g_temp.tris[a].verts[(e + 1) % 3], g_temp.tris[b].verts[f])) {
+                        *side_a = b;
+                        *side_b = a;
+                    }
+                }
+}
+
+/* The normal of corner k of triangle t: the triangle normal for a flat model or a flat
+ * triangle, the normal of the corner vertex for a smooth triangle, else the normal of the
+ * vertex that the shading mode names. */
+static const vec3 *corner_normal(int t, int k, int flat)
+{
+    int shading = g_temp.tri_shading[t];
+
+    if (flat || shading == SHADE_FLAT)
+        return &g_temp.tri_normals[t];
+    if (shading == SHADE_SMOOTH)
+        return &g_temp.vert_normals[g_temp.tris[t].verts[k]];
+    return &g_temp.vert_normals[g_temp.tris[t].verts[shading]];
+}
+
+/* Make the model in work ready and store it: the normal and the neighbors of each triangle,
+ * three render vertices for each triangle (place, texture coordinate, normal), then the
+ * triangles index the render vertices in order. flat gives every corner the normal of its
+ * triangle. */
+void __cdecl setupmodel(int model, int flat)
+{
+    int t, k;
+
+    for (t = 0; t < g_temp.num_tris; t++)
+        generatetrinormal(&g_temp.tri_normals[t], &g_temp.verts[g_temp.tris[t].verts[0]],
+                          &g_temp.verts[g_temp.tris[t].verts[1]], &g_temp.verts[g_temp.tris[t].verts[2]]);
+    find_tri_neighbors();
+    g_temp.vertex_floats = (int)(sizeof(ModelVertex) / sizeof(float));
+    for (t = 0; t < g_temp.num_tris; t++)
+        for (k = 0; k < 3; k++) {
+            ModelVertex *out = &g_temp.render_verts[t * 3 + k];
+
+            out->pos = g_temp.verts[g_temp.tris[t].verts[k]];
+            out->texcoord = g_temp.tri_texcoords[t].corners[k];
+            out->normal = *corner_normal(t, k, flat);
+        }
+    for (t = 0; t < g_temp.num_tris; t++) {
+        g_temp.tris[t].verts[0] = t * 3;
+        g_temp.tris[t].verts[1] = t * 3 + 1;
+        g_temp.tris[t].verts[2] = t * 3 + 2;
+    }
+    copymodel(model);
 }
 
 /* Add a box to the model in work: 8 vertices around center and 12 flat triangles. */

@@ -187,7 +187,7 @@ static void draw_opaque(void)
             continue;
         if (piece->kind == 0) {
             textures[0] = textures[1] = sr_data_texturelist.plain_orange;
-            rendermodel(sr_data_modellist.ammo_b[0], &piece->pos, piece->rot, 0, textures, white);
+            rendermodel(sr_data_modellist.bullet_flat[0], &piece->pos, piece->rot, 0, textures, white);
         }
         if (piece->kind == 1) {
             textures[0] = textures[1] = sr_data_texturelist.material[3];

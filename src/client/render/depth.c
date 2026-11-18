@@ -129,7 +129,7 @@ void __cdecl renderframedepth(void)
         if (!piece->active)
             continue;
         if (piece->kind == 0)
-            rendermodel(sr_data_modellist.ammo_b[0], &piece->pos, piece->rot, 1,
+            rendermodel(sr_data_modellist.bullet_flat[0], &piece->pos, piece->rot, 1,
                 cl_data_frame_models[0].textures, (const float *)&cl_data_frame_models[0].color);
         if (piece->kind == 1)
             rendermodel(sr_data_modellist.sprite[piece->kind], &piece->pos, piece->rot, 1,

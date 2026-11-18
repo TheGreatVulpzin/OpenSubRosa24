@@ -141,7 +141,7 @@ static void add_rotor(const Object *object)
  * side of the normal. The list has no size limit. */
 static void add_windows(const Object *object)
 {
-    const Model *model = &cl_data_model[g_modellist.bullet[object->type]];
+    const Model *model = &cl_data_model[g_modellist.vehicle[object->type]];
     int w, c;
 
     for (w = 0; w < model->num_windows; ++w) {
@@ -181,7 +181,7 @@ static void add_objects(void)
         if (object->active == 0 || object->state == OBJECT_BROKEN)
             continue;
         distance = vectordistance(&cl_data_camera_position, &object->pos);
-        add_model(g_modellist.bullet[object->type], g_textures.paint[object->color], g_textures.paint[0],
+        add_model(g_modellist.vehicle[object->type], g_textures.paint[object->color], g_textures.paint[0],
                   FLAG_SHADOW, &object->pos, object->rot);
         if (object->health < 1) {
             /* The last entry of the list, also when the list was full. */
@@ -204,7 +204,7 @@ static void add_bullets(void)
 
     for (i = 0; i < sr_data_numofbullets; ++i) {
         const Bullet *bullet = &sr_data_bullet[i];
-        add_model(g_modellist.ammo[bullet->type], g_textures.plain_orange, g_textures.plain_orange, 0,
+        add_model(g_modellist.bullet[bullet->type], g_textures.plain_orange, g_textures.plain_orange, 0,
                   &bullet->pos, &bullet->side);
     }
 }

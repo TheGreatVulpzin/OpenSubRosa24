@@ -1443,8 +1443,8 @@ typedef union ObjectType { struct {
     TypeFace faces[256];                 /* +0x1348 objecttype_addface appends (stride 0x40) */
     int num_quads;                       /* +0x5348 setupobjectypes_train sets it to num_particles, then appends quads; objectsimulation reads it as the number of vertices */
     TypeQuad quads[256];                 /* +0x534c objectsimulation: a point made of 4 particles and 4 weights; the points go after the particles in one index space */
-    int unk_734c;                        /* +0x734c 1 functions */
-    uint8_t pad_7350[0x408];
+    int num_lines;                       /* +0x734c createtypemodel copies this many lines to the model in work */
+    MeshLine lines[129];                 /* +0x7350 createtypemodel: the lines of the model, two vertex indexes each */
     float engine_power;                  /* +0x7758 createobject copies it (× constant) to object.engine_power */
     int num_wheels;                      /* +0x775c objecttype_addwheel increments (stride 0x44) */
     TypeWheel wheels[32];                /* +0x7760 objecttype_addwheel appends (stride 0x44) */
@@ -1473,6 +1473,8 @@ SR_STATIC_ASSERT(offsetof(ObjectType, num_faces) == 0x1344, "ObjectType.num_face
 SR_STATIC_ASSERT(offsetof(ObjectType, faces) == 0x1348, "ObjectType.faces");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_quads) == 0x5348, "ObjectType.num_quads");
 SR_STATIC_ASSERT(offsetof(ObjectType, quads) == 0x534c, "ObjectType.quads");
+SR_STATIC_ASSERT(offsetof(ObjectType, num_lines) == 0x734c, "ObjectType.num_lines");
+SR_STATIC_ASSERT(offsetof(ObjectType, lines) == 0x7350, "ObjectType.lines");
 SR_STATIC_ASSERT(offsetof(ObjectType, engine_power) == 0x7758, "ObjectType.engine_power");
 SR_STATIC_ASSERT(offsetof(ObjectType, num_wheels) == 0x775c, "ObjectType.num_wheels");
 SR_STATIC_ASSERT(offsetof(ObjectType, wheels) == 0x7760, "ObjectType.wheels");
@@ -3312,7 +3314,8 @@ typedef union Model { struct {
     MeshTri* tri_neighbors;              /* +0x0028 copymodel: malloc of num_tris * 12 */
     int num_lines;                       /* +0x002c copymodel copies ModelTemp.num_lines */
     MeshLine* lines;                     /* +0x0030 copymodel: malloc of num_lines * 8 */
-    uint8_t pad_0034[0xcc];
+    vec3 center;                         /* +0x0034 createtypemodel: the mean of the particles of the object type. The vertices are relative to it */
+    uint8_t pad_0040[0xc0];
     int num_windows;                     /* +0x0100 createwindowsprites searches this many window records */
     ModelWindow windows[64];             /* +0x0104 createwindowsprites projects four corners and matches the face number */
 }; uint8_t lf_raw[0xe04]; } Model;
@@ -3330,6 +3333,7 @@ SR_STATIC_ASSERT(offsetof(Model, tri_normals) == 0x24, "Model.tri_normals");
 SR_STATIC_ASSERT(offsetof(Model, tri_neighbors) == 0x28, "Model.tri_neighbors");
 SR_STATIC_ASSERT(offsetof(Model, num_lines) == 0x2c, "Model.num_lines");
 SR_STATIC_ASSERT(offsetof(Model, lines) == 0x30, "Model.lines");
+SR_STATIC_ASSERT(offsetof(Model, center) == 0x34, "Model.center");
 SR_STATIC_ASSERT(offsetof(Model, num_windows) == 0x100, "Model.num_windows");
 SR_STATIC_ASSERT(offsetof(Model, windows) == 0x104, "Model.windows");
 
@@ -3456,12 +3460,12 @@ SR_STATIC_ASSERT(offsetof(TextureList, newspaper) == 0x1140, "TextureList.newspa
 /* modellist[]: record of 0x7a4 bytes. */
 typedef union ModelList { struct {
     int count;                           /* +0x0000 setupgame: the next free model identifier. 485 after the identifiers are assigned */
-    int bullet[32];                      /* +0x0004 setupclient: createbulletmodel builds the first 16 */
+    int vehicle[32];                     /* +0x0004 setupclient: createtypemodel builds the models of the first 16 object types */
     int item[32];                        /* +0x0084 the model of each item type. The renderer indexes it with the item type */
     int wheel[32];                       /* +0x0104 the model of each wheel type. The renderer indexes it with the wheel type of an object */
     int human[256];                      /* +0x0184 one model for each human. frame_addmodel and the renderer index it with the human */
-    int ammo[32];                        /* +0x0584 setupclient: four shapes from the builder at 0x4af7c0 (second argument 0 to 3, third argument 0) */
-    int ammo_b[32];                      /* +0x0604 setupclient: the same four shapes with third argument 1. Entry 0 is a flat model that the effect renderer draws */
+    int bullet[32];                      /* +0x0584 setupclient: createbulletmodel builds the models of the 4 bullet types (flat_back 0) */
+    int bullet_flat[32];                 /* +0x0604 setupclient: the 4 bullet models with flat_back 1. Entry 0 is the model of the shells that the effect renderer draws */
     int city_object[32];                 /* +0x0684 setupclient: createmodel_cityobject builds the first 10 */
     int head;                            /* +0x0704 setupclient: createheadmodel */
     int foot;                            /* +0x0708 setupclient: createfootmodel */
@@ -3473,12 +3477,12 @@ typedef union ModelList { struct {
 }; uint8_t lf_raw[0x7a4]; } ModelList;
 SR_STATIC_ASSERT(sizeof(ModelList) == 0x7a4, "ModelList");
 SR_STATIC_ASSERT(offsetof(ModelList, count) == 0x0, "ModelList.count");
-SR_STATIC_ASSERT(offsetof(ModelList, bullet) == 0x4, "ModelList.bullet");
+SR_STATIC_ASSERT(offsetof(ModelList, vehicle) == 0x4, "ModelList.vehicle");
 SR_STATIC_ASSERT(offsetof(ModelList, item) == 0x84, "ModelList.item");
 SR_STATIC_ASSERT(offsetof(ModelList, wheel) == 0x104, "ModelList.wheel");
 SR_STATIC_ASSERT(offsetof(ModelList, human) == 0x184, "ModelList.human");
-SR_STATIC_ASSERT(offsetof(ModelList, ammo) == 0x584, "ModelList.ammo");
-SR_STATIC_ASSERT(offsetof(ModelList, ammo_b) == 0x604, "ModelList.ammo_b");
+SR_STATIC_ASSERT(offsetof(ModelList, bullet) == 0x584, "ModelList.bullet");
+SR_STATIC_ASSERT(offsetof(ModelList, bullet_flat) == 0x604, "ModelList.bullet_flat");
 SR_STATIC_ASSERT(offsetof(ModelList, city_object) == 0x684, "ModelList.city_object");
 SR_STATIC_ASSERT(offsetof(ModelList, head) == 0x704, "ModelList.head");
 SR_STATIC_ASSERT(offsetof(ModelList, foot) == 0x708, "ModelList.foot");
