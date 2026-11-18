@@ -44828,7 +44828,7 @@ void __cdecl lf_79ad0(void)
           local_3c = (float *)((int)local_3c + 1)) {
       }
       if (DAT_09465308 == 2) {
-        scenario_createguards((int)local_3c,0x16,&DAT_00989680);
+        scenario_createguards((int)local_3c,0x16,10000000);
       }
     }
     resetorientation(local_2c);
