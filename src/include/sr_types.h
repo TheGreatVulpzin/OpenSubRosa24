@@ -1966,7 +1966,7 @@ typedef union Option { struct {
     int voicekey;                        /* +0x0134 loadsaveoptions: key voicekey= */
     int voicemb;                         /* +0x0138 loadsaveoptions: key voicemb= */
     int help;                            /* +0x013c loadsaveoptions: key help=, default 1 */
-    uint8_t pad_0140[0x4];
+    int swap_interval;                   /* +0x0140 the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0 */
     int voiceboost;                      /* +0x0144 loadsaveoptions: key voiceboost=, default 100 */
     float voiceboost_scale;              /* +0x0148 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
     uint8_t pad_014c[0x4];
@@ -1996,6 +1996,7 @@ SR_STATIC_ASSERT(offsetof(Option, voiceholdtotalk) == 0x130, "Option.voiceholdto
 SR_STATIC_ASSERT(offsetof(Option, voicekey) == 0x134, "Option.voicekey");
 SR_STATIC_ASSERT(offsetof(Option, voicemb) == 0x138, "Option.voicemb");
 SR_STATIC_ASSERT(offsetof(Option, help) == 0x13c, "Option.help");
+SR_STATIC_ASSERT(offsetof(Option, swap_interval) == 0x140, "Option.swap_interval");
 SR_STATIC_ASSERT(offsetof(Option, voiceboost) == 0x144, "Option.voiceboost");
 SR_STATIC_ASSERT(offsetof(Option, voiceboost_scale) == 0x148, "Option.voiceboost_scale");
 
@@ -3640,7 +3641,7 @@ typedef union OptionClient { struct {
     int voicekey;                        /* +0x0130 loadsaveoptions: key voicekey= */
     int voicemb;                         /* +0x0134 loadsaveoptions: key voicemb= */
     int help;                            /* +0x0138 loadsaveoptions: key help=, default 1 */
-    uint8_t pad_013c[0x4];
+    int swap_interval;                   /* +0x013c the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0 */
     int voiceboost;                      /* +0x0140 loadsaveoptions: key voiceboost=, default 100 */
     float voiceboost_scale;              /* +0x0144 loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0 */
     uint8_t pad_0148[0x8];
@@ -3669,6 +3670,7 @@ SR_STATIC_ASSERT(offsetof(OptionClient, voiceholdtotalk) == 0x12c, "OptionClient
 SR_STATIC_ASSERT(offsetof(OptionClient, voicekey) == 0x130, "OptionClient.voicekey");
 SR_STATIC_ASSERT(offsetof(OptionClient, voicemb) == 0x134, "OptionClient.voicemb");
 SR_STATIC_ASSERT(offsetof(OptionClient, help) == 0x138, "OptionClient.help");
+SR_STATIC_ASSERT(offsetof(OptionClient, swap_interval) == 0x13c, "OptionClient.swap_interval");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost) == 0x140, "OptionClient.voiceboost");
 SR_STATIC_ASSERT(offsetof(OptionClient, voiceboost_scale) == 0x144, "OptionClient.voiceboost_scale");
 

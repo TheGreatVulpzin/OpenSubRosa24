@@ -30,3 +30,8 @@ spectated_human,int,1,0x908aad8,"the human that the player watches, -1 for none.
 server_address,uint32_t,1,0x75a5854,"clientsend: the address of the server that the packets go to. joinmenu and connectmenu write it"
 server_port,uint16_t,1,0x75a5858,"clientsend: the port of the server that the packets go to. joinmenu and connectmenu write it"
 material_records,MaterialRec,1024,0x1724f604,"setupgame and setupclient: records of 0x58 bytes. A record holds four floats, the flags and the name. The Linux client names the symbol materials"
+render_aspect,float,1,0xb7330c8,"main: render_height divided by render_width"
+render_depth_bits,int,1,0xb7330dc,"main: the depth bits of the window, from the depthbits option"
+render_stencil_bits,int,1,0xb7330e0,"main: the stencil bits of the window, from the stencilbits option"
+gl_context,void*,1,0x103675ac,"main: the OpenGL context of the window"
+steam_active,int,1,0x10367380,"main: the result of steam_init"

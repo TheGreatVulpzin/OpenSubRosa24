@@ -600,6 +600,7 @@ option,0x130,voiceholdtotalk,int,,"loadsaveoptions: key voiceholdtotalk=, defaul
 option,0x134,voicekey,int,,loadsaveoptions: key voicekey=
 option,0x138,voicemb,int,,loadsaveoptions: key voicemb=
 option,0x13c,help,int,,"loadsaveoptions: key help=, default 1"
+option,0x140,swap_interval,int,,"the client main passes it to SDL_GL_SetSwapInterval. No code writes it: it stays 0"
 option,0x144,voiceboost,int,,"loadsaveoptions: key voiceboost=, default 100"
 option,0x148,voiceboost_scale,float,,"loadsaveoptions: voiceboost divided by 100, kept between 0.125 and 4.0"
 timerlist,0x0,numoftimers,int,,"setuptimers: the next free timer index, 0x40 at the start and 0x65 at the end"
