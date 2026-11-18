@@ -17,5 +17,11 @@ int parse_uncompressed_block(ZlibBuffer *buffer);
 int parse_zlib_header(ZlibBuffer *buffer);
 void init_defaults(void);
 int parse_zlib(ZlibBuffer *buffer, int header);
+int do_zlib(ZlibBuffer *buffer, uint8_t *output, int length, int expandable, int header);
+uint8_t *stbi_zlib_decode_malloc_guesssize(const uint8_t *input, int length, int guess, int *out_length);
+uint8_t *stbi_zlib_decode_malloc(const uint8_t *input, int length, int *out_length);
+int stbi_zlib_decode_buffer(uint8_t *output, int output_length, const uint8_t *input, int input_length);
+uint8_t *stbi_zlib_decode_noheader_malloc(const uint8_t *input, int length, int *out_length);
+int stbi_zlib_decode_noheader_buffer(uint8_t *output, int output_length, const uint8_t *input, int input_length);
 
 #endif

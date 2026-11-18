@@ -139,7 +139,7 @@ rva,name,evidence
 0x8240,stbi_png_info,"stb_image: parse_png_file in header mode, then writes x, y and the component count."
 0x82e0,stbi_bmp_test_file,"stb_image: bmp_test on a file, then fseek back."
 0x8330,bmp_test,"stb_image: tests the BM mark and a header size of 12, 40, 56 or 108."
-0x83d0,get16le,"stb_image: two stbi_get8, low byte first. ELF get16le."
+0x83d0,stbi_get16le,"stb_image: two stbi_get8, low byte first. ELF get16le."
 0x8400,stbi_get32le,"stb_image: two get16le, low half first."
 0x8430,stbi_bmp_test_memory,stb_image: bmp_test on a memory context.
 0x8460,stbi_bmp_load,"stb_image: fopen, stbi_bmp_load_from_file, fclose."
@@ -422,3 +422,5 @@ rva,name,evidence
 0x10bc70,scaleaddvectors2d,out = a + b * s on x and y. ELF scaleaddvectors2d.
 0x10bca0,tangentvector2d,"out = (-y, x). ELF tangentvector2d."
 0x10bcc0,subtractvectors2d,out = a - b on x and y. ELF subtractvectors2d.
+0x1110,stbi_set_error,"stb_image: keeps the failure text and returns 0. Every decoder calls it."
+0x3b50,stbi_get16,"stb_image: two stbi_get8, high byte first."

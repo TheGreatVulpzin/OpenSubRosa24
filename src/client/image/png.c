@@ -8,6 +8,7 @@
 #include <string.h>
 #include "client.h"
 #include "image/io.h"
+#include "image/zlib.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 
@@ -65,8 +66,8 @@ enum {
 /* Read a chunk length and type. The type occupies the high thirty-two bits. */
 uint64_t get_chunk_header(ImageReader *reader)
 {
-    uint32_t length = image_get32(reader);
-    uint32_t type = image_get32(reader);
+    uint32_t length = stbi_get32(reader);
+    uint32_t type = stbi_get32(reader);
     return ((uint64_t)type << 32) | length;
 }
 
@@ -76,7 +77,7 @@ int check_png_header(ImageReader *reader)
     static const uint8_t signature[] = {137,80,78,71,13,10,26,10};
     unsigned index;
     for (index = 0; index < sizeof signature; index++)
-        if (image_get8(reader) != signature[index])
+        if (stbi_get8(reader) != signature[index])
             return image_fail(PNG_ERROR_SIGNATURE);
     return 1;
 }
@@ -301,26 +302,26 @@ static int read_png_dimensions(PngImage *image, unsigned length, unsigned *palet
     unsigned color;
     if (length != 13)
         return image_fail(PNG_ERROR_HEADER_LENGTH);
-    reader->width = image_get32(reader);
+    reader->width = stbi_get32(reader);
     if (reader->width > PNG_MAX_DIMENSION)
         return image_fail(PNG_ERROR_WIDTH);
-    reader->height = image_get32(reader);
+    reader->height = stbi_get32(reader);
     if (reader->height > PNG_MAX_DIMENSION)
         return image_fail(PNG_ERROR_HEIGHT);
-    if (image_get8(reader) != 8)
+    if (stbi_get8(reader) != 8)
         return image_fail(PNG_ERROR_DEPTH);
-    color = image_get8(reader);
+    color = stbi_get8(reader);
     if (color > 6)
         return image_fail(PNG_ERROR_COLOR_RANGE);
     if (color == 3)
         *palette_channels = 3;
     else if (color & 1)
         return image_fail(PNG_ERROR_COLOR_TYPE);
-    if (image_get8(reader))
+    if (stbi_get8(reader))
         return image_fail(PNG_ERROR_COMPRESSION);
-    if (image_get8(reader))
+    if (stbi_get8(reader))
         return image_fail(PNG_ERROR_FILTER_METHOD);
-    *interlace = image_get8(reader);
+    *interlace = stbi_get8(reader);
     if (*interlace > 1)
         return image_fail(PNG_ERROR_INTERLACE);
     if (!reader->width || !reader->height)
@@ -367,9 +368,9 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
             if (palette_count * 3 != length)
                 return image_fail(PNG_ERROR_PALETTE_TRIPLES);
             for (index = 0; index < palette_count; index++) {
-                palette[index * 4] = (uint8_t)image_get8(reader);
-                palette[index * 4 + 1] = (uint8_t)image_get8(reader);
-                palette[index * 4 + 2] = (uint8_t)image_get8(reader);
+                palette[index * 4] = (uint8_t)stbi_get8(reader);
+                palette[index * 4 + 1] = (uint8_t)stbi_get8(reader);
+                palette[index * 4 + 2] = (uint8_t)stbi_get8(reader);
                 palette[index * 4 + 3] = PNG_ALPHA;
             }
             break;
@@ -387,7 +388,7 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
                     return image_fail(PNG_ERROR_TRANSPARENCY_COUNT);
                 palette_channels = 4;
                 for (index = 0; index < length; index++)
-                    palette[index * 4 + 3] = (uint8_t)image_get8(reader);
+                    palette[index * 4 + 3] = (uint8_t)stbi_get8(reader);
             } else {
                 if (!(reader->channels & 1))
                     return image_fail(PNG_ERROR_TRANSPARENCY_ALPHA);
@@ -395,7 +396,7 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
                     return image_fail(PNG_ERROR_TRANSPARENCY_LENGTH);
                 has_transparency = 1;
                 for (index = 0; index < (unsigned)reader->channels; index++)
-                    transparent[index] = (uint8_t)image_get16(reader);
+                    transparent[index] = (uint8_t)stbi_get16(reader);
             }
             break;
         case PNG_IDAT:
@@ -431,8 +432,7 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
                 return 1;
             if (!image->compressed)
                 return image_fail(PNG_ERROR_MISSING_DATA);
-            image->expanded = CL_FN(0x405dd0, uint8_t *(__cdecl *)(uint8_t *, int, int *))
-                (image->compressed, used, &expanded_size);
+            image->expanded = stbi_zlib_decode_malloc(image->compressed, used, &expanded_size);
             if (!image->expanded)
                 return 0;
             os_free(image->compressed);
@@ -460,9 +460,9 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
                     message[index] = (char)(type >> (24 - index * 8));
                 return image_fail(PNG_ERROR_UNKNOWN_CHUNK);
             }
-            image_skip(reader, length);
+            stbi_skip(reader, length);
         }
-        image_get32(reader);
+        stbi_get32(reader);
         first = 0;
     }
 }

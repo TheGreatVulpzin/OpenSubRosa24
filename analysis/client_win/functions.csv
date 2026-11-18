@@ -3,7 +3,7 @@ rva,size,name,source,confidence,evidence
 0x1010,18,stbi_image_free,manual,1.0,stb_image: frees an image. ELF order: after stbi_failure_reason.
 0x1030,102,stbi_register_loader,manual,1.0,"stb_image: adds a loader to the first free slot of the loader list, at most once."
 0x10a0,106,stbi_load,manual,1.0,"stb_image: fopen, stbi_load_from_file, fclose."
-0x1110,15,e,callgraph,1.0,votes=248
+0x1110,15,stbi_set_error,manual,1.0,"stb_image: keeps the failure text and returns 0. Every decoder calls it."
 0x1120,471,stbi_load_from_file,manual,1.0,"stb_image: tries the test and load function of each format on a file (png, bmp, psd, tga, hdr)."
 0x1300,526,stbi_load_from_memory,manual,1.0,stb_image: tries the test and load function of each format on a memory buffer.
 0x1510,106,stbi_loadf,manual,1.0,"stb_image: fopen, stbi_loadf_from_file, fclose."
@@ -35,7 +35,7 @@ rva,size,name,source,confidence,evidence
 0x36f0,141,reset,anchor,0.816,features
 0x3780,818,process_marker,anchor,0.634,features
 0x3b10,53,stbi_skip,manual,1.0,stb_image: moves the read place of a context by n bytes.
-0x3b50,45,get16,callgraph,1.0,votes=24
+0x3b50,45,stbi_get16,manual,1.0,"stb_image: two stbi_get8, high byte first."
 0x3b80,514,build_huffman,anchor,0.664,features
 0x3d90,494,process_scan_header,anchor,0.659,features
 0x3f80,248,decode_jpeg_header,anchor,0.867,features
@@ -93,7 +93,7 @@ rva,size,name,source,confidence,evidence
 0x8240,154,stbi_png_info,manual,1.0,"stb_image: parse_png_file in header mode, then writes x, y and the component count."
 0x82e0,79,stbi_bmp_test_file,manual,1.0,"stb_image: bmp_test on a file, then fseek back."
 0x8330,146,bmp_test,manual,1.0,"stb_image: tests the BM mark and a header size of 12, 40, 56 or 108."
-0x83d0,41,get16le,manual,1.0,"stb_image: two stbi_get8, low byte first. ELF get16le."
+0x83d0,41,stbi_get16le,manual,1.0,"stb_image: two stbi_get8, low byte first. ELF get16le."
 0x8400,41,stbi_get32le,manual,1.0,"stb_image: two get16le, low half first."
 0x8430,42,stbi_bmp_test_memory,manual,1.0,stb_image: bmp_test on a memory context.
 0x8460,88,stbi_bmp_load,manual,1.0,"stb_image: fopen, stbi_bmp_load_from_file, fclose."

@@ -27,10 +27,57 @@ enum {
     BMP_ERROR_MEMORY = 0x112024
 };
 
-/* Expand a masked sample to eight bits. */
-static int bmp_sample(unsigned value, int shift, int count)
+/* The index of the highest set bit. Zero gives -1. */
+int high_bit(unsigned value)
 {
-    return CL_FN(0x409450, int(__cdecl *)(int, int, int))(value, shift, count);
+    int bit = 0;
+    if (value == 0)
+        return -1;
+    if (value >= 0x10000) {
+        bit += 16;
+        value >>= 16;
+    }
+    if (value >= 0x100) {
+        bit += 8;
+        value >>= 8;
+    }
+    if (value >= 0x10) {
+        bit += 4;
+        value >>= 4;
+    }
+    if (value >= 4) {
+        bit += 2;
+        value >>= 2;
+    }
+    if (value >= 2)
+        bit += 1;
+    return bit;
+}
+
+/* The number of set bits. */
+int bitcount(unsigned value)
+{
+    value = (value & 0x55555555) + ((value >> 1) & 0x55555555);
+    value = (value & 0x33333333) + ((value >> 2) & 0x33333333);
+    value = (value + (value >> 4)) & 0x0f0f0f0f;
+    value = value + (value >> 8);
+    value = value + (value >> 16);
+    return (int)(value & 0xff);
+}
+
+/* Move a masked sample to the low bits and repeat it to fill eight bits. A negative shift moves
+ * the sample up. */
+int shiftsigned(int value, int shift, int bits)
+{
+    int result, filled;
+    if (shift < 0)
+        value <<= -shift;
+    else
+        value >>= shift;
+    result = value;
+    for (filled = bits; filled < 8; filled += bits)
+        result += value >> filled;
+    return result;
 }
 
 /* Read masks and the palette count. Return zero for unsupported compression. */
@@ -42,15 +89,15 @@ static int bmp_header(ImageReader *reader, int header, int offset, int bits, uns
             *palette_count = (offset - 38) / 3;
         return 1;
     }
-    compression = image_get32le(reader);
+    compression = stbi_get32le(reader);
     if (compression == BMP_RLE8 || compression == BMP_RLE4)
         return image_fail(BMP_ERROR_RUNS);
     for (index = 0; index < 5; index++)
-        image_get32le(reader);
+        stbi_get32le(reader);
     if (header == BMP_INFO || header == BMP_EXTENDED) {
         if (header == BMP_EXTENDED)
             for (index = 0; index < 4; index++)
-                image_get32le(reader);
+                stbi_get32le(reader);
         if (bits == 16 || bits == 32) {
             if (compression == BMP_RGB) {
                 masks[0] = bits == 32 ? 0xff0000 : 0x7c00;
@@ -61,16 +108,16 @@ static int bmp_header(ImageReader *reader, int header, int offset, int bits, uns
                 if (compression != BMP_MASKS)
                     return 0;
                 for (index = 0; index < 3; index++)
-                    masks[index] = image_get32le(reader);
+                    masks[index] = stbi_get32le(reader);
                 if (masks[0] == masks[1] && masks[1] == masks[2])
                     return 0;
             }
         }
     } else {
         for (index = 0; index < 4; index++)
-            masks[index] = image_get32le(reader);
+            masks[index] = stbi_get32le(reader);
         for (index = 0; index < 13; index++)
-            image_get32le(reader);
+            stbi_get32le(reader);
     }
     if (bits < 16)
         *palette_count = (offset - BMP_FILE_HEADER - header) >> 2;
@@ -86,14 +133,14 @@ static int bmp_palette(ImageReader *reader, uint8_t *output, int channels, int b
     if (!count || count > BMP_PALETTE_SIZE)
         return image_fail(BMP_ERROR_PALETTE);
     for (index = 0; index < count; index++) {
-        palette[index][2] = (uint8_t)image_get8(reader);
-        palette[index][1] = (uint8_t)image_get8(reader);
-        palette[index][0] = (uint8_t)image_get8(reader);
+        palette[index][2] = (uint8_t)stbi_get8(reader);
+        palette[index][1] = (uint8_t)stbi_get8(reader);
+        palette[index][0] = (uint8_t)stbi_get8(reader);
         if (header != BMP_CORE)
-            image_get8(reader);
+            stbi_get8(reader);
         palette[index][3] = 255;
     }
-    image_skip(reader, offset - BMP_FILE_HEADER - header - (3 + (header != BMP_CORE)) * count);
+    stbi_skip(reader, offset - BMP_FILE_HEADER - header - (3 + (header != BMP_CORE)) * count);
     if (bits != 4 && bits != 8)
         return image_fail(BMP_ERROR_DEPTH);
     row_bytes = bits == 4 ? (reader->width + 1) >> 1 : reader->width;
@@ -101,12 +148,12 @@ static int bmp_palette(ImageReader *reader, uint8_t *output, int channels, int b
     for (row = 0; row < (int)reader->height; row++) {
         for (column = 0; column < (int)reader->width; column++) {
             if (bits == 8 || !(column & 1))
-                packed = image_get8(reader);
+                packed = stbi_get8(reader);
             index = bits == 8 ? packed : column & 1 ? packed & 15 : packed >> 4;
             for (channel = 0; channel < channels; channel++)
                 *output++ = palette[index][channel];
         }
-        image_skip(reader, padding);
+        stbi_skip(reader, padding);
     }
     return 1;
 }
@@ -123,28 +170,28 @@ static int bmp_rgb(ImageReader *reader, uint8_t *output, int channels, int bits,
         if (!masks[0] || !masks[1] || !masks[2])
             return image_fail(BMP_ERROR_MASKS);
         for (index = 0; index < 4; index++) {
-            shift[index] = CL_FN(0x409340, int(__cdecl *)(unsigned))(masks[index]) - 7;
-            counts[index] = CL_FN(0x4093e0, int(__cdecl *)(unsigned))(masks[0]);
+            shift[index] = high_bit(masks[index]) - 7;
+            counts[index] = bitcount(masks[0]);
         }
     }
     for (row = 0; row < (int)reader->height; row++) {
         for (column = 0; column < (int)reader->width; column++, output += channels) {
             uint8_t alpha;
             if (fast) {
-                output[2] = (uint8_t)image_get8(reader);
-                output[1] = (uint8_t)image_get8(reader);
-                output[0] = (uint8_t)image_get8(reader);
-                alpha = fast == 2 ? (uint8_t)image_get8(reader) : 255;
+                output[2] = (uint8_t)stbi_get8(reader);
+                output[1] = (uint8_t)stbi_get8(reader);
+                output[0] = (uint8_t)stbi_get8(reader);
+                alpha = fast == 2 ? (uint8_t)stbi_get8(reader) : 255;
             } else {
-                unsigned value = bits == 16 ? image_get16le(reader) : image_get32le(reader);
+                unsigned value = bits == 16 ? stbi_get16le(reader) : stbi_get32le(reader);
                 for (index = 0; index < 3; index++)
-                    output[index] = (uint8_t)bmp_sample(value & masks[index], shift[index], counts[index]);
-                alpha = masks[3] ? (uint8_t)bmp_sample(value & masks[3], shift[3], counts[3]) : 255;
+                    output[index] = (uint8_t)shiftsigned(value & masks[index], shift[index], counts[index]);
+                alpha = masks[3] ? (uint8_t)shiftsigned(value & masks[3], shift[3], counts[3]) : 255;
             }
             if (channels == 4)
                 output[3] = alpha;
         }
-        image_skip(reader, padding);
+        stbi_skip(reader, padding);
     }
     return 1;
 }
@@ -155,25 +202,25 @@ void *bmp_load(ImageReader *reader, unsigned *width, unsigned *height, unsigned 
     unsigned masks[4] = {0}, output_channels;
     int offset, header, bits, palette_count = 0, flip, row;
     uint8_t *output;
-    if (image_get8(reader) != 'B' || image_get8(reader) != 'M') {
+    if (stbi_get8(reader) != 'B' || stbi_get8(reader) != 'M') {
         image_fail(BMP_ERROR_SIGNATURE);
         return NULL;
     }
-    image_get32le(reader);
-    image_get16le(reader);
-    image_get16le(reader);
-    offset = image_get32le(reader);
-    header = image_get32le(reader);
+    stbi_get32le(reader);
+    stbi_get16le(reader);
+    stbi_get16le(reader);
+    offset = stbi_get32le(reader);
+    header = stbi_get32le(reader);
     if (header != BMP_CORE && header != BMP_INFO && header != BMP_EXTENDED && header != BMP_V4) {
         image_fail(BMP_ERROR_HEADER);
         return NULL;
     }
     cl_data_image_error = (char *)(sr_base + BMP_ERROR_DATA);
-    reader->width = header == BMP_CORE ? image_get16le(reader) : image_get32le(reader);
-    reader->height = header == BMP_CORE ? image_get16le(reader) : image_get32le(reader);
-    if (image_get16le(reader) != 1)
+    reader->width = header == BMP_CORE ? stbi_get16le(reader) : stbi_get32le(reader);
+    reader->height = header == BMP_CORE ? stbi_get16le(reader) : stbi_get32le(reader);
+    if (stbi_get16le(reader) != 1)
         return NULL;
-    bits = image_get16le(reader);
+    bits = stbi_get16le(reader);
     if (bits == 1) {
         image_fail(BMP_ERROR_MONOCHROME);
         return NULL;
@@ -195,7 +242,7 @@ void *bmp_load(ImageReader *reader, unsigned *width, unsigned *height, unsigned 
             return NULL;
         }
     } else {
-        image_skip(reader, offset - BMP_FILE_HEADER - header);
+        stbi_skip(reader, offset - BMP_FILE_HEADER - header);
         if (!bmp_rgb(reader, output, output_channels, bits, masks))
             return NULL;
     }

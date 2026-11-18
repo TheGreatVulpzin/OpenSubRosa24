@@ -5,13 +5,23 @@
 #include "image/io.h"
 #include "client.h"
 #include "sr_os.h"
+#include "sr_runtime.h"
+
+#include <string.h>
 
 void *sr_import(const char *dll, const char *name);
 
-/* Store the failure message and return zero. */
+/* Keep the failure message and return zero. */
+int stbi_set_error(const char *message)
+{
+    cl_data_image_error = (char *)message;
+    return 0;
+}
+
+/* Keep the failure message that lies at an offset of the image of the executable. */
 int image_fail(unsigned message_rva)
 {
-    return CL_FN(0x401110, int(__cdecl *)(const char *))((const char *)(sr_base + message_rva));
+    return stbi_set_error((const char *)(sr_base + message_rva));
 }
 
 /* Stop when a required decoder invariant fails. */
@@ -26,45 +36,67 @@ void image_check(int condition, unsigned expression_rva, unsigned source_rva, un
 }
 
 /* Read one unsigned byte. End of input gives zero. */
-unsigned image_get8(ImageReader *reader)
+unsigned stbi_get8(ImageReader *reader)
 {
-    return CL_FN(0x402320, unsigned(__cdecl *)(ImageReader *))(reader);
+    if (reader->file != NULL) {
+        int c = os_fgetc(reader->file);
+        return c == -1 ? 0 : (unsigned)c;
+    }
+    if (reader->cursor < reader->end)
+        return *reader->cursor++;
+    return 0;
 }
 
 /* Read a big endian word. Missing bytes give zero. */
-unsigned image_get16(ImageReader *reader)
+unsigned stbi_get16(ImageReader *reader)
 {
-    return CL_FN(0x403b50, unsigned(__cdecl *)(ImageReader *))(reader);
+    unsigned high = stbi_get8(reader);
+    return (high << 8) + stbi_get8(reader);
 }
 
 /* Read a big endian double word. Missing bytes give zero. */
-unsigned image_get32(ImageReader *reader)
+unsigned stbi_get32(ImageReader *reader)
 {
-    return CL_FN(0x407000, unsigned(__cdecl *)(ImageReader *))(reader);
+    unsigned high = stbi_get16(reader);
+    return (high << 16) + stbi_get16(reader);
 }
 
 /* Read a little endian word. Missing bytes give zero. */
-unsigned image_get16le(ImageReader *reader)
+unsigned stbi_get16le(ImageReader *reader)
 {
-    return CL_FN(0x4083d0, unsigned(__cdecl *)(ImageReader *))(reader);
+    unsigned low = stbi_get8(reader);
+    return low + (stbi_get8(reader) << 8);
 }
 
 /* Read a little endian double word. Missing bytes give zero. */
-unsigned image_get32le(ImageReader *reader)
+unsigned stbi_get32le(ImageReader *reader)
 {
-    return CL_FN(0x408400, unsigned(__cdecl *)(ImageReader *))(reader);
+    unsigned low = stbi_get16le(reader);
+    return low + (stbi_get16le(reader) << 16);
 }
 
 /* Move the cursor by count bytes. The memory cursor has no bounds check. */
-void image_skip(ImageReader *reader, int count)
+void stbi_skip(ImageReader *reader, int count)
 {
-    CL_FN(0x403b10, void(__cdecl *)(ImageReader *, int))(reader, count);
+    static int(__cdecl *seek)(void *, long, int);
+    if (reader->file == NULL) {
+        reader->cursor += count;
+        return;
+    }
+    if (!seek)
+        *(void **)&seek = sr_import("MSVCR100.DLL", "fseek");
+    seek(reader->file, count, 1);
 }
 
 /* Read count bytes into data. */
-void image_getn(ImageReader *reader, void *data, size_t count)
+void stbi_getn(ImageReader *reader, void *data, size_t count)
 {
-    CL_FN(0x409d10, void(__cdecl *)(ImageReader *, void *, size_t))(reader, data, count);
+    if (reader->file != NULL) {
+        image_read(data, count, reader->file);
+        return;
+    }
+    memcpy(data, reader->cursor, count);
+    reader->cursor += count;
 }
 
 /* Read a byte array from a file. Return the number of bytes read. */

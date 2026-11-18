@@ -5,9 +5,11 @@
  */
 #include "image/hdr.h"
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include "client.h"
 #include "image/io.h"
+#include "image/jpeg.h"
 #include "sr_os.h"
 
 enum { HDR_LINE_SIZE = 1024, HDR_COMPONENTS = 4, HDR_MIN_RUN_WIDTH = 8,
@@ -21,16 +23,62 @@ enum {
     HDR_ERROR_ROW_LENGTH = 0x1121d4
 };
 
-/* Read a header line into the supplied buffer. */
-static char *hdr_line(ImageReader *reader, char *line)
+/* Read a header line into the buffer, without the line end. A line with 1023 bytes or more is
+ * cut and the rest of the line is skipped. The line also ends at the end of the input. */
+char *hdr_gettoken(ImageReader *reader, char *buffer)
 {
-    return CL_FN(0x40a9b0, char *(__cdecl *)(ImageReader *, char *))(reader, line);
+    int length = 0;
+    char c = (char)stbi_get8(reader);
+
+    while (!at_eof(reader) && c != '\n') {
+        buffer[length++] = c;
+        if (length == HDR_LINE_SIZE - 1) {
+            while (!at_eof(reader) && stbi_get8(reader) != '\n')
+                ;
+            break;
+        }
+        c = (char)stbi_get8(reader);
+    }
+    buffer[length] = 0;
+    return buffer;
 }
 
-/* Convert one RGBE pixel to the requested channel count. */
-static void hdr_pixel(float *output, const uint8_t *rgbe, int channels)
+/* Convert one RGBE pixel to the requested number of channels. The exponent byte gives the scale
+ * 2^(exponent - 136). A zero exponent gives black. One and two channels get the mean of the
+ * colors. Two channels get the alpha 1 in the second place, four channels in the fourth. */
+void hdr_convert(float *output, const uint8_t *rgbe, int channels)
 {
-    CL_FN(0x40aa60, void(__cdecl *)(float *, const uint8_t *, int))(output, rgbe, channels);
+    if (rgbe[3] != 0) {
+        float scale = (float)ldexp(1.0f, rgbe[3] - (128 + 8));
+        if (channels <= 2) {
+            output[0] = (rgbe[0] + rgbe[1] + rgbe[2]) * scale / 3;
+        } else {
+            output[0] = rgbe[0] * scale;
+            output[1] = rgbe[1] * scale;
+            output[2] = rgbe[2] * scale;
+        }
+        if (channels == 2)
+            output[1] = 1;
+        if (channels == 4)
+            output[3] = 1;
+        return;
+    }
+    switch (channels) {
+    case 4:
+        output[3] = 1;
+        output[0] = output[1] = output[2] = 0;
+        break;
+    case 3:
+        output[0] = output[1] = output[2] = 0;
+        break;
+    case 2:
+        output[1] = 1;
+        output[0] = 0;
+        break;
+    case 1:
+        output[0] = 0;
+        break;
+    }
 }
 
 /* Read flat pixels from a position in the image. */
@@ -40,8 +88,8 @@ static void hdr_flat(ImageReader *reader, float *output, unsigned width, int hei
     uint8_t rgbe[HDR_COMPONENTS];
     for (; row < height; row++, column = 0)
         for (; column < width; column++) {
-            image_getn(reader, rgbe, sizeof rgbe);
-            hdr_pixel(output + (row * width + column) * channels, rgbe, channels);
+            stbi_getn(reader, rgbe, sizeof rgbe);
+            hdr_convert(output + (row * width + column) * channels, rgbe, channels);
         }
 }
 
@@ -53,18 +101,18 @@ float *hdr_load(ImageReader *reader, unsigned *width, int *height, int *channels
     unsigned columns, column;
     float *output;
     uint8_t *scanline = NULL;
-    if (strcmp(hdr_line(reader, line), "#?RADIANCE")) {
+    if (strcmp(hdr_gettoken(reader, line), "#?RADIANCE")) {
         image_fail(HDR_ERROR_SIGNATURE);
         return NULL;
     }
-    while (*(position = hdr_line(reader, line)))
+    while (*(position = hdr_gettoken(reader, line)))
         if (!strcmp(position, "FORMAT=32-bit_rle_rgbe"))
             format = 1;
     if (!format) {
         image_fail(HDR_ERROR_FORMAT);
         return NULL;
     }
-    position = hdr_line(reader, line);
+    position = hdr_gettoken(reader, line);
     if (strncmp(position, "-Y ", 3)) {
         image_fail(HDR_ERROR_Y);
         return NULL;
@@ -89,17 +137,17 @@ float *hdr_load(ImageReader *reader, unsigned *width, int *height, int *channels
     }
     for (row = 0; row < rows; row++) {
         uint8_t header[HDR_COMPONENTS];
-        header[0] = (uint8_t)image_get8(reader);
-        header[1] = (uint8_t)image_get8(reader);
-        header[2] = (uint8_t)image_get8(reader);
+        header[0] = (uint8_t)stbi_get8(reader);
+        header[1] = (uint8_t)stbi_get8(reader);
+        header[2] = (uint8_t)stbi_get8(reader);
         if (header[0] != 2 || header[1] != 2 || (header[2] & HDR_RUN_FLAG)) {
-            header[3] = (uint8_t)image_get8(reader);
-            hdr_pixel(output, header, requested);
+            header[3] = (uint8_t)stbi_get8(reader);
+            hdr_convert(output, header, requested);
             os_free(scanline);
             hdr_flat(reader, output, columns, rows, requested, 0, 1);
             return output;
         }
-        header[3] = (uint8_t)image_get8(reader);
+        header[3] = (uint8_t)stbi_get8(reader);
         if ((unsigned)(header[2] * 256 + header[3]) != columns) {
             os_free(output);
             os_free(scanline);
@@ -111,9 +159,9 @@ float *hdr_load(ImageReader *reader, unsigned *width, int *height, int *channels
         for (component = 0; component < HDR_COMPONENTS; component++) {
             column = 0;
             while (column < columns) {
-                unsigned count = image_get8(reader);
+                unsigned count = stbi_get8(reader);
                 if (count > HDR_RUN_FLAG) {
-                    uint8_t value = (uint8_t)image_get8(reader);
+                    uint8_t value = (uint8_t)stbi_get8(reader);
                     count -= HDR_RUN_FLAG;
                     while (count--) {
                         scanline[column * HDR_COMPONENTS + component] = value;
@@ -121,14 +169,14 @@ float *hdr_load(ImageReader *reader, unsigned *width, int *height, int *channels
                     }
                 } else {
                     while (count--) {
-                        scanline[column * HDR_COMPONENTS + component] = (uint8_t)image_get8(reader);
+                        scanline[column * HDR_COMPONENTS + component] = (uint8_t)stbi_get8(reader);
                         column++;
                     }
                 }
             }
         }
         for (column = 0; column < columns; column++)
-            hdr_pixel(output + (row * columns + column) * requested,
+            hdr_convert(output + (row * columns + column) * requested,
                        scanline + column * HDR_COMPONENTS, requested);
     }
     os_free(scanline);

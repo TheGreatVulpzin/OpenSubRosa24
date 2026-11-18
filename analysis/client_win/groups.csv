@@ -3,7 +3,7 @@ rva,name,size,group,recorded_calls
 0x1010,stbi_image_free,18,C1,16
 0x1030,stbi_register_loader,102,C1,0
 0x10a0,stbi_load,106,C1,16
-0x1110,e,15,C10,0
+0x1110,stbi_set_error,15,C1,0
 0x1120,stbi_load_from_file,471,C1,16
 0x1300,stbi_load_from_memory,526,C1,0
 0x1510,stbi_loadf,106,C1,0
@@ -33,7 +33,7 @@ rva,name,size,group,recorded_calls
 0x36f0,reset,141,C7,0
 0x3780,process_marker,818,C1,0
 0x3b10,stbi_skip,53,C1,18
-0x3b50,get16,45,C10,24
+0x3b50,stbi_get16,45,C1,24
 0x3b80,build_huffman,514,C1,0
 0x3d90,process_scan_header,494,C1,0
 0x3f80,decode_jpeg_header,248,C1,16
@@ -91,7 +91,7 @@ rva,name,size,group,recorded_calls
 0x8240,stbi_png_info,154,C1,0
 0x82e0,stbi_bmp_test_file,79,C1,0
 0x8330,bmp_test,146,C1,0
-0x83d0,get16le,41,C10,0
+0x83d0,stbi_get16le,41,C1,0
 0x8400,stbi_get32le,41,C1,0
 0x8430,stbi_bmp_test_memory,42,C1,0
 0x8460,stbi_bmp_load,88,C1,0
@@ -634,7 +634,7 @@ rva,name,size,group,recorded_calls
 0x50700,bondsimulation2,21666,C0x,0
 0x55bb0,checkbonds,5,C10,0
 0x55bc0,setupbuildingtypes,3856,C0,0
-0x56ad0,building_buildfloorplan,7780,C0,17
+0x56ad0,building_buildfloorplan,7780,C0x,17
 0x58940,building_iswindow,296,C10,0
 0x58a70,building_addgaragedoor,229,C10,0
 0x58b60,buildingedit_setup,442,C8,0
@@ -655,13 +655,13 @@ rva,name,size,group,recorded_calls
 0x605a0,buildingeditor_renderblock2,918,C8,0
 0x60940,buildingeditor_draw_sblock,509,C8,0
 0x60b40,building_save,2455,C0,0
-0x614e0,building_load,2790,C0,17
+0x614e0,building_load,2790,C0x,17
 0x61fd0,building_setupbuild,2780,C0x,0
 0x62ab0,building_setupfloorplannewer,2482,C0x,0
 0x63470,building_rotatefloorplan,3218,C10,0
 0x64110,setupbullettypes,620,C0x,0
 0x64380,createbullet,607,C0x,0
-0x645e0,bullettimetolive,111,C0,0
+0x645e0,bullettimetolive,111,C0x,0
 0x64650,deletebullet,96,C10,0
 0x646b0,bulletsimulation,3196,C0x,0
 0x65330,createcityobject,135,C10,0
@@ -733,7 +733,7 @@ rva,name,size,group,recorded_calls
 0x72490,createevent_updateplayer,393,C0,0
 0x72620,createevent_updatehuman,163,C10,0
 0x726d0,createevent_updateplayer_finance,163,C0,0
-0x72780,createevent_sound,168,C0,0
+0x72780,createevent_sound,168,C0x,0
 0x72830,createevent_updatedoor,123,C0x,0
 0x728b0,createevent_updatescenario,257,C10,0
 0x729c0,createevent_updatemission,397,C0x,0
@@ -876,7 +876,7 @@ rva,name,size,group,recorded_calls
 0xa3fe0,logicsimulation_driving,357,C10,0
 0xa4150,addpointstoteam,41,C10,0
 0xa4180,pointinsidebase,218,C0,0
-0xa4260,pointinsidebuilding,218,C0,0
+0xa4260,pointinsidebuilding,218,C0x,0
 0xa4340,pointinsidebasesafe,218,C0,0
 0xa4420,pointinsidecheckpoint,120,C10,0
 0xa44a0,logic_createcar,200,C0x,0
@@ -972,7 +972,7 @@ rva,name,size,group,recorded_calls
 0xc5470,serpnoise2d,255,C2,0
 0xc5570,cerpnoise2d,255,C2,0
 0xc5670,getrandomfloat,43,C10,0
-0xc56a0,getrandomvector2d,94,C0,0
+0xc56a0,getrandomvector2d,94,C0x,0
 0xc5700,getrandomvector3d,105,C0x,0
 0xc5770,getrandomint,15,C10,0
 0xc5780,createobject,6036,C0x,0

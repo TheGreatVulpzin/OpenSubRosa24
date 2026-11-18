@@ -9,6 +9,7 @@
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "textures/loaders.h"
+#include "textures/textures.h"
 #include "textures/upload.h"
 
 enum { FONT_GLYPHS = 256, FONT_COLUMNS = 16, FONT_CELL = 8, FONT_ATLAS = 128,
@@ -119,7 +120,7 @@ void createfont(void)
     cl_data_fonts[cl_data_fontnum].texture = texture;
     pixels = font_texture(texture, FONT_LARGE_ATLAS, FONT_LARGE_ATLAS, IMAGE_LINEAR, IMAGE_MIPMAP_LINEAR);
     font_bitmap(pixels, FONT_LARGE_ATLAS, 8);
-    CL_FN(0x50a9a0, void(__cdecl *)(int))(texture);
+    generatemipmap(texture);
     font_upload(texture);
     font_fixed_metrics(&cl_data_fonts[cl_data_fontnum], 0.25);
     cl_data_fontnum = FONT_SMALL;

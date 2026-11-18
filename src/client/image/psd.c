@@ -25,18 +25,18 @@ static void psd_runs(ImageReader *reader, uint8_t *output, int pixels)
 {
     int written = 0;
     while (written < pixels) {
-        unsigned command = image_get8(reader), count;
+        unsigned command = stbi_get8(reader), count;
         if (command == PSD_NOOP)
             continue;
         if (command < PSD_NOOP) {
             count = command + 1;
             written += count;
             while (count--) {
-                *output = (uint8_t)image_get8(reader);
+                *output = (uint8_t)stbi_get8(reader);
                 output += PSD_CHANNELS;
             }
         } else {
-            uint8_t value = (uint8_t)image_get8(reader);
+            uint8_t value = (uint8_t)stbi_get8(reader);
             count = (command ^ 255) + 2;
             written += count;
             while (count--) {
@@ -53,35 +53,35 @@ void *psd_load(ImageReader *reader, int *width, int *height, int *channels, int 
     int count, rows, columns, compression, index, channel, pixels;
     uint8_t *output;
     unsigned error = 0;
-    if (image_get32(reader) != PSD_SIGNATURE)
+    if (stbi_get32(reader) != PSD_SIGNATURE)
         error = PSD_ERROR_SIGNATURE;
-    else if (image_get16(reader) != PSD_VERSION)
+    else if (stbi_get16(reader) != PSD_VERSION)
         error = PSD_ERROR_VERSION;
     if (error) {
         image_fail(error);
         return NULL;
     }
-    image_skip(reader, 6);
-    count = image_get16(reader);
+    stbi_skip(reader, 6);
+    count = stbi_get16(reader);
     if (count < 0 || count > 16) {
         image_fail(PSD_ERROR_CHANNELS);
         return NULL;
     }
-    rows = image_get32(reader);
-    columns = image_get32(reader);
-    if (image_get16(reader) != 8)
+    rows = stbi_get32(reader);
+    columns = stbi_get32(reader);
+    if (stbi_get16(reader) != 8)
         error = PSD_ERROR_DEPTH;
-    else if (image_get16(reader) != PSD_RGB)
+    else if (stbi_get16(reader) != PSD_RGB)
         error = PSD_ERROR_COLOR;
     if (error) {
         image_fail(error);
         return NULL;
     }
     for (index = 0; index < 3; index++) {
-        int length = image_get32(reader);
-        image_skip(reader, length);
+        int length = stbi_get32(reader);
+        stbi_skip(reader, length);
     }
-    compression = image_get16(reader);
+    compression = stbi_get16(reader);
     if (compression >= 2) {
         image_fail(PSD_ERROR_COMPRESSION);
         return NULL;
@@ -93,7 +93,7 @@ void *psd_load(ImageReader *reader, int *width, int *height, int *channels, int 
         return NULL;
     }
     if (compression)
-        image_skip(reader, rows * count * 2);
+        stbi_skip(reader, rows * count * 2);
     for (channel = 0; channel < PSD_CHANNELS; channel++) {
         uint8_t *dst = output + channel;
         /* Raw planes include the plane at index count. Runs stop before that index. */
@@ -102,7 +102,7 @@ void *psd_load(ImageReader *reader, int *width, int *height, int *channels, int 
                 psd_runs(reader, dst, pixels);
             else
                 for (index = 0; index < pixels; index++, dst += PSD_CHANNELS)
-                    *dst = (uint8_t)image_get8(reader);
+                    *dst = (uint8_t)stbi_get8(reader);
         } else {
             for (index = 0; index < pixels; index++, dst += PSD_CHANNELS)
                 *dst = channel == 3 ? 255 : 0;

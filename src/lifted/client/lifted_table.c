@@ -5,7 +5,7 @@ void lf_01000(void);
 void lf_01010(void);
 void lf_01030(void);
 void lf_010a0(void);
-void lf_01110(void);
+void stbi_set_error(void);
 void lf_01120(void);
 void lf_01300(void);
 void lf_01510(void);
@@ -23,9 +23,9 @@ void lf_01930(void);
 void lf_01af0(void);
 void lf_01b50(void);
 void decode_jpeg_image(void);
-void lf_02280(void);
+void get_marker(void);
 void lf_02300(void);
-void lf_02320(void);
+void stbi_get8(void);
 void parse_entropy_coded_data(void);
 void grow_buffer_unsafe(void);
 void decode_block(void);
@@ -34,8 +34,8 @@ void extend_receive(void);
 void idct_block(void);
 void reset(void);
 void process_marker(void);
-void lf_03b10(void);
-void lf_03b50(void);
+void stbi_skip(void);
+void stbi_get16(void);
 void build_huffman(void);
 void process_scan_header(void);
 void decode_jpeg_header(void);
@@ -53,8 +53,8 @@ void lf_04ba0(void);
 void lf_04c00(void);
 void lf_04c30(void);
 void lf_04cb0(void);
-void lf_04d00(void);
-void lf_04db0(void);
+void stbi_zlib_decode_malloc_guesssize(void);
+void do_zlib(void);
 void parse_zlib(void);
 void zbuild_huffman(void);
 void lf_05210(void);
@@ -69,16 +69,16 @@ void compute_huffman_codes(void);
 void parse_uncompressed_block(void);
 void parse_zlib_header(void);
 void init_defaults(void);
-void lf_05dd0(void);
-void lf_05df0(void);
-void lf_05e60(void);
-void lf_05f10(void);
+void stbi_zlib_decode_malloc(void);
+void stbi_zlib_decode_buffer(void);
+void stbi_zlib_decode_noheader_malloc(void);
+void stbi_zlib_decode_noheader_buffer(void);
 void lf_05f80(void);
 void do_png(void);
 void convert_format(void);
 void compute_y(void);
 void parse_png_file(void);
-void lf_07000(void);
+void stbi_get32(void);
 void get_chunk_header(void);
 void check_png_header(void);
 void create_png_image(void);
@@ -93,15 +93,15 @@ void lf_08210(void);
 void lf_08240(void);
 void lf_082e0(void);
 void lf_08330(void);
-void lf_083d0(void);
-void lf_08400(void);
+void stbi_get16le(void);
+void stbi_get32le(void);
 void lf_08430(void);
 void lf_08460(void);
 void lf_084c0(void);
 void bmp_load(void);
-void lf_09340(void);
-void lf_093e0(void);
-void lf_09450(void);
+void high_bit(void);
+void bitcount(void);
+void shiftsigned(void);
 void lf_094b0(void);
 void lf_094f0(void);
 void lf_09540(void);
@@ -109,7 +109,7 @@ void lf_09650(void);
 void lf_09680(void);
 void lf_096e0(void);
 void lf_09720(void);
-void lf_09d10(void);
+void stbi_getn(void);
 void lf_09d60(void);
 void lf_09da0(void);
 void lf_09df0(void);
@@ -123,8 +123,8 @@ void lf_0a3a0(void);
 void lf_0a400(void);
 void lf_0a450(void);
 void hdr_load(void);
-void lf_0a9b0(void);
-void lf_0aa60(void);
+void hdr_gettoken(void);
+void hdr_convert(void);
 void lf_0ab90(void);
 void lf_0ac50(void);
 void writefv(void);
@@ -1305,7 +1305,7 @@ const LfEntry lf_table[] = {
     { "stbi_image_free", 0x1010, (void *)lf_01010, 1, LF_RET_VOID, 4, "p", 1 },
     { "stbi_register_loader", 0x1030, (void *)lf_01030, 1, LF_RET_INT, 4, "v", 0 },
     { "stbi_load", 0x10a0, (void *)lf_010a0, 5, LF_RET_INT, 4, "ppppv", 1 },
-    { "e", 0x1110, (void *)lf_01110, 1, LF_RET_INT, 4, "v", 0 },
+    { "stbi_set_error", 0x1110, (void *)stbi_set_error, 1, LF_RET_INT, 4, "v", 0 },
     { "stbi_load_from_file", 0x1120, (void *)lf_01120, 5, LF_RET_INT, 4, "ppppv", 1 },
     { "stbi_load_from_memory", 0x1300, (void *)lf_01300, 6, LF_RET_INT, 4, "vvpppv", 1 },
     { "stbi_loadf", 0x1510, (void *)lf_01510, 5, LF_RET_INT, 4, "ppppv", 1 },
@@ -1323,9 +1323,9 @@ const LfEntry lf_table[] = {
     { "stbi_jpeg_load_from_file", 0x1af0, (void *)lf_01af0, 5, LF_RET_INT, 4, "vpppv", 1 },
     { "start_file", 0x1b50, (void *)lf_01b50, 2, LF_RET_VOID, 4, "vv", 0 },
     { "decode_jpeg_image", 0x21d0, (void *)decode_jpeg_image, 1, LF_RET_INT, 4, "v", 1 },
-    { "get_marker", 0x2280, (void *)lf_02280, 1, LF_RET_INT, 1, "v", 1 },
+    { "get_marker", 0x2280, (void *)get_marker, 1, LF_RET_INT, 1, "v", 1 },
     { "stbi_get8u", 0x2300, (void *)lf_02300, 1, LF_RET_INT, 4, "v", 1 },
-    { "stbi_get8", 0x2320, (void *)lf_02320, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get8", 0x2320, (void *)stbi_get8, 1, LF_RET_INT, 4, "v", 1 },
     { "parse_entropy_coded_data", 0x2390, (void *)parse_entropy_coded_data, 1, LF_RET_INT, 4, "v", 1 },
     { "grow_buffer_unsafe", 0x28a0, (void *)grow_buffer_unsafe, 1, LF_RET_VOID, 4, "v", 1 },
     { "decode_block", 0x2950, (void *)decode_block, 5, LF_RET_INT, 4, "vpvvv", 1 },
@@ -1334,8 +1334,8 @@ const LfEntry lf_table[] = {
     { "idct_block", 0x2d40, (void *)idct_block, 4, LF_RET_VOID, 4, "pvpp", 0 },
     { "reset", 0x36f0, (void *)reset, 1, LF_RET_VOID, 4, "v", 0 },
     { "process_marker", 0x3780, (void *)process_marker, 2, LF_RET_INT, 4, "vv", 1 },
-    { "stbi_skip", 0x3b10, (void *)lf_03b10, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "get16", 0x3b50, (void *)lf_03b50, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_skip", 0x3b10, (void *)stbi_skip, 2, LF_RET_VOID, 4, "vv", 1 },
+    { "stbi_get16", 0x3b50, (void *)stbi_get16, 1, LF_RET_INT, 4, "v", 1 },
     { "build_huffman", 0x3b80, (void *)build_huffman, 2, LF_RET_INT, 4, "pv", 0 },
     { "process_scan_header", 0x3d90, (void *)process_scan_header, 1, LF_RET_INT, 4, "v", 1 },
     { "decode_jpeg_header", 0x3f80, (void *)decode_jpeg_header, 2, LF_RET_INT, 4, "vv", 1 },
@@ -1353,8 +1353,8 @@ const LfEntry lf_table[] = {
     { "start_mem", 0x4c00, (void *)lf_04c00, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "stbi_jpeg_test_file", 0x4c30, (void *)lf_04c30, 1, LF_RET_INT, 4, "p", 1 },
     { "stbi_jpeg_test_memory", 0x4cb0, (void *)lf_04cb0, 2, LF_RET_INT, 4, "vv", 1 },
-    { "stbi_zlib_decode_malloc_guesssize", 0x4d00, (void *)lf_04d00, 4, LF_RET_INT, 4, "vvvp", 1 },
-    { "do_zlib", 0x4db0, (void *)lf_04db0, 5, LF_RET_INT, 4, "vvvvv", 1 },
+    { "stbi_zlib_decode_malloc_guesssize", 0x4d00, (void *)stbi_zlib_decode_malloc_guesssize, 4, LF_RET_INT, 4, "vvvp", 1 },
+    { "do_zlib", 0x4db0, (void *)do_zlib, 5, LF_RET_INT, 4, "vvvvv", 1 },
     { "parse_zlib", 0x4df0, (void *)parse_zlib, 2, LF_RET_INT, 4, "vv", 1 },
     { "zbuild_huffman", 0x4f40, (void *)zbuild_huffman, 3, LF_RET_INT, 4, "pvv", 1 },
     { "stbi_bit_reverse", 0x5210, (void *)lf_05210, 2, LF_RET_INT, 4, "vv", 1 },
@@ -1369,16 +1369,16 @@ const LfEntry lf_table[] = {
     { "parse_uncompressed_block", 0x5b00, (void *)parse_uncompressed_block, 1, LF_RET_INT, 4, "p", 1 },
     { "parse_zlib_header", 0x5c80, (void *)parse_zlib_header, 1, LF_RET_INT, 4, "p", 0 },
     { "init_defaults", 0x5d10, (void *)init_defaults, 0, LF_RET_VOID, 4, "", 0 },
-    { "stbi_zlib_decode_malloc", 0x5dd0, (void *)lf_05dd0, 3, LF_RET_INT, 4, "vvp", 1 },
-    { "stbi_zlib_decode_buffer", 0x5df0, (void *)lf_05df0, 4, LF_RET_INT, 4, "vvvv", 1 },
-    { "stbi_zlib_decode_noheader_malloc", 0x5e60, (void *)lf_05e60, 3, LF_RET_INT, 4, "vvp", 1 },
-    { "stbi_zlib_decode_noheader_buffer", 0x5f10, (void *)lf_05f10, 4, LF_RET_INT, 4, "vvvv", 1 },
+    { "stbi_zlib_decode_malloc", 0x5dd0, (void *)stbi_zlib_decode_malloc, 3, LF_RET_INT, 4, "vvp", 1 },
+    { "stbi_zlib_decode_buffer", 0x5df0, (void *)stbi_zlib_decode_buffer, 4, LF_RET_INT, 4, "vvvv", 1 },
+    { "stbi_zlib_decode_noheader_malloc", 0x5e60, (void *)stbi_zlib_decode_noheader_malloc, 3, LF_RET_INT, 4, "vvp", 1 },
+    { "stbi_zlib_decode_noheader_buffer", 0x5f10, (void *)stbi_zlib_decode_noheader_buffer, 4, LF_RET_INT, 4, "vvvv", 1 },
     { "stbi_png_load_from_file", 0x5f80, (void *)lf_05f80, 5, LF_RET_INT, 4, "vpppv", 1 },
     { "do_png", 0x5fc0, (void *)do_png, 5, LF_RET_INT, 4, "ppppv", 1 },
     { "convert_format", 0x6110, (void *)convert_format, 5, LF_RET_INT, 4, "pvvvv", 1 },
     { "compute_y", 0x6690, (void *)compute_y, 3, LF_RET_INT, 4, "vvv", 0 },
     { "parse_png_file", 0x66c0, (void *)parse_png_file, 3, LF_RET_INT, 4, "pvv", 1 },
-    { "stbi_get32", 0x7000, (void *)lf_07000, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get32", 0x7000, (void *)stbi_get32, 1, LF_RET_INT, 4, "v", 1 },
     { "get_chunk_header", 0x7030, (void *)get_chunk_header, 1, LF_RET_INT64, 4, "v", 1 },
     { "check_png_header", 0x7060, (void *)check_png_header, 1, LF_RET_INT, 4, "v", 1 },
     { "create_png_image", 0x70b0, (void *)create_png_image, 5, LF_RET_INT, 4, "pvvvv", 1 },
@@ -1393,15 +1393,15 @@ const LfEntry lf_table[] = {
     { "stbi_png_info", 0x8240, (void *)lf_08240, 4, LF_RET_INT, 4, "pppp", 1 },
     { "stbi_bmp_test_file", 0x82e0, (void *)lf_082e0, 1, LF_RET_INT, 4, "p", 1 },
     { "bmp_test", 0x8330, (void *)lf_08330, 1, LF_RET_INT, 4, "v", 1 },
-    { "get16le", 0x83d0, (void *)lf_083d0, 1, LF_RET_INT, 4, "v", 1 },
-    { "stbi_get32le", 0x8400, (void *)lf_08400, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get16le", 0x83d0, (void *)stbi_get16le, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get32le", 0x8400, (void *)stbi_get32le, 1, LF_RET_INT, 4, "v", 1 },
     { "stbi_bmp_test_memory", 0x8430, (void *)lf_08430, 2, LF_RET_INT, 4, "vv", 1 },
     { "stbi_bmp_load", 0x8460, (void *)lf_08460, 5, LF_RET_INT, 4, "ppppv", 1 },
     { "stbi_bmp_load_from_file", 0x84c0, (void *)lf_084c0, 5, LF_RET_INT, 4, "vpppv", 1 },
     { "bmp_load", 0x8500, (void *)bmp_load, 5, LF_RET_INT, 4, "ppppv", 1 },
-    { "high_bit", 0x9340, (void *)lf_09340, 1, LF_RET_INT, 4, "v", 0 },
-    { "bitcount", 0x93e0, (void *)lf_093e0, 1, LF_RET_INT, 4, "v", 0 },
-    { "shiftsigned", 0x9450, (void *)lf_09450, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "high_bit", 0x9340, (void *)high_bit, 1, LF_RET_INT, 4, "v", 0 },
+    { "bitcount", 0x93e0, (void *)bitcount, 1, LF_RET_INT, 4, "v", 0 },
+    { "shiftsigned", 0x9450, (void *)shiftsigned, 3, LF_RET_INT, 4, "vvv", 0 },
     { "stbi_bmp_load_from_memory", 0x94b0, (void *)lf_094b0, 6, LF_RET_INT, 4, "vvpppv", 1 },
     { "stbi_tga_test_file", 0x94f0, (void *)lf_094f0, 1, LF_RET_INT, 4, "p", 1 },
     { "tga_test", 0x9540, (void *)lf_09540, 1, LF_RET_INT, 4, "v", 1 },
@@ -1409,7 +1409,7 @@ const LfEntry lf_table[] = {
     { "stbi_tga_load", 0x9680, (void *)lf_09680, 5, LF_RET_INT, 4, "ppppv", 1 },
     { "stbi_tga_load_from_file", 0x96e0, (void *)lf_096e0, 5, LF_RET_INT, 4, "vpppv", 1 },
     { "tga_load", 0x9720, (void *)lf_09720, 5, LF_RET_INT, 4, "vpppv", 1 },
-    { "stbi_getn", 0x9d10, (void *)lf_09d10, 3, LF_RET_VOID, 4, "vpv", 1 },
+    { "stbi_getn", 0x9d10, (void *)stbi_getn, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "stbi_tga_load_from_memory", 0x9d60, (void *)lf_09d60, 6, LF_RET_INT, 4, "vvpppv", 1 },
     { "stbi_psd_test_file", 0x9da0, (void *)lf_09da0, 1, LF_RET_INT, 4, "p", 1 },
     { "psd_test", 0x9df0, (void *)lf_09df0, 1, LF_RET_INT, 1, "v", 1 },
@@ -1423,8 +1423,8 @@ const LfEntry lf_table[] = {
     { "stbi_hdr_test_file", 0xa400, (void *)lf_0a400, 1, LF_RET_INT, 4, "p", 1 },
     { "stbi_hdr_load_from_file", 0xa450, (void *)lf_0a450, 5, LF_RET_INT, 4, "vpppv", 1 },
     { "hdr_load", 0xa490, (void *)hdr_load, 5, LF_RET_INT, 4, "vpppv", 1 },
-    { "hdr_gettoken", 0xa9b0, (void *)lf_0a9b0, 2, LF_RET_INT, 4, "vv", 1 },
-    { "hdr_convert", 0xaa60, (void *)lf_0aa60, 3, LF_RET_VOID, 4, "ppv", 1 },
+    { "hdr_gettoken", 0xa9b0, (void *)hdr_gettoken, 2, LF_RET_INT, 4, "vv", 1 },
+    { "hdr_convert", 0xaa60, (void *)hdr_convert, 3, LF_RET_VOID, 4, "ppv", 1 },
     { "stbi_hdr_load_from_memory", 0xab90, (void *)lf_0ab90, 6, LF_RET_INT, 4, "vvpppv", 1 },
     { "outfile", 0xac50, (void *)lf_0ac50, 11, LF_RET_INT, 1, "pvvvvvvvvpv", 1 },
     { "writefv", 0xace0, (void *)writefv, 3, LF_RET_VOID, 4, "ppp", 1 },

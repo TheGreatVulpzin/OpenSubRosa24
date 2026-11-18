@@ -5,6 +5,7 @@
 #include "image/zlib.h"
 #include <string.h>
 #include "image/io.h"
+#include "sr_os.h"
 #include "sr_runtime.h"
 
 enum { ZLIB_FAST_BITS = 9, ZLIB_FAST_SIZE = 1 << ZLIB_FAST_BITS,
@@ -324,4 +325,84 @@ int parse_zlib(ZlibBuffer *buffer, int header)
         }
     } while (!final && (!cl_data_image_partial || buffer->output - buffer->start < ZLIB_PARTIAL_SIZE + 1));
     return 1;
+}
+
+/* Set the output buffer and decode the stream. A stream that can grow moves its buffer when it
+ * is full. */
+int do_zlib(ZlibBuffer *buffer, uint8_t *output, int length, int expandable, int header)
+{
+    buffer->start = output;
+    buffer->output = output;
+    buffer->limit = output + length;
+    buffer->expandable = expandable;
+    return parse_zlib(buffer, header);
+}
+
+/* Decode a stream into a new buffer that starts with the given size. Return the buffer and its
+ * used size, or null. The caller frees the buffer. */
+uint8_t *stbi_zlib_decode_malloc_guesssize(const uint8_t *input, int length, int guess, int *out_length)
+{
+    ZlibBuffer buffer;
+    uint8_t *output = os_malloc((size_t)guess);
+
+    if (output == NULL)
+        return NULL;
+    buffer.cursor = (uint8_t *)input;
+    buffer.end = (uint8_t *)input + length;
+    if (do_zlib(&buffer, output, guess, 1, 1)) {
+        if (out_length)
+            *out_length = (int)(buffer.output - buffer.start);
+        return buffer.start;
+    }
+    os_free(buffer.start);
+    return NULL;
+}
+
+/* Decode a stream into a new buffer that starts with 16384 bytes. */
+uint8_t *stbi_zlib_decode_malloc(const uint8_t *input, int length, int *out_length)
+{
+    return stbi_zlib_decode_malloc_guesssize(input, length, 16384, out_length);
+}
+
+/* Decode a stream into a buffer that cannot grow. Return the used size, or -1. */
+int stbi_zlib_decode_buffer(uint8_t *output, int output_length, const uint8_t *input, int input_length)
+{
+    ZlibBuffer buffer;
+
+    buffer.cursor = (uint8_t *)input;
+    buffer.end = (uint8_t *)input + input_length;
+    if (do_zlib(&buffer, output, output_length, 0, 1))
+        return (int)(buffer.output - buffer.start);
+    return -1;
+}
+
+/* Decode a stream with no zlib header into a new buffer that starts with 16384 bytes. */
+uint8_t *stbi_zlib_decode_noheader_malloc(const uint8_t *input, int length, int *out_length)
+{
+    ZlibBuffer buffer;
+    uint8_t *output = os_malloc(16384);
+
+    if (output == NULL)
+        return NULL;
+    buffer.cursor = (uint8_t *)input;
+    buffer.end = (uint8_t *)input + length;
+    if (do_zlib(&buffer, output, 16384, 1, 0)) {
+        if (out_length)
+            *out_length = (int)(buffer.output - buffer.start);
+        return buffer.start;
+    }
+    os_free(buffer.start);
+    return NULL;
+}
+
+/* Decode a stream with no zlib header into a buffer that cannot grow. Return the used size, or -1. */
+int stbi_zlib_decode_noheader_buffer(uint8_t *output, int output_length, const uint8_t *input, int input_length)
+{
+    ZlibBuffer buffer;
+
+    buffer.cursor = (uint8_t *)input;
+    buffer.end = (uint8_t *)input + input_length;
+    if (do_zlib(&buffer, output, output_length, 0, 0))
+        return (int)(buffer.output - buffer.start);
+    return -1;
 }

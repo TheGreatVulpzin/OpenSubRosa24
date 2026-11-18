@@ -34,6 +34,13 @@ FUNCTIONS = {
     'hdr_load': 0xa490, 'createfont': 0x108060, 'loadfont': 0x1095a0,
     'setfontresolution': 0x109f30, 'freadswap': 0xfdfb0,
     'write8': 0xae60, 'writefv': 0xace0,
+    'stbi_set_error': 0x1110, 'stbi_get8': 0x2320, 'stbi_get16': 0x3b50, 'stbi_get32': 0x7000,
+    'stbi_get16le': 0x83d0, 'stbi_get32le': 0x8400, 'stbi_skip': 0x3b10, 'stbi_getn': 0x9d10,
+    'high_bit': 0x9340, 'bitcount': 0x93e0, 'shiftsigned': 0x9450, 'hdr_gettoken': 0xa9b0,
+    'hdr_convert': 0xaa60, 'get_marker': 0x2280, 'do_zlib': 0x4db0,
+    'stbi_zlib_decode_malloc_guesssize': 0x4d00, 'stbi_zlib_decode_malloc': 0x5dd0,
+    'stbi_zlib_decode_buffer': 0x5df0, 'stbi_zlib_decode_noheader_malloc': 0x5e60,
+    'stbi_zlib_decode_noheader_buffer': 0x5f10,
 }
 RESULT = re.compile(r'^\[\s*\d+/\d+\]\s+(\S+)\s+(\d+) same\s+(\d+) different\s+(\d+) crashed', re.M)
 
@@ -462,6 +469,56 @@ def other_cases(cases):
             cases.call('loadfont', f'{file.stem}_{size}', v(1005), m(path), v(struct.unpack('<I', struct.pack('<f', size))[0]))
 
 
+def reader_cases(cases):
+    for data in (b'', b'\x12', b'\x12\x34', b'\x12\x34\x56\x78\x9a\xbc'):
+        for name in ('stbi_get8', 'stbi_get16', 'stbi_get32', 'stbi_get16le', 'stbi_get32le'):
+            cases.call(name, data.hex(), m(cases.reader(data)))
+        for count in (0, 1, 3, 9, -1):
+            cases.call('stbi_skip', f'{data.hex()}_{count}', m(cases.reader(data)), v(count))
+        for count in range(min(len(data), 4) + 1):
+            cases.call('stbi_getn', f'{data.hex()}_{count}', m(cases.reader(data)), m(cases.alloc(16)), v(count))
+    for text in (b'', b'bad PNG\0', b'x' * 40 + b'\0'):
+        cases.call('stbi_set_error', f'text_{len(text)}', m(cases.alloc(text or b'\0')))
+    for value in (0, 1, 2, 3, 4, 0xff, 0x100, 0xffff, 0x10000, 0x7fffffff, 0x80000000, 0xffffffff):
+        cases.call('high_bit', f'{value:x}', v(value))
+        cases.call('bitcount', f'{value:x}', v(value))
+    for value in (0, 1, 0x55, 0xff, 0x1f, 0x7f00, 0xffffffff):
+        for shift in (-4, -1, 0, 1, 3, 8, 16):
+            for bits in (1, 2, 3, 5, 8):
+                cases.call('shiftsigned', f'{value:x}_{shift}_{bits}', v(value), v(shift), v(bits))
+    for data in (b'', b'abc\n', b'abc', b'\n', b'x' * 1500 + b'\nrest', b'x' * 1022 + b'\nrest',
+                 b'x' * 1023 + b'\nrest', b'x' * 1024 + b'\nrest\n'):
+        cases.call('hdr_gettoken', f'len_{len(data)}', m(cases.reader(data)), m(cases.alloc(1100)))
+    for rgbe in ((0, 0, 0, 0), (33, 75, 143, 130), (255, 255, 255, 255), (1, 2, 3, 1), (200, 100, 50, 128),
+                 (255, 0, 0, 136), (9, 9, 9, 7)):
+        for requested in range(1, 5):
+            cases.call('hdr_convert', f'{rgbe}_{requested}', m(cases.alloc(16)), m(cases.alloc(bytes(rgbe))), v(requested))
+    for marker in (0xff, 0xd8, 0xc0, 0x00):
+        for data in (b'', b'\x12', b'\xff\xff\xff\xd9', b'\xff\xc4\x01', b'\xff\x00', b'\xff\xff'):
+            image = cases.reader(data, size=0x36c0)
+            cases.write(image + 0x369c, bytes([marker]))
+            cases.call('get_marker', f'{marker:x}_{data.hex()}', m(image))
+    payload = bytes((i * i // 5) % 37 for i in range(5000))
+    stream = zlib.compress(payload)
+    raw = stream[2:-4]
+    for name, data, header in (('malloc', stream, True), ('noheader_malloc', raw, False)):
+        for guess in (16, 4096, 16384):
+            if name == 'malloc':
+                cases.call('stbi_zlib_decode_malloc_guesssize', f'guess_{guess}', m(cases.alloc(data)), v(len(data)),
+                           v(guess), m(cases.alloc(4)))
+        cases.call('stbi_zlib_decode_malloc' if header else 'stbi_zlib_decode_noheader_malloc', name,
+                   m(cases.alloc(data)), v(len(data)), m(cases.alloc(4)))
+        cases.call('stbi_zlib_decode_malloc' if header else 'stbi_zlib_decode_noheader_malloc', f'{name}_cut',
+                   m(cases.alloc(data[:len(data) // 2])), v(len(data) // 2), m(cases.alloc(4)))
+    for size in (100, 5000, 8000):
+        cases.call('stbi_zlib_decode_buffer', f'out_{size}', m(cases.alloc(size)), v(size), m(cases.alloc(stream)), v(len(stream)))
+        cases.call('stbi_zlib_decode_noheader_buffer', f'out_{size}', m(cases.alloc(size)), v(size), m(cases.alloc(raw)), v(len(raw)))
+    for expandable in (0, 1):
+        for header, data in ((1, stream), (0, raw), (1, b'\x78\x9c\x03\x00')):
+            cases.call('do_zlib', f'{expandable}_{header}_{len(data)}', m(cases.zbuffer(data)), m(cases.alloc(4096)),
+                       v(4096), v(expandable), v(header))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('recording', type=Path)
@@ -477,6 +534,7 @@ def main():
     png_cases(cases, [] if args.no_game_images else sorted((ROOT / 'original/client/data').rglob('*.png')))
     jpeg_cases(cases, ROOT / 'build/client_c1/jpeg')
     other_cases(cases)
+    reader_cases(cases)
     cases.save(args.work)
     print(f'{len(cases.calls)} calls, {len(cases.pages)} pages', flush=True)
     if not args.run:

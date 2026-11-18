@@ -67,10 +67,23 @@ int at_eof(ImageReader *reader)
     return reader->file ? image_eof(reader) : reader->cursor >= reader->end;
 }
 
-/* Read the pending marker or the next marker byte. */
-static unsigned jpeg_marker(JpegImage *image)
+/* Read the pending marker, or the next marker. A byte that is not 0xff gives 0xff (no marker).
+ * Repeated 0xff bytes before a marker are skipped. */
+uint8_t get_marker(JpegImage *image)
 {
-    return (uint8_t)CL_FN(0x402280, char(__cdecl *)(JpegImage *))(image);
+    uint8_t byte;
+
+    if (image->marker != 0xff) {
+        byte = image->marker;
+        image->marker = 0xff;
+        return byte;
+    }
+    byte = (uint8_t)stbi_get8(&image->reader);
+    if (byte != 0xff)
+        return 0xff;
+    while (byte == 0xff)
+        byte = (uint8_t)stbi_get8(&image->reader);
+    return byte;
 }
 
 /* Empty the entropy buffer and clear the DC predictors of the first three components. The
@@ -92,9 +105,9 @@ void __cdecl reset(JpegImage *image)
 void grow_buffer_unsafe(JpegImage *image)
 {
     do {
-        unsigned value = image->no_more ? 0 : image_get8(&image->reader);
+        unsigned value = image->no_more ? 0 : stbi_get8(&image->reader);
         if (value == JPEG_NO_MARKER) {
-            unsigned marker = image_get8(&image->reader);
+            unsigned marker = stbi_get8(&image->reader);
             if (marker) {
                 image->marker = (uint8_t)marker;
                 image->no_more = 1;
@@ -281,34 +294,34 @@ unsigned process_marker(JpegImage *image, int marker)
     case JPEG_SOF2: return image_fail(JPEG_ERROR_PROGRESSIVE);
     case JPEG_NO_MARKER: return image_fail(JPEG_ERROR_MARKER);
     case JPEG_DRI:
-        if (image_get16(reader) != 4)
+        if (stbi_get16(reader) != 4)
             return image_fail(JPEG_ERROR_RESTART_LENGTH);
-        image->restart_interval = image_get16(reader);
+        image->restart_interval = stbi_get16(reader);
         return 1;
     case JPEG_DQT:
-        remaining = image_get16(reader) - 2;
+        remaining = stbi_get16(reader) - 2;
         while (remaining > 0) {
-            header = image_get8(reader);
+            header = stbi_get8(reader);
             if (header >> 4)
                 return image_fail(JPEG_ERROR_QUANTIZATION_DEPTH);
             table = header & 15;
             if (table > 3)
                 return image_fail(JPEG_ERROR_QUANTIZATION_TABLE);
             for (index = 0; index < JPEG_COEFFICIENTS; index++)
-                image->dequantize[table * JPEG_COEFFICIENTS + jpeg_zigzag[index]] = (uint8_t)image_get8(reader);
+                image->dequantize[table * JPEG_COEFFICIENTS + jpeg_zigzag[index]] = (uint8_t)stbi_get8(reader);
             remaining -= JPEG_COEFFICIENTS + 1;
         }
         return remaining == 0;
     case JPEG_DHT:
-        remaining = image_get16(reader) - 2;
+        remaining = stbi_get16(reader) - 2;
         while (remaining > 0) {
-            header = image_get8(reader);
+            header = stbi_get8(reader);
             table = header & 15;
             if ((header >> 4) > 1 || table > 3)
                 return image_fail(JPEG_ERROR_HUFFMAN_HEADER);
             count = 0;
             for (index = 0; index < JPEG_CODE_BITS; index++) {
-                counts[index] = image_get8(reader);
+                counts[index] = stbi_get8(reader);
                 count += counts[index];
             }
             remaining -= JPEG_CODE_BITS + 1;
@@ -316,15 +329,15 @@ unsigned process_marker(JpegImage *image, int marker)
             if (!build_huffman(codes, counts))
                 return 0;
             for (index = 0; index < count; index++)
-                codes->value[index] = (uint8_t)image_get8(reader);
+                codes->value[index] = (uint8_t)stbi_get8(reader);
             remaining -= count;
         }
         return remaining == 0;
     default:
         if ((marker < JPEG_APP0 || marker > JPEG_APP15) && marker != JPEG_COMMENT)
             return 0;
-        remaining = image_get16(reader);
-        image_skip(reader, remaining - 2);
+        remaining = stbi_get16(reader);
+        stbi_skip(reader, remaining - 2);
         return 1;
     }
 }
@@ -333,15 +346,15 @@ unsigned process_marker(JpegImage *image, int marker)
 int process_scan_header(JpegImage *image)
 {
     ImageReader *reader = &image->reader;
-    int length = image_get16(reader), index, component, id, selector;
-    image->scan_components = image_get8(reader);
+    int length = stbi_get16(reader), index, component, id, selector;
+    image->scan_components = stbi_get8(reader);
     if (image->scan_components < 1 || image->scan_components > 4 || image->scan_components > reader->channels)
         return image_fail(JPEG_ERROR_SCAN_COMPONENTS);
     if (length != image->scan_components * 2 + 6)
         return image_fail(JPEG_ERROR_SCAN_LENGTH);
     for (index = 0; index < image->scan_components; index++) {
-        id = image_get8(reader);
-        selector = image_get8(reader);
+        id = stbi_get8(reader);
+        selector = stbi_get8(reader);
         for (component = 0; component < reader->channels && image->component[component].id != id; component++)
             ;
         if (component == reader->channels)
@@ -354,10 +367,10 @@ int process_scan_header(JpegImage *image)
             return image_fail(JPEG_ERROR_AC_TABLE);
         image->order[index] = component;
     }
-    if (image_get8(reader))
+    if (stbi_get8(reader))
         return image_fail(JPEG_ERROR_SPECTRAL_START);
-    image_get8(reader);
-    if (image_get8(reader))
+    stbi_get8(reader);
+    if (stbi_get8(reader))
         return image_fail(JPEG_ERROR_SUCCESSIVE_BITS);
     return 1;
 }
@@ -366,18 +379,18 @@ int process_scan_header(JpegImage *image)
 int process_frame_header(JpegImage *image, int scan)
 {
     ImageReader *reader = &image->reader;
-    int length = image_get16(reader), component, sampling, hmax = 1, vmax = 1;
+    int length = stbi_get16(reader), component, sampling, hmax = 1, vmax = 1;
     if (length < 11)
         return image_fail(JPEG_ERROR_FRAME_MINIMUM);
-    if (image_get8(reader) != 8)
+    if (stbi_get8(reader) != 8)
         return image_fail(JPEG_ERROR_DEPTH);
-    reader->height = image_get16(reader);
+    reader->height = stbi_get16(reader);
     if (!reader->height)
         return image_fail(JPEG_ERROR_HEIGHT);
-    reader->width = image_get16(reader);
+    reader->width = stbi_get16(reader);
     if (!reader->width)
         return image_fail(JPEG_ERROR_WIDTH);
-    sampling = image_get8(reader);
+    sampling = stbi_get8(reader);
     if (sampling != 1 && sampling != 3)
         return image_fail(JPEG_ERROR_COMPONENT_COUNT);
     reader->channels = sampling;
@@ -389,17 +402,17 @@ int process_frame_header(JpegImage *image, int scan)
         return image_fail(JPEG_ERROR_FRAME_LENGTH);
     for (component = 0; component < reader->channels; component++) {
         JpegComponent *part = &image->component[component];
-        part->id = image_get8(reader);
+        part->id = stbi_get8(reader);
         if (part->id != component && part->id != component + 1)
             return image_fail(JPEG_ERROR_COMPONENT_ID);
-        sampling = image_get8(reader);
+        sampling = stbi_get8(reader);
         part->h = sampling >> 4;
         if (!part->h || part->h > 4)
             return image_fail(JPEG_ERROR_HORIZONTAL_SAMPLING);
         part->v = sampling & 15;
         if (!part->v || part->v > 4)
             return image_fail(JPEG_ERROR_VERTICAL_SAMPLING);
-        part->quantization = image_get8(reader);
+        part->quantization = stbi_get8(reader);
         if (part->quantization > 3)
             return image_fail(JPEG_ERROR_QUANTIZATION_INDEX);
     }
@@ -444,19 +457,19 @@ int decode_jpeg_header(JpegImage *image, int scan)
 {
     unsigned marker;
     image->marker = JPEG_NO_MARKER;
-    if (jpeg_marker(image) != JPEG_SOI)
+    if (get_marker(image) != JPEG_SOI)
         return image_fail(JPEG_ERROR_START);
     if (scan == 1)
         return 1;
-    marker = jpeg_marker(image);
+    marker = get_marker(image);
     while (marker != JPEG_SOF0 && marker != JPEG_SOF1) {
         if (!process_marker(image, marker))
             return 0;
-        marker = jpeg_marker(image);
+        marker = get_marker(image);
         while (marker == JPEG_NO_MARKER) {
             if (at_eof(&image->reader))
                 return image_fail(JPEG_ERROR_FRAME);
-            marker = jpeg_marker(image);
+            marker = get_marker(image);
         }
     }
     return process_frame_header(image, scan) != 0;
@@ -529,7 +542,7 @@ int decode_jpeg_image(JpegImage *image)
     image->restart_interval = 0;
     if (!decode_jpeg_header(image, 0))
         return 0;
-    marker = jpeg_marker(image);
+    marker = get_marker(image);
     while (marker != JPEG_EOI) {
         if (marker == JPEG_SOS) {
             if (!process_scan_header(image) || !parse_entropy_coded_data(image))
@@ -537,7 +550,7 @@ int decode_jpeg_image(JpegImage *image)
         } else if (!process_marker(image, marker)) {
             return 0;
         }
-        marker = jpeg_marker(image);
+        marker = get_marker(image);
     }
     return 1;
 }
