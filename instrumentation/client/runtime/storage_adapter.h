@@ -471,6 +471,7 @@ extern int sr_client_end_time;
 #define cl_data_steam_active (*((int *)(sr_base + 0x10367380u)))
 #define cl_data_hide_messages (*((int *)(sr_base + 0x908b058u)))
 #define cl_data_player_marks ((int *)(sr_base + 0x75a53c0u))
+#define cl_data_wsa_data ((uint8_t *)(sr_base + 0xababc40u))
 #define cl_data_building_editor (*((BuildingEditor *)(sr_base + 0x1b9b500u)))
 #define cl_data_building_view (*((EditorView *)(sr_base + 0x1b9b5ecu)))
 #define cl_data_editor_tile_count (*((int *)(sr_base + 0x1b9b634u)))
