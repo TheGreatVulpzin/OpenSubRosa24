@@ -746,7 +746,7 @@ void lf_72b50(void);
 void lf_72c40(void);
 void lf_72d10(void);
 void createevent_updateblock_quad(void);
-void lf_72ed0(void);
+void packevent(void);
 void lf_73aa0(void);
 void lf_742f0(void);
 void buildframelist(void);
@@ -763,7 +763,7 @@ void lf_79a90(void);
 void lf_79ad0(void);
 void lf_7b100(void);
 void lf_7d060(void);
-void lf_7d090(void);
+void reloadopengl(void);
 void movecamera(void);
 void movecamera2(void);
 void checksimulation(void);
@@ -1053,7 +1053,7 @@ void landscape_rendersector(void);
 void landscape_generatenormaltexture(void);
 void landscape_generatedetail(void);
 void lf_d9fa0(void);
-void lf_daa90(void);
+void raycast_addsector(void);
 void render_sector_interior(void);
 void render_sector_alpha(void);
 void render_sector_interior_shadow2(void);
@@ -2049,7 +2049,7 @@ const LfEntry lf_table[] = {
     { "createevent_updatecarmarket", 0x72c40, (void *)lf_72c40, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateblock_interior", 0x72d10, (void *)lf_72d10, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "createevent_updateblock_quad", 0x72db0, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
-    { "packevent", 0x72ed0, (void *)lf_72ed0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "packevent", 0x72ed0, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x73aa0, (void *)lf_73aa0, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupframetextures", 0x742f0, (void *)lf_742f0, 0, LF_RET_VOID, 4, "", 2 },
     { "buildframelist", 0x74890, (void *)buildframelist, 0, LF_RET_VOID, 4, "", 0 },
@@ -2066,7 +2066,7 @@ const LfEntry lf_table[] = {
     { "resetgame", 0x79ad0, (void *)lf_79ad0, 0, LF_RET_VOID, 4, "", 1 },
     { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
     { "reactivategame", 0x7d060, (void *)lf_7d060, 0, LF_RET_VOID, 4, "", 2 },
-    { "reloadopengl", 0x7d090, (void *)lf_7d090, 0, LF_RET_VOID, 4, "", 1 },
+    { "reloadopengl", 0x7d090, (void *)reloadopengl, 0, LF_RET_VOID, 4, "", 1 },
     { "movecamera", 0x7d0e0, (void *)movecamera, 1, LF_RET_VOID, 4, "v", 0 },
     { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
     { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
@@ -2356,7 +2356,7 @@ const LfEntry lf_table[] = {
     { "landscape_generatenormaltexture", 0xd99a0, (void *)landscape_generatenormaltexture, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_generatedetail", 0xd9c70, (void *)landscape_generatedetail, 5, LF_RET_VOID, 4, "vvvvv", 1 },
     { "render_raycast2", 0xd9fa0, (void *)lf_d9fa0, 0, LF_RET_VOID, 4, "", 0 },
-    { "raycast_addsector", 0xdaa90, (void *)lf_daa90, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "raycast_addsector", 0xdaa90, (void *)raycast_addsector, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "render_sector_interior", 0xdabf0, (void *)render_sector_interior, 2, LF_RET_VOID, 4, "vv", 1 },
     { "render_sector_alpha", 0xdadf0, (void *)render_sector_alpha, 2, LF_RET_VOID, 4, "vv", 1 },
     { "render_sector_interior_shadow2", 0xdaff0, (void *)render_sector_interior_shadow2, 1, LF_RET_VOID, 4, "v", 1 },

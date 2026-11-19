@@ -3,3 +3,5 @@ createarea src/game/area.c
 area_breakblock src/game/area.c
 ai_assessthreats src/game/player_ai.c
 packevent src/net/netpack.c
+raycast_addsector src/client/render/raycast_sector.c
+reloadopengl src/client/render/gl_reload.c
