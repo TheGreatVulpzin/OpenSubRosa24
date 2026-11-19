@@ -25,7 +25,6 @@
 #define g_keys cl_data_audio_keys
 
 /* Game functions of other files. */
-#define model_extrudeeye2 CL_FN(0x4b7aa0, void(__cdecl *)(int quad, int mode))
 #define model_addvertex CL_FN(0x4badd0, int(__cdecl *)(const vec3 *pos, float tolerance))
 #define tesselatebeziertriangle CL_FN(0x4baed0, void(__cdecl *)(vec3 *out, float a, float b, float c, const int *patch))
 

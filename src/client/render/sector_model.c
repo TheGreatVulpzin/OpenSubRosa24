@@ -14,6 +14,7 @@
 #include "client.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
+#include "textures/tempmesh.h"
 #include "vectors.h"
 
 #define g_tempmesh sr_data_tempmesh
@@ -31,7 +32,6 @@
 #define g_cubequad sr_data_cubequad
 
 /* Game functions of other files. */
-#define tempmesh_optimize CL_FN(0x44c320, void(__cdecl *)(void))
 #define area_sectorvertequal CL_FN(0x50b590, int(__cdecl *)(int sector, int a, int b))
 
 #define SECTOR_SIDE 8

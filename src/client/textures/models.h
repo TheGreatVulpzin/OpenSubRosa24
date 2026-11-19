@@ -19,6 +19,7 @@ void __cdecl model_extrudequad2(int quad);
 void __cdecl model_extrudequadscale(int quad, const vec3 *offset, float scale_x, float scale_y, float scale_z);
 void __cdecl createmodel_cityobject_type(int model, int type);
 void __cdecl createmodel_cityobject_elevator(int model, int type);
+void __cdecl createmodel_cityobject_desk(int model);
 void __cdecl createmodel_cityobject(int model, int type);
 void __cdecl createhairmodel(int model);
 void __cdecl createhumanmodel(int model);

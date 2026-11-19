@@ -7,6 +7,8 @@
  */
 #include "textures/model_parts.h"
 
+#include <string.h>
+
 #include "client.h"
 #include "math/small_vectors.h"
 #include "sr_math.h"
@@ -37,6 +39,7 @@
 /* Game functions of other files. */
 #define sethumanmodelvertface CL_FN(0x4bed20, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
 #define model_deletequad CL_FN(0x4b3080, void(__cdecl *)(int quad))
+#define sethumanmodelvert CL_FN(0x4becd0, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
 
 /* Add one vertex: the place relative to center turned by rot, and the normal turned by rot. */
 static void cylinder_vertex(const vec3 *center, const vec3 *rot, const vec3 *place, float normal_x, float normal_y,
@@ -222,4 +225,168 @@ void __cdecl model_extrudeeye(int quad, int bone)
             eye_texcoord(t, k);
     }
     model_deletequad(quad);
+}
+
+/* Replace a quad of the head with the larger eye of the Bezier head: a ring of 8 vertices, each
+ * 1.5 times as far from the middle as in model_extrudeeye, and a middle vertex. The texture
+ * coordinate of a ring vertex is 0.875 times its offset. Only the middle vertex follows the face
+ * bone. The triangles are the same as in model_extrudeeye. */
+void __cdecl model_extrudeeye2(int quad, int bone)
+{
+    int corners[4], ring[EYE_POINTS], middle, i, k, t, n;
+    float angle = 0.0f;
+    vec3 center, offset;
+    double side;
+
+    for (k = 0; k < 4; k++)
+        corners[k] = g_temp.quads[quad].verts[k];
+    addvectors(&center, &g_temp.verts[corners[0]], &g_temp.verts[corners[1]]);
+    addvectors(&center, &center, &g_temp.verts[corners[2]]);
+    addvectors(&center, &center, &g_temp.verts[corners[3]]);
+    scalevector(&center, &center, 0.25f);
+    for (i = 0; i < EYE_POINTS; i++) {
+        side = -x87_sin((double)angle) * 0.125 * 0.75;
+        offset.x = (float)((side + side) * 0.125 * 1.5);
+        side = x87_cos((double)angle) * 0.125 * 0.3125;
+        offset.y = (float)((side + side) * 0.125 * 1.5);
+        offset.z = EYE_DEPTH;
+        if (i & 1)
+            offset.y = (float)(offset.y * 0.875);
+        n = g_temp.num_verts;
+        g_temp.vert_texcoords[n].u = (float)(offset.x * 0.875);
+        g_temp.vert_texcoords[n].v = (float)(offset.y * 0.875);
+        addvectors(&g_temp.verts[n], &center, &offset);
+        ring[i] = g_temp.num_verts++;
+        angle = (float)(angle + EYE_STEP);
+    }
+    offset.x = 0.0f;
+    offset.y = 0.0f;
+    offset.z = EYE_DEPTH;
+    n = g_temp.num_verts;
+    g_temp.vert_texcoords[n].u = 0.0f;
+    g_temp.vert_texcoords[n].v = 0.0f;
+    addvectors(&g_temp.verts[n], &center, &offset);
+    middle = n;
+    sethumanmodelvertface(n, bone, offset.x, offset.y, offset.z);
+    g_temp.num_verts++;
+    for (k = 0; k < 4; k++) {
+        int before = ((k + 3) & 3) * 2;
+
+        model_settritexcoord(modeltemp_addtri(corners[k], corners[(k + 1) & 3], ring[k * 2], SHADE_FLAT), 1.0f, 0.0f);
+        model_settritexcoord(modeltemp_addtri(corners[k], ring[k * 2], ring[before + 1], SHADE_FLAT), 1.0f, 0.0f);
+        model_settritexcoord(modeltemp_addtri(corners[k], ring[before + 1], ring[before], SHADE_FLAT), 1.0f, 0.0f);
+    }
+    for (i = 0; i < EYE_POINTS; i++) {
+        t = modeltemp_addtri(ring[i], ring[(i + 1) & 7], middle, SHADE_FLAT);
+        for (k = 0; k < 3; k++)
+            eye_texcoord(t, k);
+    }
+    model_deletequad(quad);
+}
+
+#define C0 0
+#define C1 1
+#define C2 2
+#define C3 3
+#define P(row, k) (4 + (row) * 4 + (k)) /* vertex k of face row 0 (left eye), 1 (right eye), 2 (mouth) */
+#define MOUTH_Z (-0.15f)
+#define MOUTH_INNER_Z (-0.18125f)
+
+/* Add a quad with one texture coordinate. The result is its index. */
+static int add_quad(int a, int b, int c, int d, float u)
+{
+    int q = g_temp.num_quads;
+
+    g_temp.quads[q].verts[0] = a;
+    g_temp.quads[q].verts[1] = b;
+    g_temp.quads[q].verts[2] = c;
+    g_temp.quads[q].verts[3] = d;
+    model_setquadtexcoord(q, u, 0.0f);
+    g_temp.num_quads++;
+    return q;
+}
+
+/* Make a face on a quad of the head. Three rows of 4 vertices go around the middle of the quad:
+ * the left eye (row 0, face bone 0), the right eye (row 1, face bone 1) and the mouth (row 2,
+ * bone 2). Flat triangles and quads fill the face between the rows and the quad corners. The
+ * mouth goes 1/32 into the head, and each eye gets an eye from model_extrudeeye. The quads of
+ * the eyes and the mouth go into head_face_quads. */
+void __cdecl model_extrudequadface(int quad)
+{
+    static const int tris[12][3] = {
+        {C0, P(0, 1), P(0, 0)}, {C0, P(0, 0), P(0, 3)}, {C0, P(0, 3), C3},
+        {C1, C2, P(1, 2)},      {C1, P(1, 2), P(1, 1)}, {C1, P(1, 1), P(1, 0)},
+        {C2, P(2, 2), P(2, 1)}, {C2, P(2, 1), P(1, 3)}, {C2, P(1, 3), P(1, 2)},
+        {C3, P(0, 3), P(0, 2)}, {C3, P(0, 2), P(2, 0)}, {C3, P(2, 0), P(2, 3)},
+    };
+    static const int fill[3][4] = {
+        {P(2, 3), P(2, 2), C2, C3}, {P(0, 2), P(1, 3), P(2, 1), P(2, 0)}, {P(0, 1), P(1, 0), P(1, 3), P(0, 2)},
+    };
+    int v[16], row, k, i, q;
+    vec3 center, place, offset, depth;
+
+    for (k = 0; k < 4; k++)
+        v[k] = g_temp.quads[quad].verts[k];
+    addvectors(&center, &g_temp.verts[v[0]], &g_temp.verts[v[1]]);
+    addvectors(&center, &center, &g_temp.verts[v[2]]);
+    addvectors(&center, &center, &g_temp.verts[v[3]]);
+    scalevector(&center, &center, 0.25f);
+    for (row = 0; row < 3; row++)
+        for (k = 0; k < 4; k++) {
+            float half_width = row < 2 ? 0.03125f : 0.015625f;
+            int n = g_temp.num_verts;
+
+            memset(&place, 0, sizeof place);
+            memset(&offset, 0, sizeof offset);
+            if (row == 0)
+                place.x = 0.0625f;
+            else if (row == 1)
+                place.x = -0.0625f;
+            place.y = row < 2 ? 0.03125f : -0.03125f;
+            offset.x = k == 0 || k == 3 ? half_width : -half_width;
+            offset.y = k < 2 ? 0.015625f : -0.015625f;
+            if (row == 2 && k < 2)
+                offset.y = (float)(offset.y + 0.015625);
+            addvectors(&place, &place, &offset);
+            addvectors(&g_temp.verts[n], &center, &place);
+            v[P(row, k)] = n;
+            if (row < 2)
+                sethumanmodelvertface(n, row, offset.x, offset.y, offset.z);
+            else
+                sethumanmodelvert(n, 2, place.x, place.y, MOUTH_Z);
+            g_temp.num_verts++;
+        }
+    for (i = 0; i < 12; i++)
+        model_settritexcoord(modeltemp_addtri(v[tris[i][0]], v[tris[i][1]], v[tris[i][2]], SHADE_FLAT), 1.0f, 0.0f);
+    for (i = 0; i < 3; i++)
+        add_quad(v[fill[i][0]], v[fill[i][1]], v[fill[i][2]], v[fill[i][3]], 1.0f);
+    for (row = 0; row < 3; row++) {
+        q = add_quad(v[P(row, 0)], v[P(row, 1)], v[P(row, 2)], v[P(row, 3)], row == 2 ? 1.0f : 0.0f);
+        cl_data_head_face_quads[row] = q;
+    }
+    g_temp.quads[quad].verts[0] = v[C0];
+    g_temp.quads[quad].verts[1] = v[C1];
+    g_temp.quads[quad].verts[2] = v[P(1, 0)];
+    g_temp.quads[quad].verts[3] = v[P(0, 1)];
+    depth.x = 0.0f;
+    depth.y = 0.0f;
+    depth.z = -0.03125f;
+    model_extrudequad(cl_data_head_face_quads[2], &depth);
+    /* The 4 new vertices of the mouth: the upper two are narrower. */
+    for (k = 0; k < 4; k++) {
+        int n = g_temp.num_verts - 4 + k;
+
+        offset.x = k == 0 || k == 3 ? 0.015625f : -0.015625f;
+        if (k < 2) {
+            offset.y = (float)((float)(0.0f - 0.03125) + 0.015625);
+            offset.x = (float)(offset.x * 0.75);
+        } else {
+            offset.y = (float)((0.0f - 0.03125) - 0.015625);
+        }
+        sethumanmodelvert(n, 2, offset.x, offset.y, MOUTH_INNER_Z);
+    }
+    for (q = g_temp.num_quads - 4; q < g_temp.num_quads; q++)
+        model_setquadtexcoord(q, 1.0f, 0.0f);
+    model_extrudeeye(cl_data_head_face_quads[0], 0);
+    model_extrudeeye(cl_data_head_face_quads[1], 1);
 }

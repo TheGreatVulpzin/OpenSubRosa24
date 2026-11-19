@@ -636,7 +636,7 @@ static float edge_distance(float fraction)
 
 /* Find the cell under the mouse and edit the view. J sets the size of the building to the cell
  * plus 1. The wall mode takes the edge nearest to the mouse when no button is down: the wall
- * goes along x when the mouse is nearer an x edge. The area mode sets the start of the chosen
+ * goes along z when the mouse is nearer a line of whole x, else along x. The area mode sets the start of the chosen
  * area with a left click and its size while the button stays down. The wheel changes the zoom
  * from 2 to 256. */
 static void building_view_mouse(void)
