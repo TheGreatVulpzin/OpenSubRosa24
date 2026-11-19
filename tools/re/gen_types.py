@@ -621,10 +621,9 @@ typedef union BuildPieceCopy { struct {
     int flags;
 }; uint8_t lf_raw[0x18]; } BuildPieceCopy;
 
+/* The colors of a building part. Colors 4 to 8 are the team colors. */
 typedef union BuildingPart { struct {
-    vec3 colors[3];
-    uint8_t pad_24[0xc];
-    float team_colors[15];
+    vec3 colors[64];
 }; uint8_t lf_raw[0x300]; } BuildingPart;
 
 typedef union Newspaper { struct {
@@ -662,6 +661,16 @@ typedef union AreaChunk { struct {
     int sectors[512];   /* +0x004 the BlockSector of each sector, or -1: index x + 8 * z + 64 * y */
 }; uint8_t lf_raw[0x804]; } AreaChunk;
 
+/* A vertex of the outer mesh of a sector (BlockSector.verts). */
+typedef struct SectorVertex {
+    vec3 pos;
+    vec3 normal;
+    vec3 tangent;
+    vec3 uv;            /* u, v and the layer of the texture */
+    vec3 color;
+    uint8_t pad_3c[4];
+} SectorVertex;
+
 /* A sector of 8 x 8 x 8 blocks of an area: the global area_sector holds 8192 records of
  * 0x6068 bytes after its first 0x40 bytes. Each block list has index x + 8 * z + 64 * y.
  * A block word: the high 3 bits give the kind (2 normal, 4 special, 6 link to the block at
@@ -678,7 +687,14 @@ typedef union BlockSector { struct {
     int area;           /* +0x5014 area_createsector: the area of the sector */
     int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
     int dirty;
-    uint8_t unk_5028[0x20];
+    int num_verts;                  /* +0x5028 the outer mesh of the sector */
+    SectorVertex *verts;            /* +0x502c */
+    int num_tris;                   /* +0x5030 */
+    int (*tris)[3];                 /* +0x5034 */
+    int *tri_slots;                 /* +0x5038 the material of each triangle */
+    vec3 *tri_normals;              /* +0x503c */
+    int (*neighbors)[3];            /* +0x5040 the triangle on the other side of each edge, or -1 */
+    vec3 (*edge_normals)[3];        /* +0x5044 the normal of that triangle, or zero */
     int num_meshes;
     SectorPart parts[256];          /* +0x504c the runs of triangles of the interior meshes */
     int unused_584c;
@@ -687,20 +703,7 @@ typedef union BlockSector { struct {
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 
-/* The mesh pointers occupy the client part of a sector. */
-typedef struct SectorShadowMesh {
-    uint8_t pad_00[0x502c];
-    uint8_t *vertices;
-    int num_triangles;
-    int (*triangles)[3];
-    uint8_t pad_5038[4];
-    vec3 *normals;
-    uint8_t pad_5040[4];
-    vec3 (*edge_normals)[3];
-    uint8_t pad_5048[0x1020];
-} SectorShadowMesh;
-SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
-SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+SR_STATIC_ASSERT(offsetof(BlockSector, edge_normals) == 0x5044, "BlockSector.edge_normals");
 
 
 /* A corner of the mesh of an object (Object.verts). */

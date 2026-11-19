@@ -789,6 +789,12 @@ tempmesh,0x150008,quad_slots,int,16384,low 16 bits: the texture slot; bits 16 to
 tempmesh,0x1a0008,num_tris,int,,area_setupsblock (0x1e50) copies num_tris * 12 bytes
 tempmesh,0x1a000c,tris,MeshTri,16384,0x1a000c + 16384 * 12 = 0x1d000c
 tempmesh,0x1d000c,tri_slots,int,16384,area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots
+tempmesh,0xc0004,colors,vec3,16384,area_buildsectormodel: the color of each vertex
+tempmesh,0xf0004,keys,int,16384,"area_buildsectormodel: x, y and z of the vertex in the sector, without the fraction, in bits 0, 10 and 20"
+tempmesh,0x160008,quad_normals,vec3,16384,area_buildsectormodel: the normal of each quad
+tempmesh,0x1e000c,tri_normals,vec3,16384,area_buildsectormodel: the normal of each triangle
+tempmesh,0x2d004c,num_specials,int,,area_buildsectormodel: the special blocks of the sector in work
+tempmesh,0x2d0050,specials,int,1536,"area_buildsectormodel: x, y and z of each special block in the area"
 blocklist,0xc,edge,int,16,"createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform)"
 blocklist,0x4c,slab,int,4,createlevel: level tile kinds 2..5 (index kind - 2): a block and its 3 turns
 blocklist,0x104,slope6,int,24,"4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling"
@@ -1019,12 +1025,12 @@ debug,0x10,lines,DebugLine,4096,debug_addcross: the lines of the crosses
 debug,0x50c80,num_values,int,,debug_addataint and debug_addatafloat add 1 for each new name
 debug,0x50c84,values,DebugValue,128,debug_addataint and debug_addatafloat: the named values of the debug display
 modellist,0x0,count,int,,"setupgame: the next free model identifier. 485 after the identifiers are assigned"
-modellist,0x4,bullet,int,32,"setupclient: createbulletmodel builds the first 16"
+modellist,0x4,vehicle,int,32,"setupclient: createtypemodel builds the models of the first 16 object types"
 modellist,0x84,item,int,32,"the model of each item type. The renderer indexes it with the item type"
 modellist,0x104,wheel,int,32,"the model of each wheel type. The renderer indexes it with the wheel type of an object"
 modellist,0x184,human,int,256,"one model for each human. frame_addmodel and the renderer index it with the human"
-modellist,0x584,ammo,int,32,"setupclient: four shapes from the builder at 0x4af7c0 (second argument 0 to 3, third argument 0)"
-modellist,0x604,ammo_b,int,32,"setupclient: the same four shapes with third argument 1. Entry 0 is a flat model that the effect renderer draws"
+modellist,0x584,bullet,int,32,"setupclient: createbulletmodel builds the models of the 4 bullet types (flat_back 0)"
+modellist,0x604,bullet_flat,int,32,"setupclient: the 4 bullet models with flat_back 1. Entry 0 is the model of the shells that the effect renderer draws"
 modellist,0x684,city_object,int,32,"setupclient: createmodel_cityobject builds the first 10"
 modellist,0x704,head,int,,"setupclient: createheadmodel"
 modellist,0x708,foot,int,,"setupclient: createfootmodel"
@@ -1185,3 +1191,6 @@ texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
 modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"
 editor_entry,0x0,index,int,,"buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list"
 editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture"
+model,0x34,center,vec3,,"createtypemodel: the mean of the particles of the object type. The vertices are relative to it"
+objecttype,0x734c,num_lines,int,,"createtypemodel copies this many lines to the model in work"
+objecttype,0x7350,lines,MeshLine,129,"createtypemodel: the lines of the model, two vertex indexes each"

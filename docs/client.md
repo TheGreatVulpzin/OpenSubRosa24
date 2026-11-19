@@ -438,6 +438,7 @@ The client keeps the game record (`game`, RVA 0x9065300) in the type `GameClient
 - Shared code that needs `end_time` reads `sr_game_end_time`. In the server it is the field. In the client it is a private variable, because the client never reads it.
 - `tools/re/gen_types.py` makes `GameClient` from the names of `Game` (`game_client_offset`). A new field of `Game` gets its client offset from that function.
 - Test: `deleteplayer` wrote the team manager 4 bytes away with `Game`. With `GameClient` it gives the same result on 60 calls. `playerteamkilltax` went from 31 to 1 different call of 60 for the same reason.
+- `generatetrinormal` of the client rounds the two edges of the triangle to floats before the cross product. The server code keeps some edge terms in x87 precision. On a curved model the normals differ in the last bit. The client follows the server code. The harness lists `setupmodel`, `createtypemodel`, `createbulletmodel`, `createcashmodel` and `createheadmodel3` as known differences: their models go to the heap, and the heap test is exact. With the rounding of the client, all 21 recorded calls of the seven model builders are the same.
 - `playerteamkilltax` takes a larger share of the money in the server code. The client does not write the team kill rate. The server never sends this result to a player, so the client follows the server code. The harness lists it as a known difference.
 - `human_calcarmtorque` draws a debug cross at the hand target in the client. Shared code calls `sr_debug_cross(center, size)` there. The server defines nothing, so the call does not exist in the server build. The client defines it as `debug_addcross`.
 
@@ -513,6 +514,8 @@ Branch `client/c7`. The plan of the group is `build/plans/c7-plan.md` (not versi
 Tests: the synthetic cases are in `instrumentation/client/synth_setup.py` (`jpeg`, `timers`, `debug`, `debugoff`, `log`, `ticket`, `mouseon`, `mouseoff`): `reset` 3 calls, `resettimer` 20, `starttimer` 5, `debug_addcross` 4, `debug_addatafloat` 14, `debug_addataint` 116 (one call skipped), `debug_writelogfile` 2 and `updateplayticket` 1, all the same. The test ignores the processor cycle count that `starttimer` stores.
 
 `reactivategame` is written (`src/client/setup/game.c`) but not adopted. It calls functions that use OpenGL, and the offline test skips them. It is in `analysis/client_win/adopted_C7_pending.txt` until a test with the game window shows it works. The Steam functions (`steam_*`) have no clean code. They are glue for the Steam SDK, and the client keeps them as they are.
+
+`gameloop` (`src/client/setup/loop.c`) and `main` (`src/client/setup/main.c`) are written. They run frame loops, so the offline test cannot call them. Both wait in `analysis/client_win/adopted_C7loop_pending.txt` for a test in the game window. The C name of `main` is `client_main`, because the harness and the test programs have their own `main`. An adopted line can have a third field with the C name (`main src/client/setup/main.c client_main`). `lift.py` and `tools/re/clean_closure.py` read it. Deliberate change: `main` does not call `steam_init` and `steam_shutdown`, and it writes 0 to `steam_active`. The client has no Steam.
 
 `reset` was in the list of C7 only because of its generic name. It belongs to the JPEG decoder, and the image code calls it directly now.
 

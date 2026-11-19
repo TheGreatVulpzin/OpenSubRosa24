@@ -64,13 +64,26 @@ def adopted_names():
     return names
 
 
+def c_names():
+    """name -> C name, for the adopted lines with a third field (a function whose real name the C
+    build cannot use)."""
+    out = {}
+    for p in sorted((ROOT / 'analysis/client_win').glob('adopted*.txt')):
+        for line in p.read_text(encoding='utf-8').splitlines():
+            fields = line.split()
+            if len(fields) > 2 and not line.startswith('#'):
+                out[fields[0]] = fields[2]
+    return out
+
+
 def hashes(names=None):
     """name -> hash of the files that the function reaches, plus the context hash."""
     funcs, texts = _index()
     context = _context_hash()
+    renamed = c_names()
     out = {}
     for name in (names if names is not None else adopted_names()):
-        seen, todo, files = set(), [name], set()
+        seen, todo, files = set(), [renamed.get(name, name)], set()
         while todo:
             n = todo.pop()
             if n in seen or n not in funcs:

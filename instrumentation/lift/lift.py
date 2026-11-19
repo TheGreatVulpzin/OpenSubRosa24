@@ -268,7 +268,9 @@ def rewritten_rvas(names):
     files = [f for d in TARGET['rewritten'] for f in (ROOT / d).glob('*.c')]
     allowed = None
     # The client adopts clean functions one by one (analysis/client_win/adopted*.txt, one file for each group,
-    # lines "name path"). Only the listed names get the clean version.
+    # lines "name path [symbol]"). Only the listed names get the clean version. The optional third field is
+    # the C name of a function whose real name the C build cannot use (main: the test programs have one).
+    function_of = {}
     if TARGET.get('adopted'):
         allowed = set()
         base = ROOT / TARGET['adopted']
@@ -277,15 +279,18 @@ def rewritten_rvas(names):
                 continue
             for line in path.read_text(encoding='utf-8').splitlines():
                 if line.strip() and not line.startswith('#'):
-                    name, src = line.split()
-                    allowed.add(name)
+                    fields = line.split()
+                    name, src = fields[0], fields[1]
+                    c_name = fields[2] if len(fields) > 2 else name
+                    allowed.add(c_name)
+                    function_of[c_name] = name
                     files.append(ROOT / src)
     for f in sorted(set(files)):
         for name in definition.findall(f.read_text(encoding='utf-8')):
             if allowed is not None and name not in allowed:
                 continue
             m = re.fullmatch(r'lf_([0-9a-f]{5})', name)
-            rva = int(m.group(1), 16) if m else by_name.get(name)
+            rva = int(m.group(1), 16) if m else by_name.get(function_of.get(name, name))
             if rva is not None:
                 out.add(rva)
                 SYMBOLS[rva] = name

@@ -226,7 +226,7 @@ void __cdecl sprite_model_simulation(void)
             if (vectorlength(&piece->vel) < REST_SPEED) {
                 piece->active = 0;
                 if (piece->kind == KIND_SHELL && g_shell_count < SHELL_LIMIT)
-                    add_corners(piece, g_modellist.ammo_b[0], g_shell_verts, &g_shell_count);
+                    add_corners(piece, g_modellist.bullet_flat[0], g_shell_verts, &g_shell_count);
                 if (piece->kind == KIND_DEBRIS && g_debris_count < DEBRIS_LIMIT)
                     add_corners(piece, g_modellist.sprite[piece->kind], g_debris_verts, &g_debris_count);
             }

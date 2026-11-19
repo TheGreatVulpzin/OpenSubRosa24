@@ -42,7 +42,7 @@ static void assign_model_ids(void)
     int i;
 
     for (i = 0; i < NUM_MODEL_SLOTS; ++i)
-        g_modellist.bullet[i] = next++;
+        g_modellist.vehicle[i] = next++;
     for (i = 0; i < NUM_MODEL_SLOTS; ++i)
         g_modellist.item[i] = next++;
     for (i = 0; i < NUM_MODEL_SLOTS; ++i)
@@ -50,8 +50,8 @@ static void assign_model_ids(void)
     for (i = 0; i < NUM_HUMAN_MODELS; ++i)
         g_modellist.human[i] = next++;
     for (i = 0; i < NUM_MODEL_SLOTS; ++i) {
-        g_modellist.ammo[i] = next++;
-        g_modellist.ammo_b[i] = next++;
+        g_modellist.bullet[i] = next++;
+        g_modellist.bullet_flat[i] = next++;
     }
     for (i = 0; i < NUM_MODEL_SLOTS; ++i)
         g_modellist.city_object[i] = next++;

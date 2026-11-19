@@ -14,7 +14,7 @@ GL_IMPORT(glEnableClientState, (uint32_t array), (array))
 GL_IMPORT(glDisableClientState, (uint32_t array), (array))
 GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
-enum { MAX_SECTORS = 8192, SECTOR_VERTEX_BYTES = 64, ARRAY_POSITION = 0x8074,
+enum { MAX_SECTORS = 8192, ARRAY_POSITION = 0x8074,
        EXT_BUFFERS = 6, SHADOW_BUFFER_BYTES = 0x300000, BUFFER_DYNAMIC = 0x88e8,
        SLOT_BIND_BUFFER = 0x115aa8, SLOT_BUFFER_DATA = 0x115ab8, SLOT_BUFFER_SUBDATA = 0x115abc };
 
@@ -47,22 +47,21 @@ void __cdecl render_buildareasectorshadow(void)
     cl_data_sector_shadow_count = 0;
     for (s = 0; s < MAX_SECTORS; ++s) {
         BlockSector *sector = &cl_data_block_sectors[s];
-        const SectorShadowMesh *mesh = (const SectorShadowMesh *)sector;
         float extrusion;
         if (!sector->used)
             continue;
         extrusion = !(0.125 < light->y) ? 0.0f :
             (float)(-(float)(sector->pos[1] + 1) * 8.0 * sr_data_area[sector->area].block_size / light->y);
-        for (t = 0; t < mesh->num_triangles; ++t) {
-            if (!(dotproduct(&mesh->normals[t], light) < 0.0))
+        for (t = 0; t < sector->num_tris; ++t) {
+            if (!(dotproduct(&sector->tri_normals[t], light) < 0.0))
                 continue;
             for (edge = 0; edge < 3; ++edge) {
-                const vec3 *vertex = (const vec3 *)(mesh->vertices + mesh->triangles[t][edge] * SECTOR_VERTEX_BYTES);
+                const vec3 *vertex = &sector->verts[sector->tris[t][edge]].pos;
                 cl_data_sector_shadow_corners[edge] = *vertex;
                 scaleaddvectors(&cl_data_sector_shadow_corners[edge + 3], vertex, light, extrusion);
             }
             for (edge = 0; edge < 3; ++edge)
-                if (0.0 <= dotproduct(&mesh->edge_normals[t][edge], light))
+                if (0.0 <= dotproduct(&sector->edge_normals[t][edge], light))
                     emit_shadow_face(sides[edge]);
             emit_shadow_face(caps);
         }

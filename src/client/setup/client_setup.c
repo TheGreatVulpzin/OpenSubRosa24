@@ -16,10 +16,12 @@
 #include "sr_runtime.h"
 #include "textures/landscape.h"
 #include "textures/loaders.h"
+#include "textures/item_models.h"
 #include "textures/models.h"
 #include "textures/opengl.h"
 #include "textures/sphere.h"
 #include "textures/textures.h"
+#include "textures/type_models.h"
 #include "textures/upload.h"
 
 #define g_modellist sr_data_modellist
@@ -32,11 +34,7 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define createbulletmodel CL_FN(0x4ad5d0, void(__cdecl *)(int model, int type))
-#define createammoshapemodel CL_FN(0x4af7c0, void(__cdecl *)(int model, int shape, int variant))
 #define createsunglassmodel CL_FN(0x4affb0, void(__cdecl *)(int model))
-#define creategunmodel2 CL_FN(0x4b3250, void(__cdecl *)(int model, int item))
-#define createcashmodel CL_FN(0x4b3900, void(__cdecl *)(int model, int item))
 #define createbriefcasemodel CL_FN(0x4b3fc0, void(__cdecl *)(int model, float x, float y, float z))
 #define createboxmodel CL_FN(0x4b41d0, void(__cdecl *)(int model, float x, float y, float z))
 #define createwheelmodel CL_FN(0x4b4520, void(__cdecl *)(int model, float radius, float width))
@@ -48,8 +46,8 @@
 #define createbillmodel CL_FN(0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
 
 enum {
-    NUM_BULLET_MODELS = 16,
-    NUM_AMMO_SHAPES = 4,
+    NUM_VEHICLE_MODELS = 16,
+    NUM_BULLET_MODELS = 4,
     NUM_CITY_OBJECTS = 10,
     NUM_FILE_MATERIALS = 128,
     NUM_HUMAN_TEXTURES = 4,
@@ -82,7 +80,7 @@ static void make_item_models(void)
     createboxmodel(item[ITEM_MP5_MAGAZINE], 0.03125f, 0.0625f, 0.0625f);
     createboxmodel(item[ITEM_9MM_MAGAZINE], 0.03125f, 0.0625f, 0.0625f);
     createboxmodel(item[ITEM_UZI_MAGAZINE], 0.03125f, 0.078125f, 0.0625f);
-    createammoshapemodel(item[ITEM_45_BULLETS], 3, 0);
+    createbulletmodel(item[ITEM_45_BULLETS], 3, 0);
     createcashmodel(item[ITEM_MAGNUM], ITEM_MAGNUM);
     createcashmodel(item[ITEM_UZI], ITEM_UZI);
     createcashmodel(item[ITEM_9MM], ITEM_9MM);
@@ -115,14 +113,14 @@ static void make_models(void)
 {
     int i;
 
-    for (i = 0; i < NUM_BULLET_MODELS; ++i)
-        createbulletmodel(g_modellist.bullet[i], i);
+    for (i = 0; i < NUM_VEHICLE_MODELS; ++i)
+        createtypemodel(g_modellist.vehicle[i], i);
     make_item_models();
     make_other_item_models();
     createhumanmodel(g_modellist.human[0]);
-    for (i = 0; i < NUM_AMMO_SHAPES; ++i) {
-        createammoshapemodel(g_modellist.ammo[i], i, 0);
-        createammoshapemodel(g_modellist.ammo_b[i], i, 1);
+    for (i = 0; i < NUM_BULLET_MODELS; ++i) {
+        createbulletmodel(g_modellist.bullet[i], i, 0);
+        createbulletmodel(g_modellist.bullet_flat[i], i, 1);
     }
     for (i = 0; i < NUM_CITY_OBJECTS; ++i)
         createmodel_cityobject(g_modellist.city_object[i], i);

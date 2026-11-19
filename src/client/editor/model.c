@@ -3,6 +3,8 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "textures/head_models.h"
+#include "textures/models.h"
 #include "intersect.h"
 #include "math/small_vectors.h"
 #include "menu/draw.h"
@@ -92,8 +94,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Game functions of other files. */
-#define buildeditmodel CL_FN(0x4bb0f0, void(__cdecl *)(int model))
-#define setupmodel CL_FN(0x4ac190, void(__cdecl *)(int model, int smooth))
 #define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
@@ -174,7 +174,7 @@ static void viewer_rebuild(void)
  * in work with the mouse. The numbers of the held vertices show on the left. */
 void __cdecl model_viewer(void)
 {
-    buildeditmodel(sr_data_modellist.head);
+    createheadmodel3(sr_data_modellist.head);
     loadtexture(sr_data_texturelist.test_m16, "test_m16.png", 0, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_LINEAR,
                 GL_LINEAR);
     resetmenuitems();

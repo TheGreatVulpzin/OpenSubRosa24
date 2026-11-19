@@ -15,7 +15,6 @@
 #include "vectors.h"
 
 /* Game functions of other files. */
-#define setupmodel CL_FN(0x4ac190, void(__cdecl *)(int, int))
 typedef int(__cdecl *LevelIntersectFn)(const vec3 *, const vec3 *, int);
 typedef void(__cdecl *SpinFn)(vec3 *, const vec3 *, float);
 typedef void(__cdecl *RandomVectorFn)(vec3 *, float, float);
@@ -189,7 +188,7 @@ void __cdecl spritesimulation(void)
 void __cdecl createwindowsprites(int object, int face, const vec3 *hit, const vec3 *impulse)
 {
     const Object *body = &sr_data_object[object];
-    const Model *model = &cl_data_model[sr_data_modellist.bullet[body->type]];
+    const Model *model = &cl_data_model[sr_data_modellist.vehicle[body->type]];
     int window = 0;
     int index;
     int row;
