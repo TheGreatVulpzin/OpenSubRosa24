@@ -10,3 +10,4 @@ addcockpittomodel src/client/textures/model_parts.c
 model_extrudeeye src/client/textures/model_parts.c
 area_buildsectormodel src/client/render/sector_model.c
 area_interior_buildsectormodel src/client/render/interior_model.c
+createheadmodel2 src/client/textures/head_models.c

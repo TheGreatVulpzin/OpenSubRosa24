@@ -3295,7 +3295,8 @@ typedef union ModelTemp { struct {
     int num_tris;                        /* +0xa0008 addboxtomodel adds 12 */
     MeshTri tris[8192];                  /* +0xa000c setupmodel: indexes into verts */
     MeshTri tri_backup[8192];            /* +0xb800c model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back */
-    uint8_t pad_d000c[0x80000];
+    uint8_t pad_d000c[0x38000];
+    vec3 patch_coords[24576];            /* +0x10800c createheadmodel2: the place of the three corners of each triangle in its Bezier patch, as weights of the patch corners */
     vec3 tri_normals[8192];              /* +0x15000c setupmodel: generatetrinormal of the three corners */
     vec3 corner_normals[24576];          /* +0x16800c the model loader: one normal for each corner of a triangle */
     TriTexCoords tri_texcoords[8192];    /* +0x1b000c model_settritexcoord writes the three corners */
@@ -3318,6 +3319,7 @@ SR_STATIC_ASSERT(offsetof(ModelTemp, render_verts) == 0x58008, "ModelTemp.render
 SR_STATIC_ASSERT(offsetof(ModelTemp, num_tris) == 0xa0008, "ModelTemp.num_tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tris) == 0xa000c, "ModelTemp.tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_backup) == 0xb800c, "ModelTemp.tri_backup");
+SR_STATIC_ASSERT(offsetof(ModelTemp, patch_coords) == 0x10800c, "ModelTemp.patch_coords");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_normals) == 0x15000c, "ModelTemp.tri_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, corner_normals) == 0x16800c, "ModelTemp.corner_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_texcoords) == 0x1b000c, "ModelTemp.tri_texcoords");

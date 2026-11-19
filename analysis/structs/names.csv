@@ -1195,6 +1195,7 @@ option,0x108,frame_overlay,int,,"the client mainmenu writes 0 at the start. Whil
 soundlist,0xa8,menu_test,int,4,"the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down"
 texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
 modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"
+modeltemp,0x10800c,patch_coords,vec3,24576,"createheadmodel2: the place of the three corners of each triangle in its Bezier patch, as weights of the patch corners"
 editor_entry,0x0,index,int,,"buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list"
 editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture"
 model,0x34,center,vec3,,"createtypemodel: the mean of the particles of the object type. The vertices are relative to it"
