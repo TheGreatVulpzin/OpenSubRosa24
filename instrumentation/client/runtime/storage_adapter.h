@@ -175,6 +175,7 @@ extern TimerList sr_unplaced_timerlist;
 #define cl_data_audio_source_limit (*((int *)(sr_base + 0x1bbe3a0u)))
 #define cl_data_source_buffer ((char *)(sr_base + 0xf3ca9c0u))
 #define cl_data_track_verts ((ModelVertex *)(sr_base + 0x147129b0u))
+#define cl_data_building_click_wait (*((int *)(sr_base + 0xf9ae250u)))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))

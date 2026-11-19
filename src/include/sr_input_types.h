@@ -177,7 +177,8 @@ typedef union EditorTile { struct {
     float width;                         /* +0x000c 64 */
     float height;                        /* +0x0010 64 */
     int* target;                         /* +0x0014 a click on the tile writes its index here */
-    uint8_t pad_0018[0x8];
+    int start;                           /* +0x0018 building_editorloop writes 0: the first entry of the list of the tile */
+    int count;                           /* +0x001c building_editorloop: the entries of the list of the tile (the material or the block names of the building) */
     int index;                           /* +0x0020 the index of the tile in its list */
 }; uint8_t lf_raw[0x24]; } EditorTile;
 SR_STATIC_ASSERT(sizeof(EditorTile) == 0x24, "EditorTile");
@@ -187,6 +188,8 @@ SR_STATIC_ASSERT(offsetof(EditorTile, y) == 0x8, "EditorTile.y");
 SR_STATIC_ASSERT(offsetof(EditorTile, width) == 0xc, "EditorTile.width");
 SR_STATIC_ASSERT(offsetof(EditorTile, height) == 0x10, "EditorTile.height");
 SR_STATIC_ASSERT(offsetof(EditorTile, target) == 0x14, "EditorTile.target");
+SR_STATIC_ASSERT(offsetof(EditorTile, start) == 0x18, "EditorTile.start");
+SR_STATIC_ASSERT(offsetof(EditorTile, count) == 0x1c, "EditorTile.count");
 SR_STATIC_ASSERT(offsetof(EditorTile, index) == 0x20, "EditorTile.index");
 
 /* building_editor[]: record of 0xec bytes. */
@@ -196,8 +199,10 @@ typedef union BuildingEditor { struct {
     char file[64];                       /* +0x0008 buildingedit_menu copies the name of the building file here */
     int wall_direction;                  /* +0x0048 buildingedit_render: 0 a wall along x, else along z */
     int tool;                            /* +0x004c buildingedit_setup writes 9 */
-    int setting_50[3];                   /* +0x0050 buildingedit_setup writes 0 */
-    uint8_t pad_005c[0x4];
+    int block_kind;                      /* +0x0050 building_editorloop: the block that E and a left click add: 0 a normal block, 1 an interior special block, 2 an outer special block. buildingedit_setup writes 0 */
+    int outer_block;                     /* +0x0054 building_editorloop: the outer special block of the block picker. buildingedit_setup writes 0 */
+    int inner_block;                     /* +0x0058 building_editorloop: the interior special block of the block picker. buildingedit_setup writes 0 */
+    int turn;                            /* +0x005c building_editorloop: the turn (0 to 3) of a new special block. Q adds 1 */
     int cell_field_10;                   /* +0x0060 buildingedit_addblock copies it to the cell */
     int packed_parts[5];                 /* +0x0064 buildingedit_addblock packs them into the cell */
     int outer_slots[8];                  /* +0x0078 the texture slots of the outer layer; buildingedit_addblock copies the first six */
@@ -222,7 +227,10 @@ SR_STATIC_ASSERT(offsetof(BuildingEditor, unused_04) == 0x4, "BuildingEditor.unu
 SR_STATIC_ASSERT(offsetof(BuildingEditor, file) == 0x8, "BuildingEditor.file");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, wall_direction) == 0x48, "BuildingEditor.wall_direction");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, tool) == 0x4c, "BuildingEditor.tool");
-SR_STATIC_ASSERT(offsetof(BuildingEditor, setting_50) == 0x50, "BuildingEditor.setting_50");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, block_kind) == 0x50, "BuildingEditor.block_kind");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, outer_block) == 0x54, "BuildingEditor.outer_block");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, inner_block) == 0x58, "BuildingEditor.inner_block");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, turn) == 0x5c, "BuildingEditor.turn");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, cell_field_10) == 0x60, "BuildingEditor.cell_field_10");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, packed_parts) == 0x64, "BuildingEditor.packed_parts");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, outer_slots) == 0x78, "BuildingEditor.outer_slots");
