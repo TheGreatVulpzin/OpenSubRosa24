@@ -14,6 +14,8 @@ Keyboard, mouse, player controls and cameras use `src/client/input/`.
 - [BMP](bmp.md): palettes and packed color masks.
 - [PSD](psd.md): planar RGB channels and PackBits runs.
 - [HDR](hdr.md): Radiance RGBE samples.
+- [TGA](tga.md): palettes, run length rows and channel order.
+- [Loading](load.md): format tests, loader order and HDR conversion.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
 

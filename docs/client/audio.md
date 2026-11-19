@@ -22,7 +22,7 @@ The socket address, handle slots and enable flags use `BsdSocket`. Its address s
 
 `shutdownaudio` closes capture when its pointer is nonzero. It gets the current context and its device, clears the current context and closes both. It disables audio but retains the pointer values.
 
-`enablespeex` selects narrowband mode, quality 8, noise reduction and automatic gain control with a level of 16000. It creates eight decoder states. `disablespeex` releases the states and their bit buffers. `preprocessspeex` changes one signed sample frame in place. `encodespeex` converts its 160 samples to floats, resets the bit buffer and stores up to 200 encoded bytes.
+`enablespeex` selects narrowband mode, quality 8, noise reduction and automatic gain control with a level of 16000. It creates eight decoder states. `disablespeex` releases the states and their bit buffers. `preprocessspeex` changes one signed sample frame in place. `encodespeex` converts its 160 samples to floats, resets the bit buffer and stores up to 200 encoded bytes. `decodespeex` decodes one frame of a speaker. A frame with no bytes gives 160 zero samples. A decoded frame clears its byte count. Every 32nd sample goes to the level table of the speaker.
 
 ## Microphone input
 
@@ -84,7 +84,7 @@ Vector length rounds its squared sum and square root result to float. Vehicle di
 | File | Functions |
 | --- | --- |
 | `setup.c` | `setupaudio`, `shutdownaudio` |
-| `speex.c` | `enablespeex`, `disablespeex`, `preprocessspeex`, `encodespeex` |
+| `speex.c` | `enablespeex`, `disablespeex`, `preprocessspeex`, `encodespeex`, `decodespeex` |
 | `voice.c` | `getaudioinput`, `getnextvoice`, `addvoice` |
 | `sockets.c` | `enablesocketserver`, `enablesocketclient` |
 | `sound.c` | `soundsimulation`, `deletesound` |
