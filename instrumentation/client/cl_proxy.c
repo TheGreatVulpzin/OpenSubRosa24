@@ -110,6 +110,23 @@ static int is_client(const unsigned char *base)
            nt->OptionalHeader.SizeOfImage == SR_CLIENT_SIZEOFIMAGE;
 }
 
+/* subvulpes.ini [client] debugit=1 sets the debug flag of the game (RVA 0x127ea8). The client
+ * never sets it, and it opens the building editor and the level editor from the main menu. Only
+ * for tests: the flag also gives debug money and debug keys. */
+#define CL_DEBUGIT_RVA 0x127ea8
+static void apply_debugit(unsigned char *base)
+{
+    char path[MAX_PATH], *slash;
+
+    GetModuleFileNameA(NULL, path, MAX_PATH);
+    slash = strrchr(path, '\\');
+    lstrcpyA(slash ? slash + 1 : path, "subvulpes.ini");
+    if (GetPrivateProfileIntA("client", "debugit", 0, path) != 0) {
+        *(int *)(base + CL_DEBUGIT_RVA) = 1;
+        cl_log("debugit=1: the debug flag of the game is on.");
+    }
+}
+
 BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
 {
     if (reason == DLL_PROCESS_ATTACH) {
@@ -128,6 +145,7 @@ BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID reserved)
             cl_log("executable is not the expected subrosa.exe. Only forwarding the network.");
         else {
             int handled = 0;
+            apply_debugit((unsigned char *)base);
 #if defined(CL_COUNT) || defined(CL_HOOKS)
             sr_base = (uintptr_t)base;
 #endif
