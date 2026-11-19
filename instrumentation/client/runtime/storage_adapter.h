@@ -429,6 +429,11 @@ void area_reset_interiors(void);
 int __cdecl lf_e9d70(int texture, int type);
 #define sr_window_atlas(texture, type) lf_e9d70((texture), (type))
 #define sr_object_frame_orthogonal 0
+void level_client_landscape(void);
+#define sr_level_after_landscape() level_client_landscape()
+void level_client_finish(void);
+#define sr_level_after_buildings() level_client_finish()
+#define sr_level_shop_count 4
 #define sr_human_floor_all_rays 1
 #define sr_timer_name(field, name) ((void)0)
 #define sr_timer_start(field) ((void)0)

@@ -608,7 +608,7 @@ void area_interior_setobject(void);
 void lf_43e20(void);
 void lf_43f80(void);
 void lf_44140(void);
-void lf_442b0(void);
+void area_interior_buildsectormodel(void);
 void area_breakblock(void);
 void lineintersectarea(void);
 void lineintersectnormalblock(void);
@@ -643,7 +643,7 @@ void building_buildfloorplan(void);
 void lf_58940(void);
 void lf_58a70(void);
 void buildingedit_setup(void);
-void lf_58d20(void);
+void building_editorloop(void);
 void lf_5c040(void);
 void buildingedit_addblock(void);
 void lf_5cef0(void);
@@ -852,7 +852,7 @@ void item_sphereintersect(void);
 void lf_9b160(void);
 void lf_9b2c0(void);
 void lf_9b5d0(void);
-void lf_9b740(void);
+void createlevel(void);
 void leveledit_setup(void);
 void lf_9c5c0(void);
 void lf_9f400(void);
@@ -943,7 +943,7 @@ void createhairmodel(void);
 void lf_b54c0(void);
 void modeltemp_addvertex(void);
 void lf_b7aa0(void);
-void lf_b80b0(void);
+void createheadmodel2(void);
 void model_addvertex(void);
 void lf_baed0(void);
 void createheadmodel3(void);
@@ -1911,7 +1911,7 @@ const LfEntry lf_table[] = {
     { "area_interior_getblock", 0x43e20, (void *)lf_43e20, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocklink", 0x43f80, (void *)lf_43f80, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocktexture", 0x44140, (void *)lf_44140, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "area_interior_buildsectormodel", 0x442b0, (void *)lf_442b0, 2, LF_RET_INT, 4, "vv", 1 },
+    { "area_interior_buildsectormodel", 0x442b0, (void *)area_interior_buildsectormodel, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_breakblock", 0x46610, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x466d0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectnormalblock", 0x478d0, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
@@ -1946,7 +1946,7 @@ const LfEntry lf_table[] = {
     { "building_iswindow", 0x58940, (void *)lf_58940, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "building_addgaragedoor", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)buildingedit_setup, 0, LF_RET_VOID, 4, "", 0 },
-    { "building_editorloop", 0x58d20, (void *)lf_58d20, 0, LF_RET_VOID, 4, "", 1 },
+    { "building_editorloop", 0x58d20, (void *)building_editorloop, 0, LF_RET_VOID, 4, "", 1 },
     { "building_checkeditor", 0x5c040, (void *)lf_5c040, 0, LF_RET_VOID, 4, "", 0 },
     { "buildingedit_addblock", 0x5c760, (void *)buildingedit_addblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "buildingedit_deleteblock", 0x5cef0, (void *)lf_5cef0, 3, LF_RET_VOID, 4, "vvv", 0 },
@@ -2155,7 +2155,7 @@ const LfEntry lf_table[] = {
     { "addcityblock", 0x9b160, (void *)lf_9b160, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "city_addintersection", 0x9b2c0, (void *)lf_9b2c0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "addcitystreet", 0x9b5d0, (void *)lf_9b5d0, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "createlevel", 0x9b740, (void *)lf_9b740, 0, LF_RET_VOID, 4, "", 1 },
+    { "createlevel", 0x9b740, (void *)createlevel, 0, LF_RET_VOID, 4, "", 1 },
     { "leveledit_setup", 0x9c4f0, (void *)leveledit_setup, 0, LF_RET_VOID, 4, "", 0 },
     { "leveleditor_loop", 0x9c5c0, (void *)lf_9c5c0, 0, LF_RET_VOID, 4, "", 1 },
     { "level_checkeditor", 0x9f400, (void *)lf_9f400, 0, LF_RET_VOID, 4, "", 0 },
@@ -2246,7 +2246,7 @@ const LfEntry lf_table[] = {
     { "createheadmodel", 0xb54c0, (void *)lf_b54c0, 1, LF_RET_VOID, 4, "v", 1 },
     { "modeltemp_addvertex", 0xb7980, (void *)modeltemp_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
     { "model_extrudeeye2", 0xb7aa0, (void *)lf_b7aa0, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "createheadmodel2", 0xb80b0, (void *)lf_b80b0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "createheadmodel2", 0xb80b0, (void *)createheadmodel2, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_addvertex", 0xbadd0, (void *)model_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
     { "tesselatebeziertriangle", 0xbaed0, (void *)lf_baed0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
     { "createheadmodel3", 0xbb0f0, (void *)createheadmodel3, 1, LF_RET_VOID, 4, "v", 1 },

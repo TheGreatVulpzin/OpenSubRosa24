@@ -23,6 +23,18 @@
 #define g_building sr_data_building
 #define g_level_marks sr_data_level_marks
 
+/* The client builds more: the landscape mesh after the landscape, and textures, buffers and the
+ * track model after the buildings. The client also has one shop less. */
+#ifndef sr_level_after_landscape
+#define sr_level_after_landscape() ((void)0)
+#endif
+#ifndef sr_level_after_buildings
+#define sr_level_after_buildings() ((void)0)
+#endif
+#ifndef sr_level_shop_count
+#define sr_level_shop_count 5
+#endif
+
 static float track_span(const vec3 *a, const vec3 *b, int z_first)
 {
     float x = (float)(a->x - b->x);
@@ -367,6 +379,7 @@ void createlevel(void)
     memset(g_level_marks, 0, 0x1000);
     createlandscape();
     buildsomeshit((const float *)&start);
+    sr_level_after_landscape();
     createarea(0, &origin, 64, 8, 64, 4.0f);
     g_city.num_intersections = 0;
     g_city.num_roads = 0;
@@ -473,7 +486,7 @@ void createlevel(void)
         }
         if ((uint32_t)kind < 5)
             *(float *)TEAM_FIELD(team0_angle, kind) = (float)((float)entry->turns * 3.14159265359 * 0.5);
-        for (j = 0; j < 5; j++) {
+        for (j = 0; j < sr_level_shop_count; j++) {
             if (strcmp(entry->name, shops[j].name) == 0) {
                 kind = shops[j].kind;
                 break;
@@ -482,4 +495,5 @@ void createlevel(void)
         building_buildfloorplan(0, entry->x, 6, entry->z, g_building.build_size_x,
                                g_building.build_size_z, g_building.build_floors, kind);
     }
+    sr_level_after_buildings();
 }

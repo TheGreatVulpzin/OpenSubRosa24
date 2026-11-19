@@ -41,6 +41,12 @@ import synth_textures as st  # noqa: E402
 PROTOTYPES = {
     'createbullet': 'ivvn',
     'createsprite': 'ivvf',
+    'sphereintersectarea': 'ooFAvr',
+    'circleintersectarea': 'ooFAvvr',
+    'building_rotatefloorplan': '',
+    'packobjectpacket': 'ip',
+    'packobjectpacket2': 'ip',
+    'unpackobjectpacket': '',
     'ticketreturned': 'Si',
     'steam_getauthticket': 'U',
     'initplayticket': '',
