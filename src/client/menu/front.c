@@ -23,6 +23,7 @@
 #include "render/models_draw.h"
 #include "render/programs.h"
 #include "render/view.h"
+#include "setup/accounts.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 #include "../../common/random.h"
@@ -85,7 +86,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 #define pbitread CL_FN(0x4fe800, int(__cdecl *)(uint32_t *value, uint32_t bits))
 #define enablesocketserver CL_FN(0x4fe2b0, void(__cdecl *)(int lan))
 #define closesocketserver CL_FN(0x4fe3f0, void(__cdecl *)(int lan))
-#define loadaccountsserver CL_FN(0x4341d0, void(__cdecl *)(void))
 #define saveaccountsclient CL_FN(0x434470, void(__cdecl *)(void))
 #define setupserver CL_FN(0x4345d0, void(__cdecl *)(void))
 #define endserver CL_FN(0x434010, void(__cdecl *)(void))

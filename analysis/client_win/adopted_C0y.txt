@@ -5,3 +5,4 @@ fixplayername src/game/player_names.c sr_fixplayername
 createsprite src/client/render/sprite_pool.c
 deletesprite src/client/render/sprite_pool.c
 spritetimetolive src/client/render/sprite_pool.c
+loadaccountsserver src/client/setup/accounts.c

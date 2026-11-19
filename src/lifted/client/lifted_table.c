@@ -548,7 +548,7 @@ void createaccount(void);
 void account_nameexists(void);
 void lf_33f20(void);
 void lf_34010(void);
-void lf_341d0(void);
+void loadaccountsserver(void);
 void saveaccountsclient(void);
 void lf_345d0(void);
 void lf_34740(void);
@@ -1851,7 +1851,7 @@ const LfEntry lf_table[] = {
     { "account_nameexists", 0x33eb0, (void *)account_nameexists, 1, LF_RET_INT, 4, "p", 0 },
     { "createclientaccount", 0x33f20, (void *)lf_33f20, 3, LF_RET_INT, 4, "ppv", 0 },
     { "saveaccountsserver", 0x34010, (void *)lf_34010, 0, LF_RET_VOID, 4, "", 1 },
-    { "loadaccountsserver", 0x341d0, (void *)lf_341d0, 0, LF_RET_VOID, 4, "", 1 },
+    { "loadaccountsserver", 0x341d0, (void *)loadaccountsserver, 0, LF_RET_VOID, 4, "", 1 },
     { "saveaccountsclient", 0x34470, (void *)saveaccountsclient, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsclient", 0x345d0, (void *)lf_345d0, 0, LF_RET_VOID, 4, "", 1 },
     { "server_writelogfile", 0x34740, (void *)lf_34740, 0, LF_RET_VOID, 4, "", 1 },
