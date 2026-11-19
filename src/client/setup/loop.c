@@ -11,6 +11,7 @@
 #include "audio/imports.h"
 #include "client.h"
 #include "debug/debug.h"
+#include "editor/building_loop.h"
 #include "editor/level.h"
 #include "math/small_vectors.h"
 #include "menu/draw.h"
@@ -111,7 +112,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define getaudioinput CL_FN(0x4fb6f0, void(__cdecl *)(int player))
 #define frame_drawvoiceicons CL_FN(0x479330, void(__cdecl *)(void))
 #define deletesound CL_FN(0x44f720, void(__cdecl *)(int sound))
-#define building_editorloop CL_FN(0x458d20, void(__cdecl *)(void))
 #define voiceoptionsmenu CL_FN(0x4d38c0, void(__cdecl *)(void))
 #define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))

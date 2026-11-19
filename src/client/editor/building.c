@@ -76,8 +76,9 @@ void __cdecl buildingedit_setup(void)
         editor->packed_parts[i] = 0;
     editor->cell_field_14 = 1;
     editor->unused_04 = 0;
-    for (i = 0; i < 3; i++)
-        editor->setting_50[i] = 0;
+    editor->block_kind = 0;
+    editor->outer_block = 0;
+    editor->inner_block = 0;
     for (i = 0; i < 6; i++)
         editor->outer_slots[i] = 0;
     for (i = 0; i < 8; i++)

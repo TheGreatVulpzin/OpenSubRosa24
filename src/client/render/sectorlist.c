@@ -5,6 +5,7 @@
 
 #include "client.h"
 #include "render/frustum.h"
+#include "render/interior_model.h"
 #include "setup/timers.h"
 #include "sr_runtime.h"
 #include "util.h"
@@ -36,7 +37,6 @@
 
 /* Game functions of other files. */
 #define markinteriors CL_FN(0x4d9fa0, void(__cdecl *)(void))
-#define area_interior_buildsectormodel CL_FN(0x4442b0, int(__cdecl *)(int sector, int slot))
 
 /* The slots of the extension functions: the client holds a pointer to each one. */
 #define SLOT_ACTIVE_TEXTURE 0x115874

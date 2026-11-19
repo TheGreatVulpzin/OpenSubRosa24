@@ -550,6 +550,10 @@ area_sector,0x24,client_connected,int,,"clientrecv writes 1 after a state packet
 area_sector,0x28,client_timeout,int,,"clientrecv: ticks without a packet; above 0x4af the client leaves the game"
 area_sector,0x2c,client_event_total,int,,"clientrecv: 16 bits in the state packet"
 debug,0x50344,net_flag,int,,"clientrecv clears it after the object packet"
+debug,0x50348,interior_vert_sum,int,,area_interior_buildsectormodel: the vertices of all interior meshes
+debug,0x5034c,interior_builds,int,,area_interior_buildsectormodel: the count of interior meshes
+debug,0x50350,interior_max_verts,int,,area_interior_buildsectormodel: the most vertices of an interior mesh
+debug,0x50354,interior_min_verts,int,,area_interior_buildsectormodel: the fewest vertices of an interior mesh above 0
 game,0x0,running,int,,"the client gameloop writes 1 at the start and 0 at the end"
 game,0x4,link_state,int,,"clientrecv writes 3 when the server sends nothing for 0x4b0 ticks"
 human,0x2b44,net_tick,int,,"unpackobjectpacket: the tick of the last state of the human"
@@ -793,6 +797,8 @@ tempmesh,0xc0004,colors,vec3,16384,area_buildsectormodel: the color of each vert
 tempmesh,0xf0004,keys,int,16384,"area_buildsectormodel: x, y and z of the vertex in the sector, without the fraction, in bits 0, 10 and 20"
 tempmesh,0x160008,quad_normals,vec3,16384,area_buildsectormodel: the normal of each quad
 tempmesh,0x1e000c,tri_normals,vec3,16384,area_buildsectormodel: the normal of each triangle
+tempmesh,0x21000c,neighbors,MeshTri,16384,area_interior_buildsectormodel: the triangle on the other side of each edge or -1
+tempmesh,0x24000c,edge_normals,vec3,49152,area_interior_buildsectormodel: the normal of that triangle for each edge or zero
 tempmesh,0x2d004c,num_specials,int,,area_buildsectormodel: the special blocks of the sector in work
 tempmesh,0x2d0050,specials,int,1536,"area_buildsectormodel: x, y and z of each special block in the area"
 blocklist,0xc,edge,int,16,"createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform)"
@@ -1124,13 +1130,18 @@ editor_tile,0x8,y,float,,
 editor_tile,0xc,width,float,,"64"
 editor_tile,0x10,height,float,,"64"
 editor_tile,0x14,target,int*,,"a click on the tile writes its index here"
+editor_tile,0x18,start,int,,"building_editorloop writes 0: the first entry of the list of the tile"
+editor_tile,0x1c,count,int,,"building_editorloop: the entries of the list of the tile (the material or the block names of the building)"
 editor_tile,0x20,index,int,,"the index of the tile in its list"
 building_editor,0x0,mode,int,,"buildingedit_render: 0 blocks, 1 walls, 2 areas, 3 markers"
 building_editor,0x4,unused_04,int,,"buildingedit_setup writes 0"
 building_editor,0x8,file,char,64,"buildingedit_menu copies the name of the building file here"
 building_editor,0x48,wall_direction,int,,"buildingedit_render: 0 a wall along x, else along z"
 building_editor,0x4c,tool,int,,"buildingedit_setup writes 9"
-building_editor,0x50,setting_50,int,3,"buildingedit_setup writes 0"
+building_editor,0x50,block_kind,int,,"building_editorloop: the block that E and a left click add: 0 a normal block, 1 an interior special block, 2 an outer special block. buildingedit_setup writes 0"
+building_editor,0x54,outer_block,int,,"building_editorloop: the outer special block of the block picker. buildingedit_setup writes 0"
+building_editor,0x58,inner_block,int,,"building_editorloop: the interior special block of the block picker. buildingedit_setup writes 0"
+building_editor,0x5c,turn,int,,"building_editorloop: the turn (0 to 3) of a new special block. Q adds 1"
 building_editor,0x60,cell_field_10,int,,"buildingedit_addblock copies it to the cell"
 building_editor,0x64,packed_parts,int,5,"buildingedit_addblock packs them into the cell"
 building_editor,0x78,outer_slots,int,8,"the texture slots of the outer layer; buildingedit_addblock copies the first six"
@@ -1189,6 +1200,7 @@ option,0x108,frame_overlay,int,,"the client mainmenu writes 0 at the start. Whil
 soundlist,0xa8,menu_test,int,4,"the client mainmenu plays one of them with debugit when the key 0x1e plus its index goes down"
 texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
 modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"
+modeltemp,0x10800c,patch_coords,vec3,24576,"createheadmodel2: the place of the three corners of each triangle in its Bezier patch, as weights of the patch corners"
 editor_entry,0x0,index,int,,"buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list"
 editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture"
 model,0x34,center,vec3,,"createtypemodel: the mean of the particles of the object type. The vertices are relative to it"

@@ -1,6 +1,6 @@
 # Rendering
 
-Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`, `frame.c`.
+Files: `src/client/render/draw2d.c`, `text.c`, `indicators.c`, `gl_state.c`, `programs.c`, `sprites.c`, `sprites_draw.c`, `effects.c`, `frame_models.c`, `sector_model.c`, `interior_model.c`, `sector_shadow.c`, `screen.c`, `depth.c`, `debug_display.c`, `frame.c`.
 
 ## The 2D layer
 
@@ -171,11 +171,31 @@ A sector is a `BlockSector` record. `sector_entries` holds the sector and the di
 
 `frame_rendermessages` disables culling and depth testing, then enables both states.
 
+## Sector meshes
+
+`src/client/render/sector_model.c` and `interior_model.c` build the meshes of a block sector in the temporary mesh (`tempmesh`) and copy them into the sector or into an interior record.
+
+`area_buildsectormodel(sector)` builds the outer mesh:
+
+- The blocks go in the order y, z, x. A normal block adds a quad for each visible face (bits 0 to 5 of the block word). The faces 1 to 4 take the color of their side from the building part. A preset texture gives the layer in `uv.z`. A sign texture gives the cell of the sign.
+- A special block adds the mesh of its block type. A special block that fills more than one cell goes in once: `tempmesh.specials` keeps the places that are in the mesh.
+- `tempmesh_optimize` joins the quads. Each quad becomes two triangles with the normal of its first vertex. The vertices that no triangle uses go away: the last vertex moves into the place.
+- The sector gets the vertices (`SectorVertex`, 64 bytes), the triangles, the material of each triangle and its normal. Each triangle also gets the triangle on the other side of each edge (`neighbors`) and the normal of that triangle (`edge_normals`), for the shadow volumes.
+
+`area_interior_buildsectormodel(sector, slot)` builds the interior of floors `slot * 2` and `slot * 2 + 1`:
+
+- The result is the interior record, or -1. A slot with nothing to show gets -2 and is not built again. A slot that already has a record keeps it.
+- Only special interior blocks add a mesh. Bits 16 to 25 of the block word hide the first faces of the block. A face that the block can hide gets the flagged material. Slots 8 to 15 select the outer textures of the block. Faces with slot 9 to 12 take the color of their side.
+- Each city object of the two floors adds a fixture: a lamp or a traffic light with its place and its turn.
+- `tempmesh_optimize2` joins the quads. The two triangles of a quad are neighbors on the diagonal. The other neighbors come only from the solid materials (no flags), and only from later triangles.
+- A new mesh takes the next record of a ring of 4096 (`interior.count`). The sector that used that record loses it.
+- The triangles of the record are in parts, one part for each material, in material order. The neighbor of an edge keeps its index from before the sort.
+
 ## Sector shadow volumes
 
 `src/client/render/sector_shadow.c` builds closed shadow volumes from the sector triangles that face away from the light. Each volume has two caps and up to three sides. The six current corners also occupy a separate array. The extrusion reaches the base of the sector's vertical block range. A light y component from zero through 0.125 gives zero extrusion. A negative y component leaves the vertex list unchanged and leaves the build timer active. A NaN y component clears the list and completes the pass without faces.
 
-The mesh view names the client pointers within `BlockSector` without changing its fields or size. The shadow list has room for 262144 positions. The buffer extension uses a three megabyte allocation and uploads the active part of the list. Without that extension, the draw pass reads the list directly. `render_areasectorshadow` draws triangles and reports the vertex count as `shadowverts`.
+The volumes use the outer mesh of `BlockSector` (`num_tris`, `tris`, `tri_normals`, `edge_normals`). The shadow list has room for 262144 positions. The buffer extension uses a three megabyte allocation and uploads the active part of the list. Without that extension, the draw pass reads the list directly. `render_areasectorshadow` draws triangles and reports the vertex count as `shadowverts`.
 
 ## Display modes and screenshots
 

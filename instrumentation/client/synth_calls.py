@@ -16,6 +16,7 @@ HUMANSIMULATION = 0x85b70
 HUMAN_ITEMSIMULATION = 0x8f730
 CALCULATEPLAYERVOICE = 0xfbe70
 SCENARIO_CREATECHASE = 0xdd100
+CREATEHEADMODEL2 = 0xb80b0
 
 
 def call(rva, *args):
@@ -31,6 +32,8 @@ def cases():
         'calculateplayervoice': [call(CALCULATEPLAYERVOICE, a, b) for a in range(2) for b in range(4)],
         # (unused, id stored in the new player)
         'scenario_createchase': [call(SCENARIO_CREATECHASE, 0, x) for x in (0, 5, 9)],
+        # The model slot. No code of the client calls this function.
+        'createheadmodel2': [call(CREATEHEADMODEL2, m) for m in (0, 3)],
     }
 
 

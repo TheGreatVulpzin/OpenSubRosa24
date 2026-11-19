@@ -319,9 +319,12 @@ typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 /* A run of triangles of a sector interior with one material. */
 typedef struct SectorPart { uint8_t material; uint8_t num_triangles; uint8_t pad_02[2]; int first_index; } SectorPart;
 typedef struct InteriorPart { uint8_t material; uint8_t pad_01[3]; int num_triangles; int first_triangle; } InteriorPart;
+/* A vertex of an interior mesh (InteriorMesh.vertices). */
+typedef struct InteriorVertex { vec3 pos; vec3 normal; vec3 tangent; float uv[2]; vec3 color; uint8_t pad_38[8]; } InteriorVertex;
+SR_STATIC_ASSERT(sizeof(InteriorVertex) == 0x40, "InteriorVertex");
 /* A lamp (type 4) or a traffic light (type 5) of an interior. A traffic light shows the state of one side of an intersection. */
 typedef struct InteriorFixture { int type; int intersection; int side; vec3 pos; vec3 rot[3]; } InteriorFixture;
-typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+typedef struct InteriorMesh { uint8_t pad_00[4]; int sector; int slot; int num_verts; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; int (*neighbors)[3]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
 SR_STATIC_ASSERT(sizeof(InteriorFixture) == 0x3c, "InteriorFixture");
 SR_STATIC_ASSERT(offsetof(InteriorMesh, fixtures) == 0x30, "InteriorMesh.fixtures");
 SR_STATIC_ASSERT(offsetof(InteriorMesh, num_parts) == 0x1e30, "InteriorMesh.num_parts");
@@ -2570,7 +2573,11 @@ typedef union Debug { struct {
     int shown_mouse;                     /* +0x50264 gameloop with the debug flag: the left mouse button plus 100, for displaydebuginfo */
     uint8_t pad_50268[0xdc];
     int net_flag;                        /* +0x50344 clientrecv clears it after the object packet */
-    uint8_t pad_50348[0x918];
+    int interior_vert_sum;               /* +0x50348 area_interior_buildsectormodel: the vertices of all interior meshes */
+    int interior_builds;                 /* +0x5034c area_interior_buildsectormodel: the count of interior meshes */
+    int interior_max_verts;              /* +0x50350 area_interior_buildsectormodel: the most vertices of an interior mesh */
+    int interior_min_verts;              /* +0x50354 area_interior_buildsectormodel: the fewest vertices of an interior mesh above 0 */
+    uint8_t pad_50358[0x908];
     uint32_t human_view;                 /* +0x50c60 F2 toggles the human diagnostic view */
     int toggle_two;                      /* +0x50c64 displaydebuginfo shows the second diagnostic switch */
     int toggle_three;                    /* +0x50c68 displaydebuginfo shows the third diagnostic switch */
@@ -2601,6 +2608,10 @@ SR_STATIC_ASSERT(offsetof(Debug, shown_humans) == 0x50258, "Debug.shown_humans")
 SR_STATIC_ASSERT(offsetof(Debug, shown_parts) == 0x5025c, "Debug.shown_parts");
 SR_STATIC_ASSERT(offsetof(Debug, shown_mouse) == 0x50264, "Debug.shown_mouse");
 SR_STATIC_ASSERT(offsetof(Debug, net_flag) == 0x50344, "Debug.net_flag");
+SR_STATIC_ASSERT(offsetof(Debug, interior_vert_sum) == 0x50348, "Debug.interior_vert_sum");
+SR_STATIC_ASSERT(offsetof(Debug, interior_builds) == 0x5034c, "Debug.interior_builds");
+SR_STATIC_ASSERT(offsetof(Debug, interior_max_verts) == 0x50350, "Debug.interior_max_verts");
+SR_STATIC_ASSERT(offsetof(Debug, interior_min_verts) == 0x50354, "Debug.interior_min_verts");
 SR_STATIC_ASSERT(offsetof(Debug, human_view) == 0x50c60, "Debug.human_view");
 SR_STATIC_ASSERT(offsetof(Debug, toggle_two) == 0x50c64, "Debug.toggle_two");
 SR_STATIC_ASSERT(offsetof(Debug, toggle_three) == 0x50c68, "Debug.toggle_three");
@@ -3006,7 +3017,9 @@ typedef union TempMesh { struct {
     MeshTri tris[16384];                 /* +0x1a000c 0x1a000c + 16384 * 12 = 0x1d000c */
     int tri_slots[16384];                /* +0x1d000c area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots */
     vec3 tri_normals[16384];             /* +0x1e000c area_buildsectormodel: the normal of each triangle */
-    uint8_t pad_21000c[0xc0040];
+    MeshTri neighbors[16384];            /* +0x21000c area_interior_buildsectormodel: the triangle on the other side of each edge or -1 */
+    vec3 edge_normals[49152];            /* +0x24000c area_interior_buildsectormodel: the normal of that triangle for each edge or zero */
+    uint8_t pad_2d000c[0x40];
     int num_specials;                    /* +0x2d004c area_buildsectormodel: the special blocks of the sector in work */
     int specials[1536];                  /* +0x2d0050 area_buildsectormodel: x, y and z of each special block in the area */
 }; uint8_t lf_raw[0x2d1850]; } TempMesh;
@@ -3026,6 +3039,8 @@ SR_STATIC_ASSERT(offsetof(TempMesh, num_tris) == 0x1a0008, "TempMesh.num_tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tris) == 0x1a000c, "TempMesh.tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots");
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_normals) == 0x1e000c, "TempMesh.tri_normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, neighbors) == 0x21000c, "TempMesh.neighbors");
+SR_STATIC_ASSERT(offsetof(TempMesh, edge_normals) == 0x24000c, "TempMesh.edge_normals");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_specials) == 0x2d004c, "TempMesh.num_specials");
 SR_STATIC_ASSERT(offsetof(TempMesh, specials) == 0x2d0050, "TempMesh.specials");
 
@@ -3280,7 +3295,8 @@ typedef union ModelTemp { struct {
     int num_tris;                        /* +0xa0008 addboxtomodel adds 12 */
     MeshTri tris[8192];                  /* +0xa000c setupmodel: indexes into verts */
     MeshTri tri_backup[8192];            /* +0xb800c model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back */
-    uint8_t pad_d000c[0x80000];
+    uint8_t pad_d000c[0x38000];
+    vec3 patch_coords[24576];            /* +0x10800c createheadmodel2: the place of the three corners of each triangle in its Bezier patch, as weights of the patch corners */
     vec3 tri_normals[8192];              /* +0x15000c setupmodel: generatetrinormal of the three corners */
     vec3 corner_normals[24576];          /* +0x16800c the model loader: one normal for each corner of a triangle */
     TriTexCoords tri_texcoords[8192];    /* +0x1b000c model_settritexcoord writes the three corners */
@@ -3303,6 +3319,7 @@ SR_STATIC_ASSERT(offsetof(ModelTemp, render_verts) == 0x58008, "ModelTemp.render
 SR_STATIC_ASSERT(offsetof(ModelTemp, num_tris) == 0xa0008, "ModelTemp.num_tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tris) == 0xa000c, "ModelTemp.tris");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_backup) == 0xb800c, "ModelTemp.tri_backup");
+SR_STATIC_ASSERT(offsetof(ModelTemp, patch_coords) == 0x10800c, "ModelTemp.patch_coords");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_normals) == 0x15000c, "ModelTemp.tri_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, corner_normals) == 0x16800c, "ModelTemp.corner_normals");
 SR_STATIC_ASSERT(offsetof(ModelTemp, tri_texcoords) == 0x1b000c, "ModelTemp.tri_texcoords");

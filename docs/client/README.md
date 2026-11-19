@@ -24,6 +24,7 @@ Keyboard, mouse, player controls and cameras use `src/client/input/`.
 - [textures.md](textures.md): the textures that the game makes at the start, and the noise functions.
 - [models.md](models.md): the model in work, the model builders, the sphere, the hair and the human.
 - [landscape.md](landscape.md): the landscape mesh.
+- [editor.md](editor.md): the building editor, its keys and the debug flag that opens it.
 
 ## Sound and voice
 

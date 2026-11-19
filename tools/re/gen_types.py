@@ -475,9 +475,12 @@ typedef struct ScoreEntry { int player; int worth; } ScoreEntry;
 /* A run of triangles of a sector interior with one material. */
 typedef struct SectorPart { uint8_t material; uint8_t num_triangles; uint8_t pad_02[2]; int first_index; } SectorPart;
 typedef struct InteriorPart { uint8_t material; uint8_t pad_01[3]; int num_triangles; int first_triangle; } InteriorPart;
+/* A vertex of an interior mesh (InteriorMesh.vertices). */
+typedef struct InteriorVertex { vec3 pos; vec3 normal; vec3 tangent; float uv[2]; vec3 color; uint8_t pad_38[8]; } InteriorVertex;
+SR_STATIC_ASSERT(sizeof(InteriorVertex) == 0x40, "InteriorVertex");
 /* A lamp (type 4) or a traffic light (type 5) of an interior. A traffic light shows the state of one side of an intersection. */
 typedef struct InteriorFixture { int type; int intersection; int side; vec3 pos; vec3 rot[3]; } InteriorFixture;
-typedef struct InteriorMesh { uint8_t pad_00[0x10]; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; uint8_t pad_24[4]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
+typedef struct InteriorMesh { uint8_t pad_00[4]; int sector; int slot; int num_verts; void *vertices; int num_triangles; void *indices; int *triangle_material; vec3 *triangle_plane; int (*neighbors)[3]; vec3 *edge_normals; int num_fixtures; InteriorFixture fixtures[128]; int num_parts; InteriorPart parts[255]; uint8_t pad_2a28[8]; } InteriorMesh;
 SR_STATIC_ASSERT(sizeof(InteriorFixture) == 0x3c, "InteriorFixture");
 SR_STATIC_ASSERT(offsetof(InteriorMesh, fixtures) == 0x30, "InteriorMesh.fixtures");
 SR_STATIC_ASSERT(offsetof(InteriorMesh, num_parts) == 0x1e30, "InteriorMesh.num_parts");

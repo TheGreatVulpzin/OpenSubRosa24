@@ -445,6 +445,11 @@ int main(int argc, char **argv)
             atexit(denorm_report);
         }
         start_sampler();
+        /* SR_DEBUGIT=1 sets the debug flag of the game (RVA 0x127ea8). The client never sets it,
+         * and it opens the building editor and the level editor from the main menu. Only for
+         * tests: the flag also gives debug money and debug keys. */
+        if (getenv("SR_DEBUGIT") && atoi(getenv("SR_DEBUGIT")) != 0)
+            *(int *)(sr_base + 0x127ea8) = 1;
         /* The entry of the game (RVA 0x10ae00) takes no arguments here. */
         ((void (__cdecl *)(void))sr_fn(IMAGE_BASE + 0x10ae00))();
     }
