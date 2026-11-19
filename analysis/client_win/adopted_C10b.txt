@@ -8,3 +8,4 @@ buildtrackmodel src/client/render/track_model.c
 addcylindertomodel src/client/textures/model_parts.c
 addcockpittomodel src/client/textures/model_parts.c
 model_extrudeeye src/client/textures/model_parts.c
+area_buildsectormodel src/client/render/sector_model.c

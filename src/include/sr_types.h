@@ -465,10 +465,9 @@ typedef union BuildPieceCopy { struct {
     int flags;
 }; uint8_t lf_raw[0x18]; } BuildPieceCopy;
 
+/* The colors of a building part. Colors 4 to 8 are the team colors. */
 typedef union BuildingPart { struct {
-    vec3 colors[3];
-    uint8_t pad_24[0xc];
-    float team_colors[15];
+    vec3 colors[64];
 }; uint8_t lf_raw[0x300]; } BuildingPart;
 
 typedef union Newspaper { struct {
@@ -506,6 +505,16 @@ typedef union AreaChunk { struct {
     int sectors[512];   /* +0x004 the BlockSector of each sector, or -1: index x + 8 * z + 64 * y */
 }; uint8_t lf_raw[0x804]; } AreaChunk;
 
+/* A vertex of the outer mesh of a sector (BlockSector.verts). */
+typedef struct SectorVertex {
+    vec3 pos;
+    vec3 normal;
+    vec3 tangent;
+    vec3 uv;            /* u, v and the layer of the texture */
+    vec3 color;
+    uint8_t pad_3c[4];
+} SectorVertex;
+
 /* A sector of 8 x 8 x 8 blocks of an area: the global area_sector holds 8192 records of
  * 0x6068 bytes after its first 0x40 bytes. Each block list has index x + 8 * z + 64 * y.
  * A block word: the high 3 bits give the kind (2 normal, 4 special, 6 link to the block at
@@ -522,7 +531,14 @@ typedef union BlockSector { struct {
     int area;           /* +0x5014 area_createsector: the area of the sector */
     int pos[3];         /* +0x5018 area_createsector: the place of the sector in its chunk */
     int dirty;
-    uint8_t unk_5028[0x20];
+    int num_verts;                  /* +0x5028 the outer mesh of the sector */
+    SectorVertex *verts;            /* +0x502c */
+    int num_tris;                   /* +0x5030 */
+    int (*tris)[3];                 /* +0x5034 */
+    int *tri_slots;                 /* +0x5038 the material of each triangle */
+    vec3 *tri_normals;              /* +0x503c */
+    int (*neighbors)[3];            /* +0x5040 the triangle on the other side of each edge, or -1 */
+    vec3 (*edge_normals)[3];        /* +0x5044 the normal of that triangle, or zero */
     int num_meshes;
     SectorPart parts[256];          /* +0x504c the runs of triangles of the interior meshes */
     int unused_584c;
@@ -531,20 +547,7 @@ typedef union BlockSector { struct {
     int interior_used[4];           /* +0x6058 not 0 when the interior of the slot is in use */
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 
-/* The mesh pointers occupy the client part of a sector. */
-typedef struct SectorShadowMesh {
-    uint8_t pad_00[0x502c];
-    uint8_t *vertices;
-    int num_triangles;
-    int (*triangles)[3];
-    uint8_t pad_5038[4];
-    vec3 *normals;
-    uint8_t pad_5040[4];
-    vec3 (*edge_normals)[3];
-    uint8_t pad_5048[0x1020];
-} SectorShadowMesh;
-SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
-SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
+SR_STATIC_ASSERT(offsetof(BlockSector, edge_normals) == 0x5044, "BlockSector.edge_normals");
 
 
 /* A corner of the mesh of an object (Object.verts). */
@@ -2991,15 +2994,21 @@ typedef union TempMesh { struct {
     vec3 normals[16384];                 /* +0x30004 addbeziersurface: unit cross of the two derivatives */
     vec3 tangents[16384];                /* +0x60004 addbeziersurface: the unit u derivative */
     vec3 uvs[16384];                     /* +0x90004 x and y only (stride 12); area_setupsblock (0x1e50) copies 2 floats */
-    uint8_t pad_c0004[0x50000];
+    vec3 colors[16384];                  /* +0xc0004 area_buildsectormodel: the color of each vertex */
+    int keys[16384];                     /* +0xf0004 area_buildsectormodel: x, y and z of the vertex in the sector, without the fraction, in bits 0, 10 and 20 */
+    uint8_t pad_100004[0x10000];
     int num_quads;                       /* +0x110004 addbeziersurface adds steps_u * steps_v quads */
     MeshQuad quads[16384];               /* +0x110008 0x110008 + 16384 * 16 = 0x150008 */
     int quad_slots[16384];               /* +0x150008 low 16 bits: the texture slot; bits 16 to 19: the UV axis 1..6 (area_setupsblock) */
-    uint8_t pad_160008[0x40000];
+    vec3 quad_normals[16384];            /* +0x160008 area_buildsectormodel: the normal of each quad */
+    uint8_t pad_190008[0x10000];
     int num_tris;                        /* +0x1a0008 area_setupsblock (0x1e50) copies num_tris * 12 bytes */
     MeshTri tris[16384];                 /* +0x1a000c 0x1a000c + 16384 * 12 = 0x1d000c */
     int tri_slots[16384];                /* +0x1d000c area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots */
-    uint8_t pad_1e000c[0xf1844];
+    vec3 tri_normals[16384];             /* +0x1e000c area_buildsectormodel: the normal of each triangle */
+    uint8_t pad_21000c[0xc0040];
+    int num_specials;                    /* +0x2d004c area_buildsectormodel: the special blocks of the sector in work */
+    int specials[1536];                  /* +0x2d0050 area_buildsectormodel: x, y and z of each special block in the area */
 }; uint8_t lf_raw[0x2d1850]; } TempMesh;
 SR_STATIC_ASSERT(sizeof(TempMesh) == 0x2d1850, "TempMesh");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_verts) == 0x0, "TempMesh.num_verts");
@@ -3007,12 +3016,18 @@ SR_STATIC_ASSERT(offsetof(TempMesh, verts) == 0x4, "TempMesh.verts");
 SR_STATIC_ASSERT(offsetof(TempMesh, normals) == 0x30004, "TempMesh.normals");
 SR_STATIC_ASSERT(offsetof(TempMesh, tangents) == 0x60004, "TempMesh.tangents");
 SR_STATIC_ASSERT(offsetof(TempMesh, uvs) == 0x90004, "TempMesh.uvs");
+SR_STATIC_ASSERT(offsetof(TempMesh, colors) == 0xc0004, "TempMesh.colors");
+SR_STATIC_ASSERT(offsetof(TempMesh, keys) == 0xf0004, "TempMesh.keys");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_quads) == 0x110004, "TempMesh.num_quads");
 SR_STATIC_ASSERT(offsetof(TempMesh, quads) == 0x110008, "TempMesh.quads");
 SR_STATIC_ASSERT(offsetof(TempMesh, quad_slots) == 0x150008, "TempMesh.quad_slots");
+SR_STATIC_ASSERT(offsetof(TempMesh, quad_normals) == 0x160008, "TempMesh.quad_normals");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_tris) == 0x1a0008, "TempMesh.num_tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tris) == 0x1a000c, "TempMesh.tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots");
+SR_STATIC_ASSERT(offsetof(TempMesh, tri_normals) == 0x1e000c, "TempMesh.tri_normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, num_specials) == 0x2d004c, "TempMesh.num_specials");
+SR_STATIC_ASSERT(offsetof(TempMesh, specials) == 0x2d0050, "TempMesh.specials");
 
 /* track[]: record of 0x578000 bytes. */
 typedef union Track { struct {

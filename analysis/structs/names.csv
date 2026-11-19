@@ -789,6 +789,12 @@ tempmesh,0x150008,quad_slots,int,16384,low 16 bits: the texture slot; bits 16 to
 tempmesh,0x1a0008,num_tris,int,,area_setupsblock (0x1e50) copies num_tris * 12 bytes
 tempmesh,0x1a000c,tris,MeshTri,16384,0x1a000c + 16384 * 12 = 0x1d000c
 tempmesh,0x1d000c,tri_slots,int,16384,area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots
+tempmesh,0xc0004,colors,vec3,16384,area_buildsectormodel: the color of each vertex
+tempmesh,0xf0004,keys,int,16384,"area_buildsectormodel: x, y and z of the vertex in the sector, without the fraction, in bits 0, 10 and 20"
+tempmesh,0x160008,quad_normals,vec3,16384,area_buildsectormodel: the normal of each quad
+tempmesh,0x1e000c,tri_normals,vec3,16384,area_buildsectormodel: the normal of each triangle
+tempmesh,0x2d004c,num_specials,int,,area_buildsectormodel: the special blocks of the sector in work
+tempmesh,0x2d0050,specials,int,1536,"area_buildsectormodel: x, y and z of each special block in the area"
 blocklist,0xc,edge,int,16,"createlevel: index = 1 open side +z-1, 2 x+1, 4 z+1, 8 x-1 (curbs and the 8x8 platform)"
 blocklist,0x4c,slab,int,4,createlevel: level tile kinds 2..5 (index kind - 2): a block and its 3 turns
 blocklist,0x104,slope6,int,24,"4 rows of 6. buildcitystreet: row 0 kind 0 rising (index step 0..5), row 1 kind 1 rising, row 2 kind 0 falling (index 5 - step), row 3 kind 1 falling"

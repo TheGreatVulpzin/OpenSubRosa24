@@ -38,7 +38,7 @@ void setupbuildingtypes(void)
         bt->parts[i].colors[0] = (vec3){1.0f, 1.0f, 1.0f};
     memcpy(&bt->parts[0].colors[1], trim_color, sizeof trim_color);
     bt->parts[0].colors[2] = (vec3){0.125f, 0.125f, 0.125f};
-    memcpy(bt->parts[0].team_colors, g_teamcolor, sizeof bt->parts[0].team_colors);
+    memcpy(&bt->parts[0].colors[4], g_teamcolor, 5 * sizeof(vec3)); /* colors 4 to 8: the team colors */
     for (rec = 0; rec < 4; rec++) {
         strcpy(g_buildblocktype[rec].name, names[rec]);
         for (piece = 0; piece < counts[rec]; piece++)
