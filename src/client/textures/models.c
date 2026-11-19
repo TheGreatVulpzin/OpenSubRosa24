@@ -730,3 +730,21 @@ void __cdecl createhumanmodel(int model)
     for (i = 1; i < HUMAN_MODEL_COPIES; i++)
         copymodel(model + i);
 }
+
+/* The desk: a top and two legs, each a box. All triangles use texture coordinate 0, 0. */
+void __cdecl createmodel_cityobject_desk(int model)
+{
+    static const vec3 centers[3] = {{0.0f, 1.0f, 0.0f}, {0.6875f, 0.5f, 0.0f}, {-0.6875f, 0.5f, 0.0f}};
+    static const float halves[3][3] = {{0.9375f, 0.0625f, 0.5f}, {0.25f, 0.4375f, 0.5f}, {0.25f, 0.4375f, 0.5f}};
+    int i;
+
+    g_temp.num_verts = 0;
+    g_temp.num_tris = 0;
+    g_temp.num_quads = 0;
+    g_temp.num_lines = 0;
+    for (i = 0; i < 3; i++)
+        addboxtomodel(&centers[i], halves[i][0], halves[i][1], halves[i][2]);
+    for (i = 0; i < g_temp.num_tris; i++)
+        model_settritexcoord(i, 0.0f, 0.0f);
+    setupmodel(model, 0);
+}

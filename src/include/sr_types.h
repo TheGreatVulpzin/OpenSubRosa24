@@ -3012,7 +3012,7 @@ typedef union TempMesh { struct {
     MeshQuad quads[16384];               /* +0x110008 0x110008 + 16384 * 16 = 0x150008 */
     int quad_slots[16384];               /* +0x150008 low 16 bits: the texture slot; bits 16 to 19: the UV axis 1..6 (area_setupsblock) */
     vec3 quad_normals[16384];            /* +0x160008 area_buildsectormodel: the normal of each quad */
-    uint8_t pad_190008[0x10000];
+    int quad_done[16384];                /* +0x190008 tempmesh_optimize2: 1 when the quad starts no more joins (a window material, or no partner in a scan) */
     int num_tris;                        /* +0x1a0008 area_setupsblock (0x1e50) copies num_tris * 12 bytes */
     MeshTri tris[16384];                 /* +0x1a000c 0x1a000c + 16384 * 12 = 0x1d000c */
     int tri_slots[16384];                /* +0x1d000c area_setupsblock (0x1e50) copies them to AreaBlock.tri_slots */
@@ -3035,6 +3035,7 @@ SR_STATIC_ASSERT(offsetof(TempMesh, num_quads) == 0x110004, "TempMesh.num_quads"
 SR_STATIC_ASSERT(offsetof(TempMesh, quads) == 0x110008, "TempMesh.quads");
 SR_STATIC_ASSERT(offsetof(TempMesh, quad_slots) == 0x150008, "TempMesh.quad_slots");
 SR_STATIC_ASSERT(offsetof(TempMesh, quad_normals) == 0x160008, "TempMesh.quad_normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, quad_done) == 0x190008, "TempMesh.quad_done");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_tris) == 0x1a0008, "TempMesh.num_tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tris) == 0x1a000c, "TempMesh.tris");
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots");

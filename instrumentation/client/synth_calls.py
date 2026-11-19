@@ -17,6 +17,11 @@ HUMAN_ITEMSIMULATION = 0x8f730
 CALCULATEPLAYERVOICE = 0xfbe70
 SCENARIO_CREATECHASE = 0xdd100
 CREATEHEADMODEL2 = 0xb80b0
+TEMPMESH_OPTIMIZE = 0x4c320
+TEMPMESH_OPTIMIZE2 = 0x4cd90
+MODEL_EXTRUDEEYE2 = 0xb7aa0
+MODEL_EXTRUDEQUADFACE = 0xb1380
+CREATEMODEL_CITYOBJECT_DESK = 0xb06c0
 
 
 def call(rva, *args):
@@ -34,6 +39,13 @@ def cases():
         'scenario_createchase': [call(SCENARIO_CREATECHASE, 0, x) for x in (0, 5, 9)],
         # The model slot. No code of the client calls this function.
         'createheadmodel2': [call(CREATEHEADMODEL2, m) for m in (0, 3)],
+        # The temporary mesh of the snapshot: the last sector or interior mesh.
+        'tempmesh_optimize': [call(TEMPMESH_OPTIMIZE)],
+        'tempmesh_optimize2': [call(TEMPMESH_OPTIMIZE2)],
+        # (quad, bone) and (quad) on the model in work of the snapshot.
+        'model_extrudeeye2': [call(MODEL_EXTRUDEEYE2, q, b) for q in (0, 1) for b in (0, 1)],
+        'model_extrudequadface': [call(MODEL_EXTRUDEQUADFACE, q) for q in (0, 2)],
+        'createmodel_cityobject_desk': [call(CREATEMODEL_CITYOBJECT_DESK, m) for m in (0, 3)],
     }
 
 

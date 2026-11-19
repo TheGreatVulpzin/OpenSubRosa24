@@ -46,3 +46,8 @@ setupobjecttypeweight src/game/object_types.c
 lerpnoise2d src/common/random.c
 serpnoise2d src/common/random.c
 cerpnoise2d src/common/random.c
+tempmesh_optimize src/client/textures/tempmesh.c
+tempmesh_optimize2 src/client/textures/tempmesh.c
+model_extrudeeye2 src/client/textures/model_parts.c
+model_extrudequadface src/client/textures/model_parts.c
+createmodel_cityobject_desk src/client/textures/models.c

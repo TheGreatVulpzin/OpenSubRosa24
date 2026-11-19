@@ -219,7 +219,7 @@ typedef union BuildingEditor { struct {
     int cursor_x;                        /* +0x00dc  */
     int floor;                           /* +0x00e0 buildingedit_render draws the blocks of this floor */
     int cursor_z;                        /* +0x00e4  */
-    uint8_t pad_00e8[0x4];
+    int area;                            /* +0x00e8 building_checkeditor: the building area that a left click sets in the area mode */
 }; uint8_t lf_raw[0xec]; } BuildingEditor;
 SR_STATIC_ASSERT(sizeof(BuildingEditor) == 0xec, "BuildingEditor");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, mode) == 0x0, "BuildingEditor.mode");
@@ -246,6 +246,7 @@ SR_STATIC_ASSERT(offsetof(BuildingEditor, drag_end_z) == 0xd8, "BuildingEditor.d
 SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_x) == 0xdc, "BuildingEditor.cursor_x");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, floor) == 0xe0, "BuildingEditor.floor");
 SR_STATIC_ASSERT(offsetof(BuildingEditor, cursor_z) == 0xe4, "BuildingEditor.cursor_z");
+SR_STATIC_ASSERT(offsetof(BuildingEditor, area) == 0xe8, "BuildingEditor.area");
 
 /* join_server[]: record of 0x48 bytes. */
 typedef union JoinServer { struct {

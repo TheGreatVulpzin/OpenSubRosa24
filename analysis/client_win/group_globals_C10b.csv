@@ -1,3 +1,4 @@
 name,type,count,client_rva,evidence
 track_verts,ModelVertex,917504,0x147129b0,"buildtrackmodel: the vertices of the track buffer (place, texture coordinate, normal). The Linux client names the record trackmodel. The array ends before info_log"
 building_click_wait,int,1,0xf9ae250,"building_editorloop: 1 when the left button is down as the editor starts. The left button then counts only after a release"
+head_face_quads,int,3,0x1bf7e04,"model_extrudequadface: the quads of the left eye, the right eye and the mouth"

@@ -43,13 +43,13 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 #define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
-#define building_checkeditor CL_FN(0x45c040, void(__cdecl *)(void))
 #define building_setupbuild CL_FN(0x461fd0, void(__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 
 #define KEY_G 10
 #define KEY_H 11
+#define KEY_J 13
 #define KEY_MINUS 45
 #define KEY_EQUALS 46
 #define KEY_LEFT_BRACKET 47
@@ -64,6 +64,7 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 #define FILE_NAME_LENGTH 28
 #define MODE_BLOCKS 0
 #define MODE_WALLS 1
+#define MODE_AREAS 2
 #define MODE_MARKERS 3
 #define KIND_NORMAL 0
 #define KIND_INTERIOR 1
@@ -454,6 +455,14 @@ static void building_box_keys(void)
                 buildingedit_deleteblock(x, editor->floor, z);
 }
 
+/* 1 when the mouse is in the rectangle. */
+static int mouse_in(float x, float y, float width, float height)
+{
+    float mx = (float)g_mouse.x, my = (float)g_mouse.y;
+
+    return x <= mx && mx < x + width && y <= my && my < y + height;
+}
+
 /* The marker mode: a left click counts the marker of the cell from 1 to 4 and then to 1 again.
  * A right click clears it. With key 1 held the click changes the prize, else the guard
  * direction. */
@@ -547,9 +556,8 @@ static void building_edit(int x, int z)
 {
     const BuildingEditor *editor = &g_editor;
     const EditorView *view = &g_view;
-    float mx = (float)g_mouse.x, my = (float)g_mouse.y;
 
-    if (!(view->x <= mx && mx < view->x + view->width && view->y <= my && my < view->y + view->height))
+    if (!mouse_in(view->x, view->y, view->width, view->height))
         return;
     if (editor->mode == MODE_MARKERS && z >= 0 && z < g_building.size_z && x >= 0 && x < g_building.size_x)
         building_edit_marker(CELL(x, editor->floor, z));
@@ -582,6 +590,138 @@ static void building_finish(void)
             cl_data_block_sectors[mesh->sector].interior_models[mesh->slot] = -1;
         mesh->sector = -1;
     }
+}
+
+/* The wheel over a tile steps the value of the tile. The value wraps from start to count - 1.
+ * With shift, a texture tile of the outer sides (1 to 4) or of the inner sides (7 to 10) gives
+ * its value to the other tiles of its group. */
+static void building_wheel_tiles(void)
+{
+    int i, k;
+
+    for (i = 0; i < g_tile_count; i++) {
+        EditorTile *tile = &g_tiles[i];
+        int changed = 0;
+
+        if (!mouse_in(tile->x, tile->y, tile->width, tile->height))
+            continue;
+        for (; g_mouse.wheel_up > 0; g_mouse.wheel_up--) {
+            ++*tile->target;
+            changed = 1;
+        }
+        for (; g_mouse.wheel_down > 0; g_mouse.wheel_down--) {
+            --*tile->target;
+            changed = 1;
+        }
+        if (*tile->target < tile->start)
+            *tile->target = tile->count - 1;
+        if (*tile->target >= tile->count)
+            *tile->target = tile->start;
+        if (!changed || g_keys[KEY_SHIFT] == 0 || tile->kind != TILE_TEXTURE)
+            continue;
+        if (i > 0 && i < 5)
+            for (k = 1; k < 5; k++)
+                *g_tiles[k].target = *tile->target;
+        if (i > 6 && i < 11)
+            for (k = 7; k < 11; k++)
+                *g_tiles[k].target = *tile->target;
+    }
+}
+
+/* The distance of a fraction to the nearest whole number. */
+static float edge_distance(float fraction)
+{
+    return 0.5 <= fraction ? (float)(1.0 - fraction) : fraction;
+}
+
+/* Find the cell under the mouse and edit the view. J sets the size of the building to the cell
+ * plus 1. The wall mode takes the edge nearest to the mouse when no button is down: the wall
+ * goes along z when the mouse is nearer a line of whole x, else along x. The area mode sets the start of the chosen
+ * area with a left click and its size while the button stays down. The wheel changes the zoom
+ * from 2 to 256. */
+static void building_view_mouse(void)
+{
+    BuildingEditor *editor = &g_editor;
+    EditorView *view = &g_view;
+    float x, z, fx, fz;
+
+    x = (float)((float)((float)((double)g_mouse.x - (view->width * 0.5 + view->x)) * view->zoom) /
+                (view->width * 0.5));
+    z = (float)((float)((float)((double)g_mouse.y - (view->height * 0.5 + view->y)) * view->zoom) /
+                (view->width * 0.5));
+    x = (float)(x + view->camera.x);
+    z = (float)(z + view->camera.z);
+    editor->cursor_x = cl_ftoi(x);
+    editor->cursor_z = cl_ftoi(z);
+    fx = (float)(x - (float)editor->cursor_x);
+    fz = (float)(z - (float)editor->cursor_z);
+    if (cl_data_audio_input_blocked == 0 && g_keys[KEY_J] != 0) {
+        g_building.size_x = editor->cursor_x + 1;
+        g_building.size_z = editor->cursor_z + 1;
+    }
+    if (editor->mode == MODE_BLOCKS || editor->mode == MODE_AREAS || editor->mode == MODE_MARKERS) {
+        if (editor->cursor_x < 0)
+            editor->cursor_x = 0;
+        if (editor->cursor_x > g_building.size_x - 1)
+            editor->cursor_x = g_building.size_x - 1;
+        if (editor->cursor_z < 0)
+            editor->cursor_z = 0;
+        if (editor->cursor_z > g_building.size_z - 1)
+            editor->cursor_z = g_building.size_z - 1;
+    }
+    if (editor->mode == MODE_WALLS) {
+        if (editor->cursor_x < 0)
+            editor->cursor_x = 0;
+        if (editor->cursor_x > g_building.size_x)
+            editor->cursor_x = g_building.size_x;
+        if (editor->cursor_z < 0)
+            editor->cursor_z = 0;
+        if (editor->cursor_z > g_building.size_z)
+            editor->cursor_z = g_building.size_z;
+        if (g_mouse.left == 0 && g_mouse.right == 0)
+            editor->wall_direction = edge_distance(fx) <= edge_distance(fz) ? 1 : 0;
+        if (editor->wall_direction == 0 && 0.5 <= fz)
+            editor->cursor_z++;
+        if (editor->wall_direction == 1 && 0.5 <= fx)
+            editor->cursor_x++;
+    }
+    if (editor->mode == MODE_AREAS) {
+        BuildingArea *area = &g_building.areas[editor->area];
+
+        if (g_mouse.left != 0 && g_mouse_previous.left == 0) {
+            area->x = editor->cursor_x;
+            area->y = editor->floor;
+            area->z = editor->cursor_z;
+        }
+        if (g_mouse.left != 0) {
+            area->size_x = editor->cursor_x - area->x;
+            area->size_y = editor->floor - area->y;
+            area->size_z = editor->cursor_z - area->z;
+        }
+    }
+    for (; g_mouse.wheel_up > 0; g_mouse.wheel_up--)
+        view->zoom = (float)(view->zoom - 1.0);
+    for (; g_mouse.wheel_down > 0; g_mouse.wheel_down--)
+        view->zoom = (float)(view->zoom + 1.0);
+    if (view->zoom < 2.0f)
+        view->zoom = 2.0f;
+    if (view->zoom > 256.0f)
+        view->zoom = 256.0f;
+}
+
+/* Read the mouse of the building editor: first the tiles, then the view. Wheel steps out of the
+ * tiles and the view are lost. */
+void __cdecl building_checkeditor(void)
+{
+    const EditorView *view = &g_view;
+
+    building_wheel_tiles();
+    if (mouse_in(view->x, view->y, view->width, view->height))
+        building_view_mouse();
+    if (g_mouse.wheel_up > 0)
+        g_mouse.wheel_up = 0;
+    if (g_mouse.wheel_down > 0)
+        g_mouse.wheel_down = 0;
 }
 
 /* Run the building editor until Exit or Escape. A left button that is down as the editor starts

@@ -1,6 +1,6 @@
 # Models
 
-Files: `src/client/textures/models.c`, `sphere.c`. Header: `models.h`, `sphere.h`.
+Files: `src/client/textures/models.c`, `model_parts.c`, `head_models.c`, `tempmesh.c`, `sphere.c`. Header: `models.h`, `model_parts.h`, `head_models.h`, `tempmesh.h`, `sphere.h`.
 
 ## The model in work
 
@@ -20,6 +20,9 @@ Shading modes of a triangle: -2 every corner uses the normal of the triangle, -1
 | `createhairmodel` | The hair: an octahedron of radius 0.1275 with each triangle split into 4. The points at the front and below the middle are stretched. |
 | `createhumanmodel` | The human: a torso that grows by four extrusions, then ten boxes (the head and the limbs), then every quad as two triangles. |
 | `createheadmodel2` (`head_models.c`) | A head of eight cubic Bezier triangles. The control points are the edit vertices. Each triangle splits two times into four. A mark (patch corners and weights) finds each point of one area of the face. Hand placed triangles and two eye extrusions replace that area. Shift changes the weights of two points. No code of the client calls it. |
+| `model_extrudeeye2` (`model_parts.c`) | The eye of the Bezier head: as `model_extrudeeye`, with a ring 1.5 times as far from the middle. A ring vertex gets 0.875 times its offset as its texture coordinate. Only the middle vertex follows the face bone. |
+| `model_extrudequadface` (`model_parts.c`) | A face on a quad of the head: three rows of 4 vertices (left eye, right eye, mouth), 12 flat triangles and 6 quads around them. The mouth goes 1/32 into the head. Each eye quad gets `model_extrudeeye`. `head_face_quads` keeps the quads of the eyes and the mouth. |
+| `createmodel_cityobject_desk` (`models.c`) | The desk: a top and two legs, each a box, all with texture coordinate 0, 0. |
 | `createheadmodel3` (`head_models.c`) | The simple head: eight points, each triangle split into four along Hermite curves, and two eye quads. |
 
 ## The human model
@@ -37,3 +40,11 @@ After the model is built, `createhumanmodel` copies it to the 255 models that fo
 `model_addvertex` returns the index of a vertex that is closer than the tolerance on all three axes, or adds a new vertex. It does the same as `modeltemp_addvertex`. `tempmesh_vertnormalequal` tells if two vertices of the temporary mesh have the same place, normal and color (each axis closer than 1e-4) and the same third texture value. `addboxtomodelquad` adds 8 vertices and 6 quads. The sizes are the full lengths of the sides. `lerp` mixes two values: `b * t + (1 - t) * a`.
 
 `model_createcash` builds the cash bundle: a box with the given half sizes and fixed texture corners on triangles 0 and 1, and on triangles 10 and 11. All other triangles get zero texture corners.
+
+## Quad joins of the temporary mesh
+
+`src/client/textures/tempmesh.c` joins the quads of the temporary mesh (`tempmesh`) before the sector meshes split them into triangles.
+
+- Two quads join when a side of one has the same two corners as a side of the other (same key, place and normal), they have the same material, their normals differ by less than 0.0001 and the sides past the shared side go on in one line (cosine at least 0.99975). The first quad takes the far corners of the second. The texture coordinates of the new corners keep the scale of the first quad. The second quad goes away.
+- `tempmesh_optimize` (outer mesh) joins along side 1 to 2 until a scan finds no join, then along side 2 to 3. It never joins a quad with the sign material.
+- `tempmesh_optimize2` (interior mesh) does the same, with a done mark for each quad (`tempmesh.quad_done`). A quad with a window material starts done. A quad that finds no partner in a scan gets done. A scan runs again only after a join with an earlier quad. The scan does not compare a quad with itself, so a quad can join itself. The timer 3 ("optimize2") counts the joins.

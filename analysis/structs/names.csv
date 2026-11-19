@@ -796,6 +796,7 @@ tempmesh,0x1d000c,tri_slots,int,16384,area_setupsblock (0x1e50) copies them to A
 tempmesh,0xc0004,colors,vec3,16384,area_buildsectormodel: the color of each vertex
 tempmesh,0xf0004,keys,int,16384,"area_buildsectormodel: x, y and z of the vertex in the sector, without the fraction, in bits 0, 10 and 20"
 tempmesh,0x160008,quad_normals,vec3,16384,area_buildsectormodel: the normal of each quad
+tempmesh,0x190008,quad_done,int,16384,"tempmesh_optimize2: 1 when the quad starts no more joins (a window material, or no partner in a scan)"
 tempmesh,0x1e000c,tri_normals,vec3,16384,area_buildsectormodel: the normal of each triangle
 tempmesh,0x21000c,neighbors,MeshTri,16384,area_interior_buildsectormodel: the triangle on the other side of each edge or -1
 tempmesh,0x24000c,edge_normals,vec3,49152,area_interior_buildsectormodel: the normal of that triangle for each edge or zero
@@ -1157,6 +1158,7 @@ building_editor,0xd8,drag_end_z,int,,
 building_editor,0xdc,cursor_x,int,,
 building_editor,0xe0,floor,int,,"buildingedit_render draws the blocks of this floor"
 building_editor,0xe4,cursor_z,int,,
+building_editor,0xe8,area,int,,"building_checkeditor: the building area that a left click sets in the area mode"
 building,0x36154f8,material_textures,int,256,"the building editor pickers and buildingeditor_renderblock: the texture list index of each material name"
 building,0x36158f8,block_types,int,1024,"buildingedit_blockmenu fills it: the block type of each block name (the last game type with the same name); buildingeditor_drawblock adds the turn of a group block"
 level_editor,0x0,mode,int,,"leveleditor_loop: 0 streets, 1 sidewalk tiles, 2 buildings (the items and the title of each mode)"
