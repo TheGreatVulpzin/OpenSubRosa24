@@ -41,6 +41,8 @@ import synth_textures as st  # noqa: E402
 PROTOTYPES = {
     'createbullet': 'ivvn',
     'createsprite': 'ivvf',
+    'glstatediffuse': '',
+    'glstateambient': '',
     'raycast_addsector': 'Accc',
     'reloadopengl': '',
     'packevent': 'ii',

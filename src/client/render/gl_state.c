@@ -22,6 +22,8 @@ enum {
     GL_BACK = 0x0405,
     GL_CW = 0x0900,
     GL_KEEP = 0x1e00,
+    GL_EQUAL = 0x0202,
+    GL_NOTEQUAL = 0x0205,
     GL_ALWAYS = 0x0207,
     GL_LEQUAL = 0x0203,
     GL_GEQUAL = 0x0206,
@@ -104,4 +106,38 @@ void __cdecl glstatenormal(void)
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CW);
     glDisable(GL_STENCIL_TEST);
+}
+
+/* The state of a light pass: colors on, depth write off, stencil kept, and the pass draws only
+ * where the stencil value is 0 (the surface is lit). */
+void __cdecl glstatediffuse(void)
+{
+    glEnable(GL_TEXTURE_2D);
+    glColorMask(1, 1, 1, 0);
+    glDepthMask(0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glEnable(GL_STENCIL_TEST);
+    glStencilMask(0xffffffffu);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_EQUAL, 0, 0xffffffffu);
+}
+
+/* The state of the ambient pass: the same as the light pass, and it draws only where the
+ * stencil value is not 0 (the surface is in shadow). */
+void __cdecl glstateambient(void)
+{
+    glEnable(GL_TEXTURE_2D);
+    glColorMask(1, 1, 1, 0);
+    glDepthMask(0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glEnable(GL_STENCIL_TEST);
+    glStencilMask(0xffffffffu);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_NOTEQUAL, 0, 0xffffffffu);
 }

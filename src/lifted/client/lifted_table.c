@@ -1059,8 +1059,8 @@ void render_sector_alpha(void);
 void render_sector_interior_shadow2(void);
 void rendermodelshadow(void);
 void glstateshadowtwoside(void);
-void lf_dc1d0(void);
-void lf_dc260(void);
+void glstatediffuse(void);
+void glstateambient(void);
 void glstatenormal(void);
 void createscenario_world(void);
 void lf_dc770(void);
@@ -2362,8 +2362,8 @@ const LfEntry lf_table[] = {
     { "render_sector_interior_shadow2", 0xdaff0, (void *)render_sector_interior_shadow2, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermodelshadow", 0xdb7c0, (void *)rendermodelshadow, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "glstateshadowtwoside", 0xdc080, (void *)glstateshadowtwoside, 0, LF_RET_VOID, 4, "", 1 },
-    { "glstatediffuse", 0xdc1d0, (void *)lf_dc1d0, 0, LF_RET_VOID, 4, "", 1 },
-    { "glstateambient", 0xdc260, (void *)lf_dc260, 0, LF_RET_VOID, 4, "", 1 },
+    { "glstatediffuse", 0xdc1d0, (void *)glstatediffuse, 0, LF_RET_VOID, 4, "", 1 },
+    { "glstateambient", 0xdc260, (void *)glstateambient, 0, LF_RET_VOID, 4, "", 1 },
     { "glstatenormal", 0xdc2f0, (void *)glstatenormal, 0, LF_RET_VOID, 4, "", 1 },
     { "createscenario_world", 0xdc360, (void *)createscenario_world, 0, LF_RET_VOID, 4, "", 0 },
     { "createscenario_mission", 0xdc770, (void *)lf_dc770, 0, LF_RET_VOID, 4, "", 0 },

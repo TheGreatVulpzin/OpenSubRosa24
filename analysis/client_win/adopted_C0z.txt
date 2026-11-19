@@ -5,3 +5,5 @@ ai_assessthreats src/game/player_ai.c
 packevent src/net/netpack.c
 raycast_addsector src/client/render/raycast_sector.c
 reloadopengl src/client/render/gl_reload.c
+glstatediffuse src/client/render/gl_state.c
+glstateambient src/client/render/gl_state.c
