@@ -161,6 +161,7 @@ extern TimerList sr_unplaced_timerlist;
 #define cl_data_auth_ticket_ready (*((int *)(sr_base + 0xf3eb1e8u)))
 #define cl_data_play_ticket ((int *)(sr_base + 0xf9ae240u))
 #define cl_data_play_ticket_on (*((int *)(sr_base + 0x127eb8u)))
+#define cl_data_voice_test_samples ((int16_t *)(sr_base + 0x13c5e700u))
 #define cl_data_image_partial (*((int *)(sr_base + 0x1bf7e10u)))
 #define cl_data_zlib_defaults_ready (*((uint8_t *)(sr_base + 0x1272cfu)))
 #define cl_data_zlib_default_length ((uint8_t *)(sr_base + 0x1279d8u))
@@ -426,8 +427,8 @@ void __cdecl debug_addline(const vec3 *from, const vec3 *to);
 #define sr_debug_line(from, to) debug_addline((from), (to))
 void area_reset_interiors(void);
 #define sr_area_reset_interiors() area_reset_interiors()
-int __cdecl lf_e9d70(int texture, int type);
-#define sr_window_atlas(texture, type) lf_e9d70((texture), (type))
+int __cdecl addwindowatlas(int texture, int type);
+#define sr_window_atlas(texture, type) addwindowatlas((texture), (type))
 #define sr_object_frame_orthogonal 0
 void level_client_landscape(void);
 #define sr_level_after_landscape() level_client_landscape()

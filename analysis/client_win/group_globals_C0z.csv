@@ -4,3 +4,4 @@ auth_ticket_size,uint32_t,1,0x17678dc4,"the length of the ticket in auth_ticket.
 auth_ticket_ready,int,1,0xf3eb1e8,"1 after ticketreturned stored a ticket. steam_getauthticket tests it"
 play_ticket,int,4,0xf9ae240,"initplayticket writes 0, 0, -1 and 0. No other code reads them"
 play_ticket_on,int,1,0x127eb8,"initplayticket writes 1. No other code reads it"
+voice_test_samples,int16_t,10240,0x13c5e700,"testspeex and testvoice: the 20480 bytes of samples that go to the sound buffer"

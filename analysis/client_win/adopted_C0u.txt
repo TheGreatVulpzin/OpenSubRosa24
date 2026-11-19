@@ -1,0 +1,8 @@
+sphereintersectarea src/game/collide_area.c
+circleintersectarea src/game/collide_area.c
+building_rotatefloorplan src/game/buildings.c
+packobjectpacket src/net/netpack.c
+packobjectpacket2 src/net/netpack.c
+movewindow src/client/input/window.c
+cityobject_simulation src/client/render/cityobjects.c
+getpaths src/client/setup/paths.c

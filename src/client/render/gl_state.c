@@ -141,3 +141,38 @@ void __cdecl glstateambient(void)
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glStencilFunc(GL_NOTEQUAL, 0, 0xffffffffu);
 }
+
+/* The stencil function of the ATI extension: the function of the front faces and of the back faces. */
+#define SLOT_STENCIL_FUNC_SEPARATE 0x116594
+typedef void(__stdcall *StencilFuncSeparateFn)(uint32_t front, uint32_t back, int reference, uint32_t mask);
+
+/* Set the stencil test of the back faces and of the front faces to different values. The back faces get
+ * back_function and the back operations, the front faces the front ones. Both use the same reference and
+ * mask. The function uses the two sided stencil of EXT when it is there, else the separate stencil of ATI,
+ * and does nothing when the machine has neither. */
+void __cdecl settwosidedstencil(uint32_t back_function, uint32_t front_function, int reference, uint32_t mask,
+                                uint32_t back_fail, uint32_t back_depth_fail, uint32_t back_pass,
+                                uint32_t front_fail, uint32_t front_depth_fail, uint32_t front_pass)
+{
+    ActiveStencilFaceFn active_face = *(ActiveStencilFaceFn *)(sr_base + SLOT_ACTIVE_STENCIL_FACE);
+    StencilOpSeparateFn stencil_op = *(StencilOpSeparateFn *)(sr_base + SLOT_STENCIL_OP_SEPARATE);
+    StencilFuncSeparateFn stencil_func = *(StencilFuncSeparateFn *)(sr_base + SLOT_STENCIL_FUNC_SEPARATE);
+
+    if (g_glext[GLEXT_STENCIL_TWO_SIDE] == 0) {
+        if (g_glext[GLEXT_STENCIL_SEPARATE] != 0) {
+            glStencilMask(0xffffffffu);
+            stencil_func(front_function, back_function, reference, mask);
+            stencil_op(GL_BACK, back_fail, back_depth_fail, back_pass);
+            stencil_op(GL_FRONT, front_fail, front_depth_fail, front_pass);
+        }
+    } else {
+        active_face(GL_BACK);
+        glStencilMask(0xffffffffu);
+        glStencilFunc(back_function, reference, mask);
+        glStencilOp(back_fail, back_depth_fail, back_pass);
+        active_face(GL_FRONT);
+        glStencilMask(0xffffffffu);
+        glStencilFunc(front_function, reference, mask);
+        glStencilOp(front_fail, front_depth_fail, front_pass);
+    }
+}

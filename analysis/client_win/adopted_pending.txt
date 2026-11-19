@@ -10,5 +10,4 @@ unpackevent src/net/client.c
 pbitread src/net/packet.c
 pbitreadnego src/net/packet.c
 systemtimer src/common/system.c
-city_addintersection src/game/city.c
 loadsaveoptions src/game/options.c
