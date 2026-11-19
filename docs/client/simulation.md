@@ -45,3 +45,9 @@ Both then count the tick, and in the states 0, 1 and 2 they run the bullets, the
 - Every chat message timer falls by 1 each tick, down to 0.
 
 The light angles follow the clock in gametype 4. With the debug flag on, [ and ] turn the first angle and Shift with them turns the second.
+
+## Missions and the level build
+
+The mission functions use the code of the server. `createmission_threeway` is the function at 0xddef0 and `createmission_transaction` the one at 0xde560. The client has its own `createmission_acquisition` (`src/client/setup/missions.c`): it calls the client chase and guard builders and it returns the id of the next scenario. `createvehicle` makes a train for type 0. Another type returns an uninitialized value.
+
+`createlevel` is the shared level builder with three hooks. After the landscape the client makes the landscape mesh and clears the window cells. After the buildings it makes the window texture, empties the buffer of the sector vertices when buffers exist, makes the mesh of each sector in use that changed, and makes the track model. The client has four shops in the building list, one less than the server.

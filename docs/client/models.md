@@ -29,3 +29,11 @@ Each vertex has a bone (`cl_data_bonevert[i].bone`) and a place (`pos`). A verte
 The torso builder adds 10 vertices, 5 quads and 6 triangles around a center. It does not set the bone of its vertices. `createhumanmodel` reads the bone record of every vertex, so a torso vertex has the bone that its record holds in memory. That value is 0 until a function sets it.
 
 After the model is built, `createhumanmodel` copies it to the 255 models that follow it.
+
+## Edits of the model in work
+
+`src/client/textures/mesh_edit.c` holds the small edits. `model_deletequad` removes a quad of the model in work: the last quad takes its place, with its texture corners. `tempmesh_deletequad` does the same in the temporary mesh and moves the slot and the normal of the quad too. An index outside the list changes nothing.
+
+`model_addvertex` returns the index of a vertex that is closer than the tolerance on all three axes, or adds a new vertex. It does the same as `modeltemp_addvertex`. `tempmesh_vertnormalequal` tells if two vertices of the temporary mesh have the same place, normal and color (each axis closer than 1e-4) and the same third texture value. `addboxtomodelquad` adds 8 vertices and 6 quads. The sizes are the full lengths of the sides. `lerp` mixes two values: `b * t + (1 - t) * a`.
+
+`model_createcash` builds the cash bundle: a box with the given half sizes and fixed texture corners on triangles 0 and 1, and on triangles 10 and 11. All other triangles get zero texture corners.

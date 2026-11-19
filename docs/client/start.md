@@ -34,3 +34,7 @@ The calls run in a fixed order.
 
 - A model that a builder makes from an item gets the item type as the second argument. The cash builder makes the Magnum, the Uzi and the 9mm, and the bill builder makes the two cash items.
 - Material numbers from 256 up have no entry in `TextureList.material`. The folder can add more files than that, and the code then writes and reads past the array.
+
+## Tickets and folders
+
+`ticketreturned` keeps an authentication ticket of up to 1024 bytes. `steam_getauthticket` gives the ticket and its size, or null when none is kept. `initplayticket` sets the play ticket to 0, 0, -1, 0. `getpaths` keeps the start folder and then finds the documents folder of the user. It makes the folder `Sub Rosa` there when it is missing, writes its path into the settings path, and goes back to the start folder. `loadaccountsserver` reads `user/server.srk` without checks on the lengths and keeps the file handle in the shared open file global.

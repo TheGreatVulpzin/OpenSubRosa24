@@ -243,3 +243,9 @@ The first two numbers use two decimal places. Text rows use fixed advances of 16
 Car windows sort from far to near. The sort key is 16777216 minus 256 times the distance. Each window has a normal, a color of half the ambient light and an alpha of 0.25 for a window that faces the camera, 0.1875 for the other side.
 
 From 0x48 on, the client game record has its fields 4 bytes before the server fields. `ClientGameView` gives the client offsets of the sun angles, the team areas and the race checkpoints.
+
+## The list of particles
+
+`src/client/render/sprite_pool.c` keeps the list of particles. The list holds 16384 particles. `createsprite` returns -1 when it is full. A mark (kind 0) needs a normal in `vel`: the function builds a frame around the normal and moves the mark 1/64 off the surface. Stains, sparks and traces get their life, gravity and drag from their kind: life 65535, 60 and 3 ticks, and drag 0.9975, 0.975 and 0.875. `deletesprite` moves the last particle into the place of the removed one. `spritetimetolive` counts the life of every particle down by one. A life of 65535 does not change, and a particle with a life below 1 is removed.
+
+`raycast_addsector` marks the sector of a block as near the camera and marks one interior slot as in use. Each slot covers two block layers. `reloadopengl` builds the shader programs and the frame textures again and then each texture that has a width. `glstatediffuse` and `glstateambient` set the same OpenGL state and differ in the stencil test: equal to 0, or not equal to 0.
