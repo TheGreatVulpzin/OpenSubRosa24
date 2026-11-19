@@ -38,3 +38,9 @@ The calls run in a fixed order.
 ## Tickets and folders
 
 `ticketreturned` keeps an authentication ticket of up to 1024 bytes. `steam_getauthticket` gives the ticket and its size, or null when none is kept. `initplayticket` sets the play ticket to 0, 0, -1, 0. `getpaths` keeps the start folder and then finds the documents folder of the user. It makes the folder `Sub Rosa` there when it is missing, writes its path into the settings path, and goes back to the start folder. `loadaccountsserver` reads `user/server.srk` without checks on the lengths and keeps the file handle in the shared open file global.
+
+## Records of players and messages
+
+`player_addaction_menu`, `player_addaction_chat` and `player_addaction_item` add an action to the ring of 64 actions of a player. A chat action keeps up to 63 characters, with no end mark. `addplayerwaypoint` adds a waypoint and `logic_splitteamcash` shares an amount between the active players of a team. `scenario_isseekmission` tells if a team has an active mission of kind 4.
+
+`createmessage` adds a chat message to the ring of 256 messages. Kinds 0 and 4 last 600 ticks and the other kinds last 480. `newspaper_addline` stores 64 bytes in a line of the newspaper. `checkfilespec` matches a name against a spec with the wildcard `*`. `building_iswindow` tells if a wall of the floor plan is a window. `addwindowatlas` finds or adds a cell of the window list. The list holds 63 cells.

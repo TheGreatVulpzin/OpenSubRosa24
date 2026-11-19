@@ -18,6 +18,7 @@ Keyboard, mouse, player controls and cameras use `src/client/input/`.
 - [Loading](load.md): format tests, loader order and HDR conversion.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
+- [Math](math.md): vectors of two floats, quaternions, circles and engine torque.
 
 ## Textures, models and landscape
 

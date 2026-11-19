@@ -249,3 +249,13 @@ From 0x48 on, the client game record has its fields 4 bytes before the server fi
 `src/client/render/sprite_pool.c` keeps the list of particles. The list holds 16384 particles. `createsprite` returns -1 when it is full. A mark (kind 0) needs a normal in `vel`: the function builds a frame around the normal and moves the mark 1/64 off the surface. Stains, sparks and traces get their life, gravity and drag from their kind: life 65535, 60 and 3 ticks, and drag 0.9975, 0.975 and 0.875. `deletesprite` moves the last particle into the place of the removed one. `spritetimetolive` counts the life of every particle down by one. A life of 65535 does not change, and a particle with a life below 1 is removed.
 
 `raycast_addsector` marks the sector of a block as near the camera and marks one interior slot as in use. Each slot covers two block layers. `reloadopengl` builds the shader programs and the frame textures again and then each texture that has a width. `glstatediffuse` and `glstateambient` set the same OpenGL state and differ in the stencil test: equal to 0, or not equal to 0.
+
+## Rays, areas and sector meshes
+
+`render_raycast2` casts 80 rows of 128 rays from the camera. Each ray takes 48 steps of 1/256 of a block. At each block it marks the sector as near the camera and marks the interior slots that the step reaches. A ray stops at once in a solid block that has no interior.
+
+`area_getblocklink` gives the block word at a place and follows a link to the larger block. `area_getblockmaterial` gives the material of the last face of a block, or -1. `area_sectorvertequal` tells if two vertices of a sector mesh are closer than 1e-4 on each axis. `area_resetsector` makes the models of a used sector again, empties its four interior slots and clears its changed flag.
+
+The sector meshes use a table of 1024 words. Each bit marks a group of 16 places of the mesh buffer. `area_setsectormesh` sets a bit, `area_getnextsectormesh` finds a free group and `area_removesectormodel` frees the meshes of a sector.
+
+The block builders add flat surfaces to the temporary mesh. `area_block_addfloor` and `area_block_addceil` take the height as the 32 bits of a float. `area_block_addfloorceil` adds the floor at 1/16 and the ceiling at 7/8. `area_block_insertquad` opens two places in the list of quads. `createwindowsprites_block` breaks a window face of a block into four triangle pieces. `settwosidedstencil` sets the stencil of the back and front faces, through the EXT extension or else the ATI extension.
