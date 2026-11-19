@@ -1,0 +1,7 @@
+createevent_message src/net/message_events.c sr_createevent_message
+createevent_updatedoor src/net/message_events.c sr_createevent_updatedoor
+createevent_updatemission src/net/message_events.c sr_createevent_updatemission
+fixplayername src/game/player_names.c sr_fixplayername
+createsprite src/client/render/sprite_pool.c
+deletesprite src/client/render/sprite_pool.c
+spritetimetolive src/client/render/sprite_pool.c

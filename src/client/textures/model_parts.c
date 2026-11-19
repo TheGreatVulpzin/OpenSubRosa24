@@ -11,6 +11,7 @@
 #include "math/small_vectors.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
+#include "textures/mesh_edit.h"
 #include "textures/models.h"
 #include "vectors.h"
 
@@ -36,7 +37,6 @@
 
 /* Game functions of other files. */
 #define sethumanmodelvertface CL_FN(0x4bed20, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
-#define model_deletequad CL_FN(0x4b3080, void(__cdecl *)(int quad))
 
 /* Add one vertex: the place relative to center turned by rot, and the normal turned by rot. */
 static void cylinder_vertex(const vec3 *center, const vec3 *rot, const vec3 *place, float normal_x, float normal_y,

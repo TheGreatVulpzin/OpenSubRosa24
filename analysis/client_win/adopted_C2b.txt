@@ -1,0 +1,7 @@
+model_deletequad src/client/textures/mesh_edit.c
+model_addvertex src/client/textures/mesh_edit.c
+tempmesh_deletequad src/client/textures/mesh_edit.c
+tempmesh_vertnormalequal src/client/textures/mesh_edit.c
+lerp src/client/textures/mesh_edit.c
+addboxtomodelquad src/client/textures/mesh_edit.c
+model_createcash src/client/textures/cash_model.c

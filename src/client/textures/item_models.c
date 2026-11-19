@@ -11,6 +11,7 @@
 #include "client.h"
 #include "sr_math.h"
 #include "sr_runtime.h"
+#include "textures/mesh_edit.h"
 #include "textures/model_parts.h"
 #include "textures/models.h"
 #include "vectors.h"
@@ -24,10 +25,6 @@
 #define ROUND_SIDES 16
 #define ROUND_SIDE_MASK 15
 #define ROUND_STEP 0.39269909262657166 /* pi / 8 rounded to a float */
-
-/* Game functions of other files. */
-#define addboxtomodelquad CL_FN(0x4b2ad0, void(__cdecl *)(const vec3 *center, float half_x, float half_y, \
-                                                          float half_z))
 
 /* Give the quads from first to the last quad one texture coordinate. */
 static void quads_texcoord(int first, float u, float v)

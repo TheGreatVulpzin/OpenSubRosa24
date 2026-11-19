@@ -455,7 +455,7 @@ SR_STATIC_ASSERT(offsetof(FrameEntry, scale) == 0x4c, "FrameEntry.scale");
 SR_STATIC_ASSERT(offsetof(FrameEntry, color) == 0x58, "FrameEntry.color");
 SR_STATIC_ASSERT(sizeof(VideoMode) == 12, "VideoMode");
 /* A particle, a glass shard or a three corner piece with springs. */
-typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; uint8_t pad_90[4]; } ClientSprite;
+typedef struct ClientSprite { int kind; int life; float gravity; vec3 pos; vec3 vel; uint8_t pad_24[12]; vec3 rot[3]; vec3 corner_vel[3]; vec3 spin; float spin_rate; float drag; float size; float size2; } ClientSprite;
 typedef struct SpriteDecalVertex { vec3 pos; float texcoord[2]; } SpriteDecalVertex;
 typedef struct GlassVertex { vec3 pos; vec3 normal; } GlassVertex;
 typedef struct TiremarkVertex { vec3 pos; float alpha; } TiremarkVertex;
