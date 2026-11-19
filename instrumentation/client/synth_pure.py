@@ -41,6 +41,9 @@ import synth_textures as st  # noqa: E402
 PROTOTYPES = {
     'createbullet': 'ivvn',
     'createsprite': 'ivvf',
+    'area_breakblock': 'AcccBevv',
+    'ai_assessthreats': 'pn',
+    'server_writelogfile': '',
     'deletesprite': 'i',
     'spritetimetolive': '',
     'model_deletequad': 'i',

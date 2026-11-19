@@ -553,7 +553,7 @@ void saveaccountsclient(void);
 void lf_345d0(void);
 void lf_34740(void);
 void playerai(void);
-void lf_35840(void);
+void ai_assessthreats(void);
 void angulardistance(void);
 void lf_35fa0(void);
 void ai_playercar(void);
@@ -609,7 +609,7 @@ void lf_43e20(void);
 void lf_43f80(void);
 void lf_44140(void);
 void lf_442b0(void);
-void lf_46610(void);
+void area_breakblock(void);
 void lineintersectarea(void);
 void lineintersectnormalblock(void);
 void lineintersectspecblock(void);
@@ -832,7 +832,7 @@ void getmasterserverip(void);
 void setupitemtypes(void);
 void createitem(void);
 void lf_970f0(void);
-void lf_97130(void);
+void itemtimetolive(void);
 void lf_971c0(void);
 void itemsimulation(void);
 void itemlogic(void);
@@ -1856,7 +1856,7 @@ const LfEntry lf_table[] = {
     { "loadaccountsclient", 0x345d0, (void *)lf_345d0, 0, LF_RET_VOID, 4, "", 1 },
     { "server_writelogfile", 0x34740, (void *)lf_34740, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x348d0, (void *)playerai, 1, LF_RET_VOID, 4, "v", 0 },
-    { "ai_assessthreats", 0x35840, (void *)lf_35840, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "ai_assessthreats", 0x35840, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
     { "angulardistance", 0x35f40, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "addplayerwaypoint", 0x35fa0, (void *)lf_35fa0, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "ai_playercar", 0x36040, (void *)ai_playercar, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -1912,7 +1912,7 @@ const LfEntry lf_table[] = {
     { "area_interior_getblocklink", 0x43f80, (void *)lf_43f80, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_interior_getblocktexture", 0x44140, (void *)lf_44140, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_interior_buildsectormodel", 0x442b0, (void *)lf_442b0, 2, LF_RET_INT, 4, "vv", 1 },
-    { "area_breakblock", 0x46610, (void *)lf_46610, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
+    { "area_breakblock", 0x46610, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x466d0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectnormalblock", 0x478d0, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "lineintersectspecblock", 0x47ad0, (void *)lineintersectspecblock, 8, LF_RET_INT, 1, "ppppppvv", 0 },
@@ -2135,7 +2135,7 @@ const LfEntry lf_table[] = {
     { "setupitemtypes", 0x951c0, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "createitem", 0x96cf0, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "getnextitem", 0x970f0, (void *)lf_970f0, 0, LF_RET_INT, 4, "", 0 },
-    { "itemtimetolive", 0x97130, (void *)lf_97130, 0, LF_RET_VOID, 4, "", 0 },
+    { "itemtimetolive", 0x97130, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deleteitem", 0x971c0, (void *)lf_971c0, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulation", 0x97350, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemlogic", 0x98290, (void *)itemlogic, 0, LF_RET_VOID, 4, "", 0 },

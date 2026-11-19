@@ -1,7 +1,5 @@
 # Candidates that no recorded call reached. They stay lifted until a test covers them.
 addbeziersurface src/game/mesh.c
-ai_assessthreats src/game/player_ai.c
-area_breakblock src/game/area.c
 building_save src/game/buildings.c
 clientrecv src/net/client.c
 leveleditor_load src/game/block_mesh.c
@@ -12,8 +10,6 @@ unpackevent src/net/client.c
 # getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.
 pbitread src/net/packet.c
 pbitreadnego src/net/packet.c
-itemtimetolive src/game/items.c
 systemtimer src/common/system.c
 city_addintersection src/game/city.c
 loadsaveoptions src/game/options.c
-createarea src/game/area.c
