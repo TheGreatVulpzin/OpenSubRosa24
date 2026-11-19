@@ -2,3 +2,4 @@ itemtimetolive src/game/items.c
 createarea src/game/area.c
 area_breakblock src/game/area.c
 ai_assessthreats src/game/player_ai.c
+packevent src/net/netpack.c
