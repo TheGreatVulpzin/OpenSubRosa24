@@ -7,3 +7,10 @@ raycast_addsector src/client/render/raycast_sector.c
 reloadopengl src/client/render/gl_reload.c
 glstatediffuse src/client/render/gl_state.c
 glstateambient src/client/render/gl_state.c
+ticketreturned src/client/setup/tickets.c
+steam_getauthticket src/client/setup/tickets.c
+initplayticket src/client/setup/tickets.c
+player_addaction_menu src/client/menu/player_menu.c
+drawplayermenu_team src/client/menu/player_menu.c
+drawplayermenu src/client/menu/player_menu.c
+setupplayermenus src/client/menu/player_menu.c

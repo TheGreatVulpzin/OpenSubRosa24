@@ -1,0 +1,6 @@
+name,type,count,client_rva,evidence
+auth_ticket,uint8_t,1024,0x16323200,"ticketreturned copies the ticket here. steam_getauthticket gives a pointer to it"
+auth_ticket_size,uint32_t,1,0x17678dc4,"the length of the ticket in auth_ticket. ticketreturned writes it"
+auth_ticket_ready,int,1,0xf3eb1e8,"1 after ticketreturned stored a ticket. steam_getauthticket tests it"
+play_ticket,int,4,0xf9ae240,"initplayticket writes 0, 0, -1 and 0. No other code reads them"
+play_ticket_on,int,1,0x127eb8,"initplayticket writes 1. No other code reads it"

@@ -768,11 +768,11 @@ void movecamera(void);
 void movecamera2(void);
 void checksimulation(void);
 void newspaper_load(void);
-void lf_7e4f0(void);
+void setupplayermenus(void);
 void playermenu(void);
-void lf_7e730(void);
+void drawplayermenu(void);
 void playermenu_team(void);
-void lf_7e970(void);
+void drawplayermenu_team(void);
 void playermenu_spawn(void);
 void playermenu_buy(void);
 void playermenu_buy_weapons(void);
@@ -1024,9 +1024,9 @@ void deleteplayer(void);
 void playersimulation(void);
 void sr_fixplayername(void);
 void lf_d5380(void);
-void lf_d5490(void);
+void player_addaction_menu(void);
 void lf_d5550(void);
-void lf_d5610(void);
+void initplayticket(void);
 void updateplayticket(void);
 void lf_d5660(void);
 void lf_d5690(void);
@@ -1254,9 +1254,9 @@ void lf_10a5f0(void);
 void loadtexturepartial(void);
 void generatemipmap(void);
 void setuptexture(void);
-void lf_10ad70(void);
+void ticketreturned(void);
 void steam_requestauthticket(void);
-void lf_10add0(void);
+void steam_getauthticket(void);
 void lf_10ae00(void);
 void lf_10b1f0(void);
 void tempmesh_vertnormalequal(void);
@@ -2071,11 +2071,11 @@ const LfEntry lf_table[] = {
     { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
     { "checksimulation", 0x7d900, (void *)checksimulation, 1, LF_RET_INT, 4, "v", 1 },
     { "newspaper_load", 0x7e350, (void *)newspaper_load, 0, LF_RET_VOID, 4, "", 1 },
-    { "setupplayermenus", 0x7e4f0, (void *)lf_7e4f0, 0, LF_RET_VOID, 4, "", 0 },
+    { "setupplayermenus", 0x7e4f0, (void *)setupplayermenus, 0, LF_RET_VOID, 4, "", 0 },
     { "playermenu", 0x7e500, (void *)playermenu, 1, LF_RET_VOID, 4, "v", 0 },
-    { "drawplayermenu", 0x7e730, (void *)lf_7e730, 1, LF_RET_VOID, 4, "v", 0 },
+    { "drawplayermenu", 0x7e730, (void *)drawplayermenu, 1, LF_RET_VOID, 4, "v", 0 },
     { "playermenu_team", 0x7e760, (void *)playermenu_team, 1, LF_RET_VOID, 4, "v", 0 },
-    { "drawplayermenu_team", 0x7e970, (void *)lf_7e970, 0, LF_RET_VOID, 4, "", 0 },
+    { "drawplayermenu_team", 0x7e970, (void *)drawplayermenu_team, 0, LF_RET_VOID, 4, "", 0 },
     { "playermenu_spawn", 0x7e990, (void *)playermenu_spawn, 1, LF_RET_VOID, 4, "v", 0 },
     { "playermenu_buy", 0x7ea40, (void *)playermenu_buy, 1, LF_RET_VOID, 4, "v", 0 },
     { "playermenu_buy_weapons", 0x7ed60, (void *)playermenu_buy_weapons, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2327,9 +2327,9 @@ const LfEntry lf_table[] = {
     { "playersimulation", 0xd4b80, (void *)playersimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "fixplayername", 0xd5200, (void *)sr_fixplayername, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_addaction_chat", 0xd5380, (void *)lf_d5380, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "player_addaction_menu", 0xd5490, (void *)lf_d5490, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "player_addaction_menu", 0xd5490, (void *)player_addaction_menu, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "player_addaction_item", 0xd5550, (void *)lf_d5550, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "initplayticket", 0xd5610, (void *)lf_d5610, 0, LF_RET_VOID, 4, "", 0 },
+    { "initplayticket", 0xd5610, (void *)initplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "updateplayticket", 0xd5650, (void *)updateplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "getplayticket", 0xd5660, (void *)lf_d5660, 0, LF_RET_INT64, 4, "", 0 },
     { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
@@ -2557,9 +2557,9 @@ const LfEntry lf_table[] = {
     { "loadtexturepartial", 0x10a7c0, (void *)loadtexturepartial, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "generatemipmap", 0x10a9a0, (void *)generatemipmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "setuptexture", 0x10ac40, (void *)setuptexture, 1, LF_RET_VOID, 4, "v", 1 },
-    { "ticketreturned", 0x10ad70, (void *)lf_10ad70, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "ticketreturned", 0x10ad70, (void *)ticketreturned, 2, LF_RET_VOID, 4, "pv", 0 },
     { "steam_requestauthticket", 0x10adb0, (void *)steam_requestauthticket, 0, LF_RET_VOID, 4, "", 1 },
-    { "steam_getauthticket", 0x10add0, (void *)lf_10add0, 1, LF_RET_INT, 4, "p", 0 },
+    { "steam_getauthticket", 0x10add0, (void *)steam_getauthticket, 1, LF_RET_INT, 4, "p", 0 },
     { "main", 0x10ae00, (void *)lf_10ae00, 0, LF_RET_INT, 4, "", 1 },
     { "getpaths", 0x10b1f0, (void *)lf_10b1f0, 0, LF_RET_VOID, 4, "", 1 },
     { "tempmesh_vertnormalequal", 0x10b290, (void *)tempmesh_vertnormalequal, 2, LF_RET_INT, 4, "vv", 0 },

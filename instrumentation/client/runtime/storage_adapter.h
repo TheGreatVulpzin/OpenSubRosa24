@@ -156,6 +156,11 @@ extern TimerList sr_unplaced_timerlist;
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
 #include "sr_input_types.h"
+#define cl_data_auth_ticket ((uint8_t *)(sr_base + 0x16323200u))
+#define cl_data_auth_ticket_size (*((uint32_t *)(sr_base + 0x17678dc4u)))
+#define cl_data_auth_ticket_ready (*((int *)(sr_base + 0xf3eb1e8u)))
+#define cl_data_play_ticket ((int *)(sr_base + 0xf9ae240u))
+#define cl_data_play_ticket_on (*((int *)(sr_base + 0x127eb8u)))
 #define cl_data_image_partial (*((int *)(sr_base + 0x1bf7e10u)))
 #define cl_data_zlib_defaults_ready (*((uint8_t *)(sr_base + 0x1272cfu)))
 #define cl_data_zlib_default_length ((uint8_t *)(sr_base + 0x1279d8u))

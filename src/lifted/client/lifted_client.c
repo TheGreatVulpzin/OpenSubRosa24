@@ -40176,40 +40176,6 @@ void __cdecl lf_7d060(void)
 #undef setupprogramobjects
 #undef SDL_SetRelativeMouseMode
 
-/* ---------------------------------------------------------------- 0x7e4f0 */
-
-void __cdecl lf_7e4f0(void)
-
-{
-  return;
-}
-
-
-/* ---------------------------------------------------------------- 0x7e730 */
-#define DAT_0bb7c594 (*(int *)SR_VA(0xbb7c594))
-#define DAT_0f181474 (*(undefined *)SR_VA(0xf181474))
-#define FUN_0047e970 ((void (__cdecl *)(undefined4))SR_FN(0x47e970))
-void __cdecl lf_7e730(int param_1)
-
-{
-  if ((DAT_0bb7c594 != 0) && (*(int *)(&DAT_0f181474 + param_1 * 0x2408) == 2)) {
-    FUN_0047e970(param_1);
-  }
-  return;
-}
-#undef DAT_0bb7c594
-#undef DAT_0f181474
-#undef FUN_0047e970
-
-/* ---------------------------------------------------------------- 0x7e970 */
-
-void __cdecl lf_7e970(void)
-
-{
-  return;
-}
-
-
 /* ---------------------------------------------------------------- 0x82910 */
 #define DAT_2a27d2c0 (*(undefined4 *)SR_VA(0x2a27d2c0))
 #define DAT_2a27d2c4 (*(undefined4 *)SR_VA(0x2a27d2c4))
@@ -53322,29 +53288,6 @@ void __cdecl lf_d5380(int param_1,char *param_2)
 #undef memcpy
 #undef strlen
 
-/* ---------------------------------------------------------------- 0xd5490 */
-#define DAT_0f181484 (*(undefined *)SR_VA(0xf181484))
-#define DAT_0f18148c (*(undefined *)SR_VA(0xf18148c))
-#define DAT_0f181490 (*(undefined *)SR_VA(0xf181490))
-#define DAT_0f181494 (*(undefined *)SR_VA(0xf181494))
-void __cdecl lf_d5490(int param_1,undefined4 param_2,undefined4 param_3)
-
-{
-  *(undefined4 *)
-   (&DAT_0f18148c + *(int *)(&DAT_0f181484 + param_1 * 0x2408) * 0x54 + param_1 * 0x2408) = 0;
-  *(undefined4 *)
-   (&DAT_0f181490 + *(int *)(&DAT_0f181484 + param_1 * 0x2408) * 0x54 + param_1 * 0x2408) = param_2;
-  *(undefined4 *)
-   (&DAT_0f181494 + *(int *)(&DAT_0f181484 + param_1 * 0x2408) * 0x54 + param_1 * 0x2408) = param_3;
-  *(int *)(&DAT_0f181484 + param_1 * 0x2408) = *(int *)(&DAT_0f181484 + param_1 * 0x2408) + 1;
-  *(uint *)(&DAT_0f181484 + param_1 * 0x2408) = *(uint *)(&DAT_0f181484 + param_1 * 0x2408) & 0x3f;
-  return;
-}
-#undef DAT_0f181484
-#undef DAT_0f18148c
-#undef DAT_0f181490
-#undef DAT_0f181494
-
 /* ---------------------------------------------------------------- 0xd5550 */
 #define DAT_0f181484 (*(undefined *)SR_VA(0xf181484))
 #define DAT_0f18148c (*(undefined *)SR_VA(0xf18148c))
@@ -53367,34 +53310,6 @@ void __cdecl lf_d5550(int param_1,undefined4 param_2,undefined4 param_3)
 #undef DAT_0f18148c
 #undef DAT_0f181490
 #undef DAT_0f181494
-
-/* ---------------------------------------------------------------- 0xd5610 */
-#define DAT_0fdae240 (*(undefined *)SR_VA(0xfdae240))
-#define DAT_0fdae244 (*(undefined *)SR_VA(0xfdae244))
-#define DAT_0fdae248 (*(undefined4 *)SR_VA(0xfdae248))
-#define DAT_0fdae24c (*(undefined4 *)SR_VA(0xfdae24c))
-#define DAT_00527eb8 (*(undefined *)SR_VA(0x527eb8))
-#define _DAT_0fdae240 (*(undefined4 *)SR_VA(0xfdae240))
-#define _DAT_0fdae244 (*(undefined4 *)SR_VA(0xfdae244))
-#define _DAT_00527eb8 (*(undefined4 *)SR_VA(0x527eb8))
-void __cdecl lf_d5610(void)
-
-{
-  _DAT_0fdae240 = 0;
-  _DAT_0fdae244 = 0;
-  DAT_0fdae248 = 0xffffffff;
-  DAT_0fdae24c = 0;
-  _DAT_00527eb8 = 1;
-  return;
-}
-#undef DAT_0fdae240
-#undef DAT_0fdae244
-#undef DAT_0fdae248
-#undef DAT_0fdae24c
-#undef DAT_00527eb8
-#undef _DAT_0fdae240
-#undef _DAT_0fdae244
-#undef _DAT_00527eb8
 
 /* ---------------------------------------------------------------- 0xd5660 */
 #define DAT_0fdae248 (*(undefined4 *)SR_VA(0xfdae248))
@@ -56990,48 +56905,6 @@ undefined4 __cdecl lf_10a5f0(int param_1,char *param_2,int param_3,undefined4 pa
 #undef strcpy
 #undef local_c
 #undef local_8
-
-/* ---------------------------------------------------------------- 0x10ad70 */
-#define DAT_17a78dc4 (*(uint *)SR_VA(0x17a78dc4))
-#define DAT_0f7eb1e8 (*(undefined4 *)SR_VA(0xf7eb1e8))
-#define DAT_16723200 (*(undefined *)SR_VA(0x16723200))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(14, "MSVCR100.DLL", "memcpy"))
-void __cdecl lf_10ad70(void *param_1,byte param_2)
-
-{
-  if (param_2 < 0x401) {
-    DAT_17a78dc4 = (uint)param_2;
-    memcpy(&DAT_16723200,param_1,(uint)param_2);
-    DAT_0f7eb1e8 = 1;
-  }
-  return;
-}
-#undef DAT_17a78dc4
-#undef DAT_0f7eb1e8
-#undef DAT_16723200
-#undef memcpy
-
-/* ---------------------------------------------------------------- 0x10add0 */
-#define DAT_0f7eb1e8 (*(int *)SR_VA(0xf7eb1e8))
-#define DAT_17a78dc4 (*(undefined4 *)SR_VA(0x17a78dc4))
-#define DAT_16723200 (*(undefined *)SR_VA(0x16723200))
-int __cdecl lf_10add0(undefined4 *param_1)
-
-{
-  undefined *puVar1;
-  
-  if (DAT_0f7eb1e8 == 1) {
-    *param_1 = DAT_17a78dc4;
-    puVar1 = &DAT_16723200;
-  }
-  else {
-    puVar1 = (undefined *)0x0;
-  }
-  return (int)puVar1;
-}
-#undef DAT_0f7eb1e8
-#undef DAT_17a78dc4
-#undef DAT_16723200
 
 /* ---------------------------------------------------------------- 0x10ae00 */
 #define DAT_10767380 (*(undefined *)SR_VA(0x10767380))

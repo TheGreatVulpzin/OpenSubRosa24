@@ -41,6 +41,13 @@ import synth_textures as st  # noqa: E402
 PROTOTYPES = {
     'createbullet': 'ivvn',
     'createsprite': 'ivvf',
+    'ticketreturned': 'Si',
+    'steam_getauthticket': 'U',
+    'initplayticket': '',
+    'player_addaction_menu': 'pii',
+    'drawplayermenu': 'p',
+    'drawplayermenu_team': '',
+    'setupplayermenus': '',
     'glstatediffuse': '',
     'glstateambient': '',
     'raycast_addsector': 'Accc',
