@@ -19,6 +19,8 @@ Shading modes of a triangle: -2 every corner uses the normal of the triangle, -1
 | `setupspheremodel` | 8 sphere meshes. Level 0 is an octahedron. Each level splits every triangle of the level before into 4. |
 | `createhairmodel` | The hair: an octahedron of radius 0.1275 with each triangle split into 4. The points at the front and below the middle are stretched. |
 | `createhumanmodel` | The human: a torso that grows by four extrusions, then ten boxes (the head and the limbs), then every quad as two triangles. |
+| `createheadmodel2` (`head_models.c`) | A head of eight cubic Bezier triangles. The control points are the edit vertices. Each triangle splits two times into four. A mark (patch corners and weights) finds each point of one area of the face. Hand placed triangles and two eye extrusions replace that area. Shift changes the weights of two points. No code of the client calls it. |
+| `createheadmodel3` (`head_models.c`) | The simple head: eight points, each triangle split into four along Hermite curves, and two eye quads. |
 
 ## The human model
 
