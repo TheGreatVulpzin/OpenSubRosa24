@@ -12,3 +12,4 @@ area_buildsectormodel src/client/render/sector_model.c
 area_interior_buildsectormodel src/client/render/interior_model.c
 createheadmodel2 src/client/textures/head_models.c
 building_editorloop src/client/editor/building_loop.c
+building_checkeditor src/client/editor/building_loop.c

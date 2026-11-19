@@ -16,6 +16,16 @@ A building has 64 floors of 64 by 64 cells (`BuildingCell`). The state of the ed
 4. A, D, W and S move the camera in steps of 16 ms. Shift makes the steps 4 times longer.
 5. At the end, it saves the building, removes its blocks from the world, builds it again at 36, 6, 36 and frees all interior meshes.
 
+## Mouse in the view and the tiles
+
+`building_checkeditor` runs each frame before the drawing:
+
+- The wheel over a tile steps its value, with a wrap from `start` to `count - 1`. With shift, a texture tile of the outer sides (1 to 4) or of the inner sides (7 to 10) gives its value to the other tiles of the group.
+- In the view, it finds the cell under the mouse (`cursor_x`, `cursor_z`). J sets the size of the building to that cell plus 1.
+- The wall mode takes the cell edges too. With no button down, the wall goes along x when the mouse is nearer an x edge.
+- The area mode sets the start of the chosen area (`area`) with a left click and its size while the button stays down.
+- The wheel in the view changes the zoom from 2 to 256. Wheel steps out of the tiles and the view are lost.
+
 ## Keys
 
 | Key | Action |
