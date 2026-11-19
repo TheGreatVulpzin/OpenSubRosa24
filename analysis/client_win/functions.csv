@@ -2645,8 +2645,8 @@ rva,size,name,source,confidence,evidence
 0xddae0,5,scenario_addcheckpoint,order,0.8,"ELF link order: between scenario_createcar and scenario_armhuman. Size 5 bytes, ELF 12 bytes."
 0xddaf0,269,scenario_armhuman,callgraph,0.667,votes=4
 0xddc00,741,createmission_acquisition,anchor,0.898,features
-0xddef0,1634,createmission_transaction,callgraph,0.667,votes=4
-0xde560,1471,createmission_threeway,callees,0.875,"callee jaccard 0.88, constants 0.37, size 1471"
+0xddef0,1634,createmission_threeway,manual,1.0,"Same code as the server createmission_threeway: 1000 plus 500 for a rand bit, then three more 500 steps, the item at the first team base, partner missions. The matcher had the names of this function and of 0xde560 swapped."
+0xde560,1471,createmission_transaction,manual,1.0,"Same code as the server createmission_transaction: three items, three rewards, a mission of kind 5 or 6 for each partner. The matcher had the names of this function and of 0xddef0 swapped."
 0xdeb20,2604,serversend,callgraph,1.0,votes=6
 0xdf550,327,servercycle,anchor,0.857,features
 0xdf6a0,4211,serverrecv,callgraph,0.333,votes=2

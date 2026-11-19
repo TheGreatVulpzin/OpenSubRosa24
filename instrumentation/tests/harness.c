@@ -1131,6 +1131,8 @@ static const char *known_difference(const char *name)
         { "createbulletmodel", "client follows the server code (generatetrinormal)" },
         { "createcashmodel", "client follows the server code (generatetrinormal)" },
         { "createheadmodel3", "client follows the server code (generatetrinormal)" },
+        /* A type other than 0 gives no vehicle. The client returns an uninitialized local, the server code -1. */
+        { "createvehicle", "returns an uninitialized local for a type other than 0" },
         { "createhairmodel", "client follows the server code (generatetrinormal)" },
         { "setupclient", "client follows the server code (generatetrinormal)" },
         { "steam_init", "no Steam in the client" },

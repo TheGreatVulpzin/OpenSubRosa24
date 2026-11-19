@@ -1,0 +1,4 @@
+createmission_acquisition src/client/setup/missions.c client_createmission_acquisition
+createmission_transaction src/game/missions.c
+createmission_threeway src/game/missions.c
+createvehicle src/game/object_create.c

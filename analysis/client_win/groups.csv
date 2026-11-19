@@ -20,6 +20,7 @@ rva,name,size,group,recorded_calls
 0x1930,hdr_to_ldr,441,C1,0
 0x1af0,stbi_jpeg_load_from_file,87,C1,0
 0x1b50,start_file,14,C1,0
+0x1b60,load_jpeg_image,1635,C1,0
 0x21d0,decode_jpeg_image,170,C1,0
 0x2280,get_marker,115,C10,16
 0x2300,stbi_get8u,17,C1,24
@@ -124,9 +125,11 @@ rva,name,size,group,recorded_calls
 0xa9b0,hdr_gettoken,162,C1,0
 0xaa60,hdr_convert,283,C1,0
 0xab90,stbi_hdr_load_from_memory,58,C1,0
+0xabd0,stbi_write_bmp,118,C1,0
 0xac50,outfile,136,C1,0
 0xace0,writefv,326,C1,0
 0xae60,write8,35,C1,0
+0xae90,write_pixels,505,C1,0
 0xb140,__GLeeGetProcAddress,15,C9,80
 0xea90,GLee_Lazy_glActiveTextureARB,29,C9,0
 0xee80,GLee_Lazy_glMultiTexCoord3fvARB,33,C9,0
@@ -548,12 +551,12 @@ rva,name,size,group,recorded_calls
 0x345d0,loadaccountsclient,362,C10,3
 0x34740,server_writelogfile,393,C0,0
 0x348d0,playerai,3940,C0x,0
-0x35840,ai_assessthreats,1784,C0,0
+0x35840,ai_assessthreats,1784,C0x,0
 0x35f40,angulardistance,82,C0,0
 0x35fa0,addplayerwaypoint,149,C10,0
 0x36040,ai_playercar,4815,C0x,0
 0x37310,ai_car_nextwaypoint,1030,C0x,0
-0x37720,createarea,1036,C0,8
+0x37720,createarea,1036,C0x,8
 0x37b30,area_createblock,1833,C0x,0
 0x38260,area_setblock,460,C0,0
 0x38430,area_setblockcolor,460,C0,0
@@ -604,7 +607,7 @@ rva,name,size,group,recorded_calls
 0x43f80,area_interior_getblocklink,445,C10,0
 0x44140,area_interior_getblocktexture,361,C10,0
 0x442b0,area_interior_buildsectormodel,9044,C10,48
-0x46610,area_breakblock,187,C0,0
+0x46610,area_breakblock,187,C0x,0
 0x466d0,lineintersectarea,4594,C0,0
 0x478d0,lineintersectnormalblock,507,C0,0
 0x47ad0,lineintersectspecblock,784,C0,0
@@ -741,7 +744,7 @@ rva,name,size,group,recorded_calls
 0x72c40,createevent_updatecarmarket,193,C10,0
 0x72d10,createevent_updateblock_interior,154,C10,0
 0x72db0,createevent_updateblock_quad,286,C0,0
-0x72ed0,packevent,3012,C0,0
+0x72ed0,packevent,3012,C0x,0
 0x73aa0,unpackevent,2128,C0,0
 0x742f0,setupframetextures,1439,C10,3
 0x74890,buildframelist,5374,C10,0
@@ -827,7 +830,7 @@ rva,name,size,group,recorded_calls
 0x951c0,setupitemtypes,6957,C0,0
 0x96cf0,createitem,1019,C0x,0
 0x970f0,getnextitem,61,C10,0
-0x97130,itemtimetolive,139,C0,0
+0x97130,itemtimetolive,139,C0x,0
 0x971c0,deleteitem,396,C10,0
 0x97350,itemsimulation,3900,C0x,0
 0x98290,itemlogic,3240,C0x,0
@@ -1073,8 +1076,8 @@ rva,name,size,group,recorded_calls
 0xddae0,scenario_addcheckpoint,5,C10,0
 0xddaf0,scenario_armhuman,269,C0x,0
 0xddc00,createmission_acquisition,741,C0x,0
-0xddef0,createmission_transaction,1634,C0x,0
-0xde560,createmission_threeway,1471,C0x,0
+0xddef0,createmission_threeway,1634,C0x,0
+0xde560,createmission_transaction,1471,C0x,0
 0xdeb20,serversend,2604,C0x,2
 0xdf550,servercycle,327,C0,6
 0xdf6a0,serverrecv,4211,C0x,4

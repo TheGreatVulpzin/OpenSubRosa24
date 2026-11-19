@@ -1077,9 +1077,9 @@ void scenario_createcar(void);
 void lf_ddad0(void);
 void lf_ddae0(void);
 void scenario_armhuman(void);
-void lf_ddc00(void);
-void lf_ddef0(void);
-void lf_de560(void);
+void client_createmission_acquisition(void);
+void createmission_threeway(void);
+void createmission_transaction(void);
 void serversend(void);
 void servercycle(void);
 void serverrecv(void);
@@ -1149,7 +1149,7 @@ void stoptimer(void);
 void getcpufrequency(void);
 void lf_fb1b0(void);
 void cs_sleep(void);
-void lf_fb3d0(void);
+void createvehicle(void);
 void getaudioinput(void);
 void lf_fbc00(void);
 void calculateplayervoice(void);
@@ -2380,9 +2380,9 @@ const LfEntry lf_table[] = {
     { "scenario_createaicar", 0xddad0, (void *)lf_ddad0, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_addcheckpoint", 0xddae0, (void *)lf_ddae0, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_armhuman", 0xddaf0, (void *)scenario_armhuman, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "createmission_acquisition", 0xddc00, (void *)lf_ddc00, 3, LF_RET_INT, 4, "vvp", 0 },
-    { "createmission_transaction", 0xddef0, (void *)lf_ddef0, 3, LF_RET_VOID, 4, "vvp", 0 },
-    { "createmission_threeway", 0xde560, (void *)lf_de560, 3, LF_RET_VOID, 4, "vvp", 0 },
+    { "createmission_acquisition", 0xddc00, (void *)client_createmission_acquisition, 3, LF_RET_INT, 4, "vvp", 0 },
+    { "createmission_threeway", 0xddef0, (void *)createmission_threeway, 3, LF_RET_VOID, 4, "vvp", 0 },
+    { "createmission_transaction", 0xde560, (void *)createmission_transaction, 3, LF_RET_VOID, 4, "vvp", 0 },
     { "serversend", 0xdeb20, (void *)serversend, 0, LF_RET_VOID, 4, "", 1 },
     { "servercycle", 0xdf550, (void *)servercycle, 0, LF_RET_VOID, 4, "", 1 },
     { "serverrecv", 0xdf6a0, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },
@@ -2452,7 +2452,7 @@ const LfEntry lf_table[] = {
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
     { "setuptimers", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
     { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },
-    { "createvehicle", 0xfb3d0, (void *)lf_fb3d0, 3, LF_RET_INT, 4, "vpp", 0 },
+    { "createvehicle", 0xfb3d0, (void *)createvehicle, 3, LF_RET_INT, 4, "vpp", 0 },
     { "getaudioinput", 0xfb6f0, (void *)getaudioinput, 1, LF_RET_VOID, 4, "v", 1 },
     { "testvoice", 0xfbc00, (void *)lf_fbc00, 2, LF_RET_VOID, 4, "vv", 1 },
     { "calculateplayervoice", 0xfbe70, (void *)calculateplayervoice, 2, LF_RET_VOID, 4, "vv", 0 },
