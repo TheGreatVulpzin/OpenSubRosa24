@@ -847,7 +847,7 @@ rva,name,size,group,recorded_calls
 0x9a330,item_removeitemlink,211,C0x,0
 0x9a410,item_physicssimulation,1924,C0x,0
 0x9aba0,item_sphereintersect,1462,C0,0
-0x9b160,city_addintersection,343,C0,0
+0x9b160,city_addintersection,343,C0x,0
 0x9b2c0,addcitystreet,770,C10,0
 0x9b5d0,addcityblock,363,C10,0
 0x9b740,createlevel,3489,C0x,8
