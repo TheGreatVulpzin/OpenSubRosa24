@@ -3,7 +3,7 @@
 The clean game code reads its data through sr_data_<name>. In the client build, each name is a
 place in the image of subrosa.exe: sr_base plus the client RVA. This file is the client version of
 instrumentation/runtime/storage_adapter.h. A name without a client address (not in the
-csv, or dropped) gets a private dummy object, so the file still compiles. A function that uses a dummy
+csv, or dropped) gets a private dummy object, so the file compiles. A function that uses a dummy
 must not be adopted: tools/re/check_adopted.py finds those functions.
 
 Usage: python -I tools/re/gen_client_storage.py
@@ -94,6 +94,22 @@ def main():
                 client_only.append('#define sr_resetgame_light() resetgame_client_light()')
                 client_only.append('#define sr_human_floor_all_rays 1')
                 client_only.append('#define sr_human_vehicle_limit_protection 0')
+                for field, macro in (('vel', 'VEL'), ('dv', 'DV'), ('ang_momentum', 'MOMENTUM'),
+                                     ('w', 'W'), ('dw', 'DW')):
+                    client_only.append(f'#define BOND_HUMAN_{macro}(h, j) (cl_data_bondhuman_client[h].{field}[j].value)')
+                client_only.append('#define BOND_HUMAN_ACTIVE(h) (sr_data_human[h].active != 0 && sr_data_human[h].has_physics != 0)')
+                client_only.append('#define BOND_HUMAN_SOLVES(h, j) (0.0 < sr_data_human[h].bones[j].in_solver)')
+                client_only.append('#define BOND_HUMAN_CLEAR(h, j) 1')
+                client_only.append('#define BOND_HUMAN_RESET(h) ((void)0)')
+                client_only.append('#define BOND_HUMAN_PREPARE(h) ((void)0)')
+                client_only.append('#define BOND_HUMAN_MARK(h, j) ((void)0)')
+                client_only.append('#define BOND_HUMAN_AXIS(h, j, k) (sr_data_human[h].bones[j].rot[k])')
+                client_only.append('#define BOND_HUMAN_INERTIA(h, j, k) (((const float *)&sr_data_human[h].bones[j].inv_inertia)[k])')
+                client_only.append('#define BOND_HUMAN_COPY_AXIS(h, j, k, value, inertia) ((void)0)')
+                client_only.append('#define BOND_COPY_MODE 0')
+                client_only.append('#define BOND_MODE(b, o) ((unsigned)(b)->mode)')
+                client_only.append('#define BOND_BALANCE_NONNEGATIVE(value) (!((value) < 0.0))')
+                client_only.append('#define BOND_BONE_SPRING 1')
                 client_only.append('#define sr_updatehuman_params int human')
                 client_only.append('#define sr_updatehuman_recipient(record, supplied) ((record)->player_id)')
                 client_only.append('#define sr_emit_updatehuman(human, player) createevent_updatehuman((human))')

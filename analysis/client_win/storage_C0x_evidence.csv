@@ -1,5 +1,5 @@
 name,client_rva,primary,secondary,limits
-bondhuman,0x17678de0,"bondsimulation2 0x50700: five arrays at +0,+0x100,+0x200,+0x300,+0x400; human stride 0x500",512 records end at bondparticle 0x17718de0; each vector has stride 0x10,"The solver expects active, mask and interleaved bones with stride 0x810. It needs client accessors."
+bondhuman,0x17678de0,"bondsimulation2 0x50700: five arrays at +0,+0x100,+0x200,+0x300,+0x400; human stride 0x500",512 records end at bondparticle 0x17718de0; each vector has stride 0x10,"Client access macros select BondHumanClient. Activity and bone selection come from Human. Axes and inverse inertia come from Bone."
 numofdynamicbonds,0x1bf7e14,bondsimulation2 0x50700: final store copies numofbonds,Linux numofdynamicbonds symbol and matching final counter assignment,
 numofstaticbonds,0x13c5e6c0,bondsimulation2 0x50700: final load replaces numofbonds,Linux numofstaticbonds symbol and matching counter lifetime,
 timerlist,0x12a7d620,renderframe and displaydebuginfo: timer indices occupy +0 through +0x50,Linux timerlist has size 0x54; group C3 and globals_checked.csv agree,Simulation timer fields at +0x54 through +0x94 do not exist. Shared profiler access needs a separate mapping.

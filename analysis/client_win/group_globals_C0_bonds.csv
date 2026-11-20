@@ -1,0 +1,2 @@
+name,type,count,client_rva,evidence
+bondhuman_client,BondHumanClient,512,0x17678de0,"bondsimulation2 0x50700: five arrays of sixteen vector slots per human. Each human occupies 0x500 bytes."

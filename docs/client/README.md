@@ -44,4 +44,5 @@ Sound and voice use `src/client/audio/`.
 - [simulation.md](simulation.md): the tick of the client, the keys of the display and the traffic lights.
 - [game_helpers.md](game_helpers.md): pool slots, player actions, account balances and client settings.
 - [network.md](network.md): the input packet that the client sends, and the smoothing of humans, objects and items.
+- [physics.md](physics.md): bonds, solver passes and the human workspace.
 - [Keyboard, mouse and controls](input.md) describe input polling, item actions, movement and cameras.

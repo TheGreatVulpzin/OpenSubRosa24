@@ -7,6 +7,7 @@
  * the velocities back (copy_back).
  */
 #include "bonds.h"
+#include "bond_storage.h"
 
 #include <stdint.h>
 
@@ -173,7 +174,7 @@ static void setup_bodyrotbody(const Bond *b, BondOpt *o)
   multiply3x3matrices((vec3 *)m, (const vec3 *)m, bb->target_rot);
   k = b->damping;
   o->damping = k;
-  /* For bones 3 to 8 of a living human, the direction of the last tick stays. */
+  /* For bones 3 to 8 of a living human, use the direction of the last tick. */
   if (kb < 3 || 8 < kb || h->health < 1) {
     geteulerangles2(&e, (const vec3 *)m);
     e0 = e.x;
@@ -292,34 +293,30 @@ static void setup_copy(void)
   sr_timer_start(bondsetupcopy);
   for (h = 0; h < 512; h++) {
     const Human *hu = &sr_humans[h];
-    BondHuman *bh = &sr_bondhumans[h];
-    bh->active = 0;
+    BOND_HUMAN_RESET(h);
     if (hu->active == 0 || hu->has_physics == 0)
       continue;
-    bh->active = 1;
-    bh->mask = 0;
+    BOND_HUMAN_PREPARE(h);
     for (k = 0; k < 15; k++) {
       const Bone *bone = &hu->bones[k];
-      BondBone *w = &bh->bones[k];
       if (0.0 < bone->in_solver)
-        bh->mask |= 1 << k;
-      w->vel = bone->vel;
-      w->w = bone->w;
-      w->ang_momentum = bone->ang_momentum;
-      w->axes[0].dir = bone->rot[0];
-      w->axes[0].k = bone->inv_inertia.x;
-      w->axes[1].dir = bone->rot[1];
-      w->axes[1].k = bone->inv_inertia.y;
-      w->axes[2].dir = bone->rot[2];
-      w->axes[2].k = bone->inv_inertia.z;
+        BOND_HUMAN_MARK(h, k);
+      BOND_HUMAN_VEL(h, k) = bone->vel;
+      BOND_HUMAN_W(h, k) = bone->w;
+      BOND_HUMAN_MOMENTUM(h, k) = bone->ang_momentum;
+      BOND_HUMAN_COPY_AXIS(h, k, 0, bone->rot[0], bone->inv_inertia.x);
+      BOND_HUMAN_COPY_AXIS(h, k, 1, bone->rot[1], bone->inv_inertia.y);
+      BOND_HUMAN_COPY_AXIS(h, k, 2, bone->rot[2], bone->inv_inertia.z);
     }
   }
   n = sr_numofparticles;
   for (i = 0; i < n; i++)
     sr_bondparticles[i].vel = sr_particles[i].vel;
+#if BOND_COPY_MODE
   n = sr_numofbonds;
   for (i = 0; i < n; i++)
     sr_bondopt[i].mode = (short)sr_bonds[i].mode;
+#endif
   sr_timer_stop(bondsetupcopy);
 }
 
@@ -365,19 +362,17 @@ static void loop_clear(int pass)
     }
   }
   for (i = 0; i < 512; i++) {
-    BondHuman *bh = &sr_bondhumans[i];
-    if (bh->active == 0)
+    if (!BOND_HUMAN_ACTIVE(i))
       continue;
     for (k = 0; k < 15; k++) {
-      BondBone *b = &bh->bones[k];
-      if ((bh->mask & 1 << k) == 0)
+      if (!BOND_HUMAN_CLEAR(i, k))
         continue;
-      b->dv.x = 0.0f;
-      b->dv.y = 0.0f;
-      b->dv.z = 0.0f;
-      b->dw.x = 0.0f;
-      b->dw.y = 0.0f;
-      b->dw.z = 0.0f;
+      BOND_HUMAN_DV(i, k).x = 0.0f;
+      BOND_HUMAN_DV(i, k).y = 0.0f;
+      BOND_HUMAN_DV(i, k).z = 0.0f;
+      BOND_HUMAN_DW(i, k).x = 0.0f;
+      BOND_HUMAN_DW(i, k).y = 0.0f;
+      BOND_HUMAN_DW(i, k).z = 0.0f;
     }
   }
   sr_timer_stop(bondloopcopy);
@@ -416,7 +411,6 @@ static void loop_balance(void)
   for (h = 0; h < 512; h++) {
     const Human *hu = &sr_humans[h];
     const vec3 *r1 = &hu->bones[0].rot[1], *r2 = &hu->bones[0].rot[2];
-    BondBone *w = &sr_bondhumans[h].bones[0];
     vec3 a, face, t;
     float limit, len, s;
 
@@ -438,7 +432,7 @@ static void loop_balance(void)
     t.y = (float)((float)(r2->x * face.z - r2->z * face.x) * 0.125);
     t.z = 0.0f;
     s = (float)(r1->y + 0.30000001192092896);
-    if (0.0 <= s) {  /* this form sends a NaN to 0 */
+    if (BOND_BALANCE_NONNEGATIVE(s)) {
       if (1.0 < s)
         s = 1.0f;
     } else {
@@ -451,9 +445,9 @@ static void loop_balance(void)
     a.y = (float)(a.y + t.y);
     a.z = (float)(t.z + a.z);
     /* Less of the turn that the bone has now. */
-    a.x = (float)(a.x - w->w.x * 0.5);
-    a.y = (float)(a.y - w->w.y * 0.5);
-    a.z = (float)(a.z - w->w.z * 0.5);
+    a.x = (float)(a.x - BOND_HUMAN_W(h, 0).x * 0.5);
+    a.y = (float)(a.y - BOND_HUMAN_W(h, 0).y * 0.5);
+    a.z = (float)(a.z - BOND_HUMAN_W(h, 0).z * 0.5);
     len = (float)x87_sqrt((double)(float)(a.y * a.y + a.x * a.x + a.z * a.z));
     limit = (float)(hu->body_strength * 0.008888889104127884);
     if (limit < len) {
@@ -465,9 +459,9 @@ static void loop_balance(void)
     a.x = a.x * 0.125f;
     a.y = (float)(a.y * 0.125);
     a.z = (float)(a.z * 0.125);
-    w->ang_momentum.x = (float)(w->ang_momentum.x + a.x);
-    w->ang_momentum.y = (float)(a.y + w->ang_momentum.y);
-    w->ang_momentum.z = (float)(a.z + w->ang_momentum.z);
+    BOND_HUMAN_MOMENTUM(h, 0).x = (float)(BOND_HUMAN_MOMENTUM(h, 0).x + a.x);
+    BOND_HUMAN_MOMENTUM(h, 0).y = (float)(a.y + BOND_HUMAN_MOMENTUM(h, 0).y);
+    BOND_HUMAN_MOMENTUM(h, 0).z = (float)(a.z + BOND_HUMAN_MOMENTUM(h, 0).z);
   }
   sr_timer_stop(bondhuman);
 }
@@ -605,7 +599,6 @@ static void contact_triangle(const Bond *b)
 /* Type 4: a bone of a human against a triangle of an object. */
 static void contact_bone_triangle(const Bond *b)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   const BondParticle *pb = &sr_bondparticles[b->particle_b];
   const BondParticle *pc = &sr_bondparticles[b->particle_c];
   const BondParticle *pd = &sr_bondparticles[b->particle_d];
@@ -616,10 +609,10 @@ static void contact_bone_triangle(const Bond *b)
   float len, inv, mb, mt, f;
   vec3 v;
 
-  v.x = (float)((float)((float)(wb * pb->vel.x + (float)(k * n.x + nd * x->vel.x)) + wc * pc->vel.x) +
+  v.x = (float)((float)((float)(wb * pb->vel.x + (float)(k * n.x + nd * BOND_HUMAN_VEL(b->owner, b->bone_a).x)) + wc * pc->vel.x) +
                 wd * pd->vel.x);
-  v.y = (float)(pd->vel.y * wd + (float)(pc->vel.y * wc + (float)(pb->vel.y * wb + (float)(x->vel.y * nd + (float)(n.y * k)))));
-  v.z = (float)(wd * pd->vel.z + (float)(wc * pc->vel.z + (float)(wb * pb->vel.z + (float)(nd * x->vel.z + (float)(k * n.z)))));
+  v.y = (float)(pd->vel.y * wd + (float)(pc->vel.y * wc + (float)(pb->vel.y * wb + (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).y * nd + (float)(n.y * k)))));
+  v.z = (float)(wd * pd->vel.z + (float)(wc * pc->vel.z + (float)(wb * pb->vel.z + (float)(nd * BOND_HUMAN_VEL(b->owner, b->bone_a).z + (float)(k * n.z)))));
   len = (float)x87_sqrt((double)(float)(v.y * v.y + v.x * v.x + v.z * v.z));
   if (len <= 1.52587890625E-5) {
     v.z = 0.0f;
@@ -638,9 +631,9 @@ static void contact_bone_triangle(const Bond *b)
     return;
   calculatefriction(&v, &b->normal, b->friction);
   f = len * mt;
-  x->dv.x = (float)(x->dv.x + f * v.x);
-  x->dv.y = (float)(v.y * f + x->dv.y);
-  x->dv.z = (float)(x->dv.z + v.z * f);
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).x + f * v.x);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(v.y * f + BOND_HUMAN_DV(b->owner, b->bone_a).y);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).z + v.z * f);
   push_triangle(b, -len * mb, &v);
 }
 
@@ -673,29 +666,28 @@ static void contact_wheel(const Bond *b)
  * its velocity has the turn of the bone in it, and the push also turns the bone. */
 static void contact_bone_level(const Bond *b)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   const vec3 n = b->normal, r = b->arm;
   float k = (float)(b->rest_length * b->stiffness), nd = -b->damping;
   vec3 p, v, t;
 
-  p.x = (float)((float)(x->w.z * r.y - r.z * x->w.y) + x->vel.x);
-  p.y = (float)(x->vel.y + (float)(r.z * x->w.x - r.x * x->w.z));
-  p.z = (float)(x->vel.z + (float)(r.x * x->w.y - x->w.x * r.y));
+  p.x = (float)((float)(BOND_HUMAN_W(b->owner, b->bone_a).z * r.y - r.z * BOND_HUMAN_W(b->owner, b->bone_a).y) + BOND_HUMAN_VEL(b->owner, b->bone_a).x);
+  p.y = (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).y + (float)(r.z * BOND_HUMAN_W(b->owner, b->bone_a).x - r.x * BOND_HUMAN_W(b->owner, b->bone_a).z));
+  p.z = (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).z + (float)(r.x * BOND_HUMAN_W(b->owner, b->bone_a).y - BOND_HUMAN_W(b->owner, b->bone_a).x * r.y));
   v.x = (float)(k * n.x + nd * p.x);
   v.y = (float)(nd * p.y + (float)(k * n.y));
   v.z = (float)(nd * p.z + (float)(k * n.z));
   if (!(0.0 < (float)(n.z * v.z + (n.x * v.x + v.y * n.y))))
     return;
   calculatefriction(&v, &b->normal, b->friction);
-  x->dv.x = (float)(v.x + x->dv.x);
-  x->dv.y = (float)(v.y + x->dv.y);
-  x->dv.z = (float)(v.z + x->dv.z);
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(v.x + BOND_HUMAN_DV(b->owner, b->bone_a).x);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(v.y + BOND_HUMAN_DV(b->owner, b->bone_a).y);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(v.z + BOND_HUMAN_DV(b->owner, b->bone_a).z);
   t.x = (float)(r.z * v.y - v.z * r.y);
   t.y = (float)(v.z * r.x - r.z * v.x);
   t.z = (float)(r.y * v.x - v.y * r.x);
-  x->dw.x = (float)(t.x + x->dw.x);
-  x->dw.y = (float)(x->dw.y + t.y);
-  x->dw.z = (float)(x->dw.z + t.z);
+  BOND_HUMAN_DW(b->owner, b->bone_a).x = (float)(t.x + BOND_HUMAN_DW(b->owner, b->bone_a).x);
+  BOND_HUMAN_DW(b->owner, b->bone_a).y = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).y + t.y);
+  BOND_HUMAN_DW(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).z + t.z);
 }
 
 /* Type 9: the turn that a muscle holds between bones b and c of human a. The change of the
@@ -703,21 +695,19 @@ static void contact_bone_level(const Bond *b)
  * Each bone gets its share. */
 static void bond_bodyrotbody(const BondOpt *o)
 {
-  BondHuman *h = &sr_bondhumans[(uint16_t)o->a];
-  BondBone *x = &h->bones[(uint16_t)o->b], *y = &h->bones[(uint16_t)o->c];
   float d = o->damping, nd = -o->damping, ns;
   vec3 v;
 
-  v.x = (float)((float)(nd * x->w.x + o->dir.x) + d * y->w.x);
-  v.y = (float)(y->w.y * d + (float)(x->w.y * nd + o->dir.y));
-  v.z = (float)(d * y->w.z + (float)(nd * x->w.z + o->dir.z));
-  x->dw.x = (float)(x->dw.x + o->share_a * v.x);
-  x->dw.y = (float)(v.y * o->share_a + x->dw.y);
-  x->dw.z = (float)(x->dw.z + v.z * o->share_a);
+  v.x = (float)((float)(nd * BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->b).x + o->dir.x) + d * BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->c).x);
+  v.y = (float)(BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->c).y * d + (float)(BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->b).y * nd + o->dir.y));
+  v.z = (float)(d * BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->c).z + (float)(nd * BOND_HUMAN_W((uint16_t)o->a, (uint16_t)o->b).z + o->dir.z));
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).x = (float)(BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).x + o->share_a * v.x);
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).y = (float)(v.y * o->share_a + BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).y);
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).z = (float)(BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->b).z + v.z * o->share_a);
   ns = -o->share_b;
-  y->dw.x = (float)(y->dw.x + ns * v.x);
-  y->dw.y = (float)(v.y * ns + y->dw.y);
-  y->dw.z = (float)(v.z * ns + y->dw.z);
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).x = (float)(BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).x + ns * v.x);
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).y = (float)(v.y * ns + BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).y);
+  BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).z = (float)(v.z * ns + BOND_HUMAN_DW((uint16_t)o->a, (uint16_t)o->c).z);
 }
 
 /* Type 10: a bone of a human holds an item at a point. The velocity of the hold point on the
@@ -725,7 +715,6 @@ static void bond_bodyrotbody(const BondOpt *o)
  * weights[0] and to the item with weights[1], and each also turns around its point. */
 static void bond_bodyitem(const Bond *b, const BondOpt *o)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   Item *it = &sr_items[b->target];
   const vec3 ra = o->arm_a, rb = o->arm_b;
   float d = b->damping, nd = -b->damping;
@@ -733,17 +722,17 @@ static void bond_bodyitem(const Bond *b, const BondOpt *o)
   vec3 v, t;
 
   v.x = (float)(nd * (float)(it->vel.x + (float)(rb.y * it->angvel.z - rb.z * it->angvel.y)) +
-                (float)(d * (float)((float)(ra.y * x->w.z - ra.z * x->w.y) + x->vel.x) + o->dir.x));
+                (float)(d * (float)((float)(ra.y * BOND_HUMAN_W(b->owner, b->bone_a).z - ra.z * BOND_HUMAN_W(b->owner, b->bone_a).y) + BOND_HUMAN_VEL(b->owner, b->bone_a).x) + o->dir.x));
   v.y = (float)(nd * (float)(it->vel.y + (float)(it->angvel.x * rb.z - rb.x * it->angvel.z)) +
-                (float)(d * (float)(x->vel.y + (float)(x->w.x * ra.z - ra.x * x->w.z)) + o->dir.y));
+                (float)(d * (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).y + (float)(BOND_HUMAN_W(b->owner, b->bone_a).x * ra.z - ra.x * BOND_HUMAN_W(b->owner, b->bone_a).z)) + o->dir.y));
   v.z = (float)(nd * (float)(it->vel.z + (float)(it->angvel.y * rb.x - rb.y * it->angvel.x)) +
-                (float)(d * (float)(x->vel.z + (float)(ra.x * x->w.y - x->w.x * ra.y)) + o->dir.z));
-  x->dv.x = (float)(x->dv.x + v.x * ns);
-  x->dv.y = (float)(x->dv.y + v.y * ns);
-  x->dv.z = (float)(x->dv.z + v.z * ns);
-  x->dw.x = (float)(ns * (float)(v.y * ra.z - ra.y * v.z) + x->dw.x);
-  x->dw.y = (float)(ns * (float)(ra.x * v.z - v.x * ra.z) + x->dw.y);
-  x->dw.z = (float)(ns * (float)(v.x * ra.y - v.y * ra.x) + x->dw.z);
+                (float)(d * (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).z + (float)(ra.x * BOND_HUMAN_W(b->owner, b->bone_a).y - BOND_HUMAN_W(b->owner, b->bone_a).x * ra.y)) + o->dir.z));
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).x + v.x * ns);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).y + v.y * ns);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).z + v.z * ns);
+  BOND_HUMAN_DW(b->owner, b->bone_a).x = (float)(ns * (float)(v.y * ra.z - ra.y * v.z) + BOND_HUMAN_DW(b->owner, b->bone_a).x);
+  BOND_HUMAN_DW(b->owner, b->bone_a).y = (float)(ns * (float)(ra.x * v.z - v.x * ra.z) + BOND_HUMAN_DW(b->owner, b->bone_a).y);
+  BOND_HUMAN_DW(b->owner, b->bone_a).z = (float)(ns * (float)(v.x * ra.y - v.y * ra.x) + BOND_HUMAN_DW(b->owner, b->bone_a).z);
   it->dv.x = (float)(it->dv.x + si * v.x);
   it->dv.y = (float)(v.y * si + it->dv.y);
   it->dv.z = (float)(v.z * si + it->dv.z);
@@ -759,17 +748,16 @@ static void bond_bodyitem(const Bond *b, const BondOpt *o)
  * between the bone and the item. arm_a.x holds the gain: the smallest inertia of the item. */
 static void bond_itemrot(const Bond *b, const BondOpt *o)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   Item *it = &sr_items[b->target];
   float d = o->damping, nd = -o->damping, g = o->arm_a.x, ns;
   vec3 v;
 
-  v.x = (float)(g * (float)((float)(nd * x->w.x + o->dir.x) + d * it->angvel.x));
-  v.y = (float)(g * (float)(it->angvel.y * d + (float)(x->w.y * nd + o->dir.y)));
-  v.z = (float)(g * (float)(d * it->angvel.z + (float)(nd * x->w.z + o->dir.z)));
-  x->dw.x = (float)(x->dw.x + v.x * o->share_a);
-  x->dw.y = (float)(x->dw.y + v.y * o->share_a);
-  x->dw.z = (float)(x->dw.z + v.z * o->share_a);
+  v.x = (float)(g * (float)((float)(nd * BOND_HUMAN_W(b->owner, b->bone_a).x + o->dir.x) + d * it->angvel.x));
+  v.y = (float)(g * (float)(it->angvel.y * d + (float)(BOND_HUMAN_W(b->owner, b->bone_a).y * nd + o->dir.y)));
+  v.z = (float)(g * (float)(d * it->angvel.z + (float)(nd * BOND_HUMAN_W(b->owner, b->bone_a).z + o->dir.z)));
+  BOND_HUMAN_DW(b->owner, b->bone_a).x = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).x + v.x * o->share_a);
+  BOND_HUMAN_DW(b->owner, b->bone_a).y = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).y + v.y * o->share_a);
+  BOND_HUMAN_DW(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).z + v.z * o->share_a);
   ns = -o->share_b;
   it->dw.x = (float)(it->dw.x + ns * v.x);
   it->dw.y = (float)(v.y * ns + it->dw.y);
@@ -799,36 +787,33 @@ static float unit_or_zero(vec3 *v)
  * the change from the bone masses. */
 static void contact_bone_bone(const Bond *b)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
-  BondBone *y = &sr_bondhumans[b->target].bones[b->bone_b];
   float mx = sr_humans[b->owner].bones[b->bone_a].mass, my = sr_humans[b->target].bones[b->bone_b].mass;
   const vec3 n = b->normal;
   float k = (float)(b->rest_length * b->stiffness), d = b->damping, nd = -b->damping;
   float s, f;
   vec3 v;
 
-  v.x = (float)(d * y->vel.x + (float)(nd * x->vel.x + k * n.x));
-  v.y = (float)(y->vel.y * d + (float)(x->vel.y * nd + (float)(k * n.y)));
-  v.z = (float)(d * y->vel.z + (float)(nd * x->vel.z + (float)(k * n.z)));
+  v.x = (float)(d * BOND_HUMAN_VEL(b->target, b->bone_b).x + (float)(nd * BOND_HUMAN_VEL(b->owner, b->bone_a).x + k * n.x));
+  v.y = (float)(BOND_HUMAN_VEL(b->target, b->bone_b).y * d + (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).y * nd + (float)(k * n.y)));
+  v.z = (float)(d * BOND_HUMAN_VEL(b->target, b->bone_b).z + (float)(nd * BOND_HUMAN_VEL(b->owner, b->bone_a).z + (float)(k * n.z)));
   s = (float)(unit_or_zero(&v) / (mx + my));
   if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
     return;
   calculatefriction(&v, &b->normal, b->friction);
   f = (float)(s * my);
-  x->dv.x = (float)(x->dv.x + f * v.x);
-  x->dv.y = (float)(x->dv.y + v.y * f);
-  x->dv.z = (float)(x->dv.z + v.z * f);
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).x + f * v.x);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).y + v.y * f);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DV(b->owner, b->bone_a).z + v.z * f);
   f = (float)(-s * mx);
-  y->dv.x = (float)(y->dv.x + f * v.x);
-  y->dv.y = (float)(y->dv.y + f * v.y);
-  y->dv.z = (float)(f * v.z + y->dv.z);
+  BOND_HUMAN_DV(b->target, b->bone_b).x = (float)(BOND_HUMAN_DV(b->target, b->bone_b).x + f * v.x);
+  BOND_HUMAN_DV(b->target, b->bone_b).y = (float)(BOND_HUMAN_DV(b->target, b->bone_b).y + f * v.y);
+  BOND_HUMAN_DV(b->target, b->bone_b).z = (float)(f * v.z + BOND_HUMAN_DV(b->target, b->bone_b).z);
 }
 
 /* Type 14: a bone of a human against an item. The hit point is local_a on the bone and
  * local_b on the item, so the push also turns both. */
 static void contact_bone_item(const Bond *b)
 {
-  BondBone *x = &sr_bondhumans[b->owner].bones[b->bone_a];
   Item *it = &sr_items[b->target];
   float mx = sr_humans[b->owner].bones[b->bone_a].mass;
   const vec3 n = b->normal, ra = b->local_a, rb = b->local_b;
@@ -839,11 +824,11 @@ static void contact_bone_item(const Bond *b)
   p.x = (float)(it->vel.x + (float)(rb.y * it->angvel.z - rb.z * it->angvel.y));
   p.y = (float)(it->vel.y + (float)(rb.z * it->angvel.x - rb.x * it->angvel.z));
   p.z = (float)(it->vel.z + (float)(rb.x * it->angvel.y - it->angvel.x * rb.y));
-  v.x = (float)(d * p.x + (float)(nd * (float)(x->vel.x + (float)(ra.y * x->w.z - ra.z * x->w.y)) + k * n.x));
+  v.x = (float)(d * p.x + (float)(nd * (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).x + (float)(ra.y * BOND_HUMAN_W(b->owner, b->bone_a).z - ra.z * BOND_HUMAN_W(b->owner, b->bone_a).y)) + k * n.x));
   v.y = (float)(d * p.y +
-                (float)(nd * (float)(x->vel.y + (float)(x->w.x * ra.z - ra.x * x->w.z)) + (float)(k * n.y)));
+                (float)(nd * (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).y + (float)(BOND_HUMAN_W(b->owner, b->bone_a).x * ra.z - ra.x * BOND_HUMAN_W(b->owner, b->bone_a).z)) + (float)(k * n.y)));
   v.z = (float)(d * p.z +
-                (float)(nd * (float)(x->vel.z + (float)(x->w.y * ra.x - ra.y * x->w.x)) + (float)(k * n.z)));
+                (float)(nd * (float)(BOND_HUMAN_VEL(b->owner, b->bone_a).z + (float)(BOND_HUMAN_W(b->owner, b->bone_a).y * ra.x - ra.y * BOND_HUMAN_W(b->owner, b->bone_a).x)) + (float)(k * n.z)));
   s = (float)(unit_or_zero(&v) / (mx + it->mass));
   if (!(0.0 < (float)(n.z * v.z + (v.x * n.x + v.y * n.y))))
     return;
@@ -852,12 +837,12 @@ static void contact_bone_item(const Bond *b)
   a.x = f * v.x;
   a.y = (float)(f * v.y);
   a.z = (float)(f * v.z);
-  x->dv.x = (float)(a.x + x->dv.x);
-  x->dv.y = (float)(a.y + x->dv.y);
-  x->dv.z = (float)(a.z + x->dv.z);
-  x->dw.x = (float)((float)(ra.z * a.y - ra.y * a.z) + x->dw.x);
-  x->dw.y = (float)(x->dw.y + (float)(ra.x * a.z - a.x * ra.z));
-  x->dw.z = (float)(x->dw.z + (float)(ra.y * a.x - ra.x * a.y));
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(a.x + BOND_HUMAN_DV(b->owner, b->bone_a).x);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(a.y + BOND_HUMAN_DV(b->owner, b->bone_a).y);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(a.z + BOND_HUMAN_DV(b->owner, b->bone_a).z);
+  BOND_HUMAN_DW(b->owner, b->bone_a).x = (float)((float)(ra.z * a.y - ra.y * a.z) + BOND_HUMAN_DW(b->owner, b->bone_a).x);
+  BOND_HUMAN_DW(b->owner, b->bone_a).y = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).y + (float)(ra.x * a.z - a.x * ra.z));
+  BOND_HUMAN_DW(b->owner, b->bone_a).z = (float)(BOND_HUMAN_DW(b->owner, b->bone_a).z + (float)(ra.y * a.x - ra.x * a.y));
   f = (float)(-s * mx);
   a.x = f * v.x;
   a.y = (float)(f * v.y);
@@ -901,6 +886,40 @@ static void contact_wheelbody(const Bond *b)
   wb->dw.z = (float)(wb->dw.z + t.z);
 }
 
+#if BOND_BONE_SPRING
+enum { BOND_TYPE_BONE_SPRING = 16 };
+
+/* Type 16: a spring between bones of two humans. */
+static void bond_bone_spring(const Bond *b, const BondOpt *o)
+{
+  const Bone *a = &sr_humans[b->owner].bones[b->bone_a];
+  const Bone *c = &sr_humans[b->target].bones[b->bone_b];
+  vec3 dir, relative;
+  float length, impulse, inv, share_a, share_b, change;
+
+  dir.x = (float)(c->pos.x - a->pos.x);
+  dir.y = (float)(c->pos.y - a->pos.y);
+  dir.z = (float)(c->pos.z - a->pos.z);
+  length = unit_or_zero(&dir);
+  impulse = (float)((float)(length - b->rest_length) * b->stiffness);
+  relative.x = (float)(BOND_HUMAN_VEL(b->target, b->bone_b).x - BOND_HUMAN_VEL(b->owner, b->bone_a).x);
+  relative.y = (float)(BOND_HUMAN_VEL(b->target, b->bone_b).y - BOND_HUMAN_VEL(b->owner, b->bone_a).y);
+  relative.z = (float)(BOND_HUMAN_VEL(b->target, b->bone_b).z - BOND_HUMAN_VEL(b->owner, b->bone_a).z);
+  impulse = (float)(dotproduct(&relative, &dir) * o->damping + impulse);
+  inv = (float)(1.0 / (a->mass + c->mass));
+  share_a = (float)(c->mass * inv);
+  share_b = (float)(a->mass * inv);
+  change = (float)(impulse * share_a);
+  BOND_HUMAN_DV(b->owner, b->bone_a).x = (float)(change * dir.x + BOND_HUMAN_DV(b->owner, b->bone_a).x);
+  BOND_HUMAN_DV(b->owner, b->bone_a).y = (float)(change * dir.y + BOND_HUMAN_DV(b->owner, b->bone_a).y);
+  BOND_HUMAN_DV(b->owner, b->bone_a).z = (float)(change * dir.z + BOND_HUMAN_DV(b->owner, b->bone_a).z);
+  change = (float)(-impulse * share_b);
+  BOND_HUMAN_DV(b->target, b->bone_b).x = (float)(change * dir.x + BOND_HUMAN_DV(b->target, b->bone_b).x);
+  BOND_HUMAN_DV(b->target, b->bone_b).y = (float)(change * dir.y + BOND_HUMAN_DV(b->target, b->bone_b).y);
+  BOND_HUMAN_DV(b->target, b->bone_b).z = (float)(change * dir.z + BOND_HUMAN_DV(b->target, b->bone_b).z);
+}
+#endif
+
 /* The end of each pass: each particle takes its velocity change. */
 static void apply_particles(void)
 {
@@ -919,42 +938,36 @@ static void apply_particles(void)
  * inverse inertia k of that axis. */
 static void apply_bones(void)
 {
-  BondHuman *h;
-  BondBone *x;
-  const BondAxis *a;
-  unsigned bit;
   float f;
-  int i;
+  int h, i;
 
-  for (h = &sr_bondhumans[0]; h < &sr_bondhumans[512]; h++) {
-    if (h->active == 0)
+  for (h = 0; h < 512; h++) {
+    if (!BOND_HUMAN_ACTIVE(h))
       continue;
-    for (i = 0, bit = 1; i < 15; i++, bit <<= 1) {
-      if (((unsigned)h->mask & bit) == 0)
+    for (i = 0; i < 15; i++) {
+      if (!BOND_HUMAN_SOLVES(h, i))
         continue;
-      x = &h->bones[i];
-      a = x->axes;
-      x->vel.x = (float)(x->dv.x + x->vel.x);
-      x->vel.y = (float)(x->dv.y + x->vel.y);
-      x->vel.z = (float)(x->dv.z + x->vel.z);
-      x->ang_momentum.x = (float)(x->dw.x + x->ang_momentum.x);
-      x->ang_momentum.y = (float)(x->dw.y + x->ang_momentum.y);
-      x->ang_momentum.z = (float)(x->dw.z + x->ang_momentum.z);
-      f = (float)((float)(x->ang_momentum.z * a[0].dir.z +
-                          (x->ang_momentum.y * a[0].dir.y + x->ang_momentum.x * a[0].dir.x)) * a[0].k);
-      x->w.x = f * a[0].dir.x;
-      x->w.y = (float)(f * a[0].dir.y);
-      x->w.z = (float)(f * a[0].dir.z);
-      f = (float)((float)(x->ang_momentum.z * a[1].dir.z +
-                          (x->ang_momentum.y * a[1].dir.y + x->ang_momentum.x * a[1].dir.x)) * a[1].k);
-      x->w.x = (float)(x->w.x + f * a[1].dir.x);
-      x->w.y = (float)(f * a[1].dir.y + x->w.y);
-      x->w.z = (float)(f * a[1].dir.z + x->w.z);
-      f = (float)((float)(x->ang_momentum.z * a[2].dir.z +
-                          (x->ang_momentum.y * a[2].dir.y + x->ang_momentum.x * a[2].dir.x)) * a[2].k);
-      x->w.x = (float)(f * a[2].dir.x + x->w.x);
-      x->w.y = (float)(f * a[2].dir.y + x->w.y);
-      x->w.z = (float)(f * a[2].dir.z + x->w.z);
+      BOND_HUMAN_VEL(h, i).x = (float)(BOND_HUMAN_DV(h, i).x + BOND_HUMAN_VEL(h, i).x);
+      BOND_HUMAN_VEL(h, i).y = (float)(BOND_HUMAN_DV(h, i).y + BOND_HUMAN_VEL(h, i).y);
+      BOND_HUMAN_VEL(h, i).z = (float)(BOND_HUMAN_DV(h, i).z + BOND_HUMAN_VEL(h, i).z);
+      BOND_HUMAN_MOMENTUM(h, i).x = (float)(BOND_HUMAN_DW(h, i).x + BOND_HUMAN_MOMENTUM(h, i).x);
+      BOND_HUMAN_MOMENTUM(h, i).y = (float)(BOND_HUMAN_DW(h, i).y + BOND_HUMAN_MOMENTUM(h, i).y);
+      BOND_HUMAN_MOMENTUM(h, i).z = (float)(BOND_HUMAN_DW(h, i).z + BOND_HUMAN_MOMENTUM(h, i).z);
+      f = (float)((float)(BOND_HUMAN_MOMENTUM(h, i).z * BOND_HUMAN_AXIS(h, i, 0).z +
+                          (BOND_HUMAN_MOMENTUM(h, i).y * BOND_HUMAN_AXIS(h, i, 0).y + BOND_HUMAN_MOMENTUM(h, i).x * BOND_HUMAN_AXIS(h, i, 0).x)) * BOND_HUMAN_INERTIA(h, i, 0));
+      BOND_HUMAN_W(h, i).x = f * BOND_HUMAN_AXIS(h, i, 0).x;
+      BOND_HUMAN_W(h, i).y = (float)(f * BOND_HUMAN_AXIS(h, i, 0).y);
+      BOND_HUMAN_W(h, i).z = (float)(f * BOND_HUMAN_AXIS(h, i, 0).z);
+      f = (float)((float)(BOND_HUMAN_MOMENTUM(h, i).z * BOND_HUMAN_AXIS(h, i, 1).z +
+                          (BOND_HUMAN_MOMENTUM(h, i).y * BOND_HUMAN_AXIS(h, i, 1).y + BOND_HUMAN_MOMENTUM(h, i).x * BOND_HUMAN_AXIS(h, i, 1).x)) * BOND_HUMAN_INERTIA(h, i, 1));
+      BOND_HUMAN_W(h, i).x = (float)(BOND_HUMAN_W(h, i).x + f * BOND_HUMAN_AXIS(h, i, 1).x);
+      BOND_HUMAN_W(h, i).y = (float)(f * BOND_HUMAN_AXIS(h, i, 1).y + BOND_HUMAN_W(h, i).y);
+      BOND_HUMAN_W(h, i).z = (float)(f * BOND_HUMAN_AXIS(h, i, 1).z + BOND_HUMAN_W(h, i).z);
+      f = (float)((float)(BOND_HUMAN_MOMENTUM(h, i).z * BOND_HUMAN_AXIS(h, i, 2).z +
+                          (BOND_HUMAN_MOMENTUM(h, i).y * BOND_HUMAN_AXIS(h, i, 2).y + BOND_HUMAN_MOMENTUM(h, i).x * BOND_HUMAN_AXIS(h, i, 2).x)) * BOND_HUMAN_INERTIA(h, i, 2));
+      BOND_HUMAN_W(h, i).x = (float)(f * BOND_HUMAN_AXIS(h, i, 2).x + BOND_HUMAN_W(h, i).x);
+      BOND_HUMAN_W(h, i).y = (float)(f * BOND_HUMAN_AXIS(h, i, 2).y + BOND_HUMAN_W(h, i).y);
+      BOND_HUMAN_W(h, i).z = (float)(f * BOND_HUMAN_AXIS(h, i, 2).z + BOND_HUMAN_W(h, i).z);
     }
   }
 }
@@ -1054,10 +1067,9 @@ static void copy_back(void)
     if (h->active == 0 || h->has_physics == 0)
       continue;
     for (j = 0; j < 15; j++) {
-      const BondBone *x = &sr_bondhumans[i].bones[j];
-      h->bones[j].vel = x->vel;
-      h->bones[j].ang_momentum = x->ang_momentum;
-      h->bones[j].w = x->w;
+      h->bones[j].vel = BOND_HUMAN_VEL(i, j);
+      h->bones[j].ang_momentum = BOND_HUMAN_MOMENTUM(i, j);
+      h->bones[j].w = BOND_HUMAN_W(i, j);
     }
   }
 }
@@ -1109,7 +1121,7 @@ void bondsimulation2(void)
       Bond *b = &sr_bonds[i];
       BondOpt *o = &sr_bondopt[i];
       /* A bond takes part in the passes whose number has all the bits of its mode. */
-      mode = (uint16_t)o->mode;
+      mode = BOND_MODE(b, o);
       if (((unsigned)pass & mode) != mode)
         continue;
       type = b->type;
@@ -1159,6 +1171,10 @@ void bondsimulation2(void)
         contact_bone_item(b);
       if (type == 15)
         contact_wheelbody(b);
+#if BOND_BONE_SPRING
+      if (type == BOND_TYPE_BONE_SPRING)
+        bond_bone_spring(b, o);
+#endif
     }
     sr_timer_start(bondwheelsim);
     objectenginesimulation2();

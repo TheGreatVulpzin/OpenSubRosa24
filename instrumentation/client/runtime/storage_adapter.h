@@ -155,6 +155,7 @@ extern int sr_unplaced_startup_counter;
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
 #include "sr_input_types.h"
+#define cl_data_bondhuman_client ((BondHumanClient *)(sr_base + 0x17678de0u))
 #define cl_data_auth_ticket ((uint8_t *)(sr_base + 0x16323200u))
 #define cl_data_auth_ticket_size (*((uint32_t *)(sr_base + 0x17678dc4u)))
 #define cl_data_auth_ticket_ready (*((int *)(sr_base + 0xf3eb1e8u)))
@@ -474,6 +475,24 @@ void resetgame_client_light(void);
 #define sr_resetgame_light() resetgame_client_light()
 #define sr_human_floor_all_rays 1
 #define sr_human_vehicle_limit_protection 0
+#define BOND_HUMAN_VEL(h, j) (cl_data_bondhuman_client[h].vel[j].value)
+#define BOND_HUMAN_DV(h, j) (cl_data_bondhuman_client[h].dv[j].value)
+#define BOND_HUMAN_MOMENTUM(h, j) (cl_data_bondhuman_client[h].ang_momentum[j].value)
+#define BOND_HUMAN_W(h, j) (cl_data_bondhuman_client[h].w[j].value)
+#define BOND_HUMAN_DW(h, j) (cl_data_bondhuman_client[h].dw[j].value)
+#define BOND_HUMAN_ACTIVE(h) (sr_data_human[h].active != 0 && sr_data_human[h].has_physics != 0)
+#define BOND_HUMAN_SOLVES(h, j) (0.0 < sr_data_human[h].bones[j].in_solver)
+#define BOND_HUMAN_CLEAR(h, j) 1
+#define BOND_HUMAN_RESET(h) ((void)0)
+#define BOND_HUMAN_PREPARE(h) ((void)0)
+#define BOND_HUMAN_MARK(h, j) ((void)0)
+#define BOND_HUMAN_AXIS(h, j, k) (sr_data_human[h].bones[j].rot[k])
+#define BOND_HUMAN_INERTIA(h, j, k) (((const float *)&sr_data_human[h].bones[j].inv_inertia)[k])
+#define BOND_HUMAN_COPY_AXIS(h, j, k, value, inertia) ((void)0)
+#define BOND_COPY_MODE 0
+#define BOND_MODE(b, o) ((unsigned)(b)->mode)
+#define BOND_BALANCE_NONNEGATIVE(value) (!((value) < 0.0))
+#define BOND_BONE_SPRING 1
 #define sr_updatehuman_params int human
 #define sr_updatehuman_recipient(record, supplied) ((record)->player_id)
 #define sr_emit_updatehuman(human, player) createevent_updatehuman((human))

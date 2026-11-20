@@ -5,7 +5,7 @@
 #include "lift_os_client.h"
 #include "lift_gl_client.h"
 
-static void *lf_imports[80];
+static void *lf_imports[79];
 #define LF_IMPORT(i, dll, name) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import(dll, name)))
 #define LF_IMPORT_ORD(i, dll, o) (lf_imports[i] ? lf_imports[i] : (lf_imports[i] = sr_import_ordinal(dll, o)))
 
@@ -26463,1563 +26463,6 @@ void __cdecl lf_3cf60(int param_1,int param_2,int param_3,int param_4,int param_
 #undef local_c
 #undef local_8
 
-/* ---------------------------------------------------------------- 0x50700 */
-#define DAT_00526650 (*(uint *)SR_VA(0x526650))
-#define DAT_17b9b808 (*(int *)SR_VA(0x17b9b808))
-#define DAT_1e1a5270 (*(int *)SR_VA(0x1e1a5270))
-#define DAT_17b98de0 (*(uint *)SR_VA(0x17b98de0))
-#define DAT_01ff7e14 (*(undefined *)SR_VA(0x1ff7e14))
-#define DAT_1405e6c0 (*(undefined4 *)SR_VA(0x1405e6c0))
-#define DAT_00523590 (*(undefined *)SR_VA(0x523590))
-#define DAT_0052359c (*(undefined *)SR_VA(0x52359c))
-#define s_bond2_00523c10 ((char *)SR_VA(0x523c10))
-#define s_wheel_00523c18 ((char *)SR_VA(0x523c18))
-#define s_partpart_00523c20 ((char *)SR_VA(0x523c20))
-#define s_bondsetup_00523c2c ((char *)SR_VA(0x523c2c))
-#define s_objwheel_00523c38 ((char *)SR_VA(0x523c38))
-#define DAT_018fc4a0 (*(undefined *)SR_VA(0x18fc4a0))
-#define DAT_018fc4a4 (*(undefined *)SR_VA(0x18fc4a4))
-#define DAT_018fc4b4 (*(undefined *)SR_VA(0x18fc4b4))
-#define DAT_018fc4c8 (*(undefined *)SR_VA(0x18fc4c8))
-#define DAT_018fc4d8 (*(undefined *)SR_VA(0x18fc4d8))
-#define DAT_018fc500 (*(undefined *)SR_VA(0x18fc500))
-#define DAT_018fc52c (*(undefined *)SR_VA(0x18fc52c))
-#define DAT_018fc55c (*(undefined *)SR_VA(0x18fc55c))
-#define DAT_018fc568 (*(undefined *)SR_VA(0x18fc568))
-#define DAT_018fc580 (*(undefined *)SR_VA(0x18fc580))
-#define DAT_018fc598 (*(undefined *)SR_VA(0x18fc598))
-#define DAT_018fc5a4 (*(undefined *)SR_VA(0x18fc5a4))
-#define DAT_018fc5a8 (*(undefined *)SR_VA(0x18fc5a8))
-#define DAT_018fc5b0 (*(undefined *)SR_VA(0x18fc5b0))
-#define DAT_018fc5bc (*(undefined *)SR_VA(0x18fc5bc))
-#define DAT_018fc5c8 (*(undefined *)SR_VA(0x18fc5c8))
-#define DAT_018fc5f4 (*(undefined *)SR_VA(0x18fc5f4))
-#define DAT_018fc5f8 (*(undefined *)SR_VA(0x18fc5f8))
-#define DAT_018fc5fc (*(undefined *)SR_VA(0x18fc5fc))
-#define DAT_018fc600 (*(undefined *)SR_VA(0x18fc600))
-#define DAT_018fc604 (*(undefined *)SR_VA(0x18fc604))
-#define DAT_018fc608 (*(undefined *)SR_VA(0x18fc608))
-#define DAT_018fc60c (*(undefined *)SR_VA(0x18fc60c))
-#define DAT_018fc610 (*(undefined *)SR_VA(0x18fc610))
-#define DAT_018fc634 (*(undefined *)SR_VA(0x18fc634))
-#define DAT_018fefc0 (*(undefined *)SR_VA(0x18fefc0))
-#define DAT_05919120 (*(undefined *)SR_VA(0x5919120))
-#define DAT_0591f02c (*(undefined *)SR_VA(0x591f02c))
-#define DAT_0591f034 (*(undefined *)SR_VA(0x591f034))
-#define DAT_0591f038 (*(undefined *)SR_VA(0x591f038))
-#define DAT_0591f050 (*(undefined *)SR_VA(0x591f050))
-#define DAT_0591f05c (*(undefined *)SR_VA(0x591f05c))
-#define DAT_0591f07c (*(undefined *)SR_VA(0x591f07c))
-#define DAT_0592030c (*(undefined *)SR_VA(0x592030c))
-#define DAT_0592031c (*(undefined *)SR_VA(0x592031c))
-#define DAT_05920328 (*(undefined *)SR_VA(0x5920328))
-#define DAT_05920334 (*(undefined *)SR_VA(0x5920334))
-#define DAT_05920340 (*(undefined *)SR_VA(0x5920340))
-#define DAT_0592034c (*(undefined *)SR_VA(0x592034c))
-#define DAT_05920358 (*(undefined *)SR_VA(0x5920358))
-#define DAT_05920364 (*(undefined *)SR_VA(0x5920364))
-#define DAT_05920370 (*(undefined *)SR_VA(0x5920370))
-#define DAT_05920388 (*(undefined *)SR_VA(0x5920388))
-#define DAT_0592038c (*(undefined *)SR_VA(0x592038c))
-#define DAT_05920390 (*(undefined *)SR_VA(0x5920390))
-#define DAT_0948b080 (*(undefined *)SR_VA(0x948b080))
-#define DAT_0948b084 (*(undefined *)SR_VA(0x948b084))
-#define DAT_0948b090 (*(undefined *)SR_VA(0x948b090))
-#define DAT_0948b0c8 (*(undefined *)SR_VA(0x948b0c8))
-#define DAT_0948b0ec (*(undefined *)SR_VA(0x948b0ec))
-#define DAT_0948b0f8 (*(undefined *)SR_VA(0x948b0f8))
-#define DAT_0948b104 (*(undefined *)SR_VA(0x948b104))
-#define DAT_0948b110 (*(undefined *)SR_VA(0x948b110))
-#define DAT_0948b11c (*(undefined *)SR_VA(0x948b11c))
-#define DAT_0948b128 (*(undefined *)SR_VA(0x948b128))
-#define DAT_0948b134 (*(undefined *)SR_VA(0x948b134))
-#define DAT_0948b14c (*(undefined *)SR_VA(0x948b14c))
-#define DAT_0948b1a4 (*(undefined *)SR_VA(0x948b1a4))
-#define DAT_0948b1a8 (*(undefined *)SR_VA(0x948b1a8))
-#define DAT_0948b1ac (*(undefined *)SR_VA(0x948b1ac))
-#define DAT_0b7715a8 (*(undefined *)SR_VA(0xb7715a8))
-#define DAT_0b7715b4 (*(undefined *)SR_VA(0xb7715b4))
-#define DAT_0b7715cc (*(undefined *)SR_VA(0xb7715cc))
-#define DAT_0fcae240 (*(undefined *)SR_VA(0xfcae240))
-#define DAT_0fcae242 (*(undefined *)SR_VA(0xfcae242))
-#define DAT_0fcae244 (*(undefined *)SR_VA(0xfcae244))
-#define DAT_0fcae248 (*(undefined *)SR_VA(0xfcae248))
-#define DAT_0fcae254 (*(undefined *)SR_VA(0xfcae254))
-#define DAT_0fcae258 (*(undefined *)SR_VA(0xfcae258))
-#define DAT_0fcae264 (*(undefined *)SR_VA(0xfcae264))
-#define DAT_0fcae274 (*(undefined *)SR_VA(0xfcae274))
-#define DAT_0fcae278 (*(undefined *)SR_VA(0xfcae278))
-#define DAT_0fcae27c (*(undefined *)SR_VA(0xfcae27c))
-#define DAT_17a78de0 (*(undefined *)SR_VA(0x17a78de0))
-#define DAT_17a78ee0 (*(undefined *)SR_VA(0x17a78ee0))
-#define DAT_17a78fe0 (*(undefined *)SR_VA(0x17a78fe0))
-#define DAT_17a790e0 (*(undefined *)SR_VA(0x17a790e0))
-#define DAT_17a791e0 (*(undefined *)SR_VA(0x17a791e0))
-#define DAT_17b18de0 (*(undefined *)SR_VA(0x17b18de0))
-#define DAT_17b18df0 (*(undefined *)SR_VA(0x17b18df0))
-#define DAT_17b9b820 (*(undefined *)SR_VA(0x17b9b820))
-#define DAT_17b9b82c (*(undefined *)SR_VA(0x17b9b82c))
-#define DAT_17b9b834 (*(undefined *)SR_VA(0x17b9b834))
-#define DAT_17b9b838 (*(undefined *)SR_VA(0x17b9b838))
-#define DAT_17b9b83c (*(undefined *)SR_VA(0x17b9b83c))
-#define DAT_17b9b840 (*(undefined *)SR_VA(0x17b9b840))
-#define DAT_17b9b848 (*(undefined *)SR_VA(0x17b9b848))
-#define DAT_17b9b854 (*(undefined *)SR_VA(0x17b9b854))
-#define DAT_17b9b858 (*(undefined *)SR_VA(0x17b9b858))
-#define DAT_17b9b85c (*(undefined *)SR_VA(0x17b9b85c))
-#define DAT_17b9b860 (*(undefined *)SR_VA(0x17b9b860))
-#define DAT_17b9b864 (*(undefined *)SR_VA(0x17b9b864))
-#define DAT_17b9b868 (*(undefined *)SR_VA(0x17b9b868))
-#define DAT_17b9b86c (*(undefined *)SR_VA(0x17b9b86c))
-#define DAT_17b9b870 (*(undefined *)SR_VA(0x17b9b870))
-#define DAT_17b9b874 (*(undefined *)SR_VA(0x17b9b874))
-#define DAT_17b9b880 (*(undefined *)SR_VA(0x17b9b880))
-#define DAT_17b9b88c (*(undefined *)SR_VA(0x17b9b88c))
-#define DAT_17b9b890 (*(undefined *)SR_VA(0x17b9b890))
-#define DAT_17b9b894 (*(undefined *)SR_VA(0x17b9b894))
-#define DAT_17b9b8a0 (*(undefined *)SR_VA(0x17b9b8a0))
-#define DAT_17b9b8b0 (*(undefined *)SR_VA(0x17b9b8b0))
-#define DAT_17b9b8b4 (*(undefined *)SR_VA(0x17b9b8b4))
-#define DAT_17b9b8b8 (*(undefined *)SR_VA(0x17b9b8b8))
-#define DAT_17b9b8bc (*(undefined *)SR_VA(0x17b9b8bc))
-#define DAT_17b9b8d0 (*(undefined *)SR_VA(0x17b9b8d0))
-#define DAT_17b9b8dc (*(undefined *)SR_VA(0x17b9b8dc))
-#define _DAT_01ff7e14 (*(int *)SR_VA(0x1ff7e14))
-#define geteulerangles2 ((void (__cdecl *)(float *, float *))SR_FN(0x4a8a30))
-#define projectorientation ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8b30))
-#define multiply3x3matrices ((void (__cdecl *)(float *, float *, float *))SR_FN(0x4a8c60))
-#define objectwheelsimulation2 ((void (__cdecl *)(void))SR_FN(0x4ca0c0))
-#define objectenginesimulation2 ((void (__cdecl *)(void))SR_FN(0x4cbf70))
-#define orientationtoquaternion ((void (__cdecl *)(float *, float *))SR_FN(0x4d6970))
-#define resettimer ((void (__cdecl *)(int, char *))SR_FN(0x4fafe0))
-#define starttimer ((void (__cdecl *)(int))SR_FN(0x4fb020))
-#define itemtimetolive ((void (__cdecl *)(int))SR_FN(0x4fb040))
-#define projectvector ((void (__cdecl *)(float *, undefined4 *, float *))SR_FN(0x4fc7f0))
-#define resetorientation ((void (__cdecl *)(undefined4 *))SR_FN(0x4fc900))
-#define rotatevector ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fc950))
-#define rotateorientation ((void (__cdecl *)(float *, undefined4 *, float))SR_FN(0x4fca30))
-#define calculatefriction ((float10 (__cdecl *)(float *, float *, float))SR_FN(0x50b6b0))
-#define dotproduct ((float10 (__cdecl *)(float *, float *))SR_FN(0x50b7f0))
-#define FUN_0050b830 ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b830))
-#define vectorlength ((float10 (__cdecl *)(float *))SR_FN(0x50b890))
-#define normalizevector ((void (__cdecl *)(float *, float *))SR_FN(0x50b8d0))
-#define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
-#define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
-#define addvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50b9d0))
-#define subtractvectors ((void (__cdecl *)(float *, float *, float *))SR_FN(0x50ba10))
-#define scalevector ((void (__cdecl *)(float *, float *, float))SR_FN(0x50ba50))
-#define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define __security_check_cookie(x) ((void)0)
-#define acos ((double (__cdecl *)(double))LF_IMPORT(10, "MSVCR100.DLL", "acos"))
-#define local_4 (*(undefined4 *)(lf_frame + 0x14c))
-#define local_138 (*(undefined2 *)(lf_frame + 0x18))
-#define local_134 (*(float (*)[3])(lf_frame + 0x1c))
-#define local_128 (*(int *)(lf_frame + 0x28))
-#define local_124 (*(int *)(lf_frame + 0x2c))
-#define local_120 (*(uint *)(lf_frame + 0x30))
-#define local_11c (*(uint *)(lf_frame + 0x34))
-#define local_118 (*(uint *)(lf_frame + 0x38))
-#define local_114 (*(int *)(lf_frame + 0x3c))
-#define local_110 (*(float (*)[3])(lf_frame + 0x40))
-#define local_104 (*(float *)(lf_frame + 0x4c))
-#define local_100 (*(float *)(lf_frame + 0x50))
-#define local_fc (*(float *)(lf_frame + 0x54))
-#define local_f8 (*(float (*)[3])(lf_frame + 0x58))
-#define local_ec (*(float *)(lf_frame + 0x64))
-#define local_e4 (*(float *)(lf_frame + 0x6c))
-#define local_e0 (*(float *)(lf_frame + 0x70))
-#define local_dc (*(float *)(lf_frame + 0x74))
-#define local_d8 (*(float *)(lf_frame + 0x78))
-#define local_d4 (*(float *)(lf_frame + 0x7c))
-#define local_d0 (*(float *)(lf_frame + 0x80))
-#define local_cc (*(float *)(lf_frame + 0x84))
-#define local_c8 (*(uint *)(lf_frame + 0x88))
-#define local_c4 (*(float *)(lf_frame + 0x8c))
-#define local_c0 (*(float *)(lf_frame + 0x90))
-#define local_bc (*(float *)(lf_frame + 0x94))
-#define local_b8 (*(float *)(lf_frame + 0x98))
-#define local_b4 (*(float *)(lf_frame + 0x9c))
-#define local_b0 (*(float *)(lf_frame + 0xa0))
-#define local_ac (*(float *)(lf_frame + 0xa4))
-#define local_a8 (*(float *)(lf_frame + 0xa8))
-#define local_a4 (*(float *)(lf_frame + 0xac))
-#define local_90 (*(float *)(lf_frame + 0xc0))
-#define local_8c (*(float *)(lf_frame + 0xc4))
-#define local_88 (*(int *)(lf_frame + 0xc8))
-#define local_84 (*(int *)(lf_frame + 0xcc))
-#define local_80 (*(float (*)[2])(lf_frame + 0xd0))
-#define local_78 (*(undefined4 *)(lf_frame + 0xd8))
-#define local_74 (*(float *)(lf_frame + 0xdc))
-#define local_70 (*(float *)(lf_frame + 0xe0))
-#define local_6c (*(float *)(lf_frame + 0xe4))
-#define local_68 (*(int *)(lf_frame + 0xe8))
-#define local_64 (*(int *)(lf_frame + 0xec))
-#define local_60 (*(float *)(lf_frame + 0xf0))
-#define local_5c (*(int *)(lf_frame + 0xf4))
-#define local_54 (*(float *)(lf_frame + 0xfc))
-#define local_50 (*(float *)(lf_frame + 0x100))
-#define local_48 (*(uint *)(lf_frame + 0x108))
-#define local_44 (*(float (*)[3])(lf_frame + 0x10c))
-#define local_38 (*(float (*)[3])(lf_frame + 0x118))
-#define local_2c (*(float (*)[3])(lf_frame + 0x124))
-#define local_20 (*(float (*)[3])(lf_frame + 0x130))
-#define local_14 (*(float (*)[3])(lf_frame + 0x13c))
-#define local_8 (*(uint *)(lf_frame + 0x148))
-void __cdecl lf_50700(void)
-
-{
-  __declspec(align(16)) uchar lf_frame[0x150];
-
-  int iVar1;
-  int iVar2;
-  uint uVar3;
-  float10 fVar4;
-  double dVar5;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  local_8 = DAT_00526650 ^ (uint)((undefined *)&local_4);
-  resettimer(9,s_bond2_00523c10);
-  starttimer(9);
-  resettimer(5,s_wheel_00523c18);
-  resettimer(6,s_partpart_00523c20);
-  resettimer(7,s_bondsetup_00523c2c);
-  resettimer(8,s_objwheel_00523c38);
-  starttimer(7);
-  for (local_5c = 0; local_5c < DAT_17b9b808; local_5c = local_5c + 1) {
-    if (*(int *)(&DAT_17b9b82c + local_5c * 0xec) < 0x100) {
-      if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0) {
-        local_120 = *(uint *)(&DAT_17b9b834 + local_5c * 0xec);
-        local_48 = *(uint *)(&DAT_17b9b838 + local_5c * 0xec);
-        *(undefined2 *)(&DAT_0fcae240 + local_5c * 0x40) = (undefined2)local_120;
-        *(undefined2 *)(&DAT_0fcae242 + local_5c * 0x40) = (undefined2)local_48;
-        subtractvectors(local_f8,(float *)(&DAT_0b7715b4 + local_48 * 0xf0),
-                        (float *)(&DAT_0b7715b4 + local_120 * 0xf0));
-        fVar4 = (float10)vectorlength(local_f8);
-        local_60 = (float)fVar4;
-        if (local_60 <= 1.52587890625E-5) {
-          zerovector(local_f8);
-        }
-        else {
-          scalevector(local_f8,local_f8,(float)(1.0 / local_60));
-        }
-        local_60 = (float)(((float)(local_60 - *(float *)(&DAT_17b9b880 + local_5c * 0xec))) *
-                   *(float *)(&DAT_17b9b88c + local_5c * 0xec));
-        copyvector((undefined4 *)(&DAT_0fcae248 + local_5c * 0x40),local_f8);
-        *(float *)(&DAT_0fcae254 + local_5c * 0x40) = local_60;
-        *(undefined4 *)(&DAT_0fcae27c + local_5c * 0x40) =
-             *(undefined4 *)(&DAT_17b9b890 + local_5c * 0xec);
-        local_74 = (float)(1.0 / (*(float *)(&DAT_0b7715a8 + local_120 * 0xf0) +
-                         *(float *)(&DAT_0b7715a8 + local_48 * 0xf0)));
-        *(float *)(&DAT_0fcae274 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_0b7715a8 + local_48 * 0xf0) * local_74);
-        *(float *)(&DAT_0fcae278 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_0b7715a8 + local_120 * 0xf0) * local_74);
-      }
-      if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 10) {
-        local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-        iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-        local_68 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-        scalevector(local_44,(float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                    *(float *)(&DAT_17b9b854 + local_5c * 0xec));
-        scaleaddvectors(local_44,local_44,
-                        (float *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b858 + local_5c * 0xec));
-        scaleaddvectors(local_44,local_44,
-                        (float *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b85c + local_5c * 0xec));
-        copyvector((undefined4 *)(&DAT_0fcae258 + local_5c * 0x40),local_44);
-        addvectors(&local_54,(float *)(&DAT_018fc568 + iVar1 * 0xe0 + local_11c * 0x2b64),local_44);
-        scalevector(local_38,(float *)(&DAT_0948b104 + local_68 * 0x1ac),
-                    *(float *)(&DAT_17b9b860 + local_5c * 0xec));
-        scaleaddvectors(local_38,local_38,(float *)(&DAT_0948b110 + local_68 * 0x1ac),
-                        *(float *)(&DAT_17b9b864 + local_5c * 0xec));
-        scaleaddvectors(local_38,local_38,(float *)(&DAT_0948b11c + local_68 * 0x1ac),
-                        *(float *)(&DAT_17b9b868 + local_5c * 0xec));
-        copyvector((undefined4 *)(&DAT_0fcae264 + local_5c * 0x40),local_38);
-        addvectors(local_80,(float *)(&DAT_0948b0c8 + local_68 * 0x1ac),local_38);
-        subtractvectors(&local_54,&local_54,local_80);
-        fVar4 = (float10)vectorlength(&local_54);
-        local_74 = (float)fVar4;
-        if (0.125 < local_74) {
-          scalevector(&local_54,&local_54,(float)(0.125 / local_74));
-        }
-        scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),&local_54,
-                    *(float *)(&DAT_17b9b88c + local_5c * 0xec));
-        local_90 = *(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64);
-        local_8c = *(float *)(&DAT_0948b090 + local_68 * 0x1ac);
-        local_74 = (float)(1.0 / (local_90 + local_8c));
-        *(float *)(&DAT_17b9b86c + local_5c * 0xec) = (float)(local_8c * local_74);
-        *(float *)(&DAT_17b9b870 + local_5c * 0xec) = (float)(local_90 * local_74);
-      }
-      if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 8) {
-        local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-        iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-        local_c8 = *(uint *)(&DAT_17b9b8b8 + local_5c * 0xec);
-        *(undefined2 *)(&DAT_0fcae240 + local_5c * 0x40) =
-             *(undefined2 *)(&DAT_17b9b8b0 + local_5c * 0xec);
-        *(undefined2 *)(&DAT_0fcae242 + local_5c * 0x40) =
-             *(undefined2 *)(&DAT_17b9b8b4 + local_5c * 0xec);
-        *(undefined2 *)(&DAT_0fcae244 + local_5c * 0x40) =
-             *(undefined2 *)(&DAT_17b9b8b8 + local_5c * 0xec);
-        scalevector(local_44,(float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                    *(float *)(&DAT_17b9b854 + local_5c * 0xec));
-        scaleaddvectors(local_44,local_44,
-                        (float *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b858 + local_5c * 0xec));
-        scaleaddvectors(local_44,local_44,
-                        (float *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b85c + local_5c * 0xec));
-        copyvector((undefined4 *)(&DAT_0fcae258 + local_5c * 0x40),local_44);
-        addvectors(&local_54,(float *)(&DAT_018fc568 + iVar1 * 0xe0 + local_11c * 0x2b64),local_44);
-        scalevector(local_38,(float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                    *(float *)(&DAT_17b9b860 + local_5c * 0xec));
-        scaleaddvectors(local_38,local_38,
-                        (float *)(&DAT_018fc5a4 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b864 + local_5c * 0xec));
-        scaleaddvectors(local_38,local_38,
-                        (float *)(&DAT_018fc5b0 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                        *(float *)(&DAT_17b9b868 + local_5c * 0xec));
-        copyvector((undefined4 *)(&DAT_0fcae264 + local_5c * 0x40),local_38);
-        addvectors(local_80,(float *)(&DAT_018fc568 + local_c8 * 0xe0 + local_11c * 0x2b64),local_38
-                  );
-        subtractvectors(&local_54,&local_54,local_80);
-        scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),&local_54,
-                    *(float *)(&DAT_17b9b88c + local_5c * 0xec));
-        *(undefined4 *)(&DAT_0fcae27c + local_5c * 0x40) =
-             *(undefined4 *)(&DAT_17b9b890 + local_5c * 0xec);
-        local_90 = *(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64);
-        local_8c = *(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_11c * 0x2b64);
-        local_74 = (float)(1.0 / (local_90 + local_8c));
-        *(float *)(&DAT_0fcae274 + local_5c * 0x40) = (float)(local_8c * local_74);
-        *(float *)(&DAT_0fcae278 + local_5c * 0x40) = (float)(local_90 * local_74);
-      }
-      if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 9) {
-        local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-        iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-        local_c8 = *(uint *)(&DAT_17b9b8b8 + local_5c * 0xec);
-        *(undefined2 *)(&DAT_0fcae240 + local_5c * 0x40) = (undefined2)local_11c;
-        local_138 = (undefined2)iVar1;
-        *(undefined2 *)(&DAT_0fcae242 + local_5c * 0x40) = local_138;
-        *(undefined2 *)(&DAT_0fcae244 + local_5c * 0x40) = (undefined2)local_c8;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_c4 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5a4 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_c0 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5b0 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_bc = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_b8 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5a4 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_b4 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5b0 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_b0 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_ac = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5a4 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_a8 = (float)fVar4;
-        fVar4 = (float10)dotproduct((float *)(&DAT_018fc5b0 + local_c8 * 0xe0 + local_11c * 0x2b64),
-                                    (float *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-        local_a4 = (float)fVar4;
-        if (*(int *)(&DAT_018fc4c8 + local_11c * 0x2b64) < 1) {
-          resetorientation((undefined4 *)(&DAT_018fc610 + local_c8 * 0xe0 + local_11c * 0x2b64));
-        }
-        multiply3x3matrices(&local_c4,&local_c4,
-                            (float *)(&DAT_018fc610 + local_c8 * 0xe0 + local_11c * 0x2b64));
-        *(undefined4 *)(&DAT_0fcae27c + local_5c * 0x40) =
-             *(undefined4 *)(&DAT_17b9b890 + local_5c * 0xec);
-        if ((((int)local_c8 < 3) || (8 < (int)local_c8)) ||
-           (*(int *)(&DAT_018fc4c8 + local_11c * 0x2b64) < 1)) {
-          if ((((int)local_c8 < 3) || (8 < (int)local_c8)) ||
-             (*(int *)(&DAT_018fc4c8 + local_11c * 0x2b64) < 1)) {
-            geteulerangles2(&local_d4,&local_c4);
-            local_104 = local_d4;
-            local_100 = local_d0;
-            local_fc = local_cc;
-            if (*(int *)(&DAT_018fc4c8 + local_11c * 0x2b64) < 1) {
-              local_50 = 0.0;
-              if (local_c8 == 9) {
-                local_50 = 0.7853981852531433;
-              }
-              local_54 = 0.0;
-              if (local_c8 == 0xc) {
-                local_54 = -0.7853981852531433;
-                local_50 = 0.0;
-              }
-              if (local_c8 == 3) {
-                local_54 = 0.0;
-                local_50 = 0.7853981852531433;
-              }
-              if (local_c8 == 6) {
-                local_54 = -0.7853981852531433;
-                local_50 = 0.0;
-              }
-              if (local_54 <= local_d4) {
-                if (local_d4 <= local_50) {
-                  local_d4 = 0.0;
-                }
-                else {
-                  local_d4 = (float)(local_d4 - local_50);
-                }
-              }
-              else {
-                local_d4 = (float)(local_d4 - local_54);
-              }
-              local_54 = -0.7853981852531433;
-              local_50 = 0.7853981852531433;
-              if ((local_c8 == 5) || (local_c8 == 8)) {
-                local_54 = 0.0;
-                local_50 = 0.0;
-              }
-              if ((local_c8 == 4) || (local_c8 == 7)) {
-                local_54 = -1.3744467496871948;
-                local_50 = 0.0;
-              }
-              if ((local_c8 == 10) || (local_c8 == 0xd)) {
-                local_54 = 0.0;
-                local_50 = 1.3744467496871948;
-              }
-              if (local_54 <= local_d0) {
-                if (local_d0 <= local_50) {
-                  local_d0 = 0.0;
-                }
-                else {
-                  local_d0 = (float)(local_d0 - local_50);
-                }
-              }
-              else {
-                local_d0 = (float)(local_d0 - local_54);
-              }
-              local_d4 = (float)(local_d4 * 0.125);
-              local_d0 = (float)(local_d0 * 0.125);
-              local_cc = (float)(local_cc * 0.125);
-              *(float *)(&DAT_0fcae27c + local_5c * 0x40) =
-                   (float)(*(float *)(&DAT_0fcae27c + local_5c * 0x40) * 0.5);
-            }
-            local_74 = 0.7853981852531433;
-            if (local_d4 < -0.7853981852531433) {
-              local_d4 = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_d4) {
-              local_d4 = 0.7853981852531433;
-            }
-            if (local_d0 < -0.7853981852531433) {
-              local_d0 = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_d0) {
-              local_d0 = 0.7853981852531433;
-            }
-            if (local_cc < -0.7853981852531433) {
-              local_cc = -0.7853981852531433;
-            }
-            if (0.7853981852531433 < local_cc) {
-              local_cc = 0.7853981852531433;
-            }
-            copyvector(local_2c,(undefined4 *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            copyvector(local_20,(undefined4 *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            copyvector(local_14,(undefined4 *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),local_14,local_d4);
-            rotateorientation(local_2c,local_14,local_104);
-            scaleaddvectors((float *)(&DAT_0fcae248 + local_5c * 0x40),
-                            (float *)(&DAT_0fcae248 + local_5c * 0x40),local_2c,local_d0);
-            rotateorientation(local_2c,local_2c,local_100);
-            scaleaddvectors((float *)(&DAT_0fcae248 + local_5c * 0x40),
-                            (float *)(&DAT_0fcae248 + local_5c * 0x40),local_20,local_cc);
-            scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),
-                        (float *)(&DAT_0fcae248 + local_5c * 0x40),
-                        *(float *)(&DAT_17b9b88c + local_5c * 0xec));
-          }
-          else {
-            copyvector(&local_c4,(undefined4 *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            copyvector(&local_b8,(undefined4 *)(&DAT_018fc5a4 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            copyvector(&local_ac,(undefined4 *)(&DAT_018fc5b0 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            projectorientation(&local_c4,&local_c4,
-                               (float *)(&DAT_018fc598 + local_c8 * 0xe0 + local_11c * 0x2b64));
-            if (local_c8 == 6) {
-              rotateorientation(&local_c4,&local_c4,1.5707963705062866);
-              rotateorientation(&local_c4,&local_b8,0.39269909262657166);
-            }
-            if (local_c8 == 7) {
-              rotateorientation(&local_c4,&local_c4,0.19634954631328583);
-            }
-            if (local_c8 == 8) {
-              rotateorientation(&local_c4,&local_c4,0.04908738657832146);
-            }
-            orientationtoquaternion(&local_e4,&local_c4);
-            local_e4 = -local_e4;
-            local_e0 = -local_e0;
-            local_dc = -local_dc;
-            normalizevector(&local_e4,&local_e4);
-            if (local_d8 < -1.0) {
-              local_d8 = -1.0;
-            }
-            if (1.0 < local_d8) {
-              local_d8 = 1.0;
-            }
-            dVar5 = acos((double)local_d8);
-            local_d4 = (float)((float)((float10)dVar5 + (float10)dVar5) * 0.5);
-            local_74 = 0.19634954631328583;
-            if (local_d4 < -0.19634954631328583) {
-              local_d4 = -0.19634954631328583;
-            }
-            if (0.19634954631328583 < local_d4) {
-              local_d4 = 0.19634954631328583;
-            }
-            scalevector(&local_54,&local_e4,-local_d4);
-            projectvector((float *)(&DAT_0fcae248 + local_5c * 0x40),&local_54,
-                          (float *)(&DAT_018fc598 + iVar1 * 0xe0 + local_11c * 0x2b64));
-            scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),
-                        (float *)(&DAT_0fcae248 + local_5c * 0x40),
-                        *(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          }
-        }
-        else {
-          scalevector((float *)(&DAT_0fcae248 + local_5c * 0x40),
-                      (float *)(&DAT_0fcae248 + local_5c * 0x40),
-                      *(float *)(&DAT_0fcae27c + local_5c * 0x40));
-        }
-        local_74 = (float)(1.0 / (*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) +
-                         *(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_11c * 0x2b64)));
-        *(float *)(&DAT_0fcae274 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_11c * 0x2b64) * local_74);
-        *(float *)(&DAT_0fcae278 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) * local_74);
-        *(undefined4 *)(&DAT_0fcae258 + local_5c * 0x40) =
-             *(undefined4 *)(&DAT_018fc5f8 + local_c8 * 0xe0 + local_11c * 0x2b64);
-        if (*(float *)(&DAT_0fcae258 + local_5c * 0x40) <
-            *(float *)(&DAT_018fc5fc + local_c8 * 0xe0 + local_11c * 0x2b64)) {
-          *(undefined4 *)(&DAT_0fcae258 + local_5c * 0x40) =
-               *(undefined4 *)(&DAT_018fc5fc + local_c8 * 0xe0 + local_11c * 0x2b64);
-        }
-        if (*(float *)(&DAT_0fcae258 + local_5c * 0x40) <
-            *(float *)(&DAT_018fc600 + local_c8 * 0xe0 + local_11c * 0x2b64)) {
-          *(undefined4 *)(&DAT_0fcae258 + local_5c * 0x40) =
-               *(undefined4 *)(&DAT_018fc600 + local_c8 * 0xe0 + local_11c * 0x2b64);
-        }
-        *(float *)(&DAT_0fcae274 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_0fcae274 + local_5c * 0x40) *
-             *(float *)(&DAT_0fcae258 + local_5c * 0x40));
-        *(float *)(&DAT_0fcae278 + local_5c * 0x40) =
-             (float)(*(float *)(&DAT_0fcae278 + local_5c * 0x40) *
-             *(float *)(&DAT_0fcae258 + local_5c * 0x40));
-      }
-    }
-  }
-  for (local_5c = 0; local_5c < 0x200; local_5c = local_5c + 1) {
-    if ((*(int *)(&DAT_018fc4a0 + local_5c * 0x2b64) != 0) &&
-       (*(int *)(&DAT_018fc4a4 + local_5c * 0x2b64) != 0)) {
-      for (local_88 = 0; local_88 < 0xf; local_88 = local_88 + 1) {
-        copyvector((undefined4 *)(&DAT_17a78de0 + local_88 * 0x10 + local_5c * 0x500),
-                   (undefined4 *)(&DAT_018fc580 + local_88 * 0xe0 + local_5c * 0x2b64));
-        copyvector((undefined4 *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                   (undefined4 *)(&DAT_018fc5c8 + local_88 * 0xe0 + local_5c * 0x2b64));
-        copyvector((undefined4 *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500),
-                   (undefined4 *)(&DAT_018fc5bc + local_88 * 0xe0 + local_5c * 0x2b64));
-      }
-    }
-  }
-  for (local_5c = 0; local_5c < DAT_1e1a5270; local_5c = local_5c + 1) {
-    copyvector((undefined4 *)(&DAT_17b18de0 + local_5c * 0x20),
-               (undefined4 *)(&DAT_0b7715cc + local_5c * 0xf0));
-  }
-  itemtimetolive(7);
-  for (local_118 = 0; (int)local_118 < 0x20; local_118 = local_118 + 1) {
-    DAT_17b98de0 = local_118;
-    for (local_5c = 0; local_5c < DAT_1e1a5270; local_5c = local_5c + 1) {
-      zerovector((undefined4 *)(&DAT_17b18df0 + local_5c * 0x20));
-    }
-    for (local_5c = 0; local_5c < 0x400; local_5c = local_5c + 1) {
-      if ((*(int *)(&DAT_0948b080 + local_5c * 0x1ac) != 0) &&
-         (*(int *)(&DAT_0948b084 + local_5c * 0x1ac) != 0)) {
-        zerovector((undefined4 *)(&DAT_0948b0f8 + local_5c * 0x1ac));
-        zerovector((undefined4 *)(&DAT_0948b14c + local_5c * 0x1ac));
-      }
-    }
-    for (local_5c = 0; local_5c < 0x400; local_5c = local_5c + 1) {
-      if (*(int *)(&DAT_05919120 + local_5c * 0x8230) != 0) {
-        for (local_88 = 0; local_88 < *(int *)(&DAT_0592030c + local_5c * 0x8230);
-            local_88 = local_88 + 1) {
-          zerovector((undefined4 *)(&DAT_05920328 + local_88 * 0xe8 + local_5c * 0x8230));
-          zerovector((undefined4 *)(&DAT_05920370 + local_88 * 0xe8 + local_5c * 0x8230));
-        }
-      }
-    }
-    for (local_5c = 0; local_5c < 0x200; local_5c = local_5c + 1) {
-      if ((*(int *)(&DAT_018fc4a0 + local_5c * 0x2b64) != 0) &&
-         (*(int *)(&DAT_018fc4a4 + local_5c * 0x2b64) != 0)) {
-        for (local_88 = 0; local_88 < 0xf; local_88 = local_88 + 1) {
-          zerovector((undefined4 *)(&DAT_17a78ee0 + local_88 * 0x10 + local_5c * 0x500));
-          zerovector((undefined4 *)(&DAT_17a791e0 + local_88 * 0x10 + local_5c * 0x500));
-        }
-      }
-    }
-    for (local_5c = 0; local_5c < 0x200; local_5c = local_5c + 1) {
-      if (((*(int *)(&DAT_018fc4a0 + local_5c * 0x2b64) != 0) &&
-          (*(int *)(&DAT_018fc4d8 + local_5c * 0x2b64) != 0)) &&
-         (((*(uint *)(&DAT_018fc55c + local_5c * 0x2b64) & 8) != 0 ||
-          (0.8999999761581421 < *(float *)(&DAT_018fc5a8 + local_5c * 0x2b64))))) {
-        for (local_88 = 0; local_88 < 0xf; local_88 = local_88 + 1) {
-          if (((local_88 == 0) && (0 < *(int *)(&DAT_018fc4c8 + local_5c * 0x2b64))) &&
-             (*(int *)(&DAT_018fc4b4 + local_5c * 0x2b64) == -1)) {
-            FUN_0050b830(&local_54,(float *)(&DAT_018fc5a4 + local_5c * 0x2b64),
-                         (float *)&DAT_00523590);
-            scalevector(&local_54,&local_54,0.1875);
-            local_6c = (float)((float)(((float)((2.0 - *(float *)(&DAT_018fc52c + local_5c * 0x2b64)) / 60.0)) *
-                       *(float *)(&DAT_018fefc0 + local_5c * 0x2b64)) * 0.5);
-            fVar4 = (float10)vectorlength(&local_54);
-            local_74 = (float)fVar4;
-            if (local_6c < local_74) {
-              normalizevector(&local_54,&local_54);
-              scalevector(&local_54,&local_54,local_6c);
-            }
-            copyvector(local_134,(undefined4 *)&DAT_0052359c);
-            rotatevector(local_134,&DAT_00523590,*(float *)(&DAT_018fc500 + local_5c * 0x2b64));
-            FUN_0050b830(local_80,(float *)(&DAT_018fc5b0 + local_88 * 0xe0 + local_5c * 0x2b64),
-                         local_134);
-            local_80[0] = 0.0;
-            local_78 = 0;
-            scalevector(local_80,local_80,0.125);
-            local_74 = (float)(*(float *)(&DAT_018fc5a8 + local_88 * 0xe0 + local_5c * 0x2b64) + 0.30000001192092896);
-            if (local_74 < 0.0) {
-              local_74 = 0.0;
-            }
-            if (1.0 < local_74) {
-              local_74 = 1.0;
-            }
-            local_6c = (float)((local_74 * 2.0) / 60.0);
-            fVar4 = (float10)vectorlength(local_80);
-            local_74 = (float)fVar4;
-            if (local_6c < local_74) {
-              normalizevector(local_80,local_80);
-              scalevector(local_80,local_80,local_6c);
-            }
-            scaleaddvectors(&local_54,&local_54,local_80,1.0);
-            normalizevector(local_f8,&local_54);
-            scaleaddvectors(&local_54,&local_54,
-                            (float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),-0.5);
-            fVar4 = (float10)vectorlength(&local_54);
-            local_60 = (float)fVar4;
-            local_6c = (float)(*(float *)(&DAT_018fefc0 + local_5c * 0x2b64) * 0.008888889104127884);
-            if (local_6c < local_60) {
-              scalevector(&local_54,&local_54,(float)(local_6c / local_60));
-            }
-            scalevector(&local_54,&local_54,0.125);
-            addvectors((float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500),
-                       (float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500),&local_54);
-          }
-        }
-      }
-    }
-    starttimer(8);
-    objectwheelsimulation2();
-    itemtimetolive(8);
-    for (local_5c = 0; local_5c < DAT_17b9b808; local_5c = local_5c + 1) {
-      if ((local_118 & *(uint *)(&DAT_17b9b82c + local_5c * 0xec)) ==
-          *(uint *)(&DAT_17b9b82c + local_5c * 0xec)) {
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0) {
-          starttimer(6);
-          local_120 = (uint)*(ushort *)(&DAT_0fcae240 + local_5c * 0x40);
-          local_48 = (uint)*(ushort *)(&DAT_0fcae242 + local_5c * 0x40);
-          copyvector(local_f8,(undefined4 *)(&DAT_0fcae248 + local_5c * 0x40));
-          local_60 = *(float *)(&DAT_0fcae254 + local_5c * 0x40);
-          subtractvectors(&local_54,(float *)(&DAT_17b18de0 + local_48 * 0x20),
-                          (float *)(&DAT_17b18de0 + local_120 * 0x20));
-          fVar4 = (float10)dotproduct(&local_54,local_f8);
-          local_60 = (float)(fVar4 * (float10)*(float *)(&DAT_0fcae27c + local_5c * 0x40) +
-                            (float10)local_60);
-          scaleaddvectors((float *)(&DAT_17b18df0 + local_120 * 0x20),
-                          (float *)(&DAT_17b18df0 + local_120 * 0x20),local_f8,
-                          (float)(local_60 * *(float *)(&DAT_0fcae274 + local_5c * 0x40)));
-          scaleaddvectors((float *)(&DAT_17b18df0 + local_48 * 0x20),
-                          (float *)(&DAT_17b18df0 + local_48 * 0x20),local_f8,
-                          (float)(-local_60 * *(float *)(&DAT_0fcae278 + local_5c * 0x40)));
-          itemtimetolive(6);
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 1) {
-          local_120 = *(uint *)(&DAT_17b9b834 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_120 * 0x20),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b9b8dc + local_5c * 0xec),
-                          *(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            addvectors((float *)(&DAT_17b18df0 + local_120 * 0x20),
-                       (float *)(&DAT_17b18df0 + local_120 * 0x20),&local_54);
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 2) {
-          local_120 = *(uint *)(&DAT_17b9b834 + local_5c * 0xec);
-          local_48 = *(uint *)(&DAT_17b9b838 + local_5c * 0xec);
-          scalevector(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(local_f8,local_f8,(float *)(&DAT_17b18de0 + local_120 * 0x20),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(local_f8,local_f8,(float *)(&DAT_17b18de0 + local_48 * 0x20),
-                          *(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          fVar4 = (float10)vectorlength(local_f8);
-          local_60 = (float)fVar4;
-          if (local_60 <= 1.52587890625E-5) {
-            zerovector(local_f8);
-          }
-          else {
-            scalevector(local_f8,local_f8,(float)(1.0 / local_60));
-          }
-          local_60 = (float)(local_60 /
-                     (*(float *)(&DAT_0b7715a8 + local_120 * 0xf0) +
-                     *(float *)(&DAT_0b7715a8 + local_48 * 0xf0)));
-          fVar4 = (float10)dotproduct(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(local_f8,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_120 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_120 * 0x20),local_f8,
-                            (float)(local_60 * *(float *)(&DAT_0b7715a8 + local_48 * 0xf0)));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_48 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_48 * 0x20),local_f8,
-                            (float)(-local_60 * *(float *)(&DAT_0b7715a8 + local_120 * 0xf0)));
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 3) {
-          local_120 = *(uint *)(&DAT_17b9b834 + local_5c * 0xec);
-          local_48 = *(uint *)(&DAT_17b9b838 + local_5c * 0xec);
-          local_114 = *(int *)(&DAT_17b9b83c + local_5c * 0xec);
-          local_128 = *(int *)(&DAT_17b9b840 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_120 * 0x20),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_48 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_114 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b870 + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_128 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b874 + local_5c * 0xec)));
-          fVar4 = (float10)vectorlength(&local_54);
-          local_60 = (float)fVar4;
-          scalevector(&local_54,&local_54,(float)(1.0 / local_60));
-          local_70 = *(float *)(&DAT_0b7715a8 + local_120 * 0xf0);
-          local_ec = (float)(*(float *)(&DAT_0b7715a8 + local_128 * 0xf0) *
-                     *(float *)(&DAT_17b9b874 + local_5c * 0xec) +
-                     (*(float *)(&DAT_0b7715a8 + local_114 * 0xf0) *
-                     *(float *)(&DAT_17b9b870 + local_5c * 0xec) +
-                     *(float *)(&DAT_0b7715a8 + local_48 * 0xf0) *
-                     *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-          local_60 = (float)(local_60 / (local_70 + local_ec));
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_120 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_120 * 0x20),&local_54,
-                            (float)(local_60 * local_ec));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_48 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_48 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_114 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_114 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b870 + local_5c * 0xec)));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_128 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_128 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b874 + local_5c * 0xec)));
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 4) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_48 = *(uint *)(&DAT_17b9b838 + local_5c * 0xec);
-          local_114 = *(int *)(&DAT_17b9b83c + local_5c * 0xec);
-          local_128 = *(int *)(&DAT_17b9b840 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,
-                          (float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_48 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_114 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b870 + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b18de0 + local_128 * 0x20),
-                          (float)(*(float *)(&DAT_17b9b890 + local_5c * 0xec) *
-                          *(float *)(&DAT_17b9b874 + local_5c * 0xec)));
-          fVar4 = (float10)vectorlength(&local_54);
-          local_60 = (float)fVar4;
-          if (local_60 <= 1.52587890625E-5) {
-            zerovector(&local_54);
-          }
-          else {
-            scalevector(&local_54,&local_54,(float)(1.0 / local_60));
-          }
-          local_70 = *(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64);
-          local_ec = (float)(*(float *)(&DAT_0b7715a8 + local_128 * 0xf0) *
-                     *(float *)(&DAT_17b9b874 + local_5c * 0xec) +
-                     (*(float *)(&DAT_0b7715a8 + local_114 * 0xf0) *
-                     *(float *)(&DAT_17b9b870 + local_5c * 0xec) +
-                     *(float *)(&DAT_0b7715a8 + local_48 * 0xf0) *
-                     *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-          local_60 = (float)(local_60 / (local_70 + local_ec));
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            scaleaddvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                            (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),&local_54,
-                            (float)(local_60 * local_ec));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_48 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_48 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b86c + local_5c * 0xec)));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_114 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_114 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b870 + local_5c * 0xec)));
-            scaleaddvectors((float *)(&DAT_17b18df0 + local_128 * 0x20),
-                            (float *)(&DAT_17b18df0 + local_128 * 0x20),&local_54,
-                            (float)(-local_60 * local_70 * *(float *)(&DAT_17b9b874 + local_5c * 0xec)));
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 5) {
-          starttimer(5);
-          local_120 = *(uint *)(&DAT_17b9b834 + local_5c * 0xec);
-          local_48 = *(uint *)(&DAT_17b9b838 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(&local_54,&local_54,
-                          (float *)(&DAT_0591f050 +
-                                   *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                                   *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_17b9b8d0 + local_5c * 0xec),
-                          (float)(*(float *)(&DAT_0591f038 +
-                                    *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                                    *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230) *
-                          *(float *)(&DAT_0591f02c +
-                                    *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                                    *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230) *
-                          *(float *)(&DAT_17b9b890 + local_5c * 0xec)));
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            iVar1 = *(int *)(&DAT_17b9b8b0 + local_5c * 0xec);
-            iVar2 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-            fVar4 = (float10)calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                                               *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            *(float *)(&DAT_0591f07c +
-                      *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                      *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230) =
-                 (float)(fVar4 + (float10)*(float *)(&DAT_0591f07c + iVar2 * 0x98 + iVar1 * 0x8230))
-            ;
-            scaleaddvectors((float *)(&DAT_0591f05c +
-                                     *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                                     *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230),
-                            (float *)(&DAT_0591f05c +
-                                     *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                                     *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230),&local_54,
-                            1.0);
-            fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b8d0 + local_5c * 0xec));
-            local_74 = (float)(fVar4 * (float10)*(float *)(&DAT_0591f02c +
-                                                          *(int *)(&DAT_17b9b8b4 + local_5c * 0xec)
-                                                          * 0x98 + *(int *)(&DAT_17b9b8b0 +
-                                                                           local_5c * 0xec) * 0x8230
-                                                          ));
-            *(float *)(&DAT_0591f034 +
-                      *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                      *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230) =
-                 (float)(*(float *)(&DAT_0591f034 +
-                           *(int *)(&DAT_17b9b8b4 + local_5c * 0xec) * 0x98 +
-                           *(int *)(&DAT_17b9b8b0 + local_5c * 0xec) * 0x8230) - local_74);
-          }
-          itemtimetolive(5);
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 7) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          FUN_0050b830(local_80,(float *)(&DAT_17a790e0 + iVar1 * 0x10 + local_11c * 0x500),
-                       (float *)(&DAT_17b9b848 + local_5c * 0xec));
-          addvectors(local_80,local_80,(float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500));
-          scaleaddvectors(&local_54,&local_54,local_80,-*(float *)(&DAT_17b9b890 + local_5c * 0xec))
-          ;
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            addvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                       (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),&local_54);
-            FUN_0050b830(local_80,(float *)(&DAT_17b9b848 + local_5c * 0xec),&local_54);
-            addvectors((float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),
-                       (float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),local_80);
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 8) {
-          local_11c = (uint)*(ushort *)(&DAT_0fcae240 + local_5c * 0x40);
-          uVar3 = (uint)*(ushort *)(&DAT_0fcae242 + local_5c * 0x40);
-          local_c8 = (uint)*(ushort *)(&DAT_0fcae244 + local_5c * 0x40);
-          copyvector(local_134,(undefined4 *)(&DAT_0fcae258 + local_5c * 0x40));
-          copyvector(local_110,(undefined4 *)(&DAT_0fcae264 + local_5c * 0x40));
-          FUN_0050b830(local_80,(float *)(&DAT_17a790e0 + uVar3 * 0x10 + local_11c * 0x500),
-                       local_134);
-          addvectors(local_80,local_80,(float *)(&DAT_17a78de0 + uVar3 * 0x10 + local_11c * 0x500));
-          scaleaddvectors(&local_54,(float *)(&DAT_0fcae248 + local_5c * 0x40),local_80,
-                          *(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          FUN_0050b830(local_80,(float *)(&DAT_17a790e0 + local_c8 * 0x10 + local_11c * 0x500),
-                       local_110);
-          addvectors(local_80,local_80,
-                     (float *)(&DAT_17a78de0 + local_c8 * 0x10 + local_11c * 0x500));
-          scaleaddvectors(&local_54,&local_54,local_80,-*(float *)(&DAT_0fcae27c + local_5c * 0x40))
-          ;
-          local_90 = *(float *)(&DAT_0fcae274 + local_5c * 0x40);
-          local_8c = *(float *)(&DAT_0fcae278 + local_5c * 0x40);
-          scaleaddvectors((float *)(&DAT_17a78ee0 + uVar3 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a78ee0 + uVar3 * 0x10 + local_11c * 0x500),&local_54,
-                          -local_90);
-          FUN_0050b830(local_80,local_134,&local_54);
-          scaleaddvectors((float *)(&DAT_17a791e0 + uVar3 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + uVar3 * 0x10 + local_11c * 0x500),local_80,
-                          -local_90);
-          scaleaddvectors((float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_11c * 0x500),&local_54,
-                          local_8c);
-          FUN_0050b830(local_80,local_110,&local_54);
-          scaleaddvectors((float *)(&DAT_17a791e0 + local_c8 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + local_c8 * 0x10 + local_11c * 0x500),local_80,
-                          local_8c);
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 10) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_68 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-          copyvector(local_134,(undefined4 *)(&DAT_0fcae258 + local_5c * 0x40));
-          addvectors(&local_54,(float *)(&DAT_018fc568 + iVar1 * 0xe0 + local_11c * 0x2b64),
-                     local_134);
-          copyvector(local_110,(undefined4 *)(&DAT_0fcae264 + local_5c * 0x40));
-          addvectors(local_80,(float *)(&DAT_0948b0c8 + local_68 * 0x1ac),local_110);
-          copyvector(&local_54,(undefined4 *)(&DAT_0fcae248 + local_5c * 0x40));
-          FUN_0050b830(local_80,(float *)(&DAT_17a790e0 + iVar1 * 0x10 + local_11c * 0x500),
-                       local_134);
-          addvectors(local_80,local_80,(float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500));
-          scaleaddvectors(&local_54,&local_54,local_80,*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          FUN_0050b830(local_80,(float *)(&DAT_0948b134 + local_68 * 0x1ac),local_110);
-          addvectors(local_80,local_80,(float *)(&DAT_0948b0ec + local_68 * 0x1ac));
-          scaleaddvectors(&local_54,&local_54,local_80,-*(float *)(&DAT_17b9b890 + local_5c * 0xec))
-          ;
-          local_90 = *(float *)(&DAT_17b9b86c + local_5c * 0xec);
-          local_8c = *(float *)(&DAT_17b9b870 + local_5c * 0xec);
-          scaleaddvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),&local_54,
-                          -local_90);
-          FUN_0050b830(local_80,local_134,&local_54);
-          scaleaddvectors((float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),local_80,
-                          -local_90);
-          scaleaddvectors((float *)(&DAT_0948b0f8 + local_68 * 0x1ac),
-                          (float *)(&DAT_0948b0f8 + local_68 * 0x1ac),&local_54,local_8c);
-          FUN_0050b830(local_80,local_110,&local_54);
-          scaleaddvectors((float *)(&DAT_0948b14c + local_68 * 0x1ac),
-                          (float *)(&DAT_0948b14c + local_68 * 0x1ac),local_80,local_8c);
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 9) {
-          local_11c = (uint)*(ushort *)(&DAT_0fcae240 + local_5c * 0x40);
-          uVar3 = (uint)*(ushort *)(&DAT_0fcae242 + local_5c * 0x40);
-          local_c8 = (uint)*(ushort *)(&DAT_0fcae244 + local_5c * 0x40);
-          scaleaddvectors(&local_54,(float *)(&DAT_0fcae248 + local_5c * 0x40),
-                          (float *)(&DAT_17a790e0 + uVar3 * 0x10 + local_11c * 0x500),
-                          -*(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          scaleaddvectors(&local_54,&local_54,
-                          (float *)(&DAT_17a790e0 + local_c8 * 0x10 + local_11c * 0x500),
-                          *(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          scaleaddvectors((float *)(&DAT_17a791e0 + uVar3 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + uVar3 * 0x10 + local_11c * 0x500),&local_54,
-                          *(float *)(&DAT_0fcae274 + local_5c * 0x40));
-          scaleaddvectors((float *)(&DAT_17a791e0 + local_c8 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + local_c8 * 0x10 + local_11c * 0x500),&local_54,
-                          -*(float *)(&DAT_0fcae278 + local_5c * 0x40));
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0xb) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_68 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-          scaleaddvectors(&local_54,(float *)(&DAT_0fcae248 + local_5c * 0x40),
-                          (float *)(&DAT_17a790e0 + iVar1 * 0x10 + local_11c * 0x500),
-                          -*(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          scaleaddvectors(&local_54,&local_54,(float *)(&DAT_0948b134 + local_68 * 0x1ac),
-                          *(float *)(&DAT_0fcae27c + local_5c * 0x40));
-          scalevector(&local_54,&local_54,*(float *)(&DAT_0fcae258 + local_5c * 0x40));
-          scaleaddvectors((float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),&local_54,
-                          *(float *)(&DAT_0fcae274 + local_5c * 0x40));
-          scaleaddvectors((float *)(&DAT_0948b14c + local_68 * 0x1ac),
-                          (float *)(&DAT_0948b14c + local_68 * 0x1ac),&local_54,
-                          -*(float *)(&DAT_0fcae278 + local_5c * 0x40));
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0xd) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_124 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-          local_c8 = *(uint *)(&DAT_17b9b8bc + local_5c * 0xec);
-          scalevector(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          scaleaddvectors(local_f8,local_f8,
-                          (float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500),
-                          -*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          scaleaddvectors(local_f8,local_f8,
-                          (float *)(&DAT_17a78de0 + local_c8 * 0x10 + local_124 * 0x500),
-                          *(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          fVar4 = (float10)vectorlength(local_f8);
-          local_60 = (float)fVar4;
-          if (local_60 <= 1.52587890625E-5) {
-            zerovector(local_f8);
-          }
-          else {
-            scalevector(local_f8,local_f8,(float)(1.0 / local_60));
-          }
-          local_60 = (float)(local_60 /
-                     (*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) +
-                     *(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_124 * 0x2b64)));
-          fVar4 = (float10)dotproduct(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(local_f8,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            scaleaddvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                            (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),local_f8,
-                            (float)(local_60 *
-                            *(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_124 * 0x2b64)));
-            scaleaddvectors((float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_124 * 0x500),
-                            (float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_124 * 0x500),local_f8,
-                            (float)(-local_60 *
-                            *(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64)));
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0xe) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_68 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-          copyvector(local_134,(undefined4 *)(&DAT_17b9b854 + local_5c * 0xec));
-          copyvector(local_110,(undefined4 *)(&DAT_17b9b860 + local_5c * 0xec));
-          scalevector(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          FUN_0050b830(local_80,(float *)(&DAT_17a790e0 + iVar1 * 0x10 + local_11c * 0x500),
-                       local_134);
-          addvectors(local_80,local_80,(float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500));
-          scaleaddvectors(local_f8,local_f8,local_80,-*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          FUN_0050b830(local_80,(float *)(&DAT_0948b134 + local_68 * 0x1ac),local_110);
-          addvectors(local_80,local_80,(float *)(&DAT_0948b0ec + local_68 * 0x1ac));
-          scaleaddvectors(local_f8,local_f8,local_80,*(float *)(&DAT_17b9b890 + local_5c * 0xec));
-          fVar4 = (float10)vectorlength(local_f8);
-          local_60 = (float)fVar4;
-          if (local_60 <= 1.52587890625E-5) {
-            zerovector(local_f8);
-          }
-          else {
-            scalevector(local_f8,local_f8,(float)(1.0 / local_60));
-          }
-          local_60 = (float)(local_60 /
-                     (*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) +
-                     *(float *)(&DAT_0948b090 + local_68 * 0x1ac)));
-          fVar4 = (float10)dotproduct(local_f8,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(local_f8,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            scalevector(&local_54,local_f8,(float)(local_60 * *(float *)(&DAT_0948b090 + local_68 * 0x1ac)));
-            addvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                       (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),&local_54);
-            FUN_0050b830(local_80,local_134,&local_54);
-            addvectors((float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),
-                       (float *)(&DAT_17a791e0 + iVar1 * 0x10 + local_11c * 0x500),local_80);
-            scalevector(&local_54,local_f8,
-                        (float)(-local_60 * *(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64)));
-            addvectors((float *)(&DAT_0948b0f8 + local_68 * 0x1ac),
-                       (float *)(&DAT_0948b0f8 + local_68 * 0x1ac),&local_54);
-            FUN_0050b830(local_80,local_110,&local_54);
-            addvectors((float *)(&DAT_0948b14c + local_68 * 0x1ac),
-                       (float *)(&DAT_0948b14c + local_68 * 0x1ac),local_80);
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0xf) {
-          local_64 = *(int *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          local_84 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          scalevector(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec),
-                      (float)(*(float *)(&DAT_17b9b880 + local_5c * 0xec) *
-                      *(float *)(&DAT_17b9b88c + local_5c * 0xec)));
-          FUN_0050b830(local_80,(float *)(&DAT_05920364 + local_84 * 0xe8 + local_64 * 0x8230),
-                       (float *)(&DAT_17b9b854 + local_5c * 0xec));
-          addvectors(local_80,local_80,
-                     (float *)(&DAT_0592031c + local_84 * 0xe8 + local_64 * 0x8230));
-          scaleaddvectors(&local_54,&local_54,local_80,-*(float *)(&DAT_17b9b890 + local_5c * 0xec))
-          ;
-          fVar4 = (float10)dotproduct(&local_54,(float *)(&DAT_17b9b894 + local_5c * 0xec));
-          if ((float10)0.0 < fVar4) {
-            calculatefriction(&local_54,&DAT_17b9b894 + local_5c * 0xec,
-                              *(float *)(&DAT_17b9b8a0 + local_5c * 0xec));
-            addvectors((float *)(&DAT_05920328 + local_84 * 0xe8 + local_64 * 0x8230),
-                       (float *)(&DAT_05920328 + local_84 * 0xe8 + local_64 * 0x8230),&local_54);
-            FUN_0050b830(local_80,(float *)(&DAT_17b9b854 + local_5c * 0xec),&local_54);
-            addvectors((float *)(&DAT_05920370 + local_84 * 0xe8 + local_64 * 0x8230),
-                       (float *)(&DAT_05920370 + local_84 * 0xe8 + local_64 * 0x8230),local_80);
-          }
-        }
-        if (*(int *)(&DAT_17b9b820 + local_5c * 0xec) == 0x10) {
-          local_11c = *(uint *)(&DAT_17b9b8b0 + local_5c * 0xec);
-          iVar1 = *(int *)(&DAT_17b9b8b4 + local_5c * 0xec);
-          local_124 = *(int *)(&DAT_17b9b8b8 + local_5c * 0xec);
-          local_c8 = *(uint *)(&DAT_17b9b8bc + local_5c * 0xec);
-          subtractvectors(local_f8,(float *)(&DAT_018fc568 + local_c8 * 0xe0 + local_124 * 0x2b64),
-                          (float *)(&DAT_018fc568 + iVar1 * 0xe0 + local_11c * 0x2b64));
-          fVar4 = (float10)vectorlength(local_f8);
-          local_60 = (float)fVar4;
-          if (local_60 <= 1.52587890625E-5) {
-            zerovector(local_f8);
-          }
-          else {
-            scalevector(local_f8,local_f8,(float)(1.0 / local_60));
-          }
-          local_60 = (float)(((float)(local_60 - *(float *)(&DAT_17b9b880 + local_5c * 0xec))) *
-                     *(float *)(&DAT_17b9b88c + local_5c * 0xec));
-          subtractvectors(&local_54,(float *)(&DAT_17a78de0 + local_c8 * 0x10 + local_124 * 0x500),
-                          (float *)(&DAT_17a78de0 + iVar1 * 0x10 + local_11c * 0x500));
-          fVar4 = (float10)dotproduct(&local_54,local_f8);
-          local_60 = (float)(fVar4 * (float10)*(float *)(&DAT_0fcae27c + local_5c * 0x40) +
-                            (float10)local_60);
-          local_74 = (float)(1.0 / (*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) +
-                           *(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_124 * 0x2b64)));
-          local_90 = (float)(*(float *)(&DAT_018fc5f4 + local_c8 * 0xe0 + local_124 * 0x2b64) * local_74);
-          local_8c = (float)(*(float *)(&DAT_018fc5f4 + iVar1 * 0xe0 + local_11c * 0x2b64) * local_74);
-          scaleaddvectors((float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),
-                          (float *)(&DAT_17a78ee0 + iVar1 * 0x10 + local_11c * 0x500),local_f8,
-                          (float)(local_60 * local_90));
-          scaleaddvectors((float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_124 * 0x500),
-                          (float *)(&DAT_17a78ee0 + local_c8 * 0x10 + local_124 * 0x500),local_f8,
-                          (float)(-local_60 * local_8c));
-        }
-      }
-    }
-    starttimer(8);
-    objectenginesimulation2();
-    itemtimetolive(8);
-    starttimer(7);
-    for (local_5c = 0; local_5c < DAT_1e1a5270; local_5c = local_5c + 1) {
-      addvectors((float *)(&DAT_17b18de0 + local_5c * 0x20),
-                 (float *)(&DAT_17b18de0 + local_5c * 0x20),
-                 (float *)(&DAT_17b18df0 + local_5c * 0x20));
-    }
-    for (local_5c = 0; local_5c < 0x200; local_5c = local_5c + 1) {
-      if ((*(int *)(&DAT_018fc4a0 + local_5c * 0x2b64) != 0) &&
-         (*(int *)(&DAT_018fc4a4 + local_5c * 0x2b64) != 0)) {
-        for (local_88 = 0; local_88 < 0xf; local_88 = local_88 + 1) {
-          if (0.0 < *(float *)(&DAT_018fc634 + local_88 * 0xe0 + local_5c * 0x2b64)) {
-            addvectors((float *)(&DAT_17a78de0 + local_88 * 0x10 + local_5c * 0x500),
-                       (float *)(&DAT_17a78de0 + local_88 * 0x10 + local_5c * 0x500),
-                       (float *)(&DAT_17a78ee0 + local_88 * 0x10 + local_5c * 0x500));
-            addvectors((float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500),
-                       (float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500),
-                       (float *)(&DAT_17a791e0 + local_88 * 0x10 + local_5c * 0x500));
-            fVar4 = (float10)dotproduct((float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500
-                                                 ),
-                                        (float *)(&DAT_018fc598 +
-                                                 local_88 * 0xe0 + local_5c * 0x2b64));
-            local_74 = (float)fVar4;
-            scalevector((float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                        (float *)(&DAT_018fc598 + local_88 * 0xe0 + local_5c * 0x2b64),
-                        (float)(local_74 * *(float *)(&DAT_018fc604 + local_88 * 0xe0 + local_5c * 0x2b64)));
-            fVar4 = (float10)dotproduct((float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500
-                                                 ),
-                                        (float *)(&DAT_018fc5a4 +
-                                                 local_88 * 0xe0 + local_5c * 0x2b64));
-            local_74 = (float)fVar4;
-            scaleaddvectors((float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                            (float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                            (float *)(&DAT_018fc5a4 + local_88 * 0xe0 + local_5c * 0x2b64),
-                            (float)(local_74 *
-                            *(float *)(&DAT_018fc608 + local_88 * 0xe0 + local_5c * 0x2b64)));
-            fVar4 = (float10)dotproduct((float *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500
-                                                 ),
-                                        (float *)(&DAT_018fc5b0 +
-                                                 local_88 * 0xe0 + local_5c * 0x2b64));
-            local_74 = (float)fVar4;
-            scaleaddvectors((float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                            (float *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500),
-                            (float *)(&DAT_018fc5b0 + local_88 * 0xe0 + local_5c * 0x2b64),
-                            (float)(local_74 *
-                            *(float *)(&DAT_018fc60c + local_88 * 0xe0 + local_5c * 0x2b64)));
-          }
-        }
-      }
-    }
-    for (local_5c = 0; local_5c < 0x400; local_5c = local_5c + 1) {
-      if ((*(int *)(&DAT_0948b080 + local_5c * 0x1ac) != 0) &&
-         (*(int *)(&DAT_0948b084 + local_5c * 0x1ac) != 0)) {
-        addvectors((float *)(&DAT_0948b0ec + local_5c * 0x1ac),
-                   (float *)(&DAT_0948b0ec + local_5c * 0x1ac),
-                   (float *)(&DAT_0948b0f8 + local_5c * 0x1ac));
-        addvectors((float *)(&DAT_0948b128 + local_5c * 0x1ac),
-                   (float *)(&DAT_0948b128 + local_5c * 0x1ac),
-                   (float *)(&DAT_0948b14c + local_5c * 0x1ac));
-        zerovector((undefined4 *)(&DAT_0948b134 + local_5c * 0x1ac));
-        fVar4 = (float10)dotproduct((float *)(&DAT_0948b128 + local_5c * 0x1ac),
-                                    (float *)(&DAT_0948b104 + local_5c * 0x1ac));
-        local_74 = (float)fVar4;
-        scaleaddvectors((float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b104 + local_5c * 0x1ac),
-                        (float)(local_74 * *(float *)(&DAT_0948b1a4 + local_5c * 0x1ac)));
-        fVar4 = (float10)dotproduct((float *)(&DAT_0948b128 + local_5c * 0x1ac),
-                                    (float *)(&DAT_0948b110 + local_5c * 0x1ac));
-        local_74 = (float)fVar4;
-        scaleaddvectors((float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b110 + local_5c * 0x1ac),
-                        (float)(local_74 * *(float *)(&DAT_0948b1a8 + local_5c * 0x1ac)));
-        fVar4 = (float10)dotproduct((float *)(&DAT_0948b128 + local_5c * 0x1ac),
-                                    (float *)(&DAT_0948b11c + local_5c * 0x1ac));
-        local_74 = (float)fVar4;
-        scaleaddvectors((float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b134 + local_5c * 0x1ac),
-                        (float *)(&DAT_0948b11c + local_5c * 0x1ac),
-                        (float)(local_74 * *(float *)(&DAT_0948b1ac + local_5c * 0x1ac)));
-      }
-    }
-    for (local_5c = 0; local_5c < 0x400; local_5c = local_5c + 1) {
-      if (*(int *)(&DAT_05919120 + local_5c * 0x8230) != 0) {
-        for (local_88 = 0; local_88 < *(int *)(&DAT_0592030c + local_5c * 0x8230);
-            local_88 = local_88 + 1) {
-          addvectors((float *)(&DAT_0592031c + local_88 * 0xe8 + local_5c * 0x8230),
-                     (float *)(&DAT_0592031c + local_88 * 0xe8 + local_5c * 0x8230),
-                     (float *)(&DAT_05920328 + local_88 * 0xe8 + local_5c * 0x8230));
-          addvectors((float *)(&DAT_05920358 + local_88 * 0xe8 + local_5c * 0x8230),
-                     (float *)(&DAT_05920358 + local_88 * 0xe8 + local_5c * 0x8230),
-                     (float *)(&DAT_05920370 + local_88 * 0xe8 + local_5c * 0x8230));
-          zerovector((undefined4 *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230));
-          fVar4 = (float10)dotproduct((float *)(&DAT_05920358 + local_88 * 0xe8 + local_5c * 0x8230)
-                                      ,(float *)(&DAT_05920334 + local_88 * 0xe8 + local_5c * 0x8230
-                                                ));
-          local_74 = (float)fVar4;
-          scaleaddvectors((float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_05920334 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float)(local_74 * *(float *)(&DAT_05920388 + local_88 * 0xe8 + local_5c * 0x8230))
-                         );
-          fVar4 = (float10)dotproduct((float *)(&DAT_05920358 + local_88 * 0xe8 + local_5c * 0x8230)
-                                      ,(float *)(&DAT_05920340 + local_88 * 0xe8 + local_5c * 0x8230
-                                                ));
-          local_74 = (float)fVar4;
-          scaleaddvectors((float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_05920340 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float)(local_74 * *(float *)(&DAT_0592038c + local_88 * 0xe8 + local_5c * 0x8230))
-                         );
-          fVar4 = (float10)dotproduct((float *)(&DAT_05920358 + local_88 * 0xe8 + local_5c * 0x8230)
-                                      ,(float *)(&DAT_0592034c + local_88 * 0xe8 + local_5c * 0x8230
-                                                ));
-          local_74 = (float)fVar4;
-          scaleaddvectors((float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_05920364 + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float *)(&DAT_0592034c + local_88 * 0xe8 + local_5c * 0x8230),
-                          (float)(local_74 * *(float *)(&DAT_05920390 + local_88 * 0xe8 + local_5c * 0x8230))
-                         );
-        }
-      }
-    }
-    itemtimetolive(7);
-  }
-  starttimer(7);
-  for (local_5c = 0; local_5c < DAT_1e1a5270; local_5c = local_5c + 1) {
-    copyvector((undefined4 *)(&DAT_0b7715cc + local_5c * 0xf0),
-               (undefined4 *)(&DAT_17b18de0 + local_5c * 0x20));
-  }
-  for (local_5c = 0; local_5c < 0x200; local_5c = local_5c + 1) {
-    if ((*(int *)(&DAT_018fc4a0 + local_5c * 0x2b64) != 0) &&
-       (*(int *)(&DAT_018fc4a4 + local_5c * 0x2b64) != 0)) {
-      for (local_88 = 0; local_88 < 0xf; local_88 = local_88 + 1) {
-        copyvector((undefined4 *)(&DAT_018fc580 + local_88 * 0xe0 + local_5c * 0x2b64),
-                   (undefined4 *)(&DAT_17a78de0 + local_88 * 0x10 + local_5c * 0x500));
-        copyvector((undefined4 *)(&DAT_018fc5bc + local_88 * 0xe0 + local_5c * 0x2b64),
-                   (undefined4 *)(&DAT_17a78fe0 + local_88 * 0x10 + local_5c * 0x500));
-        copyvector((undefined4 *)(&DAT_018fc5c8 + local_88 * 0xe0 + local_5c * 0x2b64),
-                   (undefined4 *)(&DAT_17a790e0 + local_88 * 0x10 + local_5c * 0x500));
-      }
-    }
-  }
-  itemtimetolive(7);
-  itemtimetolive(9);
-  _DAT_01ff7e14 = DAT_17b9b808;
-  DAT_17b9b808 = DAT_1405e6c0;
-  return;
-}
-#undef DAT_00526650
-#undef DAT_17b9b808
-#undef DAT_1e1a5270
-#undef DAT_17b98de0
-#undef DAT_01ff7e14
-#undef DAT_1405e6c0
-#undef DAT_00523590
-#undef DAT_0052359c
-#undef s_bond2_00523c10
-#undef s_wheel_00523c18
-#undef s_partpart_00523c20
-#undef s_bondsetup_00523c2c
-#undef s_objwheel_00523c38
-#undef DAT_018fc4a0
-#undef DAT_018fc4a4
-#undef DAT_018fc4b4
-#undef DAT_018fc4c8
-#undef DAT_018fc4d8
-#undef DAT_018fc500
-#undef DAT_018fc52c
-#undef DAT_018fc55c
-#undef DAT_018fc568
-#undef DAT_018fc580
-#undef DAT_018fc598
-#undef DAT_018fc5a4
-#undef DAT_018fc5a8
-#undef DAT_018fc5b0
-#undef DAT_018fc5bc
-#undef DAT_018fc5c8
-#undef DAT_018fc5f4
-#undef DAT_018fc5f8
-#undef DAT_018fc5fc
-#undef DAT_018fc600
-#undef DAT_018fc604
-#undef DAT_018fc608
-#undef DAT_018fc60c
-#undef DAT_018fc610
-#undef DAT_018fc634
-#undef DAT_018fefc0
-#undef DAT_05919120
-#undef DAT_0591f02c
-#undef DAT_0591f034
-#undef DAT_0591f038
-#undef DAT_0591f050
-#undef DAT_0591f05c
-#undef DAT_0591f07c
-#undef DAT_0592030c
-#undef DAT_0592031c
-#undef DAT_05920328
-#undef DAT_05920334
-#undef DAT_05920340
-#undef DAT_0592034c
-#undef DAT_05920358
-#undef DAT_05920364
-#undef DAT_05920370
-#undef DAT_05920388
-#undef DAT_0592038c
-#undef DAT_05920390
-#undef DAT_0948b080
-#undef DAT_0948b084
-#undef DAT_0948b090
-#undef DAT_0948b0c8
-#undef DAT_0948b0ec
-#undef DAT_0948b0f8
-#undef DAT_0948b104
-#undef DAT_0948b110
-#undef DAT_0948b11c
-#undef DAT_0948b128
-#undef DAT_0948b134
-#undef DAT_0948b14c
-#undef DAT_0948b1a4
-#undef DAT_0948b1a8
-#undef DAT_0948b1ac
-#undef DAT_0b7715a8
-#undef DAT_0b7715b4
-#undef DAT_0b7715cc
-#undef DAT_0fcae240
-#undef DAT_0fcae242
-#undef DAT_0fcae244
-#undef DAT_0fcae248
-#undef DAT_0fcae254
-#undef DAT_0fcae258
-#undef DAT_0fcae264
-#undef DAT_0fcae274
-#undef DAT_0fcae278
-#undef DAT_0fcae27c
-#undef DAT_17a78de0
-#undef DAT_17a78ee0
-#undef DAT_17a78fe0
-#undef DAT_17a790e0
-#undef DAT_17a791e0
-#undef DAT_17b18de0
-#undef DAT_17b18df0
-#undef DAT_17b9b820
-#undef DAT_17b9b82c
-#undef DAT_17b9b834
-#undef DAT_17b9b838
-#undef DAT_17b9b83c
-#undef DAT_17b9b840
-#undef DAT_17b9b848
-#undef DAT_17b9b854
-#undef DAT_17b9b858
-#undef DAT_17b9b85c
-#undef DAT_17b9b860
-#undef DAT_17b9b864
-#undef DAT_17b9b868
-#undef DAT_17b9b86c
-#undef DAT_17b9b870
-#undef DAT_17b9b874
-#undef DAT_17b9b880
-#undef DAT_17b9b88c
-#undef DAT_17b9b890
-#undef DAT_17b9b894
-#undef DAT_17b9b8a0
-#undef DAT_17b9b8b0
-#undef DAT_17b9b8b4
-#undef DAT_17b9b8b8
-#undef DAT_17b9b8bc
-#undef DAT_17b9b8d0
-#undef DAT_17b9b8dc
-#undef _DAT_01ff7e14
-#undef geteulerangles2
-#undef projectorientation
-#undef multiply3x3matrices
-#undef objectwheelsimulation2
-#undef objectenginesimulation2
-#undef orientationtoquaternion
-#undef resettimer
-#undef starttimer
-#undef itemtimetolive
-#undef projectvector
-#undef resetorientation
-#undef rotatevector
-#undef rotateorientation
-#undef calculatefriction
-#undef dotproduct
-#undef FUN_0050b830
-#undef vectorlength
-#undef normalizevector
-#undef copyvector
-#undef zerovector
-#undef addvectors
-#undef subtractvectors
-#undef scalevector
-#undef scaleaddvectors
-#undef __security_check_cookie
-#undef acos
-#undef local_4
-#undef local_138
-#undef local_134
-#undef local_128
-#undef local_124
-#undef local_120
-#undef local_11c
-#undef local_118
-#undef local_114
-#undef local_110
-#undef local_104
-#undef local_100
-#undef local_fc
-#undef local_f8
-#undef local_ec
-#undef local_e4
-#undef local_e0
-#undef local_dc
-#undef local_d8
-#undef local_d4
-#undef local_d0
-#undef local_cc
-#undef local_c8
-#undef local_c4
-#undef local_c0
-#undef local_bc
-#undef local_b8
-#undef local_b4
-#undef local_b0
-#undef local_ac
-#undef local_a8
-#undef local_a4
-#undef local_90
-#undef local_8c
-#undef local_88
-#undef local_84
-#undef local_80
-#undef local_78
-#undef local_74
-#undef local_70
-#undef local_6c
-#undef local_68
-#undef local_64
-#undef local_60
-#undef local_5c
-#undef local_54
-#undef local_50
-#undef local_48
-#undef local_44
-#undef local_38
-#undef local_2c
-#undef local_20
-#undef local_14
-#undef local_8
-
 /* ---------------------------------------------------------------- 0x5cef0 */
 #define DAT_01f9b5e0 (*(int *)SR_VA(0x1f9b5e0))
 #define DAT_020b82cc (*(undefined *)SR_VA(0x20b82cc))
@@ -28085,10 +26528,10 @@ void __cdecl lf_5cef0(int param_1,int param_2,int param_3)
 #define DAT_056cdb78 (*(undefined *)SR_VA(0x56cdb78))
 #define DAT_0bb33534 (*(undefined *)SR_VA(0xbb33534))
 #define DAT_137ae680 (*(undefined *)SR_VA(0x137ae680))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
 #define drawmenuitems ((void (__cdecl *)(void))SR_FN(0x4ff2e0))
@@ -28101,7 +26544,7 @@ void __cdecl lf_5cef0(int param_1,int param_2,int param_3)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(9, "MSVCR100.DLL", "strcmp"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_24 (*(int (*)[4])(lf_frame + 0x1c))
@@ -28359,8 +26802,8 @@ void __cdecl lf_5d150(void)
 #define DAT_079a5814 (*(undefined *)SR_VA(0x79a5814))
 #define DAT_09463128 (*(undefined *)SR_VA(0x9463128))
 #define DAT_0e5ac784 (*(undefined *)SR_VA(0xe5ac784))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define building_load ((void (__cdecl *)(int, int))SR_FN(0x4614e0))
 #define building_setupfloorplannewer ((void (__cdecl *)(void))SR_FN(0x462ab0))
 #define gameloop ((void (__cdecl *)(void))SR_FN(0x47b100))
@@ -28376,8 +26819,8 @@ void __cdecl lf_5d150(void)
 #define checksystemmessages ((void (__cdecl *)(void))SR_FN(0x5060d0))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(16, "MSVCR100.DLL", "memset"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(15, "MSVCR100.DLL", "memset"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_20 (*(int *)(lf_frame + 0x10))
 #define local_1c (*(int *)(lf_frame + 0x14))
@@ -28566,10 +27009,10 @@ void __cdecl lf_5dbd0(void)
 #define DAT_056cd778 (*(undefined *)SR_VA(0x56cd778))
 #define DAT_14711844 (*(undefined4 *)SR_VA(0x14711844))
 #define DAT_1764f618 (*(undefined *)SR_VA(0x1764f618))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define FUN_0045eb40 ((void (__cdecl *)(uint))SR_FN(0x45eb40))
 #define FUN_0045ef80 ((void (__cdecl *)(char *, int))SR_FN(0x45ef80))
 #define building_reloadtextures ((void (__cdecl *)(void))SR_FN(0x45f310))
@@ -28585,7 +27028,7 @@ void __cdecl lf_5dbd0(void)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_20 (*(uint (*)[4])(lf_frame + 0x20))
@@ -29034,12 +27477,12 @@ void __cdecl lf_5ef80(char *param_1,int param_2)
 #define DAT_137ae6d8 (*(undefined *)SR_VA(0x137ae6d8))
 #define DAT_137ae6dc (*(undefined *)SR_VA(0x137ae6dc))
 #define DAT_17f4b86c (*(undefined *)SR_VA(0x17f4b86c))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(17, "OPENGL32.DLL", "glEnd"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(18, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(19, "OPENGL32.DLL", "glBegin"))
-#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(20, "OPENGL32.DLL", "glBindTexture"))
-#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(21, "OPENGL32.DLL", "glTexCoord2fv"))
-#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(22, "OPENGL32.DLL", "glVertex2fv"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(16, "OPENGL32.DLL", "glEnd"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(17, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(18, "OPENGL32.DLL", "glBegin"))
+#define glBindTexture ((void (__stdcall *)(uint, uint))LF_IMPORT(19, "OPENGL32.DLL", "glBindTexture"))
+#define glTexCoord2fv ((void (__stdcall *)(float *))LF_IMPORT(20, "OPENGL32.DLL", "glTexCoord2fv"))
+#define glVertex2fv ((void (__stdcall *)(float *))LF_IMPORT(21, "OPENGL32.DLL", "glVertex2fv"))
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x3c))
@@ -29150,8 +27593,8 @@ void __cdecl lf_60940(uint param_1,float param_2,float param_3,float param_4,flo
 #define DAT_056b8768 (*(undefined *)SR_VA(0x56b8768))
 #define DAT_056bc76c (*(undefined *)SR_VA(0x56bc76c))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(8, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(23, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(24, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(23, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_5c (*(char (*)[68])(lf_frame + 0x14))
@@ -29687,7 +28130,7 @@ void __cdecl lf_6a400(undefined4 *param_1,undefined4 param_2,uint param_3)
 #undef copyvector
 
 /* ---------------------------------------------------------------- 0x6b140 */
-#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(27, "MSVCR100.DLL", "_time64"))
+#define _time64 ((__time64_t (__cdecl *)(__time64_t *))LF_IMPORT(26, "MSVCR100.DLL", "_time64"))
 __time64_t __cdecl lf_6b140(__time64_t *param_1)
 
 {
@@ -29736,7 +28179,7 @@ __time64_t __cdecl lf_6b140(__time64_t *param_1)
 #define GLee_Lazy_glFramebufferTexture2D ((void (__cdecl *)(uint, uint, uint, uint, int))SR_FN(0x4113e0))
 #define GLee_Lazy_glFramebufferRenderbuffer ((void (__cdecl *)(uint, uint, uint, uint))SR_FN(0x411450))
 #define setuptexture ((void (__cdecl *)(int))SR_FN(0x50ac40))
-#define cos ((double (__cdecl *)(double))LF_IMPORT(28, "MSVCR100.DLL", "cos"))
+#define cos ((double (__cdecl *)(double))LF_IMPORT(27, "MSVCR100.DLL", "cos"))
 #define local_c (*(float *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_742f0(void)
@@ -30072,22 +28515,22 @@ void __cdecl lf_742f0(void)
 #define _DAT_018fd368 (*(int *)SR_VA(0x18fd368))
 #define _DAT_018f88e4 (*(int *)SR_VA(0x18f88e4))
 #define _DAT_018f87a4 (*(float *)SR_VA(0x18f87a4))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(17, "OPENGL32.DLL", "glEnd"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(19, "OPENGL32.DLL", "glBegin"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(29, "OPENGL32.DLL", "glColor3f"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(30, "OPENGL32.DLL", "glVertex2f"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
-#define glFlush ((void (__stdcall *)(void))LF_IMPORT(31, "OPENGL32.DLL", "glFlush"))
-#define glFinish ((void (__stdcall *)(void))LF_IMPORT(32, "OPENGL32.DLL", "glFinish"))
-#define alSourceStop ((void (__cdecl *)(uint))LF_IMPORT(33, "OPENAL32.DLL", "alSourceStop"))
-#define alGetSourcei ((void (__cdecl *)(uint, int, int *))LF_IMPORT(34, "OPENAL32.DLL", "alGetSourcei"))
-#define alSourceUnqueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(35, "OPENAL32.DLL", "alSourceUnqueueBuffers"))
-#define alSourceQueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(36, "OPENAL32.DLL", "alSourceQueueBuffers"))
-#define alBufferData ((void (__cdecl *)(uint, int, void *, int, int))LF_IMPORT(37, "OPENAL32.DLL", "alBufferData"))
-#define alSourcef ((void (__cdecl *)(uint, int, float))LF_IMPORT(38, "OPENAL32.DLL", "alSourcef"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(16, "OPENGL32.DLL", "glEnd"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(18, "OPENGL32.DLL", "glBegin"))
+#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(28, "OPENGL32.DLL", "glColor3f"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(29, "OPENGL32.DLL", "glVertex2f"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
+#define glFlush ((void (__stdcall *)(void))LF_IMPORT(30, "OPENGL32.DLL", "glFlush"))
+#define glFinish ((void (__stdcall *)(void))LF_IMPORT(31, "OPENGL32.DLL", "glFinish"))
+#define alSourceStop ((void (__cdecl *)(uint))LF_IMPORT(32, "OPENAL32.DLL", "alSourceStop"))
+#define alGetSourcei ((void (__cdecl *)(uint, int, int *))LF_IMPORT(33, "OPENAL32.DLL", "alGetSourcei"))
+#define alSourceUnqueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(34, "OPENAL32.DLL", "alSourceUnqueueBuffers"))
+#define alSourceQueueBuffers ((void (__cdecl *)(uint, int, uint *))LF_IMPORT(35, "OPENAL32.DLL", "alSourceQueueBuffers"))
+#define alBufferData ((void (__cdecl *)(uint, int, void *, int, int))LF_IMPORT(36, "OPENAL32.DLL", "alBufferData"))
+#define alSourcef ((void (__cdecl *)(uint, int, float))LF_IMPORT(37, "OPENAL32.DLL", "alSourcef"))
 #define createaccount ((int (__cdecl *)(int))SR_FN(0x433be0))
 #define createclientaccount ((int (__cdecl *)(undefined4 *, undefined4 *, int))SR_FN(0x433f20))
 #define angulardistance ((float10 (__cdecl *)(float, float))SR_FN(0x435f40))
@@ -30139,17 +28582,17 @@ void __cdecl lf_742f0(void)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(39, "SDL2.DLL", "SDL_GetTicks"))
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(40, "SDL2.DLL", "SDL_Delay"))
-#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(41, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(38, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(39, "SDL2.DLL", "SDL_Delay"))
+#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(40, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
 #define __security_check_cookie(x) ((void)0)
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(16, "MSVCR100.DLL", "memset"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(42, "MSVCR100.DLL", "memcpy"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(15, "MSVCR100.DLL", "memset"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(41, "MSVCR100.DLL", "memcpy"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(43, "MSVCR100.DLL", "fabs"))
-#define sqrt ((double (__cdecl *)(double))LF_IMPORT(44, "MSVCR100.DLL", "sqrt"))
-#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(45, "MSVCR100.DLL", "atan2"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "fabs"))
+#define sqrt ((double (__cdecl *)(double))LF_IMPORT(43, "MSVCR100.DLL", "sqrt"))
+#define atan2 ((double (__cdecl *)(double, double))LF_IMPORT(44, "MSVCR100.DLL", "atan2"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x5c))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_41 (*(undefined1 *)(lf_frame + 0x1f))
@@ -31002,7 +29445,7 @@ void __cdecl lf_7b100(void)
 #define DAT_09465350 (*(int *)SR_VA(0x9465350))
 #define setupframetextures ((void (__cdecl *)(void))SR_FN(0x4742f0))
 #define setupprogramobjects ((void (__cdecl *)(void))SR_FN(0x4d5690))
-#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(41, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
+#define SDL_SetRelativeMouseMode ((int (__cdecl *)(int))LF_IMPORT(40, "SDL2.DLL", "SDL_SetRelativeMouseMode"))
 void __cdecl lf_7d060(void)
 
 {
@@ -31663,17 +30106,17 @@ void __cdecl lf_90bf0(int param_1)
 #define _DAT_0f7ca9b4 (*(float *)SR_VA(0xf7ca9b4))
 #define _DAT_0f7ca980 (*(float *)SR_VA(0xf7ca980))
 #define _DAT_0f7ca988 (*(float *)SR_VA(0xf7ca988))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(17, "OPENGL32.DLL", "glEnd"))
-#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(46, "OPENGL32.DLL", "glVertex3f"))
-#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(18, "OPENGL32.DLL", "glColor4f"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(19, "OPENGL32.DLL", "glBegin"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(29, "OPENGL32.DLL", "glColor3f"))
-#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(47, "OPENGL32.DLL", "glLineWidth"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
-#define glPointSize ((void (__stdcall *)(float))LF_IMPORT(48, "OPENGL32.DLL", "glPointSize"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(16, "OPENGL32.DLL", "glEnd"))
+#define glVertex3f ((void (__stdcall *)(float, float, float))LF_IMPORT(45, "OPENGL32.DLL", "glVertex3f"))
+#define glColor4f ((void (__stdcall *)(float, float, float, float))LF_IMPORT(17, "OPENGL32.DLL", "glColor4f"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(18, "OPENGL32.DLL", "glBegin"))
+#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(28, "OPENGL32.DLL", "glColor3f"))
+#define glLineWidth ((void (__stdcall *)(float))LF_IMPORT(46, "OPENGL32.DLL", "glLineWidth"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
+#define glPointSize ((void (__stdcall *)(float))LF_IMPORT(47, "OPENGL32.DLL", "glPointSize"))
 #define building_load ((void (__cdecl *)(int, int))SR_FN(0x4614e0))
 #define rendermap ((void (__cdecl *)(void))SR_FN(0x4844d0))
 #define createlevel ((void (__cdecl *)(void))SR_FN(0x49b740))
@@ -31697,11 +30140,11 @@ void __cdecl lf_90bf0(int param_1)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(39, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(38, "SDL2.DLL", "SDL_GetTicks"))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
-#define abs ((int (__cdecl *)(int))LF_IMPORT(49, "MSVCR100.DLL", "abs"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(48, "MSVCR100.DLL", "abs"))
 #define strcmp ((int (__cdecl *)(char *, char *))LF_IMPORT(9, "MSVCR100.DLL", "strcmp"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
@@ -32463,10 +30906,10 @@ void __cdecl lf_9c5c0(void)
 #define FUN_004a06f0 ((void (__cdecl *)(int))SR_FN(0x4a06f0))
 #define _ftol2(x) ((ulonglong)(longlong)(x))
 #define __security_check_cookie(x) ((void)0)
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(42, "MSVCR100.DLL", "memcpy"))
-#define abs ((int (__cdecl *)(int))LF_IMPORT(49, "MSVCR100.DLL", "abs"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(41, "MSVCR100.DLL", "memcpy"))
+#define abs ((int (__cdecl *)(int))LF_IMPORT(48, "MSVCR100.DLL", "abs"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
-#define fabs ((double (__cdecl *)(double))LF_IMPORT(43, "MSVCR100.DLL", "fabs"))
+#define fabs ((double (__cdecl *)(double))LF_IMPORT(42, "MSVCR100.DLL", "fabs"))
 #define local_50 (*(int *)(lf_frame + 0x10))
 #define local_48 (*(int *)(lf_frame + 0x18))
 #define local_44 (*(char *)(lf_frame + 0x1c))
@@ -32986,7 +31429,7 @@ int __cdecl lf_a0350(float param_1,undefined4 param_2,float param_3,float param_
 #define DAT_0f607160 (*(undefined *)SR_VA(0xf607160))
 #define DAT_0f607164 (*(undefined *)SR_VA(0xf607164))
 #define FUN_004a06f0 ((void (__cdecl *)(int))SR_FN(0x4a06f0))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(42, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(41, "MSVCR100.DLL", "memcpy"))
 #define local_8 (*(int *)(lf_frame + 0x18))
 void __cdecl lf_a03e0(int param_1)
 
@@ -33111,7 +31554,7 @@ int __cdecl lf_a04f0(int param_1,int param_2)
 /* ---------------------------------------------------------------- 0xa06f0 */
 #define DAT_0f60715c (*(int *)SR_VA(0xf60715c))
 #define DAT_0f607160 (*(undefined *)SR_VA(0xf607160))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(42, "MSVCR100.DLL", "memcpy"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(41, "MSVCR100.DLL", "memcpy"))
 void __cdecl lf_a06f0(int param_1)
 
 {
@@ -33150,8 +31593,8 @@ void __cdecl lf_a06f0(int param_1)
 #define DAT_0f70f9b4 (*(undefined *)SR_VA(0xf70f9b4))
 #define DAT_0f70f9b8 (*(undefined *)SR_VA(0xf70f9b8))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(8, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(23, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(24, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(23, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_54 (*(char (*)[64])(lf_frame + 0x1c))
@@ -33260,8 +31703,8 @@ void __cdecl lf_a0740(void)
 #define DAT_0f70f9b4 (*(undefined *)SR_VA(0xf70f9b4))
 #define DAT_0f70f9b8 (*(undefined *)SR_VA(0xf70f9b8))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(8, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(23, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(24, "MSVCR100.DLL", "fclose"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(23, "MSVCR100.DLL", "fclose"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x6c))
 #define local_5c (*(char (*)[68])(lf_frame + 0x14))
@@ -33382,8 +31825,8 @@ void __cdecl lf_a0a60(void)
 #define _DAT_005234c8 (*(float *)SR_VA(0x5234c8))
 #define _DAT_005234cc (*(float *)SR_VA(0x5234cc))
 #define _DAT_005234d0 (*(float *)SR_VA(0x5234d0))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define FUN_00434010 ((void (__cdecl *)(void))SR_FN(0x434010))
 #define loadaccountsserver ((void (__cdecl *)(void))SR_FN(0x4341d0))
 #define saveaccountsclient ((void (__cdecl *)(void))SR_FN(0x434470))
@@ -33401,7 +31844,7 @@ void __cdecl lf_a0a60(void)
 #define checksystemmessages ((void (__cdecl *)(float, float))SR_FN(0x5060d0))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 void __cdecl lf_a8e10(void)
 
@@ -33639,8 +32082,8 @@ void __cdecl lf_a8e10(void)
 #define _DAT_05750c80 (*(undefined4 *)SR_VA(0x5750c80))
 #define _DAT_05750c84 (*(undefined4 *)SR_VA(0x5750c84))
 #define _DAT_05750c88 (*(int *)SR_VA(0x5750c88))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define createclientaccount ((int (__cdecl *)(undefined4 *, undefined4 *, int))SR_FN(0x433f20))
 #define saveaccountsclient ((void (__cdecl *)(void))SR_FN(0x434470))
 #define FUN_004345d0 ((void (__cdecl *)(void))SR_FN(0x4345d0))
@@ -33669,13 +32112,13 @@ void __cdecl lf_a8e10(void)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(39, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(38, "SDL2.DLL", "SDL_GetTicks"))
 #define ntohl(x) ((uint)(((uint)(x) >> 24) | (((uint)(x) >> 8) & 0xff00u) | (((uint)(x) << 8) & 0xff0000u) | ((uint)(x) << 24)))
-#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(50, "WSOCK32.DLL", 10))
+#define inet_addr ((ulong (__stdcall *)(char *))LF_IMPORT_ORD(49, "WSOCK32.DLL", 10))
 #define ntohs(x) ((ushort)((((ushort)(x)) >> 8) | (((ushort)(x)) << 8)))
 #define __security_check_cookie(x) ((void)0)
-#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(16, "MSVCR100.DLL", "memset"))
+#define memset ((void * (__cdecl *)(void *, int, size_t))LF_IMPORT(15, "MSVCR100.DLL", "memset"))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_4 (*(undefined4 *)(lf_frame + 0x9c))
 #define local_84 (*(char (*)[32])(lf_frame + 0x1c))
@@ -34171,8 +32614,8 @@ LAB_004aa466:
 #define _DAT_005234c8 (*(float *)SR_VA(0x5234c8))
 #define _DAT_005234cc (*(float *)SR_VA(0x5234cc))
 #define _DAT_005234d0 (*(float *)SR_VA(0x5234d0))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define FUN_00468ec0 ((void (__cdecl *)(float *, uint))SR_FN(0x468ec0))
 #define gameloop ((void (__cdecl *)(void))SR_FN(0x47b100))
 #define recvpacket ((int (__cdecl *)(void))SR_FN(0x4fe420))
@@ -34193,8 +32636,8 @@ LAB_004aa466:
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(39, "SDL2.DLL", "SDL_GetTicks"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GetTicks ((uint (__cdecl *)(void))LF_IMPORT(38, "SDL2.DLL", "SDL_GetTicks"))
 #define local_24 (*(int *)(lf_frame + 0x1c))
 #define local_20 (*(uint *)(lf_frame + 0x20))
 #define local_15 (*(char (*)[13])(lf_frame + 0x2b))
@@ -34470,19 +32913,19 @@ void __cdecl lf_aa5a0(void)
 #define _DAT_1a007d10 (*(undefined4 *)SR_VA(0x1a007d10))
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(51, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(52, "OPENGL32.DLL", "glPolygonMode"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(29, "OPENGL32.DLL", "glColor3f"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(53, "OPENGL32.DLL", "glLightfv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(54, "OPENGL32.DLL", "glDepthMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glDepthFunc"))
-#define alcCaptureStart ((void (__cdecl *)(void *))LF_IMPORT(56, "OPENAL32.DLL", "alcCaptureStart"))
-#define alcCaptureStop ((void (__cdecl *)(void *))LF_IMPORT(57, "OPENAL32.DLL", "alcCaptureStop"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(58, "MSVCR100.DLL", "srand"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(50, "OPENGL32.DLL", "glFrontFace"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(51, "OPENGL32.DLL", "glPolygonMode"))
+#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(28, "OPENGL32.DLL", "glColor3f"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(52, "OPENGL32.DLL", "glLightfv"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(53, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(54, "OPENGL32.DLL", "glDepthFunc"))
+#define alcCaptureStart ((void (__cdecl *)(void *))LF_IMPORT(55, "OPENAL32.DLL", "alcCaptureStart"))
+#define alcCaptureStop ((void (__cdecl *)(void *))LF_IMPORT(56, "OPENAL32.DLL", "alcCaptureStop"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(57, "MSVCR100.DLL", "srand"))
 #define GLee_Lazy_glGenBuffersARB ((void (__cdecl *)(int, uint *))SR_FN(0x410600))
 #define GLee_Lazy_glCreateShaderObjectARB ((uint (__cdecl *)(uint))SR_FN(0x4109a0))
 #define GLee_Lazy_glCreateProgramObjectARB ((uint (__cdecl *)(void))SR_FN(0x410a20))
@@ -34539,8 +32982,8 @@ void __cdecl lf_aa5a0(void)
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
 #define steam_getname ((bool (__cdecl *)(char *))SR_FN(0x50bd80))
 #define steam_getid ((void (__cdecl *)(undefined8 *))SR_FN(0x50bdc0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(40, "SDL2.DLL", "SDL_Delay"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_Delay ((void (__cdecl *)(uint))LF_IMPORT(39, "SDL2.DLL", "SDL_Delay"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define __aullshr ((ulonglong (__cdecl *)(void))SR_FN(0x50c810))
@@ -35166,8 +33609,8 @@ void __cdecl lf_aa920(void)
 #define s_GL_VENDOR___s_005258d4 ((char *)SR_VA(0x5258d4))
 #define s_GL_RENDERER___s_005258e4 ((char *)SR_VA(0x5258e4))
 #define glGetString ((uchar * (__stdcall *)(uint))LF_IMPORT(7, "OPENGL32.DLL", "glGetString"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define launchwebpage(url) sr_open_url((char *)(url))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
@@ -35180,7 +33623,7 @@ void __cdecl lf_aa920(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 void __cdecl lf_abc00(void)
 
 {
@@ -35705,16 +34148,16 @@ void __cdecl lf_b4520(int param_1,float param_2,float param_3)
 #define _DAT_1a007d10 (*(undefined4 *)SR_VA(0x1a007d10))
 #define _DAT_1a007d14 (*(undefined4 *)SR_VA(0x1a007d14))
 #define _DAT_1a007d18 (*(undefined4 *)SR_VA(0x1a007d18))
-#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(51, "OPENGL32.DLL", "glFrontFace"))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(52, "OPENGL32.DLL", "glPolygonMode"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(29, "OPENGL32.DLL", "glColor3f"))
-#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(53, "OPENGL32.DLL", "glLightfv"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
-#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(54, "OPENGL32.DLL", "glDepthMask"))
-#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(55, "OPENGL32.DLL", "glDepthFunc"))
+#define glFrontFace ((void (__stdcall *)(uint))LF_IMPORT(50, "OPENGL32.DLL", "glFrontFace"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glPolygonMode ((void (__stdcall *)(uint, uint))LF_IMPORT(51, "OPENGL32.DLL", "glPolygonMode"))
+#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(28, "OPENGL32.DLL", "glColor3f"))
+#define glLightfv ((void (__stdcall *)(uint, uint, float *))LF_IMPORT(52, "OPENGL32.DLL", "glLightfv"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
+#define glDepthMask ((void (__stdcall *)(uchar))LF_IMPORT(53, "OPENGL32.DLL", "glDepthMask"))
+#define glDepthFunc ((void (__stdcall *)(uint))LF_IMPORT(54, "OPENGL32.DLL", "glDepthFunc"))
 #define setupmodel ((void (__cdecl *)(int, int))SR_FN(0x4ac190))
 #define negvector ((void (__cdecl *)(int))SR_FN(0x4bb0f0))
 #define model_editor ((void (__cdecl *)(void))SR_FN(0x4c1ac0))
@@ -35739,7 +34182,7 @@ void __cdecl lf_b4520(int param_1,float param_2,float param_3)
 #define copyvector ((void (__cdecl *)(undefined4 *, undefined4 *))SR_FN(0x50b950))
 #define zerovector ((void (__cdecl *)(undefined4 *))SR_FN(0x50b9b0))
 #define scaleaddvectors ((void (__cdecl *)(float *, float *, float *, float))SR_FN(0x50ba80))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define __security_check_cookie(x) ((void)0)
 #define local_4 (*(undefined4 *)(lf_frame + 0x7c))
 #define local_68 (*(int *)(lf_frame + 0x18))
@@ -36053,9 +34496,9 @@ void __cdecl lf_c14a0(void)
 #define DAT_056ceb84 (*(undefined *)SR_VA(0x56ceb84))
 #define DAT_056ceb88 (*(undefined *)SR_VA(0x56ceb88))
 #define glGetString ((uchar * (__stdcall *)(uint))LF_IMPORT(7, "OPENGL32.DLL", "glGetString"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
-#define alGetString ((char * (__cdecl *)(int))LF_IMPORT(60, "OPENAL32.DLL", "alGetString"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
+#define alGetString ((char * (__cdecl *)(int))LF_IMPORT(59, "OPENAL32.DLL", "alGetString"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(8, "MSVCR100.DLL", "sprintf"))
 #define reactivategame ((void (__cdecl *)(void))SR_FN(0x47d060))
 #define checksimulation ((undefined4 (__cdecl *)(int))SR_FN(0x47d900))
@@ -36071,11 +34514,11 @@ void __cdecl lf_c14a0(void)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
-#define SDL_GL_GetAttribute ((int (__cdecl *)(int, int *))LF_IMPORT(61, "SDL2.DLL", "SDL_GL_GetAttribute"))
-#define SDL_SetWindowFullscreen ((int (__cdecl *)(void *, uint))LF_IMPORT(62, "SDL2.DLL", "SDL_SetWindowFullscreen"))
-#define SDL_SetWindowSize ((void (__cdecl *)(void *, int, int))LF_IMPORT(63, "SDL2.DLL", "SDL_SetWindowSize"))
-#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(64, "SDL2.DLL", "SDL_GL_SetAttribute"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_GetAttribute ((int (__cdecl *)(int, int *))LF_IMPORT(60, "SDL2.DLL", "SDL_GL_GetAttribute"))
+#define SDL_SetWindowFullscreen ((int (__cdecl *)(void *, uint))LF_IMPORT(61, "SDL2.DLL", "SDL_SetWindowFullscreen"))
+#define SDL_SetWindowSize ((void (__cdecl *)(void *, int, int))LF_IMPORT(62, "SDL2.DLL", "SDL_SetWindowSize"))
+#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(63, "SDL2.DLL", "SDL_GL_SetAttribute"))
 #define __security_check_cookie(x) ((void)0)
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
 #define local_4 (*(undefined4 *)(lf_frame + 0xac))
@@ -36534,17 +34977,17 @@ void __cdecl lf_d2290(void)
 #define _DAT_094631b0 (*(undefined4 *)SR_VA(0x94631b0))
 #define _DAT_094631b4 (*(undefined4 *)SR_VA(0x94631b4))
 #define _DAT_09463224 (*(float *)SR_VA(0x9463224))
-#define rand ((int (__cdecl *)(void))LF_IMPORT(65, "MSVCR100.DLL", "rand"))
+#define rand ((int (__cdecl *)(void))LF_IMPORT(64, "MSVCR100.DLL", "rand"))
 #define sprintf ((int (__cdecl *)(char *, char *, ...))LF_IMPORT(8, "MSVCR100.DLL", "sprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(23, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(24, "MSVCR100.DLL", "fclose"))
-#define srand ((void (__cdecl *)(uint))LF_IMPORT(58, "MSVCR100.DLL", "srand"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(23, "MSVCR100.DLL", "fclose"))
+#define srand ((void (__cdecl *)(uint))LF_IMPORT(57, "MSVCR100.DLL", "srand"))
 #define FUN_0046b140 ((__time64_t (__cdecl *)(__time64_t *))SR_FN(0x46b140))
 #define optionreadwriteint ((void (__cdecl *)(undefined4 *, char *, int))SR_FN(0x4d3810))
 #define optionreadwritestring ((void (__cdecl *)(char *, char *, int, int))SR_FN(0x4d3860))
 #define loadtextfile ((void (__cdecl *)(char *))SR_FN(0x4fd740))
 #define strcpy ((char * (__cdecl *)(char *, char *))LF_IMPORT(4, "MSVCR100.DLL", "strcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(66, "MSVCR100.DLL", "_chdir"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(65, "MSVCR100.DLL", "_chdir"))
 void __cdecl lf_d3350(int param_1)
 
 {
@@ -36764,14 +35207,14 @@ void __cdecl lf_d3350(int param_1)
 #define DAT_12e92688 (*(undefined *)SR_VA(0x12e92688))
 #define DAT_17b98e00 (*(undefined *)SR_VA(0x17b98e00))
 #define _DAT_09463214 (*(int *)SR_VA(0x9463214))
-#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glEnable"))
-#define glEnd ((void (__stdcall *)(void))LF_IMPORT(17, "OPENGL32.DLL", "glEnd"))
-#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(19, "OPENGL32.DLL", "glBegin"))
-#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(29, "OPENGL32.DLL", "glColor3f"))
-#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(30, "OPENGL32.DLL", "glVertex2f"))
-#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glDisable"))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glEnable ((void (__stdcall *)(uint))LF_IMPORT(10, "OPENGL32.DLL", "glEnable"))
+#define glEnd ((void (__stdcall *)(void))LF_IMPORT(16, "OPENGL32.DLL", "glEnd"))
+#define glBegin ((void (__stdcall *)(uint))LF_IMPORT(18, "OPENGL32.DLL", "glBegin"))
+#define glColor3f ((void (__stdcall *)(float, float, float))LF_IMPORT(28, "OPENGL32.DLL", "glColor3f"))
+#define glVertex2f ((void (__stdcall *)(float, float))LF_IMPORT(29, "OPENGL32.DLL", "glVertex2f"))
+#define glDisable ((void (__stdcall *)(uint))LF_IMPORT(11, "OPENGL32.DLL", "glDisable"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define soundsimulation ((void (__cdecl *)(float *, int, int))SR_FN(0x44e190))
 #define checksimulation ((undefined4 (__cdecl *)(int))SR_FN(0x47d900))
 #define getaudioinput ((void (__cdecl *)(int))SR_FN(0x4fb6f0))
@@ -36788,7 +35231,7 @@ void __cdecl lf_d3350(int param_1)
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawbitmap ((void (__cdecl *)(int, float, float, float, float, uint, float, float, float, float))SR_FN(0x507ac0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define local_14 (*(int *)(lf_frame + 0x1c))
 #define local_8 (*(int *)(lf_frame + 0x28))
 void __cdecl lf_d38c0(void)
@@ -37116,9 +35559,9 @@ void __cdecl lf_d38c0(void)
 #define _DAT_0052827c (*(int *)SR_VA(0x52827c))
 #define _DAT_00528290 (*(int *)SR_VA(0x528290))
 #define _DAT_00528294 (*(int *)SR_VA(0x528294))
-#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(67, "MSVCR100.DLL", "fprintf"))
-#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(23, "MSVCR100.DLL", "fopen"))
-#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(24, "MSVCR100.DLL", "fclose"))
+#define fprintf ((int (__cdecl *)(FILE *, char *, ...))LF_IMPORT(66, "MSVCR100.DLL", "fprintf"))
+#define fopen ((FILE * (__cdecl *)(char *, char *))LF_IMPORT(22, "MSVCR100.DLL", "fopen"))
+#define fclose ((int (__cdecl *)(FILE *))LF_IMPORT(23, "MSVCR100.DLL", "fclose"))
 #define free ((void (__cdecl *)(void *))LF_IMPORT(1, "MSVCR100.DLL", "free"))
 #define GLee_Lazy_glUseProgramObjectARB ((void (__cdecl *)(uint))SR_FN(0x410a90))
 #define GLee_Lazy_glUniform1iARB ((void (__cdecl *)(int, int))SR_FN(0x410bb0))
@@ -37553,13 +35996,13 @@ void __cdecl lf_d5690(void)
 #define DAT_0fcab244 (*(undefined *)SR_VA(0xfcab244))
 #define DAT_12e96890 (*(undefined *)SR_VA(0x12e96890))
 #define DAT_1405e700 (*(undefined *)SR_VA(0x1405e700))
-#define alBufferData ((void (__cdecl *)(uint, int, void *, int, int))LF_IMPORT(37, "OPENAL32.DLL", "alBufferData"))
+#define alBufferData ((void (__cdecl *)(uint, int, void *, int, int))LF_IMPORT(36, "OPENAL32.DLL", "alBufferData"))
 #define encodespeex ((void (__cdecl *)(undefined4, int, int))SR_FN(0x4e1300))
-#define SDL_FreeWAV ((void (__cdecl *)(uchar *))LF_IMPORT(68, "SDL2.DLL", "SDL_FreeWAV"))
-#define SDL_LoadWAV_RW ((void * (__cdecl *)(void *, int, void *, uchar * *, uint *))LF_IMPORT(69, "SDL2.DLL", "SDL_LoadWAV_RW"))
-#define SDL_RWFromFile ((void * (__cdecl *)(char *, char *))LF_IMPORT(70, "SDL2.DLL", "SDL_RWFromFile"))
-#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(42, "MSVCR100.DLL", "memcpy"))
-#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(66, "MSVCR100.DLL", "_chdir"))
+#define SDL_FreeWAV ((void (__cdecl *)(uchar *))LF_IMPORT(67, "SDL2.DLL", "SDL_FreeWAV"))
+#define SDL_LoadWAV_RW ((void * (__cdecl *)(void *, int, void *, uchar * *, uint *))LF_IMPORT(68, "SDL2.DLL", "SDL_LoadWAV_RW"))
+#define SDL_RWFromFile ((void * (__cdecl *)(char *, char *))LF_IMPORT(69, "SDL2.DLL", "SDL_RWFromFile"))
+#define memcpy ((void * (__cdecl *)(void *, void *, size_t))LF_IMPORT(41, "MSVCR100.DLL", "memcpy"))
+#define _chdir ((int (__cdecl *)(char *))LF_IMPORT(65, "MSVCR100.DLL", "_chdir"))
 #define local_38 (*(int *)(lf_frame + 0x18))
 #define local_30 (*(uchar * *)(lf_frame + 0x20))
 #define local_2c (*(uint *)(lf_frame + 0x24))
@@ -37662,8 +36105,8 @@ void __cdecl lf_e1550(int param_1,char *param_2,int param_3)
 #define s_Clients__i_005263a4 ((char *)SR_VA(0x5263a4))
 #define DAT_0f7eb210 (*(undefined *)SR_VA(0xf7eb210))
 #define DAT_0f7eb234 (*(undefined *)SR_VA(0xf7eb234))
-#define glClear ((void (__stdcall *)(uint))LF_IMPORT(13, "OPENGL32.DLL", "glClear"))
-#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(14, "OPENGL32.DLL", "glClearColor"))
+#define glClear ((void (__stdcall *)(uint))LF_IMPORT(12, "OPENGL32.DLL", "glClear"))
+#define glClearColor ((void (__stdcall *)(float, float, float, float))LF_IMPORT(13, "OPENGL32.DLL", "glClearColor"))
 #define checkkeyboard ((void (__cdecl *)(void))SR_FN(0x4fec50))
 #define checkmouse ((void (__cdecl *)(void))SR_FN(0x4feca0))
 #define drawmenuitems ((void (__cdecl *)(void))SR_FN(0x4ff2e0))
@@ -37676,7 +36119,7 @@ void __cdecl lf_e1550(int param_1,char *param_2,int param_3)
 #define drawtext ((void (__cdecl *)(char *, float, float, float, uint, float, float, float, float, ...))SR_FN(0x506b30))
 #define setuptextdisplay ((void (__cdecl *)(void))SR_FN(0x5079d0))
 #define drawmousecursor ((void (__cdecl *)(int, int, int, float, float, float, float))SR_FN(0x507ee0))
-#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(15, "SDL2.DLL", "SDL_GL_SwapWindow"))
+#define SDL_GL_SwapWindow ((void (__cdecl *)(void *))LF_IMPORT(14, "SDL2.DLL", "SDL_GL_SwapWindow"))
 #define local_10 (*(float *)(lf_frame + 0x10))
 #define local_c (*(int *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
@@ -37828,7 +36271,7 @@ void __cdecl lf_fafc0(undefined4 *param_1)
 #define _DAT_10767380 (*(undefined4 *)SR_VA(0x10767380))
 #define _DAT_0bb330c8 (*(float *)SR_VA(0xbb330c8))
 #define _DAT_107675ac (*(void * *)SR_VA(0x107675ac))
-#define glGenTextures ((void (__stdcall *)(int, uint *))LF_IMPORT(71, "OPENGL32.DLL", "glGenTextures"))
+#define glGenTextures ((void (__stdcall *)(int, uint *))LF_IMPORT(70, "OPENGL32.DLL", "glGenTextures"))
 #define setupaudio ((void (__cdecl *)(void))SR_FN(0x4339e0))
 #define shutdownaudio ((void (__cdecl *)(void))SR_FN(0x433a70))
 #define debug_resetlogfile ((void (__cdecl *)(void))SR_FN(0x46ac30))
@@ -37845,15 +36288,15 @@ void __cdecl lf_fafc0(undefined4 *param_1)
 #define getpaths ((void (__cdecl *)(void))SR_FN(0x50b1f0))
 #define steam_init ((undefined4 (__cdecl *)(void))SR_FN(0x50bcf0))
 #define steam_shutdown ((void (__cdecl *)(void))SR_FN(0x50bd40))
-#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(64, "SDL2.DLL", "SDL_GL_SetAttribute"))
-#define SDL_Quit ((void (__cdecl *)(void))LF_IMPORT(72, "SDL2.DLL", "SDL_Quit"))
-#define SDL_GL_SetSwapInterval ((int (__cdecl *)(int))LF_IMPORT(73, "SDL2.DLL", "SDL_GL_SetSwapInterval"))
-#define SDL_GL_CreateContext ((void * (__cdecl *)(void *))LF_IMPORT(74, "SDL2.DLL", "SDL_GL_CreateContext"))
-#define SDL_CreateWindow ((void * (__cdecl *)(char *, int, int, int, int, uint))LF_IMPORT(75, "SDL2.DLL", "SDL_CreateWindow"))
-#define SDL_ShowCursor ((int (__cdecl *)(int))LF_IMPORT(76, "SDL2.DLL", "SDL_ShowCursor"))
-#define SDL_Init ((int (__cdecl *)(uint))LF_IMPORT(77, "SDL2.DLL", "SDL_Init"))
-#define WSACleanup ((int (__stdcall *)(void))LF_IMPORT(78, "WSOCK32.DLL", "WSACleanup"))
-#define WSAStartup ((int (__stdcall *)(WORD, LPWSADATA))LF_IMPORT_ORD(79, "WSOCK32.DLL", 115))
+#define SDL_GL_SetAttribute ((int (__cdecl *)(int, int))LF_IMPORT(63, "SDL2.DLL", "SDL_GL_SetAttribute"))
+#define SDL_Quit ((void (__cdecl *)(void))LF_IMPORT(71, "SDL2.DLL", "SDL_Quit"))
+#define SDL_GL_SetSwapInterval ((int (__cdecl *)(int))LF_IMPORT(72, "SDL2.DLL", "SDL_GL_SetSwapInterval"))
+#define SDL_GL_CreateContext ((void * (__cdecl *)(void *))LF_IMPORT(73, "SDL2.DLL", "SDL_GL_CreateContext"))
+#define SDL_CreateWindow ((void * (__cdecl *)(char *, int, int, int, int, uint))LF_IMPORT(74, "SDL2.DLL", "SDL_CreateWindow"))
+#define SDL_ShowCursor ((int (__cdecl *)(int))LF_IMPORT(75, "SDL2.DLL", "SDL_ShowCursor"))
+#define SDL_Init ((int (__cdecl *)(uint))LF_IMPORT(76, "SDL2.DLL", "SDL_Init"))
+#define WSACleanup ((int (__stdcall *)(void))LF_IMPORT(77, "WSOCK32.DLL", "WSACleanup"))
+#define WSAStartup ((int (__stdcall *)(WORD, LPWSADATA))LF_IMPORT_ORD(78, "WSOCK32.DLL", 115))
 #define local_c (*(uint *)(lf_frame + 0x14))
 #define local_8 (*(int *)(lf_frame + 0x18))
 undefined4 __cdecl lf_10ae00(void)

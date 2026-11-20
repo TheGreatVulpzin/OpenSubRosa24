@@ -636,7 +636,7 @@ void createwav(void);
 void createbond(void);
 void bondtimetolive(void);
 void deletebond(void);
-void lf_50700(void);
+void bondsimulation2(void);
 void checkbonds(void);
 void setupbuildingtypes(void);
 void building_buildfloorplan(void);
@@ -1940,7 +1940,7 @@ const LfEntry lf_table[] = {
     { "createbond", 0x4fcc0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "bondtimetolive", 0x501b0, (void *)bondtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deletebond", 0x50230, (void *)deletebond, 1, LF_RET_VOID, 4, "v", 0 },
-    { "bondsimulation2", 0x50700, (void *)lf_50700, 0, LF_RET_VOID, 4, "", 0 },
+    { "bondsimulation2", 0x50700, (void *)bondsimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "checkbonds", 0x55bb0, (void *)checkbonds, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbuildingtypes", 0x55bc0, (void *)setupbuildingtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x56ad0, (void *)building_buildfloorplan, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },

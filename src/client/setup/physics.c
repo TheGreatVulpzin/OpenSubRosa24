@@ -5,6 +5,7 @@
 #include "setup/physics.h"
 
 #include "client.h"
+#include "bonds.h"
 #include "humans.h"
 #include "items.h"
 #include "objects.h"
@@ -13,7 +14,6 @@
 
 /* Game functions of other files. */
 #define cityobject_simulation CL_FN(0x4665f0, void(__cdecl *)(void))
-#define bondsimulation2 CL_FN(0x450700, void(__cdecl *)(void))
 #define itemtimetolive CL_FN(0x497130, void(__cdecl *)(void))
 
 /* Run one physical tick and then expire each packed pool. */
