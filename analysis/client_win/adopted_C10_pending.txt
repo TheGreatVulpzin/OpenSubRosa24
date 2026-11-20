@@ -1,1 +1,4 @@
 setupframetextures src/client/render/frame_textures.c
+# These methods pass the identifier pointer in ECX. The call executor only supplies stack arguments.
+CSteamID src/client/setup/steam.c
+ConvertToUint64 src/client/setup/steam.c

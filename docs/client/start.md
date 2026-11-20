@@ -44,3 +44,7 @@ The calls run in a fixed order.
 `player_addaction_menu`, `player_addaction_chat` and `player_addaction_item` add an action to the ring of 64 actions of a player. A chat action keeps up to 63 characters, with no end mark. `addplayerwaypoint` adds a waypoint and `logic_splitteamcash` shares an amount between the active players of a team. `scenario_isseekmission` tells if a team has an active mission of kind 4.
 
 `createmessage` adds a chat message to the ring of 256 messages. Kinds 0 and 4 last 600 ticks and the other kinds last 480. `newspaper_addline` stores 64 bytes in a line of the newspaper. `checkfilespec` matches a name against a spec with the wildcard `*`. `building_iswindow` tells if a wall of the floor plan is a window. `addwindowatlas` finds or adds a cell of the window list. The list holds 63 cells.
+
+## Account identifiers
+
+`CSteamID` clears an account identifier of 64 bits and returns its address. `ConvertToUint64` returns all 64 bits of the identifier.
