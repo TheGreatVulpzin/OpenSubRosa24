@@ -1141,6 +1141,10 @@ static const char *known_difference(const char *name)
         { "server_writelogfile", "no account: the client prints junk for the average" },
         /* The function has no result. EAX holds what the last call left there. Memory and environment are the same. */
         { "resetgame", "no result: EAX is junk" },
+        /* A text with no number: the client returns an uninitialized float, the shared code 0. */
+        { "getfloat", "returns an uninitialized local when there is no number" },
+        /* The ray test subtracts two close numbers, so the last bit of the dot product shows in the result. */
+        { "raydistancesphere2", "cancellation of two close numbers" },
         /* The function reads the clock: two reads never give the same value. */
         { "systemtimer", "reads the clock" },
         { "createhairmodel", "client follows the server code (generatetrinormal)" },

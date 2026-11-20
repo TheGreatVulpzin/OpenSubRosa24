@@ -1,0 +1,15 @@
+getnextplayer src/client/setup/small_records.c
+getnextobject src/client/setup/small_records.c
+getnextitem src/client/setup/small_records.c
+getnexthuman src/client/setup/small_records.c
+copyquaternion src/client/setup/small_records.c
+addpointstoteam src/client/setup/small_records.c
+accountdeathtax src/client/setup/small_records.c
+fround src/client/setup/small_records.c
+raydistancesphere2 src/client/setup/small_records.c
+createclientaccount src/client/setup/client_account.c
+getfloat src/client/setup/parser_float.c
+checkbigendian src/client/setup/byte_order.c
+savemodelcsm src/client/textures/model_files.c
+loadmodelcsm src/client/textures/model_files.c
+loadtexture2 src/client/textures/loaders.c

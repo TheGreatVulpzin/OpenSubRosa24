@@ -82,6 +82,20 @@ int __cdecl loadtexture(int texture, const char *path, int mipmap, int wrap_s, i
     return 1;
 }
 
+/* As loadtexture, and the size of the image can be any size. The texture gets the image as it is. */
+int __cdecl loadtexture2(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter,
+                         int min_filter)
+{
+    if (!loadimage(path))
+        return 0;
+    strcpy(g_image_name, path);
+    texture_from_image(texture, wrap_s, wrap_t, mag_filter, min_filter);
+    if (mipmap != 0)
+        generatemipmap(texture);
+    setuptexture(texture);
+    return 1;
+}
+
 /* As loadtexture, and replace the alpha of every pixel with the alpha argument. The shared
  * image changes too. With the byte order flag set, the alpha is the low byte and is not limited
  * to a byte. */

@@ -48,6 +48,8 @@ PROTOTYPES = {
     'packobjectpacket2': 'ip',
     'unpackobjectpacket': '',
     'movewindow': '',
+    'savemodelcsm': 'iN',
+    'loadmodelcsm': 'iN',
     'getnextplayer': '',
     'getnextobject': '',
     'getnextitem': '',

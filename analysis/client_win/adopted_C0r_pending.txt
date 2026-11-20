@@ -1,0 +1,3 @@
+# gettextlength: the offline test skips it (pointer typed as integer). net_calcdistancefactor: the offline test reports a difference with the same low word of the result.
+gettextlength src/client/setup/small_records.c
+net_calcdistancefactor src/client/setup/small_records.c

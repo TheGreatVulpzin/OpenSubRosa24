@@ -546,7 +546,7 @@ void shutdownaudio(void);
 void loadwav(void);
 void createaccount(void);
 void account_nameexists(void);
-void lf_33f20(void);
+void createclientaccount(void);
 void lf_34010(void);
 void loadaccountsserver(void);
 void saveaccountsclient(void);
@@ -721,7 +721,7 @@ void economy_gunmarket(void);
 void playerbuystock(void);
 void lf_6f6e0(void);
 void playerdeathtax(void);
-void lf_6f990(void);
+void accountdeathtax(void);
 void playerteamkilltax(void);
 void lf_6fb40(void);
 void player_calcassets(void);
@@ -795,7 +795,7 @@ void rendermap(void);
 void drawmap(void);
 void selectnearitem(void);
 void createhuman(void);
-void lf_85940(void);
+void getnexthuman(void);
 void lf_85980(void);
 void humansimulation(void);
 void humansimulationclient(void);
@@ -831,7 +831,7 @@ void getonlineserverlist(void);
 void getmasterserverip(void);
 void setupitemtypes(void);
 void createitem(void);
-void lf_970f0(void);
+void getnextitem(void);
 void itemtimetolive(void);
 void lf_971c0(void);
 void itemsimulation(void);
@@ -879,7 +879,7 @@ void logicsimulation(void);
 void logic_farbslist(void);
 void sprintf_comma(void);
 void lf_a3fe0(void);
-void lf_a4150(void);
+void addpointstoteam(void);
 void pointinsidebase(void);
 void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
@@ -908,8 +908,8 @@ void lf_abc00(void);
 void modeltempvertsequal(void);
 void setupmodel(void);
 void copymodel(void);
-void lf_ad140(void);
-void lf_ad390(void);
+void savemodelcsm(void);
+void loadmodelcsm(void);
 void createtypemodel(void);
 void rendermodelnormals(void);
 void addboxtomodel(void);
@@ -961,7 +961,7 @@ void buildtrackmodel(void);
 void rendertrackmodel(void);
 void lf_c14a0(void);
 void model_editor(void);
-void lf_c1d90(void);
+void fround(void);
 void lf_c1dc0(void);
 void client_simulation(void);
 void lf_c32d0(void);
@@ -981,7 +981,7 @@ void getrandomvector2d(void);
 void getrandomvector3d(void);
 void lf_c5770(void);
 void createobject(void);
-void lf_c6f20(void);
+void getnextobject(void);
 void lf_c6f60(void);
 void lf_c6ff0(void);
 void addobjectrotation(void);
@@ -1019,7 +1019,7 @@ void lf_d43c0(void);
 void lf_d4610(void);
 void lf_d4700(void);
 void createplayer(void);
-void lf_d49e0(void);
+void getnextplayer(void);
 void deleteplayer(void);
 void playersimulation(void);
 void sr_fixplayername(void);
@@ -1035,7 +1035,7 @@ void loadsource(void);
 void orientationtoquaternion(void);
 void quaterniontoorientation(void);
 void multiplyquaternion(void);
-void lf_d6c70(void);
+void copyquaternion(void);
 void rendersphere(void);
 void rendermodellist(void);
 void rendermodel(void);
@@ -1085,7 +1085,7 @@ void servercycle(void);
 void serverrecv(void);
 void getsuncolors(void);
 void raydistancesphere(void);
-void lf_e0b60(void);
+void raydistancesphere2(void);
 void getskycolor(void);
 void getsuncolor(void);
 void csradixsort(void);
@@ -1175,10 +1175,10 @@ void lf_fd7f0(void);
 void findstring(void);
 void checkstring(void);
 void lf_fd8e0(void);
-void lf_fd9f0(void);
+void getfloat(void);
 void getstring(void);
 void cs_getline(void);
-void lf_fdc70(void);
+void checkbigendian(void);
 void lf_fdce0(void);
 void lf_fdd00(void);
 void listfiles(void);
@@ -1251,7 +1251,7 @@ void setfontresolution(void);
 void loadimage(void);
 void loadtexture(void);
 void loadtexturesetalpha(void);
-void lf_10a5f0(void);
+void loadtexture2(void);
 void loadtexturepartial(void);
 void generatemipmap(void);
 void setuptexture(void);
@@ -1850,7 +1850,7 @@ const LfEntry lf_table[] = {
     { "loadwav", 0x33af0, (void *)loadwav, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createaccount", 0x33be0, (void *)createaccount, 1, LF_RET_INT, 4, "v", 0 },
     { "account_nameexists", 0x33eb0, (void *)account_nameexists, 1, LF_RET_INT, 4, "p", 0 },
-    { "createclientaccount", 0x33f20, (void *)lf_33f20, 3, LF_RET_INT, 4, "ppv", 0 },
+    { "createclientaccount", 0x33f20, (void *)createclientaccount, 3, LF_RET_INT, 4, "ppv", 0 },
     { "saveaccountsserver", 0x34010, (void *)lf_34010, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsserver", 0x341d0, (void *)loadaccountsserver, 0, LF_RET_VOID, 4, "", 1 },
     { "saveaccountsclient", 0x34470, (void *)saveaccountsclient, 0, LF_RET_VOID, 4, "", 1 },
@@ -2025,7 +2025,7 @@ const LfEntry lf_table[] = {
     { "playerbuystock", 0x6f5d0, (void *)playerbuystock, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playersellstock", 0x6f6e0, (void *)lf_6f6e0, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdeathtax", 0x6f860, (void *)playerdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
-    { "accountdeathtax", 0x6f990, (void *)lf_6f990, 1, LF_RET_VOID, 4, "v", 0 },
+    { "accountdeathtax", 0x6f990, (void *)accountdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
     { "playerteamkilltax", 0x6fa00, (void *)playerteamkilltax, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdebt", 0x6fb40, (void *)lf_6fb40, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_calcassets", 0x6fb80, (void *)player_calcassets, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2099,7 +2099,7 @@ const LfEntry lf_table[] = {
     { "drawmap", 0x84700, (void *)drawmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "selectnearitem", 0x84f00, (void *)selectnearitem, 0, LF_RET_VOID, 4, "", 0 },
     { "createhuman", 0x850b0, (void *)createhuman, 3, LF_RET_INT, 4, "ppp", 0 },
-    { "getnexthuman", 0x85940, (void *)lf_85940, 0, LF_RET_INT, 4, "", 0 },
+    { "getnexthuman", 0x85940, (void *)getnexthuman, 0, LF_RET_INT, 4, "", 0 },
     { "deletehuman", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
     { "humansimulation", 0x85b70, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "humansimulationclient", 0x896d0, (void *)humansimulationclient, 0, LF_RET_VOID, 4, "", 0 },
@@ -2135,7 +2135,7 @@ const LfEntry lf_table[] = {
     { "getmasterserverip", 0x94c50, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
     { "setupitemtypes", 0x951c0, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "createitem", 0x96cf0, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
-    { "getnextitem", 0x970f0, (void *)lf_970f0, 0, LF_RET_INT, 4, "", 0 },
+    { "getnextitem", 0x970f0, (void *)getnextitem, 0, LF_RET_INT, 4, "", 0 },
     { "itemtimetolive", 0x97130, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deleteitem", 0x971c0, (void *)lf_971c0, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulation", 0x97350, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
@@ -2183,7 +2183,7 @@ const LfEntry lf_table[] = {
     { "logic_farbslist", 0xa3de0, (void *)logic_farbslist, 1, LF_RET_VOID, 4, "v", 0 },
     { "sprintf_comma", 0xa3ee0, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
     { "logicsimulation_driving", 0xa3fe0, (void *)lf_a3fe0, 0, LF_RET_VOID, 4, "", 0 },
-    { "addpointstoteam", 0xa4150, (void *)lf_a4150, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "addpointstoteam", 0xa4150, (void *)addpointstoteam, 2, LF_RET_VOID, 4, "vv", 0 },
     { "pointinsidebase", 0xa4180, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidebuilding", 0xa4260, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
     { "pointinsidebasesafe", 0xa4340, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
@@ -2212,8 +2212,8 @@ const LfEntry lf_table[] = {
     { "modeltempvertsequal", 0xac0d0, (void *)modeltempvertsequal, 2, LF_RET_INT, 4, "vv", 0 },
     { "setupmodel", 0xac190, (void *)setupmodel, 2, LF_RET_VOID, 4, "vv", 1 },
     { "copymodel", 0xacd30, (void *)copymodel, 1, LF_RET_VOID, 4, "v", 1 },
-    { "savemodelcsm", 0xad140, (void *)lf_ad140, 2, LF_RET_VOID, 4, "vp", 1 },
-    { "loadmodelcsm", 0xad390, (void *)lf_ad390, 2, LF_RET_INT, 4, "vp", 1 },
+    { "savemodelcsm", 0xad140, (void *)savemodelcsm, 2, LF_RET_VOID, 4, "vp", 1 },
+    { "loadmodelcsm", 0xad390, (void *)loadmodelcsm, 2, LF_RET_INT, 4, "vp", 1 },
     { "createtypemodel", 0xad5d0, (void *)createtypemodel, 2, LF_RET_VOID, 4, "vv", 1 },
     { "rendermodelnormals", 0xae8c0, (void *)rendermodelnormals, 3, LF_RET_VOID, 4, "vpp", 1 },
     { "addboxtomodel", 0xaedb0, (void *)addboxtomodel, 4, LF_RET_VOID, 4, "pvvv", 0 },
@@ -2265,7 +2265,7 @@ const LfEntry lf_table[] = {
     { "rendertrackmodel", 0xc1380, (void *)rendertrackmodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_viewer", 0xc14a0, (void *)lf_c14a0, 0, LF_RET_VOID, 4, "", 1 },
     { "model_editor", 0xc1ac0, (void *)model_editor, 0, LF_RET_VOID, 4, "", 0 },
-    { "fround", 0xc1d90, (void *)lf_c1d90, 2, LF_RET_FLOAT, 4, "vv", 0 },
+    { "fround", 0xc1d90, (void *)fround, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "unpackobjectpacket", 0xc1dc0, (void *)lf_c1dc0, 0, LF_RET_VOID, 4, "", 0 },
     { "client_simulation", 0xc2bb0, (void *)client_simulation, 0, LF_RET_VOID, 4, "", 0 },
     { "net_calcdistancefactor", 0xc32d0, (void *)lf_c32d0, 1, LF_RET_INT64, 4, "v", 0 },
@@ -2285,7 +2285,7 @@ const LfEntry lf_table[] = {
     { "getrandomvector3d", 0xc5700, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomint", 0xc5770, (void *)lf_c5770, 0, LF_RET_INT, 4, "", 0 },
     { "createobject", 0xc5780, (void *)createobject, 5, LF_RET_INT, 4, "vpppv", 0 },
-    { "getnextobject", 0xc6f20, (void *)lf_c6f20, 0, LF_RET_INT, 4, "", 0 },
+    { "getnextobject", 0xc6f20, (void *)getnextobject, 0, LF_RET_INT, 4, "", 0 },
     { "objecttimetolive", 0xc6f60, (void *)lf_c6f60, 0, LF_RET_VOID, 4, "", 0 },
     { "deleteobject", 0xc6ff0, (void *)lf_c6ff0, 1, LF_RET_VOID, 4, "v", 0 },
     { "addobjectrotation", 0xc70f0, (void *)addobjectrotation, 4, LF_RET_VOID, 4, "vppv", 0 },
@@ -2323,7 +2323,7 @@ const LfEntry lf_table[] = {
     { "particlesimulation", 0xd4610, (void *)lf_d4610, 0, LF_RET_VOID, 4, "", 0 },
     { "physicssimulation", 0xd4700, (void *)lf_d4700, 0, LF_RET_VOID, 4, "", 0 },
     { "createplayer", 0xd4750, (void *)createplayer, 0, LF_RET_INT, 4, "", 0 },
-    { "getnextplayer", 0xd49e0, (void *)lf_d49e0, 0, LF_RET_INT, 4, "", 0 },
+    { "getnextplayer", 0xd49e0, (void *)getnextplayer, 0, LF_RET_INT, 4, "", 0 },
     { "deleteplayer", 0xd4a20, (void *)deleteplayer, 1, LF_RET_VOID, 4, "v", 0 },
     { "playersimulation", 0xd4b80, (void *)playersimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "fixplayername", 0xd5200, (void *)sr_fixplayername, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2339,7 +2339,7 @@ const LfEntry lf_table[] = {
     { "orientationtoquaternion", 0xd6970, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
     { "quaterniontoorientation", 0xd6a30, (void *)quaterniontoorientation, 2, LF_RET_VOID, 4, "pp", 0 },
     { "multiplyquaternion", 0xd6b50, (void *)multiplyquaternion, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "copyquaternion", 0xd6c70, (void *)lf_d6c70, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "copyquaternion", 0xd6c70, (void *)copyquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
     { "rendersphere", 0xd6cb0, (void *)rendersphere, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "rendermodellist", 0xd6e40, (void *)rendermodellist, 1, LF_RET_VOID, 4, "v", 1 },
     { "rendermodel", 0xd7150, (void *)rendermodel, 6, LF_RET_VOID, 4, "vppvpp", 1 },
@@ -2389,7 +2389,7 @@ const LfEntry lf_table[] = {
     { "serverrecv", 0xdf6a0, (void *)serverrecv, 0, LF_RET_VOID, 4, "", 1 },
     { "getsuncolors", 0xe0720, (void *)getsuncolors, 0, LF_RET_VOID, 4, "", 0 },
     { "raydistancesphere", 0xe0b00, (void *)raydistancesphere, 3, LF_RET_FLOAT, 4, "ppv", 0 },
-    { "raydistancesphere2", 0xe0b60, (void *)lf_e0b60, 3, LF_RET_FLOAT, 4, "ppv", 0 },
+    { "raydistancesphere2", 0xe0b60, (void *)raydistancesphere2, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "getskycolor", 0xe0bc0, (void *)getskycolor, 1, LF_RET_VOID, 4, "p", 0 },
     { "getsuncolor", 0xe0ea0, (void *)getsuncolor, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "csradixsort", 0xe0f80, (void *)csradixsort, 0, LF_RET_VOID, 4, "", 0 },
@@ -2479,10 +2479,10 @@ const LfEntry lf_table[] = {
     { "findstring", 0xfd800, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
     { "checkstring", 0xfd870, (void *)checkstring, 1, LF_RET_INT, 1, "p", 0 },
     { "getint", 0xfd8e0, (void *)lf_fd8e0, 0, LF_RET_INT, 4, "", 0 },
-    { "getfloat", 0xfd9f0, (void *)lf_fd9f0, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "getfloat", 0xfd9f0, (void *)getfloat, 0, LF_RET_FLOAT, 4, "", 0 },
     { "getstring", 0xfdb20, (void *)getstring, 2, LF_RET_VOID, 4, "pv", 0 },
     { "cs_getline", 0xfdba0, (void *)cs_getline, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "checkbigendian", 0xfdc70, (void *)lf_fdc70, 0, LF_RET_VOID, 4, "", 0 },
+    { "checkbigendian", 0xfdc70, (void *)checkbigendian, 0, LF_RET_VOID, 4, "", 0 },
     { "comparestrings", 0xfdce0, (void *)lf_fdce0, 2, LF_RET_VOID, 4, "pp", 0 },
     { "checkfilespec", 0xfdd00, (void *)lf_fdd00, 2, LF_RET_INT, 4, "vp", 0 },
     { "listfiles", 0xfdde0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
@@ -2555,7 +2555,7 @@ const LfEntry lf_table[] = {
     { "loadimage", 0x109f60, (void *)loadimage, 1, LF_RET_INT, 4, "p", 1 },
     { "loadtexture", 0x10a0f0, (void *)loadtexture, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
     { "loadtexturesetalpha", 0x10a2f0, (void *)loadtexturesetalpha, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
-    { "loadtexture2", 0x10a5f0, (void *)lf_10a5f0, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
+    { "loadtexture2", 0x10a5f0, (void *)loadtexture2, 7, LF_RET_INT, 4, "vpvvvvv", 1 },
     { "loadtexturepartial", 0x10a7c0, (void *)loadtexturepartial, 6, LF_RET_VOID, 4, "vpvvvv", 1 },
     { "generatemipmap", 0x10a9a0, (void *)generatemipmap, 1, LF_RET_VOID, 4, "v", 1 },
     { "setuptexture", 0x10ac40, (void *)setuptexture, 1, LF_RET_VOID, 4, "v", 1 },
