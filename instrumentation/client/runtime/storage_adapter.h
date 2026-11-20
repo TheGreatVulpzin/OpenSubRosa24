@@ -436,6 +436,12 @@ void level_client_landscape(void);
 void level_client_finish(void);
 #define sr_level_after_buildings() level_client_finish()
 #define sr_level_shop_count 4
+void resetgame_client_screen(void);
+#define sr_resetgame_screen() resetgame_client_screen()
+void resetgame_client_level_built(void);
+#define sr_resetgame_level_built() resetgame_client_level_built()
+void resetgame_client_light(void);
+#define sr_resetgame_light() resetgame_client_light()
 #define sr_human_floor_all_rays 1
 #define sr_timer_name(field, name) ((void)0)
 #define sr_timer_start(field) ((void)0)

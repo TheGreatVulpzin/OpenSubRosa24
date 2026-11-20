@@ -1133,6 +1133,16 @@ static const char *known_difference(const char *name)
         { "createheadmodel3", "client follows the server code (generatetrinormal)" },
         /* A type other than 0 gives no vehicle. The client returns an uninitialized local, the server code -1. */
         { "createvehicle", "returns an uninitialized local for a type other than 0" },
+        /* The server code checks the bounds of the packet: a read past the end ends the packet at once.
+         * The client reads on. The two differ only for a damaged packet. */
+        { "pbitread", "client follows the server code (damaged packets)" },
+        { "pbitreadnego", "client follows the server code (damaged packets)" },
+        /* With no account the client prints an uninitialized average in stats.txt. The server code prints 0. */
+        { "server_writelogfile", "no account: the client prints junk for the average" },
+        /* The function has no result. EAX holds what the last call left there. Memory and environment are the same. */
+        { "resetgame", "no result: EAX is junk" },
+        /* The function reads the clock: two reads never give the same value. */
+        { "systemtimer", "reads the clock" },
         { "createhairmodel", "client follows the server code (generatetrinormal)" },
         { "setupclient", "client follows the server code (generatetrinormal)" },
         { "createheadmodel2", "client follows the server code (generatetrinormal)" },

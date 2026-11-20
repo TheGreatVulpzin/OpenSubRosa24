@@ -551,7 +551,7 @@ void lf_34010(void);
 void loadaccountsserver(void);
 void saveaccountsclient(void);
 void lf_345d0(void);
-void lf_34740(void);
+void server_writelogfile(void);
 void playerai(void);
 void ai_assessthreats(void);
 void angulardistance(void);
@@ -620,8 +620,8 @@ void circleintersectarea(void);
 void lf_49f00(void);
 void lf_4a180(void);
 void area_buildsectormodel(void);
-void lf_4c320(void);
-void lf_4cd90(void);
+void tempmesh_optimize(void);
+void tempmesh_optimize2(void);
 void tempmesh_deletequad(void);
 void area_getnextsectormesh(void);
 void area_setsectormesh(void);
@@ -644,7 +644,7 @@ void building_iswindow(void);
 void lf_58a70(void);
 void buildingedit_setup(void);
 void building_editorloop(void);
-void lf_5c040(void);
+void building_checkeditor(void);
 void buildingedit_addblock(void);
 void lf_5cef0(void);
 void lf_5d150(void);
@@ -704,7 +704,7 @@ void debug_addataint(void);
 void debug_addatafloat(void);
 void debug_resetlogfile(void);
 void debug_writelogfile(void);
-void lf_6ad10(void);
+void systemtimer(void);
 void lf_6b140(void);
 void server_playermessage(void);
 void drawdisplay(void);
@@ -747,7 +747,7 @@ void lf_72c40(void);
 void lf_72d10(void);
 void createevent_updateblock_quad(void);
 void packevent(void);
-void lf_73aa0(void);
+void unpackevent(void);
 void lf_742f0(void);
 void buildframelist(void);
 void frame_addmodel(void);
@@ -760,7 +760,7 @@ void frame_drawvoiceicons(void);
 void pointinsidefrustum(void);
 void boxinsidefrustum(void);
 void lf_79a90(void);
-void lf_79ad0(void);
+void resetgame(void);
 void lf_7b100(void);
 void lf_7d060(void);
 void reloadopengl(void);
@@ -919,10 +919,10 @@ void createbulletmodel(void);
 void lf_affb0(void);
 void createmodel_cityobject(void);
 void createmodel_cityobject_type(void);
-void lf_b06c0(void);
+void createmodel_cityobject_desk(void);
 void createmodel_cityobject_elevator(void);
 void addcockpittomodel(void);
-void lf_b1380(void);
+void model_extrudequadface(void);
 void model_extrudeeye(void);
 void model_extrudequad2(void);
 void addboxtomodelquad(void);
@@ -942,7 +942,7 @@ void lf_b4930(void);
 void createhairmodel(void);
 void lf_b54c0(void);
 void modeltemp_addvertex(void);
-void lf_b7aa0(void);
+void model_extrudeeye2(void);
 void createheadmodel2(void);
 void model_addvertex(void);
 void lf_baed0(void);
@@ -1194,10 +1194,11 @@ void sendpacket(void);
 void cs_pwrite(void);
 void lf_fe630(void);
 void pbitwrite(void);
-void lf_fe800(void);
+void pbitread(void);
 void lf_fe920(void);
 void lf_fea40(void);
 void pbitwritenego(void);
+void pbitreadnego(void);
 void lf_febd0(void);
 void checkkeyboard(void);
 void checkmouse(void);
@@ -1854,7 +1855,7 @@ const LfEntry lf_table[] = {
     { "loadaccountsserver", 0x341d0, (void *)loadaccountsserver, 0, LF_RET_VOID, 4, "", 1 },
     { "saveaccountsclient", 0x34470, (void *)saveaccountsclient, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsclient", 0x345d0, (void *)lf_345d0, 0, LF_RET_VOID, 4, "", 1 },
-    { "server_writelogfile", 0x34740, (void *)lf_34740, 0, LF_RET_VOID, 4, "", 1 },
+    { "server_writelogfile", 0x34740, (void *)server_writelogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x348d0, (void *)playerai, 1, LF_RET_VOID, 4, "v", 0 },
     { "ai_assessthreats", 0x35840, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
     { "angulardistance", 0x35f40, (void *)angulardistance, 2, LF_RET_FLOAT, 4, "vv", 0 },
@@ -1923,8 +1924,8 @@ const LfEntry lf_table[] = {
     { "circleintersectnormalblock", 0x49f00, (void *)lf_49f00, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
     { "circleintersectspecblock", 0x4a180, (void *)lf_4a180, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
     { "area_buildsectormodel", 0x4a650, (void *)area_buildsectormodel, 1, LF_RET_VOID, 4, "v", 1 },
-    { "tempmesh_optimize", 0x4c320, (void *)lf_4c320, 0, LF_RET_VOID, 4, "", 0 },
-    { "tempmesh_optimize2", 0x4cd90, (void *)lf_4cd90, 0, LF_RET_VOID, 4, "", 0 },
+    { "tempmesh_optimize", 0x4c320, (void *)tempmesh_optimize, 0, LF_RET_VOID, 4, "", 0 },
+    { "tempmesh_optimize2", 0x4cd90, (void *)tempmesh_optimize2, 0, LF_RET_VOID, 4, "", 0 },
     { "tempmesh_deletequad", 0x4d920, (void *)tempmesh_deletequad, 1, LF_RET_VOID, 4, "v", 0 },
     { "area_getnextsectormesh", 0x4da00, (void *)area_getnextsectormesh, 0, LF_RET_INT, 4, "", 0 },
     { "area_setsectormesh", 0x4da70, (void *)area_setsectormesh, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -1947,7 +1948,7 @@ const LfEntry lf_table[] = {
     { "building_addgaragedoor", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)buildingedit_setup, 0, LF_RET_VOID, 4, "", 0 },
     { "building_editorloop", 0x58d20, (void *)building_editorloop, 0, LF_RET_VOID, 4, "", 1 },
-    { "building_checkeditor", 0x5c040, (void *)lf_5c040, 0, LF_RET_VOID, 4, "", 0 },
+    { "building_checkeditor", 0x5c040, (void *)building_checkeditor, 0, LF_RET_VOID, 4, "", 0 },
     { "buildingedit_addblock", 0x5c760, (void *)buildingedit_addblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "buildingedit_deleteblock", 0x5cef0, (void *)lf_5cef0, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "buildingedit_blockmenu", 0x5d150, (void *)lf_5d150, 0, LF_RET_VOID, 4, "", 1 },
@@ -2007,7 +2008,7 @@ const LfEntry lf_table[] = {
     { "debug_addatafloat", 0x6ab70, (void *)debug_addatafloat, 2, LF_RET_VOID, 4, "pv", 0 },
     { "debug_resetlogfile", 0x6ac30, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "debug_writelogfile", 0x6aca0, (void *)debug_writelogfile, 1, LF_RET_VOID, 4, "v", 1 },
-    { "systemtimer", 0x6ad10, (void *)lf_6ad10, 0, LF_RET_INT, 4, "", 1 },
+    { "systemtimer", 0x6ad10, (void *)systemtimer, 0, LF_RET_INT, 4, "", 1 },
     { "lf_6b140", 0x6b140, (void *)lf_6b140, 1, LF_RET_INT, 4, "p", 1 },
     { "server_playermessage", 0x6b160, (void *)server_playermessage, 2, LF_RET_INT, 4, "vp", 0 },
     { "drawdisplay", 0x6baa0, (void *)drawdisplay, 0, LF_RET_VOID, 4, "", 1 },
@@ -2050,7 +2051,7 @@ const LfEntry lf_table[] = {
     { "createevent_updateblock_interior", 0x72d10, (void *)lf_72d10, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "createevent_updateblock_quad", 0x72db0, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x72ed0, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "unpackevent", 0x73aa0, (void *)lf_73aa0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "unpackevent", 0x73aa0, (void *)unpackevent, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupframetextures", 0x742f0, (void *)lf_742f0, 0, LF_RET_VOID, 4, "", 2 },
     { "buildframelist", 0x74890, (void *)buildframelist, 0, LF_RET_VOID, 4, "", 0 },
     { "frame_addmodel", 0x75d90, (void *)frame_addmodel, 5, LF_RET_VOID, 4, "vpvpv", 0 },
@@ -2063,7 +2064,7 @@ const LfEntry lf_table[] = {
     { "pointinsidefrustum", 0x796f0, (void *)pointinsidefrustum, 1, LF_RET_INT, 4, "p", 0 },
     { "boxinsidefrustum", 0x79890, (void *)boxinsidefrustum, 2, LF_RET_INT, 4, "pp", 0 },
     { "testtimer", 0x79a90, (void *)lf_79a90, 0, LF_RET_INT64, 4, "", 1 },
-    { "resetgame", 0x79ad0, (void *)lf_79ad0, 0, LF_RET_VOID, 4, "", 1 },
+    { "resetgame", 0x79ad0, (void *)resetgame, 0, LF_RET_VOID, 4, "", 1 },
     { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
     { "reactivategame", 0x7d060, (void *)lf_7d060, 0, LF_RET_VOID, 4, "", 2 },
     { "reloadopengl", 0x7d090, (void *)reloadopengl, 0, LF_RET_VOID, 4, "", 1 },
@@ -2222,10 +2223,10 @@ const LfEntry lf_table[] = {
     { "createsunglassmodel", 0xaffb0, (void *)lf_affb0, 1, LF_RET_VOID, 4, "v", 1 },
     { "createmodel_cityobject", 0xb01c0, (void *)createmodel_cityobject, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createmodel_cityobject_type", 0xb0200, (void *)createmodel_cityobject_type, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "createmodel_cityobject_desk", 0xb06c0, (void *)lf_b06c0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "createmodel_cityobject_desk", 0xb06c0, (void *)createmodel_cityobject_desk, 1, LF_RET_VOID, 4, "v", 1 },
     { "createmodel_cityobject_elevator", 0xb0880, (void *)createmodel_cityobject_elevator, 2, LF_RET_VOID, 4, "vv", 1 },
     { "addcockpittomodel", 0xb0af0, (void *)addcockpittomodel, 1, LF_RET_VOID, 4, "v", 0 },
-    { "model_extrudequadface", 0xb1380, (void *)lf_b1380, 1, LF_RET_VOID, 4, "v", 0 },
+    { "model_extrudequadface", 0xb1380, (void *)model_extrudequadface, 1, LF_RET_VOID, 4, "v", 0 },
     { "model_extrudeeye", 0xb2020, (void *)model_extrudeeye, 2, LF_RET_VOID, 4, "vv", 0 },
     { "model_extrudequad2", 0xb2630, (void *)model_extrudequad2, 1, LF_RET_VOID, 4, "v", 0 },
     { "addboxtomodelquad", 0xb2ad0, (void *)addboxtomodelquad, 4, LF_RET_VOID, 4, "pvvv", 0 },
@@ -2245,7 +2246,7 @@ const LfEntry lf_table[] = {
     { "createhairmodel", 0xb4a30, (void *)createhairmodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "createheadmodel", 0xb54c0, (void *)lf_b54c0, 1, LF_RET_VOID, 4, "v", 1 },
     { "modeltemp_addvertex", 0xb7980, (void *)modeltemp_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
-    { "model_extrudeeye2", 0xb7aa0, (void *)lf_b7aa0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "model_extrudeeye2", 0xb7aa0, (void *)model_extrudeeye2, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createheadmodel2", 0xb80b0, (void *)createheadmodel2, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_addvertex", 0xbadd0, (void *)model_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
     { "tesselatebeziertriangle", 0xbaed0, (void *)lf_baed0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
@@ -2497,10 +2498,11 @@ const LfEntry lf_table[] = {
     { "cs_pwrite", 0xfe5b0, (void *)cs_pwrite, 3, LF_RET_INT, 4, "pvv", 0 },
     { "cs_pread", 0xfe630, (void *)lf_fe630, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwrite", 0xfe6c0, (void *)pbitwrite, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitread", 0xfe800, (void *)lf_fe800, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitread", 0xfe800, (void *)pbitread, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitwritescale", 0xfe920, (void *)lf_fe920, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitreadscale", 0xfea40, (void *)lf_fea40, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwritenego", 0xfeb60, (void *)pbitwritenego, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitreadnego", 0xfeb80, (void *)pbitreadnego, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitwritesign", 0xfebd0, (void *)lf_febd0, 2, LF_RET_INT, 4, "pv", 0 },
     { "checkkeyboard", 0xfec50, (void *)checkkeyboard, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouse", 0xfeca0, (void *)checkmouse, 0, LF_RET_VOID, 4, "", 1 },
@@ -2606,4 +2608,4 @@ const LfEntry lf_table[] = {
     { "lf_10d680", 0x10d680, (void *)lf_10d680, 1, LF_RET_VOID, 4, "p", 0 },
     { "lf_10d7b0", 0x10d7b0, (void *)lf_10d7b0, 0, LF_RET_VOID, 4, "", 0 },
 };
-const int lf_table_count = 1301;
+const int lf_table_count = 1302;

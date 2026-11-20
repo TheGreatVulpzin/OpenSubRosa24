@@ -131,12 +131,26 @@ static void test_players(void)
     scenario_createcar(11, i, 0, 1, 1, 80.0f);
 }
 
+/* The client draws a loading screen and clears its sounds and chat at the start of a reset. */
+#ifndef sr_resetgame_screen
+#define sr_resetgame_screen() ((void)0)
+#endif
+/* The client draws the map and the shadow of the new level when the level is built. */
+#ifndef sr_resetgame_level_built
+#define sr_resetgame_level_built() ((void)0)
+#endif
+/* The client sets the position of the light from the start angles before the level is built. */
+#ifndef sr_resetgame_light
+#define sr_resetgame_light() ((void)0)
+#endif
+
 void resetgame(void)
 {
     int i, j, round;
     const vec3 *start;
     vec3 pos, rot[3];
     sr_serverinfo.ban_candidate = -1;
+    sr_resetgame_screen();
     if (sr_game.gametype == 3 && sr_server)
         saveaccountsserver();
     sr_game.state = 1;
@@ -243,7 +257,9 @@ void resetgame(void)
     }
     for (i = 0; i < 8; ++i)
         g_voice[i].active = 0;
+    sr_resetgame_light();
     createlevel();
+    sr_resetgame_level_built();
     os_srand((unsigned)os_time64(NULL));
     start = &g_city.intersections[g_city.roads[0].ends[0]].pos;
     g_camera[0] = start->x;
