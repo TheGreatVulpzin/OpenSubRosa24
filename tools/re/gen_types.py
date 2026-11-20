@@ -145,6 +145,8 @@ INPUT_STRUCTS = {
     'MenuItem': ('menu_item', 0x284),
     'EditorView': ('editor_view', 0x48),
     'EditorTile': ('editor_tile', 0x24),
+    'KeyEvent': ('key_event', 0xc),
+    'Joystick': ('joystick', 0x1a4),
     'BuildingEditor': ('building_editor', 0xec),
     'JoinServer': ('join_server', 0x48),
     'JoinAddress': ('join_address', 0x8),
@@ -1134,10 +1136,11 @@ def check_frozen(header):
 
 def game_client_offset(off):
     """Place of a Game field in the client record. The client record has no end_time, so its fields
-    sit 4 bytes before the server fields. It has 4 more bytes in the unused area between the
-    areas of the teams and the end of the record, so the shift stops there and starts again at
-    0x257e4."""
-    if 0x38 <= off < 0x57c4 or off >= 0x257e4:
+    sit 4 bytes before the server fields. It has 4 more bytes after unused_22fd8 (resetgame of the
+    client clears +0x22fd4), so the shift stops at 0x257d8 and starts again at 0x257e4. The fields
+    from 0x257d8 to 0x257e3 (the spectator, the death camera and a debug switch) have the same
+    place in both records."""
+    if 0x38 <= off < 0x257d8 or off >= 0x257e4:
         return off - 4
     return off
 

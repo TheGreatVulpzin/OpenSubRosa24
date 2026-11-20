@@ -3,6 +3,7 @@
 #include "render/landscape_draw.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "render/frustum.h"
 #include "setup/timers.h"
 #include "sr_runtime.h"
@@ -28,10 +29,6 @@ enum {
     GL_TEXTURE2 = 0x84c2
 };
 
-#define SLOT_ACTIVE_TEXTURE 0x115874
-#define SLOT_BIND_BUFFER 0x115aa8
-#define SLOT_USE_PROGRAM 0x115b18
-#define SLOT_UNIFORM_3FV 0x115b48
 
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
 GL_IMPORT(glDisableClientState, (uint32_t array), (array))
@@ -51,14 +48,14 @@ void __cdecl renderlandscape(int mode)
 
     starttimer(g_timerlist.renderlandscape);
     if (mode == 0) {
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(program->program);
-        (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM_3FV))(
+        cl_glUseProgramObjectARB(program->program);
+        cl_glUniform3fvARB(
             program->uniforms[UNIFORM_LIGHT_DIRECTION], 1, g_light_position);
         bind_texture(g_texturelist.landscape_normal);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(GL_TEXTURE1);
+        cl_glActiveTextureARB(GL_TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         bind_texture(g_texturelist.landscape_detail);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(GL_TEXTURE2);
+        cl_glActiveTextureARB(GL_TEXTURE2);
         glEnable(GL_TEXTURE_2D);
         bind_texture(g_texturelist.desert);
     }
@@ -66,14 +63,14 @@ void __cdecl renderlandscape(int mode)
     for (sector = 0; sector < NUM_SECTORS; ++sector)
         if (g_sector_lod[sector].level != SECTOR_NOT_BUILT)
             landscape_rendersector(sector);
-    (*(void(__stdcall **)(uint32_t, uint32_t))(sr_base + SLOT_BIND_BUFFER))(GL_ARRAY_BUFFER, 0);
+    cl_glBindBufferARB(GL_ARRAY_BUFFER, 0);
     glDisableClientState(GL_VERTEX_ARRAY);
     if (mode == 0) {
         glDisable(GL_TEXTURE_2D);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(GL_TEXTURE1);
+        cl_glActiveTextureARB(GL_TEXTURE1);
         glDisable(GL_TEXTURE_2D);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(GL_TEXTURE0);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(0);
+        cl_glActiveTextureARB(GL_TEXTURE0);
+        cl_glUseProgramObjectARB(0);
     }
     stoptimer(g_timerlist.renderlandscape);
 }

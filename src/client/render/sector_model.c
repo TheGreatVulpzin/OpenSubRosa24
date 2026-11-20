@@ -12,8 +12,10 @@
 #include <string.h>
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
+#include "textures/opengl.h"
 #include "textures/tempmesh.h"
 #include "vectors.h"
 
@@ -33,6 +35,12 @@
 
 /* Game functions of other files. */
 #define area_sectorvertequal CL_FN(0x50b590, int(__cdecl *)(int sector, int a, int b))
+#define area_getnextsectormesh CL_FN(0x44da00, int(__cdecl *)(void))
+#define area_setsectormesh CL_FN(0x44da70, void(__cdecl *)(int block, int used))
+#define area_removesectormodel CL_FN(0x44daf0, void(__cdecl *)(int sector))
+
+#define EXT_BUFFERS 6 /* the buffer extension in glext */
+#define NUM_SECTORS 0x2000
 
 #define SECTOR_SIDE 8
 #define BLOCK_KIND_MASK 0xe0000000u
@@ -401,4 +409,91 @@ void __cdecl area_buildsectormodel(int sector)
     remove_unused_verts();
     store_mesh(s);
     find_neighbors(sector, s);
+}
+
+#define BLOCK_SLOTS 15 /* a block of the sector list takes at most 15 vertices and 15 triangles */
+#define BLOCK_BYTES (16 * (int)sizeof(SectorVertex)) /* the vertices of one block in the buffer */
+#define NUM_MATERIALS 256
+
+/* Take the next free block of the sector list. */
+static void next_block(void)
+{
+    cl_data_sector_block = area_getnextsectormesh();
+}
+
+/* Start a run of triangles of material mat in the block in work. */
+static void start_part(BlockSector *s, int mat)
+{
+    SectorPart *part = &s->parts[s->num_meshes];
+
+    part->material = (uint8_t)mat;
+    part->num_triangles = 0;
+    part->first_index = cl_data_sector_block;
+}
+
+/* Copy the outer mesh of a sector into the sector list, one run of triangles for each material.
+ * A run fills one block: a new block starts when its vertices or its triangles pass 15. The
+ * vertices of a block are the corners of its triangles, each one once. With the buffer
+ * extension, each block goes to the vertex buffer. */
+void __cdecl area_submitsectormodel(int sector)
+{
+    SectorVertex *verts = (SectorVertex *)cl_data_sector_vertices;
+    int (*indices)[3] = (int (*)[3])&cl_data_sector_indices;
+    int *block_verts = g_tempmesh.block_verts;
+    BlockSector *s;
+    int mat, t, k, j, used;
+
+    if (sector < 0 || sector >= NUM_SECTORS || !g_block_sectors[sector].used)
+        return;
+    s = &g_block_sectors[sector];
+    area_removesectormodel(sector);
+    next_block();
+    s->num_meshes = 0;
+    for (mat = 0; mat < NUM_MATERIALS; mat++) {
+        used = 0;
+        start_part(s, mat);
+        for (t = 0; t < s->num_tris; t++) {
+            SectorPart *part = &s->parts[s->num_meshes];
+
+            if (mat != s->tri_slots[t])
+                continue;
+            if (used + 3 > BLOCK_SLOTS || part->num_triangles + 1 > BLOCK_SLOTS) {
+                area_setsectormesh(cl_data_sector_block, 1);
+                next_block();
+                used = 0;
+                s->num_meshes++;
+                part = &s->parts[s->num_meshes];
+                start_part(s, mat);
+            }
+            for (k = 0; k < 3; k++) {
+                int v = s->tris[t][k], *index = &indices[part->num_triangles + cl_data_sector_block][k];
+
+                for (j = 0; j < used; j++)
+                    if (v == block_verts[j])
+                        break;
+                if (j < used) {
+                    *index = cl_data_sector_block + j;
+                    continue;
+                }
+                *index = cl_data_sector_block + used;
+                memcpy(&verts[cl_data_sector_block + used], &s->verts[v], sizeof(SectorVertex));
+                block_verts[used++] = v;
+            }
+            part->num_triangles++;
+        }
+        if (s->parts[s->num_meshes].num_triangles != 0) {
+            area_setsectormesh(cl_data_sector_block, 1);
+            next_block();
+            s->num_meshes++;
+        }
+    }
+    if (cl_data_glext[EXT_BUFFERS]) {
+        cl_glBindBufferARB(GL_ARRAY_BUFFER, cl_data_vbo[cl_data_sector_vbo].gl_name);
+        for (k = 0; k < s->num_meshes; k++) {
+            int first = s->parts[k].first_index;
+
+            cl_glBufferSubDataARB(GL_ARRAY_BUFFER, first * (int)sizeof(SectorVertex), BLOCK_BYTES, &verts[first]);
+        }
+        cl_glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    }
 }

@@ -801,26 +801,6 @@ static void clear_tri_texcoords(void)
     memset(g_temp.tri_texcoords, 0, (size_t)g_temp.num_tris * sizeof g_temp.tri_texcoords[0]);
 }
 
-/* Build a foot box with its center below and behind the origin. */
-void createfootmodel(int model, float half_x, float half_y, float half_z)
-{
-    vec3 center = {0.0f, -0.03125f, (float)(-(double)half_z * 0.5)};
-    clear_modeltemp();
-    addboxtomodel(&center, half_x, half_y, half_z);
-    clear_tri_texcoords();
-    setupmodel(model, 0);
-}
-
-/* Build a rotor box with its forward edge at the origin. */
-void createrotormodel(int model, float half_x, float half_y, float half_z)
-{
-    vec3 center = {0.0f, 0.0f, -half_z};
-    clear_modeltemp();
-    addboxtomodel(&center, half_x, half_y, half_z);
-    clear_tri_texcoords();
-    setupmodel(model, 0);
-}
-
 /* Set a bone reference and a position without changing the reference mode. */
 void sethumanmodelvert(int vertex, int bone, float x, float y, float z)
 {
@@ -834,26 +814,6 @@ void sethumanmodelvertface(int vertex, int face, float x, float y, float z)
     g_bonevert[vertex].bone = (int)((uint32_t)face + 16u);
     g_bonevert[vertex].mode = 2;
     g_bonevert[vertex].pos = (vec3){x, y, z};
-}
-
-/* Build the two lenses and taper their inner edges. */
-void createsunglassmodel(int model)
-{
-    vec3 center = {-0.0421875f, 0.0f, -0.125f};
-    clear_modeltemp();
-    addboxtomodel(&center, 0.0375f, 0.03125f, 0.001f);
-    g_temp.verts[1].x = (float)((double)g_temp.verts[1].x - 0.009375f);
-    g_temp.verts[2].x = (float)((double)g_temp.verts[2].x - 0.009375f);
-    g_temp.verts[0].x = (float)((double)g_temp.verts[0].x + 0.0046875f);
-    g_temp.verts[3].x = (float)((double)g_temp.verts[3].x + 0.0046875f);
-    center.x = 0.0421875f;
-    addboxtomodel(&center, 0.0375f, 0.03125f, 0.001f);
-    g_temp.verts[8].x = (float)((double)g_temp.verts[8].x + 0.009375f);
-    g_temp.verts[11].x = (float)((double)g_temp.verts[11].x + 0.009375f);
-    g_temp.verts[9].x = (float)((double)g_temp.verts[9].x - 0.0046875f);
-    g_temp.verts[10].x = (float)((double)g_temp.verts[10].x - 0.0046875f);
-    clear_tri_texcoords();
-    setupmodel(model, 0);
 }
 
 /* Add a waist with two low center vertices and six flat lower triangles. */
@@ -886,122 +846,22 @@ void addwaisttomodel(const vec3 *center, float half_x, float half_y, float half_
         append_tri(first + triangles[i][0], first + triangles[i][1], first + triangles[i][2], SHADE_FLAT);
 }
 
-/* Make the control points of the head, lower the jaw, then scale the complete set. */
-void createheadmodel(int model)
-{
-    static const vec3 axes[6] = {{0,-1,0},{0,0,1},{-1,0,0},{0,0,-1},{1,0,0},{0,1,0}};
-    vec3 *points = cl_data_edit_vertices;
-    int i;
-    memcpy(points, axes, sizeof axes);
-    for (i = 0; i < 4; ++i) {
-        scaleaddvectors(&points[6 + i * 2], &points[0], &points[i + 1], 0.5f);
-        scaleaddvectors(&points[7 + i * 2], &points[i + 1], &points[0], 0.5f);
-    }
-    for (i = 0; i < 4; ++i) {
-        int next = ((i + 1) & 3) + 1;
-        scaleaddvectors(&points[14 + i * 2], &points[i + 1], &points[next], 0.5f);
-        scaleaddvectors(&points[15 + i * 2], &points[next], &points[i + 1], 0.5f);
-    }
-    for (i = 0; i < 4; ++i) {
-        scaleaddvectors(&points[22 + i * 2], &points[i + 1], &points[5], 0.5f);
-        scaleaddvectors(&points[23 + i * 2], &points[5], &points[i + 1], 0.5f);
-    }
-    for (i = 0; i < 4; ++i) {
-        scaleaddvectors(&points[30 + i], &points[0], &points[i + 1], 1.0f);
-        scaleaddvectors(&points[30 + i], &points[30 + i], &points[((i + 1) & 3) + 1], 1.0f);
-    }
-    for (i = 0; i < 4; ++i) {
-        scaleaddvectors(&points[34 + i], &points[5], &points[i + 1], 1.0f);
-        scaleaddvectors(&points[34 + i], &points[34 + i], &points[((i + 1) & 3) + 1], 1.0f);
-    }
-    for (i = 0; i < 38; ++i) {
-        if (points[i].y == -1.0f) {
-            points[i].y = -1.25f;
-            if (points[i].z == -0.5f)
-                points[i].z = -0.875f;
-            if (points[i].z == 0.0f)
-                points[i].z = -0.5f;
-        }
-    }
-    for (i = 0; i < 38; ++i)
-        scalevector(&points[i], &points[i], 0.15f);
-    createheadmodel2(model);
-}
-
-/* Accumulate each coordinate through ten float stores in cubic term order. */
-void tesselatebeziertriangle(float out[3], float u, float v, float w, const int points[10])
-{
-    const float *control = (const float *)cl_data_edit_vertices;
-    volatile float *result = out;
-    int axis;
-    for (axis = 0; axis < 3; ++axis) {
-        result[axis] = (float)((double)u * u * u * control[points[0] * 3 + axis]);
-        result[axis] = (float)((double)v * v * v * control[points[1] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)w * w * w * control[points[2] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)u * 3.0 * u * v * control[points[3] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)u * 3.0 * v * v * control[points[4] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)v * 3.0 * v * w * control[points[5] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)v * 3.0 * w * w * control[points[6] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)w * 3.0 * w * u * control[points[7] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)w * 3.0 * u * u * control[points[8] * 3 + axis] + result[axis]);
-        result[axis] = (float)((double)u * 6.0 * v * w * control[points[9] * 3 + axis] + result[axis]);
-    }
-}
-
-/* Build a phone body, its sloped lower edge and its antenna. */
-void createcellphonemodel(int model, float half_x, float half_y, float half_z)
-{
-    vec3 corner, offset;
-    int vertex, quad, triangle;
-    clear_modeltemp();
-    for (vertex = 0; vertex < 8; ++vertex) {
-        int column = vertex & 3;
-        corner.x = column == 0 || column == 3 ? -half_x : half_x;
-        corner.y = vertex < 4 ? (float)(-(double)half_y * 0.75) : half_y;
-        corner.z = column == 0 || column == 1 ? -half_z : half_z;
-        append_vertex(&corner);
-    }
-    for (quad = 0; quad < 6; ++quad) {
-        const int *corners = &g_cubequad[quad * 4];
-        int index = append_quad(corners[0], corners[1], corners[2], corners[3]);
-        model_setquadtexcoord(index, 0.0f, 0.0f);
-    }
-    offset = (vec3){0.0f, (float)(-(double)half_y * 0.25), 0.0f};
-    model_extrudequad(0, &offset);
-    g_temp.verts[g_temp.num_verts - 1].x = (float)(g_temp.verts[g_temp.num_verts - 1].x - (double)half_x * 0.5);
-    g_temp.verts[g_temp.num_verts - 4].x = (float)(g_temp.verts[g_temp.num_verts - 4].x - (double)half_x * 0.5);
-    for (quad = g_temp.num_quads - 5; quad < g_temp.num_quads; ++quad)
-        model_setquadtexcoord(quad, 0.0f, 0.0f);
-    corner = (vec3){0.0f, 0.125f, -0.03125f};
-    addboxtomodel(&corner, 0.015625f, 0.25f, 0.015625f);
-    for (triangle = g_temp.num_tris - BOX_TRIS; triangle < g_temp.num_tris; ++triangle)
-        model_settritexcoord(triangle, 1.0f, 0.0f);
-    triangulate_quads();
-    setupmodel(model, 0);
-}
-
-/* Build the shaft and the circular handle of a key. */
-void createkeymodel(int model)
-{
-    vec3 center = {0.0f, 0.0f, -0.046875f}, rot[3];
-    int quad;
-    clear_modeltemp();
-    addboxtomodelquad(&center, 0.015625f, 0.03125f, 0.09375f);
-    for (quad = 0; quad < g_temp.num_quads; ++quad)
-        model_setquadtexcoord(quad, 0.5f, 0.0f);
-    center.z = 0.015625f;
-    resetorientation(rot);
-    rotateorientation(rot, &rot[1], 1.5707963705062866f);
-    addcylindertomodel(&center, rot, 0.03125f, 0.03125f);
-    clear_tri_texcoords();
-    triangulate_quads();
-    setupmodel(model, 0);
-}
-
 /* File transfers keep the item size and count of each model array. */
 static size_t csm_transfer(const char *operation, void *data, size_t size, size_t count, void *file)
 {
     SrFileTransfer transfer = (SrFileTransfer)sr_import("MSVCR100.DLL", operation);
     return transfer(data, size, count, file);
 }
+
+#define WAIST_CORNERS 8
+#define WAIST_POINTS 10
+#define WAIST_FORK_DROP 1.25 /* the two fork points sit 1.25 half heights below the middle */
+
+/* The cube faces that the waist keeps: the sides and the top. */
+static const int waist_faces[3] = {2, 4, 5};
+
+/* The bottom of the waist: two quads from the fork points to the corners and six flat
+ * triangles. The numbers are vertex offsets from the first waist vertex. */
+static const int waist_quads[2][4] = {{3, 9, 8, 0}, {9, 2, 1, 8}};
+static const int waist_tris[6][3] = {{7, 9, 3}, {7, 6, 9}, {6, 2, 9}, {5, 8, 1}, {5, 4, 8}, {4, 0, 8}};
 

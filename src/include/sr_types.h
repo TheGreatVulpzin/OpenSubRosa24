@@ -3035,7 +3035,7 @@ typedef union TempMesh { struct {
     vec3 tri_normals[16384];             /* +0x1e000c area_buildsectormodel: the normal of each triangle */
     MeshTri neighbors[16384];            /* +0x21000c area_interior_buildsectormodel: the triangle on the other side of each edge or -1 */
     vec3 edge_normals[49152];            /* +0x24000c area_interior_buildsectormodel: the normal of that triangle for each edge or zero */
-    uint8_t pad_2d000c[0x40];
+    int block_verts[16];                 /* +0x2d000c area_submitsectormodel: the mesh vertex of each vertex of the block in work */
     int num_specials;                    /* +0x2d004c area_buildsectormodel: the special blocks of the sector in work */
     int specials[1536];                  /* +0x2d0050 area_buildsectormodel: x, y and z of each special block in the area */
 }; uint8_t lf_raw[0x2d1850]; } TempMesh;
@@ -3058,6 +3058,7 @@ SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots"
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_normals) == 0x1e000c, "TempMesh.tri_normals");
 SR_STATIC_ASSERT(offsetof(TempMesh, neighbors) == 0x21000c, "TempMesh.neighbors");
 SR_STATIC_ASSERT(offsetof(TempMesh, edge_normals) == 0x24000c, "TempMesh.edge_normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, block_verts) == 0x2d000c, "TempMesh.block_verts");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_specials) == 0x2d004c, "TempMesh.num_specials");
 SR_STATIC_ASSERT(offsetof(TempMesh, specials) == 0x2d0050, "TempMesh.specials");
 
@@ -3645,23 +3646,23 @@ typedef union GameClient { struct {
     int team4_manager;                   /* +0x4688 as team0_manager, team record 4 */
     uint8_t pad_468c[0x430];
     int unk_4abc;                        /* +0x4abc 1 functions */
-    uint8_t pad_4ac0[0xd3c];
-    int unk_57fc;                        /* +0x57fc 1 functions */
-    uint8_t pad_5800[0x43c];
-    int unk_5c3c;                        /* +0x5c3c 1 functions */
-    uint8_t pad_5c40[0xd38];
-    int unk_6978;                        /* +0x6978 1 functions */
-    uint8_t pad_697c[0x43c];
-    int unk_6db8;                        /* +0x6db8 1 functions */
-    uint8_t pad_6dbc[0xd38];
-    int unk_7af4;                        /* +0x7af4 1 functions */
-    uint8_t pad_7af8[0x8];
-    int unk_7b00;                        /* +0x7b00 1 functions */
-    uint8_t pad_7b04[0x430];
-    int unk_7f34;                        /* +0x7f34 1 functions */
-    uint8_t pad_7f38[0x1b0a0];
-    int unused_22fd8;                    /* +0x22fd8 resetgame clears this field. No reader in the server */
-    uint8_t pad_22fdc[0x27fc];
+    uint8_t pad_4ac0[0xd38];
+    int unk_57f8;                        /* +0x57f8 1 functions */
+    uint8_t pad_57fc[0x43c];
+    int unk_5c38;                        /* +0x5c38 1 functions */
+    uint8_t pad_5c3c[0xd38];
+    int unk_6974;                        /* +0x6974 1 functions */
+    uint8_t pad_6978[0x43c];
+    int unk_6db4;                        /* +0x6db4 1 functions */
+    uint8_t pad_6db8[0xd38];
+    int unk_7af0;                        /* +0x7af0 1 functions */
+    uint8_t pad_7af4[0x8];
+    int unk_7afc;                        /* +0x7afc 1 functions */
+    uint8_t pad_7b00[0x430];
+    int unk_7f30;                        /* +0x7f30 1 functions */
+    uint8_t pad_7f34[0x1b0a0];
+    int unused_22fd8;                    /* +0x22fd4 resetgame clears this field. No reader in the server */
+    uint8_t pad_22fd8[0x2800];
     int spectator_human;                 /* +0x257d8 Client spectator target or minus one */
     int death_camera_ticks;              /* +0x257dc resetgame writes -1. The client gameloop writes 180 while the viewed human lives and counts it down after the death. The free camera waits for 0. No reader in the server */
     int unused_257e0;                    /* +0x257e0 resetgame clears this field. No reader in the server */
@@ -3716,7 +3717,7 @@ SR_STATIC_ASSERT(offsetof(GameClient, team2_members) == 0x2384, "GameClient.team
 SR_STATIC_ASSERT(offsetof(GameClient, team2_manager) == 0x2390, "GameClient.team2_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, team3_manager) == 0x350c, "GameClient.team3_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, team4_manager) == 0x4688, "GameClient.team4_manager");
-SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd8, "GameClient.unused_22fd8");
+SR_STATIC_ASSERT(offsetof(GameClient, unused_22fd8) == 0x22fd4, "GameClient.unused_22fd8");
 SR_STATIC_ASSERT(offsetof(GameClient, spectator_human) == 0x257d8, "GameClient.spectator_human");
 SR_STATIC_ASSERT(offsetof(GameClient, death_camera_ticks) == 0x257dc, "GameClient.death_camera_ticks");
 SR_STATIC_ASSERT(offsetof(GameClient, unused_257e0) == 0x257e0, "GameClient.unused_257e0");

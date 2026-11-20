@@ -209,6 +209,42 @@ SR_STATIC_ASSERT(offsetof(EditorTile, start) == 0x18, "EditorTile.start");
 SR_STATIC_ASSERT(offsetof(EditorTile, count) == 0x1c, "EditorTile.count");
 SR_STATIC_ASSERT(offsetof(EditorTile, index) == 0x20, "EditorTile.index");
 
+/* key_event[]: record of 0xc bytes. */
+typedef union KeyEvent { struct {
+    int scancode;                        /* +0x0000 checksystemmessages: the SDL scancode of a key press */
+    int key;                             /* +0x0004 checksystemmessages: the SDL key code (the letter of the key) */
+    int mod;                             /* +0x0008 checksystemmessages: the SDL modifier bits. Bits 0 and 1 are the shift keys */
+}; uint8_t lf_raw[0xc]; } KeyEvent;
+SR_STATIC_ASSERT(sizeof(KeyEvent) == 0xc, "KeyEvent");
+SR_STATIC_ASSERT(offsetof(KeyEvent, scancode) == 0x0, "KeyEvent.scancode");
+SR_STATIC_ASSERT(offsetof(KeyEvent, key) == 0x4, "KeyEvent.key");
+SR_STATIC_ASSERT(offsetof(KeyEvent, mod) == 0x8, "KeyEvent.mod");
+
+/* joystick[]: record of 0x1a4 bytes. */
+typedef union Joystick { struct {
+    int instance;                        /* +0x0000 setupjoysticks: the SDL instance id */
+    uint8_t guid[16];                    /* +0x0004 setupjoysticks: the SDL GUID */
+    int num_axes;                        /* +0x0014  */
+    float axes[16];                      /* +0x0018 checkjoystick: each axis from -1 to 1 */
+    int num_buttons;                     /* +0x0058  */
+    int buttons[32];                     /* +0x005c checkjoystick: 1 while the button is down */
+    int num_hats;                        /* +0x00dc  */
+    int hats[32];                        /* +0x00e0 checkjoystick: 4 flags for each hat: up, down, left, right */
+    char name[64];                       /* +0x0160 setupjoysticks: the SDL name */
+    void* haptic;                        /* +0x01a0 setupjoysticks: the SDL haptic device, or 0 */
+}; uint8_t lf_raw[0x1a4]; } Joystick;
+SR_STATIC_ASSERT(sizeof(Joystick) == 0x1a4, "Joystick");
+SR_STATIC_ASSERT(offsetof(Joystick, instance) == 0x0, "Joystick.instance");
+SR_STATIC_ASSERT(offsetof(Joystick, guid) == 0x4, "Joystick.guid");
+SR_STATIC_ASSERT(offsetof(Joystick, num_axes) == 0x14, "Joystick.num_axes");
+SR_STATIC_ASSERT(offsetof(Joystick, axes) == 0x18, "Joystick.axes");
+SR_STATIC_ASSERT(offsetof(Joystick, num_buttons) == 0x58, "Joystick.num_buttons");
+SR_STATIC_ASSERT(offsetof(Joystick, buttons) == 0x5c, "Joystick.buttons");
+SR_STATIC_ASSERT(offsetof(Joystick, num_hats) == 0xdc, "Joystick.num_hats");
+SR_STATIC_ASSERT(offsetof(Joystick, hats) == 0xe0, "Joystick.hats");
+SR_STATIC_ASSERT(offsetof(Joystick, name) == 0x160, "Joystick.name");
+SR_STATIC_ASSERT(offsetof(Joystick, haptic) == 0x1a0, "Joystick.haptic");
+
 /* building_editor[]: record of 0xec bytes. */
 typedef union BuildingEditor { struct {
     int mode;                            /* +0x0000 buildingedit_render: 0 blocks, 1 walls, 2 areas, 3 markers */

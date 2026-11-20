@@ -826,7 +826,7 @@ void sphereintersecttrianglefull(void);
 void sphereintersectline(void);
 void sphereintersectpoint(void);
 void lineintersectsphere(void);
-void lf_94b20(void);
+void getlanipaddress(void);
 void getonlineserverlist(void);
 void getmasterserverip(void);
 void setupitemtypes(void);
@@ -962,7 +962,7 @@ void rendertrackmodel(void);
 void lf_c14a0(void);
 void model_editor(void);
 void fround(void);
-void lf_c1dc0(void);
+void cl_unpackobjectpacket(void);
 void client_simulation(void);
 void net_calcdistancefactor(void);
 void packobjectpacket2(void);
@@ -1203,8 +1203,8 @@ void pbitwritesign(void);
 void checkkeyboard(void);
 void checkmouse(void);
 void checkmouserelative(void);
-void lf_feea0(void);
-void lf_ff020(void);
+void setupjoysticks(void);
+void checkjoystick(void);
 void drawmenuitems(void);
 void generatemenutextures(void);
 void drawmenubutton2(void);
@@ -1223,13 +1223,13 @@ void menuset(void);
 void menuslider(void);
 void menutextbox(void);
 void menu_textbox_putchar(void);
-void lf_1046c0(void);
+void getinputletter(void);
 void addmenuinputchar(void);
 void deleteselectedtext(void);
 void gettextinputposition(void);
 void formattextbox(void);
 void drawtextbox(void);
-void lf_1060d0(void);
+void checksystemmessages(void);
 void listvideomodes(void);
 void movewindow(void);
 void setupperspectiveviewport(void);
@@ -2130,7 +2130,7 @@ const LfEntry lf_table[] = {
     { "sphereintersectline", 0x947f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
     { "sphereintersectpoint", 0x94900, (void *)sphereintersectpoint, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x94990, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
-    { "getlanipaddress", 0x94b20, (void *)lf_94b20, 0, LF_RET_VOID, 4, "", 1 },
+    { "getlanipaddress", 0x94b20, (void *)getlanipaddress, 0, LF_RET_VOID, 4, "", 1 },
     { "getonlineserverlist", 0x94c00, (void *)getonlineserverlist, 0, LF_RET_VOID, 4, "", 1 },
     { "getmasterserverip", 0x94c50, (void *)getmasterserverip, 0, LF_RET_INT, 4, "", 1 },
     { "setupitemtypes", 0x951c0, (void *)setupitemtypes, 0, LF_RET_VOID, 4, "", 0 },
@@ -2266,7 +2266,7 @@ const LfEntry lf_table[] = {
     { "model_viewer", 0xc14a0, (void *)lf_c14a0, 0, LF_RET_VOID, 4, "", 1 },
     { "model_editor", 0xc1ac0, (void *)model_editor, 0, LF_RET_VOID, 4, "", 0 },
     { "fround", 0xc1d90, (void *)fround, 2, LF_RET_FLOAT, 4, "vv", 0 },
-    { "unpackobjectpacket", 0xc1dc0, (void *)lf_c1dc0, 0, LF_RET_VOID, 4, "", 0 },
+    { "unpackobjectpacket", 0xc1dc0, (void *)cl_unpackobjectpacket, 0, LF_RET_VOID, 4, "", 0 },
     { "client_simulation", 0xc2bb0, (void *)client_simulation, 0, LF_RET_VOID, 4, "", 0 },
     { "net_calcdistancefactor", 0xc32d0, (void *)net_calcdistancefactor, 1, LF_RET_INT, 4, "v", 0 },
     { "packobjectpacket2", 0xc3320, (void *)packobjectpacket2, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2507,8 +2507,8 @@ const LfEntry lf_table[] = {
     { "checkkeyboard", 0xfec50, (void *)checkkeyboard, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouse", 0xfeca0, (void *)checkmouse, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouserelative", 0xfedb0, (void *)checkmouserelative, 0, LF_RET_VOID, 4, "", 1 },
-    { "setupjoysticks", 0xfeea0, (void *)lf_feea0, 0, LF_RET_VOID, 4, "", 1 },
-    { "checkjoystick", 0xff020, (void *)lf_ff020, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupjoysticks", 0xfeea0, (void *)setupjoysticks, 0, LF_RET_VOID, 4, "", 1 },
+    { "checkjoystick", 0xff020, (void *)checkjoystick, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmenuitems", 0xff2e0, (void *)drawmenuitems, 0, LF_RET_VOID, 4, "", 1 },
     { "generatemenutextures", 0x100660, (void *)generatemenutextures, 0, LF_RET_VOID, 4, "", 1 },
     { "drawmenubutton2", 0x100930, (void *)drawmenubutton2, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
@@ -2527,13 +2527,13 @@ const LfEntry lf_table[] = {
     { "menuslider", 0x103e70, (void *)menuslider, 0, LF_RET_VOID, 4, "", 0 },
     { "menutextbox", 0x1040c0, (void *)menutextbox, 0, LF_RET_VOID, 4, "", 0 },
     { "menu_textbox_putchar", 0x104490, (void *)menu_textbox_putchar, 1, LF_RET_VOID, 4, "v", 0 },
-    { "getinputletter", 0x1046c0, (void *)lf_1046c0, 0, LF_RET_INT, 4, "", 0 },
+    { "getinputletter", 0x1046c0, (void *)getinputletter, 0, LF_RET_INT, 4, "", 0 },
     { "addmenuinputchar_105810", 0x105810, (void *)addmenuinputchar, 1, LF_RET_VOID, 4, "v", 0 },
     { "deleteselectedtext", 0x1058a0, (void *)deleteselectedtext, 0, LF_RET_INT, 4, "", 0 },
     { "gettextinputposition", 0x1059a0, (void *)gettextinputposition, 0, LF_RET_INT, 4, "", 0 },
     { "formattextbox", 0x105b80, (void *)formattextbox, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "drawtextbox", 0x105dc0, (void *)drawtextbox, 11, LF_RET_VOID, 4, "vvvvvvvvvvv", 1 },
-    { "checksystemmessages", 0x1060d0, (void *)lf_1060d0, 0, LF_RET_VOID, 4, "", 1 },
+    { "checksystemmessages", 0x1060d0, (void *)checksystemmessages, 0, LF_RET_VOID, 4, "", 1 },
     { "listvideomodes", 0x1061e0, (void *)listvideomodes, 0, LF_RET_VOID, 4, "", 1 },
     { "movewindow", 0x106310, (void *)movewindow, 0, LF_RET_VOID, 4, "", 0 },
     { "setupperspectiveviewport", 0x106320, (void *)setupperspectiveviewport, 7, LF_RET_VOID, 4, "vvvvvvv", 1 },

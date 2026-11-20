@@ -10,4 +10,6 @@ void __cdecl optionsmenu(void);
 void __cdecl joinmenu(void);
 void __cdecl mainmenu(void);
 
+void __cdecl getlanipaddress(void);
+
 #endif /* CL_MENU_FRONT_H */

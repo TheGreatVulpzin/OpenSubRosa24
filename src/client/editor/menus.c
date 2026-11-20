@@ -7,6 +7,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "editor/building.h"
 #include "menu/draw.h"
 #include "menu/items.h"
@@ -31,7 +32,6 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 #define gameloop CL_FN(0x47b100, void(__cdecl *)(void))
 #define listfiles CL_FN(0x4fdde0, void(__cdecl *)(const char *pattern, int list, int flags))
 #define removeflieextentions CL_FN(0x4fe200, void(__cdecl *)(int list))
-#define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define setuptextdisplay CL_FN(0x5079d0, void(__cdecl *)(void))

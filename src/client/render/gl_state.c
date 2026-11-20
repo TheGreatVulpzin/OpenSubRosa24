@@ -7,6 +7,7 @@
 #include "render/gl_state.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 
@@ -32,9 +33,6 @@ enum {
 };
 
 /* The two functions of the stencil extensions: the client holds a pointer to each one. */
-#define SLOT_ACTIVE_STENCIL_FACE 0x116450
-#define SLOT_STENCIL_OP_SEPARATE 0x116590
-#define SLOT_STENCIL_FUNC_SEPARATE 0x116594
 
 typedef void(__stdcall *ActiveStencilFaceFn)(uint32_t face);
 typedef void(__stdcall *StencilOpSeparateFn)(uint32_t face, uint32_t fail, uint32_t depth_fail, uint32_t pass);
@@ -52,7 +50,7 @@ void settwosidedstencil(unsigned back, unsigned front, int reference, unsigned m
                         unsigned front_fail, unsigned front_depth, unsigned front_pass)
 {
     if (g_glext[GLEXT_STENCIL_TWO_SIDE]) {
-        ActiveStencilFaceFn active_face = *(ActiveStencilFaceFn *)(sr_base + SLOT_ACTIVE_STENCIL_FACE);
+        ActiveStencilFaceFn active_face = cl_glActiveStencilFaceEXT;
         active_face(GL_BACK);
         glStencilMask(0xffffffffu);
         glStencilFunc(back, reference, mask);
@@ -62,8 +60,8 @@ void settwosidedstencil(unsigned back, unsigned front, int reference, unsigned m
         glStencilFunc(front, reference, mask);
         glStencilOp(front_fail, front_depth, front_pass);
     } else if (g_glext[GLEXT_STENCIL_SEPARATE]) {
-        StencilFuncSeparateFn stencil_func = *(StencilFuncSeparateFn *)(sr_base + SLOT_STENCIL_FUNC_SEPARATE);
-        StencilOpSeparateFn stencil_op = *(StencilOpSeparateFn *)(sr_base + SLOT_STENCIL_OP_SEPARATE);
+        StencilFuncSeparateFn stencil_func = cl_glStencilFuncSeparateATI;
+        StencilOpSeparateFn stencil_op = cl_glStencilOpSeparateATI;
         glStencilMask(0xffffffffu);
         stencil_func(front, back, reference, mask);
         stencil_op(GL_BACK, back_fail, back_depth, back_pass);
@@ -89,8 +87,8 @@ void __cdecl disabletwosidedstencil(void)
  * back faces and down on the front faces. */
 void __cdecl glstateshadowtwoside(void)
 {
-    ActiveStencilFaceFn active_face = *(ActiveStencilFaceFn *)(sr_base + SLOT_ACTIVE_STENCIL_FACE);
-    StencilOpSeparateFn stencil_op = *(StencilOpSeparateFn *)(sr_base + SLOT_STENCIL_OP_SEPARATE);
+    ActiveStencilFaceFn active_face = cl_glActiveStencilFaceEXT;
+    StencilOpSeparateFn stencil_op = cl_glStencilOpSeparateATI;
 
     glDisable(GL_TEXTURE_2D);
     glColorMask(0, 0, 0, 0);

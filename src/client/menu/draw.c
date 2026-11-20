@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "client.h"
+#include "input/key_events.h"
 #include "menu/items.h"
 #include "menu/textinput.h"
 #include "render/draw2d.h"
@@ -37,7 +38,6 @@ GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Game functions of other files. */
-#define getinputletter CL_FN(0x5046c0, int(__cdecl *)(int wait))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))
 

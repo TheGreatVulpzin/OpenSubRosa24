@@ -73,61 +73,6 @@ static void finish_part(BlockSector *sector)
     ++sector->num_meshes;
 }
 
-/* Group triangles by material and copy their vertices into fixed mesh blocks. */
-void area_submitsectormodel(int sector)
-{
-    BlockSector *block;
-    const SectorShadowMesh *source;
-    int material, triangle, corner;
-    int (*indices)[3] = (int (*)[3])&cl_data_sector_indices;
-    if ((unsigned)sector >= SECTOR_LIMIT || !cl_data_block_sectors[sector].used)
-        return;
-    block = &cl_data_block_sectors[sector];
-    source = (const SectorShadowMesh *)block;
-    area_removesectormodel(sector);
-    cl_data_sector_mesh_next = area_getnextsectormesh();
-    for (material = 0; material < MATERIAL_LIMIT; ++material) {
-        int vertices = 0;
-        SectorPart *part = start_part(block, material);
-        for (triangle = 0; triangle < source->num_triangles; ++triangle) {
-            if (source->triangle_material[triangle] != material)
-                continue;
-            if (vertices + 3 > MESH_SIZE - 1 || part->num_triangles + 1 > MESH_SIZE - 1) {
-                finish_part(block);
-                vertices = 0;
-                part = start_part(block, material);
-            }
-            for (corner = 0; corner < 3; ++corner) {
-                int local, vertex = source->triangles[triangle][corner];
-                for (local = 0; local < vertices; ++local)
-                    if (cl_data_sector_mesh_remap[local] == vertex)
-                        break;
-                indices[cl_data_sector_mesh_next + part->num_triangles][corner] = cl_data_sector_mesh_next + local;
-                if (local == vertices) {
-                    memcpy(cl_data_sector_vertices + (cl_data_sector_mesh_next + local) * VERTEX_BYTES,
-                           source->vertices + vertex * VERTEX_BYTES, VERTEX_BYTES);
-                    cl_data_sector_mesh_remap[vertices++] = vertex;
-                }
-            }
-            ++part->num_triangles;
-        }
-        if (part->num_triangles)
-            finish_part(block);
-    }
-    if (cl_data_glext[GLEXT_BUFFERS]) {
-        GlBindBufferFn bind = (GlBindBufferFn)cl_data_gl_bind_buffer;
-        BufferSubData upload = (BufferSubData)cl_data_gl_buffer_sub_data;
-        int part;
-        bind(GL_ARRAY_BUFFER, cl_data_vbo[cl_data_sector_vbo].gl_name);
-        for (part = 0; part < block->num_meshes; ++part) {
-            int first = block->parts[part].first_index;
-            upload(GL_ARRAY_BUFFER, first * VERTEX_BYTES, MESH_SIZE * VERTEX_BYTES,
-                   cl_data_sector_vertices + first * VERTEX_BYTES);
-        }
-        bind(GL_ARRAY_BUFFER, 0);
-    }
-}
-
 /* Build and submit a used sector, then invalidate its four interior models. */
 void area_resetsector(int sector)
 {

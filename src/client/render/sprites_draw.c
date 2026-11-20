@@ -5,6 +5,7 @@
 #include "render/sprites.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "util.h"
@@ -12,8 +13,7 @@
 
 enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        CULL_FACE = 0xb44, LINE_SMOOTH = 0xb20, LINES = 1,
-       PROGRAM_REFLECT = 2, UNIFORM_CAMERA = 1, UNIFORM_WORLD = 4, UNIFORM_LIGHT = 5,
-       SLOT_USE_PROGRAM = 0x115b18, SLOT_UNIFORM = 0x115b48 };
+       PROGRAM_REFLECT = 2, UNIFORM_CAMERA = 1, UNIFORM_WORLD = 4, UNIFORM_LIGHT = 5 };
 
 GL_IMPORT(glVertex3fv, (const float *position), (position))
 GL_IMPORT(glNormal3fv, (const float *normal), (normal))
@@ -115,10 +115,10 @@ void __cdecl rendersprites(void)
     }
     glEnd();
     glBlendFunc(1, GL_ONE_MINUS_SRC_ALPHA);
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(program->program);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM))(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM))(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM))(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
+    cl_glUseProgramObjectARB(program->program);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
     glBindTexture(GL_TEXTURE_2D, cl_data_texture[sr_data_texturelist.material[sr_data_materiallist.flagged_material]].gl_name);
     glEnableClientState(ARRAY_POSITION);
     glEnableClientState(ARRAY_NORMAL);
@@ -152,7 +152,7 @@ void __cdecl rendersprites(void)
         }
     }
     glEnd();
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(0);
+    cl_glUseProgramObjectARB(0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_TEXTURE_2D);
     glBegin(LINES);

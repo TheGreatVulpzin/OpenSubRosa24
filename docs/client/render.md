@@ -191,6 +191,8 @@ A sector is a `BlockSector` record. `sector_entries` holds the sector and the di
 - A new mesh takes the next record of a ring of 4096 (`interior.count`). The sector that used that record loses it.
 - The triangles of the record are in parts, one part for each material, in material order. The neighbor of an edge keeps its index from before the sort.
 
+`area_submitsectormodel(sector)` copies the outer mesh into the sector list: one run of triangles for each material. A run fills one block of 16 vertex and 16 triangle places (`sector_block`), and a new block starts when the vertices or the triangles pass 15. Each corner of a block is one vertex of the block (`tempmesh.block_verts`). With the buffer extension, each block goes to the vertex buffer of the sectors.
+
 ## Sector shadow volumes
 
 `src/client/render/sector_shadow.c` builds closed shadow volumes from the sector triangles that face away from the light. Each volume has two caps and up to three sides. The six current corners also occupy a separate array. The extrusion reaches the base of the sector's vertical block range. A light y component from zero through 0.125 gives zero extrusion. A negative y component leaves the vertex list unchanged and leaves the build timer active. A NaN y component clears the list and completes the pass without faces.

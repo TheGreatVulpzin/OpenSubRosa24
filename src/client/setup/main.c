@@ -4,6 +4,8 @@
  */
 #include "setup/main.h"
 
+#include <stdlib.h>
+
 #include "audio/imports.h"
 #include "client.h"
 #include "image/fonts.h"
@@ -125,12 +127,24 @@ static void main_window(void)
     audio_SDL_GL_SetSwapInterval()(sr_data_option.swap_interval);
 }
 
+/* SR_DEBUGIT=1 in the environment turns the debug flag on. The client never sets it. The
+ * flag opens the building editor and the level editor from the main menu, and it also gives
+ * debug money and debug keys. Only for tests. */
+static void debug_switch(void)
+{
+    const char *text = getenv("SR_DEBUGIT");
+
+    if (text != NULL && atoi(text) != 0)
+        sr_data_debugit = 1;
+}
+
 /* Run the client. The client has no Steam: the Steam flag stays 0. */
 int __cdecl client_main(void)
 {
     uint32_t systems = SDL_INIT_TIMER_VIDEO;
     int i;
 
+    debug_switch();
     debug_resetlogfile();
     getcpufrequency();
     setuptimers();

@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "client.h"
+#include "gl_slots.h"
 #include "render/source.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
@@ -40,20 +41,7 @@ enum {
 };
 
 /* The functions of the shader extension: the client holds a pointer to each one. */
-#define SLOT_SHADER_SOURCE 0x115b04
-#define SLOT_COMPILE_SHADER 0x115b08
-#define SLOT_ATTACH_OBJECT 0x115b10
-#define SLOT_LINK_PROGRAM 0x115b14
-#define SLOT_GET_INFO_LOG 0x115b74
-#define SLOT_USE_PROGRAM 0x115b18
-#define SLOT_UNIFORM_1I 0x115b30
-#define SLOT_UNIFORM_2FV 0x115b44
-#define SLOT_UNIFORM_3FV 0x115b48
-#define SLOT_UNIFORM_4FV 0x115b4c
-#define SLOT_UNIFORM_LOCATION 0x115b7c
 /* The constants of the atmosphere: four floats and three floats. */
-#define ATMO_CONSTANT 0x123510
-#define ATMO_WAVELENGTH 0x123520
 
 typedef void(__stdcall *ShaderSourceFn)(uint32_t shader, int count, const char **source, const int *length);
 typedef void(__stdcall *ShaderFn)(uint32_t shader);
@@ -64,14 +52,13 @@ typedef int(__stdcall *UniformLocationFn)(uint32_t program, const char *name);
 typedef void(__stdcall *Uniform1iFn)(int location, int value);
 typedef void(__stdcall *UniformVectorFn)(int location, int count, const float *value);
 
-#define slot(type, offset) (*(type *)(sr_base + (offset)))
 
 /* Add the info log of an object to the shader log when it has text. */
 static void keep_info_log(uint32_t object)
 {
     int length;
 
-    slot(GetInfoLogFn, SLOT_GET_INFO_LOG)(object, INFO_LOG_SIZE, &length, g_info_log);
+    cl_glGetInfoLogARB(object, INFO_LOG_SIZE, &length, g_info_log);
     if (0 < length)
         strcat(g_shader_log, g_info_log);
 }
@@ -79,11 +66,11 @@ static void keep_info_log(uint32_t object)
 /* Compile one shader from its source and attach it to the program. */
 static void build_shader(uint32_t program, uint32_t shader, const char *source)
 {
-    slot(ShaderSourceFn, SLOT_SHADER_SOURCE)(shader, 1, &source, 0);
+    cl_glShaderSourceARB(shader, 1, &source, 0);
     keep_info_log(shader);
-    slot(ShaderFn, SLOT_COMPILE_SHADER)(shader);
+    cl_glCompileShaderARB(shader);
     keep_info_log(shader);
-    slot(AttachObjectFn, SLOT_ATTACH_OBJECT)(program, shader);
+    cl_glAttachObjectARB(program, shader);
     keep_info_log(shader);
 }
 
@@ -99,7 +86,7 @@ int __cdecl compileprogramobject(int program, const char *vertex_source, const c
             build_shader(record->program, record->vertex_shader, vertex_source);
         if (fragment_source != 0 && g_glext[GLEXT_FRAGMENT_SHADER] != 0)
             build_shader(record->program, record->fragment_shader, fragment_source);
-        slot(ShaderFn, SLOT_LINK_PROGRAM)(record->program);
+        cl_glLinkProgramARB(record->program);
         keep_info_log(record->program);
         record->linked = 1;
         strcat(g_shader_log, "\r\n\r\n");
@@ -110,17 +97,17 @@ int __cdecl compileprogramobject(int program, const char *vertex_source, const c
 /* The record holds the place of each uniform variable of the program. */
 static void locate(ProgramObject *record, int index, const char *name)
 {
-    record->uniforms[index] = slot(UniformLocationFn, SLOT_UNIFORM_LOCATION)(record->program, name);
+    record->uniforms[index] = cl_glGetUniformLocationARB(record->program, name);
 }
 
 static void use_program(uint32_t program)
 {
-    slot(UseProgramFn, SLOT_USE_PROGRAM)(program);
+    cl_glUseProgramObjectARB(program);
 }
 
 static void set_int(const ProgramObject *record, int index, int value)
 {
-    slot(Uniform1iFn, SLOT_UNIFORM_1I)(record->uniforms[index], value);
+    cl_glUniform1iARB(record->uniforms[index], value);
 }
 
 /* Give the program the size of one pixel of the screen. */
@@ -130,17 +117,17 @@ static void set_pixel_size(const ProgramObject *record, int index)
 
     size[0] = (float)(1.0 / (float)g_width);
     size[1] = (float)(1.0 / (float)g_height);
-    slot(UniformVectorFn, SLOT_UNIFORM_2FV)(record->uniforms[index], 1, size);
+    cl_glUniform2fvARB(record->uniforms[index], 1, size);
 }
 
 static void set_atmosphere_constant(const ProgramObject *record, int index)
 {
-    slot(UniformVectorFn, SLOT_UNIFORM_4FV)(record->uniforms[index], 1, (const float *)(sr_base + ATMO_CONSTANT));
+    cl_glUniform4fvARB(record->uniforms[index], 1, cl_data_atmo_constant);
 }
 
 static void set_atmosphere_wavelength(const ProgramObject *record, int index)
 {
-    slot(UniformVectorFn, SLOT_UNIFORM_3FV)(record->uniforms[index], 1, (const float *)(sr_base + ATMO_WAVELENGTH));
+    cl_glUniform3fvARB(record->uniforms[index], 1, cl_data_atmo_wavelength);
 }
 
 /* Read the two shader files and compile the program. The caller frees the sources. */

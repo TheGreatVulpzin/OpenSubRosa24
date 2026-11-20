@@ -12,6 +12,8 @@ int modeltemp_addtri(int a, int b, int c, int shading);
 void modeltemp_quadtotris(int quad);
 void modeltemp_smoothnormals(void);
 void __cdecl addboxtomodel(const vec3 *center, float half_x, float half_y, float half_z);
+void __cdecl addwaisttomodel(const vec3 *center, float x, float y, float z);
+void __cdecl addhalfboxtomodel(const vec3 *center, const vec3 *rot, float x, float y, float z, int skip);
 void __cdecl model_settritexcoord(int tri, float u, float v);
 void __cdecl model_setquadtexcoord(int quad, float u, float v);
 void __cdecl model_extrudequad(int quad, const vec3 *offset);

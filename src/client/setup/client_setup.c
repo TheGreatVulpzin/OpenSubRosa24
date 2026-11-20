@@ -9,6 +9,8 @@
 
 #include "audio/wav.h"
 #include "client.h"
+#include "textures/head_models.h"
+#include "textures/small_models.h"
 #include "render/sprites.h"
 #include "items.h"
 #include "setup/identifiers.h"

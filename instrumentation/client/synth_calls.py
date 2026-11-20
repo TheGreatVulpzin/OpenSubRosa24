@@ -22,6 +22,10 @@ TEMPMESH_OPTIMIZE2 = 0x4cd90
 MODEL_EXTRUDEEYE2 = 0xb7aa0
 MODEL_EXTRUDEQUADFACE = 0xb1380
 CREATEMODEL_CITYOBJECT_DESK = 0xb06c0
+GETINPUTLETTER = 0x1046c0
+SETUPJOYSTICKS = 0xfeea0
+CHECKJOYSTICK = 0xff020
+UNPACKOBJECTPACKET = 0xc1dc0
 
 
 def call(rva, *args):
@@ -46,6 +50,13 @@ def cases():
         'model_extrudeeye2': [call(MODEL_EXTRUDEEYE2, q, b) for q in (0, 1) for b in (0, 1)],
         'model_extrudequadface': [call(MODEL_EXTRUDEQUADFACE, q) for q in (0, 2)],
         'createmodel_cityobject_desk': [call(CREATEMODEL_CITYOBJECT_DESK, m) for m in (0, 3)],
+        # The key presses of the frame of the snapshot. The argument is not used.
+        'getinputletter': [call(GETINPUTLETTER, 0)] * 4,
+        # SDL of the harness has no joystick: the count is 0.
+        'setupjoysticks': [call(SETUPJOYSTICKS)],
+        'checkjoystick': [call(CHECKJOYSTICK)] * 2,
+        # The packet reader of the snapshot: the calls read the bits that come next.
+        'unpackobjectpacket': [call(UNPACKOBJECTPACKET)] * 2,
     }
 
 

@@ -1,6 +1,6 @@
 # Models
 
-Files: `src/client/textures/models.c`, `model_parts.c`, `head_models.c`, `tempmesh.c`, `sphere.c`. Header: `models.h`, `model_parts.h`, `head_models.h`, `tempmesh.h`, `sphere.h`.
+Files: `src/client/textures/models.c`, `model_parts.c`, `head_models.c`, `small_models.c`, `tempmesh.c`, `sphere.c`. Header: `models.h`, `model_parts.h`, `head_models.h`, `tempmesh.h`, `sphere.h`.
 
 ## The model in work
 
@@ -23,6 +23,12 @@ Shading modes of a triangle: -2 every corner uses the normal of the triangle, -1
 | `model_extrudeeye2` (`model_parts.c`) | The eye of the Bezier head: as `model_extrudeeye`, with a ring 1.5 times as far from the middle. A ring vertex gets 0.875 times its offset as its texture coordinate. Only the middle vertex follows the face bone. |
 | `model_extrudequadface` (`model_parts.c`) | A face on a quad of the head: three rows of 4 vertices (left eye, right eye, mouth), 12 flat triangles and 6 quads around them. The mouth goes 1/32 into the head. Each eye quad gets `model_extrudeeye`. `head_face_quads` keeps the quads of the eyes and the mouth. |
 | `createmodel_cityobject_desk` (`models.c`) | The desk: a top and two legs, each a box, all with texture coordinate 0, 0. |
+| `tesselatebeziertriangle` (`head_models.c`) | The point at three weights of a cubic Bezier triangle of 10 control points (edit vertices). Each axis adds the 10 terms one by one as floats. |
+| `addhalfboxtomodel` (`models.c`) | A box turned by a matrix, with one face left out and each triangle in both windings. |
+| `createfootmodel`, `createrotormodel` (`small_models.c`) | One box each, with texture coordinate 0, 0. |
+| `createsunglassmodel` (`small_models.c`) | Two thin boxes, narrower at the nose. |
+| `createkeymodel` (`small_models.c`) | A flat box and a ring (a cylinder) across its head. |
+| `createcellphonemodel` (`small_models.c`) | A box with a narrower bottom, a top pulled up and narrowed at the back, and an antenna box. |
 | `createheadmodel3` (`head_models.c`) | The simple head: eight points, each triangle split into four along Hermite curves, and two eye quads. |
 | `addhalfboxtomodel` | Eight vertices and both windings of each triangle, except the selected open face. |
 | `addwaisttomodel` | Ten vertices, five quads and six lower triangles. Existing parts remain in the model. |

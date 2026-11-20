@@ -49,3 +49,10 @@ The scenario_event_data view has 128 records of 80 bytes. The final padding of t
 ScenarioEventData combines first_low and first_high for the first word. It combines second_low and second_high for the second word. The third field supplies the last word. Each high part is multiplied by 65536 before addition. Both sums wrap at 32 bits. Event indices wrap at 65536.
 
 Packet reset writes the socket signature and clears the bit cursor. The scale writer divides before it masks. The scale reader multiplies after it reads. Bit masks use the low five bits of the count. The sign writer returns success even when the bit writer fails.
+## The objects of a state packet
+
+`src/client/setup/unpack_objects.c` (`cl_unpackobjectpacket`, the client version of `unpackobjectpacket`) reads the humans, the vehicles, the items and the elevators of a state packet, then runs `client_simulation`. The server version in `src/net/client.c` gives other results: the client makes row 0 of an orientation with `crossproduct` of rows 2 and 1, and it places each bone with `scaleaddvectors` and three turns. The bit widths of the fields have names in the file.
+
+Test: `synth_calls.py unpackobjectpacket` reads the bits that come next in the snapshot. On one snapshot both calls are the same. On the other two the bits run past the end of the 64 KB buffer, and the shared `pbitread` stops there (`recv_pos` becomes 0x10000) where the client did not: one byte of `recv_pos` differs. A real packet does not run past the end.
+
+`getlanipaddress` (in `front.c`) adds each address of this machine (at most 16) with the last byte 255 and the game port to the join list, before the master list.

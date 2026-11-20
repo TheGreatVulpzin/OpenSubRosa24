@@ -10,8 +10,7 @@
 
 enum { VOICE_SLOTS = 8, VOICE_SAMPLES = 160, VOICE_FRAMES = 64,
        CAPTURE_BATCH = 16, SILENCE_LIMIT = 64, VOICE_RELEASE = 16, TALK_RELEASE = 24,
-       SAMPLE_LIMIT = 32767, ALC_CAPTURE_SAMPLES = 0x312,
-       VOICE_FRAME_SIZE_LABEL = 0x1263b0 };
+       SAMPLE_LIMIT = 32767, ALC_CAPTURE_SAMPLES = 0x312 };
 #define VOICE_DISTANCE_LIMIT 65536.0f
 
 /* Choose a free slot or a replacement. Return -1 when no slot qualifies. */
@@ -98,7 +97,7 @@ void getaudioinput(int player)
         }
         encodespeex(0, player, frame);
         CL_FN(0x46aaa0, void (__cdecl *)(char *, int))(
-            (char *)(sr_base + VOICE_FRAME_SIZE_LABEL), ring->size[frame]);
+            cl_data_text_speex_frame_size, ring->size[frame]);
         ring->mode[frame] = cl_data_audio_voice_mode;
         if (quiet) {
             for (sample = 0; sample < VOICE_SAMPLES; sample++)

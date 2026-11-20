@@ -7,6 +7,7 @@
 #include "audio/sound.h"
 #include "audio/imports.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "menu/draw.h"
 #include "menu/items.h"
 #include "sr_runtime.h"
@@ -46,7 +47,6 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 
 /* Game functions of other files. */
 #define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
-#define checksystemmessages CL_FN(0x5060d0, void (__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))
@@ -105,16 +105,21 @@ void frame_drawvoiceicons(void)
     }
 }
 
-enum { TEXT_BACK = 0x125d40, TEXT_THRESHOLD = 0x125d48,
-       TEXT_PUSH_LABEL = 0x125d58, TEXT_PUSH_KEY = 0x125d6c,
-       TEXT_VOICE = 0x125d80, TEXT_SPEAKING = 0x125d8c,
-       TEXT_LEVEL = 0x125d90, TEXT_SIZE = 0x125d94,
-       TEXT_BIND = 0x125d98, TEXT_EMPTY = 0x127eb5 };
+#define TEXT_BACK cl_data_text_back
+#define TEXT_THRESHOLD cl_data_text_voice_minimum
+#define TEXT_PUSH_LABEL cl_data_text_push_to_talk
+#define TEXT_PUSH_KEY cl_data_text_push_key
+#define TEXT_VOICE cl_data_text_voice_chat
+#define TEXT_SPEAKING cl_data_text_speaking
+#define TEXT_LEVEL cl_data_text_level
+#define TEXT_SIZE cl_data_text_int_format
+#define TEXT_BIND cl_data_text_bind_hint
+#define TEXT_EMPTY cl_data_text_empty
 
 /* Place a menu label in the fixed canvas. */
-static void voice_label(unsigned text, float x, float y, float width, float height)
+static void voice_label(char *text, float x, float y, float width, float height)
 {
-    createmenubutton((char *)(sr_base + text), x, y, width, height, MENU_FONT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+    createmenubutton(text, x, y, width, height, MENU_FONT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /* Draw the waveform and the two threshold lines. */
@@ -212,10 +217,10 @@ void voiceoptionsmenu(void)
                     -1, MENU_LEFT, MENU_WAVE_Y, MENU_ACTIVE_SIZE, MENU_ACTIVE_SIZE, ICON_CENTER,
                     MENU_ACTIVE_ALPHA, MENU_ACTIVE_ALPHA, MENU_ACTIVE_ALPHA, MENU_ACTIVE_ALPHA);
                 drawtext(
-                    (char *)(sr_base + TEXT_SPEAKING), MENU_LEFT, MENU_ACTIVE_TITLE_Y, MENU_FONT,
+                    TEXT_SPEAKING, MENU_LEFT, MENU_ACTIVE_TITLE_Y, MENU_FONT,
                     ICON_CENTER, 1.0f, 1.0f, 1.0f, MENU_ACTIVE_ALPHA);
                 drawtext(
-                    (char *)(sr_base + TEXT_LEVEL), MENU_LEFT, MENU_ACTIVE_DETAIL_Y, MENU_DETAIL_FONT,
+                    TEXT_LEVEL, MENU_LEFT, MENU_ACTIVE_DETAIL_Y, MENU_DETAIL_FONT,
                     ICON_CENTER, 1.0f, 1.0f, 1.0f, MENU_ACTIVE_ALPHA);
             }
             if (cl_data_audio_push_to_talk)
@@ -226,11 +231,11 @@ void voiceoptionsmenu(void)
         if (cl_data_audio_debug)
             for (frame = 0; frame < ICON_FRAMES; frame++)
                 drawtext(
-                    (char *)(sr_base + TEXT_SIZE), MENU_MARGIN, (float)frame * MENU_DEBUG_FONT, MENU_DEBUG_FONT, 0,
+                    TEXT_SIZE, MENU_MARGIN, (float)frame * MENU_DEBUG_FONT, MENU_DEBUG_FONT, 0,
                     1.0f, 1.0f, 1.0f, 1.0f, sr_data_speex.voice_ring[0].size[frame]);
         if (cl_data_menu_items[1].pressed)
             drawtext(
-                (char *)(sr_base + TEXT_BIND), MENU_LEFT, MENU_BIND_HINT_Y, MENU_HEIGHT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
+                TEXT_BIND, MENU_LEFT, MENU_BIND_HINT_Y, MENU_HEIGHT, 0, 1.0f, 1.0f, 1.0f, 1.0f);
         drawmousecursor(
             cl_data_input_mouse.x, cl_data_input_mouse.y, MENU_CURSOR_SIZE, 1.0f, 1.0f, 1.0f, 1.0f);
         audio_SDL_GL_SwapWindow()(cl_data_audio_window);

@@ -1152,6 +1152,8 @@ static const char *known_difference(const char *name)
         { "createhairmodel", "client follows the server code (generatetrinormal)" },
         { "setupclient", "client follows the server code (generatetrinormal)" },
         { "createheadmodel2", "client follows the server code (generatetrinormal)" },
+        { "createkeymodel", "client follows the server code (generatetrinormal)" },
+        { "createheadmodel", "client follows the server code (generatetrinormal)" },
         { "steam_init", "no Steam in the client" },
         { "steam_shutdown", "no Steam in the client" },
         { "steam_update", "no Steam in the client" },

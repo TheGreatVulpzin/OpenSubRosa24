@@ -167,16 +167,9 @@ initWGLLoadFunctions src/client/gl/loaders.c
 getplayticket src/client/setup/steam.c
 settwosidedstencil src/client/render/gl_state.c
 addhalfboxtomodel src/client/textures/models.c
-createsunglassmodel src/client/textures/models.c
-createfootmodel src/client/textures/models.c
-createrotormodel src/client/textures/models.c
-createheadmodel src/client/textures/models.c
-tesselatebeziertriangle src/client/textures/models.c
 sethumanmodelvert src/client/textures/models.c
 sethumanmodelvertface src/client/textures/models.c
 addwaisttomodel src/client/textures/models.c
-createcellphonemodel src/client/textures/models.c
-createkeymodel src/client/textures/models.c
 area_getblocklink src/game/area.c
 area_getblockmaterial src/game/area.c
 area_resetsector src/client/render/sector_models.c
@@ -192,7 +185,6 @@ area_block_addwindowhorizontal_interior src/game/block_mesh.c
 area_getnextsectormesh src/client/render/sector_models.c
 area_setsectormesh src/client/render/sector_models.c
 area_removesectormodel src/client/render/sector_models.c
-area_submitsectormodel src/client/render/sector_models.c
 area_sectorvertequal src/client/render/sector_models.c
 building_addgaragedoor src/game/building_actions.c
 createevent_updatescenario src/client/setup/scenario_event.c
