@@ -13,3 +13,10 @@ area_interior_buildsectormodel src/client/render/interior_model.c
 createheadmodel2 src/client/textures/head_models.c
 building_editorloop src/client/editor/building_loop.c
 building_checkeditor src/client/editor/building_loop.c
+checksystemmessages src/client/input/key_events.c
+getinputletter src/client/input/key_events.c
+setupjoysticks src/client/input/joystick.c
+checkjoystick src/client/input/joystick.c
+getlanipaddress src/client/menu/front.c
+unpackobjectpacket src/client/setup/unpack_objects.c cl_unpackobjectpacket
+resetgame src/client/setup/reset.c cl_resetgame

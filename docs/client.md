@@ -434,8 +434,8 @@ The names `multiplyquaternion` and `projectorientation` were swapped in the serv
 
 The client keeps the game record (`game`, RVA 0x9065300) in the type `GameClient`. The server uses `Game`. Both types have the same field names, so shared code reads `sr_game.<field>` in both builds. The offsets differ:
 
-- The client record has no `end_time`. From +0x38 to +0x57c3 (the tick, the debug switches, the sun angles and the five team records), each field sits 4 bytes before the server field. A team record has 0x117c bytes in both.
-- From +0x57c4 to +0x257e3 the offsets are the same. The client has 4 more bytes in this area.
+- The client record has no `end_time`. From +0x38 to +0x257d7 (the tick, the debug switches, the sun angles, the five team records and `unused_22fd8`), each field sits 4 bytes before the server field. A team record has 0x117c bytes in both. The client `resetgame` clears +0x22fd4, where the server clears `unused_22fd8` at +0x22fd8.
+- From +0x257d8 to +0x257e3 (the spectator, the death camera and a debug switch) the offsets are the same. The client has 4 more bytes between +0x22fd8 and +0x257d8.
 - From +0x257e4 on (the count of checkpoints, the checkpoints and the count of newspapers) each field sits 4 bytes before the server field. The record has 0x25d60 bytes. The server record has 0x25d64.
 - Shared code that needs `end_time` reads `sr_game_end_time`. In the server it is the field. In the client it is a private variable, because the client never reads it.
 - `tools/re/gen_types.py` makes `GameClient` from the names of `Game` (`game_client_offset`). A new field of `Game` gets its client offset from that function.

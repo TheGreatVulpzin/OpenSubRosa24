@@ -3,6 +3,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "textures/head_models.h"
 #include "textures/models.h"
 #include "intersect.h"
@@ -94,7 +95,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Game functions of other files. */
-#define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define setuptextdisplay CL_FN(0x5079d0, void(__cdecl *)(void))

@@ -1121,6 +1121,7 @@ static const char *known_difference(const char *name)
         { "scenario_createguards", "client follows the server code (createhuman)" },
         { "scenario_createtraffic2", "client follows the server code (createhuman)" },
         { "scenario_createchase", "client follows the server code (createhuman)" },
+        { "resetgame", "client follows the server code (createhuman)" },
         /* generatetrinormal of the client rounds the two edges to floats before the cross product. The server
          * code keeps some edge terms in x87 precision. A curved model gets normals that differ in the last bit,
          * and the copies of the model on the heap differ. With the client rounding all 21 calls are the same. */

@@ -35,3 +35,11 @@ The server sends the places of humans and objects a few times each second. The c
 - `client_simulation` puts a human or an object along the line between the two places. The point goes as many steps past the newest place as ticks passed since it came, and never more than 64. The bones of the human hang from their parents by the joint offsets, turned by the joint angles.
 - `humansimulationclient` copies the place of the first bone to a human on foot. A human in a vehicle sits on its seat: the seat place is in the frame of the vehicle. While the player holds the exit button, the human moves out along the first row of the frame, one step for each tick up to 30. The arms and the legs then take the frame of their parents. Two of them (bones 9 and 12) are turned by a quarter of a turn.
 - `itemsimulationclient` counts down the timer of each item. An item that hangs from another item takes its place, and items of type 15 and 16 on a holder of type 13 or 14 move along its first row by the slot number. Other items go down by 1/16 of the second row. An item that a human holds takes the frame of the hand bone and a place 1/4 behind it.
+
+## The objects of a state packet
+
+`src/client/setup/unpack_objects.c` (`cl_unpackobjectpacket`, the client version of `unpackobjectpacket`) reads the humans, the vehicles, the items and the elevators of a state packet, then runs `client_simulation`. The server version in `src/net/client.c` gives other results: the client makes row 0 of an orientation with `crossproduct` of rows 2 and 1, and it places each bone with `scaleaddvectors` and three turns. The bit widths of the fields have names in the file.
+
+Test: `synth_calls.py unpackobjectpacket` reads the bits that come next in the snapshot. On one snapshot both calls are the same. On the other two the bits run past the end of the 64 KB buffer, and the shared `pbitread` stops there (`recv_pos` becomes 0x10000) where the client did not: one byte of `recv_pos` differs. A real packet does not run past the end.
+
+`getlanipaddress` (in `front.c`) adds each address of this machine (at most 16) with the last byte 255 and the game port to the join list, before the master list.

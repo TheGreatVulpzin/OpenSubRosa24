@@ -13,6 +13,7 @@
 #include "audio/voice.h"
 #include "audio/voice_ui.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "editor/building.h"
 #include "math/small_vectors.h"
 #include "menu/draw.h"
@@ -67,7 +68,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glPolygonMode, (unsigned, unsigned
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 
 /* Game functions of other files. */
-#define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define setuptextdisplay CL_FN(0x5079d0, void(__cdecl *)(void))
@@ -93,7 +93,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glColor3f, (float, float, float))
 #define checksimulation CL_FN(0x47d900, int(__cdecl *)(int))
 #define set_cpu_affinity CL_FN(0x4faf30, void(__cdecl *)(void)) /* setcpuaffinity */
 #define enablesocketclient CL_FN(0x4fe360, void(__cdecl *)(int lan))
-#define getlanipaddress CL_FN(0x494b20, void(__cdecl *)(void))
 #define getonlineserverlist CL_FN(0x494c00, void(__cdecl *)(void))
 #define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
 #define getmasterserverip CL_FN(0x494c50, int(__cdecl *)(void))
@@ -612,13 +611,18 @@ void __cdecl optionsmenu(void)
 #define DIRECT_IP_SIZE 0x18
 #define KEY_J 0x0d
 #define WSOCK_INET_ADDR 10
+#define WSOCK_GETHOSTBYNAME 52
+#define WSOCK_GETHOSTNAME 57
+#define HOST_NAME_SIZE 0x80
+#define MAX_LAN_ADDRESSES 16
+#define BROADCAST_BYTE 0xff /* the last byte of a broadcast address */
 #define OPTION_DISABLED 20
 #define OPTION_LABEL 21
 #define VERSION_SHORT 0x50
 
 /* The two marks of the version column. They are empty texts at fixed addresses. */
-#define VERSION_MARK_OLD ((const char *)(sr_base + 0x127eb3u))
-#define VERSION_MARK_NEW ((const char *)(sr_base + 0x127eb2u))
+#define VERSION_MARK_OLD (&cl_data_version_marks[1])
+#define VERSION_MARK_NEW (&cl_data_version_marks[0])
 
 /* Swap the bytes between network order and host order. */
 static uint32_t swap32(uint32_t value)
@@ -704,6 +708,44 @@ static void join_add_direct_ip(char *direct_ip)
     a->port = (uint16_t)sr_data_option.port;
     cl_data_join_address_count++;
     direct_ip[0] = '\0';
+}
+
+/* The part of a WinSock host entry that the client reads. */
+typedef struct HostEntry {
+    char *name;
+    char **aliases;
+    short address_type;
+    short address_length;
+    char **addresses;
+} HostEntry;
+
+/* Add the addresses of this machine (at most 16) to the address list, each with the last byte
+ * 255 (the broadcast of its network) and the game port. The master list starts after them. */
+void __cdecl getlanipaddress(void)
+{
+    static int(__stdcall * host_name)(char *, int);
+    static const HostEntry *(__stdcall * host_by_name)(const char *);
+    char name[HOST_NAME_SIZE];
+    const HostEntry *host;
+    int i;
+
+    if (!host_name) {
+        *(void **)&host_name = sr_import_ordinal("WSOCK32.DLL", WSOCK_GETHOSTNAME);
+        *(void **)&host_by_name = sr_import_ordinal("WSOCK32.DLL", WSOCK_GETHOSTBYNAME);
+    }
+    if (host_name(name, sizeof name) == -1)
+        return;
+    host = host_by_name(name);
+    if (host == NULL)
+        return;
+    for (i = 0; host->addresses[i] != NULL && i < MAX_LAN_ADDRESSES; i++) {
+        JoinAddress *a = &cl_data_join_addresses[cl_data_join_address_count];
+
+        a->address = swap32(*(const uint32_t *)host->addresses[i]) | BROADCAST_BYTE;
+        a->port = (uint16_t)sr_data_bsdsocket.port;
+        cl_data_join_address_count++;
+    }
+    cl_data_join_master_first = cl_data_join_address_count;
 }
 
 /* Draw one row of the server list: the ping, the players, the game type of a server of this

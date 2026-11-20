@@ -10,6 +10,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "debug/debug.h"
 #include "editor/building_loop.h"
 #include "editor/level.h"
@@ -101,7 +102,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define deleteplayer CL_FN(0x4d4a20, void(__cdecl *)(int player))
 #define resetgame CL_FN(0x479ad0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
-#define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define checkmouserelative CL_FN(0x4fedb0, void(__cdecl *)(void))
 #define debug_getinputs CL_FN(0x469190, void(__cdecl *)(void))

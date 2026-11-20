@@ -82,6 +82,14 @@ The body must have positive health to select movement controls. A body on foot s
 
 `debug_getinputs` selects camera players, resets interior measurements, copies the body view position and changes diagnostic display switches. Input blocking permits F6 and F11 display controls. F11 cycles six display modes. Insert adds 10000 to the money of player zero on a press. If the body exists, Insert also copies the head position into camera zero on each call.
 
+## System events, text input and joysticks
+
+`src/client/input/key_events.c` and `joystick.c`:
+
+- `checksystemmessages` reads the SDL events of the frame. The wheel steps add to the mouse record. Each key press (at most 1024 for each frame) goes into `key_events` with its scancode, key code and modifiers. A quit request sets the back flag of the menus. `message_delay` makes it wait 10 ms first, but no code sets it.
+- `getinputletter` reads the next key press of the frame. Backspace and Delete give `LETTER_DELETE` (10), Return and Escape give `LETTER_DONE` (11), Tab gives `LETTER_NEXT` (12) or, with shift, `LETTER_PREVIOUS` (13). Insert switches the overwrite mode. Home, End and the arrows move the cursor of the text, and without shift the selection ends at the cursor. A letter with shift becomes the shifted letter of a US keyboard. The harness cannot call it: the table has no signature for it.
+- `setupjoysticks` opens at most 16 joysticks and reads their id, GUID, name, counts and haptic device. `checkjoystick` copies the state to `joysticks_previous` and reads the axes (-1 to 1), the buttons and four flags for each hat. No code of the client calls the two functions.
+
 ## Functions
 
 | File | Functions |

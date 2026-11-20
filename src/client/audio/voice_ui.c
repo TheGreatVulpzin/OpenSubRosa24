@@ -7,6 +7,7 @@
 #include "audio/sound.h"
 #include "audio/imports.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "menu/draw.h"
 #include "menu/items.h"
 #include "sr_runtime.h"
@@ -46,7 +47,6 @@ enum { ICON_CHANNELS = 8, ICON_FRAME_SAMPLES = 160, ICON_FRAMES = 64,
 
 /* Game functions of other files. */
 #define drawbitmap CL_FN(0x507ac0, void (__cdecl *)(int, float, float, float, float, unsigned, float, float, float, float))
-#define checksystemmessages CL_FN(0x5060d0, void (__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void (__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void (__cdecl *)(void))
 #define drawtext CL_FN(0x506b30, void (__cdecl *)(char *, float, float, float, unsigned, float, float, float, float, ...))

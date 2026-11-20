@@ -14,6 +14,7 @@
 #include "audio/imports.h"
 #include "buildings.h"
 #include "client.h"
+#include "input/key_events.h"
 #include "editor/building.h"
 #include "editor/menus.h"
 #include "input/keyboard.h"
@@ -40,7 +41,6 @@ AUDIO_IMPORT("SDL2.DLL", __cdecl, uint32_t, SDL_GetTicks, (void))
 AUDIO_IMPORT("SDL2.DLL", __cdecl, void, SDL_GL_SwapWindow, (void *))
 
 /* Game functions of other files. */
-#define checksystemmessages CL_FN(0x5060d0, void(__cdecl *)(void))
 #define checkkeyboard CL_FN(0x4fec50, void(__cdecl *)(void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define building_setupbuild CL_FN(0x461fd0, void(__cdecl *)(void))
