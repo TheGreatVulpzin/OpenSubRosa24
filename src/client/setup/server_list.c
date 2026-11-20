@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "client.h"
+#include "packet.h"
 #include "sr_runtime.h"
 
 #define g_master sr_data_masterserver
@@ -11,7 +12,6 @@
 #define PACKET_SERVER_LIST 0x21
 
 /* Game functions of other files. */
-#define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
 

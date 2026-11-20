@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "client.h"
+#include "packet.h"
 #include "sr_runtime.h"
 
 #define g_game sr_data_game
@@ -18,7 +19,6 @@
 #define g_view_pos cl_data_audio_camera.pos
 
 /* Game functions of other files. */
-#define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
 #define pbitwrite CL_FN(0x4fe6c0, int(__cdecl *)(const uint32_t *value, uint32_t bits))

@@ -12,6 +12,10 @@
 #define g_bezier_curve_uv sr_data_bezier_curve_uv
 #define g_bezier_curve_dv sr_data_bezier_curve_dv
 
+#ifndef sr_linear_curve_negate_first
+#define sr_linear_curve_negate_first 0
+#endif
+
 float tesselatebezier(int degree, float t, float a, float b, float c, float d)
 {
     double u = (float)(1.0 - t);
@@ -35,8 +39,15 @@ float tesselatebezierderivative(int degree, float t, float a, float b, float c, 
     double v = t;
     float result;
     switch (degree) {
-    case 1:
+    case 1: {
+#if sr_linear_curve_negate_first
+        /* Store the negated endpoint before addition to keep its NaN sign. */
+        volatile float negative = -a;
+        return (float)((double)negative + d);
+#else
         return (float)((double)d - a);
+#endif
+    }
     case 2:
         return (float)((v * 2.0 * ((a - b * 2.0) + d) - a * 2.0) + b * 2.0);
     case 3:

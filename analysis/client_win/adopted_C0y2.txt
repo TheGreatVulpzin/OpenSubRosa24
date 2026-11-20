@@ -1,14 +1,1 @@
-player_addaction_chat src/client/menu/player_actions.c
-player_addaction_item src/client/menu/player_actions.c
-addplayerwaypoint src/client/setup/player_records.c
-logic_splitteamcash src/client/setup/player_records.c
-scenario_isseekmission src/client/setup/player_records.c
-newspaper_addline src/client/setup/newspaper_line.c
-createmessage src/client/setup/chat_message.c
-area_setsectormesh src/client/render/sector_marks.c
-area_getnextsectormesh src/client/render/sector_marks.c
-area_removesectormodel src/client/render/sector_marks.c
-building_iswindow src/client/setup/building_queries.c
-building_reloadtextures src/client/setup/building_queries.c
-addwindowatlas src/client/textures/window_atlas.c
 settwosidedstencil src/client/render/gl_state.c

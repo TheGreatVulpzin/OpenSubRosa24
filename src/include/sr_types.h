@@ -199,7 +199,8 @@ typedef struct CityBlock {
     int x, z;
     int size_x, height, size_z;
     int inner_x, inner_z;
-    uint8_t pad_1c[0x14];
+    int reserved;
+    uint8_t pad_20[0x10];
 } CityBlock;
 
 /* Records of the level editor. */
@@ -551,6 +552,20 @@ typedef union BlockSector { struct {
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 
 SR_STATIC_ASSERT(offsetof(BlockSector, edge_normals) == 0x5044, "BlockSector.edge_normals");
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    int *triangle_material;
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
 
 
 /* A corner of the mesh of an object (Object.verts). */
@@ -979,7 +994,7 @@ typedef union Human { struct {
     int has_physics;                     /* +0x0004 humansimulation writes 1, and 0 while the human sits in a vehicle; bondsimulation2 solves only the humans with it */
     int player_id;                       /* +0x0008 createhuman: parameter 3 (owner) */
     int account;                         /* +0x000c deleteplayer keeps the account index of a player who leaves; humansimulation takes 5% of the money above 10000 when that human dies; -1: none */
-    int unk_0010;                        /* +0x0010 1 functions */
+    int particle_id;                     /* +0x0010 deleteparticle renames this reference when the last particle moves. */
     int vehicle_id;                      /* +0x0014 createhuman writes -1; packobjectpacket sends it if != -1 */
     int vehicle_seat;                    /* +0x0018 playerai compares with 0 (driver) and 1 */
     int last_vehicle;                    /* +0x001c humansimulation: the vehicle the human sat in; the type 4 bonds against it start soft; -1 when last_vehicle_timer ends */
@@ -1049,6 +1064,7 @@ SR_STATIC_ASSERT(offsetof(Human, active) == 0x0, "Human.active");
 SR_STATIC_ASSERT(offsetof(Human, has_physics) == 0x4, "Human.has_physics");
 SR_STATIC_ASSERT(offsetof(Human, player_id) == 0x8, "Human.player_id");
 SR_STATIC_ASSERT(offsetof(Human, account) == 0xc, "Human.account");
+SR_STATIC_ASSERT(offsetof(Human, particle_id) == 0x10, "Human.particle_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_id) == 0x14, "Human.vehicle_id");
 SR_STATIC_ASSERT(offsetof(Human, vehicle_seat) == 0x18, "Human.vehicle_seat");
 SR_STATIC_ASSERT(offsetof(Human, last_vehicle) == 0x1c, "Human.last_vehicle");
@@ -1213,9 +1229,7 @@ typedef union Object { struct {
     vec3 rot[3];                         /* +0x003c createobject: matrix from parameter 4; objectsimulation normalizes it and does crossproduct */
     vec3 vel;                            /* +0x0060 objectsimulation zeroes, adds and scales */
     vec3 vel_prev;                       /* +0x006c objectsimulation copies from vel */
-    float unk_0078;                      /* +0x0078 1 functions */
-    float unk_007c;                      /* +0x007c 1 functions */
-    float unk_0080;                      /* +0x0080 1 functions */
+    vec3 rotation_sum;                   /* +0x0078 getobjectrotation sums particle velocities along the three body-axis cross products. */
     vec3 box_min;                        /* +0x0084 lineintersectobject: no hit when both ends are below it; humansimulation tests a human against the box, 2 units larger */
     vec3 box_max;                        /* +0x0090 the other corner of the box (lineintersectobject, sphereintersectobject, humansimulation) */
     uint8_t pad_009c[0xc];
@@ -1294,6 +1308,7 @@ SR_STATIC_ASSERT(offsetof(Object, pos_prev) == 0x30, "Object.pos_prev");
 SR_STATIC_ASSERT(offsetof(Object, rot) == 0x3c, "Object.rot");
 SR_STATIC_ASSERT(offsetof(Object, vel) == 0x60, "Object.vel");
 SR_STATIC_ASSERT(offsetof(Object, vel_prev) == 0x6c, "Object.vel_prev");
+SR_STATIC_ASSERT(offsetof(Object, rotation_sum) == 0x78, "Object.rotation_sum");
 SR_STATIC_ASSERT(offsetof(Object, box_min) == 0x84, "Object.box_min");
 SR_STATIC_ASSERT(offsetof(Object, box_max) == 0x90, "Object.box_max");
 SR_STATIC_ASSERT(offsetof(Object, num_particles) == 0xa8, "Object.num_particles");
@@ -1660,7 +1675,7 @@ typedef union Game { struct {
     float team0_angle;                   /* +0x0088 the facing of the base of team 0: setteammanager and logicsimulation_round turn the phones and the spawned humans by angle - pi/2 */
     int team0_unused_8c;                 /* +0x008c resetgame writes 0 */
     int team0_members;                   /* +0x0090 serversend: 6 bits in the state packet; the team records are 0x117c bytes */
-    uint8_t pad_0094[0x4];
+    int team0_scenario_state;            /* +0x0094 createevent_updatescenario packs this team state at bits 8 then 10 and 12 for later teams. */
     int team0_cash;                      /* +0x0098 economysimulation: salary bonus cash / 2 and price growth cash / 100 - 0.5; resetgame writes 0 */
     int team0_manager;                   /* +0x009c logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
     uint8_t pad_00a0[0x10];
@@ -1795,6 +1810,7 @@ SR_STATIC_ASSERT(offsetof(Game, team0_safe_max) == 0x7c, "Game.team0_safe_max");
 SR_STATIC_ASSERT(offsetof(Game, team0_angle) == 0x88, "Game.team0_angle");
 SR_STATIC_ASSERT(offsetof(Game, team0_unused_8c) == 0x8c, "Game.team0_unused_8c");
 SR_STATIC_ASSERT(offsetof(Game, team0_members) == 0x90, "Game.team0_members");
+SR_STATIC_ASSERT(offsetof(Game, team0_scenario_state) == 0x94, "Game.team0_scenario_state");
 SR_STATIC_ASSERT(offsetof(Game, team0_cash) == 0x98, "Game.team0_cash");
 SR_STATIC_ASSERT(offsetof(Game, team0_manager) == 0x9c, "Game.team0_manager");
 SR_STATIC_ASSERT(offsetof(Game, team0_doors) == 0xb0, "Game.team0_doors");
@@ -3554,7 +3570,7 @@ typedef union GameClient { struct {
     float team0_angle;                   /* +0x0084 the facing of the base of team 0: setteammanager and logicsimulation_round turn the phones and the spawned humans by angle - pi/2 */
     int team0_unused_8c;                 /* +0x0088 resetgame writes 0 */
     int team0_members;                   /* +0x008c serversend: 6 bits in the state packet; the team records are 0x117c bytes */
-    uint8_t pad_0090[0x4];
+    int team0_scenario_state;            /* +0x0090 createevent_updatescenario packs this team state at bits 8 then 10 and 12 for later teams. */
     int team0_cash;                      /* +0x0094 economysimulation: salary bonus cash / 2 and price growth cash / 100 - 0.5; resetgame writes 0 */
     int team0_manager;                   /* +0x0098 logic_setteammanager writes the manager player; deleteplayer and humansimulation clear it when that player goes; team records are 0x117c bytes */
     uint8_t pad_009c[0x10];
@@ -3687,6 +3703,7 @@ SR_STATIC_ASSERT(offsetof(GameClient, team0_safe_max) == 0x78, "GameClient.team0
 SR_STATIC_ASSERT(offsetof(GameClient, team0_angle) == 0x84, "GameClient.team0_angle");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_unused_8c) == 0x88, "GameClient.team0_unused_8c");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_members) == 0x8c, "GameClient.team0_members");
+SR_STATIC_ASSERT(offsetof(GameClient, team0_scenario_state) == 0x90, "GameClient.team0_scenario_state");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_cash) == 0x94, "GameClient.team0_cash");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_manager) == 0x98, "GameClient.team0_manager");
 SR_STATIC_ASSERT(offsetof(GameClient, team0_doors) == 0xac, "GameClient.team0_doors");

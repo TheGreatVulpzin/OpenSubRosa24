@@ -13,12 +13,22 @@
 #include "textures/textures.h"
 #include "textures/upload.h"
 
+void *sr_import(const char *dll, const char *name);
+
 #define g_image cl_data_image
 #define g_bigendian cl_data_bigendian
 #define g_image_name cl_data_image_name
 #define g_textures cl_data_texture
 
 enum { GL_RGBA = 0x1908, GL_CLAMP_TO_EDGE = 0x812f, GL_LINEAR = 0x2601 };
+
+/* Select the file transfers for a machine with the low byte first. */
+void checkbigendian(void)
+{
+    cl_data_bigendian = 0;
+    sr_data_file_write = (SrFileTransfer)sr_import("MSVCR100.DLL", "fwrite");
+    sr_data_file_read = (SrFileTransfer)sr_import("MSVCR100.DLL", "fread");
+}
 
 /* Game functions of other files. */
 #define image_file_load \

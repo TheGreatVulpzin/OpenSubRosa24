@@ -3,6 +3,9 @@
 #define CL_TEXTURES_LOADERS_H
 
 int __cdecl loadimage(const char *path);
+void checkbigendian(void);
+int loadtexture2(int texture, const char *path, int mipmap, int wrap_s, int wrap_t,
+                 int mag_filter, int min_filter);
 int __cdecl loadtexture(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter,
                         int min_filter);
 int __cdecl loadtexture2(int texture, const char *path, int mipmap, int wrap_s, int wrap_t, int mag_filter,

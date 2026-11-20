@@ -197,7 +197,7 @@ These functions read what the server writes. The dedicated server never calls th
 
 - `clientrecv` handles type 6 (new game), type 5 (state) and type 8 (voice). A state packet is skipped when its tick is 1 to 99 behind the client tick. After 0x4b0 ticks without a packet it sets `game.link_state` to 3.
 - `unpackobjectpacket` reads the four lists. It keeps the last two states of each human and object (`net_tick`, `net_pos`, `net_tick_prev`, `net_pos_prev`) to move the thing smoothly. For a human it rebuilds the bones from the joint angles and the body table.
-- `unpackevent` reads one event. `unpackorientation`, `unpackangle`, `unpackscalar` and `pbitreadnego` read the packed numbers.
+- `unpackevent` reads one event. `unpackorientation`, `unpackangle` and `pbitreadnego` read the packed numbers. `decode_unit_scalar` converts a raw signed magnitude to the unit range. `unpackscalar` reads a signed magnitude from the stream and scales it to the supplied range.
 - After a state packet the client rebuilds the inventory lists of the humans from the items.
 
 ## Codecs

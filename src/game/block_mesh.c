@@ -1163,3 +1163,107 @@ void area_createsblocks(void)
         block_finish(block, 1, 1, 1);
     }
 }
+
+/* Reserve two quad slots at the requested position. Their contents stay intact. */
+void area_block_insertquad(int unused, int position)
+{
+    int quad;
+    (void)unused;
+    for (quad = g_tempmesh.num_quads + 1; quad >= position + 2; --quad) {
+        g_tempmesh.quads[quad] = g_tempmesh.quads[quad - 2];
+        g_tempmesh.quad_slots[quad] = g_tempmesh.quad_slots[quad - 2];
+    }
+    g_tempmesh.num_quads += 2;
+}
+
+/* Add the lower face of a block at a chosen height. */
+void area_block_addfloor(float height, uint32_t slot)
+{
+    surface_set(0, height, 0, 1, height, 0, 1, height, 1, 0, height, 1);
+    surface_add(0, 0x40000, slot);
+}
+
+/* Add the upper face with its winding toward the room. */
+void area_block_addceil(float height, uint32_t slot)
+{
+    surface_set(0, height, 1, 1, height, 1, 1, height, 0, 0, height, 0);
+    surface_add(0, 0x30000, slot);
+}
+
+/* Add the floor and ceiling at the standard block heights. */
+void area_block_addfloorceil(void)
+{
+    area_block_addfloor(0.0625f, 0);
+    area_block_addceil(0.875f, 1);
+}
+
+/* Add one wall, with its texture slot selected by the quarter turn. */
+void area_block_addwall(int turns, float depth)
+{
+    surface_set(0, 1, depth, 1, 1, depth, 1, 0, depth, 0, 0, depth);
+    surface_add(turns, 0x60000, (uint32_t)turns + 1u);
+}
+
+/* Add the exterior strips to the left and right of a window. */
+void area_block_addwindowvertical_exterior(int turns, float width, int left, int right)
+{
+    if (left) {
+        surface_set(width, 1, 0, 0, 1, 0, 0, 0, 0, width, 0, 0);
+        surface_add(turns, 0x50000, 7);
+    }
+    if (right) {
+        float edge = (float)(1.0 - width);
+        surface_set(1, 1, 0, edge, 1, 0, edge, 0, 0, 1, 0, 0);
+        surface_add(turns, 0x50000, 7);
+    }
+}
+
+/* Add the reveals and inner strips on the two sides of a window. */
+void area_block_addwindowvertical_interior(int turns, float width, int left, int right)
+{
+    uint32_t wall_slot = (uint32_t)turns + 1u;
+    if (left) {
+        surface_set(width, 1, .0625f, width, 1, 0, width, 0, 0, width, 0, .0625f);
+        surface_add(turns, 0x20000, 7);
+        surface_set(0, 1, .0625f, width, 1, .0625f, width, 0, .0625f, 0, 0, .0625f);
+        surface_add(turns, 0x60000, wall_slot);
+    }
+    if (right) {
+        float edge = (float)(1.0 - width);
+        surface_set(edge, 1, 0, edge, 1, .0625f, edge, 0, .0625f, edge, 0, 0);
+        surface_add(turns, 0x10000, 7);
+        surface_set(edge, 1, .0625f, 1, 1, .0625f, 1, 0, .0625f, edge, 0, .0625f);
+        surface_add(turns, 0x60000, wall_slot);
+    }
+}
+
+/* Add the exterior strips below and above a window. */
+void area_block_addwindowhorizontal_exterior(int turns, float lower, float upper, int bottom, int top)
+{
+    if (bottom) {
+        surface_set(1, lower, 0, 0, lower, 0, 0, 0, 0, 1, 0, 0);
+        surface_add(turns, 0x50000, 7);
+    }
+    if (top) {
+        surface_set(1, 1, 0, 0, 1, 0, 0, upper, 0, 1, upper, 0);
+        surface_add(turns, 0x50000, 7);
+    }
+}
+
+/* Add inner horizontal strips only beyond the floor and ceiling edges. */
+void area_block_addwindowhorizontal_interior(int turns, float lower, float upper, int bottom, int top)
+{
+    uint32_t wall_slot = (uint32_t)turns + 1u;
+    if (bottom && 0.0625 < lower) {
+        surface_set(0, lower, 0, 1, lower, 0, 1, lower, .0625f, 0, lower, .0625f);
+        surface_add(turns, 0x40000, 7);
+        surface_set(0, lower, .0625f, 1, lower, .0625f, 1, 0, .0625f, 0, 0, .0625f);
+        surface_add(turns, 0x60000, wall_slot);
+    }
+    if (top && upper < 0.875) {
+        surface_set(0, upper, .0625f, 1, upper, .0625f, 1, upper, 0, 0, upper, 0);
+        surface_add(turns, 0x30000, 7);
+        surface_set(0, 1, .0625f, 1, 1, .0625f, 1, upper, .0625f, 0, upper, .0625f);
+        surface_add(turns, 0x60000, wall_slot);
+    }
+}

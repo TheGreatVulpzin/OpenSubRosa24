@@ -12,6 +12,7 @@
 #include "audio/sound_create.h"
 #include "client.h"
 #include "debug/debug.h"
+#include "random.h"
 #include "sr_math.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
@@ -32,7 +33,6 @@
 #define g_light_position cl_data_light_position
 
 /* Game functions of other files. */
-#define getrandomfloat CL_FN(0x4c5670, double(__cdecl *)(void))
 #define lineintersectlevel CL_FN(0x4a0f40, int(__cdecl *)(float *from, float *to, int with_objects))
 
 enum {

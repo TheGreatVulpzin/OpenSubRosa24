@@ -6,6 +6,8 @@ void loadtextfile(const char *path);
 int checkstring(const char *key);
 int findstring(const char *key);
 int getint(void);
+void resetparser(void);
+float getfloat(void);
 void getstring(char *out, int max);
 void cs_getline(char *out, int max);
 

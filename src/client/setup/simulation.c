@@ -7,6 +7,7 @@
  * receives the state of the server. A host runs the server tick itself.
  */
 #include "setup/simulation.h"
+#include "setup/physics.h"
 
 #include <stdint.h>
 
@@ -46,7 +47,6 @@ void *sr_import(const char *dll, const char *name);
 #define servercycle CL_FN(0x4df550, void(__cdecl *)(void))
 #define serverrecv CL_FN(0x4df6a0, void(__cdecl *)(void))
 #define playersimulation CL_FN(0x4d4b80, void(__cdecl *)(void))
-#define physicssimulation CL_FN(0x4d4700, void(__cdecl *)(void))
 #define logicsimulation CL_FN(0x4a3940, void(__cdecl *)(void))
 #define serversend CL_FN(0x4deb20, void(__cdecl *)(void))
 #define bulletsimulation CL_FN(0x4646b0, void(__cdecl *)(void))

@@ -26,6 +26,8 @@ The high three bits give the kind of a cell word.
 
 A link stores its offsets in bits 0 through 7 for x, 8 through 15 for z and 16 through 23 for y.
 Subtract these offsets to reach the owning cell.
+`area_getblocklink` follows one outer link. A second link is returned as a word.
+`area_getblockmaterial` reads texture slot seven and returns minus one for an invalid cell.
 Normal words use bits 0 through 5 for visible faces, in the order y-, z+, x-, z-, x+, y+.
 Bits 6 through 13 indicate textures whose bit 15 is clear.
 
@@ -230,5 +232,27 @@ Quarter-height slopes, slab, edge tops, upper corners and the flat railing bases
 Edge side UVs have a top v of 0.0625 and a bottom v of zero.
 The two corner groups retain those edge UVs. Hills and fence beams also retain their previous UV corners.
 Inner UV entries keep their previous values throughout these changes.
+
+Floor and ceiling strips write only the four corner control points. Their standard heights are 0.0625 and 0.875.
+Window strips use slot seven on the exterior and on the reveals. The inner wall strip uses the quarter turn plus one.
+An inner lower strip requires a height above 0.0625. An inner upper strip requires a height below 0.875.
+Unordered heights fail these two comparisons. A vertical strip rounds `1.0 - width` to float before it sets the right edge.
+The client linear derivative negates its first endpoint before addition. This preserves the NaN sign in the derivative scratch array.
+`area_block_insertquad` reserves two slots by moving later quads and their texture slots. The two reserved slots retain their contents.
+
+## Sector mesh blocks
+
+`SectorShadowMesh.triangle_material` selects the material of each source triangle.
+`area_submitsectormodel` scans materials in ascending order and maps source vertices into blocks of sixteen.
+It starts another block when three more vertices or one more triangle would exceed fifteen.
+An existing source vertex is copied only once within a block. Each vertex occupies 64 bytes.
+The sixteen-slot blocks are uploaded when the buffer extension is enabled.
+
+The allocation bitmap has 1024 words. A set bit marks a block in use.
+The allocator scans all words; the setter changes only the first 1023 words.
+The last word must contain a free bit when all earlier words are full.
+Removing a sector model releases its blocks and clears its mesh count, even when its use flag is zero.
+Resetting a used sector rebuilds and submits its mesh, invalidates four interior models and clears its dirty flag.
+Position equality requires each float difference to have magnitude below 0.0001. Unordered differences fail.
 
 Both large block builders run once when each level is set up.

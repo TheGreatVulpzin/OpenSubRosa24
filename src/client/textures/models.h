@@ -23,5 +23,18 @@ void __cdecl createmodel_cityobject_desk(int model);
 void __cdecl createmodel_cityobject(int model, int type);
 void __cdecl createhairmodel(int model);
 void __cdecl createhumanmodel(int model);
+void addhalfboxtomodel(const vec3 *center, const vec3 rot[3], float half_x, float half_y, float half_z, int open_face);
+void addwaisttomodel(const vec3 *center, float half_x, float half_y, float half_z);
+void createfootmodel(int model, float half_x, float half_y, float half_z);
+void createrotormodel(int model, float half_x, float half_y, float half_z);
+void createsunglassmodel(int model);
+void createheadmodel(int model);
+void createcellphonemodel(int model, float half_x, float half_y, float half_z);
+void createkeymodel(int model);
+void sethumanmodelvert(int vertex, int bone, float x, float y, float z);
+void sethumanmodelvertface(int vertex, int face, float x, float y, float z);
+void tesselatebeziertriangle(float out[3], float u, float v, float w, const int points[10]);
+void savemodelcsm(int model, const char *path);
+int loadmodelcsm(int model, const char *path);
 
 #endif /* CL_TEXTURES_MODELS_H */

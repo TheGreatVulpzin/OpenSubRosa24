@@ -37,39 +37,3 @@ static void set_square(uint32_t y_bits, int facing_down)
     g_surface[12].z = far_z;
 }
 
-/* Add a floor with a texture slot. The height is a float given as its 32 bits and stored as it is. */
-void __cdecl area_block_addfloor(uint32_t y_bits, uint32_t slot)
-{
-    set_square(y_bits, 0);
-    addbeziersurface((const float *)g_surface, sr_data_surface.uv, 1, 1, 1, 1, (int)(slot | SURFACE_FLOOR_SIDE));
-}
-
-/* Add a ceiling with a texture slot. The height is a float given as its 32 bits. */
-void __cdecl area_block_addceil(uint32_t y_bits, uint32_t slot)
-{
-    set_square(y_bits, 1);
-    addbeziersurface((const float *)g_surface, sr_data_surface.uv, 1, 1, 1, 1, (int)(slot | SURFACE_CEILING_SIDE));
-}
-
-/* Add the floor of a thin room at 1/16 and its ceiling at 7/8. The floor uses slot 0 and the ceiling slot 1. */
-void __cdecl area_block_addfloorceil(void)
-{
-    set_square(THIN_FLOOR_BITS, 0);
-    addbeziersurface((const float *)g_surface, sr_data_surface.uv, 1, 1, 1, 1, SURFACE_FLOOR_SIDE);
-    set_square(THIN_CEILING_BITS, 1);
-    addbeziersurface((const float *)g_surface, sr_data_surface.uv, 1, 1, 1, 1, SURFACE_CEILING_SIDE | 1);
-}
-
-/* Open two quads in the list of quads of the temporary mesh at a place: every quad from the place on moves
- * two places up with its texture slot, and the count grows by two. The new places keep the old values. */
-void __cdecl area_block_insertquad(int unused, int place)
-{
-    int i;
-
-    (void)unused;
-    for (i = sr_data_tempmesh.num_quads + 1; place + 2 <= i; i--) {
-        sr_data_tempmesh.quads[i] = sr_data_tempmesh.quads[i - 2];
-        sr_data_tempmesh.quad_slots[i] = sr_data_tempmesh.quad_slots[i - 2];
-    }
-    sr_data_tempmesh.num_quads += 2;
-}

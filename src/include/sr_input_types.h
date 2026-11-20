@@ -8,6 +8,23 @@
 
 #pragma pack(push, 1)
 
+/* scenario_event_data[]: record of 0x50 bytes. */
+typedef union ScenarioEventData { struct {
+    int first_low;                       /* +0x0000 Low part of the first scenario event word. */
+    int second_low;                      /* +0x0004 Low part of the second scenario event word. */
+    int second_high;                     /* +0x0008 High part of the second scenario event word. */
+    int third;                           /* +0x000c Third scenario event word. */
+    uint8_t pad_0010[0x34];
+    int first_high;                      /* +0x0044 High part of the first scenario event word. */
+    uint8_t pad_0048[0x8];
+}; uint8_t lf_raw[0x50]; } ScenarioEventData;
+SR_STATIC_ASSERT(sizeof(ScenarioEventData) == 0x50, "ScenarioEventData");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_low) == 0x0, "ScenarioEventData.first_low");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_low) == 0x4, "ScenarioEventData.second_low");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, second_high) == 0x8, "ScenarioEventData.second_high");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, third) == 0xc, "ScenarioEventData.third");
+SR_STATIC_ASSERT(offsetof(ScenarioEventData, first_high) == 0x44, "ScenarioEventData.first_high");
+
 /* input_mouse[]: record of 0x2c bytes. */
 typedef union InputMouse { struct {
     int x;                               /* +0x0000 Absolute horizontal coordinate on a 1024 pixel canvas */

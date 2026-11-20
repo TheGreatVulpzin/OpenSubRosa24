@@ -1208,3 +1208,11 @@ editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_textureme
 model,0x34,center,vec3,,"createtypemodel: the mean of the particles of the object type. The vertices are relative to it"
 objecttype,0x734c,num_lines,int,,"createtypemodel copies this many lines to the model in work"
 objecttype,0x7350,lines,MeshLine,129,"createtypemodel: the lines of the model, two vertex indexes each"
+human,0x10,particle_id,int,,deleteparticle renames this reference when the last particle moves.
+object,0x78,rotation_sum,vec3,,getobjectrotation sums particle velocities along the three body-axis cross products.
+game,0x94,team0_scenario_state,int,,createevent_updatescenario packs this team state at bits 8 then 10 and 12 for later teams.
+scenario_event_data,0x0,first_low,int,,Low part of the first scenario event word.
+scenario_event_data,0x4,second_low,int,,Low part of the second scenario event word.
+scenario_event_data,0x8,second_high,int,,High part of the second scenario event word.
+scenario_event_data,0xc,third,int,,Third scenario event word.
+scenario_event_data,0x44,first_high,int,,High part of the first scenario event word.

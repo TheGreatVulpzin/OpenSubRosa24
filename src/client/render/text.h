@@ -1,6 +1,7 @@
 /* Text on the 2D layer. See text.c. */
 #ifndef CL_RENDER_TEXT_H
 #define CL_RENDER_TEXT_H
+float gettextlength(const char *text, float size);
 
 void __cdecl drawtext(const char *text, float x, float y, float size, unsigned flags, float red, float green,
                       float blue, float alpha, ...);

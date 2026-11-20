@@ -7,6 +7,7 @@
 
 int createparticle(int type, const vec3 *pos, const vec3 *vel, float mass, int object);
 void particlesimulation(void);
+void deleteparticle(int particle);
 void particletimetolive(void);
 
 int createbond(int subtype, int particle_a, int particle_b, int object);

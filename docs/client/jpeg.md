@@ -4,6 +4,8 @@ The JPEG loader accepts baseline grayscale and three-component frames. Files: `s
 
 `JpegImage` contains the reader, four DC tables, four AC tables, quantization values and four component records. `JpegComponent` stores sampling factors, table indices, a DC predictor, dimensions and pixel storage. Only one or three components are accepted in a frame.
 
+`get_marker` consumes a cached marker first. Otherwise it requires an FF prefix and skips repeated FF bytes before returning the marker. A byte without the prefix returns FF.
+
 `decode_jpeg_header` reads markers until it finds a baseline frame. Progressive frames and sixteen-bit quantization tables fail. `process_frame_header` computes MCU dimensions and allocates each component with sixteen-byte alignment. Header-only reads allocate no component pixels.
 
 `decode_block` restores DC differences and AC runs in zigzag order. `parse_entropy_coded_data` stores blocks for one component or an interleaved scan. Restart boundaries clear the bit buffer and three DC predictors. A missing restart marker ends the scan.

@@ -274,8 +274,32 @@ int linkitem(uint32_t item, uint32_t child, int human, int slot)
     return 1;
 }
 
-/* Count down the life of each item, and delete the items at the end of their life. A
- * deleted item leaves its human and its parent, and its children leave it. */
+/* Remove an item from its human and parent, and release its children and linked vehicle. */
+void deleteitem(int item)
+{
+    uint32_t i = (uint32_t)item;
+    Item *it;
+    if (i >= MAX_ITEMS)
+        return;
+    it = &sr_items[i];
+    if (it->type == ITEM_NEWSPAPER)
+        sr_game.num_newspapers--;
+    if (it->parent_human != -1)
+        item_removehumanlink(i, it->parent_human, it->parent_slot);
+    while (it->num_children > 0) {
+        int c = it->children[--it->num_children];
+        sr_items[c].parent_item = -1;
+        createevent_updateitem((uint32_t)c);
+    }
+    if (it->parent_item != -1)
+        item_removeitemlink(i, (uint32_t)it->parent_item);
+    if (it->type == ITEM_KEY && (uint32_t)it->vehicle_id < MAX_ITEMS)
+        sr_objects[it->vehicle_id].time_to_live = 0; /* the vehicle goes with its key */
+    it->active = 0;
+    createevent_updateitem(i);
+}
+
+/* Count down each active item and remove it at the end of its life. */
 void itemtimetolive(void)
 {
     Item *it = sr_items;
@@ -287,20 +311,6 @@ void itemtimetolive(void)
             it->time_to_live--;
         if (it->time_to_live >= 1)
             continue;
-        if (it->type == ITEM_NEWSPAPER)
-            sr_game.num_newspapers--;
-        if (it->parent_human != -1)
-            item_removehumanlink(i, it->parent_human, it->parent_slot);
-        while (it->num_children > 0) {
-            int c = it->children[--it->num_children];
-            sr_items[c].parent_item = -1;
-            createevent_updateitem((uint32_t)c);
-        }
-        if (it->parent_item != -1)
-            item_removeitemlink(i, (uint32_t)it->parent_item);
-        if (it->type == ITEM_KEY && (uint32_t)it->vehicle_id < MAX_ITEMS)
-            sr_objects[it->vehicle_id].time_to_live = 0; /* the vehicle goes with its key */
-        it->active = 0;
-        createevent_updateitem(i);
+        deleteitem((int)i);
     }
 }

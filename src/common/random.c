@@ -71,6 +71,50 @@ static float random_unit(void)
     return hash_unit(g_random_counter++);
 }
 
+/* Advance the shared hash counter once. */
+float getrandomfloat(void)
+{
+    return random_unit();
+}
+
+/* Return the low sixteen bits of the next generator word. */
+int getrandomint(void)
+{
+    return genrand_int32() & 0xffff;
+}
+
+/* Return a nonnegative 31 bit integer. */
+uint32_t genrand_int31(void)
+{
+    return genrand_int32() >> 1;
+}
+
+/* Include both endpoints of the unit interval. */
+double genrand_real1(void)
+{
+    return (double)genrand_int32() * 2.3283064370807974E-10;
+}
+
+/* Include zero and exclude one. */
+double genrand_real2(void)
+{
+    return (double)genrand_int32() * 2.3283064365386963E-10;
+}
+
+/* Exclude both endpoints of the unit interval. */
+double genrand_real3(void)
+{
+    return ((double)genrand_int32() + 0.5) * 2.3283064365386963E-10;
+}
+
+/* Combine two words into a 53 bit fraction. */
+double genrand_res53(void)
+{
+    uint32_t high = genrand_int32();
+    uint32_t low = genrand_int32();
+    return ((double)(low >> 6) + (double)(high >> 5) * 67108864.0) * 1.1102230246251565E-16;
+}
+
 /* A random direction in x and y, with a length from min to min + range. */
 void getrandomvector2d(float out[2], float range, float min)
 {

@@ -15,6 +15,7 @@
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "textures/upload.h"
+#include "vectors.h"
 
 #define MENU_TEXTURE 0x3de
 #define MENU_TEXTURE_SIZE 0x20
@@ -36,7 +37,6 @@ GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
 /* Game functions of other files. */
-#define vectorlength2d CL_FN(0x50bb20, double(__cdecl *)(const float *v))
 #define getinputletter CL_FN(0x5046c0, int(__cdecl *)(int wait))
 #define drawtext CL_FN(0x506b30, void(__cdecl *)(const char *text, float x, float y, float size, uint32_t flags, \
                                                  float red, float green, float blue, float alpha, ...))

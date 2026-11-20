@@ -19,6 +19,7 @@ void setupobjecttypeweight(int type);
 void calculatepointscale(float *out, int n, const vec3 *points, const vec3 *light);
 
 void setupobjecttypes_cars(void);
+void setupobjecttypes(void);
 void setupobjecttypes_helicopters(void);
 void setupobjectypes_train(void);
 

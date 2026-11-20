@@ -42,6 +42,7 @@ def main():
     a = ap.parse_args()
 
     t = gate.load_target(a.target)
+    lift.TARGET = lift.TARGETS[a.target]
     names = lift.load_names()
     rewritten = {names.get('0x%x' % rva, 'lf_%05x' % rva) for rva in lift.rewritten_rvas(names)}
     total = defaultdict(lambda: [0, 0, 0])  # name -> calls, cycles of the C version, of the original
@@ -66,7 +67,12 @@ def main():
             continue
         with tempfile.TemporaryDirectory() as env_dir:
             env = dict(os.environ, HARNESS_TIME='1', HARNESS_ENV_DIR=env_dir, SV_UI_WIDTH='220',
-                       SV_LOG_FILE=str(out / f'{r["name"]}.log'))
+                       SV_LOG_FILE=str(out / f'{r["name"]}.log'),
+                       HARNESS_RESET='1' if t.get('reset') else '0')
+            for key, value in t.get('env', {}).items():
+                env[key] = str(ROOT / value) if (ROOT / value).exists() else value
+            if t.get('path_prepend'):
+                env['PATH'] = os.pathsep.join(str(ROOT / path) for path in t['path_prepend']) + os.pathsep + env.get('PATH', '')
             p = subprocess.run([str(t['harness']), str(t['image']), str(d / 'sv_snapshot.bin'), str(args)] + filter_arg,
                                capture_output=True, text=True, errors='replace', env=env, cwd=ROOT)
         (out / f'{r["name"]}.txt').write_text(p.stdout + p.stderr, encoding='utf-8')

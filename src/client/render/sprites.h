@@ -20,6 +20,7 @@ void __cdecl tiremark_simulation(void);
 void __cdecl tiremark_render(void);
 void __cdecl rendermuzzleflashes(void);
 void __cdecl rendercheckpoints(void);
+int pointinsidecheckpoint(const vec3 *position, int checkpoint);
 void __cdecl createspritemodel(int model, int kind);
 void __cdecl selectnearitem(void);
 

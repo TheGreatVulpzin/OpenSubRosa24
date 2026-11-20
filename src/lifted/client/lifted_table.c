@@ -525,7 +525,7 @@ void lf_2fb90(void);
 void lf_2fc10(void);
 void lf_2fd20(void);
 void lf_2fde0(void);
-void lf_2fef0(void);
+void initWGLLoadFunctions(void);
 void lf_30070(void);
 void lf_300a0(void);
 void lf_30140(void);
@@ -547,10 +547,10 @@ void loadwav(void);
 void createaccount(void);
 void account_nameexists(void);
 void createclientaccount(void);
-void lf_34010(void);
+void saveaccountsserver(void);
 void loadaccountsserver(void);
 void saveaccountsclient(void);
-void lf_345d0(void);
+void loadaccountsclient(void);
 void server_writelogfile(void);
 void playerai(void);
 void ai_assessthreats(void);
@@ -565,7 +565,7 @@ void area_setblockcolor(void);
 void area_getblock(void);
 void area_getblocklink(void);
 void area_getblockmaterial(void);
-void lf_38a90(void);
+void area_getblocktexture(void);
 void area_deleteblock(void);
 void area_createsector(void);
 void area_getnextsector(void);
@@ -576,7 +576,7 @@ void area_getnextchunk(void);
 void area_createsblocks(void);
 void area_setupsblock(void);
 void lf_3cf60(void);
-void lf_3d510(void);
+void addbeziersurfacetexture(void);
 void tesselatebezier(void);
 void tesselatebezierderivative(void);
 void area_copyrotateblock(void);
@@ -591,34 +591,34 @@ void area_createinteriorblocks(void);
 void area_block_addfloorceil(void);
 void area_block_addfloor(void);
 void area_block_addceil(void);
-void lf_42170(void);
-void lf_42220(void);
-void lf_423a0(void);
-void lf_42690(void);
-void lf_42800(void);
+void area_block_addwall(void);
+void area_block_addwindowvertical_exterior(void);
+void area_block_addwindowvertical_interior(void);
+void area_block_addwindowhorizontal_exterior(void);
+void area_block_addwindowhorizontal_interior(void);
 void area_block_addwindow(void);
 void area_block_adddoor(void);
 void area_block_addbeam(void);
 void area_block_addoutdoor(void);
 void area_block_addcorner(void);
 void area_block_rotatesurface(void);
-void lf_43780(void);
-void lf_43a80(void);
+void area_interior_createblock(void);
+void area_interior_setblock(void);
 void area_interior_setobject(void);
-void lf_43e20(void);
-void lf_43f80(void);
-void lf_44140(void);
+void area_interior_getblock(void);
+void area_interior_getblocklink(void);
+void area_interior_getblocktexture(void);
 void area_interior_buildsectormodel(void);
 void area_breakblock(void);
 void lineintersectarea(void);
 void lineintersectnormalblock(void);
 void lineintersectspecblock(void);
 void sphereintersectarea(void);
-void lf_48bf0(void);
-void lf_49000(void);
+void sphereintersectnormalblock(void);
+void sphereintersectspecblock(void);
 void circleintersectarea(void);
-void lf_49f00(void);
-void lf_4a180(void);
+void circleintersectnormalblock(void);
+void circleintersectspecblock(void);
 void area_buildsectormodel(void);
 void tempmesh_optimize(void);
 void tempmesh_optimize2(void);
@@ -626,7 +626,7 @@ void tempmesh_deletequad(void);
 void area_getnextsectormesh(void);
 void area_setsectormesh(void);
 void area_removesectormodel(void);
-void lf_4db70(void);
+void area_submitsectormodel(void);
 void setupsounds(void);
 void soundsimulation(void);
 void createsoundobject(void);
@@ -634,14 +634,14 @@ void createsound(void);
 void deletesound(void);
 void createwav(void);
 void createbond(void);
-void lf_501b0(void);
-void lf_50230(void);
+void bondtimetolive(void);
+void deletebond(void);
 void lf_50700(void);
-void lf_55bb0(void);
+void checkbonds(void);
 void setupbuildingtypes(void);
 void building_buildfloorplan(void);
 void building_iswindow(void);
-void lf_58a70(void);
+void building_addgaragedoor(void);
 void buildingedit_setup(void);
 void building_editorloop(void);
 void building_checkeditor(void);
@@ -667,32 +667,32 @@ void building_rotatefloorplan(void);
 void setupbullettypes(void);
 void createbullet(void);
 void bullettimetolive(void);
-void lf_64650(void);
+void deletebullet(void);
 void bulletsimulation(void);
-void lf_65330(void);
-void lf_653c0(void);
-void lf_65400(void);
+void createcityobject(void);
+void getnextcityobject(void);
+void deletecityobject(void);
 void lineintersectcityobject(void);
 void lineintersectcityobjecttype(void);
-void lf_66210(void);
+void sphereintersectcityobjecttype(void);
 void cityobject_simulation(void);
 void city_createelevator(void);
 void setupcityobjecttypes(void);
 void cityobject_addbox(void);
 void lf_676d0(void);
 void clientsend(void);
-void lf_685a0(void);
-void lf_68740(void);
-void lf_68830(void);
-void lf_68bd0(void);
-void lf_68e20(void);
-void lf_68ec0(void);
-void lf_68f40(void);
-void lf_68f80(void);
-void lf_68fc0(void);
-void lf_69010(void);
-void lf_69060(void);
-void lf_69110(void);
+void packunitvector(void);
+void unpackunitvector(void);
+void packorientation(void);
+void unpackorientation(void);
+void packangle(void);
+void unpackangle(void);
+void packposition(void);
+void unpackposition(void);
+void packpositiondelta(void);
+void unpackpositiondelta(void);
+void packscalar(void);
+void unpackscalar(void);
 void debug_getinputs(void);
 void displaydebuginfo(void);
 void debug_addline(void);
@@ -719,32 +719,32 @@ void economysimulation(void);
 void economy_carmarket(void);
 void economy_gunmarket(void);
 void playerbuystock(void);
-void lf_6f6e0(void);
+void playersellstock(void);
 void playerdeathtax(void);
 void accountdeathtax(void);
 void playerteamkilltax(void);
-void lf_6fb40(void);
+void playerdebt(void);
 void player_calcassets(void);
 void player_saveinventory(void);
 void player_loadinventory(void);
 void eventsimulation(void);
-void lf_71e60(void);
+void createevent_bullet(void);
 void createevent_bullethit(void);
 void sr_createevent_message(void);
-void lf_720f0(void);
+void createevent_createobject(void);
 void createevent_updateobject(void);
 void createevent_updateitem(void);
 void createevent_updateiteminfo(void);
 void createevent_updateplayer(void);
-void lf_72620(void);
+void createevent_updatehuman(void);
 void createevent_updateplayer_finance(void);
 void createevent_sound(void);
 void sr_createevent_updatedoor(void);
-void lf_728b0(void);
+void createevent_updatescenario(void);
 void sr_createevent_updatemission(void);
-void lf_72b50(void);
-void lf_72c40(void);
-void lf_72d10(void);
+void createevent_updatestocks(void);
+void createevent_updatecarmarket(void);
+void createevent_updateblock_interior(void);
 void createevent_updateblock_quad(void);
 void packevent(void);
 void unpackevent(void);
@@ -759,7 +759,7 @@ void frame_drawmessages(void);
 void frame_drawvoiceicons(void);
 void pointinsidefrustum(void);
 void boxinsidefrustum(void);
-void lf_79a90(void);
+void testtimer(void);
 void resetgame(void);
 void lf_7b100(void);
 void lf_7d060(void);
@@ -796,13 +796,13 @@ void drawmap(void);
 void selectnearitem(void);
 void createhuman(void);
 void getnexthuman(void);
-void lf_85980(void);
+void deletehuman(void);
 void humansimulation(void);
 void humansimulationclient(void);
-void lf_89de0(void);
+void setuphumanangles(void);
 void lineintersecthuman(void);
-void lf_89f50(void);
-void lf_8a010(void);
+void human_applydamage(void);
+void human_calculateanglesobject(void);
 void human_calculatelegangles(void);
 void human_calculatearmangles(void);
 void human_calcarmtorque(void);
@@ -812,7 +812,7 @@ void human_itemsimulation(void);
 void human_buildmuscles(void);
 void human_createmuscleball(void);
 void createjointbond(void);
-void lf_90be0(void);
+void human_walksimulation2(void);
 void lf_90bf0(void);
 void getinputs_human(void);
 void getinputs_car(void);
@@ -824,7 +824,7 @@ void circleintersecttriangle(void);
 void sphereintersecttriangle(void);
 void sphereintersecttrianglefull(void);
 void sphereintersectline(void);
-void lf_94900(void);
+void sphereintersectpoint(void);
 void lineintersectsphere(void);
 void lf_94b20(void);
 void getonlineserverlist(void);
@@ -833,25 +833,25 @@ void setupitemtypes(void);
 void createitem(void);
 void getnextitem(void);
 void itemtimetolive(void);
-void lf_971c0(void);
+void deleteitem(void);
 void itemsimulation(void);
 void itemlogic(void);
 void itemweaponsimulation(void);
 void itemsimulationclient(void);
-void lf_99890(void);
-void lf_99a60(void);
-void lf_99ad0(void);
-void lf_99c40(void);
+void setitempositionhuman(void);
+void item_billvalue(void);
+void item_addbill(void);
+void item_removebill(void);
 void linkitem(void);
-void lf_9a030(void);
-void lf_9a190(void);
+void linkitemtoitem(void);
+void item_addhumanlink(void);
 void item_removehumanlink(void);
 void item_removeitemlink(void);
 void item_physicssimulation(void);
 void item_sphereintersect(void);
 void city_addintersection(void);
 void addcitystreet(void);
-void lf_9b5d0(void);
+void addcityblock(void);
 void createlevel(void);
 void leveledit_setup(void);
 void lf_9c5c0(void);
@@ -865,30 +865,30 @@ void lf_a0740(void);
 void lf_a0a60(void);
 void lineintersectall(void);
 void lineintersectlevel(void);
-void lf_a1100(void);
+void circleintersectlevel(void);
 void sphereintersectlevel(void);
 void createlandscape(void);
 void landscape_buildmesh(void);
 void landscape_setheightf(void);
 void lineintersectlandscape(void);
-void lf_a22a0(void);
+void circleintersectlandscape(void);
 void sphereintersectlandscape(void);
 void buildcityinterection(void);
 void buildcitystreet(void);
 void logicsimulation(void);
 void logic_farbslist(void);
 void sprintf_comma(void);
-void lf_a3fe0(void);
+void logicsimulation_driving(void);
 void addpointstoteam(void);
 void pointinsidebase(void);
 void pointinsidebuilding(void);
 void pointinsidebasesafe(void);
-void lf_a4420(void);
+void pointinsidecheckpoint(void);
 void logic_createcar(void);
 void logic_setteammanager(void);
 void logic_splitteamcash(void);
-void lf_a4a60(void);
-void lf_a4c80(void);
+void logic_addteamcash(void);
+void logic_teammissioncomplete(void);
 void logic_suits_buy(void);
 void logic_cardealer_buy(void);
 void logic_gunstore_buy(void);
@@ -899,7 +899,7 @@ void logicsimulation_world(void);
 void geteulerangles2(void);
 void projectorientation(void);
 void multiply3x3matrices(void);
-void lf_a8d60(void);
+void transposematrix(void);
 void lf_a8e10(void);
 void lf_a9310(void);
 void lf_aa5a0(void);
@@ -913,10 +913,10 @@ void loadmodelcsm(void);
 void createtypemodel(void);
 void rendermodelnormals(void);
 void addboxtomodel(void);
-void lf_aef30(void);
+void addhalfboxtomodel(void);
 void addcylindertomodel(void);
 void createbulletmodel(void);
-void lf_affb0(void);
+void createsunglassmodel(void);
 void createmodel_cityobject(void);
 void createmodel_cityobject_type(void);
 void createmodel_cityobject_desk(void);
@@ -936,25 +936,25 @@ void createcashmodel(void);
 void lf_b3fc0(void);
 void lf_b41d0(void);
 void lf_b4520(void);
-void lf_b4710(void);
+void createfootmodel(void);
 void createspritemodel(void);
-void lf_b4930(void);
+void createrotormodel(void);
 void createhairmodel(void);
-void lf_b54c0(void);
+void createheadmodel(void);
 void modeltemp_addvertex(void);
 void model_extrudeeye2(void);
 void createheadmodel2(void);
 void model_addvertex(void);
-void lf_baed0(void);
+void tesselatebeziertriangle(void);
 void createheadmodel3(void);
 void hermiteinterpolation(void);
 void buildhumanmodel(void);
 void createhumanmodel(void);
-void lf_becd0(void);
-void lf_bed20(void);
-void lf_bed80(void);
-void lf_bf260(void);
-void lf_bf820(void);
+void sethumanmodelvert(void);
+void sethumanmodelvertface(void);
+void addwaisttomodel(void);
+void createcellphonemodel(void);
+void createkeymodel(void);
 void model_createcash(void);
 void setupspheremodel(void);
 void buildtrackmodel(void);
@@ -964,7 +964,7 @@ void model_editor(void);
 void fround(void);
 void lf_c1dc0(void);
 void client_simulation(void);
-void lf_c32d0(void);
+void net_calcdistancefactor(void);
 void packobjectpacket2(void);
 void packobjectpacket(void);
 void lerp(void);
@@ -976,18 +976,18 @@ void noise3d(void);
 void lerpnoise2d(void);
 void serpnoise2d(void);
 void cerpnoise2d(void);
-void lf_c5670(void);
+void getrandomfloat(void);
 void getrandomvector2d(void);
 void getrandomvector3d(void);
-void lf_c5770(void);
+void getrandomint(void);
 void createobject(void);
 void getnextobject(void);
-void lf_c6f60(void);
-void lf_c6ff0(void);
+void objecttimetolive(void);
+void deleteobject(void);
 void addobjectrotation(void);
-void lf_c71e0(void);
-void lf_c73d0(void);
-void lf_c7590(void);
+void getobjectrotation(void);
+void getobjectrotation2(void);
+void getobjectrotation3(void);
 void objectsimulation(void);
 void calculatebarycentric(void);
 void applydamageobject(void);
@@ -998,14 +998,14 @@ void engine_bezierinterpolation(void);
 void object_rotorsimulation(void);
 void objectsimulation_heli(void);
 void lineintersectobject(void);
-void lf_ced70(void);
+void sphereintersectobject(void);
 void buildsomeshit(void);
 void createtrack(void);
 void lineintersecttrack(void);
 void lineintersecttrackrail(void);
 void objecttrainsimulation(void);
 void objectwheelcollision2(void);
-void lf_d12e0(void);
+void objectwheelcollision(void);
 void objectsimulation_car(void);
 void getenginetorque(void);
 void lf_d2290(void);
@@ -1014,10 +1014,10 @@ void optionreadwriteint(void);
 void optionreadwritestring(void);
 void lf_d38c0(void);
 void createparticle(void);
-void lf_d4340(void);
-void lf_d43c0(void);
-void lf_d4610(void);
-void lf_d4700(void);
+void particletimetolive(void);
+void deleteparticle(void);
+void particlesimulation(void);
+void physicssimulation(void);
 void createplayer(void);
 void getnextplayer(void);
 void deleteplayer(void);
@@ -1028,7 +1028,7 @@ void player_addaction_menu(void);
 void player_addaction_item(void);
 void initplayticket(void);
 void updateplayticket(void);
-void lf_d5660(void);
+void getplayticket(void);
 void lf_d5690(void);
 void compileprogramobject(void);
 void loadsource(void);
@@ -1063,19 +1063,19 @@ void glstatediffuse(void);
 void glstateambient(void);
 void glstatenormal(void);
 void createscenario_world(void);
-void lf_dc770(void);
-void lf_dc780(void);
-void lf_dc790(void);
-void lf_dc7a0(void);
+void createscenario_mission(void);
+void createscenario_coop(void);
+void createscenario_driving(void);
+void scenario_getnextmission(void);
 void scenario_getnumofmissions(void);
 void scenario_isseekmission(void);
-void lf_dc8d0(void);
+void scenario_setmissioninactive(void);
 void scenario_createguards(void);
 void scenario_createtraffic2(void);
 void scenario_createchase(void);
 void scenario_createcar(void);
-void lf_ddad0(void);
-void lf_ddae0(void);
+void scenario_createaicar(void);
+void scenario_addcheckpoint(void);
 void scenario_armhuman(void);
 void client_createmission_acquisition(void);
 void createmission_threeway(void);
@@ -1123,12 +1123,12 @@ void generatetexture_carpet(void);
 void init_genrand(void);
 void init_by_array(void);
 void genrand_int32(void);
-void lf_eb640(void);
-void lf_eb650(void);
-void lf_eb680(void);
-void lf_eb6b0(void);
-void lf_eb6e0(void);
-void lf_eb730(void);
+void genrand_int31(void);
+void genrand_real1(void);
+void genrand_real2(void);
+void genrand_real3(void);
+void genrand_res53(void);
+void setupobjecttypes(void);
 void objecttype_addparticle(void);
 void objecttype_addbond(void);
 void objecttype_addface(void);
@@ -1147,7 +1147,7 @@ void resettimer(void);
 void starttimer(void);
 void stoptimer(void);
 void getcpufrequency(void);
-void lf_fb1b0(void);
+void setuptimers(void);
 void cs_sleep(void);
 void createvehicle(void);
 void getaudioinput(void);
@@ -1160,46 +1160,46 @@ void generatetrinormal(void);
 void resetorientation(void);
 void rotatevector(void);
 void rotateorientation(void);
-void lf_fcb80(void);
+void rotatevector2d(void);
 void lineintersectplane(void);
 void lineintersectplanetwosided(void);
 void lineintersecttriangle(void);
 void lineintersecttriangletwosided(void);
 void pointdistanceline(void);
-void lf_fd260(void);
-void lf_fd430(void);
-void lf_fd580(void);
+void lineintersectline2d(void);
+void sphereintersectline2d(void);
+void lineintersectcircle2d(void);
 void pointintersectcircle(void);
 void loadtextfile(void);
-void lf_fd7f0(void);
+void resetparser(void);
 void findstring(void);
 void checkstring(void);
-void lf_fd8e0(void);
+void getint(void);
 void getfloat(void);
 void getstring(void);
 void cs_getline(void);
 void checkbigendian(void);
-void lf_fdce0(void);
-void lf_fdd00(void);
+void comparestrings(void);
+void checkfilespec(void);
 void listfiles(void);
 void freadswap(void);
 void fwriteswap(void);
 void removeflieextentions(void);
 void enablesocketserver(void);
 void enablesocketclient(void);
-void lf_fe3f0(void);
+void disablesocket(void);
 void recvpacket(void);
-void lf_fe4f0(void);
+void resetsendpacket(void);
 void sendpacket(void);
 void cs_pwrite(void);
-void lf_fe630(void);
+void cs_pread(void);
 void pbitwrite(void);
 void pbitread(void);
-void lf_fe920(void);
-void lf_fea40(void);
+void pbitwritescale(void);
+void pbitreadscale(void);
 void pbitwritenego(void);
 void pbitreadnego(void);
-void lf_febd0(void);
+void pbitwritesign(void);
 void checkkeyboard(void);
 void checkmouse(void);
 void checkmouserelative(void);
@@ -1238,7 +1238,7 @@ void setupviewpoint(void);
 void setupobjectrender(void);
 void screenshot(void);
 void drawtext(void);
-void lf_107970(void);
+void gettextlength(void);
 void setuptextdisplay(void);
 void drawbitmap(void);
 void drawbitmaptexcoord(void);
@@ -1266,11 +1266,11 @@ void area_sectorvertequal(void);
 void calculatefriction(void);
 void flabs(void);
 void dotproduct(void);
-void lf_10b830(void);
+void crossproduct(void);
 void vectorlength(void);
 void normalizevector(void);
 void copyvector(void);
-void lf_10b980(void);
+void negvector(void);
 void zerovector(void);
 void addvectors(void);
 void subtractvectors(void);
@@ -1279,7 +1279,7 @@ void scaleaddvectors(void);
 void vectordistance(void);
 void vectorlength2d(void);
 void dotproduct2d(void);
-void lf_10bb90(void);
+void normalizevector2d(void);
 void copyvector2d(void);
 void addvectors2d(void);
 void scalevector2d(void);
@@ -1328,7 +1328,7 @@ const LfEntry lf_table[] = {
     { "start_file", 0x1b50, (void *)start_file, 2, LF_RET_VOID, 4, "vv", 0 },
     { "load_jpeg_image", 0x1b60, (void *)load_jpeg_image, 5, LF_RET_INT, 4, "ppppv", 1 },
     { "decode_jpeg_image", 0x21d0, (void *)decode_jpeg_image, 1, LF_RET_INT, 4, "v", 1 },
-    { "get_marker", 0x2280, (void *)get_marker, 1, LF_RET_INT, 1, "v", 1 },
+    { "get_marker", 0x2280, (void *)get_marker, 1, LF_RET_INT, 1, "p", 1 },
     { "stbi_get8u", 0x2300, (void *)stbi_get8u, 1, LF_RET_INT, 4, "v", 1 },
     { "stbi_get8", 0x2320, (void *)stbi_get8, 1, LF_RET_INT, 4, "v", 1 },
     { "parse_entropy_coded_data", 0x2390, (void *)parse_entropy_coded_data, 1, LF_RET_INT, 4, "v", 1 },
@@ -1340,7 +1340,7 @@ const LfEntry lf_table[] = {
     { "reset", 0x36f0, (void *)reset, 1, LF_RET_VOID, 4, "v", 0 },
     { "process_marker", 0x3780, (void *)process_marker, 2, LF_RET_INT, 4, "vv", 1 },
     { "stbi_skip", 0x3b10, (void *)stbi_skip, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "stbi_get16", 0x3b50, (void *)stbi_get16, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get16", 0x3b50, (void *)stbi_get16, 1, LF_RET_INT, 4, "p", 1 },
     { "build_huffman", 0x3b80, (void *)build_huffman, 2, LF_RET_INT, 4, "pv", 0 },
     { "process_scan_header", 0x3d90, (void *)process_scan_header, 1, LF_RET_INT, 4, "v", 1 },
     { "decode_jpeg_header", 0x3f80, (void *)decode_jpeg_header, 2, LF_RET_INT, 4, "vv", 1 },
@@ -1398,7 +1398,7 @@ const LfEntry lf_table[] = {
     { "stbi_png_info", 0x8240, (void *)stbi_png_info, 4, LF_RET_INT, 4, "pppp", 1 },
     { "stbi_bmp_test_file", 0x82e0, (void *)stbi_bmp_test_file, 1, LF_RET_INT, 4, "p", 1 },
     { "bmp_test", 0x8330, (void *)bmp_test, 1, LF_RET_INT, 4, "v", 1 },
-    { "stbi_get16le", 0x83d0, (void *)stbi_get16le, 1, LF_RET_INT, 4, "v", 1 },
+    { "stbi_get16le", 0x83d0, (void *)stbi_get16le, 1, LF_RET_INT, 4, "p", 1 },
     { "stbi_get32le", 0x8400, (void *)stbi_get32le, 1, LF_RET_INT, 4, "v", 1 },
     { "stbi_bmp_test_memory", 0x8430, (void *)stbi_bmp_test_memory, 2, LF_RET_INT, 4, "vv", 1 },
     { "stbi_bmp_load", 0x8460, (void *)stbi_bmp_load, 5, LF_RET_INT, 4, "ppppv", 1 },
@@ -1829,7 +1829,7 @@ const LfEntry lf_table[] = {
     { "__GLeeLink_WGL_OML_sync_control", 0x2fc10, (void *)lf_2fc10, 0, LF_RET_INT, 4, "", 1 },
     { "__GLeeLink_WGL_I3D_swap_frame_usage", 0x2fd20, (void *)lf_2fd20, 0, LF_RET_INT, 4, "", 1 },
     { "__GLeeLink_WGL_NV_video_output", 0x2fde0, (void *)lf_2fde0, 0, LF_RET_INT, 4, "", 1 },
-    { "initWGLLoadFunctions", 0x2fef0, (void *)lf_2fef0, 0, LF_RET_VOID, 4, "", 0 },
+    { "initWGLLoadFunctions", 0x2fef0, (void *)initWGLLoadFunctions, 0, LF_RET_VOID, 4, "", 0 },
     { "__GLeeExtList_init", 0x30070, (void *)lf_30070, 1, LF_RET_VOID, 4, "p", 0 },
     { "__GLeeExtList_clean", 0x300a0, (void *)lf_300a0, 1, LF_RET_VOID, 4, "p", 1 },
     { "__GLeeExtList_add", 0x30140, (void *)lf_30140, 2, LF_RET_VOID, 4, "pp", 1 },
@@ -1851,10 +1851,10 @@ const LfEntry lf_table[] = {
     { "createaccount", 0x33be0, (void *)createaccount, 1, LF_RET_INT, 4, "v", 0 },
     { "account_nameexists", 0x33eb0, (void *)account_nameexists, 1, LF_RET_INT, 4, "p", 0 },
     { "createclientaccount", 0x33f20, (void *)createclientaccount, 3, LF_RET_INT, 4, "ppv", 0 },
-    { "saveaccountsserver", 0x34010, (void *)lf_34010, 0, LF_RET_VOID, 4, "", 1 },
+    { "saveaccountsserver", 0x34010, (void *)saveaccountsserver, 0, LF_RET_VOID, 4, "", 1 },
     { "loadaccountsserver", 0x341d0, (void *)loadaccountsserver, 0, LF_RET_VOID, 4, "", 1 },
     { "saveaccountsclient", 0x34470, (void *)saveaccountsclient, 0, LF_RET_VOID, 4, "", 1 },
-    { "loadaccountsclient", 0x345d0, (void *)lf_345d0, 0, LF_RET_VOID, 4, "", 1 },
+    { "loadaccountsclient", 0x345d0, (void *)loadaccountsclient, 0, LF_RET_VOID, 4, "", 1 },
     { "server_writelogfile", 0x34740, (void *)server_writelogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "playerai", 0x348d0, (void *)playerai, 1, LF_RET_VOID, 4, "v", 0 },
     { "ai_assessthreats", 0x35840, (void *)ai_assessthreats, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -1869,7 +1869,7 @@ const LfEntry lf_table[] = {
     { "area_getblock", 0x38600, (void *)area_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_getblocklink", 0x38760, (void *)area_getblocklink, 4, LF_RET_INT, 4, "vvvv", 0 },
     { "area_getblockmaterial", 0x38920, (void *)area_getblockmaterial, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_getblocktexture", 0x38a90, (void *)lf_38a90, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_getblocktexture", 0x38a90, (void *)area_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_deleteblock", 0x38c00, (void *)area_deleteblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "area_createsector", 0x38fd0, (void *)area_createsector, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_getnextsector", 0x391f0, (void *)area_getnextsector, 0, LF_RET_INT, 4, "", 0 },
@@ -1880,7 +1880,7 @@ const LfEntry lf_table[] = {
     { "area_createsblocks", 0x395a0, (void *)area_createsblocks, 0, LF_RET_VOID, 4, "", 1 },
     { "area_setupsblock", 0x3c750, (void *)area_setupsblock, 1, LF_RET_VOID, 4, "v", 1 },
     { "addbeziersurface", 0x3cf60, (void *)lf_3cf60, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
-    { "addbeziersurfacetexture", 0x3d510, (void *)lf_3d510, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
+    { "addbeziersurfacetexture", 0x3d510, (void *)addbeziersurfacetexture, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "tesselatebezier", 0x3da10, (void *)tesselatebezier, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "tesselatebezierderivative", 0x3dac0, (void *)tesselatebezierderivative, 6, LF_RET_FLOAT, 4, "vvvvvv", 0 },
     { "area_copyrotateblock", 0x3db90, (void *)area_copyrotateblock, 2, LF_RET_VOID, 4, "vp", 0 },
@@ -1895,34 +1895,34 @@ const LfEntry lf_table[] = {
     { "area_block_addfloorceil", 0x41f30, (void *)area_block_addfloorceil, 0, LF_RET_VOID, 4, "", 0 },
     { "area_block_addfloor", 0x42050, (void *)area_block_addfloor, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_block_addceil", 0x420e0, (void *)area_block_addceil, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "area_block_addwall", 0x42170, (void *)lf_42170, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "area_block_addwindowvertical_exterior", 0x42220, (void *)lf_42220, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "area_block_addwindowvertical_interior", 0x423a0, (void *)lf_423a0, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "area_block_addwindowhorizontal_exterior", 0x42690, (void *)lf_42690, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_block_addwindowhorizontal_interior", 0x42800, (void *)lf_42800, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_block_addwall", 0x42170, (void *)area_block_addwall, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "area_block_addwindowvertical_exterior", 0x42220, (void *)area_block_addwindowvertical_exterior, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_block_addwindowvertical_interior", 0x423a0, (void *)area_block_addwindowvertical_interior, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "area_block_addwindowhorizontal_exterior", 0x42690, (void *)area_block_addwindowhorizontal_exterior, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_block_addwindowhorizontal_interior", 0x42800, (void *)area_block_addwindowhorizontal_interior, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_block_addwindow", 0x42b00, (void *)area_block_addwindow, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "area_block_adddoor", 0x42cb0, (void *)area_block_adddoor, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addbeam", 0x430f0, (void *)area_block_addbeam, 9, LF_RET_VOID, 4, "vvvvvvvvp", 0 },
     { "area_block_addoutdoor", 0x43380, (void *)area_block_addoutdoor, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_addcorner", 0x434e0, (void *)area_block_addcorner, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "area_block_rotatesurface", 0x43650, (void *)area_block_rotatesurface, 2, LF_RET_INT, 4, "vv", 0 },
-    { "area_interior_createblock", 0x43780, (void *)lf_43780, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
-    { "area_interior_setblock", 0x43a80, (void *)lf_43a80, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "area_interior_createblock", 0x43780, (void *)area_interior_createblock, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
+    { "area_interior_setblock", 0x43a80, (void *)area_interior_setblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "area_interior_setobject", 0x43c60, (void *)area_interior_setobject, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "area_interior_getblock", 0x43e20, (void *)lf_43e20, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_interior_getblocklink", 0x43f80, (void *)lf_43f80, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "area_interior_getblocktexture", 0x44140, (void *)lf_44140, 5, LF_RET_INT, 4, "vvvvv", 0 },
+    { "area_interior_getblock", 0x43e20, (void *)area_interior_getblock, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_interior_getblocklink", 0x43f80, (void *)area_interior_getblocklink, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "area_interior_getblocktexture", 0x44140, (void *)area_interior_getblocktexture, 5, LF_RET_INT, 4, "vvvvv", 0 },
     { "area_interior_buildsectormodel", 0x442b0, (void *)area_interior_buildsectormodel, 2, LF_RET_INT, 4, "vv", 1 },
     { "area_breakblock", 0x46610, (void *)area_breakblock, 8, LF_RET_INT, 4, "vvvvvvpp", 0 },
     { "lineintersectarea", 0x466d0, (void *)lineintersectarea, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectnormalblock", 0x478d0, (void *)lineintersectnormalblock, 8, LF_RET_INT, 4, "ppppppvv", 0 },
     { "lineintersectspecblock", 0x47ad0, (void *)lineintersectspecblock, 8, LF_RET_INT, 1, "ppppppvv", 0 },
     { "sphereintersectarea", 0x47de0, (void *)sphereintersectarea, 6, LF_RET_INT, 4, "pppvpv", 0 },
-    { "sphereintersectnormalblock", 0x48bf0, (void *)lf_48bf0, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
-    { "sphereintersectspecblock", 0x49000, (void *)lf_49000, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
+    { "sphereintersectnormalblock", 0x48bf0, (void *)sphereintersectnormalblock, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
+    { "sphereintersectspecblock", 0x49000, (void *)sphereintersectspecblock, 8, LF_RET_INT, 1, "ppppvpvv", 0 },
     { "circleintersectarea", 0x494a0, (void *)circleintersectarea, 7, LF_RET_INT, 4, "pppvppv", 0 },
-    { "circleintersectnormalblock", 0x49f00, (void *)lf_49f00, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
-    { "circleintersectspecblock", 0x4a180, (void *)lf_4a180, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
+    { "circleintersectnormalblock", 0x49f00, (void *)circleintersectnormalblock, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
+    { "circleintersectspecblock", 0x4a180, (void *)circleintersectspecblock, 9, LF_RET_INT, 1, "pppvpvpvv", 0 },
     { "area_buildsectormodel", 0x4a650, (void *)area_buildsectormodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "tempmesh_optimize", 0x4c320, (void *)tempmesh_optimize, 0, LF_RET_VOID, 4, "", 0 },
     { "tempmesh_optimize2", 0x4cd90, (void *)tempmesh_optimize2, 0, LF_RET_VOID, 4, "", 0 },
@@ -1930,7 +1930,7 @@ const LfEntry lf_table[] = {
     { "area_getnextsectormesh", 0x4da00, (void *)area_getnextsectormesh, 0, LF_RET_INT, 4, "", 0 },
     { "area_setsectormesh", 0x4da70, (void *)area_setsectormesh, 2, LF_RET_VOID, 4, "vv", 0 },
     { "area_removesectormodel", 0x4daf0, (void *)area_removesectormodel, 1, LF_RET_VOID, 4, "v", 0 },
-    { "area_submitsectormodel", 0x4db70, (void *)lf_4db70, 1, LF_RET_VOID, 4, "v", 1 },
+    { "area_submitsectormodel", 0x4db70, (void *)area_submitsectormodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "setupsounds", 0x4e030, (void *)setupsounds, 0, LF_RET_VOID, 4, "", 1 },
     { "soundsimulation", 0x4e190, (void *)soundsimulation, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "createsoundobject", 0x4f150, (void *)createsoundobject, 8, LF_RET_INT, 4, "vpvvvvvv", 1 },
@@ -1938,14 +1938,14 @@ const LfEntry lf_table[] = {
     { "deletesound", 0x4f720, (void *)deletesound, 1, LF_RET_VOID, 4, "v", 1 },
     { "createwav", 0x4f7d0, (void *)createwav, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createbond", 0x4fcc0, (void *)createbond, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "bondtimetolive", 0x501b0, (void *)lf_501b0, 0, LF_RET_VOID, 4, "", 0 },
-    { "deletebond", 0x50230, (void *)lf_50230, 1, LF_RET_VOID, 4, "v", 0 },
+    { "bondtimetolive", 0x501b0, (void *)bondtimetolive, 0, LF_RET_VOID, 4, "", 0 },
+    { "deletebond", 0x50230, (void *)deletebond, 1, LF_RET_VOID, 4, "v", 0 },
     { "bondsimulation2", 0x50700, (void *)lf_50700, 0, LF_RET_VOID, 4, "", 0 },
-    { "checkbonds", 0x55bb0, (void *)lf_55bb0, 0, LF_RET_VOID, 4, "", 0 },
+    { "checkbonds", 0x55bb0, (void *)checkbonds, 0, LF_RET_VOID, 4, "", 0 },
     { "setupbuildingtypes", 0x55bc0, (void *)setupbuildingtypes, 0, LF_RET_VOID, 4, "", 0 },
     { "building_buildfloorplan", 0x56ad0, (void *)building_buildfloorplan, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
     { "building_iswindow", 0x58940, (void *)building_iswindow, 5, LF_RET_INT, 4, "vvvvv", 0 },
-    { "building_addgaragedoor", 0x58a70, (void *)lf_58a70, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "building_addgaragedoor", 0x58a70, (void *)building_addgaragedoor, 2, LF_RET_VOID, 4, "vv", 0 },
     { "buildingedit_setup", 0x58b60, (void *)buildingedit_setup, 0, LF_RET_VOID, 4, "", 0 },
     { "building_editorloop", 0x58d20, (void *)building_editorloop, 0, LF_RET_VOID, 4, "", 1 },
     { "building_checkeditor", 0x5c040, (void *)building_checkeditor, 0, LF_RET_VOID, 4, "", 0 },
@@ -1971,32 +1971,32 @@ const LfEntry lf_table[] = {
     { "setupbullettypes", 0x64110, (void *)setupbullettypes, 0, LF_RET_VOID, 4, "", 0 },
     { "createbullet", 0x64380, (void *)createbullet, 4, LF_RET_INT, 4, "vppv", 0 },
     { "bullettimetolive", 0x645e0, (void *)bullettimetolive, 0, LF_RET_VOID, 4, "", 0 },
-    { "deletebullet", 0x64650, (void *)lf_64650, 1, LF_RET_VOID, 4, "v", 0 },
+    { "deletebullet", 0x64650, (void *)deletebullet, 1, LF_RET_VOID, 4, "v", 0 },
     { "bulletsimulation", 0x646b0, (void *)bulletsimulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "createcityobject", 0x65330, (void *)lf_65330, 3, LF_RET_INT, 4, "vpv", 0 },
-    { "getnextcityobject", 0x653c0, (void *)lf_653c0, 0, LF_RET_INT, 4, "", 0 },
-    { "deletecityobject", 0x65400, (void *)lf_65400, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createcityobject", 0x65330, (void *)createcityobject, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "getnextcityobject", 0x653c0, (void *)getnextcityobject, 0, LF_RET_INT, 4, "", 0 },
+    { "deletecityobject", 0x65400, (void *)deletecityobject, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectcityobject", 0x65430, (void *)lineintersectcityobject, 6, LF_RET_INT, 4, "pppvpp", 0 },
     { "lineintersectcityobjecttype", 0x65b80, (void *)lineintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppp", 0 },
-    { "sphereintersectcityobjecttype", 0x66210, (void *)lf_66210, 8, LF_RET_INT, 4, "pppvpppv", 0 },
+    { "sphereintersectcityobjecttype", 0x66210, (void *)sphereintersectcityobjecttype, 8, LF_RET_INT, 4, "pppvpppv", 0 },
     { "cityobject_simulation", 0x665f0, (void *)cityobject_simulation, 0, LF_RET_VOID, 4, "", 0 },
     { "city_createelevator", 0x66600, (void *)city_createelevator, 1, LF_RET_INT, 4, "p", 0 },
     { "setupcityobjecttypes", 0x66810, (void *)setupcityobjecttypes, 0, LF_RET_VOID, 4, "", 0 },
     { "cityobject_addbox", 0x67490, (void *)cityobject_addbox, 7, LF_RET_VOID, 4, "vvvvvvv", 0 },
     { "clientrecv", 0x676d0, (void *)lf_676d0, 0, LF_RET_VOID, 4, "", 1 },
     { "clientsend", 0x68030, (void *)clientsend, 0, LF_RET_VOID, 4, "", 1 },
-    { "packunitvector", 0x685a0, (void *)lf_685a0, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "unpackunitvector", 0x68740, (void *)lf_68740, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "packorientation", 0x68830, (void *)lf_68830, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "unpackorientation", 0x68bd0, (void *)lf_68bd0, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "packangle", 0x68e20, (void *)lf_68e20, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "unpackangle", 0x68ec0, (void *)lf_68ec0, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "packposition", 0x68f40, (void *)lf_68f40, 1, LF_RET_VOID, 4, "v", 0 },
-    { "unpackposition", 0x68f80, (void *)lf_68f80, 1, LF_RET_VOID, 4, "v", 0 },
-    { "packpositiondelta", 0x68fc0, (void *)lf_68fc0, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "unpackpositiondelta", 0x69010, (void *)lf_69010, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "packscalar", 0x69060, (void *)lf_69060, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "unpackscalar", 0x69110, (void *)lf_69110, 3, LF_RET_VOID, 4, "pvv", 0 },
+    { "packunitvector", 0x685a0, (void *)packunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "unpackunitvector", 0x68740, (void *)unpackunitvector, 3, LF_RET_VOID, 4, "ppv", 0 },
+    { "packorientation", 0x68830, (void *)packorientation, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "unpackorientation", 0x68bd0, (void *)unpackorientation, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "packangle", 0x68e20, (void *)packangle, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "unpackangle", 0x68ec0, (void *)unpackangle, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "packposition", 0x68f40, (void *)packposition, 1, LF_RET_VOID, 4, "v", 0 },
+    { "unpackposition", 0x68f80, (void *)unpackposition, 1, LF_RET_VOID, 4, "p", 0 },
+    { "packpositiondelta", 0x68fc0, (void *)packpositiondelta, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "unpackpositiondelta", 0x69010, (void *)unpackpositiondelta, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "packscalar", 0x69060, (void *)packscalar, 3, LF_RET_VOID, 4, "pvv", 0 },
+    { "unpackscalar", 0x69110, (void *)unpackscalar, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "debug_getinputs", 0x69190, (void *)debug_getinputs, 0, LF_RET_VOID, 4, "", 0 },
     { "displaydebuginfo", 0x69440, (void *)displaydebuginfo, 0, LF_RET_VOID, 4, "", 1 },
     { "debug_addline", 0x6a1d0, (void *)debug_addline, 2, LF_RET_VOID, 4, "pp", 0 },
@@ -2023,32 +2023,32 @@ const LfEntry lf_table[] = {
     { "economy_carmarket", 0x6ed50, (void *)economy_carmarket, 0, LF_RET_VOID, 4, "", 0 },
     { "economy_gunmarket", 0x6efa0, (void *)economy_gunmarket, 0, LF_RET_VOID, 4, "", 0 },
     { "playerbuystock", 0x6f5d0, (void *)playerbuystock, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "playersellstock", 0x6f6e0, (void *)lf_6f6e0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "playersellstock", 0x6f6e0, (void *)playersellstock, 2, LF_RET_VOID, 4, "vv", 0 },
     { "playerdeathtax", 0x6f860, (void *)playerdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
     { "accountdeathtax", 0x6f990, (void *)accountdeathtax, 1, LF_RET_VOID, 4, "v", 0 },
     { "playerteamkilltax", 0x6fa00, (void *)playerteamkilltax, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "playerdebt", 0x6fb40, (void *)lf_6fb40, 1, LF_RET_VOID, 4, "v", 0 },
+    { "playerdebt", 0x6fb40, (void *)playerdebt, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_calcassets", 0x6fb80, (void *)player_calcassets, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x6fd00, (void *)player_saveinventory, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_loadinventory", 0x70190, (void *)player_loadinventory, 1, LF_RET_VOID, 4, "v", 0 },
     { "eventsimulation", 0x704b0, (void *)eventsimulation, 0, LF_RET_VOID, 4, "", 1 },
-    { "createevent_bullet", 0x71e60, (void *)lf_71e60, 4, LF_RET_VOID, 4, "vppv", 0 },
+    { "createevent_bullet", 0x71e60, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
     { "createevent_bullethit", 0x71f20, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createevent_message", 0x72000, (void *)sr_createevent_message, 4, LF_RET_VOID, 4, "vpvv", 0 },
-    { "createevent_createobject", 0x720f0, (void *)lf_720f0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_createobject", 0x720f0, (void *)createevent_createobject, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateobject", 0x721a0, (void *)createevent_updateobject, 5, LF_RET_VOID, 4, "vvvpp", 0 },
     { "createevent_updateitem", 0x722b0, (void *)createevent_updateitem, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateiteminfo", 0x723b0, (void *)createevent_updateiteminfo, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateplayer", 0x72490, (void *)createevent_updateplayer, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updatehuman", 0x72620, (void *)lf_72620, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updatehuman", 0x72620, (void *)createevent_updatehuman, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updateplayer_finance", 0x726d0, (void *)createevent_updateplayer_finance, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_sound", 0x72780, (void *)createevent_sound, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "createevent_updatedoor", 0x72830, (void *)sr_createevent_updatedoor, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "createevent_updatescenario", 0x728b0, (void *)lf_728b0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updatescenario", 0x728b0, (void *)createevent_updatescenario, 1, LF_RET_VOID, 4, "v", 0 },
     { "createevent_updatemission", 0x729c0, (void *)sr_createevent_updatemission, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "createevent_updatestocks", 0x72b50, (void *)lf_72b50, 0, LF_RET_VOID, 4, "", 0 },
-    { "createevent_updatecarmarket", 0x72c40, (void *)lf_72c40, 1, LF_RET_VOID, 4, "v", 0 },
-    { "createevent_updateblock_interior", 0x72d10, (void *)lf_72d10, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "createevent_updatestocks", 0x72b50, (void *)createevent_updatestocks, 0, LF_RET_VOID, 4, "", 0 },
+    { "createevent_updatecarmarket", 0x72c40, (void *)createevent_updatecarmarket, 1, LF_RET_VOID, 4, "v", 0 },
+    { "createevent_updateblock_interior", 0x72d10, (void *)createevent_updateblock_interior, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "createevent_updateblock_quad", 0x72db0, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x72ed0, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x73aa0, (void *)unpackevent, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2063,7 +2063,7 @@ const LfEntry lf_table[] = {
     { "frame_drawvoiceicons", 0x79330, (void *)frame_drawvoiceicons, 0, LF_RET_VOID, 4, "", 1 },
     { "pointinsidefrustum", 0x796f0, (void *)pointinsidefrustum, 1, LF_RET_INT, 4, "p", 0 },
     { "boxinsidefrustum", 0x79890, (void *)boxinsidefrustum, 2, LF_RET_INT, 4, "pp", 0 },
-    { "testtimer", 0x79a90, (void *)lf_79a90, 0, LF_RET_INT64, 4, "", 1 },
+    { "testtimer", 0x79a90, (void *)testtimer, 0, LF_RET_INT, 4, "", 1 },
     { "resetgame", 0x79ad0, (void *)resetgame, 0, LF_RET_VOID, 4, "", 1 },
     { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
     { "reactivategame", 0x7d060, (void *)lf_7d060, 0, LF_RET_VOID, 4, "", 2 },
@@ -2100,13 +2100,13 @@ const LfEntry lf_table[] = {
     { "selectnearitem", 0x84f00, (void *)selectnearitem, 0, LF_RET_VOID, 4, "", 0 },
     { "createhuman", 0x850b0, (void *)createhuman, 3, LF_RET_INT, 4, "ppp", 0 },
     { "getnexthuman", 0x85940, (void *)getnexthuman, 0, LF_RET_INT, 4, "", 0 },
-    { "deletehuman", 0x85980, (void *)lf_85980, 1, LF_RET_VOID, 4, "v", 0 },
+    { "deletehuman", 0x85980, (void *)deletehuman, 1, LF_RET_VOID, 4, "v", 0 },
     { "humansimulation", 0x85b70, (void *)humansimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "humansimulationclient", 0x896d0, (void *)humansimulationclient, 0, LF_RET_VOID, 4, "", 0 },
-    { "setuphumanangles", 0x89de0, (void *)lf_89de0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "setuphumanangles", 0x89de0, (void *)setuphumanangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersecthuman", 0x89e10, (void *)lineintersecthuman, 4, LF_RET_INT, 1, "vppv", 0 },
-    { "human_applydamage", 0x89f50, (void *)lf_89f50, 4, LF_RET_VOID, 4, "vvvv", 0 },
-    { "human_calculateanglesobject", 0x8a010, (void *)lf_8a010, 0, LF_RET_VOID, 4, "", 0 },
+    { "human_applydamage", 0x89f50, (void *)human_applydamage, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "human_calculateanglesobject", 0x8a010, (void *)human_calculateanglesobject, 0, LF_RET_VOID, 4, "", 0 },
     { "human_calculatelegangles", 0x8a020, (void *)human_calculatelegangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_calculatearmangles", 0x8a710, (void *)human_calculatearmangles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_calcarmtorque", 0x8d000, (void *)human_calcarmtorque, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2116,7 +2116,7 @@ const LfEntry lf_table[] = {
     { "human_buildmuscles", 0x90600, (void *)human_buildmuscles, 1, LF_RET_VOID, 4, "v", 0 },
     { "human_createmuscleball", 0x90830, (void *)human_createmuscleball, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "createjointbond", 0x90a10, (void *)createjointbond, 4, LF_RET_INT, 4, "vvvp", 0 },
-    { "human_walksimulation2", 0x90be0, (void *)lf_90be0, 0, LF_RET_VOID, 4, "", 0 },
+    { "human_walksimulation2", 0x90be0, (void *)human_walksimulation2, 0, LF_RET_VOID, 4, "", 0 },
     { "getinputs", 0x90bf0, (void *)lf_90bf0, 1, LF_RET_VOID, 4, "v", 1 },
     { "getinputs_human", 0x91920, (void *)getinputs_human, 1, LF_RET_VOID, 4, "v", 0 },
     { "getinputs_car", 0x924f0, (void *)getinputs_car, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2128,7 +2128,7 @@ const LfEntry lf_table[] = {
     { "sphereintersecttriangle", 0x944a0, (void *)sphereintersecttriangle, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "sphereintersecttrianglefull", 0x94580, (void *)sphereintersecttrianglefull, 8, LF_RET_INT, 4, "ppppvpvv", 0 },
     { "sphereintersectline", 0x947f0, (void *)sphereintersectline, 7, LF_RET_INT, 4, "ppppvpp", 0 },
-    { "sphereintersectpoint", 0x94900, (void *)lf_94900, 6, LF_RET_INT, 4, "ppppvp", 0 },
+    { "sphereintersectpoint", 0x94900, (void *)sphereintersectpoint, 6, LF_RET_INT, 4, "ppppvp", 0 },
     { "lineintersectsphere", 0x94990, (void *)lineintersectsphere, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "getlanipaddress", 0x94b20, (void *)lf_94b20, 0, LF_RET_VOID, 4, "", 1 },
     { "getonlineserverlist", 0x94c00, (void *)getonlineserverlist, 0, LF_RET_VOID, 4, "", 1 },
@@ -2137,25 +2137,25 @@ const LfEntry lf_table[] = {
     { "createitem", 0x96cf0, (void *)createitem, 4, LF_RET_INT, 4, "vppp", 0 },
     { "getnextitem", 0x970f0, (void *)getnextitem, 0, LF_RET_INT, 4, "", 0 },
     { "itemtimetolive", 0x97130, (void *)itemtimetolive, 0, LF_RET_VOID, 4, "", 0 },
-    { "deleteitem", 0x971c0, (void *)lf_971c0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "deleteitem", 0x971c0, (void *)deleteitem, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulation", 0x97350, (void *)itemsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "itemlogic", 0x98290, (void *)itemlogic, 0, LF_RET_VOID, 4, "", 0 },
     { "itemweaponsimulation", 0x98f40, (void *)itemweaponsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "itemsimulationclient", 0x99500, (void *)itemsimulationclient, 0, LF_RET_VOID, 4, "", 0 },
-    { "setitempositionhuman", 0x99890, (void *)lf_99890, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "item_billvalue", 0x99a60, (void *)lf_99a60, 1, LF_RET_INT, 4, "v", 0 },
-    { "item_addbill", 0x99ad0, (void *)lf_99ad0, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "item_removebill", 0x99c40, (void *)lf_99c40, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "setitempositionhuman", 0x99890, (void *)setitempositionhuman, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "item_billvalue", 0x99a60, (void *)item_billvalue, 1, LF_RET_INT, 4, "v", 0 },
+    { "item_addbill", 0x99ad0, (void *)item_addbill, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "item_removebill", 0x99c40, (void *)item_removebill, 2, LF_RET_VOID, 4, "vv", 0 },
     { "linkitem", 0x99d50, (void *)linkitem, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "linkitemtoitem", 0x9a030, (void *)lf_9a030, 2, LF_RET_INT, 4, "vv", 0 },
-    { "item_addhumanlink", 0x9a190, (void *)lf_9a190, 3, LF_RET_INT, 1, "vvv", 0 },
+    { "linkitemtoitem", 0x9a030, (void *)linkitemtoitem, 2, LF_RET_INT, 4, "vv", 0 },
+    { "item_addhumanlink", 0x9a190, (void *)item_addhumanlink, 3, LF_RET_INT, 1, "vvv", 0 },
     { "item_removehumanlink", 0x9a220, (void *)item_removehumanlink, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "item_removeitemlink", 0x9a330, (void *)item_removeitemlink, 2, LF_RET_VOID, 4, "vv", 0 },
     { "item_physicssimulation", 0x9a410, (void *)item_physicssimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "item_sphereintersect", 0x9aba0, (void *)item_sphereintersect, 3, LF_RET_INT, 1, "vpv", 0 },
     { "city_addintersection", 0x9b160, (void *)city_addintersection, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "addcitystreet", 0x9b2c0, (void *)addcitystreet, 5, LF_RET_VOID, 4, "vvvvp", 0 },
-    { "addcityblock", 0x9b5d0, (void *)lf_9b5d0, 4, LF_RET_VOID, 4, "vvvv", 0 },
+    { "addcityblock", 0x9b5d0, (void *)addcityblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "createlevel", 0x9b740, (void *)createlevel, 0, LF_RET_VOID, 4, "", 1 },
     { "leveledit_setup", 0x9c4f0, (void *)leveledit_setup, 0, LF_RET_VOID, 4, "", 0 },
     { "leveleditor_loop", 0x9c5c0, (void *)lf_9c5c0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2169,30 +2169,30 @@ const LfEntry lf_table[] = {
     { "leveleditor_load", 0xa0a60, (void *)lf_a0a60, 0, LF_RET_VOID, 4, "", 1 },
     { "lineintersectall", 0xa0da0, (void *)lineintersectall, 2, LF_RET_INT, 1, "pp", 0 },
     { "lineintersectlevel", 0xa0f40, (void *)lineintersectlevel, 3, LF_RET_INT, 1, "ppv", 0 },
-    { "circleintersectlevel", 0xa1100, (void *)lf_a1100, 3, LF_RET_INT, 1, "ppv", 0 },
+    { "circleintersectlevel", 0xa1100, (void *)circleintersectlevel, 3, LF_RET_INT, 1, "ppv", 0 },
     { "sphereintersectlevel", 0xa1220, (void *)sphereintersectlevel, 2, LF_RET_INT, 1, "pv", 0 },
     { "createlandscape", 0xa1320, (void *)createlandscape, 0, LF_RET_VOID, 4, "", 0 },
     { "landscape_buildmesh", 0xa19c0, (void *)landscape_buildmesh, 0, LF_RET_VOID, 4, "", 1 },
     { "landscape_setheightf", 0xa1aa0, (void *)landscape_setheightf, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectlandscape", 0xa1b40, (void *)lineintersectlandscape, 2, LF_RET_INT, 1, "pp", 0 },
-    { "circleintersectlandscape", 0xa22a0, (void *)lf_a22a0, 3, LF_RET_INT64, 4, "ppv", 0 },
+    { "circleintersectlandscape", 0xa22a0, (void *)circleintersectlandscape, 3, LF_RET_INT, 4, "ppv", 0 },
     { "sphereintersectlandscape", 0xa27b0, (void *)sphereintersectlandscape, 2, LF_RET_INT, 1, "pv", 0 },
     { "buildcityinterection", 0xa2cd0, (void *)buildcityinterection, 1, LF_RET_VOID, 4, "v", 0 },
     { "buildcitystreet", 0xa2f90, (void *)buildcitystreet, 1, LF_RET_VOID, 4, "v", 0 },
     { "logicsimulation", 0xa3940, (void *)logicsimulation, 0, LF_RET_VOID, 4, "", 1 },
     { "logic_farbslist", 0xa3de0, (void *)logic_farbslist, 1, LF_RET_VOID, 4, "v", 0 },
     { "sprintf_comma", 0xa3ee0, (void *)sprintf_comma, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "logicsimulation_driving", 0xa3fe0, (void *)lf_a3fe0, 0, LF_RET_VOID, 4, "", 0 },
+    { "logicsimulation_driving", 0xa3fe0, (void *)logicsimulation_driving, 0, LF_RET_VOID, 4, "", 0 },
     { "addpointstoteam", 0xa4150, (void *)addpointstoteam, 2, LF_RET_VOID, 4, "vv", 0 },
     { "pointinsidebase", 0xa4180, (void *)pointinsidebase, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pointinsidebuilding", 0xa4260, (void *)pointinsidebuilding, 3, LF_RET_INT, 4, "vpv", 0 },
     { "pointinsidebasesafe", 0xa4340, (void *)pointinsidebasesafe, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pointinsidecheckpoint", 0xa4420, (void *)lf_a4420, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pointinsidecheckpoint", 0xa4420, (void *)pointinsidecheckpoint, 2, LF_RET_INT, 4, "pv", 0 },
     { "logic_createcar", 0xa44a0, (void *)logic_createcar, 3, LF_RET_INT, 4, "vvv", 0 },
     { "logic_setteammanager", 0xa4570, (void *)logic_setteammanager, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_splitteamcash", 0xa4980, (void *)logic_splitteamcash, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_addteamcash", 0xa4a60, (void *)lf_a4a60, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "logic_teammissioncomplete", 0xa4c80, (void *)lf_a4c80, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_addteamcash", 0xa4a60, (void *)logic_addteamcash, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "logic_teammissioncomplete", 0xa4c80, (void *)logic_teammissioncomplete, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_suits_buy", 0xa5140, (void *)logic_suits_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_cardealer_buy", 0xa52c0, (void *)logic_cardealer_buy, 2, LF_RET_VOID, 4, "vv", 0 },
     { "logic_gunstore_buy", 0xa5630, (void *)logic_gunstore_buy, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2203,7 +2203,7 @@ const LfEntry lf_table[] = {
     { "geteulerangles2", 0xa8a30, (void *)geteulerangles2, 2, LF_RET_VOID, 4, "pp", 0 },
     { "projectorientation", 0xa8b30, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "multiply3x3matrices", 0xa8c60, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "transposematrix", 0xa8d60, (void *)lf_a8d60, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "transposematrix", 0xa8d60, (void *)transposematrix, 2, LF_RET_VOID, 4, "pv", 0 },
     { "hostmenu", 0xa8e10, (void *)lf_a8e10, 0, LF_RET_VOID, 4, "", 1 },
     { "joinmenu", 0xa9310, (void *)lf_a9310, 0, LF_RET_VOID, 4, "", 1 },
     { "connectmenu", 0xaa5a0, (void *)lf_aa5a0, 0, LF_RET_VOID, 4, "", 1 },
@@ -2217,10 +2217,10 @@ const LfEntry lf_table[] = {
     { "createtypemodel", 0xad5d0, (void *)createtypemodel, 2, LF_RET_VOID, 4, "vv", 1 },
     { "rendermodelnormals", 0xae8c0, (void *)rendermodelnormals, 3, LF_RET_VOID, 4, "vpp", 1 },
     { "addboxtomodel", 0xaedb0, (void *)addboxtomodel, 4, LF_RET_VOID, 4, "pvvv", 0 },
-    { "addhalfboxtomodel", 0xaef30, (void *)lf_aef30, 6, LF_RET_VOID, 4, "ppvvvv", 0 },
+    { "addhalfboxtomodel", 0xaef30, (void *)addhalfboxtomodel, 6, LF_RET_VOID, 4, "ppvvvv", 0 },
     { "addcylindertomodel", 0xaf140, (void *)addcylindertomodel, 4, LF_RET_VOID, 4, "ppvv", 0 },
     { "createbulletmodel", 0xaf7c0, (void *)createbulletmodel, 3, LF_RET_VOID, 4, "vvv", 1 },
-    { "createsunglassmodel", 0xaffb0, (void *)lf_affb0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "createsunglassmodel", 0xaffb0, (void *)createsunglassmodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "createmodel_cityobject", 0xb01c0, (void *)createmodel_cityobject, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createmodel_cityobject_type", 0xb0200, (void *)createmodel_cityobject_type, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createmodel_cityobject_desk", 0xb06c0, (void *)createmodel_cityobject_desk, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2240,25 +2240,25 @@ const LfEntry lf_table[] = {
     { "lf_b3fc0", 0xb3fc0, (void *)lf_b3fc0, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "lf_b41d0", 0xb41d0, (void *)lf_b41d0, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "lf_b4520", 0xb4520, (void *)lf_b4520, 3, LF_RET_VOID, 4, "vvv", 1 },
-    { "createfootmodel", 0xb4710, (void *)lf_b4710, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "createfootmodel", 0xb4710, (void *)createfootmodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "createspritemodel", 0xb4820, (void *)createspritemodel, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "createrotormodel", 0xb4930, (void *)lf_b4930, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "createrotormodel", 0xb4930, (void *)createrotormodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "createhairmodel", 0xb4a30, (void *)createhairmodel, 1, LF_RET_VOID, 4, "v", 1 },
-    { "createheadmodel", 0xb54c0, (void *)lf_b54c0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "createheadmodel", 0xb54c0, (void *)createheadmodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "modeltemp_addvertex", 0xb7980, (void *)modeltemp_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
     { "model_extrudeeye2", 0xb7aa0, (void *)model_extrudeeye2, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createheadmodel2", 0xb80b0, (void *)createheadmodel2, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_addvertex", 0xbadd0, (void *)model_addvertex, 2, LF_RET_INT, 4, "pv", 0 },
-    { "tesselatebeziertriangle", 0xbaed0, (void *)lf_baed0, 5, LF_RET_VOID, 4, "vvvvp", 0 },
+    { "tesselatebeziertriangle", 0xbaed0, (void *)tesselatebeziertriangle, 5, LF_RET_VOID, 4, "pvvvp", 0 },
     { "createheadmodel3", 0xbb0f0, (void *)createheadmodel3, 1, LF_RET_VOID, 4, "v", 1 },
     { "hermiteinterpolation", 0xbc4c0, (void *)hermiteinterpolation, 6, LF_RET_VOID, 4, "vvvvvv", 0 },
     { "buildhumanmodel", 0xbc5c0, (void *)buildhumanmodel, 2, LF_RET_VOID, 4, "vv", 0 },
     { "createhumanmodel", 0xbcad0, (void *)createhumanmodel, 1, LF_RET_VOID, 4, "v", 1 },
-    { "sethumanmodelvert", 0xbecd0, (void *)lf_becd0, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "sethumanmodelvertface", 0xbed20, (void *)lf_bed20, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "addwaisttomodel", 0xbed80, (void *)lf_bed80, 4, LF_RET_VOID, 4, "pvvv", 0 },
-    { "createcellphonemodel", 0xbf260, (void *)lf_bf260, 4, LF_RET_VOID, 4, "vvvv", 1 },
-    { "createkeymodel", 0xbf820, (void *)lf_bf820, 1, LF_RET_VOID, 4, "v", 1 },
+    { "sethumanmodelvert", 0xbecd0, (void *)sethumanmodelvert, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "sethumanmodelvertface", 0xbed20, (void *)sethumanmodelvertface, 5, LF_RET_VOID, 4, "vvvvv", 0 },
+    { "addwaisttomodel", 0xbed80, (void *)addwaisttomodel, 4, LF_RET_VOID, 4, "pvvv", 0 },
+    { "createcellphonemodel", 0xbf260, (void *)createcellphonemodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "createkeymodel", 0xbf820, (void *)createkeymodel, 1, LF_RET_VOID, 4, "v", 1 },
     { "model_createcash", 0xbfbf0, (void *)model_createcash, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "setupspheremodel", 0xbfe90, (void *)setupspheremodel, 0, LF_RET_VOID, 4, "", 1 },
     { "buildtrackmodel", 0xc0a60, (void *)buildtrackmodel, 0, LF_RET_VOID, 4, "", 1 },
@@ -2268,7 +2268,7 @@ const LfEntry lf_table[] = {
     { "fround", 0xc1d90, (void *)fround, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "unpackobjectpacket", 0xc1dc0, (void *)lf_c1dc0, 0, LF_RET_VOID, 4, "", 0 },
     { "client_simulation", 0xc2bb0, (void *)client_simulation, 0, LF_RET_VOID, 4, "", 0 },
-    { "net_calcdistancefactor", 0xc32d0, (void *)lf_c32d0, 1, LF_RET_INT64, 4, "v", 0 },
+    { "net_calcdistancefactor", 0xc32d0, (void *)net_calcdistancefactor, 1, LF_RET_INT, 4, "v", 0 },
     { "packobjectpacket2", 0xc3320, (void *)packobjectpacket2, 2, LF_RET_VOID, 4, "vv", 0 },
     { "packobjectpacket", 0xc41c0, (void *)packobjectpacket, 2, LF_RET_VOID, 4, "vv", 0 },
     { "lerp", 0xc5190, (void *)lerp, 3, LF_RET_FLOAT, 4, "vvv", 0 },
@@ -2280,18 +2280,18 @@ const LfEntry lf_table[] = {
     { "lerpnoise2d", 0xc5370, (void *)lerpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "serpnoise2d", 0xc5470, (void *)serpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
     { "cerpnoise2d", 0xc5570, (void *)cerpnoise2d, 3, LF_RET_FLOAT, 4, "vvv", 0 },
-    { "getrandomfloat", 0xc5670, (void *)lf_c5670, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "getrandomfloat", 0xc5670, (void *)getrandomfloat, 0, LF_RET_FLOAT, 4, "", 0 },
     { "getrandomvector2d", 0xc56a0, (void *)getrandomvector2d, 3, LF_RET_VOID, 4, "pvv", 0 },
     { "getrandomvector3d", 0xc5700, (void *)getrandomvector3d, 3, LF_RET_VOID, 4, "pvv", 0 },
-    { "getrandomint", 0xc5770, (void *)lf_c5770, 0, LF_RET_INT, 4, "", 0 },
+    { "getrandomint", 0xc5770, (void *)getrandomint, 0, LF_RET_INT, 4, "", 0 },
     { "createobject", 0xc5780, (void *)createobject, 5, LF_RET_INT, 4, "vpppv", 0 },
     { "getnextobject", 0xc6f20, (void *)getnextobject, 0, LF_RET_INT, 4, "", 0 },
-    { "objecttimetolive", 0xc6f60, (void *)lf_c6f60, 0, LF_RET_VOID, 4, "", 0 },
-    { "deleteobject", 0xc6ff0, (void *)lf_c6ff0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "objecttimetolive", 0xc6f60, (void *)objecttimetolive, 0, LF_RET_VOID, 4, "", 0 },
+    { "deleteobject", 0xc6ff0, (void *)deleteobject, 1, LF_RET_VOID, 4, "v", 0 },
     { "addobjectrotation", 0xc70f0, (void *)addobjectrotation, 4, LF_RET_VOID, 4, "vppv", 0 },
-    { "getobjectrotation", 0xc71e0, (void *)lf_c71e0, 2, LF_RET_VOID, 4, "vp", 0 },
-    { "getobjectrotation2", 0xc73d0, (void *)lf_c73d0, 3, LF_RET_VOID, 4, "pvp", 0 },
-    { "getobjectrotation3", 0xc7590, (void *)lf_c7590, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "getobjectrotation", 0xc71e0, (void *)getobjectrotation, 2, LF_RET_VOID, 4, "vp", 0 },
+    { "getobjectrotation2", 0xc73d0, (void *)getobjectrotation2, 3, LF_RET_VOID, 4, "pvp", 0 },
+    { "getobjectrotation3", 0xc7590, (void *)getobjectrotation3, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectsimulation", 0xc78b0, (void *)objectsimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "calculatebarycentric", 0xc9cf0, (void *)calculatebarycentric, 5, LF_RET_VOID, 4, "ppppp", 0 },
     { "applydamageobject", 0xc9ee0, (void *)applydamageobject, 2, LF_RET_VOID, 4, "vv", 0 },
@@ -2302,14 +2302,14 @@ const LfEntry lf_table[] = {
     { "object_rotorsimulation", 0xccd50, (void *)object_rotorsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectsimulation_heli", 0xcd930, (void *)objectsimulation_heli, 1, LF_RET_VOID, 4, "v", 0 },
     { "lineintersectobject", 0xce570, (void *)lineintersectobject, 4, LF_RET_INT, 4, "vppv", 0 },
-    { "sphereintersectobject", 0xced70, (void *)lf_ced70, 3, LF_RET_INT, 4, "vpv", 0 },
+    { "sphereintersectobject", 0xced70, (void *)sphereintersectobject, 3, LF_RET_INT, 4, "vpv", 0 },
     { "buildsomeshit", 0xcf2e0, (void *)buildsomeshit, 1, LF_RET_VOID, 4, "p", 0 },
     { "createtrack", 0xcf5f0, (void *)createtrack, 4, LF_RET_VOID, 4, "vpvv", 0 },
     { "lineintersecttrack", 0xd06a0, (void *)lineintersecttrack, 3, LF_RET_INT, 4, "ppv", 0 },
     { "lineintersecttrackrail", 0xd0910, (void *)lineintersecttrackrail, 3, LF_RET_INT, 4, "ppv", 0 },
     { "objecttrainsimulation", 0xd0b60, (void *)objecttrainsimulation, 1, LF_RET_VOID, 4, "v", 0 },
     { "objectwheelcollision2", 0xd1010, (void *)objectwheelcollision2, 2, LF_RET_VOID, 4, "vv", 0 },
-    { "objectwheelcollision", 0xd12e0, (void *)lf_d12e0, 2, LF_RET_VOID, 4, "vv", 0 },
+    { "objectwheelcollision", 0xd12e0, (void *)objectwheelcollision, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectsimulation_car", 0xd1660, (void *)objectsimulation_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "getenginetorque", 0xd21e0, (void *)getenginetorque, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "optionsmenu", 0xd2290, (void *)lf_d2290, 0, LF_RET_VOID, 4, "", 1 },
@@ -2318,10 +2318,10 @@ const LfEntry lf_table[] = {
     { "optionreadwritestring", 0xd3860, (void *)optionreadwritestring, 4, LF_RET_VOID, 4, "ppvv", 1 },
     { "voiceoptionsmenu", 0xd38c0, (void *)lf_d38c0, 0, LF_RET_VOID, 4, "", 1 },
     { "createparticle", 0xd41d0, (void *)createparticle, 5, LF_RET_INT, 4, "vpvvv", 0 },
-    { "particletimetolive", 0xd4340, (void *)lf_d4340, 0, LF_RET_VOID, 4, "", 0 },
-    { "deleteparticle", 0xd43c0, (void *)lf_d43c0, 1, LF_RET_VOID, 4, "v", 0 },
-    { "particlesimulation", 0xd4610, (void *)lf_d4610, 0, LF_RET_VOID, 4, "", 0 },
-    { "physicssimulation", 0xd4700, (void *)lf_d4700, 0, LF_RET_VOID, 4, "", 0 },
+    { "particletimetolive", 0xd4340, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
+    { "deleteparticle", 0xd43c0, (void *)deleteparticle, 1, LF_RET_VOID, 4, "v", 0 },
+    { "particlesimulation", 0xd4610, (void *)particlesimulation, 0, LF_RET_VOID, 4, "", 0 },
+    { "physicssimulation", 0xd4700, (void *)physicssimulation, 0, LF_RET_VOID, 4, "", 0 },
     { "createplayer", 0xd4750, (void *)createplayer, 0, LF_RET_INT, 4, "", 0 },
     { "getnextplayer", 0xd49e0, (void *)getnextplayer, 0, LF_RET_INT, 4, "", 0 },
     { "deleteplayer", 0xd4a20, (void *)deleteplayer, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2332,7 +2332,7 @@ const LfEntry lf_table[] = {
     { "player_addaction_item", 0xd5550, (void *)player_addaction_item, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "initplayticket", 0xd5610, (void *)initplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "updateplayticket", 0xd5650, (void *)updateplayticket, 0, LF_RET_VOID, 4, "", 0 },
-    { "getplayticket", 0xd5660, (void *)lf_d5660, 0, LF_RET_INT64, 4, "", 0 },
+    { "getplayticket", 0xd5660, (void *)getplayticket, 0, LF_RET_INT64, 4, "", 0 },
     { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
     { "compileprogramobject", 0xd6570, (void *)compileprogramobject, 3, LF_RET_INT, 4, "vvv", 1 },
     { "loadsource", 0xd6860, (void *)loadsource, 1, LF_RET_INT, 4, "p", 1 },
@@ -2367,19 +2367,19 @@ const LfEntry lf_table[] = {
     { "glstateambient", 0xdc260, (void *)glstateambient, 0, LF_RET_VOID, 4, "", 1 },
     { "glstatenormal", 0xdc2f0, (void *)glstatenormal, 0, LF_RET_VOID, 4, "", 1 },
     { "createscenario_world", 0xdc360, (void *)createscenario_world, 0, LF_RET_VOID, 4, "", 0 },
-    { "createscenario_mission", 0xdc770, (void *)lf_dc770, 0, LF_RET_VOID, 4, "", 0 },
-    { "createscenario_coop", 0xdc780, (void *)lf_dc780, 0, LF_RET_VOID, 4, "", 0 },
-    { "createscenario_driving", 0xdc790, (void *)lf_dc790, 0, LF_RET_VOID, 4, "", 0 },
-    { "scenario_getnextmission", 0xdc7a0, (void *)lf_dc7a0, 1, LF_RET_INT, 4, "v", 0 },
+    { "createscenario_mission", 0xdc770, (void *)createscenario_mission, 0, LF_RET_VOID, 4, "", 0 },
+    { "createscenario_coop", 0xdc780, (void *)createscenario_coop, 0, LF_RET_VOID, 4, "", 0 },
+    { "createscenario_driving", 0xdc790, (void *)createscenario_driving, 0, LF_RET_VOID, 4, "", 0 },
+    { "scenario_getnextmission", 0xdc7a0, (void *)scenario_getnextmission, 1, LF_RET_INT, 4, "v", 0 },
     { "scenario_getnumofmissions", 0xdc7e0, (void *)scenario_getnumofmissions, 1, LF_RET_INT, 4, "v", 0 },
     { "scenario_isseekmission", 0xdc860, (void *)scenario_isseekmission, 1, LF_RET_INT, 4, "v", 0 },
-    { "scenario_setmissioninactive", 0xdc8d0, (void *)lf_dc8d0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "scenario_setmissioninactive", 0xdc8d0, (void *)scenario_setmissioninactive, 1, LF_RET_VOID, 4, "v", 0 },
     { "scenario_createguards", 0xdca90, (void *)scenario_createguards, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "scenario_createtraffic2", 0xdcde0, (void *)scenario_createtraffic2, 1, LF_RET_VOID, 4, "v", 0 },
     { "scenario_createchase", 0xdd100, (void *)scenario_createchase, 2, LF_RET_INT, 4, "vv", 0 },
     { "scenario_createcar", 0xdd870, (void *)scenario_createcar, 6, LF_RET_INT, 4, "vvvvvv", 0 },
-    { "scenario_createaicar", 0xddad0, (void *)lf_ddad0, 0, LF_RET_VOID, 4, "", 0 },
-    { "scenario_addcheckpoint", 0xddae0, (void *)lf_ddae0, 0, LF_RET_VOID, 4, "", 0 },
+    { "scenario_createaicar", 0xddad0, (void *)scenario_createaicar, 0, LF_RET_VOID, 4, "", 0 },
+    { "scenario_addcheckpoint", 0xddae0, (void *)scenario_addcheckpoint, 0, LF_RET_VOID, 4, "", 0 },
     { "scenario_armhuman", 0xddaf0, (void *)scenario_armhuman, 3, LF_RET_INT, 4, "vvv", 0 },
     { "createmission_acquisition", 0xddc00, (void *)client_createmission_acquisition, 3, LF_RET_INT, 4, "vvp", 0 },
     { "createmission_threeway", 0xddef0, (void *)createmission_threeway, 3, LF_RET_VOID, 4, "vvp", 0 },
@@ -2427,12 +2427,12 @@ const LfEntry lf_table[] = {
     { "init_genrand", 0xeb290, (void *)init_genrand, 1, LF_RET_VOID, 4, "v", 0 },
     { "init_by_array", 0xeb320, (void *)init_by_array, 2, LF_RET_VOID, 4, "pv", 0 },
     { "genrand_int32", 0xeb4a0, (void *)genrand_int32, 0, LF_RET_INT, 4, "", 0 },
-    { "genrand_int31", 0xeb640, (void *)lf_eb640, 0, LF_RET_INT, 4, "", 0 },
-    { "genrand_real1", 0xeb650, (void *)lf_eb650, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "genrand_real2", 0xeb680, (void *)lf_eb680, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "genrand_real3", 0xeb6b0, (void *)lf_eb6b0, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "genrand_res53", 0xeb6e0, (void *)lf_eb6e0, 0, LF_RET_FLOAT, 4, "", 0 },
-    { "setupobjecttypes", 0xeb730, (void *)lf_eb730, 0, LF_RET_VOID, 4, "", 0 },
+    { "genrand_int31", 0xeb640, (void *)genrand_int31, 0, LF_RET_INT, 4, "", 0 },
+    { "genrand_real1", 0xeb650, (void *)genrand_real1, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "genrand_real2", 0xeb680, (void *)genrand_real2, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "genrand_real3", 0xeb6b0, (void *)genrand_real3, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "genrand_res53", 0xeb6e0, (void *)genrand_res53, 0, LF_RET_FLOAT, 4, "", 0 },
+    { "setupobjecttypes", 0xeb730, (void *)setupobjecttypes, 0, LF_RET_VOID, 4, "", 0 },
     { "objecttype_addparticle", 0xeb750, (void *)objecttype_addparticle, 5, LF_RET_VOID, 4, "vvvvv", 0 },
     { "objecttype_addbond", 0xeb810, (void *)objecttype_addbond, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "objecttype_addface", 0xeb950, (void *)objecttype_addface, 8, LF_RET_VOID, 4, "vvvvvvvv", 0 },
@@ -2451,7 +2451,7 @@ const LfEntry lf_table[] = {
     { "starttimer", 0xfb020, (void *)starttimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "stoptimer", 0xfb040, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "getcpufrequency", 0xfb110, (void *)getcpufrequency, 0, LF_RET_VOID, 4, "", 1 },
-    { "setuptimers", 0xfb1b0, (void *)lf_fb1b0, 0, LF_RET_VOID, 4, "", 0 },
+    { "setuptimers", 0xfb1b0, (void *)setuptimers, 0, LF_RET_VOID, 4, "", 0 },
     { "cs_sleep", 0xfb3c0, (void *)cs_sleep, 0, LF_RET_VOID, 4, "", 1 },
     { "createvehicle", 0xfb3d0, (void *)createvehicle, 3, LF_RET_INT, 4, "vpp", 0 },
     { "getaudioinput", 0xfb6f0, (void *)getaudioinput, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2464,46 +2464,46 @@ const LfEntry lf_table[] = {
     { "resetorientation", 0xfc900, (void *)resetorientation, 1, LF_RET_VOID, 4, "p", 0 },
     { "rotatevector", 0xfc950, (void *)rotatevector, 3, LF_RET_VOID, 4, "ppv", 0 },
     { "rotateorientation", 0xfca30, (void *)rotateorientation, 3, LF_RET_VOID, 4, "ppv", 0 },
-    { "rotatevector2d", 0xfcb80, (void *)lf_fcb80, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "rotatevector2d", 0xfcb80, (void *)rotatevector2d, 2, LF_RET_VOID, 4, "pv", 0 },
     { "lineintersectplane", 0xfcc00, (void *)lineintersectplane, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersectplanetwosided", 0xfcd10, (void *)lineintersectplanetwosided, 6, LF_RET_INT, 4, "pppppp", 0 },
     { "lineintersecttriangle", 0xfce40, (void *)lineintersecttriangle, 8, LF_RET_INT, 4, "pppppppp", 0 },
     { "lineintersecttriangletwosided", 0xfcfb0, (void *)lineintersecttriangletwosided, 9, LF_RET_INT, 4, "ppppppppv", 0 },
     { "pointdistanceline", 0xfd150, (void *)pointdistanceline, 3, LF_RET_FLOAT, 4, "ppp", 0 },
-    { "lineintersectline2d", 0xfd260, (void *)lf_fd260, 7, LF_RET_INT, 4, "ppppppp", 0 },
-    { "sphereintersectline2d", 0xfd430, (void *)lf_fd430, 7, LF_RET_INT, 4, "ppppppv", 0 },
-    { "lineintersectcircle2d", 0xfd580, (void *)lf_fd580, 7, LF_RET_INT, 4, "ppppppv", 0 },
+    { "lineintersectline2d", 0xfd260, (void *)lineintersectline2d, 7, LF_RET_INT, 4, "ppppppp", 0 },
+    { "sphereintersectline2d", 0xfd430, (void *)sphereintersectline2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
+    { "lineintersectcircle2d", 0xfd580, (void *)lineintersectcircle2d, 7, LF_RET_INT, 4, "ppppppv", 0 },
     { "pointintersectcircle", 0xfd6c0, (void *)pointintersectcircle, 5, LF_RET_INT, 1, "ppppv", 0 },
     { "loadtextfile", 0xfd740, (void *)loadtextfile, 1, LF_RET_VOID, 4, "p", 1 },
-    { "resetparser", 0xfd7f0, (void *)lf_fd7f0, 0, LF_RET_VOID, 4, "", 0 },
+    { "resetparser", 0xfd7f0, (void *)resetparser, 0, LF_RET_VOID, 4, "", 0 },
     { "findstring", 0xfd800, (void *)findstring, 1, LF_RET_INT, 1, "p", 0 },
     { "checkstring", 0xfd870, (void *)checkstring, 1, LF_RET_INT, 1, "p", 0 },
-    { "getint", 0xfd8e0, (void *)lf_fd8e0, 0, LF_RET_INT, 4, "", 0 },
+    { "getint", 0xfd8e0, (void *)getint, 0, LF_RET_INT, 4, "", 0 },
     { "getfloat", 0xfd9f0, (void *)getfloat, 0, LF_RET_FLOAT, 4, "", 0 },
     { "getstring", 0xfdb20, (void *)getstring, 2, LF_RET_VOID, 4, "pv", 0 },
     { "cs_getline", 0xfdba0, (void *)cs_getline, 2, LF_RET_VOID, 4, "pv", 0 },
     { "checkbigendian", 0xfdc70, (void *)checkbigendian, 0, LF_RET_VOID, 4, "", 0 },
-    { "comparestrings", 0xfdce0, (void *)lf_fdce0, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "checkfilespec", 0xfdd00, (void *)lf_fdd00, 2, LF_RET_INT, 4, "vp", 0 },
+    { "comparestrings", 0xfdce0, (void *)comparestrings, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "checkfilespec", 0xfdd00, (void *)checkfilespec, 2, LF_RET_INT, 4, "pp", 0 },
     { "listfiles", 0xfdde0, (void *)listfiles, 3, LF_RET_VOID, 4, "pvv", 1 },
     { "freadswap", 0xfdfb0, (void *)freadswap, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "fwriteswap", 0xfe0d0, (void *)fwriteswap, 4, LF_RET_INT, 4, "vvvp", 1 },
     { "removeflieextentions", 0xfe200, (void *)removeflieextentions, 1, LF_RET_VOID, 4, "v", 0 },
     { "enablesocketserver", 0xfe2b0, (void *)enablesocketserver, 1, LF_RET_VOID, 4, "v", 1 },
     { "enablesocketclient", 0xfe360, (void *)enablesocketclient, 1, LF_RET_VOID, 4, "v", 1 },
-    { "disablesocket", 0xfe3f0, (void *)lf_fe3f0, 1, LF_RET_VOID, 4, "v", 1 },
+    { "disablesocket", 0xfe3f0, (void *)disablesocket, 1, LF_RET_VOID, 4, "v", 1 },
     { "recvpacket", 0xfe420, (void *)recvpacket, 0, LF_RET_INT, 4, "", 1 },
-    { "resetsendpacket", 0xfe4f0, (void *)lf_fe4f0, 0, LF_RET_VOID, 4, "", 0 },
+    { "resetsendpacket", 0xfe4f0, (void *)resetsendpacket, 0, LF_RET_VOID, 4, "", 0 },
     { "sendpacket", 0xfe520, (void *)sendpacket, 2, LF_RET_VOID, 4, "vv", 1 },
     { "cs_pwrite", 0xfe5b0, (void *)cs_pwrite, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "cs_pread", 0xfe630, (void *)lf_fe630, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "cs_pread", 0xfe630, (void *)cs_pread, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwrite", 0xfe6c0, (void *)pbitwrite, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitread", 0xfe800, (void *)pbitread, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitwritescale", 0xfe920, (void *)lf_fe920, 3, LF_RET_INT, 4, "pvv", 0 },
-    { "pbitreadscale", 0xfea40, (void *)lf_fea40, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pbitwritescale", 0xfe920, (void *)pbitwritescale, 3, LF_RET_INT, 4, "pvv", 0 },
+    { "pbitreadscale", 0xfea40, (void *)pbitreadscale, 3, LF_RET_INT, 4, "pvv", 0 },
     { "pbitwritenego", 0xfeb60, (void *)pbitwritenego, 2, LF_RET_INT, 4, "pv", 0 },
     { "pbitreadnego", 0xfeb80, (void *)pbitreadnego, 2, LF_RET_INT, 4, "pv", 0 },
-    { "pbitwritesign", 0xfebd0, (void *)lf_febd0, 2, LF_RET_INT, 4, "pv", 0 },
+    { "pbitwritesign", 0xfebd0, (void *)pbitwritesign, 2, LF_RET_INT, 4, "pv", 0 },
     { "checkkeyboard", 0xfec50, (void *)checkkeyboard, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouse", 0xfeca0, (void *)checkmouse, 0, LF_RET_VOID, 4, "", 1 },
     { "checkmouserelative", 0xfedb0, (void *)checkmouserelative, 0, LF_RET_VOID, 4, "", 1 },
@@ -2542,7 +2542,7 @@ const LfEntry lf_table[] = {
     { "setupobjectrender", 0x1066b0, (void *)setupobjectrender, 2, LF_RET_VOID, 4, "pp", 1 },
     { "screenshot", 0x106790, (void *)screenshot, 0, LF_RET_VOID, 4, "", 1 },
     { "drawtext", 0x106b30, (void *)drawtext, 17, LF_RET_VOID, 4, "pvvvvvvvvxxxxxxxx", 1 },
-    { "gettextlength", 0x107970, (void *)lf_107970, 2, LF_RET_FLOAT, 4, "vv", 0 },
+    { "gettextlength", 0x107970, (void *)gettextlength, 2, LF_RET_FLOAT, 4, "pv", 0 },
     { "setuptextdisplay", 0x1079d0, (void *)setuptextdisplay, 0, LF_RET_VOID, 4, "", 1 },
     { "drawbitmap", 0x107ac0, (void *)drawbitmap, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
     { "drawbitmaptexcoord", 0x107c40, (void *)drawbitmaptexcoord, 11, LF_RET_VOID, 4, "vvvvvvvvvvv", 1 },
@@ -2570,11 +2570,11 @@ const LfEntry lf_table[] = {
     { "calculatefriction", 0x10b6b0, (void *)calculatefriction, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "flabs", 0x10b7d0, (void *)flabs, 1, LF_RET_FLOAT, 4, "v", 0 },
     { "dotproduct", 0x10b7f0, (void *)dotproduct, 2, LF_RET_FLOAT, 4, "pp", 0 },
-    { "crossproduct", 0x10b830, (void *)lf_10b830, 3, LF_RET_VOID, 4, "ppp", 0 },
+    { "crossproduct", 0x10b830, (void *)crossproduct, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "vectorlength", 0x10b890, (void *)vectorlength, 1, LF_RET_FLOAT, 4, "p", 0 },
     { "normalizevector", 0x10b8d0, (void *)normalizevector, 2, LF_RET_VOID, 4, "pp", 0 },
     { "copyvector", 0x10b950, (void *)copyvector, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "negvector", 0x10b980, (void *)lf_10b980, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "negvector", 0x10b980, (void *)negvector, 2, LF_RET_VOID, 4, "pp", 0 },
     { "zerovector", 0x10b9b0, (void *)zerovector, 1, LF_RET_VOID, 4, "p", 0 },
     { "addvectors", 0x10b9d0, (void *)addvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "subtractvectors", 0x10ba10, (void *)subtractvectors, 3, LF_RET_VOID, 4, "ppp", 0 },
@@ -2583,7 +2583,7 @@ const LfEntry lf_table[] = {
     { "vectordistance", 0x10bad0, (void *)vectordistance, 2, LF_RET_FLOAT, 4, "pp", 0 },
     { "vectorlength2d", 0x10bb20, (void *)vectorlength2d, 1, LF_RET_FLOAT, 4, "p", 0 },
     { "dotproduct2d", 0x10bb60, (void *)dotproduct2d, 2, LF_RET_FLOAT, 4, "pp", 0 },
-    { "normalizevector2d", 0x10bb90, (void *)lf_10bb90, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "normalizevector2d", 0x10bb90, (void *)normalizevector2d, 2, LF_RET_VOID, 4, "pp", 0 },
     { "copyvector2d", 0x10bbf0, (void *)copyvector2d, 2, LF_RET_VOID, 4, "pp", 0 },
     { "addvectors2d", 0x10bc10, (void *)addvectors2d, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "scalevector2d", 0x10bc40, (void *)scalevector2d, 3, LF_RET_VOID, 4, "ppv", 0 },

@@ -111,6 +111,7 @@ extern uintptr_t sr_base;
 #define sr_data_packet_workspace (*((SrPacketWorkspace *)(sr_base + 0x1033ed20u)))
 #define sr_data_level_marks ((uint8_t *)(sr_base + 0x12a7c604u))
 #define sr_data_numofsprite_models (*((int *)(sr_base + 0x12a7d604u)))
+#define sr_data_timerlist (*((TimerListClient *)(sr_base + 0x12a7d620u)))
 #define sr_data_speex (*((Speex *)(sr_base + 0x12a7d680u)))
 #define sr_data_area_block ((AreaBlock *)(sr_base + 0x133ae680u))
 #define sr_data_file_write (*((SrFileTransfer *)(sr_base + 0x13bee680u)))
@@ -150,8 +151,6 @@ extern BondHuman sr_unplaced_bondhuman[512];
 #define sr_data_bondhuman sr_unplaced_bondhuman
 extern int sr_unplaced_startup_counter;
 #define sr_data_startup_counter sr_unplaced_startup_counter
-extern TimerList sr_unplaced_timerlist;
-#define sr_data_timerlist sr_unplaced_timerlist
 
 #include "sr_image_types.h"
 #include "sr_audio_types.h"
@@ -182,10 +181,16 @@ extern TimerList sr_unplaced_timerlist;
 #define cl_data_image_hdr_scale_inverse (*((float *)(sr_base + 0x111078u)))
 #define cl_data_image_ldr_gamma (*((float *)(sr_base + 0x11107cu)))
 #define cl_data_image_ldr_scale (*((float *)(sr_base + 0x111080u)))
+#define cl_data_wgl_loaders ((void * *)(sr_base + 0xb7315a0u))
 #define cl_data_image_name ((char *)(sr_base + 0xb733140u))
 #define cl_data_sound_buffers ((SoundBuffer *)(sr_base + 0xf8ab240u))
 #define cl_data_audio_source_limit (*((int *)(sr_base + 0x1bbe3a0u)))
 #define cl_data_source_buffer ((char *)(sr_base + 0xf3ca9c0u))
+#define cl_data_sector_mesh_bitmap ((uint32_t *)(sr_base + 0x12a7c604u))
+#define cl_data_sector_mesh_next (*((int *)(sr_base + 0x1047c600u)))
+#define cl_data_sector_mesh_remap ((int *)(sr_base + 0x2a1dd36cu))
+#define cl_data_gl_buffer_sub_data (*((void * *)(sr_base + 0x115abcu)))
+#define cl_data_scenario_event_data ((ScenarioEventData *)(sr_base + 0x90882dcu))
 #define cl_data_track_verts ((ModelVertex *)(sr_base + 0x147129b0u))
 #define cl_data_building_click_wait (*((int *)(sr_base + 0xf9ae250u)))
 #define cl_data_head_face_quads ((int *)(sr_base + 0x1bf7e04u))
@@ -443,6 +448,18 @@ void resetgame_client_level_built(void);
 void resetgame_client_light(void);
 #define sr_resetgame_light() resetgame_client_light()
 #define sr_human_floor_all_rays 1
+#define sr_human_vehicle_limit_protection 0
+#define sr_updatehuman_params int human
+#define sr_updatehuman_recipient(record, supplied) ((record)->player_id)
+#define sr_emit_updatehuman(human, player) createevent_updatehuman((human))
+#define sr_chat_mode cl_data_audio_voice_mode
+#define sr_timer_list_type TimerListClient
+#define sr_physics_timers 0
+#define sr_socket_disable_closes 1
+#define sr_orientation_nonpositive(value) (!(0.0 < (value)))
+#define sr_collision_ge(a, b) (!((a) < (b)))
+#define sr_collision_le(a, b) (!((a) > (b)))
+#define sr_linear_curve_negate_first 1
 #define sr_timer_name(field, name) ((void)0)
 #define sr_timer_start(field) ((void)0)
 #define sr_timer_stop(field) ((void)0)

@@ -138,6 +138,7 @@ AUDIO_STRUCTS = {
     'SoundBuffer': ('sound_buffer', 0xc),
 }
 INPUT_STRUCTS = {
+    'ScenarioEventData': ('scenario_event_data', 0x50),
     'InputMouse': ('input_mouse', 0x2c),
     'InputCamera': ('input_camera', 0x1c),
     'MenuInfo': ('menu_info', 0x60),
@@ -355,7 +356,8 @@ typedef struct CityBlock {
     int x, z;
     int size_x, height, size_z;
     int inner_x, inner_z;
-    uint8_t pad_1c[0x14];
+    int reserved;
+    uint8_t pad_20[0x10];
 } CityBlock;
 
 /* Records of the level editor. */
@@ -707,6 +709,20 @@ typedef union BlockSector { struct {
 }; uint8_t lf_raw[0x6068]; } BlockSector;
 
 SR_STATIC_ASSERT(offsetof(BlockSector, edge_normals) == 0x5044, "BlockSector.edge_normals");
+/* The mesh pointers occupy the client part of a sector. */
+typedef struct SectorShadowMesh {
+    uint8_t pad_00[0x502c];
+    uint8_t *vertices;
+    int num_triangles;
+    int (*triangles)[3];
+    int *triangle_material;
+    vec3 *normals;
+    uint8_t pad_5040[4];
+    vec3 (*edge_normals)[3];
+    uint8_t pad_5048[0x1020];
+} SectorShadowMesh;
+SR_STATIC_ASSERT(sizeof(SectorShadowMesh) == sizeof(BlockSector), "SectorShadowMesh");
+SR_STATIC_ASSERT(offsetof(SectorShadowMesh, edge_normals) == 0x5044, "SectorShadowMesh.edge_normals");
 
 
 /* A corner of the mesh of an object (Object.verts). */

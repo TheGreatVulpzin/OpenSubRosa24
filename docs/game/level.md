@@ -10,7 +10,7 @@ The level combines a height map, a track, an area of blocks, city streets and bu
 | TrackPiece | 0x578 | type, pos, num_verts, verts, num_tris, tris, center, across, box_min, box_max |
 | CityIntersection | 0x68 | x/y/z, pos, roads[4], extent[4], light, light_max |
 | CityRoad | 0x4c | ends[2], kind, width[2], dir, side, name[32] |
-| CityBlock | 0x30 | x/z, size_x, height, size_z, inner_x, inner_z |
+| CityBlock | 0x30 | x/z, size_x, height, size_z, inner_x, inner_z, reserved |
 | LevelIntersection | 0x0c | x/y/z |
 | LevelStreet | 0x34 | a/b, axis, lanes_a, lanes_b, name[32] |
 | LevelBuilding | 0x54 | name[64], x/y/z, turns, unsaved[4] |

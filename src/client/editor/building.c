@@ -39,10 +39,30 @@ GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 
 /* Game functions of other files. */
 #define area_block_createbuildinginterior CL_FN(0x43e0e0, uint32_t(__cdecl *)(int layer, uint32_t key))
-#define building_reloadtextures CL_FN(0x45f310, void(__cdecl *)(void))
 
 #define MATERIAL_NAME 64
 #define DELETE_LIMIT 31
+
+/* Return one for a window wall. The fixed wall also counts when requested. */
+int building_iswindow(int x, int floor, int z, int direction, int fixed)
+{
+    const FloorplanCell *cell = &sr_data_floorplan[x + z * 64 + floor * 4096];
+    int wall = direction == 0 ? cell->wall_row : cell->wall_col;
+    return (wall > 0 && wall < 9) || (fixed && wall == 9);
+}
+
+/* Map material names to game texture indices. The last matching name wins. */
+void building_reloadtextures(void)
+{
+    Building *building = &sr_data_building;
+    int entry, material;
+    memset(building->material_textures, 0, sizeof building->material_textures);
+    for (entry = 0; entry < building->num_materials; ++entry)
+        for (material = 0; material < sr_data_materiallist.num_materials; ++material)
+            if (strcmp(building->materials + entry * MATERIAL_NAME,
+                       cl_data_material_records[material].name) == 0)
+                building->material_textures[entry] = material;
+}
 
 /* The cell of the building at x, floor, z: cells[floor][z][x]. */
 #define CELL(x, floor, z) (&sr_data_building.cells[(floor) * 0x1000 + (z) * 0x40 + (x)])

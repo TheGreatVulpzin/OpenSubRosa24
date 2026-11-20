@@ -333,6 +333,10 @@ static __forceinline void midpoint(vec3 *m, const vec3 *a, const vec3 *b)
 /* A unit vector as a path in the octahedron: 3 bits for the octant (face), then 2 bits for
  * each split of the face into 4 triangles (0: at corner 0, 1: at corner 1, 2: at corner 2,
  * 3: the middle one). */
+#ifndef sr_orientation_nonpositive
+#define sr_orientation_nonpositive(value) ((value) <= 0.0)
+#endif
+
 void packorientation(const vec3 *dir, uint32_t bits)
 {
     vec3 *tri = g_tri, *mid = g_mid;
@@ -348,13 +352,13 @@ void packorientation(const vec3 *dir, uint32_t bits)
         midpoint(&mid[0], &tri[0], &tri[1]);
         midpoint(&mid[1], &tri[2], &tri[1]);
         midpoint(&mid[2], &tri[2], &tri[0]);
-        /* Each test is false for a NaN, so the form of each test matters. */
-        if (side(dir, &mid[0], &mid[2]) <= 0.0) {
+        /* The branch forms select the triangle for an unordered value. */
+        if (sr_orientation_nonpositive(side(dir, &mid[0], &mid[2]))) {
             if (0.0 < side(dir, &mid[1], &mid[0])) {
                 tri[0] = mid[0];
                 tri[2] = mid[1];
                 sub = one;
-            } else if (side(dir, &mid[2], &mid[1]) <= 0.0) {
+            } else if (sr_orientation_nonpositive(side(dir, &mid[2], &mid[1]))) {
                 tri[0] = mid[0];
                 tri[1] = mid[1];
                 tri[2] = mid[2];
@@ -388,11 +392,47 @@ void packscalar(const float *x, float range, uint32_t bits)
 }
 
 /* The reverse of packscalar with the range 1.0. */
-float unpackscalar(uint32_t raw, uint32_t bits)
+float decode_unit_scalar(uint32_t raw, uint32_t bits)
 {
     uint32_t half = (1u << (bits & 31)) >> 1;
     float v = (float)((raw & (half - 1)) * (1.0 / half));
     return (raw & half) == half ? -v : v;
+}
+
+/* Read a signed magnitude from the bit stream and scale it to the supplied range. */
+void unpackscalar(float *out, float range, uint32_t bits)
+{
+    uint32_t raw, half = (1u << (bits & 31)) >> 1;
+    pbitread(&raw, bits);
+    *out = (float)((float)(raw & (half - 1)) / ((float)half / range));
+    if ((raw & half) == half)
+        *out = -*out;
+}
+
+/* Decode two ratios and the axis of greatest magnitude, then normalize the vector. */
+void unpackunitvector(const uint32_t *packed, float *out, uint8_t bits)
+{
+    uint32_t axis = packed[0] & 3, mask = (1u << (bits & 31)) - 1;
+    int component, word = 1;
+    out[axis] = packed[0] & 4 ? -1.0f : 1.0f;
+    for (component = 0; component < 3; ++component) {
+        if ((uint32_t)component != axis) {
+            float ratio = (float)((packed[word] >> 1) & mask) / (float)mask;
+            if (packed[word] & 1)
+                ratio = -ratio;
+            out[component] = ratio;
+            ++word;
+        }
+    }
+    normalizevector((vec3 *)out, (const vec3 *)out);
+}
+
+/* Read each position component as a separate word. */
+void unpackposition(vec3 *out)
+{
+    cs_pread(&out->x, 4, 1);
+    cs_pread(&out->y, 4, 1);
+    cs_pread(&out->z, 4, 1);
 }
 
 /* An angle in radians from bits - 1 bits of size and a sign bit. A failed read keeps the bit
@@ -511,4 +551,75 @@ void unpackorientation(vec3 *out, uint32_t bits)
     out->y = (float)(out->y + tri[2].y);
     out->z = (float)(out->z + tri[2].z);
     normalizevector(out, out);
+}
+
+/* Begin a packet with the socket signature and a fresh bit cursor. */
+void resetsendpacket(void)
+{
+    sr_bsdsocket.send_size = 0;
+    sr_bsdsocket.send_bit = 0;
+    cs_pwrite(&sr_socketid, 1, 4);
+}
+
+/* Divide a word by scale, mask its low bits and append them to the bit stream. */
+int pbitwritescale(const uint32_t *value, uint32_t bits, uint32_t scale)
+{
+    BsdSocket *socket = &sr_bsdsocket;
+    uint32_t word;
+    if (socket->send_size >= BUFFER_SIZE)
+        return 0;
+    word = ~(UINT32_MAX << (bits & 31)) & (*value / scale);
+    while ((int32_t)bits > 0) {
+        uint32_t room = 8u - (uint32_t)socket->send_bit;
+        uint8_t *byte = &socket->send_buf[socket->send_size];
+        if (!socket->send_bit)
+            *byte = (uint8_t)word;
+        else
+            *byte |= (uint8_t)(word << (socket->send_bit & 31));
+        if (bits < room) {
+            socket->send_bit += (int)bits;
+            break;
+        }
+        ++socket->send_size;
+        socket->send_bit = 0;
+        if (bits == room)
+            break;
+        bits -= room;
+        word >>= room & 31;
+    }
+    return 1;
+}
+
+/* Read a masked word and multiply it by scale. Only the initial byte count is checked. */
+int pbitreadscale(uint32_t *value, uint32_t bits, uint32_t scale)
+{
+    BsdSocket *socket = &sr_bsdsocket;
+    uint32_t word = 0, shift = 0;
+    if (socket->recv_pos >= BUFFER_SIZE ||
+        socket->recv_size < (int32_t)((uint32_t)socket->recv_pos + (uint32_t)((int32_t)bits >> 3)))
+        return 0;
+    while ((int32_t)bits > 0) {
+        uint32_t room = 8u - (uint32_t)socket->recv_bit;
+        word |= (~(UINT32_MAX << (bits & 31)) &
+                 ((uint32_t)socket->recv_buf[socket->recv_pos] >> (socket->recv_bit & 31))) << (shift & 31);
+        if (bits < room) {
+            socket->recv_bit += (int)bits;
+            break;
+        }
+        ++socket->recv_pos;
+        socket->recv_bit = 0;
+        if (bits == room)
+            break;
+        bits -= room;
+        shift += room;
+    }
+    *value = word * scale;
+    return 1;
+}
+
+/* Keep the success result even when the bit writer cannot append data. */
+int pbitwritesign(const uint32_t *value, uint32_t bits)
+{
+    pbitwrite(value, bits);
+    return 1;
 }

@@ -25,6 +25,8 @@
 
 int area_blocksector(uint32_t area, int x, int y, int z, int *cell);
 uint32_t area_getblock(uint32_t area, int x, int y, int z);
+uint32_t area_getblocklink(uint32_t area, int x, int y, int z);
+int area_getblockmaterial(uint32_t area, int x, int y, int z);
 int area_getblocktexture(uint32_t area, int x, int y, int z, int face);
 uint32_t area_interior_getblock(uint32_t area, int x, int y, int z);
 int area_interior_getblocktexture(uint32_t area, int x, int y, int z, int face);

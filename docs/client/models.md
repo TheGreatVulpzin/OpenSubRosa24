@@ -24,6 +24,14 @@ Shading modes of a triangle: -2 every corner uses the normal of the triangle, -1
 | `model_extrudequadface` (`model_parts.c`) | A face on a quad of the head: three rows of 4 vertices (left eye, right eye, mouth), 12 flat triangles and 6 quads around them. The mouth goes 1/32 into the head. Each eye quad gets `model_extrudeeye`. `head_face_quads` keeps the quads of the eyes and the mouth. |
 | `createmodel_cityobject_desk` (`models.c`) | The desk: a top and two legs, each a box, all with texture coordinate 0, 0. |
 | `createheadmodel3` (`head_models.c`) | The simple head: eight points, each triangle split into four along Hermite curves, and two eye quads. |
+| `addhalfboxtomodel` | Eight vertices and both windings of each triangle, except the selected open face. |
+| `addwaisttomodel` | Ten vertices, five quads and six lower triangles. Existing parts remain in the model. |
+| `createfootmodel`, `createrotormodel` | Boxes whose centers are behind or below the origin. |
+| `createsunglassmodel` | Two tapered lenses with zero texture coordinates. |
+| `createcellphonemodel`, `createkeymodel` | A phone with a sloped body and antenna, or a key with a shaft and circular handle. |
+| `createheadmodel` | Thirty-eight control points with a lowered jaw, scaled by 0.15 before the surface is built. |
+| `tesselatebeziertriangle` | Ten cubic terms, with a float store after each term of each coordinate. The output can overlap the control points. |
+| `sethumanmodelvert`, `sethumanmodelvertface` | Set the bone or face reference and position. A face adds sixteen to its index and selects mode two. Padding remains intact. |
 
 ## The human model
 
@@ -48,3 +56,8 @@ After the model is built, `createhumanmodel` copies it to the 255 models that fo
 - Two quads join when a side of one has the same two corners as a side of the other (same key, place and normal), they have the same material, their normals differ by less than 0.0001 and the sides past the shared side go on in one line (cosine at least 0.99975). The first quad takes the far corners of the second. The texture coordinates of the new corners keep the scale of the first quad. The second quad goes away.
 - `tempmesh_optimize` (outer mesh) joins along side 1 to 2 until a scan finds no join, then along side 2 to 3. It never joins a quad with the sign material.
 - `tempmesh_optimize2` (interior mesh) does the same, with a done mark for each quad (`tempmesh.quad_done`). A quad with a window material starts done. A quad that finds no partner in a scan gets done. A scan runs again only after a join with an earlier quad. The scan does not compare a quad with itself, so a quad can join itself. The timer 3 ("optimize2") counts the joins.
+## CSM files
+
+`savemodelcsm` and `loadmodelcsm` first try to enter the `model` directory. They return to the parent only if that change succeeded. A CSM file has a four-byte signature, version one, the vertex count, the render vertex width and the triangle count. Six arrays follow: positions, vertex normals, vertex tangents, triangle indices, triangle normals and triangle neighbors. Each array uses four-byte words and three words per vertex or triangle.
+
+A missing file, another signature or another version makes `loadmodelcsm` return zero. A complete file is copied through the model in work and returns one. The quad and line counts remain as they were. `savemodelcsm` has no result and closes a file after the transfers.

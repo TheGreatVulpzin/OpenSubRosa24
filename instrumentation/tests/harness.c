@@ -1085,8 +1085,10 @@ static const char *known_difference(const char *name)
         { "getint", "returns an uninitialized local when there is no number" },
         /* The original returns a byte in AL and leaves the other bytes of EAX as they were. */
         { "stbi_get8u", "the high bytes of EAX are not set by the original" },
+#ifndef CL_HARNESS
         /* The game ends with _ftol2, which returns a 32-bit value in EAX on a CPU with SSE2 and leaves EDX unset. */
         { "testtimer", "EDX is not set by the original" },
+#endif
         /* x87 precision: the error grows through the computation (docs/lift.md, "Float precision"). */
         { "buildsomeshit", "x87 precision" },
         /* The client calls the vector helpers and keeps their result in an x87 register. The clean code of the

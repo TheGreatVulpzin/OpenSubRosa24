@@ -43,6 +43,17 @@ enum {
 GL_IMPORT(glVertex2fv, (const float *vertex), (vertex))
 GL_IMPORT(glTexCoord2fv, (const float *coord), (coord))
 
+/* Sum the widths of at most one thousand letters. Character indices are signed bytes. */
+float gettextlength(const char *text, float size)
+{
+    const Font *font = &g_fonts[g_fontnum];
+    float length = 0.0f;
+    int letter;
+    for (letter = 0; text[letter] && letter < TEXT_LIMIT; ++letter)
+        length = (float)((double)font->width[(signed char)text[letter]] * size + length);
+    return length;
+}
+
 /* Add the text of the number buffer to the text, without the end mark. */
 static int append_number(int length)
 {

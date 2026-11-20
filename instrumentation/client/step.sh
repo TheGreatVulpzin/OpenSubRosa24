@@ -47,17 +47,25 @@ if grep -q -i -E "error C|erro C|build failed|error LNK|fatal error|FAILED" "$lo
     exit 1
 fi
 echo "build: ok"
+status=0
 
 if [ -n "$funcs" ]; then
     echo "== gate with every recorded call: $funcs"
-    python -I instrumentation/lift/gate.py --target client_win --all-calls --funcs "$funcs" --jobs 2 > "$logs/gate_funcs.log" 2>&1
+    python -I instrumentation/lift/gate.py --target client_win --all-calls --funcs "$funcs" --jobs "$jobs" > "$logs/gate_funcs.log" 2>&1
+    gate_status=$?
     tail -3 "$logs/gate_funcs.log"
     # The gate prints only the calls that are the same. The lines of each function show the differences.
     pattern="$(echo "$funcs" | sed 's/,/|/g')"
     for result in build/gate/client_win/reset/all/client-*.txt; do
         echo "-- $(basename "$result" .txt)"
         grep -E "^\[ *[0-9]+/[0-9]+\] ($pattern) " "$result" | cut -c1-180
+        if grep -E "^\[ *[0-9]+/[0-9]+\] ($pattern) " "$result" | grep -Eq '[1-9][0-9]* (different|crashed)'; then
+            status=1
+        fi
     done
+    if [ "$gate_status" != 0 ]; then
+        status=1
+    fi
 fi
 
 if [ -n "$synth" ]; then
@@ -65,6 +73,11 @@ if [ -n "$synth" ]; then
     mkdir -p "$logs/synth"
     SYNTH_CALLS="$calls" SYNTH_JOBS="$jobs" SYNTH_FINITE="$finite" PATH="build/client_deps:$PATH" \
         python -I instrumentation/client/synth_pure.py "$rec" "$logs/synth" "$synth" > "$logs/synth.log" 2>&1
+    synth_status=$?
     grep -E "calls same|Traceback|Error" "$logs/synth.log"
+    if [ "$synth_status" != 0 ]; then
+        status=1
+    fi
 fi
 echo "== done"
+exit "$status"

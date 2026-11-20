@@ -1,3 +1,1 @@
 # The offline test skips these: the exe crashes on a pointer that the harness types as an integer.
-unpackunitvector src/client/math/unit_vector.c
-checkfilespec src/client/setup/file_spec.c

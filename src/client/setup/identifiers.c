@@ -11,6 +11,7 @@
 #include "asset_ids.h"
 #include "client.h"
 #include "files.h"
+#include "object_types.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
 
@@ -26,7 +27,6 @@
 #define setupcityobjecttypes CL_FN(0x466810, void(__cdecl *)(void))
 #define setupbody CL_FN(0x48e8d0, void(__cdecl *)(void))
 #define setupitemtypes CL_FN(0x4951c0, void(__cdecl *)(void))
-#define setupobjecttypes CL_FN(0x4eb730, void(__cdecl *)(void))
 
 enum { NUM_MATERIALS = 256, NUM_PRESETS = 4, FIRST_PRESET_MATERIAL = 21 };
 

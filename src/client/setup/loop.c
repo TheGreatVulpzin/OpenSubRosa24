@@ -10,6 +10,9 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "packet.h"
+#include "render/sector_models.h"
+#include "account_actions.h"
 #include "debug/debug.h"
 #include "editor/building_loop.h"
 #include "editor/level.h"
@@ -94,7 +97,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFlush, (void))
 AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 
 /* Game functions of other files. */
-#define createclientaccount CL_FN(0x433f20, void(__cdecl *)(int *id_a, int *id_b, int key))
 #define createaccount CL_FN(0x433be0, int(__cdecl *)(int player))
 #define createplayer CL_FN(0x4d4750, int(__cdecl *)(void))
 #define fixplayername CL_FN(0x4d5200, void(__cdecl *)(int player))
@@ -105,7 +107,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define checkmouse CL_FN(0x4feca0, void(__cdecl *)(void))
 #define checkmouserelative CL_FN(0x4fedb0, void(__cdecl *)(void))
 #define debug_getinputs CL_FN(0x469190, void(__cdecl *)(void))
-#define area_resetsector CL_FN(0x439370, void(__cdecl *)(int sector))
 #define calculateplayervoice CL_FN(0x4fbe70, void(__cdecl *)(int connection, int player))
 #define soundsimulation CL_FN(0x44e190, void(__cdecl *)(const vec3 *position, const vec3 *rotation, \
                                                          const vec3 *velocity))
@@ -113,7 +114,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define frame_drawvoiceicons CL_FN(0x479330, void(__cdecl *)(void))
 #define deletesound CL_FN(0x44f720, void(__cdecl *)(int sound))
 #define voiceoptionsmenu CL_FN(0x4d38c0, void(__cdecl *)(void))
-#define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
 #define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 

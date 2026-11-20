@@ -1,2 +1,1 @@
 # The offline test crashes in the exe: the second argument is not a pointer for the harness.
-transposematrix src/client/math/matrix.c

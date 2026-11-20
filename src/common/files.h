@@ -11,5 +11,6 @@ void removeflieextentions(int list);
 
 /* The qsort order of two names: unsigned byte compare, -1, 0 or 1. */
 int __cdecl comparestrings(const void *a, const void *b);
+int checkfilespec(const char *pattern, const char *name);
 
 #endif /* SR_FILES_H */

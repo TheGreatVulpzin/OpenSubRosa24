@@ -2,6 +2,8 @@
 
 One page for each system of `src/client/`.
 
+- [Vectors and random numbers](math.md): shared vector operations, matrices and generators.
+
 ## Images and fonts
 
 The image loaders supply texture pixels and font atlases. Each format uses a separate source file and header in `src/client/image/`.
@@ -19,6 +21,7 @@ Keyboard, mouse, player controls and cameras use `src/client/input/`.
 - [Fonts](fonts.md): bitmap atlases, widths and coordinates.
 - [Byte access](io.md): memory readers and file fields.
 - [Math](math.md): vectors of two floats, quaternions, circles and engine torque.
+- [OpenGL loaders and stencil](gl.md): WGL entry points and the front and back stencil tests.
 
 ## Textures, models and landscape
 
@@ -39,5 +42,6 @@ Sound and voice use `src/client/audio/`.
 - [render.md](render.md): the 2D layer, text, the OpenGL states and the shader programs.
 - [start.md](start.md): the identifiers of models, textures and sounds, and the start of the client.
 - [simulation.md](simulation.md): the tick of the client, the keys of the display and the traffic lights.
+- [game_helpers.md](game_helpers.md): pool slots, player actions, account balances and client settings.
 - [network.md](network.md): the input packet that the client sends, and the smoothing of humans, objects and items.
 - [Keyboard, mouse and controls](input.md) describe input polling, item actions, movement and cameras.

@@ -34,15 +34,9 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define createsunglassmodel CL_FN(0x4affb0, void(__cdecl *)(int model))
 #define createbriefcasemodel CL_FN(0x4b3fc0, void(__cdecl *)(int model, float x, float y, float z))
 #define createboxmodel CL_FN(0x4b41d0, void(__cdecl *)(int model, float x, float y, float z))
 #define createwheelmodel CL_FN(0x4b4520, void(__cdecl *)(int model, float radius, float width))
-#define createfootmodel CL_FN(0x4b4710, void(__cdecl *)(int model, float x, float y, float z))
-#define createrotormodel CL_FN(0x4b4930, void(__cdecl *)(int model, float x, float y, float z))
-#define createheadmodel CL_FN(0x4b54c0, void(__cdecl *)(int model))
-#define createcellphonemodel CL_FN(0x4bf260, void(__cdecl *)(int model, float x, float y, float z))
-#define createkeymodel CL_FN(0x4bf820, void(__cdecl *)(int model))
 #define createbillmodel CL_FN(0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
 
 enum {

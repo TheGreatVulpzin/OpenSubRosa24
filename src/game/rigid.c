@@ -2,6 +2,7 @@
 #include "rigid.h"
 
 #include "sr_runtime.h"
+#include "vectors.h"
 
 /* Game globals. */
 #define g_xaxis sr_data_xaxis /* (1 0 0) */
@@ -41,5 +42,23 @@ void getobjectrotation2(vec3 *out, int obj, const vec3 *center)
                                    q->vel.y * ((float)(g_zaxis.x * rz - g_zaxis.z * rx))))) *
                              0.125 * 0.125 * 0.5 +
                          out->z);
+    }
+}
+
+/* Sum particle velocity along the cross products of the body axes and each arm. */
+void getobjectrotation(int object, const vec3 *center)
+{
+    Object *body = &sr_objects[object];
+    float *sum = (float *)&body->rotation_sum;
+    int index, axis;
+    body->rotation_sum = (vec3){0.0f, 0.0f, 0.0f};
+    for (index = 0; index < body->num_particles; ++index) {
+        const Particle *particle = &sr_particles[body->particles[index]];
+        vec3 arm, tangent;
+        subtractvectors(&arm, &particle->pos, center);
+        for (axis = 0; axis < 3; ++axis) {
+            crossproduct(&tangent, &body->rot[axis], &arm);
+            sum[axis] = (float)((double)dotproduct(&tangent, &particle->vel) + sum[axis]);
+        }
     }
 }

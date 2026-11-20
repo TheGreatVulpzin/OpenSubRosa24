@@ -65,6 +65,22 @@ void listfiles(const char *pattern, int list, int dirs)
     qsort(l->name, l->count, NAME_SIZE, comparestrings);
 }
 
+/* Compare a file name with a pattern. Either string ending completes the match. */
+int checkfilespec(const char *pattern, const char *name)
+{
+    int p = 0, n = 0;
+    while (pattern[p] && name[n]) {
+        if (pattern[p] != name[n] && pattern[p] != '*')
+            return 0;
+        if (pattern[p] == name[n])
+            ++p;
+        else if (pattern[p + 1] == name[n])
+            p += 2;
+        ++n;
+    }
+    return 1;
+}
+
 /* A name with no dot and no 0 in 64 bytes loses the first byte of the next name. */
 void removeflieextentions(int list)
 {

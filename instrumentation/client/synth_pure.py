@@ -39,6 +39,187 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'building_addgaragedoor': 'hh',
+    'createevent_updatescenario': 'h',
+    'createevent_updateblock_interior': 'AcccB',
+    'human_applydamage': 'pxvv',
+    'deleteitem': 'n',
+    'pointinsidecheckpoint': 'vp',
+    'deleteobject': 'n',
+    'getobjectrotation': 'pv',
+    'deleteparticle': 'n',
+    'physicssimulation': '',
+    'resetsendpacket': '',
+    'pbitwritescale': 'Ubg',
+    'pbitreadscale': 'Ubg',
+    'pbitwritesign': 'Ub',
+    'area_getblocklink': 'Accc',
+    'area_getblockmaterial': 'Accc',
+    'area_block_insertquad': 'hp',
+    'area_block_addfloorceil': '',
+    'area_block_addfloor': 'rh',
+    'area_block_addceil': 'rh',
+    'area_block_addwall': 'Tr',
+    'area_block_addwindowvertical_exterior': 'Trii',
+    'area_block_addwindowvertical_interior': 'Trii',
+    'area_block_addwindowhorizontal_exterior': 'Trrii',
+    'area_block_addwindowhorizontal_interior': 'Trrii',
+    'area_getnextsectormesh': '',
+    'area_setsectormesh': 'ph',
+    'area_removesectormodel': 'p',
+    'area_submitsectormodel': 'p',
+    'area_sectorvertequal': 'ppp',
+    'savemodelcsm': 'pN',
+    'loadmodelcsm': 'pN',
+    'addhalfboxtomodel': 'vmrrre',
+    'createsunglassmodel': 'p',
+    'createfootmodel': 'prrr',
+    'createrotormodel': 'prrr',
+    'createheadmodel': 'p',
+    'tesselatebeziertriangle': 'offfH',
+    'sethumanmodelvert': 'ppfff',
+    'sethumanmodelvertface': 'ppfff',
+    'addwaisttomodel': 'vrrr',
+    'createcellphonemodel': 'prrr',
+    'createkeymodel': 'p',
+    'e': 'N',
+    'get_marker': '',
+    'get16': '',
+    'get16le': '',
+    'initWGLLoadFunctions': '',
+    'fround': 'ff',
+    'net_calcdistancefactor': 'f',
+    'getenginetorque': 'f',
+    'raydistancesphere2': 'vvr',
+    'pointintersectcircle': 'oFvvr',
+    'checkbonds': '',
+    'human_calculateanglesobject': '',
+    'human_walksimulation2': '',
+    'createscenario_mission': '',
+    'createscenario_coop': '',
+    'createscenario_driving': '',
+    'scenario_createaicar': '',
+    'scenario_addcheckpoint': '',
+    'resetparser': '',
+    'getfloat': '',
+    'checkfilespec': 'NN',
+    'unpackunitvector': 'kog',
+    'unpackposition': 'o',
+    'unpackscalar': 'org',
+    'setuphumanangles': 'p',
+    'setupobjecttypes': '',
+    'createmessage': 'hNpp',
+    'newspaper_addline': 'Sph',
+    'scenario_getnextmission': 'h',
+    'scenario_isseekmission': 'h',
+    'addwindowatlas': 'ph',
+    'building_iswindow': 'hhhhh',
+    'building_reloadtextures': '',
+    'loadtexture2': 'pNhhhhh',
+    'gettextlength': 'Nf',
+    'checkbigendian': '',
+    'addcitystreet': 'hhhhN',
+    'addcityblock': 'hhhh',
+    'getplayticket': '',
+    'settwosidedstencil': 'uuiuuuuuuu',
+    'saveaccountsserver': '',
+    'loadaccountsclient': '',
+    'area_getblocktexture': 'Accce',
+    'addbeziersurfacetexture': 'PPEEEEh',
+    'area_interior_createblock': 'AcccBk',
+    'area_interior_setblock': 'AcccB',
+    'area_interior_getblock': 'Accc',
+    'area_interior_getblocklink': 'Accc',
+    'area_interior_getblocktexture': 'Accce',
+    'sphereintersectnormalblock': 'ooFvrzBr',
+    'sphereintersectspecblock': 'ooFvrzBr',
+    'circleintersectnormalblock': 'ooFvvrzBr',
+    'circleintersectspecblock': 'ooFvvrzBr',
+    'bondtimetolive': '',
+    'deletebond': 'p',
+    'createcityobject': 'hWr',
+    'sphereintersectcityobjecttype': 'ooFhWmWr',
+    'packunitvector': 'kvg',
+    'packorientation': 'vg',
+    'unpackorientation': 'og',
+    'packangle': 'yg',
+    'unpackangle': 'og',
+    'packposition': 'v',
+    'packpositiondelta': 'vvrg',
+    'unpackpositiondelta': 'ovrg',
+    'packscalar': 'yrg',
+    'playersellstock': 'px',
+    'createevent_bullet': 'hvvh',
+    'createevent_createobject': 'p',
+    'createevent_updatehuman': 'p',
+    'createevent_updatestocks': '',
+    'createevent_updatecarmarket': 'h',
+    'testtimer': '',
+    'deletehuman': 'p',
+    'sphereintersectpoint': 'ooFvrv',
+    'setitempositionhuman': 'pp',
+    'item_billvalue': 'p',
+    'item_addbill': 'phh',
+    'item_removebill': 'ph',
+    'linkitemtoitem': 'pp',
+    'item_addhumanlink': 'pph',
+    'circleintersectlevel': 'vvr',
+    'circleintersectlandscape': 'vvr',
+    'logicsimulation_driving': '',
+    'logic_addteamcash': 'hx',
+    'logic_teammissioncomplete': 'hh',
+    'objecttimetolive': '',
+    'getobjectrotation2': 'opv',
+    'getobjectrotation3': 'op',
+    'sphereintersectobject': 'pWr',
+    'objectwheelcollision': 'ph',
+    'particletimetolive': '',
+    'particlesimulation': '',
+    'scenario_setmissioninactive': 'p',
+    'setuptimers': '',
+    'lineintersectline2d': 'ooFvvvv',
+    'sphereintersectline2d': 'ooFvvvr',
+    'lineintersectcircle2d': 'ooFvvvr',
+    'getint': '',
+    'comparestrings': 'NN',
+    'disablesocket': 'h',
+    'cs_pread': 'SJK',
+    'getnextcityobject': '',
+    'getnexthuman': '',
+    'getnextitem': '',
+    'getnextobject': '',
+    'getnextplayer': '',
+    'deletecityobject': 'n',
+    'deletebullet': 'n',
+    'player_addaction_item': 'pxx',
+    'player_addaction_chat': 'pC',
+    'addplayerwaypoint': 'pfff',
+    'createclientaccount': 'UUx',
+    'accountdeathtax': 'n',
+    'playerdebt': 'p',
+    'addpointstoteam': 'hx',
+    'logic_splitteamcash': 'hx',
+    'negvector': 'ov',
+    'crossproduct': 'ovv',
+    'transposematrix': 'mm',
+    'copyquaternion': 'qq',
+    'quaterniontoorientation': 'mq',
+    'dotproduct2d': 'vv',
+    'vectorlength2d': 'v',
+    'normalizevector2d': 'ov',
+    'rotatevector2d': 'vf',
+    'addvectors2d': 'ovv',
+    'subtractvectors2d': 'ovv',
+    'scalevector2d': 'ovf',
+    'scaleaddvectors2d': 'ovvf',
+    'tangentvector2d': 'ov',
+    'genrand_int31': '',
+    'genrand_real1': '',
+    'genrand_real2': '',
+    'genrand_real3': '',
+    'genrand_res53': '',
+    'getrandomint': '',
+    'getrandomfloat': '',
     'createbullet': 'ivvn',
     'createsprite': 'ivvf',
     'sphereintersectarea': 'ooFAvr',
@@ -334,7 +515,8 @@ CACHE_FILE = ROOT / 'build' / 'step_client' / 'synth_cache.json'
 # SYNTH_SERVER=1 runs the calls on a copy of the snapshot of a game that hosts a server: server.active is 1
 # and the game type is 3. Without it the client snapshot has no server, and the server functions return at once.
 SERVER_EDITS = [(0x75a5800, 'I', (1,)), (0x9065308, 'I', (3,))]
-TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py')
+TEST_SOURCES = ('instrumentation/tests/harness.c', 'instrumentation/client/synth_textures.py',
+                'instrumentation/client/synth_pure.py', 'analysis/client_win/params.csv')
 RESULT = re.compile(r'(\d+) calls same, (\d+) different, (\d+) known differences, (\d+) lifted crashed')
 
 
@@ -371,6 +553,12 @@ def rvas():
         if row['name']:
             out[row['name']] = int(row['rva'], 16)
     return out
+
+
+def parameter_kinds():
+    """Read the argument descriptors of the compiled dispatch table."""
+    table = (ROOT / 'src/lifted/client/lifted_table.c').read_text(encoding='utf-8')
+    return dict(re.findall(r'\{ "(\w+)", 0x[0-9a-f]+, .*?, \d+, LF_RET_\w+, \d+, "([pv]*)",', table))
 
 
 def number(rng, kind):
@@ -412,7 +600,18 @@ def make_args(rng, kinds, index):
     base = [rng.uniform(-3.0, 3.0) for _ in range(3)]
     last_world = (1000.0, 10.0, 1000.0)
     for kind in kinds:
-        if kind == 'U':
+        if kind == 'H':
+            args.append('P:0:' + struct.pack('<10i', *(rng.randrange(38) for _ in range(10))).hex())
+        elif kind == 'h':
+            args.append(rng.randrange(3))
+        elif kind == 'g':
+            args.append(rng.choice([1, 2, 3, 4, 6, 8, 9, 12, 15, 16, 20, 24, 31]))
+        elif kind == 'y':
+            args.append((number(rng, 'f'),))
+        elif kind == 'C':
+            length = rng.choice([0, 1, 2, 62, 63, 64, 65, 127])
+            args.append('P:0:' + (b'x' * length + b'\0').hex())
+        elif kind == 'U':
             args.append('P:0:' + struct.pack('<I', rng.choice([0, 1, 0xff, 0xffff, 0xffffffff, rng.randrange(0, 2**32)])).hex())
         elif kind == 'b':
             args.append(rng.choice([0, 1, 2, 3, 7, 8, 9, 15, 16, 17, 24, 31, 32, 32, rng.randrange(1, 33), rng.randrange(1, 33), 33, -1]))
@@ -507,6 +706,7 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     want = sys.argv[3].split(',') if len(sys.argv) > 3 else list(PROTOTYPES)
     addresses = rvas()
+    descriptors = parameter_kinds()
     env = dict(os.environ, HARNESS_RESET='1', HARNESS_GAME_DIR=str(ROOT / 'build' / 'client_test'),
                HARNESS_ENV_DIR=str(work / 'env'), SV_UI_WIDTH='220')
     env['PATH'] = str(ROOT / 'build' / 'client_deps') + os.pathsep + env.get('PATH', '')
@@ -519,6 +719,7 @@ def main():
     # means the same result, so the case is skipped. SYNTH_FORCE=1 runs every case again.
     cache = load_cache()
     lock = threading.Lock()
+    passed = {}
     force = bool(os.environ.get('SYNTH_FORCE'))
     names = [item.partition('=')[0] for item in want]
     code = closure_hashes(names)
@@ -529,27 +730,147 @@ def main():
         proto = kinds if kinds else PROTOTYPES[name]
         key = hashlib.sha256((code[name] + case_hash(name, proto, count)).encode()).hexdigest()
         if not force and cache.get(name, {}).get('key') == key:
+            passed[name] = True
             return f'{name}: {count} calls: cached, {cache[name]["result"]}'
         rng = random.Random(sum(map(ord, name)))
         calls = []
+        snap = None
+        scratch = 0x19e00000
+        descriptor = descriptors[name]
         for index in range(count):
             args = make_args(rng, proto, index)
+            if name in ('get_marker', 'get16', 'get16le'):
+                args = [st.image(0x19e20000)]
+            for position, value in enumerate(args):
+                if position >= len(descriptor) or descriptor[position] == 'p':
+                    continue
+                if isinstance(value, tuple):
+                    raw = struct.pack(f'<{len(value)}f', *value).ljust(256, b'\0')
+                elif isinstance(value, str) and value.startswith('P:'):
+                    raw = bytes.fromhex(value.split(':', 2)[2])
+                else:
+                    continue
+                if snap is None:
+                    snap = st.Snapshot(rec / 'sv_snapshot.bin')
+                snap.write(scratch, f'{len(raw)}s', raw)
+                args[position] = st.image(scratch)
+                scratch += (len(raw) + 31) & ~15
             calls.append(st.call(addresses[name], *args))
         path = work / f'{name}.txt'
         path.write_text(''.join(calls), encoding='utf-8', newline='\n')
         own = dict(env, HARNESS_ENV_DIR=str(work / f'env_{name}'), SV_LOG_FILE=str(work / f'{name}.log'))
         snapshot = rec / 'sv_snapshot.bin'
+        if name in ('getint', 'getfloat'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            text = b'prefix -2147483648 end\0' if name == 'getint' else b'prefix -123.125 end\0'
+            snap.write(0x13d5e700, 'ii', 0, len(text) - 1)
+            snap.write(0x13d5e708, f'{len(text)}s', text)
+        if name in ('get_marker', 'get16', 'get16le'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            data = 0x19e21000
+            snap.write(0x19e20000, '7I', 0, 0, 0, 0, 0, st.BASE + data, st.BASE + data + 4)
+            if name == 'get_marker':
+                snap.write(0x19e20000 + 0x369c, 'B', 255)
+                snap.write(data, '4B', 255, 255, 0xd8, 0)
+            else:
+                snap.write(data, '4B', 0x12, 0x34, 0x56, 0x78)
+        if name.startswith(('pack', 'unpack')) or name == 'cs_pread':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            socket = 0x19d851a0
+            snap.write(socket + 0x5c, 'ii', 0, 0)
+            snap.write(socket + 0x64, '256s', bytes(256))
+            snap.write(socket + 0x10064, 'iii', 256, 0, 0)
+            snap.write(socket + 0x10070, '256s', bytes((index * 37 + 23) & 255 for index in range(256)))
+        block_parts = ('area_block_insertquad', 'area_block_addfloorceil', 'area_block_addfloor',
+                       'area_block_addceil', 'area_block_addwall',
+                       'area_block_addwindowvertical_exterior', 'area_block_addwindowvertical_interior',
+                       'area_block_addwindowhorizontal_exterior', 'area_block_addwindowhorizontal_interior')
+        if name in block_parts:
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for offset in (0, 0x110004, 0x1a0008):
+                snap.write(0x29f0d360 + offset, 'i', 0)
+            if name == 'area_block_insertquad':
+                snap.write(0x29f0d360 + 0x110004, 'i', 4)
+                for quad in range(6):
+                    snap.write(0x29f0d360 + 0x110008 + quad * 16, '4i', *(quad * 4 + k for k in range(4)))
+                    snap.write(0x29f0d360 + 0x150008 + quad * 4, 'i', 100 + quad)
+        if name in ('area_getnextsectormesh', 'area_setsectormesh', 'area_removesectormodel',
+                    'area_submitsectormodel', 'area_sectorvertequal'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            snap.write(0x12a7c604, '1024I', *([0] * 1024))
+            for sector in range(32):
+                record = 0x1dda5280 + sector * 0x6068
+                snap.write(record, 'i', int(sector == 0))
+                snap.write(record + 0x5048, 'i', 0)
+                snap.write(record + 0x502c, '4I', st.BASE + 0x19e00000, 2,
+                           st.BASE + 0x19e10000, st.BASE + 0x19e20000)
+            for vertex in range(32):
+                snap.write(0x19e00000 + vertex * 64, '16f', vertex * 0.125, 0.0, vertex * 0.25, *([0.0] * 13))
+            snap.write(0x19e10000, '6i', 0, 1, 2, 2, 1, 3)
+            snap.write(0x19e20000, '2i', 0, 255)
+            snap.write(0x29e7d2c0 + 24, 'i', 0)
+        constructors = ('createsunglassmodel', 'createfootmodel', 'createrotormodel',
+                        'createheadmodel', 'createcellphonemodel', 'createkeymodel')
+        if name in constructors or name in ('savemodelcsm', 'loadmodelcsm'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for model in range(32):
+                record = 0xaff05a0 + model * 0xe04
+                for offset in (8, 12, 16, 20, 24, 32, 36, 40, 48):
+                    snap.write(record + offset, 'I', 0)
+            if name in ('savemodelcsm', 'loadmodelcsm'):
+                game = work / f'game_{name}'
+                (game / 'model').mkdir(parents=True, exist_ok=True)
+                own['HARNESS_GAME_DIR'] = str(game)
+            if name == 'savemodelcsm':
+                base = 0x19e80000
+                arrays = [(8, '9f', [0,0,0, 1,0,0, 0,1,0]),
+                          (16, '9f', [0,0,1] * 3), (20, '9f', [1,0,0] * 3),
+                          (32, '3i', [0,1,2]), (36, '3f', [0,0,1]), (40, '3i', [-1,-1,-1])]
+                for index, (offset, fmt, values) in enumerate(arrays):
+                    snap.write(base + index * 256, fmt, *values)
+                for model in range(32):
+                    record = 0xaff05a0 + model * 0xe04
+                    snap.write(record, 'ii', 3, 8)
+                    snap.write(record + 0x1c, 'i', 1)
+                    for index, (offset, _, _) in enumerate(arrays):
+                        snap.write(record + offset, 'I', st.BASE + base + index * 256)
+        if name in ('addhalfboxtomodel', 'addwaisttomodel'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for offset in (0, 0xa0008, 0x20000c, 0x260010):
+                snap.write(0x90f7680 + offset, 'i', 0)
+        if name == 'tesselatebeziertriangle':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            control = random.Random(420)
+            for index in range(38):
+                snap.write(0x1bf7f60 + index * 12, '3f', *(control.uniform(-2, 2) for _ in range(3)))
+        if name in ('sethumanmodelvert', 'sethumanmodelvertface'):
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            for vertex in range(32):
+                snap.write(0x1bbfe04 + vertex * 28 + 4, 'i8s', vertex + 7, b'abcdefgh')
         if os.environ.get('SYNTH_SERVER'):
-            snap = st.Snapshot(snapshot)
+            if snap is None:
+                snap = st.Snapshot(snapshot)
             for rva, fmt, values in SERVER_EDITS:
                 snap.write(rva, fmt, *values)
+        if snap is not None:
             snapshot = work / f'snapshot_{name}.bin'
             snap.save(snapshot)
         result = st.run(snapshot, path, name, own)
         if snapshot != rec / 'sv_snapshot.bin':
             snapshot.unlink()
         m = RESULT.search(result)
-        if m and int(m.group(1)) > 0 and int(m.group(2)) == 0 and int(m.group(4)) == 0:
+        passed[name] = bool(m and int(m.group(1)) + int(m.group(3)) > 0
+                            and int(m.group(2)) == 0 and int(m.group(4)) == 0)
+        if passed[name]:
             with lock:
                 cache[name] = {'key': key, 'result': result}
                 CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -566,6 +887,8 @@ def main():
                 print(line, flush=True)
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
     CACHE_FILE.write_text(json.dumps(cache, indent=1, sort_keys=True), encoding='utf-8')
+    if not all(passed.get(name, False) for name in names):
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

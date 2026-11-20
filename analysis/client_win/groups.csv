@@ -549,7 +549,7 @@ rva,name,size,group,recorded_calls
 0x341d0,loadaccountsserver,669,C0x,4
 0x34470,saveaccountsclient,349,C0x,4
 0x345d0,loadaccountsclient,362,C10,3
-0x34740,server_writelogfile,393,C0,0
+0x34740,server_writelogfile,393,C0x,0
 0x348d0,playerai,3940,C0x,0
 0x35840,ai_assessthreats,1784,C0x,0
 0x35f40,angulardistance,82,C0,0
@@ -702,7 +702,7 @@ rva,name,size,group,recorded_calls
 0x6ab70,debug_addatafloat,192,C7,0
 0x6ac30,debug_resetlogfile,103,C0,3
 0x6aca0,debug_writelogfile,108,C7,0
-0x6ad10,systemtimer,71,C0,0
+0x6ad10,systemtimer,71,C0x,0
 0x6b140,,18,C11,10
 0x6b160,server_playermessage,2367,C0x,0
 0x6baa0,drawdisplay,7233,C3,10
@@ -745,7 +745,7 @@ rva,name,size,group,recorded_calls
 0x72d10,createevent_updateblock_interior,154,C10,0
 0x72db0,createevent_updateblock_quad,286,C0,0
 0x72ed0,packevent,3012,C0x,0
-0x73aa0,unpackevent,2128,C0,0
+0x73aa0,unpackevent,2128,C0x,0
 0x742f0,setupframetextures,1439,C10,3
 0x74890,buildframelist,5374,C10,0
 0x75d90,frame_addmodel,369,C3,0
@@ -1192,10 +1192,11 @@ rva,name,size,group,recorded_calls
 0xfe5b0,cs_pwrite,113,C0x,0
 0xfe630,cs_pread,140,C10,0
 0xfe6c0,pbitwrite,308,C0x,0
-0xfe800,pbitread,283,C0,0
+0xfe800,pbitread,283,C0x,0
 0xfe920,pbitwritescale,273,C10,0
 0xfea40,pbitreadscale,287,C10,0
 0xfeb60,pbitwritenego,26,C0x,0
+0xfeb80,pbitreadnego,66,C0x,0
 0xfebd0,pbitwritesign,26,C10,0
 0xfec50,checkkeyboard,78,C4,3
 0xfeca0,checkmouse,261,C4,0

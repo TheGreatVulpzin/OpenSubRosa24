@@ -9,6 +9,7 @@
 
 void city_addintersection(int x, int y, int z);
 void addcitystreet(int a, int b, int width_a, int width_b, const char *name);
+void addcityblock(int first, int second, int x, int z);
 void buildcityinterection(int intersection);
 void buildcitystreet(int road);
 

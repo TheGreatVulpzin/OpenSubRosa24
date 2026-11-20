@@ -11,6 +11,7 @@
 #include "menu/items.h"
 #include "menu/player.h"
 #include "client.h"
+#include "player_actions.h"
 #include "sr_runtime.h"
 #include <string.h>
 
@@ -119,7 +120,7 @@ static void chat_input(void)
         if (!cl_data_audio_keys[KEY_RETURN]) {
             if (cl_data_input_chat && cl_data_input_chat_text[0] && !cl_data_audio_keys[KEY_ESCAPE]) {
                 cl_data_input_chat_length = (uint32_t)strlen(cl_data_input_chat_text);
-                CL_FN(0x4d5380, void (__cdecl *)(int, const char *))(
+                player_addaction_chat(
                     sr_data_view, cl_data_input_chat_text);
                 cl_data_input_chat_head = (cl_data_input_chat_head + 1) & CHAT_HISTORY_MASK;
             }

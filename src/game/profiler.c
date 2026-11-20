@@ -10,6 +10,13 @@
 
 #define g_sysinfo sr_data_sysinfo
 
+#ifndef sr_timer_list_type
+#define sr_timer_list_type TimerList
+#endif
+#ifndef sr_physics_timers
+#define sr_physics_timers 1
+#endif
+
 void stoptimer(int timer)
 {
     Timer *t = &g_timer[timer];
@@ -44,9 +51,10 @@ void stoptimer(int timer)
  * the order of the lines below sets them. */
 void setuptimers(void)
 {
-    TimerList *tl = &g_timerlist;
+    sr_timer_list_type *tl = &g_timerlist;
     int next = 0x40;
 
+#if sr_physics_timers
     tl->packetbuild = next++;
     tl->humansim = next++;
     tl->objectsim = next++;
@@ -64,6 +72,7 @@ void setuptimers(void)
     tl->bondwheelcollevel = next++;
     tl->bondbodyitem = next++;
     tl->bondbodylevel = next++;
+#endif
     tl->raycast = next++;
     tl->buildframelist = next++;
     tl->renderdepth = next++;

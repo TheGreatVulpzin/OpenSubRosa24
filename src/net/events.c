@@ -32,6 +32,19 @@ static void next_event(void)
     sr_numofevents = (sr_numofevents + 1) & 0xffff;
 }
 
+/* Event 15 packs an interior cell address and its new block word. */
+void createevent_updateblock_interior(int area, int x, int y, int z, uint32_t block)
+{
+    Event *event;
+    if (!sr_server)
+        return;
+    event = new_event(15);
+    event->param = (int)((uint32_t)area + ((uint32_t)x << 16));
+    event->attach_type = (int)((uint32_t)y + ((uint32_t)z << 16));
+    event->attach_id = (int)block;
+    next_event();
+}
+
 /* A vector, or zero when there is no vector. */
 static void copy_vec(vec3 *dst, const vec3 *src)
 {
@@ -209,7 +222,7 @@ void createevent_updateblock_quad(int area, int x, int y, int z, int block, int 
 }
 
 /* Event 17: a human of a player (the player takes it over at a join). */
-void createevent_updatehuman(int human, int player)
+void createevent_updatehuman(sr_updatehuman_params)
 {
     const Human *h = &sr_humans[human];
     Event *ev;
@@ -218,7 +231,7 @@ void createevent_updatehuman(int human, int player)
     ev = new_event(17);
     ev->param = human;
     ev->attach_type = h->active;
-    ev->attach_id = player;
+    ev->attach_id = sr_updatehuman_recipient(h, player);
     next_event();
 }
 
