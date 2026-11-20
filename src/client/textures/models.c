@@ -42,7 +42,6 @@ enum {
 
 /* Game functions of other files. */
 #define sethumanmodelvert CL_FN(0x4becd0, void(__cdecl *)(int vertex, int bone, float x, float y, float z))
-#define addhumantorso CL_FN(0x4bed80, void(__cdecl *)(const vec3 *center, float half_x, float half_y, float half_z))
 
 /* 1 when a and b differ by less than tolerance. */
 static int is_near(float a, float b, float tolerance)
@@ -660,7 +659,7 @@ void __cdecl createhumanmodel(int model)
     center.x = 0.0f;
     center.y = 0.125f;
     center.z = 0.0f;
-    addhumantorso(&center, 0.1875f, 0.125f, 0.125f);
+    addwaisttomodel(&center, 0.1875f, 0.125f, 0.125f);
     for (i = 0; i < g_temp.num_tris; i++)
         memset(&g_temp.tri_texcoords[i], 0, sizeof g_temp.tri_texcoords[i]);
     torso_quads = g_temp.num_quads;
@@ -775,4 +774,53 @@ void __cdecl addhalfboxtomodel(const vec3 *center, const vec3 *rot, float x, flo
         append_tri(first + tri[0], first + tri[1], first + tri[2], SHADE_FLAT);
         append_tri(first + tri[0], first + tri[2], first + tri[1], SHADE_FLAT);
     }
+}
+
+#define WAIST_CORNERS 8
+#define WAIST_POINTS 10
+#define WAIST_FORK_DROP 1.25 /* the two fork points sit 1.25 half heights below the middle */
+
+/* The cube faces that the waist keeps: the sides and the top. */
+static const int waist_faces[3] = {2, 4, 5};
+
+/* The bottom of the waist: two quads from the fork points to the corners and six flat
+ * triangles. The numbers are vertex offsets from the first waist vertex. */
+static const int waist_quads[2][4] = {{3, 9, 8, 0}, {9, 2, 1, 8}};
+static const int waist_tris[6][3] = {{7, 9, 3}, {7, 6, 9}, {6, 2, 9}, {5, 8, 1}, {5, 4, 8}, {4, 0, 8}};
+
+/* The waist of the human: a box of half sizes x, y and z around center, and two fork points
+ * below it at the front and the back, where the legs start. The bottom face of the box gives
+ * way to the quads and the triangles of the fork. */
+void __cdecl addwaisttomodel(const vec3 *center, float x, float y, float z)
+{
+    int first = g_temp.num_verts, i, k;
+
+    for (i = 0; i < WAIST_POINTS; i++) {
+        vec3 v;
+
+        v.x = (i & 3) == 0 || (i & 3) == 3 ? -x : x;
+        v.y = i < 4 ? -y : y;
+        v.z = (i & 3) == 0 || (i & 3) == 1 ? -z : z;
+        if (i >= WAIST_CORNERS) {
+            v.x = 0.0f;
+            v.y = (float)(-y * WAIST_FORK_DROP);
+            v.z = i == WAIST_CORNERS ? -z : z;
+        }
+        addvectors(&v, &v, center);
+        g_temp.verts[g_temp.num_verts++] = v;
+    }
+    for (i = 0; i < (int)(sizeof waist_faces / sizeof waist_faces[0]); i++) {
+        int *quad = g_temp.quads[g_temp.num_quads++].verts;
+
+        for (k = 0; k < 4; k++)
+            quad[k] = first + sr_data_cubequad[waist_faces[i] * 4 + k];
+    }
+    for (i = 0; i < (int)(sizeof waist_quads / sizeof waist_quads[0]); i++) {
+        int *quad = g_temp.quads[g_temp.num_quads++].verts;
+
+        for (k = 0; k < 4; k++)
+            quad[k] = first + waist_quads[i][k];
+    }
+    for (i = 0; i < (int)(sizeof waist_tris / sizeof waist_tris[0]); i++)
+        append_tri(first + waist_tris[i][0], first + waist_tris[i][1], first + waist_tris[i][2], SHADE_FLAT);
 }

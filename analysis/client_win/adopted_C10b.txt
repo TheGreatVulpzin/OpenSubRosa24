@@ -27,3 +27,5 @@ createcellphonemodel src/client/textures/small_models.c
 addhalfboxtomodel src/client/textures/models.c
 tesselatebeziertriangle src/client/textures/head_models.c
 area_submitsectormodel src/client/render/sector_model.c
+createheadmodel src/client/textures/head_models.c
+addwaisttomodel src/client/textures/models.c

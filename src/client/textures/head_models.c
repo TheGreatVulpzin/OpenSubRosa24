@@ -477,3 +477,75 @@ void __cdecl createheadmodel3(int model)
     setupmodel(model, 1);
     memcpy(g_temp.tris, g_temp.tri_backup, (size_t)g_temp.num_tris * sizeof(MeshTri));
 }
+
+/* The control points of the Bezier head. */
+
+#define HEAD_CORNERS 6        /* the bottom, four around the middle, the top */
+#define HEAD_RING 4
+#define HEAD_EDIT_POINTS 38
+#define HEAD_LOW_EDGE 6       /* first point between the bottom and the ring */
+#define HEAD_RING_EDGE 14     /* first point between two ring corners */
+#define HEAD_HIGH_EDGE 22     /* first point between the ring and the top */
+#define HEAD_LOW_SUM 30       /* first sum with the bottom */
+#define HEAD_HIGH_SUM 34      /* first sum with the top */
+#define HEAD_EDIT_SCALE 0.15000000596046448f
+#define HEAD_BOTTOM_Y (-1.0f)
+#define HEAD_JAW_Y (-1.25f)   /* the bottom points move down to the jaw */
+#define HEAD_CHIN_Z (-0.5f)
+#define HEAD_CHIN_NEW_Z (-0.875f)
+#define HEAD_JAW_NEW_Z (-0.5f)
+
+/* The 6 corners of the control octahedron: the bottom, four around the middle, the top. */
+static const vec3 head_corners[HEAD_CORNERS] = {
+    {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {-1.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
+};
+
+/* Set the 38 control points of the Bezier head (the edit vertices) and make the simple head.
+ * Points 6 to 13 lie between the bottom and each ring corner, points 14 to 21 between two ring
+ * corners, points 22 to 29 between each ring corner and the top. Points 30 to 37 are the sums
+ * of the bottom or the top and two ring corners. The bottom points move down to a jaw, and all
+ * points scale by 0.15. */
+void __cdecl createheadmodel(int model)
+{
+    vec3 *p = cl_data_edit_vertices;
+    const vec3 *bottom = &p[0], *top = &p[HEAD_CORNERS - 1];
+    int i;
+
+    for (i = 0; i < HEAD_CORNERS; i++)
+        p[i] = head_corners[i];
+    for (i = 0; i < HEAD_RING; i++) {
+        scaleaddvectors(&p[HEAD_LOW_EDGE + i * 2], bottom, &p[i + 1], 0.5f);
+        scaleaddvectors(&p[HEAD_LOW_EDGE + 1 + i * 2], &p[i + 1], bottom, 0.5f);
+    }
+    for (i = 0; i < HEAD_RING; i++) {
+        int next = ((i + 1) & 3) + 1;
+
+        scaleaddvectors(&p[HEAD_RING_EDGE + i * 2], &p[i + 1], &p[next], 0.5f);
+        scaleaddvectors(&p[HEAD_RING_EDGE + 1 + i * 2], &p[next], &p[i + 1], 0.5f);
+    }
+    for (i = 0; i < HEAD_RING; i++) {
+        scaleaddvectors(&p[HEAD_HIGH_EDGE + i * 2], &p[i + 1], top, 0.5f);
+        scaleaddvectors(&p[HEAD_HIGH_EDGE + 1 + i * 2], top, &p[i + 1], 0.5f);
+    }
+    for (i = 0; i < HEAD_RING; i++) {
+        scaleaddvectors(&p[HEAD_LOW_SUM + i], bottom, &p[i + 1], 1.0f);
+        scaleaddvectors(&p[HEAD_LOW_SUM + i], &p[HEAD_LOW_SUM + i], &p[((i + 1) & 3) + 1], 1.0f);
+    }
+    for (i = 0; i < HEAD_RING; i++) {
+        scaleaddvectors(&p[HEAD_HIGH_SUM + i], top, &p[i + 1], 1.0f);
+        scaleaddvectors(&p[HEAD_HIGH_SUM + i], &p[HEAD_HIGH_SUM + i], &p[((i + 1) & 3) + 1], 1.0f);
+    }
+    for (i = 0; i < HEAD_EDIT_POINTS; i++) {
+        if (p[i].y != HEAD_BOTTOM_Y)
+            continue;
+        p[i].y = HEAD_JAW_Y;
+        if (p[i].z == HEAD_CHIN_Z)
+            p[i].z = HEAD_CHIN_NEW_Z;
+        if (p[i].z == 0.0f)
+            p[i].z = HEAD_JAW_NEW_Z;
+    }
+    for (i = 0; i < HEAD_EDIT_POINTS; i++)
+        scalevector(&p[i], &p[i], HEAD_EDIT_SCALE);
+    createheadmodel3(model);
+}

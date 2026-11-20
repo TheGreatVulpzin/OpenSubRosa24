@@ -9,6 +9,7 @@
 
 #include "audio/wav.h"
 #include "client.h"
+#include "textures/head_models.h"
 #include "textures/small_models.h"
 #include "render/sprites.h"
 #include "items.h"
@@ -38,7 +39,6 @@
 #define createbriefcasemodel CL_FN(0x4b3fc0, void(__cdecl *)(int model, float x, float y, float z))
 #define createboxmodel CL_FN(0x4b41d0, void(__cdecl *)(int model, float x, float y, float z))
 #define createwheelmodel CL_FN(0x4b4520, void(__cdecl *)(int model, float radius, float width))
-#define createheadmodel CL_FN(0x4b54c0, void(__cdecl *)(int model))
 #define createbillmodel CL_FN(0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
 
 enum {
