@@ -45,3 +45,12 @@ Both then count the tick, and in the states 0, 1 and 2 they run the bullets, the
 - Every chat message timer falls by 1 each tick, down to 0.
 
 The light angles follow the clock in gametype 4. With the debug flag on, [ and ] turn the first angle and Shift with them turns the second.
+
+
+## Physics and packed pools
+
+The host physics pass stores the bond count before it moves particles, objects, city objects, humans and items. Bond forces and item logic follow. It removes expired items, objects, particles and bonds in that order.
+
+Particle removal moves the last particle into the free slot. Bond lists, object lists and active humans receive its new index. Human.particle_id identifies this particle. Object.rotation_sum stores the three sums of particle velocity along the cross products of its body axes and particle arms.
+
+A seated human keeps the remaining protection time in the client. The server limits it to 900 ticks.

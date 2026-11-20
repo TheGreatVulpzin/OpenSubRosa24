@@ -1185,3 +1185,11 @@ texturelist,0x110c,test_m16,int,,"model_viewer loads test_m16.png into it"
 modeltemp,0xb800c,tri_backup,MeshTri,8192,"model_viewer keeps the triangles here while setupmodel builds the menu head model, and then puts them back"
 editor_entry,0x0,index,int,,"buildingedit_blockmenu and buildingedit_texturemenu: the number of the block or texture in the game list"
 editor_entry,0x4,name,char,64,"buildingedit_blockmenu and buildingedit_texturemenu: the name of the block or texture"
+human,0x10,particle_id,int,,deleteparticle renames this reference when the last particle moves.
+object,0x78,rotation_sum,vec3,,getobjectrotation sums particle velocities along the three body-axis cross products.
+game,0x94,team0_scenario_state,int,,createevent_updatescenario packs this team state at bits 8 then 10 and 12 for later teams.
+scenario_event_data,0x0,first_low,int,,Low part of the first scenario event word.
+scenario_event_data,0x4,second_low,int,,Low part of the second scenario event word.
+scenario_event_data,0x8,second_high,int,,High part of the second scenario event word.
+scenario_event_data,0xc,third,int,,Third scenario event word.
+scenario_event_data,0x44,first_high,int,,High part of the first scenario event word.

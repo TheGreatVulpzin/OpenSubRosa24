@@ -138,6 +138,7 @@ AUDIO_STRUCTS = {
     'SoundBuffer': ('sound_buffer', 0xc),
 }
 INPUT_STRUCTS = {
+    'ScenarioEventData': ('scenario_event_data', 0x50),
     'InputMouse': ('input_mouse', 0x2c),
     'InputCamera': ('input_camera', 0x1c),
     'MenuInfo': ('menu_info', 0x60),

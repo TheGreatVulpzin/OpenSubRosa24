@@ -10,6 +10,7 @@ void humansimulation(void);
 
 /* human_body.c */
 void deletehuman(uint32_t human);
+void human_applydamage(int human, int damage, const vec3 *hit, const vec3 *force);
 int createjointbond(int human, int bone_a, int target, const vec3 *pos);
 void human_createmuscleball(int human, int parent, int bone, const vec3 *pos);
 void human_buildmuscles(int human);

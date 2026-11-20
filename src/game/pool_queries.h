@@ -9,5 +9,6 @@ int getnextobject(void);
 int getnextplayer(void);
 void deletecityobject(int index);
 void deletebullet(int index);
+void deleteobject(int object);
 
 #endif

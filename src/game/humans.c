@@ -20,6 +20,11 @@
 #include "sr_runtime.h"
 #include "vectors.h"
 
+#ifndef sr_human_vehicle_limit_protection
+#define sr_human_vehicle_limit_protection 1
+#endif
+
+
 /* Game globals. */
 #define g_xaxis sr_data_xaxis /* (1 0 0) */
 #define g_yaxis sr_data_yaxis /* (0 1 0) */
@@ -828,7 +833,7 @@ static void human_invehicle(int h, int vehicle, int seat, int has_item)
 
   hu->axis = (float)((float)x87_atan2((double)-ob->rot[2].x, (double)ob->rot[2].z) + hu->vehicle_axis);
   hu->pitch = 0.0f;
-  if (900 < hu->protect_timer)
+  if (sr_human_vehicle_limit_protection && 900 < hu->protect_timer)
     hu->protect_timer = 900;
   if (hu->vehicle_seat == 0) {
     ob->drive_input[0] = hu->input_axes[0];

@@ -82,6 +82,7 @@ def main():
                 client_only.append('#define sr_window_atlas(texture, type) addwindowatlas((texture), (type))')
                 client_only.append('#define sr_object_frame_orthogonal 0')
                 client_only.append('#define sr_human_floor_all_rays 1')
+                client_only.append('#define sr_human_vehicle_limit_protection 0')
                 client_only.append('#define sr_updatehuman_params int human')
                 client_only.append('#define sr_updatehuman_recipient(record, supplied) ((record)->player_id)')
                 client_only.append('#define sr_emit_updatehuman(human, player) createevent_updatehuman((human))')

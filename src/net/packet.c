@@ -552,3 +552,74 @@ void unpackorientation(vec3 *out, uint32_t bits)
     out->z = (float)(out->z + tri[2].z);
     normalizevector(out, out);
 }
+
+/* Begin a packet with the socket signature and a fresh bit cursor. */
+void resetsendpacket(void)
+{
+    sr_bsdsocket.send_size = 0;
+    sr_bsdsocket.send_bit = 0;
+    cs_pwrite(&sr_socketid, 1, 4);
+}
+
+/* Divide a word by scale, mask its low bits and append them to the bit stream. */
+int pbitwritescale(const uint32_t *value, uint32_t bits, uint32_t scale)
+{
+    BsdSocket *socket = &sr_bsdsocket;
+    uint32_t word;
+    if (socket->send_size >= BUFFER_SIZE)
+        return 0;
+    word = ~(UINT32_MAX << (bits & 31)) & (*value / scale);
+    while ((int32_t)bits > 0) {
+        uint32_t room = 8u - (uint32_t)socket->send_bit;
+        uint8_t *byte = &socket->send_buf[socket->send_size];
+        if (!socket->send_bit)
+            *byte = (uint8_t)word;
+        else
+            *byte |= (uint8_t)(word << (socket->send_bit & 31));
+        if (bits < room) {
+            socket->send_bit += (int)bits;
+            break;
+        }
+        ++socket->send_size;
+        socket->send_bit = 0;
+        if (bits == room)
+            break;
+        bits -= room;
+        word >>= room & 31;
+    }
+    return 1;
+}
+
+/* Read a masked word and multiply it by scale. Only the initial byte count is checked. */
+int pbitreadscale(uint32_t *value, uint32_t bits, uint32_t scale)
+{
+    BsdSocket *socket = &sr_bsdsocket;
+    uint32_t word = 0, shift = 0;
+    if (socket->recv_pos >= BUFFER_SIZE ||
+        socket->recv_size < (int32_t)((uint32_t)socket->recv_pos + (uint32_t)((int32_t)bits >> 3)))
+        return 0;
+    while ((int32_t)bits > 0) {
+        uint32_t room = 8u - (uint32_t)socket->recv_bit;
+        word |= (~(UINT32_MAX << (bits & 31)) &
+                 ((uint32_t)socket->recv_buf[socket->recv_pos] >> (socket->recv_bit & 31))) << (shift & 31);
+        if (bits < room) {
+            socket->recv_bit += (int)bits;
+            break;
+        }
+        ++socket->recv_pos;
+        socket->recv_bit = 0;
+        if (bits == room)
+            break;
+        bits -= room;
+        shift += room;
+    }
+    *value = word * scale;
+    return 1;
+}
+
+/* Keep the success result even when the bit writer cannot append data. */
+int pbitwritesign(const uint32_t *value, uint32_t bits)
+{
+    pbitwrite(value, bits);
+    return 1;
+}

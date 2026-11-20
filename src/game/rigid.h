@@ -5,5 +5,6 @@
 #include "sr_types.h"
 
 void getobjectrotation2(vec3 *out, int obj, const vec3 *center);
+void getobjectrotation(int object, const vec3 *center);
 
 #endif /* SR_RIGID_H */

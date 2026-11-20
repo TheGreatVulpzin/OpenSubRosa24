@@ -32,6 +32,19 @@ static void next_event(void)
     sr_numofevents = (sr_numofevents + 1) & 0xffff;
 }
 
+/* Event 15 packs an interior cell address and its new block word. */
+void createevent_updateblock_interior(int area, int x, int y, int z, uint32_t block)
+{
+    Event *event;
+    if (!sr_server)
+        return;
+    event = new_event(15);
+    event->param = (int)((uint32_t)area + ((uint32_t)x << 16));
+    event->attach_type = (int)((uint32_t)y + ((uint32_t)z << 16));
+    event->attach_id = (int)block;
+    next_event();
+}
+
 /* A vector, or zero when there is no vector. */
 static void copy_vec(vec3 *dst, const vec3 *src)
 {

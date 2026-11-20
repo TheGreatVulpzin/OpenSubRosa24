@@ -15,6 +15,15 @@ typedef int(__cdecl *LevelIntersectFn)(const vec3 *, const vec3 *, int);
 enum { MAX_OBJECTS = 1024, MAX_ITEMS = 1024, TIREMARK_MASK = 0x3fff,
        DEPTH_LEQUAL = 0x203, CHECKPOINTS_OFFSET = 0x25978, FLASH_MESH = 0 };
 
+/* Test x and z against the inclusive low edges and exclusive high edges. */
+int pointinsidecheckpoint(const vec3 *position, int checkpoint)
+{
+    const RenderCheckpoint *boxes = (const RenderCheckpoint *)((const char *)&sr_data_game + CHECKPOINTS_OFFSET);
+    const RenderCheckpoint *box = &boxes[checkpoint];
+    return box->low.x <= position->x && !(box->high.x <= position->x) &&
+           box->low.z <= position->z && !(box->high.z <= position->z);
+}
+
 GL_IMPORT(glVertex3fv, (const float *position), (position))
 GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
 GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))

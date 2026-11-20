@@ -179,6 +179,7 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_sector_mesh_next (*((int *)(sr_base + 0x1047c600u)))
 #define cl_data_sector_mesh_remap ((int *)(sr_base + 0x2a1dd36cu))
 #define cl_data_gl_buffer_sub_data (*((void * *)(sr_base + 0x115abcu)))
+#define cl_data_scenario_event_data ((ScenarioEventData *)(sr_base + 0x90882dcu))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))
@@ -422,6 +423,7 @@ int __cdecl addwindowatlas(int texture, int type);
 #define sr_window_atlas(texture, type) addwindowatlas((texture), (type))
 #define sr_object_frame_orthogonal 0
 #define sr_human_floor_all_rays 1
+#define sr_human_vehicle_limit_protection 0
 #define sr_updatehuman_params int human
 #define sr_updatehuman_recipient(record, supplied) ((record)->player_id)
 #define sr_emit_updatehuman(human, player) createevent_updatehuman((human))

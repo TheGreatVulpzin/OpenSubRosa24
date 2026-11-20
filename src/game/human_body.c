@@ -331,3 +331,16 @@ int createhuman(float *posp, float *rot, int player)
     }
     return h;
 }
+
+/* Subtract damage with word wrap. A health value below one ends the human. */
+void human_applydamage(int human, int damage, const vec3 *hit, const vec3 *force)
+{
+    Human *body = &sr_humans[human];
+    (void)hit;
+    (void)force;
+    body->health = (int)((uint32_t)body->health - (uint32_t)damage);
+    if (body->health < 1) {
+        body->health = 0;
+        deletehuman((uint32_t)human);
+    }
+}

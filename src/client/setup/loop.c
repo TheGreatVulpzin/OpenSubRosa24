@@ -10,6 +10,7 @@
 
 #include "audio/imports.h"
 #include "client.h"
+#include "packet.h"
 #include "render/sector_models.h"
 #include "account_actions.h"
 #include "debug/debug.h"
@@ -112,7 +113,6 @@ AUDIO_IMPORT("OPENGL32.DLL", __stdcall, void, glFinish, (void))
 #define deletesound CL_FN(0x44f720, void(__cdecl *)(int sound))
 #define building_editorloop CL_FN(0x458d20, void(__cdecl *)(void))
 #define voiceoptionsmenu CL_FN(0x4d38c0, void(__cdecl *)(void))
-#define resetsendpacket CL_FN(0x4fe4f0, void(__cdecl *)(void))
 #define cs_pwrite CL_FN(0x4fe5b0, int(__cdecl *)(const void *data, int size, int count))
 #define sendpacket CL_FN(0x4fe520, void(__cdecl *)(uint32_t address, uint16_t port))
 

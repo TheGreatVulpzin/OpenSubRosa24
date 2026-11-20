@@ -9,3 +9,4 @@ sector_mesh_bitmap,uint32_t,1024,0x12a7c604,area_getnextsectormesh scans 1024 wo
 sector_mesh_next,int,1,0x1047c600,area_submitsectormodel keeps the next free mesh offset before the vertex array.
 sector_mesh_remap,int,16,0x2a1dd36c,area_submitsectormodel maps up to fifteen source vertices in one mesh block.
 gl_buffer_sub_data,void *,1,0x115abc,area_submitsectormodel calls the glBufferSubDataARB extension slot.
+scenario_event_data,ScenarioEventData,128,0x90882dc,createevent_updatescenario reads words at offsets 0 4 8 12 and 68 with stride 80; the final padding overlaps the spectator field.

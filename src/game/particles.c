@@ -90,39 +90,61 @@ void particlesimulation(void)
     }
 }
 
-/* A particle at the end of its life loses its bonds, and the last particle takes its slot.
- * The moved particle gets the test again, so it loses one more tick. */
-void particletimetolive(void)
+/* Remove a particle and rename the last particle in every list that refers to it. */
+void deleteparticle(int particle)
 {
     Particle *particles = sr_particles;
+    Particle *p;
+    Human *h, *human_end;
+    int k, last;
+    if (particle < 0 || particle >= sr_numofparticles)
+        return;
+    p = &particles[particle];
+    for (k = p->num_bonds - 1; k >= 0; --k)
+        deletebond(p->bonds[k]);
+    last = --sr_numofparticles;
+    if (particle == last)
+        return;
+    *p = particles[last];
+    for (k = 0; k < p->num_bonds; ++k) {
+        Bond *bond = &sr_bonds[p->bonds[k]];
+        rename_index(bond_particles(bond), &bond->num_particles, last, particle);
+    }
+    for (k = 0; k < p->num_objects; ++k) {
+        Object *object = &sr_objects[p->objects[k]];
+        rename_index(object->particles, &object->num_particles, last, particle);
+    }
+    for (h = sr_humans, human_end = h + SR_MAX_HUMAN; h < human_end; h += 4) {
+        if (h[0].active && h[0].particle_id == last)
+            h[0].particle_id = particle;
+        if (h[1].active && h[1].particle_id == last)
+            h[1].particle_id = particle;
+        if (h[2].active && h[2].particle_id == last)
+            h[2].particle_id = particle;
+        if (h[3].active && h[3].particle_id == last)
+            h[3].particle_id = particle;
+    }
+}
+
+/* The moved particle gets the time-to-live test again, so it loses one more tick. */
+void particletimetolive(void)
+{
+    Particle *p = sr_particles;
+    int *count = &sr_numofparticles;
     int i = 0;
-    while (i < sr_numofparticles) {
-        Particle *p = &particles[i];
-        Human *h;
-        int k, last;
+    while (i < *count) {
+        int last;
         if (p->time_to_live < NO_LIMIT)
             p->time_to_live--;
         if (p->time_to_live >= 1) {
             i++;
+            ++p;
             continue;
         }
-        for (k = p->num_bonds - 1; k >= 0; k--)
-            deletebond(p->bonds[k]);
-        last = --sr_numofparticles;
+        last = *count - 1;
+        deleteparticle(i);
         if (i == last)
             return;
-        *p = particles[last];
-        for (k = 0; k < p->num_bonds; k++) {
-            Bond *b = &sr_bonds[p->bonds[k]];
-            rename_index(bond_particles(b), &b->num_particles, last, i);
-        }
-        for (k = 0; k < p->num_objects; k++) {
-            Object *o = &sr_objects[p->objects[k]];
-            rename_index(o->particles, &o->num_particles, last, i);
-        }
-        for (h = sr_humans; h < sr_humans + SR_MAX_HUMAN; h++)
-            if (h->active != 0 && h->unk_0010 == last)
-                h->unk_0010 = i;
     }
 }
 

@@ -24,6 +24,7 @@ void createevent_updateplayer(int player);
 void createevent_updateplayer_finance(int player);
 void createevent_updatehuman(sr_updatehuman_params);
 void createevent_updatestocks(void);
+void createevent_updateblock_interior(int area, int x, int y, int z, uint32_t block);
 void createevent_updatecarmarket(int row);
 void eventsimulation(void);
 void createevent_bullet(int bullettype, const vec3 *pos, const vec3 *vel, int item);

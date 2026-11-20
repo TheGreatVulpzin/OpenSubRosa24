@@ -5,6 +5,7 @@
 #include "pool_queries.h"
 
 #include "sr_runtime.h"
+#include "events.h"
 
 enum { CITY_OBJECT_LIMIT = 1024 };
 
@@ -74,3 +75,21 @@ void deletebullet(int index)
     if (index != sr_numofbullets)
         sr_bullets[index] = sr_bullets[sr_numofbullets];
 }
+
+/* Remove an object and release the humans and particles that refer to it. */
+void deleteobject(int object)
+{
+    Object *body;
+    int index;
+    if ((unsigned)object >= SR_MAX_OBJECT)
+        return;
+    body = &sr_objects[object];
+    for (index = 0; index < body->num_particles; ++index)
+        sr_particles[body->particles[index]].time_to_live = 0;
+    for (index = 0; index < SR_MAX_HUMAN; ++index)
+        if (sr_humans[index].active && sr_humans[index].vehicle_id == object)
+            sr_humans[index].vehicle_id = -1;
+    body->active = 0;
+    createevent_updateobject(object, 3, 0, &body->pos, NULL);
+}
+

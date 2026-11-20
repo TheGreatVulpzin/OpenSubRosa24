@@ -200,3 +200,17 @@ area_setsectormesh src/client/render/sector_models.c
 area_removesectormodel src/client/render/sector_models.c
 area_submitsectormodel src/client/render/sector_models.c
 area_sectorvertequal src/client/render/sector_models.c
+building_addgaragedoor src/game/building_actions.c
+createevent_updatescenario src/client/setup/scenario_event.c
+createevent_updateblock_interior src/net/events.c
+human_applydamage src/game/human_body.c
+deleteitem src/game/items.c
+pointinsidecheckpoint src/client/render/effects.c
+deleteobject src/game/pool_queries.c
+getobjectrotation src/game/rigid.c
+deleteparticle src/game/particles.c
+physicssimulation src/client/setup/physics.c
+resetsendpacket src/net/packet.c
+pbitwritescale src/net/packet.c
+pbitreadscale src/net/packet.c
+pbitwritesign src/net/packet.c
