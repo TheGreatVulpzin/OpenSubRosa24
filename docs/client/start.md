@@ -34,9 +34,3 @@ The calls run in a fixed order.
 
 - A model that a builder makes from an item gets the item type as the second argument. The cash builder makes the Magnum, the Uzi and the 9mm, and the bill builder makes the two cash items.
 - Material numbers from 256 up have no entry in `TextureList.material`. The folder can add more files than that, and the code then writes and reads past the array.
-
-## Start of a round
-
-`src/client/setup/reset.c` (`cl_resetgame`, the client version of `resetgame`) shows "Generating...", deletes the sounds, clears the chat messages, the teams, the stock market, the players and the world, sets the light from the two start angles, builds the level, the map and the sector shadows, and on a client that is also the server makes the editor player, the trains, the test players of the demos and the events of the round. The test values (items, phones, bills, places) have names in the file.
-
-Test: the all-calls gate gives 4 of 4 calls the same on one recording. On the other recording `createhuman` gives the new humans a protection of 3 to 6 units of 3600 ticks (the server code), where the client gives 2 to 5. The harness lists it as a known difference, as for the other callers of `createhuman`.
