@@ -4,6 +4,7 @@
 #include "render/sectorlist.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "render/frustum.h"
 #include "render/interior_model.h"
 #include "setup/timers.h"
@@ -39,11 +40,6 @@
 #define markinteriors CL_FN(0x4d9fa0, void(__cdecl *)(void))
 
 /* The slots of the extension functions: the client holds a pointer to each one. */
-#define SLOT_ACTIVE_TEXTURE 0x115874
-#define SLOT_BIND_BUFFER 0x115aa8
-#define SLOT_USE_PROGRAM 0x115b18
-#define SLOT_UNIFORM_3FV 0x115b48
-#define SLOT_MULTI_DRAW 0x115ec0
 
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
 GL_IMPORT(glDisableClientState, (uint32_t array), (array))
@@ -86,22 +82,22 @@ enum {
 
 static void select_texture_unit(uint32_t unit)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(unit);
+    cl_glActiveTextureARB(unit);
 }
 
 static void bind_buffer(uint32_t target, uint32_t buffer)
 {
-    (*(void(__stdcall **)(uint32_t, uint32_t))(sr_base + SLOT_BIND_BUFFER))(target, buffer);
+    cl_glBindBufferARB(target, buffer);
 }
 
 static void use_program(uint32_t program)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(program);
+    cl_glUseProgramObjectARB(program);
 }
 
 static void set_uniform(int location, const float *value)
 {
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM_3FV))(location, 1, value);
+    cl_glUniform3fvARB(location, 1, value);
 }
 
 /* The middle of a sector. */
@@ -253,7 +249,7 @@ static void draw_runs(int material)
         for (run = 0; run < g_part_count[material]; ++run)
             glDrawElements(GL_TRIANGLES, (int)counts[run], GL_UNSIGNED_INT, offsets[run]);
     } else {
-        (*(void(__stdcall **)(uint32_t, const int *, uint32_t, const void *const *, int))(sr_base + SLOT_MULTI_DRAW))(
+        cl_glMultiDrawElementsEXT(
             GL_TRIANGLES, (const int *)counts, GL_UNSIGNED_INT, offsets, g_part_count[material]);
     }
 }

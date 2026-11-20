@@ -4,6 +4,7 @@
  */
 #include "render/lists.h"
 #include "client.h"
+#include "gl_slots.h"
 #include "debug/debug.h"
 #include "sr_runtime.h"
 #include "setup/timers.h"
@@ -15,14 +16,13 @@ GL_IMPORT(glDisableClientState, (uint32_t array), (array))
 GL_IMPORT(glDrawArrays, (uint32_t mode, int first, int count), (mode, first, count))
 
 enum { MAX_SECTORS = 8192, ARRAY_POSITION = 0x8074,
-       EXT_BUFFERS = 6, SHADOW_BUFFER_BYTES = 0x300000, BUFFER_DYNAMIC = 0x88e8,
-       SLOT_BIND_BUFFER = 0x115aa8, SLOT_BUFFER_DATA = 0x115ab8, SLOT_BUFFER_SUBDATA = 0x115abc };
+       EXT_BUFFERS = 6, SHADOW_BUFFER_BYTES = 0x300000, BUFFER_DYNAMIC = 0x88e8 };
 
 
 /* Bind the sector vertex buffer on the array target. */
 static void bind_shadow_buffer(uint32_t buffer)
 {
-    (*(GlBindBufferFn *)(sr_base + SLOT_BIND_BUFFER))(GL_ARRAY_BUFFER, buffer);
+    cl_glBindBufferARB(GL_ARRAY_BUFFER, buffer);
 }
 
 /* Add six ordered corners to the shared volume list. */
@@ -69,11 +69,11 @@ void __cdecl render_buildareasectorshadow(void)
     if (cl_data_glext[EXT_BUFFERS]) {
         bind_shadow_buffer(cl_data_vbo[cl_data_sector_shadow_vbo].gl_name);
         if (!cl_data_sector_shadow_buffer_ready) {
-            (*(GlBufferDataFn *)(sr_base + SLOT_BUFFER_DATA))(GL_ARRAY_BUFFER, SHADOW_BUFFER_BYTES,
+            cl_glBufferDataARB(GL_ARRAY_BUFFER, SHADOW_BUFFER_BYTES,
                 cl_data_sector_shadow_vertices, BUFFER_DYNAMIC);
             cl_data_sector_shadow_buffer_ready = 1;
         }
-        (*(void(__stdcall **)(uint32_t, int, int, const void *))(sr_base + SLOT_BUFFER_SUBDATA))(
+        cl_glBufferSubDataARB(
             GL_ARRAY_BUFFER, 0, cl_data_sector_shadow_count * 12, cl_data_sector_shadow_vertices);
         bind_shadow_buffer(0);
     }

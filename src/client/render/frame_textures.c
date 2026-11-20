@@ -3,6 +3,7 @@
 #include "render/frame_textures.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_math.h"
 #include "sr_os.h"
 #include "sr_runtime.h"
@@ -11,10 +12,7 @@
 enum { GL_RGBA = 0x1908, GL_RGBA8 = 0x8058, GL_CLAMP_TO_EDGE = 0x812f, GL_NEAREST = 0x2600,
        GL_LINEAR = 0x2601, GL_TEXTURE_2D = 0xde1, FRAMEBUFFER = 0x8d40, RENDERBUFFER = 0x8d41,
        COLOR_ATTACHMENT = 0x8ce0, DEPTH_STENCIL_ATTACHMENT = 0x821a, DEPTH24_STENCIL8 = 0x88f0,
-       EXT_FRAMEBUFFER = 16, BLUR_TAPS = 8,
-       SLOT_BIND_RENDERBUFFER = 0x115bb0, SLOT_RENDERBUFFER_STORAGE = 0x115bbc,
-       SLOT_BIND_FRAMEBUFFER = 0x115bc8, SLOT_CHECK_FRAMEBUFFER = 0x115bd4,
-       SLOT_ATTACH_TEXTURE = 0x115bdc, SLOT_ATTACH_RENDERBUFFER = 0x115be4 };
+       EXT_FRAMEBUFFER = 16, BLUR_TAPS = 8 };
 
 typedef void(__stdcall *BindFn)(uint32_t target, uint32_t name);
 typedef void(__stdcall *StorageFn)(uint32_t target, uint32_t format, int width, int height);
@@ -74,14 +72,14 @@ void __cdecl setupframetextures(void)
     frame_texture(sr_data_texturelist.frame_spare, GL_LINEAR);
     if (cl_data_glext[EXT_FRAMEBUFFER] == 0)
         return;
-    gl_slot(BindFn, SLOT_BIND_FRAMEBUFFER)(FRAMEBUFFER, target->framebuffer);
-    gl_slot(AttachTextureFn, SLOT_ATTACH_TEXTURE)(FRAMEBUFFER, COLOR_ATTACHMENT, GL_TEXTURE_2D,
+    cl_glBindFramebuffer(FRAMEBUFFER, target->framebuffer);
+    cl_glFramebufferTexture2D(FRAMEBUFFER, COLOR_ATTACHMENT, GL_TEXTURE_2D,
         cl_data_texture[sr_data_texturelist.frame_color].gl_name, 0);
-    gl_slot(BindFn, SLOT_BIND_RENDERBUFFER)(RENDERBUFFER, target->renderbuffer);
-    gl_slot(StorageFn, SLOT_RENDERBUFFER_STORAGE)(RENDERBUFFER, DEPTH24_STENCIL8, cl_data_render_width,
+    cl_glBindRenderbuffer(RENDERBUFFER, target->renderbuffer);
+    cl_glRenderbufferStorage(RENDERBUFFER, DEPTH24_STENCIL8, cl_data_render_width,
         cl_data_render_height);
-    gl_slot(AttachRenderbufferFn, SLOT_ATTACH_RENDERBUFFER)(FRAMEBUFFER, DEPTH_STENCIL_ATTACHMENT, RENDERBUFFER,
+    cl_glFramebufferRenderbuffer(FRAMEBUFFER, DEPTH_STENCIL_ATTACHMENT, RENDERBUFFER,
         target->renderbuffer);
-    gl_slot(CheckFn, SLOT_CHECK_FRAMEBUFFER)(FRAMEBUFFER);
-    gl_slot(BindFn, SLOT_BIND_FRAMEBUFFER)(FRAMEBUFFER, 0);
+    cl_glCheckFramebufferStatus(FRAMEBUFFER);
+    cl_glBindFramebuffer(FRAMEBUFFER, 0);
 }

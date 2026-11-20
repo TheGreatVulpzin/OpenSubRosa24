@@ -2,6 +2,7 @@
 #include "render/atmosphere.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "setup/timers.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
@@ -31,9 +32,6 @@ enum {
     GL_TEXTURE1 = 0x84c1
 };
 
-#define SLOT_USE_PROGRAM 0x115b18
-#define SLOT_UNIFORM_3FV 0x115b48
-#define SLOT_MULTI_TEXCOORD_3FV 0x1158c8
 #define SKY_DEPTH (-16383.9375f)
 
 GL_IMPORT(glFrontFace, (uint32_t mode), (mode))
@@ -50,7 +48,7 @@ static void sky_corner(float x, float y, float across, float up)
     scalevector(&direction, &g_camera.rot[0], across);
     scaleaddvectors(&direction, &direction, &g_camera.rot[1], up);
     scaleaddvectors(&direction, &direction, &g_camera.rot[2], -1.0f);
-    (*(void(__stdcall **)(uint32_t, const float *))(sr_base + SLOT_MULTI_TEXCOORD_3FV))(GL_TEXTURE1,
+    cl_glMultiTexCoord3fvARB(GL_TEXTURE1,
                                                                                        (const float *)&direction);
     glVertex3f(x, y, SKY_DEPTH);
 }
@@ -76,10 +74,10 @@ void __cdecl renderframeatmosphere(float scale)
     glMatrixMode(GL_TEXTURE);
     glLoadIdentity();
     glLightfv(GL_LIGHT0, GL_POSITION, g_light_position);
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(program->program);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM_3FV))(
+    cl_glUseProgramObjectARB(program->program);
+    cl_glUniform3fvARB(
         program->uniforms[UNIFORM_WORLD_POSITION], 1, (const float *)&g_world_position);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM_3FV))(
+    cl_glUniform3fvARB(
         program->uniforms[UNIFORM_LIGHT_DIRECTION], 1, g_light_position);
     glBindTexture(GL_TEXTURE_2D, g_textures[g_texturelist.sky].gl_name);
     glBegin(GL_QUADS);
@@ -88,7 +86,7 @@ void __cdecl renderframeatmosphere(float scale)
     sky_corner(1.0f, 0.0f, (float)(g_camera.projection * 1.0), (float)(-scale * g_camera.projection));
     sky_corner(0.0f, 0.0f, (float)(g_camera.projection * -1.0), (float)(-scale * g_camera.projection));
     glEnd();
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(0);
+    cl_glUseProgramObjectARB(0);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(1);

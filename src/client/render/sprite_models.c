@@ -11,6 +11,7 @@
 
 #include "audio/sound_create.h"
 #include "client.h"
+#include "gl_slots.h"
 #include "debug/debug.h"
 #include "sr_math.h"
 #include "sr_os.h"
@@ -60,7 +61,6 @@ enum {
 #define BOUNCE_SOUND_MIN 0.01666666753590107
 #define FLAT_GROUND 0.7f
 #define REST_SPEED 0.008333333767950535
-#define SLOT_ACTIVE_TEXTURE 0x115874
 /* The up vector of the world: 3 floats. */
 #define UP_VECTOR 0x123590
 
@@ -236,7 +236,7 @@ void __cdecl sprite_model_simulation(void)
 
 static void select_texture_unit(uint32_t unit)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(unit);
+    cl_glActiveTextureARB(unit);
 }
 
 static void bind_texture(int texture)

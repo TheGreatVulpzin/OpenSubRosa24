@@ -5,6 +5,7 @@
  */
 #include "render/lists.h"
 #include "client.h"
+#include "gl_slots.h"
 #include "math/small_vectors.h"
 #include "sr_runtime.h"
 #include "setup/timers.h"
@@ -13,8 +14,7 @@
 
 enum { ARRAY_POSITION = 0x8074, ARRAY_NORMAL = 0x8075, ARRAY_TEXCOORD = 0x8078,
        TEXTURE0 = 0x84c0, TEXTURE1 = 0x84c1, TEXTURE2 = 0x84c2,
-       LIGHT0 = 0x4000, LIGHT_POSITION = 0x1203, CULL_FACE = 0xb44,
-       SLOT_ACTIVE_TEXTURE = 0x115874, NORMAL_OFFSET = 0x14, TEXCOORD_OFFSET = 0xc,
+       LIGHT0 = 0x4000, LIGHT_POSITION = 0x1203, CULL_FACE = 0xb44, NORMAL_OFFSET = 0x14, TEXCOORD_OFFSET = 0xc,
        FIRST_PART_REFERENCE = 16, ENTRY_HIDDEN = 2, FRAME_MODELS = 4096 };
 
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
@@ -71,7 +71,7 @@ void __cdecl buildhumanmodel(int human_index, int model_index)
 /* Select the texture unit through its extension slot. */
 static void texture_unit(uint32_t unit)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(unit);
+    cl_glActiveTextureARB(unit);
 }
 
 /* Draw the sorted entries. The world debug view suppresses the whole pass. */

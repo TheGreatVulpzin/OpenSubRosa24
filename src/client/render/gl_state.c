@@ -7,6 +7,7 @@
 #include "render/gl_state.h"
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 
@@ -30,8 +31,6 @@ enum {
 };
 
 /* The two functions of the stencil extensions: the client holds a pointer to each one. */
-#define SLOT_ACTIVE_STENCIL_FACE 0x116450
-#define SLOT_STENCIL_OP_SEPARATE 0x116590
 
 typedef void(__stdcall *ActiveStencilFaceFn)(uint32_t face);
 typedef void(__stdcall *StencilOpSeparateFn)(uint32_t face, uint32_t fail, uint32_t depth_fail, uint32_t pass);
@@ -60,8 +59,8 @@ void __cdecl disabletwosidedstencil(void)
  * back faces and down on the front faces. */
 void __cdecl glstateshadowtwoside(void)
 {
-    ActiveStencilFaceFn active_face = *(ActiveStencilFaceFn *)(sr_base + SLOT_ACTIVE_STENCIL_FACE);
-    StencilOpSeparateFn stencil_op = *(StencilOpSeparateFn *)(sr_base + SLOT_STENCIL_OP_SEPARATE);
+    ActiveStencilFaceFn active_face = cl_glActiveStencilFaceEXT;
+    StencilOpSeparateFn stencil_op = cl_glStencilOpSeparateATI;
 
     glDisable(GL_TEXTURE_2D);
     glColorMask(0, 0, 0, 0);

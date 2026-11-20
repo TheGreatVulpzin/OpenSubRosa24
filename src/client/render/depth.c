@@ -4,6 +4,7 @@
  */
 #include "render/frame.h"
 #include "client.h"
+#include "gl_slots.h"
 #include "render/gl_state.h"
 #include "render/landscape_draw.h"
 #include "render/lists.h"
@@ -19,8 +20,6 @@
 enum { CULL_FACE = 0xb44, STENCIL_TEST = 0xb90, ARRAY_POSITION = 0x8074,
        DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, PROGRAM_DEPTH = 5, PROGRAM_SHADOW = 4,
        PROGRAM_OCCLUSION = 6, PROGRAM_BLUR = 8, TEXTURE1 = 0x84c1,
-       SLOT_ACTIVE_TEXTURE = 0x115874, SLOT_USE_PROGRAM = 0x115b18,
-       SLOT_UNIFORM2 = 0x115b44, SLOT_UNIFORM4 = 0x115b4c, SLOT_ATTACH_TEXTURE = 0x115bdc,
        FRAMEBUFFER = 0x8d40, COLOR_ATTACHMENT = 0x8ce0, CLEAR_COLOR = 0x4000,
        CLEAR_COLOR_DEPTH_STENCIL = 0x4500, STENCIL_KEEP = 0x1e00, STENCIL_EQUAL = 0x202 };
 
@@ -40,7 +39,7 @@ GL_IMPORT(glTexCoord2f, (float u, float v), (u, v))
 /* Select a shader program, or clear the program with a negative index. */
 static void depth_program(int index)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(
+    cl_glUseProgramObjectARB(
         index < 0 ? 0 : cl_data_programs[index].program);
 }
 
@@ -53,7 +52,7 @@ static void depth_texture(int index)
 /* Attach an image texture to the framebuffer color output. */
 static void depth_attachment(int index)
 {
-    (*(void(__stdcall **)(uint32_t, uint32_t, uint32_t, uint32_t, int))(sr_base + SLOT_ATTACH_TEXTURE))(
+    cl_glFramebufferTexture2D(
         FRAMEBUFFER, COLOR_ATTACHMENT, GL_TEXTURE_2D, cl_data_texture[index].gl_name, 0);
 }
 
@@ -79,11 +78,11 @@ static void blur_quad(const float step[2])
 {
     ProgramObject *program = &cl_data_programs[PROGRAM_BLUR];
     depth_program(PROGRAM_BLUR);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM2))(
+    cl_glUniform2fvARB(
         program->uniforms[1], 1, step);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM4))(
+    cl_glUniform4fvARB(
         program->uniforms[2], 1, cl_data_blur_params_near);
-    (*(void(__stdcall **)(int, int, const float *))(sr_base + SLOT_UNIFORM4))(
+    cl_glUniform4fvARB(
         program->uniforms[3], 1, cl_data_blur_params_far);
     depth_texture(cl_data_texturelist.shadow_map);
     glBegin(GL_QUADS);
@@ -201,7 +200,7 @@ void __cdecl renderframedepth(void)
         glDisable(GL_TEXTURE_2D);
     else {
         depth_program(PROGRAM_OCCLUSION);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(TEXTURE1);
+        cl_glActiveTextureARB(TEXTURE1);
         glEnable(GL_TEXTURE_2D);
         depth_texture(cl_data_texturelist.random_vectors);
     }
@@ -213,7 +212,7 @@ void __cdecl renderframedepth(void)
         glEnable(GL_TEXTURE_2D);
     else {
         glDisable(GL_TEXTURE_2D);
-        (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_ACTIVE_TEXTURE))(0x84c0);
+        cl_glActiveTextureARB(0x84c0);
         depth_program(-1);
     }
     glColorMask(1, 1, 1, 0);

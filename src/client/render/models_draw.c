@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "client.h"
+#include "gl_slots.h"
 #include "sr_runtime.h"
 #include "textures/opengl.h"
 #include "vectors.h"
@@ -48,9 +49,6 @@ enum {
 };
 
 /* The slot of the multitexture extension: the client holds a pointer to it. */
-#define SLOT_ACTIVE_TEXTURE 0x115874
-#define SLOT_BIND_BUFFER 0x115aa8
-#define SLOT_USE_PROGRAM 0x115b18
 typedef void(__stdcall *ActiveTextureFn)(uint32_t unit);
 
 GL_IMPORT(glPushMatrix, (void), ())
@@ -70,17 +68,17 @@ GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
 
 static void select_texture_unit(uint32_t unit)
 {
-    (*(ActiveTextureFn *)(sr_base + SLOT_ACTIVE_TEXTURE))(unit);
+    cl_glActiveTextureARB(unit);
 }
 
 static void bind_buffer(uint32_t target, uint32_t buffer)
 {
-    (*(void(__stdcall **)(uint32_t, uint32_t))(sr_base + SLOT_BIND_BUFFER))(target, buffer);
+    cl_glBindBufferARB(target, buffer);
 }
 
 static void use_program(uint32_t program)
 {
-    (*(void(__stdcall **)(uint32_t))(sr_base + SLOT_USE_PROGRAM))(program);
+    cl_glUseProgramObjectARB(program);
 }
 
 static void bind_texture(int texture)

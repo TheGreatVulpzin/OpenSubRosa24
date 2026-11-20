@@ -4,6 +4,7 @@
  */
 #include "render/frame.h"
 #include "client.h"
+#include "gl_slots.h"
 #include "render/atmosphere.h"
 #include "render/debug_draw.h"
 #include "render/frame_list.h"
@@ -39,8 +40,6 @@ enum { CULL_FACE = 0xb44, DEPTH_LEQUAL = 0x203, FRONT_CW = 0x900, LIGHT0 = 0x400
        ONE = 1, SRC_ALPHA = 0x302, ONE_MINUS_SRC_ALPHA = 0x303,
        PROGRAM_SECTOR = 0, PROGRAM_REFLECT = 2, PROGRAM_MODEL = 3,
        UNIFORM_CAMERA = 1, UNIFORM_WORLD = 4, UNIFORM_LIGHT = 5,
-       SLOT_ACTIVE_TEXTURE = 0x115874, SLOT_USE_PROGRAM = 0x115b18, SLOT_UNIFORM3 = 0x115b48,
-       SLOT_BIND_FRAMEBUFFER = 0x115bc8, SLOT_ATTACH_TEXTURE = 0x115bdc,
        VIEW_WIDTH = 0x400, VIEW_HEIGHT = 0x280, NUM_HUMANS = 0x200, NUM_ITEMS = 0x400,
        NUM_OBJECTS = 0x400, NUM_CITYOBJECTS = 0x400, NUM_BONES = 15, NUM_TEAMS = 5,
        OBJECT_HELICOPTER = 11, CITYOBJECT_ELEVATOR = 2, BOND_PARTICLES = 0, BOND_BONES = 9,
@@ -74,17 +73,17 @@ typedef void(__stdcall *AttachTextureFn)(uint32_t, uint32_t, uint32_t, uint32_t,
 
 static void use_program(uint32_t program)
 {
-    gl_slot(UseProgramFn, SLOT_USE_PROGRAM)(program);
+    cl_glUseProgramObjectARB(program);
 }
 
 static void active_texture(uint32_t unit)
 {
-    gl_slot(ActiveTextureFn, SLOT_ACTIVE_TEXTURE)(unit);
+    cl_glActiveTextureARB(unit);
 }
 
 static void bind_framebuffer(uint32_t framebuffer)
 {
-    gl_slot(BindFramebufferFn, SLOT_BIND_FRAMEBUFFER)(FRAMEBUFFER, framebuffer);
+    cl_glBindFramebuffer(FRAMEBUFFER, framebuffer);
 }
 
 static void bind_image(int image)
@@ -426,9 +425,9 @@ static void draw_sector_alpha(void)
     const ProgramObject *program = &cl_data_programs[PROGRAM_REFLECT];
     int i;
     use_program(program->program);
-    gl_slot(Uniform3Fn, SLOT_UNIFORM3)(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
-    gl_slot(Uniform3Fn, SLOT_UNIFORM3)(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
-    gl_slot(Uniform3Fn, SLOT_UNIFORM3)(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_CAMERA], 1, &cl_data_camera_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_WORLD], 1, &cl_data_world_position.x);
+    cl_glUniform3fvARB(program->uniforms[UNIFORM_LIGHT], 1, cl_data_light_position);
     glEnableClientState(ARRAY_POSITION);
     glEnableClientState(ARRAY_NORMAL);
     glEnableClientState(ARRAY_TEXCOORD);
@@ -531,7 +530,7 @@ static void draw_color(const ClientRenderOptions *options)
 {
     frame_view();
     if (options->framebuffer)
-        gl_slot(AttachTextureFn, SLOT_ATTACH_TEXTURE)(FRAMEBUFFER, COLOR_ATTACHMENT, GL_TEXTURE_2D,
+        cl_glFramebufferTexture2D(FRAMEBUFFER, COLOR_ATTACHMENT, GL_TEXTURE_2D,
             cl_data_texture[sr_data_texturelist.frame_color].gl_name, 0);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(CLEAR_COLOR);
