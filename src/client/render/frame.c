@@ -69,7 +69,6 @@ typedef void(__stdcall *Uniform3Fn)(int location, int count, const float *value)
 typedef void(__stdcall *BindFramebufferFn)(uint32_t target, uint32_t framebuffer);
 typedef void(__stdcall *AttachTextureFn)(uint32_t, uint32_t, uint32_t, uint32_t, int);
 
-#define gl_slot(type, slot) (*(type *)(sr_base + (slot)))
 
 static void use_program(uint32_t program)
 {

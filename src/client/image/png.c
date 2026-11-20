@@ -455,7 +455,7 @@ int parse_png_file(PngImage *image, int scan, unsigned requested)
         }
         default:
             if (!(type & PNG_ANCILLARY)) {
-                char *message = (char *)(sr_base + PNG_ERROR_UNKNOWN_CHUNK);
+                char *message = cl_data_text_png_unknown_chunk;
                 for (index = 0; index < 4; index++)
                     message[index] = (char)(type >> (24 - index * 8));
                 return image_fail(PNG_ERROR_UNKNOWN_CHUNK);

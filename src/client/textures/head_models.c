@@ -26,9 +26,31 @@
 
 /* Game functions of other files. */
 #define model_addvertex CL_FN(0x4badd0, int(__cdecl *)(const vec3 *pos, float tolerance))
-#define tesselatebeziertriangle CL_FN(0x4baed0, void(__cdecl *)(vec3 *out, float a, float b, float c, const int *patch))
 
 /* createheadmodel2 */
+
+/* The point at weights a, b and c of a cubic Bezier triangle. The 10 control points are edit
+ * vertices: corners 0 to 2, two points on each edge and the middle point. Each axis adds the
+ * terms one by one, and each sum is a float. */
+void __cdecl tesselatebeziertriangle(vec3 *out, float a, float b, float c, const int *patch)
+{
+    const vec3 *p = cl_data_edit_vertices;
+    float *o = &out->x;
+    int k;
+
+    for (k = 0; k < 3; k++) {
+        o[k] = (float)(a * a * a * (&p[patch[0]].x)[k]);
+        o[k] = (float)(b * b * b * (&p[patch[1]].x)[k] + o[k]);
+        o[k] = (float)(c * c * c * (&p[patch[2]].x)[k] + o[k]);
+        o[k] = (float)(a * 3.0 * a * b * (&p[patch[3]].x)[k] + o[k]);
+        o[k] = (float)(a * 3.0 * b * b * (&p[patch[4]].x)[k] + o[k]);
+        o[k] = (float)(b * 3.0 * b * c * (&p[patch[5]].x)[k] + o[k]);
+        o[k] = (float)(b * 3.0 * c * c * (&p[patch[6]].x)[k] + o[k]);
+        o[k] = (float)(c * 3.0 * c * a * (&p[patch[7]].x)[k] + o[k]);
+        o[k] = (float)(c * 3.0 * a * a * (&p[patch[8]].x)[k] + o[k]);
+        o[k] = (float)(a * 6.0 * b * c * (&p[patch[9]].x)[k] + o[k]);
+    }
+}
 
 /* A cubic Bezier triangle: 10 indexes into the edit vertices. Corners 0 to 2, then two points
  * on each edge, then the middle point. The patch of a triangle is in the backup triangle list,

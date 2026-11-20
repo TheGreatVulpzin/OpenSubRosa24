@@ -42,8 +42,6 @@ enum {
 
 /* The functions of the shader extension: the client holds a pointer to each one. */
 /* The constants of the atmosphere: four floats and three floats. */
-#define ATMO_CONSTANT 0x123510
-#define ATMO_WAVELENGTH 0x123520
 
 typedef void(__stdcall *ShaderSourceFn)(uint32_t shader, int count, const char **source, const int *length);
 typedef void(__stdcall *ShaderFn)(uint32_t shader);
@@ -54,7 +52,6 @@ typedef int(__stdcall *UniformLocationFn)(uint32_t program, const char *name);
 typedef void(__stdcall *Uniform1iFn)(int location, int value);
 typedef void(__stdcall *UniformVectorFn)(int location, int count, const float *value);
 
-#define slot(type, offset) (*(type *)(sr_base + (offset)))
 
 /* Add the info log of an object to the shader log when it has text. */
 static void keep_info_log(uint32_t object)
@@ -125,12 +122,12 @@ static void set_pixel_size(const ProgramObject *record, int index)
 
 static void set_atmosphere_constant(const ProgramObject *record, int index)
 {
-    cl_glUniform4fvARB(record->uniforms[index], 1, (const float *)(sr_base + ATMO_CONSTANT));
+    cl_glUniform4fvARB(record->uniforms[index], 1, cl_data_atmo_constant);
 }
 
 static void set_atmosphere_wavelength(const ProgramObject *record, int index)
 {
-    cl_glUniform3fvARB(record->uniforms[index], 1, (const float *)(sr_base + ATMO_WAVELENGTH));
+    cl_glUniform3fvARB(record->uniforms[index], 1, cl_data_atmo_wavelength);
 }
 
 /* Read the two shader files and compile the program. The caller frees the sources. */

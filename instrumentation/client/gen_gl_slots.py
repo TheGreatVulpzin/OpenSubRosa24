@@ -19,6 +19,9 @@ RUNTIME_OUT = ROOT / 'instrumentation/client/runtime/gl_slots.h'
 
 C_TYPES = {'uint': 'unsigned', 'int': 'int', 'float': 'float'}
 
+# The pointer parameters that a GL function writes. Every other pointer parameter is const.
+OUT_PARAMS = {'buffers', 'framebuffers', 'renderbuffers', 'infoLog', 'length'}
+
 
 def c_type(t):
     t = t.strip()
@@ -84,9 +87,8 @@ def main():
              'extern uintptr_t sr_base;', '']
     for r in rows:
         ret, name, params = parse(r['prototype'])
-        # A pointer is input data, except for the functions that write through it (Gen, Get).
-        writes = 'Gen' in name or 'Get' in name
-        ptypes = [t if writes or not t.endswith('*') else 'const ' + t for t, _ in params]
+        # A pointer is input data, except for the parameters that the function writes.
+        ptypes = [t if n in OUT_PARAMS or not t.endswith('*') else 'const ' + t for t, n in params]
         slots.append(f'typedef {ret} (__stdcall *cl_{name}_fn)({", ".join(ptypes) or "void"});')
         slots.append(f'#define cl_{name} (*(cl_{name}_fn *)(sr_base + {r["rva"]}u))')
     slots += ['', '#endif', '']

@@ -19,7 +19,6 @@ typedef void(__stdcall *StorageFn)(uint32_t target, uint32_t format, int width, 
 typedef uint32_t(__stdcall *CheckFn)(uint32_t target);
 typedef void(__stdcall *AttachTextureFn)(uint32_t, uint32_t, uint32_t, uint32_t, int);
 typedef void(__stdcall *AttachRenderbufferFn)(uint32_t, uint32_t, uint32_t, uint32_t);
-#define gl_slot(type, slot) (*(type *)(sr_base + (slot)))
 
 /* Make a frame texture of the render size with no pixels in memory. */
 static void frame_texture(int index, int filter)

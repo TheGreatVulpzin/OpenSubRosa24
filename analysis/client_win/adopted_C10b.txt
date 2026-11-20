@@ -20,3 +20,11 @@ checkjoystick src/client/input/joystick.c
 getlanipaddress src/client/menu/front.c
 unpackobjectpacket src/client/setup/unpack_objects.c cl_unpackobjectpacket
 resetgame src/client/setup/reset.c cl_resetgame
+createfootmodel src/client/textures/small_models.c
+createrotormodel src/client/textures/small_models.c
+createsunglassmodel src/client/textures/small_models.c
+createkeymodel src/client/textures/small_models.c
+createcellphonemodel src/client/textures/small_models.c
+addhalfboxtomodel src/client/textures/models.c
+tesselatebeziertriangle src/client/textures/head_models.c
+area_submitsectormodel src/client/render/sector_model.c

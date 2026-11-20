@@ -50,7 +50,7 @@ typedef void (__stdcall *cl_glUniform4fvARB_fn)(int, int, const float *);
 #define cl_glUniform4fvARB (*(cl_glUniform4fvARB_fn *)(sr_base + 0x115b4cu))
 typedef void (__stdcall *cl_glUseProgramObjectARB_fn)(unsigned);
 #define cl_glUseProgramObjectARB (*(cl_glUseProgramObjectARB_fn *)(sr_base + 0x115b18u))
-typedef char * (__stdcall *cl_wglGetExtensionsStringARB_fn)(void *);
+typedef char * (__stdcall *cl_wglGetExtensionsStringARB_fn)(const void *);
 #define cl_wglGetExtensionsStringARB (*(cl_wglGetExtensionsStringARB_fn *)(sr_base + 0x117024u))
 typedef void (__stdcall *cl_glAttachObjectARB_fn)(unsigned, unsigned);
 #define cl_glAttachObjectARB (*(cl_glAttachObjectARB_fn *)(sr_base + 0x115b10u))
@@ -64,11 +64,11 @@ typedef void (__stdcall *cl_glFramebufferRenderbuffer_fn)(unsigned, unsigned, un
 #define cl_glFramebufferRenderbuffer (*(cl_glFramebufferRenderbuffer_fn *)(sr_base + 0x115be4u))
 typedef void (__stdcall *cl_glGetInfoLogARB_fn)(unsigned, int, int *, char *);
 #define cl_glGetInfoLogARB (*(cl_glGetInfoLogARB_fn *)(sr_base + 0x115b74u))
-typedef int (__stdcall *cl_glGetUniformLocationARB_fn)(unsigned, char *);
+typedef int (__stdcall *cl_glGetUniformLocationARB_fn)(unsigned, const char *);
 #define cl_glGetUniformLocationARB (*(cl_glGetUniformLocationARB_fn *)(sr_base + 0x115b7cu))
 typedef void (__stdcall *cl_glMultiDrawElementsEXT_fn)(unsigned, const int *, unsigned, const void **, int);
 #define cl_glMultiDrawElementsEXT (*(cl_glMultiDrawElementsEXT_fn *)(sr_base + 0x115ec0u))
-typedef void (__stdcall *cl_glShaderSourceARB_fn)(unsigned, int, const char **, const int *);
+typedef void (__stdcall *cl_glShaderSourceARB_fn)(unsigned, int, const char **, int *);
 #define cl_glShaderSourceARB (*(cl_glShaderSourceARB_fn *)(sr_base + 0x115b04u))
 
 #endif

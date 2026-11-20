@@ -62,7 +62,6 @@ enum {
 #define FLAT_GROUND 0.7f
 #define REST_SPEED 0.008333333767950535
 /* The up vector of the world: 3 floats. */
-#define UP_VECTOR 0x123590
 
 GL_IMPORT(glColor3f, (float red, float green, float blue), (red, green, blue))
 GL_IMPORT(glEnableClientState, (uint32_t array), (array))
@@ -214,7 +213,7 @@ void __cdecl sprite_model_simulation(void)
         scaleaddvectors(&piece->vel, &piece->vel, &side, -1.0f);
         scalevector(&piece->vel, &piece->vel, 0.9375f);
         if (piece->kind == KIND_SHELL) {
-            const vec3 *up = (const vec3 *)(sr_base + UP_VECTOR);
+            const vec3 *up = &sr_data_yaxis;
 
             crossproduct(&piece->rot[2], up, &piece->rot[0]);
             normalizevector(&piece->rot[2], &piece->rot[2]);

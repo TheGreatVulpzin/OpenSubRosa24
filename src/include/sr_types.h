@@ -3019,7 +3019,7 @@ typedef union TempMesh { struct {
     vec3 tri_normals[16384];             /* +0x1e000c area_buildsectormodel: the normal of each triangle */
     MeshTri neighbors[16384];            /* +0x21000c area_interior_buildsectormodel: the triangle on the other side of each edge or -1 */
     vec3 edge_normals[49152];            /* +0x24000c area_interior_buildsectormodel: the normal of that triangle for each edge or zero */
-    uint8_t pad_2d000c[0x40];
+    int block_verts[16];                 /* +0x2d000c area_submitsectormodel: the mesh vertex of each vertex of the block in work */
     int num_specials;                    /* +0x2d004c area_buildsectormodel: the special blocks of the sector in work */
     int specials[1536];                  /* +0x2d0050 area_buildsectormodel: x, y and z of each special block in the area */
 }; uint8_t lf_raw[0x2d1850]; } TempMesh;
@@ -3042,6 +3042,7 @@ SR_STATIC_ASSERT(offsetof(TempMesh, tri_slots) == 0x1d000c, "TempMesh.tri_slots"
 SR_STATIC_ASSERT(offsetof(TempMesh, tri_normals) == 0x1e000c, "TempMesh.tri_normals");
 SR_STATIC_ASSERT(offsetof(TempMesh, neighbors) == 0x21000c, "TempMesh.neighbors");
 SR_STATIC_ASSERT(offsetof(TempMesh, edge_normals) == 0x24000c, "TempMesh.edge_normals");
+SR_STATIC_ASSERT(offsetof(TempMesh, block_verts) == 0x2d000c, "TempMesh.block_verts");
 SR_STATIC_ASSERT(offsetof(TempMesh, num_specials) == 0x2d004c, "TempMesh.num_specials");
 SR_STATIC_ASSERT(offsetof(TempMesh, specials) == 0x2d0050, "TempMesh.specials");
 

@@ -8,7 +8,6 @@
 
 #define GL_LINES 0x0001
 /* The eight corners of a unit box: four at the bottom, then four at the top, in order around. */
-#define BOX_CORNERS 0x122a30
 
 GL_IMPORT(glPushMatrix, (void), ())
 GL_IMPORT(glPopMatrix, (void), ())
@@ -61,7 +60,7 @@ static void scaled_corner(const float *corner, float x, float y, float z)
 /* Draw the edges of a box at an object in red. The size is the scale along each axis. */
 void __cdecl debug_renderbox(const void *placement, const void *rotation, float x, float y, float z)
 {
-    const float *corners = (const float *)(sr_base + BOX_CORNERS);
+    const float *corners = sr_data_debug_cubevertex;
     int side;
 
     glPushMatrix();

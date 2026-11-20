@@ -748,3 +748,31 @@ void __cdecl createmodel_cityobject_desk(int model)
         model_settritexcoord(i, 0.0f, 0.0f);
     setupmodel(model, 0);
 }
+
+/* A box with one pair of sides left out: 8 corners of half sizes x, y and z around center,
+ * turned by rot, and flat triangles from the cube table. Each cube triangle goes in twice, with
+ * both windings, so it shows from both sides. The table rows skip / 2 and skip / 2 + 1 (one
+ * face) stay out. */
+void __cdecl addhalfboxtomodel(const vec3 *center, const vec3 *rot, float x, float y, float z, int skip)
+{
+    int first = g_temp.num_verts, i;
+
+    for (i = 0; i < 8; i++) {
+        vec3 corner;
+
+        corner.x = (i & 3) == 0 || (i & 3) == 3 ? -x : x;
+        corner.y = i < 4 ? -y : y;
+        corner.z = (i & 3) == 0 || (i & 3) == 1 ? -z : z;
+        addvectors(&corner, &corner, center);
+        projectvector(&g_temp.verts[g_temp.num_verts], &corner, rot);
+        g_temp.num_verts++;
+    }
+    for (i = 0; i < 12; i++) {
+        const int *tri = &sr_data_cubetri[i * 3];
+
+        if (i >> 1 == skip)
+            continue;
+        append_tri(first + tri[0], first + tri[1], first + tri[2], SHADE_FLAT);
+        append_tri(first + tri[0], first + tri[2], first + tri[1], SHADE_FLAT);
+    }
+}

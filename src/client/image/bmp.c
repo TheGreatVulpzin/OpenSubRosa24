@@ -168,7 +168,7 @@ void *bmp_load(ImageReader *reader, unsigned *width, unsigned *height, unsigned 
         image_fail(BMP_ERROR_HEADER);
         return NULL;
     }
-    cl_data_image_error = (char *)(sr_base + BMP_ERROR_DATA);
+    cl_data_image_error = cl_data_text_bad_bmp;
     reader->width = header == BMP_CORE ? image_get16le(reader) : image_get32le(reader);
     reader->height = header == BMP_CORE ? image_get16le(reader) : image_get32le(reader);
     if (image_get16le(reader) != 1)
