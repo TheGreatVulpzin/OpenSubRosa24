@@ -1,40 +1,66 @@
-# Standalone client smoke tests
+# Standalone smoke test
 
-Use a Windows desktop with a display and OpenGL. Run one client at a time.
+Run this test on Windows with a display and the real OpenGL driver. Run one client at a time.
+The driver sends SDL events. Polling wrappers supply keyboard, mouse button and relative motion states.
 
 ```powershell
-python -I instrumentation/client/smoke.py build/client_test/opensubrosa24_client_smoke.exe
-python -I instrumentation/client/smoke.py build/client_test/opensubrosa24_client_smoke.exe menus buildings
+python -I instrumentation/client/smoke.py build/client_test/opensubrosa24_client_smoke2.exe
+python -I instrumentation/client/test_smoke.py
 ```
 
-Build the test client with `cmd //c "tools\\build_client.bat"` in Git Bash.
-Copy `build/hook/opensubrosa24_client.exe` to `build/client_test/opensubrosa24_client_smoke.exe`.
-Keep the other executables for comparison.
+Build the client with `tools/build_client.bat`. Copy its output to a new executable name in `build/client_test`.
+Do not replace an executable used as a comparison reference.
+After an edit to either `.inc` file, force the compiler to rebuild `client_smoke.c`.
+Check that its object file is newer than both includes. Incremental builds can miss these includes on this machine.
+The executable must contain the current smoke driver. Older executables cannot produce captures.
 
-The executor uses `build/client_test` as the working folder.
-Each scenario uses a new process with `SR_SMOKE=<scenario>`, `SR_DEBUGIT=1` and `SR_TRACE=3`.
+Select scenarios after the executable path: `menus explore play crash buildings level model`.
+The default runs all seven scenarios. Use `--timeout <seconds>` to set a process limit.
 
-- `menus`: main menu, Options, Voice Options, Start (host) and Join. Each screen runs for at least 5 seconds. Back returns to the main menu.
-- `buildings`: select each `data/building/*.sbb` file. Enter the game, press F1, render 120 editor frames, exit, and select the next file.
-- `level`: enter Demo, press F1, render 120 editor frames, and exit.
-- `model`: use the debug shortcut A, render 120 viewer frames, and exit.
+- `menus` opens Options, Voice Options, Start and Join. It captures each main screen.
+- `explore` visits visible controls to depth three. It stops after 90 seconds, excluding client startup.
+  It records button labels, field values and depth in `screens.json`.
+  It types `smk` in string fields and `7` in numeric fields, then checks the field value.
+  It skips Exit, Quit, Back, destructive actions, Apply, CPU affinity, web links and remote connection actions.
+  Back returns to each parent. Escape returns when the screen has no Back button.
+  A time limit or an unexpected parent fails the scenario. The log records omitted actions.
+- `play` opens Start, disables network hosting and starts a local round.
+  It selects a team and Ready, then waits up to 180 seconds for the player.
+  It walks for two seconds, turns with relative mouse input and jumps.
+  Insert supplies debug money. The shop supplies a 9mm gun and its magazine when needed.
+  The driver selects the gun, loads the magazine with Shift and R, then waits for the active round.
+  Four left clicks test pixel changes, sound count increases and ammunition or gun state changes.
+  Each missing result fails with a separate message. Sound counts do not prove audible speaker output.
+- `crash` captures the building list, then opens the first building and captures the game view.
+- `buildings` captures the list, then opens each building and captures its game view and editor.
+- `level` captures the demo and level editor. `model` captures the debug model viewer.
 
-The driver reads menu labels and hit boxes. It scales the 1024 by 640 menu coordinates to the window pixels.
-It sends SDL mouse and key events and calls `SDL_WarpMouseInWindow`.
-SDL events do not change the state returned by SDL polling calls.
-Test wrappers supply matching mouse and key state only when `SR_SMOKE` is set.
-Frame counts come from completed window swaps. The test does not write game records or call editor loops directly.
+The driver reads `GL_BACK` with `glReadPixels` immediately before `SDL_GL_SwapWindow`.
+It writes uncompressed 24 bit BMP files without an image library.
+Each capture records the black pixel fraction, distinct color count and mean RGB value.
+An all-black image or a single-color image fails. The executor checks the saved pixels again.
+Open the images to check text, geometry and visual defects that pixel counts cannot identify.
 
-Each wait has a time limit. The driver sends `SDL_QUIT` after the checks.
-A pass needs the READY and PASS markers and exit code 0.
-A crash, timeout, missing driver or incomplete run fails.
-The executor stops after two timeouts at the same stage.
-The executor rejects an executable without this driver before it starts a process.
+Results use `build/client_smoke/<exe>/<scenario>/`:
 
-Logs and `summary.json` go to `build/client_smoke/<exe name>/`.
-Use `--output <folder>` to keep a separate run or `--timeout <seconds>` to change the process limit.
-The summary lists the scenario, result and last error line. Exit code 0 means all scenarios pass.
-`SR_TRACE=3` adds recent calls and the module name after a crash.
-Test settings use `build/client_test/Sub Rosa/`. The driver redirects the documents path only for a smoke run.
-The executor restores the configuration, building files and city file after each process.
-The tests check input paths and frame progress. They do not check pixel colors, sound quality or network play.
+- `shots/NN-name.bmp`: framebuffer images.
+- `shots.jsonl`: capture metrics. Each complete line survives a client crash.
+- `screens.json`: visible menu controls and field values.
+- `run.log`: stages, checks and errors.
+- `index.md`: image links, metrics and check results.
+
+Each executable also has `summary.json`. The entire output folder is ignored by Git.
+The executor restores settings, account files, city data and building files after each process.
+
+Use `--shots main,standing,before-fire,after-fire` to select capture points by name.
+The default, `--shots '*'`, selects all points. `play` requires both fire captures.
+Use `--output <folder>` to change the root folder.
+
+```powershell
+python -I instrumentation/client/smoke.py build/client_test/opensubrosa24_client_smoke2.exe menus --compare build/client_test/other.exe
+```
+
+Comparison runs the same scenarios in sequence, once per executable.
+`comparison.json` records the percentage of different pixels for each matching capture.
+Size differences count as 100 percent. Missing captures and image differences produce warnings.
+These warnings do not change scenario results. Process failures and invalid captures fail as usual.

@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <GL/gl.h>
 #include "client_smoke.h"
+#include "sr_limits.h"
 #include "../../instrumentation/client/runtime/storage_adapter.h"
 
 enum {
@@ -18,7 +20,11 @@ enum {
     START_MS = 180000, STEP_MS = 120000, FRAME_MS = 180000,
     EVENT_QUIT = 0x100, EVENT_KEY_DOWN = 0x300, EVENT_KEY_UP = 0x301,
     EVENT_MOTION = 0x400, EVENT_BUTTON_DOWN = 0x401, EVENT_BUTTON_UP = 0x402,
-    KEY_A = 4, KEY_E = 8, KEY_ESCAPE = 41, KEY_F1 = 58,
+    KEY_A = 4, KEY_E = 8, KEY_K = 14, KEY_M = 16, KEY_S = 22, KEY_W = 26, KEY_R = 21, KEY_1 = 30, KEY_7 = 36,
+    KEY_RETURN = 40, KEY_ESCAPE = 41, KEY_TAB = 43, KEY_SPACE = 44,
+    KEY_F1 = 58, KEY_INSERT = 73, KEY_HOME = 74, KEY_END = 77, KEY_SHIFT = 225, KEY_F = 9,
+    EXPLORE_MS = 90000, EXPLORE_DEPTH = 3, MAX_DIMENSION = 8192,
+    COLOR_BYTES = 1 << 21, PLAYER_LIMIT = SR_MAX_PLAYER, HUMAN_LIMIT = SR_MAX_HUMAN, ITEM_LIMIT = SR_MAX_ITEM,
     LOOP_NONE = 0, LOOP_GAME, LOOP_BUILDING, LOOP_LEVEL, LOOP_MODEL
 };
 
@@ -34,13 +40,19 @@ typedef union SmokeEvent {
 typedef struct SmokeItem {
     char text[64];
     float x, y, width, height;
-    int disabled, hidden, key;
+    int disabled, hidden, key, kind, field_type, password;
+    char value_text[64];
 } SmokeItem;
 
 typedef struct SmokeFrame {
     unsigned number;
     int count, width, height, loop;
     void *window;
+    int human, weapon, ammo, cooldown, trigger, sounds, money, player_menu, net_on;
+    int game_state, weapon_slot, magazine_slot;
+    LONG sound_calls;
+    vec3 position;
+    float yaw;
     SmokeItem items[MAX_ITEMS];
 } SmokeFrame;
 
@@ -53,7 +65,18 @@ static void (__cdecl *swap_window)(void *);
 static unsigned (__cdecl *mouse_state)(int *, int *);
 static const uint8_t *(__cdecl *keyboard_state)(int *);
 static int (__cdecl *push_event)(SmokeEvent *);
-static void (__cdecl *warp_mouse)(void *, int, int);
+static volatile LONG extra_key, relative_x, relative_y, sound_calls, observe_fire, peak_sounds;
+static DWORD scenario_start;
+static char output_dir[MAX_PATH], shot_name[96];
+static unsigned shot_request, shot_done, shot_count;
+static int shot_ok, shot_changed;
+static unsigned char *previous_pixels;
+static size_t previous_size;
+static FILE *screens;
+static unsigned screen_count;
+static unsigned (__cdecl *relative_state)(int *, int *);
+static void (__cdecl *drawable_size)(void *, int *, int *);
+static int fail(const char *reason);
 static uint32_t (__cdecl *window_id)(void *);
 static uint8_t keys[KEY_COUNT];
 
@@ -66,13 +89,20 @@ static SmokeFrame snapshot(void)
     return copy;
 }
 
-/* Copy only fields that the worker needs, after the frame reaches the screen. */
+#include "client_smoke_capture.inc"
+
+/* Copy the frame state before the buffer swap. */
 static void __cdecl smoke_swap(void *window)
 {
     int i, count;
-    swap_window(window);
+
     EnterCriticalSection(&lock);
+    if (shot_done != shot_request) {
+        shot_ok = capture_buffer(window);
+        shot_done = shot_request;
+    }
     frame.number++;
+    sample_player();
     frame.window = window;
     frame.width = cl_data_render_width;
     frame.height = cl_data_render_height;
@@ -91,8 +121,22 @@ static void __cdecl smoke_swap(void *window)
         copy->disabled = item->disabled;
         copy->hidden = item->hidden;
         copy->key = item->key;
+        copy->kind = item->kind;
+        copy->field_type = item->field_type;
+        copy->password = item->password;
+        copy->value_text[0] = 0;
+        if ((item->kind == 1 || item->kind == 2) && item->field_type && item->value) {
+            if (item->field_type == 3) snprintf(copy->value_text, sizeof copy->value_text, "%.3f", *(const float *)item->value);
+            else snprintf(copy->value_text, sizeof copy->value_text, "%d", *item->value);
+        }
+        if ((item->kind == 1 || item->kind == 2) && !item->field_type && !item->password && item->value) {
+            size_t length = item->length > 0 && item->length < 63 ? item->length : 63;
+            strncpy(copy->value_text, (const char *)item->value, length);
+            copy->value_text[length] = 0;
+        }
     }
     LeaveCriticalSection(&lock);
+    swap_window(window);
     SetEvent(changed);
 }
 
@@ -110,6 +154,8 @@ static const uint8_t *__cdecl smoke_keyboard(int *count)
     LONG key = InterlockedCompareExchange(&scan_key, 0, 0);
     keyboard_state(NULL);
     memset(keys, 0, sizeof keys);
+    if (key > 0 && key < KEY_COUNT) keys[key] = 1;
+    key = InterlockedCompareExchange(&extra_key, 0, 0);
     if (key > 0 && key < KEY_COUNT) keys[key] = 1;
     if (count) *count = KEY_COUNT;
     return keys;
@@ -140,6 +186,10 @@ void *client_smoke_import(const char *dll, const char *name, void *function)
         mouse_state = (unsigned (__cdecl *)(int *, int *))function;
         return (void *)smoke_mouse;
     }
+    if (!strcmp(name, "SDL_GetRelativeMouseState")) {
+        relative_state = (unsigned (__cdecl *)(int *, int *))function;
+        return (void *)smoke_relative;
+    }
     if (!strcmp(name, "SDL_GetKeyboardState")) {
         keyboard_state = (const uint8_t *(__cdecl *)(int *))function;
         return (void *)smoke_keyboard;
@@ -152,10 +202,11 @@ void client_smoke_call(unsigned rva)
 {
     if (!scenario) return;
     switch (rva) {
-    case 0x7b100: InterlockedExchange(&active_loop, LOOP_GAME); break;
-    case 0x58d20: InterlockedExchange(&active_loop, LOOP_BUILDING); break;
-    case 0x9c5c0: InterlockedExchange(&active_loop, LOOP_LEVEL); break;
-    case 0xc14a0: InterlockedExchange(&active_loop, LOOP_MODEL); break;
+    case SMOKE_CALL_SOUND: case SMOKE_CALL_SOUND_OBJECT: InterlockedIncrement(&sound_calls); break;
+    case SMOKE_CALL_GAME: InterlockedExchange(&active_loop, LOOP_GAME); break;
+    case SMOKE_CALL_BUILDING: InterlockedExchange(&active_loop, LOOP_BUILDING); break;
+    case SMOKE_CALL_LEVEL: InterlockedExchange(&active_loop, LOOP_LEVEL); break;
+    case SMOKE_CALL_MODEL: InterlockedExchange(&active_loop, LOOP_MODEL); break;
     }
 }
 
@@ -196,6 +247,8 @@ static int wait_screen(ScreenCheck check, unsigned frames, DWORD milliseconds, D
     fprintf(stderr, "SMOKE STAGE %s\n", stage);
     while (GetTickCount() - start < limit) {
         SmokeFrame view = snapshot();
+        if (!strcmp(scenario, "explore") && GetTickCount() - scenario_start >= EXPLORE_MS)
+            return fail("explore exceeds 90 seconds");
         if (view.number && (!check || check(&view))) {
             if (!seen) { first_frame = view.number; first_time = GetTickCount(); seen = 1; }
             if (view.number - first_frame >= frames && GetTickCount() - first_time >= milliseconds) {
@@ -208,6 +261,11 @@ static int wait_screen(ScreenCheck check, unsigned frames, DWORD milliseconds, D
         }
         if (WaitForSingleObject(stop, 0) == WAIT_OBJECT_0) return 0;
         WaitForSingleObject(changed, 20);
+    }
+    {
+        SmokeFrame view = snapshot();
+        fprintf(stderr, "SMOKE STATE loop=%d items=%d human=%d weapon=%d slot=%d ammo=%d magazine=%d state=%d\n",
+                view.loop, view.count, view.human, view.weapon, view.weapon_slot, view.ammo, view.magazine_slot, view.game_state);
     }
     fprintf(stderr, "SMOKE TIMEOUT %s\n", stage);
     return fail(stage);
@@ -234,7 +292,7 @@ static int click(const char *text)
             text, x, y, item->x, item->y, item->width, item->height);
     InterlockedExchange(&mouse_x, x);
     InterlockedExchange(&mouse_y, y);
-    warp_mouse(view.window, x, y);
+
     event.motion.type = EVENT_MOTION;
     event.motion.window = window_id(view.window);
     event.motion.x = x;
@@ -259,7 +317,7 @@ static int click(const char *text)
     return wait_screen(NULL, INPUT_FRAMES, 0, FRAME_MS, "mouse release");
 }
 
-static int key_press(int scan)
+static int key_hold(int scan, DWORD milliseconds)
 {
     SmokeFrame view = snapshot();
     SmokeEvent event = {0};
@@ -268,10 +326,13 @@ static int key_press(int scan)
     event.key.window = window_id(view.window);
     event.key.state = 1;
     event.key.scan = scan;
-    event.key.key = scan == KEY_ESCAPE ? 27 : scan == KEY_A ? 'a' : scan == KEY_E ? 'e' : (1 << 30) | scan;
+    event.key.key = scan >= KEY_A && scan <= 29 ? 'a' + scan - KEY_A :
+                    scan >= KEY_1 && scan <= KEY_1 + 8 ? '1' + scan - KEY_1 :
+                    scan == KEY_RETURN ? 13 : scan == KEY_ESCAPE ? 27 : (1 << 30) | scan;
+    if (InterlockedCompareExchange(&extra_key, 0, 0) == KEY_SHIFT) event.key.mod = 1;
     InterlockedExchange(&scan_key, scan);
     if (!push(&event)) { InterlockedExchange(&scan_key, 0); return 0; }
-    ok = wait_screen(NULL, INPUT_FRAMES, 0, FRAME_MS, "key down");
+    ok = wait_screen(NULL, INPUT_FRAMES, milliseconds, FRAME_MS, "key down");
     InterlockedExchange(&scan_key, 0);
     event.key.type = EVENT_KEY_UP;
     event.key.state = 0;
@@ -279,16 +340,19 @@ static int key_press(int scan)
     return wait_screen(NULL, INPUT_FRAMES, 0, FRAME_MS, "key release");
 }
 
+static int key_press(int scan) { return key_hold(scan, 0); }
+#include "client_smoke_scenarios.inc"
+
 static int menus(void)
 {
     static const struct { const char *button; ScreenCheck screen; } steps[] = {
         {"Options", options_screen}, {"Voice Options", voice_screen}, {"Start", host_screen}, {"Join", join_screen}
     };
     unsigned i;
-    if (!wait_screen(main_screen, 30, MENU_MS, STEP_MS, "main menu")) return 0;
+    if (!wait_screen(main_screen, 3, 300, STEP_MS, "main menu") || !shot("main")) return 0;
     for (i = 0; i < sizeof steps / sizeof steps[0]; i++) {
         if (!click(steps[i].button) || !wait_screen(steps[i].screen, 30, MENU_MS, STEP_MS, steps[i].button) ||
-            !click("Back") || !wait_screen(main_screen, INPUT_FRAMES, 0, STEP_MS, "back to main")) return 0;
+            !shot(steps[i].button) || !click("Back") || !wait_screen(main_screen, INPUT_FRAMES, 0, STEP_MS, "back to main")) return 0;
     }
     return 1;
 }
@@ -306,14 +370,14 @@ static int buildings(void)
     unsigned count = 0;
     int ok = files != INVALID_HANDLE_VALUE;
     if (!ok) return fail("no building files");
-    if (!click("Editor") || !wait_screen(list_screen, INPUT_FRAMES, 0, STEP_MS, "building list")) ok = 0;
+    if (!click("Editor") || !wait_screen(list_screen, INPUT_FRAMES, 0, STEP_MS, "building list") || !shot("building-list")) ok = 0;
     while (ok) {
         char *dot = strrchr(data.cFileName, '.');
         if (!(data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && dot) {
             *dot = 0;
             fprintf(stderr, "SMOKE BUILDING %s\n", data.cFileName);
             ok = click(data.cFileName) && wait_screen(game_screen, INPUT_FRAMES, 0, STEP_MS, "building game") &&
-                 key_press(KEY_F1) && wait_screen(building_screen, EDITOR_FRAMES, 0, FRAME_MS, "building editor") &&
+                 shot(data.cFileName) && key_press(KEY_F1) && wait_screen(building_screen, EDITOR_FRAMES, 0, FRAME_MS, "building editor") && shot("building-editor") &&
                  click("Exit") && wait_screen(game_screen, INPUT_FRAMES, 0, STEP_MS, "editor return") &&
                  leave_game(list_screen);
             if (ok) { count++; fprintf(stderr, "SMOKE BUILDING PASS %s frames=%d\n", data.cFileName, EDITOR_FRAMES); }
@@ -332,7 +396,7 @@ static int buildings(void)
 static int level(void)
 {
     return click("Demo") && wait_screen(game_screen, INPUT_FRAMES, 0, STEP_MS, "level game") &&
-           key_press(KEY_F1) && wait_screen(level_screen, EDITOR_FRAMES, 0, FRAME_MS, "level editor") &&
+           shot("level-game") && key_press(KEY_F1) && wait_screen(level_screen, EDITOR_FRAMES, 0, FRAME_MS, "level editor") && shot("level-editor") &&
            click("Exit") && wait_screen(game_screen, INPUT_FRAMES, 0, STEP_MS, "editor return") &&
            leave_game(main_screen);
 }
@@ -340,7 +404,7 @@ static int level(void)
 static int model(void)
 {
     /* Debug mode exposes this viewer through A, without a menu button. */
-    return key_press(KEY_A) && wait_screen(model_screen, EDITOR_FRAMES, 0, FRAME_MS, "model viewer") &&
+    return key_press(KEY_A) && wait_screen(model_screen, EDITOR_FRAMES, 0, FRAME_MS, "model viewer") && shot("model") &&
            click("Exit") && wait_screen(main_screen, INPUT_FRAMES, 0, STEP_MS, "back to main");
 }
 
@@ -356,7 +420,7 @@ static int crash(void)
     *dot = 0;
     fprintf(stderr, "SMOKE BUILDING %s\n", data.cFileName);
     return click("Editor") && wait_screen(list_screen, INPUT_FRAMES, 0, STEP_MS, "building list") &&
-           click(data.cFileName) && wait_screen(game_screen, EDITOR_FRAMES, 0, FRAME_MS, "building game");
+           shot("building-list") && click(data.cFileName) && wait_screen(game_screen, EDITOR_FRAMES, 0, FRAME_MS, "building game") && shot("building-game");
 }
 
 static DWORD WINAPI smoke_worker(void *unused)
@@ -371,12 +435,15 @@ static DWORD WINAPI smoke_worker(void *unused)
         if (GetTickCount() - start >= START_MS) { fail("SDL2 load timeout"); return 0; }
     }
     push_event = (int (__cdecl *)(SmokeEvent *))GetProcAddress(sdl, "SDL_PushEvent");
-    warp_mouse = (void (__cdecl *)(void *, int, int))GetProcAddress(sdl, "SDL_WarpMouseInWindow");
+    drawable_size = (void (__cdecl *)(void *, int *, int *))GetProcAddress(sdl, "SDL_GL_GetDrawableSize");
     window_id = (uint32_t (__cdecl *)(void *))GetProcAddress(sdl, "SDL_GetWindowID");
-    if (!push_event || !warp_mouse || !window_id) { fail("SDL2 test exports"); return 0; }
+    if (!push_event || !drawable_size || !window_id) { fail("SDL2 test exports"); return 0; }
     ok = wait_screen(main_screen, INPUT_FRAMES, 0, START_MS, "startup menu");
     if (ok) {
-        if (!strcmp(scenario, "crash")) ok = crash();
+        scenario_start = GetTickCount();
+        if (!strcmp(scenario, "explore")) ok = explore(0, "main");
+        else if (!strcmp(scenario, "play")) ok = play();
+        else if (!strcmp(scenario, "crash")) ok = crash();
         else if (!strcmp(scenario, "menus")) ok = menus();
         else if (!strcmp(scenario, "buildings")) ok = buildings();
         else if (!strcmp(scenario, "level")) ok = level();
@@ -384,7 +451,8 @@ static DWORD WINAPI smoke_worker(void *unused)
     }
     InterlockedExchange(&buttons, 0);
     InterlockedExchange(&scan_key, 0);
-    if (ok) { InterlockedExchange(&result, 1); fprintf(stderr, "SMOKE PASS %s\n", scenario); }
+    if (screens) { fputs("\n]\n", screens); fclose(screens); screens = NULL; }
+    if (ok && InterlockedCompareExchange(&result, 0, 0) != 2) { InterlockedExchange(&result, 1); fprintf(stderr, "SMOKE PASS %s\n", scenario); }
     fprintf(stderr, "SMOKE STAGE quit\n");
     {
         SmokeEvent event = {0};
@@ -398,8 +466,19 @@ int client_smoke_start(void)
 {
     scenario = getenv("SR_SMOKE");
     if (!scenario) return 1;
-    if (strcmp(scenario, "crash") && strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
+    if (strcmp(scenario, "explore") && strcmp(scenario, "play") && strcmp(scenario, "crash") && strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
         return fail("unknown scenario");
+    {
+        const char *directory = getenv("SR_SMOKE_OUTPUT");
+        char path[MAX_PATH];
+        if (!directory || strlen(directory) + 170 >= sizeof path) return fail("capture directory missing or too long");
+        strcpy(output_dir, directory);
+        snprintf(path, sizeof path, "%s/screens.json", output_dir);
+        screens = fopen(path, "wb");
+        if (!screens) return fail("screen manifest open");
+        fputs("[\n]", screens); fseek(screens, -1, SEEK_CUR);
+        scenario_start = GetTickCount();
+    }
     InitializeCriticalSection(&lock);
     changed = CreateEventA(NULL, FALSE, FALSE, NULL);
     stop = CreateEventA(NULL, TRUE, FALSE, NULL);
@@ -419,6 +498,7 @@ int client_smoke_finish(void)
     CloseHandle(changed);
     CloseHandle(stop);
     DeleteCriticalSection(&lock);
+    free(previous_pixels);
     status = InterlockedCompareExchange(&result, 0, 0);
     if (status != 1) { fprintf(stderr, "SMOKE FAIL %s: incomplete run\n", scenario); return 2; }
     return 0;
