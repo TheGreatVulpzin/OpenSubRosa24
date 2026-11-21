@@ -129,9 +129,13 @@ void sr_open_url(const char *url)
 
 /* ------------------------------------------------------------ functions */
 
-/* SR_TRACE=1 prints each call that goes through sr_fn. SR_TRACE=2 prints the first call of each function. */
+/* SR_TRACE=1 prints each call that goes through sr_fn. SR_TRACE=2 prints the first call of each function.
+ * SR_TRACE=3 prints nothing until a crash, then prints the last 64 calls. */
 static int g_trace;
 static unsigned char g_seen[8192];
+#define CALL_RING 64
+static uint16_t g_ring[CALL_RING];
+static unsigned g_ring_next;
 
 /* Open addressing hash of the table, filled at start-up. Each slot holds the table index plus one. */
 #define FN_HASH_SIZE 8192u
@@ -172,7 +176,9 @@ void *sr_fn(uintptr_t va)
     while (g_fn_hash[s]) {
         int i = g_fn_hash[s] - 1;
         if (lf_table[i].rva == rva) {
-            if (g_trace && (g_trace == 1 || !g_seen[i])) {
+            if (g_trace == 3) {
+                g_ring[g_ring_next++ % CALL_RING] = (uint16_t)i;
+            } else if (g_trace && (g_trace == 1 || !g_seen[i])) {
                 g_seen[i] = 1;
                 fprintf(stderr, "call %s (0x%x)\n", lf_table[i].name, (unsigned)rva);
             }
@@ -410,6 +416,16 @@ static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
             }
         }
         fprintf(stderr, "\n");
+    }
+    if (g_trace == 3) {
+        unsigned n;
+        fprintf(stderr, "last calls, oldest first:\n");
+        for (n = 0; n < CALL_RING; ++n) {
+            unsigned k = (g_ring_next + n) % CALL_RING;
+            if (g_ring_next < CALL_RING && k >= g_ring_next)
+                continue;
+            fprintf(stderr, "  %s (0x%x)\n", lf_table[g_ring[k]].name, (unsigned)lf_table[g_ring[k]].rva);
+        }
     }
     menu_dump();
     fflush(stderr);
