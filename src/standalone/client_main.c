@@ -18,6 +18,7 @@
 #include "image_client.h"
 #include "lifted_table.h"
 #include "sr_math.h"
+#include "client_smoke.h"
 
 uintptr_t sr_base;
 
@@ -92,6 +93,7 @@ void *sr_import(const char *dll, const char *name)
         fprintf(stderr, "import %s!%s not found\n", dll, name);
         exit(1);
     }
+    fn = client_smoke_import(dll, name, fn);
     if (getenv("SR_SAMPLE")) {
         if (!_stricmp(dll, "SDL2.DLL") && !strcmp(name, "SDL_GL_SwapWindow")) {
             real_swap = (void (__cdecl *)(void *))fn;
@@ -176,6 +178,7 @@ void *sr_fn(uintptr_t va)
     while (g_fn_hash[s]) {
         int i = g_fn_hash[s] - 1;
         if (lf_table[i].rva == rva) {
+            client_smoke_call(rva);
             if (g_trace == 3) {
                 g_ring[g_ring_next++ % CALL_RING] = (uint16_t)i;
             } else if (g_trace && (g_trace == 1 || !g_seen[i])) {
@@ -487,8 +490,11 @@ int main(int argc, char **argv)
         if (getenv("SR_DEBUGIT") && atoi(getenv("SR_DEBUGIT")) != 0)
             *(int *)(sr_base + DEBUGIT_RVA) = 1;
         start_sampler();
+        if (!client_smoke_start())
+            return 2;
         /* The entry of the game (RVA 0x10ae00) takes no arguments here. */
         ((void (__cdecl *)(void))sr_fn(IMAGE_BASE + 0x10ae00))();
+        return client_smoke_finish();
     }
     return 0;
 }
