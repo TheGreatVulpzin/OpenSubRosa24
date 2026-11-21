@@ -114,7 +114,7 @@ void frame_drawvoiceicons(void)
 #define TEXT_LEVEL cl_data_text_level
 #define TEXT_SIZE cl_data_text_int_format
 #define TEXT_BIND cl_data_text_bind_hint
-#define TEXT_EMPTY cl_data_text_empty
+#define TEXT_EMPTY (&cl_data_text_empty)
 
 /* Place a menu label in the fixed canvas. */
 static void voice_label(char *text, float x, float y, float width, float height)
