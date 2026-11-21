@@ -1,0 +1,2 @@
+name,type,count,client_rva,evidence
+app_ticket,AppTicket,1,0x127ec8,"The application ticket constructor and exit callback use this 36-byte object."

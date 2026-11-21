@@ -84,6 +84,7 @@ STRUCTS = {
 }
 # Records that only the client has. They get a type in the header and no storage object of the server.
 CLIENT_STRUCTS = {
+    'AppTicket': ('app_ticket', 0x24),
     'MaterialRecClient': ('material_client', 0x58),
     'BondVectorClient': ('bondvector_client', 0x10),
     'BondHumanClient': ('bondhuman_client', 0x500),

@@ -67,3 +67,15 @@ After the model is built, `createhumanmodel` copies it to the 255 models that fo
 `savemodelcsm` and `loadmodelcsm` first try to enter the `model` directory. They return to the parent only if that change succeeded. A CSM file has a four-byte signature, version one, the vertex count, the render vertex width and the triangle count. Six arrays follow: positions, vertex normals, vertex tangents, triangle indices, triangle normals and triangle neighbors. Each array uses four-byte words and three words per vertex or triangle.
 
 A missing file, another signature or another version makes `loadmodelcsm` return zero. A complete file is copied through the model in work and returns one. The quad and line counts remain as they were. `savemodelcsm` has no result and closes a file after the transfers.
+
+## Briefcases, boxes and wheels
+
+`createbriefcasemodel` builds one box for the closed briefcase. The open briefcase has two halves, with the lid at 45 degrees. Both forms clear every triangle texture corner.
+
+`createboxmodel` builds a box around the origin. Triangles zero through three, ten and eleven receive fixed texture corners. Other triangles receive zero corners.
+
+`createwheelmodel` builds a cylinder after a 90-degree rotation. Each triangle corner uses the vertex z and y coordinates divided by 0.625, plus 0.5.
+
+`tempmesh_quadnormalequal` compares two quad normals. Each component difference rounds to a float before its absolute value is compared with 0.0001. An equal limit or NaN returns zero.
+
+The shared triangle normal function rounds all six edge components to floats in the client. Its client adapter selects this rule. The server keeps its expression order and rounding points.

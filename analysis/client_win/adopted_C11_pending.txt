@@ -1,0 +1,8 @@
+# These callbacks receive their object through ECX. The dispatcher cannot supply that register.
+appticket_construct src/client/setup/ticket_callbacks.c
+callresult_run src/client/setup/ticket_callbacks.c
+callresult_runhandle src/client/setup/ticket_callbacks.c
+callresult_getsize src/client/setup/ticket_callbacks.c
+appticket_destroy src/client/setup/ticket_callbacks.c
+# RDTSC has no replay source. Two executions read different counts.
+readprocessorcycles src/client/setup/timers.c

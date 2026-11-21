@@ -48,3 +48,4 @@ rva,name,index,type,evidence
 0xfb3d0,createvehicle,2,float *,"the three rows of the orientation of the vehicle"
 0xddc00,createmission_acquisition,2,int *,"the list of teams that the mission uses"
 0xde560,createmission_threeway,2,int *,"the list of teams that the mission uses"
+0x6b140,os_time64,ret,longlong,"The CRT time function returns both EDX and EAX."

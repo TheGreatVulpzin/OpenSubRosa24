@@ -427,3 +427,18 @@ rva,name,evidence
 0x3b50,stbi_get16,"stb_image: two stbi_get8, high byte first."
 0xabd0,stbi_write_bmp,"stb_image_write: outfile with the 54 byte BMP header of 24 bit rows."
 0xae90,write_pixels,"stb_image_write: writes the rows of pixels of an image file."
+0x6b140,os_time64,The CRT time wrapper has the same signature and behavior as the shared os_time64.
+0xb3fc0,createbriefcasemodel,ELF createbriefcasemodel. The closed model is one box and the open model has two halves.
+0xb41d0,createboxmodel,The setup caller uses this box builder for magazines and boxes. Six triangles receive fixed texture corners.
+0xb4520,createwheelmodel,ELF createwheelmodel. It builds a cylinder and maps texture coordinates from its vertices.
+0xfafc0,readprocessorcycles,RDTSC stores EAX and EDX through the output pointer. The ELF inlines this operation in its timer functions.
+0x10b4d0,tempmesh_quadnormalequal,ELF tempmesh_quadnormalequal. It compares the three components of two quad normals.
+0x10c020,appticket_construct,ELF AppTicket constructor. The call result base is initialized before the ticket callback is cleared.
+0x10c0c0,callresult_run,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::Run(void*). The member method receives the object in ECX."
+0x10c100,callresult_runhandle,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::Run(void*,bool,uint64). Both handle words must match."
+0x10c160,callresult_getsize,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::GetCallbackSizeBytes returns four."
+0x10c170,appticket_destroy,ELF AppTicket destructor. It invokes the call result destructor with the same ECX.
+0x10c850,__aullrem,MSVC unsigned 64-bit remainder helper. Four stack words and a remainder in EDX:EAX.
+0x10c8d0,__aulldiv,MSVC unsigned 64-bit divide helper. Same algorithm and ABI as the shared server helper.
+0x10d680,unescapequotes,SDL command line parser helper. It removes a backslash immediately before a quote in place.
+0x10d7b0,appticket_cleanup,The process exit callback invokes the AppTicket destructor on the global ticket.

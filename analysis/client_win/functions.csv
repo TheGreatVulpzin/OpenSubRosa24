@@ -2271,7 +2271,7 @@ rva,size,name,source,confidence,evidence
 0x6aca0,108,debug_writelogfile,anchor,1.0,features
 0x6ad10,71,systemtimer,anchor,0.479,features
 0x6ad60,992,dedicatedserverloop,anchor,0.457,features
-0x6b140,18,,,,
+0x6b140,18,os_time64,manual,1.0,The CRT time wrapper has the same signature and behavior as the shared os_time64.
 0x6b160,2367,server_playermessage,anchor,0.747,features
 0x6baa0,7233,drawdisplay,anchor,0.933,features
 0x6d6f0,214,createmessage,anchor,0.825,features
@@ -2500,9 +2500,9 @@ rva,size,name,source,confidence,evidence
 0xb31c0,133,model_setquadtexcoord,callgraph,0.333,votes=2
 0xb3250,1697,creategunmodel2,callgraph,1.0,votes=12
 0xb3900,1715,createcashmodel,callgraph,1.0,votes=10
-0xb3fc0,521,,,,
-0xb41d0,835,,,,
-0xb4520,495,,,,
+0xb3fc0,521,createbriefcasemodel,manual,1.0,ELF createbriefcasemodel. The closed model is one box and the open model has two halves.
+0xb41d0,835,createboxmodel,manual,1.0,The setup caller uses this box builder for magazines and boxes. Six triangles receive fixed texture corners.
+0xb4520,495,createwheelmodel,manual,1.0,ELF createwheelmodel. It builds a cylinder and maps texture coordinates from its vertices.
 0xb4710,266,createfootmodel,callgraph,0.667,votes=4
 0xb4820,268,createspritemodel,anchor,0.451,features
 0xb4930,256,createrotormodel,callgraph,0.333,votes=2
@@ -2709,7 +2709,7 @@ rva,size,name,source,confidence,evidence
 0xfa9f0,1058,usermenu,anchor,0.956,features
 0xfae20,265,gettimeofday,anchor,0.718,features
 0xfaf30,140,setcpuaffinity,anchor,0.954,features
-0xfafc0,17,,,,
+0xfafc0,17,readprocessorcycles,manual,1.0,RDTSC stores EAX and EDX through the output pointer. The ELF inlines this operation in its timer functions.
 0xfafe0,56,resettimer,callgraph,1.0,votes=80
 0xfb020,25,starttimer,callgraph,1.0,votes=14
 0xfb040,200,stoptimer,manual,1.0,Adds the cycles since starttimer to the total of the timer and stores the total in milliseconds. The matcher name itemtimetolive was wrong.
@@ -2829,7 +2829,7 @@ rva,size,name,source,confidence,evidence
 0x10ae00,1002,main,anchor,0.951,features
 0x10b1f0,146,getpaths,anchor,0.829,features
 0x10b290,575,tempmesh_vertnormalequal,manual,1.0,"Compares several vertex arrays of the temporary mesh with a limit of 0.0001. Both tempmesh optimize functions call it. Size 575 bytes, ELF 913 bytes, the largest of the tempmesh compare functions."
-0x10b4d0,184,,,,
+0x10b4d0,184,tempmesh_quadnormalequal,manual,1.0,ELF tempmesh_quadnormalequal. It compares the three components of two quad normals.
 0x10b590,288,area_sectorvertequal,manual,1.0,Compares two vertices of a sector mesh with a limit of 0.0001. area_buildsectormodel calls it.
 0x10b6b0,282,calculatefriction,anchor,0.77,features
 0x10b7d0,29,flabs,callgraph,1.0,votes=6
@@ -2864,21 +2864,21 @@ rva,size,name,source,confidence,evidence
 0x10bee0,19,ConvertToUint64,callgraph,0.333,votes=2
 0x10bf00,146,,,,
 0x10bfa0,121,Set,anchor,0.835,features
-0x10c020,32,,,,
+0x10c020,32,appticket_construct,manual,1.0,ELF AppTicket constructor. The call result base is initialized before the ticket callback is cleared.
 0x10c040,78,CCallResult,anchor,0.597,features
 0x10c090,40,CCallbackBase,callgraph,0.333,votes=2
-0x10c0c0,50,,,,
-0x10c100,83,,,,
-0x10c160,16,,,,
-0x10c170,19,,,,
+0x10c0c0,50,callresult_run,manual,1.0,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::Run(void*). The member method receives the object in ECX."
+0x10c100,83,callresult_runhandle,manual,1.0,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::Run(void*,bool,uint64). Both handle words must match."
+0x10c160,16,callresult_getsize,manual,1.0,"ELF CCallResult<AppTicket,EncryptedAppTicketResponse_t>::GetCallbackSizeBytes returns four."
+0x10c170,19,appticket_destroy,manual,1.0,ELF AppTicket destructor. It invokes the call result destructor with the same ECX.
 0x10c190,28,,,,
 0x10c1b0,74,,,,
 0x10c650,145,_ftol2,manual,1.0,
 0x10c6fb,15,__security_check_cookie,manual,1.0,
 0x10c710,43,,,,
 0x10c810,31,,,,
-0x10c850,117,,,,
-0x10c8d0,104,,,,
+0x10c850,117,__aullrem,manual,1.0,MSVC unsigned 64-bit remainder helper. Four stack words and a remainder in EDX:EAX.
+0x10c8d0,104,__aulldiv,manual,1.0,MSVC unsigned 64-bit divide helper. Same algorithm and ABI as the shared server helper.
 0x10c940,31,,,,
 0x10c984,152,__onexit,callees,0.75,"callee jaccard 0.75, constants 1.00, size 152"
 0x10ca1c,9,_unlockexit,anchor,1.0,features
@@ -2901,8 +2901,8 @@ rva,size,name,source,confidence,evidence
 0x10d420,44,,,,
 0x10d450,186,,,,
 0x10d510,367,,,,
-0x10d680,127,,,,
+0x10d680,127,unescapequotes,manual,1.0,SDL command line parser helper. It removes a backslash immediately before a quote in place.
 0x10d700,25,,,,
 0x10d720,37,,,,
 0x10d790,28,,,,
-0x10d7b0,15,,,,
+0x10d7b0,15,appticket_cleanup,manual,1.0,The process exit callback invokes the AppTicket destructor on the global ticket.

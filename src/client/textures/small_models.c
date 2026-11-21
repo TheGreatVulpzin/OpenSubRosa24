@@ -1,4 +1,7 @@
-/* Small models of boxes: the foot, the rotor, the sunglasses, the key and the cell phone. */
+/* Small item models made from boxes and cylinders.
+ * Each builder clears the model in work and stores the completed model.
+ * Texture corners mark the faces or map the planar wheel surface.
+ */
 #include "textures/small_models.h"
 
 #include <string.h>
@@ -8,6 +11,7 @@
 #include "textures/model_parts.h"
 #include "textures/models.h"
 #include "vectors.h"
+#include "items.h"
 
 #define g_temp cl_data_modeltemp
 
@@ -90,6 +94,82 @@ void __cdecl createrotormodel(int model, float x, float y, float z)
 }
 
 #define HALF_PI_F 1.5707963705062866f
+#define QUARTER_PI_F 0.7853981852531433f
+#define WHEEL_TEXTURE_SIZE 0.625
+enum { BRIEFCASE_BASE_OPEN_FACE = 5, BRIEFCASE_LID_OPEN_FACE = 0 };
+
+/* Build the closed briefcase or its two open halves. */
+void __cdecl createbriefcasemodel(int model, float x, float y, float z)
+{
+    vec3 center = {0.0f, 0.0f, 0.0f};
+    vec3 rot[3];
+
+    clear_model();
+    if (model == sr_data_modellist.item[ITEM_BRIEFCASE]) {
+        addboxtomodel(&center, x, y, z);
+    } else {
+        center.y = (float)(-y * 0.5);
+        resetorientation(rot);
+        addhalfboxtomodel(&center, rot, x, (float)(y * 0.5), z, BRIEFCASE_BASE_OPEN_FACE);
+        center.x = 0.0f;
+        center.y = 0.0f;
+        center.z = 0.0f;
+        resetorientation(rot);
+        rotateorientation(rot, &rot[0], QUARTER_PI_F);
+        scaleaddvectors(&center, &center, &rot[1], (float)(y * 0.5));
+        scaleaddvectors(&center, &center, &rot[2], z);
+        addhalfboxtomodel(&center, rot, x, (float)(y * 0.5), z, BRIEFCASE_LID_OPEN_FACE);
+    }
+    zero_texcoords();
+    setupmodel(model, 0);
+}
+
+/* Build a box with fixed texture corners on six triangles. */
+void __cdecl createboxmodel(int model, float x, float y, float z)
+{
+    static const float corners[6][6] = {
+        {0, 0, 1, 0, 1, 1},
+        {0, 0, 1, 1, 0, 1},
+        {0, 0, 1, 0, 1, 0},
+        {0, 0, 1, 0, 0, 0},
+        {0, 1, 1, 1, 1, 0},
+        {0, 1, 1, 0, 0, 0}
+    };
+    enum { TEXTURED_TRIANGLES = 6, SIDE_TRIANGLES = 4, FIRST_END_TRIANGLE = 10 };
+    vec3 center = {0.0f, 0.0f, 0.0f};
+    int index;
+
+    clear_model();
+    addboxtomodel(&center, x, y, z);
+    zero_texcoords();
+    for (index = 0; index < TEXTURED_TRIANGLES; ++index) {
+        int triangle = index < SIDE_TRIANGLES ? index : FIRST_END_TRIANGLE + index - SIDE_TRIANGLES;
+        memcpy(&g_temp.tri_texcoords[triangle], corners[index], sizeof(corners[index]));
+    }
+    setupmodel(model, 0);
+}
+
+/* Build a wheel and use planar texture coordinates on each triangle. */
+void __cdecl createwheelmodel(int model, float length, float radius)
+{
+    vec3 center = {0.0f, 0.0f, 0.0f};
+    vec3 rot[3];
+    int triangle, corner;
+
+    clear_model();
+    center.z = (float)(length * 0.5);
+    resetorientation(rot);
+    rotateorientation(rot, &rot[1], HALF_PI_F);
+    addcylindertomodel(&center, rot, radius, length);
+    for (triangle = 0; triangle < g_temp.num_tris; ++triangle) {
+        for (corner = 0; corner < 3; ++corner) {
+            const vec3 *vertex = &g_temp.verts[g_temp.tris[triangle].verts[corner]];
+            g_temp.tri_texcoords[triangle].corners[corner].u = (float)(vertex->z / WHEEL_TEXTURE_SIZE + 0.5);
+            g_temp.tri_texcoords[triangle].corners[corner].v = (float)(vertex->y / WHEEL_TEXTURE_SIZE + 0.5);
+        }
+    }
+    setupmodel(model, 0);
+}
 #define LENS_SHIFT 0.00937500037252903f
 #define LENS_HALF_SHIFT 0.004687500186264515f
 

@@ -3265,6 +3265,29 @@ SR_STATIC_ASSERT(offsetof(ObjectPacket, cityobjects) == 0xc10, "ObjectPacket.cit
 SR_STATIC_ASSERT(offsetof(ObjectPacket, num_candidates) == 0xe10, "ObjectPacket.num_candidates");
 SR_STATIC_ASSERT(offsetof(ObjectPacket, candidates) == 0xe14, "ObjectPacket.candidates");
 
+/* app_ticket[]: record of 0x24 bytes. */
+typedef union AppTicket { struct {
+    void* vtable;                        /* +0x0000 The callback base stores its virtual function table here. */
+    uint8_t flags;                       /* +0x0004 The callback base clears this byte. */
+    uint8_t pad_0005[0x3];
+    int callback_type;                   /* +0x0008 The encrypted ticket response uses callback type 154. */
+    uint8_t pad_000c[0x4];
+    uint32_t call_low;                   /* +0x0010 The low word of the pending asynchronous call. */
+    uint32_t call_high;                  /* +0x0014 The high word of the pending asynchronous call. */
+    void* receiver;                      /* +0x0018 The callback method receives this object in ECX. */
+    void* method;                        /* +0x001c The callback method takes a response and an I/O failure flag. */
+    void* ticket_callback;               /* +0x0020 The encrypted ticket response method calls this function with the ticket bytes and their length. */
+}; uint8_t lf_raw[0x24]; } AppTicket;
+SR_STATIC_ASSERT(sizeof(AppTicket) == 0x24, "AppTicket");
+SR_STATIC_ASSERT(offsetof(AppTicket, vtable) == 0x0, "AppTicket.vtable");
+SR_STATIC_ASSERT(offsetof(AppTicket, flags) == 0x4, "AppTicket.flags");
+SR_STATIC_ASSERT(offsetof(AppTicket, callback_type) == 0x8, "AppTicket.callback_type");
+SR_STATIC_ASSERT(offsetof(AppTicket, call_low) == 0x10, "AppTicket.call_low");
+SR_STATIC_ASSERT(offsetof(AppTicket, call_high) == 0x14, "AppTicket.call_high");
+SR_STATIC_ASSERT(offsetof(AppTicket, receiver) == 0x18, "AppTicket.receiver");
+SR_STATIC_ASSERT(offsetof(AppTicket, method) == 0x1c, "AppTicket.method");
+SR_STATIC_ASSERT(offsetof(AppTicket, ticket_callback) == 0x20, "AppTicket.ticket_callback");
+
 /* material_client[]: record of 0x58 bytes. */
 typedef union MaterialRecClient { struct {
     uint32_t prefix;                     /* +0x0000 Four-byte prefix before the surface parameters. */

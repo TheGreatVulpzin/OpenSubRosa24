@@ -705,7 +705,7 @@ void debug_addatafloat(void);
 void debug_resetlogfile(void);
 void debug_writelogfile(void);
 void systemtimer(void);
-void lf_6b140(void);
+void os_time64(void);
 void server_playermessage(void);
 void drawdisplay(void);
 void createmessage(void);
@@ -933,9 +933,9 @@ void model_settritexcoord(void);
 void model_setquadtexcoord(void);
 void creategunmodel2(void);
 void createcashmodel(void);
-void lf_b3fc0(void);
-void lf_b41d0(void);
-void lf_b4520(void);
+void createbriefcasemodel(void);
+void createboxmodel(void);
+void createwheelmodel(void);
 void createfootmodel(void);
 void createspritemodel(void);
 void createrotormodel(void);
@@ -1261,7 +1261,7 @@ void steam_getauthticket(void);
 void lf_10ae00(void);
 void getpaths(void);
 void tempmesh_vertnormalequal(void);
-void lf_10b4d0(void);
+void tempmesh_quadnormalequal(void);
 void area_sectorvertequal(void);
 void calculatefriction(void);
 void flabs(void);
@@ -1299,10 +1299,10 @@ void __fastcall lf_10c0c0(int, int, int);
 void __fastcall lf_10c100(int, int, int, int, int, int);
 void __fastcall lf_10c160(int);
 void __fastcall lf_10c170(int);
-void lf_10c850(void);
-void lf_10c8d0(void);
-void lf_10d680(void);
-void lf_10d7b0(void);
+void __aullrem(void);
+void __aulldiv(void);
+void unescapequotes(void);
+void appticket_cleanup(void);
 
 const LfEntry lf_table[] = {
     { "stbi_failure_reason", 0x1000, (void *)stbi_failure_reason, 0, LF_RET_INT, 4, "", 0 },
@@ -2009,7 +2009,7 @@ const LfEntry lf_table[] = {
     { "debug_resetlogfile", 0x6ac30, (void *)debug_resetlogfile, 0, LF_RET_VOID, 4, "", 1 },
     { "debug_writelogfile", 0x6aca0, (void *)debug_writelogfile, 1, LF_RET_VOID, 4, "v", 1 },
     { "systemtimer", 0x6ad10, (void *)systemtimer, 0, LF_RET_INT, 4, "", 1 },
-    { "lf_6b140", 0x6b140, (void *)lf_6b140, 1, LF_RET_INT, 4, "p", 1 },
+    { "os_time64", 0x6b140, (void *)os_time64, 1, LF_RET_INT64, 4, "p", 1 },
     { "server_playermessage", 0x6b160, (void *)server_playermessage, 2, LF_RET_INT, 4, "vp", 0 },
     { "drawdisplay", 0x6baa0, (void *)drawdisplay, 0, LF_RET_VOID, 4, "", 1 },
     { "createmessage", 0x6d6f0, (void *)createmessage, 4, LF_RET_VOID, 4, "vpvv", 0 },
@@ -2237,9 +2237,9 @@ const LfEntry lf_table[] = {
     { "model_setquadtexcoord", 0xb31c0, (void *)model_setquadtexcoord, 3, LF_RET_VOID, 4, "vvv", 0 },
     { "creategunmodel2", 0xb3250, (void *)creategunmodel2, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createcashmodel", 0xb3900, (void *)createcashmodel, 2, LF_RET_VOID, 4, "vv", 1 },
-    { "lf_b3fc0", 0xb3fc0, (void *)lf_b3fc0, 4, LF_RET_VOID, 4, "vvvv", 1 },
-    { "lf_b41d0", 0xb41d0, (void *)lf_b41d0, 4, LF_RET_VOID, 4, "vvvv", 1 },
-    { "lf_b4520", 0xb4520, (void *)lf_b4520, 3, LF_RET_VOID, 4, "vvv", 1 },
+    { "createbriefcasemodel", 0xb3fc0, (void *)createbriefcasemodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "createboxmodel", 0xb41d0, (void *)createboxmodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
+    { "createwheelmodel", 0xb4520, (void *)createwheelmodel, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "createfootmodel", 0xb4710, (void *)createfootmodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
     { "createspritemodel", 0xb4820, (void *)createspritemodel, 2, LF_RET_VOID, 4, "vv", 1 },
     { "createrotormodel", 0xb4930, (void *)createrotormodel, 4, LF_RET_VOID, 4, "vvvv", 1 },
@@ -2446,7 +2446,7 @@ const LfEntry lf_table[] = {
     { "usermenu", 0xfa9f0, (void *)lf_fa9f0, 0, LF_RET_VOID, 4, "", 1 },
     { "gettimeofday", 0xfae20, (void *)gettimeofday, 2, LF_RET_INT, 4, "pp", 1 },
     { "setcpuaffinity", 0xfaf30, (void *)setcpuaffinity, 0, LF_RET_VOID, 4, "", 1 },
-    { "lf_fafc0", 0xfafc0, (void *)lf_fafc0, 1, LF_RET_VOID, 4, "p", 0 },
+    { "readprocessorcycles", 0xfafc0, (void *)lf_fafc0, 1, LF_RET_VOID, 4, "p", 0 },
     { "resettimer", 0xfafe0, (void *)resettimer, 2, LF_RET_VOID, 4, "vp", 0 },
     { "starttimer", 0xfb020, (void *)starttimer, 1, LF_RET_VOID, 4, "v", 0 },
     { "stoptimer", 0xfb040, (void *)stoptimer, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2565,7 +2565,7 @@ const LfEntry lf_table[] = {
     { "main", 0x10ae00, (void *)lf_10ae00, 0, LF_RET_INT, 4, "", 1 },
     { "getpaths", 0x10b1f0, (void *)getpaths, 0, LF_RET_VOID, 4, "", 1 },
     { "tempmesh_vertnormalequal", 0x10b290, (void *)tempmesh_vertnormalequal, 2, LF_RET_INT, 4, "vv", 0 },
-    { "lf_10b4d0", 0x10b4d0, (void *)lf_10b4d0, 2, LF_RET_INT, 4, "vv", 0 },
+    { "tempmesh_quadnormalequal", 0x10b4d0, (void *)tempmesh_quadnormalequal, 2, LF_RET_INT, 4, "vv", 0 },
     { "area_sectorvertequal", 0x10b590, (void *)area_sectorvertequal, 3, LF_RET_INT, 4, "vvv", 0 },
     { "calculatefriction", 0x10b6b0, (void *)calculatefriction, 3, LF_RET_FLOAT, 4, "ppv", 0 },
     { "flabs", 0x10b7d0, (void *)flabs, 1, LF_RET_FLOAT, 4, "v", 0 },
@@ -2598,14 +2598,14 @@ const LfEntry lf_table[] = {
     { "steam_requestticket", 0x10be20, (void *)steam_requestticket, 1, LF_RET_VOID, 4, "v", 1 },
     { "CSteamID", 0x10be80, (void *)lf_10be80, 1, LF_RET_INT, 4, "p", 0 },
     { "ConvertToUint64", 0x10bee0, (void *)lf_10bee0, 1, LF_RET_INT64, 4, "p", 0 },
-    { "lf_10c020", 0x10c020, (void *)lf_10c020, 1, LF_RET_INT, 4, "p", 0 },
-    { "lf_10c0c0", 0x10c0c0, (void *)lf_10c0c0, 2, LF_RET_VOID, 4, "pp", 0 },
-    { "lf_10c100", 0x10c100, (void *)lf_10c100, 5, LF_RET_VOID, 4, "ppvvv", 0 },
-    { "lf_10c160", 0x10c160, (void *)lf_10c160, 1, LF_RET_INT, 4, "p", 0 },
-    { "lf_10c170", 0x10c170, (void *)lf_10c170, 1, LF_RET_VOID, 4, "p", 0 },
-    { "lf_10c850", 0x10c850, (void *)lf_10c850, 4, LF_RET_INT64, 4, "vvvv", 0 },
-    { "lf_10c8d0", 0x10c8d0, (void *)lf_10c8d0, 4, LF_RET_INT64, 4, "vvvv", 0 },
-    { "lf_10d680", 0x10d680, (void *)lf_10d680, 1, LF_RET_VOID, 4, "p", 0 },
-    { "lf_10d7b0", 0x10d7b0, (void *)lf_10d7b0, 0, LF_RET_VOID, 4, "", 0 },
+    { "appticket_construct", 0x10c020, (void *)lf_10c020, 1, LF_RET_INT, 4, "p", 0 },
+    { "callresult_run", 0x10c0c0, (void *)lf_10c0c0, 2, LF_RET_VOID, 4, "pp", 0 },
+    { "callresult_runhandle", 0x10c100, (void *)lf_10c100, 5, LF_RET_VOID, 4, "ppvvv", 0 },
+    { "callresult_getsize", 0x10c160, (void *)lf_10c160, 1, LF_RET_INT, 4, "p", 0 },
+    { "appticket_destroy", 0x10c170, (void *)lf_10c170, 1, LF_RET_VOID, 4, "p", 0 },
+    { "__aullrem", 0x10c850, (void *)__aullrem, 4, LF_RET_INT64, 4, "vvvv", 0 },
+    { "__aulldiv", 0x10c8d0, (void *)__aulldiv, 4, LF_RET_INT64, 4, "vvvv", 0 },
+    { "unescapequotes", 0x10d680, (void *)unescapequotes, 1, LF_RET_VOID, 4, "p", 0 },
+    { "appticket_cleanup", 0x10d7b0, (void *)appticket_cleanup, 0, LF_RET_VOID, 4, "", 0 },
 };
 const int lf_table_count = 1302;

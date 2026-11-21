@@ -1,0 +1,9 @@
+os_time64 src/platform/os_calls.c
+createbriefcasemodel src/client/textures/small_models.c
+createboxmodel src/client/textures/small_models.c
+createwheelmodel src/client/textures/small_models.c
+tempmesh_quadnormalequal src/client/textures/tempmesh.c
+__aullrem src/common/system.c
+__aulldiv src/common/system.c
+unescapequotes src/client/setup/arguments.c
+appticket_cleanup src/client/setup/ticket_callbacks.c

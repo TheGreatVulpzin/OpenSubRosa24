@@ -36,9 +36,6 @@
 
 /* Game functions of other files. */
 #define setupframetextures CL_FN(0x4742f0, void(__cdecl *)(void))
-#define createbriefcasemodel CL_FN(0x4b3fc0, void(__cdecl *)(int model, float x, float y, float z))
-#define createboxmodel CL_FN(0x4b41d0, void(__cdecl *)(int model, float x, float y, float z))
-#define createwheelmodel CL_FN(0x4b4520, void(__cdecl *)(int model, float radius, float width))
 #define createbillmodel CL_FN(0x4bfbf0, void(__cdecl *)(int model, float x, float y, float z))
 
 enum {

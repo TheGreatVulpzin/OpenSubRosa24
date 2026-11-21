@@ -6,8 +6,17 @@
 
 #include "client.h"
 #include "sr_runtime.h"
+#include "setup/timers.h"
 
 #define g_timer sr_data_timer
+
+/* Store the low and high words of the processor cycle count. */
+void __cdecl readprocessorcycles(uint32_t words[2])
+{
+    uint64_t cycles = __rdtsc();
+    words[0] = (uint32_t)cycles;
+    words[1] = (uint32_t)(cycles >> 32);
+}
 
 /* Give a timer its name and clear its total. The milliseconds keep their value. */
 void __cdecl resettimer(int timer, const char *name)

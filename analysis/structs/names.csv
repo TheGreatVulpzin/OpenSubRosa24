@@ -1230,3 +1230,11 @@ scenario_event_data,0x4,second_low,int,,Low part of the second scenario event wo
 scenario_event_data,0x8,second_high,int,,High part of the second scenario event word.
 scenario_event_data,0xc,third,int,,Third scenario event word.
 scenario_event_data,0x44,first_high,int,,High part of the first scenario event word.
+app_ticket,0x0,vtable,void*,,The callback base stores its virtual function table here.
+app_ticket,0x4,flags,uint8_t,,The callback base clears this byte.
+app_ticket,0x8,callback_type,int,,The encrypted ticket response uses callback type 154.
+app_ticket,0x10,call_low,uint32_t,,The low word of the pending asynchronous call.
+app_ticket,0x14,call_high,uint32_t,,The high word of the pending asynchronous call.
+app_ticket,0x18,receiver,void*,,The callback method receives this object in ECX.
+app_ticket,0x1c,method,void*,,The callback method takes a response and an I/O failure flag.
+app_ticket,0x20,ticket_callback,void*,,The encrypted ticket response method calls this function with the ticket bytes and their length.

@@ -219,6 +219,7 @@ extern int sr_unplaced_startup_counter;
 #define cl_data_atmo_constant ((float *)(sr_base + 0x123510u))
 #define cl_data_atmo_wavelength ((float *)(sr_base + 0x123520u))
 #define cl_data_sector_block (*((int *)(sr_base + 0x1047c600u)))
+#define cl_data_app_ticket (*((AppTicket *)(sr_base + 0x127ec8u)))
 #define cl_data_modeltemp (*((ModelTemp *)(sr_base + 0x90f7680u)))
 #define cl_data_model ((Model *)(sr_base + 0xaff05a0u))
 #define cl_data_texture ((Texture *)(sr_base + 0x17b4b840u))
@@ -500,6 +501,7 @@ void resetgame_client_light(void);
 #define sr_timer_list_type TimerListClient
 #define sr_physics_timers 0
 #define sr_socket_disable_closes 1
+#define sr_triangle_edge(value) ((float)(value))
 #define sr_orientation_nonpositive(value) (!(0.0 < (value)))
 #define sr_collision_ge(a, b) (!((a) < (b)))
 #define sr_collision_le(a, b) (!((a) > (b)))

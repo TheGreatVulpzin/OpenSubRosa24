@@ -28,4 +28,7 @@ void server_writelogfile(void);
 /* The 64-bit unsigned divide of the compiler, with the arguments as four 32-bit words. */
 uint64_t __cdecl __aulldiv(uint32_t low, uint32_t high, uint32_t divisor_low, uint32_t divisor_high);
 
+/* The unsigned remainder, with the arguments as four 32-bit words. */
+uint64_t __cdecl __aullrem(uint32_t low, uint32_t high, uint32_t divisor_low, uint32_t divisor_high);
+
 #endif /* SR_SYSTEM_H */

@@ -29,7 +29,7 @@
 #define NORMAL_LIMIT 9.999999747378752E-5f
 
 /* 1 when the normals of quads a and b differ by less than 0.0001 on each axis. */
-static int tempmesh_quadnormalequal(int a, int b)
+int __cdecl tempmesh_quadnormalequal(int a, int b)
 {
     const vec3 *na = &g_tempmesh.quad_normals[a], *nb = &g_tempmesh.quad_normals[b];
 

@@ -117,6 +117,7 @@ def main():
                 client_only.append('#define sr_timer_list_type TimerListClient')
                 client_only.append('#define sr_physics_timers 0')
                 client_only.append('#define sr_socket_disable_closes 1')
+                client_only.append('#define sr_triangle_edge(value) ((float)(value))')
                 client_only.append('#define sr_orientation_nonpositive(value) (!(0.0 < (value)))')
                 client_only.append('#define sr_collision_ge(a, b) (!((a) < (b)))')
                 client_only.append('#define sr_collision_le(a, b) (!((a) > (b)))')

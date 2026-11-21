@@ -3,6 +3,11 @@
 #include "vectors.h"
 
 #include "sr_math.h"
+#include "sr_runtime.h"
+
+#ifndef sr_triangle_edge
+#define sr_triangle_edge(value) (value)
+#endif
 
 /* The values of pi that the game uses (double). */
 #define PI 3.14159265359
@@ -207,8 +212,8 @@ void generatetrinormal(vec3 *out, const vec3 *p0, const vec3 *p1, const vec3 *p2
     float bx = p2->x, by = p2->y, bz = p2->z;
     float ox = p0->x, oy = p0->y, oz = p0->z;
     out->x = (float)(((float)(az - oz)) * ((float)(by - oy)) - ((float)(ay - oy)) * ((float)(bz - oz)));
-    out->y = (float)(((float)(ax - ox)) * (bz - oz) - ((float)(bx - ox)) * (az - oz));
-    out->z = (float)((bx - ox) * (ay - oy) - (ax - ox) * (by - oy));
+    out->y = (float)(((float)(ax - ox)) * sr_triangle_edge(bz - oz) - ((float)(bx - ox)) * sr_triangle_edge(az - oz));
+    out->z = (float)(sr_triangle_edge(bx - ox) * sr_triangle_edge(ay - oy) - sr_triangle_edge(ax - ox) * sr_triangle_edge(by - oy));
     normalizevector(out, out);
 }
 

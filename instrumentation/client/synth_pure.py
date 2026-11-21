@@ -39,6 +39,16 @@ import synth_textures as st  # noqa: E402
 # 64 bytes, J an item size (0 to 4), K an item count (0 to 8). Other kinds: p a player index (0 to 31),
 # N a name text, L a file list index (0 to 3), x an amount of shares or money (small, large, negative).
 PROTOTYPES = {
+    'generatetrinormal': 'ovvv',
+    'os_time64': 'k',
+    'createbriefcasemodel': 'prrr',
+    'createboxmodel': 'prrr',
+    'createwheelmodel': 'prr',
+    'tempmesh_quadnormalequal': 'pp',
+    '__aullrem': 'uuuu',
+    '__aulldiv': 'uuuu',
+    'unescapequotes': 'N',
+    'appticket_cleanup': '',
     'building_addgaragedoor': 'hh',
     'createevent_updatescenario': 'h',
     'createevent_updateblock_interior': 'AcccB',
@@ -739,6 +749,22 @@ def main():
         descriptor = descriptors[name]
         for index in range(count):
             args = make_args(rng, proto, index)
+            if name in ('__aullrem', '__aulldiv'):
+                operands = [(0, 1), (1, 1), (2**64 - 1, 1), (2**64 - 1, 2**32 - 1),
+                            (2**64 - 1, 2**32), (2**64 - 1, 2**63 + 1),
+                            (2**63, 2**63 - 1), (2**32 + 1, 2**32 + 2),
+                            (0xfedcba9876543210, 0x123456789), (2**64 - 1, 2**64 - 1)]
+                numerator, divisor = (operands[index] if index < len(operands)
+                                      else (rng.getrandbits(64), rng.getrandbits(64) or 1))
+                args = [numerator & 0xffffffff, numerator >> 32,
+                        divisor & 0xffffffff, divisor >> 32]
+            if name == 'tempmesh_quadnormalequal':
+                args = [2 * (index % 25), 2 * (index % 25) + 1]
+            if name == 'unescapequotes':
+                texts = [b'', b'plain', b'"', b'\\', b'\\"', b'left\\"right',
+                         b'\\"\\"', b'\\""', b'\\\\"end', b'a\\"b\\"c',
+                         b'a"b', b'last\\"', b'\\"\\"\\"']
+                args = ['P:0:' + (texts[index % len(texts)] + b'\0').hex()]
             if name in ('get_marker', 'get16', 'get16le'):
                 args = [st.image(0x19e20000)]
             for position, value in enumerate(args):
@@ -814,7 +840,8 @@ def main():
             snap.write(0x19e10000, '6i', 0, 1, 2, 2, 1, 3)
             snap.write(0x19e20000, '2i', 0, 255)
             snap.write(0x29e7d2c0 + 24, 'i', 0)
-        constructors = ('createsunglassmodel', 'createfootmodel', 'createrotormodel',
+        constructors = ('createbriefcasemodel', 'createboxmodel', 'createwheelmodel',
+                        'createsunglassmodel', 'createfootmodel', 'createrotormodel',
                         'createheadmodel', 'createcellphonemodel', 'createkeymodel')
         if name in constructors or name in ('savemodelcsm', 'loadmodelcsm'):
             if snap is None:
@@ -840,6 +867,26 @@ def main():
                     snap.write(record + 0x1c, 'i', 1)
                     for index, (offset, _, _) in enumerate(arrays):
                         snap.write(record + offset, 'I', st.BASE + base + index * 256)
+        if name == 'createbriefcasemodel':
+            snap.write(0x17c040a0 + 0x84 + 13 * 4, 'i', 0)
+        if name == 'tempmesh_quadnormalequal':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            deltas = [0.00009999, -0.00009999, 0.0001, -0.0001, 0.00010001,
+                      float('nan'), float('inf'), -float('inf')]
+            pairs = [((0.0, -0.0, 0.0), (-0.0, 0.0, -0.0))]
+            for axis in range(3):
+                for delta in deltas:
+                    other = [0.0, 0.0, 0.0]
+                    other[axis] = delta
+                    pairs.append(((0.0, 0.0, 0.0), tuple(other)))
+            for index, pair in enumerate(pairs):
+                for side, values in enumerate(pair):
+                    snap.write(0x29f0d360 + 0x160008 + (index * 2 + side) * 12, '3f', *values)
+        if name == 'appticket_cleanup':
+            if snap is None:
+                snap = st.Snapshot(snapshot)
+            snap.write(0x127ec8 + 0x10, '2I', 0, 0)
         if name in ('addhalfboxtomodel', 'addwaisttomodel'):
             if snap is None:
                 snap = st.Snapshot(snapshot)

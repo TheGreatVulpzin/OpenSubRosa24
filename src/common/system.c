@@ -146,3 +146,9 @@ uint64_t __cdecl __aulldiv(uint32_t low, uint32_t high, uint32_t divisor_low, ui
 {
     return ((uint64_t)high << 32 | low) / ((uint64_t)divisor_high << 32 | divisor_low);
 }
+
+/* Return the remainder of two unsigned values given as pairs of words. */
+uint64_t __cdecl __aullrem(uint32_t low, uint32_t high, uint32_t divisor_low, uint32_t divisor_high)
+{
+    return ((uint64_t)high << 32 | low) % ((uint64_t)divisor_high << 32 | divisor_low);
+}

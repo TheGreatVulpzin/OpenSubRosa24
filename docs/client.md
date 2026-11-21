@@ -24,15 +24,11 @@ GLee and CRT code does not follow the Linux order: these names come from the fun
 the GLee source. `analysis/client_win/manual_names.csv` keeps all these names, so a new run of
 `name_all.sh` does not lose them.
 
-### Unnamed functions
+### Final unnamed functions
 
-| rva | Size | What it is |
-| --- | --- | --- |
-| 0x6b140 | 18 | Calls `_time64`. A CRT inline copy. |
-| 0xb3fc0, 0xb41d0, 0xb4520 | 521, 835, 495 | Model builders between `createcashmodel` and `createfootmodel`. The Linux build has only `createwheelmodel` there. 0xb4520 adds cylinders. |
-| 0xfafc0 | 17 | Between `setcpuaffinity` and `resettimer`. No Linux symbol. |
-| 0x10b4d0 | 184 | Compares one vertex array of the temporary mesh. `tempmesh_vertequal` or `tempmesh_normalequal`. |
-| 0x10c020 to 0x10d7b0 | 15 to 127 | CRT code (8 functions). |
+The last fifteen functions now have names and clean definitions (2026-11-20). Their names cover 2633 bytes: three model builders, quad normal comparison, the shared CRT time service, processor cycle reads, unsigned division and remainder, argument quote removal, and six application ticket callbacks.
+
+The definitions use `analysis/client_win/adopted_C11.txt` and its pending list. Five methods require ECX. The cycle reader requires a repeatable cycle source. Their definitions remain pending. The names move to their topic groups when `client_groups.py` runs.
 
 ## Files in `analysis/client_win/`
 

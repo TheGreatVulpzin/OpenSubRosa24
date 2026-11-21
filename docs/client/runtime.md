@@ -26,3 +26,19 @@ A timer (`sr_data_timer[256]`, 0x58 bytes each) has a name of up to 63 character
 ## JPEG restart
 
 `reset` (in `src/client/image/jpeg.c`) empties the bit buffer of the JPEG decoder, clears the DC predictors of the first three components and the pending marker, and starts the restart counter again. With no restart interval the counter is 0x7fffffff.
+
+## Processor cycles and argument text
+
+`readprocessorcycles` writes the low and high words of the processor cycle counter to its output buffer. Each call reads a new count.
+
+`os_time64` supplies the same CRT time service to the client and server. The unsigned division and remainder helpers in `src/common/system.c` accept four words and return two words.
+
+`unescapequotes` removes a backslash directly before a quote in the command line text. The next scan starts one byte after the current position. Adjacent quotes can therefore remain unprocessed after a removal.
+
+## Application ticket callbacks
+
+`AppTicket` holds a callback table, callback flags and type, two words of a pending call, a receiver, a member method and a ticket callback. Its constructor initializes the call result base and clears the ticket callback.
+
+`callresult_run` clears both call words and invokes the member method with no I/O failure. `callresult_runhandle` does this only when both supplied call words match. The receiver enters the method in ECX. The callback response occupies four bytes.
+
+`appticket_destroy` invokes the call result destructor. `appticket_cleanup` applies that destructor to the global application ticket during process exit.
