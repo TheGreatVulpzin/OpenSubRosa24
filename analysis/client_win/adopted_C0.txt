@@ -44,7 +44,6 @@ area_createblock src/game/area.c
 loadblock src/game/block_mesh.c
 human_calculatearmangles src/game/human_arms.c
 objectwheelsimulation2 src/game/wheels.c
-eventsimulation src/net/events.c
 itemsimulation src/game/item_physics.c
 itemlogic src/game/item_logic.c
 object_rotorsimulation src/game/vehicles.c

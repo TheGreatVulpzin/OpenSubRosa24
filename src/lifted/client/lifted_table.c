@@ -727,7 +727,7 @@ void playerdebt(void);
 void player_calcassets(void);
 void player_saveinventory(void);
 void player_loadinventory(void);
-void eventsimulation(void);
+void lf_704b0(void);
 void createevent_bullet(void);
 void createevent_bullethit(void);
 void sr_createevent_message(void);
@@ -2031,7 +2031,7 @@ const LfEntry lf_table[] = {
     { "player_calcassets", 0x6fb80, (void *)player_calcassets, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x6fd00, (void *)player_saveinventory, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_loadinventory", 0x70190, (void *)player_loadinventory, 1, LF_RET_VOID, 4, "v", 0 },
-    { "eventsimulation", 0x704b0, (void *)eventsimulation, 0, LF_RET_VOID, 4, "", 1 },
+    { "eventsimulation", 0x704b0, (void *)lf_704b0, 0, LF_RET_VOID, 4, "", 1 },
     { "createevent_bullet", 0x71e60, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
     { "createevent_bullethit", 0x71f20, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createevent_message", 0x72000, (void *)sr_createevent_message, 4, LF_RET_VOID, 4, "vpvv", 0 },
