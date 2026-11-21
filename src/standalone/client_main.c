@@ -386,11 +386,31 @@ static void start_sampler(void)
 }
 
 /* A crash prints where it happened. The map file of the exe turns the offset into a function. */
+/* Print the module that holds an address, as name+offset. */
+static void print_module(uintptr_t address)
+{
+    HMODULE module = NULL;
+    char path[MAX_PATH];
+    const char *name;
+
+    if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            (LPCSTR)address, &module) ||
+        !GetModuleFileNameA(module, path, sizeof path)) {
+        fprintf(stderr, "(no module)");
+        return;
+    }
+    name = strrchr(path, '\\');
+    fprintf(stderr, "%s+0x%x", name ? name + 1 : path, (unsigned)(address - (uintptr_t)module));
+}
+
 static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
 {
     EXCEPTION_RECORD *r = info->ExceptionRecord;
     uintptr_t at = (uintptr_t)r->ExceptionAddress;
     HMODULE self = GetModuleHandleA(NULL);
+    fprintf(stderr, "exception module: ");
+    print_module(at);
+    fprintf(stderr, "\n");
     fprintf(stderr, "exception 0x%08lx at %p (exe+0x%x)", r->ExceptionCode, r->ExceptionAddress,
             (unsigned)(at - (uintptr_t)self));
     if (r->NumberParameters >= 2)
@@ -405,7 +425,7 @@ static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
         int shown = 0, i;
         fprintf(stderr, "eip 0x%08lx ebp 0x%08lx, return addresses (exe+offset):", info->ContextRecord->Eip,
                 info->ContextRecord->Ebp);
-        for (i = 0; i < 400 && shown < 24; ++i) {
+        for (i = 0; i < 6000 && shown < 24; ++i) {
             uintptr_t w;
             if (IsBadReadPtr(sp + i, sizeof w))
                 break;
