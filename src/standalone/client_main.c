@@ -19,6 +19,7 @@
 #include "lifted_table.h"
 #include "sr_math.h"
 #include "client_smoke.h"
+#include "../../instrumentation/client/gl_trace.h"
 
 uintptr_t sr_base;
 
@@ -94,6 +95,7 @@ void *sr_import(const char *dll, const char *name)
         exit(1);
     }
     fn = client_smoke_import(dll, name, fn);
+    fn = client_gl_trace_import(dll, name, fn);
     if (getenv("SR_SAMPLE")) {
         if (!_stricmp(dll, "SDL2.DLL") && !strcmp(name, "SDL_GL_SwapWindow")) {
             real_swap = (void (__cdecl *)(void *))fn;
@@ -132,7 +134,7 @@ void sr_open_url(const char *url)
 /* ------------------------------------------------------------ functions */
 
 /* SR_TRACE=1 prints each call that goes through sr_fn. SR_TRACE=2 prints the first call of each function.
- * SR_TRACE=3 prints nothing until a crash, then prints the last 64 calls. */
+ * SR_TRACE=3 prints the last 64 calls on a crash. SR_TRACE=4 also records graphics calls. */
 static int g_trace;
 static unsigned char g_seen[8192];
 #define CALL_RING 64
@@ -172,14 +174,16 @@ void *sr_fn(uintptr_t va)
 {
     uint32_t rva = (uint32_t)(va - IMAGE_BASE);
     unsigned s;
+    client_smoke_call(rva);
+    if (g_trace >= 4)
+        client_gl_trace_slots();
     if (rva < g_fn_direct_size && g_fn_direct[rva])
         return g_fn_direct[rva];
     s = fn_slot(rva);
     while (g_fn_hash[s]) {
         int i = g_fn_hash[s] - 1;
         if (lf_table[i].rva == rva) {
-            client_smoke_call(rva);
-            if (g_trace == 3) {
+            if (g_trace >= 3) {
                 g_ring[g_ring_next++ % CALL_RING] = (uint16_t)i;
             } else if (g_trace && (g_trace == 1 || !g_seen[i])) {
                 g_seen[i] = 1;
@@ -440,7 +444,7 @@ static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
         }
         fprintf(stderr, "\n");
     }
-    if (g_trace == 3) {
+    if (g_trace >= 3) {
         unsigned n;
         fprintf(stderr, "last calls, oldest first:\n");
         for (n = 0; n < CALL_RING; ++n) {
@@ -450,6 +454,7 @@ static LONG WINAPI crash_filter(EXCEPTION_POINTERS *info)
             fprintf(stderr, "  %s (0x%x)\n", lf_table[g_ring[k]].name, (unsigned)lf_table[g_ring[k]].rva);
         }
     }
+    client_gl_trace_dump();
     menu_dump();
     fflush(stderr);
     return EXCEPTION_EXECUTE_HANDLER;
@@ -494,6 +499,7 @@ int main(int argc, char **argv)
             return 2;
         /* The entry of the game (RVA 0x10ae00) takes no arguments here. */
         ((void (__cdecl *)(void))sr_fn(IMAGE_BASE + 0x10ae00))();
+        client_gl_trace_dump();
         return client_smoke_finish();
     }
     return 0;

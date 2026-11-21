@@ -422,8 +422,10 @@ void createlevel(void)
         building_setupfloorplannewer();
         building_buildfloorplan(0, 0x24, 6, 0x24, g_building.build_size_x,
                                g_building.build_size_z, g_building.build_floors, 0);
-        if (sr_game.gametype == 1)
+        if (sr_game.gametype == 1) {
+            sr_level_after_buildings();
             return;
+        }
     }
     for (i = 0; i < g_city.num_roads; i++)
         buildcitystreet(i);

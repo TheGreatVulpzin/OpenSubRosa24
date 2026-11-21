@@ -4,6 +4,8 @@ Files: `src/client/editor/building.c`, `building_loop.c`, `menus.c`. Header: `bu
 
 The client opens the building editor only when the debug flag `debugit` is on. The client never sets the flag. For a test, set it with `subvulpes.ini` `[client] debugit=1` (the wsock32 proxy) or `SR_DEBUGIT=1` (the standalone client). Then the main menu shows **Editor**. It opens `buildingedit_menu` to choose a building, and F1 in the game opens `building_editorloop`.
 
+Before the first frame, the level builder makes the window texture and allocates the sector vertex buffer. It then submits the sector meshes and makes the track model. The building mode runs this final setup before it returns.
+
 A building has 64 floors of 64 by 64 cells (`BuildingCell`). The state of the editor is `cl_data_building_editor` (`BuildingEditor`), and its view is `cl_data_building_view` (`EditorView`).
 
 ## The loop

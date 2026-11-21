@@ -15,7 +15,7 @@
 enum {
     MENU_WIDTH = 1024, MENU_HEIGHT = 640, MAX_ITEMS = 256, KEY_COUNT = 512,
     EDITOR_FRAMES = 120, INPUT_FRAMES = 2, MENU_MS = 5000,
-    START_MS = 180000, STEP_MS = 120000, FRAME_MS = 45000,
+    START_MS = 180000, STEP_MS = 120000, FRAME_MS = 180000,
     EVENT_QUIT = 0x100, EVENT_KEY_DOWN = 0x300, EVENT_KEY_UP = 0x301,
     EVENT_MOTION = 0x400, EVENT_BUTTON_DOWN = 0x401, EVENT_BUTTON_UP = 0x402,
     KEY_A = 4, KEY_E = 8, KEY_ESCAPE = 41, KEY_F1 = 58,
@@ -344,6 +344,21 @@ static int model(void)
            click("Exit") && wait_screen(main_screen, INPUT_FRAMES, 0, STEP_MS, "back to main");
 }
 
+static int crash(void)
+{
+    WIN32_FIND_DATAA data;
+    HANDLE files = FindFirstFileA("data/building/*.sbb", &data);
+    char *dot;
+    if (files == INVALID_HANDLE_VALUE) return fail("no building files");
+    FindClose(files);
+    dot = strrchr(data.cFileName, '.');
+    if (!dot) return fail("building extension");
+    *dot = 0;
+    fprintf(stderr, "SMOKE BUILDING %s\n", data.cFileName);
+    return click("Editor") && wait_screen(list_screen, INPUT_FRAMES, 0, STEP_MS, "building list") &&
+           click(data.cFileName) && wait_screen(game_screen, EDITOR_FRAMES, 0, FRAME_MS, "building game");
+}
+
 static DWORD WINAPI smoke_worker(void *unused)
 {
     HMODULE sdl;
@@ -361,7 +376,8 @@ static DWORD WINAPI smoke_worker(void *unused)
     if (!push_event || !warp_mouse || !window_id) { fail("SDL2 test exports"); return 0; }
     ok = wait_screen(main_screen, INPUT_FRAMES, 0, START_MS, "startup menu");
     if (ok) {
-        if (!strcmp(scenario, "menus")) ok = menus();
+        if (!strcmp(scenario, "crash")) ok = crash();
+        else if (!strcmp(scenario, "menus")) ok = menus();
         else if (!strcmp(scenario, "buildings")) ok = buildings();
         else if (!strcmp(scenario, "level")) ok = level();
         else ok = model();
@@ -382,7 +398,7 @@ int client_smoke_start(void)
 {
     scenario = getenv("SR_SMOKE");
     if (!scenario) return 1;
-    if (strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
+    if (strcmp(scenario, "crash") && strcmp(scenario, "menus") && strcmp(scenario, "buildings") && strcmp(scenario, "level") && strcmp(scenario, "model"))
         return fail("unknown scenario");
     InitializeCriticalSection(&lock);
     changed = CreateEventA(NULL, FALSE, FALSE, NULL);
@@ -407,3 +423,4 @@ int client_smoke_finish(void)
     if (status != 1) { fprintf(stderr, "SMOKE FAIL %s: incomplete run\n", scenario); return 2; }
     return 0;
 }
+

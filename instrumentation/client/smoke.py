@@ -10,7 +10,7 @@ import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-SCENARIOS = {"menus": 360, "buildings": 1800, "level": 360, "model": 300}
+SCENARIOS = {"crash": 360, "menus": 360, "buildings": 1800, "level": 360, "model": 300}
 READY_SECONDS = 15
 
 
@@ -113,7 +113,7 @@ def main(argv=None):
     env = os.environ.copy()
     env.pop("SR_SAMPLE", None)
     env.pop("SR_DENORM", None)
-    env["SR_TRACE"] = "3"
+    env["SR_TRACE"] = os.environ.get("SR_TRACE", "3")
     env["SR_DEBUGIT"] = "1"
     env["PATH"] = str(ROOT / "build/client_deps") + os.pathsep + env.get("PATH", "")
     driver_present = b"SR_SMOKE" in exe.read_bytes()
