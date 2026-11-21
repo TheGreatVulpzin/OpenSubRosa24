@@ -8,6 +8,7 @@
  */
 #include "setup/simulation.h"
 #include "setup/physics.h"
+#include "setup/events.h"
 
 #include <stdint.h>
 
@@ -50,7 +51,6 @@ void *sr_import(const char *dll, const char *name);
 #define logicsimulation CL_FN(0x4a3940, void(__cdecl *)(void))
 #define serversend CL_FN(0x4deb20, void(__cdecl *)(void))
 #define bulletsimulation CL_FN(0x4646b0, void(__cdecl *)(void))
-#define eventsimulation CL_FN(0x4704b0, void(__cdecl *)(void))
 #define timetolive_records CL_FN(0x4645e0, void(__cdecl *)(void))
 
 /* SDL scancodes of the keys. */
@@ -295,7 +295,7 @@ static void simulate(void)
     cl_data_sim_ticks++;
     if (SIMULATING(g_state))
         bulletsimulation();
-    eventsimulation();
+    client_eventsimulation();
     if (SIMULATING(g_state)) {
         spritesimulation();
         sprite_model_simulation();

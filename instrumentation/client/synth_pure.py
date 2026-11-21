@@ -737,6 +737,10 @@ def main():
     def run_one(item):
         # "name=kinds" replaces the prototype of that function for this run.
         name, _, kinds = item.partition('=')
+        if name == 'eventsimulation':
+            from synth_events import run_cases
+            passed[name] = run_cases(rec, work / name, count)
+            return f'{name}: event cases ' + ('same' if passed[name] else 'FAILED')
         proto = kinds if kinds else PROTOTYPES[name]
         key = hashlib.sha256((code[name] + case_hash(name, proto, count)).encode()).hexdigest()
         if not force and cache.get(name, {}).get('key') == key:

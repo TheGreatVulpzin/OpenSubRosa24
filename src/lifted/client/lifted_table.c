@@ -646,19 +646,19 @@ void buildingedit_setup(void);
 void building_editorloop(void);
 void building_checkeditor(void);
 void buildingedit_addblock(void);
-void buildingedit_deleteblock(void);
-void buildingedit_blockmenu(void);
-void buildingedit_menu(void);
-void buildingedit_texturemenu(void);
-void buildingedit_removetexture(void);
-void buildingedit_inserttexture(void);
+void lf_5cef0(void);
+void lf_5d150(void);
+void lf_5dbd0(void);
+void lf_5e020(void);
+void lf_5eb40(void);
+void lf_5ef80(void);
 void building_reloadtextures(void);
 void buildingedit_render(void);
 void buildingeditor_drawquad(void);
 void buildingeditor_drawblock(void);
 void buildingeditor_renderblock(void);
 void buildingeditor_renderblock2(void);
-void buildingeditor_draw_sblock(void);
+void lf_60940(void);
 void lf_60b40(void);
 void building_load(void);
 void building_setupbuild(void);
@@ -727,7 +727,7 @@ void playerdebt(void);
 void player_calcassets(void);
 void player_saveinventory(void);
 void player_loadinventory(void);
-void lf_704b0(void);
+void client_eventsimulation(void);
 void createevent_bullet(void);
 void createevent_bullethit(void);
 void sr_createevent_message(void);
@@ -748,7 +748,7 @@ void createevent_updateblock_interior(void);
 void createevent_updateblock_quad(void);
 void packevent(void);
 void unpackevent(void);
-void setupframetextures(void);
+void lf_742f0(void);
 void buildframelist(void);
 void frame_addmodel(void);
 void renderframe(void);
@@ -761,8 +761,8 @@ void pointinsidefrustum(void);
 void boxinsidefrustum(void);
 void testtimer(void);
 void resetgame(void);
-void gameloop(void);
-void reactivategame(void);
+void lf_7b100(void);
+void lf_7d060(void);
 void reloadopengl(void);
 void movecamera(void);
 void movecamera2(void);
@@ -785,7 +785,7 @@ void playermenu_building_buy(void);
 void playermenu_banking(void);
 void setupgame(void);
 void setupclient(void);
-void setupglextentions(void);
+void lf_82910(void);
 void enabletwosidedstencil(void);
 void disabletwosidedstencil(void);
 void settwosidedstencil(void);
@@ -813,7 +813,7 @@ void human_buildmuscles(void);
 void human_createmuscleball(void);
 void createjointbond(void);
 void human_walksimulation2(void);
-void getinputs(void);
+void lf_90bf0(void);
 void getinputs_human(void);
 void getinputs_car(void);
 void getinputs_heli(void);
@@ -854,13 +854,13 @@ void addcitystreet(void);
 void addcityblock(void);
 void createlevel(void);
 void leveledit_setup(void);
-void leveleditor_loop(void);
-void level_checkeditor(void);
-void leveleditor_addintersection(void);
-void leveleditor_getintersection(void);
-void leveleditor_deleteintersection(void);
-void leveleditor_addstreet(void);
-void leveleditor_deletestreet(void);
+void lf_9c5c0(void);
+void lf_9f400(void);
+void lf_a02b0(void);
+void lf_a0350(void);
+void lf_a03e0(void);
+void lf_a04f0(void);
+void lf_a06f0(void);
 void lf_a0740(void);
 void lf_a0a60(void);
 void lineintersectall(void);
@@ -900,11 +900,11 @@ void geteulerangles2(void);
 void projectorientation(void);
 void multiply3x3matrices(void);
 void transposematrix(void);
-void hostmenu(void);
-void joinmenu(void);
-void connectmenu(void);
-void mainmenu(void);
-void notsupportedmenu(void);
+void lf_a8e10(void);
+void lf_a9310(void);
+void lf_aa5a0(void);
+void lf_aa920(void);
+void lf_abc00(void);
 void modeltempvertsequal(void);
 void setupmodel(void);
 void copymodel(void);
@@ -959,7 +959,7 @@ void model_createcash(void);
 void setupspheremodel(void);
 void buildtrackmodel(void);
 void rendertrackmodel(void);
-void model_viewer(void);
+void lf_c14a0(void);
 void model_editor(void);
 void fround(void);
 void cl_unpackobjectpacket(void);
@@ -1008,11 +1008,11 @@ void objectwheelcollision2(void);
 void objectwheelcollision(void);
 void objectsimulation_car(void);
 void getenginetorque(void);
-void optionsmenu(void);
+void lf_d2290(void);
 void lf_d3350(void);
 void optionreadwriteint(void);
 void optionreadwritestring(void);
-void voiceoptionsmenu(void);
+void lf_d38c0(void);
 void createparticle(void);
 void particletimetolive(void);
 void deleteparticle(void);
@@ -1029,7 +1029,7 @@ void player_addaction_item(void);
 void initplayticket(void);
 void updateplayticket(void);
 void getplayticket(void);
-void setupprogramobjects(void);
+void lf_d5690(void);
 void compileprogramobject(void);
 void loadsource(void);
 void orientationtoquaternion(void);
@@ -1094,7 +1094,7 @@ void disablespeex(void);
 void preprocessspeex(void);
 void encodespeex(void);
 void decodespeex(void);
-void testspeex(void);
+void lf_e1550(void);
 void createsprite(void);
 void createwindowsprites(void);
 void createwindowsprites_block(void);
@@ -1139,7 +1139,7 @@ void setupobjecttypes_cars(void);
 void setupobjecttypes_helicopters(void);
 void setupobjectypes_train(void);
 void objecttype_calcquadweights(void);
-void usermenu(void);
+void lf_fa9f0(void);
 void gettimeofday(void);
 void setcpuaffinity(void);
 void lf_fafc0(void);
@@ -1258,7 +1258,7 @@ void setuptexture(void);
 void ticketreturned(void);
 void steam_requestauthticket(void);
 void steam_getauthticket(void);
-void client_main(void);
+void lf_10ae00(void);
 void getpaths(void);
 void tempmesh_vertnormalequal(void);
 void tempmesh_quadnormalequal(void);
@@ -1950,19 +1950,19 @@ const LfEntry lf_table[] = {
     { "building_editorloop", 0x58d20, (void *)building_editorloop, 0, LF_RET_VOID, 4, "", 1 },
     { "building_checkeditor", 0x5c040, (void *)building_checkeditor, 0, LF_RET_VOID, 4, "", 0 },
     { "buildingedit_addblock", 0x5c760, (void *)buildingedit_addblock, 5, LF_RET_VOID, 4, "vvvvv", 0 },
-    { "buildingedit_deleteblock", 0x5cef0, (void *)buildingedit_deleteblock, 3, LF_RET_VOID, 4, "vvv", 0 },
-    { "buildingedit_blockmenu", 0x5d150, (void *)buildingedit_blockmenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "buildingedit_menu", 0x5dbd0, (void *)buildingedit_menu, 0, LF_RET_VOID, 4, "", 1 },
-    { "buildingedit_texturemenu", 0x5e020, (void *)buildingedit_texturemenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "buildingedit_removetexture", 0x5eb40, (void *)buildingedit_removetexture, 1, LF_RET_VOID, 4, "v", 0 },
-    { "buildingedit_inserttexture", 0x5ef80, (void *)buildingedit_inserttexture, 2, LF_RET_VOID, 4, "pv", 0 },
+    { "buildingedit_deleteblock", 0x5cef0, (void *)lf_5cef0, 3, LF_RET_VOID, 4, "vvv", 0 },
+    { "buildingedit_blockmenu", 0x5d150, (void *)lf_5d150, 0, LF_RET_VOID, 4, "", 1 },
+    { "buildingedit_menu", 0x5dbd0, (void *)lf_5dbd0, 0, LF_RET_VOID, 4, "", 1 },
+    { "buildingedit_texturemenu", 0x5e020, (void *)lf_5e020, 0, LF_RET_VOID, 4, "", 1 },
+    { "buildingedit_removetexture", 0x5eb40, (void *)lf_5eb40, 1, LF_RET_VOID, 4, "v", 0 },
+    { "buildingedit_inserttexture", 0x5ef80, (void *)lf_5ef80, 2, LF_RET_VOID, 4, "pv", 0 },
     { "building_reloadtextures", 0x5f310, (void *)building_reloadtextures, 0, LF_RET_VOID, 4, "", 0 },
     { "buildingedit_render", 0x5f3c0, (void *)buildingedit_render, 0, LF_RET_VOID, 4, "", 1 },
     { "buildingeditor_drawquad", 0x5fca0, (void *)buildingeditor_drawquad, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
     { "buildingeditor_drawblock", 0x5fdf0, (void *)buildingeditor_drawblock, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "buildingeditor_renderblock", 0x600d0, (void *)buildingeditor_renderblock, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
     { "buildingeditor_renderblock2", 0x605a0, (void *)buildingeditor_renderblock2, 8, LF_RET_VOID, 4, "vvvvvvvv", 1 },
-    { "buildingeditor_draw_sblock", 0x60940, (void *)buildingeditor_draw_sblock, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
+    { "buildingeditor_draw_sblock", 0x60940, (void *)lf_60940, 9, LF_RET_VOID, 4, "vvvvvvvvv", 1 },
     { "building_save", 0x60b40, (void *)lf_60b40, 1, LF_RET_VOID, 4, "v", 1 },
     { "building_load", 0x614e0, (void *)building_load, 2, LF_RET_VOID, 4, "vv", 1 },
     { "building_setupbuild", 0x61fd0, (void *)building_setupbuild, 0, LF_RET_VOID, 4, "", 0 },
@@ -2031,7 +2031,7 @@ const LfEntry lf_table[] = {
     { "player_calcassets", 0x6fb80, (void *)player_calcassets, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_saveinventory", 0x6fd00, (void *)player_saveinventory, 1, LF_RET_VOID, 4, "v", 0 },
     { "player_loadinventory", 0x70190, (void *)player_loadinventory, 1, LF_RET_VOID, 4, "v", 0 },
-    { "eventsimulation", 0x704b0, (void *)lf_704b0, 0, LF_RET_VOID, 4, "", 1 },
+    { "eventsimulation", 0x704b0, (void *)client_eventsimulation, 0, LF_RET_VOID, 4, "", 1 },
     { "createevent_bullet", 0x71e60, (void *)createevent_bullet, 4, LF_RET_VOID, 4, "vppv", 0 },
     { "createevent_bullethit", 0x71f20, (void *)createevent_bullethit, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createevent_message", 0x72000, (void *)sr_createevent_message, 4, LF_RET_VOID, 4, "vpvv", 0 },
@@ -2052,7 +2052,7 @@ const LfEntry lf_table[] = {
     { "createevent_updateblock_quad", 0x72db0, (void *)createevent_updateblock_quad, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
     { "packevent", 0x72ed0, (void *)packevent, 2, LF_RET_VOID, 4, "vv", 0 },
     { "unpackevent", 0x73aa0, (void *)unpackevent, 1, LF_RET_VOID, 4, "v", 0 },
-    { "setupframetextures", 0x742f0, (void *)setupframetextures, 0, LF_RET_VOID, 4, "", 2 },
+    { "setupframetextures", 0x742f0, (void *)lf_742f0, 0, LF_RET_VOID, 4, "", 2 },
     { "buildframelist", 0x74890, (void *)buildframelist, 0, LF_RET_VOID, 4, "", 0 },
     { "frame_addmodel", 0x75d90, (void *)frame_addmodel, 5, LF_RET_VOID, 4, "vpvpv", 0 },
     { "renderframe", 0x75f10, (void *)renderframe, 0, LF_RET_VOID, 4, "", 1 },
@@ -2065,8 +2065,8 @@ const LfEntry lf_table[] = {
     { "boxinsidefrustum", 0x79890, (void *)boxinsidefrustum, 2, LF_RET_INT, 4, "pp", 0 },
     { "testtimer", 0x79a90, (void *)testtimer, 0, LF_RET_INT, 4, "", 1 },
     { "resetgame", 0x79ad0, (void *)resetgame, 0, LF_RET_VOID, 4, "", 1 },
-    { "gameloop", 0x7b100, (void *)gameloop, 0, LF_RET_VOID, 4, "", 1 },
-    { "reactivategame", 0x7d060, (void *)reactivategame, 0, LF_RET_VOID, 4, "", 2 },
+    { "gameloop", 0x7b100, (void *)lf_7b100, 0, LF_RET_VOID, 4, "", 1 },
+    { "reactivategame", 0x7d060, (void *)lf_7d060, 0, LF_RET_VOID, 4, "", 2 },
     { "reloadopengl", 0x7d090, (void *)reloadopengl, 0, LF_RET_VOID, 4, "", 1 },
     { "movecamera", 0x7d0e0, (void *)movecamera, 1, LF_RET_VOID, 4, "v", 0 },
     { "movecamera2", 0x7d4c0, (void *)movecamera2, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2089,7 +2089,7 @@ const LfEntry lf_table[] = {
     { "playermenu_banking", 0x80770, (void *)playermenu_banking, 1, LF_RET_VOID, 4, "v", 0 },
     { "setupgame", 0x80c10, (void *)setupgame, 0, LF_RET_VOID, 4, "", 1 },
     { "setupclient", 0x81a80, (void *)setupclient, 0, LF_RET_VOID, 4, "", 1 },
-    { "setupglextentions", 0x82910, (void *)setupglextentions, 0, LF_RET_VOID, 4, "", 1 },
+    { "setupglextentions", 0x82910, (void *)lf_82910, 0, LF_RET_VOID, 4, "", 1 },
     { "enabletwosidedstencil", 0x82a00, (void *)enabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "disabletwosidedstencil", 0x82a20, (void *)disabletwosidedstencil, 0, LF_RET_VOID, 4, "", 1 },
     { "settwosidedstencil", 0x82a40, (void *)settwosidedstencil, 10, LF_RET_VOID, 4, "vvvvvvvvvv", 1 },
@@ -2117,7 +2117,7 @@ const LfEntry lf_table[] = {
     { "human_createmuscleball", 0x90830, (void *)human_createmuscleball, 4, LF_RET_VOID, 4, "vvvp", 0 },
     { "createjointbond", 0x90a10, (void *)createjointbond, 4, LF_RET_INT, 4, "vvvp", 0 },
     { "human_walksimulation2", 0x90be0, (void *)human_walksimulation2, 0, LF_RET_VOID, 4, "", 0 },
-    { "getinputs", 0x90bf0, (void *)getinputs, 1, LF_RET_VOID, 4, "v", 1 },
+    { "getinputs", 0x90bf0, (void *)lf_90bf0, 1, LF_RET_VOID, 4, "v", 1 },
     { "getinputs_human", 0x91920, (void *)getinputs_human, 1, LF_RET_VOID, 4, "v", 0 },
     { "getinputs_car", 0x924f0, (void *)getinputs_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "getinputs_heli", 0x93130, (void *)getinputs_heli, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2158,13 +2158,13 @@ const LfEntry lf_table[] = {
     { "addcityblock", 0x9b5d0, (void *)addcityblock, 4, LF_RET_VOID, 4, "vvvv", 0 },
     { "createlevel", 0x9b740, (void *)createlevel, 0, LF_RET_VOID, 4, "", 1 },
     { "leveledit_setup", 0x9c4f0, (void *)leveledit_setup, 0, LF_RET_VOID, 4, "", 0 },
-    { "leveleditor_loop", 0x9c5c0, (void *)leveleditor_loop, 0, LF_RET_VOID, 4, "", 1 },
-    { "level_checkeditor", 0x9f400, (void *)level_checkeditor, 0, LF_RET_VOID, 4, "", 0 },
-    { "leveleditor_addintersection", 0xa02b0, (void *)leveleditor_addintersection, 3, LF_RET_INT, 4, "vvv", 0 },
-    { "leveleditor_getintersection", 0xa0350, (void *)leveleditor_getintersection, 4, LF_RET_INT, 4, "vvvv", 0 },
-    { "leveleditor_deleteintersection", 0xa03e0, (void *)leveleditor_deleteintersection, 1, LF_RET_VOID, 4, "v", 0 },
-    { "leveleditor_addstreet", 0xa04f0, (void *)leveleditor_addstreet, 2, LF_RET_INT, 4, "vv", 0 },
-    { "leveleditor_deletestreet", 0xa06f0, (void *)leveleditor_deletestreet, 1, LF_RET_VOID, 4, "v", 0 },
+    { "leveleditor_loop", 0x9c5c0, (void *)lf_9c5c0, 0, LF_RET_VOID, 4, "", 1 },
+    { "level_checkeditor", 0x9f400, (void *)lf_9f400, 0, LF_RET_VOID, 4, "", 0 },
+    { "leveleditor_addintersection", 0xa02b0, (void *)lf_a02b0, 3, LF_RET_INT, 4, "vvv", 0 },
+    { "leveleditor_getintersection", 0xa0350, (void *)lf_a0350, 4, LF_RET_INT, 4, "vvvv", 0 },
+    { "leveleditor_deleteintersection", 0xa03e0, (void *)lf_a03e0, 1, LF_RET_VOID, 4, "v", 0 },
+    { "leveleditor_addstreet", 0xa04f0, (void *)lf_a04f0, 2, LF_RET_INT, 4, "vv", 0 },
+    { "leveleditor_deletestreet", 0xa06f0, (void *)lf_a06f0, 1, LF_RET_VOID, 4, "v", 0 },
     { "leveleditor_save", 0xa0740, (void *)lf_a0740, 0, LF_RET_VOID, 4, "", 1 },
     { "leveleditor_load", 0xa0a60, (void *)lf_a0a60, 0, LF_RET_VOID, 4, "", 1 },
     { "lineintersectall", 0xa0da0, (void *)lineintersectall, 2, LF_RET_INT, 1, "pp", 0 },
@@ -2204,11 +2204,11 @@ const LfEntry lf_table[] = {
     { "projectorientation", 0xa8b30, (void *)projectorientation, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "multiply3x3matrices", 0xa8c60, (void *)multiply3x3matrices, 3, LF_RET_VOID, 4, "ppp", 0 },
     { "transposematrix", 0xa8d60, (void *)transposematrix, 2, LF_RET_VOID, 4, "pv", 0 },
-    { "hostmenu", 0xa8e10, (void *)hostmenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "joinmenu", 0xa9310, (void *)joinmenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "connectmenu", 0xaa5a0, (void *)connectmenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "mainmenu", 0xaa920, (void *)mainmenu, 0, LF_RET_VOID, 4, "", 1 },
-    { "notsupportedmenu", 0xabc00, (void *)notsupportedmenu, 0, LF_RET_VOID, 4, "", 1 },
+    { "hostmenu", 0xa8e10, (void *)lf_a8e10, 0, LF_RET_VOID, 4, "", 1 },
+    { "joinmenu", 0xa9310, (void *)lf_a9310, 0, LF_RET_VOID, 4, "", 1 },
+    { "connectmenu", 0xaa5a0, (void *)lf_aa5a0, 0, LF_RET_VOID, 4, "", 1 },
+    { "mainmenu", 0xaa920, (void *)lf_aa920, 0, LF_RET_VOID, 4, "", 1 },
+    { "notsupportedmenu", 0xabc00, (void *)lf_abc00, 0, LF_RET_VOID, 4, "", 1 },
     { "modeltempvertsequal", 0xac0d0, (void *)modeltempvertsequal, 2, LF_RET_INT, 4, "vv", 0 },
     { "setupmodel", 0xac190, (void *)setupmodel, 2, LF_RET_VOID, 4, "vv", 1 },
     { "copymodel", 0xacd30, (void *)copymodel, 1, LF_RET_VOID, 4, "v", 1 },
@@ -2263,7 +2263,7 @@ const LfEntry lf_table[] = {
     { "setupspheremodel", 0xbfe90, (void *)setupspheremodel, 0, LF_RET_VOID, 4, "", 1 },
     { "buildtrackmodel", 0xc0a60, (void *)buildtrackmodel, 0, LF_RET_VOID, 4, "", 1 },
     { "rendertrackmodel", 0xc1380, (void *)rendertrackmodel, 1, LF_RET_VOID, 4, "v", 1 },
-    { "model_viewer", 0xc14a0, (void *)model_viewer, 0, LF_RET_VOID, 4, "", 1 },
+    { "model_viewer", 0xc14a0, (void *)lf_c14a0, 0, LF_RET_VOID, 4, "", 1 },
     { "model_editor", 0xc1ac0, (void *)model_editor, 0, LF_RET_VOID, 4, "", 0 },
     { "fround", 0xc1d90, (void *)fround, 2, LF_RET_FLOAT, 4, "vv", 0 },
     { "unpackobjectpacket", 0xc1dc0, (void *)cl_unpackobjectpacket, 0, LF_RET_VOID, 4, "", 0 },
@@ -2312,11 +2312,11 @@ const LfEntry lf_table[] = {
     { "objectwheelcollision", 0xd12e0, (void *)objectwheelcollision, 2, LF_RET_VOID, 4, "vv", 0 },
     { "objectsimulation_car", 0xd1660, (void *)objectsimulation_car, 1, LF_RET_VOID, 4, "v", 0 },
     { "getenginetorque", 0xd21e0, (void *)getenginetorque, 1, LF_RET_FLOAT, 4, "v", 0 },
-    { "optionsmenu", 0xd2290, (void *)optionsmenu, 0, LF_RET_VOID, 4, "", 1 },
+    { "optionsmenu", 0xd2290, (void *)lf_d2290, 0, LF_RET_VOID, 4, "", 1 },
     { "loadsaveoptions", 0xd3350, (void *)lf_d3350, 1, LF_RET_VOID, 4, "v", 1 },
     { "optionreadwriteint", 0xd3810, (void *)optionreadwriteint, 3, LF_RET_VOID, 4, "ppv", 1 },
     { "optionreadwritestring", 0xd3860, (void *)optionreadwritestring, 4, LF_RET_VOID, 4, "ppvv", 1 },
-    { "voiceoptionsmenu", 0xd38c0, (void *)voiceoptionsmenu, 0, LF_RET_VOID, 4, "", 1 },
+    { "voiceoptionsmenu", 0xd38c0, (void *)lf_d38c0, 0, LF_RET_VOID, 4, "", 1 },
     { "createparticle", 0xd41d0, (void *)createparticle, 5, LF_RET_INT, 4, "vpvvv", 0 },
     { "particletimetolive", 0xd4340, (void *)particletimetolive, 0, LF_RET_VOID, 4, "", 0 },
     { "deleteparticle", 0xd43c0, (void *)deleteparticle, 1, LF_RET_VOID, 4, "v", 0 },
@@ -2333,7 +2333,7 @@ const LfEntry lf_table[] = {
     { "initplayticket", 0xd5610, (void *)initplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "updateplayticket", 0xd5650, (void *)updateplayticket, 0, LF_RET_VOID, 4, "", 0 },
     { "getplayticket", 0xd5660, (void *)getplayticket, 0, LF_RET_INT64, 4, "", 0 },
-    { "setupprogramobjects", 0xd5690, (void *)setupprogramobjects, 0, LF_RET_VOID, 4, "", 2 },
+    { "setupprogramobjects", 0xd5690, (void *)lf_d5690, 0, LF_RET_VOID, 4, "", 2 },
     { "compileprogramobject", 0xd6570, (void *)compileprogramobject, 3, LF_RET_INT, 4, "vvv", 1 },
     { "loadsource", 0xd6860, (void *)loadsource, 1, LF_RET_INT, 4, "p", 1 },
     { "orientationtoquaternion", 0xd6970, (void *)orientationtoquaternion, 2, LF_RET_VOID, 4, "pp", 0 },
@@ -2398,7 +2398,7 @@ const LfEntry lf_table[] = {
     { "preprocessspeex", 0xe12c0, (void *)preprocessspeex, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "encodespeex", 0xe1300, (void *)encodespeex, 3, LF_RET_VOID, 4, "vvv", 1 },
     { "decodespeex", 0xe13c0, (void *)decodespeex, 3, LF_RET_VOID, 4, "vvv", 1 },
-    { "testspeex", 0xe1550, (void *)testspeex, 3, LF_RET_VOID, 4, "vpv", 1 },
+    { "testspeex", 0xe1550, (void *)lf_e1550, 3, LF_RET_VOID, 4, "vpv", 1 },
     { "createsprite", 0xe16b0, (void *)createsprite, 4, LF_RET_INT, 4, "vpvv", 0 },
     { "createwindowsprites", 0xe1ac0, (void *)createwindowsprites, 4, LF_RET_VOID, 4, "vvpp", 0 },
     { "createwindowsprites_block", 0xe2130, (void *)createwindowsprites_block, 8, LF_RET_VOID, 4, "vvvvvvpp", 0 },
@@ -2443,7 +2443,7 @@ const LfEntry lf_table[] = {
     { "setupobjecttypes_helicopters", 0xf6b30, (void *)setupobjecttypes_helicopters, 0, LF_RET_VOID, 4, "", 0 },
     { "setupobjectypes_train", 0xf7a50, (void *)setupobjectypes_train, 0, LF_RET_VOID, 4, "", 0 },
     { "objecttype_calcquadweights", 0xfa7d0, (void *)objecttype_calcquadweights, 3, LF_RET_VOID, 4, "ppp", 0 },
-    { "usermenu", 0xfa9f0, (void *)usermenu, 0, LF_RET_VOID, 4, "", 1 },
+    { "usermenu", 0xfa9f0, (void *)lf_fa9f0, 0, LF_RET_VOID, 4, "", 1 },
     { "gettimeofday", 0xfae20, (void *)gettimeofday, 2, LF_RET_INT, 4, "pp", 1 },
     { "setcpuaffinity", 0xfaf30, (void *)setcpuaffinity, 0, LF_RET_VOID, 4, "", 1 },
     { "readprocessorcycles", 0xfafc0, (void *)lf_fafc0, 1, LF_RET_VOID, 4, "p", 0 },
@@ -2562,7 +2562,7 @@ const LfEntry lf_table[] = {
     { "ticketreturned", 0x10ad70, (void *)ticketreturned, 2, LF_RET_VOID, 4, "pv", 0 },
     { "steam_requestauthticket", 0x10adb0, (void *)steam_requestauthticket, 0, LF_RET_VOID, 4, "", 1 },
     { "steam_getauthticket", 0x10add0, (void *)steam_getauthticket, 1, LF_RET_INT, 4, "p", 0 },
-    { "main", 0x10ae00, (void *)client_main, 0, LF_RET_INT, 4, "", 1 },
+    { "main", 0x10ae00, (void *)lf_10ae00, 0, LF_RET_INT, 4, "", 1 },
     { "getpaths", 0x10b1f0, (void *)getpaths, 0, LF_RET_VOID, 4, "", 1 },
     { "tempmesh_vertnormalequal", 0x10b290, (void *)tempmesh_vertnormalequal, 2, LF_RET_INT, 4, "vv", 0 },
     { "tempmesh_quadnormalequal", 0x10b4d0, (void *)tempmesh_quadnormalequal, 2, LF_RET_INT, 4, "vv", 0 },

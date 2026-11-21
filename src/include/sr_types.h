@@ -676,7 +676,7 @@ typedef union Mission { struct {
     int kind;
     int item;
     int partner;
-    int unk_14;
+    int partner_detail; /* The high partner nibble of a mission event. */
     uint8_t pad_18[8];
     int item_type;
     int cash;
