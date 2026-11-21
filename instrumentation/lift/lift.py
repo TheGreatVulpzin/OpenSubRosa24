@@ -223,9 +223,12 @@ TARGETS = {
         pure=frozenset({'sqrt', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'pow', 'exp', 'log',
                         'log10', 'fmod'}),
         crt_start=0x10c6fb, skip_callers=True,
-        # C++ glue of the Steam callbacks (Set, CCallResult, CCallbackBase and the unregister pair).
+        # C++ glue of the Steam callbacks (Set, CCallResult, CCallbackBase and the unregister pair),
+        # the Steam id methods (CSteamID, ConvertToUint64) and the ticket call result methods
+        # (construct, Run, Run with handle, GetCallbackSizeBytes, destroy).
         # The standalone client has no Steam: a call to one of them does nothing and returns 0.
-        ignored=frozenset({0x10bfa0, 0x10c040, 0x10c090, 0x10c190, 0x10c1b0}),
+        ignored=frozenset({0x10bfa0, 0x10c040, 0x10c090, 0x10c190, 0x10c1b0, 0x10be80, 0x10bee0,
+                           0x10c020, 0x10c0c0, 0x10c100, 0x10c160, 0x10c170}),
         # The standalone client needs the loops in C. They get no hook and no harness call.
         lift_loops=True,
         # checkmenuitems and FUN_00401300 call the callback of a menu item (cdecl, integer arguments).

@@ -1,1 +1,0 @@
-# Candidates that no recorded call reached. They stay lifted until a test covers them.

@@ -1,2 +1,0 @@
-# Needs the game window: GLeeInit needs an OpenGL context.
-setupglextentions src/client/render/glext.c

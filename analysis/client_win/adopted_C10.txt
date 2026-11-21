@@ -199,3 +199,4 @@ resetsendpacket src/net/packet.c
 pbitwritescale src/net/packet.c
 pbitreadscale src/net/packet.c
 pbitwritesign src/net/packet.c
+setupframetextures src/client/render/frame_textures.c

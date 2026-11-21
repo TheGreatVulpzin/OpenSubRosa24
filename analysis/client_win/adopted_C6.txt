@@ -12,3 +12,4 @@ deletesound src/client/audio/sound.c
 frame_drawvoiceicons src/client/audio/voice_ui.c
 getnextvoice src/client/audio/voice.c
 addvoice src/client/audio/voice.c
+voiceoptionsmenu src/client/audio/voice_ui.c

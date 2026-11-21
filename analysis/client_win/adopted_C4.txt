@@ -10,3 +10,4 @@ debug_getinputs src/client/input/debug.c
 getinputs_human src/client/input/player_inputs.c
 getinputs_car src/client/input/player_inputs.c
 getinputs_heli src/client/input/player_inputs.c
+getinputs src/client/input/dispatch.c

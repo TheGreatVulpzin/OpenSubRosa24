@@ -7,3 +7,4 @@ __aullrem src/common/system.c
 __aulldiv src/common/system.c
 unescapequotes src/client/setup/arguments.c
 appticket_cleanup src/client/setup/ticket_callbacks.c
+readprocessorcycles src/client/setup/timers.c

@@ -21,3 +21,4 @@ steam_getname src/client/setup/steam.c
 steam_getid src/client/setup/steam.c
 steam_requestticket src/client/setup/steam.c
 steam_requestauthticket src/client/setup/steam.c
+reactivategame src/client/setup/game.c

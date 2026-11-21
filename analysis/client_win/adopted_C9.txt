@@ -1,0 +1,1 @@
+setupglextentions src/client/render/glext.c

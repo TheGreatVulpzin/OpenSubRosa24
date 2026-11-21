@@ -1,8 +1,0 @@
-# Candidates that no recorded call reached. They stay lifted until a test covers them.
-addbeziersurface src/game/mesh.c
-building_save src/game/buildings.c
-clientrecv src/net/client.c
-leveleditor_load src/game/block_mesh.c
-leveleditor_save src/game/block_mesh.c
-# getrandomvector2d: the client function at 0x71e60 is another function (a record writer), not the server one.
-loadsaveoptions src/game/options.c

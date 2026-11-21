@@ -1,1 +1,0 @@
-# gettextlength: the offline test skips it (pointer typed as integer). net_calcdistancefactor: the offline test reports a difference with the same low word of the result.

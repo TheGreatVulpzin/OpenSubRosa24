@@ -1,0 +1,2 @@
+gameloop src/client/setup/loop.c
+main src/client/setup/main.c client_main

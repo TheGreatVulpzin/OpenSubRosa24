@@ -6,19 +6,6 @@
 #include "setup/steam.h"
 #include "sr_runtime.h"
 
-/* Clear the account identifier and return its storage. */
-void *__fastcall CSteamID(uint64_t *id)
-{
-    *id = 0;
-    return id;
-}
-
-/* Return all bits of the account identifier. */
-uint64_t __fastcall ConvertToUint64(const uint64_t *id)
-{
-    return *id;
-}
-
 /* Return the cached play ticket identifier. */
 uint64_t getplayticket(void)
 {

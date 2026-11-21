@@ -1,3 +1,4 @@
 createwindowsprites_block src/client/render/sprite_pool.c
 render_raycast2 src/client/render/raycast.c
 testvoice src/client/audio/test_voice.c
+testspeex src/client/audio/test_voice.c

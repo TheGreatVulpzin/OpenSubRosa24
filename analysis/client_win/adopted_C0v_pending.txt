@@ -1,2 +1,0 @@
-# A file that does not load gives junk format, size and rate in the client test. The good path has no test file.
-testspeex src/client/audio/test_voice.c

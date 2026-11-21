@@ -227,8 +227,10 @@ static int join_screen(const SmokeFrame *v) { return item_index(v, "Direct IP") 
 static int list_screen(const SmokeFrame *v) { return item_index(v, "New Building") >= 0; }
 static int game_screen(const SmokeFrame *v) { return v->count > 1 && v->items[1].hidden && v->items[1].key == KEY_ESCAPE; }
 static int pause_screen(const SmokeFrame *v) { return item_index(v, "Press E to exit") >= 0; }
-static int building_screen(const SmokeFrame *v) { return v->loop == LOOP_BUILDING && item_index(v, "Name") >= 0 && item_index(v, "Exit") == 0; }
-static int level_screen(const SmokeFrame *v) { return v->loop == LOOP_LEVEL && item_index(v, "Exit") == 0 && !game_screen(v) && !list_screen(v) && !main_screen(v); }
+/* A clean game loop calls the editor loops directly, so the probe may name the game loop. */
+static int editor_loop(const SmokeFrame *v, int loop) { return v->loop == loop || v->loop == LOOP_GAME; }
+static int building_screen(const SmokeFrame *v) { return editor_loop(v, LOOP_BUILDING) && item_index(v, "Name") >= 0 && item_index(v, "Exit") == 0; }
+static int level_screen(const SmokeFrame *v) { return editor_loop(v, LOOP_LEVEL) && item_index(v, "Exit") == 0 && !game_screen(v) && !list_screen(v) && !main_screen(v); }
 static int model_screen(const SmokeFrame *v) { return v->loop == LOOP_MODEL && v->count == 1 && item_index(v, "Exit") == 0; }
 
 static int fail(const char *reason)

@@ -34,3 +34,10 @@ formattextbox src/client/menu/textinput.c
 gettextinputposition src/client/menu/textinput.c
 drawtextbox src/client/menu/draw.c
 menu_textbox_putchar src/client/menu/textinput.c
+connectmenu src/client/menu/front.c
+notsupportedmenu src/client/menu/front.c
+usermenu src/client/menu/front.c
+hostmenu src/client/menu/front.c
+optionsmenu src/client/menu/front.c
+joinmenu src/client/menu/front.c
+mainmenu src/client/menu/front.c

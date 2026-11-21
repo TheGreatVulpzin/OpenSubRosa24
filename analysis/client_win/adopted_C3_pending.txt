@@ -1,1 +1,0 @@
-setupprogramobjects src/client/render/programs.c

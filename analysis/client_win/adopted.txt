@@ -101,3 +101,9 @@ lineintersectcityobjecttype src/game/collide.c
 lineintersectarea src/game/collide_area.c
 lineintersectnormalblock src/game/collide_area.c
 lineintersectspecblock src/game/collide_area.c
+addbeziersurface src/game/mesh.c
+building_save src/game/buildings.c
+clientrecv src/net/client.c
+leveleditor_load src/game/block_mesh.c
+leveleditor_save src/game/block_mesh.c
+loadsaveoptions src/game/options.c
