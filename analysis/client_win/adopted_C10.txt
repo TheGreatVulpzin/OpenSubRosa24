@@ -163,7 +163,6 @@ gettextlength src/client/render/text.c
 addcitystreet src/game/city.c
 addcityblock src/game/city.c
 checkbigendian src/client/textures/loaders.c
-initWGLLoadFunctions src/client/gl/loaders.c
 getplayticket src/client/setup/steam.c
 settwosidedstencil src/client/render/gl_state.c
 addhalfboxtomodel src/client/textures/models.c

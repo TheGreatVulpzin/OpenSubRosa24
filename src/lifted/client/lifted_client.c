@@ -21877,6 +21877,272 @@ undefined4 __cdecl lf_2fde0(void)
 #undef s_wglGetVideoInfoNV_0052044c
 #undef FUN_0040b140
 
+/* ---------------------------------------------------------------- 0x2fef0 */
+#define FUN_0042f240 ((void *)SR_FN(0x42f240))
+#define DAT_0bb315a0 (*(undefined *)SR_VA(0xbb315a0))
+#define FUN_0042f250 ((void *)SR_FN(0x42f250))
+#define DAT_0bb315a4 (*(undefined *)SR_VA(0xbb315a4))
+#define FUN_0042f260 ((void *)SR_FN(0x42f260))
+#define DAT_0bb315a8 (*(undefined *)SR_VA(0xbb315a8))
+#define FUN_0042f2e0 ((void *)SR_FN(0x42f2e0))
+#define DAT_0bb315ac (*(undefined *)SR_VA(0xbb315ac))
+#define FUN_0042f3a0 ((void *)SR_FN(0x42f3a0))
+#define DAT_0bb315b0 (*(undefined *)SR_VA(0xbb315b0))
+#define FUN_0042f580 ((void *)SR_FN(0x42f580))
+#define DAT_0bb315b4 (*(undefined *)SR_VA(0xbb315b4))
+#define FUN_0042f640 ((void *)SR_FN(0x42f640))
+#define DAT_0bb315b8 (*(undefined *)SR_VA(0xbb315b8))
+#define FUN_0042f700 ((void *)SR_FN(0x42f700))
+#define DAT_0bb315bc (*(undefined *)SR_VA(0xbb315bc))
+#define FUN_0042f710 ((void *)SR_FN(0x42f710))
+#define DAT_0bb315c0 (*(undefined *)SR_VA(0xbb315c0))
+#define FUN_0042f720 ((void *)SR_FN(0x42f720))
+#define DAT_0bb315c4 (*(undefined *)SR_VA(0xbb315c4))
+#define FUN_0042f730 ((void *)SR_FN(0x42f730))
+#define DAT_0bb315c8 (*(undefined *)SR_VA(0xbb315c8))
+#define FUN_0042f740 ((void *)SR_FN(0x42f740))
+#define DAT_0bb315cc (*(undefined *)SR_VA(0xbb315cc))
+#define FUN_0042f750 ((void *)SR_FN(0x42f750))
+#define DAT_0bb315d0 (*(undefined *)SR_VA(0xbb315d0))
+#define FUN_0042f760 ((void *)SR_FN(0x42f760))
+#define DAT_0bb315d4 (*(undefined *)SR_VA(0xbb315d4))
+#define FUN_0042f770 ((void *)SR_FN(0x42f770))
+#define DAT_0bb315d8 (*(undefined *)SR_VA(0xbb315d8))
+#define FUN_0042f810 ((void *)SR_FN(0x42f810))
+#define DAT_0bb315dc (*(undefined *)SR_VA(0xbb315dc))
+#define FUN_0042f920 ((void *)SR_FN(0x42f920))
+#define DAT_0bb315e0 (*(undefined *)SR_VA(0xbb315e0))
+#define FUN_0042fa00 ((void *)SR_FN(0x42fa00))
+#define DAT_0bb315e4 (*(undefined *)SR_VA(0xbb315e4))
+#define FUN_0042fac0 ((void *)SR_FN(0x42fac0))
+#define DAT_0bb315e8 (*(undefined *)SR_VA(0xbb315e8))
+#define FUN_0042fb10 ((void *)SR_FN(0x42fb10))
+#define DAT_0bb315ec (*(undefined *)SR_VA(0xbb315ec))
+#define FUN_0042fb90 ((void *)SR_FN(0x42fb90))
+#define DAT_0bb315f0 (*(undefined *)SR_VA(0xbb315f0))
+#define FUN_0042fc10 ((void *)SR_FN(0x42fc10))
+#define DAT_0bb315f4 (*(undefined *)SR_VA(0xbb315f4))
+#define FUN_0042fd20 ((void *)SR_FN(0x42fd20))
+#define DAT_0bb315f8 (*(undefined *)SR_VA(0xbb315f8))
+#define FUN_0042fde0 ((void *)SR_FN(0x42fde0))
+#define DAT_0bb315fc (*(undefined *)SR_VA(0xbb315fc))
+#define DAT_0bb31600 (*(undefined *)SR_VA(0xbb31600))
+#define DAT_0bb31604 (*(undefined *)SR_VA(0xbb31604))
+#define DAT_0bb31608 (*(undefined *)SR_VA(0xbb31608))
+#define DAT_0bb3160c (*(undefined *)SR_VA(0xbb3160c))
+#define DAT_0bb31610 (*(undefined *)SR_VA(0xbb31610))
+#define DAT_0bb31614 (*(undefined *)SR_VA(0xbb31614))
+#define DAT_0bb31618 (*(undefined *)SR_VA(0xbb31618))
+#define DAT_0bb3161c (*(undefined *)SR_VA(0xbb3161c))
+#define DAT_0bb31620 (*(undefined *)SR_VA(0xbb31620))
+#define DAT_0bb31624 (*(undefined *)SR_VA(0xbb31624))
+#define DAT_0bb31628 (*(undefined *)SR_VA(0xbb31628))
+#define DAT_0bb3162c (*(undefined *)SR_VA(0xbb3162c))
+#define DAT_0bb31630 (*(undefined *)SR_VA(0xbb31630))
+#define FUN_0042ec10 ((void *)SR_FN(0x42ec10))
+#define FUN_0042ecd0 ((void *)SR_FN(0x42ecd0))
+#define FUN_0042ece0 ((void *)SR_FN(0x42ece0))
+#define FUN_0042ed30 ((void *)SR_FN(0x42ed30))
+#define FUN_0042edd0 ((void *)SR_FN(0x42edd0))
+#define FUN_0042ee50 ((void *)SR_FN(0x42ee50))
+#define FUN_0042ef30 ((void *)SR_FN(0x42ef30))
+#define FUN_0042efd0 ((void *)SR_FN(0x42efd0))
+#define FUN_0042efe0 ((void *)SR_FN(0x42efe0))
+#define FUN_0042f030 ((void *)SR_FN(0x42f030))
+#define FUN_0042f0b0 ((void *)SR_FN(0x42f0b0))
+#define FUN_0042f150 ((void *)SR_FN(0x42f150))
+#define FUN_0042f230 ((void *)SR_FN(0x42f230))
+#define _DAT_0bb315a0 (*(undefined * *)SR_VA(0xbb315a0))
+#define _DAT_0bb315a4 (*(undefined * *)SR_VA(0xbb315a4))
+#define _DAT_0bb315a8 (*(undefined * *)SR_VA(0xbb315a8))
+#define _DAT_0bb315ac (*(undefined * *)SR_VA(0xbb315ac))
+#define _DAT_0bb315b0 (*(undefined * *)SR_VA(0xbb315b0))
+#define _DAT_0bb315b4 (*(undefined * *)SR_VA(0xbb315b4))
+#define _DAT_0bb315b8 (*(undefined * *)SR_VA(0xbb315b8))
+#define _DAT_0bb315bc (*(undefined * *)SR_VA(0xbb315bc))
+#define _DAT_0bb315c0 (*(undefined * *)SR_VA(0xbb315c0))
+#define _DAT_0bb315c4 (*(undefined * *)SR_VA(0xbb315c4))
+#define _DAT_0bb315c8 (*(undefined * *)SR_VA(0xbb315c8))
+#define _DAT_0bb315cc (*(undefined * *)SR_VA(0xbb315cc))
+#define _DAT_0bb315d0 (*(undefined * *)SR_VA(0xbb315d0))
+#define _DAT_0bb315d4 (*(undefined * *)SR_VA(0xbb315d4))
+#define _DAT_0bb315d8 (*(undefined * *)SR_VA(0xbb315d8))
+#define _DAT_0bb315dc (*(undefined * *)SR_VA(0xbb315dc))
+#define _DAT_0bb315e0 (*(undefined * *)SR_VA(0xbb315e0))
+#define _DAT_0bb315e4 (*(undefined * *)SR_VA(0xbb315e4))
+#define _DAT_0bb315e8 (*(undefined * *)SR_VA(0xbb315e8))
+#define _DAT_0bb315ec (*(undefined * *)SR_VA(0xbb315ec))
+#define _DAT_0bb315f0 (*(undefined * *)SR_VA(0xbb315f0))
+#define _DAT_0bb315f4 (*(undefined * *)SR_VA(0xbb315f4))
+#define _DAT_0bb315f8 (*(undefined * *)SR_VA(0xbb315f8))
+#define _DAT_0bb315fc (*(undefined * *)SR_VA(0xbb315fc))
+#define _DAT_0bb31600 (*(undefined * *)SR_VA(0xbb31600))
+#define _DAT_0bb31604 (*(undefined * *)SR_VA(0xbb31604))
+#define _DAT_0bb31608 (*(undefined * *)SR_VA(0xbb31608))
+#define _DAT_0bb3160c (*(undefined * *)SR_VA(0xbb3160c))
+#define _DAT_0bb31610 (*(undefined * *)SR_VA(0xbb31610))
+#define _DAT_0bb31614 (*(undefined * *)SR_VA(0xbb31614))
+#define _DAT_0bb31618 (*(undefined * *)SR_VA(0xbb31618))
+#define _DAT_0bb3161c (*(undefined * *)SR_VA(0xbb3161c))
+#define _DAT_0bb31620 (*(undefined * *)SR_VA(0xbb31620))
+#define _DAT_0bb31624 (*(undefined * *)SR_VA(0xbb31624))
+#define _DAT_0bb31628 (*(undefined * *)SR_VA(0xbb31628))
+#define _DAT_0bb3162c (*(undefined * *)SR_VA(0xbb3162c))
+#define _DAT_0bb31630 (*(undefined * *)SR_VA(0xbb31630))
+void __cdecl lf_2fef0(void)
+
+{
+  _DAT_0bb315a0 = FUN_0042ec10;
+  _DAT_0bb315a4 = FUN_0042ecd0;
+  _DAT_0bb315a8 = FUN_0042ece0;
+  _DAT_0bb315ac = FUN_0042ed30;
+  _DAT_0bb315b0 = FUN_0042edd0;
+  _DAT_0bb315b4 = FUN_0042ee50;
+  _DAT_0bb315b8 = FUN_0042ef30;
+  _DAT_0bb315bc = FUN_0042efd0;
+  _DAT_0bb315c0 = FUN_0042efe0;
+  _DAT_0bb315c4 = FUN_0042f030;
+  _DAT_0bb315c8 = FUN_0042f0b0;
+  _DAT_0bb315cc = FUN_0042f150;
+  _DAT_0bb315d0 = FUN_0042f230;
+  _DAT_0bb315d4 = FUN_0042f240;
+  _DAT_0bb315d8 = FUN_0042f250;
+  _DAT_0bb315dc = FUN_0042f260;
+  _DAT_0bb315e0 = FUN_0042f2e0;
+  _DAT_0bb315e4 = FUN_0042f3a0;
+  _DAT_0bb315e8 = FUN_0042f580;
+  _DAT_0bb315ec = FUN_0042f640;
+  _DAT_0bb315f0 = FUN_0042f700;
+  _DAT_0bb315f4 = FUN_0042f710;
+  _DAT_0bb315f8 = FUN_0042f720;
+  _DAT_0bb315fc = FUN_0042f730;
+  _DAT_0bb31600 = FUN_0042f740;
+  _DAT_0bb31604 = FUN_0042f750;
+  _DAT_0bb31608 = FUN_0042f760;
+  _DAT_0bb3160c = FUN_0042f770;
+  _DAT_0bb31610 = FUN_0042f810;
+  _DAT_0bb31614 = FUN_0042f920;
+  _DAT_0bb31618 = FUN_0042fa00;
+  _DAT_0bb3161c = FUN_0042fac0;
+  _DAT_0bb31620 = FUN_0042fb10;
+  _DAT_0bb31624 = FUN_0042fb90;
+  _DAT_0bb31628 = FUN_0042fc10;
+  _DAT_0bb3162c = FUN_0042fd20;
+  _DAT_0bb31630 = FUN_0042fde0;
+  return;
+}
+#undef FUN_0042f240
+#undef DAT_0bb315a0
+#undef FUN_0042f250
+#undef DAT_0bb315a4
+#undef FUN_0042f260
+#undef DAT_0bb315a8
+#undef FUN_0042f2e0
+#undef DAT_0bb315ac
+#undef FUN_0042f3a0
+#undef DAT_0bb315b0
+#undef FUN_0042f580
+#undef DAT_0bb315b4
+#undef FUN_0042f640
+#undef DAT_0bb315b8
+#undef FUN_0042f700
+#undef DAT_0bb315bc
+#undef FUN_0042f710
+#undef DAT_0bb315c0
+#undef FUN_0042f720
+#undef DAT_0bb315c4
+#undef FUN_0042f730
+#undef DAT_0bb315c8
+#undef FUN_0042f740
+#undef DAT_0bb315cc
+#undef FUN_0042f750
+#undef DAT_0bb315d0
+#undef FUN_0042f760
+#undef DAT_0bb315d4
+#undef FUN_0042f770
+#undef DAT_0bb315d8
+#undef FUN_0042f810
+#undef DAT_0bb315dc
+#undef FUN_0042f920
+#undef DAT_0bb315e0
+#undef FUN_0042fa00
+#undef DAT_0bb315e4
+#undef FUN_0042fac0
+#undef DAT_0bb315e8
+#undef FUN_0042fb10
+#undef DAT_0bb315ec
+#undef FUN_0042fb90
+#undef DAT_0bb315f0
+#undef FUN_0042fc10
+#undef DAT_0bb315f4
+#undef FUN_0042fd20
+#undef DAT_0bb315f8
+#undef FUN_0042fde0
+#undef DAT_0bb315fc
+#undef DAT_0bb31600
+#undef DAT_0bb31604
+#undef DAT_0bb31608
+#undef DAT_0bb3160c
+#undef DAT_0bb31610
+#undef DAT_0bb31614
+#undef DAT_0bb31618
+#undef DAT_0bb3161c
+#undef DAT_0bb31620
+#undef DAT_0bb31624
+#undef DAT_0bb31628
+#undef DAT_0bb3162c
+#undef DAT_0bb31630
+#undef FUN_0042ec10
+#undef FUN_0042ecd0
+#undef FUN_0042ece0
+#undef FUN_0042ed30
+#undef FUN_0042edd0
+#undef FUN_0042ee50
+#undef FUN_0042ef30
+#undef FUN_0042efd0
+#undef FUN_0042efe0
+#undef FUN_0042f030
+#undef FUN_0042f0b0
+#undef FUN_0042f150
+#undef FUN_0042f230
+#undef _DAT_0bb315a0
+#undef _DAT_0bb315a4
+#undef _DAT_0bb315a8
+#undef _DAT_0bb315ac
+#undef _DAT_0bb315b0
+#undef _DAT_0bb315b4
+#undef _DAT_0bb315b8
+#undef _DAT_0bb315bc
+#undef _DAT_0bb315c0
+#undef _DAT_0bb315c4
+#undef _DAT_0bb315c8
+#undef _DAT_0bb315cc
+#undef _DAT_0bb315d0
+#undef _DAT_0bb315d4
+#undef _DAT_0bb315d8
+#undef _DAT_0bb315dc
+#undef _DAT_0bb315e0
+#undef _DAT_0bb315e4
+#undef _DAT_0bb315e8
+#undef _DAT_0bb315ec
+#undef _DAT_0bb315f0
+#undef _DAT_0bb315f4
+#undef _DAT_0bb315f8
+#undef _DAT_0bb315fc
+#undef _DAT_0bb31600
+#undef _DAT_0bb31604
+#undef _DAT_0bb31608
+#undef _DAT_0bb3160c
+#undef _DAT_0bb31610
+#undef _DAT_0bb31614
+#undef _DAT_0bb31618
+#undef _DAT_0bb3161c
+#undef _DAT_0bb31620
+#undef _DAT_0bb31624
+#undef _DAT_0bb31628
+#undef _DAT_0bb3162c
+#undef _DAT_0bb31630
+
 /* ---------------------------------------------------------------- 0x30070 */
 
 void __cdecl lf_30070(undefined4 *param_1)

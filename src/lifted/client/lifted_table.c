@@ -525,7 +525,7 @@ void lf_2fb90(void);
 void lf_2fc10(void);
 void lf_2fd20(void);
 void lf_2fde0(void);
-void initWGLLoadFunctions(void);
+void lf_2fef0(void);
 void lf_30070(void);
 void lf_300a0(void);
 void lf_30140(void);
@@ -1829,7 +1829,7 @@ const LfEntry lf_table[] = {
     { "__GLeeLink_WGL_OML_sync_control", 0x2fc10, (void *)lf_2fc10, 0, LF_RET_INT, 4, "", 1 },
     { "__GLeeLink_WGL_I3D_swap_frame_usage", 0x2fd20, (void *)lf_2fd20, 0, LF_RET_INT, 4, "", 1 },
     { "__GLeeLink_WGL_NV_video_output", 0x2fde0, (void *)lf_2fde0, 0, LF_RET_INT, 4, "", 1 },
-    { "initWGLLoadFunctions", 0x2fef0, (void *)initWGLLoadFunctions, 0, LF_RET_VOID, 4, "", 0 },
+    { "initWGLLoadFunctions", 0x2fef0, (void *)lf_2fef0, 0, LF_RET_VOID, 4, "", 0 },
     { "__GLeeExtList_init", 0x30070, (void *)lf_30070, 1, LF_RET_VOID, 4, "p", 0 },
     { "__GLeeExtList_clean", 0x300a0, (void *)lf_300a0, 1, LF_RET_VOID, 4, "p", 1 },
     { "__GLeeExtList_add", 0x30140, (void *)lf_30140, 2, LF_RET_VOID, 4, "pp", 1 },
