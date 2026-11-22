@@ -50,6 +50,7 @@ typedef struct SmokeFrame {
     void *window;
     int human, weapon, ammo, cooldown, trigger, sounds, money, player_menu, net_on;
     int game_state, weapon_slot, magazine_slot;
+    int voice_off, voice_head, voice_enabled, voice_push, voice_key, voice_mouse, team;
     LONG sound_calls;
     vec3 position;
     float yaw;
@@ -79,6 +80,35 @@ static void (__cdecl *drawable_size)(void *, int *, int *);
 static int fail(const char *reason);
 static uint32_t (__cdecl *window_id)(void *);
 static uint8_t keys[KEY_COUNT];
+static int capture_device;
+static DWORD capture_time;
+static unsigned capture_count;
+
+/* Supply deterministic microphone frames without a physical capture device. */
+static void *__cdecl smoke_capture_open(const char *name, unsigned rate, int format, int size)
+{
+    (void)name; (void)rate; (void)format; (void)size;
+    capture_time = GetTickCount();
+    return &capture_device;
+}
+
+static int __cdecl smoke_capture_close(void *device) { (void)device; return 1; }
+static void __cdecl smoke_capture_control(void *device) { (void)device; }
+static void __cdecl smoke_capture_info(void *device, int token, int size, int *value)
+{
+    (void)device; (void)token; (void)size;
+    *value = GetTickCount() - capture_time >= 20 ? 160 : 0;
+}
+
+static void __cdecl smoke_capture_samples(void *device, void *data, int count)
+{
+    int i;
+    int16_t *samples = data;
+    (void)device;
+    for (i = 0; i < count; i++) samples[i] = i & 1 ? 4096 : -4096;
+    capture_time = GetTickCount();
+    capture_count++;
+}
 
 static SmokeFrame snapshot(void)
 {
@@ -177,6 +207,13 @@ void *client_smoke_import(const char *dll, const char *name, void *function)
     if (!getenv("SR_SMOKE")) return function;
     if (!_stricmp(dll, "SHELL32.DLL") && !strcmp(name, "SHGetSpecialFolderPathA"))
         return (void *)smoke_documents;
+    if (!_stricmp(dll, "OPENAL32.DLL") && !strcmp(getenv("SR_SMOKE"), "play")) {
+        if (!strcmp(name, "alcCaptureOpenDevice")) return (void *)smoke_capture_open;
+        if (!strcmp(name, "alcCaptureCloseDevice")) return (void *)smoke_capture_close;
+        if (!strcmp(name, "alcCaptureStart") || !strcmp(name, "alcCaptureStop")) return (void *)smoke_capture_control;
+        if (!strcmp(name, "alcGetIntegerv")) return (void *)smoke_capture_info;
+        if (!strcmp(name, "alcCaptureSamples")) return (void *)smoke_capture_samples;
+    }
     if (_stricmp(dll, "SDL2.DLL")) return function;
     if (!strcmp(name, "SDL_GL_SwapWindow")) {
         swap_window = (void (__cdecl *)(void *))function;

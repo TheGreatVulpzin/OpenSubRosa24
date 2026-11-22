@@ -30,6 +30,10 @@ The calls run in a fixed order.
 
 `src/client/setup/option_keys.c` reads and writes one key of the settings file. A read searches the key in the text and sets the value. A write puts the key and the value on one line, with a carriage return and a line feed. The file is the shared file handle `open_file`. The server uses the same worker (`option_int` and `option_string` in `src/game/options.c`) and only reads.
 
+`src/client/setup/options.c` loads and saves the client settings with `OptionClient`.
+The client record omits the server game type field. The fields after it have different positions.
+Loading sets the voice key to V before it reads the file. Saving uses the current color, depth and stencil bits.
+
 ## Quirks
 
 - A model that a builder makes from an item gets the item type as the second argument. The cash builder makes the Magnum, the Uzi and the 9mm, and the bill builder makes the two cash items.

@@ -33,10 +33,17 @@ static void sample_player(void)
     frame.human = frame.weapon = frame.ammo = -1;
     frame.money = frame.player_menu = frame.cooldown = frame.trigger = 0;
     frame.net_on = sr_data_option.net_on;
+    frame.voice_enabled = cl_data_audio_voice_enabled;
+    frame.voice_push = cl_data_audio_push_to_talk;
+    frame.voice_key = cl_data_audio_voice_key;
+    frame.voice_mouse = cl_data_audio_voice_mouse;
+    frame.voice_off = sr_data_speex.voice_ring[sr_data_view >= 0 && sr_data_view < PLAYER_LIMIT ? sr_data_view : 0].voice_off;
+    frame.voice_head = sr_data_speex.voice_ring[sr_data_view >= 0 && sr_data_view < PLAYER_LIMIT ? sr_data_view : 0].head;
     if (sr_data_view >= 0 && sr_data_view < PLAYER_LIMIT) {
         const Player *player = &sr_data_player[sr_data_view];
         frame.human = player->human_id;
         frame.money = player->money; frame.player_menu = player->menu; frame.yaw = player->yaw;
+        frame.team = player->team;
         if (frame.human >= 0 && frame.human < HUMAN_LIMIT) {
             const Human *human = &sr_data_human[frame.human];
             int slot, child;

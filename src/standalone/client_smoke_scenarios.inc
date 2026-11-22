@@ -205,11 +205,16 @@ static int play(void)
     before = snapshot();
     if (before.net_on && !click("Host")) return 0;
     if (!click("Start") || !wait_screen(game_screen, 3, 0, START_MS, "world load") || !shot("world")) return 0;
+    if (!shot("round-before-team") || !record_screen("round-before-team", 0)) return 0;
     before = snapshot();
     if (before.human < 0) {
         if (item_index(&before, "Enter City") >= 0) { if (!click("Enter City")) return 0; }
-        else if (!key_press(KEY_1) || !key_press(KEY_R)) return 0;
+        else if (!key_press(KEY_1) || !shot("round-after-team") || !record_screen("round-after-team", 0) || !key_press(KEY_R)) return 0;
     }
+    if (getenv("SR_SMOKE_ROUND_ONLY")) return 1;
+    before = snapshot();
+    fprintf(stderr, "SMOKE ASSERT round-team %s team=%d\n", before.team == 0 ? "PASS" : "FAIL", before.team);
+    if (before.team != 0) return fail("team key did not select first team");
     if (!wait_screen(live_player, 3, 0, START_MS, "player spawn") || !shot("standing")) return 0;
     before = snapshot();
     if (!key_hold(KEY_W, 2000)) return 0;
@@ -230,7 +235,8 @@ static int play(void)
         if (!key_press(KEY_TAB)) return 0;
         before = snapshot();
         if (item_index(&before, "Weapons") < 0) { shot("weapon-unavailable"); record_screen("weapon-unavailable", 0); return fail("weapon shop unavailable after Tab"); }
-        if (!click("Weapons") || !click("9mm") || !click("Back") || !click("Ammo") ||
+        if (!shot("shop") || !record_screen("shop", 0)) return 0;
+        if (!click("Weapons") || !shot("weapon-shop") || !click("9mm") || !click("Back") || !click("Ammo") ||
             !click("9mm Magazine") || !click("Back") || !click("Done")) return 0;
     }
     before = snapshot();
@@ -252,11 +258,19 @@ static int play(void)
     if (!shot("before-fire")) return 0;
     before = snapshot();
     InterlockedExchange(&peak_sounds, before.sounds);
+    fprintf(stderr, "SMOKE VOICE before enabled=%d push=%d key=%d mouse=%d off=%d head=%d capture=%u\n",
+            before.voice_enabled, before.voice_push, before.voice_key, before.voice_mouse,
+            before.voice_off, before.voice_head, capture_count);
+    if (!before.voice_enabled || !before.voice_push || before.voice_key != 25 || before.voice_mouse != 0)
+        { fail("push to talk settings differ from fixture"); ok = 0; }
+    if (!capture_count || !before.voice_off) return fail("microphone is not idle before fire");
     InterlockedExchange(&observe_fire, 1);
     for (i = 0; i < 4; i++) {
         if (!fire_button(1) || !wait_screen(NULL, 3, 100, FRAME_MS, "fire held")) return 0;
         if (!i && !shot("after-fire")) ok = 0;
         after = snapshot();
+        fprintf(stderr, "SMOKE VOICE fire=%d off=%d head=%d capture=%u\n", i, after.voice_off, after.voice_head, capture_count);
+        if (!after.voice_off) { fail("left fire button activates microphone"); ok = 0; }
         if (after.sound_calls > before.sound_calls || after.sounds > before.sounds) audio = 1;
         if (after.weapon == before.weapon && (after.ammo < before.ammo || after.cooldown != before.cooldown || after.trigger != before.trigger)) weapon = 1;
         fprintf(stderr, "SMOKE FIRE %d sounds=%d calls=%ld weapon=%d ammo=%d cooldown=%d trigger=%d\n",
@@ -266,6 +280,7 @@ static int play(void)
     InterlockedExchange(&observe_fire, 0);
     if (InterlockedCompareExchange(&peak_sounds, 0, 0) > before.sounds) audio = 1;
     EnterCriticalSection(&lock); visual = shot_changed; LeaveCriticalSection(&lock);
+    fprintf(stderr, "SMOKE ASSERT fire-voice %s\n", ok ? "PASS" : "FAIL");
     fprintf(stderr, "SMOKE ASSERT fire-image %s\n", visual ? "PASS" : "FAIL");
     fprintf(stderr, "SMOKE ASSERT fire-sound %s before=%d/%ld after=%d/%ld peak=%ld\n", audio ? "PASS" : "FAIL",
             before.sounds, before.sound_calls, after.sounds, after.sound_calls, InterlockedCompareExchange(&peak_sounds, 0, 0));
@@ -273,5 +288,13 @@ static int play(void)
     if (!visual) { fail("image did not change after fire"); ok = 0; }
     if (!audio) { fail("no sound count or createsound increase after fire"); ok = 0; }
     if (!weapon) { fail("ammo and gun state did not change after fire"); ok = 0; }
-    return shot("after-burst") && ok;
+    if (!shot("after-burst") || !key_hold(25, 300)) return 0;
+    after = snapshot();
+    fprintf(stderr, "SMOKE ASSERT voice-key %s off=%d\n", !after.voice_off ? "PASS" : "FAIL", after.voice_off);
+    if (after.voice_off) { fail("voice key did not activate microphone"); ok = 0; }
+    if (!wait_screen(NULL, 30, 1000, FRAME_MS, "voice key release")) return 0;
+    after = snapshot();
+    fprintf(stderr, "SMOKE ASSERT voice-release %s off=%d\n", after.voice_off ? "PASS" : "FAIL", after.voice_off);
+    if (!after.voice_off) { fail("microphone did not stop after voice key release"); ok = 0; }
+    return ok;
 }

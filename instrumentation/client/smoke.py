@@ -260,7 +260,27 @@ def run_suite(exe, scenarios, output, timeout, points):
                       "timeout": False, "seconds": 0, "exit_code": None, "log": str(log)}
         else:
             with preserve_inputs(folder):
+                if scenario == "play":
+                    settings = folder / "Sub Rosa/config.txt"
+                    settings.parent.mkdir(parents=True, exist_ok=True)
+                    data = settings.read_bytes() if settings.exists() else b""
+                    values = {b"voicechat": b"1", b"voiceholdtotalk": b"1", b"voicekey": b"25", b"voicemb": b"0"}
+                    lines = [line for line in data.splitlines() if line.split(b"=", 1)[0] not in {*values, b"voiceboost"}]
+                    lines.extend(key + b"=" + value for key, value in values.items())
+                    settings.write_bytes(b"\r\n".join(lines) + b"\r\n")
                 result = run_process([str(exe), "--run"], scenario, folder, env, log, timeout or SCENARIOS[scenario])
+                if scenario == "play" and result["ok"] and not env.get("SR_SMOKE_ROUND_ONLY"):
+                    try:
+                        data = settings.read_bytes()
+                        saved = dict(line.split(b"=", 1) for line in data.splitlines() if b"=" in line)
+                        expected = {**values, b"voiceboost": b"100"}
+                        valid = all(saved.get(key) == value for key, value in expected.items()) and b"\r\r\n" not in data
+                    except OSError:
+                        valid = False
+                    with log.open("a", encoding="utf-8") as output_log:
+                        output_log.write(f"SMOKE ASSERT voice-save {'PASS' if valid else 'FAIL'}\n")
+                    if not valid:
+                        result.update(ok=False, error="voice settings were not saved with CRLF lines")
         collect_artifacts(directory, result)
         results.append(result)
         print(f"{exe.stem}/{scenario}: {'ok' if result['ok'] else 'FAILED'} | {result['error'] or '-'}", flush=True)

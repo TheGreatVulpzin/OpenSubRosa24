@@ -104,6 +104,8 @@ if(CL_ADOPTED)
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:addvoice=server_voice_slot>")
     set_property(SOURCE src/game/game_setup.c APPEND PROPERTY COMPILE_DEFINITIONS
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:setupgame=server_setupgame>")
+    set_property(SOURCE src/game/options.c APPEND PROPERTY COMPILE_DEFINITIONS
+        "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_adopted>:loadsaveoptions=server_loadsaveoptions>")
     set_property(TARGET client_adopted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set(CL_ADOPTED_OBJECTS $<TARGET_OBJECTS:client_adopted>)
 endif()

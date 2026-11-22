@@ -89,3 +89,10 @@ Vector length rounds its squared sum and square root result to float. Vehicle di
 | `sockets.c` | `enablesocketserver`, `enablesocketclient` |
 | `sound.c` | `soundsimulation`, `deletesound` |
 | `voice_ui.c` | `frame_drawvoiceicons`, `voiceoptionsmenu` |
+
+## Saved voice controls
+
+Client settings use `OptionClient`. The talk key defaults to V (SDL scan code 25).
+The mouse binding is a bit mask. A zero mask selects no mouse button.
+`loadsaveoptions` reads and writes the voice switch, talk mode, key, mouse mask, threshold and gain.
+A talk key or a selected mouse bit starts voice transmission. The fire button has no separate voice action.

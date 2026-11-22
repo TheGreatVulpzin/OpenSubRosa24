@@ -64,3 +64,17 @@ Comparison runs the same scenarios in sequence, once per executable.
 `comparison.json` records the percentage of different pixels for each matching capture.
 Size differences count as 100 percent. Missing captures and image differences produce warnings.
 These warnings do not change scenario results. Process failures and invalid captures fail as usual.
+The play scenario sets voice chat and push to talk, with V as the key and no mouse binding.
+It supplies deterministic microphone samples through the capture imports, without a physical microphone.
+It records the voice ring state before and during fire. A fire click that starts voice transmission fails the scenario.
+A V press must start transmission. Transmission must stop after the release interval.
+The executor restores the settings file after the process ends.
+
+The play captures include `round-before-team`, `round-after-team`, `shop` and `weapon-shop`.
+The round screen is a roster with three team columns and a fourth column for observers.
+An empty team has no player rows. Its gray panel uses an untextured rectangle.
+The driver checks team selection, then opens the shop after the player enters the round.
+The play fixture omits the gain key. After exit, the saved file must contain the default gain and all talk settings.
+The saved file must use CRLF lines without an extra carriage return.
+
+Use SR_SMOKE_ROUND_ONLY=1 for roster comparisons. This mode ends play after the team captures and does not test fire or voice.

@@ -106,4 +106,4 @@ building_save src/game/buildings.c
 clientrecv src/net/client.c
 leveleditor_load src/game/block_mesh.c
 leveleditor_save src/game/block_mesh.c
-loadsaveoptions src/game/options.c
+loadsaveoptions src/client/setup/options.c
