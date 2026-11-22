@@ -737,6 +737,10 @@ def main():
     def run_one(item):
         # "name=kinds" replaces the prototype of that function for this run.
         name, _, kinds = item.partition('=')
+        from synth_shared import FUNCTIONS, run_cases as run_shared
+        if name in FUNCTIONS:
+            passed[name] = run_shared(rec, work / name, name, count)
+            return f'{name}: record cases ' + ('same' if passed[name] else 'FAILED')
         if name == 'eventsimulation':
             from synth_events import run_cases
             passed[name] = run_cases(rec, work / name, count)
