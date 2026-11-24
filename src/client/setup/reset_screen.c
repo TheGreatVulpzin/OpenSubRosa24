@@ -69,3 +69,11 @@ void resetgame_client_screen(void)
         }
     }
 }
+
+/* The client views no human at the start of a game and its death camera counter is zero. The free
+ * camera copies its place to the view camera only when the counter is zero. */
+void resetgame_client_camera_counter(void)
+{
+    sr_game.spectator_human = -1;
+    sr_game.death_camera_ticks = 0;
+}

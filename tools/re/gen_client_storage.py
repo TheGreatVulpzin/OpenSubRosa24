@@ -92,6 +92,8 @@ def main():
                 client_only.append('#define sr_resetgame_level_built() resetgame_client_level_built()')
                 client_only.append('void resetgame_client_light(void);')
                 client_only.append('#define sr_resetgame_light() resetgame_client_light()')
+                client_only.append('void resetgame_client_camera_counter(void);')
+                client_only.append('#define sr_resetgame_camera_counter() resetgame_client_camera_counter()')
                 client_only.append('#define sr_human_floor_all_rays 1')
                 client_only.append('#define sr_human_vehicle_limit_protection 0')
                 for field, macro in (('vel', 'VEL'), ('dv', 'DV'), ('ang_momentum', 'MOMENTUM'),

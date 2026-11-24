@@ -143,6 +143,11 @@ static void test_players(void)
 #ifndef sr_resetgame_light
 #define sr_resetgame_light() ((void)0)
 #endif
+/* The server writes minus one to the death camera counter. The client has no spectator and a counter of
+ * zero: the free camera moves only when the counter is zero. */
+#ifndef sr_resetgame_camera_counter
+#define sr_resetgame_camera_counter() (sr_game.death_camera_ticks = -1)
+#endif
 
 void resetgame(void)
 {
@@ -165,7 +170,7 @@ void resetgame(void)
     g_camera[0] = 160.0f;
     g_camera[1] = 32.0f;
     g_camera[2] = 128.0f;
-    sr_game.death_camera_ticks = -1;
+    sr_resetgame_camera_counter();
     sr_game.unused_257e0 = 0;
     sr_game.unused_257ec = 0;
     for (i = 0; i < 5; ++i) {
