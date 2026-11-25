@@ -122,6 +122,19 @@ if(CL_ADOPTED)
     set_property(SOURCE src/game/options.c APPEND PROPERTY COMPILE_DEFINITIONS
         "$<$<STREQUAL:$<TARGET_PROPERTY:NAME>,client_native>:loadsaveoptions=server_loadsaveoptions>")
     set_property(TARGET client_native PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+    # The native client executable: it holds no image of subrosa.exe and no file of instrumentation/.
+    add_executable(subvulpes-client-native EXCLUDE_FROM_ALL src/standalone/client_native_main.c
+        src/platform/client_imports.c src/platform/client_crt.c src/platform/x87_math_client.c
+        third_party/glee/GLee.c $<TARGET_OBJECTS:client_native>)
+    target_include_directories(subvulpes-client-native PRIVATE src/include src/platform src/client src/client/native third_party/glee)
+    target_compile_options(subvulpes-client-native PRIVATE /arch:IA32 /W3 /utf-8)
+    target_compile_definitions(subvulpes-client-native PRIVATE _CRT_SECURE_NO_WARNINGS SR_CLIENT_NATIVE)
+    set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "/W0")
+    target_link_libraries(subvulpes-client-native PRIVATE opengl32 user32 gdi32 ws2_32 shell32)
+    target_link_options(subvulpes-client-native PRIVATE /LARGEADDRESSAWARE /MAP /DEBUG)
+    set_target_properties(subvulpes-client-native PROPERTIES OUTPUT_NAME opensubrosa24_client_native)
+    set_property(TARGET subvulpes-client-native PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 # Lifted client code with the hook tables of the lifter, the verifier and the recorder. The hook
 # tables are generated under build/ by instrumentation/client/pipeline.sh and are not in the
@@ -132,7 +145,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
     target_sources(cl_wsock32 PRIVATE instrumentation/client/cl_hooks.c
         src/lifted/client/lifted_client.c build/lift/client_win/hooks_lifted.c build/lift/client_win/hooks_record.c
         instrumentation/hook/verify.c instrumentation/hook/record.c instrumentation/hook/record_imports.c
-        instrumentation/hook/imports.c instrumentation/runtime/profile.c instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
+        instrumentation/hook/imports.c instrumentation/runtime/profile.c src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(cl_wsock32 PRIVATE src/lifted src/platform)
     target_compile_definitions(cl_wsock32 PRIVATE CL_HOOKS)
     set_source_files_properties(src/lifted/client/lifted_client.c PROPERTIES COMPILE_OPTIONS "/arch:IA32;/W0;/WX-;/we4013")
@@ -142,7 +155,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
     add_executable(harness_client instrumentation/tests/harness.c instrumentation/client/check_image_io.c instrumentation/hook/verify.c instrumentation/hook/hook.c
         instrumentation/hook/record.c instrumentation/hook/imports.c instrumentation/hook/console.c instrumentation/tests/harness_ui.c
         instrumentation/platform/plat_test.c src/lifted/client/lifted_client.c src/lifted/client/lifted_table.c
-        instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
+        src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
     target_include_directories(harness_client PRIVATE src/include src/lifted src/platform src/client instrumentation/platform
         instrumentation/hook instrumentation/runtime build/lift/client_win)
     target_compile_options(harness_client PRIVATE /W4 /WX /utf-8)
@@ -160,11 +173,11 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/src/lifted/client/lifted_client.c
         target_compile_options(client_lifted PRIVATE /arch:IA32 /W0 /utf-8)
         target_compile_definitions(client_lifted PRIVATE _CRT_SECURE_NO_WARNINGS SR_STANDALONE)
         set_property(TARGET client_lifted PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-        add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/standalone/client_crt.c
+        add_executable(subvulpes-client EXCLUDE_FROM_ALL src/standalone/client_main.c src/platform/client_crt.c
             src/standalone/client_smoke.c instrumentation/client/gl_trace.c
             build/client_image/image_client.c build/client_image/client_gl.c
             build/client_image/client_gl_glee.c third_party/glee/GLee.c
-            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c instrumentation/client/runtime/x87_math_client.c ${CL_ADOPTED_OBJECTS})
+            $<TARGET_OBJECTS:client_lifted> src/lifted/client/lifted_table.c src/platform/x87_math_client.c ${CL_ADOPTED_OBJECTS})
         target_include_directories(subvulpes-client PRIVATE src/include src/lifted src/standalone src/platform src/client third_party/glee)
         set_source_files_properties(third_party/glee/GLee.c PROPERTIES COMPILE_OPTIONS "/W0")
         target_link_libraries(subvulpes-client PRIVATE opengl32)
