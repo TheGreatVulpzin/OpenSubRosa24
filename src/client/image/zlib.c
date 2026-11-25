@@ -28,6 +28,8 @@ enum {
     ZLIB_ASSERT_CODE_RANGE = 0x1118fc,
     ZLIB_DYNAMIC_SOURCE = 0x111a20,
     ZLIB_ASSERT_REPEAT = 0x111a8c,
+    ZLIB_ASSERT_REVERSE_BITS = 0x1115c4,
+    ZLIB_REVERSE_SOURCE = 0x111558,
     ZLIB_REPEAT_SOURCE = 0x111ac0,
     ZLIB_ERROR_REPEAT = 0x111b2c,
     ZLIB_ASSERT_ALIGNMENT = 0x111a9c,
@@ -410,6 +412,6 @@ int stbi_zlib_decode_noheader_buffer(uint8_t *output, int output_length, const u
 /* Reverse the low bits of a value. The count of bits must not be above 16. */
 int stbi_bit_reverse(int value, int bits)
 {
-    image_check(bits <= 16, 0x1115c4, 0x111558, 0x774);
+    image_check(bits <= 16, ZLIB_ASSERT_REVERSE_BITS, ZLIB_REVERSE_SOURCE, 0x774);
     return bitreverse16((uint32_t)value) >> (16 - bits);
 }

@@ -8,6 +8,15 @@
 #define sr_parser_file (*(void **)&cl_data_open_file)
 /* The client keeps the tick before the place of Game.ticks. Shared code reads a signed int. */
 #define sr_game_ticks (*(int *)&cl_data_game_tick)
+/* The text that a place number of the client executable names (image decoder messages). */
+#ifdef SR_CLIENT_NATIVE
+#include "image/texts.h"
+#define CL_TEXT(rva) cl_text(rva)
+#define CL_WTEXT(rva) cl_wtext(rva)
+#else
+#define CL_TEXT(rva) ((const char *)(sr_base + (rva)))
+#define CL_WTEXT(rva) ((const wchar_t *)(sr_base + (rva)))
+#endif
 void __cdecl debug_addcross(const vec3 *center, float size);
 #define sr_debug_cross(center, size) debug_addcross((center), (size))
 void __cdecl debug_addatafloat(const char *name, float value);

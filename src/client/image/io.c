@@ -18,10 +18,10 @@ int stbi_set_error(const char *message)
     return 0;
 }
 
-/* Keep the failure message that lies at an offset of the image of the executable. */
+/* Keep the failure message that the place number names. */
 int image_fail(unsigned message_rva)
 {
-    return stbi_set_error((const char *)(sr_base + message_rva));
+    return stbi_set_error(CL_TEXT(message_rva));
 }
 
 /* Stop when a required decoder invariant fails. */
@@ -32,7 +32,7 @@ void image_check(int condition, unsigned expression_rva, unsigned source_rva, un
         return;
     if (!call)
         *(void **)&call = sr_import("MSVCR100.DLL", "_wassert");
-    call((const wchar_t *)(sr_base + expression_rva), (const wchar_t *)(sr_base + source_rva), line);
+    call(CL_WTEXT(expression_rva), CL_WTEXT(source_rva), line);
 }
 
 /* Read one unsigned byte. End of input gives zero. */
