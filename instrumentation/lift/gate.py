@@ -13,7 +13,7 @@ Usage:
   python -I instrumentation/lift/gate.py --target client      another target (instrumentation/lift/targets/<name>.json)
   python -I instrumentation/lift/gate.py --reset              each function starts from the snapshot
 
-The rule of docs/lift.md: no "calls same" count may drop on any recording (a function that the harness lists as a known difference is not checked). A drop is a
+The rule of docs/lift.md: no "calls same" count may drop on any recording (a function that the harness lists as a known difference is checked too: its counts must stay as in the baseline). A drop is a
 function with fewer same calls than in the baseline, or a function that has calls in the
 baseline and no line now. New differences and crashes are also errors.
 
@@ -173,17 +173,15 @@ def compare(name, funcs, base, only):
         if only is not None and f not in only:
             continue
         now = funcs.get(f)
-        if now is not None and now['note'].startswith('known:') and not now['crashed']:
-            continue  # a known difference (known_difference in instrumentation/tests/harness.c)
         if now is None:
             if b['same'] > 0:
                 errors.append(f'{name}: {f} has no line now (baseline {b["same"]} same)')
         elif now['same'] < b['same']:
             errors.append(f'{name}: {f} {b["same"]} -> {now["same"]} same')
     for f, now in sorted(funcs.items()):
+        # A known difference (known_difference in instrumentation/tests/harness.c) is no failure by
+        # itself. It must stay as in the baseline: no new different call, no new crash.
         b = base.get(f, {'different': 0, 'crashed': 0})
-        if now['note'].startswith('known:') and not now['crashed']:
-            continue
         if now['different'] > b['different'] or now['crashed'] > b['crashed']:
             errors.append(f'{name}: {f} {now["different"]} different, {now["crashed"]} crashed {now["note"]}')
     return errors
