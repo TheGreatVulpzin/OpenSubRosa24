@@ -90,17 +90,22 @@ Done when: a new developer can find a system, read it and change it without the 
 
 Model: Haiku for the grep checks, Sonnet for the names and the splits.
 
-## Phase E. Rules for changes
+## Phase E. Scope and rules for changes
 
-The decision that opens the work for other people: what happens to the comparison with the original.
+OSR24 (this repository) gives the source of the game in the hands of the reader, with few changes.
+It keeps the vanilla behavior: the protocol, the simulation and the results of every function.
+New features do not go here. They go to Overrosa (the client with extensions) and to SubVulpes
+(the server). Both use this repository as their base.
 
-- Until now each function has to give the same result as the original. This is the right rule
-  while the code is a copy.
-- After phase A, freeze a reference: the recordings and the synthetic tests give the results of
-  the last compared version. A change that does not alter a result passes the same tests.
-  A change that alters a result (a new feature, a faster algorithm, a fix) says so in the
-  commit, and the owner updates the reference for that function.
-- Protocol changes need the server and the client to change together.
+- SubVulpes talks to the vanilla game wherever it can. The vanilla path of the protocol stays
+  the code of this repository. A feature that a vanilla client cannot read is sent only to a
+  client that announced support for it (an extension flag at the start of the connection).
+- A change here is allowed for a security fix, a crash fix, a build fix, a gain in speed that
+  keeps every result bit for bit, and a gain in readability. A change that alters a result is
+  rare. Its commit says what changed and why, and `docs/changes.md` lists it.
+- Until phase A, each function has to give the same result as the original. After phase A, freeze
+  a reference: the recordings and the synthetic tests give the results of the last compared
+  version. A change that passes the same tests did not alter a result.
 - The build has one command, the tests have one command, and a short `CONTRIBUTING.md` says both.
 
 ## Phase F. Speed
@@ -115,10 +120,10 @@ hot function has a measured result.
 1. Profile with `profile=1` and `SV_SAMPLE` on the native executable: frame time of the menus,
    the city, a fight.
 2. Remove what only existed to match the original: x87 helpers where SSE gives the same
-   or an accepted result, copies of data, repeated calls.
+   result bit for bit, copies of data, repeated calls. No change that alters a result.
 3. Check the denormal cases (small integers in float locals are slow on x87).
-4. Later, after the code is stable: a 64 bit build. The pointer size asserts in the types show
-   each place that has to change.
+4. A 64 bit build is not planned for this repository. It changes the layout of the records, so the
+   owner decides it later. The pointer size asserts in the types show each place that would change.
 
 Model: Opus for the float work. Sonnet for the rest.
 
@@ -130,8 +135,10 @@ Model: Opus for the float work. Sonnet for the rest.
    They touch different files, so two worktrees can run together.
 4. E when A passes. F after B and C.
 
-## Decisions (items 1 and 2 confirmed by the owner on 2026-11-25)
+## Decisions
 
-1. Phase E: after the freeze, a change that alters a result is allowed with a note in the commit.
-2. Phase B step 4: the harness, lifter and recorder stay in the repository, outside the normal build.
-3. Phase F step 4: a 64 bit build comes after phase F, not before.
+1. Confirmed 2026-11-25: the harness, lifter and recorder stay in the repository, outside the normal build.
+2. Confirmed 2026-11-25: this repository keeps the vanilla behavior. Features go to Overrosa and SubVulpes.
+   SubVulpes talks to the vanilla game where it can, and uses extensions only with a client that announces them.
+3. Open: libraries. SDL2 and OpenAL as DLL with headers and import libraries, Speex and GLee as source in
+   `third_party/`. All calls go direct, without `sr_import`.
