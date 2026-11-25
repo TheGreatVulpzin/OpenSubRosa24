@@ -71,8 +71,9 @@ Done when: `grep sr_import src/` finds nothing in `src/client`, `src/game`, `src
 
 1. CRT (56 lookups): call `fopen`, `fread`, `qsort` and the others with the real headers.
 2. winsock (24): `winsock2.h`, link `ws2_32`. The game used `WSOCK32.dll` by ordinal: use the names.
-3. SDL2, OpenAL, Speex: put the source in `third_party/` and build it into the executable (the
-   project is GPL, the three licenses work with it: zlib, LGPL, BSD). Call the real API.
+3. SDL2 and OpenAL: keep the DLL files that the game ships. Add their headers to `third_party/` and link the
+   import library, so the code calls the real API by name. Speex: put the source in `third_party/` and build it
+   into the executable (BSD). OpenAL Soft is LGPL, and a DLL is the simple way to follow its license.
 4. kernel32 and shell32 (8): `windows.h`.
 
 Model: Sonnet. Each library is one commit and one smoke test.
@@ -140,5 +141,5 @@ Model: Opus for the float work. Sonnet for the rest.
 1. Confirmed 2026-11-25: the harness, lifter and recorder stay in the repository, outside the normal build.
 2. Confirmed 2026-11-25: this repository keeps the vanilla behavior. Features go to Overrosa and SubVulpes.
    SubVulpes talks to the vanilla game where it can, and uses extensions only with a client that announces them.
-3. Open: libraries. SDL2 and OpenAL as DLL with headers and import libraries, Speex and GLee as source in
+3. Confirmed 2026-11-25: libraries. SDL2 and OpenAL as DLL with headers and import libraries, Speex and GLee as source in
    `third_party/`. All calls go direct, without `sr_import`.
